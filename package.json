@@ -1,0 +1,18 @@
+{
+  "name": "ultimate-pi-package",
+  "version": "0.1.0",
+  "description": "Custom pi package starter with caveman and impeccable.style skills",
+  "private": true,
+  "keywords": [
+    "pi-package"
+  ],
+  "license": "MIT",
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  }
+}
