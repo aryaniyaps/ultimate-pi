@@ -9,6 +9,32 @@ Ship a production-grade coding harness where the agent:
 2. stays concise and deterministic in output style,
 3. remains easy to extend with skills and extensions.
 
+## Getting started
+
+1. Install from npm:
+
+   ```bash
+   npm install -g ultimate-pi
+   ```
+
+2. Install package into PI from your project folder:
+
+   ```bash
+   pi install ultimate-pi -l
+   ```
+
+3. Reload PI to activate skills and extensions:
+
+   ```bash
+   /reload
+   ```
+
+4. Optional: install from GitHub Packages instead:
+
+   ```bash
+   npm install -g @aryaniyaps/ultimate-pi --registry=https://npm.pkg.github.com
+   ```
+
 ### Included skills (upstream repositories)
 
 | Skill | Upstream repo | What it does |
