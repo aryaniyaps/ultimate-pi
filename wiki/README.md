@@ -19,3 +19,5 @@ Track architecture and implementation decisions for this repo.
 - [0013 - Add package repository URL for provenance validation](decisions/0013-add-package-repository-url-for-provenance-validation.md)
 - [0014 - Publish scoped package to GitHub Packages npm registry](decisions/0014-publish-scoped-package-to-github-packages.md)
 - [0015 - Add end-user getting started section to README](decisions/0015-add-end-user-getting-started-section-to-readme.md)
+- [0016 - Track inter-agent consensus loop as future plan item](decisions/0016-track-inter-agent-consensus-loop-as-future-plan-item.md)
+- [0017 - Track queryable context layer with vector indexing](decisions/0017-track-queryable-context-layer-with-vector-indexing.md)
