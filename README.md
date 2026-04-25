@@ -2,11 +2,6 @@
 
 (Beta) The **ultimate AI coding harness** on top of [**pi.dev**](https://pi.dev).
 
-This repo is a focused PI package that enforces a high-signal workflow:
-- lean-ctx-first tooling
-- compact caveman communication
-- reproducible skill composition
-
 ## Goal
 
 Ship a production-grade coding harness where the agent:
