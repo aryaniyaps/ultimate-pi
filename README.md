@@ -1,6 +1,6 @@
-# Ultimate PI Harness
+# Ultimate PI
 
-Build the **ultimate AI coding harness** on top of **pi.dev**.
+(Beta) The **ultimate AI coding harness** on top of **pi.dev**.
 
 This repo is a focused PI package that enforces a high-signal workflow:
 - lean-ctx-first tooling
@@ -13,16 +13,6 @@ Ship a production-grade coding harness where the agent:
 1. uses compressed context before raw tool spam,
 2. stays concise and deterministic in output style,
 3. remains easy to extend with skills and extensions.
-
-## Current harness setup
-
-### Core package wiring
-
-- `package.json` registers:
-  - `./extensions`
-  - `./.agents/skills`
-- Project system prompt override:
-  - `.pi/SYSTEM.md`
 
 ### Included skills (upstream repositories)
 
