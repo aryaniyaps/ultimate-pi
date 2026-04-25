@@ -11,3 +11,4 @@ Track architecture and implementation decisions for this repo.
 - [0005 - Automate npm publish with GitHub Actions](decisions/0005-automate-npm-publish-with-github-actions.md)
 - [0006 - Switch npm automation to Trusted Publishing (OIDC)](decisions/0006-switch-to-npm-trusted-publishing.md)
 - [0007 - Use absolute banner URL for npm README rendering](decisions/0007-use-absolute-banner-url-for-npm-readme-rendering.md)
+- [0008 - Rename banner asset for cache-busting on npm README](decisions/0008-rename-banner-asset-for-cache-busting.md)

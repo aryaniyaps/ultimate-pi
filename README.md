@@ -1,4 +1,4 @@
-![Ultimate PI banner](https://raw.githubusercontent.com/aryaniyaps/ultimate-pi/main/.github/banner.png)
+![Ultimate PI banner](https://raw.githubusercontent.com/aryaniyaps/ultimate-pi/main/.github/banner-v2.png)
 
 > (Beta) The **ultimate AI coding harness** on top of [**pi.dev**](https://pi.dev).
 
