@@ -1,6 +1,6 @@
-# Ultimate PI
+![Ultimate PI banner](.github/banner.png)
 
-(Beta) The **ultimate AI coding harness** on top of [**pi.dev**](https://pi.dev).
+> (Beta) The **ultimate AI coding harness** on top of [**pi.dev**](https://pi.dev).
 
 ## Goal
 
