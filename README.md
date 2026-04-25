@@ -1,6 +1,6 @@
 # Ultimate PI
 
-(Beta) The **ultimate AI coding harness** on top of **pi.dev**.
+(Beta) The **ultimate AI coding harness** on top of [**pi.dev**](https://pi.dev).
 
 This repo is a focused PI package that enforces a high-signal workflow:
 - lean-ctx-first tooling
