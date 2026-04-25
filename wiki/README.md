@@ -16,3 +16,4 @@ Track architecture and implementation decisions for this repo.
 - [0010 - Simplify setup-node for npm Trusted Publishing](decisions/0010-simplify-setup-node-for-npm-trusted-publishing.md)
 - [0011 - Add noop workflow change to force fresh publish run](decisions/0011-add-noop-workflow-change-to-force-fresh-publish-run.md)
 - [0012 - Align workflow runtime with npm Trusted Publishing requirements](decisions/0012-align-workflow-runtime-with-npm-trusted-publishing-requirements.md)
+- [0013 - Add package repository URL for provenance validation](decisions/0013-add-package-repository-url-for-provenance-validation.md)
