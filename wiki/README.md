@@ -25,3 +25,4 @@ Track architecture and implementation decisions for this repo.
 - [0019 - Add Harbor Terminal-Bench adapter and keep bench assets out of npm package](decisions/0019-add-harbor-terminal-bench-adapter-and-keep-bench-assets-out-of-npm-package.md)
 - [0020 - Default Harbor adapter to PI non-interactive prompt flag](decisions/0020-default-harbor-adapter-to-pi-non-interactive-prompt-flag.md)
 - [0021 - Exclude benchmark result artifacts from npm package](decisions/0021-exclude-benchmark-results-from-npm-package.md)
+- [0022 - Add Terminal-Bench 2.0 submission snapshot (2026-04-25__21-05-42)](decisions/0022-add-terminal-bench-2-submission-snapshot-2026-04-25-21-05-42.md)

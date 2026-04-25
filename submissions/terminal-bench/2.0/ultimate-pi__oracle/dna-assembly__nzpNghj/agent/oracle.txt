@@ -1,0 +1,1627 @@
+Get:1 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:2 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1981 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+Get:4 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1498 kB]
+Get:5 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [34.2 kB]
+Get:6 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [3479 kB]
+Get:7 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+Get:12 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [2354 kB]
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2141 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [3658 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [38.0 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [35.6 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]
+Get:19 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
+Fetched 37.5 MB in 21s (1828 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  dialign emboss-data emboss-lib fontconfig-config fonts-dejavu-core
+  fonts-dejavu-mono krb5-locales libaom3 libbrotli1 libbsd0 libde265-0
+  libdeflate0 libexpat1 libfontconfig1 libfreetype6 libgd3 libgssapi-krb5-2
+  libheif-plugin-aomdec libheif-plugin-aomenc libheif-plugin-libde265 libheif1
+  libhpdf-2.3.0 libjbig0 libjpeg-turbo8 libjpeg8 libk5crypto3 libkeyutils1
+  libkrb5-3 libkrb5support0 libldap-common libldap2 liblerc4 libmysqlclient21
+  libpng16-16t64 libpq5 libsasl2-2 libsasl2-modules libsasl2-modules-db
+  libsharpyuv0 libtiff6 libwebp7 libx11-6 libx11-data libxau6 libxcb1
+  libxdmcp6 libxpm4 mysql-common
+Suggested packages:
+  emboss-doc emboss-test embassy clustalw libgd-tools krb5-doc krb5-user
+  libheif-plugin-x265 libheif-plugin-ffmpegdec libheif-plugin-jpegdec
+  libheif-plugin-jpegenc libheif-plugin-j2kdec libheif-plugin-j2kenc
+  libheif-plugin-rav1e libheif-plugin-svtenc libsasl2-modules-gssapi-mit
+  | libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap libsasl2-modules-otp
+  libsasl2-modules-sql ncbi-epcr
+The following NEW packages will be installed:
+  dialign emboss emboss-data emboss-lib fontconfig-config fonts-dejavu-core
+  fonts-dejavu-mono krb5-locales libaom3 libbrotli1 libbsd0 libde265-0
+  libdeflate0 libexpat1 libfontconfig1 libfreetype6 libgd3 libgssapi-krb5-2
+  libheif-plugin-aomdec libheif-plugin-aomenc libheif-plugin-libde265 libheif1
+  libhpdf-2.3.0 libjbig0 libjpeg-turbo8 libjpeg8 libk5crypto3 libkeyutils1
+  libkrb5-3 libkrb5support0 libldap-common libldap2 liblerc4 libmysqlclient21
+  libpng16-16t64 libpq5 libsasl2-2 libsasl2-modules libsasl2-modules-db
+  libsharpyuv0 libtiff6 libwebp7 libx11-6 libx11-data libxau6 libxcb1
+  libxdmcp6 libxpm4 mysql-common primer3
+0 upgraded, 50 newly installed, 0 to remove and 21 not upgraded.
+Need to get 75.0 MB of archives.
+After this operation, 530 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 krb5-locales all 1.20.1-6ubuntu2.6 [14.8 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libbsd0 amd64 0.12.1-1build1.1 [41.2 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libexpat1 amd64 2.6.1-2ubuntu0.4 [88.2 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkrb5support0 amd64 1.20.1-6ubuntu2.6 [34.4 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libk5crypto3 amd64 1.20.1-6ubuntu2.6 [82.0 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble/main amd64 libkeyutils1 amd64 1.6.3-3build1 [9490 B]
+Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkrb5-3 amd64 1.20.1-6ubuntu2.6 [348 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgssapi-krb5-2 amd64 1.20.1-6ubuntu2.6 [143 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpng16-16t64 amd64 1.6.43-5ubuntu0.5 [188 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble/main amd64 libxau6 amd64 1:1.0.9-1build6 [7160 B]
+Get:11 http://archive.ubuntu.com/ubuntu noble/main amd64 libxdmcp6 amd64 1:1.1.3-0ubuntu6 [10.3 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble/main amd64 libxcb1 amd64 1.15-1ubuntu2 [47.7 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble/main amd64 libx11-data all 2:1.8.7-1build1 [115 kB]
+Get:14 http://archive.ubuntu.com/ubuntu noble/main amd64 libx11-6 amd64 2:1.8.7-1build1 [650 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble/universe amd64 dialign amd64 2.2.1-12build1 [152 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble/main amd64 libbrotli1 amd64 1.1.0-2build2 [331 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libfreetype6 amd64 2.13.2+dfsg-1ubuntu0.1 [402 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble/main amd64 fonts-dejavu-mono all 2.37-8 [502 kB]
+Get:19 http://archive.ubuntu.com/ubuntu noble/main amd64 fonts-dejavu-core all 2.37-8 [835 kB]
+Get:20 http://archive.ubuntu.com/ubuntu noble/main amd64 fontconfig-config amd64 2.15.0-1.1ubuntu2 [37.3 kB]
+Get:21 http://archive.ubuntu.com/ubuntu noble/main amd64 libfontconfig1 amd64 2.15.0-1.1ubuntu2 [139 kB]
+Get:22 http://archive.ubuntu.com/ubuntu noble/main amd64 libsharpyuv0 amd64 1.3.2-0.4build3 [15.8 kB]
+Get:23 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libaom3 amd64 3.8.2-2ubuntu0.1 [1941 kB]
+Get:24 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libheif-plugin-aomdec amd64 1.17.6-1ubuntu4.2 [10.6 kB]
+Get:25 http://archive.ubuntu.com/ubuntu noble/main amd64 libde265-0 amd64 1.0.15-1build3 [166 kB]
+Get:26 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libheif-plugin-libde265 amd64 1.17.6-1ubuntu4.2 [8174 B]
+Get:27 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libheif1 amd64 1.17.6-1ubuntu4.2 [276 kB]
+Get:28 http://archive.ubuntu.com/ubuntu noble/main amd64 libjpeg-turbo8 amd64 2.1.5-2ubuntu2 [150 kB]
+Get:29 http://archive.ubuntu.com/ubuntu noble/main amd64 libjpeg8 amd64 8c-2ubuntu11 [2148 B]
+Get:30 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libdeflate0 amd64 1.19-1build1.1 [43.9 kB]
+Get:31 http://archive.ubuntu.com/ubuntu noble/main amd64 libjbig0 amd64 2.1-6.1ubuntu2 [29.7 kB]
+Get:32 http://archive.ubuntu.com/ubuntu noble/main amd64 liblerc4 amd64 4.0.0+ds-4ubuntu2 [179 kB]
+Get:33 http://archive.ubuntu.com/ubuntu noble/main amd64 libwebp7 amd64 1.3.2-0.4build3 [230 kB]
+Get:34 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libtiff6 amd64 4.5.1+git230720-4ubuntu2.5 [200 kB]
+Get:35 http://archive.ubuntu.com/ubuntu noble/main amd64 libxpm4 amd64 1:3.5.17-1build2 [36.5 kB]
+Get:36 http://archive.ubuntu.com/ubuntu noble/main amd64 libgd3 amd64 2.3.3-9ubuntu5 [128 kB]
+Get:37 http://archive.ubuntu.com/ubuntu noble/universe amd64 libhpdf-2.3.0 amd64 2.3.0+dfsg-1build3 [432 kB]
+Get:38 http://archive.ubuntu.com/ubuntu noble/main amd64 mysql-common all 5.8+1.1.0build1 [6746 B]
+Get:39 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libmysqlclient21 amd64 8.0.45-0ubuntu0.24.04.1 [1255 kB]
+Get:40 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-modules-db amd64 2.1.28+dfsg1-5ubuntu3.1 [20.4 kB]
+Get:41 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-2 amd64 2.1.28+dfsg1-5ubuntu3.1 [53.2 kB]
+Get:42 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libldap2 amd64 2.6.10+dfsg-0ubuntu0.24.04.1 [198 kB]
+Get:43 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpq5 amd64 16.13-0ubuntu0.24.04.1 [146 kB]
+Get:44 http://archive.ubuntu.com/ubuntu noble/universe amd64 emboss-lib amd64 6.6.0+dfsg-12ubuntu2 [2976 kB]
+Get:45 http://archive.ubuntu.com/ubuntu noble/universe amd64 emboss-data all 6.6.0+dfsg-12ubuntu2 [61.0 MB]
+Get:46 http://archive.ubuntu.com/ubuntu noble/universe amd64 emboss amd64 6.6.0+dfsg-12ubuntu2 [980 kB]
+Get:47 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libheif-plugin-aomenc amd64 1.17.6-1ubuntu4.2 [14.7 kB]
+Get:48 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libldap-common all 2.6.10+dfsg-0ubuntu0.24.04.1 [32.9 kB]
+Get:49 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-modules amd64 2.1.28+dfsg1-5ubuntu3.1 [69.9 kB]
+Get:50 http://archive.ubuntu.com/ubuntu noble/universe amd64 primer3 amd64 2.6.1-4 [221 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 75.0 MB in 10s (7598 kB/s)
+Selecting previously unselected package krb5-locales.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4381 files and directories currently installed.)
+Preparing to unpack .../00-krb5-locales_1.20.1-6ubuntu2.6_all.deb ...
+Unpacking krb5-locales (1.20.1-6ubuntu2.6) ...
+Selecting previously unselected package libbsd0:amd64.
+Preparing to unpack .../01-libbsd0_0.12.1-1build1.1_amd64.deb ...
+Unpacking libbsd0:amd64 (0.12.1-1build1.1) ...
+Selecting previously unselected package libexpat1:amd64.
+Preparing to unpack .../02-libexpat1_2.6.1-2ubuntu0.4_amd64.deb ...
+Unpacking libexpat1:amd64 (2.6.1-2ubuntu0.4) ...
+Selecting previously unselected package libkrb5support0:amd64.
+Preparing to unpack .../03-libkrb5support0_1.20.1-6ubuntu2.6_amd64.deb ...
+Unpacking libkrb5support0:amd64 (1.20.1-6ubuntu2.6) ...
+Selecting previously unselected package libk5crypto3:amd64.
+Preparing to unpack .../04-libk5crypto3_1.20.1-6ubuntu2.6_amd64.deb ...
+Unpacking libk5crypto3:amd64 (1.20.1-6ubuntu2.6) ...
+Selecting previously unselected package libkeyutils1:amd64.
+Preparing to unpack .../05-libkeyutils1_1.6.3-3build1_amd64.deb ...
+Unpacking libkeyutils1:amd64 (1.6.3-3build1) ...
+Selecting previously unselected package libkrb5-3:amd64.
+Preparing to unpack .../06-libkrb5-3_1.20.1-6ubuntu2.6_amd64.deb ...
+Unpacking libkrb5-3:amd64 (1.20.1-6ubuntu2.6) ...
+Selecting previously unselected package libgssapi-krb5-2:amd64.
+Preparing to unpack .../07-libgssapi-krb5-2_1.20.1-6ubuntu2.6_amd64.deb ...
+Unpacking libgssapi-krb5-2:amd64 (1.20.1-6ubuntu2.6) ...
+Selecting previously unselected package libpng16-16t64:amd64.
+Preparing to unpack .../08-libpng16-16t64_1.6.43-5ubuntu0.5_amd64.deb ...
+Unpacking libpng16-16t64:amd64 (1.6.43-5ubuntu0.5) ...
+Selecting previously unselected package libxau6:amd64.
+Preparing to unpack .../09-libxau6_1%3a1.0.9-1build6_amd64.deb ...
+Unpacking libxau6:amd64 (1:1.0.9-1build6) ...
+Selecting previously unselected package libxdmcp6:amd64.
+Preparing to unpack .../10-libxdmcp6_1%3a1.1.3-0ubuntu6_amd64.deb ...
+Unpacking libxdmcp6:amd64 (1:1.1.3-0ubuntu6) ...
+Selecting previously unselected package libxcb1:amd64.
+Preparing to unpack .../11-libxcb1_1.15-1ubuntu2_amd64.deb ...
+Unpacking libxcb1:amd64 (1.15-1ubuntu2) ...
+Selecting previously unselected package libx11-data.
+Preparing to unpack .../12-libx11-data_2%3a1.8.7-1build1_all.deb ...
+Unpacking libx11-data (2:1.8.7-1build1) ...
+Selecting previously unselected package libx11-6:amd64.
+Preparing to unpack .../13-libx11-6_2%3a1.8.7-1build1_amd64.deb ...
+Unpacking libx11-6:amd64 (2:1.8.7-1build1) ...
+Selecting previously unselected package dialign.
+Preparing to unpack .../14-dialign_2.2.1-12build1_amd64.deb ...
+Unpacking dialign (2.2.1-12build1) ...
+Selecting previously unselected package libbrotli1:amd64.
+Preparing to unpack .../15-libbrotli1_1.1.0-2build2_amd64.deb ...
+Unpacking libbrotli1:amd64 (1.1.0-2build2) ...
+Selecting previously unselected package libfreetype6:amd64.
+Preparing to unpack .../16-libfreetype6_2.13.2+dfsg-1ubuntu0.1_amd64.deb ...
+Unpacking libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.1) ...
+Selecting previously unselected package fonts-dejavu-mono.
+Preparing to unpack .../17-fonts-dejavu-mono_2.37-8_all.deb ...
+Unpacking fonts-dejavu-mono (2.37-8) ...
+Selecting previously unselected package fonts-dejavu-core.
+Preparing to unpack .../18-fonts-dejavu-core_2.37-8_all.deb ...
+Unpacking fonts-dejavu-core (2.37-8) ...
+Selecting previously unselected package fontconfig-config.
+Preparing to unpack .../19-fontconfig-config_2.15.0-1.1ubuntu2_amd64.deb ...
+Unpacking fontconfig-config (2.15.0-1.1ubuntu2) ...
+Selecting previously unselected package libfontconfig1:amd64.
+Preparing to unpack .../20-libfontconfig1_2.15.0-1.1ubuntu2_amd64.deb ...
+Unpacking libfontconfig1:amd64 (2.15.0-1.1ubuntu2) ...
+Selecting previously unselected package libsharpyuv0:amd64.
+Preparing to unpack .../21-libsharpyuv0_1.3.2-0.4build3_amd64.deb ...
+Unpacking libsharpyuv0:amd64 (1.3.2-0.4build3) ...
+Selecting previously unselected package libaom3:amd64.
+Preparing to unpack .../22-libaom3_3.8.2-2ubuntu0.1_amd64.deb ...
+Unpacking libaom3:amd64 (3.8.2-2ubuntu0.1) ...
+Selecting previously unselected package libheif-plugin-aomdec:amd64.
+Preparing to unpack .../23-libheif-plugin-aomdec_1.17.6-1ubuntu4.2_amd64.deb ...
+Unpacking libheif-plugin-aomdec:amd64 (1.17.6-1ubuntu4.2) ...
+Selecting previously unselected package libde265-0:amd64.
+Preparing to unpack .../24-libde265-0_1.0.15-1build3_amd64.deb ...
+Unpacking libde265-0:amd64 (1.0.15-1build3) ...
+Selecting previously unselected package libheif-plugin-libde265:amd64.
+Preparing to unpack .../25-libheif-plugin-libde265_1.17.6-1ubuntu4.2_amd64.deb ...
+Unpacking libheif-plugin-libde265:amd64 (1.17.6-1ubuntu4.2) ...
+Selecting previously unselected package libheif1:amd64.
+Preparing to unpack .../26-libheif1_1.17.6-1ubuntu4.2_amd64.deb ...
+Unpacking libheif1:amd64 (1.17.6-1ubuntu4.2) ...
+Selecting previously unselected package libjpeg-turbo8:amd64.
+Preparing to unpack .../27-libjpeg-turbo8_2.1.5-2ubuntu2_amd64.deb ...
+Unpacking libjpeg-turbo8:amd64 (2.1.5-2ubuntu2) ...
+Selecting previously unselected package libjpeg8:amd64.
+Preparing to unpack .../28-libjpeg8_8c-2ubuntu11_amd64.deb ...
+Unpacking libjpeg8:amd64 (8c-2ubuntu11) ...
+Selecting previously unselected package libdeflate0:amd64.
+Preparing to unpack .../29-libdeflate0_1.19-1build1.1_amd64.deb ...
+Unpacking libdeflate0:amd64 (1.19-1build1.1) ...
+Selecting previously unselected package libjbig0:amd64.
+Preparing to unpack .../30-libjbig0_2.1-6.1ubuntu2_amd64.deb ...
+Unpacking libjbig0:amd64 (2.1-6.1ubuntu2) ...
+Selecting previously unselected package liblerc4:amd64.
+Preparing to unpack .../31-liblerc4_4.0.0+ds-4ubuntu2_amd64.deb ...
+Unpacking liblerc4:amd64 (4.0.0+ds-4ubuntu2) ...
+Selecting previously unselected package libwebp7:amd64.
+Preparing to unpack .../32-libwebp7_1.3.2-0.4build3_amd64.deb ...
+Unpacking libwebp7:amd64 (1.3.2-0.4build3) ...
+Selecting previously unselected package libtiff6:amd64.
+Preparing to unpack .../33-libtiff6_4.5.1+git230720-4ubuntu2.5_amd64.deb ...
+Unpacking libtiff6:amd64 (4.5.1+git230720-4ubuntu2.5) ...
+Selecting previously unselected package libxpm4:amd64.
+Preparing to unpack .../34-libxpm4_1%3a3.5.17-1build2_amd64.deb ...
+Unpacking libxpm4:amd64 (1:3.5.17-1build2) ...
+Selecting previously unselected package libgd3:amd64.
+Preparing to unpack .../35-libgd3_2.3.3-9ubuntu5_amd64.deb ...
+Unpacking libgd3:amd64 (2.3.3-9ubuntu5) ...
+Selecting previously unselected package libhpdf-2.3.0:amd64.
+Preparing to unpack .../36-libhpdf-2.3.0_2.3.0+dfsg-1build3_amd64.deb ...
+Unpacking libhpdf-2.3.0:amd64 (2.3.0+dfsg-1build3) ...
+Selecting previously unselected package mysql-common.
+Preparing to unpack .../37-mysql-common_5.8+1.1.0build1_all.deb ...
+Unpacking mysql-common (5.8+1.1.0build1) ...
+Selecting previously unselected package libmysqlclient21:amd64.
+Preparing to unpack .../38-libmysqlclient21_8.0.45-0ubuntu0.24.04.1_amd64.deb ...
+Unpacking libmysqlclient21:amd64 (8.0.45-0ubuntu0.24.04.1) ...
+Selecting previously unselected package libsasl2-modules-db:amd64.
+Preparing to unpack .../39-libsasl2-modules-db_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...
+Unpacking libsasl2-modules-db:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...
+Selecting previously unselected package libsasl2-2:amd64.
+Preparing to unpack .../40-libsasl2-2_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...
+Unpacking libsasl2-2:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...
+Selecting previously unselected package libldap2:amd64.
+Preparing to unpack .../41-libldap2_2.6.10+dfsg-0ubuntu0.24.04.1_amd64.deb ...
+Unpacking libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+Selecting previously unselected package libpq5:amd64.
+Preparing to unpack .../42-libpq5_16.13-0ubuntu0.24.04.1_amd64.deb ...
+Unpacking libpq5:amd64 (16.13-0ubuntu0.24.04.1) ...
+Selecting previously unselected package emboss-lib.
+Preparing to unpack .../43-emboss-lib_6.6.0+dfsg-12ubuntu2_amd64.deb ...
+Unpacking emboss-lib (6.6.0+dfsg-12ubuntu2) ...
+Selecting previously unselected package emboss-data.
+Preparing to unpack .../44-emboss-data_6.6.0+dfsg-12ubuntu2_all.deb ...
+Unpacking emboss-data (6.6.0+dfsg-12ubuntu2) ...
+Selecting previously unselected package emboss.
+Preparing to unpack .../45-emboss_6.6.0+dfsg-12ubuntu2_amd64.deb ...
+Unpacking emboss (6.6.0+dfsg-12ubuntu2) ...
+Selecting previously unselected package libheif-plugin-aomenc:amd64.
+Preparing to unpack .../46-libheif-plugin-aomenc_1.17.6-1ubuntu4.2_amd64.deb ...
+Unpacking libheif-plugin-aomenc:amd64 (1.17.6-1ubuntu4.2) ...
+Selecting previously unselected package libldap-common.
+Preparing to unpack .../47-libldap-common_2.6.10+dfsg-0ubuntu0.24.04.1_all.deb ...
+Unpacking libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+Selecting previously unselected package libsasl2-modules:amd64.
+Preparing to unpack .../48-libsasl2-modules_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...
+Unpacking libsasl2-modules:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...
+Selecting previously unselected package primer3.
+Preparing to unpack .../49-primer3_2.6.1-4_amd64.deb ...
+Unpacking primer3 (2.6.1-4) ...
+Setting up libexpat1:amd64 (2.6.1-2ubuntu0.4) ...
+Setting up libsharpyuv0:amd64 (1.3.2-0.4build3) ...
+Setting up libaom3:amd64 (3.8.2-2ubuntu0.1) ...
+Setting up mysql-common (5.8+1.1.0build1) ...
+update-alternatives: using /etc/mysql/my.cnf.fallback to provide /etc/mysql/my.cnf (my.cnf) in auto mode
+Setting up libmysqlclient21:amd64 (8.0.45-0ubuntu0.24.04.1) ...
+Setting up libxau6:amd64 (1:1.0.9-1build6) ...
+Setting up libkeyutils1:amd64 (1.6.3-3build1) ...
+Setting up liblerc4:amd64 (4.0.0+ds-4ubuntu2) ...
+Setting up libbrotli1:amd64 (1.1.0-2build2) ...
+Setting up libsasl2-modules:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...
+Setting up libdeflate0:amd64 (1.19-1build1.1) ...
+Setting up krb5-locales (1.20.1-6ubuntu2.6) ...
+Setting up emboss-data (6.6.0+dfsg-12ubuntu2) ...
+Setting up libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+Setting up libjbig0:amd64 (2.1-6.1ubuntu2) ...
+Setting up libkrb5support0:amd64 (1.20.1-6ubuntu2.6) ...
+Setting up libsasl2-modules-db:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...
+Setting up primer3 (2.6.1-4) ...
+Setting up libx11-data (2:1.8.7-1build1) ...
+Setting up fonts-dejavu-mono (2.37-8) ...
+Setting up libpng16-16t64:amd64 (1.6.43-5ubuntu0.5) ...
+Setting up fonts-dejavu-core (2.37-8) ...
+Setting up libk5crypto3:amd64 (1.20.1-6ubuntu2.6) ...
+Setting up libjpeg-turbo8:amd64 (2.1.5-2ubuntu2) ...
+Setting up libsasl2-2:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...
+Setting up libwebp7:amd64 (1.3.2-0.4build3) ...
+Setting up libkrb5-3:amd64 (1.20.1-6ubuntu2.6) ...
+Setting up libde265-0:amd64 (1.0.15-1build3) ...
+Setting up libbsd0:amd64 (0.12.1-1build1.1) ...
+Setting up dialign (2.2.1-12build1) ...
+Setting up libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...
+Setting up libjpeg8:amd64 (8c-2ubuntu11) ...
+Setting up libhpdf-2.3.0:amd64 (2.3.0+dfsg-1build3) ...
+Setting up libxdmcp6:amd64 (1:1.1.3-0ubuntu6) ...
+Setting up libxcb1:amd64 (1.15-1ubuntu2) ...
+Setting up fontconfig-config (2.15.0-1.1ubuntu2) ...
+Setting up libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.1) ...
+Setting up libgssapi-krb5-2:amd64 (1.20.1-6ubuntu2.6) ...
+Setting up libtiff6:amd64 (4.5.1+git230720-4ubuntu2.5) ...
+Setting up libx11-6:amd64 (2:1.8.7-1build1) ...
+Setting up libfontconfig1:amd64 (2.15.0-1.1ubuntu2) ...
+Setting up libxpm4:amd64 (1:3.5.17-1build2) ...
+Setting up libpq5:amd64 (16.13-0ubuntu0.24.04.1) ...
+Setting up libheif-plugin-aomdec:amd64 (1.17.6-1ubuntu4.2) ...
+Setting up libheif1:amd64 (1.17.6-1ubuntu4.2) ...
+Setting up libgd3:amd64 (2.3.3-9ubuntu5) ...
+Setting up emboss-lib (6.6.0+dfsg-12ubuntu2) ...
+Setting up libheif-plugin-libde265:amd64 (1.17.6-1ubuntu4.2) ...
+Setting up emboss (6.6.0+dfsg-12ubuntu2) ...
+Setting up libheif-plugin-aomenc:amd64 (1.17.6-1ubuntu4.2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.6) ...
+>input
+actcttcctttttcaatattattgaagcatttatcagggttattgtctcatgagcggatacatatttgaatgtatttagaaaaataaacaaataggggttccgcgcacatttccccgaaaagtgctagtggtgctagccccgcgaaattaatacgactcactatagggtctagaaataattttgtttaactttaagaaggagatatacatatgatcagtctgattgcggcgttagcggtagatcgcgttatcggcatggaaaacgccatgccgtggaacctgcctgccgatctcgcctggtttaaacgcaacaccttaaataaacccgtgattatgggccgccatacctgggaatcaatcggtcgtccgttgccaggacgcaaaaatattatcctcagcagtcaaccgggtacggacgatcgcgtaacgtgggtgaagtcggtggatgaagccatcgcggcgtgtggtgacgtaccagaaatcatggtgattggcggcggtcgcgtttatgaacagttcttgccaaaagcgcaaaaactgtatctgacgcatatcgacgcagaagtggaaggcgacacccatttcccggattacgagccggatgactgggaatcggtattcagcgaattccacgatgctgatgcgcagaactctcacagctattgctttgagattctggagcggcggtaatgaggatcccgggaattctcgagtaaggttaacctgcaggaggcctttaattaaggtggtgcggccgcgctagcggtcccgggggatcgatccggctgctaacaaagcccgaaaggaagctgagttggctgctgccaccgctgagcaataactagcataaccccttggggcctctaaacgggtcttgaggggttttttgctgaaaggaggaactatatccggaagcttggcactggccgaccggggtcgagcactgactcgctgcgctcggtcgttcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttatccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgtaaaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtcttgagtccaacccgctaagacacgacttatcgccactggcagcagccactggtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggctacactagaagaacagtatttggtatctgcgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtggaacgaaaactcacagatccgggattttggtcatgagattatcaaaaaggatcttcacctagatccttttaaattaaaaatgaagttttaaatcaatctaaagtatatatgagtaaacttggtctgacagttaccaatgcttaatcagtgaggcacctatctcagcgatctgtctatttcgttcatccatagttgcctgactccccgtcgtgtagataactacgatacgggagggcttaccatctggccccagtgctgcaatgataccgcgggacccacgctcaccggctccagatttatcagcaataaaccagccagccggaagggccgagcgcagaagtggtcctgcaactttatccgcctccatccagtctattaattgttgccgggaagctagagtaagtagttcgccagttaatagtttgcgcaacgttgttgccattgctacaggcatcgtggtgtcacgctcgtcgtttggtatggcttcattcagctccggttcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaagcggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgcagtgttatcactcatggttatggcagcactgcataattctcttactgtcatgccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtcattctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaatacgggataataccgcgccacatagcagaactttaaaagtgctcatcattggaaaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgagatccagttcgatgtaacccactcgtgcacccaactgatcttcagcatcttttactttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccgcaaaaaagggaataagggcgacacggaaatgttgaatactcat
+>egfp
+atgagcaagggcgaggagctgttcaccggggtggtgcccatcctggtcgagctggacggcgacgtaaacggccacaagttcagcgtgtccggcgagggtgagggcgatgccacctacggcaagctgaccctgaagttcatctgcaccacgggcaagctgcccgtgccctggcccaccctcgtgaccaccctgacctacggcgtgcagtgcttcagccgctaccccgaccacatgaagcagcacgacttcttcaagtccgccatgcccgaaggctacgtccaggagcgcaccatcttcttcaaggacgacggcaactacaagacccgcgccgaggtgaagttcgagggcgacaccctggtgaaccgcatcgagctgaagggcatcgacttcaaggaggacggcaacatcctggggcacaagctggagtacaactacaacagccacaacgtctatatcatggccgacaagcagaagaacggcatcaaggtgaacttcaagatccgccacaacatcgaggacggcagcgtgcagctcgccgaccactaccagcagaacacccccatcggcgacggccccgtgctgctgcccgacaaccactatctgagcacccagtccgccctgagcaaagaccccaacgagaagcgcgatcacatggtcctgctggagttcgtgaccgccgccgggatcactctcggcatggacgagctgtacaaataa
+>flag
+atgggtagtggctccggtagcggtagcggcagcgactacaaggacgacgacgacaagggttccggttctggttcaggtagtggttcataa
+>snap
+atggacaaagactgcgaaatgaagcgcaccaccctggatagccctctgggcaagctggaactgtctgggtgcgaacagggcctgcaccgtatcatcttcctgggcaaaggaacatctgccgccgacgccgtggaagtgcctgccccagccgccgtgctgggcggaccagagccactgatgcaggctaccgcatggctcaacgcctactttcaccagcctgaggccatcgaggagttccctgtgccagcgctgcaccatccagtgttccagcaggagagctttacccgccaggtgctgtggaaactgctgaaagtggtgaagtttggagaggtcatcagctacagccacctggccgccctggccggcaatcccgcagccaccgccgcagtgaaaaccgcactgagcggaaatcccgtgcccattctgatcccctgccaccgggtggtgcagggcgacctggacgtggggggctacgaaggcgggctcgcagttaaagagtggctgctggcccacgagggccacagactgggtaagcctgggctgggttaa
+>output
+actcttcctttttcaatattattgaagcatttatcagggttattgtctcatgagcggatacatatttgaatgtatttagaaaaataaacaaataggggttccgcgcacatttccccgaaaagtgctagtggtgctagccccgcgaaattaatacgactcactatagggtctagaaataattttgtttaactttaagaaggagatatacatatgagcaagggcgaggagctgttcaccggggtggtgcccatcctggtcgagctggacggcgacgtaaacggccacaagttcagcgtgtccggcgagggtgagggcgatgccacctacggcaagctgaccctgaagttcatctgcaccacgggcaagctgcccgtgccctggcccaccctcgtgaccaccctgacctacggcgtgcagtgcttcagccgctaccccgaccacatgaagcagcacgacttcttcaagtccgccatgcccgaaggctacgtccaggagcgcaccatcttcttcaaggacgacggcaactacaagacccgcgccgaggtgaagttcgagggcgacaccctggtgaaccgcatcgagctgaagggcatcgacttcaaggaggacggcaacatcctggggcacaagctggagtacaactacaacagccacaacgtctatatcatggccgacaagcagaagaacggcatcaaggtgaacttcaagatccgccacaacatcgaggacggcagcgtgcagctcgccgaccactaccagcagaacacccccatcggcgacggccccgtgctgctgcccgacaaccactatctgagcacccagtccgccctgagcaaagaccccaacgagaagcgcgatcacatggtcctgctggagttcgtgaccgccgccgggatcactctcggcatggacgagctgtacaaaggtagtggctccggtagcggtagcggcagcgactacaaggacgacgacgacaagggttccggttctggttcaggtagtggttcagacaaagactgcgaaatgaagcgcaccaccctggatagccctctgggcaagctggaactgtctgggtgcgaacagggcctgcaccgtatcatcttcctgggcaaaggaacatctgccgccgacgccgtggaagtgcctgccccagccgccgtgctgggcggaccagagccactgatgcaggctaccgcatggctcaacgcctactttcaccagcctgaggccatcgaggagttccctgtgccagcgctgcaccatccagtgttccagcaggagagctttacccgccaggtgctgtggaaactgctgaaagtggtgaagtttggagaggtcatcagctacagccacctggccgccctggccggcaatcccgcagccaccgccgcagtgaaaaccgcactgagcggaaatcccgtgcccattctgatcccctgccaccgggtggtgcagggcgacctggacgtggggggctacgaaggcgggctcgcagttaaagagtggctgctggcccacgagggccacagactgggtaagcctgggctgggttaatgaggatcccgggaattctcgagtaaggttaacctgcaggaggcctttaattaaggtggtgcggccgcgctagcggtcccgggggatcgatccggctgctaacaaagcccgaaaggaagctgagttggctgctgccaccgctgagcaataactagcataaccccttggggcctctaaacgggtcttgaggggttttttgctgaaaggaggaactatatccggaagcttggcactggccgaccggggtcgagcactgactcgctgcgctcggtcgttcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttatccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgtaaaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtcttgagtccaacccgctaagacacgacttatcgccactggcagcagccactggtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggctacactagaagaacagtatttggtatctgcgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtggaacgaaaactcacagatccgggattttggtcatgagattatcaaaaaggatcttcacctagatccttttaaattaaaaatgaagttttaaatcaatctaaagtatatatgagtaaacttggtctgacagttaccaatgcttaatcagtgaggcacctatctcagcgatctgtctatttcgttcatccatagttgcctgactccccgtcgtgtagataactacgatacgggagggcttaccatctggccccagtgctgcaatgataccgcgggacccacgctcaccggctccagatttatcagcaataaaccagccagccggaagggccgagcgcagaagtggtcctgcaactttatccgcctccatccagtctattaattgttgccgggaagctagagtaagtagttcgccagttaatagtttgcgcaacgttgttgccattgctacaggcatcgtggtgtcacgctcgtcgtttggtatggcttcattcagctccggttcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaagcggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgcagtgttatcactcatggttatggcagcactgcataattctcttactgtcatgccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtcattctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaatacgggataataccgcgccacatagcagaactttaaaagtgctcatcattggaaaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgagatccagttcgatgtaacccactcgtgcacccaactgatcttcagcatcttttactttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccgcaaaaaagggaataagggcgacacggaaatgttgaatactcat
+Needleman-Wunsch global alignment of two sequences
+########################################
+# Program: needle
+# Rundate: Sat 25 Apr 2026 16:21:04
+# Commandline: needle
+#    [-asequence] sequences.fasta:egfp
+#    [-bsequence] sequences.fasta:output
+#    -gapopen 10
+#    -gapextend 0.5
+#    -aformat pair
+#    -outfile stdout
+# Align_format: pair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: egfp
+# 2: output
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 3591
+# Identity:     716/3591 (19.9%)
+# Similarity:   716/3591 (19.9%)
+# Gaps:        2874/3591 (80.0%)
+# Score: 3565.5
+# 
+#
+#=======================================
+
+egfp               1 --------------------------------------------------      0
+                                                                       
+output             1 actcttcctttttcaatattattgaagcatttatcagggttattgtctca     50
+
+egfp               1 --------------------------------------------------      0
+                                                                       
+output            51 tgagcggatacatatttgaatgtatttagaaaaataaacaaataggggtt    100
+
+egfp               1 --------------------------------------------------      0
+                                                                       
+output           101 ccgcgcacatttccccgaaaagtgctagtggtgctagccccgcgaaatta    150
+
+egfp               1 --------------------------------------------------      0
+                                                                       
+output           151 atacgactcactatagggtctagaaataattttgtttaactttaagaagg    200
+
+egfp               1 ----------atgagcaagggcgaggagctgttcaccggggtggtgccca     40
+                               ||||||||||||||||||||||||||||||||||||||||
+output           201 agatatacatatgagcaagggcgaggagctgttcaccggggtggtgccca    250
+
+egfp              41 tcctggtcgagctggacggcgacgtaaacggccacaagttcagcgtgtcc     90
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           251 tcctggtcgagctggacggcgacgtaaacggccacaagttcagcgtgtcc    300
+
+egfp              91 ggcgagggtgagggcgatgccacctacggcaagctgaccctgaagttcat    140
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           301 ggcgagggtgagggcgatgccacctacggcaagctgaccctgaagttcat    350
+
+egfp             141 ctgcaccacgggcaagctgcccgtgccctggcccaccctcgtgaccaccc    190
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           351 ctgcaccacgggcaagctgcccgtgccctggcccaccctcgtgaccaccc    400
+
+egfp             191 tgacctacggcgtgcagtgcttcagccgctaccccgaccacatgaagcag    240
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           401 tgacctacggcgtgcagtgcttcagccgctaccccgaccacatgaagcag    450
+
+egfp             241 cacgacttcttcaagtccgccatgcccgaaggctacgtccaggagcgcac    290
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           451 cacgacttcttcaagtccgccatgcccgaaggctacgtccaggagcgcac    500
+
+egfp             291 catcttcttcaaggacgacggcaactacaagacccgcgccgaggtgaagt    340
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           501 catcttcttcaaggacgacggcaactacaagacccgcgccgaggtgaagt    550
+
+egfp             341 tcgagggcgacaccctggtgaaccgcatcgagctgaagggcatcgacttc    390
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           551 tcgagggcgacaccctggtgaaccgcatcgagctgaagggcatcgacttc    600
+
+egfp             391 aaggaggacggcaacatcctggggcacaagctggagtacaactacaacag    440
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           601 aaggaggacggcaacatcctggggcacaagctggagtacaactacaacag    650
+
+egfp             441 ccacaacgtctatatcatggccgacaagcagaagaacggcatcaaggtga    490
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           651 ccacaacgtctatatcatggccgacaagcagaagaacggcatcaaggtga    700
+
+egfp             491 acttcaagatccgccacaacatcgaggacggcagcgtgcagctcgccgac    540
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           701 acttcaagatccgccacaacatcgaggacggcagcgtgcagctcgccgac    750
+
+egfp             541 cactaccagcagaacacccccatcggcgacggccccgtgctgctgcccga    590
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           751 cactaccagcagaacacccccatcggcgacggccccgtgctgctgcccga    800
+
+egfp             591 caaccactatctgagcacccagtccgccctgagcaaagaccccaacgaga    640
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           801 caaccactatctgagcacccagtccgccctgagcaaagaccccaacgaga    850
+
+egfp             641 agcgcgatcacatggtcctgctggagttcgtgaccgccgccgggatcact    690
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           851 agcgcgatcacatggtcctgctggagttcgtgaccgccgccgggatcact    900
+
+egfp             691 ctcggcatggacgagctgtacaaa--taa---------------------    717
+                     ||||||||||||||||||||||||  ||.                     
+output           901 ctcggcatggacgagctgtacaaaggtagtggctccggtagcggtagcgg    950
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output           951 cagcgactacaaggacgacgacgacaagggttccggttctggttcaggta   1000
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1001 gtggttcagacaaagactgcgaaatgaagcgcaccaccctggatagccct   1050
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1051 ctgggcaagctggaactgtctgggtgcgaacagggcctgcaccgtatcat   1100
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1101 cttcctgggcaaaggaacatctgccgccgacgccgtggaagtgcctgccc   1150
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1151 cagccgccgtgctgggcggaccagagccactgatgcaggctaccgcatgg   1200
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1201 ctcaacgcctactttcaccagcctgaggccatcgaggagttccctgtgcc   1250
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1251 agcgctgcaccatccagtgttccagcaggagagctttacccgccaggtgc   1300
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1301 tgtggaaactgctgaaagtggtgaagtttggagaggtcatcagctacagc   1350
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1351 cacctggccgccctggccggcaatcccgcagccaccgccgcagtgaaaac   1400
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1401 cgcactgagcggaaatcccgtgcccattctgatcccctgccaccgggtgg   1450
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1451 tgcagggcgacctggacgtggggggctacgaaggcgggctcgcagttaaa   1500
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1501 gagtggctgctggcccacgagggccacagactgggtaagcctgggctggg   1550
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1551 ttaatgaggatcccgggaattctcgagtaaggttaacctgcaggaggcct   1600
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1601 ttaattaaggtggtgcggccgcgctagcggtcccgggggatcgatccggc   1650
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1651 tgctaacaaagcccgaaaggaagctgagttggctgctgccaccgctgagc   1700
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1701 aataactagcataaccccttggggcctctaaacgggtcttgaggggtttt   1750
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1751 ttgctgaaaggaggaactatatccggaagcttggcactggccgaccgggg   1800
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1801 tcgagcactgactcgctgcgctcggtcgttcggctgcggcgagcggtatc   1850
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1851 agctcactcaaaggcggtaatacggttatccacagaatcaggggataacg   1900
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1901 caggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgtaaa   1950
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          1951 aaggccgcgttgctggcgtttttccataggctccgcccccctgacgagca   2000
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2001 tcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactat   2050
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2051 aaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgtt   2100
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2101 ccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaag   2150
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2151 cgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtagg   2200
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2201 tcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgac   2250
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2251 cgctgcgccttatccggtaactatcgtcttgagtccaacccgctaagaca   2300
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2301 cgacttatcgccactggcagcagccactggtaacaggattagcagagcga   2350
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2351 ggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggc   2400
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2401 tacactagaagaacagtatttggtatctgcgctctgctgaagccagttac   2450
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2451 cttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctg   2500
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2501 gtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaa   2550
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2551 ggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtg   2600
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2601 gaacgaaaactcacagatccgggattttggtcatgagattatcaaaaagg   2650
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2651 atcttcacctagatccttttaaattaaaaatgaagttttaaatcaatcta   2700
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2701 aagtatatatgagtaaacttggtctgacagttaccaatgcttaatcagtg   2750
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2751 aggcacctatctcagcgatctgtctatttcgttcatccatagttgcctga   2800
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2801 ctccccgtcgtgtagataactacgatacgggagggcttaccatctggccc   2850
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2851 cagtgctgcaatgataccgcgggacccacgctcaccggctccagatttat   2900
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2901 cagcaataaaccagccagccggaagggccgagcgcagaagtggtcctgca   2950
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          2951 actttatccgcctccatccagtctattaattgttgccgggaagctagagt   3000
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3001 aagtagttcgccagttaatagtttgcgcaacgttgttgccattgctacag   3050
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3051 gcatcgtggtgtcacgctcgtcgtttggtatggcttcattcagctccggt   3100
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3101 tcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaagc   3150
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3151 ggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgcag   3200
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3201 tgttatcactcatggttatggcagcactgcataattctcttactgtcatg   3250
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3251 ccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtcatt   3300
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3301 ctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaatac   3350
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3351 gggataataccgcgccacatagcagaactttaaaagtgctcatcattgga   3400
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3401 aaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgagatc   3450
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3451 cagttcgatgtaacccactcgtgcacccaactgatcttcagcatctttta   3500
+
+egfp             718 --------------------------------------------------    717
+                                                                       
+output          3501 ctttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccgca   3550
+
+egfp             718 -----------------------------------------    717
+                                                              
+output          3551 aaaaagggaataagggcgacacggaaatgttgaatactcat   3591
+
+
+#---------------------------------------
+#---------------------------------------
+Needleman-Wunsch global alignment of two sequences
+########################################
+# Program: needle
+# Rundate: Sat 25 Apr 2026 16:21:04
+# Commandline: needle
+#    [-asequence] sequences.fasta:flag
+#    [-bsequence] sequences.fasta:output
+#    -gapopen 10
+#    -gapextend 0.5
+#    -aformat pair
+#    -outfile stdout
+# Align_format: pair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: flag
+# 2: output
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 3591
+# Identity:      88/3591 ( 2.5%)
+# Similarity:    88/3591 ( 2.5%)
+# Gaps:        3501/3591 (97.5%)
+# Score: 415.0
+# 
+#
+#=======================================
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output             1 actcttcctttttcaatattattgaagcatttatcagggttattgtctca     50
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output            51 tgagcggatacatatttgaatgtatttagaaaaataaacaaataggggtt    100
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           101 ccgcgcacatttccccgaaaagtgctagtggtgctagccccgcgaaatta    150
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           151 atacgactcactatagggtctagaaataattttgtttaactttaagaagg    200
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           201 agatatacatatgagcaagggcgaggagctgttcaccggggtggtgccca    250
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           251 tcctggtcgagctggacggcgacgtaaacggccacaagttcagcgtgtcc    300
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           301 ggcgagggtgagggcgatgccacctacggcaagctgaccctgaagttcat    350
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           351 ctgcaccacgggcaagctgcccgtgccctggcccaccctcgtgaccaccc    400
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           401 tgacctacggcgtgcagtgcttcagccgctaccccgaccacatgaagcag    450
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           451 cacgacttcttcaagtccgccatgcccgaaggctacgtccaggagcgcac    500
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           501 catcttcttcaaggacgacggcaactacaagacccgcgccgaggtgaagt    550
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           551 tcgagggcgacaccctggtgaaccgcatcgagctgaagggcatcgacttc    600
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           601 aaggaggacggcaacatcctggggcacaagctggagtacaactacaacag    650
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           651 ccacaacgtctatatcatggccgacaagcagaagaacggcatcaaggtga    700
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           701 acttcaagatccgccacaacatcgaggacggcagcgtgcagctcgccgac    750
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           751 cactaccagcagaacacccccatcggcgacggccccgtgctgctgcccga    800
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           801 caaccactatctgagcacccagtccgccctgagcaaagaccccaacgaga    850
+
+flag               1 --------------------------------------------------      0
+                                                                       
+output           851 agcgcgatcacatggtcctgctggagttcgtgaccgccgccgggatcact    900
+
+flag               1 ------atg---------------ggtagtggctccggtagcggtagcgg     29
+                           |||               ||||||||||||||||||||||||||
+output           901 ctcggcatggacgagctgtacaaaggtagtggctccggtagcggtagcgg    950
+
+flag              30 cagcgactacaaggacgacgacgacaagggttccggttctggttcaggta     79
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           951 cagcgactacaaggacgacgacgacaagggttccggttctggttcaggta   1000
+
+flag              80 gtggttcataa---------------------------------------     90
+                     ||||||||.|.                                       
+output          1001 gtggttcagacaaagactgcgaaatgaagcgcaccaccctggatagccct   1050
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1051 ctgggcaagctggaactgtctgggtgcgaacagggcctgcaccgtatcat   1100
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1101 cttcctgggcaaaggaacatctgccgccgacgccgtggaagtgcctgccc   1150
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1151 cagccgccgtgctgggcggaccagagccactgatgcaggctaccgcatgg   1200
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1201 ctcaacgcctactttcaccagcctgaggccatcgaggagttccctgtgcc   1250
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1251 agcgctgcaccatccagtgttccagcaggagagctttacccgccaggtgc   1300
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1301 tgtggaaactgctgaaagtggtgaagtttggagaggtcatcagctacagc   1350
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1351 cacctggccgccctggccggcaatcccgcagccaccgccgcagtgaaaac   1400
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1401 cgcactgagcggaaatcccgtgcccattctgatcccctgccaccgggtgg   1450
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1451 tgcagggcgacctggacgtggggggctacgaaggcgggctcgcagttaaa   1500
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1501 gagtggctgctggcccacgagggccacagactgggtaagcctgggctggg   1550
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1551 ttaatgaggatcccgggaattctcgagtaaggttaacctgcaggaggcct   1600
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1601 ttaattaaggtggtgcggccgcgctagcggtcccgggggatcgatccggc   1650
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1651 tgctaacaaagcccgaaaggaagctgagttggctgctgccaccgctgagc   1700
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1701 aataactagcataaccccttggggcctctaaacgggtcttgaggggtttt   1750
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1751 ttgctgaaaggaggaactatatccggaagcttggcactggccgaccgggg   1800
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1801 tcgagcactgactcgctgcgctcggtcgttcggctgcggcgagcggtatc   1850
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1851 agctcactcaaaggcggtaatacggttatccacagaatcaggggataacg   1900
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1901 caggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgtaaa   1950
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          1951 aaggccgcgttgctggcgtttttccataggctccgcccccctgacgagca   2000
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2001 tcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggactat   2050
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2051 aaagataccaggcgtttccccctggaagctccctcgtgcgctctcctgtt   2100
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2101 ccgaccctgccgcttaccggatacctgtccgcctttctcccttcgggaag   2150
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2151 cgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgtagg   2200
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2201 tcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccgac   2250
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2251 cgctgcgccttatccggtaactatcgtcttgagtccaacccgctaagaca   2300
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2301 cgacttatcgccactggcagcagccactggtaacaggattagcagagcga   2350
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2351 ggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacggc   2400
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2401 tacactagaagaacagtatttggtatctgcgctctgctgaagccagttac   2450
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2451 cttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgctg   2500
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2501 gtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaaaa   2550
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2551 ggatctcaagaagatcctttgatcttttctacggggtctgacgctcagtg   2600
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2601 gaacgaaaactcacagatccgggattttggtcatgagattatcaaaaagg   2650
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2651 atcttcacctagatccttttaaattaaaaatgaagttttaaatcaatcta   2700
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2701 aagtatatatgagtaaacttggtctgacagttaccaatgcttaatcagtg   2750
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2751 aggcacctatctcagcgatctgtctatttcgttcatccatagttgcctga   2800
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2801 ctccccgtcgtgtagataactacgatacgggagggcttaccatctggccc   2850
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2851 cagtgctgcaatgataccgcgggacccacgctcaccggctccagatttat   2900
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2901 cagcaataaaccagccagccggaagggccgagcgcagaagtggtcctgca   2950
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          2951 actttatccgcctccatccagtctattaattgttgccgggaagctagagt   3000
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3001 aagtagttcgccagttaatagtttgcgcaacgttgttgccattgctacag   3050
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3051 gcatcgtggtgtcacgctcgtcgtttggtatggcttcattcagctccggt   3100
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3101 tcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaagc   3150
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3151 ggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgcag   3200
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3201 tgttatcactcatggttatggcagcactgcataattctcttactgtcatg   3250
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3251 ccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtcatt   3300
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3301 ctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaatac   3350
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3351 gggataataccgcgccacatagcagaactttaaaagtgctcatcattgga   3400
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3401 aaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgagatc   3450
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3451 cagttcgatgtaacccactcgtgcacccaactgatcttcagcatctttta   3500
+
+flag              91 --------------------------------------------------     90
+                                                                       
+output          3501 ctttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccgca   3550
+
+flag              91 -----------------------------------------     90
+                                                              
+output          3551 aaaaagggaataagggcgacacggaaatgttgaatactcat   3591
+
+
+#---------------------------------------
+#---------------------------------------
+Needleman-Wunsch global alignment of two sequences
+########################################
+# Program: needle
+# Rundate: Sat 25 Apr 2026 16:21:05
+# Commandline: needle
+#    [-asequence] sequences.fasta:snap
+#    [-bsequence] sequences.fasta:output
+#    -gapopen 10
+#    -gapextend 0.5
+#    -aformat pair
+#    -outfile stdout
+# Align_format: pair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: snap
+# 2: output
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 3593
+# Identity:     547/3593 (15.2%)
+# Similarity:   547/3593 (15.2%)
+# Gaps:        3046/3593 (84.8%)
+# Score: 2724.5
+# 
+#
+#=======================================
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output             1 actcttcctttttcaatattattgaagcatttatcagggttattgtctca     50
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output            51 tgagcggatacatatttgaatgtatttagaaaaataaacaaataggggtt    100
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           101 ccgcgcacatttccccgaaaagtgctagtggtgctagccccgcgaaatta    150
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           151 atacgactcactatagggtctagaaataattttgtttaactttaagaagg    200
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           201 agatatacatatgagcaagggcgaggagctgttcaccggggtggtgccca    250
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           251 tcctggtcgagctggacggcgacgtaaacggccacaagttcagcgtgtcc    300
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           301 ggcgagggtgagggcgatgccacctacggcaagctgaccctgaagttcat    350
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           351 ctgcaccacgggcaagctgcccgtgccctggcccaccctcgtgaccaccc    400
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           401 tgacctacggcgtgcagtgcttcagccgctaccccgaccacatgaagcag    450
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           451 cacgacttcttcaagtccgccatgcccgaaggctacgtccaggagcgcac    500
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           501 catcttcttcaaggacgacggcaactacaagacccgcgccgaggtgaagt    550
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           551 tcgagggcgacaccctggtgaaccgcatcgagctgaagggcatcgacttc    600
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           601 aaggaggacggcaacatcctggggcacaagctggagtacaactacaacag    650
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           651 ccacaacgtctatatcatggccgacaagcagaagaacggcatcaaggtga    700
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           701 acttcaagatccgccacaacatcgaggacggcagcgtgcagctcgccgac    750
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           751 cactaccagcagaacacccccatcggcgacggccccgtgctgctgcccga    800
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           801 caaccactatctgagcacccagtccgccctgagcaaagaccccaacgaga    850
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           851 agcgcgatcacatggtcctgctggagttcgtgaccgccgccgggatcact    900
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           901 ctcggcatggacgagctgtacaaaggtagtggctccggtagcggtagcgg    950
+
+snap               1 --------------------------------------------------      0
+                                                                       
+output           951 cagcgactacaaggacgacgacgacaagggttccggttctggttcaggta   1000
+
+snap               1 -------atggacaaagactgcgaaatgaagcgcaccaccctggatagcc     43
+                            |  ||||||||||||||||||||||||||||||||||||||||
+output          1001 gtggttca--gacaaagactgcgaaatgaagcgcaccaccctggatagcc   1048
+
+snap              44 ctctgggcaagctggaactgtctgggtgcgaacagggcctgcaccgtatc     93
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1049 ctctgggcaagctggaactgtctgggtgcgaacagggcctgcaccgtatc   1098
+
+snap              94 atcttcctgggcaaaggaacatctgccgccgacgccgtggaagtgcctgc    143
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1099 atcttcctgggcaaaggaacatctgccgccgacgccgtggaagtgcctgc   1148
+
+snap             144 cccagccgccgtgctgggcggaccagagccactgatgcaggctaccgcat    193
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1149 cccagccgccgtgctgggcggaccagagccactgatgcaggctaccgcat   1198
+
+snap             194 ggctcaacgcctactttcaccagcctgaggccatcgaggagttccctgtg    243
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1199 ggctcaacgcctactttcaccagcctgaggccatcgaggagttccctgtg   1248
+
+snap             244 ccagcgctgcaccatccagtgttccagcaggagagctttacccgccaggt    293
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1249 ccagcgctgcaccatccagtgttccagcaggagagctttacccgccaggt   1298
+
+snap             294 gctgtggaaactgctgaaagtggtgaagtttggagaggtcatcagctaca    343
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1299 gctgtggaaactgctgaaagtggtgaagtttggagaggtcatcagctaca   1348
+
+snap             344 gccacctggccgccctggccggcaatcccgcagccaccgccgcagtgaaa    393
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1349 gccacctggccgccctggccggcaatcccgcagccaccgccgcagtgaaa   1398
+
+snap             394 accgcactgagcggaaatcccgtgcccattctgatcccctgccaccgggt    443
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1399 accgcactgagcggaaatcccgtgcccattctgatcccctgccaccgggt   1448
+
+snap             444 ggtgcagggcgacctggacgtggggggctacgaaggcgggctcgcagtta    493
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1449 ggtgcagggcgacctggacgtggggggctacgaaggcgggctcgcagtta   1498
+
+snap             494 aagagtggctgctggcccacgagggccacagactgggtaagcctgggctg    543
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1499 aagagtggctgctggcccacgagggccacagactgggtaagcctgggctg   1548
+
+snap             544 ggttaa--------------------------------------------    549
+                     ||||||                                            
+output          1549 ggttaatgaggatcccgggaattctcgagtaaggttaacctgcaggaggc   1598
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1599 ctttaattaaggtggtgcggccgcgctagcggtcccgggggatcgatccg   1648
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1649 gctgctaacaaagcccgaaaggaagctgagttggctgctgccaccgctga   1698
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1699 gcaataactagcataaccccttggggcctctaaacgggtcttgaggggtt   1748
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1749 ttttgctgaaaggaggaactatatccggaagcttggcactggccgaccgg   1798
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1799 ggtcgagcactgactcgctgcgctcggtcgttcggctgcggcgagcggta   1848
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1849 tcagctcactcaaaggcggtaatacggttatccacagaatcaggggataa   1898
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1899 cgcaggaaagaacatgtgagcaaaaggccagcaaaaggccaggaaccgta   1948
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1949 aaaaggccgcgttgctggcgtttttccataggctccgcccccctgacgag   1998
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          1999 catcacaaaaatcgacgctcaagtcagaggtggcgaaacccgacaggact   2048
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2049 ataaagataccaggcgtttccccctggaagctccctcgtgcgctctcctg   2098
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2099 ttccgaccctgccgcttaccggatacctgtccgcctttctcccttcggga   2148
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2149 agcgtggcgctttctcatagctcacgctgtaggtatctcagttcggtgta   2198
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2199 ggtcgttcgctccaagctgggctgtgtgcacgaaccccccgttcagcccg   2248
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2249 accgctgcgccttatccggtaactatcgtcttgagtccaacccgctaaga   2298
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2299 cacgacttatcgccactggcagcagccactggtaacaggattagcagagc   2348
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2349 gaggtatgtaggcggtgctacagagttcttgaagtggtggcctaactacg   2398
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2399 gctacactagaagaacagtatttggtatctgcgctctgctgaagccagtt   2448
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2449 accttcggaaaaagagttggtagctcttgatccggcaaacaaaccaccgc   2498
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2499 tggtagcggtggtttttttgtttgcaagcagcagattacgcgcagaaaaa   2548
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2549 aaggatctcaagaagatcctttgatcttttctacggggtctgacgctcag   2598
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2599 tggaacgaaaactcacagatccgggattttggtcatgagattatcaaaaa   2648
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2649 ggatcttcacctagatccttttaaattaaaaatgaagttttaaatcaatc   2698
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2699 taaagtatatatgagtaaacttggtctgacagttaccaatgcttaatcag   2748
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2749 tgaggcacctatctcagcgatctgtctatttcgttcatccatagttgcct   2798
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2799 gactccccgtcgtgtagataactacgatacgggagggcttaccatctggc   2848
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2849 cccagtgctgcaatgataccgcgggacccacgctcaccggctccagattt   2898
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2899 atcagcaataaaccagccagccggaagggccgagcgcagaagtggtcctg   2948
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2949 caactttatccgcctccatccagtctattaattgttgccgggaagctaga   2998
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          2999 gtaagtagttcgccagttaatagtttgcgcaacgttgttgccattgctac   3048
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3049 aggcatcgtggtgtcacgctcgtcgtttggtatggcttcattcagctccg   3098
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3099 gttcccaacgatcaaggcgagttacatgatcccccatgttgtgcaaaaaa   3148
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3149 gcggttagctccttcggtcctccgatcgttgtcagaagtaagttggccgc   3198
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3199 agtgttatcactcatggttatggcagcactgcataattctcttactgtca   3248
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3249 tgccatccgtaagatgcttttctgtgactggtgagtactcaaccaagtca   3298
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3299 ttctgagaatagtgtatgcggcgaccgagttgctcttgcccggcgtcaat   3348
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3349 acgggataataccgcgccacatagcagaactttaaaagtgctcatcattg   3398
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3399 gaaaacgttcttcggggcgaaaactctcaaggatcttaccgctgttgaga   3448
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3449 tccagttcgatgtaacccactcgtgcacccaactgatcttcagcatcttt   3498
+
+snap             550 --------------------------------------------------    549
+                                                                       
+output          3499 tactttcaccagcgtttctgggtgagcaaaaacaggaaggcaaaatgccg   3548
+
+snap             550 -------------------------------------------    549
+                                                                
+output          3549 caaaaaagggaataagggcgacacggaaatgttgaatactcat   3591
+
+
+#---------------------------------------
+#---------------------------------------
+Needleman-Wunsch global alignment of two sequences
+########################################
+# Program: needle
+# Rundate: Sat 25 Apr 2026 16:21:06
+# Commandline: needle
+#    [-asequence] sequences.fasta:input
+#    [-bsequence] sequences.fasta:output
+#    -gapopen 10
+#    -gapextend 0.5
+#    -aformat pair
+#    -outfile stdout
+# Align_format: pair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: input
+# 2: output
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 3612
+# Identity:    2623/3612 (72.6%)
+# Similarity:  2623/3612 (72.6%)
+# Gaps:         906/3612 (25.1%)
+# Score: 11617.5
+# 
+#
+#=======================================
+
+input              1 actcttcctttttcaatattattgaagcatttatcagggttattgtctca     50
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output             1 actcttcctttttcaatattattgaagcatttatcagggttattgtctca     50
+
+input             51 tgagcggatacatatttgaatgtatttagaaaaataaacaaataggggtt    100
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output            51 tgagcggatacatatttgaatgtatttagaaaaataaacaaataggggtt    100
+
+input            101 ccgcgcacatttccccgaaaagtgctagtggtgctagccccgcgaaatta    150
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           101 ccgcgcacatttccccgaaaagtgctagtggtgctagccccgcgaaatta    150
+
+input            151 atacgactcactatagggtctagaaataattttgtttaactttaagaagg    200
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output           151 atacgactcactatagggtctagaaataattttgtttaactttaagaagg    200
+
+input            201 agatatacatatgatca---------------------------------    217
+                     ||||||||||||||.||                                 
+output           201 agatatacatatgagcaagggcgaggagctgttcaccggggtggtgccca    250
+
+input            218 -----gtc-----tgattgcggcgttagcgg----tagatc-gcgt----    248
+                          |||     .||..|||.|||.|.|||    .||.|| ||||    
+output           251 tcctggtcgagctggacggcgacgtaaacggccacaagttcagcgtgtcc    300
+
+input            249 ------------------------tatcggca------------------    256
+                                             || |||||                  
+output           301 ggcgagggtgagggcgatgccaccta-cggcaagctgaccctgaagttca    349
+
+input            257 --tggaaaacg----------ccatgccgtgg---------------aac    279
+                       ||.|..|||          ||.||||.|||               |.|
+output           350 tctgcaccacgggcaagctgcccgtgccctggcccaccctcgtgaccacc    399
+
+input            280 ctg-cct------------------gccg--------------------a    290
+                     ||| |||                  ||||                    |
+output           400 ctgacctacggcgtgcagtgcttcagccgctaccccgaccacatgaagca    449
+
+input            291 tctcgcctggttta------------------------------aacgca    310
+                     .|.||.||..||.|                              |.||||
+output           450 gcacgacttcttcaagtccgccatgcccgaaggctacgtccaggagcgca    499
+
+input            311 acacctt----------------aaat---aaaccc--------gtga--    331
+                     .||.|||                ||.|   |.||||        ||||  
+output           500 ccatcttcttcaaggacgacggcaactacaagacccgcgccgaggtgaag    549
+
+input            332 ttatgggccgccatacctgg------gaatcaatc----ggtcgtccgtt    371
+                     ||...||.||.|| .|||||      |.|||.|.|    ||.|.||    
+output           550 ttcgagggcgaca-ccctggtgaaccgcatcgagctgaagggcatc----    594
+
+input            372 gcc-------aggac-gcaaaaatattatcct------------------    395
+                     |.|       ||||| ||||      .|||||                  
+output           595 gacttcaaggaggacggcaa------catcctggggcacaagctggagta    638
+
+input            396 ------cagcagtca-accgggta--------cggacgatc-gcgtaacg    429
+                           ||.|||.|| |.||..||        |.|||.|.| |...||||
+output           639 caactacaacagccacaacgtctatatcatggccgacaagcagaagaacg    688
+
+input            430 tg------ggtgaagt--------cg----------gtgga--------t    447
+                      |      ||||||.|        ||          |.|||        |
+output           689 -gcatcaaggtgaacttcaagatccgccacaacatcgaggacggcagcgt    737
+
+input            448 gaag----------------------------ccatcg----cgg---cg    462
+                     |.||                            ||||||    |||   ||
+output           738 gcagctcgccgaccactaccagcagaacacccccatcggcgacggccccg    787
+
+input            463 tg-tggtgac------------------------gt--------------    473
+                     || ||.||.|                        ||              
+output           788 tgctgctgcccgacaaccactatctgagcacccagtccgccctgagcaaa    837
+
+input            474 -------accagaa-----at--catggt---------------------    488
+                            ||.||||     ||  ||||||                     
+output           838 gaccccaacgagaagcgcgatcacatggtcctgctggagttcgtgaccgc    887
+
+input            489 ------gat---------------------------------tggcggcg    499
+                           |||                                 ||||..||
+output           888 cgccgggatcactctcggcatggacgagctgtacaaaggtagtggctccg    937
+
+input            500 gtcgcgtt------------tatga-----------aca---------gt    517
+                     ||.|||.|            ||..|           |||         ||
+output           938 gtagcggtagcggcagcgactacaaggacgacgacgacaagggttccggt    987
+
+input            518 tct---------------------------tgccaa---aagcgca----    533
+                     |||                           |||.||   |||||||    
+output           988 tctggttcaggtagtggttcagacaaagactgcgaaatgaagcgcaccac   1037
+
+input            534 -------------------aa-----aactgt------------------    541
+                                        ||     ||||||                  
+output          1038 cctggatagccctctgggcaagctggaactgtctgggtgcgaacagggcc   1087
+
+input            542 -------------------------------atctgacgcatatcgacgc    560
+                                                    |||||.|||    ||||||
+output          1088 tgcaccgtatcatcttcctgggcaaaggaacatctgccgc----cgacgc   1133
+
+input            561 ---agaagtg----------------------------------------    567
+                        .||||||                                        
+output          1134 cgtggaagtgcctgccccagccgccgtgctgggcggaccagagccactga   1183
+
+input            568 -gaaggcgac-----------ac----------------------ccat-    582
+                      |.||||.||           ||                      |||| 
+output          1184 tgcaggctaccgcatggctcaacgcctactttcaccagcctgaggccatc   1233
+
+input            583 ------ttccc---------------------------------gga---    590
+                           |||||                                 |||   
+output          1234 gaggagttccctgtgccagcgctgcaccatccagtgttccagcaggagag   1283
+
+input            591 --ttacgagccggatgactg-ggaatc-----------------------    614
+                       ||||..|||.|.|| ||| ||||.|                       
+output          1284 ctttacccgccaggtg-ctgtggaaactgctgaaagtggtgaagtttgga   1332
+
+input            615 --ggtattcagc--------------------------------------    624
+                       |||..|||||                                      
+output          1333 gaggtcatcagctacagccacctggccgccctggccggcaatcccgcagc   1382
+
+input            625 -----------------------------gaattccacg-----atgctg    640
+                                                  |||.||| ||     ||.|||
+output          1383 caccgccgcagtgaaaaccgcactgagcggaaatcc-cgtgcccattctg   1431
+
+input            641 at----------------gcgca----gaact------------------    652
+                     ||                |.|||    ||.||                  
+output          1432 atcccctgccaccgggtggtgcagggcgacctggacgtggggggctacga   1481
+
+input            653 -------ctcacagcta-----ttgct-ttg---------------agat    674
+                            |||.|||.||     |.||| .||               ||| 
+output          1482 aggcgggctcgcagttaaagagtggctgctggcccacgagggccacaga-   1530
+
+input            675 tctgg---agc---ggc---ggtaatgaggatcccgggaattctcgagta    715
+                      ||||   |||   |||   |.||||||||||||||||||||||||||||
+output          1531 -ctgggtaagcctgggctgggttaatgaggatcccgggaattctcgagta   1579
+
+input            716 aggttaacctgcaggaggcctttaattaaggtggtgcggccgcgctagcg    765
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1580 aggttaacctgcaggaggcctttaattaaggtggtgcggccgcgctagcg   1629
+
+input            766 gtcccgggggatcgatccggctgctaacaaagcccgaaaggaagctgagt    815
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1630 gtcccgggggatcgatccggctgctaacaaagcccgaaaggaagctgagt   1679
+
+input            816 tggctgctgccaccgctgagcaataactagcataaccccttggggcctct    865
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1680 tggctgctgccaccgctgagcaataactagcataaccccttggggcctct   1729
+
+input            866 aaacgggtcttgaggggttttttgctgaaaggaggaactatatccggaag    915
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1730 aaacgggtcttgaggggttttttgctgaaaggaggaactatatccggaag   1779
+
+input            916 cttggcactggccgaccggggtcgagcactgactcgctgcgctcggtcgt    965
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1780 cttggcactggccgaccggggtcgagcactgactcgctgcgctcggtcgt   1829
+
+input            966 tcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttat   1015
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1830 tcggctgcggcgagcggtatcagctcactcaaaggcggtaatacggttat   1879
+
+input           1016 ccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccag   1065
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1880 ccacagaatcaggggataacgcaggaaagaacatgtgagcaaaaggccag   1929
+
+input           1066 caaaaggccaggaaccgtaaaaaggccgcgttgctggcgtttttccatag   1115
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1930 caaaaggccaggaaccgtaaaaaggccgcgttgctggcgtttttccatag   1979
+
+input           1116 gctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggt   1165
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          1980 gctccgcccccctgacgagcatcacaaaaatcgacgctcaagtcagaggt   2029
+
+input           1166 ggcgaaacccgacaggactataaagataccaggcgtttccccctggaagc   1215
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2030 ggcgaaacccgacaggactataaagataccaggcgtttccccctggaagc   2079
+
+input           1216 tccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtc   1265
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2080 tccctcgtgcgctctcctgttccgaccctgccgcttaccggatacctgtc   2129
+
+input           1266 cgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgta   1315
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2130 cgcctttctcccttcgggaagcgtggcgctttctcatagctcacgctgta   2179
+
+input           1316 ggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcac   1365
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2180 ggtatctcagttcggtgtaggtcgttcgctccaagctgggctgtgtgcac   2229
+
+input           1366 gaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtct   1415
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2230 gaaccccccgttcagcccgaccgctgcgccttatccggtaactatcgtct   2279
+
+input           1416 tgagtccaacccgctaagacacgacttatcgccactggcagcagccactg   1465
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2280 tgagtccaacccgctaagacacgacttatcgccactggcagcagccactg   2329
+
+input           1466 gtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttg   1515
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2330 gtaacaggattagcagagcgaggtatgtaggcggtgctacagagttcttg   2379
+
+input           1516 aagtggtggcctaactacggctacactagaagaacagtatttggtatctg   1565
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2380 aagtggtggcctaactacggctacactagaagaacagtatttggtatctg   2429
+
+input           1566 cgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgat   1615
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2430 cgctctgctgaagccagttaccttcggaaaaagagttggtagctcttgat   2479
+
+input           1616 ccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcag   1665
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2480 ccggcaaacaaaccaccgctggtagcggtggtttttttgtttgcaagcag   2529
+
+input           1666 cagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttc   1715
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2530 cagattacgcgcagaaaaaaaggatctcaagaagatcctttgatcttttc   2579
+
+input           1716 tacggggtctgacgctcagtggaacgaaaactcacagatccgggattttg   1765
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2580 tacggggtctgacgctcagtggaacgaaaactcacagatccgggattttg   2629
+
+input           1766 gtcatgagattatcaaaaaggatcttcacctagatccttttaaattaaaa   1815
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2630 gtcatgagattatcaaaaaggatcttcacctagatccttttaaattaaaa   2679
+
+input           1816 atgaagttttaaatcaatctaaagtatatatgagtaaacttggtctgaca   1865
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2680 atgaagttttaaatcaatctaaagtatatatgagtaaacttggtctgaca   2729
+
+input           1866 gttaccaatgcttaatcagtgaggcacctatctcagcgatctgtctattt   1915
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2730 gttaccaatgcttaatcagtgaggcacctatctcagcgatctgtctattt   2779
+
+input           1916 cgttcatccatagttgcctgactccccgtcgtgtagataactacgatacg   1965
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2780 cgttcatccatagttgcctgactccccgtcgtgtagataactacgatacg   2829
+
+input           1966 ggagggcttaccatctggccccagtgctgcaatgataccgcgggacccac   2015
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2830 ggagggcttaccatctggccccagtgctgcaatgataccgcgggacccac   2879
+
+input           2016 gctcaccggctccagatttatcagcaataaaccagccagccggaagggcc   2065
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2880 gctcaccggctccagatttatcagcaataaaccagccagccggaagggcc   2929
+
+input           2066 gagcgcagaagtggtcctgcaactttatccgcctccatccagtctattaa   2115
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2930 gagcgcagaagtggtcctgcaactttatccgcctccatccagtctattaa   2979
+
+input           2116 ttgttgccgggaagctagagtaagtagttcgccagttaatagtttgcgca   2165
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          2980 ttgttgccgggaagctagagtaagtagttcgccagttaatagtttgcgca   3029
+
+input           2166 acgttgttgccattgctacaggcatcgtggtgtcacgctcgtcgtttggt   2215
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3030 acgttgttgccattgctacaggcatcgtggtgtcacgctcgtcgtttggt   3079
+
+input           2216 atggcttcattcagctccggttcccaacgatcaaggcgagttacatgatc   2265
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3080 atggcttcattcagctccggttcccaacgatcaaggcgagttacatgatc   3129
+
+input           2266 ccccatgttgtgcaaaaaagcggttagctccttcggtcctccgatcgttg   2315
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3130 ccccatgttgtgcaaaaaagcggttagctccttcggtcctccgatcgttg   3179
+
+input           2316 tcagaagtaagttggccgcagtgttatcactcatggttatggcagcactg   2365
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3180 tcagaagtaagttggccgcagtgttatcactcatggttatggcagcactg   3229
+
+input           2366 cataattctcttactgtcatgccatccgtaagatgcttttctgtgactgg   2415
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3230 cataattctcttactgtcatgccatccgtaagatgcttttctgtgactgg   3279
+
+input           2416 tgagtactcaaccaagtcattctgagaatagtgtatgcggcgaccgagtt   2465
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3280 tgagtactcaaccaagtcattctgagaatagtgtatgcggcgaccgagtt   3329
+
+input           2466 gctcttgcccggcgtcaatacgggataataccgcgccacatagcagaact   2515
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3330 gctcttgcccggcgtcaatacgggataataccgcgccacatagcagaact   3379
+
+input           2516 ttaaaagtgctcatcattggaaaacgttcttcggggcgaaaactctcaag   2565
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3380 ttaaaagtgctcatcattggaaaacgttcttcggggcgaaaactctcaag   3429
+
+input           2566 gatcttaccgctgttgagatccagttcgatgtaacccactcgtgcaccca   2615
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3430 gatcttaccgctgttgagatccagttcgatgtaacccactcgtgcaccca   3479
+
+input           2616 actgatcttcagcatcttttactttcaccagcgtttctgggtgagcaaaa   2665
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3480 actgatcttcagcatcttttactttcaccagcgtttctgggtgagcaaaa   3529
+
+input           2666 acaggaaggcaaaatgccgcaaaaaagggaataagggcgacacggaaatg   2715
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+output          3530 acaggaaggcaaaatgccgcaaaaaagggaataagggcgacacggaaatg   3579
+
+input           2716 ttgaatactcat   2727
+                     ||||||||||||
+output          3580 ttgaatactcat   3591
+
+
+#---------------------------------------
+#---------------------------------------
+INPUT FWD	Tm=60.644592°C
+INPUT REV	Tm=58.082753°C
+EGFP FWD	Tm=66.274364°C
+EGFP REV	Tm=64.582168°C
+FLAG FWD	Tm=63.301116°C
+FLAG REV	Tm=60.610114°C
+SNAP FWD	Tm=64.483301°C
+SNAP REV	Tm=65.636158°C

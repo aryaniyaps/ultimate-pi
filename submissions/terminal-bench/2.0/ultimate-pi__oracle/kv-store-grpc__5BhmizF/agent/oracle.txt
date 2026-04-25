@@ -1,0 +1,22 @@
+Collecting grpcio==1.73.0
+  Downloading grpcio-1.73.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.8 kB)
+Collecting grpcio-tools==1.73.0
+  Downloading grpcio_tools-1.73.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.3 kB)
+Collecting protobuf<7.0.0,>=6.30.0 (from grpcio-tools==1.73.0)
+  Downloading protobuf-6.33.6-cp39-abi3-manylinux2014_x86_64.whl.metadata (593 bytes)
+Collecting setuptools (from grpcio-tools==1.73.0)
+  Downloading setuptools-82.0.1-py3-none-any.whl.metadata (6.5 kB)
+Downloading grpcio-1.73.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (6.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.0/6.0 MB 5.4 MB/s  0:00:01
+Downloading grpcio_tools-1.73.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.7/2.7 MB 2.8 MB/s  0:00:00
+Downloading protobuf-6.33.6-cp39-abi3-manylinux2014_x86_64.whl (323 kB)
+Downloading setuptools-82.0.1-py3-none-any.whl (1.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 9.1 MB/s  0:00:00
+Installing collected packages: setuptools, protobuf, grpcio, grpcio-tools
+
+Successfully installed grpcio-1.73.0 grpcio-tools-1.73.0 protobuf-6.33.6 setuptools-82.0.1
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+[notice] A new release of pip is available: 25.2 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip

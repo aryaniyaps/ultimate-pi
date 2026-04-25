@@ -1,0 +1,9 @@
+agent_url: https://github.com/aryaniyaps/ultimate-pi
+agent_display_name: "ultimate-pi"
+agent_org_display_name: "aryaniyaps"
+
+models:
+  - model_name: oracle
+    model_provider: harbor
+    model_display_name: "Oracle"
+    model_org_display_name: "Harbor"
