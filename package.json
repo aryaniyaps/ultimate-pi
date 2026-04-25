@@ -21,5 +21,8 @@
     "skills": [
       "./.agents/skills"
     ]
+  },
+  "scripts": {
+    "bench:terminal": "./bench/terminal-bench/run-terminal-bench.sh"
   }
 }

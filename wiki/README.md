@@ -22,3 +22,6 @@ Track architecture and implementation decisions for this repo.
 - [0016 - Track inter-agent consensus loop as future plan item](decisions/0016-track-inter-agent-consensus-loop-as-future-plan-item.md)
 - [0017 - Track queryable context layer with vector indexing](decisions/0017-track-queryable-context-layer-with-vector-indexing.md)
 - [0018 - Keep harness extensible and avoid opinionated design-skill coupling](decisions/0018-keep-harness-extensible-and-avoid-opinionated-design-skill-coupling.md)
+- [0019 - Add Harbor Terminal-Bench adapter and keep bench assets out of npm package](decisions/0019-add-harbor-terminal-bench-adapter-and-keep-bench-assets-out-of-npm-package.md)
+- [0020 - Default Harbor adapter to PI non-interactive prompt flag](decisions/0020-default-harbor-adapter-to-pi-non-interactive-prompt-flag.md)
+- [0021 - Exclude benchmark result artifacts from npm package](decisions/0021-exclude-benchmark-results-from-npm-package.md)

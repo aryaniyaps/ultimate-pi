@@ -1,0 +1,19 @@
+Collecting eigenpy==3.10.3
+  Downloading eigenpy-3.10.3-0-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+Collecting cmeel (from eigenpy==3.10.3)
+  Downloading cmeel-0.59.0-py3-none-any.whl.metadata (4.7 kB)
+Collecting cmeel-boost~=1.87.0 (from eigenpy==3.10.3)
+  Downloading cmeel_boost-1.87.0.1-0-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (1.0 kB)
+Requirement already satisfied: numpy<2.4,>=2.2 in /usr/local/lib/python3.13/site-packages (from cmeel-boost~=1.87.0->eigenpy==3.10.3) (2.3.0)
+Downloading eigenpy-3.10.3-0-cp313-cp313-manylinux_2_28_x86_64.whl (4.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 3.0 MB/s  0:00:01
+Downloading cmeel_boost-1.87.0.1-0-cp313-cp313-manylinux_2_28_x86_64.whl (35.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.9/35.9 MB 1.8 MB/s  0:00:19
+Downloading cmeel-0.59.0-py3-none-any.whl (20 kB)
+Installing collected packages: cmeel, cmeel-boost, eigenpy
+
+Successfully installed cmeel-0.59.0 cmeel-boost-1.87.0.1 eigenpy-3.10.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+[notice] A new release of pip is available: 25.2 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip
