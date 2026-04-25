@@ -20,7 +20,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22.14.0'
+
+      - name: Ensure npm trusted publishing minimum version
+        run: |
+          npm i -g npm@^11.5.1
+          node -v
+          npm -v
 
       - name: Publish package
         run: npm publish --provenance --access public
