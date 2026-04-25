@@ -70,34 +70,3 @@ pi install . -l
 ```
 
 Then restart PI or run `/reload`.
-
-Suggested commands:
-
-```text
-/skill:caveman
-/skill:compress
-/skill:lean-ctx
-/skill:context7-cli
-/lean-ctx-status
-/system-prompt-status
-```
-
-Run compression directly:
-
-```bash
-cd skills/compress
-python3 -m scripts /absolute/path/to/CLAUDE.md
-```
-
-Optional env vars:
-
-- `CAVEMAN_COMPRESS_CMD`
-- `CAVEMAN_MODEL`
-
-## Attribution
-
-- Caveman source: https://github.com/JuliusBrussee/caveman (MIT)
-- Lean-ctx source: https://github.com/yvgude/lean-ctx (Apache-2.0, MIT components)
-- Context7 source: https://github.com/upstash/context7 (MIT)
-
-See `THIRD_PARTY_NOTICES.md` and `THIRD_PARTY_LICENSES/`.
