@@ -20,19 +20,19 @@ Ship a production-grade coding harness where the agent:
 
 - `package.json` registers:
   - `./extensions`
-  - `./skills`
+  - `./.agents/skills`
 - Project system prompt override:
   - `.pi/SYSTEM.md`
 
-### Installed skills (present in this repo)
+### Included skills (upstream repositories)
 
-- `skills/caveman/SKILL.md`
-- `skills/compress/SKILL.md`
-- `skills/compress/scripts/*`
-- `skills/lean-ctx/SKILL.md`
-- `skills/lean-ctx/scripts/install.sh`
-- `skills/context7-cli/SKILL.md`
-- `skills/context7-cli/references/*`
+| Skill | Upstream repo | What it does |
+|---|---|---|
+| caveman | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) | Ultra-compressed response style for token-efficient, high-signal communication. |
+| compress | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) | Compresses memory/context files into caveman format while preserving technical content. |
+| lean-ctx | [yvgude/lean-ctx](https://github.com/yvgude/lean-ctx) | Context runtime and compression toolkit for reads/search/shell/edit flows. |
+| context7-cli | [upstash/context7](https://github.com/upstash/context7) | Pulls current library docs and manages Context7 skills/config from CLI. |
+| emil-design-eng | [emilkowalski/skill](https://github.com/emilkowalski/skill) | UI/design craftsmanship guidance: interaction polish, motion, and component quality. |
 
 ### Runtime guardrail extension
 
