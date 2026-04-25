@@ -14,3 +14,4 @@ Track architecture and implementation decisions for this repo.
 - [0008 - Rename banner asset for cache-busting on npm README](decisions/0008-rename-banner-asset-for-cache-busting.md)
 - [0009 - Force OIDC path by clearing NODE_AUTH_TOKEN in publish step](decisions/0009-force-oidc-path-by-clearing-node-auth-token-in-publish-step.md)
 - [0010 - Simplify setup-node for npm Trusted Publishing](decisions/0010-simplify-setup-node-for-npm-trusted-publishing.md)
+- [0011 - Add noop workflow change to force fresh publish run](decisions/0011-add-noop-workflow-change-to-force-fresh-publish-run.md)
