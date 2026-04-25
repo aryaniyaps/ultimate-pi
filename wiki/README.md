@@ -17,3 +17,4 @@ Track architecture and implementation decisions for this repo.
 - [0011 - Add noop workflow change to force fresh publish run](decisions/0011-add-noop-workflow-change-to-force-fresh-publish-run.md)
 - [0012 - Align workflow runtime with npm Trusted Publishing requirements](decisions/0012-align-workflow-runtime-with-npm-trusted-publishing-requirements.md)
 - [0013 - Add package repository URL for provenance validation](decisions/0013-add-package-repository-url-for-provenance-validation.md)
+- [0014 - Publish scoped package to GitHub Packages npm registry](decisions/0014-publish-scoped-package-to-github-packages.md)

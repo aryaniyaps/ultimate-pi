@@ -1,0 +1,35 @@
+name: Publish to GitHub Packages
+run-name: Publish GitHub package from ${{ github.ref_name }}
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  publish-github-packages:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js for GitHub Packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@aryaniyaps'
+
+      - name: Prepare scoped package manifest for GitHub Packages
+        run: |
+          npm pkg set name='@aryaniyaps/ultimate-pi'
+          npm pkg set publishConfig.registry='https://npm.pkg.github.com'
+
+      - name: Publish package to GitHub Packages
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
