@@ -43,7 +43,6 @@ Ship a production-grade coding harness where the agent:
 | compress | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) | Compresses memory/context files into caveman format while preserving technical content. |
 | lean-ctx | [yvgude/lean-ctx](https://github.com/yvgude/lean-ctx) | Context runtime and compression toolkit for reads/search/shell/edit flows. |
 | context7-cli | [upstash/context7](https://github.com/upstash/context7) | Pulls current library docs and manages Context7 skills/config from CLI. |
-| emil-design-eng | [emilkowalski/skill](https://github.com/emilkowalski/skill) | UI/design craftsmanship guidance: interaction polish, motion, and component quality. |
 | scrapling-official | [D4Vinci/Scrapling](https://github.com/D4Vinci/Scrapling) | Official Scrapling skill for web extraction/scraping with adaptive parsing, JS rendering, stealth fetchers, and anti-bot handling. |
 
 ### Runtime guardrail extension
@@ -82,3 +81,13 @@ pi install . -l
 ```
 
 Then restart PI or run `/reload`.
+
+## Terminal-Bench evaluation (local only)
+
+Use Harbor custom-agent flow from docs:
+
+```bash
+npm run bench:terminal
+```
+
+Scaffold files live in `bench/terminal-bench/` and are excluded from npm publish via `.npmignore`.

@@ -1,0 +1,16 @@
+Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8792 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [297 kB]
+Fetched 9350 kB in 2s (4311 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+grep is already the newest version (3.8-5).
+grep set to manually installed.
+coreutils is already the newest version (9.1-1).
+coreutils set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 26 not upgraded.

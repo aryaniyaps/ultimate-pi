@@ -1,0 +1,30 @@
+{
+    "id": "e0eac9ec-acab-42c8-9fed-ac7e92d7738f",
+    "started_at": "2026-04-25T20:55:39.070992",
+    "finished_at": "2026-04-25T20:57:30.837815",
+    "n_total_trials": 1,
+    "stats": {
+        "n_trials": 1,
+        "n_errors": 0,
+        "evals": {
+            "oracle__terminal-bench-2": {
+                "n_trials": 1,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "mean": 1.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "write-compressor__3z5jBZT"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+Analyzing program to extract secret key...
+Testing normal input...
+Welcome to the Security Challenge!
+This program processes user input.
+Find a way to extract the hidden information.
+Enter your input: Input processed successfully.
+
+Trying different inputs to find the secret...
+Sending payload...
+/solution/solve.sh: line 25: warning: command substitution: ignored null byte in input
+Welcome to the Security Challenge!
+This program processes user input.
+Find a way to extract the hidden information.
+Enter your input: Authentication bypassed!
+Access granted! Secret: FLAG{b4ff3r_0v3rfl0w_m4st3r_k3y_2024}
+Found secret key: FLAG{b4ff3r_0v3rfl0w_m4st3r_k3y_2024}
+Secret key saved to /app/results.txt
