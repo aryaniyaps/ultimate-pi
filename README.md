@@ -48,12 +48,12 @@ Ship a production-grade coding harness where the agent:
 ### Runtime guardrail extension
 
 - `extensions/lean-ctx-enforce.ts`
-  - Detects `lean-ctx` availability.
-  - Blocks built-ins (`read`, `write`, `edit`, `grep`, `find`, `ls`, raw `bash`) when `lean-ctx` exists.
-  - Allows shell only via `lean-ctx -c <command>`.
-  - Adds status commands:
+  - Detects `lean-ctx` availability (cached check).
+  - Overrides built-in `read` tool to execute through `lean-ctx read` when available.
+  - Overrides built-in `bash` tool and auto-wraps commands with `lean-ctx -c <command>` when needed.
+  - Falls back to default built-in tools if `lean-ctx` is unavailable.
+  - Adds status command:
     - `/lean-ctx-status`
-    - `/system-prompt-status`
 
 ## Design choices (concise)
 
@@ -63,8 +63,8 @@ Ship a production-grade coding harness where the agent:
 2. **Caveman-by-default response style**  
    Reason: short, exact, low-noise outputs for coding loops.
 
-3. **Policy in system prompt + enforcement in extension**  
-   Reason: prompt sets intent; extension guarantees behavior.
+3. **Runtime enforcement in extension code**  
+   Reason: executable extension logic is the single source of truth for lean-ctx routing.
 
 4. **Skill-based composition**  
    Reason: easy to swap/upgrade capabilities without rewiring core package.
