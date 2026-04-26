@@ -24,5 +24,8 @@
   },
   "scripts": {
     "bench:terminal": "./bench/terminal-bench/run-terminal-bench.sh"
+  },
+  "devDependencies": {
+    "@mariozechner/pi-coding-agent": "0.70.2"
   }
 }
