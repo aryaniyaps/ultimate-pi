@@ -1,8 +1,6 @@
-import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
-import { readFile, stat } from "node:fs/promises";
-import { resolve } from "node:path";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { createBashTool, createReadTool } from "@mariozechner/pi-coding-agent";
 
-const GUARDED_TOOLS = new Set(["read", "write", "edit", "grep", "find", "ls", "bash"]);
 const CACHE_TTL_MS = 10_000;
 
 type LeanCtxState = {
@@ -11,18 +9,10 @@ type LeanCtxState = {
   bin?: string;
 };
 
-type SystemPromptCache = {
-  path: string;
-  mtimeMs: number;
-  text: string;
-};
-
 let cachedLeanCtx: LeanCtxState = {
   checkedAt: 0,
   available: false,
 };
-
-let cachedSystemPrompt: SystemPromptCache | undefined;
 
 async function detectLeanCtx(pi: ExtensionAPI): Promise<LeanCtxState> {
   const now = Date.now();
@@ -56,70 +46,15 @@ function bashUsesLeanCtx(command: string): boolean {
   return /(^|\s|&&|\|\|)lean-ctx(\s|$)/.test(trimmed);
 }
 
-async function loadProjectSystemPrompt(cwd: string): Promise<string | undefined> {
-  const path = resolve(cwd, ".pi", "SYSTEM.md");
-
-  try {
-    const info = await stat(path);
-    if (cachedSystemPrompt && cachedSystemPrompt.path === path && cachedSystemPrompt.mtimeMs === info.mtimeMs) {
-      return cachedSystemPrompt.text;
-    }
-
-    const text = await readFile(path, "utf8");
-    const trimmed = text.trim();
-    if (!trimmed) return undefined;
-
-    cachedSystemPrompt = {
-      path,
-      mtimeMs: info.mtimeMs,
-      text: trimmed,
-    };
-    return trimmed;
-  } catch {
-    return undefined;
-  }
-}
-
-function pickVerificationMarker(promptText: string): string | undefined {
-  for (const line of promptText.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    if (trimmed.startsWith("#")) continue;
-    if (trimmed.startsWith("- ")) continue;
-    if (trimmed.length < 12) continue;
-    return trimmed.slice(0, 120);
-  }
-  return undefined;
-}
-
-async function reportSystemPromptStatus(ctx: ExtensionContext): Promise<"missing" | "verified" | "uncertain"> {
-  const projectPrompt = await loadProjectSystemPrompt(ctx.cwd);
-  if (!projectPrompt) {
-    ctx.ui.notify(".pi/SYSTEM.md not found. Pi default system prompt active.", "warning");
-    return "missing";
-  }
-
-  const effectivePrompt = ctx.getSystemPrompt();
-  const marker = pickVerificationMarker(projectPrompt);
-  if (marker && effectivePrompt.includes(marker)) {
-    ctx.ui.notify(".pi/SYSTEM.md detected and present in effective system prompt.", "success");
-    return "verified";
-  }
-
-  ctx.ui.notify(".pi/SYSTEM.md found. Verification uncertain; reload and re-check.", "info");
-  return "uncertain";
-}
-
 export default function (pi: ExtensionAPI) {
   pi.on("session_start", async (_event, ctx) => {
     const state = await detectLeanCtx(pi);
     if (state.available) {
-      ctx.ui.notify(`lean-ctx enforcement active (${state.bin ?? "lean-ctx"})`, "info");
+      ctx.ui.notify(`lean-ctx overrides active (${state.bin ?? "lean-ctx"}). Built-in tools replaced.`, "info");
     } else {
-      ctx.ui.notify("lean-ctx not found. Built-in tools allowed until installed.", "warning");
+      ctx.ui.notify("lean-ctx not found. Default tools allowed until installed.", "warning");
     }
 
-    await reportSystemPromptStatus(ctx);
   });
 
   pi.registerCommand("lean-ctx-status", {
@@ -128,39 +63,79 @@ export default function (pi: ExtensionAPI) {
       cachedLeanCtx.checkedAt = 0;
       const state = await detectLeanCtx(pi);
       if (state.available) {
-        ctx.ui.notify(`lean-ctx available: ${state.bin ?? "lean-ctx"}. Built-ins blocked.`, "success");
+        ctx.ui.notify(`lean-ctx available: ${state.bin ?? "lean-ctx"}. Built-in tools are overridden.`, "success");
       } else {
-        ctx.ui.notify("lean-ctx unavailable. Built-ins currently allowed.", "warning");
+        ctx.ui.notify("lean-ctx unavailable. Built-in tools act normally.", "warning");
       }
     },
   });
 
-  pi.registerCommand("system-prompt-status", {
-    description: "Check .pi/SYSTEM.md replacement status",
-    handler: async (_args, ctx) => {
-      await reportSystemPromptStatus(ctx);
+
+  const cwd = process.cwd();
+
+  // Override read to use lean-ctx
+  const originalRead = createReadTool(cwd);
+  pi.registerTool({
+    name: "read",
+    label: "read",
+    description: "Read the contents of a file. Uses lean-ctx under the hood for efficient reading.",
+    parameters: originalRead.parameters,
+
+    async execute(toolCallId, params, signal, onUpdate, ctx) {
+      const state = await detectLeanCtx(pi);
+      if (!state.available) {
+        return originalRead.execute(toolCallId, params, signal, onUpdate, ctx);
+      }
+
+      const { path, offset, limit } = params;
+      let mode = "full";
+      if (offset !== undefined && limit !== undefined) {
+        mode = `lines:${offset}-${offset + limit - 1}`;
+      } else if (offset !== undefined) {
+        mode = `lines:${offset}-`;
+      } else if (limit !== undefined) {
+        mode = `lines:1-${limit}`;
+      }
+
+      try {
+        const result = await pi.exec("lean-ctx", ["read", String(path), "-m", mode], { cwd: ctx.cwd });
+        if (result.code !== 0) {
+            return {
+                content: [{ type: "text", text: result.stderr || result.stdout || "Error reading file" }],
+                details: { error: true },
+            };
+        }
+        return {
+            content: [{ type: "text", text: result.stdout }],
+            details: { lines: result.stdout.split("\n").length, readViaLeanCtx: true },
+        };
+      } catch (error: any) {
+        return {
+            content: [{ type: "text", text: error.stdout || error.stderr || error.message }],
+            details: { error: true },
+        };
+      }
     },
   });
 
-  pi.on("tool_call", async (event) => {
-    if (!GUARDED_TOOLS.has(event.toolName)) return;
+  // Override bash to use lean-ctx automatically
+  const originalBash = createBashTool(cwd);
+  pi.registerTool({
+    name: "bash",
+    label: "bash",
+    description: "Execute a bash command. Automatically wraps commands with lean-ctx for efficient output.",
+    parameters: originalBash.parameters,
 
-    const state = await detectLeanCtx(pi);
-    if (!state.available) return;
+    async execute(toolCallId, params, signal, onUpdate, ctx) {
+      const state = await detectLeanCtx(pi);
+      let command = String(params.command || "");
 
-    if (event.toolName === "bash") {
-      const command = String((event.input as { command?: unknown })?.command ?? "");
-      if (bashUsesLeanCtx(command)) return;
+      if (state.available && !bashUsesLeanCtx(command)) {
+        const escapedCommand = `'${command.replace(/'/g, "'\\''")}'`;
+        command = `lean-ctx -c ${escapedCommand}`;
+      }
 
-      return {
-        block: true,
-        reason: "Blocked by lean-ctx enforcement. Use `lean-ctx -c <command>` for shell commands.",
-      };
-    }
-
-    return {
-      block: true,
-      reason: `Blocked by lean-ctx enforcement. Use lean-ctx tools/flows instead of built-in \`${event.toolName}\`.`,
-    };
+      return originalBash.execute(toolCallId, { ...params, command }, signal, onUpdate, ctx);
+    },
   });
 }

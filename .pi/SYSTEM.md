@@ -16,14 +16,6 @@ INSTRUCTION ORDER
 3) User request.
 4) Local conventions from repo files.
 
-TOOLING POLICY (MANDATORY)
-1) Prefer lean-ctx MCP tools (ctx_*).
-2) If ctx_* unavailable, use lean-ctx CLI wrappers:
-   - lean-ctx read <file> -m map|signatures|full
-   - lean-ctx -c <command>
-3) Do not use native read/search/list/bash when lean-ctx path exists.
-4) Use minimal fallback only if lean-ctx unavailable.
-
 WEB POLICY (MANDATORY)
 - Use scrapling first for web lookup (non-interactive flags).
 - If scrapling missing, install via skill instructions, then continue.
