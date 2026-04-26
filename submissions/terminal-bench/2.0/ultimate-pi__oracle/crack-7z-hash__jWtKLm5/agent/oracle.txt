@@ -1,307 +1,0 @@
-john
-secrets.7z
-CONTRIBUTING.md
-LICENSE
-README.md
-doc
-requirements.txt
-run
-shell.nix
-src
-1password2john.py
-7z2john.pl
-DPAPImk2john.py
-adxcsouf2john.py
-aem2john.py
-aix2john.pl
-aix2john.py
-alnum.chr
-alnumspace.chr
-alpha.chr
-andotp2john.py
-androidbackup2john.py
-androidfde2john.py
-ansible2john.py
-apex2john.py
-apop2john.py
-applenotes2john.py
-aruba2john.py
-ascii.chr
-atmail2john.pl
-axcrypt2john.py
-base64conv
-benchmark-unify
-bestcrypt2john.py
-bestcryptve2john.py
-bip-0039
-bitcoin2john.py
-bitlocker2john
-bitlocker2john.py
-bitshares2john.py
-bitwarden2john.py
-bks2john.py
-blockchain2john.py
-calc_stat
-cardano2john.py
-ccache2john.py
-ccl_chrome_indexeddb
-cisco2john.pl
-codepage.pl
-coinomi2john.py
-cprepair
-cracf2john.py
-dashlane2john.py
-deepsound2john.py
-dictionary.rfc2865
-digits.chr
-diskcryptor2john.py
-dmg2john
-dmg2john.py
-dns
-dumb16.conf
-dumb32.conf
-dynamic.conf
-dynamic_disabled.conf
-dynamic_flat_sse_formats.conf
-ecryptfs2john.py
-ejabberd2john.py
-electrum2john.py
-encdatavault2john.py
-encfs2john.py
-enpass2john.py
-enpass5tojohn.py
-ethereum2john.py
-filezilla2john.py
-fuzz.dic
-fuzz_option.pl
-fvde2john.py
-geli2john.py
-genincstats.rb
-genmkvpwd
-gpg2john
-hccap2john
-hccapx2john.py
-hextoraw.pl
-htdigest2john.py
-hybrid.conf
-ibmiscanner2john.py
-ikescan2john.py
-ios7tojohn.pl
-itunes_backup2john.pl
-iwork2john.py
-john
-john.bash_completion
-john.conf
-john.zsh_completion
-jtr_rulez.pm
-jtrconf.pm
-kdcdump2john.py
-keepass2john
-keplr2john.py
-keychain2john.py
-keyring2john.py
-keystore2john.py
-kirbi2john.py
-known_hosts2john.py
-korelogic.conf
-krb2john.py
-kwallet2john.py
-lanman.chr
-lastpass2john.py
-latin1.chr
-ldif2john.pl
-leet.pl
-lib
-libreoffice2john.py
-lion2john-alt.pl
-lion2john.pl
-lm_ascii.chr
-lotus2john.py
-lower.chr
-lowernum.chr
-lowerspace.chr
-luks2john.py
-mac2john-alt.py
-mac2john.py
-mailer
-makechr
-mcafee_epo2john.py
-mkvcalcproba
-monero2john.py
-money2john.py
-mongodb2john.js
-mosquitto2john.py
-mozilla2john.py
-multibit2john.py
-neo2john.py
-netntlm.pl
-netscreen.py
-network2john.lua
-office2john.py
-openbsd_softraid2john.py
-opencl
-openssl2john.py
-oracle2john.py
-oubliette2john.py
-padlock2john.py
-pass_gen.pl
-password.lst
-pcap2john.py
-pdf2john.pl
-pdf2john.py
-pem2john.py
-pfx2john.py
-pgpdisk2john.py
-pgpsda2john.py
-pgpwde2john.py
-pkcs12kdf.py
-potcheck.pl
-prosody2john.py
-protobuf
-ps_token2john.py
-pse2john.py
-putty2john
-pwsafe2john.py
-racf2john
-radius2john.pl
-radius2john.py
-rar2john
-raw2dyna
-regex_alphabets.conf
-relbench
-repeats16.conf
-repeats32.conf
-restic2john.py
-rexgen2rules.pl
-rules
-rules-by-rate.conf
-rules-by-score.conf
-rulestack.pl
-sap2john.pl
-sense2john.py
-sha-dump.pl
-sha-test.pl
-signal2john.py
-sipdump2john.py
-ssh2john.py
-sspr2john.py
-staroffice2john.py
-stats
-strip2john.py
-telegram2john.py
-test_tezos2john.py
-tezos2john.py
-tgtsnarf
-tokenize.pl
-truecrypt2john.py
-uaf2john
-unafs
-undrop
-unique
-unisubst.conf
-unrule.pl
-unshadow
-upper.chr
-uppernum.chr
-utf8.chr
-vdi2john.pl
-vmx2john.py
-wpapcap2john
-zed2john.py
-zip2john
-ztex
-Get:1 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
-Hit:2 http://archive.ubuntu.com/ubuntu noble InRelease
-Get:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
-Get:4 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1981 kB]
-Get:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
-Get:6 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [38.0 kB]
-Get:7 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2141 kB]
-Get:8 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [3479 kB]
-Get:9 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1498 kB]
-Get:10 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [34.2 kB]
-Get:11 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [3658 kB]
-Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [2354 kB]
-Get:13 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [35.6 kB]
-Get:14 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]
-Get:15 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
-Fetched 15.6 MB in 3s (5024 kB/s)
-Reading package lists...
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following NEW packages will be installed:
-  libcompress-raw-lzma-perl
-0 upgraded, 1 newly installed, 0 to remove and 76 not upgraded.
-Need to get 35.1 kB of archives.
-After this operation, 134 kB of additional disk space will be used.
-Get:1 http://archive.ubuntu.com/ubuntu noble/universe amd64 libcompress-raw-lzma-perl amd64 2.209-1build2 [35.1 kB]
-debconf: delaying package configuration, since apt-utils is not installed
-Fetched 35.1 kB in 1s (30.2 kB/s)
-Selecting previously unselected package libcompress-raw-lzma-perl:amd64.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 15712 files and directories currently installed.)
-Preparing to unpack .../libcompress-raw-lzma-perl_2.209-1build2_amd64.deb ...
-Unpacking libcompress-raw-lzma-perl:amd64 (2.209-1build2) ...
-Setting up libcompress-raw-lzma-perl:amd64 (2.209-1build2) ...
-ATTENTION: the hashes might contain sensitive encrypted data. Be careful when sharing or posting these hashes
-Using default input encoding: UTF-8
-Will run 16 OpenMP threads
-Proceeding with single, rules:Single
-Press Ctrl-C to abort, or send SIGUSR1 to john process for status
-Almost done: Processing the remaining buffered candidate passwords, if any.
-Warning: Only 23 candidates buffered for the current salt, minimum 128 needed for performance.
-0g 0:00:09:53 DONE 1/3 (2026-04-25 16:31) 0g/s 16.47p/s 16.47c/s 16.47C/s S7z1902..Secrets7z1900
-Proceeding with wordlist:/app/john/run/password.lst
-Enabling duplicate candidate password suppressor using 256 MiB
-1g 0:00:11:46 DONE 2/3 (2026-04-25 16:33) 0.001415g/s 18.53p/s 18.53c/s 18.53C/s tom..jethrotull
-Use the "--show" option to display all of the cracked passwords reliably
-Session completed. 
-Loaded 1 password hash (7z, 7-Zip archive encryption [SHA256 256/256 AVX2 8x AES])
-Cost 1 (iteration count) is 524288 for all loaded hashes
-Cost 2 (padding size) is 3 for all loaded hashes
-Cost 3 (compression type) is 2 for all loaded hashes
-Cost 4 (data length) is 13 for all loaded hashes
-Note: Passwords longer than 28 rejected
-1998             (secrets.7z)     
-Reading package lists...
-Building dependency tree...
-Reading state information...
-Suggested packages:
-  7zip-standalone 7zip-rar
-The following NEW packages will be installed:
-  7zip
-0 upgraded, 1 newly installed, 0 to remove and 76 not upgraded.
-Need to get 1846 kB of archives.
-After this operation, 6306 kB of additional disk space will be used.
-Get:1 http://archive.ubuntu.com/ubuntu noble/universe amd64 7zip amd64 23.01+dfsg-11 [1846 kB]
-debconf: delaying package configuration, since apt-utils is not installed
-Fetched 1846 kB in 2s (819 kB/s)
-Selecting previously unselected package 7zip.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 15724 files and directories currently installed.)
-Preparing to unpack .../7zip_23.01+dfsg-11_amd64.deb ...
-Unpacking 7zip (23.01+dfsg-11) ...
-Setting up 7zip (23.01+dfsg-11) ...
-
-7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20
- 64-bit locale=C.UTF-8 Threads:16 OPEN_MAX:1048576
-
-Scanning the drive for archives:
-1 file, 215 bytes (1 KiB)
-
-Extracting archive: /app/secrets.7z
---
-Path = /app/secrets.7z
-Type = 7z
-Physical Size = 215
-Headers Size = 199
-Method = LZMA2:12 7zAES
-Solid = -
-Blocks = 1
-
-Everything is Ok
-
-Folders: 1
-Files: 1
-Size:       9
-Compressed: 215
-honeybear
