@@ -55,6 +55,18 @@ Ship a production-grade coding harness where the agent:
   - Adds status command:
     - `/lean-ctx-status`
 
+- `extensions/auto-commit-orchestrator.ts`
+  - Adds policy-driven auto-commit and optional auto-push flow.
+  - Uses deterministic git-state checks (`git status --porcelain`) and trigger lock deduping.
+  - Enforces `Co-authored-by` trailer for `pi-mono` on harness commits.
+  - Supports project/global JSON config with restrictive merge semantics for safety fields.
+  - Adds commands:
+    - `/auto-commit-status`
+    - `/auto-commit-validate-config`
+  - Starts disabled by default; enable via config after review.
+  - Config template:
+    - `.pi/auto-commit.example.json`
+
 ## Design choices (concise)
 
 1. **Lean-ctx-first execution**  

@@ -63,7 +63,7 @@ export default function (pi: ExtensionAPI) {
       cachedLeanCtx.checkedAt = 0;
       const state = await detectLeanCtx(pi);
       if (state.available) {
-        ctx.ui.notify(`lean-ctx available: ${state.bin ?? "lean-ctx"}. Built-in tools are overridden.`, "success");
+        ctx.ui.notify(`lean-ctx available: ${state.bin ?? "lean-ctx"}. Built-in tools are overridden.`, "info");
       } else {
         ctx.ui.notify("lean-ctx unavailable. Built-in tools act normally.", "warning");
       }
@@ -84,7 +84,7 @@ export default function (pi: ExtensionAPI) {
     async execute(toolCallId, params, signal, onUpdate, ctx) {
       const state = await detectLeanCtx(pi);
       if (!state.available) {
-        return originalRead.execute(toolCallId, params, signal, onUpdate, ctx);
+        return originalRead.execute(toolCallId, params, signal, onUpdate);
       }
 
       const { path, offset, limit } = params;
@@ -135,7 +135,7 @@ export default function (pi: ExtensionAPI) {
         command = `lean-ctx -c ${escapedCommand}`;
       }
 
-      return originalBash.execute(toolCallId, { ...params, command }, signal, onUpdate, ctx);
+      return originalBash.execute(toolCallId, { ...params, command }, signal, onUpdate);
     },
   });
 }
