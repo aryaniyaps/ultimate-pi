@@ -7,6 +7,7 @@ import { join } from "node:path";
 import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
 import type { AssistantMessage, Context as AIContext, Model } from "@mariozechner/pi-ai";
 import type { AutoCommitConfig } from "../lib/auto-commit-core";
+import { AutoCommitPaneComponent, createAutoCommitPane } from "./auto-commit-pane";
 
 const require = createRequire(__filename);
 const {
@@ -36,6 +37,7 @@ type RuntimeState = {
 	lastCommitAttemptAt: number;
 	sessionAutoCommitCount: number;
 	idleTimer?: ReturnType<typeof setTimeout>;
+	pane?: AutoCommitPaneComponent | null;
 };
 
 type AiCommitPlan = {
@@ -109,9 +111,22 @@ function colorizeStatus(text: string): string {
 	return text;
 }
 
-function setStatus(ctx: ExtensionContext, text: string | undefined) {
+function setStatus(ctx: ExtensionContext, text: string | undefined, state?: RuntimeState) {
 	if (!ctx.hasUI) return;
 	ctx.ui.setStatus("auto-commit", text ? colorizeStatus(text) : undefined);
+	if (state?.pane) {
+		state.pane.updateState({
+			status: text ?? "idle",
+			commitInFlight: state.commitInFlight,
+			enabled: state.config.enabled,
+			dryRun: state.config.dryRun,
+			aiEnabled: state.config.ai.enabled,
+			sessionCommits: state.sessionAutoCommitCount,
+			blockedReason: state.blockedReason,
+			configError: state.configError,
+			lastBranch: undefined, // updated separately on commit success
+		});
+	}
 }
 
 async function loadAndValidateConfig(ctx: ExtensionContext): Promise<{ config: AutoCommitConfig; sourceNotes: string[] }> {
@@ -500,7 +515,7 @@ async function runGuardCommands(
 async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: ExtensionContext, state: RuntimeState) {
 	if (!state.configLoaded || state.commitInFlight) return;
 	if (state.blockedReason) {
-		setStatus(ctx, `disabled(${state.blockedReason})`);
+		setStatus(ctx, `disabled(${state.blockedReason})`, state);
 		return;
 	}
 
@@ -509,21 +524,21 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 	state.lastCommitAttemptAt = now;
 
 	state.commitInFlight = true;
-	setStatus(ctx, `checking(${reason})`);
+	setStatus(ctx, `checking(${reason})`, state);
 	try {
 		if (!state.config.enabled) {
-			setStatus(ctx, "disabled(config)");
+			setStatus(ctx, "disabled(config)", state);
 			return;
 		}
 
 		const inside = await runGit(pi, ctx.cwd, ["rev-parse", "--is-inside-work-tree"]);
 		if (inside.code !== 0 || inside.stdout.trim() !== "true") {
-			setStatus(ctx, "blocked(not-git-repo)");
+			setStatus(ctx, "blocked(not-git-repo)", state);
 			return;
 		}
 
 		if (await isGitOperationInProgress(pi, ctx.cwd)) {
-			setStatus(ctx, "blocked(git-op-in-progress)");
+			setStatus(ctx, "blocked(git-op-in-progress)", state);
 			return;
 		}
 
@@ -531,17 +546,17 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 		if (state.config.submodules.ignore) statusArgs.push("--ignore-submodules=all");
 		const status = await runGit(pi, ctx.cwd, statusArgs);
 		if (status.code !== 0) {
-			setStatus(ctx, "blocked(status-failed)");
+			setStatus(ctx, "blocked(status-failed)", state);
 			return;
 		}
 
 		const paths = parseChangedPaths(status.stdout);
 		if (paths.length === 0) {
-			setStatus(ctx, "idle");
+			setStatus(ctx, "idle", state);
 			return;
 		}
 		if (paths.length < state.config.trigger.minChangedFiles) {
-			setStatus(ctx, "blocked(threshold)");
+			setStatus(ctx, "blocked(threshold)", state);
 			return;
 		}
 
@@ -549,22 +564,22 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 			const requiredGuard = await runGuardCommands(pi, ctx.cwd, state.config.guards.required, state.config.guards.timeoutMs);
 			if (!requiredGuard.ok) {
 				if (requiredGuard.timedOut && state.config.guards.onTimeout === "skipGuardsCommit") {
-					setStatus(ctx, "warning(guard-timeout-skip)");
+					setStatus(ctx, "warning(guard-timeout-skip)", state);
 				} else {
-					setStatus(ctx, `blocked(${requiredGuard.details ?? "guard"})`);
+					setStatus(ctx, `blocked(${requiredGuard.details ?? "guard"})`, state);
 					return;
 				}
 			}
 
 			const optionalGuard = await runGuardCommands(pi, ctx.cwd, state.config.guards.optional, state.config.guards.timeoutMs);
 			if (!optionalGuard.ok) {
-				setStatus(ctx, `blocked(${optionalGuard.details ?? "optional-guard"})`);
+				setStatus(ctx, `blocked(${optionalGuard.details ?? "optional-guard"})`, state);
 				return;
 			}
 		}
 
 		if (state.config.dryRun) {
-			setStatus(ctx, `dry-run(would-commit:${paths.length})`);
+			setStatus(ctx, `dry-run(would-commit:${paths.length})`, state);
 			if (ctx.hasUI) ctx.ui.notify(`[auto-commit] dry-run: would commit ${paths.length} file(s)`, "info");
 			return;
 		}
@@ -572,18 +587,18 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 		const aiPlan = await buildAiCommitPlanWithRetry(pi, ctx, state.config, paths);
 		const branch = await ensureTargetBranch(pi, ctx.cwd, state.config, paths, aiPlan);
 		if (!branch) {
-			setStatus(ctx, "blocked(branch)");
+			setStatus(ctx, "blocked(branch)", state);
 			return;
 		}
 
 		const add = await runGit(pi, ctx.cwd, ["add", "-A"]);
 		if (add.code !== 0) {
-			setStatus(ctx, "blocked(git-add)");
+			setStatus(ctx, "blocked(git-add)", state);
 			return;
 		}
 
 		if (!state.coAuthorTrailer) {
-			setStatus(ctx, "blocked(co-author)");
+			setStatus(ctx, "blocked(co-author)", state);
 			return;
 		}
 		const message = buildCommitMessage(state.config, paths, state.coAuthorTrailer, aiPlan);
@@ -593,21 +608,22 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 		await unlink(tempPath).catch(() => { });
 		if (commit.code !== 0) {
 			if (commit.stderr.includes("nothing to commit") || commit.stdout.includes("nothing to commit")) {
-				setStatus(ctx, "idle");
+				setStatus(ctx, "idle", state);
 				return;
 			}
-			setStatus(ctx, "blocked(git-commit)");
+			setStatus(ctx, "blocked(git-commit)", state);
 			return;
 		}
 
 		state.sessionAutoCommitCount += 1;
-		setStatus(ctx, `committed(${branch})`);
+		setStatus(ctx, `committed(${branch})`, state);
+		state.pane?.updateState({ lastBranch: branch, sessionCommits: state.sessionAutoCommitCount });
 		if (ctx.hasUI) ctx.ui.notify(`[auto-commit] committed on ${branch}`, "info");
 
 		if (!state.config.autoPush) return;
 		const remote = await resolvePushRemote(pi, ctx.cwd, branch);
 		if (!state.config.push.allowedRemotes.includes(remote)) {
-			setStatus(ctx, `blocked(remote-not-allowed:${remote})`);
+			setStatus(ctx, `blocked(remote-not-allowed:${remote})`, state);
 			if (ctx.hasUI) ctx.ui.notify(`[auto-commit] push blocked: remote ${remote} not allowed`, "warning");
 			return;
 		}
@@ -623,7 +639,7 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 					push = await runGit(pi, ctx.cwd, ["push", "-u", remote, branch], state.config.push.timeoutMs);
 				} else {
 					await runGit(pi, ctx.cwd, ["rebase", "--abort"], 5_000);
-					setStatus(ctx, "blocked(rebase-conflict)");
+					setStatus(ctx, "blocked(rebase-conflict)", state);
 					if (ctx.hasUI) ctx.ui.notify("[auto-commit] push conflict needs manual resolution", "warning");
 					return;
 				}
@@ -631,17 +647,18 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 		}
 		if (push.code !== 0) {
 			if ((push.stderr + push.stdout).includes("non-fast-forward")) {
-				setStatus(ctx, "blocked(non-fast-forward)");
+				setStatus(ctx, "blocked(non-fast-forward)", state);
 				return;
 			}
-			setStatus(ctx, "blocked(push-failed)");
+			setStatus(ctx, "blocked(push-failed)", state);
 			return;
 		}
 
-		setStatus(ctx, `pushed(${remote}/${branch})`);
+		setStatus(ctx, `pushed(${remote}/${branch})`, state);
+		state.pane?.updateState({ lastBranch: `${remote}/${branch}` });
 		if (ctx.hasUI) ctx.ui.notify(`[auto-commit] pushed to ${remote}/${branch}`, "info");
 	} catch (error: any) {
-		setStatus(ctx, "blocked(error)");
+		setStatus(ctx, "blocked(error)", state);
 		if (ctx.hasUI) ctx.ui.notify(`[auto-commit] error: ${error?.message ?? String(error)}`, "error");
 	} finally {
 		state.commitInFlight = false;
@@ -674,6 +691,21 @@ export default function (pi: ExtensionAPI) {
 		clearIdleTimer();
 		state.sessionAutoCommitCount = 0;
 		state.blockedReason = undefined;
+
+		// Set up the right-side overlay pane
+		if (ctx.hasUI) {
+			try {
+				ctx.ui.setWidget("auto-commit-pane", (tui, theme) => {
+					const handle = createAutoCommitPane(tui, theme);
+					state.pane = handle.component;
+					state.pane.updateState({ status: "idle", enabled: false, dryRun: true, aiEnabled: true, commitInFlight: false, sessionCommits: 0 });
+					return handle;
+				}, { placement: "aboveEditor" });
+			} catch {
+				// overlay may not be supported in all modes; degrade gracefully
+			}
+		}
+
 		try {
 			const loaded = await loadAndValidateConfig(ctx);
 			state.config = loaded.config;
@@ -682,17 +714,17 @@ export default function (pi: ExtensionAPI) {
 			const issues = validateMergedConfig(state.config);
 			if (issues.length > 0) {
 				state.blockedReason = "invalid-config";
-				setStatus(ctx, "disabled(invalid-config)");
+				setStatus(ctx, "disabled(invalid-config)", state);
 				if (ctx.hasUI) ctx.ui.notify(`[auto-commit] disabled: ${issues.join("; ")}`, "error");
 				return;
 			}
 			if (state.config.coAuthor.enforce && !state.coAuthorTrailer) {
 				state.blockedReason = "co-author-resolution-failed";
-				setStatus(ctx, "disabled(co-author-resolution-failed)");
+				setStatus(ctx, "disabled(co-author-resolution-failed)", state);
 				if (ctx.hasUI) ctx.ui.notify("[auto-commit] disabled: co-author trailer cannot be resolved", "error");
 				return;
 			}
-			setStatus(ctx, state.config.enabled ? "idle" : "disabled(config)");
+			setStatus(ctx, state.config.enabled ? "idle" : "disabled(config)", state);
 			if (ctx.hasUI && loaded.sourceNotes.length > 0) {
 				ctx.ui.notify(`[auto-commit] config loaded (${loaded.sourceNotes.join(", ")})`, "info");
 			}
@@ -700,7 +732,7 @@ export default function (pi: ExtensionAPI) {
 			state.configLoaded = true;
 			state.blockedReason = "config-error";
 			state.configError = error?.message ?? String(error);
-			setStatus(ctx, "disabled(config-error)");
+			setStatus(ctx, "disabled(config-error)", state);
 			if (ctx.hasUI) ctx.ui.notify(`[auto-commit] disabled: ${state.configError}`, "error");
 		}
 	});
@@ -717,6 +749,13 @@ export default function (pi: ExtensionAPI) {
 
 	pi.on("session_shutdown", async (event: any, ctx) => {
 		clearIdleTimer();
+		// Clean up the pane overlay
+		if (state.pane) {
+			state.pane = null;
+		}
+		if (ctx.hasUI) {
+			ctx.ui.setWidget("auto-commit-pane", undefined);
+		}
 		if (!state.configLoaded || !state.config.fallbackOnShutdown) return;
 		if (event?.reason !== "quit") return;
 		if (state.sessionAutoCommitCount > 0) return;
