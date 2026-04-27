@@ -81,9 +81,28 @@ async function runGit(pi: ExtensionAPI, cwd: string, args: string[], timeout?: n
 	};
 }
 
+const ANSI = {
+	reset: "\u001b[0m",
+	red: "\u001b[31m",
+	yellow: "\u001b[33m",
+	green: "\u001b[32m",
+	cyan: "\u001b[36m",
+	gray: "\u001b[90m",
+} as const;
+
+function colorizeStatus(text: string): string {
+	if (text.startsWith("blocked(")) return `${ANSI.red}${text}${ANSI.reset}`;
+	if (text.startsWith("warning(")) return `${ANSI.yellow}${text}${ANSI.reset}`;
+	if (text.startsWith("committed(") || text.startsWith("pushed(")) return `${ANSI.green}${text}${ANSI.reset}`;
+	if (text.startsWith("checking(")) return `${ANSI.cyan}${text}${ANSI.reset}`;
+	if (text.startsWith("dry-run(")) return `${ANSI.yellow}${text}${ANSI.reset}`;
+	if (text.startsWith("disabled(") || text === "idle") return `${ANSI.gray}${text}${ANSI.reset}`;
+	return text;
+}
+
 function setStatus(ctx: ExtensionContext, text: string | undefined) {
 	if (!ctx.hasUI) return;
-	ctx.ui.setStatus("auto-commit", text);
+	ctx.ui.setStatus("auto-commit", text ? colorizeStatus(text) : undefined);
 }
 
 async function loadAndValidateConfig(ctx: ExtensionContext): Promise<{ config: AutoCommitConfig; sourceNotes: string[] }> {
