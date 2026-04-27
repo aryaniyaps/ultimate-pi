@@ -7,7 +7,6 @@ import { join } from "node:path";
 import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
 import type { AssistantMessage, Context as AIContext, Model } from "@mariozechner/pi-ai";
 import type { AutoCommitConfig } from "../lib/auto-commit-core";
-import { AutoCommitPaneComponent, createAutoCommitPane } from "./auto-commit-pane";
 
 const require = createRequire(__filename);
 const {
@@ -37,7 +36,6 @@ type RuntimeState = {
 	lastCommitAttemptAt: number;
 	sessionAutoCommitCount: number;
 	idleTimer?: ReturnType<typeof setTimeout>;
-	pane?: AutoCommitPaneComponent | null;
 };
 
 type AiCommitPlan = {
@@ -111,22 +109,8 @@ function colorizeStatus(text: string): string {
 	return text;
 }
 
-function setStatus(ctx: ExtensionContext, text: string | undefined, state?: RuntimeState) {
-	if (!ctx.hasUI) return;
-	ctx.ui.setStatus("auto-commit", text ? colorizeStatus(text) : undefined);
-	if (state?.pane) {
-		state.pane.updateState({
-			status: text ?? "idle",
-			commitInFlight: state.commitInFlight,
-			enabled: state.config.enabled,
-			dryRun: state.config.dryRun,
-			aiEnabled: state.config.ai.enabled,
-			sessionCommits: state.sessionAutoCommitCount,
-			blockedReason: state.blockedReason,
-			configError: state.configError,
-			lastBranch: undefined, // updated separately on commit success
-		});
-	}
+function setStatus(_ctx: ExtensionContext, _text: string | undefined, _state?: RuntimeState) {
+	// pane removed; retained as no-op for call-site compatibility
 }
 
 async function loadAndValidateConfig(ctx: ExtensionContext): Promise<{ config: AutoCommitConfig; sourceNotes: string[] }> {
@@ -334,9 +318,9 @@ function normalizeAiPlan(raw: any, config: AutoCommitConfig, paths: string[]): A
 
 	const details = Array.isArray(raw.details)
 		? raw.details
-				.map((d: unknown) => sanitizeCommitLine(String(d ?? ""), ""))
-				.filter((d: string) => d.length > 0)
-				.slice(0, 6)
+			.map((d: unknown) => sanitizeCommitLine(String(d ?? ""), ""))
+			.filter((d: string) => d.length > 0)
+			.slice(0, 6)
 		: [];
 
 	const rawBranch = String(raw.branch ?? raw.branchSlug ?? "").trim();
@@ -580,7 +564,6 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 
 		if (state.config.dryRun) {
 			setStatus(ctx, `dry-run(would-commit:${paths.length})`, state);
-			if (ctx.hasUI) ctx.ui.notify(`[auto-commit] dry-run: would commit ${paths.length} file(s)`, "info");
 			return;
 		}
 
@@ -617,14 +600,12 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 
 		state.sessionAutoCommitCount += 1;
 		setStatus(ctx, `committed(${branch})`, state);
-		state.pane?.updateState({ lastBranch: branch, sessionCommits: state.sessionAutoCommitCount });
-		if (ctx.hasUI) ctx.ui.notify(`[auto-commit] committed on ${branch}`, "info");
+
 
 		if (!state.config.autoPush) return;
 		const remote = await resolvePushRemote(pi, ctx.cwd, branch);
 		if (!state.config.push.allowedRemotes.includes(remote)) {
 			setStatus(ctx, `blocked(remote-not-allowed:${remote})`, state);
-			if (ctx.hasUI) ctx.ui.notify(`[auto-commit] push blocked: remote ${remote} not allowed`, "warning");
 			return;
 		}
 
@@ -655,7 +636,7 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 		}
 
 		setStatus(ctx, `pushed(${remote}/${branch})`, state);
-		state.pane?.updateState({ lastBranch: `${remote}/${branch}` });
+
 		if (ctx.hasUI) ctx.ui.notify(`[auto-commit] pushed to ${remote}/${branch}`, "info");
 	} catch (error: any) {
 		setStatus(ctx, "blocked(error)", state);
@@ -692,19 +673,7 @@ export default function (pi: ExtensionAPI) {
 		state.sessionAutoCommitCount = 0;
 		state.blockedReason = undefined;
 
-		// Set up the right-side overlay pane
-		if (ctx.hasUI) {
-			try {
-				ctx.ui.setWidget("auto-commit-pane", (tui, theme) => {
-					const handle = createAutoCommitPane(tui, theme);
-					state.pane = handle.component;
-					state.pane.updateState({ status: "idle", enabled: false, dryRun: true, aiEnabled: true, commitInFlight: false, sessionCommits: 0 });
-					return handle;
-				}, { placement: "aboveEditor" });
-			} catch {
-				// overlay may not be supported in all modes; degrade gracefully
-			}
-		}
+
 
 		try {
 			const loaded = await loadAndValidateConfig(ctx);
@@ -749,13 +718,7 @@ export default function (pi: ExtensionAPI) {
 
 	pi.on("session_shutdown", async (event: any, ctx) => {
 		clearIdleTimer();
-		// Clean up the pane overlay
-		if (state.pane) {
-			state.pane = null;
-		}
-		if (ctx.hasUI) {
-			ctx.ui.setWidget("auto-commit-pane", undefined);
-		}
+
 		if (!state.configLoaded || !state.config.fallbackOnShutdown) return;
 		if (event?.reason !== "quit") return;
 		if (state.sessionAutoCommitCount > 0) return;

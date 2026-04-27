@@ -24,7 +24,7 @@
   },
   "scripts": {
     "bench:terminal": "./bench/terminal-bench/run-terminal-bench.sh",
-    "check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck lib/auto-commit-core.ts extensions/auto-commit-pane.ts extensions/auto-commit-orchestrator.ts extensions/lean-ctx-enforce.ts",
+    "check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck lib/auto-commit-core.ts extensions/auto-commit-orchestrator.ts extensions/lean-ctx-enforce.ts",
     "test": "node --experimental-strip-types --test"
   },
   "devDependencies": {
