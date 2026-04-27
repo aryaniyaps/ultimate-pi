@@ -23,9 +23,12 @@
     ]
   },
   "scripts": {
-    "bench:terminal": "./bench/terminal-bench/run-terminal-bench.sh"
+    "bench:terminal": "./bench/terminal-bench/run-terminal-bench.sh",
+    "check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck lib/auto-commit-core.ts extensions/auto-commit-orchestrator.ts extensions/lean-ctx-enforce.ts",
+    "test": "node --experimental-strip-types --test"
   },
   "devDependencies": {
-    "@mariozechner/pi-coding-agent": "0.70.2"
+    "@mariozechner/pi-coding-agent": "0.70.2",
+    "typescript": "^6.0.3"
   }
 }
