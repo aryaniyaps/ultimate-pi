@@ -5,6 +5,7 @@ import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 
 import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
+import type { AssistantMessage, Context as AIContext, Model } from "@mariozechner/pi-ai";
 import type { AutoCommitConfig } from "../lib/auto-commit-core";
 
 const require = createRequire(__filename);
@@ -35,6 +36,14 @@ type RuntimeState = {
 	lastCommitAttemptAt: number;
 	sessionAutoCommitCount: number;
 	idleTimer?: ReturnType<typeof setTimeout>;
+};
+
+type AiCommitPlan = {
+	type: string;
+	scope: string;
+	summary: string;
+	details: string[];
+	branchSlug: string;
 };
 
 async function readJson(path: string): Promise<any> {
@@ -150,23 +159,102 @@ async function resolveCurrentBranch(pi: ExtensionAPI, cwd: string): Promise<stri
 	return branch.stdout.trim();
 }
 
-async function ensureTargetBranch(pi: ExtensionAPI, cwd: string, config: AutoCommitConfig): Promise<string | undefined> {
+function toSlug(value: string): string {
+	return sanitizeBranchPart(value.toLowerCase().replace(/[\s_]+/g, "-").replace(/[^a-z0-9-]+/g, "-").replace(/-+/g, "-"));
+}
+
+function summarizePathsForBranch(paths: string[]): string {
+	const summary = deriveSummary(paths, 2).replace(/^update\s+/i, "");
+	const slug = toSlug(summary.replace(/[\/]/g, "-"));
+	return slug.length > 0 ? slug : "workspace-update";
+}
+
+const GIT_RESERVED_NAMES = new Set([
+	"HEAD", "FETCH_HEAD", "ORIG_HEAD", "MERGE_HEAD",
+	"REBASE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD",
+	"BISECT_LOG", "BISECT_NAMES", "BISECT_TERMS",
+	"AUTOMERGE_MSG", "COMMIT_EDITMSG", "TAG_EDITMSG",
+	"MERGE_MSG", "SQUASH_MSG",
+]);
+
+const MAX_BRANCH_LENGTH = 100;
+
+function isGitReservedName(name: string): boolean {
+	const lower = name.toLowerCase();
+	for (const reserved of GIT_RESERVED_NAMES) {
+		if (lower === reserved.toLowerCase()) return true;
+	}
+	if (lower.endsWith(".lock")) return true;
+	if (lower.includes("..")) return true;
+	if (lower.startsWith(".") || lower.endsWith(".")) return true;
+	return false;
+}
+
+function validateBranchName(name: string): boolean {
+	if (!name || name.length === 0) return false;
+	if (name.length > MAX_BRANCH_LENGTH) return false;
+	if (isGitReservedName(name)) return false;
+	if (/[\s~\^:?*\\||]/.test(name)) return false;
+	if (name.includes("//")) return false;
+	if (/[\x00-\x1f\x7f]/.test(name)) return false;
+	if (name.endsWith("/")) return false;
+	return true;
+}
+
+async function branchExistsRemotely(pi: ExtensionAPI, cwd: string, branchName: string): Promise<boolean> {
+	const remotes = await runGit(pi, cwd, ["remote"]);
+	if (remotes.code !== 0) return false;
+	const remoteNames = remotes.stdout.trim().split("\n").filter((r) => r.trim().length > 0);
+	for (const remote of remoteNames) {
+		const check = await runGit(pi, cwd, ["show-ref", "--verify", `refs/remotes/${remote}/${branchName}`]);
+		if (check.code === 0 && check.stdout.trim().length > 0) return true;
+	}
+	return false;
+}
+
+async function createUniqueBranch(pi: ExtensionAPI, cwd: string, baseName: string): Promise<string | undefined> {
+	const base = sanitizeBranchPart(baseName);
+	if (!base) return undefined;
+	if (!validateBranchName(base)) return undefined;
+
+	for (let i = 1; i <= 20; i += 1) {
+		const candidate = i === 1 ? base : `${base}-${i}`;
+		if (!validateBranchName(candidate)) continue;
+		if (await branchExistsRemotely(pi, cwd, candidate)) continue;
+		const sw = await runGit(pi, cwd, ["switch", "-c", candidate]);
+		if (sw.code === 0) return candidate;
+
+		const output = `${sw.stdout}\n${sw.stderr}`.toLowerCase();
+		const collision = output.includes("already exists") || output.includes("a branch named") || output.includes("not a commit");
+		if (!collision) return undefined;
+	}
+
+	const emergency = sanitizeBranchPart(`${base}-${Date.now()}`);
+	if (!validateBranchName(emergency)) return undefined;
+	const sw = await runGit(pi, cwd, ["switch", "-c", emergency]);
+	if (sw.code !== 0) return undefined;
+	return emergency;
+}
+
+async function ensureTargetBranch(
+	pi: ExtensionAPI,
+	cwd: string,
+	config: AutoCommitConfig,
+	paths: string[],
+	aiPlan?: AiCommitPlan,
+): Promise<string | undefined> {
 	const current = await resolveCurrentBranch(pi, cwd);
+	const smartSlug = toSlug(aiPlan?.branchSlug || "") || summarizePathsForBranch(paths);
+
 	if (current.length > 0) {
 		if (config.branch.strategy === "auto-feature-branch" && isProtectedBranch(current, config.branch.protected)) {
-			const next = sanitizeBranchPart(`pi/${current}/${Date.now()}`);
-			const sw = await runGit(pi, cwd, ["switch", "-c", next]);
-			if (sw.code !== 0) return undefined;
-			return next;
+			return createUniqueBranch(pi, cwd, `pi/${current}/${smartSlug}`);
 		}
 		return current;
 	}
 
 	const shortSha = (await runGit(pi, cwd, ["rev-parse", "--short", "HEAD"]))?.stdout.trim() || "nohead";
-	const created = sanitizeBranchPart(`pi/${Date.now()}-${shortSha}`);
-	const sw = await runGit(pi, cwd, ["switch", "-c", created]);
-	if (sw.code !== 0) return undefined;
-	return created;
+	return createUniqueBranch(pi, cwd, `pi/${smartSlug}-${shortSha}`);
 }
 
 async function resolvePushRemote(pi: ExtensionAPI, cwd: string, branch: string): Promise<string> {
@@ -187,20 +275,201 @@ async function hasUpstream(pi: ExtensionAPI, cwd: string): Promise<boolean> {
 	return upstream.code === 0;
 }
 
-function buildCommitMessage(config: AutoCommitConfig, paths: string[], trailer: string): string {
-	const summary = deriveSummary(paths, config.message.maxSummaryPaths);
+function readAssistantText(message: AssistantMessage): string {
+	return message.content
+		.filter((part): part is { type: "text"; text: string } => part.type === "text")
+		.map((part) => part.text)
+		.join("\n")
+		.trim();
+}
+
+function stripMarkdownFences(raw: string): string {
+	let text = raw;
+	text = text.replace(/^```(?:json|JSON)?\s*\n?/gm, "");
+	text = text.replace(/\n?```$/gm, "");
+	return text.trim();
+}
+
+function parseFirstJsonObject(raw: string): any | undefined {
+	const stripped = stripMarkdownFences(raw);
+	const start = stripped.indexOf("{");
+	const end = stripped.lastIndexOf("}");
+	if (start < 0 || end <= start) return undefined;
+	try {
+		return JSON.parse(stripped.slice(start, end + 1));
+	} catch {
+		return undefined;
+	}
+}
+
+function sanitizeCommitLine(value: string, fallback: string): string {
+	const cleaned = value.replace(/[\r\n]+/g, " ").trim();
+	return cleaned.length > 0 ? cleaned : fallback;
+}
+
+function normalizeAiPlan(raw: any, config: AutoCommitConfig, paths: string[]): AiCommitPlan | undefined {
+	if (!raw || typeof raw !== "object") return undefined;
+	const summaryFallback = deriveSummary(paths, config.message.maxSummaryPaths);
+
+	let type = sanitizeCommitLine(String(raw.type ?? ""), config.message.typeDefault);
+	if (!VALID_COMMIT_TYPES.has(type)) type = config.message.typeDefault;
+
+	const scope = sanitizeCommitLine(String(raw.scope ?? ""), config.message.scopeDefault);
+	const summary = sanitizeCommitLine(String(raw.summary ?? ""), summaryFallback);
+
+	const details = Array.isArray(raw.details)
+		? raw.details
+				.map((d: unknown) => sanitizeCommitLine(String(d ?? ""), ""))
+				.filter((d: string) => d.length > 0)
+				.slice(0, 6)
+		: [];
+
+	const rawBranch = String(raw.branch ?? raw.branchSlug ?? "").trim();
+	const branchSlug = (() => {
+		if (!rawBranch) return summarizePathsForBranch(paths);
+		const slug = toSlug(rawBranch);
+		if (slug.length < 2) return summarizePathsForBranch(paths);
+		if (isGitReservedName(slug)) return summarizePathsForBranch(paths);
+		return slug;
+	})();
+
+	return {
+		type,
+		scope,
+		summary,
+		details,
+		branchSlug,
+	};
+}
+
+async function fetchRecentCommits(pi: ExtensionAPI, cwd: string, count: number): Promise<string> {
+	const log = await runGit(pi, cwd, ["log", "--no-color", "--oneline", `-n${count}`]);
+	if (log.code !== 0 || log.stdout.trim().length === 0) return "<no commits yet>";
+	return log.stdout.trim();
+}
+
+const VALID_COMMIT_TYPES = new Set([
+	"feat", "fix", "refactor", "docs", "style", "test", "chore",
+	"perf", "ci", "build", "revert", "improvement",
+]);
+
+function deriveCommitType(paths: string[], diffStat: string): string {
+	const allPaths = paths.map((p) => p.toLowerCase()).join(" ");
+	const statLower = diffStat.toLowerCase();
+	if (allPaths.includes("test") || statLower.includes("_test.") || statLower.includes("test_")) return "test";
+	if (allPaths.includes(".md") && !allPaths.includes(".ts")) return "docs";
+	if (allPaths.includes(".yml") || allPaths.includes(".yaml") || allPaths.includes("ci")) return "ci";
+	if (statLower.includes("rename") || statLower.includes("move")) return "refactor";
+	if (allPaths.includes("package.json") || allPaths.includes("tsconfig")) return "build";
+	return "";
+}
+
+async function buildAiCommitPlan(
+	pi: ExtensionAPI,
+	ctx: ExtensionContext,
+	config: AutoCommitConfig,
+	paths: string[],
+): Promise<AiCommitPlan | undefined> {
+	if (!config.ai.enabled || !ctx.model) return undefined;
+
+	const auth = await ctx.modelRegistry.getApiKeyAndHeaders(ctx.model as Model<any>);
+	if (!auth.ok) return undefined;
+
+	const diffStat = await runGit(pi, ctx.cwd, ["diff", "--no-color", "--stat"]);
+	const diffPatch = await runGit(pi, ctx.cwd, ["diff", "--no-color"]);
+	if (diffPatch.code !== 0) return undefined;
+
+	const cappedPatch = diffPatch.stdout.slice(0, config.ai.maxDiffChars);
+	const projectName = ctx.cwd.split("/").pop() || "project";
+	const recentCommits = await fetchRecentCommits(pi, ctx.cwd, 8);
+	const guessedType = deriveCommitType(paths, diffStat.stdout);
+
+	const promptLines = [
+		`You create git commit metadata for the "${projectName}" project.`,
+		"",
+		"Return strict JSON only. No markdown fences. No commentary. No explanation. Just the JSON object.",
+		"",
+		"Schema:",
+		'{"type":"<conventional-commit-type>","scope":"<scope>","summary":"<imperative-summary-max-72-chars>","details":["<bullet>","<bullet>"],"branch":"<descriptive-kebab-slug>"}',
+		"",
+		"Rules:",
+		"- type must be one of: feat, fix, refactor, docs, style, test, chore, perf, ci, build, revert, improvement",
+		"- scope: single word representing the primary area of change (e.g. auth, ui, api, config)",
+		"- summary: specific imperative mood, max 72 chars, describe what the change DOES not what files changed",
+		"- details: 2-6 concise bullets explaining what changed and WHY, not just listing files",
+		"- branch: a descriptive kebab-case name reflecting the PURPOSE of the change, not just file names. Examples: add-user-auth, fix-memory-leak, refactor-config-loader, not: update-src-index-ts",
+		"- branch must NOT include type prefix (no feat/ or fix/), just the descriptive slug",
+	];
+
+	if (recentCommits !== "<no commits yet>") {
+		promptLines.push("", "Recent commits for style reference:", recentCommits);
+	}
+	if (guessedType) {
+		promptLines.push("", `Hint: the diff suggests type "${guessedType}" but you must judge independently.`);
+	}
+
+	promptLines.push(
+		"",
+		`Changed paths (${paths.length}): ${paths.join(", ")}`,
+		diffStat.stdout.trim().length > 0 ? `Diffstat:\n${diffStat.stdout.trim()}` : "Diffstat: <none>",
+		`Patch (truncated):\n${cappedPatch}`,
+	);
+
+	const prompt = promptLines.join("\n");
+
+	try {
+		const { completeSimple } = await import("@mariozechner/pi-ai");
+		const aiContext: AIContext = {
+			messages: [{ role: "user", content: prompt, timestamp: Date.now() }],
+		};
+		const response = await completeSimple(ctx.model as Model<any>, aiContext, {
+			apiKey: auth.apiKey,
+			headers: auth.headers,
+			timeoutMs: config.ai.timeoutMs,
+			maxTokens: 900,
+			reasoning: "minimal",
+		});
+		const rawText = readAssistantText(response);
+		const parsed = parseFirstJsonObject(rawText);
+		return normalizeAiPlan(parsed, config, paths);
+	} catch {
+		return undefined;
+	}
+}
+
+async function buildAiCommitPlanWithRetry(
+	pi: ExtensionAPI,
+	ctx: ExtensionContext,
+	config: AutoCommitConfig,
+	paths: string[],
+): Promise<AiCommitPlan | undefined> {
+	let lastError: unknown = undefined;
+	for (let attempt = 0; attempt <= config.ai.retries; attempt += 1) {
+		if (attempt > 0) {
+			await new Promise<void>((resolve) => setTimeout(resolve, config.ai.retryDelayMs * attempt));
+		}
+		const plan = await buildAiCommitPlan(pi, ctx, config, paths);
+		if (plan) return plan;
+	}
+	return undefined;
+}
+
+function buildCommitMessage(config: AutoCommitConfig, paths: string[], trailer: string, aiPlan?: AiCommitPlan): string {
+	const summary = aiPlan?.summary || deriveSummary(paths, config.message.maxSummaryPaths);
+	const body = (aiPlan?.details ?? []).map((line) => `- ${line}`).join("\n");
 	const vars = {
-		type: config.message.typeDefault,
-		scope: config.message.scopeDefault,
+		type: aiPlan?.type || config.message.typeDefault,
+		scope: aiPlan?.scope || config.message.scopeDefault,
 		summary,
 		changedFiles: String(paths.length),
 		timestamp: new Date().toISOString(),
-		body: "",
+		body,
 	};
 	let message = renderTemplate(config.message.template, vars).trim();
-	if (!message.includes("\n")) {
-		message = `${message}\n\n${trailer}`;
-	} else if (!message.includes("Co-authored-by:")) {
+	if (body.length > 0) {
+		message = `${message}\n\n${body}`;
+	}
+	if (!message.includes("Co-authored-by:")) {
 		message = `${message}\n\n${trailer}`;
 	}
 	return message;
@@ -300,7 +569,8 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 			return;
 		}
 
-		const branch = await ensureTargetBranch(pi, ctx.cwd, state.config);
+		const aiPlan = await buildAiCommitPlanWithRetry(pi, ctx, state.config, paths);
+		const branch = await ensureTargetBranch(pi, ctx.cwd, state.config, paths, aiPlan);
 		if (!branch) {
 			setStatus(ctx, "blocked(branch)");
 			return;
@@ -316,7 +586,7 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 			setStatus(ctx, "blocked(co-author)");
 			return;
 		}
-		const message = buildCommitMessage(state.config, paths, state.coAuthorTrailer);
+		const message = buildCommitMessage(state.config, paths, state.coAuthorTrailer, aiPlan);
 		const tempPath = join(tmpdir(), `PI_AUTOCOMMIT_${Date.now()}.msg`);
 		await writeFile(tempPath, message, "utf8");
 		const commit = await runGit(pi, ctx.cwd, ["commit", "-F", tempPath]);
@@ -344,7 +614,21 @@ async function evaluateAndMaybeCommit(reason: string, pi: ExtensionAPI, ctx: Ext
 
 		const upstreamExists = await hasUpstream(pi, ctx.cwd);
 		const pushArgs = upstreamExists ? ["push", remote, branch] : ["push", "-u", remote, branch];
-		const push = await runGit(pi, ctx.cwd, pushArgs, state.config.push.timeoutMs);
+		let push = await runGit(pi, ctx.cwd, pushArgs, state.config.push.timeoutMs);
+		if (push.code !== 0 && (push.stderr + push.stdout).includes("non-fast-forward")) {
+			const fetch = await runGit(pi, ctx.cwd, ["fetch", remote, branch], state.config.push.timeoutMs);
+			if (fetch.code === 0) {
+				const rebase = await runGit(pi, ctx.cwd, ["rebase", `${remote}/${branch}`], state.config.push.timeoutMs);
+				if (rebase.code === 0) {
+					push = await runGit(pi, ctx.cwd, ["push", "-u", remote, branch], state.config.push.timeoutMs);
+				} else {
+					await runGit(pi, ctx.cwd, ["rebase", "--abort"], 5_000);
+					setStatus(ctx, "blocked(rebase-conflict)");
+					if (ctx.hasUI) ctx.ui.notify("[auto-commit] push conflict needs manual resolution", "warning");
+					return;
+				}
+			}
+		}
 		if (push.code !== 0) {
 			if ((push.stderr + push.stdout).includes("non-fast-forward")) {
 				setStatus(ctx, "blocked(non-fast-forward)");
@@ -447,6 +731,7 @@ export default function (pi: ExtensionAPI) {
 				enabled: state.config.enabled,
 				dryRun: state.config.dryRun,
 				autoPush: state.config.autoPush,
+				aiEnabled: state.config.ai.enabled,
 				mode: state.config.trigger.mode,
 				blockedReason: state.blockedReason,
 				commitInFlight: state.commitInFlight,

@@ -43,5 +43,10 @@
     "typeDefault": "chore",
     "scopeDefault": "harness",
     "maxSummaryPaths": 2
+  },
+  "ai": {
+    "enabled": true,
+    "timeoutMs": 20000,
+    "maxDiffChars": 12000
   }
 }
