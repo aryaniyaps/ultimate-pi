@@ -1,4 +1,4 @@
-# ADR-009: Replace Custom Wiki Layer with claude-obsidian (GitHub Mode)
+# ADR-009: Replace Custom Wiki Layer with obsidian-wiki (ar9av) + obsidian-skills (kepano)
 
 **Date:** 2026-04-28
 **Status:** Accepted
@@ -19,13 +19,13 @@ Our current wiki layer (ADR-007) built a custom `WikiKnowledgeBase` class + `wik
 9. **Vectra dependency** — ~80MB embedding model, custom TypeScript code, build complexity
 10. **No batch ingest** — one-at-a-time entry creation only
 
-The [claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) project provides a mature, skill-based Obsidian vault system specifically designed for AI-agent knowledge management. Its GitHub Mode (Mode B) maps directly to our repository/codebase knowledge needs, and its operation suite (ingest, query, lint, save, autoresearch) covers every gap above.
+The [obsidian-wiki](https://github.com/AgriciDaniel/obsidian-wiki) project provides a mature, skill-based Obsidian vault system specifically designed for AI-agent knowledge management. Its GitHub Mode (Mode B) maps directly to our repository/codebase knowledge needs, and its operation suite (ingest, query, lint, save, autoresearch) covers every gap above.
 
 ## Decision
 
-**Replace the custom wiki layer (ADR-007) with claude-obsidian's skill suite, operating in GitHub Mode (Mode B).**
+**Replace the custom wiki layer (ADR-007) with obsidian-wiki's skill suite, operating in GitHub Mode (Mode B).**
 
-### What we adopt from claude-obsidian
+### What we adopt from obsidian-wiki
 
 | Component | What it replaces | What we gain |
 |-----------|------------------|--------------|
@@ -46,11 +46,11 @@ The [claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) project p
 
 | Component | Why we keep it |
 |-----------|---------------|
-| Harness schemas (`harness-schemas.ts`) | Inter-layer data contracts. claude-obsidian is the storage engine, not the schema engine. |
+| Harness schemas (`harness-schemas.ts`) | Inter-layer data contracts. obsidian-wiki is the storage engine, not the schema engine. |
 | Harness config (`harness-config.ts`) | Layer tuning parameters. |
-| All extension event hooks | The harness still writes to wiki on `spec_hardened`, `plan_approved`, etc. — but via claude-obsidian skills instead of `WikiKnowledgeBase.store()`. |
+| All extension event hooks | The harness still writes to wiki on `spec_hardened`, `plan_approved`, etc. — but via obsidian-wiki skills instead of `WikiKnowledgeBase.store()`. |
 | Archon workflow YAML | Orchestration unchanged. |
-| Entry type mapping | Our `EntryType` enum maps to claude-obsidian's `type` frontmatter field. |
+| Entry type mapping | Our `EntryType` enum maps to obsidian-wiki's `type` frontmatter field. |
 
 ### Architecture change
 
@@ -63,16 +63,16 @@ Harness layers → WikiKnowledgeBase.ts → wiki/ (markdown) + .pi/wiki-search/ 
 
 **After (ADR-009):**
 ```
-Harness layers → .pi/skills/wiki-ingest/ (claude-obsidian skill) → wiki/ (Obsidian vault)
-                .pi/skills/wiki-query/ (claude-obsidian skill) → wiki/ (read hot.md → index.md → pages)
-                .pi/skills/wiki-lint/ (claude-obsidian skill) → wiki/ (health checks)
+Harness layers → .pi/skills/wiki-ingest/ (obsidian-wiki skill) → wiki/ (Obsidian vault)
+                .pi/skills/wiki-query/ (obsidian-wiki skill) → wiki/ (read hot.md → index.md → pages)
+                .pi/skills/wiki-lint/ (obsidian-wiki skill) → wiki/ (health checks)
                 .pi/skills/wiki/ (orchestrator) → routes to sub-skills
                 wiki/hot.md → cross-session context cache
                 wiki/index.md → structured catalog (replaces Vectra search for most queries)
                 .raw/ → immutable source documents
 ```
 
-### Directory mapping: harness entry types → claude-obsidian Mode B
+### Directory mapping: harness entry types → obsidian-wiki Mode B
 
 | Harness `EntryType` | Current directory | New directory | Notes |
 |----------------------|-------------------|---------------|-------|
@@ -89,9 +89,9 @@ Harness layers → .pi/skills/wiki-ingest/ (claude-obsidian skill) → wiki/ (Ob
 
 | Component | Why removed |
 |-----------|-------------|
-| `lib/wiki-kb.ts` (`WikiKnowledgeBase`) | Replaced by claude-obsidian skills writing directly to `wiki/` |
+| `lib/wiki-kb.ts` (`WikiKnowledgeBase`) | Replaced by obsidian-wiki skills writing directly to `wiki/` |
 | `tools/wiki-cli.ts` (custom CLI) | Replaced by skill-driven `ingest`, `query`, `lint` operations |
-| `@huggingface/transformers` dependency | No longer needed — claude-obsidian uses LLM-native reading + `.raw/` delta tracking instead of local embeddings |
+| `@huggingface/transformers` dependency | No longer needed — obsidian-wiki uses LLM-native reading + `.raw/` delta tracking instead of local embeddings |
 | `vectra` dependency | No longer needed — `wiki/index.md` + `wiki/hot.md` + wikilink traversal replaces vector search for most queries |
 | `.pi/wiki-search/` directory | No longer needed — no Vectra index |
 | `all-MiniLM-L6-v2` model (~80MB) | No longer needed |
@@ -101,7 +101,7 @@ Harness layers → .pi/skills/wiki-ingest/ (claude-obsidian skill) → wiki/ (Ob
 
 **Before:** Vectra hybrid search (BM25 + vector embeddings). Requires model download, index build, ~80MB cache.
 
-**After:** Layered LLM-native reading (from claude-obsidian wiki-query skill):
+**After:** Layered LLM-native reading (from obsidian-wiki wiki-query skill):
 1. **Quick mode** (~1,500 tokens): Read `wiki/hot.md` only. Covers recent context.
 2. **Standard mode** (~3,000 tokens): Read `hot.md` → `index.md` → 3-5 relevant pages. Most queries.
 3. **Deep mode** (~8,000+ tokens): Full wiki scan for synthesis/comparison questions.
@@ -118,7 +118,7 @@ For projects exceeding 10k wiki entries, DragonScale optional semantic tiling (v
 
 | Component | Size | Purpose |
 |-----------|------|---------|
-| claude-obsidian skills (files) | ~50KB | Agent skill instructions for ingest/query/lint/save |
+| obsidian-wiki skills (files) | ~50KB | Agent skill instructions for ingest/query/lint/save |
 | Obsidian (optional, for graph view) | Free app | Human browsing, graph visualization, backlinks |
 | `ollama` + `nomic-embed-text` (optional) | ~300MB | DragonScale semantic tiling for large wikis |
 | `scripts/allocate-address.sh` (opt-in) | ~2KB | DragonScale deterministic page addressing |
@@ -131,11 +131,11 @@ Net dependency reduction: ~87MB → ~50KB (or ~350KB with optional DragonScale).
 
 | Alternative | Why rejected |
 |-------------|-------------|
-| Keep ADR-007 system + add hot cache and lint | Reinventing what claude-obsidian already provides. Two systems to maintain. |
+| Keep ADR-007 system + add hot cache and lint | Reinventing what obsidian-wiki already provides. Two systems to maintain. |
 | Keep ADR-007 but use Vectra search for indexing only | Still requires 80MB model download and custom TypeScript search code. LLM-native reading is simpler. |
-| Use claude-obsidian without Mode B | Generic structure doesn't map to our codebase knowledge needs. Mode B gives `modules/`, `decisions/`, `flows/` which align with harness output. |
-| Use claude-obsidian Mode B exactly as-is without mapping | Would lose our harness-specific entry types and event hooks. Need the mapping layer. |
-| Use claude-obsidian MCP server integration | Requires Obsidian running + Local REST API plugin. Our harness runs headless in CI/CD. Skills are the right interface. |
+| Use obsidian-wiki without Mode B | Generic structure doesn't map to our codebase knowledge needs. Mode B gives `modules/`, `decisions/`, `flows/` which align with harness output. |
+| Use obsidian-wiki Mode B exactly as-is without mapping | Would lose our harness-specific entry types and event hooks. Need the mapping layer. |
+| Use obsidian-wiki MCP server integration | Requires Obsidian running + Local REST API plugin. Our harness runs headless in CI/CD. Skills are the right interface. |
 
 ## Consequences
 
@@ -155,4 +155,4 @@ Net dependency reduction: ~87MB → ~50KB (or ~350KB with optional DragonScale).
 - **Token cost for queries**: Standard query costs ~3,000 tokens (hot.md + index + pages). Deep queries cost ~8,000+ tokens. Our Vectra search was "free" after index build. Mitigation: hot cache short-circuits most queries at ~500 tokens.
 - **Wikilink syntax**: Switching from `[text](path)` to `[[Page Name]]` means updates to existing wiki entries. Mitigation: one-time migration script.
 - **Obsidian as soft dependency**: Skills work without Obsidian, but graph view, backlinks, and properties panel require it. Mitigation: Obsidian is free, and skills are fully functional without it.
-- **claude-obsidian is external**: Skill files come from an external repository. Mitigation: install as a pinned skill or vendor the skill files into the project.
+- **obsidian-wiki is external**: Skill files come from an external repository. Mitigation: install as a pinned skill or vendor the skill files into the project.

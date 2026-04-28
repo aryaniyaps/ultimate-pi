@@ -366,13 +366,10 @@ export const DEFAULT_CONFIG: HarnessConfig = {
 
 ### Files
 
-- `.pi/skills/wiki/SKILL.md` — Orchestrator skill: setup, scaffold, route to sub-skills
-- `.pi/skills/wiki-ingest/SKILL.md` — INGEST operation: source → wiki pages, cross-references, log
-- `.pi/skills/wiki-query/SKILL.md` — QUERY operation: 3 depth modes (quick/standard/deep)
-- `.pi/skills/wiki-lint/SKILL.md` — LINT operation: health checks, contradiction flagging
-- `.pi/skills/save/SKILL.md` — /save: file conversations to wiki
-- `WIKI.md` — Full schema reference (claude-obsidian's WIKI.md at vault root)
-- `extensions/harness-knowledge-base.ts` — Extension: registers tools, commands, event hooks; invokes skills
+- `.pi/skills/wiki/SKILL.md` — Harness-specific override: triggers, entry type mapping, conventions
+- `extensions/harness-knowledge-base.ts` — Extension: registers tools, commands, event hooks; invokes wiki skills
+- Wiki skills installed via `npx skills add Ar9av/obsidian-wiki --yes` (24 skills: wiki-setup, wiki-ingest, wiki-query, wiki-lint, wiki-status, wiki-rebuild, wiki-update, wiki-capture, wiki-research, wiki-export, wiki-dashboard, wiki-synthesize, wiki-history-ingest, claude-history-ingest, codex-history-ingest, hermes-history-ingest, openclaw-history-ingest, data-ingest, cross-linker, tag-taxonomy, graph-colorize, llm-wiki, skill-creator)
+- Obsidian formatting skills installed via `npx skills add kepano/obsidian-skills --yes` (5 skills: obsidian-markdown, obsidian-bases, json-canvas, obsidian-cli, defuddle)
 
 ### Wiki structure (Mode B: GitHub / Repository)
 
@@ -520,15 +517,17 @@ sources:
 
 ### Dependencies
 
-| Component | Size | Purpose |
-|-----------|------|----------|
-| claude-obsidian skills | ~50KB | Agent skill instructions for ingest/query/lint/save |
-| `WIKI.md` | ~15KB | Full schema reference at vault root |
+| Component | Source | Purpose |
+|-----------|--------|---------|
+| obsidian-wiki skills (24) | `npx skills add Ar9av/obsidian-wiki --yes` | Wiki operations: ingest, query, lint, setup, status, rebuild, update, capture, research, export, dashboard, synthesize, cross-linker, tag-taxonomy, history-ingest, etc. |
+| obsidian-skills (5) | `npx skills add kepano/obsidian-skills --yes` | Obsidian formatting: markdown syntax, bases, canvas, CLI, defuddle |
 | Obsidian app (optional) | Free | Human browsing, graph view, backlinks, properties panel |
-| `ollama` + `nomic-embed-text` (optional) | ~300MB | DragonScale semantic tiling for wikis >10k entries |
-| `scripts/allocate-address.sh` (optional) | ~2KB | DragonScale deterministic page addressing |
+| `ollama` + `nomic-embed-text` (optional) | ~300MB | QMD semantic search for large wikis |
+| `qmd` MCP server (optional) | ~10MB | Local lex+vec search over wiki + sources |
 
 **Removed dependencies:** `vectra` (~1.8MB), `@huggingface/transformers` (~5MB), `all-MiniLM-L6-v2` model (~80MB), `commander` (~200KB), `nanoid` (~5KB). Net reduction: ~87MB.
+
+**Key advantage:** Both skill packages are installed via `npx skills add` and auto-updated. No manual vendoring or lock-file drift.
 
 ## Layer 1 — Intake and Specification Hardening
 
