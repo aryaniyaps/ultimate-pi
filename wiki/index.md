@@ -11,13 +11,15 @@ This wiki maps the codebase architecture and tracks key software design decision
 - [[Key Decisions]]
 
 ## Modules
-*(Index of modules will go here)*
+- [[skills]] - Agent capability plugins
+- [[extensions]] - Programmatic hooks
+- [[bench]] - Evaluation tools
 
 ## Components
 *(Index of components will go here)*
 
 ## Decisions
-*(Index of decisions will go here)*
+- [[colocate-wiki]] - Co-locating Wiki with Codebase
 
 ## Dependencies
 *(Index of dependencies will go here)*
