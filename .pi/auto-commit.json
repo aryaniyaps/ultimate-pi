@@ -1,26 +1,20 @@
 {
-  "dryRun": false,
-  "coAuthor": {
-    "login": "pi-mono",
-    "email": "261679550+pi-mono@users.noreply.github.com"
-  },
-  "branch": {
-    "strategy": "auto-feature-branch",
-    "protected": [
-      "main",
-      "master",
-      "release/*"
-    ]
-  },
-  "push": {
-    "allowedRemotes": [
-      "origin"
-    ]
-  },
-  "submodules": {
-    "ignore": true
-  },
-  "message": {
-    "scopeDefault": "harness"
-  }
+	"dryRun": false,
+	"coAuthor": {
+		"login": "pi-mono",
+		"email": "261679550+pi-mono@users.noreply.github.com"
+	},
+	"branch": {
+		"strategy": "auto-feature-branch",
+		"protected": ["main", "master", "release/*"]
+	},
+	"push": {
+		"allowedRemotes": ["origin"]
+	},
+	"submodules": {
+		"ignore": true
+	},
+	"message": {
+		"scopeDefault": "harness"
+	}
 }
