@@ -9,6 +9,8 @@ layer: "6"
 sources:
   - "[[harness-implementation-plan]]"
 related:
+  - "[[harness-wiki-pipeline]]"
+  - "[[harness-wiki-skill-mapping]]"
   - "[[agentic-harness]]"
   - "[[wiki-query-interface]]"
   - "[[schema-orchestration]]"

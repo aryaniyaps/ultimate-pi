@@ -1,4 +1,14 @@
 # Wiki Operations Log
+## [2026-04-28] create | Harness-Wiki Integration Contract (ADR-010 + Skill Mapping + Pipeline)
+- Created: [[adr-010]], [[harness-wiki-skill-mapping]], [[harness-wiki-pipeline]]
+- Updated: [[index]] (added 3 new entries)
+- Created directories: wiki/sources/, wiki/entities/, wiki/concepts/, wiki/questions/, wiki/folds/, wiki/canvases/
+- Key insight: Every harness layer MUST read wiki before acting and write wiki after every state transition. This is enforced at L7 schema orchestration extension hooks. The read-first/write-after contract adds ~3,000-6,000 tokens per subtask but eliminates design drift and wiki staleness entirely.
+- ADR-010 establishes the tight-coupling contract: no layer acts without querying wiki for relevant ADRs, specs, and patterns first; no state transition completes without a wiki write.
+- 11 Obsidian skills are mapped to specific pipeline stages with exact read/write/format responsibilities per layer.
+- 7 staleness elimination rules ensure no page goes stale: status propagation, decision referencing, cross-reference integrity, contradiction resolution, hot cache freshness, lint schedule, index synchronization.
+- Token budget impact: ~20-35% increase overhead, from ~83,500 to ~102,500-117,500 per 5-subtask plan.
+
 
 ## [2026-04-28] ingest | Full GitHub Wiki (re-ingest, previously interrupted)
 - Source: `.raw/ultimate-pi.wiki/` (13 markdown pages from GitHub wiki)

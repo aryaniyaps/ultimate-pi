@@ -8,6 +8,8 @@ tags: [module, harness, planning, architecture]
 sources:
   - "[[harness-implementation-plan]]"
 related:
+  - "[[harness-wiki-skill-mapping]]"
+  - "[[harness-wiki-pipeline]]"
   - "[[spec-hardening]]"
   - "[[structured-planning]]"
   - "[[grounding-checkpoints]]"
@@ -38,6 +40,7 @@ An 8-layer mandatory pipeline — every task flows through all layers. No layer 
 ## Key Design Decisions
 - **[[adr-008|Black-box QA]]**: Tests from spec only, never from implementation
 - **[[adr-009|claude-obsidian Mode B]]**: Replaces Vectra + embeddings with LLM-native search
+- **[[adr-010|Wiki Tight-Coupling]]**: Every layer reads wiki first, writes wiki after every state transition
 - **No skip rule**: Verification is mandatory. Agent confidence is not evidence.
 
 ## Build Sequence

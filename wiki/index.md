@@ -17,6 +17,7 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[schema-orchestration]] | L7 | Archon workflow DAG orchestrates all layers |
 | [[wiki-query-interface]] | L8 | LLM-native search via claude-obsidian skills |
 | [[harness-implementation-plan]] | — | Build phases, token budgets, risk surface |
+| [[harness-wiki-skill-mapping]] | — | Skill-to-layer contract: which wiki skill fires when |
 | [[skills]] | — | Agent capability plugins |
 | [[extensions]] | — | Programmatic hooks |
 | [[bench]] | — | Evaluation tools |
@@ -28,6 +29,7 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[colocate-wiki]] | Co-locating Wiki with Codebase |
 | [[adr-008]] | Spec-Only Black-Box QA |
 | [[adr-009]] | claude-obsidian Mode B for Persistent Memory |
+| [[adr-010]] | Agentic Harness ↔ Wiki Tight-Coupling Contract |
 
 ## Components
 *(Index of components will go here)*
@@ -36,4 +38,6 @@ This wiki maps the codebase architecture and tracks key software design decision
 *(Index of dependencies will go here)*
 
 ## Flows
-*(Index of flows will go here)*
+| Flow | Summary |
+|------|---------|
+| [[harness-wiki-pipeline]] | Read-first/write-after data flow between harness and wiki |
