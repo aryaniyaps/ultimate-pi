@@ -1,25 +1,8 @@
 {
-  "enabled": true,
   "dryRun": false,
-  "autoPush": true,
-  "fallbackOnShutdown": false,
-  "trigger": {
-    "mode": "hybrid",
-    "idleMs": 20000,
-    "cooldownMs": 2000,
-    "minChangedFiles": 1
-  },
   "coAuthor": {
     "login": "pi-mono",
-    "id": 261679550,
-    "email": "261679550+pi-mono@users.noreply.github.com",
-    "enforce": true
-  },
-  "guards": {
-    "required": [],
-    "optional": [],
-    "timeoutMs": 30000,
-    "onTimeout": "block"
+    "email": "261679550+pi-mono@users.noreply.github.com"
   },
   "branch": {
     "strategy": "auto-feature-branch",
@@ -32,16 +15,12 @@
   "push": {
     "allowedRemotes": [
       "origin"
-    ],
-    "timeoutMs": 30000
+    ]
   },
   "submodules": {
     "ignore": true
   },
   "message": {
-    "template": "{{type}}({{scope}}): {{summary}}",
-    "typeDefault": "chore",
-    "scopeDefault": "harness",
-    "maxSummaryPaths": 2
+    "scopeDefault": "harness"
   }
 }

@@ -1,6 +1,10 @@
 submissions/
 jobs/
 pl
+
+# Environment (user-specific secrets/paths)
+.env
+
 # Node / package manager artifacts
 node_modules/
 npm-debug.log*

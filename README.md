@@ -57,19 +57,28 @@ git clone https://github.com/<owner>/<repo>.wiki.git ~/wiki/<repo>
 
 ### Step 3 — Configure `.env`
 
-In your project root, create `.env` pointing to the vault:
+Copy the example and fill in your paths:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env`:
 
 ```bash
 # Required: absolute path to your Obsidian vault
 OBSIDIAN_VAULT_PATH=~/wiki/<repo>
 
 # Optional: source directories to ingest from (comma-separated)
-OBSIDIAN_SOURCES_DIR=~/Documents
+# Point at folders with documents/articles/notes to distill — NOT your project code.
+# OBSIDIAN_SOURCES_DIR=~/Documents
 
 # Optional: QMD collections for semantic search in wiki-query
 # QMD_WIKI_COLLECTION=
 # QMD_PAPERS_COLLECTION=
 ```
+
+> **Note:** `.env` is gitignored — it contains user-specific paths and is never committed. Only `.env.example` is tracked.
 
 ### Step 4 — Run `wiki-setup`
 
