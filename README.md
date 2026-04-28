@@ -123,38 +123,28 @@ Installed via `npx skills add AgriciDaniel/claude-obsidian --yes` or bundled:
   - Adds status command:
     - `/lean-ctx-status`
 
+### Dotenv loader extension
+
+- `extensions/dotenv-loader.ts`
+  - Loads `.env` files into `process.env` on session start, before other extensions read their config.
+  - Ensures extensions like `@posthog/pi` can pick up env vars from `.env` automatically.
+  - Configurable via env vars (set before launching pi):
+
+| Variable | Default | Description |
+|---|---|---|
+| `ENV_LOADER_FILES` | `.env` | Comma-separated list of `.env` file paths (relative to cwd). |
+| `ENV_LOADER_OVERRIDE` | `false` | Set to `true` to overwrite existing env vars. |
+| `ENV_LOADER_SILENT` | `false` | Set to `true` to suppress startup logs. |
+| `ENV_LOADER_ENCODING` | `utf-8` | File encoding for `.env` files. |
+
+  - Supports variable expansion (`$VAR` and `${VAR}`) referencing current `process.env`.
+  - Reloads on `/reload`.
+  - Status command: `/env-loader-status`
+
 ### PostHog analytics extension
 
 - `@posthog/pi` (installed via `pi install @posthog/pi`)
-  - Captures AI generation spans, tool spans, and traces to [PostHog](https://posthog.com).
-  - Tracks model, provider, tokens, cost, latency, errors per turn.
-  - Groups traces by message or session (configurable).
-
-#### Environment variables
-
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `POSTHOG_API_KEY` | **Yes** | — | PostHog project API key. Extension silently skips if missing. |
-| `POSTHOG_HOST` | No | `https://us.i.posthog.com` | PostHog instance URL. Change for EU or self-hosted. |
-| `POSTHOG_PRIVACY_MODE` | No | `false` | Set to `true` to redact prompt/input content from events. |
-| `POSTHOG_ENABLED` | No | `true` | Set to `false` to disable the extension entirely. |
-| `POSTHOG_TRACE_GROUPING` | No | `message` | How traces are grouped: `message` (one trace per agent run) or `session` (merge runs within a session window). |
-| `POSTHOG_SESSION_WINDOW_MINUTES` | No | `60` | Minutes before a session window expires (only used when `POSTHOG_TRACE_GROUPING=session`). |
-| `POSTHOG_PROJECT_NAME` | No | Derived from `cwd` | Override the project name sent in events. Defaults to the repo directory name. |
-| `POSTHOG_AGENT_NAME` | No | `pi:<project>` | Override the agent name sent in events. |
-| `POSTHOG_TAGS` | No | — | Custom tags appended to every event. Format: `key1:val1,key2:val2`. |
-| `POSTHOG_MAX_ATTRIBUTE_LENGTH` | No | `12000` | Max chars for truncated attribute values. |
-
-#### Quick start
-
-1. Get a PostHog API key from **Project Settings → API Keys**.
-2. Set env vars (e.g. in your shell or `.env`):
-
-   ```bash
-   export POSTHOG_API_KEY=phc_xxx...
-   ```
-
-3. Reload PI (`/reload`). The extension auto-initializes on session start.
+  - Wraps the upstream [posthog-pi](https://github.com/PostHog/posthog-pi) extension to capture AI generation spans, tool spans, and traces in [PostHog](https://posthog.com). See the upstream repo for configuration and env vars.
 
 ## Design choices (concise)
 
