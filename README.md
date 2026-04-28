@@ -37,25 +37,7 @@ Ship a production-grade coding harness where the agent:
 
 ## Obsidian wiki setup
 
-The wiki lives in your repo's GitHub wiki and is checked out locally. Most wiki skills need this vault configured. One-time setup:
-
-> **For forks:** replace `aryaniyaps/ultimate-pi` with your own `<owner>/<repo>` throughout.
-
-### Step 1 — Activate the GitHub wiki
-
-The repo must have at least one page before you can clone it:
-
-1. Go to `https://github.com/<owner>/<repo>/wiki` (e.g. `https://github.com/aryaniyaps/ultimate-pi/wiki`)
-2. Click **Create the first page** (or **New Page** if it already exists)
-3. Save any content — this activates the wiki git endpoint
-
-### Step 2 — Clone the wiki repo
-
-```bash
-git clone https://github.com/<owner>/<repo>.wiki.git ~/wiki/<repo>
-```
-
-### Step 3 — Run `wiki`
+### Step 1 — Run `wiki`
 
 Inside your PI session, run:
 
@@ -65,7 +47,7 @@ Inside your PI session, run:
 
 This skill walks you through the rest automatically — creating the folder structure, special files (`Home.md`, `log.md`, `hot.md`), `.gitignore`, and `.obsidian` config. It stays in sync with the skill definition, so you always get the latest structure without manually mirroring docs here.
 
-### Step 4 — Open in Obsidian
+### Step 2 — Open in Obsidian
 
 1. Open Obsidian → **File → Open Vault** → select your vault directory (e.g. `~/wiki/ultimate-pi`)
 2. Install recommended community plugins:
