@@ -67,7 +67,7 @@ Then edit `.env`:
 
 ```bash
 # Required: absolute path to your Obsidian vault
-OBSIDIAN_VAULT_PATH=~/wiki/<repo>
+OBSIDIAN_VAULT_PATH=~/wiki/ultimate-pi
 
 # Optional: source directories to ingest from (comma-separated)
 # Point at folders with documents/articles/notes to distill — NOT your project code.
