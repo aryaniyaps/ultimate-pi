@@ -20,6 +20,7 @@ Query and maintain the project wiki — the single source of truth for design de
 | `wiki-export` | ar9av/obsidian-wiki | Export vault graph to JSON, GraphML, Neo4j, HTML |
 | `wiki-dashboard` | ar9av/obsidian-wiki | Create dynamic Obsidian Bases dashboard views |
 | `wiki-synthesize` | ar9av/obsidian-wiki | Discover and fill synthesis gaps |
+| `wiki-history-ingest` | ar9av/obsidian-wiki | Mine past Pi agent sessions for knowledge |
 | `cross-linker` | ar9av/obsidian-wiki | Auto-discover and insert missing wikilinks |
 | `tag-taxonomy` | ar9av/obsidian-wiki | Enforce consistent tag vocabulary |
 | `obsidian-markdown` | kepano/obsidian-skills | Correct Obsidian-flavored syntax |
@@ -33,6 +34,7 @@ Query and maintain the project wiki — the single source of truth for design de
 Use wiki skills when you need to:
 - Look up decisions or ADRs → `wiki-query`
 - Ingest new knowledge → `wiki-ingest`
+- Mine past Pi sessions → `wiki-history-ingest`
 - Record decisions, patterns, events → `wiki-capture` or `wiki-ingest`
 - Check wiki health → `wiki-lint`
 - Set up or rebuild → `wiki-setup` / `wiki-rebuild`
