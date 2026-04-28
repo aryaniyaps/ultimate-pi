@@ -1,497 +1,293 @@
 ---
 name: obsidian-bases
-description: Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries. Use when working with .base files, creating database-like views of notes, or when the user mentions Bases, table views, card views, filters, or formulas in Obsidian.
+description: "Create and edit Obsidian Bases (.base files): Obsidian's native database layer for dynamic tables, card views, list views, filters, formulas, and summaries over vault notes. Triggers on: create a base, add a base file, obsidian bases, base view, filter notes, formula, database view, dynamic table, task tracker base, reading list base."
+allowed-tools: Read Write
 ---
 
-# Obsidian Bases Skill
+# obsidian-bases: Obsidian's Database Layer
 
-## Workflow
+Obsidian Bases (launched 2025) turns vault notes into queryable, dynamic views. Tables, cards, lists, maps. Defined in `.base` files. No plugin required; it is a core Obsidian feature.
 
-1. **Create the file**: Create a `.base` file in the vault with valid YAML content
-2. **Define scope**: Add `filters` to select which notes appear (by tag, folder, property, or date)
-3. **Add formulas** (optional): Define computed properties in the `formulas` section
-4. **Configure views**: Add one or more views (`table`, `cards`, `list`, or `map`) with `order` specifying which properties to display
-5. **Validate**: Verify the file is valid YAML with no syntax errors. Check that all referenced properties and formulas exist. Common issues: unquoted strings containing special YAML characters, mismatched quotes in formula expressions, referencing `formula.X` without defining `X` in `formulas`
-6. **Test in Obsidian**: Open the `.base` file in Obsidian to confirm the view renders correctly. If it shows a YAML error, check quoting rules below
+**Authoritative reference**: If the kepano/obsidian-skills plugin is installed, prefer its canonical obsidian-bases skill. Otherwise, use the reference below. Official docs: https://help.obsidian.md/bases/syntax
 
-## Schema
+---
 
-Base files use the `.base` extension and contain valid YAML.
+## File Format
+
+`.base` files contain valid YAML. The root keys are `filters`, `formulas`, `properties`, `summaries`, and `views`.
 
 ```yaml
-# Global filters apply to ALL views in the base
-filters:
-  # Can be a single filter string
-  # OR a recursive filter object with and/or/not
-  and: []
-  or: []
-  not: []
-
-# Define formula properties that can be used across all views
-formulas:
-  formula_name: 'expression'
-
-# Configure display names and settings for properties
-properties:
-  property_name:
-    displayName: "Display Name"
-  formula.formula_name:
-    displayName: "Formula Display Name"
-  file.ext:
-    displayName: "Extension"
-
-# Define custom summary formulas
-summaries:
-  custom_summary_name: 'values.mean().round(3)'
-
-# Define one or more views
-views:
-  - type: table | cards | list | map
-    name: "View Name"
-    limit: 10                    # Optional: limit results
-    groupBy:                     # Optional: group results
-      property: property_name
-      direction: ASC | DESC
-    filters:                     # View-specific filters
-      and: []
-    order:                       # Properties to display in order
-      - file.name
-      - property_name
-      - formula.formula_name
-    summaries:                   # Map properties to summary formulas
-      property_name: Average
-```
-
-## Filter Syntax
-
-Filters narrow down results. They can be applied globally or per-view.
-
-### Filter Structure
-
-```yaml
-# Single filter
-filters: 'status == "done"'
-
-# AND - all conditions must be true
+# Global filters: apply to ALL views
 filters:
   and:
-    - 'status == "done"'
-    - 'priority > 3'
+    - file.hasTag("wiki")
+    - 'status != "archived"'
 
-# OR - any condition can be true
-filters:
-  or:
-    - 'file.hasTag("book")'
-    - 'file.hasTag("article")'
+# Computed properties
+formulas:
+  age_days: '(now() - file.ctime).days.round(0)'
+  status_icon: 'if(status == "mature", "✅", "🔄")'
 
-# NOT - exclude matching items
-filters:
-  not:
-    - 'file.hasTag("archived")'
+# Display name overrides for properties panel
+properties:
+  status:
+    displayName: "Status"
+  formula.age_days:
+    displayName: "Age (days)"
 
-# Nested filters
-filters:
-  or:
-    - file.hasTag("tag")
-    - and:
-        - file.hasTag("book")
-        - file.hasLink("Textbook")
-    - not:
-        - file.hasTag("book")
-        - file.inFolder("Required Reading")
+# One or more views
+views:
+  - type: table
+    name: "All Pages"
+    order:
+      - file.name
+      - type
+      - status
+      - updated
+      - formula.age_days
 ```
 
-### Filter Operators
+---
 
-| Operator | Description |
-|----------|-------------|
-| `==` | equals |
-| `!=` | not equal |
-| `>` | greater than |
-| `<` | less than |
-| `>=` | greater than or equal |
-| `<=` | less than or equal |
-| `&&` | logical and |
-| `\|\|` | logical or |
-| <code>!</code> | logical not |
+## Filters
+
+Filters select which notes appear. Applied globally or per-view.
+
+```yaml
+# Single string filter
+filters: 'status == "current"'
+
+# AND: all must be true
+filters:
+  and:
+    - 'status != "archived"'
+    - file.hasTag("wiki")
+
+# OR: any can be true
+filters:
+  or:
+    - file.hasTag("concept")
+    - file.hasTag("entity")
+
+# NOT: exclude matches
+filters:
+  not:
+    - file.inFolder("wiki/meta")
+
+# Nested
+filters:
+  and:
+    - file.inFolder("wiki/")
+    - or:
+        - 'type == "concept"'
+        - 'type == "entity"'
+```
+
+### Filter operators
+
+`==` `!=` `>` `<` `>=` `<=`
+
+### Useful filter functions
+
+| Function | Example |
+|----------|---------|
+| `file.hasTag("x")` | Notes with tag `x` |
+| `file.inFolder("path/")` | Notes in folder |
+| `file.hasLink("Note")` | Notes linking to Note |
+
+---
 
 ## Properties
 
-### Three Types of Properties
+Three types:
+- **Note properties**: from frontmatter: `status`, `type`, `updated`
+- **File properties**: metadata: `file.name`, `file.mtime`, `file.size`, `file.ctime`, `file.tags`, `file.folder`
+- **Formula properties**: computed: `formula.age_days`
 
-1. **Note properties** - From frontmatter: `note.author` or just `author`
-2. **File properties** - File metadata: `file.name`, `file.mtime`, etc.
-3. **Formula properties** - Computed values: `formula.my_formula`
+---
 
-### File Properties Reference
+## Formulas
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `file.name` | String | File name |
-| `file.basename` | String | File name without extension |
-| `file.path` | String | Full path to file |
-| `file.folder` | String | Parent folder path |
-| `file.ext` | String | File extension |
-| `file.size` | Number | File size in bytes |
-| `file.ctime` | Date | Created time |
-| `file.mtime` | Date | Modified time |
-| `file.tags` | List | All tags in file |
-| `file.links` | List | Internal links in file |
-| `file.backlinks` | List | Files linking to this file |
-| `file.embeds` | List | Embeds in the note |
-| `file.properties` | Object | All frontmatter properties |
-
-### The `this` Keyword
-
-- In main content area: refers to the base file itself
-- When embedded: refers to the embedding file
-- In sidebar: refers to the active file in main content
-
-## Formula Syntax
-
-Formulas compute values from properties. Defined in the `formulas` section.
+Defined in `formulas:`. Referenced as `formula.name` in `order:` and `properties:`.
 
 ```yaml
 formulas:
-  # Simple arithmetic
-  total: "price * quantity"
+  # Days since created
+  age_days: '(now() - file.ctime).days.round(0)'
 
-  # Conditional logic
-  status_icon: 'if(done, "✅", "⏳")'
+  # Days until a date property
+  days_until: 'if(due_date, (date(due_date) - today()).days, "")'
 
-  # String formatting
-  formatted_price: 'if(price, price.toFixed(2) + " dollars")'
+  # Conditional label
+  status_icon: 'if(status == "mature", "✅", if(status == "developing", "🔄", "🌱"))'
 
-  # Date formatting
-  created: 'file.ctime.format("YYYY-MM-DD")'
-
-  # Calculate days since created (use .days for Duration)
-  days_old: '(now() - file.ctime).days'
-
-  # Calculate days until due date
-  days_until_due: 'if(due_date, (date(due_date) - today()).days, "")'
+  # Word count estimate
+  word_est: '(file.size / 5).round(0)'
 ```
 
-## Key Functions
-
-Most commonly used functions. For the complete reference of all types (Date, String, Number, List, File, Link, Object, RegExp), see [FUNCTIONS_REFERENCE.md](references/FUNCTIONS_REFERENCE.md).
-
-| Function | Signature | Description |
-|----------|-----------|-------------|
-| `date()` | `date(string): date` | Parse string to date (`YYYY-MM-DD HH:mm:ss`) |
-| `now()` | `now(): date` | Current date and time |
-| `today()` | `today(): date` | Current date (time = 00:00:00) |
-| `if()` | `if(condition, trueResult, falseResult?)` | Conditional |
-| `duration()` | `duration(string): duration` | Parse duration string |
-| `file()` | `file(path): file` | Get file object |
-| `link()` | `link(path, display?): Link` | Create a link |
-
-### Duration Type
-
-When subtracting two dates, the result is a **Duration** type (not a number).
-
-**Duration Fields:** `duration.days`, `duration.hours`, `duration.minutes`, `duration.seconds`, `duration.milliseconds`
-
-**IMPORTANT:** Duration does NOT support `.round()`, `.floor()`, `.ceil()` directly. Access a numeric field first (like `.days`), then apply number functions.
-
+**Key rule**: Subtracting two dates returns a `Duration`. Not a number. Always access `.days` first:
 ```yaml
-# CORRECT: Calculate days between dates
-"(date(due_date) - today()).days"                    # Returns number of days
-"(now() - file.ctime).days"                          # Days since created
-"(date(due_date) - today()).days.round(0)"           # Rounded days
+# CORRECT
+age: '(now() - file.ctime).days'
 
-# WRONG - will cause error:
-# "((date(due) - today()) / 86400000).round(0)"      # Duration doesn't support division then round
+# WRONG: crashes
+age: '(now() - file.ctime).round(0)'
 ```
 
-### Date Arithmetic
-
+**Always guard nullable properties with `if()`**:
 ```yaml
-# Duration units: y/year/years, M/month/months, d/day/days,
-#                 w/week/weeks, h/hour/hours, m/minute/minutes, s/second/seconds
-"now() + \"1 day\""       # Tomorrow
-"today() + \"7d\""        # A week from today
-"now() - file.ctime"      # Returns Duration
-"(now() - file.ctime).days"  # Get days as number
+# CORRECT
+days_left: 'if(due_date, (date(due_date) - today()).days, "")'
 ```
+
+---
 
 ## View Types
 
-### Table View
-
+### Table
 ```yaml
 views:
   - type: table
-    name: "My Table"
+    name: "Wiki Index"
+    limit: 100
     order:
       - file.name
+      - type
       - status
-      - due_date
-    summaries:
-      price: Sum
-      count: Average
+      - updated
+    groupBy:
+      property: type
+      direction: ASC
 ```
 
-### Cards View
-
+### Cards
 ```yaml
 views:
   - type: cards
     name: "Gallery"
     order:
       - file.name
-      - cover_image
-      - description
+      - tags
+      - status
 ```
 
-### List View
-
+### List
 ```yaml
 views:
   - type: list
-    name: "Simple List"
+    name: "Quick List"
     order:
       - file.name
       - status
 ```
 
-### Map View
+---
 
-Requires latitude/longitude properties and the Maps community plugin.
+## Wiki Vault Templates
 
-```yaml
-views:
-  - type: map
-    name: "Locations"
-    # Map-specific settings for lat/lng properties
-```
-
-## Default Summary Formulas
-
-| Name | Input Type | Description |
-|------|------------|-------------|
-| `Average` | Number | Mathematical mean |
-| `Min` | Number | Smallest number |
-| `Max` | Number | Largest number |
-| `Sum` | Number | Sum of all numbers |
-| `Range` | Number | Max - Min |
-| `Median` | Number | Mathematical median |
-| `Stddev` | Number | Standard deviation |
-| `Earliest` | Date | Earliest date |
-| `Latest` | Date | Latest date |
-| `Range` | Date | Latest - Earliest |
-| `Checked` | Boolean | Count of true values |
-| `Unchecked` | Boolean | Count of false values |
-| `Empty` | Any | Count of empty values |
-| `Filled` | Any | Count of non-empty values |
-| `Unique` | Any | Count of unique values |
-
-## Complete Examples
-
-### Task Tracker Base
+### Wiki content dashboard (all non-meta pages)
 
 ```yaml
 filters:
   and:
-    - file.hasTag("task")
+    - file.inFolder("wiki/")
+    - not:
+        - file.inFolder("wiki/meta")
+
+formulas:
+  age: '(now() - file.ctime).days.round(0)'
+
+properties:
+  formula.age:
+    displayName: "Age (days)"
+
+views:
+  - type: table
+    name: "All Wiki Pages"
+    order:
+      - file.name
+      - type
+      - status
+      - updated
+      - formula.age
+    groupBy:
+      property: type
+      direction: ASC
+```
+
+### Entity index (people, orgs, repos)
+
+```yaml
+filters:
+  and:
+    - file.inFolder("wiki/entities/")
     - 'file.ext == "md"'
 
-formulas:
-  days_until_due: 'if(due, (date(due) - today()).days, "")'
-  is_overdue: 'if(due, date(due) < today() && status != "done", false)'
-  priority_label: 'if(priority == 1, "🔴 High", if(priority == 2, "🟡 Medium", "🟢 Low"))'
-
-properties:
-  status:
-    displayName: Status
-  formula.days_until_due:
-    displayName: "Days Until Due"
-  formula.priority_label:
-    displayName: Priority
-
 views:
   - type: table
-    name: "Active Tasks"
-    filters:
-      and:
-        - 'status != "done"'
+    name: "Entities"
     order:
       - file.name
+      - entity_type
       - status
-      - formula.priority_label
-      - due
-      - formula.days_until_due
+      - updated
     groupBy:
-      property: status
+      property: entity_type
       direction: ASC
-    summaries:
-      formula.days_until_due: Average
-
-  - type: table
-    name: "Completed"
-    filters:
-      and:
-        - 'status == "done"'
-    order:
-      - file.name
-      - completed_date
 ```
 
-### Reading List Base
-
-```yaml
-filters:
-  or:
-    - file.hasTag("book")
-    - file.hasTag("article")
-
-formulas:
-  reading_time: 'if(pages, (pages * 2).toString() + " min", "")'
-  status_icon: 'if(status == "reading", "📖", if(status == "done", "✅", "📚"))'
-  year_read: 'if(finished_date, date(finished_date).year, "")'
-
-properties:
-  author:
-    displayName: Author
-  formula.status_icon:
-    displayName: ""
-  formula.reading_time:
-    displayName: "Est. Time"
-
-views:
-  - type: cards
-    name: "Library"
-    order:
-      - cover
-      - file.name
-      - author
-      - formula.status_icon
-    filters:
-      not:
-        - 'status == "dropped"'
-
-  - type: table
-    name: "Reading List"
-    filters:
-      and:
-        - 'status == "to-read"'
-    order:
-      - file.name
-      - author
-      - pages
-      - formula.reading_time
-```
-
-### Daily Notes Index
+### Recent ingests
 
 ```yaml
 filters:
   and:
-    - file.inFolder("Daily Notes")
-    - '/^\d{4}-\d{2}-\d{2}$/.matches(file.basename)'
-
-formulas:
-  word_estimate: '(file.size / 5).round(0)'
-  day_of_week: 'date(file.basename).format("dddd")'
-
-properties:
-  formula.day_of_week:
-    displayName: "Day"
-  formula.word_estimate:
-    displayName: "~Words"
+    - file.inFolder("wiki/sources/")
 
 views:
   - type: table
-    name: "Recent Notes"
-    limit: 30
+    name: "Sources"
     order:
       - file.name
-      - formula.day_of_week
-      - formula.word_estimate
-      - file.mtime
+      - source_type
+      - created
+      - status
+    groupBy:
+      property: source_type
+      direction: ASC
 ```
 
-## Embedding Bases
+---
 
-Embed in Markdown files:
+## Embedding in Notes
 
 ```markdown
 ![[MyBase.base]]
 
-<!-- Specific view -->
 ![[MyBase.base#View Name]]
 ```
 
+---
+
+## Where to Save
+
+Store `.base` files in `wiki/meta/` for vault dashboards:
+- `wiki/meta/dashboard.base`: main content view
+- `wiki/meta/entities.base`: entity tracker
+- `wiki/meta/sources.base`: ingestion log
+
+---
+
 ## YAML Quoting Rules
 
-- Use single quotes for formulas containing double quotes: `'if(done, "Yes", "No")'`
-- Use double quotes for simple strings: `"My View Name"`
-- Escape nested quotes properly in complex expressions
+- Formulas with double quotes → wrap in single quotes: `'if(done, "Yes", "No")'`
+- Strings with colons or special chars → wrap in double quotes: `"Status: Active"`
+- Unquoted strings with `:` break YAML parsing
 
-## Troubleshooting
+---
 
-### YAML Syntax Errors
+## What Not to Do
 
-**Unquoted special characters**: Strings containing `:`, `{`, `}`, `[`, `]`, `,`, `&`, `*`, `#`, `?`, `|`, `-`, `<`, `>`, `=`, `!`, `%`, `@`, `` ` `` must be quoted.
-
-```yaml
-# WRONG - colon in unquoted string
-displayName: Status: Active
-
-# CORRECT
-displayName: "Status: Active"
-```
-
-**Mismatched quotes in formulas**: When a formula contains double quotes, wrap the entire formula in single quotes.
-
-```yaml
-# WRONG - double quotes inside double quotes
-formulas:
-  label: "if(done, "Yes", "No")"
-
-# CORRECT - single quotes wrapping double quotes
-formulas:
-  label: 'if(done, "Yes", "No")'
-```
-
-### Common Formula Errors
-
-**Duration math without field access**: Subtracting dates returns a Duration, not a number. Always access `.days`, `.hours`, etc.
-
-```yaml
-# WRONG - Duration is not a number
-"(now() - file.ctime).round(0)"
-
-# CORRECT - access .days first, then round
-"(now() - file.ctime).days.round(0)"
-```
-
-**Missing null checks**: Properties may not exist on all notes. Use `if()` to guard.
-
-```yaml
-# WRONG - crashes if due_date is empty
-"(date(due_date) - today()).days"
-
-# CORRECT - guard with if()
-'if(due_date, (date(due_date) - today()).days, "")'
-```
-
-**Referencing undefined formulas**: Ensure every `formula.X` in `order` or `properties` has a matching entry in `formulas`.
-
-```yaml
-# This will fail silently if 'total' is not defined in formulas
-order:
-  - formula.total
-
-# Fix: define it
-formulas:
-  total: "price * quantity"
-```
-
-## References
-
-- [Bases Syntax](https://help.obsidian.md/bases/syntax)
-- [Functions](https://help.obsidian.md/bases/functions)
-- [Views](https://help.obsidian.md/bases/views)
-- [Formulas](https://help.obsidian.md/formulas)
-- [Complete Functions Reference](references/FUNCTIONS_REFERENCE.md)
+- Do not use `from:` or `where:`: those are Dataview syntax, not Obsidian Bases
+- Do not use `sort:` at the root level: sorting is per-view via `order:` and `groupBy:`
+- Do not put `.base` files outside the vault: they only render inside Obsidian
+- Do not reference `formula.X` in `order:` without defining `X` in `formulas:`

@@ -1,196 +1,231 @@
 ---
 name: obsidian-markdown
-description: Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax. Use when working with .md files in Obsidian, or when the user mentions wikilinks, callouts, frontmatter, tags, embeds, or Obsidian notes.
+description: "Write correct Obsidian Flavored Markdown: wikilinks, embeds, callouts, properties, tags, highlights, math, and canvas syntax. Reference this when creating or editing any wiki page. Triggers on: write obsidian note, obsidian syntax, wikilink, callout, embed, obsidian markdown, wikilink format, callout syntax, embed syntax, obsidian formatting, how to write obsidian markdown."
+allowed-tools: Read Write Edit
 ---
 
-# Obsidian Flavored Markdown Skill
+# obsidian-markdown: Obsidian Flavored Markdown
 
-Create and edit valid Obsidian Flavored Markdown. Obsidian extends CommonMark and GFM with wikilinks, embeds, callouts, properties, comments, and other syntax. This skill covers only Obsidian-specific extensions -- standard Markdown (headings, bold, italic, lists, quotes, code blocks, tables) is assumed knowledge.
+Reference this skill when writing any wiki page. Obsidian extends standard Markdown with wikilinks, embeds, callouts, and properties. Getting syntax wrong causes broken links, invisible callouts, or malformed frontmatter.
 
-## Workflow: Creating an Obsidian Note
+**Cross-reference**: If the kepano/obsidian-skills plugin is installed, prefer its canonical obsidian-markdown skill for authoritative Obsidian syntax reference. Otherwise, use the reference below. See also [github.com/kepano/obsidian-skills](https://github.com/kepano/obsidian-skills).
 
-1. **Add frontmatter** with properties (title, tags, aliases) at the top of the file. See [PROPERTIES.md](references/PROPERTIES.md) for all property types.
-2. **Write content** using standard Markdown for structure, plus Obsidian-specific syntax below.
-3. **Link related notes** using wikilinks (`[[Note]]`) for internal vault connections, or standard Markdown links for external URLs.
-4. **Embed content** from other notes, images, or PDFs using the `![[embed]]` syntax. See [EMBEDS.md](references/EMBEDS.md) for all embed types.
-5. **Add callouts** for highlighted information using `> [!type]` syntax. See [CALLOUTS.md](references/CALLOUTS.md) for all callout types.
-6. **Verify** the note renders correctly in Obsidian's reading view.
+---
 
-> When choosing between wikilinks and Markdown links: use `[[wikilinks]]` for notes within the vault (Obsidian tracks renames automatically) and `[text](url)` for external URLs only.
+## Wikilinks
 
-## Internal Links (Wikilinks)
+Internal links use double brackets. The filename without extension.
 
-```markdown
-[[Note Name]]                          Link to note
-[[Note Name|Display Text]]             Custom display text
-[[Note Name#Heading]]                  Link to heading
-[[Note Name#^block-id]]                Link to block
-[[#Heading in same note]]              Same-note heading link
-```
+| Syntax | What it does |
+|---|---|
+| `[[Note Name]]` | Basic link |
+| `[[Note Name\|Display Text]]` | Aliased link (shows "Display Text") |
+| `[[Note Name#Heading]]` | Link to a specific heading |
+| `[[Note Name#^block-id]]` | Link to a specific block |
 
-Define a block ID by appending `^block-id` to any paragraph:
+Rules:
+- Case-sensitive on some systems. Match the exact filename.
+- No path needed: Obsidian resolves by filename uniqueness.
+- If two files have the same name, use `[[Folder/Note Name]]` to disambiguate.
 
-```markdown
-This paragraph can be linked to. ^my-block-id
-```
-
-For lists and quotes, place the block ID on a separate line after the block:
-
-```markdown
-> A quote block
-
-^quote-id
-```
+---
 
 ## Embeds
 
-Prefix any wikilink with `!` to embed its content inline:
+Embeds use `!` before the wikilink. They display the content inline.
 
-```markdown
-![[Note Name]]                         Embed full note
-![[Note Name#Heading]]                 Embed section
-![[image.png]]                         Embed image
-![[image.png|300]]                     Embed image with width
-![[document.pdf#page=3]]               Embed PDF page
-```
+| Syntax | What it does |
+|---|---|
+| `![[Note Name]]` | Embed a full note |
+| `![[Note Name#Heading]]` | Embed a section |
+| `![[image.png]]` | Embed an image |
+| `![[image.png\|300]]` | Embed image with width 300px |
+| `![[document.pdf]]` | Embed a PDF (Obsidian renders natively) |
+| `![[audio.mp3]]` | Embed audio |
 
-See [EMBEDS.md](references/EMBEDS.md) for audio, video, search embeds, and external images.
+---
 
 ## Callouts
 
+Callouts are blockquotes with a type keyword. They render as styled alert boxes.
+
 ```markdown
 > [!note]
-> Basic callout.
+> Default informational callout.
 
-> [!warning] Custom Title
+> [!note] Custom Title
 > Callout with a custom title.
 
-> [!faq]- Collapsed by default
-> Foldable callout (- collapsed, + expanded).
+> [!note]- Collapsible (closed by default)
+> Click to expand.
+
+> [!note]+ Collapsible (open by default)
+> Click to collapse.
 ```
 
-Common types: `note`, `tip`, `warning`, `info`, `example`, `quote`, `bug`, `danger`, `success`, `failure`, `question`, `abstract`, `todo`.
+### All callout types
 
-See [CALLOUTS.md](references/CALLOUTS.md) for the full list with aliases, nesting, and custom CSS callouts.
+| Type | Aliases | Use for |
+|------|---------|---------|
+| `note` |: | General notes |
+| `abstract` | `summary`, `tldr` | Summaries |
+| `info` |: | Information |
+| `todo` |: | Action items |
+| `tip` | `hint`, `important` | Tips and highlights |
+| `success` | `check`, `done` | Positive outcomes |
+| `question` | `help`, `faq` | Open questions |
+| `warning` | `caution`, `attention` | Warnings |
+| `failure` | `fail`, `missing` | Errors or failures |
+| `danger` | `error` | Critical issues |
+| `bug` |: | Known bugs |
+| `example` |: | Examples |
+| `quote` | `cite` | Quotations |
+| `contradiction` |: | Conflicting information (wiki convention) |
+
+---
 
 ## Properties (Frontmatter)
 
+Obsidian renders YAML frontmatter as a Properties panel. Rules:
+
 ```yaml
 ---
-title: My Note
-date: 2024-01-15
+type: concept                    # plain string
+title: "Note Title"              # quoted if it contains special chars
+created: 2026-04-08              # date as YYYY-MM-DD (not ISO datetime)
+updated: 2026-04-08
 tags:
-  - project
-  - active
-aliases:
-  - Alternative Name
-cssclasses:
-  - custom-class
+  - tag-one                      # list items use - format
+  - tag-two
+status: developing
+related:
+  - "[[Other Note]]"             # wikilinks must be quoted in YAML
+sources:
+  - "[[source-page]]"
 ---
 ```
 
-Default properties: `tags` (searchable labels), `aliases` (alternative note names for link suggestions), `cssclasses` (CSS classes for styling).
+Rules:
+- Flat YAML only. Never nest objects.
+- Dates as `YYYY-MM-DD`, not `2026-04-08T00:00:00`.
+- Lists as `- item`, not inline `[a, b, c]`.
+- Wikilinks in YAML must be quoted: `"[[Page]]"`.
+- `tags` field: Obsidian reads this as the tag list, searchable in vault.
 
-See [PROPERTIES.md](references/PROPERTIES.md) for all property types, tag syntax rules, and advanced usage.
+---
 
 ## Tags
 
+Two valid forms:
+
 ```markdown
-#tag                    Inline tag
-#nested/tag             Nested tag with hierarchy
+#tag-name             : inline tag anywhere in the body
+#parent/child-tag     : nested tag (shows hierarchy in tag pane)
 ```
 
-Tags can contain letters, numbers (not first character), underscores, hyphens, and forward slashes. Tags can also be defined in frontmatter under the `tags` property.
-
-## Comments
-
-```markdown
-This is visible %%but this is hidden%% text.
-
-%%
-This entire block is hidden in reading view.
-%%
+In frontmatter:
+```yaml
+tags:
+  - research
+  - ai/obsidian
 ```
 
-## Obsidian-Specific Formatting
+Do not use `#` inside frontmatter tag lists. Just the tag name.
 
+---
+
+## Text Formatting
+
+Standard Markdown plus Obsidian extensions:
+
+| Syntax | Result |
+|---|---|
+| `**bold**` | Bold |
+| `*italic*` | Italic |
+| `~~strikethrough~~` | Strikethrough |
+| `==highlight==` | Highlighted text (yellow in Obsidian) |
+| `` `inline code` `` | Inline code |
+
+---
+
+## Math
+
+Obsidian uses MathJax/KaTeX:
+
+Inline math:
 ```markdown
-==Highlighted text==                   Highlight syntax
+$E = mc^2$
 ```
 
-## Math (LaTeX)
-
+Block math:
 ```markdown
-Inline: $e^{i\pi} + 1 = 0$
-
-Block:
 $$
-\frac{a}{b} = c
+\int_0^\infty e^{-x} dx = 1
 $$
 ```
 
-## Diagrams (Mermaid)
+---
+
+## Code Blocks
+
+Standard fenced code blocks. Obsidian highlights all common languages:
+
+````markdown
+```python
+def hello():
+    return "world"
+```
+````
+
+---
+
+## Tables
+
+Standard Markdown tables:
+
+```markdown
+| Column A | Column B | Column C |
+|----------|----------|----------|
+| Value    | Value    | Value    |
+| Value    | Value    | Value    |
+```
+
+Obsidian renders tables natively. No plugin needed.
+
+---
+
+## Mermaid Diagrams
+
+Obsidian renders Mermaid natively:
 
 ````markdown
 ```mermaid
 graph TD
     A[Start] --> B{Decision}
-    B -->|Yes| C[Do this]
-    B -->|No| D[Do that]
+    B -->|Yes| C[End]
+    B -->|No| D[Loop]
+    D --> A
 ```
 ````
 
-To link Mermaid nodes to Obsidian notes, add `class NodeName internal-link;`.
+Supported: `graph`, `sequenceDiagram`, `gantt`, `classDiagram`, `pie`, `flowchart`.
+
+---
 
 ## Footnotes
 
 ```markdown
-Text with a footnote[^1].
+This sentence has a footnote.[^1]
 
-[^1]: Footnote content.
-
-Inline footnote.^[This is inline.]
+[^1]: The footnote text goes here.
 ```
 
-## Complete Example
-
-````markdown
----
-title: Project Alpha
-date: 2024-01-15
-tags:
-  - project
-  - active
-status: in-progress
 ---
 
-# Project Alpha
+## What NOT to Do
 
-This project aims to [[improve workflow]] using modern techniques.
-
-> [!important] Key Deadline
-> The first milestone is due on ==January 30th==.
-
-## Tasks
-
-- [x] Initial planning
-- [ ] Development phase
-  - [ ] Backend implementation
-  - [ ] Frontend design
-
-## Notes
-
-The algorithm uses $O(n \log n)$ sorting. See [[Algorithm Notes#Sorting]] for details.
-
-![[Architecture Diagram.png|600]]
-
-Reviewed in [[Meeting Notes 2024-01-10#Decisions]].
-````
-
-## References
-
-- [Obsidian Flavored Markdown](https://help.obsidian.md/obsidian-flavored-markdown)
-- [Internal links](https://help.obsidian.md/links)
-- [Embed files](https://help.obsidian.md/embeds)
-- [Callouts](https://help.obsidian.md/callouts)
-- [Properties](https://help.obsidian.md/properties)
+- Do not use `[link text](path/to/note.md)` for internal links: use `[[Note Name]]` instead.
+- Do not use HTML inside callouts: stick to Markdown.
+- Do not use `##` inside a callout body: headings don't render inside callouts.
+- Do not write `tags: [a, b, c]` inline in frontmatter: Obsidian prefers the list format.
+- Do not write ISO datetimes in frontmatter (`2026-04-08T00:00:00Z`): use `2026-04-08`.
