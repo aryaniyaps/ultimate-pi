@@ -123,6 +123,24 @@ Installed via `npx skills add AgriciDaniel/claude-obsidian --yes` or bundled:
   - Adds status command:
     - `/lean-ctx-status`
 
+### Dotenv loader extension
+
+- `extensions/dotenv-loader.ts`
+  - Loads `.env` files into `process.env` on session start, before other extensions read their config.
+  - Ensures extensions like `@posthog/pi` can pick up env vars from `.env` automatically.
+  - Configurable via env vars (set before launching pi):
+
+| Variable | Default | Description |
+|---|---|---|
+| `ENV_LOADER_FILES` | `.env` | Comma-separated list of `.env` file paths (relative to cwd). |
+| `ENV_LOADER_OVERRIDE` | `false` | Set to `true` to overwrite existing env vars. |
+| `ENV_LOADER_SILENT` | `false` | Set to `true` to suppress startup logs. |
+| `ENV_LOADER_ENCODING` | `utf-8` | File encoding for `.env` files. |
+
+  - Supports variable expansion (`$VAR` and `${VAR}`) referencing current `process.env`.
+  - Reloads on `/reload`.
+  - Status command: `/env-loader-status`
+
 ### PostHog analytics extension
 
 - `@posthog/pi` (installed via `pi install @posthog/pi`)
