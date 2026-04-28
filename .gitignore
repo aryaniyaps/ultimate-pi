@@ -1,4 +1,3 @@
-wiki/
 submissions/
 jobs/
 pl
@@ -10,3 +9,6 @@ yarn-error.log*
 pnpm-debug.log*
 .pnpm-store/
 .npm/
+
+# Wiki search index (regenerable)
+.pi/wiki-search/

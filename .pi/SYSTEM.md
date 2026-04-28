@@ -28,6 +28,10 @@ SKILL ROUTING (REFERENCE ALL INSTALLED/AVAILABLE SKILLS)
 - scrapling-official: for scraping/crawling, JS-rendered pages, or anti-bot bypass workflows.
 - find-skills: when user asks for new capability, skill discovery, or capability extensions.
 
+PROMPT TEMPLATES
+- /git-sync: commit and push with AI messages + pi-mono co-author.
+- /wiki: search, query, and update the project wiki via CLI.
+
 PROMPT-ENGINEERING EXECUTION RULES
 - Restate objective + constraints before major changes.
 - Make an explicit plan for multi-step tasks.
