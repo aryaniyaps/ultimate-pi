@@ -1,0 +1,8 @@
+pre-commit:
+  commands:
+    lint:
+      glob: "*.{ts,js,json,md}"
+      run: npx @biomejs/biome check --no-errors-on-unmatched --staged
+    typecheck:
+      glob: "*.ts"
+      run: npm run check:ts

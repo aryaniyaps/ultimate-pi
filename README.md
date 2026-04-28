@@ -185,15 +185,39 @@ Installed via `npx skills add kepano/obsidian-skills --yes` or bundled:
 5. **Model-agnostic compression path**  
    Reason: `compress` skill calls PI CLI, so provider/model can change per environment.
 
-## Use locally
+## Development setup
 
-From repo root:
+1. Clone and install dependencies:
+
+   ```bash
+   git clone https://github.com/aryaniyaps/ultimate-pi.git
+   cd ultimate-pi
+   npm install
+   ```
+
+   `npm install` automatically sets up pre-commit hooks via [Lefthook](https://github.com/evilmartians/lefthook).
+
+2. Install the package locally into PI:
+
+   ```bash
+   pi install . -l
+   ```
+
+   Then restart PI or run `/reload`.
+
+### Linting & formatting
+
+This project uses [Biome](https://biomejs.dev) for linting, formatting, and import sorting.
 
 ```bash
-pi install . -l
+npm run lint            # check lint + format errors
+npm run lint:fix        # auto-fix lint + format errors
+npm run format          # format all files
+npm run format:check    # check formatting without writing
+npm run check:ts        # typecheck extensions
 ```
 
-Then restart PI or run `/reload`.
+Pre-commit hooks run `biome check` and `tsc` on staged files automatically — no bad code gets committed.
 
 ## Terminal-Bench evaluation (local only)
 
