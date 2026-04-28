@@ -37,92 +37,31 @@ Ship a production-grade coding harness where the agent:
 
 ## Obsidian wiki setup
 
-The wiki lives in the [GitHub wiki repo](https://github.com/aryaniyaps/ultimate-pi.wiki.git) and is checked out locally at `~/wiki/ultimate-pi`. Most wiki skills need this vault configured. One-time setup:
+The wiki lives in your repo's GitHub wiki and is checked out locally. Most wiki skills need this vault configured. One-time setup:
+
+> **For forks:** replace `aryaniyaps/ultimate-pi` with your own `<owner>/<repo>` throughout.
 
 ### Step 1 — Activate the GitHub wiki
 
 The repo must have at least one page before you can clone it:
 
-1. Go to `https://github.com/aryaniyaps/ultimate-pi/wiki`
+1. Go to `https://github.com/<owner>/<repo>/wiki` (e.g. `https://github.com/aryaniyaps/ultimate-pi/wiki`)
 2. Click **Create the first page** (or **New Page** if it already exists)
 3. Save any content — this activates the wiki git endpoint
 
-### Step 2 — Clone and initialize the vault
+### Step 2 — Clone the wiki repo
 
 ```bash
-git clone https://github.com/aryaniyaps/ultimate-pi.wiki.git ~/wiki/ultimate-pi
-cd ~/wiki/ultimate-pi
-
-# Create folder structure
-mkdir -p {concepts,entities,skills,references,synthesis,journal,projects,_archives,_raw,.obsidian}
+git clone https://github.com/<owner>/<repo>.wiki.git ~/wiki/<repo>
 ```
 
-This creates the folder layout wiki skills expect:
-- `concepts/` `entities/` `skills/` `references/` `synthesis/` `journal/` — topic folders
-- `projects/` — per-project knowledge
-- `_archives/` — wiki snapshots for rebuild/restore
-- `_raw/` — staging area; drop drafts here, `wiki-ingest` promotes them
+### Step 3 — Configure `.env`
 
-### Step 3 — Create special files
-
-The vault root needs three files. `wiki-setup` auto-generates them, or create manually:
-
-**Home.md** — top-level wiki index (must be `Home.md` for GitHub wiki)
-
-```markdown
----
-title: Wiki Index
----
-
-# Wiki Index
-
-*This index is automatically maintained. Last updated: 2026-04-28*
-
-## Concepts
-
-*No pages yet. Use `wiki-ingest` to add your first source.*
-
-## Entities
-
-## Skills
-
-## References
-
-## Synthesis
-
-## Journal
-```
-
-**log.md** — append-only changelog
-
-**hot.md** — semantic cache of recent activity (~500 words)
-
-### Step 4 — Create `.gitignore`
-
-```bash
-cat > .gitignore << 'EOF'
-.obsidian/
-_raw/
-_archives/
-.DS_Store
-EOF
-```
-
-### Step 5 — Commit and push
-
-```bash
-git add -A
-git commit -m "init: obsidian wiki vault structure"
-git push
-```
-
-### Step 6 — Configure `.env` in your project
-
-In your project root, create `.env`:
+In your project root, create `.env` pointing to the vault:
 
 ```bash
 # Required: absolute path to your Obsidian vault
-OBSIDIAN_VAULT_PATH=~/wiki/ultimate-pi
+OBSIDIAN_VAULT_PATH=~/wiki/<repo>
 
 # Optional: source directories to ingest from (comma-separated)
 OBSIDIAN_SOURCES_DIR=~/Documents
@@ -132,9 +71,19 @@ OBSIDIAN_SOURCES_DIR=~/Documents
 # QMD_PAPERS_COLLECTION=
 ```
 
-### Step 7 — Open in Obsidian
+### Step 4 — Run `wiki-setup`
 
-1. Open Obsidian → **File → Open Vault** → select `~/wiki/ultimate-pi`
+Inside your PI session, run:
+
+```
+/wiki-setup
+```
+
+This skill walks you through the rest automatically — creating the folder structure, special files (`Home.md`, `log.md`, `hot.md`), `.gitignore`, and `.obsidian` config. It stays in sync with the skill definition, so you always get the latest structure without manually mirroring docs here.
+
+### Step 5 — Open in Obsidian
+
+1. Open Obsidian → **File → Open Vault** → select your vault directory (e.g. `~/wiki/ultimate-pi`)
 2. Install recommended community plugins:
    - **Dataview** — query page metadata, dynamic tables
    - **Graph Analysis** — enhanced graph view
