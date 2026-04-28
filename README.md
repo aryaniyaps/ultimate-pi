@@ -120,42 +120,22 @@ This skill walks you through the rest automatically — creating the folder stru
 | context7-cli | [upstash/context7](https://github.com/upstash/context7) | Fetch current library docs, manage Context7 skills/config. |
 | scrapling-official | [D4Vinci/Scrapling](https://github.com/D4Vinci/Scrapling) | Web scraping with anti-bot bypass, JS rendering, stealth fetchers. |
 
-### Obsidian wiki skills (25 skills)
+### Obsidian wiki skills (11 skills)
 
-Installed via `npx skills add Ar9av/obsidian-wiki --yes` or bundled:
-
-| Skill | What it does |
-|---|---|
-| llm-wiki | Foundational knowledge-distillation pattern theory (raw → wiki → schema). |
-| wiki-setup | Initialize a new Obsidian vault with correct structure and config. |
-| wiki-ingest | Distill documents/sources into interconnected wiki pages. |
-| wiki-query | Search the wiki and answer questions with citations. |
-| wiki-status | Show wiki state: ingested, pending, delta vs sources. |
-| wiki-lint | Audit wiki health: orphans, broken links, stale content. |
-| wiki-update | Sync current project knowledge into the wiki. |
-| wiki-capture | Save current conversation as a structured wiki note. |
-| wiki-rebuild | Archive and rebuild the wiki from scratch. |
-| wiki-research | Autonomous multi-round web research → wiki. |
-| wiki-export | Export knowledge graph to JSON, GraphML, Neo4j, HTML. |
-| wiki-dashboard | Create dynamic dashboard views using Obsidian Bases. |
-| wiki-synthesize | Discover cross-cutting synthesis opportunities across pages. |
-| cross-linker | Auto-discover and insert missing wikilinks between pages. |
-| tag-taxonomy | Enforce consistent tagging via controlled vocabulary. |
-| graph-colorize | Color-code the Obsidian graph view by tag/folder. |
-| data-ingest | Ingest raw text data (chat exports, CSVs, logs) into wiki. |
-| ingest-url | Fetch a URL and distill its content into the wiki. |
-| skill-creator | Create, modify, and benchmark skills with evals. |
-
-### Obsidian editor skills (5 skills)
-
-Installed via `npx skills add kepano/obsidian-skills --yes` or bundled:
+Installed via `npx skills add AgriciDaniel/claude-obsidian --yes` or bundled:
 
 | Skill | What it does |
 |---|---|
-| obsidian-markdown | Create/edit Obsidian Flavored Markdown (wikilinks, callouts, frontmatter). |
-| obsidian-cli | CLI interaction with Obsidian vaults — read, create, search, manage notes. |
-| obsidian-bases | Create database-like views (.base files) with filters, formulas, summaries. |
-| json-canvas | Create visual canvases (.canvas) — mind maps, flowcharts, node graphs. |
+| autoresearch | Research topic and file to wiki. |
+| canvas | Work with JSON canvas. |
+| obsidian-bases | Create database-like views. |
+| obsidian-markdown | Edit Obsidian flavored markdown. |
+| save | Save conversation to wiki. |
+| wiki | Add links to orphan files. |
+| wiki-fold | Create index files for folders. |
+| wiki-ingest | Distill sources to wiki. |
+| wiki-lint | Check for broken links/orphans. |
+| wiki-query | Answer questions via wiki search. |
 | defuddle | Extract clean markdown from web pages, stripping clutter. |
 
 ### Runtime guardrail extension

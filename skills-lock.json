@@ -1,6 +1,18 @@
 {
 	"version": 1,
 	"skills": {
+		"autoresearch": {
+			"source": "AgriciDaniel/claude-obsidian",
+			"sourceType": "github",
+			"skillPath": "skills/autoresearch/SKILL.md",
+			"computedHash": "680507f0d23499b7becf50c2e1c094aae9a8fc9aa2a38d9952e66484588fe85d"
+		},
+		"canvas": {
+			"source": "AgriciDaniel/claude-obsidian",
+			"sourceType": "github",
+			"skillPath": "skills/canvas/SKILL.md",
+			"computedHash": "34a35b0462c24bcd017868f5e975686877fd3fffa2562f2d7a748f80009f2e10"
+		},
 		"caveman": {
 			"source": "juliusbrussee/caveman",
 			"sourceType": "github",
@@ -29,10 +41,10 @@
 			"computedHash": "233e21583eb1743fe68eb218da0a961e28af256ea4370e264370de8d2f7dffab"
 		},
 		"defuddle": {
-			"source": "kepano/obsidian-skills",
+			"source": "AgriciDaniel/claude-obsidian",
 			"sourceType": "github",
 			"skillPath": "skills/defuddle/SKILL.md",
-			"computedHash": "0ed68bc3e818ba0e6b8d192357ea3daaf552a3893f8854e7fd43c06831f91323"
+			"computedHash": "36d05ef63d91c999d906f1ac2ece68ad3d776b830b88352b5d36473a13b0ecbb"
 		},
 		"emil-design-eng": {
 			"source": "emilkowalski/skill",
@@ -69,10 +81,10 @@
 			"computedHash": "5a55db4e73ca833366768ec24636bebfa5a66815cd96dbbe26d7cec4a1e39f1c"
 		},
 		"obsidian-bases": {
-			"source": "kepano/obsidian-skills",
+			"source": "AgriciDaniel/claude-obsidian",
 			"sourceType": "github",
 			"skillPath": "skills/obsidian-bases/SKILL.md",
-			"computedHash": "ed0a53502693e56c67575a9958daca9a3a1ac7ba483367f400b4cad9488bfb3c"
+			"computedHash": "324b0a59f187620a6ecf628766f95eaf9bd0d2038642b90e8cd1fa9403e066f1"
 		},
 		"obsidian-cli": {
 			"source": "kepano/obsidian-skills",
@@ -81,10 +93,16 @@
 			"computedHash": "f46ae626875f7e47c410c2ee93896c4526024ebe127719e8fb430261b5677edc"
 		},
 		"obsidian-markdown": {
-			"source": "kepano/obsidian-skills",
+			"source": "AgriciDaniel/claude-obsidian",
 			"sourceType": "github",
 			"skillPath": "skills/obsidian-markdown/SKILL.md",
-			"computedHash": "cacc9058a35ad3fd4985b4c31121bff8202f1337c39808c1326ded6a19a7915f"
+			"computedHash": "a4434c4cb38b56283073f880cd00f457efe58188592563d0c5cc3c7b29f20dd4"
+		},
+		"save": {
+			"source": "AgriciDaniel/claude-obsidian",
+			"sourceType": "github",
+			"skillPath": "skills/save/SKILL.md",
+			"computedHash": "544139acaab3b003c378c2d56ec26a9bb36f4ff76df3495828b54d27472f4812"
 		},
 		"scrapling-official": {
 			"source": "D4Vinci/Scrapling",
@@ -106,8 +124,8 @@
 		"wiki": {
 			"source": "AgriciDaniel/claude-obsidian",
 			"sourceType": "github",
-			"skillPath": "skills/wiki",
-			"computedHash": "installed-manually"
+			"skillPath": "skills/wiki/SKILL.md",
+			"computedHash": "cd198f5cc31bba932b667d22d7dbd17eec46bddba70b51540701b19afd440a39"
 		},
 		"wiki-capture": {
 			"source": "Ar9av/obsidian-wiki",
@@ -127,23 +145,29 @@
 			"skillPath": ".skills/wiki-export/SKILL.md",
 			"computedHash": "4b26018ff2ba71290c52e42ade0bcd8fe9bc08ea2ffa8a15bbf2200bcdf0e1f1"
 		},
-		"wiki-ingest": {
-			"source": "Ar9av/obsidian-wiki",
+		"wiki-fold": {
+			"source": "AgriciDaniel/claude-obsidian",
 			"sourceType": "github",
-			"skillPath": ".skills/wiki-ingest/SKILL.md",
-			"computedHash": "ac80daab5bfbfafd848a8622f201ac18c8c4058baaeaa053d9d77c42032d4eae"
+			"skillPath": "skills/wiki-fold/SKILL.md",
+			"computedHash": "9264860f35e3bf38e011a6bba413988ae34988335dcf643bc01a88f32f6d7b22"
+		},
+		"wiki-ingest": {
+			"source": "AgriciDaniel/claude-obsidian",
+			"sourceType": "github",
+			"skillPath": "skills/wiki-ingest/SKILL.md",
+			"computedHash": "06233fbefbc3ff0f7a15b720e79a874801cd0b7994a0b429c005c62895d07997"
 		},
 		"wiki-lint": {
-			"source": "Ar9av/obsidian-wiki",
+			"source": "AgriciDaniel/claude-obsidian",
 			"sourceType": "github",
-			"skillPath": ".skills/wiki-lint/SKILL.md",
-			"computedHash": "936c13efe24a5ba8cc6bf057066912ed29e53d08d69d0fed83ab768c25edb60b"
+			"skillPath": "skills/wiki-lint/SKILL.md",
+			"computedHash": "07acbe2b18419edf33ec2055ebc108edfbacc6666b6606cd828367b6b227ea78"
 		},
 		"wiki-query": {
-			"source": "Ar9av/obsidian-wiki",
+			"source": "AgriciDaniel/claude-obsidian",
 			"sourceType": "github",
-			"skillPath": ".skills/wiki-query/SKILL.md",
-			"computedHash": "bee39c39c0f6c2cb8be64cabb20e2910cef2026f19b88675996e3cce3bbeefc4"
+			"skillPath": "skills/wiki-query/SKILL.md",
+			"computedHash": "b40ba05903fba0dcee18c065d8819e6d0cb4a4f2ae3e4335404d42c833cfce82"
 		},
 		"wiki-rebuild": {
 			"source": "Ar9av/obsidian-wiki",
