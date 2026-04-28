@@ -263,7 +263,7 @@ The wiki is configured through environment variables (see `.env.example`). The o
 - `OBSIDIAN_VAULT_PATH` — Where the wiki lives **(required)**
 - `OBSIDIAN_SOURCES_DIR` — Where raw source documents are
 - `OBSIDIAN_CATEGORIES` — Comma-separated list of categories
-- `CLAUDE_HISTORY_PATH` — Where to find Claude conversation data
+- `PI_HISTORY_PATH` — Where to find Pi agent session data
 
 No API keys are needed — the agent running these skills already has LLM access built in.
 
@@ -285,8 +285,7 @@ For details on specific operations, see the companion skills:
 - **wiki-status** — Audit what's ingested, compute delta, recommend append vs rebuild
 - **wiki-rebuild** — Archive current wiki, rebuild from scratch, or restore from archive
 - **wiki-ingest** — Distill source documents into wiki pages
-- **claude-history-ingest** — Ingest Claude conversation history
-- **codex-history-ingest** — Ingest Codex CLI session history
+- **wiki-history-ingest** — Ingest Pi agent conversation history
 - **data-ingest** — Ingest any raw text data
 - **wiki-query** — Answer questions against the wiki
 - **wiki-lint** — Audit and maintain wiki health

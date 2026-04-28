@@ -24,7 +24,12 @@ If `.env` doesn't exist, create it from `.env.example`. Ask the user for:
    - Can be multiple paths, comma-separated
    - Default: `~/Documents`
 
-3. **Have QMD installed?** → `QMD_WIKI_COLLECTION` / `QMD_PAPERS_COLLECTION`
+3. **Where is your Pi agent history?** → `PI_HISTORY_PATH`
+   - Default: `~/.pi`
+   - This is where the Pi coding agent stores session transcripts
+   - Used by `wiki-history-ingest` to mine past conversations for knowledge
+
+4. **Have QMD installed?** → `QMD_WIKI_COLLECTION` / `QMD_PAPERS_COLLECTION`
    - Optional. Enables semantic search in `wiki-query` and source discovery in `wiki-ingest`.
    - If unsure, skip for now — both skills fall back to `Grep` automatically.
    - Install instructions: see `.env.example` (QMD section).
@@ -154,4 +159,5 @@ Report the results and tell the user they can now:
 1. Open the vault in Obsidian (File → Open Vault → select the directory)
 2. Run `wiki-status` to see what's available to ingest
 3. Run `wiki-ingest` to add their first sources
-4. Run `wiki-status` again anytime to check the delta
+4. Run `wiki-history-ingest` to mine past Pi agent sessions for knowledge
+5. Run `wiki-status` again anytime to check the delta

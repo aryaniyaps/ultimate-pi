@@ -16,7 +16,7 @@ You are computing the current state of the wiki: what's been ingested, what's ne
 
 ## Before You Start
 
-1. Read `.env` to get `OBSIDIAN_VAULT_PATH`, `OBSIDIAN_SOURCES_DIR`, `CLAUDE_HISTORY_PATH`, `CODEX_HISTORY_PATH`
+1. Read `.env` to get `OBSIDIAN_VAULT_PATH`, `OBSIDIAN_SOURCES_DIR`, `PI_HISTORY_PATH`
 2. Read `.manifest.json` at the vault root — this is the ingest tracking ledger
 
 ## The Manifest
@@ -37,11 +37,11 @@ The manifest lives at `$OBSIDIAN_VAULT_PATH/.manifest.json`. It tracks every sou
       "pages_created": ["concepts/transformers.md"],
       "pages_updated": ["entities/vaswani.md"]
     },
-    "~/.claude/projects/-Users-name-my-app/abc123.jsonl": {
+    "~/.pi/agent/sessions/--home-name-projects-my-app--/2026-04-06T10-00-00Z_abc123.jsonl": {
       "ingested_at": "2026-04-06T11:00:00Z",
       "size_bytes": 128000,
       "modified_at": "2026-04-06T09:00:00Z",
-      "source_type": "claude_conversation",
+      "source_type": "pi_session",
       "project": "my-app",
       "pages_created": ["entities/my-app.md"],
       "pages_updated": ["skills/react-debugging.md"]
@@ -49,12 +49,11 @@ The manifest lives at `$OBSIDIAN_VAULT_PATH/.manifest.json`. It tracks every sou
   },
   "projects": {
     "my-app": {
-      "source_path": "~/.claude/projects/-Users-name-my-app",
+      "source_path": "~/.pi/agent/sessions/--home-name-projects-my-app--",
       "vault_path": "projects/my-app",
       "last_ingested": "2026-04-06T11:00:00Z",
-      "conversations_ingested": 5,
-      "conversations_total": 8,
-      "memory_files_ingested": 3
+      "sessions_ingested": 5,
+      "sessions_total": 8
     }
   },
   "stats": {
@@ -76,21 +75,11 @@ Glob each directory in OBSIDIAN_SOURCES_DIR for all text files
 Record: path, size, modification time
 ```
 
-### Claude History (from `CLAUDE_HISTORY_PATH`)
+### Pi Agent History (from `PI_HISTORY_PATH`)
 ```
-Glob: ~/.claude/projects/*/          → project directories
-Glob: ~/.claude/projects/*/*.jsonl   → conversation files
-Glob: ~/.claude/projects/*/memory/*.md → memory files
-Record: path, size, modification time, parent project
-```
-
-### Codex History (from `CODEX_HISTORY_PATH`)
-```
-Glob: ~/.codex/session_index.jsonl            → session inventory index
-Glob: ~/.codex/sessions/**/rollout-*.jsonl    → session rollout transcripts
-Glob: ~/.codex/history.jsonl                  → optional local history log
-Glob: ~/.codex/archived_sessions/**/rollout-*.jsonl → archived rollouts (if user wants archive coverage)
-Record: path, size, modification time, inferred project from cwd when available
+Glob: ~/.pi/agent/sessions/*/        → project directories
+Glob: ~/.pi/agent/sessions/*/*.jsonl  → session transcript files
+Record: path, size, modification time, parent project (decoded from directory name)
 ```
 
 ### Any other sources the user has pointed at previously
@@ -110,15 +99,9 @@ Compare current sources against the manifest. Classify each source file:
 
 When a manifest entry has no `content_hash` (older entry), fall back to mtime comparison only.
 
-For Claude history specifically, also compute:
-- New projects (directories in `~/.claude/projects/` not in manifest)
-- New conversations within existing projects
-- Updated memory files
-
-For Codex history specifically, also compute:
-- New rollout files under `sessions/**`
-- Updated `session_index.jsonl` entries (session title/freshness changes)
-- Archived rollout delta only when archive coverage is requested
+For Pi agent history specifically, also compute:
+- New projects (directories in `~/.pi/agent/sessions/` not in manifest)
+- New session JSONL files within existing projects
 
 ## Step 3: Report the Status
 
@@ -147,8 +130,7 @@ Present a clear summary:
 | Source | Type | Size |
 |---|---|---|
 | ~/Documents/research/new-paper.pdf | document | 2.1 MB |
-| ~/.claude/projects/-Users-.../session-xyz.jsonl | claude_conversation | 340 KB |
-| ~/.codex/sessions/2026/04/12/rollout-...jsonl | codex_rollout | 220 KB |
+| ~/.pi/agent/sessions/--home-.../2026-04-28T05-19-41Z_abc.jsonl | pi_session | 340 KB |
 | ... | | |
 
 ### Modified sources (need re-ingesting): 3
@@ -315,5 +297,5 @@ After writing the file, append to `log.md`:
 
 - If the manifest doesn't exist, report everything as "new" and recommend a full ingest
 - This skill only reads and reports — it doesn't modify anything (except writing `_insights.md` in insights mode, which is regenerable)
-- The actual ingest work is done by the ingest skills (`wiki-ingest`, `claude-history-ingest`, `codex-history-ingest`, `data-ingest`)
+- The actual ingest work is done by the ingest skills (`wiki-ingest`, `wiki-history-ingest`, `data-ingest`)
 - Those skills are responsible for updating the manifest after they finish
