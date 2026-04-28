@@ -55,42 +55,17 @@ The repo must have at least one page before you can clone it:
 git clone https://github.com/<owner>/<repo>.wiki.git ~/wiki/<repo>
 ```
 
-### Step 3 — Configure `.env`
-
-Copy the example and fill in your paths:
-
-```bash
-cp .env.example .env
-```
-
-Then edit `.env`:
-
-```bash
-# Required: absolute path to your Obsidian vault
-OBSIDIAN_VAULT_PATH=~/wiki/ultimate-pi
-
-# Optional: source directories to ingest from (comma-separated)
-# Point at folders with documents/articles/notes to distill — NOT your project code.
-# OBSIDIAN_SOURCES_DIR=~/Documents
-
-# Optional: QMD collections for semantic search in wiki-query
-# QMD_WIKI_COLLECTION=
-# QMD_PAPERS_COLLECTION=
-```
-
-> **Note:** `.env` is gitignored — it contains user-specific paths and is never committed. Only `.env.example` is tracked.
-
-### Step 4 — Run `wiki-setup`
+### Step 3 — Run `wiki`
 
 Inside your PI session, run:
 
 ```
-/wiki-setup
+/wiki
 ```
 
 This skill walks you through the rest automatically — creating the folder structure, special files (`Home.md`, `log.md`, `hot.md`), `.gitignore`, and `.obsidian` config. It stays in sync with the skill definition, so you always get the latest structure without manually mirroring docs here.
 
-### Step 5 — Open in Obsidian
+### Step 4 — Open in Obsidian
 
 1. Open Obsidian → **File → Open Vault** → select your vault directory (e.g. `~/wiki/ultimate-pi`)
 2. Install recommended community plugins:
