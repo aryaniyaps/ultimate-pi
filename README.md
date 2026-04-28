@@ -123,6 +123,39 @@ Installed via `npx skills add AgriciDaniel/claude-obsidian --yes` or bundled:
   - Adds status command:
     - `/lean-ctx-status`
 
+### PostHog analytics extension
+
+- `@posthog/pi` (installed via `pi install @posthog/pi`)
+  - Captures AI generation spans, tool spans, and traces to [PostHog](https://posthog.com).
+  - Tracks model, provider, tokens, cost, latency, errors per turn.
+  - Groups traces by message or session (configurable).
+
+#### Environment variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `POSTHOG_API_KEY` | **Yes** | — | PostHog project API key. Extension silently skips if missing. |
+| `POSTHOG_HOST` | No | `https://us.i.posthog.com` | PostHog instance URL. Change for EU or self-hosted. |
+| `POSTHOG_PRIVACY_MODE` | No | `false` | Set to `true` to redact prompt/input content from events. |
+| `POSTHOG_ENABLED` | No | `true` | Set to `false` to disable the extension entirely. |
+| `POSTHOG_TRACE_GROUPING` | No | `message` | How traces are grouped: `message` (one trace per agent run) or `session` (merge runs within a session window). |
+| `POSTHOG_SESSION_WINDOW_MINUTES` | No | `60` | Minutes before a session window expires (only used when `POSTHOG_TRACE_GROUPING=session`). |
+| `POSTHOG_PROJECT_NAME` | No | Derived from `cwd` | Override the project name sent in events. Defaults to the repo directory name. |
+| `POSTHOG_AGENT_NAME` | No | `pi:<project>` | Override the agent name sent in events. |
+| `POSTHOG_TAGS` | No | — | Custom tags appended to every event. Format: `key1:val1,key2:val2`. |
+| `POSTHOG_MAX_ATTRIBUTE_LENGTH` | No | `12000` | Max chars for truncated attribute values. |
+
+#### Quick start
+
+1. Get a PostHog API key from **Project Settings → API Keys**.
+2. Set env vars (e.g. in your shell or `.env`):
+
+   ```bash
+   export POSTHOG_API_KEY=phc_xxx...
+   ```
+
+3. Reload PI (`/reload`). The extension auto-initializes on session start.
+
 ## Design choices (concise)
 
 1. **Lean-ctx-first execution**  
