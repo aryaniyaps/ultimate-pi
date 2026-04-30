@@ -4,6 +4,7 @@ title: "pi-messenger Analysis for Harness Integration"
 created: 2026-04-30
 updated: 2026-04-30
 tags: [pi-messenger, analysis, harness, multi-agent, communication, transport]
+status: developing
 sources:
   - "https://github.com/nicobailon/pi-messenger"
 related:

@@ -59,6 +59,12 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[meta-agent-context-pruning]] | Observer agent that detects stuckness, prunes context, restarts agent |
 | [[agent-loop-detection-patterns]] | Production-grade detection for stuck agent loops (repetition, ping-pong, retry) |
 | [[guardian-agent-pattern]] | Pre-execution and post-execution safety validation for agent actions |
+| [[harness-h-formalism]] | Formal six-component harness model: H = (E, T, C, S, L, V) |
+| [[feedforward-feedback-harness]] | Guides (feedforward) + sensors (feedback) control framework |
+| [[generator-evaluator-architecture]] | GAN-inspired separation of generator and evaluator agents |
+| [[self-evolving-harness]] | Auto-synthesis and meta-optimization of harness code |
+| [[selective-debate-routing]] | Trigger debate only when beneficial (iMAD, 92% token savings) |
+| [[context-anxiety]] | Models rush to finish as context window fills |
 
 ## Components
 *(Index of components will go here)*
@@ -75,13 +81,14 @@ This wiki maps the codebase architecture and tracks key software design decision
 
 | Question | Summary |
 |----------|---------|
-| [[Research: Model-Adaptive Agent Harness Design]] | Redesigning autoresearch harness as four-layer model-adaptive system |
+| [[Research: Model-Adaptive Agent Harness Design]] | Model-adaptive harness design: four-layer configurable system must be specialized per model |
 | [[Research: context-mode vs lean-ctx]] | context-mode vs lean-ctx comparison + "Think in Code" enforcement |
 | [[Research: semantic code search tools]] | Self-hosted semantic code search for AI coding agents |
 | [[research-agent-first-codebase-exploration]] | Rethinking OSS codebase strategies for AI agents |
 | [[research-wozcode-token-reduction]] | WOZCODE architecture analysis and harness integration plan |
 | [[research-gitingest-gitreverse-integration]] | Evaluation of GitIngest and GitReverse for harness integration |
 | [[Research: Meta-Agent Context Drift Detection]] | Meta-agent for detecting context drift and pruning dead-end history |
+| [[research-agentic-coding-harness-latest-papers]] | Latest papers on agentic coding harnesses & pipeline improvements |
 
 ## Sources
 
@@ -105,6 +112,12 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[langsight-loop-detection]] | blog | LangSight production loop detection with argument hashing (2026) |
 | [[agent-drift-academic-paper]] | paper | Agent Drift: ASI framework across 12 dimensions (Rath, 2026) |
 | [[vectara-guardian-agents]] | blog | Guardian Agents benchmark: ~900 scenarios, 6 domains (Vectara, 2025) |
+| [[meng2026-agent-harness-survey]] | paper | Comprehensive harness survey: H=(E,T,C,S,L,V), 110+ papers, 23 systems |
+| [[anthropic2026-harness-design]] | blog | Anthropic's GAN-inspired multi-agent harness for long-running coding |
+| [[bockeler2026-harness-engineering]] | blog | Martin Fowler: feedforward/feedback controls, harnessability |
+| [[lou2026-autoharness]] | paper | AutoHarness: LLM synthesizes harness from environment feedback |
+| [[lee2026-meta-harness]] | paper | Meta-Harness: outer-loop optimization of harness code |
+| [[fan2025-imad]] | paper | iMAD: selective multi-agent debate, 92% token savings, AAAI 2026 |
 
 ## Dependencies
 *(Index of dependencies will go here)*
@@ -113,4 +126,4 @@ This wiki maps the codebase architecture and tracks key software design decision
 | Flow | Summary |
 |------|---------|
 | [[harness-wiki-pipeline]] | Read-first/write-after data flow between harness and wiki |
-| [[consensus-debate-flow]] | Multi-agent debate flow: transport, protocol, integration with harness layers |
+| [[consensus-debate]] | Multi-agent debate flow: transport, protocol, integration with harness layers |

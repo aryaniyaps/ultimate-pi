@@ -4,6 +4,7 @@ title: "Hot Cache"
 updated: 2026-04-30T13:30:00
 created: 2026-04-30
 tags: []
+status: active
 ---
 
 # Recent Context
@@ -69,9 +70,48 @@ L2 (Plan) → L2.5 (Drift Monitor) → L3 (Execute + Grounding)
 
 ---
 
-## Model-Adaptive Agent Harness (2026-04-30)
+## Agentic Coding Harness Latest Papers (2026-04-30)
 
-**Verdict**: Redesigned autoresearch harness from fixed script → four-layer model-adaptive system.
+**Verdict**: 5 immediate pipeline improvements. 3 future phases. Formal model H=(E,T,C,S,L,V).
+
+### Key Findings
+1. **Harness formalized as H=(E,T,C,S,L,V)** (Meng et al. 2026, 110+ papers). No system achieves production reliability without all six components.
+2. **Self-evaluation is broken** (Anthropic 2026). Agents "confidently praise mediocre outputs." Must separate generator from evaluator.
+3. **Debate should be selective** (iMAD, AAAI 2026). 92% token savings, 13.5% accuracy improvement vs always-debate. Debate can overturn correct answers.
+4. **Harnesses can self-evolve** (AutoHarness, Meta-Harness 2026). Outer-loop optimization surpasses hand-engineered baselines on TerminalBench-2.
+5. **Feedforward + Feedback framework** (Böckeler/Fowler 2026). Guides + sensors, computational + inferential. Behaviour harness remains unsolved.
+
+### 5 Immediate Pipeline Improvements
+| # | Change | Phase |
+|---|--------|-------|
+| 1 | Hard-threshold grading criteria for L4 critics | 5-6 |
+| 2 | Sprint contracts at L2 (agree "done" before L3) | 3-4 |
+| 3 | Pre-debate gating classifier for consensus debate | 14-15 |
+| 4 | H=(E,T,C,S,L,V) mapping to harness docs | 0 |
+| 5 | Feedforward/feedback control audit | All |
+
+### 3 Future Phases
+| # | Phase |
+|---|-------|
+| 17 | Harness Auto-Optimization (auto-tune budgets, learn profiles, remove dead gates) |
+| 18 | Behaviour Harness (functional correctness verification — unsolved) |
+| 19 | Context Anxiety Guard (detect & mitigate rushing in long sessions) |
+
+### Token Budget Revision
+- Consensus debate: ~13,000 → ~3,000 (selective routing saves 92% on ~80% tasks)
+- Sprint contracts add ~2,500 to L2
+- **Net per subtask: ~24,000-26,000** (down from ~30,500-33,500)
+
+### New Pages
+Sources: [[meng2026-agent-harness-survey]], [[anthropic2026-harness-design]], [[bockeler2026-harness-engineering]], [[lou2026-autoharness]], [[lee2026-meta-harness]], [[fan2025-imad]]
+Concepts: [[harness-h-formalism]], [[feedforward-feedback-harness]], [[generator-evaluator-architecture]], [[self-evolving-harness]], [[selective-debate-routing]], [[context-anxiety]]
+Synthesis: [[research-agentic-coding-harness-latest-papers]]
+
+---
+
+## Previous: Model-Adaptive Agent Harness (2026-04-30)
+
+**Verdict**: The harness pipeline must be model-specialized. Four-layer configurable system (Signal, Gate, Channel, Completion).
 
 ### Source
 Forge Code reached 81.8% on TermBench 2.0 with both GPT 5.4 and Opus 4.6 — but only after adapting their harness to each model's specific failure modes. The models didn't change. The harness did. https://forgecode.dev/blog/gpt-5-4-agent-improvements/
@@ -96,24 +136,20 @@ L1 SIGNAL     — Flat structure, constraints-first, explicit markers, atomic in
 ### Design Principle
 **Write once for strict (GPT-safe). Relax for forgiving models.** Never write for forgiving and hope strict models cope.
 
-### Applied to Autoresearch Skill
-- **L1**: Skill rewritten in strict mode — H3 max nesting, REQUIRED blocks first, atomic instructions
-- **L2**: Round-completion gate (3 questions, hard). Pre-File Verification gate (10-item checklist, NO OPT-OUT for gpt)
-- **L3**: Explicit truncation warning rule. Explicit progress counters (N/3 rounds, N/5 sources)
-- **L4**: "YOU ARE DONE WHEN" + post-file self-check (3 verification items, hard gate)
-- **Opus relaxations**: Annotated throughout skill. Narrative self-assessment instead of checklists. Metadata inference for truncation.
+### Application to Harness Pipeline
+These findings will guide the harness pipeline design. Each pipeline phase that generates agent-facing instructions must vary based on the driving model:
+- L1 Signal: instruction formatting, density, ordering, emphasis
+- L2 Gate: enforcement model (hard vs soft), evidence standard (checklist vs self-assessment)
+- L3 Channel: truncation signaling (in-band vs metadata), progress (explicit vs implicit)
+- L4 Completion: criteria style (falsifiable vs completion-signal), self-audit (enforced vs natural)
 
-### Configuration Files
-- `references/harness-config.md` — Full four-layer dimension specification (15 dimensions across 4 layers)
-- `references/model-profiles.md` — Concrete profiles: opus, gpt, gemini, strict with per-dimension values
-- `program.md` — Updated with `model_profile: auto | opus | gpt | gemini | strict`
-- `SKILL.md` — Rewritten as strict-mode canonical template with opus relaxation annotations
+Key principle: **write once for strict (GPT-safe), relax for forgiving (Opus).**
 
 ### Open Questions
-- Runtime model detection for `auto` profile?
-- Per-step vs per-round gate granularity for gpt?
-- Extract four-layer harness as cross-skill framework?
-- Validate gemini profile against actual trajectories?
+- How to detect model at runtime?
+- Per-step vs per-round gate granularity for GPT?
+- Extract four-layer harness as cross-phase framework?
+- Validate profiles against actual agent trajectories?
 
 ---
 
