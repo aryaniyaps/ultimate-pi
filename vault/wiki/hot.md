@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-04-30T10:00:00
+updated: 2026-04-30T11:00:00
 created: 2026-04-30
 tags: []
 ---
@@ -9,7 +9,57 @@ tags: []
 # Recent Context
 
 ## Last Updated
-2026-04-30. pi-lean-ctx native package adopted, custom extension dropped. Wiki lives at vault/wiki/.
+2026-04-30. Consensus debate protocol designed. pi-messenger analyzed, stripped, integrated.
+
+## Consensus Debate: Multi-Agent Argument for Harness (2026-04-30)
+
+**Verdict**: Adopt. pi-messenger transport (stripped) + consensus protocol layer.
+
+### First Principles
+- Best human software decisions come from back-and-forth arguing (dialectic: thesis → antithesis → synthesis)
+- Applies even more to agents: multi-round argument substitutes for intuition that agents lack
+- Single-pass review (current L4) misses structural/philosophical flaws that only emerge in rebuttal
+- Agents cannot "sense" something is wrong — debate rounds force deeper reasoning
+
+### pi-messenger Analysis
+- **532 ⭐**, npm package. Multi-agent communication via file system. No daemon, no server.
+- **Core mechanism**: Agent registry (`.pi/messenger/registry/*.json`) + per-agent inbox directories + `fs.watch` delivery
+- **What we adopt**: Registry, inbox messaging, `fs.watch`, atomic file writes, stale cleanup, name generation
+- **What we strip**: Chat overlay UI, status bar indicators, activity feed, emoji statuses, crew orchestration (L7 handles this), swarm claims, human-as-participant
+- **Why file-based**: Zero infrastructure, process isolation via filesystem, crash-safe (messages persist), observable (transcripts are files)
+
+### Consensus Protocol Design
+- **DebateSession**: N agents, M rounds, defined topic. Turn-based (attacker → defender per round).
+- **ConsensusBudget**: Max rounds, max tokens/round, max wall-clock, convergence rounds
+- **Verdicts**: CONSENSUS_REACHED, DEADLOCK, BUDGET_EXHAUSTED, TIMEOUT
+- **Convergence detection**: Position hash stability across K consecutive rounds OR explicit "no further objections" signal
+
+### Integration Points
+- **L1 (Spec Hardening)**: Spec proposer vs Spec critic. 3 rounds, ~6K tokens. "Is the spec complete?"
+- **L2 (Planning)**: Planner vs Plan critic. 3 rounds, ~10K tokens. "Is the plan executable and non-circular?"
+- **L4 (Adversarial)**: Defender vs Attacker. 4 rounds, ~8K tokens. Multi-round attack replacing single-pass critic.
+
+### Token Budget
+- Adds ~13,000 tokens per subtask (~4K L1, ~5K L2, ~4K L4)
+- Self-funding: catching one spec flaw at L1 saves entire downstream L2-L8 cost (~15,500 tokens)
+- New total per subtask: ~30,500-33,500 tokens
+
+### Implementation (Phases 14-15)
+- Phase 14: Install pi-messenger, build transport layer (`lib/harness-messenger.ts`), `DebateSession` class, consensus schemas, convergence detection
+- Phase 15: ConsensusBudget enforcement, verdict generation, debate→wiki transcript, L1/L2/L4 integration
+
+### Architecture
+```
+Harness L1/L2/L4 → Consensus Protocol Layer → pi-messenger Transport → Filesystem
+```
+- Consensus protocol: DebateSession, Budget, Turns, Convergence, Verdicts
+- pi-messenger transport: Registry, Inboxes, fs.watch, Atomic writes
+- File-based: `.pi/messenger/registry/`, `.pi/messenger/inbox/<agent>/`, `.pi/messenger/debates/<id>/`
+
+### Key Decisions
+- [[adr-011]]: Full decision record
+- [[consensus-debate]]: Protocol design and first-principles analysis
+- [[pi-messenger-analysis]]: Component-by-component adopt/strip breakdown
 
 ## pi-lean-ctx native integration (2026-04-30)
 
