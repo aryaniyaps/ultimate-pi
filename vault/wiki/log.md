@@ -1,5 +1,14 @@
 # Wiki Operations Log
 
+## [2026-04-30] research | Consensus Debate: Multi-Agent Argument for Harness
+- Rounds: 1 (direct first-principles analysis + pi-messenger source analysis)
+- Sources found: 1 (pi-messenger GitHub: registry, store, handlers, crew source)
+- Pages created: [[adr-011]], [[consensus-debate]], [[pi-messenger-analysis]]
+- Pages updated: [[harness-implementation-plan]] (added Phases 14-15), [[index]], [[hot]]
+- Synthesis: This page (log entry)
+- Key finding: Best human software decisions come from back-and-forth arguing. This applies even more to agents — multi-round dialectical debate is a substitute for the intuition agents lack. pi-messenger's file-based agent messaging (registry, inbox, fs.watch) is the right transport layer. Strip all overlays (chat UI, status bar, activity feed, crew orchestration). Build consensus protocol on top: DebateSession, ConsensusBudget, turn protocol, convergence detection, verdict generation. Integration points: L1 (spec debate), L2 (plan debate), L4 (multi-round adversarial). Adds ~13K tokens/subtask but self-funding — one caught flaw saves downstream cost.
+- Architecture: pi-messenger transport (stripped) → Consensus protocol layer → Harness L1/L2/L4 debate spawns. File-based, no server, no daemon. Agents communicate peer-to-peer via inbox directories.
+
 ## [2026-04-30] harness | adopt pi-lean-ctx native package, drop custom extension
 - Decision: [[2026-04-30-pi-lean-ctx-native]]
 - Changes: deleted `extensions/lean-ctx-enforce.ts`, added `npm:pi-lean-ctx` to `.pi/settings.json`, updated SYSTEM.md, package.json, SKILL.md

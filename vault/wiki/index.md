@@ -31,6 +31,7 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[adr-008]] | Spec-Only Black-Box QA |
 | [[adr-009]] | claude-obsidian Mode B for Persistent Memory |
 | [[adr-010]] | Agentic Harness ↔ Wiki Tight-Coupling Contract |
+| [[adr-011]] | Multi-Agent Consensus Debate via pi-messenger transport |
 
 ## Concepts
 
@@ -50,6 +51,8 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[hybrid-code-search]] | BM25 + embeddings + RRF fusion for best-of-both-worlds code search |
 | [[agent-search-enforcement]] | Strategies to force AI agents to use semantic search over grep/cat |
 | [[mcp-tool-routing]] | Using MCP to register semantic search as first-class agent tool |
+| [[consensus-debate]] | Multi-agent dialectical debate protocol for harness decisions |
+| [[pi-messenger-analysis]] | Analysis of pi-messenger: what we adopt, what we strip for harness |
 
 ## Components
 *(Index of components will go here)*
@@ -97,3 +100,4 @@ This wiki maps the codebase architecture and tracks key software design decision
 | Flow | Summary |
 |------|---------|
 | [[harness-wiki-pipeline]] | Read-first/write-after data flow between harness and wiki |
+| [[consensus-debate-flow]] | Multi-agent debate flow: transport, protocol, integration with harness layers |
