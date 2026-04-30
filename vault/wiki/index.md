@@ -55,6 +55,10 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[mcp-tool-routing]] | Using MCP to register semantic search as first-class agent tool |
 | [[consensus-debate]] | Multi-agent dialectical debate protocol for harness decisions |
 | [[pi-messenger-analysis]] | Analysis of pi-messenger: what we adopt, what we strip for harness |
+| [[context-drift-in-agents]] | Progressive degradation of agent behavior over extended interactions |
+| [[meta-agent-context-pruning]] | Observer agent that detects stuckness, prunes context, restarts agent |
+| [[agent-loop-detection-patterns]] | Production-grade detection for stuck agent loops (repetition, ping-pong, retry) |
+| [[guardian-agent-pattern]] | Pre-execution and post-execution safety validation for agent actions |
 
 ## Components
 *(Index of components will go here)*
@@ -77,6 +81,7 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[research-agent-first-codebase-exploration]] | Rethinking OSS codebase strategies for AI agents |
 | [[research-wozcode-token-reduction]] | WOZCODE architecture analysis and harness integration plan |
 | [[research-gitingest-gitreverse-integration]] | Evaluation of GitIngest and GitReverse for harness integration |
+| [[Research: Meta-Agent Context Drift Detection]] | Meta-agent for detecting context drift and pruning dead-end history |
 
 ## Sources
 
@@ -96,6 +101,10 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[wozcode]] | product-doc | WOZCODE token-reduction architecture for Claude Code (2026) |
 | [[gitingest]] | tool | Codebase-to-structured-text for LLM context ingestion |
 | [[gitreverse]] | tool | Repo-to-synthetic-prompt via OpenRouter LLM |
+| [[ironclaw-drift-monitor]] | github-issue | nearai/ironclaw DriftMonitor: rule-based stuck-pattern detection (2026) |
+| [[langsight-loop-detection]] | blog | LangSight production loop detection with argument hashing (2026) |
+| [[agent-drift-academic-paper]] | paper | Agent Drift: ASI framework across 12 dimensions (Rath, 2026) |
+| [[vectara-guardian-agents]] | blog | Guardian Agents benchmark: ~900 scenarios, 6 domains (Vectara, 2025) |
 
 ## Dependencies
 *(Index of dependencies will go here)*

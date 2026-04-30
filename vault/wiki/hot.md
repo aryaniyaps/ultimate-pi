@@ -9,7 +9,65 @@ tags: []
 # Recent Context
 
 ## Last Updated
-2026-04-30. Model-adaptive harness design. Four-layer configurable system applied to autoresearch skill.
+2026-04-30. Meta-agent context drift detection research. Novel synthesis: detect stuck → prune context → restart agent.
+
+## Meta-Agent Context Drift Detection (2026-04-30)
+
+**Verdict**: The meta-agent concept is a NOVEL SYNTHESIS. Each component exists independently; no system combines detection + pruning + restart.
+
+### What the User Proposed
+A meta-agent that monitors the primary coding agent for context drift — repeated incorrect tool calls, excessive ls/find commands — and when stuckness is detected, prunes irrelevant tool calls from context and restarts the agent with clean context.
+
+### Key Finding: Novel Composition, Not Novel Components
+| Component | Existing Implementation | Status |
+|-----------|----------------------|--------|
+| Stuck-pattern detection | ironclaw DriftMonitor (5 rule-based patterns) | Production-ready |
+| Loop detection | LangSight (argument hashing, 90%+ catch rate) | Production |
+| Context pruning | SWE-Pruner (23-54% token reduction) | Academic (ACL 2026) |
+| Guardian/meta-agent | Vectara Guardian Agents, GuardAgent paper | Active research |
+| **Detect → Prune → Restart pipeline** | **None exists** | **GAP — this is the novelty** |
+
+### Closest Prior Art: ironclaw DriftMonitor
+nearai/ironclaw #1634 (March 2026) implements detection + system-message injection. 5 rules: repetition (3+ identical calls), failure spiral (4+ errors), tool cycling (A-B-A-B), silence drift (15+ iters), rework churn (3+ file writes). Does NOT prune context — only injects corrections.
+
+### First Principles Assessment
+- **Feasibility**: High. Detection is O(1) per call (hash comparison). Pruning is metadata operation. Restart is standard pattern.
+- **Overhead**: ~1,500-3,000 tokens per 50-step session (LLM-based detection). Rule-based detection costs 0 tokens.
+- **Net savings**: 5-10x token reduction for stuck sessions. Breakeven after 1-2 interventions.
+- **Risk**: Conservative pruning essential — removing useful context is worse than keeping noise.
+
+### Academic Foundation
+Agent Drift paper (arxiv 2601.04170, Rath 2026): 42% task success reduction from drift. ASI framework across 12 dimensions in 4 categories. Drift emerges after median 73 interactions. Combined mitigation achieves 81.5% reduction (EMC + DAR + ABA).
+
+### Harness Integration: Layer 2.5 — Runtime Drift Monitor
+```
+L2 (Plan) → L2.5 (Drift Monitor) → L3 (Execute + Grounding)
+                ↑                          ↓
+                └── injects corrections ───┘
+```
+- `lib/harness-drift-monitor.ts` — Detection engine, pruning logic, correction injection
+- `extensions/harness-drift-monitor.ts` — Hooks into before_llm_call / after_tool_call
+- `.pi/harness/drift-monitor.json` — Config: thresholds, escalation levels, whitelists
+- Model-adaptive: Rule-based every step (GPT), every 10 steps (Gemini), LLM-based every 15 steps (Opus)
+
+### Escalation Model
+1. **Soft nudge**: System message — "You're stuck. Try different approach."
+2. **Strong nudge**: System message + context summary
+3. **Forced restart**: Terminate, prune history, restart with clean context
+
+### Open Questions
+- Can pruning be done in-place (API-supported) or always needs session restart?
+- Does pruning break chain-of-thought coherence mid-reasoning?
+- How does pruning interact with prompt caching?
+- Can Haiku/Flash serve as meta-agent detector (near-zero overhead)?
+
+### Sources
+- [[ironclaw-drift-monitor]] (nearai/ironclaw #1634, March 2026)
+- [[langsight-loop-detection]] (LangSight Engineering, March 2026)
+- [[agent-drift-academic-paper]] (Rath, January 2026)
+- [[vectara-guardian-agents]] (Vectara, November 2025)
+
+---
 
 ## Model-Adaptive Agent Harness (2026-04-30)
 
