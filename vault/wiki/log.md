@@ -1,5 +1,14 @@
 # Wiki Operations Log
 
+## [2026-04-30] research | Model-Adaptive Agent Harness Design
+- Rounds: 1 (deep first-principles analysis + Forge Code source)
+- Sources found: 1 (Forge Code blog: GPT 5.4 vs Opus 4.6 on TermBench 2.0)
+- Pages created: [[Research: Model-Adaptive Agent Harness Design]], [[forgecode-gpt5-agent-improvements]], [[model-adaptive-harness]], [[harness-configuration-layers]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Config files created: `references/harness-config.md`, `references/model-profiles.md` (rewritten)
+- Config files updated: `SKILL.md`, `references/program.md`
+- Key finding: Agent harness is a four-layer configurable system (Signal, Gate, Channel, Completion), not a fixed script. Each layer has dimensions that vary by model. GPT needs flat structure, constraints-first ordering, enforced gates, in-band signals. Opus tolerates nesting, infers from metadata, self-corrects. The skill was redesigned from one-size-fits-all into a model-adaptive harness with opus relaxation annotations.
+
 ## [2026-04-30] harness | First-principles rethink: split lint+format from inline validation → new Phase 16
 - Decision: Lint + format must NEVER run inline. Syntax validation (compilers/parsers) stays inline (Phase 12). Lint + format becomes final gate (Phase 16, post-L4).
 - Pages updated: [[harness-implementation-plan]] (Phase 12 renamed, Phase 16 added, build phases table, token budget, architecture changes), [[inline-post-edit-validation]] (removed linters from inline, added Phase 16 pointer, split validator tables), [[hot]] (new entry), [[log]] (this entry)

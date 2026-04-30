@@ -1,6 +1,30 @@
 # Research Program
 
-This file configures the autoresearch loop. Edit it to match your domain and research style. The autoresearch skill reads it before every run.
+This file is the configuration entry point for the autoresearch harness. It specifies the model profile, research objectives, constraints, fetch pipeline, and quality standards.
+
+---
+
+## Harness Configuration
+
+### Model Profile
+
+Which behavioral compensations to apply. This controls the four-layer harness: L1 Signal Design, L2 Gate Design, L3 State Channel, L4 Completion Model.
+
+```yaml
+model_profile: auto  # auto | opus | gpt | gemini | strict
+```
+
+| Profile | Description | When to use |
+|---|---|---|
+| `auto` | Detect model, fall back to `strict` if uncertain | Default |
+| `opus` | Relaxed: soft gates, natural flow, metadata inference | Claude / Opus family |
+| `gpt` | Full enforcement: hard gates, flat paths, explicit signals | GPT-4 / GPT-5 family |
+| `gemini` | Conservative: near-gpt with per-round granularity | Gemini family |
+| `strict` | Maximum enforcement. Identical to `gpt` profile | Unknown model (safe default) |
+
+**Reference**: `references/harness-config.md` (dimension specification), `references/model-profiles.md` (profile values).
+
+**Why this matters**: Forge Code reached 81.8% on TermBench 2.0 with both GPT 5.4 and Opus 4.6 — but only after adapting the harness to each model's specific failure modes. The models didn't change. The harness did. https://forgecode.dev/blog/gpt-5-4-agent-improvements/
 
 ---
 

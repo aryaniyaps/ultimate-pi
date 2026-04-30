@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-04-30T11:00:00
+updated: 2026-04-30T13:30:00
 created: 2026-04-30
 tags: []
 ---
@@ -9,9 +9,55 @@ tags: []
 # Recent Context
 
 ## Last Updated
-2026-04-30. Lint + Format Gate split from inline validation. First-principles pipeline reorder: syntax inline, lint/format final.
+2026-04-30. Model-adaptive harness design. Four-layer configurable system applied to autoresearch skill.
 
-## Lint + Format: First-Principles Pipeline Rethink (2026-04-30)
+## Model-Adaptive Agent Harness (2026-04-30)
+
+**Verdict**: Redesigned autoresearch harness from fixed script → four-layer model-adaptive system.
+
+### Source
+Forge Code reached 81.8% on TermBench 2.0 with both GPT 5.4 and Opus 4.6 — but only after adapting their harness to each model's specific failure modes. The models didn't change. The harness did. https://forgecode.dev/blog/gpt-5-4-agent-improvements/
+
+### Four-Layer Harness Model
+```
+L4 COMPLETION — "YOU ARE DONE WHEN" + post-file self-check
+L3 CHANNEL    — Truncation: in-band warning text (gpt) vs metadata (opus)
+L2 GATES      — Round-completion + Pre-File Verification (hard gates for gpt, soft for opus)
+L1 SIGNAL     — Flat structure, constraints-first, explicit markers, atomic instructions
+```
+
+### Key Finding: Models Fail Differently
+| Behavior | Opus/Claude | GPT |
+|---|---|---|
+| Structure | Tolerates nesting, natural flow | Needs flat, constraints-first |
+| Truncation | Infers from metadata | Needs body-text warning |
+| Verification | Naturally double-checks | Must be ENFORCED (hard gate) |
+| Completion | Self-aware of gaps | Stops after plausible-but-incomplete |
+| Emphasis | Contextual cues work | Explicit markers (REQUIRED, MANDATORY) |
+
+### Design Principle
+**Write once for strict (GPT-safe). Relax for forgiving models.** Never write for forgiving and hope strict models cope.
+
+### Applied to Autoresearch Skill
+- **L1**: Skill rewritten in strict mode — H3 max nesting, REQUIRED blocks first, atomic instructions
+- **L2**: Round-completion gate (3 questions, hard). Pre-File Verification gate (10-item checklist, NO OPT-OUT for gpt)
+- **L3**: Explicit truncation warning rule. Explicit progress counters (N/3 rounds, N/5 sources)
+- **L4**: "YOU ARE DONE WHEN" + post-file self-check (3 verification items, hard gate)
+- **Opus relaxations**: Annotated throughout skill. Narrative self-assessment instead of checklists. Metadata inference for truncation.
+
+### Configuration Files
+- `references/harness-config.md` — Full four-layer dimension specification (15 dimensions across 4 layers)
+- `references/model-profiles.md` — Concrete profiles: opus, gpt, gemini, strict with per-dimension values
+- `program.md` — Updated with `model_profile: auto | opus | gpt | gemini | strict`
+- `SKILL.md` — Rewritten as strict-mode canonical template with opus relaxation annotations
+
+### Open Questions
+- Runtime model detection for `auto` profile?
+- Per-step vs per-round gate granularity for gpt?
+- Extract four-layer harness as cross-skill framework?
+- Validate gemini profile against actual trajectories?
+
+---
 
 **Verdict**: Split Phase 12. Inline = syntax only (compilers/parsers). Lint + format = final gate (Phase 16, post-L4).
 

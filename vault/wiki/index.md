@@ -37,6 +37,8 @@ This wiki maps the codebase architecture and tracks key software design decision
 
 | Concept | Summary |
 |---------|--------|
+| [[model-adaptive-harness]] | Harness that varies behavior by model profile, not one-size-fits-all |
+| [[harness-configuration-layers]] | Four-layer framework (L1 Signal, L2 Gate, L3 Channel, L4 Completion) |
 | [[agent-codebase-interface]] | Designing tool interfaces for AI agents, not humans |
 | [[progressive-disclosure-agents]] | Layered codebase information (L0-L3) within token budgets |
 | [[repo-map-ranking]] | Graph centrality algorithm for selecting important codebase symbols |
@@ -69,6 +71,7 @@ This wiki maps the codebase architecture and tracks key software design decision
 
 | Question | Summary |
 |----------|---------|
+| [[Research: Model-Adaptive Agent Harness Design]] | Redesigning autoresearch harness as four-layer model-adaptive system |
 | [[Research: context-mode vs lean-ctx]] | context-mode vs lean-ctx comparison + "Think in Code" enforcement |
 | [[Research: semantic code search tools]] | Self-hosted semantic code search for AI coding agents |
 | [[research-agent-first-codebase-exploration]] | Rethinking OSS codebase strategies for AI agents |
@@ -79,6 +82,7 @@ This wiki maps the codebase architecture and tracks key software design decision
 
 | Source | Type | Summary |
 |--------|------|---------|
+| [[forgecode-gpt5-agent-improvements]] | blog | Forge Code's model-adaptive harness findings (GPT 5.4 vs Opus 4.6, TermBench 2.0) |
 | [[ck-semantic-search]] | docs | Official ck documentation (BeaconBay, 2025-2026) |
 | [[vgrep-semantic-search]] | readme | vgrep GitHub readme and docs (CortexLM, 2025-2026) |
 | [[context-mode-website]] | website | context-mode.com landing page |

@@ -1,0 +1,23 @@
+{
+  "skill_name": "posthog-analyst",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "run a quick posthog analysis on the last 3 days — just error rates per model, nothing deep. I want to know if claude or gpt is having more problems.",
+      "expected_output": "A summary table showing error rates per model from the last 3 days, with a brief verdict on which model has more issues. Follows Quick Mode format: table with error counts and rates, offer to go deeper.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/posthog-analyze for the last 14 days. I'm seeing tool loops where the agent keeps retrying the same failing bash command and it's wasting tokens. Check if this is model-specific and what we should change in the harness to stop it.",
+      "expected_output": "Full analysis: query results showing tool error patterns by model, identification of tool loop pattern, cross-reference with execution-feedback-loop wiki page, model-specific recommendations for gate design changes (L2). Filed to wiki as an analysis page.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "do a full postmortem on everything from yesterday. I want to know every misalignment, every error, and what specific changes each model profile needs. File it all to the wiki.",
+      "expected_output": "Comprehensive analysis filed to vault/wiki/analyses/posthog-YESTERDAY.md with per-model breakdown, pattern detection across all 5 patterns, cross-references to wiki model-adaptive-harness pages, and a prioritized recommendations table. Updates index.md, log.md, and hot.md.",
+      "files": []
+    }
+  ]
+}
