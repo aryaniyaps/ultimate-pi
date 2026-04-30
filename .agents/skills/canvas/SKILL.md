@@ -7,9 +7,9 @@ allowed-tools: Read Write Edit Glob Grep
 # canvas: Visual Reference Layer
 
 The three knowledge capture layers:
-- `/save` → text synthesis (wiki/questions/, wiki/concepts/)
-- `/autoresearch` → structured knowledge (wiki/sources/, wiki/concepts/)
-- `/canvas` → visual references (wiki/canvases/)
+- `/save` → text synthesis (vault/wiki/questions/, vault/wiki/concepts/)
+- `/autoresearch` → structured knowledge (vault/wiki/sources/, vault/wiki/concepts/)
+- `/canvas` → visual references (vault/wiki/canvases/)
 
 A canvas is a JSON file Obsidian renders as an infinite visual board. This skill reads and writes canvas JSON directly. Read `references/canvas-spec.md` for the full format reference before making any edits. This spec aligns with the [JSON Canvas open standard](https://jsoncanvas.org/). If the kepano/obsidian-skills plugin is installed, its json-canvas skill is the authoritative canvas spec reference. Otherwise, use the guidance below.
 
@@ -17,7 +17,7 @@ A canvas is a JSON file Obsidian renders as an infinite visual board. This skill
 
 ## Default Canvas
 
-`wiki/canvases/main.canvas`
+`vault/wiki/canvases/main.canvas`
 
 If it does not exist, create it:
 
@@ -47,21 +47,21 @@ If it does not exist, create it:
 
 ### open / status (`/canvas` with no args)
 
-1. Check if `wiki/canvases/main.canvas` exists.
+1. Check if `vault/wiki/canvases/main.canvas` exists.
 2. If yes: read it, count nodes by type, list all group node labels (zone names).
    Report: "Canvas has N nodes: X images, Y text cards, Z wiki pages. Zones: [list]"
 3. If no: create it with the starter structure above.
    Report: "Created main.canvas with a General zone."
-4. Tell user: "Open `wiki/canvases/main.canvas` in Obsidian to view."
+4. Tell user: "Open `vault/wiki/canvases/main.canvas` in Obsidian to view."
 
 ---
 
 ### new (`/canvas new [name]`)
 
 1. Slugify the name: lowercase, spaces → hyphens, strip special chars.
-2. Create `wiki/canvases/[slug].canvas` with the starter structure, title updated to `# [Name]`.
-3. Add entry to `wiki/overview.md` under a "## Canvases" subsection (append after the Current State section). Do not modify `wiki/index.md`. It uses a fixed section schema (Domains, Entities, Concepts, Sources, Questions, Comparisons).
-4. Report: "Created wiki/canvases/[slug].canvas"
+2. Create `vault/wiki/canvases/[slug].canvas` with the starter structure, title updated to `# [Name]`.
+3. Add entry to `vault/wiki/overview.md` under a "## Canvases" subsection (append after the Current State section). Do not modify `vault/wiki/index.md`. It uses a fixed section schema (Domains, Entities, Concepts, Sources, Questions, Comparisons).
+4. Report: "Created vault/wiki/canvases/[slug].canvas"
 
 ---
 
@@ -116,7 +116,7 @@ Same as add image. Obsidian renders PDFs natively as file nodes.
 
 ### add note (`/canvas add note [wiki-page]`)
 
-1. Search `wiki/` for a file matching the page name (case-insensitive, partial match ok).
+1. Search `vault/wiki/` for a file matching the page name (case-insensitive, partial match ok).
 2. Use the vault-relative path as the `file` field.
    - Use `"type": "file"` (not `"type": "link"`): `.md` files use file nodes, not link nodes.
    - `"type": "link"` takes a `url: "https://..."`: it is for web URLs only.
@@ -162,20 +162,20 @@ Write and report.
 
 ### list (`/canvas list`)
 
-1. `glob wiki/canvases/*.canvas`
+1. `glob vault/wiki/canvases/*.canvas`
 2. For each canvas: read JSON, count nodes by type.
 3. Report:
 
 ```
-wiki/canvases/main.canvas      . 14 nodes (8 images, 3 text, 2 file, 1 group)
-wiki/canvases/design-ideas.canvas. 42 nodes (30 images, 4 text, 8 groups)
+vault/wiki/canvases/main.canvas      . 14 nodes (8 images, 3 text, 2 file, 1 group)
+vault/wiki/canvases/design-ideas.canvas. 42 nodes (30 images, 4 text, 8 groups)
 ```
 
 ---
 
 ### from banana (`/canvas from banana`) (if the banana-claude plugin is installed)
 
-1. Check `wiki/canvases/.recent-images.txt` first (session log of newly written images).
+1. Check `vault/wiki/canvases/.recent-images.txt` first (session log of newly written images).
 2. If not found or empty: use `find` with correct precedence (parentheses required. Without them `-newer` only binds to the last `-name` clause):
    ```bash
    python3 -c "import time,os; open('/tmp/ten-min-ago','w').close(); os.utime('/tmp/ten-min-ago',(time.time()-600,time.time()-600))"
@@ -247,7 +247,7 @@ If a collision is detected (ID already exists in the canvas), append `-2`, `-3`,
 
 ## Session Log (optional hook)
 
-If `wiki/canvases/.recent-images.txt` exists, append any new image path written to `_attachments/images/` during this session (one path per line, keep last 20).
+If `vault/wiki/canvases/.recent-images.txt` exists, append any new image path written to `vault/_attachments/images/` during this session (one path per line, keep last 20).
 
 `/canvas from banana` reads this file first, making it instant without filesystem search.
 
@@ -267,7 +267,7 @@ When `/banana` finishes generating images, suggest:
 1. Read canvas-spec.md before editing any canvas JSON.
 2. Always read the canvas file before writing. Parse existing nodes to avoid ID collisions and calculate auto-positions.
 3. Create `_attachments/images/canvas/` for downloaded/copied images.
-4. Update `wiki/index.md` when creating new canvases.
+4. Update `vault/wiki/index.md` when creating new canvases.
 5. Report position and zone after every add operation.
 
 ## See Also

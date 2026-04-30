@@ -24,11 +24,11 @@ Determine the best type from the conversation content:
 
 | Type | Folder | Use when |
 |------|--------|---------|
-| synthesis | wiki/questions/ | Multi-step analysis, comparison, or answer to a specific question |
-| concept | wiki/concepts/ | Explaining or defining an idea, pattern, or framework |
-| source | wiki/sources/ | Summary of external material discussed in the session |
-| decision | wiki/meta/ | Architectural, project, or strategic decision that was made |
-| session | wiki/meta/ | Full session summary: captures everything discussed |
+| synthesis | vault/wiki/questions/ | Multi-step analysis, comparison, or answer to a specific question |
+| concept | vault/wiki/concepts/ | Explaining or defining an idea, pattern, or framework |
+| source | vault/wiki/sources/ | Summary of external material discussed in the session |
+| decision | vault/wiki/meta/ | Architectural, project, or strategic decision that was made |
+| session | vault/wiki/meta/ | Full session summary: captures everything discussed |
 
 If the user specifies a type, use that. If not, pick the best fit based on the content. When in doubt, use `synthesis`.
 
@@ -42,16 +42,16 @@ If the user specifies a type, use that. If not, pick the best fit based on the c
 4. **Extract** all relevant content from the conversation. Rewrite it in declarative present tense (not "the user asked" but the actual content itself).
 5. **Create** the note in the correct folder with full frontmatter.
 6. **Collect links**: identify any wiki pages mentioned in the conversation. Add them to `related` in frontmatter.
-7. **Update** `wiki/index.md`. Add the new entry at the top of the relevant section.
-8. **Append** to `wiki/log.md`. New entry at the TOP:
+7. **Update** `vault/wiki/index.md`. Add the new entry at the top of the relevant section.
+8. **Append** to `vault/wiki/log.md`. New entry at the TOP:
    ```
    ## [YYYY-MM-DD] save | Note Title
    - Type: [note type]
-   - Location: wiki/[folder]/Note Title.md
+   - Location: vault/wiki/[folder]/Note Title.md
    - From: conversation on [brief topic description]
    ```
-9. **Update** `wiki/hot.md` to reflect the new addition.
-10. **Confirm**: "Saved as [[Note Title]] in wiki/[folder]/."
+9. **Update** `vault/wiki/hot.md` to reflect the new addition.
+10. **Confirm**: "Saved as [[Note Title]] in vault/wiki/[folder]/."
 
 ---
 
@@ -69,7 +69,7 @@ status: developing
 related:
   - "[[Any Wiki Page Mentioned]]"
 sources:
-  - "[[.raw/source-if-applicable.md]]"
+  - "[[vault/.raw/source-if-applicable.md]]"
 ---
 ```
 
