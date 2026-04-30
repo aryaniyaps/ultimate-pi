@@ -18,6 +18,7 @@ related:
   - "[[adr-011]]"
   - "[[consensus-debate]]"
   - "[[pi-messenger-analysis]]"
+  - "[[inline-post-edit-validation]]"
 ---
 
 # Harness Implementation Plan
@@ -38,6 +39,13 @@ Project page for the ultimate-pi agentic harness implementation. See the full co
 | 7 | Observability (L6) | `lib/harness-observability.ts`, `extensions/harness-observability.ts` |
 | 8 | Archon Integration (L7) | `.archon/workflows/*.yaml`, `.archon/commands/harness.md` |
 | 9 | Package integration | Update package.json, README, PLAN.md |
+| 10 | AST Truncation | `lib/harness-ast.ts`, `lib/harness-search.ts` |
+| 11 | Fuzzy Edit Matching | `lib/harness-edit.ts` |
+| 12 | Inline Syntax Validation | `lib/harness-validate.ts`, `lib/harness-sql-fix.ts` |
+| 13 | Haiku Model Router | `lib/harness-router.ts`, `lib/harness-explorer.ts` |
+| 14 | Consensus Transport | `lib/harness-messenger.ts`, `lib/harness-debate.ts` |
+| 15 | Consensus Protocol | `extensions/harness-debate.ts`, layer extension updates |
+| 16 | Final Lint + Format Gate | `lib/harness-polish.ts`, `extensions/harness-polish.ts` |
 
 ## Key Architecture Decisions
 
@@ -92,17 +100,21 @@ Add normalization layer to the `edit` tool. See [[fuzzy-edit-matching]].
 
 **Expected savings**: Eliminates 5-15% of retry round-trips.
 
-### Phase 12: Inline Post-Edit Validation
+### Phase 12: Inline Syntax Validation
 
-Run compilers/linters/parsers after each edit, before model sees result. See [[inline-post-edit-validation]].
+Run compilers and parsers after each edit, before model sees result. **Syntax only** — does the code parse/compile? Linting and formatting are deferred to [[#phase-16-final-lint-format-gate|Phase 16]] (post-verification final gate). See [[inline-post-edit-validation]].
+
+**First-principles rationale**: Syntax errors block all further progress — the model wastes tokens reasoning about code that doesn't compile. Catching at the tool layer saves full round-trips. But lint warnings (style, unused vars) and formatting (whitespace changes) must NEVER run inline: lint is noisy on in-progress code, and formatting modifies whitespace which breaks the `edit` tool's exact-match `oldText` contract.
 
 | Capability | Files | Depends On |
 |-----------|-------|------------|
 | `post-edit-validate` hook (L3) | `lib/harness-executor.ts` | Grounding checkpoints |
-| TS/JS syntax validation | `lib/harness-validate.ts` | `tsc --noEmit` |
-| JSON/YAML parser validation | `lib/harness-validate.ts` | None |
-| SQL dialect auto-fix | `lib/harness-sql-fix.ts` | SQL linter |
+| TS/JS compile check | `lib/harness-validate.ts` | `tsc --noEmit` |
+| JSON/YAML parse check | `lib/harness-validate.ts` | None |
+| SQL dialect auto-fix | `lib/harness-sql-fix.ts` | SQL parser |
 | Better error context (real diffs) | `lib/harness-executor.ts` | Post-edit validate |
+
+**Gate rule**: Inline validators MUST complete in <2 seconds. Anything slower (full project `tsc`, ESLint with plugins, prettier) belongs in Phase 16.
 
 **Expected savings**: Catches syntax errors pre-model — 10-20% reduction in error-recovery tokens.
 
@@ -129,9 +141,34 @@ Route read-only exploration to cheaper model. See [[model-routing-agents]].
 | Automated QA | ~3,500 | ~3,500 | No change (quality-critical) |
 | Critics (2 focus areas) | ~4,000 | ~4,000 | No change (adversarial) |
 | Observability | ~1,500 | ~1,500 | No change |
+| Final lint + format gate | — | ~0 | Deterministic tooling, no LLM |
 | Memory writes | ~1,500 | ~1,000 | Haiku for standard writes |
 | **Coding tokens** | variable | **-25-55%** | AST truncation + fuzzy edits |
 | **Total per subtask** | **~17,500** | **~12,500-15,000** | 15-30% overhead reduction |
+
+### Phase 16: Final Lint + Format Gate
+
+Run linters and formatters as a **single final pass** after L4 adversarial verification passes and before L5 observability. This is the last code-modifying step in the pipeline.
+
+**First-principles rationale**: Linting and formatting are separate concerns from syntax and correctness. The pipeline enforces the correct ordering: first make it work (L3 syntax + L4 verification), then make it clean (Phase 16). Running lint/format inline would: (a) flood the agent with style warnings on in-progress code, (b) break edit tool `oldText` matching via whitespace changes, (c) waste tokens on cosmetic fixes for code that might be rewritten next edit. Formatting MUST be last — it touches every line, invalidating all line numbers for any subsequent operation.
+
+| Capability | Files | Depends On |
+|-----------|-------|------------|
+| `final-polish` gate (post-L4 hook) | `lib/harness-polish.ts` | Phase 5 (L4 critics) |
+| Lint with auto-fix: ESLint, biome, ruff, clippy | `lib/harness-polish.ts` | Language detection from L3 |
+| Format with auto-apply: prettier, biome, rustfmt | `lib/harness-polish.ts` | Lint pass (lint first, format second) |
+| Lint violations report (non-auto-fixable) | `lib/harness-polish.ts` | Lint pass |
+| Gate verdict: PASS / PASS_WITH_WARNINGS / FAIL | `lib/harness-polish.ts` | Full polish run |
+| Wiki artifact: polish report | `extensions/harness-polish.ts` | L6 memory writes |
+
+**Gate semantics**:
+- `PASS`: All auto-fixes applied, zero remaining lint violations → proceed to L5
+- `PASS_WITH_WARNINGS`: Auto-fixes applied, non-auto-fixable warnings remain → logged to wiki, proceed
+- `FAIL`: Lint errors that can't be auto-fixed → return to agent for manual fix (max 1 retry, then escalate)
+
+**Ordering within gate**: Lint → auto-fix lint → format → verify format didn't introduce lint violations → verdict.
+
+**Token cost**: Near-zero (deterministic tooling, no LLM involvement). Time cost: <10 seconds for typical projects.
 
 ### Fundamental Architecture Changes Required
 
@@ -139,13 +176,25 @@ These are not incremental — they require structural changes to the agent:
 
 1. **Model router layer**: The agent must dispatch operations to different models. This is a new cross-cutting concern between L7 (orchestration) and L3/L8 (execution). Currently, the harness assumes one model for all operations.
 
-2. **Inline validation pipeline**: Current validation is post-hoc (L3 checks after all edits, L4 attacks after phase complete). WOZCODE's inline validation interposes after each individual tool invocation — a fundamentally tighter loop.
+2. **Two-tier validation pipeline**: Current validation is post-hoc (L3 checks after all edits, L4 attacks after phase complete). The new design adds inline syntax validation (Phase 12, fast, tool-layer, catches broken code before model sees it) and a final lint+format gate (Phase 16, post-L4, deterministic, no LLM involvement). These are complementary — inline catches "doesn't compile", final gate catches "isn't clean". Neither replaces L4's adversarial semantic verification.
 
 3. **AST-aware tool primitives**: The `read`, `search`, and `grep` tools must become AST-aware. This requires tree-sitter integration at the tool layer, not just the planning layer (where repo-map-ranking currently sits).
 
-4. **Non-exact tool matching**: The `edit` tool's contract changes from "exact string match" to "best-effort fuzzy match with exact fallback." This is a semantic change to a core tool primitive.
+4. **Non-exact tool matching**: The `edit` tool's contract changes from "exact string match" to "best-effort fuzzy match with exact fallback." This is a semantic change to a core tool primitive. Note: fuzzy matching is tolerant of minor whitespace drift, but full formatting runs ONLY in Phase 16 — never inline.
 
 5. **Tool result intermediation**: Currently, tool results go straight to the model. With inline validation, the tool pipeline must intercept results, run validators, attempt auto-fixes, and only then surface the (possibly transformed) result to the model.
+
+---
+
+## Final Polish Gate (Phase 16)
+
+See [[#phase-16-final-lint-format-gate|Phase 16 above]] for full specification. Runs once after L4 adversarial verification passes. Lint → auto-fix → format → verify → verdict.
+
+**Pipeline position**: L3 (edits with inline syntax checks) → L4 (adversarial verification) → **Phase 16 (lint + format gate)** → L5 (observability).
+
+**Why not inline**: Formatting modifies every line — breaks `edit` tool `oldText` matching. Linting on in-progress code produces noise, not signal. Both waste agent tokens on cosmetic decisions that may be invalidated by the next edit.
+
+**Why not in L4**: L4 critics reason about correctness (logic, security, spec compliance). Lint/formatters are deterministic tools — no LLM reasoning needed. Adding them to L4 would bloat the adversarial budget with non-adversarial work.
 
 ---
 

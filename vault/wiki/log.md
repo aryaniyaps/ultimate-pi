@@ -1,5 +1,11 @@
 # Wiki Operations Log
 
+## [2026-04-30] harness | First-principles rethink: split lint+format from inline validation → new Phase 16
+- Decision: Lint + format must NEVER run inline. Syntax validation (compilers/parsers) stays inline (Phase 12). Lint + format becomes final gate (Phase 16, post-L4).
+- Pages updated: [[harness-implementation-plan]] (Phase 12 renamed, Phase 16 added, build phases table, token budget, architecture changes), [[inline-post-edit-validation]] (removed linters from inline, added Phase 16 pointer, split validator tables), [[hot]] (new entry), [[log]] (this entry)
+- Key finding: Three distinct quality concerns with different timing — syntax (inline, blocks progress), semantics (L4, needs LLM), style (final gate, deterministic tools). Bundling them wastes tokens + breaks edit tool contracts. Formatting MUST be last: it touches every line, invalidating all line numbers for any subsequent operation.
+- Pipeline order: L3(Edit+Syntax) → L4(Verify) → Phase 16(Lint+Format) → L5(Observe)
+
 ## [2026-04-30] research | Consensus Debate: Multi-Agent Argument for Harness
 - Rounds: 1 (direct first-principles analysis + pi-messenger source analysis)
 - Sources found: 1 (pi-messenger GitHub: registry, store, handlers, crew source)

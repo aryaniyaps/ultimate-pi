@@ -54,8 +54,11 @@ Trigger: user passes a URL starting with `https://`.
 
 Steps:
 
-1. **Fetch** the page using WebFetch.
-2. **Clean** (optional): if `defuddle` is available (`which defuddle 2>/dev/null`), run `defuddle [url]` to strip ads, nav, and clutter. Typically saves 40-60% tokens. Fall back to raw WebFetch output if not installed.
+1. **Fetch** the page using scrapling (primary) or defuddle (fallback for simple pages):
+   - Primary: `SCRAPLING=/home/aryaniyaps/.local/venvs/scrapling/bin/scrapling; $SCRAPLING extract get "$URL" /tmp/ingest.md --ai-targeted`
+   - JS/protected pages: escalate to `fetch` or `stealthy-fetch` with `--ai-targeted --network-idle`
+   - Simple fallback: `defuddle parse "$URL" --md > /tmp/ingest.md`
+2. **Clean** (optional): if scrapling output has boilerplate, run `defuddle parse /tmp/ingest.md --md > /tmp/ingest-clean.md`
 3. **Derive slug** from the URL path (last segment, lowercased, spaces→hyphens, strip query strings).
 4. **Save** to `vault/.raw/articles/[slug]-[YYYY-MM-DD].md` with a frontmatter header:
    ```markdown

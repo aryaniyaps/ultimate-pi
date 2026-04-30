@@ -1,19 +1,11 @@
 ---
 name: autoresearch
-description: >
-  Autonomous iterative research loop. Takes a topic, runs web searches, fetches sources,
-  synthesizes findings, and files everything into the wiki as structured pages.
-  Based on Karpathy's autoresearch pattern: program.md configures objectives and constraints,
-  the loop runs until depth is reached, output goes directly into the knowledge base.
-  Triggers on: "/autoresearch", "autoresearch", "research [topic]", "deep dive into [topic]",
-  "investigate [topic]", "find everything about [topic]", "research and file",
-  "go research", "build a wiki on".
-allowed-tools: Read Write Edit Glob Grep WebFetch WebSearch
+description: Autonomous iterative research loop. Takes a topic, runs web searches, fetches sources, synthesizes findings, and files everything into the wiki as structured pages. Based on Karpathy's autoresearch pattern: program.md configures objectives and constraints, the loop runs until depth is reached, output goes directly into the knowledge base. Triggers on: "/autoresearch", "autoresearch", "research [topic]", "deep dive into [topic]", "investigate [topic]", "find everything about [topic]", "research and file", "go research", "build a wiki on".
 ---
 
 # autoresearch: Autonomous Research Loop
 
-You are a research agent. You take a topic, run iterative web searches, synthesize findings, and file everything into the wiki. The user gets wiki pages, not a chat response.
+You are a research agent. You take a topic, run iterative web searches using scrapling, fetch pages, clean with defuddle, synthesize findings, and file everything into the wiki. The user gets wiki pages, not a chat response.
 
 This is based on Karpathy's autoresearch pattern: a configurable program defines your objectives. You run the loop until depth is reached. Output goes into the knowledge base.
 
@@ -21,7 +13,130 @@ This is based on Karpathy's autoresearch pattern: a configurable program defines
 
 ## Before Starting
 
-Read `references/program.md` to load the research objectives and constraints. This file is user-configurable. It defines what sources to prefer, how to score confidence, and any domain-specific constraints.
+Read `references/program.md` to load the research objectives, constraints, web fetch pipeline, and quality-sites whitelist. This file is user-configurable.
+
+Also read `references/quality-sites.md` for the whitelist of vetted coding reference sites.
+
+---
+
+## Prerequisites Check
+
+Before the first fetch, verify the toolchain:
+
+```bash
+SCRAPLING="/home/aryaniyaps/.local/venvs/scrapling/bin/scrapling"
+test -x "$SCRAPLING" || echo "MISSING: scrapling not found at $SCRAPLING"
+which defuddle >/dev/null 2>&1 || echo "MISSING: defuddle not installed (npm install -g defuddle-cli)"
+```
+
+If scrapling is missing, install it:
+```bash
+python3 -m venv /home/aryaniyaps/.local/venvs/scrapling
+/home/aryaniyaps/.local/venvs/scrapling/bin/pip install "scrapling[all]>=0.4.7"
+/home/aryaniyaps/.local/venvs/scrapling/bin/python -m playwright install chromium
+```
+
+If defuddle is missing:
+```bash
+npm install -g defuddle-cli
+```
+
+---
+
+## Query Routing
+
+Before any search or fetch, classify the query:
+
+| Query Type | Tool | Notes |
+|---|---|---|
+| API docs, signatures, config | **context7** | `ctx7 library <name> <query>` then `ctx7 docs <id> <query>` |
+| Debugging errors | context7 (API) + scrapling (discussions) | Split: API part via ctx7, error discussion via DuckDuckGo |
+| Architecture, patterns | scrapling + quality-sites | Route to martinfowler, highscalability, engineering blogs |
+| Library comparison | scrapling + quality-sites | Multi-source, check dates |
+| New tech exploration | scrapling + quality-sites | HN, arxiv, engineering blogs |
+
+**Never use scrapling/defuddle for API docs.** API documentation lives in context7 exclusively.
+
+---
+
+## Web Fetch Pipeline
+
+All web fetches go through this pipeline. DO NOT use `curl`, `wget`, or raw bash HTTP commands.
+
+### Step 1: Search (DuckDuckGo via scrapling)
+
+```bash
+SCRAPLING="/home/aryaniyaps/.local/venvs/scrapling/bin/scrapling"
+ENCODED=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$QUERY'''))")
+$SCRAPLING extract get "https://html.duckduckgo.com/html/?q=$ENCODED" /tmp/autoresearch-search.md --ai-targeted
+```
+
+Parse `/tmp/autoresearch-search.md` for result links. Extract candidate URLs.
+
+### Step 2: Fetch (scrapling primary)
+
+For each candidate URL:
+
+```bash
+$SCRAPLING extract get "$URL" "/tmp/autoresearch-$SLUG.md" --ai-targeted
+```
+
+- `--ai-targeted` extracts only main content, strips hidden elements, blocks ads
+- Output: `.md` for markdown (preferred), `.html` for raw, `.txt` for plain text
+- Use `--css-selector "article"` or similar to target specific content regions
+- Use `--timeout 60` for slow sites
+
+**Escalation**: If `get` returns empty or blocked content:
+
+```bash
+# JS-rendered pages
+$SCRAPLING extract fetch "$URL" "/tmp/autoresearch-$SLUG.md" --ai-targeted --network-idle
+
+# Anti-bot protected pages
+$SCRAPLING extract stealthy-fetch "$URL" "/tmp/autoresearch-$SLUG.md" --ai-targeted --solve-cloudflare
+```
+
+### Step 3: Clean (defuddle, optional)
+
+Check the scrapling output. If it still contains boilerplate (nav bars, cookie banners, related articles), run:
+
+```bash
+defuddle parse "/tmp/autoresearch-$SLUG.md" --md > "/tmp/autoresearch-$SLUG-clean.md"
+```
+
+For simple pages, defuddle can fetch AND clean in one pass:
+```bash
+defuddle parse "$URL" --md > "/tmp/autoresearch-$SLUG.md"
+```
+
+### Step 4: Extract
+
+Read the cleaned markdown file. Extract:
+- Key claims (with source attribution)
+- Entities (people, orgs, products)
+- Concepts and frameworks
+- Open questions
+
+### Cleanup
+
+```bash
+rm -f /tmp/autoresearch-*.md
+```
+
+---
+
+## Quality Sites Routing
+
+Before fetching any non-API URL, check `references/quality-sites.md`. Route queries according to the Routing Rules:
+
+- **Debugging/errors**: `site:stackoverflow.com [error]` or `site:github.com/[org]/[repo]/issues [error]`
+- **Architecture/patterns**: martinfowler.com, highscalability.com, engineering blogs
+- **Library comparisons**: multiple Tier 1/2 sources, check dates
+- **Version/release**: check pypi.org / crates.io / npmjs.com directly
+
+**API documentation sites are EXCLUDED.** All API docs are resolved by context7. See Query Routing above.
+
+Do not cite sources from the Exclusions list (AI content farms, mirrors, stale packages, API doc sites).
 
 ---
 
@@ -72,18 +187,19 @@ Input: topic (from Topic Selection, above)
 
 Round 1. Broad search
 1. Decompose topic into 3-5 distinct search angles
-2. For each angle: run 2-3 WebSearch queries
-3. For top 2-3 results per angle: WebFetch the page
-4. Extract from each: key claims, entities, concepts, open questions
+2. For each angle: run 2-3 DuckDuckGo searches via scrapling
+3. For top 2-3 results per angle: fetch via scrapling get (escalate to fetch/stealthy-fetch if needed)
+4. Clean with defuddle if output has boilerplate
+5. Extract from each: key claims, entities, concepts, open questions
 
 Round 2. Gap fill
-5. Identify what's missing or contradicted from Round 1
-6. Run targeted searches for each gap (max 5 queries)
-7. Fetch top results for each gap
+6. Identify what's missing or contradicted from Round 1
+7. Run targeted searches for each gap (max 5 queries)
+8. Fetch top results for each gap
 
 Round 3. Synthesis check (optional, if gaps remain)
-8. If major contradictions or missing pieces still exist: one more targeted pass
-9. Otherwise: proceed to filing
+9. If major contradictions or missing pieces still exist: one more targeted pass
+10. Otherwise: proceed to filing
 
 Max rounds: 3 (as set in program.md). Stop when depth is reached or max rounds hit.
 ```
@@ -209,5 +325,20 @@ Follow the limits in `references/program.md`:
 - Max pages per session (default: 15)
 - Confidence scoring rules
 - Source preference rules
+- Quality-sites whitelist from `references/quality-sites.md`
 
 If a constraint conflicts with completeness, respect the constraint and note what was left out in the Open Questions section.
+
+---
+
+## Toolchain Summary
+
+| Purpose | Tool | Command |
+|---|---|---|
+| Search | scrapling → DuckDuckGo | `$SCRAPLING extract get "https://html.duckduckgo.com/html/?q=..." ...` |
+| Fetch (simple) | scrapling get | `$SCRAPLING extract get "$URL" "$FILE".md --ai-targeted` |
+| Fetch (JS) | scrapling fetch | `$SCRAPLING extract fetch "$URL" "$FILE".md --ai-targeted --network-idle` |
+| Fetch (anti-bot) | scrapling stealthy-fetch | `$SCRAPLING extract stealthy-fetch "$URL" "$FILE".md --ai-targeted --solve-cloudflare` |
+| Clean | defuddle | `defuddle parse "$INFILE" --md > "$OUTFILE"` |
+| Read | read tool | `read /tmp/autoresearch-*.md` |
+| File | write/edit tools | Create wiki pages |
