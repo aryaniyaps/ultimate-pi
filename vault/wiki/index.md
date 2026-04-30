@@ -55,6 +55,12 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[mcp-tool-routing]] | Using MCP to register semantic search as first-class agent tool |
 | [[consensus-debate]] | Multi-agent dialectical debate protocol for harness decisions |
 | [[pi-messenger-analysis]] | Analysis of pi-messenger: what we adopt, what we strip for harness |
+| [[harness-h-formalism]] | Formal six-component harness model: H = (E, T, C, S, L, V) |
+| [[feedforward-feedback-harness]] | Guides (feedforward) + sensors (feedback) control framework |
+| [[generator-evaluator-architecture]] | GAN-inspired separation of generator and evaluator agents |
+| [[self-evolving-harness]] | Auto-synthesis and meta-optimization of harness code |
+| [[selective-debate-routing]] | Trigger debate only when beneficial (iMAD, 92% token savings) |
+| [[context-anxiety]] | Models rush to finish as context window fills |
 
 ## Components
 *(Index of components will go here)*
@@ -71,12 +77,13 @@ This wiki maps the codebase architecture and tracks key software design decision
 
 | Question | Summary |
 |----------|---------|
-| [[Research: Model-Adaptive Agent Harness Design]] | Redesigning autoresearch harness as four-layer model-adaptive system |
+| [[Research: Model-Adaptive Agent Harness Design]] | Model-adaptive harness design: four-layer configurable system must be specialized per model |
 | [[Research: context-mode vs lean-ctx]] | context-mode vs lean-ctx comparison + "Think in Code" enforcement |
 | [[Research: semantic code search tools]] | Self-hosted semantic code search for AI coding agents |
 | [[research-agent-first-codebase-exploration]] | Rethinking OSS codebase strategies for AI agents |
 | [[research-wozcode-token-reduction]] | WOZCODE architecture analysis and harness integration plan |
 | [[research-gitingest-gitreverse-integration]] | Evaluation of GitIngest and GitReverse for harness integration |
+| [[research-agentic-coding-harness-latest-papers]] | Latest papers on agentic coding harnesses & pipeline improvements |
 
 ## Sources
 
@@ -96,6 +103,12 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[wozcode]] | product-doc | WOZCODE token-reduction architecture for Claude Code (2026) |
 | [[gitingest]] | tool | Codebase-to-structured-text for LLM context ingestion |
 | [[gitreverse]] | tool | Repo-to-synthetic-prompt via OpenRouter LLM |
+| [[meng2026-agent-harness-survey]] | paper | Comprehensive harness survey: H=(E,T,C,S,L,V), 110+ papers, 23 systems |
+| [[anthropic2026-harness-design]] | blog | Anthropic's GAN-inspired multi-agent harness for long-running coding |
+| [[bockeler2026-harness-engineering]] | blog | Martin Fowler: feedforward/feedback controls, harnessability |
+| [[lou2026-autoharness]] | paper | AutoHarness: LLM synthesizes harness from environment feedback |
+| [[lee2026-meta-harness]] | paper | Meta-Harness: outer-loop optimization of harness code |
+| [[fan2025-imad]] | paper | iMAD: selective multi-agent debate, 92% token savings, AAAI 2026 |
 
 ## Dependencies
 *(Index of dependencies will go here)*
@@ -104,4 +117,4 @@ This wiki maps the codebase architecture and tracks key software design decision
 | Flow | Summary |
 |------|---------|
 | [[harness-wiki-pipeline]] | Read-first/write-after data flow between harness and wiki |
-| [[consensus-debate-flow]] | Multi-agent debate flow: transport, protocol, integration with harness layers |
+| [[consensus-debate]] | Multi-agent debate flow: transport, protocol, integration with harness layers |

@@ -28,7 +28,7 @@ The models fail differently:
 
 **Write once for the strictest model. Relax for forgiving models. Never write for forgiving and hope strict models cope.**
 
-The canonical harness is written in "strict mode" (GPT-safe): flat structure, constraints-first, explicit markers, enforced gates, in-band signals. Opus/Claude models receive relaxations — they may skip explicit markers, use narrative self-assessment instead of checklists, and trust metadata for state signals.
+The canonical harness should be written in "strict mode" (GPT-safe): flat structure, constraints-first, explicit markers, enforced gates, in-band signals. Opus/Claude models receive relaxations — they may skip explicit markers, use narrative self-assessment instead of checklists, and trust metadata for state signals.
 
 ## What Adapts
 
@@ -44,8 +44,8 @@ Each layer has dimensions that vary by model profile (`opus`, `gpt`, `gemini`, `
 ## What Never Adapts
 
 Core invariants across all profiles:
-- Research pipeline steps
-- Quality-sites routing rules
-- Source attribution requirements
+- Pipeline phase ordering
+- Quality standards and source attribution requirements
 - Confidence labeling
-- Max rounds and max pages constraints
+- Budget constraints (max rounds, max tokens, max pages)
+- Verification requirements (what must be checked, even if how varies by model)

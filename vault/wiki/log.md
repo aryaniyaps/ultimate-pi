@@ -1,13 +1,18 @@
 # Wiki Operations Log
 
+## [2026-04-30] autoresearch | Agentic Coding Harness Latest Papers & Pipeline Improvements
+- Rounds: 2
+- Sources found: 9 (2 surveys, 5 papers, 2 production engineering blogs)
+- Pages created: [[research-agentic-coding-harness-latest-papers]] (synthesis), [[meng2026-agent-harness-survey]], [[anthropic2026-harness-design]], [[bockeler2026-harness-engineering]], [[lou2026-autoharness]], [[lee2026-meta-harness]], [[fan2025-imad]], [[harness-h-formalism]], [[feedforward-feedback-harness]], [[generator-evaluator-architecture]], [[self-evolving-harness]], [[selective-debate-routing]], [[context-anxiety]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: Harness has a formal model H=(E,T,C,S,L,V). Self-evaluation fundamentally broken — separate generator from evaluator. Debate should be selective not always-on (iMAD: 92% token savings). Harnesses can self-evolve (AutoHarness, Meta-Harness). 5 immediate pipeline improvements identified: hard-threshold L4 criteria, sprint contracts at L2, pre-debate gating classifier, H-formalism mapping, feedforward/feedback audit. 3 future phases proposed: harness auto-optimization, behaviour harness, context anxiety guard.
+
 ## [2026-04-30] research | Model-Adaptive Agent Harness Design
 - Rounds: 1 (deep first-principles analysis + Forge Code source)
 - Sources found: 1 (Forge Code blog: GPT 5.4 vs Opus 4.6 on TermBench 2.0)
 - Pages created: [[Research: Model-Adaptive Agent Harness Design]], [[forgecode-gpt5-agent-improvements]], [[model-adaptive-harness]], [[harness-configuration-layers]]
 - Pages updated: [[index]], [[log]], [[hot]]
-- Config files created: `references/harness-config.md`, `references/model-profiles.md` (rewritten)
-- Config files updated: `SKILL.md`, `references/program.md`
-- Key finding: Agent harness is a four-layer configurable system (Signal, Gate, Channel, Completion), not a fixed script. Each layer has dimensions that vary by model. GPT needs flat structure, constraints-first ordering, enforced gates, in-band signals. Opus tolerates nesting, infers from metadata, self-corrects. The skill was redesigned from one-size-fits-all into a model-adaptive harness with opus relaxation annotations.
+- Key finding: Agent harness must be a model-specialized system, not a one-size-fits-all script. Four configurable layers (Signal, Gate, Channel, Completion) each have dimensions that vary by model. GPT needs flat structure, constraints-first ordering, enforced gates, in-band signals. Opus tolerates nesting, infers from metadata, self-corrects. The harness pipeline we are building must incorporate per-model specialization — write once for strict (GPT-safe), relax for forgiving (Opus).
 
 ## [2026-04-30] harness | First-principles rethink: split lint+format from inline validation → new Phase 16
 - Decision: Lint + format must NEVER run inline. Syntax validation (compilers/parsers) stays inline (Phase 12). Lint + format becomes final gate (Phase 16, post-L4).

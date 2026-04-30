@@ -21,7 +21,7 @@ sources:
 
 ## Overview
 
-Forge Code's TermBench 2.0 results reveal that agent harness reliability is not a property of the model — it's a property of how well the harness compensates for each model's specific failure modes. GPT 5.4 and Opus 4.6 reached identical 81.8% scores only after model-specific adaptation. This research applied those findings to the autoresearch skill's harness, redesigning it from a fixed script into a four-layer configurable system with model profiles.
+Forge Code's TermBench 2.0 results reveal that agent harness reliability is not a property of the model — it's a property of how well the harness compensates for each model's specific failure modes. GPT 5.4 and Opus 4.6 reached identical 81.8% scores only after model-specific adaptation. This research documents the design principles for making the harness pipeline model-aware.
 
 ## Key Findings
 
@@ -29,11 +29,11 @@ Forge Code's TermBench 2.0 results reveal that agent harness reliability is not 
 
 - **GPT and Opus fail differently but reach the same capability ceiling** when the harness compensates. GPT needs flat structure, constraints-first ordering, enforced gates, in-band signals. Opus tolerates nesting, infers from metadata, self-corrects (Source: [[forgecode-gpt5-agent-improvements]])
 
-- **Enforced verification is the single biggest improvement.** GPT stops after plausible-but-incomplete solutions. "Please verify" does nothing. A programmatic gate — checklist that must be passed before proceeding — catches gaps. This applies directly to the autoresearch Pre-File Verification Gate (Source: [[forgecode-gpt5-agent-improvements]])
+- **Enforced verification is the single biggest improvement.** GPT stops after plausible-but-incomplete solutions. "Please verify" does nothing. A programmatic gate — checklist that must be passed before proceeding — catches gaps (Source: [[forgecode-gpt5-agent-improvements]])
 
-- **Schema/instruction shape is a reliability variable, not cosmetic.** GPT anchors on what appears first. Moving `REQUIRED` constraints before descriptive content reduces malformed behavior. Flat structures (1 nesting level) reduce structural errors. Same semantics, different reliability (Source: [[forgecode-gpt5-agent-improvements]])
+- **Schema/instruction shape is a reliability variable, not cosmetic.** GPT anchors on what appears first. Moving constraints before descriptive content reduces malformed behavior. Flat structures (1 nesting level) reduce structural errors. Same semantics, different reliability (Source: [[forgecode-gpt5-agent-improvements]])
 
-- **Truncation signaling must be in-band for GPT.** Metadata fields like `total_lines` are invisible to GPT's attention. Body-text warnings ("... truncated N lines") are necessary. Opus reads metadata fine. This applies to the autoresearch truncation warning rule (Source: [[forgecode-gpt5-agent-improvements]])
+- **Truncation signaling must be in-band for GPT.** Metadata fields like `total_lines` are invisible to GPT's attention. Body-text warnings are necessary. Opus reads metadata fine (Source: [[forgecode-gpt5-agent-improvements]])
 
 ## Key Entities
 
@@ -45,32 +45,51 @@ Forge Code's TermBench 2.0 results reveal that agent harness reliability is not 
 - [[model-adaptive-harness]]: Harness that varies behavior by model profile, not a one-size-fits-all instruction set
 - [[harness-configuration-layers]]: Four-layer framework (L1 Signal, L2 Gate, L3 Channel, L4 Completion) with configurable dimensions per model
 
-## Design Applied
+## Design Principles for the Harness Pipeline
 
-The autoresearch skill was redesigned:
+These findings will be applied to the harness pipeline as it is built out. The key principle: **write once for strict (GPT-safe defaults), relax for forgiving models**. Never write for forgiving and hope strict models cope.
 
-1. **L1 Signal Design**: Skill rewritten in strict mode — flat structure (H3 max), `REQUIRED:` before description, atomic instructions, explicit markers throughout
-2. **L2 Gate Design**: Round-completion gate (3-question hard gate after each round). Pre-File Verification Gate (10-item checklist, no opt-out for gpt/strict)
-3. **L3 State Channel**: Explicit truncation warning rule with body-text format. Explicit progress counters (round N/3, sources N/5)
-4. **L4 Completion Model**: "YOU ARE DONE WHEN" falsifiable criteria. Post-file self-check (3 verification items). Hard gate for gpt/strict
+### Four-Layer Model (see [[harness-configuration-layers]] for full specification)
 
-**Profile resolution**: `program.md → model_profile → model-profiles.md → dimension values`
+1. **L1 Signal Design** — instruction density, ordering, emphasis, nesting depth, atomicity
+2. **L2 Gate Design** — enforcement model (hard vs soft), granularity, evidence standard, retry behavior
+3. **L3 State Channel** — how truncation, progress, and errors are communicated to the model
+4. **L4 Completion Model** — how "done" is determined and verified
 
-**Opus relaxations**: Narrative self-assessment instead of checklists. Metadata inference for truncation. Natural completion signals. Core pipeline steps NEVER relax.
+### Model-Specific Differences
 
-## Configuration Files Created
+| Behavior | Opus/Claude | GPT |
+|---|---|---|
+| Structure | Tolerates nesting, natural flow | Needs flat, constraints-first |
+| Truncation | Infers from metadata | Needs body-text warning |
+| Verification | Naturally double-checks | Must be ENFORCED (hard gate) |
+| Completion | Self-aware of gaps | Stops after plausible-but-incomplete |
+| Emphasis | Contextual cues work | Explicit markers (REQUIRED, MANDATORY) |
 
-- `references/harness-config.md`: Full four-layer dimension specification
-- `references/model-profiles.md`: Concrete profiles (opus, gpt, gemini, strict) with per-dimension values
-- `program.md`: Updated with `model_profile` config and reference links
-- `SKILL.md`: Rewritten as strict-mode canonical template with opus relaxation annotations
+### What Must Adapt per Model
+
+Each pipeline phase that generates instructions for the agent should vary based on the driving model:
+- Instruction formatting (density, ordering, emphasis)
+- Gate enforcement (hard vs soft, checklist vs self-assessment)
+- State signaling (in-band vs metadata, explicit vs implicit progress)
+- Completion criteria (falsifiable checklist vs completion signal)
+
+### What Never Adapts
+
+Core invariants across all model profiles:
+- Pipeline steps and phase ordering
+- Quality standards and source attribution requirements
+- Confidence labeling
+- Budget constraints (max rounds, max tokens, max pages)
+- Verification gates (what must be checked, even if how varies by model)
 
 ## Open Questions
 
-- How to detect model at runtime for `auto` profile? System prompt parsing? Tool-call format detection?
-- Should per-step gates (between fetch and extract, between extract and synthesize) be added for gpt profile, or is per-round sufficient?
-- How do these findings apply to other skills beyond autoresearch? The four-layer model is general — should it be extracted as a cross-skill harness framework?
-- Gemini profile is conservative (near-gpt). Needs validation against actual Gemini agent trajectories
+- How to detect model at runtime? System prompt parsing? Tool-call format detection?
+- Should per-step gates be added for GPT profile, or is per-round sufficient?
+- How do these findings apply across all harness phases beyond research?
+- Gemini profile needs validation against actual Gemini agent trajectories
+- Should the harness maintain per-model reliability metrics to track which compensations work?
 
 ## Sources
 
