@@ -9,7 +9,7 @@ tags:
   - interface-design
 related:
   - "[[swe-agent-aci]]"
-  - "[[agent-first-exploration]]"
+  - "[[research-agent-first-codebase-exploration]]"
 status: developing
 ---
 

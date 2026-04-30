@@ -17,6 +17,8 @@ tags:
   - benchmark
   - software-engineering
   - evaluation
+created: 2023-10-10
+updated: 2026-04-30
 ---
 
 # SWE-bench: Can Language Models Resolve Real-World GitHub Issues?

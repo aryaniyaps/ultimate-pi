@@ -12,6 +12,10 @@ key_claims:
   - "47 files × Read() = 700 KB → 1 ctx_execute() = 3.6 KB (200× reduction)"
   - "Cloudflare uses similar 'Code Mode' for Workers API with 2,500+ endpoints"
   - "LLM writes TypeScript, code runs in sandbox, only console.log() output enters context"
+created: 2026-04-30
+updated: 2026-04-30
+status: ingested
+tags: [#source/blog]
 ---
 
 # Think in Code (blog post)

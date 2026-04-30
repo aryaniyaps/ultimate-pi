@@ -15,6 +15,7 @@ related:
   - "[[hybrid-code-search]]"
   - "[[agent-search-enforcement]]"
   - "[[Research: semantic code search tools]]"
+title: "ck (seek)"
 ---
 
 # ck (seek)

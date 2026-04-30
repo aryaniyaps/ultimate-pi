@@ -12,6 +12,8 @@ related:
   - "[[lean-ctx]]"
   - "[[leanctx-website]]"
   - "[[Research: context-mode vs lean-ctx]]"
+updated: 2026-04-30
+title: "ADR: Adopt pi-lean-ctx Native Package, Drop Custom Extension"
 ---
 
 # ADR: Adopt pi-lean-ctx Native Package, Drop Custom Extension

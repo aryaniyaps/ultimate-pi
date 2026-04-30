@@ -13,6 +13,10 @@ key_claims:
   - "30× fewer tokens across full sessions"
   - "Used at Microsoft, Google, Meta, ByteDance, Red Hat, GitHub"
   - "HN #1 with 570+ points"
+created: 2026-04-30
+updated: 2026-04-30
+status: ingested
+tags: [#source/website]
 ---
 
 # context-mode.com

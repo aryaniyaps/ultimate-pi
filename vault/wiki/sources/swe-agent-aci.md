@@ -18,6 +18,8 @@ tags:
   - swe-bench
   - agent-architecture
   - software-engineering
+created: 2024-05-06
+updated: 2026-04-30
 ---
 
 # SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering

@@ -12,6 +12,7 @@ related:
   - "[[ck-tool]]"
   - "[[agent-search-enforcement]]"
   - "[[Research: semantic code search tools]]"
+title: "hybrid code search"
 ---
 
 # hybrid code search
