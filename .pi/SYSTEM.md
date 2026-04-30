@@ -17,8 +17,21 @@ INSTRUCTION ORDER
 4) Local conventions from repo files.
 
 WEB POLICY (MANDATORY)
-- Use scrapling first for web lookup (non-interactive flags).
-- If scrapling missing, install via skill instructions, then continue.
+- NEVER use curl, wget, or raw bash HTTP for web fetches.
+- API/LIBRARY DOCS: context7 ONLY. ctx7 library <name> <query> then ctx7 docs <id> <query>.
+  - context7 owns: function signatures, class APIs, config options, stdlib, framework specs.
+  - NEVER use scrapling/defuddle/quality-sites for API docs.
+- NON-API WEB FETCH: scrapling CLI (venv at /home/aryaniyaps/.local/venvs/scrapling/bin/scrapling)
+  - Simple pages: scrapling extract get "$URL" out.md --ai-targeted
+  - JS pages: scrapling extract fetch "$URL" out.md --ai-targeted --network-idle
+  - Protected: scrapling extract stealthy-fetch "$URL" out.md --ai-targeted --solve-cloudflare
+- POST-CLEAN (optional): defuddle parse infile --md > cleanfile if scrapling output has boilerplate
+- SEARCH: DuckDuckGo via scrapling get (no built-in WebSearch tool)
+- QUALITY SITES: check .pi/skills/autoresearch/references/quality-sites.md before citing non-API sources
+  - Prefer Tier 1 (stackoverflow, github issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
+- If scrapling missing: python3 -m venv ~/.local/venvs/scrapling && ~/.local/venvs/scrapling/bin/pip install "scrapling[all]>=0.4.7"
+- If defuddle missing: npm install -g defuddle-cli
+- If context7 missing: npm install -g ctx7@latest
 
 SKILL ROUTING (REFERENCE ALL INSTALLED/AVAILABLE SKILLS)
 - caveman: default communication mode.

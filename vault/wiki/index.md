@@ -43,7 +43,7 @@ This wiki maps the codebase architecture and tracks key software design decision
 | [[execution-feedback-loop]] | Agent debug-test-iterate cycle via structured test output |
 | [[ast-truncation]] | Stubbing function bodies at AST level for token-efficient code reading |
 | [[fuzzy-edit-matching]] | Diff algorithm tolerating formatting drift to eliminate edit retries |
-| [[inline-post-edit-validation]] | Running compilers/linters after each edit, before model sees errors |
+| [[inline-post-edit-validation]] | Compiler/parser validation after each edit (syntax only — lint/format deferred to Phase 16) |
 | [[model-routing-agents]] | Dispatching exploration to cheap models (Haiku), code gen to frontier |
 | [[codebase-to-context-ingestion]] | Converting entire codebases into structured LLM context |
 | [[think-in-code]] | Paradigm: write code to process data, don't read raw data into context |

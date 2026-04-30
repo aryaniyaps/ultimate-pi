@@ -9,7 +9,45 @@ tags: []
 # Recent Context
 
 ## Last Updated
-2026-04-30. Consensus debate protocol designed. pi-messenger analyzed, stripped, integrated.
+2026-04-30. Lint + Format Gate split from inline validation. First-principles pipeline reorder: syntax inline, lint/format final.
+
+## Lint + Format: First-Principles Pipeline Rethink (2026-04-30)
+
+**Verdict**: Split Phase 12. Inline = syntax only (compilers/parsers). Lint + format = final gate (Phase 16, post-L4).
+
+### First Principles
+- Three distinct quality concerns: syntax (does it parse?), semantics (is it correct?), style (is it clean?)
+- Each has different timing requirements. Bundling them wastes tokens and breaks tool contracts.
+- **Syntax belongs inline** (Phase 12): broken code blocks all progress. Catch at tool layer, save round-trips.
+- **Semantics belongs in L4**: adversarial verification needs full context, spec comparison, LLM reasoning.
+- **Lint + format belongs at the end** (Phase 16, new): lint is noisy on in-progress code. Formatting modifies whitespace → breaks edit tool `oldText` exact matching. Both waste agent tokens on cosmetic decisions invalidated by next edit.
+
+### New Phase 16: Final Lint + Format Gate
+- **Position**: L3 (edits + inline syntax checks) → L4 (adversarial verification) → **Phase 16 (lint + format)** → L5 (observability)
+- **Ordering**: Lint → auto-fix lint → format → verify format didn't introduce violations → verdict
+- **Verdicts**: PASS (zero violations), PASS_WITH_WARNINGS (non-auto-fixable warnings), FAIL (errors needing manual fix, max 1 retry)
+- **Tooling**: eslint/ruff/clippy (lint + auto-fix), prettier/biome/rustfmt (format auto-apply)
+- **Token cost**: Near-zero (deterministic tooling). Time: <10s for typical projects.
+- **Files**: `lib/harness-polish.ts`, `extensions/harness-polish.ts`
+
+### Phase 12 Renamed: Inline Syntax Validation
+- **Was**: "Inline Post-Edit Validation" with compilers + linters + formatters
+- **Now**: Syntax only — `tsc --noEmit`, `JSON.parse`, `yaml.parse`, SQL parser
+- **Gate rule**: Must complete in <2s. Full-project tsc, ESLint with plugins, prettier excluded.
+- **Linting/formatting removed from inline validators table** in [[inline-post-edit-validation]]
+
+### Why Not Inline
+- Formatting modifies every line → edit tool's `oldText` won't match on next edit → guaranteed failure
+- Linting on half-written code produces noise (unused imports, missing types), not signal
+- Agent context-switches to fix style when code might be rewritten next edit
+- Human analogy: spell-checker autocorrecting while you're still drafting
+
+### Pipeline Order
+```
+L1(Spec) → L2(Plan) → L3(Edit+Syntax) → L4(Verify) → [Phase 16: Lint+Format] → L5(Observe) → L6(Memory) → L7(Orch) → L8(Query)
+```
+
+---
 
 ## Consensus Debate: Multi-Agent Argument for Harness (2026-04-30)
 
@@ -135,7 +173,8 @@ Harness L1/L2/L4 → Consensus Protocol Layer → pi-messenger Transport → Fil
 ## Active Threads
 - **Harness Phase 10**: AST truncation — leverage existing tree-sitter infra from repo-map-ranking
 - **Harness Phase 11**: Fuzzy edit matching — add normalization layer to edit tool
-- **Harness Phase 12**: Inline post-edit validation — add post-edit-validate hook to L3 grounding checkpoints
+- **Harness Phase 12**: Inline syntax validation (compilers/parsers only — NO linters, NO formatters)
+- **Harness Phase 16 (NEW)**: Final lint + format gate — runs once after L4, before L5
 - **Harness Phase 13**: Haiku model router — new ModelRouter component, woz:explore subagent
 - **Revised token budget**: ~17,500 → ~12,500-15,000 tokens per subtask (15-30% overhead reduction)
 - **Open questions**: AST truncation on dynamic languages, fuzzy matching false-positive rate, Haiku hallucination risk in summaries
