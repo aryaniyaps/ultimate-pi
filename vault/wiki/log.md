@@ -1,5 +1,12 @@
 # Wiki Operations Log
 
+## [2026-04-30] autoresearch | Meta-Agent Context Drift Detection
+- Rounds: 2
+- Sources found: 10 (searched), 9 fetched, 4 filed as source pages
+- Pages created: [[Research: Meta-Agent Context Drift Detection]], [[ironclaw-drift-monitor]], [[langsight-loop-detection]], [[agent-drift-academic-paper]], [[vectara-guardian-agents]], [[context-drift-in-agents]], [[meta-agent-context-pruning]], [[agent-loop-detection-patterns]], [[guardian-agent-pattern]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: The meta-agent concept (detect stuck → prune context → restart) is a NOVEL SYNTHESIS. Each component exists independently (ironclaw DriftMonitor for detection, SWE-Pruner for context pruning, LangSight for loop detection, Vectara for guardian agents) but no system combines all three phases. The closest prior art is nearai/ironclaw #1634 (March 2026) which implements detection + injection but does NOT prune context. Academic foundation: Agent Drift paper (arxiv 2601.04170) quantifies 42% task success reduction from drift, ASI framework across 12 dimensions. Proposed harness integration: Layer 2.5 — Runtime Drift Monitor between L2 (Plan) and L3 (Execute).
+
 ## [2026-04-30] autoresearch | Agentic Coding Harness Latest Papers & Pipeline Improvements
 - Rounds: 2
 - Sources found: 9 (2 surveys, 5 papers, 2 production engineering blogs)
