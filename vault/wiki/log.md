@@ -1,5 +1,14 @@
 # Wiki Operations Log
 
+## [2026-04-30] consolidate | First-Principles Harness Consolidation
+- All April 2026 research integrated into master plan
+- Pages created: [[harness-control-frameworks]] (unified H-formalism + feedforward-feedback + generator-evaluator), [[drift-detection-unified]] (3 complementary drift paradigms with clear boundaries), [[think-in-code-enforcement]] (L3 module with 3-layer enforcement)
+- Pages rewritten: [[harness-implementation-plan]] (27 build phases, unified token budget, all tools/research), [[harness]] (updated pipeline with L2.5 + cross-cutting tools), [[index]] (full reorganization, all 30+ concepts), [[adr-011]] (selective routing per iMAD), [[model-adaptive-harness]] (canonical entry point, de-duplicated)
+- Duplication resolved: layer numbering (P0-P27 mapped to layers), drift detection (3 paradigms unified), token budget (single table), model profiles (entry + detailed split), control frameworks (3 frameworks as orthogonal dimensions), ADR-011 staleness (selective routing), index freshness (all concepts listed)
+- New tools integrated: ck (P13), Gitingest (P15), pi-messenger (P17), pi-lean-ctx (done)
+- New paradigms: Think-in-Code L3 module, selective debate routing (92% savings), context drift as positive feedback loop, 3 quality concerns → 3 timings
+- Unified token budget: ~15K-16K/subtask (down from ~17.5K baseline)
+
 ## [2026-04-30] autoresearch | Meta-Agent Context Drift Detection
 - Rounds: 2
 - Sources found: 10 (searched), 9 fetched, 4 filed as source pages
