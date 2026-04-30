@@ -1,265 +1,306 @@
 ---
 type: module
 title: Harness Implementation Plan
-status: developing
+status: active
 created: 2026-04-28
 updated: 2026-04-30
-tags: [harness, ultimate-pi, implementation, architecture]
+tags: [harness, ultimate-pi, implementation, architecture, master-plan]
 sources:
-  - "[[harness-implementation-plan]]"
+  - "[[meng2026-agent-harness-survey]]"
+  - "[[anthropic2026-harness-design]]"
+  - "[[bockeler2026-harness-engineering]]"
+  - "[[forgecode-gpt5-agent-improvements]]"
+  - "[[wozcode]]"
+  - "[[fan2025-imad]]"
+  - "[[ironclaw-drift-monitor]]"
 related:
+  - "[[harness]]"
   - "[[agentic-harness]]"
-  - "[[spec-hardening]]"
-  - "[[structured-planning]]"
-  - "[[grounding-checkpoints]]"
-  - "[[adversarial-verification]]"
-  - "[[persistent-memory]]"
-  - "[[automated-observability]]"
+  - "[[harness-h-formalism]]"
+  - "[[model-adaptive-harness]]"
+  - "[[feedforward-feedback-harness]]"
+  - "[[drift-detection-unified]]"
   - "[[adr-011]]"
   - "[[consensus-debate]]"
-  - "[[pi-messenger-analysis]]"
-  - "[[inline-post-edit-validation]]"
 ---
 
 # Harness Implementation Plan
 
-Project page for the ultimate-pi agentic harness implementation. See the full concept at [[agentic-harness]].
+**Master plan** for the ultimate-pi agentic harness. Consolidates all research from April 2026 — WOZCODE token reduction, model-adaptive harness design, semantic code search, consensus debate, meta-agent drift detection, and latest academic papers (Meng, Anthropic, Böckeler, Forge Code, iMAD). This is the single authoritative source for harness architecture, build phases, and token budgets.
+
+## First Principles
+
+1. **The harness — not the model — determines reliability at scale.** (Meng et al. 2026, 110+ papers, 23 systems). Models reach the same capability ceiling only after harness adaptation (Forge Code: GPT 5.4 and Opus 4.6 both hit 81.8% on TermBench 2.0).
+2. **Every pipeline layer reads wiki first, writes wiki after.** Enforcement at L7 extension hooks. [[adr-010]].
+3. **Write once for strictest model (GPT-safe). Relax for forgiving models.** [[model-adaptive-harness]].
+4. **Three quality concerns, three timings:** Syntax (inline, blocks progress), Semantics (L4, needs LLM), Style (Phase 16 final gate, deterministic tools).
+5. **Debate is selective, not always-on.** Pre-debate gating classifier saves 92% tokens (iMAD, AAAI 2026). [[selective-debate-routing]].
+6. **Context drift is a positive feedback loop.** Each failed attempt accelerates failure. Meta-agent detection + pruning + restart breaks the loop. [[drift-detection-unified]].
+
+---
+
+## Formal Model: H = (E, T, C, S, L, V)
+
+From Meng et al. (2026) survey of 110+ papers. Our harness maps as:
+
+| Component | Our Implementation |
+|-----------|-------------------|
+| **E** Execution Loop | L1-L4 pipeline (Spec → Plan → Execute → Verify) |
+| **T** Tool Registry | Tool schemas, MCP tools (lean-ctx 48 tools, ck semantic search, Gitingest), skills |
+| **C** Context Manager | Wiki knowledge base, AST truncation (Phase 10), lean-ctx compression, think-in-code enforcement |
+| **S** State Store | Wiki vault persistence, ctx_session cross-session memory, hot.md cache |
+| **L** Lifecycle Hooks | L7 Archon orchestration, post-edit validation hooks, drift monitor hooks |
+| **V** Evaluation Interface | L4 adversarial verification, L5 observability, terminal-bench evaluation |
+
+Gaps to close: explicit lifecycle hook contracts, systematic action trajectory tracking, cross-harness portability testing.
+
+---
+
+## Feedforward-Feedback Control Framework
+
+From Böckeler (2026, Martin Fowler). Cross-reference audit of our pipeline:
+
+| Control Type | Our Implementation |
+|-------------|-------------------|
+| **Feedforward-Computational** | Tool schemas, `tsc --noEmit`, JSON schema validation, structured output contracts |
+| **Feedforward-Inferential** | SKILL.md files, ADRs, wiki pages, AGENTS.md, model profiles |
+| **Feedback-Computational** | Inline syntax validation (Phase 12), final lint+format gate (Phase 16), ck semantic grep |
+| **Feedback-Inferential** | L4 adversarial verification, L2 plan review, L1 spec debate, meta-agent drift monitor |
+
+Unsolved: Behaviour Harness (functional correctness verification). Current approach (AI-generated tests + manual testing) is insufficient. Future Phase 18.
+
+---
+
+## The 8-Layer Runtime Pipeline
+
+Every task flows through all layers. No skip rule. Verification is mandatory.
+
+```
+L1: Spec Hardening        → L2: Structured Planning   → L2.5: Runtime Drift Monitor
+  ↓                                                         ↓
+L3: Grounding Checkpoints → L4: Adversarial Verification → Phase 16: Lint+Format Gate
+  ↓
+L5: Automated Observability → L6: Persistent Memory → L7: Schema Orchestration → L8: Wiki Query
+```
+
+| # | Layer | Module | Purpose |
+|---|-------|--------|---------|
+| 1 | Spec Hardening | [[spec-hardening]] | Block execution until ambiguities resolved |
+| 2 | Structured Planning | [[structured-planning]] | Machine-readable task DAG before code. Sprint contracts (agree "done" before L3) |
+| 2.5 | Runtime Drift Monitor | [[drift-detection-unified]] | Detect stuck patterns, prune dead context, restart agent |
+| 3 | Grounding Checkpoints | [[grounding-checkpoints]] | Smallest verifiable change + spec-drift detection |
+| 4 | Adversarial Verification | [[adversarial-verification]] | Critic agents attack, not review. Multi-round debate (selective routing). Hard-threshold pass/fail criteria. |
+| 5 | Automated Observability | [[automated-observability]] | Instrumentation is definition-of-done |
+| 6 | Persistent Memory | [[persistent-memory]] | claude-obsidian wiki as knowledge base |
+| 7 | Schema Orchestration | [[schema-orchestration]] | Archon workflow DAG orchestrates all layers. Enforces read-first/write-after contract. |
+| 8 | Wiki Query Interface | [[wiki-query-interface]] | LLM-native search via claude-obsidian skills |
+
+---
 
 ## Build Phases
 
+Organized by pipeline position, not sequential numbering. Each phase maps to a specific layer or cross-cutting concern.
+
+### Foundation (Phase 0)
+
 | Phase | What | Files |
 |-------|------|-------|
-| 0 | Foundation | `lib/harness-schemas.ts`, `lib/harness-config.ts`, `.pi/harness.example.json` |
-| 1 | Memory (L6) | Install claude-obsidian skills, scaffold vault Mode B, `extensions/harness-knowledge-base.ts` |
-| 2 | Spec Hardening (L1) | `lib/harness-spec.ts`, `extensions/harness-spec.ts` |
-| 3 | Planning (L2) | `lib/harness-planner.ts`, `extensions/harness-planner.ts` |
-| 4 | Execution+Grounding (L3) | `lib/harness-executor.ts`, `extensions/harness-executor.ts` |
-| 5 | Automated QA (L4) | `lib/harness-qa.ts`, `extensions/harness-qa.ts` |
-| 6 | Critics (L5) | `lib/harness-critics.ts`, `extensions/harness-critics.ts` |
-| 7 | Observability (L6) | `lib/harness-observability.ts`, `extensions/harness-observability.ts` |
-| 8 | Archon Integration (L7) | `.archon/workflows/*.yaml`, `.archon/commands/harness.md` |
-| 9 | Package integration | Update package.json, README, PLAN.md |
-| 10 | AST Truncation | `lib/harness-ast.ts`, `lib/harness-search.ts` |
-| 11 | Fuzzy Edit Matching | `lib/harness-edit.ts` |
-| 12 | Inline Syntax Validation | `lib/harness-validate.ts`, `lib/harness-sql-fix.ts` |
-| 13 | Haiku Model Router | `lib/harness-router.ts`, `lib/harness-explorer.ts` |
-| 14 | Consensus Transport | `lib/harness-messenger.ts`, `lib/harness-debate.ts` |
-| 15 | Consensus Protocol | `extensions/harness-debate.ts`, layer extension updates |
-| 16 | Final Lint + Format Gate | `lib/harness-polish.ts`, `extensions/harness-polish.ts` |
+| F0 | Foundation schemas + config | `lib/harness-schemas.ts`, `lib/harness-config.ts`, `.pi/harness.example.json` |
+| F0 | H=(E,T,C,S,L,V) formal mapping to docs | Update harness docs |
+| F0 | Model profile system (opus/gpt/gemini/strict) | `lib/harness-profiles.ts` |
+
+### L1-L2: Pre-Execution
+
+| Phase | What | Layer | Files |
+|-------|------|-------|-------|
+| P1 | Spec Hardening | L1 | `lib/harness-spec.ts`, `extensions/harness-spec.ts` |
+| P2 | Structured Planning + Sprint Contracts | L2 | `lib/harness-planner.ts`, `extensions/harness-planner.ts` |
+| P2b | Pre-debate gating classifier (selective routing per iMAD) | L1/L2/L4 | `lib/harness-debate-gate.ts` |
+
+### L2.5: Runtime Drift Monitor
+
+| Phase | What | Layer | Files |
+|-------|------|-------|-------|
+| P3 | Rule-based stuck-pattern detection (repetition, failure spiral, tool cycling, silence, rework, excessive search) | L2.5 | `lib/harness-drift-monitor.ts` |
+| P4 | Context pruning + correction injection | L2.5 | `lib/harness-drift-monitor.ts` |
+| P5 | Escalation model (soft nudge → strong nudge → forced restart) | L2.5 | `lib/harness-drift-monitor.ts` |
+| P6 | DriftMonitor config + model-adaptive thresholds | L2.5 | `.pi/harness/drift-monitor.json` |
+| P7 | Extension hooks (before_llm_call / after_tool_call) | L2.5 | `extensions/harness-drift-monitor.ts` |
+
+### L3: Execution Layer (with Tool Enhancements)
+
+| Phase | What | Layer | Files |
+|-------|------|-------|-------|
+| P8 | Grounding Checkpoints (MVC execution, spec-drift detection) | L3 | `lib/harness-executor.ts`, `extensions/harness-executor.ts` |
+| P9 | AST Truncation & Ranked Reading (WOZCODE-inspired) | L3 tools | `lib/harness-ast.ts`, `lib/harness-search.ts` |
+| P10 | Fuzzy Edit Matching (tolerate whitespace/indentation drift) | L3 tools | `lib/harness-edit.ts` |
+| P11 | Inline Syntax Validation — compilers/parsers only, <2s | L3 tools | `lib/harness-validate.ts`, `lib/harness-sql-fix.ts` |
+| P12 | Post-edit validation hook (integrate into L3 executor) | L3 | Update `lib/harness-executor.ts` |
+| P13 | Semantic Code Search — ck MCP integration, 3-layer enforcement | L3 tools | `.pi/mcp/ck-search.json`, update AGENTS.md |
+| P14 | Think-in-Code Enforcement — system prompt + ctx_execute sandbox | L3 tools | Update AGENTS.md, `.pi/settings.json` |
+| P15 | Gitingest skill — bulk external repo ingestion | L3 tools | `.pi/skills/gitingest/SKILL.md` |
+
+### L4: Adversarial Verification
+
+| Phase | What | Layer | Files |
+|-------|------|-------|-------|
+| P16 | Critic agents with hard-threshold pass/fail criteria | L4 | `lib/harness-critics.ts`, `extensions/harness-critics.ts` |
+| P17 | Consensus Debate Transport — pi-messenger (stripped) | L4 cross | `lib/harness-messenger.ts` |
+| P18 | Consensus Debate Protocol — DebateSession, Budget, Convergence | L4 cross | `lib/harness-debate.ts`, `lib/harness-schemas.ts` |
+| P19 | Debate integration: L1 spec debate, L2 plan debate, L4 multi-round | L1/L2/L4 | Update `extensions/harness-*.ts` |
+
+### L5-L8: Post-Verification
+
+| Phase | What | Layer | Files |
+|-------|------|-------|-------|
+| P20 | Final Lint + Format Gate (post-L4, deterministic, no LLM) | Gate | `lib/harness-polish.ts`, `extensions/harness-polish.ts` |
+| P21 | Automated Observability | L5 | `lib/harness-observability.ts`, `extensions/harness-observability.ts` |
+| P22 | Persistent Memory (wiki vault, hot cache, lint schedule) | L6 | `extensions/harness-knowledge-base.ts` |
+| P23 | Schema Orchestration (Archon DAG, read-first enforcer) | L7 | `.archon/workflows/*.yaml`, `extensions/harness-orchestrator.ts` |
+| P24 | Wiki Query Interface (3-depth modes) | L8 | Integrated via claude-obsidian skills |
+
+### Cross-Cutting
+
+| Phase | What | Files |
+|-------|------|-------|
+| P25 | Haiku Model Router — route exploration to cheap model | `lib/harness-router.ts`, `lib/harness-explorer.ts` |
+| P26 | Package integration — update package.json, README, PLAN.md | Multiple |
+| P27 | Context Anxiety Guard — detect and mitigate rushing | `lib/harness-anxiety.ts` |
+
+### Future Phases (Not Scheduled)
+
+| Phase | What | Source |
+|-------|------|--------|
+| F1 | Harness Auto-Optimization — auto-tune budgets, learn profiles, remove dead gates | [[self-evolving-harness]] |
+| F2 | Behaviour Harness — functional correctness verification (unsolved problem) | [[feedforward-feedback-harness]] |
+| F3 | Model Profile Auto-Learning — learn from execution traces instead of hand-coding | [[self-evolving-harness]] |
+
+---
+
+## Unified Token Budget
+
+Single authoritative budget. All previous fragmented estimates consolidated.
+
+### Per-Layer Budget (per subtask)
+
+| Layer / Phase | Tokens | Mechanism |
+|---------------|--------|-----------|
+| L1 Spec Hardening | ~2,000 | Mandatory read + hardening + selective debate (~20% tasks trigger debate, +1,500 avg) |
+| L2 Planning + Sprint Contracts | ~4,500 | Base plan + sprint contracts + selective debate (~20% tasks, +2,000 avg) |
+| L2.5 Drift Monitor | ~0-300 | Rule-based detection costs 0 tokens. LLM-based every 15 steps (Opus) = ~500. Avg ~150. |
+| L3 Grounding + Execution | ~500-600 | Checkpoint overhead. Inline validation adds latency but saves retry tokens. |
+| L4 Adversarial Verification | ~4,500 | Hard-threshold criteria + selective multi-round debate (~30% tasks trigger 2+ rounds, +2,000 avg) |
+| Phase 16 Lint+Format Gate | ~0 | Deterministic tooling, no LLM. Time: <10s. |
+| L5 Observability | ~1,500 | Metric definitions, verification |
+| L6 Memory Writes | ~1,000 | Haiku for standard writes, Opus for deep synthesis |
+| L7+L8 Orchestration + Query | ~1,000 | Wiki bootstrapping amortized |
+| **Total per subtask** | **~15,000-16,000** | Down from original ~17,500 baseline |
+
+### Savings Mechanisms (relative to naive baseline)
+
+| Mechanism | Savings | Source |
+|-----------|---------|--------|
+| AST truncation (read tool) | 30-50% input tokens on code exploration | [[wozcode]] |
+| Fuzzy edit matching | Eliminates 5-15% retry round-trips | [[wozcode]] |
+| Inline syntax validation | 10-20% fewer error-recovery tokens | [[wozcode]] |
+| Haiku model router | ~40% operations on 15× cheaper model → 15-25% cost reduction | [[wozcode]] |
+| Selective debate routing | 92% token savings on ~80% of debate-invoked tasks | [[fan2025-imad]] |
+| Think-in-Code enforcement | 30-200× reduction on data analysis calls | [[think-in-code]] |
+| Context drift pruning | 5-10× reduction for stuck sessions | [[drift-detection-unified]] |
+
+### 5-Subtask Plan Budget
+
+| Component | Naive Baseline | With All Improvements |
+|-----------|---------------|----------------------|
+| Pipeline overhead | ~87,500 | ~75,000-80,000 |
+| Coding tokens | variable | -25-55% (AST truncation + fuzzy edits) |
+| **Total 5-subtask** | **~87,500+** | **~55,000-65,000 + coding** |
+
+---
+
+## New Tools Integrated
+
+Tools identified from April 2026 research, now part of the implementation plan:
+
+| Tool | Phase | Purpose | Integration |
+|------|-------|---------|-------------|
+| **ck** (semantic code search) | P13 | Hybrid BM25+embeddings code search, grep-compatible, MCP-native | MCP server: `ck --serve`. 3-layer enforcement: AGENTS.md rule + MCP registration + shell interception |
+| **Gitingest** (bulk ingestion) | P15 | Convert external repos → structured LLM text | `/gitingest` skill wrapping Python package |
+| **pi-messenger** (stripped) | P17 | File-based agent messaging transport for consensus debate | Dependency in package.json. Strip all UI overlays. |
+| **pi-lean-ctx** (native) | F0 | 48 MCP tools, AST compression, governance, shell patterns | Already adopted: [[2026-04-30-pi-lean-ctx-native]] |
+
+---
+
+## Drift Detection: Three Paradigms, Unified
+
+See [[drift-detection-unified]] for full specification. Summary:
+
+| Paradigm | Layer | Detects | Mechanism | Intervention |
+|----------|-------|---------|-----------|-------------|
+| **Spec Drift** | L3 | Scope creep, spec violation | Compare current state to hardened spec hash | Abort, replan from L2 |
+| **Tool-Call Drift** | L2.5 | Stuck patterns, context pollution, loop cycles | Rule-based (6 patterns) + LLM-based (semantic) | Prune dead context, inject correction, restart agent |
+| **Implementation Drift** | L4 | Code doesn't match spec | Adversarial verification, multi-round debate | Rework subtask, re-verify |
+
+These are complementary, not redundant. Each targets a different failure mode at a different pipeline stage.
+
+---
+
+## "Think in Code" Integration
+
+From context-mode research. Enforced at 3 levels:
+
+1. **System Prompt** (zero cost, immediate): AGENTS.md rule — "When analyzing/filtering/comparing data, write code. Output only the answer. Never read raw data into context for mental processing."
+2. **Tool Interception** (L3): PreToolUse hook detects data-analysis-like Read/Bash calls → routes to `ctx_execute()` sandbox (via pi-lean-ctx).
+3. **PostToolUse Compression** (L3): When large output enters context, lean-ctx shell patterns auto-compress.
+
+Expected savings: 30-200× reduction on data analysis tool calls.
+
+---
 
 ## Key Architecture Decisions
 
 - **[[adr-008|ADR-008 (Black-Box QA)]]**: Tests from spec only, never from implementation
 - **[[adr-009|ADR-009 (claude-obsidian Mode B)]]**: Replaces Vectra + embeddings with LLM-native search
 - **[[adr-010|ADR-010 (Wiki Tight-Coupling)]]**: Every layer reads wiki first, writes wiki after
-- **[[adr-011|ADR-011 (Consensus Debate)]]**: Multi-agent back-and-forth argument via pi-messenger transport
-
-## Token Budget (Current)
-
-| Layer | Tokens/subtask |
-|-------|---------------|
-| Spec hardening | ~2,000 |
-| Planning + review | ~5,000 |
-| Grounding checkpoints | ~500 |
-| Automated QA | ~3,500 |
-| Critics (2 focus areas) | ~4,000 |
-| Observability | ~1,500 |
-| Memory writes | ~500 / ~1,500 (standard/deep) |
-| **Total per subtask** | **~17,500** |
-
-Typical 5-subtask plan: ~83,500 tokens overhead + coding tokens.
+- **[[adr-011|ADR-011 (Consensus Debate with Selective Routing)]]**: Multi-agent debate via pi-messenger transport, gated by iMAD-style hesitation classifier. UPDATE: selective routing adopted per iMAD findings (2026-04-30).
 
 ---
 
-## WOZCODE-Inspired Enhancements (Phase 10+)
+## Wiki Integration Contract
 
-Research: [[research-wozcode-token-reduction]]. WOZCODE achieves 25-55% token reduction via three levers — smarter search, fuzzy edits, quality loop — that map to new capabilities in our harness.
+Per [[adr-010]] and [[harness-wiki-pipeline]]:
 
-### Phase 10: AST Truncation & Ranked Reading
-
-Add AST-aware progressive disclosure to the `read` tool. See [[ast-truncation]].
-
-| Capability | Files | Depends On |
-|-----------|-------|------------|
-| Tree-sitter AST truncation | `lib/harness-ast.ts` | Existing repo-map-ranking infra |
-| `read --truncate` mode | Update `read` tool | AST truncation |
-| `read --expand funcName` on-demand | Update `read` tool | AST truncation |
-| Ranked snippet search (not full grep) | `lib/harness-search.ts` | repo-map-ranking |
-
-**Expected savings**: 30-50% reduction in input tokens for code exploration calls.
-
-### Phase 11: Fuzzy Edit Matching
-
-Add normalization layer to the `edit` tool. See [[fuzzy-edit-matching]].
-
-| Capability | Files | Depends On |
-|-----------|-------|------------|
-| Whitespace/character normalization | `lib/harness-edit.ts` | None |
-| Indentation-aware diff matching | `lib/harness-edit.ts` | Normalization |
-| Ambiguity detection + fallback | `lib/harness-edit.ts` | Fuzzy matching |
-
-**Expected savings**: Eliminates 5-15% of retry round-trips.
-
-### Phase 12: Inline Syntax Validation
-
-Run compilers and parsers after each edit, before model sees result. **Syntax only** — does the code parse/compile? Linting and formatting are deferred to [[#phase-16-final-lint-format-gate|Phase 16]] (post-verification final gate). See [[inline-post-edit-validation]].
-
-**First-principles rationale**: Syntax errors block all further progress — the model wastes tokens reasoning about code that doesn't compile. Catching at the tool layer saves full round-trips. But lint warnings (style, unused vars) and formatting (whitespace changes) must NEVER run inline: lint is noisy on in-progress code, and formatting modifies whitespace which breaks the `edit` tool's exact-match `oldText` contract.
-
-| Capability | Files | Depends On |
-|-----------|-------|------------|
-| `post-edit-validate` hook (L3) | `lib/harness-executor.ts` | Grounding checkpoints |
-| TS/JS compile check | `lib/harness-validate.ts` | `tsc --noEmit` |
-| JSON/YAML parse check | `lib/harness-validate.ts` | None |
-| SQL dialect auto-fix | `lib/harness-sql-fix.ts` | SQL parser |
-| Better error context (real diffs) | `lib/harness-executor.ts` | Post-edit validate |
-
-**Gate rule**: Inline validators MUST complete in <2 seconds. Anything slower (full project `tsc`, ESLint with plugins, prettier) belongs in Phase 16.
-
-**Expected savings**: Catches syntax errors pre-model — 10-20% reduction in error-recovery tokens.
-
-### Phase 13: Haiku Model Router
-
-Route read-only exploration to cheaper model. See [[model-routing-agents]].
-
-| Capability | Files | Depends On |
-|-----------|-------|------------|
-| `ModelRouter` component | `lib/harness-router.ts` | Archon orchestrator (L7) |
-| `woz:explore` Haiku subagent | `lib/harness-explorer.ts` | ModelRouter |
-| Operation-type routing rules | `lib/harness-router.ts` | L8 wiki-query-interface |
-| Summary-to-parent contract | `lib/harness-explorer.ts` | Haiku agent |
-
-**Expected savings**: ~40% of operations on 15× cheaper model → ~15-25% overall cost reduction.
-
-### Revised Token Budget (With WOZCODE Enhancements)
-
-| Layer | Current | With WOZCODE | Savings Mechanism |
-|-------|---------|-------------|-------------------|
-| Spec hardening | ~2,000 | ~2,000 | No change (critical path) |
-| Planning + review | ~5,000 | ~3,500 | Haiku for review |
-| Grounding checkpoints | ~500 | ~600 | Inline validation adds latency but saves retries |
-| Automated QA | ~3,500 | ~3,500 | No change (quality-critical) |
-| Critics (2 focus areas) | ~4,000 | ~4,000 | No change (adversarial) |
-| Observability | ~1,500 | ~1,500 | No change |
-| Final lint + format gate | — | ~0 | Deterministic tooling, no LLM |
-| Memory writes | ~1,500 | ~1,000 | Haiku for standard writes |
-| **Coding tokens** | variable | **-25-55%** | AST truncation + fuzzy edits |
-| **Total per subtask** | **~17,500** | **~12,500-15,000** | 15-30% overhead reduction |
-
-### Phase 16: Final Lint + Format Gate
-
-Run linters and formatters as a **single final pass** after L4 adversarial verification passes and before L5 observability. This is the last code-modifying step in the pipeline.
-
-**First-principles rationale**: Linting and formatting are separate concerns from syntax and correctness. The pipeline enforces the correct ordering: first make it work (L3 syntax + L4 verification), then make it clean (Phase 16). Running lint/format inline would: (a) flood the agent with style warnings on in-progress code, (b) break edit tool `oldText` matching via whitespace changes, (c) waste tokens on cosmetic fixes for code that might be rewritten next edit. Formatting MUST be last — it touches every line, invalidating all line numbers for any subsequent operation.
-
-| Capability | Files | Depends On |
-|-----------|-------|------------|
-| `final-polish` gate (post-L4 hook) | `lib/harness-polish.ts` | Phase 5 (L4 critics) |
-| Lint with auto-fix: ESLint, biome, ruff, clippy | `lib/harness-polish.ts` | Language detection from L3 |
-| Format with auto-apply: prettier, biome, rustfmt | `lib/harness-polish.ts` | Lint pass (lint first, format second) |
-| Lint violations report (non-auto-fixable) | `lib/harness-polish.ts` | Lint pass |
-| Gate verdict: PASS / PASS_WITH_WARNINGS / FAIL | `lib/harness-polish.ts` | Full polish run |
-| Wiki artifact: polish report | `extensions/harness-polish.ts` | L6 memory writes |
-
-**Gate semantics**:
-- `PASS`: All auto-fixes applied, zero remaining lint violations → proceed to L5
-- `PASS_WITH_WARNINGS`: Auto-fixes applied, non-auto-fixable warnings remain → logged to wiki, proceed
-- `FAIL`: Lint errors that can't be auto-fixed → return to agent for manual fix (max 1 retry, then escalate)
-
-**Ordering within gate**: Lint → auto-fix lint → format → verify format didn't introduce lint violations → verdict.
-
-**Token cost**: Near-zero (deterministic tooling, no LLM involvement). Time cost: <10 seconds for typical projects.
-
-### Fundamental Architecture Changes Required
-
-These are not incremental — they require structural changes to the agent:
-
-1. **Model router layer**: The agent must dispatch operations to different models. This is a new cross-cutting concern between L7 (orchestration) and L3/L8 (execution). Currently, the harness assumes one model for all operations.
-
-2. **Two-tier validation pipeline**: Current validation is post-hoc (L3 checks after all edits, L4 attacks after phase complete). The new design adds inline syntax validation (Phase 12, fast, tool-layer, catches broken code before model sees it) and a final lint+format gate (Phase 16, post-L4, deterministic, no LLM involvement). These are complementary — inline catches "doesn't compile", final gate catches "isn't clean". Neither replaces L4's adversarial semantic verification.
-
-3. **AST-aware tool primitives**: The `read`, `search`, and `grep` tools must become AST-aware. This requires tree-sitter integration at the tool layer, not just the planning layer (where repo-map-ranking currently sits).
-
-4. **Non-exact tool matching**: The `edit` tool's contract changes from "exact string match" to "best-effort fuzzy match with exact fallback." This is a semantic change to a core tool primitive. Note: fuzzy matching is tolerant of minor whitespace drift, but full formatting runs ONLY in Phase 16 — never inline.
-
-5. **Tool result intermediation**: Currently, tool results go straight to the model. With inline validation, the tool pipeline must intercept results, run validators, attempt auto-fixes, and only then surface the (possibly transformed) result to the model.
+- **Read-first**: Every layer queries wiki for relevant ADRs, specs, patterns before executing
+- **Write-after**: Every state transition writes a wiki artifact (decision, pattern, event)
+- **Staleness rules**: Status propagation, decision referencing, cross-reference integrity, contradiction resolution, hot cache freshness, lint schedule (every 10-15 writes), index synchronization
+- **Enforcement**: L7 schema orchestration extension hooks
 
 ---
 
-## Final Polish Gate (Phase 16)
+## What Never Adapts (Cross-Model Invariants)
 
-See [[#phase-16-final-lint-format-gate|Phase 16 above]] for full specification. Runs once after L4 adversarial verification passes. Lint → auto-fix → format → verify → verdict.
+Per [[model-adaptive-harness]]:
 
-**Pipeline position**: L3 (edits with inline syntax checks) → L4 (adversarial verification) → **Phase 16 (lint + format gate)** → L5 (observability).
-
-**Why not inline**: Formatting modifies every line — breaks `edit` tool `oldText` matching. Linting on in-progress code produces noise, not signal. Both waste agent tokens on cosmetic decisions that may be invalidated by the next edit.
-
-**Why not in L4**: L4 critics reason about correctness (logic, security, spec compliance). Lint/formatters are deterministic tools — no LLM reasoning needed. Adding them to L4 would bloat the adversarial budget with non-adversarial work.
+- Pipeline phase ordering and layer requirements
+- Quality standards and source attribution
+- Confidence labeling
+- Budget constraints (max rounds, max tokens, max pages)
+- Verification requirements (what must be checked, even if how varies)
+- Read-first/write-after wiki contract
+- No-skip rule (verification is mandatory)
 
 ---
 
-## Consensus Debate (Phases 14-15)
+## What Adapts Per Model
 
-Research: [[adr-011]], [[consensus-debate]], [[pi-messenger-analysis]]. The best human software decisions come from back-and-forth arguing. Single-pass review is insufficient — agents need multi-round dialectical debate with consensus budgets.
+See [[harness-configuration-layers]] for full table. Key differences:
 
-### Phase 14: Consensus Transport (pi-messenger integration)
+| Dimension | Opus/Claude | GPT | Gemini |
+|-----------|-------------|-----|--------|
+| Structure | Tolerates nesting | Needs flat, constraints-first | TBD |
+| Verification | Natural double-check | Must be enforced hard gate | TBD |
+| Truncation | Reads metadata | Needs in-band body text | TBD |
+| Completion | Self-aware of gaps | Stops at plausible-but-incomplete | TBD |
+| Drift detection | LLM-based every 15 steps | Rule-based every step | Rule-based every 10 steps |
 
-Adopt pi-messenger's file-based agent messaging as transport. Strip all UI overlays.
-
-| Capability | Files | Depends On |
-|-----------|-------|------------|
-| Install pi-messenger as dependency | `package.json` | None |
-| Transport layer: registry, inbox, watcher | `lib/harness-messenger.ts` | pi-messenger |
-| `DebateSession` class | `lib/harness-debate.ts` | Transport layer |
-| Consensus message schema | `lib/harness-schemas.ts` (extend) | None |
-| Convergence detection | `lib/harness-debate.ts` | DebateSession |
-
-### Phase 15: Consensus Protocol
-
-Structured debate with budgets, verdicts, and harness integration.
-
-| Capability | Files | Depends On |
-|-----------|-------|------------|
-| `ConsensusBudget` enforcement | `lib/harness-debate.ts` | Phase 14 |
-| Verdict generation (CONSENSUS/DEADLOCK/BUDGET_EXHAUSTED) | `lib/harness-debate.ts` | Phase 14 |
-| Debate transcript → wiki artifact | `extensions/harness-debate.ts` | Phase 14, L6 |
-| L1 spec debate integration | `extensions/harness-spec.ts` (update) | Phase 14 |
-| L2 plan debate integration | `extensions/harness-planner.ts` (update) | Phase 14 |
-| L4 multi-round attack integration | `extensions/harness-critics.ts` (update) | Phase 14 |
-
-**Budget per debate**: 3-4 rounds, ~2-3K tokens/round (see [[consensus-debate]] for per-layer breakdown).
-
-**Added per subtask**: ~13,000 tokens (L1: +4K, L2: +5K, L4: +4K). Self-funding — catching one spec/plan flaw saves the downstream cost.
-
-### Consensus Debate Architecture
-
-```
-┌──────────────────────────────────────────────────────┐
-│                 HARNESS PIPELINE (L7)                  │
-│                                                        │
-│  L1 (Spec) ──spawns──► Debate: Proposer vs Critic     │
-│  L2 (Plan) ──spawns──► Debate: Planner vs Critic      │
-│  L4 (Verif) ─spawns──► Debate: Defender vs Attacker   │
-│                                                        │
-│  ┌──────────────────────────────────────────────┐     │
-│  │        CONSENSUS PROTOCOL LAYER              │     │
-│  │  DebateSession, ConsensusBudget,             │     │
-│  │  Turn protocol, Convergence, Verdict          │     │
-│  └────────────────┬─────────────────────────────┘     │
-│                   │                                     │
-│  ┌────────────────▼─────────────────────────────┐     │
-│  │     pi-messenger TRANSPORT (stripped)         │     │
-│  │  Registry, Inboxes, fs.watch, Atomic writes   │     │
-│  └──────────────────────────────────────────────┘     │
-│                   │                                     │
-│      .pi/messenger/registry/                            │
-│      .pi/messenger/inbox/<agent>/                       │
-│      .pi/messenger/debates/<debate-id>/                 │
-└──────────────────────────────────────────────────────┘
-```
-
-**What we adopt from pi-messenger**: File-based registry, inbox-based messaging, `fs.watch` delivery, atomic file writes, stale cleanup.
-
-**What we strip**: Chat overlay, status bar, activity feed, emoji, crew orchestration, swarm claims, human-as-participant.
-
-See [[pi-messenger-analysis]] for detailed component-by-component breakdown.
+**Design principle**: Write once for strict (GPT-safe defaults). Relax for forgiving models.
