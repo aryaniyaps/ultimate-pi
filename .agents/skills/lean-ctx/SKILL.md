@@ -5,6 +5,8 @@ description: Context Runtime for AI Agents — 46 MCP tools, 10 read modes, 90+ 
 
 # LeanCTX — Context Runtime for AI Agents
 
+> **Integration note:** This project uses `pi-lean-ctx` (npm package) as the native Pi extension. It auto-wraps bash/read/ls/find/grep through lean-ctx CLI and connects to the lean-ctx MCP server. No manual setup needed.
+
 LeanCTX optimizes LLM context through 46 MCP tools, 90+ shell compression patterns, and tree-sitter AST parsing for 18 languages. It provides adaptive file reading, cross-session memory (CCP), task-conditioned relevance scoring, and a feedback loop for learning optimal compression.
 
 ## Setup (run first)

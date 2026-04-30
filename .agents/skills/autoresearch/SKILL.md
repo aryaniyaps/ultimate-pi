@@ -94,18 +94,18 @@ Max rounds: 3 (as set in program.md). Stop when depth is reached or max rounds h
 
 After research is complete, create these pages:
 
-**wiki/sources/**. One page per major reference found
+**vault/wiki/sources/**. One page per major reference found
 - Use source frontmatter (type, source_type, author, date_published, url, confidence, key_claims)
 - Body: summary of the source, what it contributes to the topic
 
-**wiki/concepts/**. One page per significant concept extracted
+**vault/wiki/concepts/**. One page per significant concept extracted
 - Only create a page if the concept is substantive enough to stand alone
 - Check the index first: update existing concept pages rather than creating duplicates
 
-**wiki/entities/**. One page per significant person, org, or product identified
+**vault/wiki/entities/**. One page per significant person, org, or product identified
 - Check the index first: update existing entity pages
 
-**wiki/questions/**. One synthesis page titled "Research: [Topic]"
+**vault/wiki/questions/**. One synthesis page titled "Research: [Topic]"
 - This is the master synthesis. Everything comes together here.
 - Sections: Overview, Key Findings, Entities, Concepts, Contradictions, Open Questions, Sources
 - Full frontmatter with related links to all pages created in this session
@@ -127,8 +127,8 @@ status: developing
 related:
   - "[[Every page created in this session]]"
 sources:
-  - "[[wiki/sources/Source 1]]"
-  - "[[wiki/sources/Source 2]]"
+  - "[[vault/wiki/sources/Source 1]]"
+  - "[[vault/wiki/sources/Source 2]]"
 ---
 
 # Research: [Topic]
@@ -163,8 +163,8 @@ sources:
 
 ## After Filing
 
-1. Update `wiki/index.md`. Add all new pages to the right sections
-2. Append to `wiki/log.md` (at the TOP):
+1. Update `vault/wiki/index.md`. Add all new pages to the right sections
+2. Append to `vault/wiki/log.md` (at the TOP):
    ```
    ## [YYYY-MM-DD] autoresearch | [Topic]
    - Rounds: N
@@ -173,7 +173,7 @@ sources:
    - Synthesis: [[Research: Topic]]
    - Key finding: [one sentence]
    ```
-3. Update `wiki/hot.md` with the research summary
+3. Update `vault/wiki/hot.md` with the research summary
 
 ---
 
@@ -187,10 +187,10 @@ Research complete: [Topic]
 Rounds: N | Searches: N | Pages created: N
 
 Created:
-  wiki/questions/Research: [Topic].md (synthesis)
-  wiki/sources/[Source 1].md
-  wiki/concepts/[Concept 1].md
-  wiki/entities/[Entity 1].md
+  vault/wiki/questions/Research: [Topic].md (synthesis)
+  vault/wiki/sources/[Source 1].md
+  vault/wiki/concepts/[Concept 1].md
+  vault/wiki/entities/[Entity 1].md
 
 Key findings:
 - [Finding 1]

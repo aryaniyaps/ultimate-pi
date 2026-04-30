@@ -24,7 +24,7 @@
 	},
 	"scripts": {
 		"bench:terminal": "./bench/terminal-bench/run-terminal-bench.sh",
-		"check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck extensions/lean-ctx-enforce.ts",
+		"check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck extensions/dotenv-loader.ts",
 		"lint": "biome check",
 		"lint:fix": "biome check --fix",
 		"format": "biome format --write",

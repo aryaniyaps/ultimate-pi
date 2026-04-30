@@ -24,7 +24,7 @@ SKILL ROUTING (REFERENCE ALL INSTALLED/AVAILABLE SKILLS)
 - caveman: default communication mode.
 - compress: when user asks to compress memory/prompt/todo docs into caveman format.
 - context7-cli: for library/API docs, setup/config guides, or generating/installing skills.
-- lean-ctx: default layer for reading, searching, shell execution, and codebase navigation.
+- lean-ctx (pi-lean-ctx): native Pi package handles bash/read/ls/find/grep routing and MCP bridge. See skill for CLI usage patterns.
 - scrapling-official: for scraping/crawling, JS-rendered pages, or anti-bot bypass workflows.
 - find-skills: when user asks for new capability, skill discovery, or capability extensions.
 
