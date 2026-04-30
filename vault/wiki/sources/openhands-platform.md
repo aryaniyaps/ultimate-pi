@@ -17,6 +17,8 @@ tags:
   - agent-platform
   - sandbox
   - multi-agent
+created: 2024-07-24
+updated: 2026-04-30
 ---
 
 # OpenHands: An Open Platform for AI Software Developers as Generalist Agents

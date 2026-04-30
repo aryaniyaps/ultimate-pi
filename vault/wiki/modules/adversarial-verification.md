@@ -31,7 +31,7 @@ Layer 4 of the [[agentic-harness]]. Critic agents **attack**, not review. No cod
 
 | Verdict | Action |
 |---------|--------|
-| `pass` | Proceed to [[automated-observability\|Layer 5]] |
+| `pass` | Proceed to [[automated-observability|Layer 5]] |
 | `fail` | Rework subtask |
 | `conditional_pass` | Proceed with logged caveats |
 

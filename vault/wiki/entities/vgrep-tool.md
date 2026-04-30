@@ -14,6 +14,7 @@ related:
   - "[[vgrep-semantic-search]]"
   - "[[ck-tool]]"
   - "[[Research: semantic code search tools]]"
+title: "vgrep"
 ---
 
 # vgrep

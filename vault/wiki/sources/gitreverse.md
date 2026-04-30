@@ -18,13 +18,17 @@ tags:
   - prompt-generation
   - repo-analysis
   - llm-tool
+created: 2026-04-30
+updated: 2026-04-30
+status: ingested
+title: "GitReverse"
 ---
 
 # GitReverse
 
 ## What It Is
 
-GitReverse takes a public GitHub repo URL and generates a synthetic user prompt — the kind of prompt someone might paste into Cursor, Claude Code, or Codex to "vibe code" the project from scratch.
+GitReverse takes a public GitHub repo URL and generates a synthetic user prompt — a prompt someone might paste into Cursor, Claude Code, or Codex to "vibe code" the project from scratch.
 
 ## How It Works
 

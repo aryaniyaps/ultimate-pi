@@ -2,6 +2,8 @@
 type: meta
 title: "Hot Cache"
 updated: 2026-04-30T10:00:00
+created: 2026-04-30
+tags: []
 ---
 
 # Recent Context

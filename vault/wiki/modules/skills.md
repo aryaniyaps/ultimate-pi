@@ -12,6 +12,7 @@ used_by: ["pi"]
 tags: [module, skills]
 created: "2026-04-28"
 updated: "2026-04-28"
+title: "Agent Skills"
 ---
 # Agent Skills
 

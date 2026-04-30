@@ -13,6 +13,7 @@ related:
   - "[[mcp-tool-routing]]"
   - "[[agentic-harness-context-enforcement]]"
   - "[[Research: semantic code search tools]]"
+title: "agent search enforcement"
 ---
 
 # agent search enforcement

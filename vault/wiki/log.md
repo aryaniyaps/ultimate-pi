@@ -24,7 +24,7 @@
 - Rounds: 1 (direct source analysis — both service homepages, READMEs, APIs, output formats)
 - Sources found: 2
 - Pages created: [[gitingest]], [[gitreverse]], [[codebase-to-context-ingestion]], [[research-gitingest-gitreverse-integration]]
-- Synthesis: [[Research: GitIngest and GitReverse Integration]]
+- Synthesis: [[research-gitingest-gitreverse-integration]]
 - Key finding: Gitingest (codebase → structured text) is a strong fit for the harness. It fills a gap — the harness has no bulk codebase ingestion mechanism, only file-by-file lean-ctx reading. GitReverse (repo → synthetic LLM prompt) is not useful — it generates prompts FROM repos, but the harness receives prompts. Recommendation: integrate Gitingest via a `/gitingest` skill (renamed from `/ingest` to avoid clash with wiki-ingest). Skip GitReverse.
 
 ## [2026-04-30] autoresearch | WOZCODE Token-Reduction Architecture
@@ -32,14 +32,14 @@
 - Sources found: 1
 - Pages created: [[research-wozcode-token-reduction]], [[wozcode]], [[ast-truncation]], [[fuzzy-edit-matching]], [[inline-post-edit-validation]], [[model-routing-agents]]
 - Pages updated: [[harness-implementation-plan]] (added Phases 10-13 with WOZCODE-inspired enhancements), [[index]], [[hot]]
-- Synthesis: [[Research: WOZCODE Token-Reduction Architecture]]
+- Synthesis: [[research-wozcode-token-reduction]]
 - Key finding: WOZCODE achieves 25-55% token reduction via three compounding levers — smarter search (AST truncation), batched fuzzy edits (near-miss tolerance), and quality loop (inline post-edit validation). These map to 4 new harness phases (10-13) requiring 5 fundamental agent architecture changes: model router layer, inline validation pipeline, AST-aware tool primitives, non-exact tool matching, and tool result intermediation.
 
 ## [2026-04-30] autoresearch | Agent-First Codebase Exploration Strategies
 - Rounds: 2 (broad search + gap fill → direct synthesis)
 - Sources found: 5
 - Pages created: [[research-agent-first-codebase-exploration]], [[oss-guide-codebase-exploration]], [[aider-repomap-tree-sitter]], [[swe-agent-aci]], [[swe-bench]], [[openhands-platform]], [[agent-codebase-interface]], [[progressive-disclosure-agents]], [[repo-map-ranking]], [[execution-feedback-loop]]
-- Synthesis: [[Research: Agent-First Codebase Exploration Strategies]]
+- Synthesis: [[research-agent-first-codebase-exploration]]
 - Key finding: Humans and agents need fundamentally different codebase interfaces. Humans learn by using projects; agents learn by mapping them. Every human-centric OSS technique maps to an agent-native equivalent via Agent-Codebase Interface (ACI) design, with agents excelling at symbol ingestion and cross-reference tracking while struggling with context window limits and lack of visual pattern recognition.
 
 ## [2026-04-28] create | Harness-Wiki Integration Contract (ADR-010 + Skill Mapping + Pipeline)

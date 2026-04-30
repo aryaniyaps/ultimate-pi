@@ -19,6 +19,8 @@ tags:
   - tree-sitter
   - repo-map
   - context-window
+created: 2023-10-22
+updated: 2026-04-30
 ---
 
 # Building a better repository map with tree-sitter

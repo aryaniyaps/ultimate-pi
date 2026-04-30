@@ -19,6 +19,10 @@ tags:
   - token-reduction
   - claude-code
   - agent-architecture
+created: 2026-04-30
+updated: 2026-04-30
+status: ingested
+title: "WOZCODE"
 ---
 
 # WOZCODE

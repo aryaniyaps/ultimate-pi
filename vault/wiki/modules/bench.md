@@ -12,6 +12,7 @@ used_by: []
 tags: [module, bench]
 created: "2026-04-28"
 updated: "2026-04-28"
+title: "Benchmarks"
 ---
 # Benchmarks
 

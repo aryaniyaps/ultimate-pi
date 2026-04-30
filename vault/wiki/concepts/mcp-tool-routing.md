@@ -12,6 +12,7 @@ related:
   - "[[agent-search-enforcement]]"
   - "[[ck-tool]]"
   - "[[Research: semantic code search tools]]"
+title: "MCP tool routing"
 ---
 
 # MCP tool routing

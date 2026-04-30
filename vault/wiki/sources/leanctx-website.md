@@ -12,6 +12,10 @@ key_claims:
   - "Supports 24 AI tools"
   - "Single Rust binary, zero telemetry, Apache 2.0"
   - "Agent governance with profiles, budgets, SLOs, anomaly detection"
+created: 2026-04-30
+updated: 2026-04-30
+status: ingested
+tags: [#source/website]
 ---
 
 # leanctx.com

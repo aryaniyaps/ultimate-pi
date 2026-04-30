@@ -82,7 +82,7 @@ The core finding: humans and agents need fundamentally different interfaces to t
 
 **Human strategy**: Narrow scope to the relevant subsystem; treat everything else as a black box.
 
-**Agent equivalent**: Identical principle, but implemented through [[Progressive Disclosure for Agents]] — a layered information architecture (L0: project map, L1: symbol map, L2: file context, L3: deep context). Agent starts with L0 always available, queries deeper layers on demand.
+**Agent equivalent**: Identical principle, but implemented through [[progressive-disclosure-agents]] — a layered information architecture (L0: project map, L1: symbol map, L2: file context, L3: deep context). Agent starts with L0 always available, queries deeper layers on demand.
 
 **Key difference**: Humans scope down through intuition. Agents scope down through structured queries — "show me all callers of function X" or "show me all implementations of interface Y." The tooling must support these queries efficiently.
 
@@ -110,7 +110,7 @@ The core finding: humans and agents need fundamentally different interfaces to t
 
 **Human strategy**: Rubber duck debugging, mentor review, explain to someone else.
 
-**Agent equivalent**: [[Adversarial Verification]] — a separate critic agent reviews the proposed change, checks for edge cases, verifies against specifications, and either approves or sends back with specific failure reasons. This replaces the human mentor role.
+**Agent equivalent**: [[adversarial-verification]] — a separate critic agent reviews the proposed change, checks for edge cases, verifies against specifications, and either approves or sends back with specific failure reasons. This replaces the human mentor role.
 
 ### 10. "Hack it, then get it right" → "Iterative refinement with verification gates" (Source: [[oss-guide-codebase-exploration]])
 

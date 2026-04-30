@@ -9,6 +9,7 @@ context: "Should the architecture wiki be co-located in the same repository as t
 tags: [decision, architecture, documentation]
 created: "2026-04-28"
 updated: "2026-04-28"
+title: "Co-locating Wiki with Codebase"
 ---
 # Co-locating Wiki with Codebase
 

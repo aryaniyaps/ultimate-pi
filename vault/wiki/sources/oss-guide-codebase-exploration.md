@@ -21,6 +21,8 @@ tags:
   - codebase-exploration
   - open-source
   - human-guide
+created: 2026-04-30
+updated: 2026-04-30
 ---
 
 # General Guide For Exploring Large Open Source Codebases
