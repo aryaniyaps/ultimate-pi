@@ -36,6 +36,7 @@ related:
 4. **Three quality concerns, three timings:** Syntax (inline, blocks progress), Semantics (L4, needs LLM), Style (Phase 16 final gate, deterministic tools).
 5. **Debate is selective, not always-on.** Pre-debate gating classifier saves 92% tokens (iMAD, AAAI 2026). [[selective-debate-routing]].
 6. **Context drift is a positive feedback loop.** Each failed attempt accelerates failure. Meta-agent detection + pruning + restart breaks the loop. [[drift-detection-unified]].
+7. **Winning consensus from any agent debate MUST be filed in the project wiki.** Permanent alignment record prevents future agents from re-litigating settled debates. Filed to `wiki/consensus/`. Enforced by L7 write-after contract. [[consensus-debate]].
 
 ---
 
@@ -148,6 +149,7 @@ Organized by pipeline position, not sequential numbering. Each phase maps to a s
 | P17 | Consensus Debate Transport — pi-messenger (stripped) | L4 cross | `lib/harness-messenger.ts` |
 | P18 | Consensus Debate Protocol — DebateSession, Budget, Convergence | L4 cross | `lib/harness-debate.ts`, `lib/harness-schemas.ts` |
 | P19 | Debate integration: L1 spec debate, L2 plan debate, L4 multi-round | L1/L2/L4 | Update `extensions/harness-*.ts` |
+| P19b | Consensus-to-wiki filing: every debate verdict writes to `wiki/consensus/` | L4/L7 | `extensions/harness-debate.ts` (wiki write hook), L7 enforcement |
 
 ### L5-L8: Post-Verification
 
@@ -218,6 +220,16 @@ Single authoritative budget. All previous fragmented estimates consolidated.
 
 ---
 
+## Consensus Filing Contract
+
+Per First Principle #7 and [[consensus-debate]]:
+
+- **Every debate that reaches a verdict writes to `wiki/consensus/[layer]-[topic-slug].md`**.
+- Consensus pages contain: final position, key rounds summary, evidence references, participant agents, verdict type, date.
+- **DEADLOCK** and **BUDGET_EXHAUSTED** verdicts also file — to record what could NOT be resolved and why.
+- Future agents query `wiki/consensus/` before forming positions. Contradicting a filed consensus triggers harness block.
+- This is the mechanism for **permanent agent alignment**: the wiki is the source of truth for all resolved disputes.
+
 ## New Tools Integrated
 
 Tools identified from April 2026 research, now part of the implementation plan:
@@ -270,9 +282,10 @@ Expected savings: 30-200× reduction on data analysis tool calls.
 
 Per [[adr-010]] and [[harness-wiki-pipeline]]:
 
-- **Read-first**: Every layer queries wiki for relevant ADRs, specs, patterns before executing
-- **Write-after**: Every state transition writes a wiki artifact (decision, pattern, event)
+- **Read-first**: Every layer queries wiki for relevant ADRs, specs, patterns, AND consensus records before executing
+- **Write-after**: Every state transition writes a wiki artifact (decision, pattern, event). Consensus verdicts are state transitions and MUST write to `wiki/consensus/`.
 - **Staleness rules**: Status propagation, decision referencing, cross-reference integrity, contradiction resolution, hot cache freshness, lint schedule (every 10-15 writes), index synchronization
+- **Alignment guarantee**: Future agents query wiki consensus records before making decisions — preventing re-litigation of settled debates. If an agent proposes a position that contradicts a filed consensus, the harness blocks and surfaces the conflict.
 - **Enforcement**: L7 schema orchestration extension hooks
 
 ---

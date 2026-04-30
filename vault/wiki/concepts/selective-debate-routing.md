@@ -3,7 +3,7 @@ type: concept
 title: "Selective Debate Routing"
 created: 2026-04-30
 updated: 2026-04-30
-status: seed
+status: active
 tags:
   - debate
   - consensus
@@ -61,6 +61,7 @@ iMAD suggests we should:
 Task → Single agent self-critique → Extract hesitation features
   ├─ High confidence → Skip debate, proceed
   └─ Uncertainty detected → Trigger consensus debate (per ADR-011)
+       └─ Consensus reached → File winning position to wiki/consensus/ (mandatory, per [[consensus-debate]])
 ```
 
 ## Open Questions

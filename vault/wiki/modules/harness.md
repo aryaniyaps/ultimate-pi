@@ -71,7 +71,7 @@ L5: Automated Observability → L6: Persistent Memory → L7: Schema Orchestrati
 - **[[adr-008|Black-box QA]]**: Tests from spec only, never from implementation
 - **[[adr-009|claude-obsidian Mode B]]**: Replaces Vectra + embeddings with LLM-native search
 - **[[adr-010|Wiki Tight-Coupling]]**: Every layer reads wiki first, writes wiki after
-- **[[adr-011|Consensus Debate with Selective Routing]]**: Multi-agent debate gated by iMAD-style classifier
+- **[[adr-011|Consensus Debate with Selective Routing]]**: Multi-agent debate gated by iMAD-style classifier. Winning consensus filed to `wiki/consensus/` for permanent agent alignment.
 - **No skip rule**: Verification is mandatory. Agent confidence is not evidence.
 - **First-principles quality split**: Syntax (inline), Semantics (L4), Style (final gate)
 

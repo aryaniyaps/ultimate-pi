@@ -3,7 +3,7 @@ type: concept
 title: "Consensus Debate"
 created: 2026-04-30
 updated: 2026-04-30
-status: seed
+status: active
 tags: [harness, consensus, debate, multi-agent, dialectic, protocol]
 related:
   - "[[adr-011]]"
@@ -97,10 +97,10 @@ Turn {
 
 | Verdict | Meaning | Harness action |
 |---------|---------|---------------|
-| `CONSENSUS_REACHED` | Both sides agree on final position | Proceed to next layer |
-| `DEADLOCK` | Positions unchanged after `convergenceRounds` rounds | Escalate to human; log positions |
-| `BUDGET_EXHAUSTED` | Max rounds or tokens hit without convergence | Use last agreed position if any; otherwise escalate |
-| `TIMEOUT` | Wall-clock time exceeded | Escalate |
+| `CONSENSUS_REACHED` | Both sides agree on final position | File winning consensus to wiki as permanent alignment record, then proceed to next layer |
+| `DEADLOCK` | Positions unchanged after `convergenceRounds` rounds | File both positions + deadlock analysis to wiki. Escalate to human. |
+| `BUDGET_EXHAUSTED` | Max rounds or tokens hit without convergence | File last positions + exhaustion analysis to wiki. Use last agreed position if any; otherwise escalate |
+| `TIMEOUT` | Wall-clock time exceeded | File partial transcript to wiki. Escalate |
 
 ### Convergence Detection
 
@@ -124,7 +124,7 @@ Alternatively: if the attacker explicitly signals "no further objections" by set
 | 2 | "What about partial writes during retry? Is the operation idempotent?" | "Spec now requires idempotency key. Each retry reuses the same key. Server deduplicates." |
 | 3 | "No further objections. Spec is complete." | — |
 
-**Verdict**: CONSENSUS_REACHED. Spec proceeds to L2.
+**Verdict**: CONSENSUS_REACHED. Winning consensus filed to `wiki/consensus/spec-[slug].md`. Spec proceeds to L2.
 
 **Budget**: 3 rounds, ~2K tokens/round.
 
@@ -142,7 +142,7 @@ Alternatively: if the attacker explicitly signals "no further objections" by set
 | 2 | "Task 4 (DB migration) has no rollback plan. If migration fails after Task 5 (data transform) runs, we're in an inconsistent state." | "Added Task 4b: migration verification + rollback trigger. Task 4 and 4b form an atomic pair. Task 5 only runs after 4b passes." |
 | 3 | "No further objections. Plan is executable." | — |
 
-**Verdict**: CONSENSUS_REACHED. Plan proceeds to L3.
+**Verdict**: CONSENSUS_REACHED. Winning consensus filed to `wiki/consensus/plan-[slug].md`. Plan proceeds to L3.
 
 **Budget**: 3 rounds, ~3K tokens/round.
 
@@ -154,7 +154,7 @@ Alternatively: if the attacker explicitly signals "no further objections" by set
 
 This replaces the current single-pass L4 critic. Instead of one attack, the critic gets multiple rounds to find increasingly subtle flaws.
 
-**Budget**: 4 rounds, ~2K tokens/round.
+**Budget**: 4 rounds, ~2K tokens/round. Winning consensus filed to `wiki/consensus/verify-[slug].md`.
 
 ## Token Budget Impact
 
@@ -187,10 +187,20 @@ See [[pi-messenger-analysis]] for full analysis. Summary:
 - `extensions/harness-planner.ts` — Updated: L2 plan debate integration
 - `extensions/harness-critics.ts` — Updated: L4 multi-round debate integration
 
+## Wiki Filing Rule (Mandatory)
+
+**Winning consensus from any agent debate MUST be filed in the project wiki.** This is not optional. The purpose is permanent agent alignment: future agents query the wiki before making decisions and find the resolved consensus, preventing re-litigation of settled debates.
+
+- **CONSENSUS_REACHED** → File final position + key rounds + evidence references to `wiki/consensus/`
+- **DEADLOCK** → File both positions + deadlock analysis (what blocked convergence)
+- **BUDGET_EXHAUSTED / TIMEOUT** → File partial transcript + exhaustion analysis
+
+Filing is enforced by L7 schema orchestration: no layer transition after a debate until the wiki write is confirmed. [[adr-010]] already mandates write-after for every state transition — consensus verdicts are state transitions and fall under this contract.
+
 ## Open Questions
 
 - Should debates use the same model for both sides, or different models for genuine adversarial diversity?
-- Should debate transcripts be filed as wiki pages for post-hoc analysis?
 - What is the right default `convergenceRounds`? (1 may be too aggressive, 2 may waste tokens)
 - Should L3 (Grounding Checkpoints) also have a debate mode? (Current thinking: no — L3 is about execution fidelity, not design decisions)
 - Can we reuse a single critic agent across multiple debates, or should each debate spawn fresh critics?
+- What is the optimal wiki page structure for consensus records? (candidate: `wiki/consensus/[topic-slug].md` with frontmatter linking to the debate layer, participants, and verdict)
