@@ -10,7 +10,58 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-04-30. Major consolidation: all research integrated into master harness plan. Duplication resolved. Unified frameworks created.
+2026-04-30. Augment embedding/chunking research complete — 3 open questions resolved from [[Research: Augment Code Context Engine]]. See below.
+
+## Augment Code Context Engine Research (2026-04-30)
+
+### Key Findings
+- Context Engine: semantic codebase indexing (1M+ files), real-time knowledge graph, not grep/ keyword.
+- #1 SWE-bench Pro (51.80%) — same model (Opus 4.5) beats Cursor by 1.59%, Claude Code by 2.05%.
+- #1 open-source SWE-bench Verified agent (65.4%) — dual-model: Claude Sonnet 3.7 + OpenAI o1 ensembler.
+- Prompt Enhancer: auto-enriches queries with codebase context before LLM sees them.
+- Context as MCP: launched Feb 2026 — 30-80% improvement when used as context provider for other agents.
+- "Contractor vs Employee" model: context is the bottleneck, not intelligence.
+
+### Integration Plan (6 Modules)
+1. **Semantic Codebase Indexer** — embeddings via sentence-transformers, LanceDB storage, tree-sitter chunking, watchdog sync.
+2. **Context Retrieval Engine** — hybrid BM25 + semantic search, multi-source (code + wiki + git + knowledge).
+3. **Prompt Enhancer** — pre-process queries, inject context, detect reuse opportunities.
+4. **MCP Context Server** — expose `query_codebase` tool, read-only.
+5. **Dual-Model Agent Loop** — primary model (Claude) for iteration + ensembler (GPT-5/o1) for selection.
+6. **Multi-Source Context Aggregator** — unify lean-ctx + semantic index + wiki + ctx_knowledge + git history.
+
+### Pages Created (15)
+Sources: [[Augment Context Engine Official]], [[Augment SWE-bench Agent GitHub]], [[Augment SWE-bench Pro Blog]], [[Augment Code WorkOS ERC 2025]], [[Augment Code Codacy AI Giants]], [[Augment Code MCP SiliconAngle]], [[Auggie Context MCP Server]]
+Concepts: [[Context Engine (AI Coding)]], [[Semantic Codebase Indexing]], [[Dual-Model Agent Architecture]], [[Prompt Enhancement]], [[Majority Vote Ensembling]], [[Contractor vs Employee AI Model]]
+Entity: [[Augment Code]]
+Synthesis: [[Research: Augment Code Context Engine]]
+
+### Open Questions → NOW RESOLVED (2026-04-30 follow-up research)
+- **Q1: Augment's embedding model & vector DB** — Still undisclosed. Inferred: likely custom variant of Voyage-code-3 / BGE-code-v1 / SFR-Embedding-Code fine-tuned on proprietary corpus. Vector DB candidates: Pinecone serverless, Weaviate, or custom sharded FAISS. See [[coir-code-retrieval-benchmark]] for top code embedding models.
+- **Q2: Chunking strategy & compression** — Resolved. State of the art is AST-aware chunking (cAST paper, June 2025) + contextualized text prepending. Chunking matters MORE than embedding model (Vectara NAACL 2025). Augment almost certainly uses this approach. See [[cast-code-chunking-paper]], [[AST-Aware Code Chunking]].
+- **Q3: MiniLM-L6-v2 vs larger models** — Resolved. MiniLM-L6-v2 is 5-8% less accurate than larger models (78.1% vs 86.2% top-5 on general text, gap wider for code). But gap can be partially closed by AST-aware chunking + contextualized text + hybrid search. Start with MiniLM + good chunking, upgrade to BGE-code-v1 if CoIR benchmark shows insufficient quality. See [[embedding-models-benchmark-supermemory-2025]], [[code-chunk-library-supermemory]].
+
+### New Sources (5)
+[[cast-code-chunking-paper]], [[vectara-chunking-vs-embedding-naacl2025]], [[coir-code-retrieval-benchmark]], [[code-chunk-library-supermemory]], [[embedding-models-benchmark-supermemory-2025]]
+
+### New Concepts (3)
+[[AST-Aware Code Chunking]], [[Contextualized Text Embedding]], [[Late Chunking vs Early Chunking]]
+
+### Remaining Open Questions
+- Real-time sync at scale (1M+ files) — implementation detail not available.
+- Context compression algorithm — black box.
+- Retrieval pipeline (candidate generation → re-ranking) — partial information only.
+- Empirical CoIR benchmark validation needed for our setup.
+
+---
+
+**46 open questions resolved across 6 themes — see [[resolved-context-pruning-inplace-vs-restart]] and 5 other resolution pages.**
+
+## Consensus-to-Wiki Filing Rule (2026-04-30)
+
+**Mandatory**: Winning consensus from any agent debate MUST be filed in `wiki/consensus/`. All 4 verdict types file (CONSENSUS_REACHED, DEADLOCK, BUDGET_EXHAUSTED, TIMEOUT). Purpose: permanent agent alignment — future agents query before forming positions, harness blocks contradictions.
+
+Updated: [[consensus-debate]], [[harness-implementation-plan]] (new First Principle #7, phase P19b, Consensus Filing Contract), [[adr-011]], [[selective-debate-routing]], [[harness]]. Created: [[consensus/index]] (directory + template).
 
 ## Consolidation Summary (2026-04-30)
 

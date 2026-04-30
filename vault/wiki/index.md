@@ -64,6 +64,14 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[fork-safe-spec-storage]] | Fork isolation: gitignored cache + `harness init` bootstrap |
 | [[content-addressed-spec-identity]] | Content-hash spec identity + `harness migrate` transfer-on-merge |
 
+## Concepts — Chunking & Embeddings
+
+| Concept | Summary |
+|---------|---------|
+| [[AST-Aware Code Chunking]] | Split code at AST boundaries, not character limits; +4.3 Recall@5 |
+| [[Contextualized Text Embedding]] | Prepend scope/signatures/imports before embedding raw code |
+| [[Late Chunking vs Early Chunking]] | Embed full doc then pool vs embed chunks separately; contextual retrieval is sweet spot |
+
 ## Concepts — Context & Search
 
 | Concept | Summary |
@@ -88,6 +96,12 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Concept | Summary |
 |---------|---------|
+| [[Context Engine (AI Coding)]] | Semantic search engine providing deep codebase understanding |
+| [[Semantic Codebase Indexing]] | Converting code to vector embeddings for similarity search |
+| [[Dual-Model Agent Architecture]] | Fast model for iteration + deliberative model for selection |
+| [[Prompt Enhancement]] | Pre-processing queries with retrieved codebase context |
+| [[Majority Vote Ensembling]] | Generate N solutions, LLM selects best |
+| [[Contractor vs Employee AI Model]] | Context makes the difference, not intelligence |
 | [[agentic-harness]] | Central execution pipeline concept |
 | [[consensus-debate]] | Multi-agent dialectical debate protocol for harness decisions |
 | [[selective-debate-routing]] | iMAD: trigger debate only when beneficial (92% token savings) |
@@ -110,6 +124,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Entity | Summary |
 |--------|---------|
+| [[Augment Code]] | AI coding platform with Context Engine, #1 SWE-bench Pro |
 | [[lean-ctx]] | Context Runtime for AI Agents — adopted via pi-lean-ctx native |
 | [[ck-tool]] | Hybrid code search tool, Rust, 1.6k ⭐, MCP-native |
 | [[vgrep-tool]] | Vector embedding search engine, Rust, 144 ⭐ |
@@ -117,10 +132,22 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[ops-codegraph-tool]] | Python dependency graph engine + semantic search |
 | [[codesearch]] | Rust MCP server for Claude Code/OpenCode |
 
+## Resolved Questions
+
+| Resolution | Resolves |
+|-----------|---------|
+| [[resolved-context-pruning-inplace-vs-restart]] | In-place vs restart, cache interaction, chain-of-thought, meta-agent regress |
+| [[resolved-treesitter-dynamic-languages]] | Tree-sitter + dynamic languages, 3-layer solution (syntax→types→runtime) |
+| [[resolved-imad-debate-gating-transfer]] | iMAD QA→code review transfer, selective routing, model-specific classifiers |
+| [[resolved-small-model-meta-agents]] | Haiku/Flash for drift detection, cost analysis, infinite regress resolved |
+| [[resolved-mcp-tool-preference]] | MCP priority system (none exists), 3-layer enforcement, false positive rates |
+| [[resolved-context-window-economics]] | Token allocation model, monorepo handling, caching, Gitingest questions |
+
 ## Research Syntheses
 
 | Synthesis | Summary |
 |-----------|---------|
+| [[Research: Augment Code Context Engine]] | Context Engine architecture, benchmarks, integration plan for harness |
 | [[Research: Model-Adaptive Agent Harness Design]] | Four-layer harness must be specialized per model |
 | [[Research: context-mode vs lean-ctx]] | context-mode vs lean-ctx + Think in Code enforcement |
 | [[Research: semantic code search tools]] | Self-hosted semantic code search — ck recommended |
@@ -135,6 +162,13 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Source | Type | Summary |
 |--------|------|---------|
+| [[Augment Context Engine Official]] | product-page | Context Engine features, benchmarks, team impact |
+| [[Augment SWE-bench Agent GitHub]] | github-repo | #1 open-source SWE-bench agent, dual-model architecture |
+| [[Augment SWE-bench Pro Blog]] | blog-post | #1 SWE-bench Pro at 51.80%, same-model comparison |
+| [[Augment Code WorkOS ERC 2025]] | conference-recap | Context Engine as prompt enhancer, live demo |
+| [[Augment Code Codacy AI Giants]] | podcast-recap | Engineering interview: context strategy, pricing, onboarding |
+| [[Augment Code MCP SiliconAngle]] | news-article | MCP launch, 30-80% improvement as context provider |
+| [[Auggie Context MCP Server]] | github-repo | Community MCP wrapper for Augment context engine |
 | [[meng2026-agent-harness-survey]] | paper | H=(E,T,C,S,L,V), 110+ papers, 23 systems |
 | [[anthropic2026-harness-design]] | blog | GAN-inspired generator-evaluator architecture |
 | [[bockeler2026-harness-engineering]] | blog | Feedforward/feedback controls (Martin Fowler) |
@@ -149,6 +183,11 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[wozcode]] | product-doc | WOZCODE token-reduction architecture (25-55% savings) |
 | [[ck-semantic-search]] | docs | ck hybrid code search documentation |
 | [[vgrep-semantic-search]] | readme | vgrep vector embedding search |
+| [[cast-code-chunking-paper]] | paper | cAST: AST-aware code chunking for RAG, +4.3 Recall@5 (June 2025) |
+| [[vectara-chunking-vs-embedding-naacl2025]] | paper | Chunking strategy ≥ embedding model for retrieval quality, NAACL 2025 |
+| [[coir-code-retrieval-benchmark]] | paper | CoIR: standard benchmark for code retrieval, ACL 2025, pip-installable |
+| [[code-chunk-library-supermemory]] | tool | Production AST-aware code chunking library (npm), tree-sitter based |
+| [[embedding-models-benchmark-supermemory-2025]] | benchmark | MiniLM vs BGE vs E5 vs Nomic on BEIR TREC-COVID (June 2025) |
 | [[context-mode-website]] | website | context-mode.com landing page |
 | [[leanctx-website]] | website | leanctx.com landing page |
 | [[think-in-code-blog]] | blog | "Think in Code" by B. Mert Köseoğlu |

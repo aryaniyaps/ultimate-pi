@@ -1,5 +1,32 @@
 # Wiki Operations Log
 
+## [2026-04-30] autoresearch | Augment Embedding Model, Chunking Strategy, Local vs Cloud Embeddings
+- Rounds: 2 (5 broad searches, 5 gap-fill searches, 5 sources fetched)
+- Sources fetched: 5 (cAST paper, code-chunk blog, embedding benchmark, CoIR benchmark, Vectara NAACL 2025)
+- Pages created (sources): [[cast-code-chunking-paper]], [[vectara-chunking-vs-embedding-naacl2025]], [[coir-code-retrieval-benchmark]], [[code-chunk-library-supermemory]], [[embedding-models-benchmark-supermemory-2025]]
+- Pages created (concepts): [[AST-Aware Code Chunking]], [[Contextualized Text Embedding]], [[Late Chunking vs Early Chunking]]
+- Pages updated: [[Research: Augment Code Context Engine]] (3 open questions resolved, 4 remaining)
+- Key finding: Augment's exact embedding model + vector DB remain undisclosed, but latest research (cAST paper June 2025, Vectara NAACL 2025) shows AST-aware chunking matters more than model choice. MiniLM-L6-v2 is 5-8% less accurate than larger models but this gap can be partially closed by AST-aware chunking + contextualized text prepending. Recommendation: start with MiniLM-L6-v2 + tree-sitter AST chunking + contextualized text, run CoIR benchmark eval, upgrade to BGE-code-v1 if needed.
+
+## [2026-04-30] autoresearch | Augment Code Context Engine
+- Rounds: 1
+- Sources found: 8
+- Pages created: [[Research: Augment Code Context Engine]] (synthesis), [[Augment Context Engine Official]], [[Augment SWE-bench Agent GitHub]], [[Augment SWE-bench Pro Blog]], [[Augment Code WorkOS ERC 2025]], [[Augment Code Codacy AI Giants]], [[Augment Code MCP SiliconAngle]], [[Auggie Context MCP Server]], [[Context Engine (AI Coding)]], [[Semantic Codebase Indexing]], [[Dual-Model Agent Architecture]], [[Prompt Enhancement]], [[Majority Vote Ensembling]], [[Contractor vs Employee AI Model]], [[Augment Code]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: Augment Code's Context Engine is a semantic codebase search engine that achieves #1 SWE-bench Pro (51.80%). Same model (Claude Opus 4.5) scores 6 points higher with better context. Context quality > model intelligence. Implementation plan: 6 modules (semantic indexer, context retrieval, prompt enhancer, MCP server, dual-model agent, multi-source aggregator) integrable into our harness using existing infrastructure (lean-ctx, wiki, ctx_knowledge) + new components (LanceDB/ChromaDB embeddings, tree-sitter AST chunking, watchdog sync).
+
+## [2026-04-30] autoresearch | Resolution of 46 Open Questions Across 6 Themes
+- Rounds: 2 (6 theme searches, 12 sources fetched)
+- Pages created: [[resolved-context-pruning-inplace-vs-restart]], [[resolved-treesitter-dynamic-languages]], [[resolved-imad-debate-gating-transfer]], [[resolved-small-model-meta-agents]], [[resolved-mcp-tool-preference]], [[resolved-context-window-economics]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: 46 open questions across 11 wiki pages resolved via 6 cross-cutting theme resolutions. Major outcomes: (1) In-place context editing is the production pattern — session restart is fallback. Claude API, OpenCode DCP, OpenClaw all use in-place clearing. (2) Tree-sitter handles 80% of dynamic language parsing — static analysis (mypy/Pyright) + runtime profiling cover remaining 20%. (3) iMAD debate gating transfers from QA to code review in principle, needs code-specific hesitation cues and model-specific classifiers. (4) Haiku/Flash can serve as meta-agent drift detectors at near-zero cost. (5) MCP has no priority system — tool preference achieved through prompt engineering + harness interception. (6) Token allocation follows 10-20-40 rule (repo-map/conversation/files), monorepos need hierarchical L0-L2 progressive disclosure, pre-computed repo maps are primary optimization.
+
+## [2026-04-30] harness | Mandatory consensus-to-wiki filing rule
+- Decision: Winning consensus from any agent debate MUST be filed in project wiki for permanent agent alignment.
+- Pages updated: [[consensus-debate]] (converted open question to mandatory rule, updated verdict semantics, integration points), [[harness-implementation-plan]] (new First Principle #7, new build phase P19b, new Consensus Filing Contract section, updated wiki contract), [[adr-011]] (strengthened wiki filing from mitigation to mandatory, added alignment benefit), [[selective-debate-routing]] (added wiki filing to implementation sketch), [[harness]] (updated key design decisions)
+- Pages created: [[consensus/index]] (consensus records directory with template)
+- Key finding: Without permanent alignment records, future agents re-litigate settled debates. Wiki consensus records close this loop — agents query before forming positions, harness blocks contradictions. All 4 verdict types file (CONSENSUS_REACHED, DEADLOCK, BUDGET_EXHAUSTED, TIMEOUT). Enforced by L7 write-after contract per ADR-010.
+
 ## [2026-04-30] autoresearch | GitHub Issues as Harness Spec Storage
 - Rounds: 1 (+ fork/multi-tenant deep dive)
 - Sources found: 5 (GH docs: sub-issues, dependencies; community: gh-sub-issue extension; feature request: cli/cli#10298; fork discussion: #161368)
