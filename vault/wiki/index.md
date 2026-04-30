@@ -61,6 +61,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[guardian-agent-pattern]] | Pre-execution and post-execution safety validation |
 | [[context-anxiety]] | Models rush to finish as context window fills |
 | [[verification-drift-detection]] | Stub — see [[grounding-checkpoints]] |
+| [[fork-safe-spec-storage]] | Fork isolation: gitignored cache + `harness init` bootstrap |
+| [[content-addressed-spec-identity]] | Content-hash spec identity + `harness migrate` transfer-on-merge |
 
 ## Concepts — Context & Search
 
@@ -127,6 +129,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[research-gitingest-gitreverse-integration]] | Gitingest adopted, GitReverse skipped |
 | [[Research: Meta-Agent Context Drift Detection]] | Novel synthesis: detect → prune → restart |
 | [[research-agentic-coding-harness-latest-papers]] | 5 pipeline improvements, 3 future phases, formal H-model |
+| [[Research: GitHub Issues as Harness Spec Storage]] | GitHub Issues as cloud-persistent spec storage with sub-issues + dependencies |
 
 ## Sources (External Research)
 
@@ -151,6 +154,11 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[think-in-code-blog]] | blog | "Think in Code" by B. Mert Köseoğlu |
 | [[gitingest]] | tool | Codebase-to-structured-text for LLM context |
 | [[gitreverse]] | tool | Repo-to-synthetic-prompt (not adopted) |
+| [[github-sub-issues-docs]] | documentation | GitHub official docs on sub-issues (parent-child hierarchies) |
+| [[github-issue-dependencies-docs]] | documentation | GitHub official docs on issue dependencies (blocked-by/blocking) |
+| [[gh-sub-issue-extension]] | github-repo | Community gh CLI extension for sub-issue management |
+| [[gh-cli-sub-issue-rfc]] | github-issue | Official gh CLI feature request for native sub-issue support |
+| [[github-fork-issues-discussion]] | github-discussion | Fork issues enablement evolution (Jun-Dec 2025) |
 | [[aider-repomap-tree-sitter]] | blog | Tree-sitter + graph ranking for LLM code context |
 | [[swe-agent-aci]] | paper | Agent-Computer Interfaces concept (2024) |
 | [[swe-bench]] | paper | Real-world software engineering benchmark |
