@@ -69,3 +69,19 @@ L1: Spec → L2: Plan → L2.5: Drift Monitor → L3: Execute (+TiC, +AST, +Fuzz
 ```
 
 Formal models: H=(E,T,C,S,L,V) + Feedforward-Feedback + Generator-Evaluator. All mapped to our pipeline in [[harness-control-frameworks]].
+
+### GitHub Issues as Harness Spec Storage (2026-04-30)
+
+Research: [[Research: GitHub Issues as Harness Spec Storage]] — GitHub Issues can serve as cloud-persistent spec storage with native sub-issues (parent-child hierarchies, April 2025) and issue dependencies (blocked-by/blocking).
+
+Key architecture: Dual-tier — local `.pi/harness/specs/<id>.json` for speed + GitHub Issue for cross-session ledger. Not every micro-step creates an issue; only major state transitions (spec creation, plan creation, phase completion).
+
+Toolchain: `gh issue create/edit/comment/list/view` for CRUD, `gh-sub-issue` extension (yahsan2, 110 stars, MIT) for parent-child management until `gh` CLI gains native support (cli/cli#10298). GitHub Projects v2 for optional kanban/roadmap visualization.
+
+Labels encode machine-readable state: `harness-spec`, `layer-{n}`, `status:{status}`. Issue comments serve as immutable execution audit trail.
+
+**Fork safety**: `.pi/harness/specs/` is gitignored — never committed, never forked. `ultimate-pi harness init` bootstraps a fork's own issue tracker (enable issues, create labels, set `gh` repo context). Zero upstream spec leakage into forks.
+
+Init flow: detect fork → enable issues → create labels → set repo → gitignore cache → ready. Idempotent re-runs are no-ops.
+
+**Content-addressed spec identity**: Every HardenedSpec carries a `SHA256(intent + criteria + done)` fingerprint embedded in the issue body (`<!-- spec-fp: <hash> -->`). Harness resolves specs by hash search across repos, not by brittle issue numbers. When fork merges upstream: `ultimate-pi harness migrate` transfers specs via `gh issue transfer` + relays labels. Idempotent. ~2-3 days to implement.

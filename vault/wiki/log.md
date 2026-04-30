@@ -1,5 +1,15 @@
 # Wiki Operations Log
 
+## [2026-04-30] autoresearch | GitHub Issues as Harness Spec Storage
+- Rounds: 1 (+ fork/multi-tenant deep dive)
+- Sources found: 5 (GH docs: sub-issues, dependencies; community: gh-sub-issue extension; feature request: cli/cli#10298; fork discussion: #161368)
+- Pages created: [[Research: GitHub Issues as Harness Spec Storage]], [[github-sub-issues-docs]], [[github-issue-dependencies-docs]], [[gh-sub-issue-extension]], [[gh-cli-sub-issue-rfc]], [[github-fork-issues-discussion]]
+- Pages created (concepts): [[fork-safe-spec-storage]], [[content-addressed-spec-identity]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: GitHub Issues has native sub-issues (April 2025, up to 8 levels deep) and issue dependencies (blocked-by/blocking) — both map directly to harness spec decomposition (L1) and task DAGs (L2). `gh` CLI lacks native support but `gh-sub-issue` extension bridges the gap. Recommended architecture: dual-tier (local JSON cache + GitHub Issue ledger) — cloud persistence for major state transitions only, not every micro-step.
+- Integration: L1 spec hardening → create parent issue. L2 structured planning → create sub-issues for tasks, link with dependencies. Issue comments as immutable execution audit log. Labels encode machine-readable state.
+- Fork safety: `.pi/harness/specs/` gitignored (runtime cache, never committed). Forks get clean issue tracker via `ultimate-pi harness init` bootstrap (enable issues, create labels, set repo context). No upstream spec leakage.
+
 ## [2026-04-30] consolidate | First-Principles Harness Consolidation
 - All April 2026 research integrated into master plan
 - Pages created: [[harness-control-frameworks]] (unified H-formalism + feedforward-feedback + generator-evaluator), [[drift-detection-unified]] (3 complementary drift paradigms with clear boundaries), [[think-in-code-enforcement]] (L3 module with 3-layer enforcement)
