@@ -15,6 +15,7 @@ related:
   - "[[think-in-code-enforcement]]"
   - "[[agentic-harness-context-enforcement]]"
   - "[[harness-implementation-plan]]"
+  - "[[Research: executor.sh Harness Integration]]"
 sources:
   - "[[codeact-apple-2024]]"
   - "[[cloudflare-codemode]]"

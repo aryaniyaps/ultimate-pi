@@ -75,7 +75,7 @@ This skill walks you through the rest automatically — creating the folder stru
 | compress | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) | Compress memory/context files into caveman format. |
 | lean-ctx | [yvgude/lean-ctx](https://github.com/yvgude/lean-ctx) | Context runtime — 46 MCP tools, 10 read modes, tree-sitter AST. Compresses context up to 99%. |
 | context7-cli | [upstash/context7](https://github.com/upstash/context7) | Fetch current library docs, manage Context7 skills/config. |
-| scrapling-official | [D4Vinci/Scrapling](https://github.com/D4Vinci/Scrapling) | Web scraping with anti-bot bypass, JS rendering, stealth fetchers. |
+| firecrawl | [firecrawl](https://firecrawl.dev) | Web search, scraping, crawling, JS rendering, site downloads, interactive pages. |
 
 ### Obsidian wiki skills (11 skills)
 

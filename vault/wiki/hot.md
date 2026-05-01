@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-01T16:40:00
+updated: 2026-05-01T21:30:00
 created: 2026-04-30
 tags: []
 status: active
@@ -10,7 +10,39 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-01. Fallow codebase intelligence research complete. New P44 phase (7 sub-phases): single-command comprehensive quality gate for TS/JS. No ecosystem has fallow-equivalent. Ecosystem gap analysis filed.
+2026-05-01. executor.sh research complete. Executor is an **integration layer**, not just TS execution layer. Three new P43 sub-phases (P43b catalog+discovery, P43c policy-aware execution). Build vs integrate decision: custom for harness-native tools, Executor as dep for external API.
+
+## executor.sh Harness Integration (2026-05-01)
+
+### Key Finding
+**executor.sh (RhysSullivan/executor) is an integration layer — a unified tool catalog + auth + policy + execution runtime — not just a TypeScript execution layer.** Our existing wiki classified it alongside CodeAct and Cloudflare Code Mode under P43 (TS Execution Layer). This research finds Executor belongs in a broader category: the agent integration/runtime layer.
+
+### Three Gaps Revealed
+1. **No tool catalog with intent-based discovery**: `tools.discover({ query, limit })` lets agents search tools by intent without loading all schemas → new **P43b**
+2. **No shared auth for external tools**: Executor centralizes OAuth/keychain across agents → gap for post-v1
+3. **No execution pause/resume**: Stateful execution lifecycle with `waiting_for_interaction` state → new **P43c**
+
+### Five Pillars (from executor.sh landing)
+1. Unified catalog with intent-based discovery
+2. Shared auth (sign in once, all agents share)
+3. Policy engine (auto-approve reads, pause on writes, wildcards)
+4. Any agent via MCP (single MCP endpoint)
+5. Local-first (secrets in keychain, nothing leaves machine)
+
+### Build vs Integrate Decision
+- **Harness-native L3 tools (P43)**: Build custom TS runtime with borrowed catalog/discovery/policy patterns
+- **External API integration (GitHub, Slack, Stripe)**: Use Executor as MCP dependency (post-v1)
+
+### Source Updated
+[[executor-rhyssullivan]] — major rewrite with product positioning, architecture, policy engine, execution lifecycle
+
+### Synthesis
+[[Research: executor.sh Harness Integration]]
+
+### Plan Updated
+[[harness-implementation-plan]] — P43b (Tool Catalog with Discovery), P43c (Policy-Aware Execution)
+
+---
 
 ## Fallow Codebase Intelligence Harness Integration (2026-05-01)
 

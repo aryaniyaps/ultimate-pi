@@ -187,6 +187,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: Gemini CLI SOTA Harness Integration]] | Gemini CLI SOTA: 15 innovations mapped, 7 integration priorities from first principles |
 
 | [[Research: TypeScript Execution Layer for Agent Tool Calling]] | TS execution layer: CodeAct → Cloudflare Code Mode → Executor convergence, 3-4x context reduction, P43 phase |
+| [[Research: executor.sh Harness Integration]] | executor.sh: integration layer scope, 3 new P43 sub-phases (catalog, discovery, policy), build vs integrate decision |
 
 ## Sources (External Research)
 
