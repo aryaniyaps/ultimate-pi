@@ -1,5 +1,12 @@
 # Wiki Operations Log
 
+## [2026-05-01] autoresearch | executor.sh Harness Integration
+- Rounds: 1 (1 search, 3 fetches: executor.sh landing, GitHub README, DeepWiki architecture)
+- Sources updated: [[executor-rhyssullivan]] (major rewrite — added product positioning, architecture, policy engine, DeepWiki details)
+- Pages created (synthesis): [[Research: executor.sh Harness Integration]]
+- Pages updated: [[harness-implementation-plan]] (new P43b + P43c sub-phases from Executor patterns, executor.sh research linked in related, new sub-phases in TS Execution Layer Validation table), [[index]], [[log]], [[hot]]
+- Key finding: executor.sh positions RhysSullivan/executor as an **integration layer** (not just TS execution layer) — a unified catalog + auth + policy + execution runtime spanning OpenAPI, GraphQL, MCP, and custom sources. This scope is broader than our P43 classification. Three gaps revealed: (1) no tool catalog with intent-based discovery (`tools.discover()`), (2) no shared auth for external tools, (3) no execution pause/resume for human-in-the-loop. New P43b (Tool Catalog with Discovery) and P43c (Policy-Aware Execution) sub-phases added. Executor independently validates our First Principle #19 (code > JSON for tool calling) and extends it with policy/auth/execution lifecycle. Build vs integrate: use Executor as dependency for external API integration (post-v1); build custom runtime for harness-native L3 tools with borrowed catalog/discovery/policy patterns.
+
 ## [2026-05-01] autoresearch | Fallow Codebase Intelligence Harness Integration
 - Rounds: 1 (3 DuckDuckGo searches, 1 primary GitHub fetch, 4 ecosystem searches)
 - Sources fetched: 1 (fallow-rs/fallow GitHub README + docs)

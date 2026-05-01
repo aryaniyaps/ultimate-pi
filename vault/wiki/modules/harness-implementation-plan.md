@@ -34,6 +34,7 @@ related:
   - "[[cursor-harness-innovations]]"
   - "[[codex-harness-innovations]]"
   - "[[Research: cursor.sh Harness Innovations]]"
+  - "[[Research: executor.sh Harness Integration]]"
   - "[[Research: Google Antigravity Harness Integration]]"
   - "[[Research: Codex State-of-the-Art Harness Improvements]]"
   - "[[antigravity-agent-first-architecture]]"
@@ -188,7 +189,9 @@ Organized by pipeline position, not sequential numbering. Each phase maps to a s
 | P14 | Think-in-Code Enforcement — system prompt + ctx_execute sandbox | L3 tools | Update AGENTS.md, `.pi/settings.json` |
 | P15 | Gitingest skill — bulk external repo ingestion | L3 tools | `.pi/skills/gitingest/SKILL.md` |
 | P15b | Pre-Verification Isolation Sandbox — isolated temp workspace for compile/lint before presenting results. Cursor Shadow Workspace pattern adapted for CLI harness. | L3→L4 gate | `lib/harness-preverify.ts`, `extensions/harness-preverify.ts` |
-| P43 | **TypeScript Execution Layer** — single `write_ts` tool replaces flat tool list. All L3 tools (read, bash, edit, grep, find, ck_search, ctx_execute) exposed as typed TS API via auto-generated type defs. Agent writes TypeScript code; runtime executes in sandboxed Node.js VM or Deno subprocess. Tool calls dispatch via typed RPC back to harness. Permission subsystem (P35) gates all tool calls within sandbox. Extends P14 (Think-in-Code) from data analysis to full tool orchestration. 3-4x context reduction on multi-tool workflows. Validated by CodeAct (+20% success, ICML 2024), Cloudflare Code Mode, Executor (1.3K stars). | L3 tools | `lib/harness-ts-exec.ts`, `lib/harness-ts-types.ts`, `extensions/harness-ts-exec.ts`, `.pi/harness/ts-exec.json` |
+| P43 | **TypeScript Execution Layer** — single `write_ts` tool replaces flat tool list. All L3 tools (read, bash, edit, grep, find, ck_search, ctx_execute) exposed as typed TS API via auto-generated type defs. Agent writes TypeScript code; runtime executes in sandboxed Node.js VM or Deno subprocess. Tool calls dispatch via typed RPC back to harness. Permission subsystem (P35) gates all tool calls within sandbox. Extends P14 (Think-in-Code) from data analysis to full tool orchestration. 3-4x context reduction on multi-tool workflows. Validated by CodeAct (+20% success, ICML 2024), Cloudflare Code Mode, Executor (1.3K stars). See [[Research: executor.sh Harness Integration]] for updated sub-phases. | L3 tools | `lib/harness-ts-exec.ts`, `lib/harness-ts-types.ts`, `extensions/harness-ts-exec.ts`, `.pi/harness/ts-exec.json` |
+| P43b | **Tool Catalog with Intent-Based Discovery** — `tools.discover({ query, limit })` runtime API for agents to search tools by intent without loading all schemas into context. Catalog indexes all harness-native L3 tools by name, description, tags, and parameter schemas. Inspired by Executor's catalog + discovery pattern. Extends P43's static type generation with runtime tool discovery. | L3 tools | Update `lib/harness-ts-exec.ts` |
+| P43c | **Policy-Aware Execution** — extend sandboxed runtime with policy engine integration. Auto-approve reads (deterministic, no LLM permission check). Pause on writes (execution enters waiting state, human resumes). Wildcard path rules. Execution lifecycle with pause/resume state machine. Integrates with P35 Permission Subsystem. Inspired by Executor's policy engine + execution lifecycle. | L3 tools | Update `lib/harness-ts-exec.ts`, `extensions/harness-ts-exec.ts` |
 
 ### L4: Adversarial Verification
 
@@ -502,6 +505,8 @@ Research into the TypeScript execution layer pattern — giving agents a single 
 | Phase | What | Inspired By |
 |---|---|---|
 | P43 | TypeScript Execution Layer — single `write_ts` tool + sandboxed TypeScript runtime with typed API for all L3 tools | Three-system convergence: CodeAct (academic), CF Code Mode (production), Executor (open-source) |
+| P43b | Tool Catalog with Intent-Based Discovery — `tools.discover()` runtime API | Executor's catalog + discovery pattern |
+| P43c | Policy-Aware Execution — auto-approve reads, pause on writes, execution lifecycle | Executor's policy engine + pause/resume |
 
 #### What We Deliberately Do NOT Adopt
 

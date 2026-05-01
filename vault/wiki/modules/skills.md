@@ -24,4 +24,4 @@ The `skills/` directory contains individual skill definitions that extend the ca
 - `lean-ctx` (core operations)
 - `caveman`
 - `compress`
-- `scrapling-official`
+- `firecrawl`
