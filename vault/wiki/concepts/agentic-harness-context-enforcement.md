@@ -60,6 +60,17 @@ AI agents are profligate with context. They call `Read()` on 47 files when 1 scr
 - Analytics dashboard for human oversight
 - Example: lean-ctx governance features
 
+### Layer 6: TypeScript Execution Layer (emerging, high potential)
+- Replace ALL individual tool calls with a single "write TypeScript" tool
+- Agent writes TS code that orchestrates tools via typed API
+- Code executes in sandboxed runtime (Node.js VM, Deno, or Worker isolate)
+- Tool calls dispatch via typed RPC to harness for permission gating
+- Intermediate results stay in sandbox — only final output enters LLM context
+- 3-4x context reduction vs flat tool calling
+- ~20% higher multi-tool success rate (CodeAct, ICML 2024)
+- Validated by: Apple CodeAct, Cloudflare Code Mode, Executor (1.3K stars)
+- See [[ts-execution-layer]] and [[harness-implementation-plan]] (P43)
+
 ## Recommendation for ultimate-pi Harness
 
 **Current state**: lean-ctx installed as MCP server + shell hook.
@@ -77,3 +88,5 @@ AI agents are profligate with context. They call `Read()` on 47 files when 1 scr
 4. **Add output compression rules** — context-mode's output compression (strip filler, fragments OK, short synonyms) can be added to AGENTS.md regardless of tool choice.
 
 5. **Monitor context usage** — lean-ctx's `gain` dashboard and `wrapped` reports provide visibility. Use them to measure effectiveness of any new enforcement.
+
+6. **Plan TypeScript Execution Layer (P43)** — the logical extension of Think-in-Code. Instead of enforcing code-over-data for analysis tasks, replace the entire flat tool list with a typed TypeScript API + sandboxed runtime. Agent writes TS code; sandbox executes; only results enter context. 3-4x context reduction, ~20% higher success rate. See [[ts-execution-layer]] and [[harness-implementation-plan]].

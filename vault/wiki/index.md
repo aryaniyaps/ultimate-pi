@@ -8,7 +8,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | Layer | Module | Summary |
 |-------|--------|---------|
 | — | [[harness]] | 8-layer mandatory pipeline with drift monitor + cross-cutting tool enhancements |
-| — | [[harness-implementation-plan]] | Master build plan: 27 phases, unified token budget, all research integrated |
+| — | [[harness-implementation-plan]] | Master build plan: 42 phases, unified token budget, all research integrated (Codex, Cursor, Antigravity, Claude Code) |
 | L1 | [[spec-hardening]] | Block execution until ambiguities resolved |
 | L2 | [[structured-planning]] | Machine-readable task DAG + sprint contracts |
 | L2.5 | [[drift-detection-unified]] | Runtime drift monitor: 3 paradigms (tool-call, spec, implementation) |
@@ -46,8 +46,9 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[harness-h-formalism]] | H = (E, T, C, S, L, V) — 6-component formal model |
 | [[feedforward-feedback-harness]] | Guides + Sensors, Computational + Inferential |
 | [[generator-evaluator-architecture]] | GAN-inspired separation of generator and evaluator agents |
-| [[model-adaptive-harness]] | Harness varies behavior by model profile (entry point) |
-| [[harness-configuration-layers]] | Four-layer config: Signal, Gate, Channel, Completion (detailed tables) |
+| [[model-adaptive-harness]] | Harness generates provider-native prompts (v2 redesign, May 2026) |
+| [[provider-native-prompting]] | Generate prompts optimized for each provider's official conventions |
+| [[harness-configuration-layers]] | Four-layer config: Signal, Gate, Channel, Completion — now provider-native (v2) |
 | [[self-evolving-harness]] | Auto-synthesis and meta-optimization of harness code |
 
 ## Concepts — Execution & Drift
@@ -59,10 +60,18 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[meta-agent-context-pruning]] | Detect stuck → prune dead context → restart agent (novel synthesis) |
 | [[agent-loop-detection-patterns]] | Production patterns: repetition, ping-pong, retry-without-progress |
 | [[guardian-agent-pattern]] | Pre-execution and post-execution safety validation |
+| [[codex-harness-innovations]] | Codex innovations: 10 patterns cataloged from open-source Rust agent, first-principles analysis |
+| [[codebase-intelligence-harness-integration]] | 7-point integration map for fallow codebase intelligence in harness pipeline |
+| [[codebase-intelligence-ecosystem-comparison]] | Cross-language gap analysis: no ecosystem has fallow-equivalent |
+| [[cursor-harness-innovations]] | 10 Cursor innovations cataloged with first-principles analysis for harness integration |
 | [[context-anxiety]] | Models rush to finish as context window fills |
 | [[verification-drift-detection]] | Stub — see [[grounding-checkpoints]] |
 | [[fork-safe-spec-storage]] | Fork isolation: gitignored cache + `harness init` bootstrap |
 | [[content-addressed-spec-identity]] | Content-hash spec identity + `harness migrate` transfer-on-merge |
+| [[harness-engineering-first-principles]] | Synthesized 12 first principles from Fowler, OpenAI, LangChain, Augment |
+| [[agent-skills-pattern]] | Progressive disclosure: skills loaded on-demand to prevent context rot |
+| [[policy-engine-pattern]] | Pre-execution gates: deterministic constraints vs probabilistic compliance |
+| [[gemini-cli-architecture]] | Gemini CLI SOTA: 15 harness innovations, 2-package architecture, weekly releases |
 
 ## Concepts — Chunking & Embeddings
 
@@ -89,6 +98,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[inline-post-edit-validation]] | Syntax-only post-edit compiler/parser check (<2s) |
 | [[hybrid-code-search]] | BM25 + embeddings + RRF fusion |
 | [[agent-search-enforcement]] | 3-layer defense to force semantic search over grep/cat |
+| [[ts-execution-layer]] | Replace flat tool calling with typed TypeScript API + sandboxed runtime (3-4x context reduction) |
 | [[mcp-tool-routing]] | MCP protocol for semantic search as first-class agent tool |
 | [[codebase-to-context-ingestion]] | Converting entire codebases into structured LLM context |
 
@@ -104,6 +114,9 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Contractor vs Employee AI Model]] | Context makes the difference, not intelligence |
 | [[agentic-harness]] | Central execution pipeline concept |
 | [[consensus-debate]] | Multi-agent dialectical debate protocol for harness decisions |
+| [[lifecycle-hooks]] | Tool-level deterministic hooks (30+ events, exit-code semantics, 100% compliance) |
+| [[structured-compaction]] | Five-layer compaction with forked subagent, ~85% context reduction |
+| [[subagent-worktree-isolation]] | Fresh context windows + isolated git worktrees per subagent |
 | [[selective-debate-routing]] | iMAD: trigger debate only when beneficial (92% token savings) |
 | [[agent-codebase-interface]] | Designing tool interfaces for AI agents, not humans |
 | [[progressive-disclosure-agents]] | Layered codebase information (L0-L3) within token budgets |
@@ -111,6 +124,14 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[execution-feedback-loop]] | Agent debug-test-iterate cycle via structured test output |
 | [[model-routing-agents]] | Dispatching exploration to cheap models, code gen to frontier |
 | [[pi-messenger-analysis]] | What we adopt/strip from pi-messenger for consensus transport |
+
+## Concepts — Antigravity Innovations
+
+| Concept | Summary |
+|---------|--------|
+| [[antigravity-agent-first-architecture]] | Two-view control plane: Editor View + Manager View for multi-agent orchestration |
+| [[agent-artifacts-verifiable-deliverables]] | Trust via human-reviewable deliverables instead of raw tool logs |
+| [[browser-subagent-visual-verification]] | Headless browser agent that visually verifies UI changes |
 
 ## Modules — Other
 
@@ -158,10 +179,27 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[research-agentic-coding-harness-latest-papers]] | 5 pipeline improvements, 3 future phases, formal H-model |
 | [[Research: GitHub Issues as Harness Spec Storage]] | GitHub Issues as cloud-persistent spec storage with sub-issues + dependencies |
 
+| [[Research: Codex State-of-the-Art Harness Improvements]] | Codex open-source architecture: 7 validations, 5 new gaps, 3 novel patterns, 5 new phases |
+| [[Research: Fallow Codebase Intelligence Harness Integration]] | Fallow: 7 harness integration points, cross-ecosystem gap analysis, P44 phases |
+| [[Research: Claude Code State-of-the-Art Harness Improvements]] | Claude Code architecture: 6 gaps, 5 new phases, 4 first principles |
+| [[Research: cursor.sh Harness Innovations]] | Cursor production harness: 5 validations, 4 new gaps, first-principles lessons |
+| [[Research: Google Antigravity Harness Integration]] | Google Antigravity SOTA: artifacts, browser subagent, agent-first architecture, 3 new phases |
+| [[Research: Gemini CLI SOTA Harness Integration]] | Gemini CLI SOTA: 15 innovations mapped, 7 integration priorities from first principles |
+
+| [[Research: TypeScript Execution Layer for Agent Tool Calling]] | TS execution layer: CodeAct → Cloudflare Code Mode → Executor convergence, 3-4x context reduction, P43 phase |
+
 ## Sources (External Research)
 
 | Source | Type | Summary |
 |--------|------|---------|
+| [[Source: Google Gemini CLI Architecture Docs]] | official-docs | Architecture: 2 packages (cli+core), ReAct loop, tool system |
+| [[Source: Google Blog - Gemini CLI Announcement]] | official-announcement | Launch: free tier, 1M token window, MCP, Google Search grounding |
+| [[Source: Render AI Coding Agents Benchmark 2025]] | benchmark-report | Independent: Cursor 8/10, Gemini 6.8/10, strengths/weaknesses |
+| [[Source: Martin Fowler - Harness Engineering]] | engineering-blog | Canonical: feedforward/feedback, computational/inferential, steering loop |
+| [[Source: LangChain - Anatomy of Agent Harness]] | engineering-blog | Agent=Model+Harness, primitives derivation, model-harness co-evolution |
+| [[Source: OpenAI Harness Engineering Five Principles]] | engineering-blog | 5 principles from 1M-line agent-built codebase |
+| [[Source: Augment - Harness Engineering for AI Coding Agents]] | engineering-blog | PEV loop, constraint layers, measurement metrics |
+| [[Source: Gemini CLI Changelogs]] | official-changelog | Feature evolution: v0.4–v0.40 across 40+ weekly releases |
 | [[Augment Context Engine Official]] | product-page | Context Engine features, benchmarks, team impact |
 | [[Augment SWE-bench Agent GitHub]] | github-repo | #1 open-source SWE-bench agent, dual-model architecture |
 | [[Augment SWE-bench Pro Blog]] | blog-post | #1 SWE-bench Pro at 51.80%, same-model comparison |
@@ -173,6 +211,9 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[anthropic2026-harness-design]] | blog | GAN-inspired generator-evaluator architecture |
 | [[bockeler2026-harness-engineering]] | blog | Feedforward/feedback controls (Martin Fowler) |
 | [[forgecode-gpt5-agent-improvements]] | blog | Model-adaptive harness findings (GPT 5.4 vs Opus 4.6) |
+| [[openai-prompt-guidance]] | official-docs | OpenAI prompt guidance: GPT-5.5 through GPT-4.1 |
+| [[anthropic-prompt-best-practices]] | official-docs | Anthropic prompt engineering: Claude Opus 4.7 through Haiku 4.5 |
+| [[gemini-3-prompting-guide]] | official-docs | Google Gemini 3 prompting guide on Vertex AI |
 | [[lou2026-autoharness]] | paper | AutoHarness: LLM synthesizes harness from feedback |
 | [[lee2026-meta-harness]] | paper | Meta-Harness: outer-loop harness optimization |
 | [[fan2025-imad]] | paper | iMAD: selective debate routing, 92% token savings |
@@ -203,6 +244,24 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[swe-bench]] | paper | Real-world software engineering benchmark |
 | [[openhands-platform]] | paper | Open platform for AI developer agents |
 | [[oss-guide-codebase-exploration]] | blog | Human-centric OSS codebase exploration guide |
+| [[cursor-shadow-workspace-2024]] | engineering-blog | Shadow Workspace: hidden Electron window LSP pre-validation |
+| [[cursor-agent-best-practices-2026]] | engineering-blog | Agent best practices: Plan Mode, hooks, skills, context management |
+| [[cursor-harness-april-2026]] | engineering-blog | Harness evolution: dynamic context, Keep Rate, error classification |
+| [[cursor-shipped-coding-agent-2026]] | engineering-blog | Composer system architecture, MoE, latency, sandboxing |
+| [[cursor-instant-apply-2024]] | engineering-blog | Speculative edits: 1000 tok/s, fast apply model, diff problem |
+| [[cursor-fork-29b-2025]] | analysis | VS Code fork architecture, vertical agent thesis |
+| [[codex-open-source-agent-2026]] | github-repo | Codex CLI: 79.2K stars, Rust, sandboxing, hooks, MCP, skills |
+| [[claude-code-architecture-vila-lab-2026]] | academic-paper | VILA-Lab arxiv 2604.14228: comprehensive Claude Code architecture analysis |
+| [[claude-code-architecture-qubytes-2026]] | blog | Qubytes: five-layer architecture breakdown (agent loop, permissions, tools, state, compaction) |
+| [[claude-code-architecture-karaxai-2026]] | blog | KaraxAI: full stack walkthrough — CLAUDE.md, skills, plugins, MCP, hooks |
+| [[codeact-apple-2024]] | paper | CodeAct: 20% higher success rate, 30% fewer turns (ICML 2024) |
+| [[cloudflare-codemode]] | official-docs | Cloudflare Code Mode: TypeScript execution layer, Worker sandbox |
+| [[executor-rhyssullivan]] | github-repo | Executor: local-first TS runtime, 1.3K stars, cross-agent tool catalog |
+| [[colinmcnamara-context-optimization-codemode]] | blog | Context optimization: sub-agents vs TypeScript interfaces |
+| [[fallow-rs-codebase-intelligence]] | github-repo | Fallow: Rust-native TS/JS codebase intelligence, 1.7K stars, MIT. Dead code, duplication, complexity, boundaries, MCP server |
+| [[google-antigravity-official-blog]] | engineering-blog | Google Antigravity: agent-first IDE, Manager View, Artifacts, Skills |
+| [[google-antigravity-wikipedia]] | encyclopedia | Antigravity: VS Code fork, Gemini 3.1, Windsurf $2.4B acquisition |
+| [[cursor-vs-antigravity-2026]] | comparison | Cursor v2.6 vs Antigravity v1.20: centaur vs manager, benchmarks |
 
 ## Flows
 

@@ -1,5 +1,78 @@
 # Wiki Operations Log
 
+## [2026-05-01] autoresearch | Fallow Codebase Intelligence Harness Integration
+- Rounds: 1 (3 DuckDuckGo searches, 1 primary GitHub fetch, 4 ecosystem searches)
+- Sources fetched: 1 (fallow-rs/fallow GitHub README + docs)
+- Pages created (sources): [[fallow-rs-codebase-intelligence]]
+- Pages created (concepts): [[codebase-intelligence-harness-integration]], [[codebase-intelligence-ecosystem-comparison]]
+- Pages created (synthesis): [[Research: Fallow Codebase Intelligence Harness Integration]]
+- Pages updated: [[harness-implementation-plan]] (new phases P44a-P44g, Fallow Validation section, New Tools table, updated sources/related), [[index]] (fallow source + concepts + synthesis), [[log]], [[hot]]
+- Key finding: Fallow (1.7K stars, MIT, Rust-native) is the ONLY codebase intelligence tool across TS/JS, Python, Go, Rust, and Elixir that provides dead code + duplication + complexity + boundaries in one sub-second package. Purpose-built for AI agents (MCP server, JSON `actions` array, `auto_fixable` flags). Fits 7 harness integration points: L3 tool calling (P44a), P15b pre-verify (P44b), Phase 16 gate (P44c), L5 observability (P44d), P29 error classification (P44e), L6 baselines (P44f), P42 automations (P44g). No ecosystem has a fallow-equivalent — every other language requires 3-5 separate tools for similar coverage.
+
+## [2026-05-01] autoresearch | TypeScript Execution Layer for Agent Tool Calling
+- Rounds: 1 (5 searches, 8 fetches across CodeAct, Cloudflare Code Mode, Executor, McNamara analysis)
+- Sources fetched: 4 (Apple CodeAct research page, Cloudflare Code Mode official docs + GitHub, Executor GitHub README, McNamara context optimization analysis)
+- Pages created (sources): [[codeact-apple-2024]], [[cloudflare-codemode]], [[executor-rhyssullivan]], [[colinmcnamara-context-optimization-codemode]]
+- Pages created (concepts): [[ts-execution-layer]]
+- Pages created (synthesis): [[Research: TypeScript Execution Layer for Agent Tool Calling]]
+- Pages updated: [[harness-implementation-plan]] (new First Principle #19, new L3 phase P43, TS Execution Layer Validation section, updated savings mechanisms), [[mcp-tool-routing]] (added TS execution layer as alternative #4), [[agentic-harness-context-enforcement]] (added Layer 6: TypeScript Execution Layer, recommendation #6), [[index]], [[log]], [[hot]]
+- Key finding: Three independent systems converge on the TypeScript execution layer pattern — Apple CodeAct (ICML 2024: +20% success, -30% turns), Cloudflare Code Mode (production: 3-4x context reduction, Worker sandbox), Executor (open-source: 1.3K stars, local-first TS runtime). Core insight: LLMs are better at writing code to orchestrate tools than at making individual tool calls. New P43 phase adds single `write_ts` tool + sandboxed TypeScript runtime with typed API for all L3 tools. Extends P14 (Think-in-Code) from data analysis to full tool orchestration. 3-4x context reduction on multi-tool workflows.
+
+## [2026-05-01] autoresearch | Gemini CLI SOTA + Harness Integration from First Principles
+- Rounds: 1 (5 broad searches, 8 primary fetches, 3 gap-fill fetches)
+- Sources fetched: 8 (official architecture docs, official blog announcement, Render benchmark, Martin Fowler harness engineering, LangChain harness anatomy, OpenAI 5 principles summary, Augment harness engineering guide, Gemini CLI changelogs)
+- Pages created (sources): [[Source: Google Gemini CLI Architecture Docs]], [[Source: Google Blog - Gemini CLI Announcement]], [[Source: Render AI Coding Agents Benchmark 2025]], [[Source: Martin Fowler - Harness Engineering]], [[Source: LangChain - Anatomy of Agent Harness]], [[Source: OpenAI Harness Engineering Five Principles]], [[Source: Augment - Harness Engineering for AI Coding Agents]], [[Source: Gemini CLI Changelogs]]
+- Pages created (concepts): [[harness-engineering-first-principles]], [[agent-skills-pattern]], [[policy-engine-pattern]], [[gemini-cli-architecture]]
+- Pages created (synthesis): [[Research: Gemini CLI SOTA Harness Integration]]
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: Gemini CLI (launched June 2025, v0.40+, 103k GitHub stars, 6,005 commits) introduced 15 SOTA harness primitives: agent skills with progressive disclosure, Plan Mode, codebase investigator subagent, context compression, chapters narrative, policy engine, subagents+remote agents (A2A), event-driven hooks, four-tier memory, multi-registry architecture, browser agent, model routing, sandboxing stack, git worktrees, extensions ecosystem. Seven integration opportunities identified from first principles (not feature-copying): P-F1 pre-execution policy gates, P-F2 skills activation mechanism, P-F3 research subagents for planning, P-F4 event-driven hooks middleware, P-F5 git worktree sessions, P-F6 chapters narrative, P-F7 browser agent. Each derived from harness engineering first principles (Feedforward-Feedback, Mechanical Enforcement, Progressive Disclosure, Model-Harness Independence). Benchmark shows Gemini CLI excels at editing existing codebases (context-driven) but struggles on greenfield — validates our grounding-heavy approach.
+
+## [2026-05-01] autoresearch | Codex State-of-the-Art Harness Improvements
+- Rounds: 1 (1 round, 8 primary fetches from GitHub + official docs)
+- Sources fetched: 8 (GitHub repo README, AGENTS.md, codex-rs README, official docs subagents/memories/sandboxing/hooks/skills/workflows pages)
+- Pages created (sources): [[codex-open-source-agent-2026]]
+- Pages created (concepts): [[codex-harness-innovations]]
+- Pages created (synthesis): [[Research: Codex State-of-the-Art Harness Improvements]]
+- Pages updated: [[harness-implementation-plan]] (new First Principles #16-18, Codex Validation section, phases P38-P42, updated master description), [[index]], [[hot]], [[log]]
+- Key finding: Codex (79.2K GitHub stars, open-source Apache 2.0, Rust 96.3%) independently validated 7 of our planned features (model-adaptive, skills, hooks, subagents, pre-verification, memory, worktrees) and revealed 5 new gaps: OS-level sandbox enforcement (P38), MCP server mode (P39), skills ecosystem tooling (P40), implicit memory capture (P41), scheduled automations (P42). Three novel architectural patterns: multi-surface agent architecture, Rust-native implementation as first-principles choice, sandbox as foundation with permissions as policy layer (FP #16). Codex also introduces bidirectional MCP (FP #17) and Chronicle-style implicit memory (FP #18).
+
+## [2026-05-01] autoresearch | Claude Code State-of-the-Art Harness Improvements
+- Rounds: 1 (4 broad searches, 6 primary fetches, official docs verification)
+- Sources fetched: 6 (VILA-Lab arxiv paper, Qubytes architecture deep-dive, KaraxAI systems walkthrough, Penligent security architecture, official Agent SDK docs, official Hooks reference)
+- Pages created (sources): [[claude-code-architecture-vila-lab-2026]], [[claude-code-architecture-qubytes-2026]], [[claude-code-architecture-karaxai-2026]], [[claude-code-security-architecture-penligent-2026]]
+- Pages created (concepts): [[structured-compaction]], [[lifecycle-hooks]], [[subagent-worktree-isolation]]
+- Pages created (synthesis): [[Research: Claude Code State-of-the-Art Harness Improvements]]
+- Pages updated: [[harness-implementation-plan]] (new First Principles #12-15, Claude Code Validation section, phases P33-P37, updated gaps), [[index]], [[hot]], [[log]]
+- Key finding: Claude Code's architecture (reverse-engineered from 510K-line TypeScript codebase, 82K+ GitHub stars) is the most sophisticated production agent harness. Six major innovations not in our plan: five-layer structured compaction (P34), 30+ lifecycle hook events with exit-code semantics (P33), permission subsystem with ML classifier (P35), subagent worktree isolation (P25b), additive config hierarchy (P37), session storage with checkpointing (P36). Claude Code validated 3 of our features (FP #1 harness>model, model-adaptive, skills system). Design tensions: embeddings (P13) vs agentic search, pipeline vs reactive loop. Four deliberate non-adoptions: plugin ecosystem, multi-surface interface, OS sandboxing, CLAUDE.md every-turn injection.
+
+## [2026-05-01] autoresearch | Google Antigravity Harness Integration
+- Rounds: 2 (5 broad searches, 4 gap-fill searches, 8 sources fetched)
+- Sources fetched: 8 (Google official blog, Wikipedia, Cursor-vs-Antigravity comparison, Architecture deep dive, VentureBeat, MarkTechPost, The New Stack hands-on, engineering.01cloud deep dive)
+- Pages created (sources): [[google-antigravity-official-blog]], [[google-antigravity-wikipedia]], [[cursor-vs-antigravity-2026]]
+- Pages created (concepts): [[antigravity-agent-first-architecture]], [[agent-artifacts-verifiable-deliverables]], [[browser-subagent-visual-verification]]
+- Pages created (synthesis): [[Research: Google Antigravity Harness Integration]]
+- Pages updated: [[harness-implementation-plan]] (new First Principle #11, Antigravity Validation section, new phases P30/P31/P32, updated token budget), [[index]] (antigravity concepts + sources), [[hot]] (antigravity section), [[log]]
+- Key finding: Google Antigravity (launched Nov 2025, Windsurf $2.4B acq) independently validated 7 of our planned features (model-adaptive, pre-verification isolation, subagent specialization, self-evolving harness, skills system, adversarial verification, dynamic context — different approaches). Revealed 3 critical gaps: no browser/visual verification (P30), no artifact generation for human review (P31), no cross-project learning (P32). First-principles lesson: trust requires proof (artifacts), not just criticism (adversarial review) — both are mandatory. Deliberately NOT adopting: 1M token context window (too expensive), full IDE integration (we are CLI), Google Cloud lock-in, $249.99/mo pricing.
+
+## [2026-05-01] autoresearch | cursor.sh Harness Innovations
+- Rounds: 2 (5 broad searches, 5 primary fetches, 2 gap-fill fetches)
+- Sources fetched: 7 (Cursor engineering blog: shadow workspace, agent best practices, harness evolution, instant apply; ByteByteGo deep dive; MMNTM architecture analysis; speculative editing analysis)
+- Pages created (sources): [[cursor-shadow-workspace-2024]], [[cursor-agent-best-practices-2026]], [[cursor-harness-april-2026]], [[cursor-shipped-coding-agent-2026]], [[cursor-instant-apply-2024]], [[cursor-fork-29b-2025]]
+- Pages created (concepts): [[cursor-harness-innovations]]
+- Pages created (synthesis): [[Research: cursor.sh Harness Innovations]]
+- Pages updated: [[harness-implementation-plan]] (new First Principles #8-10, new phases P15b/P28/P29, P25 evolved to Subagent Specialization Router, P21 extended with Keep Rate + LLM-as-Judge, P10 extended with full-file rewrite mode, Cursor Validation section, F4 sandbox-as-infra), [[index]], [[log]], [[hot]]
+- Key finding: Cursor's production harness ($1B ARR, 400M+ daily requests) independently validated 5 of our planned features (model-adaptive harness, dynamic context, P27 context anxiety, F1 self-evolving harness, P10 fuzzy edits) and revealed 4 critical gaps now incorporated: pre-verification isolation sandbox (P15b), positive agent loop hooks (P28), per-tool per-model error classification (P29), and subagent specialization routing (P25 evolved). First-principles lesson: pre-verification beats post-verification, Keep Rate > benchmark scores, error classification enables self-healing, positive loops as important as negative loops.
+
+## [2026-05-01] research | Model-Specific Prompting Guides — Harness Redesign
+- Rounds: 1 (direct fetch of official provider documentation)
+- Sources fetched: 3 (OpenAI, Anthropic, Google Cloud official prompting guides)
+- Pages created (sources): [[openai-prompt-guidance]], [[anthropic-prompt-best-practices]], [[gemini-3-prompting-guide]]
+- Pages created (concepts): [[provider-native-prompting]]
+- Pages created (synthesis): [[Research: Model-Specific Prompting Guides]]
+- Pages rewritten: [[model-adaptive-harness]] (v2 redesign — retired "write once for strictest" principle), [[harness-configuration-layers]] (added Gemini column, provider-native dimensions, official sources)
+- Pages updated: [[index]], [[log]]
+- Key finding: Every major model provider now publishes OFFICIAL prompting guidance specific to their models. The current harness design ("write once for strictest, relax for forgiving") is WRONG according to official guidance. Each provider specifies fundamentally DIFFERENT prompting conventions — not just different strictness levels. OpenAI says constraints-first, Google says constraints-LAST. OpenAI (5.5+) says shorter outcome-first, the harness generates verbose constraint-heavy prompts. Anthropic mandates XML tags, Google uses plain text. The redesign: generate provider-native prompts from a semantic spec via pluggable renderers — never generate a single canonical prompt and relax it. New module: Prompt Renderer (Phase P22b).
+
 ## [2026-04-30] autoresearch | Augment Embedding Model, Chunking Strategy, Local vs Cloud Embeddings
 - Rounds: 2 (5 broad searches, 5 gap-fill searches, 5 sources fetched)
 - Sources fetched: 5 (cAST paper, code-chunk blog, embedding benchmark, CoIR benchmark, Vectara NAACL 2025)

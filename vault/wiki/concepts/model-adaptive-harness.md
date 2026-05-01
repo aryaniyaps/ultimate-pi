@@ -3,52 +3,81 @@ type: concept
 title: "Model-Adaptive Agent Harness"
 aliases: ["adaptive harness", "model-aware harness"]
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-01
 tags: [concept, agents, harness-design, model-awareness]
-status: active
+status: redesign
 related:
+  - "[[provider-native-prompting]]"
   - "[[harness-configuration-layers]]"
-  - "[[Research: Model-Adaptive Agent Harness Design]]"
+  - "[[Research: Model-Specific Prompting Guides]]"
   - "[[forgecode-gpt5-agent-improvements]]"
   - "[[harness-implementation-plan]]"
-  - "[[drift-detection-unified]]"
+  - "[[codex-harness-innovations]]"
+  - "[[codex-open-source-agent-2026]]"
+  - "[[openai-prompt-guidance]]"
+  - "[[anthropic-prompt-best-practices]]"
+  - "[[gemini-3-prompting-guide]]"
+sources:
+  - "[[openai-prompt-guidance]]"
+  - "[[anthropic-prompt-best-practices]]"
+  - "[[gemini-3-prompting-guide]]"
+  - "[[forgecode-gpt5-agent-improvements]]"
 ---
 
 # Model-Adaptive Agent Harness
 
-An agent harness that varies its behavior based on which LLM is driving it. Not a one-size-fits-all instruction set — a configurable system of signals, gates, channels, and completion criteria that adapts to each model's specific failure modes.
+An agent harness that generates **provider-native prompts** optimized for each model's official prompting conventions — not a single canonical format with strictness relaxations.
 
-> [!tip] See [[harness-configuration-layers]] for the detailed per-dimension comparison tables (Signal, Gate, Channel, Completion) across Opus, GPT, Gemini, and Strict profiles.
+> [!important] REDESIGN: May 2026 — The original design ("write once for strictest, relax for forgiving") has been replaced. Official provider guidance shows that models need fundamentally different prompt formats, not just different strictness levels. See [[provider-native-prompting]] and [[Research: Model-Specific Prompting Guides]].
 
-## Why
+## Why This Exists
 
-Forge Code demonstrated that GPT 5.4 and Opus 4.6 reached identical benchmark scores (81.8% on TermBench 2.0) only after the harness was adapted to each model. Drop both into the same harness and Opus looks easier. Adapt the harness and the gap disappears.
+Forge Code demonstrated that GPT 5.4 and Opus 4.6 reached identical benchmark scores (81.8% on TermBench 2.0) only after the harness was adapted to each model. This proved that adaptation matters.
 
-The models fail differently:
-- **GPT**: Anchors on first-seen content, gets confused by nested structures, misses metadata signals, stops after plausible-but-incomplete solutions. Needs flat structure, constraints-first ordering, enforced hard gates, in-band signaling.
-- **Opus/Claude**: Infers from structure, tolerates nesting, reads metadata, naturally double-checks. Tolerates hierarchical instructions, soft gates, metadata-based state channels.
-- **Gemini**: Profile TBD — needs validation against actual agent trajectories.
+But Forge Code's approach was empirical: observe failure modes, then compensate. Each provider now publishes OFFICIAL guidance on how to prompt their models correctly. These guides should be the PRIMARY source for harness adaptations.
 
-## Key Principle
+## Design Principle (v2 — May 2026)
 
-**Write once for the strictest model (GPT-safe defaults). Relax for forgiving models. Never write for forgiving and hope strict models cope.**
+**Generate provider-native prompts from a provider-agnostic semantic specification. Never generate a single canonical prompt and relax it.**
 
-The canonical harness instructions are written in "strict mode" (GPT-safe): flat structure, constraints-first, explicit markers, enforced hard gates, in-band signals. Opus/Claude profiles receive relaxations — they may skip explicit markers, use narrative self-assessment, and trust metadata for state signals.
+The harness's internal representation is a semantic spec (WHAT must be communicated). The prompt renderer generates actual prompt text according to the target model's provider conventions (HOW it's communicated).
 
-## Four-Layer Configuration Model
+See [[provider-native-prompting]] for the full architecture and renderer design.
 
-```
-L4 COMPLETION MODEL — How "done" is determined and verified
-L3 STATE CHANNEL    — How system state reaches the model
-L2 GATE DESIGN      — How transitions between phases are controlled
-L1 SIGNAL DESIGN    — How instructions are formatted for model consumption
-```
+## Provider Profiles (Official Guidance)
 
-Each layer has configurable dimensions that vary by model profile. See [[harness-configuration-layers]] for the full comparison table showing all 16 dimension variations across 4 model profiles.
+### OpenAI GPT-5.x
+- **Structure**: XML-like sections, constraints-first ordering
+- **Density**: Outcome-first, concise. Describe destination, not journey
+- **Verification**: Pre-flight/post-flight action safety blocks
+- **Thinking**: reasoning_effort parameter (none/low/medium/high/xhigh)
+- **Tools**: apply_patch native, shell_command, update_plan
+- **Key rule**: Contradictory instructions actively harm GPT-5+ reasoning
+- **Source**: [[openai-prompt-guidance]]
+
+### Anthropic Claude 4.x
+- **Structure**: XML tags, long content at TOP, query at BOTTOM
+- **Density**: General instructions over prescriptive steps
+- **Verification**: Self-check at end, role setting critical
+- **Thinking**: Adaptive thinking with effort parameter (max/xhigh/high/medium/low)
+- **Tools**: Explicit tool direction, text_editor, bash
+- **Key rule**: Be explicit; don't infer intent from vague prompts
+- **Source**: [[anthropic-prompt-best-practices]]
+
+### Google Gemini 3
+- **Structure**: Plain text, constraints at END (not beginning)
+- **Density**: Concise by default, must explicitly steer for verbosity
+- **Verification**: Split-step: verify capability → then generate
+- **Thinking**: thinking level LOW/HIGH, system instructions
+- **Temperature**: **1.0 MANDATORY** — never change
+- **Key rule**: Persona definitions are binding; model treats them seriously
+- **Source**: [[gemini-3-prompting-guide]]
+
+> [!gap] Empirical failure mode data (from Forge Code) should be layered ON TOP of official guidance, not used as the foundation. The old design was reversed.
 
 ## What Never Adapts
 
-Core invariants across all profiles — these are enforced by the pipeline structure, not by model-specific instructions:
+Core invariants across all profiles — enforced by pipeline structure, not model-specific instructions:
 
 - Pipeline phase ordering and layer requirements
 - Quality standards and source attribution requirements
@@ -58,26 +87,36 @@ Core invariants across all profiles — these are enforced by the pipeline struc
 - Read-first/write-after wiki contract
 - No-skip rule (verification is mandatory)
 
-## Model-Specific Adaptations (Summary)
-
-| Behavior | Opus/Claude | GPT | Gemini |
-|----------|-------------|-----|--------|
-| Structure | Tolerates nesting, natural flow | Needs flat, constraints-first | TBD |
-| Truncation | Infers from metadata | Needs body-text in-band warning | TBD |
-| Verification | Naturally double-checks | Must be ENFORCED (hard gate) | TBD |
-| Completion | Self-aware of gaps | Stops after plausible-but-incomplete | TBD |
-| Emphasis | Contextual cues work | Explicit markers (REQUIRED, MANDATORY) | TBD |
-| Drift detection | LLM-based every 15 steps | Rule-based every step | Rule-based every 10 steps |
-
 ## Application to Harness Pipeline
 
-Each pipeline phase that generates agent-facing instructions varies based on the driving model profile:
-- **L1 Spec Hardening**: Instruction density, constraint ordering, emphasis markers
-- **L2 Structured Planning**: Gate enforcement (hard checklist vs soft self-assessment), granularity (per-step vs per-round)
-- **L2.5 Drift Monitor**: Detection frequency (per-step rule-based vs every-15-step LLM-based), escalation aggression
-- **L3 Grounding Checkpoints**: Truncation signaling (in-band warning vs metadata), progress indicators (explicit counters vs implicit)
-- **L4 Adversarial Verification**: Completion criteria (falsifiable checklist vs completion-signal), self-audit (enforced vs natural)
+Each pipeline layer generates a fragment of the semantic spec. The renderer produces the actual prompt:
 
-## Source
+- **L1 Spec Hardening**: Task definition, acceptance criteria → rendered per provider conventions
+- **L2 Structured Planning**: Task DAG, dependencies → constraint ordering per provider
+- **L2.5 Drift Monitor**: Detection strategy → split-step (Gemini), self-check (Claude), loop (GPT)
+- **L3 Grounding Checkpoints**: Verification steps → grounding mechanism per provider
+- **L4 Adversarial Verification**: Attack vectors → verification workflow per provider
+- **L5-L8**: Observability, memory, orchestration, query → rendered per provider
 
-Derived from Forge Code's TermBench 2.0 findings: https://forgecode.dev/blog/gpt-5-4-agent-improvements/
+## Implementation
+
+New module: **Prompt Renderer** (Phase P22b in [[harness-implementation-plan]])
+
+```
+Semantic Spec → Prompt Renderer → Provider-Native Prompt
+                ├── openai-renderer
+                ├── anthropic-renderer  
+                └── google-renderer
+```
+
+- `lib/renderers/openai.ts` — XML-like sections, constraints-first, preambles
+- `lib/renderers/anthropic.ts` — XML tags, long-content-top, role setting
+- `lib/renderers/google.ts` — Plain text, constraints-last, grounding statements
+- `lib/renderers/fallback.ts` — Conservative markdown for unknown models
+
+## Sources
+
+- [[openai-prompt-guidance]] — OpenAI official, 2026
+- [[anthropic-prompt-best-practices]] — Anthropic official, 2026
+- [[gemini-3-prompting-guide]] — Google Cloud official, 2026-04-29
+- [[forgecode-gpt5-agent-improvements]] — Forge Code empirical, 2026

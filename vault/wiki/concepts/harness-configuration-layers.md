@@ -3,18 +3,26 @@ type: concept
 title: "Harness Configuration Layers"
 aliases: ["four-layer harness", "harness layers", "L1-L4 harness"]
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-01
 tags: [#concept, #agents, #harness-design]
-status: developing
+status: redesign
 related:
+  - "[[provider-native-prompting]]"
   - "[[model-adaptive-harness]]"
   - "[[forgecode-gpt5-agent-improvements]]"
-  - "[[Research: Model-Adaptive Agent Harness Design]]"
+  - "[[Research: Model-Specific Prompting Guides]]"
+sources:
+  - "[[openai-prompt-guidance]]"
+  - "[[anthropic-prompt-best-practices]]"
+  - "[[gemini-3-prompting-guide]]"
+  - "[[forgecode-gpt5-agent-improvements]]"
 ---
 
 # Harness Configuration Layers
 
-A four-layer model for agent harness design. Each layer has configurable dimensions that vary by LLM model. Based on Forge Code's finding that the same harness produces different reliability across models — and that exposing these as configuration (not hardcoding them) is what separates brittle harnesses from reliable ones.
+A four-layer model for agent harness design. Each layer has configurable dimensions that vary by LLM model. **Updated May 2026** with official provider guidance as the primary source, replacing the earlier empirical-only approach.
+
+> [!important] The old design principle ("write once for strict, relax for forgiving") is retired. See [[provider-native-prompting]] for the replacement: generate provider-native prompts from a semantic spec.
 
 ## Layer Architecture
 
@@ -29,49 +37,53 @@ L1 SIGNAL DESIGN    — How instructions are formatted for model consumption
 
 How instructions, constraints, and structure are formatted.
 
-| Dimension | Opus/Claude | GPT | Why |
-|---|---|---|---|
-| Density | concise | verbose | GPT needs repetition; Opus infers |
-| Constraint Ordering | natural-flow | constraints-first | GPT weights early tokens higher |
-| Emphasis | contextual | explicit-markers | GPT responds to `REQUIRED:`; Opus reads intent |
-| Nesting Depth | hierarchical | flat | GPT confused by nested structures |
-| Atomicity | compound | atomic | GPT does first directive, stops |
+| Dimension | OpenAI GPT | Anthropic Claude | Google Gemini | Source |
+|---|---|---|---|---|
+| Structure | XML-like sections | XML tags | Plain text sections | Official guides |
+| Density | Concise, outcome-first (5.5+) | General over prescriptive | Concise by default | OpenAI 5.5 guide, Anthropic BP, Gemini 3 guide |
+| Constraint Ordering | FIRST (early tokens weighted higher) | Flexible | LAST (constraints at end) | Forge Code, Gemini 3 guide |
+| Emphasis | Explicit markers for invariants only | Role setting + why explanation | Persona definitions binding | All three guides |
+| Nesting Depth | Flat (older GPT), relaxed (GPT-5.5+) | Hierarchical OK | Flat recommended | Forge Code, official guides |
 
 ## L2: Gate Design
 
 How transitions between phases are controlled.
 
-| Dimension | Opus/Claude | GPT | Why |
-|---|---|---|---|
-| Enforcement | soft-gate | hard-gate | GPT stops early without enforced gates |
-| Granularity | per-round | per-step | GPT needs frequent drift-prevention |
-| Evidence | self-assessment | checklist | GPT self-assessment is confidently wrong |
-| Retry | flag-and-continue | auto-loop | GPT chooses "continue" over "retry" |
+| Dimension | OpenAI GPT | Anthropic Claude | Google Gemini | Source |
+|---|---|---|---|---|
+| Enforcement | Hard-gate (verification loop) | Self-check at end | Split-step verify→generate | GPT-5.4 guide, Anthropic BP, Gemini 3 guide |
+| Granularity | Per-step | Per-round (auto-calibrated) | Per-step | Forge Code, Anthropic BP |
+| Evidence | Checklist + tool output | Self-assessment + quote extraction | Explicit capability verification | GPT-5.4 guide, Anthropic BP, Gemini 3 guide |
+| Retry | Auto-loop (tool persistence rules) | Flag-and-continue (effort-controlled) | Escalate after 1-2 fallback strategies | GPT-5.4 guide, Anthropic BP, Gemini 3 guide |
 
 ## L3: State Channel
 
 How system state reaches the model.
 
-| Dimension | Opus/Claude | GPT | Why |
-|---|---|---|---|
-| Truncation | metadata | in-band | GPT ignores metadata fields |
-| Progress | implicit | explicit-counters | GPT loses track in long trajectories |
-| Error | natural | structured | GPT handles structured errors better |
+| Dimension | OpenAI GPT | Anthropic Claude | Google Gemini | Source |
+|---|---|---|---|---|
+| Truncation | In-band warning + compaction API | Context awareness (tracks own budget) | System instruction for budget | GPT guide, Anthropic BP |
+| Progress | Explicit counters + user update spec | Auto-calibrated progress updates | Less verbose, steer explicitly | GPT-5.1 guide, Anthropic Opus 4.7, Gemini 3 guide |
+| Error | Structured (phase parameter) | Natural (adaptive thinking) | System instruction routing | GPT-5.3 Codex, Anthropic BP |
+| Grounding | Citation rules + retrieval budgets | Quote extraction from documents | Explicit "context is truth" statement | All three guides |
 
 ## L4: Completion Model
 
 How "done" is determined.
 
-| Dimension | Opus/Claude | GPT | Why |
-|---|---|---|---|
-| Criteria | completion-signal | falsifiable-checklist | GPT's "I'm done" is unreliable |
-| Self-Audit | natural | enforced | GPT must be forced into reviewer mode |
-| Partial-Work | accept-with-gaps | reject | GPT partial work looks complete but isn't |
+| Dimension | OpenAI GPT | Anthropic Claude | Google Gemini | Source |
+|---|---|---|---|---|
+| Criteria | Falsifiable checklist + completeness contract | Completion-signal + self-check | Split-step verification pass | GPT-5.4, Anthropic BP, Gemini 3 guide |
+| Self-Audit | Enforced (verification loop) | Natural (may need prompting) | Enforced (verify before generate) | GPT-5.4, Anthropic BP, Gemini 3 guide |
+| Partial-Work | Reject (completeness contract) | Accept-with-gaps (autonomous continuation) | STOP if unverified | GPT-5.4, Anthropic BP, Gemini 3 guide |
 
-## Design Principle
+## Design Principle (v2)
 
-**Write once for strict (GPT-safe defaults). Relax for forgiving models.** The cost of over-specifying is minor (extra tokens). The cost of under-specifying is broken agent loops.
+**Generate provider-native prompts from a semantic spec.** See [[provider-native-prompting]] for the renderer architecture.
 
-## Source
+## Sources
 
-Derived from Forge Code's TermBench 2.0 findings: https://forgecode.dev/blog/gpt-5-4-agent-improvements/
+- [[openai-prompt-guidance]] — OpenAI official, 2026
+- [[anthropic-prompt-best-practices]] — Anthropic official, 2026
+- [[gemini-3-prompting-guide]] — Google Cloud official, 2026-04-29
+- [[forgecode-gpt5-agent-improvements]] — Forge Code empirical failure modes, 2026
