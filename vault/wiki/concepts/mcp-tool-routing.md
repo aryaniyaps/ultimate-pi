@@ -2,16 +2,19 @@
 type: concept
 status: developing
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-01
 tags:
   - mcp
   - agent-tools
   - routing
   - architecture
+  - typescript-execution-layer
 related:
   - "[[agent-search-enforcement]]"
   - "[[ck-tool]]"
   - "[[Research: semantic code search tools]]"
+  - "[[ts-execution-layer]]"
+  - "[[harness-implementation-plan]]"
 title: "MCP tool routing"
 ---
 
@@ -97,3 +100,4 @@ The agent decides which tool to use. MCP tools appear alongside native tools. To
 - **Custom agent framework**: Build your own tool router that intercepts all tool calls and rewrites them.
 - **Proxy MCP server**: An MCP server that wraps both native tools and ck, making routing decisions centrally.
 - **Shell function aliases**: `function grep() { ck --hybrid "$@" || command grep "$@"; }` — simpler but less controlled.
+- **[[ts-execution-layer|TypeScript Execution Layer]]**: Replace MCP tool routing entirely. Instead of routing individual tool calls, expose all tools as a typed TypeScript API. Agent writes TS code; sandbox executes; tool calls dispatch via RPC. 3-4x context reduction and ~20% higher multi-tool success rate vs flat tool calling. Validated by CodeAct, Cloudflare Code Mode, Executor.
