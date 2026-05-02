@@ -12,9 +12,8 @@ related:
   - "[[repo-map-ranking]]"
   - "[[aider-repomap-tree-sitter]]"
 status: developing
----
 
-# Progressive Disclosure for Agents
+---# Progressive Disclosure for Agents
 
 A strategy for presenting codebase information to agents in layers of increasing detail, matching the agent's navigation pattern.
 

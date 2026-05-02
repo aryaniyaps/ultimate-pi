@@ -217,13 +217,3 @@ npm run check:ts        # typecheck extensions
 ```
 
 Pre-commit hooks run `biome check` and `tsc` on staged files automatically — no bad code gets committed.
-
-## Terminal-Bench evaluation (local only)
-
-Use Harbor custom-agent flow from docs:
-
-```bash
-npm run bench:terminal
-```
-
-Scaffold files live in `bench/terminal-bench/` and are excluded from npm publish via `.npmignore`.

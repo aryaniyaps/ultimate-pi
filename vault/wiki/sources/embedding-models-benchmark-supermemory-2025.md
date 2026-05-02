@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: benchmark-report
 author: Naman Bansal / Supermemory AI
 date_published: 2025-06-27
@@ -18,9 +19,10 @@ tags:
   - bge
   - e5
   - nomic
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Best Open-Source Embedding Models Benchmarked and Ranked (2025)
+---# Best Open-Source Embedding Models Benchmarked and Ranked (2025)
 
 ## Summary
 

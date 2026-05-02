@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: github-issue
 title: "gh CLI Feature Request: Parent Issues / Sub-Tasks Support"
 author: premun (cli/cli)
@@ -19,9 +20,10 @@ tags:
 related:
   - "[[Research: GitHub Issues as Harness Spec Storage]]"
   - "[[gh-sub-issue-extension]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# gh CLI Feature Request: Parent Issues / Sub-Tasks
+---# gh CLI Feature Request: Parent Issues / Sub-Tasks
 
 Official feature request on `cli/cli` repo (44.2k stars) requesting native sub-issue support in `gh issue create` and `gh issue edit`.
 

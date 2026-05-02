@@ -20,9 +20,8 @@ tags:
   - software-engineering
 created: 2024-05-06
 updated: 2026-04-30
----
 
-# SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering
+---# SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering
 
 Introduces the concept of Agent-Computer Interfaces (ACI) — designing human-computer interfaces specifically for language model agents rather than humans.
 

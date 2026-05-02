@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: official_documentation
 title: "Cloudflare Code Mode"
 author: "Cloudflare (Kenton Varda, Sunil Pai)"
@@ -19,9 +20,10 @@ key_claims:
   - "Network isolation enforced at Workers runtime level (globalOutbound: null)"
   - "Tool calls dispatched via Workers RPC, not network requests"
   - "3-4x context reduction vs traditional tool calling"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Cloudflare Code Mode
+---# Cloudflare Code Mode
 
 Cloudflare's `@cloudflare/codemode` package (beta) implements the **TypeScript execution layer** pattern for AI agents. Instead of exposing dozens of MCP tools as separate function calls in the LLM context, it converts all tools into a typed TypeScript API, gives the LLM a single "write code" tool, and executes the generated JavaScript in a secure, isolated Worker sandbox.
 

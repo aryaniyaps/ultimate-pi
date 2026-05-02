@@ -13,8 +13,8 @@ related:
 sources:
   - "[[claude-code-architecture-karaxai-2026]]"
   - "[[claude-code-security-architecture-penligent-2026]]"
+updated: 2026-05-02
 ---
-
 # Lifecycle Hook System
 
 Deterministic policy enforcement at the tool lifecycle level through hook events with exit-code semantics. The key insight: **CLAUDE.md achieves ~92% compliance. Hooks achieve 100% compliance** for conditions they match (Source: [[claude-code-architecture-karaxai-2026]]).

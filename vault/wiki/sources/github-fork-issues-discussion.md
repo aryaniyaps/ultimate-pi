@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: github-discussion
 title: "GitHub Community: No Issues to Enable in Forked Repo"
 author: guangli-dai, tarak6984, secretnamebasis
@@ -19,9 +20,10 @@ tags:
   - multi-tenant
 related:
   - "[[Research: GitHub Issues as Harness Spec Storage]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# GitHub Community: Fork Issues Discussion
+---# GitHub Community: Fork Issues Discussion
 
 GitHub Community discussion #161368 tracking the evolution of issue support on forked repositories.
 

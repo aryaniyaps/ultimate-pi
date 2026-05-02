@@ -21,10 +21,9 @@ sources:
   - "[[opencode-dcp]]"
   - "[[openclaw-session-pruning]]"
   - "[[ms-chat-history-management]]"
-  - "[[agent-drift-paper]]"
----
+  - "[[agent-drift-academic-paper]]"
 
-# Resolved: In-Place Context Pruning vs Session Restart
+---# Resolved: In-Place Context Pruning vs Session Restart
 
 ## Resolution
 

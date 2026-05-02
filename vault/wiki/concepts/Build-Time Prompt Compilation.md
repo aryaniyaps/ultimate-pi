@@ -13,10 +13,9 @@ related:
   - "[[Prompt Renderer]]"
   - "[[research: Prompt Renderer for Multi-Model Agent Harness]]"
 sources:
-  - "[[Source: PromptKit PackC Compiler]]"
----
+  - "[[Source: Build-Time Prompt Compilation Architecture]]"
 
-# Build-Time Prompt Compilation
+---# Build-Time Prompt Compilation
 
 The practice of compiling prompts from a base specification into validated, model-specific output at **build time** (not runtime), then shipping the compiled output as static assets in an npm package.
 
@@ -30,6 +29,7 @@ The practice of compiling prompts from a base specification into validated, mode
 | **npm distribution** | Static JSON files | Ship template engine + templates |
 | **Determinism** | Hash-verifiable output | Runtime variables may differ |
 | **Dependency weight** | None (compiled JSON is raw data) | Must ship template engine in bundle |
+| **Real-world tools** | Microsoft prompt-engine (abandoned, 2.8K stars), PromptWeaver (active, MIT) | Jinja2, Handlebars runtime rendering |
 
 ## Pipeline Design
 
@@ -49,7 +49,7 @@ Included in npm package as static assets
 
 ## Deterministic Build Requirements
 
-1. **Version-locked renderer**: Pinned compiler version (like `.packc-version`)
+1. **Version-locked renderer**: Pinned compiler version in build manifest
 2. **Input hashing**: `sha256sum` over all source spec files
 3. **Build manifest**: Records compiler version, source files, file hashes, build time
 4. **Same input → same output**: Guaranteed identical compiled prompts for same spec + version

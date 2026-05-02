@@ -122,7 +122,7 @@ Extended for consensus:
   "role": "attacker",
   "position": "Succinct claim",
   "counter_to": "Previous claim being countered",
-  "evidence_refs": ["[[wiki/page]]", "src/auth.ts:142"],
+  "evidence_refs": ["wiki/page", "src/auth.ts:142"],
   "confidence_change": -1,
   "timestamp": "...",
   "replyTo": "prev-turn-uuid"

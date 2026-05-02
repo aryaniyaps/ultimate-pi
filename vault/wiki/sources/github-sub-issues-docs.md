@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: documentation
 title: "GitHub Sub-Issues — Official Documentation"
 author: GitHub Docs
@@ -20,9 +21,10 @@ tags:
   - project-management
 related:
   - "[[Research: GitHub Issues as Harness Spec Storage]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# GitHub Sub-Issues — Official Documentation
+---# GitHub Sub-Issues — Official Documentation
 
 GitHub's official documentation for the sub-issues feature, launched in April 2025.
 

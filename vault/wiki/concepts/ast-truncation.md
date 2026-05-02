@@ -14,9 +14,8 @@ related:
   - "[[wozcode]]"
   - "[[research-wozcode-token-reduction]]"
 status: developing
----
 
-# AST Truncation
+---# AST Truncation
 
 AST truncation is a technique for reducing LLM input tokens during code exploration by returning function/method signatures while stubbing their bodies. Unlike file-level selection (choose which files to show), AST truncation operates at the syntax level: show the interface, hide the implementation.
 

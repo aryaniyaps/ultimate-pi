@@ -15,9 +15,8 @@ related:
   - "[[harness-implementation-plan]]"
 sources:
   - "[[fan2025-imad]]"
----
 
-# Selective Debate Routing
+---# Selective Debate Routing
 
 The practice of triggering multi-agent debate only when likely to be beneficial, rather than for every query. From iMAD (Fan et al., AAAI 2026).
 

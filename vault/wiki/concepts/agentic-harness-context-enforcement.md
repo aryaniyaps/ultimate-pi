@@ -14,9 +14,8 @@ related:
   - "[[lean-ctx]]"
 sources:
   - "[[Research: context-mode vs lean-ctx]]"
----
 
-# Agentic Harness Context Enforcement
+---# Agentic Harness Context Enforcement
 
 How to enforce context-efficient behavior ("think in code") in an agentic harness — the orchestration layer that manages AI coding agents.
 

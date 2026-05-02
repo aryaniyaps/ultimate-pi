@@ -21,9 +21,8 @@ sources:
   - "[[gh-sub-issue-extension]]"
   - "[[gh-cli-sub-issue-rfc]]"
   - "[[github-fork-issues-discussion]]"
----
 
-# Research: GitHub Issues as Harness Spec Storage
+---# Research: GitHub Issues as Harness Spec Storage
 
 ## Overview
 

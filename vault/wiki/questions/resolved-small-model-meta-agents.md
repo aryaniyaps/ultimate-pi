@@ -17,14 +17,13 @@ resolves:
 related:
   - "[[meta-agent-context-pruning]]"
   - "[[drift-detection-unified]]"
+  - "[[agent-drift-academic-paper]]"
   - "[[model-routing-agents]]"
-  - "[[agent-drift-paper]]"
 sources:
-  - "[[agent-drift-paper]]"
+  - "[[agent-drift-academic-paper]]"
   - "[[wozcode]]"
----
 
-# Resolved: Small Model Meta-Agents for Drift Detection
+---# Resolved: Small Model Meta-Agents for Drift Detection
 
 ## Resolution
 
@@ -34,7 +33,7 @@ sources:
 
 ### Rule-Based Detection = Zero LLM Cost
 
-The 6 drift pattern signatures (repetition, failure spiral, tool cycling, silence drift, rework churn, excessive searching) are all rule-based. They use hash comparison and counters — 0 LLM tokens. No model needed at all. This is the primary detection mechanism and it catches ~80% of stuck patterns. (Source: [[agent-drift-paper]], ironclaw DriftMonitor)
+The 6 drift pattern signatures (repetition, failure spiral, tool cycling, silence drift, rework churn, excessive searching) are all rule-based. They use hash comparison and counters — 0 LLM tokens. No model needed at all. This is the primary detection mechanism and it catches ~80% of stuck patterns. (Source: [[agent-drift-academic-paper]], ironclaw DriftMonitor)
 
 ### LLM-Based Detection = Small Model Feasible
 

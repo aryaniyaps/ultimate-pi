@@ -31,9 +31,9 @@ status: complete
 | `[[context-engineering]]` | (removed) | [[context-anxiety]] |
 | `[[consensus-debate-flow]]` | `[[consensus-debate]]` | [[index]] |
 | `[[Anthropic]]` | `[[anthropic2026-harness-design]]` | [[research-agentic-coding-harness-latest-papers]] |
-| `[[Meng et al.]]` | `[[meng2026-agent-harness-survey]]` | [[research-agentic-coding-harness-latest-papers]] |
-| `[[Martin Fowler / Thoughtworks]]` | `[[bockeler2026-harness-engineering]]` | [[research-agentic-coding-harness-latest-papers]] |
-| `[[Lee et al. (Stanford/Together AI)]]` | `[[lee2026-meta-harness]]` | [[research-agentic-coding-harness-latest-papers]] |
+| `[[Meng et al]]` | `[[meng2026-agent-harness-survey]]` | [[research-agentic-coding-harness-latest-papers]] |
+| `[[Martin Fowler]]` | `[[bockeler2026-harness-engineering]]` | [[research-agentic-coding-harness-latest-papers]] |
+| `[[Lee et al]]` | `[[lee2026-meta-harness]]` | [[research-agentic-coding-harness-latest-papers]] |
 | `[[Meta-Harness]]` | `[[lee2026-meta-harness]]` | [[lou2026-autoharness]] |
 
 ### Stale Index Fixed (1)

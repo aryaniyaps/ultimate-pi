@@ -23,9 +23,8 @@ related:
 sources:
   - "[[claude-context-editing-docs]]"
   - "[[gitingest]]"
----
 
-# Resolved: Context Window Economics
+---# Resolved: Context Window Economics
 
 ## Resolution
 

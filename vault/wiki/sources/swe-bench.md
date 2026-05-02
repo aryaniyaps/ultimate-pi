@@ -19,9 +19,8 @@ tags:
   - evaluation
 created: 2023-10-10
 updated: 2026-04-30
----
 
-# SWE-bench: Can Language Models Resolve Real-World GitHub Issues?
+---# SWE-bench: Can Language Models Resolve Real-World GitHub Issues?
 
 The canonical benchmark for evaluating language models on real-world software engineering tasks. Defines the problem scope agents face when navigating large codebases.
 

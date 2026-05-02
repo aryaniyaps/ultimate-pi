@@ -2,6 +2,7 @@
 type: concept
 title: "Dual-Model Agent Architecture"
 created: 2026-04-30
+status: developing
 tags:
   - agent-architecture
   - llm
@@ -15,9 +16,9 @@ related:
 sources:
   - "[[Augment SWE-bench Agent GitHub]]"
   - "[[Augment SWE-bench Pro Blog]]"
----
+updated: 2026-05-02
 
-# Dual-Model Agent Architecture
+---# Dual-Model Agent Architecture
 
 An agent architecture that uses two different LLMs for distinct phases: a fast, capable model for iterative reasoning/ coding, and a more deliberative model for solution selection/verification.
 

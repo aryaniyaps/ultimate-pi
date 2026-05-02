@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: github-repository
 author: Augment Code
 date_published: 2025
@@ -19,9 +20,10 @@ tags:
   - coding-agent
   - open-source
   - claude
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Augment SWE-bench Verified Agent (GitHub)
+---# Augment SWE-bench Verified Agent (GitHub)
 
 ## Summary
 

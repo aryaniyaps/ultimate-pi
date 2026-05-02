@@ -9,17 +9,19 @@ tags:
   - browser-automation
   - visual-verification
   - tools
+  - browser-use
 aliases: ["headless browser agent", "visual verification subagent"]
 related:
   - "[[agentic-harness]]"
   - "[[harness-implementation-plan]]"
   - "[[grounding-checkpoints]]"
+  - "[[browser-harness-agent]]"
 sources:
   - "[[cursor-vs-antigravity-2026]]"
   - "[[google-antigravity-official-blog]]"
----
+  - "[[Source: browser-harness CDP Harness]]"
 
-# Browser Subagent for Visual Verification
+---# Browser Subagent for Visual Verification
 
 Antigravity's most distinctive technical capability: an agent subprocess that drives a headless Chromium browser to visually verify UI changes.
 
@@ -58,8 +60,10 @@ None of this can verify that a UI change actually produced the correct visual re
 ## Proposed Integration: Phase P30
 
 Add a **Browser Subagent** to the tool registry:
-- `lib/harness-browser.ts` — Puppeteer/Playwright-based headless browser driver
+- `lib/harness-browser.ts` — browser-harness driving headless Chrome via CDP WebSocket
 - `extensions/harness-browser.ts` — Extension hook: after UI-related edits, optionally trigger visual verification
 - Configurable: `.pi/harness/browser.json` — enable/disable, screenshot directories, viewport configs
 
 The browser subagent operates as a specialized subagent (P25 router dispatches UI tasks to it). It reports results as artifacts (P31).
+
+> [!update] Migrated from Puppeteer to browser-harness (9.4K stars, MIT) — thin CDP harness by browser-use. Self-healing: agent writes missing helpers mid-execution. Direct CDP access (one WebSocket to Chrome, nothing between). See [[browser-harness-agent]] and [[Source: browser-harness CDP Harness]].

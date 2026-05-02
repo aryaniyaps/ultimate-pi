@@ -13,8 +13,8 @@ sources:
   - "[[claude-code-architecture-vila-lab-2026]]"
   - "[[claude-code-security-architecture-penligent-2026]]"
   - "[[claude-code-architecture-karaxai-2026]]"
+updated: 2026-05-02
 ---
-
 # Subagent Worktree Isolation
 
 Claude Code's approach to subagent safety: each subagent gets a fresh context window AND optionally an isolated Git worktree. Only the final summary returns to the parent. No intermediate state leaks.

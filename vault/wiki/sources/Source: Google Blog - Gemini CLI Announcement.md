@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: official-announcement
 author: Taylor Mullen, Ryan J. Salva (Google)
 date_published: 2025-06-25
@@ -14,8 +15,10 @@ key_claims:
   - Non-interactive mode for script automation
   - Shares technology with Gemini Code Assist (VS Code + terminal)
   - Open source: global community contribution expected
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # Google Official Blog: Gemini CLI Announcement
 
 ## What It Is

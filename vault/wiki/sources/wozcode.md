@@ -23,9 +23,8 @@ created: 2026-04-30
 updated: 2026-04-30
 status: ingested
 title: "WOZCODE"
----
 
-# WOZCODE
+---# WOZCODE
 
 WOZCODE is a Claude Code plugin by WithWoz Inc. that reduces token spend through three compounding levers. Patent-pending. Runs 100% locally — code never leaves the developer's machine.
 

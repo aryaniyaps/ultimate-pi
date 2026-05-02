@@ -16,9 +16,8 @@ sources:
   - "[[lou2026-autoharness]]"
   - "[[lee2026-meta-harness]]"
   - "[[meng2026-agent-harness-survey]]"
----
 
-# Self-Evolving Harness
+---# Self-Evolving Harness
 
 The concept that a harness can automatically improve itself through iterative refinement, execution traces, and outer-loop optimization — rather than requiring manual human engineering.
 

@@ -14,9 +14,8 @@ related:
   - "[[agentic-harness-context-enforcement]]"
   - "[[Research: semantic code search tools]]"
 title: "agent search enforcement"
----
 
-# agent search enforcement
+---# agent search enforcement
 
 Strategies to force AI coding agents to use semantic code search tools (ck, vgrep) instead of raw `grep`, `cat`, and pipe commands.
 

@@ -13,9 +13,8 @@ related:
   - "[[agent-search-enforcement]]"
   - "[[Research: semantic code search tools]]"
 title: "hybrid code search"
----
 
-# hybrid code search
+---# hybrid code search
 
 Combining lexical (keyword-based) and semantic (embedding-based) search with Reciprocal Rank Fusion (RRF) for code search.
 

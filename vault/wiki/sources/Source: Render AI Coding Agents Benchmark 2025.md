@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: benchmark-report
 author: Mitch Alderson (Render)
 date_published: 2025-08-12
@@ -13,8 +14,10 @@ key_claims:
   - OpenAI Codex (6/10): powerful model, hampered by UX issues
   - Gemini CLI pattern: excels at editing existing codebases (context-driven), struggles generating from scratch
   - Free tier: 60 req/min, 1,000 req/day (industry best)
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # Render AI Coding Agents Benchmark (August 2025)
 
 ## What It Is

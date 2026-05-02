@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: academic-paper
 title: "Don't Break the Cache: An Evaluation of Prompt Caching for Long-Horizon Agentic Tasks"
 author: "Elias Lumer, Faheem Nizar, Akshaya Jangiti, et al. (PricewaterhouseCoopers U.S.)"
@@ -22,9 +23,10 @@ key_claims:
   - "System prompt only caching provides the most consistent benefits across both cost and latency dimensions"
   - "Cost savings scale linearly with prompt size (54-89% at 50K tokens), stable across tool counts"
   - "Evaluated on DeepResearch Bench: 500 agent sessions, 10K-token system prompts, 4 flagship models"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Academic Validation of Prompt Caching Strategies
+---# Academic Validation of Prompt Caching Strategies
 
 ## Experimental Design
 

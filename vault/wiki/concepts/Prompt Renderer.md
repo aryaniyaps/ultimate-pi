@@ -14,11 +14,10 @@ related:
   - "[[model-adaptive-harness]]"
   - "[[research: Prompt Renderer for Multi-Model Agent Harness]]"
 sources:
-  - "[[Source: PromptKit PackC Compiler]]"
+  - "[[Source: Build-Time Prompt Compilation Architecture]]"
   - "[[Source: AgentBus Jinja2 Prompt Pipelines]]"
----
 
-# Prompt Renderer
+---# Prompt Renderer
 
 A build-time prompt compilation system that takes a **base prompt spec** (model-agnostic) and renders **per-model optimized prompts** by applying each model's official prompting conventions, substituting variables, and caching compiled output.
 

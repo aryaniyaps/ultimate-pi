@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: blog
 title: "Inside Claude Code: The Architecture That Makes AI Actually Do the Work"
 author: "Vijendra (The Neural Blueprint / Qubytes)"
@@ -14,8 +15,9 @@ key_claims:
   - "Hooks are the enterprise integration surface"
   - "Subagents enable horizontal scaling of reasoning"
   - "Safety as a subsystem, not an afterthought"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Claude Code Architecture (Qubytes, 2026)
 
 ## Source Summary

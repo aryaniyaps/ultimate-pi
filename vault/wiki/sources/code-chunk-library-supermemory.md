@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: open-source-tool
 author: Shoubhit Dash / Supermemory AI
 date_published: 2025-12-27
@@ -17,9 +18,10 @@ tags:
   - tree-sitter
   - embeddings
   - open-source
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# code-chunk: AST-Aware Code Chunking Library
+---# code-chunk: AST-Aware Code Chunking Library
 
 ## Summary
 

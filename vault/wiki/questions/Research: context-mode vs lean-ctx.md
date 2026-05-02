@@ -18,9 +18,8 @@ sources:
   - "[[context-mode-website]]"
   - "[[leanctx-website]]"
   - "[[think-in-code-blog]]"
----
 
-# Research: context-mode vs lean-ctx
+---# Research: context-mode vs lean-ctx
 
 ## Overview
 

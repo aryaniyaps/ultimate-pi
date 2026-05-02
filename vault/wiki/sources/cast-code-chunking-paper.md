@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: research-paper
 author: Yilin Zhang, Xinran Zhao, Zora Zhiruo Wang, Chenyang Yang, Jiayi Wei, Tongshuang Wu (CMU)
 date_published: 2025-06-18
@@ -16,9 +17,10 @@ tags:
   - code-rag
   - embedding
   - arxiv
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# cAST: Enhancing Code Retrieval-Augmented Generation with Structural Chunking via Abstract Syntax Tree
+---# cAST: Enhancing Code Retrieval-Augmented Generation with Structural Chunking via Abstract Syntax Tree
 
 ## Summary
 

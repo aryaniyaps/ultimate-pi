@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: podcast-recap
 author: Codacy (interview with Vinay Perneti, VP Engineering at Augment Code)
 date_published: 2026-03-30
@@ -18,9 +19,10 @@ tags:
   - context-engine
   - engineering-interview
   - enterprise
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# How Augment Code Solved the Large Codebase Problem (Codacy AI Giants)
+---# How Augment Code Solved the Large Codebase Problem (Codacy AI Giants)
 
 ## Summary
 

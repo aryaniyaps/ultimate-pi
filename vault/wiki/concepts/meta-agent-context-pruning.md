@@ -3,6 +3,7 @@ aliases: ["meta-agent pruning", "context drift meta-agent", "stuck-agent recover
 type: concept
 title: "Meta-Agent Context Pruning"
 created: 2026-04-30
+status: developing
 tags:
   - concept
   - meta-agent
@@ -17,9 +18,9 @@ related:
   - "[[ironclaw-drift-monitor]]"
   - "[[harness-configuration-layers]]"
   - "[[grounding-checkpoints]]"
----
+updated: 2026-05-02
 
-# Meta-Agent Context Pruning
+---# Meta-Agent Context Pruning
 
 A proposed system: a separate observer (meta-agent) monitors the primary coding agent for stuck behavior, detects context drift, prunes irrelevant history from the context window, and restarts the agent with clean context. This is a **novel synthesis** — each component exists independently in literature and practice, but the full pipeline (detect → identify dead-ends → prune → restart) has not been published as a single system.
 

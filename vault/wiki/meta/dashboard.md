@@ -1,10 +1,12 @@
 ---
 type: meta
+status: active
 title: "Dashboard"
-updated: 2026-04-30
+updated: 2026-05-02
 created: 2026-04-30
-tags: []
+tags: [meta, dashboard]
 ---
+
 # Wiki Dashboard
 
 ## Recent Activity

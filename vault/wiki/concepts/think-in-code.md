@@ -14,9 +14,8 @@ related:
 sources:
   - "[[think-in-code-blog]]"
   - "[[context-mode-website]]"
----
 
-# Think in Code
+---# Think in Code
 
 A paradigm for AI coding agents where the agent writes code to process data instead of reading raw data into the context window for mental processing.
 

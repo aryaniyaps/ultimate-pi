@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: official-documentation
 title: "Anthropic Prompt Engineering Best Practices (Claude Opus 4.7 through Haiku 4.5)"
 author: "Anthropic"
@@ -21,9 +22,10 @@ tags:
   - claude
   - model-specific
   - harness-design
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Anthropic Prompt Engineering Best Practices
+---# Anthropic Prompt Engineering Best Practices
 
 Official comprehensive prompt engineering guide for Claude's latest models (Opus 4.7, Opus 4.6, Sonnet 4.6, Haiku 4.5). Single reference covering foundational techniques, output control, tool use, thinking, and agentic systems.
 

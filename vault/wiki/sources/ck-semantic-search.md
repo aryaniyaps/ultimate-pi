@@ -26,9 +26,8 @@ related:
 created: 2025-08-30
 updated: 2026-04-30
 status: ingested
----
 
-# ck (seek): Hybrid Code Search
+---# ck (seek): Hybrid Code Search
 
 ## Summary
 

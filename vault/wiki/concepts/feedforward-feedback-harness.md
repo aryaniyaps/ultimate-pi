@@ -16,9 +16,8 @@ related:
 sources:
   - "[[bockeler2026-harness-engineering]]"
   - "[[meng2026-agent-harness-survey]]"
----
 
-# Feedforward-Feedback Harness Controls
+---# Feedforward-Feedback Harness Controls
 
 From Böckeler (2026, Martin Fowler): A cybernetic model of harness controls as guides (feedforward) and sensors (feedback), each split into computational and inferential execution types.
 

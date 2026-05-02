@@ -10,9 +10,8 @@ tags:
 status: developing
 related:
   - "[[gitingest]]"
----
 
-# Codebase-to-Context Ingestion
+---# Codebase-to-Context Ingestion
 
 ## Definition
 

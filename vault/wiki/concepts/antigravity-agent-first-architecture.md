@@ -17,9 +17,8 @@ sources:
   - "[[google-antigravity-official-blog]]"
   - "[[google-antigravity-wikipedia]]"
   - "[[cursor-vs-antigravity-2026]]"
----
 
-# Antigravity Agent-First Architecture
+---# Antigravity Agent-First Architecture
 
 Google Antigravity's foundational architectural shift: the IDE is not an AI-enhanced editor. It is a **control plane for autonomous coding agents**.
 

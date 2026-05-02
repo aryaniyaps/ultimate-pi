@@ -28,9 +28,8 @@ sources:
   - "[[swe-agent-aci]]"
   - "[[swe-bench]]"
   - "[[openhands-platform]]"
----
 
-# Research: Rethinking OSS Codebase Exploration for AI Coding Agents
+---# Research: Rethinking OSS Codebase Exploration for AI Coding Agents
 
 ## Overview
 

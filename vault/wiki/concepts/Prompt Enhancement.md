@@ -2,6 +2,7 @@
 type: concept
 title: "Prompt Enhancement"
 created: 2026-04-30
+status: developing
 tags:
   - prompt-engineering
   - context
@@ -15,9 +16,9 @@ related:
 sources:
   - "[[Augment Code WorkOS ERC 2025]]"
   - "[[Augment Code Codacy AI Giants]]"
----
+updated: 2026-05-02
 
-# Prompt Enhancement
+---# Prompt Enhancement
 
 The process of automatically enriching a user's query with relevant codebase context before it reaches the LLM. The goal is to give the LLM the same understanding a senior engineer would have when approaching a task.
 

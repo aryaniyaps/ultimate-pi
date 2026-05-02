@@ -16,9 +16,8 @@ related:
   - "[[ts-execution-layer]]"
   - "[[harness-implementation-plan]]"
 title: "MCP tool routing"
----
 
-# MCP tool routing
+---# MCP tool routing
 
 Using the Model Context Protocol (MCP) to register semantic code search as a first-class agent tool, then routing code-exploration queries through it instead of generic shell tools.
 

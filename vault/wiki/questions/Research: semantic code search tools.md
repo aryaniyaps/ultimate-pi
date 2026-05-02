@@ -19,9 +19,8 @@ related:
 sources:
   - "[[ck-semantic-search]]"
   - "[[vgrep-semantic-search]]"
----
 
-# Research: semantic code search tools
+---# Research: semantic code search tools
 
 ## Overview
 

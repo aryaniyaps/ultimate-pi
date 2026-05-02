@@ -19,9 +19,8 @@ related:
   - "[[agentic-harness]]"
 sources:
   - "[[wozcode]]"
----
 
-# Research: WOZCODE Token-Reduction Architecture
+---# Research: WOZCODE Token-Reduction Architecture
 
 ## Overview
 

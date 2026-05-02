@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: academic_paper
 title: "CodeAct: Executable Code Actions Elicit Better LLM Agents"
 author: "Xingyao Wang, Yangyi Chen, Lifan Yuan, Yizhe Zhang, Yunzhu Li, Hao Peng, Heng Ji (Apple / UIUC)"
@@ -18,9 +19,10 @@ key_claims:
   - "Python interpreter provides automatic, zero-cost error signals — wrong calculations raise exceptions immediately"
   - "Open-source models benefit more: CodeActAgent (Mistral 7B) at 12.2% vs Lemur-70B at 3.7% on multi-tool benchmark"
   - "CodeActInstruct dataset: 7,139 multi-turn code-based trajectories across 4 domains"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# CodeAct (Apple, ICML 2024)
+---# CodeAct (Apple, ICML 2024)
 
 Foundation research paper that established the **code-as-unified-action-space** paradigm. Proposes replacing the JSON and text action formats common in tool-calling agents with executable Python code.
 

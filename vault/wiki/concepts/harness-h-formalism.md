@@ -14,9 +14,8 @@ related:
   - "[[model-adaptive-harness]]"
 sources:
   - "[[meng2026-agent-harness-survey]]"
----
 
-# Harness H-Formalism
+---# Harness H-Formalism
 
 The six-component formal model of an agent execution harness, from Meng et al. (2026): **H = (E, T, C, S, L, V)**.
 

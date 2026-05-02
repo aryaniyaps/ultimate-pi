@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 author: Vivek Trivedy (LangChain)
 date_published: 2026-03-10
@@ -15,8 +16,10 @@ key_claims:
   - Context Rot management: compaction, tool call offloading, progressive disclosure (Skills)
   - Ralph Loop: intercept model exit, reinject original prompt in clean context window
   - Model-harness co-evolution creates overfitting — best harness for task may NOT be what model was trained with
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # LangChain: The Anatomy of an Agent Harness
 
 ## What It Is

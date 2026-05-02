@@ -20,9 +20,8 @@ key_claims:
   - "Free public preview, cross-platform (Windows, macOS, Linux)"
   - "Editor view + Manager view for agent orchestration"
   - "Artifacts: verifiable deliverables replacing raw tool calls"
----
 
-# Google Antigravity - Wikipedia
+---# Google Antigravity - Wikipedia
 
 Wikipedia entry for Google Antigravity. Last updated April 24, 2026.
 

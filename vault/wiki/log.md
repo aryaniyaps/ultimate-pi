@@ -1,11 +1,35 @@
+---
+type: meta
+status: active
+created: 2026-04-28
+updated: 2026-05-02
+tags: [meta, log, operations]
+---
+
 # Wiki Operations Log
 
-## [2026-05-02] autoresearch | Prompt Renderer for Multi-Model Agent Harness
-- Rounds: 2 (5 broad searches + 6 primary fetches + 2 gap-fill searches)
-- Sources found: 4 (PromptKit PackC, AgentBus Jinja2, TianPan Caching, Arxiv "Don't Break the Cache")
-- Pages created: [[Prompt Renderer]], [[Build-Time Prompt Compilation]] (concepts), [[Source: PromptKit PackC Compiler]], [[Source: AgentBus Jinja2 Prompt Pipelines]], [[Source: TianPan Prompt Caching Architecture]], [[Source: Arxiv — Don't Break the Cache]] (sources), [[Research: Prompt Renderer for Multi-Model Agent Harness]] (synthesis)
+## [2026-05-02] correction | Fabricated npm packages removed, real tools documented, browser-harness replaces Puppeteer
+- Rounds: 1 (correction research — npm verification + firecrawl searches + GitHub scrapes)
+- Sources created: [[Source: Build-Time Prompt Compilation Architecture]], [[Source: browser-harness CDP Harness]]
+- Concepts created: [[browser-harness-agent]]
+- Pages corrected (PromptKit PackC → real tools): [[Source: PromptKit PackC Compiler]] (replaced by [[Source: Build-Time Prompt Compilation Architecture]]), [[Build-Time Prompt Compilation]], [[Prompt Renderer]], [[Research: Prompt Renderer for Multi-Model Agent Harness]], [[hot]], [[log]], [[index]]
+- Pages corrected (Puppeteer → browser-use): [[browser-subagent-visual-verification]], [[harness-implementation-plan]] (P30), [[HARNESS-PRD]] (P30 + P22b + Q10 + dependency table)
+- Key finding: "PromptKit PackC" was fabricated by LLM hallucination — no such npm package exists. Real alternatives: Microsoft prompt-engine (2.8K stars, MIT, YAML→prompt, abandoned 2022) validates the pattern; PromptWeaver (`@iqai/prompt-weaver`, MIT, Dec 2025) provides Handlebars template compilation + Zod validation. Implementation: DIY pipeline (js-yaml + PromptWeaver + per-model renderer plugins). For browser subagent: browser-harness (9.4K stars, MIT) — thin CDP harness by browser-use — replaces Puppeteer as the LLM-to-Chrome bridge for P30.
+
+## [2026-05-02] autoresearch | TypeScript Best Practices and Codebase Structure
+- Rounds: 2 (5 broad searches + 5 primary fetches + 5 gap-fill searches + 5 gap-fill fetches)
+- Sources found: 10 | Fetched: 10
+- Pages created: [[ts-strict-mode-rishikc]], [[ts-runtimes-comparison-betterstack]], [[barrel-files-tkdodo]], [[ts-monorepo-koerselman]], [[vitest-official]], [[ts-folder-structure-mingyang]], [[ts-best-practices-2025-devto]], [[ts-result-error-handling-kkalamarski]] (sources), [[typescript-strict-mode]], [[barrel-files]], [[monorepo-architecture]], [[result-monad-error-handling]] (concepts), [[javascript-runtimes]], [[vitest]] (entities), [[Research: TypeScript Best Practices and Codebase Structure]] (synthesis)
 - Pages updated: [[index]], [[log]], [[hot]]
-- Key finding: Build-time prompt compilation is a PROVEN PATTERN (PromptKit PackC v1.4.6, npm) that eliminates runtime template engines, cache warmup, and parallel-execution traps. The architecture: base prompt spec (YAML) → per-model renderers (GPT/Claude/Gemini plugins applying each provider's official conventions) → compiled JSON shipped in npm → runtime just does string substitution for variables. Multi-tier caching (semantic → prefix → full) is well understood (41-80% cost savings, Arxiv-validated). Each model needs fundamentally DIFFERENT prompting conventions — OpenAI constraints-first, Anthropic XML tags, Google constraints-last — a single canonical prompt relaxed per model is WRONG. Two-phase variable system: compile-time vars produce multiple compiled variants, runtime vars are simple string-replace placeholders. Integration: new harness module (Phase P22b from prior research), compiler as `npm run compile-prompts` build step, compiled output in `dist/prompts/`.
+- Key finding: Enable `strict: true` by default. Avoid barrel files in app code (68% module bloat). Node.js remains safest runtime choice. Built-package strategy preferred for TS monorepos. Vitest replaced Jest as default test runner. Backend folders should be named by technical capability, not feature. Result monad pattern enables declarative error handling. ESLint `@typescript-eslint/recommended-type-checked` pairs with strict mode for defense-in-depth.
+
+## [2026-05-02] autoresearch | Prompt Renderer for Multi-Model Agent Harness (CORRECTED 2026-05-02)
+- Rounds: 2 (5 broad searches + 6 primary fetches + 2 gap-fill searches)
+- Sources found: 4 (AgentBus Jinja2, TianPan Caching, Arxiv "Don't Break the Cache", Microsoft prompt-engine)
+- Pages created: [[Prompt Renderer]], [[Build-Time Prompt Compilation]] (concepts), [[Source: Build-Time Prompt Compilation Architecture]], [[Source: AgentBus Jinja2 Prompt Pipelines]], [[Source: TianPan Prompt Caching Architecture]], [[Source: Arxiv — Don't Break the Cache]] (sources), [[Research: Prompt Renderer for Multi-Model Agent Harness]] (synthesis)
+- Pages updated: [[index]], [[log]], [[hot]]
+- **CORRECTION (2026-05-02)**: "PromptKit PackC" (npm, v1.4.6, 48 versions) does NOT exist — it was fabricated. The architecture pattern is valid but no mature off-the-shelf npm package implements it. Real tools: Microsoft prompt-engine (2.8K stars, MIT, abandoned 2022) validates YAML→prompt pattern; PromptWeaver (`@iqai/prompt-weaver`, MIT, Dec 2025) provides Handlebars template compilation + Zod validation. Implementation: DIY pipeline (js-yaml + PromptWeaver + per-model renderer plugins). See [[Source: Build-Time Prompt Compilation Architecture]].
+- Key finding: Build-time prompt compilation is a PROVEN ARCHITECTURAL PATTERN — but no off-the-shelf npm package exists. Implementation: DIY pipeline (js-yaml + @iqai/prompt-weaver + per-model renderers). The architecture: base prompt spec (YAML) → per-model renderers (GPT/Claude/Gemini plugins applying each provider's official conventions) → compiled JSON shipped in npm → runtime just does string substitution for variables. Multi-tier caching (semantic → prefix → full) is well understood (41-80% cost savings, Arxiv-validated). Each model needs fundamentally DIFFERENT prompting conventions — OpenAI constraints-first, Anthropic XML tags, Google constraints-last — a single canonical prompt relaxed per model is WRONG. Two-phase variable system: compile-time vars produce multiple compiled variants, runtime vars are simple string-replace placeholders. Integration: new harness module (Phase P22b from prior research), compiler as `npm run compile-prompts` build step, compiled output in `dist/prompts/`.
 
 ## [2026-05-01] autoresearch | executor.sh Harness Integration
 - Rounds: 1 (1 search, 3 fetches: executor.sh landing, GitHub README, DeepWiki architecture)
@@ -111,7 +135,7 @@
 ## [2026-04-30] harness | Mandatory consensus-to-wiki filing rule
 - Decision: Winning consensus from any agent debate MUST be filed in project wiki for permanent agent alignment.
 - Pages updated: [[consensus-debate]] (converted open question to mandatory rule, updated verdict semantics, integration points), [[harness-implementation-plan]] (new First Principle #7, new build phase P19b, new Consensus Filing Contract section, updated wiki contract), [[adr-011]] (strengthened wiki filing from mitigation to mandatory, added alignment benefit), [[selective-debate-routing]] (added wiki filing to implementation sketch), [[harness]] (updated key design decisions)
-- Pages created: [[consensus/index]] (consensus records directory with template)
+- Pages created: [[consensus-records]] (consensus records directory with template)
 - Key finding: Without permanent alignment records, future agents re-litigate settled debates. Wiki consensus records close this loop — agents query before forming positions, harness blocks contradictions. All 4 verdict types file (CONSENSUS_REACHED, DEADLOCK, BUDGET_EXHAUSTED, TIMEOUT). Enforced by L7 write-after contract per ADR-010.
 
 ## [2026-04-30] autoresearch | GitHub Issues as Harness Spec Storage

@@ -21,9 +21,8 @@ related:
 sources:
   - "[[tree-sitter-docs]]"
   - "[[py-tree-sitter]]"
----
 
-# Resolved: Tree-Sitter Handling of Dynamic Languages
+---# Resolved: Tree-Sitter Handling of Dynamic Languages
 
 ## Resolution
 

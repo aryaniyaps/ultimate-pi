@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: github-issue
 title: "ironclaw DriftMonitor — Anti-Drift Self-Checks in Agentic Loop"
 author: ilblackdragon (nearai)
@@ -21,9 +22,10 @@ related:
   - "[[Research: Meta-Agent Context Drift Detection]]"
   - "[[context-drift-in-agents]]"
   - "[[agent-loop-detection-patterns]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# ironclaw DriftMonitor
+---# ironclaw DriftMonitor
 
 ## Summary
 

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: official-documentation
 author: Google
 date_published: 2025-06-25
@@ -13,8 +14,10 @@ key_claims:
   - ReAct loop: user input → CLI → Core → Gemini API → tool execution → final response
   - Key design principles: modularity, extensibility, user experience
   - Read-only ops may not require user confirmation; write ops always do
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # Gemini CLI Architecture (Official Docs)
 
 ## What It Is

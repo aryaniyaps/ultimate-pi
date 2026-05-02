@@ -15,9 +15,8 @@ related:
   - "[[ck-tool]]"
   - "[[Research: semantic code search tools]]"
 title: "vgrep"
----
 
-# vgrep
+---# vgrep
 
 **Repository**: [CortexLM/vgrep](https://github.com/CortexLM/vgrep)  
 **Stars**: 144 | **Language**: Rust | **License**: TBD

@@ -2,6 +2,7 @@
 type: concept
 title: "Majority Vote Ensembling"
 created: 2026-04-30
+status: developing
 tags:
   - agent-architecture
   - llm
@@ -12,9 +13,9 @@ related:
   - "[[Dual-Model Agent Architecture]]"
 sources:
   - "[[Augment SWE-bench Agent GitHub]]"
----
+updated: 2026-05-02
 
-# Majority Vote Ensembling
+---# Majority Vote Ensembling
 
 A technique where an agent generates multiple candidate solutions to the same problem, then uses an LLM (or voting mechanism) to select the best one. Used by Augment Code's SWE-bench agent to boost success rates.
 

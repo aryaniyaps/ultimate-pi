@@ -107,8 +107,8 @@ When a module's implementation status changes (e.g., `status: developing` → `s
 
 ### Rule 2: Decision Referencing
 When a new ADR supersedes or modifies an existing one:
-- The new ADR MUST have `supersedes: [[old-adr]]` in frontmatter
-- The old ADR MUST have `superseded_by: [[new-adr]]` and `status: superseded` updated
+- The new ADR MUST have `supersedes: old-adr` in frontmatter
+- The old ADR MUST have `superseded_by: new-adr` and `status: superseded` updated
 - `index.md` MUST reflect the change
 
 ### Rule 3: Cross-Reference Integrity

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: blog-post
 author: Arash (AJ) Joobandi, Augment Code
 date_published: 2026-02-04
@@ -16,9 +17,10 @@ tags:
   - augment-code
   - benchmark
   - context-engine
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Auggie Tops SWE-Bench Pro (Official Blog)
+---# Auggie Tops SWE-Bench Pro (Official Blog)
 
 ## Summary
 

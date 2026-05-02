@@ -3,6 +3,7 @@ type: concept
 title: "Codebase Intelligence Harness Integration"
 created: 2026-05-01
 updated: 2026-05-01
+status: developing
 tags:
   - harness
   - codebase-intelligence
@@ -17,9 +18,8 @@ related:
   - "[[adr-010]]"
 sources:
   - "[[fallow-rs-codebase-intelligence]]"
----
 
-# Codebase Intelligence Harness Integration
+---# Codebase Intelligence Harness Integration
 
 How deterministic codebase intelligence tools (primary: fallow for TS/JS) integrate into the ultimate-pi 8-layer agentic harness pipeline. Fallow is NOT an AI tool — it is the codebase truth layer the agent calls for deterministic quality signals.
 

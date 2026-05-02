@@ -16,9 +16,8 @@ sources:
   - "[[Source: Gemini CLI Changelogs]]"
   - "[[Source: Martin Fowler - Harness Engineering]]"
   - "[[Source: Augment - Harness Engineering for AI Coding Agents]]"
----
 
-# Policy Engine Pattern: Pre-Execution Gates
+---# Policy Engine Pattern: Pre-Execution Gates
 
 ## What It Is
 

@@ -19,16 +19,15 @@ related:
   - "[[harness-configuration-layers]]"
   - "[[harness-implementation-plan]]"
 sources:
-  - "[[Source: PromptKit PackC Compiler]]"
+  - "[[Source: Build-Time Prompt Compilation Architecture]]"
   - "[[Source: AgentBus Jinja2 Prompt Pipelines]]"
   - "[[Source: TianPan Prompt Caching Architecture]]"
   - "[[Source: Arxiv — Don't Break the Cache]]"
   - "[[openai-prompt-guidance]]"
   - "[[anthropic-prompt-best-practices]]"
   - "[[gemini-3-prompting-guide]]"
----
 
-# Research: Prompt Renderer for Multi-Model Agent Harness
+---# Research: Prompt Renderer for Multi-Model Agent Harness
 
 ## Overview
 
@@ -36,7 +35,7 @@ Design a custom prompt renderer for the ultimate-pi agentic harness that takes a
 
 ## Key Findings
 
-1. **Build-time compilation is validated by production systems** (Source: [[Source: PromptKit PackC Compiler]]). PackC (v1.4.6, npm) demonstrates the YAML→JSON prompt compilation pipeline in production: 5 stages (Config→Registry→Validation→Assembly→Serialization), deterministic builds, incremental compilation, and validation at compile time. The pattern is proven — we adapt it from Go/CLI to TypeScript/npm library.
+1. **Build-time compilation is a proven architectural pattern but no mature off-the-shelf npm package exists.** The pattern is validated by Microsoft prompt-engine (2.8K stars, MIT — YAML-based prompt management, abandoned 2022) and PromptWeaver (`@iqai/prompt-weaver`, MIT, active Dec 2025 — Handlebars template compilation with Zod validation). The implementation is a DIY build pipeline: `js-yaml` (parse specs) + `@iqai/prompt-weaver` (template engine) + per-model renderer plugins → compiled JSON shipped in npm. No runtime template engine needed.
 
 2. **Strategic cache boundary control is essential** (Source: [[Source: Arxiv — Don't Break the Cache]]). Across 500 agent sessions and 4 flagship models, system prompt only caching provides the most consistent benefits (41-80% cost reduction, 13-31% TTFT improvement). Full context caching can paradoxically increase latency. The golden rule: static content first, dynamic content last. Compile-time rendering makes this trivial — all static content is in the compiled prompt, runtime vars are appended at the end.
 
@@ -208,10 +207,10 @@ interface PromptVariable {
 
 ## Open Questions
 
-1. **What template syntax for base specs?** YAML is proven (PackC), but JSON Schema or a custom DSL might provide better validation. YAML with JSON Schema validation appears to be the practical choice.
+1. **What template syntax for base specs?** YAML with JSON Schema validation is the practical choice. PromptWeaver's Handlebars syntax provides the template layer. Microsoft prompt-engine validated the YAML pattern. JSON Schema (or Zod, integrated with PromptWeaver) provides better validation than raw YAML parsing alone. YAML stays human-friendly for spec authors.
 2. **How to handle prompt versioning across npm releases?** Compiled prompts must be versioned with the harness. Semantic versioning for prompts: major = breaking spec change, minor = new prompt added, patch = rendering tweak. The build manifest provides traceability.
 3. **What about custom/fine-tuned models?** The renderer plugin system should support user-defined renderers for custom models. Default: fall back to "generic" renderer that produces a neutral format.
-4. **How to test compiled prompts?** Each compiled variant needs automated testing. PackC's validation stage checks syntax and token thresholds. We should add semantic testing: does the compiled prompt produce the expected behavior when sent to the target model?
+4. **How to test compiled prompts?** Each compiled variant needs automated testing. PromptWeaver's Zod schema validation checks structure and types at compile time. Token thresholds checked against model-specific limits. Semantic testing (does the compiled prompt produce expected behavior?) requires sending to the target model — this is a separate integration test concern.
 5. **What happens when a provider changes its API format?** Compiled prompts for that provider become stale. The build manifest tracks renderer version — recompilation produces updated prompts. A CI check should flag prompts compiled with outdated renderer versions.
 6. **Where does token budget allocation fit?** The base spec should declare expected token budgets. The compiler validates that compiled prompts don't exceed model limits. Budget allocation is a prompt design concern, not a renderer concern — but the renderer enforces it.
 7. **Does the renderer need to support chat message arrays (multi-turn)?** Yes — the base spec should support defining multi-message prompts (system + examples + user template). The renderer compiles the full message array structure per model's expected format.

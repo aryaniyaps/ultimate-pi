@@ -17,9 +17,8 @@ sources:
   - "[[Source: Google Gemini CLI Architecture Docs]]"
   - "[[Source: Gemini CLI Changelogs]]"
   - "[[Source: Google Blog - Gemini CLI Announcement]]"
----
 
-# Gemini CLI Architecture (SOTA)
+---# Gemini CLI Architecture (SOTA)
 
 ## Overview
 

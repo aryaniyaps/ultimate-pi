@@ -2,6 +2,7 @@
 type: concept
 title: "Contextualized Text Embedding"
 created: 2026-04-30
+status: developing
 tags:
   - embeddings
   - chunking
@@ -12,9 +13,9 @@ related:
   - "[[Semantic Codebase Indexing]]"
 sources:
   - "[[code-chunk-library-supermemory]]"
----
+updated: 2026-05-02
 
-# Contextualized Text Embedding
+---# Contextualized Text Embedding
 
 ## Definition
 

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 author: Birgitta Böckeler (Thoughtworks)
 date_published: 2026-04-02
@@ -16,8 +17,10 @@ key_claims:
   - Harnessability: not every codebase equally amenable. "Ambient affordances" matter.
   - Ashby's Law: regulator must have at least as much variety as system it governs
   - Behaviour harness is the elephant in the room — unresolved
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # Martin Fowler: Harness Engineering for Coding Agent Users
 
 ## What It Is

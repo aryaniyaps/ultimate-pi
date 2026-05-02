@@ -15,9 +15,8 @@ related:
 sources:
   - "[[Source: Gemini CLI Changelogs]]"
   - "[[Source: LangChain - Anatomy of Agent Harness]]"
----
 
-# Agent Skills Pattern: Progressive Disclosure
+---# Agent Skills Pattern: Progressive Disclosure
 
 ## What It Is
 

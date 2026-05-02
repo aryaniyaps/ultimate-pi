@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 author: Tony Lee
 date_published: 2026-02-12
@@ -14,8 +15,10 @@ key_claims:
   - Custom linters + structural tests enforce layered architecture; linters themselves written by Codex
   - Chrome DevTools Protocol gives agent DOM snapshots, screenshots, navigation
   - "A map, not a manual": ARCHITECTURE.md as bird's-eye view, not exhaustive documentation
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # OpenAI Harness Engineering: Five Principles
 
 ## What It Is

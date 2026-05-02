@@ -17,9 +17,8 @@ sources:
   - "[[Source: LangChain - Anatomy of Agent Harness]]"
   - "[[Source: OpenAI Harness Engineering Five Principles]]"
   - "[[Source: Augment - Harness Engineering for AI Coding Agents]]"
----
 
-# Harness Engineering: First Principles
+---# Harness Engineering: First Principles
 
 ## Core Definition
 

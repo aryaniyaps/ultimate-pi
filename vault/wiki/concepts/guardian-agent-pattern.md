@@ -3,6 +3,7 @@ aliases: ["guardian agent", "pre-execution safety", "agent guardrails"]
 type: concept
 title: "Guardian Agent Pattern"
 created: 2026-04-30
+status: developing
 tags:
   - concept
   - guardian-agent
@@ -14,9 +15,9 @@ related:
   - "[[context-drift-in-agents]]"
   - "[[vectara-guardian-agents]]"
   - "[[ironclaw-drift-monitor]]"
----
+updated: 2026-05-02
 
-# Guardian Agent Pattern
+---# Guardian Agent Pattern
 
 A design pattern where a separate agent (or rule-based system) monitors and validates another agent's actions — either before execution (proactive) or after detecting failure patterns (reactive). Emerging as a standard approach for production agent reliability.
 

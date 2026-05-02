@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 title: "Iterating with Shadow Workspaces"
 author: "Arvid Lunnemark (Cursor/Anysphere)"
@@ -14,8 +15,9 @@ key_claims:
   - "Concurrency via interleaving: AIs paused/resumed like CPU processes"
   - "Future: kernel-level folder proxy (FUSE) for runnability + disk isolation"
   - "Rust-analyzer broken because it needs on-disk files; macOS FUSE blocked by Apple walled garden"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Iterating with Shadow Workspaces
 
 Cursor's engineering blog post describing the **shadow workspace** — a hidden Electron window that lets AI agents iterate on code with full Language Server Protocol (LSP) access, independently of the user's coding experience.

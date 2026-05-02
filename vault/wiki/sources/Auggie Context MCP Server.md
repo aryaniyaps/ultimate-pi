@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: github-repository
 author: aj47 (community)
 date_published: 2026
@@ -17,9 +18,10 @@ tags:
   - augment-code
   - context-engine
   - open-source
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Auggie Context MCP Server (Community)
+---# Auggie Context MCP Server (Community)
 
 ## Summary
 

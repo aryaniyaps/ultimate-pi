@@ -23,9 +23,8 @@ related:
 created: 2026-04-30
 updated: 2026-04-30
 status: ingested
----
 
-# vgrep: Privacy-First Semantic Search Engine
+---# vgrep: Privacy-First Semantic Search Engine
 
 ## Summary
 

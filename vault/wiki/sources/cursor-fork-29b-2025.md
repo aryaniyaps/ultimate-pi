@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: analysis
 title: "Cursor: How Forking VS Code Built a $29B Company"
 author: "MMNTM Research"
@@ -14,8 +15,9 @@ key_claims:
   - "Model agnosticism as competitive moat vs Copilot's OpenAI lock-in"
   - "Vertical agent thesis: interface and intelligence cannot be decoupled"
   - "The fork tax: constant upstream VS Code merges required"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Cursor: How Forking VS Code Built a $29B Company
 
 MMNTM Research analysis (Dec 2025) of Cursor's architectural strategy and business model.

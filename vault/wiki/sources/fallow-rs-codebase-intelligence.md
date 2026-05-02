@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: github-repo
 title: "Fallow - Codebase Intelligence for TypeScript & JavaScript"
 author: "Bart Waardenburg (fallow-rs)"
@@ -34,9 +35,10 @@ related:
   - "[[Research: Fallow Codebase Intelligence Harness Integration]]"
   - "[[codebase-intelligence-harness-integration]]"
   - "[[codebase-intelligence-ecosystem-comparison]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Fallow: Codebase Intelligence for TypeScript & JavaScript
+---# Fallow: Codebase Intelligence for TypeScript & JavaScript
 
 Rust-native static analysis tool for TS/JS codebases. Built by Bart Waardenburg (fallow-rs). 1.7K GitHub stars, MIT licensed, 151 releases. Sub-second analysis on projects up to 20K+ files (Next.js benchmark: 1.72s).
 

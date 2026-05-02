@@ -5,6 +5,7 @@ title: "Executor — The Integration Layer for AI Agents"
 author: "Rhys Sullivan"
 date_published: 2026-04-25
 updated: 2026-05-01
+status: ingested
 url: "https://executor.sh"
 repo: "https://github.com/RhysSullivan/executor"
 confidence: high
@@ -30,9 +31,9 @@ key_claims:
   - "Bun monorepo architecture: apps/executor (CLI/server), apps/web (React UI), packages/ (core logic), plugins/ (source-specific)"
   - "Sandbox: SES (Secure EcmaScript) or Deno subprocesses for isolation"
   - "1.3K GitHub stars, 1,492 commits, MIT license"
----
+created: 2026-05-02
 
-# Executor (RhysSullivan/executor)
+---# Executor (RhysSullivan/executor)
 
 > Product site: [executor.sh](https://executor.sh) | Repo: [github.com/RhysSullivan/executor](https://github.com/RhysSullivan/executor)
 

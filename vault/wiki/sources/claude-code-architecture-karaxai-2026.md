@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: blog
 title: "How Claude Code Actually Works: A Systems-Level Deep Dive"
 author: "KaraxAI"
@@ -18,8 +19,9 @@ key_claims:
   - "Hooks achieve 100% compliance; CLAUDE.md rules achieve ~92%"
   - "Deliberately no embeddings: 'agentic search generally works better' — Boris Cherny"
   - "The model is the commodity; the agent is the product"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Claude Code Systems Deep-Dive (KaraxAI, 2026)
 
 ## Source Summary

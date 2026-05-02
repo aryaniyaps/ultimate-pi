@@ -19,9 +19,8 @@ related:
 sources:
   - "[[github-fork-issues-discussion]]"
   - "[[Research: GitHub Issues as Harness Spec Storage]]"
----
 
-# Fork-Safe Spec Storage
+---# Fork-Safe Spec Storage
 
 How ultimate-pi's harness keeps spec storage isolated across forks. When someone forks a project using ultimate-pi, zero upstream spec state leaks into the fork.
 

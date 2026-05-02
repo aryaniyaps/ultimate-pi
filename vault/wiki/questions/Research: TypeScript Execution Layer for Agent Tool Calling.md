@@ -20,9 +20,8 @@ sources:
   - "[[cloudflare-codemode]]"
   - "[[executor-rhyssullivan]]"
   - "[[colinmcnamara-context-optimization-codemode]]"
----
 
-# Research: TypeScript Execution Layer for Agent Tool Calling
+---# Research: TypeScript Execution Layer for Agent Tool Calling
 
 ## Overview
 

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: open-source-repository
 title: "Codex CLI — OpenAI's Open-Source Coding Agent"
 author: "OpenAI"
@@ -19,8 +20,9 @@ key_claims:
   - "Skills system following open agentskills.io standard with progressive disclosure"
   - "Git worktrees for safe parallel branch work"
   - "Automations for scheduled recurring agent tasks"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Codex CLI — OpenAI's Open-Source Coding Agent
 
 **Source type**: Open-source repository + official documentation. Primary documentation at `developers.openai.com/codex`.

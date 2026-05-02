@@ -20,9 +20,8 @@ related:
   - "[[ck-tool]]"
 sources:
   - "[[mcp-architecture-docs]]"
----
 
-# Resolved: MCP Tool Preference vs Native Bash/Grep
+---# Resolved: MCP Tool Preference vs Native Bash/Grep
 
 ## Resolution
 

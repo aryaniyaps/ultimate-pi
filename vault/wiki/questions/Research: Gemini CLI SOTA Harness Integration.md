@@ -26,9 +26,8 @@ sources:
   - "[[Source: OpenAI Harness Engineering Five Principles]]"
   - "[[Source: Augment - Harness Engineering for AI Coding Agents]]"
   - "[[Source: Gemini CLI Changelogs]]"
----
 
-# Research: Gemini CLI SOTA + Harness Integration from First Principles
+---# Research: Gemini CLI SOTA + Harness Integration from First Principles
 
 ## Overview
 
@@ -42,7 +41,7 @@ Gemini CLI (launched June 2025, now v0.40+) introduced a composable agent harnes
 
 2. **Plan Mode (v0.29, Feb 2026)** — Structured task decomposition with `/plan`, todo tracking, annotation support, research subagents, external editor integration. Enabled by default v0.34. Parallel to our L2 Structured Planning. (Source: [[Source: Gemini CLI Changelogs]])
 
-3. **Codebase Investigator Subagent (v0.12, Oct 2025)** — JIT context discovery: automatically explores workspace, resolves relevant files. Enhanced with JIT context injection in v0.36. Parallel to our Gitingest + ck semantic search for L3 Grounding. (Source: [[Source: Gemini CLI Architecture Docs]])
+3. **Codebase Investigator Subagent (v0.12, Oct 2025)** — JIT context discovery: automatically explores workspace, resolves relevant files. Enhanced with JIT context injection in v0.36. Parallel to our Gitingest + ck semantic search for L3 Grounding. (Source: [[Source: Google Gemini CLI Architecture Docs]])
 
 4. **Context Compression Service (v0.38, Apr 2026)** — Advanced context management distilling conversation history. Configurable compression threshold. Parallel to our pi-lean-ctx. (Source: [[Source: Gemini CLI Changelogs]])
 

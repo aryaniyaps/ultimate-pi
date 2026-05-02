@@ -11,9 +11,8 @@ related:
   - "[[agent-codebase-interface]]"
   - "[[verification-drift-detection]]"
 status: developing
----
 
-# Execution Feedback Loop
+---# Execution Feedback Loop
 
 The agent equivalent of a human's debug-test-iterate cycle. Instead of visual step-through debugging, agents rely on structured execution feedback.
 
