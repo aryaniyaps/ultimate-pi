@@ -34,7 +34,7 @@ When referring to level in frontmatter, use `batch_exponent: k` (not `level: k`)
 | **dry-run (default)** | **No Write tool calls.** Emit fold content via Bash `cat`/`heredoc` to stdout only. | `fold the log, dry-run k=3` |
 | **commit** | Uses Write/Edit tools. Each Write fires the repo PostToolUse hook which auto-commits wiki changes. Accept this. Compose full content first, then sequence writes. | `fold the log, commit k=3` (only after a clean dry-run) |
 
-**Why stdout-only in dry-run**: the repo's `hooks/hooks.json` PostToolUse hook fires on any `Write|Edit` and runs `git add vault/wiki/ vault/.raw/`. Writing to `/tmp` does not stage /tmp, but it still triggers the hook, which will commit *any pending wiki changes* under a generic message. Dry-run must leave zero residue. Bash stdout does not fire the hook.
+**Why stdout-only in dry-run**: the repo's `hooks/hooks.json` PostToolUse hook fires on any `Write|Edit` and runs `git add wiki/ .raw/`. Writing to `/tmp` does not stage /tmp, but it still triggers the hook, which will commit *any pending wiki changes* under a generic message. Dry-run must leave zero residue. Bash stdout does not fire the hook.
 
 ---
 
@@ -48,9 +48,9 @@ fold-k{K}-from-{EARLIEST-DATE}-to-{LATEST-DATE}-n{COUNT}
 
 Example: `fold-k3-from-2026-04-10-to-2026-04-23-n8`.
 
-The filename in commit mode is `vault/wiki/folds/{FOLD-ID}.md`. No date-of-creation in the filename. No timestamp in the title.
+The filename in commit mode is `wiki/folds/{FOLD-ID}.md`. No date-of-creation in the filename. No timestamp in the title.
 
-**Duplicate detection (required)**: before emitting any output, check if `vault/wiki/folds/{FOLD-ID}.md` already exists. If so, report "Fold already exists at wiki/folds/{FOLD-ID}.md. Use --force to overwrite, or pick a different range." and stop. This is the no-op idempotency guarantee; byte-identical content is NOT guaranteed (LLM prose varies) but the filename and scope are.
+**Duplicate detection (required)**: before emitting any output, check if `wiki/folds/{FOLD-ID}.md` already exists. If so, report "Fold already exists at wiki/folds/{FOLD-ID}.md. Use --force to overwrite, or pick a different range." and stop. This is the no-op idempotency guarantee; byte-identical content is NOT guaranteed (LLM prose varies) but the filename and scope are.
 
 ---
 
@@ -70,7 +70,7 @@ If fewer than `2^k` log entries exist, report the shortfall and stop. Do not sil
 ### 1. Parse log entries
 
 ```
-grep -n "^## \[" vault/wiki/log.md | head -{2^k}
+grep -n "^## \[" wiki/log.md | head -{2^k}
 ```
 
 Record for each entry: line number, date, operation, title, and the following bullet lines until the next `## [` or end-of-section.
@@ -78,7 +78,7 @@ Record for each entry: line number, date, operation, title, and the following bu
 ### 2. Extract child page identifiers
 
 From each entry's bullet list, extract:
-- `Location: vault/wiki/path/to/page.md` (the primary page)
+- `Location: wiki/path/to/page.md` (the primary page)
 - `[[Wikilinks]]` inline
 - `Pages created:` and `Pages updated:` lists
 
@@ -123,12 +123,12 @@ If any check fails, abort and report the specific failure.
 **Dry-run**: use Bash `cat <<'EOF' ... EOF` to stdout. Do not use Write. Print the fold ID and a one-line summary of what the commit step would do.
 
 **Commit** (only after user says "commit the fold"):
-1. `Write` the fold page to `vault/wiki/folds/{FOLD-ID}.md`. (PostToolUse hook will auto-commit this.)
-2. `Edit` `vault/wiki/index.md` to add the fold link under a `## Folds` section (create section if missing). (Hook auto-commits.)
-3. `Edit` `vault/wiki/log.md` to prepend one entry:
+1. `Write` the fold page to `wiki/folds/{FOLD-ID}.md`. (PostToolUse hook will auto-commit this.)
+2. `Edit` `wiki/index.md` to add the fold link under a `## Folds` section (create section if missing). (Hook auto-commits.)
+3. `Edit` `wiki/log.md` to prepend one entry:
    ```
    ## [YYYY-MM-DD] fold | batch-exponent-k{K} rollup of N entries
-   - Location: vault/wiki/folds/{FOLD-ID}.md
+   - Location: wiki/folds/{FOLD-ID}.md
    - Range: {EARLIEST-DATE} to {LATEST-DATE}
    - Children: N log entries
    ```
@@ -162,7 +162,7 @@ See `references/fold-template.md` for the canonical frontmatter and body layout.
 - Do not write "emergent themes" that span entries without naming which entries contribute.
 - Do not claim byte-identical idempotency. Structural idempotency is the actual guarantee.
 - Do not suppress or bypass the PostToolUse auto-commit hook.
-- Do not update `vault/wiki/hot.md`. Ownership stays with save/ingest skills.
+- Do not update `wiki/hot.md`. Ownership stays with save/ingest skills.
 
 ---
 
@@ -181,11 +181,11 @@ Or: `git revert` the three auto-commits. Child pages are untouched in either pat
 
 User: "fold the log, dry-run k=3"
 
-1. Parse `vault/wiki/log.md` top 8 entries.
+1. Parse `wiki/log.md` top 8 entries.
 2. Build structured children list (8 records).
 3. Read 0-10 referenced pages as needed.
 4. Produce fold ID: `fold-k3-from-2026-04-10-to-2026-04-23-n8`.
-5. Check `vault/wiki/folds/fold-k3-from-2026-04-10-to-2026-04-23-n8.md` does not exist.
+5. Check `wiki/folds/fold-k3-from-2026-04-10-to-2026-04-23-n8.md` does not exist.
 6. Write fold body following the template.
 7. Run self-check (frontmatter/table consistency, count verification).
 8. Emit via `cat <<'EOF' ... EOF` to stdout.

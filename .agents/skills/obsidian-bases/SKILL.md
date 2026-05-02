@@ -270,10 +270,10 @@ views:
 
 ## Where to Save
 
-Store `.base` files in `vault/wiki/meta/` for vault dashboards:
-- `vault/wiki/meta/dashboard.base`: main content view
-- `vault/wiki/meta/entities.base`: entity tracker
-- `vault/wiki/meta/sources.base`: ingestion log
+Store `.base` files in `wiki/meta/` for vault dashboards:
+- `wiki/meta/dashboard.base`: main content view
+- `wiki/meta/entities.base`: entity tracker
+- `wiki/meta/sources.base`: ingestion log
 
 ---
 

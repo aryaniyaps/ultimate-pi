@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-01T21:30:00
+updated: 2026-05-02T11:45:00
 created: 2026-04-30
 tags: []
 status: active
@@ -10,7 +10,56 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-01. executor.sh research complete. Executor is an **integration layer**, not just TS execution layer. Three new P43 sub-phases (P43b catalog+discovery, P43c policy-aware execution). Build vs integrate decision: custom for harness-native tools, Executor as dep for external API.
+2026-05-02. Prompt Renderer research complete. Build-time prompt compilation is PROVEN pattern. Base spec → per-model renderers → compiled JSON shipped in npm → runtime just string-substitutes variables. Zero runtime compilation, zero cache warmup. Each model needs fundamentally DIFFERENT prompting conventions.
+
+## Prompt Renderer for Multi-Model Agent Harness (2026-05-02)
+
+### Key Finding
+**Build-time prompt compilation is a PROVEN PATTERN validated by PromptKit PackC (npm, v1.4.6, 48 versions).** The architecture: base prompt spec (YAML) → per-model renderer plugins (GPT/Claude/Gemini) → compiled JSON shipped in npm → runtime just does string substitution for variables. This eliminates runtime template engines, cache warmup latency, and parallel-execution traps entirely.
+
+### Architecture
+```
+BUILD TIME:  Base Spec (YAML) → Compiler → GPT.json + Claude.json + Gemini.json → npm package
+RUNTIME:     Load {spec, model}.json → substitute runtime vars → send to LLM
+```
+
+### Core Design Decisions
+1. **Build-time, not runtime**: Compiler runs during `npm run build`. Compiled prompts are static JSON assets in `dist/prompts/`. No template engine shipped.
+2. **Per-model renderers are plugins**: Each provider's official conventions applied at compile time. GPT (constraints-first, flat), Claude (XML tags, long-form), Gemini (constraints-last, plain text).
+3. **Two-phase variable system**: Compile-time vars produce multiple compiled variants. Runtime vars are `__VAR_name__` placeholders for simple string replace (no template engine needed).
+4. **Caching is built-in**: Compiled prompts ARE the cache. Incremental builds only recompile changed specs (hash-based). No runtime cache warming, no parallel-execution trap, no TTL concerns.
+5. **Deterministic builds**: Same spec + same compiler version → identical output. Hash-verified via build manifest.
+
+### Multi-Tier Caching Context
+- **Semantic cache** (100% savings): intercept near-duplicate queries before API call
+- **Prefix cache** (50-90% savings): static system prompts cached by provider API
+- **Build cache**: compiled prompts shipped in package — no runtime prefix caching needed
+- Arxiv-validated (500 agent sessions, 4 models): system prompt only caching = 41-80% cost reduction, 13-31% TTFT improvement
+
+### Per-Model Rendering Rules
+| Provider | Structure | Instruction Order | Cache | Best Practice Source |
+|----------|-----------|------------------|-------|---------------------|
+| OpenAI GPT | Flat, constraints-first | Outcome→Constraints→Context | Auto | platform.openai.com/docs/guides/prompt-engineering |
+| Anthropic Claude | XML tags, nesting OK | Role→Context→Task→XML | Explicit cache_control | docs.anthropic.com + interactive tutorial |
+| Google Gemini | Plain text, constraints-last | Context→Task→Constraints | Explicit context cache | cloud.google.com/vertex-ai/docs |
+
+### Integration with Harness
+Extends [[provider-native-prompting]] (Phase P22b from prior research). New compiler module: `scripts/compile-prompts.ts`. Compiled output: `dist/prompts/{gpt,claude,gemini}/*.json`. Runtime loader: `loadPrompt(specName, model, runtimeVars)` — zero-dependency, just `JSON.parse` + string replace.
+
+### Sources (4 new)
+[[Source: PromptKit PackC Compiler]] — Prompt compilation: YAML→JSON pipeline, deterministic builds
+[[Source: AgentBus Jinja2 Prompt Pipelines]] — Jinja2 templating patterns adapted to build-time
+[[Source: TianPan Prompt Caching Architecture]] — Multi-tier caching, 60-90% savings, cache boundary control
+[[Source: Arxiv — Don't Break the Cache]] — Academic validation: 41-80% cost reduction across providers
+
+### Synthesis
+[[Research: Prompt Renderer for Multi-Model Agent Harness]] — Full architecture, 5-phase implementation plan, 7 open questions
+
+### New Concept Pages
+[[Prompt Renderer]] — Build-time compilation: base spec → per-model prompts via pluggable renderers
+[[Build-Time Prompt Compilation]] — Compile at build time, ship as static JSON in npm, zero runtime cost
+
+---
 
 ## executor.sh Harness Integration (2026-05-01)
 

@@ -48,6 +48,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[generator-evaluator-architecture]] | GAN-inspired separation of generator and evaluator agents |
 | [[model-adaptive-harness]] | Harness generates provider-native prompts (v2 redesign, May 2026) |
 | [[provider-native-prompting]] | Generate prompts optimized for each provider's official conventions |
+| [[Prompt Renderer]] | Build-time compilation: base spec → per-model prompts via pluggable renderers |
+| [[Build-Time Prompt Compilation]] | Compile prompts at build time, ship as static JSON in npm — zero runtime cost |
 | [[harness-configuration-layers]] | Four-layer config: Signal, Gate, Channel, Completion — now provider-native (v2) |
 | [[self-evolving-harness]] | Auto-synthesis and meta-optimization of harness code |
 
@@ -188,6 +190,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | [[Research: TypeScript Execution Layer for Agent Tool Calling]] | TS execution layer: CodeAct → Cloudflare Code Mode → Executor convergence, 3-4x context reduction, P43 phase |
 | [[Research: executor.sh Harness Integration]] | executor.sh: integration layer scope, 3 new P43 sub-phases (catalog, discovery, policy), build vs integrate decision |
+| [[Research: Prompt Renderer for Multi-Model Agent Harness]] | Build-time prompt renderer: per-model compilation, caching, variable system, npm distribution |
 
 ## Sources (External Research)
 
@@ -263,6 +266,10 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[google-antigravity-official-blog]] | engineering-blog | Google Antigravity: agent-first IDE, Manager View, Artifacts, Skills |
 | [[google-antigravity-wikipedia]] | encyclopedia | Antigravity: VS Code fork, Gemini 3.1, Windsurf $2.4B acquisition |
 | [[cursor-vs-antigravity-2026]] | comparison | Cursor v2.6 vs Antigravity v1.20: centaur vs manager, benchmarks |
+| [[Source: PromptKit PackC Compiler]] | official-docs | Prompt compilation: YAML→JSON pipeline, deterministic builds, fragment handling |
+| [[Source: AgentBus Jinja2 Prompt Pipelines]] | engineering-blog | Jinja2 templating: inheritance, conditionals, loops, pipeline runner |
+| [[Source: TianPan Prompt Caching Architecture]] | engineering-blog | Multi-tier caching: semantic→prefix→full, 60-90% savings, cache boundary control |
+| [[Source: Arxiv — Don't Break the Cache]] | academic-paper | PwC evaluation: 41-80% cost reduction, system-prompt-only caching optimal |
 
 ## Flows
 
