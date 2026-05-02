@@ -181,7 +181,7 @@ services:
       - backend
     env_file: ./searxng/searxng.env
     volumes:
-      - ./searxng/settings.yml:/etc/searxng/settings.yml:Z
+      - ./searxng/settings.yml:/etc/searxng/settings.yml
       - searxng-data:/var/cache/searxng
     depends_on:
       - searxng-valkey
