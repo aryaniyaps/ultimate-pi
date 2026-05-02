@@ -1,0 +1,85 @@
+# SearXNG settings for Firecrawl self-hosted integration
+# Docs: https://docs.searxng.org/admin/settings/settings.html
+
+general:
+  debug: false
+  instance_name: "Firecrawl Search"
+  enable_metrics: false
+
+brand:
+  docs_url: https://docs.searxng.org/
+  public_instances: https://searx.space
+  wiki_url: https://github.com/searxng/searxng/wiki
+  issue_url: https://github.com/searxng/searxng/issues
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  formats:
+    - html
+    - json
+  ban_time_on_fail: 5
+  max_ban_time_on_fail: 120
+
+server:
+  port: 8080
+  bind_address: "0.0.0.0"
+  base_url: false
+  limiter: false
+  secret_key: "fcaacc9a734a7f85634f48aa23bfde183ef646fd0c51054f95de6fd73226b04e"
+  image_proxy: false
+  method: "GET"
+
+valkey:
+  url: valkey://searxng-valkey:6379/0
+
+ui:
+  default_theme: simple
+  default_locale: ""
+
+outgoing:
+  request_timeout: 10.0
+  pool_connections: 100
+  pool_maxsize: 20
+  enable_http2: true
+
+plugins:
+  searx.plugins.calculator.SXNGPlugin:
+    active: true
+  searx.plugins.hash_plugin.SXNGPlugin:
+    active: true
+  searx.plugins.self_info.SXNGPlugin:
+    active: true
+  searx.plugins.unit_converter.SXNGPlugin:
+    active: true
+  searx.plugins.tracker_url_remover.SXNGPlugin:
+    active: true
+
+categories_as_tabs:
+  general:
+  images:
+  videos:
+  news:
+
+engines:
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
+  - name: google
+    engine: google
+    shortcut: go
+  - name: brave
+    engine: brave
+    shortcut: br
+  - name: startpage
+    engine: startpage
+    shortcut: sp
+  - name: wikipedia
+    engine: wikipedia
+    shortcut: wp
+
+doi_resolvers:
+  oadoi.org: "https://oadoi.org/"
+  doi.org: "https://doi.org/"
+
+default_doi_resolver: "oadoi.org"
