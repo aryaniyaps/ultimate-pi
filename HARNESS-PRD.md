@@ -16,7 +16,7 @@ The **Ultimate-PI Agentic Harness** is an 8-layer mandatory execution pipeline a
 This PRD covers the **complete harness implementation** across 48+ build phases spanning specification hardening, structured planning, runtime drift monitoring, tool-level execution enforcement, adversarial verification, observability, persistent memory, cross-cutting agent capabilities, and self-evolving infrastructure.
 
 **Key metrics**:
-- Token overhead per subtask: ~16,000-17,500 with all enhancements (down from ~87,500 naive)
+- Token overhead per subtask: ~17,500-19,000 with all enhancements (down from ~87,500 naive; +~1,800 for LLM-first L2.5 drift detection that prevents 5K-50K token stuck sessions)
 - 3-4x context reduction via TypeScript execution layer with isolated-vm sandbox (P43, Group 4)
 - Think-in-Code absorbed by P43 — P43 IS think-in-code
 - 92% token savings on consensus debates via iMAD selective routing (ADR-011, Group 3)
@@ -56,9 +56,9 @@ These 19 principles were synthesized from 6 independent research streams (Meng e
 1. **The harness — not the model — determines reliability at scale.** Models reach the same capability ceiling only after harness adaptation.
 2. **Every pipeline layer reads wiki first, writes wiki after.** No layer can skip the knowledge base contract.
 3. **Write once for strictest model (GPT-safe). Relax for forgiving models.** Provider-native prompting renders per-model without changing the semantic spec.
-4. **Three quality concerns, three timings:** Syntax (inline, blocks progress), Semantics (L4, needs LLM), Style (Phase 16 final gate, deterministic tools).
+4. **Three quality concerns, three timings:** Syntax (inline, blocks progress), Semantics (L4, needs LLM), Style (P20 final gate, deterministic tools).
 5. **Debate is selective, not always-on.** Pre-debate gating classifier saves 92% tokens (iMAD, AAAI 2026).
-6. **Context drift is a positive feedback loop.** Each failed attempt accelerates failure. Meta-agent detection + pruning + restart breaks the loop.
+6. **Context drift is a positive feedback loop.** Each failed attempt accelerates failure. LLM-first detection (Haiku 4.5) + pruning + restart breaks the loop. Rule-based is the cost-saving pre-filter, not the authority.
 7. **Winning consensus from any agent debate MUST be filed in the project wiki.** Permanent alignment record prevents future agents from re-litigating settled debates.
 
 ### 3.2 Verification & Quality
@@ -85,7 +85,7 @@ These 19 principles were synthesized from 6 independent research streams (Meng e
 
 ### 4.1 The 8-Layer Mandatory Pipeline
 
-Harness activates via explicit `/harness "task"` command (ADR-021). Normal chat bypasses pipeline entirely. When active, every task flows through all layers.
+Harness activates via explicit `/harness "task"` command (ADR-021). Normal chat bypasses pipeline entirely. During rollout, `/harness` runs in staged enforcement mode until Group 5 ships. Full mandatory 8-layer enforcement begins after Group 5.
 
 ```
 /harness "task"
@@ -94,13 +94,13 @@ L1: Spec Hardening (harness_ask Q&A, GitHub Issues storage)
   ↓
 L2: Structured Planning (YAML plan, compact summary into system prompt)
   ↓
-L2.5: Runtime Drift Monitor (7 rule-based patterns, turn-dependent thresholds)
+L2.5: Runtime Drift Monitor (LLM-first: Haiku 4.5 + rule-based pre-filter + ck search routing)
   ↓
 L3: TS Execution Layer + Grounding Checkpoints (P43 isolated-vm sandbox)
   ↓
 L4: Adversarial Verification (critic sub-agent via @tintinweb/pi-subagents RPC)
   ↓
-Phase 16: Lint+Format Gate (biome check + tsc --noEmit + fallow)
+P20: Lint+Format Gate (biome check + tsc --noEmit + fallow)
   ↓
 L5: Automated Observability → L6: Persistent Memory → L7: Schema Orchestration → L8: Wiki Query
 ```
@@ -111,10 +111,10 @@ L5: Automated Observability → L6: Persistent Memory → L7: Schema Orchestrati
 |---|-------|---------|---------------|
 | **L1** | Spec Hardening | Block execution until ambiguities resolved | harness_ask tool, GitHub Issues storage (ADR-025), spec hash |
 | **L2** | Structured Planning | Machine-readable task DAG + sprint contracts | YAML plan file, compact system prompt summary (ADR-020, ADR-024) |
-| **L2.5** | Runtime Drift Monitor | Detect stuckness, prune dead context, restart agent | 7 rule-based patterns + turn-dependent thresholds + ck routing (ADR-022) |
+| **L2.5** | Runtime Drift Monitor | LLM-first semantic drift detection (Haiku 4.5) + rule-based pre-filter. Structured drift context. | 6-pattern rule-based pre-filter (0 tokens) + Haiku 4.5 drift check every 8 turns (~700 tokens). Catches semantic drift that rule-based alone cannot. |
 | **L3** | Grounding Checkpoints + P43 TS Execution | Single `write_ts` tool in isolated-vm sandbox | isolated-vm V8 isolate (ADR-014), AST truncation, inline validation, ck search |
 | **L4** | Adversarial Verification | Critic sub-agent attacks with hard-threshold criteria | @tintinweb/pi-subagents RPC (ADR-016), selective debate, consensus filing |
-| **Phase 16** | Lint+Format Gate | Deterministic quality gate (post-L4, pre-L5) | biome check + tsc --noEmit + fallow — 0 LLM tokens (ADR-013) |
+| **P20** | Lint+Format Gate | Deterministic quality gate (post-L4, pre-L5) | biome check + tsc --noEmit + fallow — 0 LLM tokens (ADR-013) |
 | **L5** | Automated Observability | Instrumentation is definition-of-done | Keep Rate tracking, LLM-as-Judge, error classification, health snapshots |
 | **L6** | Persistent Memory | Wiki vault, hot cache, knowledge base | Read-first/write-after contract, cross-project learning KB |
 | **L7** | Schema Orchestration | Archon workflow DAG, enforces wiki contract | Extension hooks, debate filing enforcement |
@@ -133,7 +133,7 @@ These span multiple layers and are implemented as shared subsystems:
 | **Context Anxiety Guard** | P27 | Detect and mitigate rushing/refusal as context fills |
 | **Positive Agent Loop Hooks** | P28 | Re-invoke agent until DONE condition met (counterpart to drift monitor) |
 | **Per-Tool Per-Model Error Classification** | P29 | Anomaly detection baselines for automated self-healing |
-| **Browser Subagent** | P30 | Headless browser for visual UI verification |
+| **Browser Subagent** | P30 | Headless browser for visual UI verification via **Vercel Labs agent-browser** (31.4K stars, Apache 2.0, Rust-native). Snapshot + refs workflow, annotated screenshots, structured diff. Replaces browser-harness (9.4K stars, Python) May 2026. |
 | **Artifact Generation Layer** | P31 | Human-reviewable deliverables (screenshots, recordings, test summaries) |
 | **Cross-Project Learning KB** | P32 | Multi-project knowledge transfer for agents |
 | **Structured Compaction** | P34 | 5-layer compaction, ~85% context reduction |
@@ -186,6 +186,17 @@ GAN-inspired separation: generator agents produce code, evaluator agents critiqu
 
 ## 6. Detailed Build Phases
 
+### 6.0 Canonical Phase Map (Normalization)
+
+To keep implementation, metrics, and issue tracking consistent, the following aliases are normalized:
+
+| Previous Reference | Canonical Reference | Notes |
+|--------------------|---------------------|-------|
+| Phase 16 lint gate | **P20** | Deterministic post-L4 gate (biome + tsc + fallow) |
+| P2b iMAD gating | **P19** | iMAD is implemented in Group 3 under L4 |
+| P2.4 iMAD deferred | **P19** | P2.4 is placeholder text only |
+| F0.4 model profile mention | **F0.6** | F0.4 is extension wiring; model profiles belong to F0.6/P47 |
+
 ### Phase 0: Foundation (F0)
 
 Build the configurability substrate before any pipeline layers. All harness logic lives in `src/harness/` (pure TypeScript). Pi integration via `.pi/extensions/harness-event-bus.ts` (thin wiring).
@@ -197,7 +208,7 @@ Build the configurability substrate before any pipeline layers. All harness logi
 | F0.3 | Harness event bus | `src/harness/events.ts` (typed wrapper around pi.events, ADR-012) |
 | F0.4 | Pi extension wiring | `.pi/extensions/harness-event-bus.ts` (registers /harness command, wires src/harness/ to pi hooks) |
 | F0.5 | harness-setup bootstrap | `/harness-setup` command: install @tintinweb/pi-subagents, create wiki, configure GitHub, verify tooling (ADR-025) |
-| F0.6 | Model profiles (deferred) | Deferred to Group 8 (P22b). Not needed until provider-native rendering. |
+| F0.6 | Model profiles (deferred) | Initial scaffold deferred to Group 6 after P22b prompt renderer prerequisites. Learned replacement lands in Group 9 (P47). |
 
 ### Phase 1: Spec Hardening (L1)
 
@@ -216,23 +227,24 @@ Build the configurability substrate before any pipeline layers. All harness logi
 | P2.1 | Task DAG generator | YAML task dependency graph from hardened spec (ADR-020). No code until DAG signed. |
 | P2.2 | Sprint contracts | `doneCriteria` per task: deterministic (tests_pass, lint_passes, etc.) + spec_requirement (L4 critic). |
 | P2.3 | Plan summary injector | Compact 3-5 line plan summary into system prompt. Full YAML on disk (ADR-024). Agent re-reads at checkpoints. |
-| P2.4 | iMAD gating (deferred) | Deferred to Group 3. Pre-debate classifier not needed until L4 debate exists. |
+| P2.4 | iMAD gating placeholder | Placeholder only. Canonical implementation is P19 in Group 3. |
 
-### Phase 3-7: Runtime Drift Monitor (L2.5)
+### Phase 3-7: Runtime Drift Monitor (L2.5) — LLM-First v2
 
-Seven detection patterns + turn-dependent thresholds + escalation model, running continuously via `tool_result` event analysis. Sliding window of last 20 tool calls.
+**Rethought May 2026 from first principles.** Primary detection is now LLM-based with structured drift context, using a very cheap and fast model (Haiku 4.5, ~$0.25/M input). Rule-based (6 patterns) becomes cost-saving pre-filter and fallback. Running continuously via `tool_result` event analysis. See [[drift-detection-unified]] for full first-principles derivation.
 
 | ID | Deliverable | Description |
 |----|-------------|-------------|
-| P3 | Rule-based pattern detection | 7 patterns (ADR-022): repetition loops, failure spirals, tool cycling, silence/batching (turn-dependent), rework, excessive search, obsolete search (ck routing) |
-| P4 | Context pruning + correction | Prune dead context, inject correction prompt between turns via `before_agent_start` |
-| P5 | Escalation ladder | Soft nudge → strong nudge → forced restart. Thresholds configurable. |
-| P6 | Drift config | Per-project thresholds in `.pi/harness/config.json` → `driftMonitor` key. Turn-dependent batching: no limit turns 1-8, 12 reads turns 9-15, 6 reads turns 16+. |
-| P7 | ck search routing | Detect grep/find for semantic queries (≥3 words). Nudge: use ck_search instead (ADR-022). |
+| P3 | LLM-based semantic drift detection | **Primary detector**. Every 8 turns: build structured drift context (task, subtask, last 12 tool calls summary, files modified, errors, turn count — ~700 tokens). Send to Haiku 4.5. Returns JSON: `{drifted, pattern, confidence, action}`. Catches semantic drift (agent heading wrong direction) that rule-based cannot. ~$0.0002 per check. |
+| P3-fast | Rule-based pre-filter | **Cost-saving accelerator**. 6 patterns (repetition hash, failure spiral, tool cycling, silence/batching, rework churn, excessive search). 0 tokens, <1ms. If CLEAR stuck pattern → skip LLM check, escalate immediately. If CLEAN or AMBIGUOUS → proceed to LLM check. If LLM call fails → use rule-based verdict as safety net. |
+| P4 | Context pruning + correction | Prune dead context, inject correction prompt between turns via `before_agent_start`. Triggered by LLM verdict (action=nudge|restart) or rule-based fast-path. |
+| P5 | Escalation ladder | Soft nudge (confidence<0.7, action=continue) → Strong nudge (drifted=true, action=nudge) → Forced restart (action=restart). Derived from LLM verdict, not hardcoded thresholds. |
+| P6 | Drift config | Per-project config in `.pi/harness/config.json → driftMonitor`. Fields: `llmModel` (default Haiku 4.5), `checkFrequency` (default 8 turns), `driftContextTemplate`, `rulePreFilterThresholds`, `escalationMode`. |
+| P7 | ck search routing | Detect grep/find for semantic queries (≥3 words). Nudge: use ck_search instead (ADR-022). Deterministic — no LLM needed. |
 
 ### Phase 8-15: Execution Layer (L3) + P43 TS Execution Layer
 
-**Note**: Build order is pipeline-first (ADR-015). P43 ships in Group 4, after L2.5 and L4 are validated. L3 survivors (P8, P9, P11, P13, P15) integrate into P43's isolated-vm runtime. P14 (Think-in-Code) is absorbed by P43 — P43 IS think-in-code. P10 (fuzzy edits) moves into P43's `edit()` host function. P15b (pre-verification sandbox) reuses P43's isolated-vm isolate.
+**Note**: Build order is pipeline-first (ADR-015). P43 ships in Group 4, after L2.5 and L4 are validated. L3 survivors (P8, P9, P11, P12, P13, P15, P15b) integrate into P43's isolated-vm runtime. P14 (Think-in-Code) is absorbed by P43 — P43 IS think-in-code. P10 (fuzzy edits) moves into P43's `edit()` host function. P15b (pre-verification sandbox) reuses P43's isolated-vm isolate.
 
 | ID | Deliverable | Description | Token Impact |
 |----|-------------|-------------|-------------|
@@ -256,8 +268,8 @@ Critic runs as a separate pi process via **@tintinweb/pi-subagents** cross-exten
 | P16 | Critic agent definition | `.pi/agents/critic.md` with `prompt_mode: replace` (clean context). Hard-threshold pass/fail criteria from sprint contract. |
 | P17 | Sub-agent RPC integration | Harness spawns critic via `subagents:rpc:spawn`. Listens for `subagents:completed` for verdict. |
 | P18 | Debate protocol | `DebateSession`, `Budget`, `Convergence` contracts (ADR-011). Multi-round via `steer_subagent` RPC. |
-| P19 | iMAD gating (P2b implemented here) | Pre-debate hesitation classifier. Trigger multi-round debate only when needed. ~92% token savings. |
-| P19b | Consensus-to-wiki filing | Every verdict → `wiki/consensus/`. L7 extension hooks enforce filing compliance. |
+| P19 | iMAD gating (canonical) | Pre-debate hesitation classifier. Trigger multi-round debate only when needed. Replaces earlier placeholder references (P2.4/P2b). ~92% token savings. |
+| P19b | Consensus-to-wiki filing | Every verdict → `vault/wiki/consensus/`. L7 extension hooks enforce filing compliance. |
 
 ### Phase 20-24: Post-Verification (L5-L8)
 
@@ -279,7 +291,7 @@ Critic runs as a separate pi process via **@tintinweb/pi-subagents** cross-exten
 | P27 | Context anxiety guard | Detect rushing/refusal as context fills. Proactive mitigation. | Cursor |
 | P28 | Positive agent loop hooks | Re-invoke agent until DONE (tests pass, lint clean). Counterpart to drift monitor. | Cursor |
 | P29 | Error classification | Per-tool per-model error types. Anomaly detection baselines. Auto-heal candidates. | Cursor |
-| P30 | Browser subagent | browser-harness (9.4K stars, MIT) for thin CDP-based visual UI verification. Self-healing: agent writes missing helpers mid-execution. Replaces raw Puppeteer scripting. | Antigravity |
+| P30 | Browser subagent | **Vercel Labs agent-browser** (31.4K stars, Apache 2.0, Rust-native) for thin CDP-based visual UI verification. Snapshot + refs workflow, annotated screenshots, structured diff, batch mode, React introspection. Replaces browser-harness (9.4K stars, MIT, Python) — May 2026. | Antigravity |
 | P31 | Artifact generation | Human-reviewable deliverables: screenshots, recordings, test summaries. | Antigravity |
 | P32 | Cross-project learning KB | Multi-project knowledge transfer. Tagged strategies queried across projects. | Antigravity |
 | P33 | Lifecycle hook system | 30+ events. Exit-code semantics (0=allow, 2=deny). 5 hook types. | Claude Code |
@@ -294,7 +306,7 @@ Critic runs as a separate pi process via **@tintinweb/pi-subagents** cross-exten
 | P42 | Scheduled automations | Cron-style harness runs: wiki lint, dep updates, test health, drift sweeps. | Codex |
 | P44a | Fallow MCP tool registration | Register fallow MCP server in tool registry. Real-time codebase intelligence. | Fallow |
 | P44b | Fallow pre-verification audit | `fallow audit --changed-since main` in P15b sandbox. Scoped pass/warn/fail. | Fallow |
-| P44c | Fallow Phase 16 gate | `fallow audit --gate all` as post-L4 deterministic gate. Baseline support. | Fallow |
+| P44c | Fallow P20 gate | `fallow audit --gate all` as post-L4 deterministic gate. Baseline support. | Fallow |
 | P44d | Fallow L5 health snapshots | `fallow health --score` snapshots. Trend comparison. Keep Rate proxy. | Fallow |
 | P44e | Fallow P29 error mapping | Map fallow JSON output to error classification taxonomy. `auto_fixable` flag. | Fallow |
 | P44f | Fallow L6 baselines | Git-committed baseline files in `.fallow-baselines/`. Separate from gitignored cache. | Fallow |
@@ -308,7 +320,7 @@ These phases make the harness self-improving. They require all prior phases to b
 |----|-------------|-------------|------------|
 | P45 | Harness auto-optimization | Auto-tune token budgets per project type. Remove dead gates that never trigger. Learn optimal debate gating thresholds from pass/fail history. Re-weights subagent router by observed success rate per task type. Implements Cursor's 90-min RL loop pattern on our own accept/reject data. | P21, P25, P29 |
 | P46 | Behaviour harness | Functional correctness verification beyond adversarial review. AI-generated test suite from hardened spec (ADR-008 compliant: tests from spec, never implementation). Mutation testing to verify test quality. Property-based testing (fast-check) for invariant validation. Fallow runtime hot-path coverage (optional paid layer) to weight tests by production usage. | P20, P21, P44d |
-| P47 | Model profile auto-learning | Replace hand-coded model profiles (F0.4) with learned profiles from execution traces. Inputs: P29 per-tool per-model error baselines, P21 Keep Rate by model, P2b debate gating outcomes, L4 pass/fail rates. Output: auto-generated `.pi/harness/model-profiles.json` with learned provider-native configurations. Human review gate before promotion to production. | P21, P22b, P29 |
+| P47 | Model profile auto-learning | Replace initial model profile scaffolding (F0.6) with learned profiles from execution traces. Inputs: P29 per-tool per-model error baselines, P21 Keep Rate by model, P19 debate gating outcomes, L4 pass/fail rates. Output: auto-generated `.pi/harness/model-profiles.json` with learned provider-native configurations. Human review gate before promotion to production. | P21, P22b, P29 |
 | P48 | Sandbox-as-infrastructure | Custom execution scheduler for parallel agent scenarios. Fast sandbox provisioning (<500ms cold start). Aggressive recycling of warm sandboxes. Resource limits per sandbox (CPU, memory, disk, network). Compatible with P38 OS-level sandbox (bubblewrap/Seatbelt). Enables multi-agent parallel execution within token budget. | P38, P43 |
 
 ---
@@ -404,17 +416,17 @@ P14 is fully absorbed by P43 TypeScript Execution Layer. P43 IS think-in-code. T
 |---------------|--------|-----------|
 | L1 Spec Hardening | ~2,000 | Mandatory read + hardening + selective debate (~20% trigger, +1,500 avg) |
 | L2 Planning + Contracts | ~4,500 | Base plan + sprint contracts + selective debate (~20% trigger, +2,000 avg) |
-| L2.5 Drift Monitor | ~0-300 | Rule-based: 0. LLM-based every 15 steps (Opus): ~500. Avg ~150. |
+| L2.5 Drift Monitor | ~1,500-2,200 | Rule-based pre-filter: 0 tokens (fast-path if CLEAR stuck). LLM-based primary (Haiku 4.5): ~700 tokens/check every 8 turns. ~25-step session = ~3 checks. Net positive: prevents 5K-50K token stuck sessions. |
 | Pre-Verification Sandbox (P15b) | ~0-200 | Deterministic: 0. LLM on failure: ~200. |
 | L3 Execution (enhanced) | ~0 | Tool enhancements save tokens — not cost. See savings table below. |
 | L4 Adversarial Verification | ~4,500 | Hard-threshold criteria + selective multi-round debate (~30% trigger 2+ rounds) |
-| Phase 16 Lint+Format | ~0 | Deterministic tools. 0 LLM tokens. |
+| P20 Lint+Format | ~0 | Deterministic tools. 0 LLM tokens. |
 | L5 Observability | ~2,000 | Keep Rate tracking, LLM-as-Judge, error baselines |
 | L6 Memory Writes | ~1,000 | Haiku for standard writes, Opus for deep synthesis |
-| P30 Browser Subagent | ~0-500 | Deterministic screenshot + pixel diff unless vision analysis needed. Avg ~100. |
+| P30 Browser Subagent | ~0-500 | Deterministic snapshot + diff unless vision model needed. agent-browser batch mode reduces process overhead. Avg ~100. |
 | P31 Artifact Generation | ~1,000 | Haiku for standard artifacts |
 | L7+L8 Orchestration + Query | ~1,000 | Wiki bootstrapping amortized |
-| **Total per subtask** | **~16,000-17,500** | |
+| **Total per subtask** | **~17,500-19,000** | Updated May 2026: L2.5 LLM-first (~+1,800 tokens for perfect semantic drift detection), P30 agent-browser (31.4K stars, Rust-native). |
 
 ### 10.2 Savings Mechanisms
 
@@ -424,8 +436,8 @@ P14 is fully absorbed by P43 TypeScript Execution Layer. P43 IS think-in-code. T
 | Fuzzy edit matching (P10) | Eliminates 5-15% retry rounds | WOZCODE |
 | Inline validation (P11) | 10-20% fewer error-recovery tokens | WOZCODE |
 | Haiku model router (P25) | 15-25% cost reduction | WOZCODE |
-| Selective debate routing (P2b) | 92% token savings on ~80% of debate-invoked tasks | iMAD (AAAI 2026) |
-| Think-in-Code (P14) | 30-200× reduction on data analysis calls | Think-in-Code |
+| Selective debate routing (P19) | 92% token savings on ~80% of debate-invoked tasks | iMAD (AAAI 2026) |
+| Think-in-Code (P14, absorbed by P43) | Included in P43 savings (not additive) | Think-in-Code |
 | TS Execution Layer (P43) | 3-4× context reduction on multi-tool workflows | CodeAct, CF Code Mode |
 | Context drift pruning (P3-P7) | 5-10× reduction for stuck sessions | Drift detection |
 | Structured compaction (P34) | ~85% context reduction | Claude Code |
@@ -451,9 +463,9 @@ Not every task benefits from multi-agent debate. Pre-debate gating classifier:
 
 ### 11.2 Consensus Filing Contract
 
-- Every debate verdict → `wiki/consensus/[layer]-[topic-slug].md`
+- Every debate verdict → `vault/wiki/consensus/[layer]-[topic-slug].md`
 - DEADLOCK and BUDGET_EXHAUSTED verdicts also file — records what could NOT be resolved
-- Future agents query `wiki/consensus/` before forming positions
+- Future agents query `vault/wiki/consensus/` before forming positions
 - Contradicting a filed consensus → harness blocks and surfaces conflict
 - L7 extension hooks enforce filing compliance
 
@@ -485,7 +497,7 @@ Existing architecture decisions:
 
 ### 12.2 Activation (ADR-021)
 
-**Explicit `/harness "task"` command.** Normal chat bypasses pipeline entirely. Flags: `--no-verify`, `--plan-only`, `--skip-lint`, `--model`.
+**Explicit `/harness "task"` command.** Normal chat bypasses pipeline entirely. Default mode enforces all available gates. Bypass flags (`--no-verify`, `--skip-lint`) are debug-only and must emit audit logs. Other flags: `--plan-only`, `--model`.
 
 ### 12.3 What Stays
 
@@ -500,9 +512,9 @@ Existing architecture decisions:
 
 - **Tool calling**: Flat tool list → TypeScript execution layer with isolated-vm sandbox (P43)
 - **Prompt generation**: Single format → provider-native rendering (P22b, deferred)
-- **Execution flow**: Ad-hoc → mandatory 8-layer pipeline (explicitly activated)
+- **Execution flow**: Ad-hoc → staged pipeline during rollout, then mandatory 8-layer pipeline at full maturity (explicitly activated)
 - **Quality enforcement**: Best-effort → adversarial verification + deterministic gates (biome + tsc)
-- **Drift handling**: None → 7-pattern detection + turn-dependent thresholds + escalation
+- **Drift handling**: None → LLM-first detection (Haiku 4.5 every 8 turns) + rule-based pre-filter + turn-dependent escalation
 
 ### 12.5 New Dependencies
 
@@ -555,7 +567,7 @@ $2.4B Windsurf acquisition. Validated: model-adaptive, pre-verification isolatio
 | **Token budget overshoot**: Expected savings don't materialize | Medium | Medium | Per-phase token measurement. Kill switches for any phase that costs > saves. |
 | **Model regressions**: New model versions break prompt renderers | High | High | Build-time prompt compilation + deterministic builds. Hash-verified. |
 | **Sandbox escapes**: TS execution layer has security gaps | Critical | Low | Inner: isolated-vm V8 isolate (ADR-014). Outer: P38 bubblewrap/Seatbelt. Defense in depth. |
-| **Drift monitor false positives**: Nudges interrupt productive work | Medium | Low | Turn-dependent thresholds (ADR-022). No limit turns 1-8. User override. Escalation requires confirmation before restart. |
+| **Drift monitor false positives** | Medium | Low | LLM-based primary detection understands task intent — distinguishes polling/retry from stuckness. Rule-based pre-filter catches obvious fast-path patterns. User override available. Escalation requires confirmation before restart. |
 | **Wiki staleness**: Knowledge base out of sync with codebase | Medium | High | Lint schedule (every 10-15 writes). Cross-reference integrity checks. |
 | **Fork safety**: Specs leak between forks | Medium | Low | GitHub Issues storage (ADR-025). Specs tied to repo. No local cache. No leak vector. |
 | **Consensus overuse**: Too many debates burn tokens | Low | Medium | iMAD gating: 92% token savings on ~80% of tasks. Hard budget caps. |
@@ -582,11 +594,11 @@ $2.4B Windsurf acquisition. Validated: model-adaptive, pre-verification isolatio
 |--------|--------|-------------|
 | Token overhead per subtask | <17,500 | Harness instrumentation |
 | Context reduction (P43 active) | >3× vs flat tool calling | A/B per-task measurement |
-| Drift detection recall | >95% (rule-based), >80% (LLM-based) | Stuck session flagging |
+| Drift detection recall | >95% (rule-based fast-path), >90% (LLM-based semantic) | Stuck session flagging |
 | Adversarial pass rate (first attempt) | >70% | Per-task gate logs |
 | Consensus debate token savings | >85% vs always-debate | iMAD gating logs |
 | Consensus filing compliance | 100% | L7 hook enforcement |
-| Fallow gate pass rate (Phase 16) | >95% (warn+pass) | Audit logs |
+| Fallow gate pass rate (P20) | >95% (warn+pass) | Audit logs |
 | Health score trend | Non-decreasing per PR | `fallow health --trend` |
 
 ### 15.3 Anti-Goals (What We Explicitly Do NOT Measure)
@@ -606,7 +618,7 @@ P43 deferred to Group 4. Validate quality gates (L1/L2/L2.5/L4) before investing
 | Group | Phases | Effort Estimate | Rationale |
 |-------|--------|-----------------|-----------|
 | **Group 1: Foundation + L1/L2** | F0.1-F0.5, P1.1-P1.5, P2.1-P2.3 | ~2 weeks | Spec hardening + planning + event bus + harness-setup. Blocks all downstream layers. |
-| **Group 2: L2.5 Drift Monitor** | P3, P4, P5, P6, P7 | ~2 weeks | 7 rule-based patterns + turn-dependent thresholds. Works with pi's existing flat tools. Protects token budget. |
+| **Group 2: L2.5 Drift Monitor** | P3, P3-fast, P4, P5, P6, P7 | ~2 weeks | LLM-first drift detection (Haiku 4.5) + rule-based pre-filter + turn-dependent escalation. Structured drift context. Catches semantic drift. Works with pi's existing flat tools. Protects token budget. |
 | **Group 3: L4 Adversarial** | P16, P17, P18, P19, P19b | ~3 weeks | Critic sub-agent via @tintinweb/pi-subagents. iMAD gating. Consensus filing. Verification backbone. |
 | **Group 4: P43 TS Execution Layer + L3 survivors** | P43, P43b, P43c, P8, P9, P11, P12, P13, P15, P15b | ~4 weeks | Single biggest context reduction (3-4x). isolated-vm sandbox. L3 checkpoints integrated. |
 | **Group 5: Post-Verification** | P20, P21, P22, P23, P24 | ~2 weeks | Biome+tsc gate. Keep Rate tracking. Memory persistence. Wiki query. |
@@ -621,7 +633,7 @@ P43 deferred to Group 4. Validate quality gates (L1/L2/L2.5/L4) before investing
 
 Each group ships independently and adds value:
 1. **After Group 1**: `/harness` command works. Specs hardened, plans structured, event bus active. harness-setup bootstraps project.
-2. **After Group 2**: Agent stuckness auto-detected and corrected. 7 drift patterns monitored. Turn-dependent thresholds prevent false positives.
+2. **After Group 2**: Agent stuckness AND semantic drift auto-detected via LLM-first monitor (Haiku 4.5, ~$0.0002/check). 6-pattern rule-based pre-filter catches obvious stuckness for free. Escalation derived from LLM verdict.
 3. **After Group 3**: Every change passes critic sub-agent attack. Consensus debates filed. Quality gate proven.
 4. **After Group 4**: 3-4x context reduction on all tool workflows. Single `write_ts` tool replaces flat tools.
 5. **After Group 5**: Keep Rate tracked. Memory persists. Pipeline orchestrated.
@@ -664,7 +676,7 @@ src/harness/                    # Pure TypeScript. No pi imports. Testable witho
   events.ts                     # Typed harness event bus (wraps pi.events)
   l1-spec.ts                    # L1: Spec hardening, ambiguity detector, spec hash, harness_ask
   l2-planner.ts                 # L2: YAML plan generator, sprint contracts, plan injection
-  l2.5-drift.ts                 # L2.5: 7-pattern drift detection, escalation ladder, ck routing
+  l2.5-drift.ts                 # L2.5: LLM-first drift detection (Haiku 4.5) + rule-based pre-filter + P6 config + ck routing
   l3-executor.ts                # L3: Grounding checkpoint management (Group 4, P43 runtime)
   l4-critics.ts                 # L4: Critic sub-agent manager (pi-subagents RPC)
   p43-ts-exec.ts                # P43: TypeScript execution layer (isolated-vm runtime)
@@ -702,16 +714,16 @@ src/harness/                    # Pure TypeScript. No pi imports. Testable witho
 scripts/
   compile-prompts.ts            # P22b: Build-time prompt compiler
 
-wiki/consensus/                 # All debate verdicts filed here (ADR-011)
-wiki/decisions/                 # ADRs (ADR-008 through ADR-025)
-wiki/concepts/                  # All harness concepts
+vault/wiki/consensus/           # All debate verdicts filed here (ADR-011)
+vault/wiki/decisions/           # ADRs (ADR-008 through ADR-025)
+vault/wiki/concepts/            # All harness concepts
 ```
 
 ---
 
 ## 18. Resolved Questions
 
-All 10 original PRD questions resolved. 11 additional decisions made during grilling session (2026-05-02). 21 total decisions documented as ADRs (008-025).
+All 10 original PRD questions resolved. 11 additional decisions made during grilling session (2026-05-02). 21 total decisions resolved; 18 are documented as ADRs (008-025).
 
 | # | Question | Resolution | Rationale |
 |---|----------|------------|-----------|
@@ -732,8 +744,8 @@ All 10 original PRD questions resolved. 11 additional decisions made during gril
 | Q15 | Harness project structure? | **src/harness/ library + .pi/extensions/harness-event-bus.ts wiring (ADR-017).** Pure TypeScript harness logic. Thin pi integration layer. Testable without pi runtime. | ADR-017. Separation of concerns. |
 | Q16 | Config: multiple files or single? | **Single .pi/harness/config.json (ADR-018).** Project-local. No cascade. All defaults in code. | ADR-018. Simple. One file. |
 | Q17 | L1 user Q&A mechanism? | **harness_ask tool (ADR-019).** Structured questions via pi TUI. LLM calls the tool. Fallback: system prompt injection. | ADR-019. Structured over conversational. |
-| Q18 | Activation: auto-detect or explicit command? | **Explicit /harness command (ADR-021).** Normal chat bypasses pipeline. Flags: --no-verify, --plan-only. | ADR-021. User controls pipeline activation. |
-| Q19 | Drift monitor: pattern definitions and thresholds? | **7 patterns with turn-dependent thresholds (ADR-022).** Silence/batching: no limit turns 1-8, 12 reads turns 9-15, 6 reads turns 16+. ck routing for semantic searches. Escalation ladder: soft→strong→restart. | ADR-022. Turn-dependent prevents false positives during exploration. |
+| Q18 | Activation: auto-detect or explicit command? | **Explicit /harness command (ADR-021).** Normal chat bypasses pipeline. Canonical flags: `--no-verify`, `--plan-only`, `--skip-lint`, `--model` (debug bypass flags require audit log). | ADR-021. User controls pipeline activation. |
+| Q19 | Drift monitor: detection mechanism and thresholds? | **LLM-FIRST v2 (May 2026).** Primary detection is Haiku 4.5 (or equivalent cheap model) with structured drift context every 8 turns (~700 tokens/check, ~$0.0002/check). Rule-based (6 patterns) is cost-saving pre-filter and fallback. ck search routing (≥3 words → ck_search) is deterministic. Escalation ladder derived from LLM verdict. Configurable: model, frequency, context template, thresholds via `.pi/harness/config.json → driftMonitor`. | ADR-022 updated. LLM-first from first principles: catches semantic drift that rule-based misses. Rule-based catches fast-path obvious stuckness for 0 tokens. Net positive: prevents 5K-50K token stuck sessions at ~$0.001-0.005/session. |
 | Q20 | Spec storage: local or GitHub Issues? | **GitHub Issues only (ADR-025).** No local cache. Network-dependent. Fail-fast if GitHub unreachable. `.github/ISSUE_TEMPLATE/harness-spec.yml`. | ADR-025. Single source of truth. |
 | Q21 | One-time setup? | **/harness-setup command (ADR-025).** Installs pi-subagents, creates wiki vault, creates GitHub issue template, creates config, verifies tooling. Interactive checklist. | ADR-025. Bootstrap in one command. |
 
@@ -764,7 +776,7 @@ All 10 original PRD questions resolved. 11 additional decisions made during gril
 - iMAD (Fan et al., AAAI 2026) — Selective debate routing, 92% savings
 - PromptWeaver (@iqai/prompt-weaver) — Handlebars template compilation + Zod validation for prompts
 - Microsoft prompt-engine — YAML-based prompt management (validates pattern, abandoned 2022)
-- browser-harness (9.4K stars, MIT) — Thin CDP harness for LLM browser control (replaces Puppeteer)
+- **agent-browser** (Vercel Labs, 31.4K stars, Apache 2.0, Rust-native) — Browser automation CLI purpose-built for AI agents. Snapshot + refs, annotated screenshots, structured diff, React introspection. Replaces browser-harness (9.4K stars, Python) for P30.
 
 ### Prompt Architecture
 - OpenAI Prompt Engineering Guide (official)
@@ -772,4 +784,4 @@ All 10 original PRD questions resolved. 11 additional decisions made during gril
 - Google Gemini 3 Prompting Guide (official, Vertex AI)
 
 ### Full Wiki
-All source pages, concept pages, research syntheses, and entity pages available in `wiki/`. See `wiki/index.md` for complete catalog. See `wiki/hot.md` for current context.
+All source pages, concept pages, research syntheses, and entity pages available in `vault/wiki/`. See `vault/wiki/index.md` for complete catalog. See `vault/wiki/hot.md` for current context.

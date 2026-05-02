@@ -141,8 +141,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 |---------|--------|
 | [[antigravity-agent-first-architecture]] | Two-view control plane: Editor View + Manager View for multi-agent orchestration |
 | [[agent-artifacts-verifiable-deliverables]] | Trust via human-reviewable deliverables instead of raw tool logs |
-| [[browser-harness-agent]] | Thin CDP harness (9.4K stars, MIT) — self-healing LLM→Chrome bridge via raw CDP, replaces Puppeteer |
-| [[browser-subagent-visual-verification]] | Headless browser agent that visually verifies UI changes (now uses browser-use instead of Puppeteer) |
+| [[agent-browser-browser-automation]] | Vercel Labs agent-browser (31.4K stars, Apache 2.0, Rust-native) — browser automation CLI for AI agents. Snapshot + refs, annotated screenshots, structured diff. Replaces browser-harness for P30 May 2026. |
+| [[browser-subagent-visual-verification]] | Headless browser agent that visually verifies UI changes (now uses Vercel Labs agent-browser — May 2026) |
 
 ## Modules — Other
 
@@ -288,7 +288,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[google-antigravity-wikipedia]] | encyclopedia | Antigravity: VS Code fork, Gemini 3.1, Windsurf $2.4B acquisition |
 | [[cursor-vs-antigravity-2026]] | comparison | Cursor v2.6 vs Antigravity v1.20: centaur vs manager, benchmarks |
 | [[Source: Build-Time Prompt Compilation Architecture]] | architecture-analysis | Real tools: DIY pipeline (js-yaml + PromptWeaver + per-model renderers), replaces fabricated PromptKit PackC |
-| [[Source: browser-harness CDP Harness]] | official-repo | browser-harness: 9.4K stars, MIT, thin CDP harness — self-healing LLM-to-Chrome bridge, replaces Puppeteer for P30 |
+| [[Source: Vercel Labs agent-browser]] | official-repo | agent-browser: 31.4K stars, Apache 2.0, Rust-native browser automation CLI for AI agents — snapshot + refs, annotated screenshots, structured diff. Replaces browser-harness for P30. |
+| [[Source: browser-harness CDP Harness]] | official-repo | browser-harness: 9.4K stars, MIT, thin CDP harness — self-healing LLM-to-Chrome bridge. SUPERSEDED by agent-browser for P30 (May 2026). |
 | [[Source: AgentBus Jinja2 Prompt Pipelines]] | engineering-blog | Jinja2 templating: inheritance, conditionals, loops, pipeline runner |
 | [[Source: TianPan Prompt Caching Architecture]] | engineering-blog | Multi-tier caching: semantic→prefix→full, 60-90% savings, cache boundary control |
 | [[Source: Arxiv — Don't Break the Cache]] | academic-paper | PwC evaluation: 41-80% cost reduction, system-prompt-only caching optimal |

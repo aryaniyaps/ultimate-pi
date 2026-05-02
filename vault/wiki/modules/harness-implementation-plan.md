@@ -3,7 +3,7 @@ type: module
 title: Harness Implementation Plan
 status: active
 created: 2026-04-28
-updated: 2026-05-01
+updated: 2026-05-02
 tags: [harness, ultimate-pi, implementation, architecture, master-plan]
 sources:
   - "[[meng2026-agent-harness-survey]]"
@@ -22,6 +22,7 @@ sources:
   - "[[google-antigravity-wikipedia]]"
   - "[[cursor-vs-antigravity-2026]]"
   - "[[fallow-rs-codebase-intelligence]]"
+  - "[[Source: Vercel Labs agent-browser]]"
 related:
   - "[[harness]]"
   - "[[agentic-harness]]"
@@ -40,6 +41,7 @@ related:
   - "[[antigravity-agent-first-architecture]]"
   - "[[agent-artifacts-verifiable-deliverables]]"
   - "[[browser-subagent-visual-verification]]"
+  - "[[agent-browser-browser-automation]]"
   - "[[Research: Claude Code State-of-the-Art Harness Improvements]]"
   - "[[lifecycle-hooks]]"
   - "[[structured-compaction]]"
@@ -136,7 +138,7 @@ L5: Automated Observability → L6: Persistent Memory → L7: Schema Orchestrati
 |---|-------|--------|---------|
 | 1 | Spec Hardening | [[spec-hardening]] | Block execution until ambiguities resolved |
 | 2 | Structured Planning | [[structured-planning]] | Machine-readable task DAG before code. Sprint contracts (agree "done" before L3) |
-| 2.5 | Runtime Drift Monitor | [[drift-detection-unified]] | Detect stuck patterns, prune dead context, restart agent |
+| 2.5 | Runtime Drift Monitor | [[drift-detection-unified]] | LLM-first (Haiku/mini) semantic drift detection + rule-based pre-filter. Structured drift context. Detect stuck patterns + semantic drift, prune, restart. |
 | 3 | Grounding Checkpoints | [[grounding-checkpoints]] | Smallest verifiable change + spec-drift detection |
 | 4 | Adversarial Verification | [[adversarial-verification]] | Critic agents attack, not review. Multi-round debate (selective routing). Hard-threshold pass/fail criteria. |
 | 5 | Automated Observability | [[automated-observability]] | Instrumentation is definition-of-done |
@@ -166,15 +168,17 @@ Organized by pipeline position, not sequential numbering. Each phase maps to a s
 | P2 | Structured Planning + Sprint Contracts | L2 | `lib/harness-planner.ts`, `extensions/harness-planner.ts` |
 | P2b | Pre-debate gating classifier (selective routing per iMAD) | L1/L2/L4 | `lib/harness-debate-gate.ts` |
 
-### L2.5: Runtime Drift Monitor
+### L2.5: Runtime Drift Monitor (LLM-First v2)
+
+**Rethought May 2026 from first principles**. Primary detection is now LLM-based with structured drift context, using a very cheap model (Haiku 4.5). Rule-based (6 patterns) becomes the cost-saving pre-filter and fallback. See [[drift-detection-unified]] for full reasoning.
 
 | Phase | What | Layer | Files |
 |-------|------|-------|-------|
-| P3 | Rule-based stuck-pattern detection (repetition, failure spiral, tool cycling, silence, rework, excessive search) | L2.5 | `lib/harness-drift-monitor.ts` |
-| P4 | Context pruning + correction injection | L2.5 | `lib/harness-drift-monitor.ts` |
-| P5 | Escalation model (soft nudge → strong nudge → forced restart) | L2.5 | `lib/harness-drift-monitor.ts` |
-| P6 | DriftMonitor config + model-adaptive thresholds | L2.5 | `.pi/harness/drift-monitor.json` |
-| P7 | Extension hooks (before_llm_call / after_tool_call) | L2.5 | `extensions/harness-drift-monitor.ts` |
+| P3 | **LLM-based drift detection (primary)** + rule-based pre-filter (fallback). Structured drift context: task, subtask, last 12 tool calls summary, files modified, errors, turn count. Sent to Haiku 4.5 every 8 turns (~700 tokens/check). Returns JSON: `{drifted, pattern, confidence, action}`. Catches SEMANTIC drift that rule-based cannot. | L2.5 | `lib/harness-drift-monitor.ts` |
+| P4 | Context pruning + correction injection (triggered by LLM verdict or rule-based fast-path) | L2.5 | `lib/harness-drift-monitor.ts` |
+| P5 | Escalation model (soft nudge → strong nudge → forced restart), action derived from LLM verdict | L2.5 | `lib/harness-drift-monitor.ts` |
+| P6 | DriftMonitor config: LLM model selection (default Haiku 4.5), check frequency (default 8 turns), drift context template, rule-based pre-filter thresholds | L2.5 | `.pi/harness/drift-monitor.json` |
+| P7 | Extension hooks (before_llm_call / after_tool_call) + ck search routing (deterministic pattern: grep/find with ≥3 words → ck_search) | L2.5 | `extensions/harness-drift-monitor.ts` |
 
 ### L3: Execution Layer (with Tool Enhancements)
 
@@ -248,7 +252,7 @@ Organized by pipeline position, not sequential numbering. Each phase maps to a s
 | P35 | Permission Subsystem — allow/deny/ask rule engine with scope hierarchy (Managed/User/Project/Local). ML-based auto-classifier for auto mode. Composable rule syntax. Sits between agent loop and tool execution as architecturally separate layer. Claude Code permission architecture. | [[claude-code-security-architecture-penligent-2026]] |
 | P36 | Session Storage with Resume/Fork/Rewind — append-oriented session transcripts (JSONL). Sidechain subagent transcripts for context isolation. Checkpoint file-state snapshots before edits. Session resumption and forking. Claude Code session architecture. | [[claude-code-architecture-karaxai-2026]] |
 | P37 | CLAUDE.md-Style Entrypoint System — additive configuration hierarchy (Global → Project → Local) with conditional YAML frontmatter. Single coherence entry-point for all harness rules, wiki references, and project conventions. Replaces distributed wiki-only approach with a unified entrypoint. | [[claude-code-architecture-karaxai-2026]] |
-| P30 | Browser Subagent — browser-harness (9.4K stars, MIT, thin CDP harness) for visual verification of UI changes. Self-healing: agent writes missing helpers mid-execution. Direct CDP access via one WebSocket. Replaces Puppeteer. Antigravity browser subagent pattern. Dispatched by P25 subagent router for UI tasks. | L3 tools | `lib/harness-browser.ts`, `extensions/harness-browser.ts`, `.pi/harness/browser.json` |
+| P30 | Browser Subagent — **Vercel Labs agent-browser** (31.4K stars, Apache 2.0, Rust-native) for visual verification of UI changes. Snapshot + refs workflow, annotated screenshots, structured diff, batch mode. Replaces browser-harness (9.4K stars, Python). Antigravity browser subagent pattern. Dispatched by P25 subagent router for UI tasks. | L3 tools | `lib/harness-browser.ts`, `extensions/harness-browser.ts`, `.pi/harness/browser.json` |
 | P31 | Artifact Generation Layer — agents generate human-reviewable deliverables (screenshots, browser recordings, test result summaries) after L4 verification. Complements adversarial review with positive proof of correctness. Antigravity Artifacts pattern. | L4→L5 bridge | `lib/harness-artifacts.ts`, `extensions/harness-artifacts.ts` |
 | P32 | Cross-Project Learning Knowledge Base — extend L6 persistent memory for cross-project knowledge transfer. Agents save successful strategies and code patterns tagged by domain. Query across projects. Foundation for F1 self-evolving harness. Antigravity knowledge base pattern. | L6 | Update `extensions/harness-knowledge-base.ts`, `.pi/harness/knowledge-base.json` |
 
@@ -297,7 +301,7 @@ Single authoritative budget. All previous fragmented estimates consolidated.
 |---------------|--------|-----------|
 | L1 Spec Hardening | ~2,000 | Mandatory read + hardening + selective debate (~20% tasks trigger debate, +1,500 avg) |
 | L2 Planning + Sprint Contracts | ~4,500 | Base plan + sprint contracts + selective debate (~20% tasks, +2,000 avg) |
-| L2.5 Drift Monitor | ~0-300 | Rule-based detection costs 0 tokens. LLM-based every 15 steps (Opus) = ~500. Avg ~150. |
+| L2.5 Drift Monitor | ~1,500-2,200 | Rule-based pre-filter: 0 tokens (fast path if CLEAR stuck). LLM-based primary (Haiku 4.5): ~700 tokens every 8 turns. ~25-step session: ~3 checks × 700 = ~2,100 avg. Net positive: prevents 5,000-50,000 token stuck sessions. |
 | Pre-Verification Sandbox (P15b) | ~0-200 | Deterministic compile/lint in isolated temp workspace. LLM tokens only on failure to feed error back. |
 | L4 Adversarial Verification | ~4,500 | Hard-threshold criteria + selective multi-round debate (~30% tasks trigger 2+ rounds, +2,000 avg) |
 | Phase 16 Lint+Format Gate | ~0 | Deterministic tooling, no LLM. Time: <10s. |
@@ -325,7 +329,7 @@ Single authoritative budget. All previous fragmented estimates consolidated.
 
 | Component | Naive Baseline | With All Improvements |
 |-----------|---------------|----------------------|
-| Pipeline overhead | ~87,500 | ~75,000-80,000 |
+| Pipeline overhead | ~87,500 | ~80,000-85,000 |
 | Coding tokens | variable | -25-55% (AST truncation + fuzzy edits) |
 | **Total 5-subtask** | **~87,500+** | **~55,000-65,000 + coding** |
 
@@ -351,7 +355,7 @@ Tools identified from April 2026 research, now part of the implementation plan:
 | **Gitingest** (bulk ingestion) | P15 | Convert external repos → structured LLM text | `/gitingest` skill wrapping Python package |
 | **pi-messenger** (stripped) | P17 | File-based agent messaging transport for consensus debate | Dependency in package.json. Strip all UI overlays. |
 | **pi-lean-ctx** (native) | F0 | 48 MCP tools, AST compression, governance, shell patterns | Already adopted: [[2026-04-30-pi-lean-ctx-native]] |
-| **browser-harness** (thin CDP harness, 9.4K stars, MIT) | P30 | Self-healing CDP bridge to Chrome. Agent calls raw CDP methods directly (session.Page.navigate, etc.). Agent writes missing helpers mid-execution. TypeScript variant available (browser-harness-js, 428 stars). Replaces Puppeteer. | `uv add browser-harness` (Python) or `npx skills add browser-harness-js` (TS). Subagent dispatched by P25 router for UI tasks. Config: `.pi/harness/browser.json` |
+| **agent-browser** (Vercel Labs, 31.4K stars, Apache 2.0, Rust-native) | P30 | Browser automation CLI purpose-built for AI agents. Snapshot + refs workflow, annotated screenshots, structured diff, React introspection, Web Vitals, batch mode, built-in skills system. Replaces browser-harness (9.4K stars, Python). | `npm install -g agent-browser` (single binary, no Node.js runtime). Subagent dispatched by P25 router for UI tasks. Config: `.pi/harness/browser.json` |
 | **Fallow** (codebase intelligence) | P44 | Dead code, duplication, complexity, boundaries. MCP server for agents. Audit mode for CI gates. | `npm install -D fallow`. MCP registration: `.pi/mcp/fallow.json`. Agent skill: `fallow-skills`. 7 sub-phases (P44a-P44g). |
 
 ---
@@ -530,7 +534,7 @@ See [[drift-detection-unified]] for full specification. Summary:
 | Paradigm | Layer | Detects | Mechanism | Intervention |
 |----------|-------|---------|-----------|-------------|
 | **Spec Drift** | L3 | Scope creep, spec violation | Compare current state to hardened spec hash | Abort, replan from L2 |
-| **Tool-Call Drift** | L2.5 | Stuck patterns, context pollution, loop cycles | Rule-based (6 patterns) + LLM-based (semantic) | Prune dead context, inject correction, restart agent |
+| **Tool-Call Drift** | L2.5 | Stuck patterns, context pollution, SEMANTIC drift (heading wrong direction) | LLM-first (Haiku/mini, ~700 tokens/8 turns) + rule-based pre-filter (0 tokens) | Prune dead context, inject correction, restart agent |
 | **Implementation Drift** | L4 | Code doesn't match spec | Adversarial verification, multi-round debate | Rework subtask, re-verify |
 
 These are complementary, not redundant. Each targets a different failure mode at a different pipeline stage.
@@ -594,6 +598,6 @@ See [[harness-configuration-layers]] for full table. Key differences:
 | Verification | Natural double-check | Must be enforced hard gate | TBD |
 | Truncation | Reads metadata | Needs in-band body text | TBD |
 | Completion | Self-aware of gaps | Stops at plausible-but-incomplete | TBD |
-| Drift detection | LLM-based every 15 steps | Rule-based every step | Rule-based every 10 steps |
+| Drift detection | LLM-based (Haiku) every 12 turns + rule pre-filter | LLM-based (Haiku/mini) every 8 turns + rule pre-filter | LLM-based (Haiku/mini) every 8 turns + rule pre-filter |
 
 **Design principle**: Generate provider-native prompts from provider-agnostic semantic spec. Never generate a single canonical prompt and relax it. See [[provider-native-prompting]] and [[model-adaptive-harness]] for the May 2026 redesign. Validated by Cursor's per-model tool provisioning (patches for OpenAI, string replace for Anthropic) and per-model-version prompt customization. [[cursor-harness-april-2026]].

@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-02T12:40:00
+updated: 2026-05-02T17:00:00
 created: 2026-04-30
 tags: []
 status: active
@@ -10,7 +10,57 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-02. Tech stack corrections applied: fabricated "PromptKit PackC" removed, real tools documented; browser-harness replaces Puppeteer for P30.
+2026-05-02. **P30 browser engine replaced**: Vercel Labs agent-browser (31.4K stars, Apache 2.0, Rust-native) replaces browser-harness (9.4K stars, MIT, Python). **L2.5 drift detection rethought from first principles**: LLM-first (Haiku 4.5) with structured drift context replaces rule-based primary. See below.
+
+## P30 Browser Engine: agent-browser (May 2026)
+
+### browser-harness → Vercel Labs agent-browser
+**Upgrade for maturity and AI agent integration.** agent-browser (31.4K GitHub stars, Apache 2.0, v0.26.0, 81 releases, 112 contributors) is 3.3× larger than browser-harness (9.4K stars, MIT, Python) and provides richer AI agent primitives:
+- Snapshot + refs workflow (snapshot -i → click @e2 → fill @e3)
+- Annotated screenshots with numbered labels matching @eN refs
+- Structured diff (snapshot diff + visual pixel diff)
+- React introspection (react tree, react renders, react suspense)
+- Web Vitals (LCP/CLS/TTFB/FCP/INP)
+- Batch mode (multi-command single invocation)
+- Built-in skills system (skills get core, npx skills add)
+- Rust-native single binary (no Python dependency)
+
+Install: `npm install -g agent-browser`. Config: `.pi/harness/browser.json`.
+
+See [[Source: Vercel Labs agent-browser]] and [[agent-browser-browser-automation]].
+
+### Files updated
+HARNESS-PRD.md (P30, L2.5, deps, references, token budget, resolved Q19), wiki/modules/harness-implementation-plan.md (P3-P7, P30, L2.5, token budget, tools table), wiki/concepts/drift-detection-unified.md (full LLM-first rewrite), wiki/concepts/browser-subagent-visual-verification.md (agent-browser), wiki/concepts/agent-browser-browser-automation.md (new), wiki/sources/Source: Vercel Labs agent-browser.md (new), wiki/index.md, wiki/hot.md.
+
+## L2.5 Drift Detection: LLM-First v2 (May 2026)
+
+### First-Principles Rethink
+
+**Problem**: Rule-based detection (6 patterns: repetition, failure spiral, etc.) catches ~80% of stuck sessions but MISSES semantic drift — agent making "progress" but heading in the wrong direction. FP #6 states drift is a positive feedback loop; the 20% that slip through are the most dangerous.
+
+**Solution**: LLM-based primary detection with structured context input + very cheap model.
+
+```
+Every 8 turns:
+  1. Rule-based pre-filter (0 tokens, <1ms): if CLEAR stuck → escalate immediately
+  2. Build structured drift context (~700 tokens):
+     { task, subtask, last_12_tool_calls_summary, files_modified, errors, turn }
+  3. Send to Haiku 4.5: "Is agent making progress? Reply JSON."
+  4. Act on verdict: continue | nudge | restart
+```
+
+**Why LLM-first**:
+- LLM has semantic understanding of task + plan — catches direction-drift that rule-based can't
+- Structured context (not full history) keeps cost negligible: ~700 tokens × $0.25/M = ~$0.0002/check
+- Classification task (not generation) is ideal for cheap models
+- Rule-based is now the cost-saving pre-filter, not the authority
+- Net positive: ~$0.001-0.005/session prevents 5,000-50,000 token stuck sessions
+
+Token budget impact: L2.5 goes from ~0-150 → ~1,500-2,200/session. Total per-subtask: ~17,500-19,000 (up from 16,000-17,500).
+
+See [[drift-detection-unified]] for full first-principles derivation.
+
+---
 
 ## Tech Stack Corrections (2026-05-02)
 
@@ -22,10 +72,8 @@ status: active
 - **PromptWeaver** (`@iqai/prompt-weaver`, MIT, Dec 2025): Handlebars template compilation + Zod validation. Active. Production-ready.
 - **DIY pipeline**: `js-yaml` (parsing) + `@iqai/prompt-weaver` (templates) + custom per-model renderer plugins. See [[Source: Build-Time Prompt Compilation Architecture]].
 
-### Puppeteer → browser-harness (P30)
-**Cutting-edge SOTA replacement.** browser-harness (9.4K stars, MIT, Python) by browser-use replaces Puppeteer as the browser subagent for P30. Thin CDP harness: one WebSocket to Chrome, nothing between. Self-healing: agent writes missing helpers mid-execution. TypeScript variant: browser-harness-js (428 stars, 652 typed CDP methods). See [[Source: browser-harness CDP Harness]] and [[browser-harness-agent]].
-
-**Files corrected**: HARNESS-PRD.md (P30, P22b, Q10, deps, references), wiki/concepts/* (3 files), wiki/questions/* (2 files), wiki/modules/* (1 file), wiki/hot.md, wiki/log.md, wiki/index.md.
+### Puppeteer → browser-harness → agent-browser (P30)
+**Evolution**: Puppeteer → browser-harness (May 1) → Vercel Labs agent-browser (May 2). agent-browser (31.4K stars, Apache 2.0, Rust-native) provides richer AI agent primitives: snapshot + refs, annotated screenshots, structured diff, React introspection, batch mode, skills system. Replaces browser-harness (9.4K stars, MIT, Python) for P30. See [[Source: Vercel Labs agent-browser]] and [[agent-browser-browser-automation]].
 
 ---
 
