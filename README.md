@@ -35,6 +35,45 @@ Ship a production-grade coding harness where the agent:
    npm install -g @aryaniyaps/ultimate-pi --registry=https://npm.pkg.github.com
    ```
 
+## Firecrawl self-hosted (web scraping infra)
+
+The Firecrawl skill depends on a Firecrawl instance. This repo includes a self-hosted
+setup powered by Docker — no separate repo clone needed.
+
+### Quick start
+
+```bash
+cd firecrawl
+cp .env.template .env   # first time only — edit if needed
+docker compose up -d     # pulls pre-built GHCR images automatically
+```
+
+Firecrawl API is now at `http://localhost:3002`. Admin UI at
+`http://localhost:3002/admin/<BULL_AUTH_KEY>/queues`.
+
+### Services
+
+| Service | Image | Port |
+|---------|-------|------|
+| `api` | `ghcr.io/firecrawl/firecrawl` | 3002 |
+| `playwright-service` | `ghcr.io/firecrawl/playwright-service:latest` | 3000 (internal) |
+| `nuq-postgres` | `ghcr.io/firecrawl/nuq-postgres:latest` | 5432 (internal) |
+| `redis` | `redis:alpine` | 6379 (internal) |
+| `rabbitmq` | `rabbitmq:3-management` | 5672 (internal) |
+| `searxng` | `searxng/searxng:latest` | 8080 |
+
+### Configuration
+
+All options live in `firecrawl/.env`. See `firecrawl/.env.template` for the full
+reference. Key env vars:
+
+- `PORT` — API port (default: `3002`)
+- `SEARXNG_ENDPOINT` — enables `/search` API (default: `http://searxng:8080`)
+- `OPENAI_API_KEY` — enables AI features (JSON formatting, `/extract` API)
+- `BULL_AUTH_KEY` — admin UI access key (default: `CHANGEME` — change in production)
+
+See `firecrawl/README.md` for detailed docs and SDK usage examples.
+
 ## Obsidian wiki setup
 
 ### Step 1 — Run `wiki`
