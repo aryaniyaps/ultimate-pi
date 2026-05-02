@@ -16,9 +16,8 @@ related:
 sources:
   - "[[gitingest]]"
   - "[[gitreverse]]"
----
 
-# Research: GitIngest and GitReverse Integration
+---# Research: GitIngest and GitReverse Integration
 
 ## Overview
 

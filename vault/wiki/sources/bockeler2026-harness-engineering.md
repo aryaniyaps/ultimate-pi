@@ -22,9 +22,8 @@ tags:
 created: 2026-04-30
 updated: 2026-04-30
 status: ingested
----
 
-# Harness Engineering for Coding Agent Users
+---# Harness Engineering for Coding Agent Users
 
 Birgitta Böckeler, Martin Fowler. April 2026.
 

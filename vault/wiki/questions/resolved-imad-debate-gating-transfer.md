@@ -21,9 +21,8 @@ related:
   - "[[fan2025-imad]]"
 sources:
   - "[[fan2025-imad]]"
----
 
-# Resolved: iMAD Debate Gating — QA to Code Review Transfer
+---# Resolved: iMAD Debate Gating — QA to Code Review Transfer
 
 ## Resolution
 

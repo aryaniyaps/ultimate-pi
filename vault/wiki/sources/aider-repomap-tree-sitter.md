@@ -21,9 +21,8 @@ tags:
   - context-window
 created: 2023-10-22
 updated: 2026-04-30
----
 
-# Building a better repository map with tree-sitter
+---# Building a better repository map with tree-sitter
 
 Aider's approach to solving the "code context" problem for LLMs. When an LLM needs to make changes in a large codebase, it must understand how the target code relates to the rest of the codebase. Aider sends a concise repository map built via tree-sitter AST parsing.
 

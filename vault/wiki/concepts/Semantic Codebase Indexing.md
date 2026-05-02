@@ -2,6 +2,7 @@
 type: concept
 title: "Semantic Codebase Indexing"
 created: 2026-04-30
+status: developing
 tags:
   - code-indexing
   - embeddings
@@ -15,9 +16,9 @@ related:
 sources:
   - "[[Augment Context Engine Official]]"
   - "[[Augment Code Codacy AI Giants]]"
----
+updated: 2026-05-02
 
-# Semantic Codebase Indexing
+---# Semantic Codebase Indexing
 
 The process of converting source code into vector embeddings that capture semantic meaning, enabling similarity search across a codebase without relying on exact keyword matching.
 

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 title: "How to Build Prompt Pipelines with Jinja2 Templating"
 author: "Qasim"
@@ -19,9 +20,10 @@ key_claims:
   - "Pipeline runner: define pipelines as data, not code — `inputs_from` mapping connects step outputs to next step's template vars"
   - "Common errors: undefined variables (use defaults), template path issues (use absolute paths), whitespace (use trim_blocks/lstrip_blocks)"
   - "One template handles both zero-shot and few-shot — you control behavior through data, not separate prompt strings"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Prompts as Jinja2 Pipelines
+---# Prompts as Jinja2 Pipelines
 
 ## Core Pattern
 

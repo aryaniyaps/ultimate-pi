@@ -3,6 +3,7 @@ aliases: ["agent drift", "behavioral drift", "context drift in agents"]
 type: concept
 title: "Context Drift in AI Agents"
 created: 2026-04-30
+status: developing
 tags:
   - concept
   - drift
@@ -16,9 +17,9 @@ related:
   - "[[agent-drift-academic-paper]]"
   - "[[ironclaw-drift-monitor]]"
   - "[[model-adaptive-harness]]"
----
+updated: 2026-05-02
 
-# Context Drift in AI Agents
+---# Context Drift in AI Agents
 
 The progressive degradation of agent behavior, decision quality, and task coherence over extended interactions. Not a model failure — a context management failure.
 

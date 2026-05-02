@@ -19,9 +19,8 @@ tags:
 created: 2026-04-30
 updated: 2026-04-30
 status: ingested
----
 
-# Agent Harness for Large Language Model Agents: A Survey
+---# Agent Harness for Large Language Model Agents: A Survey
 
 Meng et al., April 2026. 110+ papers, 23 systems analyzed.
 

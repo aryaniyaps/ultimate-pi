@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 title: "How Cursor Shipped its Coding Agent to Production"
 author: "Lee Robinson (Cursor) + ByteByteGo"
@@ -15,8 +16,9 @@ key_claims:
   - "Search and replace tools are hardest to teach; training data has high volume of these trajectories"
   - "Sandboxing: custom VM scheduler for bursty demand. Sandboxes are core serving infrastructure"
   - "Three production lessons: tool use baked into model, adoption is ultimate metric, speed is product"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # How Cursor Shipped its Coding Agent to Production
 
 ByteByteGo deep dive (Jan 2026) written with Lee Robinson at Cursor. Covers the full architecture of Cursor's coding agent system, Composer model training, and three production challenges.

@@ -21,9 +21,8 @@ related:
   - "[[Research: Codex State-of-the-Art Harness Improvements]]"
 sources:
   - "[[executor-rhyssullivan]]"
----
 
-# Research: executor.sh Harness Integration
+---# Research: executor.sh Harness Integration
 
 ## Overview
 

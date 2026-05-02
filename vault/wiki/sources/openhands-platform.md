@@ -19,9 +19,8 @@ tags:
   - multi-agent
 created: 2024-07-24
 updated: 2026-04-30
----
 
-# OpenHands: An Open Platform for AI Software Developers as Generalist Agents
+---# OpenHands: An Open Platform for AI Software Developers as Generalist Agents
 
 A platform that provides the infrastructure for AI agents to interact with codebases through the same interfaces humans use: writing code, executing commands, and browsing the web.
 

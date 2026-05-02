@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: blog
 title: "How to Detect and Stop AI Agent Loops in Production"
 author: LangSight Engineering
@@ -21,9 +22,10 @@ related:
   - "[[Research: Meta-Agent Context Drift Detection]]"
   - "[[agent-loop-detection-patterns]]"
   - "[[context-drift-in-agents]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# LangSight Loop Detection
+---# LangSight Loop Detection
 
 ## Summary
 

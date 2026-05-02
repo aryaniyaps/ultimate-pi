@@ -20,9 +20,8 @@ related:
   - "[[harness]]"
 sources:
   - "[[fallow-rs-codebase-intelligence]]"
----
 
-# Research: Fallow Codebase Intelligence Harness Integration
+---# Research: Fallow Codebase Intelligence Harness Integration
 
 ## Overview
 

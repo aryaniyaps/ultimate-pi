@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: news-article
 author: Kyt Dotson, SiliconAngle
 date_published: 2026-02-06
@@ -17,9 +18,10 @@ tags:
   - context-engine
   - mcp
   - siliconangle
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Augment Code Makes Context Engine Available for Any AI Agent (SiliconAngle)
+---# Augment Code Makes Context Engine Available for Any AI Agent (SiliconAngle)
 
 ## Summary
 

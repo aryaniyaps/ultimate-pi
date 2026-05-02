@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 author: Molisha Shah (Augment Code)
 date_published: 2026-04-16
@@ -13,8 +14,10 @@ key_claims:
   - Rules files are one layer of harness, not complete solution — must combine with deterministic enforcement
   - Key metrics: Task Resolution Rate, Code Churn Rate, Verification Tax, Defect Escape Rate
   - DORA report: higher AI adoption correlates with increased throughput AND instability
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # Augment: Harness Engineering for AI Coding Agents
 
 ## What It Is

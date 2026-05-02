@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: academic-paper
 title: "Dive into Claude Code: The Design Space of Today's and Future AI Agent Systems"
 author: "Jiacheng Liu, Xiaohan Zhao, Xinyi Shang, Zhiqiang Shen"
@@ -14,8 +15,9 @@ key_claims:
   - "Core subsystems: permission system with ML classifier, five-layer compaction pipeline, four extensibility mechanisms, subagent delegation with worktree isolation"
   - "Comparison with OpenClaw reveals how same design questions produce different answers under different deployment contexts"
   - "Six open design directions identified for future agent systems"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Dive into Claude Code (VILA-Lab, 2026)
 
 ## Source Summary

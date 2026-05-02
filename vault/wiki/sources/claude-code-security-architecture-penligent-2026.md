@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: blog
 title: "Inside Claude Code: The Architecture Behind Tools, Memory, Hooks, and MCP"
 author: "Penligent"
@@ -16,8 +17,9 @@ key_claims:
   - "Managed settings: allowManagedHooksOnly, allowManagedMcpServersOnly, allowManagedPermissionRulesOnly"
   - "CVE-2025-68143/144/145: MCP Git server vulnerabilities show thin tool wrappers inherit unsafe command surfaces"
   - "Agent risk is compositional: repo, tool result, config file, MCP server — all can become control inputs"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Claude Code Security Architecture (Penligent, 2026)
 
 ## Source Summary

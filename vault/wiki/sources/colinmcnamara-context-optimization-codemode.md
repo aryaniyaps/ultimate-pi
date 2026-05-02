@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: blog
 title: "Context Optimization in AI Agents: From Sub-Agents to TypeScript Interfaces"
 author: "Colin McNamara"
@@ -17,9 +18,10 @@ key_claims:
   - "Code Mode is 'non-deterministic to deterministic' — LLM generates code, runtime executes predictably"
   - "TypeScript has advantages for LLM-generated code: rich training data, type safety as guardrails, deterministic execution"
   - "LLMs have seen millions of lines of TypeScript in training but far fewer synthetic tool-call examples"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Context Optimization in AI Agents: From Sub-Agents to TypeScript Interfaces
+---# Context Optimization in AI Agents: From Sub-Agents to TypeScript Interfaces
 
 Colin McNamara's analysis of Cloudflare's Code Mode, comparing context consumption across three agent tool-calling patterns: traditional tool calling, sub-agent architecture, and the TypeScript execution layer.
 

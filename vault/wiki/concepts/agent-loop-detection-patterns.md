@@ -3,6 +3,7 @@ aliases: ["agent loop patterns", "stuck agent detection", "tool call loops"]
 type: concept
 title: "Agent Loop Detection Patterns"
 created: 2026-04-30
+status: developing
 tags:
   - concept
   - loop-detection
@@ -14,9 +15,9 @@ related:
   - "[[meta-agent-context-pruning]]"
   - "[[langsight-loop-detection]]"
   - "[[ironclaw-drift-monitor]]"
----
+updated: 2026-05-02
 
-# Agent Loop Detection Patterns
+---# Agent Loop Detection Patterns
 
 Production-grade detection patterns for identifying when an AI agent is stuck in a non-productive loop. Based on LangSight's production experience and ironclaw's DriftMonitor proposal.
 

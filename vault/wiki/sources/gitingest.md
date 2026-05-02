@@ -22,9 +22,8 @@ created: 2026-04-30
 updated: 2026-04-30
 status: ingested
 title: "Gitingest"
----
 
-# Gitingest
+---# Gitingest
 
 ## What It Is
 

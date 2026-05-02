@@ -3,6 +3,7 @@ type: concept
 title: "Codebase Intelligence Ecosystem Comparison"
 created: 2026-05-01
 updated: 2026-05-01
+status: developing
 tags:
   - harness
   - codebase-intelligence
@@ -17,9 +18,8 @@ related:
   - "[[harness-implementation-plan]]"
 sources:
   - "[[fallow-rs-codebase-intelligence]]"
----
 
-# Codebase Intelligence Ecosystem Comparison
+---# Codebase Intelligence Ecosystem Comparison
 
 Comparison of codebase intelligence tools across TypeScript/JavaScript, Python, Go, Rust, and Elixir ecosystems. Focus: tools that provide project-wide dead code detection, duplication analysis, complexity scoring, and architecture boundary enforcement — the capabilities a coding agent harness needs for deterministic quality gating.
 

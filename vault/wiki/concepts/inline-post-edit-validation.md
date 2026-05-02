@@ -14,9 +14,8 @@ related:
   - "[[research-wozcode-token-reduction]]"
   - "[[harness-implementation-plan]]"
 status: developing
----
 
-# Inline Post-Edit Validation
+---# Inline Post-Edit Validation
 
 Inline post-edit validation runs **compilers and parsers** immediately after each code edit — before the model sees the result. Syntax errors are caught at the tool layer, not at the agent reasoning layer, eliminating unnecessary retry round-trips. Linting and formatting are deferred to Phase 16: a single deterministic final gate that runs after L4 adversarial verification passes. See [[harness-implementation-plan#phase-16-final-lint-format-gate|Phase 16]].
 

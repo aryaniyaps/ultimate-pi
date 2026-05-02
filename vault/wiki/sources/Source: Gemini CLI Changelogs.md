@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: official-changelog
 author: Google
 date_published: 2026-04-30
@@ -20,8 +21,10 @@ key_claims:
   - v0.23 (Jan): Experimental Agent Skills support (agentskills.io)
   - v0.12 (Oct 2025): Codebase investigator subagent, model routing, model selection
   - Launch: Jun 25, 2025
+created: 2026-05-02
+updated: 2026-05-02
+tags: [source]
 ---
-
 # Gemini CLI Changelogs (v0.4 — v0.40)
 
 ## What It Is

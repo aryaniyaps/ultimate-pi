@@ -2,6 +2,7 @@
 type: concept
 title: "Late Chunking vs Early Chunking"
 created: 2026-04-30
+status: developing
 tags:
   - chunking
   - embeddings
@@ -12,9 +13,9 @@ related:
   - "[[Contextualized Text Embedding]]"
 sources:
   - "[[vectara-chunking-vs-embedding-naacl2025]]"
----
+updated: 2026-05-02
 
-# Late Chunking vs Early Chunking
+---# Late Chunking vs Early Chunking
 
 ## Definitions
 

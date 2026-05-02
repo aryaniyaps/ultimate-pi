@@ -19,9 +19,8 @@ tags:
 created: 2026-04-30
 updated: 2026-04-30
 status: ingested
----
 
-# AutoHarness: Automatically Synthesizing Code Harnesses
+---# AutoHarness: Automatically Synthesizing Code Harnesses
 
 Lou et al., February 2026.
 

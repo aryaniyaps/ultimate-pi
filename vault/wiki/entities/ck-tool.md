@@ -16,9 +16,8 @@ related:
   - "[[agent-search-enforcement]]"
   - "[[Research: semantic code search tools]]"
 title: "ck (seek)"
----
 
-# ck (seek)
+---# ck (seek)
 
 **Repository**: [BeaconBay/ck](https://github.com/BeaconBay/ck)  
 **Stars**: 1,572 | **Language**: Rust | **License**: MIT / Apache-2.0  

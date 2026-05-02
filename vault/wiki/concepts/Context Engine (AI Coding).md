@@ -2,6 +2,7 @@
 type: concept
 title: "Context Engine (AI Coding)"
 created: 2026-04-30
+status: developing
 tags:
   - ai-coding
   - context
@@ -16,9 +17,9 @@ related:
 sources:
   - "[[Augment Context Engine Official]]"
   - "[[Augment Code WorkOS ERC 2025]]"
----
+updated: 2026-05-02
 
-# Context Engine (AI Coding)
+---# Context Engine (AI Coding)
 
 A context engine is a system that provides AI coding agents with deep, semantic understanding of a codebase beyond what text search (grep) can provide. It is the differentiator between agents that merely generate code and agents that write code that fits the codebase.
 

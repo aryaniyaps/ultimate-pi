@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: official-documentation
 title: "OpenAI Prompt Guidance (GPT-5.5 through GPT-4.1)"
 author: "OpenAI"
@@ -21,9 +22,10 @@ tags:
   - gpt
   - model-specific
   - harness-design
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# OpenAI Prompt Guidance
+---# OpenAI Prompt Guidance
 
 Official prompting guide from OpenAI covering all GPT models from GPT-5.5 down to GPT-4.1. Each model generation has a dedicated section with model-specific guidance.
 

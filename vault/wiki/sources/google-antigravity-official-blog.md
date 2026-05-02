@@ -21,9 +21,8 @@ key_claims:
   - "Agents learn from past work via knowledge base"
   - "Free public preview with Gemini 3 Pro, Claude Sonnet 4.5, and GPT-OSS support"
   - "Cross-platform: macOS, Windows, Linux"
----
 
-# Build with Google Antigravity (Official Announcement)
+---# Build with Google Antigravity (Official Announcement)
 
 Google's official announcement blog post for Antigravity, published November 20, 2025.
 

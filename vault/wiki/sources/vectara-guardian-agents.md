@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: blog
 title: "Guardian Agents Benchmark"
 author: Vishal Naik, Chenyu Xu (Vectara)
@@ -22,9 +23,10 @@ related:
   - "[[Research: Meta-Agent Context Drift Detection]]"
   - "[[guardian-agent-pattern]]"
   - "[[context-drift-in-agents]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Vectara Guardian Agents Benchmark
+---# Vectara Guardian Agents Benchmark
 
 ## Summary
 

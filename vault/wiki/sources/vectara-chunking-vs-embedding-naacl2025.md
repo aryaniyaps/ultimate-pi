@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: research-paper
 author: Vectara Research Team
 date_published: 2024-10-16
@@ -16,9 +17,10 @@ tags:
   - rag
   - retrieval-quality
   - naacl
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Vectara NAACL 2025: Chunking Strategy vs Embedding Model
+---# Vectara NAACL 2025: Chunking Strategy vs Embedding Model
 
 ## Summary
 

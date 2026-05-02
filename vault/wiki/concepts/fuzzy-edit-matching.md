@@ -12,9 +12,8 @@ related:
   - "[[research-wozcode-token-reduction]]"
   - "[[harness-implementation-plan]]"
 status: developing
----
 
-# Fuzzy Edit Matching
+---# Fuzzy Edit Matching
 
 Fuzzy edit matching is a tool-level enhancement that makes code edits tolerant of minor formatting differences between what the model outputs and what exists on disk. Instead of failing on exact string mismatch, the edit tool applies a similarity-tolerant diff that lands near-misses without a retry round-trip.
 

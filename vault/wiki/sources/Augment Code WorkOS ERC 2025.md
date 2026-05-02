@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: conference-recap
 author: Zack Proser, WorkOS
 date_published: 2025-10-29
@@ -17,9 +18,10 @@ tags:
   - context-engine
   - semantic-search
   - erc-2025
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Augment Code: Context Is the New Compiler (WorkOS ERC 2025)
+---# Augment Code: Context Is the New Compiler (WorkOS ERC 2025)
 
 ## Summary
 

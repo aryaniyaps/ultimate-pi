@@ -16,9 +16,8 @@ related:
   - "[[agentic-harness]]"
 sources:
   - "[[anthropic2026-harness-design]]"
----
 
-# Generator-Evaluator Architecture
+---# Generator-Evaluator Architecture
 
 A GAN-inspired multi-agent pattern where an evaluator agent grades a generator agent's output against explicit criteria. From Anthropic's harness design work (Rajasekaran, 2026).
 

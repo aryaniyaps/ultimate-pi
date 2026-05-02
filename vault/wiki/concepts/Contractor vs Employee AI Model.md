@@ -2,6 +2,7 @@
 type: concept
 title: "Contractor vs Employee AI Model"
 created: 2026-04-30
+status: developing
 tags:
   - ai-strategy
   - context
@@ -13,9 +14,9 @@ related:
   - "[[Augment Code]]"
 sources:
   - "[[Augment Code Codacy AI Giants]]"
----
+updated: 2026-05-02
 
-# Contractor vs Employee AI Model
+---# Contractor vs Employee AI Model
 
 A mental model coined by Vinay Perneti (VP Engineering at Augment Code) that frames the relationship between LLM intelligence and codebase context in AI coding tools.
 

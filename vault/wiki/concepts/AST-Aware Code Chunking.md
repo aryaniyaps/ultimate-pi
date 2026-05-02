@@ -2,6 +2,7 @@
 type: concept
 title: "AST-Aware Code Chunking"
 created: 2026-04-30
+status: developing
 tags:
   - chunking
   - code-rag
@@ -14,9 +15,9 @@ related:
 sources:
   - "[[cast-code-chunking-paper]]"
   - "[[code-chunk-library-supermemory]]"
----
+updated: 2026-05-02
 
-# AST-Aware Code Chunking
+---# AST-Aware Code Chunking
 
 ## Definition
 

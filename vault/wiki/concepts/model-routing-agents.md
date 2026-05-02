@@ -13,9 +13,8 @@ related:
   - "[[research-wozcode-token-reduction]]"
   - "[[wiki-query-interface]]"
 status: developing
----
 
-# Model Routing Agents
+---# Model Routing Agents
 
 Model routing is an agent architecture pattern where different operation types are dispatched to different AI models based on capability requirements and cost. Read-only exploration work goes to the cheapest capable model; code generation stays on the frontier model.
 

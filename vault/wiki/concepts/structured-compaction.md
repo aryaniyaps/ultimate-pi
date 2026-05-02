@@ -14,8 +14,8 @@ sources:
   - "[[claude-code-architecture-vila-lab-2026]]"
   - "[[claude-code-architecture-qubytes-2026]]"
   - "[[claude-code-architecture-karaxai-2026]]"
+updated: 2026-05-02
 ---
-
 # Structured Compaction Pipeline
 
 Claude Code's approach to context management: a five-layer compaction pipeline that uses a forked subagent to produce structured summaries tuned for software engineering tasks. Unlike simple truncation or lossy summarization, this is "structured extraction followed by selective reconstruction."

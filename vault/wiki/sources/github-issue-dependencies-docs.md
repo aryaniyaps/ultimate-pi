@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: documentation
 title: "GitHub Issue Dependencies — Official Documentation"
 author: GitHub Docs
@@ -20,9 +21,10 @@ tags:
 related:
   - "[[Research: GitHub Issues as Harness Spec Storage]]"
   - "[[github-sub-issues-docs]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# GitHub Issue Dependencies — Official Documentation
+---# GitHub Issue Dependencies — Official Documentation
 
 GitHub's official documentation for issue dependencies (blocked-by / blocking relationships).
 

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 title: "Prompt Caching: The Optimization That Cuts LLM Costs by 90%"
 author: "Tian Pan"
@@ -22,9 +23,10 @@ key_claims:
   - "Anthropic: cache write 25% premium, cache read 90% discount — break-even at 1.4 cache hits"
   - "OpenAI: auto-caching, 50% discount, no write premium"
   - "Monitor: cache hit rate = cache_read_input_tokens / total_input_tokens, target 70%+"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Multi-Tier Prompt Caching Architecture
+---# Multi-Tier Prompt Caching Architecture
 
 ## Three-Tier Stack
 

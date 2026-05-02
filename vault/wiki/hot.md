@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-02T11:45:00
+updated: 2026-05-02T12:40:00
 created: 2026-04-30
 tags: []
 status: active
@@ -10,12 +10,71 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-02. Prompt Renderer research complete. Build-time prompt compilation is PROVEN pattern. Base spec → per-model renderers → compiled JSON shipped in npm → runtime just string-substitutes variables. Zero runtime compilation, zero cache warmup. Each model needs fundamentally DIFFERENT prompting conventions.
+2026-05-02. Tech stack corrections applied: fabricated "PromptKit PackC" removed, real tools documented; browser-harness replaces Puppeteer for P30.
+
+## Tech Stack Corrections (2026-05-02)
+
+### PromptKit PackC → Real Tools
+**Fabrication detected & corrected.** "PromptKit PackC" (npm, v1.4.6, 48 versions) does NOT exist — it was an LLM hallucination. The build-time prompt compilation architecture IS valid. No mature off-the-shelf npm package exists.
+
+**Real alternatives**:
+- **Microsoft prompt-engine** (2.8K stars, MIT): YAML-based prompt management. Validates the pattern. Abandoned 2022.
+- **PromptWeaver** (`@iqai/prompt-weaver`, MIT, Dec 2025): Handlebars template compilation + Zod validation. Active. Production-ready.
+- **DIY pipeline**: `js-yaml` (parsing) + `@iqai/prompt-weaver` (templates) + custom per-model renderer plugins. See [[Source: Build-Time Prompt Compilation Architecture]].
+
+### Puppeteer → browser-harness (P30)
+**Cutting-edge SOTA replacement.** browser-harness (9.4K stars, MIT, Python) by browser-use replaces Puppeteer as the browser subagent for P30. Thin CDP harness: one WebSocket to Chrome, nothing between. Self-healing: agent writes missing helpers mid-execution. TypeScript variant: browser-harness-js (428 stars, 652 typed CDP methods). See [[Source: browser-harness CDP Harness]] and [[browser-harness-agent]].
+
+**Files corrected**: HARNESS-PRD.md (P30, P22b, Q10, deps, references), wiki/concepts/* (3 files), wiki/questions/* (2 files), wiki/modules/* (1 file), wiki/hot.md, wiki/log.md, wiki/index.md.
+
+---
+
+## TypeScript Best Practices and Codebase Structure (2026-05-02)
+
+## TypeScript Best Practices and Codebase Structure (2026-05-02)
+
+### Key Finding
+**TypeScript ecosystem has matured significantly.** Strict mode is consensus default. Barrel files are now discouraged for app code. Monorepo tooling (Turborepo, Nx) is production-ready. Vitest has replaced Jest for new projects. Bun is fastest runtime but Node.js remains safest for production. tRPC eliminates 89-98% of API bugs through compile-time type safety (separate research available).
+
+### Eight Key Findings
+1. **Enable `strict: true` by default.** `strictNullChecks` alone eliminates null-reference bugs. Migrate incrementally.
+2. **Avoid barrel files in app code.** Causes circular imports + 68% module bloat in real production measurements.
+3. **Node.js remains safest runtime.** Bun is 4× faster but Node.js features are backporting Bun/Deno innovations.
+4. **Built-package strategy preferred for TS monorepos.** Build with bundler, use Turborepo for orchestration, generate `.d.ts.map` for IDE support.
+5. **Vitest replaced Jest** as default test runner for Vite/TypeScript projects.
+6. **Name backend folders by technical capability** (controllers, services, repositories), not feature.
+7. **Result monad enables declarative error handling.** `Result<Ok, Err>` with map/flatMap/match. Errors are values, not exceptions.
+8. **ESLint + strict mode = defense-in-depth.** `@typescript-eslint/recommended-type-checked` catches what strict mode misses (floating promises).
+
+### Sources (8)
+[[ts-strict-mode-rishikc]], [[ts-runtimes-comparison-betterstack]], [[barrel-files-tkdodo]], [[ts-monorepo-koerselman]], [[vitest-official]], [[ts-folder-structure-mingyang]], [[ts-best-practices-2025-devto]], [[ts-result-error-handling-kkalamarski]]
+
+### Concepts Created
+[[typescript-strict-mode]], [[barrel-files]], [[monorepo-architecture]], [[result-monad-error-handling]]
+
+### Entities Created
+[[javascript-runtimes]], [[vitest]]
+
+### Synthesis
+[[Research: TypeScript Best Practices and Codebase Structure]] — Full synthesis with key findings, contradictions, open questions.
+
+### Contradictions Found
+- Barrel files: traditional wisdom vs TkDodo's performance data (resolution: libraries only)
+- Folder structure: technical-capability vs feature-based (resolution: technical for backend, feature for frontend)
+- Built vs source-only packages: depends on team/project size
+
+### Open Questions
+- tRPC adoption rate vs REST in non-TypeScript environments
+- Biome vs ESLint+Prettier adoption in 2026
+- `isolatedModules: true` performance in large monorepos
+- Oxc vs SWC vs ESBuild for type stripping benchmarks
+
+---
 
 ## Prompt Renderer for Multi-Model Agent Harness (2026-05-02)
 
 ### Key Finding
-**Build-time prompt compilation is a PROVEN PATTERN validated by PromptKit PackC (npm, v1.4.6, 48 versions).** The architecture: base prompt spec (YAML) → per-model renderer plugins (GPT/Claude/Gemini) → compiled JSON shipped in npm → runtime just does string substitution for variables. This eliminates runtime template engines, cache warmup latency, and parallel-execution traps entirely.
+**Build-time prompt compilation is a PROVEN PATTERN — but no mature off-the-shelf npm package exists.** The architecture: base prompt spec (YAML) → per-model renderer plugins (GPT/Claude/Gemini) → compiled JSON shipped in npm → runtime just does string substitution for variables. Implementation: DIY build pipeline using `js-yaml` (parsing) + `@iqai/prompt-weaver` (Handlebars templates + Zod validation) + custom per-model renderer plugins. Microsoft prompt-engine (2.8K stars, MIT) validates the YAML→prompt pattern but is abandoned (last update 2022). PromptWeaver (MIT, Dec 2025) provides the active template compilation layer. This eliminates runtime template engines, cache warmup latency, and parallel-execution traps entirely. See [[Source: Build-Time Prompt Compilation Architecture]] for full correction.
 
 ### Architecture
 ```
@@ -47,7 +106,7 @@ RUNTIME:     Load {spec, model}.json → substitute runtime vars → send to LLM
 Extends [[provider-native-prompting]] (Phase P22b from prior research). New compiler module: `scripts/compile-prompts.ts`. Compiled output: `dist/prompts/{gpt,claude,gemini}/*.json`. Runtime loader: `loadPrompt(specName, model, runtimeVars)` — zero-dependency, just `JSON.parse` + string replace.
 
 ### Sources (4 new)
-[[Source: PromptKit PackC Compiler]] — Prompt compilation: YAML→JSON pipeline, deterministic builds
+[[Source: Build-Time Prompt Compilation Architecture]] — Real tools: DIY pipeline (js-yaml + PromptWeaver + per-model renderers)
 [[Source: AgentBus Jinja2 Prompt Pipelines]] — Jinja2 templating patterns adapted to build-time
 [[Source: TianPan Prompt Caching Architecture]] — Multi-tier caching, 60-90% savings, cache boundary control
 [[Source: Arxiv — Don't Break the Cache]] — Academic validation: 41-80% cost reduction across providers
@@ -432,7 +491,7 @@ Synthesis: [[Research: Augment Code Context Engine]]
 
 **Mandatory**: Winning consensus from any agent debate MUST be filed in `wiki/consensus/`. All 4 verdict types file (CONSENSUS_REACHED, DEADLOCK, BUDGET_EXHAUSTED, TIMEOUT). Purpose: permanent agent alignment — future agents query before forming positions, harness blocks contradictions.
 
-Updated: [[consensus-debate]], [[harness-implementation-plan]] (new First Principle #7, phase P19b, Consensus Filing Contract), [[adr-011]], [[selective-debate-routing]], [[harness]]. Created: [[consensus/index]] (directory + template).
+Updated: [[consensus-debate]], [[harness-implementation-plan]] (new First Principle #7, phase P19b, Consensus Filing Contract), [[adr-011]], [[selective-debate-routing]], [[harness]]. Created: [[consensus-records]] (directory + template).
 
 ## Consolidation Summary (2026-04-30)
 

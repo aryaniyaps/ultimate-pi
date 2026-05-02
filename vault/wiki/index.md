@@ -1,3 +1,11 @@
+---
+type: index
+status: active
+created: 2026-04-28
+updated: 2026-05-02
+tags: [meta, index, catalog]
+---
+
 # Codebase Map & Architecture Wiki
 
 ## Overview
@@ -133,7 +141,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 |---------|--------|
 | [[antigravity-agent-first-architecture]] | Two-view control plane: Editor View + Manager View for multi-agent orchestration |
 | [[agent-artifacts-verifiable-deliverables]] | Trust via human-reviewable deliverables instead of raw tool logs |
-| [[browser-subagent-visual-verification]] | Headless browser agent that visually verifies UI changes |
+| [[browser-harness-agent]] | Thin CDP harness (9.4K stars, MIT) — self-healing LLM→Chrome bridge via raw CDP, replaces Puppeteer |
+| [[browser-subagent-visual-verification]] | Headless browser agent that visually verifies UI changes (now uses browser-use instead of Puppeteer) |
 
 ## Modules — Other
 
@@ -154,6 +163,17 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[autodev-codebase]] | TypeScript MCP server with call graphs + Ollama embeddings |
 | [[ops-codegraph-tool]] | Python dependency graph engine + semantic search |
 | [[codesearch]] | Rust MCP server for Claude Code/OpenCode |
+| [[javascript-runtimes]] | Node.js (stable, mature), Deno (secure, tooling-rich), Bun (fast, drop-in replacement) |
+| [[vitest]] | Vite-native test framework, Jest-compatible, v4.1.5, Oxc-powered TypeScript |
+
+## Concepts — TypeScript & Code Organization
+
+| Concept | Summary |
+|---------|--------|
+| [[typescript-strict-mode]] | `strict: true` enables 8+ compiler checks that prevent null reference bugs |
+| [[barrel-files]] | Re-export files: useful for libraries, harmful for app code (circular imports, 68% module bloat) |
+| [[monorepo-architecture]] | Single-repo multi-package: built-package vs internal-packages, Turborepo, ESM rules |
+| [[result-monad-error-handling]] | Functional pattern: `Result<Ok, Err>` with map/flatMap/match — errors as values |
 
 ## Resolved Questions
 
@@ -191,6 +211,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: TypeScript Execution Layer for Agent Tool Calling]] | TS execution layer: CodeAct → Cloudflare Code Mode → Executor convergence, 3-4x context reduction, P43 phase |
 | [[Research: executor.sh Harness Integration]] | executor.sh: integration layer scope, 3 new P43 sub-phases (catalog, discovery, policy), build vs integrate decision |
 | [[Research: Prompt Renderer for Multi-Model Agent Harness]] | Build-time prompt renderer: per-model compilation, caching, variable system, npm distribution |
+| [[Research: TypeScript Best Practices and Codebase Structure]] | Strict mode, runtimes, barrel files, monorepos, folder structure, error handling, testing |
 
 ## Sources (External Research)
 
@@ -266,10 +287,19 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[google-antigravity-official-blog]] | engineering-blog | Google Antigravity: agent-first IDE, Manager View, Artifacts, Skills |
 | [[google-antigravity-wikipedia]] | encyclopedia | Antigravity: VS Code fork, Gemini 3.1, Windsurf $2.4B acquisition |
 | [[cursor-vs-antigravity-2026]] | comparison | Cursor v2.6 vs Antigravity v1.20: centaur vs manager, benchmarks |
-| [[Source: PromptKit PackC Compiler]] | official-docs | Prompt compilation: YAML→JSON pipeline, deterministic builds, fragment handling |
+| [[Source: Build-Time Prompt Compilation Architecture]] | architecture-analysis | Real tools: DIY pipeline (js-yaml + PromptWeaver + per-model renderers), replaces fabricated PromptKit PackC |
+| [[Source: browser-harness CDP Harness]] | official-repo | browser-harness: 9.4K stars, MIT, thin CDP harness — self-healing LLM-to-Chrome bridge, replaces Puppeteer for P30 |
 | [[Source: AgentBus Jinja2 Prompt Pipelines]] | engineering-blog | Jinja2 templating: inheritance, conditionals, loops, pipeline runner |
 | [[Source: TianPan Prompt Caching Architecture]] | engineering-blog | Multi-tier caching: semantic→prefix→full, 60-90% savings, cache boundary control |
 | [[Source: Arxiv — Don't Break the Cache]] | academic-paper | PwC evaluation: 41-80% cost reduction, system-prompt-only caching optimal |
+| [[ts-strict-mode-rishikc]] | article | TypeScript strict mode guide: 8+ sub-flags, migration strategy, ESLint pairing |
+| [[ts-runtimes-comparison-betterstack]] | article | Node.js vs Deno vs Bun: benchmarks, tooling, security, TS support (2026) |
+| [[barrel-files-tkdodo]] | article | Barrel files cause 68% module bloat, circular imports — stop using in app code |
+| [[ts-monorepo-koerselman]] | article | Monorepo patterns: built-package vs internal-packages, Turborepo, ESM, IDE setup |
+| [[vitest-official]] | official-docs | Vite-native test framework, Jest-compatible, v4.1.5 |
+| [[ts-folder-structure-mingyang]] | article | Production-grade Node.js/TS folder structure: Clean Architecture approach |
+| [[ts-best-practices-2025-devto]] | article | TS best practices 2025: type safety, advanced types, linting, tooling |
+| [[ts-result-error-handling-kkalamarski]] | article | Result monad pattern for declarative error handling in TypeScript |
 
 ## Flows
 

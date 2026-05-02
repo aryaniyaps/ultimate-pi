@@ -23,9 +23,8 @@ tags:
   - human-guide
 created: 2026-04-30
 updated: 2026-04-30
----
 
-# General Guide For Exploring Large Open Source Codebases
+---# General Guide For Exploring Large Open Source Codebases
 
 A guide created in Fall 2020 for MLH Fellows on how to explore and contribute to large open-source codebases. The guide covers the full lifecycle: choosing a project, getting started, discovering issues, planning, coding, and claiming issues.
 

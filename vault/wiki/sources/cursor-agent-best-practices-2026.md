@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 title: "Best Practices for Coding with Agents"
 author: "Lee Robinson (Cursor/Anysphere)"
@@ -16,8 +17,9 @@ key_claims:
   - "Git worktree isolation for parallel agents"
   - "Multi-model parallel execution with judging"
   - "Context anxiety: models start refusing work as context fills up"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Best Practices for Coding with Agents
 
 Cursor's official guide (Lee Robinson, Jan 2026) covering agent harness design, Plan Mode, context management strategies, Rules/Skills system, long-running agent hooks, parallel agents via git worktrees, and workflow patterns.

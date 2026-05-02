@@ -11,9 +11,8 @@ related:
   - "[[swe-agent-aci]]"
   - "[[research-agent-first-codebase-exploration]]"
 status: developing
----
 
-# Agent-Codebase Interface (ACI)
+---# Agent-Codebase Interface (ACI)
 
 The design of tool interfaces specifically for AI agents — not humans — to interact with codebases. Extends the SWE-agent concept of Agent-Computer Interfaces to codebase exploration specifically.
 

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 title: "Editing Files at 1000 Tokens per Second"
 author: "Aman Sanger (Cursor/Anysphere)"
@@ -14,8 +15,9 @@ key_claims:
   - "Search/replace diff format (Aider-inspired) eliminates line numbers but most models still fail"
   - "Fine-tuned Llama-3-70b + speculative edits outperforms GPT-4o on accuracy and speed"
   - "~1000 tokens/sec on 70B model, deployed with Fireworks AI inference engine"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Editing Files at 1000 Tokens per Second
 
 Cursor's May 2024 technical post on their Fast Apply model and speculative edits algorithm.

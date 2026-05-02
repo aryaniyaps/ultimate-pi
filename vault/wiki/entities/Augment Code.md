@@ -3,6 +3,7 @@ type: entity
 entity_type: organization
 title: "Augment Code"
 created: 2026-04-30
+status: developing
 tags:
   - ai-coding
   - startup
@@ -13,9 +14,9 @@ related:
   - "[[Context Engine (AI Coding)]]"
   - "[[Augment SWE-bench Agent GitHub]]"
   - "[[Augment SWE-bench Pro Blog]]"
----
+updated: 2026-05-02
 
-# Augment Code
+---# Augment Code
 
 Augment Code (also Augment Computing Inc.) builds AI coding assistants specifically designed for large, complex codebases. Their core differentiator is the Context Engine — a semantic search engine for code that understands relationships across hundreds of thousands of files.
 

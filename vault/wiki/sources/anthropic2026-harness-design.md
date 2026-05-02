@@ -21,9 +21,8 @@ tags:
 created: 2026-04-30
 updated: 2026-04-30
 status: ingested
----
 
-# Harness Design for Long-Running Application Development
+---# Harness Design for Long-Running Application Development
 
 Anthropic Engineering, March 2026. Prithvi Rajasekaran.
 

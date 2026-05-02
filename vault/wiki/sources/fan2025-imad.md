@@ -21,9 +21,8 @@ tags:
 created: 2026-04-30
 updated: 2026-04-30
 status: ingested
----
 
-# iMAD: Intelligent Multi-Agent Debate
+---# iMAD: Intelligent Multi-Agent Debate
 
 Fan et al., AAAI 2026 (Oral).
 

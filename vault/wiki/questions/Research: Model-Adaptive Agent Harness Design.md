@@ -15,9 +15,8 @@ related:
   - "[[forgecode-gpt5-agent-improvements]]"
 sources:
   - "[[forgecode-gpt5-agent-improvements]]"
----
 
-# Research: Model-Adaptive Agent Harness Design
+---# Research: Model-Adaptive Agent Harness Design
 
 ## Overview
 

@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: github-repo
 title: "gh-sub-issue: GitHub CLI Extension for Sub-Issues"
 author: yahsan2
@@ -22,9 +23,10 @@ tags:
 related:
   - "[[Research: GitHub Issues as Harness Spec Storage]]"
   - "[[gh-cli-sub-issue-rfc]]"
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# gh-sub-issue: GitHub CLI Extension for Sub-Issues
+---# gh-sub-issue: GitHub CLI Extension for Sub-Issues
 
 Community `gh` CLI extension (110 stars, MIT) bridging the gap where `gh` CLI lacks native sub-issue support.
 

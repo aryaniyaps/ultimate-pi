@@ -24,9 +24,8 @@ sources:
   - "[[cursor-shipped-coding-agent-2026]]"
   - "[[cursor-instant-apply-2024]]"
   - "[[cursor-fork-29b-2025]]"
----
 
-# Research: cursor.sh Harness Innovations
+---# Research: cursor.sh Harness Innovations
 
 ## Overview
 

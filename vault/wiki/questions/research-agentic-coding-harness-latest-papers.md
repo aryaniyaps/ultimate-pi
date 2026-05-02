@@ -29,9 +29,8 @@ sources:
   - "[[lou2026-autoharness]]"
   - "[[lee2026-meta-harness]]"
   - "[[fan2025-imad]]"
----
 
-# Research: Agentic Coding Harness — Latest Papers & Pipeline Improvements
+---# Research: Agentic Coding Harness — Latest Papers & Pipeline Improvements
 
 ## Overview
 

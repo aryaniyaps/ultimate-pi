@@ -21,9 +21,8 @@ key_claims:
   - "Antigravity Ultra at $249.99/mo criticized for high agentic loop costs"
   - "Cursor v2.6 adds JetBrains support; Antigravity is VS Code only"
   - "Antigravity v1.20.5 powered by Gemini 3.1 Pro"
----
 
-# Cursor vs Antigravity 2026
+---# Cursor vs Antigravity 2026
 
 Technical comparison published March 18, 2026 by MeshWorld.
 

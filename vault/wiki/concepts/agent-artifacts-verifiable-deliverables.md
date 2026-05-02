@@ -18,9 +18,8 @@ related:
 sources:
   - "[[google-antigravity-official-blog]]"
   - "[[cursor-vs-antigravity-2026]]"
----
 
-# Agent Artifacts: Trust via Verifiable Deliverables
+---# Agent Artifacts: Trust via Verifiable Deliverables
 
 Google Antigravity's Artifact system replaces raw tool-call logs with human-readable, verifiable deliverables that agents generate as they work.
 

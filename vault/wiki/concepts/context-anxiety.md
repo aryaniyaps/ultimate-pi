@@ -13,9 +13,8 @@ related:
   - "[[harness-implementation-plan]]"
 sources:
   - "[[anthropic2026-harness-design]]"
----
 
-# Context Anxiety
+---# Context Anxiety
 
 A failure mode where LLM agents begin wrapping up work prematurely as they approach what they believe is their context limit. Identified and named by Anthropic Engineering (Rajasekaran, 2026).
 

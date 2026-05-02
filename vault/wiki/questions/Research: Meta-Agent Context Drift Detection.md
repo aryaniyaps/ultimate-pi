@@ -28,9 +28,8 @@ sources:
   - "[[langsight-loop-detection]]"
   - "[[agent-drift-academic-paper]]"
   - "[[vectara-guardian-agents]]"
----
 
-# Research: Meta-Agent Context Drift Detection
+---# Research: Meta-Agent Context Drift Detection
 
 ## Overview
 

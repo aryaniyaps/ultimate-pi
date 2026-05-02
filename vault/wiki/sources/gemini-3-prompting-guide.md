@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: official-documentation
 title: "Gemini 3 Prompting Guide"
 author: "Google Cloud"
@@ -21,9 +22,10 @@ tags:
   - gemini
   - model-specific
   - harness-design
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Gemini 3 Prompting Guide
+---# Gemini 3 Prompting Guide
 
 Official prompting guide published by Google Cloud for Gemini 3 models on Vertex AI. Covers prompting strategies specific to Gemini 3's architecture and reasoning capabilities.
 

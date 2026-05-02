@@ -20,9 +20,8 @@ tags:
 created: 2026-04-30
 updated: 2026-04-30
 status: ingested
----
 
-# Meta-Harness: End-to-End Optimization of Model Harnesses
+---# Meta-Harness: End-to-End Optimization of Model Harnesses
 
 Lee et al., March 2026. Stanford / Together AI.
 

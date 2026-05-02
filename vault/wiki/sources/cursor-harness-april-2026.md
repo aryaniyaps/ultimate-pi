@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: engineering-blog
 title: "Continually Improving Our Agent Harness"
 author: "Stefan Heule & Jediah Katz (Cursor/Anysphere)"
@@ -18,8 +19,9 @@ key_claims:
   - "Context anxiety: one model started refusing work as context window filled"
   - "Subagent pattern: fresh context window per specialized task"
   - "Future: multi-agent orchestration where system dispatches to specialized subagents"
+created: 2026-05-02
+updated: 2026-05-02
 ---
-
 # Continually Improving Our Agent Harness
 
 Cursor's April 30, 2026 engineering blog detailing their harness evolution philosophy, measurement systems, error classification, and model-adaptive customization. Most directly relevant source for our harness plan.

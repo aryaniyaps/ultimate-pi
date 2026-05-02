@@ -11,9 +11,8 @@ related:
   - "[[aider-repomap-tree-sitter]]"
   - "[[progressive-disclosure-agents]]"
 status: developing
----
 
-# Repo Map Ranking
+---# Repo Map Ranking
 
 A graph-based algorithm for selecting the most important portions of a codebase to present to an agent within a token budget.
 

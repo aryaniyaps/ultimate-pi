@@ -21,9 +21,8 @@ sources:
   - "[[cloudflare-codemode]]"
   - "[[executor-rhyssullivan]]"
   - "[[colinmcnamara-context-optimization-codemode]]"
----
 
-# TypeScript Execution Layer
+---# TypeScript Execution Layer
 
 Pattern for AI agent tool calling: instead of exposing dozens of tools as individual function calls in the LLM context, give the agent a **single "write TypeScript" tool** plus a **sandboxed TypeScript runtime** with a typed API surface for all tools. The LLM writes code; the runtime executes it; only results return to context.
 

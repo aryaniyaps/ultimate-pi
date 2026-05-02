@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: research-paper
 author: Xiangyang Li, Kuicai Dong, Yi Quan Lee, Wei Xia, Yichun Yin, Hao Zhang, Yong Liu, Yasheng Wang, Ruiming Tang
 date_published: 2024-07-03
@@ -17,9 +18,10 @@ tags:
   - embeddings
   - coir
   - mteb
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
+---# CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
 
 ## Summary
 

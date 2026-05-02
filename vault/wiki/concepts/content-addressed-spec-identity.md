@@ -17,9 +17,8 @@ related:
   - "[[spec-hardening]]"
 sources:
   - "[[Research: GitHub Issues as Harness Spec Storage]]"
----
 
-# Content-Addressed Spec Identity
+---# Content-Addressed Spec Identity
 
 How ultimate-pi harnesses resolve specs by content fingerprint, not issue number. Solves the fork-merge divergence problem: fork's issue #5 and upstream's issue #5 are different specs found by different hashes.
 

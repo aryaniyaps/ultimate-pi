@@ -1,5 +1,6 @@
 ---
 type: source
+status: ingested
 source_type: product-page
 author: Augment Code
 date_published: 2026
@@ -19,9 +20,10 @@ tags:
   - augment-code
   - semantic-search
   - codebase-indexing
----
+created: 2026-05-02
+updated: 2026-05-02
 
-# Augment Context Engine Official Page
+---# Augment Context Engine Official Page
 
 ## Summary
 
