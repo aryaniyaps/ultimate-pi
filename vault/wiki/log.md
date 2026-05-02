@@ -1,5 +1,12 @@
 # Wiki Operations Log
 
+## [2026-05-02] autoresearch | Prompt Renderer for Multi-Model Agent Harness
+- Rounds: 2 (5 broad searches + 6 primary fetches + 2 gap-fill searches)
+- Sources found: 4 (PromptKit PackC, AgentBus Jinja2, TianPan Caching, Arxiv "Don't Break the Cache")
+- Pages created: [[Prompt Renderer]], [[Build-Time Prompt Compilation]] (concepts), [[Source: PromptKit PackC Compiler]], [[Source: AgentBus Jinja2 Prompt Pipelines]], [[Source: TianPan Prompt Caching Architecture]], [[Source: Arxiv — Don't Break the Cache]] (sources), [[Research: Prompt Renderer for Multi-Model Agent Harness]] (synthesis)
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: Build-time prompt compilation is a PROVEN PATTERN (PromptKit PackC v1.4.6, npm) that eliminates runtime template engines, cache warmup, and parallel-execution traps. The architecture: base prompt spec (YAML) → per-model renderers (GPT/Claude/Gemini plugins applying each provider's official conventions) → compiled JSON shipped in npm → runtime just does string substitution for variables. Multi-tier caching (semantic → prefix → full) is well understood (41-80% cost savings, Arxiv-validated). Each model needs fundamentally DIFFERENT prompting conventions — OpenAI constraints-first, Anthropic XML tags, Google constraints-last — a single canonical prompt relaxed per model is WRONG. Two-phase variable system: compile-time vars produce multiple compiled variants, runtime vars are simple string-replace placeholders. Integration: new harness module (Phase P22b from prior research), compiler as `npm run compile-prompts` build step, compiled output in `dist/prompts/`.
+
 ## [2026-05-01] autoresearch | executor.sh Harness Integration
 - Rounds: 1 (1 search, 3 fetches: executor.sh landing, GitHub README, DeepWiki architecture)
 - Sources updated: [[executor-rhyssullivan]] (major rewrite — added product positioning, architecture, policy engine, DeepWiki details)

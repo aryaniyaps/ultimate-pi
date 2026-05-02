@@ -20,6 +20,13 @@ pnpm-debug.log*
 # Raw source files (immutable, not committed)
 .raw/
 
+# Vault symlinks (resolve to vault/ for claude-obsidian skills)
+/wiki
+/.raw
+/_templates
+/_attachments
+/.obsidian
+
 # Skill lock file (auto-generated, skip lint)
 skills-lock.json
 .firecrawl/

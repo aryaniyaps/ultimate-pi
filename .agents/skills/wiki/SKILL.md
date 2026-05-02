@@ -57,7 +57,7 @@ Dot-prefixed folders (`.raw/`) are hidden in Obsidian's file explorer and graph 
 
 ## Hot Cache
 
-`vault/wiki/hot.md` is a ~500-word summary of the most recent context. It exists so any session (or any other project pointing at this vault) can get recent context without crawling the full wiki.
+`wiki/hot.md` is a ~500-word summary of the most recent context. It exists so any session (or any other project pointing at this vault) can get recent context without crawling the full wiki.
 
 Update hot.md:
 - After every ingest
@@ -119,9 +119,9 @@ Steps:
 
 1. Determine the wiki mode. Read `references/modes.md` to show the 6 options and pick the best fit.
 2. Ask: "What is this vault for?" (one question, then proceed).
-3. Create full folder structure under `vault/wiki/` based on the mode.
+3. Create full folder structure under `wiki/` based on the mode.
 4. Create domain pages + `_index.md` sub-indexes.
-5. Create `vault/wiki/index.md`, `vault/wiki/log.md`, `vault/wiki/hot.md`, `vault/wiki/overview.md`.
+5. Create `wiki/index.md`, `wiki/log.md`, `wiki/hot.md`, `wiki/overview.md`.
 6. Create `_templates/` files for each note type.
 7. Apply visual customization. Read `references/css-snippets.md`. Create `.obsidian/snippets/vault-colors.css`.
 8. Create the vault CLAUDE.md using the template below.
@@ -198,7 +198,7 @@ Your job as the LLM:
 4. Maintain hot cache after every operation
 5. Always update index, sub-indexes, log, and hot cache on changes
 6. Always use frontmatter and wikilinks
-7. Never modify vault/.raw/ sources
+7. Never modify .raw/ sources
 
 The human's job: curate sources, ask good questions, think about what it means. Everything else is on you.
 

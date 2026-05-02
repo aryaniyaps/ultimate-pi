@@ -9,7 +9,7 @@ description: >
 
 # wiki-lint: Wiki Health Check
 
-Run lint after every 10-15 ingests, or weekly. Ask before auto-fixing anything. Output a lint report to `vault/wiki/meta/lint-report-YYYY-MM-DD.md`.
+Run lint after every 10-15 ingests, or weekly. Ask before auto-fixing anything. Output a lint report to `wiki/meta/lint-report-YYYY-MM-DD.md`.
 
 ---
 
@@ -24,7 +24,7 @@ Work through these in order:
 5. **Missing cross-references**. Entities mentioned in a page but not linked.
 6. **Frontmatter gaps**. Pages missing required fields (type, status, created, updated, tags).
 7. **Empty sections**. Headings with no content underneath.
-8. **Stale index entries**. Items in `vault/wiki/index.md` pointing to renamed or deleted pages.
+8. **Stale index entries**. Items in `wiki/index.md` pointing to renamed or deleted pages.
 9. **Address validity** (DragonScale Mechanism 2). For every page that has an `address:` frontmatter field, validate the format. See the **Address Validation** section below.
 10. **Semantic tiling** (DragonScale Mechanism 3, opt-in). Flag candidate duplicate pages (across all scanned types, not just concepts) via embedding cosine similarity. See the **Semantic Tiling** section below.
 
@@ -32,7 +32,7 @@ Work through these in order:
 
 ## Lint Report Format
 
-Create at `vault/wiki/meta/lint-report-YYYY-MM-DD.md`:
+Create at `wiki/meta/lint-report-YYYY-MM-DD.md`:
 
 ```markdown
 ---
@@ -101,7 +101,7 @@ During lint, flag pages that violate the style guide:
 
 ## Dataview Dashboard
 
-Create or update `vault/wiki/meta/dashboard.md` with these queries:
+Create or update `wiki/meta/dashboard.md` with these queries:
 
 ````markdown
 ---
@@ -136,7 +136,7 @@ LIST FROM "wiki/questions" WHERE answer_quality = "draft" SORT created DESC
 
 ## Canvas Map
 
-Create or update `vault/wiki/meta/overview.canvas` for a visual domain map:
+Create or update `wiki/meta/overview.canvas` for a visual domain map:
 
 ```json
 {
@@ -203,7 +203,7 @@ Before validating anything, classify the page:
 
 5. **Legacy identification**: every page classified as "legacy" that LACKS an address is informational. The lint report lists them under "Pending backfill" with total count.
 
-6. **Address-map consistency** (`vault/.raw/.manifest.json`): for every page path in `address_map`, the page must exist and its frontmatter `address` must match the mapping. Mismatches are errors (either a rename dropped the map update, or a manual edit diverged).
+6. **Address-map consistency** (`.raw/.manifest.json`): for every page path in `address_map`, the page must exist and its frontmatter `address` must match the mapping. Mismatches are errors (either a rename dropped the map update, or a manual edit diverged).
 
 ### Lint posture summary
 
@@ -232,7 +232,7 @@ Lint only observes. Do NOT auto-assign missing addresses during lint. Assignment
 - [[Page A]] and [[Page B]] share address `c-000042`.
 - [[Post-Rollout Page]]: missing address. Page created 2026-04-25 (post-rollout); address required. Run wiki-ingest or manually run `./scripts/allocate-address.sh` and add to frontmatter.
 - [[Page Name]] has address `c-000100` but counter peek is `50`. Counter drift; run `./scripts/allocate-address.sh --rebuild`.
-- `vault/.raw/.manifest.json` maps `wiki/foo.md` -> `c-000010` but page frontmatter has `c-000012`. Resolve mismatch.
+- `.raw/.manifest.json` maps `wiki/foo.md` -> `c-000010` but page frontmatter has `c-000012`. Resolve mismatch.
 
 ### Pending backfill (informational)
 - M legacy pages without addresses. See `.vault-meta/legacy-pages.txt` for the canonical legacy set, or filter by `created:` < 2026-04-23.
@@ -270,7 +270,7 @@ Inspect `/tmp/tiling-peek.json` (structured diagnostics: script path, python int
 When `TILING_READY=1`:
 
 ```bash
-./scripts/tiling-check.py --report vault/wiki/meta/tiling-report-YYYY-MM-DD.md
+./scripts/tiling-check.py --report wiki/meta/tiling-report-YYYY-MM-DD.md
 REPORT_EXIT=$?
 case $REPORT_EXIT in
   0)  echo "tiling report written" ;;

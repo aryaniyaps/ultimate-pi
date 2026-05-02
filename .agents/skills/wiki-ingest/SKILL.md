@@ -13,18 +13,18 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 ## Delta Tracking
 
-Before ingesting any file, check `vault/.raw/.manifest.json` to avoid re-processing unchanged sources.
+Before ingesting any file, check `.raw/.manifest.json` to avoid re-processing unchanged sources.
 
 ```bash
 # Check if manifest exists
-[ -f vault/.raw/.manifest.json ] && echo "exists" || echo "no manifest yet"
+[ -f .raw/.manifest.json ] && echo "exists" || echo "no manifest yet"
 ```
 
 **Manifest format** (create if missing):
 ```json
 {
   "sources": {
-    "vault/.raw/articles/article-slug-2026-04-08.md": {
+    ".raw/articles/article-slug-2026-04-08.md": {
       "hash": "abc123",
       "ingested_at": "2026-04-08",
       "pages_created": ["wiki/sources/article-slug.md", "wiki/entities/Person.md"],
@@ -54,20 +54,17 @@ Trigger: user passes a URL starting with `https://`.
 
 Steps:
 
-1. **Fetch** the page using scrapling (primary) or defuddle (fallback for simple pages):
-   - Primary: `SCRAPLING=/home/aryaniyaps/.local/venvs/scrapling/bin/scrapling; $SCRAPLING extract get "$URL" /tmp/ingest.md --ai-targeted`
-   - JS/protected pages: escalate to `fetch` or `stealthy-fetch` with `--ai-targeted --network-idle`
-   - Simple fallback: `defuddle parse "$URL" --md > /tmp/ingest.md`
-2. **Clean** (optional): if scrapling output has boilerplate, run `defuddle parse /tmp/ingest.md --md > /tmp/ingest-clean.md`
+1. **Fetch** the page using WebFetch.
+2. **Clean** (optional): if `defuddle` is available (`which defuddle 2>/dev/null`), run `defuddle [url]` to strip ads, nav, and clutter. Typically saves 40-60% tokens. Fall back to raw WebFetch output if not installed.
 3. **Derive slug** from the URL path (last segment, lowercased, spaces→hyphens, strip query strings).
-4. **Save** to `vault/.raw/articles/[slug]-[YYYY-MM-DD].md` with a frontmatter header:
+4. **Save** to `.raw/articles/[slug]-[YYYY-MM-DD].md` with a frontmatter header:
    ```markdown
    ---
    source_url: [url]
    fetched: [YYYY-MM-DD]
    ---
    ```
-5. Proceed with **Single Source Ingest** starting at step 2 (file is now in `vault/.raw/`).
+5. Proceed with **Single Source Ingest** starting at step 2 (file is now in `.raw/`).
 
 ---
 
@@ -79,7 +76,7 @@ Steps:
 
 1. **Read** the image file using the Read tool. Claude can process images natively.
 2. **Describe** the image contents: extract all text (OCR), identify key concepts, entities, diagrams, and data visible in the image.
-3. **Save** the description to `vault/.raw/images/[slug]-[YYYY-MM-DD].md`:
+3. **Save** the description to `.raw/images/[slug]-[YYYY-MM-DD].md`:
    ```markdown
    ---
    source_type: image
@@ -99,23 +96,23 @@ Use cases: whiteboard photos, screenshots, diagrams, infographics, document scan
 
 ## Single Source Ingest
 
-Trigger: user drops a file into `vault/.raw/` or pastes content.
+Trigger: user drops a file into `.raw/` or pastes content.
 
 Steps:
 
 1. **Read** the source completely. Do not skim.
 2. **Discuss** key takeaways with the user. Ask: "What should I emphasize? How granular?" Skip this if the user says "just ingest it."
-3. **Create** source summary in `vault/wiki/sources/`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
+3. **Create** source summary in `wiki/sources/`. Use the source frontmatter schema from `references/frontmatter.md`. Assign an address per the **Address Assignment** section below.
 4. **Create or update** entity pages for every person, org, product, and repo mentioned. One page per entity. Assign addresses to new entity pages.
 5. **Create or update** concept pages for significant ideas and frameworks. Assign addresses to new concept pages.
 6. **Update** relevant domain page(s) and their `_index.md` sub-indexes.
-7. **Update** `vault/wiki/overview.md` if the big picture changed.
-8. **Update** `vault/wiki/index.md`. Add entries for all new pages.
-9. **Update** `vault/wiki/hot.md` with this ingest's context.
-10. **Append** to `vault/wiki/log.md` (new entries at the TOP):
+7. **Update** `wiki/overview.md` if the big picture changed.
+8. **Update** `wiki/index.md`. Add entries for all new pages.
+9. **Update** `wiki/hot.md` with this ingest's context.
+10. **Append** to `wiki/log.md` (new entries at the TOP):
     ```markdown
     ## [YYYY-MM-DD] ingest | Source Title
-    - Source: `vault/.raw/articles/filename.md`
+    - Source: `.raw/articles/filename.md`
     - Summary: [[Source Title]]
     - Pages created: [[Page 1]], [[Page 2]]
     - Pages updated: [[Page 3]], [[Page 4]]
@@ -145,8 +142,8 @@ Batch ingest is less interactive. For 30+ sources, expect significant processing
 
 Token budget matters. Follow these rules during ingest:
 
-- Read `vault/wiki/hot.md` first. If it contains the relevant context, don't re-read full pages.
-- Read `vault/wiki/index.md` to find existing pages before creating new ones.
+- Read `wiki/hot.md` first. If it contains the relevant context, don't re-read full pages.
+- Read `wiki/index.md` to find existing pages before creating new ones.
 - Read only 3-5 existing pages per ingest. If you need 10+, you are reading too broadly.
 - Use PATCH for surgical edits. Never re-read an entire file just to update one field.
 - Keep wiki pages short. 100-300 lines max. If a page grows beyond 300 lines, split it.
@@ -180,7 +177,7 @@ Do not silently overwrite old claims. Flag and let the user decide.
 
 ## What Not to Do
 
-- **Source files under `vault/.raw/` are immutable.** Do not modify the files that users drop there (articles, transcripts, images). The `vault/.raw/.manifest.json` delta tracker and its `address_map` (DragonScale Mechanism 2) are the only files under `vault/.raw/` that `wiki-ingest` itself maintains. Treat every other file under `vault/.raw/` as read-only source content.
+- **Source files under `.raw/` are immutable.** Do not modify the files that users drop there (articles, transcripts, images). The `.raw/.manifest.json` delta tracker and its `address_map` (DragonScale Mechanism 2) are the only files under `.raw/` that `wiki-ingest` itself maintains. Treat every other file under `.raw/` as read-only source content.
 - Do not create duplicate pages. Always check the index and search before creating.
 - Do not skip the log entry. Every ingest must be recorded.
 - Do not skip the hot cache update. It is what keeps future sessions fast.
@@ -226,7 +223,7 @@ ADDR=$(./scripts/allocate-address.sh)
 # ADDR is now e.g. "c-000042"; counter is already incremented
 ```
 
-**CRITICAL**: never use the Write or Edit tool on `.vault-meta/address-counter.txt`. That would fire the PostToolUse hook, which runs `git add vault/wiki/ vault/.raw/` and can accidentally commit unrelated pending wiki changes under a generic message. Counter mutation is **only** permitted through the helper script (Bash tool).
+**CRITICAL**: never use the Write or Edit tool on `.vault-meta/address-counter.txt`. That would fire the PostToolUse hook, which runs `git add wiki/ .raw/` and can accidentally commit unrelated pending wiki changes under a generic message. Counter mutation is **only** permitted through the helper script (Bash tool).
 
 ### Helper modes
 
@@ -238,9 +235,9 @@ ADDR=$(./scripts/allocate-address.sh)
 
 1. Before writing a new non-meta page, call `./scripts/allocate-address.sh` and capture the output.
 2. Include `address: c-XXXXXX` in the page's frontmatter.
-3. Record the path-to-address mapping in `vault/.raw/.manifest.json` under a new top-level key `address_map` (see schema below).
+3. Record the path-to-address mapping in `.raw/.manifest.json` under a new top-level key `address_map` (see schema below).
 
-### `address_map` in `vault/.raw/.manifest.json`
+### `address_map` in `.raw/.manifest.json`
 
 ```json
 {
