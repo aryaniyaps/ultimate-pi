@@ -146,7 +146,7 @@ Installed via `npx skills add AgriciDaniel/claude-obsidian --yes` or bundled:
 
 ### Dotenv loader extension
 
-- `extensions/dotenv-loader.ts`
+- `.pi/extensions/dotenv-loader.ts`
   - Loads `.env` files into `process.env` on session start, before other extensions read their config.
   - Ensures extensions like `@posthog/pi` can pick up env vars from `.env` automatically.
   - Configurable via env vars (set before launching pi):
