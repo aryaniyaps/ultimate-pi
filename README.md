@@ -94,16 +94,6 @@ This skill walks you through the rest automatically — creating the folder stru
    - **Graph Analysis** — enhanced graph view
    - **Obsidian Git** — auto-commit and push vault to the wiki repo
 
-### Start using wiki skills
-
-```
-/wiki-status          → see what sources are available to ingest
-/wiki-ingest          → add your first sources
-/wiki-query           → ask questions across your wiki
-/wiki-lint            → check wiki health
-/wiki-update          → sync current project knowledge into the wiki
-```
-
 ## Included skills
 
 ### Core skills (upstream repositories)

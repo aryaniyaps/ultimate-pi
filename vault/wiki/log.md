@@ -2,11 +2,25 @@
 type: meta
 status: active
 created: 2026-04-28
-updated: 2026-05-02
+updated: 2026-05-03
 tags: [meta, log, operations]
 ---
 
 # Wiki Operations Log
+
+## [2026-05-03] autoresearch | Automating Software Engineering — Lovable, Bolt, Emergent, Rocket
+- Rounds: 1 (5 broad searches + 11 scrapes)
+- Sources found: 6 (Lovable architecture/clone/docs, Bolt architecture/EvilMartians, OpenAI Codex blog, OpenDev arxiv, Anthropic harness blog, Rocket platform + TechCrunch, Emergent website)
+- Pages created: [[Source: Lovable Architecture & Clone Analysis]], [[Source: Bolt.new Architecture & Case Study]], [[Source: Rocket.new — Vibe Solutioning Platform]], [[Source: OpenAI Harness Engineering — 0 Lines of Human Code]], [[Source: OpenDev — Building AI Coding Agents for the Terminal]] (sources), [[Context-Aware System Reminders]], [[Multi-Agent AI Coding Architecture]] (concepts), [[Lovable (company)]], [[Bolt.new (StackBlitz)]], [[Rocket.new]], [[Emergent Labs]] (entities), [[Research: Automating Software Engineering - Lovable, Bolt, Emergent, Rocket]] (synthesis)
+- Pages updated: [[context-engineering]] (stub → developing, enriched with OpenDev/OpenAI/Anthropic findings)
+- Key finding: Multi-agent architecture (Planner→Architect→Coder/Generator→Evaluator) is universal across all platforms. Environment control (WebContainers, Chrome DevTools MCP, Playwright) is the moat — agents must run and verify code, not just generate it. Context engineering is the central design constraint — progressive disclosure, adaptive compaction, system reminders at decision points. OpenAI built product with 0 lines of human code over 5 months (~1M lines, ~1.5K PRs). Rocket.new thesis: code generation is a commodity; deciding what to build is the missing piece.
+
+## [2026-05-03] autoresearch | Engineering Workflows of Legendary Programmers and AI Harness Mapping
+- Rounds: 2 (5 broad searches + 11 scrapes + 3 gap-fill searches)
+- Sources found: 5 (Linux coding style, Unix philosophy, Kernighan interview, Hejlsberg 7 learnings, Guido design philosophy)
+- Pages created: [[linux-kernel-coding-workflow]], [[unix-philosophy]], [[birth-of-unix-kernighan-interview]], [[hejlsberg-7-learnings]], [[guido-python-design-philosophy]] (sources), [[legendary-engineering-patterns-harness]] (concept), [[Linus Torvalds]], [[Ken Thompson]], [[Dennis Ritchie]], [[Anders Hejlsberg]], [[Guido van Rossum]], [[Bjarne Stroustrup]] (entities), [[Research: Engineering Workflows of Legendary Programmers and AI Harness Mapping]] (synthesis)
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: 10 cross-cutting engineering patterns from 6 legendary programmers map directly to harness layers. Core insight: same principles that produced Linux/Unix/C/C++/Python/TypeScript must constrain AI-generated code. Type systems (Hejlsberg, Stroustrup) emerge as essential AI guardrails — deterministic constraints matter MORE with AI, not less. All six programmers oppose vibe coding; human architectural control is non-negotiable. Thompson's productivity demonstrates that deep system understanding enables extreme leverage — semantic codebase indexing is prerequisite, not optional. Subtractive design (McIlroy/Thompson's "what can we throw out") is the antidote to AI bloat but not yet implemented in any harness layer.
 
 ## [2026-05-03] autoresearch | Skill-First MVP & Harness Implementation Architecture
 - Rounds: 2 (5 broad searches + 5 primary scrapes + 2 gap-fill searches)
