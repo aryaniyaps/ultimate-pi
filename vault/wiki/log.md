@@ -8,6 +8,20 @@ tags: [meta, log, operations]
 
 # Wiki Operations Log
 
+## [2026-05-03] autoresearch | Skill-First MVP & Harness Implementation Architecture
+- Rounds: 2 (5 broad searches + 5 primary scrapes + 2 gap-fill searches)
+- Sources found: 3 (SwirlAI Skills, Claude API Skills, Blake Crosley Agent Architecture)
+- Pages created: [[Source: SwirlAI Agent Skills Progressive Disclosure]], [[Source: Claude API Agent Skills Overview]], [[Source: Blake Crosley Agent Architecture Guide]] (sources), [[skill-first-architecture]] (concept), [[Research: Skill-First Harness Architecture]] (synthesis)
+- Pages rewritten (major): [[mvp-implementation-blueprint]] (Skill-First v2), [[harness-implementation-plan]] (Skill-First v2)
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: Harness layers should be markdown-based skills, not TypeScript code. Only deterministic infrastructure needs code: event bus, drift monitor, types, config. Cuts code surface from 15 TS files to 4. Progressive disclosure keeps context lean (~480 tokens for all 6 harness skills at discovery vs ~15K tokens for loaded code modules). Independently validated by Anthropic, OpenAI, Google, GitHub, Cursor all adopting the SKILL.md open standard within weeks of release. 20 total files (4 code + 12 skill + 4 config). ~8 weeks to MVP (down from ~9).
+
+## [2026-05-03] question | MVP Implementation Blueprint Filed
+- **Page**: [[mvp-implementation-blueprint]] — Filed to `vault/wiki/questions/`.
+- **Source**: Deep wiki query synthesizing HARNESS-PRD, harness-implementation-plan, 18 ADRs (008-025), drift-detection-unified.
+- **Content**: Comprehensive MVP build plan for Groups 1-3 + P20 gate per ADR-015 pipeline-first order. 15 source files defined with type interfaces, config architecture, drift monitor patterns (LLM-first Haiku 4.5 + 6-rule pre-filter), L4 critic via @tintinweb/pi-subagents, P20 deterministic gate (biome+tsc+fallow), L5-L8 trace/memory. ~9-week build order with incremental delivery milestones.
+- Pages updated: [[index]] (added Questions section), [[log]].
+
 ## [2026-05-02] correction | Fabricated npm packages removed, real tools documented, browser-harness replaces Puppeteer
 - Rounds: 1 (correction research — npm verification + firecrawl searches + GitHub scrapes)
 - Sources created: [[Source: Build-Time Prompt Compilation Architecture]], [[Source: browser-harness CDP Harness]]

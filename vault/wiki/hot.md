@@ -10,7 +10,63 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-02. **P30 browser engine replaced**: Vercel Labs agent-browser (31.4K stars, Apache 2.0, Rust-native) replaces browser-harness (9.4K stars, MIT, Python). **L2.5 drift detection rethought from first principles**: LLM-first (Haiku 4.5) with structured drift context replaces rule-based primary. See below.
+2026-05-03. **Skill-First Architecture**: MVP and harness implementation plans rethought from first principles. Harness layers are now markdown-based skills (`.pi/skills/harness-*/SKILL.md`) — only drift monitor and event bus remain as TypeScript code. 4 code files vs 15. Progressive disclosure keeps context lean. See below.
+
+## Skill-First Harness Architecture (May 2026)
+
+### Key Finding
+**Harness layers should be markdown-based skills, not TypeScript code modules.** The core insight: the harness is a skill coordination layer, not a code pipeline. Only deterministic infrastructure needs code — the event bus (routing pi events to skills), the drift monitor (real-time pattern matching on every `tool_result` event), shared types, and config. Everything else — spec hardening, planning, adversarial verification, observability, memory — is probabilistic LLM evaluation and should be a skill.
+
+### Architecture
+```
+CODE LAYER (4 TS files — deterministic, always-on):
+  events.ts (routes pi events → skills) | drift-monitor.ts (pattern matching) | types.ts | config.ts
+
+SKILL LAYER (6 SKILL.md directories — probabilistic, on-demand):
+  harness-spec/ | harness-plan/ | harness-critic/ | harness-observe/ | harness-gate/ | harness-memory/
+
+WIKI LAYER (Obsidian — persistent, cross-session):
+  ADRs, specs, plans, consensus, hot cache, index
+```
+
+### Why Skills Over Code
+1. **Better at evaluation**: LLM is better at spec quality, plan correctness, code review than imperative code.
+2. **Progressive disclosure**: 6 harness skills cost ~480 tokens at discovery vs 15 code modules always loaded (~15K tokens).
+3. **Zero-compile iteration**: Edit markdown → agent picks up next activation. No TypeScript compilation for harness logic changes.
+4. **User-editable**: PMs/domain experts can edit SKILL.md without TypeScript knowledge.
+5. **Industry convergence**: Anthropic, OpenAI, Google, GitHub, Cursor all adopted SKILL.md open standard within weeks.
+
+### Why Some Things Stay Code
+**Drift monitor MUST be code**: Runs deterministically on every `tool_result` event with sub-millisecond rule-based pre-filter. Skills are probabilistic — the model decides when to activate them. Drift detection cannot be skipped.
+
+**Event bus MUST be code**: Routes pi's 5 native events to skill invocations. Must fire on every event with zero exceptions.
+
+### File Count
+| Old (v1 Code-First) | New (v2 Skill-First) |
+|---------------------|----------------------|
+| 15 TypeScript files (~2,500 lines) | 4 TypeScript files (~800 lines) |
+| 0 skill files | 12 skill files (6 SKILL.md + 6 reference.md) |
+| Compilation required for every logic change | Compilation only when types/drift/event bus change |
+| ~9 weeks to MVP | ~8 weeks to MVP |
+
+### Sources (3 new)
+[[Source: SwirlAI Agent Skills Progressive Disclosure]] — Three-tier architecture, ecosystem adoption speed (Mar 2026)
+[[Source: Claude API Agent Skills Overview]] — Filesystem-based skill architecture, loading levels, security
+[[Source: Blake Crosley Agent Architecture Guide]] — Complete harness pattern: hooks, skills, subagents, production results (Apr 2026)
+
+### Concept Created
+[[skill-first-architecture]] — Full architecture derivation, first principles, when skills vs when code
+
+### Synthesis
+[[Research: Skill-First Harness Architecture]] — Full research synthesis: architecture comparison, contradictions, open questions
+
+### Plans Rewritten
+[[mvp-implementation-blueprint]] — Skill-First v2: 20 files, 4 code + 12 skill + 4 config. All skill bodies documented.
+[[harness-implementation-plan]] — Skill-First v2: every phase now specifies implementation method (SKILL or CODE).
+
+---
+
+Previous (2026-05-02): **P30 browser engine replaced**: Vercel Labs agent-browser (31.4K stars, Apache 2.0, Rust-native) replaces browser-harness (9.4K stars, MIT, Python). **L2.5 drift detection rethought from first principles**: LLM-first (Haiku 4.5) with structured drift context replaces rule-based primary.
 
 ## P30 Browser Engine: agent-browser (May 2026)
 
