@@ -214,7 +214,7 @@ For each model with detected issues, produce recommendations in this format:
 #### Issue 2: ...
 ```
 
-Recommendations are concrete and actionable. They reference specific files to change (e.g., `.pi/skills/autoresearch/references/model-profiles.md`, specific SKILL.md sections, harness config). They specify which harness layer and which dimension.
+Recommendations are concrete and actionable. They reference specific files to change (e.g., `.pi/skills/wiki-autoresearch/references/model-profiles.md`, specific SKILL.md sections, harness config). They specify which harness layer and which dimension.
 
 **Do NOT auto-apply fixes.** Only recommend. The user decides what to change.
 

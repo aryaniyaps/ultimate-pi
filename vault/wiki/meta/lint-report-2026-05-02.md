@@ -42,9 +42,6 @@ status: complete
 ### Type/Status convention
 Non-standard types (`synthesis`, `resolution`, `analysis`, `overview`) and statuses (`resolved`, `stable`, `complete`) are now accepted as valid conventions. They capture useful distinctions and are used consistently.
 
-### Semantic Tiling
-Skipped. Ollama not installed in PATH. Install ollama and run `ollama pull nomic-embed-text` to enable.
-
 ---
 
 ## Original Findings (pre-fix)
@@ -209,14 +206,6 @@ All resolve automatically when files are renamed to use `Research: ` prefix.
 
 Also, [[index]] references `[[consensus/index]]` but this is unreachable (filename collision with wiki/index.md).
 
-## Address Validation
-
-DragonScale not active. `scripts/allocate-address.sh` exists but `.vault-meta/address-counter.txt` not found — skip.
-
-## Semantic Tiling
-
-`scripts/tiling-check.py` exists but ollama model `nomic-embed-text` not pulled (exit code 11). Run `ollama pull nomic-embed-text` to enable semantic tiling in future lint runs.
-
 ## Dashboard
 
 See [[dashboard]] for current Dataview queries. Status: existing dashboard is up-to-date with all query templates from the wiki-lint spec.
@@ -260,4 +249,3 @@ All research synthesis and resolved question pages in `wiki/questions/` are miss
 5. **Decide on type/status vocabulary** — either expand canonical set or reclassify
 6. **Resolve 18 dead conceptual links** — either create stubs or correct to existing pages
 7. **Resolve 9 dead entity links** — create entity stubs or remove wikilinks
-8. **Pull `nomic-embed-text`** for semantic tiling in next lint run

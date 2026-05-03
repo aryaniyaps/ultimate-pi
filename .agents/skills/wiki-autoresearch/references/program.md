@@ -1,6 +1,6 @@
 # Research Program
 
-This file configures the autoresearch loop. Edit it to match your domain and research style. The autoresearch skill reads it before every run.
+This file configures the wiki-autoresearch loop. Edit it to match your domain and research style. The wiki-autoresearch skill reads it before every run.
 
 ---
 
