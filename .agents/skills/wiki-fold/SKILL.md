@@ -162,7 +162,7 @@ See `references/fold-template.md` for the canonical frontmatter and body layout.
 2. **Additive**: children are never modified.
 3. **Bounded reads**: 0-15 child-page reads per fold.
 4. **Extractive**: zero invented facts. Count checks enforced.
-5. **No chaining**: wiki-fold does not invoke wiki-lint, wiki-ingest, autoresearch, or wiki-save.
+5. **No chaining**: wiki-fold does not invoke wiki-lint, wiki-ingest, wiki-autoresearch, or wiki-save.
 
 ---
 

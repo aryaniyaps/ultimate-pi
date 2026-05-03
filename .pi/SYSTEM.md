@@ -31,7 +31,7 @@ WEB POLICY (MANDATORY)
   - Parse local docs: firecrawl parse <file> -o .firecrawl/parsed.md
 - SEARCH: firecrawl search (no DuckDuckGo).
 - POST-CLEAN (optional): defuddle parse infile --md > cleanfile if output has boilerplate.
-- QUALITY SITES: check .pi/skills/autoresearch/references/quality-sites.md before citing non-API sources.
+- QUALITY SITES: check .pi/skills/wiki-autoresearch/references/quality-sites.md before citing non-API sources.
   - Prefer Tier 1 (stackoverflow, github issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
 - If firecrawl missing: npx firecrawl --help || npm install -g firecrawl-cli@latest
 - If defuddle missing: npm install -g defuddle-cli

@@ -8,7 +8,7 @@ allowed-tools: Read Write Edit Glob Grep
 
 The three knowledge capture layers:
 - `/save` → text synthesis (wiki/questions/, wiki/concepts/)
-- `/autoresearch` → structured knowledge (wiki/sources/, wiki/concepts/)
+- `/wiki-autoresearch` (alias `/autoresearch`) → structured knowledge (wiki/sources/, wiki/concepts/)
 - `/canvas` → visual references (wiki/canvases/)
 
 A canvas is a JSON file Obsidian renders as an infinite visual board. This skill reads and writes canvas JSON directly. Read `references/canvas-spec.md` for the full format reference before making any edits. This spec aligns with the [JSON Canvas open standard](https://jsoncanvas.org/). If the kepano/obsidian-skills plugin is installed, its json-canvas skill is the authoritative canvas spec reference. Otherwise, use the guidance below.

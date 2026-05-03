@@ -118,7 +118,7 @@ Route to the correct operation based on what the user says:
 | "what do you know about X", "query:" | QUERY | `wiki-query` |
 | "lint", "health check", "clean up" | LINT | `wiki-lint` |
 | "save this", "file this", "/save" | SAVE | `wiki-save` |
-| "/autoresearch [topic]", "research [topic]" | AUTORESEARCH | `autoresearch` |
+| "/wiki-autoresearch [topic]", "/autoresearch [topic]", "research [topic]" | AUTORESEARCH | `wiki-autoresearch` |
 | "/canvas", "add to canvas", "open canvas" | CANVAS | `canvas` |
 
 ---

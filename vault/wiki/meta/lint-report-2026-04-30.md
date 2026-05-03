@@ -80,16 +80,6 @@ All template files (expected): `_templates/decision.md`, `_templates/flow.md`
 
 ---
 
-## Address Validation
-
-Skipped. DragonScale not configured (`scripts/allocate-address.sh` not found).
-
-## Semantic Tiling
-
-Skipped. Tiling script not available (`scripts/tiling-check.py` not found).
-
----
-
 ## Artifacts Updated
 
 - `vault/wiki/meta/lint-report-2026-04-30.md` — this report

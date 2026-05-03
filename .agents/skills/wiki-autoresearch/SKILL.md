@@ -1,17 +1,17 @@
 ---
-name: autoresearch
+name: wiki-autoresearch
 description: >
   Autonomous iterative research loop. Takes a topic, runs web searches, fetches sources,
   synthesizes findings, and files everything into the wiki as structured pages.
   Based on Karpathy's autoresearch pattern: program.md configures objectives and constraints,
   the loop runs until depth is reached, output goes directly into the knowledge base.
-  Triggers on: "/autoresearch", "autoresearch", "research [topic]", "deep dive into [topic]",
-  "investigate [topic]", "find everything about [topic]", "research and file",
-  "go research", "build a wiki on".
+  Triggers on: "/wiki-autoresearch", "/autoresearch", "wiki-autoresearch", "autoresearch",
+  "research [topic]", "deep dive into [topic]", "investigate [topic]",
+  "find everything about [topic]", "research and file", "go research", "build a wiki on".
 allowed-tools: Read Write Edit Glob Grep WebFetch WebSearch
 ---
 
-# autoresearch: Autonomous Research Loop
+# wiki-autoresearch: Autonomous Research Loop
 
 You are a research agent. You take a topic, run iterative web searches, synthesize findings, and file everything into the wiki. The user gets wiki pages, not a chat response.
 
@@ -24,7 +24,7 @@ This is based on Karpathy's autoresearch pattern: a configurable program defines
 All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
 
 ```bash
-WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+WIKI_PATH="${WIKI_VAULT_PATH:-${VAULT_WIKI_PATH:-vault/wiki}}"
 ```
 
 Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/sources/` → `$WIKI_PATH/sources/` (default: `vault/wiki/sources/`).
@@ -44,36 +44,8 @@ Three paths to a topic:
 ### A. Explicit topic (always respected)
 When the user says `/autoresearch [topic]` or "research X", use the given topic verbatim and skip the sections below.
 
-### B. Boundary-first selection (agenda control, opt-in)
-**This is agenda control, not pure memory.** DragonScale Memory.md Mechanism 4 labels this mechanism as such because it shapes which direction the research agent moves next. Users who want a strict memory-layer subset should omit this path entirely.
-
-When `/autoresearch` is invoked WITHOUT a topic AND the vault has adopted DragonScale, default to surfacing the frontier of the vault as a set of candidate topics the user can accept, override, or decline.
-
-Feature detection (shell):
-
-```bash
-if [ -x ./scripts/boundary-score.py ] && [ -d ./.vault-meta ] && command -v python3 >/dev/null 2>&1; then
-  BOUNDARY_MODE=1
-else
-  BOUNDARY_MODE=0
-fi
-```
-
-When `BOUNDARY_MODE=1`:
-
-1. Run `./scripts/boundary-score.py --json --top 5`. Returns the top 5 frontier pages by `boundary_score = (out_degree - in_degree) * recency_weight`.
-2. **Helper failure handling**: if the helper exits non-zero, emits invalid JSON, or returns an empty `results` array, set `BOUNDARY_MODE=0` and fall through to section C below. Do NOT prompt the user with an empty candidate list, and do NOT improvise a topic.
-3. Present the candidate list to the user: "Your top frontier pages are: [list]. Research which one? (1-5, or type a topic to override, or say 'cancel' to be asked normally.)"
-4. If the user picks 1-5, use the selected page's title as the topic.
-5. If the user types free text, use that.
-6. If the user cancels or does not choose, fall through to C.
-
-The boundary score is a heuristic, not an objective measure of what SHOULD be researched. The user always has the option to type a free-text topic to override the surfaced candidates.
-
-**Link-resolution semantics**: the boundary helper uses **filename-stem wikilink resolution only**. `[[Foo]]` is counted as an edge to `Foo.md` anywhere in the vault. Aliases declared via frontmatter `aliases:` are **not** parsed. Folder-qualified links (e.g. `[[notes/Foo]]`) are resolved by stem only. This matches default Obsidian behavior for unique filenames but does not implement full Obsidian alias resolution.
-
-### C. User-chosen (default when B is unavailable)
-When `BOUNDARY_MODE=0` or the user declined every frontier pick, ask: "What topic should I research?"
+### B. User-chosen (default)
+When `/autoresearch` is invoked WITHOUT a topic, ask: "What topic should I research?"
 
 ---
 
@@ -178,7 +150,7 @@ sources:
 1. Update `wiki/index.md`. Add all new pages to the right sections
 2. Append to `wiki/log.md` (at the TOP):
    ```
-   ## [YYYY-MM-DD] autoresearch | [Topic]
+   ## [YYYY-MM-DD] wiki-autoresearch | [Topic]
    - Rounds: N
    - Sources found: N
    - Pages created: [[Page 1]], [[Page 2]], ...
@@ -194,7 +166,7 @@ sources:
 After filing everything:
 
 ```
-Research complete: [Topic]
+wiki-autoresearch complete: [Topic]
 
 Rounds: N | Searches: N | Pages created: N
 

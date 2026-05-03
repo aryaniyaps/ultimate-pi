@@ -83,4 +83,3 @@ wiki/
 
 - 24 obsidian-wiki skills: `npx skills add Ar9av/obsidian-wiki --yes`
 - 5 obsidian-skills: `npx skills add kepano/obsidian-skills --yes`
-- Optional: `ollama` + `nomic-embed-text` for DragonScale semantic tiling
