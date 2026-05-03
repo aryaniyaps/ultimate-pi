@@ -39,13 +39,27 @@ Read `references/program.md` to load the research objectives and constraints. Th
 
 ## Topic Selection
 
-Three paths to a topic:
+Two paths to a topic. Follow the first one that applies.
 
 ### A. Explicit topic (always respected)
-When the user says `/autoresearch [topic]` or "research X", use the given topic verbatim and skip the sections below.
 
-### B. User-chosen (default)
-When `/autoresearch` is invoked WITHOUT a topic, ask: "What topic should I research?"
+The topic is whatever the user said after the trigger phrase. Extract it by removing the trigger from the user's message.
+
+**How to extract:**
+- User: `/autoresearch kubernetes operators` → topic: `kubernetes operators`
+- User: `/wiki-autoresearch Rust async patterns` → topic: `Rust async patterns`
+- User: `research the current state of WASM` → topic: `the current state of WASM`
+- User: `deep dive into transformers vs diffusers` → topic: `transformers vs diffusers`
+- User: `investigate Postgres query planning` → topic: `Postgres query planning`
+- User: `find everything about eBPF` → topic: `eBPF`
+- User: `build a wiki on Zig allocators` → topic: `Zig allocators`
+
+**Rule**: strip the trigger phrase (`/autoresearch`, `/wiki-autoresearch`, `research`, `deep dive into`, `investigate`, `find everything about`, `go research`, `research and file`, `build a wiki on`), trim whitespace, and treat everything remaining as the topic. Use it verbatim.
+
+If the topic is present, skip to the Research Loop. Do NOT ask "what topic."
+
+### B. No topic given (fallback)
+When the user invokes `/autoresearch`, `/wiki-autoresearch`, `go research`, or `research and file` with NO topic after the trigger, ask: "What topic should I research?"
 
 ---
 

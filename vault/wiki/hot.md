@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-03T16:07:00
+updated: 2026-05-03T21:45:00
 created: 2026-04-30
 tags: []
 status: active
@@ -10,7 +10,96 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-03. **Automating Software Engineering — Lovable, Bolt, Emergent, Rocket**: Universal multi-agent pattern, environment control as moat, context engineering as central constraint, 0 human-code product (Codex). See below. **Legendary Engineering Patterns** and **Skill-First Architecture** also active.
+2026-05-03. **pi-vs-claude-code agentic orchestration pipeline** research filed. **sentrux.dev integrated**, **Automating Software Engineering**, **Legendary Engineering Patterns**, and **Skill-First Architecture** also active.
+
+---
+
+## pi-vs-claude-code — Agentic Orchestration Pipeline for Our Harness (May 2026)
+
+### Key Finding
+**Pi's TypeScript extension system can implement full multi-agent orchestration — subagent delegation, team dispatch, and sequential chaining — entirely in user-space without core agent changes.** disler/pi-vs-claude-code (928 stars) provides production-grade reference implementations of all three patterns. Combined with OpenDev's comprehensive architecture paper (arXiv:2603.05344v1) and Martin Fowler's harness engineering framework, clear implementation paths emerge for our harness.
+
+### 7 Key Findings
+1. **Three orchestration patterns cover the design space** (Source: [[sources/disler-pi-vs-claude-code]]): Subagent delegation (`/sub`), team dispatch (`/team` via `teams.yaml`), sequential chaining (`/chain` via `agent-chain.yaml`). All implementable as `.pi/skills/` extensions.
+2. **Schema-level isolation > runtime permission checks** (Source: [[sources/opendev-arxiv-2603.05344v1]]): Removing tools from subagent schemas makes dangerous operations structurally impossible. The model cannot argue for capabilities it doesn't know exist.
+3. **Context engineering is a first-class concern** (Source: [[sources/opendev-arxiv-2603.05344v1]]): Staged compaction (5 thresholds), event-driven reminders (24 templates, `role: user` injection), dual-memory architecture. Our harness lacks all three.
+4. **Harness = Guides + Sensors + Steering Loop** (Source: [[sources/martin-fowler-harness-engineering]]): Feedforward guides steer before action; feedback sensors observe after. Human iterates on both.
+5. **Multi-model pipelines beat single-model agents** (Source: [[sources/mindstudio-four-agent-types]]): Different pipeline stages benefit from different models (Opus for planning, Sonnet for building, Haiku for reviewing).
+6. **Safety requires defense-in-depth** (Source: [[sources/opendev-arxiv-2603.05344v1]]): Five independent layers — prompt → schema → approval → validation → hooks. Our harness has none in structured form.
+7. **Agent types must match task architecture** (Source: [[sources/mindstudio-four-agent-types]]): Coding Harness, Dark Factory, Auto Research, Orchestration — each optimized for different work. Mismatch = failure.
+
+### Concepts Created (5)
+[[concepts/agentic-orchestration-pipeline]], [[concepts/agent-harness-architecture]], [[concepts/multi-agent-specialization]], [[concepts/context-engineering]], [[concepts/safety-defense-in-depth]]
+
+### Entities Created (3)
+[[entities/pi-coding-agent]], [[entities/disler-indydevdan]], [[entities/opendev]]
+
+### Sources (5)
+[[sources/disler-pi-vs-claude-code]], [[sources/opendev-arxiv-2603.05344v1]], [[sources/martin-fowler-harness-engineering]], [[sources/mindstudio-four-agent-types]], [[sources/anthropic-effective-harnesses]]
+
+### Synthesis
+[[questions/Research-pi-vs-claude-code-agentic-orchestration-pipeline]] — Full research: 7 findings, 1 contradiction, 6 open questions
+
+### Implementation Path
+1. Extend existing `Agent` tool with team dispatch via YAML config (`.pi/agents/teams.yaml`)
+2. Add chain orchestration with `$INPUT` variable injection (`.pi/agents/agent-chain.yaml`)
+3. Implement context isolation per subagent (fresh conversation per spawn)
+4. Add progress dashboards (grid for teams, step tracker for chains)
+5. Build safety defense-in-depth (schema gating → approval → validation → hooks)
+6. Implement staged compaction (5 thresholds) and event-driven reminders
+
+### Open Questions
+- Event-driven system reminders in Pi's extension API?
+- Right compaction strategy for our context window?
+- Persistent approval rules across sessions?
+- 9-pass fuzzy editing in Pi's `edit` tool?
+- Performance impact of context isolation per subagent?
+- Steering loop mechanism (human review → update guides/sensors)?
+
+---
+
+## sentrux.dev — Architectural Sensor for AI Coding Agents (May 2026)
+
+### Key Finding
+**sentrux closes the feedback loop for AI-agent-written code — a real-time architectural sensor that computes a single Quality Signal (0–10,000) from 5 independent graph-theoretic metrics, visualizes the codebase as an interactive treemap, and integrates with AI coding agents via MCP.** Built in Rust (MIT), 52 languages via tree-sitter. First released March 11, 2026 (v0.5.7 as of March 18). 1.9k GitHub stars, 168 forks. Pro tier ($15/month) via runtime dylib plugin with Ed25519 license keys.
+
+### 7 Key Findings
+1. **Unique positioning as the missing feedback loop**: sensor (sentrux) → signal → controller (AI agent) → actuator (code changes) → system (codebase) → loop. Classical cybernetics (Wiener 1948, Tsien 1954).
+2. **Mathematically grounded scoring**: Quality Signal = geometric mean of (modularity × acyclicity × depth × equality × redundancy)^(1/5) × 10000. Justified by Nash Social Welfare theorem (1950). Claims "ungameable by design."
+3. **5 metrics cover complete structural space**: 3 edge properties (modularity Newman 2004, acyclicity Martin 2003, depth Lakos 1996) + 2 node properties (equality Gini 1912, redundancy Kolmogorov 1963).
+4. **MCP-first AI agent integration**: 9 tools (scan, health, session_start, session_end, rescan, check_rules, evolution, dsm, test_gaps). Agent detects quality degradation per session.
+5. **Pro tier via runtime plugin**: Pro features ($15/mo) in separately downloaded dylib. Ed25519 license keys with offline validation. Per-user watermarking. Team tier at $40/month/seat.
+6. **Rapid development velocity**: Initial commit to v0.5.7 with Pro architecture in ~1 week. 318 commits, 37 releases.
+7. **52 languages via tree-sitter**: Zero language-specific Rust code. Adding language = plugin.toml + tags.scm only.
+
+### Contradictions
+- **Self-assessment gap**: sentrux gives own repo a "D" rating — problematic for credibility.
+- **Rapid release pace vs stability**: 17 releases in one day during launch. Reddit flagged as "vibe-coded."
+- **Conceptual strength vs practical utility**: Community split between praising feedback loop concept and questioning usefulness.
+
+### Sources (7)
+[[sentrux-github-repo]], [[sentrux-dev-landing]], [[sentrux-docs-quality-signal]], [[sentrux-docs-root-cause-metrics]], [[sentrux-docs-rules-engine]], [[sentrux-docs-pro-architecture]], Reddit r/rust launch post
+
+### Concepts Created (4)
+[[Quality Signal (sentrux)]], [[Five Root Cause Metrics (sentrux)]], [[sentrux Rules Engine]], [[sentrux MCP Integration]]
+
+### Entity Created
+[[sentrux (tool)]]
+
+### Synthesis
+[[Research: sentrux.dev]] — Full research: 7 findings, 4 contradictions, 6 open questions
+
+### Open Questions
+- Production adoption unknown (tool <2 months old)
+- No independent reviews beyond Reddit launch thread
+- Accuracy varies by tree-sitter grammar maturity
+- Scalability with large codebases unverified
+- Pro plugin security: runtime dylib loading risks
+- No benchmarking against SonarQube, CodeClimate, etc.
+
+---
+
+Previous (2026-05-03): **Automating Software Engineering**, **Legendary Engineering Patterns**, and **Skill-First Architecture** research also active. See below.
 
 ---
 

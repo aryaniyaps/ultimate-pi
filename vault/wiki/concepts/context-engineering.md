@@ -1,55 +1,62 @@
 ---
 type: concept
-status: developing
-created: 2026-05-02
-updated: 2026-05-03
-tags: [concept, context, harness]
+tags:
+  - context-engineering
+  - token-management
+  - compaction
+  - memory
 related:
-  - "[[Context Engine (AI Coding)]]"
-  - "[[agentic-harness-context-enforcement]]"
-  - "[[context-anxiety]]"
-  - "[[Context-Aware System Reminders]]"
-  - "[[progressive-disclosure-agents]]"
-  - "[[structured-compaction]]"
-sources:
-  - "[[Source: OpenDev — Building AI Coding Agents for the Terminal]]"
-  - "[[Source: OpenAI Harness Engineering — 0 Lines of Human Code]]"
-  - "[[anthropic2026-harness-design]]"
+  - "[[Agent Harness Architecture]]"
+  - "[[sources/opendev-arxiv-2603.05344v1]]"
+  - "[[sources/martin-fowler-harness-engineering]]"
 ---
 
 # Context Engineering
 
-The practice of designing and optimizing the context that an AI agent receives — what information, how structured, and when provided. Context quality > model intelligence (validated by Augment SWE-bench Pro results: same model, 6-point improvement with better context).
+The practice of managing an LLM's context window as a first-class engineering concern. Context is a finite, expensive resource consumed by system prompts, tool schemas, conversation history, and tool outputs. Effective context engineering determines how long an agent can operate before context overflow degrades performance.
 
-## First Principles
+## Core Principles
 
-### Context Is a Budget, Not a Buffer
-Every capability added to the system prompt, every tool result returned to the agent, competes for the same finite token budget. In practice, tool outputs (file contents, command results, search hits) consume **70-80% of context** in a typical session. Richer outputs improve per-turn accuracy but shorten session life. (Source: OpenDev)
+1. **Entropy reduction**: Each context element should reduce uncertainty about the desired output
+2. **Minimal sufficiency**: Include only what is necessary to avoid attention dilution
+3. **Semantic continuity**: Context should evolve coherently across turns, not be reconstructed from scratch
 
-### Progressive Disclosure
-Give agents **maps, not encyclopedias**. OpenAI's finding: a giant AGENTS.md file crowds out the task, rots instantly, and can't be mechanically verified. Instead: short AGENTS.md (~100 lines) as table of contents pointing to a structured `docs/` directory. (Source: OpenAI Harness Engineering)
+## Key Techniques
 
-### Adaptive Compaction, Not Emergency Compaction
-Graduated reduction stages (70%→99% thresholds) outperform binary emergency compaction. Cheaper strategies (masking, pruning) often reclaim enough space to avoid expensive LLM summarization. Mark tool outputs as "active → faded → archived" progressively. (Source: OpenDev)
+### Adaptive Context Compaction (ACC)
+Five graduated stages instead of a single emergency threshold:
+- **70%**: Warning — log pressure, track trends
+- **80%**: Observation Masking — replace old tool results with reference pointers (~15 tokens each)
+- **85%**: Fast Pruning — walk backward, replace oldest results with `[pruned]` markers
+- **90%**: Aggressive Masking — shrink preservation window to most recent outputs only
+- **99%**: Full Compaction — LLM-based summarization of middle portion, keep recent verbatim
 
-### System Reminders at Decision Points
-Instructions in the system prompt lose influence as conversations grow. After 30+ tool calls, agents silently stop following them. Inject short, targeted reminders at the exact point of decision using `role: user` messages. Cap frequency to prevent noise. (Source: OpenDev, [[Context-Aware System Reminders]])
+ACC reduces peak context consumption by ~54%, often eliminating the need for emergency compaction.
 
-### Calibrate from API-Reported Token Counts
-Providers inject invisible content (safety preambles, tool schemas, internal formatting). Local token estimates systematically underestimate actual usage. Always treat the API's reported `prompt_tokens` as ground truth. (Source: OpenDev)
+### Dual-Memory Architecture
+- **Episodic memory**: LLM summary of full history (strategic context). Regenerated from full history every 5 messages to prevent summary drift.
+- **Working memory**: Last 6 exchanges verbatim (operational detail).
 
-### Dual-Memory for Thinking Contexts
-When providing context to a thinking/reasoning model: separate compressed long-range context (episodic summary) from detailed short-range context (recent messages verbatim). Regenerate episodic summary from full history periodically, not incrementally — iterative summarization accumulates drift. (Source: OpenDev)
+### Event-Driven System Reminders
+Short, targeted messages injected at decision points (not upfront in system prompt). Use `role: user` for maximum recency. Governed by counter budgets to prevent noise.
 
-### Offload Large Outputs to Filesystem
-When a tool produces output exceeding a threshold, write full content to scratch file, return short preview + file reference. Transforms a context-consumption problem into a retrieval problem — retrieval costs one tool call, context consumption is paid on every subsequent LLM call. (Source: OpenDev)
+### Lazy Tool Discovery
+Only discovered/explicitly invoked MCP tool schemas consume context. Baseline overhead: <5% instead of 40%.
 
-### Context Resets vs Compaction
-Anthropic found that some models exhibit "context anxiety" — wrapping up prematurely when approaching context limit. Compaction alone insufficient for Sonnet 4.5. Context resets (clear window, new agent with structured handoff) required. Opus 4.6 largely eliminated this — model capability determines which strategy works. (Source: Anthropic Harness Design)
+### Tool Result Optimization
+Per-tool-type summarization (file reads → metadata, search → match counts, directory listings → item counts). Large outputs (>8,000 chars) offloaded to scratch files with previews.
+
+### Prompt Caching
+Split system prompt into stable (cacheable) and dynamic parts. Stable portion (~80-90%) receives `cache_control` header, yielding ~88% input cost reduction on cached tokens.
+
+## Calibration
+
+Always use the API's reported `prompt_tokens` as calibration anchor, not local estimates. Providers inject invisible content (safety preambles, tool serialization) that local counting misses.
 
 ## Relevance to Our Harness
-- Our AGENTS.md may be too monolithic — consider restructuring as index + progressive disclosure
-- We lack graduated compaction — current approach is binary emergency
-- We lack system reminders — instructions fade over long sessions
-- We lack dual-memory for planning phases
-- Token calibration should use API-reported counts, not local estimates
+
+- No staged compaction — we rely on session restarts when context fills
+- No event-driven reminders — our system prompt decays over long sessions
+- No dual-memory — thinking contexts share full history
+- Partial tool result optimization — `lean-ctx` compresses bash output
+- Lazy discovery pattern exists — `ctx_discover_tools` for lean-ctx

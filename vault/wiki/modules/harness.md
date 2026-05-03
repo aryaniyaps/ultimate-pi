@@ -9,6 +9,7 @@ sources:
   - "[[harness-implementation-plan]]"
   - "[[harness-control-frameworks]]"
   - "[[drift-detection-unified]]"
+  - "[[Research: sentrux.dev]]"
 related:
   - "[[harness-wiki-skill-mapping]]"
   - "[[harness-wiki-pipeline]]"
@@ -22,11 +23,11 @@ An **8-layer mandatory pipeline** with a **drift monitor layer** and **cross-cut
 ## Runtime Pipeline
 
 ```
-L1: Spec Hardening → L2: Structured Planning → L2.5: Drift Monitor
+L1: Spec Hardening → L2: Structured Planning → L2.5: Drift Monitor (+sentrux structural)
   ↓                                               ↓
-L3: Grounding Checkpoints → L4: Adversarial Verification → Phase 16: Lint+Format Gate
+L3: Grounding Checkpoints (+sentrux MCP) → L4: Adversarial Verification → Phase 16: Lint+Format+Arch Gate (+sentrux check)
   ↓
-L5: Automated Observability → L6: Persistent Memory → L7: Schema Orchestration → L8: Wiki Query
+L5: Automated Observability (+Quality Signal) → L6: Persistent Memory (+baselines) → L7: Schema Orchestration → L8: Wiki Query
 ```
 
 ## The 8 Layers (+ Drift Monitor)
@@ -54,6 +55,7 @@ L5: Automated Observability → L6: Persistent Memory → L7: Schema Orchestrati
 | Semantic Code Search | ck hybrid BM25+embeddings grep (Phase P13) |
 | Gitingest | Bulk external repo ingestion (Phase P15) |
 | Haiku Model Router | Route exploration to cheap model (Phase P25) |
+| **sentrux MCP (9 tools)** | Structural scan, health check, rules check, session baseline/diff — agent self-verifies architecture before committing (Phase P44) |
 
 ## Formal Models
 
