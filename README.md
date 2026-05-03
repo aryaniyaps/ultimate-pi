@@ -101,7 +101,6 @@ This skill walks you through the rest automatically — creating the folder stru
 | Skill | Upstream | What it does |
 |---|---|---|
 | caveman | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) | Ultra-compressed response style. Cuts token usage ~75%. |
-| compress | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) | Compress memory/context files into caveman format. |
 | lean-ctx | [yvgude/lean-ctx](https://github.com/yvgude/lean-ctx) | Context runtime — 46 MCP tools, 10 read modes, tree-sitter AST. Compresses context up to 99%. |
 | context7-cli | [upstash/context7](https://github.com/upstash/context7) | Fetch current library docs, manage Context7 skills/config. |
 | firecrawl | [firecrawl](https://firecrawl.dev) | Web search, scraping, crawling, JS rendering, site downloads, interactive pages. |
@@ -116,23 +115,13 @@ Installed via `npx skills add AgriciDaniel/claude-obsidian --yes` or bundled:
 | canvas | Work with JSON canvas. |
 | obsidian-bases | Create database-like views. |
 | obsidian-markdown | Edit Obsidian flavored markdown. |
-| save | Save conversation to wiki. |
+| wiki-save | Save conversation to wiki. |
 | wiki | Add links to orphan files. |
 | wiki-fold | Create index files for folders. |
 | wiki-ingest | Distill sources to wiki. |
 | wiki-lint | Check for broken links/orphans. |
 | wiki-query | Answer questions via wiki search. |
 | defuddle | Extract clean markdown from web pages, stripping clutter. |
-
-### Runtime guardrail extension
-
-- `extensions/lean-ctx-enforce.ts`
-  - Detects `lean-ctx` availability (cached check).
-  - Overrides built-in `read` tool to execute through `lean-ctx read` when available.
-  - Overrides built-in `bash` tool and auto-wraps commands with `lean-ctx -c <command>` when needed.
-  - Falls back to default built-in tools if `lean-ctx` is unavailable.
-  - Adds status command:
-    - `/lean-ctx-status`
 
 ### Dotenv loader extension
 
@@ -156,25 +145,6 @@ Installed via `npx skills add AgriciDaniel/claude-obsidian --yes` or bundled:
 
 - `@posthog/pi` (installed via `pi install @posthog/pi`)
   - Wraps the upstream [posthog-pi](https://github.com/PostHog/posthog-pi) extension to capture AI generation spans, tool spans, and traces in [PostHog](https://posthog.com). See the upstream repo for configuration and env vars.
-
-## Design choices (concise)
-
-1. **Lean-ctx-first execution**  
-   Reason: cut context/token waste and keep tool usage structured.
-
-2. **Caveman-by-default response style**  
-   Reason: short, exact, low-noise outputs for coding loops.
-
-3. **Runtime enforcement in extension code**  
-   Reason: executable extension logic is the single source of truth for lean-ctx routing.
-
-4. **Skill-based composition**  
-   Reason: easy to swap/upgrade capabilities without rewiring core package.
-
-5. **Model-agnostic compression path**  
-   Reason: `compress` skill calls PI CLI, so provider/model can change per environment.
-
-## Development setup
 
 1. Clone and install dependencies:
 

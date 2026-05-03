@@ -27,7 +27,7 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 | `wiki-ingest` | Write sources and extracted entities to wiki | Write (after change) |
 | `wiki-lint` | Health check: orphans, dead links, stale claims, frontmatter gaps | Write (periodic) |
 | `wiki-fold` | Rollup log entries into meta-pages | Write (periodic) |
-| `save` | Capture conversation/insight as structured wiki note | Write (after insight) |
+| `wiki-save` | Capture conversation/insight as structured wiki note | Write (after insight) |
 | `obsidian-markdown` | Format wiki pages with correct OFM syntax | Write (all writes) |
 | `obsidian-bases` | Create dynamic database views over wiki pages | Read (dashboards) |
 | `canvas` | Visual map of wiki pages and relationships | Read (exploration) |
@@ -42,7 +42,7 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 | Phase | Skill | Action | Detail |
 |-------|-------|--------|--------|
 | **Read** | `wiki-query` | Look up `decisions/` and `modules/spec-hardening` | Find existing hardening rules, ADR constraints, success criteria patterns |
-| **Write** | `save` | File hardened spec as decision page | `decisions/spec-{feature}.md` with frontmatter `type: decision` |
+| **Write** | `wiki-save` | File hardened spec as decision page | `decisions/spec-{feature}.md` with frontmatter `type: decision` |
 | **Write** | `wiki-ingest` | Update `modules/spec-hardening.md` status | Add new `> [!success]` or `> [!warning]` callout |
 | **Format** | `obsidian-markdown` | Ensure all spec pages use correct OFM | Wikilinks, callouts, frontmatter |
 
@@ -52,7 +52,7 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 |-------|-------|--------|--------|
 | **Read** | `wiki-query` | Look up `flows/`, `modules/structured-planning` | Prior plans, DAG patterns, proven task decomposition |
 | **Read** | `wiki-query` | Deep search for related ADRs | Cross-reference all decisions that affect the plan |
-| **Write** | `save` | File approved plan as flow page | `flows/plan-{feature}.md` with frontmatter `type: flow`, `plan_status: approved` |
+| **Write** | `wiki-save` | File approved plan as flow page | `flows/plan-{feature}.md` with frontmatter `type: flow`, `plan_status: approved` |
 | **Write** | `wiki-ingest` | Update `modules/structured-planning.md` | Add plan reference, update status |
 | **Format** | `obsidian-markdown` | All plan pages use OFM | Task DAG in code blocks, wikilinks to dependencies |
 
@@ -62,8 +62,8 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 |-------|-------|--------|--------|
 | **Read** | `wiki-query` | Quick search `hot.md` for current session context | Am I drifting from the approved plan? |
 | **Write** | `wiki-ingest` | Record checkpoint in `log.md` | Append entry with checkpoint type, task_id, pass/fail |
-| **Write** | `save` | If drift detected, file failure pattern | `modules/{feature}.md` with `> [!contradiction]` callout |
-| **Write** | `save` | If checkpoint passed, update hot.md | Refresh recent context with current state |
+| **Write** | `wiki-save` | If drift detected, file failure pattern | `modules/{feature}.md` with `> [!contradiction]` callout |
+| **Write** | `wiki-save` | If checkpoint passed, update hot.md | Refresh recent context with current state |
 
 ### L4: Adversarial Verification
 
@@ -71,8 +71,8 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 |-------|-------|--------|--------|
 | **Read** | `wiki-query` | Look up `decisions/adr-008` and relevant specs | Tests must come from spec ONLY — never from implementation |
 | **Read** | `wiki-query` | Look up `modules/adversarial-verification` | Attack patterns, focus areas, retry limits |
-| **Write** | `save` | File verified success patterns | `modules/{feature}.md` with `status: mature` frontmatter |
-| **Write** | `save` | File failure patterns with critic findings | `modules/{feature}.md` with `> [!contradiction]` callout |
+| **Write** | `wiki-save` | File verified success patterns | `modules/{feature}.md` with `status: mature` frontmatter |
+| **Write** | `wiki-save` | File failure patterns with critic findings | `modules/{feature}.md` with `> [!contradiction]` callout |
 | **Write** | `wiki-ingest` | Update `modules/adversarial-verification.md` | Add attack results to findings section |
 
 ### L5: Automated Observability
@@ -80,7 +80,7 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 | Phase | Skill | Action | Detail |
 |-------|-------|--------|--------|
 | **Read** | `wiki-query` | Look up `modules/automated-observability` | Existing metric definitions, alert conditions |
-| **Write** | `save` | File observability decision | `decisions/observability-{feature}.md` with metric definitions |
+| **Write** | `wiki-save` | File observability decision | `decisions/observability-{feature}.md` with metric definitions |
 | **Write** | `wiki-ingest` | Update `modules/automated-observability.md` | Add new metrics, update verification table |
 
 ### L6: Persistent Memory (Already Wiki-Native)
@@ -88,7 +88,7 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 | Phase | Skill | Action | Detail |
 |-------|-------|--------|--------|
 | **Read** | `wiki-query` | Standard/deep search per depth table | See [[persistent-memory]] three-depth mode |
-| **Write** | `save` | File decisions, patterns, events | Per "Write Patterns by Layer" table in [[persistent-memory]] |
+| **Write** | `wiki-save` | File decisions, patterns, events | Per "Write Patterns by Layer" table in [[persistent-memory]] |
 | **Write** | `wiki-query` | Update `hot.md` | Every session start / shutdown per event hooks |
 | **Write** | `wiki-ingest` | Batch entity/concept extraction | After research or multi-source ingestion |
 | **Periodic** | `wiki-lint` | Health check every 10-15 writes | Per lint schedule in [[wiki-query-interface]] |
@@ -110,7 +110,7 @@ Exactly which Obsidian wiki skills are invoked at each pipeline stage. This is t
 | **Read** | `wiki-query` | Primary search interface per depth table | See [[wiki-query-interface]] |
 | **Read** | `obsidian-bases` | Dashboard views over wiki pages | Status dashboards, dependency views |
 | **Read** | `canvas` | Visual exploration of page relationships | Architecture maps, dependency graphs |
-| **Write** | `save` | File deep-query results | `questions/research-{topic}.md` |
+| **Write** | `wiki-save` | File deep-query results | `questions/research-{topic}.md` |
 
 ## Cross-Cutting Skills
 
@@ -131,5 +131,5 @@ The harness enforces the read-first/write-after contract at two chokepoints:
 1. **L7 Schema Orchestration**: Before dispatching any layer, the orchestrator checks that `wiki-query` has been called for the relevant pages. If not, it inserts a read step.
 2. **Extension hooks**: Every `extensions/harness-*.ts` file must call the appropriate wiki skill before/after its layer logic. The hook pattern is:
    - `pre_action`: Call `wiki-query` for relevant docs
-   - `post_action`: Call `save` or `wiki-ingest` to persist outcomes
+   - `post_action`: Call `wiki-save` or `wiki-ingest` to persist outcomes
    - `periodic`: Call `wiki-lint` every 10-15 writes

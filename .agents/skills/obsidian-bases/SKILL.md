@@ -12,6 +12,12 @@ Obsidian Bases (launched 2025) turns vault notes into queryable, dynamic views. 
 
 ---
 
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill (in `.base` filter expressions like `file.inFolder("wiki/")`) are relative to the wiki directory inside the Obsidian vault. Obsidian Bases operate on the vault directly; the `wiki/` prefix in filter expressions reflects the folder name within the vault. If your wiki folder has a different name, adjust filter paths accordingly.
+
+---
+
 ## File Format
 
 `.base` files contain valid YAML. The root keys are `filters`, `formulas`, `properties`, `summaries`, and `views`.

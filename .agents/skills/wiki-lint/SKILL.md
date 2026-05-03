@@ -13,6 +13,18 @@ Run lint after every 10-15 ingests, or weekly. Ask before auto-fixing anything. 
 
 ---
 
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/index.md` → `$WIKI_PATH/index.md` (default: `vault/wiki/index.md`).
+
+---
+
 ## Lint Checks
 
 Work through these in order:

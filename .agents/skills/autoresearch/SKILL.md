@@ -19,6 +19,18 @@ This is based on Karpathy's autoresearch pattern: a configurable program defines
 
 ---
 
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/sources/` → `$WIKI_PATH/sources/` (default: `vault/wiki/sources/`).
+
+---
+
 ## Before Starting
 
 Read `references/program.md` to load the research objectives and constraints. This file is user-configurable. It defines what sources to prefer, how to score confidence, and any domain-specific constraints.

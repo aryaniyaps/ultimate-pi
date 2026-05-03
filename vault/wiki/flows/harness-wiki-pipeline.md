@@ -73,27 +73,27 @@ After every state transition, the following wiki writes happen:
 
 | Layer | Event | Wiki Write | Skill | Target Page |
 |-------|-------|-----------|-------|-------------|
-| L1 | Spec hardened | Decision + callout | `save` | `decisions/spec-{feature}.md` |
-| L1 | Ambiguity resolved | Decision | `save` | `decisions/spec-{feature}.md` |
-| L2 | Plan approved | Flow page | `save` | `flows/plan-{feature}.md` |
-| L2 | Plan rejected | Failure pattern | `save` | `modules/{feature}.md` with `> [!contradiction]` |
-| L3 | Checkpoint passed | Log entry + hot.md | `wiki-ingest` + `save` | `log.md` + `hot.md` |
-| L3 | Drift detected | Failure pattern | `save` | `modules/{feature}.md` with `> [!contradiction]` |
-| L4 | Subtask verified | Success pattern | `save` | `modules/{feature}.md` with `status: mature` |
-| L4 | Subtask failed | Failure pattern | `save` | `modules/{feature}.md` with `> [!contradiction]` |
-| L4 | QA test results | Decision + metrics | `save` | `decisions/qa-{feature}.md` |
-| L5 | Observability defined | Decision | `save` | `decisions/observability-{feature}.md` |
+| L1 | Spec hardened | Decision + callout | `wiki-save` | `decisions/spec-{feature}.md` |
+| L1 | Ambiguity resolved | Decision | `wiki-save` | `decisions/spec-{feature}.md` |
+| L2 | Plan approved | Flow page | `wiki-save` | `flows/plan-{feature}.md` |
+| L2 | Plan rejected | Failure pattern | `wiki-save` | `modules/{feature}.md` with `> [!contradiction]` |
+| L3 | Checkpoint passed | Log entry + hot.md | `wiki-ingest` + `wiki-save` | `log.md` + `hot.md` |
+| L3 | Drift detected | Failure pattern | `wiki-save` | `modules/{feature}.md` with `> [!contradiction]` |
+| L4 | Subtask verified | Success pattern | `wiki-save` | `modules/{feature}.md` with `status: mature` |
+| L4 | Subtask failed | Failure pattern | `wiki-save` | `modules/{feature}.md` with `> [!contradiction]` |
+| L4 | QA test results | Decision + metrics | `wiki-save` | `decisions/qa-{feature}.md` |
+| L5 | Observability defined | Decision | `wiki-save` | `decisions/observability-{feature}.md` |
 | L5 | Metric verified | Module update | `wiki-ingest` | `modules/automated-observability.md` |
-| L6 | Memory write | Per event hooks table | `save` / `wiki-ingest` | Per [[persistent-memory]] mapping |
+| L6 | Memory write | Per event hooks table | `wiki-save` / `wiki-ingest` | Per [[persistent-memory]] mapping |
 | L7 | Wave completed | Orchestration status | `wiki-ingest` | `modules/schema-orchestration.md` |
 | L7 | Replan triggered | Log entry + flow update | `wiki-ingest` | `log.md` + `flows/plan-{feature}.md` |
-| L8 | Deep query answered | Synthesis page | `save` | `questions/research-{topic}.md` |
+| L8 | Deep query answered | Synthesis page | `wiki-save` | `questions/research-{topic}.md` |
 
 ### Session Shutdown (once per session)
 
 | Step | Skill | Target | Purpose |
 |------|-------|--------|---------|
-| 1 | `save` | `hot.md` | Update recent context for next session |
+| 1 | `wiki-save` | `hot.md` | Update recent context for next session |
 | 2 | `wiki-ingest` | `log.md` | Append shutdown entry |
 | 3 | `wiki-lint` | Full vault | Catch staleness, orphans, dead links |
 | 4 | `wiki-fold` | `wiki/folds/` | If 8+ entries since last fold, run fold |
@@ -112,7 +112,7 @@ When a new ADR supersedes or modifies an existing one:
 - `index.md` MUST reflect the change
 
 ### Rule 3: Cross-Reference Integrity
-When `save` creates a new page, it MUST:
+When `wiki-save` creates a new page, it MUST:
 - Add wikilinks to all related pages mentioned in frontmatter
 - Add a backlink entry in each referenced page (or flag for `wiki-lint` to catch)
 - Update `index.md` with the new entry
@@ -141,7 +141,7 @@ Lint output goes to `wiki/meta/lint-report-YYYY-MM-DD.md`.
 
 ### Rule 7: Index Synchronization
 `index.md` is updated:
-- After every `save` that creates a new page
+- After every `wiki-save` that creates a new page
 - After every `wiki-ingest` batch
 - After every `wiki-lint` that removes or merges pages
 - Never manually — always through skills

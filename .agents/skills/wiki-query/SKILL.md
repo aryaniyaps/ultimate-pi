@@ -10,6 +10,18 @@ The wiki has already done the synthesis work. Read strategically, answer precise
 
 ---
 
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/index.md` → `$WIKI_PATH/index.md` (default: `vault/wiki/index.md`).
+
+---
+
 ## Query Modes
 
 Three depths. Choose based on the question complexity.

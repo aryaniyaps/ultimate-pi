@@ -11,6 +11,18 @@ Read the source. Write the wiki. Cross-reference everything. A single source typ
 
 ---
 
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/index.md` → `$WIKI_PATH/index.md` (default: `vault/wiki/index.md`).
+
+---
+
 ## Delta Tracking
 
 Before ingesting any file, check `.raw/.manifest.json` to avoid re-processing unchanged sources.
@@ -74,7 +86,7 @@ Trigger: user passes an image file path (`.png`, `.jpg`, `.jpeg`, `.gif`, `.webp
 
 Steps:
 
-1. **Read** the image file using the Read tool. Claude can process images natively.
+1. **Read** the image file using the Read tool. pi can process images natively.
 2. **Describe** the image contents: extract all text (OCR), identify key concepts, entities, diagrams, and data visible in the image.
 3. **Save** the description to `.raw/images/[slug]-[YYYY-MM-DD].md`:
    ```markdown
@@ -223,7 +235,7 @@ ADDR=$(./scripts/allocate-address.sh)
 # ADDR is now e.g. "c-000042"; counter is already incremented
 ```
 
-**CRITICAL**: never use the Write or Edit tool on `.vault-meta/address-counter.txt`. That would fire the PostToolUse hook, which runs `git add wiki/ .raw/` and can accidentally commit unrelated pending wiki changes under a generic message. Counter mutation is **only** permitted through the helper script (Bash tool).
+**CRITICAL**: never use the Write or Edit tool on `.vault-meta/address-counter.txt`. That would fire the PostToolUse hook, which runs `git add $WIKI_PATH/ .raw/` and can accidentally commit unrelated pending wiki changes under a generic message. Counter mutation is **only** permitted through the helper script (Bash tool).
 
 ### Helper modes
 
@@ -267,7 +279,7 @@ On a page rename, the skill must update the `address_map` key (old path -> new p
 
 ### Concurrency policy
 
-- **Single-writer only** in Phase 2. Do not run parallel ingests from multiple Claude sessions or sub-agents that assign addresses. The `flock` in the helper prevents counter corruption but does not serialize page writes themselves.
+- **Single-writer only** in Phase 2. Do not run parallel ingests from multiple pi sessions or sub-agents that assign addresses. The `flock` in the helper prevents counter corruption but does not serialize page writes themselves.
 - Sub-agents (codex, general-purpose) that are dispatched for research or review MUST NOT call the allocator. They are read-only in this respect.
 - Multi-writer support is a deferred feature.
 

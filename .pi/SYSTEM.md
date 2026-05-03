@@ -48,6 +48,7 @@ SKILL ROUTING (REFERENCE ALL INSTALLED/AVAILABLE SKILLS)
 PROMPT TEMPLATES
 - /git-sync: commit and push with AI messages + pi-mono co-author.
 - /wiki: search, query, and update the project wiki via CLI.
+- /harness-setup: full harness bootstrap — obsidian wiki + CLI tools + pi extensions + config.
 
 PROMPT-ENGINEERING EXECUTION RULES
 - Restate objective + constraints before major changes.
