@@ -15,8 +15,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Layer | Module | Summary |
 |-------|--------|---------|
-| — | [[harness]] | 8-layer mandatory pipeline with drift monitor + cross-cutting tool enhancements |
-| — | [[harness-implementation-plan]] | Master build plan (Skill-First v2): phases mapped to skills vs code, unified token budget, all research integrated |
+| — | [[harness]] | 8-layer mandatory pipeline with drift monitor + sentrux structural gate + cross-cutting tool enhancements |
+| — | [[harness-implementation-plan]] | Master build plan (Skill-First v2): phases mapped to skills vs code, unified token budget, sentrux P44 integration |
 | L1 | [[spec-hardening]] | Block execution until ambiguities resolved |
 | L2 | [[structured-planning]] | Machine-readable task DAG + sprint contracts |
 | L2.5 | [[drift-detection-unified]] | Runtime drift monitor: 3 paradigms (tool-call, spec, implementation) |
@@ -119,6 +119,16 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[mcp-tool-routing]] | MCP protocol for semantic search as first-class agent tool |
 | [[codebase-to-context-ingestion]] | Converting entire codebases into structured LLM context |
 
+## Concepts — Orchestration & Harness
+
+| Concept | Summary |
+|---------|---------|
+| [[agentic-orchestration-pipeline]] | Three patterns: subagent delegation, team dispatch, sequential chaining |
+| [[agent-harness-architecture]] | Agent = Model + Harness. Scaffolding + Harness phases. Feedforward guides + Feedback sensors |
+| [[multi-agent-specialization]] | Specialization by role, model, and tool set. Team composition via YAML config |
+| [[context-engineering]] | Staged compaction, dual-memory, event-driven reminders, lazy tool discovery, prompt caching |
+| [[safety-defense-in-depth]] | Five-layer architecture: prompt → schema → approval → validation → hooks |
+
 ## Concepts — Agent Architecture
 
 | Concept | Summary |
@@ -161,7 +171,20 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[extensions]] | Programmatic hooks |
 | [[bench]] | Evaluation tools (terminal-bench) |
 
-## Entities
+## Entities — Projects & Tools
+
+| Entity | Summary |
+|--------|---------|
+| [[pi-coding-agent]] | Open-source terminal coding agent by Mario Zechner. TypeScript extension API. Our harness platform |
+| [[opendev]] | Open-source terminal agent. First comprehensive architecture paper (arXiv:2603.05344v1) |
+
+## Entities — People
+
+| Entity | Summary |
+|--------|---------|
+| [[disler-indydevdan]] | Creator of pi-vs-claude-code. 15+ Pi extensions. Reference implementation for orchestration |
+
+## Entities — Companies
 
 | Entity | Summary |
 |--------|---------|
@@ -184,6 +207,15 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[codesearch]] | Rust MCP server for Claude Code/OpenCode |
 | [[javascript-runtimes]] | Node.js (stable, mature), Deno (secure, tooling-rich), Bun (fast, drop-in replacement) |
 | [[vitest]] | Vite-native test framework, Jest-compatible, v4.1.5, Oxc-powered TypeScript |
+
+## Concepts — Code Quality & Architecture Governance
+
+| Concept | Summary |
+|---------|---------|
+| [[Quality Signal (sentrux)]] | Geometric mean of 5 root cause metrics (0-10,000 score), Nash Social Welfare theorem |
+| [[Five Root Cause Metrics (sentrux)]] | modularity, acyclicity, depth, equality, redundancy — 3 edge + 2 node graph properties |
+| [[sentrux Rules Engine]] | TOML-based architectural constraint system with layers, boundaries, CI enforcement |
+| [[sentrux MCP Integration]] | 9-tool MCP server for AI agent feedback loops: scan, session_start/end, check_rules, etc. |
 
 ## Concepts — TypeScript & Code Organization
 
@@ -209,6 +241,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Synthesis | Summary |
 |-----------|---------|
+| [[Research: pi-vs-claude-code Agentic Orchestration Pipeline]] | **NEW**: Three orchestration patterns, harness architecture, safety layers, implementation path |
 | [[Research: Augment Code Context Engine]] | Context Engine architecture, benchmarks, integration plan for harness |
 | [[Research: Model-Adaptive Agent Harness Design]] | Four-layer harness must be specialized per model |
 | [[Research: context-mode vs lean-ctx]] | context-mode vs lean-ctx + Think in Code enforcement |
@@ -239,6 +272,11 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Source | Type | Summary |
 |--------|------|---------|
+| [[sources/disler-pi-vs-claude-code]] | github-repo | Pi extension showcase: 15+ extensions for orchestration, safety, UI, cross-agent integration |
+| [[sources/opendev-arxiv-2603.05344v1]] | academic-paper | OpenDev architecture: compound AI system, ACC, system reminders, 5-layer safety (Mar 2026) |
+| [[sources/martin-fowler-harness-engineering]] | engineering-blog | Harness = Guides + Sensors + Steering Loop. Computational vs Inferential controls (Apr 2026) |
+| [[sources/mindstudio-four-agent-types]] | article | Four agent types: Coding Harness, Dark Factory, Auto Research, Orchestration (2026) |
+| [[sources/anthropic-effective-harnesses]] | engineering-blog | Authoritative harness definition: runtime framework for tool dispatch, context, safety (2025) |
 | [[Source: Lovable Architecture & Clone Analysis]] | blog | Multi-agent architecture: Planner→Architect→Coder, Pydantic-typed handoffs, LangGraph orchestration |
 | [[Source: Bolt.new Architecture & Case Study]] | case-study | WebContainers + Claude, 0→$4M ARR in 4 weeks, Remix frontend, open source |
 | [[Source: Rocket.new — Vibe Solutioning Platform]] | news | Strategy→Build→Intelligence platform, $15M seed, 1.5M users, "vibe McKinsey" |
@@ -328,6 +366,12 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Source: AgentBus Jinja2 Prompt Pipelines]] | engineering-blog | Jinja2 templating: inheritance, conditionals, loops, pipeline runner |
 | [[Source: TianPan Prompt Caching Architecture]] | engineering-blog | Multi-tier caching: semantic→prefix→full, 60-90% savings, cache boundary control |
 | [[Source: Arxiv — Don't Break the Cache]] | academic-paper | PwC evaluation: 41-80% cost reduction, system-prompt-only caching optimal |
+| [[sentrux-github-repo]] | github-repo | sentrux: 1.9k stars, 52 languages, MCP server, 5 metrics, MIT |
+| [[sentrux-dev-landing]] | website | sentrux.dev: landing page, cybernetic feedback loop, pricing |
+| [[sentrux-docs-quality-signal]] | documentation | Quality Signal formula, geometric mean justification, Nash theorem |
+| [[sentrux-docs-root-cause-metrics]] | documentation | 5 metrics mathematical definitions, graph-theoretic completeness |
+| [[sentrux-docs-rules-engine]] | documentation | .sentrux/rules.toml constraint system with layers and boundaries |
+| [[sentrux-docs-pro-architecture]] | documentation | Pro tier: runtime dylib, Ed25519 licenses, $15/mo, per-user watermarking |
 | [[ts-strict-mode-rishikc]] | article | TypeScript strict mode guide: 8+ sub-flags, migration strategy, ESLint pairing |
 | [[ts-runtimes-comparison-betterstack]] | article | Node.js vs Deno vs Bun: benchmarks, tooling, security, TS support (2026) |
 | [[barrel-files-tkdodo]] | article | Barrel files cause 68% module bloat, circular imports — stop using in app code |

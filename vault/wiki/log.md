@@ -8,6 +8,25 @@ tags: [meta, log, operations]
 
 # Wiki Operations Log
 
+## [2026-05-03] wiki-autoresearch | pi-vs-claude-code Agentic Orchestration Pipeline
+- Rounds: 2 (repo scrape + 4 broad searches + 2 gap-fill searches)
+- Sources found: 5
+- Pages created: [[sources/disler-pi-vs-claude-code]], [[sources/opendev-arxiv-2603.05344v1]], [[sources/martin-fowler-harness-engineering]], [[sources/mindstudio-four-agent-types]], [[sources/anthropic-effective-harnesses]] (sources), [[concepts/agentic-orchestration-pipeline]], [[concepts/agent-harness-architecture]], [[concepts/multi-agent-specialization]], [[concepts/context-engineering]], [[concepts/safety-defense-in-depth]] (concepts), [[entities/pi-coding-agent]], [[entities/disler-indydevdan]], [[entities/opendev]] (entities), [[questions/Research-pi-vs-claude-code-agentic-orchestration-pipeline]] (synthesis)
+- Pages updated: [[index]], [[log]], [[hot]]
+- Key finding: Pi's extension system can implement full multi-agent orchestration (subagent delegation, team dispatch, sequential chaining) entirely in user-space TypeScript. Three orchestration patterns + five-layer safety architecture + staged context compaction. Schema-level tool isolation more robust than runtime permission checks. Harness = Guides + Sensors + Steering Loop. Our harness can adopt all three orchestration patterns as `.pi/skills/` extensions backed by YAML config.
+
+## [2026-05-03] harness-update | sentrux integration into harness implementation plan
+- Replaced Fallow (P44a-g) with sentrux for structural quality gate
+- Added sentrux MCP (9 tools) to L2.5 drift monitor, L3 grounding, P20 gate, L5 observability
+- Updated: [[harness-implementation-plan]], [[harness]], [[Research: sentrux.dev]], [[index]], [[hot]]
+- sentrux adds 0 LLM tokens — all tools are deterministic Rust computations
+
+## [2026-05-03] wiki-autoresearch | sentrux.dev
+- Rounds: 1 (primary source scrape + docs + 1 external search)
+- Sources found: 7 (GitHub README, sentrux.dev, 4 docs pages, Pro architecture doc, Reddit launch post)
+- Pages created: [[sentrux-github-repo]], [[sentrux-dev-landing]], [[sentrux-docs-quality-signal]], [[sentrux-docs-root-cause-metrics]], [[sentrux-docs-rules-engine]], [[sentrux-docs-pro-architecture]] (sources), [[Quality Signal (sentrux)]], [[Five Root Cause Metrics (sentrux)]], [[sentrux Rules Engine]], [[sentrux MCP Integration]] (concepts), [[sentrux (tool)]] (entity), [[Research: sentrux.dev]] (synthesis)
+- Key finding: sentrux positions itself as the missing feedback loop for AI-agent code quality — 5 graph-theoretic metrics aggregated via geometric mean (Nash theorem), MCP integration with 9 tools, 52 languages via tree-sitter. <2 months old, 1.9k stars, mixed community reception.
+
 ## [2026-05-03] autoresearch | Automating Software Engineering — Lovable, Bolt, Emergent, Rocket
 - Rounds: 1 (5 broad searches + 11 scrapes)
 - Sources found: 6 (Lovable architecture/clone/docs, Bolt architecture/EvilMartians, OpenAI Codex blog, OpenDev arxiv, Anthropic harness blog, Rocket platform + TechCrunch, Emergent website)

@@ -34,6 +34,12 @@ sources:
   - "[[claude-code-architecture-vila-lab-2026]]"
   - "[[codeact-apple-2024]]"
   - "[[fallow-rs-codebase-intelligence]]"
+  - "[[sentrux-github-repo]]"
+  - "[[sentrux-docs-quality-signal]]"
+  - "[[sentrux-docs-root-cause-metrics]]"
+  - "[[sentrux-docs-rules-engine]]"
+  - "[[sentrux-docs-pro-architecture]]"
+  - "[[Research: sentrux.dev]]"
 ---
 
 # Harness Implementation Plan (Skill-First v2)
@@ -107,16 +113,18 @@ L1: harness-spec skill       →  Hardens specification, resolves ambiguity
 L2: harness-plan skill       →  Generates YAML task DAG with sprint contracts
   ↓
 L2.5: drift-monitor.ts code →  LLM-first drift detection every 8 turns (Haiku 4.5) + rule pre-filter
+        + sentrux MCP        →  Structural health baseline via session_start/end. Catches architectural decay.
   ↓
 L3: Agent Execution          →  Flat tools (P43 deferred). Drift monitor watches tool_result events.
+      + sentrux MCP          →  Agent can scan() for structural awareness, check_rules() before commits.
   ↓
 L4: harness-critic skill     →  Spawns critic agent via pi-subagents. iMAD gating. Consensus filing.
   ↓
-P20: harness-gate skill      →  Deterministic: biome + tsc + fallow. 0 LLM tokens.
+P20: harness-gate skill      →  Deterministic: biome + tsc + fallow (dead code) + sentrux check (architecture). 0 LLM tokens.
   ↓
-L5: harness-observe skill    →  Keep Rate tracking, LLM-as-Judge.
+L5: harness-observe skill    →  Keep Rate tracking, LLM-as-Judge, Quality Signal trending via sentrux evolution.
   ↓
-L6: harness-memory skill     →  Wiki read-first/write-after contract.
+L6: harness-memory skill     →  Wiki read-first/write-after contract. Structural baselines via sentrux gate.
   ↓
 L7: Schema Orchestration     →  Archon YAML workflow (already YAML-based, no code).
   ↓
@@ -184,7 +192,7 @@ Config: `.pi/harness/config.json` → `driftMonitor.*` keys.
 
 | Phase | What | Method | Files |
 |-------|------|--------|-------|
-| P20 | Final Lint + Format Gate | **SKILL** + BASH | `.pi/skills/harness-gate/SKILL.md` — instructions; bash runs biome/tsc/fallow |
+| P20 | Final Lint + Format + Architecture Gate | **SKILL** + BASH | `.pi/skills/harness-gate/SKILL.md` — instructions; bash runs biome/tsc/fallow/sentrux |
 | P21 | Automated Observability + Keep Rate | **SKILL** | `.pi/skills/harness-observe/SKILL.md` |
 | P22 | Persistent Memory (wiki vault) | **SKILL** | `.pi/skills/harness-memory/SKILL.md` |
 | P23 | Schema Orchestration (Archon DAG) | YAML | `.archon/workflows/*.yaml` (already YAML-based) |
@@ -198,7 +206,19 @@ Config: `.pi/harness/config.json` → `driftMonitor.*` keys.
 | P27 | Context Anxiety Guard | **SKILL** | Can be skill-based with drift monitor integration |
 | P28 | Positive Agent Loop Hooks | CODE | Extensions (hooks are deterministic) |
 | P29 | Per-Tool Per-Model Error Classification | **SKILL** | `harness-observe/reference.md` (analysis is LLM evaluation) |
-| P44a-g | Fallow Integration | Mixed | MCP config + `harness-gate/reference.md` instructions |
+### P44: Structural Quality Gate — sentrux Integration (replaces Fallow)
+
+sentrux fully replaces Fallow for all codebase intelligence functions. It provides everything Fallow did (dead code, duplication, complexity, boundaries) plus additional capabilities Fallow lacked: modularity analysis (Newman 2004), acyclicity detection (Tarjan's SCC), dependency depth (Lakos 1996), equality/god-file detection (Gini 1912), session baseline/diff, and MCP integration with 9 tools.
+
+| Phase | What | Method | Files |
+|-------|------|--------|-------|
+| P44a | sentrux MCP tool registration (9 tools) | CONFIG | `.pi/mcp/sentrux.json` — scan, health, session_start/end, rescan, check_rules, evolution, dsm, test_gaps |
+| P44b | Pre-verification structural gate (`sentrux check`) | BASH + SKILL | Invoked by harness-gate skill in P15b sandbox |
+| P44c | CI structural pass/fail (`sentrux check .` exits 0/1) | BASH | `.github/workflows/quality.yml` |
+| P44d | Quality Signal tracking in L5 observability | SKILL | `harness-observe/reference.md` — sentrux evolution for trending |
+| P44e | Rules engine enforcement (`.sentrux/rules.toml`) | CONFIG | Project-root `.sentrux/rules.toml` — layers, boundaries, constraints |
+| P44f | Structural baselines in L6 memory | BASH | `sentrux gate --save` before session, `sentrux gate .` after |
+| P44g | Session structural diff (catch degradation) | MCP | `session_start()` / `session_end()` via MCP — integrated into L2.5 drift monitor |
 
 ### Future Phases — Method TBD
 
@@ -223,16 +243,16 @@ Per subtask. Skill activation costs comparable to code module loading but with p
 |---------------|--------|-----------|
 | L1 Spec Hardening (skill) | ~2,500 | Skill activation ~2,000 + spec generation + Q&A |
 | L2 Planning (skill) | ~4,500 | Skill activation + plan generation + sprint contracts |
-| L2.5 Drift Monitor (code) | ~1,500-2,200 | Haiku 4.5 every 8 turns. Rule pre-filter: 0 tokens. |
-| Pre-Verification Sandbox (P15b) | ~0-200 | Deterministic compile/lint. LLM tokens only on failure. |
+| L2.5 Drift Monitor (code) | ~1,500-2,200 | Haiku 4.5 every 8 turns. Rule pre-filter: 0 tokens. sentrux session_start/end: 0 LLM tokens (MCP). |
+| Pre-Verification Sandbox (P15b) | ~0-200 | Deterministic compile/lint/sentrux check. LLM tokens only on failure. |
 | L4 Adversarial (skill + agent) | ~4,500 | Skill activation + critic sub-agent + selective debate |
-| Phase 16 Lint+Format Gate | ~0 | Deterministic bash. Skill provides instructions — 0 tokens for execution. |
-| L5 Observability (skill) | ~2,000 | Skill activation + metric analysis |
+| Phase 16 Lint+Format+Arch Gate | ~0 | Deterministic bash: biome + tsc + fallow + sentrux check. 0 LLM tokens. |
+| L5 Observability (skill) | ~2,000 | Skill activation + metric analysis. sentrux evolution: 0 LLM tokens (MCP data). |
 | L6 Memory Writes (skill) | ~1,000 | Skill activation + wiki interaction |
 | Browser Subagent (P30) | ~0-500 | Deterministic screenshot + pixel diff |
 | Artifact Generation (P31) | ~1,000 | Skill activation + artifact generation |
 | L7+L8 Orchestration + Query | ~1,000 | Wiki bootstrapping amortized |
-| **Total per subtask** | **~16,500-18,000** | Comparable to v1. Skill activation replaces code module loading. |
+| **Total per subtask** | **~16,500-18,000** | sentrux MCP tools add 0 LLM tokens — they are deterministic structural computations. |
 
 ### Savings from Skill-First Architecture
 
@@ -245,6 +265,7 @@ Per subtask. Skill activation costs comparable to code module loading but with p
 | AST truncation | 30-50% input tokens (unchanged) |
 | Fuzzy edit matching | 5-15% retry round elimination (unchanged) |
 | TS Execution Layer (P43, deferred) | 3-4x context reduction (unchanged) |
+| sentrux MCP structural checks | 0 LLM tokens for architecture gate — deterministic Rust computation. Replaces ~500-1,000 tokens of LLM-based structural review that Fallow required for interpretation. |
 
 ---
 
@@ -280,7 +301,8 @@ Unchanged from v1. Every debate verdict writes to `wiki/consensus/`. The harness
 | **Gitingest** (bulk ingestion) | P15 | Skill |
 | **pi-messenger** (stripped) | P17 | Code (transport layer — deterministic) |
 | **agent-browser** (Vercel Labs) | P30 | Bash CLI — invoked by skill |
-| **Fallow** (codebase intelligence) | P44 | MCP + bash — invoked by gate skill |
+| **sentrux** (structural quality gate) | P44 | MCP + Bash + Config — replaces Fallow. 9 MCP tools, rules engine, session diff. |
+| **Fallow** (dead code detection) | P20 gate | Bash — retained for dead code only (sentrux covers architecture). Complementary, not replaced. |
 
 ---
 
@@ -288,6 +310,7 @@ Unchanged from v1. Every debate verdict writes to `wiki/consensus/`. The harness
 
 All research from April-May 2026 remains valid. The skill-first architecture is independently validated by:
 
+- **sentrux — Structural Feedback Loop** (Mar 2026): Validates FP #2 (every pipeline layer reads wiki first), FP #4 (three quality concerns at three timings), and FP #7 (winning consensus filed). The Quality Signal (0-10,000) provides a single continuous metric for architectural health that maps directly to L5 observability and L2.5 structural drift monitoring. The MCP integration (9 tools) provides the actuator side of the cybernetic feedback loop — agents can scan, baseline, and detect degradation autonomously. (Source: [[Research: sentrux.dev]])
 - **Anthropic Agent Skills** (Dec 2025): Three-tier progressive disclosure proven at scale. Within weeks, OpenAI, Google, GitHub, Cursor adopted the open standard. (Source: [[Source: SwirlAI Agent Skills Progressive Disclosure]])
 - **Blake Crosley Harness Pattern** (Apr 2026): "The harness is a programmable runtime with an LLM kernel." 84 hooks, 48 skills production system. "Hooks guarantee execution; prompts do not." (Source: [[Source: Blake Crosley Agent Architecture Guide]])
 - **Claude Code Architecture** (Mar-May 2026): Skills + hooks + subagents + memory as the four extension primitives. (Source: [[Source: Claude API Agent Skills Overview]])
@@ -312,7 +335,7 @@ All research from April-May 2026 remains valid. The skill-first architecture is 
 | **ADR-020** | YAML task DAG | Generated by harness-plan skill, not code. |
 | **ADR-022** | 7 drift patterns | In drift-monitor.ts (code — deterministic). |
 | **ADR-025** | GitHub Issues spec storage | Used by harness-spec skill. |
-| **ADR-013** | Biome + tsc + fallow gate | Invoked by harness-gate skill (bash). |
+| **ADR-013** | Biome + tsc + fallow + sentrux gate | Invoked by harness-gate skill (bash). sentrux adds architectural enforcement: cycles, modularity, depth, equality, redundancy. |
 | **ADR-016** | pi-subagents for L4 critic | Invoked by harness-critic skill. |
 
 ---
