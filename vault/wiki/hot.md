@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-02T17:00:00
+updated: 2026-05-03T13:30:00
 created: 2026-04-30
 tags: []
 status: active
@@ -10,7 +10,93 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-03. **Skill-First Architecture**: MVP and harness implementation plans rethought from first principles. Harness layers are now markdown-based skills (`.pi/skills/harness-*/SKILL.md`) — only drift monitor and event bus remain as TypeScript code. 4 code files vs 15. Progressive disclosure keeps context lean. See below.
+2026-05-03. **Automating Software Engineering — Lovable, Bolt, Emergent, Rocket**: Universal multi-agent pattern, environment control as moat, context engineering as central constraint, 0 human-code product (Codex). See below. **Legendary Engineering Patterns** and **Skill-First Architecture** also active.
+
+---
+
+## Automating Software Engineering — Platform Patterns for Harness (May 2026)
+
+### Key Finding
+**Multi-agent architecture (Planner→Architect→Coder/Generator→Evaluator) is universal across all successful AI coding platforms.** Combined with deep engineering reports from OpenAI (Codex, 0 human-written lines) and Anthropic/OpenDev (context engineering, system reminders), clear first-principles patterns emerge for our harness.
+
+### 10 Key Findings
+1. **Multi-agent decomposition is universal**: Lovable (Planner→Architect→Coder), Anthropic (Planner→Generator→Evaluator), OpenAI (agent-to-agent review loops), OpenDev (dual-agent thinking/action separation).
+2. **Environment control is the moat**: Bolt's WebContainers ($4M ARR in 4 weeks), OpenAI's Chrome DevTools MCP, Anthropic's Playwright MCP. Agents must run and verify code, not just generate it.
+3. **Structured outputs prevent chaos**: Pydantic-typed handoffs between agents. "Structured data transforms AI from demo to production" (Lovable clone).
+4. **Context engineering is the central constraint**: Progressive disclosure (AGENTS.md as ToC, not encyclopedia), adaptive compaction (5 stages, 54% reduction), system reminders at decision points (OpenDev).
+5. **Repository as system of record**: "What Codex can't see doesn't exist." All knowledge in repo as versioned markdown. Doc-gardening agents scan for staleness (OpenAI).
+6. **Enforce architecture mechanically**: Custom linters + structural tests, not prompts. "Constraints become multipliers with agents" (OpenAI).
+7. **Generator-evaluator loop (GAN-inspired)**: Separate evaluator with hard-threshold criteria. Sprint contracts (agree on "done" before coding). Evaluator uses Playwright to actually click through apps.
+8. **"Code generation is a commodity"** (Rocket.new thesis): Pre-build strategy + competitive intelligence is the frontier. $15M seed, 1.5M users.
+9. **0 lines of human code**: OpenAI built production product (~1M lines, ~1.5K PRs) with Codex. Humans steer, agents execute. 3.5 PRs/engineer/day.
+10. **Garbage collection for AI slop**: Continuous background cleanup agents. "Golden principles" encoded mechanically. Technical debt = high-interest loan.
+
+### Sources (6 new)
+[[Source: Lovable Architecture & Clone Analysis]], [[Source: Bolt.new Architecture & Case Study]], [[Source: Rocket.new — Vibe Solutioning Platform]], [[Source: OpenAI Harness Engineering — 0 Lines of Human Code]], [[Source: OpenDev — Building AI Coding Agents for the Terminal]], [[anthropic2026-harness-design]]
+
+### Concepts Created (2 new)
+[[Context-Aware System Reminders]] — Event-driven behavioral guidance at decision points
+[[Multi-Agent AI Coding Architecture]] — Universal pattern with structured handoffs
+
+### Entities Created (4)
+[[Lovable (company)]], [[Bolt.new (StackBlitz)]], [[Rocket.new]], [[Emergent Labs]]
+
+### Synthesis
+[[Research: Automating Software Engineering - Lovable, Bolt, Emergent, Rocket]] — Full research: 10 findings, 3 contradictions, 5 open questions
+
+### Page Updated
+[[context-engineering]] (stub → developing, enriched with 8 first principles from OpenDev/OpenAI/Anthropic)
+
+---
+
+## Legendary Engineering Patterns for AI Harness (May 2026)
+
+### Key Finding
+**10 cross-cutting engineering patterns from 6 legendary programmers — Torvalds, Thompson, Ritchie, Stroustrup, Hejlsberg, van Rossum — map directly to AI coding harness design.** The core insight: the same principles that produced the world's most durable software must constrain AI-generated code. Deterministic guardrails (type systems, linters, tests) become more important with AI, not less.
+
+### 10 Patterns → Harness Map
+| Pattern | Source | Harness Map |
+|---------|--------|-------------|
+| Fast feedback loops | Hejlsberg, Torvalds | Instant lint/build on AI output; pre-execution type checking |
+| Composability over monoliths | Thompson, Ritchie, McIlroy | Agent composition: specialized sub-agent pipeline stages |
+| Chain of trust | Torvalds | Tiered verification: lint → type-check → test → critic → human |
+| Subtractive design | Thompson, McIlroy | Harness "suggest deletion" mode — NOT YET IMPLEMENTED |
+| Behavioral compatibility | Hejlsberg, Stroustrup, Torvalds | Fidelity gates: preserve existing test behavior |
+| Pragmatism over perfection | van Rossum | "Correct enough" over "provably correct" |
+| Readability first | Torvalds, van Rossum, Kernighan | Post-generation lint/style enforcement |
+| Deep understanding → leverage | Thompson | Semantic codebase indexing prerequisite to generation |
+| Type systems as guardrails | Hejlsberg, Stroustrup | Mandatory deterministic checks before human review |
+| Shared context/community | Thompson, Ritchie, Kernighan | Wiki as digital Unix Room — all decisions visible, searchable |
+
+### Critical Consensus
+- **All six programmers oppose "vibe coding"** — human architectural control is non-negotiable
+- **Hejlsberg + Stroustrup converge**: type systems are THE AI guardrail
+- **Hejlsberg + van Rossum converge**: type hints above ~10K lines, dynamic below
+- **van Rossum**: "We stay in control where it comes to architecture and API design"
+- **Torvalds**: vibe coding "horrible for production, fine for learning" (2026)
+
+### Sources (5)
+[[linux-kernel-coding-workflow]], [[unix-philosophy]], [[birth-of-unix-kernighan-interview]], [[hejlsberg-7-learnings]], [[guido-python-design-philosophy]]
+
+### Concept Created
+[[legendary-engineering-patterns-harness]] — Full 10-pattern mapping with harness integration details
+
+### Entities Created (6)
+[[Linus Torvalds]], [[Ken Thompson]], [[Dennis Ritchie]], [[Anders Hejlsberg]], [[Guido van Rossum]], [[Bjarne Stroustrup]]
+
+### Synthesis
+[[Research: Engineering Workflows of Legendary Programmers and AI Harness Mapping]] — Full research synthesis: 10 findings, 5 contradictions resolved, 5 open questions
+
+### Open Questions
+- Subtractive design in AI harness — not yet designed in any layer
+- Thompson-level codebase understanding for AI agents — benchmark needed
+- Balance fast feedback vs thorough verification per change type
+- Harness equivalent of "don't break userspace"
+- Van Rossum's 10K-line typing threshold — empirical validation needed
+
+---
+
+**Skill-First Architecture**: Harness layers as markdown skills (`.pi/skills/harness-*/SKILL.md`) — only drift monitor and event bus remain as TypeScript code. 4 code files vs 15. Progressive disclosure keeps context lean. See below.
 
 ## Skill-First Harness Architecture (May 2026)
 

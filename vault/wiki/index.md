@@ -2,7 +2,7 @@
 type: index
 status: active
 created: 2026-04-28
-updated: 2026-05-02
+updated: 2026-05-03
 tags: [meta, index, catalog]
 ---
 
@@ -61,6 +61,12 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[harness-configuration-layers]] | Four-layer config: Signal, Gate, Channel, Completion — now provider-native (v2) |
 | [[self-evolving-harness]] | Auto-synthesis and meta-optimization of harness code |
 
+## Concepts — Legendary Engineering Patterns
+
+| Concept | Summary |
+|---------|---------|
+| [[legendary-engineering-patterns-harness]] | 10 patterns from Torvalds/Thompson/Ritchie/Stroustrup/Hejlsberg/van Rossum mapped to harness layers |
+
 ## Concepts — Execution & Drift
 
 | Concept | Summary |
@@ -117,6 +123,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Concept | Summary |
 |---------|---------|
+| [[Multi-Agent AI Coding Architecture]] | Universal pattern: Planner→Architect→Coder/Generator→Evaluator with structured handoffs |
+| [[Context-Aware System Reminders]] | Event-driven injection of behavioral guidance at decision points to counteract attention-decay |
 | [[Context Engine (AI Coding)]] | Semantic search engine providing deep codebase understanding |
 | [[Semantic Codebase Indexing]] | Converting code to vector embeddings for similarity search |
 | [[Dual-Model Agent Architecture]] | Fast model for iteration + deliberative model for selection |
@@ -157,6 +165,16 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Entity | Summary |
 |--------|---------|
+| [[Lovable (company)]] | Full-stack AI dev platform (formerly GPT Engineer). SOC 2, ISO 27001, multi-agent pipeline |
+| [[Bolt.new (StackBlitz)]] | Browser-based AI web dev. WebContainers + Claude. 0→$4M ARR in 4 weeks. Open source |
+| [[Rocket.new]] | "Vibe Solutioning" platform: strategy + building + competitive intelligence. $15M seed, 1.5M users |
+| [[Emergent Labs]] | YC S24. Autonomous coding agents replacing traditional software development |
+| [[Linus Torvalds]] | Linux kernel, Git, chain-of-trust, don't break userspace |
+| [[Ken Thompson]] | Unix co-creator, extreme leverage from deep understanding |
+| [[Dennis Ritchie]] | Unix co-creator, C language, K&R, economy from constraints |
+| [[Anders Hejlsberg]] | Turbo Pascal, Delphi, C#, TypeScript — fast feedback, behavioral compatibility |
+| [[Guido van Rossum]] | Python — pragmatism over perfection, human control over architecture |
+| [[Bjarne Stroustrup]] | C++ — evolutionary design, compatibility over purity, static typing |
 | [[Augment Code]] | AI coding platform with Context Engine, #1 SWE-bench Pro |
 | [[lean-ctx]] | Context Runtime for AI Agents — adopted via pi-lean-ctx native |
 | [[ck-tool]] | Hybrid code search tool, Rust, 1.6k ⭐, MCP-native |
@@ -203,6 +221,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: GitHub Issues as Harness Spec Storage]] | GitHub Issues as cloud-persistent spec storage with sub-issues + dependencies |
 
 | [[Research: Codex State-of-the-Art Harness Improvements]] | Codex open-source architecture: 7 validations, 5 new gaps, 3 novel patterns, 5 new phases |
+| [[Research: Automating Software Engineering - Lovable, Bolt, Emergent, Rocket]] | Platform architectures (Lovable, Bolt, Rocket, Emergent) + first-principles harness patterns from OpenAI/Anthropic/OpenDev |
 | [[Research: Fallow Codebase Intelligence Harness Integration]] | Fallow: 7 harness integration points, cross-ecosystem gap analysis, P44 phases |
 | [[Research: Claude Code State-of-the-Art Harness Improvements]] | Claude Code architecture: 6 gaps, 5 new phases, 4 first principles |
 | [[Research: cursor.sh Harness Innovations]] | Cursor production harness: 5 validations, 4 new gaps, first-principles lessons |
@@ -214,11 +233,22 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: Prompt Renderer for Multi-Model Agent Harness]] | Build-time prompt renderer: per-model compilation, caching, variable system, npm distribution |
 | [[Research: TypeScript Best Practices and Codebase Structure]] | Strict mode, runtimes, barrel files, monorepos, folder structure, error handling, testing |
 | [[Research: Skill-First Harness Architecture]] | **NEW (May 2026)**: Rethought MVP + harness plans from first principles. Skills as atomic unit. 4 code files vs 15. |
+| [[Research: Engineering Workflows of Legendary Programmers and AI Harness Mapping]] | **NEW (May 2026)**: 10 patterns from 6 legendary programmers mapped to harness layers |
 
 ## Sources (External Research)
 
 | Source | Type | Summary |
 |--------|------|---------|
+| [[Source: Lovable Architecture & Clone Analysis]] | blog | Multi-agent architecture: Planner→Architect→Coder, Pydantic-typed handoffs, LangGraph orchestration |
+| [[Source: Bolt.new Architecture & Case Study]] | case-study | WebContainers + Claude, 0→$4M ARR in 4 weeks, Remix frontend, open source |
+| [[Source: Rocket.new — Vibe Solutioning Platform]] | news | Strategy→Build→Intelligence platform, $15M seed, 1.5M users, "vibe McKinsey" |
+| [[Source: OpenAI Harness Engineering — 0 Lines of Human Code]] | engineering-blog | Codex-built product: 0 human-written lines, ~1M lines code, progressive disclosure, architecture enforcement |
+| [[Source: OpenDev — Building AI Coding Agents for the Terminal]] | paper | Compound AI system, adaptive compaction, system reminders, 5-layer safety, MCP lazy discovery |
+| [[linux-kernel-coding-workflow]] | official-documentation | Linux kernel coding style + dev process (Torvalds, 2026) |
+| [[unix-philosophy]] | encyclopedia | Unix philosophy (Thompson, Ritchie, McIlroy, Raymond) |
+| [[birth-of-unix-kernighan-interview]] | interview-podcast | Bell Labs Unix creation (Kernighan, 2020) |
+| [[hejlsberg-7-learnings]] | interview-blog | 7 engineering lessons (Hejlsberg, GitHub Blog 2026) |
+| [[guido-python-design-philosophy]] | interview-blog | Python design philosophy (van Rossum, 2009/2025) |
 | [[Source: Google Gemini CLI Architecture Docs]] | official-docs | Architecture: 2 packages (cli+core), ReAct loop, tool system |
 | [[Source: Google Blog - Gemini CLI Announcement]] | official-announcement | Launch: free tier, 1M token window, MCP, Google Search grounding |
 | [[Source: Render AI Coding Agents Benchmark 2025]] | benchmark-report | Independent: Cursor 8/10, Gemini 6.8/10, strengths/weaknesses |
