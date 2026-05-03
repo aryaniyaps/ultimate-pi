@@ -12,6 +12,12 @@ Reference this skill when writing any wiki page. Obsidian extends standard Markd
 
 ---
 
+## Wiki Path Resolution
+
+This skill provides Obsidian syntax reference. It does NOT perform file operations itself. When invoked by other skills (wiki-ingest, wiki-save, etc.), those skills handle wiki path resolution via `VAULT_WIKI_PATH`.
+
+---
+
 ## Wikilinks
 
 Internal links use double brackets. The filename without extension.

@@ -1,6 +1,6 @@
 # MCP Setup
 
-MCP lets Claude read and write vault notes directly without copy-paste. Four options ordered from simplest to most featureful.
+MCP lets pi read and write vault notes directly without copy-paste. Four options ordered from simplest to most featureful.
 
 > [!tip] Recommendation
 > If you have **Obsidian v1.12 or newer**, start with **Option D: Obsidian CLI**. It needs no MCP server, no plugins, and no TLS workarounds. Use Options A or B only if you need persistent MCP integration or are on an older Obsidian version.
@@ -9,7 +9,7 @@ MCP lets Claude read and write vault notes directly without copy-paste. Four opt
 
 ## Step 1: Install the Local REST API Plugin
 
-You must do this in Obsidian (Claude cannot do it programmatically):
+You must do this in Obsidian (pi cannot do it programmatically):
 
 1. Obsidian > Settings > Community Plugins > Turn off Restricted Mode
 2. Browse > Search "Local REST API" > Install > Enable
@@ -31,17 +31,25 @@ You should get a JSON response with vault info.
 Uses MarkusPfundstein's mcp-obsidian. Requires the Local REST API plugin running.
 
 ```bash
-claude mcp add-json obsidian-vault '{
-  "type": "stdio",
-  "command": "uvx",
-  "args": ["mcp-obsidian"],
-  "env": {
-    "OBSIDIAN_API_KEY": "<YOUR_KEY>",
-    "OBSIDIAN_HOST": "127.0.0.1",
-    "OBSIDIAN_PORT": "27124",
-    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+Add the MCP server to pi's configuration. In `.pi/settings.json` or via pi's MCP bridge, configure:
+
+```json
+{
+  "mcpServers": {
+    "obsidian-vault": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["mcp-obsidian"],
+      "env": {
+        "OBSIDIAN_API_KEY": "<YOUR_KEY>",
+        "OBSIDIAN_HOST": "127.0.0.1",
+        "OBSIDIAN_PORT": "27124",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+      }
+    }
   }
-}' --scope user
+}
+```
 ```
 
 > [!warning] Security
@@ -56,11 +64,19 @@ Capabilities: read notes, write notes, search, patch frontmatter fields, append 
 No Obsidian plugin needed. Reads the vault directory directly.
 
 ```bash
-claude mcp add-json obsidian-vault '{
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@bitbonsai/mcpvault@latest", "/absolute/path/to/your/vault"]
-}' --scope user
+Add the MCP server to pi's configuration. In `.pi/settings.json` or via pi's MCP bridge, configure:
+
+```json
+{
+  "mcpServers": {
+    "obsidian-vault": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@bitbonsai/mcpvault@latest", "/absolute/path/to/your/vault"]
+    }
+  }
+}
+```
 ```
 
 Replace `/absolute/path/to/your/vault` with the actual vault path.
@@ -77,7 +93,7 @@ No MCP needed. Use curl in bash throughout the session. See `rest-api.md` for al
 
 ## Option D: Obsidian CLI (recommended for v1.12+)
 
-Obsidian shipped a native CLI in v1.12 (2026). It exposes vault operations directly to the terminal. No REST API plugin, no MCP server, no self-signed certs, no TLS workarounds. Claude calls it through the Bash tool.
+Obsidian shipped a native CLI in v1.12 (2026). It exposes vault operations directly to the terminal. No REST API plugin, no MCP server, no self-signed certs, no TLS workarounds. pi calls it through the Bash tool.
 
 **Check if available:**
 ```bash
@@ -116,7 +132,7 @@ The `kepano/obsidian-skills` repo includes an `obsidian-cli` skill that wraps th
 
 ## Use `--scope user`
 
-Both MCP options use `--scope user` so the vault is available across all Claude Code projects, not just the one where you ran the command.
+Configure MCP servers at the user level so the vault is available across all pi projects, not just the one where you ran the command.
 
 ---
 
@@ -125,10 +141,9 @@ Both MCP options use `--scope user` so the vault is available across all Claude 
 After setup:
 
 ```bash
-claude mcp list               # confirm the server appears
-claude mcp get obsidian-vault # confirm the path or URL is correct
+Check pi's MCP status to confirm the server appears and the path/URL is correct.
 ```
 
-In a Claude Code session, type `/mcp` to check connection status.
+In a pi session, type `/mcp` to check connection status.
 
 Then test: "List all notes in my wiki folder."

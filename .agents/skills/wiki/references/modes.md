@@ -20,7 +20,7 @@ vault/
 ├── _meta/
 │   ├── index.md
 │   └── log.md
-└── CLAUDE.md
+└── WIKI.md
 ```
 
 Frontmatter for `wiki/pages/` notes:
@@ -65,7 +65,7 @@ vault/
 ├── _meta/
 │   ├── index.md
 │   └── log.md
-└── CLAUDE.md
+└── WIKI.md
 ```
 
 Frontmatter for `wiki/modules/` notes:
@@ -107,7 +107,7 @@ vault/
 ├── _meta/
 │   ├── index.md
 │   └── log.md
-└── CLAUDE.md
+└── WIKI.md
 ```
 
 Frontmatter for `wiki/decisions/` notes:
@@ -147,7 +147,7 @@ vault/
 │   ├── index.md
 │   ├── log.md
 │   └── hot-cache.md   # ~500-word summary of most active context
-└── CLAUDE.md
+└── WIKI.md
 ```
 
 Frontmatter for `wiki/goals/` notes:
@@ -165,7 +165,7 @@ updated: YYYY-MM-DD
 ---
 ```
 
-Hot cache note: `_meta/hot-cache.md` is a ~500-word file Claude updates at the end of each session. It captures current focus areas, recent wins, and open threads. This prevents Claude from having to crawl the whole wiki to answer "where were we?".
+Hot cache note: `_meta/hot-cache.md` is a ~500-word file pi updates at the end of each session. It captures current focus areas, recent wins, and open threads. This prevents pi from having to crawl the whole wiki to answer "where were we?".
 
 Key wiki pages to create: `[[North Star]]`, `[[Weekly Review Template]]`, `[[Annual Goals]]`
 
@@ -187,7 +187,7 @@ vault/
 ├── _meta/
 │   ├── index.md
 │   └── log.md
-└── CLAUDE.md
+└── WIKI.md
 ```
 
 Frontmatter for `wiki/papers/` notes:
@@ -228,7 +228,7 @@ vault/
 ├── _meta/
 │   ├── index.md
 │   └── log.md
-└── CLAUDE.md
+└── WIKI.md
 ```
 
 Frontmatter for `wiki/concepts/` notes:

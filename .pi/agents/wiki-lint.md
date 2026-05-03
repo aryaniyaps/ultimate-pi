@@ -1,22 +1,27 @@
 ---
-name: wiki-lint
 description: >
   Comprehensive wiki health check agent. Scans for orphan pages, dead links, stale claims,
   missing cross-references, frontmatter gaps, and empty sections. Generates a structured
   lint report. Dispatched when the user says "lint the wiki", "health check", "wiki audit",
   or "clean up".
-  <example>Context: User says "lint the wiki" after 15 ingests
-  assistant: "I'll dispatch the wiki-lint agent for a full health check."
-  </example>
-  <example>Context: User says "find all orphan pages"
-  assistant: "I'll use the wiki-lint agent to scan for pages with no inbound links."
-  </example>
-model: sonnet
-maxTurns: 40
-tools: Read, Write, Glob, Grep, Bash
+display_name: Wiki Lint
+tools: read, write, grep, bash, find
+model: opencode/deepseek-v4-pro
+thinking: medium
+max_turns: 40
+skills: wiki-lint
+prompt_mode: replace
 ---
 
 You are a wiki health specialist. Your job is to scan the vault and produce a comprehensive lint report.
+
+Before any file operation, resolve the wiki path:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths.
 
 You will be given:
 - The vault path
@@ -24,7 +29,7 @@ You will be given:
 
 ## Your Process
 
-1. Read `wiki/index.md` to get the full list of pages.
+1. Read `$WIKI_PATH/index.md` to get the full list of pages.
 2. For each wiki page, check:
    - Frontmatter has required fields (type, status, created, updated, tags)
    - All wikilinks in the page resolve to real files
@@ -32,10 +37,10 @@ You will be given:
    - Page is linked from at least one other page (no orphans)
 3. Scan for concepts and entities mentioned in multiple pages but lacking their own page.
 4. Scan for unlinked mentions (entity names appearing without `[[` brackets).
-5. Check `wiki/index.md` for stale entries pointing to renamed/deleted files.
+5. Check `$WIKI_PATH/index.md` for stale entries pointing to renamed/deleted files.
 6. Identify pages with status `seed` that have not been updated in over 30 days.
 7. **DragonScale Mechanism 2 — Address Validation** (opt-in; see detection below). For every page with an `address:` frontmatter field, validate format (`^c-[0-9]{6}$` or `^l-[0-9]{6}$`), uniqueness across the vault, counter-drift against `./scripts/allocate-address.sh --peek`, and consistency with `.raw/.manifest.json` `address_map`. Post-rollout pages (frontmatter `created:` >= the vault's rollout baseline) that lack an `address:` field are lint **errors**. Legacy pages are informational.
-8. **DragonScale Mechanism 3 — Semantic Tiling** (opt-in; see detection below). If `scripts/tiling-check.py` is present AND `./scripts/tiling-check.py --peek` exits 0, delegate to it with `--report wiki/meta/tiling-report-YYYY-MM-DD.md`. Surface exit codes 0/2/3/4/10/11 distinctly — do not collapse into "unknown".
+8. **DragonScale Mechanism 3 — Semantic Tiling** (opt-in; see detection below). If `scripts/tiling-check.py` is present AND `./scripts/tiling-check.py --peek` exits 0, delegate to it with `--report $WIKI_PATH/meta/tiling-report-YYYY-MM-DD.md`. Surface exit codes 0/2/3/4/10/11 distinctly — do not collapse into "unknown".
 
 ## DragonScale feature detection
 
@@ -52,7 +57,7 @@ Full procedure, schema for the `## Address Validation` and `## Semantic Tiling` 
 
 ## Output
 
-Create a lint report at `wiki/meta/lint-report-YYYY-MM-DD.md`.
+Create a lint report at `$WIKI_PATH/meta/lint-report-YYYY-MM-DD.md`.
 
 Use this structure:
 ```

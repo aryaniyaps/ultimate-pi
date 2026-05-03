@@ -1,5 +1,5 @@
 ---
-name: save
+name: wiki-save
 description: >
   Save the current conversation, answer, or insight into the Obsidian wiki vault as a
   structured note. Analyzes the chat, determines the right note type, creates frontmatter,
@@ -15,6 +15,18 @@ allowed-tools: Read Write Edit Glob Grep
 Good answers and insights shouldn't disappear into chat history. This skill takes what was just discussed and files it as a permanent wiki page.
 
 The wiki compounds. Save often.
+
+---
+
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/index.md` → `$WIKI_PATH/index.md` (default: `vault/wiki/index.md`).
 
 ---
 
@@ -90,7 +102,7 @@ status: active
 ## Writing Style
 
 - Declarative, present tense. Write the knowledge, not the conversation.
-- Not: "The user asked about X and Claude explained..."
+- Not: "The user asked about X and pi explained..."
 - Yes: "X works by doing Y. The key insight is Z."
 - Include all relevant context. Future sessions should be able to read this page cold.
 - Link every mentioned concept, entity, or wiki page with wikilinks.

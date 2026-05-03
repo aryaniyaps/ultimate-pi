@@ -11,6 +11,18 @@ A fold is **additive**: child log entries and their referenced pages are never m
 
 ---
 
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/log.md` → `$WIKI_PATH/log.md` (default: `vault/wiki/log.md`).
+
+---
+
 ## Scope boundary (explicit)
 
 This skill does **not** implement:
@@ -48,9 +60,9 @@ fold-k{K}-from-{EARLIEST-DATE}-to-{LATEST-DATE}-n{COUNT}
 
 Example: `fold-k3-from-2026-04-10-to-2026-04-23-n8`.
 
-The filename in commit mode is `wiki/folds/{FOLD-ID}.md`. No date-of-creation in the filename. No timestamp in the title.
+The filename in commit mode is `$WIKI_PATH/folds/{FOLD-ID}.md`. No date-of-creation in the filename. No timestamp in the title.
 
-**Duplicate detection (required)**: before emitting any output, check if `wiki/folds/{FOLD-ID}.md` already exists. If so, report "Fold already exists at wiki/folds/{FOLD-ID}.md. Use --force to overwrite, or pick a different range." and stop. This is the no-op idempotency guarantee; byte-identical content is NOT guaranteed (LLM prose varies) but the filename and scope are.
+**Duplicate detection (required)**: before emitting any output, check if `$WIKI_PATH/folds/{FOLD-ID}.md` already exists. If so, report "Fold already exists at $WIKI_PATH/folds/{FOLD-ID}.md. Use --force to overwrite, or pick a different range." and stop. This is the no-op idempotency guarantee; byte-identical content is NOT guaranteed (LLM prose varies) but the filename and scope are.
 
 ---
 
@@ -70,7 +82,7 @@ If fewer than `2^k` log entries exist, report the shortfall and stop. Do not sil
 ### 1. Parse log entries
 
 ```
-grep -n "^## \[" wiki/log.md | head -{2^k}
+grep -n "^## \[" "$WIKI_PATH/log.md" | head -{2^k}
 ```
 
 Record for each entry: line number, date, operation, title, and the following bullet lines until the next `## [` or end-of-section.
@@ -86,7 +98,7 @@ Build a structured children list:
 ```yaml
 children:
   - date: "2026-04-23"
-    op: "save"
+    op: "wiki-save"
     title: "DragonScale Memory v0.2 — post-adversarial-review"
     page: "[[DragonScale Memory]]"
   - ...
@@ -123,12 +135,12 @@ If any check fails, abort and report the specific failure.
 **Dry-run**: use Bash `cat <<'EOF' ... EOF` to stdout. Do not use Write. Print the fold ID and a one-line summary of what the commit step would do.
 
 **Commit** (only after user says "commit the fold"):
-1. `Write` the fold page to `wiki/folds/{FOLD-ID}.md`. (PostToolUse hook will auto-commit this.)
-2. `Edit` `wiki/index.md` to add the fold link under a `## Folds` section (create section if missing). (Hook auto-commits.)
-3. `Edit` `wiki/log.md` to prepend one entry:
+1. `Write` the fold page to `$WIKI_PATH/folds/{FOLD-ID}.md`. (PostToolUse hook will auto-commit this.)
+2. `Edit` `$WIKI_PATH/index.md` to add the fold link under a `## Folds` section (create section if missing). (Hook auto-commits.)
+3. `Edit` `$WIKI_PATH/log.md` to prepend one entry:
    ```
    ## [YYYY-MM-DD] fold | batch-exponent-k{K} rollup of N entries
-   - Location: wiki/folds/{FOLD-ID}.md
+   - Location: $WIKI_PATH/folds/{FOLD-ID}.md
    - Range: {EARLIEST-DATE} to {LATEST-DATE}
    - Children: N log entries
    ```
@@ -150,7 +162,7 @@ See `references/fold-template.md` for the canonical frontmatter and body layout.
 2. **Additive**: children are never modified.
 3. **Bounded reads**: 0-15 child-page reads per fold.
 4. **Extractive**: zero invented facts. Count checks enforced.
-5. **No chaining**: wiki-fold does not invoke wiki-lint, wiki-ingest, autoresearch, or save.
+5. **No chaining**: wiki-fold does not invoke wiki-lint, wiki-ingest, autoresearch, or wiki-save.
 
 ---
 
@@ -162,7 +174,7 @@ See `references/fold-template.md` for the canonical frontmatter and body layout.
 - Do not write "emergent themes" that span entries without naming which entries contribute.
 - Do not claim byte-identical idempotency. Structural idempotency is the actual guarantee.
 - Do not suppress or bypass the PostToolUse auto-commit hook.
-- Do not update `wiki/hot.md`. Ownership stays with save/ingest skills.
+- Do not update `$WIKI_PATH/hot.md`. Ownership stays with wiki-save/ingest skills.
 
 ---
 
@@ -181,11 +193,11 @@ Or: `git revert` the three auto-commits. Child pages are untouched in either pat
 
 User: "fold the log, dry-run k=3"
 
-1. Parse `wiki/log.md` top 8 entries.
+1. Parse `$WIKI_PATH/log.md` top 8 entries.
 2. Build structured children list (8 records).
 3. Read 0-10 referenced pages as needed.
 4. Produce fold ID: `fold-k3-from-2026-04-10-to-2026-04-23-n8`.
-5. Check `wiki/folds/fold-k3-from-2026-04-10-to-2026-04-23-n8.md` does not exist.
+5. Check `$WIKI_PATH/folds/fold-k3-from-2026-04-10-to-2026-04-23-n8.md` does not exist.
 6. Write fold body following the template.
 7. Run self-check (frontmatter/table consistency, count verification).
 8. Emit via `cat <<'EOF' ... EOF` to stdout.

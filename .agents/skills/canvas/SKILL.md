@@ -15,6 +15,18 @@ A canvas is a JSON file Obsidian renders as an infinite visual board. This skill
 
 ---
 
+## Wiki Path Resolution
+
+All `wiki/` paths in this skill are relative to the wiki directory inside the Obsidian vault. Resolve before any file operation:
+
+```bash
+WIKI_PATH="${VAULT_WIKI_PATH:-vault/wiki}"
+```
+
+Use `$WIKI_PATH/` as the prefix for all `wiki/...` file paths. Example: `wiki/canvases/main.canvas` → `$WIKI_PATH/canvases/main.canvas` (default: `vault/wiki/canvases/main.canvas`).
+
+---
+
 ## Default Canvas
 
 `wiki/canvases/main.canvas`
@@ -272,7 +284,4 @@ When `/banana` finishes generating images, suggest:
 
 ## See Also
 
-For standalone visual production (12 templates, 6 layout algorithms, AI generation,
-presentations), see [claude-canvas](https://github.com/AgriciDaniel/claude-canvas).
-This skill handles wiki-scoped visual boards. claude-canvas handles full-featured
-canvas orchestration for any project.
+This skill handles wiki-scoped visual boards inside the Obsidian vault.

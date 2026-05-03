@@ -26,7 +26,14 @@ pnpm-debug.log*
 /_templates
 /_attachments
 /.obsidian
+.vault-meta/
 
 # Skill lock file (auto-generated, skip lint)
 skills-lock.json
 .firecrawl/
+.fallow-baseline.json
+
+# Harness artifacts
+.pi/harness/critics/
+.pi/harness/plans/
+.pi/harness/specs/

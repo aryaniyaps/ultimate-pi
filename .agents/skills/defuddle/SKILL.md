@@ -12,6 +12,12 @@ Use this before any URL ingestion. It is optional but strongly recommended. It c
 
 ---
 
+## Wiki Path Resolution
+
+This skill saves cleaned content to `.raw/` (relative to vault root). It does NOT write to `wiki/` directly. The vault root is the working directory. Other skills (wiki-ingest) handle wiki path resolution via `VAULT_WIKI_PATH` when reading from `.raw/` and writing to `wiki/`.
+
+---
+
 ## Install
 
 ```bash
