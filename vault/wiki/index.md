@@ -9,14 +9,14 @@ tags: [meta, index, catalog]
 # Codebase Map & Architecture Wiki
 
 ## Overview
-This wiki maps the codebase architecture, tracks key software design decisions, and serves as the persistent memory layer for the ultimate-pi agentic harness. See [[harness-implementation-plan]] for the authoritative master plan.
+This wiki maps the codebase architecture, tracks key software design decisions, and serves as the persistent memory layer for the ultimate-pi agentic harness. See [[harness-implementation-plan]] for the authoritative master plan (updated May 2026: skill-first v2 architecture).
 
 ## Harness Pipeline
 
 | Layer | Module | Summary |
 |-------|--------|---------|
 | — | [[harness]] | 8-layer mandatory pipeline with drift monitor + cross-cutting tool enhancements |
-| — | [[harness-implementation-plan]] | Master build plan: 42 phases, unified token budget, all research integrated (Codex, Cursor, Antigravity, Claude Code) |
+| — | [[harness-implementation-plan]] | Master build plan (Skill-First v2): phases mapped to skills vs code, unified token budget, all research integrated |
 | L1 | [[spec-hardening]] | Block execution until ambiguities resolved |
 | L2 | [[structured-planning]] | Machine-readable task DAG + sprint contracts |
 | L2.5 | [[drift-detection-unified]] | Runtime drift monitor: 3 paradigms (tool-call, spec, implementation) |
@@ -79,6 +79,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[fork-safe-spec-storage]] | Fork isolation: gitignored cache + `harness init` bootstrap |
 | [[content-addressed-spec-identity]] | Content-hash spec identity + `harness migrate` transfer-on-merge |
 | [[harness-engineering-first-principles]] | Synthesized 12 first principles from Fowler, OpenAI, LangChain, Augment |
+| [[skill-first-architecture]] | **NEW (May 2026)**: Harness layers as markdown skills — only drift monitor and event bus remain as code. Zero-compile iteration. |
 | [[agent-skills-pattern]] | Progressive disclosure: skills loaded on-demand to prevent context rot |
 | [[policy-engine-pattern]] | Pre-execution gates: deterministic constraints vs probabilistic compliance |
 | [[gemini-cli-architecture]] | Gemini CLI SOTA: 15 harness innovations, 2-package architecture, weekly releases |
@@ -141,8 +142,8 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 |---------|--------|
 | [[antigravity-agent-first-architecture]] | Two-view control plane: Editor View + Manager View for multi-agent orchestration |
 | [[agent-artifacts-verifiable-deliverables]] | Trust via human-reviewable deliverables instead of raw tool logs |
-| [[browser-harness-agent]] | Thin CDP harness (9.4K stars, MIT) — self-healing LLM→Chrome bridge via raw CDP, replaces Puppeteer |
-| [[browser-subagent-visual-verification]] | Headless browser agent that visually verifies UI changes (now uses browser-use instead of Puppeteer) |
+| [[agent-browser-browser-automation]] | Vercel Labs agent-browser (31.4K stars, Apache 2.0, Rust-native) — browser automation CLI for AI agents. Snapshot + refs, annotated screenshots, structured diff. Replaces browser-harness for P30 May 2026. |
+| [[browser-subagent-visual-verification]] | Headless browser agent that visually verifies UI changes (now uses Vercel Labs agent-browser — May 2026) |
 
 ## Modules — Other
 
@@ -212,6 +213,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: executor.sh Harness Integration]] | executor.sh: integration layer scope, 3 new P43 sub-phases (catalog, discovery, policy), build vs integrate decision |
 | [[Research: Prompt Renderer for Multi-Model Agent Harness]] | Build-time prompt renderer: per-model compilation, caching, variable system, npm distribution |
 | [[Research: TypeScript Best Practices and Codebase Structure]] | Strict mode, runtimes, barrel files, monorepos, folder structure, error handling, testing |
+| [[Research: Skill-First Harness Architecture]] | **NEW (May 2026)**: Rethought MVP + harness plans from first principles. Skills as atomic unit. 4 code files vs 15. |
 
 ## Sources (External Research)
 
@@ -288,7 +290,11 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[google-antigravity-wikipedia]] | encyclopedia | Antigravity: VS Code fork, Gemini 3.1, Windsurf $2.4B acquisition |
 | [[cursor-vs-antigravity-2026]] | comparison | Cursor v2.6 vs Antigravity v1.20: centaur vs manager, benchmarks |
 | [[Source: Build-Time Prompt Compilation Architecture]] | architecture-analysis | Real tools: DIY pipeline (js-yaml + PromptWeaver + per-model renderers), replaces fabricated PromptKit PackC |
-| [[Source: browser-harness CDP Harness]] | official-repo | browser-harness: 9.4K stars, MIT, thin CDP harness — self-healing LLM-to-Chrome bridge, replaces Puppeteer for P30 |
+| [[Source: SwirlAI Agent Skills Progressive Disclosure]] | newsletter | Three-tier progressive disclosure, ecosystem adoption speed, skills as system design pattern (Mar 2026) |
+| [[Source: Claude API Agent Skills Overview]] | official-docs | Filesystem-based skill architecture, three loading levels, security model |
+| [[Source: Blake Crosley Agent Architecture Guide]] | engineering-blog | Complete harness pattern: hooks, skills, subagents, multi-agent orchestration, production results (Apr 2026) |
+| [[Source: Vercel Labs agent-browser]] | official-repo | agent-browser: 31.4K stars, Apache 2.0, Rust-native browser automation CLI for AI agents — snapshot + refs, annotated screenshots, structured diff. Replaces browser-harness for P30. |
+| [[Source: browser-harness CDP Harness]] | official-repo | browser-harness: 9.4K stars, MIT, thin CDP harness — self-healing LLM-to-Chrome bridge. SUPERSEDED by agent-browser for P30 (May 2026). |
 | [[Source: AgentBus Jinja2 Prompt Pipelines]] | engineering-blog | Jinja2 templating: inheritance, conditionals, loops, pipeline runner |
 | [[Source: TianPan Prompt Caching Architecture]] | engineering-blog | Multi-tier caching: semantic→prefix→full, 60-90% savings, cache boundary control |
 | [[Source: Arxiv — Don't Break the Cache]] | academic-paper | PwC evaluation: 41-80% cost reduction, system-prompt-only caching optimal |
@@ -300,6 +306,12 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[ts-folder-structure-mingyang]] | article | Production-grade Node.js/TS folder structure: Clean Architecture approach |
 | [[ts-best-practices-2025-devto]] | article | TS best practices 2025: type safety, advanced types, linting, tooling |
 | [[ts-result-error-handling-kkalamarski]] | article | Result monad pattern for declarative error handling in TypeScript |
+
+## Questions
+
+| Question | Answer Summary |
+|----------|---------------|
+| [[mvp-implementation-blueprint]] | **UPDATED (May 2026)**: Skill-First v2. 4 TS files + 12 skill files. 20 files total, ~8 weeks. |
 
 ## Flows
 
