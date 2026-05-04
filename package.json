@@ -16,7 +16,8 @@
 	},
 	"pi": {
 		"extensions": [
-			"./.pi/extensions"
+			"./.pi/extensions",
+			"./.pi/providers"
 		],
 		"skills": [
 			"./.agents/skills"
@@ -39,6 +40,7 @@
 		"typescript": "^6.0.3"
 	},
 	"dependencies": {
+		"@cursor/sdk": "^1.0.12",
 		"asciify-image": "^0.1.10"
 	}
 }
