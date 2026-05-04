@@ -2,7 +2,7 @@
 type: index
 status: active
 created: 2026-04-28
-updated: 2026-05-03
+updated: 2026-05-04
 tags: [meta, index, catalog]
 ---
 
@@ -387,6 +387,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | Question | Answer Summary |
 |----------|---------------|
 | [[mvp-implementation-blueprint]] | **UPDATED (May 2026)**: Skill-First v2. 3 TS files + 12 skill files. 19 files total, ~8 weeks. |
+| [[how-to-enable-semantic-code-search-now]] | **IMPLEMENTED (L1+L2)**: ck installed, index built, skill created, grep tool intercepted via pi extension, file watcher auto-reindexes |
 
 ## Flows
 

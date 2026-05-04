@@ -8,6 +8,24 @@ tags: [meta, log, operations]
 
 # Wiki Operations Log
 
+## [2026-05-04] implement | Layer 2: grep interception + file watcher for ck
+- **ck-enforce pi extension** (`.pi/extensions/ck-enforce.ts`): Overrides lean-ctx's `grep` tool on `session_start`. Detects conceptual patterns (multi-word, no regex) and reroutes to `ck --hybrid`. Literal/exact patterns pass through to native rg. Status command: `/ck-enforce`.
+- **File watcher** (`.pi/scripts/ck-watch.sh`): Node.js fs.watch-based auto-reindexer. Watches for source file changes (ts, js, py, rs, md, json, etc.) with 1500ms debounce. Excludes node_modules, .ck, .git, dist, build, .pi/npm. Verified: reindexes in ~400ms on change.
+- **Dependency added**: `@sinclair/typebox` (devDependency, for grep tool schema)
+- Pages updated: `.pi/SYSTEM.md` (unchanged — policy already there), `wiki/index.md` (updated question status), `wiki/log.md` (this entry)
+- Key finding: Registration on `session_start` required because lean-ctx loads as a package after project extensions. Without session_start delay, lean-ctx's grep would overwrite ck-enforce's grep.
+- Verification: TypeScript compiles clean, ck-watch reindexes correctly, ck-index status shows 342 files / 1593 chunks.
+
+## [2026-05-04] implement | Semantic code search enabled — ck installed, indexed, enforced
+- **P13 Implemented**: ck (BeaconBay/ck) installed, semantic index built (342 files, 1,593 chunks, 2.7MB, BAAI/bge-small-en-v1.5)
+- **Skill created**: `.pi/skills/ck-search/SKILL.md` — teaches agent when/how to use ck vs grep, search decision tree, token efficiency guidance
+- **System prompt enforced**: `SYSTEM.md` updated with CODEBASE SEARCH POLICY section — NEVER raw grep for exploration, ALWAYS ck --hybrid
+- **Index built**: `ck index .` — 342 files indexed, hybrid search working (BM25 + semantic RRF fusion)
+- **Gitignore updated**: `.ck/` added to .gitignore (regenerable, like wiki-search index)
+- **Pages created**: [[how-to-enable-semantic-code-search-now]] (question/answer synthesis)
+- **Pages updated**: [[index]] (new question entry), [[log]] (this entry)
+- Key finding: Augment Code proves semantic indexing beats grep at scale — same model scores 1.59% higher on SWE-bench Pro with better context. Three-layer enforcement (prompt rules → skill guidance → future pre-exec hook) is the proven strategy. ck search returns ranked, scored results (~500-1000 tokens) vs raw grep output (~5000-20000 tokens).
+
 ## [2026-05-04] cleanup | Removed custom event bus — pi now has built-in event bus
 - Pi's latest version ships a native event bus — custom `events.ts` and `harness-event-bus.ts` no longer needed
 - Code layer reduced: 4 files → 3 files (types, config, drift-monitor). Event bus removed.

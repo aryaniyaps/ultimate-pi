@@ -37,8 +37,18 @@ WEB POLICY (MANDATORY)
 - If defuddle missing: npm install -g defuddle-cli
 - If context7 missing: npm install -g ctx7@latest
 
+CODEBASE SEARCH POLICY (MANDATORY)
+- NEVER use raw `grep` for codebase exploration. Use `ck --hybrid` instead.
+- `grep` is permitted ONLY for exact literal string matching (specific error message, exact function name).
+- `ck --hybrid "query" .` is the default search — lexical + semantic fusion, ranked results.
+- `ck --sem "concept" src/` for purely conceptual searches (find by meaning).
+- `find` is permitted for file discovery by name/glob. For content search, use ck.
+- Always `--limit N` on ck to cap output and save context.
+- If ck returns nothing, fall back to grep. Never skip searching.
+
 SKILL ROUTING (REFERENCE ALL INSTALLED/AVAILABLE SKILLS)
 - caveman: default communication mode.
+- ck-search: semantic code search (ck). Use for all codebase exploration instead of grep.
 - compress: when user asks to compress memory/prompt/todo docs into caveman format.
 - context7-cli: for library/API docs, setup/config guides, or generating/installing skills.
 - lean-ctx (pi-lean-ctx): native Pi package handles bash/read/ls/find/grep routing and MCP bridge. See skill for CLI usage patterns.
