@@ -43,6 +43,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[adr-009]] | active | claude-obsidian Mode B for Persistent Memory |
 | [[adr-010]] | active | Agentic Harness ↔ Wiki Tight-Coupling Contract |
 | [[adr-011]] | accepted | Multi-Agent Consensus Debate with Selective Routing (iMAD) |
+| [[adr-017]] | **superseded** | ~~Harness Project Structure — Event bus removed, pi built-in replaces custom wiring~~ |
 | [[2026-04-30-pi-lean-ctx-native]] | active | Adopt pi-lean-ctx native package, drop custom extension |
 | [[colocate-wiki]] | active | Co-locating Wiki with Codebase |
 
@@ -85,7 +86,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[fork-safe-spec-storage]] | Fork isolation: gitignored cache + `harness init` bootstrap |
 | [[content-addressed-spec-identity]] | Content-hash spec identity + `harness migrate` transfer-on-merge |
 | [[harness-engineering-first-principles]] | Synthesized 12 first principles from Fowler, OpenAI, LangChain, Augment |
-| [[skill-first-architecture]] | **NEW (May 2026)**: Harness layers as markdown skills — only drift monitor and event bus remain as code. Zero-compile iteration. |
+| [[skill-first-architecture]] | **UPDATED (May 2026)**: Harness layers as markdown skills — only drift monitor remains as code. Event bus handled by pi built-in. Zero-compile iteration. |
 | [[agent-skills-pattern]] | Progressive disclosure: skills loaded on-demand to prevent context rot |
 | [[policy-engine-pattern]] | Pre-execution gates: deterministic constraints vs probabilistic compliance |
 | [[gemini-cli-architecture]] | Gemini CLI SOTA: 15 harness innovations, 2-package architecture, weekly releases |
@@ -265,7 +266,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: executor.sh Harness Integration]] | executor.sh: integration layer scope, 3 new P43 sub-phases (catalog, discovery, policy), build vs integrate decision |
 | [[Research: Prompt Renderer for Multi-Model Agent Harness]] | Build-time prompt renderer: per-model compilation, caching, variable system, npm distribution |
 | [[Research: TypeScript Best Practices and Codebase Structure]] | Strict mode, runtimes, barrel files, monorepos, folder structure, error handling, testing |
-| [[Research: Skill-First Harness Architecture]] | **NEW (May 2026)**: Rethought MVP + harness plans from first principles. Skills as atomic unit. 4 code files vs 15. |
+| [[Research: Skill-First Harness Architecture]] | **UPDATED (May 2026)**: Rethought MVP + harness plans from first principles. Skills as atomic unit. 3 code files vs 15. Event bus removed. |
 | [[Research: Engineering Workflows of Legendary Programmers and AI Harness Mapping]] | **NEW (May 2026)**: 10 patterns from 6 legendary programmers mapped to harness layers |
 
 ## Sources (External Research)
@@ -385,7 +386,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Question | Answer Summary |
 |----------|---------------|
-| [[mvp-implementation-blueprint]] | **UPDATED (May 2026)**: Skill-First v2. 4 TS files + 12 skill files. 20 files total, ~8 weeks. |
+| [[mvp-implementation-blueprint]] | **UPDATED (May 2026)**: Skill-First v2. 3 TS files + 12 skill files. 19 files total, ~8 weeks. |
 
 ## Flows
 

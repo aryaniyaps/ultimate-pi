@@ -18,7 +18,7 @@ related:
 
 ## Definition
 
-A harness architecture where pipeline layers are implemented as **markdown-based skills** (`.pi/skills/harness-*/SKILL.md`) rather than TypeScript code modules. Only deterministic infrastructure — the event bus, drift monitor, shared types, and config — remains as code. Skills are progressively loaded on-demand via the three-tier disclosure pattern: Discovery → Activation → Execution.
+A harness architecture where pipeline layers are implemented as **markdown-based skills** (`.pi/skills/harness-*/SKILL.md`) rather than TypeScript code modules. Only deterministic infrastructure — the drift monitor, shared types, and config — remains as code. Event routing is handled by pi's built-in event bus. Skills are progressively loaded on-demand via the three-tier disclosure pattern: Discovery → Activation → Execution.
 
 ## First Principles
 
@@ -28,7 +28,7 @@ A harness architecture where pipeline layers are implemented as **markdown-based
 
 3. **Markdown skills ARE the specification.** No separate spec file per harness layer. The `SKILL.md` body is simultaneously the spec, the implementation instructions, and the documentation. Supporting files (`reference.md`, `scripts/`) provide execution-layer resources loaded on demand.
 
-4. **The event bus is a router, not logic.** One thin TypeScript file wires pi's native events to skill invocations. Pipeline ordering is enforced by skill activation sequence — the event bus fires `harness-l1-activated` → L1 skill runs → returns → fires `harness-l2-activated` → L2 skill runs → etc.
+4. **Pi's built-in event bus handles routing.** No custom event bus needed — pi's native event system wires events to skill invocations. Pipeline ordering is enforced by skill activation sequence — pi fires `harness-l1-activated` → L1 skill runs → returns → pi fires `harness-l2-activated` → L2 skill runs → etc.
 
 5. **Progressive disclosure is the memory model.** Skills load in three tiers: Discovery (metadata only, ~80 tokens/skill, always loaded), Activation (full SKILL.md body, ~2,000 tokens, loaded when relevant), Execution (supporting files, unlimited, loaded on demand). This keeps context lean while enabling unlimited bundled knowledge.
 
@@ -41,12 +41,13 @@ A harness architecture where pipeline layers are implemented as **markdown-based
 │                     THE SKILL-FIRST HARNESS                   │
 ├─────────────────────────────────────────────────────────────┤
 │  CODE LAYER (TypeScript — deterministic, always-on)          │
-│  ┌──────────────┐  ┌──────────────┐  ┌───────────────────┐  │
-│  │  Event Bus   │  │Drift Monitor │  │ Types + Config    │  │
-│  │  (routes pi  │  │(pattern match│  │ (shared infra)    │  │
-│  │  events→     │  │ every tool_  │  │                   │  │
-│  │  skills)     │  │ result event)│  │                   │  │
-│  └──────────────┘  └──────────────┘  └───────────────────┘  │
+│  ┌──────────────┐  ┌───────────────────┐                    │
+│  │Drift Monitor │  │ Types + Config    │                    │
+│  │(pattern match│  │ (shared infra)    │                    │
+│  │ every tool_  │  │                   │                    │
+│  │ result event)│  │                   │                    │
+│  └──────────────┘  └───────────────────┘                    │
+│  EVENT BUS: pi's built-in native event system               │
 │                                                              │
 │  SKILL LAYER (Markdown — probabilistic, on-demand)           │
 │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐       │
@@ -81,10 +82,12 @@ A harness architecture where pipeline layers are implemented as **markdown-based
 
 | Component | File | Reason |
 |-----------|------|--------|
-| Event Bus | `events.ts` (~200 lines) | Wires pi's 5 native events to skill invocations. Must be deterministic — fires on every event, no exceptions. |
 | Drift Monitor | `drift-monitor.ts` (~500 lines) | Real-time pattern matching with sliding windows on every `tool_result` event. Sub-millisecond latency required. LLM evaluation every 8 turns is the PRIMARY detection, but the rule-based pre-filter and escalation ladder are deterministic code. |
-| Shared Types | `types.ts` (~200 lines) | TypeScript interfaces for Spec, Plan, DriftEvent, CriticVerdict, Config. Needed by both event bus and drift monitor. |
+| Shared Types | `types.ts` (~200 lines) | TypeScript interfaces for Spec, Plan, DriftEvent, CriticVerdict, Config. Needed by drift monitor and config. |
 | Config Loader | `config.ts` (~100 lines) | Loads `.pi/harness/config.json`, merges with code defaults. Deterministic — no LLM involvement. |
+
+> [!note] Event Bus Removed (2026-05-04)
+> Pi's latest version ships a built-in event bus. The custom `events.ts` (~200 lines) and `.pi/extensions/harness-event-bus.ts` are no longer needed. Skills register directly with pi's native event system.
 
 ## Skill Directory Structure
 
@@ -114,11 +117,11 @@ A harness architecture where pipeline layers are implemented as **markdown-based
 
 | Metric | Old (Code-First) | New (Skill-First) | Reduction |
 |--------|-----------------|-------------------|-----------|
-| TypeScript source files | 15 | 4 | -73% |
-| TypeScript lines | ~2,500 | ~800 | -68% |
+| TypeScript source files | 15 | 3 | -80% |
+| TypeScript lines | ~2,500 | ~600 | -76% |
 | Markdown skill files | 0 | 6 SKILL.md + 6 reference.md | New |
 | Markdown skill lines | 0 | ~1,200 (instructions) | New |
-| Compilation required | Yes (all 15 files) | Yes (4 files only) | -73% |
+| Compilation required | Yes (all 15 files) | Yes (3 files only) | -80% |
 | Iteration cycle | Edit TS → compile → restart | Edit MD → agent picks up next activation | Seconds vs minutes |
 
 ## Why Skills Over Code for Harness Layers
@@ -144,14 +147,14 @@ Skills are the WRONG choice when:
 - **Deterministic execution is required.** The drift monitor MUST fire on every `tool_result` event with zero exceptions. Skills are probabilistic — the model decides when to activate them.
 - **Sub-millisecond latency is required.** Pattern matching on a sliding window needs <1ms response. LLM invocation adds 200-500ms.
 - **The behavior is purely mechanical.** Loading a config file, merging with defaults, registering pi event handlers — these are wiring, not reasoning. Skills add unnecessary LLM overhead.
-- **State management across events.** The event bus tracks pipeline phase, turn count, drift history across hundreds of events. Skills are stateless per invocation — they'd need to re-read state from disk each time.
+- **State management across events.** Pi's native event bus tracks pipeline phase, turn count, drift history across hundreds of events. Skills are stateless per invocation — they'd need to re-read state from disk each time.
 
 ## Migration Path
 
-From current plan (15 TS files) to skill-first (4 TS files + 6 skills):
+From current plan (15 TS files) to skill-first (3 TS files + 6 skills):
 
-1. **F0 + L2.5 first** (unchanged — these ARE code): Event bus, types, config, drift monitor. These are the foundation.
-2. **Convert L1 Spec Hardening**: Extract the ambiguity detection and spec hardening logic from `l1-spec.ts` into `harness-spec/SKILL.md`. The event bus fires this skill when it detects a `/harness` command.
+1. **F0 + L2.5 first** (unchanged — these ARE code): Types, config, drift monitor. These are the foundation. Event bus is handled by pi's built-in system.
+2. **Convert L1 Spec Hardening**: Extract the ambiguity detection and spec hardening logic from `l1-spec.ts` into `harness-spec/SKILL.md`. Pi's native event system fires this skill when it detects a `/harness` command.
 3. **Convert L2 Planning**: Extract DAG generation and sprint contract logic into `harness-plan/SKILL.md`.
 4. **Convert L4 Adversarial**: Already partially skill-based (critic.md agent definition). Extract attack pattern catalog into `harness-critic/SKILL.md`.
 5. **Convert P20 Gate**: Already deterministic bash commands. Extract gate instructions into `harness-gate/SKILL.md`.
@@ -160,4 +163,4 @@ From current plan (15 TS files) to skill-first (4 TS files + 6 skills):
 8. **L7 Orchestration**: Already Archon YAML-based. No change.
 9. **L8 Wiki Query**: Already claude-obsidian skills. No change.
 
-> [!gap] Pi skill system integration details need verification. Can pi skills invoke other pi skills? Can pi skills write to `.pi/harness/` directories? These determine whether the event bus sequences skills or skills chain themselves.
+> [!gap] Pi skill system integration details need verification. Can pi skills invoke other pi skills? Can pi skills write to `.pi/harness/` directories? These determine whether pi's event bus sequences skills or skills chain themselves.

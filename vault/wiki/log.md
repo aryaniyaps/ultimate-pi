@@ -2,11 +2,17 @@
 type: meta
 status: active
 created: 2026-04-28
-updated: 2026-05-03
+updated: 2026-05-04
 tags: [meta, log, operations]
 ---
 
 # Wiki Operations Log
+
+## [2026-05-04] cleanup | Removed custom event bus — pi now has built-in event bus
+- Pi's latest version ships a native event bus — custom `events.ts` and `harness-event-bus.ts` no longer needed
+- Code layer reduced: 4 files → 3 files (types, config, drift-monitor). Event bus removed.
+- Pages updated: [[adr-017]] (superseded), [[skill-first-architecture]] (event bus removed from code layer), [[Research: Skill-First Harness Architecture]] (architecture table updated), [[mvp-implementation-blueprint]] (19 files, event bus removed), [[index]] (ADR-017 status), [[hot]] (Skill-First section), [[log]] (this entry)
+- Key finding: Skills register directly with pi's built-in event bus. No custom wiring needed. Reduces code surface: 3 TS files, ~600 lines (was 4 files, ~800 lines).
 
 ## [2026-05-03] wiki-autoresearch | pi-vs-claude-code Agentic Orchestration Pipeline
 - Rounds: 2 (repo scrape + 4 broad searches + 2 gap-fill searches)

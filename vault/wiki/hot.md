@@ -185,17 +185,18 @@ Previous (2026-05-03): **Automating Software Engineering**, **Legendary Engineer
 
 ---
 
-**Skill-First Architecture**: Harness layers as markdown skills (`.pi/skills/harness-*/SKILL.md`) — only drift monitor and event bus remain as TypeScript code. 4 code files vs 15. Progressive disclosure keeps context lean. See below.
+**Skill-First Architecture**: Harness layers as markdown skills (`.pi/skills/harness-*/SKILL.md`) — only drift monitor remains as TypeScript code. Event bus handled by pi's built-in system. 3 code files vs 15. Progressive disclosure keeps context lean. See below.
 
 ## Skill-First Harness Architecture (May 2026)
 
 ### Key Finding
-**Harness layers should be markdown-based skills, not TypeScript code modules.** The core insight: the harness is a skill coordination layer, not a code pipeline. Only deterministic infrastructure needs code — the event bus (routing pi events to skills), the drift monitor (real-time pattern matching on every `tool_result` event), shared types, and config. Everything else — spec hardening, planning, adversarial verification, observability, memory — is probabilistic LLM evaluation and should be a skill.
+**Harness layers should be markdown-based skills, not TypeScript code modules.** The core insight: the harness is a skill coordination layer, not a code pipeline. Only deterministic infrastructure needs code — the drift monitor (real-time pattern matching on every `tool_result` event), shared types, and config. Event routing is handled by pi's built-in event bus. Everything else — spec hardening, planning, adversarial verification, observability, memory — is probabilistic LLM evaluation and should be a skill.
 
 ### Architecture
 ```
-CODE LAYER (4 TS files — deterministic, always-on):
-  events.ts (routes pi events → skills) | drift-monitor.ts (pattern matching) | types.ts | config.ts
+CODE LAYER (3 TS files — deterministic, always-on):
+  drift-monitor.ts (pattern matching) | types.ts | config.ts
+  EVENT BUS: pi's built-in native event system
 
 SKILL LAYER (6 SKILL.md directories — probabilistic, on-demand):
   harness-spec/ | harness-plan/ | harness-critic/ | harness-observe/ | harness-gate/ | harness-memory/
@@ -214,14 +215,14 @@ WIKI LAYER (Obsidian — persistent, cross-session):
 ### Why Some Things Stay Code
 **Drift monitor MUST be code**: Runs deterministically on every `tool_result` event with sub-millisecond rule-based pre-filter. Skills are probabilistic — the model decides when to activate them. Drift detection cannot be skipped.
 
-**Event bus MUST be code**: Routes pi's 5 native events to skill invocations. Must fire on every event with zero exceptions.
+**Event bus is pi's built-in**: Pi's latest version ships a native event bus — no custom `events.ts` or `harness-event-bus.ts` needed. Skills register directly with pi's native events.
 
 ### File Count
 | Old (v1 Code-First) | New (v2 Skill-First) |
 |---------------------|----------------------|
-| 15 TypeScript files (~2,500 lines) | 4 TypeScript files (~800 lines) |
+| 15 TypeScript files (~2,500 lines) | 3 TypeScript files (~600 lines) |
 | 0 skill files | 12 skill files (6 SKILL.md + 6 reference.md) |
-| Compilation required for every logic change | Compilation only when types/drift/event bus change |
+| Compilation required for every logic change | Compilation only when types/drift change |
 | ~9 weeks to MVP | ~8 weeks to MVP |
 
 ### Sources (3 new)
@@ -236,7 +237,7 @@ WIKI LAYER (Obsidian — persistent, cross-session):
 [[Research: Skill-First Harness Architecture]] — Full research synthesis: architecture comparison, contradictions, open questions
 
 ### Plans Rewritten
-[[mvp-implementation-blueprint]] — Skill-First v2: 20 files, 4 code + 12 skill + 4 config. All skill bodies documented.
+[[mvp-implementation-blueprint]] — Skill-First v2: 19 files, 3 code + 12 skill + 4 config. Event bus handled by pi built-in. All skill bodies documented.
 [[harness-implementation-plan]] — Skill-First v2: every phase now specifies implementation method (SKILL or CODE).
 
 ---

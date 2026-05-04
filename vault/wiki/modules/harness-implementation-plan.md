@@ -44,7 +44,9 @@ sources:
 
 # Harness Implementation Plan (Skill-First v2)
 
-**Master plan** for the ultimate-pi agentic harness. Rethought May 2026 from first principles: harness layers are now **markdown-based skills** loaded via progressive disclosure. Only deterministic infrastructure — event bus, drift monitor, types, config — remains as TypeScript code. Consolidates all research from April-May 2026: Codex, Claude Code, Cursor, Antigravity, Fallow, WOZCODE, model-adaptive design, consensus debate, drift detection.
+**Master plan** for the ultimate-pi agentic harness. Rethought May 2026 from first principles: harness layers are now **markdown-based skills** loaded via progressive disclosure. Only deterministic infrastructure — orchestrator extension, drift monitor, types, config — remains as TypeScript code. Consolidates all research from April-May 2026: Codex, Claude Code, Cursor, Antigravity, Fallow, WOZCODE, model-adaptive design, consensus debate, drift detection.
+
+**2026-05-04 CORRECTION**: Pi v0.70.2 provides 30+ native event types via `ExtensionAPI.on()`. No custom event bus needed. The orchestrator listens to pi's native events directly and routes them through the skill pipeline. See [[adr-012]] and [[adr-026-one-thing]] for details.
 
 ## The Skill-First Principle
 
@@ -53,7 +55,7 @@ sources:
 | Implementation | What | Why |
 |---------------|------|-----|
 | **Skill** (`.pi/skills/harness-*/SKILL.md`) | L1 Spec, L2 Plan, L4 Critic, P20 Gate, L5 Observe, L6 Memory | Probabilistic evaluation — LLM is better at this than imperative code |
-| **Code** (`src/harness/*.ts`) | Event bus, Drift Monitor, Types, Config | Deterministic execution — must fire on every event with zero exceptions |
+| **Code** (`src/harness/*.ts`) | Drift Monitor, Types, Config | Deterministic execution — must fire on every event with zero exceptions |
 
 See [[skill-first-architecture]] for full derivation and first principles.
 
@@ -61,7 +63,7 @@ See [[skill-first-architecture]] for full derivation and first principles.
 
 All 19 original first principles remain valid. One new principle added:
 
-**FP #20: The harness is a skill coordination layer, not a code pipeline.** Markdown-based skills loaded via progressive disclosure outperform TypeScript modules for harness logic. Skills are zero-compile, user-editable, context-efficient (three-tier loading), and portable across platforms. Code is reserved for deterministic infrastructure: event routing and drift monitoring.
+**FP #20: The harness is a skill coordination layer, not a code pipeline.** Markdown-based skills loaded via progressive disclosure outperform TypeScript modules for harness logic. Skills are zero-compile, user-editable, context-efficient (three-tier loading), and portable across platforms. Code is reserved for deterministic infrastructure: drift monitoring. Event routing handled by pi's built-in event bus.
 
 Original principles (condensed):
 1. Harness — not model — determines reliability at scale.
@@ -92,18 +94,18 @@ From Meng et al. (2026). Our implementation now maps skills into the formal mode
 
 | Component | Implementation (Skill-First) |
 |-----------|------------------------------|
-| **E** Execution Loop | Event bus routes pi events → L1-L4 skill sequence. Drift monitor (code) runs on every `tool_result`. |
+| **E** Execution Loop | Harness orchestrator listens to pi's 30+ native events → routes to L1-L4 skill sequence via `pi.sendMessage()`. Drift monitor (code) runs on every `tool_result`. |
 | **T** Tool Registry | Tool schemas, MCP tools, skills as activation-scoped tools |
 | **C** Context Manager | Progressive disclosure via skills (discovery → activation → execution). Wiki knowledge base. |
-| **S** State Store | Wiki vault persistence. Pipeline state tracked by event bus in memory + persisted at compaction. |
-| **L** Lifecycle Hooks | Event bus routes pi's 5 native events. Skills define their own hooks in frontmatter. |
+| **S** State Store | Wiki vault persistence. Pipeline state tracked by pi's native event bus in memory + persisted at compaction. |
+| **L** Lifecycle Hooks | Orchestrator listens to pi's 30+ native events directly. Skills define their own hooks in frontmatter. |
 | **V** Evaluation Interface | L4 adversarial (critic skill + agent). L5 observability (observe skill). |
 
 ---
 
 ## The 8-Layer Runtime Pipeline (Skill-First)
 
-Every task flows through all layers. Skills activate in sequence via event bus.
+Every task flows through all layers. Skills activate in sequence via the harness orchestrator extension, which listens to pi's native events and injects steering prompts via `pi.sendMessage()`.
 
 ```
 / harness "task"
@@ -113,7 +115,7 @@ L1: harness-spec skill       →  Hardens specification, resolves ambiguity
 L2: harness-plan skill       →  Generates YAML task DAG with sprint contracts
   ↓
 L2.5: drift-monitor.ts code →  LLM-first drift detection every 8 turns (Haiku 4.5) + rule pre-filter
-        + sentrux MCP        →  Structural health baseline via session_start/end. Catches architectural decay.
+        + sentrux MCP        →  Structural health baseline via orchestrator session hooks. Catches architectural decay.
   ↓
 L3: Agent Execution          →  Flat tools (P43 deferred). Drift monitor watches tool_result events.
       + sentrux MCP          →  Agent can scan() for structural awareness, check_rules() before commits.
@@ -141,9 +143,9 @@ Each phase now specifies its **implementation method**: SKILL or CODE.
 
 | Phase | What | Method | Files |
 |-------|------|--------|-------|
-| F0 | Types + Config | CODE | `src/harness/types.ts`, `src/harness/config.ts` |
-| F0 | Event bus (routes pi events → skills) | CODE | `src/harness/events.ts` |
-| F0 | Event bus extension wiring for pi | CODE | `.pi/extensions/harness-event-bus.ts` |
+| F0 | Types + Config | CODE | `src/harness/types.ts` |
+| F0 | Harness orchestrator (listens to pi's 30+ native events, routes to skills) | CODE | `.pi/extensions/harness-orchestrator.ts` |
+| F0 | Pipeline config | YAML | `harness.yaml` |
 | F0 | Model profile system | CODE | `src/harness/profiles.ts` or config-driven |
 
 ### L1-L2: Pre-Execution — SKILLS
@@ -284,7 +286,7 @@ model: opus  # Use Opus for adversarial review
 ---
 ```
 
-The event bus can pass model directives when invoking skills. Provider-native prompt rendering (P22b) applies to skill bodies as well as system prompts — but skill bodies are user-editable markdown, giving teams the option to write model-specific instructions directly.
+Pi's built-in event bus can pass model directives when invoking skills. Provider-native prompt rendering (P22b) applies to skill bodies as well as system prompts — but skill bodies are user-editable markdown, giving teams the option to write model-specific instructions directly.
 
 ---
 
@@ -326,10 +328,10 @@ All research from April-May 2026 remains valid. The skill-first architecture is 
 
 | ADR | Decision | Skill-First Impact |
 |-----|----------|-------------------|
-| **ADR-012** | Extension-based event bus | Event bus is the ONLY extension. Invokes skills instead of calling code functions. |
+| **ADR-012** | Extension-based harness orchestrator | Orchestrator is the ONLY extension. Listens to pi's 30+ native events directly. Invokes skills via `pi.sendMessage()`. |
 | **ADR-015** | Pipeline-first build order | Unchanged. Skills deliver same pipeline in same order. |
-| **ADR-017** | `src/harness/` library + thin wiring | Now truly thin: 4 files vs 15. Logic extracted to skills. |
-| **ADR-021** | Explicit `/harness` command | Event bus detects command → activates harness-spec skill. |
+| **ADR-017** | `~~src/harness/~~` library + thin wiring. Superseded. | Now truly thin: 3 files vs 15. Logic extracted to skills. Event bus removed. |
+| **ADR-021** | Explicit `/harness` command | Pi's native event bus detects command → activates harness-spec skill. |
 | **ADR-018** | Single config file | Unchanged. |
 | **ADR-019** | `harness_ask` tool | Invoked by harness-spec skill, not code. |
 | **ADR-020** | YAML task DAG | Generated by harness-plan skill, not code. |

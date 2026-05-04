@@ -5,7 +5,7 @@ description: >
   file entities and concepts, update index) then reports what was created and updated.
   Use when the user says "ingest all", "batch ingest", or provides multiple files at once.
 tools: read, write, edit, grep, bash
-model: opencode/deepseek-v4-pro
+model: router/auto
 thinking: medium
 max_turns: 30
 skills: wiki-ingest
