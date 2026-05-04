@@ -1,0 +1,95 @@
+{
+    "defaultProfile": "auto",
+    "debug": false,
+    "classifierModel": "opencode-go/glm-5",
+    "phaseBias": 0.5,
+    "maxSessionBudget": 1.0,
+    "largeContextThreshold": 100000,
+    "rules": [
+        {
+            "matches": [
+                "deploy",
+                "production",
+                "release"
+            ],
+            "tier": "high",
+            "reason": "Safety check for production tasks"
+        },
+        {
+            "matches": "changelog",
+            "tier": "low"
+        }
+    ],
+    "profiles": {
+        "auto": {
+            "high": {
+                "model": "opencode-go/deepseek-v4-pro",
+                "thinking": "high",
+                "fallbacks": [
+                    "github-copilot/claude-opus-4.7",
+                    "github-copilot/gpt-5.5"
+                ]
+            },
+            "medium": {
+                "model": "opencode-go/mimo-v2.5",
+                "thinking": "medium",
+                "fallbacks": [
+                    "github-copilot/claude-sonnet-4.6"
+                ]
+            },
+            "low": {
+                "model": "opencode-go/glm-5.1",
+                "thinking": "low",
+                "fallbacks": [
+                    "github-copilot/gpt-5.4-mini"
+                ]
+            }
+        },
+        "cheap": {
+            "high": {
+                "model": "opencode-go/deepseek-v4-flash",
+                "thinking": "low",
+                "fallbacks": [
+                    "github-copilot/gpt-5.4-mini"
+                ]
+            },
+            "medium": {
+                "model": "opencode-go/minimax-m2.7",
+                "thinking": "off",
+                "fallbacks": [
+                    "github-copilot/claude-haiku-4.5"
+                ]
+            },
+            "low": {
+                "model": "opencode-go/glm-5",
+                "thinking": "off",
+                "fallbacks": [
+                    "github-copilot/claude-haiku-4.5"
+                ]
+            }
+        },
+        "deep": {
+            "high": {
+                "model": "opencode-go/deepseek-v4-pro",
+                "thinking": "xhigh",
+                "fallbacks": [
+                    "github-copilot/claude-opus-4.7"
+                ]
+            },
+            "medium": {
+                "model": "opencode-go/kimi-k2.6",
+                "thinking": "medium",
+                "fallbacks": [
+                    "github-copilot/claude-sonnet-4.6"
+                ]
+            },
+            "low": {
+                "model": "opencode-go/mimo-v2.5",
+                "thinking": "low",
+                "fallbacks": [
+                    "github-copilot/gpt-5.4"
+                ]
+            }
+        }
+    }
+}

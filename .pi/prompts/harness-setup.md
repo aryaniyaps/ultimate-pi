@@ -285,6 +285,27 @@ Verify each package:
 | `@posthog/pi` | Analytics event capture | F0 |
 | `pi-lean-ctx` | Context runtime (read/bash/find/grep/MCP bridge) | F0 |
 | `@tintinweb/pi-subagents` | L4 critic sub-agent spawn/control | P16 |
+| `@yeliu84/pi-model-router` | Per-turn intelligent model routing (auto high/medium/low tier selection) | F0 |
+
+## Step 3.5 — Model Router Configuration
+
+Verify the model router is installed and configured:
+
+```bash
+# Verify package installed
+ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null && echo "✓ model-router package" || echo "✗ model-router package — run: cd .pi/npm && npm install"
+
+# Verify config exists
+ls .pi/model-router.json 2>/dev/null && echo "✓ model-router.json" || echo "✗ model-router.json — see .pi/npm/node_modules/@yeliu84/pi-model-router/model-router.example.json"
+```
+
+Do NOT block. If config exists, continue. If missing, warn in report and continue.
+
+**Router activation happens automatically** — the agent should output the following as its next message (this activates the router in the current session):
+
+> `/router profile auto`
+
+The pi TUI will intercept this and activate the `auto` profile. Then continue to Step 4.
 
 ## Step 4 — Configuration Files
 
@@ -374,6 +395,10 @@ cd .pi/npm && npm ls 2>/dev/null && echo "✓ pi extensions" || echo "✗ pi ext
 ls "$WIKI_PATH/index.md" 2>/dev/null && echo "✓ wiki vault" || echo "✗ wiki vault"
 ls "$WIKI_PATH/hot.md" 2>/dev/null && echo "✓ wiki hot cache" || echo "✗ wiki hot cache"
 
+# model router
+ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null && echo "✓ model-router package" || echo "✗ model-router package"
+ls .pi/model-router.json 2>/dev/null && echo "✓ model-router config" || echo "✗ model-router config"
+
 # settings persistence
 grep -q 'wiki_path' .pi/settings.json 2>/dev/null && echo "✓ wiki path saved to settings" || echo "! wiki path not saved"
 
@@ -431,7 +456,8 @@ Output summary table:
 | fallow | ✓/✗ | Baseline: created/pending |
 | biome | ✓/✗ | Project config: found/default |
 | gh CLI | ✓/✗ | Auth: yes/no |
-| pi extensions | ✓/✗ | 3 packages |
+| pi extensions | ✓/✗ | 4 packages |
+| model router | ✓/✗ | Package + config verified, activation via `/router profile auto` |
 
 | .gitignore | ✓/✗ | 6 entries added |
 | wiki_path in settings | ✓/✗ | Persisted to .pi/settings.json |
