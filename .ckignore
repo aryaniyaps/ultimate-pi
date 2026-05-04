@@ -1,0 +1,41 @@
+# .ckignore
+
+# Build artifacts (not useful for understanding code)
+target/
+dist/
+build/
+*.o
+*.so
+*.dylib
+
+# Dependencies (too large, low signal)
+node_modules/
+vendor/
+venv/
+.venv/
+
+# Media files (not code)
+*.png
+*.jpg
+*.gif
+*.mp4
+*.pdf
+
+<!-- # Large data files
+*.csv
+*.json
+*.xml
+*.log -->
+
+# Test fixtures (unless you search them)
+fixtures/
+__snapshots__/
+*.snap
+
+<!-- # Generated code (if not relevant)
+*_pb2.py
+*.generated.*
+
+# Documentation (include if you want AI to reference docs)
+# docs/
+# *.md -->
