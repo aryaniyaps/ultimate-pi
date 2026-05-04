@@ -1,95 +1,95 @@
 {
-    "defaultProfile": "auto",
-    "debug": false,
-    "classifierModel": "cursor/gpt-5.3-codex-low-fast",
-    "phaseBias": 0.5,
-    "maxSessionBudget": 1.0,
-    "largeContextThreshold": 100000,
-    "rules": [
-        {
-            "matches": [
-                "deploy",
-                "production",
-                "release"
-            ],
-            "tier": "high",
-            "reason": "Safety check for production tasks"
-        },
-        {
-            "matches": "changelog",
-            "tier": "low"
-        }
-    ],
-    "profiles": {
-        "auto": {
-            "high": {
-                "model": "cursor/gpt-5.3-codex-high-fast",
-                "thinking": "high",
-                "fallbacks": [
-                    "cursor/claude-opus-4-7-thinking-high",
-                    "cursor/gpt-5.5-high"
-                ]
-            },
-            "medium": {
-                "model": "cursor/gpt-5.3-codex-fast",
-                "thinking": "medium",
-                "fallbacks": [
-                    "cursor/claude-4.6-sonnet-medium"
-                ]
-            },
-            "low": {
-                "model": "cursor/gpt-5.3-codex-low-fast",
-                "thinking": "low",
-                "fallbacks": [
-                    "cursor/gpt-5.4-mini-low"
-                ]
-            }
-        },
-        "cheap": {
-            "high": {
-                "model": "cursor/gpt-5.2-codex-high-fast",
-                "thinking": "low",
-                "fallbacks": [
-                    "cursor/gpt-5.4-mini-low"
-                ]
-            },
-            "medium": {
-                "model": "cursor/gpt-5.2-codex-fast",
-                "thinking": "off",
-                "fallbacks": [
-                    "cursor/claude-4.5-sonnet"
-                ]
-            },
-            "low": {
-                "model": "cursor/gpt-5.2-codex-low-fast",
-                "thinking": "off",
-                "fallbacks": [
-                    "cursor/claude-4.5-sonnet"
-                ]
-            }
-        },
-        "deep": {
-            "high": {
-                "model": "cursor/gpt-5.3-codex-xhigh-fast",
-                "thinking": "xhigh",
-                "fallbacks": [
-                    "cursor/claude-opus-4-7-thinking-xhigh"
-                ]
-            },
-            "medium": {
-                "model": "cursor/claude-4.6-sonnet-medium-thinking",
-                "thinking": "medium",
-                "fallbacks": [
-                    "cursor/claude-4.6-sonnet-medium"
-                ]
-            },
-            "low": {
-                "model": "cursor/gpt-5.3-codex-spark-preview-low",
-                "thinking": "low",
-                "fallbacks": [
-                    "cursor/gpt-5.4-medium"
-                ]
-            }
-        }
+  "defaultProfile": "auto",
+  "debug": false,
+  "classifierModel": "cursor/gpt-5.3-codex",
+  "phaseBias": 0.5,
+  "maxSessionBudget": 1.0,
+  "largeContextThreshold": 100000,
+  "rules": [
+    {
+      "matches": [
+        "deploy",
+        "production",
+        "release"
+      ],
+      "tier": "high",
+      "reason": "Safety check for production tasks"
+    },
+    {
+      "matches": "changelog",
+      "tier": "low"
     }
+  ],
+  "profiles": {
+    "auto": {
+      "high": {
+        "model": "cursor/gpt-5.3-codex",
+        "thinking": "high",
+        "fallbacks": [
+          "cursor/claude-opus-4-6",
+          "cursor/gpt-5.2-codex"
+        ]
+      },
+      "medium": {
+        "model": "cursor/gpt-5.3-codex",
+        "thinking": "medium",
+        "fallbacks": [
+          "cursor/claude-sonnet-4-6"
+        ]
+      },
+      "low": {
+        "model": "cursor/gpt-5.2-codex",
+        "thinking": "low",
+        "fallbacks": [
+          "cursor/gpt-5.2"
+        ]
+      }
+    },
+    "cheap": {
+      "high": {
+        "model": "cursor/gpt-5.2-codex",
+        "thinking": "low",
+        "fallbacks": [
+          "cursor/gpt-5.2"
+        ]
+      },
+      "medium": {
+        "model": "cursor/gpt-5.2",
+        "thinking": "off",
+        "fallbacks": [
+          "cursor/claude-sonnet-4-5"
+        ]
+      },
+      "low": {
+        "model": "cursor/gpt-5.1",
+        "thinking": "off",
+        "fallbacks": [
+          "cursor/claude-sonnet-4-5"
+        ]
+      }
+    },
+    "deep": {
+      "high": {
+        "model": "cursor/gpt-5.3-codex",
+        "thinking": "xhigh",
+        "fallbacks": [
+          "cursor/claude-opus-4-6"
+        ]
+      },
+      "medium": {
+        "model": "cursor/claude-sonnet-4-6",
+        "thinking": "medium",
+        "fallbacks": [
+          "cursor/gpt-5.3-codex"
+        ]
+      },
+      "low": {
+        "model": "cursor/gpt-5.2-codex",
+        "thinking": "low",
+        "fallbacks": [
+          "cursor/gpt-5.2"
+        ]
+      }
+    }
+  }
 }
