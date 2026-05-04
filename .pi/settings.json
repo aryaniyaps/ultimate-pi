@@ -1,3 +1,9 @@
 {
+	"defaultProvider": "router",
+	"defaultModel": "auto",
+	  "retry": {
+    "enabled": true,
+    "maxRetries": 3
+  },
 	"packages": ["..", "npm:@posthog/pi", "npm:pi-lean-ctx", "npm:@tintinweb/pi-subagents", "npm:@yeliu84/pi-model-router"]
 }

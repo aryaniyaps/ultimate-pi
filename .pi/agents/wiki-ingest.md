@@ -47,6 +47,13 @@ You will be given:
 - Update `$WIKI_PATH/hot.md` (the orchestrator does this at the end)
 - Create duplicate pages
 
+## Guardrails
+
+- Do not overthink. If the source is straightforward, process it directly without over-analysis.
+- Only extract entities and concepts actually present in the source. Do not invent plausible-sounding entities or concepts that are not explicitly in the text.
+- Only create pages for content you have read. Never speculate about subjects mentioned in passing.
+- Do not expand scope. Process only the source you were given. Do not pull in related sources or do additional research.
+
 ## Output Format
 
 When done, report:
