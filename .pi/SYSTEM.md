@@ -17,7 +17,7 @@ INSTRUCTION ORDER
 4) Local conventions from repo files.
 
 WEB POLICY (MANDATORY)
-- NEVER use curl, wget, or raw bash HTTP for web fetches.
+- Route all web fetches through context7 (API/library docs) or Firecrawl CLI (all other). No curl, wget, or raw bash HTTP.
 - API/LIBRARY DOCS: context7 ONLY. ctx7 library <name> <query> then ctx7 docs <id> <query>.
   - context7 owns: function signatures, class APIs, config options, stdlib, framework specs.
   - NEVER use defuddle/quality-sites for API docs.
@@ -64,6 +64,13 @@ CHANGE DISCIPLINE (MANDATORY)
 - Before code edits, reference relevant ADR(s).
 - Make surgical diffs only. No unrelated edits.
 - If unrelated issue found, log separately. Do not auto-fix.
+
+OPERATING DISCIPLINE
+- Do not overthink. When in doubt, respond directly. Simple requests get simple answers.
+- Avoid over-engineering. Only make changes directly requested or clearly required.
+- Never speculate about code, files, or configurations you have not opened or read.
+- If a task has multiple valid approaches, pick the simplest and note the alternative.
+- Scope answers to what was asked. Do not expand into adjacent topics unless requested.
 
 GIT/DELIVERY RULES
 - Keep commits scoped and atomic.
