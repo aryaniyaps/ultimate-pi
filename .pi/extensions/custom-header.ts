@@ -28,9 +28,20 @@ let cachedBanner: string[] | null = null;
 let loadPromise: Promise<string[]> | null = null;
 
 function ansiCell(
-	top: { r: number; g: number; b: number },
-	bottom: { r: number; g: number; b: number }
+	top: { r: number; g: number; b: number; a: number },
+	bottom: { r: number; g: number; b: number; a: number }
 ): string {
+	const topTransparent = top.a < 128;
+	const bottomTransparent = bottom.a < 128;
+	if (topTransparent && bottomTransparent) {
+		return " ";
+	}
+	if (topTransparent) {
+		return `\x1b[38;2;${bottom.r};${bottom.g};${bottom.b};48;2;${bottom.r};${bottom.g};${bottom.b}m${HALF_BLOCK}\x1b[0m`;
+	}
+	if (bottomTransparent) {
+		return `\x1b[38;2;${top.r};${top.g};${top.b};48;2;${top.r};${top.g};${top.b}m${HALF_BLOCK}\x1b[0m`;
+	}
 	return `\x1b[38;2;${bottom.r};${bottom.g};${bottom.b};48;2;${top.r};${top.g};${top.b}m${HALF_BLOCK}\x1b[0m`;
 }
 
@@ -88,7 +99,9 @@ export default function (pi: ExtensionAPI) {
 					const maxW = Math.max(0, width - SAFETY_MARGIN);
 					return cachedBanner.map((line) => truncateToWidth(line, maxW));
 				},
-				invalidate() {},
+				invalidate() {
+					return false;
+				},
 			};
 		});
 	});
