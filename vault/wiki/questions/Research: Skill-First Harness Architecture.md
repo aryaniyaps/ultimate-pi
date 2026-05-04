@@ -38,8 +38,8 @@ Rethought the entire MVP and harness implementation plans from first principles.
 - **The harness pattern is hooks→skills→agents→workflows.** Claude Code's architecture (22+ lifecycle events, markdown skills, subagents, filesystem memory) validates that the harness is "a programmable runtime with an LLM kernel" — not a TypeScript codebase. (Source: [[Source: Blake Crosley Agent Architecture Guide]])
 - **Skills compose with hooks.** Skills can define their own hooks in YAML frontmatter that activate only while the skill runs. This creates domain-specific deterministic behavior without polluting other sessions. (Source: [[Source: Blake Crosley Agent Architecture Guide]])
 - **Markdown skills ARE the spec.** No separate spec files. The SKILL.md body is simultaneously the specification, the implementation instructions, and the documentation. Supporting files (reference.md, scripts/) provide execution-layer resources. (Source: [[Source: Claude API Agent Skills Overview]])
-- **The event bus is the only orchestrator code.** One thin TypeScript file wires pi's native events to skill invocations. It's a router, not logic. Pipeline ordering is enforced by skill activation sequence, not imperative code.
-- **File count drops from 15 to 4 TypeScript files.** `src/harness/events.ts` (event bus), `src/harness/drift-monitor.ts` (drift detection), `src/harness/types.ts` (shared types), `src/harness/config.ts` (config loader). All other functionality becomes `.pi/skills/harness-*/SKILL.md` files.
+- **Pi's built-in event bus handles routing.** No custom event bus needed — pi's native event system wires events to skill invocations. Pipeline ordering is enforced by skill activation sequence, not imperative code.
+- **File count drops from 15 to 3 TypeScript files.** `src/harness/drift-monitor.ts` (drift detection), `src/harness/types.ts` (shared types), `src/harness/config.ts` (config loader). All other functionality becomes `.pi/skills/harness-*/SKILL.md` files.
 
 ## Key Entities
 
@@ -66,9 +66,9 @@ Rethought the entire MVP and harness implementation plans from first principles.
 | P20 Gate | `src/harness/p20-gate.ts` (~100 lines TS) | `.pi/skills/harness-gate/SKILL.md` (bash commands) |
 | L5 Observability | `src/harness/l5-observability.ts` (~200 lines TS) | `.pi/skills/harness-observe/SKILL.md` (markdown) |
 | L6 Memory | `src/harness/l6-memory.ts` (~150 lines TS) | Already wiki-based (claude-obsidian skills) |
-| Event Bus | `src/harness/events.ts` (~200 lines TS) | **KEPT AS CODE** — pi extension wiring |
+| Event Bus | ~~`src/harness/events.ts`~~ (~200 lines TS) | **REMOVED** — pi's built-in event bus handles routing (2026-05-04) |
 | Types + Config | `src/harness/types.ts` + `config.ts` (~300 lines) | **KEPT AS CODE** — shared infrastructure |
-| **Total TS files** | **~15 files, ~2,500 lines** | **~4 files, ~800 lines** |
+| **Total TS files** | **~15 files, ~2,500 lines** | **~3 files, ~600 lines** |
 | **Total skill files** | **0** | **6 SKILL.md files + supporting** |
 
 ## Contradictions
@@ -77,11 +77,11 @@ Rethought the entire MVP and harness implementation plans from first principles.
 
 ## Open Questions
 
-- **How does pi's skill system handle skill-to-skill invocation?** Can a harness skill invoke the next pipeline skill programmatically, or does the event bus need to sequence them? The event bus likely sequences — each skill returns, event bus fires next hook.
-- **Can pi skills define hooks in frontmatter?** Claude Code skills can. If pi doesn't support this, hooks must remain in the event bus or `.pi/settings.json`.
+- **How does pi's skill system handle skill-to-skill invocation?** Can a harness skill invoke the next pipeline skill programmatically, or does pi's built-in event bus need to sequence them? Pi's event bus likely sequences — each skill returns, pi fires next hook.
+- **Can pi skills define hooks in frontmatter?** Claude Code skills can. If pi doesn't support this, hooks must remain in pi's event system or `.pi/settings.json`.
 - **What is the skill context budget in pi?** Claude Code uses 2% of context window with 16,000 char fallback. Pi's budget is unknown.
 - **Skill caching behavior.** Smarter implementations cache recently used skills. Does pi reload SKILL.md from disk every activation or cache? This affects drift monitor → spec hardening reinvocation performance.
-- **How are skill-generated artifacts stored?** L2 planning generates YAML plan files. Can skills write to `.pi/harness/plans/` directly, or does the event bus broker file writes?
+- **How are skill-generated artifacts stored?** L2 planning generates YAML plan files. Can skills write to `.pi/harness/plans/` directly, or does pi's event system broker file writes?
 - **Skill version pinning across releases.** When harness skills ship in pi package, compiled prompts vs live markdown: which approach? The research shows build-time compilation is valid but adds complexity vs live markdown that can be user-edited.
 
 ## Sources

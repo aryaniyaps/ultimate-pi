@@ -6,7 +6,7 @@ description: >
   or "clean up".
 display_name: Wiki Lint
 tools: read, write, grep, bash, find
-model: opencode/deepseek-v4-pro
+model: router/auto
 thinking: medium
 max_turns: 40
 skills: wiki-lint
