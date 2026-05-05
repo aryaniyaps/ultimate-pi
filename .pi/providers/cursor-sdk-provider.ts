@@ -340,6 +340,60 @@ function stripToolCallMarkup(text: string): string {
 		.trim();
 }
 
+function normalizeParsedToolCallArgs(
+	name: string,
+	arguments_: Record<string, unknown>,
+): Record<string, unknown> {
+	const tool = name.toLowerCase();
+	const args = { ...arguments_ };
+	delete args.toolCallId;
+	delete args.call_id;
+
+	if (tool === "shell" || tool === "bash") {
+		const command = typeof args.command === "string" ? args.command : "";
+		const workingDirectory =
+			typeof args.working_directory === "string"
+				? args.working_directory
+				: typeof args.workingDirectory === "string"
+					? args.workingDirectory
+					: typeof args.cwd === "string"
+						? args.cwd
+						: undefined;
+		const blockUntilMs =
+			typeof args.block_until_ms === "number"
+				? args.block_until_ms
+				: typeof args.timeout === "number"
+					? args.timeout
+					: undefined;
+
+		const normalized: Record<string, unknown> = { command };
+		if (workingDirectory && workingDirectory.trim().length > 0) {
+			normalized.working_directory = workingDirectory.trim();
+		}
+		if (typeof blockUntilMs === "number" && Number.isFinite(blockUntilMs) && blockUntilMs >= 0) {
+			normalized.block_until_ms = Math.floor(blockUntilMs);
+		}
+		if (typeof args.description === "string" && args.description.trim().length > 0) {
+			normalized.description = args.description.trim();
+		}
+		return normalized;
+	}
+
+	if (tool === "glob") {
+		const normalized: Record<string, unknown> = {};
+		if (typeof args.globPattern === "string") normalized.glob_pattern = args.globPattern;
+		else if (typeof args.pattern === "string") normalized.glob_pattern = args.pattern;
+		if (typeof args.targetDirectory === "string") normalized.target_directory = args.targetDirectory;
+		return normalized;
+	}
+
+	if (tool === "read") {
+		return typeof args.path === "string" ? { path: args.path } : {};
+	}
+
+	return args;
+}
+
 function likelyNeedsTool(text: string): boolean {
 	const lower = text.toLowerCase();
 	const signals = ["use ", "run ", "read ", "write ", "edit ", "find ", "grep ", "list ", "ls ", "bash ", "command", "file", "directory", "tool"];
@@ -461,11 +515,18 @@ function streamCursorSdk(model: Model<Api>, context: Context, options?: SimpleSt
 			const agent = await Agent.create({
 				apiKey: process.env.CURSOR_API_KEY,
 				model: { id: selectedModel } as ModelSelection,
-				local: { cwd: process.cwd() },
+					// YOLO-style local runtime: load all Cursor settings and disable sandbox
+					// so the agent can execute tool/shell flows without interactive gating.
+					local: {
+						cwd: process.cwd(),
+						settingSources: ["all"],
+						sandboxOptions: { enabled: false },
+					},
 			});
 
 			try {
 				options?.signal?.addEventListener("abort", onAbort, { once: true });
+				// Keep force=true so stale/busy local runs never block autonomous execution.
 				const run = await agent.send(promptText, { local: { force: true } });
 				runCancel = () => run.cancel();
 
@@ -540,18 +601,22 @@ function streamCursorSdk(model: Model<Api>, context: Context, options?: SimpleSt
 					if (parsedPiToolCall) {
 						const contentIndex = output.content.length;
 						const toolCallId = `call_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+						const normalizedArgs = normalizeParsedToolCallArgs(
+							parsedPiToolCall.name,
+							parsedPiToolCall.arguments,
+						);
 						const piToolCall = {
 							type: "toolCall" as const,
 							id: toolCallId,
 							name: parsedPiToolCall.name,
-							arguments: parsedPiToolCall.arguments,
+							arguments: normalizedArgs,
 						};
 						output.content.push(piToolCall);
 						stream.push({ type: "toolcall_start", contentIndex, partial: output });
 						stream.push({
 							type: "toolcall_delta",
 							contentIndex,
-							delta: JSON.stringify(parsedPiToolCall.arguments),
+							delta: JSON.stringify(normalizedArgs),
 							partial: output,
 						});
 						stream.push({ type: "toolcall_end", contentIndex, toolCall: piToolCall, partial: output });

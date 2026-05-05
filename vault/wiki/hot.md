@@ -1,13 +1,31 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-03T21:45:00
+updated: 2026-05-05T17:05:00
 created: 2026-04-30
 tags: []
 status: active
 ---
 
 # Recent Context
+
+## Last Updated
+2026-05-05. Filed research: [[Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points]].
+
+## Key Recent Facts
+- First-principles verdict unchanged: keep Obsidian wiki as Layer 6 canonical memory.
+- `claude-mem` fits as optional fast recall cache, not source-of-record.
+- Deterministic write-back gates stay mandatory for decision-bearing tasks.
+- Current vault still lacks direct `claude-mem` benchmark and provenance evidence.
+
+## Recent Changes
+- Created: [[Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points]]
+- Updated: [[index]], [[log]], [[hot]]
+- Flagged: External web validation blocked in this run; findings grounded in existing vault sources.
+
+## Active Threads
+- User deciding replace-vs-complement for `claude-mem` in harness memory architecture.
+- Next step: run external benchmark pass on `claude-mem` durability, precision/recall, and provenance fidelity.
 
 ## Last Updated
 2026-05-03. **pi-vs-claude-code agentic orchestration pipeline** research filed. **sentrux.dev integrated**, **Automating Software Engineering**, **Legendary Engineering Patterns**, and **Skill-First Architecture** also active.

@@ -2,7 +2,7 @@
 type: index
 status: active
 created: 2026-04-28
-updated: 2026-05-04
+updated: 2026-05-05
 tags: [meta, index, catalog]
 ---
 
@@ -119,6 +119,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[ts-execution-layer]] | Replace flat tool calling with typed TypeScript API + sandboxed runtime (3-4x context reduction) |
 | [[mcp-tool-routing]] | MCP protocol for semantic search as first-class agent tool |
 | [[codebase-to-context-ingestion]] | Converting entire codebases into structured LLM context |
+| [[memory-system-of-record-vs-ephemeral-cache]] | Canonical wiki memory + optional local fast cache layering |
 
 ## Concepts — Orchestration & Harness
 
@@ -268,6 +269,9 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: TypeScript Best Practices and Codebase Structure]] | Strict mode, runtimes, barrel files, monorepos, folder structure, error handling, testing |
 | [[Research: Skill-First Harness Architecture]] | **UPDATED (May 2026)**: Rethought MVP + harness plans from first principles. Skills as atomic unit. 3 code files vs 15. Event bus removed. |
 | [[Research: Engineering Workflows of Legendary Programmers and AI Harness Mapping]] | **NEW (May 2026)**: 10 patterns from 6 legendary programmers mapped to harness layers |
+| [[Research: claude-mem over Obsidian for Harness Layer]] | Replacement assessment: keep Obsidian as source of truth, optional claude-mem as cache |
+| [[Research: how claude-mem fits into our workflow. and whether it should replace obsidian in the codebase. no hard feelings about previous actions, rethink from first principles always]] | First-principles reassessment: keep Obsidian canonical, use claude-mem only as non-authoritative acceleration cache |
+| [[Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points]] | First-principles verdict: complement, not replace. Keep wiki canonical; use claude-mem only as fast cache |
 
 ## Sources (External Research)
 
