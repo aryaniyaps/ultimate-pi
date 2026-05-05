@@ -1,7 +1,7 @@
 {
   "defaultProfile": "auto",
   "debug": false,
-  "classifierModel": "cursor/gpt-5.3-codex",
+  "classifierModel": "opencode-go/qwen3.6-plus",
   "phaseBias": 0.5,
   "maxSessionBudget": 1.0,
   "largeContextThreshold": 100000,
@@ -23,71 +23,71 @@
   "profiles": {
     "auto": {
       "high": {
-        "model": "cursor/gpt-5.3-codex",
+        "model": "opencode-go/deepseek-v4-pro",
         "thinking": "high",
         "fallbacks": [
-          "cursor/claude-opus-4-6",
-          "cursor/gpt-5.2-codex"
+          "opencode-go/qwen3.6-plus",
+          "opencode-go/kimi-k2.6"
         ]
       },
       "medium": {
-        "model": "cursor/gpt-5.3-codex",
+        "model": "opencode-go/qwen3.6-plus",
         "thinking": "medium",
         "fallbacks": [
-          "cursor/claude-sonnet-4-6"
+          "opencode-go/deepseek-v4-pro"
         ]
       },
       "low": {
-        "model": "cursor/gpt-5.2-codex",
+        "model": "opencode-go/deepseek-v4-flash",
         "thinking": "low",
         "fallbacks": [
-          "cursor/gpt-5.2"
+          "opencode-go/qwen3.5-plus"
         ]
       }
     },
     "cheap": {
       "high": {
-        "model": "cursor/gpt-5.2-codex",
+        "model": "opencode-go/qwen3.6-plus",
         "thinking": "low",
         "fallbacks": [
-          "cursor/gpt-5.2"
+          "opencode-go/qwen3.5-plus"
         ]
       },
       "medium": {
-        "model": "cursor/gpt-5.2",
+        "model": "opencode-go/qwen3.5-plus",
         "thinking": "off",
         "fallbacks": [
-          "cursor/claude-sonnet-4-5"
+          "opencode-go/deepseek-v4-flash"
         ]
       },
       "low": {
-        "model": "cursor/gpt-5.1",
+        "model": "opencode-go/deepseek-v4-flash",
         "thinking": "off",
         "fallbacks": [
-          "cursor/claude-sonnet-4-5"
+          "opencode-go/qwen3.5-plus"
         ]
       }
     },
     "deep": {
       "high": {
-        "model": "cursor/gpt-5.3-codex",
+        "model": "opencode-go/deepseek-v4-pro",
         "thinking": "xhigh",
         "fallbacks": [
-          "cursor/claude-opus-4-6"
+          "opencode-go/kimi-k2.6"
         ]
       },
       "medium": {
-        "model": "cursor/claude-sonnet-4-6",
+        "model": "opencode-go/kimi-k2.6",
         "thinking": "medium",
         "fallbacks": [
-          "cursor/gpt-5.3-codex"
+          "opencode-go/deepseek-v4-pro"
         ]
       },
       "low": {
-        "model": "cursor/gpt-5.2-codex",
+        "model": "opencode-go/qwen3.6-plus",
         "thinking": "low",
         "fallbacks": [
-          "cursor/gpt-5.2"
+          "opencode-go/deepseek-v4-flash"
         ]
       }
     }

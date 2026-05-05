@@ -2,11 +2,32 @@
 type: meta
 status: active
 created: 2026-04-28
-updated: 2026-05-04
+updated: 2026-05-05
 tags: [meta, log, operations]
 ---
 
 # Wiki Operations Log
+
+## [2026-05-05] wiki-autoresearch | claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points
+- Rounds: 2 (broad architecture pass + targeted evidence-gap check)
+- Sources found: 5 (existing authoritative vault sources)
+- Pages created: [[questions/Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points]]
+- Synthesis: [[Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points]]
+- Key finding: claude-mem complements wiki as fast cache. It does not replace wiki as canonical memory without new evidence for provenance, durability, and conflict-safe governance.
+
+## [2026-05-05] wiki-autoresearch | how claude-mem fits into our workflow. and whether it should replace obsidian in the codebase. no hard feelings about previous actions, rethink from first principles always
+- Rounds: 2 (broad local corpus scan + targeted gap check)
+- Sources found: 5 (from existing vault corpus)
+- Pages created: [[questions/Research: how claude-mem fits into our workflow. and whether it should replace obsidian in the codebase. no hard feelings about previous actions, rethink from first principles always]]
+- Synthesis: [[Research: how claude-mem fits into our workflow. and whether it should replace obsidian in the codebase. no hard feelings about previous actions, rethink from first principles always]]
+- Key finding: Do not replace Obsidian as canonical Layer 6 memory now. Use claude-mem, if adopted, as non-authoritative cache with mandatory wiki write-back gates.
+
+## [2026-05-05] wiki-autoresearch | claude-mem over Obsidian for Harness Layer
+- Rounds: 2 (local corpus scan + targeted gap check)
+- Sources found: 5
+- Pages created: [[questions/Research: claude-mem over Obsidian for Harness Layer]], [[concepts/memory-system-of-record-vs-ephemeral-cache]]
+- Synthesis: [[Research: claude-mem over Obsidian for Harness Layer]]
+- Key finding: Do not replace Obsidian as Layer 6 memory system-of-record. If claude-mem is introduced, use it as non-authoritative cache and keep wiki as canonical source with hook-enforced write-back.
 
 ## [2026-05-04] implement | Layer 2: grep interception + file watcher for ck
 - **ck-enforce pi extension** (`.pi/extensions/ck-enforce.ts`): Overrides lean-ctx's `grep` tool on `session_start`. Detects conceptual patterns (multi-word, no regex) and reroutes to `ck --hybrid`. Literal/exact patterns pass through to native rg. Status command: `/ck-enforce`.
