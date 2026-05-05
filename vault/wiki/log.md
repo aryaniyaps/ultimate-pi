@@ -8,6 +8,62 @@ tags: [meta, log, operations]
 
 # Wiki Operations Log
 
+## [2026-05-05] wiki-autoresearch | pi-vcc (ecosystem expansion + SOTA update)
+- Rounds: 2 (broad search across 4 angles + targeted gap fill on 3 new extensions + 2 SOTA developments)
+- Searches: 8 | Sources found: 5 new (pi-rtk-optimizer, pi-omni-compact, pi-context-prune, Anthropic Compaction API, Context Folding paper)
+- Pages created: [[pi-rtk-optimizer-github-repo]], [[pi-omni-compact-github-repo]], [[pi-context-prune-github-repo]], [[anthropic-compaction-api]], [[context-folding-paper]] (sources), [[context-folding]] (concept)
+- Pages updated: [[pi-compaction-extensions-ecosystem]] (4→7 extensions, 3-layer architecture), [[deterministic-session-compaction]] (context folding comparison, 3-layer model), [[Research: pi-vcc]] (major update: 10 findings, expanded ecosystem, SOTA developments), [[index]], [[log]], [[hot]]
+- Key finding: Pi compaction ecosystem grew from 4 to 7 extensions across three layers (prevention → pruning → compression). Anthropic launched official server-side compaction API (beta Jan 2026). Context Folding (arXiv 2510.11967) achieves 10x context reduction via RL-trained branch/return. Tool-calling accuracy collapses ~40% past 80K tokens (hard cliff). pi-vcc remains the only zero-LLM option across all 7 extensions and the official API.
+
+## [2026-05-05] wiki-autoresearch | pi-vcc (metrics refresh)
+- Rounds: 2 (broad pass + targeted gap fill)
+- Searches: 7 | Sources found: 4 (pi-vcc repo, pi.dev package page, pi core compaction docs, Codex DSC issue)
+- Pages created: none (refresh run)
+- Pages updated: [[pi-vcc-github-repo]] (stars/install metrics refreshed), [[Research: pi-vcc]] (overview + source stats refreshed), [[index]], [[log]], [[hot]]
+- Key finding: Core findings remain stable: pi-vcc is still the only deterministic compaction extension in Pi's current ecosystem. Fresh metrics now show 75 stars and 3,299 monthly / 606 weekly installs, indicating gradual adoption while the architectural differentiation remains unchanged.
+
+## [2026-05-05] wiki-autoresearch | pi-vcc (competitive landscape)
+- Rounds: 2 (broad search across 4 angles + targeted gap fill on 3 gaps)
+- Searches: 7 | Sources found: 5 (pi-vcc repo, pi core docs, Distill repo, Codex DSC RFC, Pi compaction ecosystem)
+- Pages created: [[distill-deterministic-context-compression]] (source), [[codex-dsc-rfc-8573]] (source), [[pi-compaction-extensions-ecosystem]] (source), [[deterministic-session-compaction]] (concept)
+- Pages updated: [[pi-vcc-github-repo]] (enriched with benchmarks, forks, ecosystem position), [[vcc-conversation-compaction-for-pi]] (competitive context added), [[Research: pi-vcc]] (major rewrite: 8 findings, competitive landscape, 5 open questions), [[index]], [[log]], [[hot]]
+- Key finding: pi-vcc is uniquely positioned as the only fully deterministic compaction extension in Pi's 4-extension ecosystem. The pattern is independently validated by Codex DSC RFC (rejected but technically sound), Distill (143 stars, different layer), and MemoSift. The recall capability (`vcc_recall` over raw JSONL) is the killer differentiator no competitor offers.
+
+## [2026-05-05] wiki-autoresearch | pi-vcc (refresh)
+- Rounds: 2 (broad verification + targeted gap fill)
+- Sources found: 3 (pi-vcc repo, npm package metadata, pi core compaction docs)
+- Pages created: none (existing pages refreshed)
+- Pages updated: [[pi-vcc-github-repo]], [[Research: pi-vcc]], [[index]], [[log]], [[hot]]
+- Key finding: `pi-vcc` can explicitly take over `/compact` and auto-compaction routing with `overrideDefaultCompaction: true`, clarifying deployment mode versus Pi core defaults.
+
+## [2026-05-05] wiki-autoresearch | pi-vcc
+- Rounds: 2 (broad topic framing + targeted gap fill)
+- Sources found: 2 (pi-vcc repo/package docs, pi core compaction docs)
+- Pages created: [[pi-mono-compaction-docs]] (source), [[Research: pi-vcc]] (synthesis)
+- Pages updated: [[index]] (added source and synthesis entries), [[log]] (this entry), [[hot]] (new pi-vcc section)
+- Key finding: Pi already has built-in compaction; `pi-vcc` is a deterministic compaction + recall extension that adds predictable behavior and lineage recall ergonomics rather than introducing compaction from zero.
+
+## [2026-05-05] wiki-autoresearch | vcc extension for pi coding agent
+- Rounds: 2 (broad search + ambiguity gap-fill)
+- Sources found: 4 (pi0 marketplace, tintinweb model provider marketplace, cdervis community marketplace, sting8k/pi-vcc)
+- Pages created: [[pi-vscode-marketplace]], [[pi-vscode-model-provider-marketplace]], [[vscode-pi-community-extension]], [[pi-vcc-github-repo]] (sources), [[pi-vscode-extension-landscape]], [[vcc-conversation-compaction-for-pi]] (concepts), [[Research: vcc extension for pi coding agent]] (synthesis)
+- Pages updated: [[index]] (added concepts, sources, synthesis entries), [[log]] (this entry), [[hot]] (new research section)
+- Key finding: "vcc extension for pi coding agent" has two valid meanings. VS Code side has three active extension patterns (official bridge, LM provider, community full UI). Literal VCC side maps to `pi-vcc`, a deterministic Pi compaction/recall package (not a VS Code UI extension).
+
+## [2026-05-05] wiki-autoresearch | how GSD fits into our coding harness setup
+- Rounds: 1 (primary source scrape + 3 search angles + HN discussion + community analysis)
+- Sources found: 4 (GSD GitHub repo, codecentric deep dive, HN discussion ~473 pts, freeCodeCamp GAN comparison)
+- Pages created: [[gsd-github-repo]], [[gsd-codecentric-deep-dive]], [[gsd-hn-discussion]] (sources), [[gsd-get-shit-done]] (entity), [[Research: how GSD fits into our coding harness setup]] (synthesis)
+- Pages updated: [[index]] (added 5 entries), [[log]] (this entry), [[hot]] (new research section)
+- Key finding: GSD is downstream (builds apps). Our harness is upstream (controls agent behavior). They are complementary, not competitive. GSD's context engineering + wave execution patterns are adoptable. GSD lacks adversarial verification — our L4 fills that gap. GSD's community limitations (token-heavy, degrades at scale) validate our harness design.
+
+## [2026-05-05] wiki-autoresearch | Superpowers skill for agentic coding agents
+- Rounds: 1 (broad search with 5 angles, rich primary sources found directly)
+- Sources found: 3 (GitHub repo, release blog, Termdock analysis) + 5 search angle results
+- Pages created: [[questions/Research-superpowers-skill-for-agentic-coding-agents]] (synthesis), [[superpowers-github-repo]] (source), [[superpowers-release-blog]] (source), [[superpowers-termdock-analysis]] (source), [[superpowers-methodology]] (concept), [[agent-skills-ecosystem]] (concept), [[jesse-vincent]] (entity)
+- Pages updated: [[index]] (added 7 entries to Concepts, Entities, Sources, Research sections), [[log]], [[hot]]
+- Key finding: Superpowers (179K ⭐) validates our skill-first architecture. It can be integrated as `.pi/skills/superpowers/` skill set, adding hard-gate methodology enforcement (brainstorm→plan→TDD→subagent→review). But Superpowers cannot replace our deterministic code-level enforcement (drift monitor). Best approach: adopt Superpowers as methodology layer (probabilistic) + our harness for enforcement layer (deterministic).
+
 ## [2026-05-05] wiki-autoresearch | claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points
 - Rounds: 2 (broad architecture pass + targeted evidence-gap check)
 - Sources found: 5 (existing authoritative vault sources)

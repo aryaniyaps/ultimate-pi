@@ -1,4 +1,4 @@
-import { Agent, type ModelSelection } from "@cursor/sdk";
+import { Agent, Cursor, type ModelSelection } from "@cursor/sdk";
 import {
 	calculateCost,
 	createAssistantMessageEventStream,
@@ -13,8 +13,20 @@ import {
 	type Tool,
 } from "@mariozechner/pi-ai";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { parseCursorTranscriptToolCalls } from "../internal/cursor-sdk-transcript-parser";
 
 type ReasoningLevel = "minimal" | "low" | "medium" | "high" | "xhigh";
+type CursorAgentFactory = typeof Agent.create;
+const DEFAULT_CURSOR_AGENT_FACTORY: CursorAgentFactory = Agent.create.bind(Agent);
+let createCursorAgent: CursorAgentFactory = DEFAULT_CURSOR_AGENT_FACTORY;
+const MODEL_LIST_CACHE_TTL_MS = 5 * 60 * 1000;
+let cachedAvailableModelIds: Set<string> | undefined;
+let availableModelIdsFetchedAt = 0;
+let availableModelIdsInFlight: Promise<Set<string>> | undefined;
+
+export function __setCursorAgentFactoryForTests(factory?: CursorAgentFactory): void {
+	createCursorAgent = factory ?? DEFAULT_CURSOR_AGENT_FACTORY;
+}
 
 type ModelVariants = {
 	default: string;
@@ -23,6 +35,20 @@ type ModelVariants = {
 	medium?: string;
 	high?: string;
 	xhigh?: string;
+};
+
+const LEGACY_CURSOR_MODEL_ALIASES: Record<string, { id: string; reasoning?: ReasoningLevel }> = {
+	"claude-opus-4-7-xhigh": { id: "claude-opus-4-6", reasoning: "xhigh" },
+	"claude-opus-4-7-max": { id: "claude-opus-4-6", reasoning: "xhigh" },
+	"claude-opus-4-7-high": { id: "claude-opus-4-6", reasoning: "high" },
+	"claude-opus-4-7-medium": { id: "claude-opus-4-6", reasoning: "medium" },
+	"claude-opus-4-7-low": { id: "claude-opus-4-6", reasoning: "low" },
+	"gpt-5.3-codex-fast": { id: "gpt-5.3-codex", reasoning: "low" },
+	"gpt-5.5-high": { id: "gpt-5.2", reasoning: "high" },
+	"gpt-5.5-extra-high": { id: "gpt-5.2", reasoning: "xhigh" },
+	"claude-4.5-sonnet": { id: "claude-sonnet-4-5" },
+	"claude-4.5-sonnet-thinking": { id: "claude-sonnet-4-5", reasoning: "high" },
+	"claude-4.5-opus-high": { id: "claude-opus-4-5", reasoning: "high" },
 };
 
 const MODEL_MAP: Record<string, ModelVariants> = {
@@ -88,6 +114,34 @@ const MODEL_MAP: Record<string, ModelVariants> = {
 	"grok-code-fast-1": { default: "grok" },
 };
 
+const MODEL_ID_ALIASES: Record<string, string[]> = {
+	"auto": ["auto", "default", "composer-2"],
+	"claude-sonnet-4-5": ["claude-sonnet-4-5", "sonnet-4.5", "claude-sonnet-4"],
+	"claude-sonnet-4-6": ["claude-sonnet-4-6", "sonnet-4.6"],
+	"claude-opus-4-5": ["claude-opus-4-5", "opus-4.5"],
+	"claude-opus-4-6": ["claude-opus-4-6", "opus-4.6"],
+	"gpt-5.1": ["gpt-5.1-high", "gpt-5.1"],
+	"gpt-5.1-codex-max": ["gpt-5.1-codex-max", "gpt-5.1-codex-mini"],
+	"gpt-5.2": ["gpt-5.2-high", "gpt-5.2"],
+	"gpt-5.2-codex": ["gpt-5.2-codex"],
+	"gpt-5.3-codex": ["gpt-5.3-codex", "gpt-5.3-codex-spark"],
+	"gpt-5.3-codex-fast": ["gpt-5.3-codex-fast", "gpt-5.3-codex", "gpt-5.3-codex-low"],
+	"gpt-5.5-high": ["gpt-5.5-high", "gpt-5.2-high", "gpt-5.2"],
+	"gpt-5.5-extra-high": ["gpt-5.5-extra-high", "gpt-5.2-high", "gpt-5.2"],
+	"claude-opus-4-7-low": ["claude-opus-4-7-low", "opus-4.6-thinking", "claude-opus-4-6"],
+	"claude-opus-4-7-medium": ["claude-opus-4-7-medium", "opus-4.6-thinking", "claude-opus-4-6"],
+	"claude-opus-4-7-high": ["claude-opus-4-7-high", "opus-4.6-thinking", "claude-opus-4-6"],
+	"claude-opus-4-7-max": ["claude-opus-4-7-max", "opus-4.6-thinking", "claude-opus-4-6"],
+	"claude-opus-4-7-xhigh": ["claude-opus-4-7-xhigh", "opus-4.6-thinking", "claude-opus-4-6"],
+	"claude-4.5-sonnet": ["claude-4.5-sonnet", "sonnet-4.5", "claude-sonnet-4-5"],
+	"claude-4.5-sonnet-thinking": ["claude-4.5-sonnet-thinking", "sonnet-4.5-thinking", "claude-sonnet-4-5"],
+	"claude-4.5-opus-high": ["claude-4.5-opus-high", "opus-4.5-thinking", "claude-opus-4-5"],
+	"gemini-3-pro-preview": ["gemini-3-pro-preview", "gemini-3-pro", "gemini-3.1-pro"],
+	"gemini-3-flash-preview": ["gemini-3-flash-preview", "gemini-3-flash", "gemini-2.5-flash"],
+	"grok-code-fast-1": ["grok-code-fast-1", "grok", "grok-4.3", "grok-4-20"],
+	"composer-2": ["composer-2", "default", "composer-1.5"],
+};
+
 const PROVIDER_MODELS = [
 	{ id: "auto", name: "Auto (Cursor)", reasoning: false, contextWindow: 200000, maxTokens: 32768 },
 	{ id: "claude-sonnet-4-5", name: "Claude 4.5 Sonnet (Cursor)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
@@ -99,21 +153,132 @@ const PROVIDER_MODELS = [
 	{ id: "gpt-5.2", name: "GPT-5.2 (Cursor)", reasoning: true, contextWindow: 200000, maxTokens: 32768 },
 	{ id: "gpt-5.2-codex", name: "GPT-5.2 Codex (Cursor)", reasoning: true, contextWindow: 200000, maxTokens: 32768 },
 	{ id: "gpt-5.3-codex", name: "GPT-5.3 Codex (Cursor)", reasoning: true, contextWindow: 200000, maxTokens: 32768 },
+	{ id: "gpt-5.3-codex-fast", name: "GPT-5.3 Codex Fast (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32768 },
+	{ id: "gpt-5.5-high", name: "GPT-5.5 High (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32768 },
+	{ id: "gpt-5.5-extra-high", name: "GPT-5.5 Extra High (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32768 },
+	{ id: "claude-opus-4-7-low", name: "Claude Opus 4.7 Low (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
+	{ id: "claude-opus-4-7-medium", name: "Claude Opus 4.7 Medium (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
+	{ id: "claude-opus-4-7-high", name: "Claude Opus 4.7 High (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
+	{ id: "claude-opus-4-7-max", name: "Claude Opus 4.7 Max (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
+	{ id: "claude-opus-4-7-xhigh", name: "Claude Opus 4.7 XHigh (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
+	{ id: "claude-4.5-sonnet", name: "Claude 4.5 Sonnet (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
+	{ id: "claude-4.5-sonnet-thinking", name: "Claude 4.5 Sonnet Thinking (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
+	{ id: "claude-4.5-opus-high", name: "Claude 4.5 Opus High (Cursor, alias)", reasoning: true, contextWindow: 200000, maxTokens: 32000 },
 	{ id: "gemini-3-pro-preview", name: "Gemini 3 Pro (Cursor)", reasoning: false, contextWindow: 1000000, maxTokens: 65536 },
 	{ id: "gemini-3-flash-preview", name: "Gemini 3 Flash (Cursor)", reasoning: false, contextWindow: 1000000, maxTokens: 65536 },
 	{ id: "grok-code-fast-1", name: "Grok (Cursor)", reasoning: false, contextWindow: 131072, maxTokens: 32768 },
-	{ id: "composer-1", name: "Composer 1 (Cursor)", reasoning: false, contextWindow: 200000, maxTokens: 32768 },
-	{ id: "composer-1.5", name: "Composer 1.5 (Cursor)", reasoning: false, contextWindow: 200000, maxTokens: 32768 },
+	{ id: "composer-2", name: "Composer 2 (Cursor)", reasoning: false, contextWindow: 200000, maxTokens: 32768 },
 ];
 
-function toCursorModelId(canonicalId: string, reasoning?: string): string {
-	const family = MODEL_MAP[canonicalId];
-	if (!family) {
-		return canonicalId;
+type ProviderModelEntry = (typeof PROVIDER_MODELS)[number];
+
+function getAliasCandidates(id: string): string[] {
+	return MODEL_ID_ALIASES[id] ?? [id];
+}
+
+function supportsModelId(id: string, available: Set<string>): boolean {
+	return getAliasCandidates(id).some((candidate) => available.has(candidate));
+}
+
+function resolveSupportedModelId(preferred: string, canonicalId: string, available: Set<string>): string {
+	if (available.has(preferred)) {
+		return preferred;
 	}
-	const level = reasoning as ReasoningLevel | undefined;
-	const variant = level ? family[level] : undefined;
-	return variant ?? family.default;
+
+	const candidates = [
+		...getAliasCandidates(preferred),
+		...getAliasCandidates(canonicalId),
+		...getAliasCandidates("auto"),
+	];
+	for (const candidate of candidates) {
+		if (available.has(candidate)) {
+			return candidate;
+		}
+	}
+	return preferred;
+}
+
+async function getAvailableCursorModelIds(forceRefresh = false): Promise<Set<string>> {
+	const now = Date.now();
+	if (!forceRefresh && cachedAvailableModelIds && now - availableModelIdsFetchedAt < MODEL_LIST_CACHE_TTL_MS) {
+		return cachedAvailableModelIds;
+	}
+	if (availableModelIdsInFlight) {
+		return availableModelIdsInFlight;
+	}
+
+	availableModelIdsInFlight = (async () => {
+		const apiKey = process.env.CURSOR_API_KEY;
+		if (!apiKey) {
+			return cachedAvailableModelIds ?? new Set<string>();
+		}
+		try {
+			const models = await Cursor.models.list({ apiKey });
+			const ids = new Set<string>(models.map((model) => model.id));
+			cachedAvailableModelIds = ids;
+			availableModelIdsFetchedAt = Date.now();
+			return ids;
+		} catch {
+			return cachedAvailableModelIds ?? new Set<string>();
+		}
+	})();
+
+	try {
+		return await availableModelIdsInFlight;
+	} finally {
+		availableModelIdsInFlight = undefined;
+	}
+}
+
+async function getDynamicProviderModels(forceRefresh = false): Promise<ProviderModelEntry[]> {
+	const available = await getAvailableCursorModelIds(forceRefresh);
+	if (available.size === 0) {
+		return PROVIDER_MODELS;
+	}
+	return PROVIDER_MODELS.filter((model) => supportsModelId(model.id, available));
+}
+
+function toProviderModelConfig(model: ProviderModelEntry) {
+	return {
+		id: model.id,
+		name: model.name,
+		reasoning: model.reasoning,
+		input: ["text"] as ("text" | "image")[],
+		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+		contextWindow: model.contextWindow,
+		maxTokens: model.maxTokens,
+	};
+}
+
+function registerCursorProviderModels(pi: ExtensionAPI, models: ProviderModelEntry[]): void {
+	pi.registerProvider("cursor", {
+		baseUrl: "cursor://sdk",
+		apiKey: "CURSOR_API_KEY",
+		api: "cursor-sdk" as Api,
+		models: models.map(toProviderModelConfig),
+		streamSimple: streamCursorSdk,
+	});
+}
+
+async function toCursorModelId(canonicalId: string, reasoning?: string): Promise<string> {
+	const normalizedId = canonicalId.startsWith("cursor/") ? canonicalId.slice("cursor/".length) : canonicalId;
+	const legacyAlias = LEGACY_CURSOR_MODEL_ALIASES[normalizedId];
+	const resolvedCanonicalId = legacyAlias?.id ?? normalizedId;
+	const resolvedReasoning = legacyAlias?.reasoning ?? (reasoning as ReasoningLevel | undefined);
+	const family = MODEL_MAP[resolvedCanonicalId];
+	const preferredModelId = family
+		? (() => {
+				const level = resolvedReasoning;
+				const variant = level ? family[level] : undefined;
+				return variant ?? family.default;
+			})()
+		: resolvedCanonicalId;
+
+	const available = await getAvailableCursorModelIds();
+	if (available.size === 0) {
+		return preferredModelId;
+	}
+	return resolveSupportedModelId(preferredModelId, resolvedCanonicalId, available);
 }
 
 function contentBlockToText(block: TextContent | ImageContent): string {
@@ -332,11 +497,35 @@ function parseBracketToolCall(text: string, context: Context): { name: string; a
 	return undefined;
 }
 
+function extractThinkingTextFromTranscript(text: string): { thinking: string; remainingText: string } {
+	const lines = text.split("\n");
+	const thinkingLines: string[] = [];
+	const remainingLines: string[] = [];
+
+	for (const line of lines) {
+		const raw = line.trim();
+		const stripped = raw.replace(/^[⠋⠙⠸⠴⠦⠇⠏✻•*]+\s*/, "");
+		const thinkingMatch = stripped.match(/^Thinking\.\.\.\s*:?\s*(.*)$/i);
+		if (thinkingMatch) {
+			if (thinkingMatch[1]) thinkingLines.push(thinkingMatch[1]);
+			continue;
+		}
+		remainingLines.push(line);
+	}
+
+	return {
+		thinking: thinkingLines.join("\n").trim(),
+		remainingText: remainingLines.join("\n"),
+	};
+}
+
 function stripToolCallMarkup(text: string): string {
 	return text
 		.replace(/```pi_tool_call\s*[\s\S]*?```/gi, "")
 		.replace(/\{\s*"name"\s*:\s*"[^"]+"\s*,\s*"arguments"\s*:\s*\{[\s\S]*?\}\s*\}/g, "")
 		.replace(/(?:^|\n)\s*(?:⏳\s*)?\[[^\]]+\]\s*\{[\s\S]*?(?=\n(?:\s*(?:Status|Actions)\s*:|$)|$)/g, "")
+		.replace(/(?:^|\n)\s*⏺\s*[a-zA-Z0-9._-]+\s*[\s\S]*?```json\s*[\s\S]*?```\s*[\s\S]*?```[\s\S]*?```/g, "")
+		.replace(/^.*?\n(?=\s*⏺\s*[a-zA-Z0-9._-]+\s*$)/s, "")
 		.trim();
 }
 
@@ -391,6 +580,33 @@ function normalizeParsedToolCallArgs(
 		return typeof args.path === "string" ? { path: args.path } : {};
 	}
 
+	if (tool === "edit") {
+		const path = typeof args.path === "string" ? args.path : undefined;
+		const edits = Array.isArray(args.edits) ? args.edits : undefined;
+		if (edits && edits.length > 0) {
+			return path ? { path, edits } : { edits };
+		}
+
+		const oldText =
+			typeof args.oldText === "string"
+				? args.oldText
+				: typeof args.old_string === "string"
+					? args.old_string
+					: undefined;
+		const newText =
+			typeof args.newText === "string"
+				? args.newText
+				: typeof args.new_string === "string"
+					? args.new_string
+					: undefined;
+		if (path && oldText !== undefined && newText !== undefined) {
+			return { path, edits: [{ oldText, newText }] };
+		}
+
+		// Incomplete "edit path" pseudo-calls should be remapped upstream.
+		return path ? { path } : {};
+	}
+
 	return args;
 }
 
@@ -398,6 +614,67 @@ function likelyNeedsTool(text: string): boolean {
 	const lower = text.toLowerCase();
 	const signals = ["use ", "run ", "read ", "write ", "edit ", "find ", "grep ", "list ", "ls ", "bash ", "command", "file", "directory", "tool"];
 	return signals.some((s) => lower.includes(s));
+}
+
+const CURSOR_SDK_NOISE_PATTERNS: readonly RegExp[] = [
+	/\bmanaged_skills\.(?:removed|added|updated)\b/,
+	/\bLocalCursorRulesService load completed\b/,
+	/\bAgentSkillsCursorRulesService load completed\b/,
+	/\bCursorPluginsAgentSkillsService load completed\b/,
+	/^\s*[⠋⠙⠸⠴⠦⠇⠏]\s+Working\.\.\.\s*$/,
+];
+
+function isCursorSdkNoiseChunk(chunk: string): boolean {
+	const normalized = chunk.replace(/\u001b\[[0-9;]*m/g, "").trim();
+	if (!normalized) return false;
+	return CURSOR_SDK_NOISE_PATTERNS.some((pattern) => pattern.test(normalized));
+}
+
+function stripCursorSdkNoise(chunk: string): string {
+	// Keep carriage-return spinner frames intact while filtering; splitting on '\r'
+	// turns transient updates into visible multiple lines in the TUI.
+	const lines = chunk.split("\n");
+	const kept: string[] = [];
+	for (const line of lines) {
+		const normalized = line.replace(/\u001b\[[0-9;]*m/g, "").replace(/\r/g, "").trim();
+		if (normalized.length > 0 && isCursorSdkNoiseChunk(normalized)) {
+			continue;
+		}
+		kept.push(line);
+	}
+	return kept.join("\n");
+}
+
+async function withCursorSdkNoiseSuppressed<T>(run: () => Promise<T>): Promise<T> {
+	const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+	const originalStderrWrite = process.stderr.write.bind(process.stderr);
+
+	const filteredWrite = (
+		originalWrite: (chunk: string | Uint8Array, encoding?: BufferEncoding, cb?: (error?: Error | null) => void) => boolean,
+		chunk: string | Uint8Array,
+		encoding?: BufferEncoding,
+		cb?: (error?: Error | null) => void,
+	): boolean => {
+		const text = typeof chunk === "string" ? chunk : Buffer.from(chunk).toString(encoding ?? "utf8");
+		const sanitized = stripCursorSdkNoise(text);
+		if (!sanitized) {
+			cb?.(null);
+			return true;
+		}
+		return originalWrite(sanitized, encoding, cb);
+	};
+
+	process.stdout.write = ((chunk: string | Uint8Array, encoding?: BufferEncoding, cb?: (error?: Error | null) => void) =>
+		filteredWrite(originalStdoutWrite, chunk, encoding, cb)) as typeof process.stdout.write;
+	process.stderr.write = ((chunk: string | Uint8Array, encoding?: BufferEncoding, cb?: (error?: Error | null) => void) =>
+		filteredWrite(originalStderrWrite, chunk, encoding, cb)) as typeof process.stderr.write;
+
+	try {
+		return await run();
+	} finally {
+		process.stdout.write = originalStdoutWrite as typeof process.stdout.write;
+		process.stderr.write = originalStderrWrite as typeof process.stderr.write;
+	}
 }
 
 function streamCursorSdk(model: Model<Api>, context: Context, options?: SimpleStreamOptions): AssistantMessageEventStream {
@@ -452,6 +729,44 @@ function streamCursorSdk(model: Model<Api>, context: Context, options?: SimpleSt
 			if (!mappedName) return undefined;
 			return { name: mappedName, arguments: { path: args.path ?? "", content: args.fileText ?? "" } };
 		}
+		if (n === "edit") {
+			const editToolName = resolveToolName(["Edit", "edit"]);
+			const path = typeof args.path === "string" ? args.path : "";
+			const edits = Array.isArray(args.edits) ? args.edits : undefined;
+			const oldText =
+				typeof args.oldText === "string"
+					? args.oldText
+					: typeof args.old_string === "string"
+						? args.old_string
+						: undefined;
+			const newText =
+				typeof args.newText === "string"
+					? args.newText
+					: typeof args.new_string === "string"
+						? args.new_string
+						: undefined;
+
+			// Preserve Edit intent even when args are incomplete so the TUI
+			// still renders the edit call instead of silently converting it.
+			if ((!edits || edits.length === 0) && (oldText === undefined || newText === undefined)) {
+				return editToolName ? { name: editToolName, arguments: { path } } : undefined;
+			}
+
+			if (!editToolName) {
+				return undefined;
+			}
+
+			if (edits && edits.length > 0) {
+				return { name: editToolName, arguments: { path, edits } };
+			}
+			return {
+				name: editToolName,
+				arguments: {
+					path,
+					edits: [{ oldText: oldText ?? "", newText: newText ?? "" }],
+				},
+			};
+		}
 		const passthrough = resolveToolName([name, n]);
 		if (!passthrough) return undefined;
 		return { name: passthrough, arguments: args };
@@ -482,6 +797,8 @@ function streamCursorSdk(model: Model<Api>, context: Context, options?: SimpleSt
 		let aborted = false;
 		let sawPiToolCall = false;
 		let plainText = "";
+		let activeTextContentIndex: number | undefined;
+		let activeThinkingContentIndex: number | undefined;
 		const emittedToolCallIds = new Set<string>();
 
 		const output: AssistantMessage = {
@@ -507,143 +824,237 @@ function streamCursorSdk(model: Model<Api>, context: Context, options?: SimpleSt
 			void runCancel?.();
 		};
 
+		const appendTextDelta = (text: string): void => {
+			if (!text) return;
+			plainText += text;
+			if (activeTextContentIndex === undefined) {
+				activeTextContentIndex = output.content.length;
+				output.content.push({ type: "text", text: "" });
+				stream.push({ type: "text_start", contentIndex: activeTextContentIndex, partial: output });
+			}
+			const current = output.content[activeTextContentIndex] as TextContent;
+			current.text += text;
+			stream.push({ type: "text_delta", contentIndex: activeTextContentIndex, delta: text, partial: output });
+		};
+
+		const closeActiveTextBlock = (): void => {
+			if (activeTextContentIndex === undefined) return;
+			const current = output.content[activeTextContentIndex] as TextContent;
+			stream.push({
+				type: "text_end",
+				contentIndex: activeTextContentIndex,
+				content: current.text,
+				partial: output,
+			});
+			activeTextContentIndex = undefined;
+		};
+
+		const appendThinkingDelta = (text: string): void => {
+			if (!text) return;
+			if (activeThinkingContentIndex === undefined) {
+				activeThinkingContentIndex = output.content.length;
+				output.content.push({ type: "thinking", thinking: "" });
+				stream.push({ type: "thinking_start", contentIndex: activeThinkingContentIndex, partial: output });
+			}
+			const current = output.content[activeThinkingContentIndex] as { type: "thinking"; thinking: string };
+			current.thinking += text;
+			stream.push({
+				type: "thinking_delta",
+				contentIndex: activeThinkingContentIndex,
+				delta: text,
+				partial: output,
+			});
+		};
+
+		const closeActiveThinkingBlock = (): void => {
+			if (activeThinkingContentIndex === undefined) return;
+			const current = output.content[activeThinkingContentIndex] as { type: "thinking"; thinking: string };
+			stream.push({
+				type: "thinking_end",
+				contentIndex: activeThinkingContentIndex,
+				content: current.thinking,
+				partial: output,
+			});
+			activeThinkingContentIndex = undefined;
+		};
+
 		try {
 			stream.push({ type: "start", partial: output });
 
-			const selectedModel = toCursorModelId(model.id, options?.reasoning);
-			const promptText = serializeContext(context);
-			const agent = await Agent.create({
-				apiKey: process.env.CURSOR_API_KEY,
-				model: { id: selectedModel } as ModelSelection,
-					// YOLO-style local runtime: load all Cursor settings and disable sandbox
-					// so the agent can execute tool/shell flows without interactive gating.
-					local: {
-						cwd: process.cwd(),
-						settingSources: ["all"],
-						sandboxOptions: { enabled: false },
-					},
-			});
+			await withCursorSdkNoiseSuppressed(async () => {
+				const selectedModel = await toCursorModelId(model.id, options?.reasoning);
+				const promptText = serializeContext(context);
+				const agent = await createCursorAgent({
+					apiKey: process.env.CURSOR_API_KEY,
+					model: { id: selectedModel } as ModelSelection,
+						// YOLO-style local runtime: load all Cursor settings and disable sandbox
+						// so the agent can execute tool/shell flows without interactive gating.
+						local: {
+							cwd: process.cwd(),
+							settingSources: ["all"],
+							sandboxOptions: { enabled: false },
+						},
+				});
 
-			try {
-				options?.signal?.addEventListener("abort", onAbort, { once: true });
-				// Keep force=true so stale/busy local runs never block autonomous execution.
-				const run = await agent.send(promptText, { local: { force: true } });
-				runCancel = () => run.cancel();
+				try {
+					options?.signal?.addEventListener("abort", onAbort, { once: true });
+					// Keep force=true so stale/busy local runs never block autonomous execution.
+					const run = await agent.send(promptText, { local: { force: true } });
+					runCancel = () => run.cancel();
 
-				for await (const event of run.stream()) {
-					if (aborted) break;
-					if (event.type === "tool_call") {
-						if (event.status !== "running" && event.status !== "completed") {
-							continue;
-						}
-						if (emittedToolCallIds.has(event.call_id)) {
-							continue;
-						}
-						const mapped = mapCursorTool(event.name, event.args);
-						if (!mapped) continue;
-						emittedToolCallIds.add(event.call_id);
-						emitToolCallBlock(output, mapped, event.call_id);
-						sawPiToolCall = true;
-						continue;
-					}
-					if (event.type !== "assistant") continue;
-
-					for (const block of event.message.content) {
-						if (block.type === "text") {
-							const text = block.text || "";
-							if (!text) continue;
-							plainText += text;
-							const idx = output.content.length;
-							output.content.push({ type: "text", text: "" });
-							stream.push({ type: "text_start", contentIndex: idx, partial: output });
-							(output.content[idx] as TextContent).text = text;
-							stream.push({ type: "text_delta", contentIndex: idx, delta: text, partial: output });
-							stream.push({ type: "text_end", contentIndex: idx, content: text, partial: output });
-							continue;
-						}
-
-						if (block.type === "tool_use") {
-							const mapped = mapCursorTool(block.name, block.input);
-							if (!mapped) continue;
-							const toolCallId = block.id || `call_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
-							if (emittedToolCallIds.has(toolCallId)) {
+					for await (const event of run.stream()) {
+						if (aborted) break;
+						if (event.type === "tool_call") {
+							if (event.status !== "running" && event.status !== "completed" && event.status !== "error") {
 								continue;
 							}
-							emittedToolCallIds.add(toolCallId);
-							emitToolCallBlock(output, mapped, toolCallId);
-							sawPiToolCall = true;
+							const mapped = mapCursorTool(event.name, event.args);
+							if (!mapped) continue;
+
+							if (!emittedToolCallIds.has(event.call_id)) {
+								closeActiveThinkingBlock();
+								closeActiveTextBlock();
+								emittedToolCallIds.add(event.call_id);
+								emitToolCallBlock(output, mapped, event.call_id);
+								sawPiToolCall = true;
+							}
+
+							continue;
+						}
+						if (event.type === "thinking") {
+							appendThinkingDelta(event.text || "");
+							continue;
+						}
+						if (event.type !== "assistant") continue;
+						closeActiveThinkingBlock();
+
+						for (const block of event.message.content) {
+							if (block.type === "thinking" && typeof block.thinking === "string") {
+								appendThinkingDelta(block.thinking);
+								continue;
+							}
+
+							if (block.type === "reasoning" && typeof block.text === "string") {
+								appendThinkingDelta(block.text);
+								continue;
+							}
+
+							if (block.type === "text") {
+								const text = block.text || "";
+								const extracted = extractThinkingTextFromTranscript(text);
+								if (extracted.thinking) {
+									appendThinkingDelta(extracted.thinking);
+								}
+								const visibleText = extracted.remainingText;
+								if (!visibleText.trim()) {
+									continue;
+								}
+								appendTextDelta(visibleText);
+								continue;
+							}
+
+							if (block.type === "tool_use") {
+								const mapped = mapCursorTool(block.name, block.input);
+								if (!mapped) continue;
+								closeActiveThinkingBlock();
+								closeActiveTextBlock();
+								const toolCallId = block.id || `call_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+								if (emittedToolCallIds.has(toolCallId)) {
+									continue;
+								}
+								emittedToolCallIds.add(toolCallId);
+								emitToolCallBlock(output, mapped, toolCallId);
+								sawPiToolCall = true;
+							}
 						}
 					}
-				}
+					closeActiveThinkingBlock();
+					closeActiveTextBlock();
 
-				const result = await run.wait();
-				if (aborted || options?.signal?.aborted || result.status === "cancelled") {
-					output.stopReason = "aborted";
-					output.errorMessage = "Request aborted";
-					stream.push({ type: "error", reason: "aborted", error: output });
-					stream.end();
-					return;
-				}
-				if (result.status !== "finished") {
-					output.stopReason = "error";
-					output.errorMessage = result.result || `Cursor SDK run status: ${result.status}`;
-					stream.push({ type: "error", reason: "error", error: output });
-					stream.end();
-					return;
-				}
+					const result = await run.wait();
+					if (aborted || options?.signal?.aborted || result.status === "cancelled") {
+						output.stopReason = "aborted";
+						output.errorMessage = "Request aborted";
+						stream.push({ type: "error", reason: "aborted", error: output });
+						stream.end();
+						return;
+					}
+					if (result.status !== "finished") {
+						output.stopReason = "error";
+						output.errorMessage = result.result || `Cursor SDK run status: ${result.status}`;
+						stream.push({ type: "error", reason: "error", error: output });
+						stream.end();
+						return;
+					}
 
-				applyUsage(model, output, promptText, plainText || result.result || "");
+					applyUsage(model, output, promptText, plainText || result.result || "");
 
-				// Some models may output fenced `pi_tool_call` JSON as plain text instead of native tool blocks.
-				// Convert it into a real toolCall block so Pi UI/tool execution works consistently.
-				if (!sawPiToolCall) {
-					const parsedPiToolCall = parsePiToolCall(plainText, context) ?? parseBracketToolCall(plainText, context);
-					if (parsedPiToolCall) {
-						const contentIndex = output.content.length;
-						const toolCallId = `call_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
-						const normalizedArgs = normalizeParsedToolCallArgs(
-							parsedPiToolCall.name,
-							parsedPiToolCall.arguments,
-						);
-						const piToolCall = {
-							type: "toolCall" as const,
-							id: toolCallId,
-							name: parsedPiToolCall.name,
-							arguments: normalizedArgs,
-						};
-						output.content.push(piToolCall);
-						stream.push({ type: "toolcall_start", contentIndex, partial: output });
-						stream.push({
-							type: "toolcall_delta",
-							contentIndex,
-							delta: JSON.stringify(normalizedArgs),
-							partial: output,
-						});
-						stream.push({ type: "toolcall_end", contentIndex, toolCall: piToolCall, partial: output });
-						sawPiToolCall = true;
+					// Some models may output fenced `pi_tool_call` JSON as plain text instead of native tool blocks.
+					// Convert it into a real toolCall block so Pi UI/tool execution works consistently.
+					if (!sawPiToolCall) {
+						const parsedPiToolCalls: Array<{ name: string; arguments: Record<string, unknown> }> = [];
+						const parsedFenced = parsePiToolCall(plainText, context);
+						if (parsedFenced) parsedPiToolCalls.push(parsedFenced);
+						const parsedBracket = parseBracketToolCall(plainText, context);
+						if (parsedBracket) parsedPiToolCalls.push(parsedBracket);
+						parsedPiToolCalls.push(...parseCursorTranscriptToolCalls(plainText, context));
 
-						const cleaned = stripToolCallMarkup(plainText);
-						if (cleaned !== plainText) {
-							for (const content of output.content) {
-								if (content.type === "text") {
-									content.text = stripToolCallMarkup(content.text);
+						if (parsedPiToolCalls.length > 0) {
+							closeActiveTextBlock();
+							closeActiveThinkingBlock();
+							for (const parsedPiToolCall of parsedPiToolCalls) {
+							const contentIndex = output.content.length;
+							const toolCallId = `call_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+							const normalizedArgs = normalizeParsedToolCallArgs(
+								parsedPiToolCall.name,
+								parsedPiToolCall.arguments,
+							);
+							const piToolCall = {
+								type: "toolCall" as const,
+								id: toolCallId,
+								name: parsedPiToolCall.name,
+								arguments: normalizedArgs,
+							};
+							output.content.push(piToolCall);
+							stream.push({ type: "toolcall_start", contentIndex, partial: output });
+							stream.push({
+								type: "toolcall_delta",
+								contentIndex,
+								delta: JSON.stringify(normalizedArgs),
+								partial: output,
+							});
+							stream.push({ type: "toolcall_end", contentIndex, toolCall: piToolCall, partial: output });
+							sawPiToolCall = true;
+							}
+
+							const cleaned = stripToolCallMarkup(plainText);
+							if (cleaned !== plainText) {
+								for (const content of output.content) {
+									if (content.type === "text") {
+										content.text = stripToolCallMarkup(content.text);
+									}
 								}
 							}
 						}
 					}
-				}
 
-				if (sawPiToolCall) {
-					output.stopReason = "toolUse";
-					stream.push({ type: "done", reason: "toolUse", message: output });
-				} else {
-					stream.push({ type: "done", reason: "stop", message: output });
+					if (sawPiToolCall) {
+						for (const content of output.content) {
+							if (content.type === "text") {
+								content.text = stripToolCallMarkup(content.text);
+							}
+						}
+						output.stopReason = "toolUse";
+						stream.push({ type: "done", reason: "toolUse", message: output });
+					} else {
+						stream.push({ type: "done", reason: "stop", message: output });
+					}
+					stream.end();
+				} finally {
+					options?.signal?.removeEventListener("abort", onAbort);
+					agent.close();
 				}
-				stream.end();
-			} finally {
-				options?.signal?.removeEventListener("abort", onAbort);
-				agent.close();
-			}
+			});
 		} catch (error) {
 			output.stopReason = options?.signal?.aborted ? "aborted" : "error";
 			output.errorMessage = error instanceof Error ? error.message : String(error);
@@ -655,20 +1066,20 @@ function streamCursorSdk(model: Model<Api>, context: Context, options?: SimpleSt
 	return stream;
 }
 
+export const __streamCursorSdkForTests = streamCursorSdk;
+
 export default function cursorSdkProvider(pi: ExtensionAPI) {
-	pi.registerProvider("cursor", {
-		baseUrl: "cursor://sdk",
-		apiKey: "CURSOR_API_KEY",
-		api: "cursor-sdk" as Api,
-		models: PROVIDER_MODELS.map((model) => ({
-			id: model.id,
-			name: model.name,
-			reasoning: model.reasoning,
-			input: ["text"] as ("text" | "image")[],
-			cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-			contextWindow: model.contextWindow,
-			maxTokens: model.maxTokens,
-		})),
-		streamSimple: streamCursorSdk,
+	// Synchronous fallback registration; refreshed with account-specific models below.
+	registerCursorProviderModels(pi, PROVIDER_MODELS);
+
+	const refreshProviderModels = async (forceRefresh = false) => {
+		const models = await getDynamicProviderModels(forceRefresh);
+		registerCursorProviderModels(pi, models);
+	};
+
+	void refreshProviderModels();
+
+	pi.on("session_start", () => {
+		void refreshProviderModels(true);
 	});
 }

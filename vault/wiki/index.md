@@ -4,6 +4,7 @@ status: active
 created: 2026-04-28
 updated: 2026-05-05
 tags: [meta, index, catalog]
+
 ---
 
 # Codebase Map & Architecture Wiki
@@ -131,6 +132,17 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[context-engineering]] | Staged compaction, dual-memory, event-driven reminders, lazy tool discovery, prompt caching |
 | [[safety-defense-in-depth]] | Five-layer architecture: prompt → schema → approval → validation → hooks |
 
+## Concepts — Agent Skills & Methodology
+
+| Concept | Summary |
+|---------|---------|
+| [[pi-vscode-extension-landscape]] | Three extension patterns for Pi in VS Code: official bridge, LM provider, community full UI |
+| [[vcc-conversation-compaction-for-pi]] | VCC in Pi means deterministic conversation compaction + recall (`pi-vcc`), not VS Code UI |
+| [[deterministic-session-compaction]] | **UPDATED**: No-LLM compaction pattern: pi-vcc, Distill, MemoSift, Codex DSC. Now includes context folding comparison and 3-layer token management architecture |
+| [[context-folding]] | **NEW**: RL-learned branch/return sub-trajectories. 10x context reduction (32K vs 327K). arXiv 2510.11967 (ByteDance/CMU/Stanford). Now in Anthropic's API |
+| [[superpowers-methodology]] | Hard-gate discipline framework: brainstorm→plan→TDD→subagent→review pipeline |
+| [[agent-skills-ecosystem]] | 490K+ SKILL.md marketplace, open standard, cross-agent, security risks |
+
 ## Concepts — Agent Architecture
 
 | Concept | Summary |
@@ -177,6 +189,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Entity | Summary |
 |--------|---------|
+| [[gsd-get-shit-done]] | **NEW**: 60K ⭐ meta-prompting system. Discuss→plan→execute→verify→ship pipeline. Downstream from our harness. |
 | [[pi-coding-agent]] | Open-source terminal coding agent by Mario Zechner. TypeScript extension API. Our harness platform |
 | [[opendev]] | Open-source terminal agent. First comprehensive architecture paper (arXiv:2603.05344v1) |
 
@@ -184,6 +197,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Entity | Summary |
 |--------|---------|
+| [[jesse-vincent]] | **NEW**: Creator of Superpowers. Request Tracker, K-9 Mail, Prime Radiant founder |
 | [[disler-indydevdan]] | Creator of pi-vs-claude-code. 15+ Pi extensions. Reference implementation for orchestration |
 
 ## Entities — Companies
@@ -243,6 +257,9 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Synthesis | Summary |
 |-----------|---------|
+| [[Research: pi-vcc]] | **UPDATED**: Pi compaction ecosystem grew 4→7 extensions. Anthropic launched official compaction API. Context Folding (arXiv) achieves 10x reduction. pi-vcc still only zero-LLM option. 80K token accuracy cliff validated |
+| [[Research: vcc extension for pi coding agent]] | **NEW**: Topic split into two meanings: VS Code extension ecosystem vs literal `pi-vcc` compaction package |
+| [[Research: how GSD fits into our coding harness setup]] | **NEW**: GSD is downstream (builds apps); our harness is upstream (controls agent behavior). Complementary. 3 adoptable patterns, 3 integration levels, 4 open questions. |
 | [[Research: pi-vs-claude-code Agentic Orchestration Pipeline]] | **NEW**: Three orchestration patterns, harness architecture, safety layers, implementation path |
 | [[Research: Augment Code Context Engine]] | Context Engine architecture, benchmarks, integration plan for harness |
 | [[Research: Model-Adaptive Agent Harness Design]] | Four-layer harness must be specialized per model |
@@ -267,6 +284,7 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 | [[Research: executor.sh Harness Integration]] | executor.sh: integration layer scope, 3 new P43 sub-phases (catalog, discovery, policy), build vs integrate decision |
 | [[Research: Prompt Renderer for Multi-Model Agent Harness]] | Build-time prompt renderer: per-model compilation, caching, variable system, npm distribution |
 | [[Research: TypeScript Best Practices and Codebase Structure]] | Strict mode, runtimes, barrel files, monorepos, folder structure, error handling, testing |
+| [[Research: Superpowers Skill for Agentic Coding Agents]] | **NEW**: Superpowers methodology, hard-gate enforcement, harness integration, ecosystem analysis |
 | [[Research: Skill-First Harness Architecture]] | **UPDATED (May 2026)**: Rethought MVP + harness plans from first principles. Skills as atomic unit. 3 code files vs 15. Event bus removed. |
 | [[Research: Engineering Workflows of Legendary Programmers and AI Harness Mapping]] | **NEW (May 2026)**: 10 patterns from 6 legendary programmers mapped to harness layers |
 | [[Research: claude-mem over Obsidian for Harness Layer]] | Replacement assessment: keep Obsidian as source of truth, optional claude-mem as cache |
@@ -277,6 +295,25 @@ This wiki maps the codebase architecture, tracks key software design decisions, 
 
 | Source | Type | Summary |
 |--------|------|---------|
+| [[distill-deterministic-context-compression]] | github-repo | **NEW**: Siddhant-K-code/distill (143 stars), 4-layer deterministic context compression, ~12ms, different layer than pi-vcc |
+| [[codex-dsc-rfc-8573]] | github-issue | **NEW**: Codex DSC RFC — deterministic checkpoint proposal, validates pi-vcc pattern, closed as not_planned |
+| [[pi-compaction-extensions-ecosystem]] | ecosystem-analysis | **UPDATED**: 7 Pi compaction extensions across 3 layers: prevention (rtk-optimizer), mid-session (context-prune), boundary (vcc, omni-compact, model-aware, custom, agentic) |
+| [[pi-rtk-optimizer-github-repo]] | github-repo | **NEW**: Upstream token reduction via command rewriting + output compaction, v0.5.3, deterministic, MIT |
+| [[pi-omni-compact-github-repo]] | github-repo | **NEW**: Large-context model (1M+) subprocess compaction, v0.1.2, opposing philosophy to pi-vcc |
+| [[pi-context-prune-github-repo]] | github-repo | **NEW**: Tool-call batch summarization with original preservation + prefix caching, 5 trigger modes |
+| [[anthropic-compaction-api]] | official-docs | **NEW**: Anthropic server-side compaction API (beta Jan 2026). Claude Opus 4.7/4.6, Sonnet 4.6. LLM-based |
+| [[context-folding-paper]] | paper | **NEW**: arXiv 2510.11967 (ByteDance/CMU/Stanford). 10x context reduction via RL-trained branch/return. 62% BrowseComp-Plus, 58% SWE-Bench at 32K tokens |
+| [[pi-mono-compaction-docs]] | official-docs | Core Pi compaction docs (`/compact`, `/autocompact`, thresholds). Baseline for evaluating `pi-vcc` |
+| [[pi-vscode-marketplace]] | marketplace-listing | **NEW**: Official Pi VS Code extension (`pi0.pi-vscode`), 1,348 installs, IDE bridge + `@pi` chat participant |
+| [[pi-vscode-model-provider-marketplace]] | marketplace-listing | **NEW**: Pi as VS Code LM provider (`vscode.lm.*`) for Copilot Chat + model picker |
+| [[vscode-pi-community-extension]] | marketplace-listing | **NEW**: Community unofficial extension (`cdervis.vscode-pi`), 352 installs, RPC sidebar/chat UX |
+| [[pi-vcc-github-repo]] | github-repo | **UPDATED**: `pi-vcc` deterministic compaction/recall package for Pi sessions, v0.3.12, includes `overrideDefaultCompaction` route control and refreshed install metrics |
+| [[gsd-github-repo]] | github-repo | **NEW**: 60K ⭐ meta-prompting/spec-driven dev system for Claude Code + 15 runtimes. MIT. v1.40.0. |
+| [[gsd-codecentric-deep-dive]] | engineering-blog | **NEW**: Deep architecture analysis of GSD's slash commands, agents, hooks, state persistence |
+| [[gsd-hn-discussion]] | discussion-thread | **NEW**: 473-pt HN discussion: community consensus, comparisons, limitations |
+| [[superpowers-github-repo]] | github-repo | **NEW**: 179K ⭐ agentic skills framework, 14+ composable skills, hard-gate enforcement |
+| [[superpowers-release-blog]] | blog-post | **NEW**: Original release announcement, persuasion principles, TDD for skills |
+| [[superpowers-termdock-analysis]] | article | **NEW**: Third-party deep dive, skill-by-skill analysis, philosophy breakdown |
 | [[sources/disler-pi-vs-claude-code]] | github-repo | Pi extension showcase: 15+ extensions for orchestration, safety, UI, cross-agent integration |
 | [[sources/opendev-arxiv-2603.05344v1]] | academic-paper | OpenDev architecture: compound AI system, ACC, system reminders, 5-layer safety (Mar 2026) |
 | [[sources/martin-fowler-harness-engineering]] | engineering-blog | Harness = Guides + Sensors + Steering Loop. Computational vs Inferential controls (Apr 2026) |

@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-05-05T17:05:00
+updated: 2026-05-05T20:20:00
 created: 2026-04-30
 tags: []
 status: active
@@ -10,25 +10,91 @@ status: active
 # Recent Context
 
 ## Last Updated
-2026-05-05. Filed research: [[Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points]].
+2026-05-05. Deep research: [[Research: pi-vcc]] (ecosystem expansion 4→7, Anthropic compaction API, Context Folding SOTA).
+
+## pi-vcc Research — Ecosystem Expansion (May 2026)
+
+### Key Finding
+**Pi compaction ecosystem grew from 4 to 7 extensions operating at three distinct layers: prevention (rtk-optimizer), mid-session pruning (context-prune), and boundary compaction (vcc + 4 others). Anthropic launched official server-side compaction API (beta Jan 2026). Context Folding (arXiv 2510.11967) achieves 10x context reduction via RL-trained branch/return. pi-vcc remains the only zero-LLM option across all 7 extensions and the official API. Tool-calling accuracy collapses ~40% past 80K tokens — a hard cliff, not gradual decline.**
+
+### Ten Key Findings
+1. **Ecosystem grew 4→7 extensions**: Three new extensions since April: pi-omni-compact (large-context model subprocess), pi-context-prune (tool-call batch summarization), pi-rtk-optimizer (upstream command rewriting + output compaction).
+2. **Three-layer token management emerged**: Prevention (rtk-optimizer) → mid-session pruning (context-prune) → boundary compaction (vcc/others). Maps directly to our harness's layered context engineering.
+3. **pi-vcc still uniquely deterministic**: Across all 7 extensions plus Anthropic's official API, pi-vcc is the only zero-LLM option. Every other approach uses LLM summarization.
+4. **Anthropic launched official compaction API**: Beta since January 2026. Server-side automatic summarization for Claude Opus 4.7/4.6, Sonnet 4.6. Validates compaction as first-class platform concern.
+5. **Context Folding achieves 10x reduction**: arXiv 2510.11967 (ByteDance Seed/CMU/Stanford). FoldGRPO RL framework learns branch/return sub-trajectories. 62% BrowseComp-Plus, 58% SWE-Bench Verified at only 32K tokens.
+6. **80K token accuracy cliff confirmed**: Past ~80K effective-context tokens, tool-calling accuracy collapses ~40%. Hard cliff. Context windows beyond 80K misleading for agentic workloads.
+7. **pi-omni-compact: opposing philosophy**: Spawns 1M+ context model for highest-fidelity summaries. Exactly opposite of pi-vcc: more compute for quality vs zero compute for determinism.
+8. **Recall still unique**: No new extension or API offers searchable pre-compaction history. `vcc_recall` over raw JSONL remains pi-vcc's killer differentiator.
+9. **Pi ecosystem reached 2,808+ resources**: 1,183+ extensions, 1,459 active projects. Compaction among highest-activity categories.
+10. **65% of enterprise AI failures from context drift**: Compaction quality directly determines agent reliability. Not optional.
+
+### Pages Created
+[[pi-rtk-optimizer-github-repo]], [[pi-omni-compact-github-repo]], [[pi-context-prune-github-repo]], [[anthropic-compaction-api]], [[context-folding-paper]] (sources), [[context-folding]] (concept)
+
+### Pages Updated
+[[pi-compaction-extensions-ecosystem]] (4→7 extensions), [[deterministic-session-compaction]] (context folding + 3-layer model), [[Research: pi-vcc]] (10 findings, expanded landscape)
+
+## VCC Extension Research (May 2026)
+
+### Key Finding
+**Topic has two valid meanings. For Pi, "VCC" can mean VS Code integration extensions OR literal VCC compaction (`pi-vcc`). VS Code side currently has three patterns: official bridge (`pi0.pi-vscode`), LM provider bridge (`tintinweb.vscode-pi-model-chat-provider`), and community full chat UX (`cdervis.vscode-pi`). Literal VCC side is `pi-vcc`, a deterministic compaction/recall Pi package, not a VS Code UI extension.**
+
+### Five Key Findings
+1. **Official extension exists and is active**: `pi0.pi-vscode` (1,348 installs, v0.0.9) keeps terminal-first flow, adds `@pi` chat participant, and ships rich VS Code bridge tools.
+2. **Model provider path exists**: `tintinweb.vscode-pi-model-chat-provider` (350 installs) exposes Pi via `vscode.lm.*` so Copilot Chat and LM API extensions can use Pi models.
+3. **Community full UX option exists**: `cdervis.vscode-pi` (352 installs, v0.13.0) is unofficial/prerelease but offers rich sidebar + RPC workflow and rapid iteration.
+4. **Literal VCC is compaction tech**: `sting8k/pi-vcc` uses deterministic no-LLM compaction, high token reduction, and recall over session lineage.
+5. **Naming collision causes confusion**: User phrase "vcc extension" is ambiguous unless clarified as IDE extension vs compaction extension.
+
+### Pages Created
+[[pi-vscode-marketplace]], [[pi-vscode-model-provider-marketplace]], [[vscode-pi-community-extension]], [[pi-vcc-github-repo]] (sources), [[pi-vscode-extension-landscape]], [[vcc-conversation-compaction-for-pi]] (concepts), [[Research: vcc extension for pi coding agent]] (synthesis)
+
+## GSD Integration Research (May 2026)
+
+### Key Finding
+**GSD (60K stars) is a downstream application-building pipeline (discuss→plan→execute→verify→ship). Our harness is an upstream behavior-control pipeline (spec→plan→drift→grounding→adversarial→observe→memory→orchestrate→query). They address fundamentally different layers. Complementary, not competitive.**
+
+### Six Key Findings
+1. **GSD is downstream; we are upstream.** GSD receives user ideas and produces apps. Our harness governs how agents reason, verify, and maintain state during any coding task.
+2. **GSD lacks adversarial verification — our L4 fills that gap.** GSD's quality gates are mechanical (lint, test, type-check). No agent reads another agent's code to assess spec-vs-intent alignment.
+3. **Both systems share skill-first architecture.** Since May 2026, our harness uses markdown skills. GSD has always been markdown-first. Both use progressive disclosure.
+4. **GSD's context engineering complements our L3 grounding.** Fresh subagent contexts, file-based state, XML plans — same techniques, different abstraction levels.
+5. **GSD's state files are a narrower version of our L6 memory.** `.planning/` is project memory. Our wiki is universal knowledge across all harness layers.
+6. **GSD's community limitations validate our harness design.** Token-heavy, degrades at scale, verification uses lexical tools — exactly the failure modes our L1-L4 pipeline prevents.
+
+### Patterns Worth Adopting
+- **Namespace routing**: 6 meta-skills reducing 86→6 skill listings (saves ~2K tokens/turn)
+- **Deterministic CLI helper**: `gsd-tools.cjs` — script for operations LLMs do unreliably
+- **Wave execution tracking**: Dependency-aware parallel execution with per-task summaries
+
+### Integration Opportunities
+- **Immediate**: Adopt namespace routing + deterministic helper pattern
+- **Medium-term**: Run GSD inside harness-controlled pi sessions with harness drift monitoring
+- **Long-term**: Unified skill marketplace if GSD-2 converges with pi
+
+### Pages Created
+[[gsd-github-repo]], [[gsd-codecentric-deep-dive]], [[gsd-hn-discussion]] (sources), [[gsd-get-shit-done]] (entity), [[Research: how GSD fits into our coding harness setup]] (synthesis)
+
+---
 
 ## Key Recent Facts
-- First-principles verdict unchanged: keep Obsidian wiki as Layer 6 canonical memory.
-- `claude-mem` fits as optional fast recall cache, not source-of-record.
-- Deterministic write-back gates stay mandatory for decision-bearing tasks.
-- Current vault still lacks direct `claude-mem` benchmark and provenance evidence.
-
-## Recent Changes
-- Created: [[Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points]]
-- Updated: [[index]], [[log]], [[hot]]
-- Flagged: External web validation blocked in this run; findings grounded in existing vault sources.
+- Superpowers (`obra/superpowers`) by Jesse Vincent: 179K GitHub stars, 15.9K forks, MIT license, v5.1.0 (May 2026).
+- Complete software development methodology as composable SKILL.md skills with hard-gate enforcement.
+- Validates our skill-first architecture — both use progressive disclosure, markdown-based skills.
+- Can be directly integrated as `.pi/skills/superpowers/` skill set. Adds methodology layer.
+- Cannot replace our deterministic code-level enforcement (drift monitor). Best approach: Superpowers as methodology (probabilistic) + harness as enforcement (deterministic).
+- Cross-agent SKILL.md portability: works across Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Copilot.
+- 490K+ skills ecosystem exists across Skills.sh (83K+), SkillsMP (400K+), ClawHub (~10K).
 
 ## Active Threads
-- User deciding replace-vs-complement for `claude-mem` in harness memory architecture.
-- Next step: run external benchmark pass on `claude-mem` durability, precision/recall, and provenance fidelity.
+- User evaluating Superpowers for harness integration.
+- Key decision: adopt Superpowers as skill set vs build custom methodology skills.
+- Security consideration: 13.4% of marketplace skills have critical issues (Snyk study).
 
-## Last Updated
-2026-05-03. **pi-vs-claude-code agentic orchestration pipeline** research filed. **sentrux.dev integrated**, **Automating Software Engineering**, **Legendary Engineering Patterns**, and **Skill-First Architecture** also active.
+---
+
+Previous research still active. See below.
 
 ---
 

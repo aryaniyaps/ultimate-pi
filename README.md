@@ -45,26 +45,6 @@ Run the harness setup prompt to configure everything (wiki, firecrawl, env vars,
 
 The harness includes an Obsidian wiki vault as its knowledge layer. Run `/wiki` in your PI session to scaffold it, then open the vault in [Obsidian](https://obsidian.md). Recommended community plugins: Dataview, Graph Analysis, Obsidian Git.
 
-## Included skills
-
-| Skill | What it does |
-|---|---|
-| **caveman** | Ultra-compressed response style (~75% token savings). |
-| **context7-cli** | Fetch library docs, manage Context7 skills/config. |
-| **find-skills** | Discover and install new agent skills. |
-| **firecrawl** | Web search, scraping, crawling, JS rendering, interactive pages, structured extraction, site downloads. |
-| **autoresearch** | Autonomous deep research filed to the wiki. |
-| **wiki** | Scaffold and manage the Obsidian wiki vault. |
-| **wiki-save** | Save conversations and insights to the wiki. |
-| **wiki-query** | Answer questions using the wiki vault. |
-| **wiki-ingest** | Distill external sources into wiki pages. |
-| **wiki-lint** | Health-check the wiki (orphans, dead links, stale claims). |
-| **wiki-fold** | Rollup log entries into meta-pages. |
-| **defuddle** | Strip web page clutter to clean markdown. |
-| **canvas** | Work with Obsidian JSON canvas files. |
-| **obsidian-markdown** | Correct Obsidian-flavored markdown editing. |
-| **obsidian-bases** | Create database-like views over vault notes. |
-| **posthog-analyst** | Analyze agent performance via PostHog MCP. |
 
 ## Contributing
 
