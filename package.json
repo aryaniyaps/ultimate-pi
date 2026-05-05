@@ -1,13 +1,21 @@
 {
 	"name": "ultimate-pi",
 	"version": "0.1.2",
-	"description": "Custom pi package starter",
+	"description": "Ultimate AI coding harness for pi.dev — extensible skills, Obsidian wiki knowledge layer, compressed context, deterministic output",
 	"keywords": [
 		"pi-package",
 		"pi-mono",
 		"pi",
 		"ai-harness",
-		"coding-agent"
+		"coding-agent",
+		"obsidian-wiki",
+		"knowledge-base",
+		"context-compression",
+		"agent-skills",
+		"cursor-sdk",
+		"firecrawl",
+		"lean-ctx",
+		"vcc"
 	],
 	"license": "MIT",
 	"repository": {
@@ -30,7 +38,8 @@
 		"format": "biome format --write",
 		"format:check": "biome format",
 		"prepare": "lefthook install",
-		"test": "node --experimental-strip-types --test"
+		"test": "node --experimental-strip-types --test",
+		"test:integration": "npx -y tsx --test test/cursor-sdk-provider.integration.test.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.6",
