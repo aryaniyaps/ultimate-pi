@@ -1,7 +1,8 @@
 ---
 type: concept
-status: developing
+status: active
 created: 2026-05-05
+updated: 2026-05-07
 tags:
   - pi-agent
   - vcc
@@ -11,6 +12,7 @@ related:
   - "[[pi-vcc-github-repo]]"
   - "[[context-continuity]]"
   - "[[structured-compaction]]"
+  - "[[adr-027]]"
 ---
 
 # VCC Conversation Compaction for Pi
