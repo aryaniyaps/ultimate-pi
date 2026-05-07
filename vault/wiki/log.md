@@ -8,7 +8,11 @@ tags: [meta, log, operations]
 
 # Wiki Operations Log
 
-## [2026-05-05] wiki-autoresearch | pi-vcc (ecosystem expansion + SOTA update)
+## [2026-05-07] replace | pi-lean-ctx → context-mode
+- **Decision**: [[2026-05-07-replace-lean-ctx-with-context-mode]]
+- **Changes**: replaced `npm:pi-lean-ctx` with `npm:context-mode` in `.pi/settings.json`; replaced `pi-lean-ctx` devDependency with `context-mode` in `.pi/npm/package.json`; deleted `.pi/extensions/ck-enforce.ts` (lean-ctx-specific grep override); updated `package.json` keyword and `CONTRIBUTING.md`
+- **Tradeoff**: gained FTS5 sandbox + 11K+ community + native Pi hooks; lost AST compression (tree-sitter 18 langs), 90+ shell pattern compression, smart read modes, agent governance (profiles/budgets/SLOs), 48 MCP tools → 11
+- **Risk**: `ck-enforce.ts` was blocking conceptual grep and steering to `ck --hybrid` — now relies on SYSTEM.md policy compliance alone
 - Rounds: 2 (broad search across 4 angles + targeted gap fill on 3 new extensions + 2 SOTA developments)
 - Searches: 8 | Sources found: 5 new (pi-rtk-optimizer, pi-omni-compact, pi-context-prune, Anthropic Compaction API, Context Folding paper)
 - Pages created: [[pi-rtk-optimizer-github-repo]], [[pi-omni-compact-github-repo]], [[pi-context-prune-github-repo]], [[anthropic-compaction-api]], [[context-folding-paper]] (sources), [[context-folding]] (concept)
