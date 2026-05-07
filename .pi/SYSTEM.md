@@ -46,6 +46,7 @@ See `.pi/skills/firecrawl` for workflow escalation.
 - **Search:** firecrawl search only (no DuckDuckGo).
 - **Post-clean (optional):** `defuddle parse infile --md > cleanfile` if output has boilerplate.
 - **Quality sites:** check `.pi/skills/wiki-autoresearch/references/quality-sites.md` before citing non-API sources. Prefer Tier 1 (StackOverflow, GitHub issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
+- **Research:** use `/wiki-autoresearch <topic>` for deep research. Results are graphified into `graphify-out/`.
 
 ### Missing CLI fallbacks
 - Firecrawl missing: `npx firecrawl --help || npm install -g firecrawl-cli@latest`
@@ -53,20 +54,45 @@ See `.pi/skills/firecrawl` for workflow escalation.
 - Context7 missing: `npm install -g ctx7@latest`
 
 ---
-## Codebase Search Policy (Mandatory)
+## Graphify-First Workflow (Mandatory)
 
-> [!danger] No raw grep
-> **Never** use raw `grep` for codebase exploration. Use `ck --hybrid` instead.
+> [!tip] Graph before grep
+> **Always** build or consult the Graphify knowledge graph before codebase exploration.
+> The graph reveals structure, god nodes, and surprising connections that raw
+> search cannot. 71.5× token reduction on mixed corpora.
+
+### Graphify Knowledge Graph
+
+Graphify builds a queryable knowledge graph from code, docs, papers, and diagrams.
+It identifies core concepts (god nodes), community structure, and cross-domain
+connections via tree-sitter AST analysis + LLM semantic extraction.
+
+| Step | Command | When |
+|------|---------|------|
+| Build graph | `graphify .` | First session, or after major code changes |
+| Update graph | `graphify . --update` | After a few file changes (incremental) |
+| Query graph | `graphify query "question"` | Understanding relationships, architecture |
+| Trace paths | `graphify path "A" "B"` | How two concepts connect |
+| Explain node | `graphify explain "Concept"` | Deep dive on one concept |
+| Read report | Read `graphify-out/GRAPH_REPORT.md` | Fastest path to codebase understanding |
+
+**Order of operations for codebase exploration:**
+1. Read `graphify-out/GRAPH_REPORT.md` (god nodes, surprises, suggested questions)
+2. Run `graphify query` for domain-specific questions
+3. Use `ck --hybrid` or `grep` only for exact text that the graph doesn't surface
+4. Read individual files last — the graph already told you what matters
+
+### Fallback Search (when graph doesn't cover it)
 
 | Tool | When | Command |
 |------|------|---------|
-| `ck --hybrid` | Default search — lexical + semantic fusion, ranked results | `ck --hybrid "query" .` |
-| `ck --sem` | Purely conceptual searches (find by meaning) | `ck --sem "concept" src/` |
-| `grep` | **Only** for exact literal string matching (error message, exact function name) | `grep -F "exact string"` |
+| `ck --hybrid` | Lexical + semantic fusion search | `ck --hybrid "query" .` |
+| `ck --sem` | Purely conceptual searches | `ck --sem "concept" src/` |
+| `grep` | **Only** for exact literal string matching | `grep -F "exact string"` |
 | `find` | File discovery by name/glob only | `find . -name "*.ts"` |
 
 - Always use `--limit N` on ck to cap output and save context.
-- If ck returns nothing, fall back to grep. Never skip searching.
+- Graphify is primary. ck/grep/find are secondary.
 
 ---
 ## Agent Routing
@@ -86,9 +112,9 @@ See `.pi/skills/firecrawl` for workflow escalation.
 
 ---
 ## Change Discipline (Mandatory)
-- Maintain project wiki and ADRs in `wiki/decisions/`.
-- Document each design decision immediately: context, alternatives, chosen option, rationale, consequences.
-- Before code edits, reference relevant ADR(s).
+- Run `graphify . --update` after significant code changes to keep the knowledge graph current.
+- Document design decisions as ADRs in `docs/adr/` using format: context, alternatives, chosen option, rationale, consequences.
+- Before code edits, consult the graphify graph (`graphify query`) and relevant ADRs.
 - Make surgical diffs only. No unrelated edits.
 - If unrelated issue found, log separately. Do not auto-fix.
 
