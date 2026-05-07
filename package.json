@@ -1,6 +1,6 @@
 {
 	"name": "ultimate-pi",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "Ultimate AI coding harness for pi.dev — extensible skills, Obsidian wiki knowledge layer, compressed context, deterministic output",
 	"keywords": [
 		"pi-package",
@@ -29,6 +29,9 @@
 		],
 		"skills": [
 			"./.agents/skills"
+		],
+		"prompts": [
+			"./.pi/prompts"
 		]
 	},
 	"scripts": {
@@ -42,10 +45,10 @@
 		"test:integration": "npx -y tsx --test test/cursor-sdk-provider.integration.test.ts"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.0.6",
-		"@mariozechner/pi-coding-agent": "0.70.2",
+		"@biomejs/biome": "2.4.14",
+		"@mariozechner/pi-coding-agent": "0.73.0",
 		"@sinclair/typebox": "^0.34.49",
-		"lefthook": "1.11.13",
+		"lefthook": "2.1.6",
 		"typescript": "^6.0.3"
 	},
 	"dependencies": {
