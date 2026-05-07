@@ -1,6 +1,6 @@
 {
 	"name": "ultimate-pi",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "Ultimate AI coding harness for pi.dev — extensible skills, Obsidian wiki knowledge layer, compressed context, deterministic output",
 	"keywords": [
 		"pi-package",
@@ -54,7 +54,6 @@
 	"dependencies": {
 		"@cursor/sdk": "^1.0.12",
 		"@sting8k/pi-vcc": "^0.3.12",
-		"asciify-image": "^0.1.10",
-		"pi-smart-voice-notify": "^0.4.0"
+		"asciify-image": "^0.1.10"
 	}
 }
