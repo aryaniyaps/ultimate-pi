@@ -1,6 +1,6 @@
 ---
-description: Full harness bootstrap — obsidian wiki scaffold, CLI tools install, pi extension packages, and verification. Run once per project.
-argument-hint: "[--skip-wiki] [--skip-tools] [--force] [--wiki-path <path>]"
+description: Full harness bootstrap — obsidian wiki scaffold, optional self-hosted firecrawl (Docker), CLI tools install, pi extension packages, and verification. Run once per project.
+argument-hint: "[--skip-wiki] [--skip-tools] [--skip-firecrawl-self] [--force] [--wiki-path <path>]"
 ---
 
 # harness-setup — Full Harness Bootstrap
@@ -110,11 +110,139 @@ Run the `/wiki` prompt flow using the user-confirmed `$WIKI_PATH`:
    ├── meta/             # dashboards, lint reports
    └── components/       # reusable sub-modules
    ```
-4. Create `$WIKI_PATH/../.vault-meta/` with vault metadata (at project root level, not inside wiki).
-5. Create vault `AGENTS.md` in project root with mode, purpose, conventions, operations.
+4. Create `$WIKI_PATH/.vault-meta/` with vault metadata (inside the wiki vault).
+5. Create vault `AGENTS.md` inside `$WIKI_PATH/` with mode, purpose, conventions, operations.
 6. Initialize wiki git tracking if not already present.
 7. Write initial `$WIKI_PATH/hot.md` with setup timestamp.
 8. **Save resolved path** to `.pi/settings.json` (merge `"wiki_path": "<relative-path>"` into settings) for future sessions.
+
+## Step 1.5 — Optional Self-Hosted Firecrawl
+
+Ask: "Use self-hosted Firecrawl (local Docker) or cloud (api.firecrawl.dev)? [cloud/self]"
+Default: **cloud**.
+
+If user chooses **self**:
+
+### 1.5.1 — Docker Engine Install
+
+Check if Docker is already available:
+```bash
+if ! command -v docker &>/dev/null; then
+	# Detect OS and install Docker Engine
+	if [ -f /etc/os-release ]; then
+		. /etc/os-release
+		case "$ID" in
+			ubuntu|debian)
+				curl -fsSL https://get.docker.com | sh
+				;;
+				fedora|rhel|centos)
+				curl -fsSL https://get.docker.com | sh
+				;;
+				arch)
+				pacman -S --noconfirm docker
+				;;
+			*)
+				echo "Unsupported distro: $ID. Install Docker manually: https://docs.docker.com/engine/install/"
+				;;
+		esac
+	elif command -v brew &>/dev/null; then
+		# macOS — install Docker Desktop via brew
+		brew install --cask docker
+	else
+		echo "Cannot detect OS. Install Docker manually: https://docs.docker.com/engine/install/"
+	fi
+
+	# Enable and start Docker
+	sudo systemctl enable --now docker 2>/dev/null || true
+
+	# Add current user to docker group (no sudo needed)
+	sudo usermod -aG docker $USER 2>/dev/null || true
+	newgrp docker 2>/dev/null || echo "Docker group added. Restart terminal or run: newgrp docker"
+fi
+```
+
+Verify:
+```bash
+docker --version
+docker compose version
+```
+
+Block if Docker install fails. Show manual install link.
+
+### 1.5.2 — Set Up Self-Hosted Firecrawl Files
+
+The `firecrawl/` directory in the project root contains all self-hosted config:
+
+```
+firecrawl/
+├── docker-compose.yaml   # Multi-service compose (API, Playwright, Redis, RabbitMQ, Postgres, SearXNG)
+├── README.md             # Self-hosted usage docs
+├── .env.template         # Environment variables template
+└── searxng/
+    ├── searxng.env       # SearXNG-specific env
+    └── settings.yml      # SearXNG engine config
+```
+
+Create `.env` from template if missing:
+```bash
+if [ ! -f firecrawl/.env ]; then
+	if [ -f firecrawl/.env.template ]; then
+		cp firecrawl/.env.template firecrawl/.env
+		echo "Created firecrawl/.env from template."
+	else
+		cat > firecrawl/.env << 'EOF'
+# Firecrawl Self-Hosted Configuration
+PORT=3002
+INTERNAL_PORT=3002
+REDIS_URL=redis://redis:6379
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=postgres
+USE_DB_AUTHENTICATION=false
+NUM_WORKERS_PER_QUEUE=8
+CRAWL_CONCURRENT_REQUESTS=10
+MAX_CONCURRENT_JOBS=5
+BROWSER_POOL_SIZE=5
+BULL_AUTH_KEY=changeme
+SEARXNG_EXTERNAL_PORT=8080
+# Optional AI: uncomment and set
+# OPENAI_API_KEY=
+# OPENAI_BASE_URL=
+# MODEL_NAME=
+# OLLAMA_BASE_URL=
+EOF
+		echo "Created firecrawl/.env with defaults."
+	fi
+fi
+```
+
+### 1.5.3 — Start Services
+
+```bash
+docker compose -f firecrawl/docker-compose.yaml up -d
+```
+
+Wait for health:
+```bash
+echo "Waiting for services to be healthy..."
+for i in $(seq 1 30); do
+	if curl -sf http://localhost:3002/v1/health &>/dev/null; then
+		echo "✓ Firecrawl API is healthy"
+		break
+	fi
+	sleep 2
+done
+```
+
+### 1.5.4 — Verify Self-Hosted Instance
+
+```bash
+curl -sf http://localhost:3002/v1/health && echo "✓ Self-hosted Firecrawl running on :3002" || echo "✗ Firecrawl not healthy yet — check: docker compose -f firecrawl/docker-compose.yaml logs"
+docker compose -f firecrawl/docker-compose.yaml ps
+```
+
+If user chose **cloud**, skip all 1.5.x steps. Just note:
+> "Using cloud Firecrawl. Ensure `FIRECRAWL_API_KEY` is set. Run `firecrawl login` in Step 2.1."
 
 ## Step 2 — Install Global CLI Packages
 
@@ -133,7 +261,18 @@ Verify:
 firecrawl --status
 ```
 
-If not authenticated, offer browser login or API key:
+**If self-hosted mode (Step 1.5 was chosen):** skip cloud auth. Point CLI at local instance:
+```bash
+export FIRECRAWL_API_URL=http://localhost:3002
+export FIRECRAWL_API_KEY=""
+```
+Add to shell profile for persistence:
+```bash
+echo 'export FIRECRAWL_API_URL=http://localhost:3002' >> ~/.bashrc 2>/dev/null
+echo 'export FIRECRAWL_API_KEY=""' >> ~/.bashrc 2>/dev/null
+```
+
+**If cloud mode:** authenticate if not already:
 ```bash
 firecrawl login --browser
 # OR
@@ -324,7 +463,7 @@ Ensure `.gitignore` contains:
 
 ### 4.2 — Vault AGENTS.md
 
-If not already created by Step 1, create a minimal `AGENTS.md` in project root:
+If not already created by Step 1, create a minimal `AGENTS.md` inside `$WIKI_PATH/`:
 
 ```markdown
 # ultimate-pi: Agentic Harness Wiki
@@ -337,7 +476,6 @@ Wiki vault path: `$WIKI_PATH`
 
 ## Structure
 
-`$WIKI_PATH/`
 ├── index.md → master catalog
 ├── log.md → chronological operations
 ├── hot.md → recent context cache
@@ -348,21 +486,22 @@ Wiki vault path: `$WIKI_PATH`
 ├── entities/ → tools, platforms, people
 ├── questions/ → filed research answers
 ├── consensus/ → debate verdicts
-└── flows/ → pipeline diagrams
+├── flows/ → pipeline diagrams
+└── .vault-meta/ → vault metadata
 
 ## Conventions
 
 - YAML frontmatter required: type, status, created, updated, tags
 - Wikilinks: [[Page Name]] format
 - .raw/ is immutable source storage
-- $WIKI_PATH/index.md updated on every ingest
-- $WIKI_PATH/log.md is append-only, newest at top
+- index.md updated on every ingest
+- log.md is append-only, newest at top
 
 ## Cross-Project Reference
 
 Other projects can reference this vault:
-1. Read $WIKI_PATH/hot.md (~500 tokens)
-2. Read $WIKI_PATH/index.md if needed
+1. Read hot.md (~500 tokens)
+2. Read index.md if needed
 3. Drill into specific topics as needed
 
 ## Path Resolution
@@ -461,13 +600,16 @@ Output summary table:
 
 | .gitignore | ✓/✗ | 6 entries added |
 | wiki_path in settings | ✓/✗ | Persisted to .pi/settings.json |
+| Firecrawl mode | self/cloud | Self-hosted on :3002 / Cloud (api.firecrawl.dev) |
+| Docker Engine | ✓/✗/N/A | Installed / Not needed (cloud mode) |
 
 Next steps:
 1. If tools missing: re-run with `--force` or install individually
 2. If wiki not scaffolded: run `/wiki` prompt
 3. If gh not authenticated: `gh auth login`
-4. First harness run: `/harness "your task description"`
-5. To change wiki path later: update `VAULT_WIKI_PATH` env var or `.pi/settings.json` → `wiki_path` field
+4. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
+5. First harness run: `/harness "your task description"`
+6. To change wiki path later: update `VAULT_WIKI_PATH` env var or `.pi/settings.json` → `wiki_path` field
 
 ## Guard Rails
 
@@ -475,11 +617,13 @@ Next steps:
 - **Wiki path must be writable**: Check `test -w "$(dirname "$WIKI_PATH")"` before scaffold. Block if not writable.
 - **Wiki path outside project**: Allowed (e.g., `~/vaults/my-project`). Cross-project vault sharing is supported.
 - **Node.js >= 18 required**: Some pi packages use modern Node APIs.
+- **Docker required for self-hosted**: Step 1.5 needs Docker Engine + Compose. Block if install fails.
+- **Sufficient RAM for self-hosted**: Firecrawl stack needs ~8GB+ free (API: 8G, Playwright: 4G, others).
 - **Idempotent**: All checks skip if already installed. `--force` overrides.
 - **No destructive actions**: Creates files only if missing. Never overwrites existing wiki content.
 - **Wiki safety**: Scaffold only creates structure, never modifies existing wiki content.
 - **Partial success**: If some tools fail, report which and continue. User can fix individually.
-- **Rate limits**: ctx7 login is optional. firecrawl auth is required for web operations.
+- **Rate limits**: ctx7 login is optional. firecrawl auth is required for cloud; none needed for self-hosted.
 - **Settings persistence**: The resolved `wiki_path` is saved to `.pi/settings.json` so future sessions auto-detect it.
 
 ## Error Handling
@@ -498,6 +642,10 @@ Next steps:
 | biome.json missing | Create minimal config. |
 | settings.json not writable | Warn. Wiki path won't persist across sessions. |
 | No internet | Block for tool installs. Continue for wiki-only steps if `--skip-tools`. |
+| Docker not running | Start: `sudo systemctl start docker`. Block if cannot start. |
+| Docker install fails | Show manual link: https://docs.docker.com/engine/install/. Block Step 1.5, continue rest. |
+| Port 3002 already in use | Warn. User must free port or change `PORT` in `firecrawl/.env`. |
+| Self-hosted health check timeout | Show logs: `docker compose -f firecrawl/docker-compose.yaml logs`. Continue — may need more time. |
 
 ## Flags
 
@@ -505,5 +653,6 @@ Next steps:
 |------|--------|
 | `--skip-wiki` | Skip Step 1 (wiki scaffold). Use when wiki already exists. |
 | `--skip-tools` | Skip Step 2 (CLI tool installs). Use when tools already set up. |
+| `--skip-firecrawl-self` | Skip Step 1.5 (self-hosted Firecrawl). Always use cloud. |
 | `--force` | Reinstall all tools even if already present. Overwrite existing files. |
 | `--wiki-path <path>` | Override wiki vault path. Absolute or relative to project root. Bypasses env var and settings. |
