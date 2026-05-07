@@ -66,8 +66,8 @@ to re-read frontmatter for already-profiled agents.
 | "create an agent" | Agent-related keywords in description |
 | "Pi extension" / "Pi theme" | Pi component domain keywords |
 | "rethink" / "first principles" | Prioritization keywords |
-| "ingest to wiki" | Wiki ingestion keywords |
-| "lint the wiki" | Wiki lint keywords |
+| "build knowledge graph" | Graphify keywords |
+| "query the graph" | Graphify queries |
 
 ### Fuzzy Match — Semantic Fit
 
@@ -158,8 +158,6 @@ $ find .pi/agents -name '*.md' -type f
 # .pi/agents/pi-pi/agent-expert.md
 # .pi/agents/pi-pi/skill-expert.md
 # .pi/agents/rethink.md
-# .pi/agents/wiki-ingest.md
-# .pi/agents/wiki-lint.md
 
 # Then read each to understand capabilities
 # Then match user task to the right agent(s)

@@ -1,11 +1,11 @@
 ---
-description: Full harness bootstrap — obsidian wiki scaffold, optional self-hosted firecrawl (Docker), CLI tools install, pi extension packages, and verification. Run once per project.
-argument-hint: "[--skip-wiki] [--skip-tools] [--skip-firecrawl-self] [--force] [--wiki-path <path>]"
+description: Full harness bootstrap — Graphify knowledge graph setup, optional self-hosted firecrawl (Docker), CLI tools install, pi extension packages, and verification. Run once per project.
+argument-hint: "[--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--force]"
 ---
 
 # harness-setup — Full Harness Bootstrap
 
-Bootstraps the complete ultimate-pi agentic harness: Obsidian wiki vault, CLI tools, pi extension packages, configuration files, and verification. Idempotent — safe to re-run, skips what's already installed.
+Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, CLI tools, pi extension packages, configuration files, and verification. Idempotent — safe to re-run, skips what's already installed.
 
 ## Step 0 — Pre-flight Environment Check
 
@@ -17,104 +17,69 @@ which git && git --version
 
 Block if node < 18, npm < 9, or git missing. Report versions and continue.
 
-Read `.pi/auto-commit.json` for co-author + branch config. Read `.pi/settings.json` for extension packages list and `wiki_path` field (if present).
+Read `.pi/auto-commit.json` for co-author + branch config. Read `.pi/settings.json` for extension packages list.
 
-## Step 0.5 — Resolve Wiki Vault Path + Detect Existing Vault
+## Step 0.5 — Graphify Setup
 
-Resolve the wiki vault path with this priority:
-
-1. **CLI flag** `--wiki-path <path>` (highest priority — user explicitly passed it)
-2. **Env var** `VAULT_WIKI_PATH` (set by project or user shell config)
-3. **Settings file** `.pi/settings.json` → `wiki_path` field
-4. **Default** `vault/wiki` (relative to project root)
+Check if Graphify is installed and set up:
 
 ```bash
-# Resolve logic
-if [ -n "$CLI_WIKI_PATH" ]; then
-  WIKI_PATH="$CLI_WIKI_PATH"
-elif [ -n "$VAULT_WIKI_PATH" ]; then
-  WIKI_PATH="$VAULT_WIKI_PATH"
+# Check Python 3.10+
+python3 --version | grep -q "3\.1[0-9]" && echo "✓ Python 3.10+" || echo "✗ Need Python 3.10+"
+
+# Check if Graphify is installed
+if pip show graphifyy &>/dev/null; then
+  echo "✓ Graphify installed"
+  GRAPHIFY_INSTALLED=true
 else
-  WIKI_PATH="$(node -e "try{const s=require('./.pi/settings.json');if(s.wiki_path)process.stdout.write(s.wiki_path)}catch(e){}" 2>/dev/null)"
-  WIKI_PATH="${WIKI_PATH:-vault/wiki}"
+  echo "! Graphify not installed"
+  GRAPHIFY_INSTALLED=false
 fi
 
-# Normalize to absolute path (relative paths are relative to project root)
-if [[ "$WIKI_PATH" != /* ]]; then
-  WIKI_PATH="$(pwd)/$WIKI_PATH"
-fi
-
-# Detect if a vault already exists at the resolved path
-# Vault indicators: .obsidian/ folder OR wiki/index.md OR wiki/log.md
-if [ -d "$WIKI_PATH/.obsidian" ] || [ -f "$WIKI_PATH/index.md" ] || [ -f "$WIKI_PATH/log.md" ]; then
-  VAULT_EXISTS=true
-  # Quick stats
-  PAGE_COUNT=$(find "$WIKI_PATH" -name "*.md" -type f 2>/dev/null | wc -l)
-  LAST_LOG=$(head -5 "$WIKI_PATH/log.md" 2>/dev/null || echo "unknown")
-else
-  VAULT_EXISTS=false
-fi
+# Check if graph already exists
+test -f graphify-out/graph.json && GRAPH_EXISTS=true || GRAPH_EXISTS=false
 ```
 
-**Present to user explicitly — context-aware:**
+**Present to user:**
 
-### Case A: Env var was set + vault found
+### Case A: Graphify installed + graph exists
+> "Graphify ready. Existing graph: `graphify-out/`. Run `graphify . --update` to refresh."
 
-> "`VAULT_WIKI_PATH` is set to `$VAULT_WIKI_PATH`. Vault detected: $PAGE_COUNT pages, last updated $LAST_LOG. Confirm this is the correct vault?"
+### Case B: Graphify installed + no graph
+> "Graphify installed but no graph built yet. Build one now?"
 
-### Case B: Env var was set + NO vault found
+### Case C: Graphify not installed
+> "Graphify not found. Install: `pip install graphifyy && graphify install`. Install now?"
 
-> "`VAULT_WIKI_PATH` is set to `$VAULT_WIKI_PATH`, but no vault found there (no `.obsidian/`, `index.md`, or `log.md`). Where should we create the wiki vault? (Press Enter to use this path, or type a different path)"
+### Case D: Python too old
+> "Python 3.10+ required for Graphify. Current: `$(python3 --version)`. Install Python 3.10+ before continuing."
 
-### Case C: Settings had wiki_path + vault found
+## Step 1 — Build Knowledge Graph
 
-> "Found `wiki_path: <path>` in `.pi/settings.json`. Vault detected: $PAGE_COUNT pages, last updated $LAST_LOG. Use this vault?"
+```bash
+# Install if needed
+if [ "$GRAPHIFY_INSTALLED" != "true" ]; then
+  pip install graphifyy && graphify install
+fi
 
-### Case D: No env var, no settings → defaulting
+# Build the graph (or update existing)
+if [ "$GRAPH_EXISTS" = "true" ]; then
+  graphify . --update --wiki
+else
+  graphify . --wiki
+fi
 
-> "No `VAULT_WIKI_PATH` env var or `wiki_path` in settings found. Default path: `$(pwd)/vault/wiki`. Where should we create the wiki vault? (Press Enter for default, or type a different path)"
+# Quick stats
+echo "Graph built. Output: graphify-out/"
+ls graphify-out/
+```
 
-### Case E: All sources agree on path + vault found
+Read and summarize `graphify-out/GRAPH_REPORT.md` — show god nodes and surprising connections.
 
-> "Wiki vault: `$WIKI_PATH` ($PAGE_COUNT pages, last updated $LAST_LOG). Use this?"
-
-**Wait for user confirmation before proceeding.** This is the ONLY blocking question. If user provides a different path, update `WIKI_PATH`, re-detect, and re-confirm.
-
-**DX principles:**
-- Always show the resolved absolute path so user knows exactly where files go.
-- Always show the *source* of the path (env var, settings, default) so user understands WHY this path was chosen.
-- When no vault is detected, ask explicitly — don't just silently create at the default.
-- Don't check for `.obsidian/` in project root as a fallback. The vault can live anywhere.
-
-## Step 1 — Wiki Scaffold
-
-Run the `/wiki` prompt flow using the user-confirmed `$WIKI_PATH`:
-
-1. If `VAULT_EXISTS=true` (detected in Step 0.5): skip scaffold. Move to Step 2.
-2. If `VAULT_EXISTS=false`: ask ONE question: "What is this vault for?"
-3. Scaffold full wiki structure based on answer at `$WIKI_PATH`:
-   ```
-   $WIKI_PATH/
-   ├── index.md          # master catalog
-   ├── log.md            # chronological operations log
-   ├── hot.md            # recent context summary
-   ├── overview.md       # executive summary
-   ├── sources/          # source document summaries
-   ├── entities/         # people, orgs, products, repos
-   ├── concepts/         # ideas, patterns, frameworks
-   ├── decisions/        # ADRs + design decisions
-   ├── questions/        # filed research answers
-   ├── modules/          # code module documentation
-   ├── flows/            # pipeline/process flows
-   ├── consensus/        # debate verdict records
-   ├── meta/             # dashboards, lint reports
-   └── components/       # reusable sub-modules
-   ```
-4. Create `$WIKI_PATH/.vault-meta/` with vault metadata (inside the wiki vault).
-5. Create vault `AGENTS.md` inside `$WIKI_PATH/` with mode, purpose, conventions, operations.
-6. Initialize wiki git tracking if not already present.
-7. Write initial `$WIKI_PATH/hot.md` with setup timestamp.
-8. **Save resolved path** to `.pi/settings.json` (merge `"wiki_path": "<relative-path>"` into settings) for future sessions.
+Create project directories needed for graphify workflow:
+```bash
+mkdir -p ./raw docs/adr
+```
 
 ## Step 1.5 — Optional Self-Hosted Firecrawl
 
@@ -461,60 +426,43 @@ Ensure `.gitignore` contains:
 .pi/harness/specs/
 ```
 
-### 4.2 — Vault AGENTS.md
+### 4.2 — Project AGENTS.md
 
-If not already created by Step 1, create a minimal `AGENTS.md` inside `$WIKI_PATH/`:
+Create a minimal `AGENTS.md` in the project root for agent onboarding:
 
 ```markdown
-# ultimate-pi: Agentic Harness Wiki
+# ultimate-pi: Agentic Harness
 
-Mode: B (Engineering Research + System Design)
-Purpose: Knowledge base for the ultimate-pi agentic coding harness — architecture, research, decisions, implementation plans.
+Purpose: Agentic coding harness — architecture, research, decisions, implementation.
 Owner: pi-mono + user
 Created: $(date +%Y-%m-%d)
-Wiki vault path: `$WIKI_PATH`
 
 ## Structure
 
-├── index.md → master catalog
-├── log.md → chronological operations
-├── hot.md → recent context cache
-├── concepts/ → ideas, patterns, frameworks (harness layers, drift detection, skill-first architecture)
-├── decisions/ → ADRs for every architectural choice
-├── modules/ → code module docs (harness implementation plan, pipeline)
-├── sources/ → reference materials
-├── entities/ → tools, platforms, people
-├── questions/ → filed research answers
-├── consensus/ → debate verdicts
-├── flows/ → pipeline diagrams
-└── .vault-meta/ → vault metadata
+- graphify-out/ → Knowledge graph (run `graphify .` to build)
+- ./raw/ → Source documents for graphify ingestion
+- docs/adr/ → Architectural Decision Records
+- .pi/skills/ → Agent skills
+- .pi/agents/ → Specialized agents
+
+## Graphify-First Workflow
+
+1. Run `graphify . --wiki` to build the knowledge graph
+2. Read `graphify-out/GRAPH_REPORT.md` for god nodes and surprising connections
+3. Query: `graphify query "question"`
+4. ADRs stored in `docs/adr/`
 
 ## Conventions
 
-- YAML frontmatter required: type, status, created, updated, tags
-- Wikilinks: [[Page Name]] format
-- .raw/ is immutable source storage
-- index.md updated on every ingest
-- log.md is append-only, newest at top
-
-## Cross-Project Reference
-
-Other projects can reference this vault:
-1. Read hot.md (~500 tokens)
-2. Read index.md if needed
-3. Drill into specific topics as needed
-
-## Path Resolution
-
-This vault's filesystem path is set via:
-- Env var: `VAULT_WIKI_PATH` (current: `$VAULT_WIKI_PATH` or unset)
-- Settings: `.pi/settings.json` → `wiki_path`
-- Default fallback: `vault/wiki`
+- Graph before grep — always consult the knowledge graph first
+- ./raw/ is source storage for graphify
+- ADRs in docs/adr/ with structured format
+- `graphify . --update` after significant changes
 ```
 
 ## Step 5 — Verification
 
-Run full verification suite using resolved `$WIKI_PATH`:
+Run full verification suite:
 
 ```bash
 # CLI tools
@@ -530,55 +478,41 @@ gh --version 2>/dev/null && echo "✓ gh" || echo "✗ gh"
 # pi extensions
 cd .pi/npm && npm ls 2>/dev/null && echo "✓ pi extensions" || echo "✗ pi extensions"
 
-# wiki vault (using resolved WIKI_PATH)
-ls "$WIKI_PATH/index.md" 2>/dev/null && echo "✓ wiki vault" || echo "✗ wiki vault"
-ls "$WIKI_PATH/hot.md" 2>/dev/null && echo "✓ wiki hot cache" || echo "✗ wiki hot cache"
+# graphify knowledge graph
+pip show graphifyy 2>/dev/null && echo "✓ graphify installed" || echo "✗ graphify not installed"
+ls graphify-out/graph.json 2>/dev/null && echo "✓ knowledge graph built" || echo "✗ no graph built yet"
 
 # model router
 ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null && echo "✓ model-router package" || echo "✗ model-router package"
 ls .pi/model-router.json 2>/dev/null && echo "✓ model-router config" || echo "✗ model-router config"
 
-# settings persistence
-grep -q 'wiki_path' .pi/settings.json 2>/dev/null && echo "✓ wiki path saved to settings" || echo "! wiki path not saved"
+# raw folder for graphify sources
+ls -d ./raw 2>/dev/null && echo "✓ ./raw directory exists" || echo "! ./raw directory missing"
 
 # gitignore entries
 grep -q '.firecrawl/' .gitignore 2>/dev/null && echo "✓ .gitignore" || echo "! .gitignore missing entries"
 ```
 
-## Step 6 — Wiki Hot Cache Bootstrap
+## Step 6 — Graph Knowledge Report Bootstrap
 
-Write initial `$WIKI_PATH/hot.md`:
-```markdown
----
-type: meta
-title: "Hot Cache"
-updated: $(date -u +%Y-%m-%dT%H:%M:%S)
-created: $(date +%Y-%m-%d)
-tags: []
-status: active
----
+After graph is built, read and display key findings:
 
-# Recent Context
-
-## Last Updated
-$(date +%Y-%m-%d). Harness setup completed. All CLI tools installed, wiki vault scaffolded at `$WIKI_PATH`, pi extensions configured.
-
-## Key Facts
-- Harness runs 8-layer mandatory pipeline (L1 → L2 → L2.5 → L3 → L4 → P20 → L5 → L6 → L7 → L8)
-- Implementation: skill-first v2 — 4 code files, 6 harness skills
-- Wiki vault: Mode B (Engineering Research + System Design)
-- Wiki path: `$WIKI_PATH`
-- ADRs filed in `$WIKI_PATH/decisions/`
-- Consensus debate verdicts filed in `$WIKI_PATH/consensus/`
-
-## Recent Changes
-- Created: Full wiki vault structure
-
-- Installed: firecrawl-cli, defuddle-cli, ctx7, agent-browser, ck-search, fallow, biome, gh
-
-## Active Threads
-- Next: run first spec through pipeline with `/harness "task description"`
+```bash
+# Show graph stats
+python3 -c "
+import json
+with open('graphify-out/graph.json') as f:
+    g = json.load(f)
+nodes = g['nodes']
+edges = g['edges']
+communities = len(set(n.get('community', 0) for n in nodes))
+god_nodes = sorted(nodes, key=lambda n: n.get('degree', 0), reverse=True)[:5]
+print(f'Nodes: {len(nodes)}  |  Edges: {len(edges)}  |  Communities: {communities}')
+print(f'God nodes: {[n[\"label\"] for n in god_nodes]}')
+" 2>/dev/null || echo "Graph not yet built"
 ```
+
+Summarize `graphify-out/GRAPH_REPORT.md` to the user.
 
 ## Step 7 — Report
 
@@ -586,7 +520,7 @@ Output summary table:
 
 | Component | Status | Detail |
 |-----------|--------|--------|
-| Wiki Vault | ✓/✗ | Path: `$WIKI_PATH` — scaffold complete / task pending |
+| Knowledge Graph | ✓/✗ | `graphify-out/graph.json` — graph status |
 | firecrawl-cli | ✓/✗ | Auth: yes/no |
 | defuddle-cli | ✓/✗ | Version |
 | ctx7 | ✓/✗ | Login: yes/no |
@@ -599,32 +533,29 @@ Output summary table:
 | model router | ✓/✗ | Package + config verified, activation via `/router profile auto` |
 
 | .gitignore | ✓/✗ | 6 entries added |
-| wiki_path in settings | ✓/✗ | Persisted to .pi/settings.json |
+| ./raw directory | ✓/✗ | Created for graphify source ingestion |
 | Firecrawl mode | self/cloud | Self-hosted on :3002 / Cloud (api.firecrawl.dev) |
 | Docker Engine | ✓/✗/N/A | Installed / Not needed (cloud mode) |
 
 Next steps:
 1. If tools missing: re-run with `--force` or install individually
-2. If wiki not scaffolded: run `/wiki` prompt
+2. If graph not built: run `graphify . --wiki`
 3. If gh not authenticated: `gh auth login`
 4. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
 5. First harness run: `/harness "your task description"`
-6. To change wiki path later: update `VAULT_WIKI_PATH` env var or `.pi/settings.json` → `wiki_path` field
 
 ## Guard Rails
 
 - **Internet required**: Several tools need npm registry access. Block if offline.
-- **Wiki path must be writable**: Check `test -w "$(dirname "$WIKI_PATH")"` before scaffold. Block if not writable.
-- **Wiki path outside project**: Allowed (e.g., `~/vaults/my-project`). Cross-project vault sharing is supported.
+- **Graphify requires Python 3.10+**: Check `python3 --version`. Block if too old.
 - **Node.js >= 18 required**: Some pi packages use modern Node APIs.
 - **Docker required for self-hosted**: Step 1.5 needs Docker Engine + Compose. Block if install fails.
 - **Sufficient RAM for self-hosted**: Firecrawl stack needs ~8GB+ free (API: 8G, Playwright: 4G, others).
 - **Idempotent**: All checks skip if already installed. `--force` overrides.
-- **No destructive actions**: Creates files only if missing. Never overwrites existing wiki content.
-- **Wiki safety**: Scaffold only creates structure, never modifies existing wiki content.
+- **No destructive actions**: Creates files only if missing. Never overwrites existing content.
 - **Partial success**: If some tools fail, report which and continue. User can fix individually.
 - **Rate limits**: ctx7 login is optional. firecrawl auth is required for cloud; none needed for self-hosted.
-- **Settings persistence**: The resolved `wiki_path` is saved to `.pi/settings.json` so future sessions auto-detect it.
+
 
 ## Error Handling
 
@@ -632,16 +563,15 @@ Next steps:
 |-------|--------|
 | Node < 18 | Block. Report required version. |
 | npm not found | Block. Suggest install method per OS. |
-| Wiki path not writable | Block. Show path and suggest `chmod` or different path. |
-| Wiki path already has vault + `--skip-wiki` not set | Report state, ask if user wants to skip or force re-scaffold. |
-| `VAULT_WIKI_PATH` and `wiki_path` in settings disagree | Resolve with priority (env var wins), warn user about mismatch, ask to confirm. |
+| Python < 3.10 | Block. Report required Python version for Graphify. |
+| Graphify install fails | Show pip error output. Suggest `pip install --upgrade pip` and retry. |
 | firecrawl auth failed | Show manual login instructions. Continue with other tools. |
 | gh not installed | Show GitHub CLI install link. Skip label creation. |
 | pi packages install fail | Show error output. Check npm permissions. |
-| wiki already exists | Report state, skip scaffold, continue other steps. |
+| graph already exists | Report state. Offer `graphify . --update` to refresh. |
 | biome.json missing | Create minimal config. |
-| settings.json not writable | Warn. Wiki path won't persist across sessions. |
-| No internet | Block for tool installs. Continue for wiki-only steps if `--skip-tools`. |
+| settings.json not writable | Warn. Settings won't persist across sessions. |
+| No internet | Block for tool installs. Continue for graphify-only steps if `--skip-tools`. |
 | Docker not running | Start: `sudo systemctl start docker`. Block if cannot start. |
 | Docker install fails | Show manual link: https://docs.docker.com/engine/install/. Block Step 1.5, continue rest. |
 | Port 3002 already in use | Warn. User must free port or change `PORT` in `firecrawl/.env`. |
@@ -651,8 +581,8 @@ Next steps:
 
 | Flag | Effect |
 |------|--------|
-| `--skip-wiki` | Skip Step 1 (wiki scaffold). Use when wiki already exists. |
+| `--skip-graphify` | Skip Step 1 (graph build). Use when graph already exists. |
 | `--skip-tools` | Skip Step 2 (CLI tool installs). Use when tools already set up. |
 | `--skip-firecrawl-self` | Skip Step 1.5 (self-hosted Firecrawl). Always use cloud. |
 | `--force` | Reinstall all tools even if already present. Overwrite existing files. |
-| `--wiki-path <path>` | Override wiki vault path. Absolute or relative to project root. Bypasses env var and settings. |
+
