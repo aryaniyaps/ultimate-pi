@@ -113,4 +113,4 @@ Configurable via env vars (set before launching pi):
 
 `wiki`, `wiki-save`, `wiki-query`, `wiki-ingest`, `wiki-lint`, `wiki-fold`, `autoresearch`, `canvas`, `obsidian-markdown`, `obsidian-bases`
 
-> `lean-ctx` is installed as a separate pi package (`pi-lean-ctx`) — not bundled as a skill.
+> `context-mode` is installed as a separate pi package (`npm:context-mode`) — not bundled as a skill.
