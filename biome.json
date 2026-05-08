@@ -8,7 +8,7 @@
 	"files": {
 		"ignoreUnknown": false,
 		"maxSize": 5242880,
-		"includes": ["**/*.{ts,tsx,js,jsx,json,jsonc,css,md}", "!graphify-out/**"]
+		"includes": ["**/*.{ts,tsx,js,jsx,json,jsonc,css,md}", "!graphify-out"]
 	},
 	"formatter": {
 		"enabled": true,
