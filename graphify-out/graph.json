@@ -85,19 +85,10 @@
       "norm_label": "code:block5 (/harness-setup)"
     },
     {
-      "label": "Wiki",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L44",
-      "id": "ultimate_pi_readme_wiki",
-      "community": 105,
-      "norm_label": "wiki"
-    },
-    {
       "label": "Contributing",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L49",
+      "source_location": "L45",
       "id": "ultimate_pi_readme_contributing",
       "community": 105,
       "norm_label": "contributing"
@@ -3537,7 +3528,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L169",
       "id": "raw_github_com_beaconbay_ck_interactive_tui_terminal_user_interface",
-      "community": 405,
+      "community": 400,
       "norm_label": "\ud83c\udfa8 **interactive tui (terminal user interface)**"
     },
     {
@@ -3546,7 +3537,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L175",
       "id": "raw_github_com_beaconbay_ck_codeblock_5",
-      "community": 405,
+      "community": 400,
       "norm_label": "code:shell (# start tui for current directory)"
     },
     {
@@ -3555,7 +3546,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L197",
       "id": "raw_github_com_beaconbay_ck_semantic_search",
-      "community": 403,
+      "community": 398,
       "norm_label": "\ud83d\udd0d **semantic search**"
     },
     {
@@ -3564,7 +3555,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L203",
       "id": "raw_github_com_beaconbay_ck_codeblock_6",
-      "community": 403,
+      "community": 398,
       "norm_label": "code:shell (# these find related code even without exact keywords:)"
     },
     {
@@ -3573,7 +3564,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L213",
       "id": "raw_github_com_beaconbay_ck_drop_in_grep_compatibility",
-      "community": 395,
+      "community": 403,
       "norm_label": "\u26a1 **drop-in grep compatibility**"
     },
     {
@@ -3582,7 +3573,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L219",
       "id": "raw_github_com_beaconbay_ck_codeblock_7",
-      "community": 395,
+      "community": 403,
       "norm_label": "code:shell (ck -i \"warning\" *.log              # case-insensitive)"
     },
     {
@@ -3591,7 +3582,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L227",
       "id": "raw_github_com_beaconbay_ck_hybrid_search",
-      "community": 398,
+      "community": 393,
       "norm_label": "\ud83c\udfaf **hybrid search**"
     },
     {
@@ -3600,7 +3591,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L233",
       "id": "raw_github_com_beaconbay_ck_codeblock_8",
-      "community": 398,
+      "community": 393,
       "norm_label": "code:shell (ck --hybrid \"async timeout\" src/    # best of both worlds)"
     },
     {
@@ -3618,7 +3609,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L250",
       "id": "raw_github_com_beaconbay_ck_smart_file_filtering",
-      "community": 396,
+      "community": 402,
       "norm_label": "\ud83d\udcc1 **smart file filtering**"
     },
     {
@@ -3627,7 +3618,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L256",
       "id": "raw_github_com_beaconbay_ck_codeblock_9",
-      "community": 396,
+      "community": 402,
       "norm_label": "code:shell (# ck respects multiple exclusion layers (all are additive):)"
     },
     {
@@ -3681,7 +3672,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L334",
       "id": "raw_github_com_beaconbay_ck_search_filter_options",
-      "community": 388,
+      "community": 396,
       "norm_label": "search & filter options"
     },
     {
@@ -3690,7 +3681,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L338",
       "id": "raw_github_com_beaconbay_ck_codeblock_12",
-      "community": 388,
+      "community": 396,
       "norm_label": "code:shell (# threshold filtering)"
     },
     {
@@ -3708,7 +3699,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L364",
       "id": "raw_github_com_beaconbay_ck_model_selection",
-      "community": 404,
+      "community": 389,
       "norm_label": "model selection"
     },
     {
@@ -3717,7 +3708,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L370",
       "id": "raw_github_com_beaconbay_ck_codeblock_13",
-      "community": 404,
+      "community": 389,
       "norm_label": "code:shell (# default: bge-small (fast, precise chunking))"
     },
     {
@@ -3726,7 +3717,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L391",
       "id": "raw_github_com_beaconbay_ck_index_management",
-      "community": 399,
+      "community": 404,
       "norm_label": "index management"
     },
     {
@@ -3735,7 +3726,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L395",
       "id": "raw_github_com_beaconbay_ck_codeblock_14",
-      "community": 399,
+      "community": 404,
       "norm_label": "code:shell (# check index status)"
     },
     {
@@ -3744,7 +3735,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L442",
       "id": "raw_github_com_beaconbay_ck_from_crates_io",
-      "community": 392,
+      "community": 397,
       "norm_label": "from crates.io"
     },
     {
@@ -3753,7 +3744,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L446",
       "id": "raw_github_com_beaconbay_ck_codeblock_15",
-      "community": 392,
+      "community": 397,
       "norm_label": "code:shell (cargo install ck-search)"
     },
     {
@@ -3762,7 +3753,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L450",
       "id": "raw_github_com_beaconbay_ck_from_source",
-      "community": 397,
+      "community": 392,
       "norm_label": "from source"
     },
     {
@@ -3771,7 +3762,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L454",
       "id": "raw_github_com_beaconbay_ck_codeblock_16",
-      "community": 397,
+      "community": 392,
       "norm_label": "code:shell (git clone https://github.com/beaconbay/ck)"
     },
     {
@@ -3780,7 +3771,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L460",
       "id": "raw_github_com_beaconbay_ck_package_managers",
-      "community": 401,
+      "community": 390,
       "norm_label": "package managers"
     },
     {
@@ -3789,7 +3780,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L464",
       "id": "raw_github_com_beaconbay_ck_codeblock_17",
-      "community": 401,
+      "community": 390,
       "norm_label": "code:shell (# currently available:)"
     },
     {
@@ -3798,7 +3789,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L478",
       "id": "raw_github_com_beaconbay_ck_finding_code_patterns",
-      "community": 390,
+      "community": 401,
       "norm_label": "finding code patterns"
     },
     {
@@ -3807,7 +3798,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L482",
       "id": "raw_github_com_beaconbay_ck_codeblock_18",
-      "community": 390,
+      "community": 401,
       "norm_label": "code:shell (# find authentication/authorization code)"
     },
     {
@@ -3816,7 +3807,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L499",
       "id": "raw_github_com_beaconbay_ck_team_workflows",
-      "community": 402,
+      "community": 388,
       "norm_label": "team workflows"
     },
     {
@@ -3825,7 +3816,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L503",
       "id": "raw_github_com_beaconbay_ck_codeblock_19",
-      "community": 402,
+      "community": 388,
       "norm_label": "code:shell (# find related test files)"
     },
     {
@@ -3834,7 +3825,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L518",
       "id": "raw_github_com_beaconbay_ck_integration_examples",
-      "community": 393,
+      "community": 391,
       "norm_label": "integration examples"
     },
     {
@@ -3843,7 +3834,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L522",
       "id": "raw_github_com_beaconbay_ck_codeblock_20",
-      "community": 393,
+      "community": 391,
       "norm_label": "code:shell (# git hooks)"
     },
     {
@@ -3852,7 +3843,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L568",
       "id": "raw_github_com_beaconbay_ck_index_storage",
-      "community": 394,
+      "community": 395,
       "norm_label": "index storage"
     },
     {
@@ -3861,7 +3852,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L590",
       "id": "raw_github_com_beaconbay_ck_codeblock_21",
-      "community": 394,
+      "community": 395,
       "norm_label": "code:shell (# run the full test suite)"
     },
     {
@@ -3870,7 +3861,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L610",
       "id": "raw_github_com_beaconbay_ck_development_setup",
-      "community": 389,
+      "community": 394,
       "norm_label": "development setup"
     },
     {
@@ -3879,7 +3870,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L614",
       "id": "raw_github_com_beaconbay_ck_codeblock_22",
-      "community": 389,
+      "community": 394,
       "norm_label": "code:shell (git clone https://github.com/beaconbay/ck)"
     },
     {
@@ -3888,7 +3879,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L623",
       "id": "raw_github_com_beaconbay_ck_ci_requirements",
-      "community": 400,
+      "community": 399,
       "norm_label": "ci requirements"
     },
     {
@@ -3897,7 +3888,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L629",
       "id": "raw_github_com_beaconbay_ck_codeblock_23",
-      "community": 400,
+      "community": 399,
       "norm_label": "code:shell (# format code (required))"
     },
     {
@@ -3915,7 +3906,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L666",
       "id": "raw_github_com_beaconbay_ck_next_v0_6",
-      "community": 391,
+      "community": 405,
       "norm_label": "next (v0.6+)"
     },
     {
@@ -3924,7 +3915,7 @@
       "source_file": "raw/github.com_BeaconBay_ck.md",
       "source_location": "L736",
       "id": "raw_github_com_beaconbay_ck_codeblock_24",
-      "community": 391,
+      "community": 405,
       "norm_label": "code:shell (cargo install ck-search)"
     },
     {
@@ -4583,6 +4574,15 @@
       "id": "firecrawl_readme_codeblock_2",
       "community": 124,
       "norm_label": "code:js (const client = new firecrawl({ apikey: \"\", baseurl: \"http://)"
+    },
+    {
+      "label": "Wiki",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "community": 105,
+      "norm_label": "wiki",
+      "id": "ultimate_pi_readme_wiki"
     },
     {
       "label": "overview.md",
@@ -6731,7 +6731,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L60",
-      "community": 236,
+      "community": 235,
       "norm_label": "1. file structure (code layer)",
       "id": "questions_mvp_implementation_blueprint_1_file_structure_code_layer"
     },
@@ -6740,7 +6740,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L62",
-      "community": 236,
+      "community": 235,
       "norm_label": "what stays code (3 files)",
       "id": "questions_mvp_implementation_blueprint_what_stays_code_3_files"
     },
@@ -6749,7 +6749,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L64",
-      "community": 236,
+      "community": 235,
       "norm_label": "code:block1 (src/harness/)",
       "id": "questions_mvp_implementation_blueprint_codeblock_1"
     },
@@ -6758,7 +6758,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L74",
-      "community": 236,
+      "community": 235,
       "norm_label": "what becomes skills (6 directories)",
       "id": "questions_mvp_implementation_blueprint_what_becomes_skills_6_directories"
     },
@@ -6767,7 +6767,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L76",
-      "community": 236,
+      "community": 235,
       "norm_label": "code:block2 (.pi/skills/)",
       "id": "questions_mvp_implementation_blueprint_codeblock_2"
     },
@@ -6776,7 +6776,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L98",
-      "community": 236,
+      "community": 235,
       "norm_label": "extension wiring",
       "id": "questions_mvp_implementation_blueprint_extension_wiring"
     },
@@ -6785,7 +6785,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L100",
-      "community": 236,
+      "community": 235,
       "norm_label": "code:block3 (.pi/)",
       "id": "questions_mvp_implementation_blueprint_codeblock_3"
     },
@@ -6848,7 +6848,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L223",
-      "community": 298,
+      "community": 296,
       "norm_label": "3. l1: spec hardening \u2014 `harness-spec/skill.md`",
       "id": "questions_mvp_implementation_blueprint_3_l1_spec_hardening_harness_spec_skill_md"
     },
@@ -6857,7 +6857,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L225",
-      "community": 298,
+      "community": 296,
       "norm_label": "skill frontmatter",
       "id": "questions_mvp_implementation_blueprint_skill_frontmatter"
     },
@@ -6866,7 +6866,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L227",
-      "community": 298,
+      "community": 296,
       "norm_label": "code:yaml (---)",
       "id": "questions_mvp_implementation_blueprint_codeblock_6"
     },
@@ -6875,7 +6875,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L239",
-      "community": 298,
+      "community": 296,
       "norm_label": "skill.md body (core instructions)",
       "id": "questions_mvp_implementation_blueprint_skill_md_body_core_instructions"
     },
@@ -6884,7 +6884,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L259",
-      "community": 298,
+      "community": 296,
       "norm_label": "supporting file: `reference.md`",
       "id": "questions_mvp_implementation_blueprint_supporting_file_reference_md"
     },
@@ -6947,7 +6947,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L317",
-      "community": 235,
+      "community": 236,
       "norm_label": "6. l4: adversarial verification \u2014 `harness-critic/skill.md` + `.pi/agents/critic.md`",
       "id": "questions_mvp_implementation_blueprint_6_l4_adversarial_verification_harness_critic_skill_md_pi_agents_critic_md"
     },
@@ -6956,7 +6956,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L319",
-      "community": 235,
+      "community": 236,
       "norm_label": "skill frontmatter",
       "id": "questions_mvp_implementation_blueprint_skill_frontmatter_319"
     },
@@ -6965,7 +6965,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L321",
-      "community": 235,
+      "community": 236,
       "norm_label": "code:yaml (---)",
       "id": "questions_mvp_implementation_blueprint_codeblock_8"
     },
@@ -6974,7 +6974,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L338",
-      "community": 235,
+      "community": 236,
       "norm_label": "skill.md body",
       "id": "questions_mvp_implementation_blueprint_skill_md_body_338"
     },
@@ -6983,7 +6983,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L348",
-      "community": 235,
+      "community": 236,
       "norm_label": "critic agent definition (`.pi/agents/critic.md`)",
       "id": "questions_mvp_implementation_blueprint_critic_agent_definition_pi_agents_critic_md"
     },
@@ -6992,7 +6992,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L350",
-      "community": 235,
+      "community": 236,
       "norm_label": "code:yaml (---)",
       "id": "questions_mvp_implementation_blueprint_codeblock_9"
     },
@@ -7001,7 +7001,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L361",
-      "community": 235,
+      "community": 236,
       "norm_label": "supporting file: `reference.md`",
       "id": "questions_mvp_implementation_blueprint_supporting_file_reference_md_361"
     },
@@ -7010,7 +7010,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L371",
-      "community": 297,
+      "community": 298,
       "norm_label": "7. p20: deterministic gate \u2014 `harness-gate/skill.md`",
       "id": "questions_mvp_implementation_blueprint_7_p20_deterministic_gate_harness_gate_skill_md"
     },
@@ -7019,7 +7019,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L373",
-      "community": 297,
+      "community": 298,
       "norm_label": "skill frontmatter",
       "id": "questions_mvp_implementation_blueprint_skill_frontmatter_373"
     },
@@ -7028,7 +7028,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L375",
-      "community": 297,
+      "community": 298,
       "norm_label": "code:yaml (---)",
       "id": "questions_mvp_implementation_blueprint_codeblock_10"
     },
@@ -7037,7 +7037,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L386",
-      "community": 297,
+      "community": 298,
       "norm_label": "skill.md body",
       "id": "questions_mvp_implementation_blueprint_skill_md_body_386"
     },
@@ -7046,7 +7046,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L398",
-      "community": 297,
+      "community": 298,
       "norm_label": "supporting file: `reference.md`",
       "id": "questions_mvp_implementation_blueprint_supporting_file_reference_md_398"
     },
@@ -7055,7 +7055,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L407",
-      "community": 296,
+      "community": 297,
       "norm_label": "8. l5-l8: trace, observability, memory",
       "id": "questions_mvp_implementation_blueprint_8_l5_l8_trace_observability_memory"
     },
@@ -7064,7 +7064,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L409",
-      "community": 296,
+      "community": 297,
       "norm_label": "l5: `harness-observe/skill.md`",
       "id": "questions_mvp_implementation_blueprint_l5_harness_observe_skill_md"
     },
@@ -7073,7 +7073,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L413",
-      "community": 296,
+      "community": 297,
       "norm_label": "l6: `harness-memory/skill.md`",
       "id": "questions_mvp_implementation_blueprint_l6_harness_memory_skill_md"
     },
@@ -7082,7 +7082,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L417",
-      "community": 296,
+      "community": 297,
       "norm_label": "l7: schema orchestration",
       "id": "questions_mvp_implementation_blueprint_l7_schema_orchestration"
     },
@@ -7091,7 +7091,7 @@
       "file_type": "document",
       "source_file": "questions/mvp-implementation-blueprint.md",
       "source_location": "L421",
-      "community": 296,
+      "community": 297,
       "norm_label": "l8: wiki query interface",
       "id": "questions_mvp_implementation_blueprint_l8_wiki_query_interface"
     },
@@ -35472,21 +35472,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L44",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_md",
-      "target": "ultimate_pi_readme_wiki"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
       "source_location": "L49",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "readme_md",
       "target": "ultimate_pi_readme_contributing"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_md",
+      "target": "ultimate_pi_readme_wiki"
     },
     {
       "relation": "contains",
@@ -35814,9 +35814,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_md",
-      "target": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026"
     },
     {
       "relation": "contains",
@@ -35824,9 +35824,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026",
-      "target": "raw_semantic_code_search_tool_comparison_2026_research_summary",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_research_summary"
     },
     {
       "relation": "contains",
@@ -35834,9 +35834,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026",
-      "target": "raw_semantic_code_search_tool_comparison_2026_key_architectural_divergence",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_key_architectural_divergence"
     },
     {
       "relation": "contains",
@@ -35844,9 +35844,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026",
-      "target": "raw_semantic_code_search_tool_comparison_2026_decision_smgrep_is_best_ck_replacement",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_decision_smgrep_is_best_ck_replacement"
     },
     {
       "relation": "contains",
@@ -35854,9 +35854,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026",
-      "target": "raw_semantic_code_search_tool_comparison_2026_graphify_already_handles_what_these_tools_promise",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_graphify_already_handles_what_these_tools_promise"
     },
     {
       "relation": "contains",
@@ -35864,9 +35864,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026",
-      "target": "raw_semantic_code_search_tool_comparison_2026_open_questions",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_open_questions"
     },
     {
       "relation": "contains",
@@ -35874,9 +35874,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_semantic_code_search_tools_comprehensive_comparison_2026",
-      "target": "raw_semantic_code_search_tool_comparison_2026_sources",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_sources"
     },
     {
       "relation": "contains",
@@ -35884,9 +35884,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_research_summary",
-      "target": "raw_semantic_code_search_tool_comparison_2026_tier_1_polished_community_backed",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_tier_1_polished_community_backed"
     },
     {
       "relation": "contains",
@@ -35894,9 +35894,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_research_summary",
-      "target": "raw_semantic_code_search_tool_comparison_2026_tier_2_niche_with_unique_strengths",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_tier_2_niche_with_unique_strengths"
     },
     {
       "relation": "contains",
@@ -35904,9 +35904,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_research_summary",
-      "target": "raw_semantic_code_search_tool_comparison_2026_tier_3_graph_based_different_category",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_tier_3_graph_based_different_category"
     },
     {
       "relation": "contains",
@@ -35914,9 +35914,9 @@
       "source_file": "raw/semantic-code-search-tool-comparison-2026.md",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_semantic_code_search_tool_comparison_2026_decision_smgrep_is_best_ck_replacement",
-      "target": "raw_semantic_code_search_tool_comparison_2026_codeblock_1",
-      "confidence_score": 1.0
+      "target": "raw_semantic_code_search_tool_comparison_2026_codeblock_1"
     },
     {
       "relation": "contains",
@@ -36304,9 +36304,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_1",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_1"
     },
     {
       "relation": "contains",
@@ -36314,9 +36314,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_code_by_concept",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_code_by_concept"
     },
     {
       "relation": "contains",
@@ -36324,9 +36324,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L124",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_cross_content",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_cross_content"
     },
     {
       "relation": "contains",
@@ -36334,9 +36334,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L140",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_multilingual_private",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_multilingual_private"
     },
     {
       "relation": "contains",
@@ -36344,9 +36344,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L163",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_just_ask_no_skygrep_index",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_just_ask_no_skygrep_index"
     },
     {
       "relation": "contains",
@@ -36354,9 +36354,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_smart_from_the_wrong_folder",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_smart_from_the_wrong_folder"
     },
     {
       "relation": "contains",
@@ -36364,9 +36364,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L197",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_streaming_intelligent_routing",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_streaming_intelligent_routing"
     },
     {
       "relation": "contains",
@@ -36374,9 +36374,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L216",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_why_this_matched_skygrep_x_new_in_0_5_8",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_why_this_matched_skygrep_x_new_in_0_5_8"
     },
     {
       "relation": "contains",
@@ -36384,9 +36384,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L378",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_reading_the_per_query_telemetry_footer_0_2_2",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_reading_the_per_query_telemetry_footer_0_2_2"
     },
     {
       "relation": "contains",
@@ -36394,9 +36394,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L513",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_resources",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_resources"
     },
     {
       "relation": "contains",
@@ -36404,9 +36404,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L517",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_license",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_license"
     },
     {
       "relation": "contains",
@@ -36414,9 +36414,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L521",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_uh_oh",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_uh_oh"
     },
     {
       "relation": "contains",
@@ -36424,9 +36424,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L528",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_stars",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_stars"
     },
     {
       "relation": "contains",
@@ -36434,9 +36434,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L532",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_watchers",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_watchers"
     },
     {
       "relation": "contains",
@@ -36444,9 +36444,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L536",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_forks",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_forks"
     },
     {
       "relation": "contains",
@@ -36454,9 +36454,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L556",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_uh_oh_556",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_uh_oh_556"
     },
     {
       "relation": "contains",
@@ -36464,9 +36464,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L565",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_md",
-      "target": "raw_github_com_danielchen26_skylakegrep_uh_oh_565",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_uh_oh_565"
     },
     {
       "relation": "contains",
@@ -36474,9 +36474,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L114",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_code_by_concept",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_2",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_2"
     },
     {
       "relation": "contains",
@@ -36484,9 +36484,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_cross_content",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_3",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_3"
     },
     {
       "relation": "contains",
@@ -36494,9 +36494,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L146",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_multilingual_private",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_4",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_4"
     },
     {
       "relation": "contains",
@@ -36504,9 +36504,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_just_ask_no_skygrep_index",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_5",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_5"
     },
     {
       "relation": "contains",
@@ -36514,9 +36514,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L186",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_smart_from_the_wrong_folder",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_6",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_6"
     },
     {
       "relation": "contains",
@@ -36524,9 +36524,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L203",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_streaming_intelligent_routing",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_7",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_7"
     },
     {
       "relation": "contains",
@@ -36534,9 +36534,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L222",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_why_this_matched_skygrep_x_new_in_0_5_8",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_8",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_8"
     },
     {
       "relation": "contains",
@@ -36544,9 +36544,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L310",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_why_this_matched_skygrep_x_new_in_0_5_8",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_9",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_9"
     },
     {
       "relation": "contains",
@@ -36554,9 +36554,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L357",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_why_this_matched_skygrep_x_new_in_0_5_8",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_10",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_10"
     },
     {
       "relation": "contains",
@@ -36564,9 +36564,9 @@
       "source_file": "raw/github.com_danielchen26_skylakegrep.md",
       "source_location": "L458",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_danielchen26_skylakegrep_reading_the_per_query_telemetry_footer_0_2_2",
-      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_11",
-      "confidence_score": 1.0
+      "target": "raw_github_com_danielchen26_skylakegrep_codeblock_11"
     },
     {
       "relation": "contains",
@@ -36784,9 +36784,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_codeblock_1",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_1"
     },
     {
       "relation": "contains",
@@ -36794,9 +36794,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_codeblock_2",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_2"
     },
     {
       "relation": "contains",
@@ -36804,9 +36804,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_codeblock_3",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_3"
     },
     {
       "relation": "contains",
@@ -36814,9 +36814,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_codeblock_4",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_4"
     },
     {
       "relation": "contains",
@@ -36824,9 +36824,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_codeblock_5",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_5"
     },
     {
       "relation": "contains",
@@ -36834,9 +36834,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L133",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_claude_code",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_claude_code"
     },
     {
       "relation": "contains",
@@ -36844,9 +36844,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_mcp_server",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_mcp_server"
     },
     {
       "relation": "contains",
@@ -36854,9 +36854,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_query",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_query"
     },
     {
       "relation": "contains",
@@ -36864,9 +36864,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L199",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_index",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_index"
     },
     {
       "relation": "contains",
@@ -36874,9 +36874,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L211",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_serve",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_serve"
     },
     {
       "relation": "contains",
@@ -36884,9 +36884,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L226",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_stop_smgrep_stop_all",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_stop_smgrep_stop_all"
     },
     {
       "relation": "contains",
@@ -36894,9 +36894,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L237",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_clean",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_clean"
     },
     {
       "relation": "contains",
@@ -36904,9 +36904,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L249",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_status",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_status"
     },
     {
       "relation": "contains",
@@ -36914,9 +36914,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L255",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_list",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_list"
     },
     {
       "relation": "contains",
@@ -36924,9 +36924,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L261",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_smgrep_doctor",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_smgrep_doctor"
     },
     {
       "relation": "contains",
@@ -36934,9 +36934,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L330",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_config_file",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_config_file"
     },
     {
       "relation": "contains",
@@ -36944,9 +36944,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L414",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_environment_variables",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_environment_variables"
     },
     {
       "relation": "contains",
@@ -36954,9 +36954,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L435",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_ignoring_files",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_ignoring_files"
     },
     {
       "relation": "contains",
@@ -36964,9 +36964,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L451",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_manual_store_management",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_manual_store_management"
     },
     {
       "relation": "contains",
@@ -36974,9 +36974,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L505",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_resources",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_resources"
     },
     {
       "relation": "contains",
@@ -36984,9 +36984,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L509",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_license",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_license"
     },
     {
       "relation": "contains",
@@ -36994,9 +36994,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L513",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_uh_oh",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_uh_oh"
     },
     {
       "relation": "contains",
@@ -37004,9 +37004,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L520",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_stars",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_stars"
     },
     {
       "relation": "contains",
@@ -37014,9 +37014,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L524",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_watchers",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_watchers"
     },
     {
       "relation": "contains",
@@ -37024,9 +37024,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L528",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_md",
-      "target": "raw_github_com_can1357_smgrep_forks",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_forks"
     },
     {
       "relation": "contains",
@@ -37034,9 +37034,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_mcp_server",
-      "target": "raw_github_com_can1357_smgrep_codeblock_6",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_6"
     },
     {
       "relation": "contains",
@@ -37044,9 +37044,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_query",
-      "target": "raw_github_com_can1357_smgrep_codeblock_7",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_7"
     },
     {
       "relation": "contains",
@@ -37054,9 +37054,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L185",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_query",
-      "target": "raw_github_com_can1357_smgrep_codeblock_8",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_8"
     },
     {
       "relation": "contains",
@@ -37064,9 +37064,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_index",
-      "target": "raw_github_com_can1357_smgrep_codeblock_9",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_9"
     },
     {
       "relation": "contains",
@@ -37074,9 +37074,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L221",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_serve",
-      "target": "raw_github_com_can1357_smgrep_codeblock_10",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_10"
     },
     {
       "relation": "contains",
@@ -37084,9 +37084,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L232",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_stop_smgrep_stop_all",
-      "target": "raw_github_com_can1357_smgrep_codeblock_11",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_11"
     },
     {
       "relation": "contains",
@@ -37094,9 +37094,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L243",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_clean",
-      "target": "raw_github_com_can1357_smgrep_codeblock_12",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_12"
     },
     {
       "relation": "contains",
@@ -37104,9 +37104,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L267",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_doctor",
-      "target": "raw_github_com_can1357_smgrep_codeblock_13",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_13"
     },
     {
       "relation": "contains",
@@ -37114,9 +37114,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L283",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_doctor",
-      "target": "raw_github_com_can1357_smgrep_codeblock_14",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_14"
     },
     {
       "relation": "contains",
@@ -37124,9 +37124,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L294",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_smgrep_doctor",
-      "target": "raw_github_com_can1357_smgrep_codeblock_15",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_15"
     },
     {
       "relation": "contains",
@@ -37134,9 +37134,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L334",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_config_file",
-      "target": "raw_github_com_can1357_smgrep_codeblock_16",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_16"
     },
     {
       "relation": "contains",
@@ -37144,9 +37144,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L420",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_environment_variables",
-      "target": "raw_github_com_can1357_smgrep_codeblock_17",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_17"
     },
     {
       "relation": "contains",
@@ -37154,9 +37154,9 @@
       "source_file": "raw/github.com_can1357_smgrep.md",
       "source_location": "L474",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "raw_github_com_can1357_smgrep_manual_store_management",
-      "target": "raw_github_com_can1357_smgrep_codeblock_18",
-      "confidence_score": 1.0
+      "target": "raw_github_com_can1357_smgrep_codeblock_18"
     },
     {
       "relation": "contains",
@@ -70810,5 +70810,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "24858443b7eb4576f33960417310c10aac5d6a18"
+  "built_at_commit": "9c69518202253288b8139acfcefc663571374561"
 }
