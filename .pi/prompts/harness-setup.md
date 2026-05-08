@@ -363,6 +363,31 @@ if gh auth status &>/dev/null; then
 fi
 ```
 
+### 2.8 — sentrux (Architectural Quality Gate + MCP Sensor)
+
+```bash
+if ! command -v sentrux &>/dev/null || [ "$FORCE" = "true" ]; then
+	curl -fsSL https://raw.githubusercontent.com/sentrux/sentrux/main/install.sh | sh
+fi
+```
+
+Verify:
+```bash
+sentrux --version && echo "✓ sentrux installed" || echo "✗ sentrux install failed"
+```
+
+Install all 52 language plugins:
+```bash
+sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or failed"
+```
+
+Configure MCP server in `.pi/mcp.json` (see Step 4.3).
+
+Set up project baseline (optional, runs on first check):
+```bash
+sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate run"
+```
+
 ## Step 3 — Pi Extension Packages
 
 Install pi extension packages from `.pi/settings.json`:
@@ -414,9 +439,33 @@ Ensure `.gitignore` contains:
 .pi/harness/critics/
 .pi/harness/plans/
 .pi/harness/specs/
+.sentrux/
 ```
 
-### 4.2 — Project AGENTS.md
+### 4.2 — MCP Server Configuration
+
+Add sentrux MCP server to `.pi/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "context-mode": {
+      "command": "context-mode"
+    },
+    "sentrux": {
+      "command": "sentrux",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+This gives agents real-time access to structural health metrics:
+- `scan` — quality signal, file count, bottleneck detection
+- `session_start` / `session_end` — baseline comparison, degradation detection
+- `check_rules` — architectural constraint enforcement
+- `health`, `rescan`, `evolution`, `dsm`, `test_gaps`
+
+### 4.3 — Project AGENTS.md
 
 Create a minimal `AGENTS.md` in the project root for agent onboarding:
 
@@ -463,6 +512,7 @@ ck --version 2>/dev/null && echo "✓ ck-search" || echo "✗ ck-search"
 fallow --version 2>/dev/null && echo "✓ fallow" || echo "✗ fallow"
 biome --version 2>/dev/null && echo "✓ biome" || echo "✗ biome"
 gh --version 2>/dev/null && echo "✓ gh" || echo "✗ gh"
+sentrux --version 2>/dev/null && echo "✓ sentrux" || echo "✗ sentrux"
 
 # pi extensions
 cd .pi/npm && npm ls 2>/dev/null && echo "✓ pi extensions" || echo "✗ pi extensions"
@@ -517,10 +567,11 @@ Output summary table:
 | fallow | ✓/✗ | Baseline: created/pending |
 | biome | ✓/✗ | Project config: found/default |
 | gh CLI | ✓/✗ | Auth: yes/no |
+| sentrux | ✓/✗ | Version + plugins: 52 languages |
 | pi extensions | ✓/✗ | 4 packages |
 | model router | ✓/✗ | Package + config verified, activation via `/router profile auto` |
 
-| .gitignore | ✓/✗ | 6 entries added |
+| .gitignore | ✓/✗ | 7 entries added |
 | ./raw directory | ✓/✗ | Created for graphify source ingestion |
 | Firecrawl mode | self/cloud | Self-hosted on :3002 / Cloud (api.firecrawl.dev) |
 | Docker Engine | ✓/✗/N/A | Installed / Not needed (cloud mode) |
@@ -530,7 +581,8 @@ Next steps:
 2. If graph not built: run `graphify . --wiki`
 3. If gh not authenticated: `gh auth login`
 4. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
-5. First harness run: `/harness "your task description"`
+5. If sentrux plugins missing: `sentrux plugin add-standard`
+6. First harness run: `/harness "your task description"`
 
 ## Guard Rails
 
@@ -564,6 +616,7 @@ Next steps:
 | Docker install fails | Show manual link: https://docs.docker.com/engine/install/. Block Step 1.5, continue rest. |
 | Port 3002 already in use | Warn. User must free port or change `PORT` in `firecrawl/.env`. |
 | Self-hosted health check timeout | Show logs: `docker compose -f firecrawl/docker-compose.yaml logs`. Continue — may need more time. |
+| sentrux install fails | Show install script output. Fallback: download from https://github.com/sentrux/sentrux/releases/latest |
 
 ## Flags
 

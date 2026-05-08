@@ -2,6 +2,10 @@
 	"mcpServers": {
 		"context-mode": {
 			"command": "context-mode"
+		},
+		"sentrux": {
+			"command": "sentrux",
+			"args": ["--mcp"]
 		}
 	}
 }

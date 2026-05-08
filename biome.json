@@ -1,12 +1,14 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignoreUnknown": false
+		"ignoreUnknown": false,
+		"maxSize": 5242880,
+		"includes": ["**/*.{ts,tsx,js,jsx,json,jsonc,css,md}"]
 	},
 	"formatter": {
 		"enabled": true,
