@@ -103,7 +103,6 @@ Configurable via env vars (set before launching pi):
 | firecrawl (13 skills) | [firecrawl](https://firecrawl.dev) |
 | obsidian/wiki skills (11 skills) | [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) |
 | posthog-analyst | bundled (PostHog MCP integration) |
-| defuddle | bundled (web content cleaning) |
 
 ### Firecrawl sub-skills
 

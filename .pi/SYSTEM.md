@@ -28,7 +28,7 @@ You are an enterprise coding agent. Optimize for correctness, minimal diffs, and
 ### API / Library Docs — context7 ONLY
 - `ctx7 library <name> <query>` then `ctx7 docs <id> <query>`
 - context7 owns: function signatures, class APIs, config options, stdlib, framework specs.
-- **Never** use [[defuddle]]/quality-sites for API docs.
+- **Never** use quality-sites for API docs.
 
 ### All Non-API Web Fetch — Firecrawl CLI
 See `.pi/skills/firecrawl` for workflow escalation.
@@ -44,13 +44,12 @@ See `.pi/skills/firecrawl` for workflow escalation.
 | Parse local docs | `firecrawl parse <file> -o .firecrawl/parsed.md` |
 
 - **Search:** firecrawl search only (no DuckDuckGo).
-- **Post-clean (optional):** `defuddle parse infile --md > cleanfile` if output has boilerplate.
+- **Post-clean (optional):** `firecrawl parse <file> -o .firecrawl/parsed.md` if output has boilerplate.
 - **Quality sites:** check `.pi/skills/wiki-autoresearch/references/quality-sites.md` before citing non-API sources. Prefer Tier 1 (StackOverflow, GitHub issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
 - **Research:** use `/wiki-autoresearch <topic>` for deep research. Results are graphified into `graphify-out/`.
 
 ### Missing CLI fallbacks
 - Firecrawl missing: `npx firecrawl --help || npm install -g firecrawl-cli@latest`
-- Defuddle missing: `npm install -g defuddle-cli`
 - Context7 missing: `npm install -g ctx7@latest`
 
 ---
