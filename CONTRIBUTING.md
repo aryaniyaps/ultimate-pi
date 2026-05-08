@@ -34,6 +34,45 @@ npm run check:ts        # typecheck extensions
 
 Pre-commit hooks run `biome check` and `tsc` on staged files automatically.
 
+## Sentrux (architectural quality gate)
+
+[Sentrux](https://github.com/sentrux/sentrux) provides real-time structural quality metrics for AI-agent-written code. It acts as a feedback loop sensor — scanning codebase architecture, detecting degradation, and enforcing rules via MCP.
+
+### Quick start
+
+```bash
+# Install (macOS / Linux / Windows)
+curl -fsSL https://raw.githubusercontent.com/sentrux/sentrux/main/install.sh | sh
+
+# Install all 52 language plugins
+sentrux plugin add-standard
+
+# Run a quality scan
+sentrux check .
+
+# Save baseline before agent session
+sentrux gate --save .
+
+# Compare after — catches degradation
+sentrux gate .
+```
+
+### MCP Integration
+
+The sentrux MCP server is configured in `.pi/mcp.json`. Agents can use tools like `scan`, `session_start`, `session_end`, `check_rules`, `health`, and `evolution` to monitor code quality during development.
+
+### Rules Engine
+
+Create `.sentrux/rules.toml` to define architectural constraints:
+
+```toml
+[constraints]
+max_cycles = 0
+max_coupling = "B"
+max_cc = 25
+no_god_files = true
+```
+
 ## Firecrawl (self-hosted web scraping)
 
 The Firecrawl skill depends on a Firecrawl instance. This repo includes a self-hosted setup powered by Docker.

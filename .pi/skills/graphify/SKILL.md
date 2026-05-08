@@ -57,18 +57,12 @@ Follow these steps in order. Do not skip steps.
 ### Step 1 - Ensure graphify is installed
 
 ```bash
-# Detect the correct Python interpreter (handles pipx, venv, system installs)
-GRAPHIFY_BIN=$(which graphify 2>/dev/null)
-if [ -n "$GRAPHIFY_BIN" ]; then
-    PYTHON=$(head -1 "$GRAPHIFY_BIN" | tr -d '#!')
-    case "$PYTHON" in
-        *[!a-zA-Z0-9/_.-]*) PYTHON="python3" ;;
-    esac
-else
-    PYTHON="python3"
-fi
-"$PYTHON" -c "import graphify" 2>/dev/null || "$PYTHON" -m pip install graphifyy -q 2>/dev/null || "$PYTHON" -m pip install graphifyy -q --break-system-packages 2>&1 | tail -3
+# Install via uv tool if not already available
+command -v graphify >/dev/null 2>&1 || uv tool install graphifyy
 mkdir -p graphify-out
+# Get the Python interpreter uv uses for the tool
+PYTHON=$(uv tool run graphify -- -c "import sys; print(sys.executable)" 2>/dev/null || echo "python3")
+"$PYTHON" -c "import graphify" 2>/dev/null || { uv tool install graphifyy && "$PYTHON" -c "import graphify"; }
 # Write interpreter path for all subsequent steps
 "$PYTHON" -c "import sys; open('graphify-out/.graphify_python', 'w').write(sys.executable)"
 ```
