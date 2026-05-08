@@ -251,17 +251,7 @@ mkdir -p .firecrawl
 firecrawl scrape "https://firecrawl.dev" -o .firecrawl/install-check.md
 ```
 
-### 2.2 — defuddle-cli (Web Page Cleaner)
-
-```bash
-if ! command -v defuddle &>/dev/null || [ "$FORCE" = "true" ]; then
-	npm install -g defuddle-cli
-fi
-```
-
-Verify: `defuddle --version`
-
-### 2.3 — ctx7 (Context7 Library Docs + Skills Management)
+### 2.2 — ctx7 (Context7 Library Docs + Skills Management)
 
 ```bash
 if ! command -v ctx7 &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -277,7 +267,7 @@ ctx7 login
 ctx7 whoami
 ```
 
-### 2.4 — agent-browser (Vercel Labs Browser Automation for AI Agents)
+### 2.3 — agent-browser (Vercel Labs Browser Automation for AI Agents)
 
 ```bash
 if ! command -v agent-browser &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -302,7 +292,7 @@ if [ ! -f .pi/harness/browser.json ]; then
 fi
 ```
 
-### 2.5 — ck-search (Semantic Code Search)
+### 2.4 — ck-search (Semantic Code Search)
 
 ```bash
 if ! command -v ck &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -317,7 +307,7 @@ Register as MCP server (if Claude MCP available):
 claude mcp list 2>/dev/null && claude mcp add ck-search -s user -- ck --serve || echo "MCP not available — ck will be used as CLI only"
 ```
 
-### 2.6 — fallow (Codebase Intelligence: Dead Code, Duplication, Complexity)
+### 2.5 — fallow (Codebase Intelligence: Dead Code, Duplication, Complexity)
 
 ```bash
 if ! command -v fallow &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -335,7 +325,7 @@ Set up baseline for existing codebases:
 fallow audit --gate all --format json > .fallow-baseline.json 2>/dev/null || echo "No baseline yet — will be created on first gate run"
 ```
 
-### 2.7 — biome (Lint + Format Gate)
+### 2.6 — biome (Lint + Format Gate)
 
 ```bash
 if ! command -v biome &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -350,7 +340,7 @@ ls biome.json 2>/dev/null && echo "biome.json found — using project config" ||
 
 Verify: `biome --version`
 
-### 2.8 — gh CLI (GitHub Issues Spec Storage — ADR-025)
+### 2.7 — gh CLI (GitHub Issues Spec Storage — ADR-025)
 
 ```bash
 if ! command -v gh &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -467,7 +457,6 @@ Run full verification suite:
 ```bash
 # CLI tools
 firecrawl --status 2>/dev/null && echo "✓ firecrawl" || echo "✗ firecrawl"
-defuddle --version 2>/dev/null && echo "✓ defuddle" || echo "✗ defuddle"
 ctx7 --help 2>/dev/null && echo "✓ ctx7" || echo "✗ ctx7"
 agent-browser --version 2>/dev/null && echo "✓ agent-browser" || echo "✗ agent-browser"
 ck --version 2>/dev/null && echo "✓ ck-search" || echo "✗ ck-search"
@@ -522,7 +511,6 @@ Output summary table:
 |-----------|--------|--------|
 | Knowledge Graph | ✓/✗ | `graphify-out/graph.json` — graph status |
 | firecrawl-cli | ✓/✗ | Auth: yes/no |
-| defuddle-cli | ✓/✗ | Version |
 | ctx7 | ✓/✗ | Login: yes/no |
 | agent-browser | ✓/✗ | Config: .pi/harness/browser.json |
 | ck-search | ✓/✗ | MCP: registered/CLI-only |
