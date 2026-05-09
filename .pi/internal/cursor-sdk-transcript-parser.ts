@@ -25,7 +25,9 @@ export function parseCursorTranscriptToolCalls(
 		for (const candidate of candidates) {
 			const exact = tools.find((tool) => tool.name === candidate);
 			if (exact) return exact.name;
-			const insensitive = tools.find((tool) => tool.name.toLowerCase() === candidate.toLowerCase());
+			const insensitive = tools.find(
+				(tool) => tool.name.toLowerCase() === candidate.toLowerCase(),
+			);
 			if (insensitive) return insensitive.name;
 		}
 		return undefined;
@@ -33,8 +35,12 @@ export function parseCursorTranscriptToolCalls(
 
 	const blockRegex = /⏺\s*([a-zA-Z0-9._-]+)[\s\S]*?```json\s*([\s\S]*?)```/g;
 	let match: RegExpExecArray | null = null;
-	const parsedCalls: Array<{ name: string; arguments: Record<string, unknown> }> = [];
-	while ((match = blockRegex.exec(text)) !== null) {
+	const parsedCalls: Array<{
+		name: string;
+		arguments: Record<string, unknown>;
+	}> = [];
+	match = blockRegex.exec(text);
+	while (match !== null) {
 		const rawToolName = match[1] ?? "";
 		const mappedName = normalizeToolName(rawToolName);
 		if (!mappedName) continue;
@@ -49,10 +55,14 @@ export function parseCursorTranscriptToolCalls(
 				parsedCalls.push({ name: mappedName, arguments: {} });
 				continue;
 			}
-			parsedCalls.push({ name: mappedName, arguments: parsed as Record<string, unknown> });
+			parsedCalls.push({
+				name: mappedName,
+				arguments: parsed as Record<string, unknown>,
+			});
 		} catch {
 			parsedCalls.push({ name: mappedName, arguments: {} });
 		}
+		match = blockRegex.exec(text);
 	}
 
 	return parsedCalls;
