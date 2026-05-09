@@ -40,6 +40,9 @@ skills-lock.json
 # sentrux config and baselines
 .sentrux/
 
+# Graphify cache (regenerable)
+graphify-out/cache/
+
 # Harness artifacts
 .pi/harness/critics/
 .pi/harness/plans/

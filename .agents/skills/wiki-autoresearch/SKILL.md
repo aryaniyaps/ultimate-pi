@@ -15,10 +15,10 @@ allowed-tools: Read Write Edit Glob Grep WebFetch WebSearch Bash
 
 You are a research agent. You take a topic, run iterative web searches, synthesize
 findings, and build a queryable knowledge graph via Graphify. The user gets a
-graph and a research report — not a wall of text.
+graph — not a wall of text.
 
 This is based on Karpathy's autoresearch pattern. You run the loop until depth
-is reached. Output goes into the knowledge graph.
+is reached. Output goes into the knowledge graph only — no separate report file.
 
 ---
 
@@ -117,11 +117,9 @@ graphify ./raw --wiki --mode deep
 
 ---
 
-## Synthesis & Filing
+## Synthesis via Graph
 
-After the graph is built:
-
-### 1. Query the Graph for Synthesis
+After the graph is built, query it directly for insights:
 
 ```bash
 # Find the god nodes (core concepts)
@@ -140,65 +138,14 @@ graphify query "what are the most surprising cross-domain connections?"
 graphify path "ConceptA" "ConceptB"
 ```
 
-### 2. Write the Research Synthesis
-
-Create `graphify-out/RESEARCH_REPORT.md`:
-
-```markdown
-# Research: [Topic]
-**Date:** YYYY-MM-DD
-**Rounds:** N | **Sources:** N | **Graph Nodes:** N | **Graph Edges:** N
-
-## Overview
-[2-3 sentence summary of findings, grounded in what the graph reveals]
-
-## God Nodes (Core Concepts)
-From the graph's highest-degree nodes:
-- **[[Node A]]**: [one-line description]
-- **[[Node B]]**: [one-line description]
-
-## Surprising Connections
-- **[[Node X]] ↔ [[Node Y]]**: [what the graph revealed that was unexpected]
-
-## Community Structure
-The graph identified N communities:
-- Community 0 (largest): [topic] — [brief description]
-- Community 1: [topic] — [brief description]
-
-## Key Findings
-- Finding 1 (sourced from graph node [[X]])
-- Finding 2 (sourced from graph node [[Y]])
-
-## Contradictions
-- [[Source A]] suggests X. [[Source B]] suggests Y.
-  [Which is more credible and why, based on source quality]
-
-## Open Questions
-- [Question the research didn't fully answer]
-- [Gap that needs more sources]
-
-## Graph Statistics
-- Total nodes: N
-- Total edges: N
-- Communities: N
-- God nodes: [[Node 1]], [[Node 2]], [[Node 3]]
-- Token reduction vs naive: [from GRAPH_REPORT.md benchmark]
-
-## Sources
-[List all files in ./raw/ with brief descriptions]
-```
-
-### 3. File the Synthesis
-
-The report lives at `graphify-out/RESEARCH_REPORT.md`. It is queryable via
-`graphify query` and linkable from the graph itself.
+No separate report file is created. The graph IS the research output.
 
 ---
 
-## After Filing
+## After Building
 
-No wiki index, log, or hot cache to update. The graph IS the index. The
-GRAPH_REPORT.md IS the hot cache. Everything is queryable.
+No wiki index, log, hot cache, or report file to update. The graph IS the index.
+The GRAPH_REPORT.md IS the hot cache. Everything is queryable.
 
 The user can:
 - Open `graphify-out/graph.html` for interactive exploration
@@ -220,7 +167,6 @@ Rounds: N | Sources: N | Graph: N nodes, N edges
 Output:
   graphify-out/graph.html         (interactive graph)
   graphify-out/GRAPH_REPORT.md    (auto-generated analysis)
-  graphify-out/RESEARCH_REPORT.md (synthesis)
   graphify-out/wiki/              (browsable articles)
   ./raw/                           (N source files)
 
@@ -242,4 +188,4 @@ Follow the limits in `references/program.md`:
 - Source preference rules
 
 If a constraint conflicts with completeness, respect the constraint and note
-what was left out in the Open Questions section of the research report.
+what was left out so the user can query the graph about gaps.

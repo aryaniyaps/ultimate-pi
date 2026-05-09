@@ -95,7 +95,7 @@ for conceptual code search before falling back to `ck`:
 1. Read `graphify-out/GRAPH_REPORT.md` (god nodes, surprises, suggested questions)
 2. Run `graphify query` for domain-specific questions, call traces, and semantic search
 3. Use `graphify explain "Concept"` for caller/callee/dependency deep dives
-4. Use `ck --hybrid` or `grep` only for exact text that the graph doesn't surface
+4. Use `sg -p 'pattern'` for structural code search, then `ck --hybrid` only if graph and ast-grep don't surface it
 5. Read individual files last — the graph already told you what matters
 
 ### Fallback Search (when graph doesn't cover it)
@@ -103,19 +103,23 @@ for conceptual code search before falling back to `ck`:
 > [!note] Graphify handles semantic search and call graphs
 > Graphify already provides semantic code search and call-graph tracing. Use
 > `graphify query`, `graphify explain`, and `graphify path` as your primary
-> code exploration tools. Only fall back to `ck`/`grep`/`find` when the graph
+> code exploration tools. Only fall back to `sg`/`ck`/`find` when the graph
 > doesn't have the answer (e.g., not yet indexed, or you need exact raw text).
 
 | Tool | When | Command |
 |------|------|---------|
-| `ck --hybrid` | Lexical + semantic fusion search (fallback) | `ck --hybrid "query" .` |
-| `ck --sem` | Purely conceptual searches (fallback) | `ck --sem "concept" src/` |
-| `grep` | **Only** for exact literal string matching | `grep -F "exact string"` |
+| `sg -p` | **Primary code search** — AST-aware structural pattern matching | `sg -p 'pattern' --lang typescript` |
+| `sg scan` | Rule-based code scanning (use project rules in `sgconfig.yml`) | `sg scan` |
+| `ck --hybrid` | Lexical + semantic fusion search (fallback after ast-grep) | `ck --hybrid "query" .` |
+| `ck --sem` | Purely conceptual searches (fallback after ast-grep) | `ck --sem "concept" src/` |
 | `find` | File discovery by name/glob only | `find . -name "*.ts"` |
+| `grep` | **Last resort** — exact literal string matching in non-code files only | `grep -F "exact string"` |
 
+- **Always prefer ast-grep (`sg`) over grep for code search.** ast-grep understands code structure via tree-sitter — it matches patterns, not strings. Use it for: finding function calls, class definitions, import statements, variable usage, and any structural code query.
+- Never use grep for code search. grep is only for: log files, non-code text files, exact byte-level matching when AST patterns can't work.
 - Always use `--limit N` on ck to cap output and save context.
-- Graphify is primary. ck/grep/find are secondary.
-- Do NOT install or use grepai/seagoat/mgrep for call-graph tracing or semantic
+- Graphify is primary. ast-grep is secondary. ck/find are fallbacks. grep is last resort.
+- Do NOT install or use grepai/seagoat/mgrep for call-graph traces or semantic
   search — graphify already handles both.
 
 ---

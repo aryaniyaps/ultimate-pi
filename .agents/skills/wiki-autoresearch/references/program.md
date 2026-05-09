@@ -37,5 +37,5 @@ None configured. Add domain-specific constraints below.
 ## Output Format
 
 Results are filed into `graphify-out/` via the knowledge graph.
-The synthesis report is written to `graphify-out/RESEARCH_REPORT.md`.
+No separate synthesis report — the graph IS the research output.
 Raw sources are stored in `./raw/` for graphify ingestion.
