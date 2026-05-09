@@ -3,7 +3,7 @@ pre-commit:
     lint:
       glob: "*.{ts,js,json,md}"
       exclude: "graphify-out/**"
-      run: npx @biomejs/biome check --no-errors-on-unmatched --staged
+      run: npx @biomejs/biome check --no-errors-on-unmatched --write {staged_files}
     typecheck:
       glob: "*.ts"
       run: npm run check:ts
