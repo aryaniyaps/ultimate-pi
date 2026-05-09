@@ -325,6 +325,27 @@ ls biome.json 2>/dev/null && echo "biome.json found — using project config" ||
 
 Verify: `biome --version`
 
+### 2.6 — ast-grep (AST-Aware Structural Code Search)
+
+```bash
+if ! command -v sg &>/dev/null || [ "$FORCE" = "true" ]; then
+	npm install -g @ast-grep/cli@latest
+fi
+```
+
+Verify:
+```bash
+sg --version && echo "✓ ast-grep installed" || echo "✗ ast-grep install failed"
+```
+
+ast-grep is the primary code search tool. It uses tree-sitter for AST-aware pattern matching — understands code structure, not just text. Replaces grep for code search tasks.
+
+Quick smoke test:
+```bash
+# Search for function definitions across the codebase
+sg -p 'function $NAME($$$ARGS) { $$$BODY }' --json 2>/dev/null | head -5 && echo "✓ ast-grep pattern matching works" || echo "! ast-grep smoke test — may need language-specific config"
+```
+
 ### 2.7 — gh CLI (GitHub Issues Spec Storage — ADR-025)
 
 ```bash
@@ -481,6 +502,8 @@ Created: $(date +%Y-%m-%d)
 - ./raw/ is source storage for graphify
 - ADRs in docs/adr/ with structured format
 - `graphify . --update` after significant changes
+- ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code
+- Create `.sg/rules/` for project-wide code quality rules
 ```
 
 ## Step 5 — Verification
@@ -494,6 +517,7 @@ ctx7 --help 2>/dev/null && echo "✓ ctx7" || echo "✗ ctx7"
 agent-browser --version 2>/dev/null && echo "✓ agent-browser" || echo "✗ agent-browser"
 ck --version 2>/dev/null && echo "✓ ck-search" || echo "✗ ck-search"
 biome --version 2>/dev/null && echo "✓ biome" || echo "✗ biome"
+sg --version 2>/dev/null && echo "✓ ast-grep" || echo "✗ ast-grep"
 gh --version 2>/dev/null && echo "✓ gh" || echo "✗ gh"
 sentrux --version 2>/dev/null && echo "✓ sentrux" || echo "✗ sentrux"
 
@@ -550,6 +574,7 @@ Output summary table:
 | agent-browser | ✓/✗ | Config: .pi/harness/browser.json |
 | ck-search | ✓/✗ | MCP: registered/CLI-only |
 | biome | ✓/✗ | Project config: found/default |
+| ast-grep | ✓/✗ | AST-aware code search (`sg`)
 | gh CLI | ✓/✗ | Auth: yes/no |
 | sentrux | ✓/✗ | Version + plugins: 52 languages |
 | pi extensions | ✓/✗ | 4 packages |
