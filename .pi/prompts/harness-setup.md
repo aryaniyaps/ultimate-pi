@@ -69,6 +69,9 @@ else
   graphify . --wiki
 fi
 
+# Install git hooks — auto-update graph on commit/checkout
+graphify hook install
+
 # Quick stats
 echo "Graph built. Output: graphify-out/"
 ls graphify-out/
@@ -307,25 +310,7 @@ Register as MCP server (if Claude MCP available):
 claude mcp list 2>/dev/null && claude mcp add ck-search -s user -- ck --serve || echo "MCP not available — ck will be used as CLI only"
 ```
 
-### 2.5 — fallow (Codebase Intelligence: Dead Code, Duplication, Complexity)
-
-```bash
-if ! command -v fallow &>/dev/null || [ "$FORCE" = "true" ]; then
-	npm install -g fallow
-fi
-```
-
-Verify:
-```bash
-fallow --version
-```
-
-Set up baseline for existing codebases:
-```bash
-fallow audit --gate all --format json > .fallow-baseline.json 2>/dev/null || echo "No baseline yet — will be created on first gate run"
-```
-
-### 2.6 — biome (Lint + Format Gate)
+### 2.5 — biome (Lint + Format Gate)
 
 ```bash
 if ! command -v biome &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -435,7 +420,6 @@ Ensure `.gitignore` contains:
 .firecrawl/
 .raw/
 .vault-meta/
-.fallow-baseline.json
 .pi/harness/critics/
 .pi/harness/plans/
 .pi/harness/specs/
@@ -509,7 +493,6 @@ firecrawl --status 2>/dev/null && echo "✓ firecrawl" || echo "✗ firecrawl"
 ctx7 --help 2>/dev/null && echo "✓ ctx7" || echo "✗ ctx7"
 agent-browser --version 2>/dev/null && echo "✓ agent-browser" || echo "✗ agent-browser"
 ck --version 2>/dev/null && echo "✓ ck-search" || echo "✗ ck-search"
-fallow --version 2>/dev/null && echo "✓ fallow" || echo "✗ fallow"
 biome --version 2>/dev/null && echo "✓ biome" || echo "✗ biome"
 gh --version 2>/dev/null && echo "✓ gh" || echo "✗ gh"
 sentrux --version 2>/dev/null && echo "✓ sentrux" || echo "✗ sentrux"
@@ -520,6 +503,7 @@ cd .pi/npm && npm ls 2>/dev/null && echo "✓ pi extensions" || echo "✗ pi ext
 # graphify knowledge graph
 pip show graphifyy 2>/dev/null && echo "✓ graphify installed" || echo "✗ graphify not installed"
 ls graphify-out/graph.json 2>/dev/null && echo "✓ knowledge graph built" || echo "✗ no graph built yet"
+graphify hook status 2>/dev/null && echo "✓ graphify git hooks installed" || echo "✗ graphify git hooks not installed"
 
 # model router
 ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null && echo "✓ model-router package" || echo "✗ model-router package"
@@ -560,11 +544,11 @@ Output summary table:
 | Component | Status | Detail |
 |-----------|--------|--------|
 | Knowledge Graph | ✓/✗ | `graphify-out/graph.json` — graph status |
+| Graphify Hooks | ✓/✗ | git post-commit/post-checkout hooks |
 | firecrawl-cli | ✓/✗ | Auth: yes/no |
 | ctx7 | ✓/✗ | Login: yes/no |
 | agent-browser | ✓/✗ | Config: .pi/harness/browser.json |
 | ck-search | ✓/✗ | MCP: registered/CLI-only |
-| fallow | ✓/✗ | Baseline: created/pending |
 | biome | ✓/✗ | Project config: found/default |
 | gh CLI | ✓/✗ | Auth: yes/no |
 | sentrux | ✓/✗ | Version + plugins: 52 languages |
@@ -579,10 +563,11 @@ Output summary table:
 Next steps:
 1. If tools missing: re-run with `--force` or install individually
 2. If graph not built: run `graphify . --wiki`
-3. If gh not authenticated: `gh auth login`
-4. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
-5. If sentrux plugins missing: `sentrux plugin add-standard`
-6. First harness run: `/harness "your task description"`
+3. If hooks not installed: run `graphify hook install`
+4. If gh not authenticated: `gh auth login`
+5. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
+6. If sentrux plugins missing: `sentrux plugin add-standard`
+7. First harness run: `/harness "your task description"`
 
 ## Guard Rails
 
@@ -605,6 +590,7 @@ Next steps:
 | npm not found | Block. Suggest install method per OS. |
 | Python < 3.10 | Block. Report required Python version for Graphify. |
 | Graphify install fails | Show pip error output. Suggest `pip install --upgrade pip` and retry. |
+| graphify hook install fails | Hooks need `.git/` directory. Verify inside git repo. Manual: `git config core.hooksPath .pi/git-hooks` |
 | firecrawl auth failed | Show manual login instructions. Continue with other tools. |
 | gh not installed | Show GitHub CLI install link. Skip label creation. |
 | pi packages install fail | Show error output. Check npm permissions. |

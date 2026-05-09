@@ -47,3 +47,8 @@ graphify-out/cache/
 .pi/harness/critics/
 .pi/harness/plans/
 .pi/harness/specs/
+
+
+graphify-out/manifest.json    # mtime-based, breaks after git clone
+graphify-out/cost.json        # local only
+# graphify-out/cache/         # optional: commit for speed, skip to keep repo small

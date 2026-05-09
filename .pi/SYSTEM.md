@@ -71,27 +71,52 @@ connections via tree-sitter AST analysis + LLM semantic extraction.
 | Build graph | `graphify .` | First session, or after major code changes |
 | Update graph | `graphify . --update` | After a few file changes (incremental) |
 | Query graph | `graphify query "question"` | Understanding relationships, architecture |
-| Trace paths | `graphify path "A" "B"` | How two concepts connect |
-| Explain node | `graphify explain "Concept"` | Deep dive on one concept |
+| Trace paths | `graphify path "A" "B"` | How two concepts connect (includes call chains) |
+| Explain node | `graphify explain "Concept"` | Deep dive — shows all callers, callees, references |
+| DFS trace | `graphify query "who calls X" --dfs` | Follow a specific call/dependency chain |
 | Read report | Read `graphify-out/GRAPH_REPORT.md` | Fastest path to codebase understanding |
+
+**Call graph tracing via graphify:**
+Graphify's tree-sitter AST extraction captures `calls`, `implements`, and `references`
+edges at build time. Use these to answer call-graph questions without external tools:
+- **Who calls `functionName`?** → `graphify explain "functionName"` (shows all inbound `calls` edges)
+- **What does `functionName` call?** → `graphify explain "functionName"` (shows all outbound `calls` edges)
+- **How does `Auth` reach `Database`?** → `graphify path "Auth" "Database"` (shortest call chain)
+- **Trace a dependency chain deep** → `graphify query "how does X depend on Y" --dfs`
+
+**Semantic code search via graphify:**
+Graphify already indexes the entire codebase as a knowledge graph. Use graphify
+for conceptual code search before falling back to `ck`:
+- **Find code by meaning** → `graphify query "where is authentication logic"`
+- **Find related concepts** → `graphify query "what connects to error handling"`
+- **Cross-file surprises** → `graphify query "what unexpected connections exist"`
 
 **Order of operations for codebase exploration:**
 1. Read `graphify-out/GRAPH_REPORT.md` (god nodes, surprises, suggested questions)
-2. Run `graphify query` for domain-specific questions
-3. Use `ck --hybrid` or `grep` only for exact text that the graph doesn't surface
-4. Read individual files last — the graph already told you what matters
+2. Run `graphify query` for domain-specific questions, call traces, and semantic search
+3. Use `graphify explain "Concept"` for caller/callee/dependency deep dives
+4. Use `ck --hybrid` or `grep` only for exact text that the graph doesn't surface
+5. Read individual files last — the graph already told you what matters
 
 ### Fallback Search (when graph doesn't cover it)
 
+> [!note] Graphify handles semantic search and call graphs
+> Graphify already provides semantic code search and call-graph tracing. Use
+> `graphify query`, `graphify explain`, and `graphify path` as your primary
+> code exploration tools. Only fall back to `ck`/`grep`/`find` when the graph
+> doesn't have the answer (e.g., not yet indexed, or you need exact raw text).
+
 | Tool | When | Command |
 |------|------|---------|
-| `ck --hybrid` | Lexical + semantic fusion search | `ck --hybrid "query" .` |
-| `ck --sem` | Purely conceptual searches | `ck --sem "concept" src/` |
+| `ck --hybrid` | Lexical + semantic fusion search (fallback) | `ck --hybrid "query" .` |
+| `ck --sem` | Purely conceptual searches (fallback) | `ck --sem "concept" src/` |
 | `grep` | **Only** for exact literal string matching | `grep -F "exact string"` |
 | `find` | File discovery by name/glob only | `find . -name "*.ts"` |
 
 - Always use `--limit N` on ck to cap output and save context.
 - Graphify is primary. ck/grep/find are secondary.
+- Do NOT install or use grepai/seagoat/mgrep for call-graph tracing or semantic
+  search — graphify already handles both.
 
 ---
 ## Agent Routing
