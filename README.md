@@ -41,10 +41,6 @@ Run the harness setup prompt to configure everything (wiki, firecrawl, env vars,
 /harness-setup
 ```
 
-## Wiki
-
-The harness includes an Obsidian wiki vault as its knowledge layer. Run `/wiki` in your PI session to scaffold it, then open the vault in [Obsidian](https://obsidian.md). Recommended community plugins: Dataview, Graph Analysis, Obsidian Git.
-
 
 ## Contributing
 
