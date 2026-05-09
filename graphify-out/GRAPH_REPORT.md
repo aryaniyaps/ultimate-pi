@@ -1,7 +1,7 @@
-# Graph Report - ultimate-pi  (2026-05-08)
+# Graph Report - ultimate-pi  (2026-05-09)
 
 ## Corpus Check
-- 28 files · ~59,298 words
+- 28 files · ~59,299 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5be7c15a`
+- Built from commit: `e96ff9e5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1401,11 +1401,11 @@ Nodes (6): Concepts Introduced, Entities Mentioned, Key Claims, Notes, Summary, 
 
 ### Community 235 - "Community 235"
 Cohesion: 0.29
-Nodes (7): 1. File Structure (Code Layer), code:block1 (src/harness/), code:block2 (.pi/skills/), code:block3 (.pi/), Extension Wiring, What Becomes Skills (6 directories), What Stays Code (3 files)
+Nodes (7): 6. L4: Adversarial Verification — `harness-critic/SKILL.md` + `.pi/agents/critic.md`, code:yaml (---), code:yaml (---), Critic Agent Definition (`.pi/agents/critic.md`), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
 
 ### Community 236 - "Community 236"
 Cohesion: 0.29
-Nodes (7): 6. L4: Adversarial Verification — `harness-critic/SKILL.md` + `.pi/agents/critic.md`, code:yaml (---), code:yaml (---), Critic Agent Definition (`.pi/agents/critic.md`), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
+Nodes (7): 1. File Structure (Code Layer), code:block1 (src/harness/), code:block2 (.pi/skills/), code:block3 (.pi/), Extension Wiring, What Becomes Skills (6 directories), What Stays Code (3 files)
 
 ### Community 237 - "Community 237"
 Cohesion: 0.29
@@ -1649,15 +1649,15 @@ Nodes (5): 7. P20: Deterministic Gate — `harness-gate/SKILL.md`, code:yaml (--
 
 ### Community 297 - "Community 297"
 Cohesion: 0.4
-Nodes (5): 4. L2: Structured Planning — `harness-plan/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
+Nodes (5): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body (Core Instructions), Supporting File: `reference.md`
 
 ### Community 298 - "Community 298"
 Cohesion: 0.4
-Nodes (5): 8. L5-L8: Trace, Observability, Memory, L5: `harness-observe/SKILL.md`, L6: `harness-memory/SKILL.md`, L7: Schema Orchestration, L8: Wiki Query Interface
+Nodes (5): 4. L2: Structured Planning — `harness-plan/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
 
 ### Community 299 - "Community 299"
 Cohesion: 0.4
-Nodes (5): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body (Core Instructions), Supporting File: `reference.md`
+Nodes (5): 8. L5-L8: Trace, Observability, Memory, L5: `harness-observe/SKILL.md`, L6: `harness-memory/SKILL.md`, L7: Schema Orchestration, L8: Wiki Query Interface
 
 ### Community 300 - "Community 300"
 Cohesion: 0.4

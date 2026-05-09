@@ -6,10 +6,10 @@
  * doubling vertical resolution in the same terminal footprint.
  */
 
+import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { truncateToWidth } from "@mariozechner/pi-tui";
 import Jimp from "jimp";
-import { join } from "node:path";
 
 const imagePath = join(process.cwd(), ".pi", "extensions", "banner.png");
 
@@ -29,7 +29,7 @@ let loadPromise: Promise<string[]> | null = null;
 
 function ansiCell(
 	top: { r: number; g: number; b: number; a: number },
-	bottom: { r: number; g: number; b: number; a: number }
+	bottom: { r: number; g: number; b: number; a: number },
 ): string {
 	const topTransparent = top.a < 128;
 	const bottomTransparent = bottom.a < 128;

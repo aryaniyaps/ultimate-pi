@@ -5,7 +5,10 @@
  * ~/project (main)  ↑12k ↓8k  $0.042  [████████░░] 72%  anthropic • claude-sonnet-4-20250514 • xhigh
  */
 
-import type { ExtensionAPI, ExtensionContext } from "@mariozechner/pi-coding-agent";
+import type {
+	ExtensionAPI,
+	ExtensionContext,
+} from "@mariozechner/pi-coding-agent";
 import type { TUI } from "@mariozechner/pi-tui";
 import { Box, Text, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
@@ -91,7 +94,10 @@ function modelInfo(ctx: ExtensionContext): ModelInfo {
 // ── thinking label ────────────────────────────────────────────────
 
 /** Returns thinking level display string, or null if model doesn't support reasoning. */
-function thinkingLabel(level: string | null, reasoning: boolean): string | null {
+function thinkingLabel(
+	level: string | null,
+	reasoning: boolean,
+): string | null {
 	if (!reasoning || level == null) return null;
 	if (level === "minimal") return "off";
 	return level;
@@ -99,7 +105,10 @@ function thinkingLabel(level: string | null, reasoning: boolean): string | null 
 
 // ── cwd + branch ──────────────────────────────────────────────────
 
-function pathLabel(cwd: string, branch: string | null): { cwd: string; branch: string | null } {
+function pathLabel(
+	cwd: string,
+	branch: string | null,
+): { cwd: string; branch: string | null } {
 	let pwd = cwd;
 	const home = process.env.HOME || process.env.USERPROFILE;
 	if (home && pwd.startsWith(home)) {
@@ -159,7 +168,10 @@ export default function customFooter(pi: ExtensionAPI) {
 		state.cost = computeCost(ctx);
 
 		ctx.ui.setFooter((tui, theme, footerData) => {
-			if (unsubBranch) { unsubBranch(); unsubBranch = null; }
+			if (unsubBranch) {
+				unsubBranch();
+				unsubBranch = null;
+			}
 
 			state.tui = tui;
 			state.branch = footerData.getGitBranch();
@@ -178,7 +190,10 @@ export default function customFooter(pi: ExtensionAPI) {
 
 			return {
 				dispose() {
-					if (unsubBranch) { unsubBranch(); unsubBranch = null; }
+					if (unsubBranch) {
+						unsubBranch();
+						unsubBranch = null;
+					}
 					state.tui = null;
 					state.box = null;
 					state.textLine = null;
@@ -200,7 +215,10 @@ export default function customFooter(pi: ExtensionAPI) {
 					const innerW = Math.max(1, width - 2 - SAFETY_MARGIN);
 
 					// ── left: cwd/branch  tokens  cost ──
-					const { cwd: cwdPath, branch: gitBranch } = pathLabel(state.cwd, state.branch);
+					const { cwd: cwdPath, branch: gitBranch } = pathLabel(
+						state.cwd,
+						state.branch,
+					);
 					const pathDisplay = gitBranch
 						? `${cwdPath} (${theme.fg("error", gitBranch)})`
 						: cwdPath;
@@ -236,11 +254,19 @@ export default function customFooter(pi: ExtensionAPI) {
 
 					if (lw + gap + bw + gap + rw <= innerW) {
 						const pad = innerW - lw - gap - bw - gap - rw;
-						const line = colLeft + " ".repeat(gap + pad) + barFull + " ".repeat(gap) + dimRight;
+						const line =
+							colLeft +
+							" ".repeat(gap + pad) +
+							barFull +
+							" ".repeat(gap) +
+							dimRight;
 						textLine.setText(truncateToWidth(line, innerW));
 					} else {
 						// Priority: keep bar visible, keep left (cwd) intact, truncate modelId first
-						const tlNow = thinkingLabel(state.thinkingLevel, state.modelReasoning);
+						const tlNow = thinkingLabel(
+							state.thinkingLevel,
+							state.modelReasoning,
+						);
 						const buildRight = (mid: string) => {
 							const modelPart = tlNow ? `${mid} ${tlNow}` : mid;
 							const parts: string[] = [state.modelProvider];
@@ -252,7 +278,10 @@ export default function customFooter(pi: ExtensionAPI) {
 						let dimR = buildRight(truncMid);
 						let rwNow = visibleWidth(dimR);
 
-						while (truncMid.length > 0 && lw + gap + bw + gap + rwNow > innerW) {
+						while (
+							truncMid.length > 0 &&
+							lw + gap + bw + gap + rwNow > innerW
+						) {
 							truncMid = truncMid.slice(0, -1);
 							dimR = buildRight(truncMid);
 							rwNow = visibleWidth(dimR);
@@ -260,7 +289,12 @@ export default function customFooter(pi: ExtensionAPI) {
 
 						if (lw + gap + bw + gap + rwNow <= innerW) {
 							const pad = innerW - lw - gap - bw - gap - rwNow;
-							const line = colLeft + " ".repeat(gap + pad) + barFull + " ".repeat(gap) + dimR;
+							const line =
+								colLeft +
+								" ".repeat(gap + pad) +
+								barFull +
+								" ".repeat(gap) +
+								dimR;
 							textLine.setText(truncateToWidth(line, innerW));
 						} else {
 							// ModelId gone, still overflows: truncate leftStr
@@ -269,7 +303,12 @@ export default function customFooter(pi: ExtensionAPI) {
 								textLine.setText(truncateToWidth(dimR, innerW));
 							} else {
 								const truncLeft = truncateToWidth(colLeft, Math.max(1, avail));
-								const line = truncLeft + " ".repeat(gap) + barFull + " ".repeat(gap) + dimR;
+								const line =
+									truncLeft +
+									" ".repeat(gap) +
+									barFull +
+									" ".repeat(gap) +
+									dimR;
 								textLine.setText(truncateToWidth(line, innerW));
 							}
 						}
