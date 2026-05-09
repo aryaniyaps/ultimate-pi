@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `17aa2f5d`
+- Built from commit: `116e1895`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1649,7 +1649,7 @@ Nodes (5): 7. P20: Deterministic Gate — `harness-gate/SKILL.md`, code:yaml (--
 
 ### Community 297 - "Community 297"
 Cohesion: 0.4
-Nodes (5): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body (Core Instructions), Supporting File: `reference.md`
+Nodes (5): 8. L5-L8: Trace, Observability, Memory, L5: `harness-observe/SKILL.md`, L6: `harness-memory/SKILL.md`, L7: Schema Orchestration, L8: Wiki Query Interface
 
 ### Community 298 - "Community 298"
 Cohesion: 0.4
@@ -1657,7 +1657,7 @@ Nodes (5): 4. L2: Structured Planning — `harness-plan/SKILL.md`, code:yaml (--
 
 ### Community 299 - "Community 299"
 Cohesion: 0.4
-Nodes (5): 8. L5-L8: Trace, Observability, Memory, L5: `harness-observe/SKILL.md`, L6: `harness-memory/SKILL.md`, L7: Schema Orchestration, L8: Wiki Query Interface
+Nodes (5): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body (Core Instructions), Supporting File: `reference.md`
 
 ### Community 300 - "Community 300"
 Cohesion: 0.4
