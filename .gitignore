@@ -40,8 +40,8 @@ skills-lock.json
 # sentrux config and baselines
 .sentrux/
 
-# Graphify cache (regenerable)
-graphify-out/cache/
+# Graphify output (regenerable by post-checkout hook)
+graphify-out/
 
 # Harness artifacts
 .pi/harness/critics/
@@ -49,6 +49,3 @@ graphify-out/cache/
 .pi/harness/specs/
 
 
-graphify-out/manifest.json    # mtime-based, breaks after git clone
-graphify-out/cost.json        # local only
-graphify-out/cache/         # optional: commit for speed, skip to keep repo small
