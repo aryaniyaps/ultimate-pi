@@ -1,13 +1,18 @@
-# Graph Report - .  (2026-05-10)
+# Graph Report - ultimate-pi  (2026-05-10)
 
 ## Corpus Check
-- 14 files · ~0 words
+- 4 files · ~1,615 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 - 3937 nodes · 3537 edges · 428 communities (359 shown, 69 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `9569a6e3`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Kantord Seagoat|Kantord Seagoat]]
@@ -1644,15 +1649,15 @@ Nodes (5): 8. L5-L8: Trace, Observability, Memory, L5: `harness-observe/SKILL.md
 
 ### Community 297 - "L1: Spec Hardening Harness-Spec/Skill"
 Cohesion: 0.4
-Nodes (5): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body (Core Instructions), Supporting File: `reference.md`
+Nodes (5): 7. P20: Deterministic Gate — `harness-gate/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
 
 ### Community 298 - "L2: Structured Planning Harness-Plan/Skill"
 Cohesion: 0.4
-Nodes (5): 7. P20: Deterministic Gate — `harness-gate/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
+Nodes (5): 4. L2: Structured Planning — `harness-plan/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
 
 ### Community 299 - "L5-L8: Trace Observability Memory"
 Cohesion: 0.4
-Nodes (5): 4. L2: Structured Planning — `harness-plan/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`
+Nodes (5): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, code:yaml (---), Skill Frontmatter, SKILL.md Body (Core Instructions), Supporting File: `reference.md`
 
 ### Community 300 - "Getting Started"
 Cohesion: 0.4
