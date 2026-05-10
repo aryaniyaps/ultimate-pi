@@ -17,5 +17,5 @@ Before starting:
 
 After research is complete:
 1. Run `graphify ./raw --wiki --mode deep` to build the knowledge graph
-2. Write synthesis to `graphify-out/RESEARCH_REPORT.md`
+2. Cleanup: remove `./raw/` since graphify has already ingested all data
 3. Report: rounds, sources, graph nodes/edges, god nodes, surprising connections
