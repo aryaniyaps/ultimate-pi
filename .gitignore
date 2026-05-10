@@ -42,6 +42,16 @@ skills-lock.json
 
 # Graphify cache (regenerable)
 graphify-out/cache/
+graphify-books-out/cache/
+
+# Source corpus for graphify-books-out (large PDFs, not committed)
+books/
+
+# Stray graphify metadata at repo root (from running graphify outside graphify-out/)
+/.graphify_detect.json
+/.graphify_python
+/.graphify_root
+/.graphify_incremental.json
 
 # Harness artifacts
 .pi/harness/critics/
