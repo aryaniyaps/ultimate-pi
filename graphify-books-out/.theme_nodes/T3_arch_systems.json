@@ -1,2572 +1,2572 @@
 {
-  "theme": "T3_arch_systems",
-  "theme_nodes": [
-    {
-      "id": "csapp_virtual_memory",
-      "label": "Virtual Memory",
-      "book": "csapp"
-    },
-    {
-      "id": "fund_arch_monolithic_vs_distributed",
-      "label": "Monolithic versus distributed architectures",
-      "book": "fund_arch"
-    },
-    {
-      "id": "csapp_performance_optimization",
-      "label": "Optimizing Program Performance",
-      "book": "csapp"
-    },
-    {
-      "id": "fund_arch_microservices_style",
-      "label": "Microservices architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "csapp_machine_level_programs",
-      "label": "Machine-Level Representation of Programs",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_exceptional_control_flow",
-      "label": "Exceptional Control Flow",
-      "book": "csapp"
-    },
-    {
-      "id": "ddia_single_leader",
-      "label": "Single-leader replication",
-      "book": "ddia"
-    },
-    {
-      "id": "meadows_systems_balancing_loop",
-      "label": "Balancing (negative) feedback",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_reinforcing_loop",
-      "label": "Reinforcing (positive) feedback",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "team_topologies_book",
-      "label": "Team Topologies (book)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_cognitive_load",
-      "label": "Team cognitive load",
-      "book": "team_topologies"
-    },
-    {
-      "id": "fund_arch_event_driven_style",
-      "label": "Event-driven architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_hexagonal_architecture",
-      "label": "Hexagonal architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "ddia_lsm_tree",
-      "label": "LSM-trees",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_btree",
-      "label": "B-trees",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_snapshot_isolation",
-      "label": "Snapshot isolation (MVCC)",
-      "book": "ddia"
-    },
-    {
-      "id": "meadows_systems_bounded_rationality",
-      "label": "Bounded rationality",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "team_topologies_four_team_types",
-      "label": "Four fundamental team types",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_three_interaction_modes",
-      "label": "Three core team interaction modes",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_accelerate_book",
-      "label": "Accelerate (Forsgren, Humble, Kim)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "fund_arch_book",
-      "label": "Fundamentals of Software Architecture (2nd ed.)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_software_architecture",
-      "label": "Software architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_dimension_decisions",
-      "label": "Architecture decisions (definitional dimension)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_modularity",
-      "label": "Modularity",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_architectural_characteristics",
-      "label": "Architectural characteristics (-ilities)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_eventual_consistency",
-      "label": "Eventual consistency",
-      "book": "fund_arch"
-    },
-    {
-      "id": "csapp_memory_hierarchy",
-      "label": "The Memory Hierarchy",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_linking",
-      "label": "Linking",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_concurrent_programming",
-      "label": "Concurrent Programming",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_cache_organization",
-      "label": "Cache organization (S, E, B)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_elf_object_files",
-      "label": "ELF relocatable object files",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_unix_io_model",
-      "label": "Unix I/O model (open, read, write, close)",
-      "book": "csapp"
-    },
-    {
-      "id": "ddia_relational_model",
-      "label": "Relational model",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_replication",
-      "label": "Replication",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_leaderless",
-      "label": "Leaderless replication",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_partitioning",
-      "label": "Partitioning (sharding)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_total_order_broadcast",
-      "label": "Total order broadcast",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_stream_processing",
-      "label": "Stream processing",
-      "book": "ddia"
-    },
-    {
-      "id": "meadows_systems_book",
-      "label": "Thinking in Systems: A Primer",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ch4_surprise",
-      "label": "Chapter 4: Why Systems Surprise Us",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_stocks",
-      "label": "Stocks",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_stock_flow_structure",
-      "label": "Stock-and-flow structure",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "team_topologies_fast_flow",
-      "label": "Fast and safe flow of change",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_stream_aligned_team",
-      "label": "Stream-aligned team",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_platform_team",
-      "label": "Platform team",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_team_first_thinking",
-      "label": "Team-first thinking",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_conways_law",
-      "label": "Conway\u2019s law",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_fracture_planes",
-      "label": "Software boundaries / fracture planes",
-      "book": "team_topologies"
-    },
-    {
-      "id": "fund_arch_trade_offs",
-      "label": "Trade-off analysis in architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_coupling",
-      "label": "Coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_component_coupling",
-      "label": "Component coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fitness_functions",
-      "label": "Fitness functions (architectural governance tests)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_layered_style",
-      "label": "Layered architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_choreography",
-      "label": "Choreography (distributed workflows)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_orchestration",
-      "label": "Orchestration (distributed workflows)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_conways_law",
-      "label": "Conway's Law",
-      "book": "fund_arch"
-    },
-    {
-      "id": "csapp_processor_architecture",
-      "label": "Processor Architecture",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_network_programming",
-      "label": "Network Programming",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_bits_and_bytes",
-      "label": "Bits and bytes",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_arithmetic_and_logic_ops",
-      "label": "Arithmetic and logical operations",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_pipelined_processor",
-      "label": "Pipelined processor",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_pipeline_hazards",
-      "label": "Pipeline hazards (data, control, structural)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_compiler_optimizations",
-      "label": "Compiler optimizations",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_cache_hits_misses",
-      "label": "Cache hits, misses, evictions",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_fork_execve",
-      "label": "fork, execve, waitpid",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_signals",
-      "label": "Unix signals",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_page_tables",
-      "label": "Page tables and multi-level page tables",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_threads_pthreads",
-      "label": "Threads and Pthreads",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_mutexes",
-      "label": "Mutexes (Pthreads mutex)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_system_calls",
-      "label": "System calls",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_address_translation",
-      "label": "Address translation",
-      "book": "csapp"
-    },
-    {
-      "id": "ddia_scalability",
-      "label": "Scalability",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_maintainability",
-      "label": "Maintainability",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_fault_tolerance",
-      "label": "Fault tolerance",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_graph_model",
-      "label": "Graph model",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_binary_encoding",
-      "label": "Binary encodings",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_avro",
-      "label": "Apache Avro",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_schema_evolution",
-      "label": "Schema evolution",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_replication_lag",
-      "label": "Replication lag",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_transactions",
-      "label": "Transactions",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_event_log",
-      "label": "Event logs (Kafka-style)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_future_data_systems",
-      "label": "The future of data systems",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_unifying_batch_stream",
-      "label": "Unifying batch and stream processing",
-      "book": "ddia"
-    },
-    {
-      "id": "meadows_systems_part_two",
-      "label": "Part Two: Systems and Us",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_part_three",
-      "label": "Part Three: Creating Change\u2014Systems and Philosophy",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ch5_traps",
-      "label": "Chapter 5: System Traps \u2026 and Opportunities",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ch7_living",
-      "label": "Chapter 7: Living in a World of Systems",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_feedback_loop",
-      "label": "Feedback loop",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_resilience",
-      "label": "Resilience",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_mental_models",
-      "label": "Mental models",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_surprise_behavior",
-      "label": "Surprising behavior (counterintuitive dynamics)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_wrong_goal",
-      "label": "Seeking the wrong goal",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp3_goals",
-      "label": "Leverage point 3: Goals",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp2_paradigm",
-      "label": "Leverage point 2: Paradigm",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_limits_to_growth",
-      "label": "Limits to Growth (World3 lineage)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_world3_overshoot",
-      "label": "Overshoot and collapse",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_dancing_with_systems",
-      "label": "Dancing with systems (humility, learning)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "team_topologies_xaas_mode",
-      "label": "X-as-a-Service interaction mode",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_reverse_conway_maneuver",
-      "label": "Reverse / inverse Conway maneuver",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_evolve_team_topologies",
-      "label": "Evolve team topologies over time",
-      "book": "team_topologies"
-    },
-    {
-      "id": "fund_arch_architecture_vs_design",
-      "label": "Architecture versus design",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_thoughtworks_radar",
-      "label": "Thoughtworks Technology Radar",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_bounded_context",
-      "label": "Bounded context (DDD)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_modular_monolith",
-      "label": "Modular monolith architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_eda_broker_topology",
-      "label": "Broker (choreographed) EDA topology",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_eda_mediator_topology",
-      "label": "Mediator EDA topology",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_cap_tradeoffs",
-      "label": "CAP-style distributed trade-offs (consistency/availability/partitioning)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_architectural_decisions_ch21",
-      "label": "Architectural decisions (Chapter 21)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_adr",
-      "label": "Architecture Decision Records (ADRs)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "csapp_tour_of_systems",
-      "label": "A Tour of Computer Systems",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_information_representation",
-      "label": "Representing and Manipulating Information",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_system_level_io",
-      "label": "System-Level I/O",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_integer_encodings",
-      "label": "Integer encodings (unsigned and two's complement)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_ieee754_floating_point",
-      "label": "IEEE 754 floating point",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_x86_64_instruction_set",
-      "label": "x86-64 instruction set basics",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_registers_and_operands",
-      "label": "Registers and operand forms",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_control_flow_assembly",
-      "label": "Control in assembly (jumps, conditions)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_procedure_call_convention",
-      "label": "Procedure call conventions",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_stack_frame_layout",
-      "label": "Stack frames and local storage",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_position_independent_code",
-      "label": "Position-independent code (PIC)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_sequential_processor",
-      "label": "Sequential processor implementation",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_branch_prediction",
-      "label": "Branch prediction",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_storage_technologies",
-      "label": "Storage technologies (SRAM, DRAM, SSD, disk)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_locality_principle",
-      "label": "Principle of locality (temporal and spatial)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_cache_friendly_code",
-      "label": "Writing cache-friendly code",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_symbol_resolution",
-      "label": "Symbol resolution and linkage",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_shared_libraries",
-      "label": "Shared libraries (.so)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_process_abstraction",
-      "label": "Process abstraction",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_vm_as_caching",
-      "label": "VM as a caching problem",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_tlb",
-      "label": "Translation Lookaside Buffer (TLB)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_client_server_model",
-      "label": "Client-server programming model",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_sockets_api",
-      "label": "Sockets API",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_race_conditions",
-      "label": "Race conditions",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_semaphores",
-      "label": "Semaphores",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_condition_variables",
-      "label": "Condition variables",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_thread_safe_functions",
-      "label": "Thread-safe and reentrant functions",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_parallelism_speedup",
-      "label": "Parallelism and speedup (Amdahl)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_kernel_mode_user_mode",
-      "label": "Kernel mode vs user mode",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_elf_executable",
-      "label": "ELF executable object files",
-      "book": "csapp"
-    },
-    {
-      "id": "ddia_reliable_scalable_maintainable",
-      "label": "Reliable, scalable, maintainable systems",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_data_model",
-      "label": "Data models for applications",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_document_model",
-      "label": "Document model",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_quorum",
-      "label": "Quorum reads/writes",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_weak_isolation",
-      "label": "Weak isolation levels",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_serializable",
-      "label": "Serializable isolation",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_two_phase_commit",
-      "label": "Two-phase commit (2PC)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_distributed_troubles",
-      "label": "The trouble with distributed systems",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_time_clocks",
-      "label": "Time and clocks",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_vector_clocks",
-      "label": "Vector clocks",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_consistency_consensus",
-      "label": "Consistency and consensus",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_linearizability",
-      "label": "Linearizability",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_batch_processing",
-      "label": "Batch processing",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_mapreduce",
-      "label": "MapReduce",
-      "book": "ddia"
-    },
-    {
-      "id": "meadows_systems_part_one",
-      "label": "Part One: System Structure and Behavior",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ch1_basics",
-      "label": "Chapter 1: The Basics",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ch2_zoo",
-      "label": "Chapter 2: A Brief Visit to the Systems Zoo",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ch3_work_well",
-      "label": "Chapter 3: Why Systems Work So Well",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ch6_leverage",
-      "label": "Chapter 6: Leverage Points\u2014Places to Intervene",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_systems_thinking",
-      "label": "Systems thinking",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_flows",
-      "label": "Flows",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_delays",
-      "label": "Delays",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_population_capital",
-      "label": "Population\u2013capital interactions",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_exponential_growth",
-      "label": "Exponential growth from reinforcing loops",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_tragedy_commons",
-      "label": "Tragedy of the commons",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_policy_resistance",
-      "label": "Policy resistance",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp11_buffers",
-      "label": "Leverage point 11: Buffers",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp10_stock_flow",
-      "label": "Leverage point 10: Stock-and-flow structures",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp9_delays",
-      "label": "Leverage point 9: Delays",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp8_balancing",
-      "label": "Leverage point 8: Strength of balancing loops",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp7_reinforcing",
-      "label": "Leverage point 7: Gain around reinforcing loops",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp6_information",
-      "label": "Leverage point 6: Information flows",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp5_rules",
-      "label": "Leverage point 5: Rules",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp4_self_org",
-      "label": "Leverage point 4: Self-organization",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp1_transcend",
-      "label": "Leverage point 1: Transcending paradigms",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_leverage_hierarchy",
-      "label": "Hierarchy of intervention effectiveness (12\u21921)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_counterintuitive_policies",
-      "label": "Counterintuitive policy outcomes",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "team_topologies_enabling_team",
-      "label": "Enabling team",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_collaboration_mode",
-      "label": "Collaboration interaction mode",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_team_boundaries",
-      "label": "Team boundaries and coupling",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_flow_of_change",
-      "label": "Flow of change through the system",
-      "book": "team_topologies"
-    },
-    {
-      "id": "fund_arch_dimension_style",
-      "label": "Architecture style (definitional dimension)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_expectations_architect",
-      "label": "Expectations of a software architect",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_soft_skills",
-      "label": "Soft skills for architects",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_twenty_minute_rule",
-      "label": "20-minute learning rule",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_granularity",
-      "label": "Granularity",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_cohesion",
-      "label": "Cohesion",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_call_graph_analysis",
-      "label": "Call graph analysis for coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_yourdon_constantine",
-      "label": "Yourdon and Constantine Structured Design",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_distance_main_sequence",
-      "label": "Distance from the Main Sequence",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_connascence",
-      "label": "Connascence",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_static_coupling",
-      "label": "Static coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_measuring_characteristics",
-      "label": "Measuring architecture characteristics",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_architectural_quanta",
-      "label": "Architectural quanta",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_domain_driven_design",
-      "label": "Domain-driven design",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_team_topologies",
-      "label": "Team topologies and architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_microkernel_style",
-      "label": "Microkernel architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_service_based_style",
-      "label": "Service-based architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_space_based_style",
-      "label": "Space-based architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_odsoa",
-      "label": "Orchestration-driven service-oriented architecture (ODSOA)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_sagas",
-      "label": "Sagas and distributed transactions",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_base_transactions",
-      "label": "BASE transactions",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_acid_transactions",
-      "label": "ACID transactions",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_choosing_style",
-      "label": "Choosing an appropriate architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_reuse_pattern",
-      "label": "Reuse pattern (separation of concerns)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_domain_operational_coupling",
-      "label": "Domain versus operational coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_service_mesh",
-      "label": "Service Mesh pattern",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_graph_theory_coupling",
-      "label": "Graph theory in coupling metrics",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_inverse_conway_maneuver",
-      "label": "Inverse Conway Maneuver (Jonny Leroy)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_martin_fowler",
-      "label": "Martin Fowler",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fowler_architecture_definition",
-      "label": "Fowler: architecture is what is hard to change",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_eric_evans",
-      "label": "Eric Evans",
-      "book": "fund_arch"
-    },
-    {
-      "id": "csapp_endianness",
-      "label": "Endianness (byte ordering)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_twos_complement",
-      "label": "Two's complement arithmetic",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_c_type_conversions",
-      "label": "C integer promotions and conversions",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_data_representation_in_c",
-      "label": "Representing data in C",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_array_and_struct_access",
-      "label": "Array indexing and struct layout",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_buffer_overflows",
-      "label": "Buffer overflows and stack corruption",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_y86_instruction_set",
-      "label": "Y86 simplified ISA",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_program_profiling",
-      "label": "Program profiling (e.g., gprof)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_loop_unrolling",
-      "label": "Loop unrolling",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_blocking_for_cache",
-      "label": "Blocking/tiling for cache locality",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_write_allocate_policies",
-      "label": "Write-through vs write-back caches",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_matrix_multiply_locality",
-      "label": "Matrix multiply and locality",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_compiler_driver_pipeline",
-      "label": "Compiler driver (cpp, cc1, as, ld)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_relocation",
-      "label": "Relocation and relocation entries",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_plt_got",
-      "label": "PLT and GOT for dynamic linking",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_exceptions_hardware",
-      "label": "Hardware exceptions",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_exceptions_os",
-      "label": "OS exceptions and traps",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_signal_handlers",
-      "label": "Signal handlers and async-signal-safety",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_physical_vs_virtual_addressing",
-      "label": "Physical vs virtual addressing",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_address_spaces",
-      "label": "Address spaces",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_demand_paging",
-      "label": "Demand paging",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_memory_mapping_mmap",
-      "label": "Memory mapping (mmap)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_dynamic_memory_allocators",
-      "label": "Dynamic memory allocators",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_robust_io_rio",
-      "label": "Robust I/O (Rio package)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_standard_io_vs_unix_io",
-      "label": "Standard I/O vs Unix I/O",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_web_clients_and_servers",
-      "label": "Web clients and servers",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_context_switching",
-      "label": "Context switching",
-      "book": "csapp"
-    },
-    {
-      "id": "ddia_reliability",
-      "label": "Reliability",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_load_parameters",
-      "label": "Load parameters (RPS, data size)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_latency_percentiles",
-      "label": "Latency percentiles (p50, p95, p99)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_horizontal_scaling",
-      "label": "Horizontal scaling (scale out)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_many_to_many",
-      "label": "Many-to-one and many-to-many relationships",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_storage_retrieval",
-      "label": "Storage and retrieval",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_sstable",
-      "label": "SSTables (sorted string tables)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_wal",
-      "label": "Write-ahead log (WAL)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_secondary_index",
-      "label": "Secondary indexes",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_encoding_evolution",
-      "label": "Encoding and evolution",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_json_encoding",
-      "label": "JSON encoding",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_protobuf",
-      "label": "Protocol Buffers",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_multi_leader",
-      "label": "Multi-leader replication",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_async_replication",
-      "label": "Asynchronous replication",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_read_repair",
-      "label": "Read repair",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_version_vectors",
-      "label": "Version vectors",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_read_committed",
-      "label": "Read committed",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_network_unreliable",
-      "label": "Unreliable networks",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_partial_failure",
-      "label": "Partial failure",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_causality",
-      "label": "Causality and happens-before",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paxos",
-      "label": "Paxos",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_raft",
-      "label": "Raft",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_zab",
-      "label": "ZooKeeper Atomic Broadcast (Zab)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_dataflow_engines",
-      "label": "Dataflow execution engines",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_event_sourcing",
-      "label": "Event sourcing",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_cdc",
-      "label": "Change data capture (CDC)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_lambda_architecture",
-      "label": "Lambda architecture",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_kappa_architecture",
-      "label": "Kappa architecture",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_end_to_end_argument",
-      "label": "End-to-end argument for correctness",
-      "book": "ddia"
-    },
-    {
-      "id": "meadows_systems_two_competing_loops",
-      "label": "Two competing balancing loops",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_escalation",
-      "label": "Escalation",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_success_successful",
-      "label": "Success to the successful",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_archetypes",
-      "label": "System archetypes (recurring trap structures)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_lp12_constants",
-      "label": "Leverage point 12: Constants, parameters, numbers",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_jay_forrester",
-      "label": "Jay Forrester / industrial dynamics lineage",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_club_of_rome",
-      "label": "Club of Rome (Limits to Growth)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_suboptimization",
-      "label": "Suboptimization (optimizing parts harms the whole)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_observe_first",
-      "label": "Observe, listen, stay humble before intervening",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_runaway_loops",
-      "label": "Runaway (unchecked reinforcing loop)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_ethical_intervention",
-      "label": "Ethics of intervention in complex systems",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "team_topologies_actual_communication_lines",
-      "label": "Actual lateral communication vs reporting lines",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_systems_thinking_whole",
-      "label": "Optimize the whole flow of work",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_largest_bottleneck_iteration",
-      "label": "Find largest bottleneck, eliminate, repeat",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_complicated_subsystem_team",
-      "label": "Complicated-subsystem team",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_facilitating_mode",
-      "label": "Facilitating interaction mode",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_context_switching_cost",
-      "label": "Context switching and excessive domains",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_team_api",
-      "label": "Team API (explicit interface)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_mel_conway",
-      "label": "Mel Conway",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_organizational_sensing",
-      "label": "Organizational sensing and evolution",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_collaboration_vs_xaas",
-      "label": "Collaboration vs X-as-a-Service tradeoffs",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_team_dependencies",
-      "label": "Team dependencies and handoffs",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_jez_humble",
-      "label": "Jez Humble",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_gene_kim",
-      "label": "Gene Kim",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_devops_handbook",
-      "label": "The DevOps Handbook (Kim et al.)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_toc_bottleneck_alignment",
-      "label": "Bottleneck-focused improvement (aligned with TOC-style thinking)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_next_gen_operating_model",
-      "label": "Next-generation digital operating model",
-      "book": "team_topologies"
-    },
-    {
-      "id": "fund_arch_dimension_characteristics",
-      "label": "Architecture characteristics (definitional dimension)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_dimension_components",
-      "label": "Logical components (definitional dimension)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_third_law",
-      "label": "Third Law of Software Architecture (decisions on a spectrum)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_interpersonal_skills",
-      "label": "Interpersonal and leadership skills",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_technical_breadth",
-      "label": "Technical breadth for architects",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_personal_radar",
-      "label": "Personal technology radar",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_afferent_coupling",
-      "label": "Afferent coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_efferent_coupling",
-      "label": "Efferent coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_zone_of_pain",
-      "label": "Zone of Pain (brittle code)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_zone_of_uselessness",
-      "label": "Zone of Uselessness (over-abstract code)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_logical_components",
-      "label": "Logical components",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_temporal_coupling",
-      "label": "Temporal coupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_law_of_demeter",
-      "label": "Law of Demeter",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_operational_characteristics",
-      "label": "Operational architectural characteristics",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_structural_characteristics",
-      "label": "Structural architectural characteristics",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_cross_cutting_characteristics",
-      "label": "Cross-cutting architectural characteristics",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_least_worst_architecture",
-      "label": "Least worst architecture (trade-offs)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_identifying_characteristics",
-      "label": "Identifying architectural characteristics",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_katas",
-      "label": "Architecture katas",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_cyclomatic_complexity",
-      "label": "Cyclomatic complexity metric",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_governance",
-      "label": "Architecture governance",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_synchronous_communication",
-      "label": "Synchronous communication",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_meilir_page",
-      "label": "Meilir Page design principle (encapsulation)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_styles_vs_patterns",
-      "label": "Architecture styles versus patterns",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_unitary_architecture",
-      "label": "Unitary architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_client_server",
-      "label": "Client/server architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_network_reliable",
-      "label": "Fallacy: network is reliable",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_latency_zero",
-      "label": "Fallacy: latency is zero",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_bandwidth_infinite",
-      "label": "Fallacy: bandwidth is infinite",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_network_secure",
-      "label": "Fallacy: network is secure",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_topology_static",
-      "label": "Fallacy: topology never changes",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_one_admin",
-      "label": "Fallacy: one administrator",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_transport_free",
-      "label": "Fallacy: transport cost is zero",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_fallacy_network_homogeneous",
-      "label": "Fallacy: network is homogeneous",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_layers_of_isolation",
-      "label": "Layers of isolation",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_pipeline_style",
-      "label": "Pipeline architecture style",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_data_isolation",
-      "label": "Data isolation in microservices",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_architectural_patterns_ch20",
-      "label": "Architectural patterns (Chapter 20)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_ports_and_adapters",
-      "label": "Ports and Adapters pattern",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_cqrs",
-      "label": "CQRS pattern",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_broker_domain_pattern",
-      "label": "Broker-Domain pattern",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_graphql_contracts",
-      "label": "GraphQL for contract decoupling",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_graph_database_topic",
-      "label": "Graph databases (related: graph analytics, not central topic)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_adr_storage",
-      "label": "Storing and managing ADRs",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_decision_antipatterns",
-      "label": "Architectural decision antipatterns",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_generative_ai_decisions",
-      "label": "Generative AI in architectural decisions",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_melvin_conway",
-      "label": "Melvin Conway",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_jonny_leroy",
-      "label": "Jonny Leroy (Inverse Conway coinage)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_alistair_cockburn",
-      "label": "Alistair Cockburn",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_rebecca_parsons",
-      "label": "Rebecca J. Parsons",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_thoughtworks_org",
-      "label": "Thoughtworks (organization)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_head_first_sa_ref",
-      "label": "Head First Software Architecture (Raju Gandhi et al.)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_risk_analysis_ch22",
-      "label": "Analyzing architecture risk",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_diagramming_ch23",
-      "label": "Diagramming architecture (UML, C4, ArchiMate)",
-      "book": "fund_arch"
-    },
-    {
-      "id": "csapp_fp_rounding_modes",
-      "label": "Floating-point rounding modes",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_superscalar_out_of_order",
-      "label": "Superscalar and out-of-order execution (conceptual)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_code_motion_reduction",
-      "label": "Code motion and strength reduction",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_memory_aliasing",
-      "label": "Memory aliasing and optimization limits",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_static_vs_dynamic_linking",
-      "label": "Static vs dynamic linking",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_library_interpositioning",
-      "label": "Library interpositioning",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_nonlocal_jumps",
-      "label": "Nonlocal jumps (setjmp/longjmp)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_garbage_collection_basics",
-      "label": "Garbage collection basics (conceptual)",
-      "book": "csapp"
-    },
-    {
-      "id": "csapp_elf_shared_object",
-      "label": "ELF shared object (.so)",
-      "book": "csapp"
-    },
-    {
-      "id": "ddia_hardware_faults",
-      "label": "Hardware faults",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_software_faults",
-      "label": "Software faults (bugs)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_human_errors",
-      "label": "Human errors",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_tail_latency",
-      "label": "Tail latency amplification",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_vertical_scaling",
-      "label": "Vertical scaling (scale up)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_elastic_systems",
-      "label": "Elastic systems",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_operability",
-      "label": "Operability",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_simplicity",
-      "label": "Simplicity",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_evolvability",
-      "label": "Evolvability",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_declarative_queries",
-      "label": "Declarative query languages (SQL)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_cypher",
-      "label": "Cypher (graph query language)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_property_graph",
-      "label": "Property graph model",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_triple_store",
-      "label": "Triple-store (RDF)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_schema_on_read",
-      "label": "Schema-on-read",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_schema_on_write",
-      "label": "Schema-on-write",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_hash_index",
-      "label": "Hash indexes",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_compaction",
-      "label": "Compaction (size-tiered, leveled)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_clustered_index",
-      "label": "Clustered indexes",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_heap_file",
-      "label": "Heap files",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_column_oriented",
-      "label": "Column-oriented storage",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_thrift",
-      "label": "Apache Thrift",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_forward_compat",
-      "label": "Forward compatibility",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_backward_compat",
-      "label": "Backward compatibility",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_writer_reader_schema",
-      "label": "Writer's schema vs reader's schema",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_synchronous_replication",
-      "label": "Synchronous replication",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_semi_sync",
-      "label": "Semi-synchronous replication",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_read_your_writes",
-      "label": "Read-your-writes consistency",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_monotonic_reads",
-      "label": "Monotonic reads",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_consistent_prefix",
-      "label": "Consistent prefix reads",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_split_brain",
-      "label": "Split brain",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_hinted_handoff",
-      "label": "Hinted handoff",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_partition_key",
-      "label": "Partition key",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_secondary_index_partition",
-      "label": "Partitioning secondary indexes",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_rebalancing",
-      "label": "Rebalancing partitions",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_hotspot",
-      "label": "Skew and hotspots",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_acid",
-      "label": "ACID",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_repeatable_read",
-      "label": "Repeatable read",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_write_skew",
-      "label": "Write skew",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_phantom",
-      "label": "Phantom reads",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_two_phase_locking",
-      "label": "Two-phase locking (2PL)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_ssi",
-      "label": "Serializable snapshot isolation (SSI)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_logical_clocks",
-      "label": "Logical clocks",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_process_pauses",
-      "label": "Process pauses (GC, virtualization)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_unreliable_time",
-      "label": "Unreliable local clocks",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_fencing_tokens",
-      "label": "Fencing tokens",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_membership_coord",
-      "label": "Membership and coordination services",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_join_algorithms_mr",
-      "label": "Join algorithms in batch systems",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_complex_event_proc",
-      "label": "Complex event processing",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_bigtable",
-      "label": "Chang et al.: Bigtable",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_dynamo",
-      "label": "DeCandia et al.: Dynamo",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_spanner",
-      "label": "Corbett et al.: Spanner",
-      "book": "ddia"
-    },
-    {
-      "id": "meadows_systems_dynamic_equilibrium",
-      "label": "Dynamic equilibrium",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_interconnectedness",
-      "label": "Interconnectedness",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_nonlinearity",
-      "label": "Nonlinearity",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_boundaries",
-      "label": "System boundaries",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_one_stock_two_flows",
-      "label": "One-stock two-flow (bathtub)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_information_vs_material",
-      "label": "Information flows vs material stocks and flows",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_drift_low_performance",
-      "label": "Drift to low performance",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_shifting_burden",
-      "label": "Shifting the burden to the intervenor",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_rule_beating",
-      "label": "Rule beating",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_trap_competitive_exclusion",
-      "label": "Competitive exclusion",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_hierarchy_goals",
-      "label": "Hierarchical goal structures",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_stocks_renewable_nonrenewable",
-      "label": "Renewable vs nonrenewable stocks",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "meadows_systems_goals_vs_indicators",
-      "label": "Goals vs measured indicators (distortion risks)",
-      "book": "meadows_systems"
-    },
-    {
-      "id": "team_topologies_sociotechnical_system",
-      "label": "Sociotechnical / human\u2013computer ecosystem framing",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_org_chart_problem",
-      "label": "Org chart misrepresents real communication",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_three_structures_pflaeging",
-      "label": "Formal, informal, and value-creation structures (Pflaeging)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_matrix_management_limits",
-      "label": "Matrix management as static view",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_rummler_brache_white_space",
-      "label": "Rummler & Brache white-space performance thinking",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_project_to_product_kersten",
-      "label": "Project-to-product shift (Kersten)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_stream_aligned_primary",
-      "label": "Stream-aligned as primary team form",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_internal_customer_platform",
-      "label": "Platform as internal customer-facing capability",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_good_platform_just_big_enough",
-      "label": "A good platform is \u201cjust big enough\u201d",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_well_defined_interactions",
-      "label": "Well-defined interactions reduce uncertainty",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_small_long_lived_teams",
-      "label": "Small, long-lived teams as default",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_cognitive_capacity_limit",
-      "label": "Finite cognitive capacity per team",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_minimize_cognitive_load_boundaries",
-      "label": "Good boundaries minimize cognitive load",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_conway_paper_1968",
-      "label": "How Do Committees Invent? (1968)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_homomorphic_force",
-      "label": "Homomorphic force / architecture\u2013org alignment",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_james_lewis_thoughtworks",
-      "label": "James Lewis (Thoughtworks) and reverse Conway",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_microservices_revival",
-      "label": "Microservices-era revival of Conway\u2019s law",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_naive_conway_misuse",
-      "label": "Naive misapplications of Conway\u2019s law",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_hidden_monolith_coupling",
-      "label": "Hidden monoliths and coupling",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_team_sized_architecture",
-      "label": "Team-sized architecture responsibilities",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_choose_boundaries_for_load",
-      "label": "Choose boundaries to match cognitive load",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_manufacturing_fracture_example",
-      "label": "Manufacturing fracture-plane analogy",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_dunbar_number_teams",
-      "label": "Dunbar\u2019s number for multi-team groupings",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_one_complex_domain_per_team",
-      "label": "At most one complicated/complex domain per team",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_platform_thinking",
-      "label": "Internal platform thinking",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_thin_platform_wrapper",
-      "label": "Platform wrapper pattern",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_triggers_for_change",
-      "label": "Triggers for topology evolution",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_devops_topologies_precursor",
-      "label": "DevOps Topologies (prior work)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_team_antipatterns",
-      "label": "Team anti-patterns",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_nicole_forsgren",
-      "label": "Nicole Forsgren",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_continuous_delivery_book",
-      "label": "Continuous Delivery (Humble & Farley)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_dan_pink_intrinsic",
-      "label": "Dan Pink autonomy/mastery/purpose",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_psychological_safety_edmondson",
-      "label": "Psychological safety (Edmondson)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_wardley_mapping_ref",
-      "label": "Wardley mapping (reference)",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_less_scrum_ref",
-      "label": "Large-Scale Scrum (LeSS) reference",
-      "book": "team_topologies"
-    },
-    {
-      "id": "team_topologies_strategic_conway_application",
-      "label": "Strategic application of Conway\u2019s law",
-      "book": "team_topologies"
-    },
-    {
-      "id": "fund_arch_first_law",
-      "label": "First Law of Software Architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_second_law",
-      "label": "Second Law of Software Architecture",
-      "book": "fund_arch"
-    },
-    {
-      "id": "fund_arch_strategic_vs_tactical",
-      "label": "Strategic versus tactical decisions",
-      "book": "fund_arch"
-    },
-    {
-      "id": "ddia_imperative_queries",
-      "label": "Imperative APIs",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_lamport_clocks",
-      "label": "Lamport (1978) Time, Clocks, and Ordering of Events",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_gray_transaction",
-      "label": "Gray & Reuter: Transaction Processing: Concepts and Techniques",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_brewer_cap",
-      "label": "Brewer: Towards robust distributed systems (CAP intuition)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_gilbert_lynch",
-      "label": "Gilbert & Lynch: Brewer's conjecture and feasibility of CAP",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_flp",
-      "label": "Fischer, Lynch, Paterson: Impossibility of distributed consensus (FLP)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_raft",
-      "label": "Ongaro & Ousterhout: Raft consensus",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_paxos",
-      "label": "Lamport: The Part-Time Parliament (Paxos)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_chandy_lamport",
-      "label": "Chandy & Lamport: Distributed snapshots",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_calvin",
-      "label": "Thomson et al.: Calvin (deterministic DB)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_snowflake",
-      "label": "Snowflake paper (elastic warehouse)",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_mapreduce_dean",
-      "label": "Dean & Ghemawat: MapReduce",
-      "book": "ddia"
-    },
-    {
-      "id": "ddia_paper_kafka",
-      "label": "Kreps et al.: Kafka / log-centric architecture",
-      "book": "ddia"
-    }
-  ],
-  "cross_theme_god_nodes": [
-    {
-      "id": "greene_laws_human_nature",
-      "label": "Human nature",
-      "book": "greene_laws"
-    },
-    {
-      "id": "cialdini_influence_principle_commitment_consistency",
-      "label": "Commitment and consistency principle",
-      "book": "cialdini_influence"
-    },
-    {
-      "id": "cialdini_influence_book",
-      "label": "Influence: The Psychology of Persuasion (2007 revised ed.)",
-      "book": "cialdini_influence"
-    },
-    {
-      "id": "cialdini_influence_introduction",
-      "label": "Introduction: compliance research and participant observation",
-      "book": "cialdini_influence"
-    },
-    {
-      "id": "cialdini_influence_principle_social_proof",
-      "label": "Social proof principle",
-      "book": "cialdini_influence"
-    },
-    {
-      "id": "cialdini_influence_principle_liking",
-      "label": "Liking principle",
-      "book": "cialdini_influence"
-    },
-    {
-      "id": "cialdini_influence_principle_reciprocity",
-      "label": "Reciprocity principle",
-      "book": "cialdini_influence"
-    },
-    {
-      "id": "cialdini_influence_principle_scarcity",
-      "label": "Scarcity principle",
-      "book": "cialdini_influence"
-    },
-    {
-      "id": "murphy_subconscious_subconscious_mind",
-      "label": "Subconscious (irrational) creative mind",
-      "book": "murphy_subconscious"
-    },
-    {
-      "id": "dweck_mindset_growth_mindset",
-      "label": "Growth mindset: abilities can be developed through effort, strategies, help",
-      "book": "dweck_mindset"
-    },
-    {
-      "id": "dweck_mindset_fixed_mindset",
-      "label": "Fixed mindset: qualities seen as fixed; urgency to prove oneself",
-      "book": "dweck_mindset"
-    },
-    {
-      "id": "frankl_meaning_logotherapy",
-      "label": "Logotherapy",
-      "book": "frankl_meaning"
-    },
-    {
-      "id": "haidt_happiness_rider_elephant_metaphor",
-      "label": "Rider and elephant (conscious vs automatic)",
-      "book": "haidt_happiness"
-    },
-    {
-      "id": "frankl_meaning_meaning_in_suffering",
-      "label": "Meaning in suffering",
-      "book": "frankl_meaning"
-    },
-    {
-      "id": "crucial_conversations_pool_shared_meaning",
-      "label": "Pool of Shared Meaning",
-      "book": "crucial_conversations"
-    },
-    {
-      "id": "frankl_meaning_existential_vacuum",
-      "label": "Existential vacuum",
-      "book": "frankl_meaning"
-    },
-    {
-      "id": "ousterhout_design_complexity",
-      "label": "Complexity in software systems",
-      "book": "ousterhout_design"
-    },
-    {
-      "id": "mcconnell_codecomp_book",
-      "label": "Code Complete, 2nd ed.: A Practical Handbook of Software Construction",
-      "book": "mcconnell_codecomp"
-    },
-    {
-      "id": "effective_engineer_leverage",
-      "label": "Leverage (impact per time invested)",
-      "book": "effective_engineer"
-    },
-    {
-      "id": "pragmatic_prog_toc_contents",
-      "label": "Book Contents / Outline",
-      "book": "pragmatic_prog"
-    },
-    {
-      "id": "ousterhout_design_information_hiding",
-      "label": "Information hiding",
-      "book": "ousterhout_design"
-    },
-    {
-      "id": "clrs_divide_and_conquer",
-      "label": "Divide-and-conquer design paradigm",
-      "book": "clrs"
-    },
-    {
-      "id": "mcconnell_codecomp_part5",
-      "label": "Part V \u2014 Code Improvements",
-      "book": "mcconnell_codecomp"
-    },
-    {
-      "id": "pragmatic_prog_part_approach",
-      "label": "Part 2: A Pragmatic Approach",
-      "book": "pragmatic_prog"
-    },
-    {
-      "id": "pmbok_process_group_planning",
-      "label": "Planning Process Group",
-      "book": "pmbok"
-    },
-    {
-      "id": "pmbok_process_group_monitoring_controlling",
-      "label": "Monitoring and Controlling Process Group",
-      "book": "pmbok"
-    },
-    {
-      "id": "pmbok_process_group_executing",
-      "label": "Executing Process Group",
-      "book": "pmbok"
-    },
-    {
-      "id": "kerzner_pm_pert_network_planning",
-      "label": "PERT network development and time integration",
-      "book": "kerzner_pm"
-    },
-    {
-      "id": "pmbok_knowledge_areas_section_iii",
-      "label": "Section III \u2014 Project Management Knowledge Areas",
-      "book": "pmbok"
-    },
-    {
-      "id": "pmbok_ka_integration",
-      "label": "Project Integration Management",
-      "book": "pmbok"
-    },
-    {
-      "id": "pmbok_ka_scope",
-      "label": "Project Scope Management",
-      "book": "pmbok"
-    },
-    {
-      "id": "pmbok_ka_risk",
-      "label": "Project Risk Management",
-      "book": "pmbok"
-    },
-    {
-      "id": "lean_lexicon_takt_time_2621",
-      "label": "Takt Time",
-      "book": "lean_lexicon"
-    },
-    {
-      "id": "lean_lexicon_heijunka",
-      "label": "Heijunka",
-      "book": "lean_lexicon"
-    },
-    {
-      "id": "lean_lexicon_jidoka",
-      "label": "Jidoka",
-      "book": "lean_lexicon"
-    },
-    {
-      "id": "grove_hom_meeting_medium",
-      "label": "Meeting as the medium of managerial work",
-      "book": "grove_hom"
-    },
-    {
-      "id": "lean_lexicon_value_stream_mapping_vsm",
-      "label": "Value-Stream Mapping (VSM)",
-      "book": "lean_lexicon"
-    },
-    {
-      "id": "lean_lexicon_pull_production",
-      "label": "Pull Production",
-      "book": "lean_lexicon"
-    },
-    {
-      "id": "larson_elegant_four_states_vocab",
-      "label": "Four-state vocabulary for team performance",
-      "book": "larson_elegant"
-    },
-    {
-      "id": "lean_lexicon_toyota_production_system_tps",
-      "label": "Toyota Production System (TPS)",
-      "book": "lean_lexicon"
-    }
-  ]
+	"theme": "T3_arch_systems",
+	"theme_nodes": [
+		{
+			"id": "csapp_virtual_memory",
+			"label": "Virtual Memory",
+			"book": "csapp"
+		},
+		{
+			"id": "fund_arch_monolithic_vs_distributed",
+			"label": "Monolithic versus distributed architectures",
+			"book": "fund_arch"
+		},
+		{
+			"id": "csapp_performance_optimization",
+			"label": "Optimizing Program Performance",
+			"book": "csapp"
+		},
+		{
+			"id": "fund_arch_microservices_style",
+			"label": "Microservices architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "csapp_machine_level_programs",
+			"label": "Machine-Level Representation of Programs",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_exceptional_control_flow",
+			"label": "Exceptional Control Flow",
+			"book": "csapp"
+		},
+		{
+			"id": "ddia_single_leader",
+			"label": "Single-leader replication",
+			"book": "ddia"
+		},
+		{
+			"id": "meadows_systems_balancing_loop",
+			"label": "Balancing (negative) feedback",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_reinforcing_loop",
+			"label": "Reinforcing (positive) feedback",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "team_topologies_book",
+			"label": "Team Topologies (book)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_cognitive_load",
+			"label": "Team cognitive load",
+			"book": "team_topologies"
+		},
+		{
+			"id": "fund_arch_event_driven_style",
+			"label": "Event-driven architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_hexagonal_architecture",
+			"label": "Hexagonal architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "ddia_lsm_tree",
+			"label": "LSM-trees",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_btree",
+			"label": "B-trees",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_snapshot_isolation",
+			"label": "Snapshot isolation (MVCC)",
+			"book": "ddia"
+		},
+		{
+			"id": "meadows_systems_bounded_rationality",
+			"label": "Bounded rationality",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "team_topologies_four_team_types",
+			"label": "Four fundamental team types",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_three_interaction_modes",
+			"label": "Three core team interaction modes",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_accelerate_book",
+			"label": "Accelerate (Forsgren, Humble, Kim)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "fund_arch_book",
+			"label": "Fundamentals of Software Architecture (2nd ed.)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_software_architecture",
+			"label": "Software architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_dimension_decisions",
+			"label": "Architecture decisions (definitional dimension)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_modularity",
+			"label": "Modularity",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_architectural_characteristics",
+			"label": "Architectural characteristics (-ilities)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_eventual_consistency",
+			"label": "Eventual consistency",
+			"book": "fund_arch"
+		},
+		{
+			"id": "csapp_memory_hierarchy",
+			"label": "The Memory Hierarchy",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_linking",
+			"label": "Linking",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_concurrent_programming",
+			"label": "Concurrent Programming",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_cache_organization",
+			"label": "Cache organization (S, E, B)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_elf_object_files",
+			"label": "ELF relocatable object files",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_unix_io_model",
+			"label": "Unix I/O model (open, read, write, close)",
+			"book": "csapp"
+		},
+		{
+			"id": "ddia_relational_model",
+			"label": "Relational model",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_replication",
+			"label": "Replication",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_leaderless",
+			"label": "Leaderless replication",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_partitioning",
+			"label": "Partitioning (sharding)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_total_order_broadcast",
+			"label": "Total order broadcast",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_stream_processing",
+			"label": "Stream processing",
+			"book": "ddia"
+		},
+		{
+			"id": "meadows_systems_book",
+			"label": "Thinking in Systems: A Primer",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ch4_surprise",
+			"label": "Chapter 4: Why Systems Surprise Us",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_stocks",
+			"label": "Stocks",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_stock_flow_structure",
+			"label": "Stock-and-flow structure",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "team_topologies_fast_flow",
+			"label": "Fast and safe flow of change",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_stream_aligned_team",
+			"label": "Stream-aligned team",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_platform_team",
+			"label": "Platform team",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_team_first_thinking",
+			"label": "Team-first thinking",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_conways_law",
+			"label": "Conway\u2019s law",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_fracture_planes",
+			"label": "Software boundaries / fracture planes",
+			"book": "team_topologies"
+		},
+		{
+			"id": "fund_arch_trade_offs",
+			"label": "Trade-off analysis in architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_coupling",
+			"label": "Coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_component_coupling",
+			"label": "Component coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fitness_functions",
+			"label": "Fitness functions (architectural governance tests)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_layered_style",
+			"label": "Layered architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_choreography",
+			"label": "Choreography (distributed workflows)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_orchestration",
+			"label": "Orchestration (distributed workflows)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_conways_law",
+			"label": "Conway's Law",
+			"book": "fund_arch"
+		},
+		{
+			"id": "csapp_processor_architecture",
+			"label": "Processor Architecture",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_network_programming",
+			"label": "Network Programming",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_bits_and_bytes",
+			"label": "Bits and bytes",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_arithmetic_and_logic_ops",
+			"label": "Arithmetic and logical operations",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_pipelined_processor",
+			"label": "Pipelined processor",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_pipeline_hazards",
+			"label": "Pipeline hazards (data, control, structural)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_compiler_optimizations",
+			"label": "Compiler optimizations",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_cache_hits_misses",
+			"label": "Cache hits, misses, evictions",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_fork_execve",
+			"label": "fork, execve, waitpid",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_signals",
+			"label": "Unix signals",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_page_tables",
+			"label": "Page tables and multi-level page tables",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_threads_pthreads",
+			"label": "Threads and Pthreads",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_mutexes",
+			"label": "Mutexes (Pthreads mutex)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_system_calls",
+			"label": "System calls",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_address_translation",
+			"label": "Address translation",
+			"book": "csapp"
+		},
+		{
+			"id": "ddia_scalability",
+			"label": "Scalability",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_maintainability",
+			"label": "Maintainability",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_fault_tolerance",
+			"label": "Fault tolerance",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_graph_model",
+			"label": "Graph model",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_binary_encoding",
+			"label": "Binary encodings",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_avro",
+			"label": "Apache Avro",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_schema_evolution",
+			"label": "Schema evolution",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_replication_lag",
+			"label": "Replication lag",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_transactions",
+			"label": "Transactions",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_event_log",
+			"label": "Event logs (Kafka-style)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_future_data_systems",
+			"label": "The future of data systems",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_unifying_batch_stream",
+			"label": "Unifying batch and stream processing",
+			"book": "ddia"
+		},
+		{
+			"id": "meadows_systems_part_two",
+			"label": "Part Two: Systems and Us",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_part_three",
+			"label": "Part Three: Creating Change\u2014Systems and Philosophy",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ch5_traps",
+			"label": "Chapter 5: System Traps \u2026 and Opportunities",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ch7_living",
+			"label": "Chapter 7: Living in a World of Systems",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_feedback_loop",
+			"label": "Feedback loop",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_resilience",
+			"label": "Resilience",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_mental_models",
+			"label": "Mental models",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_surprise_behavior",
+			"label": "Surprising behavior (counterintuitive dynamics)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_wrong_goal",
+			"label": "Seeking the wrong goal",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp3_goals",
+			"label": "Leverage point 3: Goals",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp2_paradigm",
+			"label": "Leverage point 2: Paradigm",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_limits_to_growth",
+			"label": "Limits to Growth (World3 lineage)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_world3_overshoot",
+			"label": "Overshoot and collapse",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_dancing_with_systems",
+			"label": "Dancing with systems (humility, learning)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "team_topologies_xaas_mode",
+			"label": "X-as-a-Service interaction mode",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_reverse_conway_maneuver",
+			"label": "Reverse / inverse Conway maneuver",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_evolve_team_topologies",
+			"label": "Evolve team topologies over time",
+			"book": "team_topologies"
+		},
+		{
+			"id": "fund_arch_architecture_vs_design",
+			"label": "Architecture versus design",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_thoughtworks_radar",
+			"label": "Thoughtworks Technology Radar",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_bounded_context",
+			"label": "Bounded context (DDD)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_modular_monolith",
+			"label": "Modular monolith architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_eda_broker_topology",
+			"label": "Broker (choreographed) EDA topology",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_eda_mediator_topology",
+			"label": "Mediator EDA topology",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_cap_tradeoffs",
+			"label": "CAP-style distributed trade-offs (consistency/availability/partitioning)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_architectural_decisions_ch21",
+			"label": "Architectural decisions (Chapter 21)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_adr",
+			"label": "Architecture Decision Records (ADRs)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "csapp_tour_of_systems",
+			"label": "A Tour of Computer Systems",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_information_representation",
+			"label": "Representing and Manipulating Information",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_system_level_io",
+			"label": "System-Level I/O",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_integer_encodings",
+			"label": "Integer encodings (unsigned and two's complement)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_ieee754_floating_point",
+			"label": "IEEE 754 floating point",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_x86_64_instruction_set",
+			"label": "x86-64 instruction set basics",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_registers_and_operands",
+			"label": "Registers and operand forms",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_control_flow_assembly",
+			"label": "Control in assembly (jumps, conditions)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_procedure_call_convention",
+			"label": "Procedure call conventions",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_stack_frame_layout",
+			"label": "Stack frames and local storage",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_position_independent_code",
+			"label": "Position-independent code (PIC)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_sequential_processor",
+			"label": "Sequential processor implementation",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_branch_prediction",
+			"label": "Branch prediction",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_storage_technologies",
+			"label": "Storage technologies (SRAM, DRAM, SSD, disk)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_locality_principle",
+			"label": "Principle of locality (temporal and spatial)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_cache_friendly_code",
+			"label": "Writing cache-friendly code",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_symbol_resolution",
+			"label": "Symbol resolution and linkage",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_shared_libraries",
+			"label": "Shared libraries (.so)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_process_abstraction",
+			"label": "Process abstraction",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_vm_as_caching",
+			"label": "VM as a caching problem",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_tlb",
+			"label": "Translation Lookaside Buffer (TLB)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_client_server_model",
+			"label": "Client-server programming model",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_sockets_api",
+			"label": "Sockets API",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_race_conditions",
+			"label": "Race conditions",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_semaphores",
+			"label": "Semaphores",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_condition_variables",
+			"label": "Condition variables",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_thread_safe_functions",
+			"label": "Thread-safe and reentrant functions",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_parallelism_speedup",
+			"label": "Parallelism and speedup (Amdahl)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_kernel_mode_user_mode",
+			"label": "Kernel mode vs user mode",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_elf_executable",
+			"label": "ELF executable object files",
+			"book": "csapp"
+		},
+		{
+			"id": "ddia_reliable_scalable_maintainable",
+			"label": "Reliable, scalable, maintainable systems",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_data_model",
+			"label": "Data models for applications",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_document_model",
+			"label": "Document model",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_quorum",
+			"label": "Quorum reads/writes",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_weak_isolation",
+			"label": "Weak isolation levels",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_serializable",
+			"label": "Serializable isolation",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_two_phase_commit",
+			"label": "Two-phase commit (2PC)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_distributed_troubles",
+			"label": "The trouble with distributed systems",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_time_clocks",
+			"label": "Time and clocks",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_vector_clocks",
+			"label": "Vector clocks",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_consistency_consensus",
+			"label": "Consistency and consensus",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_linearizability",
+			"label": "Linearizability",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_batch_processing",
+			"label": "Batch processing",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_mapreduce",
+			"label": "MapReduce",
+			"book": "ddia"
+		},
+		{
+			"id": "meadows_systems_part_one",
+			"label": "Part One: System Structure and Behavior",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ch1_basics",
+			"label": "Chapter 1: The Basics",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ch2_zoo",
+			"label": "Chapter 2: A Brief Visit to the Systems Zoo",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ch3_work_well",
+			"label": "Chapter 3: Why Systems Work So Well",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ch6_leverage",
+			"label": "Chapter 6: Leverage Points\u2014Places to Intervene",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_systems_thinking",
+			"label": "Systems thinking",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_flows",
+			"label": "Flows",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_delays",
+			"label": "Delays",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_population_capital",
+			"label": "Population\u2013capital interactions",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_exponential_growth",
+			"label": "Exponential growth from reinforcing loops",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_tragedy_commons",
+			"label": "Tragedy of the commons",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_policy_resistance",
+			"label": "Policy resistance",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp11_buffers",
+			"label": "Leverage point 11: Buffers",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp10_stock_flow",
+			"label": "Leverage point 10: Stock-and-flow structures",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp9_delays",
+			"label": "Leverage point 9: Delays",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp8_balancing",
+			"label": "Leverage point 8: Strength of balancing loops",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp7_reinforcing",
+			"label": "Leverage point 7: Gain around reinforcing loops",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp6_information",
+			"label": "Leverage point 6: Information flows",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp5_rules",
+			"label": "Leverage point 5: Rules",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp4_self_org",
+			"label": "Leverage point 4: Self-organization",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp1_transcend",
+			"label": "Leverage point 1: Transcending paradigms",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_leverage_hierarchy",
+			"label": "Hierarchy of intervention effectiveness (12\u21921)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_counterintuitive_policies",
+			"label": "Counterintuitive policy outcomes",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "team_topologies_enabling_team",
+			"label": "Enabling team",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_collaboration_mode",
+			"label": "Collaboration interaction mode",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_team_boundaries",
+			"label": "Team boundaries and coupling",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_flow_of_change",
+			"label": "Flow of change through the system",
+			"book": "team_topologies"
+		},
+		{
+			"id": "fund_arch_dimension_style",
+			"label": "Architecture style (definitional dimension)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_expectations_architect",
+			"label": "Expectations of a software architect",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_soft_skills",
+			"label": "Soft skills for architects",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_twenty_minute_rule",
+			"label": "20-minute learning rule",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_granularity",
+			"label": "Granularity",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_cohesion",
+			"label": "Cohesion",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_call_graph_analysis",
+			"label": "Call graph analysis for coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_yourdon_constantine",
+			"label": "Yourdon and Constantine Structured Design",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_distance_main_sequence",
+			"label": "Distance from the Main Sequence",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_connascence",
+			"label": "Connascence",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_static_coupling",
+			"label": "Static coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_measuring_characteristics",
+			"label": "Measuring architecture characteristics",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_architectural_quanta",
+			"label": "Architectural quanta",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_domain_driven_design",
+			"label": "Domain-driven design",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_team_topologies",
+			"label": "Team topologies and architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_microkernel_style",
+			"label": "Microkernel architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_service_based_style",
+			"label": "Service-based architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_space_based_style",
+			"label": "Space-based architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_odsoa",
+			"label": "Orchestration-driven service-oriented architecture (ODSOA)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_sagas",
+			"label": "Sagas and distributed transactions",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_base_transactions",
+			"label": "BASE transactions",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_acid_transactions",
+			"label": "ACID transactions",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_choosing_style",
+			"label": "Choosing an appropriate architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_reuse_pattern",
+			"label": "Reuse pattern (separation of concerns)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_domain_operational_coupling",
+			"label": "Domain versus operational coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_service_mesh",
+			"label": "Service Mesh pattern",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_graph_theory_coupling",
+			"label": "Graph theory in coupling metrics",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_inverse_conway_maneuver",
+			"label": "Inverse Conway Maneuver (Jonny Leroy)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_martin_fowler",
+			"label": "Martin Fowler",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fowler_architecture_definition",
+			"label": "Fowler: architecture is what is hard to change",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_eric_evans",
+			"label": "Eric Evans",
+			"book": "fund_arch"
+		},
+		{
+			"id": "csapp_endianness",
+			"label": "Endianness (byte ordering)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_twos_complement",
+			"label": "Two's complement arithmetic",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_c_type_conversions",
+			"label": "C integer promotions and conversions",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_data_representation_in_c",
+			"label": "Representing data in C",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_array_and_struct_access",
+			"label": "Array indexing and struct layout",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_buffer_overflows",
+			"label": "Buffer overflows and stack corruption",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_y86_instruction_set",
+			"label": "Y86 simplified ISA",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_program_profiling",
+			"label": "Program profiling (e.g., gprof)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_loop_unrolling",
+			"label": "Loop unrolling",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_blocking_for_cache",
+			"label": "Blocking/tiling for cache locality",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_write_allocate_policies",
+			"label": "Write-through vs write-back caches",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_matrix_multiply_locality",
+			"label": "Matrix multiply and locality",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_compiler_driver_pipeline",
+			"label": "Compiler driver (cpp, cc1, as, ld)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_relocation",
+			"label": "Relocation and relocation entries",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_plt_got",
+			"label": "PLT and GOT for dynamic linking",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_exceptions_hardware",
+			"label": "Hardware exceptions",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_exceptions_os",
+			"label": "OS exceptions and traps",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_signal_handlers",
+			"label": "Signal handlers and async-signal-safety",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_physical_vs_virtual_addressing",
+			"label": "Physical vs virtual addressing",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_address_spaces",
+			"label": "Address spaces",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_demand_paging",
+			"label": "Demand paging",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_memory_mapping_mmap",
+			"label": "Memory mapping (mmap)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_dynamic_memory_allocators",
+			"label": "Dynamic memory allocators",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_robust_io_rio",
+			"label": "Robust I/O (Rio package)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_standard_io_vs_unix_io",
+			"label": "Standard I/O vs Unix I/O",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_web_clients_and_servers",
+			"label": "Web clients and servers",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_context_switching",
+			"label": "Context switching",
+			"book": "csapp"
+		},
+		{
+			"id": "ddia_reliability",
+			"label": "Reliability",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_load_parameters",
+			"label": "Load parameters (RPS, data size)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_latency_percentiles",
+			"label": "Latency percentiles (p50, p95, p99)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_horizontal_scaling",
+			"label": "Horizontal scaling (scale out)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_many_to_many",
+			"label": "Many-to-one and many-to-many relationships",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_storage_retrieval",
+			"label": "Storage and retrieval",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_sstable",
+			"label": "SSTables (sorted string tables)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_wal",
+			"label": "Write-ahead log (WAL)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_secondary_index",
+			"label": "Secondary indexes",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_encoding_evolution",
+			"label": "Encoding and evolution",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_json_encoding",
+			"label": "JSON encoding",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_protobuf",
+			"label": "Protocol Buffers",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_multi_leader",
+			"label": "Multi-leader replication",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_async_replication",
+			"label": "Asynchronous replication",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_read_repair",
+			"label": "Read repair",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_version_vectors",
+			"label": "Version vectors",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_read_committed",
+			"label": "Read committed",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_network_unreliable",
+			"label": "Unreliable networks",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_partial_failure",
+			"label": "Partial failure",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_causality",
+			"label": "Causality and happens-before",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paxos",
+			"label": "Paxos",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_raft",
+			"label": "Raft",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_zab",
+			"label": "ZooKeeper Atomic Broadcast (Zab)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_dataflow_engines",
+			"label": "Dataflow execution engines",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_event_sourcing",
+			"label": "Event sourcing",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_cdc",
+			"label": "Change data capture (CDC)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_lambda_architecture",
+			"label": "Lambda architecture",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_kappa_architecture",
+			"label": "Kappa architecture",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_end_to_end_argument",
+			"label": "End-to-end argument for correctness",
+			"book": "ddia"
+		},
+		{
+			"id": "meadows_systems_two_competing_loops",
+			"label": "Two competing balancing loops",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_escalation",
+			"label": "Escalation",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_success_successful",
+			"label": "Success to the successful",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_archetypes",
+			"label": "System archetypes (recurring trap structures)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_lp12_constants",
+			"label": "Leverage point 12: Constants, parameters, numbers",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_jay_forrester",
+			"label": "Jay Forrester / industrial dynamics lineage",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_club_of_rome",
+			"label": "Club of Rome (Limits to Growth)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_suboptimization",
+			"label": "Suboptimization (optimizing parts harms the whole)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_observe_first",
+			"label": "Observe, listen, stay humble before intervening",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_runaway_loops",
+			"label": "Runaway (unchecked reinforcing loop)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_ethical_intervention",
+			"label": "Ethics of intervention in complex systems",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "team_topologies_actual_communication_lines",
+			"label": "Actual lateral communication vs reporting lines",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_systems_thinking_whole",
+			"label": "Optimize the whole flow of work",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_largest_bottleneck_iteration",
+			"label": "Find largest bottleneck, eliminate, repeat",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_complicated_subsystem_team",
+			"label": "Complicated-subsystem team",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_facilitating_mode",
+			"label": "Facilitating interaction mode",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_context_switching_cost",
+			"label": "Context switching and excessive domains",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_team_api",
+			"label": "Team API (explicit interface)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_mel_conway",
+			"label": "Mel Conway",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_organizational_sensing",
+			"label": "Organizational sensing and evolution",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_collaboration_vs_xaas",
+			"label": "Collaboration vs X-as-a-Service tradeoffs",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_team_dependencies",
+			"label": "Team dependencies and handoffs",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_jez_humble",
+			"label": "Jez Humble",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_gene_kim",
+			"label": "Gene Kim",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_devops_handbook",
+			"label": "The DevOps Handbook (Kim et al.)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_toc_bottleneck_alignment",
+			"label": "Bottleneck-focused improvement (aligned with TOC-style thinking)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_next_gen_operating_model",
+			"label": "Next-generation digital operating model",
+			"book": "team_topologies"
+		},
+		{
+			"id": "fund_arch_dimension_characteristics",
+			"label": "Architecture characteristics (definitional dimension)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_dimension_components",
+			"label": "Logical components (definitional dimension)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_third_law",
+			"label": "Third Law of Software Architecture (decisions on a spectrum)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_interpersonal_skills",
+			"label": "Interpersonal and leadership skills",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_technical_breadth",
+			"label": "Technical breadth for architects",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_personal_radar",
+			"label": "Personal technology radar",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_afferent_coupling",
+			"label": "Afferent coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_efferent_coupling",
+			"label": "Efferent coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_zone_of_pain",
+			"label": "Zone of Pain (brittle code)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_zone_of_uselessness",
+			"label": "Zone of Uselessness (over-abstract code)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_logical_components",
+			"label": "Logical components",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_temporal_coupling",
+			"label": "Temporal coupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_law_of_demeter",
+			"label": "Law of Demeter",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_operational_characteristics",
+			"label": "Operational architectural characteristics",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_structural_characteristics",
+			"label": "Structural architectural characteristics",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_cross_cutting_characteristics",
+			"label": "Cross-cutting architectural characteristics",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_least_worst_architecture",
+			"label": "Least worst architecture (trade-offs)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_identifying_characteristics",
+			"label": "Identifying architectural characteristics",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_katas",
+			"label": "Architecture katas",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_cyclomatic_complexity",
+			"label": "Cyclomatic complexity metric",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_governance",
+			"label": "Architecture governance",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_synchronous_communication",
+			"label": "Synchronous communication",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_meilir_page",
+			"label": "Meilir Page design principle (encapsulation)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_styles_vs_patterns",
+			"label": "Architecture styles versus patterns",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_unitary_architecture",
+			"label": "Unitary architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_client_server",
+			"label": "Client/server architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_network_reliable",
+			"label": "Fallacy: network is reliable",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_latency_zero",
+			"label": "Fallacy: latency is zero",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_bandwidth_infinite",
+			"label": "Fallacy: bandwidth is infinite",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_network_secure",
+			"label": "Fallacy: network is secure",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_topology_static",
+			"label": "Fallacy: topology never changes",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_one_admin",
+			"label": "Fallacy: one administrator",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_transport_free",
+			"label": "Fallacy: transport cost is zero",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_fallacy_network_homogeneous",
+			"label": "Fallacy: network is homogeneous",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_layers_of_isolation",
+			"label": "Layers of isolation",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_pipeline_style",
+			"label": "Pipeline architecture style",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_data_isolation",
+			"label": "Data isolation in microservices",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_architectural_patterns_ch20",
+			"label": "Architectural patterns (Chapter 20)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_ports_and_adapters",
+			"label": "Ports and Adapters pattern",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_cqrs",
+			"label": "CQRS pattern",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_broker_domain_pattern",
+			"label": "Broker-Domain pattern",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_graphql_contracts",
+			"label": "GraphQL for contract decoupling",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_graph_database_topic",
+			"label": "Graph databases (related: graph analytics, not central topic)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_adr_storage",
+			"label": "Storing and managing ADRs",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_decision_antipatterns",
+			"label": "Architectural decision antipatterns",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_generative_ai_decisions",
+			"label": "Generative AI in architectural decisions",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_melvin_conway",
+			"label": "Melvin Conway",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_jonny_leroy",
+			"label": "Jonny Leroy (Inverse Conway coinage)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_alistair_cockburn",
+			"label": "Alistair Cockburn",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_rebecca_parsons",
+			"label": "Rebecca J. Parsons",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_thoughtworks_org",
+			"label": "Thoughtworks (organization)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_head_first_sa_ref",
+			"label": "Head First Software Architecture (Raju Gandhi et al.)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_risk_analysis_ch22",
+			"label": "Analyzing architecture risk",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_diagramming_ch23",
+			"label": "Diagramming architecture (UML, C4, ArchiMate)",
+			"book": "fund_arch"
+		},
+		{
+			"id": "csapp_fp_rounding_modes",
+			"label": "Floating-point rounding modes",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_superscalar_out_of_order",
+			"label": "Superscalar and out-of-order execution (conceptual)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_code_motion_reduction",
+			"label": "Code motion and strength reduction",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_memory_aliasing",
+			"label": "Memory aliasing and optimization limits",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_static_vs_dynamic_linking",
+			"label": "Static vs dynamic linking",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_library_interpositioning",
+			"label": "Library interpositioning",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_nonlocal_jumps",
+			"label": "Nonlocal jumps (setjmp/longjmp)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_garbage_collection_basics",
+			"label": "Garbage collection basics (conceptual)",
+			"book": "csapp"
+		},
+		{
+			"id": "csapp_elf_shared_object",
+			"label": "ELF shared object (.so)",
+			"book": "csapp"
+		},
+		{
+			"id": "ddia_hardware_faults",
+			"label": "Hardware faults",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_software_faults",
+			"label": "Software faults (bugs)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_human_errors",
+			"label": "Human errors",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_tail_latency",
+			"label": "Tail latency amplification",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_vertical_scaling",
+			"label": "Vertical scaling (scale up)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_elastic_systems",
+			"label": "Elastic systems",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_operability",
+			"label": "Operability",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_simplicity",
+			"label": "Simplicity",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_evolvability",
+			"label": "Evolvability",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_declarative_queries",
+			"label": "Declarative query languages (SQL)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_cypher",
+			"label": "Cypher (graph query language)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_property_graph",
+			"label": "Property graph model",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_triple_store",
+			"label": "Triple-store (RDF)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_schema_on_read",
+			"label": "Schema-on-read",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_schema_on_write",
+			"label": "Schema-on-write",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_hash_index",
+			"label": "Hash indexes",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_compaction",
+			"label": "Compaction (size-tiered, leveled)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_clustered_index",
+			"label": "Clustered indexes",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_heap_file",
+			"label": "Heap files",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_column_oriented",
+			"label": "Column-oriented storage",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_thrift",
+			"label": "Apache Thrift",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_forward_compat",
+			"label": "Forward compatibility",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_backward_compat",
+			"label": "Backward compatibility",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_writer_reader_schema",
+			"label": "Writer's schema vs reader's schema",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_synchronous_replication",
+			"label": "Synchronous replication",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_semi_sync",
+			"label": "Semi-synchronous replication",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_read_your_writes",
+			"label": "Read-your-writes consistency",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_monotonic_reads",
+			"label": "Monotonic reads",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_consistent_prefix",
+			"label": "Consistent prefix reads",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_split_brain",
+			"label": "Split brain",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_hinted_handoff",
+			"label": "Hinted handoff",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_partition_key",
+			"label": "Partition key",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_secondary_index_partition",
+			"label": "Partitioning secondary indexes",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_rebalancing",
+			"label": "Rebalancing partitions",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_hotspot",
+			"label": "Skew and hotspots",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_acid",
+			"label": "ACID",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_repeatable_read",
+			"label": "Repeatable read",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_write_skew",
+			"label": "Write skew",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_phantom",
+			"label": "Phantom reads",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_two_phase_locking",
+			"label": "Two-phase locking (2PL)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_ssi",
+			"label": "Serializable snapshot isolation (SSI)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_logical_clocks",
+			"label": "Logical clocks",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_process_pauses",
+			"label": "Process pauses (GC, virtualization)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_unreliable_time",
+			"label": "Unreliable local clocks",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_fencing_tokens",
+			"label": "Fencing tokens",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_membership_coord",
+			"label": "Membership and coordination services",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_join_algorithms_mr",
+			"label": "Join algorithms in batch systems",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_complex_event_proc",
+			"label": "Complex event processing",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_bigtable",
+			"label": "Chang et al.: Bigtable",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_dynamo",
+			"label": "DeCandia et al.: Dynamo",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_spanner",
+			"label": "Corbett et al.: Spanner",
+			"book": "ddia"
+		},
+		{
+			"id": "meadows_systems_dynamic_equilibrium",
+			"label": "Dynamic equilibrium",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_interconnectedness",
+			"label": "Interconnectedness",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_nonlinearity",
+			"label": "Nonlinearity",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_boundaries",
+			"label": "System boundaries",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_one_stock_two_flows",
+			"label": "One-stock two-flow (bathtub)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_information_vs_material",
+			"label": "Information flows vs material stocks and flows",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_drift_low_performance",
+			"label": "Drift to low performance",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_shifting_burden",
+			"label": "Shifting the burden to the intervenor",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_rule_beating",
+			"label": "Rule beating",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_trap_competitive_exclusion",
+			"label": "Competitive exclusion",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_hierarchy_goals",
+			"label": "Hierarchical goal structures",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_stocks_renewable_nonrenewable",
+			"label": "Renewable vs nonrenewable stocks",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "meadows_systems_goals_vs_indicators",
+			"label": "Goals vs measured indicators (distortion risks)",
+			"book": "meadows_systems"
+		},
+		{
+			"id": "team_topologies_sociotechnical_system",
+			"label": "Sociotechnical / human\u2013computer ecosystem framing",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_org_chart_problem",
+			"label": "Org chart misrepresents real communication",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_three_structures_pflaeging",
+			"label": "Formal, informal, and value-creation structures (Pflaeging)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_matrix_management_limits",
+			"label": "Matrix management as static view",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_rummler_brache_white_space",
+			"label": "Rummler & Brache white-space performance thinking",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_project_to_product_kersten",
+			"label": "Project-to-product shift (Kersten)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_stream_aligned_primary",
+			"label": "Stream-aligned as primary team form",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_internal_customer_platform",
+			"label": "Platform as internal customer-facing capability",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_good_platform_just_big_enough",
+			"label": "A good platform is \u201cjust big enough\u201d",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_well_defined_interactions",
+			"label": "Well-defined interactions reduce uncertainty",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_small_long_lived_teams",
+			"label": "Small, long-lived teams as default",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_cognitive_capacity_limit",
+			"label": "Finite cognitive capacity per team",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_minimize_cognitive_load_boundaries",
+			"label": "Good boundaries minimize cognitive load",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_conway_paper_1968",
+			"label": "How Do Committees Invent? (1968)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_homomorphic_force",
+			"label": "Homomorphic force / architecture\u2013org alignment",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_james_lewis_thoughtworks",
+			"label": "James Lewis (Thoughtworks) and reverse Conway",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_microservices_revival",
+			"label": "Microservices-era revival of Conway\u2019s law",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_naive_conway_misuse",
+			"label": "Naive misapplications of Conway\u2019s law",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_hidden_monolith_coupling",
+			"label": "Hidden monoliths and coupling",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_team_sized_architecture",
+			"label": "Team-sized architecture responsibilities",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_choose_boundaries_for_load",
+			"label": "Choose boundaries to match cognitive load",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_manufacturing_fracture_example",
+			"label": "Manufacturing fracture-plane analogy",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_dunbar_number_teams",
+			"label": "Dunbar\u2019s number for multi-team groupings",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_one_complex_domain_per_team",
+			"label": "At most one complicated/complex domain per team",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_platform_thinking",
+			"label": "Internal platform thinking",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_thin_platform_wrapper",
+			"label": "Platform wrapper pattern",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_triggers_for_change",
+			"label": "Triggers for topology evolution",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_devops_topologies_precursor",
+			"label": "DevOps Topologies (prior work)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_team_antipatterns",
+			"label": "Team anti-patterns",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_nicole_forsgren",
+			"label": "Nicole Forsgren",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_continuous_delivery_book",
+			"label": "Continuous Delivery (Humble & Farley)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_dan_pink_intrinsic",
+			"label": "Dan Pink autonomy/mastery/purpose",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_psychological_safety_edmondson",
+			"label": "Psychological safety (Edmondson)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_wardley_mapping_ref",
+			"label": "Wardley mapping (reference)",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_less_scrum_ref",
+			"label": "Large-Scale Scrum (LeSS) reference",
+			"book": "team_topologies"
+		},
+		{
+			"id": "team_topologies_strategic_conway_application",
+			"label": "Strategic application of Conway\u2019s law",
+			"book": "team_topologies"
+		},
+		{
+			"id": "fund_arch_first_law",
+			"label": "First Law of Software Architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_second_law",
+			"label": "Second Law of Software Architecture",
+			"book": "fund_arch"
+		},
+		{
+			"id": "fund_arch_strategic_vs_tactical",
+			"label": "Strategic versus tactical decisions",
+			"book": "fund_arch"
+		},
+		{
+			"id": "ddia_imperative_queries",
+			"label": "Imperative APIs",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_lamport_clocks",
+			"label": "Lamport (1978) Time, Clocks, and Ordering of Events",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_gray_transaction",
+			"label": "Gray & Reuter: Transaction Processing: Concepts and Techniques",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_brewer_cap",
+			"label": "Brewer: Towards robust distributed systems (CAP intuition)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_gilbert_lynch",
+			"label": "Gilbert & Lynch: Brewer's conjecture and feasibility of CAP",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_flp",
+			"label": "Fischer, Lynch, Paterson: Impossibility of distributed consensus (FLP)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_raft",
+			"label": "Ongaro & Ousterhout: Raft consensus",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_paxos",
+			"label": "Lamport: The Part-Time Parliament (Paxos)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_chandy_lamport",
+			"label": "Chandy & Lamport: Distributed snapshots",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_calvin",
+			"label": "Thomson et al.: Calvin (deterministic DB)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_snowflake",
+			"label": "Snowflake paper (elastic warehouse)",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_mapreduce_dean",
+			"label": "Dean & Ghemawat: MapReduce",
+			"book": "ddia"
+		},
+		{
+			"id": "ddia_paper_kafka",
+			"label": "Kreps et al.: Kafka / log-centric architecture",
+			"book": "ddia"
+		}
+	],
+	"cross_theme_god_nodes": [
+		{
+			"id": "greene_laws_human_nature",
+			"label": "Human nature",
+			"book": "greene_laws"
+		},
+		{
+			"id": "cialdini_influence_principle_commitment_consistency",
+			"label": "Commitment and consistency principle",
+			"book": "cialdini_influence"
+		},
+		{
+			"id": "cialdini_influence_book",
+			"label": "Influence: The Psychology of Persuasion (2007 revised ed.)",
+			"book": "cialdini_influence"
+		},
+		{
+			"id": "cialdini_influence_introduction",
+			"label": "Introduction: compliance research and participant observation",
+			"book": "cialdini_influence"
+		},
+		{
+			"id": "cialdini_influence_principle_social_proof",
+			"label": "Social proof principle",
+			"book": "cialdini_influence"
+		},
+		{
+			"id": "cialdini_influence_principle_liking",
+			"label": "Liking principle",
+			"book": "cialdini_influence"
+		},
+		{
+			"id": "cialdini_influence_principle_reciprocity",
+			"label": "Reciprocity principle",
+			"book": "cialdini_influence"
+		},
+		{
+			"id": "cialdini_influence_principle_scarcity",
+			"label": "Scarcity principle",
+			"book": "cialdini_influence"
+		},
+		{
+			"id": "murphy_subconscious_subconscious_mind",
+			"label": "Subconscious (irrational) creative mind",
+			"book": "murphy_subconscious"
+		},
+		{
+			"id": "dweck_mindset_growth_mindset",
+			"label": "Growth mindset: abilities can be developed through effort, strategies, help",
+			"book": "dweck_mindset"
+		},
+		{
+			"id": "dweck_mindset_fixed_mindset",
+			"label": "Fixed mindset: qualities seen as fixed; urgency to prove oneself",
+			"book": "dweck_mindset"
+		},
+		{
+			"id": "frankl_meaning_logotherapy",
+			"label": "Logotherapy",
+			"book": "frankl_meaning"
+		},
+		{
+			"id": "haidt_happiness_rider_elephant_metaphor",
+			"label": "Rider and elephant (conscious vs automatic)",
+			"book": "haidt_happiness"
+		},
+		{
+			"id": "frankl_meaning_meaning_in_suffering",
+			"label": "Meaning in suffering",
+			"book": "frankl_meaning"
+		},
+		{
+			"id": "crucial_conversations_pool_shared_meaning",
+			"label": "Pool of Shared Meaning",
+			"book": "crucial_conversations"
+		},
+		{
+			"id": "frankl_meaning_existential_vacuum",
+			"label": "Existential vacuum",
+			"book": "frankl_meaning"
+		},
+		{
+			"id": "ousterhout_design_complexity",
+			"label": "Complexity in software systems",
+			"book": "ousterhout_design"
+		},
+		{
+			"id": "mcconnell_codecomp_book",
+			"label": "Code Complete, 2nd ed.: A Practical Handbook of Software Construction",
+			"book": "mcconnell_codecomp"
+		},
+		{
+			"id": "effective_engineer_leverage",
+			"label": "Leverage (impact per time invested)",
+			"book": "effective_engineer"
+		},
+		{
+			"id": "pragmatic_prog_toc_contents",
+			"label": "Book Contents / Outline",
+			"book": "pragmatic_prog"
+		},
+		{
+			"id": "ousterhout_design_information_hiding",
+			"label": "Information hiding",
+			"book": "ousterhout_design"
+		},
+		{
+			"id": "clrs_divide_and_conquer",
+			"label": "Divide-and-conquer design paradigm",
+			"book": "clrs"
+		},
+		{
+			"id": "mcconnell_codecomp_part5",
+			"label": "Part V \u2014 Code Improvements",
+			"book": "mcconnell_codecomp"
+		},
+		{
+			"id": "pragmatic_prog_part_approach",
+			"label": "Part 2: A Pragmatic Approach",
+			"book": "pragmatic_prog"
+		},
+		{
+			"id": "pmbok_process_group_planning",
+			"label": "Planning Process Group",
+			"book": "pmbok"
+		},
+		{
+			"id": "pmbok_process_group_monitoring_controlling",
+			"label": "Monitoring and Controlling Process Group",
+			"book": "pmbok"
+		},
+		{
+			"id": "pmbok_process_group_executing",
+			"label": "Executing Process Group",
+			"book": "pmbok"
+		},
+		{
+			"id": "kerzner_pm_pert_network_planning",
+			"label": "PERT network development and time integration",
+			"book": "kerzner_pm"
+		},
+		{
+			"id": "pmbok_knowledge_areas_section_iii",
+			"label": "Section III \u2014 Project Management Knowledge Areas",
+			"book": "pmbok"
+		},
+		{
+			"id": "pmbok_ka_integration",
+			"label": "Project Integration Management",
+			"book": "pmbok"
+		},
+		{
+			"id": "pmbok_ka_scope",
+			"label": "Project Scope Management",
+			"book": "pmbok"
+		},
+		{
+			"id": "pmbok_ka_risk",
+			"label": "Project Risk Management",
+			"book": "pmbok"
+		},
+		{
+			"id": "lean_lexicon_takt_time_2621",
+			"label": "Takt Time",
+			"book": "lean_lexicon"
+		},
+		{
+			"id": "lean_lexicon_heijunka",
+			"label": "Heijunka",
+			"book": "lean_lexicon"
+		},
+		{
+			"id": "lean_lexicon_jidoka",
+			"label": "Jidoka",
+			"book": "lean_lexicon"
+		},
+		{
+			"id": "grove_hom_meeting_medium",
+			"label": "Meeting as the medium of managerial work",
+			"book": "grove_hom"
+		},
+		{
+			"id": "lean_lexicon_value_stream_mapping_vsm",
+			"label": "Value-Stream Mapping (VSM)",
+			"book": "lean_lexicon"
+		},
+		{
+			"id": "lean_lexicon_pull_production",
+			"label": "Pull Production",
+			"book": "lean_lexicon"
+		},
+		{
+			"id": "larson_elegant_four_states_vocab",
+			"label": "Four-state vocabulary for team performance",
+			"book": "larson_elegant"
+		},
+		{
+			"id": "lean_lexicon_toyota_production_system_tps",
+			"label": "Toyota Production System (TPS)",
+			"book": "lean_lexicon"
+		}
+	]
 }

@@ -53,6 +53,9 @@ books/
 /.graphify_root
 /.graphify_incremental.json
 
+# Machine-specific path stamp written by graphify post-commit hook
+graphify-books-out/.graphify_root
+
 # Harness artifacts
 .pi/harness/critics/
 .pi/harness/plans/
