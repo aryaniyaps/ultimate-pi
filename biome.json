@@ -8,7 +8,11 @@
 	"files": {
 		"ignoreUnknown": false,
 		"maxSize": 5242880,
-		"includes": ["**/*.{ts,tsx,js,jsx,json,jsonc,css}", "!graphify-out/**/*", "!graphify-books-out/**/*"]
+		"includes": [
+			"**/*.{ts,tsx,js,jsx,json,jsonc,css}",
+			"!graphify-out/**/*",
+			"!graphify-books-out/**/*"
+		]
 	},
 	"formatter": {
 		"enabled": true,
