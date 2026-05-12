@@ -306,7 +306,7 @@ def main() -> None:
         surprises,
         detection,
         {"input": 0, "output": 0},
-        "books/ + graphify-books-corpus/",
+        "data/books/ + graphify-books-corpus/",
         suggested_questions=questions,
     )
     (out_dir / "GRAPH_REPORT.md").write_text(report, encoding="utf-8")

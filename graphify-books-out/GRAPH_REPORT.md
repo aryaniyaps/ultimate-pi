@@ -1,4 +1,4 @@
-# Graph Report - books/ + graphify-books-corpus/  (2026-05-10)
+# Graph Report - data/books/ + graphify-books-corpus/  (2026-05-10)
 
 ## Corpus Check
 - 29 files · ~0 words
@@ -659,7 +659,7 @@ Nodes (12): Library interpositioning, Linking, Machine-Level Representation of P
 
 ### Community 94 - "CLRS: Approximation & LP"
 Cohesion: 0.18
-Nodes (10): Ambiguous Edges - Review These, Community Hubs (Navigation), Corpus Check, God Nodes (most connected - your core abstractions), Graph Report - books/  (2026-05-10), Hyperedges (group relationships), Knowledge Gaps, Suggested Questions (+2 more)
+Nodes (10): Ambiguous Edges - Review These, Community Hubs (Navigation), Corpus Check, God Nodes (most connected - your core abstractions), Graph Report - data/books/  (2026-05-10), Hyperedges (group relationships), Knowledge Gaps, Suggested Questions (+2 more)
 
 ### Community 95 - "Rationalization & Base Rates"
 Cohesion: 0.24
