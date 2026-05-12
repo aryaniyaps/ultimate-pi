@@ -117,7 +117,7 @@ def main():
     labels = {cid: f'Community {cid}' for cid in communities}
     questions = suggest_questions(G, communities, labels)
 
-    report = generate(G, communities, cohesion, labels, gods, surprises, detection, tokens, 'books/', suggested_questions=questions)
+    report = generate(G, communities, cohesion, labels, gods, surprises, detection, tokens, 'data/books/', suggested_questions=questions)
     Path('graphify-books-out/GRAPH_REPORT.md').write_text(report)
     to_json(G, communities, 'graphify-books-out/graph.json')
 

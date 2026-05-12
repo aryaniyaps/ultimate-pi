@@ -40,7 +40,7 @@ def main():
     }
     tokens = {'input': 0, 'output': 0}
 
-    report = generate(G, communities, cohesion, labels, gods, surprises, detection, tokens, 'books/', suggested_questions=questions)
+    report = generate(G, communities, cohesion, labels, gods, surprises, detection, tokens, 'data/books/', suggested_questions=questions)
     Path('graphify-books-out/GRAPH_REPORT.md').write_text(report)
     print('Wrote GRAPH_REPORT.md (with labels and cross-book communities)')
 
