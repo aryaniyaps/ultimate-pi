@@ -1,0 +1,1506 @@
+[0.3s] All right, we're live recording. Let's
+[2.7s] kick this off and get to it.
+[5.8s] >> Cool. Um, super excited to chat with you
+[8.0s] all. Um, I've been spending a lot of
+[9.7s] work to uh in the last couple weeks uh
+[12.6s] making slides and animations for uh some
+[15.8s] upcoming conference talks. If you're in
+[17.4s] New York for AI engineer code summit, uh
+[20.3s] come say hi. We'll be hanging out. I'm
+[22.0s] doing an MCP debate on Thursday.
+[24.4s] Apparently, I am framed as the antiMCP
+[27.7s] guy now, which I feel like is not
+[29.7s] accurate, but uh we'll be leaning into
+[32.4s] leaning into that one. So, come see come
+[34.2s] see I think it's going to be streamed,
+[35.2s] too. Come see me and Ian argue about
+[37.0s] whether MCP is good or not. [snorts]
+[40.2s] Um but I anyways, I've been working on a
+[42.1s] lot of slides. Uh and I people have a
+[45.1s] lot of people ask me how I make them.
+[47.1s] Um, and it's a fun little combination of
+[50.7s] like
+[52.3s] AI assisted changes to existing open
+[54.4s] source libraries. It's uh a bunch of
+[57.0s] cloud code pipelines and slash commands.
+[59.0s] So, I figured I would show you all how
+[61.2s] that works today. Uh, and then we can uh
+[63.9s] we can walk through exactly how it works
+[66.4s] kind of under the hood and how it fits
+[67.8s] together. So, I'm going to do what we
+[70.2s] learned in demo school, which is uh they
+[72.7s] call it start with the end in mind.
+[75.5s] So, if I pop over to our handydandy
+[78.5s] whiteboard, um I'm going to just do a
+[80.8s] simple diagram. Um Bob, what do you want
+[83.0s] to what do you want a diagram for?
+[85.6s] >> Um
+[88.1s] let's do a diagram for how we uh how we
+[91.7s] do the how do we do the setup for this
+[95.0s] uh for this talk that we usually plan
+[97.8s] for.
+[98.9s] >> So, the emails, everything else we do.
+[102.1s] >> Yeah. Uh okay, cool. So, we have like
+[104.4s] episode name,
+[107.0s] episode description,
+[110.8s] and then we have the uh
+[114.3s] we have the like next week's link.
+[117.8s] >> Oh, yeah. So, it's like next week's
+[119.7s] episode name,
+[121.9s] next week's episode description, next
+[124.5s] week's like signup link. This is how we
+[126.2s] generate the email that comes out every
+[127.7s] week. Um,
+[129.9s] and then we also take in the like last
+[132.6s] week's YouTube link.
+[135.7s] And so basically we want to write an
+[137.1s] email that is like here's what we did
+[138.5s] yesterday and here's what's coming up
+[140.6s] next week basically um
+[144.1s] from last week's episode. So we have
+[146.7s] like an AI generated summary from last
+[148.8s] week's episode and then we pass this all
+[151.3s] into uh draw this in. We pass this all
+[155.4s] into a like custom claw slash command.
+[161.5s] And what we get out of this is some
+[164.7s] metadata
+[167.0s] and some uh what else? It's like the uh
+[170.9s] for the next episode
+[173.5s] >> uh
+[173.9s] >> which causes it to show up here.
+[178.2s] So, this site is all based on um a bunch
+[182.1s] of like code that basically reads JSON
+[184.5s] from the AI that works repo.
+[189.6s] Let's see.
+[192.6s] Where does this live by Bob? It's like
+[194.0s] in each folder, right?
+[195.4s] >> It's in each folder. You can go into it
+[196.9s] and you can click on the metapiles. So,
+[199.4s] you read this meta file. It pulls out
+[201.0s] all the data. Uh and then it writes that
+[203.7s] into a giant JSON file that's on the
+[205.2s] root of the directory.
+[207.0s] >> Yeah. And this powers the RSS feed that
+[209.2s] is this thing. So it shows here's the
+[211.2s] upcoming episode and all this.
+[214.4s] >> Um, and it also powers the read. It also
+[217.1s] like updates the readme, right? It's
+[218.8s] like next episode building an animation.
+[221.0s] >> We turn the JSON into like a
+[222.6s] >> Sorry. Go ahead.
+[223.6s] >> We turned the whole JSON into basically
+[225.1s] a bunch of different outputs for
+[226.6s] different viewing systems that people
+[228.3s] might want.
+[229.6s] >> Yep. Um, so anyways, um, so we get the
+[232.9s] metadata for the next episode and we get
+[234.2s] a draft of the email recap, right? So
+[238.6s] like summary and the YouTube link and
+[240.2s] everything that's coming next week. This
+[241.5s] sets up the the repo. Um, I think it
+[243.8s] also does it update the metadata for the
+[245.7s] previous episode too, right?
+[247.7s] >> It does update the metadata for the
+[249.9s] previous episode and generate the read
+[251.4s] me for the previous episode. Ah,
+[253.7s] >> okay. Cool.
+[264.7s] Um, amazing. And I'm just going to color
+[268.6s] code these a little bit. So, the stuff
+[270.4s] for the previous episode is will be in
+[274.5s] blue and the stuff for the next episode
+[276.5s] will be in red.
+[279.2s] >> Maybe make the cloud social command uh
+[282.1s] uh Yeah, let's make that one like white.
+[284.2s] Yeah, exactly.
+[285.5s] >> Okay, cool. So here we have like kind of
+[287.3s] a fun diagram, right? And this is
+[288.6s] actually not what we're talking about
+[289.6s] today. I just needed something that we
+[291.0s] were going to draw. Um, so what I can do
+[293.2s] is I can save this. Um,
+[297.3s] and this will download an Excal file,
+[300.6s] right? So this if you look at this file,
+[302.7s] I think maybe we can just open in VS
+[305.5s] Code.
+[311.8s] See what we got in here.
+[312.8s] >> It's a giant XML file, I think, right? I
+[315.4s] think it's JSON, but yeah.
+[317.0s] >> Oh,
+[318.0s] >> so it just has like data about all of
+[320.5s] these objects and when they were created
+[322.7s] and their timestamps and the colors and
+[324.7s] all this kind of stuff. So this is the
+[326.7s] full drawing. You can upload this from
+[328.3s] scratch. This is every single thing.
+[330.0s] This is enough to kind of restart it or
+[331.6s] re-upload it or export it or whatever it
+[333.5s] is. So what we can do with this file
+[336.4s] though is uh there's a cool project
+[338.2s] called Excalate.
+[342.5s] a random thing I saw in Hacker News like
+[344.5s] nine months ago that I've been kind of
+[346.0s] hacking around with ever since. Um, he
+[349.3s] has a hosted version of it where you can
+[351.3s] drop in your file
+[354.5s] and then you can and then it will
+[356.2s] animated. And so this is going to
+[358.6s] actually just look at the timestamps on
+[360.3s] all the objects and then draw them in
+[362.7s] order so that you can uh generate cool
+[365.8s] little images. And it has this feature.
+[368.2s] You can export this to a SVG. You can
+[371.0s] also export this to a webm um which is
+[373.6s] what our custom code is going to do. So
+[375.8s] you kind of you give it a tab to view. I
+[379.2s] think [clears throat] it's
+[384.6s] >> uh maybe make it just point it to the
+[386.2s] podcast. Uh yeah, sure.
+[389.8s] >> So what this is going to do is literally
+[391.4s] like share your screen and record the
+[394.3s] animation and then convert it to a webm
+[396.8s] which is like an MP4. It's just like a
+[398.6s] web video format.
+[401.0s] It's a really clever hack of how to
+[402.6s] generate a web.
+[404.2s] >> Yeah, it's it's kind of it's kind of
+[406.4s] unhinged. And so now it's exported
+[409.8s] and I think we should be able to
+[412.1s] download it. They updated this. Yeah,
+[414.8s] export to WebM. There we go.
+[416.8s] >> So this is my like
+[422.1s] um So yeah, so here's our webm file. So
+[425.3s] you can put this on YouTube. Um, and so
+[427.7s] like when I when we go on YouTube and I
+[430.0s] go uh
+[433.3s] human layer,
+[435.8s] maybe it's at human layer.
+[437.4s] >> It's at Yeah.
+[439.4s] >> No, this is somebody else. Is it human
+[441.8s] layer dev?
+[444.3s] >> Yeah. Know your channels.
+[447.6s] >> I don't know my channel.
+[449.6s] >> We'll just go to YouTube. I think we
+[451.0s] have it. Yeah.
+[452.2s] >> Yeah. Yeah. So you can just take these
+[454.7s] webs and upload them directly to
+[456.6s] YouTube. So here's a bunch of stuff that
+[458.4s] I've been working on. So you can kind of
+[459.8s] just come open this link and this is
+[461.8s] what we end up using in slides and
+[463.9s] Google talks and things like this. So
+[465.5s] this is like how do you compress context
+[467.0s] from a bunch of repos. This is
+[468.3s] irrelevant also to what we're talking
+[469.8s] about today. Um but uh that's kind of
+[473.6s] the the basics of it. I got really
+[475.7s] annoyed because I made a lot of these
+[477.1s] and I didn't want to come here and
+[478.4s] upload files and do all this stuff. So,
+[481.2s] I have a fork of Excalibur Animate,
+[483.4s] which we'll put a link to in the in the
+[485.5s] code, uh, where we built a headless
+[488.1s] version of this. And so, I'm going to
+[489.8s] show you kind of the, um,
+[493.1s] this one was doing some research that
+[494.6s] we'll share as well, which just explains
+[496.1s] how it all works.
+[499.4s] Um, but what I'm going to do is,
+[503.9s] um,
+[505.7s] see,
+[510.2s] >> while you look this up, I think half the
+[512.6s] battle here, it's honestly just about
+[514.2s] knowing about the right to tools to be
+[515.8s] able to use. So, what's funny is like we
+[517.7s] could be talking about how to animate
+[518.7s] Excel draw videos and every one of us
+[520.7s] will be like, "That looks beautiful.
+[521.8s] That looks great." But if we don't know
+[523.0s] about that new tool that doesn't
+[524.7s] accelerate, we probably would have just
+[527.0s] not even either come up with the idea
+[528.3s] ourselves or even have done it or even
+[531.3s] have like done the extra leg work to go
+[532.9s] build that kind of tool chain.
+[535.1s] >> Yep.
+[535.5s] >> So I think it's just really interesting
+[537.0s] to show the marriage of like regular
+[539.6s] software with like what we're about to
+[542.3s] do, which is like some sort of
+[543.2s] automation on here.
+[545.1s] >> Yep. So this is the prompt. I'm actually
+[546.8s] just going to show you how it works. Um,
+[550.5s] and I'm going to give it the file. What
+[552.4s] was the file we made?
+[554.2s] >> It's in your
+[554.9s] >> download workflow.excaladraw.
+[559.4s] Workflow.excalraw.
+[563.4s] And we'll put it in desktop.
+[571.0s] And so what this is going to do is it's
+[573.1s] going to read a bunch of tools that we
+[574.7s] built. We'll walk in walk through like
+[576.3s] each of these tools and how they work.
+[577.7s] But I just kind of want to show you what
+[578.7s] the end result is. Is basically this is
+[581.6s] going to use my fork of Excalate to do
+[585.4s] the webm recording in kind of a headless
+[587.7s] way with a headless browser or not
+[589.5s] headless but a like using browser
+[591.4s] automation. And then it's going to um
+[596.2s] what is it going to do? It's going to uh
+[598.6s] let's just put this in bypass
+[600.1s] permissions. It's going to take that
+[602.2s] like video and ask me to review it. And
+[604.5s] then if it works well, then we'll then
+[606.2s] we'll then we'll ship it to YouTube. And
+[608.3s] so it's kind of a full endto-end
+[609.7s] pipeline of going from the workflow to
+[612.6s] YouTube in one go. And so the basics of
+[616.2s] this is like you have your like
+[618.5s] file.excaladraw.
+[622.8s] The model's going to read this and some
+[624.4s] tools.
+[626.3s] And then what Claude's going to do in
+[628.0s] order is um
+[632.7s] CLI command to upload
+[635.8s] the video
+[637.7s] and then or sorry to generate the webm.
+[641.1s] >> Yeah. And that means it's going to use
+[643.3s] playright and a bunch of other things
+[644.7s] I'm guessing to go do that.
+[647.0s] >> Uh I don't exactly remember what it
+[648.8s] uses. It's whatever. It's literally like
+[650.6s] I did a research plan implement of like
+[653.0s] here's what I want to be able to do and
+[654.4s] then I had Claude go build it. So yeah.
+[655.9s] So here it is launching the browser.
+[657.4s] It's doing all of this in a row. I also
+[659.5s] added flags to be able to control the
+[661.9s] animation speed. And I also found issues
+[665.1s] with uh it doesn't load the Excalibur
+[668.0s] fonts well and I was too lazy to go
+[669.6s] figure that out.
+[670.8s] >> Um but here we go. This thing ran the
+[672.9s] script and it did all the stuff and now
+[675.4s] it has a file.
+[679.8s] Um, when it's done, it's going to
+[681.4s] actually like tell me where it is and
+[683.3s] like ask me to confirm.
+[686.7s] >> Um, okay, cool. So, it's still the
+[688.3s] desktop. Yeah.
+[690.1s] >> Well, actually, go on. I'll let you keep
+[692.0s] going on.
+[692.9s] >> I have a couple questions about this
+[694.0s] workflow as you're doing this.
+[695.7s] >> Yeah.
+[696.1s] >> Because my first question about this
+[697.4s] workflow is like, while this is
+[698.5s] incredible,
+[700.2s] >> why run it through Claude? Like, why not
+[702.6s] just write a bash script that just does
+[703.9s] this? Feels like a very, very linear
+[705.8s] flow. Uh, it's a good question. Yeah, it
+[708.1s] could probably just be a bash script,
+[709.8s] >> but it's not it's not about that. What
+[711.1s] I'm trying to ask is like what what do
+[712.4s] you think was your intuition? Like there
+[713.6s] must have been some benefit that you
+[715.2s] were getting in the beginning by doing
+[717.0s] it this way.
+[718.4s] >> Um,
+[719.4s] >> um I Yeah, I think it was really like
+[721.1s] Claude was making edits to the tools and
+[724.1s] adding CLI flags and like figuring out
+[726.6s] how to run the stuff. And so I never
+[728.5s] even like ran this CLI myself. Like I
+[730.6s] was having Claude edit this like fork of
+[733.1s] Excaladraw animate and then run the
+[734.8s] commands. like I don't even know the
+[735.9s] syntax of this. Like Claude designed the
+[737.6s] syntax of this and built it for itself.
+[740.3s] >> I think that's actually the most
+[741.5s] interesting part here. Like this tool is
+[743.1s] awesome. Um and I suspect hopefully many
+[745.5s] people want to go do this and like maybe
+[747.0s] we can turn into a simple bash script.
+[749.4s] But I think the real benefit here is
+[752.2s] kind of similar to like I think someone
+[755.0s] else might ask a very simple question
+[757.0s] which is like in the very early days of
+[758.7s] Python why join this Python when you can
+[761.0s] write this in C and like you could save
+[763.4s] so much more memory about it and perhaps
+[766.1s] almost the question I'm asking is like
+[767.8s] why are you burning tokens every time
+[769.2s] you run this when you can just run a
+[770.5s] bash script and maybe the fact of the
+[773.2s] matter is like what you're really buying
+[775.8s] here is you bought time to not have to
+[778.5s] think about a task. You let it be fully
+[780.4s] automated and now whenever you go into
+[782.1s] it, you just run kind of like a slash
+[784.6s] command, kind of like a CLI command
+[786.2s] basically.
+[787.0s] >> Exactly.
+[787.6s] >> That slash command operates in a way
+[789.9s] that allows you to one continue treating
+[792.6s] this like a bash script, but also remind
+[794.4s] yourself that like you if you need to,
+[796.2s] you can always adapt the workflow on the
+[797.9s] go. Like maybe there's a new command you
+[800.6s] need.
+[801.4s] >> Yeah. And we talk about this also in
+[802.9s] like 12 factor agents uh of like
+[805.3s] basically like the valuable thing that
+[807.0s] LLMs can do is turn human words into
+[810.6s] JSON unstructured data into structured
+[813.0s] data. And so for example, if I said that
+[815.1s] was too fast, I can say like make it
+[817.3s] slower.
+[819.6s] Um and this is literally just going to
+[821.2s] redo the generation with a different
+[823.0s] speed param.
+[826.1s] To be fair, I could also do up up up d-
+[829.3s] speed slower and like that that can also
+[832.0s] do it. But I
+[834.3s] >> Yeah, if it's at the end, but what if
+[835.8s] it's in the middle and you got to
+[837.4s] remember Yeah, I'm with you.
+[839.3s] >> It's just work. I I agree. It's a
+[841.0s] different kind of work that you have.
+[843.0s] >> Yeah.
+[843.4s] >> And I think what's interesting about
+[844.8s] this whole system is like
+[847.0s] >> as a developer, it's almost like your
+[848.9s] your personal mindset has shifted.
+[851.0s] >> Like the fact that you in your brain
+[852.8s] were not even instinctively like, "Hey,
+[854.4s] I could have written this to the bash
+[855.4s] script." If you were just like, I'll
+[856.3s] just do this and I'm done. I solved my
+[857.7s] problem. I'm going to move on.
+[859.2s] >> Yeah.
+[859.4s] >> I think that's what software is about.
+[861.8s] And that's kind of what you're doing
+[864.1s] here. Like it probably cost me like X
+[865.8s] dollars or X cents to run this every
+[867.4s] single time.
+[868.7s] >> And in your brain, you're just like
+[870.6s] work, it's fine.
+[872.2s] >> Yeah. Not my biggest problem. On to onto
+[874.3s] the next thing.
+[875.8s] >> That's kind of what I'm realizing. And
+[877.2s] like that mind shift I think is the
+[879.0s] most interesting parameter here.
+[880.4s] >> Yeah. And about probably two out of
+[882.3s] three times I try to do that and it like
+[883.9s] doesn't go well. Also, I thought this
+[885.1s] one was interesting as one that did like
+[886.6s] I'll be like cool, let's see if AI can
+[888.0s] just write the script for this and do it
+[889.2s] and solve it for me. Um, and this is how
+[891.5s] we develop all the tools, right? Like I
+[893.0s] think the the LM is more useful in a
+[896.2s] tool like, hey, fetch all my calendar
+[897.8s] events and then summarize them for the
+[899.5s] day. Like, yeah, I can write the tool to
+[901.0s] do that and then it can go do the thing.
+[903.0s] Um, but the other thing that's cool here
+[904.8s] is like it's, you know, when I
+[906.4s] regenerated this and then when I'm
+[907.7s] ready, I don't go do a bash script. I'm
+[909.4s] just like, okay, upload that bad boy.
+[913.7s] see if this will send.
+[916.8s] Uh, so what this is going to do is like
+[918.2s] go and like I don't have to like go get
+[920.3s] the file path that was generated output
+[922.6s] and pass it as the input to the next
+[924.4s] command. Like Claude is just kind of
+[926.1s] fing those like pointers through the
+[928.2s] different like tool calls for me.
+[930.6s] >> Yeah.
+[930.9s] >> You know what I mean?
+[932.1s] >> Yeah. It's abstracting away a way of
+[934.2s] thinking that you don't have to think
+[935.3s] about anymore.
+[936.8s] >> Yep.
+[937.1s] >> That I think is really interesting. Now
+[938.9s] I have a couple more questions about
+[940.2s] this. So I think the most interesting
+[942.0s] thing to go here I I don't know if other
+[943.8s] things you want to show but I have a
+[945.7s] direction I'd love to take this in.
+[947.8s] >> Let me just finish the demo and make
+[949.1s] sure this is working and then and then
+[950.7s] let's let's let's let's dig in. So yeah,
+[952.4s] it says it's uploaded. I think it takes
+[954.3s] like actually a second to process. But
+[955.8s] yeah, so here's the video and then I can
+[957.7s] go pop this in, you know, slides new and
+[961.8s] I can insert a video.
+[966.9s] Dump this in. And now you've got a handy
+[969.4s] little animation for your talk.
+[972.6s] And we'll do play automatically. And
+[975.0s] then we'll do slideshow. And this should
+[976.6s] just pop up. Ah, I made a little Yeah,
+[979.4s] usually we make them bigger, but
+[981.7s] >> yeah, that's sick.
+[982.5s] >> Um, yeah, that's the that's that's the
+[985.2s] workflow.
+[987.0s] >> Um, so firstly, I feel like people want
+[988.8s] this, but and we should put the if
+[990.2s] you're down, we should just put the
+[991.3s] prompt and the workflow in a folder in
+[993.5s] the new episode.
+[995.0s] >> We'll just put it in the new episode.
+[996.1s] We'll put the prompt. Uh, I think I can
+[998.1s] also even just share the tools. These
+[999.4s] are all in like one of our private repos
+[1000.9s] that we use for doing lots of stuff with
+[1002.4s] YouTube. But, um, yeah, it's like
+[1005.8s] >> cool.
+[1006.3s] >> But I have a separate question now. So,
+[1008.6s] >> yeah,
+[1009.4s] >> here's the direction I'd love to take
+[1010.6s] this and I think people would really
+[1011.8s] enjoy seeing this done in real life and
+[1013.3s] it would be valuable to me as well, more
+[1015.0s] importantly, which is what I want to see
+[1017.1s] is how would I go take this workflow?
+[1020.8s] And one of the most annoying things
+[1021.8s] about Scalic draw diagrams and these
+[1023.5s] animation that you're making is
+[1024.6s] obviously I want to change the order and
+[1026.0s] semantics of how these animations
+[1027.4s] happen. Let's do it. Can you do it?
+[1029.2s] >> So I will show you my workflow for this.
+[1031.6s] It's pretty jank, but basically it's it
+[1033.8s] comes from I've been hacking on this in
+[1035.7s] a while and I happened to know what the
+[1038.2s] Excaladraw format is and kind of took a
+[1040.7s] guess at um
+[1044.1s] what how how the tool was working under
+[1046.0s] the hood. Um, but you see you have all
+[1047.8s] these elements and one of the things on
+[1049.9s] the element is
+[1052.3s] updated
+[1054.1s] and this is like a Unix time stamp.
+[1056.3s] >> Yeah.
+[1056.6s] >> And so this tracks actually I think it's
+[1058.3s] not updated. I think it's it's one of
+[1060.6s] these numbers in here. But basically
+[1062.5s] like let's say I wanted to redo this
+[1064.6s] animation and I wanted to do like
+[1067.8s] um
+[1068.5s] >> I want to show like all the blue stuff
+[1070.6s] first.
+[1071.9s] >> Yeah. So then I would basically take
+[1073.8s] everything else. I'm going to do a janky
+[1076.0s] version of this. Um, but I would take
+[1078.2s] everything else and I would like command
+[1079.8s] exit to remove it and then I would paste
+[1081.7s] it back in. And now these things all
+[1083.4s] have new time stamps basically.
+[1086.6s] >> So, first let's try that. See if that
+[1088.3s] works on Excalibur animate.
+[1090.9s] >> Yeah. Um, I'm going to get rid of this
+[1093.1s] and we'll save this
+[1095.6s] and I'll just say now do workflow
+[1098.5s] 2.excal.
+[1106.7s] And what I really want to see is I want
+[1108.4s] to be able to modify the cloud code
+[1109.9s] command that you have.
+[1111.4s] >> Yeah.
+[1111.9s] >> To go edit in this way. Like I want to
+[1113.5s] be able to say, "Hey, I want to modify
+[1114.7s] all the I want to make all the blue
+[1116.6s] stuff go first."
+[1118.6s] >> Ah, okay.
+[1120.9s] >> This is a big ass This is a big ass JSON
+[1123.0s] file. So, it's like
+[1124.6s] >> a lot of context and probably hard for
+[1127.4s] Claude to reason about, but I actually
+[1129.2s] don't know it.
+[1130.5s] >> Yeah. How would you go about this?
+[1132.8s] >> Yeah. Um
+[1135.9s] >> because even even in the world that you
+[1137.4s] did, you actually did it the opposite
+[1138.5s] way where you accidentally swap the
+[1140.6s] order.
+[1141.7s] >> Yeah.
+[1142.5s] >> Yourself
+[1145.1s] and I want to literally look at your
+[1146.6s] workflow for adding that feature in.
+[1149.1s] >> Um sure. So this is a research thing
+[1152.2s] where I basically actually happened to
+[1153.6s] have done a research on the whole system
+[1155.9s] and it wrote this big ass research file.
+[1157.8s] I still have plenty of context left, so
+[1159.4s] I'm just going to resume from here. But
+[1160.8s] like, well, let's make a plan. I want to
+[1163.4s] build a tool in Excaladraw
+[1168.3s] animate to reorder. Well, actually, what
+[1171.8s] I would probably want to do is like
+[1173.9s] summarize the elements as markdown and
+[1176.6s] so the model could basically like swap
+[1179.0s] things around.
+[1180.6s] >> I think Vasin's key here is actually the
+[1183.3s] most important part. I think this this I
+[1185.0s] actually slightly disagree. I think it's
+[1186.6s] actually this jQ is key.
+[1190.6s] >> Ah, interesting. See, the problem is is
+[1193.0s] I don't want the model to read all of
+[1195.4s] that JSON because it's going to eat.
+[1197.0s] doesn't have if it does jQ have you JQ
+[1200.0s] should somewhere anyway we can why don't
+[1201.5s] we just put a research plan to try the
+[1204.6s] try the a research to go figure it out
+[1208.2s] and see how it could go reorder the
+[1210.2s] elements and like we can do use jq we
+[1211.9s] can use markdown rendering we can
+[1213.4s] basically do anything else we want on it
+[1214.7s] and try
+[1215.8s] >> but jq I think is structured g is the
+[1217.8s] right way to think about it oh yeah
+[1219.4s] baskin just said that
+[1226.0s] >> but again I I think it just goes down to
+[1227.4s] a couple of different things. Um where
+[1230.2s] it's really about uh like knowing these
+[1233.6s] tools. So like Dexter, your default is
+[1236.0s] to think really hard about thinking
+[1238.9s] about like using markdown because that's
+[1241.0s] what you've been doing for a while and
+[1241.9s] Vasin probably has used JQ quite a lot.
+[1244.2s] So it feels like more intuitive to think
+[1245.8s] about it and it's just a matter of tools
+[1247.3s] and exposures.
+[1248.9s] >> So JQ is good. Um but yeah, you're
+[1251.6s] right. You could use like uh
+[1254.1s] >> and it might be a combination of both.
+[1256.4s] It might be it might be a combination of
+[1259.1s] both that actually is most relevant here
+[1265.5s] with a human during reordering
+[1270.2s] to uh script or jq command to
+[1277.2s] um
+[1279.0s] uh what is it a script or jq command.
+[1282.1s] Make sure you understand how excalid
+[1285.4s] draw animate decides the order to render
+[1289.3s] animation elements in.
+[1291.8s] >> Why create plan and not research
+[1293.3s] codebase?
+[1294.6s] >> Uh cuz in this thing I literally just
+[1296.7s] did a research codebase like before we
+[1298.6s] started the episode. I just said like
+[1300.1s] read the excal animate command. Give me
+[1302.0s] I I I figured it would be useful for
+[1303.8s] this episode.
+[1305.0s] >> Okay, cool. Nice.
+[1306.9s] >> Yeah. So let me just pop back to the end
+[1308.9s] here. Um, make sure you understand how
+[1310.9s] Excel draw animate decides the order to
+[1312.3s] render out. Shuffle them around based on
+[1316.2s] human feedback.
+[1318.2s] Remember
+[1321.2s] this will be used with a model like
+[1324.1s] clawed code.
+[1327.1s] So it is
+[1330.8s] not appropriate to read the entire JSON
+[1333.8s] file or write JSON directly. Um, JSON
+[1336.9s] must be summarized by bash or scripts
+[1339.4s] and JSON must be written by programs,
+[1342.1s] not by models.
+[1344.4s] >> Um,
+[1346.2s] yeah,
+[1347.7s] let's see what it does.
+[1352.4s] We'll see what
+[1353.0s] >> Oh, and I forgot one thing. Uh, I forgot
+[1355.0s] the magic words. I've been finding more
+[1357.0s] and more that the the the it's it's
+[1360.0s] really valuable to just kind of give a
+[1361.9s] little bit of extra guidance on these
+[1363.2s] things, no matter how much you put on
+[1364.5s] the prompt.
+[1365.8s] Um, it could be really valuable to just
+[1367.8s] say like work back and forth with me and
+[1370.5s] start with your open questions and
+[1371.8s] phases outline before writing the plan.
+[1376.5s] >> Oh yeah. And you want that to be
+[1379.4s] basically the most recent token at all
+[1381.0s] times.
+[1382.0s] >> Yeah, basically it's like Yeah, it's in
+[1383.5s] the prompt, but yeah, putting it at the
+[1385.2s] very end as like the most important
+[1386.8s] instruction never hurts.
+[1390.4s] All right, let me just double check.
+[1391.8s] Okay, yeah, it's only reading 200 lines
+[1393.4s] like I told it to.
+[1397.5s] And it should get enough of the shape.
+[1403.9s] >> You can just ask it to generate a jaq
+[1406.1s] command to describe the schema shape by
+[1408.2s] the way.
+[1410.1s] And that would actually give it
+[1411.1s] everything without actually reading the
+[1412.2s] full shape. And I bet the keys are good
+[1413.5s] enough.
+[1416.2s] >> Yeah, I think that's right. Okay. Yeah.
+[1417.6s] So that was reading 200 lines was about
+[1419.5s] 3 or 4% of our context window. So but in
+[1422.3s] this case I think it's worth it. Like
+[1423.9s] sometimes you just want that context in
+[1425.8s] because it's relevant.
+[1427.4s] >> Yeah, I would have actually read the
+[1428.6s] whole window because just so it knows
+[1430.2s] the because like recursive structures
+[1431.8s] get really complicated in Excala draw.
+[1435.0s] >> Yeah, I don't I don't use a lot of
+[1436.2s] recursive structure. That's also part of
+[1437.6s] it is just like keeping your Excalibraw
+[1439.5s] simple and like focused.
+[1440.8s] >> Okay, that's a good point. Yes, you can
+[1442.6s] constrain it from the top level because
+[1444.2s] we're not trying to build a general
+[1445.1s] purpose tool. We're just trying to like
+[1446.6s] we as users can constrain what we do.
+[1449.4s] >> But like also like here's another like
+[1451.1s] this is a really small simple one.
+[1453.6s] Oh my god, Google wants to know that
+[1455.2s] it's me.
+[1457.3s] Is it going to kick me out again? Uh,
+[1460.6s] like here's like a much more complex
+[1463.5s] like video that has like hundreds of
+[1465.5s] elements in it. All right,
+[1467.2s] >> for being asked a question, what apps do
+[1468.9s] you use to do audio to text? I
+[1470.9s] personally use Whisper. Dex uses Super
+[1473.0s] Whisper. Uh, honestly, I think any of
+[1475.5s] them are really good enough. Uh, voice
+[1478.5s] to text is a pretty good problem.
+[1480.1s] There's open source options, there's
+[1481.8s] free options, there's local models. I
+[1484.2s] personally don't think that there's any
+[1485.6s] huge win on any one of them. I just hate
+[1488.2s] changing my workflow. So, I will just
+[1490.3s] use the app that I have been using for a
+[1492.1s] while.
+[1493.4s] >> Yeah. So, here's the other one we
+[1494.6s] launched where we made all the blue ones
+[1496.6s] come first basically.
+[1498.3s] >> And I didn't mess with the arrow. This
+[1499.6s] is also like another thing where it's
+[1500.8s] like, okay, yeah, you're right. It would
+[1502.1s] be nice to have a script where I could
+[1503.3s] just be like make all the errors arrows
+[1505.0s] come last or something like this. It's
+[1506.2s] like getting the AI to actually
+[1508.2s] manipulate the contents of the animation
+[1510.5s] is a is a funky one.
+[1512.6s] >> And I think that's where like the
+[1513.8s] superpower of AI does come in a lot
+[1515.5s] more. It's like, oh, that is suddenly
+[1516.7s] good. We're like, hey, make all the
+[1518.3s] arrows should just pop in at once.
+[1520.7s] >> Yeah.
+[1521.2s] >> Like there's small things like that that
+[1522.6s] we could go do and like
+[1524.7s] >> I've missed a lot with like doing like
+[1527.4s] AI assisted modifications to Excalibur
+[1529.8s] Animate. Although last time I tried it,
+[1531.4s] I was not doing RPI. It was like in like
+[1533.6s] like February or March. So, um, we'll
+[1536.7s] see how this plan comes out, but,
+[1542.6s] um, cool. What else you want to see?
+[1544.3s] >> Well, I think that's probably the most
+[1545.7s] interesting thing. I really want to see
+[1547.0s] your workflow of how you iterate on this
+[1548.4s] and how you actually make this make
+[1549.6s] progress because like for me that was
+[1551.8s] the most insightful thing when I first
+[1554.0s] like tried to do coding cuz I've said
+[1557.0s] this many times like I have never felt
+[1558.6s] skill capped in producing code. I have
+[1560.8s] always been able to produce more code. I
+[1563.0s] like my skill cap has been the rate at
+[1564.5s] which I can type code in. Not really the
+[1567.1s] rate at which I can think about code.
+[1569.0s] And AI when it first came out, it still
+[1572.5s] did not feel like it unblocked me. Like
+[1574.3s] cursor tab complete was the most I
+[1576.1s] really used for a while. The agent
+[1578.5s] workflow was just not that good for me.
+[1580.4s] Like even cloud code on its own never
+[1582.6s] produced great results.
+[1585.1s] But at some point I think I saw you work
+[1587.3s] with AI and I was like
+[1589.8s] I can do a lot and now I can find that I
+[1591.8s] can paralyze like three or four tasks in
+[1593.5s] parallel when I'm really focused.
+[1595.2s] >> This is the thing you're talking I mean
+[1596.2s] like we talk about this a lot which is
+[1597.8s] like one of the key insights is like
+[1599.2s] don't outsource the thinking like you
+[1600.8s] need to bring your taste and your craft
+[1602.3s] and your ability to design systems as an
+[1604.4s] engineer and like what AI does is it it
+[1607.5s] can read a lot of code really fast and
+[1610.2s] it can write a lot of code really fast
+[1612.2s] but like the code won't be good unless
+[1614.0s] you are thinking about it and working
+[1615.4s] and engaging about it
+[1617.8s] >> and
+[1619.4s] because the actual coding part is fast
+[1621.9s] now you get to spend more time doing
+[1624.2s] high lever stuff like thinking and
+[1626.0s] planning and designing and uh Okay. So,
+[1628.8s] what you're saying is basically
+[1630.1s] >> tiring
+[1631.2s] >> because and in the old day when you were
+[1633.0s] capped by the code, you would like be
+[1634.4s] writing code and you would only have to
+[1636.0s] think as fast as you were able to code.
+[1638.2s] >> Yeah. Which just wasn't that fast.
+[1640.9s] >> Like I'm a [laughter] I'm not a I'm not
+[1642.5s] what I would say like a crazy fast
+[1643.8s] typer, but even the fast typers type at
+[1645.7s] like 100 words per 120 130 words per
+[1648.8s] minute or whatever it is. Um
+[1651.1s] >> yeah,
+[1651.5s] >> but it's not incredibly fast.
+[1654.4s] Um, yeah, like use if you ever use your
+[1657.4s] stats in Whisper Flow or any of them,
+[1658.7s] they're naturally be like you're talking
+[1660.2s] at 200 words per minute easily.
+[1662.0s] >> Yeah, there's some people I think
+[1662.8s] Whisper Flow even had like a leaderboard
+[1664.4s] where it was like here's the fastest
+[1666.1s] talkers in uh on
+[1667.9s] >> Exactly. And it's rare that anyone's
+[1669.8s] talking at 30 words per minute. Um,
+[1671.8s] let's go back to the other thing and
+[1673.4s] check it out. I was gonna say, yeah,
+[1674.5s] this is also the interesting thing about
+[1675.8s] like using AI to code is you end up with
+[1677.9s] like these downtime points while the
+[1679.8s] agent is working. And if you're pairing
+[1682.9s] on it, then it becomes very easy to just
+[1684.7s] sit and engage on the problem and think
+[1686.3s] and reflect and like frontload some of
+[1688.2s] the thinking for the next step. But if
+[1690.2s] you're doing this alone, I just end up
+[1691.8s] checking Twitter or email or something.
+[1693.3s] So I I think these workflows work a lot
+[1695.2s] better with two people.
+[1696.2s] >> Yeah, I think so too. And then you end
+[1697.6s] up in a world where basically the old
+[1699.3s] xac my code is compiling meme
+[1701.8s] >> just becomes a reality since my agent's
+[1704.0s] generating and you just go and waste
+[1706.4s] time for a while which actually in funny
+[1708.9s] enough makes you more distracted when
+[1710.8s] you go read the final plan that comes
+[1713.1s] out of the model and then you're
+[1714.8s] producing even worse quality content
+[1716.9s] because you're not actually reading
+[1718.2s] because you're already distracted and
+[1719.4s] you're coming back to a very low
+[1720.7s] engagement task in the form of reading
+[1722.7s] and therefore you're actually producing
+[1724.1s] worse output and then you're like this
+[1725.5s] stuff is not working.
+[1727.7s] >> Yeah. No, talking is way more engaging
+[1729.8s] and arguing and debating how which
+[1731.8s] library to use and all this stuff I
+[1733.3s] think is
+[1733.8s] >> exactly like even just us talking like
+[1735.7s] Markdown or JQ is they will make us want
+[1738.6s] to go read that in a little bit more
+[1740.1s] detail and what the plan was.
+[1755.0s] What other things might you want to tell
+[1756.3s] it if it's is asking for like what kind
+[1758.0s] of human interactions do you want to be
+[1759.5s] able to do?
+[1760.7s] >> Um, yeah, I guess that's good enough.
+[1762.9s] Um, or
+[1763.6s] >> this is going to be a little bit janky.
+[1764.6s] I haven't we don't have time to do like
+[1766.6s] the full whiteboard and design the heck
+[1768.2s] out of this system, but it's a good
+[1769.5s] idea.
+[1771.9s] Content
+[1774.7s] is essential.
+[1777.7s] XY position can skip. Animate order is
+[1782.2s] fine.
+[1783.8s] >> Yeah, we we literally just need to
+[1785.4s] animate the order and perhaps choose
+[1786.9s] what to animate and what not to animate.
+[1788.6s] Animate
+[1790.8s] or uh maybe that's not the right word.
+[1793.1s] Maybe what I want to say is like I
+[1794.5s] wanted to be able to build a logical
+[1796.0s] flow. So like it might it might be
+[1797.9s] useful for the model to decide that
+[1799.4s] given all this content here's the order
+[1801.0s] in which stuff should be rendered and
+[1802.5s] make its own decision on the ordering.
+[1806.2s] >> Oh actually
+[1807.9s] >> right that sounds super useful too like
+[1810.0s] it's like then I don't have to think
+[1811.4s] about it. I can build the diagram and
+[1812.6s] the model will just
+[1816.2s] figure out the ordering automatically
+[1817.8s] for me.
+[1830.4s] of elements etc. Okay, cool.
+[1837.5s] Grouped handling.
+[1839.4s] Don't worry about grouped elements.
+[1843.2s] That's out of scope for now.
+[1846.8s] >> Yeah, grouped elements. Yeah, that's I
+[1849.3s] guess it was my nested questions right
+[1852.1s] away.
+[1863.9s] >> This is the other magic word.
+[1865.0s] >> A lot of the stuff.
+[1866.4s] >> Yeah, go ahead.
+[1867.0s] >> Let you say what what's the magic word?
+[1868.9s] I want to hear that. I was going to say
+[1869.9s] a lot of times it tries to put we got to
+[1872.2s] update kind of the base prompt here, but
+[1873.7s] a lot of times it will try to put all
+[1874.7s] the testing at the end and it's like no,
+[1876.1s] I want you to write a unit test in each
+[1877.7s] phase.
+[1879.4s] >> Yeah.
+[1882.1s] What's really interesting about this
+[1883.2s] whole thing is just like just how much
+[1885.0s] downtime there is. I think the most
+[1886.6s] important thing about these workflows is
+[1888.2s] people should be paralyzing stuff. You
+[1889.7s] should never be working at one thing at
+[1890.9s] a time.
+[1892.9s] >> Yeah. I do find though
+[1895.9s] >> even if I'm fully locked in like and I'm
+[1898.6s] doing complex work that requires a lot I
+[1900.6s] mean if it's just little bug fixes like
+[1902.0s] we have a linear board where we just
+[1903.4s] kind of like push them through this
+[1904.7s] workflow and we don't even open them in
+[1906.1s] code layer. Um but uh
+[1910.5s] yeah if if I'm like locked in and doing
+[1912.3s] things really like two is still the max
+[1914.2s] for me I think.
+[1916.0s] >> Dude get good. I don't know what else to
+[1918.3s] tell you.
+[1919.6s] >> Yeah. Are you doing four four in
+[1921.0s] parallel
+[1922.3s] >> only? I can't. It's too much work. It's
+[1924.2s] like I have to be really focused. I
+[1925.5s] literally have to have no distractions.
+[1926.8s] I can do that only on weekends.
+[1929.1s] >> Yeah. Yeah. Exactly. It's like if I have
+[1931.1s] four hours on a Saturday, I can sit down
+[1932.9s] and just crank through and like fully
+[1934.6s] log in.
+[1935.8s] >> Um Okay, cool. Element filtering.
+[1939.4s] I don't care.
+[1942.8s] >> Um
+[1948.1s] I don't know. time for this.
+[1950.4s] >> Okay. Yeah. No, what I found personally
+[1952.9s] for myself is uh at least for us, we're
+[1955.7s] doing a lot of like complex like
+[1957.2s] compilers work right now and type
+[1959.0s] systems work and that is not very uh
+[1962.9s] >> uh like if you go check the YouTube
+[1964.3s] channel, there's a couple videos about
+[1965.3s] this. We've been building an incremental
+[1966.6s] parser. Uh, and what that means is like
+[1969.6s] in v Yeah. In VS Code when you're
+[1971.4s] writing code, you typically don't want
+[1973.4s] your autocomplete to reset every single
+[1975.8s] time
+[1977.5s] without having to every time you change
+[1979.4s] any you type into the keystroke. So
+[1981.2s] that's what the current BAML LSP does.
+[1983.2s] Every single time you type code, it
+[1984.5s] regenerates a whole system. It
+[1986.0s] regenerates autocomplete every single
+[1987.4s] time. What we're doing now is if you
+[1988.9s] change a character or two, it'll only
+[1990.5s] regenerate parts of it. And what that
+[1993.3s] means is one, we'll have way better
+[1995.4s] errors. So as you have errors, we'll
+[1997.0s] still like if you're rendering,
+[1999.6s] let's say you're rendering one function
+[2001.1s] today and you're rendering a prompt and
+[2002.5s] playing around with that prompt and you
+[2003.6s] start editing a different prompt.
+[2005.6s] >> Yeah.
+[2005.9s] >> Currently the old function may break if
+[2009.0s] we write syntax.
+[2010.4s] >> Yeah, exactly. So it's either if if
+[2013.2s] something is broken, nothing works,
+[2015.8s] >> which is a fine way to write the first
+[2017.5s] version of the compiler, but we're
+[2018.9s] actually redoing that to make it
+[2020.2s] incremental. So like it's like in
+[2021.8s] Typescript when you make a syntax error
+[2023.6s] it doesn't break everything. It only
+[2025.6s] breaks part that part of the code. So
+[2027.8s] that's actually what we've been working
+[2029.0s] on and
+[2031.8s] it's cloud code has been uh I don't even
+[2034.1s] know if we're using pure cloud code. I
+[2035.4s] think we're using cloud codec. So people
+[2037.0s] on the team use different things. So
+[2038.2s] there's no actual prescription which I
+[2039.9s] think goes to show that there's no
+[2041.0s] specific tool chain that's actually
+[2042.3s] better than the other. I think they're
+[2043.4s] all pretty much about the same
+[2045.6s] >> in terms of correctness. I mean, I think
+[2048.0s] the a thing we talk about a lot with
+[2049.8s] that is like I think you get more
+[2051.4s] benefit out of picking one tool and
+[2053.8s] sticking with it. And it's like you said
+[2055.3s] like right the best way to get really
+[2056.3s] good at LM programming is to build
+[2057.8s] intuition. It was the like machine
+[2059.6s] learning engineer that you used to work
+[2060.9s] with. It was just like how do you know
+[2062.3s] this is better? He's just like I just
+[2064.3s] know like I can't explain it to you.
+[2066.4s] vibes. Having the vibes on how Codeex
+[2070.1s] behaves really really down or how Cloud
+[2072.3s] Code behaves really really down is so
+[2074.6s] much more valuable than like having some
+[2077.4s] crazy minmaxing thing where you're like
+[2079.1s] I use Claude for this and Codeex for
+[2080.6s] this and cursor for this. Like
+[2082.2s] >> have you found the vibes to be that
+[2083.9s] different
+[2084.5s] >> between cloud code and codeex?
+[2086.2s] >> Codeex cursor any of them? I personally
+[2088.4s] have not found it to be that different.
+[2089.7s] like they mostly serve my needs and like
+[2091.7s] maybe there's nuances but not in a way
+[2093.5s] that's like like for example if I work
+[2095.2s] with any of the engineers on our team
+[2096.6s] obviously they all have different things
+[2098.4s] >> but in general like
+[2100.9s] >> they're all really good and like it
+[2102.6s] doesn't really and
+[2104.2s] >> yes in extreme scenarios certain people
+[2106.4s] are really good at certain things like I
+[2107.6s] am not a detail oriented person you
+[2109.4s] don't want me doing a final release
+[2111.0s] checklist
+[2111.8s] >> I would be horrible at that
+[2114.6s] >> um on the other hand like Aaron and Sam
+[2116.6s] who's right there on my team they're
+[2117.9s] extremely detail oriented like if you a
+[2119.7s] checklist. I can if they say the
+[2121.0s] checklist is done, it is done. And I
+[2124.8s] think I know I just don't see that much
+[2126.6s] of an extreness in coding agents. But
+[2128.7s] maybe you have you work with them maybe
+[2130.2s] in a different parameter.
+[2132.0s] >> I mean there's a lot of cases where I'll
+[2133.4s] be like my I like I know my instincts
+[2135.2s] with Claude and my instinct is like
+[2136.4s] Claude would get this wrong and Codex
+[2138.0s] can get it right. There's also a lot of
+[2139.3s] things where it's like Claude would get
+[2140.4s] this right and Codex will get it wrong.
+[2142.0s] Um it has a little bit less to do with
+[2143.9s] like coding problems and stuff. It's a
+[2146.0s] little more meta of like if I come on
+[2147.9s] the like human layer uh prompts and
+[2150.4s] stuff like you'll notice some of these
+[2152.0s] prompts are like very long sets of
+[2155.4s] instructions
+[2157.0s] and what I've noticed is like a model
+[2158.8s] like sonnet so there's like context
+[2160.4s] gathering and then there's reading all
+[2161.8s] this stuff and then there's like doing
+[2163.2s] discovery with the user and then there's
+[2165.4s] like like planning the structure with
+[2167.4s] the user and then there's like writing
+[2169.1s] the whole plan and basically like and
+[2171.4s] then there's like syncing and reviewing
+[2173.0s] with the user and all these kind
+[2174.6s] basically like If you give this prompt
+[2176.0s] to Sonnet, there's a 50% chance that by
+[2178.0s] the time it gets to step three, it like
+[2180.2s] forgets what step it's on and there's
+[2182.4s] two more steps.
+[2183.9s] >> Versus like a model like Opus is really
+[2186.1s] good at like long horizon instruction
+[2188.3s] following where it's like it can use 30%
+[2190.1s] of the context window and it won't
+[2191.5s] forget what the original instructions
+[2193.0s] were.
+[2193.7s] >> And like I imagine Codex is similar
+[2196.2s] that's a metavibe thing. That's not like
+[2197.8s] Codex is better at Typescript and Cloud
+[2199.9s] is better at Python or something, right?
+[2201.4s] That's that's a model thing.
+[2203.4s] >> Yeah. And maybe what I was thinking
+[2204.7s] about is like these coding agents have
+[2207.1s] two different dimensions to it. One is
+[2209.1s] yeah
+[2209.4s] >> like the coding agent like the actual
+[2211.4s] prompt that the coding agent has and the
+[2212.8s] tools it has and the second dimension is
+[2214.3s] the model it uses.
+[2215.7s] >> And they're kind of orthogonal
+[2217.3s] >> cuz you can swap one out for the other.
+[2220.2s] And at least for me I generally I
+[2223.9s] actually stopped using Opus. actually
+[2225.4s] use Sonnet now a lot more because it's
+[2228.1s] just faster and
+[2230.2s] >> the speed is definitely like an
+[2232.6s] interesting bit of leverage because the
+[2234.3s] faster you can iterate the less it
+[2235.8s] matters that the first part was correct.
+[2238.6s] >> Exactly. And then we'll see if this what
+[2241.7s] what progress is made. And the other
+[2243.3s] thing that I found is
+[2245.7s] interestingly enough like the actual
+[2247.4s] coding agent and the tool harness
+[2249.0s] actually don't seem to make a big
+[2250.8s] difference to me personally. Like they
+[2252.9s] all seem the same. Like I actually find
+[2254.2s] myself, funnily enough, like I use I I
+[2257.0s] do use code letter for almost every
+[2258.2s] complex research task I have just
+[2259.6s] because it's easier to work with
+[2260.3s] markdown files in Obsidian. And you guys
+[2262.9s] do a great job of making that capable.
+[2266.5s] >> Oh, I got a new feature for you by the
+[2268.1s] way.
+[2269.2s] >> Oh,
+[2271.0s] >> you can now open your files in your
+[2273.1s] default editor just by clicking them in
+[2275.4s] code.
+[2276.6s] >> Which I guess shell scripts open in
+[2278.6s] Xcode for me, which is terrible. But let
+[2280.8s] me go change my
+[2284.2s] Wait, wait. Is there a button there for
+[2285.7s] Excaladraw?
+[2286.9s] >> You want to open a file in Excal?
+[2289.8s] >> Yeah, for markdown files. Of course I
+[2291.9s] do. Excaladraw is the best way to read
+[2294.2s] >> Obsidian.
+[2295.4s] >> Obsidian. Sorry, not Excel. Obsidian.
+[2297.9s] Obsidian.
+[2298.4s] >> Yeah. Send us a PR adding Obsidian.
+[2300.5s] We'll take it.
+[2301.3s] >> I love Obsidian uh for reading markdown
+[2304.0s] files.
+[2304.3s] >> Oh, no. No, I was just going to say this
+[2305.5s] is going to go rip through the plan and
+[2306.9s] build write a bunch of Python that is
+[2308.3s] probably going to be slopp cuz we didn't
+[2309.8s] actually do the thinking and we didn't
+[2311.1s] read the plan cuz we're we're in a hurry
+[2313.0s] here. But if you want to see us actually
+[2314.7s] go through this workflow, we do do an
+[2316.4s] episode like every six weeks where we
+[2317.9s] just sit down and code for three hours.
+[2319.5s] So, uh you can catch one of those.
+[2322.2s] >> Yeah, we'll I mean I think it might get
+[2323.9s] further than we think on here.
+[2325.9s] >> Yeah, we'll see. Um
+[2328.4s] but my I think my real question here is
+[2332.0s] like as this goes ahead and generates
+[2334.0s] stuff. Sorry.
+[2335.4s] >> So it is like making like jQ script.
+[2338.4s] >> Yeah. Exactly. I think the thing that
+[2340.7s] was mentioning earlier about like these
+[2341.8s] coding agent harnesses is like for
+[2343.2s] really small tasks what I find myself
+[2345.0s] doing is I just want the lowest UX
+[2347.0s] friction to make the task happen.
+[2350.6s] And that has been a game changer in
+[2352.4s] terms of productivity.
+[2354.6s] >> Yeah.
+[2356.8s] But like for like super simple
+[2358.4s] documentation tasks, I was like uh I
+[2362.0s] just used what's it called for super?
+[2367.0s] >> It made a reax to capture the element
+[2369.3s] type and where we're moving it.
+[2370.9s] >> Oh no, it did not use l. [laughter]
+[2374.2s] >> No. Uh yeah, it didn't it didn't
+[2375.9s] understand. Like I said, like this is
+[2377.3s] not a plan that I would try to rush
+[2378.5s] through in 10 minutes because it's quite
+[2379.8s] complicated. But uh it is doing things.
+[2382.2s] >> So
+[2383.0s] >> it's funny. We can come and come back
+[2384.8s] and iterate on this.
+[2385.7s] >> Okay, we'll probably have to go and
+[2386.8s] iterate on this. I And I think this is
+[2388.5s] the thing where it's like if we observe
+[2389.8s] this like I would just stop this. It's
+[2391.1s] probably a waste of money and tokens to
+[2392.5s] let it keep going.
+[2394.2s] >> Um I'll probably won't do anything
+[2396.2s] because like the minute you recognize
+[2397.6s] that it's doing something wrong, it's
+[2398.8s] like doomed
+[2400.6s] effectively.
+[2401.3s] >> Yep. That's the That's the other thing
+[2402.6s] we've been like doing a lot of talking
+[2403.8s] and like coaching about too is like
+[2406.1s] there are a bunch of different levels of
+[2409.3s] wrongness and like if your plan is if
+[2412.5s] you're like in the middle of
+[2413.4s] implementation and it finishes a phase
+[2415.4s] and it's like 95% of the way there
+[2418.8s] go fix it in cursor yourself. Go open VS
+[2420.9s] Code and change the thing. If it's like
+[2424.1s] 10 like 85% of the way there maybe you
+[2426.6s] just polish it just like in the same
+[2428.0s] session be like cool I don't quite like
+[2429.4s] this. Can you make the UI like square
+[2431.4s] corners instead of round corners? Like
+[2432.8s] you're not going to go edit it, but
+[2433.7s] you're going to just tell Claude to do
+[2434.8s] it. If it's even worse, maybe you say,
+[2437.8s] "Okay, cool. Phase one is done. We're
+[2439.6s] going to add a phase 1B that is like the
+[2441.9s] polish part cuz you wanted to use the
+[2443.5s] research and actually plan it out and
+[2445.0s] iterate on it. And then if it's way off,
+[2447.2s] it's like 60% there." It's like, "Cool.
+[2449.6s] Actually, we need to throw out this
+[2451.1s] code. we need to throw out the whole
+[2452.4s] plan and take what we learned in phase
+[2454.0s] one and apply it to build a new plan
+[2455.5s] because we realize that like it's easier
+[2457.8s] to start over than to try to recover
+[2459.4s] this like bad trajectory. Also, I just
+[2462.4s] want to be very clear for anyone that
+[2464.2s] thinks that this might be us uh not
+[2466.6s] talking about this
+[2468.8s] uh and like just like talking about it
+[2470.2s] and be like, "Hey, it didn't work here."
+[2471.5s] Like, we do this for extremely
+[2472.8s] complicated tasks. So, for those of you
+[2474.5s] that don't know, uh why are you guys
+[2477.8s] using the thoughts tool like the CLI or
+[2480.0s] whatever?
+[2481.4s] No, we just use Obsidian and we push
+[2484.1s] >> the Obsidian thing. Okay, cool.
+[2485.9s] >> Yeah. Uh but we do sometimes share with
+[2488.6s] GitHub.
+[2489.5s] >> Uh what we do is like to give you
+[2491.4s] context on what this is, Salsa has a
+[2493.0s] library in Rust that allows you to do
+[2494.6s] like caching and a bunch of complicated
+[2496.6s] things for like compilers and ASC stuff.
+[2499.4s] What we're doing is we're basically
+[2500.7s] limit we're basically mirroring what the
+[2502.8s] Rust compiler does in a lot of what
+[2505.2s] Baml's compiler does under the hood
+[2507.0s] somewhere. Where'd it go? Cool. Rust
+[2510.5s] analyze. Yeah. So, we're literally just
+[2512.0s] using rust analyzer as like a base for
+[2514.4s] design. We're using a lot of like UV ash
+[2516.6s] technology as a base for design because
+[2518.3s] they're also built in Rust. And we're
+[2520.5s] taking all the learnings from it and
+[2521.8s] just applying it to like some of the
+[2523.0s] more complicated things we do in BAML
+[2524.4s] now. And we literally generate this
+[2526.9s] whole file using AI. And there's a ton
+[2528.3s] of mistakes. Like I'll be very honest
+[2530.0s] with you guys and share the full thing
+[2531.2s] if I can. general
+[2535.0s] uh language. I sorry I need to make sure
+[2536.9s] that I don't share something that I'm
+[2537.8s] not supposed to.
+[2539.9s] Um we're like we talk about this and I'm
+[2542.2s] like hey this is a vi coding artifact
+[2543.7s] for this stuff and I'm very clear about
+[2545.4s] this. Um but it's just like yeah but
+[2548.7s] there's stuff missing and we recognize
+[2550.2s] that stuff is missing. We're just making
+[2551.7s] progress on it. There's another thing
+[2553.8s] where it's like hey this looks this
+[2555.9s] looks off. Yep. We just know that's
+[2558.0s] wrong. So, we're not actually expecting
+[2560.2s] these documents even to be 100% correct
+[2562.4s] cuz the amount of effort it takes to be
+[2563.8s] 100% correct is just way too high. We
+[2566.0s] just need them directionally. Perfect.
+[2568.6s] >> You want the plan good enough that like
+[2570.6s] you can if there's any issues like if
+[2572.9s] you're 90% of the way there like the the
+[2574.9s] final issues can be resolved in line and
+[2577.0s] you won't have to like throw it out and
+[2578.2s] start over. That's that's the definition
+[2580.2s] of good enough. And this is when I talk
+[2582.2s] about vibes and like getting a feel for
+[2584.6s] one model and what it's able to do is
+[2586.5s] like understanding when to just talk to
+[2589.4s] Claude versus when to add a new phase
+[2593.0s] versus when to just throw out the plan
+[2595.0s] and start over is like vibes and you
+[2598.7s] just like have to put in the reps to get
+[2600.6s] the sense of that and like it takes
+[2602.6s] repetitions to make it work.
+[2604.8s] >> Exactly. And there's no real shortcut to
+[2607.0s] this, but like the level of complication
+[2608.2s] that you can do here is like like this
+[2610.4s] is not trivial R code. Most people will
+[2612.4s] never write a compiler. Most people
+[2613.8s] never write an incremental compiler
+[2615.8s] where you have like a very little un
+[2618.1s] where you have uh um the ability to use
+[2621.4s] leverage um past edits by the user to
+[2625.1s] not have to rebuild the whole compile
+[2626.6s] code chain. So the fact that like we're
+[2628.7s] able to go build this completely from
+[2630.0s] scratch and like take advantage of LMS
+[2631.6s] to go do this. I think this would have
+[2634.2s] been easily a sixmon work item
+[2636.5s] beforehand.
+[2638.4s] We're bucketing this to be at most two
+[2640.0s] months.
+[2642.1s] And there's just no shortcut for any of
+[2643.9s] this stuff along the way. Uh what's cool
+[2647.0s] is I'll show you guys some of the
+[2649.7s] interesting stuff that this leads to
+[2652.0s] when you go do this. But obviously what
+[2654.7s] we want to go do is like we want to have
+[2656.2s] a really fast developer loop internally
+[2658.0s] for these kinds of workflows. So how do
+[2660.2s] we have fast developer loops? Well well
+[2662.2s] how do you have incredibly fast
+[2663.5s] developer workflows here is like well
+[2665.3s] you have to build internal tools and you
+[2667.1s] can see some of the internal tools that
+[2668.4s] we build. So we have a whole bunch of
+[2670.0s] testing suites that we built. But then
+[2671.4s] Greg literally spent like a day and a
+[2673.8s] half building out this internal tool
+[2675.8s] which allows us to go ahead and see
+[2678.2s] really quickly the diff.
+[2680.9s] As you can see over here, he typed out
+[2682.1s] some code and shows you the tip between
+[2683.4s] the
+[2684.4s] >> it's called the CST, which is slightly
+[2687.4s] different than the A. Uh, and you can
+[2689.5s] watch the videos and understand.
+[2691.7s] >> Yeah, you can understand the difference
+[2693.4s] between that. That's more nuanced, but
+[2695.4s] you can imagine that while we're
+[2696.6s] building this out, editing this tree is
+[2699.2s] really hard and knowing what this
+[2701.4s] version was versus the previous version
+[2703.1s] of it was on the previous edit of the
+[2705.0s] source code is really hard. So here you
+[2707.1s] can just we we built a snapshotting tool
+[2709.0s] where while you're developing you can be
+[2710.8s] like hey is this editing the right
+[2712.2s] things. So what we actually built is
+[2714.3s] like a whole tool chain so that you can
+[2715.8s] actually really quickly understand the
+[2717.5s] diff between systems with a color-coded
+[2719.5s] syntax. So as you go type something out
+[2721.3s] it shows you color coded what you added.
+[2723.6s] But obviously caching is a big part of
+[2725.2s] this too. We can also view what was
+[2727.6s] cached and what nodes were reused really
+[2729.6s] quickly by doing the color highlighting.
+[2732.4s] But this whole tool chain is spcoded
+[2734.7s] 100% of this. I say vi coded in the
+[2737.2s] sense like not in the dirty way that
+[2738.6s] people describe it [laughter] but in the
+[2740.5s] nice way where like we actually put some
+[2741.9s] time into it. We did this and again
+[2744.6s] normally a tool chain like this would be
+[2746.1s] weeks of effort uh or like at least at
+[2748.9s] least a week of effort. It's not trivial
+[2751.8s] but because of like kind of these
+[2753.6s] software practices that we have we can
+[2756.1s] get into a world where like this is
+[2757.5s] almost like an expectation for someone
+[2759.6s] to go build out now like build things
+[2761.9s] that make
+[2762.5s] >> you expect to use AI. Yeah. you're
+[2765.3s] expect to use AI to build tools that
+[2767.2s] help you like keep that iteration loop
+[2769.8s] tight. I'm curious, has anyone tried to
+[2771.8s] expose
+[2773.8s] like parts of this tool to a coding
+[2776.6s] agent and let the coding agent kind of
+[2778.3s] like iterate and be like, hey, here's
+[2779.6s] how you'll know if it's working as if
+[2780.9s] the final thing looks like this and just
+[2782.5s] like run back and forth looking at the
+[2784.1s] CST and the diff in a loop.
+[2786.4s] >> So, when I showed this, uh, this is what
+[2788.7s] happens. But again, coding agents are
+[2790.2s] not very good at UI stuff. So what we
+[2792.6s] actually have um
+[2796.2s] is a slightly different thing. We
+[2798.3s] actually have built something that does
+[2799.7s] do that. Um and again this is where
+[2801.5s] knowing the right tool chain run
+[2804.3s] >> uh this is where knowing the tool chain
+[2805.8s] can make a huge difference. Uh but
+[2810.1s] having a tool chain here where they go
+[2813.4s] uh
+[2813.7s] >> yeah what does this look like?
+[2816.5s] uh what you have is for every single
+[2818.7s] test case you have a bunch of files and
+[2821.2s] every single one has a snap file and
+[2823.1s] every time you edit it it creates a snap
+[2825.0s] new and the le and what that does is the
+[2827.7s] LLM can now go like and say like if I
+[2829.6s] see a snap new then there's a delta
+[2831.4s] between what I was what I have stored
+[2833.2s] from my last snapshot and what the new
+[2835.6s] version is.
+[2836.6s] >> So you can use that to incrementally
+[2838.1s] grow itself. Yeah. But we we spent like
+[2841.1s] a long time setting up the testing
+[2843.0s] infrastructure for this.
+[2844.5s] >> Uh I think if I show I can show you guys
+[2846.2s] how long it took to make the testing
+[2847.4s] infrastructure
+[2849.0s] as well.
+[2850.6s] >> This is if you're going to build a thing
+[2851.9s] that you want to last a 100red years,
+[2853.5s] you need a good foundation.
+[2855.6s] >> So what we did to actually build this
+[2857.1s] whole versioning system is we went
+[2858.8s] through and actually designed the entire
+[2860.6s] testing plan here. Let me find out where
+[2862.6s] this file is.
+[2865.2s] Salsa.
+[2867.3s] Yeah, there we go. And we have a plan
+[2869.8s] just for purely testing where we
+[2871.4s] describe exactly what we want the
+[2872.8s] testing infrastructure to be. We said
+[2874.5s] there's a folder called test.
+[2877.1s] >> Anything you're going to build and like
+[2879.1s] writing testing infrastructure with code
+[2880.6s] is better than writing workflows by
+[2882.5s] hand. Anything you're going to build is
+[2883.8s] going to benefit from a plan.
+[2886.3s] >> Yeah. And just going to go do this and
+[2887.9s] actually designing what the whole system
+[2889.4s] is going to look like took forever. Like
+[2891.9s] this I think took me an entire weekend
+[2893.9s] just to write the testing
+[2895.0s] infrastructure. And it it wasn't just
+[2896.4s] about like writing the code. writing the
+[2897.6s] code was actually really fast. What took
+[2899.4s] time was actually building out the um
+[2904.2s] building out the developer workflow for
+[2906.3s] like testing it. So I actually ignored
+[2907.8s] the agent side. I just said as a human
+[2909.6s] what testing loop do I want
+[2911.8s] >> and I just went through
+[2913.6s] >> and like wrote through like a bunch of
+[2915.1s] Rust macros to generate tests along the
+[2916.8s] way
+[2918.0s] >> and eventually it actually just came up
+[2919.8s] with its own mechanism what it needed.
+[2921.4s] We talked about what we needed from like
+[2923.0s] the actual like uh output directory in
+[2925.2s] the snapshot test. Where'd it go? Insta
+[2930.1s] and how it's created. So like Insta is
+[2932.1s] this library in Rust. I would not have
+[2934.2s] known about it without researching like
+[2935.9s] the astral tool chain for like UV and
+[2938.4s] rough and they use Insta. But I learned
+[2940.6s] that
+[2941.1s] >> and then we realized that not only we
+[2942.7s] want these tests, we also want
+[2944.1s] performance tests. We want to guarantee
+[2945.9s] that the BMA compiler is a certain level
+[2947.8s] of speed
+[2948.7s] >> and the only way to do that is to add it
+[2950.0s] to CI/CD and the only way to do that is
+[2951.8s] to have unit tests for it. So just
+[2954.2s] incrementally deciding that if we're
+[2955.9s] going to go build this tool chain out
+[2957.2s] this way, it's all vi coding and
+[2959.9s] building tool chains for that kind of
+[2961.0s] workflow. There's no shortcut here.
+[2963.8s] >> This is cool. Thanks for sharing this
+[2965.4s] stuff. Uh I think we're almost at time.
+[2967.4s] Um let's open up for any last questions.
+[2969.9s] Otherwise, like I don't know. What did
+[2971.8s] you learn today?
+[2972.6s] >> Really the main thing I learned today
+[2974.3s] was
+[2976.1s] I'm going to make more Excalibur
+[2977.4s] animations.
+[2979.1s] >> Yeah. We'll push up the code.
+[2981.9s] Um, we'll push up the YouTube script.
+[2983.9s] Uh, we'll push up a couple couple other
+[2985.6s] random things. Um, and uh, yeah, let us
+[2990.2s] know what you think. If you like the
+[2991.2s] episode, bring a friend next time. We'll
+[2992.7s] post all this stuff. We're going to I
+[2994.1s] think um, we're going to be sending the
+[2996.1s] email a little bit later. Uh, everyone
+[2998.2s] told us to keep the production quality
+[2999.8s] super scrappy, but uh, yeah, we've uh,
+[3003.2s] we've decided to invest even more in the
+[3005.1s] show. So, first was Riverside, now we
+[3006.9s] got an editor. Uh, we're going to start
+[3008.9s] putting out the YouTube videos probably
+[3010.2s] a week after the episode. So, uh, all
+[3012.6s] the more reason to come see it live.
+[3014.1s] You'll be 10 days ahead of everybody
+[3016.2s] else.
+[3017.0s] >> Cool. Um, any questions from anyone?
+[3019.3s] Otherwise, we'll probably take it off
+[3020.7s] and then head back um head back to work.
+[3025.1s] >> Do you ever do consulting work? Uh, as
+[3028.0s] fun as that would be, uh, we mostly just
+[3030.2s] do the teachings for free. We're
+[3031.5s] building we're building products. Um
+[3033.6s] maybe maybe someday we'll I'll I'll be a
+[3036.0s] consultant when I'm uh
+[3037.8s] >> sitting on uh actually you know what no
+[3039.8s] here's the plan billion dollar company
+[3043.1s] and then just help people for free
+[3047.0s] because that's what's actually really
+[3048.3s] fun and brings me a lot of joy.
+[3050.2s] >> If you want to pay me you can but this
+[3051.9s] is all far future. We're going to make
+[3053.4s] code take code layer to the moon first
+[3055.0s] take to the moon and then uh maybe maybe
+[3057.8s] we'll just keep AI that works going for
+[3059.4s] fun.
+[3060.2s] >> Yeah. Um we don't do consulting but uh
+[3062.5s] if you guys ever want uh both Dasher and
+[3064.9s] I have done like lunch and learns with
+[3066.6s] tons of teams for different kinds of uh
+[3068.8s] conversations happy to do it with
+[3070.6s] another team. We've done it for uh I
+[3074.0s] don't know if we share official teams
+[3075.0s] but like I've done it personally for
+[3076.1s] like unfortunate 50s. I'm happy to do it
+[3078.1s] with smaller companies as well. We learn
+[3080.6s] a lot by engaging with different kinds
+[3082.1s] of companies and learning from that. So
+[3083.4s] like if you guys enjoy this content,
+[3085.0s] enjoy doing this, invite us out to do a
+[3086.8s] lunch with your team
+[3088.2s] >> as well. It's a great use of time for
+[3089.9s] everyone involved.
+[3090.7s] >> Awesome. With that, we will uh say
+[3092.7s] goodbye for this week. Thanks everyone
+[3094.1s] for joining. Thanks for bringing great
+[3095.4s] questions. Uh we'll send you the uh all
+[3097.8s] the assets uh as soon as they're ready.
+[3100.1s] >> And check out the link for next week's
+[3101.4s] episode. And next week's episode is
+[3103.4s] going to be about uh next week's episode
+[3105.8s] is going to be about evalodal
+[3109.4s] types. So that's an interesting topic.
+[3111.6s] Tune in, tell your friends, and we'll
+[3113.2s] send out the update soon.

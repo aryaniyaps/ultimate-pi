@@ -1,0 +1,945 @@
+Ada, create two claw code agents. Name
+them Sony and Blink.
+>> Understood, Dan. I'll create two Claude
+code agents named Sony and Blink.
+Both agents Sony and Blink are ready.
+Dan, what tasks should we assign them
+next?
+>> Command Sony to read all files in the AI
+docs directory. Use the plan/comand
+to support video generation using the
+Soore API. Make sure that it writes its
+plan to the specs directory.
+>> Got it, Dan. I'll have Sony read all
+files in the AI docs directory. Then
+plan for video generation support using
+the Sora API and save the plan in the
+specs directory. Sony is working on it.
+Dan, let me know if you want to assign
+something to Blink next.
+>> Ada command blink to invert the primary
+colors and the front end. We want black
+text on a white background. Pull in the
+play font from Google Fonts and apply it
+to all text.
+>> Understood, Dan. I'll instruct Blink to
+invert the primary colors in the front
+end for black text on a white background
+and then apply the play font from Google
+fonts to all text. Anything else you
+want to line up?
+>> The tech industry wants you to pick one
+model, one provider, one tool. But for
+you and I, the engineer, this is a
+losing game. Why is that? It's because
+you're optimizing for their business
+model, not your maximum capability.
+Loyalty in the generative AI age is not
+the winning strategy. The winning play
+is to use them all. Think in ands, not
+ors. Use Gemini models, red next OpenAI
+models. Use cloud code next to the
+OpenAI's real-time API. Combine, mix,
+and mash. So, what if you took this idea
+further and put together three
+state-of-the-art generative AI
+technologies into one big three super
+agent?
+Let me show you how this works. This is
+highly experimental. I've built out
+these multi- aent systems in the past.
+This one is by far the most powerful.
+Let me show you exactly how. Ada, list
+our current agents.
+>> Sure, Dan. We currently have two active
+agents, Sony and Blink.
+>> All right. Can you go ahead and check
+the status of Blink? How's it doing with
+this updates?
+>> Dan, Blink's task is underway. It's
+identified the files and is beginning
+implementation to invert colors and
+apply the play font.
+>> Okay, fantastic. What about Sony? Sony
+has completed reviewing the AI docs and
+backend architecture and it's now
+planning the full Sora API integration.
+We'll check back soon once it progresses
+further.
+>> Couple quick things to mention right
+away. Right, we have an orchestrator
+voice agent. After you have better
+agents, you add more agents and then you
+start building custom agents. You need a
+wrapper to actually communicate and
+control all of your agents. Right next
+to our voice orchestrator agent, we also
+have multi- aent observability. Right?
+You can see we have a live pulse of all
+of our agents activities. If we open
+this up, you can see this in even more
+detail. We're leveraging cloud code
+hooks to get great details out of every
+one of our agents. And you can see here
+one of our agents is now validating its
+work with the new Gemini 2.5 computer
+use model inside of a new agent inside
+of a tool. We'll break that down in just
+a second here. We'll walk through the
+architecture. Our agent is actually
+validating its work here, right? So, I'm
+just going to move this off screen so I
+can finish up. You can see that tool use
+getting fired off right there. Blink is
+actually validating its work with a
+browser agent. So very powerful stuff
+right out of the gate. Our agents are
+more powerful than ever. And thanks to
+multi- aent observability. We can
+actually see what they're doing right
+without being stuck in the loop. This is
+a huge huge trend that is going to be
+relevant as we move forward in the
+generative AI age. As agentic engineers,
+if you can't see what your agents are
+doing at scale, you will not be able to
+scale your compute. And when you scale
+your compute, you scale your impact.
+Something else really cool here just to
+mention with this multi- aent
+observability UI, we are also getting
+quick, fast, cheap model summaries. You
+can see this work coming in in the
+background. We're getting cheap, fast
+model summaries of every command coming
+in here, right? So, we don't need to dig
+into everything. Of course, we can if we
+want to. We can see the entire payload,
+but what we really want is highlevel.
+You know, we only want to dive in if
+something goes wrong. Here's another
+browser agent confirming that color
+change, right? We have powerful closed
+loop structures. Our cloud code agent
+has a computer use tool that it can use
+to actually completely validate its
+work. Then the browser tool will spit
+back out any, you know, success or
+failure messages. Again, I'm just going
+to get this out the way here. And our
+agent will then validate its work. So,
+Blink is testing its work and I think
+right now Sony has completed its work
+actually. So, let's go ahead and see how
+Sony's doing. Let's just check our
+primary interface here. And yeah, check
+this out. Agent Sony result message task
+complete. And there's the breakdown. So,
+I'm going to confirm this with ADA, the
+agent orchestrator. And then we're going
+to continue building out front end and
+backend for content generation. Ada, go
+ahead and list our agents and check on
+both of our agent statuses.
+>> All right, Dan. I'll first list our
+agents and then check the status of both
+Sony and Blink. Dan, here's the update.
+Sony has successfully completed its
+task. It generated a full specification
+document at Specs Sora video generation
+integration. Blink has completed the
+code changes, inverting colors, and
+applying the play font and is about to
+start the dev server for validation.
+Both agents are on track and ready for
+any next steps you have in mind.
+>> Fantastic. Ada, go ahead and open up
+that specs file generated by Sony.
+>> Sure, Dan. The specs file is now open in
+VS Code. Dan, let me know if you want to
+review anything specific or move on to
+the next task.
+>> Very cool stuff here, right? We have our
+agent agentically calling specific tools
+that help us operate a multi- aent
+system. Our Sony agent has completed
+this plan for Sora video generation.
+There you go. You can see architecture,
+API endpoints, response request body.
+You can see here it's actually got a lot
+of the key information dialed in. are a
+Gentic coders are of course running on
+the brand new Claude Code 2 with the
+Claude 4.5 sonnet model. Very powerful,
+very capable, very hands-off, very
+autonomous model. We talked about this
+in our previous video. Cloud code is the
+agentic coding tool to beat right now. A
+list videos, delete video, remix.
+Fantastic. So, these are all the new
+features coming out of the OpenAI Sora 2
+API. Here's our project structure. Great
+breakdown. You might have noticed that
+when I was commanding our orchestrator
+to write the prompt into our Sony agent
+decoding agent, I said use the slash
+command plan. So, this actually ran a
+custom slash command and wrote the plan
+out in a structure that we've detailed.
+Okay, so custom slash commands very
+powerful. They come up over and over and
+over again because they represent
+reusable compute for your agents for
+you. They allow you to set up reusable
+structures of results. This looks super
+great. I'm going to add one more thing
+here throughout this, you know,
+experiment here. I'm going to try not to
+write any prompts. Okay, I'm just going
+to talk to my orchestrator. I want my
+orchestrator to handle things aside from
+voice prompting. I don't want to type
+anything except for a couple key updates
+here. So, I'm just going to say
+important additional notes. I want to
+make sure that the self validation loop
+here is really, really tight for our
+agent. Be sure to set up logging
+structures. This way you can validate if
+issues occur. You can lean on your
+output files. Python logging and best
+practices. Exactly. Okay. So, this is
+great. So, this plan looks fantastic.
+I'm going to go ahead and just close
+this now. That's been saved and updated.
+And now I'm going to have Sony get to
+work on actually implementing this. Ada,
+instruct Sony to run the build custom/
+command against the exact specification
+file it generated.
+>> Understood, Dan. I'll have Sony run a
+build based on the exact specification
+file it created. Sony is running the
+build now, Dan.
+>> Okay, fantastic. And then let's command
+Blink to read that specification file
+and report when it's done reading. No
+building yet. Just have it read that
+file.
+>> Got it, Dan. I'll instruct Blink to read
+the specification file and report back
+once it's done reading. I'll send that
+command now.
+>> Now, in our multi-agent observability,
+we're going to see those two agents kick
+off.
+>> Blink is now reading the specification
+file, Dan. So now we have those two
+agents running for us, getting worked
+on, and we can quickly observe
+everything that's happening here. Right?
+If we just go ahead and scroll to the
+bottom here, we're going to see our
+agents operating. Why is this so
+valuable? Why is this experiment
+important to pay attention to? I think
+if you're a fan of this channel, you
+understand that compute is how you scale
+your impact as an engineer. But we have
+to keep pushing that further. First we
+have better agents, then we have more
+agents, then we have custom agents, and
+then we need to conduct them and
+orchestrate them in the best way. Blink
+agent just finished. So let's command
+Blink to actually start building out the
+front end. Blink has read this this, you
+know, 900 line plan with a detailed
+breakdown of how to build the OpenAI Sor
+API. We're going to have Sony focus on
+the back end and now let's go ahead and
+have Blink build out the front end for
+this. All right, Ada command Blink to
+implement the front end based on the
+spec file. We want to have Sony working
+on the back end like it is and we have
+Blink working on the front end. Focus on
+just the front end components and wiring
+it up to the back end. Stick to our
+black on white minimalist theme and have
+a strong focus on fault tolerance and
+retry logic for our video API. Does that
+make sense?
+>> Understood, Dan. I'll command Blink to
+implement the front end components, wire
+them to the back end, follow the
+black-on-white theme, and ensure fault
+tolerance and retry logic. I'll get that
+going now.
+>> Now, both of our agents are kicked off
+and working, right? So we have Sony on
+the back end here. And if we open up our
+multi- aent observability, we can see
+that exactly. So Sony is on the back
+end. There's that logging setup Python
+file. And now Blink is actually going to
+implement on the front end. Okay. And so
+two agents working. Looks great. We can
+scale this up as much as we need to.
+What does this application architecture
+look like? Right. Let's actually just
+break this down. I'll throw something on
+the screen here for you as I talk
+through this. It starts with the input
+layer. Who are your actual drivers of
+the workflow? It's the engineer. So you
+or I. And then very importantly our
+agents. We need to be designing input
+interfaces for our agents so that they
+can close the loop. All right, this is a
+big big idea we talk about in tactical
+agent coding. This is how you scale your
+impact. Teach your agents how to correct
+their own work. We then use text or
+voice and the orchestrator agent is
+running the OpenAI real time API. Open
+AAI's real-time API starts our system
+layer. So inside of our system, Realtime
+API has of course several tools. And so
+if we scroll back up here, you can see
+some of the tools that our agent has,
+right? So the tool catalog gets logged
+right at the start of every session.
+List agents, create agent, command
+agent. These are the real big heavy
+hitters. We want our agent orchestration
+layer to be able to interact and command
+other agents very quickly. when we
+command an agent, right? When we pass a
+prompt from our orchestrator agent into
+our actual builder agent. So, you know,
+we have claw code agents in this case.
+We can also spin up browser agents,
+which you'll see in a moment here. Once
+we start passing in commands, this
+enters the claw code world. And so,
+we've done several videos, you know, sub
+agents, custom/comands, infinite agentic
+loops, programmatic mode, custom agents,
+right? It's all there. All of that, you
+know, can be truly compressed into one
+command and one system that you can then
+do and add additional work into. Okay.
+And then the cool thing here is that our
+cloud code agent has access to the new
+Gemini 2.5 computer use model. It's
+going to be using that agent to validate
+its work and get concrete feedback in a
+closed loop structure. We have closed
+loop prompts built into our multi- aent
+system, built into the system prompt of
+our custom agent. And notice how this
+orchestration layer is super thin. It
+has basically crud against agents. And
+we're not saying what agents exactly
+here. There are any agents, right? And
+they're any tool and any type. We're
+going to have that new Opus model or
+we're going to have that new Gemini 3
+model. Whatever tool or model is coming
+next, you want to be able to adapt your
+system. So then we have to respond and
+get actual concrete feedback. Okay? And
+so that gives us our output, right?
+Right. So we have the input layer, the
+system layer, and then the output layer
+of our multi- aent system. Also, we
+should mention that our cloud code
+agents are pinging out to their multi-
+aent observability system. So that's all
+fantastic. It's very, very powerful. Our
+system then, right, via our tools and
+our OpenAI real-time API, it then
+outputs audio, text, files, and
+basically side effects, right? Whatever
+our agents have done, that's what's
+going out. And then that of course loops
+all the way back to us, right? The
+engineer and our agents. When you're
+designing these systems, you really want
+to be thinking about the inputs and the
+outputs and how the outputs loop back
+into the inputs. Very important. It's
+very critical for making the systems
+powerful and legitimate. And so, you can
+see here our UI just updated. Um, our
+front-end agent, Blink, got some work
+done here for us. This looks great. Um,
+okay. And now it's updating. It's making
+some UI changes, which I'm not a fan of.
+I actually really like that previous uh
+UI. Let me actually just go ahead and
+blow this up a little bit and see what
+just happened there. It had two UIs
+there that overrode each other. Let's
+see what's going on here. Okay, I see
+Sony is actually interfering with
+Blink's frontend work. So, we're
+probably going to have to recommand
+Blink to come back in set things up.
+But, this is something that's going to
+happen, right? We need clear boundaries
+between our agents and our agents don't
+have that, right? I wasn't clear enough
+with my prompt and I wasn't clear enough
+in the plan to have backend agent just
+work on back-end stuff. Yeah, you can
+see here Sony working on video
+generation tasks. We're going to have
+duplicate code here to work through.
+Let's just go ahead and I'll let the
+agents finish. We'll we'll see how they
+kind of battle through this. Let's dive
+in here and see where our agents are. We
+should have given our system enough time
+here. Let's go ahead and see where
+things are. Ada, go ahead and give me a
+status update on both of our agents.
+>> Both agents are actively working. Dan,
+Sony is executing its build task and
+Blink is implementing the front-end
+components. Both are in progress and
+we'll check back for more detailed
+updates soon. I'm going to go ahead and
+have Blink jump back in, update the UI,
+ADA, have Blink check over the new APIs
+on the back end, and then set back up
+the themes, styles, and components that
+it initially wrote. It looks like the
+Sony agent kind of also did some
+front-end work, have Blink really
+comprehensively look at both the front
+end and the back end before it makes its
+updates. We want to make sure we get
+those styles back. do all that while
+we're connecting to the existing
+functioning API.
+>> Understood, Dan.
+>> So, now Blink is going to be kicked off
+and uh you know, hopefully it'll
+regenerate that great UI we had at the
+start there. So, now we have Sony and
+Blink running once again. Let's go ahead
+and open this up and monitor our agents
+as they work through this task. So, I am
+curious at this point what Sony is
+doing. I think it's just testing
+through. We have some videos, we have
+generation fails, download, but no
+playback so far. So,
+so there we go. So, that looks great.
+So, Blink has updated our front end back
+to that clean style. That looks awesome.
+>> Glad to hear it's looking great. Dan,
+let me know if you want any further
+adjustments or if you'd like to proceed
+with more test.
+>> All right, so we have these awesome
+quick templates that we can use. So, we
+have our Claw Code agent testing its
+workflow here. Video generator is
+looking good. There we go. So, we just
+saw a scroll and a image uh screenshot.
+This just scroll back up.
+Um, I've been really impressed with the
+Gemini 2.5 computer use model. Nice. It
+switched to library mode. There's a
+couple of videos. Looks like these are
+old videos that I've already generated
+when running some tests against this.
+Nice. This looks great. So, I wonder
+what exactly it's testing here. I think
+it's probably just doing UI tests. But
+there we go. Just toggle back. I'm not
+doing any of this right. By the way, my
+hands are are up here.
+And yeah, every time the screen kind of
+flickers like that, it's actually taking
+a screenshot. Thanks to our multi- aent
+observability, we can see exactly the
+tools that are getting kicked off. Right
+now, just blink is running. So, so far
+so good here. It looks like though since
+it's fired off two browsers, it's
+probably looking for that new connection
+here. So, um I'm just going to close
+this and let's see what it does here. It
+might just fire up another one. And you
+can see from our manual testing here, we
+do have an issue. So, if we hit uh open
+this, let's refresh this cinematic go
+cat and then hit generate. Let's see
+what we get here with some manual
+testing. Okay. All right. So, we're
+getting into a nice interface here.
+Let's see if our queuing logic actually
+works. And our agents may have marked
+this as completed here. Let's let's go
+ahead and see what's going on here.
+Yeah. So, there's our Gemini browser
+agent response. Nice video generation.
+Looks like it is working there. That's
+great. And here's Blink's response
+message. What was done? And so,
+confirmed all these are operational
+cores for 3334. This is actually wrong.
+It should be 333. Good. Backend front
+end running on that extra port there.
+That's not exactly right, but okay. So,
+confirmed all endpoints. That looks
+good. Uh, fantastic. Good. Testing
+valid. All components are working. Our
+front end does look good. Let's see how
+this generation works. We do want to see
+this complete. Um, but in the meantime,
+what I'll do is I'll have a full-on
+browser agent just spin up and run a
+prompt for us. Ada, create a browser use
+agent. Have that agent uh test our local
+host on port 3333. Have it write a image
+prompt and generate it. Make sure that
+it waits for a while. It's going to take
+some time to generate, but I want to
+validate that this works. Make it update
+the model to Sora 2 Pro. Duration 8
+seconds. And let's use portrait mode.
+Instruct that all to a browser use agent
+after you create it.
+>> Got it, Dan. I'll create a browser use
+agent and instruct it to test your local
+host on port 3333. Generate an image
+prompt and update to Sora 2 Pro.
+Duration 8 seconds. Portrait mode. I'll
+make sure it waits for generation.
+>> Okay. So, so this is working. So you can
+see with our manual test, we did get a
+cat image generated there. That looks
+great. Our browser use agent is writing
+that prompt by itself here. And there we
+go. It's scrolling. Now it's probably
+going to click uh it might click
+generate video. It might update some
+settings. Okay. So it's just going to
+click generate video. Let's go ahead and
+see what we get here. And now it's going
+to run this. So as it's taking
+screenshots here, it should just, you
+know, run and hopefully it'll wait for
+that full cycle. But in the meantime,
+while that's running, check this out. We
+got a full generation here. cat on a
+marble table, I think.
+Yeah, pretty much exactly what you would
+expect, right? Uh, we can download the
+thumbnail. Let's see how that works.
+Fantastic. There's a thumbnail. Uh, we
+can remix. We can download the sprite
+sheet. That's interesting. Let's take a
+look at what that looks like. Okay, so
+nice. So, just a couple images
+throughout the playback and create
+remix. I wonder how much this works.
+Okay, let's just go and try this. You
+can see our video generation coming in
+here for our testing agent. Um, let's
+see if this video renders fully. Looks
+like we might have some issues with the
+browser use actually displaying the the
+actual videos here. Okay, so that didn't
+work. So, we'll just let that keep
+spinning. So, let's remix this video.
+Cat update cat to be spinning. Let's see
+how this works. Okay, so I'm not sure
+what happened there. It looks like our
+generation legit exploded. It actually
+ended our entire voice orchestration
+agent, but we can go ahead and just kick
+this off once again and go ahead and
+list all agents. Dan, we've got three
+agents active, Blink and Sony for coding
+tasks and a browser agent called browser
+agent 17722. Let me know what you'd like
+to do next.
+>> All right, so we did get a end toend cat
+generation here. That worked out great.
+I would have liked to see our remix
+feature working, but um let's go ahead
+and see this video here. Okay, so great.
+So this is the video generated by our
+browser use agent. Let's just check this
+out.
+Okay,
+the great part about the system is even
+with a crash like that, we can quickly
+just restart and we have our recent
+files where the agents are logging their
+work and we can just relist all of our
+agents and have our primary agent spin
+back up and get back to work. So, I'm
+not going to dig into this too much
+more. I wanted to showcase, you know,
+what a multi- aent system looks like
+when you start combining these different
+systems. We have Gemini 2.5 computer
+use, testing out capabilities, testing
+out functionality. We have a nice multi-
+aent system here where we can operate
+with multiple agents and actually see
+the results. We're using powerful clawed
+code agents and then we have our actual
+application that's getting built out by
+our agents, right? We can do this now.
+We can have them continue to deploy
+against this to test to validate their
+work. Let me just quickly pull down the
+application here. You remember
+throughout several pieces there, I
+explicitly had my cloud code agents run
+specific commands. They're directly
+referencing some of these powerful
+agentic workflows that have already been
+built out. Right? We ran plan and we ran
+build. They were able to directly use
+these commands while being prompted from
+another agent. Right? This makes it
+really easy to extend their capabilities
+and use more shorter concise natural
+language to direct what they can do. We
+can just quickly come in here kind of
+validate some of the work they did
+inside of the codebase. Our agents
+operated this codebase for us end to
+end. So if we come into the specs file
+here, we can see our sor video
+generation plan. Right? This was the
+initial plan that we looked at that
+actually executed all the work that was
+built out. Right? Now, I should have
+improved my prompt a little bit by
+saying, you know, Sony, you're only
+working on the back end, right? We did
+get a great front end generated end to
+end here, right? We have components, we
+have our composables, and our blink
+agent took care of that for us. And
+inside of our backend here, if we open
+up source, looks like we have some extra
+files that were generated, but you can
+see we have our primary interface there.
+There's our main health checks. And
+then, of course, inside of routers
+videos, we have this great architecture
+as was planned. And so we could have
+tweaked any of this inside of our plan.
+Classic fast API backend endpoints,
+download content, so on and so forth,
+right? All of this put together, built
+out our sore video generator. This is
+really a content generator. Thanks to
+our agents here, we can just generate
+these videos, right? Let's do a
+cinematic scene wide shot of snowboarder
+on massive mountain. Slow pan. Let's go
+ahead and use 2 pro. I want 8 seconds.
+Let's go ahead and try the portrait
+view. Let's go ahead and generate that.
+Thanks to our multi- aent orchestration
+system, they built this out end to end
+for us. So, we have this decent loading
+screen. Of course, everything can be
+improved, right? We can hop in the loop
+after our agents have completed work.
+What this is is another example of
+orchestrating multiple agents, observing
+our agents, and conducting our agents
+with a highle interface. In this case,
+we're using voice interface to
+accomplish work. These are ideas that
+you can be putting together, right? I
+know someone in the comments is going to
+say you can do this a lot faster if you
+just type yada yada yada. There are a
+bunch of, you know, conditionals to
+voicebased workflows, but I've been
+building out these multi- aent systems
+for years now. Every single time I sit
+down to experiment with what you can do
+with the latest tools, what you can do
+has progressed a great amount. Now, take
+from this whatever you want to, but the
+key ideas here are quite simple.
+Voicebased agent coding is right around
+the corner. If you're on the edge, you
+can start building these out right now
+to control and manage your fleets of
+agents. Now, even without voice, right,
+completely throw voice out the window,
+right? You can use textbased workflows
+and we can spin this up right now,
+right? If we close this and we use this
+workflow and instead if I say prompt uh
+list all agents, check their status, I
+have this interface for my agent to just
+kick off our orchestrator agent and get
+work done right away. So you can see
+that's just we're blasting through all
+this work here. All this stuff is
+happening very quickly, very rapidly. No
+voice response. It's all text. Okay.
+Whatever system you want to build, make
+sure you have text, make sure you have
+voice. You want to expand the inputs
+that you can have to your system so that
+you can satisfy the feedback loop of
+your entire multi- aent orchestrated
+system, right? You want to build for
+you, your team, and your agents at the
+same time. Make sure that your outputs
+of your system wrap all the way back
+into your inputs. Make sure that your
+agents can receive the feedback from
+your system. All right, we have a
+promptbased workflow. Right, let me just
+clear that out again and show that to
+you. Right, if we hit up, you can see I
+have a entire workflow for this tool
+that can be activated just with passing
+in a prompt. Why is that? It's it's so I
+can expose it to our agent so that our
+agent can test it all for us. Last but
+not least, we had our multi-agent
+observability system to help us actually
+monitor all of our clawed code specific
+agents. You can really plug in any agent
+you want to this. Right now, this just
+supports claw code. I'm going to leave
+the multi- aent observability codebase
+linked in the description. It's based
+right on cloud code hooks. We've talked
+about this on the channel in the past.
+That's going to be available there for
+you. And if you want to push your
+agentic coding abilities even further,
+if you want to continuously start moving
+from inloop to outloop, I have one last
+thing to offer you. Many engineers
+already know what this is if you've been
+watching the channel. I want to pitch to
+you tactical agentic coding before the
+early bird deal runs out here on
+Wednesday. Tactical agentic coding is my
+take on how you can push far beyond AI
+coding and vibe coding with advanced
+agentic engineering so powerful that
+your codebase runs itself. Now the ideas
+here we've been talking about on the
+channel over and over. We take those
+ideas and we push them even further. Now
+let me be super clear here. This is for
+engineers that ship to production. This
+is for engineers that are looking for
+that big edge in the generative AI age
+with agents. All right, we know that AI
+coding is not enough and there are a
+bunch of big ideas here, but the most
+important one is that you, the engineer,
+are the bottleneck. It's not the tools,
+it's not the models, it's not the
+agents, right? As you can see here in
+our multi- aent example, right? It's
+about what we can do. How can we
+orchestrate all these powerful tools,
+right? And check this out. We have our
+we have our uh let me just go and full
+screen this. Hop back over.
+All right. And so we can download the
+thumbnail, of course. We can download
+the spreadsheet. We can work with this.
+This is going to be the beginning of my
+uh content generation platform. Make
+sure you like and follow if you're
+interested in seeing where this goes. Of
+course, we're going to be building the
+whole thing with agents, and it's going
+to be a great way for us to explore
+different multi- aent architectures.
+Anyway, back to Tactical Agent Coding,
+right? It's very clear that the models
+are great. The tools are fantastic. The
+agents are there. It's about you, right?
+It's about you and I. We are the
+bottleneck. Now, let's push our compute
+further. All right. So, the guiding
+question here is what if your codebase
+could ship itself? Obviously, here I'm
+asking the question. So, I have some
+type of answer for you inside of
+Tactical Agentic Coding. Disclaimer,
+this is not for beginners. If you're a
+noob, if you're a vibe coder, this is
+not going to be for you. This will be
+over your head. The ideas are pretty
+advanced in here. We have a big goal
+inside of this course. My mission is to
+transform you into an engineer they
+can't replace. How do we do this? We let
+go of the old ways of engineering to
+master the new best tool for the job.
+That is of course agents. Okay. The big
+idea that we explore over and over is
+that we build the system that builds the
+system. You want to be more and more
+operating on the agentic system that
+then builds the system. Now, we just saw
+that I just showed you yet another
+example of that inside this experiment
+here, right? I built an agent
+orchestration layer and then I prompted
+that layer to build the application.
+Okay, I built an agentic system once
+again on the channel in public, right?
+This could have gone wrong a million
+times and it did go wrong a couple
+times, right? There's this is this is a
+spectrum guys, right? We're we're
+constantly improving. Think in the gray,
+right? No, no one has the answers now.
+But the people that are experimenting
+and pushing things forward, they have
+more answers than the others. Okay? You
+know, you saw that here, right? We built
+a system cloud code agents browser use
+agents with Gemini 2.5 real time open
+AAI API right we're putting together
+powerful layers of compute to then build
+the system for us okay you're going to
+see this over and over and over
+jumpstart that right you can master this
+architecture right now inside of
+tactical agent coding okay and you can
+learn how to build it inside of every
+single codebase that you build all right
+so we have a couple big ideas in here
+right we scale the core 4 and just to
+mention this there are two courses
+inside Tactical Agentic Coding. The
+first one is the core eight lessons. If
+you just want the core of the big ideas,
+just get this one. After you purchase
+Tactical Agentic Coding, you can then
+come into Agentic Horizon and get some
+additional lessons and you can vote on
+the next three lessons that come up. All
+right, so all the lessons are here. All
+the details are here. Link will be in
+the description for you here. Of course,
+um we're back for phase two. Thanks so
+much for all the kind words from every
+engineer. I need to add a bunch of
+reviews. You guys have been really
+hammering the reviews. We now have over
+500 engineers upleveling their skills
+right now. And just to mention this, um,
+the deal, the early room special is
+almost over. So get in here before this
+ends. All right? By the time you're
+seeing this, this is going to be like at
+down at 3 or 2 or 1 days remaining.
+Okay? This deal ends Wednesday night. So
+get in here. I am rewarding engineers
+that see opportunity and invest in
+themselves. That's all this is. This is
+not a marketing trick. It is just here
+so that engineers that invest in
+themselves and want a good deal for it,
+they act on it. Okay, this is completely
+risk-f free. It doesn't happen often on
+my channel thankfully, but every once in
+a while, you know, I'll get the random
+few commenters that think I'm some type
+of internet scammer or some fake guru.
+Um, none of this stuff exists without
+serious engineering over and over and
+over, battle testing my ideas. Why am I
+saying all that? I'm saying that because
+I think about the engineering
+perspective. You have a full refund
+guarantee before you start lesson 4
+within 30 days. You get your money back.
+I don't want you in here if you don't
+want to be in here. There's no value in
+that for me or for you. So, if you get
+to the third lesson and you don't like
+my style or you don't see the vision,
+you get a full refund guaranteed. No
+questions asked. No problem, no hard
+feeling. This is tactical agenda coding.
+Check out the FAQ. Check out the landing
+page video to understand what this is
+all about. Once again, this is for
+engineers that ship to production. If
+you are a noob, if you're just starting
+your journey, this is not going to be
+for you. Okay? Um, building something
+for everyone means building something
+for no one. If you've built products,
+you know that you understand that. So,
+multi- aent systems are here. You want
+to be thinking in and, not or. Put these
+tools together to do more than you ever
+could before. So, as many viewers of the
+channel know, cloud code is my primary
+agent coding tool, but I'm constantly
+battle testing it against Gemini,
+against Codeex, against all these other
+tools. And most importantly, I'm
+composing them together. Right? The name
+of the game with engineering right now
+is is that engineers with higher output
+are almost directly using more compute.
+Okay? I've said it on the channel
+before, I'll say it again. There is a
+direct causal relationship between your
+compute use and your engineering output.
+Scale your compute to scale your impact.
+It can feel very overwhelming right now
+with the insane pace of innovation
+coming out of all these labs. What does
+that mean for us engineers? To me, all I
+see is opportunity. That's why every
+single Monday, I sit down to try to show
+you what's possible, show you potential
+futures, to give you a concrete take of
+ideas I'm exploring to push my
+engineering further beyond so that you
+can adopt them for your own so that you
+can take them, tweak them, and get some
+advantage. All right? It's all about
+your information advantage. There's so
+much slop out there. All right? Um,
+there's so much slop out there. There's
+going to be so much noise, right? Focus
+on the signal. Focus on channels like
+this that are actually trying,
+experimenting, pushing, combining. And
+always remember that if everything falls
+apart, the one big idea you can lean on
+is in order to scale your impact, you
+must scale your compute. This is the
+name of the game. This is why agents are
+taking off right now. This is what
+matters more than anything. Use more
+agents, use more compute, build your
+multi- aent system. And no matter what
+you do here, stay focused and keep
+building.

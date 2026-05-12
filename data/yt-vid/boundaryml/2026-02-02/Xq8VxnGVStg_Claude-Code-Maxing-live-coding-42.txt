@@ -1,0 +1,2976 @@
+[0.1s] Okay. So you're using the program each
+[1.9s] programming language's own subsystem for
+[4.3s] integrating with the system and you
+[6.0s] basically just need to be able to invoke
+[7.9s] that from the DAML VM.
+[10.1s] >> Exactly. And that's how we do that and
+[11.8s] that's how we've designed this and
+[12.9s] that's why it feels so native in every
+[14.3s] language stood instead out plugs right
+[16.2s] in.
+[17.2s] >> Uh so you kind of get all the benefits
+[18.7s] of every existing language without
+[20.1s] having to really pay too much of a tax
+[21.8s] of having to use BAML and that's why
+[23.4s] BAML is designed to be integrated. But
+[25.5s] in web assembly that's the next crate
+[27.4s] that we want to go build. We want to
+[28.8s] connect this whole system to the W uh to
+[31.1s] the WOM system. So we want to virtualize
+[33.0s] a file system and we want to virtualize
+[35.3s] network calls like fetch. Those would be
+[37.6s] I think the two end goals of today.
+[39.8s] >> And the idea that possible if you're if
+[41.9s] you're invoking from Python that it
+[44.9s] should like basically be passed into the
+[47.2s] runtime a function that is actually like
+[49.2s] a native Python fetch or like a native
+[51.6s] TypeScript fetch based on a language
+[53.1s] you're in and similar to how CIS works.
+[55.6s] >> Exactly. That's literally what I'm
+[57.0s] doing. I'm I'm literally shipping as
+[58.5s] much and you can go to our rebound and
+[59.7s] you can see we're all just shipping as
+[61.0s] much code as possible at the speed of
+[62.9s] thought
+[63.7s] >> which is just mindboggling in my eyes.
+[71.2s] >> For everyone that's new, this is our
+[72.6s] weekly episode. This is AI that works.
+[74.6s] Every single week Dexter and I get
+[76.4s] together and we try and show real
+[78.2s] practical uh systems that try and take
+[80.9s] advantage of AI in some usable way.
+[84.0s] Hopefully some of the techniques that we
+[85.2s] have are applicable today.
+[87.0s] Today's episode is kind of um a
+[89.4s] throwback to one of the past a couple of
+[91.6s] the past episodes that we've done. And
+[93.3s] today's episode is going to be all about
+[95.1s] how to actually use AI in a aentic
+[97.8s] system and how we're going to go code.
+[99.6s] So, we're going to take a really hard
+[101.0s] problem. We're going to code it on the
+[102.5s] fly. We're going to have discussions.
+[104.2s] We'll take it as far as we can and we'll
+[106.5s] try and set everyone up for success.
+[108.3s] >> Yep. We're just going to we're going to
+[109.8s] ship until me and Vibav are exhausted,
+[113.4s] >> basically. uh which will be somewhere
+[115.8s] between an hour and two hours. Um we're
+[118.3s] just going to live code.
+[120.9s] >> Now let's give everyone a little bit of
+[122.6s] context behind what we're going to be
+[124.4s] talking about and how we're going to be
+[126.6s] doing this. So um some of you may know
+[129.0s] this uh one of the things that we've
+[130.5s] been doing if you've been watching our
+[131.6s] repo for those of you that are um we
+[134.4s] have been working on making our compiler
+[136.5s] much much better and enabling new
+[138.7s] capabilities like filtering completeness
+[141.4s] um arbitrary object instantiation etc
+[143.8s] etc kind of almost like a V8 alternative
+[147.3s] is the idea
+[149.2s] and while we've been doing this um as
+[152.5s] you can imagine it's pretty hard but in
+[154.5s] the last three or four months maybe six
+[156.0s] months I don't think I've written a
+[157.0s] single line of code by hand. I've now
+[158.5s] implemented a garbage collector. We've
+[160.3s] implemented heap allocators. We have
+[162.4s] some F5 bridges. Kind of have a whole
+[165.0s] stack. So, we're going to just work on
+[167.0s] part of that system. And what I'm going
+[168.5s] to try and do is I'm going to bring us
+[169.9s] up to speed on what parts of that system
+[172.4s] is. Uh, and I'll show the part that
+[175.0s] we're working on exactly how we're going
+[176.4s] through it. Some of the stuff I have
+[178.2s] already done. So, I'll walk us through
+[179.7s] parts of it to talk us how the design
+[181.4s] phase works. And most of it hopefully
+[184.2s] we'll get to go code on the fly. But
+[186.6s] before we do that, Dexter, do you I'm
+[188.9s] going to screen share. Do you want to go
+[190.0s] and tell people what the tool that we're
+[191.6s] going to be using is?
+[192.6s] >> Yeah, I mean, I think I think we'll talk
+[193.9s] through kind of a lot of the why and the
+[195.4s] motivations and the structure um while
+[198.7s] we're going because there's going to be
+[199.8s] as if you've done RPI, you know, there's
+[201.3s] always like five minute little down
+[202.7s] times where, you know, oh, it's going to
+[204.4s] go research a bunch of stuff and come
+[205.9s] back. Uh but basically we have rebuilt
+[209.4s] code layer as many of you know it from
+[211.8s] the ground up um for a bunch of reasons
+[215.0s] and we'll get into why. I think the most
+[217.5s] like obvious thing that you'll see here
+[220.2s] is the kind of like refinement of the
+[224.4s] workflow. It's now not just RPI. It's
+[227.0s] got four or five steps. Um and one of
+[229.7s] the biggest goals we we had was we found
+[231.6s] that there was a lot of like you still
+[234.1s] had to to get really good results. Like
+[235.9s] you can get better results by just using
+[237.8s] the prompts, but to get really good
+[239.0s] results, you still had to build a lot of
+[240.6s] intuition around LLMs and you had to be
+[242.6s] very kind of like delicate in crafting
+[245.6s] your context window um and in like
+[248.2s] sprinkling in like I hated that we
+[250.2s] called it this. We literally called it
+[251.5s] magic words. There were like words that
+[253.2s] you could sprinkle in at the end of your
+[254.6s] prompt that would get you better results
+[256.5s] just by causing the model to follow the
+[258.5s] instructions and the prompts better. And
+[260.2s] I think we talked about this a little
+[261.7s] bit at the 12 factor agents for coding
+[264.1s] agents episode we did two weeks ago, but
+[266.2s] basically like we've done a lot of
+[268.2s] replacing um the usage of prompting for
+[272.2s] control flow by splitting up the
+[274.6s] workflow and just using more control
+[277.4s] flow for control flow as we get more
+[279.3s] clear on like what the happy path is and
+[281.3s] what is like the best way to build these
+[282.9s] kind of things.
+[284.1s] >> So with that, let me go and show what
+[286.6s] part of the code we're going to work on
+[288.0s] and how we're going to deal with it.
+[289.5s] parts of the code that we're gonna work
+[290.7s] on are gonna be specifically related to
+[293.5s] web assembly. Um it's not fun. Uh it's a
+[298.1s] lot of uh how do I put it? Crap to deal
+[301.8s] with actually uh when you go deal with
+[304.0s] web assembly. I'll show exactly how this
+[306.1s] workflow ends up helping us and what
+[307.8s] we've been doing.
+[308.7s] >> Where is this panel language
+[311.2s] in this folder?
+[313.1s] Okay,
+[315.0s] >> so before I get everyone the last and we
+[317.8s] worked on web assembly the very first
+[319.5s] time we pair programmed on BAML
+[321.7s] together. I think that was the one like
+[323.6s] getting that thing running in the
+[324.6s] browser was crazy.
+[326.4s] >> Exactly. And just so we have like full
+[328.1s] context for everyone in the chat, please
+[329.6s] keep asking questions along the way if
+[331.3s] something architecture doesn't make
+[332.6s] sense. We're gonna have tons of dead
+[334.5s] time to go talk about this stuff. So
+[336.5s] just ask.
+[339.8s] Awesome. So what are we really trying to
+[342.0s] do? So I'll describe the overall
+[343.1s] architecture and as we do the
+[344.3s] architecture I'll then go ahead and
+[347.1s] talk through this. So what we have is we
+[350.2s] have our compiler we have our uh beex
+[352.6s] which is kind of like our V8 engine.
+[354.0s] It's the beex baml execution engine. And
+[356.9s] then what we have is we've done one of
+[359.2s] the cool one of the interesting things
+[360.7s] about BAML that you might know is that
+[362.4s] we try and be compatible with every
+[364.1s] single language. And part of that comes
+[366.4s] from this new CIS crate that we have
+[368.1s] created. And this is kind of like system
+[369.4s] calls. You can think of it like network
+[370.6s] operations. You can think of it like uh
+[372.5s] OS environment variables. And what we do
+[375.0s] with the SIS calls is we actually bridge
+[377.4s] to every other system under the hood to
+[380.8s] say that when you call when in BAML when
+[383.0s] you call os.get environment variables in
+[385.3s] the case of python it goes to the uh in
+[389.0s] you'll see a cis python that will route
+[391.5s] itself all the way to python and
+[393.3s] actually get os.environ from python
+[396.1s] >> and go will get the go environment
+[397.4s] variable. That's how we do the bridging.
+[399.6s] >> Okay. So you're using the program each
+[401.5s] programming language's own subsystem for
+[403.9s] integrating with the system and you
+[405.7s] basically just need to be able to invoke
+[407.5s] that from the BAML VM.
+[409.8s] >> Exactly. And that's how we do that and
+[411.4s] that's how we've designed this. That's
+[412.6s] why it feels so native in every language
+[414.2s] stood instead out plugs right in.
+[416.8s] >> Uh so you kind of get all the benefits
+[418.4s] of every existing language without
+[419.8s] having to really pay too much of a tax
+[421.4s] of having to use BAML. And that's why
+[423.0s] BAML is designed to be integrated. But
+[425.1s] in web assembly that's the next crate
+[427.1s] that we want to go build. We want to
+[428.4s] connect this whole system to the W uh to
+[430.7s] the WOM system. Now, in order to
+[433.3s] actually create the Wom system, we're
+[434.8s] going to need to create a new CIS bridge
+[436.6s] into WOM. And WOM is interesting because
+[439.8s] we don't just want to call fetch in the
+[441.8s] WOM world. We kind of want to pass in a
+[443.4s] JavaScript function from playground and
+[446.7s] pass it all the way down into
+[449.1s] >> because WOM because WOM itself is kind
+[452.0s] of designed to not have a lot of those.
+[454.2s] It's like sandboxy thing, right? It's
+[456.1s] for running mostly like Basel. It
+[457.8s] doesn't have access to the file system
+[460.0s] by default. It doesn't have access to
+[461.6s] network interfaces by default.
+[463.4s] >> Exactly. So like how would a file system
+[465.6s] work in Wom? Well, the JavaScript system
+[467.9s] is actually just going to have a
+[469.0s] virtualized file system. The JavaScript
+[471.4s] system will have a virtualized
+[473.8s] uh will have a virtualized um what's it
+[476.9s] called? We'll have a virtualized
+[478.2s] environment variable system. The Java
+[480.6s] the JavaScript is virtualized but really
+[482.6s] it's still bridging to JavaScript
+[483.9s] functions to access everything. So
+[485.4s] what's nice about that is now React can
+[487.7s] modify these systems and your BML code
+[490.4s] will just access this side effect. This
+[492.6s] will also enable CloudFare workers which
+[494.2s] will just be nice. Um but this is a
+[497.4s] system that we're going to go design.
+[501.7s] So ideally at the end of this box we
+[503.4s] should see another thing called cis wom
+[505.5s] over here and there should be a
+[506.9s] dependency that somehow creates connects
+[508.7s] baml playground wom to beex engine
+[512.2s] >> and also ends up depending
+[514.2s] >> go
+[514.6s] >> sorry what is baml playground wom like
+[516.9s] and this thing on the right this is the
+[518.7s] this is the baml core that we've been
+[520.9s] using for years now this is the vs code
+[523.0s] extension like what is this? Yeah. So
+[525.4s] this is the thing that powers a VS Code
+[527.3s] extension.
+[528.9s] >> Okay.
+[529.7s] >> So we haven't shown the VS code
+[531.1s] extension, JavaScript code here. Uh but
+[533.2s] this diagram is purely our Rust code.
+[535.8s] >> Okay. So the BMAL playground wom is the
+[537.8s] bridge to the VS code extension.
+[540.3s] >> Exactly. So this compiles the web
+[541.8s] assembly and creates a JavaScript
+[543.0s] interface on top of it. And then our
+[544.3s] JavaScript system just calls initializes
+[546.1s] WM and calls all that.
+[548.3s] >> Okay.
+[549.1s] >> So we're going to have to pass in some
+[550.4s] callbacks into here and then pass it all
+[552.3s] the way down.
+[553.9s] Okay, exciting.
+[555.2s] >> Cool. So, we want to virtualize a file
+[557.4s] system and we want to virtualize network
+[559.5s] calls like fetch. Those would be I think
+[561.8s] the two end goals of today.
+[563.7s] >> And the idea that possible if you're if
+[565.8s] you're invoking from Python that it
+[568.7s] should like basically be passed into the
+[571.1s] runtime a function that is actually like
+[573.0s] a native Python fetch or like a native
+[575.4s] TypeScript fetch based on a language
+[577.0s] you're in similar to how CIS works.
+[579.8s] >> Exactly. Exactly. Um I think Rich asked
+[582.5s] interest question how does this diagram
+[584.0s] get created. So this diagram is actually
+[586.3s] very very LM friendly. You can pass in
+[587.9s] as an image to the diagram or if you can
+[589.5s] see over here it's purely an SVG file.
+[592.3s] So you can also just read it and it's
+[593.9s] very very small. Why did we use SVG over
+[596.6s] um why do we use SVG over PNG? Well we
+[600.0s] use SVG over PNG because
+[602.8s] um uh can you can you show the raw file
+[607.0s] also when you have a sec? Uh it's just
+[609.4s] 719 lines.
+[611.1s] >> Yeah.
+[612.0s] >> So like it's super small. Um and it fits
+[614.6s] right into an LM context window. This
+[616.6s] gets fully codegened. Uh we don't
+[619.1s] actually write this ourselves. How does
+[620.6s] this get codegened? Well, if uh one of
+[623.0s] the things that we've been doing in our
+[624.2s] codebase is uh many of you know we don't
+[626.0s] do code reviews at all and we ship a
+[628.0s] pretty complex system. As you can see
+[629.3s] from here, we've got all sorts of code
+[631.7s] in here. We have unsafe Rust code that
+[633.3s] we have to go do. Uh we have a tool that
+[635.8s] we've built. If you go into our repo,
+[637.7s] you'll find it. It's called I don't know
+[639.4s] what's the resolution of my screen right
+[640.7s] now, Dexter. Is it good? Is it bad?
+[641.8s] >> It's readable. It's good.
+[643.3s] >> It's readable. Okay, that's good.
+[647.0s] Interesting. So, it zooms out
+[648.2s] automatically. Anyway, um there's a if
+[650.6s] you go into repo, there's a tool called
+[652.2s] tools tools stow. Cargo Stow is a tool
+[655.7s] that we've made that basically is able
+[658.5s] to go ahead and look into a repo and
+[660.5s] basically guarantees
+[662.5s] uh dependencies. It's kind of like an
+[664.4s] alternative to like um a lot of like
+[666.2s] llinters. But what we basically do is we
+[668.6s] say, "Hey, if you have a namespace, we
+[670.7s] can guarantee rules about that namespace
+[672.6s] about how arrows can be drawn between
+[674.2s] them."
+[675.0s] >> So why does this matter?
+[675.8s] >> I've seen there's tools like this in
+[677.2s] like if you have a giant rails mono
+[679.2s] repo, you can like per package you can
+[681.5s] set like ingress and egress rules and
+[684.2s] then you can have like hard enforcement
+[686.1s] and then they also have like a soft
+[687.5s] enforcement mode where just print a list
+[689.4s] of the violations and then you have your
+[691.1s] to-do list if you actually want to
+[692.5s] create the clean boundaries that you've
+[694.0s] specified.
+[694.8s] >> Yeah. And the idea is that these dashed
+[696.9s] arrows are across namespace boundaries
+[699.1s] and these arrows uh and the uh other
+[701.8s] links are like um within namespace
+[704.1s] boundaries
+[704.5s] >> like within a crate.
+[706.2s] >> Exactly. Uh these are all the names of
+[708.0s] crates and we basically this just makes
+[709.8s] it really easy to see is there's like if
+[711.4s] an LM slop machine has added bad
+[714.2s] boundaries and if it does we basically
+[716.6s] have a CI/CD failure that prevents that
+[718.3s] from happening because in the world of
+[720.1s] LLMs the more you can automate it's
+[721.8s] really easy and like this this file stom
+[724.4s] just runs on CI/CD. So like for example
+[727.3s] linking this to the actual diagram
+[729.4s] you'll notice that we have like a
+[730.6s] namespace called BAML and now there's a
+[732.5s] BAML namespace over here and everything
+[733.8s] in here is prefixed with BAML under the
+[736.2s] hood.
+[737.3s] So my question is like there is you have
+[740.1s] your rule set and then you have your
+[741.8s] generated diagram and I'm curious
+[745.4s] >> um
+[747.0s] >> which one of the like I would have
+[748.6s] expected something in the middle like an
+[750.8s] intermediate like text representation
+[752.7s] that is LM friendly because you don't
+[754.4s] really want to be feeding SVG paths
+[756.3s] straight to an LLM, right? I agree
+[758.1s] >> because there's some there's some
+[759.4s] algorithm the layout algorithm here that
+[761.7s] actually determines how the SVG is
+[763.2s] generated, right?
+[764.2s] >> Yeah. Let's go back to this diagram
+[766.2s] because I think people will have a lot
+[767.3s] of questions about this. But let's do
+[768.4s] this right after we actually create a
+[769.6s] new task.
+[770.3s] >> Yeah, let's take this off.
+[771.8s] >> Okay. Uh in theory, the wazi runtime
+[774.8s] should be supported as well, Patrick.
+[780.6s] >> Okay.
+[783.1s] >> We'll call this like sis was.
+[792.8s] Okay. Um, and what we want to do is we
+[795.0s] want to say something like, and I use
+[796.2s] voice for a lot of my coms. So, I want
+[798.6s] to research the codebase and oh, whoops.
+[802.3s] Currently, we don't support BAML
+[803.8s] playground wom calling into Beex engine.
+[805.8s] I want to make that possible. That
+[807.1s] likely means we also have to add a
+[808.6s] cis_wom crate to because cy native can't
+[811.6s] be used for beex engine there.
+[816.3s] >> Cool. That's probably about right.
+[822.4s] Okay,
+[822.8s] >> possible. Okay, cool. So, it's a pretty
+[824.5s] ambiguous task as you guys can see. It's
+[826.6s] somewhat it has some technical details
+[828.2s] because I have some context around this
+[830.6s] already. So, I'm going to give it that.
+[832.0s] Um, and I'll just kick this off.
+[834.8s] >> And the first thing that we're going to
+[836.0s] do is I'm going to pull up Obsidian.
+[840.2s] Where's my favorite little tool called
+[842.6s] Obsidian?
+[846.7s] Oh, the resolution makes drives me
+[848.3s] crazy. It changes how my mouse works.
+[851.8s] Um, and what we did over here is we made
+[854.3s] a VBB. So, the first thing is it just
+[856.9s] made a ticket file that uh just wrote
+[859.9s] everything down in terms of what we just
+[861.4s] wrote in the message. And now it's going
+[862.7s] to go and kick off our research process.
+[865.0s] And those of you that know RPI from DEX
+[866.8s] are talking about it so much is
+[869.7s] um honestly that RPI is pretty freaking
+[872.9s] good. Before we do any amount of work
+[875.0s] into the question, we're going to
+[876.4s] produce some research that tries to get
+[879.4s] some facts about the system. It doesn't
+[882.2s] do any effort in terms of actually
+[885.0s] understanding it uh in terms of actually
+[887.5s] modifying it or even interpreting the
+[889.5s] changes that we need. It's purely about
+[891.0s] gathering the current status of the
+[892.5s] system. Is that right, Dexter?
+[894.3s] >> Yeah. So, um, and and it used to be
+[896.4s] basically like the process to do a good
+[898.2s] RPI, like a a lazy RPI would be like
+[901.2s] here's what I'm building, go do research
+[902.9s] for it. And the challenge we saw that
+[905.0s] doing over and over again is the model
+[906.6s] would focus more on information about
+[909.3s] how to solve the ticket that you were
+[911.0s] building or the problem or the issue or
+[912.6s] the bug. And research, the goal of
+[915.2s] research is really to like compress
+[917.4s] truth to compress the state of the world
+[919.5s] today without having you want it to stay
+[921.5s] super super objective. And so the like
+[925.0s] skilled RPI people what they would do is
+[927.2s] they would read the ticket and then they
+[928.5s] would kind of have at least high level
+[930.6s] understanding of where stuff was in the
+[931.8s] codebase. They would have like be able
+[933.2s] to read a chart like this and understand
+[935.0s] how things are laid out. Uh and so they
+[937.4s] would they would translate it into
+[938.8s] objective questions. They'd be like tell
+[940.3s] me everything about how BAML playground
+[941.8s] was works. Tell me how CIS native calls
+[944.2s] into native programming language. Tell
+[946.0s] me about the relationship between the
+[947.8s] beex and the cy crates. like they would
+[949.4s] generate these questions that they would
+[951.0s] know would send the model off to find
+[952.6s] the right things. Um the challenge was
+[955.3s] is like we need we wanted it to work
+[958.4s] well for the the lazy folks as well,
+[960.9s] right? Like that requires quite a bit of
+[962.4s] skill and codebased understanding. Uh
+[965.0s] and so one of the things that we
+[967.7s] trialled a lot and got really good
+[969.0s] results with is um what Vibb's doing now
+[971.0s] which is to take the ask of what we're
+[973.5s] building do a very lightweight like
+[976.5s] exploration of the codebase and then
+[979.0s] generate not a research document but a
+[981.5s] set of objective questions. And so now
+[984.8s] instead of just research, there's like
+[986.6s] two phases, right? You take the ticket
+[988.2s] and you build the questions. And then
+[989.8s] when we feed the questions to the next
+[991.7s] fresh context window, we're context
+[993.6s] engineering it. in the way we do not
+[995.6s] want the researcher to have any
+[997.8s] intuition about what we're building
+[999.4s] because these models will always bake in
+[1001.0s] a bunch of implementation details which
+[1003.3s] is basically like the model picking the
+[1005.9s] next most likely token rather than like
+[1008.6s] pulling the human in into the loop to
+[1010.9s] like review and identify and like
+[1013.0s] iterate on this stuff.
+[1014.2s] >> Exactly.
+[1014.5s] >> Does that make sense?
+[1016.1s] >> Exactly. So hopefully the tokens will
+[1018.9s] come out pretty soon and we'll have our
+[1020.2s] research questions. uh but while it
+[1022.4s] doesn't do that you guys had a couple
+[1024.1s] questions around how how does the
+[1025.4s] diagram be generated there might be
+[1027.0s] intermediate step so it turns out that
+[1028.7s] this di we did consider putting
+[1030.3s] intermediate step out but the reason
+[1031.5s] that we don't link every single
+[1035.0s] um every single dependency in this
+[1036.7s] diagram is because it actually ends up
+[1040.0s] being once you have dependencies it ends
+[1041.6s] up being like very transitive. So if
+[1043.4s] this ends if compiler emit depends
+[1045.5s] on BAML compiler MIR likely BMA compiler
+[1048.6s] emit also somehow depends on BMA
+[1050.2s] compiler VIR we don't want to draw that
+[1053.1s] dependency line so we do a lot of
+[1054.4s] transitive reduction to actually get rid
+[1057.1s] of all the dependencies and only show
+[1058.5s] the minimum set of dependency in the
+[1059.7s] graph this actually makes this much
+[1061.0s] easier for an LM to digest as well and
+[1063.3s] makes it way easier to induce rules and
+[1065.4s] verification on top of this if that
+[1067.6s] makes sense.
+[1071.4s] I think we're done with research
+[1073.0s] questions.
+[1075.2s] Um, okay. I think we're done with
+[1076.7s] research questions.
+[1081.2s] Okay. I want to go read this, Dexter. I
+[1083.0s] think there's a question for you in the
+[1083.9s] chat.
+[1084.7s] >> Let's see. Oh, yeah. So, I mean, this
+[1086.4s] will become clear when um
+[1090.6s] this will become clear when we when we
+[1092.6s] go and like look at what these questions
+[1094.2s] are, but yeah. So, here they are. So
+[1095.4s] yeah, the the idea is you want to make
+[1098.4s] um you want to make you want to make
+[1100.2s] this super super objective. So it's
+[1102.1s] asking here's trace how this works. Find
+[1104.0s] how these things relate. Find all the
+[1105.5s] patterns for this and that. Um find the
+[1108.0s] async bridging and since types and you
+[1110.1s] can always edit these, right? Like the
+[1111.4s] idea is like we just want to automate
+[1113.5s] the thing and give you like a starter
+[1115.4s] and you may delete one of these
+[1116.5s] questions, you may add a new one, but
+[1118.2s] this is going to give you the like basic
+[1121.4s] idea of what um what what the research
+[1125.8s] should probably look like. And and Ben,
+[1127.8s] this Riptide experimental, this is the
+[1129.6s] like again I mentioned it earlier in the
+[1132.0s] episode, but we kind of rebuilt code
+[1133.5s] layer from the ground up. Um, and this
+[1136.5s] is uh this is a preview of our new
+[1139.3s] project which I guess Vibb has been
+[1141.0s] using what for like a week now. We got a
+[1143.4s] lot of we got a lot of support tickets
+[1144.6s] from Vibb. He has lots of he has lots of
+[1146.6s] requests.
+[1148.0s] >> I'm an opinion engineer if I say nothing
+[1150.3s] else. Um, okay. So, let's talk about
+[1153.0s] let's talk about um what kind of
+[1154.6s] questions it asks. So, it seems to be as
+[1156.3s] you can as many of you can tell uh
+[1157.9s] likely the u
+[1160.6s] uh you can actually see what some of the
+[1162.2s] questions are. A lot of the questions
+[1163.2s] are actually about the current crate.
+[1164.6s] It's talking about like how does baml
+[1166.1s] playground actually use wom binden which
+[1167.9s] is a crate in rust uh that takes
+[1170.1s] advantage of javascript and bridges the
+[1171.6s] two together. We may have to do some
+[1173.4s] extra work there because we need to
+[1174.6s] virtualize a file system. Which of these
+[1177.2s] can be which of these are unsupported?
+[1179.1s] For example, fs open and shell are
+[1181.0s] clearly unsupported in wom but we may
+[1184.8s] not want so we have a shell sys call for
+[1187.0s] example. We may not want to actually
+[1188.7s] make these unsupported. So I'll actually
+[1190.8s] update this question.
+[1192.6s] For the unsupported
+[1197.2s] systems, I would like to accept
+[1201.0s] callbacks from I would like to accept
+[1204.5s] optional callbacks from JS.
+[1208.0s] Um,
+[1210.2s] so I can bridge with a
+[1214.5s] virtualized
+[1217.4s] um FS
+[1220.9s] uh virtual virtualiz fs/shell.
+[1226.3s] Um, so we just need to know what needs
+[1232.2s] to be in that way.
+[1235.8s] So I wanted to update the questions
+[1237.0s] because if the question is wrong, it's
+[1238.6s] going to go ahead and just make this
+[1239.9s] assumption for the rest of the system
+[1241.4s] that what they're going to do over here
+[1243.3s] is it's going to say that hey we now
+[1245.8s] need a ver if it says it's unsupported,
+[1247.7s] it's just going to do everything else.
+[1249.4s] So it should just know it should know
+[1250.7s] the concept of it is virtualization as
+[1253.0s] opposed to anything else.
+[1256.5s] Uh and then what I want to tell it is uh
+[1261.1s] BAML schema was this is extremely
+[1267.4s] legacy code.
+[1269.7s] We don't
+[1271.8s] uh know if it follows
+[1275.1s] best practices
+[1278.4s] but it can still provide some guidance.
+[1283.4s] So I want to make sure even when it does
+[1285.3s] research it knows that this is uh just
+[1287.5s] old code and we definitely want to make
+[1288.9s] sure we don't bias ourselves too much in
+[1291.3s] this system.
+[1294.2s] >> RPI stands for research plan implement.
+[1296.5s] We got a question chat there.
+[1298.6s] >> Yeah.
+[1299.0s] >> Um it is a phenomenal technique. Uh for
+[1301.5s] context by the way uh I guess I can't
+[1303.9s] show my usage here. I I am I have uh
+[1307.5s] actually let me pull up my code base.
+[1309.0s] >> Been blasting a lot of tokens. Dude,
+[1311.3s] >> I'm about to show you guys how much code
+[1312.6s] I've been writing really fast while when
+[1314.2s] this proceeds to research because
+[1315.4s] research will take a while.
+[1316.8s] >> Let's get this in. And actually, what I
+[1318.2s] would do Well,
+[1318.9s] >> okay.
+[1319.4s] >> Um,
+[1320.4s] >> I would actually Will you cancel this?
+[1322.1s] We're we're updating how the questions
+[1323.7s] get passed in. It doesn't actually pull
+[1325.2s] from the file. It pulls from the last
+[1327.1s] agent message.
+[1328.5s] >> No, it doesn't. It just It just pasted
+[1331.0s] the questions in. So, what I would do is
+[1332.5s] I would uh just copy this prompt and
+[1334.6s] then just paste in the questions from
+[1337.1s] from the doc. Didn't it copy and paste
+[1340.2s] it from here?
+[1341.1s] >> No, it's not.
+[1343.8s] It will be soon, but today it's not. Uh,
+[1346.0s] this is an improvement we want to make.
+[1348.2s] >> Uh, okay. Well, I'll just tell it to
+[1349.7s] like
+[1350.9s] >> Well, don't tell it to read. See, the
+[1352.2s] problem is you don't want it to read the
+[1353.3s] file because you don't want the input
+[1355.2s] query. You don't want it to know what
+[1356.4s] we're building. So, you have to go
+[1357.5s] delete the input query
+[1359.1s] >> for this.
+[1360.5s] >> Yeah.
+[1362.0s] >> Why don't you want the input query?
+[1363.9s] >> Because the research must remain
+[1365.8s] objective. because you don't want the
+[1367.9s] model to know about what we're building.
+[1371.7s] >> Okay, let's get rid of it in that case.
+[1373.5s] I'll try that. Um, I have found having
+[1375.3s] input query sometimes useful, but let's
+[1376.8s] try it. I'm down.
+[1378.2s] >> You guys spend a lot more time thinking
+[1379.5s] about this than I do. Okay, while this
+[1381.0s] is running, let's do a few more things.
+[1382.3s] Let's I want to talk about how our team
+[1384.2s] like codes a lot. So, uh, and like how
+[1386.5s] we're able to go and ship without a lot
+[1388.0s] of PRs and what workflow.
+[1390.3s] >> You all have an incredibly high quality,
+[1392.6s] well architected code base and you don't
+[1395.2s] do code reviews.
+[1397.0s] Yeah.
+[1397.4s] >> How can people get there? What's the
+[1399.4s] What's the secret?
+[1401.8s] >> We're writing a crap ton of code. I'll
+[1403.4s] just show you like in the last month. Uh
+[1405.5s] this was a very sad month.
+[1410.3s] Um and Aaron Aaron actually writes a
+[1412.3s]  ton, but he writes in the private
+[1413.5s] repo because we have a cloud system
+[1414.7s] that's coming up really fast. He'll be
+[1416.6s] excited.
+[1417.8s] >> Um but like like check out all this
+[1420.5s] code.
+[1422.4s] All vibecoded
+[1424.2s] >> and it's all additive. It's not vibe
+[1425.8s] coded. I don't like the word vibe
+[1427.4s] coding.
+[1428.7s] >> You engineered it.
+[1430.5s] >> Yeah, it's engineered. But like I'm
+[1432.0s] talking about like we've done heap
+[1433.0s] allocators. We've done all sorts of
+[1434.2s] things now. And this is all very very
+[1435.9s] recent in terms of what's happening. You
+[1437.8s] just see the order of magnitude of code
+[1439.0s] that we're doing with pure vibe coding.
+[1441.4s] >> Vibe coding means you don't give a
+[1443.0s] about the code. Uh so I think it's
+[1445.2s] really like I don't know Simon Wilson
+[1446.7s] calls it vibe engineering. I don't even
+[1448.4s] like the word vibe. I
+[1450.2s] >> I think it's just software engineering.
+[1451.8s] We're uh it's it's like designed
+[1454.2s] systems. Um and like part of the process
+[1456.3s] of doing design systems here
+[1458.3s] >> is actually like building tools like
+[1460.1s] this. So we spend a considerable amount
+[1461.9s] of time on our team actually like
+[1464.4s] thinking about like what kind of tools
+[1465.7s] to build not just about like how to go
+[1467.4s] build this because like for example if
+[1469.8s] this you should have seen let's see if I
+[1471.4s] can can I use can I look up history of
+[1473.2s] this file? Let's look up history of this
+[1475.0s] file. Um because I think that'll be fun.
+[1477.3s] >> Yeah. I mean like what what you're after
+[1478.7s] here is mental alignment, right? either
+[1480.8s] with the human and the agent or with the
+[1482.6s] human and other humans. But you need
+[1484.2s] like efficient ways to keep everybody on
+[1486.5s] the team on the same page as far as like
+[1489.0s] what the codebase is and how it's
+[1491.0s] changing over time.
+[1492.5s] >> Exactly. Because otherwise you can't do
+[1494.3s] anything. And I actually want to bring
+[1496.6s] architecture. SVG into the like the top
+[1499.0s] of the file. So how do I see raw
+[1500.6s] history? Yeah.
+[1502.2s] >> The history of this file.
+[1504.7s] H
+[1505.0s] >> it's not going to just show me all the
+[1506.5s] versions of this file. Um, how should I
+[1509.6s] do this?
+[1510.3s] >> I think if you click one of these, you
+[1511.8s] see the file at that at that Shaw. Yeah.
+[1514.9s] View code at this point.
+[1516.2s] >> Let's just go down this. So, like I'll
+[1517.6s] show you the very earliest version. The
+[1519.0s] very earliest version had this shitty
+[1520.4s] piece of code. Still very useful. By the
+[1523.1s] way, we actually caught some bugs here.
+[1524.6s] Like for example, one of the first bugs
+[1526.6s] that we caught by seeing this diagram
+[1528.1s] was we're like, why does the compiler
+[1529.8s] tool chain depend on the VM?
+[1531.8s] >> And that was um surprising to say the
+[1534.5s] least. Actually, let me just pull up a
+[1536.0s] couple more of those. I shall do it in
+[1538.2s] chronological history so it's like very
+[1539.7s] very clear what's happening because I
+[1541.4s] thought that was that was the most
+[1542.5s] interesting part of why this tool chain
+[1543.9s] helped and you guys can actually see how
+[1545.4s] it evolved over time.
+[1550.2s] Okay, maybe I missed one but doesn't
+[1551.4s] matter. So yeah, the first thing we
+[1552.8s] caught was hey why does a VM depend on
+[1554.8s] this? Well, it turned out the VM depend
+[1556.5s] on this because we had some built-in
+[1557.8s] types and like built-in functions that
+[1560.0s] were hardcoded into VM crate that were
+[1562.1s] now in there. So we actually just pull
+[1564.2s] that out into a separate crate and now
+[1565.4s] you can see the VM is here. But this is
+[1567.4s] still a little weird. Why does the VM
+[1569.7s] why does the compiler still depend on
+[1571.4s] the VM?
+[1572.5s] >> That's still really really odd.
+[1574.2s] >> I think we did this later. Uh we did a
+[1576.4s] couple more stuff. So then we made a
+[1578.5s] type system where the types that are
+[1580.5s] used in the VM because we have to do
+[1581.9s] like bite code generation.
+[1583.7s] >> Yeah, you pull out the type system so
+[1586.3s] that you have like the interface between
+[1588.0s] the two things
+[1589.6s] >> kind of. It's more like the assembly
+[1591.1s] that we generate. So the way the BML
+[1592.7s] compiler works is we read all your
+[1594.2s] source code and we generate assembly
+[1595.7s] that describes it.
+[1597.5s] >> That's why it's freaking fast. Uh now
+[1600.4s] >> um but what ends up
+[1601.4s] >> when you say assembly, do you mean x86
+[1603.5s] assembly or do you mean your own kind of
+[1605.2s] like assembly?
+[1606.1s] >> It's our own instruction set. It's very
+[1607.5s] similar to how Python does it. Uh we
+[1608.9s] have it's like how JVM works. That's how
+[1610.6s] everything else works. So we have our
+[1611.9s] own like instruction by code.
+[1614.2s] >> The BAML bite code. Um the BAM bite
+[1617.4s] code. Anyway, um of what ends up
+[1619.8s] happening now is now you can again see
+[1621.4s] the project became a lot cleaner as you
+[1623.8s] can go do this. We've also we started
+[1625.6s] enforcing a couple rules on top of that.
+[1628.2s] For example, when LM started naming
+[1630.3s] things, they'll kind of name things
+[1631.7s] whatever the heck they want and it
+[1633.2s] quickly turns into slop uh that just uh
+[1636.4s] quickly starts interdepending.
+[1638.6s] So, for example, now you're seeing that
+[1640.1s] we finally had the uh the Stow tool at
+[1642.2s] this point. What the STO tool did is it
+[1644.3s] enforced naming criteria. It also said
+[1646.3s] that for example Tokyo we know is a
+[1648.4s] dangerous crate. If someone depends on
+[1650.4s] Tokyo we quickly get uh screwed because
+[1652.8s] we don't have WAM support by accident
+[1654.5s] now and the W was build breaks because
+[1656.1s] it imports something that we can't
+[1657.3s] import. For those of you that know don't
+[1659.3s] know Tokyo is a rust library for like
+[1661.4s] multipprocessing and async workflows and
+[1664.2s] async behaves really weird in WAM and in
+[1667.0s] very various languages. So this becomes
+[1669.7s] harder for it to deal with. Uh then
+[1672.3s] after that we added a bunch more tests
+[1673.7s] and as you can see the tests quickly
+[1675.3s] blew up and we're like okay well this
+[1676.7s] doesn't really scale. So then we made
+[1678.6s] this actually much better. Um and then a
+[1681.8s] lot this is the same data but just like
+[1683.9s] easier to read.
+[1685.2s] >> Exactly. because we started coloring by
+[1686.9s] namespace and then we started one of the
+[1690.0s] first things that we noticed was oh
+[1692.3s] there's some really weird dependencies
+[1693.9s] like the way that VM types actually gets
+[1696.2s] used is it goes to BML snapshot which
+[1698.6s] then goes all which then like the best
+[1701.0s] engine weirdly depends on
+[1703.4s] >> so there's this really weird dependency
+[1705.0s] here and like what's really interesting
+[1706.6s] when you go look at this is your brain
+[1709.0s] automatically probably guesses like oh
+[1710.9s] this probably shouldn't be named BAML
+[1712.5s] snapshot this should probably be in the
+[1713.7s] Beex system this should be snapshot
+[1715.8s] just because of the way that
+[1716.7s] dependencies are oriented. And you could
+[1719.4s] spend forever discussing how to name
+[1721.4s] software. But when you actually just
+[1723.8s] look at this, it's a lot more clear how
+[1727.1s] you actually name things. And even cloud
+[1728.5s] code, we just asked cloud code, what's a
+[1729.9s] better name for this system? And cloud
+[1732.1s] code eventually came up with the name of
+[1736.0s] I think it's in here. The cloud code was
+[1738.3s] like, oh, we should name this beex
+[1739.4s] program. And now again, you can see how
+[1741.1s] the diagram became a lot more clear. And
+[1743.8s] that's I think the interesting part of
+[1745.6s] this is you can go from a really sloppy
+[1747.5s] diagram to a converg diagram that makes
+[1750.3s] more sense over time. And that's really
+[1754.2s] what I find to be really useful when
+[1756.8s] vibe coding, which is the clarity of
+[1758.8s] your thoughts and your architecture is
+[1760.4s] really the only gap.
+[1762.6s] And the better that you can convey
+[1764.6s] clarity and simplicity to the agent, the
+[1767.0s] more likely that you'll end up with a
+[1768.6s] world where the agent is actually going
+[1771.0s] to be able to do something that makes
+[1772.2s] more sense. And in this the only problem
+[1774.7s] with the current system right now is the
+[1776.2s] the layout engine doesn't have a stable
+[1778.2s] way of organizing these namespaces.
+[1781.0s] If we actually change that I suspect it
+[1782.8s] would be a lot easier and a lot more
+[1784.2s] robust as well along the way.
+[1786.6s] >> Yeah. getting deterministic layouts like
+[1788.7s] I don't know if you've used like mermaid
+[1790.0s] versus like graph viz or like dot um
+[1794.6s] >> the toggles on it like the APIs to those
+[1797.6s] systems always and it's either like very
+[1799.3s] low level and you actually have to think
+[1800.8s] about like the algorithm or it's very
+[1802.6s] high level and very brittle like I don't
+[1804.2s] know you ever use dot and like rank
+[1806.3s] equals same for
+[1807.4s] >> graph this uses graphiz under the hood
+[1811.5s] >> um and that's why we mermaid was just
+[1813.7s] not pulling out the right thing the
+[1815.9s] other nice thing about this is while it
+[1817.8s] does use graphiz, graphiz doesn't
+[1819.7s] support like all these customizations.
+[1821.2s] So what we really do is we produce
+[1823.2s] graphis produce an SVG. Then we do some
+[1825.2s] most processing on the SVG to actually
+[1827.1s] make it nice. So like for example,
+[1829.4s] following these dotted arrows is really
+[1831.0s] hard visually, but now it's super easy
+[1832.8s] because these dotted arrows are like
+[1834.1s] arrows along the way. So you know which
+[1835.6s] direction the arrow is going at any
+[1836.8s] given point.
+[1838.2s] >> Yeah. Nice. Cool. Um I think we got our
+[1842.0s] research doc, right? It's still wring.
+[1844.0s] >> It's almost done.
+[1845.4s] >> Yeah. Okay. So, we've taken our
+[1846.9s] questions and we've turned them into
+[1848.9s] research.
+[1850.4s] Um, and now it's going to give you this
+[1852.3s] document. Um, and you may you may read
+[1855.7s] this. I mean, again, like depending on
+[1857.3s] how large I know you're doing a very big
+[1859.0s] complex thing and a very big codebase.
+[1860.6s] So, in this case, like I imagine you'll
+[1862.2s] want to read and skim this research and
+[1863.7s] make sure it's captured all the details
+[1865.2s] you want. depending on the size of the
+[1867.5s] task, I sometimes find myself like just
+[1871.0s] not really reviewing the questions, not
+[1872.6s] really reviewing the research because
+[1874.1s] the most important and high leverage
+[1875.9s] part of this is going to come next. Um,
+[1878.0s] and it'll be clear from the design
+[1879.8s] discussion if something was missed in
+[1881.2s] the research. But I I encourage you to
+[1883.4s] to review this if you if you if you want
+[1885.5s] to.
+[1886.1s] >> So, here's what I usually do when I do
+[1888.3s] this. So, I basically just say screw
+[1890.2s] tokens. I don't really care about the
+[1891.8s] the token price or anything. I'll just
+[1893.3s] pay the money anyway because speed
+[1894.6s] matters a lot more than um token price.
+[1898.1s] >> So what I end up doing is I say, "Okay,
+[1899.7s] there's some questions here. Maybe
+[1900.9s] there's some mistakes in the research. I
+[1902.2s] don't really know." I just start the
+[1904.2s] next process anyway
+[1905.8s] >> in case and then you go start reviewing
+[1907.6s] it.
+[1908.2s] >> Exactly. And literally I'll start
+[1909.7s] reading the research afterwards. I'll be
+[1911.5s] like, "Okay, well I'll come back and now
+[1913.1s] I'll read this because it's just like
+[1914.6s] pipelining." And if the pipeline is bad,
+[1916.2s] then I'll literally go and kill the
+[1917.7s] other process, kill the context, and
+[1919.4s] I'll just start again.
+[1920.9s] >> Yeah. Milles had a good question in the
+[1922.4s] chat. Do you also include a research
+[1923.9s] question for new third party libraries
+[1925.5s] to evaluate when appropriate? Um, I
+[1928.0s] think the answer is basically yes. Um, I
+[1930.9s] think we did an example of this here
+[1932.2s] where we added a web search question
+[1934.0s] which was like go read about the WASM
+[1936.6s] best practices. Not quite a library, but
+[1938.5s] it's an external technology that it
+[1940.2s] ended up sending off a like web agent to
+[1942.4s] research.
+[1943.4s] >> Yeah. And it's probably somewhere in
+[1945.1s] here or it'll pop up in the chat soon.
+[1947.7s] >> Yeah. If you see that you have a web
+[1948.9s] search researcher there in your mini map
+[1950.6s] on the right.
+[1951.2s] >> Oh yeah, right here. There you go. So,
+[1952.6s] you can go see what it searched for and
+[1954.3s] like what it what it ended up finding.
+[1956.0s] >> Yeah, it looked it literally wanted to
+[1957.4s] figure out how to use wine genen and JS
+[1959.0s] functions like which is what I wanted to
+[1961.1s] go figure out.
+[1962.3s] >> Cool.
+[1965.4s] >> I'm going to skim this for a little bit
+[1966.7s] really fast. Um, as you can tell, our
+[1969.1s] SIS calls are interesting to say the
+[1971.2s] least.
+[1972.4s] >> Okay. Shell. Nice.
+[1975.0s] >> Yeah, a shell is really important to us.
+[1976.9s] Uh, it allows you to build a coding
+[1978.3s] agent.
+[1980.8s] >> Bash configured considered harmful.
+[1987.0s] >> Uh, free function start version hot
+[1989.3s] reload. Okay. Oh, yeah. We need hot
+[1992.3s] reload as well. So, it needs to consider
+[1994.3s] that.
+[1996.7s] >> Okay, cool. So, it found a thing that
+[1998.1s] you didn't have like front of mind in
+[1999.6s] your write up, but you're like, "Oh,
+[2000.6s] yeah.
+[2000.8s] >> No, no, we have we have hot reload. It's
+[2002.8s] in there."
+[2003.4s] >> Yeah. Uh but it yeah
+[2007.1s] include hot reload. Yeah,
+[2009.1s] >> exactly.
+[2011.0s] I'm glad it mentions as legacy.
+[2014.8s] >> Yep. Promise base. So it actually knows
+[2016.5s] how to go bind this. That's perfect.
+[2020.7s] So this is how we do file system binding
+[2022.5s] in the old system. The new system needs
+[2024.3s] to be a little bit more generic.
+[2033.0s] And as you'll notice, I'm really
+[2034.6s] skimming this. I'm actually not trying
+[2036.2s] to do a very well detailed re read of
+[2038.8s] this. There's two reasons to this, just
+[2040.6s] to be very transparent. One reason is
+[2042.6s] we're on a live stream. I don't have
+[2043.8s] time to read this in a very detailed
+[2045.1s] way. U and I might be a little bit more
+[2047.4s] detailed, but also like Duck says, like
+[2049.4s] I'm just not that worried about uh about
+[2052.2s] the research being really wrong. It,
+[2054.2s] like I said, it's mostly objective. I'm
+[2055.8s] just looking for like did it miss
+[2057.0s] something that I know is foundational?
+[2059.1s] >> Uh it really
+[2060.8s] >> it's easier to proceed through and even
+[2062.5s] if you get all the way to the
+[2063.2s] implementation you're like oh there's
+[2064.5s] this huge foot gun that we missed. It's
+[2066.3s] like it's not that hard to just rewind
+[2068.6s] take your research and be like cool like
+[2070.6s] go do a followup and find all of this
+[2072.7s] stuff and then you resume from there
+[2074.3s] again and you push it back through.
+[2076.3s] >> Yeah. And then the other thing you guys
+[2077.4s] will notice is like this is actually one
+[2078.8s] of the most useful parts that I find in
+[2080.3s] the model like this code references. The
+[2082.6s] research always spits this out now and
+[2084.6s] that is so pleasant because like it
+[2086.5s] makes graping for the model so much
+[2088.3s] easier in downstream processes.
+[2090.3s] >> Yeah, you you you you would be surprised
+[2092.6s] how much of the context window gets used
+[2094.6s] when you start a fresh context on just
+[2096.3s] like finding where the stuff is and
+[2098.1s] which lines of the file are relevant.
+[2099.8s] >> Yeah, I don't think this matters.
+[2103.3s] Uh GC doesn't really matter how garbage
+[2106.1s] collection works. Uh it literally does
+[2107.8s] not make a difference.
+[2109.7s] Um
+[2113.4s] uh that's okay as well. Like I it
+[2115.3s] doesn't really matter. We just need a
+[2116.2s] virtualized file. So some it doesn't
+[2117.6s] matter how it read the old system,
+[2119.5s] >> how the old one worked.
+[2121.2s] >> Yeah. Like that I think really makes no
+[2123.8s] difference.
+[2125.0s] >> Okay. So um what we're going to see next
+[2127.0s] is the the design discussion um which is
+[2130.1s] essentially um basically if you've used
+[2133.2s] the canonical like RPI prompts from the
+[2135.4s] human layer repo or some version of them
+[2137.8s] um baked into that prompt was three
+[2140.2s] steps there was like ask the user you
+[2143.1s] know okay for for a number of questions
+[2145.8s] do you want to solve it this way or that
+[2147.4s] way right asking them how do you want to
+[2149.0s] approach this implementation based on
+[2150.6s] everything we read and what was in the
+[2152.1s] ticket um there's another there's
+[2154.5s] another prompt that is like, "Okay, now
+[2156.2s] what order do you want to do the
+[2157.4s] building in?" Like, it's like, "Where
+[2158.5s] are we going?" And then how do we get
+[2159.8s] there? And then write the plan. And
+[2162.4s] these steps could get skipped often. And
+[2165.3s] so what we've done is we've taken a long
+[2167.2s] prompt with 50 instructions and split it
+[2169.5s] up into three smaller prompts with fewer
+[2171.8s] instructions that solve different parts
+[2173.8s] of that planning workflow.
+[2176.5s] >> Yep. Exactly. And then um you've been
+[2178.4s] you're asking a question like is there a
+[2179.8s] difference of RPI versus filter? No, you
+[2181.8s] can do all this in cloud code too. Um
+[2184.3s] but um what I personally find is useful
+[2186.2s] is like this this stuff or like I can
+[2188.7s] organize by tasks and in cloud code like
+[2191.0s] resetting the context that begin the
+[2192.5s] same task is really hard. Knowing that
+[2194.2s] this was my research prompt and this was
+[2195.7s] like what we're doing design for. It's
+[2197.0s] just nice. I didn't label it just got
+[2198.5s] labeled automatically. Uh if you go back
+[2201.0s] to some of my other stuff I can show you
+[2202.6s] like for example I do multiple on some
+[2204.2s] stuff. It's just really easy to go
+[2205.5s] understand.
+[2207.0s] >> Oh cool. So you went you jumped back to
+[2208.6s] design and then went straight to
+[2209.5s] implementation. That's cool.
+[2211.0s] >> Yeah. Well I went the other way.
+[2212.2s] implementation back to design.
+[2214.0s] >> I see.
+[2215.3s] >> Yeah, that one.
+[2216.2s] >> Yeah. Okay. So, you got to the
+[2217.2s] implementation step and then you
+[2218.3s] realized something was off and you're
+[2219.4s] like, "Okay, we need to go update the
+[2220.6s] design doc and then I'm going to like
+[2221.9s] proceed from here."
+[2222.8s] >> Cool.
+[2223.2s] >> And people are asking like, "How does
+[2224.5s] this get organized over here?" Um, it's
+[2226.2s] just a files format. Like the prompt
+[2228.0s] just writes it to a file. You can choose
+[2229.6s] whatever file you want. You can tell the
+[2230.8s] agent to name it differently. Um, I need
+[2232.8s] to update the base prompts to actually
+[2234.2s] start naming these by number. So, like
+[2236.3s] research,
+[2236.8s] >> oh, that's coming actually. We're
+[2238.6s] >> research question should be 01. research
+[2240.5s] the actual research would be 02 then it
+[2242.2s] should be 03 for design discussion
+[2244.7s] >> because I want to number stuff
+[2245.9s] sequentially
+[2247.5s] >> and especially like if you guys look at
+[2249.1s] if if people want to see like my other
+[2250.5s] stuff like you can see how wild this
+[2251.8s] gets
+[2252.8s] >> uh actually I have another one that's
+[2254.0s] better
+[2254.9s] >> like this one
+[2257.0s] >> I have like multiple structured outlines
+[2259.0s] I I'll have multiple plans I have
+[2260.6s] multiple design discussions that have v1
+[2262.3s] v2 the model just picks an arbitrary
+[2264.0s] name if it's sequentially numbered it
+[2266.7s] just also reminds me in what order I was
+[2269.0s] working on the files and what order I
+[2270.4s] created them.
+[2271.5s] >> Yep.
+[2274.0s] Amazing. Um, cool. So, let's Yeah, let's
+[2276.6s] have a look at the design design
+[2277.9s] discussion. I know we have a summary in
+[2279.8s] the chat stream, but I would say
+[2281.5s] probably better to look at the document
+[2283.1s] itself.
+[2284.1s] >> Yes, I do always read the summary, by
+[2286.0s] the way, uh, because it's faster for me
+[2287.7s] to know what I'm going at. But I will
+[2289.4s] never ever start answering those
+[2291.3s] questions without actually reading the
+[2294.0s] full document because it is garbage.
+[2295.8s] >> Did the automatic like GitHub permal
+[2297.7s] link work? If you click on that link,
+[2299.0s] does it open?
+[2300.0s] >> That's the other thing that I found to
+[2301.1s] be extremely useful. So these design
+[2302.5s] discussions create uh GitHub links
+[2304.6s] automatically for us.
+[2306.2s] >> Oh no.
+[2306.7s] >> Oh, it did not work.
+[2309.5s] >> You might have a uh issue in your sync.
+[2312.2s] You may have like a merge conflict in
+[2314.2s] your sync repo.
+[2316.2s] >> Maybe. Um but that's unfortunate.
+[2319.1s] >> Yes, we're fixing that.
+[2321.1s] >> Okay. Yeah. Uh please do. I use I use
+[2324.1s] this all the time. Uh, as you can see,
+[2325.7s] most of it syncs and like whenever I
+[2328.2s] sync it, what I end up doing is I will
+[2329.7s] just take these design discussions, send
+[2331.0s] it to someone on my team, and they can
+[2332.1s] just go read it with a lot more context.
+[2336.8s] Okay, let's go read this really fast.
+[2339.2s] Um, patterns to follow. Yeah, cool. Yes,
+[2342.2s] native.
+[2347.5s] We want to bind promises with JS
+[2350.2s] callbacks. That'll do the trick. Uh,
+[2353.1s] thread local storage. Yep. We want
+[2355.0s] thread local storage.
+[2363.0s] >> Oh, nice. It's actually pretty cool.
+[2365.7s] JavaScript.
+[2367.6s] >> That is correct. Yeah, it's correct. Um,
+[2370.2s] this might be slightly nicer from like
+[2371.8s] an ergonomic standpoint because it'll
+[2373.1s] make the JavaScript code cleaner,
+[2374.8s] >> but we could do a onetoone strct that we
+[2376.9s] code gen so it should be okay.
+[2379.4s] >> Okay.
+[2379.8s] >> How does async operations bridge to JS
+[2382.0s] promises?
+[2383.8s] No Tokyo.
+[2387.1s] Yep, this is correct. Uh that is the
+[2389.7s] right way to do this. You want we want
+[2392.8s] we don't really want a Tokyo dependency
+[2394.3s] unless we need one,
+[2396.0s] >> right?
+[2397.5s] >> Yeah. Uh we could do this one uh which
+[2399.9s] might be slightly faster, but I'll have
+[2401.6s] I'll I'll have it go research that. I
+[2404.2s] should call FC thread. Um yes, that is
+[2406.9s] correct.
+[2412.6s] Uh what should the initialization API
+[2415.0s] look like from JavaScript?
+[2421.1s] That is also correct. Uh
+[2424.8s] though one could argue that we might
+[2426.3s] want to constructor a parameter. Okay,
+[2428.5s] we'll talk about this in a second.
+[2431.0s] What serialization format uh for
+[2433.4s] arguments? Uh yep, we just use Well,
+[2436.9s] this is incorrect. We'll have to come
+[2439.3s] back to this in a second. Uh, this is
+[2441.1s] totally wrong.
+[2443.0s] Um, and we need to have it go. I know
+[2444.8s] what it has to go research in order to
+[2446.1s] go do this.
+[2450.0s] So, once we've done this,
+[2455.1s] once we've done this, you'll notice that
+[2456.7s] there's this is a lot more detailed uh,
+[2458.9s] in what it does. It tries to show the
+[2460.8s] minimum amount of code that it actually
+[2462.3s] needs
+[2464.2s] um behind the scenes and then it will
+[2465.9s] try and show one of the things I think
+[2467.8s] uh you guys added now which I've
+[2469.2s] actually been enjoying is like just
+[2470.6s] patterns that make sense that are
+[2472.2s] relevant.
+[2473.0s] >> Yeah. What did we find? cuz it used to
+[2474.8s] be you had to read the whole research to
+[2477.0s] make sure it didn't pick any bad
+[2479.0s] patterns or whatever and now we just
+[2480.6s] like the research is objective and part
+[2482.7s] of the design is like okay based on all
+[2484.3s] the code that the research found like
+[2487.0s] what things are relevant to this ticket
+[2488.6s] we're building
+[2490.2s] >> exactly and um I think Ralph asked the
+[2492.5s] question like what's the actual process
+[2494.3s] full process end to end is you research
+[2497.8s] questions you go research then you go
+[2500.3s] into like this design discussion which
+[2501.9s] is going to be a little bit more of a
+[2503.0s] back and forth
+[2504.5s] Um, and then what we'll end up producing
+[2507.4s] >> is we'll go from here uh to producing
+[2509.8s] what's called like a structured outline.
+[2513.3s] >> And Dax, do you want to talk about your
+[2514.6s] structured outline a little bit?
+[2516.1s] >> Yeah. I mean, so design is really like
+[2517.6s] where are we going? Like what does the
+[2519.0s] end state look like and like what is the
+[2521.2s] overall thing and then this is how do we
+[2523.2s] get there? Um, and so like there's two
+[2525.8s] skills in doing like you know hard
+[2528.2s] problems and complex code bases with AI
+[2530.2s] coding agents. And one of them is like
+[2532.1s] getting the agent to like you know point
+[2534.5s] at the right northstar goal. But the
+[2536.7s] other skill is like I think by default a
+[2539.4s] lot of coding agents will want to do
+[2540.9s] what we call like very horizontal plans
+[2542.9s] of like do the API layer and then do the
+[2545.9s] data sorry do the database layer then
+[2547.5s] the services layer then the API layer
+[2549.2s] then the UI layer and it's like you
+[2550.6s] can't actually test anything until it's
+[2552.4s] done. And the last thing you want is to
+[2554.1s] be at the end of 2,000 lines of code and
+[2556.6s] it's not working and you don't know
+[2557.9s] where and the agent like it's basically
+[2560.1s] takes a lot more context. And so if you
+[2561.8s] could order the steps in such a way that
+[2563.8s] there is either like ideally like a unit
+[2566.8s] or integration testable approach that
+[2569.1s] the model can verify that it's working
+[2571.0s] in between the steps. Uh that's awesome.
+[2573.9s] Or at the very least like you want to
+[2575.8s] you want to set the order of the steps
+[2577.6s] so that you can check the same way you
+[2579.1s] would do if you were coding. Like you
+[2580.3s] wouldn't sit there and write a thousand
+[2581.4s] lines of code. you would write like 50
+[2583.4s] lines of code and then run a test suite
+[2585.3s] or check something. You would write
+[2586.5s] another 100 lines of code and then you
+[2588.4s] would like run a CLI to check if it was
+[2590.3s] working. Like you you like you can still
+[2592.3s] organize these things in terms of
+[2593.8s] feedback loops and there will always be
+[2595.9s] problems that like you can't like end
+[2597.9s] toend integration tests. Like obviously
+[2599.8s] if the model can check its own work
+[2601.4s] that's the best cuz you don't have to
+[2602.7s] sit there and check stuff but
+[2604.7s] structuring your plans
+[2607.5s] in such a way that you'll be able to
+[2610.4s] validate it along the way
+[2612.3s] >> for easy stuff not necessary you just
+[2614.3s] tell the model go rip the whole plan but
+[2615.8s] if you're going to be want to be in the
+[2617.0s] loop and make sure it's correct as you
+[2618.6s] go um then this is a really powerful
+[2621.0s] thing and this is basically like
+[2623.0s] >> it's not the whole plan if you've used
+[2625.2s] an RPI plan it can be a thousand or
+[2627.4s] 2,000 lines of markdown
+[2629.4s] I actually no longer recommend that
+[2631.3s] people read those. Like it's a pain.
+[2633.0s] People try to do code review on plans
+[2635.0s] before they actually went to do the PR,
+[2636.8s] which is basically reviewing the same
+[2638.4s] code twice and there would be surprises,
+[2641.0s] right? When you're doing a plan, you're
+[2642.3s] like 80 or 90% there and then you do
+[2644.2s] some tweaks at the end. So people were
+[2645.4s] doing double code review. And so this
+[2647.7s] structure outline is much more like
+[2650.1s] highlevel and concise. This is the
+[2652.6s] document we use for um for mental
+[2655.9s] alignment on our team and what we
+[2657.8s] recommend to our users is basically like
+[2659.6s] share this around share the design
+[2661.8s] discussion around these are tighter and
+[2663.4s] more it's all about human leverage right
+[2665.3s] don't make humans read any more markdown
+[2667.6s] than they have to just like you don't
+[2668.9s] want to make a pull request that is like
+[2670.2s] a pain in the ass to review.
+[2672.2s] >> Yeah. I think the there's a funnily
+[2674.3s] enough I actually I actually do read the
+[2676.5s] plans and I found bugs in them actually
+[2678.6s] >> that were not shook.
+[2681.0s] >> You you want to you want to do the high
+[2682.5s] leverage thing first, right? You want to
+[2683.8s] get like the the core structure out
+[2685.4s] before you go nitpick the details.
+[2688.4s] >> So like for example, I'll give you guys
+[2689.6s] a couple examples. So like there's this
+[2690.7s] concept called the structured outline
+[2692.0s] and then the plan. So like we don't
+[2693.7s] generate the plan immediately. And the
+[2695.4s] reason we don't generate the plan
+[2696.2s] immediately is like really simply like
+[2698.6s] before you determine all the steps and
+[2700.1s] all the parts and the all the tasks that
+[2702.0s] your or to-dos that your agent is going
+[2703.8s] to go do. The problem the first problem
+[2706.0s] that you'll run into is you'll quickly
+[2708.3s] be like ah I want to reorder this in I
+[2710.5s] want to switch the order of like to-do
+[2712.4s] one and to-do two. Well, when I run into
+[2714.7s] that problem, what ends up happening the
+[2716.6s] think about what a coding agent has to
+[2717.9s] do. code agent has to basically delete
+[2720.6s] lines one through n and it has to first
+[2723.1s] find lines which is a hard enough task
+[2725.1s] and then it has to go ahead and replace
+[2726.8s] it earlier. If you have code snippets as
+[2729.4s] a part of your actual word here the
+[2732.0s] number of lines expands dramatically. So
+[2735.3s] something as simple as
+[2737.0s] >> it's just exactly it's one of the least
+[2738.6s] context efficient things you can do.
+[2740.8s] >> So you might still want code in here and
+[2742.7s] I think sometimes we get some and we
+[2744.6s] actually ask it to generate some
+[2745.8s] sometimes in here. Yeah, you got to add
+[2748.1s] more detail if you don't know what it's
+[2749.6s] trying to do.
+[2750.2s] >> Exactly. And like for example, you can
+[2751.5s] see over here, it actually did put some
+[2753.0s] code here. But even in here, one of the
+[2755.2s] things that you'll notice is as you're
+[2756.6s] doing a lot of design discussions and as
+[2758.5s] you're doing like structured outline
+[2759.8s] review and on that process to go edit
+[2761.8s] it, it creates a bunch of slop and
+[2764.1s] artificially induces phases and steps as
+[2767.4s] it does stuff. And so what I will often
+[2769.6s] do for a really complicated task is I'll
+[2771.2s] actually have it review the task and
+[2773.4s] after it's done, I'll have it then say,
+[2775.8s] "Okay, now is there a different way that
+[2777.1s] we'd organize this and create a new
+[2779.9s] structured outline?" And that's why you
+[2781.4s] have phase one, two, and four down from
+[2784.8s] phase 1, five, and seven. And in fact,
+[2787.0s] if I show you guys like the prompt that
+[2788.5s] actually led to this, I'll show that in
+[2789.9s] a second. We went to four phase instead
+[2792.4s] of eight uh while this is running
+[2796.4s] uh via native properties. And again, why
+[2798.2s] is this design nice? Finding that prompt
+[2800.1s] is trivial. I just go over here and I
+[2802.1s] know it's it's a design phase here. And
+[2804.6s] I just bring everyone back to the chat.
+[2809.6s] Oh, actually it wasn't cuz uh your thing
+[2811.8s] died. It's in cloud code.
+[2813.8s] >> Uh but I'll show you cloud code.
+[2816.8s] >> Alpha software fam. If anyone asks why
+[2819.6s] you can't have rip tide yet, it's
+[2821.4s] because we're still working on stability
+[2823.4s] stuff and viobs.
+[2826.9s] >> Yeah. Okay. Um, so one of the thing, oh,
+[2830.0s] was this the right one?
+[2832.7s] >> No cloud attribution.
+[2835.2s] >> Finding the right cla path is so
+[2837.5s] freaking Yeah, I hate I hate when it
+[2839.1s] adds cloud attribution sometimes,
+[2840.5s] especially when it's me and the only
+[2842.1s] thing I'm having Claude do is like uh
+[2846.5s] when the only thing Claude is doing is
+[2848.1s] literally just Oh, right here.
+[2851.0s] This the chat. Uh, and when the only
+[2853.0s] thing Claude is doing is just something
+[2854.7s] silly. Oh, I did compaction. Do you know
+[2857.1s] how I have Do I Do you know how I get
+[2858.9s] the full chat out of compaction?
+[2863.1s] >> I have not dug into that because I don't
+[2865.7s] believe in compaction.
+[2867.8s] >> Oh, I I I do compact sadly.
+[2870.2s] >> I know. I know you do.
+[2872.1s] >> I've seen it. I'm a
+[2874.8s] >> Let's Let's not worry about this. Our
+[2876.5s] design discussion is waiting on our our
+[2878.2s] answers. So, um
+[2879.5s] >> Okay, I'll go back. I'll do some I'll do
+[2882.0s] some product work and go.
+[2883.4s] >> We'll we'll compare the the structure
+[2885.1s] outline we build and you'll see us give
+[2886.6s] feedback on it and then we'll compare it
+[2888.3s] to the actual plan that gets built and
+[2890.0s] you can see the differences then.
+[2891.8s] >> Yeah.
+[2892.6s] >> Um okay, but this thing it's got
+[2894.4s] patterns to follow and then it's got a
+[2895.5s] bunch of questions for you. So,
+[2897.0s] >> okay. Well, first I got to read the
+[2898.4s] first I got to read all the crap because
+[2900.1s] uh sadly I I read um because I'm a
+[2902.9s] heathen.
+[2903.8s] >> It is very sad.
+[2904.8s] >> System. Okay, this makes sense.
+[2907.0s] Completion handler.
+[2909.1s] Um, okay. Yes. Yes, I understand this.
+[2914.4s] And luckily, I can skin this because I
+[2915.8s] know this codebase pretty well. Uh, or
+[2917.5s] else I'd be very sad. This is also one
+[2919.7s] of the nastiness that we're getting rid
+[2921.0s] of. We used to do some nastiness where
+[2922.4s] every time we wanted to build a bridge
+[2923.6s] for any credentials, we'd like pass in a
+[2925.2s] custom function. Now, it's just shell.
+[2927.4s] So, it's so nice. It's so clean.
+[2934.6s] Uh, grouped callback. Yes. Okay. So
+[2938.2s] these are So you remember the summary
+[2939.9s] that we were reading where it's like how
+[2941.1s] should we group this? There's a couple
+[2942.3s] different options. You can do a builder
+[2943.9s] pattern. This is disgusting in my eyes.
+[2945.8s] I hate this.
+[2947.3s] >> Uh I hate builder patterns unless you
+[2948.9s] really really want to go do this. Uh
+[2950.8s] this custom strct is really nice. I
+[2953.0s] think um and we could or we could do
+[2956.6s] something like this. I just don't like
+[2957.8s] this because this just going to create
+[2959.3s] like more and more and more nested
+[2960.8s] strus. And I really want to avoid having
+[2962.9s] nested strus. Uh like having a flat
+[2965.0s] strct that's like well named is just way
+[2966.8s] more useful
+[2967.8s] >> with just every single function
+[2969.3s] flattened instead of having Yeah, that
+[2971.2s] makes a lot of sense.
+[2972.4s] >> Exactly. It's just so much easier.
+[2975.9s] >> Uh and yeah, that's why it kind of did
+[2977.6s] this. Otherwise, I have to make like
+[2978.6s] five WMTrs and like it's just one
+[2985.4s] >> sick.
+[2989.3s] >> Um okay, let's look at this. How do
+[2991.3s] async bridges work? Wasam bridge. Um, I
+[2994.6s] am curious about this uh what the
+[2996.3s] performance implication of this is. So
+[2997.8s] like let's just cue that task off. This
+[2999.9s] is a feature I've been asking desk for a
+[3001.6s] long time. I wish I could just fork this
+[3003.6s] chat thread and just have it go dig into
+[3005.6s] this.
+[3007.0s] >> I mean you technically are forking it.
+[3009.8s] >> I know. But I wish I would just
+[3011.0s] naturally do that so I could always
+[3012.4s] revert back to the thread originally.
+[3015.1s] I mean, you can use you can make a new
+[3017.0s] chat and say iterate design and then you
+[3019.4s] can I know it's not discoverable, but if
+[3021.1s] you make a new chat and say, "Hey, I'm
+[3022.3s] iterating on the design."
+[3024.6s] >> Uh, let's kick it off. I'm good.
+[3026.7s] >> Um, it's too much UX work for me. Uh, I
+[3029.4s] I want your
+[3030.4s] >> better UX is coming. We're going to give
+[3031.8s] you more more buttons than just the go
+[3033.6s] forward. we're going to give you the
+[3034.8s] like, okay, keep working on this in a
+[3036.5s] >> That's actually my biggest gripe at
+[3037.6s] cloud code, too, because I think to
+[3039.3s] really uh to really like context max.
+[3041.6s] You kind of need to have you need the
+[3044.6s] ability to be able to fork I what I
+[3046.0s] really want to be able to do is I want
+[3047.0s] to say like, oh, I want to start from I
+[3049.2s] want to start from this cloud code and
+[3050.6s] spin up four questions in parallel and
+[3052.3s] then kind of map reduce and bring them
+[3053.8s] back together. And like that's what I do
+[3055.8s] a lot actually if I had the if I get the
+[3057.5s] chance to. I do that sometimes in here
+[3059.0s] too,
+[3059.5s] >> but it's just the US makes it so hard.
+[3061.5s] It's It's too much of a pain to do it in
+[3063.6s] the optimal way.
+[3066.6s] >> Um
+[3067.3s] >> yeah, that makes sense.
+[3068.2s] >> Okay. How should
+[3071.5s] >> uh how should callbacks be stored? Um I
+[3075.4s] do agree thread local storage is correct
+[3080.1s] and that can be a one-time thing that
+[3082.2s] needs to be initialized.
+[3086.6s] Ref new. I do like that. Or we could
+[3090.6s] pass it as a global static,
+[3094.1s] but then it's unsafe. I don't want to
+[3096.3s] know this. Oh yeah, the closures would
+[3098.6s] be the way to solve this. Uh, but I do
+[3100.6s] agree that this would be too much work.
+[3102.2s] Okay, thread local storage just fine.
+[3105.0s] Um, what should the initialization API
+[3107.8s] look like? Well, look, this is actually
+[3110.6s] wrong. It did the wrong research here.
+[3112.6s] Bam project does not actually depend on
+[3114.6s] this.
+[3115.8s] >> Okay. Uh, and that's just like to go
+[3118.4s] back to the architecture diagram that we
+[3119.8s] have.
+[3123.4s] Um,
+[3128.6s] the other nice thing by the way about
+[3130.1s] code layer that I personally like is
+[3131.4s] cloud code is too contextualized to my
+[3133.0s] repo, but I have like four checkouts on
+[3134.5s] my repo because I'm a heen and still
+[3136.1s] can't learn work trees even though we
+[3137.7s] had that episode about it. Uh, it's too
+[3140.2s] hard for my brain. I tried so hard. I
+[3142.2s] can't do it. Why don't you just have one
+[3144.1s] repo and make BAML one through four be
+[3146.9s] work trees?
+[3148.7s] >> It's the same. You don't change your
+[3149.8s] >> work. I don't know the get merge
+[3151.5s] commands for work trees. It's too hard
+[3152.8s] to go do that. I tried telling
+[3154.1s] >> the same as if the branch was local.
+[3155.8s] It's just get merge branch name.
+[3158.2s] >> My my brain is too puny. I've given that
+[3161.0s] >> apparently. Well, you you you've got a
+[3162.9s] lot of stuff in there. There's just not
+[3164.2s] room for other things.
+[3166.4s] >> Uh so when we're doing this BAML
+[3168.6s] playground right now depends on B uh BML
+[3171.2s] project. It now also needs to depend on
+[3173.4s] Beex's engine and that's just a mistake
+[3175.0s] that we have right now that we as in
+[3176.6s] it's not clear to the system how we did
+[3178.5s] this and what I need to go tell it to do
+[3180.7s] is to go fix that problem. So I will
+[3182.6s] tell it that.
+[3183.4s] >> Yeah. So you say okay so for question
+[3185.4s] for
+[3187.8s] >> Q4
+[3189.6s] uh this is actually the wrong entry
+[3193.0s] point
+[3194.6s] really.
+[3196.2s] Uh
+[3198.5s] you want to construct a engine plus a
+[3207.2s] project.
+[3209.1s] See how onion
+[3211.4s] skin
+[3214.6s] constructs.
+[3217.9s] Hey,
+[3218.6s] >> don't sign this though because you have
+[3220.6s] sub agents running.
+[3222.2s] >> Uh yeah, I won't press enter right now.
+[3224.2s] See how onion skin
+[3227.0s] >> uh please do uh see how onions
+[3229.4s] constructs a batch program which allows
+[3232.7s] construction of DEX VM plus DEX engine.
+[3241.6s] >> Cool.
+[3242.2s] >> And then we want uh the playground
+[3246.3s] to do something similar.
+[3250.6s] Okay. Once this is done, I'll fire this
+[3252.5s] off.
+[3253.9s] This is usually how I work too is like I
+[3255.7s] will just cue up all my answers to all
+[3257.7s] the questions in one message kind of
+[3259.4s] thing. But you can do either way.
+[3267.6s] >> No speech to text is giving you for
+[3269.5s] not using speech to text.
+[3271.0s] >> I will be I do sometimes use speech to
+[3273.0s] text. I think it's kind of awkward on
+[3274.3s] stream to use speech to text because I'm
+[3276.0s] both thinking about speech in the
+[3277.4s] context of what I'm going to say on
+[3278.6s] stream and then typing is my context for
+[3280.8s] like typing. Uh exactly. I'm narrating
+[3283.3s] but then speech uh typing is my context
+[3285.5s] break of like knowing that I'm talking
+[3286.7s] to the code and allows my
+[3288.7s] >> also separate
+[3289.8s] >> narrating you're also speaking out loud
+[3292.2s] every word that you're typing
+[3295.4s] >> as you're what can I say um give me a
+[3302.1s] >> that's so funny um what argument
+[3304.4s] serialization should be used how oh
+[3306.4s] that's a great question did find the
+[3307.8s] right type though summary did not have
+[3309.4s] this
+[3311.2s] um we're not going to pass raw bites
+[3312.9s] because we are not animals. Um, well, we
+[3316.0s] might I kind of want to use protobuff
+[3318.2s] because that's what we use elsewhere,
+[3319.2s] but I'm not going to.
+[3321.5s] Uh, I don't like we could do this.
+[3327.9s] Uh, add JSON toization
+[3330.9s] via
+[3334.6s] >> JSON.
+[3337.2s] >> JSON is a little bit tricky. Um I think
+[3339.4s] we need customization.
+[3341.7s] >> Huh.
+[3342.6s] >> Doesn't support functions.
+[3345.8s] >> Yeah, it's not just that. It's just that
+[3347.3s] like it's um
+[3350.2s] Yeah, JSON serialization is tricky
+[3351.9s] because we have like handles. So for
+[3353.8s] context, um let me open Excalibur really
+[3356.0s] fast.
+[3359.9s] >> Oh, do you need me to send you a a scene
+[3361.8s] or you got one?
+[3363.0s] >> I'll just pull one up.
+[3364.4s] >> Okay. The the tricky part of our system
+[3366.8s] is like um so we have this thing called
+[3369.0s] like uh VEX engine
+[3372.0s] >> zoom in a little bit.
+[3373.4s] >> Yeah.
+[3374.6s] >> Or make the text bigger. Yeah. There you
+[3376.0s] go.
+[3377.1s] >> How do I make the text bigger on this
+[3378.6s] thing?
+[3379.8s] >> Uh yeah, there you go.
+[3380.7s] >> Excel.
+[3382.3s] We have a thing that's called DEX
+[3383.7s] engine. Um and this communicates um I
+[3387.9s] guess for now it's it's communicating to
+[3390.0s] WAM.
+[3393.8s] Uh it's like this is still like Wom
+[3396.4s] still in Rust code.
+[3398.1s] >> Yep.
+[3399.1s] >> Uh and this is basically like bridging
+[3400.6s] the gap between the two and they're
+[3401.7s] sending data between each other. Uh
+[3403.8s] inside the beex engine, we have um we
+[3406.7s] have some horrible things that we've
+[3408.1s] built
+[3409.9s] uh that you may or may not care about,
+[3412.5s] but it will help explain the concept
+[3414.5s] what we're trying to do a little bit
+[3415.5s] more in terms of
+[3417.8s] uh what we have.
+[3421.4s] Green. Green.
+[3422.7s] >> Oh, yes. orange and green the best color
+[3425.5s] combo.
+[3427.0s] >> Uh we kind of have a heap and what ends
+[3429.4s] up happening is whenever you run a
+[3430.8s] thread in the VEX engine it allocates on
+[3433.0s] top of the heap.
+[3434.8s] Um and some things need to have long
+[3438.2s] live lifetimes. So for example uh like a
+[3440.8s] file operation let's say or a network
+[3442.6s] request a net request and a file
+[3444.7s] operation kind of have to have like a
+[3446.2s] separate se system that's like a
+[3447.9s] resource is what we call them that have
+[3450.2s] slightly different uh lifetimes because
+[3451.8s] of async workflows and the heap has some
+[3454.6s] ability to access these systems as well
+[3457.2s] and what ends up happening is network
+[3459.2s] resources can be can actually be passed
+[3462.4s] around from
+[3464.9s] your JS code which is how the
+[3467.5s] virtualization is working
+[3470.9s] uh and this gets passed all the way
+[3472.3s] down. So, and this goes to the WASM
+[3474.6s] system. So, like we can serialize many
+[3476.2s] types from WASM to JavaScript uh but
+[3478.9s] some types can't be serialized. So, like
+[3480.8s] for example like uh the network type,
+[3482.6s] but we still need to be able to point to
+[3483.9s] the same object in both the heap and in
+[3486.8s] JavaScript.
+[3487.8s] >> Okay. So, the WASM is actually going to
+[3489.3s] call out to whatever JS runtime which
+[3491.9s] actually originally invoked the Beex
+[3493.7s] engine. So, you need to like thread it
+[3495.1s] all the way through.
+[3496.4s] >> Exactly. And that's why like uh for
+[3498.2s] example when it when it asked me about
+[3499.8s] like uh the question that came up over
+[3501.8s] here when we were doing this design flow
+[3504.5s] was why can't we just serialize to JSON
+[3507.4s] uh using JSON serialization? Well, we
+[3509.3s] can't serialize to JSON because some
+[3510.7s] types are not JSON serializable. They're
+[3512.4s] inherently native types that are
+[3514.5s] pointing to things in memory that need
+[3516.4s] to be preserved
+[3517.1s] >> like a function.
+[3519.4s] >> Yeah. Like a function or like
+[3520.6s] environment variable or like a like a
+[3523.5s] like a file descriptor for example. Yep.
+[3526.8s] Okay.
+[3527.4s] >> Um so this is definitely correct. We
+[3529.0s] want uh we don't want option A. We
+[3531.0s] definitely want um option B.
+[3537.8s] This is Q5.
+[3539.8s] We don't want option A. Uh we sometimes
+[3548.2s] send out handles
+[3550.2s] to rest types
+[3553.0s] arc stuff.
+[3558.4s] We need that to be preserved.
+[3565.0s] And then what we should really do is
+[3566.5s] something like option B.
+[3570.2s] Okay. And then I want to make sure that
+[3571.4s] didn't have any more questions for me.
+[3574.4s] Yeah, you I don't think you also haven't
+[3575.8s] you haven't given answers to the um
+[3579.4s] >> the other ones are just default answers.
+[3581.1s] So I'll tell it that in question two and
+[3583.4s] uh two and one.
+[3585.4s] >> I'm going to save this and say yes
+[3587.4s] update
+[3590.2s] uh
+[3597.4s] the doc. All right, I'll let update the
+[3599.9s] doc really fast before I go tell it more
+[3601.7s] things.
+[3602.6s] >> Cool.
+[3603.2s] >> I'm going to go read this now.
+[3607.1s] Sorry, there's a lot of reading on the
+[3608.5s] chat.
+[3610.5s] >> Based on good engineering is a lot of
+[3612.5s] reading and thinking.
+[3615.3s] >> It's so sad.
+[3617.2s] >> I have never read this much in my life.
+[3622.1s] >> Uh, okay. So, I have to do a lot of JS
+[3623.8s] allocations.
+[3627.2s] Spawn local. That's fine.
+[3642.3s] Oh, we definitely don't want this. I do
+[3644.5s] not want a pending on stuff where I have
+[3647.2s] to make a new channel to go do things.
+[3651.1s] That could be very nice. If we can do
+[3653.0s] shared memory, that means we can get way
+[3654.4s] higher performance, which would be very
+[3657.0s] very quick.
+[3659.2s] What's really interesting is uh every
+[3660.9s] time I see code say something like high
+[3662.7s] complexity, it's like the most mid uh
+[3666.3s] thing that I care about. I don't
+[3667.5s] actually care about complexity when I go
+[3668.9s] write things
+[3669.7s] >> because like the LM's going to do the
+[3670.9s] work anyway. It's equally as complex for
+[3672.5s] the model. The only question is does it
+[3673.9s] understand it?
+[3674.9s] >> Um
+[3675.4s] >> well, it's like this is the uh the zen
+[3677.3s] of Python thing, right? Is like complex
+[3680.2s] is better. Simple is better than
+[3681.7s] complex, but complex is better than
+[3683.3s] complicated. Like complex is not
+[3685.0s] necessarily bad.
+[3686.8s] >> Yeah, exactly. Um, so like the LM for
+[3689.7s] some reason likes to tell me about
+[3691.0s] complexity. I just don't care. Um, I
+[3693.7s] just want correct. I want forever
+[3695.4s] correct.
+[3696.9s] >> Yep.
+[3698.1s] >> Um,
+[3698.6s] >> complex and safe, right? Complicated is
+[3701.1s] like complex and unsafe basically.
+[3703.7s] >> Exactly.
+[3704.2s] >> Brittle. Yeah.
+[3705.7s] >> Uh, yeah. So I guess option C where we
+[3707.8s] use Tokyo binding gen will definitely
+[3710.1s] definitely definitely not work because
+[3711.8s] we're gonna have to do callback
+[3713.0s] shenanigans anyway.
+[3714.7s] >> Yeah, because we have async.io and like
+[3716.7s] fetch for example in JavaScript is going
+[3718.5s] to be fetch.
+[3719.5s] >> It just won't work. Uh streaming will
+[3721.8s] also not work trivially.
+[3725.5s] No actual no actual async runtime still
+[3728.3s] uses spawn local.
+[3731.0s] Okay,
+[3734.0s] I do have a question about this. I feel
+[3735.8s] like this part I don't like.
+[3740.0s] >> Um,
+[3742.2s] that part is really nasty.
+[3743.4s] >> JSPI
+[3750.0s] >> a bench show Rust wasn't running
+[3755.1s] boundary crossing. Yeah, this is kind of
+[3757.3s] what I'm kind of uh worried about
+[3759.8s] because I know Prisma Rants has problem
+[3761.8s] which is why I'm always really careful
+[3763.6s] about this stuff and why I knew to ask
+[3765.8s] about performance.
+[3768.9s] >> Um I do want to ask it to see if the
+[3772.0s] other approach is going to be better.
+[3774.1s] So, the other the other thing I'm I
+[3776.0s] don't think we should do this, but it's
+[3777.1s] worth mentioning on on the stream is
+[3778.8s] like another thing that I will often do
+[3781.2s] during design is actually like fork out
+[3783.6s] of the design flow to do like a
+[3786.2s] different type of research. We almost
+[3787.8s] call it like
+[3789.8s] Bruce, did you lose your the whole
+[3791.4s] thing? Do you have multiple clipboards?
+[3793.4s] >> Yeah, I have multiple clipboards, of
+[3794.6s] course.
+[3794.8s] >> Okay, cool.
+[3795.8s] >> If you're not using clipboard history,
+[3797.3s] what are you? You're a pleb.
+[3799.0s] >> I do, but I see people do that. I know
+[3801.8s] >> you can't you can't be an AI engineer if
+[3804.4s] you don't have multiple clipboards. Um,
+[3806.8s] no. One thing I would do sometimes is
+[3808.9s] like fork out into what I call like
+[3810.9s] proof mode or like learning test mode,
+[3813.3s] which is like, okay, I actually want you
+[3815.5s] to go write some little tiny PC's that
+[3817.9s] demonstrate this behavior because
+[3819.8s] sometimes Claude will every model will
+[3822.9s] confidently say this is how it works and
+[3824.8s] it will miss key details and like
+[3827.7s] deterministic feedback from the system.
+[3832.6s] All
+[3835.8s] right, cool. Let's read this. Uh, I do
+[3838.6s] want to go deep on this thread and this
+[3840.1s] is again why is forking useful? Because
+[3841.8s] like I said, I just want to fork on this
+[3843.4s] one concept without really having to do
+[3845.4s] anything else.
+[3846.6s] >> Yeah.
+[3847.2s] >> Um,
+[3847.6s] >> I mean, so like you can if you get to
+[3849.1s] high context, you can always create I
+[3851.0s] mean I can show you if you create a new
+[3852.2s] session, you can just say like use the
+[3853.8s] iterate design discussion skill for VB
+[3856.5s] sysm and it will just create a thread
+[3858.3s] and it's like cool, what do you want to
+[3859.7s] add? Another question to really think
+[3861.9s] about is like why does this actually
+[3863.1s] matter? Like why does this matter for
+[3865.0s] our performance scenarios? Like why do I
+[3866.5s] care? Well, because if we're doing
+[3867.6s] shell, if we're doing any sort of data
+[3869.5s] encoding between the systems like if
+[3871.2s] you're calling shell web request, that
+[3872.8s] means each of those in the web assembly
+[3874.3s] world is now going to be effectively 15
+[3876.9s] times slower. And like that's just like
+[3879.4s] we could do that. I mean fundamentally
+[3880.6s] it doesn't really matter. Uh like data
+[3882.6s] transo transcoding doesn't really take
+[3884.3s] that much. Like like we said it's like
+[3885.9s] 15 fps. But if you can make it faster
+[3888.6s] for no reason other than just doing it,
+[3891.6s] like why not?
+[3895.7s] >> Yeah,
+[3895.9s] >> there's a new standard emerging. I don't
+[3897.9s] really care about that.
+[3900.3s] Maybe I can look this up while I'm at it
+[3903.1s] >> because I find it fascinating and I'm
+[3905.3s] I'm a weirdo like this.
+[3908.0s] What JSPI is check this out too. But
+[3910.6s] yeah, this is the JSP.
+[3912.5s] >> Okay, web assembly JavaScript promise
+[3914.7s] integration API from V8.
+[3917.6s] Yeah, I know. That's why I'm Look at
+[3918.8s] this. It looks kind of interesting. This
+[3920.6s] is Code. This is Oh. Oh, interesting.
+[3927.3s] That's cool.
+[3934.6s] Uh, this is
+[3938.4s] that's kind of cool.
+[3944.2s] I guess it's not widely available yet.
+[3951.4s] Uh
+[3953.8s] yeah, we can't do this sadly. It's not
+[3955.4s] widely available enough.
+[3958.2s] That looks really interesting though.
+[3959.8s] The fact that you can do transcoding
+[3961.7s] from uh a slightly more native way means
+[3965.9s] that you just use you get way way better
+[3968.6s] performance.
+[3971.0s] Specific cost per async operations.
+[3973.1s] Don't care about that. I hate waiting
+[3974.6s] for this. I hate waiting for tool calls.
+[3976.4s] >> Okay, so make another one to go update
+[3978.1s] questions four and five with your
+[3979.4s] answers from the clipboard. So just hit
+[3981.0s] C and just do like use iterate design
+[3983.4s] discussion for
+[3992.6s] >> use it in it design discussion skill to
+[3995.0s] update the design discussion for
+[3996.6s] questions four and five.
+[3998.9s] Uh, I don't think it's going to know
+[4000.7s] what task you're on is the thing.
+[4003.4s] >> It will because I'm on this task.
+[4007.4s] >> Uh, you should tell it what task you're
+[4009.4s] on. I mean, maybe it'll figure it out,
+[4011.5s] but uh, we don't currently inject any.
+[4014.5s] Yeah, there you go.
+[4016.3s] >> Oh, you don't Okay, I see. You gota you
+[4018.0s] got to put that. It's coming. That's why
+[4019.8s] it messed up last time. Yeah, that makes
+[4021.6s] so much sense. Yeah, it doesn't. Yeah,
+[4023.8s] because this is just a cloud skill that
+[4025.5s] is uh but yeah, we're not we want to be
+[4028.1s] care very careful with like modifying
+[4030.6s] people's system prompts or injecting
+[4032.6s] context that they can't see. Um
+[4035.0s] >> I agree.
+[4036.0s] >> So
+[4038.1s] >> now I'm going to run into a race
+[4039.1s] condition where both coding agents are
+[4040.6s] going to try and write to the same file.
+[4041.8s] I'm going to be very sad.
+[4044.2s] >> Um that's fine. They'll try again.
+[4046.6s] >> Okay, cool. Um while this goes on, let's
+[4049.0s] talk about more like engineering things
+[4050.2s] that we found. So like one of the things
+[4051.6s] that we're running into now while this
+[4053.0s] is coding is how do we keep maintaining
+[4055.3s] the shipping velocity that we have
+[4057.2s] without really being stressed about
+[4058.6s] this? Well, there's a couple of things.
+[4061.0s] First thing, this RPI workflow is great.
+[4062.9s] These architectured diagrams and tools
+[4064.3s] like cargo stow which enforce the
+[4066.1s] diagram boundaries across different
+[4067.7s] cross uh cross different name spaces is
+[4070.2s] fantastic. But the next thing that
+[4072.4s] really matters here to take it to the
+[4074.6s] next level I think is actually about
+[4076.5s] like adding workflows. Like we've been
+[4078.2s] talking about this in our team which
+[4079.4s] like we don't do code reviews. That
+[4081.2s] makes sense. We probably don't really
+[4082.3s] want to have code reviews enforced. But
+[4084.1s] one of the things that we do have for
+[4085.4s] example is we do have like performance
+[4087.3s] tests for example. And what the
+[4089.3s] performance test do is they run the test
+[4091.5s] and then they run a CI/CD. I guess this
+[4093.4s] one's find one that's merged.
+[4098.2s] They run the test and then we actually
+[4100.0s] run like COSE which is a phenomenal tool
+[4102.2s] to run performance tests. And what it
+[4103.9s] says is it runs a performance test. It
+[4105.4s] tells you if anything substantially
+[4107.0s] changed and if it does it actually fails
+[4109.4s] the PR and you have to manually go and
+[4111.2s] approve it in some UI that says oh I
+[4113.0s] looked at this performance regression
+[4114.2s] and it's acceptable
+[4116.1s] >> and that's really that's really
+[4117.8s] >> that's the only way to make the check
+[4119.1s] pass.
+[4120.2s] >> Exactly. And then the check won't pass
+[4121.5s] otherwise uh and it's a mandatory check
+[4124.1s] for us.
+[4125.4s] >> Okay.
+[4125.8s] >> Uh and what that does is it makes life
+[4128.4s] much easier. So now the next step is how
+[4130.8s] do you build that similar kind of
+[4132.2s] workflow into here?
+[4133.5s] You can imagine a new rule set built
+[4135.1s] into cargo sto which where during CI/CD
+[4138.2s] cargo sto will actually look at the diff
+[4140.1s] of certain crates that you explicitly
+[4141.9s] called out and a certain crates have too
+[4144.5s] high of a a line number in them. It
+[4146.7s] fails until you manually approve it and
+[4148.6s] say okay I have said that I've looked at
+[4150.9s] this code specifically and I approve it.
+[4153.3s] So you want to build a tool that
+[4154.5s] basically requires like basically
+[4157.3s] requires human review for the check to
+[4159.0s] pass if there's like more than a
+[4160.8s] thousand lines of code changed
+[4162.6s] >> or some some arbitrary specifier. It
+[4164.7s] could be an LM prompt that decides if
+[4166.3s] it's complex enough. So like for example
+[4168.4s] >> does GitHub support this? Like isn't
+[4170.2s] there like a review rules or something?
+[4173.0s] >> Nah, it's too complicated to go set up.
+[4174.9s] I really want an LM prompt basically.
+[4176.7s] >> So you want to write a custom you want
+[4178.4s] to write a custom Rust crate to do it
+[4180.3s] instead.
+[4181.4s] >> We're just going to go do it. It's easy.
+[4182.8s] Normally, this would be hard, but this
+[4184.1s] is going to take me an hour and a half
+[4185.3s] of my time to go vibe code this.
+[4187.4s] >> Yep.
+[4187.7s] >> And it'll just work.
+[4189.5s] >> Um, and it's effectively zero effort.
+[4192.2s] There's other things we can do. For
+[4193.2s] example, we can enforce things like if
+[4194.6s] the binary size is too big, require
+[4197.0s] manual approval.
+[4198.8s] >> Okay.
+[4199.3s] >> And there's a lot of small things that
+[4200.8s] we can do on top of this that'll just uh
+[4203.0s] do this for us. And then we can also
+[4204.2s] build slack integration. GitHub has a
+[4205.9s] similar thing called like owners, but
+[4207.5s] owners is too heavy. It's like too
+[4209.2s] filebased. I don't care about specific
+[4211.3s] files. I care about the magnitude of the
+[4213.1s] change. And that's the tricky part.
+[4215.4s] That's where there's no real system that
+[4216.7s] does this. And once you get once you
+[4218.7s] build around the magnitude of change,
+[4220.0s] then you can say something like, hey, if
+[4221.4s] someone made like a thousand line
+[4222.6s] change, have them at least manually
+[4224.4s] approve and say they looked at the code.
+[4226.5s] And what that does is it just puts a
+[4228.2s] little bit of a brain in someone's head
+[4229.8s] that says, I'm I approve. No slop.
+[4233.4s] >> Yep.
+[4234.4s] >> All right. Because you still want no
+[4236.3s] code reviews for like small changes
+[4237.8s] because like cloud code, all this other
+[4239.2s] stuff are just shipping code all the
+[4240.6s] time. And like if you have good test
+[4242.4s] coverage, you have really good rules on
+[4243.9s] your codebase, it's fine. But for big
+[4246.0s] system,
+[4247.0s] >> go ahead.
+[4247.8s] >> I was going to say it also it requires a
+[4250.3s] lot of trust. And like I think at my
+[4253.7s] first job, we had a rules like there
+[4255.3s] were no required PE like you didn't have
+[4257.4s] to have a PR to merge a poll request. No
+[4260.6s] poll request was sorry you didn't have
+[4262.3s] to have a review. Like it wasn't
+[4264.0s] enforced by the system. Nobody would
+[4266.6s] ever merge a PR without a review. It was
+[4268.8s] like enforced by culture instead of
+[4270.6s] being enforced by the system. Yeah. Um
+[4273.6s] it basically never happened, but there
+[4275.2s] was no like rule. There was no admin
+[4277.0s] override. Anyone could technically click
+[4278.7s] the merge button. By the time I got
+[4280.5s] there, it was like 20 engineers on the
+[4281.9s] backend like platform team and like you
+[4285.4s] didn't even think about it. It was like
+[4287.0s] basically like safety through culture
+[4289.2s] rather than through systems that enforce
+[4291.3s] stuff. It was the same thing with like
+[4292.4s] no one had pre- push or pre-commit
+[4294.0s] hooks. It was like you just ran the test
+[4296.6s] and it was just part of how you did your
+[4298.0s] thing.
+[4299.3s] >> Oh, this is the Anyway, coming back to
+[4301.4s] the
+[4301.9s] >> Yeah, let's let's go build some more.
+[4303.3s] >> Option B is actually option B is
+[4305.5s] actually complex.
+[4309.7s] >> The LM was in this case correct about
+[4311.8s] complexity. Um it turns out the option
+[4314.7s] that it proposed was basically building
+[4316.2s] its own um walls and binden
+[4318.7s] implementation using message channels
+[4320.4s] which is absurd. We're not going to do
+[4322.5s] that.
+[4323.8s] Um yes, we will not do that. I will I
+[4326.1s] will um I will refrain from and hold
+[4328.2s] myself back and not do this.
+[4331.1s] Um I would like to
+[4332.8s] >> just build your own like fork of was
+[4335.1s] binden futures from the ground up.
+[4337.8s] >> I I would like to do this but I I do
+[4339.8s] draw a line.
+[4340.9s] >> Yeah. Um uh
+[4344.2s] channels work um
+[4351.4s] yes u I see I want to actually look at
+[4355.4s] the code. I wish it would give me some
+[4356.9s] code that let me go understand it a
+[4359.0s] little bit.
+[4359.2s] >> I want to say it's like what you really
+[4360.4s] need to do is you need to send it off to
+[4361.8s] like can you go build an end toend
+[4363.9s] example of each of these?
+[4369.7s] This is hilarious. There are no real re
+[4372.7s] zero production examples of anyone doing
+[4374.6s] this.
+[4375.0s] >> Well, also the cloud deep research cloud
+[4377.7s] web search researcher is not as thorough
+[4379.6s] as like a chatgbt deep research. I
+[4381.6s] wouldn't just cuz it said I found
+[4382.8s] nothing of this in on the web doesn't
+[4384.3s] mean
+[4384.6s] >> it probably means that it's not a common
+[4386.2s] pattern on the internet and that's
+[4387.4s] probably good enough reason for me not
+[4389.0s] to do it.
+[4389.8s] >> Y
+[4390.2s] >> I've never seen it say this for any sort
+[4392.1s] of coding pattern before. By the way,
+[4394.2s] there's zero examples of someone using
+[4395.8s] this in production. That's a first off
+[4397.8s] for me.
+[4398.8s] >> Theoretically practical. It's funny that
+[4400.8s] like models will suggest things like
+[4402.6s] this. It's like no one's ever done this
+[4404.3s] before and you probably shouldn't, but
+[4406.0s] like we could.
+[4407.5s] >> Yeah. Um,
+[4409.4s] >> cloud's up for whatever.
+[4413.0s] >> This sounds This does sound fun. Maybe I
+[4415.4s] will build a high performance version of
+[4417.3s] Binden one one weekend. This sounds very
+[4420.2s] fun to go do. Uh,
+[4423.4s] but I will not do this. Okay. So, this
+[4425.4s] is garbage. Yes, let's
+[4430.1s] add context
+[4432.3s] um to that part.
+[4436.4s] Okay, let's add context to that part and
+[4438.4s] definitely mark that option B is
+[4439.8s] basically irrational.
+[4443.7s] >> Do you know which one you want to do?
+[4446.2s] >> Uh option A.
+[4448.4s] We'll take the performance cost for now
+[4450.0s] and then I'll just profile and see if
+[4451.5s] it's actually faster.
+[4454.4s] Um what I really love about this task by
+[4456.2s] the way is when we're doing this in
+[4457.4s] parallel what's really nice is um when I
+[4459.5s] told her the feedback of like hey some
+[4461.2s] of these types have some of these types
+[4463.0s] need to be constructed through beex
+[4464.2s] engine and beex program it actually
+[4465.8s] called the codebase analyzer and did
+[4467.4s] another micro research
+[4469.6s] >> which is fantastic for me because then I
+[4471.8s] didn't have to go tell it everything I
+[4473.8s] did a contextualized research on the
+[4475.2s] spot
+[4476.2s] >> yep
+[4477.4s] >> and now in theory it should have all the
+[4480.3s] design discussion the keep modified But
+[4483.2s] it's it's it's competing with the other
+[4485.2s] one.
+[4486.2s] >> Yeah, that's the only problem with
+[4487.8s] coding agents. They don't understand
+[4489.0s] race conditions. We need files that
+[4490.7s] allow for multiple editors at the same
+[4492.2s] time by default. A file system that does
+[4493.9s] that. It's it looks like a virtualized
+[4496.1s] file, but it kind of behaves like
+[4497.5s] separate files. That would be fantastic.
+[4500.0s] >> Well, you need like basically you need
+[4501.4s] like the YJS like CRDT thing basically.
+[4505.0s] >> What is that? Uh it's like how Google
+[4507.4s] Docs works is basically like you have
+[4510.1s] like a log of operations and then they
+[4512.2s] are like deterministically mergeable or
+[4514.1s] you can like bounce. It's like okay yeah
+[4516.2s] now we can't have two things writing to
+[4518.0s] the same file but like that would at
+[4519.7s] least let you write to two sections of
+[4522.0s] two different sections of the same file.
+[4525.4s] >> Yeah. Okay. So now we're done with this
+[4527.3s] u and I think this one is almost done.
+[4529.6s] So now I just need to go read the code
+[4531.0s] again. Read the design again. I would
+[4532.3s] keep an eye on that one because if it
+[4533.8s] gets if it if it if it gets too many
+[4535.8s] like the file got modified errors, it
+[4538.0s] might resort to like weird said and
+[4540.3s] stuff. Uh but yeah. Okay, it looks like
+[4542.2s] this is on the right track. I just when
+[4543.9s] it keeps trying to do edits, I have seen
+[4545.6s] it like break out like crash out into
+[4548.1s] weird approaches to like
+[4550.2s] >> figure out.
+[4552.6s] This is why I hate doing parallel writes
+[4554.4s] though.
+[4554.9s] >> Yeah,
+[4555.2s] >> it's too risky. It's like way too risky
+[4557.7s] for me. Okay, it's done.
+[4558.8s] >> Yep. Okay. Um, and I think the permal
+[4562.4s] links are available. I think people ask
+[4563.9s] for are these design docs going to be
+[4565.7s] available. Um, these design docs are in
+[4567.8s] a private repo right now, but there's I
+[4569.2s] guess there's no reason.
+[4569.7s] >> We'll copy them in for this episode. I
+[4571.4s] think we can just copy the folder in so
+[4573.2s] that people can
+[4573.8s] >> I don't think the repos has to be uh has
+[4575.8s] to be private. I can probably open
+[4577.5s] >> You should make your repo public then.
+[4579.0s] Public all your design discussions. Open
+[4580.9s] spec.
+[4582.2s] >> Yeah, I don't know about open spec.
+[4584.2s] Maybe I'll copy in part place parts of
+[4586.3s] it though. this when I when I do this, I
+[4588.6s] just grab the docs and drop them in the
+[4590.2s] AI that works like the episode GitHub
+[4591.8s] folder.
+[4592.2s] >> That's probably the right way to do it.
+[4593.1s] I'll just grab all these from this
+[4594.2s] folder inside this just w them and put
+[4597.3s] them in there.
+[4598.4s] >> Yep.
+[4599.0s] >> Result. But also, I hope many people
+[4600.9s] realize it's not actually just about the
+[4603.0s] final artifacts that we create. A lot of
+[4604.4s] this is a process that I'm going through
+[4607.8s] and ask the right questions and stuff.
+[4609.7s] >> Exactly. like I we have to really
+[4611.6s] understand the trade-offs that we're
+[4612.8s] making and that is purely just that's
+[4614.8s] engineering and there's no shortcut to
+[4616.8s] that. How am I using Obsidian? Um if you
+[4620.0s] notice every time I read the markdown I
+[4621.7s] only ever read it through here because
+[4623.4s] Obsidian is one of the best systems to
+[4625.5s] read markdown. I have yet to see
+[4627.4s] anything better. Um, and the reason that
+[4628.9s] it's better, by the way, just to be more
+[4630.2s] concrete, uh, for anyone that hasn't
+[4631.7s] used it before, is specifically because
+[4634.2s] it has this reader writer mode and
+[4636.1s] allows me to switch to reader mode and
+[4637.7s] prevent myself from editing the doc by
+[4639.3s] accident because really I just use the
+[4640.6s] model to edit the doc.
+[4642.1s] >> Yep.
+[4644.1s] >> Um, question four. This is updated. I
+[4646.6s] want to read the summary first. I always
+[4648.1s] read the summary before I do anything
+[4649.4s] else. And it sounds like it has more.
+[4650.9s] Um,
+[4653.1s] does it have Okay, I need to go read
+[4655.1s] this more again just in case. Yeah, I
+[4657.6s] don't think it ever got your like I
+[4659.1s] accept the recommendation for question
+[4661.0s] one kind of thing.
+[4662.4s] >> Yeah. Question four is the original key
+[4665.2s] references.
+[4666.9s] >> Oh, nice. Okay, I figured this out. I
+[4668.2s] figured out how I want to go do this.
+[4670.6s] That's perfect. It now knows how to pass
+[4672.6s] that in. Key references. We're going to
+[4675.3s] pass this in as well. And right now, end
+[4676.9s] bars are not bound to the sysops. We'll
+[4678.9s] have to go change that later.
+[4681.1s] Compile source with this. Um, yep. We
+[4685.0s] have a custom thing contain our caner
+[4686.7s] for GC coordination. That's exactly what
+[4688.4s] we really need.
+[4690.6s] Um, must be wrapped as some objects.
+[4698.6s] Yeah, exactly. So, art can keep ROS
+[4700.8s] objects alive. Okay. And then I'll say I
+[4716.6s] Okay. And then yeah, we should just give
+[4718.6s] this one more like skim over before we
+[4720.9s] go to the outline.
+[4722.2s] >> Well, I'm going to kick off the outline
+[4723.4s] test while we read the design doc one
+[4725.3s] more time because again, pipeline. As
+[4727.6s] much as you can pipeline, as much as you
+[4729.0s] can prefetch, the better off you'll be.
+[4732.2s] >> Okay. But the outline is really, really
+[4733.7s] fast. The outline rarely does research.
+[4736.2s] It takes it takes time for mines.
+[4738.6s] >> This kind of code I found that it
+[4739.9s] actually takes a while. Yeah.
+[4741.6s] >> I I think it's just like the complexity
+[4743.0s] of the system. You got WASM, you have
+[4744.6s] like features across run times. It
+[4747.8s] >> it just takes a while.
+[4749.2s] >> Okay.
+[4749.5s] >> And like worst case, it's ready before
+[4750.9s] I'm done reading it. Who cares? I just
+[4752.5s] throw it away if it's bad and I redo it
+[4754.1s] again.
+[4755.0s] >> Yep.
+[4756.2s] >> Right. My time is more valuable than
+[4758.0s] anything else.
+[4759.4s] >> Yep. Human time.
+[4761.8s] >> Human time.
+[4762.3s] >> Minimal clock time.
+[4764.1s] >> Exactly. We're all we're only optimizing
+[4767.4s] for wall clock time, not for token time.
+[4770.4s] Because the the other problem is like if
+[4771.9s] I get distracted, the worst thing that
+[4773.7s] can happen is I get distracted and now
+[4775.2s] I'm off like doing my own thing and I
+[4777.2s] get dist I go on Twitter or Reddit or
+[4778.9s] something for like 15 10 15 minutes and
+[4781.0s] my brain has switched context. I page
+[4782.5s] everything in.
+[4784.8s] So it's actually not just a matter of
+[4786.2s] like I I'm trying to optimize for time.
+[4788.2s] The biggest problem is just that like if
+[4789.8s] I'm if I'm screwed then I just can't uh
+[4793.8s] there. Yes, there we go.
+[4796.9s] Okay, cool. While this is running, let's
+[4798.8s] go back to reading this.
+[4802.1s] >> Okay, we already have all the patterns.
+[4803.4s] All design questions have been resolved.
+[4805.0s] I hate the fact that we don't keep all
+[4806.6s] the options around.
+[4809.8s] >> I wish it would dextra. We got to fix
+[4811.4s] that.
+[4812.6s] >> Yeah, that's coming. It's in the It's in
+[4814.5s] the I fixed our I fixed our auto uh our
+[4817.8s] our background agent and that one is now
+[4819.8s] in the queue. So, it's coming.
+[4821.6s] >> Nice. I'm I'm excited. Uh so,
+[4824.3s] >> what is referencing is he wants to see
+[4826.6s] the short description of the options
+[4828.6s] that we didn't choose, not just the ones
+[4830.4s] that we did choose.
+[4831.7s] >> And and again, the reason for that is
+[4833.3s] because it's all about context. So, like
+[4835.2s] if the model should know later on if I
+[4837.1s] do a different step, the model should
+[4838.6s] know that I chose explicitly not to
+[4840.3s] follow this pattern. the model and a
+[4842.3s] human that looks at this should also be
+[4843.8s] like oh I didn't just I didn't just vibe
+[4846.0s] this I actually did make some decisions
+[4848.2s] along the way and I might have made
+[4850.0s] wrong decisions and we can talk about
+[4851.8s] that but looking at this doc alone
+[4854.3s] doesn't allow for discussion to happen
+[4855.9s] again it's like basically a done deal
+[4858.8s] >> in any way
+[4860.1s] >> and when I often see like uh more like
+[4863.0s] um more junior people sharing with me
+[4865.0s] like how they use AI the hardest part
+[4866.6s] with it is like it literally just feels
+[4868.1s] like they hit tab tab tab tab tab or
+[4870.1s] enter enter enter and put no thought
+[4873.3s] into whatever the model wanted to do.
+[4875.2s] They didn't look
+[4876.1s] >> basically means I have to review the
+[4877.2s] whole thing. Like I can't skip any parts
+[4879.4s] of the review because I'm like you put
+[4880.6s] zero thought into it. So I have to
+[4881.8s] assume that you put zero thought into
+[4883.4s] the whole place.
+[4884.6s] >> If you're just going to accept
+[4885.5s] everything that the AI chooses, then
+[4887.4s] like you're not doing the thinking which
+[4889.2s] is like what the engineers are being
+[4890.8s] paid for. Like if if I wanted to just
+[4892.4s] take Claude's output and turn it into a
+[4894.2s] PR, I don't I don't need another
+[4895.7s] engineer to help me with that.
+[4897.4s] >> Exactly. This is a beautiful design. I I
+[4899.7s] love that our sysops is so modular. Now
+[4901.4s] we can do sisops watom. Boom. It just
+[4903.4s] takes in the callbacks and just binds
+[4905.0s] everything together.
+[4910.2s] >> Yes.
+[4912.3s] >> Okay. While it's on fetch and you get
+[4914.6s] the external value, you call the cy, you
+[4917.6s] pin
+[4922.9s] and then it awaits the promise and we do
+[4924.8s] from js value. Okay.
+[4933.4s] Um, okay. I have to check a few things.
+[4936.1s] Where does the call back? Oh, the call
+[4937.4s] get the call back comes in from here.
+[4939.2s] Perfect.
+[4944.0s] Okay, these are walls and callbacks.
+[4950.2s] Um, that's cool because it's thread
+[4952.6s] local. Every single method when we
+[4954.1s] actually call sisop just checks if we
+[4955.7s] have this. If it doesn't, uh, then we
+[4958.0s] basically just give unsupported.
+[4962.0s] This needs to be codegen with a macro.
+[4963.8s] I'm not handwriting all of these.
+[4966.6s] >> Okay.
+[4969.2s] >> Well, we have like infinite SIS calls,
+[4971.0s] right? So like, and anytime we add a new
+[4972.5s] SIS call, we want to macro it whenever
+[4974.3s] possible.
+[4975.3s] >> Yep.
+[4978.6s] >> Uh, yes. Okay. So, let's read the code.
+[4981.5s] This is a should expose project engine.
+[4984.1s] Perfect.
+[4986.2s] Oh, it doesn't take in a project. That's
+[4987.9s] wrong.
+[4990.8s] Um, this takes in a program, not an
+[4993.5s] engine.
+[4997.5s] Uh, I'll see if the outline figures that
+[4999.2s] out.
+[5003.4s] >> Yeah, this is this is Yeah. Okay.
+[5005.9s] >> Oh, it does. Okay, it does. It adds a
+[5007.9s] product pipeline to Okay. Uh, program.
+[5011.8s] Okay, cool.
+[5015.7s] And this one read the research too,
+[5017.1s] right? If you go back, I think it should
+[5018.9s] show on the right tab like all the
+[5021.2s] source. Yeah, all the reference
+[5022.4s] documents on the right. So yeah, as we
+[5024.3s] build this up, basically every document
+[5026.2s] you create becomes part of your like
+[5029.0s] accumulated context window and you're
+[5031.3s] all working towards kind of the final
+[5033.3s] artifact is that plan that then can be
+[5035.8s] like basically iterated over with like
+[5038.0s] one context window per phase.
+[5040.9s] >> Yeah. And you can see what we're doing
+[5042.2s] here. For example, like right now when
+[5043.8s] we send values across the bridge,
+[5045.9s] >> like we turn an array that's a Rust
+[5047.7s] array into a JavaScript array. That's
+[5049.6s] just what we do. We turn a like a media
+[5051.8s] type which is a a weird handle that
+[5053.5s] points to a Rust object into a handle
+[5056.2s] >> and that just like copies the handle and
+[5057.7s] sends it across. Same with like
+[5059.1s] resources. We just send a handle across.
+[5063.4s] Um so like the front end knows that
+[5065.1s] these are different types that need to
+[5067.2s] be treated differently.
+[5075.0s] Okay,
+[5076.6s] >> cool. I think that's good. Um, there's
+[5078.6s] two bits of feedback, right? You had the
+[5080.2s] pro program thing, which you think it's
+[5081.9s] going to figure out, and then there was
+[5083.0s] one.
+[5083.3s] >> I think that would have figured out
+[5084.2s] looking at the prompt for the next one.
+[5085.8s] >> Uh, everything else. I don't really have
+[5087.9s] >> the other one. You said you need to
+[5089.0s] codegen that with the
+[5091.0s] >> Yeah, that was macro stuff, but I'm not
+[5092.5s] worried about that cuz I have a separate
+[5093.7s] PR in a separate workspace that's doing
+[5095.4s] that.
+[5096.4s] >> Oh, I see. Okay. So, for now, this is
+[5098.3s] going to be ugly, but then you're going
+[5099.6s] to update it later.
+[5101.0s] >> Yeah, exactly.
+[5102.4s] >> Okay.
+[5103.3s] >> Uh, and this is what I meant. The
+[5104.4s] structured output actually takes a
+[5105.6s] while.
+[5106.6s] >> Yeah.
+[5107.0s] >> Uh, along the way, and we still are
+[5108.4s] going to get like a 15 seconds uh,
+[5110.3s] behind the scenes. And I'm not going to
+[5112.6s] make everyone watch me actually
+[5114.2s] implement this because once we produce a
+[5116.2s] structured output, I just I let it rip
+[5118.3s] on a while loop and it just runs the
+[5120.2s] whole uh, implementation. Um, assuming
+[5122.6s] the structured outline is good. Do you
+[5124.9s] use the implement agent in Riptide?
+[5127.8s] >> Yeah. Yeah, I do. I don't really think
+[5129.4s] about it. I just let it run.
+[5131.0s] >> Yep. Yeah. Once once you're happy with
+[5132.6s] the I actually want to add a slider for
+[5135.0s] you, like an autonomy slider where it's
+[5136.6s] like once you approve the structure
+[5138.1s] outline, it literally just rips until
+[5140.4s] it's ready to send you a PR. Like it
+[5142.0s] makes the plan and then it starts the
+[5143.4s] work tree and then it creates the goes.
+[5146.6s] >> Well, while we're here, um I know we're
+[5148.3s] going to start running out of time soon.
+[5149.7s] Um people do people have questions? uh
+[5152.1s] feel free to drop them in the chat for
+[5153.8s] Riverside. Obviously, we'll have
+[5155.1s] questions later on uh that people might
+[5157.7s] have that they can send on the Discords.
+[5159.7s] But do people have questions about this
+[5161.0s] workflow so far?
+[5162.2s] >> Can't wait to see if some of the prompts
+[5164.4s] in the AI that works repo.
+[5167.8s] Learned so much. I'm forever grateful. I
+[5170.0s] will continue to learn more about BAML.
+[5171.9s] Joined in late. Can you summarize? Uh
+[5174.0s] no, you can watch the recording.
+[5176.2s] >> Just give him a summary, D.
+[5177.7s] >> No, I'm just kidding. Uh so we're going
+[5179.3s] through we're building a feature on BAML
+[5180.9s] which is um
+[5183.2s] how would you this is basically adding
+[5185.4s] like the the support that existed in the
+[5188.6s] BAML like core uh language repo that
+[5191.5s] powers the VS code extension and stuff
+[5193.3s] and basically plumbing it through into
+[5195.4s] the actual like BAML VM here which is
+[5198.4s] the Beex engine and the CIS bindings so
+[5200.5s] that um the kind of new new and improved
+[5204.4s] fancy like Turing complete programming
+[5206.5s] language BML can access all the same WOM
+[5209.8s] stuff. Um, and is it two-way? Is it like
+[5212.7s] is basically the idea is like you want
+[5213.8s] to be able to evaluate BAML like new
+[5215.6s] BAML code in the VS code extension or is
+[5218.6s] it the other direction?
+[5219.8s] >> Yeah, I want to run BAML code in the VS
+[5221.7s] code extension without you having to do
+[5223.0s] anything. So like for example like how
+[5224.2s] do you run the new BM code? The new BML
+[5226.4s] code allows you to call like shell.
+[5228.0s] >> How do you run shell in a WOM
+[5229.7s] environment
+[5230.6s] >> in like a browser window? So we have
+[5232.7s] that bridging for you.
+[5234.4s] >> I see.
+[5235.0s] >> How do you have a virtualized file
+[5236.4s] system? uh because like you want to make
+[5238.3s] a file open, file readrite, we build
+[5240.0s] that bridging for you. How do you bridge
+[5241.6s] network requests? For example, cores
+[5243.1s] requests are a huge problem uh if you're
+[5245.4s] in a browser window because like all
+[5246.6s] these and and end APIs just disable
+[5249.3s] cores. It's so annoying. How do you
+[5251.1s] solve that problem?
+[5252.8s] >> Uh we got another question. Um uh ETA
+[5256.4s] for alpha release. Uh stay tuned. We'll
+[5258.8s] announce it. Um I didn't hear if you saw
+[5262.7s] are you levering the JSON canvas spec
+[5264.7s] with Obsidian at all? Would you consider
+[5266.8s] that instead of asking?
+[5269.0s] >> Okay.
+[5269.4s] >> I have no idea what that is.
+[5271.3s] >> And then Yebin had a question. Do you
+[5273.2s] ever run into the issue where you run
+[5275.0s] out of context when trying to do
+[5276.6s] research?
+[5278.4s] >> Um I find that because I'm saving a lot
+[5281.2s] of these documents personally along the
+[5282.8s] way, the documents are kind of my
+[5284.2s] context and I just like restart a
+[5285.7s] context window with the documents. But I
+[5287.4s] have run out of context and honestly I
+[5289.0s] just use autoco compact. It works fine.
+[5291.6s] >> Yes, you can. Depending on what you do,
+[5293.4s] I I am fine. If I'm especially if I'm
+[5295.7s] feeling very lazy and I'm just like
+[5297.6s] playing Claude, I'm just like riffing
+[5299.4s] out some random like I'll yolo it
+[5301.8s] and just autocompact. I don't really
+[5303.5s] care. It's more like when you're super
+[5305.6s] dialed, you're dialed in and you're
+[5307.4s] like, I'm going to go ship a thousand
+[5308.7s] lines of code. That's when the
+[5309.9s] compaction becomes really important.
+[5312.4s] >> Okay. And this is where these questions
+[5314.0s] get kind of garbage. Uh, this one is
+[5316.3s] trivial. Uh there's
+[5320.5s] nothing special
+[5324.4s] in the CD
+[5327.1s] and the call function
+[5330.7s] back
+[5333.5s] supports
+[5335.0s] this.
+[5336.9s] Uh let's add this uh
+[5341.3s] not a concern
+[5346.6s] error handling granularity.
+[5352.5s] Uh we would like some decent
+[5357.0s] error types if possible.
+[5361.4s] Uh what I don't like about this error
+[5363.0s] handling granularity problem by the way
+[5364.4s] is I know that this is a design problem
+[5366.5s] and whatever thing that we constructed
+[5368.3s] is going to be kind of bad because it's
+[5372.3s] going to go and update this plan with
+[5373.7s] this with this error conversion thing
+[5375.5s] and I just don't like that concept. Um
+[5378.2s] >> yeah but
+[5379.1s] >> there's yeah
+[5380.6s] >> I will deal with it and I'll live with
+[5381.9s] it. It's kind of a world where like when
+[5383.9s] you look at the the like enhanced RPI
+[5386.9s] workflow here, it's kind of part of it
+[5389.4s] is like very structured steps for the
+[5391.0s] human to do and different types of work,
+[5392.2s] but it's also like give the model four
+[5395.6s] options to ask questions about the
+[5397.5s] problem and give you four options to
+[5400.3s] resteer if it gets something wrong.
+[5404.5s] Like the research comes out, the
+[5405.8s] research has open questions. When you go
+[5407.2s] from research to design, the design will
+[5409.8s] go find the answers to those open
+[5411.1s] questions. And when you go to design to
+[5414.0s] structure, you may also get like more
+[5416.2s] open questions. And it's just like how
+[5418.2s] do we guarantee that we're being like
+[5420.3s] thoughtful about any every like edge
+[5422.7s] case and corner case and detail before
+[5424.9s] we go to implementation.
+[5431.0s] >> Exactly. Um I'm going to read this a
+[5433.2s] little bit more. Um this stuff is really
+[5435.5s] good and specifically one of the things
+[5437.4s] that I'm really looking for is how
+[5438.7s] modular is this? I don't the phases
+[5440.3s] sometimes feel a little artificial
+[5441.6s] because sometimes like just do all of it
+[5442.7s] in one go.
+[5444.1s] >> I often tell it to just combine the
+[5446.1s] phase. I'm just like phases one, two,
+[5447.4s] and three can be one phase. It's really
+[5449.5s] about like what at what point is there
+[5452.1s] something worth checking?
+[5454.3s] >> Um like the phase should not be so big
+[5457.0s] that the model can't complete it in one
+[5458.6s] context window and it should not be so
+[5461.3s] small that there's nothing to verify at
+[5463.1s] the end. And there's your sweet spot and
+[5465.0s] it depends on your codebase and your
+[5466.5s] taste and how you test things. And if
+[5468.0s] you have a front-end web app versus if
+[5469.5s] it's all a programming language, like
+[5471.1s] the things that can be verified
+[5472.4s] automatically is like on a spectrum
+[5474.2s] there.
+[5477.7s] >> Okay, so I found out I found one big
+[5479.6s] design bug, which is this one,
+[5481.5s] >> which is the beex. It's adding some new
+[5483.5s] compile rs. That should just live in the
+[5485.5s] compiler tool chain. It shouldn't live
+[5486.6s] in the playground specifically.
+[5488.6s] >> Okay.
+[5491.1s] >> Um, that's good to know. I can fix that.
+[5495.8s] While you're giving it while you're
+[5497.0s] giving it that feedback, there's
+[5498.6s] thoughts on plan to implement as is
+[5500.8s] popularized by cursor versus the more
+[5502.6s] extensive RPI flow. Um
+[5504.5s] >> um
+[5506.6s] >> I tell you my thoughts. Uh personally
+[5508.6s] like plan to implement only really works
+[5510.0s] for simple tasks. There's no freaking
+[5511.5s] way this was thing is going to be
+[5513.4s] oneshotable at the end of it if I do
+[5515.4s] plan to implement. It's just not enough.
+[5517.8s] >> There just not enough uh concept here.
+[5522.9s] Um, yeah. The way I think about it is
+[5524.5s] like it's a spectrum, right? Like the
+[5526.7s] amount the like size and complexity of
+[5529.4s] the hardest task you can solve, the
+[5532.2s] ceiling goes up with how much of this
+[5534.2s] context engineering and design that
+[5536.2s] you're willing to do. And so if it's
+[5538.1s] like literally change the color of a
+[5539.8s] button, like yeah, just tell Claude,
+[5541.8s] hey, here's the file. Go make it blue.
+[5544.0s] >> And like if it's a slightly bigger task,
+[5546.2s] then maybe just a plan implement is
+[5547.9s] good. But as the task get larger and you
+[5550.4s] want to actually ship like large complex
+[5552.4s] things across many modules um basically
+[5556.5s] it's like the payoff of doing more
+[5558.8s] context engineering up front to build a
+[5560.7s] really really good plan is worth it
+[5563.8s] >> like like for example just so everyone
+[5565.2s] knows here like bam playground wom is
+[5567.1s] going to now take a dependency on baml
+[5568.6s] compiler hir that is architecturally
+[5570.4s] incorrect stow will catch that cargo sto
+[5572.9s] that we built will catch that dependency
+[5574.3s] and it'll like
+[5576.6s] >> but you don't want to catch it it's
+[5577.8s] easier catch now than how
+[5579.6s] >> it's going to start building the
+[5580.6s] dependency on this this is going to
+[5582.9s] start depending on like bammo h compiler
+[5585.0s] hr. I do not want that arrow to be
+[5586.7s] drawn.
+[5587.9s] >> Yep.
+[5588.4s] >> It's invalid. I also don't want an error
+[5590.7s] to be drawn where this thing um where
+[5593.3s] this thing suddenly where has to go make
+[5596.1s] its own compiler inside of itself to
+[5598.7s] make the program stuff that we want. It
+[5600.6s] shouldn't do that. That should be a
+[5602.2s] thing that BAML project can do or beex
+[5605.3s] engine can do. So when I go look into
+[5607.9s] this uh what I really want to do is I
+[5609.8s] want to make sure this architectural
+[5610.9s] thing is caught. And we talked about a
+[5612.2s] lot of design stuff up until now and it
+[5614.2s] made one assumption here. If I if in the
+[5617.1s] research plan implement in the standard
+[5619.4s] if it was less granular than the
+[5621.0s] workflow that we're doing here, it's
+[5622.6s] very possible this step would have been
+[5623.8s] an assumption that was made by a prior
+[5625.4s] step and it would just never have been
+[5627.9s] revealed to me and the code would just
+[5629.2s] be slop at the end.
+[5631.1s] >> Yep. and then I would be screwed because
+[5633.6s] then I'd feel like AI the process of AI
+[5636.8s] engineering didn't work and I think
+[5638.8s] that's why so many people feel like the
+[5640.3s] process of AI engineering doesn't work
+[5641.4s] because they try a simple thing it works
+[5642.6s] they try something complex like what
+[5643.9s] we're doing here for WOM and it doesn't
+[5645.8s] work at all and the real way to do this
+[5649.0s] is just to sit and like understand the
+[5650.8s] intricacies and like the amount of
+[5652.5s] nuance that you have to go higher is
+[5653.8s] like you have to read this line
+[5655.8s] >> and like it's very easy to scroll
+[5657.0s] through this file be like yep yep y and
+[5658.6s] not catch this line.
+[5660.6s] >> Yep. And like that's that's the hard
+[5663.0s] part to be honest. It's about having
+[5664.6s] focus to actually go read this.
+[5668.6s] The nice part is in my experience when I
+[5671.3s] have gotten this right and I've actually
+[5673.5s] detailed and read this the amount of
+[5675.1s] slot that I generate is very very
+[5676.8s] little.
+[5678.9s] >> Nice.
+[5679.5s] >> And often I oneshot the whole
+[5681.0s] implementation as long as the phases are
+[5683.2s] actually correct. Sometimes sometimes it
+[5685.4s] one shot Go ahead.
+[5686.7s] >> I'm sorry. Did you give it the feedback?
+[5688.1s] Do you want to keep this running while
+[5689.4s] we're while we're wrapping? I I'm
+[5691.3s] probably going to have to I think we're
+[5692.5s] nearing two hours. I don't think this
+[5693.7s] will finish and I'm going to have to
+[5694.7s] close my laptop and this research task
+[5696.2s] will take too long.
+[5697.6s] >> Okay,
+[5698.3s] >> this is like a
+[5700.2s] >> little bit more fundamental thing that I
+[5701.9s] missed earlier.
+[5703.2s] >> Vib will ship this uh at some point.
+[5705.7s] >> Oh, this is going to merge. I need to do
+[5707.4s] this anyway. This is my Yeah, we'll pick
+[5710.6s] pick we will uh link the PR in the show
+[5713.6s] notes.
+[5714.6s] >> Yeah, it it will definitely have landed
+[5716.2s] by the time you guys uh see the episode
+[5717.8s] live on YouTube. Uh, for sure.
+[5720.6s] >> Um, I have one more question and then we
+[5722.6s] can we can kind of wrap this up, but uh,
+[5724.3s] Yben says, um, have you ran into any
+[5726.2s] issues with RPI with massive tasks, eg
+[5728.2s] tasks so large that even RPI starts to
+[5730.2s] elucinate or do you usually just split
+[5731.6s] the tasks into smaller ones so that
+[5733.6s] doesn't happen in the first place?
+[5736.6s] What do you think?
+[5737.8s] >> What are your thoughts?
+[5739.4s] >> Um, yeah, I mean I I put it I put it in
+[5741.7s] the chat. It's like you can always do
+[5743.0s] multiple researches. You can always do
+[5745.2s] multiple plans. I think Kyle shipped a
+[5747.1s] PR last week that was like 20,000 lines
+[5749.3s] of code and it had like three structure
+[5751.9s] outlines and then split it into like
+[5753.5s] three or four different plans um and
+[5756.0s] like shipped it in two parts. But part
+[5757.5s] of it is like yeah at a certain point
+[5759.7s] there's a if you want to ship a 10,000
+[5762.4s] lines of code in a single plan like
+[5764.6s] that's just not going to it's going to
+[5765.7s] eat too much of the context window just
+[5767.1s] to read the plan. And so like yes as was
+[5769.8s] always true in software engineering the
+[5771.4s] more you can break down your tasks the
+[5773.1s] better. Um, and you can use AI to help
+[5775.6s] break down these tasks. But usually what
+[5777.2s] I will often do is like if it's really
+[5779.5s] really big, I will do a bunch of
+[5781.0s] research, like multiple research files,
+[5782.9s] and then create a structure outline that
+[5784.5s] will be like 10 phases. And then when we
+[5786.9s] go to plan writing, I'll have it carve
+[5788.6s] out just the parts of the plan. Like
+[5790.4s] I'll do like plan for phases one and two
+[5792.3s] because they're actually huge. Plan for
+[5794.1s] phases three and four because that's
+[5795.4s] actually like a like an individually
+[5797.1s] shippable thing. And you can work back
+[5798.6s] and forth with Claude to um get a feel
+[5803.0s] for um
+[5805.6s] like brainstorm and iterate on like how
+[5808.4s] can we break this up? How can we re
+[5810.2s] reorder the phases so that each of these
+[5812.3s] chunks is like independently shippable.
+[5814.4s] >> Um I'm going to show you guys something
+[5815.7s] just to give you guys an idea of how um
+[5818.1s] how big these plans versus things get.
+[5820.6s] You guys can like roughly get a rough
+[5823.5s] idea of this. Um, I'm just going to have
+[5826.2s] it build a tree of every single file uh
+[5829.4s] in here and then also just tell me like
+[5831.0s] how long everything is
+[5834.5s] and that'll give you an idea of at least
+[5836.3s] what I've been doing and how complicated
+[5839.0s] it ends up being roughly.
+[5840.4s] >> Yeah, I'm excited to see this.
+[5843.0s] >> Um, and it'll give you probably a range
+[5848.9s] and then I will have to call it quits
+[5850.3s] because I do have to go to a meeting.
+[5852.2s] >> Yes, sir.
+[5859.0s] I feel like every week on this show.
+[5860.6s] Okay, here we go.
+[5862.1s] >> This is number of lines.
+[5864.2s] >> Uh, so what number of lines is like
+[5868.9s] anywhere from like
+[5870.6s] >> Yeah, the plans end up being around a
+[5872.2s] thousand and but everything else is much
+[5873.9s] smaller.
+[5875.0s] >> Patterns. I don't know, man. I don't
+[5877.0s] want to think about this. This is this
+[5878.9s] is not a thing I want to think about. Uh
+[5881.6s] let's let's let cloud code come up with
+[5883.3s] patterns for us
+[5887.2s] and we'll see. Um so I've done like
+[5889.2s] maybe how many how many things have I
+[5890.6s] done? One
+[5892.7s] this is one two three four five six
+[5896.2s] seven 8 9 10 11 12 uh 12 tasks on this.
+[5903.2s] Um
+[5904.8s] you can kind of get an idea. Tickets
+[5906.7s] usually start anywhere from 2 to 70
+[5908.2s] lines. I had some really big ones. Um,
+[5911.0s] it goes to research questions which are
+[5913.1s] around this much. Research is anywhere
+[5914.6s] from 400 to 1,000. Design do questions
+[5916.7s] are like roughly half that structure are
+[5919.6s] pretty low. And then like my plans go
+[5921.0s] anywhere like 3,000 lines.
+[5923.9s] >> Depending how detailed getting
+[5925.8s] >> Can I uh can I screenshot this for the
+[5927.7s] episode?
+[5928.2s] >> Yeah, go for it.
+[5930.0s] >> Throw this on the whiteboard.
+[5931.4s] >> It's fine.
+[5932.2s] >> And I'll grab that other whiteboard from
+[5933.6s] you as well. We'll we'll put that on the
+[5935.0s] GitHub.
+[5935.4s] >> Yeah. And and for other context, if I
+[5938.1s] actually look at the code review of how
+[5939.2s] big these some of these have been, I can
+[5940.6s] show you guys how big these code reviews
+[5942.5s] get as well. Um because I've I've
+[5944.2s] shipped a lot of this code already now.
+[5954.7s] So like you can just look at this like I
+[5956.9s] finished this which is like adding sys
+[5958.2s] calls a fetch. There's like roughly like
+[5959.9s] 800 lines of code uh fully done by this
+[5962.2s] workflow. I wrote I did not write a
+[5964.2s] single line of code, but I did review
+[5966.1s] all of it with the same level of detail
+[5967.4s] that you're seeing over here.
+[5969.0s] >> Yeah.
+[5969.3s] >> Um and it worked one shot. No extra
+[5972.4s] work.
+[5973.1s] >> This handle code, I think this one was
+[5974.6s] another one like 500 lines of code. I'm
+[5976.4s] mostly this was like a refactor.
+[5979.4s] >> Uh because I found a bug. I found some
+[5981.3s] slop in some previous system.
+[5984.5s] This one is like added another like 800
+[5988.2s] 900 like about 900 lines of code is what
+[5990.1s] I added. Um,
+[5993.4s] this is like some still crap. That one
+[5996.0s] is different.
+[5997.9s] Um,
+[5999.4s] added a debugger. Uh, this garbage
+[6001.7s] collector that I wrote. Um, this is
+[6004.3s] funny.
+[6004.6s] >> Oh, this is the thing we were doing the
+[6006.6s] galaxy brain.
+[6007.8s] >> Yeah, exactly. This is 4,000 lines of
+[6009.5s] code fully generated by this thing. It's
+[6011.0s] a full garbage collector that's like
+[6012.4s] memory safe. I think we had one race
+[6014.2s] condition bug that we caught a post post
+[6016.6s] this. Uh, and we caught that in a we
+[6019.2s] also caught the race condition bug by
+[6020.6s] leveraging AI, funnily enough. Um, like
+[6024.1s] it was a weird memory race condition bug
+[6026.0s] because we write some unsafe code in
+[6028.2s] here.
+[6029.5s] Uh, and then this actually finished off
+[6031.1s] the garbage collector. Like there's some
+[6033.6s] pretty complic like um we if anyone's
+[6036.3s] curious we use like something called
+[6037.3s] like a semi space algorithm. And I know
+[6039.1s] about I knew about like generational
+[6040.5s] garbage collection but I didn't know
+[6041.5s] about like semispace garbage collection.
+[6044.2s] And it's just like interesting how fast
+[6045.8s] you can learn stuff and implement things
+[6047.2s] from like idea to merge. It's so fast
+[6050.4s] now. The world is such a magical place.
+[6052.9s] >> It's exciting. I'm excited.
+[6055.6s] >> It's been really interesting coding
+[6057.0s] within this workflow. I really really
+[6058.6s] enjoyed it.
+[6060.2s] >> Amazing. Yeah. I I like your comment
+[6062.1s] about how you are now exhausted all the
+[6064.2s] time because you can actually produce
+[6066.0s] code at the speed of thought instead of
+[6067.8s] at the speed of typing.
+[6069.8s] >> Exactly. That's literally what I'm
+[6071.1s] doing. I'm I'm literally shipping as
+[6072.6s] much and you can go to rebound and you
+[6073.9s] can see we're all just shipping as much
+[6075.4s] code as possible at the speed of thought
+[6077.8s] >> which is just mindboggling in my eyes.
+[6080.7s] >> Well, lots of new stuff coming. I can't
+[6082.2s] wait to share it with you. Uh this was
+[6084.4s] super fun. I learned a lot. It's always
+[6085.9s] fun to watch people use our stuff. And
+[6087.8s] for everyone still watching on the chat,
+[6089.8s] um, keep an eye out for the launch
+[6092.3s] coming soon. We're doing some stability
+[6093.9s] stuff and rolling out to some more
+[6095.5s] design partners. But hopefully to be
+[6097.6s] able to give people a, you know, solo
+[6100.9s] hobby version of this soon so you can
+[6102.6s] mess with it for yourself. If you guys
+[6104.3s] find these um interesting, uh all we ask
+[6107.6s] is uh go check out uh join the live
+[6110.6s] stream u and come ask questions, watch
+[6113.0s] the videos um after the fact. You should
+[6116.6s] hopefully see an episode for next week
+[6118.6s] pretty soon going live. Um we have most
+[6121.9s] of our episodes starting to get prepped.
+[6123.3s] We do these episodes every single
+[6124.6s] Tuesday at about 10:10 a.m. Though the
+[6127.1s] episode will say 10. And shouts out to
+[6129.0s] producer Kevin by the way who has been
+[6131.4s] helping us with a lot of things. Uh I
+[6134.2s] think you've seen him as a guest on some
+[6135.7s] of these shows. He's automating I know
+[6137.4s] we did an episode about automating the
+[6138.8s] AI that works workflow
+[6140.6s] >> and then that thing was unmaintained and
+[6143.0s] it was no longer usable. So now we have
+[6145.3s] a very good engineer uh helping to run
+[6147.7s] the show here and he rocks. Thank you
+[6149.6s] Kevin. I don't know if you're going to
+[6150.7s] see this but uh I'm going to send you a
+[6152.5s] thank you in Slack anyways.
+[6153.8s] >> And then we'll see you guys next week.
+[6155.9s] >> See you guys next week. Thanks
+[6157.0s] everybody.

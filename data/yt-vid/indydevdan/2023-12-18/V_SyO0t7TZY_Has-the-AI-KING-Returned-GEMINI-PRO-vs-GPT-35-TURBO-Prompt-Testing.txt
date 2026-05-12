@@ -1,0 +1,649 @@
+I'm not going to waste your time here's
+the Topline information you need to know
+to determine if Gemini Pro is worth your
+time the tldr is the king of AI has not
+returned yet I highly recommend you try
+out Gemini Pro but not because it's
+outperforming
+gp4 despite all the drama around Google
+demos for Gemini technology overall
+Gemini Pro performs slightly better than
+gbt 3.5 turbo winning in some cases
+while losing in others there's this
+really great blog post by this company
+called clue that just came out I've been
+able to back up a lot of what they've
+been claiming here throughout the
+article and I think it's pretty spoton
+I'm going to give you the top level
+metrics right now I've got this all in a
+code base that you can check out this is
+the llm eval code base I have the repo
+up if you scroll down to the section
+titled Gemini Pro versus GPT 3.5 you can
+see I've got a quick section here
+showcasing the highlights between Gemini
+Pro and gbt 3.5 .5 Gemini Pro is
+slightly better than GPT 3.5 there's a
+small to medium siiz Edge I'm not
+exactly quite sure how large this Edge
+is it really depends on your use case
+when it comes to price comparison
+they're the exact same so Google is
+being pretty aware and I think they're
+actually making a statement with this
+price point they're saying this is our
+gpg 3.5 right and what comes next is of
+course Gemini Ultra they've mentioned
+Ultra in their llm marketing SL
+evaluation blog post here you know
+they're CL CL that Ultra is going to
+surpass GPT 4 we'll see about that you
+know we're going to cover that as soon
+as that comes out as well definitely
+subscribe if you're interested in that
+on this channel we use the best tool for
+the job right now llms agentic software
+autonomous software is the name of the
+game and so that means you need to be
+using the best model for the job I'm
+spending a lot of time focusing on
+scaling up llm evaluation and testing
+Frameworks hence this video and my
+previous video just like writing
+software you want to know that your
+prompts are working just like your code
+is working and prompt testing allows you
+to confirm and know with serious
+confidence that your prompts are going
+to deliver the outcomes that you're
+looking for so let's continue down the
+line so you know Gemini Pro 3.5 exact
+same price now here's something pretty
+interesting so Gemini Pro uh
+demonstrated pretty Superior speed we're
+going to dig into the exact numbers here
+this is something I really look out for
+this is super important that's awesome
+so instruction following again this is
+another area where Gemini Pro seems to
+excel it sticks closer to what you're
+asking which I think is a huge huge huge
+Advantage this is one of my top metrics
+I look for when I'm comparing llms is it
+listening to The Prompt and how much
+prompt engineering do I have to do to
+get the results I'm looking for so
+content generation DPG 3.5 has a slight
+Advantage here I found that you know it
+produces a bit more nuance and varied
+results I'm sure this can be tweaked in
+both models you know with temperature
+but I just found on average uh 3.5 um is
+a little bit better with content
+generation language understanding Gemini
+Pro shows Superior language
+understanding you know when you start
+putting together these benchmarks um you
+can see why I've rated Gemini Pro
+slightly better the speed's there
+instruction following is there language
+understanding is there um but we do have
+some negatives you know Gemini Pro seems
+to be bias toward Google it's pretty
+obvious why but it seems to like
+randomly throw references to Google in
+the prompt responses you know I'm I
+don't know why that wasn't like cleaned
+up or removed from the data maybe it was
+inserted seems like something Google
+would do I don't know I'm not really
+sure you know for that reason I found
+that you know gpg 3.5 was more unbiased
+if you've used any Google Cloud
+Technologies you know that there's some
+setup costs in general more mature Cloud
+platforms have a little bit steeper of a
+learning curve the API is usually going
+to be a little more complex just because
+they have to and want to support more
+use cases Gemini Pro loses here the open
+a API is much easier to understand can
+reason about and use but there's not a
+huge gap here so you know just a small
+difference something to call out AI
+alignment and safety this mostly comes
+from Gemini Pro and other Google llms
+being extremely restrictive some
+Engineers some people really want to be
+able to prompt anything they want under
+the sun no matter how you know kind of
+hostile or um opinionated or intense it
+might be I don't really care the things
+I want to do with llms and the products
+I want to build they're not in any way
+I'm not trying to blur the lines of any
+social ideas I I am fully avoiding you
+know the politics of the deeper
+conversation around um you know AI
+alignment and safety I have had no
+problem so far even with Gemini and I've
+noticed it is a bit more restrictive um
+I've had no issues with it when building
+products so far I know that this is
+something that other people other
+Engineers other product Builders really
+care about so I just wanted to call it
+out here multimodal capabilities Gemini
+Pro blows gbg 3.5 out of the water here
+gbg 3.5 turbo is it's a second version
+of an older model it does not have
+multimodal support Gemini Pro is a brand
+new model it's got tons of Google tech
+behind it and it's newer obviously so it
+has tons of multimodal functionality
+which you saw likely in their blog post
+so pretty cool stuff and so these are
+some common benchmarks and also just
+some like really personal benchmarks
+that I like like to look at I think
+every product Builder and every engineer
+is going to have their own specific
+ranking of what they care most about
+when it comes to picking the right model
+right for a lot of people for a lot of
+Builders you know the developer
+experiences everything right if it has a
+better DX like you're there and I don't
+blame you right better DX is highly
+correlated with speed but you know I
+know some Engineers really only care
+about good content generation right or
+you know speed the speed is up there
+with me you know I'm going to throw up
+my top ranking on the screen right now
+just so you can see that what I care
+most about you know I've been using this
+stuff since it first came out uh W seems
+like so long ago now but only a little
+over a year or something you know these
+are my rankings I have my own reasons
+for this for me really instruction
+following is the key followed by speed
+if a model has those two things I'm
+willing to sacrifice on pretty much
+everything else right price you know
+content generation uh bias like
+everything else kind of falls to the
+side if they if they can really follow
+instructions you know create concise
+results really consistently and it's
+fast right I don't want my users to have
+to wait you know I think if you really
+are in that product head space you you
+want you're you're always looking at
+technology through the lens of how it
+impacts your users so that's what I like
+to do right what can it follow
+instructions how fast is it right and
+then everything else is a distant third
+fourth fifth place whatever drop a
+comment I'd love to know what you care
+about the most like what's your personal
+ranking you know maybe you're top three
+your top four and you know if there's
+something missing here that you want to
+see in future evaluations I'm really
+excited to compare Gemini Ultra I'm
+definitely going to make a video on that
+so you know if I'm missing something
+here that you want to see drop a comment
+I'll make sure to cover it one that I
+was thinking of that kind of want to add
+is like privacy although it seems kind
+of dumb because like everyone has the
+same stance they always say that they
+won't use your data um it's uh
+anonymized and you know it's like all
+good so I don't know how you know useful
+that'll be but anyway yeah let me know
+what you'd like to see there let's
+continue so I have a bunch of other
+notes here around prompt testing so you
+know feel free to jump in and check this
+out real quick I just want to show you a
+couple of tests that I have set up to
+you know help evaluate promps and prompt
+providers so let me go ahead and open up
+that code base that we were just in
+here's the read me we can scroll up to
+the top um there are some quick setup
+instructions all this is listed here you
+can also check out the previous video
+for more detailed setup instructions
+I've added the new instructions on how
+to set up Gemini and I've also added
+Gemini to our prompt Fu tests so let's
+go ahead and just check out one example
+here I'm going to go ahead and CD into
+lowercase is nlq minimal agent prompt
+I'm going to export all my API Keys
+prompt fu eval so just in the directory
+running promp Fu eval and as you can see
+here if we open up promp Fu config I've
+added the Gemini Pro provider okay so we
+have that there I'm going to now we're
+on promu view so you can see the UI I
+already have it running so I'm going to
+open up Chrome and check out the results
+so so you can see here we have a couple
+of tests so first of all what are we
+testing let's take a quick step back and
+other this UI looks a little complex
+it's not you can see we have three files
+here we have the prompt prompt Fu config
+and we have test yaml so this is
+everything we need to test out our
+prompts and prompt config you can see
+here we're referencing our prompt txt
+and a glob pattern for tests we have
+three providers so each prompt is going
+to run for each provider and each test
+will also run for each prompt for each
+provider right so if we hop into the
+prompt you can see here I have a simple
+prompt is the following block of text a
+SQL natural language query so I want to
+get a clear answer yes or no if the SQL
+natural language query that I'm passing
+in is a valid nlq right and in the test
+you can see this is where all the magic
+happen so let me just collapse here to
+simplify and you can see here I have
+this being passed in list jobs that have
+run longer than 30 seconds and in the
+response in the assertion statement all
+I'm saying is make sure that the results
+have one of these words right so this is
+I contains any this is one of many
+assertion types from prompt Fu
+definitely check those out you can find
+all the assertion types in the docs of
+course this basically creates a great
+test for each llm provider that makes
+sure that the response of this prompt
+given this nlq variable so this actually
+will end up looking like this for that
+specific test right it'll look like this
+right so it'll pass that in in the nlq
+variable right there and then it'll run
+and you know assert uh the results there
+and then I have two additional tests
+here and this is what creates this UI
+right so you can see here we have the
+nlq running here and you can see we have
+gp4 GPT 3.5 and Gemini Pro right you can
+see here we have a couple cach results
+so I did run without the cach parameter
+so I'm going to go ahead and rerun this
+test I always like to run eval with no
+cash so that I'm getting real true
+results every single time you can see
+there it's printing cash is disabled
+okay so you can see here we're running
+gp4 3.5 and Gemini Pro and you can see
+here Gemini Pro actually failed in one
+case I actually like how concisely it's
+responding here Gemini Pro is actually
+inappropriately returning a bad result
+in this case you know list five users
+with Gmail email let's go ahead and look
+where that is here so that's the second
+test case so let me collapse these other
+two and you know in this result this is
+a natural language query so we have
+Gemini Pro actually returning the wrong
+results here um but you can see here you
+know 3.5 returned great you know of
+course four did it totally fine uh you
+know something to notice here though we
+can see the average times you know this
+is actually isn't supporting my findings
+here Gemini Pro is about half a second
+slower than turbo 3.5 so so Turbo's
+running really fast right now which is
+great but also you know you have gbg 4
+running in 10 seconds took 10 seconds to
+run all of these uh which is pretty
+gnarly in this case it looks like I
+actually want to be using 3.5 for this
+prompt scenario because we have Gemini
+Pro failing in one case entirely and on
+the other hand we have GPT 4 taking 10
+times as long as GPT 3.5 so there's one
+test case let's go ahead and look at
+another test case let's go ahead and CD
+out and go into the is nlq
+prompt so this is a non-minimal version
+so we have a little bit more beef here
+in here we have a similar format except
+we have our providers with a different
+configuration block and we have this
+default test setup and this is really
+great this is more of what I'm using in
+production this is a really really
+useful mechanism that promp Fu provides
+not only can you specify all the
+variables of each provider but you can
+come in and set up a default test to be
+rerun among all of your tests while
+swapping out some of the variables right
+you can say always run these assertions
+but in the test which we can see here
+you know I have a bunch of nqs coming in
+um you know these will change so I want
+these to be dynamic but I always want to
+just test the exact same thing right and
+what assertions am I running here I want
+to see if it's returning Json I'm
+looking for two variables Rank and
+passable and then we have the types so
+it's a number and a bing and of course
+at the bottom you can see we're
+referencing our files and that's that so
+you know a lot more going on here lot
+more tests here's the prompt so
+basically I have a more uh detailed
+production like setup this prompt is one
+I actually have running in production so
+this is a real live test that you're
+seeing and you know this test helps feel
+talk to your database so talk to your
+database is an application that we
+started on this channel in the postgress
+data analytics series and it's turned
+into a full product so so when you enter
+a prompt into talk to your database it
+first checks hey is this even a valid
+natural language query is it a valid
+natural language prompt and then after
+it's validated then it goes ahead and
+generates the SQL and then the actual
+results so you can see here if I just
+type something in like Ping this is not
+a valid nlq right so this is something
+that you know your application is going
+to get a lot of input you need to make
+sure that it's getting filtered out
+properly if we look at the results here
+invalid nlq right but if we say
+something like list 10 users right and
+then enter there this is going to pass
+the nlq test and then it's going to give
+back a valid response
+there we go so we can see that come back
+list 10 users and then we can open up
+the results and we have exactly 10 users
+right so prompt testing is really
+important you know you need to make sure
+that your application is actually doing
+what it needs to do so I've been using
+tons of prop testing to validate and
+ship a better product here talk to your
+database by the way is live there's a
+demo version out ready you can just hop
+in here and connect and you can use the
+access code
+7777 check out the application if you're
+interested there's a lot more work going
+going on here in the background to make
+this a wonderful really great experience
+for developers let's hop back to the
+meat of this so you can see here we have
+the new vertex Gemini Pro so let's go
+ahead and run this right so once again
+we're just going to run that prompt Fu
+eval no cash so we don't want this cash
+to run this is going to run a ton of
+test cases so make sure you're actually
+ready when it's time to run this right
+so we have 39 test cases because for
+each prompt and we have just one prompt
+here but we have you know maybe uh you
+13 actual tests and then we have you
+know 13 times three providers we have
+you know I'm runting four 3.5 and Gemini
+so let's go ahead and look at the
+results in the
+UI so awesome so here are the results we
+can see we had a couple tests fail and
+uh we can see we got a lot of great
+results as well so you know real quick
+Top Line we're looking at 3.5 we're
+looking at Gemini Pro and we're looking
+at tb4 this is one case where you can
+see that on average Gemini Pro is
+performing really really quickly right
+so in the other test we saw it
+performing a little more slowly and this
+one it's almost double the speed of 3.5
+on average okay so that's really cool so
+you know here's the result I'm getting
+back and just real quick we can hop into
+that prompt one more time so basically
+we're saying is this block of text a SQL
+natural language query rate it from 1 to
+5 and then return passible if it is
+greater than two okay so we have this
+exact structure that we wanted to return
+and we can see without any additional um
+you know setup uh we're getting the
+right results for it looks like both
+gpt3 and Gemini Pro we actually have a
+couple errors here in the regex format
+gb4 giving us a couple bad responses um
+you know it could be argued that this is
+correct and it could be argued that it's
+wrong in my specific case for this
+product for this application I actually
+want these to go through right if
+someone just types in order payments and
+that's the name of a table which it is
+is in the demo um application of talk to
+your database I want that to just go
+through same with select 10 users to me
+this is a valid nlq natural language
+query we have select unique user rules
+again this is valid so you know in this
+case gbg4 is both slower and wrong right
+so I I'm I'm saying this you know as a
+as a video to you know kind of inform
+you and help you make better decisions
+on your products but also building these
+tests and sharing it really helps me
+build better products because as I'm
+looking at these results I'm finding new
+information and it's helping to inform
+and help me make better product
+decisions a lot of the value here is you
+know how much are you spending how
+accurate is your prompt how accurate is
+the your prompt provider are you getting
+back results consistently enough for
+this to be production viable if what
+you're doing isn't serving your users in
+the end something needs to change right
+change the llm change the prompt change
+something right and prompt Fu prompt
+evaluation Frameworks comparing 3.5 to
+Gemini they're going to help you get
+there right so it's really important to
+have some Suite of test that you can
+look at so that you can actually compare
+results so that you actually know what's
+going on and you're not just guessing I
+think a lot of us are still just
+guessing it's it's time to really start
+getting value out of this right let's
+let the hype cycle die let's start
+building real things real applications
+with this let's stop making you know
+Meme uh apps and meme products like
+let's start doing real stuff with llm
+technology and to do that just like when
+you're writing code you need proof how
+do you prove something you test it so
+anyway rant over um you know you can see
+here we got the pretty much the exact
+same token usage so really really
+interesting stuff you know in this case
+where we have a lot more volume maybe
+it's a volume thing maybe it's the um
+usage of that Json format that you need
+to specify when you're using uh GPT 3
+and four you know response object type
+Json object you know maybe that's
+slowing things down I'm not exactly sure
+maybe Gemini Pro is just really really
+fast right again look at the top line
+here we have the average coming in in at
+about a second you know 900 milliseconds
+and then we have Gemini Pro coming in
+about half that time 500 milliseconds
+half a second and you can see here on
+average right if we just search Ms here
+you can see here Gemini is just blowing
+both gbts out of the water of course
+it's faster than gb4 gb4 is incredibly
+slow but um you know it's good to see
+this it's good to have the proof and you
+know like I said Link in the description
+to this code base you can get all this
+start testing tweak all these tests to
+you know your specific use case to your
+product and really dig into you know
+improve your product to better serve
+your customers so anyway so that's that
+let's hop back into the readme here
+let's go ahead and open up the read me
+in the um ACT code base oh one thing I
+wanted to call out real quick is the
+regex match that we using here this is
+pretty cool you can see here that gb4
+failed the regx match that's one of the
+prompt Fu test assertion statements so
+we can see here we have you know assert
+type regex and then we're looking for
+anything and then make sure it's 2 3 4
+or five right and then once again
+anything and so you know gp4 failed here
+select an off user for whatever reason
+it doesn't think that's a natural
+language query and uh you know rank
+ranks it one and not passible which is
+wrong right so our re statement caught
+that we need to see 2 3 4 or five
+anywhere in the string so just wanted to
+call that out there's a lot of really
+cool things cool ways you can test using
+promp Fu um you know definitely check
+them out Link's going to be in the
+description for that my favorite testing
+framework for sure by far really going
+to stick with them for a while I think I
+don't see any issues you know they have
+a bunch of great documentation you can
+see here they have the pro and soon the
+ultra is going to be coming out so
+really excited to get into that test
+that out I'm 100% going to be creating a
+video benchmarking Gemini Ultra stay
+tuned for that you don't want to miss
+someone actually testing these models on
+a production level application so we're
+going to take it all the way we're using
+this stuff in prod you know I'm
+thoroughly testing out these models stay
+up to date with that by by following the
+channel you know what to do hit the like
+hit the sub and yeah definitely check
+out uh you know this blog post I think
+it's really good top level comparison of
+pro and GPT good stuff Gemini seems
+really great Ultra is apparently going
+to be really insane I'm really excited
+for that uh you know big shout out to
+everyone working on prompt Fu really
+good stuff there let's go back to the
+code base real quick want to make sure I
+didn't miss
+anything so what else do we have here
+yeah and you know probably important to
+just highlight some of the high level
+again testing your comes down to three
+things save money save time when you're
+using the best llm the cheapest llm that
+really fits your use case got a spelling
+mistake here nice um you're going to
+benefit from that right like you you as
+an individual developer you as someone
+working in a company um you know you
+want to be Min maxing your resource
+usage right so ship with confidence you
+know when you're testing your prompts
+you can know right just just like we did
+here right um if we look at those
+results again right like once you can
+validate that type of input you know
+that your application is working right
+even with how non-deterministic uh llms
+are so helps you really ship with
+confidence and of course you know you
+plug this into a cicd process it's going
+to help you prevent regressions maybe
+you're updating your prompt maybe you're
+tweaking something I highly recommend
+just like running it through a testing
+framework like prompt Pro first and then
+make the update right so that the
+regression doesn't even happen but
+regardless this going to help you catch
+regression so you know I think that's it
+for uh this video the tldr is that you
+Gemini Pro isn't touching gb4 yet but
+it's outperforming 3.5 which means that
+their Ultra benchmarks might actually be
+true right if we look wherever we found
+Ultra the these benchmarks might
+actually be true because uh you know
+their 3.5 is outperforming TBT 3.5 so
+you know really great stuff there um I'm
+pretty excited for this you know really
+excited to see how Gemini Ultra performs
+I'm rooting for Google and really any
+and every llm provider I know I need to
+get on the anthropic uh stack and get
+that integrated into some of my tests to
+see how they're performing you know and
+that's the beauty of a prompt testing
+framework you can just test everyone
+right and uh I'm very confident that uh
+yeah um promp Fu has a provider for them
+right so I just need to get in here and
+set that up more competition means
+prices go down benchmarks go up which is
+good for developers which means end
+users benefit right so competition here
+is good we don't want one winner taking
+all um you know we don't want Google
+search happening over again again right
+we do want more than one player creating
+models and being providers having more
+options means we can build better tools
+better products for our users clients
+and customers if you're into AI agents
+prompt engineering and using the best
+tool for the job hit the sub hit the
+like drop a comment and I'll see you in
+the next
+one

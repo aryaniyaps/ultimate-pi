@@ -1,0 +1,749 @@
+to build complex agentic systems you
+need your agents to be able to make
+concrete decisions that affect the flow
+of your application not only is our
+insights team generating cool insights
+for us they're generating it in Json
+format we have two Innovation files cuz
+our round robin ran twice all of our
+chat team logs we can dig into and we
+also have the Run SQL resol we now have
+the ability to make decisions based on
+our agents output and we can now have
+our agents generate specific structured
+output it could be argued that the two
+agents we're going to build in this
+video are two of the most important
+agents the first agent type gives your
+multi-agent systems the ability to drive
+autonomous decision making your agent is
+going to be able to answer a question
+and then consistently provide specific
+output responses that then drive action
+in your application the second agent
+type enables you to generate structured
+responses for your l LMS that means no
+more prompt engineering magic to get the
+output you're looking for you'll be able
+to use your agents ask specific
+questions and get structured responses
+in any form you want there's a sweet
+spot between the uncontrolled
+non-deterministic generative
+capabilities of llms in a program that
+runs top to bottom the same way every
+time in this video we're going to find
+that sweet spot and solidify repeatable
+engineering patterns we can use not only
+in our postgress data analytics tool but
+in every multi-agent system we build
+from now on in order to integrate
+autonomous decision-making and
+structured responses into our postgress
+data analytics tool we're going to merge
+two great code bases from Microsoft
+we're going to be using autogen the
+multi-agent framework we've been
+building on throughout the series with
+guidance guidance is a tool that enables
+us to control our llms more effective i
+l it utilizes a handlebars like
+templating syntax that allows us to make
+selections build conditionals and
+generate specific structured outputs at
+the end of this video we're going to
+talk about the code base we've been
+building up over these six videos so
+stick around for that that's going to be
+somewhere near the end of this video
+let's not waste any more time let's
+merge guidance and autogen for agentic
+decisionmaking and structured responses
+so first things first as always let's
+run a simple example to show off our
+application poetry Run start pass in our
+natural language query which is going to
+be a prompt against our database so we
+can type in natural language and get
+results out of our postgress database
+we're going to look at the product and
+let's just say I want to get the most
+expensive product from our products
+table show the most expensive product
+return the product name and ID so our
+multi-agent application builds the
+prompt generates the SQL statement runs
+the statement writes it to a file and
+reports everything that's happened
+throughout so we can see here it
+successfully ran and thanks for our work
+in our previous video we can see that we
+have a folder here called Agent results
+we can see we have a couple of runs here
+and our latest run and we can see that
+it returned product 89 product ID also
+89 and if we hop back to our result here
+we can see that's exactly what we were
+expecting so in natural language we can
+query against our database how do we
+accomplish this it all starts out with
+the prompt so we're using AR cars to
+pull in our prompt once we have our
+prompt we prefix it with fulfill this
+database query we build a session ID
+that marks the Run of this agent system
+we then open up a new block of code with
+our postgress agent instruments we pass
+in the database URL and the session ID
+and it gives us back agent instruments
+and a database structure you can think
+of agent instruments as a store like
+structure that our agents can use to
+call functions and reference specific
+state if we open this up you can see
+we're building out table definitions
+using some Bings and some simple word
+matching we're then adding those table
+definitions to our prompt just like you
+can see here we have a list of tables
+getting attached to our prompt that's
+great we're then using our orchestrator
+to build out our data engineering team
+our data engineering team is then using
+the sequential conversation which runs
+top to bottom and then we're using the
+new python 3.10 match statement to
+analyze the conversation result we're
+looking to match on result is true and
+then we're looking at the cost and then
+we're reporting our result there we also
+have a full log of our agent
+conversation so you can see that our
+admin talks to our engineer our engineer
+talks to our data analysts and then our
+analyst calls the function to actually
+write the SQL and run that entire flow
+so this is our postgress AI Analytics
+tool so far now that I've walked through
+the code several times and I'm talking
+about it out loud it's pretty incredible
+what we've done so far if you want more
+details if you want to see how we got to
+this point check out the previous five
+videos I would definitely recommend you
+start from start to finish it's going to
+make a lot more sense coming back to
+this point I know it's getting kind of
+hard to follow but we're stacking up
+everything we've done and we're going to
+end with a really cool system here
+especially after this video let's talk
+about flow control with agents so in a
+production like environment our prompt
+could be passing in anything right we
+could get complete junk we could fat
+finger some bad prompt a use
+can just type in random text into this
+prompt coming from a you know front end
+user interface a lot of things can go
+wrong when figuring out what's getting
+passed into this prompt this is the
+perfect use case to build out our brand
+new agent to help us drive
+decisionmaking in our application so
+what we're going to do is based on our
+input prompt if this is just complete
+junk and it doesn't make sense as an SQL
+natural language query we're going to
+filter it out we're going to log a
+response and say hey this is not
+something we can process so we'll be
+able to just filter that out completely
+on the other hand though if we get a
+valid query you know something like all
+off users we want to allow this to run
+through our system so what we're going
+to do right now is build out a new
+decision agent that allows us to control
+the flow of our application let's code
+that right
+now
+okay we now have a brand new gate team
+this gate team is powered by our scrum
+master and if we just look at the high
+level here we can see that our gate team
+with our scrum Master agent is now
+filtering out if this prompt is not a
+valid natural language Cy prompt right
+so we're getting the confidence here
+based on the response of our
+orchestrator our orchestrator contains
+our team and their result and and if
+we're digging into the last message
+string here so the last thing that was
+said in the conversation we're then
+casting that to an INT and using a match
+statement to drive the flow of our
+application so you can see here if
+confidence is a one or two the gate team
+is going to reject this prompt also if
+for whatever reason our agent returns
+complete garbage we just reject and move
+on but when we do get a 3 four or five
+confidence level we will continue
+running our application so you can see
+here there's no return statement in our
+34 five case right then we just continue
+we proceed with you know building out
+the table definitions right build tables
+so this is really cool right when I have
+an agent that can help us control the
+flow of our application so let's dig to
+this scrum Master team and see exactly
+how we did this so if the team name is
+Scrum master in our build team
+orchestrator function we're now building
+this new team build scrum Master team
+with two agents use as few agents as you
+need to get your job done so you can see
+here we have a brand new agent type
+called Defensive scrum Master agent and
+this is a reference to you know there's
+some teams where you have concrete scrum
+Masters usually these are just a product
+managers a good scrum manager will
+filter in and out work for the engineers
+and for the team they'll defend the time
+and the road map that's been set up for
+the team so that's the idea for this
+agent right it's going to protect our
+application it's going to protect our
+Downstream agent teams from needing to
+run garbage tasks that don't make any
+sense for them to run right now so let's
+dig into this prompt first we'll dig
+into the prompt and then we'll look at
+our custom agent let's look at this
+prompt right this is a guidance prompt
+so now we're digging into the magic of
+guidance the kicker is all in this last
+line here select Rank and then it's
+saying choose one or two or three or
+four or five and it's wrapped in this
+handlebars like syntax we have this you
+know select statement here that's saying
+select one of these these values based
+on the content from the rest of the
+prompt right and the rest of the prompt
+is saying this is the following block of
+text a SQL natural language query in lq
+and we're ranking that confidence from 1
+to five where one is definitely not two
+is likely not and then 345 is on the
+positive side and then as a templated
+variable we're able to pass in potential
+natural language query and if we hop
+down to the agent here this is our
+defensive scrum Master agent this is the
+agent that's actually getting built here
+instead of the usual autogen proxy or
+autogen conversible agent we're building
+our own defensive Square Master agent
+and this is really cool so let me show
+you how you can build your own custom
+agents so run this register reply
+function pass in whatever you want to
+run for your new custom function as you
+can see here we have this new check SQL
+nlq right so check SQL natural language
+query and what we're doing here is based
+on the message that gets passed in so
+you can see here we're just picking up
+the last message we're then using guide
+guidance our prompt and the last message
+which is the natural language query that
+we pass in here right so get all off the
+users and then we're able to pull out
+from the choices we get back from the
+open AI response specifically the rank
+and the rank is what gets set up if we
+look back at our natural language query
+right here right so it's saying select
+rank we're able to pull out just the
+rank really precisely and get one of
+these five values this is really cool by
+doing this we're able to
+deterministically set the responses our
+agents can have without a ton of prompt
+engineering magic the potential here is
+Limitless and as soon as you concretely
+understand this concept you unlock so
+much value by being able to generate
+specific responses from your agents our
+our entire lives and all the systems
+we're a part of they're all based on if
+then statements right if Sun's Up time
+to wake up if 8:00 time for work if we
+have an important message from our
+coworker respond so on and so forth
+right allowing your llms to make
+decisions in your application based on
+the response of your llm you then drive
+different flows in your application just
+like this right this is probably one of
+the simplest examples this is
+essentially an if if else fallback
+statement right but this is a great
+example a great first example in
+understanding that to build complex
+agentic systems you need your agents to
+be able to make concrete decisions that
+affect the flow of your application if
+you go ahead and just run this on some
+crap
+like something like where is my dog
+right this just makes no sense as a
+natural language query we can see that
+our gate team just rejects this the
+confidence is too low right so right
+away our gate team rejects this on the
+other hand if we do something like give
+me all job feedback with a rating higher
+than three you can see that our gate
+team approved this with a confidence of
+four right we're relatively confident
+that this is a legitimate natural
+language query and this is going to go
+ahead and run right we got select job we
+can see our new log ran here with both
+of our agent teams running now right we
+have the scrum Master team running and
+we also have the data engineering team
+that ran so we're we're recording every
+chat conversation for every team so if
+we come into our data engineering team
+we can see as expected you know we have
+our exact select statement where you
+know we have rating greater than three
+that's great and if we hop into our
+scrum Master team you can see we have
+one simple message coming from our admin
+to our scrum Master our scrum Master
+then just spits back the response it's
+not saying it to anyone it's just
+storing that and so we're able to get
+that from the last message and operate
+on it so this is awesome our agents can
+now help us control the flow of our
+application okay so this is great let's
+move on and add some more value to our
+postgress data analytics tool so what I
+want to do here is create a brand new
+team so let's go over to our agents. py
+file where we're building all of our
+teams and in the orchestration here you
+can see we're building different teams
+out so we built three teams throughout
+the course of our series I want to build
+a new team team here and we're going to
+call them the uh Data Insights our Data
+Insights team is going to give us Unique
+Concrete results based on the query
+coming in I want to get interesting
+insights from our data without even
+interacting with our data or even having
+to ask right I want I want to push our
+postgress AI tool further like let let's
+use the unique capabilities of llms and
+get some cool results out without even
+asking what the Data Insights team is
+going to do is run a brand new
+conversation type we're going to run a
+conversation flow that looks like this
+so we're going to build a round robin
+conversation flow where given a number
+of Loops we're just going to run in a
+circle and let the agents Converse to
+each other over and over again so we can
+arbitrarily generate tons of insights
+from our database based on the query
+coming in we're also going to utilize
+guidance again and another custom agent
+to generate specific structured output
+so when our agents are generating these
+cool insights we're going to get them in
+a really formatted specific Json format
+so we're going to get something like an
+Insight we're going to get the SQL query
+to run the insight and then I want them
+to like summarize and tell me like
+what's the business value of this
+Insight right like if we implement this
+what what do we get what do we learn so
+let's go ahead and build that
+out okay we now have a brand new Data
+Insights team I've commented out our
+data engineering team we're just going
+to skip past them and we're going to get
+right to our Innovation prompt so given
+this database query we're going to pass
+in the query generate novel insights and
+new database queries to give business
+insights we are then building up a
+insights prompt and you can see here
+we're using both core and related table
+definitions if we hop back up to our
+build table definitions we now have this
+related tables database query which
+basically all this does is is it looks
+at all the foreign keys of the tables
+that we passed in and it fetches all
+those tables up to some limit right so
+if there's a foreign key on say the jobs
+table we're going to pull in up to two
+tables that relate to that foreign key
+so that's what that does and then we're
+going to get both the related tables and
+our similar tables so you know based on
+our embeddings based on the natural
+language query we're going to put
+together all those tables we're going to
+get the table definitions and that's
+what we're going to use for our insights
+prompt right so we're going to get
+tables that are used for our data
+engineering team and a couple more so
+that we can extend and let our insights
+team you know get a little more creative
+with some more tables so after that we
+build out our Data Insights team which
+has a new unique agent that we'll dive
+into we then run a new conversation type
+called round robin and as we discussed
+the round robin does exactly this right
+so given a number of Loops just Loop
+between all your agents so A to B B to C
+and then C back to a right and if you
+have two Loops just go again right so
+that's the ground Robin conversation
+flow refer back to the previous videos
+to learn how exactly we set up
+conversation flows the top level here is
+we have a new round robin conversation
+type which as we saw here um allows our
+agents to talk in a circular fashion and
+you know we do have a couple other
+conversation types here if we code
+collapse we have sequential and
+broadcast which can be reflected uh you
+know just like this so broadcast is
+Agent a talks to just sends out a large
+message to b CDE E and F and of course
+sequential the most common conversation
+of flow type thus far A to B B to C all
+the way down to your last agent so the
+new round robin enables a different type
+of conversation flow that our agents can
+use to create different results right
+and it's kind of perfect for this use
+case which is generating interesting
+Data Insights so after we do that we
+basically just do a normal check using
+the match statement and then we report
+success or failure so before we dive
+into the agent let's just run this and
+see what this looks like so we got
+approved by our gate team that is a
+valid query and now we're going to run
+our Data Insights team remember we're
+skipping over the engineering team just
+to get right to this team ideally we
+want to build out some type of
+asynchronous functionality cuz these
+teams can run in parallel and as you can
+see this is this is really cool this is
+kind of like the amazing part not only
+is our insights team generating cool
+insights for us they're generating it in
+Json format so let's go ahead and let
+this finish great so we got success we
+got the total cost that one cost us
+about 10 cents this team is a bit more
+expensive don't uh you know just fire
+these off like I am here but let's go
+ahead and check out the results right so
+we've run this a couple times let's look
+at give me all failed jobs and you can
+see here we have a Innovation file so
+this is the insights team and if we look
+at this go and format we can see that
+they're generating new novel Insight so
+you know identify the most common
+reasons for job failur so it's going to
+look at this jobs log table which was
+pulled in from our related table query
+find out users that have the most failed
+Jobs super useful right so we're going
+to count you know users we're going to
+check their name we're going to inter
+jooin on users uh you know parent user
+ID our agents are not just making these
+relationships up right so if you look at
+the jobs table we're looking for a
+parent user ID let's go ahead and hit
+jobs we can see that that is a
+completely valid column right so they
+are looking at the tables they're
+generating insights and then we have
+actional business value it's telling us
+what we gain from doing right I think
+that's a really nice addition um and
+this is all just based on the prompt
+right the round robin isn't super
+necessary here since we can just bump up
+the number of insights we're creating
+it's still a very useful conversation
+Flow To You know have in your toolbox um
+so I figured this was just a good way to
+you know kind of show off that and you
+can arbitrarily bump this up so you know
+say you had like some research team or
+maybe you're you know writing code and
+you want to validate your code several
+times in your agent team you can just
+bump up your Loops right you know three
+four five times s there are definitely
+use cases for round robin type
+conversation flow so really cool there
+let's go ahead and dive into kind of the
+Crux of what's making this all happen
+right our Data Insights guidance agent
+so let's go ahead and jump into build
+team Orchestra function which is what
+orchestrates building all of our teams
+go and do a little bit of collapsing
+here so you can see this more cleanly
+and let's go ahead and look at our Data
+Insights team so our Data Insights team
+consists of three agents we have a the
+usual user proxy uh we have our insights
+agent and then we have our reporter
+agent all the reporter agent is doing is
+you know using a function map to write
+to a file we call our instruments. write
+Innovation file which is just going to
+you know write it write whatever content
+which is given as a Json file you can
+also see our validator here we went over
+validators in previous videos so that we
+know our agents are doing exactly what
+we want to all we're doing here is
+checking to make sure that those Json
+files do exist okay let's hop back to
+our insights agent as you can see here
+we have another custom agent let's go
+ahead and look at our insights agent
+just like before we we have a new agent
+same flow right whenever you want to
+override the auto gy function calling
+use register reply passing the function
+then we get these params and all we're
+doing here is we don't need to look at
+any of the previous messages so we're
+just saying run this prompt and and this
+is a guidance prompt that says the
+following you're a data innovator you
+analyze SQL database structure and
+generate three novel insights for your
+team to reflect on and query format your
+insights in this Json format and this is
+where a lot of the magic of guidance
+comes through right and they have a ton
+of examples on their web page if you
+search each you can see a lot of
+examples of you know generating content
+with loops you can see they have a
+entire character that's getting
+generated here with just the Json so
+we're kind of doing something similar
+except what we want is valuable SQL
+insights valuable insights that explain
+the business value we want to see the
+SQL and we want to see what is the
+Insight in general and just like top
+level natural language then we're just
+generating three rows of this right as a
+Json structure temperature set to seven
+this is really cool you can set
+temperature individually pretty
+incredible in combination with control
+flow agents um being able to generate
+specific output formats is pretty
+incredible I got to say I'm always on
+the lookout for better tools that can do
+this uh I I have my eye on a couple but
+I just want to show this off because
+this is incredible right we're now
+getting structured output from our llm
+and as you saw if we hop back over to
+the Innovation file while it's doing
+exactly that right we're getting three
+clean insights explaining the business
+value and it's also giving us the SQL
+query right so you can imagine a front
+end where not only are we helping the
+user query in natural language we're
+also just like pushing useful
+information to them as well that they
+maybe haven't thought of yet or that
+maybe are going to be follow-up queries
+so this is pretty incredible stuff we're
+enhancing our postgress AI agent even
+forther let me hop back to that agent so
+we can see that prompt one more time you
+know generating Json we're using a loop
+and then were saying saying exactly what
+we wanted to to generate right format
+your insights in Json format so that's
+the prompt here's the agent agents and
+the team team gets built by the
+orchestrator and the team gets managed
+at the top level and the orchestrator
+runs the specific conversation flow so a
+lot of value here we now have the
+ability to make decisions based on our
+agents's output and we can now have our
+agents generate specific structured
+output let's light some money on fire
+let's set Loops to two let's bring back
+our engineering team let's go ahead and
+run you know a full real example let's
+get all products that cost more than $50
+right me all products that cost more
+than 50 of course it comes through the
+gate team first we now are filtering out
+bad SQL uh natural language queries just
+completely so we're saving a lot of
+money there we're sending it to the data
+engineering team data engineering team
+is generating the SQL running it saving
+all that we're recording all the
+conversations our agents are having you
+can see there we got the product table
+properly parsed in from postgress using
+embeddings and just like a simple
+natural word matching and you can see
+here our insights team is generating
+novel insights things that we haven't
+even asked for yet things that we don't
+know we want it's generating that for us
+and it's going to write it into a clean
+Json file for us to push to our front
+end we are doing the round robin if we
+search here round robin we got Loops to
+so our data Insight team is actually
+going to run twice it's going to
+generate two batches of insights for us
+right there's another batch so we're
+really starting to tap into the agentic
+capabilities you can see that's second
+run cost 16 cents if I summed all the
+teams up you know this is going to this
+was like a 40 C half a dollar query you
+know half a dollar run basically so you
+know be pretty careful with this now
+that our multi- team multi-agent
+application has run let's go ahead and
+look at the results right we have this
+clean pattern for results we have two
+Innovation files cuz our round robin ran
+twice we have all of our chat team logs
+we can dig into and we also have the Run
+SQL res right so you can see here all
+the prices here are over 50 right
+there's nothing under 50 we can just do
+a quick browse through it's all greater
+than 50 which is great and then we have
+our brand new insights we have two
+rounds of insights right uh pretty cool
+pretty pretty incredible right these are
+generating novel ideas that we can then
+run um and then we have the logs of all
+of our agent conversations right so
+pretty awesome you can see the round
+robin here ran twice we have admin going
+to insights insights to data reporter
+data reporter running the function and
+then data reporter back to the admin the
+admin then starts over with the prompt
+and just runs it again right our
+building blocks are stacking up I know
+that this code base is getting a little
+hard to follow I have finally wrapped up
+the code into a decent structure I've
+got it ready for you guys go ahead check
+out the code base Link in the
+description um let me just say a couple
+words about the code base before you go
+check it out this codebase is not a
+library this is not autogen this is not
+guidance this is not something that you
+can just plug in play and just like
+start running with okay this codebases
+set of patterns ideas and
+implementations to help you build your
+own agentic software right use this code
+basee use our postgress AI agent
+codebase as an example of patterns and
+ideas right we built out the
+orchestrator we built out instruments as
+a store we built out conversation flows
+to control how our agents talk we built
+out a clean logging system these are
+patterns the ground beneath us is
+changing rapidly week by week don't take
+any code base including autogen
+including you know whatever else you're
+using don't take it as fact or something
+better than something else nothing is
+complete things are shifting and
+changing a R ton what is this series all
+leading up to I thought it would be
+awesome to not just dig into hentic
+software not just to like show off
+patterns and you know ways that you can
+build your own applications tools
+techniques you know libraries like
+guidance and autogen Etc but I thought
+it would be really cool to end the
+series with a complete product that
+you'll be able to use to interact with
+your postgress database somewhere you
+can go to just talk to your database and
+natural language and get results out
+faster than ever before at the end of
+this series on our 10th video I'm going
+to be releasing an application we're
+going to call talk to your database link
+is going to be in the description if you
+want to sign up and be one of the first
+to see and use the application that we
+built right here on this channel from
+start to finish over the next three
+videos we're going to wrap up our
+application deploy build out the front
+end and really start making our app
+battle tested so you and I can use this
+application and get real value out of it
+the way we interact with our data is
+changing so the applications we use to
+interact must evolve as well that is
+what talk to your database is all about
+again Link in the description sign up to
+be the first to know when it drops on
+our 10th video huge thanks for watching
+I hope you got a lot of value out of
+this if you made it to the end
+definitely like subscribe and thanks for
+watching I'll see you in the next
+one

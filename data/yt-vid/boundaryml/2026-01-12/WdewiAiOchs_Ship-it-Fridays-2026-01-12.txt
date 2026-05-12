@@ -1,0 +1,35 @@
+[2.2s] JB is using Django RQ workers to drive
+[4.6s] LLM calls off of a message cube. And
+[7.0s] what he was finding is that those LLM
+[8.9s] calls aren't making it to BML studio. We
+[12.0s] track this problem down to an
+[13.3s] interaction between the Python async
+[15.3s] runtime and BML's async runtime. We
+[17.7s] don't have a fix within BAML yet, but we
+[19.4s] do have a simple workound for you. What
+[21.7s] you want to do is import the flush
+[23.4s] function from BAML client.tracing.
+[26.0s] Then manually call flush after you make
+[27.9s] your LLM call. And that llm calls trace
+[30.7s] will get through to boundary studio.
+[33.8s] >> Hey Sedarf, just want to let you know we
+[36.3s] heard your request to add at description
+[38.6s] fields from on BAML class fields and
+[42.5s] surface them in the generated pyantic
+[44.7s] models. Enjoy.
+[48.2s] Hello Bren Burner and Maxmillian. You
+[50.4s] both reported the same bug about the
+[52.3s] panic in our LM response parser. So I
+[55.0s] fixed that bug and I added some tests.
+[57.3s] So in the next release, you should no
+[58.6s] longer run into that issue or that panic
+[60.6s] that you saw right there. [snorts] Thank
+[62.1s] you for reporting the bug.
+[63.9s] >> Hey Kendrick, on Boundary Studio, you
+[66.4s] asked for uh video video previews and
+[69.8s] we've just added that. So now in the
+[72.2s] dashboard, every time that you see one
+[74.1s] of these BAML blobs, we will load it for
+[77.0s] you and you can just play it and uh
+[80.2s] debug your traces right there. Thank
+[83.7s] you.

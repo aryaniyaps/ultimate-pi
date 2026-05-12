@@ -1,0 +1,2164 @@
+cloud.
+All right, welcome back everyone uh to
+another episode of AI Networks. Uh this
+uh I'm Bibb, one of the creators of BAML
+and with me I have
+>> uh my name is Dex. Uh and I'm the
+founder of Human Layer.
+>> Yeah. Um
+>> 12 factor agents, although VIB doesn't
+get enough credit for that one.
+>> 12 Factor agents and you want to give me
+a shout out, give Vibbob a shout out,
+too.
+>> Uh no, that's all good. Um but I think
+today what we want to talk about is
+really around a topic that comes up a
+lot. Uh which is we have new models come
+out all the time. How do we actually go
+about measuring which model we should
+use? Should we swap the model? Should we
+not swap the model? We're going to write
+some code. We're going to show you how
+to do it. And then but I think most
+importantly we're going to we're going
+to start off with just a general
+discussion around this uh really quickly
+and I'm going to try and get like people
+to share their thoughts along the way.
+So the first thing I want to talk about
+is like for everyone that is um that
+does build LM applications um you can do
+by show of hand type in chat whatever
+you think is best.
+Uh and Dex as well like I want to ask
+how many of you are how many of you did
+when you see a new model come out
+immediately go back and try and update
+your prompts to use that model right
+away.
+>> Steph you do
+>> uh yeah I've done this a couple times.
+Um,
+even back like a year and a half ago
+when it was like GPT4
+switched to GPT40, that was the biggest
+one. That was and like I know 40 was a
+little bit dumber, but it was so much
+faster and cheaper that I was just like,
+"Okay, this is faster. We're good." Like
+I vibed it in 30 seconds. I was like,
+"Yep, we're going to use this one from
+now on."
+>> I see. And like what drives that for
+you? Like what is it just cost for you
+that makes that decision? Like what?
+>> It was speed. It was experience. We had
+we had a thing in the UI. Basically, we
+we built this app before we were working
+on human layer. We're doing this thing
+like analyze uh SQL queries from your
+SQL audit log and like pump them through
+GPT and then like summarize the query
+and then like segment them by person or
+by table to try to give descriptions of
+like what is this table generally used
+for or what is this person generally
+query things about. And so that summary
+was like take the last 10 queries,
+summarize those and then do that a bunch
+of times in parallel and then summarize
+the summaries. And so like we had to we
+were running a ton of prompts and so
+like I think 40 is like four times
+faster or twice as fast as GPT4. So it
+was a huge like UX boost because we were
+doing it live on the fly. We hadn't
+started like pre-filling it or warming
+the cache for it or whatever. So it was
+like the speed was the only thing with
+like user experience. It was like this
+is faster even if it's slightly dumber I
+want it.
+>> Yeah. I think that's normally what I've
+seen as well. Uh it's like if there's a
+huge step function improvement, most
+people are just immediately trying to
+swap over at least some of their prompts
+to the latest model or at least see how
+they could do. But at least my empirical
+evidence has been the minute a uh the
+minute um like a new model comes out,
+the first thing that I often see people
+do is like wait for other people's
+response to it and
+>> let someone else vibe check for you,
+right? Yeah,
+>> that's what I feel like I'm seeing a lot
+more of is like people are like mostly
+happy with the model today or they're I
+would say like it's like the known enemy
+and a new model is like the unknown
+enemy. It could be good, it could be a
+friend, but you really don't know and
+like the effort of actually seeing if
+the model will work or not work is not
+worth it especially if a system isn't
+broken. Well, and what you see also is
+people come up with their own uh like
+benchmark systems like their own um how
+do we say it like their own just
+personal benchmark of like when a new
+model comes out I have a bunch of
+prompts that are secrets that is like my
+private benchmark set that gives me a
+feel for how it performs and I can tweak
+and like see how that works. Um, if
+you're an AI engineer, this is a really
+good talk. Simon Wilson talks about his
+benchmark for seeing how good a model is
+is now like his vibe is generating an
+SVG of a pelican on a bicycle and like
+literally generating the SVGs from
+scratch. And so like he has it for Nova
+and Llama 3.3 and Deep Seek and kind of
+like how all of these different models
+draw things.
+>> So like this is not a technical
+benchmark. This is a vibe benchmark, but
+new model comes out, he's running this
+test on it basically.
+So that as well.
+>> Yeah, I think um I think that's kind of
+what I see too.
+>> Sorry,
+>> we got some comments in the chat as
+well.
+>> I think Sylvia put um Sylvia said a
+point about like this is uh the best way
+to do it is just like prompt it.
+Honestly, I think I I feel the same way.
+Like for example, we have our AI content
+pipeline that we use to summarize these
+videos, send out emails, send out little
+blurb. We'll probably be adding pretty
+soon to it. will be adding this ability
+to
+uh what I would say is like add um
+hopefully add like blog posts written
+about it as well from the same context
+and our borrow
+>> I wrote a pro I wrote a prompt for
+tweets based on it it's pretty well
+>> yeah and it's surprising it it takes a
+while but like now that it's working
+would you change to a new model
+>> the original owner was kind of
+>> oh I'm not a host I can't mute people
+for you
+>> I don't know why you're not auto host
+let me make you an auto host.
+I'll make host. There we go. Um, yeah.
+What what would you do like now that the
+tweet pipeline is working and the other
+systems are working, would you go ahead
+and like update the model?
+So, here's another thing that's happened
+recently is like and this is going to be
+kind of like uh
+sorry, I lost my power for a sec. Um,
+we built this whole pipeline and then I
+was like prototyping something in
+Claude. Um, and just seeing like we
+built this pipeline to do the tweets and
+the human a loop and all this stuff. And
+I jumped in. I was just like, can Claude
+build this in like a headless like the
+more agentic way?
+>> Yeah.
+>> Um, and so that's the other thing. It's
+like not just vibing different models,
+but different like architectures.
+>> Um, let me see if I can switch back to
+the other. There we go.
+>> Yeah.
+>> Um, but this tweet, this LinkedIn post
+here was literally entirely written by
+Claude. Every I didn't edit it at all. I
+added the credit for the slide because
+Claude can't do links. But like this is
+from our last episode. I just said I'll
+show you the prompt that we use. Um
+it's called social. So it's like find
+all the whiteboard images and the
+episodes. So if you go on our website um
+this is getting a tiny bit off topic,
+but um this is exactly kind of how I'm
+vibing through this stuff. So here's the
+episode and it's basically like for each
+of these pictures that we uploaded like
+download it look at it and write a post
+about it.
+Um so like use will get to download the
+image create a Twitter post that
+captures the key insight keep it short.
+Each post should teach one specific
+lesson from the whiteboard and this is
+the file that got created. So it
+basically for each one um yeah so here's
+the one that was posted on LinkedIn. Um
+so this is kind of like it's not just
+vibing like
+one prompt in and the model does
+something but it's also it's like how
+smart is the model at like multi-turn
+tool calling and stuff like that. So all
+that is to say is like not only should
+you say here's the text in here's the
+prompt what comes out this like like
+tokens in tokens out context engineering
+view but also like can you zoom out like
+is the new model smart enough in the
+right harness some kind of like just
+like simple tool calling loop like cloud
+code to solve a bigger problem to like
+oneshot a LinkedIn post or something
+like that.
+>> Yeah, exactly. I think that's the right
+mentality and I think the really like my
+my approach to new models is honestly
+twofold. whenever I think about them.
+The way that I approach new models is
+one I every time a new model comes out I
+try and like flip the switch in my brain
+that helps me like think about what a
+model can do and cannot do and just like
+turn it off. It's really important I try
+and remove that bias because otherwise I
+won't ask the model to do enough and I
+just push the model to its limit. I try
+and use a shorter prompt that is maybe a
+little bit more ambiguous sometimes even
+and just see what the model does and
+then I let I run like 20 or 30 of them
+and then I get a vibe check on how good
+it's going and if it can do harder
+problems it's a more interesting model
+if it behaves better in certain domains
+it's a more interesting model and if
+that is true then only do I go and say
+like okay now let me go and see how well
+this model performs on the actual task I
+need to think about
+>> in your like production code in the
+product you're building
+>> exactly and I usually will never ever
+think about swapping a model until I've
+built that intuition on my own. And if
+if it seems like tangentially
+beneficial, what I view it as, it's not
+worth the energy that it would take me
+to go do that and make the system
+slightly better when I can just make
+when I can just go ahead and add a new
+feature cuz it's not about like whether
+or not you switch the prompt. switching
+prompts takes almost as much time as
+actually writing a new feature usually
+because and it's not even because you're
+like doing busy work just that writing a
+feature now is really fast because you
+can use a genic system to write code but
+evaluating evaluating an AI pipeline is
+always going to be really slow because
+most people don't have automated evals
+so what we're going to do is vibe evals
+and if we're going to do vibe evals
+we're going to be slower inherently
+along the way and that's what I often
+see as the bottleneck
+when I go and like uh decide what I do
+and don't do with these systems. Well,
+and and I'll I'll link this talk as well
+is um Ben Stein from AI engineer talked
+a little bit about what it's like to be
+a product manager in the AI world where
+you're doing a lot of he doesn't call it
+like VI evals from like a engineering
+perspective for him it's a little bit
+more like the the properties are
+emergent and so we can go build a new
+feature and pull in a new model and then
+put it in our product and then goes play
+around with it in the context of the
+product and see oh it can do this and it
+can do this and like by playing and
+trying and like exploring it then you
+back into oh that's a cool feature we
+want to build for that if it since it
+since now we know it can do that let's
+now we bake the evals now we do the
+testing but this idea that used to
+happen Ben put it as like we used to
+have this idea of like behavior driven
+development where like non-technical
+people would write the specifications of
+like in this case it should work like
+this and in this case it should work
+like this and we would like it was like
+given when then if you've used like
+cucumber or girkin or anything like that
+it was like less technical people would
+write this Englishy syntax and then the
+engineers would develop that and like
+the take is like that doesn't work
+anymore in the AI world because it's
+really hard to be able to say we must be
+able to do this and then like oh the
+models can never do that but if you just
+throw the new model into your product
+and see what can it do now you're like
+oh it can do that okay cool let's go
+make that part of the spec. Yeah, with
+that let's jump to the fun part of this
+uh session. Um, which unless someone has
+someone else they want to share, but it
+sounds like most people have the same
+opinion as us, which is like they
+usually uh evaluate one is like should
+we even update? If the system is
+working, don't update it. If you want to
+try the new model, then you kind of end
+up vibe evaling uh along the way. With
+that, let's talk about how one does vibe
+eval because I think that's going to be
+quite important um to actually think
+about it. So, I'm going to screen share
+uh my desktop. Again, as always, if you
+see something you're not supposed to
+see, please let me know so I can turn it
+off and clip it out of the screen share.
+Um otherwise,
+>> do a do a poll real quick because I just
+fixed your generator versions.
+>> Oh, thank you.
+>> It was cursor hallucinated a generator
+version, but
+>> unless you just pulled it down.
+>> I did. I just pulled it.
+>> So, the prompt that we're going to use
+is actually uh the AI that works prompt.
+We're going to go ahead and try some of
+these, especially like the email prompt
+to see like how do we actually eval the
+email prompt? Today we use the Gemini
+um model to go do this. So like is there
+a way that we could perhaps see if we
+can use the non-geemini model to do
+better?
+>> And this is yeah, this is something I've
+been really curious about especially in
+the context of like BAML because BAML I
+think is my for these low-level evals of
+just like does did we if we change the
+prompt are we gonna break things we know
+are supposed to work? Um, but I've never
+really had a good framework for like I
+want to just take this one prompt and
+test it with the same data across four
+different models and like see what that
+workflow feels like. So, I'm really
+excited to have you dig into this.
+>> Yeah. Well, like I think the first thing
+is like obviously we can deal one model
+at a time. Oh, did I not set up uh
+one second, I didn't set up my end bars.
+Um, I went to hide this and then set up
+my environment variables.
+Um while you're doing that um let me
+just check the chat here. Um Jud says
+we've been testing and validating
+results of one model against another
+model mostly for the batch ecosystem
+setup not real time. So there are places
+where I or my team are quite occupied to
+even review the results which are
+sometimes hallucinated. We try to
+automate validation results from one M
+model again. Yeah. having one model look
+at the outputs of other models is like
+technically in an academic sense uh I
+think is uh corre like papers will say
+that that works better and LLM as judge
+works like improves your accuracy but it
+also is like that same thing that the
+the postwe point is like the more steps
+you add to your pipeline the more you're
+introducing uncertainty and so if your
+judge is just as inaccurate as your
+other models then you uh may end up just
+having creating more like stochastic
+effects and more randomness.
+>> That's true. Um the challenge we had was
+mostly in the batch ecosystem and we
+were like just lazy enough to review
+like I mean to give you guys some
+context we do like large reports on
+candidates and when we do that it's
+painfully st I mean we we had some
+hallucination effects from open AAI or
+any standard models we were like tired
+of it. the we put them in like some sort
+of a recursive loop in our ETLs and uh
+that somehow saved us a lot of time
+because now we have near um uh near good
+level accuracy meaning both the models
+are trained very differently right like
+llama 3 or open AAI or anthropic so that
+kind of helps wet the results for us but
+this is not really uh related to this
+topic I just thought I'll throw that out
+there yeah I know you guys are talking
+about evals of one single model yeah
+That's a actually um that's actually a
+really good question that leading into
+like what is accuracy and like accuracy
+can be hallucination rate. Um I'm just
+going to pull up one more slide that
+I'll I'll I'll add to the show notes as
+well. Um let me go grab that
+um
+really quick. This is from a talk we
+gave at the MLOps uh meetup um or agents
+and prod like virtual conference. Um,
+where is this?
+Sorry. Um,
+I think this is the wrong deck. Sorry.
+Let me go find it.
+Um, basically the idea that like uh
+performance in the past was all about
+cost latency like before AI. Um, here we
+go.
+Um,
+like Vibbos says this all the time,
+right? Can can you imagine if your REST
+API failed on 20% of requests? Like you
+would be having an outage. You would
+update your savage page, you'd be like
+everything is broken. But in an AI, if
+it gets it right 80% of the time for
+certain use cases, that's like kind of
+good enough. Um, and so before AI, we
+had latency and uptime and cost and
+security, but now we also have accuracy.
+And accuracy is like number of
+hallucinations and a couple other
+things. But like it it's really like
+depends on your use case, right? Like in
+certain cases there are things where
+like oh if the model gets that wrong,
+the user will be able to tell and they
+can go change it. But there's other
+things where it's like if your model is
+fetching context from some list of
+regulations and you want it to like
+accurately
+uh reproduce the content of that
+regulation in its reasoning trace. That
+has to be correct. Otherwise, like your
+app is not only like not helpful, but
+it's actively harmful.
+>> And so, this is kind of when we talk
+about performance. Yeah. Go ahead,
+Silia. Just to articulate what I think
+you're saying, it seems like you're
+saying that accur or what I'm taking
+away is that accuracy is implied to also
+be a a standin for quality and it's a
+poorly defined word and it can mean a
+lot of different things in a lot of
+different contexts,
+I guess.
+I think that's I think that's valid.
+Yeah, I think that's a good way to put
+it. And it's like again I'll I'll share
+the link to the product talk which is
+like accuracy and like trade-offs and
+like what you need and like what makes
+your product good and like what makes it
+what delivers value for the because like
+you could say like 95% accuracy and 99%
+accuracy from the customer perspective
+are equivalent. Like those two things
+both help the user solve their problem
+in the same way, the same amount. Well,
+>> but there are other cases. Yeah.
+>> If I'm vibe coding and I have 80%
+accuracy, I can just go fix the 20%
+that's wrong.
+>> Yes.
+>> Or like like it's
+if accuracy
+like in that context, what accuracy
+means is makes working code. Um, but
+it's if it's hallucination rate on
+factual data, that's a completely
+different
+measure than makes working code. Well,
+and I think it also depends on your you
+like writing code in cursor is a very
+human in the loop experience where it's
+like even if the code it makes is not
+quite working or doesn't quite pass the
+llinter or whatever, it's like you still
+saved me a bunch of time even though I
+have now I'm just doing 20% of the work
+instead of 100% of the work. Um but in
+certain workflows like if if if it's
+hard for the human to be in like a lot
+of these like cloud maxers,
+hyperengineers, whatever you want to
+call them like their their goal and like
+the goal of tools like cloud code which
+is totally headless is becoming more and
+more like how do we make it so that you
+don't have to edit the code or so that
+like if if the code is wrong you can fix
+it with a prompt rather than with um
+something like something like going and
+editing the file yourself. an experiment
+like he went spent about a month having
+multiple different claents prompt each
+other just to like see how actually good
+that was right now and I thought that
+was an interesting experiment.
+>> Yeah
+like yesterday with like 12 sub Asian
+instances and just one container with
+two orchestrators and it was not fun to
+do that. I think the idea is very very
+similar to like for example this email
+task. Like what the heck does good
+accuracy mean for generating good email
+that's a summary for a for a blog post
+of some kind. It's actually really
+really ambiguous what it would be. Like
+for example,
+>> if we miss bullet points, if we miss
+topics, that's fine. But if the tone
+sucks, then we're [ __ ]
+>> Exactly. And like and for example, like
+hello first name. I don't personally
+care about this right now because our
+workflow right now is we take the email
+that is generated from this system and
+then we paste it into loops. If we did
+this in a fully automated way then
+suddenly accuracy of generating hello
+first name no longer works.
+Now I need to guarantee that it
+generates hello first name and I need to
+substitute that with the actual variable
+that they swap out in the loops API
+system. And now my accuracy constraints
+and definition have fundamentally
+changed.
+So, it's possible that a new model
+allows for that, but I think the the
+real way to always think about it is
+exactly what Sylvia said, which is you
+always have to think about the business
+use case of AI before defining the
+problem. It's like it's when people talk
+about like if if you're an engineer or
+worked with engineers before, you'll
+often see people that are talking about
+like how does this work in the case of
+um like someone's like, I want to make
+the a I want to make the system faster.
+But if there's no user criteria attached
+to making it faster, there's no end
+goal. Code can always be faster. Code
+can always be better, but you need
+always a definition that makes sense for
+the product. So in this case, the email
+can always be better. We know that
+there's no end to a perfect email. If
+there was, marketing would be solved and
+we wouldn't have to do any of this stuff
+ever again. There'd be one button that
+you press and you generate the best
+email. But most things that are worth
+solving from a business standpoint have
+no infinite goal. The thing with AI that
+I think makes people more nervous about
+this compared to other problems is that
+the iteration speed feels faster. So we
+feel like we should get to a faster
+better solution faster as well. So we
+want to converge to the best solution
+ASAP. So like when a new model comes
+out, I think the feeling that we're
+having most of the time is not that this
+model is going to generally like oh
+maybe this was what I needed, not a
+better prompt, not a better software. I
+just the model will solve all these
+problems and make it go away. And
+sometimes that happens. GD4 to GPD35 was
+a big difference. Undeniably so. GPT 40
+Mini like D said changed latency in an
+order of magnitude way. And there's no
+five evals that Dex Dex actually said he
+will lose a he will lose um accuracy and
+like reliability in favor of latency
+because that mattered for his product
+experience.
+On the other hand, DeepC came out and
+like the need of it being open source
+and matching even if it's worse than
+GP40 suddenly got a lot of people
+excited because it opened up use cases
+that weren't possible before. But if
+you're a consumer app that has like
+let's say like a 100 thousand users or
+like a thousand users and that isn't a
+big problem for you, just use GT40.
+There's no need to eval.
+But I always think it's worth thinking
+about. So if you have high accuracy
+constraints like in this case, we can
+always make the email better. Let's talk
+about how we would eval this. Well, the
+first thing that we would do is what I
+like to do is just very very basically
+just like at least have one test. Like I
+have one test here and it's written over
+here. I want to deal with this. I might
+actually have a couple more tests and
+let's see if I can get it.
+>> But the the idea being like if you have
+one test you can just drop in 40 mini
+and just like verify your probably gut
+instinct that like 40 min is going to
+suck at this task or drop in sonnet 4
+versus opus 4 and just kind of see how
+do these things perform just by looking
+at the output.
+>> Sorry I was sharing nvar and I did not
+want to share it again.
+So, right over here, um, we're spending
+almost no money because the system's
+pretty good. But if I go into here, uh,
+what prompt am I on? I'm on email
+structure prompt.
+That's what I run. Okay, cool.
+Let's just make another test cases. So,
+I have two now.
+Okay, now I have two test cases. And
+this is literally a thing from cracking
+the prompting interview. That's a
+subject. it has this and like dumps out
+a bunch of stuff that describes uh
+cracking a prompt interview along with
+um what the next session is about. Um
+and I can just go
+>> Okay, cool. So this is So the inputs to
+this are the outputs from parsing the
+transcript and just asking it to pull
+out these four different like categories
+of insights.
+>> Exactly. And like it talks about labels,
+diorization, a few other things. So I'm
+not going to prompt I'm not going to
+email the whole pipeline. I'm going to
+eval just as one step because eval
+pipeline is a thing I can do but like
+it's way easier to just make sure that
+the one step got better and then I can
+make the other step go better and right
+and the analogy that I always use in my
+self is like a long time ago it was
+definitely true that most people could
+write better assembly than what C could
+write but now the C compiler is always
+going to be better than most people can
+ever write and like systems get better
+over time. I think we're in the assembly
+era of prompting right now. We're
+probably not at a point where like
+systems can automatically heal
+themselves because not because they
+can't do it, but most people don't have
+good problem definitions on which they
+need to optimize for. So therefore, the
+best thing you can do is first get a
+good grasp of your problem. So if I just
+like go ahead and quickly run this um
+I'll run this test specifically
+and we'll just see how well it works.
+And while I'm doing this, I'm going to
+talk about how we can eval multiple
+models because I think that's the part
+that everyone is really really
+interested in. So we'll do from
+important B
+and I have to
+install one more thing. UV run UV add
+identic
+sync.
+Cool. So it is running all the
+environment variables are running
+correctly. So, I want to see how well
+this works.
+Python restart language server.
+Why is it not picking up?
+This is the most annoying thing about
+Python. You have to set the environment
+variables correctly.
+Um, and I believe I have to do one last
+thing, which is I have to tell it to
+generate.
+>> Probably have to generate.
+Oh, yeah. I was putting in an app but
+>> oh that's okay I'll just put it directly
+there. Um and then what we'll do is
+we'll do B dot and the test that I'm
+making is only on draft email. So like
+draft email
+and I'm going to pass in some sort of
+summary into it and then a structure
+uh along with it and then I'm going to
+like get the results. At some point what
+I want to do is swap the model. So like
+let's really quickly make a test case
+from this. So I will uh
+summary equals um
+there you go and then claw fill these
+out the wrong thing I
+and it'll do its thing. But while it's
+doing its thing, I basically have a
+result. Now, the first thing I'll notice
+is what I really want to do is I'm going
+to do the very very quickly dumbest
+thing that I can do, which is No, I
+don't want this, which is I'm just going
+to save this to disk
+and I'll just dump the data out and that
+will do something for me.
+>> You want to put a time stamp in there?
+>> Um, I'll do that in a second. Now, what
+I really want to do when I go run this
+system is actually
+Uh end
+there.
+>> UV addend. Oh
+>> that is like the worst naming of any
+package ever and I hate it.
+Um I wish they would just take end over.
+Um and it does this adds this stuff in
+there and then prints this out.
+Now the real thing that I really really
+want to do over here is I want to make
+sure that whatever I'm dumping into here
+is actually like parameterized over a
+lot of test suites. What I'm actually
+going to do is I'm going to say
+defaf load test
+name stir
+um
+tuple
+Okay. So, you're going to be storing
+your test data on disk as JSON.
+>> Exactly. I'm just going to load it and
+I'm going to load it into here and I'm
+going to go send both the data out of
+here. And the reason that I'm going to
+go do this is now what I'm really going
+to do in my eval set is not just this.
+And for now, what I will do is I'll just
+like um
+Yeah,
+>> I'm just going to hard code these for
+now.
+And did I spell structure wrong?
+What did I do wrong?
+>> You have an indent somewhere. Oh, your
+indent on summary needs to have come
+back one.
+>> I forgot. I hate Python.
+>> Love Python. Best language.
+Hey,
+>> I set this up for TypeScript, dude. You
+could have done this all in TypeScript
+if you wanted to.
+>> Yeah. Yeah. Yeah. I will. I will. I
+will.
+Um, and then what I'm really going to do
+after this is I'm going to go and let's
+run a bunch of models. So I'm going to
+have a bunch of tests and I'll say uh,
+and I can choose what dimension I run
+this on. I can run it per test per model
+or I can run per model per test.
+>> It's up to me. And the dimension
+>> Oh, I see. So you're going to do like a
+nested for loop basically like for each
+test run the same test against four
+models and then dump them out so we can
+look at them.
+>> I'll like write all these out. It
+doesn't really matter. Um, and I have
+some models that I've already defined.
+So, like if I go into um
+>> Okay. So, you're not going to generate
+multiple BAML clients like in the BAML
+source. So, you're going to use like the
+dynamic client builder.
+>> I have some that I'll define over here.
+Um, and some I won't. So, I'm just going
+to run three model. GT40 Mini. I'm going
+to run this and I'm going to run my
+Gemini smart.
+>> Um, I think I have a different model as
+well called my Gemini store somewhere
+over here. So, I'll just go to these and
+just see what else I I like my Gemini,
+which is going to use a flash as well.
+>> Cool. Nice.
+>> And I'll just put these all in here. I
+won't think about it. And I'm going to
+run each of these models along the way.
+Now, the way I'm going to do this is I'm
+going to run like for model in this
+client registry
+equals client.
+I think I just do this.
+I think I see where you're going with
+this vibe of are you trying to do like
+dynamic passing of the model names by
+the client?
+>> Yeah, exactly.
+>> Ah, sorry I'm typing very slow today. I
+don't know why.
+That client or BML pie right
+pie. Yeah.
+Sorry, I've been I slept very late last
+night, so I'm a little bit slower than I
+normally am when I type.
+And like boom, we're just going to set
+the model. And now we're going to give
+the eval of that model. Now, the problem
+that I want to want to do here is I'm
+going to want to also do this for every
+test. So I'll say for test
+in this range, and then for this, I'm
+now going to go run the test. It's
+basically a parameterized test suite,
+but there's a reason that I'm not using
+pi test.
+>> Do you want to move this in here? The
+load test
+>> based on test name.
+>> And the reason that I'm not using piest
+right away um is that the way that I'm
+going to run this test is actually going
+to be async.
+So I want to run all the stuff in async
+mode.
+>> Nice. And the reason I want to run all
+of this in async mode is because this is
+going to be a lot of stuff. I don't
+really want to think about what I run
+when I have basically infinite capacity.
+So I'm just going to run maximally
+parallel stuff.
+>> Do you have to change where you're
+writing to? Also,
+>> say that again.
+>> Uh with your with open result.json.
+>> Yeah. So it gets tricky when you do
+eval. The reason that this gets tricky
+is because at some point some of these
+are going to fail. You just you just
+know that if you're running a bunch in
+parallel all the time like model outages
+naturally happen. You might put retry
+logics in here. You might do all sorts
+of things. But at some point some of
+these are going to fail. So there's a
+couple ways to do this. And what I
+always do is I just do this def run unit
+u
+um
+I always run I always run it wrapped in
+a thing
+and I always run it this way and I will
+also do like the saving and everything
+in here right in here as well. So if I'm
+going to go save something, I'll save it
+in this function directly
+and then I will just do a try
+accept
+and we'll usually not turn
+and I will just guarantee that this
+function is not allowed to fail.
+>> God, I love Python.
+>> Say again.
+>> I love Python.
+>> Yes, indeed. Uh that is how I feel about
+this. But I mean, you're going to have
+to do this anytime because we have a
+high network dependency. And if you're
+truly running eval, you're probably
+running like 500 of them, a 100 of them
+at large test bandwidth. So like you're
+going to have to design code. If you're
+only running 10, it doesn't really
+matter. Just go do it. Um, but if you're
+running a lot, this does matter and
+starts making a huge difference. So now
+we can go do this. We run the unit test
+and we go do this. But then we get to
+have a the best part is we just have to
+have like a tasks cube. now
+and our problem goes away.
+Uh, and now we have a really, really
+nice Wait, what is this?
+>> We got to fix this. How you're writing
+to the disc or something.
+>> Sorry, I'm going to fix this.
+>> Nice.
+>> Uh, and now this no longer needs to
+write to disk.
+And then boom.
+>> So something needs to write to disk,
+right?
+>> Well, this part right here. I'll write
+to this right over here. I'm going to
+write in this method. Uh, this is where
+I want to go this, but I don't want to
+do it anywhere else. I really only want
+to do it here. Now, the other thing I'm
+going to run into is all this stuff is
+going to run really massively in
+parallel. So, how do I want to think
+about this? I have to think about what
+I'm going to go do. So, I'm going to
+have like a target directory.
+I think you also need to return from the
+run unit test function. It's returning
+none.
+>> Yeah. Uh I can just ignore that. But I
+can just like also return like true.
+>> Yeah.
+>> Or return false.
+And that's okay.
+I can
+There we go. And this will give me some
+modicum of something. Uh,
+and it'll be like it'll tell me how many
+tests actually pass versus failed. And
+there's some count over here. And then
+the other thing that I want to do is I
+just want to save this to disk. And it
+kind of figured it out what I wanted to
+go do. So like let's just leave it at
+this. I don't want to think about it.
+Um, I'm going to go run this. I'm going
+to run I'm going to create one more test
+really fast um from here.
+I wish uh it would just do it but it did
+not do it properly. I'll do it manually.
+>> I don't think you need the transcript,
+right?
+>> Um I don't remember what we passed into
+this. So I'll try
+a long freaking transcript. I forgot how
+big these things.
+>> Yeah. The whole point of this was like
+we were we were showing off how Gemini
+can be used with the whole transcript,
+but I
+Yeah,
+I guess you could keep the transcript if
+you wanted to. Why did you say you don't
+use piest again? I might have missed
+that part.
+>> Because when I run everything in
+parallel, it starts to get tricky how I
+want to save stuff, how I want to go do
+things. It gets really
+>> And like the thing about pi test is it's
+like a unit testing framework. when
+you're running evals, it's much much
+closer to Jupyter notebooks than
+anything Piest is going to go do.
+>> So it's actually like the better. You
+wouldn't use Jupyter notebooks and piest
+for the same thing.
+>> Yep.
+>> And this is exploratory, right?
+>> Exactly.
+>> Okay, let's have Cursor do some more
+work.
+One second. We're actually working on
+getting exporting test cases to here
+because it sounds very useful
+both test.
+Oh, no, no, no, no, no, no, no. What the
+[ __ ]
+>> You said revert, dude.
+>> I realized that.
+Um, how do I get back?
+>> Can you command Z?
+>> Can't.
+>> Can you undo?
+>> Can't.
+That's gone. Okay.
+>> Yeah, it's gone.
+>> Oh my freaking god. Sorry.
+>> Oh, you could be like that guy that
+posted on Twitter about how cursor
+deleted a month's worth of your work.
+>> Whoa, that was a lot.
+>> This is why I don't use cursor anymore.
+>> It's like the UX is there's just one one
+thing that that there's just certain
+times it just doesn't doesn't behave in
+a nice way.
+>> I thought I accepted the change and
+everything. Um, is there a way that I
+can fix this? Let me just see.
+Same chat. If you didn't if you didn't
+run the second prompt, if you just
+clicked off, it would have fixed it. But
+it's gone now.
+>> No, it's gone. It's gone. So, I
+apologize, friends. Uh, we're going to
+have to wait a second uh while I go do
+this again.
+>> And Dexter, do you use cloud code for
+everything now?
+>> I'm using cloud. I haven't opened an
+editor in uh in about a month, and I
+shipped eight PRs yesterday.
+Dex is one of the best um cloud coders
+that I've seen. I'm actually trying to
+learn from him.
+>> Okay, I think we're good.
+>> Yeah, I'm uh I'm restraining my uh my
+instinct to Okay, so it does have it in
+like the edit history, so it can kind of
+figure it seems like it kind of
+remembers what you were doing
+>> kind of. It's almost
+>> You lost your end. You lost everything.
+Wait, Dax, drop some claw code like
+lower while we wait.
+>> Once once Vib gets this running, I'll
+I'll I'll take over for a second. I'll
+I'll I'll whatever the next change we
+make once the initial thing is done, I
+can I can take over and have show you
+some claw tricks.
+>> Nice.
+Okay.
+Uh, target their results.
+Okay. I think we're mostly done. Uh,
+this will, I think, work in theory.
+>> You lost your M though. You need to get
+back.
+>> Yes.
+Cool. Okay.
+>> Yeah, let's try. We haven't run any code
+in a while. I'm curious just to like
+kind of run the simple version and see
+what happens and then we can iterate
+from there.
+>> So, I have to still migrate these tests.
+Um, but I think I can do it in a
+slightly nicer way, which is
+let me try
+Okay. And then um
+>> maybe I should have used cloud code and
+that was my mistake.
+>> It's always a mistake.
+>> I don't trust it anymore.
+>> Well, it's very also interesting to see
+what's going to happen with the pricing
+change because I know I'm I went to a
+meet up in SF a couple weeks ago that
+was like the uh the quad maxers meet up
+and they literally like checked receipts
+at the door. If you're not spending more
+than $50 a day on AI coding tools, then
+you don't get in
+>> really.
+>> And there was a lot of people at that
+meetup.
+>> I think Cloud said it was like 5% of
+their users effective. That's a lot.
+Like there's a lot of power users just
+run like six a day.
+>> Yeah. And it's very quickly overnight
+became like I think when when sonnet 4
+and opus 4 came out I think anthropic
+was probably serving 10% of their
+inference or 20% of their inference to
+cloud code and it probably jumped up to
+like 50%. Like I think the the heaviest
+like per token users are definitely
+going to be the the cloud code people
+who are like
+>> running 10 in parallel
+>> for everything. you what?
+>> While this is running, the next thing is
+like first thing that you'll notice is
+once this thing is actually done
+running, we're just going to have a
+bunch of JSON files. JSON files are
+garbage. They're not very useful at all
+because like when I go look at them, I
+won't be able to do anything. So, let's
+go do something else now.
+Please don't [ __ ] me cursor.
+Let's
+>> new chat.
+>> Commit.
+Hit add.
+table
+stream. Is it stream lit? I don't know
+what it is.
+>> Yep. Yep. Streamlit should work. It's
+pretty good at stream lit.
+>> Uh so I can render the results.
+Yeah.
+Oh, what the [ __ ] did it do? Cloud Code
+did some stuff.
+>> There you go.
+>> So, it's editing the JSON files for you.
+>> Okay. Made made one file for me for test
+and married gun. Cool.
+Okay. It's got two files that I think
+are mostly good.
+Uh this is the last one. Burning any
+foul
+and I don't want to touch this file. I'm
+kind of scared. So I'm going to let it
+do its thing.
+>> And because I deleted all the code, I
+became super cautious right away because
+I don't trust this
+>> one thing.
+Okay,
+>> I think we're almost done. Um,
+all right, let's just go run this really
+fast. Um, and the first thing I'll do is
+I'll notice that you what you'll notice
+is like um the first thing you'll notice
+is I don't actually trust whether the AI
+thing is going to work or not. I don't
+know if the cloud code generated code is
+good.
+This is the only thing I hate about
+cloud code VS code. I can't hide it. Um,
+so I'm actually not going to run the
+code. I'm just going to run it like
+this. Not say what it is.
+>> Just going to make sure it kind of
+compiles and works
+>> exactly.
+Test name is incorrect.
+That work.
+>> Uh, you had some pyantic error.
+I think I run I'm running the wrong
+test. There we go. That one worked. And
+then email structure and then um
+burning.
+>> So what are those names again? What is
+married guan burning guinea fo?
+>> They're just like the two test names
+that I had.
+>> Yeah. when you when you pull tests from
+the BAML console, it just makes up a
+like random string for you.
+>> Adjective animal. I think
+>> it doesn't really matter. Um, but now
+that I have the test, I can go run this.
+And this will run. And while this is
+doing this, I will also do that make the
+results.
+Then I'm going to run this. Okay, while
+this is running, I'm now going to start
+another cloud code test.
+Um, I got scared by his cursor, so I
+don't think I'll use it anymore. Um,
+update the app to be a Streamlit app
+that renders the result
+as they come in
+for each uh variant.
+Um,
+for each variant. Um, cool.
+and see what it does. And the first
+thing I'm going really want to do is I
+just want to like vibe code a somewhat
+decent UI so I can actually just iterate
+because if I can't actually see my
+results like
+you'll notice in here uh email draft is
+not JSON serializable because I I'm dumb
+model
+is what I should have done. Um and that
+would produce a dict object that would
+do everything. Do we do mode equals JSON
+because it will you need it to convert
+the time stamps if there's any time
+stamps? Yeah. So,
+>> thank you.
+>> Let it run again.
+>> I dump a lot of JSON in my day by let me
+tell you.
+>> I can see that. So, like this is like
+one of the few things like this is why
+it's just really good to not like go all
+out on your emails and wait the whole
+time for everything because if you do
+that, you'll just get stuck. Um, sure,
+why not?
+I'll let it generate the screen app and
+then it's going to go use this function
+to go run run the unit test.
+And once this thing is done it, as you
+can see over here, it dumped out a bunch
+of stuff.
+And I can actually go look at each of
+these and see how well they do. Uh, but
+as you can see, it's actually going to
+be hard for me to go read all this. So,
+um, yes.
+>> Oh, wow. Oh yeah, the JSON Unicode
+serialized emojis is atrocious.
+>> Yep, exactly.
+UV run sync.
+I don't actually know how to run a
+Streamlit app. Uh, but I've run it a few
+times, so I always have to look at how
+to go do it.
+>> I think you just UV run it.
+>> Oh, UVX streamllet run.
+Oh, yeah. There you go.
+>> There you go. Um, so it actually lets
+you select test as you're going to it.
+Let's just select model and then I can
+just run the evals.
+>> So you have this yeah you have this um
+pantic issue
+>> where whatever whatever your test data
+is like missing certain fields
+>> because of this stupid thing. Uh let me
+>> just paste it into cloud.
+>> No no this one is like the wrong test
+case that's why.
+>> Okay.
+Uh, it was called
+>> search for email structure.
+>> There you go.
+>> Nice.
+>> Oh, it just loads them in.
+>> Yeah, your input JSON just paste that
+error in the cloud.
+>> That is also a good idea.
+No, just put Yeah. Okay.
+>> Maybe I give it too much context. Um, it
+is running though and it is definitely
+running something. Um,
+>> yeah.
+>> And it's running to like JSON
+serializable
+errors. Um, and then I just have to go
+fix that one error which is
+JSON.
+>> It's it's off track.
+Yeah. Okay. Good. Here we go.
+And I think this should get us caught up
+if this is done. I usually do this in
+TypeScript. I thought I'd do it in
+Python today and I think that was a
+mistake. Um,
+and the reason I use TypeScript for
+everyone else's context of why I prefer
+to go do that is because what I really
+want is I want a quick React app that I
+can just like run a simple system in and
+just see what's happening.
+>> What Why don't you Why don't you push
+what you have because I'll I can I can
+kind of show show off how we might
+quickly translate this to to TypeScript.
+>> Let's do it.
+Well, let me see if it's running yet.
+One last thing and then if this runs and
+I think we're good.
+Dex, could you just also talk talk out
+aloud when you're doing some of the
+translation work because some of us
+don't really know TypeScript that well.
+>> Uh, I mean, I'll ask Claude to talk out
+loud.
+>> That would be great. Whatever works.
+>> It's going to be very verbose. Uh, so we
+might have to skim it, but I'll I'll
+paste I can paste the trace in or
+whatever.
+>> Y'all can read it later.
+The hard part about all this systems, as
+many of you can see, is the hard part is
+actually not the AI part. It's actually
+building the infra so you can actually
+go render everything. Okay. Well, this
+isn't really working. So, I'm going to
+I'm going to change I'm going to change
+trajectories.
+And instead of the app doing that, just
+load the just make a streamlit app that
+loads the data from the
+results
+directory and renders it. I gave up. Um,
+I'm going to do a simpler thing and this
+is like just get more guaranteed to be
+good. Uh, I'm just going to load the
+data from the results gener uh,
+directory and just like render it and
+then see what happens because I think
+I'm just going to have way more
+likelihood of success in that scenario.
+>> Oh yeah, that works.
+>> Yes. Uh, and that's a simpler way to go
+about it. While I'm doing this, I
+realize a couple more things. Uh, the
+model name over here is going to have an
+escape slash. So, I need to go unescape
+that. Uh, unescaped
+model.
+Perfect.
+>> I'm going to go deal with this. Uh, show
+that off. Um,
+go deal with this. Um,
+uh,
+I'm going to make that directory import
+OS
+and then UV.
+This should in theory be a lot more
+reliable.
+if this app load. And now I can go see
+it. And like really what I want to go do
+is I literally just want to see these
+side by side and just go read it because
+that is the only true way that I can
+actually eval them.
+Uh and I just have to go build this. And
+if I don't build this UI, no matter what
+I no matter what I do, it won't be good.
+And the first thing you can notice when
+I build this UI is like I can
+immediately see that see that one of
+them is just longer than the other. It's
+like a really quick glance thing that I
+can get without reading it.
+And I can see one of them includes bold
+text, the other one doesn't. For better
+or for worse, it doesn't really matter.
+But the fact is like the UI based vibe
+eval system that we build here is just
+going to be a lot better than anything
+else that we could do manually. So if I
+go ahead and we'll do this again. Um,
+u
+main.py. We'll run this. And then I
+think
+what did I do?
+email structure. Did I delete the wrong
+one? Oh,
+uh, which one do I want? I don't want
+married one email structure.
+Um, structure. Yeah.
+If I go ahead and run this, it's going
+to go ahead and produce a bunch of tests
+for me really fast while it goes to run.
+And then it should have a new directory
+structure here to make my life slightly
+easier when I go do this. Change
+structure
+to be
+not allow JSON and then it dump stuff in
+there. So I'll just run this
+and then this should be able to run the
+stream app.
+and then be able to read from it.
+And now you'll see I have a lot more
+test in here. I have an optics on it and
+openi as well that it wasn't reading
+before because of the directory
+structure. And like one of the most
+practical things that I think a lot of
+people under underlook when they build
+these eval systems is the amount of work
+that you have to put into actually like
+building out all this like infra tooling
+is surprisingly large. It's way more
+than I ever expected. And this is the
+same kind of work. If you go talk to any
+data scientist, go talk to any machine
+learning person that was doing it before
+the LLM era, what they'll tell you is
+90% of the job is not training the
+model. 90% of the job is getting the
+data in the right shape so you can make
+the right decisions. And that is so
+annoying. But that problem doesn't
+magically go away when you work with LM.
+It's just something you have to do very
+very frequently. So in this
+>> and this is why people talk about how
+important eval are. And like when we did
+the episode with Brian, he's like, I'll
+share the code. I'll share the prompts.
+The only thing I will not show on screen
+is the evals because that's the part
+that takes the most work and the most
+thought and it is about knowing your
+problem. And I think as we get to this
+world where it's like more and more code
+is written by AI and more and more
+software can be trivially repro like if
+you wanted to build a copy of VS code
+you could do that with AI. There are
+like techniques and processes where you
+can take large complex software as long
+as everything is documented. You can
+build specs and plans to reproduce any
+existing piece of software. And so the
+real moat is this is like taste and
+knowing what your users want and having
+like hard-coded like results of looking
+at stuff and deciding what good looks
+like because then you can then you can
+iterate on your stuff and then you can
+learn and then you can keep making the
+software better.
+>> And even over here like think about how
+complicated it is for me to actually
+like go build this out. Like I can't
+actually analyze emails like this. Like
+this is not a good readable format. So
+what I really want is I want A and B for
+every test case. So I can see for every
+test case I want to just swap out random
+models. So I'm going to tell Gemini to
+do I'm going to tell it to do that
+instead of showing every model for every
+test case
+for a for a given
+test case. I want to side by side drop
+downs.
+>> All right. After this I'm going to make
+a commit and push and I'm gonna I'm
+gonna I'm gonna practice uh I'm gonna
+So I can see the So I can see side by
+side of model versus model
+what does that and this is just a really
+important thing because like the thing
+that I actually would want to build here
+is not even like an evaluate. What I
+really want to build is infra where my
+team can go eval this stuff very
+quickly. You can think of it like
+building any sort of internal tooling
+that you would be building for your own
+company. And you have to again what
+we're trying to do here is decide what
+the goal of this email is. And the goal
+of this email is I want to know what
+email is better. I'm going to send this
+out to like a bunch of people.
+And like now I can go do this. And it
+becomes really easy for me to go see
+this. Like okay, let me swap this out
+and see how well this works. Which one
+do I like better?
+>> Oh, this is better. Yeah, this is great.
+>> And like now we can quickly see which
+one we like. Um, these look almost the
+same. Are they the same? No, this is my
+Gemini. So, this is Flash. This is uh
+this is um uh the better pro. And it
+seems like Flash almost got everything
+right, but it forgot about the next
+session. So, like, okay, clear. Flash is
+definitely a loser. Let me just move on
+to the next one and go on. But you
+notice something here. I did this super
+manually. If I'm sharing this with my
+team, I need to add a new feature to my
+Eval dashboard, which is a thing where I
+can leave my notes in here. Now, I
+that's another thing I have to go build.
+Another thing that I want to build is
+like just like really quickly like
+invalidate this and just say like Flash
+is bad. So I might want to build like an
+X. So I can just click X over here and
+like remind myself that I've already
+seen Flash compared to Gemini. And
+there's all sorts of systems you can
+build along the way here to just decide
+which one is better. Same thing here.
+Like this one just doesn't like it. This
+one I guess made it a lot shorter which
+could be better. One, two, three. You
+got this one. It dropped one of the
+bullet points which might be fine. I
+don't really care. So, if I was okay
+with this and anthropic sonnet would be
+like seems okay. And GT4 Mini, I don't
+really like this one. This one literally
+just made a giant blob of text and
+that's not what we want to send out. So,
+this becomes immediately invalidated.
+So, I'm like, "Okay, cool. I'm
+>> I like the Borro mini one. It's like got
+a little bit of like a Hemingway vibe
+where it's just like lots of little
+short sentences."
+>> Dude, I hate this. But that's You can
+see how we just disagree on this.
+>> Yeah. But we need to be able to quickly
+evaluate this in the previous
+>> but now okay one more feed lap back loop
+I want to do like go change the prompt
+now and then rerun this and like this
+shows how you can iterate on you like
+use this as a system to iterate like
+because it's not just on like which
+one's better across the model but it's
+like okay now let's change it let's see
+how it changes all the models and how
+all the models perform.
+>> Exactly. And then the other thing you're
+going to run into if we change the
+prompt is now you need to previous
+compare the previous version of the
+prompt against this part. So now we have
+three dimensions. We're comparing
+against the model, the version, and the
+model at the same time. So, and there's
+no, and a lot of people will try and
+sell you like, hey, I have the perfect
+UI for you. We're going to solve all
+your problems. The fact of the matter is
+there's no perfect UI to be completely
+honest. For seeing an email, this is
+probably a better UI than like a
+dashboard that just shows you JSON. I
+don't want to see the JSON. I want to
+see something that looks like an email
+and reads like an email and renders the
+markdown. for rendering coordinates on
+an image. I want to see the actual image
+with a box rod around the coordinates of
+the image
+>> and every single thing you have to do is
+bespoke and unique. So, you just have to
+do the work to go do this and like vibe
+code it like we did over here. BJ's got
+a question or like
+>> no just an afterthought that you could
+split the entire email body like we did
+earlier uh in multiple like an
+introduction paragraph and you know a
+final
+>> uh like call to action or whatever and
+then pass them like evaluate them
+whatever then you can actually it's not
+it's no longer just a body anymore but
+you have multiple segments to work with
+with different bodies again. So you're
+dissecting the problem into smaller
+problems basically.
+>> Exactly. And then the other thing that
+you could end up doing is even though
+you dissect it into smaller problems,
+you could still assemble it from the
+eval perspective as one big thing.
+So from the eval perspective, it looks
+like the big thing. And now we can build
+small tooling. So like for example, I'll
+show you something cool. Uh LMS tend to
+Sorry, Dex. I'll I'll push it over in
+one second. I really
+>> No, you're good. I I think at this point
+we can we can wrap it up soon and go to
+questions. And I just all the activity
+in the chat is telling me like let's do
+our next episode on context engineering
+with with uh with coding CLIs. I think
+that's a great topic. LMS tend to
+produce uh things like m dashes
+and hyperboles.
+um build a detector
+for that in the UI by highlighting
+LME
+stuff. So I can go build this uh I can
+just like add it to the UI where one of
+the things it's going to do is just
+highlight a bunch of stuff for me and
+like if I go look at the diff of what's
+going to generate. Did I miss it? No, I
+didn't. Cool.
+>> This is interesting. Okay. Oh, you it's
+making it's using a reax to detect
+things that look like LME.
+>> Yeah. And I think that's okay. We don't
+need it to be perfect. Um we just need
+to be good enough.
+>> That's actually a dope feature. Um
+>> Exactly. content generation,
+>> right?
+>> Will you flip back to the UI before this
+gets I just want to grab a screenshot
+real quick for the for the episode.
+>> Perfect. Okay. And then we can show
+another one once it has the LM
+detectors.
+>> Yeah.
+>> Yeah. It better put absolutely and
+you're absolutely right in that reax.
+>> Um
+>> certainly
+[Laughter]
+>> that's funny.
+>> Uh Sylvia's got a question.
+>> So like it's put a bunch of stuff in
+here. It's like uh undoubtedly been
+credibly like I don't even know what
+that means. Sure. What
+>> comprehensive comprehensive needs to be
+>> the back slashb is the it is beginning
+of the word the word.
+>> Sorry I'm dumb. Yes. Uh yes. Uh, as you
+can see, um, I spend very little time
+writing Reax. Thank goodness for that.
+>> Yeah, Viob replaced all his Reaxes with
+40 Mini like six years ago.
+>> 40 Mini is amazing at Reax.
+And like boom, now we can just see this
+right away. And you can see how like I
+just improved the Eval system really
+fast without doing too much work.
+>> Yeah. And this is what actually um I
+forget. I think it was Sarah Cat and
+Zarah at Amplify Partners posted this
+like a year ago like talked to a 100 AI
+founders and one of her big takeaways is
+like the eval harness is basically just
+like any other test system. It's quite
+easy to build and the actual value in
+eval is generating the data of like
+what's good and what's not so that you
+can continue to improve
+>> trying to solve a problem using so uh VJ
+I I think the interesting thing about
+this is like what I'm not trying to do
+is I'm not trying to solve the problem
+of saying that this is perfect what I'm
+trying to do with this goal the reason I
+even came up with this UI is not because
+I think this is perfect but what I
+really want to do is I just want the
+user who's evaluing to quickly see
+certain things
+and I'm like okay like cuz if I scan
+this I might not even notice that an M
+dash existed here but like I don't know
+if you go on Reddit if you go anywhere
+you'll often see people now complaining
+about like a m dashes post I just ignore
+them because they're all AI generated
+>> and some people auto filter emails that
+have m dashes in them and there's all
+sorts of these risks that are now
+happening because of AI generated
+behavior. So, I want to go and like uh
+uh like uh flag for that quickly.
+>> Um
+>> that's really sad because some of us
+like m dashes.
+>> I love
+>> I do too. And now I explicitly remove
+them because like I'm in a lot of like
+founder groups and just general. I've
+talked to a lot of folks and like most
+people remove them.
+>> OM has been prompt or has been poisoning
+my training data with M dashes.
+Yeah, I think actually like the trick is
+like uh just like we did on Twitter in
+2013 uh intentional typos. And I've I've
+been using M dashes for 10 years, but
+I've always used them wrong. People tell
+me that's the wrong way to use an M
+dash. And I'm like, no, this is how I
+use M dashes. So, there's my trick. You
+can keep your M dash as long as you use
+it wrong. Like, put spaces around it.
+The correct way to use an M dash is to
+have it like touch both words with no
+spaces around it. But if you put spaces
+around it, no one every you can you can
+prove, hey, that's not an LLM cuz I did
+it wrong.
+>> I do that all the time. That's my human.
+>> I feel like people that think that
+people don't know how to use M dashes
+and that only agents do probably don't
+know the proper usage of M dashes.
+>> Yeah.
+>> Sad question.
+>> I'm gonna turn this into an email really
+fast.
+>> Yeah. So I had just wanted to summarize
+what VIP was saying earlier where it
+seems like evaluation tooling is
+incredibly specific to the definition of
+accuracy and the actual business problem
+that the LLM is being used to solve and
+thus it cannot be it has to be bespoke.
+text
+>> doesn't have to be bespoke, but it's
+easy to do it bespoke and then you have
+full flexibility. This is kind of
+exactly how uh shad CN works where it's
+like scaffold out the core of it that is
+like basic best practices, but then you
+can change everything you want. And now
+the code is really cheap. I think in
+general it's like if you have the
+patterns or the outline or you have a
+template that you can use for this stuff
+then um and then you customize it with a
+vibe coding tool or something like that.
+I think that's probably right. Um there
+are for certain very like if you are
+drawing bounding boxes on images there
+are tools that will do it better and
+more completely than whatever you can
+vibe code in an hour for sure. If your
+use case is super generic, but also like
+if you're building evals for a super
+generic use case, you're probably
+already cooked because that shit's been
+around for five years.
+>> Exactly. And like you'll notice what I
+just did really fast because I built
+this eval dashboard. I did something. I
+literally added a new model called Chad
+GBT really quickly where I literally
+just went to CHBT, generated the same
+JSON. Um, and I'm just going to have it
+go through that again
+and I will generate for this one as
+well.
+I'll go render this. And I'm This isn't
+even me doing this manual. I just went
+to ChatGpt, did this uh straight up. I
+just asked to do zero shot do the model.
+And what I want to do now is I can go
+here in theory. I should see ChatG pop
+up and I can just like compare it. We
+know that we like my Gemini Smart and
+then we know that we have a new one
+called Chat GT. So you can just like
+compare it
+and like the first thing you'll notice
+is just like yeah there's just a lot
+more m dashes right away in chat GBT and
+this is without me having to read it.
+It's a lot shorter. It's a lot different
+and this one reads a little bit more AI
+generated. If someone saw this one they
+wouldn't see that. But like what I'm
+trying to do in Eval is just like really
+quickly detect it and see what happens.
+And I'm trying to make life easier for
+the developer so that the person that's
+actually building the pipeline can
+quickly decide is chatt better or not in
+my use case.
+And if you build a good framework, then
+ideally what you'll have is you'll
+slowly make this system better and
+better and better for this part of your
+pipeline.
+>> And you will likely not end up with just
+one of these systems. You'll end up with
+tons of these systems
+>> because you'll have Go ahead.
+>> Sorry, I was going to say and the one
+one of the dimensions that we're not
+tracking here is the actual prompt
+itself. Like you could actually take
+five models, five prompts, and then
+generate what is it 25 outputs and then
+have a one-on-one like voting system and
+just have people go through which one is
+better, which one is better until you
+get to the best one and then that's how
+you kind of decide what to develop on.
+>> Exactly. And the real problem here that
+everyone runs into from my experience is
+just the fact that like these are
+complex multi-dimensional problems.
+You're you're indexing on the test case.
+You're indexing on the model. You're
+indexing on the prompt. You're indexing
+on any such variety of stuff.
+>> Which episode are we doing the email
+for? All that stuff could be variables.
+>> Exactly. Right. So like all that stuff
+just takes time to go build out and
+sadly there's no shortcut and the best
+thing you can do is like well I mean we
+do have a shortcut which is you use LM
+to generate all the code so you don't
+have to build it. And we spend we went
+from nothing to fully running the test
+suite to actually viewing multiple
+models to actually having a UI that we
+can go eval stuff on in less than an
+hour.
+>> And we deleted all the code once.
+>> And yeah, and we deleted all the code
+once. Um
+stuff is really fast now. You just have
+to go like go do and this is going to be
+way faster than like any automated LM
+evalu.
+And it's not that it's naturally going
+to be better. It's just that I don't
+have a clear definition for what a great
+email is. So I can put LM as judge, but
+like I don't even know what's going to
+judge him. Like it's not going to be
+very helpful right now for this.
+>> Right. You need to get your judge prompt
+really well and eval that separately.
+>> Exactly. Exactly. And if I were doing
+LMS as judge, what I would do here is
+I'd write another prompt to go and eval
+the email at the very end here to say,
+"How is this one good?" And then I'd
+literally write the annotation here of
+what the judge says. And then I can eval
+the judge prompt while evaling the main
+prompt. And it becomes this huge meta
+problem along the way. VJ you had a
+question.
+>> I just have an afterthought again. Uh
+because we are discussing evaluating uh
+the structure of emails. Naturally since
+we are trying to develop the entire uh
+email structure um recently we did one
+implementation of outbound uh email uh
+like email sales and we noticed that for
+example we were targeting uh executives
+for a small segment and none of these
+executives actually read their emails.
+It was it was LLMs doing their emails.
+So we sat and you know evaluated all of
+these complex systems like you just
+mentioned. Turns out they don't care. So
+they wanted it in a particular structure
+in a particular format without uh
+complex uh URLs or images or whatever.
+So the point is I think it's not just
+about uh getting the structure right but
+it is about actually understanding the
+entire end to-end use case and see how
+this brings impact to the business
+because we need to keep that in
+perspective as well at end of the day
+that that outcome is what is uh
+delivering value and not uh this
+particular outcome does that make sense
+>> I think that's a great way to put it
+>> yeah and like like I I think what I
+would do here is just like if I were
+building this out more holistically like
+there's small checks that I would build.
+For example, how many of the links here
+are made up versus valid.
+>> Yeah, that can be your like runtime
+guards, right? Is like go try to fetch
+every link and make sure that it
+actually returns a 200 or whatever.
+>> Yeah. Or I could just do that only in my
+evalu. I don't actually have to go do it
+everywhere. I can just purely do in my
+evalu.
+>> Yeah.
+>> I can go validate that like there's no
+placeholders like this one. Like if
+there's like a word with like a bracket
+with like the word here on it, I can go
+detect that and detect placeholders
+because that seems to be a pretty common
+pattern
+>> and there's like any such thing that I
+could go build slowly over time to make
+the system as good as I need it to be. I
+think Sylvia had a question a while ago.
+I don't know if the question still
+exists.
+>> I think it was addressed.
+>> Okay, awesome.
+Um, with that, any other questions
+before I we get to show off something
+really freaking cool today?
+>> All right, this will be your teaser
+preview for the next. You got to come in
+and push this though.
+>> Okay, let me push it.
+Uh, made some change added. Uh, Eval
+system. Let me make sure I did not
+accidentally check in my file. Yes, for
+comparing models plus test cases.
+We're not going to be able to go deep on
+this because we don't have time, but
+this will be your teaser for next week.
+And I think yeah, next week it seems
+like there's a ton of interest in doing
+um doing like a how do we do context
+engineering for coding agents like cloud
+code and Gemini CLI and stuff like that.
+>> I pushed um I will let you screen share.
+I thought this is the coolest thing I've
+ever seen. Um I'll give a little primer
+um because I'm usually very very suspect
+on most things. Um, but like vibe coding
+is kind of annoying. Um, but I think
+vibe coding is a different kind of
+coding than cursor or anything else is.
+And like I think when I first met
+someone that was trying to go do this, I
+was just like, ah, cursor just feels
+wrong. And we saw an examples of it
+today. Like what I'm really trying to do
+is I'm not really writing code. I'm
+watching the code.
+And like that showed me something that
+was really freaking cool. uh which is
+what does an ID look like if your
+primary incentive
+is to like watch the code not write the
+code yourself.
+Is that a good description Dex?
+>> Yeah, I think that's right.
+Um so this is kind of our tool for
+multipplexing cloud codes. This is open
+source. We can go deeper next week, but
+this is a system that lets you run lots
+of cloud codes in parallel. Um
+so I can say start bootstrapping a new
+Nex.js JS app.
+So I have one claude running and doing
+the bootstrapping. I have another claude
+building a plan to research the current
+codebase and find the streamlet app and
+go through all of this. Um let's see we
+are tracking the to-dos here. Um but
+basically the interesting thing here is
+not like hey there's a UI on cloud code
+that's a little bit nicer. The
+interesting thing here is really like
+the process that we use for uh prompting
+Claude to do this like continual
+compacting markdown and doing context
+engineering by using sub agents to
+research and fetch things and sort of
+like I think um I forget the source
+graph um CTO talked about this at AI
+engineer which is like the skill of
+wielding coding agents. If you just
+shout at claude what you want, you're
+not going to get great results.
+Um, but if you are able to kind of wield
+the agent, well, then um, all right.
+See, this is this one's not going to
+work because it's going to have to do
+uh, a bunch of shell things. Um, so
+there's still certain things that we do,
+but essentially like what we what we've
+been doing a lot at Human Layer lately
+is basically like closing the editor.
+Um,
+and what we do have is uh
+we we do a lot of like reading
+implementation plans. Um, and so this is
+what we're editing right now is like
+markdown files that talk about the code
+and how it's going to change because if
+you can get this right, then the
+implementation is always really really
+clean. And so we spend way more time
+reviewing and like nitpicking these
+implementation plans. that talk about
+what the architecture is going to be
+than we do actually um
+nitpick like I barely review code
+anymore and like I said I haven't opened
+a file in an editor in like a month
+because we mostly just look at these
+plans and so everything we're doing is
+open source we'll keep the specs is the
+thing that we're not publishing just yet
+um because that's the valuable thing
+because if an AI agent is good and
+you're prompting it right then you can
+take any spec and turn it into working
+code um
+>> so anyways that's uh That's a little
+preview. Um, if you're interested in
+playing with this, um, happy to I'll
+I'll throw a link in the in the email.
+There's we have a weight list sign up.
+Um, especially if you like superhuman or
+you like using Vim mode and you hate
+touching the mouse. Um, this is a really
+fun set of tools that we've been messing
+with and uh, curious to see what people
+think.
+>> Questions, thoughts. Vib, what do you
+want? What do you want to see here? I
+mean number one thing I saw is like look
+the infrastructure for me of like
+setting up git work trees and all this
+other stuff is just annoying and like
+this you just want something that kind
+of does that for you. That's why I found
+it personally kind of interesting.
+>> Oh the work tree stuff. Yeah, we should
+talk about we can talk about work trees
+next week too. Um we haven't built in
+work tree support for this yet but um we
+have a bunch of prompts that make it
+pretty easy to create work trees for all
+this. Um but
+>> yeah, it'll be fun. I think like
+multipplexing and like five coding in
+general has been really good. Maybe I'll
+get someone else from my team to show up
+as well who's I think is a much better
+vibe coder than I am. As we all
+discovered, I delete my code way more
+often by accident. Um, but I'll show
+that off in a bit.
+Um, with that, um, I think that's it for
+today's episode. Unless someone's got
+one last question. Uh, we'll take one
+more if there is one. Otherwise, we're
+going to log off and then we'll come
+back next week where we'll talk about
+actually like what the full vibe coding
+workflow is for like building agents.
+Yeah, we're going to make all of you
+99.9th percentile vibe coders. It's
+going to be it's going to be a good
+time. And if anyone has a cool vibe
+coding workflow that you want to share
+next week, like think about it and we
+can maybe have people do like one to two
+minute demos.
+>> Sorry, was there a question?
+>> Oh, I was just saying I'm not trying to
+be a 99th percentile vibe coder yet. I
+feel like I got to be a 99th percentile
+coder first.
+Uh a lot of people are skipping that
+part.
+>> People I think the way I I I was also
+very skeptical to be completely honest
+of that. But like the thing that has
+changed my perspective is like my gut
+instinct is not to use AI. And I think
+the part of the reason is like one I'm a
+I feel like I'm a very efficient
+developer. So I write code generally
+fast. two, I kind of feel like AI I was
+like I have this natural bias because
+I'm still thinking about GPT35 and GPT4
+sometimes about the limits of today's
+models and I'm like ah yeah I can't do
+that but what I've been trying to do now
+is I have a new policy which is like for
+any feature I implement I spend 10
+minutes on clog or cursor or something
+like that and after that what I end up
+doing is at the end of 10 minutes I
+either decide do I think I'll finish
+this task in 30 minutes or not if the
+answer is no then and I go back to
+coding. If the answer is yes, I stay
+vibe coding. And it has been a really
+good mental model for me to get over.
+>> You're doing something that I think is
+really important, which is Jeff Huntley
+calls deliberate intentional practice.
+>> Yeah. And it's just like I have to I
+have to muscle my way to do this.
+>> The reason why I've been so skeptical is
+because I've been like coding for less
+than a year and a half at this point. So
+I'm just like I really want good
+foundations.
+>> Yeah. Yeah. the the maybe I like I said
+it's hard to know. I don't know what's
+best or what's wrong, but I'm just
+sharing my practice. But we'll talk
+about the stuff a lot more and like
+other things that we've been having the
+team do uh to get better at like
+shipping code faster along the way.
+>> But that's the idea is like it's it's
+it's good to just try it for I actually
+really like what you just said by Bob is
+like let me try it for 10 minutes a day
+before I go start to do my old thing.
+And that's like
+>> 10 minutes a feature not 10 minutes a
+day
+>> if you are going to learn anything. Um,
+and the LM is essentially a very complex
+instrument and we all need to learn to
+play it. And the problem is is that they
+ship a new version of the instrument
+every month and you got to learn to play
+that one too. Um, but I think that's the
+future is going to look a lot like um
+something that is a little more art than
+science and something that is a lot more
+feel than than concrete. But if you can
+stay on the bleeding edge of of of what
+the best in class looks like in that
+world, uh you're gonna be you're gonna
+reap rewards.
+>> Anyway, we'll chat more about this next
+week. Um for this week, uh that's it. We
+talked about how to evalu
+dashboards as you build them. Post
+screenshots conversations always live on
+the Discord if you guys would like or
+send us an email.
+>> Awesome. Super fun. Thanks. Bye, Bob.
+Thanks everybody.
+>> Bye everyone. owned by Dex.

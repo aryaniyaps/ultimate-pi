@@ -1,0 +1,517 @@
+we started with prompts we then explored
+prompt chains now it's time to put it
+all together into an agentic workflow
+all of these prompts tools libraries AI
+agents and chatbots are completely
+worthless if they don't help you solve a
+real concrete problem let's look at one
+of the many unexplored use cases you can
+use a gentic workflows for to drive
+valuable end results so here's a simple
+blog post you can see we have a big H1
+we have a couple PS we have a small list
+here and then we have a table but of
+course this is not a normal Blog the
+data that drives this table is built
+entirely off in a gentic workflow that
+updates by itself without intervention
+let's go ahead and nuke some data so I
+can show you exactly what this looks
+like so I'm going to remove the Claude
+3.5 Sonet Row from this table and our
+agentic workflow will notice that
+there's a new model that hasn't been
+captured and it will read it so I'll
+move over to the data set and I'll
+remove clae 3.5 Sonet this is the Json
+row that is populating this table and
+now you can see we don't have that row
+it's completely missing so now we're in
+the state right before anthropic
+announced Claude 3.5 Sonet so now let's
+go ahead and run this agentic workflow
+and then we'll discuss exactly how it
+works so you can see it's opening up
+every page it's doing the scraping it's
+running the retrieve step it's running
+the trigger step it's running the
+agentic step and we're going to break
+these steps down in just a second
+including the notifications that you see
+on the screen that's my mobile device
+right here and that's going to be one of
+the critical steps of this agentic
+workflow we need to know when something
+important happens if we're by our
+primary device or if we're out we need
+to know what's going on with our
+workflows right now we are running our
+agentic these are our prompts our AI
+agents our flows you can see there we
+detected a change and now we have a
+brand new notification I can also open
+up these notifications on my device here
+and you can see here we have a new model
+Claud 3.5 Sonet has been added to
+anthropics lineup with an input cost of
+three an output cost of 15 so this is
+awesome right this happened
+automatically I was notified right on my
+device this is one of my favorite
+notification tools this is called ntfy
+also pronounced as just notifi and it's
+a really really clean simple HTTP based
+Pub sub notification service definitely
+check this out I'll leave a link in the
+description but I think this is one of
+the crucial steps of building out
+agentic workflows which we're going to
+talk about in just a second I think
+there's a flow to this I think there are
+specific steps that I keep seeing as I
+keep building out these workflows and in
+this video I want to share them with you
+and walk through this code a little bit
+to really show off how you can build
+agentic workflows end to end so let's go
+ahead and hop back to the site and
+actually see that change so you can see
+we now have that Claude 3.5 Sonet back
+in our table the data driving this table
+the data driveing this blog
+automatically updated it and it's all
+thanks to this full complete agentic
+workflow this is where the Channel's
+going this is a piece of the future that
+we have been gnawing at video after
+video building software that works for
+us while we sleep so let's go ahead and
+dive into this let's see how it works I
+manually kick this workflow off how this
+will actually work work is it'll be
+scheduled just like this and it'll run
+over and over and over so let's go ahead
+and just kick this off while we discuss
+this this is just going to be running in
+the background so imagine you have an
+agent farm that is just running
+arbitrary agents for you it has you know
+5 10 15 different agentic workflows that
+operate on your behalf in the background
+while you're going about your day this
+is one of the key steps of the agentic
+workflow we're going to break down this
+is the trigger step so you can see here
+I'm using this simple python Library
+called schedule it's very very clean
+simple and easy to read you can see
+every 10 seconds I'm running a test job
+and test job is just going to print and
+every minute I'm going to run the real
+prompt chainable for llm prices this is
+the full workflow that we started
+building in the previous video you can
+see the workflow just got kicked off
+again it's been 1 minute so our agentic
+workflow is automatically kicking off
+it's running the triggered step it's
+running the retrieve step and now it's
+running our agentic this is where it's
+run running prompt chains on the scraped
+data and it's making the decision
+whether there are any new models on any
+one of our configured items and you can
+see here it decided that there are no
+new models detected there's no summary
+to write our workflow just continues to
+run in the background here I think
+breaking down your workflows into
+concrete steps is going to be the most
+helpful for you so you can see the first
+thing that happens is of course the
+workflow gets triggered next We Run The
+retrieve step this is where you're going
+to be pulling in all the information
+you need for your agentic workflow to
+run sometimes this is going to be from a
+database sometimes going to be from a
+file in my case I need to scrape a
+couple websites and then operate on the
+information scraped so this is my
+retrieve step I'm saving this
+information so that future steps can
+work on it so the next step is the
+agentic step this is when you're
+actually running your prompts your AI
+agents your assistants whatever
+combination of prompts you've built up
+this is where you're going to run that
+so in my case I'm going ahead and
+looping through each one of the
+providers
+and this represents a single block here
+so we're going to Loop through each
+provider we're going to look at the
+scraped content for that specific
+provider so what was the content scraped
+for instance from anthropic and then for
+each one of those we are going to run
+this prompt chain we covered this in the
+previous video when to use prompt chains
+I'm going to link that in the
+description definitely check that out
+there's a lot of valuable content in
+that video including this minable
+chainable class that you can use to
+build out promp chain CHS that have back
+references to the outputs of previous
+prompts and you can also pass in context
+to use in every specific prompt again
+I'll link that in the description
+there's a lot of value packed into that
+last video so we run our prompt chain
+now after this runs we're going to have
+our table results for this specific
+provider we then store those results and
+that completes our hentic step after
+that we now are running the act and
+notify step if you are running tool from
+your agents your act and agentic step
+will be intertwined you can also notify
+directly from your agents I like to
+separate these steps out I'm just
+running prompts and then after that I'll
+operate on the results and now I'm
+looking for changes detected so I have
+this function that detects if something
+changed between the new scraped values
+that you can see are getting scraped
+right there from open Ai and than the
+previous results that we already have
+saved right because that's how we can
+tell if something is changed right we it
+against the previous result you can use
+an llm for this you can use raw code for
+this that's completely up to you and
+your implementation I do think over the
+Long Haul more and more code and we'll
+talk about this when we go over the five
+tips for building agentic workflows I
+think a trend we're going to see is as
+these models progress and as we improve
+our abilities to operate with models and
+prompts and prompt chains all the way up
+the stack we're going to be writing less
+code and handing off more of the work
+that needs to be done to agents so we
+get changes detected this is is going to
+be a simple bulling if it's false this
+is just done right and we've seen this
+happen several times here uh no summary
+detected that happens if there's no
+summary detected here by our agents we
+summarize the changes if some changes
+were detected using the incredible Sonic
+3.5 model here just to look to see if
+there are any changes that are
+significant if there are we go ahead and
+update our table rows and then this is
+really cool this is where our notify and
+our commit and push step happens if we
+actually detect changes and we can dig
+into this prompt this is not something
+we talked about in the previous video so
+this prompt is pretty simple basically
+you give it the previous Json data
+current Json data and then we just want
+a summary of the changes in this
+specific Json format right so we're
+looking for this we want a summary if
+there is one if there's no significant
+change just return you know true or
+false and you know again we're running a
+prompt that drives the outcome of the
+application that's what makes this in a
+IC workflow it's driven by the reasoning
+of your prompts after we have our change
+summary we then check that variable
+that's returned again right from our
+agent and if there's a summary detected
+we then run our notification right
+that's how we got our notification to
+our mobile device and any device we have
+subscribed to this specific notification
+topic that's when we got our message
+there and then this step is not filled
+in yet because this code isn't live yet
+but we have this commit and push step
+step this is currently unimplemented but
+you get the idea right once our gentic
+workflow detects a change and we push to
+this file with the change inside of it
+we are going to commit and push this to
+production or you know staging however
+your workflow works we are giving our
+agentic workflow full control and we're
+giving it the ability to say when our
+agent says we have changes we go ahead
+and push those changes up we let our
+agent drive that behavior and then that
+completes the final step of course you
+can see there we're kicking off again so
+that's a large part of how this works
+let me just go ahead and work through
+those individual steps one more time I
+think that's the most important thing
+that can really help you build and drive
+your own agentic workflows this is a
+sequential agentic workflow so there are
+predetermined steps that I'm driving my
+prompts through that I'm driving the
+prompt chain through this isn't a you
+know group chat conversation or a
+multi-agent conversation the common
+example you've seen is do some research
+on this topic and you have you know four
+agents with different capabilities and
+they just run off this is what I like to
+call a sequential agentic workflow so we
+have predetermined steps for how exactly
+we want things to work and what exactly
+we want to have happen right so I think
+they're going to be different types of
+agentic workflows all working up to the
+final type which is a workflow that is
+basically prompting you for information
+and then it goes off and does all the
+work that's for a much much uh later
+video let's go ahead and look at these
+steps so we have the trigger step this
+starts your agentic workflow you hit an
+API where your scheduler kicks off like
+we're doing here right we have auler
+that's triggering every n amount of time
+to start the workflow a lot of these
+workflows are going to be triggered via
+a you know UI so that's the most
+important part right obviously uh you
+need to start the workflow somehow so
+that's step one I think step two is then
+retrieve in this example we are scraping
+a couple websites to gather information
+about the models that we want to display
+on the site right so you know we're
+looking at U vertex we're looking at
+open ey we're looking at anthropic just
+pulling in some information letting the
+agents run on that and then that all
+gets formatted into the output here
+right but we first need to retrieve
+information this will sometimes come
+from an API a database you know a local
+file uh message you know some type of
+Pub sub or web scraping in this example
+right so this is a ret step I know I've
+mentioned that I am anti- rag on the
+channel before that is true but for sure
+there are some cases where you just have
+so much information that you need to use
+some type of chunking mechanism my
+advice there is to keep the chunking as
+simple as possible as the context
+Windows of every model increases and the
+price goes to zero and then the next
+step right so of course this is what
+really differentiates agentic workflows
+from just normal code right because at
+the end of the day that that's exactly
+what this is right it's code code
+powered by a reasoning system and so
+what we end up doing here we run our
+prompts that solve your problem so this
+is you know your prompts prompt chains
+or AI agents if you're using the
+assistance API you're doing that this is
+where the tool calling happens this is
+where all the magic happens right then
+we have the ACT step this is where we
+actually act on the information
+retrieved calling tools and this
+officially completes the task at hand
+right so now we're updating files we're
+updating databases we're updating the
+API we're updating the UI Etc right in
+our case we are updating this file here
+right this is the end result this is the
+action that is caused by the workflow so
+we're getting these clean rows for our
+Blog then we have a learn step so I'm
+not going to dig into this too much here
+um this is a topic for another video
+this is where your prompts and your
+agentic step this is where it learns so
+my workflow does not have a learn step
+this is where your agent self-improved
+we're going to have several videos on
+this uh we're going to go ahead and just
+kind of gloss over this step for now
+because this is pretty advanced stuff
+that uh I'm still exploring and many
+engineers and researchers are still
+exploring uh so then we have the notify
+step right so this is the notification
+you saw I think it's really important to
+be plugged into your agentic workflow
+when something happens you want to know
+what's happening and you want to be able
+to observe when it's doing the right
+thing when it's doing the wrong thing so
+that you can come in improve your
+workflow or teach your workflow how to
+improve you just need to be aware of the
+results of the system just like you
+would any system nothing special there
+so that's the steps for the sequential
+workflow so that's what that looks like
+right let me open this up so you first
+trigger your workflow to get it kicked
+off you retrieve any information you
+need to run your prompts your agents Etc
+you then run your agentic this is the
+key step you then act on that
+information you act on the results of
+your agents you then learn if there's
+anything that your agents need to learn
+from that Run Cycle from that iteration
+and then you notify right this is where
+you're alerting yourself this is where
+you're making sure you're logging and
+making sure that this information of
+this agentic step can be easily
+attainable for this workflow I built up
+this simple system where I have the
+outputs running and it just uses you
+know a date time stamp and it contains
+all the information I need to look back
+at the individual runs so here we can
+see the model pricing output for this
+one even if it wasn't used and pushed to
+production we can also see the scrape
+results we can see the prompts that were
+being built for each provider we looked
+at a lot of this in the previous video
+again refer to that to dig into more
+detail of what exactly rest stored here
+but I think it's really important to
+have a full built out logging system you
+can dig into I'm using some really basic
+file logging here because it gets the
+job done fast so I think this is a good
+breakdown of the sequential agentic
+workflow steps right trigger retrieve
+run your agentic act on the results of
+your agentic update your AIS with any
+important information that will help
+them improve then you notify yourself
+you notify the Builder you notify and
+you log the results so last thing I want
+to talk about in this video I want to
+give you five quick tips for building
+out these agenic workflows the first
+thing that comes to mind is be
+incremental start with the bare minimum
+prompts start with the fewest
+abstractions the fewest layers and then
+slowly give your agents more abilities
+and autonomy slowly build up the prompt
+chain slowly make it more complicated
+give your agents more tools over time
+really really start simple this is the
+fastest way to get some Real Results
+second tip I mentioned this before but
+use great logging and notification I
+think it's really really important to
+have a tool like notify that you can you
+know easily alert yourself easily alert
+you know any other Engineers that you're
+working with and and just really keep
+track of your system because how will
+you improve your system if you don't
+know the outputs and you can't debug it
+right so great monitoring leads to Great
+debugging and system level understanding
+uh don't skip this I I highly recommend
+running the state-of-the-art models
+first uh don't try to Chimp out on
+anything that um isn't just the best
+when you're building out these agent
+workflows if you're really trying to
+drive valuable business results just
+start with the best and if you can then
+slowly replace your models with cheaper
+models over the long term I've mentioned
+this before on the channel but all the
+costs of these prompts of all the great
+high class models the cost of all this
+stuff is going to zero it's all getting
+commoditized so you want to be using the
+best tool for the job and just getting
+used to the capabilities available to
+you right uh llms are just functions
+it's important to engineer your AG
+gentics as you would any other function
+right when it's time to call your AG
+gentics when it's time to test when it's
+time to maintain these systems it's just
+a string in string out function I think
+as epic and as awesome as these tools
+are I think it's important to keep that
+in mind right underneath all of it you
+have a black box where a string goes in
+and a string goes out all right so build
+for tomorrow this kind of Loops fully
+back to tip one be incremental over time
+you should be giving your agents more
+abilities and autonomy and writing less
+code I do think that in the end you'll
+find yourself writing less code and
+giving more tasks and work to your
+agents I think this will take time I
+think we're going to have to build a ton
+of agentic workflows which is exactly
+what we're going to be doing on this
+channel but I think we will get there
+over time we're going to be writing less
+code we're going to be doing less of the
+individual lines and instead of using
+you know conditionals and if statements
+and loops and all this stuff we're going
+to give those capabilities to our agents
+and they're going to do it for us so
+that's where we're at let me know what
+you think about my five tips here for
+building agentic workflows do you agree
+do you disagree with any of these you
+know let me know what you think about
+the sequential agentic workflow steps
+these are getting built out more and
+more not a ton of people are building
+out full end to-end agentic workflows
+this is where we're going on the channel
+this is what it's always been about
+there are a lot of cool stop gaps on the
+way but to me this is the killer use
+case for this incredible technology
+we're building out living software we're
+writing and Building Things that builds
+on on our behalf while we sleep and the
+auto updating Blog the auto updating
+table here is one of many first examples
+and pieces of living software we can
+build that uh we're just getting started
+with so you can see there uh you know
+still auto updating thanks to the
+Schuler that's it that's a Full Circle
+here and uh thanks so much for watching
+sub comment like and I will see you in
+the next one

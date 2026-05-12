@@ -1,0 +1,623 @@
+what's up Engineers welcome back I got
+to be honest this is the first time I am
+genuinely impressed by a local on device
+small language model lva 3.2 came out a
+couple days ago in several varieties I
+want to focus our attention today on the
+1 billion and 3 billion parameter models
+that were created to run specifically on
+device up until now I've largely ignored
+local models we've created a couple
+videos on them over the course of the
+channel but I don't use them at all in
+my day-to-day developer workflows I
+think that's going to be changing very
+soon often times as these models come
+out though you likely have the same
+question I do how good is llama 3.2
+really it's important to understand when
+to use local models and that all comes
+down to knowing what they can do in
+comparison to other slms and big-
+hitting state-of-the-art large language
+models what do you know I've created a
+notebook for you and I to do that very
+thing this notebook is built on top of
+AMA and Maro in this video I want to
+share with you how I'm breaking down
+both the llms and the slms and comparing
+them to know when local on device slms
+like llama 3.2 are ready for your use
+case so we've made a couple improvements
+to this notebook from our previous video
+you can see here we're now selecting
+three models let me go ahead and add
+53.5 Quinn 2 .5 let's go ahead and do
+the Llama 321 billion parameter you can
+see I have Gemini 1.5 flash2 and let's
+go ahead and pick up Sonet as well so I
+have seven models selected and let's
+just go ahead and run a test uh ping
+prompt and hello prompt I'll drop the
+temperature to zero for maximum
+instruction following and hit submit so
+right away in this reactive notebook you
+can see here we have all of our selected
+models listed and we have our selected
+prompts as well so this notebook is
+loading from just a directory of prompts
+you can see here we have a really simple
+ping prompt and a hello prompt right
+hello my name is Dan are you ready to
+build and Below you can see we have a
+nice clean progress bar we have our
+local models running on ama ama LS you
+can see a variety of local models I've
+installed recently and over the course
+of you know 6 months so these slms are
+running right on my M2 MacBook Pro which
+is really awesome given these models can
+perform so let's go ahead and see how
+they're performing on these basic
+introductory prompts so in this ping
+prompt here I'm looking for a simple
+pong response so let's see how every one
+of these models performs across this
+prompt so of course we have gpg 40 mini
+pong how can I assist you perfect we
+have llama 3.2 with a ping um you know
+it's starting to talk about the um bash
+ping command that's often where these
+models get kind of confused we have
+flash O2 um again same kind of deal
+we're just looking for a pong response
+fi is giving me a entire lecture on PING
+which okay didn't ask for that Quinn 2.5
+really really good clean pong response
+we have the 1 billion blowing up and of
+course you know state-of-the-art CL 3.5
+pong I'm ready to help what can I do so
+that's great um you know kind of
+expected results so in this notebook not
+only can we compare prompts across
+several models we can also rank them so
+this is really cool I want to share this
+with you if we scroll down to the bottom
+here we have this table and we can go
+ahead and just check all these items and
+we can vote on these items so let me go
+ahe and reset so with the rankings reset
+you can see here we have SIMPLE
+scorecards and the idea for this
+notebook is to as you're walking through
+prompts and comparing prompts against
+multiple llms you can just come down
+here and vote on your selected outputs
+right so let's go ahead and keep a tally
+on which prompts are actually performing
+the way we want them to and which which
+ones are not passing the test right so
+let's go Ahad look at our hello prompt
+so you know this is just another simple
+introductory prompt hello my name is Dan
+are you ready to build so if we look at
+the responses for this we can see a
+variety of things hello definitely ready
+to build nice uh 3.2 I'm more than ready
+to build all right let's let's go uh
+flash two you has some ready to build
+tell me what you have in mind F uh great
+giving me a whole lecture here again
+that's uh that's more than enough coin
+2.5 you know giving me a pretty solid
+response here L 3 .1 super concise and
+of course Sonet uh you know decent uh
+response there right I'm going to go
+ahead and just select all these and
+we'll just give everyone a free couple
+points here right so that'll increment
+every model by two since we had you know
+two prompts running against every model
+so we'll do that and then let's go ahead
+and run some more prompts so so in this
+drop down here you can see I have a
+whole list of prompts across a couple
+different domains we have some basic
+ones here we have some coding we have
+some context window testing some bash
+command generation string manipulation
+so on and so forth right so the whole
+idea with this notebook is to be able to
+walk through specific prompts that
+you've run in the past and walk through
+specific use cases for your prompts
+against different models to see how they
+perform side by side so let's go ahead
+and run some more right uh python count
+to 10 and python multi-length counting
+we submit here and you can see we're
+kicking off there remember we have two
+prompts seven models that's going to
+make for 14 executions so so let's look
+at our basic python count to 10 XML
+prompt you can see here we're using the
+XML format for the best most concise
+results the purpos is to count to 10 in
+Python then we have a couple
+instructions and then in our multi- lay
+counting we're basically doing the same
+thing count to 10 then zero and then
+we're asking the model to generate those
+results in several other languages and
+of course we have a couple instructions
+here the main one here is respond only
+with runable code and use markdown to
+format the languages with H1 and the
+code with back ticks so you know
+starting at the top here let's look at
+our python count to 10 right so this is
+a really simple function and you know
+the first thing we're testing here is
+respond with only runnable code who is
+doing that who's going to lose some
+points right away we see L 3.2 adding
+some extra text here we don't care about
+the extra text um we wanted it to follow
+the instructions closely so we're going
+to dock a point from uh 3.2 flash nailed
+it mini nailed it as well uh fi giving
+us a whole block here of Tex we don't
+really care about that Quinn right on
+the dot Lama 3.2 1B giving us some extra
+stuff here we don't care and Claw 3.5
+Sonet doing the best it's kind of hard
+to see but this is actually being
+displayed in markdown and I did say
+respond with only runnable code so you
+know if I was being really strict the
+only winner here is Claud 3.5 but you
+know we're going to be lenient in
+markdown is you know acceptable as well
+so we're going to take off a point from
+a 3.2 2 F and uh 3.1 all these on and
+then we'll remove here we'll remove F
+and 3.2 so let's see what our
+multi-length counting XML looks like
+right so we have 4 mini we have the nice
+H1 language code H1 language code H1
+language code same for SQL and Russ so
+01 nailing it we have lamba 3.2 it did
+add an additional string here but that's
+fine language code so types script 10
+bash 10
+to0 it's it has a note for us SQL is not
+temply used for this for sure but it
+still did it for us love to see that
+then we have R so that looks good Gemini
+Flash 2 uh same deal language output
+language output language output that
+looks good fi it's added several
+additional bits of information here that
+we don't really care about um it did
+find a nice result here for uh MyQ and
+postgress with the generate series
+function so that's a nice find from Fi
+Fi is invalidated here because it's just
+adding a bunch of extra stuff here right
+Quinn 2.5 python typescript bash SQL
+rust nice L 3.1 python typescript bash
+SQL rust has a note here so we'll dock
+that as well and then of course Sonet is
+going to be an absolute dream we know
+this is going to work perfectly so same
+Trend right in the end for the basic
+multi-length counting prompt uh we have
+to points from llama 3.2 from F and
+llama 3.1 1 billion parameters so we'll
+go ahead Mark those we'll cast our votes
+and you can see you know llama fi and
+llama 1 billion are a little bit behind
+here I got to say though they are doing
+a great job they're keeping up for the
+most part let's go ahead and clear our
+selections and let's run some more
+prompts so let's go ahead and run a
+single string manipulation prompt and
+we'll kick this off you know this is
+just a simple summary of the following
+test packs so here's a script from my
+previous YouTube video and it's just
+going to create some simple bullet
+points this was from the two-way prompt
+video so this will be a pretty simple
+win for every model 3.2 There's a
+summary there's flash giving us a nice
+bullet point list Quinn llama 3.21
+billion parameter and of course son it
+so that looks good we're going to go
+ahead and give everyone points here and
+move on to another prompt so let's look
+at a few prompts that are a bit more
+interesting let's run a couple of our
+personal AI assistant responses you know
+this is the prompt that you have set up
+for um your personal AI assistant if we
+open up this prompt here you can see
+when you're building out personal AI
+assistants you want them to respond in a
+specific way with some context right so
+imagine these are variables you have
+your assistant name you have your uh
+human companion and then as you're
+prompting this to the llm to create a
+response we're saying something like
+this right concisely communicate the
+following message to your human
+companion and we're saying select an
+image to generate a view component from
+and so if we look at the responses we
+want responses from our language models
+that communicate that back to the human
+companion of the AI assistant right so
+we have gpg 40 leading the way here Dan
+please select an image to generate a
+view component from perfect llama 3.2
+hey Dan can you please select an image
+perfect we have flash legit F great
+response as well and you can see here
+pretty much everyone PR everyone has
+done it right interestingly we have claw
+3.5 kind of adding a bit of additional
+information
+um if we look at the second assistant
+prompt kind of the same setup right we
+have our assistant and then we have our
+name and then we want our a assistant to
+communicate I found the URL in your
+clipboard I'll scrape the URL and
+generate example code for you but first
+what about the example code would you
+like me to focus on right so it's going
+to actually ask a question oh mini
+perfect right I found the URL on your
+clipboard I'll scrape it but first what
+aspect of the code example do you want
+me to focus on right so that's good same
+deal from llama 3.2 so you know llama
+doing a great job here it's it's keeping
+up it is making some mistakes but it is
+for the most part absolutely keeping up
+Gemini flash a nice kind of concise
+response I really like the response here
+from flash O2 uh we have five 3.5 Ada
+here got that link from Dan's clipboard
+that's kind of weird um ready to extract
+some scraping magic so this response is
+really interesting right it's a
+friendlier more kind of
+conversational uh response which uh you
+know isn't terrible not great we have
+Quinn 2.5 with a great concise response
+I'm really really impressed by Quin 2.5
+and then we have llama
+3.21 billion performing totally fine
+here and then Sonic doing well looks
+like every model has done a solid job
+here we're going to go ahead and give
+every model a vote and move on to our
+next prompt here so far we're just
+lagging a little bit from the Llama
+models and the F models model let's go
+ahead and take a look at a couple SQL
+generation prompts if we scroll to the
+bottom here we have a couple SQL
+statements let's go ahead and pull these
+in um let's run three prompts against
+our seven models so we'll go ahead and
+kick that off and as you can see here we
+now have our three nlq prompts and
+basically we're saying you know given a
+natural language query and a table
+definition generate the corresponding
+SQL statement we're converting natural
+language queries into SQL statements and
+and right away you can see here for
+omeni giving us a solid response this is
+correct it's off true and plan premium
+let's see if all the other slms follow
+we have Lama 3.2 nailed it flash nailed
+it fi nailing it but adding a little bit
+of ambiguity here with this premium with
+the Wild Card matcher here that's not
+exactly what we want um I am going to
+dock a point from fi for that but we can
+see Quinn llama Sonic performing great
+right so here another prompt um we're
+just looking for created after 2022
+right so another really really simple
+prompt you wouldn't assume models would
+mess this up but this is something that
+you want to test right and you know as
+I'm saying that we can scroll down and
+see5 3.5 fudging this because it's also
+giving us a bunch of extra text that we
+don't want we don't care about in the
+response we can see Sonic is making sure
+that this is a Tim stamp so I'm going to
+go ahead and dock two points from five
+and let's get to our third prompt here
+this is a simple order by updated limit
+three so you know we want the latest
+three orders based on updated date
+descending descending descending this
+all looks good again VI bombing it here
+giving us more information than we want
+everyone else though looks great so I'm
+going to go ahead and select everything
+here and we're going to dock a point
+from fi right so we're going to dock
+every point from fi and then cast our
+votes everyone's moving along here fi is
+now in last
+[Music]
+place I hope you can see why this is
+valuable right it's one thing to look at
+a bunch of benchmarks right like every
+one of these model providers throws up a
+bunch of benchmarks that you know you
+can assume more or less will be biased
+right you can assume more or less will
+be cherry-picked right like they're
+comparing L 3.2 90 billion parameter to
+ha coup and 40 mini they're kind of
+punching down in a way you know there's
+also the entire idea that the these
+models have contaminated test data so
+the benchmark test data is what's used
+to train the model so of course the
+answers are in there you know so there
+are a bunch of problems with these
+benchmarks and I think even more
+importantly than that having some
+multilanguage model tester or ranker for
+you to kind of check how it performs
+against your specific use case or is
+ultra Ultra valuable because it gives
+you that hands-on experience with
+running multiple models you know and
+there are a ton of other benefits of
+slm's you know local on device models
+privacy cost offline access content
+Freedom you can generate whatever you
+want and of course just the personal
+integration of being able to you know
+combine with all your personal data
+everything is inhouse right so there are
+many advantages to these slms I think a
+notebook like this can help you figure
+out you know okay so llama 3.2 is out
+how does it compare to Quinn how does
+Quinn compare to 40 and how does 40
+compare to Sonet right cuz I think we
+all have a good idea of how these top
+state-of-the-art models perform because
+we use them all the time but this tool
+is super impactful and can be really
+helpful for you in helping you offload
+the work that these models are doing for
+you to a simpler local model especially
+as the model sizes decrease and the
+accuracy continues to increase there are
+a couple key pieces I want to share with
+you here let's go ahead and look at a
+couple of code generation prompts I'm
+going to run these two code generation
+prompts we'll keep the temperature at
+zero same models and we'll just hit
+submit here we can dive into this method
+and we can see exact what it looks like
+right so we have a super simple one
+prefix string ABC 2 and then we have the
+proposed output right then we have
+another one is palindrome returns true
+if it's a palindrome false otherwise
+right so another really simple prompt
+we're just going to run through this and
+we're going to see are these models all
+good enough to do these really basic
+things I think the answer is pretty
+confidently yes it's so cool that I have
+some slms running all this on device so
+you can see here really simple right
+this is just prefix string you just
+multiply so along with 3.2 is going to
+lose a point here it's got the
+formatting a little fudged flash has the
+answer super concise super safe great
+code with examples love to see that it
+is adding a bunch of additional
+information though uh to be clear you
+know this is something that I could have
+improved in the prompt this prompt is
+just saying implement this function I'm
+not saying don't specify details so we
+can't really dock points for that so
+we'll allow flash to get away with that
+one uh we have fi 3.5 giving us a nice
+solid answer quein
+Sonet so on and so forth right and then
+we have our second code generation
+function is palindrome it's really
+interesting to see how every model is
+going to come up with a slightly
+different answer of this let's go ahead
+and just look through this um again
+llama giving us some weird output there
+flash is looking really good here it's
+giving us several versions and then we
+have fi doing a decent job here giving
+us a really kind of simple pythonic
+answer Quin 2 decent answer there llama
+1B uh frankly outperforming
+3B which is super interesting to see and
+then of course claw 3.5 so again pretty
+good we're going to dock a point from um
+llama 3.2 for some weird formatting but
+everything else looks good so we're
+going to tell up our votes there so you
+can see the scores here so far we have
+Lambo 3.2 lagging a little bit fi in
+last place 1B kind of hilariously a
+little ahead but then you have kind of
+the next class of models all kind of
+lined up the big call out here is that
+coin 2.5 is eff L operating as a smaller
+size you know state-of-the-art model
+which is really really cool to see again
+Quin 2 is running on my device right um
+that's coming right out of you know AMA
+and if we look at AMA a coin 2.5 this is
+a 7 billion parameter model so you know
+small this is this is running on my
+device locally for free 128k contact
+window very good model and honestly
+Quinn 2.5 was not on my map previous to
+actually running this experiment
+although I really expected a bit more
+from llama 3.2 we also have to consider
+that llama 3.2 is a 3 billion parameter
+model here so you know it's going to be
+not as great for
+now there's one more test I want to
+share with you that is kind of
+interesting so I have this needle in the
+haste deck context prompt where is that
+um yeah so we have these context window
+prompts and I'll just select one of
+these and and we can dig into what
+exactly this is doing so if I hit submit
+here you can see that um I actually have
+a really really long script and I'm
+passing this in to my on device models
+and I'm asking a very very specific
+question about this script right so this
+is like the classic needle in the hstack
+test it's also you know specific
+information retrieval basically just
+asking what was the end year prediction
+made in this script below then I'm
+passing the script and the trick here is
+that it has to look through a bunch of
+text if we just copy this open up our
+editor and paste you can see here this
+is 5K token so not a massive amount we
+know that state-of-the-art models can
+handle this no problem but for our on
+device models like 53 this could very
+well this could very well nuke my AMA
+instance and kind of fry something or at
+least freeze so let's see how this
+performs hopefully this can push through
+I might have to drop 53 from this but
+we'll see all right so my computer has
+absolutely Frozen up here 53.5 is going
+to lose a point it is not processing
+this I'm going to go ahead and stop the
+instance here and we're going to um go
+ahead and just move on it could not run
+this you know 5K token prompt there
+that's okay that happens you can hear my
+computer here it's in turbo mode uh
+trying to wind down that 5 3.5 llama
+call let's go ahead and wrap up on a
+code explanation run so go ahead kick
+this off close up the context window
+prompt hit submit and this is a much
+simpler prompt right we're just asking
+cisely explain how I can use list
+comprehensions in Python in less than
+100 words so the 100w is the real test
+here and you can see here 4 mini nice
+concise response llama 3.2 also nice and
+concise flash is good we got to dock
+another point from
+f um throwing in some symbols there that
+doesn't make sense and actually this
+entire response does not make any sense
+we have Quinn 2.5 great Lama 1B I'm
+really really impressed with llama 1B
+it's crazy that this is a 1 billion
+parameter model doing all this work and
+of course Claude is fantastic so we'll
+drop a point from fi and everyone else
+looks great so we'll vote and so this is
+our end result here fi last place 3.2
+second to last place and then llama 3.2
+1 billion parameter doing a really
+really great job actually for a 1
+billion parameter model I mean if we
+look at the size on that on disk uh
+3.2 1 billion is only taking up 1.3 uh
+gab of of memory here so really really
+impressive really great tiny model and
+then of course we have 40 mini
+performing fantastically Claude of
+course we would not expect anything less
+and then we have Quinn and then we have
+Quinn performing insanely well um I'm
+going to be taking a look at more models
+in this fashion this is this is helping
+me understand where the rankings really
+really are in general and for you know
+my specific prompts my specific use
+cases I have a whole you know kind of uh
+personal library of these prompts that I
+like to test models against I'm going to
+load this up into this system and really
+give this some more testing so I hope
+the value of this makes sense by
+combining a kind of simple reusable
+notebook like Maro and the wonderful
+local model provider and deployer AMA we
+can really really quickly just test out
+these models in comparison to each other
+right it makes a whole world of
+difference to see these results side by
+side versus in some Benchmark or off
+some blog or off some Twitter post that
+someone randomly tweets out right
+language models are really interesting
+in that you kind of need to have a feel
+for them and the feel comes from testing
+and validating them side by side
+comparing these models in a relative
+basis is a really great way to get
+results and to understand their True
+Performance another kind of shocker for
+me was a 1.5 flash O2 this model is
+performing really really great and it's
+a small cheap fast model obviously it's
+still from Google it's still a
+cloudbased model but I'm really really
+happy with the results here let me know
+in the comments sections what type of
+prompts do you want tested and what
+models do you want to see those prompts
+tested against we now have this reusable
+notebook where we can come in add models
+and select different prompts at
+different temperatures and really
+understand how these prompts run against
+multiple models so this notebook is
+going to be in the description for you
+you should definitely take this test it
+against your prompts test it against
+your use cases and get a better
+understanding of how these models
+actually perform because although the
+local models are not quite there these
+models will be ready for your specific
+use case and these slms will be able to
+run right on your Hardware thanks for
+watching hit the like hit the sub and
+I'll see you in the next one

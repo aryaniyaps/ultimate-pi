@@ -1,0 +1,755 @@
+For the past week, I've been working
+through agent skill issues. Now you have
+agent skills, sub-agents, custom {slash}
+commands, output styles, plugins, hooks,
+memory files, and MCP servers.
+What is this all for? I've been using
+Claude Code since it was first available
+in February. Since its release, I've
+generated more code than in my previous
+15 years as an engineer. This tool has
+changed engineering. But this once
+simple tool has gotten complex over the
+year. So let's simplify it. Skills are
+simple, but they're so similar to MCP,
+sub-agents, and custom {slash} commands,
+it's hard to know when to use a skill.
+There's a right way to think about
+skills, and there's a wrong way. I want
+to show you both to make it absolutely
+clear what this feature can do for your
+engineering. Skills are powerful, but
+you should not always build a skill.
+Let's make sense of all of these
+powerful Claude Code capabilities.
+Let's first look at the wrong way to use
+skills to solve an engineering problem.
+Here we have a skill on the left, a
+sub-agent in the middle, and a custom
+{slash} command on the right. Bam, bam,
+bam. If you're parallel agent decoding,
+generating multiple solutions at the
+same time, you've likely created Git
+work trees. Here's a question for you.
+Which one of these three ways is the
+right way to create your Git work trees
+or manage your Git work trees? To answer
+this, we need to understand how these
+features really differ. On the top here,
+we have four key features we're going to
+compare side-by-side. Now on the left,
+we have capabilities. So let's start
+with the three most important
+capabilities. Skills stand out here
+right away because they're triggered by
+your agents. If you give your agent some
+direction, they will trigger the right
+skill. Sub-agents are very similar in
+this way. Unlike {slash} commands where
+you're explicitly kicking this off. We
+then have context efficiency. Now this
+is a huge selling point of skills.
+Unlike MCP servers, which explode your
+context window on boot up, skills are
+very context efficient. This is
+something that they talk about a lot,
+which I think is super, super important.
+I'm glad that they're going into detail.
+There are three levels of progressive
+disclosure. You have the metadata level,
+the actual instructions of your skill.md
+file, and then you have all of the
+resources that your agent pulls in from
+your skill when it needs. All right. The
+last thing here is context persistence.
+The only loser here is sub-agents. But
+of course, this is what makes sub-agents
+great. Sub-agents isolate and protect
+your context window. Shareability is not
+that important. You can use Git, you can
+use plugins, you can share these.
+>> Dan, your entry work tree is live on
+ports 4020 and 5193, ready for parallel
+development.
+>> Nice. All right, so we got one of our
+trees there. Sub-agents are the big
+winner if you're looking to parallelize
+your workflows. Dan, I've successfully
+created and started your yellow tree
+work tree on ports 4010, and it's
+running now.
+>> so we have our red tree, blue tree,
+yellow tree. Fantastic. Okay. You would
+think that specialized ability is unique
+to skills. It's not. You can specialize
+any one of these features. And of
+course, you can share all of these any
+way you want. Now what is important is
+modularity. This truly differentiates
+skills. Skills are just like MCP servers
+in that you have a dedicated solution.
+It's even more modular than MCP servers,
+frankly, because skills have a dedicated
+directory structure, right? If we look
+at this skill, create work tree skill,
+the most important thing here is that we
+have a dedicated structure for building
+out repeat solutions that our agent can
+invoke, right? That is the primary
+benefit of skills. The modularity here
+is really important. It is high, all
+right? Unlike sub-agents and {slash}
+commands, where you kind of had to roll
+this capability out yourself, which we
+have done in previous videos. And then
+things get interesting here at the last
+level, where we start thinking about
+composition. Now this is where uh I
+think a lot of the confusion comes when
+we talk about skills, MCP servers,
+sub-agents, and {slash} commands.
+Specifically, skills and {slash}
+commands are very, very composable. In
+fact, you can circularly compose all of
+these items together, minus sub-agents,
+right? Because sub-agent cannot use a
+sub-agent. But when it comes to skills,
+skills can use prompts, skills can use
+other skills, skills can use MCP
+servers, and of course, skills can use
+sub-agents. So this is the feature
+breakdown. As you can see here, there's
+a ton of overlap. This is important to
+call out. It's the approach that's new,
+right? We get a dedicated modular
+directory structure, efficient context,
+right? Which again, we had with
+sub-agents, but these are triggered by
+our agents. So this is the
+distinguishing pattern of when you would
+use a skill over MCP, sub-agent, and
+{slash} command. Now I know this isn't
+super clear right away, so let's look at
+some dedicated, specific use cases on
+when you would use these four features.
+So skills
+are truly for automatic behavior. MCP is
+built for external integrations. We have
+sub-agents for isolated workflows that
+you can also parallelize. And then
+{slash} commands are manual triggers,
+right? Manual units of compute that you
+can deploy when you need them. The big
+battle here I see is between skills and
+{slash} commands. To be specific here,
+these are custom {slash} commands, all
+right? So let's look through some use
+cases. Automatically extract text and
+data from PDFs. So which of these four
+do you think this belongs in? As we work
+through this, make a good guess, and
+then comment down below how many you
+roughly got right, and if you were
+aligned with where I'm going to place
+these use cases, all right? So I think
+automatically, right? There's that
+keyword automatic. I think you want this
+to be a skill if you always want to
+extract text and data from PDFs. This is
+a skill. What if you want to connect to
+Jira? This is an external source, right?
+So we want of course an MCP server, all
+right? What next, right? Let's keep
+breaking these down. What if you want to
+run a comprehensive security audit? Now
+this one is tricky. This one is tricky,
+but I think because you want this to be
+able to scale, and because you don't
+really need this in your context window,
+and you don't want this to be automatic.
+You want this to occur at a specific
+point in time that you kick off, I think
+we want this to be a sub-agent. Okay?
+And so what about generalized, you know,
+Git commit messages? Now we have a
+simple one-step task here. Here's the
+tricky part about these, right? You
+could easily make this a skill, you can
+make it a {slash} command, you can make
+it a sub-agent. But which is best? I
+think this is best as a simple {slash}
+command, okay? What about querying your
+database? This is a classic one. You of
+course want an MCP server, all right?
+You at least want to start with an MCP
+server. We'll talk about composability
+in just a second here. So what if you
+want to fix any bugs and failing tests,
+and you want to do this at scale? Okay,
+you of course want to throw this inside
+of a sub-agent, right? You can scale
+this up. Just get the job done. I don't
+care what the errors are, just fix them
+and do it at scale, all right? What if
+you want to detect style guide
+violations? This is an interesting one.
+I think when you want to encode some
+behavior, some repeat behavior, I do
+think that you want this to be a
+dedicated skill, all right? Fetch
+real-time weather data from APIs. This
+is a stupid one. Uh it's MCP, right?
+This is a third-party service that
+you're integrating with. So here's a
+cool one. What if you want to create a
+component, right? Insert whatever UI
+framework you use. No one cares anymore,
+and it doesn't matter. This is a simple
+one-off task that you likely want to
+encode in a custom {slash} command, all
+right? Fantastic. So here is a keyword.
+Whenever you see parallel, you should
+always just think, just jump to
+sub-agents, right? Nothing else supports
+parallel calling, right? It's just
+sub-agents. So whenever you see that
+parallel keyword, and whenever you want
+to think about something you want to
+parallelize and isolate the context
+window, and again, you have to be okay
+with losing that context afterward, cuz
+it will be lost, you'll just want to
+throw that into a sub-agent, right? So
+this is for sub-agents, okay? So here
+are some use cases with the appropriate
+feature I think you should set them next
+to. I think it's clear that MCP is all
+about external integrations. And also,
+if you want to bundle multiple services
+together and then expose them to your
+agent with specific capabilities, it's
+pretty clear here you want MCP. If you
+want isolated context windows that
+you're okay losing the context of, and
+you want parallelization, it's clear you
+want a sub-agent. Now what's more
+confusing is skills versus {slash}
+commands. I think skills versus MCP is
+very distinct. Skills can of course use
+MCP servers, you can compose everything
+into a skill, but you can also compose
+everything into a {slash} command. And
+then this is where things get
+interesting. If you look at this feature
+set here, {slash} commands and skills
+are very similar. The only exception
+here is the modularity and who is
+triggering it. So this is actually
+really interesting. There are a lot of
+engineers right now that are going all
+in on skills. They're converting all
+their {slash} commands to skills. I
+think that's a huge mistake. I see
+{slash} commands as the primitive of
+agent coding, of AI coding, and really
+of language models. So you want to be
+very, very careful to get rid of your
+prompts. And let me show you exactly
+what I mean. Let me show you how I'm
+thinking about approaching skills as a
+compositional unit, and not a replace
+all for MCP, {slash} commands, or
+sub-agents. Because these are all
+distinct. I think if you're using just
+one of these, you're not using these
+features properly. You're not using
+Claude Code properly. We have our work
+trees, and we can just you know, verify
+this very quickly. If we go to trees,
+you can see we have three brand new
+versions of this code base, fully built
+out. There's the environment variable
+file. If you go into apps, you can see
+client server, everything is there. Our
+agents use the prompt, sub agent, and
+skill to do the exact same work. This is
+the wrong way to think about skills. If
+you can do the job with a sub agent or a
+custom slash command, and it's a one-off
+job, do not use a skill. This is not
+what skills are for. How should we think
+about skills? So, here's our skill sub
+agent, and here's our prompt. The three
+agentic units of work that we kicked
+off. We accomplished the same job with
+three different capabilities. Okay, now
+this is where things get tricky, and
+this is where there's a lot of confusion
+around this tool, right? In engineering,
+you don't want many ways to do the same
+thing. You want one dedicated way to get
+the job done. So, this is getting
+confusing. Claude code is becoming a
+larger and larger tool. Successful
+things tend to grow, and at some point,
+it loses its originality. It loses what
+made it distinct. Now, I don't think
+Claude code is there. I like this
+feature. I think it's a net positive for
+the ecosystem, for the tool, and for
+engineers. Now, how do we properly use
+skills? Remember in the beginning, I
+mentioned that, you know, I asked,
+"What's the right way to create a Git
+work tree?" Very clearly, you can do
+this in three distinct ways. I think in
+the end, you can build up any one of
+these, but the true answer here is you
+probably want a prompt to create a Git
+work tree. You want to be able to see
+what happened, and unless you need to
+create many of these, we don't need to
+parallelize this, right? But if you do
+need to parallelize, use a sub agent,
+right? That's a perfect, you know,
+branching point to go from custom slash
+commands to sub agents. If you need to
+parallelize, you can take your existing
+custom slash command and throw it in a
+sub agent. In fact, that's exactly what
+we've done here. If you actually dial
+into this sub agent prompt, you can see
+I'm having the sub agent compose a
+prompt with the slash command tool. It
+is calling our prompt. So, we're
+starting to get into a composability
+chain, right? Where we have the base
+level unit being a prompt, aka a custom
+slash command. How you compose these
+features is very important, all right?
+And you can push this even further. In
+our skill, guess what we're doing?
+Instructions, use the slash command
+tool, okay? So, here we are looking at
+the prompt as the primitive for all the
+existing features. I've been saying this
+for years, frankly, ever since the
+generative AI revolution kicked off. Do
+not give away the prompt, okay? The
+prompt is the fundamental unit of
+knowledge work and of programming. If
+you don't know how to build and manage
+prompts, you will lose. Why is that?
+It's because everything comes down to
+just four pieces now. There are four
+pieces of agentic coding. You have
+context, model, prompt, and tools. If
+you understand these, if you can build
+and manage these, you will win. Why is
+that? It's because every agent is the
+core four, and every feature that every
+one of these agentic coding tools is
+going to build is going to build
+directly on the core four. This is the
+foundation. This is the ground level,
+all right? If you master the
+fundamentals, you'll master the
+compositional units, you'll master the
+features, and then you'll master the
+tools. This is why it's so important to
+always lead with a custom slash command.
+When you're starting out, I always
+recommend you just build a prompt. Don't
+build a skill. Don't build an sub agent.
+Don't build out an MCP server. Keep it
+simple, all right? Build a prompt.
+Everything is a prompt in the end. It's
+tokens in, tokens out. So, if we want to
+parallelize, though, we can go to sub
+agent. Now, when do we go to a skill,
+right? This is the critical question.
+When do we move from a prompt to a
+skill? For creating Git work trees, we
+can easily use just a prompt, right? One
+prompt solves the problem. But if we
+want to solve the problem of managing
+our Git work trees, right? Because, you
+know, dealing with Git work trees isn't
+just about creating them, right? If we
+open up trees here, I now have three Git
+work trees to manage, to read from, to
+merge, to remove, right? We need a
+skill, okay? We need a skill to manage
+our Git work trees, right? So, this is
+where one prompt is not enough. You want
+to scale it into a reusable solution. We
+need, of course, a skill. This is what
+skills were built for, okay? Reusable
+file system-based resources, Claude
+domain-specific expertise, workflow
+context, best practices into
+specialists, okay? I just kind of
+glossed over that. I didn't really read
+that properly, but you get the point,
+okay? This is This is what skills are
+all about. Skills offer a dedicated
+solution, right? An opinionated
+structure on how to solve repeat
+problems in an agent-first way, okay?
+Let's Let Let me show you exactly what I
+mean here. So, we're going to boot up a
+new instance, and if we go to our skills
+here, right? If we collapse, collapse,
+and look at skills, we have a work tree
+manager skill. This is a lot more built
+out, right? And so, we can do something
+like this. List skills. You can see here
+I have a meta skill and a video
+processor skill. Dan, I've listed the
+four available skills you can use in
+your Claude code environment. So, this
+is the right way to think about skills.
+We have a skill that is a manager of a
+specific problem set. Repeat solution
+for a specific problem. If we actually
+just needed to create work trees, slash
+create work tree, and we're done, right?
+Give the branch, give the, you know,
+additional details to make the branch
+unique, right? Set up environment
+variables, set up the right client
+server ports, whatever, and you're done,
+right? One-off. But if we need to
+manage, and you saw those prompts just
+then, right? If you need to manage
+multiple elements, you know, stop
+manually prompting this, stop firing off
+these custom slash commands by yourself.
+Really dial in and build a skill. So,
+let's run this, right? Let's actually
+run the skill. So, I'm going to say pull
+back up our trees, and let's manage
+these now, right? So, manage Git work
+trees, remove red tree, create purple
+tree with offset four, so that we offset
+our ports, list our trees, okay? So,
+this is a skill set. We have solved the
+problem of managing our Git work trees
+with a dedicated skill. This is what
+skills are about, all right? I'm going
+to fire that off, and our agent is going
+to get to work on this. You know, this
+leads us to a great point here. Let's go
+ahead and look at some definitions while
+our agent works through this piece by
+piece. When we come back, we should see
+red tree removed, and we want to see an
+added purple tree, and then we want to
+see just a summary of our current trees,
+right? Let's look at some just
+definitions at a high level, right?
+Where do all these capabilities fit, and
+when do we use each, right? So, agent
+skills. You use this to package custom
+expertise that your agent autonomously
+applies to your recurring workflows.
+Super important, very distinguished. MCP
+servers is about connecting your agent
+to external tools and data sources. To
+me, there is very, very little overlap
+here between agent skills and MCP
+servers. These are fully distinct. And
+to be super clear here, I like to think
+about things at composition levels,
+right? What should be using what? Skills
+can have many MCP servers. Skills can
+have many sub agents. Skills can have
+many custom slash commands, right? But
+an MCP server is a lower-level unit,
+right? You wouldn't have an MCP server
+use a skill. So, there's a chain of
+command here. And very interestingly, um
+I would consider a slash command a super
+primitive, where it acts as both a
+primitive and a composition. Because, of
+course, you can take a custom slash
+command, and you can run a set of
+skills, you can run MCP servers, and you
+can run sub agents. So, it's very
+interesting how these things compose.
+There's a lot of circular composition
+that you can build up here, but I would
+definitely place your skills at the top
+of the composition hierarchy, all right?
+So, let's continue here. We have agent
+skills. We have MCP servers, right?
+External data sources. We have sub
+agents, and we use sub agents to
+delegate isolatable specialized tasks
+with separate contexts that can work in
+parallel. Sub agents are very
+distinguished, right? I think it's very
+clear when you'd use a sub agent versus
+when you wouldn't. When you want work
+out of your primary agent's context
+window, and you can delegate it, and you
+don't care that you're going to lose the
+context at the end. We also have custom
+slash commands, all right? This is for
+reusable prompt shortcuts that you
+invoke manually. Now, I am definitely
+underselling custom slash commands here.
+I I would say if you had to pick one,
+and you just kind of forget about
+everything else, you definitely want to
+prioritize your mastery of custom slash
+commands. Why? Because this is the
+closest compositional unit to just
+bare-metal agent plus LLM, right? You're
+passing in a user prompt. You must
+master the prompt. There are no
+exceptions here. If you avoid
+understanding how to write great
+prompts, how to really build these out
+in a repeatable way, uh you will not
+progress as an agentic engineer. You
+will not progress as an engineer in 2025
+and 2026 and beyond, okay? The prompt is
+the fundamental unit of knowledge work
+now. There are no exceptions to this. If
+you understand this, you will win, all
+right? And this is something that comes
+up over and over and over. This is a big
+topic inside of tactical agentic coding
+and agentic horizon. I'll leave those
+linked in the description. If you want
+to push further and really master how
+you can use prompts at scale in agents
+with multiple agents, all right? That's
+the custom slash command. This is the
+primitive, all right? This is There's
+This is ultra important, all right? So,
+what's next, right? Let's continue
+breaking down all these features. We of
+course have hooks. Hooks are great. This
+is deterministic automation that
+executes commands at specific life cycle
+events, right? This is where we kind of
+add determinism rather than always
+relying on the agent to decide. So, we
+need to balance these things, right? And
+this is why, again, in tactical agentic
+coding, we push outside of the agents to
+ADWs, AI developer workflows, where you
+combine the old world of code with the
+new world of agents. If you really want
+to scale, you need both. And hooks lets
+us tap into deterministic automation,
+all right? So, what else we have here?
+We have plugins. This is simple. There's
+no overlap here between any of these
+other features, plugins that you package
+and distribute these sets of work,
+right? This isn't super interesting.
+It's just a way to share and reuse cloud
+code extensions, all right? Last but not
+least here, we have our output styles.
+And so, you saw this here, right? I'm
+using output styles 24/7. When our agent
+finishes this work, it's going to
+actually summarize the work using a
+text-to-speech output style. If we
+scroll down here, you can see I have a
+whole slew of output styles. We've
+talked about this before on the channel.
+I'm using the observable tools diff
+text-to-speech summary, and you can see
+here we're onto that last step, list
+work trees prompt. And very importantly
+here, you can see my skill is using a
+compositional prompt, right? It's using
+a prompt to do the work. Great stuff
+there. That's the output styles. You
+know, I hope this helps you distinguish
+some of these features and when you
+should be using each. At the end of the
+day, use whatever works for you,
+right? Don't let these features, don't
+let these, you know, cloud code buzzy
+kind of features stop you from just
+shipping work, all right? Use what works
+for you. But, I would say have a strong
+bias towards slash commands. And then,
+when you're thinking about composing
+many slash commands, sub agents, or
+MCPs, think about putting them in a
+skill, all right? But, your skills again
+should have a slew of slash commands.
+Now, that leads me to um some opinions
+that I have about this feature. I like
+it, but there are also some problems
+with this feature. So, let me just
+quickly just work through this pros and
+cons list. So, this is agent skills. And
+let me just kind of walk through this
+with you. I want to tell you what I like
+and what I don't like. And comment down
+below if you agree with me on my pros
+and cons here. I like that this is agent
+invoked, right? We want to lean into the
+autonomy, right? Dial up the autonomy
+knob to 11, all right? And this is how
+we do it. We delegate more work to our
+agents. I like the context protection,
+right? This is incremental context
+window adoption. Progressive disclosure
+is what they call it. Unlike MCP
+servers, which just straight-up tortures
+context window, I like that this is a
+dedicated isolated file system pattern,
+right? We can now logically compose and
+group our skills together. This makes it
+really easy to write, update, create,
+modify, and then distribute what your
+agents can do. So, this is great. This
+is honestly the biggest value prop right
+next to agent invoked for agent skills.
+Can compose other elements, or we should
+say other features. And then lastly, you
+know, again, I think it's really
+important to highlight, this is the
+agentic approach. This is what you want
+to see. Agent just does the right thing.
+Lots to like here, but there are some
+things that I don't like. So, it doesn't
+go all the way. What do I mean by that?
+I can't nest sub agents, and I can't
+nest my prompts, right? Why not? Why do
+we not have the capability to inside of
+our bundle here, right? Inside of our
+like file system VM for my skill, where
+is my slash commands directory? Where is
+my agents directory, right? Why didn't
+the cloud code team go all the way here?
+If you're making this the bundle for
+repeatable solutions, why can't I embed
+prompts, the most important feature out
+of any one of these these agents? It's
+just prompts, right? This is Don't let
+anyone confuse you with these feature
+releases. Prompts are the most important
+thing of all. Dan, I have successfully
+managed your Git work trees. Nice.
+>> Removed red tree. Created purple tree on
+ports 4240 and 5213.
+And listed all three running work trees.
+Okay. So, that work's been completed,
+but let me just finish my rant here.
+You know, why can't I put the most
+important primitive of all inside of
+skills in a dedicated way? I know, I
+know, I can just engineer this in, but
+they're creating this pattern, so just
+go all the way. That's my biggest
+complaint and my like one request for
+this feature. I think that reliability
+is going to be an interesting one. So,
+will the agent actually use the right
+skills when chained? I think
+individually it's less concerning, but
+when you, you know, stack these up, and
+this is one of the key features that
+they mentioned,
+you know, compose capabilities, combine
+skills, how reliable is that? Can I
+actually deploy that into production?
+Can I actually chain together five
+skills and expect them to be called
+back-to-back-to-back-to-back-to-back? Or
+should I again just use a prompt?
+Because I can guarantee you if you run,
+you know, call {slash} XYZ, then call
+{slash} ZYX, this will run in the right
+order. So, I'm I'm It's not clear to me
+how reliable skills are yet. Of course,
+more testing, make sure you subscribe,
+make sure you like and comment so the
+YouTube algorithm knows you're
+interested. We're going to be pushing
+skills hard and seeing what we can
+really do on the channel. So, the last
+kind of issue I have with this is that
+we could do all this with prompt
+engineering plus custom slash commands
+plus slash command tool. Problem here is
+that skills are effectively opinionated
+prompt engineering
+plus modularity. The real question here
+is is what's the actual innovation?
+Right? What's actually new here? I think
+the answer is not that much. And at the
+same time, having a dedicated specific
+way to operate your agents in an
+agent-first way is still powerful, all
+right? So, it's very interesting, right?
+This is quite a simple feature. It's a
+kind of thin opinionated file structure,
+but we could do that before, you know?
+So, I don't know. I'm I'm I'm still kind
+of working through this. There's nothing
+actually new here. I think this is, you
+know, the cloud code team making it
+easier to bundle together repeat
+solutions in an agent-first way. So,
+that's my pros and cons list. I've built
+out several skills for repeat workflows.
+Right now, I'm really stacking up my
+user directory with a bunch of concrete
+skills. It's very clear that this
+release is important, right? We have
+this like huge banner here at the top.
+The cloud code team, the Anthropic
+engineers, they're really pushing this
+feature. And I think for good reason.
+This is powerful, and it's a dedicated
+way to across their entire platform
+enable engineers and just general users
+to create repeat agent-first solutions,
+right? We're creating domain-specific
+expertise in an agent-first way. So, I
+like this feature. I am using it. You
+know, I give this a solid eight out of
+10. It is very clear this does not
+replace any existing feature or
+capability. Like this is not a
+replacement for MCP, slash command, or
+sub agent. It is a higher compositional
+level that you can use to group these
+features together to solve a specific
+problem in a repeat way. This code base
+is going to be available to you, link in
+the description. You're going to get
+access to all four of these skills. And
+I also have the meta skill for you. You
+can use this skill to build other
+skills. This is a very, very, very
+powerful agentic abstraction you can
+always use. Build the thing that builds
+the thing. This is a big theme in
+tactical agentic coding. Again, link in
+the description for that. Then we have
+the video processor, where we actually
+have a dedicated script. And this skill
+is dedicated around processing and
+managing different video files, create
+transcriptions, so on and so forth,
+right? So, I just wanted to give you a
+few ideas of how you can use skills to
+push your engineering forward. Take
+these, understand skills, make them your
+own. If you made it to the end,
+definitely like and comment to let the
+algorithm know you're interested. I'll
+see you next Monday with a big idea for
+your agentic coding. Stay focused and
+keep building.

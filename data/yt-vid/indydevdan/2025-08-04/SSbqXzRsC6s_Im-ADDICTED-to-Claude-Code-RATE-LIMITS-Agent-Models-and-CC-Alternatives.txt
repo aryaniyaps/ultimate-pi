@@ -1,0 +1,721 @@
+weak, base, strong. Three levels of
+model control, simple, and beautiful. We
+now have access to the haik coup,
+sonnet, and opus models in our sub
+aents. In the background here, I have 12
+sub aents operating across these three
+levels of intelligence, speed, and cost
+conducting crypto research for me.
+They're setting up my next big trade.
+Now, obviously not financial advice, but
+you can see here running 12 agents in
+parallel with different levels of
+compute, Haiku, Sonnet, and Opus, you
+and I are able to do more deep research
+and more wide research than we ever
+could before. The Claudeco team
+continues their blazing red hot streak
+as they ship another set of surgical
+minimal useful features. We have sub
+agent model selection, agent mentions,
+and hidden file mentions. We do have bad
+news though. We have new rate limits.
+Someone watching the Andy Dev Dan
+channel took the infinite agentic loop,
+parallelized it, and ran it 24/7 and
+ruined it for the rest of us. In this
+post, Anthropic mentioned something
+really, really interesting that caught
+my attention. We're committed to
+supporting longunning use cases through
+other options in the future. With the
+success of Claude Code and the Claude 4
+series, you and I can bet that Enthropic
+is betting on highly agentic longrunning
+systems and models. So, I'm thinking
+ahead toward what Enthropic could be
+releasing next. But I have to say with
+all the excitement around cloud code,
+it's pretty clear engineers like you and
+I and now a decent portion of the Genai
+tech industry, we're all overexposed to
+claw code. We have too many eggs in one
+basket. This is bad investing. I don't
+think these rate limits are unfair at
+all, but it's woken me up. And maybe
+it's woken you up, too. We need cloud
+code alternatives. We have too many eggs
+in one basket, right? We're addicted. We
+need help. We're clawholics now. We need
+alternatives. Not because cloud code
+isn't great. It's because it's too
+great. With these new rate limits coming
+in, as they mentioned, it'll affect less
+than 5% of users, but you and I, we're
+probably in the 10 or 5%. And these rate
+limits are coming. All right. August
+28th. It's kind of perfect timing that
+this came out with their brand new model
+selection feature. In this video, we're
+going to take a look at that because you
+can see across three versions. And you
+know, speaking of limits, right, there's
+my Opus limit coming up right here. But
+you can see across three versions, you
+know, I have Haiku, Sonnet, and Opus
+running the exact same prompt. We're
+going to dig into this so that we can
+understand that we don't always need the
+highest levels of compute to solve
+problems. The ability to select the
+right model for the job is ultra
+important. And I think this powerful
+weak base, strong model stack for agents
+is going to be a great way to navigate
+not just rate limits, but it's going to
+help us navigate costs, speed, and
+intelligence trade-offs. I've been
+thinking about this for a while as I
+continue to, you know, discuss, use, and
+really lean on cloud code, we're
+overlevered, right? Just like an
+investor has too much stock, too much of
+their portfolio in one tool. We have a
+lot of engineering resources, time,
+dependency on cloud code at this point.
+So with the release of Quinn3 coder 480
+billion parameters everything that keeps
+shipping inside of the Gemini CLI right
+I'm keeping my eyes on all of these
+agentic coding tools all these agentic
+model developments and with uh the
+recent news that anthropic had to
+provoke open AAI's access to claude two
+things are very very clear to me now
+claw code has completely changed
+engineering and alternatives are on the
+way if you're an IND industry leader,
+you will always be copied and cloned.
+Cloud code is the industry leader for
+agentic coding. It is being copied and
+cloned all over the place. In upcoming
+videos, we're going to be looking and
+investigating, you know, some of these
+open source alternatives, some other
+closed source alternatives. It is time
+to diversify. All right, but you know,
+let's be super real. Uh, no one is close
+to cloud code. Let's keep cooking with
+the best agent coding tool in the game.
+Let's break down a few powerful agent
+orchestration patterns with sub aent
+model selection so we can use the right
+agent coding model for the job at hand
+while avoiding these new rate limits.
+My crypto research can run with this
+single slash command and it kicked off
+12 agents. Right away we have to point
+out something really really important.
+Look at the time differences. Look at
+the token differences. These small,
+fast, cheap models are going to do less
+work for you, but they're going to do it
+in a short amount of time, while Sonnet
+and Opus are going to scale up the
+amount of tokens, the cost, and the time
+consumed. You can see it's writing this
+comprehensive summary for us with 12
+output tool calls in parallel. Let's let
+our primary agent cook some more, and
+let's answer the question, what does
+model selection really offer you?
+Ultimately, it lets you solve two
+problems. model overkill, where you're
+wasting tokens and money, and model
+underperformance, where you waste time
+having to improve your prompt or fire
+off the larger, more powerful model
+after wasting time on the cheaper model.
+Okay, it's all about the tradeoff,
+right? We're always trading off three
+things when we're selecting our models:
+performance, speed, and cost. You can
+optimize for performance, you can
+optimize for speed, and you can optimize
+for cost. I always advocate that you
+want performance over everything else,
+right? This is why we spend to win. This
+is why we have that big claw code max
+$200 subscription, right? However much
+you can push it, you want to be pushing
+it for the compute. The compute is
+absolutely worth it. There's nothing
+more important in the generative AI age
+as an engineer than your ability to
+scale up compute and use it to solve
+real engineering problems. This is the
+name of the game. This is what every
+winning engineer is doing right now. I
+guarantee you that bar none. You know,
+when we double click into this, it's
+quite a simple equation, right? We have
+Hiku 3.5, our weak model. We have Sonnet
+4, our balanced workhorse model. And
+then, of course, Opus 4. When you're
+solving real problems, when you're
+building out things and you want
+performance over everything, you choose
+the best model. And you can even push
+this further, right? Model selection is
+just layer one. The next layer is of
+course thinking, right? You can specify
+the information dense keyword the IDK
+think hard ultra think right anthropic
+has encoded this keyword for us so that
+in our prompts we can activate this
+feature whenever we need to right and I
+highly highly recommend if you're not
+doing this you need to be using this if
+you look at the charts if you go on
+artificial analysis if you run you know
+examples yourself 4 thinking beats opus
+4 bass also of course opus 4 thinking
+beats sonet 4 thinking so that's a
+really important call out there are
+other dimensions of your model that you
+can push. This is the trade-off we're
+making when we're selecting models, when
+we're using models. And you know,
+there's a fourth kind of hidden
+dimension here. We also have to work
+against um APIs and rate limits here.
+This is kind of the hidden dimension.
+This is probably something we're going
+to want to add in the future as we scale
+up our compute and start running those
+big big long running, we're talking
+hours and hours and hours long
+engineering workflow. All right. Why are
+we hitting these rate limits more?
+What's going on, right? How are we able
+to scale up further? It's of course
+because of sub agents, right? We can now
+spin up multiple agents from our primary
+agent. We covered this in our last
+video. And now we have more compute than
+ever. And we can specify what our sub
+aents do. We can now write system
+prompts for our sub aents. Okay. So, we
+just had this crypto analysis run. I
+have a couple interesting ideas here
+that I want to share with you. All
+stemming from this crypto research
+custom/comand. All right. And so, you
+know, funnily enough, um I am at my rate
+limits for the day. This is kind of
+perfect timing. I'm glad I'm filming it
+right here. Uh rate limits are
+obnoxious. you know, I'm on that $200
+plan, but you can still see here I am
+hitting rate limit. There is absolutely
+an argument for selecting the right
+model for the job, right? You don't
+always need top-end compute. And
+especially when we're deploying our
+agents into production environments, you
+want to use the right model for the job.
+You don't want to go overkill, right?
+Remember, model selection solves two
+problems. Model overkill and model
+underperformance. You want to hit that
+sweet spot if and when it matters. A lot
+of the time, you probably do this too,
+right? A lot of the times we just go
+model and we just go right to opus,
+right? I just want the best model and
+then you always throw on thinking mode
+and you let it operate at the highest
+possible intelligence level just to get
+the job done, right? Uh this is great. I
+do this all the time too. But as you're
+scaling up parallel sub agents, parallel
+agents, running multi- aent workflows,
+right? Ondevice and offdevice, um these
+rate limits, I think, are going to come
+into play more and more. Feel like rate
+limits have never truly been more
+important than with compute, right?
+because let's say you hit the daily or
+the weekly limit. Uh that's it, right?
+And this is also why it's so important
+for us to find alternatives. Anyway,
+more on that in the future. Make sure
+you're subscribed and like we're going
+to be investigating and benchmarking
+agentic coding tool alternatives. Um
+back to this prompt, right? Let's talk
+about model selection. So, let's go
+ahead and open up cursor. Let's
+understand this crypto research prompt.
+Couple new features coming out of the
+cloud code team. Let's just go ahead and
+pull up the official docs/re. And we
+have three important features to cover
+here. So we have agents with custom
+model support, appmentions for custom
+agents, and we have app meions for
+hidden files. This is super important.
+Now we can do something like this. And
+now we can see all of our cloud files.
+And do we have anything else here? Let's
+see. MCP, right? So now we can see our
+MCP file here. What's going on here? So
+I have a custom slash command that is
+kicking off 12 agents. And really it's
+kicking off four distinct solutions with
+three levels of agent each, right?
+Haiku, sonnet, opus. This is a great way
+to understand what model do I really
+need to solve this problem. Okay, so you
+can see they're working off a bunch of
+crypto agents doing crypto research,
+macro analysis, investment play ideas,
+so on and so forth, right? So we can go
+ahead and just collapse. Here's the
+prompt format we have here. Top level
+kind of purpose variables. We're just
+passing in a ticker. We have our agent
+groups. So we're defining, you know,
+what teams of agents are going to run.
+And then we have execution instructions.
+So this is, you know, I also like to
+call this workflow. And then we have our
+output format. So output format super
+important when you're writing these
+prompts. This forces your primary agent
+to communicate to you what you want your
+output format to be. And for your
+agents, it forces your agents to report
+their output. So right away you can see
+something interesting here in this
+system prompt for my crypto market
+agent. There's not much here. In fact,
+all I'm doing here is referencing
+another prompt. And so this is a pattern
+that I want to share with you here. You
+can have sets of agents at different
+levels, right? Different model levels,
+different descriptions, right? so that
+you can ABC test against one prompt,
+right? So, I think this is a really
+powerful pattern. It's also useful so
+that you can test this on your primary
+agent, right? Instead of it just being
+one system prompt inside a specific
+agent, you can test multiple prompts
+against multiple agents. Now, you do
+have to keep in mind this is still the
+system prompt, right? So, what we have
+here is a system prompt, right? And you
+can see here we have that output format
+from our agent system prompt. The key
+thing here is that you know, let me copy
+this uh reference here. You can see for
+our three agents, Hiku, Opus, Sonnet,
+we're using this exact same prompt. So
+here's Hiku, here's Opus. You can see
+all that change there. Let's go back and
+forth. All that's changing there is our
+model color and agent name, right? So
+this lets us again ABC test our model
+and our description. Okay, this is cool.
+Inside of each one of these prompts, we
+are of course doing specific crypto
+analysis, crypto research. So let's go
+ahead and open up macro
+cryptocorrelation. You know, inside of
+this prompt, let's go ahead and just
+open this up. We have, you know, classic
+prompt format, purpose, instructions,
+workflow, output. You are a macro crypto
+correlation analysis expert. Here we
+want to understand how global macro
+plays into the traditional market. Of
+course, we have instructions and then we
+have our workflow. We're at our
+step-by-step play for the sub aent.
+Always remember this is the system
+prompt we're operating in here when
+we're calling sub aents. And you know,
+just to make this super clear, we
+covered this in our previous sub aent
+video from last week. You are prompting
+your primary agent. Your primary agent
+is prompting your sub agents. Your sub
+agents are responding to your primary
+agent, not to you. The flow of
+information matters here, especially
+when you start scaling up to, and we've
+covered this, multi- aent workflow
+orchestration where you have multiple
+prompts firing off back to back to back.
+It all feeds into your primary agents
+context window. Okay? It doesn't return
+to you. So when you read these agent
+prompts, right, we have a bunch of
+underscore agent_prompt.
+MD, these are all returning to your
+primary agent. And so that's why we have
+this and we if we go up to the top level
+crypto research, we have this output
+format call on the top level crypto
+research. Right? This is that top level
+prompt that we executed to kick off our
+12 agents across three different models.
+Their output format here is really
+important. So, we're taking each
+response directly with no modifications,
+no summarizations, and no changes. Okay,
+super important. Again, we're
+referencing anthropics encoded keyword
+important. We're prefixing this with
+important so our agent pays more
+attention to it. And then we have our
+output format. All right, so now we
+should be able to just find these,
+right? So, if we open this up, collapse
+everything. And we go into outputs, you
+can see we have two files here, 10 5614.
+Here we go. There are all of our
+prompts. You can see it's in that exact
+same format as specified. And then we
+can take a look at each level. Okay. And
+so this is the really important part,
+right? Every level matters, right? You
+don't always need opus for certain
+things. You don't always need sonnet,
+but you can see in some cases you can
+drop all the way down to a cheap fast
+haiku model. Let's see if for something
+like a cryptocoin analyzer. Do a
+sidebyside here. So that's haiku. Here's
+opus. Here's sonnet. You know, very
+clearly the haiku model is having a
+problem. It's having a challenge with
+the format. And if we open up our
+cryptocoin prompt and go down to our
+output format, you can always check for
+model strength by looking to see if it
+can obey your output formats. So we're
+looking for output in this structure,
+cryptocurrency analysis. And you can see
+here right away IU goes off the rails,
+right? If we move over to sonnet, we can
+see that it's not exact, but it gets a
+lot closer. We have, you know, market
+data, recent news and developments.
+There's the market data and if we search
+for news, you can see we have a news
+section here on sonnet, right? So, this
+looks better, right? We can work with
+this. Um, if we go to Opus, however, and
+search for that exact header, we can see
+we're getting that exact header. And
+this is a really important call out,
+right? If you want maximum performance,
+you always scale it up to that top
+model, right? You pay to play. And this
+is something I see some engineers are so
+scared to spend. they're so scared to,
+you know, use that maximum compute and
+really pay to play. This is a massive
+advantage. Understanding what the
+maximum capabilities are and getting the
+advantage of using them will set you
+ahead. It'll break you away from the
+pack. When I want to use the best, I
+don't hesitate. Okay? You can even push
+that further. Of course, as you know,
+you can add thinking to these models.
+You can force them to think more. Use
+their reasoning effort. Increase
+intelligence even further. Of course,
+you're going to spend more to do this,
+right? they're still generating those
+tokens even if you can't see them. And
+you want to be especially careful with
+this with sub agents, right? Because
+this stuff is still happening. You want
+to be making sure that you're using the
+value of your top level agents,
+specifically your opus agents or
+whatever your strong model is. Make sure
+you're getting value out of this. Don't
+be wasteful with this stuff. Unless
+you're learning something or
+experimenting, you really want to, you
+know, use these models with a clear
+purpose. All right, keep that in mind,
+too. And always remember, you can push
+the model further with thinking mode.
+Just to mention it, uh, Sonic 4th
+thinking is very, very powerful, right?
+More broadly, this pattern of having a
+weak base and strong model for your
+agent model stack is super powerful,
+right? It's super important because you
+don't always need Opus, right? Sometimes
+you're just summarizing some work, so
+you can drop down to a simple model. And
+this applies across model providers,
+right? Gemini Flash Light, 2.5 Flash,
+2.5 Pro, and then, you know, there are
+bigger levels above and below. Gemini
+just put out their deep think model,
+while OpenAI has 03 Pro. They have their
+new agent model and they have apparently
+GPT5. We'll see about that. I think this
+is a great pattern for you to kind of
+select models and use the right model,
+right? It's all about that PF speed cost
+trade-off and you know the kind of
+hidden layer rate limits. We're scaling
+up our compute across multiple
+dimensions. Now, if you want to scale,
+it's pretty clear that reusable prompts
+aka custom/comands and sub agents is the
+way to scale up your compute and get
+more work done than ever. So, this is a
+powerful agent pattern you can use. You
+have your top level agent calling a
+custom SL command. Here we're doing
+crypto research. This fires off many sub
+aents, right, across different model
+levels and then it takes the results and
+refuses them, right, in a big way. We're
+just doing what we've done for years on
+the channel, prompt chaining and fusion
+chaining. Okay, we've covered this stuff
+a long time ago before reusing models
+even existed. Inside of your agents, you
+can do something really powerful. You
+can create dedicated agent prompts to
+reuse across different agents to
+understand what model performance you
+really need. That looks like this. If we
+go into agents, we go into crypto, you
+can see we have cryptocoin analyzer
+haiku. We have the exact same version
+for sonnet. Right? There's that sonnet.
+And we have the exact same version for
+opus as well. So it's all just a small
+tweak to understand what model you
+really need for the job you're doing.
+And this is why it's so important to
+isolate your prompt for your sub agents.
+This is just a pattern. It's an idea
+that you can use. And another advantage
+here is of course we can just hop into a
+new agent and we can just fire this
+prompt off oursel right on the top
+level. Okay? You know whenever you want
+to you can understand what your prompt
+is doing and how it performs by just
+running it on the top level. Right? So
+here we can just run our cryptocoin
+analyzer agent and actually we need to
+pass in a uh let's do B&B. This is a
+great way to understand what your prompt
+does end to end and to make tweaks to it
+by running it on the top level right in
+your primary agent. A lot of things get
+lost when you're running sub aents. So
+you can use this dedicated agent prompt
+pattern to understand, you know, what
+model you really need for the job. The
+way I look at it is a lot of my simpler
+tasks where we're just generating unique
+names for files where we're doing some
+small file moving, some file migration,
+some quick summarizations. Haiku 3.5 can
+do a lot of that stuff, right? In fact,
+you probably have seen, you know, this
+little popup here from cloud code. Guess
+who's running that? This is a ha coup
+model making up, you know, a relevant
+one-word description, right? The perfect
+example for that, right? You don't need
+a big model to do that. You need
+something fast and cheap and simple. So,
+that's a small example of how you can
+use a small fast model and avoid using a
+bigger, stronger model, right? Even like
+Sonnet 4. Then there's of course the
+Sonet 4. This is a workhorse model,
+right? This is our base level model.
+This is going to be a great balance. I
+think a lot of work happening right now
+is coming out of Sonet 4. It's funny to
+think about, you know, what model is
+responsible for the most code in the
+world. And I think right now it's very
+clearly sonnet 4. And then of course we
+have opus, right? When you're doing
+serious work, when you're putting the
+pellet to the metal, you use opus 4 and
+you scale it with thinking mode, right?
+I do this all the time. Any complex
+work, any, you know, serious engineering
+work, production work, opus for think,
+burn up the tokens, hit the right
+limits, it doesn't matter. The compute
+is there for you to use, right? And so
+we can take all these models, we can
+take them in thinking mode, we can embed
+them in sub aents and scale them up,
+right? And so in the end we get
+something like this, right? A powerful
+multi- aent orchestration workflow. This
+is just one simple example of work
+happening. All feeds back into the
+primary agent. Primary agent can then
+execute on all that work, right? This is
+just one workflow. Again, we covered
+this in our previous week's video. I'll
+make sure to link that. You want to
+understand the model controls. You want
+to understand your tool and you want to
+understand what you can do with them.
+Right? every week here. That's what
+we're pushing toward. Understanding the
+best agent coding tools so that we can
+build systems that work for us while we
+sleep. That's always been the focus.
+It's always been the mission of this
+channel. We're going to build living
+software that works for us while we
+sleep. We're getting closer than ever
+with cloud code, with these incredible
+longrunning jobs and sub agents. But we
+also need to make sure that you know
+when rate limits pop up when the next
+set of restrictions or you know whatever
+comes next we need to make sure we can
+diversify. So you know again as you know
+this is like my 15th cloud code video in
+a row unprecedented for this channel but
+um I follow and focus on the signal of
+the best tool for the job right now for
+engineering. There's no better tool than
+cloud code but we need to make sure we
+diversify. We can't be so reliant on a
+single tool on a single set of models,
+right? We have to make sure that we can
+do more. We have to make sure that, you
+know, we have other agent coding tools.
+So, I'm keeping an eye out for that,
+right? We just had that Quinn 3 drop. We
+have Gemini CLI improving all the time.
+And then we have a bunch of open source
+alternatives that I'm going to give a
+serious sit down to really soon here. If
+you've reached out or emailed, I'm going
+to be covering a lot of the open source
+agent coding tools coming up here and
+comparing them, doing really concrete
+comparisons to the industry leader,
+Cloud Code. Don't underestimate the
+power of model selection, right? Our
+crypto research agents did a ton of
+research for us. We can look at Opus big
+plays, right? Let's go into markdown
+format. Crypto play report, strong
+bullish momentum, XRP, interesting,
+right? SEC settlement rally. Thesis,
+there's an execution, right? Right. So
+we have this interesting bullc case. All
+this interesting research, right? Salana
+DeFi ecosystem. Okay. Huge huge return
+on investment. Again, not investment
+advice. Uh we're just looking at some of
+the results that our agents created for
+us. Okay. Crypto investment agent
+prompt. If we look at the uh response
+format once again, we can see that Opus
+is obeying the prompt output format very
+well. We can open up the equivalent
+sonnet version. And you can see sonnet
+is getting close here as well. Um, it
+also has this, you know, little header
+here which we didn't ask for. But
+overall, you know, looks like Sonnet is
+doing the job for the crypto investment
+plays idea, right? You know, it has a
+play here, crypto accumulation at key
+supports. You know, it's identified some
+dip spots for us to come into, right? We
+have our kill criteria, right? This is a
+concrete section we ask for from this
+template. This looks great. We have
+Ethereum liquid staking opportunity,
+six-month time frame, so on and so
+forth, right? And then we can drop all
+the way down to Haiku. You can see here
+haiku way off. This problem is too
+complicated for haiku. Right? And this
+pattern repeats across the rest of our
+analysis. Right? So this is one more
+idea that you can add to your toolbox
+when you're agent coding. Use the right
+model for the job. Isolate your system
+prompts so that you can run them against
+any model that you want. And make sure
+you are diversifying. I love cloud code
+just as much as the next engineer. We
+were one of the first channels to cover
+it. But um drop a like and a comment if
+you were here before and during the
+early days of covering Claude Code. It's
+not over. It's definitely not over.
+Claude Code is an incredible tool. The
+team is shipping back to back to back.
+But we have to think as independent
+actors. We can't overinvest into one
+tool. Okay, this is a really balanced
+take out of Enthropic. these weekly
+limits had to get set into place because
+yes, people are abusing this incredible
+tool with 24/7 hour in the background
+agents and agent workflows. But um you
+know it's important that we diversify,
+right? Every single day we have more and
+more options emerging. Quinn 3 coder
+Gemini CLI with the new Gemini models
+pretty crazy you know anthropic getting
+kind of defensive here around the API
+we'll see how that progresses a hend
+coding tools will continue to evolve as
+well as the models but what remains the
+same is of course the principles of AI
+coding keep your eyes on the big three
+context model and prompt understand how
+to use these three elements to solve
+problems that you face because if you
+master these you will master Genai no
+matter the current drama no matter the
+current rate limits no matter the models
+All right, stick to the principles of AI
+coding. I'll be starting the countdown
+for the phase 2 aentic coding course
+very very soon. I'll be locking in a
+release date for that. So stay tuned for
+that. If you made it to the end, drop a
+comment and let me know what you think
+about the current agentic coding
+ecosystem and these brand new rate
+limits around cloud code. If you're
+experimenting with alternatives, let me
+know what you're working with and I'll
+use that as a great starting place. No
+matter what, stay focused and keep
+building.

@@ -1,0 +1,33 @@
+[1.8s] Hi everyone. Uh so for all of you who
+[4.9s] are interested in the Rust clients for
+[7.6s] BAML, I'm excited to announce that we
+[9.0s] have finally added documentation for
+[10.6s] them
+[11.7s] um starting from the tutorials uh around
+[14.6s] how to set set up a new Rust project uh
+[18.0s] that uses BAML
+[19.7s] um to all the various libraries that we
+[22.0s] have implemented in the Rust client. Um
+[24.4s] so cancellation tokens,
+[27.0s] um
+[27.6s] type builder, you can see the Rust code
+[29.6s] here.
+[30.8s] Um multimedia types of course are
+[32.4s] supported um and so on. So do let us
+[35.6s] know
+[36.6s] uh if this is working for you, if
+[37.7s] there's anything missing, and thanks.
+[40.8s] Hello indicate404. Thank you for making
+[43.0s] this PR for how to fix deadlocks and
+[44.6s] panics under high super high concurrency
+[46.6s] and testing our Go system out even
+[48.7s] further.
+[50.1s] We actually didn't know that Go can fail
+[51.8s] when sending data to channels and we had
+[53.6s] to use a
+[55.4s] defer system to go check stuff out. So
+[57.8s] now that this is um addressed, now we
+[60.6s] should be able to have much more Go
+[62.0s] system and you should see this merged
+[63.5s] and released in this week's release.
+[65.9s] Thank you.

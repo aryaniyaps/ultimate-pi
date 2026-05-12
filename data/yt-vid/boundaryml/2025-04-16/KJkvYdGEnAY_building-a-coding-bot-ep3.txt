@@ -1,0 +1,1721 @@
+There we go.
+Um
+where we have env vars and these are
+also just like installed by the user.
+Now, I'm going to make a couple of
+constraints onto our problem just to
+make this easier.
+I'm going to assume env vars are
+completely locked and cannot be Oh, I
+cannot
+env vars are completely locked and
+cannot be modified by I cannot do that.
+Env vars are completely locked and
+cannot be modified by um
+by the end user
+at any point during the run time of the
+system. We're going to simplify this a
+little bit.
+Um we'll assume the things that we are
+allowed to modify are the files and
+where you should be able to install new
+things into our system.
+Um
+Okay, so like the packages and things
+like that, like pip packages and things
+Okay. Exactly.
+Um now that we have our environment
+defined, let's talk about what our what
+the user is going to tell us. Oops.
+The user is likely going to give us some
+sort of instructions. Uh so like
+instructions.
+And this will come in the form of some
+text for now. Uh we can talk about
+multimodal later, but just to keep it a
+little bit easier, we'll uh we'll talk
+about just text.
+And at some point, what I really want
+coming out of this
+is effectively a new environment
+that somehow has slightly different
+files.
+Um
+Oops, let me Let me make this the wrong
+thing.
+And then
+excel. Okay.
+Somehow what I want to do is I want to
+take the new I want to take a shot I
+want to take a some environment and some
+I want to take some environment and some
+instructions and spit out a new
+environment out of this.
+So at the very high level,
+what we'll do is figure out how we can
+go do this. Now there's a couple of
+different problems that we want to go
+into this. The first problem is
+the user's instructions may not be very
+good.
+The second problem is I will somehow
+want to know exactly which files are
+actually relevant over here. So I'll
+start writing some of this stuff down.
+Uh why is this so ugly?
+Um okay.
+Uh
+cool.
+Uh instruc- instructions unclear.
+Very hard to write.
+Instructions are going to be unclear,
+and then also we're going to have to
+figure out find the right files.
+But let us assume that these two
+problems can eventually be solved.
+Somehow we can write a different bot
+that can go solve these problems.
+Even if I have the instructions and I
+have all the right files, there's
+another problem, which is
+generate the right code.
+And this last problem ends up in my eyes
+being a lot more complicated and harder
+than uh or at least being
+perceived to be a lot more complicated
+and harder than it actually is.
+So before we dive really deep into how
+to clarify instructions and how to find
+the right files, let's focus on the
+bottom part of the problem, which is how
+we can actually generate the right code
+given clear instructions and the right
+subset of files involved.
+Let's see what we can do to take
+advantage of the fact that this is code
+and not plain English.
+So when I go write this,
+there's a there's a couple of different
+things we can do, but I'm going to write
+some pseudo code over here.
+Def uh update file
+instructions
+stir and then uh files map
+stir stir.
+Let's talk about what pseudo code for
+this kind of problem would end up
+looking like.
+The first thing we could do is we could
+just ask the LLM to regenerate the whole
+file. That is probably not going to be
+very effective just because eventually
+we all have files that are more than
+4,000 tokens long or 8,000 tokens long.
+So we just know off the bat that that
+won't work for any sophisticated system.
+So let's break this out into smaller
+things. What we'll do is we'll have it
+generate diffs of some kind.
+Uh generate diffs
+uh instructions
+files.
+And the reason that I'm jumping straight
+to diffs and not even talking about why
+to generate files is again because it
+can't actually be solved. It's not
+possible given the output token limits
+of the models today to really solve the
+constraint around this problem. And yes,
+I know I can run a while loop on the
+models and let it keep generating more
+tokens.
+But at least in my experience, the code
+bases are a little bit too complex to
+have it go do that. Diffs seem a little
+bit more tractable and naturally
+compressing the information I need to
+just what I need.
+Now what I can do is for diff in diff
+or maybe I should do this.
+Apply diff
+diffs files.
+And somehow I should be able to generate
+new files by then applying the diffs.
+And once I apply the diffs, I want to
+somehow run some validation.
+Validate
+uh
+validate where I'm going to pass in
+instructions
+new files.
+Oops.
+Files.
+Uh and then have some sort of result out
+of this.
+And what I might want to do is more
+along the lines of this. While true,
+solve that pass.
+Return new files.
+And I'll
+this is kind of breaking down the core
+of just bag of tools into some kind of
+more smaller deterministic glue between
+some really focused small things we can
+write as really focused small prompts.
+Exactly. And the real reason that we
+want to go do this is because if I go
+look at what generate diffs can do, this
+itself could be a whole agentic loop on
+its own, and we'll go talk about this.
+How you apply the diffs could or could
+not be an LLM.
+Um and then the actual result itself is
+likely not going to be an LLM because at
+some point we want to probably run some
+code to determine if it's good or bad.
+So let's go talk about how we could
+apply the diffs
+to our system. And then I think the last
+thing I'm going to go do is
+Let's talk about how we can generate the
+diffs. So when I go into the diff
+generation, I think the easiest way to
+talk about this is actually write
+writing some code.
+So I have some code over here.
+Uh where did it go?
+And
+Dash, you want to give them a quick walk
+through on what this code is that I'm
+sharing?
+Uh yeah, yeah, I think you should pull
+the latest though. Uh I think there's
+like an extra file in there.
+There you go.
+Uh so there's not much here right now.
+Um so we've got some kind of like base
+So we have a project on the on the left
+which is just a
+small little like calculator
+application. It's like a
+CLI that can uh run thing run uh
+run basic calculations. Uh I showed it
+to Vaibhav. He said it sucks. I was like
+perfect. Let's get the agent uh let's
+have the agent make it better.
+Uh I actually agree. This is a terrible
+implementation of a calculator. I think
+Claude wrote this.
+So yeah, if you want to do math, uh you
+have seven steps to add 5 + 2.
+Uh so this is the program the example
+program that we'll have our agent code
+up and make better and we'll improve the
+uh the kind of UX of this thing. But um
+and then in this this other folder in
+agent, we have kind of a scaffolding out
+of um a small AI application.
+Um the only thing that's already written
+here is just code to walk a directory
+tree and give us kind of a dictionary of
+file name to file contents.
+Yep.
+Um so let's start off with the first
+part. Let's generate a diff.
+Now you've all probably seen functions
+that generate diffs before, but I'm
+going to show like two or three
+different options on how to generate
+diffs because they can make a huge
+difference, and especially if we have um
+especially the minute you start going to
+smaller models, it can really really
+dramatically change the quality of your
+results as we go talk about this. And I
+think that's going to be a very
+interesting part about this. So generate
+diff.
+What we're going to have is instructions
+string
+and then what we'll have is like code.
+And for now we'll pass in only a single
+file. We won't pass in more than one
+file at once. We'll ask it to generate a
+So that's like the current code, the
+current state of the file basically,
+right?
+Exactly. Uh I'll call it I'll call it
+something better. Current code.
+And what I want to output is some code.
+Uh
+Let's use GPT-4 over now and I'll bump
+myself down.
+Um
+instructions, here's the current code.
+I'll give you a set output format.
+And then what I will do is I will
+probably do this. dot roll user
+cuz we're using OpenAI's models, they
+send to they send to like system
+instructions with roll users, and then
+we'll add another part of it, which is
+going to be
+file path.
+Um No, I don't need file path. Okay,
+let's just add current code.
+Okay, let's open this, and then I'm
+going to start pasting in some test
+cases really fast.
+Oops.
+Okay, uh
+and when I go ahead and actually get the
+calculator, let's grab this calculator
+code just so I can test it.
+Mhm.
+Okay. Now I have something I can go test
+really fast that is
+doing interesting things
+with the calculator.
+Oh man, this is so this is so clean.
+What instructions are you going to give
+it? So what I think I'm going to do is
+I'm going to say let's say I want to add
+exponent
+uh capability on the on the
+go.
+operator
+So it's a pretty clear instruction. The
+code is pretty clear and it's pretty
+self-constrained as to exactly what it
+should go do.
+And I probably want to go ahead and
+figure out what I can go do and I don't
+know what this do.
+I don't even know what this is.
+Uh and then it's going to go add add
+multiply divide. So it will have to
+touch multiple files in the system.
+But we'll go see exactly what we can do
+if we can go add the exponent operations
+to the calculator.
+If I go run this, it will probably go do
+something.
+Um
+And the first part that I will get is
+it's not going to really go to do in the
+right way. It's going to offer like uh
+giant update system in a way that isn't
+very useful. So let's make it actually
+better at this.
+Uh class this
+Uh what we'll do is like we'll say goal
+string.
+Mhm.
+It's just kind of having it outline its
+reasoning a little bit before it goes
+out into generation.
+description And then I'll have it
+generate the diff right over here.
+Um and I'll say the return type of this
+is going to be a diff.
+So now what I have Oh, let me do word
+wrap.
+Now what I have over here is I have a
+method that can go ahead and return some
+sort of goal and then diff back to me.
+Oh, probably don't want to call this
+goal. I'll call it like update
+description.
+Cool.
+So it kind of did a diff, but it did it
+in a format that is
+kind of useful, not super useful.
+Um because I can't actually be
+guaranteed that any of this is going to
+be abided by because I didn't give it a
+way to read the diff.
+So let's add a little bit more
+constraints onto this. Wait, I didn't I
+didn't quite follow that. Um cuz I saw
+that my first impression was like, "Oh,
+that's a diff. That's a patch file I can
+go apply to my project right away." So
+what's what's missing from this? So the
+first thing that's really missing from
+this for me is a couple of things.
+Yeah.
+Um and the first one is really just the
+fact that like calculator_original.py is
+probably not the name of my file.
+Right?
+I see. Okay.
+Uh calculator_updated.py is not the name
+of the output file.
+There's these small nuances and I think
+these nuances are dramatically going to
+change how we parse and go read things
+around it.
+But
+Okay. what I do see is that this thing
+probably wants to know what it is going
+to go do. So let's give it like a file
+path file name in general.
+Okay. Real quick by the way, there was a
+question about like which part of this
+is in the user pro user message versus
+system prompt um if you want to clarify
+that.
+doing right now is everything above this
+for GPT-4o is generally going to by
+default being the system message,
+instructions that the user gives me, and
+the output format I want. And the actual
+code goes into the user message. I'm
+basically treating the instructions of
+the user as good as a
+uh as good as um
+instructions that I gave on the team. Uh
+as someone uh on our code wrote. Even
+though it's user incoming message, I
+treat it like a system message.
+So let's talk about like
+like what is it like a lot of them all
+models have better instruction following
+for what you put in the system prompt,
+right?
+Why not put the current code in the user
+prompt?
+Um
+Oh, why why put the current code? So
+there's a couple of different reasons of
+why we put this in the current why we
+put this in the current code as opposed
+to the user prompt. And the biggest
+reason is just like the way the models
+are oriented. So let's just take a look
+at what what this does. If I were to go
+were to go read the prompt
+you can view like the you can view these
+role semantics as basically just like
+automatic um oops
+I should fix that.
+As automatic um
+breakers for where the code actually
+lives. So now if I were to go write
+this, it isn't actually obvious where
+the section of my code begins or doesn't
+begin. I'd have to add some prefix like
+uh code here.
+But if I'm using user
+I see. system messages, I kind of get
+that by default because these are
+special tokens that the model ingest
+that let it know that it's eliminating
+something by default.
+Okay, so you're you're not really
+relying on the assistant user tuning in
+terms of like a chat conversation, but
+you're just using switching the user
+mode as a really really well-tuned
+separator between whatever came before
+whatever's coming next.
+Exactly.
+Cool. Cuz the model is well-tuned to
+understand this and this gives me a
+really really free way to go paste this
+down.
+Um Yeah, I think it's he's saying like
+basically like if you if you used XML
+tags around it, that would be similar.
+We're just using this for the purpose of
+separating. Yeah, and like we can go do
+this and like this
+we can do this even now, but it we
+really don't need to
+because this is pretty well understood
+in terms of what the errors they could
+have are.
+Cool.
+Sorry, you were talking about diffs.
+Let's Let's go back to diffs. Now, I do
+like the update descriptions. I think
+these descriptions could be a little bit
+better. So like uh let's just rename
+this to update notes. And right now I'm
+just updating it directly
+uh rather than changing like alias or
+anything because I'm just I I'm not
+really using this code anywhere. And now
+let's talk about diffs. Now, a couple of
+Okay. So
+return in
+this format. Let's give it a more
+constrained format.
+diff
+And then what I want is I'm going to
+make it generate the diff in a markdown
+file.
+And I'm going to try and look like this
+diff as much as possible cuz this seems
+to be the thing the model likes to do.
+Is this like proper
+uh my file.
+Yeah, Gabe. Great uh great question.
+Yeah, so we're going to start with
+GPT-4o and then um we're going to show
+how we can use some prompt techniques to
+make this work really well even with 4o
+mini or something.
+There we go. So I'm going to let it go
+do this
+uh in this example.
+Where the way that it's going to
+generate the diff is I want it to tell
+me what file it's removing, what file
+it's adding. And then it's going to put
+in some like line numbers or something
+around this, I guess. And then
+surrounding code, add the deleted code,
+add the added code, and give me back
+surrounding code at the very end.
+Um and it added the closing XML marks by
+default. So it didn't really work. So I
+updated so it's not a closing tag.
+Now, this clearly looks like it could be
+misinterpreted. So I'm going to I'm
+going to write it like this just to like
+make it a little bit more clear that's
+not XML or something by default.
+So let's try running this now.
+Um
+Return this format. Don't need quotes.
+So escape this.
+Um what is it doing?
+So let's go read this code and see what
+actually pulled out.
+So it did actually do something pretty
+nice for me whereas it gave me a diff.
+It said these lines changed.
+And then it gave me another diff where
+it says these lines changed. And it told
+me exactly what I need to add remove and
+add uh this format.
+Which is kind of interesting because it
+actually was able to detect that the
+divide needed a comma and then it added
+the exponent.
+Mhm. So this seems to work pretty well
+in terms of what it's parsing and what
+it's returning back to me.
+Um Looks like it did still have the
+backticks though. Were you trying to get
+rid of those? Yeah, let me see uh return
+this format. Use
+So I told it not to do something as we
+saw like my prompt said don't need to
+add quotes to escape this. Instead of a
+don't, let's add this. Let's Let's give
+it a capability instead of removing a
+capability. Use triple backticks
+to
+Do you want triple backticks though?
+Like aren't you going to just going to
+strip those out later? characters.
+So I'll show you what I mean.
+Okay.
+Um
+Let's see if I can get to do this.
+Yeah.
+Uh
+Let's call this field something else.
+Oops, sorry.
+And this is kind of like a version of
+few-shot sampling, I guess you could
+say.
+That's trying to produce some good code
+here. Let's try and run this. Funny, we
+have syntax highlighting broken.
+Did it go do it? No, it's still adding
+the triple backticks. So it sounds like
+I can go do this.
+Um
+So you're telling it to use backticks?
+Let me tell you why I'm trying to use
+triple backticks.
+So the problem is if I don't use triple
+backticks, it's going to put the thing
+in quotes. If I put it in quotes, it's
+going to be really hard for me to find
+out where this quotes start and stop cuz
+my code itself has quotation marks in
+it.
+So when I generate the diff, it's going
+to break eventually because if it
+doesn't the quotes correctly or do
+something else correctly, it's
+definitely going to go break. So, maybe
+what I need to do is I need to call this
+diff update diff.
+Let it code. Let's call this updated
+code.
+And then try something here again.
+Use triple backticks to prevent escape
+characters.
+There we go.
+So, it's what it looked like is naming
+it diff over here was confusing the
+model.
+But, now that I'm using a name that's a
+little bit more unique and specifically
+not related to the actual thing I'm cuz
+I'm overloading the word diff to mean
+too many things. It's both the name of
+my output and the action that I want it
+to go do.
+So, by renaming it to update code, it's
+probably a just a little bit easier for
+the model to go understand what's going
+on.
+Um
+escape characters uh
+and no quotes.
+Let's try this one more time see if I
+can get something good.
+Um nope, the other way was necessary.
+Okay.
+Oops, there we go. Okay, so this is
+actually a a sort of like um
+an intuition you have about specifically
+about how the YAML parser is pulling
+things out of this field. Well, it's
+also just about what I need the model to
+go do. I do not want the model to
+generate worry about these quotes cuz it
+will mess up cuz I'm generating large
+sequences of code.
+Oh, because it's trying to make JSON and
+those triple quotes are going to like
+make it think that it accidentally made
+invalid JSON or something.
+Exactly. Got you.
+And that's going to be really really
+hard thing for me to go get. And the raw
+output of the
+uh prompt looks like this.
+Thanks, someone else.
+Yeah, so that context that output format
+ends up translating into this this is
+like the full raw prompt. And I'm
+noticing like answering JSON the schema,
+I'll just get rid of that really fast
+because this is so finicky.
+Prefix
+equals
+answer using
+the schema.
+Prevent escape characters like
+Um and then why is that outputting JSON
+so Let me go update this. Okay, so your
+concern is that it's trying to escape
+all the quotes in the JSON and the
+concern is that if the model has to
+think about that, then it's going to
+kind of gum up and take attention away
+from the core task, which is generating
+good code. Exactly. So, let's add a
+couple more things. Let's add
+temperature zero to my system.
+Let's run this one more time and see
+what it does.
+Um
+and let's try this one more time.
+What I'm going to do is I'm going to
+actually move this out of the
+description and just try seeing if I can
+give it a few-shot example right over
+here.
+Allow
+for no
+escape characters.
+And now the prompt looks like this.
+I see. So, you took the description out
+of the actual schema and you're just
+adding this as a standalone instruction.
+Exactly. So, allow for Oh, I know what
+it To allow for multi-
+line strings.
+There we go.
+And now we have it working. I see. Okay,
+so you And this comes after the thing
+that I think I've heard you say a lot
+before, which is this idea of like let
+the model write code in the way that
+it's most trained to write code, which
+is not code inside a big JSON object,
+but is just stream the code out flat as
+as it as an actual file. And so, by
+telling it to use triple backticks, the
+model thinks, "Oh, now I don't have to
+deal with escape characters. I can just
+do this as multi- multi-line string."
+Exactly. Exactly. And one quick thing to
+note here is I told it to a multi-line
+string and you saw me iterate in many
+different ways. I wrote a lot of nots in
+the before.
+And really what I was able to nail nail
+down here is by getting rid of all the
+nots and really thinking hard about what
+I was trying to get it to do, which was
+really just like I wanted to output
+multi-line strings.
+By letting it go do that,
+it can now understand exactly what it's
+going trying to go do a lot better.
+Right, cuz it hasn't been trained on
+generating code inside a JSON object.
+It's been trained on generating code as
+a flat thing. Exactly. And like it's
+really about the not concept that is
+hard to go wrap my head around,
+especially the minute I go to like the
+smaller models. So, let's use like a
+smaller model like this one.
+Temperature 0.1.
+Let's just boil this down and see if it
+does approximately the right thing.
+The idea of a not is just very very hard
+for it to go do. And now you can notice
+that the diff has gone a little bit
+longer because of the slightly smaller
+model.
+And if I'm doing this, the first worry
+that I have is, "Oh, is the model just
+outputting like a lot more code than it
+needs to?" Let's see if I can trim that
+down.
+One easy way to trim that down is to
+just make it return multiple diffs
+instead of one diff.
+Cool.
+Right? So, let's just go do that.
+That's a lot of return.
+Another diff.
+Let's see what it does.
+Oh, it's outputting a lot more code.
+Uh let's add some instructions.
+Keep diffs
+small and
+and use multiple diffs.
+I wonder if this thing is messing it up
+right now
+because it's actually telling me that
+this allow Technically, the diff format
+allows for multiple things to be
+included. Let's get rid of this.
+Uh Are you going to be able to what Keep
+going. I have questions. I'm going to
+Let's let's hear this example.
+Okay, let's run this.
+Let's see what this does.
+Um this did not add any pluses or
+minuses and we'll talk about this in a
+little bit later. And let's go add one
+more thing.
+I actually change this to be update
+notes just to be um a string
+instead of a multi-line string cuz
+what's likely happening is writing
+multiple diffs
+and then it's going to head and just um
+not really understanding what it needs
+to go do. So, what we should really do
+is class
+updated code string array.
+So, here's what I'm going to do. I'm
+going to let notes be multiple and for
+each one of these notes, I want it to
+generate one code sample.
+And I'll add this in here.
+Use block from multi-line string.
+I think this will work.
+Um and then this will return multiple
+multiple and then I do not need this
+anymore.
+And one more try.
+What What's the prompt look like now?
+There we go.
+But, here's what the prompt looks like
+now.
+Let's go read this fast. Um
+So, what we really want to go do is what
+we want to go do is we want to say that
+we're going to generate a triple
+backtick string for multi-line files.
+We're going to literally let it generate
+the code. Then we're going to say you
+can actually generate multiple diffs in
+this format.
+Uh and then we're going to keep the
+diffs small, use multiple diffs for the
+same file.
+What the model ends up generating is
+something actually very useful, which is
+add exponentiation operation to the
+calculator and this is GPT-4 mini.
+And actually it was able to break it
+down to say my file, it says, "I need to
+go add exponentiate over here and I need
+to go ahead and add exponentiate down
+here."
+Now, the thing that's missing it looks
+like is the at symbols actually helped
+it quite a lot.
+It also added an exponentiate function
+directly into this method instead of
+adding it to the import.
+Um let's go ahead and add a little bit
+more context onto here.
+Do you want to tell it what file name
+we're changing as one of the parameters?
+That's kind of what I was thinking as
+well.
+Cuz it seems like it's getting uh
+confused by this.
+File name file
+And that's probably good enough.
+So, let me know if that
+file name calculator.py.
+So, let's read the prompt one more time.
+We have the file calculator.py, we have
+the actual contents of the file.
+And then what we really have is
+uh let's run this code in one more time.
+I just want to let you know we're at
+about 20 minutes left, so I'm um not
+sure if when you want to you want to
+switch to actually like applying these
+diffs.
+Cool. That's a good point. Or kind of
+the other stages of the pipeline. Let's
+talk about the next stage of the
+pipeline. So, we have something that
+seems to be able to generate some amount
+of code from here. And we then we also
+have something that can also apply
+diffs.
+So, now let's talk about the next part,
+which is actually generating diffs. I
+think we had one last question, which is
+how much does indentation matter in the
+description in the prompt?
+Um indentation pretty much just matters
+because it's just like noise.
+For example, if I were to not indent
+this versus indent this, it probably
+just reads slightly differently.
+You want to show the token view?
+Um can we see if it changes the actual
+like tokens? It I mean, indentation is
+white space, but like in the end what it
+really it doesn't really matter too
+much. And the reason it doesn't matter
+too much is
+the way I look at this is like
+think about like a human reading it for
+clarity. If I indent this, then the real
+benefit that I get as a human is I can
+really quickly jump down here and see if
+this is where it ends.
+Mhm.
+The model can also pick up on patterns
+while reading this sort of thing, and it
+should be able to detect that this thing
+it just belongs to the thing above it
+because it's indented.
+So, in reality, I should probably be
+like tapping these in as well, just
+because it's just like easier for it to
+see like, oh, this is like one
+one indentation and this is two
+indentations.
+Cuz there are tokens that exist for like
+four four space tokens.
+So, it just like it reads two tokens as,
+oh, it probably belongs to a diff inside
+of this array. It probably belongs to a
+diff inside of this array.
+And then I'm going to go back to the
+photo.
+And now I want to talk about the next
+part, which I think a lot of people
+overlook, which is how can I actually go
+ahead and apply this diff?
+Because once you start applying the
+diff,
+the hardest thing that most people run
+into is actually going to be
+I'm going to go back to here, which is
+when we go out and apply this diff and
+we have a bunch of diffs,
+most people are like, I'll just go and
+like string replace, go do this. But
+actually, the best way to think about
+this problem is on a per file basis.
+So, instead of viewing this as a massive
+um
+as a I'm going to apply all the diffs at
+once, what I'm going to do is I'm going
+to apply a single diff
+at one point at a time. So, there's
+going to be a diff object,
+and this will be all and this will be
+only that one file that it really
+touches.
+And I want to go think about this
+problem.
+The first thing you have to do in this
+problem is you have to go ahead and say
+find match
+diff.old.
+And this is going to be like some find
+match function of the old method of the
+file and then like the current version
+of the file.
+And if you failed to find a match,
+there's a couple of things you can go
+do.
+You can toss it to another LLM
+to go ahead and see if you can find a
+match. You can use something like uh
+Levenshtein distance or something else
+to see if there's something
+approximately close to the match.
+But in reality, if you failed to find a
+complete match, then this whole thing
+that it generated at the top is probably
+not very useful, even if if you can't
+toss it to an if another LLM is unable
+to find another match for you.
+Yeah, I've seen I've seen cloud code
+mess this up a lot, and I I think
+there's this not like plus minus diffing
+and it's a little bit more like
+string to replace So, they do it with
+like a find replace basically, and then
+it if it can't find the string to
+replace, it'll fall back to trying to
+use like said and grep. Yeah. So, if you
+remember, there was this thing that we
+we talked about a couple sessions ago,
+which is about managing the context and
+like the case of like an error system
+where like um
+when I'm generating like a Cypher query,
+uh I'm going to have the user generate
+some context, and at some point the
+model will get it wrong.
+Well, then what I will end up doing is
+when the model gets it wrong, I will add
+some new context on top of it. I will
+let the model go generate a new
+response, and then it will probably
+hopefully get it right at this point.
+And for my final context window, what I
+end up doing is I say
+I will literally just ignore everything
+that the model did in the middle and
+only give the right query.
+Oops, I'll change the colors on here so
+it's a little bit more clear.
+And only give it the right query and
+delete these other two contexts out of
+it.
+So, I'm basically just managing the
+context. I'm pretending like I got the
+answer on the right on the first try.
+I can go do the same thing with a diff
+system,
+which is once I find a match in here,
+uh whether it's by using an LLM, whether
+it's by using like a string match,
+Levenshtein distance, or anything else
+onto here, I'll I'll do my best to find
+a match. If I failed to find a match, I
+have to abort out of the loop
+and leave and go back.
+But once I find a match,
+then I can do a couple of different
+things, which is I can apply the match.
+And this is a basic operation to just do
+like a string replace.
+And once I'm able to go ahead and apply
+the match, I can do the next part of the
+system, which I think
+is the part that most people never do,
+which is leverage the AST.
+What does that mean?
+Well, there's two parts of code that
+needs to be correct when I go generate
+this.
+One of the parts of code that needs to
+be correct when I go generate this is
+going to be that the syntax of the code
+is actually correct.
+I can I can use the AST library
+uh uh Python provides to go validate the
+file itself. And it's not actually going
+to make sure that all my imports are
+correct or anything else, but what it
+can do is just validate the actual
+syntax that the LLM generated in the new
+diff is correct. So, for example, if it
+missed a comma or something else. And I
+can find exactly what line has the AST
+mistake,
+and I can do put this in a while loop.
+Okay, so this isn't going to catch
+issues with like imports that are broken
+or methods from other files that are
+called wrong, but at least we'll know
+that the code was syntactically correct.
+Exactly. Cuz I want to scope down the
+problem as much as possible because if
+I'm going to go use
+um if I'm going to go use something like
+um
+like code generation, I don't want to
+have the model worry about everything
+always all at once.
+If I can have guarantee like what
+guarantee do I provide at the first
+sentence? I provide a guarantee that the
+match of the old diff exists in some
+shape or form matching the existing file
+somehow.
+And it doesn't matter that I use an LLM
+or string replace inside of this method
+to go find that exact line.
+All that matters is that I was able to
+find it.
+And when I apply the match, this is a
+string replace. I don't have to think
+about it. But what I wanted to go do
+here is I want to make sure that
+um
+Okay, so you have another LLM with a
+very specific prompt that is like, hey,
+here was the change you tried to make,
+here was the original goal, here were
+the errors. Exactly.
+And generate a new diff basically.
+I may not even need to give it
+uh I may not even need to give it
+uh
+I may not even need to give it uh what
+they called the original file.
+Since it's just a purely syntactical
+error approach.
+What's nice about this
+like
+validate it again or something.
+What's nice about this method is that
+this fix error method
+I'm going to try drawing a curvy arrow.
+The fix error method could really be a
+thing.
+Ooh, I tried. Uh could really be a thing
+that goes back to my update files with
+just a single file with a very specific
+instruction that I have hardcoded to
+help it analyze the errors.
+So, it could technically go back into my
+rebel loop
+and that I'm building out here and have
+it go generate this.
+And it could be like a version of this
+method that doesn't actually need to go
+run in terms of like um in terms of run
+the code. It just needs to go make it
+syntactically valid.
+So, rather than the errors, you would
+actually have kind of like some kind of
+new instructions here. Exactly. And
+you're kind of recursively you're
+recursing. And then what's the exit
+condition of this while loop? Is it
+like, you know,
+if not errors, break?
+Yeah, exactly.
+Cool.
+That's exactly it.
+Cool. And I can do something a little
+bit more sophisticated where like if I
+have like 50 errors or like 20 if like
+I've done this loop like five times, I
+break anyway.
+Yeah. Um but this kind of gets me there
+kind of most of the way there. And this
+is the same thing. I generate a diff, I
+go apply the diff, and I run this in a
+loop.
+It's pretty similar, but it's defined
+it's breaking down the problem in a way
+where the only goal of the thing when
+the only goal of the update file when it
+enters from the fix errors context
+is to just fix these errors.
+If that makes sense.
+Cool. Following. Yeah, this is uh this
+is starting to feel like a an ambitious
+topic to try to cover in an hour, but um
+I think this is super interesting. The
+next thing that we really want to go do
+is actually find all the imports. And
+again, we can leverage the AST
+to go do this.
+So, we don't actually have to use an LLM
+to go do this. I mean, we could, but we
+can also just use the AST in the Python
+library to tell us what are all the
+imports that are imported into this
+file.
+And any new imports that are done,
+we can just
+import them.
+It turns out that this is a pretty
+straightforward task as long as you have
+all imports provided to you. So, if you
+see any files that are local files, we
+can know the difference between those
+because we can detect which are local
+files because we have access to all the
+source code.
+And we can just update the environment
+to import everything uh
+relative here.
+If we run into any errors,
+we do the same thing over here.
+Uh now, this one gets a little bit more
+um sophisticated in terms of how you
+would have to deal with these kinds of
+errors.
+And the reason for that is there's a
+couple of different types of errors that
+we can imagine that the system has.
+One of the types of errors that the
+system could end up having
+is the fact that
+stuff just doesn't exist. It's a made-up
+repository.
+In that case, there's no amount of
+install steps that we could go do to go
+fix this and we have to go back up to
+here and abort out of the system and
+somehow add some new observations into
+here that says do not use this library.
+The next type of error that we could
+really have is the fact that we just
+installed something incorrectly in a
+slightly different way. Like for
+example, one common mistake I make is I
+do pip install dot and
+where you have to do pip install python
+dash dot and.
+Mhm. And fixing that sort of error may
+require some other like there's a couple
+of different ways to go um inspect into
+that. One of them is you use like a web
+search agent to go and call it and say
+how could I fix this error?
+One is you go ahead and just like
+ask the LM how to go fix the error.
+And there's different approaches here,
+but in general you can do this.
+Um
+Jonathan says why not both?
+Why not both? You can do both.
+It's just a matter of time and
+expediency that you really have to think
+about when you build these systems.
+Um
+fix errors.
+Fix install errors um and I've also like
+fixed
+uh AST errors.
+Uh errors and then we're going to give
+it actually the file and we're going to
+do a new thing in here that we probably
+have to think about that I forgot to
+include in here which is
+uh you want to have some sort of
+observations object that you're kind of
+tracking over time that you're going to
+pass into this.
+The observations object needs to be a
+thing that is passed into every other
+object downstream.
+That you can somehow modify in some way
+and then go ahead and update as well. So
+in this case you might need to go ahead
+and update the observations.
+Um unfixable.
+If unfixables
+There we go. And then you kind of just
+want to abort out of this.
+Raise
+stop exception.
+And then
+on this method
+try
+catch. I can't write to the code very
+fast.
+Uh and I want to abort out of this loop
+and really just add some unfixable
+errors down here.
+But the whole
+I think the whole point of what I really
+wanted to cover today is that when
+you're trying to go build like a diffing
+agent the way most people apply this
+agent is a very simple loop of ask the
+LM to go fix something, if it breaks,
+give it the error and go build that loop
+forever.
+And when you're trying to go do that
+system,
+the problem with that is you run into a
+lot of brittle edge cases that the model
+just cannot fix.
+And specifically what you're running
+into is the same problem that we usually
+talk about which is context management.
+Which is if you're not manually building
+the context up out of the system
+it is very very hard for you to navigate
+and get the model to go output it
+correctly. For example,
+maybe GPT-5 or 4.1 can go do this in one
+shot for a lot of problems. But GPT-4O
+mini cannot go do this very well. It
+will just struggle to apply a diff. And
+it will struggle to
+perfect it.
+ability to actually just like understand
+full context when it especially as that
+context window gets longer with more and
+different kinds of errors. Um
+yeah you lose you kind of lose the
+thread and you spin out, right?
+Exactly. So the whole point when we
+talked about like the side protection
+generation where we're actually able to
+remove these two messages out of the
+context window and not have to have them
+long term and we only keep them around
+temporarily becomes even more important
+when you're doing a complex task like
+code generation.
+And the most important part to do is be
+able to decompose the problem to very
+small problems
+and then say all I have to do is find a
+match. Cool. I will take the diff. If I
+can find the exact string match, I'll go
+do it. If I can't, I'll use an LM to
+find the line of code that's referring
+to.
+And if none of that works
+then I'll literally just abort and add
+an observation to my system and then
+have it go do this. And at some point
+when it gets to a good state I want to
+go ahead and clear the observations.
+Cuz they're no longer interesting to the
+like next set of problems that we're
+solving or the next step back plan.
+Exactly.
+And it's kind of me tracking this
+history over time. And then what I
+really want to do is I want to go
+leverage existing tools that are really
+good for doing certain kinds of tasks.
+Like the LM should not to be doing
+syntax validation.
+I likely also shouldn't be using an LM
+to look at the whole file and tell me
+here's all the errors go go find out
+what they are and go fix them.
+If I instead use an AST to tell me this,
+then I can give it the exact pinpoint of
+surrounding code and say go fix the
+syntax.
+Yeah, I think Jonathan that's exactly
+right. And like the LM's job is to turn
+context into new tokens, new code. Your
+job of everything else is to get exactly
+the right most optimal context into the
+LM so it can do that as well as possible
+as cheaply as possible. Exactly. And
+then same with installs. Instead of
+asking instead of running the code and
+telling me what I need to install, I can
+just find
+all the imports. So like for example,
+there's a
+there's a python library in here that
+you can use.
+It's called like
+import
+AST.
+Def find find imports.
+Uh code.
+You can literally just call AST.parse.
+And you can literally just walk through
+this tree and find everything that's a
+module of AST import.
+And it will literally just tell you
+exactly what this node is.
+And it will actually yield out exact all
+the all the imports for you.
+You can get import from as well.
+Um
+and I believe this will do everything
+for you.
+Now this won't catch every import cuz it
+will miss out on some of the most like
+edge casey imports that you have.
+But you can still detect most of them
+from here.
+Um now the other thing and I can run
+this code if people are curious. The
+other thing that you're able to go do is
+I could also go generate this um yeah I
+can also go generate this from actual
+code as well.
+Function find imports.
+Um let's just go write this. Test.
+Oops.
+If I give it the same code that I have
+down below
+Let's go.
+Oops.
+If I give it
+Should be LM parse out all the imports.
+And then I can just find LM parse out
+all the imports. Um
+Oops.
+And it will probably respond fine.
+And it says the only import is
+operations.
+Which if I look at the code is actually
+true.
+Right? If I add a couple more
+it will pull it out. And the beauty of
+this thing is there's like this art to
+kind of figure out what kind of model
+you want to go use for these kinds of
+things.
+If I were someone what I would want to
+do is I'd want to figure out the
+smallest model that I can use for each
+task.
+And in this case finding imports is a
+pretty small task so I could probably
+throw GPT-4O mini at it. I could
+probably throw like a deep sequel or
+even like I don't know. Probably like
+something.
+Like maybe even like a llama
+8B.
+Oh, that's pretty good.
+If you put it out, I think I have llama
+uh latest.
+I think I have a llama running.
+I do not.
+Um I can start
+know if you need the latest tag, do you?
+Uh llama PS. O LS.
+O llama LS.
+Do I have any of these?
+Yeah, you kind of do need the latest
+tag. It's kind of annoying.
+Uh do you want latest?
+Uh
+V1.
+Um I'll figure out why. I'm probably
+missing some
+really parameter here.
+Um
+so I'm going to go do that.
+But really determining what model you
+have to go use can make a huge
+difference. So in this case what I
+really want is if I all I want to do is
+find imports and I don't want to write
+the AST code over here
+I can literally just use O llama to go
+leverage instead because I know this is
+a small enough task. And if 90% of my
+system that I'm that I'm writing over
+here
+ends up using mostly a small small
+model, but then some of it ends up using
+like let's say GPT-4O, I can get a lot
+of value
+just by reducing the amount of cost that
+I have to go do in in terms of latency
+and in terms of accuracy.
+Because the most important part I want
+to do the hard part as much as possible
+with a big model. I want to do this I
+want to do the small parts
+uh with smaller models.
+Um and because when I'm going to go run
+this
+I run into this problem where like
+generate diffs, especially if I'm on day
+zero of my system, I do not want to go
+ahead and like get all of this down
+in terms of the cost and accuracy. I
+just want the accuracy to be high and I
+don't care about cost. I'll throw this
+at GPT-4o.
+And because I've spent more time on on
+applied diffs, more of this will be
+smaller models. And what you do is you
+incrementally replace parts of your
+pipeline with smaller and smaller
+models. And as you add smaller models,
+the real work around to make smaller
+models better is one some of the prompt
+engineering stuff that you end up doing.
+But the real thing is really about like
+adding supporting systems around them.
+So you can actually go ahead and make
+them better. So in this case, leveraging
+the AST allows me to use a smaller model
+because the goal of the smaller model is
+no longer generate perfect code and fix
+all of your errors. The goal is generate
+something that's pretty close to correct
+and be able to fix syntactical errors.
+It doesn't have to fix logical errors.
+It only has to fix syntactical errors.
+And then when I go to validate, I live
+in this world where I'm again validating
+large running code.
+And I might have even something detect
+what kind of error this is. If it's a
+simple error, I'll toss it at a smaller
+model. If it's a more complex error,
+I'll toss it at GPT-4o or 4.1.
+And
+And so you're just constantly adding new
+probes and knobs and dials on your
+pipeline that you can make changes and
+you can swap out a bigger slightly
+bigger model slightly smaller model etc.
+Exactly. And in the end all of this is
+really about a distribution play, right?
+We have a distri- oops.
+How do I draw a line?
+Uh
+up here. Yeah. Draw a line. Okay. All I
+really want is I want a distribution
+where the majority of my users fall
+under this and I have some long tail of
+this and where this is like dollars
+going up higher.
+I just want I want to make sure that
+most of my users fall under this domain.
+If like 5% of my users are extremely
+expensive, that doesn't really matter
+for most use cases. If 5% is really
+slow, it doesn't really matter. It is
+going to be really really hard for
+someone to build an AI pipeline that
+looks like this
+while having good accuracy. That's just
+not the way AI pipelines can work
+because of the nature of problems that
+users will constantly ask you to go do.
+So one way to deal with this, especially
+when your problem is very very expansive
+like generating code, is you design your
+pipeline from the very beginning to kind
+of follow this sort of distribution.
+And the whole point is your pipeline Oh,
+how do I make this thinner? I hate this.
+Okay.
+Your pipeline starts off at a
+distribution that looks like this. It's
+very expensive. Right. You're using big
+model. This is like what you keep the
+kind of the recurring point is like
+start with a big model that can do a
+bunch of things pretty well and then
+slowly over time like as you say, oh,
+this is worth building. This is
+valuable. We want to invest more
+engineering time on this. You're
+constantly shifting that code that that
+curve to the left and making it kind of
+better.
+Exactly. So like what I what I can do by
+swapping just applied diff section cuz
+applied diff is almost definitely the
+most expensive part of my pipeline cuz
+that's where it's going to make
+mistakes. I have to re-correct them and
+I have to loop in that forever. It's
+probably not in generating diff. It's
+probably in applied diff.
+By shifting applied diff to be better, I
+probably just shift my pipeline to the
+whole very much to the left.
+And then eventually what I can do is I
+can work on generating things that are
+really really good for Python and maybe
+even fine-tune a tiny model for that and
+slowly just over time shift my pipeline
+over. But this is the whole point of
+where you move your pipeline over is all
+about
+moving it to the left and adding
+engineering over here. What we're really
+doing is we're applying engineering to
+make it cheaper, faster, more accurate
+by taking a better control of the
+system.
+Does that describe the high-level thing
+of what we were trying to do in today's
+conversation? It was a It was pretty
+ambitious, I guess, to take all of this
+and go implement all of this from
+scratch.
+Yeah, there's a lot of requests for
+people want to get working code for all
+of this. So maybe maybe we'll have a
+hack day this weekend and
+Yeah. Yeah, we'll go do that. We'll go
+to hack day and we'll give you like
+working code from this sample and get
+this out. Um no, this is good and I I I
+think what's also like what what wasn't
+explicitly mentioned but is really
+really important to keep in mind is like
+every single one of these techniques
+that is like, oh, cool. We'll take a big
+model and then we'll make it cheaper,
+smaller, faster, better. You could take
+all of those techniques and just drop in
+a big model again and suddenly because
+you're doing these accuracy techniques,
+your big model is going to perform a lot
+better than just a naively single shot
+single prompted big model.
+Yeah. Exactly. Exactly.
+I think what we should really do, Dax,
+is we should take this code and actually
+just turn this into real code cuz I
+don't think I could have pseudo coded
+and written the code in real time.
+Yeah. Are we going to build an AI to
+clone this weekend? I'm doing a I'm
+doing a hack day on Friday, dude. Maybe
+we'll have you join remote. Yeah. We'll
+go do that. So we'll probably send out
+an email slightly later with today's
+session with the working code. Uh expect
+it probably around the weekend.
+Um are there questions that people have?
+I know there were a couple that were
+asked as we were going on.
+Yeah, feel free to come off mute mute
+and shout and tell us what you liked or
+what was confusing still or drop it in
+the chat. Hey hey Vaibhav. Hey Dax.
+Thanks thanks for the great session. Um
+so this
+this was super great for the problem of,
+you know, making targeted changes in
+code. I'm curious if you guys have any
+thoughts of, you know, how how how the
+problem kind of changes when we're
+thinking of, you know, building
+something from scratch, right? So like
+if I were to go to, you know, StackBlitz
+or V0 or whatever, I just I want to get
+a whole bunch right off the initial
+prompt. How do you guys think about that
+that problem?
+I view that as a totally separate
+problem as updating existing code. So if
+I were building a system that were going
+to go do this, and again, it's all about
+like this left-to-right movement, Yep.
+the way I'd move this system from left
+to right,
+uh
+the way I'd move this system from left
+to right is I'd first build a system
+uh that is able to like I'd build two
+separate systems like generate new code
+and
+update existing code.
+And really just build a router between
+them
+that decides which one I'm going to. And
+I'd treat them as two totally totally
+separate systems.
+Um and that's why V0 is so freaking good
+at giving you a UI out of the box, but
+it's so bad at updating code eventually
+because at least what I run into is like
+I get amazing draft one. Chat message
+one, beautiful. Chat message two,
+amazing. Chat message like 25, I'm like,
+oh my god, I'm ripping my hair out
+trying to get it to do the thing I
+wanted to go do.
+Because it's just not as um
+it's just not as precise.
+And it's just this balance that you end
+up having to go do for now given today's
+models. Does that answer your question,
+Tal?
+Yeah, I I I guess I'm I'm curious how
+you how feasible you think it is for
+something like V0, maybe like what what
+the time and this is a you know, a very
+loaded question like what the time frame
+might be where something like that could
+be commoditized.
+think I think a lot of getting this
+working is actually not about getting it
+working but also giving people really
+good tools. So V0 has started to go do
+this. But one of the things that you'll
+notice like Cursor do, so like I'm in my
+I'm in my I'm in my Rust code base,
+is Cursor will actually let me like
+refer to actual code right in here.
+Yep. And the reason they do that is
+because it turns out this problem that I
+saw at the very beginning of finding the
+right context is really really really
+hard.
+I get a lot of value by the user just
+telling me what they want me to pass in.
+So instead of having to build this out
+directly from scratch, V0 likely has to
+build some sort of tooling to make this
+better. So I'll show you some of the
+tooling that they've built out that I
+think is headed in this direction and
+shows this point very directly.
+So like um
+I'll just open this floating bubbles,
+whatever.
+Right? Um and look at what they can do
+here. They actually allow you to now
+select these elements very directly and
+apply quick changes. Why are they doing
+that?
+Because if you don't do this, you will
+not generate good code. Like they cannot
+do it.
+So a lot of these paradigms in terms of
+generating perfect responses will not
+just require
+uh not just require like code changes
+foundationally at the very bottom layer,
+but they also require UX workflows that
+are
+tuned perfectly to the exact way that
+you are currently writing that code.
+V0's case means point to that part of
+the element. Cursor's case means refer
+to that file. So if you are building a
+competitor, then what I would do is I
+would figure out what is the
+what is the most UX friendly way for the
+person to give you the right context?
+Cuz if you have the right context and
+you have good instructions, it is really
+easy to go do that.
+Good instructions are a lot easier to
+correct using a model and ask clarifying
+questions. Bad context is virtually
+impossible
+to correct. So just help the user give
+you the right piece of code.
+Does that answer Yeah, that's Yeah,
+that's that's awesome. I didn't know I
+didn't know that was in V0. I I have
+used V0 from time to time. I do think
+browser tools
+has that as well. I have I have used
+that functionality with the browser
+tools MCP via Cursor. So if anyone's
+using Cursor, they may want to check
+that out, too. But thanks.
+Um I don't know if there's a hand
+raising. I just wanted to say thank you.
+I love the V0. I'm using it more. Um I
+do a planning and task operation first
+and I tell V0 to write in a documents
+folder. It will create documents,
+scripts, everything else. I'll do up to
+20 planning and documentation steps
+before it actually starts to instantiate
+and write code. What I actually give it
+is a full PRD with a front end spec that
+I write outside. I've been able to
+generate up to like 200 files, half of
+which are docs and half of which are
+code with like uh
+like 11 different directories with only
+just a few errors in the final initial
+page generation, just as an FYI. With
+the right planning and having it write
+to its system and read it.
+in a week.
+Yeah, from what I've seen I'm pretty
+sure V0 is doing something special with
+import and stuff because they see with
+import detection like just from relative
+files.
+Because that's like the easiest way to
+go fix this and like given how technical
+the Next.js team is in TypeScript
+specifically, they have a really easy
+way to showcase some of these errors and
+go fix these bugs.
+I just want to say thanks. This is my
+second session with you. I'm new to
+Vercel.
+And absolutely brilliant everything I
+can. Thanks so much for today. Thanks,
+Derek. Awesome. Love it. Thanks for
+bringing your energy.
+Yeah. Um other questions from anyone
+else that's left on?
+Cool. Um in that case, we'll call it a
+good day today. Um and then Dex and I
+will send out working code for this
+uh on the calculator repo.
+Hey, you you committed it. That's on
+recording. I mean, yeah, it's recorded.
+It's going to happen. Um
+it's never hurts to write code.
+It'll be really fun.
+All right. Thank you, everyone. And
+thank you again, Dex. This was really
+fun.
+Yep. And last, thanks, everybody.
+See you guys in the next week.
+Catch you all later.
+Bye-bye. Thanks, Dex. See you.
+See you.

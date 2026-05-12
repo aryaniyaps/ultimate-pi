@@ -1,0 +1,1725 @@
+Um, okay. So, a lot of you have been
+here before, some of you are new. Uh,
+this is AI that works, where me and Vibb
+talk about AI that works. Uh, it's a
+very, uh, straightforward title. Um, my
+name is Dex. I'm the founder of a
+company called Human Layer. We help
+people build better, safer, more
+interesting, more useful agents. Um, and
+Vibb, I'll let you do your intro. Cool.
+I'm Vibb. I'm Vibb. Um, I work on BAML
+and if you don't know what BAML is,
+check it out. It's an interesting way to
+use LMS in a way that's kind of fun.
+With that, yeah, today we're going to
+talk about entities and entity
+resolution and dduping and resolving.
+And um I think we've got a pretty
+interesting kind of like it's it's kind
+of a toy use case, but I think it really
+will demonstrates really well some of
+the um kind of core ideas there and um
+will be a fun thing that you can pick up
+and we'll try to keep it simple enough
+that you can pick it up and run with it.
+Um this meeting is being put it in your
+own put it in your own code and then um
+we will push all the code that we write
+today as well. All right. So what is
+entity resolution? What is entity
+duping? Um, and how are all these terms
+kind of related? I think that's the
+first thing I want to start with over
+everything else. So, I'm going to screen
+share. I'm going to talk about uh empty
+resolution. I realized I need my mic or
+my mouse for today.
+All right. Well, he's getting that. Oh,
+he's back.
+All right. So really quickly, I think a
+lot of people mix up entity resolution
+to these smaller problems into a giant
+problem and that makes the problem much
+much harder. So I'm going to really
+quickly clarify exactly what we're going
+to go cover and what we're going to talk
+about.
+So step one is we always have entities.
+So we have like some sort of name that
+we want to extract or some class of
+names that we want to pull out. So the
+most common example that I think
+everyone can relate to is let's say
+company names. I have a database of
+people that are registered that I know
+about that are legal entities of
+companies and I want to say that no
+matter what someone says I want to pull
+out that sort of data and there's
+different ways that we can go about this
+problem. So let's take a couple sample
+names so we all can think about this. So
+someone might write the word Xbox
+someone might write the word MSFT when
+talking about the stock price ticker.
+Someone might write the word Microsoft.
+um someone might misspell Microsoft
+and we might even have other things like
+um Microsoft Inc. uh or whatever they're
+called. All of these kind of map to the
+same entity as far as I'm concerned
+assuming that I don't care about
+subsidiaries. I'm going to make that
+claim right now. And they all kind of
+map to this entity that I have
+specifically. This entity isn't just a
+plain entity. I also often have some ID
+attached to it in my database that is
+very very specific.
+And what I want to be able to do is
+somehow get this information out. Now,
+there's two different problems that
+exist in here. And we're going to skip.
+And there's one last problem that we
+didn't mention, I guess. Uh, enriching.
+Um, so in this case, we're dduping
+entities. So no matter what everyone
+says, we're going to spit out the same
+ID. We're resolving them to the same
+exact entity, and we're going to extract
+this data out of it. So we want to
+extract from whatever information the
+model gives us this independent process.
+Now there are a couple ways that we can
+go do this. We can prompt our way to
+trying to do this. We give it the LLM
+all of the companies and we say only use
+this list of companies. Yeah. What's the
+what's the naive approach to this? I
+guess like what does that look like?
+Like what similar to like the
+classification problem, right? Let's
+write the let's write the function
+signature because I think that helps.
+Def. Yep.
+D and we'll we'll assume we're going to
+extract a single entity for now. We
+might have multiple but we'll take that
+out. Uh input will be a string and the
+output will be an entity type. Um an
+entity type
+will have a name stir which doesn't
+really matter and some ID that is like
+some sort of database ID that does
+matter. And the most naive way to do
+this is my function will also take in a
+uh list of entities.
+And I ask super dumb. I just ask Alm to
+pick one of these. So I can write
+something like this. Pick best choice
+equals ask lm input options. And I'm
+certain many of us can write a prompt to
+go do this. This isn't that interesting.
+The next level of uh complexity that we
+can add is we can say now if best choice
+not in options for some sort of stir
+match function
+or some sort of match function that we
+write return none
+else
+best return best choice. So now we've
+done Go ahead. And this could even be a
+place where you would incorporate some
+of those um the stuff we talked about in
+the eval episode of like having runtime
+guards of like Okay, cool. We know for
+sure that it has to be in this list. So
+if it's not, we just kind of like add
+more error context to it and ask the LM
+to try again at least once. Yeah. So we
+could exactly we could be like oh um we
+could literally just do it like try
+again. It's like we could put a thing
+here. is like num tries
+equals
+uh int
+equals like three by default.
+Uh if
+if num tries
+less than uh greater than zero
+return.
+We just recursively call itself and you
+should do recursion but for now
+um so we could do this uh we could go
+escalate to a human. We can do all these
+things that we want to go do in here.
+But there's a couple other reasons that
+it might not exist. There are other
+reasons that it might not exist such as
+like our entities array itself might be
+incomplete. Like imagine that in
+Microsoft case, great. We can we can
+scrape the S&P 500. We can get all the
+top businesses that we know about and we
+pass them into here. But in Microsoft's
+case, we might actually run into an
+issue where let's say someone's looking
+for the company Human Layer. Human Layer
+probably doesn't exist in most public
+registries yet. And I say yet, it will
+in about a year or two. Whoa, buddy.
+We're on Crunch Base. That's true. Um,
+but uh if you're on there, you might not
+find the right entity because it's just
+missing information. You might want to
+have an option to enrich data.
+So, you might want to actually consider
+enriching your options array itself over
+here and then updating your options
+array for next time around. And the
+options for enriching are kind of what
+you said, Dexter. You could escalate to
+a human to go enrich it. You can
+escalate for another pipeline that's
+completely independent that scrapes the
+web and searches for everything along
+that lays and builds a list of
+candidates and then passes off to a
+human or does it yourself.
+Or you can always just sorry one more
+thing
+or you can just do the thing that we did
+in this current code which says we will
+do nothing and we'll just return none in
+that scenario. So there's it's kind of
+up to the caller to decide what to do if
+it's none. Exactly. It's your choice how
+much rigor you want to have on your
+pipeline, how much automation you add in
+this process. But the actual process of
+entity extraction, as it turns out, like
+this this method of doing this, I find
+this to be a little bit easier than um
+than even this goes along. And I think
+actually the best way to show this is
+code, not even whiteboarding. Uh because
+it's surprisingly very very
+straightforward. So let's just go ahead
+into the AI that works repo. Um, cd
+repos
+get pull just in case
+pull drease.
+Okay, clear. Okay. Um ls maker
+2025 06
+17
+uh entity extraction
+let's see
+cool uh uv init and then uv add baml-py
+oops
+uv
+we run baml cli test sorry we do this
+usually ahead of time, but Oh, it
+all right. It's good. This demonstrates
+how easy it is to do this. And while
+he's doing that, Derrick, you had a
+question?
+Yeah, I was just gonna maybe if it if I
+could take the liberty to add like a use
+case in real world where I've done this
+kind of with TF diff and Excel as human
+in the loop when it didn't get above a
+threshold match which now I can see
+these identified pipelines being another
+level. So I tried to take like a
+deterministic approach with a threshold
+first and then fall back to like this
+type of thing. Anyway, long story short
+was a Barnes & Noble Digital Nook. They
+they had like so many uh contracts with
+Adobe. And so they had a a database of
+contracts of 10,000 contracts they had
+that they some of them were were weren't
+assigned to people. Some they were
+paying and not using. And uh we did this
+process to align all of the Adobe Adobe
+systems, Adobe, you know, into basically
+Adobe products and Adobe consulting and
+literally took like it turned out there
+were 40 kind of unique like contracts
+under different things that weren't
+visible and brought them all into those
+two categories. So they had a total
+aggregate view of their Adobe spend.
+They found the ones that had no owner
+and that they could actually save and
+that like five or 10 minutes paid for
+our project. Nice. Um so I just wanted
+to mention this is like type of things
+that you could use this and I could give
+other examples. Uh yeah I think
+resolving something to the same shared
+ID is generally useful when things have
+many many multitudes of inputs. It's a
+very very general problem and I think
+the problem that we're going to talk
+about today is one that should be
+obvious to everyone which is like
+resumes. Obviously, if I have a Caner
+database, how many of you use some ATS
+system and you just want to search for
+the person that works in my shop at
+Amazon? Like people wrote like AWS or
+something else that isn't really
+relevant, but really I just want to
+search for all employees of Amazon. I
+know when we go and hire people, we
+always look for people by candidate
+references of different companies,
+different backgrounds, different skill
+sets. Like for example, I wrote CV
+engineer, but I just want to look for
+people that have computer vision
+expertise. that's going to be hard to go
+find unless I can do some sort of
+resistant entity resolution. Like skills
+tags are another example of where you
+want to do entity resolution. You want
+some level of entities that are well
+known, well established, and highly
+useful. And you also want to have
+adaptability of that. For example, in
+this case, Boundary ML should be its own
+entity, but likely that a database won't
+have that on day zero. So, I want to be
+able to track and amend my entities
+database while I go do this. And that
+part is the part I think that makes this
+problem so interesting and so
+fascinating. It's not merely by
+extracting.
+It's about how do you build and maintain
+an entity database that is changing ever
+so often all all the time. And I think
+that's the problem that we should dive
+into today. Cool.
+Well, let's look at this code. So in
+this case, I have something really
+really simple. I have a thing that is a
+functional extract resume. It's going to
+extract a resume from uh this place and
+we're just going to have experiences.
+But now I want to go do this. I'm going
+to go add some um test cases really fast
+just so I know because I know that this
+is going to be a problem. I want this to
+be Microsoft obviously. Um I'll put like
+GCP.
+Uh and hopefully we'll figure out what
+it figures out on there. Um and I
+specifically left ambig ambiguous
+uh ambiguous uh so I know what it is. Um
+and now let's go play around with this.
+Obviously, if I go do this, it's not
+going to work off the top of my off the
+top of my head. If I just say like at
+description get the real company name
+legal
+legals name.
+Uh, let's run this.
+And like it did some stuff. It did
+Alphabet Inc., it did Microsoft. And
+like if I spin it down to GPT4 mini, who
+knows? Maybe this will work, maybe it
+won't. It kind of did, but there's no
+guarantee. I'm really relying on the
+vibes of the LM to hope that I get this
+correct. And I think that's the thing
+that we should go up take upscale a
+little bit. So let's just make this an
+experience data model.
+And I'm just going to focus on company
+and title. I won't even add anything
+else. Description.
+I don't need this.
+The legal
+company name.
+And this will kind of work
+I think but it really didn't like Google
+isn't actually a legal company name.
+Neither is my shop. It's actually like
+my shop inc or something else. So let's
+make another object in here to help the
+model really understand what we mean.
+Name
+as verbatim
+batum from
+content.
+uh legal name
+um
+is subsidiary.
+Let's just know if it's a subsidiary
+really fast. Mhm. And let's run this.
+Cool. Uh it pulled this out. This is for
+viob resume. Let's run the other test
+case now, the ambiguous one,
+and see what it does. The ambiguous test
+case, you remember, has boundary ML,
+GCP, and Xbox. GCP legal name Xbox and
+it it's really not understanding what I
+want. So let's do the first thing and
+just like beef up the model.
+Uh really not understanding what I want
+either. Um name I'm telling you man peak
+peak working hours they make all the
+models dumber. It's my new conspiracy
+theory. Uh let's get rid of is
+subsidiary and then let's ask legal
+name. What I want to know is if
+available
+best guess at the legal name of the
+company
+and we might find that we actually it's
+interesting right we immediately got
+Microsoft Corporation Google LLC and
+Boundary ML Inc. which is not the real
+name. So now let's go over here. Company
+type uh wellestablished well-known
+uh startup because those are really the
+two established companies that I might
+have. So let's just go and establish
+this. Yeah, because you kind of and
+that's basically you're helping to
+filter between like how likely is this
+to be something that the model made up?
+Because if the model doesn't pick well
+known then it's more likely that it's
+not in the training set basically right
+or owning
+exactly and now we're noticing it's
+listing on Google cloud platform um and
+then we can say we can add more uh
+well let's add another one known
+subsidiary which I think is good
+over here if
+If well known
+of
+the owning company. So let's read my
+prompt really fast. What I have out here
+I changed my data model. The name I
+still want to be verbatim from the
+content. Then I want it to tell me that
+what company type I am. I'm either
+wellknown a well-known subsidiary or a
+startup. And then I want to tell me in
+the legal name, I want it to actually
+tell me if it's well-known, best guess
+of the legal name of the company. If
+it's a well-known subsidiary, best case
+of the owning company. So I'm actually
+being very deliberate with the actual
+model itself. And I'm actually going to
+make this an optional field because in
+the case of a startup, I don't want to
+spit out a legal name.
+Skip if startup.
+Okay. So this is almost like forcing a
+very specific flavor of reasoning onto
+the extraction process. Exactly. And you
+can see now the model is actually like
+kind of understanding what I want to do
+a lot better.
+Um and it's actually spinning out what I
+want. Now this is only half the battle
+because at this point I now have
+something. Let's just see if GP4 mini
+works really fast. Why not? Right. This
+doesn't let you leverage your database
+of named entities and it doesn't let you
+evolve the database over time. Exactly.
+And we can see that hey GCP uh a
+well-known um
+what's it called well-known subsidiary
+is probably not working as well uh or
+like uh like GCP isn't working as well
+in G uh GP uh GP 40 because 40 Mini
+still says Google Cloud Platform. Yeah,
+but that's okay. We actually don't want
+to worry about that too much because we
+could spend forever prompting this or we
+can add a multiaceted approach to go
+solve this problem. Cool. So let's take
+a look at what that approach would look
+like.
+So now what we're going to do is do
+something like this.
+Um
+I'll put I'll put a real example here.
+Um, I'll just take this example. As I
+said,
+also be interesting to see this with
+like the actual raw text from like a
+real resume rather than this little like
+fake markdown thing. I will Yeah, I'll
+do that in a second. Um, I just think
+it's I like to use toy examples because
+then we don't have to all digest all the
+examples at first. Yeah, like resume
+equals this. Cool. So now we have a
+resume and what we're going to do now is
+we're actually going to go access all
+the experiences
+for company in
+for EXP
+exp.
+No, there's a company type. Oh, I have
+to set up my UV environment.
+U packetic.
+This is a company type for company dot
+uh let's say legal name. So I want to
+first get the legal name. So I'm going
+to do a couple of things um and be like
+uh in uh extract companies in here. So
+company
+exp.
+Okay. What I'm going to do over here is
+first I'm going to go ahead and actually
+get the actual type of the company.
+match exp
+type
+case
+uh startup I don't really care and I'll
+just like print it out and I don't
+really want to do anything
+uh I don't actually know if I have to
+break I might have to
+okay
+do nothing in fact I might even want to
+do one more thing where I like
+specifically will set the legal name of
+the company explicitly to none
+because I do not want in the case of a
+startup, even if the LM hallucinates
+something, I'm just going to ignore it.
+It doesn't matter to me. It's like it's
+garbage data. If it's a well-known
+company, um I'm going to see if it has a
+legal name.
+Uh if it if it does if it doesn't have a
+legal name and it's a well-known
+company, I might figure out um to do ask
+an LM
+else. Now if I have to go do this now I
+want to do the next thing which is
+validate names
+which I will do is like validate company
+which I'll take in the exp company
+itself and I want to go validate this
+somehow.
+Now what I will do over here is write a
+validate function.
+There you go. And the way I'll validate
+this is I'll assume that I have a list
+of companies def load companies.
+Um, and what this will return is this
+will return a list of tupils. Oops.
+Of like name,
+comma, like legal name
+or like maybe I'll what I'll do is
+actually something slightly different.
+Sorry. legal name and then also return a
+list of actual descriptions about that
+company. So in the case of Go ahead. Are
+we going to end up doing something
+similar to what we did in the
+classification where we kind of have a a
+internal class that our program manages
+and controls the view that is like what
+the database sees versus what the LM
+sees versus what the what the code sees.
+Exactly. It's a very very similar
+pattern but it's slightly different. In
+the case of what I will be doing here is
+I'll say like company valid equals load
+companies
+valid companies both this and then for
+valid company invalid companies I'm
+going to just see if the legal name
+of this thing that I have over here
+matches this. If the legal name is
+coming in my database I am good. That
+doesn't Okay. So, so it's almost like a
+a group by where you have the where you
+have like an index from legal name to
+all of the known company names
+basically. Exactly. Exactly. And in the
+case of me not finding some valid
+company that I like, then what I will do
+after this is now I need to to do ask an
+LLM
+to update
+uh ask an LLM to
+uh update the company to find. Yeah, you
+have a lot of ask LLMs in here and I'm
+not they seem to be different things in
+different parts of the workflow. Yeah.
+So, I'm just writing to-do comments
+here. But what I want to do is I'm just
+going to load all the companies from my
+database and if I find if I find one it
+matches the legal names that I am aware
+of in my database, I'm good. If I'm
+unable to find one, then what I want to
+do is I want to ask the LM. So in this
+case, it's been out Google Cloud
+Platform. So I literally just dump the
+valid companies into my uh LLM and ask
+them to pick one. I basically turn this
+problem into a classification problem.
+Why not just dump the list of valid
+companies in any like at the start in
+the original prompt? Well, a couple of
+reasons for that and I think that's a
+really really good question. Well, one
+of them is I can get a good bang for my
+buck without doing that. Like I see you
+use the cheap model with a small prompt
+and like a lot of times it will just get
+it right. Exactly. And then if you're if
+you're any reasonably sized company,
+your ATS of legal companies that you're
+going to be hiring from is going to be
+massive.
+Just has to be by definition. So
+instead, okay, so you're you're just
+like pre-optimizing this basically,
+right? like our our normal advice is
+like use the biggest model and the
+biggest prompt and the most powerful
+thing first and then break it down when
+it becomes a performance bottleneck. But
+in this case, you're just saying like
+I'm going to actually start with a
+smaller tighter tighter model and then
+zoom back out to a bigger model if I
+don't find something that kind of
+matches my expectations. Yes. And then
+one last caveat is that like I can't
+actually put together my actual um I
+can't fit all the companies I know about
+into the prompt. I know that from the
+get. I see. Yeah. Right. Like we all
+know that from the very beginning. We
+can't do that. Like for this problem of
+extracting resumes. It's not possible
+for the PDF contract problem. It's not
+possible to put all the contracts into
+most problem that have an entity
+resolution problem can't do this on day
+one. You can't just put it all in a
+prompt. That's actually a much better
+answer. Yeah. So like it it kind of it
+would be wasteful for me to go even
+write the base prompt because it it I
+know up front by definition of the
+problem, I can't do it. Cool. And so I
+imagine there's some stage where we kind
+of like if we if we do want to push them
+in, we would narrow down the set that we
+pass into the LM. Exactly. And that's
+literally what we do over here. We do
+the same thing we did in the
+classification problem. This is
+basically this is a classification
+problem.
+Cool.
+Okay. At this point, because all I'm
+doing is I'm taking the legal name of
+the company like Google Cloud Platform
+and trying to classify it against the
+known companies and we all know how to
+do classification problems. There's many
+different approaches. One example is we
+just dump all the companies into there.
+Another example is we go ahead
+and go do the whole thing. So it's
+really up to us how we go about this
+problem. But this basically becomes a
+classification problem at this point.
+And in the case, the only difference is
+now I'm allowed to return other or like
+no company found.
+And if I find no company found, then I
+have a choice of what I do at this
+point. This Okay. So, we're actually
+going to kind of like skip over that
+classification part and just zoom out
+and look at the B bigger broader
+pipeline. Right. Exactly. Because
+there's no point in rewriting that
+process again. Um I think if someone is
+interested they can go look at the
+classification video we did a couple
+weeks back and just know we will put a
+we'll put a link to that in the uh in
+the show notes. Yeah. Uh but like once
+you do the classification refer
+to video. Um
+once you do that then you're basically
+able to go move on. Now you have a valid
+company. Now the problem is this won't
+always return a valid company. Sometimes
+it'll return something not found. So we
+want to go update this and make this a
+little bit better for ourselves. So
+sometimes we'll return this otherwise
+we'll return none for now. Very
+simplistic.
+Now what we want to do over here is I
+need to enumerate this.
+If uh result equals this, if result is
+none,
+if the result is none, then I kind of
+want to val invalidate the company and
+mark it as such.
+Otherwise, I'm okay leaving it as that.
+I kind of want to say this legal name is
+not valid.
+So even because the legal name is what
+you're going to use to map that's like
+you're using that as a proxy to the
+database ID basically. Exactly. Exactly.
+I'm using this as a database ID. So if
+I'm unable to find a valid company for
+this legal name, I'm going to go and
+like just not care about it. If I am
+able to find a valid legal name, then
+I'll go do this. And in this
+classification problem, what I do is
+like I'd call an LLM. If it found a
+valid legal name, I would just change
+the legal name of the object that I have
+and return it back. Cool. Cool. So now I
+have this. I'm able to go do this. Now
+there's a couple scenarios in here that
+all that all fail. Same with the legal
+name over here. This is also like
+classified. So like let me just write a
+function really fast. Class pick
+potential
+uh name company
+uh uh content
+stir and what this will return is like a
+stir or none passed.
+So what is the content that got that
+gets passed in there? Exactly. So what I
+would do is I'd pass into here potential
+company.name.leal
+name. So I pass in the legal name of the
+company and ask it that if
+return
+company.leal name equal potential
+company uh return company. So this is
+what I I think this I keep getting
+tripped up by the tupils. Are you down
+to put a couple like actual examples in
+there instead of like the names of the
+columns? That's a good idea. Microsoft
+Corporation,
+uh, Xbox,
+uh, Xbox, Azure,
+um, MSFT,
+and maybe there should be a dictionary.
+Maybe that'll be easier.
+Sure. Uh, there we go. Cool. Uh, Google
+does not own GitHub.
+Um, this is like one example of
+companies. Sorry about that. Good call
+on that. Um
+it items
+valid company. Um cool.
+There we go. Cool. All right. So now
+what I would do is I just pass in legal
+name. I pick the uh potential company.
+And what I can do over here is like or
+legal name and how many and I just
+return this. So now I'm doing something
+very very simple, very simple, which is
+I just see if any of the aliases match
+the content and if they do then I'll
+return the legal name. This could be an
+LM function but I'm choosing to use a
+very basic heristic here instead.
+Does that make sense Dexter? Yeah. So so
+this content is really like a like
+company name.
+Yeah. Which one? This one. So I mean we
+use content in the main function and in
+that case content is like the source of
+the resume. I just I don't want to mix
+up those we're going to do something
+over here. So in this scenario where the
+legal name wasn't provided for a company
+then we're going to do this potential
+but it's not the full resume it's the
+company.name.
+Exactly. So if the legal name is none
+I'm going to pick a potential company by
+passing in the legal name. So I guess my
+point was like in pick potential company
+should that v variable be called company
+name? Uh
+it's not always going to be the company
+name because in different places I'm
+passing different things in the valid
+where I have a valid company. I'm going
+to pass in the legal name. In the case
+of where the legal name was not filled
+out by the LLM, I'm going to pass in the
+actual name of the company verbatim from
+the resume.
+Okay? Using different things to go do
+this. And you can imagine that I pass in
+like different piece of content. I might
+pass in the whole experience block into
+here. It's really up to me as a
+developer to decide what I want to go
+do.
+But the goal of this function is to say
+given some string, tell me all the
+relevant pieces of content that might
+match that company. And if I have it,
+then I update my company name into here.
+Now, the nice thing that I'm able to do
+about all this is I'm also invalidating
+names that come back to me from the LM.
+If the LM gives me a name, I'm
+invalidating it if it's not valid.
+In addition to that, I also am going to
+go ahead and do the same thing with
+subsidiaries. I'll do the exact same
+thing. So, I'll just like put this over
+here.
+Oh, I can't do that in Python. I didn't
+know that. Okay.
+You might be able to use an or
+something.
+Um Oh, maybe. Oh, I can. Nice.
+I didn't know that. Cool. Match is
+pretty freaking cool. Um, so now I can
+actually go do this and I can handle the
+scenario really nicely. Now I can build
+a Now that I've done this, I basically
+have a pipeline that is able to go ahead
+and validate all sorts of things in
+here. Let's go run this really fast.
+Um, I'm actually going to make the
+problem a little bit simpler and change
+what model I used to be a very very bad
+model.
+Lama
+latest.
+I don't know if this will work, but it
+might.
+Oh, lsv
+run python-fellow.
+Mhm. There we go. So, I'm going to go
+run this with an oama model really fast
+and see what happens.
+My old might not be out.
+Oops.
+Uh, there we go. Okay, there you go.
+Something happens. So, the model Oh, I
+forgot to print out stuff. That's funny.
+Um,
+let's go ahead and go print this out.
+print.
+There you go. That's what I wanted.
+And I'm also going to print out the
+response ahead of time.
+Uh before and then after enriching.
+after. Okay. Um and then BMA log equals
+Oh.
+Oh, this can't actually happen. That's
+cool. Python yells at me. Um
+so now we can see what happens before.
+So before we have boundary ML null um
+the Google cloud platform subsidiary of
+Alphabet and then this thing did
+actually not do this.
+I might have to debug this a little bit
+really fast.
+Um this thing did not get enriched. Uh
+let's see what happened.
+Well-known subsidiary should have gone
+into here. Expco company name. Uh let me
+print this out.
+You could just tell cursor agent to add
+a bunch of print statements. That's
+probably true. Add some debug print
+statements.
+Okay. Well, it does this.
+Did it do it? Command ki.
+This is the only problem with AI
+generate code. It takes a while to
+write.
+Let's just go for it. Beautiful.
+We're gonna have a lot of print
+statements.
+Um, have you ever used the cursor
+debugger that lets you like step through
+Python code? No, I haven't.
+It's uh sometimes pretty good.
+Uh, company type of startup. Did I make
+something silly and not actually go
+through every company?
+Oh, I see. I didn't know Python this
+break actually breaks out of the loop.
+Out of the loop. Yeah. Yeah. I don't
+think you want that. Okay, let's get rid
+of more debug statements.
+I want to go run this.
+So now when we're able to go do this in
+theory, um
+this should
+null out the actual legal name of the
+GCP because it didn't actually work.
+Okay, so this is just detecting which
+ones can you accurately extract. This is
+and then after that you could do another
+pass to go try to ask an LLM to better
+pick or do a lookup or do a rag against
+the list or something like that.
+Exactly. And now we can actually go
+further and say if the result is none
+what I can say is like
+other names other names equals
+pick potential uh sorry let's go to
+validate company what I can say here's
+if this is none what I also want to do
+is another option uh from name equals
+pick
+and then I just return this. So, if I if
+the actual legal name doesn't find it,
+then I'll also try from the original
+name that I got from the LLM when I'm
+validating a company and we'll see what
+this does.
+So, the goal here is to say that there
+are many ways that I could enrich it.
+You can see right over here I was able
+to enrich it to Google now
+because what I said was oh even if the
+LLM doesn't initially get a good legal
+name which it did not. It got Google
+Cloud Platform.
+What I will do is I will go ahead and
+try and find a good match. If I am
+unable to find a good match from the
+legal name I'll try the original name in
+my database and see if I can go find it.
+So you see we're going to go check does
+the original name match one of the
+aliases. space. Exactly. Match one of
+the aliases. And this is again the most
+simplistic algorithm that I could
+implement here. I could do something
+more sophisticated here such as calling
+an LLM, asking another model to go save
+things um or go do something. But now
+this is still only half of the battle.
+I'm still not done yet because we have
+Boundary ML. Boundary ML is clearly not
+going to be found in my database. So
+what I need to do is I almost need to
+build a totally separate workflow to
+solve for that problem. And the best way
+Yeah. And you could you could almost do
+something aentic. I I I want to hear
+what you were going to say, but I was
+like you can almost do something aentic
+here where it's like there's a LLM is
+picking a tool that is like actually the
+next step is to update our list of
+companies because of some input or some
+human input or whatever it is. Yeah, I
+may not even need uh like really I might
+just know that hey if it's a startup I
+always need to do an agentic workflow
+and I might want to maintain my list of
+startups separately than my list of well
+well-known companies or even mark these
+as startups versus well-known companies.
+So then what I could do now is like
+build a database pipeline that says as
+soon as I save a data into there, I push
+something to an SQSQ that says go look
+up information about Boundary ML and
+here's database IDs that could be
+impacted by Boundary ML. So if you find
+a company called Boundary ML in the
+cloud somewhere. So let's let's go back
+to our whiteboard.
+Uh where do they go? So now the next
+step now that we have this pipeline
+where we're pretty good about legally
+known companies that we have in our
+database. Now we have a separate thing.
+Now what we're going to do is we're
+going to create an AWS SQSQ that's going
+to do a couple of things. It's going to
+submit a job that says look for
+info on
+boundary ML. Also, by the way, the the
+row ID that I just inserted is equal to
+like uh like 50 uh 51.
+And then So, your goal is basically
+you're going to you're going to put in
+what you extracted and then you're going
+to say like, "Hey, we need to get a
+legal name for this company." Exactly.
+So, I'm going to give it I'm going to
+give it give it the information I
+extracted. I might even give it the raw
+resume. Something else that I might want
+to give it just to give it more context
+on it. I might want to give it the full
+resume, the original text or whatever I
+have. But specifically, I'm going to
+tell it I care about
+I care about this company Boundary ML in
+this resume. So now I can build a
+pipeline whose job it is to first say
+give me everything
+every clue from the resume
+about boundary ML.
+Whoops.
+And this becomes again a very simple
+prompt that we can go do. Now I can use
+web search or some other tool that I
+want
+uh to go find all the relevant
+information. Then I can build a whole Go
+ahead. Okay. So you would use those
+clues you extracted from the resume to
+build good web searches. Basically it's
+like basically like if you didn't know
+Boundary ML was an AI dev tools company.
+Maybe you could figure that out from the
+resume and then you would look search
+for BAML AI instead of searching just
+BAML and getting a bunch of things about
+Bank of America. Exactly. or I might
+have the location of the person and
+where they live on or go do something
+like that. I might find all sorts of
+clues that might give me information
+about that. Then you can make a bunch of
+search queries, build a web search
+pipeline and at some point this thing
+will end. It'll put together a proposal
+or it'll put together no proposal. It's
+really up to you.
+And now now that we have a proposal, we
+have our list of databases. This becomes
+an entry into there with a status of
+proposed instead of committed.
+And it is some other agent's job
+to migrate us from proposed to
+committed.
+Now I see and that might be human input.
+That might be more searches against the
+database. You you decide the logic for
+what lets you commit a new entity to the
+database. Exactly. Uh information.
+Right. If you're if you're doing this
+for tax information, you want to
+probably have a human in the loop. If
+you're doing this for like resume ATS
+information, it's just like small
+enrichment for like making searches
+better. Automate that sucker. It doesn't
+matter. You might even want to go
+straight to committed in that scenario.
+It's up to you, right? I mean, it's also
+like you there's two kinds of human in
+the loop, right? There's human the loop
+like do not commit this until someone
+has reviewed it and then there's like
+commit it and then anyone has the
+ability to come back later and edit it
+and update it. Right. Exactly. Exactly.
+And we can just email our Slack channel
+saying we added a new company. Go review
+it pre uh whenever you have time. Yeah.
+That async or batch human in the loop.
+Exactly. And all of this whole thing
+just becomes like a workflow that we've
+built out. And now we have this other
+last piece of information which is row
+ID 51. Once it becomes committed, what I
+need to do is I need to go to the other
+database where I've stored this
+information and then right because you
+have two tables. You have tables of like
+your abstractions, your extractions that
+are like in progress or pending and then
+you have the lookup table of all the
+companies you know. Exactly.
+And now update row 51 for boundary.
+That's it. Once that is committed
+and now we've actually built a pipeline
+in a fully automated way or as automated
+as this process is for proposed to
+committed that can go find information
+do web search and then go figure this
+out.
+Um before we go into the next part of it
+any questions from anyone,
+you can type in the chat or raise your
+hand uh and come on.
+I guess my question is like is there a
+zooming out here bigger? Like is there
+like what what what else is here?
+Honestly, this is it. I've seen this
+work a couple of places for different
+couple of different companies. This
+works for all sorts of processes. So
+like another process that doesn't sound
+the same but is exactly the same is
+topic clustering.
+So if you think about what topic
+clustering is, let's say I want to have
+like the most semantic mill, let's say
+I'm building like a giant news media
+company and I want to know what topics
+are sensational in the world that I
+should talk about right now. That's
+basically the same pipeline. I have a
+bunch of data because a topic is an
+entity with like an official thing.
+Exactly. What if I was making a tool to
+like label all my Gmails for me? It's
+same thing. I want to go do the same
+thing. Um, and go do that. So, you don't
+have to really think about any of those
+concept because those labels are
+entities and you want to you don't want
+to make new labels all the time. You
+want to resolve them to the same labels
+whenever possible.
+We got a question. Can Sorry. Go ahead.
+Uh, and you can also do interesting
+things with like not just labels but
+also with um hierarchal labels. So you
+can have like topics that are like
+saying like we want to go up down up
+down and you can go figure that out
+uh along the way. So it's like do I want
+the higher level category or the lower
+level category? It's up to me and all of
+that is almost the same problem. So in
+the case like news media, I might want
+to say like have global news and have
+like Britain news or like US news and
+those could be hierarchal design or
+where I look for global news first and
+then I find the subcategories around it
+that are around like environmental stuff
+or um
+uh environmental stuff or like financial
+news under global news or I can go
+straight to financial news or global
+news or uh financial stuff or
+environmental notes along the way. Yeah,
+the the multi- multi-entity grouping is
+kind of tricky where something could
+have multiple different categories and
+like there's it's one of n instead of
+exactly one company, then you just
+return an array
+and it's the same. And then you can run
+through the same validation checks on
+each thing in the array. Exactly. If you
+if we're doing multilel thing, it's
+actually really easy. All we do is let's
+go do this really fast. I'm going to
+turn on my Python type checker so we can
+see how we actually catch these bugs.
+Uh
+um oh
+let's add this in here. Sorry, static
+analysis is very important to me. Um
+so now that we go down here, let's go
+ahead and like add this in our way. So
+what what do I do over here? Well, maybe
+there are multiple legal names that make
+sense. So let's make this an array.
+Let's pretend you worked at Palunteer
+and you consulted for six companies but
+it was one experience. Exactly.
+Now what I have to do here is this will
+return instead of a string. I mean this
+can still return a string because this
+is just like for content.
+Uh legal name company.leal name.
+We have a bunch of questions stacking up
+by the way. Um sorry. No, you're good.
+You're good. I didn't want to interrupt
+you. Um
+so uh I just I just want to do if you're
+uh if you're let me do this one all we
+have to do here is now we just make this
+a for loop
+and we have to do the same kind of code
+wrapping to make this a for loop and
+then we might want to resolve the same
+if the for loop for some reason dumped
+out like GCP G Google Cloud Platform we
+want to resolve them both to one entry
+called Google.
+That's the only other you have to Oh,
+and then you end up flattening the the
+list. Exactly. It doesn't flatten the
+list. Exactly. That's all that. Um,
+cool.
+Um, cool. Uh, um, can BAML use lower
+level models like BERT or Alberta? Um,
+right now we have just LM support, but
+uh, you can if you wrap BERT or Alberta
+around an LM API, uh, which I don't
+think you can because they're just
+embedding models really then, uh, for
+now. But eventually, yeah. Yeah,
+Michaela has a really cool example of
+like if if the Baml run didn't didn't
+return return like null for one of the
+fields, they would go do a web search
+with Tavali and then just pass that
+context in. That's it sounds like they
+they naturally discovered the same
+process we just discovered today, which
+is like if you got an empty field, which
+is in this case got this data out of
+here, you just run web search and do the
+same thing again. That's kind of cool.
+Yep. Um okay, when does the database
+pipeline get triggered? Right after the
+ML pipeline or was that from one of the
+BAML functions? Oh, the database
+pipeline would get triggered right over
+here. So, what I can do now is I can say
+like uh at the very end of the code.
+Let's actually write that out. Yeah.
+It's like Yeah, exactly. It's like you
+you exit the loop, you've done all the
+repairs you can, then you find the ones
+that didn't get satisfied and you go
+kick off jobs, right? Exactly. Is none,
+then I just kick off a job.
+Is none.
+print uh kick
+off AWS uh kick off job to find better
+match.
+So now I can go do this
+and this is when I would go do this at
+the very very end of this. Cool.
+Um propose to committed is a bit vague.
+You're updating data in a database in
+prod for the company info search
+results, but AI could commit on wrongful
+information. Yeah. So, that's what we
+talked about is like you need to uh look
+at your risk and and your use case and
+you may want to have kind of human in
+the loop or you may want to have it push
+it to like a stage database that gets
+reviewed regularly and it gets queried.
+Exactly. You can view your SQL table for
+this company information table to look
+something like this. Like you have like
+a table called like company uh name
+company uh uh like ID, company
+attributes, like other keywords or
+something that you might want to have
+about it. Keyword you could have a I
+guess like you could have a flag that
+like whether it was human reviewed or
+like how how hard committed it was,
+right? And then you'd basically have
+like company.status
+company. status and status would be one
+of like uh like uh proposed
+uh ready.
+Yeah. And you could even store the like
+human comment or whatever it is. And you
+could actually asynchronously go through
+with an LM and try to repair this. Like
+if a human said, "No, that's wrong."
+Like go search for this that you could
+you could kick off new jobs periodically
+based on that. It's really important
+that your data model represent the
+complexity of your problem. So if you
+need multiple drafts of a company before
+you can get to a good resolution, you
+need a data model that can go do that
+and this is independent of an LLM. Like
+this is even like if in Wikipedia for
+example, they keep track of every edit
+that every human makes so they can roll
+them back really easily. That's what we
+do with git. You just need to find the
+right data model that represents the
+complexity of your task. So in this
+case, I did something very very basic
+where I only have two booleans proposed
+and ready. And I can make a web UI that
+literally shows everyone on my at my
+company internal dashboards a view of
+these tables and people can manually
+promote promote promote. And I can have
+like a last updated column on top of
+here is like um
+last updated
+that I sort by. So in the UI, people can
+go see this and I can have information
+about who the last person that updated
+was or I can do what Dexter says and
+keep a full edit log of the entire edit
+history of that row and go make that
+possible as well. It's up to me as the
+developer of this application to decide
+the requirements for this task. And this
+is what we always say is it's it's
+mostly engineering. If you can do the
+software engineering behind this, you
+can build the tool that fits your
+problem and it's going to work a lot
+better than one of these like
+one-sizefits-all just like rag against a
+thing and push it in and hope it works.
+Yes. Does that answer your question?
+Sure. Yes. Very cool. Uh I I really like
+Sean's question. I was wondering if
+you'd be down to come off mute and kind
+of clarify a little bit more what you're
+thinking about.
+Um how do I think about performances of
+large numbers of these matches? I guess
+for if you're going to classify emails,
+you could have 10,000 plus calls. Yeah.
+Can you hear me? Okay. Yep. I'm actually
+on the the train at the moment. So the
+um yeah, there's that N plus1 thing. If
+I have lots of emails, I want to, you
+know, maybe I would think about batching
+them. Um, or training
+smaller models on my custom task, you
+know, would be how I'd want to do it in
+production potentially if I have lots of
+similarly structured documents. So just
+kind of curious your general philosophy
+on using LMS in
+your BAML framework and like am I just
+kind of being old school and worrying
+about that or just like just do the API
+calls and and move on or should I be
+thinking about something else here?
+Yeah. Um well just as uh just as I think
+we say a lot of times like this stuff is
+pretty much just functions. So in this
+case we have like a type signature. The
+thing that implements this type
+signature could be a really really
+complicated model like 04 that we toss
+at it. It could be GVD26, who knows? Um,
+it could be a very tiny model that we've
+custom trained to actually take a
+specific content and then spit out the
+actual company that we have trained on.
+It can only output valid companies,
+nothing else. It could be a really
+really cheap heristic like the one I
+wrote here that just matches on aliases.
+So that becomes your prerogative. But
+the most important thing is you just
+need to collect data on what makes this
+function really good. What makes this
+type signature perform accurately.
+So once you have large scales of
+problems like and there's different ways
+when you use the word performance. If
+you're thinking about speed and cost and
+latency
+then yeah the answer is try not to use
+an LLM right a really dumb heristic. Now
+the problem is this heristic might not
+balance very well for accuracy. So you
+might need to use a bigger model. So
+then you try a GPD, try like the 54
+models like I was trying right now. And
+if that doesn't work, then bump it up to
+04 because so you can just ship the prod
+and not have to write 5,000 lines of
+code trying to optimize your model away.
+And then collect data, use that data to
+go train a tiny model, eval it against
+your system by having a benchmark
+because this system can be benchmarked
+with an F1 score. So we can get a
+numerical benchmark on this and then
+just run that in a loop until you have a
+type signature that meets the
+constraints of your problem. But it's
+really about thinking of it as type
+signatures and once you think of it that
+way then you choose what part of the
+system you want to optimize as a
+developer.
+Does that answer the question? Yeah, I
+love that. Um
+very compelling part of the whole stack.
+The uh the kind of last little follow up
+is
+my natural language.
+Uh you're going to have to type that
+out. Your audio is cutting out.
+Step and then linking step. and you're
+kind of doing it as a oneshot
+sort of thing here.
+Okay, I'll let him type it out while he
+goes and that's it. Um, Dexter, is that
+kind of how you think about optimization
+as well?
+Um,
+yeah, I mean I think that tracks I mean
+I'm still always all about this like
+use the it's like what we did on the the
+policy to props episode, right? It's
+like take a subset, work through,
+iterate on a small subset of a hundred
+and then move up to a thousand and
+understand the performance and like at
+the end of the day, yes, if you want AI
+to do the work, then like you're going
+to have to spend the tokens to go do the
+work on all the things, but like iterate
+and get it tight on a small subset,
+figure out learn what you can do with
+smaller models before you like 10x the
+number of records you're you're
+processing on each run. Yeah, I agree. I
+agree. I think that's a general
+philosophy as well. Um, while we wait
+for Sean's question, um, if anyone else
+has more questions, feel free to type
+them out in the chat. I'm going to show
+you how to do some of the enrichment
+tasks that we had like handwaved away if
+that's useful. Function, uh, extract
+uh, company clues
+uh,
+resume string uh, content uh, company
+target company string. Okay. Um, given
+this resume, tell me all the clues that
+may help
+me find information
+about the company, target company.
+Yeah. Or you could even just have it
+output like queries for web search. So,
+I will do that in a second, but I'm
+going to go break this up. Um, so I'm
+going to go run this in a very very
+basic format
+and like let's go do this
+company clues
+resume target company
+uh boundary ML and what's interesting
+about this is because I know that
+extract company clues will only ever be
+run on like large smaller companies I
+build my test cases like that
+accordingly as well. I don't actually
+build my test case. I have Google. I
+don't care because the input to this
+function is guaranteed by my software
+layer by the API definition of I have of
+how I'm using this function that the
+scope is only ever going to be unknown
+companies. Now, that scope can change
+like in regular software. Your function
+can suddenly be used for concepts
+they're not used to. And you just have
+to keep that in mind. So, you might want
+to drop a comment to let people know.
+But let's go run this and see what it
+does. Yep.
+Um,
+so it's giving me a bunch of clues. Uh,
+this is not very good. U, let's go do
+this. Uh, and go do this here. Class
+clues,
+uh, clues string array. Uh, good
+searches. Good.
+Google searches
+string array. We'll change the data type
+here to be a little bit better.
+And I'm doing this in one shot.
+And that's kind of interesting over
+here. So now it's like
+and it's interesting. It actually says,
+oh, it might Boundary ML might be doing
+computer vision stuff. It might be C++
+and Rust might be parts of Boundary ML
+stack. And now you can it actually gives
+me pretty good
+information about how to go find this.
+What is your target company? Okay, so
+it's it's still asking about the other
+things. Interesting. Well, it might
+because that might still be a good
+search in terms of what it is. So, let's
+make this better because I think you're
+getting ambiguity on here. class search
+uh like uh priority
+I may
+based on
+which queries I should run first.
+Oh cool. And then you can do like a
+group buy and run them in in batches.
+Exactly. Then I just run all my queries
+that are high first
+and like this is probably a good query
+by Gupta foundry founder of mail that'll
+probably get you to the legal name of
+our company. Um found it and it's just
+like helping you go do this and like I
+would go just build a now we can imagine
+how to build a pipeline off of you can
+go iterate on that prompt and test this
+and be like oh hey you're a expert
+researcher whatever whatever prompt
+tricks you want to use. Exactly. Uh and
+then you can toss web search at it. You
+can do whatever you want and you can
+find information about this. Uh, tell me
+clues that may help me find information.
+Specifically,
+I want to find the legal
+name
+of the company.
+And I can like prompt my way through
+this and just see what it does.
+And now you can see the that the queries
+got a lot better. And it's actually
+really funny what the queries are doing.
+It's actually giving me like search
+queries of like who is patterns and like
+actually really restricting this to this
+and it's like looking for my name in
+like quotes because it knows Google will
+search for this specifically.
+Oh man, I uh I almost want to give you
+my Exa API key and have you run some of
+these. I Yeah, so this is basically what
+we would end up building. We'd go build
+this out, then we'd actually go build
+the search part of it and then we'd pull
+the data out. We build an agent to
+evaluate the results of the web search
+to see if we have we basically write a
+function that says extract legal name
+function extract legal name from like
+content uh and like search results.
+Exactly. And just pull that out and then
+I'd go do this
+and I just go do this over and over
+again until I have a good legal name.
+Cool. And you could have it output like
+six and then have a model do the judge
+thing and pick one or two or three of
+the best ones and then send three of
+them to a human in Slack and be like
+pick which one is the best and kind of
+all that kind of stuff. Exactly. All
+this basically just becomes software.
+That's the point because all we're doing
+is we're just designing like API
+contracts that have some guaranteed data
+model and now we know how to go deal
+with this data model in one way. And
+like for example like you naturally
+being like a systems engineer you went
+to being like oh I'll just run all the
+high ones in batch parallel. Someone
+might not do that. They may do
+everything sequentially. They may write
+all of them in parallel. It doesn't
+matter. It's up to you as an engineer to
+decide the trade-offs that you want to
+make and the amount of system resources
+you want to spend to find the answer.
+Um, let's take Sean's question really
+fast. Um, normally I do entity linking
+as a two-step process, uh, with an
+entity reference as a span and then a
+link, but then I realized it's more of a
+comment than a question. Um, yeah. So, I
+see what you're saying. Cool. Yeah, the
+span is kind of the only problem that
+I've seen with the span is sometimes the
+model if you like use URLs, we discussed
+this last time in our prompt hacking
+thing, a model is just less likely to
+actually dump out a URL correctly. So, I
+would just recommend swapping out the
+URL with some like with some indexed ID.
+So instead of having the model dump out
+like
+https
+google.com like this
+oops like this query is just going to be
+way worse than having the model spit out
+like um Google search idx0
+like there's just way less tokens and
+way way fewer things will go wrong
+especially once the URLs have like
+something like like ref equals like like
+once you get to these things where
+things aren't really mattering, your
+tokens get completely screwed and hard
+to go extract. So you want to be really
+careful about what strings you have the
+model actually spit out and you want to
+reduce the noise or like entropy of
+those strings to be as stable as
+possible.
+Um, and we discussed that last week. We
+had a really fun time discussing all
+sorts of techniques.
+Are you on team beef up models as you
+can as you dev or team weaken down
+models as you dev? Um, personally I'm on
+team of use the best model possible
+initially cuz shipping your product is
+way more important than um than cost in
+the very beginning unless you know for
+sure you have cost constraints. I
+personally use the maximum amount of
+resources that I can for a given project
+without optimization in the very
+beginning. Dex, what about you?
+I like to use big models first and then
+pair it down. Um, it depends on the
+question. It's the same thing with
+developing agents, too. Like the
+12-factor agent stuff is all about like,
+hey, let's get right in the weeds and
+make things really, really good and
+engineer everything. Like,
+if you can just give a model 10 tools in
+a prompt and it can get it right for
+every single use case that you care
+about, then do that. And then when you
+find the things it can't get right,
+that's when you start decomposing and
+engineering. Exactly. Or like in our
+case today, we knew for sure that it's
+impossible for us to dump all the legal
+companies into the problem. So, we're
+not going to waste our time doing that
+because it's it's it's it's not in the
+constraints of our problem. So, we'll
+start with the minimount of work that we
+can. But, you you still need to know
+where the walls of the box are and know
+like, oh, yeah, I'll I'll never no
+matter how good the no matter how big
+the model is, this is just never going
+to yield good results. So, we're going
+to skip trying to do that. But, you'll
+notice that I did not write an LLM
+prompt for validate company, pick
+potential company. I just did the dumb
+thing where I just use aliases.
+And it might work to be completely
+honest. A lot of resumes probably use
+like one of 50 words to mention a
+company. I may not need an LM for this,
+but I might want to use an LM anyway uh
+because it's faster. I think one of our
+engineers said a really really funny
+thing um recently where they mentioned
+that we don't actually want to do like a
+standard library like languages might
+not need a standard library anymore
+because technically everything can be an
+LLM function. Uh, actually I'll show his
+expose.
+Um, and I think that was better Antonio
+because I thought this was very very
+funny.
+Uh, he talked about how when you're
+actually doing a
+uh you could technically do URL encoding
+using an LLM instead of actually using
+string interpolation and format strings.
+And this becomes really interesting
+behavior in the future as we as
+developers can go out. And right now
+this looks extremely silly because we
+all know how to do URL encoding uh with
+just like string interpolation. But this
+might not be as crazy as it sounds
+anymore like 5 years from now. Just like
+Slack using 70 gigs of RAM would have
+been insane 10 years ago, 20 years ago.
+And now it's like it's okay. Every
+laptop's got enough. We just go spend
+the RAM. It might be true for compute as
+well.
+I love it. Um, anything else before we
+close out?
+Going once, going twice.
+All right. Well, today we covered entity
+extraction. Um, thank you guys for
+joining us. Next week I think is going
+to be really fun. Dex, do you want to
+give them a preview of what we're
+talking about? Yeah, so I dropped the
+link in there. Um, so we do a lot of
+work on this show. Um, but we also do a
+lot of riffing. And our favorite thing
+is to get on and talk with you about
+your real problems. And the things that
+we don't like doing as much is
+downloading videos and creating
+transcripts and writing up notes and
+things like that. And so we want to
+we're going to get a bunch of we're
+going to get all the boring stuff set up
+ahead of time, but we want to walk
+through kind of building live a AI
+content pipeline where you can take a
+video like this, whether it's sessions
+uh that we're doing, whether it's a
+video you find online, whether it's a
+meeting you have with the customer,
+whatever it is, like take recorded
+content and turn it into a content
+pipeline of like a small blog post, uh
+uploading the events in GitHub, pulling
+out the transcript, um and kind of just
+like doing as as much as we can do get
+done in an hour of like how we run the
+show in the background and how we use AI
+to kind of make it better and how we
+apply the we come here and talk about
+all these like toy problems. So, next
+week we're going to solve a real
+problem.
+Cool. We're going to be fun.
+I have a quick question if you if you
+don't mind if you have just a few
+seconds. Um the the

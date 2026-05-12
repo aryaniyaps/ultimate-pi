@@ -1,0 +1,440 @@
+llm technology is breaking the limits on
+what you can build you can now create
+software that not only makes decisions
+for you it can create arbitrary content
+on your behalf in this video I want to
+give you key engineering principles and
+techniques to help you build incredible
+multi-agent systems that solve problems
+on your behalf there's one principle in
+particular that once you know it will
+unlock a new world of Rapid engineering
+and productivity gains for you senior
+Engineers know this principle
+intuitively through experience and not
+only am I going to share this principle
+with you to help you architect design
+code and ship your work faster I'm going
+to show you exactly what it looks like
+in practice to give you a practical
+reference and guide on how to use this
+principle in this video so what is this
+incredible engineering principle that
+senior plus Engineers just kind of know
+by heart it's simple everything is a
+function so what does that mean what are
+the implications how does this help you
+ship code faster how does it help you
+build useful AI agents how does this
+principle help you build great apps and
+tools and less time we'll dig into that
+in just a moment but first let's
+describe what we're going to build in
+this series that's right we're going to
+start a simple multi-agent application
+in a classic beginning middle end 3art
+series we're going to talk about
+principles we're going to build a proof
+of concept and then we're going to have
+a production ready version and let's get
+into what exactly we're going to be
+building I've been kicking this down the
+road for a long time waiting for all the
+pieces to come together so I can share
+with you to accelerate your engineering
+while getting some concrete value out of
+this tool myself we're going to build a
+multi-agent YouTube automation metadata
+generator the great part about building
+this on the channel and sharing it with
+you is that you can use these principles
+architecture and design Philosophy for
+building any type of agentic content
+generation application if you've created
+YouTube content written blogs created
+documentation you know written peer
+review descriptions anything like that
+you know that this can be a really
+manual laborious process we're going to
+start from beginning to end and automate
+the entire flow of this Central manual
+process so after you have your video
+rendered you go through this long
+process of SEO research brainstorming
+ideas generating titles generating your
+thumbnail iterating on your thumbnail
+improving your description collecting
+the resources putting your hashtag
+together all to you know formalize that
+into a final review so that you can
+upload your video this is really
+applicable to any process where you have
+a core asset that's been generated think
+about you know code think about a PR
+think about a Blog think about an
+announcement post anything like that
+where you have a core asset and then you
+have surrounding metadata that takes a
+decent chunk of time but is Mission
+critical to shipping your core asset so
+we're going to take this entire process
+and build a multi-agent system that
+automates the entire process for us so
+all we have is our rendered video we'll
+then build out a simple CLI application
+at least to start then we can build it
+into a UI that will take that rendered
+video it'll generate all the metadata
+that we need and then it'll create just
+a few files that we can quickly upload
+and have the process fully automated
+removing all of these Center steps for
+us so let's talk about principles to
+help us build multi-agent applications
+like this in video two and three of this
+series we're going to dive deeper into
+the details of how exactly will do each
+one of these steps in this video I want
+to set up some of the core principles
+you can use to build software in general
+but more specifically a gentic software
+software that's fueled by llms software
+that utilizes multi-agent systems that
+are being built right now with the new
+incredible llm technology at your
+disposal so let's take a look at three
+key engineering principles we can apply
+including this interesting idea of
+everything is a function that we can
+apply to building multi-agent
+applications looking at this YouTube
+automation tool as a example we can work
+through so principle one use the right
+tool for the job in this case use the
+right agent for the job right so let's
+talk about this a little bit identify
+the problem you're trying to solve break
+your problem into tiny problems in the
+example of our metadata generator we
+have this whole top level problem of
+create YouTube metadata right and so
+there are actually several steps in
+there right we have the generation of
+the title the thumbnail the description
+right break those down to Tiny Steps
+whatever your big level process is
+whatever your big problem is it's not a
+big problem it's three or four or five
+small ones this makes it a lot more
+digestible then decide if you need an
+agent if you need to code or if you need
+manual input to make this happen and
+when you're building these out always
+start from the top to the bottom if you
+can use an agent to do it use an agent
+if you need to code write the code if
+you need manual input okay then do it
+manually you want to be automating as
+much as you can so this brings up a
+really important question that I think a
+lot of us are still working through how
+do you know which one to choose how do
+you know when you can use an LM to solve
+a problem in front of you so when to use
+an AI agent this is kind of
+reformulating the question use the best
+tool for the job in a different way
+right when do you use this tool when do
+we use this incredible tool that we've
+been given this LM technology so a
+framework I've been using that I think
+will be really helpful for you is follow
+crud in order this is something that
+I've been utilizing in talk to your
+database a text to SQL to results
+application that just went Live this
+past week really excited about that I'm
+going to leave that in the description
+if you're interested in writing less SQL
+and getting more results out of your
+database that's going to be in the
+description for you this principle of
+following crud in order so what do I
+mean by that you want your agents to be
+doing these things over these things so
+you want them to be creating and reading
+over updating and deleting let's dig
+into this a little more agents are great
+at creating and reading data at creating
+and reading information agents are not
+great at updating and deleting data it's
+a lot riskier there's a lot more
+complexity in updating something it
+requires a lot more context a lot more
+knowledge a lot more awareness and
+frankly llms are not there even some of
+the best Topline ones obviously I'm
+talking about gpts right gpt3 and gbt 4
+Turbo in the eyes of our YouTube
+transcription multi-agent system we have
+this transcribe YouTube video that's
+just going to be raw code there's no
+reason to have an agent transcribe a
+video for you then we're going to read
+the transcription in each one of our
+prompts and then we're going to create
+metadata from that right we're going to
+be creating thumbnails we're going to be
+creating titles we're going to be
+creating the description right and this
+Falls in those two really great cases in
+our crud system that llms are really
+great at you can always use this as a
+quick reference when do I use an llm
+when do I use an AI agent am I creating
+am I reading that should be the first
+thing you ask yourself am I creating and
+am I reading if you're updating and
+deleting it's going to be a bit more
+complex there's going to be a bit more
+going on llms are great at creating new
+information creating new data and
+they're great at reading existing data
+so that's framework number one a couple
+more useful tips you want to be be
+looking at lower midsize Stakes you want
+to be looking at repetitive tasks right
+it's like every time you upload a video
+every time you post a blog every time
+you PR your code whatever it might be
+you know these repetitive tasks can
+definitely be automated away via llm
+technology why because they have clear
+inputs and outputs so I hope that's
+sounding familiar and I hope that Rings
+a little bell here to something we're
+going to be talking about in just a
+second next when do you use an llm when
+you understand the problem well I've
+talked about this before in the 2024
+predictions video I think the biggest
+trap for newbies and people stepping
+into new domains with the help of gpts
+and chat GPT is that they don't actually
+know what they're looking for and how
+can you create a solution when you don't
+know the problem well right there's an
+inconsistency there so you want to
+understand the problem well if you don't
+understand the problem well you
+shouldn't be asking someone or something
+right the llm the agents to solve it for
+you because you won't even know how to
+prompt you won't know how to ask the
+question right you won't know how to
+direct your agent to solve the problem
+for you you should probably just code it
+yourself and do it manually so you can
+better understand the problem and then
+maybe after that turn to an llm to
+automate it use AI agents to solve
+problems you understand well fast if
+you're enjoying this so far if this
+makes sense so far definitely hit the
+like hit the sub it helps other creators
+Builders and Engineers just like you
+find this content get value out of it so
+that they can build their next thing
+definitely takes some time for me to
+formulate all these ideas to turn it
+into concrete content that you can
+consume quickly and move on with your
+day so let's move on to one of the key
+core principles we discussed in the
+beginning
+everything is a function let's break
+this down this is a really deep State
+idea in engineering once you hear it
+once you understand it it kind of
+changes the way that you think about
+software llms take in prompts and return
+responses right scripts take in CLI
+arguments and produce outputs right apis
+take in parameters and return data you
+have function parameters and you have
+function return values right you have
+your prams and you have your return you
+can see where this is going right all
+code is effectively a pipeline of
+functions that take in inputs and
+produce outputs okay let's just like
+really try to dig into this idea let's
+try to internalize this idea once you
+understand this you can design and
+engineer better tools and applications
+much faster much better you can
+understand where things might go wrong
+everything is a function let's keep
+digging into this right every problem
+can be broken down into a series of
+functions with discrete inputs and
+outputs that can be tested and chained
+together These Chains you build make up
+the solution to your problem so if you
+want to build great Solutions you need
+to understand and properly design your
+inputs and outputs of the functions
+you're using and chaining together
+here's the big kicker llms are just
+another function in your pipeline llms
+are just another piece in your solution
+if you design that their input well
+you'll get a great output right let's
+look at a concise example Through The
+Eyes of our YouTube metadata generator
+system the top level problem can be
+defined as this function the input is a
+video write a path to a video I'll have
+a fully rendered video into a directory
+or my desktop wherever it might be it's
+going to return metadata so all we have
+in this function is whatever steps you
+need to take to you know use your llms
+to generate the metad data given the
+video right just like in principle one
+use the right tool for the job how do
+you find the tool you take your problem
+and you break it down and then you say
+how can I fix this one tiny thing let's
+break it down now we have a transcribe
+function and so what this does is
+important but what's more important is
+the input and the output so we have
+transcribe so we'll transcribe the video
+we'll get a string and then once we have
+our transcription we'll be able to
+generate the description right so then
+that Returns the string right maybe we
+pass in the title maybe we have that
+available and what does that that do now
+we can given the description and we
+probably want to pass the title in here
+as well right but given this additional
+information we can now chain that
+together and generate our image generate
+thumbnail will take a description
+probably a title as well and now it'll
+generate an image okay so think about
+your llms as you would any function you
+can test them you can chain them you can
+break them down into smaller functions
+most importantly you can design them to
+take in specific inputs and produce
+specific outputs to solve your problem
+why because everything is a function
+functions have parameters they take
+inputs and functions have return values
+they produce outputs principle three
+great questions yield great results as
+you're building out your multi-agent
+systems and your agentic applications
+and even just your raw software just
+keep asking good questions even if they
+seem dumb right what am I trying to
+solve what is the right way to use this
+tool what is the right prompt what's the
+best way to do this and every question
+you come up with just throw your best
+guess answer at it a lot of engineering
+and product building is you know there
+are lots of solved problems but
+eventually and this is where things get
+interesting you're going to run into
+something that you just aren't sure
+about and that's when it's really
+important to formulate a good question
+so that you can create a great result
+from that right or at least a result
+that you can iterate with so you know
+how will you know when your problem
+solved what happens if something goes
+wrong do you have good failure
+mechanisms and how do you monitor the
+solution right if you're building out
+these agentic applications you're going
+to want to know and Define questions
+like this for a multi-agent YouTube
+metadata generator we know when the
+problem's solved when we can you know
+type in our CLI app or whatever the
+application is on the other end of it we
+get a title we get an image and we get a
+completed description right that's how
+we know when it's complete you want to
+be creating answers to your questions
+because that will give you solid results
+so you know with these principles you
+can take your principles apply them
+create a proof of concept and then after
+that create a production and that's
+exactly how we're going to formulate
+these three videos this video is all
+about the principles we're going to use
+to build our multi-agent system in the
+next video we're going to show off the
+proof of concept and then we're going to
+productionize it we're going to share it
+with the world you'll be able to
+download this you'll be able to use it
+just to even test it out right even if
+you don't generate YouTube content
+you'll be able to look at the code and
+check this out so with these principles
+we can start moving forward right right
+no plan is perfect because there's bound
+to be unknown challenges that arrive
+during development but those who plan
+the future tend to create it and then
+once you have that you can create your
+first version right principles allow you
+to get to your first version with the
+fundamental truth of what you're trying
+to build right what's the problem you're
+really trying to solve how can you use
+llms to help you get to that point keep
+your principles close throughout
+development especially in that first
+version once you have your first version
+you can iterate to success you'll be
+able to unlock the awesome value that
+llms are giving us the principles really
+give you a tool set to build the first
+version right so you know on the channel
+we're going to build out this
+multi-agent YouTube metadata generator
+in the next video we're going to show
+off V1 we're going to break down how we
+utilize these principles and then we're
+going to get a full productionize
+version now we're going to talk about
+the good the bad we're going to you know
+use this channel we're going to use
+these videos as a learning grounds for
+building out this great technology I'm
+really excited to put a lot of the
+things I'm learning right now from
+building talk to database I'm actively
+working on that we have new features
+coming every single week I'm really
+excited to ship those for everyone
+writing SQL that wants to save a bunch
+of time but we're taking that we're
+taking all these ideas we're pushing
+them further here we're going to
+automate YouTube metadata generation
+we're going to do that by building a
+really cool CLI application that does it
+all for us thanks for watching stay
+focused keep building and I'll see you
+in the next one with a proof of
+concept

@@ -1,0 +1,1543 @@
+[0.2s] What what are I think a few people are
+[1.9s] asking like what are good articles for
+[3.3s] harness engineering. If I'm completely
+[4.7s] honest, the best way to do any of this
+[6.6s] harness engineering stuff is I would get
+[9.0s] clone codecs. I would get clone pi and
+[11.8s] then I would try and build a harness
+[13.8s] that's better than them at one thing for
+[16.7s] one task.
+[17.9s] >> Can dumb model with good harness beat
+[19.9s] the good model with bad harness?
+[22.0s] >> It depends on the delta of dumb and
+[23.9s] good.
+[25.0s] >> I mean I think this is the the same
+[26.6s] thing as like the the context
+[28.1s] engineering argument, right? is like
+[30.2s] >> if you can actually like narrow the
+[33.3s] scope of the problem to exactly what you
+[35.4s] want to do and you can optimize for your
+[37.7s] use case then it's it's not even can it
+[40.8s] beat it. It's like basically the har the
+[42.4s] the dumb harness the worst harness in
+[44.3s] the world is just yolo prompting a model
+[46.2s] >> like make make the world a better place.
+[47.7s] I do think that's part of software like
+[50.1s] build something really [ __ ] cool that
+[51.6s] makes you want to keep building more
+[53.4s] software inspires more people to build
+[55.0s] it.
+[60.1s] Okay. So, today on AI that works, we had
+[62.8s] a great conversation around whether or
+[65.0s] not uh you are going to get better
+[67.8s] bitter.
+[69.6s] Today on AI that works, we had a great
+[71.4s] conversation about uh whether or not
+[73.4s] you're going to get bitter lessened if
+[74.9s] you try to build your own harnesses. the
+[76.9s] advantages that model labs have in
+[79.1s] building really good harnesses, the
+[81.0s] ideas behind RL and uh how you can uh
+[84.8s] swapping a certain harness for a model
+[87.1s] that's not trained on that harness. Um
+[89.8s] the intricacies of recursive types and
+[92.1s] tool calling and token wise tool calling
+[94.2s] versus um constrained tool calling. Some
+[97.0s] basics on benchmarks and RL and how
+[99.0s] these models are actually trained for
+[100.6s] the harness that they're going to run
+[101.8s] in. And then we talk a little bit about
+[103.8s] outer harness versus inner harness
+[105.6s] orchestration, all sorts of fun stuff.
+[108.4s] Um, it was a really fun conversation.
+[111.0s] We're back to basics here on uh just
+[113.8s] learning together and trying to figure
+[115.5s] out what's the next steps and what can
+[117.8s] we all do to take AI and push the
+[120.4s] frontier of what's possible, get the
+[122.0s] best possible performance, move way
+[123.8s] beyond the demo. And uh I really enjoyed
+[125.6s] the chat.
+[126.6s] >> I'm Vibb. I'm one of the co-founders at
+[128.2s] Boundary. We make a programming language
+[130.0s] called BAML. Uh, and we're really
+[132.8s] excited to show some of the new stuff
+[134.2s] coming up very very soon, but I'm going
+[136.8s] to pause put a pin on that for today.
+[139.0s] And then we've got Dexter over here
+[140.5s] who's my co-host.
+[141.5s] >> Oh, I can say. Yeah. Uh, I'm the CEO and
+[143.9s] co-founder of Human Layer. Uh, we uh
+[146.5s] build tools for engineers to get better
+[148.6s] results from AI. Uh, so you can move two
+[150.8s] to three times faster without uh AI
+[152.7s] slopping up your codebase.
+[154.9s] And today we're going to talk about SLOP
+[157.5s] and we're going to talk about uh where
+[159.7s] it comes from and uh there's going to
+[161.9s] there's been a lot in the in the news.
+[163.9s] So I guess I'll introduce the show to
+[165.4s] this is AI that works. We talk about AI
+[167.2s] that actually works. We do a lot of
+[168.5s] systems diagramming. Um we go deep on
+[170.8s] the concepts underneath uh and try to
+[173.0s] help you learn things that'll help you
+[174.3s] push beyond the demo. Um and today I'm
+[176.5s] really excited to talk about there was a
+[177.8s] ton of stuff going on online. We did the
+[179.2s] harness engineering thing like two weeks
+[180.6s] ago. I've been complaining about people
+[182.8s] writing shitty AI written harness
+[185.4s] engineering articles online for the last
+[187.4s] two weeks. Uh at which point uh Ryan
+[190.6s] Leapo of OpenAI was like, "Sorry for the
+[193.4s] harness engineering hype."
+[194.8s] >> You want to show the tweet?
+[195.8s] >> Well, so I'll show the I'll show the
+[197.4s] tweet that that uh that
+[199.4s] >> triggered us to have this conversation.
+[201.8s] >> Yeah. Where is Oh, man. The TLDDR is
+[205.7s] just like what we really want to do is
+[208.6s] just
+[210.2s] I think put a little bit more detail
+[213.8s] into talking about what it means to
+[216.2s] build harnesses in way more detail on
+[217.8s] like what harnesses can and cannot do
+[219.6s] and where the alpha really is in this
+[221.8s] world at least from our perspectives.
+[224.0s] >> Yeah. And and basically, you know, our
+[227.1s] our job as uh people who work at AI all
+[230.2s] day and uh talk about it sometimes is to
+[233.5s] cut through the hype and cut through the
+[235.4s] jargon and try to help everybody move
+[238.5s] forward and be productive with this
+[240.3s] stuff because there's a lot there's a
+[242.7s] lot there's a couple good articles on
+[244.2s] harnesses going around and for every one
+[246.8s] good article there's like 10 like half
+[248.8s] AI written slop of people just
+[250.8s] engagement farming and so I think it's
+[252.6s] worth kind of taking a stand To be fair,
+[254.7s] Dexter, is this you engagement farming
+[257.0s] over here or are we are we producing one
+[259.0s] of the good ones?
+[260.2s] >> No. Enga I think engagement farming is
+[262.5s] specifically is like when you do
+[264.6s] something that you know is low quality
+[266.5s] or low effort just because you know it
+[268.9s] will give you more likes to do it and
+[270.7s] more engagement to do it than to not do
+[272.3s] it.
+[272.7s] >> Okay. Okay. So, it's because it's high
+[275.1s] effort. It's not engagement farming.
+[277.0s] >> It's high effort. It's genuine. Uh
+[279.4s] >> there we go. It may yield engagement,
+[282.1s] but that's we're not doing it just for
+[283.9s] engagement. We're doing it because you
+[286.6s] all have a right to know.
+[288.2s] >> I agree. A lot of people are asking
+[289.8s] like, "What's a good way to um um high
+[293.0s] up for rage bait?" Yes. What's a good
+[294.5s] way to high up for rage bait? Just
+[296.6s] >> just yell.
+[297.9s] >> Um
+[298.3s] >> yeah, I mean, if you try really hard,
+[299.8s] it's probably still rage baiting. But
+[302.4s] >> what what are I think a few people are
+[304.1s] asking like what are good articles for
+[305.4s] harness engineering? If I'm completely
+[307.0s] honest, the best way to do any of this
+[308.7s] harness engineering stuff is I would get
+[311.1s] clone codecs. I would get clone pi and
+[313.9s] then I would try and build a harness
+[316.0s] that's better than them at one thing for
+[319.0s] one task.
+[320.4s] >> And like it doesn't matter what the task
+[321.8s] is. It can be data science, it can be
+[323.4s] writing unit tests, it can be like end
+[326.0s] to end tests. Um that's probably the
+[329.5s] best way to really get good at it. Um,
+[332.4s] and if you really want to read an
+[333.8s] article and maybe Dexter has some ideas,
+[335.6s] but like my opinion is like like for
+[338.3s] example, when I want to go learn about a
+[339.8s] new feature, I just get clone a repo
+[341.6s] that is a good example of that feature
+[344.1s] and then I just
+[347.0s] then I just like have Claude or Codeex
+[348.7s] explain it to me. Like I'm just let's go
+[351.0s] talk about this in detail. Let's talk
+[352.2s] about every design decision that was
+[353.4s] made. Oh, there we go.
+[354.9s] >> Yeah. So, here's the quote. Uh,
+[357.3s] basically while alternative coding
+[359.0s] harnesses may have short-term lift, they
+[360.9s] will be bitter lessened away. I am
+[362.6s] bearish on any harness that doesn't come
+[364.1s] from the lab whose model you are using.
+[366.1s] You're fighting against post training.
+[367.9s] To put a finer point on this, you know
+[369.8s] how like yakals are like, huh, that's
+[372.9s] weird, but I guess whatever it's what
+[375.4s] we've got, we can work with that. Is
+[378.2s] exactly the same with like the
+[379.3s] particular JSON construction that the
+[381.0s] codec shell tool uses. And so the ma the
+[383.7s] model, this is like pre pre-cloud code
+[385.8s] before we figured out how to do this in
+[386.9s] RL. Uh the model used to mangle nested
+[389.2s] quotes in this monstrosity RPC all the
+[391.2s] time. It basically like was bad at tool
+[393.0s] calling. The way they made the model
+[394.5s] good at tool calling. We talk about this
+[395.7s] two weeks ago, but like by Bob, you want
+[397.3s] to you want to take a put a point on
+[398.6s] this and just kind of draw out like
+[400.2s] pre-training versus post-training and
+[402.0s] like how this stuff looks. And like Ryan
+[404.6s] is kind of right, but I'm also like
+[407.8s] there's there's more follow on stuff and
+[410.0s] responses to this that we'll dig into,
+[411.7s] but I want to just like clarify like
+[413.4s] what what he's saying here and then we
+[415.4s] can jump into as requested the much
+[417.5s] longer article about context uh harness
+[420.2s] engineering that was posted a couple
+[421.7s] weeks ago.
+[422.6s] >> Yeah. So like here's my theory. Again,
+[425.8s] this is my theory. Do not uh please do
+[427.8s] not take me on it. This not financial
+[429.3s] advice. Uh but it might be AI advice.
+[432.0s] Um, when I go look at this, when I think
+[434.0s] about like the quality of a model on any
+[435.7s] given task, let's just say a model has
+[437.8s] like a curve that looks like this. Why
+[440.7s] is this line so big? I can't do this.
+[442.9s] This is emotionally hurting me. Let's
+[445.0s] say a model has a line a curve looks a
+[447.9s] performance curve like this for a lot of
+[449.4s] tasks where it performs really good in
+[452.1s] this region, but then like for tail end
+[453.6s] task that it has doesn't have a lot of
+[455.0s] data for, it starts like flatlining its
+[456.6s] performance.
+[458.4s] Effectively at post training what you
+[460.0s] can do is you can kind of like make this
+[463.0s] oops I'll use a different color. You can
+[464.6s] kind of change the shape of this curve
+[465.9s] to be like this.
+[468.0s] And then with more post training you can
+[469.8s] get better and better and better over
+[471.5s] time.
+[472.3s] >> And the axis here
+[474.3s] >> quality
+[476.5s] quality uh on this side and then like
+[478.9s] type it's like a type of task like
+[480.9s] difficulty of task or like constraint of
+[482.8s] task or something and you can kind of
+[485.3s] make it better. And I think Ryan's point
+[487.2s] in theory is definitely like is
+[490.0s] definitely correct like in the in the in
+[492.3s] some sense you are definitely correct
+[495.2s] that the best way to get alpha for a lot
+[497.4s] of tasks that are extremely hard for a
+[499.6s] model are to go train for it and if you
+[502.4s] have enough data nothing is almost going
+[504.2s] to be as good as training for that task.
+[508.0s] My particular opinion on this is the
+[509.8s] part that is really missed here is
+[513.7s] is actually a software question. It has
+[515.7s] nothing to do with models. And like I
+[517.4s] know Dexter and I have talked about this
+[518.7s] is like if you go think about what is
+[521.0s] running here like you have an LLM and
+[523.6s] you're right that there's high alpha
+[525.0s] here.
+[526.8s] Um then you have a harness
+[531.9s] and then you have this last thing which
+[533.4s] is like the environment
+[535.8s] that you're running in.
+[538.7s] The thing that I think makes this
+[540.4s] impossible to have the any model company
+[542.7s] maintain alpha over this is as long as
+[545.5s] they you keep as long as they keep using
+[548.6s] the same exact API as everyone else to
+[551.8s] talk from harness to LLM and back.
+[555.6s] >> So this is like the completions or
+[557.8s] response
+[558.1s] >> or responses API,
+[559.4s] >> right?
+[560.0s] >> Yeah. I mean OpenAI or Antropic has
+[561.9s] their own, but it's like close enough
+[563.4s] that you can translate it.
+[564.7s] >> Yeah.
+[566.6s] because the environment that you run the
+[568.7s] harness in is often owned by the user.
+[572.1s] Um, and because this is often happening
+[574.3s] not only in user owned machines, but
+[576.3s] like there's a second dimension of it,
+[577.8s] which is like actually I'll talk about
+[579.1s] in a second. There's nothing that they
+[581.9s] can do from someone building another
+[584.0s] harness that basically mimics this
+[585.9s] because you can always capture the web
+[588.1s] request coming out of here and you know
+[589.4s] exactly what alpha that they have. So
+[592.7s] any alphabet,
+[593.4s] >> we've done this on the show before,
+[594.7s] right? Where we basically like put a
+[596.6s] proxy between cloud code and the LLM API
+[599.5s] and you've pulled out like oh when it
+[601.0s] does a when it does a file edit it uses
+[604.1s] new string.
+[605.8s] >> Yeah.
+[606.6s] >> Old string.
+[607.5s] >> Yeah. So the point is
+[608.6s] >> actually technically old string new
+[609.8s] string but yeah.
+[611.0s] >> Yeah. But the point is like as long as
+[613.3s] you know the shape of the call that the
+[614.9s] model prefers to make nothing prevents
+[617.5s] you from having the model make that
+[619.3s] shape of call.
+[622.0s] We're passing that tool shape to the LM.
+[624.6s] Okay. So, let let's zoom out. Like why
+[626.4s] does it matter that you give the LM the
+[629.7s] same tool definitions and same tool
+[632.8s] parser like response parsers?
+[634.7s] >> Sure. Yeah. Yeah.
+[635.6s] >> Why do you want the exact same tool code
+[637.7s] uses?
+[638.4s] >> Yeah.
+[639.1s] >> Um
+[639.8s] >> this is I think where the RL stuff comes
+[641.5s] in cuz this is the first time we got
+[643.1s] this.
+[643.8s] >> This is what we're talking about with
+[644.9s] post training. So like what Claude code
+[647.0s] team is likely doing is
+[648.5s] >> do one task which is like call edit tool
+[652.9s] properly
+[654.0s] >> without mangling the JSON
+[656.4s] >> without without like
+[657.7s] >> they actually don't even
+[659.3s] >> I wouldn't even say that it's just like
+[660.8s] success the metric is just like success
+[663.1s] of success of like edit tool
+[667.4s] >> um sure yeah I mean it well are you
+[669.7s] talking about success of just like
+[670.7s] calling it properly or like doing the
+[672.3s] edit to solve a problem both.
+[676.3s] >> Yeah. So, this is like bbench
+[678.3s] performance or something.
+[679.8s] >> Exactly. Exactly. And what
+[682.6s] >> like embedded in this is one of the
+[683.8s] things you have to do to succeed at
+[684.8s] Sweetbench is you have to be able to
+[686.8s] call the edit tool correctly the first
+[688.6s] time so you're not wasting a bunch of
+[690.0s] context retrying it over and over again.
+[692.2s] >> Exactly. So what ends up happening over
+[694.2s] here is when you're doing this the tool
+[698.9s] the models are basically being trained
+[700.9s] like clawed opus whatever the latest
+[703.0s] version is is being trained for this
+[705.5s] specific version of the edit tool.
+[708.2s] >> Yeah.
+[708.5s] >> And like technically these models are
+[710.2s] fairly general purpose. So if you use it
+[712.3s] for a slightly different version of the
+[713.9s] edit tool, it's not like you're getting
+[715.5s] way worse performance. Just to be very
+[717.3s] clear, you're likely going to get like
+[719.0s] something like this. Oops, I didn't get
+[720.4s] the right line. Interesting. I cannot
+[723.0s] draw a dash line.
+[723.7s] >> Yeah. Like if you called it B like let's
+[725.5s] say for example you switched new string
+[727.4s] and old string that might impact your
+[729.3s] performance by 0.01%
+[733.1s] per call. Right.
+[734.4s] >> Exactly. And like fundamentally like
+[736.3s] it's like h it's basically the same
+[738.2s] performance cuz these models are so
+[739.7s] general purpose. It's just slightly
+[741.6s] worse. So it's not even like that big of
+[743.7s] a difference, but it is a slight
+[746.1s] difference. And likely the best alpha
+[748.8s] for any given task, assuming that the
+[751.0s] model providers are choosing to post
+[753.1s] train on that task is here. Now, if
+[756.1s] they're not choosing to post train on
+[757.4s] the task, it's very possible that your
+[759.6s] implementation is actually better than
+[761.8s] the what the model is doing because
+[763.3s] they're not actually optimizing for it.
+[765.1s] But if the model weights are being
+[766.2s] optimized for it, you should use
+[767.8s] something like this because you will
+[770.2s] just get slightly better performance.
+[771.7s] There's still caveats in which you can
+[773.2s] do better.
+[774.3s] >> But in general, this is like a good
+[777.0s] >> in machine learning there's no such
+[778.2s] thing as like absolute truths. They're
+[779.4s] just like general rules of thumb.
+[782.2s] >> So like this is a good general rule of
+[783.9s] thumb.
+[784.9s] >> And I think it's also worth noting the
+[786.6s] the chart, I won't pull it up, but the
+[787.9s] chart you always site of like, hey, if
+[789.4s] you're going to do a 100 turn operation,
+[791.8s] reducing your accuracy by 1% actually
+[794.4s] has like a 25% impact on the final
+[797.5s] result or more. Exactly. Because of how
+[799.1s] that compounds.
+[800.8s] >> Yeah. So like if you're doing like 50
+[802.5s] tool calls because you're doing a coding
+[804.0s] agent task, it compounds real freaking
+[805.9s] fast.
+[806.9s] >> Yeah.
+[807.8s] >> Or like 500 tool calls. So I I think
+[810.9s] once we go from here the So now we
+[813.3s] understand how LM are kind of optimizing
+[815.4s] the harness for this. They define
+[816.8s] specific tools in here which they also
+[819.1s] post train the model on because they
+[821.0s] have a bunch of data for that and now
+[822.6s] they're post training on it. Now they
+[824.1s] can go do it. So the shape of this
+[825.5s] doesn't actually matter. That that's the
+[827.8s] key part that a lot of people think
+[828.9s] about like you if you're a model
+[830.5s] provider you actually don't have to care
+[832.2s] about the shape of your tool call at
+[834.0s] all. You spend zero claim you spend zero
+[836.2s] effort on that
+[837.8s] >> because
+[838.7s] >> you post train so it doesn't matter
+[840.2s] >> because you're going to post train. I
+[841.3s] see. Yeah. So if you're pre-training a
+[842.6s] model basically so you have these two
+[844.2s] stages right? You have like
+[845.4s] pre-training.
+[847.0s] I'm not I'm not going to draw a diagram
+[848.4s] of pre-training versus post- training,
+[849.9s] but if you want to you can
+[851.3s] >> I mean like to some degree it might
+[852.8s] matter but effectively like you train
+[854.4s] the model on like general English tool
+[856.1s] calling whatever and then you post train
+[857.8s] it on the coding agents for like the
+[859.4s] tool calls that you care about the most.
+[861.4s] >> So you have data and this gives you a
+[863.4s] pre-trained model
+[865.5s] >> and then you have RL
+[868.1s] RL or RLHF where you have humans
+[871.1s] labeling data sets
+[873.1s] >> uh and then you have a postrain model.
+[875.8s] >> Yeah. Uh you likely now they probably
+[878.2s] use cloud code as like a good training
+[880.0s] test set if I were them. They have so
+[882.1s] much data from there for free.
+[883.6s] >> Yeah. Yep.
+[884.6s] >> Um like that's probably the best thing
+[886.5s] for these companies, how much high
+[888.1s] quality complex data that they're
+[889.6s] getting with coding agents.
+[891.3s] >> Cool. Okay. So that's that's why knowing
+[894.2s] what tool calls the harness is sending
+[896.1s] to the LLM is important to get the best
+[898.9s] results from that LLM.
+[901.4s] >> Exactly.
+[901.7s] >> And so let's go back to the point you
+[902.7s] were making, which is like, okay, cool.
+[904.2s] as long as the harness runs on my
+[905.5s] machine, which it has to do if it's
+[906.9s] going to access my files and my shell
+[908.6s] and stuff like this, then I will know
+[911.1s] the tool for call formats. And so I can
+[913.8s] basically I mean this is I think um DAX
+[916.6s] has mentioned this is how open code has
+[918.3s] developed their tool calling syntax
+[920.3s] because like the tool for cloud code is
+[922.5s] edit but the tool for chat GPT is patch
+[924.9s] and it's like this long string. It's
+[926.6s] like file
+[928.7s] and then it's like this long like it
+[930.6s] looks like a git diff. Yeah, exactly.
+[934.1s] And again, it's
+[935.4s] >> if you try to use
+[936.8s] >> if you try to use GP GPT5 in the cloud
+[939.4s] code harness because again if you are
+[941.1s] proxying here, you can also just like
+[942.9s] divert instead of sending proxying it
+[944.6s] through transparently, you can divert
+[946.4s] all this traffic to a different LLM.
+[949.0s] >> Uh you're going to get terrible
+[950.6s] performance because GPT knows how to
+[953.6s] call this tool and it hasn't been
+[955.6s] post-trained on this tool.
+[957.6s] >> Exactly.
+[959.2s] You won't get terrible performance. you
+[960.6s] get slightly different performance.
+[962.4s] Terrible is hard to say cuz these models
+[964.2s] are very good general purpose machines.
+[965.9s] And like there's like three questions in
+[967.1s] the chat that I think are worth on this
+[968.7s] topic really fast.
+[970.4s] >> So like one of the questions is uh am I
+[973.1s] alluding to the fact that DSP or BAML
+[975.0s] can do slightly better than the model if
+[976.8s] it makes no assumptions on the tool
+[978.3s] calling shape? And like the premise here
+[980.4s] is exactly that. So like you can
+[982.3s] definitely do better than models for
+[983.9s] general purpose tool calling
+[986.5s] than what models do because like for
+[988.2s] especially the more complex your shape
+[990.2s] is the less training data that there is
+[992.7s] for your kind of shape. Often a really
+[995.4s] complex kind of shape that really
+[996.7s] suffers from this is like recursive data
+[998.4s] types because recursive data types are
+[1001.1s] so nuanced and they have like intricate
+[1002.7s] relationships along them. Getting a
+[1004.2s] model to output extremely complicated
+[1005.9s] recursive data types like you just
+[1008.5s] shouldn't do that in general. It's going
+[1010.7s] to be very expensive and everything.
+[1013.1s] Sorry, it's not expensive. It's going to
+[1014.5s] be very hard to get high accuracy out of
+[1016.6s] it for like hard tasks. So, you can
+[1018.8s] likely do better than the model by
+[1020.2s] default unless they are post training on
+[1021.9s] it.
+[1022.6s] >> The coding agent the go ahead
+[1024.8s] >> the anthropic API does not support uh
+[1027.7s] discriminative unions.
+[1029.4s] >> Yeah, there there's a whole bunch of
+[1030.7s] other reasons.
+[1031.8s] >> Um and then the other part fundamentally
+[1034.6s] is like JSON is not the best way to
+[1036.7s] represent all data because of escape
+[1038.2s] characters. So like for again for simple
+[1040.6s] like these model providers are now
+[1043.6s] specifically encoding specific kind of
+[1045.4s] tools. So they're getting better at that
+[1047.4s] and that might mean it's getting better
+[1048.8s] across the shape of all them. But what I
+[1051.0s] suspect it means is it's getting really
+[1052.4s] good at writing code in JSON format. Not
+[1055.7s] necessarily.
+[1057.5s] And I don't even think they do code in
+[1058.8s] JSON format. I suspect what they do is
+[1060.2s] they detect it's this tool. Then they do
+[1062.2s] this. Then they don't require JSON. They
+[1063.8s] just parse it until they get a special
+[1065.2s] end token. That's what I would do if I
+[1067.4s] were them. Um because then you don't
+[1069.4s] have to worry about teaching the model
+[1070.5s] escape characters. You just let it
+[1071.8s] output code like it's supposed to output
+[1073.5s] code.
+[1074.4s] >> Do you want to like draw or screenshot
+[1077.3s] or code that last point of like um
+[1080.7s] >> yeah sorry I said a lot of words and I
+[1083.0s] probably can describe that a lot better.
+[1084.7s] Effectively like what happens you ask a
+[1086.4s] model to generate a tool call. So a
+[1087.8s] model is basically just generating like
+[1089.2s] token sequence after token sequence. Um,
+[1091.4s] and like it just generates one token at
+[1094.1s] a time until it does this. And then like
+[1095.4s] obviously it has a sequence of input
+[1096.9s] tokens that came before it. So like
+[1099.6s] these are input tokens. These are output
+[1101.8s] tokens. When it decides that it wants to
+[1103.7s] invoke a tool call, it says some English
+[1105.2s] tokens. Then eventually it outputs a
+[1107.2s] very special token. That's like the tool
+[1109.9s] call token. It says I'm going to
+[1111.8s] initiate a tool call. And it usually
+[1114.3s] after that it outputs some more tokens.
+[1115.9s] That's like here's the name of the tool
+[1118.0s] call. um and I'll say like the name of
+[1119.8s] the tool call and then I'll start
+[1121.6s] outputting the data and once it outputs
+[1123.8s] a tool call name what Enthropic or
+[1125.8s] OpenAI or any of these companies can do
+[1128.0s] is they can now say something like from
+[1130.6s] this point onwards you must uh you you
+[1133.0s] can only abide by proper JSON so if
+[1135.7s] you're outputting an array the first
+[1137.1s] curly it has to be a curly it's not a
+[1139.0s] choice and it continuously goes onward
+[1141.8s] now what I was alluding to is if you're
+[1143.8s] doing the edit tool call I actually
+[1146.3s] don't have to do this because I'm doing
+[1147.8s] post training
+[1148.9s] I don't have to abide by JSON rules
+[1150.6s] anymore. I have to know that this is a
+[1152.3s] special tool that I know special things
+[1154.2s] about that has different constraints and
+[1156.0s] everything else. And what I do now is I
+[1159.5s] let you output like something like uh
+[1161.8s] old code. You can I don't know if they
+[1163.9s] have a token for this or not, but I'm
+[1165.2s] just theorizing here of how you could do
+[1167.2s] this. You could have a token for old
+[1168.8s] code.
+[1170.4s] Then you could have it generate a bunch
+[1172.0s] of token sequences that are basically
+[1174.6s] just like arbitrary code. Oh, that's not
+[1177.4s] good.
+[1179.4s] Uh, that just does this over and over
+[1181.8s] again. And then you can have it go
+[1184.2s] generate a
+[1187.1s] new code and does this again.
+[1190.6s] And you can see how one does not end up
+[1193.0s] having to do any
+[1195.8s] any special JSON encoding here. And then
+[1198.2s] you can output one special thing that
+[1199.9s] says
+[1201.4s] done.
+[1203.9s] Um, and now you're effectively done with
+[1205.8s] this by injecting three special tokens.
+[1208.5s] Not saying that you have to do three
+[1209.8s] special tokens. There's even simpler
+[1211.2s] ways to go do this.
+[1213.7s] Um, but there's many reasons why you
+[1215.5s] don't want to enforce grammar for like
+[1217.0s] to edit calls for tools and stuff
+[1218.6s] because like it's just the one, it's a
+[1221.6s] huge waste of tokens, and two, there's
+[1223.3s] no way that the model will generate the
+[1224.9s] best code if it has to JSON escape it
+[1228.1s] while it generates code for like large
+[1229.7s] diffs.
+[1231.3s] So I would rather just do it much
+[1233.0s] differently and not this is uh someone's
+[1235.5s] asking like don't they just enforce
+[1236.8s] grammar? So in this this is also a form
+[1239.1s] of grammar enforcement
+[1241.1s] just to be very clear. U it's just a
+[1243.7s] special kind of grammar enforcement that
+[1245.1s] is not JSON compliant. This is a grammar
+[1247.3s] enforcement that says if you call the
+[1249.0s] edit tool you must output a token that's
+[1251.3s] called o old code then any sequence of
+[1253.8s] tokens then you must output a new code
+[1255.6s] token then any sequence of tokens then
+[1257.4s] the done token. It's still grammar
+[1259.4s] enforcement.
+[1261.0s] Uh I think people just think about
+[1262.2s] grammar enforcement as enforcing JSON.
+[1264.6s] That's not what that means.
+[1267.0s] >> Okay. So what does this have to do with
+[1269.0s] recursive types and discriminated
+[1270.6s] unions?
+[1271.3s] >> Uh the point is like once you start
+[1273.0s] doing discriminated unions or something
+[1274.5s] else, you do have to use something like
+[1276.0s] unless you're postraining, you have
+[1277.2s] these special tokens for the tool that
+[1279.0s] you care about, you effectively have to
+[1281.0s] do JSON grammar.
+[1283.6s] And JSON grammar is perfectly fine. But
+[1285.8s] like we said, now you have to enforce
+[1287.8s] this. Then you have to enforce like the
+[1289.7s] tokens for actually outputting
+[1292.4s] proper JSON. So you have to like quote
+[1295.5s] and then another quote token and then a
+[1299.0s] and again I don't know the token
+[1300.5s] vocabulary off top of my head so I'm
+[1301.8s] like just pretending what tokens are.
+[1304.3s] >> Yeah. Like this might be its own token
+[1306.5s] kind of thing.
+[1307.0s] >> Yeah. Yeah. Exactly. Uh that's a good
+[1308.6s] thing to just draw it there so people
+[1309.9s] don't think of it as single tokens. And
+[1312.0s] maybe the answer is like 100 here. Or
+[1314.2s] maybe the answer is another map with
+[1316.6s] another key inside of itself because
+[1318.6s] it's like a recursive map for whatever
+[1321.1s] reason. And once you start doing this
+[1323.5s] kind of data shape, there's just less
+[1325.4s] training data in the world on like
+[1326.9s] extremely complicated recursive types
+[1328.6s] that have relationships between each
+[1330.6s] keys. So the model is kind of trying to
+[1332.7s] do two things at the same time. And so
+[1334.7s] and so maybe the context engineering
+[1337.0s] harness engineering here thing here is
+[1338.9s] is less about how you talk to the model
+[1341.2s] and more about like how do you provide
+[1343.8s] tools to the model in a way that the
+[1345.5s] model is going to have a chance of
+[1348.0s] calling it well. You know what I mean?
+[1349.6s] Like
+[1349.9s] >> exactly
+[1350.4s] >> the reason why cloud code works is
+[1352.1s] because the tools that are the core of
+[1353.5s] it readredit bash are damn simple. There
+[1357.0s] is no nested object in there.
+[1359.2s] >> Exactly. And and the remember there's a
+[1362.1s] special token here that we already
+[1363.7s] mentioned which is like this is like a
+[1365.9s] special like start tool call.
+[1369.2s] There's a very special token here. And I
+[1372.2s] think the main thing that I was trying
+[1373.4s] to point out to people was that for many
+[1376.3s] things start tool call is a good thing.
+[1378.8s] But it's also very possible that the
+[1380.6s] best way to actually just get the best
+[1382.3s] alpha here is just to just let the model
+[1384.6s] keep doing output tokens
+[1387.0s] >> like normal and just format you've built
+[1390.0s] your own format that is actually more
+[1391.6s] efficient at encoding the data that you
+[1393.5s] want to encode because the model
+[1395.8s] providers haven't really optimized for
+[1397.4s] this kind of behavior yet. That was kind
+[1399.5s] of the point of this and this is how you
+[1400.9s] can get alpha on top of the models even
+[1403.0s] though you're not doing this.
+[1404.8s] >> Cool. You said there were three
+[1406.1s] questions in the chat. Is there some
+[1408.3s] other good ones that we want to jump in?
+[1409.5s] >> Um, do you have an idea of why harness
+[1411.4s] for cloud code opus 4.7 is the worst of
+[1415.0s] or opus 4 point is the worst harness? Oh
+[1418.2s] my god. It's because when you run Opus
+[1421.0s] 4.7 in cloud code with no customization,
+[1425.1s] you start your context window at 50,000
+[1427.4s] tokens because there's 32,000 tokens of
+[1430.2s] tools and 10,000 tokens of system
+[1433.1s] prompt. That's that's my take.
+[1435.9s] >> I I think my take is probably people
+[1438.2s] overindex on the benchmarks too much. I
+[1441.4s] think most tasks in software engineering
+[1443.2s] don't require the best stuff. So just
+[1445.6s] like use the thing you like and like
+[1447.8s] >> can we talk about benchmarks real quick?
+[1451.4s] >> Yeah, let's put let's talk about
+[1452.9s] >> main ones and like how how how are these
+[1455.0s] models actually post-trained RL, right?
+[1457.7s] >> I don't think benchmarks matter for this
+[1459.8s] stuff personally.
+[1461.6s] >> Well, I guess not less benchmarks more
+[1463.5s] like I mean the benchmark and the data
+[1465.9s] set is kind of the same, right? You have
+[1468.3s] your like train and test data sets. No,
+[1471.4s] cuz I think that benchmarks are like
+[1474.0s] when I think of like coding agent
+[1475.4s] benchmarks
+[1477.3s] every single time I look at one I'm like
+[1479.0s] it's [ __ ] [ __ ] cuz like it
+[1481.7s] doesn't match my behavior of as an
+[1484.2s] engineer. Like what I want is I want to
+[1485.8s] toss a really really hard problem at the
+[1487.3s] model and then I want it to go solve
+[1489.8s] some [ __ ] for me. And like that's
+[1492.7s] just I don't know about you, but like I
+[1495.5s] I find that like the model makes way
+[1498.6s] less of a difference than people claim
+[1501.1s] it makes. And I find that like it's more
+[1503.0s] about the
+[1504.8s] processes that we put around it that
+[1507.0s] helps increase the system. So like when
+[1509.7s] I used RPI for example, I feel like that
+[1512.1s] boosted my system more than like any
+[1513.9s] specific model or harness did. And like
+[1516.3s] that was like a
+[1519.6s] that was the thing that matters a lot.
+[1521.7s] The benchmark is like I don't care what
+[1523.5s] they say about the benchmarks unless it
+[1525.0s] actually like lets me ship more code.
+[1527.0s] But what do you think?
+[1527.8s] >> The the reason I think this is relevant
+[1529.7s] is like we talked about this like RL
+[1532.3s] environment or RLHF that gives you the
+[1534.2s] post-trained model and the models only
+[1536.3s] know how to code well on the types of
+[1538.3s] things that they've seen. And so you can
+[1540.4s] look at something like I learned this
+[1541.7s] actually chatting with um Calvin who was
+[1544.2s] one of the OGs on um the codeex launch
+[1547.1s] but there's this thing called sweep
+[1548.6s] bench multilingual right
+[1551.4s] so we take the model and we teach it to
+[1554.1s] uh do these uh to like learn how to call
+[1557.1s] these tools well and to like increase
+[1559.2s] and uh the reliability at a certain task
+[1562.6s] you have sweepbench multilingual which
+[1564.3s] is uh it works off of so the original
+[1568.0s] sweepbench was just Django Right.
+[1570.5s] >> Yep. It was like a single uh it was also
+[1574.0s] like a single very simple tasks from
+[1575.9s] what I saw.
+[1577.0s] >> Yeah. So you basically you would take
+[1578.4s] the repo
+[1581.5s] um this is roughly I'm I like
+[1585.5s] within reason this is this is how it
+[1587.5s] works. You look at past PRs and I think
+[1590.2s] they got like 2,000 of them.
+[1592.3s] >> Yep.
+[1593.6s] >> Uh if you actually uh there was a bunch
+[1595.9s] of these that got distilled down. Uh so
+[1598.2s] it's like useful PRs. Uh this was what
+[1601.8s] was called like and it gets distilled
+[1603.7s] down to like less. Um and this is how
+[1606.3s] you get Sweetbench uh verified which was
+[1609.4s] basically like all of the tasks were
+[1611.0s] actually like looked at by humans and
+[1612.6s] made sure these were like actual good
+[1614.2s] tasks for the model to do. And you
+[1616.3s] basically give the model an RL
+[1618.3s] environment
+[1622.8s] where um we should really have Meni on
+[1624.7s] to talk about this honestly. Um, this
+[1627.3s] would be a great episode of like going
+[1629.1s] really in depth on how code RL works,
+[1631.5s] but you basically like check out the
+[1634.6s] code before the PR.
+[1638.2s] You ask the model, ask the coding agent
+[1641.0s] to fix it. And remember coding agent is
+[1643.4s] model plus harness.
+[1648.6s] Uh and then the output is like changed
+[1651.6s] code
+[1653.8s] and then you have some sort of like
+[1655.7s] verifier um which is like did the model
+[1659.0s] actually complete the task and this can
+[1661.0s] have one score or it can have a lot of
+[1662.6s] scores. This is similar we talked about
+[1664.4s] Jeepa there's like frontiers here so
+[1666.2s] this might be like test correct maybe
+[1669.8s] like you might penalize it for like
+[1672.0s] simplest solution so like the more lines
+[1675.0s] of code it writes it gets a little bit
+[1676.4s] penalized. Um there's all these like
+[1678.9s] reward functions basically
+[1681.0s] >> token cost.
+[1682.6s] >> So we had the Sweetbench.
+[1685.4s] >> Yeah.
+[1687.1s] And then Sweetbench multilingual just
+[1688.8s] basically takes Django and then also I
+[1691.4s] forget all the projects that are a bunch
+[1693.1s] of random projects
+[1695.2s] C++ I think I think it's just C.
+[1698.1s] >> Uh you have I forget what the other ones
+[1700.2s] but there's basically like
+[1701.4s] >> you have it for all the different
+[1702.7s] programming languages. You have one for
+[1704.4s] Java. You have one for for Golang. You
+[1707.8s] have like a bunch of different projects
+[1709.1s] where you do this process
+[1710.7s] >> and then basically based on these
+[1712.4s] results
+[1713.5s] >> you actually use that to like adjust you
+[1716.2s] use like and again like you use it to do
+[1718.5s] like GRPO or some some fancy thing that
+[1722.3s] actually updates the model weights.
+[1724.8s] >> I don't think they update the model
+[1726.0s] weights here. I'm pretty sure this bench
+[1728.9s] is just about like
+[1731.1s] >> so there's two there's there's the
+[1732.6s] benchmark which you can use to put it in
+[1734.3s] and then evaluate the model but then
+[1736.9s] also like my understanding is that when
+[1739.7s] yeah in theory you can do this
+[1742.4s] you use the results on these benchmarks
+[1744.6s] when you say this is part of the
+[1745.8s] training data it's like we're using this
+[1747.8s] to adjust so that it gets good at lots
+[1750.3s] of different types of coding tasks.
+[1752.2s] >> Yeah. Once you have metrics you can
+[1754.6s] optimize for them in various ways. I
+[1756.6s] agree. Yeah,
+[1759.0s] >> like you have another one that is like
+[1760.5s] terminal bench, right? Which is like can
+[1762.2s] the thing call bash a lot?
+[1763.8s] >> Yeah, I think I agree. Um I think but
+[1766.4s] like there's a couple other things that
+[1768.1s] maybe we should chat about. I think the
+[1769.5s] main thing I really want to make sure
+[1770.8s] that we really stress on is like this
+[1772.5s] whole point about like is there bitter
+[1773.8s] lesson? Is there value in building a
+[1775.1s] harness or like are the labs basically
+[1777.2s] [ __ ] everyone? And like that's all
+[1778.8s] that's all it is. Like if you're not a
+[1780.2s] lab, you're [ __ ] I have a really
+[1782.4s] simple reason why I think that's like
+[1783.9s] it's actually like the labs that have
+[1785.4s] almost no alpha. They basically do all
+[1787.2s] the work for all the people to to give
+[1790.9s] other people opportunities to build
+[1792.2s] better harnesses. And I think this is
+[1793.8s] why people are building better harnesses
+[1796.2s] because a lab's optimized I think this
+[1798.8s] goes into like psychology of like what
+[1800.2s] is an organization really optimized to
+[1802.1s] do. The lab to some degree has to
+[1803.8s] believe that there's some strong alpha
+[1806.3s] in what they are doing tied to what they
+[1808.2s] have. So it's almost in their incentive
+[1809.8s] to only discover solutions that are tied
+[1812.7s] closely to the model. But
+[1815.4s] >> right and that's basically it's like
+[1817.4s] okay what is our unique advantage is we
+[1819.8s] have a crap ton of compute and we have a
+[1822.2s] lot of researchers who are training
+[1824.6s] stuff and we own the model
+[1826.1s] >> yeah but I think that's actually a red
+[1828.5s] herring in my opinion because this is
+[1829.8s] just like a pure software thing. So
+[1831.5s] imagine you're in this world that we
+[1832.6s] were talking about earlier. So I'm like
+[1833.7s] I'm going to go back to like this
+[1834.7s] drawing that I had. I'm going to copy
+[1836.5s] and paste it and then like bring it over
+[1837.8s] to the side and talk and like clean it
+[1839.4s] up a little bit. The the thing is uh
+[1841.7s] when you're doing this over here
+[1844.6s] um this is an openi response. There's no
+[1847.6s] way for the model to prevent you from
+[1849.3s] recognizing what this API call is. You
+[1851.8s] can observe this. Now someone might say
+[1854.9s] uh and why is this true? Because if
+[1856.1s] you're building a coding agent, this
+[1857.2s] coding agent is typically running on a
+[1858.6s] user own machine. But someone might say
+[1861.4s] that hey no actually this is going to
+[1863.0s] run on the labs machine. The labs will
+[1864.6s] not let you run their run their coding
+[1866.3s] agents on your machine. You have to go
+[1868.5s] into a cloud computer that own that ends
+[1870.9s] up running this. So now this is
+[1872.2s] >> Yeah. This is how like devon work.
+[1875.5s] Exactly.
+[1876.6s] >> Yeah.
+[1877.0s] >> But it's still even though it's a lab
+[1880.2s] owned machine, it's userowned code. If
+[1883.0s] the user is running code, you can't
+[1884.6s] prevent them from doing this because at
+[1886.2s] some point they're going to make an API
+[1887.8s] call and they will go do this. If you're
+[1889.4s] building them on their API usage, at
+[1892.0s] some point you're going to expose what
+[1893.3s] API call you're making to the end user
+[1895.7s] because that's what they're being built
+[1896.9s] on.
+[1898.0s] I mean at some I mean like if you're
+[1900.7s] okay let's say you're making some API
+[1902.6s] usage over here and you're being built
+[1904.1s] for this how are they going to ban you
+[1906.6s] from seeing your own API calls to what
+[1910.2s] the models are assuming that you're
+[1911.4s] using an API key to go process it not
+[1914.1s] let's not say
+[1914.9s] >> lab own machines what if they're
+[1916.4s] proxying all the o and like you don't
+[1918.2s] all you all you put in is a GitHub issue
+[1920.6s] and you get back a PR like let's talk
+[1923.0s] through that world
+[1923.8s] >> it just depends on if they want to build
+[1925.2s] any sort of interrupt or like
+[1926.4s] observability on pricing or anything
+[1928.0s] else on that. They could say no, but we
+[1930.3s] haven't really seen a lot of companies
+[1931.9s] that do massive compute that don't have
+[1933.9s] intricate pricing availability for what
+[1936.6s] they do. Very few companies are like
+[1939.0s] totally opaque
+[1940.8s] >> that do usage based consumption.
+[1943.1s] >> Cognition works really really hard to
+[1945.8s] make sure that their system prompts are
+[1949.2s] are kept secret. Like
+[1952.6s] I I don't know if if those have been
+[1955.0s] leaked. the cognition prompts.
+[1958.1s] >> Yeah,
+[1959.7s] like I think it only works because
+[1962.1s] they're probably not selling to that
+[1963.4s] many people. Once you start selling to a
+[1964.8s] large number of people, you will leak
+[1965.9s] your system prompt. It's an
+[1967.1s] inevitability
+[1969.4s] >> chat. I'm I'm uh I'm I'm nominating
+[1972.5s] someone in the chat to go see if the dev
+[1974.6s] and cognition
+[1975.4s] >> it's like I think Versel tried really
+[1977.0s] hard to prevent their system prompt and
+[1978.3s] as soon as they got like a lot of users
+[1979.8s] eventually they decided
+[1981.0s] >> prompt is everywhere.
+[1982.6s] >> Exactly. like you can't prevent this
+[1984.1s] stuff from leaking almost it will leak.
+[1987.0s] Um the thing that is like we said the
+[1988.8s] more important thing is like the tool
+[1989.8s] call APIs like the tools that you define
+[1992.5s] it. You can make it hard for people to
+[1994.2s] understand exactly how you use the tool
+[1998.4s] and like you could have a you could have
+[2000.4s] a tool that's called edit tool that
+[2001.8s] actually does like really fancy things
+[2003.2s] underneath the hood. But again it's a
+[2005.1s] binary running on a m to some degree.
+[2008.4s] It's a binary running where you are
+[2010.2s] running user code. If you are running
+[2012.7s] user code, the user can tell your coding
+[2015.1s] agent to write a thing that sniffs
+[2017.3s] >> to write a proxy that sends data out of
+[2020.1s] environment to me.
+[2021.2s] >> Exactly. Like you cannot prevent this
+[2023.4s] and you
+[2024.1s] >> you basically move the proxy into the
+[2025.9s] lab done environment and you out out
+[2030.0s] >> shell. Exactly. You cannot prevent this
+[2032.0s] stuff from happening no matter how hard
+[2034.2s] you try. Uh there you go. There's the
+[2036.3s] Devon prompt. Like it's not even a I
+[2039.7s] think the point is like there's no alpha
+[2041.2s] here and that's really the hard part
+[2042.9s] about what all these models and model
+[2044.9s] providers struggle from which is you
+[2047.4s] cannot prevent people from understanding
+[2049.1s] what your tool call is and there is a
+[2050.9s] way you can prevent them which is you
+[2053.4s] can build a um uh run string commands on
+[2058.3s] binary. I mean the string thing doesn't
+[2060.3s] work either because like disassembly is
+[2062.5s] really easy to do with a model now.
+[2064.1s] models can like un disassemble like code
+[2066.2s] that used to take humans like weeks or
+[2068.3s] years to go do. They just do it way
+[2070.3s] >> without even without even prompting it.
+[2072.3s] I was debugging a cloud code thing and
+[2074.4s] my cloud code running started reading
+[2076.8s] through all the compiled like minified
+[2078.7s] JavaScript to figure out what was
+[2080.6s] happening.
+[2081.4s] >> Yeah. So like because of that reason
+[2083.5s] there's no way um like that's kind of
+[2086.1s] why like when I see like there's no
+[2087.3s] alpha here for the long term and why you
+[2089.5s] can't prevent the harness engineering
+[2090.7s] from leaking that's why I think it can't
+[2092.7s] be better lessened away because what you
+[2095.2s] end up doing as a model provider is you
+[2098.1s] have a model that provides this level of
+[2099.9s] skill then you build a harness that adds
+[2101.9s] a little bit of alpha on top of it and
+[2103.8s] you do a lot of you spend a lot of money
+[2106.5s] to go up a little bit on top of this and
+[2109.5s] then someone else basically just builds
+[2110.7s] a better harness. by looking at you and
+[2112.6s] like thinking harder and they just big
+[2114.3s] think. Like you think and then they big
+[2116.6s] think, but they spend way less money on
+[2119.1s] their big think than you spend on your
+[2120.9s] and then on your think. Okay. But what
+[2123.9s] if what if this I mean I guess the
+[2125.8s] question is and we talked about this on
+[2127.1s] the other bitter lesson thing like what
+[2128.6s] if you take it in this direction, right?
+[2131.5s] And then the lab releases a new version
+[2133.4s] that takes it in a different direction.
+[2135.0s] That's fine.
+[2135.5s] >> And now even
+[2136.9s] >> then you just big then you have
+[2138.6s] >> you big think again.
+[2139.8s] >> Yeah.
+[2140.3s] >> Like
+[2141.3s] It's not it's not like it's a problem.
+[2143.1s] Your job as the person building on top
+[2145.0s] of the model is like you just think
+[2147.8s] more. It's like um I think the best
+[2150.9s] analogy again I if you guys watch the
+[2152.9s] show you hear me talk about like uh
+[2154.6s] performance optimization of work a lot
+[2156.5s] cuz I think it's a very very similar
+[2158.1s] system like the hard the hardware people
+[2160.7s] build hardware and you write software
+[2162.6s] that makes you run really really fast on
+[2164.6s] that hardware. Then the hardware people
+[2166.0s] invent something new and you're like
+[2167.0s] [ __ ] I can write new software that runs
+[2168.6s] really really fast. And that's just what
+[2170.7s] you do. Um, like every single time
+[2173.0s] Nvidia releases some new GPU
+[2174.7s] instructions, that's an opportunity for
+[2176.7s] you to rewrite your algorithm from
+[2178.0s] scratch and beat the [ __ ] out of your
+[2179.8s] past system.
+[2181.9s] Like that's what you can do,
+[2183.7s] >> right?
+[2184.2s] >> Um, we got about 20 minutes left. Do you
+[2186.5s] want to go through the harness
+[2188.7s] engineering paper together, the article
+[2191.1s] from like February? Um, or should we
+[2193.4s] take some more questions? What do you
+[2194.5s] want to do?
+[2195.6s] >> Um, we can do that. Let's take some more
+[2197.5s] questions. It sounds like people have a
+[2198.6s] lot of questions on here though. I think
+[2200.1s] the paper hopefully people understand
+[2201.4s] the point of like why we think like the
+[2202.8s] models effectively can't really own this
+[2205.0s] stuff. It's like it's running on your
+[2207.4s] code. It's running your code on your
+[2209.7s] machines. There's no protection. They
+[2212.6s] cannot prevent you from understanding
+[2214.2s] how they make tool calls. They can
+[2215.7s] prevent you from understanding how they
+[2216.8s] use the tool calls in their actual
+[2218.1s] harness, but like that's binary
+[2219.3s] disassembly.
+[2220.9s] And like you can disassemble binaries
+[2222.8s] and go understand them. You can like
+[2224.4s] track a binary's like file call accesses
+[2226.6s] like SIS calls if and just like track
+[2229.6s] all the SIS calls that a binary is
+[2232.2s] making and just know exactly what it
+[2235.0s] does and like regurgitate it.
+[2237.0s] >> Can dumb model with good harness beat
+[2238.9s] the good model with bad harness?
+[2241.0s] >> It depends on the delta of dumb and
+[2243.0s] good.
+[2244.0s] >> I mean I think this is the the same
+[2245.6s] thing as like the the context
+[2247.1s] engineering argument, right? is like
+[2249.3s] >> if you can actually like narrow the
+[2252.3s] scope of the problem to exactly what you
+[2254.3s] want to do and you can optimize for your
+[2256.6s] use case then it's it's not even can it
+[2259.8s] beat it. It's like basically the har the
+[2261.4s] the dumb harness the worst harness in
+[2263.3s] the world is just yolo prompting a
+[2265.0s] model. Just open the thing and ask it to
+[2267.0s] do a thing and no programmatic anything
+[2269.3s] in between
+[2270.5s] >> and then the entire spectrum between
+[2272.7s] that point and the harness the lab ships
+[2275.8s] and the alternative like way of
+[2278.3s] interacting the model that you can
+[2280.0s] build. Um we t I mean we talked about
+[2281.8s] this last year of like hey look 01 will
+[2285.0s] output these reasoning traces but if you
+[2287.9s] have a very specific problem and you put
+[2289.5s] in the time to code it up you can get
+[2291.1s] GPT40 mini or GPT5 mini to do the same
+[2295.1s] thinking thing with thinking turned off.
+[2297.4s] It just happens. And and again like
+[2301.0s] >> is that better than having the official
+[2303.4s] like reasoning tokens in your trace? I
+[2306.6s] don't know. It's an optimization
+[2307.9s] problem. In the very long term, are you
+[2310.9s] probably going to need to rebuild that
+[2312.8s] as models put more and more kind of like
+[2315.6s] attention optimization into the layers
+[2318.3s] of the model to focus on like official
+[2321.1s] thinking tokens versus thinking tokens
+[2323.2s] in the plain output context?
+[2325.8s] Probably. But again, it's what we said
+[2327.8s] is like you can context engineer the
+[2329.9s] models faster than the labs can release
+[2333.8s] every six months.
+[2334.4s] >> Exactly. And that will always be true.
+[2337.4s] There's if the labs get really fast at
+[2339.6s] training a model, you will just you
+[2341.1s] should in theory get faster at context
+[2343.0s] engineering a model
+[2345.0s] in theory. Body asked a question like is
+[2347.6s] there a new DevOps layer for like tech
+[2349.2s] companies where you just have to always
+[2350.4s] keep up to date with the latest models?
+[2351.8s] I think the answer is yes. Like if
+[2353.0s] you're if you're using models for
+[2355.0s] anything like writing code or like in
+[2359.1s] your actual product, you it's part of
+[2361.3s] your job now. Like you always have to
+[2363.4s] test the newest model and be like does
+[2365.0s] it does it uplift your customer value
+[2367.1s] prop higher and if it does like swap it
+[2369.3s] out like AB testing is like
+[2371.0s] fundamentally a big part of software
+[2373.1s] now.
+[2373.7s] >> Yep. That's why you need evals. Can you
+[2375.6s] explain how this relates to anthropics
+[2377.4s] anti-distillation attempts? Weren't they
+[2379.2s] trying to conceal or spoof the tool
+[2381.8s] shapes?
+[2382.5s] >> Yeah. And they probably realized that's
+[2383.7s] pointless.
+[2384.3s] >> Well, so the new Opus model uh 4.7
+[2387.4s] doesn't show you the reasoning traces
+[2389.6s] anymore. Have you seen that?
+[2391.0s] >> Oh yeah. Makes sense. Like they're just
+[2392.7s] like we found some alpha and like a
+[2394.3s] codeex openi doesn't either for that
+[2396.2s] reason.
+[2396.7s] >> Yeah. You get the thinking summaries but
+[2399.1s] not the the tool traces the they won't
+[2402.3s] give it to you themselves
+[2403.8s] >> cuz like like really like I didn't I
+[2406.4s] didn't mention this earlier but like the
+[2407.6s] one way the model providers can prevent
+[2409.1s] you from doing this is they could just
+[2410.6s] say certain tool calls you can only make
+[2413.1s] if you're calling from our harness.
+[2415.4s] That's really hard to do because proving
+[2417.5s] that you're not from a harness is really
+[2419.2s] that you are from a harness is really
+[2420.6s] just like it's very much like browser
+[2422.5s] agent stuff where it's like you can
+[2424.3s] spoof coming from any browser
+[2426.3s] >> possible because you know what's
+[2427.7s] happening with the openclaw thing is
+[2429.3s] they started it said hey if you're using
+[2430.9s] openclaw you can't use your claw code
+[2433.0s] subscription
+[2434.3s] >> and then they made that a policy and
+[2437.1s] then a couple days later if you had part
+[2439.4s] of the open claw system prompt your
+[2441.6s] system prompt they would start blocking
+[2443.8s] you and of course then everybody body
+[2445.2s] else. Okay, we'll we'll change our
+[2446.5s] system prompt and just change take that
+[2448.1s] part out. And so a couple days later or
+[2450.6s] a weeks later, it became clear that it
+[2453.3s] was like people they were looking in the
+[2455.6s] recent git history for the types of
+[2458.4s] commits that OpenClaw would make.
+[2461.0s] >> And so if you have any of those in your
+[2462.4s] recent git history, then you get blocked
+[2464.5s] or diverted to extra usage. And I don't
+[2467.0s] know, I
+[2468.8s] >> I'm not taking sides on this one. If
+[2470.6s] Anthropic wants to give me a discount
+[2472.0s] and wants to set rules about where and
+[2473.7s] how I'm allowed to use it, like that's
+[2475.4s] their priority as a business and you can
+[2477.2s] vote with your dollar uh as to whether
+[2479.2s] you're cool with that or not. Um but I
+[2482.6s] think uh
+[2483.4s] >> I mean as a business you can do this and
+[2485.0s] like but that's what I mean like it's
+[2486.2s] impossible to go do this. It's like
+[2487.5s] saying like you can only access a
+[2488.9s] website from Chrome. Like yes, you can
+[2491.0s] do that. It's just very very hard to
+[2493.0s] guarantee it.
+[2493.8s] >> Yeah. I mean it's Yeah. We're basically
+[2495.3s] going to have like bot detection but for
+[2497.7s] custom harnesses at a certain point
+[2499.4s] where it's like
+[2500.6s] >> every it's a constantly moving frontier
+[2502.8s] of every time the provider starts
+[2505.2s] blocking something everyone changes
+[2507.1s] their behavior to not hit that that
+[2509.1s] catch and then they have to bring new
+[2512.3s] heruristics all the time and it just
+[2513.9s] constantly
+[2514.4s] >> and that just means you're going to have
+[2515.4s] false positives and false negatives and
+[2517.2s] that's just like the tax of business.
+[2518.6s] It's like if you run a store you have
+[2520.2s] some amount of shoplifting. It's just
+[2522.1s] part of running a store and like this
+[2524.6s] might just be part of running a model
+[2525.8s] company.
+[2526.6s] >> Is people people shoplifting your your
+[2529.0s] subscription plan to use it for uh you
+[2531.6s] know sending Discord messages to your to
+[2534.0s] your buddies?
+[2535.0s] >> Exactly. This is a new form of token
+[2537.0s] lifting. That's what it is. Token
+[2539.2s] lifting.
+[2542.8s] >> Bruce has got a question. Can can you
+[2544.3s] talk about the limits of harnesses
+[2545.7s] running longunning tests and is there
+[2548.0s] alpha to optimize your own longrunning
+[2549.8s] build workflows versus using
+[2552.4s] best-in-class harnesses?
+[2554.7s] Um I think so. I think like longunning
+[2557.0s] tasks are still very very unsolved. Um
+[2559.9s] because they're just again it's tasks
+[2561.8s] that have less training data. So you if
+[2564.6s] you have an engineering workflow in your
+[2566.4s] team that you know works for your
+[2568.1s] people, building a custom harness that
+[2571.3s] does that workflow is just it's going to
+[2573.9s] be good.
+[2575.0s] >> Yeah. And I think we talked about this a
+[2576.5s] couple weeks ago, but like it's worth
+[2578.2s] mentioning you have like the model, you
+[2580.5s] have the LM, and then you have like what
+[2583.1s] we might call the like inner harness. So
+[2586.6s] this is things like the tools, the um
+[2591.6s] the like how how like the the tool
+[2594.3s] definitions, the tool implementations,
+[2597.1s] like what they after you edit edit a
+[2599.1s] file in cloud code, it returns like
+[2601.2s] information about that file. Um when you
+[2604.5s] like when you run you know edit returns
+[2607.9s] context
+[2609.6s] >> or um when you run bash like it's like
+[2614.8s] long bash responses automatically
+[2618.6s] offloaded to a file.
+[2621.7s] Uh things like
+[2624.0s] >> like this is where you start getting
+[2625.4s] alpha and
+[2627.0s] >> calls rejected and sent to basically
+[2631.3s] like you have to use use limit offset.
+[2635.5s] >> Yeah, exactly. And like again this is
+[2638.0s] like
+[2639.0s] >> the problem with this stuff is like it's
+[2640.6s] averaging for the general use case. So
+[2643.0s] like we have certain files like snapshot
+[2645.0s] files that are long by default and we
+[2646.8s] kind of need the model to read all of it
+[2648.6s] when it reads it. So like it's kind of
+[2650.5s] annoying that that error happens and
+[2651.8s] every time it does actually lowers our
+[2653.2s] performance because now the model has to
+[2655.0s] read this thing uh by an offset. So I
+[2659.0s] think the one mistake that a lot of
+[2660.4s] people make is that they forget that
+[2662.2s] like the engineers building this stuff
+[2665.2s] are the same as you.
+[2667.8s] Like they're literally building the
+[2669.4s] exact same as you. Maybe they have a
+[2671.4s] little bit of more knowledge about like
+[2673.3s] what Anthropic is doing next, but like
+[2676.2s] if you've ever worked at a big company,
+[2677.4s] you kind of know how that works. like
+[2678.6s] you don't really like it's just like
+[2680.5s] information arbitrage anyway even inside
+[2682.3s] the companies. So like my opinion about
+[2685.0s] all of this is just like
+[2688.0s] if you were good at finding alpha before
+[2690.9s] you should still be good at finding
+[2692.1s] alpha now. Like all you're going to do
+[2694.2s] is you can build any amount of harnesses
+[2695.8s] around it that just go do this and you
+[2697.8s] just keep stacking your while loops to
+[2699.3s] add more intelligence. And if you've got
+[2700.6s] a while loop that has more information
+[2702.3s] that the one inside of it does, you can
+[2704.6s] do better.
+[2706.4s] Like the RPI loop that you added is a
+[2708.2s] while loop that has more information
+[2709.9s] than the one inside of it does because
+[2711.8s] it knows that I'm doing some sort of a
+[2713.8s] process around engineering and that
+[2716.4s] makes
+[2717.5s] >> that inner loop perform better because
+[2719.4s] it's not trying to do as much.
+[2723.3s] I think you can just keep stacking loops
+[2724.9s] and I honestly think this is what
+[2726.1s] software is going to be keep becoming.
+[2727.5s] We're just going to keep stacking loops
+[2729.2s] forever. Like someone asked about beads
+[2730.7s] and gas town. Beads and gasound is just
+[2732.6s] another loop on top of this. We just run
+[2734.7s] another Y loop.
+[2736.2s] Yep.
+[2736.9s] >> And then you got beats.
+[2738.8s] >> Yeah. And then you put a while while
+[2740.4s] loop on top of that and you have gas. I
+[2742.0s] mean, oversimplifying a little bit, but
+[2743.8s] like Yeah. This is a really good
+[2745.0s] picture. I agree.
+[2746.3s] >> Yeah. This is how I've always thought
+[2748.5s] about it. Like, and as long as you can
+[2750.3s] find a while loop to add on, you can
+[2753.3s] find alpha.
+[2755.9s] >> Yep. I mean, this is uh someone just
+[2757.4s] posted the other day. It's like, oh, I
+[2758.6s] built my first uh orchestrator on top of
+[2761.8s] OpenAI goal, right? Right. So, Codex is
+[2764.4s] a goal mode now, which is kind of Ralph
+[2766.0s] Wiggamy where it's just like keep going
+[2767.4s] until you do the thing and launch new
+[2768.8s] context windows and it's like constantly
+[2770.9s] doing this like internal compaction on
+[2772.6s] the goal. And he was like, "Yeah, so I
+[2775.0s] have this thing that like basically one
+[2776.8s] thing generates the goals and then
+[2778.3s] another thing goes and takes all those
+[2779.8s] goals and fans out and completes the
+[2781.5s] goals."
+[2782.5s] >> It's like you put one more loop on top
+[2784.6s] of it. And it's I don't know.
+[2786.2s] >> This is again some of the hype stuff
+[2787.9s] where I'm just like, "Okay, cool. You
+[2789.8s] did that." like but like the thing you
+[2792.0s] built is probably just like a hundred
+[2793.8s] lines of Python or TypeScript and so
+[2795.9s] like I don't know if there's like there
+[2798.1s] may be alpha in it but it's also it's
+[2800.1s] like I don't think there's a there's a
+[2801.8s] moat in it. So I'm curious Vibov for you
+[2804.2s] like for people who want to build tools
+[2806.1s] that are going to be around for a while
+[2808.0s] solve problems in a way that is
+[2809.4s] sustainable like what advice would you
+[2811.0s] give folks? Um, your job is not to build
+[2815.8s] any one while loop. Your job is to
+[2817.9s] always build the next while loop.
+[2820.6s] >> And if you feel that you can't keep up,
+[2822.7s] then like I would quit now and go cash
+[2824.9s] in right now when there's a lot of money
+[2826.4s] to be made.
+[2829.8s] >> Okay, you heard it here first. Uh,
+[2832.8s] >> lean into the grift and get paid because
+[2835.4s] this is really hard and if you don't
+[2837.2s] have the uh the gas for it, then uh you
+[2839.9s] might not like it.
+[2841.0s] >> I wouldn't say it's hard. It's just like
+[2842.4s] a thing that you have to keep doing.
+[2844.0s] Like this is very very different than
+[2846.6s] previous software where like oh you
+[2848.0s] learned a thing and like you could build
+[2849.7s] a career off of building a PHP dev.
+[2853.1s] Uh you can't like performance
+[2855.1s] engineering I think that's why it's so
+[2856.3s] hard or like machine learning work is so
+[2858.0s] hard and why AI engineers not not
+[2860.2s] today's AI engineers but like
+[2861.5s] traditional machine learning engineers
+[2862.9s] or performance engineers were paid so
+[2864.2s] much money
+[2865.2s] >> is because the rate of speed that you
+[2866.6s] have to update was so fast. So like if
+[2870.4s] you're a performance engineer, every new
+[2871.7s] hardware revision get [ __ ] you got to
+[2873.6s] learn it real fast and you got to know
+[2875.5s] how to ship it
+[2877.7s] fall behind
+[2878.5s] >> and you have to invent for the new thing
+[2880.6s] like you invented for the old thing. You
+[2882.2s] can't just like have invented for one
+[2883.7s] type of hardware and be like I'm done.
+[2885.3s] I'll make a career off of this
+[2888.1s] >> and like that's what that's what
+[2889.8s] software is now
+[2890.7s] >> velocity not the position.
+[2893.0s] >> Exactly. your skill set is your ability
+[2895.1s] to understand core concepts and reapply
+[2897.9s] them over and over and over again
+[2901.0s] uh in a very different way like leak
+[2903.8s] code I think is actually a great skill
+[2905.3s] now people that are previously good at
+[2907.0s] le code and I don't mean like memorizing
+[2909.0s] but like truly just solving from first
+[2910.6s] principles sorry this is I I have an
+[2912.9s] Excel draw somewhere but this is not it
+[2915.4s] like that's actually in my opinion still
+[2917.4s] a hirable skill because if you're good
+[2919.8s] at application of fundamental skills
+[2921.9s] onto problem sets
+[2923.4s] That is that is what this Y loop skill
+[2925.5s] is.
+[2926.3s] >> And here's my final pitch too is like
+[2928.6s] use all of this to solve a problem. Like
+[2931.5s] this is part of like product
+[2933.0s] engineering, right? Is like don't just
+[2935.1s] build the thing like go solve a problem.
+[2937.2s] Understand your impact
+[2940.2s] impact. And like I don't know, not to
+[2942.4s] get corny with it, but like make make a
+[2944.6s] thing people want,
+[2947.0s] >> right? Make a thing that makes people's
+[2948.6s] lives easier, that solves their problem,
+[2950.6s] that they're willing to pay you money
+[2951.8s] for.
+[2952.8s] >> Wait, put it back. I want to add the
+[2955.2s] last thing. Boom.
+[2957.1s] >> Okay. All right.
+[2959.1s] >> Just because you're not in Silicon
+[2960.4s] Valley doesn't mean you get to make fun
+[2961.8s] of us up here.
+[2963.1s] >> I'm joking. Uh, but generally like make
+[2965.5s] make the world a better place. I do
+[2966.9s] think that's part of software. Like
+[2969.0s] >> build something really [ __ ] cool that
+[2970.5s] makes you want to keep building more
+[2972.3s] software, inspires more people to build
+[2973.8s] it.
+[2974.4s] >> Nice. I think that's a good spot to end
+[2976.5s] on. Um, we can maybe take one last
+[2978.3s] question.
+[2978.8s] >> What models you guys are using and what
+[2980.3s] reasoning levels. My model of choice is
+[2982.9s] the model I use last. That's it. That's
+[2985.6s] my only distinction in how I pick a
+[2987.1s] model. Every now and then I Oh, I do I
+[2989.6s] do click when I hit out when I run when
+[2992.5s] I'm noticing that I'm running out of
+[2993.7s] context. I upgrade to the 1 million
+[2995.4s] context window in any model I use. That
+[2998.2s] is the one. And which if I click up, I
+[3000.2s] get Opus 4.7. If I click down, I get
+[3003.1s] Opus 4.6. And I I don't really know
+[3005.1s] which one I use. It's very random.
+[3007.3s] >> Um, cool. Uh, my answer is, uh, been
+[3010.2s] experimenting a lot with 5.5 on low
+[3013.0s] mode. Um, I have not had enough time to
+[3016.6s] get a feel for what are the higher level
+[3019.1s] reasoning efforts on 5.5 that I like.
+[3021.4s] Um, I know from talking to people like
+[3023.4s] Ben Davis and a couple others that if
+[3024.8s] you put it on high or extra high and
+[3026.3s] you're not careful, you'll get that case
+[3028.4s] of like, oh, the model wrote a thousand
+[3030.9s] unit test for a like color change on a
+[3034.2s] button. And so it's like, okay, you got
+[3035.9s] to be careful there. So I like 5.5 low
+[3038.3s] for a lot of things, especially if
+[3039.9s] things are already planned out.
+[3041.1s] Obviously, GPT is still bad at UI, but
+[3043.3s] we'll see. We'll get there. So, um, I
+[3045.7s] think Claude is nice for human readable
+[3048.7s] plans. Like, if I'm going to write a
+[3050.5s] plan that I'm going to read and interact
+[3052.1s] with, one, it's going to be short and
+[3053.6s] high level, and two, I want a model that
+[3055.7s] is like like designed to write like a
+[3059.1s] human and feel a little bit human. I
+[3061.0s] think Codex is almost intentionally at
+[3062.6s] this point like feels a little robotic.
+[3064.6s] I don't know if it's intentional or not
+[3065.9s] and I know like it makes it really
+[3067.7s] really good at doing certain types of
+[3069.0s] tasks. Um but if I don't want to think
+[3072.6s] about like making sure the model builds
+[3075.1s] the right understanding of the code base
+[3076.6s] before it starts working, I will use
+[3078.3s] like GPT4 on high or X high.
+[3080.7s] >> Uh you know what that reminds me of
+[3082.6s] actually?
+[3083.8s] >> Yeah,
+[3084.2s] >> that reminds me of a very very important
+[3086.2s] thing which is I freaking hate whenever
+[3088.6s] I use a coding agent. It says, "I would
+[3091.2s] do this, but that sounds like a really
+[3092.6s] expensive refactor. So to minimize
+[3094.4s] changes, I'm going to do this other
+[3095.6s] thing." And it's so these models are so
+[3099.0s] bad at that cuz like historically in
+[3102.0s] software, you want to go do that.
+[3104.1s] >> But like now with AI, it's like no, just
+[3106.1s] do the right thing every single time.
+[3108.6s] >> Like that's what I wish they did.
+[3110.2s] >> But sadly, I was like prompted for that.
+[3112.2s] That's like the only reason I can't run
+[3113.8s] in wild like wild run. That one that one
+[3117.4s] thing corners
+[3118.9s] >> they actually they're doing the
+[3120.2s] opposite. They're trying to minimize
+[3121.4s] entropy.
+[3122.3s] >> Yep.

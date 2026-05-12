@@ -1,0 +1,92 @@
+hi everyone today I'll show you show you
+a new tool that we have built so here we
+have a circuit as a PDF or an image and
+what I'll do is I'll have I'll use a
+model to try and describe the circuit
+for
+me using our tool we're actually going
+to be able to take this exact circuit as
+there is and then put that into what we
+call tabular format and you can see here
+it's able to pull out all the components
+that are described over here and give
+you all the voltage resources and every
+other little bit about this now if you
+wanted you'd obviously also be able to
+actually Define the schema yourself and
+pull out exactly what you're looking for
+let's take another example let's take
+this data
+sheet we can do the same thing about
+this data sheet as well um and you'll
+notice over here that it
+will go ahead and pull out all the
+content over here in a bit
+and we're actually able to again take
+out all the content here and put into
+tabular format tabular format makes it a
+lot easier to read and also makes it a
+lot easier to reduce the likelihood of
+the LM actually hallucinating so you can
+actually see that things like supported
+devices scroll down here we'll notice
+that it's in the description these
+letters will come out almost perfectly
+in line with what's coming out now you
+could connect this to a database store
+this information somewhere else augment
+this information with some other um
+supplementary information and actually
+pull out U like make these
+hyperlinks you can do this with almost
+any sort of content so like if we take a
+look at this
+circuit not only can I actually pull
+data out I can actually have the model
+start describing to me what equations
+could be so let's go ahead and try that
+example why this loads
+so I can just write I care about solving
+for V Let's see what it does
+now and while I wasn't able to Sol for
+it I can actually put the I can actually
+force it to kind of think of it this way
+I can actually say what I want to pull
+out is the
+equation I'll say that this is a
+string and I'll just try running this
+now and we'll see what comes out of
+this and you can see right over here we
+actually have an equation for v out spit
+out
+now this won't always be correct and
+especially if you have the LM do math
+sometimes it might make mistakes but it
+might give you a really good starting
+point that is easier to verify rather
+than have to do the computation
+yourself let's take another let's take
+another couple examples just show the
+capabilities of what's possible now you
+can do this with circuits you can do
+this with data sheets but as you guys
+might have you might have a lot of forms
+that you need might need to make tabular
+see with any sort of pictures of any
+kind as well so that means if you were
+to take a picture off off of your phone
+of let's say some circuit diagram or
+some screenshot that you deployed you'd
+be able to ask the model to go ahead and
+pull out that information as well so
+even like the more practical example of
+super blurry photos the model will be
+able to go ahead and detect and make
+tabular almost any information you want
+so this will work with PDFs
+screenshots
+um PowerPoints document X docx Files
+virtually any sort of content throw at
+it I hope that helps and helps you know
+how you could use uh our tooling to help
+make your workflows much faster

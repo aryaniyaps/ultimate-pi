@@ -1,0 +1,285 @@
+Most people are visual learners. I am
+myself, you probably are watching this
+video. The problem is coding agents like
+Claude Code are not very visual tools.
+When you want it to explain something to
+you visually, or even just help you
+explain something to someone else, they
+really don't do a good job unless you do
+a lot of prompting and give it the right
+abilities. And that is what I have been
+working on. So, I love using Excalidraw
+for all of my diagrams. You've seen this
+before if you've been on my channel or
+in the Dynamis community. I build dozens
+of these every single month. And so,
+I've taken my entire workflow and I've
+packaged it up into a skill so I can use
+Claude Code or any coding agent to help
+me build all these beautiful and
+practical diagrams. And so, giving my
+coding agent the ability to argue
+visually. And so, right now, I want to
+share this skill with you. My entire
+process packaged up so you can use it
+right now. So, I will have a link in the
+description to this GitHub repository.
+This has everything for the Ex- calidraw
+diagram skill. It is pretty simple
+overall. So, you just clone this
+repository and then you create a new
+folder in your .claude/skills
+or whatever it is for your coding agent
+and then you just copy over everything
+from this. And it is going to work no
+matter your coding agent. So, I'll show
+you my setup really quickly here. I have
+my .claude skills directory. I created a
+new folder called Excalidraw diagram and
+then I just dumped in everything from
+the repo including the skill.md. This is
+the primary instruction set that guides
+Claude Code how to argue visually,
+creating the JSON files for these
+Excalidraw diagrams. And I know this is
+super meta, but I used the Excalidraw
+diagram skill to create this diagram to
+explain the workflow to you so you
+understand how it works. And I iterated
+a couple of times to get to this point,
+but this is the kind of thing that you
+can generate with this skill. All you
+have to do, I'll show you a really quick
+demo of this right now. It's going to
+Claude Code and just say, "Hey, I want
+to create a diagram to explain." and
+then I could just like give the path to
+this file for example. You could also
+give it the path to maybe like a YouTube
+script. I do that all the time to help
+with my YouTube videos. You can have it
+build a diagram based on a PDF document.
+Like it can be literally anything. So
+you just send in this prompt and then
+Claude code or whatever coding agent is
+going to be smart enough to know like,
+"Okay, let me go ahead and load in the
+skill." And that brings in the entire
+workflow. So basically we're giving it a
+very articulate prompt how to generate
+the diagram and validate it as well. And
+once your coding agent outputs the JSON
+for the Excalidraw diagram, you can just
+go to excalidraw.com
+and load it from your local file system.
+Or you can use the Excalidraw plugin in
+Obsidian. Both are very valid and
+excalidraw.com is entirely free. So very
+easy to render these diagrams once you
+have them. And my favorite part about
+this workflow is not only does it create
+the Excalidraw diagram, but it also
+validates it visually. So it will render
+the diagram, take a screenshot, look at
+the PNG, and then iterate on any of the
+imperfections. And I just get insane
+results with this workflow when we have
+this self-validation. Cuz like I said
+earlier, coding agents are not the best
+at visual tasks. They need the ability
+to check their own work and we can do
+that with Excalidraw. So I'll show you
+an example really quick of an image that
+it rendered after it built the diagram.
+So it's looking at this directly to see
+if there's anything off with the visual
+flow, the hierarchy of information, all
+the things that I have prompted into the
+skill.md. And it uses a Python script in
+order to do this rendering, which that's
+really the only setup that we have for
+the skill. So I cover that in the read
+me here, but honestly the easiest thing
+is you can just ask your coding agent to
+help you set up the Excalidraw diagram
+skill. Because then it knows to read the
+read me and it'll pretty much just go
+through the manual steps on its own. So
+that by the time it's your turn to use
+the skill, everything is all good to go,
+and you can just simply ask it to build
+any kind of diagram like I showed in the
+simple demo earlier. Now, one very
+important thing to keep in mind, no
+matter how well-designed this Excalidraw
+skill is, and I have been iterating on
+it constantly, it is not going to be a
+perfect. For example, this meta diagram
+here that explains the workflow, it took
+me two or three iterations to get to
+this point. This is the original diagram
+that the skill with Claude code produced
+for me, which it still looks pretty
+good, but you can see there are a couple
+of imperfections here. Like I feel like
+the arrows look a little jank, for lack
+of better words. This arrow is too
+short. I don't quite like the colors. I
+feel like there's not enough information
+displayed here. So, I have my critiques,
+and it's very easy though to iterate on
+this. Just a couple of directed updates
+with my help to get to the point where
+we have something more like this. Now,
+the reason that it's never perfect at
+first, it actually makes sense when you
+think about how much the large language
+model has to produce for this diagram.
+Cuz think about this, it has to decide
+every color, every shape, the entire
+layout, the position of everything.
+There's so many micro decisions going
+into creating just this single, rather
+simple diagram. And so, it's always
+going to be imperfect, but it's easy to
+get to this point. That's the important
+thing is getting the starting point with
+this skill for you to apply your own
+reasoning for how you want it to evolve
+and the exact information that you want
+to display. Cool. So, the last thing
+that I want to cover with you is the
+workflow, at least at a high level,
+especially so you know how to customize
+it to your own liking. We'll also talk
+about the color palette. That's one of
+the most important things to make the
+diagrams on brand to you, or just the
+color scheme that you like using. So,
+the core philosophy that I have built a
+lot of prompting around in the skill.md
+is teaching the coding agent how to
+argue visually. So, explaining that like
+we don't just want to put things in a
+bunch of blocks cuz when it generates
+Excalidraw diagrams without this skill,
+it's very blocky for lack of better
+words. But instead, we want to argue
+visually. We want the structure and
+labels to explain the entire concept. So
+even if we strip out all of the
+explanatory text from the diagram like
+this, we would still be able to
+understand what we are arguing visually
+in the diagram. And so there are two
+main questions that I have the coding
+agent ask itself in the workflow. First,
+does the visual structure mirror the
+concept's behavior? And then also could
+someone learn something concrete from
+this diagram? I'm very educational
+focused on my YouTube channel, as you
+probably know. So I want these diagrams
+to be very complimentary to exactly what
+I'm trying to explain in the content.
+And then for the workflow itself, it
+just starts with your idea. So this
+skill is assuming that you already have
+a good idea of what you want to create a
+diagram for. So you can iterate with
+your coding agent before you load this
+skill and then have it first assess the
+depth of the diagram. And the reason
+this is important is because we have
+very simple diagrams like this. And then
+we have more complicated ones like this.
+Maybe this is a better example as well.
+And the reason we need to assess the
+depth is because for more complicated
+diagrams, we have to build them section
+by section. Otherwise, you'll get an
+error with Claude code where it's trying
+to output more than 32,000 tokens.
+There's a limit there. So we have to
+build it section by section cuz these
+diagrams, they take quite a few tokens.
+It's definitely worth it, but it does
+take a while to generate these. And so
+after it assesses, do I need to build it
+all at once or in chunks, then it's
+going to map the pattern. So taking our
+idea and thinking about what shapes do
+we need, what text do we need in the
+diagram, putting it all together to then
+build the JSON file that we can render
+with the Obsidian Excalidraw plugin or
+in excalidraw.com.
+But after before it comes back to us, it
+goes through the validation loop. This
+is what I was talking about earlier,
+where it renders the PNG, views the
+image, finds any imperfections, and then
+it'll just make direct edits to the JSON
+file it already created. So, it's not
+like it has to spend all the time to
+create a duplicate or anything. Usually,
+it'll iterate like two to four times.
+Not that it's going to fix everything by
+the time control passes back to us, but
+it is going to be a fantastic starting
+point. I also have all of my design
+patterns laid out into the skill.md,
+giving it examples of visual patterns,
+telling it to not do boxes and boxes and
+boxes. These are the kinds of things
+that coding agents will do without
+guidance because they generate
+Excalidraw diagrams that are always way
+too simple and look the same every
+single time when we don't have this kind
+of workflow. Multi-zoom architecture,
+again, just things for variety. We have
+the color system so I can be consistent
+in the colors for my diagrams. And then
+also the evidence artifact. So, being
+really specific for the kinds of
+elements that I want to really make my
+diagrams educational. And these are all
+the things that you can tune for
+yourself, especially the color palette.
+So, I'll go back to my skill here and
+show you that one of the files that I
+referenced in the reference folder of
+the skill. This is in the GitHub repo as
+well, is the color palette. And so, you
+can just ask your coding agent, like,
+"Hey, I want to use purples and yellows
+instead of blues." or whatever, right?
+And it can create the hex codes and like
+put all this in the color palette. So,
+that way when you are generating
+diagrams going forward, it's your brand
+and the color scheme that you want to
+use. And so, you can edit this. You can
+change the different uh element
+templates that it can bring in. All of
+this you can tune yourself, but also it
+all works out of the box if you just
+want to use it right away. So, a very
+flexible skill that I have built for
+you. So, there you go. That is the
+Excalidraw diagram skill, and I
+encourage you to clone this repo, bring
+in the skill, and just try it right now
+on a PDF, even a code base. You could do
+research you do with an agent or just
+raw text. The The
+are endless, and it does such a good job
+creating a starting point, literally
+saving me hours and hours every single
+week. And so, if you appreciated this
+video, and you're looking forward to
+more things on skills and agentic
+engineering, I'd really appreciate a
+like and a subscribe. And with that, I
+will see you in the next video.

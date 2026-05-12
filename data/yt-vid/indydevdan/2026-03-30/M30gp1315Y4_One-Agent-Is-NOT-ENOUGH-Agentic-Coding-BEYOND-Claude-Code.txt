@@ -1,0 +1,1039 @@
+If you've been building with agents and
+pushing what you can do with your
+agentic coding tool, you've realized
+something critical. One agent is not
+enough. Imagine this. It's the end of
+2026 and you've evolved your engineering
+from a single agent to multiple agents
+to agent teams. They've been building
+and learning just like you because you
+stopped using agents that forget and you
+started using agent experts. Each agent
+team you have contains agents that have
+their own skills, expertise, and domain
+knowledge, supercharging them so that
+they outperform any other agent. In
+fact, you have a few agent teams that
+are outperforming your coworkers.
+Engineers, one agent is not enough.
+Multi-agent orchestration and tools like
+Claude Code are the current frontier,
+but today I want to show you a system
+that pushes beyond Claude Code. This is
+multi-team agentic coding. Here we use
+specialized teams of agents to
+outperform the normal distribution of
+results. Now, if you're cost min-maxer
+and you care about saving money over
+getting results, this video is not for
+you. But, if you're an engineer working
+on mid- to large-size production code
+bases, stick around and let's take a
+peek at the performance gains you can
+get from multi-team agentic coding.
+Here we have a customized Pi coding
+agent. We've re-engineered the entire
+experience so that we're inside of a
+chat room with our teams of agents.
+Let's start out simple and then expose
+the valuable properties this system has.
+We'll start with my favorite, ping.
+We're talking to our orchestrator. It's
+giving us a classic ping-pong response.
+Let's talk to our team leads. Ping each
+team lead. Now, our orchestrator is
+going to call every team lead and you
+can see there our team leads are now
+responding. Notice here we have a
+two-layer architecture where we have an
+orchestrator talking to our team leads.
+All of our team leads responded and now
+our orchestrator is composing the
+results and giving us the final
+response. Of course, in the footer you
+can see all of our details. We have our
+orchestrator, leads, contacts, and total
+cost summed together. So the
+orchestrator cost here is the cost of
+the entire multi-team system. But this
+goes even deeper. As you saw here in the
+beginning, these are multiple teams of
+agents. Let me show you exactly what I
+mean. Have engineering and present tree
+structure of the most important files.
+And so we're delegating directly to our
+engineering team. So our engineering
+lead is going to take over. We're
+at-mentioning them and now engineering
+is going to do something incredible.
+It's going to delegate to front-end
+developer. Our engineering lead tried to
+access files that it doesn't have
+permission to. It stepped out of its
+domain. And so it realized this and it
+delegated to its team members who have
+the right tools. So this might seem like
+an annoyance or like a waste of tokens,
+but it's actually very valuable. The
+engineering lead prompted the back-end
+developer and it also prompted the
+front-end developer for an answer. And
+so you can see both these agents getting
+work done here in a chat-like interface.
+And so what we have here is three tiers
+of agents. We have our orchestrator, we
+have our leads, and we have our workers.
+They both responded to the lead and now
+the lead is going to respond to the
+orchestrator. This is a very very
+powerful multi-team orchestration tool.
+There it is, engineering nailed it.
+Here's the rundown. And now our
+orchestrator is giving us a full
+breakdown of what's going on. This
+multi-team tool has advantages already
+over the normal prompting back-and-forth
+experience. If we hit {slash} toggle
+workers, we can see our actual full team
+breakdown. We've been conversing with
+our engineering team and engineering
+team has looked up files, has read its
+context, and it's done something
+incredible as well. If you realize here
+that out of the box for a simple command
+like that, the context is actually quite
+high. You've noticed something really
+important about this system. Our agents
+are loading memory files. They're
+loading their agent expertise. More on
+that in a moment. If you can see how
+powerful this system can be, definitely
+like, subscribe so you let the algorithm
+know that you're interested in
+multi-agent orchestration like this.
+Let's keep pushing this system further.
+We're operating in a prompt routing code
+base. And I can blow up the code base
+here. It's a common problem a lot of
+LLM-based applications have. You don't
+want to pay for intelligence that you
+don't need. Specifically, when you have
+thousands and thousands of users running
+your application that hits agents or
+hits some LLM at some point, your simple
+prompts don't need to hit expensive
+models. For example, you don't want Opus
+4.6 to run with high reasoning when you
+can just have Claude Haiku respond or
+Sonnet respond. There's a great
+breakdown of a highly intelligent model,
+a medium intelligent model, and a
+not-so-intelligent but very cheap model.
+And we can go even cheaper than this. Of
+course, there are cheaper, frankly
+better models than Haiku, but just as an
+example, this is a common problem you're
+going to want to solve when building
+with LLMs. You don't want to pay for
+intelligence that you don't need. So,
+what we have here is a prompt complexity
+classifier. It's very simple and we can
+run it right now. So, you know, if we
+open up a terminal inside this code
+base, and we type J for just, we're of
+course using just file for quick
+commands, and J is an alias for just
+just to be super clear. We can do just
+predict summarize this code base. And
+now our system should predict that only
+a medium or a low-tier model is needed
+to satisfy this prompt. And we hit enter
+here, you can see our classifier
+running, and you can see our label is
+medium. There's all the confidences out
+of 100 or 100%. This type of prompt
+would route to Claude Sonnet 4.6 or
+whatever your medium-tier model is set
+to. So, that's the problem and that's
+what this code base is. But, of course,
+we're not building this. We are having
+our agents and we're teaching our agents
+how to build it. And in this case, we
+actually have an entire agent team that
+knows how to run this code base better
+than anyone. At a previous job, I was a
+lead data scientist and I would spend a
+lot of time building out these
+classifier models by hand. Now, we can
+just have agents do it for us. So, I
+want to showcase one of the advantages
+of having teams that you work with
+instead of just individual agents,
+especially individual one-off agents.
+So, let's go ahead and ask our teams a
+question. What we're going to get here
+is a multi-perspective
+answer. So, I'll say, "Ask all teams,
+what are two additional scikit-learn
+classifiers we can test our current
+classifier against?" And so, once again,
+we're entering that chat pattern, always
+only talking to our orchestrator. And
+then our orchestrator decides who it
+needs to delegate the work to. I asked a
+question, it thought, it's delegating
+work out to its individual teams. You
+can see that it wrote the exact same
+prompt to every single team. It's very
+important, it's very consistent, and
+we'll showcase how it's able to do that
+in a moment. The individual team leads
+have taken over. So, we have our
+planner, we have our engineer, and we
+have our validator. It's completely up
+to them whether they decide to delegate
+additional work. It looks like the
+engineering lead is delegating work to
+the back-end dev. Our validation lead
+here has delegated to the security
+reviewer. QA engineer is there. You can
+see all the tools that's running.
+Planning lead is running, so on and so
+forth. And so, these are all going to
+run and put together all the results.
+And you can see all the work that each
+team is doing. You can see the cost and
+whatnot taking up. And now they're going
+to start to compose back the results.
+So, the flow here is orchestrator talks
+to the leads, leads talk to the workers.
+And then we get one unified response. We
+are conversing with our orchestrator and
+no one else. So, this is super, super
+important. Let me point something out
+here. All three teams weighed in,
+there's strong consensus. This is what
+you want to see. Linear SVC, calibrated
+classifier CV, unanimous pick across all
+teams. Digging in further, split
+recommendation. They both favor Claude
+man and B. Engineering prefers SGD
+classifier and then everyone agreed to
+skip certain things. This is a chat
+experience. And so one of the key
+elements of that is that every agent can
+see the conversation. Not to get too
+ahead of things here, but if I copy the
+session ID and I just search for this
+and I go to the conversation, you can
+see the entire conversation that's
+happened so far. In a JSON L file, you
+can see all of the leads and you can see
+the depths. I point this out just to say
+that every agent is aware of the
+conversation happening. And then our
+orchestrator starting to guide the
+experience. Want me to have engineering
+draft implementation for the benchmark.
+Let's go ahead and have our team build
+this out and I want to utilize the team
+structure that we've built here to get
+better results. So how can we do that?
+Let's do this. I'll say plan, engineer,
+and then validate. Make sure to add just
+commands to test both models and we'll
+call it, you know, just prompt both. All
+right, and then we'll fire that off. So
+plan, engineer, and then validate. Our
+orchestrator agent is going to write out
+a great detailed plan and then our lead
+is going to dive into things. So you'll
+notice here, really interesting thing
+that my plan lead does, it first always
+gets all the context. We are not afraid
+to spend to win here. We're not afraid
+to give our agents all the relevant
+context they need. And this is something
+critical we talked about in our previous
+week's video, the CEO agents. We talked
+about that key idea of giving your
+agents more context. Use that powerful 1
+million context window model inside of
+your Opus and your Sonic models so that
+they have all the information they need
+to succeed. This is a massive advantage
+you can be building into now as long as
+you're not afraid to spend to get the
+advantage. Something else important here
+to mention is why am I building and
+sharing a system like this with you? You
+always want to be thinking about where
+the ball is going, not where it is. We
+have a couple converging trends that are
+super super important that this
+application embodies. All right, we have
+incredible intelligence with increasing
+context windows. All right, we have the
+new 1 million context window here from
+Claude. This is very, very powerful and
+it unlocks a new frontier of what is
+possible. And then as you'll see here in
+a moment, we can specialize our agents
+even further by making them agent
+experts. And then we've scaled that idea
+thanks to a customizable agent coding
+tool. We are using the Pi agent harness
+to customize this entire experience. So
+we have powerful context windows. We
+have agents that learn. Let me be super
+clear about this. As you'll see, every
+one of these agents they have a working
+mental model about how things work and
+this grows over time. Every time you run
+your team, they're all taking notes,
+they're all building up their mental
+model and then they're loading it at the
+beginning. As you can see here, a lot of
+read tools happen in the beginning. The
+The book here represents the read tool
+calls and that's because they're always
+loading the conversation and their own
+specialized mental model. So we have
+large context windows coming in at
+cheaper costs. You're going to have so
+many tokens available to you. The
+question is are you using them? Then we
+have agent expertise. Thanks to the
+context window, you can really load up
+the specialization and the memory of
+every single specialized agent. And then
+of course we have the Pi coding agent,
+the agent harness. You can build
+customized agentic experiences, not just
+agents, not just teams of agents, but
+the entire agent harness can be
+customized when you're using a tool like
+Pi. So I hope you can see, when you
+stack these things together, we're
+getting far away from the normal
+distribution of results.
+It all starts with the dot Pi file.
+Unlike dot Claude where you have agents,
+prompts, skills, so on and so forth.
+When you're customizing the agent
+harness, as we mentioned in last week's
+video, CEO agents, I'll link that in
+description for you. You can customize
+the experience down to the folders, down
+to the individual files. Everything is
+customizable here. With that, we've
+customized the experience to look like
+this. We have a multi-team config. I
+really like this configuration-based
+approach because it means at any point
+in time, we can just copy our config,
+change up the teams, and specialize how
+we need. We have our orchestrator. We're
+passing in a path to the system prompt
+of the orchestrator. We'll break that
+down in a moment. And we have individual
+teams. If we jump into planning, we have
+our lead specified. It's just a system
+prompt and a name. All right. Then we
+have a couple additional properties,
+just a team color. And then we have the
+members. And we're repeating the
+pattern. We're giving the path to the
+system prompt of the agent. And this
+pattern is going to repeat for
+engineering. You can see there's the
+engineering team, front end, back end,
+that I've just copied the kind of
+default template. Um we don't need a
+front end dev for prompt routing. This
+is a data science back end focused type
+of code base. But nonetheless, we have a
+front end dev there. We can get rid of
+that. We can change that whenever we
+want. The three key nodes of building
+software, planning, engineering, and
+validation. So the pattern repeats. Nice
+and simple. The whole idea here is I'm
+setting up reusable, customizable
+systems that are easy to change and
+update. That's the configuration file
+that puts all the teams together. And
+you can see here we have a couple of key
+paths, where the agents are, where the
+sessions are, and where some of the logs
+are. Let's go ahead and open up that
+orchestrator, right? What does our
+orchestrator look like inside the
+system? We have our name, our model. Of
+course, for the orchestrator, we want to
+use the best intelligence available so
+that it coordinates everything properly.
+And then here we start deviating from
+the normal out-of-the-box AGI coding
+experience you're probably used to. We
+have expert tees. Our orchestrator has a
+mental model of everything that's
+happened. It has complete control over
+it, so it's updatable. And we have max
+lines. We don't want this to grow too
+big. Frankly, with a million contacts
+available, this could be much larger,
+but 10,000 lines is still a ton of
+context. Here we have skills. You're
+likely used to this. The interesting
+thing here is that, let's say we open up
+our engineering lead. Our engineering
+lead also has zero micromanagement. So
+you can You the zero micromanagement
+skill is shared between the orchestrator
+and all the leads. The whole idea is
+don't micromanage, delegate the right
+work at the right time to the workers.
+And for the orchestrator, delegate the
+right work to the individual teams.
+Okay, so this is very powerful. We are
+sharing skills when necessary. You can
+see here we also have a conversational
+response skill and this is shared
+between every other agent. If we open up
+our back-end agent here, it does not
+have that conversational response skill
+because we want our back-end dev, we
+want our developers, we want our
+builders to be very, very verbose and
+very detail-oriented. But when we get to
+our leads and our orchestrator, we don't
+really need that. We have the tools
+block here and you can see the special
+skill that our orchestrator has is the
+delegate and our lead also has delegate
+because remember this is a three-tier
+architecture. We have an orchestrator,
+leads, and workers. And then here comes
+something really powerful. We have
+domain. So this specifies what the
+agents can and cannot do and where they
+can and cannot go. And if you're working
+in a large code base, this is very, very
+powerful. Let's look at our planning
+lead. They have read access to
+everything. Here's that dot path. Read
+update access to the dot pi directory
+where they can, you know, look at and
+write their expertise. They also have
+full read access to the specs directory,
+right, where plans are actually written.
+But they can't update it. They must
+delegate that work. As you can see here,
+zero micromanagement. Always use this.
+You're a leader, delegate, never
+execute. So the leaders aren't actually
+doing any raw file changing-related work
+unless it's related to their mental
+model which is stored in the expertise
+directory. So this is powerful. Think
+about what you can do with this. If
+you're operating a large, large code
+base, we're talking thousands of files,
+you can build specific agents that
+operate specific parts of the code base.
+This is a simple example, but my
+planners, they can read the entire code
+base, but they can't change anything. I
+don't want them to change anything. I
+want them to create plans. And so we
+have this enforced. You can imagine this
+dials right into the Pi hooks system. If
+you're building out something like this
+with Claude, although you'll be a lot
+more limited in what you can do, you
+could also plug into the Claude code
+hooks capability. Pi has the exact same
+system. You have a bunch of hooks you
+can tap into. We detailed this in our Pi
+versus Claude code video. Link in the
+description, of course. A very
+specialized experience. This front
+matter is custom-built. We're building
+teams and we're building agents that do
+a couple things, right? So, it has
+expertise. These agents remember. Every
+time this agent boots up, it's going to
+load from its expertise file. And so, if
+we hop back to our system, let's see
+what's going on here. QA engineer is
+running. Our validation lead is looking
+at some stuff. And the validation is
+kicking off. Security reviewer. Security
+reviewer says ship it, no issues. But,
+we can see here our QA engineer has
+found a couple things. And so, super
+important. We have multiple agents
+working on these teams. And they're
+going to find different things. They all
+have different context windows,
+different perspectives. And if we wanted
+to, they could all be running different
+models. So, it looks like the QA
+engineer has some information that the
+security validator doesn't. And if we
+scroll down here, the full life cycle is
+complete. And the orchestrator has put
+together the results of the system and
+communicated to us. To be super clear
+here, it is running all of these skills
+that it has, right? The orchestrator
+knows not to just give me a giant block
+of text back because it has the
+conversational response skill, always
+used when writing responses. And so, our
+agent give us a nice, you know,
+relatively concise summary here. And now
+we have the next step, of course. But,
+we had a whole team run through this
+workflow, planning, engineering, and
+validating. And so, very, very powerful
+stuff, right? 18 minutes so far, lots of
+work done. And now we can run train
+both, we can run prompt both. So, we can
+see how our classifiers are working now.
+New terminal window here. J. You can see
+we have those new methods that are
+multi-team agent coding tool built to
+summarize this code base, predict both.
+There you go. And you can see the kind
+of difference between them. They both
+are routing to mid, which is good. They
+agree on this. And then we can see some
+individual stats from our individual
+side kit learn models, right? So, very
+powerful stuff. We can go ahead and test
+another prompt to see how they both
+perform. And what we really want is to
+probably run this eval. Do you want to
+run head-to-head eval on the holdout
+data set? So, let's just go ahead and do
+that. Run head-to-head.
+Again, we're going to see the power of
+locking the domain. Our orchestrator
+can't actually do this work. It knows
+that. So, it's delegating to
+engineering. And so, the lead, again,
+lead cannot do work. It is a thinker.
+It's a planner. It's a coordinator. And
+so, the lead passed that to back end.
+It's going to read what we have, and
+then it's going to run them
+head-to-head. We'll go ahead and let
+that run and come back to the results in
+a moment. And the way that you're
+building your agent to coding system is
+the edge now. And as I talk about all
+the time on the channel, we want to
+increase the trust we have in our
+agents. And in order to do that, we need
+specialized experiences. And And we want
+to dial things down to the agent
+harness. How can you build customized
+specialized systems that outperform, you
+know, normal distribution of results
+everyone else is getting? A great way to
+do that is to really know how to control
+the core four, context model, prompt,
+tools, and then orchestrate, right?
+Scale it. Below here is just a mostly
+standard system prompt with a couple of
+key differences. This is the
+orchestrator system prompt. I am
+injecting some variables at runtime
+before the agent loads the system
+prompt. Right, we have the session
+directory, we have the conversation log,
+and then we have the teams. So, the
+teams is coming dynamically in from our
+YAML file. We have its individual tools,
+and then I'm also giving the file paths,
+right? I'm actually loading in the
+expertise and skills block, right? I'm
+taking it out of the front matter, and
+I'm placing it inside the system prompt
+for the agent. Our orchestrator is
+acutely aware of all the skills it has,
+you know, it knows how to write mental
+models. You can see I have a mental
+model skill for tracking and keeping its
+mental model updated, as well as other
+things, right? For instance, I have an
+active listener skill. This is something
+that you just might not want. You might
+not want your agent to always read the
+conversation log before every response.
+But, this is something that I do want in
+my orchestrator. And, in fact, if you
+just search this, you can see that I
+have this inside of every team member.
+Every single team member is And, let me
+just dial this into this one path here,
+multi-team and agents. You can see we
+have our 10 agents all specialized. And,
+they're all active listeners. Read the
+conversation log before every response.
+And, so by composing skills like this,
+we're able to control and quickly modify
+the capabilities of every single agent
+because often times there's shared
+capability you want. There could be an
+agent somewhere that we don't want to
+always active listen. We want it to be
+independent and not to rely on the
+current conversation. Easily changeable,
+modifiable from this multi-team agent to
+coding tool. This is how the system is
+kind of composed. Of course, we have a
+dot skills directory. Nothing really new
+here. Every one of these skills is
+modifiable. You can see everything we
+have there. Some are shared, some are
+not. We can jump into this. It's a
+classic prompt architecture. Nothing
+really huge to note here, but you can
+see here this is how agents are keeping
+track of their mental models.
+Instructions, personal expertise file,
+when to read, when to update, how to
+structure, you know, an improvement that
+can be made, a customization, a
+specialization you can make to your
+agents is teaching them exactly how you
+want them to write their mental models
+and to keep track of this. You want to
+be kind of careful here, though. When
+you're building agent experts, you don't
+want to be over rigid about this. Our
+agents are storing and maintaining their
+own mental models. They're storing what
+they think is most relevant to their
+success, and it's going to grow over
+each session. Again, when we talk about
+advantages over other systems, every
+time I boot this up, my agent teams,
+down to the individual workers, is going
+to have a stacking, compounding set of
+memory that's allowing them to
+specialize further and further and
+further over and over and over. And, so
+if you're building legitimate production
+software, this becomes very important to
+always go through your team because your
+team is the one accumulating knowledge.
+This is where domain specifying becomes
+really, really important. For example,
+like front-end dev, you might have
+something like this. And of course, your
+front-end dev can do whatever they need
+to here. So, you might have this and
+you'll probably also want them to be
+able to read the back-end, but never
+touch it. They can't actually touch this
+ever. One example there, and of course,
+we might want the exact opposite thing
+inside of our back-end dev. So, we could
+paste this and then we go back-end and
+we fix this. And now our back-end
+engineer and our front-end engineer sit
+next to each other. We can look at these
+side by side here. And this means that
+our agents can both read any file that
+they need to, but our front-end can only
+update and write to the front-end
+directory, whereas our back-end can only
+write and update and delete from our
+back-end directory. Over time, this
+specialization becomes more and more
+important as each member is building up
+their own mental model of the system.
+And thanks to the powerful new Claude 1
+million true context windows, having
+expertise like this is more viable than
+ever. If we hop into the mental model
+for our back-end developer, it's
+actually got information stored about
+its previous code base that I had it
+operating in. So, it's remembering all
+this. I actually need to get rid of this
+and tune the mental model, but this is
+an application that is tracking in its
+mental model. Its mental model is 5,000
+tokens. And this is very powerful. Let's
+explore. There's a session, and it's
+just keeping track of not detailed
+specific information, just high-level
+information about what's going on. It's
+writing down the specs, missing
+infrastructure, key risks, back-end
+patterns it noticed, security stuff,
+testing, so on and so forth. And so,
+it's just maintaining this on its own. I
+don't do anything with this. I don't
+touch this. And that's uh one of the key
+ideas with the mental model. You can't
+have your fingers on everything. And
+this is, you know, the journey that
+every engineer needs to make as they
+move toward becoming an agentic
+engineer. You have to let go. You have
+to teach your agents to operate as you
+would. The mental model is one of the
+greatest examples of this. You can give
+guidelines on how they should be
+building great mental models. We have
+that in our mental model skill, but
+we're not going much further than that,
+right? The skill is only 77 lines long
+and we're letting them maintain and
+update this on their own. That's
+expertise. That's our specialized
+agents. This is the system prompt that's
+loading into every single agent. We have
+skills, we have our configuration file,
+and we also have sessions. So, this is a
+really important idea. Let's go ahead
+and pull the session ID on this agent
+and just pull up the conversation log
+like we had before. You can see here
+we're also storing all of the tool calls
+for every single team. We're also
+storing the starting system prompt just
+so it's super super clear. We can jump
+into our back-end dev here and we can
+see exactly what its system prompt looks
+like with everything templated in. Full
+control. You can see super super simple,
+super concise. By placing this
+information in the system prompt, it is
+strongly adhering to this information.
+We are really detailing and controlling
+the core four down to the system prompt
+level. This is complete customization.
+If we hop back to our results here, our
+back-end dev did the work, communicated
+back to the lead, and here it's handing
+the results back to the orchestrator. We
+can see the results for our V1, our LR,
+and our new classifier here. All the
+results were written into the session.
+This session director is really
+important so that there's just a shared
+space for agents to operate on whatever
+work they're doing. We should be able to
+find head-to-head. There's the results,
+and we can see the work that our
+multi-agent teams put together for us.
+You can see here we're running our
+original LR model against complement and
+B, and we have our accuracy across. The
+most important part about this
+classifier system, you know, jumping
+into the individual problem itself is
+that whenever we need a high
+intelligence model, we want our
+classifier to be more biased toward
+that. It's a much worse problem if you
+predicted a medium or low intelligence
+model when you really needed high,
+right? That's just a bad user
+experience, that's bad customer
+experience. So, we've fine-tuned the
+experience to make sure that things are
+pushed to high as a safe default. So,
+we're always pushing toward high, more
+expensive model for the customer
+experience. Based on the financials of
+your business, you might change that a
+little bit to veer toward mid, hopefully
+not low. That's kind of the details of
+how I would build out a prompt writing
+system and how I have built out some
+prompt writing systems in the past. As
+you've seen here, there are many things,
+there are many dimensions you can
+specialize on. Not only are we
+specializing in individual agents,
+anyone can do this with Cloud Code via
+sub-agents. We've actually built
+specialized teams. Every team has its
+domain, and then we're having a single
+interface orchestrator so that our
+cognitive input into the system, right?
+Your effort, it doesn't need to increase
+as you increase the total number of
+specialized agents. This is a huge
+problem with customization unless you
+build it right. And I think this
+chat-like interface is the right way to
+build it because here we have delegation
+pattern where it all starts with the
+orchestrator, right? You are just
+talking to the orchestrator, and then
+the orchestrator delegates to the teams,
+and the teams delegate to their workers.
+By doing this, every team focuses on
+their specialty, and every team is
+fine-tunable. Of course, you can see
+here I have all of my leads as a more
+powerful Opus model, and the workers are
+Sonic models. You could play with this,
+you could tune this however you like,
+but you can see the pattern very
+clearly, right? You want your thinkers,
+your orchestrator level, and your lead
+agents to be as smart as they possibly
+can. And then your workers, you can dial
+down, they just need to follow
+instructions and execute. Of course, if
+you're going all out, you'll make
+everything the top best possible model.
+I think a really important piece of this
+is the 1 million context window model. I
+back in Devs doing a lot of work, did
+get past 100K tokens spent, and this
+will just continue as knowledge and
+domain expertise stacks up in the code
+base. Nice part here is, you know,
+whenever you want to, you can just prune
+a team or a member or you can add a
+team. Really is as simple as updating
+the configuration file. Let me just
+quickly showcase that. We can just very
+quickly kill this team, hop back into
+the terminal, fire up the app, teams,
+and now it's just planning and
+engineering. No validation. Super
+powerful trend here. On the channel, I
+really like to focus on the idea of
+moving where the ball is going, not
+where it is. We have a lot of very
+powerful tailwinds available, but
+they're not accessible if you're doing
+what everyone else is doing. Let me
+share a few next generation ideas and
+ways that I will be and already am
+pushing multi-agent teams like this.
+Once you build an opinionated structure
+like this, the next thing to do is build
+a meta agent or meta team that helps you
+quickly fine-tune and improve the team.
+With the system, you can build out
+powerful things like team-based custom
+slash commands, aka skills. It's also
+called skills. There's so many names for
+just prompt. It's annoying. You can
+build out these prompts, these workflows
+with your teams in mind. You know, a
+classic one is like plan, build,
+validate. Like one of the oldest
+workflows known to agentic engineers.
+You have a plan, you build, and you
+validate just like how we wrote except
+as a reusable prompt. You can start
+really, really stacking this up and
+getting massive advantages with a system
+like this. Another idea here is a lot of
+the value of this system comes from your
+agents stacking up knowledge over time.
+So, our engineering lead, for instance,
+has its own mental model. And so, really
+fine-tuning the mental model and the
+mental model skill to properly track
+results in your system is going to be
+really important. You may have noticed
+here, expertise is a list. So, we can
+also do something like this. If you have
+highly opinionated knowledge, you need
+to add to your database migration agent
+or your billing agent. It's a really,
+really important thing to have
+specialized or specific context. You
+don't want anyone to mess it up. So, you
+can build out additional expertise
+that's not updatable. Talking about that
+billing use case, billing workflow, blah
+blah blah. All of this context is
+specializable. This would create a
+read-only memory file of expertise that
+only your billing agent would have. This
+is one example, but again, expertise
+super super important. Billing,
+migrations, devops, deploying, these are
+all great examples of specialized
+engineering. You don't want a generic
+agent doing this stuff. You want an
+agent that has experience, that has
+expertise doing this over and over and
+over, just like you would trust someone,
+an engineer on your team who you know
+has done it, right? It's the same
+concept. Really locking in the expertise
+is going to be a massive advantage for
+engineers that are able to unlock it,
+and for engineers that understand why
+agent experts will always outperform a
+generic agent. Skills, very very clear
+why this is important. It's not a secret
+to anyone. Specialized tools, obviously
+very important. You can see how much
+power we built into the system with just
+one tool, delegate. And then of course,
+domain locking. You might have a
+configuration file agent or again,
+probably better example, devops agent.
+No one should be touching the devops
+files and folders except the devops
+agent. This is like the holy grail of
+operating mid to large-size codebases
+with these powerful agents that are
+continuing to get smarter, more
+intelligent while the token cost is
+coming down. I know a lot of engineers
+are going to watch this, and it always
+annoys me frankly. They're going to
+watch this and and they're going to see,
+"Oh my god, $8 for this agent team.
+You're wasting time and tokens
+communicating between these agents."
+You're thinking about right now. You're
+not thinking far enough into the future.
+Models will improve, costs are going
+down, tokens are going to be available
+to you at insane volumes. I think about
+this all the time. I am not spending
+enough tokens, you are not spending
+enough tokens, and you are wasting time
+doing things the old way, and now the
+old way is
+one agent to coding tool in the terminal
+prompting back and forth. I really,
+really highly recommend you push
+yourself to spend more tokens to do more
+work with agents. This is the greatest
+opportunity that has ever existed for us
+engineers. And now the only question is,
+can you agentic code? Can you agentic
+engineer? Can you build systems that
+build systems on your behalf? This is
+yet another powerful agentic opportunity
+available to you if you want to tap into
+it. This is not a public code base. I'm
+sharing this exclusively with tactical
+agentic coding and agentic horizon
+members. This is the second of three
+next generation multi-agent applications
+and code bases I'll be sharing with
+agentic horizon members. So, let me just
+quick break this down as I did last
+week. Tactical agentic coding is my take
+on how to scale far beyond AI coding and
+vibe coding with agentic engineering. So
+powerful, your code base runs itself. I
+don't receive any sponsorships. I've
+been given plenty of opportunity to do
+so. All I sell on this channel is
+hand-crafted courses I built, which
+frankly these take years to build to
+like have the knowledge and the
+presentation abilities to even
+communicate these ideas. I take them all
+and I give them to you in these
+individual courses. So, that's all I
+sell on this channel. If you want to
+support, if you like the ideas, take
+this course and get ahead of the pack. A
+lot of what we're seeing in the industry
+we have covered already in this course,
+and there's information and patterns in
+this course that has not been covered in
+the industry at all yet. This is for
+engineers that ship. AI coding is not
+enough. You want to be building systems
+that build systems for you. This is the
+true gift of agentic coding, all right?
+You can compound your advantage by
+building agentic systems that then build
+your application, test your application,
+validate your application, plan on your
+application, so on and so forth, right?
+If you're using agents on a daily basis,
+this course was made for you. We talk
+about templating your engineering and
+scaling the core forward to their
+absolute maximum. Let me be super clear
+about this. There are two courses in
+this. If you want to gain access to the
+multi-team H entity coding tool and last
+week's CEO agents multi-agent code base
+where we use many agents and lots of
+compute to help us make strategic
+decisions, these are available for
+agentic Horizon members. So, you need
+both courses to gain access, but I
+guarantee you it's going to be worth it.
+There's a lot of valuable powerful ideas
+we talk about. We go through eight
+tactics of agentic coding. We build a
+system that builds a system. No AGI, no
+ASI BS. It's just boots on the ground
+engineering with agents. All right,
+inside of agentic Horizon we push all
+the ideas further. The most important
+one is building agentic layers and as
+mentioned today, agent experts. For
+anyone who's hesitant or not sure or
+maybe this is the first time you're
+watching one of my videos, I only want
+you in this course if it's for you. For
+that reason, I have a no questions asked
+30-day refund before you start lesson
+four. So, hop in here, get your edge.
+I'm going to have these code bases
+available for agentic Horizon members.
+Phase three is coming soon, so make sure
+you understand everything that's
+available to you right now in phase two
+in the age of agents. Many, many lessons
+in here breaking down lots of ideas
+you've already seen in the industry.
+That's enough for now on this. Again,
+link will be in the description for you
+if you're interested. The name of the
+game in 2026 is trust and scale. What
+can you do with your agentic coding
+tools and your agentic systems to
+increase the trust you have in your
+agents to such a high level that you
+know they will ship the result when you
+hit enter on the prompt. After you do
+that, you scale it. How big can you go?
+How surgical can your agents be? Agents
+with specialized expertise that builds
+over time will play a critical role
+here. This isn't just Claude capturing
+memory with everything you've ever said
+to it over years. That's not going to go
+well. What is going to go well is
+specialized agents that have specific
+purposes and growing context windows and
+increasing intelligence that you have
+learned to specialize in your agent
+harness. More tools like this will
+emerge, but the ideas will be there. And
+then the question becomes, do you know
+how to build agent experts? And then,
+can you build teams of experts that
+operate autonomously on your behalf? No
+matter what, stay focused and keep
+building.

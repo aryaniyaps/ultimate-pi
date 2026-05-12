@@ -1,0 +1,1975 @@
+cord later. So, welcome back everyone.
+Uh, this is the thing that we have been
+doing now for a little bit of time where
+our goal is to talk about AI that works,
+talk about real code, talk about things
+that are going to scale, and also build
+reliable systems for different kinds of
+use cases. Um, I'm Vibv. I'm one of the
+creators of BAML. Uh, but more
+importantly, I've been in machine
+learning for about 10 years. I've worked
+on all sorts of systems from Face ID to
+predictive systems at hedge funds all
+the way to augmented reality systems
+over at Microsoft and unreliability is
+the hardest thing to deal with. Uh so we
+want to talk about that in different
+ways and Dexter. Yep. And I'm I'm Dex.
+Um I'm working on a tool called human
+layer which again we're not here to
+shell anything. We're just here to learn
+from each other and build AI that works
+and figure out how we can push today's
+models to the bleeding edge. But um in
+the last year or so, I've talked to
+hundreds of founders building agents and
+learning what reliability means to them
+and what kinds of human in the loop and
+all kinds of asynchronous orchestration
+and um worked really closely with IBOV
+uh for a long time on like what is the
+future of agents look like and how can
+you build agents where you have a really
+high performance ceiling and you're not
+locked into kind of the assumptions of
+various frameworks and things like that.
+So that's that's what that's why I'm
+here. That's what I'm passionate about.
+Cool. And today's topic is about MCP
+texture. Do you want to clue them in on
+what we're want to talk about? Yeah. Um,
+so the idea is um, we've done a lot of
+examples in that video is is one of them
+and we've done a couple workshops so far
+about um, like tool calling agents in a
+world where you want to maintain
+complete control over the prompt and the
+control flow. Um, but I think one of the
+things that has people so excited about
+MCP is there's a little bit less. It's
+kind of a uniform interface for pulling
+additional tools into your system. Um,
+and a request we've gotten from a lot of
+folks is basically, okay, how do I take
+this 12 factor agents methodology and
+kind of maybe get to skip some steps or
+accelerate my development by not having
+to write the tool implement? Like we're
+really good. What we care about is like
+optimizing the prompt and the structured
+output so that when you have a reasoning
+trace that's a 100 steps long or
+whatever it is that ap the AI can still
+reliably select the next tool but once
+that tool is selected your code has to
+decide what to do with it and that's
+both uh incredibly freeing and
+incredibly powerful but also puts a
+little bit more of the work on you. Um,
+and so I had this experience building,
+we have a deployment bot that runs in
+Slack and we use it to like basically
+when a when a dev when a when a branch
+is merged, uh, it'll run the dev builds
+and stuff and then a human can kind of
+at message the bot and say, "Hey,
+promote this to production." Uh, that
+involves triggering GitHub workflows and
+triggering promotion workflows in
+Verscell. And it spent we spent way too
+much time trying to figure out the exact
+API invocations to promote uh a release
+in Verscell. And it turned out like the
+fastest way to do it was like go into
+the Chrome console and like copy the
+requests and then paste those into a
+model and have it write the code because
+of the the point is is like integrating
+with external systems is hard and MCP
+gives service providers a way to give
+users a kind of drop in tool uh set of
+tools where all all you have to do is
+add this MCP to your system and then you
+can expose it to your agent as hey these
+are options of the types of JSON you're
+allowed to output and then once that
+JSON that is output, we can actually
+send that to the MCP server. And so the
+vendor, whoever's maintaining the
+upstream service is providing us with a
+toolkit or an SD, it's like SDKs for
+agents, right? Where I don't have to
+learn how all this stuff works. I just
+send the tool call to the MCP server and
+that's going to handle talking to the
+upstream system or API or whatever it
+is. So all that is great, but the
+problem is what if we have a thousand
+plus MCB tools? What if we had 50,000
+MCB tools? What if we have a bazillion
+MCB tools? At some point, it's not going
+to fit in the context window. At some
+point, model performance is going to
+drop. At some point, just like we use
+databases to save data onto disk and
+don't have everything living in memory,
+we're going to have to build a system
+that can go deal with this because
+everything interesting happens at large
+scales. And if you have a company with
+10 users, you can live in memory. It's
+just not that interesting. Probably
+there are some companies with 10 users
+that are interesting. Um, and today I
+want to, but before we get into MCP, I
+just want to get a poll from people
+really quickly, um, about what it is.
+I'm going to save this as a meeting
+poll. And I'm just going to run this.
+Um, and just two questions. I just want
+to get a feel for where people are at,
+uh, about MCP, like who uses MCP? What's
+people's long-term view on MCP? I just
+want to get the feel for where we're at.
+And I'm going to try and uh I'll leave
+it on for about like 15 more seconds. Um
+so try and answer
+uh if you can. Um if you're just here to
+sit and listen, that's totally okay as
+well. But we got almost everyone
+answering. Um and I'm going to share uh
+my
+screen just so we can share the poll
+results. Um I think I can if I end it
+will share the poll results. All right,
+I'm going to end. It's been 45 seconds.
+In three, two, one,
+done. All right, I'm going to share the
+results in the chat. Uh, can you guys
+see the results? I assume you can. Um,
+it's out of interesting what we see is
+we have some folks about um about 30% of
+people use MCP currently. 50% of people
+aspirationally want to do it.
+Surprisingly, 25% of people will never
+do it. Um, and then most people seem to
+be bullish on MCP. Uh, a few people
+don't seem to like it and uh some people
+are like not MCP
+exactly. Does anyone that is in the camp
+of I currently ship with MCP just want
+to share what they do with MCP just to
+give everyone else a little bit of
+context?
+Sure. Uh, I can I can hop in. Um, yeah.
+So for me, uh, a lot of what I was
+doing, I I took over as like head of
+engineering and didn't have a product
+manager. And so a lot of the work that I
+was doing was basically like, hey, I've
+got some loose, uh, assumptions of a
+ticket or something that needs to be
+done. Um, and I'd like to put that into
+like linear or something like that. And
+so formatting like a PRD or formatting
+something that just quickly kind of
+outlines what I needed to do. So I
+hooked up NCPs with claude um with
+claude desktop specifically and then um
+would hook those in uh so that I could
+kind of just very quickly scaffold
+something out. Um so like that's
+something um and I've kind of looked at
+different ways of of expanding that.
+Like I think MCPs are still pretty early
+on so it's been a bit tricky to find a
+way to like scale that out. So, a lot of
+what I've ended up shipping is like web
+hookups to MCPs or custom chat clients
+because I want to I want to use it on my
+phone. I want to use it on the go like
+you know like I can't just tied to my
+computer. Uh thanks for sharing. Uh Ben,
+right? Sure. Yeah. Thanks for sharing
+Ben. I think generally that's what I
+have seen for MCPS. I know very few
+companies, we've talked to a bunch of YC
+companies and I know very very few of
+them that actually use MCPs in
+production except for enduser things to
+get scale out. Um, and I think the magic
+of like if you're owning if you're
+writing code to own the inner agent
+loop, MCP just becomes another layer of
+SDK. I think the real magic I was
+talking about this on LinkedIn with a
+couple folks this week and like the real
+magic of MCP is like if you're not
+writing code or you don't know how to
+write code but you just want to drop a
+bunch of integrations into a chatbot
+that you already use like claw desktop
+or cursor or something like that that's
+where it really shines.
+Yeah, I agree. And I think but if you're
+doing it like for what I've seen it
+struggle with is I think the problem
+that a lot of people have. So before we
+get into this, let's do a whiteboard
+really fast like sort of exactly what is
+MCP at least from our perspective and
+how do we distill it down into the same
+systems that we've been used to. So we
+do this a lot where like we think of
+LLMs as just functions. Functions take
+in input parameters and they return a
+data type. Let's break down what an MCP
+is from a very core principles and then
+we can go back and think about the
+implementation details of what the exact
+implementation spec of what the current
+proposal for what MCP is and how that
+ends up panning out. Um, and we'll try
+and keep this fairly high level. So, let
+me open this really fast
+slide and I will open the
+whiteboard. Um, I'm starting to draw it
+up. Yeah.
+And I will screen share my whole screen.
+So once again, um, if we do see an API
+key, try not to copy it.
+Um, all right. I think we we are live.
+All right. All right. Join the room.
+Cool. So MCP servers are just they're
+responsible for two things. They expose
+two special APIs on top of a standard
+what you could imagine as a REST
+service. It has one API called list
+tools and it has another API called call
+tools. That is it. There's nothing else
+magical about
+MCP. Fundamentally, it's you can view it
+effectively as a rest API that has two
+special things. And it and like Dexter
+wrote tool baked in. It kind of has it
+kind of can be. Uh just to challenge
+that
+Dexter, there's nothing that says I
+can't just like put like a database
+here,
+where I'm loading my tools from. It's
+true. Yeah, I I think most
+implementations have kind of a static
+schema, but but um yeah, technically
+every time you call this list tools
+endpoint, it could
+and every time you call tool, it could
+at some point return a say a 404 on a
+tool not found. And that is very okay
+for the spec of what an MCP has. The
+problem that I think a lot of people run
+into is when they list out tools, they
+do the most simplistic thing. They take
+these tools and pass it into the LM and
+that works until it doesn't because at
+some point if we believe MCP is the
+future and I'm I I'll share my personal
+view on all that at the end. Uh so it's
+not biased in any way. Um the idea is
+actually like before you basically
+before you send your prompt to the
+agent, you would spin up every MCP
+server in scope for that query,
+everything that's installed, pull all
+the tools out and then say like, hey,
+here's the user's prompt and here's all
+the tools you can call. Exactly. That's
+a traditional thing out there. And then
+the model will pick a tool call, which
+is in our world that we all know is
+return a data model. And then we'll call
+that data model and then pass it back to
+the MCP server.
+live
+live.
+Awesome. So when we are doing this um
+the problem with this is a lot of people
+call that authorization and all these
+security things we have to deal with.
+Let's just ignore all that. Let's just
+assume at some point we'll be able to
+pass in beer tokens of various
+permissions authored correctly and we'll
+solve all that problem. I don't want to
+go into that because that's just a spec
+design problem. Um you're talking about
+the O questions in the chat. Yeah, I'm
+just going to ignore that for now
+because I think there's more interesting
+problems at hand because fundamentally I
+think the first question we should ask
+is is it useful to have a system that
+returns to us a list of tools? Probably.
+Is it useful to have something
+standardized that does that? Probably.
+Just like it's super useful to websites
+for websites to all agree semantically
+on a robots.txt file and we all scraper
+companies just agree that we're not
+going to go scrape robots. We'll scrape
+according to robots.txt. txt. It's not
+or a website can expose a open API open
+API spec that says, "Hey, here's the
+methods on this API and here's how you
+authenticate to them." Exactly. So,
+another equivalent to an MCP equivalent
+could just be something that says every
+time I go to like uh my
+website. It exposes an open API spec
+that describes all the ai stuff that is
+available to an agent. And there was
+another company that was doing this.
+They called it like / aagents.j JSON or
+something. Yeah. And it was an altern I
+think it was almost like an alternative
+to MCP and I think now they're just
+going all in on MCP just because that's
+kind of what's what's become the
+standard. It basically is. But like
+fundamentally like does this specific
+implementation detail where you put it
+on a server and everything make sense?
+Maybe, but probably not in the sense of
+like generality. Like we probably don't
+need to require a microser as a bakedin
+design concept. But the idea that we
+want to list tools makes sense. The idea
+that we want to be able to call those
+tools dynamically makes sense. So let's
+talk about what we could do in the world
+of a thousand tools. For those of you
+that were here for our very first
+episode, classification with a thousand
+plus categories, you might find this to
+be very very similar. Um, and for those
+of you that haven't, I'm going to run
+through it very quickly, but you should
+watch that full video to get the whole
+concept of it so we don't have to spend
+too much time on repeating the same
+thing because that video goes into much
+more detail. I'm going to delete the
+word MCP and I'm just going to say I
+have a list of tools because what I
+fundamentally have is I have a bunch of
+tools and I want to go
+from one tool or like I want to imagine
+each of these are a bucket of like a
+hundred tools. What I really
+Do do you want to quickly just pull up
+the JSON file of like basically we're
+not using the MCP servers and um we just
+have that like tools.json show people
+what it looks like tools.json.
+So this is we took there's a there's an
+MCP registry called Smithery and so they
+have thousands of MCP servers and so
+what we did was we b queried the list of
+servers and then for each server we
+pulled off all of the tools that server
+exposes. Right? So now we have like I
+think this is like 10,000 something
+tools in here or something stupid. It's
+like an absurd amount of tools. An agent
+should not be able to handle this. So
+we're just going to talk about this and
+we're going to talk about if we have
+these 10,000 tools all from different
+servers. How do we go down this? Well,
+we need some function. I don't know why
+mine is black. What is wrong with
+this? I don't understand opacity. Okay.
+We need some function that is going to
+take us down from a thousand
+tools to less. Let's say like whatever
+tools we think the model can handle. If
+it can handle something like let's
+assume we're using GD40. So we can
+handle a 100 tools. A model is going to
+be pretty good at picking a 100
+tools. So Dexter is writing the function
+signature given a user query and given a
+list of tools which we can just call it
+a list of tool. Yeah, exactly.
+We're going to return down another list
+of tools. That's all we need to go write
+out. I'm going to write one thing in
+there. There we go. So, this is the goal
+for step one. And I'll just call it I
+put in query string because this is the
+most common in these like raggy type
+like retrieval things of like what was
+the user's query, but it's actually like
+whatever parameters would help our
+deterministic code or whatever is inside
+this function, which could be more
+nondeterministic stuff down the line. It
+could be a checkbox in my UI where the
+user has explicitly checked off Slack.
+It could be a checkbox where they've
+explicitly checked off notion or in
+addition to the string that comes into
+here. Right? So, it's about tying the
+system together. But fundamentally, I
+just need a function that says given
+some query object and a list of tools,
+pick a smaller list of tools. Um, and I
+can do this could be a random function.
+It doesn't matter. That's the point. I
+just need something that can go from a
+lot to a smaller amount, right? You
+could the simplest one would just be
+like return tools sub like return the
+first 50 tools. Exactly. And a more
+complex one is we can use embeddings to
+go and pick these tools. And we'll talk
+about um how that ends up looking. And
+then eventually what I want is now given
+this query I want to pick the right
+tool. And we all know how to do this as
+well which is we have the model go ahead
+and say given the user query go pick the
+right tool. And that's a simple
+prompting problem. Once we have this
+calling the tool, it just becomes a
+matter of wiring up the right APIs or
+calling the right function along the
+way. So we don't have to think about
+this too much and then we're basically
+done. And the real magic here is being
+able to have what we call these probes
+across the way where we want to be we
+want to have probes in two different
+sections of the system. We have these
+probes over here that
+says did the did my system that narrows
+a tool narrow to at least one of the
+right tools that I need? That's question
+number one.
+If it did, I'm good. I don't need to
+change this part of the system. Then the
+next question I ask is now given this
+narrower set of tools, did the model
+pick the right set of
+tools. That's another question I can go
+ask. And for both of these systems, I
+just ask a simple yes no question. Based
+on which one is wrong, I update that
+part of the system. And do we want to
+just for simplicity assume that the
+model's only picking one tool at a time
+for now? I know we can support multiple
+but yeah for now we can assume that if
+we want to support multiple remember we
+just use a list you just change the
+system to a list and then we kind of
+solve the problem
+automatically. So now we'll actually go
+write the code be before I go into
+that. Do people understand does anyone
+have follow-up questions on exactly what
+MCP is and what we need to be able to do
+if we have a thousand plus tools to be
+able to leverage that in our
+system. I'll pause for like two seconds
+and you guys have plenty of time to ask.
+This is meant to be interactive because
+Dexter and I talk about this stuff all
+the time, but if you have questions like
+this is the easiest way to get a
+real-time answer.
+I I have a question I'd like to ask if
+that's okay. Yeah. Uh so I just like to
+hear if generally this is something we
+have people deciding which tool to use
+or we basically want to set up LLM so
+that they automate it all. So it's like
+I'm wondering what the scaling procedure
+is like. Is it just all synthetic or do
+we have someone actually in a meeting
+hashing it out with like domain experts?
+Well, that depends on your use case. If
+you're in the legal world, you might
+want to have some lawyers actually look
+and see if the right tools were selected
+for each of these use cases. Like, hey,
+did the LM were the right narrowed set
+of tools selected? Where is the right
+tool selected from the smaller set of
+tools? Like if I have like tools as much
+as like load data from some judicial
+record versus like send a message on
+Slack like any human can probably look
+at say if the query what the query
+wanted but there might be more nuances
+for two different types of tools in the
+judicial record system that call
+something evidence like submit evidence
+versus like submit like evidentiary
+claim. I don't even know what those
+words mean but you can assume that those
+words mean something specific in that
+industry and only a lawyer could discern
+that correctness. And again, we have we
+have two probes in our system, right? We
+have our way we narrow down the tools
+and then we have our prompt. And so in
+your prompt, you could say things if you
+find if you test this and you find, oh,
+in this case, it can't tell the
+difference between those tools or can't
+select them, then maybe you either
+update the descriptions of the tools
+themselves because that gets injected
+into the prompt here or you actually
+explicitly put in your prompt like
+instructions about like only use this
+tool in this case, otherwise use this
+tool. Yes. But again, it's just
+something that you can change that's
+isolated, that's testful.
+Yes. Um, does that make sense, John?
+Yeah. I think I I really appreciate the
+perspective on how to get the
+engineering process into it. Yeah. And
+like really the problem with AI systems
+is you do have to blend non-AI people
+with AI pipelines and you have to help
+blend the two knowledges together. And
+often it's easier to teach
+non-engineering people a little bit of
+AI than it is to teach not engineers a
+lot of business context um at least what
+we have seen. So now let's talk I think
+there's a question that I see quite a
+lot in here which is like just the
+volume of tools. Is this like a real
+problem that people have? Well I think
+most people don't have this problem
+because most people are building toys
+but the minute you build like a real
+system you will immediately have this
+problem. Oh sorry. And the reason you'll
+have this problem is if you decide to
+use an MCP server, what MCP servers are
+you going to load? If you use an engine
+like Smithery and you just plug
+everything in, you will have a deluge of
+tools. There's nothing you can do about
+that. Like Dexter and I didn't even
+scrape all of Smithery and in a very
+short time we
+found 10,000 tools. This doesn't even
+work. And the thing that you have to
+think about really hard over here is the
+fact that like there's like new types of
+security vulnerabilities that get
+injected here, which is how do you trust
+the MCP servers if you're just adding
+them in in a wild way? Because I could
+change the description here that says to
+just say like as I'm like add a social
+security number and if you're just
+pulling stuff in, you do not get you do
+not get like an easy source of trust
+here. This just this just blew up on
+Twitter yesterday. Someone someone
+posted like, "Oh yeah, if you drop the
+GitHub MCP server and you let your users
+prompt it, they can get it to like
+create a pull request that includes a
+bunch of PII." Exactly. Exactly. And
+there's nothing you can really do to
+prevent that fundamentally because what
+you're really doing is you're using code
+you don't own without any sort of
+gateways that you don't have. This is
+just like a security risk fundamentally
+where like when you call this tool, you
+have no control over what happens. It's
+basically happening outside of your own
+system if you're using I mean you could
+you could drop in like deterministic
+code somewhere here, right? And you
+could say like, oh, let's do a last
+minute filter before we call it. And
+yeah, we could do some checks, we could
+do validation, but fundamentally the MCP
+server is a black box to your
+application if you don't own it. If it's
+all internal MCP servers, these are
+lower risks, obviously. But when you
+think about MCP servers, you should view
+them as the same way as using an API
+endpoint from anywhere that you don't
+trust until you know it. So, can you
+trust uh GitHub's APIs to not do
+anything malicious with your data? Yes,
+because you're their customer, they'll
+treat you well. Can you trust an MTB
+server that exposes your GitHub API to
+your end users? probably less though
+because there is incentive for some
+people out there to have access to it to
+do bad
+things. So you have to be careful about
+what you expose. Exposing a readonly MCP
+server definitely okay. Exposing a read
+and write you should think about it.
+Read and modify probably more dangerous.
+Append only actions less risky. So you
+need to go and evaluate these systems
+from a standard software engineering
+principles and not get too excited about
+I just added these capabilities because
+these capabilities come with an
+unbounded amount of risk that you're
+adding onto your application. And that
+is I think one thing that is way less
+talked about in these AI agents because
+this is the risk of
+MCP. That said, we're here to talk about
+how to use MCP, not the risk of MC MCP.
+So, we'll talk about how to go do this
+because any of the things that you do
+here doesn't have to be true with just
+MCP. You could have this in your own
+app. You could have built 50,000 tools
+that you trust that your company
+exposes. And now you want to give your
+agent those
+capabilities. Now, many of you have
+probably seen me draw this diagram a few
+times at this point where I always draw
+like oh my god, not an A. How do I draw?
+I want to draw with my pencil. Um, I
+always draw these weird things where I
+draw this
+curve. This curve represents a lot of
+software. Uh, so I'm going to draw this
+how this talks about MCP and
+capabilities. Sorry, what's on the x-
+axis here? That's what I want to talk
+about. What MCP really does is an MCP
+server quickly extends your capabilities
+that you're able to cover with better
+averageness, but it drops your
+reliability in any one service because
+what you've done by adding MCP is you
+basically taken away more
+control away from your control flow
+system. So you're not writing if
+statements, for loops, all these other
+systems around there. You're just saying
+pick something, go do it.
+And that's like saying, I've hired a
+hundred different contractors and I will
+just let them shuffle tasks around to go
+do it. They'll probably go do something,
+especially if they're pretty good. But
+yeah, the time classical deterministic
+software
+versus, you know, here's a hund here's
+a, you know, a thousand tools and one
+call like the god prompt or whatever.
+Exactly. Like, hey, you're an agent. You
+can solve every single problem for me.
+And this here is like a spectrum. And
+so, yeah, more tools is like, cool, I'm
+going to write less code and I'm going
+to hope the LM can figure it out. But
+again, that's what we've always found.
+That's what 12 factor agents is all
+about is like the less deterministic you
+have, the less the less deterministic
+your software is. And that's kind of
+part of it. And there's always
+trade-offs there. And you got to find
+your sweet spot. And so what we're going
+to talk today is like methods of like,
+okay, how can we how can we balance and
+how can we find a sweet spot where it's
+like, okay, I'm still not writing every
+line of code like into classic
+deterministic software, but I'm also not
+just like handing off the keys and
+letting the model go yolo it. Exactly.
+Cuz like this line we have here
+represents classic deterministic
+software. It handles that one scenario
+really damn well and nothing else. Then
+we add some LMS to it and it becomes
+slightly wrong side of the curve. it
+becomes slightly worse but it starts to
+handle a lot more scenarios and then we
+add a bunch of MCP and then like it on
+average it might perform worse but it
+handles way more scenarios than anything
+else that we have done beforehand and
+like therefore it's better because co we
+care about coverage for our unique
+application more than we care about
+adding everything else and really it
+doesn't have to be an eitheror situation
+which is where people get stumped it can
+easily just become we will write this
+deter deterministics offer for this one
+control path we have. We'll write an LM
+workflow for this other control set of
+control paths. And you know what? For
+everything else that we're not going to
+cover, we're going to toss it in an MTP
+and that will address everything. And we
+can just use an LLM to decide which of
+these paths we're going to send our user
+on based on the current journey that
+they're
+on. And that is an easy way to think
+about these hoppers. It's not an either
+or. We can really leverage all of them
+together along the way. That said, let's
+talk about tools and how we use a
+thousand plus tools. And there's another
+good question there of like, can we
+label tools as critical? I'll add a link
+after the session. There's uh there's
+some new stuff in the spec where you can
+annotate the tools, but it's it doesn't
+get sent to the LM. It's kind of
+directions to the client. Exactly. Um,
+so we'll talk about this a little bit.
+So, let's talk about again what is these
+tools because I tried to go write this
+code and I'm I've I've written as much
+of it as I could ahead of time because
+most of it's just boilerplate code and
+we can just walk through it. It's a lot
+easier rather than having to talk about
+it. Um, so what I want to do is I want
+to open this file and I want to look at
+what this looks like. So, what is our
+agent loop? As the very first part of
+it, our agent loop is going to be this.
+We are going to have a function. A
+function is going to take a state. And
+for now, I'm going to do something
+really dumb. I'm going to pass in our
+state as purely a string. And Dexter
+will probably like this, which is I
+added some other other tools. Nice. Um,
+our prompt is going to be extremely
+simple, which is you are an agent with
+access to any number of tools. I'm going
+to tell it what it has to do. It's going
+to answer with one of those tools and
+help that user by picking action from
+the following. I should this is bad or
+the following and then I'm just going to
+write the user I'm just going to dump
+the state as a part of the user message
+along the
+way. Now what are these tools that I
+have exposed to the model? I have two
+specific tools that I'm going to like
+hardcode into my system because I know
+MCP servers are just not good enough.
+The first one I'm going to add is I want
+to have the user have two different
+types of messages that I have. One is a
+request clarification where I literally
+just want the I want to show the user a
+different type of message that says I
+need your help and I might render that
+in the UI separately than a respond to
+user message because it's just slightly
+different UIs and I just want to have
+that differentiated and then the actual
+message. So that's my human message. But
+then I have a second type of tool that
+is all my actions and I'm just going to
+mark these dynamically defined. So I
+will not define them at runtime. I will
+only define them. I will not define them
+at compile time. All these actions are
+only known at runtime. So this is the
+difference between um if you want to I'm
+just going to send you one other file.
+The uh the kind of like calculator tools
+that we brought in that. Okay, cool.
+What is it called? Uh tool calculator.
+So like this would be like like hard
+hard code defining your tools. Exactly.
+Uh and then passing those to the model.
+And so you could do these all by hand,
+but the whole point is in MCP we're
+going to do this dynamically. We're
+going to fetch something at runtime and
+then we're going to feed those into the
+model as blend as well. Like you can
+say, hey, we have what we'll do is we'll
+actually send just like we have like
+some statically defined tools like human
+messages. We can also just add
+calculator tools here. Let's give it the
+calculator tools while we're at it.
+Like we don't have to it's it's we live
+in this hybrid world where some tools
+are going to be defined dynamically and
+some tools are going to be defined
+statically and the static tools are in
+general going to have more reliability
+more systematic guarantees because we
+know about them and the deny tools will
+have less guarantees and more less
+reliability because we won't really tie
+to our UI or end process because we
+can't by
+definition. Um and then we really just
+have this function. So I want to talk
+about how we'll end up using this
+function. So generally I will try and
+write this code by hand. So I'll just go
+around it about and go do that. So what
+we're going to have is we're going to
+have a function that's going to do
+something. Now in order to load our
+tools from dynamically you have to use
+something that can go represent the
+tools. So we have a thing called type
+builder that does that. And for now
+let's just assume that we this will
+work. I'll talk about how this does.
+Yeah, I might even just put a to-do here
+like, hey, look, this is where you would
+like dynamically launch your MCP server,
+call the list tools, and kind of compact
+it into your list of things that you're
+going to parse. But we just we did that
+ahead of time um and just dropped in a
+JSON file. That makes sense. Exactly.
+And your your company might do that,
+too. You might just cache the tools list
+thing so you don't have to call it every
+single time you go there. Um because
+that file, like we said, could be huge.
+like getting 10,000 tools could easily
+be I don't know how big this file is,
+but like we can just see inspect.
+Actually, I think it tells me
+um it tell me it's 300,000 lines. Um it
+is it
+is one it's like 11 megabytes of data
+and that may not matter but there's a
+point at which like the network does
+matter and I don't want to send that to
+my client on server all the time. I just
+want it cached around. So you as a
+developer might also make that choice at
+some
+point. Then what I have is I'm going to
+get these tools. I'm going to send it to
+my tool options. Then at runtime, I'm
+going to say my actions data model. I'm
+going to add a property to it called
+tools. And I'm going to add my tools
+into this
+property. Now, how did I pick how did I
+go from a thousand tools to a smaller
+amount? Well, in this case, I did the
+dumbest possible thing, which is I just
+picked the first 50 tools. I did nothing
+clever at all. Do you want to pull that
+into like a narrow tools function just
+to be kind of map it back to the to the
+whiteboard
+narrow tool and like what is the type of
+this thing? This is going to be a list
+of field
+types. Okay, I have to go import things.
+This is probably the only reason I did
+not do this.
+Um, okay. So, I'm just going to go for
+now. I'm going to go do this. I'll pass
+in a query stir and pass that in. And
+what I will do here is this instead of
+this will just be
+a narrow tools and I will pass in a
+query which is empty stir.
+But basically the query would be the
+input to your do something method.
+Right. Exactly. And then specifically
+what I'm saying is hey in this scenario
+the tool options is going to be a union
+of any of these tools that I passed in
+to this uh to this thing. So given a
+list of 100 tools I am allowed to pick
+any one of those. Now I might say I want
+to pick multiple of those and I can just
+do list or something. And now I'm
+allowed to pick a list of these unions,
+but I don't have to pick all of them and
+it's up to me to decide. So union is
+basically you're going to ask the model
+pick one structured object and it to be
+valid it has to be one of the 50 types
+in this union basically. Exactly.
+Exactly. Cool. Um and then what I'm
+going to go do is I'm going to do the
+next part which is I'm going to write my
+chat loop. And many of you have probably
+seen this chat loop before. Um, it's
+very straightforward. We just put a
+while loop true. We have a chat object
+that represents our current state. And
+we're going to just run this and say I'm
+going to pick the action based on
+whatever the user based use that LM
+function. The action will return one of
+my static tools which is a human message
+type or and if it is a human message
+type, I'll print out the message to the
+user. I'll add it to my chat thread that
+I have going on over here. And then I'll
+take the user's message, I append it on,
+and I'll run it again. And this is a
+really subtle thing going on here. I
+think most people are used to seeing a
+big JSON structure here with RO user and
+all that stuff. This is actually a great
+uh illustration of a concept we talk a
+lot about in 12actor agents, which is
+like you can tell the model what's
+happened so far however you want. You do
+not have to use the standard OpenAI JSON
+messages format. you could just put the
+whole thing in a system message or put
+the whole thing in a user message um and
+let it work from there. And if you look
+at how our prompt works, it's just going
+to put all that in. Uh I know models are
+like specifically tuned on like user
+versus assistant and you could still
+implement that, but um it's up to you. I
+I think this is worth worth calling out
+because it's it's subtle. Exactly. Um so
+you can see TypeScript or Riot. Um I'll
+do TypeScript next time. It's pretty
+much the same thing. You can send all
+this stuff to chat and I'll convert it
+to TypeScript for you. I was on a stand
+up today and my my engineers uh keep
+asking to rewrite all our Python and
+TypeScript. So I I feel you, Andrew. I
+apologize that I have to do the sin of
+using Python because we're equal
+opportunity builders here. I think
+there's a there's plenty of plenty of
+reason to use Python and TypeScript. I
+honestly think that if you're going to
+build things in AI, you should just get
+good at both. Uh or just learn BAML and
+doesn't anyway. I'm I'm joking. I'll
+stop. Um, but I think though when I go
+down this road is like I've added this
+to my tool and for the other action,
+what I'll do is the minute I get an MTB
+tool, in this case I'm breaking, but I
+don't have to break. I could call the
+MCP server and then continue onwards. I
+want to pause you one more time. Uh,
+your battery's about to die. Oh, shoot.
+Yes. Um, shouts out to Remo or sorry,
+uh, shouts out to, uh, Shia for calling
+that out. Any questions so far? Does
+this all make sense?
+I mean, shouts out to Remo for saying
+Python and Typescript, but
+yeah, go ahead, Kashall.
+Um yeah, I was just wondering like when
+you have like multiple uh functions that
+are being run within the MCP server, um
+is there have you encountered a
+situation where you have to figure out
+the right order for the functions to run
+and how does the LLM do that? You know,
+in some cases the order might be
+important.
+Yeah. Um yeah, I mean I think the LM's
+always going to return tools as a list
+and so you could call it in the order
+that the LM picked. You can also just
+constrain the ln. This prompt that we
+have here is constraining it to only do
+one action at a time. Um, but you could
+just turn this to a list type and then
+it could return multiple. Um, I've seen
+some interesting stuff where people have
+it call it calls the human message tool
+and the other tool and that can be used
+like depending on how you prompt it like
+the prompt is all the like you have
+total control over how you ask the model
+to talk and so you could say always
+output a human message and the tool
+you're calling and then we show it to
+the user while the tool's being called.
+Um, but yeah, for ordering vib you ever
+seen anything where like a model picks
+multiple tools and you have to decide
+what order to call them in? Well, that
+I'm gonna I'm gonna do something silly
+here, but it's like look, if you care
+about ordering and you just
+Yeah, but I'm talking more like in a
+situation where um I don't know, it's
+just imagine like a subject matter
+expertise uh subject matter expert who
+doesn't really know much coding and
+stuff and they're just using this tool
+and um the tool is like asking for like
+a bunch of websites that have to like uh
+go through different things. So, um
+there might be a right flow to do do
+those operations in your responsibility
+as an app developer to determine your
+use case. If you're doing a bunch of
+stuff in parallel, you're doing that as
+an optimization because you just have
+the LM do one thing at a time and go do
+that. What you've said is I want to go
+do things in parallel. Yeah. Just like
+if you're doing you have to deal with
+race conditions, data races, and atomic
+and non-atomic variables. If you're
+writing multi-threading code, that's now
+your job as an app developer to take on
+that burden away from your users. And
+how do you do that? You just do this.
+You can just say this depends on these
+tools as a part of your mort tools.
+Yeah. Or you could even take it out of
+the LM's hands and you could have
+deterministic code that says like hey
+for if there are web search tools in the
+payload, run all of those in parallel
+before running any of the other tools.
+But at the end of the day, the model
+calls seven tools. The model is asking
+you go do all these things and then send
+me back the context window once you've
+done all the things. So you basically
+get to decide and optimize all of that.
+Yeah.
+Yes. Does that make sense?
+Hello.
+You know the first step is you have to
+find flights that work and only after
+you find the flights do you want those
+days right you but if you end up booking
+the hotels first but your flights are
+you know the days are not aligned that's
+kind of a situation you don't want so
+how can we like you know have the agent
+go through those like steps sequentially
+is what I'm trying to figure out that's
+as a part of your data model your data
+model needs to represent the
+sequentialness of control flow if you
+want to go do that Or you can just embed
+that as baked in knowledge like vector
+says which is like if you get search
+request regardless of what order the LMS
+spits out in like um let me let me
+change this really fast just to make it
+more clear. Let's say I return an array
+of tools right over here. I've now
+changed my code to
+um yeah
+exactly exactly said it really well.
+Uh so let's say over here I have an
+array. I now have a list of actions and
+human messages that come
+out. It is now up to me to say that this
+thing is now going to be what is this?
+Oh shoot. I disabled the generator.
+Sorry. Sorry. I'm running a dev version
+and I need to stop doing
+things. All right. Cool. Um this thing
+now is going to be a list of actions.
+And what I want to do here is I want to
+say for action and actions go do the
+same thing that I was saying before. Oh,
+okay. But now I can I don't have to do
+this. I could first say like actions
+equal action like sort
+actions and I can say I can sort this
+now in this way
+uh
+instance and I can say all human
+messages must be processed first before
+any other tool that comes out from the
+model. Okay, cool. Thank you. Right? So
+I can find this bridge and it's up if if
+this is important to my application
+security development, I can go do this.
+Um but this is really really important
+that um as a developer we remember what
+is something that we can do versus
+something that
+a versus something that a model has to
+go do. And this doesn't have to be a
+sort. I could even filter and I could
+remove or I could modify actions. I
+could say, "Hey, if one of the actions
+is going to be like read bank
+transaction, insert another action
+before that that says show something to
+a user that I'm going to read your bank
+statement and like send a human message
+to confirm before I go do this." Yes.
+And Joe started typing something that I
+think is really really clear and like
+really important is like the first time
+I tried to build a tool calling agent
+for me for something that I really
+wanted. It was like and I've said I
+think I said this last week too is like
+it was I was building I had a make file
+to build my project and it was like
+docker build and run tests and all this
+stuff and I I started with just like
+here's the make file go build the
+project and I gave it access to call
+bash bash functions and then I kept
+doing things out of order and then I
+kept making the prompt bigger and more
+complicated and I was like first do this
+then do this then do this then do this
+and I think one of the points we're
+going to make on this show all the time
+is that there are certain things that
+models are really really good at but
+like if you already know the order. I
+spent like two hours trying to hack on
+this thing and get the prompt perfect.
+If you already know what the right order
+is, you could have just written those
+five make commands in a bash script. You
+don't need a model to do that. Exactly.
+So now I'm going to go run this code
+just to give people a little bit of an
+idea of what I've been doing. Um over
+here um I'm going to stop screen sharing
+for half a second while I load my API
+keys.
+Port. Okay.
+And I'm going to be back to screen
+sharing. Okay. So, I've loaded my API
+keys and hopefully no one will see them,
+but if you do, we'll find out. I I have
+I have a couple copies of them if anyone
+wants them. Yeah. Um, so let's go run
+this thing. And I'm going to do a
+really, really simple thing. I'm just
+going to call it run do something. And
+we'll just see what happens.
+UV run
+tools tool. Oh, I'm not in the right
+folder. That's why.
+CD
+2025 and CD bonus. What is this?
+Workshop
+bonus. Clear. Okay. UV runtools.
+py. So, I'm going to go send it a bunch
+of messages. And this is going to run
+some stuff. And the first thing I want
+to show people is the message I send is
+get pages 1 through three from the
+database. So we can I want to spend some
+time just reading over this prompt so we
+can see what happens. It's the same
+prompt that we had before. Um I'm going
+to move this over here so we can go see
+this which is saying the following. You
+are an agent with access to any number
+of tools. Answer in JSON with one of
+these schemas. And I literally just list
+out the tools field like I did over
+here. Um, I'm going to show what this
+parts tools
+does. This thing is going to add a
+tools.
+Whoops. This thing adds a tool field
+which is over here into my action data
+model and it lists out all the tool
+options that I have. So my tool name is
+going to be whatever execute command or
+something. It has the command timeout
+blah blah blah one read output and a
+bunch of other tools. Where are these
+coming from? What I did over here is I
+simply read the JSON schema and I just
+converted to a data model of my choice.
+This is the other point. You don't have
+to use open API spec. You don't have to
+tie yourself down to it. You might find
+that hey, the word tool name is fine,
+but actually it's going to be way
+better to not call it tool name. I just
+want to alias it to I want to alias this
+to like a function name. Oh, function.
+Yeah, exactly. So, we can change this
+and now the
+LLM will basically now call it function
+name. And that's the point. Don't tie
+yourself down because different models
+will have different behaviors and you
+need to be able to change this on the
+fly in a really easy way. You likely
+want it to be the same thing all the way
+down no matter what. Now I did something
+very unique which is I actually this is
+what I call it for the LLM. What what I
+actually call it in my code is like BAML
+tool name with dollar signs because I
+wanted to find that key and not
+accidentally pollute it from all the
+other JSON fields that people might
+have. Sorry I didn't quite catch the the
+the usage of BAML tool key. Can you
+Yeah, let me describe that again. Let me
+call this let me call a tool really
+fast. Let's just call like um add a
+we'll do this add a to-do actually. So
+we see over here add a to-do over here.
+So actually add a to-do to jot to send
+Dexter the uh the database
+ID and I'll say add a
+to-do. Let's just see what this happens.
+I have no idea.
+Um, I need
+it. Oh, and you can see what it actually
+did. It actually said right over here,
+detailed like due date, priority, and
+additional description. Why? Because due
+date, priority, and additional
+description. It actually pulled it out
+from here. I need it by
+tomorrow, May
+28th, and it's high pri.
+Okay. Okay. So, the model didn't select
+the tool, but it knew what the tool
+needed because it was in the pro.
+Exactly. So, it used the request human
+clarification tool and then it returned
+this tool back for me. And why is BAML
+tool name here? Well, that's because
+this is a special thing that I added
+that I wanted. So, for the sake of the
+prompt, I don't want to call it
+something special. I just want to call
+it function name because it's easier for
+the model. for the sake of my code, I do
+want to call it something special
+because who knows what MCP server is
+doing what under the hood and maybe they
+have another property called function
+name and I don't want to deal with that.
+So what I do is I just say for the LM
+we'll call it function name but in my
+codebase I'll call it BAML tool name so
+I can find it very easily and handle it
+in a more deterministic way. Does that
+make sense Dexter?
+Yeah, I got it. Um, I mean, you're still
+passing it into the prompt as function
+name. Yes.
+So, I don't see how it quite solves that
+problem, but I get I get the concept
+you're trying to get across, which is
+like you want to have kind of special
+reserve fields or something. Exact. And
+like if I want to call if I accidentally
+even if I call this to if I call this in
+the model, the model is going to get
+confused. Like we know this is going to
+hurt the model's performance. So I'm
+going to do the thing that's going to
+help the model the most and just alias
+that in field to whatever I want to call
+it. And then when when basically and the
+idea is like we haven't implemented the
+part of the loop that actually goes and
+calls that tool yet. And we're probably
+not even going to do that today. Um
+maybe if we have time at the end but the
+idea here is how do we narrow sorry what
+I do here is I say tool equals
+action model
+extra
+tools oh and this
+is okay cool tool this is going to be in
+any type it always will be in any type
+there's nothing you can really do about
+that um if because you're doing it
+dynamically at runtime exactly because
+we can't really help that. So, we'll
+just type it as a
+dict. And now we'll go do this. And now
+we can say like tool name
+equals
+tool.pop. What do I call that field?
+Name
+key. And now I have the name of the tool
+and then
+args are just the rest of it.
+And I can even say print.
+Yeah, let's let's see that. Let's run
+it.
+Yeah, cool.
+Let's run
+this. And
+um
+you're going to have to go get your
+prompt again. If you just copy the list
+of user messages out of the top, you can
+do it. Oh, wait. Oh, wait. Scroll back
+down here. Yeah, get
+that. And that's the same thing, which
+makes sense because LMS aren't fully
+uh Where did it
+go? Scrolling is hard. I should have
+made this a test case.
+And the other thing I noticed is that
+I'm actually not injecting the AI
+messages in here. So it sounds like
+there's a bug somewhere in my code. Oh
+yeah, right over here. I only print it
+out. Yeah, I think cursor deleted your
+AI message. That makes sense. But
+honestly, now it says right over here,
+I'd like to call the tool notion AI
+notion API MCP tool. And I just send
+these args in. And now I can just pass
+that into the MCP parameter, get the
+response, add it to my chat object in
+whatever form I wanted. it doesn't
+really matter. And then continue on with
+my
+loop. Um I'm going to pause here and
+just say, do people have
+questions? I think the biggest question
+that was in there was um that Joe was
+asking was like, okay, how do we do the
+embeddings and the narrowing in a like
+smart sophisticated way? Yeah. Um and I
+think that's actually more interesting
+than actually going and calling the
+tool. Although I think probably we can
+publish an example afterwards of like
+hey we brought in the Python MCP client
+and actually ripped it like yeah we can
+just call the tool or something. We can
+go do that too. Um I think you're right.
+I think this is probably the most
+interesting part. What I would do if I
+were here is I actually wouldn't do this
+in this way. The thing we've done here
+is not bad but really what I would do is
+I'd say narrow tools um list tools dev
+load
+tools. Um, and what I'm going to do is
+like tool file path. And then what I'm
+going to return is going to be a
+uh type builder
+object. I'm just going to call this
+right over here every single
+time. So I'm going to parse the tools.
+I'm going to parse tool path. I'm going
+to return this. And specifically I'm
+going to have is I'm going to pass in a
+query into here.
+And given a query, I'm going to narrow
+the tool. So everything looks everything
+should look almost the
+same except we're going to do
+this. And now we basically are going to
+load the tools on every single chat all
+the time and pass that object
+in. Now we don't Yeah, let's see how
+that works. You think that's going to
+work? Well, well, in this case, no,
+because I'm still returning narrow tools
+is still returning the 50 p tools. Okay.
+Um, like there's nothing that's
+happening over here. Um, but like we
+could use embeddings to solve the right
+tools. The problem again that I think a
+lot of people run into is the problem
+that we run into when we do
+classification. Most people make the
+mistake of saying that hey, I'm going to
+use this embed this description as the
+thing that I pass into LM and also the
+thing for embeddings. That is a mistake.
+Just like in classification, remember
+what we did and when we did a
+classification doc and I'll pull up that
+doc again.
+Um, hello. There's the screenshots are
+in the repo. Exactly. That's I'll just
+pull it up on here.
+Uh, because I think that's going to be a
+better way to just look at it. And we
+look at classification and we look at
+this like we did not send the same
+description to the prompt as we did for
+the embedding system and we should not
+do that because different different
+models have different behaviors. So the
+fact of being able to go ahead and we
+can say that hey the description for
+this category for the embedding text is
+different than the description that goes
+into LM to help select the right
+category is also true for LLMs. The
+description that I use here for this
+tool is likely not the best description
+for actually passing into an embedding
+model. Maybe I take the whole thing over
+here and I send that to an embedding
+model. Maybe I send the entire server to
+an embedding model all at once and all
+the tools under one server. It really is
+up to me of how I decide that and I
+shouldn't be tied down to go doing that
+in some other way. So even like this
+thing that we wrote over here of like
+picking the right tools, this doesn't
+actually have to be as simple as like I
+have a list of tools already. Go select
+that. I could say I have a list of
+servers which contains a list of tools
+and now go narrow from there. And that
+could both narrow the servers down and
+the tools down. So it's important that I
+maintain that control at all times of
+how I go do this. And one sophisticated
+manner is chuck everything in embedding.
+use the description of the tool to
+decide what you do. But what ends up
+happening in practice is like when I
+read this, this doesn't actually help me
+if I use the description alone. You
+could easily imagine having this, this
+is the same description for git github
+and
+bitbucket. That is useless to me as a
+developer. Um, you might have that. Hey,
+I know that you are logged in as a
+company that I you have connected to my
+organization. and you've connected
+GitHub. Well, then it doesn't matter
+what big bucket descriptions are. I just
+use a boolean switch that isn't anything
+fancy to just say I only enable GitHub
+servers and I don't enable uh Bitbucket
+servers. And you'll hear DR and I say
+the same thing over and over again,
+which is like there is no oneshot magic
+trick. And I think that's what people
+when when we saw the poll today, why
+everyone was so optimistic about MCP is
+it feels like that magic bullet, but
+it's not. you're just adding more
+software and like whether you want to
+use an API or not is up to you. Like we
+use REST APIs all the time. We don't all
+reinvent GitHub. We just use it and it's
+useful. So like yeah, it might make
+sense to use someone else's agentic
+system. But how you use it, how you plug
+it in is very important to your actual
+application and like that is application
+specific.
+Cool. Are we going to do it? Do you I
+mean I can write the embedding thing.
+What I will do is I will just go to our
+previous code and I will copy and paste
+it because we already have it. I don't
+have to re reinvent the
+wheel. Um
+but we had this thing up here which is
+narrow down
+category. It's literally going to be the
+exact same
+code. Um where did it go? Yeah. Yeah.
+And I think while you're doing that,
+like the main the main lesson here is
+right you can you can do this in a hund
+different ways. You can use embeddings.
+You can do this like I feel like I don't
+know the word for it. Um it's not rag
+but it's like basically like passing
+chunks of data into an LLM and having it
+like decide whether any of them are
+relevant. Passing lists of tools and you
+can have a really small LLM decide,
+okay, cool. These six tools are relevant
+and the rest of them are not. And you
+might get zero relevant tools on most of
+your queries. Um, but again it's a
+smaller, more focused prompt. Yeah, let
+me go change this code really fast
+because in order to go do this, what I
+actually have to do is right now what
+I'm returning here for every tool is I'm
+returning the name of the server and the
+tool and then the actual type that is
+associated with it. What I actually need
+to return now has changed. What I need
+to return now is going to be the entire
+tool object and the type of the tool.
+It's no longer a simple object because I
+need that object to be able to do the
+embedding to do the embeddings. Yep.
+Exactly. So now what I'm going to have
+here is I'm going to load the tools. Um
+sorry I'll load the tools. The tools
+will be did I change the type?
+Toolable. I'm going to load the tools.
+Tools will be a type of tools and
+values. This will be tool
+types. And now I have to go down and
+write this code.
+I will go do this and
+this narrow down my tools. So I will
+have a bunch of tools. For every tool,
+what I will do is I will
+uh find the embedding of every uh so
+you're going to use the raw JSON from
+the MCP server to generate the embedding
+text.
+Exactly. Is this correct?
+I have to do
+you don't have you need to grab the
+embed function. Yeah. So, what I'm going
+to do is I'm going to do
+JSON.dumps. I'm just literally going to
+dump that into my category
+and I won't think too hard about
+it. And we're pulling some language from
+the last one of we're using in in this
+one it's called categories in this one.
+In the uh tools one, it should probably
+be called tool, but yeah, we'll deal
+with that in a second. Um, I'm gonna
+rename this to field
+type. Got to import
+numpy. And most of this should just
+work. Oh man, look at auto doing our
+homework for us, building the uh summary
+of key takeaways for us. Yes, define a
+prompt with an action that's dynamic.
+List out all your tools. like we'll
+increase the matches to like I don't
+know like
+100. And now this is going to go return
+this. And now we just use this and we
+return a union and we're basically done.
+Um and that should basically just work.
+Uh text. Okay. Blah blah blah. I don't
+need that anymore. Let's run this
+sucker. This might take a while because
+I want to run embeddings on like 10,000
+tools. Um so we'll just see what it
+does.
+Uh, and I'm not running any of it in
+parallel because I didn't do it in
+async, which I probably should, but
+that's okay. Um, actually, get back to
+multipprocessing, dude.
+Uh,
+openi
+async async openi. Okay,
+cool. Uh, I want to go do this. Does
+input actually expect a list of ins? Um,
+I don't know how that's going to work if
+I send it multiple. So, let's not try
+that.
+Um, and then do this in
+parallel. How do I do this in
+asynciogather? Oh, wait. Asyncio.run
+async.io.gather.
+I am a little stickler for doing this.
+So, I will Oh, I see. I will likely
+wait. um and editing SQL
+and then if you if you wanted to keep
+this as synchronous. Okay,
+thanks Deborah.
+Async. Okay, cool.
+Is this working? Oh, and then I have the
+embeddings.
+Cool. Uh and then I just wait on these,
+I guess.
+Um, I don't
+actually I'm certain that this will get
+fixed at some
+point.
+Uh,
+wait. Okay.
+Okay. I think this will run. Um, you got
+to do async io.run run here or make it
+async.
+Yeah. And then I will have to do async.
+Um, we'll do this. And this is doing
+something incredibly dumb where I'm
+going to call the embed on every single
+call to this. So, I have no idea what
+this is going to do. Uh, UV add openai.
+UV add numpy
+um and all this seems to be a little bit
+I think repetitive from last time but
+that's because like the reason I didn't
+describe this is you can go learn about
+the nuances there very easily but the
+whole point of this is that you don't
+have to do everything you can just use
+the same principles and build them up to
+build more complex systems over time
+yeah so you could use embeddings to
+narrow this
+to narrow this down. Oh, sorry, Dexter.
+What were you saying? Oh, sorry. Yeah,
+there's a little lag. Um, yeah, you can
+use embeddings to narrow this down. You
+can use um you can use an LM to narrow
+this down. You could use some
+deterministic code that does someone
+mentioned having full text search.
+And I'm doing something really really
+dumb over here which
+is I am if I can I'm basically just
+embedding this each JSON blob completely
+independently.
+So I'm not even embedding the
+description. You probably would want to
+do like the name and the description or
+something, right? Maybe. I don't know. I
+I really don't know. The thing is like
+for every tool you probably want a
+special way to embed it and that thing
+is unique to that tool. And in fact, I
+mean, so yeah, and this is the point. I
+mean, we'll just keep saying every week
+is like the idea is not to get this
+perfect in an hour. The idea is to build
+a system that gives us lots of points
+that we can both test, that we can mock,
+that we can probe, that we can tweak so
+that we can optimize each part of the
+pipeline to the point where we can build
+a a system that as always gets the most
+out of today's LLMs. And this is this is
+sort of the approach that we're seeing
+both large enterprises and really hot
+startups are using all over the place is
+like the 100 MCP tools single prompt or
+thousand MCP tools sing single prompt
+one that that one just breaks down and
+like you could just use less tools to
+start but eventually you'll actually
+want to be able to have an agent that
+can do lots and lots of things and this
+is kind of step one in doing that. Yeah.
+And more importantly, like the fact of
+the matter is the actual embedding text
+that you're going to go embed is likely
+unique to your unique problem. The way
+you embed that tool is specific to you.
+And any description you use is likely
+going to be specific to you. So even if
+you have I mean you could even you could
+even pre-process and have an LLM read
+the JSON and spit out a really wordy
+description that then we go use to make
+embeddings out of. Yeah. And then I
+think you asked the question remod like
+could you not fine-tune a small
+classification model I mean you could
+that becomes another way to build the
+same function that we just built over
+here which is narrow categories you can
+build a classifier that does that you
+could build a random algorithm it's it's
+based on your use case and how well you
+understand your problem and how well you
+understand your problem going back to
+the eval episode that we did is like you
+should have a test suite that's puts a
+hundred things in here and gives you a
+score out because until you know that a
+certain approach is better or worse than
+another one, you're just kind of
+shooting in the dark.
+Exactly. And then like one of the ways
+that you see us doing this right now,
+we're just like I hardcoded a simple
+prompt into my system. I didn't really
+think about it and then I put a
+um then I just put a while true loop and
+I just kept running and typing just to
+see if it behaved correctly. Why did I
+add this human uh this uh this uh human
+message tool? Well, at this point, I've
+built a lot of agents, so I kind of just
+know that likely the human message is
+not going to have enough clarification.
+So, I generally will build this in since
+I'm building a CLI interactive system
+anyway. So, for a CLI interactive
+system, I'm just going to default to
+this as like good practice that I've
+learned. But that just experience of
+building these systems. Three minutes
+left. Any last takeaways here um before
+we jump to questions? I'm hoping this
+will run eventually. I forgot to build
+the progress bar. This is why I add the
+progress bar. It's so nice. TQDM.
+Yeah. Uh but no, really the last
+takeaway is just like MCP isn't that
+hard. It's just an API that does list a
+bunch of tools and let you call that
+tool. We already have a bunch of other
+ways to go do that as well. So you don't
+have to tie yourself to
+MCP. Calling an MCP server with a
+thousand plus tools is just a matter of
+being able to narrow down to small
+amount of tools correctly. The rest of
+this code is easy software and you can
+go look at exactly how we did this. Um,
+like how we converted that to a type
+spec is really easy. You're just
+defining open API specs and converting
+it to open API says boolean, you make
+that a boolean. Open API says string,
+you make that a string. Open API says a
+these three enums, you make that an
+enum. It's a pretty straightforward data
+model conversion. So that part isn't
+really interesting. Uh, the only part
+that is interesting is giving it a tool
+name that then you can go call.
+And to recap based on what auto said I
+think is really good is like basically
+define a prompt with a dynamic action
+call list tools optionally narrow those
+tools um inject those parse into
+structured data and inject them into the
+BAML prompt at runtime and then handle
+the LM response however you would in any
+other agentic system. Exactly. That's
+it. It's not that hard. It's very few
+lines of code. The lines of code get
+messy
+when when you start doing fancy things
+like narrowing down your categories
+using embeddings.
+Awesome. We had a lot of great questions
+during the show. Uh any other questions?
+Either drop them in the chat or put a
+hand up or just come off mute. What's
+been the best performing embedding
+model? Uh and what's been the best
+performing embedding you've made so far?
+How do you implement it? Um, I don't
+think there is a best performing. I
+think it's very use case uh specific.
+But in general, I think it's just
+like as long as you can control the text
+and the embedding, it becomes really
+easy to tweak it when it picks the wrong
+thing. So like I think that's the most
+important insight is like look, if the
+embedding picked the wrong tool, then
+there's no way the LM can pick the right
+one because it's not even in your input.
+So you just have to be able and the
+beauty of this system is if as if you
+have to tweak your prompt to change your
+embedding, you're
+stuck. Like that's a bad place to be.
+What you really want to be able to do is
+you want to be able to tweak your
+embeddings completely orthogonal to
+changing your prompts. If they're the
+one and the same, then changing one
+impacts the other. You want to separ you
+want a separation of concerns as much as
+possible. Is that Dexter? What about
+you? Have you seen models that are
+strictly better or worse? Um, I've seen
+faster embeddings. Yeah, that's pretty
+much it. Embeddings really just aren't
+that cool. But like there are ways now
+where you can make them fast at least.
+Yeah,
+I think the model is the least important
+part of it. The most interesting part is
+the content that you're trying to do
+things with, and that's what I would
+focus on given how good these models
+have gotten already.
+Yeah, I I agree. I think the the lever
+you want to try tweet like it's always
+like do the easiest thing first. Like if
+you can get to the performance grade
+that you need by changing the text that
+goes into the embedding, then why on
+earth would you go fine-tune an
+embedding model or try to use some fancy
+one or something like that? And and to
+to that point, if you can't do that
+level of accuracy, then you should go
+fine-tune an embedding model, but try
+the easiest thing first.
+Yep. And honestly, I would say even like
+try a thousand MCP tools in your prompt
+first and like see if that works. Why
+even filter like who knows maybe 03 will
+just do it and you don't your your use
+case is not specific to like cost or
+latency in any
+way up to 70% great then that was a good
+change and that was worth it. But if you
+had the embedding filtering and it goes
+up by 0.01% 01%. You can even say like
+is it really worth the extra code and
+the time from our team or do we need to
+take a step back and do a different
+approach? Yeah. Um Tim asked a great
+question. How long does it take to take
+a symbol embedding? I think it's just
+network dependencies sadly. So like I
+would just expect anything will take
+anywhere from
+like 50 milliseconds probably the
+fastest you can do and like a second is
+probably the worst case outcome. Um,
+what I would do is because embedding
+should be cheap is I would just deploy a
+small embedding model into your own VPC
+and just call it a day. Use like Bedrock
+or something else to go hosted, Azure,
+whatever you want. Um, and that's
+probably the best bang for the buck. Um,
+because as we're seeing here, processing
+of 10,000 embeddings does take a while.
+Uh, it's taking a long time for this to
+run and I can't really do anything about
+that. I just have to let it run.
+Um, other questions for
+anyone. Um, can I show the Can you show
+the call for narrow down categories
+again?
+Yeah, it's really right here. What I'm
+doing is my system I think he's like
+where where are you calling it? Oh,
+right here. I'm just saying it's like
+the the union of the tool options are
+the unions of all the
+tools narrow down to some
+amount and we'll post all this code
+online. So like you'll get access to it.
+We'll send the getter rebound
+everything so you'll be able to run this
+yourself. I'll probably disable the
+embedding thing or maybe what I'll do is
+I'll just save the embeddings to disk so
+you don't have to recomputee it uh
+unless you change the raw
+string. Um cool. Or you could just test
+this with a slice, right? You know, go
+edit the JSON file or just slice out the
+first 50 and test this. Um, maybe I'll
+do that
+because I suspect that's what's
+happening right now.
+Oh, he gave up.
+I have no idea how far in I got. There's
+50 cents of open AI credits down the
+drain.
+Okay, this might be faster. Doing a
+thousand network calls. Um, I realized
+10,000 was probably too ambitious. Um,
+I'm going to do less. I'm gonna do 100.
+Um, I'm going to only select the top
+like the 10
+matches. This will likely be a lot
+faster. Um, and really what I should
+have done is hosted a local embedding
+model and just run that. And now you can
+see exactly what happened. So I said
+what? And this is kind of cool. I said
+database stuff and it started building
+Superbase into my tooling system.
+Right. And actually it said notion API
+get page which is probably right. It
+picked the superbase MCP server uh
+restore page database create a new
+database archive page and everything
+else. You can see that some of these are
+totally
+wrong. Um but we can go do this. Um and
+it actually asked me a really useful
+question. Yes. But I want you to
+navigate the
+browser to
+then find the database ID. And now
+hopefully it'll come up with browser use
+in the prompt when it does this. And
+that's exactly what it just picked one.
+Yep. Right. Not only did it do that,
+actually list it out and picked browser
+base as a thing. Can we can we see the
+list of tools that made it in like the
+top the top 10, top K or whatever? Yeah,
+there you go. and it was able to go pick
+that through because I'm only passing
+the last message and it basically just
+works. I think that's the whole point of
+these systems. Um, but if they didn't
+work, then what I would do is I'd likely
+like likely have to somehow modify the
+object that I'm embedding in some way so
+the right thing did get selected. That
+I'm I'm glad I ran that with a shorter
+tool because then we actually got to see
+it working into I think that was a great
+call. Um, sick. But the principles are
+all the same.
+Cool. All right, folks. Thanks so much
+for coming by.
+Thanks for coming, everyone. Uh, we'll
+see you guys next week. Human in the
+loop. We're going to do async. We're
+going to do we're going to do autonomous
+agents. We're going to do clarifying
+with the human for a while. I'm really
+excited to show some human in the loop
+code.
+Awesome. Thanks everyone. Bye folks.
+Good luck. Good luck.

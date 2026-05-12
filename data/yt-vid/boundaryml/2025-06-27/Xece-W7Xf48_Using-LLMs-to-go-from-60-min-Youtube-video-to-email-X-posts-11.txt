@@ -1,0 +1,2331 @@
+And we are
+all right. Um, let's get to it. 10:05.
+Um, so welcome everyone to our next
+episode of AI that works. Our whole goal
+here is always the same. Write code that
+works and see if we can do some
+incredible things with AI that doesn't
+uh that doesn't depend on waiting for
+GBD 26. My name is Vive. I am one of the
+creators of BAML and my wonderful
+co-host is Dexter. I'll let him
+introduce himself. Uh, I am working on
+My name is Dexter. I build things. Uh,
+that's probably all you need to know.
+Uh, try to help people build very cool
+AI stuff. Um, whether it's agents,
+whether it's pipelines, whether it's
+fullstack applications. Uh,
+yeah, that's that's I'm not going to go
+deep into it. Um, real quick, uh,
+announcements, just updates. Um, for
+those of y'all, I'll just say it again
+one more time in the stream is like, so
+we're going to do these, we do these
+every Tuesday at 10 a.m. Um, and then we
+launch the I guess this is good context
+to lead into where we're going. Um, we
+publish the videos Fridays at 8 a.m. Um,
+and we will push up everything in this
+show will be in the GitHub repo here.
+Uh, I'll put in the Zoom chat. So, all
+the notes from previous episodes.
+Everything will be live by Friday. Um,
+I have a short link, but this is just
+the GitHub repo. Oh, that's not right.
+Sorry, hlyr.devitw.
+Um, that'll take you to all the previous
+sessions and you can watch the
+recordings. You can see the notes and
+the notes from this session will be
+there and any useful links and things
+like that and all of the code.
+Yeah. And it takes a lot of work. The
+reason that we try and share all the
+code is honestly because there's a lot
+of people out there talking about how to
+go how you can theoretically build
+things.
+We just want to see the code. We're all
+engineers or eventually everyone will be
+an engineer. Today everyone needs Excel.
+Tomorrow everyone's gonna write code.
+It's just the way it is. We might as
+well share all the code and share what
+we can learn along the way. Um with that
+in mind, today's topic is one Dra and I
+have we're very very very very excited
+about. Um all this work that we do every
+week is really freaking annoying
+sometimes. This actual we love doing it.
+We love doing it. But it's I agree. And
+I think the part that's the most
+annoying is the manual part of like
+downloading the videos, uploading them
+to YouTube, getting the transcript,
+sending out the email afterwards. And
+sometimes you probably notice like four
+of our episodes didn't send an email
+out. That's because that's not what we
+love doing. We just like writing code.
+That's the thing that we love the most.
+So we thought, why don't we actually go
+put some of the practices that we talked
+about in the previous episodes into
+practice and build a pipeline that can
+go do something. And the thing that we
+thought was worth doing was really
+building the AI content pipeline. So
+what we're going to start off with today
+is we're going to screen share. We're
+going to show you a live demo of what
+works today, what doesn't work today.
+Then we're going to talk about the
+architecture diagram on a whiteboard.
+And then afterwards, we're going to go
+make the pipeline better because I think
+those are the steps that I find to be
+personally really interesting.
+So with that, let's kick it off. Um,
+today's is going to be even more
+interactive than normal. So, if you have
+questions, please hop off mute. Just
+come and ask yourselves. That's why we
+do this over Zoom and not a podcast
+recording software or anything else
+because it's just way faster and people
+get to ask real questions along the way.
+Um, with that, let's get started.
+And I will say I am one of the least
+vibe coded people out there. I don't
+really vibe code. Um,
+but thanks to Dexter and actually uh
+credit to my cousin as well,
+I'm a big believer everyone should be vi
+coding uh a lot more than they think
+they should. If you were vioding before,
+you probably should v code more than you
+thought you were. And here's what we
+were able to do with this pipeline.
+So, right over here, the first thing
+you'll notice is we are able to sync
+with Zoom and actually record all the
+previous recordings up here. So, we can
+actually see any of the previous
+recordings. You can see one right over
+here. This current one is literally
+going on right now. We started the
+recording and it pops in immediately. We
+can see our previous recordings and we
+can just import and process them. What
+happens when you import and process the
+recording? I'll just kick one off. Um is
+I'll just real quick call out. It says
+the title is still says cracking the
+prompting interview. I think that's like
+inherited from from BAML, but this is
+this current episode.
+Uh oh. Or inherited from Luma or
+whatever from Yeah. When Luma created
+the Zoom, it left the title.
+Exactly. So, we'll just start off this
+one. AI that works designing emails.
+We'll create the import. So, now you can
+see the video process. This is one we
+already did all the work in the email
+for, but um the idea is you going
+forward we would use this. So, while
+it's processing, I'll let it kick itself
+off and you can actually see what it's
+doing. When it when it's processing,
+it's actually going ahead and
+downloading the full video. And it's
+going to go ahead and eventually it'll
+get to a point where once the video is
+downloaded, it'll actually upload itself
+to uh YouTube automatically. It'll
+download the full transcript. Then it'll
+start producing key points and video
+summaries. And then after it's done,
+it'll actually produce like an email
+draft. I guess I don't have that here.
+This one didn't finish. Let me
+once it's done, it'll actually produce
+like an email draft of what to go send
+out. I'll produce like an exp post that
+we can go copy and paste and post out
+there and it'll produce like LinkedIn
+content as well. So, this is what we
+mean by multi- channelannel content.
+Download a 60-minute video. Uh, go for
+it. Go summarize it. Get the key topics
+and takeaways and then go draft things.
+Now, what you'll notice here is that
+this email does read like AI still. It's
+still not Yo, this email sucks, dude.
+Exactly. So, we're gonna talk about how
+to make it. Did you even did you even
+look at the prompt? No, I didn't. I vip
+code the whole thing because the point
+what I really I think this is the point
+I want to stress today is before you can
+even work on your AI part of your
+pipeline, you're not even at the point
+where you can start working on that.
+What you need is infrastructure that you
+can actually iterate on. And if we
+hadn't built this whole system out that
+could do the glue code, building the AI
+part is completely useless because it
+doesn't really matter. I still need to
+build the rest of it. And the rest of it
+is actually critical to my iteration
+loop. And we talk about this in our eval
+video a lot where if you don't if you're
+evaling, you should spin up a quick
+little UI to go determine if your evals
+are correct or not. Go compare the
+differences. If you're building a
+pipeline, you should be doing the same
+thing. And right here, you can see the
+same thing. It actually is going ahead
+and let me see if the socket connection
+works. Yeah, there we go.
+It's actually going to it's actually
+able to also stream out the outputs if I
+wanted to, which is really useful for me
+to iterate a little bit faster along the
+way.
+I'll pause really fast questions so far.
+Cool. Let's keep on going. How long was
+it end to end? Did you say three hours
+or something to build this? I logged off
+after three hours. I don't know how late
+five was up last night.
+It took a total of 6 pm to about 2:30
+a.m. um combined with an hour and a half
+break in the middle.
+I
+pne
+you're new to the session. Pne pr you
+got to go watch the other episodes. We
+don't we don't do frameworks here.
+And the reason we don't do them is more
+often than not they just get in the way
+and they make it harder to go do things
+rather than easier. With that, let's
+talk about what this architecture
+diagram ends up looking like. Um,
+unless there's a couple more questions
+about this itself. Um, yeah, let's let's
+uh let's draw it out and then let's
+let's make the let's make the actual AI
+generated stuff not suck. I agree. All
+right, pull this down.
+Oops. Why is my mouse not working?
+We did record the whole thing. You can
+watch it at 2 to speed. We'll post it.
+Well, not the whole thing. Yeah, we're
+we're gonna post the recording. I uh
+Yeah, there's I got to we got to edit a
+couple things out, but yeah, you can you
+can watch the the beginning.
+All right, so let's talk about what the
+architecture of this whole system is and
+how we actually did this. And we will
+probably try and record more of our
+coding sessions along the way. uh if
+people find it interesting, we can
+invite you to them and watch us code in
+real time as well uh along with just uh
+going to go do that. So there's actually
+there's actually three main parts to the
+system
+and I think it's it's useful to draw
+them out totally different systems.
+This one is the database.
+Then we have the back end
+and then we have the front end.
+Okay. So another thing that we did is
+what we said is
+we will actually not allow the uh front
+end to really get data from the back
+end. It's not allowed to. It's allowed
+to issue requests to the back end but it
+can't get data from the back end. The
+back end is allowed to read and write
+from the database and the front end is
+allowed to read from the database.
+So we get really really nice queries of
+how things are being built out. And the
+reason that this is so important is
+because if you're doing something like
+streaming or interactive UIs, building
+out the system to from your back end
+that communicates with your front end is
+a pain in the ass. And if you're doing
+it on a lot of different places all the
+time, this is what real-time databases
+were made for. Just use them and you can
+solve a lot of your pain and you might
+run into and so basically the the data
+API is just your database schema. The
+front end just needs to know the raw
+schema and it can query whatever you
+want to expose to it, right?
+Yes. Exactly. So as long as you have
+like a view in your database that is
+accessible uh that is read readable and
+you have like some materialized view on
+it that is secure doesn't have anything
+like PII data or something along that or
+at least requires like authenticated
+users to access it then you can go ahead
+and go access this along the way. Um it
+does require some consideration of
+exactly how you do it. The easiest way
+to do it is a materialized view if you
+want to do it securely on your actual
+data. So you can go configure that in a
+good way.
+Um but once you can go do that now
+you're able to build a pipeline that is
+mostly just workflows in your back end
+that is issuing work at one after
+another. So for example and you kind of
+get you get rid of this like state
+machiny thing where the front end's like
+pushing data and then fetching it back
+out of the back end. It's kind of this
+unidirectional flow. And I think a lot
+of like this happened in React. We had
+React for like a year and a year and a
+half. And then people realized like the
+current backend paradigm in React, which
+at the time was things like Backbone.js
+and and things like that, just didn't
+work well for the amount of complexity
+people were using to add React into
+their apps. And all this stuff like Flux
+came out and there was explosion of like
+six different frameworks all came out
+that one summer of like how do you do
+this unidirectional data flow because it
+was what worked for real-time dynamic
+applications.
+Yeah. And this is a pattern that we've
+seen happen a lot like we just find it
+way easier what you and this is similar
+to video games and all these other
+things that you might want to do uh
+where what you really want to go do is
+you have some what I would call like
+state of truth that is represented here
+and all you want to do is you want to
+render the truth as fast as possible to
+the front end and it's really easy to do
+that when you're able to go ahead and
+actually model the truth in a way that
+is representative in the way that the
+front end can use it and the challenge
+challenge then becomes building a schema
+that everything else can go reuse
+correctly. So you do have to plan that
+out a little bit, but I think it pays
+for itself. Um, personally in terms of
+like the developer ease and how easy
+this ends up being. This also does
+really nice componentization for both
+like paralyzing workflows in terms of
+how many people can work on it and not
+just people but agents. It makes it way
+easier for my uh front end to actually
+understand what it's rendering. If now
+the one part that we run into is in
+order to go do this, what you'll find is
+you have data models. Um,
+sorry, I'll draw another rectangle. You
+have some data models that you're saving
+into your database
+into here. And these data models both
+have to be used by Python and written
+from Python. And then they also have to
+be used and written by Type.
+Having some way to keep these in sync is
+also really important. Otherwise, you
+end up again in a world of pain and that
+doesn't really work. And figuring out
+which side you're on is really, really
+important of how you go do that. But
+once you can nail that down, your
+iteration loop is going to be really
+fast. And adding new features, as we'll
+see today, when we add another feature
+such as chapter summary into our system,
+becomes a thing that you can just buy
+code trivially
+and you don't have to think about it
+anymore. uh because your agent kind of
+understands the architecture of what
+you're building out and it's so nicely
+componentized that it doesn't have room
+for making mistakes along the way. It's
+like an a you basically built in an API
+contract. If your front end was both
+reading and writing to the database, you
+now have a choice ever the agent now has
+to make an implicit decision of do I do
+this in the front end or do I do this in
+the back end and that's a choice
+and it might make one choice correctly,
+one choice wrong. But the more you go
+along, the more choices that will be
+made incorrectly just by volume and by
+the nature of it happening
+automatically. By doing this, we make a
+very clear direction of what Dexter is
+saying. It's very easy what it does. The
+front end's job is to render the content
+and issue new background tasks. The
+backend job is to plum and churn on data
+and eventually write updates to the
+database. The database's job is to send
+data out to the front end as soon as
+possible. And now it's very clear what
+we have to go represent along the way.
+Um, with that, let's talk about some of
+our routes. Um,
+I do have a very opinionated stance on
+what's a great data model agnostic
+library as we'll see today. Um, but
+we'll show that in a second. We'll show
+the full code.
+Um, so what's a what's the APIs that we
+actually have? We have a couple APIs
+that we defined. Um,
+we have Dexter. Do you remember what
+they are by
+video? We have one API to like uh submit
+a new request. Uh did you push the
+latest code? I can pull it down and and
+pull that out real quick. Yeah, let me
+do that. Actually, I don't think I did.
+Um Oh, I might have.
+I guess I did.
+Uh cool. I will get the API endpoints.
+Turns out there's uh AI is pretty good
+at generating a list of API endpoints.
+Provide feedback. Um and then we what we
+do is we submit a new request, provide
+feedback. Um get list of videos. So
+there are some things that we do from
+the back end. Um get list of videos,
+provide feedback, and then what's the
+other stuff? I think there's one more.
+Get title. Oh, there we go. I don't know
+why I didn't do that.
+Okay, so these are basically all the
+APIs that we have. Um, we did have to
+build one integration because we get
+actual Zoom API calls. We don't want to
+do that in a real-time database and we
+want the back end to have access. So
+this is something that the front end
+queries from directly. This is a way to
+add feedback to a draft. So, if you
+don't like an email, um what we're able
+to do is we can just go through and say
+like, "Oh,
+um I can just leave feedback and say,
+eh, this is
+not long enough."
+Dude, you got to make it more uh Jan
+alpha enough uh emojis.
+And I'll just refine the email. And what
+this will do is this will commit a task
+and eventually the email will get
+refined along the way. Uh and I did not
+I think I don't know whether I don't
+know if you're planning on um getting
+this but I think it would be really
+helpful to kind of see the sequence
+diagram or the flowchart of like how how
+stuff flows through the system. Yeah, I
+was going to get to that once I show all
+the routes. Okay, that's a good idea.
+So and then we basically have all these
+routes. So let's um let's look at what
+this actually ends up looking like in a
+sequence flow in that case. So we have
+all these things. So the first thing
+that we have is Oops. I can't draw it
+there.
+I will try and do the side by side. Oh,
+I'm missing a couple end points. One
+sec. Oh, you are. Okay. That's what I
+thought. It looks like you don't Yeah.
+Yeah. The first five are actually the
+most important.
+Oh, did I lose this?
+Oh, sorry. I have to adjust my Okay,
+there we go. Um, so what we have here
+looks like this. The first step that
+happens is the back end submits a task
+to say like I want to process this
+specific meeting ID.
+Uh, the front end submits the task to
+submit I want to process meeting ID. The
+back end then gets all the submits a
+background task. So it responds very
+very fast to the front end saying cool I
+got you. And then the background task
+will go ahead and kick off and then say
+something like
+the following where it will say
+something like um download
+download video plus transcript.
+Um finding the video is a little bit
+more complicated I presume because not
+all Zoom videos will only have one video
+say sometimes have multiple because
+people start and stop the recording and
+other things along the way. So we have
+to go do that.
+Then we will kick off a couple jobs in
+parallel. One of them is upload to
+YouTube
+and then simultaneously
+we also kick off the
+summarized uh summarized task. Once the
+summarized task is done, we kick off
+three tasks in parallel again.
+Uh, draft email,
+draft Twitter,
+draft X, and then draft um, LinkedIn.
+Does the summarize task also output the
+like key points and stuff like that?
+Exactly. That that's what it output. It
+outputs like a general summary of
+everything. Um, so the database updates
+from each of these is like basically
+like
+mark uploaded in DB.
+Exactly.
+And then this is like add summary points
+to DB.
+Exactly. And actually this one streams
+in. So I actually like save the whole
+thing on every update of the tick of the
+stream. Yep. Um,
+exactly. Um, and technically there's a
+special thing that I Oops.
+There's one last thing that I do over
+here, which is like
+Whoops.
+I I mark I I mark the database as it's
+done summarizing.
+It's important I can like mark the state
+at each single one of them. And that's
+that that's something else I had to do
+because once I was done some that's
+actually I I think that's actually worth
+maybe taking a sec to drill into is just
+kind of like having your kind of job
+system just be a table with a bunch of
+nullable columns and you can tell what's
+been done just by what's set in the
+database. And in that way, I mean, it's
+it's not as like robust as something
+like big and like chunky like temporal
+or something like that, but it is
+honestly probably good enough,
+especially if you're building like
+internal tools for yourself. Um, which
+is, uh, super super high leverage I
+think these days. Um, just that idea of
+like a really simple job system.
+The problem that I ran into when I was
+doing purely nullable fields is that it
+wasn't I wasn't doing JSON parsing. Uh,
+sorry. It like once I was streaming, I
+had something in there when I wasn't
+done. So, I actually needed to keep a
+status of it a little bit more. I see.
+Because like I needed to know the status
+of like is it started, is it streaming,
+or is it done and the status was really
+important
+and having that available was important
+to actually show the UI there. Um, and
+then the other thing that I did was I
+got bored so I added one last thing. I
+added uh while I was at it, I was like,
+"Okay, let's just why not?" We did these
+three things. So, I just asked it to
+literally follow this example along the
+way. And I said, "Draft a title for me
+after you're done."
+Uh, so that became the next thing that
+we did. So, now we had four pipelines
+that could trigger and process. Once
+this was done, I have another thing that
+I could do, which was a user, Do
+Yeah. Sorry. Do me a favor real quick.
+Hit five.
+and just change the arrow to this one
+over here because those macaroni those
+macaroni errors arrows suck. I agree.
+Oh, so you got Yeah, if you hit five
+twice, I think it cycles through. It
+used to happen to me all the time. Still
+happens to me all the time. Thank you.
+This is why I'm really bad at Excel. Um,
+then we get another pretty [ __ ] good,
+dude.
+Now we have another request that the
+user can do once all these are done. And
+remember all this is streaming to the
+real-time database. So it's very very
+easy for my front end to render this
+because it's just rendering a blob of
+JSON that is strongly typed and I know
+how to render it. So it becomes trivial
+for me to go render. I just build react
+components for all those types.
+Then I built a second part of the
+pipeline which said like if the user
+will make like a draft ID content type
+and then their feedback. So the user
+wants to commit feedback to one of these
+emails. So each of these drafts has an
+ID. They have a version history and
+everything attached to it. There's
+different content types and medium. So
+like email, X, and LinkedIn.
+And once this happens, we do the same
+exact thing that we were doing before.
+Oops.
+Where this time instead of our normal
+background, we kick off another
+background process.
+And this background process again
+responds very very fast to the OM saying
+okay cool I'll I'll take care of that
+for you.
+And once that is done, it goes to the
+real-time database, pulls out the draft,
+pulls out the transcript,
+uh, draft,
+transcript,
+and then issues that to a prompt, saves
+a new version, and then writes that to
+the database. And that's all this
+pipeline is. There's nothing fancy about
+this and it's really just kicking off
+background workers constantly to go do
+work for me while I go and allow myself
+to iterate fast along the way.
+Does this give everyone a good idea of
+what the background pipeline looks like
+and how we're able to go and iterate on
+this pipeline along the way?
+Uh there's a question from Vijay.
+So in the first instance when you
+created the draft, did you use the
+transcript or did you use the uh summary
+of the transcript? I just used I I I at
+the time I didn't actually think about
+using the transcript. So I just used the
+transcript. We can update that to go use
+the transcript as well. This is why the
+summary. Got it. Yeah, I only use the
+summary, not the transcript. Sorry. Uh
+this is why the these initial drafts are
+bad.
+That's uh so like when we go look on
+this and we actually look at the UI on
+here. Where'd it go?
+Oops.
+Find the right screen.
+Don't know where it went.
+I don't know where Arc is. Sorry.
+Okay. Okay, I guess it's here. Um, this
+is why the original draft was really
+bad. And like now that I told it to go
+and add more feedback with like emojis,
+you can see it added more emojis in this
+one, but the first one didn't have any
+of that. And like it's going to be bad.
+It doesn't have any of this. It writes
+your name. I have to fill this stuff
+out. It's kind of annoying. Um, but
+that's because I have really given it no
+context. And the AI part of this is not
+even close to done. Okay, cool. So, so
+to test this, so to test this, what
+we're going to do is we're going to
+change the prompt and then we're going
+to reimpport a whole video from scratch
+and then we're going to see if the
+drafts are better, right? Well, we can
+just regenerate the summary. But yes, uh
+we don't actually have to No, no, I was
+No, that was your leadin. You're This is
+This is where we uh we go way down into
+the interloop and we say, "Hey, okay,
+cool. Let's go get a real record from
+the database and then like write a test
+for it." Yeah. Let's go do that.
+Actually, that's the uh that's the old
+way. That's how I would have done this a
+year ago is just kind of test the thing
+end to end, right? Well, I I think
+that's the point like let's show the end
+to end testing loop and let's show the
+faster loop once we're able to go do it.
+So, in this case, does that answer your
+question, BJ?
+Yes, it does. Thank you. Perfect. Yes.
+So, now let's go ahead and actually go
+and try and make some of this pipeline
+better. Now, there's a couple questions
+asked about how do we keep all the state
+in sync and everything. So, I'll just
+show you a little bit more of the code
+and what it ends up looking like because
+I think it is useful to have some dive
+through before we go and change a bunch
+of things. I'm also going to show how to
+go make this work with claw code and how
+to go edit it to add a new pip part of
+the pipeline because the problem that I
+actually noticed the most if we actually
+look at some of the prompts,
+they're just long. it just like doesn't
+really talk about the real part of it.
+Like it adds a feedback. It dumps a
+transcript in there, which is fine, but
+it's like
+it it doesn't really really really
+understand what I mean by actually
+making the prompt better uh and what
+makes a good email. It's same thing with
+this. is like it doesn't really
+understand about what is a good Twitter
+thread when it does this along the way
+cuz I don't think this
+it's it's giving it instructions about
+what to do not so much about like what
+looks good like what good looks like
+exactly and like but we can't focus on
+what good looks like until we have the
+mechanics of what to do really plumbed
+in because I will spend a lot more time
+iterating on the infrastructure like I
+said this took about eight hours of work
+to go from nothing to a fully generating
+SAS flow that does this. Um, and that's
+worth doing. But if I just built the AI
+part, I wouldn't even if I thought this
+was useful, I would Dexture and I
+wouldn't actually use this app. It would
+be unusable. So, we need to build a flow
+that made sense for us in a way. And
+then we can go and make the AI part
+better. Otherwise, you just have a bunch
+of Python scripts that you don't
+actually use and now they're trash. And
+that was a waste of time. So building
+the whole thing out is worth it because
+then you can decide how to actually
+design the AI along the way. Um with
+that let's talk about some of this
+stuff. So this data model called Twitter
+thread. This is what we're rendering
+both in the back end and the front end.
+I'll show you how this gets used in the
+front end.
+Uh and I'm just going to exclude all the
+val code.
+Oops.
+Um all we do is we just regenerate
+types. and we generate types for both
+front end and backend types and now we
+just use them here. So in this case we
+have a Twitter thread. This gets
+imported and now my UI component just
+renders this. So what's really nice
+about this is if I tell the model to go
+change what it means to be a Twitter
+thread, my front end will break at
+compile time and now it will go actually
+cloud code can go fix it for me. So I
+actually get types that are in sync
+perfectly along the way rather than
+anything else. Um and the way that I'm
+able to do this is I just codegen both
+types. I cogen the Python versions that
+my back end uses and writes to the
+database and then I co-gen the React
+versions that my front end uses and I
+just use the same types to basically
+issue the glue code along the way. So I
+think Joe asked that question earlier I
+use to go do that and this is what I
+found worked for me.
+Um, okay. So, you have the back end. The
+back end is getting the transcript and
+then it's passing it to methods in BAML
+in Python with using Pyantic. And then
+when it gets them back, it's storing
+those to the database. And because it's
+all generated from the same BAML kind of
+contract API specification, when those
+same kind of JSON objects get served to
+the front end, the front end can use the
+generated client uh that that they got
+made from the exact same specification
+to render those things and have type
+safety around them and know exactly what
+they look like when they're being
+rendered.
+Exactly. Exactly. Cool. So, you get
+really, really convenient type systems
+along the way. Um, with that, let's
+focus on actually making some of these
+prompts better. Um, so the first thing
+that we'll notice is generate a custom
+Twitter thread. Um, one thing that I did
+not do because I was voting, um,
+I found this helpful writing the UI much
+better. Um, the V0 UI is okay, but the
+problem is when you're actually syncing
+a back end and front end together, using
+Vzero is a really really it's hard. Uh,
+because what I need you have to find a
+way to well, you have to find a way to
+make sure vzero fully understands the
+like data contract and the models that
+are available. Right. Exactly.
+Otherwise, it just changes things and
+then I'm stuck in a I'm iterating way
+slower. And it's fine if your entire app
+is purely built in Typescript. But if
+you have longunning workflows, it's not
+going to be built purely in like your
+Nex.js app won't define everything.
+Um, and like that just doesn't work. So
+that's why I had to go down this road.
+And I think a lot of people are using
+like non Typescript backends or they
+have non-typescript back ends already
+that they want to pull data from. And
+it's just useful to have one data
+architecture that does this. You can
+still do it in v 0ero, but it's just the
+it doesn't have the context and if it
+breaks the types, then my whole app is
+broken. That sucks.
+Um,
+with that, let's focus on specifically
+one of it. Um, I think the thing that I
+dislike the most is actually the email
+draft. And Dexter and I have a couple
+emails that we've sent out. We like
+those. So, why don't we just do
+something silly
+and see if we can make the email draft
+better by doing the dumbest thing
+possible, which is first Oh, wow. Is the
+never use prompting guy going to use fot
+prompting in this episode. I'm going to
+add a transcript actually first. Okay.
+Okay. Now, this is not going to work.
+So, what I'm going to do is I'm going to
+go to cloud code and I will tell it
+um to um update
+the Python code that calls
+email draft to pass in the transcript.
+And this is I mean coming back to that
+idea of like VZ needing more context
+about all your other systems to work
+well. Um I think it becomes like your
+job as the prompt engineer to or
+actually we'll say context engineer
+which is like to give it a good prompt
+and then give it all the context that it
+needs. Uh and some of these like coding
+agents that run in the CLI like cloud
+code or even cursor agent like they tend
+to be pretty good depending on the size
+of the project. Um it gets a little uh
+uh tricky harder. You just have to be
+more thoughtful if the project's huge.
+But especially for small projects, they
+can be very good at finding all the
+right context for you. So that and kind
+of taking that job of like getting all
+the right files and pasting them into
+the right place. Um, take that off your
+plate basically.
+Exactly. And now you can see it's
+passing the transcript for me
+automatically.
+And in theory, uh, do you want to make
+this? Uh, sure. I don't want to ask
+again. YOLO. I just gave it all. Let's
+go.
+Um, and now that's actually going to go
+ahead and go update the transcript here.
+Uh, I haven't done a session on cloud
+code and cursor, but we probably will at
+some point. Dexter was on this yesterday
+and I was not about it, but cloud code
+is in my opinion much superior to
+cursor's agent. Um, a relative. Yeah, we
+will we will do in the next couple weeks
+a deep dive probably into vibe coding.
+It'll it'll be a little bit different
+than like the like, hey, let's go let's
+go like really fine-tune, refine a bunch
+of pipelines, but I think it could be a
+fun episode.
+Um, what do I not like about fuchsia
+prompting? The reason I think I
+specifically say this so egregiously and
+so aggressively about fat prompting is a
+lot of people use freeot prompting as
+like a crutch to try and get the model
+to do what they want without
+understanding that they're actually
+injecting a lot of bias in the model. So
+let's say you're building a healthcare
+company and you're using Fshot prompting
+to teach the model how to do like um um
+like detect the right verbiage from a
+doctor. That could be good or it could
+be really really bad. Like let's say for
+example you wanted to go tell that you
+want to talk about like some sort of
+like weird liver disease that a person
+has and that's the shot example you use.
+It's a really rare disease. One in like
+a million people have it. So it's really
+unlikely to impact anything. and then a
+customer comes in with the same exact
+name as the example in your prompt in
+your future example,
+you're gonna have a hard time not
+telling telling model this is truly an
+example and not an example that's
+related to that customer from a
+different doctor. It's just a hard it's
+gonna infer meaning from things that you
+didn't intend for it to like include as
+part of the example like that people
+named you know people named Sarah are
+likely to have a liver a rare liver
+condition or something but like when you
+give it that example it's going to learn
+to a different doctor right even a
+simple assumption just the person Sarah
+is going to a different is going to a
+different doctor now and it's an updated
+conversation you're giving me an example
+but it's also an example about the same
+person and whether or not the model
+understands that or not doesn't really
+matter. It's just more so just that like
+you just have to know the biases you're
+injecting. In our case, we know Dexter
+and I are recording these videos. We
+know our tone is what we want to go
+embed. So if we put a few shot example
+in here, it's just going to do what we
+want exactly because we're not going I'm
+not going to run this on any other
+videos but the AI that works videos. Now
+we do recordings for our team meeting.
+Sometimes if I use the same prompt in
+here, it will not generate a good email
+because I've fought example it for that
+specific scenario. So what I really
+really like is this thing that I like to
+call dynamic fshot prompting uh
+what is it workshop and that works. It's
+just that most people don't do it. Um or
+like partial fot prompting. So like
+instead of actually telling the model
+that like oh in this case if I want the
+model to really understand that
+engineering is only people that actively
+code. So like a VP of engineering isn't
+engineering their product. I can write
+that like this in my prompt where I
+don't actually give the full output in
+my prompt. I only tell it like oh
+because they don't code the category is
+product. I missed out on everything
+else. I didn't add any other fields. So
+I'm letting the model really understand
+this is truly an example. It's even if
+there's another person named by Gupta
+this even to a human would be clear that
+this is an example without having to
+read too much into it. infer the the
+default inference as an example and also
+you can do more dynamic stuff like for
+example dynamically change the name of
+the if for whatever reason I know the
+person has a name vibupa change this
+name
+to be different for that example right
+and that's just things that you can do
+to go make your fa prompts a lot better
+because because if your prompt uses vibb
+gupta and then you pass in a new thing
+and the person's name is also vibb gupta
+then it might assume that it's the same
+that follows that pattern when really
+you'd basically want to say like okay
+whatever the person's name we're testing
+on make sure the name in the fshot
+example is different before we launch
+the prompt. Exactly. So you want to kind
+of find an you want to make it I think
+the idea of fshot prompting thing is you
+want to guarantee the model thinks of
+the thing you're providing as an example
+and that is a cool tangent.
+Sorry uh let's uh let's test this thing.
+So, let's add the trans. We added the
+transcript part in there. Um, and like
+now I'll read summarize. So, the only
+thing we changed So, the only thing we
+changed was we're using the exact same
+prompt. We're just also passing in the
+transcript. Exactly. Um, okay. And this
+is going to be really annoying because
+it's going to it just takes a while to
+go run. And while we're doing that, I'm
+actually going to go add something and
+it's streaming this out. So, we'll see
+if this is better or worse. So, sorry.
+Did you just re-trigger all the
+processing for all the drafts?
+Basically, resum just for this one.
+Yeah. Yeah, exactly. For all the drafts
+and the summary. So now it's going to
+cost me.
+Yeah. Go ahead. So when you when you do
+reummarize, it's going to repull out the
+bullet points for takeaways and key
+topics and then it's going to go because
+the upstream thing changed, it's going
+to go regenerate all the drafts.
+Exactly.
+Um that's what I have kind of defined in
+here. Um and it just takes a while. I
+don't know why the malls are so slow
+this morning. Uh but they are. Now, as
+you can see, my iteration loop here is
+kind of hosed. It's very, very, very
+slow. So, I'm going to try and make this
+iteration loop a little bit faster by
+writing some test cases. Now, the
+problem is writing test cases is
+actually kind of annoying because I
+don't actually want to do this. But
+these prompts are better. I actually
+think these key points are better than
+the previous one. Like, it actually got
+one of the key things we talked about
+last time, which is RTFP, read the FN
+prompt. Um, sorry. Did you Did you
+change the summarization as well? I
+thought I thought we left the
+summarization itself unchanged.
+Um, oh, sorry. Whenever I do re
+summarize, I actually regenerate the
+whole summary as well, not just the
+Okay, so this is just a second a second
+pass over the same data, right? You
+didn't change the inputs to the summary.
+Exactly. So, I actually I just changed
+the email draft one, but I also ch I did
+the resummarize button along the way.
+Yeah. Okay. But but you're talking about
+hey these the fact that these points are
+better in this case is just at this this
+time the the model happened to pick
+better summary points. Okay. Yes. So
+once this email is done take it out. And
+this is why I added the re summarize
+button because like sometimes the
+summary is just off
+and I don't really want to think too
+hard about it. Uh so like the easiest
+way you just want to try I just want to
+try again. So I wanted a way to
+re-trigger the pipeline and you could do
+this actually in because we wrote all
+the code and we have full control over
+the pipeline. You could actually do this
+in the code and say like hey just run it
+three times and show three summaries and
+I'll just pick one and then go do the
+rest of the pipeline. Like you could you
+could implement that pretty easily. Yes.
+Like cloud code could probably build
+that for you in five minutes. Uh and
+then the email summary at some point
+will finish up.
+All the content is generated. So I'm
+have to refresh. This is the sinking
+point that I did not get perfect.
+Did this work?
+Um did not. Let me try rerunning.
+I think OpenAI for some reason has been
+not working very well. Oh,
+I have an error here.
+This Oh, Claude didn't quite nail it. It
+didn't nail it. It's fine. Um, but while
+it's doing that, I'm going to do
+something. I'm going to add some
+observability to my pipeline so I can
+actually iterate on it a little bit
+faster because the promp thing is going
+to be so freaking slow otherwise.
+Um yeah, I generated
+um I'm just going to dump thing.
+Um
+pass new project.
+Uh I guess it doesn't really matter if
+you have API keys. You can just send
+data here
+with X.
+AI that works is built on trust, folks.
+Indeed it is. I will stop screen sharing
+that while I edit my end file.
+We have some trust but not infinite
+trust.
+Yeah.
+Okay. So what you're doing is adding the
+API keys so that every every AI call is
+basically going to be tracked and so we
+can use Yeah. And I really what I really
+the main thing I really want to be
+honest is I just want to go see the logs
+so that when it goes ahead I can go
+ahead and just like turn it into a
+um yeah turn it into a test case.
+And basically without that what you
+could do is I guess you could like
+handcraft a test case by like going and
+looking in the database and like
+assembling the inputs yourself and then
+like writing a test case by hand. Yeah.
+But I don't really want to do that. I
+just want to use like the real test case
+along the way.
+Um there we go.
+This should I think be done now. It
+should have made some diffs along the
+way. Um,
+oh yeah, we forgot to pass in
+transcript. Generate email draft. Okay,
+cool.
+Okay, now what we should be able to do,
+I also made this other reset processing
+bug because like sometimes this button
+gets grayed out like sometimes it's in a
+bad state like it is right now because I
+restarted my server. So, this just
+allows me to restart processing really
+really fast.
+And now in theory,
+oh, it just resets the state. In theory,
+this will work beautifully, but we'll
+see. Um, starting BAML similarization
+for video. There we go. Here we go. So,
+the summarization is happening. Um, so
+the real thing that I really want to do
+now is what I want to do is I want to
+focus on two parts. I want to make the
+summary as good as possible and I want
+to make the email as good as possible.
+The only way I can really make the email
+very good is by being a really fast
+iteration loop on actually iterating on
+the prop. Now, iterating on the UI layer
+is just too slow. I can't do that. I I
+don't want to build state management
+record replay on every single aspect of
+this. It's just going to be too slow.
+So, I'm just going to go iterate on just
+the email. Now, I on the summary, you
+can apply the same concepts to the
+Twitter and the LinkedIn and all the
+other stuff. And the reason that we're
+not we should also take ahead. Sorry. Go
+ahead. I was
+Oh, go ahead. Sorry. Go ahead, sir. We
+got a little bit of lag. I just want to
+know like we should take some time at
+the end just to talk about like, hey,
+what would be next for this thing? And
+like I I imagine we keep working on this
+thing and like what other things do we
+want this to do in addition to email and
+Twitter? How can we make it a little
+more backgroundy? How can we catch web
+hooks instead of like having to come
+here and click on stuff? There's a whole
+like next generation of this thing. Oh
+yeah, 100%. Um, Vid's got a question
+really fast.
+So, we are currently building the end to
+end pipeline to test this, but are you
+also going to do the peacewise uh test
+as well? I'm literally about to do that
+right now. Now, what I want to do for
+the peacewise testing is rather than
+running the peacewise testing on my own.
+Oh, you got another you got another
+error.
+Okay, let me find this
+cloud code isn't doing this right. So, I
+will find this myself
+and just like fix it.
+Uh, command C, command B. Back end.
+Hide my terminal.
+Let me turn on my Python
+script mode really fast and then it'll
+yell at me.
+Why is he on me? Oh, is this not a
+waitable?
+There we go. That's why it wasn't
+working.
+I wasn't calling the right code. That's
+good to know.
+Async. Where's the other one that I
+changed?
+Um, sorry about watching me live code.
+Um, I was hoping to have most of the
+stuff done.
+Okay, I think it should be good now.
+But while this is done, let's talk about
+what the actual thing looks like. So I
+should be able to actually see the
+actual test case and I should be able to
+go and edit it. There you go. So yeah,
+maybe we just do not the email one. We
+do a different one. Exactly. So we can
+just say like the summarize for example.
+Let's just make sure the summary is
+actually good. So let's just make this a
+test case. Let's work on this. And now
+we can go to
+So that was really fast. Uh so what you
+did was you took a recording of an input
+output pair for one of these calls and
+generated a test case so that you can go
+change the prompt and see how it affects
+the output basically.
+So what I'm finding now is I have the
+transcript I can go play around with
+this like fundamentally what I really
+need is I need a way to actually go see
+if this is actually going to work or
+not. Um, how do I hide without having to
+go run the entire pipeline end to end
+exactly? So now what I'm able to do is I
+can go see the pipeline, see what it's
+doing, and then I can just go like
+firstly I can just see what the model
+did. It's not like the model's key
+takeaways are just smaller than I what I
+want them to be. I want them to be like
+paragraphs. So let's just change that a
+little bit. Let's add like a Let's see
+what the model actually does.
+It doesn't seem like the model is
+actually listening to me. It feels like
+what it's actually doing is jumping it
+out even though I told it to give me an
+outline of a very very dense summary
+um in the system prompt. So let's try a
+different model. Uh let's just swap out
+to like enthropic um I think I have a
+custom sonnet
+and see if sonnet will work
+along the way.
+And so basically you want it before it
+starts dumping out JSON, you want it to
+kind of like outline its thoughts.
+Exactly. Outline a dead summary of the
+video. Uh then
+answer then fill out the summary.
+Um so example
+Let's do that. Sure.
+Um,
+schema. Sure. Let's just try that. Maybe
+my prompt was bad. So, let's just
+iterate and see if I can get the model
+to spit this out.
+It's really wild how slow the models
+are. I feel like I'm being rate limited.
+And this is yeah this is the um this is
+that like we covered this in depth in
+the reasoning topic right of like how
+can you get a model to kind of like
+think about it before it starts
+generating the data that our program is
+actually going to use. Exactly. So now
+it actually is generating a pretty good
+depth response of what it wanted and
+then it's outputting the summary and I
+think we'll see if this is actually
+better or not. I'll try with open AI
+again just to see what it does. Open IP
+portal
+and you can see how fast I'm iterating
+here. And what I'm really trying to do
+here is I'm trying to figure out is it
+doing what I want. Ah, that looks
+actually better than other things. Um,
+and I can even guide it. Par one,
+um, par two, par three. I can even make
+it write multiple paragraphs by telling
+it what I want it to go do because it
+this this doesn't seem very dense.
+So, let's let it go do more along the
+way.
+Ah, this looks way it looks like it's
+better on the right track because now
+I'm telling it to do multiple
+paragraphs.
+So, let's see if it actually understood
+it. It still really did do multiple
+paragraphs.
+Um,
+so let's like fill this out. Um,
+topic par
+um topic one
+para
+Topic one.
+See,
+topic two parag
+since the videos are 60 plus minutes
+long. Try and have time ranges.
+Time range. Cool.
+It'll get the gist of what I want. So,
+I'm trying to force it to basically
+reason more along the way and reason the
+way that I really want it to go do.
+Nope, that didn't work at all. Um, I'll
+rerun this one more time.
+Went fast.
+And I think the other thing that I want
+to do
+is I want to see
+if I can get it to actually listen to me
+by making the temp. I had originally
+deliberately tried to keep the
+temperature uh higher for this kind of
+task. But I'm going to make it
+temperature zero now and try this out
+one more time.
+Nice.
+Oh, this is sick.
+Okay. And then what are we going to go
+update the structured outputs to create
+timestamps or like chapter summaries? We
+might not even need that. I just wanted
+to go have this because I wanted to use
+this as the summary first before it
+actually goes ahead and fills out main
+takeaways and everything else here, but
+we could update the structured output to
+also encode encode time uh time things
+if you think it's useful. So let's go do
+that. Let's change main takeaways to
+include time data,
+right? Um
+uh let's add another field.
+Um main takeaways
+uh timed data
+time data
+uh summary
+string array.
+Well, the summary can be can just be one
+string. Exactly. Okay.
+And you can actually see what I was able
+to do. It took me a little bit of work
+to go get this. And now the model isn't
+actually going to go do this because
+it's like I can just reason the data
+model. So it's using the flexibility to
+go do this on its own without really
+having to think too hard about this. Um,
+but and I'm my question, I guess, and I
+think the answer is probably just vibes,
+but like how are you deciding whether
+like what's what's the real trade-off
+between having it do this in the
+preamble versus having it do it in the
+data model?
+What's the real trade-off? It's a couple
+of things. Uh, when it does in the
+preamble, it's not polluting the data
+model yet. So, it allows it to like just
+like kind of have like scratch work when
+I'm actually doing work along the way to
+go produce some results. And that's the
+real benefit. Um, what I find is in
+general, Enthropic listens to
+instructions a little bit better for
+this kind of stuff than OpenAI does. So
+like I'll try to run this again with
+like Enthropic
+and it should start sending the data.
+Now we're on here. I think we should
+have gone another one for email.
+Where's the email stuff? Uh oh, the
+email one didn't run because I re I
+think you probably still have an error.
+Yeah. Um, so now we're actually able to
+go do this. It's generating time codes,
+generating a little bit more takeaways,
+but it still seems a little very
+one-dimensional compared to this, which
+is okay. I might actually be okay with
+like a onelevel uh summarization here.
+It's not it might not be a bad thing,
+but I think I got I will get slightly
+better key topics and bullet points
+along the way to go do this. Now, I may
+not want to call this bullet points.
+It's like let's call this like aliases
+like takeaways.
+Takeaways,
+right? description. Action items. Action
+items. Uh listeners
+can action items listeners
+uh can do
+to improve their skills. And you can see
+what this does to the prompt. It changes
+it to instead of bullet points, we now
+have a field called takeaways. It's an
+action item listeners can do to improve
+their prompt, which I think in general
+is going to be very, very nice.
+So, let's go run this. I'm also noticing
+that the the time data from anthropic is
+uh looks kind of hallucinated. It's just
+doing 0 to 15, 15 to 30, 30 to 45.
+That's true. Which is probably not
+probably not good enough.
+Yeah, I agree. Um, let's see if it did
+it this way. Yeah, it really just broke
+it up to almost like 4 hour chunks. And
+it's probably I bet what it's doing is
+biasing up to 60 minutes. Videos
+are pretty long.
+Try have time synced to the transcript.
+And this is again the thing we talk
+about all the time is like a tight
+iteration iteration loop of like if you
+were doing this end to end testing or
+even with piest without like dedicated
+tools, I think this probably take longer
+to kind of fiddle with. Exactly. It
+sounds like it's still using those. So
+like it this might just be like a thing
+Enthropic is going to do unless I
+specifically break down the transcript
+into like a shorter chunk. So we can
+just try that. Oh, you want to try a
+separate method that chunks the
+transcript.
+Like let's just like I don't know. It's
+like 45 minutes. Well, I'm just going to
+do like the dumb thing
+and just like command X
+and just run that uh and just see what
+it does.
+It sounds like a It looks like a little
+bit better uh along the way uh but not
+too much. So like I just leave it for
+now and like we'll come back to this in
+a second.
+But I think the summarizer looks
+significantly better at this point.
+um in terms of what we're going to go
+get. So now what we'll do is
+update my UI is show the new
+Yeah, exactly. It's kind of like if you
+wanted to take do a pre-processing step
+on the transcript and really focus on
+splitting it up into time chunks and
+maybe like chunk it deterministically
+and then pass those chunks into models.
+You could do that. update my UI to show
+the new time data in the um in summary.
+Um, cool. Let's go do this. One thing I
+like to do when I go do all this stuff
+is like this stuff is done. So, I'm I'm
+just going to stage this and then I'm
+going to go tell it to go do this.
+[Music]
+And now it should go be able to go find
+this. And the time data should pop up in
+there. So, I tried to guide it a little
+bit along the way.
+Um,
+and it should hopefully be able to go
+ahead and see if he can find it.
+Oh,
+oh, it's too big for Claude to read it.
+Yeah, because of this test case. So,
+what I will do, yeah, I'll help it and
+split up the test case into a
+summarize test.baml,
+which makes sense like we will have a
+bunch of issues with long-term tests.
+Continue. I made the file smaller.
+Um, so now that I can just put my test
+in here, now this file should be
+actually readable. That's actually one
+good thing for me to note in general
+from now on because transcripts are
+going to be long. I should keep all my
+tests in different files. In fact, I
+probably want each test to be its own
+file because I know transcripts will be
+long.
+Um otherwise like my AI code gen stuff
+will not be able to do it very well.
+Yeah. And that's like another thing that
+I think um would be cool for a vibe
+coding episode is like how do you make
+your code base um easy for AI to use?
+And there's actually I think a really
+important balance between like if you
+have lots of little files like really
+small files then you're going to end up
+with like the AI has to remember to read
+every single file and the prompting and
+the tuning is going to set it to be a
+little bit kind of like balanced in how
+much it reads. But if your files are too
+long, it's also trained to be a little
+bit um kind of uh thrifty with how much
+of a file it reads, right? The models,
+the the agents generally try to read
+like, okay, if I can find the right 100
+lines, I'm just going to read those. And
+that can be an issue as well. And I
+think we found a lot of success in um
+what we're doing is like and you'll is
+is in prompting the model to like make
+sure it always reads a,000 or 1500. If
+it's a long file, read the whole file
+because otherwise it ends up like I I'm
+sure we've seen this uh in vibe coding
+where it's like reimplements a method
+that already existed somewhere else just
+because it didn't read enough of the
+file to see that that function was
+already there.
+Exactly. So now I think it should be
+almost done. Um and it uh it regen the
+code which it didn't have to but it did.
+That's okay. Um and now it should be
+able to update the UI as well.
+Um, this is the only part about VIP.
+It's kind of annoying. I don't I can't
+tell all the stuff. I think it's all
+done. Cool. Let's go back to the UI and
+see what it does.
+So, now that we have this, now we can
+just resummize.
+Oh, it fail.
+Um, oh, I don't have my API key for
+entropic. Give me one second. Let me buy
+that in really fast.
+It would be quite funny if um I did not
+realize, but I was secretly just sharing
+all my API keys anyway because I had the
+screen up, but I think I have my other
+screen.
+Um
+and API key.
+Okay.
+Nobody back in again. And now I'll try
+some more time.
+resummarize it is processing
+and once it's processing we will be able
+to go see everything soon.
+Um,
+while we're going to go do this, um, why
+don't we use frameworks here? Um, I want
+to show you the code that we're actually
+using to call AI models, just to tell
+you an idea of why we don't use
+frameworks. Um,
+I actually hate this bud code.
+The fact that it consumes an editor slot
+is really annoying.
+Um, but when I go down into this, all
+I'm really doing here is this. I'm just
+calling a method that calls summarize
+video. The summarize video is just a
+function that I've already defined that
+takes in a transcript, takes out a
+title, and spits out a data model. The
+fact that this uses an LLM doesn't
+really matter, and I don't really need a
+framework to go deal with this. Um, in
+order to orchestrate it, all I do at
+this point is
+once the summary is done, I feed the
+summary into these three things and I
+just async.io.gather it. So like the
+benefit that I'm getting from a
+framework just isn't worth the debugging
+headache that I would have to deal with.
+All I really want is I just want to have
+functions after one after another. And
+this is one of like the points I think
+we make a lot in um in 12 factor agents
+is basically the idea that like code is
+already a directed graph. And if you
+really like thinking in graphs, you can
+use frameworks that give you kind of
+this like nodes and edge edges
+structure. But what you're looking at
+can you go back to that real quick?
+what you're looking at on the screen
+is is a DAG. It's like do this thing and
+then fan it out and do these things and
+Okay, can you can you go back to the
+code real quick? You do this thing and
+then
+um you you do this thing and then you
+fan it out to these three things and
+then when they're all done then you go
+to another step. Like code is already a
+way of expressing directed graphs. Um
+and if you are able to write code and do
+the basics and get maybe get help from a
+model and writing the code itself then
+um you should leave yourself open to
+whatever approaches and structures and
+like now because we control all this
+code. If we wanted to like add another
+step here that is pre-summary and then
+pass the output of that in in addition
+to our summary here. We have the
+flexibility and the freedom to kind of
+architect this however we want and by
+doing weird custom stuff. That's kind of
+how you find the boundary of what the
+model is capable of and kind of push the
+limits of what is possible with AI. Um,
+if you're just kind of like using a
+generic approach, you're going to be
+your quality is going to be capped at,
+you know, whatever everyone else using
+the generic approach is able to do
+versus if you open the box and start
+tinkering with the wires, you may be
+able to get better results.
+Yeah. Exactly. And then the other really
+thing important thing to note is like
+most frameworks don't actually give you
+like full fundamental control of the
+full full full prompt. They add some
+preamles they modify how your tools are
+being presented because part of
+standardizing things like passing
+between open anthropic is standardizing
+something. And while it's true that you
+may want to go do that the problem is
+the fundamental thing that you're
+passing into the model is these tokens.
+Like these token oh it's going to take
+that's going to take forever to render.
+I [ __ ] up. um
+uh running a model on tokenizer in a
+browser is not a good call on very very
+long text but at some point you're going
+to call the model in some way and you're
+going to want a model to see those exact
+tokens. Your quality is strictly bound
+by the tokens you send in and out of the
+model. The only thing that configures
+what the model spits out is the tokens
+in the tokens out. So if you can't
+control every token out there, you can't
+get it. So I think we've had some people
+for example that live from like other
+countries and like if they if they use a
+library and they build a pipeline that's
+supposed to speak let's say Japanese or
+like um Persian or some uh or any other
+language along the way like Hindi
+anything if the library injects a word
+of English the model's going to speak in
+English um because it thinks it's
+allowed to do that and it's really
+important that if you have control you
+can actually have that access along the
+full way.
+Hopefully that answered the question,
+VJ.
+Um, and now I think I canceled this
+again. Okay, third time to What do we
+want to get through before we kind of
+wrap for today and go to questions?
+Um, I think we can go to questions. I'm
+just going to go I showed kind of how to
+make the summary summary slightly better
+by going to go down this road. I'm I the
+last thing I was going to do was
+actually feed in the email and the
+transcript to the email to make it
+slightly better as well. So, I'll try
+and get that wired up and if I don't get
+it wired up on the call, I'll do it
+afterwards and go send out the content
+as well so people can poke around with
+the prompt. But you saw the iteration
+loop of what I do. I take the prompt
+once I have some data. I literally just
+go ahead and like make a test case from
+real data because I need to run the
+pipeline once. I don't want to have fake
+data. Fake data is the worst thing I can
+do because if I use AI synthetic data,
+it's it's going to work and then it
+won't work for my real problem. So, I'll
+just run the pipeline once, pay the
+cost, download the test case, and then
+I'll just iterate on the test case alone
+until I'm satisfied, then have the AI
+model go fix all the downstream
+pipelines along the way.
+Yeah. And this is kind of what we did on
+the Evals episode, too, right? Which is
+like push real data, push a little bit
+of real data through the pipeline and
+then go look at it by hand and find,
+okay, this would make a good test case
+or this is a good example of something
+the model's not good at. And like part
+of baking golden files is about like,
+oh, this is a thing it did right and I
+like everything about this. Let's cement
+that as a test case. So as I change
+things, I know that that one will
+continue to work. And then also, hey,
+let me go find a thing that doesn't work
+and let me go take that down and put it
+on the workbench and tinker with the
+prompt and iterate on it. Exactly. And I
+think if I go look at the new summaries,
+like we've generated quite a few
+summaries at this point. I think this is
+the most recent one. We're literally
+generating time codes and everything
+else. So the fact that the UI isn't
+rendering it means that cloud code just
+messed up in the UI and didn't render
+this correctly. So I just need to go
+debug that and figure this out. But it's
+really easy for me to like cool the time
+codes look good and this is this might
+be good enough for the next step of the
+pipeline. So it allows me to just debug
+really really quickly to see what's
+actually happening under the hood. Um
+with that let's break for questions
+really fast and if we don't have any
+we'll just keep by coding for like the
+next 10 minutes or so.
+Um,
+what do you think about tools like the
+Verscell AI SDK that still give you all
+that flexibility to do whatever you
+want, but also give you tons of helpful
+stuff for streaming and tools and UI and
+React integration, other helpers and
+utilities.
+What do I personally think about the
+Versell AI SDK? Um,
+I think the Versell AI SDK is okay to be
+completely honest. Um, I think the
+biggest problem that I have with the
+Verscell AI SDK is that one, it's too
+deeply tied to a lot of native Versel
+stuff, and two, I don't actually think
+it captures the nuance of what streaming
+actually is. Um, a lot of people think
+of streaming for structure data to be
+trivial. U but it's actually a really,
+really, really hard problem. And I'll
+show you why it's hard. Um, and why of
+why it's hard, I I wrote the tool
+streaming for VLM
+So I like I I'm familiar with I've
+actually contributed to the streaming in
+the AI SDK too. Um I guess like I I've
+used it on projects where I've never
+used Versol at all. Like it doesn't
+force you into Versell's ecosystem. It's
+actually like totally independent of
+their platform. Yeah. Yeah.
+So I was just curious like because it
+gives you lots of great stuff for like
+generating like if you're doing like
+tool calls or structure generation it
+lets you stream that object to the you
+know your react app or whatever and get
+a hook so that you can see okay well
+this is this field has been generated
+and now this field has been generated
+and so you can like make your user
+interface interactive as um you know
+like for example if you're generating a
+complicated object you can make your
+time to interactivity and time to user
+feedback faster. Um, but I like it's the
+one the one one thing it does force you
+into is using Zod. Like it's very
+opinionated about using ZOD for schema
+definition, which is fine. Zod's a great
+library, but like I love all the great
+things that BAML gives you for that. So
+I guess like my question is like more
+along the lines of like is that do you
+ever see there being like some type of
+integration there of using like with
+actually have a BAML integration with
+Versell? Um, all you have to do is like
+so BMAL under the hood. I mean nextJS
+right yeah we have a function like
+summarize video so what you can do in
+your VS in your code directly let's say
+you wanted to do this all in your front
+end code I didn't actually do this here
+but I could um we also do the thing for
+you where we just give you a hook that
+you can just use import um
+uh let me do this from atlantreact
+hooks So we have a function here called
+summarize video. So you got to use
+summarize video hook and then what you
+can do is const
+equals use summarize video and then you
+can have like a data as a summary or you
+can have a mutate function and all the
+other state associated with it and you
+can just go call this with whatever data
+you want. The summary is guaranteed to
+be a version of this type along the way.
+So you can do like and the and the
+partial type is the thing that has like
+based on your BAML code of like what's
+what's nullable in a stream basically.
+Right. Exactly. So you call like mutate
+um and when you call mutate you get like
+a stream object along this um along the
+way but the data object just updates
+along the way. So data become okay. I
+didn't know you had that. So,
+so you and and like when you do summary
+dot you get like bullet points and you
+notice that all these things get like
+optionalized along the way. But what I
+could do is I could say even during
+streaming I want to guarantee that video
+summary key point is going to be I
+actually want to guarantee that hey when
+I go send the video summary I want key
+points to individually be stream.done
+the the key points field has to be done.
+So all right I so that would mean that
+like this the hook would not start
+streaming data until the key points were
+all processed and then you would start
+getting the partial object for all the
+rest of the fields until main takeaways
+is done. So now main takeaways becomes
+guaranteed to be a string array versus
+if you're trivially streaming you now
+have to go do this and now it becomes
+like a very everything is now everything
+everything is nullable versus hey I
+guarantee that time data and main
+takeaways will always be true before I
+hand it to my renderer.
+want to stream just this array. Each
+string should be individually streamed.
+And now you get a slightly different
+type. You get an array. Oh, whoops.
+This will render in a second. You get an
+array of like
+this should actually work. I'm surprised
+that this doesn't work. Maybe the code
+gen is wrong for this. Let me check one
+more time. Point. We're actually in the
+middle like redefining our types. Some
+stuff works with Go, which requires
+perfectly strict types and doesn't allow
+for any flexibility. So, we're just
+finding a couple bugs in there, but the
+idea is like you you when you're
+streaming, you actually live in a
+duality of type systems. And that is the
+part that people really miss out on. You
+really have two type trades you have to
+navigate, which is really really
+complicated. So, having utilities like
+you can't actually use TypeScript's
+partial type to go do that. So then when
+you go ahead and actually build
+something out, you want to go build like
+really interactive component.
+Doing this should be trivial.
+where I built a React component that
+analyzes and does this, but you can't
+really do that because this is working
+off of two type trees and that is a hard
+part and making that easy I think is
+something else AICK doesn't actually do
+when you get to real complicated AI real
+complicated JSON structures because if
+you have recursive types you have nested
+objects you can't define that well in
+ZOD you really need two ZOD schemas to
+do that correctly.
+Okay, thanks.
+Damn.
+Um, that was uh that was that was uh
+welcome. That's that's why we call it
+advanced AI engineering, folks.
+That was sick.
+Um,
+there's another question. Uh, you want
+to talk about the email optimization?
+Yeah, I want to figure out why that's
+not working, but like what we can do
+here is like we can just make this test
+case really fast. I think Abby mind you
+had the question. Do you want to
+summarize this question for me, Dex,
+while I get this working?
+Yeah. No, I don't question like uh when
+he mentioned about the AI SDK, I felt
+that we uh while we were stripping bolt
+new which uses AI SDK uh we kind of uh
+touched upon that part of the uh the
+ecosystem and I personally found out
+that there's no way to control what uh
+the LLM produces out when you use Versal
+SDK versus when you use BAML. So um with
+bold new the problem always existed that
+the model the LLM could generate
+anything and versal there's no way to
+control it. Um so I was just structured
+object generation. What you mean like
+structured object generation like
+generating? Yeah, it totally has that.
+It like generate object and stream
+object. You just give it a ZOD schema
+and tell it generate an object. No, but
+like how do you evaluate the output of
+like uh imagine you have you are gener
+generating a prompt. How do you uh
+how do you make sure that the
+response is is sort of consistent as in
+like um what we did was basically tried
+to give examples of uh prompt
+engineering to the LLM itself while
+using the SD AI SDK. I didn't see a way
+of uh the SDK controlling the response
+generated from the LLM in in a way that
+you can do with BAML like if you if you
+get what I mean.
+Yeah. The biggest I think a lot of
+people ask like why can't you just use
+structure generation? I think that's
+what Kyle's question here is like why
+doesn't that just work? The reason that
+structure generation really doesn't work
+fundamentally is that like for example
+check out this email. this email that we
+have is literally outputting JSON with
+escape characters with new lines that
+itself is going to lead to like a bias
+in the model. So what I really want to
+do is I want to somehow tell this draft
+to say at description use triple quote
+strings
+u for multi-line strings.
+And now when I go run this it doesn't
+generate escape characters anymore. the
+email will just be better because
+instead of sampling for the best token
+that is parsible, I allow the model to
+output the best token actually thinks is
+the best. And that makes a huge
+difference in quality for the model
+because when you're not doing this,
+Dexter had a great great visual on this
+last time which was basically saying
+something like this which is when the
+model goes and generates a this is the
+token it wants it wants to generate a
+new line character and then there are
+other characters that wants to go
+generate like oh a backslash or a back
+slashn or something else along the way.
+When you go do this, when you do
+structure generation, you basically say
+you are not allowed to generate the new
+line character because you're inside of
+a quotation mark. That's not valid JSON
+and you invalidate those tokens. We did
+this a lot in computer vision in the
+past last 10 years where you like tried
+to outsmart the model. It turns out just
+like let the model do its thing. The
+only reason that we have to do structure
+generation with JSON is because we don't
+have a better parser. If we had a better
+schema that we could go and like parse,
+then it would just do the trick for us
+and we could let the model do whatever
+it wanted.
+Yeah, JSON was like totally the wrong
+decision for for structured generation
+just in general. Like JSON should never
+have been the primitive for that. It
+should have been like toml or YAML or
+something where it's much more like
+everyone uses XML, right? Well, XML
+and YAML have the same problems. Toml
+and Yam are basically in disccernible
+for where they start and their ambiguity
+is a starting point. It's really really
+hard to mclarify because almost every
+file is a valid YAML file. So parsing
+that is virtually impossible because
+there's no there's not enough
+constraints on it. XML has a similar
+problem where you run into escape
+characters with XML and like the actual
+way that you do XML is so nasty. If
+you've seen how JSON looks in XML, like
+type systems and XML don't really make
+sense. They're too verbose. So it's not
+that there's one answer for everything.
+It's just that you want the flexibility
+as the app designer to choose what you
+want. If your if your goal as a
+developer is to generate HTML code, XML
+will be a bad format for you. Guaranteed
+definition. All right. All right. All
+right. I'm going to pause this on the
+structured output. This is a dope deep
+dive. We have seven minutes left and we
+have some really good questions in the
+chat. Um I we have Derek has a hand
+raised. Um so, uh and that I really like
+Sean's question as well, which is like
+how do you keep your database schemas
+consistent with your BAML generated
+types? Um I think that one is quick,
+right? We're just dumping JSON B into
+the database and and the front end is
+parsing it using the BAML library.
+Um, but then I want to hear D's question
+as well. Literally the types that I save
+are just text and I think I just do JS.
+I think I up actually I have this is not
+the latest table. I had to do some
+migrations. Uh, where's my migrations
+table?
+Um, I added uh all of these became JSON
+views. They're just JSON views. So I
+just open and close JSON V files uh JSON
+B columns along the way and then I just
+cast it because I know it's correct. The
+hard part about this is versioning
+tables over time. But this is the same
+problem that you'd have in versioning at
+any other point in your codebase. Um we
+will have a solution for that really
+soon actually. It's going to be really
+exciting. That's several conversation.
+Uh versioning schemas is really really
+hard.
+All right Derek what you got?
+Just a quick question. And you've made
+me think um earlier when you were doing
+the summarize I had put a suggestion
+maybe synthesize all of the variable
+names functions aside really it's that
+first sentence where you say summarize
+this but then now I was first going to
+ask about eval like an approach if you
+wanted to try a few different versions
+of that sentence how would you eval it
+but then now it's I'm thinking it's more
+complex because synthesis because of the
+way you've blocked this into those time
+chunks
+then it may not even you know like
+synthesize across them. So if this
+question is making any sense, how would
+you handle that to kind of evalid uh
+given that you've taken a chunked
+approach now?
+Well, I would just the pipeline like I
+think chunked meaning the chunk meaning
+the transcript time chunks. So like now
+you'd have to look across those chunks
+to do a synthesis as opposed to
+summarizing each one. That that's what I
+meant. So hopefully I'm making sense
+with my question. No, that okay. So this
+was I mean we haven't actually I don't
+think we've actually done that yet. Um
+but the proposal was like hey we could
+make the transcript a little bit shorter
+and that may actually not be uh be the
+right idea. Um yeah but then you have to
+basically have a you basically have to
+have a separate eval that is like okay
+based on our chunking prompt and our
+chunking algorithm and how do we take
+that those chunks and pass it back in?
+We're no longer evaluating just input
+output pairs. We're now evaluating kind
+of a few steps of the pipeline which is
+also really important to do right the
+best eval is the one that actually tell
+runs your pipeline end to end and tells
+you if it's still working and then you
+can go refine down into the smaller
+level ones smaller chunks of your
+pipeline and then individual prompts to
+narrow down like okay what's the thing
+that broke this but um I think the
+answer is like that's probably not what
+we would do
+that was just a proposal like because
+you have control of the pipeline you can
+do whatever you
+I don't know if that's a great answer.
+Oh, thumbs up. All right, we'll take it.
+Cool. So, let's actually make the email
+better really fast. By the way, while
+I'm here,
+uh, email example, we're going to do
+this. Um, an example. An example. Great.
+Email was this. Sahil's question is now
+that we have an automated pipeline, are
+they are we are they going to get the uh
+video upload now instead of Friday?
+No. Um because we're going to make the
+pipeline good. I think one of the things
+I hate as an engineer is I [ __ ] hate
+emails. I want emails to be useful or
+not at all received. Uh so Dexter and I
+actually do some good work to actually
+go edit the pipeline to make the emails
+good. So like in this case, I literally
+an example of here's what it is. Fed in
+the example and it's going to go ahead
+and
+um and it's going to go ahead and not
+read the prompt. I actually told it a
+great exampam a great email was this. a
+great email for
+a prior
+uh video was this. And now I'll notice a
+small things that I noticed immediately,
+which is these bullet points are labeled
+wrong. So I want to go and like format
+these better.
+So let's go do that or
+like let's just make the prompt better
+and like that's great. I don't need to
+tell I don't need to sick.
+um
+topic in this again. Let's go read this.
+Looks good. Main takeaways. Looks good.
+Uh transcript. Complete transcript.
+Full transcript.
+Um we'll go do this. I will probably
+move the transcript above the main take.
+Yep. Because again biased mostly by the
+most recent tokens. So I'm going to go
+do that. So I want the main takeaways to
+be last. It's going to go do this. I'm
+using GP4 mini. Let's just try and see
+what happens.
+I've heard GPT I've experimented a
+little bit. The GPT4.5 is is um very
+good these sort of writing tasks. A
+couple of things. If you notice it said
+your name, that's
+a a private video. Um create a
+professional announcement on behalf
+of five and Dexter. Let's tell it that.
+Let's tell it that on behalf of us so it
+can have more context again. And this is
+why we can use a fshot example because
+this example is a really really good
+example for what we want. In this case,
+they didn't put a call to action in the
+data model. The call to action is
+probably dumb. Are you hitting context
+limits on 40 mini? Maybe because it's so
+long.
+I'm not. There's no way. Okay. Okay.
+Let's go do this. Let's make call to
+action optional.
+And it actually seems like it figured it
+out. Um, we can go read this really
+fast. So, this was about dynamic
+strategies for effective prompting. Uh,
+this is weird. Um, and last time's video
+title was actually we already had a
+title. The title was called um cracking
+the prompting interview. So, before I go
+add in parameter, let's say like let's
+just like assume that the title that I
+passed in I can just crack change this
+in my test case.
+uh summary.
+Let's assume that I gave it the right
+title. Oh, at the bottom. Yeah, your
+title says Zoom meeting
+cracking the prompting interview. So,
+I'll go run this
+new video release. Cracking the
+prompting interview. This is pretty
+good. It actually got rid of the Zoom
+meeting. Gave a slightly better title.
+It actually almost got the exact same
+email that we actually really wanted.
+Use indexes instead of relying on long
+URLs. That's a great thing. Natural
+output. Let it go in the most natural
+format instead of constraining them to
+JSON, which thing that we should do.
+Really format the structure as you want.
+Read the prompt. Balancing
+effectiveness. That looks like spam. Uh
+real world applications that looks like
+spam. Um, so what we can do now is we
+can just like compare this to the actual
+thing that we sent out and we can go see
+what it feels like.
+And this was the one that we wrote by
+hand for this one. Um, there's a couple
+of things that didn't have like these.
+One of the things that we probably like
+is we like having code in the emails.
+Code snip like small little code
+snippets in back text in the emails. It
+makes I think makes it much more
+authentic.
+Didn't seem to capture that. So let's
+just tell it that we like that. Um
+uh where'd it go? We can tell this in
+the draft. Um include
+code snippets
+include small code snippets in the
+emails.
+And now let's go run this.
+And let's see if it does something.
+And I might actually have a hard time
+including code snippets because it's
+just from an audio snippet. So what I
+might need to do is I might actually
+need to feed in the video into this as
+well. So I can actually have video as
+context while it does this. So we should
+get the YouTube URL for the YouTube
+video and just pass into like a Gemini
+model and go pass that in. And that
+would be like the next thing that I
+would go iterate on along the way.
+Are you guys understanding we iterate on
+this pipeline and make it better to make
+it really feel like what's good? What's
+good here I want you all to notice is
+Dexra and I already have done this work
+a few times. So we have a golden target
+in mind. If we're working on a data set
+that neither of us understands, there's
+no golden target and we'll be stuck and
+we won't be able to get an answer really
+well.
+So we can iterate fast without an eval
+set because we kind of understand the
+domain of the problem.
+Um
+is there any
+other questions along the way. Um
+texture, anything else you want to
+mention?
+Um no, the only the other reason why we
+can't send this out right away because
+Zoom takes like four hours to process
+the video and create the transcript. So
+that's uh to answer Seil's other
+question, we will no matter how much AI
+we have, we will never send the video
+immediately after the call. Yes, because
+of Zoom. Um and we might be able to get
+get around the one day turnaround as
+well. But again, the whole point of this
+is I am Don't you go present to the AI
+team at Zoom? Don't you have like
+influence over how they can't you make
+it faster? Yeah, let me ping them. Um,
+but I think the
+um yeah, I think the takeaway here is
+like build the tools that you need,
+build the workflow first. Once you've
+built the workflow, add the AI part
+because you can decouple that
+development really fast. and whatever I
+have to do to generate the email
+address. My real suspicion to make this
+email really good is actually I should
+actually break down the structure of
+this email into like separate sections
+that we have and write a two-step
+pipeline where the first step generates
+all the structure, then the second step
+puts it into the like the language and
+the floweriness of what the email needs.
+And I think that will make it a lot a
+lot better.
+Um, but I think that's it. We went a lot
+a little bit over than what we planned
+on doing today. Um, but this was tons of
+fun. I personally learned a lot building
+this whole thing out. Way more than I
+normally do. Um, because I learned from
+Draode. It was amazing. Um, you were you
+were pretty good at Vive coding before
+uh when we got started. No, I'm I'm not.
+I think I do. My v coating is

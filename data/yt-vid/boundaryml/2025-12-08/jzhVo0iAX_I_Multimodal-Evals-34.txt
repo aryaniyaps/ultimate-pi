@@ -1,0 +1,1843 @@
+[0.0s] People tell me like I talked to someone
+[1.4s] yesterday like should I still learn to
+[2.7s] code? Like is that gonna be a waste in
+[4.2s] five t years? And I'm like knowing how
+[6.0s] to design systems is going to be really
+[8.1s] really important and like they talk
+[9.6s] about like programming is building a
+[11.1s] theory like and building a theory and
+[14.2s] and and designing this stuff I think is
+[15.9s] really really important. One of the
+[17.7s] biggest uh improvements I made was just
+[20.0s] switching to Gemini Flash. You can see I
+[21.8s] I tried GD40 then Sonnet and then Gemini
+[24.6s] 25 Flash and you can see the difference
+[26.4s] it made just right there.
+[28.2s] There's tons of data of cars driving
+[31.0s] perfectly fine on a nice sunny day on
+[32.8s] empty highways. That data is completely
+[35.2s] useless to every self-driving car
+[37.0s] company out in the world. What I want to
+[38.8s] see is a car carrying three other cars
+[41.0s] on a tow truck that looks like a car
+[42.7s] headed towards your direction with a
+[44.6s] median that's completely in the middle
+[45.9s] of the road cuz it's broken. That is
+[48.5s] useful data. And the goal with this is
+[51.6s] to say like, okay, how can we build a
+[53.2s] pipeline that takes all these different
+[54.7s] kinds of receipts and [music]
+[57.3s] extracts the information from the
+[59.7s] receipts such as the item amounts, the
+[62.1s] grand totals, and everything like that.
+[68.8s] Oh, wow. We're This is again, here we
+[71.4s] are again.
+[73.4s] AI that works. What's up, guys? How
+[75.8s] y'all doing?
+[76.9s] >> How's it going, Dexter? Uh, I'm doing
+[79.2s] great. I'm uh currently in an
+[82.6s] undisclosed location taking care of some
+[85.3s] business, but I wasn't going to miss the
+[87.3s] pod because I'm very excited about the
+[89.0s] topic today.
+[90.6s] >> Where the heck are you?
+[92.4s] >> I am in an undisclosed location. I'm in
+[94.8s] a very colorful conference room.
+[96.3s] >> Looks like you're in a It looks like
+[97.6s] you're in a Willy Wonka factory if I'm
+[99.9s] completely [laughter] honest.
+[101.8s] >> You know, you're not far off.
+[103.5s] >> Well, guys, good to see you again. I
+[105.8s] think today's episode is one that I
+[108.6s] think funnily enough I had a few DMs
+[111.3s] this week just talking purely about
+[113.1s] multimmodal evals and I was like
+[118.1s] I was like going straight forward I was
+[119.5s] like oh my god this is a perfect episode
+[120.9s] for the timing of what's going on and
+[123.2s] then Kevin here who's who many of you
+[125.5s] might have seen from a previous Eval
+[127.0s] episode that we did had actually gone
+[129.3s] through and gone really deep into this
+[131.2s] problem and I was like well there's no
+[132.9s] one else better to have than Kevin right
+[135.3s] on this timing.
+[136.5s] >> Well, I appreciate that and yeah,
+[138.1s] introduction um for me like I yeah I was
+[140.3s] I was on the podcast um gosh month ago,
+[143.8s] month and a half hard to remember lose
+[146.2s] track of time but um yeah on a previous
+[148.7s] large scale classification pipeline
+[150.4s] evals but Kevin Gregory I work uh an ML
+[154.2s] engineer at Evolution IQ and we build
+[156.3s] claims guidance software for insurance
+[158.6s] companies. Hopefully we build AI that
+[160.8s] works. [laughter]
+[163.2s] >> Yeah. I mean when you're in uh I mean I
+[165.0s] and that's a that's a thing I think that
+[166.5s] is like we don't we don't talk about
+[167.6s] enough on the show is like you know
+[169.0s] Vivoth has spends a lot of time and we
+[170.7s] try to bring on guests who are working
+[172.2s] in industries. It's a lot of like um
+[175.4s] things that you can apply in like
+[177.0s] vertical AI. Um, one of the things that
+[179.8s] led to like the 12 the whole 12 factor
+[181.6s] agents thing and the context engineering
+[183.2s] thing at the start was like, hey, like
+[186.0s] let's go talk to a bunch of people who
+[187.4s] are actually like shipping real AI
+[189.9s] products to the enterprise with high
+[191.8s] reliability in situations where like,
+[194.4s] oh, it doesn't work. Like let's blame
+[196.3s] the AI is like not an acceptable excuse.
+[198.3s] Like it has to work. It has to work
+[200.1s] almost as good as deterministic
+[201.6s] software.
+[202.3s] >> I mean, if it doesn't, it's just not
+[203.8s] interesting.
+[204.6s] >> Exactly. That what what's the hard
+[206.4s] what's the hard problem, right? What's
+[207.8s] the thing that a lot of people may want
+[209.0s] to just like nope out on and uh how are
+[212.2s] people who need to solve real problems
+[213.8s] for serious businesses actually like
+[216.0s] putting pen to paper and and solving
+[218.1s] this stuff?
+[218.7s] >> And multimodal email is something that
+[220.3s] we do a lot at at Evolution IQ because
+[222.9s] there's a lot of medical documents that
+[224.1s] come in with insurance claims and you
+[226.6s] can OCR it and get text and just kind of
+[229.1s] treat it as a text input or you can just
+[230.9s] do multimodal. But how do you do that?
+[232.8s] How do you build it reliably? Which do
+[234.3s] you choose? There's all sorts of
+[235.9s] considerations that go into making those
+[237.6s] decisions and and building out those
+[239.2s] pipelines.
+[240.0s] >> So with that in mind, I think what we
+[242.0s] should do first is let's just lay out
+[243.6s] the problem that we're working on for
+[245.1s] everyone so that way we can have it
+[246.5s] understood. So I'll screen share, I'll
+[247.9s] show off the excaladraw.
+[251.0s] And Kevin, why don't you just take us
+[252.6s] through and start posting some like
+[254.4s] general diagram of like the problem that
+[256.2s] we're investigating here together?
+[259.5s] >> Sure. Um, [clears throat] so you want me
+[261.4s] to start drawing an Excel draw? Yeah,
+[263.9s] >> if you want to talk through it, I can I
+[265.4s] can I can try to take notes if you want
+[267.1s] to do like the broad strokes and I I can
+[268.9s] annotate it.
+[270.2s] >> Yeah. So,
+[272.2s] um many people on this call may be
+[274.8s] familiar with something called the chord
+[276.5s] data set, but what it is is it's receipt
+[278.5s] data. And
+[281.0s] the goal with this is to say like, okay,
+[283.4s] how can we build a pipeline that takes
+[285.1s] all these different kinds of receipts
+[287.2s] and extracts the information from the
+[290.7s] receipts such as the item amounts, the
+[293.1s] grand totals, and everything like that
+[295.4s] and does so in a reliable fashion. And
+[298.0s] what's interesting about receipt data is
+[299.8s] that there's a lot of for one the the
+[304.1s] actual size of the data or the size of
+[307.0s] the images are kind of all over the
+[308.6s] place, right? Like receipts are, you
+[310.7s] know, everyone I think here's probably
+[312.2s] been to CVS and gotten the receipt
+[313.5s] that's like 30 ft long and it's kind of
+[315.4s] comical. [laughter]
+[317.3s] Um, and and things like that are not at
+[319.1s] all what the LLMs are expecting, right?
+[321.8s] They're expecting kind of a certain
+[323.4s] specific size and dimensionality and um
+[327.8s] so we're seeing
+[329.0s] >> you want to post some of the images here
+[330.6s] just so we know what we're looking at.
+[332.3s] >> Absolutely. Look um so these were
+[336.1s] actually interestingly enough from
+[338.4s] Indonesia.
+[340.3s] So these are Indonesian receipts.
+[343.1s] >> Okay.
+[344.0s] >> Yeah. Oh wow. There's Yeah, look at
+[345.7s] that.
+[347.2s] So that's it took me a minute to figure
+[350.0s] out like why the commas and and decimals
+[352.0s] were different. Um, and it's because
+[354.2s] it's Indonesian and you can see there's
+[356.8s] just so there's kind of a normal length
+[358.6s] one there and here is a really small one
+[361.3s] that with only one item and I'm just
+[363.6s] scrolling through and randomly picking
+[364.9s] them so I'm not kind of um,
+[368.2s] >> you know, so they're like not only are
+[370.6s] they receipt data, it's like receipt
+[371.8s] data that's like randomly blurred or
+[373.3s] like hidden away too. Mhm.
+[375.0s] >> This is like redacted for privacy or
+[377.0s] what?
+[378.0s] >> I I suppose um for privacy. Not a lot of
+[381.8s] vendor information here per se. It
+[383.3s] really focuses on the the totals
+[385.4s] themselves.
+[387.2s] Um this is just the data set. This is
+[389.1s] from hugging. It's a hugging face data
+[390.6s] set.
+[391.3s] >> Got it.
+[393.0s] >> Um yeah, I mean I can just
+[395.8s] >> I mean I can see how this is not only is
+[397.5s] this silly, it's like comically silly in
+[399.1s] the form of like CVS is like in that
+[401.0s] scenario you can't even see you can
+[402.4s] barely see the total. really squint
+[405.8s] >> and you can make out some pixels of what
+[407.4s] it might be.
+[408.8s] >> I I put I put this one in. I don't know
+[410.6s] if this is actually this probably is not
+[412.1s] actually part of the data set cuz you
+[413.7s] cannot see the actual totals.
+[415.8s] >> I mean, if you squint that anyway, but I
+[417.8s] think the point here is like and some of
+[419.0s] them are like grease stains. Some of
+[420.3s] them are clearly have shadows and all
+[421.9s] sorts of other problems on them.
+[423.4s] >> There are some that are crinkled at
+[424.7s] different angles.
+[426.0s] >> Yep.
+[428.1s] >> So,
+[429.0s] >> so like really real world re really
+[431.2s] really real world data is what I'm
+[432.7s] seeing. Mhm. Yeah. And it's another
+[437.2s] thing that's interesting is is
+[440.3s] and we'll kind of get into this when we
+[442.0s] start exploring and kind of discovering
+[444.2s] the things I did and the mistakes I made
+[445.8s] and what I found is
+[448.6s] some it seems like some of the
+[449.8s] restaurants randomly have different
+[451.2s] taxes that they apply and those can
+[453.4s] appear in different ways um and don't
+[456.1s] always get added to the total. It looks
+[457.7s] like, see this PB1? You see this um in
+[461.4s] this purplish one right here that I'm
+[462.9s] kind of moving around. Yeah, this PB1 is
+[465.3s] a restaurant tax that is only there
+[467.1s] sometimes.
+[468.7s] Um
+[470.6s] and so yeah,
+[472.4s] >> you can add it to the total. You said
+[474.4s] >> sometimes it is, sometimes it's not. You
+[476.2s] can tell here it is because it's the
+[478.1s] only one that ends in a two and the
+[479.3s] total ends in a two.
+[480.6s] >> But it seems like sometimes it's there,
+[484.0s] sometimes it's not there. I also
+[485.5s] discovered that sometimes there are just
+[487.2s] discounts applied. Um, so it's it's a
+[490.8s] kind of thing where the more you look at
+[493.6s] these, the more challenges you find. And
+[497.0s] that's kind of the point, right? Is you
+[499.0s] have to just [clears throat] start
+[500.6s] building the system and build a system
+[503.0s] in such a way where it allows you to
+[505.4s] easily and quickly uncover these things.
+[507.6s] >> Okay. So, what is what does your output
+[509.3s] data set look like? Like I'm wondering
+[510.8s] like do you like have a table model? Are
+[513.2s] some of these fields optional? Like what
+[515.0s] do you actually want in your structured
+[517.0s] outputs here?
+[518.8s] >> Sure.
+[519.2s] >> You said item amounts, grand totals,
+[521.2s] like do you have either a document or a
+[524.0s] a BAML or or something that kind of just
+[527.0s] demonstrates all of the things we might
+[528.6s] want to pull out of one of these?
+[530.0s] >> Yeah, I've got um a BAML file and I can
+[533.2s] just post quickly
+[535.7s] >> screenshots in here for now. We'll get
+[537.0s] to the code.
+[538.8s] >> We'll go dig into it later.
+[540.9s] >> Yeah.
+[542.6s] racted JSONs. If you have like extracted
+[544.3s] JSONs, they might be interesting as well
+[545.8s] to just take a look at really quickly.
+[547.9s] >> Um,
+[548.4s] >> just so we can understand what the final
+[550.0s] end output is.
+[551.4s] >> So, this is the BAML class and this is
+[553.9s] of the final, right? I initially didn't
+[555.8s] have the unit discount or the rounding
+[558.0s] or things like that in there. You'll
+[559.4s] kind of see me discover these things.
+[561.0s] >> Rounding. Interesting. Okay.
+[562.9s] >> Yeah. Interesting. [laughter]
+[563.8s] Right.
+[565.3s] >> Yeah.
+[567.7s] I think this is just looking at this
+[569.9s] like my first gut instinct is just like
+[572.7s] like
+[574.2s] my first gut instinct is like I'm
+[575.8s] surprised that you need quantity for
+[577.5s] things like receipt data like this. I
+[579.7s] can see why but it's
+[582.3s] it's not how I buy most things. There's
+[584.6s] I mean sometimes they have quantities
+[585.8s] but usually I just say like what it is.
+[588.1s] >> Unit discount is interesting that you
+[589.8s] needed that in there.
+[591.3s] >> Like this thing obviously flags me in a
+[594.2s] very weird way. [laughter]
+[598.1s] Um, the fact that you need this is
+[599.8s] really interesting. Um,
+[602.9s] I I I really wonder why you called this
+[605.3s] grand total instead of total, but I I
+[607.4s] can see why you have subtotal. It sounds
+[609.3s] like
+[609.7s] >> that's it.
+[611.3s] >> Subtotal.
+[612.4s] >> Yeah,
+[613.2s] >> go ahead.
+[614.0s] >> Subtotal versus grand total. I wanted
+[615.8s] the LLM to be really clear on what the
+[618.0s] you know that there is those are two
+[620.1s] distinct fields and don't get them
+[621.4s] confused.
+[623.8s] >> I see. And like we can look at this and
+[625.4s] we can clearly see that it's and it
+[628.2s] seems to be working mostly correctly.
+[630.2s] >> Mhm. Yeah. It's it's good. And there's
+[634.0s] there are some edge cases where I mean
+[636.6s] that you'll see that um that when I look
+[638.6s] at the receipt I can't even figure out
+[640.4s] like what is going on this receipt. The
+[642.6s] numbers don't seem to add up. Um you
+[645.6s] know so it's it's it's very interesting.
+[647.4s] It's very interesting.
+[648.7s] So before we go into this and really ask
+[651.6s] um
+[653.2s] really ask okay so someone asked a
+[655.1s] question dumb question why did rounding
+[657.0s] uh stand out immediately well the reason
+[659.4s] rounding stood out to me immediately is
+[660.9s] like when I think of receipts I don't
+[663.7s] think of rounding my totals I usually
+[665.2s] just swipe my credit card and it the
+[666.8s] number is what it is so I don't I at
+[669.6s] least living in America we generally
+[671.4s] don't round stuff you might round stuff
+[673.5s] for tip and tax
+[675.7s] >> gas stations gas stations have fractions
+[678.1s] of a penny.
+[679.1s] >> Yeah. Gas station, I guess. Okay. But
+[680.9s] that's rare.
+[681.5s] >> Or they used to. Maybe they don't
+[682.8s] anymore actually. Maybe that's like
+[684.9s] maybe I'm aging myself. [laughter]
+[687.9s] >> And then so it just stood out as
+[690.1s] something weird that I would pull out
+[691.5s] because I it's just not a my gut
+[693.8s] instinct doesn't say that I would round
+[696.9s] by default,
+[697.9s] >> right?
+[698.7s] >> Um and then another question someone
+[700.5s] asked is why not do OCR and pass to an
+[702.9s] LLM? I think for that we have a really
+[707.0s] um maybe we should just do OCR really
+[709.6s] quickly on some of these images
+[712.1s] and just to show what OCR does and the
+[714.3s] at least Kevin I'm not sure about your
+[716.5s] take on this or Dexter but my problem
+[718.9s] with OCR that I have always seen is OCR
+[721.2s] loses structural semblance
+[723.1s] >> yes
+[724.2s] >> whenever I do that. So like in the case
+[725.7s] of this thing up here uh in the first
+[728.6s] image um on the top right over here if I
+[731.1s] were to do OCR I would get a one and LM
+[734.2s] dumpling chili SC and 68
+[737.3s] 0000
+[738.5s] >> without the spacing.
+[740.2s] >> Yeah I don't know I I would have to
+[741.8s] infer the spacing. I'd have to be like
+[743.4s] oh they're rotationally in the same
+[745.4s] angle so therefore it's correct. But if
+[747.6s] the image was taken at like a slight
+[749.0s] angle like this, all of a sudden I can't
+[751.8s] even use OCR to be like I have to go
+[753.7s] find like the normals of the image. And
+[757.0s] that's just a more complicated problem
+[758.9s] in my experience.
+[761.5s] >> Yeah. Okay. So I think um I think
+[764.6s] probably for the rest of this episode
+[765.9s] like before we get to the code I think
+[767.8s] it would be really interesting to one uh
+[770.6s] maybe vib briefly recap just like the
+[773.8s] four or five categories of evals we
+[775.9s] talked about in the last eval episode of
+[777.6s] like runtime guard rails vibe eval like
+[780.2s] deterministic evals this kind of stuff
+[782.6s] and then um talk about Kevin just really
+[786.8s] high level the architecture of your
+[788.8s] pipeline and then we can get into like
+[791.3s] what checks did you put it what parts
+[793.4s] and and how is it implemented? How's
+[795.4s] that sound?
+[796.9s] >> Dex, I love that you're asking me to do
+[798.4s] this, but I pro I Kevin showed me a
+[800.5s] screenshot of his dashboard. I think you
+[802.1s] should just pull that up. It's going to
+[803.3s] answer that question really quickly.
+[805.2s] Let's just start dashboard that we ended
+[807.3s] up with. Kevin,
+[808.2s] >> the final one.
+[809.7s] >> The final one. And I think we can start
+[811.2s] with what we ended up with and then we
+[812.9s] can walk up to the journey of how we got
+[814.6s] there.
+[815.3s] >> Sure. And like what was the process of
+[817.4s] discovery? Because I think I think there
+[820.2s] was something that stuck out to me that
+[821.5s] when you DM me is like I think one of
+[823.5s] the things that Kevin told me about this
+[824.7s] is like this problem was way easier than
+[826.2s] I thought.
+[826.7s] >> It was a lot easier than I expected.
+[828.2s] Yeah.
+[828.7s] >> Um and for people that were asking about
+[831.4s] handwritten documents or anything else
+[832.6s] along that lines like this problem is
+[834.2s] way easier than you think. But I think
+[836.8s] the key takeaway here that we had when
+[839.0s] Kevin and I were talking about this was
+[841.2s] it was only easy because the mechanism
+[843.0s] that Kevin used to break down the
+[844.6s] problem is what made it easy.
+[847.4s] >> Okay. So the design of the design of the
+[850.2s] system mapped nicely onto the design of
+[853.0s] the evals because we had all that in
+[855.0s] mind from the start.
+[856.5s] >> Exactly.
+[857.9s] >> Yeah. And I I took a very similar
+[859.8s] approach to this that I took to the
+[861.3s] large scale classification pipeline,
+[863.0s] right? of what information is going to
+[865.4s] inform how you change the pipeline,
+[868.3s] right? Like what information is going to
+[869.9s] tell you where the errors are, what they
+[872.3s] are, and show you exactly, you know,
+[875.0s] what's going on. And then how do you
+[876.5s] display that in a way that's just that
+[878.0s] just knocks you over the head with how
+[879.5s] obvious it is what's going on, right?
+[882.5s] So, this is the final one. Uh, Vivv, I
+[884.8s] ended up doing, you know, 350 receipts
+[887.0s] total instead of the 100 I showed you
+[888.5s] yesterday just to kind of fill it out a
+[891.4s] little bit more. Um and you can see here
+[894.3s] right this is the these are the the eval
+[897.8s] um data completeness
+[900.6s] are there receipts and grand total grand
+[903.3s] total calculation does
+[906.1s] the subtotal I mean so these two grand
+[909.2s] total calculation subtotal consistency
+[911.2s] and sum validation are just looking at
+[913.3s] different pieces of if you add up just
+[915.8s] the transactions does it equal the
+[917.2s] subtotal does if the extracted subtotal
+[919.6s] plus the taxes and rounding does that
+[921.3s] equal the total so just basic summations
+[923.1s] that are supposed to happen. Um unit
+[925.6s] price accuracy, right? That is um number
+[929.0s] of items purchased times the price
+[931.3s] should equal the the amount extracted
+[933.8s] for that line item. And then positive
+[935.8s] values, right? If you're extracting
+[937.6s] something, it should be a positive
+[938.6s] value, right? You're paying for
+[939.8s] something, it should be positive.
+[940.6s] [laughter]
+[942.0s] >> Funny that they're negative failures
+[943.4s] there. That's actually what's very
+[944.9s] surprising to me.
+[946.2s] >> Mhm. Yeah. And so um I mean what we can
+[950.4s] do real quick is we can just look like
+[952.0s] okay so there are what two that fail the
+[956.0s] positive values um so it's extracting
+[958.2s] negative values somewhere um and that
+[960.2s] might be correct right the eval itself
+[962.0s] might be wrong but we can just look at
+[963.8s] that so let's let's see if we go to the
+[966.9s] detailed results we can quickly just
+[968.8s] scroll to let's see this one a few
+[971.9s] failed that's not the
+[974.6s] um
+[976.3s] so we can quickly just look to see where
+[978.3s] it failed with the positive. Here we go.
+[980.5s] This one had positive values. Um, or I'm
+[983.8s] sorry, this one failed the positive
+[984.9s] values. So, we just look at the receipt
+[987.8s] and
+[989.3s] so let's see. Are there negative values
+[990.9s] here? No, there aren't. Right. I'm not
+[994.0s] seeing any. Uh, oh, the discount. It
+[996.9s] extracted a negative value for the
+[998.4s] discount.
+[1000.1s] And it extracted that as a
+[1003.6s] line item, not as a discount. Because if
+[1005.9s] we go here because we can show see the
+[1008.0s] extracted data right next to it.
+[1010.9s] Yeah. It thinks it we purchased a disc
+[1015.0s] and that it's not a discount on the
+[1017.0s] amount but we purchased we purchased
+[1019.4s] something called a discount.
+[1021.3s] >> And what's funny here is that does lead
+[1023.0s] you to having the right answer in the
+[1024.5s] end.
+[1024.8s] >> It does. Right. Because
+[1027.0s] >> one and minus one on the row.
+[1029.5s] >> That's right.
+[1030.2s] >> Yeah.
+[1030.9s] >> So because the summation all works but
+[1033.6s] it's interesting. Yeah.
+[1035.7s] >> And what's really interesting here is if
+[1037.5s] you had for example, let's say you had
+[1039.6s] built your software, can you scroll up a
+[1041.2s] little bit where you did the minus DSC?
+[1043.5s] >> Uh the minusc
+[1044.9s] >> in the data set in the data in the
+[1046.6s] extracted data.
+[1048.6s] >> Oh. Oh, in here.
+[1050.3s] >> Like what's funny here is like you could
+[1052.6s] imagine someone saying, "Hey, unit price
+[1054.4s] we know always has to be positive." And
+[1055.8s] writing an absolute value on there
+[1058.5s] >> and like programmatically and that would
+[1060.3s] clearly lead to the wrong output here.
+[1062.4s] >> Mhm.
+[1063.8s] Uh, okay. So, if you worked around that
+[1066.5s] it had negatives by just flipping every
+[1068.4s] negative to positive and assuming it was
+[1070.1s] an LLM error, you would actually break
+[1072.5s] the thing because these two errors
+[1074.1s] happen to cancel each other out probably
+[1075.7s] like correctly structurally like from
+[1078.3s] whatever system this came from. But
+[1080.6s] yeah, you make assumptions that nothing
+[1082.5s] is ever negative and you end up with
+[1084.2s] Yeah. Okay. Mhm.
+[1085.4s] >> And what's interesting here is like this
+[1086.9s] is just like one of the grant uh one of
+[1088.6s] the failures here in terms of uh
+[1090.2s] negative, but I suspect you're saying
+[1091.7s] this Kevin because I suspect you spent a
+[1093.6s] lot of time looking through the data and
+[1094.7s] you every time it said gave you
+[1096.2s] something negative, you're like, "Oh
+[1097.4s] [ __ ] that's real world data, it's
+[1099.2s] actually negative."
+[1100.6s] >> Yeah. [laughter] Yeah. Exactly.
+[1103.5s] >> Um so question in the chat that I think
+[1106.0s] is relevant. So none of these receipts
+[1108.0s] have a golden data set, right? The
+[1110.1s] hugging face data set doesn't actually
+[1111.5s] have the right answers with it.
+[1115.4s] So the hugging face data set has um it
+[1119.4s] does have what they call metadata.
+[1122.6s] Um I looked at it some and compared it.
+[1126.7s] It was honestly it just would have taken
+[1129.3s] a lot longer to incorporate into the
+[1131.0s] pipeline uh because it has a lot of
+[1133.6s] quirks to it that I needed to spend a
+[1135.2s] lot of time figuring out. And I think my
+[1138.6s] goal with this was to try to build a you
+[1140.7s] know like in the real world right we we
+[1143.0s] don't have the golden data set so how
+[1145.0s] can we try to get closer to building
+[1147.1s] that on their own was kind of the tack
+[1148.6s] that I took with this but yeah hugging
+[1150.9s] face does have what they call metadata
+[1153.3s] which has a lot of information including
+[1155.7s] the actual amounts.
+[1157.8s] My my gut says that for most people
+[1160.2s] working on AI pipelines, especially like
+[1161.9s] multimmodal data, they don't have a
+[1163.8s] golden data set like what exactly what
+[1165.4s] Kevin is saying. And I think if you go
+[1167.8s] back to the original dashboard, Kevin,
+[1169.5s] the homepage instead of the detail view,
+[1172.7s] my first gut says it's really important
+[1175.7s] for people to be able to almost elevate
+[1177.8s] from like having no golden data set and
+[1180.4s] only random data to first building a
+[1183.2s] proxy of like is the system mostly
+[1185.1s] working and which eval
+[1188.2s] failure. So in this case like we looked
+[1190.2s] at positive values even though positive
+[1191.8s] values failing, it's actually not a true
+[1193.7s] failure. It's a failure where if you
+[1195.4s] look at it, it's actually correct. So,
+[1197.8s] we almost are like, "Okay, cool.
+[1200.0s] Positive values are a thing we'll spot
+[1201.4s] check, but they're almost always going
+[1202.8s] to be correct." Now, we can go look at
+[1204.7s] some validation or subtotal consistency
+[1206.6s] or grand total consistency. And what's
+[1209.0s] interesting to me is even if some
+[1210.6s] validation and subtotal consistency is
+[1212.6s] wrong, grand total calculation seems to
+[1214.6s] be way more correct. And being able to
+[1216.6s] design from this and then slowly
+[1218.3s] escalate to making a golden data set
+[1220.9s] from this data is way more interesting
+[1223.6s] than actually saying let's go make a
+[1225.8s] golden data set from day one cuz it's
+[1227.8s] just so much slower.
+[1231.0s] How by the way how long do you have
+[1233.9s] >> take you timing wise?
+[1235.4s] >> This whole thing probably took me
+[1238.7s] three or four hours
+[1240.0s] >> including running everything by coding
+[1241.7s] the whole UI and everything.
+[1243.6s] >> Yeah.
+[1246.5s] It was it was really fast. [snorts]
+[1248.9s] Maybe I'm exaggerating, but it was not
+[1251.8s] it was it was not a substantial time
+[1253.4s] investment.
+[1256.2s] >> Interesting.
+[1257.7s] Um that's actually way less than I
+[1259.5s] expected to be completely honest.
+[1261.2s] >> Yeah, this that's what I was saying when
+[1263.8s] I meant that this is um [clears throat]
+[1266.4s] yeah, I want to say the stopwatch.
+[1268.1s] [laughter]
+[1268.7s] I mean this is what we say about like
+[1270.2s] code in in general is like I think
+[1271.9s] someone was someone was posting uh that
+[1274.6s] like oh code is now really cheap and
+[1276.2s] software is really cheap and like update
+[1278.4s] your priors about how and when and why
+[1280.2s] you build software and one of my
+[1281.8s] favorite comments was like the writing
+[1284.7s] of the code was never the hard part like
+[1287.5s] it's important to get it right but like
+[1289.7s] when you have the design and and I know
+[1291.3s] you demoed a similar dashboard to this
+[1293.2s] so like you kind of already knew what
+[1294.6s] you wanted and you knew how the system
+[1296.1s] would be designed and you knew what kind
+[1297.6s] of data you needed like formatted on
+[1299.4s] disk and you knew how you would run it
+[1300.8s] and it's like that's the hard part that
+[1303.4s] I think takes a lot of iteration and
+[1305.1s] time and like designing systems is still
+[1307.8s] people tell me like I talked to someone
+[1309.0s] yesterday like should I still learn to
+[1310.3s] code like is that going to be a waste in
+[1311.8s] 5 10 years and I'm like knowing how to
+[1313.8s] design systems is going to be really
+[1315.7s] really important and like they talk
+[1317.2s] about like programming is building a
+[1318.8s] theory
+[1319.7s] >> like and building a theory and and and
+[1322.4s] designing this stuff I think is really
+[1323.8s] really important. Yeah, that's that's
+[1325.8s] that's my take on like yeah, this was
+[1327.6s] fast because you knew exactly what you
+[1329.0s] wanted and you knew what the design
+[1330.2s] would be.
+[1331.8s] >> That's a good Yeah, that's a good point.
+[1333.5s] >> And that's that stuff was hard earned.
+[1335.4s] That stuff probably took months or years
+[1337.6s] to develop.
+[1339.9s] >> Let's let's go back to day one. Uh like
+[1342.3s] when you first started this project,
+[1343.9s] Kevin, what was the first thing you did
+[1345.4s] and what did you end up doing next?
+[1347.5s] >> Like how did you end up in this final
+[1349.0s] design in the very
+[1351.7s] >> Sure. to the very first
+[1354.0s] >> I I'd love to know. Yeah. Okay. Sorry.
+[1356.1s] Tell tell the story. I'd love to also
+[1357.6s] know like a little bit more detail like
+[1360.0s] how it actually works like not every
+[1361.7s] line of code but like how do the
+[1363.9s] different components of the system fit
+[1365.4s] together and like what are the
+[1366.6s] interfaces that you created to make this
+[1368.6s] make this work well for you and be kind
+[1370.3s] of like be able to evolve it. But
+[1372.3s] >> sure.
+[1372.6s] >> All right. Let's go let's go to baseline
+[1374.2s] number one. 21 receipts. Okay.
+[1375.8s] >> Yeah. So I started with just very basic
+[1377.4s] like training wheels, right? like I
+[1378.9s] don't want to spend a lot of money on
+[1380.1s] LLM compute if nothing's working. So
+[1382.9s] this is using GPT40.
+[1385.8s] Um
+[1387.4s] and right out of the gate and you can
+[1390.2s] see that the amounts aren't it's okay
+[1393.0s] but there's a lot of mistakes, right? So
+[1394.6s] the sum validation is the biggest one
+[1396.6s] that we're missing. And if we we look at
+[1398.4s] that um
+[1401.4s] we just can look at one of these.
+[1404.1s] It's so interesting to me because it's
+[1405.8s] so it's so tempting to think that an to
+[1408.4s] forget that LLM are just math and
+[1410.5s] computers behind the scenes and there's
+[1411.8s] not they're not actually people because
+[1413.8s] you'll just see flat hallucinations here
+[1415.6s] that are just plainly wrong. Um I mean I
+[1419.0s] don't know one right off the top but
+[1422.2s] it's missing something here. You can
+[1423.8s] tell it's off by
+[1426.3s] a lot right 173 200. Um, and if you
+[1430.6s] would kind of scroll down the extraction
+[1433.0s] here and the the receipt, you'd find
+[1434.7s] that there's just one that is just
+[1435.9s] completely missing or just completely
+[1437.3s] wrong. So my first thought is, okay, so
+[1439.8s] what if I just use a smarter LLM, right?
+[1443.0s] So instead of using GBT40,
+[1446.1s] what if I use
+[1447.8s] >> before you show the results of a smaller
+[1449.4s] smarter LLM? Question. Did you have all
+[1451.2s] these eval designed from minute one?
+[1454.1s] Yeah, I did. My So, my thought was so if
+[1457.2s] I'm extracting a receipt and I'm getting
+[1460.0s] things like the subtotals, I'm getting
+[1461.7s] the the item amounts, the grand totals,
+[1464.3s] um I actually went back and forth with
+[1467.4s] uh
+[1469.2s] it was it was sonnet and cursor and
+[1470.9s] said, "Here's kind of what I'm doing.
+[1472.2s] Like, let's brainstorm, figure out what
+[1473.8s] some good runtime eels would be."
+[1477.0s] >> Okay. So, the first thing you actually
+[1479.1s] did wasn't actually do this. You just
+[1481.1s] stopped and thought about the problem
+[1482.6s] for a little bit. So the first thing I
+[1484.2s] did was look at the receipts. That's the
+[1486.2s] very very first [laughter] thing I did.
+[1487.6s] I downloaded the data.
+[1488.6s] >> Look at your data.
+[1489.7s] >> Looked at the receipts. That was Yeah.
+[1491.9s] And that's when I realized that, hey,
+[1493.1s] this is this is not this is not American
+[1495.4s] [clears throat] currency, right? We're
+[1496.5s] we're somewhere else.
+[1497.1s] >> Okay.
+[1497.8s] >> Um so yes, the very first thing I did
+[1499.6s] was looked at my data. Just spent some
+[1501.4s] time looking just like we did with the
+[1503.8s] the the whiteboard, right? Just looking
+[1505.6s] at different receipts and wow, there's
+[1507.0s] all these kind of different things. Some
+[1508.1s] are grease, some have some handwriting,
+[1510.1s] some have random discounts. Well, I
+[1511.8s] mean, I didn't see that right off the
+[1513.0s] bat, but
+[1513.9s] >> okay,
+[1514.5s] >> looked at the data.
+[1515.4s] >> What what I what I love about the design
+[1517.9s] of this so much is you didn't have to do
+[1521.5s] any hand labeling. You needed no golden
+[1523.8s] data set. You designed a system to
+[1525.6s] evaluate the accuracy of extraction
+[1528.1s] solely based on like the invariance that
+[1531.2s] you know should be true about the
+[1532.5s] receipt.
+[1533.5s] >> Exactly.
+[1534.6s] >> Okay. So, what you So, you looked at the
+[1536.6s] data. You literally I'm just saying you
+[1537.8s] just download data and just scroll
+[1538.9s] through images and just like pick random
+[1540.3s] ones and just like skimmed really fast.
+[1542.7s] >> That's it.
+[1543.7s] >> Okay. So, step one looked at data.
+[1546.0s] >> Mhm.
+[1546.4s] >> Step two, what did you do next?
+[1548.9s] >> Step two, I
+[1552.6s] uh set up like basically set up the the
+[1555.9s] project, set up the repo, set up uh
+[1558.2s] BAML, and
+[1560.9s] went back and forth with an LLM to
+[1562.8s] figure out what runtime evals there
+[1564.8s] should be. So really quickly, you what
+[1567.4s] do you mean by set up the project? So
+[1569.8s] you does that mean you started loading
+[1571.8s] the image files, you started being
+[1573.7s] running a small test harness in Python
+[1576.0s] where you could like loop through images
+[1577.6s] really quickly or was it purely just
+[1579.9s] like initialize like
+[1581.1s] >> it was purely just initialize.
+[1582.8s] >> Okay. So not really anything just so you
+[1584.9s] could have a folder to work out of.
+[1586.4s] >> Exactly. Just got so I got a folder to
+[1588.5s] work out of.
+[1589.8s] >> Okay. And then I'm guessing you defined
+[1592.2s] your receipt data model very curs like
+[1595.4s] very trivially.
+[1598.4s] >> Yeah. Um
+[1601.2s] define the receipt data model uh in in
+[1604.2s] BAML.
+[1605.4s] >> Um
+[1606.6s] >> okay. So the original one didn't have
+[1608.2s] all of these like rounding
+[1611.4s] >> what the original receipt data model
+[1612.9s] was. Do you have that somewhere?
+[1614.3s] >> No, I don't have it.
+[1615.2s] >> You can just write it if you just want
+[1616.8s] to write it really quickly like to be
+[1618.2s] like receipt v1. I'm just really curious
+[1620.2s] what you ended up.
+[1620.9s] >> I mean, I can just kind of pretend here,
+[1622.7s] right? So, this is what it ended up
+[1624.1s] being. So, the initial one was uh
+[1627.2s] literally just item name, quantity, unit
+[1630.7s] price, total price, and then for the
+[1633.8s] that was the transaction data. And then
+[1635.8s] for the receipt data, um all of this was
+[1639.5s] gone. And I just had transactions
+[1642.8s] subtotal.
+[1644.6s] Um no, I think I just had transactions
+[1647.0s] in total initially. It was just add up
+[1650.2s] all the transactions that should equal
+[1651.6s] the total.
+[1652.8s] >> Got it. Okay. And then then you went
+[1656.6s] through like a cursor conversation from
+[1658.6s] here and you said what are some runtime
+[1660.2s] emails
+[1661.1s] >> I can do?
+[1662.4s] >> And then that got me to
+[1665.0s] uh update this. So I had the subtotal
+[1668.2s] and the tax
+[1670.6s] which made sense to me.
+[1673.1s] >> Got it. And that was like it didn't it
+[1675.5s] didn't really like disagree with what
+[1677.1s] you were thinking. It was like ah this
+[1678.7s] seems obvious and the runtime the cursor
+[1681.5s] conversation led you to have and if you
+[1683.2s] pull up again what uh what eval you were
+[1685.5s] showing.
+[1686.2s] >> Mhm.
+[1687.4s] >> Uh what the eval you had were data
+[1689.3s] completeness
+[1690.8s] grand total calculation unit price
+[1692.6s] accuracy subtotal consistency positive
+[1695.7s] values and some validation
+[1697.6s] >> right? Uh and then that once it
+[1700.6s] described those you added subtotal and
+[1701.9s] tax and now you have a now you have a
+[1704.9s] data model and then evals that you have.
+[1707.8s] >> Exactly.
+[1709.1s] >> Perfect. Cool. And then you ran that on
+[1710.9s] a very cheap model. I guess the model
+[1712.2s] that you're most familiar with which is
+[1713.8s] GD40. I like it's not even about cheap.
+[1715.9s] It's just about familiarity. It's just
+[1717.4s] like the model that you probably it's
+[1719.0s] your go-to model for a task.
+[1721.3s] >> Can can we pseudo code out kind of like
+[1724.1s] the core loop here? It's like for each
+[1726.5s] image. I mean, I I guess it's pretty
+[1728.8s] clear, right? You take each image,
+[1731.2s] >> you you uh you you you run the
+[1734.0s] extraction, you do the math, and then
+[1736.2s] you record which of the which of the
+[1738.2s] checks passed and failed.
+[1739.9s] >> And they're all just pass fail.
+[1741.8s] >> Exactly. They're all just pass fail.
+[1743.6s] Yeah.
+[1745.4s] >> Um
+[1745.8s] >> Okay. Do you want to show that?
+[1746.8s] Actually, that's a good idea. You want
+[1747.9s] just want to show that?
+[1749.5s] >> Yeah. It would be interesting to see the
+[1750.6s] code
+[1752.6s] that works. It's going to be in the AI
+[1754.0s] that works repo. But do you want to show
+[1755.0s] the code really fast?
+[1756.3s] >> Sure.
+[1757.4s] or like show yeah show one of the evals
+[1759.7s] or one of the like just like the the
+[1761.8s] code that like takes the output and does
+[1763.4s] the math on it. I mean it's it's pretty
+[1765.1s] simple code I'm sure but it' be kind of
+[1766.9s] interesting to see it for real.
+[1769.8s] >> So let's see it's all it's all zoomed in
+[1772.7s] so it's a little little off. Um
+[1776.1s] so
+[1776.5s] >> you have an image you produce extracted
+[1778.4s] data on it right there.
+[1779.9s] >> Right. So this this is the extracted
+[1781.6s] data. Ah, and you have error handling to
+[1784.1s] be like sometimes it fails, which is
+[1786.2s] also fail. Which is also fair. Yes.
+[1788.6s] >> Yeah. Which is actually um the the
+[1791.8s] dashboard keeps track of how many
+[1793.4s] failures there are,
+[1794.6s] >> which spoiler alert, I tried to do
+[1796.1s] Gemini 3 last night and I got a ton of
+[1798.1s] extraction failures. So,
+[1799.8s] >> Got it.
+[1800.4s] >> Yeah. Then not sure what's going on with
+[1802.7s] that, but something to figure out.
+[1805.1s] >> They said this one's supposed to be
+[1806.2s] better at tool calling.
+[1809.1s] [snorts]
+[1809.6s] >> I don't know. Maybe maybe it is. Uh
+[1811.4s] maybe I was doing something wrong.
+[1812.4s] [laughter] It's very possible.
+[1813.8s] >> No. I mean I'm I'm sure they said that
+[1815.5s] and it's not as true as they want it to
+[1817.3s] be.
+[1817.8s] >> Yeah.
+[1818.6s] >> Okay. And then you produce an evaluation
+[1820.6s] result. Ah
+[1822.3s] >> right. And if we just look at say
+[1825.5s] evaluate grand total calculation.
+[1830.0s] >> Cool. It's just like
+[1831.1s] >> you're just doing math on a JSON object.
+[1833.9s] >> Yeah. [clears throat] Okay. Cool. So
+[1835.2s] there's like there's no um there's
+[1837.2s] nothing fancy here. You're literally
+[1838.2s] just doing
+[1838.6s] >> nothing fancy. Oh, tolerance is
+[1841.3s] interesting because you have floating
+[1842.2s] point numbers. Makes sense. So, you had
+[1844.7s] to go real tolerance out.
+[1846.4s] >> Mhm.
+[1849.0s] >> Did you have tolerance from day one or
+[1850.6s] was that something you added later when
+[1851.9s] you saw some of them were like off by 1
+[1853.7s] cent?
+[1854.9s] >> I had this from day one.
+[1856.6s] >> Yeah,
+[1857.6s] >> I sus. Yeah, if you're ever doing
+[1859.1s] floatingoint math calculations, you will
+[1860.7s] always have this error. You need like
+[1862.4s] you need a tolerance. You don't have a
+[1864.2s] choice.
+[1866.4s] >> Cool. Um, yeah, it's very it's very
+[1869.1s] basic. Like I said, this task was it
+[1871.0s] surprised me as to how easy this task
+[1873.1s] ended up being. I was expecting a lot
+[1874.8s] more kind of [snorts] I was going to
+[1877.0s] have to spend a lot more time on it.
+[1878.5s] >> And you know what I find really
+[1879.7s] interesting about this is if you wanted
+[1881.4s] to add another email, it's actually
+[1883.0s] really easy for you to add one here
+[1884.7s] >> because like you just add one more to
+[1886.0s] the list. It's effectively zero cost.
+[1889.0s] >> That's it.
+[1891.0s] >> That's cool.
+[1891.7s] >> Yeah, that's it. So I can see why you
+[1893.5s] said this basically took you three hours
+[1895.1s] because you basically have two separate
+[1896.6s] pipelines here. You have one pipeline
+[1898.4s] that does the actual extraction. You
+[1900.9s] have a separate pipeline that runs the
+[1903.0s] eval on those platform uh on that
+[1904.9s] extraction. They're both disjoint. They
+[1907.2s] have no dependencies except the shared
+[1908.8s] data model between them which is the
+[1910.7s] receipt data object that you showed us
+[1912.4s] in the receipt. AML file. And then you
+[1915.8s] have a third system that visualizes the
+[1918.1s] results of the second system.
+[1920.2s] >> That's right. And you just have a data
+[1922.2s] contract between them that shows how to
+[1923.8s] go render everything.
+[1925.7s] >> Mhm.
+[1926.7s] >> And last,
+[1927.4s] >> okay, so the evaluation results get
+[1929.1s] written to like a JSON file right next
+[1931.3s] to the extraction results.
+[1933.2s] >> Exactly. Yeah. I mean, if you look uh
+[1936.4s] results, we can look at uh this one uh
+[1938.7s] detailed results. This is uh if we
+[1941.4s] scroll up, you see the evals. This is
+[1943.5s] what the the streamlet app is reading
+[1946.0s] from here.
+[1949.0s] Okay. So this is for a given receipt for
+[1951.7s] an image path. So this [clears throat]
+[1952.6s] is how it lets you render all that stuff
+[1954.1s] if you need to.
+[1955.1s] >> Exactly.
+[1955.8s] >> And then Okay.
+[1957.6s] >> Exactly. Cool.
+[1958.3s] >> And that's how he loads data
+[1959.4s] dynamically. That's how he pulls up all
+[1961.0s] the information about it.
+[1962.7s] >> It's
+[1963.2s] >> And is the extracted is the extracted
+[1965.0s] data embedded in here as well
+[1967.5s] >> in like this JSON object or does it have
+[1969.2s] to look?
+[1969.9s] >> That was that was what I pasted in the
+[1971.1s] white. Yeah, it's right down here. So
+[1972.6s] yeah, it can just read this and the
+[1974.6s] stream lit app has everything that it
+[1976.7s] needs.
+[1977.9s] And the reason that this was so fast for
+[1980.2s] you to do Kevin from what I understand
+[1981.7s] is last time when you built your
+[1983.8s] classification system you actually spent
+[1985.3s] a lot of time on designing this shape
+[1989.0s] >> like you're like what is the shape of
+[1990.4s] this data extracted data has here
+[1992.1s] there's a bunch of evals that have these
+[1993.6s] names and these results and then it has
+[1995.8s] to have the model information because I
+[1997.2s] want to be able to compare same image on
+[1999.5s] different models it has to have a run
+[2001.4s] information because
+[2003.0s] >> I might run the same thing multiple
+[2004.7s] times based on things that I changed
+[2006.3s] along the Okay, so you're basically just
+[2009.2s] shaping the data shape for the tooling
+[2011.6s] before you actually really build it. But
+[2014.3s] once you've designed the tooling, it's
+[2016.4s] effectively zero work to make any
+[2019.1s] different system use the same tooling.
+[2021.0s] >> Yeah, you know, that's actually a really
+[2022.2s] good point. I hadn't realized until you
+[2023.4s] just said all that how much my work on
+[2025.8s] the previous one kind of set me up for
+[2028.6s] this to go really really quickly.
+[2031.3s] Yeah, that's actually very similar to
+[2033.3s] how I have seen um most AI like most
+[2037.8s] companies that we've worked with have
+[2039.0s] actually had a very similar response
+[2040.5s] where like I think the work up front
+[2043.8s] feels so painful and so annoying cuz
+[2046.2s] you're like ah why am I doing this? I
+[2047.5s] can just like one hack this like not
+[2049.0s] think about this and just do it oneoff.
+[2050.9s] But it turns out if you do one-off work
+[2052.6s] every single project takes the same
+[2054.2s] amount of time consistently. But if you
+[2056.8s] do do the upfront work up front where
+[2058.7s] you just stop and think about the design
+[2060.5s] system a little bit better, the next
+[2063.0s] project similarly just takes way less
+[2065.2s] time because most of the fundamentals
+[2068.2s] are truly the same. Now I'm curious from
+[2070.6s] the design. Oh, go ahead, Dex.
+[2072.4s] >> And I actually just to like echo your
+[2074.4s] point. I I really like this pattern. I
+[2076.4s] naturally stumbled into something like
+[2078.0s] this when I was building like a PII
+[2080.1s] extraction and like scrubbing pipeline
+[2081.9s] where like I was writing after each step
+[2084.7s] of the pipeline you want to write the
+[2086.2s] JSON because then you the human can
+[2088.1s] inspect it. You can resume from a past
+[2090.6s] result. You can test incremental parts
+[2092.3s] of the pipeline like the results
+[2094.8s] actually can become like the bits that
+[2097.0s] you use to build more like baked golden
+[2100.5s] evals, golden data sets, golden like
+[2102.7s] test sets so that you can you can know
+[2104.7s] that and like having JSON is nice
+[2106.6s] because it's human readable and machine
+[2108.4s] readable for some some pe some people J
+[2110.7s] say JSON was meant for humans. I don't
+[2112.4s] know if I would go that far. Uh JSON was
+[2115.4s] meant for was made for machines.
+[2117.0s] >> JSON was meant for humans. If machines
+[2118.6s] are the only thing we cared about, we'd
+[2119.9s] all use protobuff.
+[2121.5s] >> That's all right. Fair enough. Yeah. Um,
+[2123.5s] [laughter]
+[2124.3s] anyways, no, I I think the structure
+[2125.8s] makes a ton of sense. And like I can't
+[2127.4s] imagine building any kind of AI
+[2129.4s] pipeline. My question actually for both
+[2131.1s] of you is like do you have thoughts
+[2133.4s] about how this would scale? cuz like
+[2135.0s] once you have a 100,000 images, is it
+[2137.7s] actually like performant to do this in
+[2139.8s] JSON or do you have thoughts about like
+[2141.4s] would you would you move this to a like
+[2143.3s] obviously same structure and like
+[2144.8s] checkpoints along the way but like what
+[2146.5s] are the limitations of doing it this
+[2148.1s] way?
+[2149.3s] >> Well, I don't think JSON itself is
+[2150.8s] necessarily bad. You could store into an
+[2152.3s] S3 bucket instead of JSON. It's the same
+[2154.5s] thing like like it's S3 bucket with
+[2158.1s] pads. The fact that you're using a file
+[2159.7s] system is the storage layer itself
+[2161.9s] doesn't matter.
+[2164.0s] What if your results gets too big to
+[2166.0s] like store into memory? Like you have to
+[2167.8s] then figure out how to like you have to
+[2168.9s] do some kind of like sharding. Yeah, but
+[2171.0s] you need to pull it down to do each
+[2172.5s] incremental step of the pipeline
+[2174.4s] >> that oh sure put into MongoDB database
+[2176.7s] then like put into MongoDB database and
+[2179.0s] like query only the fields that you have
+[2181.0s] like Kevin did over here. If you scroll
+[2182.5s] up Kevin like the the JSON strct that
+[2185.7s] he's storing is basically scroll up it
+[2188.1s] has a thing called evaluations.
+[2189.8s] Literally you can pull everything but
+[2191.4s] the extracted data and only pull the
+[2193.1s] evaluation side of it which should be
+[2195.4s] small enough but and we all know how to
+[2196.9s] do like
+[2197.2s] >> but I mean if you have 500 million
+[2199.0s] records you I mean I that's probably too
+[2201.3s] high to be reasonable like that's the
+[2202.7s] number of like
+[2203.4s] >> even with that like we know how to do
+[2204.7s] pageionation on databases like
+[2207.0s] >> you can't do that in S3 though like I I
+[2209.0s] agree like I you need that is my kind of
+[2210.6s] my question is like you need something
+[2211.8s] that supports like slicing and filtering
+[2213.6s] and pageionation right
+[2214.5s] >> S3 does that too like AWS has built a
+[2217.0s] bunch of software on top of S3 that has
+[2218.5s] all the querying pagidation as I'm not
+[2221.0s] saying you should use S3 necessarily.
+[2222.5s] It's just a different like you can solve
+[2224.2s] this problem as another engineering
+[2225.8s] problem rather than having to think
+[2227.4s] about like
+[2229.2s] saying I have a bunch of data that is
+[2231.2s] somewhat structured and I want to query
+[2233.0s] it with some aggregation is a
+[2234.6s] well-defined problem that I'm certain
+[2237.1s] cloud code could solve.
+[2238.9s] >> Okay, so VBO thinks my question was
+[2240.7s] boring.
+[2241.9s] >> Well, maybe
+[2242.9s] >> I can tell you though [laughter] if I
+[2244.6s] had 500 million records I would not I
+[2246.7s] would not be using a stream app. No way.
+[2249.4s] >> Yeah. Yeah. No, [laughter] this is I
+[2251.4s] mean like this feels like a really good
+[2252.6s] Have either of you ever worked with
+[2253.5s] parquet? It's basically like gent json.
+[2257.0s] >> This would be great for like or like
+[2258.2s] lance.
+[2258.6s] >> I'm sure people are already is there.
+[2260.5s] >> Say what?
+[2261.4s] >> Or lance DB or something. This would be
+[2263.1s] great for that.
+[2264.4s] >> I don't know if enough about lance DB to
+[2266.6s] comment.
+[2267.9s] is really good for like multimodal data
+[2269.4s] sets on top of it which makes it really
+[2271.7s] cuz it does like the oneoff links to
+[2275.4s] like uh not saving in your actual data.
+[2278.1s] >> Now I have one more question Kevin what
+[2280.8s] did change in this pipeline versus your
+[2283.0s] previous pipeline that you made? Were
+[2284.2s] there any architectural changes you did
+[2285.7s] have to make?
+[2288.5s] the I think the the biggest one was in
+[2291.5s] the previous pipeline um we had multiple
+[2295.5s] checkpoints because that we had I mean I
+[2297.8s] don't know how many people on the call
+[2298.6s] were were a part of that but it was a
+[2299.8s] large scale classification pipeline
+[2301.2s] where the first thing we did was we
+[2303.4s] dumped a bunch of categories into an
+[2305.4s] embedder to filter that down and then we
+[2307.7s] took just the top however many
+[2309.7s] categories and then dumped those into an
+[2311.2s] LLM with the actual query and then we
+[2313.4s] get the final response.
+[2315.8s] So, we were able to check each one of
+[2318.2s] those steps, kind of what's going in and
+[2319.7s] out of each step and figure out where
+[2321.2s] the problem is. Here, it's it's kind of
+[2322.9s] just a one shot, right? There's no
+[2326.6s] break points or probes in order to to
+[2329.8s] check and see where things are kind of
+[2331.9s] breaking down. Um, it was one prompt. I
+[2334.4s] guess you you could kind of say with the
+[2337.7s] different evals, there are all these
+[2338.8s] kind of different little points, but
+[2340.0s] still there's not the it's not the same.
+[2341.8s] Oh, I have multiple checkpoints here.
+[2345.0s] I think that was probably the biggest
+[2346.3s] one.
+[2347.3s] >> Got it. Okay. So, the fact it was like a
+[2349.4s] structurally a different problem because
+[2351.0s] you only had one checkpoint and no
+[2352.7s] incremental progress along the way to
+[2354.6s] measure.
+[2355.4s] >> So, you weren't analyzing multi-steps,
+[2358.0s] you were analyzing one. So, I'm guessing
+[2359.4s] your JSON shape did change to represent
+[2361.8s] that.
+[2362.2s] >> Definitely. Yeah.
+[2363.3s] >> Okay.
+[2364.4s] >> And and the last one, didn't you also
+[2365.8s] have to handle label the data? Like
+[2367.5s] there wasn't like an answer key for this
+[2369.4s] stuff, right?
+[2370.2s] >> Yeah, I had to handle label the data.
+[2371.6s] And last one there was no real way to do
+[2373.9s] at least that I could think of runtime
+[2376.3s] evouts.
+[2377.8s] >> Cool.
+[2378.1s] >> I remember reaching out to you know my
+[2380.1s] family members and me um and handle
+[2383.0s] label the data and say it was it was
+[2385.6s] items in a a hardware store and what
+[2388.2s] basically categories they should fall
+[2389.9s] into in the hardware store. Another
+[2391.4s] thing that's interesting about
+[2393.2s] >> another thing that's interesting about
+[2394.1s] the previous problem is that the
+[2395.4s] previous problem had multiple right
+[2396.6s] answers. That was something that we
+[2397.7s] found that was really interesting in
+[2398.6s] that previous one was, you know, like I
+[2401.5s] I don't remember any of the examples,
+[2402.7s] but something such as
+[2405.5s] um I don't know, I'm blanking, but like
+[2408.2s] in in an air conditioning filter could
+[2410.3s] be an HVAC or it could be in
+[2413.6s] >> in air conditioning.
+[2414.6s] >> In air conditioning. Exactly. And those
+[2416.6s] could be two two different categories.
+[2417.8s] And so what was interesting last time is
+[2419.2s] we went through the mistakes and we
+[2420.4s] actually we we said, "Hey, these
+[2422.1s] actually kind of are correct." So
+[2423.4s] instead of having one answer, you have a
+[2425.4s] set of right answers. And we would check
+[2427.3s] to see if our output was in that set.
+[2430.4s] Here there is a right answer, right?
+[2433.0s] Like they paid a certain amount for
+[2434.7s] whatever you know whatever they ate. So
+[2437.8s] that was a different kind of way to
+[2439.0s] think about it as well.
+[2441.0s] >> That's actually really interesting. Um
+[2443.5s] >> what did you I was going to say like so
+[2445.3s] what did you use this? We're getting a
+[2446.6s] little short on time and there's one
+[2447.5s] good question in the chat, but like what
+[2449.0s] did you use this for? Like did you
+[2451.9s] actually take the eval and then go back
+[2453.6s] and try to improve the models and
+[2455.7s] switching the models? Did you change up
+[2457.1s] your prompt at all? Um did you were you
+[2460.0s] able to use this to drive improvements
+[2461.8s] in the extraction? Yeah, let's look at
+[2463.3s] the prompts.
+[2464.5s] >> Yeah, I can show you. Well, I think
+[2466.9s] yeah, so here's the actual here's the
+[2469.0s] prompt that uh that's not it. You can
+[2470.8s] see I I played around with extracting
+[2472.9s] number of transactions, but I didn't
+[2474.7s] need
+[2475.2s] >> as a pre as a pre-step.
+[2477.8s] >> Exactly. uh didn't end up needing it
+[2479.8s] because this worked so well. And this is
+[2482.1s] the prompt, right? So each transaction
+[2485.4s] or each item,
+[2487.4s] this is what um you want for each item
+[2490.7s] on the receipt and then all these
+[2493.4s] receipt totals, right? And and these
+[2495.9s] didn't all I didn't discover all these
+[2498.2s] right out of the gate, right? Like we
+[2499.7s] said before, rounding
+[2502.5s] discount on total
+[2504.6s] um
+[2508.2s] yeah those didn't like I didn't have
+[2510.5s] those right out of the gate. Those came
+[2512.2s] from
+[2513.8s] kind of iterating and experimenting.
+[2516.6s] >> Okay. So you iterated the data structure
+[2518.3s] and the prompt together because of this
+[2520.5s] thing that like we do all the time on
+[2522.4s] this show which is like prompting
+[2524.2s] through your output format basically.
+[2526.5s] >> Right. And I mean we can we can see here
+[2529.0s] if I go to um let's see it's I think it
+[2533.5s] is yeah it's this one. So if we load
+[2537.0s] this
+[2538.6s] which side note one of the biggest uh
+[2542.1s] improvements I made was just switching
+[2543.9s] to Gemini Flash. You can see I I tried
+[2546.0s] GD40 then Sonnet and then Gemini 25
+[2548.5s] Flash and you can see the difference it
+[2550.1s] made just right there. going from uh 40
+[2553.6s] to Gemini Flash almost made this only
+[2556.7s] has one mistake. So if we look at the
+[2558.6s] mistake, you can see it's here.
+[2564.0s] Surprise surprise, it has a discount of
+[2566.4s] 19,000 and I mean now the discount, you
+[2570.1s] know, the discount's here because it's
+[2571.7s] part of the data model um now, but
+[2574.1s] before there was no discount and so it
+[2577.1s] was missing that discount amount.
+[2579.7s] >> Got it. And you can see the difference
+[2581.1s] is the 19,000 which is the discount. So
+[2583.5s] it's like so that's when I saw I said
+[2587.2s] >> you started with a small set of
+[2588.6s] receipts. You figured out what can we
+[2589.9s] learn about making the data model and
+[2591.4s] the prompt better with that small set.
+[2593.1s] And then once you got those pretty
+[2594.7s] pretty good and you said even if one of
+[2596.6s] these is failing right you can basically
+[2598.7s] say like okay that one we're not going
+[2600.5s] to try to solve. Let's do a bigger data
+[2602.0s] set. Let's see what other problems we
+[2603.2s] hit. And so you built a tool that
+[2604.5s] basically like when things are not
+[2606.6s] passing, you can immediately dig in and
+[2608.6s] use what you learned from the eval to go
+[2610.9s] improve the prompt.
+[2612.2s] >> Exactly.
+[2612.5s] >> Go find more corner cases. I love it.
+[2614.7s] >> You can you can kind of find like see my
+[2617.8s] journey just by looking at the named
+[2619.4s] runs, right? So we're here at Gemini
+[2621.8s] Flash. I added just a discount on total
+[2624.5s] field and then I noticed that there's
+[2627.3s] some item discounts. It's like a
+[2628.9s] percentage of the item. So then I added
+[2630.8s] that and that looked pretty good. So, I
+[2632.7s] jumped up to 50 receipts or 51 cuz I
+[2635.3s] forgot it started at zero. Whatever.
+[2638.3s] >> Retry logic.
+[2639.4s] >> Then I added retry cuz I was just
+[2640.9s] getting extraction failures. I'm like,
+[2642.2s] [ __ ] it. Like, let's just do exponential
+[2643.4s] retry. And then that one.
+[2644.9s] >> Can we see the receipts? Can we see the
+[2647.0s] results from each of those
+[2648.6s] >> like the 50 and then with the retry
+[2650.3s] logic?
+[2651.3s] >> Sure.
+[2651.8s] >> Like I'd love to kind of just like see
+[2653.7s] it progress over time
+[2655.4s] >> just like the highle analysis. Yeah.
+[2657.8s] >> Yeah.
+[2658.6s] >> Okay. So here and then if I do the retry
+[2664.3s] added, you can see the unified accuracy.
+[2667.4s] Yeah, it just it just got even better.
+[2669.2s] [clears throat]
+[2669.4s] >> Oh, sure. Yeah, cuz it's just like Sure.
+[2671.4s] There's just some weird flakiness. Let's
+[2673.1s] just like run it.
+[2674.0s] >> Yeah, exactly.
+[2675.2s] >> Cool. Okay, go on.
+[2676.8s] >> Um,
+[2677.1s] >> and then what was the next one?
+[2678.6s] >> Next one was same thing but 100.
+[2683.8s] >> And again, similar performance. It's
+[2686.1s] doing well. And this is where you get to
+[2688.5s] the point where um and viab this is what
+[2691.1s] I should this is the one we saw
+[2692.2s] yesterday. Um and this is where we start
+[2695.1s] looking at the mistakes. It's like I
+[2696.8s] don't know how I would label this.
+[2698.4s] Right? These these are the interesting
+[2699.6s] ones. All right. So if I come down here
+[2702.2s] I mean we'll just look at at this one.
+[2704.7s] Um difference of 3,000. Let's see if
+[2707.3s] this is an interesting one.
+[2708.8s] >> Really interesting. Like certainly Kevin
+[2710.0s] hasn't looked at this data on the fly.
+[2711.4s] He's literally looking at it right now
+[2712.9s] and it's like ah I see something is off
+[2715.4s] by 3,000. Mhm.
+[2717.0s] >> And like here I can see that it
+[2718.3s] literally double counted the 3,000 of
+[2720.2s] the discount and the tax.
+[2724.4s] >> Wait, what's the discount?
+[2725.8s] >> Yeah,
+[2726.1s] >> it just added a $3,000 discount. I have
+[2728.2s] no idea why.
+[2729.1s] >> Oh, yeah. I see that. Yeah,
+[2732.5s] >> I think that's Well, what's also
+[2735.8s] interesting is like this.
+[2737.6s] >> What are the 50,000 and the 17,000
+[2739.8s] underneath the cash that they
+[2741.1s] >> paid?
+[2743.0s] Okay. Okay. Okay. So here it double
+[2745.7s] counted that. Yeah, it's
+[2748.3s] >> So I would probably iterate on the
+[2749.7s] prompt on this one, but if we just look
+[2751.5s] at a couple others.
+[2753.0s] >> Yeah. Okay.
+[2754.2s] >> Like let's see. Um Oh, this I think this
+[2756.6s] is that discount one that I got confused
+[2758.4s] on.
+[2759.2s] >> Yep, there's that.
+[2761.0s] >> Um
+[2762.5s] >> I think what's really important here is
+[2763.8s] I want everyone on the everyone on the
+[2765.4s] call to really quickly realize how fast
+[2767.3s] we're looking and understanding this
+[2769.1s] data. The key part here is understanding
+[2771.5s] the problem. And I think someone in the
+[2773.7s] question, someone in the chat asked that
+[2775.0s] important question is like, isn't this
+[2776.6s] stupid? Aren't we doing manual
+[2777.8s] prompting? Shouldn't we do like an
+[2779.2s] optimizer? And in theory, you could use
+[2782.5s] an optimizer, but the real problem is
+[2784.4s] the reason that we can't use an
+[2785.7s] optimizer cuz real world data is messy.
+[2788.1s] You can optimize if you know exactly
+[2789.8s] what you're optimizing on, but we don't
+[2792.3s] even know if it's correct. Like if our
+[2794.1s] emails are actually correctly uh
+[2796.6s] defined, like in the case of earlier in
+[2798.3s] the chat, we talked about like negative
+[2800.3s] values. We did see correct negative
+[2803.0s] values applied
+[2804.3s] >> and if we were optimizing on that
+[2805.8s] failure the prompt would be like don't
+[2807.3s] add negative values ever but that
+[2809.2s] doesn't actually mean that that's true.
+[2811.8s] So while an optimizer can be useful,
+[2813.7s] it's only so and so that's useful once
+[2815.6s] you understand
+[2817.5s] >> like it will overfit for what you are
+[2819.4s] telling it to optimize for. And if you
+[2821.1s] don't have good definitions of the final
+[2823.4s] outcome, you will lose
+[2826.2s] >> like it will
+[2826.9s] >> it would be cool to take this data set
+[2828.9s] and run it through a prompt optimizer
+[2830.5s] and see if it can improve the eval
+[2832.2s] performance. That might be a fun We
+[2833.9s] don't have time to do it today, but I
+[2835.2s] thought I like doing like a Jeppa or
+[2837.2s] like doing the like BAML DSPI like
+[2839.8s] Frankenstein pipeline that someone's
+[2841.8s] someone talked about.
+[2844.3s] >> Yeah, I think it's really important like
+[2846.3s] fundamentally regardless of what you
+[2847.8s] use, it's really important that people
+[2849.0s] look at the data. like the tooling that
+[2851.0s] you build around looking at the data.
+[2852.2s] While it sounds stupid and silly and
+[2854.0s] slow and arcane,
+[2856.1s] this was actually the thing that'll help
+[2857.7s] you speed this up because the real thing
+[2859.7s] you want to optimize is a data set of
+[2861.4s] 10,000 receipts. You don't want to
+[2863.6s] optimize on a data set of 100 receipts.
+[2865.6s] And if you think about it, the best
+[2867.4s] example that I think is very tangible
+[2868.9s] for most people is actually
+[2869.8s] self-driving. So when you work in the
+[2871.8s] self-driving space, there's tons of data
+[2875.0s] of cars driving perfectly fine on a nice
+[2877.3s] sunny day on empty highways. That data
+[2879.7s] is completely useless to every
+[2881.4s] self-driving car company out in the
+[2882.9s] world. What I want to see is a car
+[2885.2s] carrying three other cars on a tow truck
+[2887.0s] that looks like a car headed towards
+[2888.5s] your direction with a median that's
+[2890.4s] completely in the middle of the road cuz
+[2891.8s] it's broken. That is useful data. And
+[2895.2s] it's the same thing in here. When I go
+[2897.0s] and build like the prompt optimizer,
+[2899.8s] what I really want to do is I want to
+[2901.2s] find the data that is relevant to then
+[2903.6s] go build the optimizer on.
+[2907.3s] Like that's what is the real fundamental
+[2909.3s] question like how do you find like the
+[2911.1s] most odd data sets that are actually
+[2913.2s] going to help me decide this and then
+[2914.8s] you can go ahead and build what I would
+[2917.2s] say is like turn this into a golden data
+[2919.5s] set and say hey I found these weird edge
+[2921.7s] cases let me go and define the perfect
+[2923.6s] JSON for each of these data sets.
+[2925.9s] >> Mhm.
+[2926.4s] >> This is [clears throat] exactly what the
+[2927.4s] final output should be and now go eval
+[2930.2s] that against that for these specific
+[2933.4s] very small data sets that I have. And I
+[2935.9s] I think to your point VA is this isn't
+[2938.2s] we're doing this really quickly, right?
+[2940.3s] Once I once you've done something like
+[2941.7s] this before, right? Building a building
+[2944.3s] it again for some a different system is
+[2947.0s] fast and now we're iterating through it
+[2949.5s] very very quickly. Like this whole thing
+[2951.6s] understanding the problem space a lot
+[2953.1s] better. You can do in half a day or a
+[2956.5s] day tops. and then you're much better
+[2958.6s] equipped to do what you're saying and uh
+[2962.1s] build your golden data set, build the
+[2963.6s] right JSON, and then maybe do a prompt
+[2965.5s] optimizer. But it doesn't take much time
+[2967.9s] in order just to, you know, invest a
+[2969.6s] little bit up front and then you'll have
+[2972.0s] that to inform the decisions you make
+[2973.7s] down the road.
+[2974.5s] >> Yeah, it's really about like I think
+[2976.4s] it's really about like deep
+[2977.8s] understanding of the problem.
+[2979.0s] >> I don't know if you want to keep talking
+[2979.9s] about the optimizer thing, but like
+[2981.4s] there's a question in the chat is like a
+[2983.0s] human won't be able to find the best
+[2984.7s] prompt manually. And I think like I want
+[2987.4s] to I want to double down on sorry, what
+[2989.4s] did you say?
+[2990.0s] >> I I mostly agree.
+[2991.3s] >> Okay. It's it's like it's almost like it
+[2993.4s] feels like it's like this this perfect
+[2995.0s] world framing of it where you have
+[2996.5s] access to infinite data, every single
+[2998.6s] potential thing that you might hit ahead
+[3001.4s] of time. Uh then yes, like a prompt
+[3004.2s] optimizer will do better. But I also
+[3006.6s] think like by under optimizing you lean
+[3009.8s] into the like emerging capabilities and
+[3012.5s] generative nature of these systems where
+[3014.5s] it's like you don't know exactly what
+[3016.2s] it's going to be capable of and you're
+[3018.7s] you're better off prompting less and
+[3021.3s] less specifically and having a good
+[3024.0s] feedback loop um like we've built here.
+[3027.9s] You know what I would do here is like
+[3029.7s] let's say I was shipping this in a
+[3031.0s] product for actually making this like
+[3032.6s] for like autoesting receipts on like
+[3035.1s] Brex or a bank banking app or like any
+[3037.5s] sort of like Pinops application like
+[3039.9s] Concur or any sort of like receipt uh
+[3042.1s] management system. What I would do is I
+[3044.4s] would go if you look at the top level
+[3045.8s] data set uh can you go up Kevin?
+[3048.3s] >> Uh
+[3049.6s] >> yeah like let's say I'm filing like a
+[3051.0s] reimbursement for my company analysis.
+[3054.2s] Oh, yeah. This one.
+[3055.1s] >> What I would see here is like, look,
+[3056.8s] what I want to ask myself is, I want to
+[3058.5s] ship a product. I don't actually care
+[3060.1s] about hitting 100%. Here's what I care
+[3062.1s] about. I care about the user's problem
+[3064.5s] being solved. The user's problem here is
+[3066.6s] entering receipt data is freaking
+[3068.4s] annoying and really hard.
+[3070.0s] >> So, [clears throat] here's what I would
+[3071.0s] do. I would look at this data and be
+[3073.0s] like, "Okay, cool. We're hitting a
+[3074.7s] really high percentage success rate."
+[3076.8s] Like, it's mostly correct. Uh, what's
+[3079.0s] the exact percentage here? Do you know
+[3080.4s] what it is, Kevin? If you scroll up over
+[3082.1s] grand total.
+[3083.2s] >> Yeah. If you can save me having to enter
+[3085.7s] in a receipt
+[3087.0s] >> 3% failure rate like I'm at a 3% failure
+[3089.8s] rate 99% of the n over 95% of the time I
+[3094.2s] won't have to enter the receipt. What I
+[3096.3s] would say is great I will ship this app
+[3098.6s] but because I have all these guarantees
+[3100.6s] built into it. What I will do
+[3102.2s] secondarily is into my UIUX I will build
+[3105.8s] a system that says something else which
+[3109.3s] is I will say I will flag that for the
+[3112.2s] user and say I found a mistake. Can you
+[3114.2s] please double check every single entry
+[3115.8s] manually and I would literally force
+[3117.7s] them to check check check every single
+[3120.6s] thing in the UI to make sure they
+[3122.7s] actually validated against the actual
+[3124.4s] receipt. And now I have a system that's
+[3126.3s] 100% correct.
+[3127.9s] >> And yeah, it's it's about bridging that
+[3129.7s] gap with human in the loop, right? It's
+[3131.3s] like as long if you're saving me if I
+[3132.9s] only have to do that one in 20 receipts,
+[3134.6s] you're still saving me a [ __ ] ton of
+[3136.1s] time. Cuz without the system, I would
+[3138.2s] have to do every single one of them.
+[3140.4s] >> Not only that, you would have had to
+[3141.6s] manually enter it versus checking for
+[3143.9s] accuracy. Huge difference.
+[3145.8s] >> And only checking the ones that fail my
+[3148.2s] checks,
+[3149.1s] >> which is also a huge different shift.
+[3151.3s] So, like the burden just went from like
+[3153.4s] uploading receipts being like a painful
+[3155.0s] task that takes like a couple minutes to
+[3157.4s] being something that takes 90% of the
+[3159.0s] time one or two seconds and then 10% of
+[3162.2s] a time takes a 30 more seconds on top of
+[3164.7s] that. So, my burden is way less. But I
+[3167.4s] could go even further. What I could do,
+[3169.6s] we could build a second system here that
+[3171.4s] says the LM is actually going to be
+[3173.4s] wrong. We'll assume that the model will
+[3175.3s] be wrong. And then we'll build a second
+[3177.5s] system on top of it that says whenever
+[3179.1s] we get a grand total calculation error.
+[3181.5s] We'll actually tell the model, hey, your
+[3184.4s] error is wrong. Your grand total is
+[3186.3s] completely wrong. Here's how much it's
+[3188.4s] off by. Update the original data model
+[3191.0s] to produce here's the original data
+[3192.6s] model. Here's the error that you have.
+[3194.6s] Re-update to go do that. And now I can
+[3196.1s] run the grand total calculation again
+[3197.9s] off of that error. So, not only building
+[3200.9s] in the runtime checks as a as like a
+[3204.2s] thing I'm doing for evals, but actually
+[3205.4s] building into the product and saying
+[3207.2s] when
+[3207.6s] >> as a just like self-correcting like hey
+[3211.1s] retry because there's an issue with this
+[3212.8s] kind of thing and not even sending it to
+[3215.0s] the human
+[3216.2s] >> and then if it and I let that run up to
+[3218.3s] three times and if that fails the third
+[3220.6s] time I send it to the human
+[3222.7s] >> or I might even show the human the UI
+[3225.1s] and let the human know, hey, I found an
+[3226.9s] error. I'm working on fixing it. give me
+[3228.7s] a give me like a second and I'll fix it
+[3231.4s] >> and the human can basically then review
+[3233.6s] either review or not fix it. It's up to
+[3237.0s] them
+[3238.5s] and that's kind of like a few other
+[3240.1s] things that you can do here. And I think
+[3241.5s] it's more about understand these emails
+[3244.0s] are not purely about like offline emails
+[3246.3s] but how you can make them be online so
+[3248.8s] that you don't have to prompt optimize
+[3250.4s] and end up with the perfect prompt
+[3252.4s] because if you can only ship your
+[3253.8s] product when it's perfect, you will lose
+[3255.8s] the battle of shipping product. Yeah.
+[3258.5s] >> Yes.
+[3260.5s] >> That's a great takeaway. Um
+[3262.8s] >> yeah,
+[3263.5s] >> Kevin, if you want if you if you had one
+[3265.8s] piece of advice to someone who wanted to
+[3267.4s] build a system like this, like what's
+[3269.1s] the what's the one or two biggest
+[3270.6s] takeaways from your side?
+[3272.7s] >> Um
+[3274.7s] Gemini, so the first one is Gemini Flash
+[3276.5s] is seems to be the best at OCR. So like
+[3280.0s] not notably better than Sonnet or 40. So
+[3285.4s] just going from 40 right here, same
+[3288.0s] prompt, same data model, everything to
+[3291.3s] flash
+[3293.4s] right away,
+[3295.4s] noticeable.
+[3296.8s] >> Yeah. Um, so that was the biggest thing
+[3298.7s] that surprised me. And the second one, I
+[3300.4s] mean, we've said it before, but it's
+[3301.6s] it's you got to look at your data. you
+[3303.4s] won't
+[3305.1s] I mean maybe some to some people the
+[3306.9s] rounding the discounts uh the different
+[3309.9s] taxes maybe that would be obvious to
+[3311.3s] some people but particularly the
+[3312.5s] discounts and the rounding weren't
+[3314.2s] obvious to me even even after I looked
+[3317.4s] at some of the receipts initially I
+[3320.1s] still missed it I didn't check 100 right
+[3322.1s] and so it took building this out and
+[3325.0s] then looking at the errors and seeing
+[3326.5s] like okay I understand what the error
+[3328.3s] this is making and you know this is
+[3331.5s] obviously going to be present in a a lot
+[3333.0s] of receipts because these receipts just
+[3334.4s] tend to have, you know, this data tends
+[3336.9s] to have this feature. So, it's it's
+[3339.4s] looking at your data and there's no real
+[3342.1s] magic um way around that that I found.
+[3344.9s] You have to understand the problem.
+[3347.1s] >> And what's really interesting about that
+[3348.6s] is it's like changing the shape of your
+[3350.7s] data isn't just like changing the
+[3351.9s] prompt. It's actually about changing
+[3353.3s] like
+[3354.9s] the data model that your code is using
+[3357.3s] around the system.
+[3359.1s] >> Okay, question for you guys. knowing
+[3362.2s] what you know now. Um, now you don't
+[3365.2s] have to name any names, but there's a
+[3367.0s] lot of companies out there selling
+[3369.0s] evals, either selling the problem of you
+[3371.2s] must be doing evals or selling products
+[3373.0s] that help you do eval so you can improve
+[3375.1s] your stuff. What do you think about
+[3377.5s] evals as a business?
+[3379.8s] >> I think obviously everyone wants to make
+[3382.2s] money doing something. So there and
+[3383.8s] there's not it's not like it's not
+[3385.0s] valuable, but I think it's very similar
+[3387.2s] to how front end works. You don't really
+[3389.8s] buy front end. You can buy someone to
+[3392.2s] build your front end. You can buy
+[3394.0s] someone to host your front end, but you
+[3396.3s] don't buy your UI components. Typically,
+[3398.7s] your UI components are yours and your
+[3400.4s] businesses. I think Eval is very
+[3402.5s] similar. You got to design the eval like
+[3406.1s] the metric itself. Anyone that's telling
+[3407.9s] you is selling you a metric, it is
+[3410.0s] scamming you because the metric is so
+[3412.5s] domain specific, so problem specific
+[3415.9s] that it it doesn't really matter. And
+[3417.6s] then everything else is just like
+[3418.7s] harnesses to run stuff.
+[3421.0s] That's what Joshy just said.
+[3422.5s] >> Oh yeah.
+[3423.0s] >> Aren't existing eval solutions mostly
+[3425.0s] harnesses to run? I mean, I remember
+[3426.6s] when Brian came on and he was talking
+[3428.2s] about their decaying resolution memory
+[3429.8s] and he was showing some of their code
+[3431.1s] and we was like, "Hey, are you okay
+[3432.5s] sharing kind of some of your closed
+[3433.7s] source stuff?" He's like, "Yeah, I can
+[3434.9s] show you guys the code. That's okay. I
+[3436.2s] will never show you guys the evals. The
+[3438.0s] evals are the thing we keep super
+[3439.6s] tight." And it's like, "Okay, yeah,
+[3441.3s] that's actually the hard work of
+[3443.0s] building the product is like developing
+[3445.7s] over time in the same way he didn't want
+[3448.2s] to outsource his memory system. He
+[3449.8s] didn't want to outsource his eval system
+[3451.4s] because it was really really tailored to
+[3453.4s] his product and and and his problems and
+[3455.6s] his users.
+[3456.6s] >> Yeah. And I'm not saying there's not
+[3458.2s] value in paying someone to run your
+[3460.0s] evals for you.
+[3461.8s] >> Um but I'm also not saying there's like
+[3463.8s] a necessary need and an urgent need to
+[3466.0s] go do that either. Um like in my opinion
+[3469.0s] like what Kevin just did over here was
+[3470.6s] like clearly didn't take him that long.
+[3472.6s] It did take him some design time and
+[3474.5s] some system design time. I guess if
+[3475.9s] people use his source code and point it
+[3478.3s] point cloud code at this repo and say
+[3479.9s] hey design me an ebos system works kind
+[3481.6s] of like this or like chat with chat with
+[3484.7s] look at this code and help me think
+[3486.2s] about how to design evals for my own
+[3487.8s] system like what design system I can use
+[3489.7s] there. I'm certain they could do it in
+[3492.3s] maybe not three hours but probably not
+[3494.7s] one week either. It's probably like a
+[3496.8s] one day process to go design this out.
+[3499.4s] And like my my thought process is like
+[3503.0s] just do that. And then if you decide
+[3505.0s] that hey this is we're running evals on
+[3507.2s] 500 million data sets and we need to run
+[3509.4s] like an offloaded distributed system and
+[3511.8s] we don't want to own that. Great. Go pay
+[3515.1s] for that. If you're running like 500
+[3517.4s] receipts just run on your stupid
+[3518.6s] machine. Like like [laughter]
+[3521.5s] it's like async.io is not going to break
+[3523.8s] on your system. If you want to have a
+[3525.8s] shared distributed system that everyone
+[3527.4s] can see these results and you don't want
+[3529.0s] to go build that for your team, then
+[3531.0s] just go do that. It's not going to take
+[3533.4s] you that long to go do that. But also
+[3535.4s] pay someone for that. That's not a bad
+[3537.3s] thing to have. Like like building out
+[3539.3s] this versioning system, if someone has
+[3541.2s] designed it in a way that is really
+[3542.5s] beautiful and good like Verscell has
+[3544.3s] done a great job at shipping front-end
+[3547.0s] UIs with staging environments on pull
+[3549.6s] requests, like all that stuff is really
+[3551.5s] really good in Verscell. has nothing to
+[3553.4s] do with writing front-end code, but it
+[3554.9s] makes writing front-end code better.
+[3556.6s] >> Exactly. And you can build your own
+[3558.2s] system for that, but like I don't want
+[3559.7s] to I don't want to say like for a PR
+[3561.4s] launch this preview URL.
+[3563.0s] >> We built our own at Sprout. It was it
+[3564.8s] was it was big. It was incredibly
+[3566.3s] valuable though. Like it was it was the
+[3567.9s] most useful part of the dev platform at
+[3569.8s] the whole company.
+[3570.8s] >> Yeah. But it's so much better to just
+[3572.2s] pay someone for it.
+[3573.6s] >> Um and I think that's kind of what it
+[3575.3s] comes down to. It's like you got to pick
+[3576.9s] the parts of your eval system that are
+[3578.5s] actually useful. If you don't have like
+[3581.3s] a hundred people looking at random evals
+[3584.0s] results all the time, um, then you
+[3587.1s] probably don't need this. I would just
+[3589.1s] go ahead and straight just like host it
+[3593.2s] and just send it over like send over
+[3594.8s] like a tail what's a tail scale URL to
+[3597.6s] your teammate and go do that. Produce a
+[3599.8s] bunch of JSON files that you can share
+[3601.0s] over some like check them into git if
+[3602.9s] you want. It doesn't really matter.
+[3605.4s] Um, and I think it's just about
+[3606.6s] designing the system you want. And like
+[3607.9s] paying for it, I think can be useful,
+[3610.4s] but it it also isn't like a necessary
+[3613.4s] thing that you have to do. Emails are
+[3615.1s] necessary, paying for them or not.
+[3617.5s] >> Amazing. Um, this was super fun. Um,
+[3620.4s] Kevin, thank you so much for jumping on
+[3621.8s] and sharing. I can't wait to uh
+[3624.5s] >> seems like about every six weeks you've
+[3626.2s] gone and uh change changed the rules of
+[3627.9s] the game. So, uh, hope hope to have you
+[3629.8s] back again soon. This is great. Um, any
+[3632.4s] any last thoughts? All the code is
+[3634.5s] already on um GitHub, I guess.
+[3637.1s] >> Uh I haven't I haven't pushed it yet,
+[3638.6s] but I'll do that.
+[3639.7s] >> Push it. Make the PR. We'll merge it in.
+[3641.8s] Uh
+[3643.4s] I guess for everyone else that's listen
+[3645.0s] still listening. Uh this is AI that
+[3647.3s] works. If you guys are interested in
+[3649.0s] this kind of concepts and you like
+[3650.4s] seeing this kind of content, uh come
+[3652.7s] check out the subscription over here or
+[3654.8s] check out the YouTube. We'll usually
+[3656.2s] post the videos one week afterwards.
+[3658.6s] Really appreciate this time with Dex and
+[3660.7s] obviously Kevin for making up the time.
+[3662.3s] It's been always a wild ride and thank
+[3664.2s] you everyone for joining the chat as
+[3665.5s] well.
+[3666.2s] >> Yeah, thanks.
+[3667.4s] >> Thanks everybody.
+[3669.0s] >> Bye everyone.

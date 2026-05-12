@@ -1,0 +1,771 @@
+anyone purchase any Dev Dan course. I
+like his YouTube content, but I somehow
+don't trust any product with this type
+of landing page. Yeah, I completely
+agree with just the landing page makes
+me feel like it's a scam. That landing
+page looks like ass. Wouldn't buy from
+someone who can't get it right with AI.
+Before selling an AI mastery course,
+maybe start by mastering your own
+landing page.
+poof. And my personal favorite, just
+grift.
+Okay, now there are some positive
+comments in here from engineers that
+have taken the courses, but the feedback
+here is well taken. And I want to use
+this Reddit post as an opportunity to
+showcase a new emerging technology you
+can use to scale your agents. Let's talk
+about agent sandboxes. What are agent
+sandboxes? What's E2B? And how is this
+useful for scaling your impact with your
+agents?
+Let's first create actionables from the
+Reddit post. We need to turn this Reddit
+post into concrete prompts so our agents
+can resolve any issues. So the first
+thing we're going to do is boot up
+cursor and we're going to boot up two
+different Cloud Code agents. I want
+Claude sonnet there in YOLO mode and
+another Claude Sonnet. Our agent on the
+left is going to be our orchestrator
+agent and we're going to run prime OB
+box. So, this is going to prime our
+agents to be the orchestrator to kick
+off our agent sandboxes. Now, on the
+right, we're going to set up prompts to
+turn the Reddit post into concrete
+highle prompts for our front-end agents.
+I'll use my code snippet here, AGP. This
+is for a gentic prompt that's going to
+create a great starting place for us.
+And our only variable here is going to
+be the Reddit post. And I just want to
+collect all the information from this
+page, right? So, I'm just going to go
+ahead and copy here. Hopefully, Reddit
+doesn't sue me for this. And we're just
+going to paste this here. And now we
+have all that information there. All
+right. So what's the purpose of this
+prompt? Based on this Reddit post
+paragraph prompts center the first
+prompt buttons respond directly. Great.
+So I'm going to paste this into our
+second cloud code instance there and get
+that fired off. That should give us
+three distinct prompts in total. We'll
+be able to take these and pass it into
+our agent sandbox orchestrator agent
+that's actually going to kick off the
+sandboxes. You can see here it has the
+command structure. It knows how to
+operate this tool. We ran this prompt
+here, prime Obox, and Obox stands for
+outbox agent. This is effectively the
+skill setup for this agent. Okay, this
+could be a skill. This could be a sub
+agent. We're keeping things simple. And
+here it's just a prompt. Run ox. And I'm
+going to go ahead and get a link to this
+codebase. It's just a version of the
+front-end landing page that Reddit
+roasted. We're going to make some
+improvements to it. We want our agents
+inside of their own sandboxes to make
+changes to this website and then host
+the URL back out. We're going to do this
+at scale. This is going to be really
+cool. Let's go ahead and grab the GitHub
+URL for this. Just going to copy this
+and then use this in the prompt. So
+that's the URL that the sandbox will
+clone. Let's go ahead and set the
+branch. We're going to call this landing
+page fixes from Reddit sonnet model. And
+here's the cool part. I want three
+forks. Okay. And then finally the
+prompt. I'm just going to paste in our
+first prompt here. Fix the spacing a
+little bit here. And bam. So I'm going
+to copy this, paste it into our agent.
+So this is going to use our outbox agent
+decoding tool. You can see the tool is
+running right there. We have the
+repository, we have the branch, we have
+the model, and we have the forks. So
+we're going to spin up three parallel
+agents working independently in their
+own codebase. This is the value
+proposition of cloud sandbox. This is
+going to be really cool. So let's go
+ahead and take a look at what this looks
+like in the E2B dashboard. This is our
+AI sandbox tool. You can see here if we
+refresh, we now have three sandboxes,
+three dedicated environments that each
+agent runs on its own. This is the value
+proposition of cloud sandboxes. These
+are dedicated environments that our
+agents own completely end to end. All
+right, so we use fork 3. So that exact
+same prompt is running three times. And
+I'll explain why we do that in just a
+moment. First, let's spin up some more
+sandboxes. We still have two more
+prompts to run. create two more versions
+with the same settings, but update the
+branch for each prompt against these
+prompts. Copy this in and paste it.
+We'll let Cloud Code handle this for us.
+It'll format everything and set up the
+formatting structure. So, you can see
+here we have two new Outbox CLI command
+calls. So, for this prompt, we're
+running three versions. And for this
+prompt, we're running three versions.
+Take note of the scale, okay? Instead of
+prompting back and forth, right, in a
+single claw code agent, what we've done
+here is we've taught an agent how to run
+sandboxes, we now have nine sandboxes.
+Okay, so we search 22 here uh or we got
+to search something more specific. Node
+22. E2B also supports templates, which
+is super super powerful. You can
+basically set up packages that you want
+installed in this specific sandbox.
+They're all running that version. What
+just happened here? What are agent
+sandboxes? Why is this important? This
+is a kind of slowly emerging trend.
+Right now only Fortune 100 companies are
+using this technology. This is tooling
+that runs. If you've used Manis, Chat
+GBT, Claude, when they start running
+code, guess what they're running?
+They're running isolated agent
+environments. They're running an agent
+sandbox. And what this does is it gives
+your agents an isolated sandbox to have
+full control over. I have my Mac Mini
+right here. I've run agents on this
+device. It's very powerful. You can set
+up some really great workflows, but
+there's limits to having a single
+device, right? Even when you have git
+work trees and you're running parallel
+git work trees so that you can run
+individual agents inside of specific
+directories and then have each agent
+kind of set up that environment, right?
+That's great, but it is still a
+limitation. Why is that? What are we
+trying to accomplish here with agent
+sandboxes? There is something big
+missing from every single agent coding
+setup right now. when you hop into the
+terminal, right, and you're prompting
+back and forth over and over in an
+individual agent, you're extremely
+limited. Your presence is very high and
+what you can do is limited based on your
+single agent that you have running. Now,
+we talk about the agentic scaling
+framework all the time. You first start
+with a single agent. You then make your
+agent better. You learn to context
+engineer. You learn to agentic prompt
+engineer. Then you add more agents. And
+then eventually you get to custom
+agents. And then there's one final
+level. If you're at the edge, you start
+orchestrating all of your agents with an
+orchestrator agent. Kind of like what
+we're doing here by teaching our agent
+how to run agent sandboxes. All right.
+There are different variants of the
+orchestrator agent. But the point here
+is that engineering is about a lot more
+than just writing code. You're doing
+research, you're doing reinforcement
+learning, you're setting up computer use
+agents, you're doing AI data analysis,
+you're planning, you're reviewing,
+you're experimenting, right? You're
+prototyping, you're testing, right? So
+many things happen, right? You know, as
+engineers, we glue together these large
+systems and put it together to create an
+experience for an end user, right?
+Engineering is about much more than just
+writing code. Agent sandboxes represent
+a natural evolution of agentic coding,
+right? First, we prompt back and forth.
+Then, we set up multiple agents inside
+the loop, outside the loop, inside of
+application, so on and so forth. But at
+some point, we need to give our agents
+more autonomy, more control, and the
+ability to act as we do in our own
+dedicated environments, right? On our
+laptop, on our computers, on our
+devices, right? They need their own
+agent sandbox. By the way, I'm not
+sponsored by E2B. They are just the best
+tool for this job right now, and that's
+what I try to focus on. All right? There
+are others like U Modal. I'm going to
+link them all in the description for
+you. What I want to do here is showcase
+how powerful this can be. These are
+still running in the background. And
+what I want to do here is just kind of
+show you what these are doing, right?
+What just ran exactly? I'm going to grab
+this command here. I've been using this
+to test. All right. So, this is the
+command that our agents are running. UV
+run ox GitHub URL. There's the branch
+and here's the prompt. Update the
+index.html file. We're going to set the
+title to the fork and the branch.
+Install dependencies. Boot the server.
+Provide a public URL. Hiku. And let's go
+ahead and set this to four forks. Okay.
+Okay, so we're going to have four
+versions run in parallel. Let me
+actually cd into the correct directory.
+This is going to be in the agent working
+sandbox.
+Here we go. Sandbox workflow. And then
+we'll actually kick off this workflow.
+Right. So, four haiku agents working in
+parallel. We're just going to update the
+index file and set the title. We'll see
+few more sandboxes kick up here. And you
+can see that these just got kicked up in
+the last minute here, right? These all
+got kicked off basically instantly. And
+some of our other sandboxes are likely
+going to be completing pretty soon here,
+right? And so what do agent sandboxes
+give us? It gives us three things.
+Isolation, scale, and agency. All right?
+And by us, really, it gives your agents
+these three things. All right? So
+isolation, it gives your agents
+dedicated environments that are safe,
+destroyable, they're ephemeral. You can
+spend them up, you can spend them down,
+just like your agents themselves. You
+really want to be thinking about your
+agents as deletable resources with a
+single purpose, right? You want focus
+agents accomplishing specific tasks and
+when they're done, they're gone. This
+lets us bypass many context problems
+very, very quickly. All right? And you
+can see here VS Code just opened with
+the logs summarizing the work done, all
+forks completed. All of our agents have
+finished. Each one of them has their own
+logs. Let's go ahead and open up logs.
+And you can see here we're getting our
+logs in. Let's go ahead and open up the
+test titles. And here's the coolest
+part, right? We have an entire agent
+playback. We can see everything that's
+happened top to bottom. That's great.
+But this is what I want. So, we can open
+up the individual forks. All right. So,
+let's just go ahead and open all of
+these up. There's the public URL that
+our agents are creating for us thanks to
+the sandbox. Here's what happened.
+Right? So, check this out. Just like we
+asked for, every single agent created in
+their own environment, they expose the
+web application. Right? You can see here
+we're on E2B.app. And here's fork one.
+Here's fork 2, fork 3, and fork 4.
+Right? Just like we asked for forks and
+they only updated the title. You can see
+here our other agents are coming in as
+well. This is what's happening, right?
+We are scaling our compute to scale our
+impact. Now imagine what you could do if
+you actually passed in useful prompts
+into these, right? Just like we did at
+the beginning. Let's go ahead and take a
+look at our actual code updates to make
+some improvements to the landing page as
+the Redditors have requested. All right,
+we have taught our orchestrator agent
+how to use this and where the logs, you
+know, exactly where the logs will be.
+Review the logs, open GitHub PRs, and
+preview URLs in Chrome for every link
+you find for the nine agents you kicked
+off. We're going to have our
+orchestrator agent reveal all the
+information for us. Right, we already
+set up great logging. This is an agentic
+process, so we have logs everywhere. Our
+agent can tap into anything that it
+needs to see to get the work done. All
+right. So, our agent is opening up.
+Here's all the PRs on this codebase.
+Right. We now have a bunch of new PRs
+from each individual agent. There's fix
+one. There's fix 3. There's transparent
+pricing 1 2 3. And here's our social
+proof badge 1 2 3. And now we're going
+to start getting the applications
+opened.
+All right. And so, here we go. Our agent
+just opened up
+every new version for us. Okay. And so
+if we scroll down, we can see that we
+have a new pricing setup here, right?
+This is a specialized specific version.
+You can see it's made some tweaks to the
+landing page here, right? And so this is
+just one version, right? If we go to the
+next version here, you can see that
+another agent made completely different
+tweaks here, right? It's got the pricing
+further up. Explore 8 tactics. You can
+kind of see the other information below.
+So this version just moved the pricing
+up. We can just keep going on down the
+line, right? There's another version
+where if we start scrolling, we can see
+a nice header here that pops up. And I
+assume, yep, when we click this, it's
+going to auto scroll to specific
+sections, right? So, course content. And
+then, of course, we can just click right
+to pricing. And, you know, the Redditors
+will be happy about this. We get right
+to the pricing right here. Okay. We can
+even click to FAQ. You know, we're on
+just the third version. And just to
+mention it, like why is this important?
+Who who cares, right? We can now solve
+one problem many times with compute
+thanks to agent sandboxes. Okay. Once
+you configure your agents and teach them
+how to run and set up your codebase at
+scale, you can just deploy them in their
+own environment and let them do whatever
+you need to do. And then you can access
+a pattern called best of n. Instead of
+just prompting back and forth in the
+loop here with a single agent, we just
+spun up nine versions. To be clear, we
+spun up three versions, but we gave each
+version three attempts, right? So, we
+basically tripled the compute to solve a
+specific problem, right? We created a
+few prompt variants and then we just
+gave it three times the compute. We
+wanted three versions of each. And as
+you know, language models, agents,
+they're non-deterministic. So, every
+time you run them, you're going to get
+something a little different. And we can
+see that right here in these first three
+versions. All right, here's another
+version. You can see it kind of ignored
+the existing header here. So, it missed
+this. But if we scroll down, you can
+see, you know, it's made a couple
+tweaks. There's that dark overlay there.
+Again, it left a lot of this the same.
+But you can see here we have this new
+header. Let's check out another version.
+If we start scrolling here, kind of same
+deal, right? So, a lot of these are just
+addressing that header. Um, this
+actually looks a lot better, frankly,
+with this like auto showing up. The
+black text has got to go though. This is
+just misalignment in the prompt. It
+can't see the background, right? Another
+improvement we can make to this workflow
+to our agents really is to give them
+some better browserbased tools, right?
+So they can actually validate against
+this public URL and read and see their
+work right here. Not bad. Once again, of
+course, we can just click these
+autoscroll get started. It's going to
+take us right to pricing. Fantastic. And
+then next one. What does this look like?
+So what happened here? Okay, so we just
+put the pricing transparent pricing. We
+moved it up front and we're talking
+about more of the guarantees here a lot
+higher up in the scroll. All right, so
+that's good. Team mode. We can go to
+individual mode. Fantastic. You know,
+the styling kind of questionable, but
+that's fine. This is one of the great
+parts. Again, we're running a best of
+end pattern. Once you have access to
+more compute and you've taught an agent
+how to scale other agents, right, this
+is the orchestrator kind of showing up
+once again in a different shape, in a
+different form. I'll link the previous
+video a couple weeks ago where we talked
+about the orchestrator agent. So, here's
+another version where we have the
+pricing just a lot higher up. Bold
+pricing, free risk, lifetime access. And
+as one of the Redditors mentioned, you
+know, let me just quickly address
+something here. Someone mentioned the
+refund. Yeah. So I have this refund
+policy, right? Battle Panda 100 called
+it out. If you don't like either one of
+these courses, right, Principal A coding
+or tactical coding, you get a full
+refund before you start lesson 4. So
+it's all risk-free. Um, you know, this
+is why I love that Grift comment so
+much. It literally couldn't be less
+grift. But anyway, the concerns were
+valid, right? You have to kind of scroll
+all the way down to see the pricing. I
+get it. But here we have a solid
+solution to that, right? We have nine
+versions of the application and we
+actually have to be careful here because
+something is about to happen to these
+sandboxes. With every sandbox, they each
+have their own lifetime. These sandboxes
+are ephemeral. They're temporary. And we
+can actually look inside of the system
+prompt of our agent here. If we close
+all these files inside of the system
+prompt, sandbox fork agent system
+prompt, you can see here if we scroll to
+the top, you can see our variables. And
+we can just collapse everything. So you
+can see this clean agentic prompt. In
+the variable section, we actually have a
+sandbox lifetime. All right, this is
+1,800 seconds. This is going to be 30
+minutes. Very soon here, our agents are
+going to start spinning down their
+environment, or rather the agent sandbox
+is going to start closing. All right, so
+we have to, you know, quickly take a
+look here at the rest of the versions,
+see which one we like. And then, of
+course, we always have the PRs, right?
+Just to be super clear, you know, every
+one of these versions created their own
+PR. So, we have the code, it's here. Our
+agents went off. They did work in their
+outloop agent coding system and then
+they're presenting the work back to us
+of course in a classic GitHub PR. We
+have just scaled our compute. Keep in
+mind how few prompts I actually wrote. I
+extracted information and then we turned
+it into a prompt that our agents ran and
+they operated on this for us. Right? So
+we have very very literally scaled our
+compute to scale our impact. All right.
+I just want to actually take a peep at
+some of these other versions to see if
+there's anything super interesting.
+Okay, we just moved the section up there
+a little bit more. And then I assume we
+just moved pricing up a little bit
+further here. Okay. Yeah. So that's not
+interesting. Updated. That's not
+interesting. Okay. Also not very
+interesting. Right. So this is another
+great aspect of the best event. You're
+just going to get complete duds,
+right? some in some generations when you
+just let your agent go off and do work,
+it's just going to be a version that you
+can just completely, you know, very
+quickly dismiss. And so, you know, we
+can get rid of, you know, several of
+these versions right away. These just
+aren't what I was looking for. We were
+really looking for some of these earlier
+versions here, uh, with this grit header
+with autoscrolling. So, you know, now
+that I have this, again, we just threw
+agents at this to kind of generate the
+best of end, right? Multi- version
+solutioning with many agents. What I'll
+do after this, right, I'll take this,
+I'll review the PR, I'll make sure that
+it's responsive. I'll clean up some of
+this darker text, right? I'll hop in the
+loop a little bit. I'll pull this
+specific branch and then get to work on
+actually shipping it out to pulling it
+to production. So, you know, shout out
+to Reddit for calling this out. And um
+I'm going to go ahead and leave a
+comment on this. I'll just like link
+back to this video to just kind of
+showcase uh some of the ideas in action
+that we talk about in both of these
+courses. So, here we're using parallel
+compute. You know, yes, this does come
+with cost. Let's talk about some of the
+trade-offs of agent sandboxes, right?
+These are powerful. These are great.
+But, you know, you can see here there
+obviously is a cost to this, right? I
+just spun up 13 agents running their own
+devices. Yes, you need to use your API
+key. Yes, it will cost you. This can't
+use your Cloud Code Max or Pro
+subscription. It has to go through the
+API. Another trade-off here is that you
+do have to engineer your sandbox, right?
+So, let's go and just take a look at
+like the application structure. Just
+like last week we talked about CLI
+versus MCP versus skills. I have that
+exact same layering here minus the
+skills. So I have a CLI to manage the
+sandboxes and then I wrap that CLI in an
+MCP server. So anytime anywhere we want
+to we can go ahead and boot up a new
+cloud code agent here and run MCP config
+and just run on this MCP and then I can
+run something like this, right? I can
+get the ID of this sandbox, right? And
+this is cool. You can actually click
+enter your sandbox and you can see
+everything that's going on here. this
+repository. So if we click into the
+repo, there's that entire codebase set
+up, ready to go. It's live. It's
+running. And you can see here's the
+agent timeout, right? So there's the
+timeout of the sandbox. Turn thinking
+on. Hit MCP. And you can see here,
+here's the E2B sandbox wrapper MCP
+server that I built here. LS the root
+directory of this sandbox. And I'll
+prefix E2B sandbox MCP. Okay. And so
+we'll kick this off. And our agent is
+going to peer in to this sandbox with
+this MCP server. Right? So there's that
+list files. It's going to run this path
+depth one. And it's going to give us
+files inside of this MCP server. Bam.
+There's that. We're at the root of that
+sandbox. Go here. Right. Here's the
+actual repo. Uh ls this directory here.
+There we go. There's the entire
+codebase. All right. Very cool. We've
+set up an MCP server that wraps the CLI.
+And the CLI has the key commands. If we
+just hop in here, go to commands. you
+can see all of the key elements that
+actually wrap the functionality. And
+here we are tapping into, let me just be
+super clear here, you know, we are
+tapping into um E2B. So if we go into
+modules and we go into something like
+files, you can see we're using E2B. This
+is the agent sandbox tooling. We're
+connecting to the sandbox and then we're
+running specific sandbox SDK tooling
+like this. Right? This is how you can of
+course compose different types of tools
+into CLIs, MCP and of course we can turn
+this into a skill if we want to. All
+right, so that's how that works. And
+then we have our sandbox agent workflow
+which is running that Xbox or sorry Obox
+workflow that you saw. And so this is
+the actual high level that our agent was
+running. And this is what we ran our
+prompt into before, right? So this is
+exactly what this looks like. If we hit
+up here, we are running the Obox tooling
+which is the sandbox workflow. And right
+now we only have one workflow. If you've
+taken tactile agenda coding, you know
+what this truly represents. It
+represents an ADW. The sandbox fork is
+the tooling we use to actually spin up
+all the environments and there's all the
+flags for the command and then it just
+kind of goes into the details yada yada
+yada. Two important things to mention
+here. If we go into agents, we of course
+using the cloud code agent SDK. This is
+in fact a custom agent where we pass a
+prompt into. And then our if we look for
+options, you can see all of our cloud
+code options that we're setting up. We
+have allowed tools, disallowed tools,
+and the most important piece here is
+that if we go into our config
+um config or sorry, constants and search
+our allowed tools, you can see here is
+all the tools, right? The new MCP
+specific tools that we're building out
+to help our agent interact with this
+specific service. You can kind of get
+the idea of how this works, right? uh
+init sandbox create connect execute kill
+sandbox right there and you know
+speaking of let's go and check the
+timeout you know a lot of our sandboxes
+they have about 7 minutes left to live
+some of them have already started
+closing down these sandboxes don't last
+forever right just like your agent
+they're ephemeral they have a purpose
+you spin them up you get cloned you do
+work and then you finish right you
+delete them this is the agent sandbox
+and one last thing I want to share with
+you here you know there are many
+important pieces to setting up agents
+the most important are of course the
+core four context model prompt tools. We
+talk about this on the channel all the
+time. If we search for that system
+prompt here, um, and open this up again,
+you know, this is the engine that drives
+our sandbox agent. So, this is an
+engineering agent that operates its own
+sandbox, right? Your sandbox is fully
+isolated environment with its own file
+system, tools, configuration, right? So,
+everything here is detailed in the
+purpose. Once again, we have clean,
+clear prompt engineering. You know,
+context engineering is great, but if you
+can't prompt engineer, nothing else
+matters, right? It's going to be garbage
+in the whole time. This system prompt
+completely overrides. If we look here,
+right, the system prompt completely
+overrides the clawed code system prompt.
+This is a full true custom agent. It has
+its own tools and it's specialized to do
+one thing extraordinarily well. So,
+that's the agent sandbox. Sandboxes are
+starting to spin down now as we approach
+the 30 minute mark here. You know, what
+are the next steps here? So after you
+have tooling like this that is you know
+rapidly deploying many versions many
+solutions this very quickly turns into a
+of review constraint. How do you review
+all this? Planning and reviewing are the
+big areas of focus for engineering with
+agents. Right? If you're doing this
+right you're likely planning a lot and
+or you're reviewing a lot of work. And
+you can see here we have a decent amount
+to review. Obviously we can just come in
+tick off all the ones that we don't want
+or don't care about get rid of them.
+Right? that we can mark as closed and
+then just proceed from there. I am going
+to go through this and deploy a couple
+of these versions on tactical agent
+coding and principled ad coding because
+I do like some of these versions and I
+really like this version here, right? I
+think this is the best one. I'm going to
+update this button a little bit to match
+the theme a little bit better. But
+anyway, you know, this was a simple
+example of showing off how you can use
+agent sandboxes. And to be completely
+clear, you know, with UI, this is a
+little overkill for a problem like this.
+you know, making some tweaks to a user
+interface, but still it showcases the
+point very well. Asian sandboxes give
+you compute at scale. It lets you very
+literally scale your compute to scale
+your impact. That's a huge theme we
+focus on on this channel every single
+week, week after week. We know that
+engineering is about much more than just
+writing code. By giving your agents
+their own environment and their own
+tools, they can operate more
+autonomously, right? You can scale up
+what your agents can do. The agent is
+the best tool for the job of
+engineering. So how well can you use the
+best tool? This is the measure of our
+impact as engineers in the age of
+agents. Keep your eyes on this trend.
+Agent sandboxes are going to come up
+more and more and more. It's going to be
+a very very powerful piece of AI tooling
+if you know how to use it and if you
+know how to leverage it. Right now only
+a lot of big labs and engineers near the
+edge are using this right for
+reinforcement learning for isolated fast
+one-off environments data analytics
+right there are many many use cases it
+took me a while to understand why this
+was important but once you see it once
+it clicks it really clicks again I'm not
+sponsored by E2B or cloud code or any of
+these tools I'm an unbiased third party
+I look for the best tool for the job of
+engineering and then I share them with
+you when I have time agent is the best
+tool for engineering and the best way to
+scale up the autonomy of your agent is
+by giving it its own dedicated agent
+environment like E2B. I'm going to
+deploy these changes on tactical agent
+coding. If you're interested in pushing
+what you can do forward, check it out.
+I'm also going to share my agent sandbox
+codebase with you here so that you can
+check this out. You'll be able to
+quickly spin up agents against specific
+code bases. You know, spend some time
+understanding the code. There are layers
+here. This is not a simple piece of
+technology. There are some levels to
+this, but if you're using agents every
+day, it won't be hard for you to
+understand. Link for this codebase will
+be in the description. You know, shout
+out to everyone who commented on the
+Reddit post, all the haters and, you
+know, everyone that shared some kind
+words about the course. Big shout out to
+everyone here. I'll drop a comment for
+this video after I edit and get this
+rendered on the Reddit post and we'll
+let engineers like you and everyone here
+that's going to see this post on Reddit,
+you guys decide if I'm a grifter or not.
+All right? No matter what anyone says
+about your work, the great, the good,
+the bad, the ugly, stay focused and keep
+building.

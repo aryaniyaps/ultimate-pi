@@ -1,0 +1,961 @@
+what a week it's great to be back here
+with you guys feel like it's been a long
+time open AI just killed more than 1,000
+startups with their latest announcement
+on Monday with gb4 turbo 128k Contex
+window assistance API Turbo with vision
+Dolly 3 Json mode and tons more you
+already know this though you've been
+deep diving into videos content code and
+likely rushing to keep up with what it
+means for your engineering work and and
+your product work since open AI Deb day
+I've been spending every free minute
+exploring researching questioning and
+condensing my learnings into pure oil to
+understand what this means for you and I
+as product Builders there's a ton we can
+talk about there's a ton we can cover
+but I don't have the time we don't have
+the time so let's focus in on the bigger
+metag game by looking at open ai's most
+interesting and most technical
+announcement the assistance API backed
+by gbg D4 turbo in this video we're
+going to break down gd4 assistance API
+into a clean reusable python structure
+that we use on our postgress data
+analytics tool we've been building over
+the series by using a real use case this
+will give us a better understanding of
+the value the use cases and how it
+compares to plain gp4 chat completion
+calls we'll then touch on the macro
+institutional level of what all these
+changes mean then we'll dive into the
+smaller micro
+none of this matters if we can't
+conceptualize it and condense it down
+into what we can do on a day-to-day
+basis thinking planning building turning
+these incredible tools open AI is giving
+us into real concrete value for
+ourselves and for our users customers
+and clients if this sounds interesting
+to you and you are excited to cultivate
+a calm collected perspective and action
+plan hit the like hit the sub and let's
+build a reusable gp4 Turbo assistant
+we're going to call Turbo 4 as always
+let's start by recapping our multi-agent
+postgress data analytics tool in natural
+language we can ask our multi-agent tool
+any question about our postgress
+database for instance let's reveal all
+negative job feedback at a high level
+our application is very simple we take a
+natural language query against our
+database we load in tables that are
+relevant and we use a series of llms
+back by open AI to to generate the SQL
+run it and report all the data to a file
+we also have a special insights team you
+can see here generating interesting
+additional queries that offer us
+business value in some shape or form you
+can see here our team completed we get
+reported the costs here we have a clean
+report of everything that happened in
+the Run we have the results in a clean
+Json file and then we have our
+Innovation file which has a report of
+all the interesting insights that our
+agent is pushing to us and then we have
+a clean agent log which records the
+conversations between our llm agents you
+can see here the admin's talking to the
+engineer passing the original query then
+the engineer to the analyst and then the
+analyst is calling the function that it
+needs to run and Report the results to a
+run SQL file so how does this work we
+accomplish this by using autogen
+guidance and a clean reusable
+application structure let's go ahead and
+walk through it briefly you can see here
+at the top we have a postgress database
+URL and an open AI API key we then take
+in the prompt we fix the prompt we build
+a session ID we open up the scope of our
+postgress agent instruments which acts
+as a store for agents you can think of
+this like Redux or Pia or a frontend
+store but it's for our agents it
+contains functions and state that they
+can use and manipulate we then have a
+gate team that determines if this is a
+valid natural language query against a
+postgress database we then use
+embeddings and a simple word matching
+technique to get all table definitions
+that are quer will need to run after we
+build the prompt we have our data
+engineering team we run a sequential
+conversation which runs top to bottom
+agent a passes to B B to C C to D then
+we look at the result of that and we do
+some logging and then our final team the
+Data Insights team takes another prompt
+based on the original prompt it takes a
+different set of tables that are also
+related then it builds its own unique
+Data Insights team runs a round robin
+conversation so that we can arbitrarily
+increase this to 2 3 4 5 and it'll
+generate batches of insight for us
+that's our multi-agent team we've done a
+ton here check out the previous videos
+in the series if you want to get caught
+up and understand everything that's
+going on here all the code for previous
+videos in the series will be linked in
+the description this series is leading
+up to a product called talk to your
+database if you're interested in being
+one of the first ones to try it Link's
+going to be in the description I'm
+really excited to bring all the work
+we've done to a fully usable product
+that we can use to get real value from
+and interact with our post postgress
+databases in a new seamless way feel
+free to sign up if you're interested so
+let's dig in the assistance API so we
+can really understand the value whenever
+I'm looking at a new API I like to break
+it down figure out how the entities
+relate to each other so let's look at
+this so we have at the top level we have
+assistants threads right so you'll have
+many assistants at the top then you'll
+have a list of threads and then threads
+have messages and threads also have runs
+and then we have assistants also have
+files something called steps tools
+and let me put the tools up here as well
+your threads can also have individual
+tools which is really cool I'm really
+excited to show you how you can utilize
+thread level tools I think it really
+changes the game in terms of getting
+full control over when functions run
+that's what the API looks like I want to
+build at a brand new workflow starting
+from scratch whenever something new
+comes out don't try to automatically
+integrate it into your pre-existing code
+that's going to be a hassle you're going
+to make mistakes things are going to not
+go the way you want them to right away
+so I always recommend start from a blank
+slate work your way back up up and then
+once you understand the system that
+you're building and you have a decent
+wrapper you have a decent kind of
+structure for it then integrate so
+that's what we're going to do we're
+going to take two steps here we're going
+to build out our assistance API wrapper
+we're going to call Turbo 4 run it on a
+basic example and after we kind of
+understand and conceptualize all of
+these uh different API entities we're
+then going to integrate it into our
+postgress data analytics tool we'll
+replace our data engineering team this
+workflow here where we're generating the
+SQL and then we're running it and then
+we're you know saving and Reporting all
+the files and Reporting costs and
+whatnot we'll replace this code with our
+brand new assistant API so let me cook
+up a fresh example in a brand new main
+file let's code that right
+now okay so let's break this down we now
+have a brand new assistance API wrapper
+called turbo 4 if we look at our
+application structure we can see we have
+a new top level python main file we
+updated our poetry start script to also
+include a turbo so now we can run this
+poetry run turbo and have our new script
+kickoff if we hop over to Turbo main we
+can see we have a couple things here so
+let me just uncollapse all the code here
+let's just start from the main file
+we're building our new turbo 4 assistant
+we're building a turbo tool which takes
+the name of the function the config and
+the actual function and then we have our
+assistant so we're saying get or create
+assistant we don't want to keep creating
+assistants every time we run so we're
+saying get or create we are then saying
+make thread so just like we looked at at
+the top here we have assistants and
+assistants have threads we're giving our
+assistant a list of tools which is our
+list of Turbo tools here and then we're
+adding a message create 10 random facts
+about llm technology after we add that
+message we're then actually firing off
+our thread so everything up to this
+point point will start running and the
+llm will then respond and add its
+response to a list of messages now we're
+kicking off a run and this will of
+course include steps as well and we have
+messages in there and then after we get
+that result back we're saying use the
+stor function to store one fact being
+really explicit here saying you know I
+want you to use this function and I want
+you to do this thing once again we run
+the thread so keep in mind this is all
+the exact same thread right so the great
+thing about the thread API is that open
+AI is giving us the ability to chain
+together messages and then when we run a
+new thread it's referencing the
+information in the previous messages in
+the thread that it needs to to run the
+new set of messages right so if it
+doesn't need to reference anything we've
+talked about in the past it won't it's
+then taking this message looking at the
+previous messages and then running our
+stor fact function in which we trigger
+by passing in this toolbox parameter
+where we say run all these functions on
+this thread right so let's go ahead and
+look at what this looks like with an
+actual run so I'm just go ahead and hit
+enter here so what you'll see here is a
+bunch of log messages that I place at
+the top of each function just so we know
+exactly what's going on so you can see
+run thread you can see equip tools you
+can see make thread and I just like to
+do that so it's easier to debug when I'm
+you know building out new wrappers new
+modules Etc you can see here add message
+generate 10 run thread you saw it it
+froze there for a little bit and let's
+scroll back up run threads with the
+store fact run thread has a log message
+here it's storing one of those facts um
+but then you can see at the bottom here
+we have a print assistant messages let's
+go ahead and copy this out change the
+language mode to format and if we start
+at the bottom here we have from the user
+to the assistant so from us to our llm
+and you know generate 10 random facts
+sure here are 10 random facts use the
+stor function to store and then it's
+stating the fact that it's going to
+store here and if we look at our stor
+function we just have this log here so
+we should see this stor fact log get
+printed somewhere here and there there
+we go so you can see that came out right
+here so this function did actually get
+called this is great right it looks
+really clean really simple let's look
+into what is actually going on here
+under the hood right so let's go to our
+turbo 4 system and let's break this down
+so you can see here we have a class in
+the init function we set up several
+variables the kind of key ones here are
+map function tools so this Maps the
+function name to our turbo tools and
+again turbo tools is just this name
+config callable function and we have the
+new gbg4 turbo model of course and
+preview mode we have some polling some
+local messages Etc but the most
+important things are here we have our
+tools our assistant ID and our current
+thread ID we have a property that is our
+chat messages and chat messages is just
+a sort of all the thread messages that
+we've saved that we load back from the
+thread API right so you can see that all
+here we have our tool config so this
+just Loops through all of our turbo
+tools that we passed in and it gives us
+back a config we then have a set
+instructions function which first makes
+sure that we have an assistant ID and
+and then basically it's going to update
+our assistant so you can see here we're
+diving into that assistant API you know
+take our assistant ID and it's going to
+you know set the instructions but you
+know even before that you know we have
+get or create assistant so this is
+really important right we have a call to
+all of our assistants I'm matching by
+name because I don't want to keep
+duplicating our assistant right and if
+the model's different we go and update
+the model that's kind of a minor detail
+but you know if this is the first time
+we're doing this we're going to create a
+new assistant otherwise we're going to
+match and store our assistant that we
+can reference throughout the creation of
+our threads and messages and Etc right
+so that's how we get a new assistant and
+then to get this like cool chaining
+functionality this is called function
+chaining what I'm doing here is every
+function returns self you can if you
+wanted to do this right you can if you
+want just do this and you know call your
+make thread call your equip tools call
+your add message right you can do this
+if you want it's just a little worder
+and this is a bit simpler um and I just
+kind of like the way this flows right
+you can read it top to bottom and see
+exactly what's going on either way works
+um we have equipped tools again just
+doing a validation check we always need
+our assistant ID so this forces us to
+make sure that we call this function
+first before we can call any you know
+additional Channing functions but then
+we're just filling up our map in a
+really simple way we have tool. name
+which is a function name right so this
+is going to bind store fact to the turbo
+tool right so we're going to end up with
+just a clean dictionary of this and then
+we have this if equip on assistant so
+this is a really important thing to
+really consider and assistants API you
+know we have this tools array here in
+which you can set tools on the assistant
+the problem with putting the tools on
+the top level is that if the assistant
+thinks it should run that tool for
+whatever reason it will run it I
+actually don't like this functionality
+as the default I want to run tools AKA
+functions specifically on certain
+threads we're doing that here on this
+run thread call which will'll get to I'm
+saying toolbox stor fact so use this
+function on this thread run specifically
+I don't want it to run arbitrarily
+whenever the agent thinks it's the best
+time to I want it to run on this call
+specifically the this just protects the
+flow of the application from running a
+function uh when it's not supposed to
+run as GPT improves and I think it's
+gotten really good here things like this
+will not be necessary I just like it
+because it's a lot more explicit so
+anyway that's our equip tools function
+so this gives our agents the ability to
+run specific functions based on the
+turbo tools that we pass in and then the
+make thread you know again checks the
+and then it calls the open AI client
+beta threads create call right and again
+all you need from that is the thread ID
+that you can reference in future calls
+we reset the thread messages here and
+then an add message we're of course
+referencing that thread that we just
+created right whatever we pass in here
+gets stored as the message setting up a
+couple other state variables and we're
+also refreshing the threads uh if it's
+passing through here just a couple nice
+switches as convenient methods load
+threads is going to load all the
+existing thre thread messages I should
+probably call this load thread messages
+it's a little bit clearer because we're
+loading the messages from the thread
+after that we have this list step
+function and this is going to combine
+our run ID with our thread ID and it
+tells us where and what exactly our
+assistant is doing during API calls and
+then we get to the core of Turbo 4 of
+really the assistance API it's this run
+thread function call so this is a little
+dense let's try to walk through it here
+quickly we do our validation checks of
+if no toolbox items were passed in AKA
+function calls we set it to nonone if
+they were passed in we go ahead and get
+the configuration for the tool and set
+this up to be basically a list of
+configuration objects that we can call
+the configuration object of course as
+you know looks like this right we have
+that I refresh our thread messages this
+is just for personal logging sake and
+then we're creating our Ron so this is
+you know in our hierarchy here we're now
+creating our runs and our runs are going
+to contain IDs right and then we do this
+pulling mechanism this is the trickiest
+part of the assistance API this pulling
+mechanism we keep pulling the API to see
+if this thread run has completed or if
+it needs to run a function call or if
+something else has occurred right maybe
+an error has occurred but if we look at
+this we're constantly retrieving this
+run using the thread ID and the Run ID
+we're then checking if this requires
+action right now requires action means
+it needs to run a function call so then
+we Loop through we get all the tool
+calls that need to happen this is where
+we're looking at our function map with
+the tool arguments passed back from
+openai and we're just running our
+function so you can see here we have
+that dot function call This Is Us
+running our function with the arguments
+open AI is giving us with the tool name
+it's also giving us after that we report
+basically saying you know here's the
+output of the function call we pass in
+the tool call ID back into a tool output
+we're then submitting the tool call
+outputs back to the run and then once
+everything completes and is finalized
+it'll give us back a completed status in
+which we just once again we I just want
+to keep refreshing the thread messages
+so that we have them on our class in
+memory right so this is just a list call
+on the thread ID after the run has been
+completed right if it isn't completed
+right and it's still loading we do this
+polling call where essentially it's
+going to keep running until the status
+is either you know requires action or
+completed definitely want to improve
+this a little bit by adding an else
+statement because this will just spin on
+if something has gone wrong right but
+that's what the pulling variable is and
+that is the turbo 4 let's go ahead and
+collapse everything so we can see that
+cleanly couple function calls a lot of
+work is happening in the Run threads
+basically you're managing IDs here
+you're making sure that your thread
+messages are you know loaded when you
+need them definitely heavier on the code
+side but this is what the assistant API
+looks like I really like how turbo 4 is
+set up because after we've kind of
+hidden the complexity of the assistance
+API away in Turbo 4 we can then do
+really clean things things like this
+right it's it's really obvious What's
+Happening Here get or create the agent
+make a new thread equip these tools run
+this message run the thread once it's
+complete run a new message use this tool
+right it's kind of like really intuitive
+and you know this is going to be really
+simple to work with so you know what I
+want to do now is take this example and
+replace our data analytics team our team
+that's generating SQL and then running
+it and writing the result to a file
+let's go ahead and replace that team
+with the turbo 4 agent
+okay we now have turbo 4 essentially
+completely replacing our data analytics
+team let's see how we've done that if
+you've seen the previous videos in the
+series you know exactly how this code
+flow works we have the prompt at the top
+a prefix here for fill this database
+query and then here's where our turbo
+four assistant comes in right so we're
+building our assistant we're generating
+our session ID just like we were before
+instead we're just going to use the
+assistant name and actually here we
+could we could just use the raw prompt I
+think we're using the raw prompt
+um on the original version yeah so let's
+go ahead and just do that right so let's
+do this and maybe we prefix um assistant
+name here just so we know it's turbo
+forward doing it and then we open up
+just like before our agent instruments
+which is our you know store and our
+functions and whatnot for our agents um
+we then have our database embed and what
+we've done is just kind of compress all
+that functionality into this function
+get similar table deps for prompt so you
+know all that previous functionality we
+had is just going to be in this function
+so this is you know our embeddings match
+this is our similar word functionality
+and this is our uh forign key table
+lookup so that's all happening here and
+then we're adding the table definitions
+adding it as a capitalized reference
+onto our prompt we're then setting up
+our tools and this is really cool so you
+know we have our turbo tool it's going
+to hit the Run SQL functionality we have
+a kind of slim down version of our run
+SQL tool configuration that looks like
+this we're then using our agent
+instruments which has our run SQL
+functionality right so really huge
+advantage of putting together smaller
+building blocks right we separated out
+our Asian instruments into you know an
+isolated class which has you know
+specific functionality but it isn't
+really tied to any system right we're
+able to just like Plug and Play Between
+the assistance API and autogen and even
+just playing llm calls right so this is
+really nice that we separate it out like
+this you know we can jump in here and
+it's just a standalone function right
+which is really like efficient and
+reusable right and as you know we have
+our database getting generated up here
+it's also part of the instruments output
+so we get our instruments and database
+we put together our tools and then just
+like as before we have our assistant
+chainable functions running top to
+bottom here right so it's super clear we
+have these extra functions here that we
+created we can just Cy these out from
+top to bottom we're setting our
+instructions you're an elite SQL
+Developer you generate the most concise
+and Performing SQL queries we're
+equipping the tools right we're
+equipping this to run SQL we're adding a
+message which is the prompt we generated
+up here right so it has all the table
+definitions it needs we're running that
+chunk so it's you know first going to
+generate the SQL just like in data
+engineering team and then after it
+generates that we're then saying use the
+Run SQL function to run the SQL you've
+just generated and again we're
+explicitly passing in the tool we want
+it to run this is like really important
+we're specifically passing in this tool
+here which then gets loaded and passed
+in during the thread run right so you
+can see here during this thread run
+we're saying you know here's the thread
+ID here's the assistant ID use these
+tools and we're explicitly calling out
+the tool right here we then have a
+couple additional functions to kind of
+replace uh the work that our
+orchestrator was doing previously so we
+have you know we're on validation so
+this just proves that our agents
+actually did what we asked them to do we
+set this up in I think it was video two
+or three of the series we then spy on
+our assistant which is basically just
+you know going to report the
+conversations it's having it's going to
+save that to this file again specified
+by our agent instruments we're then
+going to get the costs and the tokens
+and report that as well to a make agent
+cost file let's go ahead and run run
+this right get all Gmail users so we're
+definitely missing our gate team here
+and we're missing our insights team but
+I just want to focus in on the turbo 4
+assistant and just you know isolate on
+this and see if we can indeed replace
+our previously autogen multi-agent team
+with just a single assistant running two
+different props with some additional
+functionality you know run validation
+spot on agent get agent cost so let's
+see how this runs okay so you can see
+we're kicking off here we have the
+prompt we have the table definitions we
+made a thread we added the message set
+instructions and you can kind of see it
+all top to bottom get to create agent
+passing in Turbo 4 TBT 4 uh parameters
+there but let's go ahead and see how
+it's done okay so it's done already you
+can see here again we ran that thread up
+there we added the message know use SQL
+you can see it did that exactly it's
+running the Run thread with that run SQL
+call and then it's specifically saying
+you know calling run SQL with these
+parameters right so that's perfect and
+then we ran the validation as well we
+can see agent results we have the the
+agent chats and we can see that you know
+again that same structure from and two
+and I think this is bottom to top here
+so no top to bottom so you can see here
+fulfill it database query from assistant
+to user so from the agent to us it's
+saying Gmail users provide from provided
+table definitions you know we just want
+look at all email addresses in the users
+table with the end suffix of gmail.com
+right so it's providing this SQL for us
+which is awesome we can see that in the
+SQL query file exactly what you would
+expect and then it is running that and
+the result we return from that function
+rql right we just say something like
+yeah good successfully delivered and
+then it reports to us I'm going to run
+this function and then it was
+successfully delivered and executed so
+that's great that all ran fantastic and
+of course we can see the results here we
+have three Gmail users we've looked at
+this before if you go to our tables look
+at users sort the email we can see we
+have three Gmail users Alice Bob Charlie
+and you can see of course Alice Bob
+Charlie right here right so we have all
+three of those fantastic we're also
+reporting the cost so you can see that
+that run cost is about 2 cents so
+another important thing we just haven't
+had time to touch on here is the files
+API so you know the files API is part of
+what makes the assistant so valuable
+right we can upload specific files
+attach them to our assistant with the
+create assistant file and then
+throughout all of our run thread calls
+it will automatically look at that file
+when it needs to so that's something we
+didn't get to here that easily be added
+to Turbo 4 as another call where we
+create and read files and make sure that
+we haven't already created that file so
+that's an improvement we'll likely make
+here in a future video this is a fully
+running assistance API with a really
+clean reusable structure that we can use
+to solve any problem not just our
+specific SQL generating problem right
+you can see it's using this to replace
+our gate agent we could use it to
+replace our insights agent and honestly
+really interestingly we could replace
+our entire postgress uh data analytics
+teams with a single assistant
+essentially right I think that gets into
+a deeper discussion of is that the right
+way to go uh what are the pros and cons
+of multi-agent teams you know using
+something like autogen versus you know
+just use a big assistant when should you
+use tools like this this looks really
+cool looks really incredible you know we
+have it here you can get the code Link
+in the description right you always have
+to consider the pros and cons to things
+like this right we have this clean
+structure if we go back to our previous
+version our autogen plus guidance
+version you know we have a lot of like
+really clean structures here already set
+up and and you know we have the team
+orchestrator and whatnot building out
+specific teams right we have data
+engineering team data viz team scrum
+Master team um you know this flow is
+really great it works you know the
+assistance approach works we we we can
+push this even further let let me just
+real quick code this up we can go even
+smaller right we could do something like
+this right so this is an even simpler
+solution where we literally just have
+two prompts running against the open AI
+API right this is the chat completion
+API super simple super concise kind of
+doing the exact same thing but it does
+it in two calls instead of one generate
+the SQL take that SQL and run it against
+run SQL function and then we have the
+validate function right at the bottom
+here right just like we did with the Run
+validation call right so we have these
+three replacing all this and all of the
+API calls that's happening in this
+assistant when you're building these
+tools out I really think it's important
+I've talked about this on the channel
+before I'm going to be a broken record
+about it you want to be building
+building blocks don't think that any
+single implementation is the way to go
+right this is a kind of really clean
+structured format really clean class
+where we have a lot of complexity
+isolated away do you need it maybe there
+is definitely a time in the place to use
+a larger built out class like this and
+there's of course a time in the place to
+just do everything in two prompts run a
+validation function on it and just call
+it a Dave there's also an argument for
+reusing our conversational flow that we
+built out with autogen and Gaiden we
+have our orchestrator that can run many
+different conversation flows my point is
+don't get too attached to any one
+implementation you want to have
+different sized building blocks to
+tackle different sized problems this is
+part of the reason that open AI is
+building their apis like they are right
+there's different use cases for all of
+this and they're trying to figure out
+what do we want as developers what are
+we most interested in what have we been
+most interested in they're solving for a
+couple things here so now let's let's
+get into the macro and micro
+conversation right because that's this
+is all heading so it's pretty clear that
+these new capabilities from open AI are
+really incredible for engineers and
+builders that really Embrace new
+powerful technology what is happening
+here what what is open AI doing open AI
+is becoming the most important company
+in the 2020s and Beyond it probably
+already is the most important company in
+the 2020s great sign of that is this
+this announcement right open AI Dev day
+this blog post whenever a company's
+announcements causes Industries to shift
+you know that they technology is
+gamechanging you know that what they're
+doing is very important and this is
+where your eyes should be this is where
+your time should be open AI is becoming
+a platform for generative AI it's best
+to think of them like the new Apple but
+for llms how do we know this is
+happening how do we know they're making
+this transformation right we saw this
+with plugins we see it with chat gbt
+plus we see it with the paid API layer
+we see gpts right their gpts coming
+right we see the GPT store pre view
+we're likely going to see some you know
+15 to 30% Commission on paid gpts right
+it's it's pretty clear that on a macro
+level for the App Store for llms gpts
+you know assistants agents they want to
+be a core provider except it's looking
+like they'll own even more of the share
+than Apple does with the App Store uh
+because the distance between them and
+Google or anthropic or Facebook is is
+about the same distance as gp24 is to
+any open source model which is
+absolutely massive in combination with
+the these latest improvements 128k
+Contex window lower prices gbg4 Vision
+Dolly 3 there's so many applications
+that can be built on open AI right now
+it is incredible I don't have enough
+time in the day to build all the things
+that I want to with this technology I'm
+sure you have that feeling I'm sure you
+can relate to that there's just not
+enough time to crank everything out that
+you can imagine with this stuff it's so
+incredible that's such a great feeling
+um it also means that we need to focus
+on what matters right so let's let's go
+to the micro level right so that's a
+macro open AI is trying to own the llm
+stack right they're going to build
+platforms on it they're going to offer
+services for us developers to build on
+top of it and they're going to take a
+massive slice out of it right as they
+should this is incredible technology
+they've earned it and probably more so
+let's transition to the micro level so I
+think on the micro level the day-to-day
+operations for us as operators as
+Engineers as product Builders comes down
+to like prioritizing right it's all
+about where should I be focused you know
+they just came out with a bunch of new
+tech how should I think about this where
+should I be focused focused again I'm a
+broken record I would be focused but not
+I would be I am focused on code reuse on
+building block reuse on reusability on
+composability real example take the llm
+py file 117 lines of code now I have
+used this one file in so many
+applications I've built it is incredible
+and this is just a simple wrapper around
+chat completion right I need to update
+this to the latest version this is
+actually the old version this has
+provided me with so much value this
+simple one building right this is the
+very base foundational level of
+interacting with llm Technologies simple
+prompt pass in the model and you're just
+like going right so much value unlocked
+you can build on top of this as as we're
+doing in this series you can build
+larger building blocks right we have
+orchestrators we have agents we now have
+turbo 4 that we can use right we can
+reuse turbo 4 for any problem any system
+that we want to right building blocks
+building blocks Building Blocks the game
+is changing so rapidly and you know I'm
+going to I I I said this in the previous
+video it's kind of funny that I did
+because that very same day this
+announcement came through on November
+6th I think it was right yeah November
+6th on Monday when a previous video
+dropped I literally said this these are
+patterns the ground beneath us is
+changing rapidly week by week don't take
+any code base including autogen
+including you know whatever else you're
+using don't take it as fact or something
+better than something else nothing is
+complete things are shifting and
+changing a crap ton and the timing could
+not have been more perfect that video
+launched on the morning of November 6
+and then this happened really just Nails
+in the point be flexible focus on small
+building blocks on the micro that is the
+number one thing I can say don't
+overcommit to any one structure to
+anyone library to any one capability
+that you have that you're building on
+top of this the ground is Shifting
+beneath us you need to be able to shift
+and move with the ground ride the
+earthquake that open AI is giving us
+right it's a beautiful thing but you
+don't want to get caught in the cracks
+keep aiming to understand the technology
+keep playing with it keep Building
+Products on top of this there 's a lot
+more here that we haven't covered that
+we're going to cover in future videos
+uploading files for our assistants to
+read the image API I mean there's so
+much value here that could that's just
+waiting to be unlocked I think the right
+way to unlock it is small steps building
+blocks composability aim for reuse don't
+overcommit to any one structure I think
+that's the right way to think about this
+on the micro level the lower level
+functionality is getting abstracted away
+for us and I think you can expect to see
+this trend continue we need to be able
+to apply our judgement against the
+options available to us to build the
+best product in the lowest amount of
+time to generate the most value for our
+users our customers our clients and of
+course ourselves I think that's another
+really Golden Nugget here I'm looking at
+these tools is not only a way to build
+better products but also as a way to
+accelerate my ability to create new
+products right this is a gold mine of a
+personal engineering workflow
+Improvement the number of improvements
+you can make to your own personal Dev
+workflow with this technology is
+incredible we're just scratching the
+surface of what's possible so we have
+three videos left in the series this is
+video 7 we're going to 10 videos and
+it's all centered around our postgress
+data analytics agent it was really
+important to take a a smaller break from
+that today to talk about some of this
+technology to talk about the macro and
+the micro I hope you enjoyed that all
+the codes in the description just like
+you I need some time to digest all the
+API changes building out and tweaking
+some of our functionality some of our
+building blocks that we've worked on so
+far throughout the series I need to
+figure out exactly the best way to
+utilize this for our postgress data
+analytics tool just like I mentioned
+talk to your database is what this is
+all leading up to this is how we're
+going to end the series we're going to
+end up with a real live product I want
+to show you guys that we're not just
+talking on this channel we're not just
+sharing what we're learning we're not
+just you know having really in-depth
+macro micro conversations we're also
+building it we're going all the way so
+in the next video I'm going to have some
+more solidified decisions on how we're
+going to utilize the new gp4 technology
+for the postgress data analytics agent
+and finally we're going to get a version
+of the postgate analytics agent live on
+an API so that we can start working on
+the front end for talk to your database
+so that we can seamlessly interact with
+our databases faster while saving a ton
+of time thanks for watching drop the
+like drop the sub and I'll see you in
+the next one

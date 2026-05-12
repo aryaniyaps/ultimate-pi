@@ -1,0 +1,1034 @@
+What if you could have it all? Speed,
+price, and performance in a single
+model. Is the new Claude Haiku 4.5 that
+model? On the right, we have Haiku 4.5
+right next to Sonnet 4.5. Bam, bam, and
+on the left our multi-agent
+observability system. Let's open up some
+detailed swim lanes and compare these
+models side by side to understand Sonnet
+4.5 versus Haiku 4.5. The real question
+is what types of work can Haiku offload
+from Sonnet to save you and I time and
+money. Let's double click into Haiku 4.5
+to see how great it really is.
+Right away in our multi-agent
+observability system, you can see our
+agents getting to work. But, you can see
+something really awesome coming out of
+the new Claude Haiku 4.5 model. Haiku is
+running almost a second faster than
+Sonnet. Now, this is a really
+fascinating element of this model. It is
+absolutely fast. You can see it's got
+about 10 more tool calls than Sonnet
+does in the same period of time. We have
+a 3-minute interval here that we're
+looking at and you can see Haiku has
+over half a second edge over Sonnet.
+Now, this is going to change and this is
+going to lead us to our first key
+observation about Haiku versus Sonnet.
+You can see Haiku has decided that it is
+done working. It is writing its output
+file. I'm going to break down exactly
+what this prompt was in just a moment.
+There we go. So, Haiku has finished its
+work. So, it's got 74 total Claude code
+hook events and 36 of those were
+explicit tool calls. You can see it took
+Sonnet a bit more time within this
+3-minute interval. While Sonnet is
+writing its output, let's break down the
+stats out of Haiku. There are a couple
+key things I want to point out here. I
+see Haiku 4.5 as the cheap fast compute
+for agents. Haiku 4.5 is a third of the
+price of Sonnet. So, for every Sonnet
+prompt you write, you could have written
+three Haiku prompts. Now, it doesn't
+always work out that way, but that's the
+way I like to think about this. It's not
+always about the input and output
+pricing. You have to look at the cash
+pricing. Cash hits and cash writes drop
+the price down even further. This model
+is cheaper than you think it is. Just to
+mention it right away, I am not
+affiliated or sponsored at all by
+Anthropic or any model lab. I'm an
+unbiased third party. I comment and I
+talk about these tools because I focus
+on using the best tool for the job.
+Right now, I'll set them ready to go.
+Right now, these models are the most
+important thing to pay attention to and
+you heard that there. That marks the
+completion of both our models there. So,
+that's Haiku. Let me move to the
+5-minute mark and I'm just going to take
+a quick screenshot here so we can come
+back to this in just a moment. Haiku 4.5
+is a thinking model. This is an upgrade
+from 3.5. That was a pure base model.
+This is a very fast model. Some of the
+benchmarks are reporting 100 to over 200
+tokens per second once it gets going.
+Very powerful. Now, the most important
+thing we're going to break down in this
+video is what are the use cases for this
+model? When do you use Claude Haiku 4.5
+over Sonnet? Let's go ahead and just
+take a look at what exactly happened. We
+saw Haiku finish in about half the time
+it took Sonnet to finish. Haiku
+finished. The big question here is did
+Haiku 4.5 do the exact same work that
+Sonnet did twice as fast at a third of
+the price? Let's find out. Let's go
+ahead and look at the results of this
+prompt in this code base. So, this is
+the prompt that we just ran. Find and
+summarize specific files in the code
+base. We're looking for view and
+TypeScript files inside of the apps
+directory. So, let's go ahead and see
+that output file. There's two versions.
+We have Haiku 4.5 and we have Sonnet
+4.5. So, if we crack these both open,
+you'll see that they both wrote the file
+in the exact proper structure. So, if we
+go split screen mode here, the first
+thing we need to check is did both of
+our models find all the files in this
+code base? So, we can quickly just check
+this. If we go to the bottom of Sonnet,
+you can see we have about 96 lines.
+Bottom of Haiku, you can see we have 93
+lines. So, we're seeing another
+difference here in performance. Let's go
+ahead and count these, right? On Haiku,
+we're going to just do a quick regex
+search. TypeScript new line. 17 files,
+right? This regex search gives us all of
+our TypeScript files. And let's go ahead
+and do or view new line as well. 31
+files in total. Let's copy this search,
+move to Sonnet, and you can see
+something critical here. Haiku missed
+one file. Now, one out of 32 in some
+cases is a complete failure. That's a 3%
+failure rate. In some engineering
+domains, this is completely
+unacceptable. Now, on the other side, in
+a lot of domains,
+a 3% failure rate is more than enough.
+In fact, it's great when you can move
+twice as fast and spend a third as much.
+You have to keep that in mind as we're
+looking through these results, right?
+There are serious cost speed benefits.
+So, specifically costs and time losses
+by using these stronger, more powerful
+models, right? So, if you can trade this
+off, you're going to want to know about
+that, right? You're going to want to
+make that trade-off. Now, there is
+something else very important here that
+I built into this prompt specifically to
+compare Haiku to Sonnet. To be super
+clear here, I'm not trying to hype up
+Haiku at all. I'm trying to compare
+these models to understand when we can
+downgrade and pass off work to a
+cheaper, faster, more performant model.
+But, if the model can't do the job, we
+can't give the job to the model. What do
+I mean exactly? So, inside of this
+prompt, let me just go ahead and
+collapse everything so you can see
+classic structure, very easy to
+understand, very consistent, great for
+you, your team, and your agents. Now, if
+we scroll down here to the report
+format, you can see two things. Both
+models nailed the report format. So, we
+love to see that. But, there's an
+important detail here in our summary,
+right? This is a two-sentence summary.
+In the first, describe the file's
+purpose and functionality, and in the
+second sentence, describe where the file
+is used in the code base. This is more
+complex, right? This directly adds
+complexity to the prompt. Let's go ahead
+and continue comparing. So, we have
+Sonnet on the bottom here and we have
+Haiku on the top. Now, you'll notice
+something. If we search the keyword used
+on the Sonnet results, you'll see 12
+search results of use. And if we look at
+the second sentence just at a glance,
+you can see that the summaries coming
+out of Sonnet are a bit improved, right?
+We see that used keyword throughout and
+it even mentions when a file is unused.
+Now, if we search this inside of the
+Haiku results, you'll see only two hits.
+Okay? It serves as a starter template,
+enables proper type definitions,
+supports custom styling. You can see
+here, in general, Haiku completely
+missed this second instruction, okay?
+So, this is a key difference between
+Haiku and between Sonnet. I want to
+showcase not just how good, cheap, and
+performant Haiku 4.5 is, but also where
+it starts to fall apart, okay? This is
+cheap fast compute for agents, but I
+really see Haiku as a scouter model.
+That's kind of the best way I can
+describe it. It's good for search,
+summary, but for simple tasks. Let's
+scale this up, right? Let's push this
+further. We now know that Haiku is fast,
+it's cheap, it's performant, but it will
+lose detail, okay? It will lose track of
+some critical information. Haiku is a
+fast hard worker, but it won't work for
+very long.
+So, let's clear our agents and point
+them toward a critical task for agentic
+coding, planning. Let's reset our
+multi-agent observability and let's fire
+these two new prompts off. We're going
+to have Haiku and Sonnet plan a brand
+new feature. We know that great planning
+is great prompting. This is a critical
+element, a critical value proposition of
+agentic coding and of agents. So, let's
+dial into their individual swim lanes
+and let's see how these models perform
+side by side once again
+on a planning
+task. We're going to have these models
+plan this set of work. All right, so
+this is not a trivial planning task at
+all. They're building out three distinct
+new features. We're going to add three
+new UI themes. We're going to add a
+10-minute activity pulse timer. So, you
+can see here right now we have one,
+three, and five. They're going to plan
+out the 10-minute switch there. And then
+we're going to have a regex front-end
+only search bar for the agent event
+stream. All right, so that's the stream
+right here. We want to be able to search
+through these events quickly for
+Right away, same trend, right? Haiku is
+working very fast. On average, the time
+between tool calls is almost a second
+faster than Sonnet. You can see that
+Haiku has called almost twice as many
+tools as Sonnet. Now, I notice something
+here, too. Haiku has also made a mistake
+here that I want to call out. In the
+prompt, I explicitly state do not use
+any sub-agents. All right, so let me
+just quickly pull that up right here.
+Important, do not use sub-agents to do
+this. Run your own code to accomplish
+this task. So, here we have Haiku
+violating instructions in the prompt.
+It's running a sub-agent. This is bad
+prompting. Whereas, Sonnet solved that
+and did all the searching on its own one
+step at a time, reading files back to
+back. This is fine. We're going to let
+it fly. It did gather some results.
+Let's see how it performs. So, while
+these models are outputting their plans,
+I want to talk about something that's
+super, super important. Why do we care
+about Haiku at all? We care for this one
+reason alone. We care because we can
+pass off agentic capability between our
+models. So, from Sonnet 4 to Sonnet 4.5,
+the number of things Sonnet can do has
+increased. Now, we see that exact same
+thing from Haiku 3.5 to It's not just in
+that easy problem domain space anymore.
+It can now solve many of the problems
+that only Sonnet and only Opus can solve
+or could solve. And now, we're going to
+see this exact same thing. To be clear,
+Opus hasn't been released yet, but once
+it's released, we're going to see hard
+problems that were just not possible
+before be solved by that next frontier
+model. Now, it's a lot easier to compare
+a Sonnet and a Haiku together than an
+Opus to what's the edge of capability
+that we want to compare it against.
+That's becoming increasingly challenging
+as these models saturate and beat every
+single benchmark. I think the one thing
+I'm looking at now, the one thing I care
+about is agentic capability. How
+autonomous is the model and how well can
+it understand intent? Now, we're
+focusing here on Haiku. There are
+problems that Haiku can now solve that
+only Sonnet or Opus could solve, right?
+And so, what does that mean? It means
+that we can better trade off speed and
+cost and performance, right? Keep in
+mind, for every Sonnet prompt you write,
+you get three Haiku prompts, right?
+You're getting three to one if Haiku can
+do the job. That is the critical
+delineation to make. But now, it's
+important to map out the problem space,
+right? Easy problems to average problems
+to really understand what Haiku can do
+that you can offload down from Sonnet,
+right? Just like when Sonnet 4, Sonnet
+4.5
+>> Sonnet and ready to go. Okay, so our
+agents are completing in the background
+there, but just like when Sonnet 4 and
+Sonnet 4.5 was released, it replaced
+Opus, right? Why would you wait so long?
+Why would you spend so much when you can
+downgrade the model to get the job done.
+So, this is why we care about Haiku. We
+care because it gives us a model stack.
+And so, this idea is super important.
+You want a portfolio of models that you
+can work with. An agent model stack,
+weak, base, strong, right? Haiku,
+Sonnet, Opus, okay? And this isn't just
+relevant to Anthropic like pick your
+model stack, right? I don't care what
+model set you use. I think you should
+use and try all these models to
+understand the landscape of agentics,
+understand the landscape of generative
+AI. So, we all know that the new Gemini
+model is in the wild right now. It is
+going to be shipped soon. That's going
+to be really exciting. The performance
+of that looks insane. But every GenAI
+company has a model stack, right? You
+have Mini, you have Pro, and then you
+have Pro. It doesn't matter what this is
+for you. It only matters that you have a
+selection of models where you can trade
+off price, performance, and speed at
+will. Why would you spend the time and
+money on Opus when Sonnet does the job?
+Same thing applies for Sonnet and Haiku.
+Why would you spend the time and money
+on Sonnet when Haiku can do it at a
+third of the price, twice as fast? This
+is why we care about this release. Now,
+the real question is, can Haiku do the
+job, right? And this is where
+multi-agent observability, understanding
+some evals, understanding some
+benchmarks really comes into play, all
+right? So, both models completed their
+tasks. Let's see how they've performed.
+Let's just see if Haiku can take its
+plan and build out the feature end to
+end. And by the way, we are operating on
+the multi-agent observability code base.
+We have the agents pointed kind of back
+at their observability UI here. So,
+let's go ahead and see what was
+generated there, right? Let's understand
+the new plan that was created in the
+specs directory. And once again here,
+you know, we have another classic
+agentic prompt, classic structure, very
+consistent, purpose, variables,
+instructions, workflow, report. If
+you've been watching the channel, you
+understand why consistent prompting is
+so important for consistent results, all
+right? And you understand the value of
+every one of these sections. They're all
+distinct and important in their own
+unique way, all right? Let's look at the
+plans generated here, right? So, if we
+go into the specs directory, we can see
+these two new plans generated. Let's
+open them up and once again, let's
+understand how they compare. Sonnet on
+the right and we have Haiku on the left.
+So, the most important thing is that
+they accomplished these three tasks. Add
+three new UI themes. So, this is Haiku
+here that we're looking at. Three new UI
+themes, add 10-minute live activity
+pulse timer, perfect, and add
+regex-enabled front-end search bar, all
+right? So, it looks like it picked up on
+all three tasks. Let's just do a size
+check. So, if we scroll to the bottom
+here, you can see another distinct
+difference between these models. Haiku
+works very fast, very hard, but not for
+very long. Sonnet, on the on the other
+hand, has output a file that is three to
+four times longer than Haiku. So, you
+can bet that there's going to be some
+additional detail here that we could
+point Haiku or Sonnet or Opus at that
+will result in a better build step of
+the software developer life cycle. Right
+away, I think we can make a blanket
+statement that Haiku is not a good
+planner, okay? It's not meant to think
+deeply. It's meant to accomplish
+surface-level, high-level, pattern-rich
+work, right? Summarizing things, simple
+tasks. All that said, maybe
+Haiku knows something that Sonnet
+doesn't. Let's just fire this prompt off
+in a build higher-order prompt. I'm
+going to run {slash} build and we're
+going to have Haiku build the feature.
+And if it completes the work, then we
+were off about the importance of
+the detail that that plan actually
+needed, all right? But let's go ahead
+and fire it off. Let's see how Haiku
+performs here.
+All right. So, we're going to let Haiku
+get to work here. This is a classic
+build prompt. This is a higher-order
+prompt where we pass a plan into a
+prompt. We've talked about this on the
+channel and we utilize this concept
+inside of tactical agentic coding. But
+you can see here we have a simple format
+of our agentic prompt, purpose,
+variables, workflow, report. Haiku is
+just running and building and
+implementing this. We do have an ultra
+think information dense keyword here to
+activate thinking, but we already had
+thinking on via the tab key. So, this
+should be good to go. When we look at
+these models kind of side by side
+together, this is how I'm thinking about
+these models, right? They're all
+thinking enabled now, which is great.
+This extends performance, but it also
+extends their price, right? Because
+they're consuming more tokens. This is
+expected. We do want to scale our
+compute to scale our impact. So, we like
+thinking. Something that I would like to
+see is more fine-tunable thinking out of
+these models, out of these labs. Right
+now, you know, inside of uh Claude Code,
+we just have thinking on or thinking
+off. Which by the way, I had thinking
+off on Sonnet. So, it was actually
+operating at a disadvantage compared to
+Haiku. So, important thing to mention
+there. So, we can see here Haiku
+working. We do have that 10-minute
+marker in there. That looks great. Let's
+see if it comes in with that
+regex-enabled search bar under the event
+stream under the tags. The breakdown
+here is pretty much exactly what you
+expect, right? Haiku is the new fastest
+model. Again, we're talking 100 to
+200-plus tokens per second once things
+get going. This is something I need to
+add to the multi-agent observability
+toolkit here. Right now, we're just
+measuring kind of average speed, right?
+Average speed between the tool calls.
+You can see here that Haiku is very
+fast, right? Right now, you know, with
+Sonnet 4.5 and Opus 4.1, those are
+effectively the same models, but Opus is
+kind of unusable right now just due to
+the price, okay? You can see here its
+speed breakdown is exactly what you
+would think relative to the other
+models. And then we have our cost
+breakdown. Haiku, again, operating at
+about a third of the price of Sonnet.
+You get a lot more out of Haiku if Haiku
+can do the job, right? And this is the
+big recurring theme when you're talking
+about performance tradeoffs. It's
+performance, speed, and cost. Those are
+the three dials you and I have as
+engineers to tweak and tune as we're
+building agents with these powerful
+models. And again, by the way, I don't
+care what model stack you use. It only
+matters that you have the optionality to
+use the right one at the right time,
+right? This is why we care about Haiku.
+I had several other ideas that I wanted
+to share with you today, but when Haiku
+dropped, um I knew it was a perfect time
+>> and ready to go.
+>> Okay, so one of our agents have
+finished. When Haiku dropped, I knew
+that it was a perfect time to talk about
+this key idea. I mean I mean, if you're
+running a business, like there is
+nothing more critical than performance,
+cost, speed tradeoffs, right? This is
+what running a business is all about.
+How much performance can you get out of
+the engine you're building and what does
+it cost? Can we dial up and down these
+knobs? When you have a model portfolio
+like this, right? A model stack, weak,
+base, strong, you can do a lot more and
+you can tweak and tune the knobs when
+the time is right, all right? So, this
+is super super critical for scaling your
+agents across your code base, all right?
+Now, let's see what's been done here.
+So, nice. We have a regex bar, 10-minute
+interval here. All this happened really
+quickly, right? If I dial up how long
+did did this take, right? Let's try the
+10-minute. Nice. So, it looks like 10
+minute looks great. Within a span of
+about, what is this? Three or so
+minutes, Haiku completed this work. It
+used 25 tool calls and the average time
+between tools was about 4.3 seconds,
+okay? We also have 52 total events. And
+so, about half of those were actual tool
+calls, right? So, we are tracking the
+other events coming out of Claude Code,
+pre-tool, post-tool, stop notification,
+and a couple other ones, right? Start
+session, user prompt, so on and so
+forth. But the main work coming out of
+your agents is always the tool calls. To
+scale your impact, scale your compute.
+One of the most direct ways to measure
+your compute is by looking right here at
+your tool calls, okay? Tool calls are a
+rough corollary for results. So, the
+more tool calls in the less time means
+the more impact you're having, assuming,
+okay? And this is important, right? I
+have to You have to caveat all that.
+Assuming the work you're doing is
+valuable, right? Underneath all the
+agents, all the new technology, you
+still have to apply the right judgment
+to the right problems to generate real
+value. Have to focus on something that's
+worth building, worth solving, worth
+spending time on, worth using agents on.
+So, this is great, right? We have our
+10-minute timer. Let's check our regex
+search. I'm going to directly ask Haiku
+what fields can we search on? And I am
+absolutely loving the speed out of this
+thing. As as soon as it hits the server,
+you can see it just drilling back
+tokens, right? There Look at that. Here
+are all the events we can search
+through, event type, source, app. Great.
+So, we should be able to search
+something like this, right? If I just do
+stop, all of our stop events and
+subagent stop. Nice. Let's be more
+specific. Subagent stop. There we go.
+Look at that. Reads. Right, so we have
+all the reads in the summary. All right.
+So, here's another one, filter panel.
+Let me just search filter. There it is.
+So, everything related to filter panel.
+So, this is great, right? And let's do a
+regex search. Okay. So, what do we want
+to do here? Let's say event view. So,
+this looks good, right? Event row, event
+timeline. Very, very nice. Oh, nice. It
+even gave us a little error here, right?
+Invalid regular expression. Very cool.
+So, what if we did event? Nice. Okay.
+This is looking great. And then, of
+course, we can just search peer session
+IDs for B A 5. Very nice. There it is.
+Only events coming out of that session
+ID. Okay. So, I mean, implementing
+front-end regex search, not trivial,
+also not super complex, right? If we
+look at the kind of complexity zones we
+were looking at, I would put this in,
+you know, low-tier average problem to
+solve, right? And again, this is
+something that probably 3.5 Haiku or not
+probably
+3.5 Haiku could not have coded this,
+right? Even with a plan like this. Kind
+of impressive stuff, right? You can see
+that our time drill works. We can go 1,
+3, 5, 10, and we're capturing more of
+those events. And if we refresh, we
+should get the latest end kind of
+events. There we go. Looks good. Okay.
+And now we have our themes. All right.
+So, did we get new themes? So, I'll ask,
+what are the names of the new themes?
+Midnight purple.
+We have sunset orange and mint fresh.
+So, let's see if this worked, right? So,
+midnight purple. Okay. So, this did not
+work. This is the default light theme,
+and midnight purple is not updating to
+anything. So, let's see if Nope, sunset
+orange does not work either. Do we get
+mint green? No. Okay. So, these were not
+properly wired up. I'll bet that it
+created it, but it missed some critical
+detail of wiring it all up, okay? And
+so, very interesting stuff there, right?
+And we can just, you know, validate that
+directly in the code base. If we open up
+a new terminal, get stat here to see all
+the files that were changed. You can see
+162 lines. You know, we can quickly just
+see Look through this. There's the
+search bar, right? That looks great.
+Here are events that are now getting
+filtered via the search bar. Also
+awesome. There's that 10-minute
+interval. Great, great, great. And then
+here's our colors, right? So, it looks
+like the colors are there, but they're
+not wired up, right? Something got
+missed with their wiring, and that's
+causing the issue with the actual output
+here, all right? So, I'm just going to
+go back to our classic dark theme.
+That's fine. You can see here once
+again, Haiku is a very powerful
+performer model. Would Sonnet have
+missed this? Absolutely not. I can say
+that with confidence. Sonnet would not
+have missed this. It's probably even in
+the plan, right? There's probably some
+wiring detail here with the UI theme
+that was definitely locked in by Sonnet.
+You can see here just looking through
+the plan again, there's a lot more
+detail here about accomplishing this
+work. There's the theming functionality,
+right? All the way down to the exact
+themes it wants to create, adding the
+CSS theme, right? This all looks good.
+But these are details that Haiku just
+completely missed, right? It's a lot
+more surface level. Like look at this.
+This is all it wrote for that new UI
+theme. Let's scroll down here and see if
+there's anything else. Yeah, so it just
+missed a bunch of details here, right?
+It has five steps for this, so on and so
+forth. Okay. So, we don't need to harp
+on that for too long. I just want to
+showcase that, right? We have Haiku
+accomplishing a lot of powerful work
+that Haiku 3.5 had no chance of
+accomplishing, but at the same time,
+this model is not Sonnet, okay? I
+wouldn't even go I wouldn't even go as
+far as saying that it's Sonnet 4.0,
+right? It's a bit below that. Although
+its capabilities are increasing, right?
+It can solve some average kind of
+mid-level challenging problems. It is
+not a Sonnet-level model, right? Maybe
+we'd call this, you know, Claude 3.5
+Sonnet or Claude 3.7 Sonnet-level in
+some cases, but this is not a
+replacement for Sonnet at all, and I
+think that's, you know, fairly clear.
+This is not quite our all-in-one model
+yet. Right now, Sonnet is still the
+powerful workhorse model that can do it
+all for you. That being said, there are
+specific cases where you want to drop
+down to Haiku and use Haiku to solve
+problems. Haiku is great for simple
+work. It's great for actually coding.
+It's not a great planner. It's a great
+summarizer, but it will lose detail,
+right? You can pretty much expect that
+whatever you throw Haiku at, if it's not
+a simple kind of one, two, three-step
+task, Sonnet will outperform it. But
+it'll cost you three times as much to
+use Sonnet. Let's break down another
+example of this at work at scale. So,
+we're going to clear our agents here so
+that we have fresh contacts. We're going
+to clear out our agent system, and we'll
+run this command. Bench run load AI docs
+Haiku 4 5. Same deal here. Bench load
+docs Sonnet 4 5. Fire. Fire. And let's
+have these run in AI docs parallel
+search here. Let me break down this
+prompt. Let's go ahead and open up the
+swim lanes so we can see these models
+work side by side together. So, this
+prompt is going to pull in several
+pieces of documentation. So, Haiku
+firing up subagents. Sonnet is getting
+there. Let's go ahead and dial in the
+time frames here. Go ahead and open this
+up just a little bit more. Now we have
+Haiku on top with an insane 1.2 second
+average time between tool calls. The
+rate here has increased, right? We're
+deploying subagents against this
+problem. So, things are moving a lot
+faster. So, we have 1.5 seconds here out
+of Haiku. We have 27 tool calls, and
+then Sonnet here is running 23 tool
+calls with a 2.3 second gap. That's
+coming down here. That looks good, but
+you can hear our subagents completing
+their work.
+And so, we're firing off a
+documentation-gathering
+prompt, right?
+So, this is a perfect use case for
+firing off subagents, gather
+documentation, and then we're going to
+have our primary agents, Haiku and
+Sonnet, answer specific questions about
+the documentation. And to be super
+clear, inside of each subagent, Haiku is
+running Haiku subagents, and Sonnet is
+running Sonnet subagents. There's the
+reading coming in there. And so, this is
+an interesting case here where the
+number of tool calls is going to be
+closer to the same. This is what you
+want to see, right? You want to see both
+Haiku and Sonnet performing the same
+amount of work, but you want to see that
+time difference, right? Haiku is writing
+its answer file, and it finished kind of
+around this point here, and now it's
+just working through its output tokens,
+whereas and Sonnet was still working
+through tasks, still working through
+things. But you can see here there's its
+output file, right? Haiku also wrote the
+file out, right? And if we Let's go up
+to a 5-minute timer interval here just
+to keep track.
+Perfect. So, now both agents have
+completed. We're asking our agents to
+answer some questions about the
+documentation, all right? So, the idea
+was here, fetch these documentation
+pieces, so, you know, some Claude docs,
+Gemini, OpenAI, and then answer specific
+questions, all right? So, let's see how
+these models performed side by side this
+task. You can see here in the end, it
+looks like the total tools, right? The
+total compute used to solve the problem,
+they were about the same. The question
+here is, did we need Sonnet for this or
+could we have passed this down to Haiku,
+right? This is the the kind of game that
+we're playing when these new models are
+released. So, let's let's break down
+what they did, right? What what's the
+actual functional work they completed
+for us, all right? Here's the prompt.
+They have their instructions. It says to
+look in the workflow cuz it's the actual
+agent workflow they're running. Read
+this file, create the output directory.
+For each URL in the readme, fetch them.
+After they're all fetched, answer each
+question, all right? And then output a
+answer as markdown file. If we hop up to
+our questions, you can see we have three
+concrete questions about some of the
+Claude code features. So, subagents,
+plugins, and skills. So, two of these
+are new features out of Claude code we
+haven't discussed yet on the channel.
+Stay tuned for more of that. Make sure
+you're subscribed and liked up. But so,
+let's see what they actually generated
+here for us, right? If we open up AI
+docs, we can see that two directories
+have been generated. There's all the
+documentation for each. So, if we dial
+into a couple of these files here in the
+AI docs Haiku directory, it ran a
+scraping job, right? So, simple, not a
+lot of room for variance here. It just
+scraped the file and created an output
+directory and summarized some
+capabilities, right? So, these are both
+exactly the same. This looks great. Now,
+the interesting part here is going to be
+in the answers. So, here's answers for
+Sonnet, and here's answers for Haiku.
+Let's put these side by side once again.
+So, Haiku on the left, and we have
+Sonnet on the right. So, what are the
+three different priority levels for
+subagents? Project, user, CLI, all
+right? So, if you look at this here, you
+can see um Haiku actually caught a
+little bit more detail here. Project
+level, lower level, and CLI defined,
+right? There's this new dash dash in the
+CLI that you can pass in, right? And
+then we can do something like this. And
+so, this is a setting, right? Yeah, dash
+dash agents. This is another level of
+subagent priorities inside of the Claude
+code system, right? Project level, where
+you have it in dot Claude, you have your
+home directory level, and then you have
+this dash dash agent level.
+Interestingly here, Sonnet just missed
+this detail, all right? So, that's
+question one. Question two, we're
+looking for the plugin directory
+structure, all right? So, it looks like
+Haiku generated a little extra stuff
+here. This dot MCP dot JSON isn't
+exactly right. Did nest skills here,
+which isn't exactly right. So, you can
+see a a bit of discrepancy here. You can
+see it's breaking down the purpose of
+the dot Claude directory. That's great.
+Now, here's an interesting one, right?
+Skills versus sub agents. How are they
+different, right? This is a really
+interesting question that frankly I had
+when I started looking at this. How do
+agent skills differ from sub agents in
+terms of invocation, context, and when
+should they be used? So, here's the
+respective answers out of this, right? I
+think this is really interesting here.
+So, we have Sonnet's answers on the
+right and we have Haiku's answers on the
+left. You can see a very similar
+structure, right? Whatever their
+training process is, it's very similar
+because the results these models are
+producing are, you know, nearly
+identical. And, you know, this is a a
+thing that model labs do, right? It's
+likely that both Sonnet 4.5 and Haiku
+4.5 were trained on Opus uh 4.x, right?
+It's it's not clear what version, maybe
+5.x, who knows, right? Only Anthropic
+engineers know that. But, this is a a
+thing that happens often in the LLM
+space, model distillation, right? But,
+anyway, so you can see here agent
+skills, Claude determines when to use
+these. This is a really interesting new
+feature inside of Claude code. We have
+these skills that can be autonomously
+enacted, right? Whereas, sub agents also
+can be automatically called, but we can
+also explicitly call these as the user
+as well, right? Great breakdown from
+both models. I think we're getting some
+rich, great responses out of both of
+these models, which can lead us to the
+summary that um and, you know, speaking
+of summaries here, Haiku is actually
+giving us a nice summarize response here
+um at the end, right? Comparison table.
+This is pretty nice. Model driven user
+or auto delegated, right? That's great.
+Shares the main context, separate
+context window. Perfect discovery.
+Autonomous based on requests, based on
+explicit or task match. That's exactly
+right. Best for adding capabilities,
+best for delegating specialized tasks.
+Okay, so um Haiku doing a great job with
+the summarization here of this prompt.
+You know, another solid win for Haiku.
+This is a powerful, fast, and cheap
+model. It is very clear that Claude 4.5
+Haiku it is not as performant as Claude
+4 or Claude 4.5, even though it ranked
+like this. Maybe it does have those same
+engineering chops. It definitely
+programmed very well, but in terms of
+raw power across the board, we can put
+Haiku 4.5 kind of a notch below Sonnet
+4. And, to be super clear, this is still
+incredible. Again, we're talking about a
+third of the price. Often times, when
+I'm booting up my Claude code instances
+inside the loop, I stop and I first ask
+myself, do I even need Sonnet for this
+now or can I drop down to Haiku? Can
+Haiku accomplish this task for me? And
+for any simple pieces of work, I'm
+deploying Haiku to solve that problem
+instead of spinning up Sonnet. And, you
+know, we have a perfect example of that,
+you know, just to be super super
+concrete. We have these agent summaries,
+right? All these little agent summaries
+here that are summarizing the work done.
+This is being done by guess what? That's
+exactly right. Haiku 4.5, okay? So, for
+every item coming in here, we have Haiku
+4.5 running these agentic summaries on
+the payloads that are getting passed in.
+You can see some of these payloads are
+not super trivial. We're having Haiku
+4.5 create high-level summaries for
+every single event coming in here. We're
+talking about hundreds and thousands of
+events. Haiku is doing all of that very
+quickly, at high performance, very
+accurately here, right? Bastille
+accounts, 145. Bastille executing to do
+tool right. Agent executing Bastille
+commands, so on and so forth, right? A
+perfect use case for a cheap, fast
+model. All right? This is the thing to
+keep your eyes on as you're improving
+your agentic capabilities. A great rule
+of thumb is, use Haiku for file
+summarization, for structured data
+summarization, use it for documentation,
+for simple code generation, use it for
+pattern matching. And, then you want to
+use Sonnet for the big, heavy-hitting
+items, right? Planning, architecture
+design, debugging complex scenarios,
+long-running agentic coding jobs,
+long-running agent pipelines, right?
+Secure production-sensitive
+work, setting up things like
+refactoring. But, then that's a great
+example, right? For refactoring work,
+Haiku can probably refactor those files,
+right? In fact, this is where you would
+have Sonnet plan the work and then spin
+up Haiku sub agents to actually do the
+refactorization work. And then you can
+have Sonnet just double-check the files,
+you know, using those read tokens versus
+the actual output tokens. Because again,
+if you write with Haiku, you're dropping
+your price by 3x, right? It's 3x
+cheaper. Said another way, it's a third
+as expensive. And that's not counting
+when you start hitting the cash over and
+over, the price drops even further. So,
+I'm a big fan of this model. I think
+this was important enough to kind of
+halt some of the other big agentic
+orchestration work that I wanted to
+share with you. More on that coming in
+the future. The link for this codebase,
+for the multi-agent observability
+codebase, is going to be available to
+you in the description. Observability
+and orchestration is the next frontier
+for agents right now. I'm spending a lot
+of my research and experimentation time
+right here, focused on this, all right?
+So, all the work we've done here and all
+the work that you're likely doing is
+being done what's called inside the
+loop. You're prompting back and forth
+with your agents. Maybe you have some
+great custom {slash} command set up,
+right? {slash} XYZ, and then you can do,
+you know, some amount of work with your
+agents. That's all great and fantastic,
+but this is just one mode of agentic
+coding. There's two, and if you're at
+the edge, there's three, but there are
+two primary modes of agentic coding.
+Most engineers are stuck in the loop,
+prompting back and forth, which is why I
+built tactical agentic coding. I've been
+talking about this on the channel week
+after week, so I'm not going to harp on
+it too long here. The idea is simple. We
+need to scale far beyond AI coding and
+vibe coding and start becoming agentic
+engineers, all right? You will develop
+techniques and tactics so powerful with
+agents that your codebase will run
+itself. This is advanced. This is not
+simple. If you're a noob or a vibe
+coder, this course is not for you. So,
+there are two distinct courses inside
+here. So, tactical agentic coding is the
+core essential eight lessons, and then
+if you want, you can upgrade, right?
+This is an upgradeable extended mastery
+lessons to agentic horizon. For all of
+my agentic horizon members, the fourth
+lesson is in progress right now. I'm
+going to be delivering that to you early
+October, so stay tuned for that. Right
+now, we have three lessons available.
+The fourth lesson is on the way. Your
+votes are all in. We're going to be
+pushing on that. If you're not an
+agentic horizon member yet, hop in here,
+get the first course, get the second
+course, and then place your vote. There
+are still two more coming after the
+release of lesson 12 inside of agentic
+horizon. I'm really excited to share
+that with you. I'll make sure to
+announce it, of course, on the channel
+when this lesson drops, but stay tuned
+for that. We are pushing hard into the
+next frontier of agentic coding. We're
+deploying agents all over our codebase.
+If you've taken tactical agentic coding,
+you understand the paradigm shift that's
+happening right now. Better agents, more
+agents, custom agents. And soon, the big
+idea we'll be talking about in the next
+agentic horizon lesson is agent
+orchestration. Like you saw here, it is
+super super critical to be organizing
+and observing your agents. There's two
+big ideas we're pushing into on the
+channel and inside of tactical agentic
+coding, multi-agent observability and
+multi-agent orchestration. You know
+where to find me every single Monday, no
+matter what. Stay focused and keep
+building.

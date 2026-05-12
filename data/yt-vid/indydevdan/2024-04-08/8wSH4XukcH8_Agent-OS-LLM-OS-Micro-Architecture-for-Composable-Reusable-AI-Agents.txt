@@ -1,0 +1,599 @@
+as AI agents take center stage in the
+tech ecosystem new challenges and
+questions arise one of the most
+important questions being what's the
+best way to build AI Agents Set another
+way what's the optimal architecture for
+AI agents you've luckely heard of llm os
+Andrew Kathy's brilliant architecture
+for a new type of computing model that
+is slowly becoming a reality in this
+video I want to reframe the llm OS into
+a simplified OS architecture that
+focuses on how you can get immediate
+results out of your AI agents today and
+over the long term as the llm ecosystem
+evolves let's break down the agent OS
+you can think of agent OS as a
+microarchitecture inside of llm os just
+like computer architectures there'll be
+many different agent architectures but
+what matters is the abilities they
+unlock for you and your work let's break
+down the agent OS architecture in a way
+that makes sense and makes it easier to
+build a Gent applications what does this
+architecture look like I've broken this
+down into three key sections the lpu io
+and RAM throughout this video we're
+going to break down each one of these
+sections and why it's critical to have
+them in composable reusable pieces that
+you can swap in and out so there are
+couple interesting pieces here I want to
+highlight so in our last video we
+discussed seven prompt chains you can
+use to build AI agents this is super
+important this is part of the lpu which
+we'll break down in a second and our Ram
+AKA random axis memory we're concretely
+defining not just our input but also are
+State variables that your AI agent can
+modify throughout their life cycle so in
+our IO in andout we of course have our
+tools this allows your agent to interact
+with the real world but we also have
+something called spyware you can think
+of this as monitoring and debugging and
+visualization of your agent and then
+finally we're going to talk about these
+really really important symbols here
+these right facing triangles if you're a
+functional programmer or a senior
+engineer you can already tell where
+we're going with this architecture but
+let's quick just give away all the ideas
+we're going to discuss in this video If
+These topics sound interesting to you
+definitely stick around we're going to
+break down the agent OS just like you
+saw there are many components there
+we're going to run through them make
+sense of them and talk about how
+arranging your agents in the agent OS
+architecture is going to help you build
+agents not just for the short term but
+over the long term we're going to talk
+about what makes a not just a good but a
+great architecture and then we're going
+to answer the question you know is using
+an architecture like this is building
+some type of system better than just
+putting together a couple prompts and a
+couple tools do need to potentially over
+engineer this to get the exact same
+results out of our system out of our
+agents then we're going to push Beyond
+AI agents and talk about what might be
+coming next in the industry and then
+we're going to talk about the big
+missing piece from this architecture and
+really the big missing piece from the
+llm ecosystem as a whole the first thing
+we need to do is break down the
+terminology here what is the asent OS
+architecture let's start with the most
+important piece the lpu I like the
+terminology from Gro the language
+processing unit when we look at possible
+architectures at the agent level it
+makes a lot of sense to pull all of the
+models all of the prompts all of your
+prompt chains and everything inside that
+into a single unit that is the language
+processing unit this is the real
+innovation without the lpu we're just
+designing another system with code the
+lpu is what really differentiates this
+system with anything else that's been
+built in the past we then of course have
+IO this is your input and output also
+known as function calling and tools your
+IO is what enables your a agent to talk
+with the outside world it could be the
+browser it could be your file system it
+could be your database it can be
+anything that interfaces with the
+outside world and then finally we have
+Ram so I think it's really important to
+establish a concrete component inside
+this architecture specifically for
+memory for context for your inputs
+there's a huge step that I haven't seen
+a lot of people taking with their agents
+yet and that's having your agent be able
+to update its own State and operate on
+that to produce novel results these
+three systems work together to create a
+complete AI agent so let's break down
+each one of these components the lpu
+consists of your model provider your
+models your prompts and your prompt
+chains model providers are of course the
+generators of your models open AI
+anthropic Google's models and any
+provider of the local models that you
+have running up a level we have the
+individual models themselves right so
+now you have your gpt3 GPT 4 you have
+Cloud 3 hiu Sonet you have Gemini 1 Pro
+Gemini Ultra Gemini 1.5 Pro these are
+where your IND individual models lie
+above that you have your concrete
+prompts every AI agent should solve one
+problem and it should solve that one
+problem well ideally you can look at
+your prompts and know exactly what this
+agent does notice how the prompts are on
+top of the models which are on top of
+the model providers at the top of the
+lpu we have the prompt chains in the
+last video we talked about why this is
+so important I'll link that in the
+description definitely check that video
+out you can do a lot more than you think
+with your prompts their entire products
+that are waiting to to be unlocked by
+arranging the right prompts together in
+the right prompt chain it's important to
+differentiate prompts and prompt chains
+because the value you can get out of
+chaining together multiple prompts
+vastly outperforms the value you get
+from a single prompt we've explored this
+idea on the channel we have several
+videos showing this and proving this out
+this is really important to mention and
+this makes up the lpu this is the key
+component of the agent architecture your
+Mel providers your individual llms your
+unique domain specific prompts and how
+you chain your prompts together using
+different prompt chaining techniques and
+patterns is what makes up a very
+powerful lpu language processing unit
+we're using the OS architecture as an
+analogy here for the architecture for
+great powerful AI agents so you know
+even just looking at this one stack
+maybe a question is going off in your
+head it definitely has gone off in my
+head many times do you need every
+component to build a great agent so do
+you need you know prompt chains do you
+need prompts do you need every part of
+this architecture including the io and
+the RAM and its individual pieces to to
+build a great agent pretty decisively
+the answer to that question is
+absolutely not if you can solve a
+problem if you can build an AI agent
+that solves one problem for you really
+well in a single prompt with a single
+model on top of one provider then just
+use that right you shouldn't over
+engineer any architecture I highly
+recommend you always use the bare
+minimum tool set you need to get your
+job done beyond all principles that is
+number one if you only need a prompt and
+a model and a model provider to get your
+job done to build the agent you need
+just use that so that's the short answer
+the longer answer answer is it's
+important to be practicing building out
+these architectures and utilizing these
+architectures because they're going to
+show up in many many shapes and forms
+that are going to ultimately provide you
+with the same end result one of the big
+advantages here of having these layers
+is that when GPT 5 comes out you already
+have support for open AI so you hop into
+your model and you add that one layer
+inside your AI agent and you're done the
+beauty of this architecture is that you
+can quickly and easily swap out any one
+of your models any one of your prompts
+any one of your promp chains and any one
+of your model providers and still get
+great results out of your AI agent this
+is a huge Advantage because over the
+long term when you have a faster
+interoperable architecture you can move
+a lot more quickly than someone who has
+to you know dig in their code base and
+rebuild some of the pieces because
+they're not swappable they're not easy
+to maintain they're not easy to
+interchange with each other right so you
+don't need every component but the
+arrangement of this specific
+architecture can absolutely help you
+over the long term let's move on to the
+next section the ram your AI agent
+should have the capability to operate on
+state as your agents get more complex
+and they solve bigger problems better
+autonomously they'll likely be operating
+on their own internal State based on the
+inputs that you give it these are the
+items that are inserted and that work
+with your lpu right so your state and
+your input they operate with your lpu
+and then you might take the result of
+one of your prompts or your prompt chain
+do some IO update your state and then
+based on that update to your state run a
+different promp or a different set of
+prompt chains you can see how that could
+be useful over time if you're enjoying
+this video so far and the lpu and the
+ram are making sense definitely hit the
+like hit the sub in future videos we're
+going to be building out real examples
+of how you can use this architecture
+against Real use cases we'll build
+concrete Python and typescript classes
+that utilize this very architecture and
+chain together the ideas we're
+discussing in this video lastly we have
+iio you likely very familiar with tools
+already this is how your llm this is how
+your prompt this is how your agent
+interacts with existing functionality
+this is how we make web requests this is
+how we interact with databases files so
+on and so forth we then have this
+additional layer here that I think is
+really important to uniquely specify in
+the io layer which is spyware I'll link
+the videos where we discuss spyware in
+the past but I don't see enough people
+talking about how they're monitoring
+their AI agents monitoring the state
+monitoring The Prompt monitoring your
+inputs and outputs I think when you're
+building out your AI agents you want to
+have some system even if it's just
+something as some simple as logging to a
+file via one of your tools I think it's
+important to make the concrete
+differentiation here that your spyware
+enables you to inspect logging and do
+debugging on your individual agent right
+once you get complex enough agents
+they're doing a lot of work they're
+operating on a lot of State something's
+going to go wrong at some point you're
+going to want to dig into your agent and
+see what exactly happened so you can
+tweak your IO your RAM or your lpu to
+make improvements to your AI agent if
+you can't monitor it if you can't
+measure it how will you improve your
+system
+so these three components make up what
+is the agent OS the agent OS
+architecture lpu IO Ram you've likely
+already used these in different versions
+maybe you called them something else a
+lot of people like to call State and
+input the ram section just the context
+window I completely understand I think
+it's important to identify it as a
+separate unit because really you can
+have Ram sitting on the side you have
+files you have databases and then when
+your lpu needs information or when it
+wants to update information to help it
+solve a problem it runs a prompt it runs
+a prompt chain that interacts with the
+io that can update your RAM so on and so
+forth right I think that most agent
+architectures have some form of these
+three units your IO devices AKA tools
+your lpu AKA your prompts and your RAM
+AKA your state your variables your
+context that live inside your agent so
+this is great we have a solid
+architecture now it's really important
+to ask the question after you build an
+architecture after you design some
+system how do you know your architecture
+is good how do you know that what you've
+done is an improvement at all right how
+do we know that this is better than just
+putting two prompts together and giving
+your second prompt a tool and calling it
+a day if we look at Andrew's llm o video
+here he has this really really great
+list of what he thinks LMS will be able
+to do in a few years it's crazy how many
+of these things they can already do so
+let's think step by step and go through
+this list and see if our agent
+architecture can perform these tasks it
+can read and generate text of course the
+lpu has that covered it has more
+knowledge than any single human about
+all subjects I think the lpu and
+combination with a web browsing tool has
+this capability how easy and accessible
+is it to accomplish that goal is
+definitely Up For Debate it can browse
+the internet we'll leave that up to the
+io it can use existing software
+infrastructure calculator python mouse
+keyboard This is up to the
+responsibility of the I/O and the tools
+available in combination with some
+really really great prompts it can see
+and generate images and videos so if we
+have the right model in our lpu and the
+right IO we can definitely read in files
+you're definitely already aware of
+models that can perform those tasks
+we're still waiting on a great video
+model it can hear and speak and generate
+music we're there with the music hear
+and speak is still a work in progress
+there are TTS text to speech modules
+that are getting built out tools like
+deep gram and others I think we still
+need to see the cost come down for TTS
+but through this agent architecture when
+that system rolls out we'll be able to
+handle that via IO and lpu it can think
+for a long time using system 2 Thinking
+The lpu Prompt chains in combination
+with our Ram can definitely accomplish
+that goal you can imagine we have a
+prompt chain that includes several you
+know think step by step review your work
+that then outputs and reviews several
+plans that can be then written to RAM
+and then reloaded into additional
+prompts we can think of that as a great
+way to build out system 2 thinking it
+can self improve in domains that offer a
+reward function this is a really really
+important topic we're going to discuss
+at the end I think current this agent os
+does not have the ability to
+self-improve we'll talk about that in a
+second it can be customized and fine tun
+en Force specific tasks many versions
+exist in app stores so I think
+customization and fine-tuning definitely
+happens at the model provider and the
+model level the agent OS can quickly
+swap in and out these different models
+to perform the task at varying degrees
+based on their model and as many of you
+know the rat race for building out and
+deploying AI agents as apps through some
+type of you know GPT like store is
+definitely under way right now open AI
+has taken a first shot at that with the
+GPT store and then finally it can
+communicate with other llms this is a
+really really important idea and we
+tapped on it in the beginning of the
+video let's talk about what these
+right-facing triangles mean because it
+can communicate with llms is a really
+really powerful idea really really
+powerful notion that really speaks to
+where AI agents are going and what the
+next step is after you have clean AI
+agent architecture that you can reuse
+and quickly build and improve on so at
+the start of the video we highlighted
+these two points let's talk about
+composability these two icons might be
+the most critical aspect of this AI
+agent architecture we have the lpu we
+have the ram we have the io and then we
+have inputs and outputs in previous
+videos we talked about treating
+everything like a function you can think
+of your agent OS as an individual
+function a black box that takes inputs
+and produce outputs this ability allows
+us to compose our agents together I've
+talked about this many times I'm going
+to keep talking about it because it's a
+critical design technique composability
+lets you take your smaller pieces and
+put them together to build something
+greater you can see here these arrows
+represent our inputs and our outputs and
+of course if you have a clean typed
+function or a clean typed system that
+has a unit of work this individual agent
+and it produces output in the same shape
+as the input to another system AKA our
+second agent you can compose these
+agents together just like you can
+compose functions together when you're
+writing code just like you can compose
+anything composability reusability and
+interrup ability of your agents is
+something that will take your agent
+architecture to the next level you can
+expand on this to chain together one to
+n agents build out entire agentic
+workflows which is the next level of
+abstraction beyond the AI agent at first
+we have llms then we have prompts then
+we have prompt chains then we have ai
+agents and the next step after that is
+our agentic workflows agent one feeds
+into agent two feeds into agent n that's
+why it's so important to build these
+modular reusable systems that operate
+well on their own but also can be used
+as building blocks that can be stacked
+up next to another agentic piece of
+software you put enough of these
+together and you get a living system
+creating value on your behalf while you
+sleep that's really where we're heading
+on this channel it's about building
+these systems it's about understanding
+the lower level units composing them up
+building them up making them reusable so
+that we don't have to keep rebuilding
+the exact same system due to sloppy
+architecture this idea really highlights
+this question again right do you need
+every component to build a great agent
+no you don't you don't you don't need
+this architecture you don't need the
+agent OS architecture at all right if
+you can solve the problem with a couple
+props do it but what you will miss by
+not using an architecture like this is
+the reusability and the composability of
+the system as a whole right always pull
+back the curtain of your system and ask
+this is great it's solves the problem
+but what happens next there's always
+another level for your architecture
+there's always another level for your
+system for your product for your tools
+and for you so as you're building it out
+as you're designing your systems always
+have in mind this is awesome if I
+accomplish everything I want to here
+right if I build a great agent what
+happens next what's the next step
+composability of your AI agents is the
+next step toward building true agentic
+software if you only take away one thing
+from this video it's this idea you want
+to be building AI agents that solve a
+problem for you and that solve it well
+after you do that you want to push it a
+little further and ask how could I use
+this agent as a piece in a larger system
+to drive even greater results so there's
+one more thing to discuss with this
+agent architecture what's missing from
+agent OS no architecture is perfect
+there's always a flaw there's always a
+trade-off what's missing from this
+system Andrew karpathy talked about this
+idea here that we completely missed that
+we completely skipped over it can
+self-improve this is what is missing
+from not just this architecture but from
+many many many agentic systems many
+applications using llms no one has
+cracked the case on selfimprovement how
+can your agent self-improve this simple
+diagram summarizes that next level that
+next step you have some Loop that runs
+some system that runs and then on
+execution it learns it improves and it
+can accomplish that exact same goal and
+less time with less resources operating
+faster operating more concisely it can
+drive the results you're looking for in
+an improved way what happens when you
+run the system again the exact same
+thing it has a Improvement reward
+function that runs that allows your
+system to self-improve this is a major
+missing piece from the agent OS
+architecture and again I think from the
+llm ecosystem as a whole after that
+finishes you can recursively Loop this
+at a higher level and functionally have
+your agent self-improve to infinity or
+until your open AI credits run out right
+so this is a big missing piece in
+combination with composing AI agents
+this this will likely come around the
+same time I'm still playing with this
+idea I'm still working through what this
+might look like I think on the low level
+on the ground level outside of the model
+self-improvement involves running your
+prompt running your promp chain and then
+updating your RAM updating your state to
+say you know this result was not that
+good or this result was great let's do
+more of that and then that result feeds
+back into your prompt chain and then
+reruns throughout your IO and your RAM
+right that then again updates a state
+that feeds right back into your prompt
+ch right so I think self-improvement on
+an agent level looks something like that
+but I'm still working through this idea
+I'm still testing I'm still
+experimenting with a lot of that so I
+have nothing concrete there but I want
+to call this idea out for you because in
+combination with composability this is
+how we go beyond the AI agent we make it
+self-improve so that's Asian OS there
+are a lot of ideas there I'm going to
+try to clip this video down for you get
+it into a compact version that makes
+sense I want to reiterate this idea one
+more time because it's really evolving
+and it's taking different shapes and
+forms forms the prompt is the new
+fundamental unit of programming and that
+means the prompt is the new fundamental
+unit of knowledge work if you can Master
+The Prompt and all of its derivatives
+which of course is the prompt chain and
+now the AI agent you'll be able to build
+create and manipulate data and
+information like no one has been able to
+in the past you'll be faster you'll be
+more accurate you'll be building
+products at an insane rate and really I
+think AI agents is the new oil it's the
+new gold it's the new currency whatever
+you want to call it and all of its lower
+level components are equally as critical
+in future videos we're going to utilize
+this architecture we're going to build
+out concrete examples and solve real
+problems using the Asian OS architecture
+as I mentioned previously I am actively
+working on what I believe will be one of
+the most important agentic applications
+any one of us can build and use I'm
+working on my personal AI assistant I'll
+be sharing videos on that in the future
+and we'll be digging into more Mission
+critical tools like AI coding assistance
+and other related tools that help us
+build out a gentic software so we can
+evolve our engineering evolve our role
+as Engineers so we can move ourselves up
+the stack to continue doing what great
+Engineers do we control and we
+manipulate data faster and better than
+anyone else at the core of engineering
+that's what it's all about thanks so
+much for watching if you got value out
+of this definitely hit the like hit the
+sub and I'll see you in the next
+one

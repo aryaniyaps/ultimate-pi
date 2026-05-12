@@ -1,0 +1,295 @@
+this is a video where it's better to
+show not tell we'll discuss how powerful
+AI assistance can be for your
+engineering especially in 2025 after the
+demo while you're watching this feel
+free to comment and share what
+capabilities you would want your
+engineering personal AI assistant to
+have
+hey
+adah hey Dan how can I help you
+today a to go ahead and scrape to a file
+from my
+[Music]
+clipboard the content has been
+successfully scraped and saved to the
+file structured outputs introduction
+guide. MD is there anything else you
+would like to do with this
+file AA can you go ahead and update the
+structured outputs introduction guide
+file let's go ahead and clean it up
+remove some of the formatting we have
+some lists of numbers that don't need to
+be there let's just clean it up and
+focus on the use case of structured
+outputs and the code examples
+surrounding it use a reasoning model for
+this
+[Music]
+the structured outputs introduction
+guide has been cleaned up and revised
+with a focus on the use case of
+structured outputs and relevant code
+examples the reasoning model was used
+for this task ni J ad go ahead and load
+that file into our active memory
+[Music]
+the structured outputs introduction
+guide file has been loaded into our
+active memory how can I assist you
+further nice job beta go ahead and use
+the structured outputs introduction
+guide as an example and let's create a
+new python file with examples on how
+exactly to use structured outputs go
+ahead and create a new file a new python
+file for us with runable code use your
+reasoning model for this
+[Music]
+the python file structured outputs
+examples. py has been created with
+examples on how to use structured
+outputs feel free to check it out and
+run the
+code all right a can you go ahead and
+run that code for us go ahead and run
+python on that file
+[Music]
+the code in structured outputs examples.
+py has been run successfully would you
+like to see the
+output no that's okay I have it right
+here I can see the output here in this
+file thank
+you you're welcome if you need any more
+help just let me
+a to go ahead and scrape to a file from
+my clipboard go ahead and take this URL
+scrape it create a markdown document for
+[Music]
+us the content from the URL has been
+scraped and saved to a markdown document
+named openis swarm overview. MD let me
+know if you need any further
+assistance cool yeah let's go ahead and
+just discuss this file uh just briefly
+tell me what this is all about what is
+open AI
+[Music]
+swarm the file outlines open AI swarm
+which is an experimental educational
+framework for multi-agent
+orchestration it showcases concepts for
+coordinating and executing agents
+primarily using the chat completions
+API open AI swarm is designed for
+educational purposes rather than
+production allowing developers to
+explore lightweight scalable and
+customizable agent patterns and
+functions okay can you walk me through a
+couple use cases of this let's just keep
+discussing our open AI swarm overview
+document what are some use cases of this
+and how does it differ from other
+multi-agent
+[Music]
+tools open AI swarm is designed to help
+developers learn about multi-agent
+orchestration through an educational
+approach it emphasizes lightweight
+ergonomic agent orchestration with a
+focus on handoffs and
+routines some use cases for open AI
+swarm you developers can use it to
+understand and experiment with
+multi-agent systems Dynamics without the
+complexities of a full production
+environment it is useful for developers
+to explore different agent coordination
+and execution patterns open AI swarm
+differs from other multi-agent tools in
+the following ways experimental and
+educational it is built for exploration
+and learning rather than for deployment
+in a production environment
+statelessness unlike some established
+tools with stateful capabilities swarm
+maintains statelessness between
+interactions focusing on handoffs and
+routines overall open AI swarm serves as
+a learning tool for developers to grasp
+the essentials of multi-agent systems
+without the overhead of more complex
+production focused
+platforms a to go ahead and delete the
+open AI swarm overview file Force delete
+and then after that go ahead and clear
+our active memory go ahead and reset our
+active memory uh Force
+[Music]
+delete the open AI swarm overview file
+has been deleted and the active memory
+has been reset if you need further
+assistance feel free to let me know
+you to go ahead and scrape to a file
+from my
+[Music]
+clipboard the content has been scraped
+from your clipboard and save to the file
+openai API pricing guide. MD in the
+scratch
+Pad wonderful can you go ahead and
+update that document and just simplify
+it a lot um I just want a clear
+breakdown of pricing just single headers
+and then the pricing of every single
+model right below that super blunt
+simple bullet points break down the
+pricing for me go ahead and use a
+state-ofthe-art model for
+[Music]
+this let's update the open AI API
+pricing guide markdown file and uh at
+the top of the file can you go ahead and
+add a CSV table with the model name the
+input pricing and then the output
+pricing and then can you also just add a
+um estimated average token pricing as a
+uh final column go ahead and use the
+state-of-the-art model for this
+[Music]
+hey to go ahead and create a new empty
+CSV file call it model
+[Music]
+pricing the empty CSV file named model
+pricing. ccsv has been created wonderful
+Ada can you go ahead and update the
+model pricing file I've updated it with
+model prices just go ahead and get rid
+of the quotes for us and make sure that
+it's all snake case for our column
+[Music]
+headers nice Joba thank
+you you're welcome Dan if you need
+anything else just let me
+know all right so I hope you can kind of
+see where things are going with the
+power of AI assistance when it comes
+down to it AI assistance are going to
+accelerate our information rate what
+does that mean exactly I think at its
+very core software engineering is about
+processing and manipulating information
+and then Building Systems that allow us
+to do it at scale the combination of
+these incredible reasoning models with
+the new real-time API that gives us
+speech to speech capabilities is insane
+for engineering we were able to work
+through three use cases for personal AI
+assistance for software engineering in
+particular and I think that there are
+plenty plenty more we use about a
+quarter or a half of our tool set here
+and uh you know we were able to do a
+decent amount of work without uh typing
+a single character so I think that's
+really important I think this is really
+powerful and there's an interesting
+pattern for building AI assistance that
+I want to share with you here you saw me
+pull in data into active memory this is
+basically a simple Json file that
+probably should be built out into a full
+database but the idea here is simple as
+you're working with your AI assistant do
+you want content to be loaded directly
+into active memory so that we can use it
+throughout other prompts just real quick
+to dip in the code a little bit you can
+see here that we are constantly loading
+in the
+memory content for instance in our
+create file call when we're actually
+generating new files we're going to load
+the existing memory content from our
+active memory. Json file into an XML
+block right so this gets fully loaded
+into the prompt when we're creating
+brand new files so this is an
+interesting pattern that I think is
+going to be important on top of
+personalization where we'll be able to
+customize our personal AI assistance I
+think this pattern of having an active
+memory kind of like a ram Random Access
+Memory I think this pattern is going to
+be really important moving forward and
+over time we're going to want our
+personal AI assistant to automatically
+manage their own memory as the
+conversation is going on right and this
+is all on top of the um historical
+memory that is built up on top of the
+real-time API content right and that's
+probably a good next step to take for
+the personal AI assistant is to onload
+so for instance in the the main file
+here when we first load our assistant
+we're going to want to be able to right
+away load our active memory into our
+assistant immediately I think this is a
+massively important Trend to pay
+attention to as software Engineers this
+code base is going to be in the
+description for you if you want to check
+out this next version of the realtime AI
+assistant I feel like I'm probably 10
+tools away from having a really complete
+Ultra useful software engineering
+focused AI assistant that I can use in
+parallel that can work in parallel with
+me while I'm building out software and
+getting things done I can feel this
+tooling I can feel the culmination of
+all these incredible AI tools changing
+the way I build changing the way I think
+about building this is all really
+incredible technology I hope you can see
+where this is going we're speaking in
+natural language to direct and control
+our personal AI assistant that can
+delegate work to a slew of specialized
+AI agents we scraped content we brand
+code we generated a demo we generated a
+proof of concept we discussed a
+repository and then we did some content
+reformatting to be totally clear a lot
+of the stuff you can do by hand on your
+own I think that's really really clear
+we're Engineers we can move really
+quickly on the keyboard but the
+advantage here I think of having a
+personal AI assistant with a focus in
+engineering is to run tasks in parallel
+to you and get work done in parallel to
+you by just running a couple commands
+and by firing off a few Tools in natural
+language we can have a personal AI
+assistant get work done with us in
+parallel I think when you combine that
+with the powerful reasoning agents we
+can really set up high quality long
+running agentic workflows that again are
+working in parallel with us as we move
+forward with our day-to-day tasks the
+future is here it's just not equally
+distributed yet and to be fair the
+tooling is still getting there but we
+get to see it first together here on the
+channel by building it stay focused and
+keep building I'll see you in the next
+one

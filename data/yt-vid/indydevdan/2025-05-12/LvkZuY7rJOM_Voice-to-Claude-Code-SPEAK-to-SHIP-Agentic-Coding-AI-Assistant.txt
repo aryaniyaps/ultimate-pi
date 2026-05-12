@@ -1,0 +1,771 @@
+[Music]
+Claude, are you ready to build? Ready to
+help. What do you want to build? All
+right, so let's start simple. Claude, go
+ahead and create a simple Hello World
+starter coding examples for the six most
+popular programming languages. Let's go
+ahead and create them inside of a
+directory called starter coding.
+Hello world examples are in the starter
+coding folder for Python, JavaScript,
+Java, C++, Go, and Ruby.
+Fantastic. Okay, Claude, go ahead take
+those examples and showcase how to make
+an HTTP request, make a um go ahead and
+pass in the URL as a CLI parameter and
+comment every line of code.
+updated six programming examples to make
+HTTP requests using URL parameters with
+added detailed comments. Nice. Okay, as
+you guys can see here, we have real time
+speech to text running and it's getting
+fed into our agentic coding tool. And
+you know, this is really cool, right?
+Real time speech to text coming in. I
+love to see this in real time. Inside of
+the cloud code is programmable codebase.
+I've got everything dialed into a single
+file within, you know, 700 lines of
+code. We have our ears, we have our
+brain, and we have the voice of our
+personal AI assistant. Now, we're going
+to break this down, but let me go ahead
+and and cancel this large request. This
+is really cool. We have a personal AI
+assistant that we can talk to to make
+changes for us. We're going to talk
+about how Cloud Code completely changes
+the game for personal AI assistants in
+this video. Let's go ahead and continue
+making useful changes. So, inside of the
+script, we have an issue. You can see we
+have the default list of cloud code
+tools. And if I search for this, um, I'm
+not actually using this yet. This is a
+real problem that I just kind of left in
+here to showcase in this video. And what
+I want to do here is have our personal
+AI assistant fueled by cloud code go
+ahead and make this change for us. Fire
+this up again with that same ID. A cool
+feature is that we can reference
+previous conversations. I'll show that
+off in a second. Let's just go ahead and
+kick this off. And now you can see our
+personal AI assistant listening to us,
+right? This is an always on assistant.
+You can see there it's autocorrecting
+things as it proceeds. And I'm going to
+go ahead and pause here. And you'll
+notice nothing will
+happen. Okay. So, nothing happened there
+because the trigger word wasn't
+detected. My trigger words here are one
+of these four. And as soon as I say
+them, the assistant will actually act.
+Right. So let's go ahead and make this
+change. Sonnet, go ahead and update our
+allowed tools CLI parameters. Update
+these to use our constant at the top of
+the file. We have a constant called
+default cloud code tools. Go ahead and
+use this instead of basically
+duplicating those items. We should get
+this picked up here. There we go. So
+sonnet is one of my trigger words. So
+it's going to go ahead and actually run
+this command. So you can see cloud code
+got kicked off. We should use the spread
+operator here so that we can reuse that
+constant that we had at the top of the
+file. Right? So we had our default cloud
+code tools. We want to see this get used
+here on the left. As we'll talk about in
+a second, you know, the system is not
+perfect. You know, the first cloud code
+is expensive. And then the second
+problem is that we have uh updated the
+process message method to use the
+default claw tools constant from lines
+85 to 93 for CLI parameters avoiding
+duplicate tool lists. Fantastic. And so
+you know the second issue here is that
+it does take some time. You can see
+there audio itself playing took 9
+seconds. That's fine. But running our
+agent coding tool did take a decent
+amount of time. So you can see that
+change got rolled in there. That looks
+fantastic. So, Anthropic just released
+the uh web search tool, and I want to
+play with this a little bit. So, I
+already have this documentation inside
+of our AI docs, one of the three
+essential folders. Highly recommend you
+set up this directory inside your
+codebase. Our assistant has access to
+this. So, let's go ahead and create a
+brand new plan that'll combine this and
+our UV single file script so that we can
+get a concrete demo of how the web
+search tool looks. So, I'm just going to
+use my assistant to build out this plan
+and then implement it for us. So, I'm
+going to go ahead and just quickly reset
+here. Sonnet, read a couple files in our
+AI docs directory. I want you to read
+the UV single file script and I also
+want you to read the uh enthropic web
+search tool documentation. So, put these
+together into a single spec inside of
+our specs directory. This is going to
+detail how we can build out a minimal
+version of the new anthropic web search
+as a UV single file script. I just want
+you to create the plan for us here.
+Write a brand new plan in the specs
+directory. Okay. So, as you can see
+there, I think one of the problems with
+natural language is that, you know, it
+just takes some time to like really
+communicate everything you want. I've
+created a detailed spec for a
+self-contained Python script that takes
+search queries from the command line,
+uses anthropics web search with
+authentication, formats results with
+citations, and supports options like
+domain filtering and location context.
+The spec covers script structure,
+dependencies, CLI, authentication, usage
+examples, output format, error handling,
+and future improvements. Okay, so this
+looks good overall. It looks like we are
+actually missing our uh code examples.
+So, Sonnet, update that file. Uh we are
+missing a concrete code example. Make
+sure you pull, you know, real code
+examples from Enthropic web search tool
+markdown file from our AI docs and make
+sure that that's added in there. We need
+concrete examples because we're going to
+use this as the kind of framework for
+actually writing this code. So, we have
+the update coming in here. And so, you
+know, this is just continuing down that
+trend of great planning is great
+prompting. This is the key principle in
+lesson five and I've mentioned it on the
+channel a million times now. I'm going
+to keep mentioning it because you know
+successful engineering really being
+successful at anything um it's not
+always about new different ideas. It's
+really about doing the same correct
+thing over and over and over at updated
+the anthropic web search UV spec code
+examples covering tool setup API
+requests citation extraction and
+response formatting. It includes a full
+working example with error handling
+specific anthropic error codes and
+improved citation formatting. The spec
+is now ready for implementation with
+real world code from Anthropics docs.
+Okay, so if we take a look at this
+documentation here, the updated version
+looks a lot better. You can see our
+command line interface, web search
+capabilities. This looks good. We have
+block domains, there's tools, there's
+max use. Let me just go ahead look at
+the documentation again at a high level.
+Type name, max uses. Okay, great. So
+this looks right. We just had our
+personal AI tool build out this plan for
+us. Read some documentation and now I
+think it's time to go ahead and
+implement this. So the great part about
+this, you know, this is a really
+important part of whatever system you're
+building out if you're, you know,
+integrating with LLMs and agentic
+systems. You really want context
+reusability. This is something that uh I
+hope the cloud code team spends some
+more time building out. They just
+recently launched this feature where you
+can do claude continue and this will
+pick up on your previous session. They
+also just added claude resume. So if we
+click cloud resume you can see different
+sessions pop up and so this is a really
+great way to hop back in specific
+sessions. But in the system I've built
+out a simple conversation tracker which
+you can see here in the output
+directory. If we click CC you can see
+all I'm doing is tracking you know basic
+conversation history right? So there's
+that intro. Cloud code, are you ready to
+build? So on and so forth. This is a
+great way to reload the conversation.
+Obviously, we're using cloud code here
+as a programmable tool. That means we
+need to do a little bit more managing of
+context. Go ahead and fire this off and
+let's get this feature implemented.
+Claude, go ahead and read the anthropic
+web search UV script spec and let's go
+ahead and implement this into a brand
+new UV single file script.
+All right. So, this should be good
+enough. The big unlock here is that
+cloud code is smart enough. It's
+intelligent enough. It has enough
+searching capabilities, right? It's
+agentic enough to take this request and
+it has the abilities to look through
+whatever it needs to inside this
+codebase, right? The specs and the AI
+docs in particular. This should be
+enough for cloud code to get started,
+right? it knows to read this spec and of
+course it can see that specs directory
+if it does any file searching and then
+we say let's go ahead and implement this
+into a new UV single file script. So
+let's see what cloud code comes up with
+here. Let's yeah there we go. Nice. That
+looks great.
+Um let's uh see what we got here. I've
+created a self-contained Python script
+for the anthropic web search UV with
+command line support, error handling,
+API key checks, citation formatting, and
+colored output. It includes time zone
+support, usage tracking, domain
+filtering, and robust API error
+handling. There's also a readme with
+install steps, usage examples, output
+details, and pricing notes. The script
+runs via doshanthropic search.py, your
+search query. Awesome. Okay. So, you
+know, really what I want to do here is
+showcase the uh capabilities of a
+personal AI assistant. So, I don't want
+to harp too much on this script. Um, but
+you know, since it's here, let's go
+ahead and run this. So, let's open up
+the readme that was created. And there's
+our search query. So, uh, we probably
+need to run CXO on this. Probably give
+permissions here. CX enthropic search
+Python file. And then let's go ahead and
+run a search.
+anthropic claw code and let's see what
+we get here. So, I'll be impressed if
+this uh works in one shot. I feel like
+that happens more and more. You know,
+the more you kind of learn to write
+concise prompts, you know, natural
+language, written language, the easier
+it gets to actually clean this code up.
+So, um looks like there was an issue
+here.
+Okay, interesting. So, we got one search
+and response. I'll search these
+capabilities for you. So, that worked.
+This is here. I'm actually going to go
+ahead and commit this into this
+codebase. All of this, by the way, is
+available to you. Link in the
+description. This is going to be in the
+cloud code is programmable codebase.
+We're continuing to explore how we can
+use cloud code as a programmable agentic
+coding tool. This makes personal AI
+assistance not only better, but more
+performant than ever. As you saw right
+in the terminal, we can just talk, we
+can communicate, and we can have Cloud
+Code do arbitrary work for us thanks to
+all of its incredible tool calling
+capabilities. Not only did it write a
+bunch of cool starter code for us, it
+also uh was able to write a plan. Okay,
+so it merged a couple pieces of
+documentation, we wrote a plan and then
+that plan contained the kind of you know
+key framework for our actual code. Okay,
+so we're using AI plan drafting and then
+we use that to um actually generate a
+new piece of code. While we're talking
+about this, I'm going to fire this up.
+And I don't want this additional readme
+here. So, um, I'm just going to have our
+assistant clean this up. I want to merge
+this. So, uh, Sonnet, can you go ahead
+and take the anthropic search readme and
+merge it into our base level readme? I
+don't want that duplicate readme. Please
+go ahead, clean that up, and then delete
+the anthropic search readme when you
+finish. This is going to happen
+automatically in the background for us.
+So, that's great. While you're working
+with these assistants, you know, and
+doing scary things like merging and
+deleting, I always like to uh just
+commit whatever code I have. Um, you
+know, I highly recommend you get this on
+some type of short alias. I'm just going
+to run that there. Why is this
+important? Why is having a incredible
+700 line personal AI assistant valuable?
+Right? Why is this valuable? It's
+valuable because of one simple idea. You
+know it. We talk about on the channel
+all the time. Read me is merged, the
+duplicate deleted, and anthropic search
+docs are now fully included with
+sections on prerequisites, setup, usage,
+output format, and keynotes. Fantastic.
+Okay, so sorry. Yeah, we got interrupted
+there, guys. Sorry. Uh, what was I
+saying? So, the key idea here is compute
+equals success. Okay, the more you scale
+your compute, the more success you will
+have as an engineer in the generative AI
+age. If you understand this one idea,
+you are going to win. You're setting
+yourselves up to win. So, how were we
+able to tap into more compute here with
+our personal AI assistant plugged into
+Claude Code? Cloud Code is a
+programmable agentic coding tool. And
+not only is it just programmable, it's
+infinitely programmable. So, you can do
+stuff like this, right? Um, you can
+write entire workflows, right? Here's a
+super simple one we've looked at, right?
+You have a prompt that uh creates a new
+branch, creates a to-do, to-do.ts, ts
+minimal C cli application and then it
+commits okay so there are tools embedded
+in this prompt right and and that's the
+big idea if you get that you'll get a
+lot of things there are tool calls
+embedded in this prompt and it unlocks
+all types of craziness right reusable
+ADWs principal a coding members know how
+powerful that can be we can call any
+tool natural language we can embed
+inside scripts and we can stack multiple
+cloud code instances we can scale our
+compute with cloud code in agents.
+You're seeing this, you know, in the
+flesh. You know, I I don't just talk on
+this channel. I don't just, you know,
+hype up things. I always aim to deliver
+real engineering value to you. We got to
+talk about pricing as well in a second.
+But the personal AI assistant is a
+concrete example of that. Right? We have
+a cloud code call here. You can see in
+our process message, we're setting up
+that cloud code command just as we have
+in our previous more simplistic
+examples. Right? So in this codebase,
+you know, whenever you're ready for it,
+we have underscore 2 um cloud code is
+programmable and you can see this exact
+simple example boiled down to its atoms.
+Okay, you can see there's a prompt.
+We're doing a few things there and then
+we're running cloud code as a
+programmable agent encoding tool. There
+is some confusion in the industry right
+now. Some engineers are wondering what
+is cloud code for? How is it different?
+You know, is cursor better? Is better? A
+couple thoughts there. First, don't
+think in ors, think in ands. Use these
+tools together. Use different
+combinations. Don't limit yourself with
+the ore mindset. That will set you back.
+Point number two here is there is no
+other tool right now that is an agentic
+programmable tool. Okay, we've gone into
+detail on this in a couple previous
+videos. You know, we know that AI coding
+is a small subset of agentic coding, but
+the the the true impact of this we're
+going to be unpacking on the channel.
+Make sure you're subscribed. Make sure
+you're part of the journey because this
+is going to get really interesting,
+right? You you can't do this with
+Windsurf. You can't do this with Cursor.
+You can't do this with Klein. Codeex is
+the only tool uh close to accomplishing
+this. It has full auto mode and then you
+can write a prompt and then your
+assistant will do work for you. Okay, so
+this is close but codeex is is you know
+to be fully honest it's nothing special.
+It's basically a clone of cloud code.
+The only thing they have going for them
+is the fact that they enable open
+models. Okay, so you can use whatever
+model um you want, right? They have
+custom configuration option for uh
+different models, right? So, of course,
+everyone's running toward the new Gemini
+models. They just released the new Pro
+model. That's all fantastic. If Claude
+Code opens up their models, they just
+win this game immediately. Okay. Now, I
+doubt they'll do that. It's not a good
+strategic decision to make from a
+business strategy perspective. They are
+making so much money off this tool. And
+uh you know, maybe that's a good place
+to to go here now, right? This personal
+AI assistant, cloud code, this new
+powerful agentic tool. Um it's not all
+roses, right? this then costs. You can
+see here um you know what but before we
+get to this before we dive into this uh
+I just really want to I want to stop and
+uh I always forget to do this. I want to
+stop and say uh just a huge thank you.
+Uh we're about to hit 50k subs
+and we were never supposed to get this
+big. I imagine we would flatline around
+10 or 20k subs and we would just go
+sideways for basically ever, right? Like
+I imagine that this was it. Okay, but
+here we are almost at 50K subs. It's
+been a really long drive. Every week I
+show up four, you know, mid and senior
+plus engineers working in the field with
+their boots on the ground every single
+day, right? It's about building real
+valuable software. Engineers are
+skeptical by nature. It's like a huge
+percentage of the audience that watches
+the channel, they're not subscribed. And
+that's fine. That's fine. Whenever
+you're ready, I'm here. I'll be here
+every single week. I don't know if you
+can tell yet. If you can't, this is not
+a scam. This is not a griff. The one
+product that I do sell on the channel,
+Principal AI coding, has been immensely
+valuable to every engineer that's taken
+it. The reviews have been insane and
+it's setting up for what we're going to
+do next. You can already kind of feel
+what's coming next. If you've been
+watching the channel, everything we're
+doing is about scaling our compute so
+that we can be successful, right? We're
+talking LLMs, AI coding, agentic coding,
+AI agents, and whatever comes next. I'm
+I'm really proud to say there are some
+big big hitting engineers and high
+performers that watch this channel.
+We're talking about your favorite
+engineers favorite engineer and um you
+know I just want to stop and just say
+thank you. You know it's been a
+obviously a ton of hard work doing this
+every single week, but it is always
+worth it to help you know you to help
+other engineers. There's so much noise
+and and the the noise to value ratio I
+feel like is very low. um just across
+the ecosystem. One last thing I'll say
+here is I have three priorities and no
+matter how big we get, I want you to
+know that you know what these priorities
+are because it differentiates what we do
+here on the Indie Devdan channel. Okay,
+so one build living software, two unlock
+your engineering potential and three
+make a living by creating value. Okay,
+the order is everything, right? Um, I I
+want you to know my priorities and I
+want to just really hint on why it's so
+important to have priorities yourself.
+I'm not here to make a living, right?
+That's not my first priority. That's my
+third priority. I'm not here to just
+unlock your engineering potential. Okay?
+My top priority is to build living
+software that works while I sleep. Okay?
+And by having this mission, right? By
+having that as my key cornerstone
+mission, I'm able to provide you with
+unique value that you can't find
+anywhere else. Because of my mission,
+because of my priorities, this isn't
+changing. It's not going to change. And
+I'm going to be here every single week,
+50K, 60K, no matter how high or how low
+we go. We're going to have big videos.
+We're going to have crappy videos that
+don't do well. But in every single
+video, I'm going to be aiming to give
+you concrete value to help your
+engineering every single week, every
+single day. And you know, by the way,
+you know, I do focus a lot of my time
+and effort on senior plus engineers. But
+you know, for all the noobs out there,
+following learning, big shout out to
+you. Some of the content we look at is
+dense. Hats off to you for learning, for
+pushing above your weight. The best way
+to grow as a noob, you know, junior
+engineer is to spend time with other
+heavy hitters and, you know, listen to
+other engineers that know what they're
+doing and that, you know, have concrete
+takes. Anyway, that's a long rant. I
+just want to say thank you. We're almost
+at 50K. That's cool. In the end, it's
+just a number. What matters is what we
+do here on the channel, the technology
+we use, and the way we use it. Patterns,
+techniques, and most importantly,
+principles, right? tools, great models,
+great applications, great. What matters
+is what we do with them. Back to Claw
+Code and back to the personal AI
+assistant. Back to scaling our compute.
+So, um I just want to talk about costs.
+Okay. Uh we're getting deep fried here.
+This is my cost chart for Claude Code. I
+just took a quick image of this today.
+Um and you can see here in just 10 days
+I'm at $100. Okay. And I even have some
+off days on here, right, where I'm using
+other technology. So, I can guarantee
+you uh I'm not using enough compute.
+You're not using enough compute. We can
+get these numbers way higher. And we're
+going to And you know, to be clear, it's
+not about spending more money. It's
+about spending more money and getting
+more value out. If you can spend $100
+and get $200 worth of engineering work
+done, you should put in as much money as
+you can, right? You have a value
+generator, right? That's what a lot of
+these powerful tools are. You put 20
+bucks in and 40 bucks worth of value
+comes out right now. Now, the trick
+obviously is when we're comparing our
+compute advantage across all these
+tools, the real question is, can you put
+a 100 bucks in and get 300 bucks out
+using a different tool? Okay. And then
+then and that's what the compute
+advantage equation is really all about.
+And that's what we're going to be
+exploring on this channel over time.
+Right now, there just is not a tool more
+important than Cloud Code. They're
+shipping the highest amount of value and
+the ROI you can get here. The exchange
+of time plus cost is actually quite low
+if you really really understand the
+value of your time. You know, on one
+hand, yes, very expensive. On the other
+hand, something is only expensive uh
+relative to what it gives you. You can
+see yesterday almost 50 bucks. Pretty
+gnarly. So, I love Cloud Code. I'm going
+to continue using it. I'm definitely not
+saying don't use this. You know, they
+just launched their Max plan. And I've
+been scratching my head on this one a
+little bit, as you may have as well. I
+can't really tell if this is actually
+going to save money or not. As you can
+see, I'm like a prime candidate for
+something like this. I'm already at 100.
+The big problem with a lot of AI labs
+right now that are providing compute is
+that there are still limits. Okay? Like
+it doesn't matter how much you're
+paying. Um you can see there's still
+limits. I don't know if this will
+actually be helpful. I'm going to wait
+to hear a little bit more before jumping
+in on this membership. I am not a clawed
+user. I think that if you're a clawed
+user, this subscription is a lot more
+interesting and enticing because it is
+unified. They say that somewhere here,
+right? This is one unified subscription.
+So, if you use Claude Desktop or, you
+know, web, I think this is a no-brainer.
+Like, pick this up, pick up their what
+was it, the $100 a month, you know,
+you're going to get some good usage out
+of this. Where it stops being useful is
+if you're not hitting your usage limits,
+right? And and that's where the math
+just it isn't really clear to me. Um, I
+wish that they would just come out and
+say, "Hey, this is going to be cheaper
+if you use the entire membership." This
+is going to be cheaper than paying via
+API key. um as as I am here, right? This
+got mentioned on our previous video. So,
+I just wanted to bring this up. This is
+available here. I think the giveaway
+here is if you use web and desktop and
+you use cloud code, this is a
+no-brainer. So, something to mention
+here is, you know, we were one of the
+first channels to really start talking
+about cloud code. But you can see here
+inside of Hacker News, we might need to
+go to the second page now. You can see
+uh you know, cloud code is getting a lot
+more attention. 246 comments on Hacker
+News for this post. Exactly. To me, this
+is a really great sign. Uh the industry
+is catching up to how important this
+tool is. Um even though there are still,
+you know, some questions. Everyone
+always, you know, mentions cursor when
+any AI coding tool is brought up as a
+comparison. As you've seen on the
+channel, there is no comparison to cloud
+code right now. Even when you exclude
+the fact that this is a programmable
+agent coding tool, I don't think other
+tools are close. And you know, I say
+that by the way, look at the bottom
+right corner here, right? Cursor tab. I
+use cursor. I pay for cursor. Um, I'm a
+huge fan of cursor. I just never use
+their uh agent capabilities because
+cloud codes is frankly better. Okay. And
+we can dig into what better means uh on
+the channel as we go on. But it's great
+to see this. The industry is catching on
+the the, you know, serious impact of
+cloud code. And after I finish this
+video up, I'm going to dive head first
+into podcast that was just released with
+two of the creators of Cloud Code. So,
+I'm really excited to check this out.
+I'll leave those links in the
+description for you as well to check
+this out. I already know this is going
+to be a banger video and they're going
+to be some really important ideas. I
+think you know big takeaway here. Uh
+cloud code isn't going anywhere. This is
+the best leading agentic coding tool. Um
+as you saw here we were able to build
+out a very very powerful voice to cloud
+code personal AI assistant in just 700
+lines of code. So what are the
+components of this? Personal AI
+assistants at their core are simple. You
+have the ears, you have the brain and
+you have the voice. So the ears of our
+application is something called the real
+time speech to text. So this is a great
+library. You saw we were using it here
+and this gets our input from speech into
+text so that we can run it into our
+brain. And so for our brain we are of
+course using claw code. This is what
+actually does all the work. This is what
+does the heavy lifting. This is what
+does the responding and this is how we
+get work done in natural language using
+our voice. Okay. Lastly, we have our
+voice. Right? So, our voice is fueled by
+OpenAI. And you can see here it's a
+simple request. You pass in your text.
+It gives you an output file. You play
+the output file. The only kind of
+important note here is that we're using
+compressed speech. Sometimes cloud code
+will return a bunch of details. So,
+we're using gbt 4.1 mini to just
+compress whatever was returned. We have
+this clean, concise compression prompt.
+Um, this is going to be here again in
+the codebase for you to check out. But
+basically, we just want to compress and
+make things really concise and put it
+into a natural language, you know,
+conversational response. And this is a
+great use for a smaller, faster model.
+You know, we can save some time. So, I'm
+throwing GPT4.1 Mini at this problem and
+having great success. Whenever you're
+thinking about building out your own
+personal AI assistant, this is how you
+can do it. I think this is going to be a
+really powerful tool. Not many engineers
+are going to unlock this. I want to give
+you valuable ideas like this so that you
+can tap into it if you so choose. And
+that's the three components, right?
+Ears, the brain, and the voice. This
+codebase is going to be available to
+you. Link's going to be in the
+description. This is inside of the cloud
+code is programmable codebase. And for
+anyone interested, if you want to
+accelerate your engineering, check out
+principled AI coding. This is the best
+way to learn AI coding in a principled
+way, giving you foundational skills to
+stay relevant with AI coding tools of
+today and tomorrow. This is an essential
+theme. We talk about principles, not
+tools. Principles not models. As many of
+you know, the next level course is in
+the works. I'm working on the course
+that comes after this. This is going to
+be a brand new course that builds on top
+of everything we've done here. Stay
+tuned for that. We're going to be using
+powerful next generation agentic coding
+to take everything we've done to the
+next level. We're going to multiply
+everything we've done. Enough about this
+link in the description as usual. You
+can also get voice to claude link in the
+description. There's a ton of amazing
+real time uh speechto text functionality
+to you know modify. There are many ways
+to make this faster to make it more
+accurate or you can trade off speed uh
+for performance and vice versa. I'll
+also leave a link to real-time speech to
+text. I'll also just go ahead and commit
+the anthropic search. Our assistant
+built this out for us. I basically
+talked to my computer and had it built
+out, you know, 230 lines of code, which
+is fantastic, really cool. As discussed,
+there are pros and cons to using natural
+language and speaking aloud, but I think
+it's another way we can scale our
+compute to scale our engineering impact.
+You know where to find me every single
+Monday. Stay focused and keep building.

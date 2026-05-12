@@ -1,0 +1,527 @@
+What's up engineers? Andy Devdan here.
+When it comes to AI coding, there are
+two camps of engineers. Those who spend
+money to save time and those who spend
+time to save money. I always advocate
+for the first. Time is the one resource
+you'll never get back. But what if we
+could have it both ways? Zuck and the
+cracked engineers at Meta just dropped
+the Llama for Herd, Behemoth, Maverick,
+and Scout. These models so far are
+looking like the best
+open-sourceish models available. I'm
+filming this super super fresh on
+Sunday, so a lot of these models don't
+have full support across LM providers,
+but I have had the chance to play around
+with Llama for Maverick, and it's got me
+excited for
+lowcost, high intelligence compute. What
+if we could have it all? Maverick is
+beating out some of the best closed
+source proprietary LLMs, including the
+latest Chachi BT4 and the cracked Gemini
+2.5 Pro. It's really crazy to see a
+again open- sourceish model on the top
+of really any chart. This model really
+stole the show away from Gemini 2.5 Pro.
+As you can see here, I think this is the
+first time a Google model has been at
+the top of an intelligence chart. But it
+looks like already it's been out for
+literally two weeks and it looks like
+pretty soon we're going to see Maverick
+and then my god Behemoth
+um topping the charts pretty soon here
+unless OpenAI's 03 or 04 mini can
+compete. So there's more options than
+ever for powerful compute. As you might
+know on the channel, we have been
+hyperfocused on the evolution of AI
+coding to agentic coding. And the leader
+here, the clear leader in this space is
+Claude Code. This is the agentic coding
+tool made by Anthropic. This tool is
+changing software engineering. This is
+the best Agentic coding tool in the game
+right now because it sits at the
+intersection of Agentic Coding,
+customizable MCP servers, and it's
+fueled by the powerful Clawude 3.7
+Sonnet, a game-changing model in its own
+right. But there is a massive problem
+with Claw 3.7 Sonnet. If you've worked
+with Claude Code, you know that this
+model is quite expensive. The $3 per
+million input isn't the problem. It's
+really the $15 per million output
+tokens. If you're writing code at scale,
+if you're scaling up your compute, if
+you're packaging and handing off tons of
+work to cla code to get a ton done, you
+know that the cost really lies in this
+15 output token costs. So, what can we
+do about it? With all these new
+incredible models coming out, wouldn't
+it be great if we could delegate the AI
+coding process away from Cloud Code to
+whatever model we wanted? We could
+delegate it out to Behemoth, Maverick,
+Scout. We could try out the new
+secretive quazar alpha model. And of
+course, we could give it to Gemini 2.5
+Pro and save 2/3 the cost compared to
+Claw 3.7 Sonnet. So, what if we could do
+this right by now? You're probably up to
+date with the model context protocol.
+This is one of the most important things
+happening in the engineering world right
+now. We're standardizing the language of
+our agents. We're standardizing the
+language and the interface to interact
+with tools in a repeatable fashion. Why
+don't we delegate the AI coding process
+to the original best open-source AI
+coding tool, Ader? This gives us three
+distinct advantages. We can save money
+by using a cheaper model. We can regain
+full control over what model we want to
+code with inside of cloud code. And
+lastly, it lets you tap into a powerful
+agentic pattern we'll discuss in this
+video. Let's increase our compute
+advantage on the compute time and cost
+dimension with this experimental ADER
+MCP server.
+So, let's open up the terminal and get
+Claw Code up and running. The first
+thing I'm going to do is run my context
+priming prompt. This is me telling Claw
+Code what it needs to understand to
+write code and to operate in this
+codebase. So, I have this saved as a
+custom slash command, also known as a
+prompt template. If I hit slash and I
+run context prime with ader, this is
+going to run several commands. It's a
+small workflow. You can see here cloud
+code is reading a couple files. It's
+running get ls files and now it's going
+to run a tree command so that it
+understands the structure of this ader
+mcp server. There's the summary. The
+most important part here is at the
+bottom when coding for this project I
+should use aderic code tool as directed.
+So instead of using its own file editing
+tools it's going to use our tool. Here
+we're overriding its file editing tool
+with our own ADER AI code. And now we
+have access to any model we want that
+ADER supports. So if I run
+bangcat.mmcp.json, you can see I'm
+running the new Gemini 2.5 Pro model.
+This is the paid version. If you want,
+you can of course use the experimental
+version and hand over all of your code
+and data and prompts to Google. This is
+totally fine if you don't care. But
+always remember if something's free,
+your prompts, your code, your data, and
+you are the product. So this is what
+that MCP server setup looks like, right?
+So we have ADER. We then specify our
+model. Typical MCP setup stuff here. So
+what can we do with this, right? What
+does this actually look like? Let's get
+back into bash mode. I'll run cat. And I
+just want to show you the utils. So a
+new cool feature in cloud code. If you
+start typing something, hit tab, you can
+get autocomplete. I just want to cat the
+utils. And you can see here I just have
+a couple things here, right? We have the
+default editor model and we have the
+default architect model. So let's use a
+very very simple AI coding example using
+ader inside of claw code. So we'll use
+this ader code. So just being super
+clear here with the tool I want called
+add a default weak model to utils. py
+use the same model as editor. So I'll
+just fire this off and instead of using
+its own tool, its own file editing tool,
+you can see here we have our Ader MCP
+server running. And this is really cool,
+right? We have clawed code operating as
+the AI coder. It's writing the AI
+quitting prompt. It's passing in the
+context. And of course, the model was
+already selected up here, right? So
+we're using this as the default model.
+So if we go ahead and run this, this is
+going to be a quick small change. We're
+going to get back a diff. And you can
+see that there we just delegated the AI
+coding process away from claw codes 3.7
+sonnet to gemini. So if we go ahead and
+cat that file again, we now have that
+new weak model variable. Right? So just
+showcasing obviously this is a simple
+oneline change. This is table stakes for
+modern AI coding tools. Right? But this
+is really cool. I just want to really
+hone in on this idea. Um, we had claw
+code hand off the AI coding process to
+one of the original top-notch AI coding
+tools, Ader, and we had it write the
+code. So, we can use any model, right?
+We can we can have any model uh run this
+process, right? Let's go ahead and scale
+our impact a little bit more with this
+tool. Inside of this codebase, we have
+multiple.info calls, right? So, you can
+see here we have a ton of.infos. So,
+let's go ahead and just run an arbitrary
+AI coding prompt to update these. We'll
+run clear to clear the conversation
+history. I'll go ahead and rerun my
+context prime. You have to remember this
+is a blank slate. Now, always think from
+the perspective of your AI coding
+assistant. So, we're going to reprime
+with Ader. And what I want to do here is
+showcase how many output tokens we're
+really saving by using a completely
+different model, right? We don't need to
+use claw 3.7 sonnet. We can delegate the
+AI coding process and really any process
+we want to another tool to another MCP
+server. This is important to mention as
+well. There's also another tool we can
+list models um coming out of ADER. So I
+can also say you know list models and
+then we can say something like uh Grock,
+right? So let's say I want to get all
+the Grock models that Ader supports. You
+can see that command coming up there. We
+hit enter and we can see all the Grock
+models here, right? So looks good. We
+can do this for any provider from AD,
+right? So let's say we want to see what
+the latest uh Gemini models are, right?
+We can see that brand new 2.5, right? So
+this looks great. And then if we search
+2.5, we should get that model down here.
+Yep, there we go. So, we got that new
+Gemini 2.5 Pro preview. That's the model
+I'm currently using as the default. So,
+let's go ahead and replace these info
+calls with debug calls, right? Just a
+random example prompt. So, again, clear
+contact prime with ader. This is a
+workflow that I use all the time. If
+you're using cloud code, you probably
+have some workflow like this. you're
+constantly refreshing sessions as you
+fill up the context window and you need
+to run that you know compact command
+over and over and over and let's go
+ahead and run this AI coding prompt. So
+I'll paste this in. So we're going to
+search Python files look for.info then
+aderic code and I'm just being super
+clear with the tool call here update all
+logging.info todebug model and then I'm
+passing in a model I want to use. Okay,
+so let's go ahead and run this and let's
+see if we get the right command here. So
+there's that search. So we're now moving
+into this space with agentic coding
+where we're not just running coding
+prompts, right? We're running uh
+arbitrary tool calls based on our prompt
+and then specific AI coding tools. So
+check this out again. We have cloud code
+uh writing the AI coding prompt for us.
+And there's a lot of work that we can do
+here in the uh tool argument description
+to uh help it with IDKs and you know to
+improve the prompting of cloud code
+prompting ader but you know this looks
+good in itself you can see it's using
+some powerful keywords out of the box
+and then it's kind of just walking
+through the details right so this looks
+really really good just change instances
+all instances of info to debug right
+super clear and then it's passing in the
+context
+right here. So, you know, again, this is
+why it's so important to prime your AI
+coding tool. Um, when it's calling other
+tools that also need context, it can
+then pass those in perfectly, right? And
+this is why we had it search for.info
+first. So, now it knows exactly where
+those files are. We do have an issue
+here. Uh, it wants to run open router,
+open router, uh, quaazar alpha. I think
+this is actually wrong. It's just one
+open router. Uh, just do this. Copy. I'm
+going to hit escape and I'm going to say
+use this. And I might be wrong here. It
+actually might be open router open
+router, but I don't think it is. Okay,
+let's go ahead and fire this off. Okay,
+so still issues there. So it actually
+might have been right. So I'm going to
+uh say open router open router slash. So
+I'm just cool. So I'm going to hit yes
+here. And let's go ahead and see the
+response. So this is really really cool.
+So look at the diff that came back. This
+is a really really important feature of
+this workflow of this tool call. Our
+ADER MCP server returns true and then it
+returns the diff, right? So the diff
+gets fed right back into cloud code.
+Cloud code isn't using output tokens
+here, at least not as many as it would
+if it wrote all of this code, right? And
+so there's the diff. Something really
+incredible is happening here. I
+mentioned there are three advantages.
+The third advantage is this interesting
+agent architecture where cloud code is
+acting as a agent orchestrator, a tool
+orchestrator. So this might seem really
+obvious, but the most important thing
+about your tool calls is the action it
+takes. and what it returns back to cloud
+code to help guide cloud code or
+whatever MCP host you're using. You
+might like cursor, you might like the
+claw desktop application, whatever
+you're using. When you're writing your
+tools, it's really really important to
+return useful information. So you can
+see here we got the entire diff and
+immediately cloud code got to work in
+validating Ader's work. Instead of a
+architect editor, we have a editor
+reviewer workflow here. And it runs in
+this kind of interesting loop. So you
+can see here cloud code looking for
+logger.info calls. This is why I chose
+this example because you can see cloud
+code validating that AI coding change.
+And if we scroll down here, you can see
+it looks like a couple files, a couple
+logs were missed, right? Let's finish
+the task by updating the remaining.info
+calls in logging. py we have this
+looping editor reviewer workflow here
+with cloud code and ader this is one of
+the reasons I always stress you want to
+think in ands not ors don't limit
+yourself by thinking one tool one idea
+is better strictly better than another
+right it's very often the case that you
+can use multiple tools multiple ideas
+together in an and in a combined in a
+composed workflow to get better results.
+We're seeing this here in action with
+Cloud Code and Ader. Look at this great
+AI coding prompt, right? Context model
+prompt. It's all here. It's all coming
+together. You know, it's interesting to
+see where this could go if you wrapped
+Ader in its own agent, right? We're
+starting to see this agent orchestration
+come out of Cloud Code where if you give
+it the right tools, which could
+themselves also be agents, um you get
+this really interesting feedback loop,
+right? It's doing more work
+autonomously. We can see here uh cloud
+code is now writing the prompts for me.
+Right? Cloud code is now selecting the
+context. Right? So super super
+interesting idea here. I think we're
+definitely pushing in this direction
+where we're having uh multiple tools,
+multiple agents talking back and forth
+solving problems. Some agents use
+specific LLMs that are better at some
+things. And of course, specific agents
+are going to solve domain specific
+problems extraordinarily well. So
+anyway, let's go ahead and let Eater and
+Cloud Code finish up this change. You
+can see that was really simple. There's
+success. There's the diff. And now
+again, we can see Cloud Code validating
+that change again. Okay, so it wants to
+see where are those.infos. Let's keep
+working. We're eliminating the right
+ones. There we go. So this looks good,
+right? The remaining.info are actually
+the method definition. So that looks
+great. So if we look at ourinfos now,
+this looks pretty good. Looks like we
+have our logging and our tests for logs.
+Very cool. It's nice to see this in
+action and we did that with the uh open
+router quazar model. So, you know,
+whatever model this happens to be um
+coming out of open router. Not sure what
+this is, but rumor says this is the new
+open AI model. If this is their upcoming
+uh open-source model, that would be
+absolutely insane because uh this model
+is quite powerful. But that's the key
+idea here. I don't think I need to harp
+on on this too much more. You really
+want to be thinking about your MCP
+servers as ways to delegate work off of
+cloud code. And if we type slashcost
+here after all those changes have been
+made, uh you can see here I've only
+spent uh 68 cents. And and you know,
+check this out. Lines added, lines
+removed. Cloud code has not made a
+single change, right? So, we're saving
+quite a bit of money from those, you
+know, $15 output token costs, right?
+Throughout the session, throughout all
+of the sessions that we ran here, all
+Cloud Code was doing was reading, right?
+Read, read, read, read. It got the diff,
+so we need to read that into the context
+window. It read these files, right? It's
+all good. These are all $3 per million
+token reads. So, we're keeping our cost
+down. staying away from that 5x cost for
+every write you make, you could have
+made five reads, right? So why not just
+outsource the the AI coding to another
+model, right? A cheaper model with equal
+or even better intelligence uh for
+actually writing the code. And if we
+check out the Ader leaderboards, we can
+see things are getting pretty spicy. We
+don't have the new LMAL 4 models in yet,
+but you know, we can see here the model
+I was just using, Gemini 2.5 Pro. It is
+the leader right now. It's an insane 8%
+improvement. It's an insane 8%
+improvement over claw 3.7 with thinking
+tokens. This is quite a big deal.
+Gemini, Google, they're cooking right
+now. They are coming back hard. My
+prediction still stands. I'm still
+strongly behind OpenAI being the leader
+in terms of raw intelligence. I think
+that 03 and 04 mini, which looks like
+it's going to be released in Q2, I think
+they're going to blow past everyone else
+in the space right now. But we'll see.
+Right now, we have a, you know, great
+model, Gemini 2.5 Pro. We have the brand
+new Llama 4s. We have a lot of new
+intelligence to work with and understand
+the capabilities of. This is a really
+simple idea, but it can be very
+powerful. There are some scenarios where
+you don't just need to spend to win. You
+can have it all. And I think we're
+seeing that specifically when we combine
+MCP servers with great AI coding tools.
+If we run GS here, you can see all of
+the code that was changed here by our AI
+coding tool. This is get status and it
+all happened. It was all done by um the
+combination of ADER and cloud code.
+Another one of the reasons why Ader is
+one of the still best AI coding tools is
+that it is programmable. You can take
+Ader, you can control it, you can write
+it into your own workflows, you can
+write it into your own MCP servers as
+we've done here. This code is going to
+be available to you in the description
+if you want to see how you can do this,
+how you can program with ADER. You can
+add it to your own workflows. If you've
+taken principal ad coding, you're
+familiar with these ideas. You know how
+powerful this tool can be. It's really
+hard to debate that there's a more
+customizable and controllable
+open-source a coding tool than Ader.
+There's a reason I use ADER inside of
+principled AI coding. It is simply the
+best way to teach a coding in a
+principled way for every tool for every
+model that's going to be released. It
+also gives you access to a massive
+number of models. If we type ader-list
+models and then you pass in any
+substring you want. So say you're
+looking for open AAI models, you can
+just see all the models you have
+available to you via many many
+providers. So very very powerful stuff
+as you might know from the state of AI
+coding essay. I am still using Ader. If
+we search ADER here, you can see the
+tools that I am adding removing. You can
+see my kind of AI coding tool
+investments. I have reduced my usage in
+Ader in exchange for cloud code. I'm
+primarily using cloud code, but after
+this kind of, you know, new experimental
+discovery of using ADER inside of cloud
+code, my usage here is probably going to
+go back up because I'm going to be able
+to control my AI coding model. So, I
+might have to come in update this. Um,
+if you haven't checked this out already,
+the state of AI coding is a huge
+breakdown of where AI coding is at,
+where it could be going, and high
+leverage bets you can make to understand
+where it might go so that you can get
+ahead of the curve. Definitely check
+this out. There's a super comprehensive
+essay. I broke a lot of key ideas down
+inside of this blog post. Obviously, one
+of the big ideas we've been discussing
+on the channel, compute equals success
+for anyone interested. I've also just
+released part two. It's now available
+exclusively for principled AI coding
+members where we talk about the
+transitory nature of AI coding. AI
+coding is not going to be around
+forever. And in part two, we talk about
+what's coming next. If you're not a
+principal AI coding member yet, that's
+fine. You can hop into part one,
+engineering with exponentials, and get a
+great idea of how to leverage compute in
+your engineering work. Links will be in
+the description as usual. Llama 4 is
+here. This new Quazar Alpha model is
+likely to be released soon. And of
+course, we have the incredible Gemini
+2.5 Pro. I'm going to be working with
+this model a lot more for AI coding and
+for building agents. If you enjoyed this
+video, if you got value out of it, you
+know exactly what to do. Like,
+subscribe, comment. I will see you in
+the next one. Stay focused and keep
+building.

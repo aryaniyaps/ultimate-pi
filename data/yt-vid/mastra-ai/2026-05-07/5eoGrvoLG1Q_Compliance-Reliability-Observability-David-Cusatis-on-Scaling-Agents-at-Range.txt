@@ -1,0 +1,550 @@
+Before we get started, just want to give
+a round of applause for this amazing
+event today. Shout out to Moshtra, shout
+out to all of you all for being there.
+Really appreciate it.
+Um, a show of hands, how many of you all
+are building agents with Moshtra in
+production today?
+Few. Okay, cool.
+Um,
+over the last year, we've been building
+um, on top of Moshtra for a lot of
+agents in our product and I wanted to
+share just kind of some of the war
+stories and challenges we ran into,
+solutions we had to come up with to
+um, make these agents reliable and work
+really well.
+Um, a little bit of background about
+Range. Uh, we are an all-in-one
+AI-powered wealth management product.
+And so, if anyone here is familiar with
+financial advisors, we offer the same
+set of services, um, all-in-one, uh,
+from investments, taxes, cash flow,
+retirement, and all that stuff. Um, you
+know, the major difference for us is
+we're not an in-person advisor, we're
+not going to take you out to dinner,
+we're an AI-driven product experience
+and we are much cheaper than traditional
+advisors.
+So, we've been building on top of
+Moshtra for quite some time. I actually
+looked it up. The first Discord message
+I sent to the uh, Moshtra Discord was
+April 11th, 2025. And uh, we were trying
+to do all sorts of different stuff back
+then. Uh, I remember, you know, having
+to install like an alpha branch that
+lived in our code base for a little bit
+too long than I'd like to admit. Um,
+just to get things like containers
+working and uh, execution context shared
+uh, between different steps and
+different tools. Um,
+but we've we've now shipped a number of
+different agents on top of Moshtra. Uh,
+Rye is our flagship AI agent. Um, it can
+give uh, high-quality financial advice
+using a lot of the same technology that
+we built for our human advisors over the
+years. Um, and so, you know, we've
+benchmarked that. Uh, it's trained on
+our internal investment philosophy using
+the same tooling and we benchmarked it
+across a variety of uh, financial
+advising uh, certifications and exams.
+Um, Rye can pass with flying colors the
+typical human financial advisor passes
+with about a 70%.
+Um and so our users ask questions like,
+you know, make me a tax plan for 2026,
+help me save in taxes.
+Um and the way it works is Rye will
+actually uh execute a tax projection
+um
+using our tax projection system that we
+built internally. We've codified all 50
+uh states and federal uh tax codes as
+well.
+Um but we also have various other types
+of agents including things like
+onboarding. Um if anyone's ever worked
+with a traditional financial advisor,
+you know, one of the biggest pain points
+is giving them all of your contacts, all
+of your documents, that sort of stuff.
+We have a bunch of different uh document
+parsing workflows and things like that.
+Um we also have a team of financial
+advisors in-house and we've built agents
+to help them do their job more
+efficiently.
+Um and uh as well as our support staff,
+uh we built a number of support
+diagnostic agents as well.
+One of the things that we had to focus
+on or there's three big buckets that we
+had to focus on as we were scaling our
+agents in production. Um
+We are a uh SEC-registered uh investment
+advisor and what that means is there are
+certain uh SEC regulations we have to
+adhere to and from things around data
+retention and and so forth. Um logging
+out the uh and so we had to focus really
+heavily on things like um logging,
+auditability, uh making sure we captured
+all of the different uh metadata and
+thinking traces uh across every single
+element tool call.
+We had to focus on reliability. Uh
+reliability, nothing feels kind of worse
+than uh chatting with your agent about,
+you know, really complex financial
+topics and having it not work. Um and so
+we really had to spend spend a lot of
+time focus on how do we handle failover,
+how do we handle resiliency. Um and, you
+know, I I'm a big component of speed
+being a superpower. And so we really
+wanted to build state-of-the-art
+intelligence, um super high-quality
+financial advice, uh and have it be very
+very low latency.
+And lastly, we focused a lot, you know,
+related to the first two around
+observability.
+Um,
+tracing per, you know, different sort of
+steps and sub-agent executions was was
+really important to us. You can't really
+understand
+how your agent's performing if you can't
+understand, you know, within the various
+like nested executions, what's actually
+going on.
+The first thing I want to talk about is,
+you know, in the early days, I know the
+the Maestro framework has matured
+greatly since we started building on it,
+but you really had two options in the
+early days. You had workflows or you had
+agents. We over-indexed actually pretty
+heavily on workflows for some of the
+reasons I mentioned earlier, things
+around latency and so forth.
+Um,
+the the key takeaway here is though, you
+you want to make sure you're picking the
+right abstraction. A lot of folks have
+been talking about agents. Sometimes
+workflow's actually the right thing to
+choose. For instance,
+we do a lot of like document parsing,
+you know, and so that's like a four-step
+process. You might, you know,
+pre-process some documents, classify
+them, extract the information from them,
+and then validate you did the right
+thing.
+And then, you know, for agents, you want
+to use
+when the task is open-ended for
+non-super latency-critical applications
+as well. Um, we've seen a lot of
+success, just as everyone else seems to
+like have presented today, um,
+giving agents a bunch of tools. It works
+really well. The latest models perform
+really really well given a bunch of
+tools. And so, these these are some of
+the tools that we've built for our
+agent. Um, these are, you know, for
+context, like these were tools that we
+built for our humans before we even
+built AI, and then wiring them up to our
+agents just kind of worked.
+So,
+um, around observability,
+these are some of the things we did. Um,
+we implemented
+Maestro and AI SDK actually provide a
+lot of really great like hooks around,
+you know, various aspects of the
+execution life cycle. So, we have
+logging for things, uh, for sub-agent
+execution. Um, every single, you know,
+step starts, completes, tool call
+starts, stops.
+Um, we have metrics around latency,
+successes, failures, token usage. Um,
+and then, as I mentioned around our
+compliance use cases, we needed to think
+about archiving,
+um, for, you know, to make sure we're
+adhering to the various regulator
+policies that we need to do. On the
+left-hand side, or on the, yeah,
+left-hand side here, um,
+this sort of like what a trace looks
+like. I think we we built our own
+internally, but I think Mosaic just
+released their, um,
+metrics and loggings in their studio.
+So, you should probably try that.
+The other thing we spent a lot of time
+doing,
+uh, was making sure our models are
+really resilient. And we are seeing
+like, I'm sure you all see this, if
+you're all Claude Code users, how many
+folks here are using Claude Code?
+All right, cool. A lot of hands going
+up. Um, every day at like 9:00 a.m.,
+Claude Code kind of has like a blip or
+an outage. I think a lot of these
+different providers are very capacity
+constrained. And so, we wanted to make
+sure that, again, our system was very
+resilient to, you know, outages and
+errors.
+Um, and so, we built something called
+the resilient language model.
+Um, this allows us to do failover in a
+couple different ways. You can do things
+like failover from Anthropic API to
+Bedrock. You can [clears throat]
+failover from Claude Opus 4/6 to, you
+know, Gemini 3.1 Pro. Um,
+one of the learnings that we had was
+around, um,
+you think you're being clever by saying
+like, "Oh, let's just failover to
+Bedrock." Turns out everybody's also
+failing over to Bedrock, and so you kind
+of have this like cascading sort of
+outages. So, you want to have control
+over how you're failing over,
+um, and really make sure that your
+models can be resilient.
+And then, I spent so much of my waking
+hours over the last year thinking about
+how to measure whether or not our AI
+financial advice is good. And so, you
+know, you can do so much with evals.
+One of the things that we felt, uh, that
+we found to be very effective was kind
+of this post-generation analysis.
+The short story here is like we use LLM
+as a judge to evaluate content after
+it's being evaluated across a bunch of
+different metrics and it gives us like a
+live kind of pulse on how our system is
+performing and what's working or if we
+need to do things like, you know,
+escalate to human or and so forth. Um,
+and so, you know, Mantra allows us to
+obviously execute the different aspects
+of our workflows,
+um, but then it allows us to kick off
+this like asynchronous process as well
+to do this compliance and quality
+checks, um, in the background.
+Some of the things just like at a really
+high level that we're checking for are
+around grounding rate. So, for instance,
+is our AI RR agents using uh, the data
+that they retrieved uh, as part of the
+workflow in the response, um,
+user sentiment analysis, are people, you
+know, angry, are they swearing, those
+type of things. Um, missing data or
+corrections. So, a lot of times if if
+our users say, "Hey, my income is
+actually $100,000. You said it was
+$50,000." That's something we would want
+to know and try to understand, you know,
+where did this come from? And then
+a variety of different compliance and
+policy checks,
+um, things like as a SEC registered RIA,
+we have to think about things like, um,
+fiduciary standard, uh, duty of care,
+duty of loyalty, are we including the
+right disclosures? Disclosures are just
+like, you know, investment, you know,
+uh, performance is past performance is
+not indicative of future gains, that
+type of thing. Uh, for certain type of
+responses you need that uh, content in
+the actual response as well.
+And so, you know, what we needed, you
+all might need as well. Um, I know that,
+you know, where we sort of had to
+over-index a lot on compliance, but as I
+was thinking about this talk, um,
+really what compliance solves for is
+like explainability and a lot of the
+stuff that we built really solves for
+like explainability, trying to pinpoint
+exactly why the agent made the response
+that it did. Um, I think is pretty
+generally applicable. Um, and so
+hopefully these three sort of buckets
+help you think about uh, what you all
+need to do to scale your agents in
+production.
+Um, so yeah, thank you very much. I
+really appreciate your time and
+attention. Um,
+the last thing I'll mention is we are
+hiring. My role here is chief AI
+architect, but I'm also head of talent
+right now, and so uh, if any of you all
+are looking to join Range, come talk to
+me after.
+>> [applause]
+>> David, thank you so much.
+>> Thanks, man. We actually have time for a
+few questions and answers. If you drop
+heads? Yeah, absolutely. Yeah. I'm going
+to bring Sam up as well. Hey, Sam.
+Thanks.
+Good to see you.
+Amazing talk. So,
+think I I think it's um, the thing I
+think was really interesting about the
+talk is that because
+a lot more people sort of are tinkering
+and playing around with building agents
+than building agents. And the people
+that are like building agents haven't
+sort of pushed them as far as you guys
+have pushed them. I think you've given
+folks a lot of really interesting
+insights into
+what, you know, agents look like sort of
+at scale with all the guardrails that
+you've put in. Yeah, absolutely. Um,
+it it took about, you know, a year of
+kind of banging our head against various
+aspects of the process, but um, you
+know, very proud of what we built and
+continuing looking to see
+uh, what you all continue getting up to
+and how the framework matures. Yeah, I
+mean, we're excited to to see what you
+cook up with it. Um, I think you you
+said like
+you said one thing during talk that I
+was kind of curious about. What you said
+you were going to kind of give give us
+like the short version of what um, you
+guys were doing with the with post
+generation analysis. What is the the
+long version of it?
+Uh, so the long version, let me think
+about that for a sec. So,
+the long version is we have this whole
+like pipeline that like anyone
+across the company can actually plug
+into in terms of like the way um, after
+generating content, like you might want
+to plug in your specific policy. I don't
+know, for instance, like
+the the the post-generation analysis of
+determining what is good is very
+different for a piece of financial
+advice that's like trying to make a tax
+projection for you versus something
+that's doing like a summary of like
+investment news, right? And so, we have
+different aspects. Um one thing that
+maybe is not clear is that we, you know,
+we have over 15 agents right now running
+in production. Um all of them have kind
+of like different definition of like
+what good looks like. And so, having
+like a live view of what that, you know,
+the live view of the metrics and what
+how that looks and is behaving in real
+time is has actually been very helpful.
+Yeah. That that's awesome. Um another
+question I had was you were kind of
+walking through the the technical
+aspects, but I'd be really interested um
+to get a little bit more into like the
+human aspects here. So, how many folks
+at Range are are building agents?
+Um I the engineering team at Range
+probably gets sick of tired of me
+hearing this, but I tell everybody that
+they're all AI engineers, right? Like um
+we are pretty much we're a team of about
+25 uh technical folks. And so, everyone
+is building agents. Everyone is building
+on top of our sort of like we call it
+internally like our AI platform um
+to, you know, build the products and
+features that our customers love.
+One interesting thing, you know, when as
+it relates to sort of people building at
+Range, we've actually been developing a
+lot of developer technology for
+um non-technical folks to contribute
+code. And so, now at this point, all of
+our PMs, all of our designers, they're
+pushing code live to Range, and um it's
+been amazing to see. Yeah, that's really
+great. What's been like
+you know, as
+have you hired folks that have come in
+with, you know, AI engineering
+backgrounds or you're hiring sort of
+general-purpose developers and they're
+kind of learning this stuff on the fly?
+How is that process been as they've
+you've been like bringing new folks on
+into like into building agents? Yeah. Um
+we have not been hiring like
+specifically AI engineers in particular.
+I think
+there's not that many of them out there
+and sort of like a new uh title uh
+especially, you know, as as things
+continue to evolve. We have one person
+who focuses on machine learning at Range
+and they help us, you know, one thing I
+didn't talk about is actually early days
+when we were building things with
+primarily master workflows. We were
+actually doing training on our own
+models to like inject in certain parts
+of that workflow to like optimize for
+latency. And so we brought that person
+on to help us like build and scale out a
+lot of that stuff. Yeah. Um but
+primarily folks are generalists and
+things like that.
+>> Are you still training your own models
+or how is that kind of like I don't It's
+interesting. Um so
+we we actually moved to more workflows
+being agentic in nature. So basically
+all of the stuff we were training these
+models to like uh optimize for, the
+model yeah, somebody mentioned earlier
+just like kind of being bitter lesson
+filled like you know, we I think the the
+model capability's getting better um
+sort of eat your scaffolding. And so
+we're we're you know, and that's great
+by the way. Like I think
+I could
+>> too. Yeah. It's great when it's great
+it's a lot like it's great that when AI
+engineering eats the ML engineering.
+Exactly.
+>> it's a lot easier to to operate on this
+level of the stack than that level of
+the stack. Absolutely, yeah. But I mean
+to your point like I think we had to
+upskill a lot and like Claude and these
+other AI coding tools allowed us to move
+really quickly in building a lot of this
+stuff.
+Primarily probably because we're using
+TypeScript. And so you know, there's a
+lot of uh
+generalist full stack, you know,
+whatever type of engineers can do a lot
+of damage uh with the tooling that we
+have available today. Yeah. Um so so
+that's maybe also a good like opening
+into you know, are there other things
+that you started or maybe you were doing
+six months or nine months or 12 months
+ago and you aren't doing anymore and and
+maybe that's because they were the wrong
+approach. Maybe it was just cuz the
+models got more powerful.
+Yeah, one of the things we um
+the one thing that comes to mind really
+quickly is around our like onboarding
+workflows and agents that we built.
+Part of um
+as you're ramping up with a traditional
+financial advice, you got to give away
+over like all your documents and connect
+your bank accounts to the platform that
+you use plaid, Yodlee, MX, like the
+different data aggregators and stuff
+like that. What we found is that all of
+those like banking connections tend to
+be hit or miss for about, you know, 80%
+of things it works fine, but for the 20%
+it's very painful. So, we built ways
+into the product
+to allow folks like supplement with
+additional data. One way you do that is
+you can upload a document or a statement
+or something like that and we can
+extract it. Um one of the things we
+found early on was we were actually
+doing um OCR, passing it to textract,
+extra like taking that text, passing it
+to an LLM, having it massage it and and
+use structured outputs to put in a
+specific format. Um and we found we were
+able to skip that OCR step in a lot of
+cases now. And so, like that's like
+another thing that we've seen recently.
+Uh
+agents are eating OCR? Agents are eating
+OCR, yeah.
+>> Or better models or
+Um that's that's awesome. Yeah.
+You mentioned you compared agents and
+workflows. I was curious if you've
+explored the advantages of multi-agent
+systems. I'm thinking about things like
+the supervisor pattern. Um
+the we have like a more uh the way our
+system works today is there are certain
+like sub-agents, but it's like not a,
+you know, kind of free-form sort of
+sub-agents. Like one of the cool things
+I like about your guys' framework is
+agents and workflows are very
+composable, and so you can use workflows
+and agents um as you see fit. And so,
+there are some sub-agent like
+executions, but it's a little bit more
+guided and less like open-ended. Yeah. I
+see. Yeah. Well, David, thank you so
+much. All right, thank you.
+>> [applause]
+>> It's pretty cool to get to learn from a
+master user.
+>> Yeah. And I quite like watching how
+enthusiastic you are about learning
+about their experience, because it's
+that
+>> [laughter]
+>> that is the kind of attitude and the
+philosophy that makes master better
+every time. I mean, it's also this like
+really interesting part of being kind of
+the the tool guys is that you know, we
+we're thinking about the primitives and
+and you know, we only learn about a lot
+of this stuff through these kinds of
+conversations. So, but but at the same
+time like it's nice because and I think
+this is also just true of this
+conference and being here in this room
+is that the more you we learn the more
+we can share.

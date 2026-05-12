@@ -1,0 +1,569 @@
+Let's open claw code.
+Shift tab. Shift tab. Bam. We're in plan
+mode. The debate is over. Claw Code is
+taking over the engineering world. The
+Claw Code team continues their red hot
+streak as the most cracked engineering
+team. How are they able to do this? The
+creator of Claw Code said it himself.
+Generally at Anthropic, we have this
+product principle of do the simple thing
+first. The team has stealth launched
+plan mode. It's simple and powerful. How
+does plan mode work and why does it
+exist? There are two powerful ways to
+use plan mode. We're going to break down
+right now. One of these techniques takes
+a little more time but pays you
+dividends. You want to make sure you're
+using the right method so you don't
+waste your valuable engineering time.
+Let's master claw code plan mode in 20
+minutes.
+No one knows clawed code better than
+claw code. Let's ask it to tell us about
+plan mode. Reflect on your system
+prompt. Hi, can you explain plan mode?
+So, with certain features, you can be
+sure the system prompt has information
+about it. Here, we're quite literally
+asking Claude code to tell us about its
+new plan mode. You can see incoming
+tokens streaming in. And we look at
+that. Here is the details on plan mode
+right out of the system prompt. Plan
+mode is a special operating mode where I
+research and analyze, create a plan,
+present the plan for approval, wait for
+confirmation. So, this is really
+important and this is interesting. I
+didn't know it had an exit plan mode
+tool. This might be a fresh feature that
+just rolled out. The cloud code team's
+engineering velocity is mind-blowing.
+I'm restricted from making any file
+edits, running commands, creating or
+deleting, or making commits. And here we
+get a nice breakdown of when this is
+useful. We're working with AI here, so
+we can just ask stupid zero judgment
+questions that might have already been
+explained in the previous prompt, right?
+Ask stupid questions, validate your
+assumptions, learn fast, and move even
+faster. Can plan mode create or modify
+any files? Let's say like plan MD, can
+you modify that? So, I'm just being
+super super clear with cloud code. I
+want it to repeat things back to me.
+After all, we are operating in plan
+mode, so this is what it's for. No, plan
+mode cannot create or modify any files,
+including plan.MD. So, this is really
+about building up the context window
+inside of cloud code. There's no
+actions. There's no mutations happening
+here, right? So, let's be totally clear
+here. So I'll say so the purpose of plan
+mode read files understand the codebase
+by loading
+your context window with important
+information
+before we start working then switch out
+and edit correct me if I'm wrong. I like
+to use this correct me if I'm wrong to
+decrease sickle fancy basically decrease
+the bias in the model and present a more
+neutral question format. These models
+love to tell you exactly what you want
+to hear because it's good for business
+for these AI labs. So, you have to be
+really clear. So, I like to use this.
+Correct me if I'm wrong. It's just a
+little bit more neutral. You can see
+cloud code validating exactly what we
+were saying. Yes, you're exactly right.
+That's a perfect understanding of plan
+mode's purpose. It's research and
+planning phase where I load, analyze,
+design, present, then after you approve,
+exit, execute, and then we run all the
+commands so on and so forth. Right? This
+is really interesting. Notice how claw
+code is converging on the senior
+engineers developer workflow. First, we
+understand the feature by gathering the
+right information. We build up the state
+space of the problem and the solution.
+And only then do we start building.
+Before plan mode, we'd have to do
+something like this, right? You have
+your long prompt and then we say
+something like this, right? Don't write,
+update, or delete anything. Just read
+and plan. So with two shift tabs, we can
+immediately just enable that prompt
+modification. Planning mode means you
+can focus on priming your agent with the
+right context before getting work done.
+Great. So we have this new plan mode.
+Let's put it to work.
+I'm going to open up cursor here and
+let's enhance our previous proof of
+concept codebase, the infinite agentic
+loop. In this codebase, you can have
+claw code generate infinite versions of
+a solution to your problem until it
+breaks. Let's go ahead open up a new
+terminal window here. Fire up clog.
+We'll make sure we're running the
+state-of-the-art model opus 4. I'm going
+to run a prime command to get our
+context window loaded with key
+information about this codebase. You can
+check out the prime command inside of
+the custom slash command. This is a
+really simple one. We're just running
+get ls files and we're having cloud code
+read a couple of files. So you can also
+see we have claw.md added to this
+directory. So claw code is now primed.
+I'll hit shift tab tab. And now we're in
+plan mode. In the beginning I mentioned
+there are two ways to use plan mode. You
+can plan then write code or you can plan
+write the plan to a spec file and then
+have cloud code execute on the spec that
+you created. Four out of five times. I
+recommend the second technique
+specifically for mid to largesized
+features which you should be aiming for.
+We have more than enough compute and
+intelligent models in great tools. So
+aim big, hand off more work to your
+agent. Do more in single swings to save
+time and understand how far you can
+really push these models and these
+tools. So right now our infinite agentic
+loop set up in this codebase. If we open
+up source or source infinite, you can
+see they're generating single files. And
+in our previous video, we looked at
+these UIs, we can quickly just take a
+look at one of these. If I open up UI
+hybrid one, copy the path to this, and I
+just type Chrome this inside of bash
+mode, which you can trigger inside of
+cloud code with the bang or the
+exclamation. You know, you can take a
+look at this. Basically, we're just
+generating infinite UIs that could do
+many different things. If I go to two,
+you can see here's another one. Here's
+another one. Right? So, we just
+generated all of these interesting user
+interfaces.
+Right? Here's another kind of wild one.
+Here's another. Right? We can go, you
+know, we had tons and tons of these
+generated. If if you open up these
+directories, you can see all of them.
+You can check these out yourself. Okay.
+So, we ran a prompt that generated a ton
+of UIs inside of a single HTML file.
+Okay. So, very cool. What we're going to
+do here is update our lower level prompt
+that we passed into our infinite agentic
+loop prompt and we're going to have
+cloud code plan out exactly what we want
+done here. So what we're doing here is
+effectively metaprompting. I'm writing a
+prompt that's going to write a prompt
+that is a plan aka a spec. What I want
+to do here is just something simple. I
+want to showcase the power of plan mode.
+And instead of writing single
+self-contained HTML files, what we'll do
+is we'll break them up into their own
+isolated directory with a CSS.js and
+HTML file. Okay? And then we're going to
+embed all that in a new plan. So let's
+go ahead and get to work there. And all
+we need to do is be concise and write a
+great prompt. So I'll say let's plan
+specs V3. And I'll say V4. So I'm going
+to update that. That's what we want to
+generate. We want to build on specs v3.
+I'm using clause autocomplete here with
+the at@ symbol, but instead of writing a
+singlehtml
+file split into CSS.js.html,
+we also want to store these three files
+unique directory. All right. And that's
+it. So in plan mode, Claude Code is now
+going to get to work filling up its own
+context window with the information it
+needs to plan this workout. Okay, so
+we're going to kick this off. I'm going
+to leave open the specs directory.
+Nothing is going to get created here,
+right? This is all going into Cloud
+Codes context window. It's not going to
+create or modify anything, right? Just
+like it told us here, just like we
+learned by prompting and asking
+questions against Cloud Code. So let's
+go ahead and take a look at this. It's
+reading context. It's figuring things
+out. It's understanding what it needs to
+do to build out this V4 spec, right? So,
+it has a clear understanding of
+requirements and now it's going to
+present a plan. And so, this is quite
+interesting, right? It's planning inside
+of its own context window. It's just
+looking at your codebase, gathering
+information, reading files, right? It's
+all read. There's no mutations, there's
+no create, there's no update, there's no
+deletes. It's a very safe mode. And very
+importantly, this mirrors the beginning
+of a senior engineer's process, right?
+We plan, work first, we architect, we
+think, we plan, and only then do we
+build. So let's see what we have here.
+It's walking through based on my
+analysis. Here's a comprehensive plan.
+So this looks decent. You can see it has
+this key changes from V3 to V4. Each
+iteration creates its own all CSS,
+alljs. Perfect. So this looks good. Now
+I want to ask a question here about the
+implementation. There's one key detail.
+I want to make sure every version that
+we're going to generate with the
+infinite agentic loop gets their own
+directory with those three files. So I'm
+just going to be super clear here and
+showcase you know how you can use plan
+mode. So we're basically talking with
+the cloud 4 opus model running on claw
+code to be clear. showcase what the
+output durest
+mark directory looks like after running
+three agents. And so output directory is
+going to be part of our arguments, part
+of our variables inside of our infinite
+agentic loop prompt. And so I'm
+referencing this variable here, which is
+where all the iterations will be saved.
+So I'm going to kick this off. I want to
+be super clear about what's going on.
+And importantly, this conversation we're
+having is getting added to the context
+window. Right? So, check this out. This
+is exactly what I wanted to see. Right?
+Scroll up. You can see output dur right
+there. However, that gets defined in the
+infinite prompt, right? As a variable.
+We then are getting our own separate
+versions. And this is exactly what I
+want to see. I'm just proving things out
+uh with cloud code, right? I'm planning
+with cloud code with powerful
+intelligence. all my abilities, all your
+abilities, they're now augmented by
+cloud code, by Agenta coding tools, and
+by these models. So, make sure you can
+tap into it, right? Planning mode really
+helps us tap into this. So, let's go
+ahead and kick this off. I'm going to
+get out of plan mode. So, I'm going to
+run shift tab, shift tab. I want to get
+into autoaccept yolo mode. And now we'll
+let cloud code rip build the v4 spec
+mirror v3. and be clear about the
+improvements
+we are making. And I'll throw in a think
+hard to trigger the reasoning model
+here. This is awesome. So, we're going
+to get our new V4 spec out of this.
+Okay. So, the important thing here is
+that we're having Cloud Code write a new
+plan. There's a big problem with if we
+just said, you know, build out write the
+code for this, right? We can't see the
+full plan without consistently prompting
+Claude code. And remember, agents are
+ephemeral. What does that mean? They're
+temporary. They're stateless. Their
+context window will be blown away. So,
+we can improve on plan mode by having it
+write out the full plan into the specs
+directory, one of the three essential
+directories for agentic coding. Okay.
+And then we can once this plan is
+written here, we can review it, we can
+iterate on it, we can tweak it, and we
+can commit it to our repository, which
+has many downstream positive side
+effects. We'll dig into future videos.
+Make sure you're subscribed so you don't
+miss out on actionable agentic coding
+ideas like this. As you can see, week
+after week, there's a lot of value we
+can create with powerful agentic coding
+tools like cloud code. So, we're going
+to get the spec here written. It's
+activated the reasoning model. We use
+the think hard information dense keyword
+encoded by the cloud code team. Where
+was that? Let me search for that. Up
+here. Yeah, right here. Right. I said
+think hard and this triggers the
+reasoning model. Right now, Claude 4
+Opus is running its thinking process,
+making sure that everything's super
+clear. You can see very importantly,
+we're mirroring again another IDK right
+there. We're mirroring the V4 structure,
+but adapt it for the multifile approach.
+This is key. And while it's loading
+here, we can open up, you know, UI V3.
+Again, definitely check out the previous
+video to really understand the infinite
+agentic prompt and what's really going
+on here. But, you know, you can see just
+at a high level what exactly is going
+on, right? We're generating uniquely
+themed UI components that combine
+multiple UIs into one elegant solution.
+So that's what we're doing there. And
+you can see we just got V4 created for
+us here. 360 lines. Let's go ahead and
+open it up and make sure it makes sense.
+Okay. So themed hybrid UI specification
+V4 looks awesome. Builds on V3 with a
+critical architectural improvement,
+separation of concerns, new modular file
+structure. Great. And so I just want to
+quickly look through this plan and I
+want to see this key detail right here.
+output requirements directory structure
+UI hybrid iteration number very
+important right this differentiates it
+from v3 where we just use the iteration
+number from the infinite agentic loop
+and then we just create thehtml here
+we're creating the directory fantastic
+looks great I'm catching cloud code here
+before it makes a mistake I'm going to
+hit escape uh this is one of the you
+know great reasons to see the thinking
+of your model it was about to create an
+updated infinite command which we don't
+need at all this is good I'm going to
+stop it right here then I'm going to
+boot up another agent here. Open up a
+new cloud code agent and we're just
+going to kick this off. Right? So, this
+plan looks good. It has all the details
+from V3, right? We just built on the V3
+spec. And so, now we're going to kick
+off this infinite agentic workflow with
+our new plan. Just to kind of hop back
+into that idea from last week, this is
+the power of having higher order
+prompts. What does that mean? It's just
+like higher order functions where in
+certain programming languages, you can
+pass a function into a function. We're
+doing that same thing here with auntic
+coding and with prompt engineer. We're
+passing a prompt into a prompt, right?
+The infinite prompt takes a prompt as a
+parameter that it can operate in. Okay,
+there's a ton of value here. We're just
+scratching the surface of what can be
+done with higher order prompts. More on
+that later. Again, make sure to
+subscribe so you don't miss that. Let's
+go ahead and kick this off. Right, so
+there's V3. Let's close that and let's
+kick off V4 in our new Cloud Code
+instance. Check the model. We always
+like that big beefy opus model. And
+let's go ahead and kick this off, right?
+So slash um infinite. This is a custom
+slash command inside of the directory.
+We'll hit tab. And now we need a couple
+of arguments. So we can go ahead and
+sync these up. We need the spec file v4.
+We need our output directory source
+group. And then we need count. How many
+iterations are we going to run? Uh let's
+just fire off 10. We're going to have 10
+new versions here created. Let's go
+ahead and fire this off. Now our
+infinite agentic loop is going to read
+the spec output to the source group
+based on whatever is inside of our spec
+and it's going to create 10 versions.
+Let's go ahead and let this rip. And
+we're doing all this thanks to planning,
+right? This is all thanks to plans. We
+have plans on plans, right?
+Custom/comands. Then we have our specs,
+right? Another prompt. We had, you know,
+cloud code in plan mode, right?
+Thinking, building up context. So much
+of what we do as engineers in the
+generative AI age in this kind of second
+phase is all about building up
+information sets and organizing
+information for our agents and really
+understanding what our agents can do.
+There we go. You can see we have two
+waves. We're going to run in two
+batches. Wave one is going to create
+five agents. Wave two is going to create
+five agents as well. You can see their
+themes. And now cloud code and opus mode
+is going to kick off five agents in
+parallel. Again, once you finish this
+video, check out the previous one to
+really understand the infinite agentic
+loop prompt. Here's the magical moment
+we've all been waiting for. We're going
+to get five parallel agents kicked off
+and they're going to start working for
+us. There we go.
+So, you can see we have that new
+directory and we also have those five
+new agents running in parallel here.
+Let's go and just open all these
+directories up preemptively and we're
+going to be able to watch all of these
+parallel cloud code agents work together
+to accomplish every version of this
+task. Okay? And so if somehow you've
+been watching this channel and you
+haven't been convinced of the importance
+of the fundamental principle of AI
+coding, great planning is great
+prompting. You should absolutely be
+convinced now. Okay. a leading AI lab
+ghost launched and used the tab key for
+the feature for quick access. It might
+seem like I'm micro analyzing, but this
+is what great engineering is, right?
+Every detail matters. Every product
+decision matters and every product
+decision says something. All right, so
+you can see five agents running in
+parallel doing their own isolated pieces
+of work based on our plans. um you know
+principal ad coding members and
+subscribers of the channel you've
+already known about planning and
+architect editor prompt chains and you
+know that key principle that the plan is
+the prompt right we've known this for
+some time now you already have this
+deployed into production you're already
+using this in cloud code every single
+day this is just a new you know mode of
+operating for us as engineers now right
+but if you're just hearing about this
+principle of a coding the plan is the
+prompt check out principled AI coding to
+learn the other Seven principles of AI
+coding link in the description. This is
+fantastic, right? This is working for us
+on our behalf. We have five agents here.
+Everyone's up to two tool uses. It's
+probably going to be three each and then
+we'll be able to dive in and actually
+look at what's going on here. Okay, so
+it looks like hybrid v2 is coming around
+the corner here. This is exactly what
+we've detailed in our plan. And thanks
+to Cloud Code in plan mode here, right,
+shift tab, shift tab, uh, we were able
+to very quickly load up its context
+window with a couple key details, right?
+Very concise prompts. You don't have to
+type a lot. You don't have to do a lot
+with these great tools, but you do need
+to know exactly what to say and what to
+ask. We focus on these key ideas of
+writing concise prompts on the channel
+all the time. All right, so it looks
+like all of our versions are getting
+filled out here. You can see task two
+complete, task three complete. Both
+agents had four tool uses each. They
+both consumed about, you know, 40k of
+Opus tokens. That means there's a lot of
+value in these tokens, right? Uh 3
+minutes each. Not too bad. All right.
+And all of our other tasks are now
+complete. These should all be, you know,
+ready for us to operate in. Now, our
+agent, you know, running about 400
+seconds here. 5.2K tokens on the top
+level agent. Um and now we're going to
+kick off wave two. So, I'm going to stop
+it here. I I want these tokens for some
+other engineering work. But you can see
+it's going to kick off wave two here.
+I'm going to go ahead and stop it here.
+And let's just go ahead and look at our
+results here. Right. So I can type um
+Chrome. Let's open up one of these
+files. Copy the reference with command
+shift R. And I'll just paste that here.
+This is going to open up our brand new
+index script style. Still with that key
+prompt of generating interesting new UI.
+So let's go ahead and kick this off and
+check this out. Right. Uh nature's
+answers. Uh plant your search seed. Very
+interesting. All right. So, we have this
+interesting search bar here. We have a
+filter. Interesting UI there. Let's go
+on to number two. And remember, these
+were all generated in parallel. So, this
+is another interesting one that's going
+to validate as we type. And phone
+number, credit card. You see we have
+complete progress at the bottom. This is
+a really clean minimalist UI. Looks
+great. Let's look at V3. Okay. And V4.
+Okay. Very cool. We have like a music
+player in this kind of retro neon style.
+Okay. So there's more versions here. You
+get the point. Um the prompt or should I
+say the prompts and this prompt system
+uh that we have with the infinite
+agentic loop. It's doing all this work
+for us. This is very powerful. This is
+all thanks to planning as a you know key
+engineering concept that's been embedded
+inside of Cloud Code, the best agentic
+coding tool in the game right now. This
+codebase is going to be available to you
+in the description just as last week.
+I'm going to add this new spec here. And
+I'll leave source group in here as well.
+Planning is a key element of software
+engineering. First, we think, then we
+plan, and then we build. All with our
+agentic coding tools. There's a tectonic
+shift happening in the engineering world
+right now. The winning engineers and
+teams are setting up their code bases
+and tools, not for themselves, but for
+their agents. You know where to find me
+every single Monday. Stay focused and
+keep building.

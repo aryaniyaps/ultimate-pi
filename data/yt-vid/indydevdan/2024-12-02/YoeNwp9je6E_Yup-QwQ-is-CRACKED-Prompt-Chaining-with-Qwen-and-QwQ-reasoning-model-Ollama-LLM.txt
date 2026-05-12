@@ -1,0 +1,438 @@
+llama 3 models were good quinnn 2.5
+models have been amazing and alib Baba's
+new qwq also known as Quinn with
+questions or as I like to call it qdub
+is proving to be quite incredible
+because it gives you reasoning
+capabilities on your device this is the
+first local reasoning model that really
+caught my attention but it's not for the
+reason you think and let's be real here
+this model although impressive has flaws
+it can consume quite a ton of time due
+to its excessive Loop it randomly will
+spit out Chinese and its greatest
+Advantage The Chain of Thought Loop also
+makes it effectively useless since the
+outputs contain its internal thoughts in
+this video I want to share a couple
+ideas with you surrounding prompt
+chaining we're going to look at a two
+model prompt chain pattern where you use
+a Reasoner to generate the source of the
+output and then you use a highquality
+base model to extract the outputs by
+doing this we make qdb instantly useful
+I've been really impressed with this
+model it is hard to use so let's dig in
+let's figure out how we can get value
+from powerful local reasoning models not
+tomorrow not next week not when the next
+model drops but
+[Music]
+today so for our generative AI stack
+we're going to be using qwq a Quinn 2.5
+model 01 mini 40 oama and llm libraries
+to run our prompt so here's the setup
+commands everything we're going to look
+at in the video is going to be linked in
+the description for you and a gist let's
+just go ahead and do some quick recap so
+we can run models like this I can copy
+this command and just run a Quinn model
+right out of AMA so we're all familiar
+with this AMA super powerful we're just
+passing in the simple pain command we
+can also run this with the brand new Q
+dub model and it's going to give us
+something similar there's not a lot for
+it to think about here so thankfully we
+don't get a super long Loop we just get
+the response pong and of course we can
+run the llm library and we'll get a
+simple pong response from the 01 Mini
+model as well running the qwq model is
+really fantastic it's really powerful I
+think it's a fantastic model for
+planning designing Building architecture
+ideation and content generation the big
+problem with this model it's going to
+take quite a bit of time and the output
+of the model is going to be entangled
+with the thoughts so let me show a
+concrete example of what I mean by that
+exactly here we'll say code python CSV
+to DB we'll pass in a CSV path as the
+parameter and then we'll expect back a
+string let's see what Quin with
+questions does okay so first off you can
+see one of the issues with the model is
+that sometimes it just spits out Chinese
+so I'm going to break it here right away
+and prefix it with English and let's see
+if this helps here right so I'm going to
+fire it off one once again there we go
+so now we're getting the response back
+in English so it's walking through
+exactly how it would create this
+function so in this very kind of
+condensed prompt you see we're getting a
+a lot of information here right it's
+really breaking things down and if we
+were to open up another terminal window
+here and fire off this goad and fire off
+the same prompt with a 01 mini call and
+just pass this in here right if we were
+to run that same thing we know that 0
+mini hides its thought process so 01
+mini is not going to show us the details
+it's just going to print out exactly
+what we are looking for so if we scroll
+up we can see the final output here from
+the o Mini model of course it's super
+fast it's running on open AI hyperfast
+servers while qwq or qdb is running
+right on my MacBook M2 Pro you can see
+here it's still going it's still
+spinning this is taking a crap ton of
+time and I'm just going to cut it off
+there right it takes a ton of time to
+run this model so as the Quinn team
+mentioned this model can get caught in
+recursive Loops maybe we were in one
+there it's hard to be sure so already
+when we compare this to 01 mini it's not
+really a fair comparison ubb is not
+really that effective you can't really
+use this model out of the box so how do
+we resolve this issue of qwq outputting
+a ton of thought what we really want to
+do is extract its final
+[Music]
+response so what we can do is use a
+prompt chain and let's go ahead and just
+pull out an example here right this is a
+simple script that we've created you can
+run using bun or Python's UV and if we
+open our file explorer we can see two
+files chain. py and chain. TS let's look
+at the typescript version we can see we
+have read and replace and we have prompt
+chain so let's open up uh prompt simple
+and you can see we have a really really
+simple XML prompt here and we can run
+this with this command here let's bring
+this to a new file so we're going to run
+Bun Run chain we're going to pass in the
+original input so this is going to be
+the first value of this we want to use
+the prompts simple. txt file and then
+we're going to use the olama Quin 2.5
+coder model we can just go and F this
+off it'll make tons of sense once I run
+this you can see we have an output and
+you can see what's happening here right
+our input is getting replaced with our
+start value okay start value with bun is
+the first input and it's replacing this
+template right in our previous video we
+talked about the four levels of the
+prompt from level one to level four
+definitely check that out to get a good
+understanding of how you can write high
+quality prompts here we have a super
+simple version of a prompt where we have
+a purpose and a dynamic variable so we
+can do something interesting with this
+simple script if we hop back to chain.
+TS or chain. py you'll notice something
+interesting here we're just looping
+through list of prompts and we're also
+looping through a list of models and
+then in this prom chain function if we
+see a model that's prefixed with AMA we
+go ahead and run the olama command if
+it's prefix with llm We Run The CLI l
+Lim man and this allows us to take the
+output from a prompt and use it as the
+input to another prompt we've done a
+couple videos on prompt training in the
+past this is a super powerful pattern
+that doesn't get talked about a lot you
+can use this to compensate and
+strengthen model abilities by taking one
+prompt and using the output of a prompt
+as the input to another prompt so you
+can check out this code link of course
+is going to be in the description if you
+want to understand how prompt chaining
+works at a deeper level but basically we
+have this simple script here both a
+typescript and a python version that
+allows you to chain together output so
+we can do something interesting like
+this right if I hop back to the read me
+and if I go to prompt chain with two
+prompts I can just copy this let's go
+ahead and take a look at this and you'll
+see something really interesting here
+right we have the start value we have
+our list of prompts so what we're doing
+here is we're running simple prompt with
+start value and then we're taking the
+output from this first prompt and then
+we're passing it in to the second prompt
+prompt okay and for both prompts we're
+going to run the exact same model of
+these items so if we go ahead kick this
+off you'll see something interesting
+start value is getting passed in the
+first prompt content and this prompt is
+basically just suffixing pong to the
+response and so you can see the result
+here start value pong then we run it
+again so we pass start value pong as the
+input to prompt two and then of course
+the output is start value pong pong
+right because we run the prompt chain
+twice and the the cool part about this
+of course is that you can scale this to
+whatever number of prompts you you like
+right so you can run this here again
+with three prompts and you can see you
+know the output getting treated as the
+input three times and then you know you
+can basically do this as many times as
+you want and as many times is as useful
+to you right so if we copy this paste it
+in here we have a prompt chain of length
+10 that's going to take the previous
+prompt output and use it as the input to
+the next prompt so I hope you can see
+where this is going right if we want to
+use qdub or Quinn with questions in an
+interesting way and really get value out
+of it right now we can create prompt
+chains so you can see here I've been
+experimenting with several prompt chains
+you can take prompt chains and use one
+on the qwq model to you know run your
+original prompt and then you can use an
+extraction model you know this can be
+gbg4 it can be another local model like
+Quinn 2.5 it can be whatever you want it
+to be then you can use another model to
+extract the output let's look at a real
+example of that and if this is making
+sense if you're understanding how prompt
+training can be useful drop the like
+drop the sub this is our bread and
+butter prompt engineering is super super
+core to the channel and it's super
+important in the age of generative AI
+The Prompt is everything if you can
+understand and use and manipulate
+prompts you are going to win over the
+next year and
+[Music]
+Beyond we can see here let me just go
+ahead and pull this into a file so we
+can take a look at this we have a base
+prompt input value that's going to go
+into our prompt title generation
+Reasoner if we open up that prompt we
+can see what that looks like right here
+create ey catching High SEO click worthy
+titles so this is good for just content
+generation for blogs YouTube videos any
+type of content that you might be
+creating we have a prompt here with a
+dynamic variable instructions and a
+purpose and let's go ahead and fire this
+off this will take a little bit of time
+to run since we're running this all
+locally what's going to happen here is
+we'll see in the output but basically we
+going to have qwq walk through creating
+these titles and then we're going to
+have a olama Quin 2.5 model parse out
+the response and we can speed this up by
+running an open AI series prompt chain
+so let's use an 01 reasoning model and
+then gpg 40 as the base model running
+the exact same thing right so we can
+copy this go to a file and before we run
+this let's go ahead and just take a look
+so we understand what is happening here
+so we have the same thing right bun run
+chain. TS the first parameter is the
+title that we want to create other
+titles based on and then we have our
+first prompt which is going to be our
+Reasoner prompt and then we have our
+second prompt right and our second
+prompt is our extraction prompt that
+looks like
+this okay so same kind of deal extract
+the titles from the final output of user
+input so we're referencing this Dynamic
+variable here we have some instructions
+and then we have example output telling
+us exactly how we want these titles form
+formatted fantastic we have this second
+prompt and you can see here we're
+running llm instead of olama because
+we're using Cloud models here and we're
+going to run an 01 reasoning model and
+then gpg 40 mini this is some pretty
+light work we don't need a more powerful
+model than this let's go ahead and in
+our second terminal window fire this off
+and we'll see this get created pretty
+quickly here since it's on open ai's you
+know GPU Tech fantastic and then we can
+just go ahead and open this up and take
+a look right so it's in that same format
+we have our first prompt you can see our
+prompt content here so this is you know
+that full value it's getting populated
+here if we open up this prompt you can
+see exactly what that looked like and
+exactly how it was replaced thanks to
+this input Dynamic variable and then we
+have the result from 01 mini right so we
+have this result it's giving us 10 new
+titles feel free to choose the best one
+and then we run our second prompt right
+we directly take this output and if we
+scroll down here you can see in our user
+input this is is our input to our next
+prompt okay and then if we scroll down
+you can see 01 mini giving us a nice
+clean Json structure here all we have to
+do is parse it out of the markdown block
+really cool stuff here let's see if qwq
+has finished there it is let's go ahead
+and open it up and we can see the same
+thing from qwq of course we're going to
+see a much longer Chain of Thought right
+we're going to see its internal
+monologue I really like the fact that
+you can see its entire thought process
+right if we who search characters you
+can see it keeping the character count
+between 40 and 85 right it explicitly
+mentions one of our instructions we do
+love to see that I'm sure it's going to
+mention at some point uh you know the
+number of titles that we want to create
+this is great it's giving us a breakdown
+of the characters against its new titles
+right making sure they're within the
+character limit make sure they're unique
+and not repetitive that's something we
+explicitly mentioned in one of our
+instructions so it's really great to see
+qdub uh you know explicitly mentioning
+that in its thought process this is
+really what you want to see from your
+reasoning models you want to see them
+reflecting on your prompt inputs and
+then we have the final titles list here
+right and now let's see if Quin 2.5
+coder was able to take the user output
+and actually return Json so you can see
+here we have the input for Quinn 2.5
+coder being the output of our previous
+model here so if we scroll down to final
+titles if we just search this
+we can see we're now inside the user
+input on the Quin 2.5 model and if we
+scroll down to the output let's see how
+it's done nice fantastic so Quin 2.5 was
+able to nail this and it's all thanks to
+this prompt chaining pattern where we
+have a powerful reasoning model
+generating the request thinking through
+your prompt and then we have an
+extractor model so this is a traditional
+base model right this is going to be
+your average uh gpg 40 Gemini your
+flashes your minis uh your quins your
+base language model they can do the
+extraction work of pulling out the final
+result from your reasoning model so you
+know if we just search here you can see
+supercharge your NLP locally and if we
+scroll up here you can see that was in
+the final titles and that worked really
+well likely use inspiration from the
+example outputs and you can see where
+this is going right this is an important
+pattern that I want to share with you
+specifically for these reasoning models
+where we can see the Chain of Thought we
+can see the internal monologue of models
+like qwq Quinn with questions it's
+possible that in the future we'll see
+the internal monologue from the new 01
+model or other reasoning models that are
+going to be coming out in the future
+this pattern is going to be ultra useful
+for cleaning out and parsing out the
+outputs from these powerful reasoning
+models right because otherwise you're
+limited to using qwq and other reasoning
+models just inside of a chat window
+where you have to man parse out the
+result every single time right I wanted
+to share this idea with you I wanted to
+bring prompt training back up on the
+channel this is something I use
+internally all the time when I'm
+building out my own AI agents personal
+AI assistants you can kind of see it
+littered across uh some of the code
+bases I share on the channel prompt
+training is ultra Ultra important and
+it's not discussed enough so I wanted to
+share that with you here on the channel
+feel free to check out our previous
+prompt engineering video where we walk
+through the four levels of prompts that
+allow you to write really powerful
+really accurate prompts everything you
+saw here is going to be in the
+description in a Guist for you let me
+know what you think in the comments how
+do you feel about qwq are you finding it
+useful for your own work if so how are
+you using this model I have the 2025
+predictions video coming up for the
+channel one of my big predictions to
+kind of give a little bit away we're
+going to see local models become truly
+viable truly useful um in a more
+mainstream way and qwq qdub Quinn with
+questions is absolutely Paving the way
+here I got to say I am shocked with this
+model it is finicky it's stingy it's the
+preview version there are a lot of
+problems with this model as we've
+discussed there's language mixing it's
+slow you need a prompt chain to extract
+the actual final result but we're going
+down a great path here AI is becoming
+democratized that's really important we
+don't want any one of these large AI
+companies to own all of this technology
+I found Q to be a bit more interesting
+than the model context Provider from
+anthropic that's a super important
+release we're going to cover that on the
+channel as well I want to see that get
+developed a little more and I'm still
+working through how to best use that
+technology if you enjoyed this video you
+know what to do drop the like drop the
+sub and I'll see you in the next one

@@ -1,0 +1,1864 @@
+[0.0s] Most people have probably not had
+[1.2s] experience building streaming systems.
+[3.1s] They're actually really quite easy.
+[5.7s] But it just requires a different brain
+[7.5s] muscle to [music] think about it.
+[8.8s] Hopefully the most interesting thing
+[10.2s] you'll take away is that this is so easy
+[12.0s] that if you take the diagrams that we're
+[13.6s] about to share, give them to cursor your
+[16.0s] favorite coding engine of your choice,
+[17.6s] it will literally just write the code
+[19.2s] for you and you will not have to do
+[20.6s] anything. But yeah, just to be able to
+[23.0s] like literally you can open an HTML file
+[24.8s] in your browser and have it do all kinds
+[26.5s] of interesting things before you
+[28.0s] actually need react or anything. Like
+[31.4s] you're at this point your bar for
+[33.8s] creating an next JS app or a V app or
+[36.4s] like a full front end like in a
+[38.4s] framework, like should be significantly
+[41.3s] higher than it used to be. Like it used
+[43.2s] to be uh number one, it used to be
+[45.4s] really annoying and hard to write an
+[46.8s] index HTML from scratch that used
+[48.8s] JavaScript or XHR or jQuery or whatever
+[51.1s] it is. So you just like would just use
+[52.6s] the framework cuz one it made it easier
+[54.4s] and two you knew you were going to need
+[55.4s] it eventually. But now it is both easy
+[57.8s] to have Claude riff one of these out and
+[60.2s] two very easy to take one of these and
+[62.0s] turn it into a V app or a next JS app if
+[64.8s] you need it.
+[66.4s] I have no idea what this is going to
+[67.6s] show. Uh but let's try.
+[69.2s] >> Let's have a look.
+[71.4s] I'm a rusty boy.
+[73.4s] Ready?
+[75.7s] So [music] first things first Oh, so
+[78.4s] dope.
+[79.8s] I don't know if you saw that.
+[81.6s] It's like you're actually watching it
+[83.1s] fill [music] out in real time.
+[89.5s] What's up, y'all? Today we have a really
+[90.8s] fun episode of AI that works. I'm super
+[92.7s] stoked. Vibhav's going to give us a
+[94.2s] master class on systems engineering and
+[96.5s] architecting streaming systems. We're
+[98.4s] going to go through the whiteboards and
+[99.7s] then we're going to build end to end a
+[101.2s] dynamic application that you can use to
+[103.0s] do fan fan out and parallel async
+[105.7s] streaming of summarizing arbitrary web
+[108.7s] pages. We're going to push all the code.
+[110.4s] We're going to show you how it works.
+[111.7s] You can take this to go build better
+[113.2s] UIs, more interesting UXs, and
+[116.8s] push AI to its limits. Uh this was super
+[119.8s] fun conversation. I can't wait for you
+[121.2s] to dig into it.
+[122.6s] Uh let's get into it.
+[124.6s] Thank you, Dexter. This is going to be
+[125.8s] really fun. What's up? I'm Dex. This is
+[127.6s] Vibhav. This is AI that works where we
+[129.6s] talk about how to get AI to do real
+[132.7s] things beyond the demo, run in
+[134.2s] production, solve real problems, run
+[135.8s] reliably, testably, maintainably over
+[138.2s] time. Uh do cool things that no one else
+[140.8s] can do, solve hard problems that no one
+[142.4s] else can solve,
+[143.7s] and all kinds of fun useful tricks. And
+[146.0s] we'll write some code and I don't know,
+[148.0s] Vibhav, I Sorry, I took all the intro,
+[150.6s] but say something cool, I guess. I don't
+[152.5s] No, I think you filled it up just fine,
+[154.9s] to be completely honest.
+[156.6s] Incredible.
+[157.8s] I am Dex. I am the CEO of Human Layer.
+[160.3s] We build tools for context engineering
+[162.8s] with coding agents, solving hard
+[164.4s] problems in complex codebases by being
+[166.6s] smarter about how you build AI.
+[168.6s] Vibhav. Cue me in, man. Tell me what I
+[171.0s] >> Vibhav is the CEO and co-founder of
+[173.8s] Boundary where they make Baml, a new
+[176.3s] programming language for building in
+[179.2s] this world of
+[180.7s] nondeterminism.
+[182.4s] And so all sorts of fun new syntax and
+[184.1s] tooling and
+[185.9s] built from the ground up for a world
+[187.3s] where you don't know exactly what your
+[188.5s] code's going to do and running the same
+[190.5s] piece of code five times could do five
+[192.1s] different things. What are the
+[193.8s] programming primitives we need in that
+[195.1s] world? That was better than I have ever
+[197.2s] said it myself. Thank you so much.
+[198.8s] >> Yeah.
+[199.9s] Um so today's episode, I know we had
+[201.8s] listed that we're going to talk about
+[202.9s] evals.
+[204.0s] Sadly, we're going to change it up. Our
+[205.6s] demo and the coding system that we're
+[207.0s] making was fairly complex and I was
+[208.8s] unable to wrap it up. We will do it next
+[211.0s] week.
+[211.3s] >> Somebody somebody procrastinated his
+[213.6s] episode prep. I've never done this
+[216.0s] before. This is never happened to me. If
+[217.9s] you've watched this show, you know every
+[219.4s] time I run an episode, my code always
+[221.4s] runs perfectly and I always prepare
+[223.8s] 100%.
+[224.9s] >> between me and Dexter. Now,
+[226.6s] >> [laughter]
+[226.8s] >> I tried I was trying to put a pretty
+[228.1s] epic demo together and I think next week
+[230.2s] if you are you all folks are interested,
+[232.1s] next week we're going to go talk about
+[233.4s] how to really in this world where you
+[234.8s] want to build a software factory, how do
+[236.7s] you build
+[237.9s] um
+[238.8s] how do you write evals in that world
+[240.4s] where you want everything to be fully
+[241.6s] automated? Imagine the old world of
+[244.0s] software was built for a world where we
+[245.5s] have code reviews and we have all these
+[246.8s] human processes to write code at human
+[249.2s] speed.
+[250.4s] How do you write code at machine speed?
+[252.0s] How do you ship code at machine speed?
+[253.8s] It's all eval driven. So that's the demo
+[256.0s] I was going to show. It's really
+[258.0s] freaking cool. I have it like
+[260.2s] I would say like 60% working.
+[262.1s] >> just do the evals episode, man.
+[263.8s] >> No, trust me. Trust me. You with the
+[266.0s] real demo, it's going to be so much
+[267.5s] better and so much more exciting.
+[269.2s] So give me one more week. We will see it
+[271.1s] next week and it will be freaking
+[272.9s] awesome. No, I'm making new demo at the
+[275.0s] Unconference on Saturday.
+[276.2s] >> If any of you are coming to the
+[277.3s] Unconference this weekend, you will get
+[279.3s] to see it live. You will get to see the
+[282.2s] the evals system run live and exactly
+[284.8s] how you build a software factory in a
+[286.4s] fully automated way.
+[288.3s] Um and why today's programming languages
+[290.3s] can't really do it. It's fundamentally
+[291.8s] impossible to go do it in today's
+[293.4s] languages.
+[294.8s] So
+[295.4s] >> Incredible. That's a little teaser.
+[297.8s] Apologies that I'm giving a teaser, not
+[299.5s] real code. But there's another topic
+[301.2s] that I think Dexter and I chatted about
+[302.6s] that we think it's going to be just as
+[303.7s] insightful and just as useful and
+[305.6s] actually useful to even Dexter today.
+[308.1s] Uh we talk a lot about streaming on this
+[310.0s] episode, but one of the thing on in past
+[312.4s] episodes, but one of the things that
+[313.6s] we've never really discussed
+[315.5s] is how do you do how do you do streaming
+[317.4s] for an entire agent that you're going to
+[319.0s] build from scratch?
+[321.4s] That part I think is always left certain
+[323.7s] things feeling much more magical than
+[326.0s] other systems. So for example, if any of
+[328.2s] you have ever used Deep Research
+[330.8s] on um
+[332.1s] on OpenAI, it feels good cuz it's almost
+[335.1s] incrementally giving you progress.
+[336.7s] Imagine if Deep Research showed you
+[338.3s] nothing until it was completely done.
+[341.3s] It wouldn't be as good. Same with
+[343.0s] Perplexity's agent. Like why was it
+[344.7s] initially so good? Well, because when
+[346.5s] they started off, they started off
+[347.6s] showing you the work that they were
+[348.9s] doing and didn't just make you um
+[352.2s] just wait in silence. Showed the
+[354.5s] sources, showed what it was doing. It's
+[357.0s] it's the dopamine thing. It's why
+[358.5s] software has loader. You want to know
+[360.6s] that things are happening. Something
+[362.7s] something to keep you engaged. Unless
+[364.5s] you're using the Windows copy directory
+[366.9s] or remove directory where the loader
+[368.3s] means nothing.
+[369.2s] >> that's just like an RNG running in the
+[370.9s] background.
+[371.5s] >> literally just like what what's I don't
+[373.2s] know what's GOING ON THERE.
+[374.0s] >> [laughter]
+[378.4s] >> UM [snorts] but we want to talk about
+[380.4s] this. It turns out
+[382.0s] I was just explaining this to a user the
+[383.8s] other day of how to go build this out
+[385.4s] and I realized most people have probably
+[387.0s] not had experience building streaming
+[388.5s] systems. They're actually really quite
+[390.6s] easy.
+[391.9s] But it just requires a different brain
+[393.6s] muscle to think about it. And we're
+[395.8s] going to go share that today.
+[397.8s] As always, if you folks have questions,
+[399.9s] please drop drop them in the chat.
+[402.0s] Hopefully the most interesting thing
+[403.4s] you'll take away is that this is so easy
+[405.3s] that if you take the diagrams that we're
+[406.9s] about to share, give them to cursor your
+[409.3s] favorite coding agent of your choice, it
+[411.0s] will literally just write the code for
+[412.7s] you and you will not have to do
+[413.8s] anything.
+[415.2s] It's really that simple. It's more about
+[417.4s] system design than anything else. All
+[419.5s] right. So when we think about streaming,
+[421.4s] that's the model we have to do. Let's
+[422.4s] say we built a coding agent.
+[425.4s] Our coding agent has one input. Usually
+[427.8s] it takes in a user's prompt of some kind
+[430.2s] and this applies to all agents. Coding
+[432.1s] agents are just the simplest things to
+[433.5s] explain cuz we can talk about different
+[435.1s] levels of streaming we might want.
+[437.5s] Um the coding agent will then first it
+[439.9s] starts off with like a user input, a
+[442.0s] user prompt.
+[444.5s] And once you get a user prompt, it's
+[446.0s] basically going to start sending
+[447.5s] messages to the LLM. So when we go talk
+[449.3s] about streaming, we got coding agents,
+[450.6s] we got user inputs. And let's just
+[453.2s] really quickly remember what is an LLM.
+[455.3s] An LLM
+[456.9s] is a stateless system that takes in some
+[460.1s] input in the form of a prompt
+[462.3s] and then produces
+[464.1s] some typically like some JSON API that
+[468.0s] has various states. It has tool calling.
+[470.1s] It has
+[471.7s] structured outputs. It has
+[473.9s] string messages. It has all sorts of
+[475.6s] things.
+[476.6s] Most of these LLM providers provide a
+[478.8s] separate thing which is
+[481.8s] They also provide
+[483.8s] a SSE API. I know they're both
+[486.2s] technically JSON, but like
+[488.3s] hopefully this makes the point at least
+[490.0s] of like there are different forms of
+[491.4s] streaming.
+[491.5s] >> you gives you deltas. It gives you
+[493.5s] chunks, right?
+[494.2s] >> Yeah, it gives you it gives you instead
+[495.5s] of waiting for this whole thing, this
+[496.9s] just gives you incremental data at some
+[498.5s] cadence at the provider of the LLM
+[500.4s] decides.
+[501.8s] Um this is not the only form of
+[504.0s] streaming because there's a separate
+[505.9s] system which is
+[507.4s] our agent a wheel loop.
+[510.4s] A wheel loop.
+[512.3s] A wheel loop indeed. And let's make this
+[514.7s] orange and yellow. And so there's
+[516.2s] there's each token that comes out, but
+[517.7s] then there's each each we call them like
+[520.0s] turns, right? Of like Harness sends some
+[523.3s] information to the model. Model sends a
+[525.9s] instruction back. Harness does its
+[527.7s] thing, sends it back to the model and
+[529.3s] you're going back and forth. Exactly.
+[531.8s] So there's there's there's literally
+[533.3s] something about like
+[535.3s] you're going to produce some input, then
+[536.6s] you're going to take this thing, and
+[537.6s] then you're going to feed it back in.
+[539.3s] This state and then this is actually
+[540.7s] your agent system.
+[542.3s] So it's interesting because you actually
+[543.6s] have many different ways of streaming
+[545.5s] over here.
+[546.8s] And this is also a simple agent. It's
+[548.6s] not where we're running multiple queries
+[550.2s] in parallel. If you have multiple
+[551.5s] queries in parallel, then this gets
+[552.8s] amplified by n.
+[554.8s] Um so there's different points of
+[556.1s] streaming.
+[557.2s] If we think about this, we can have
+[559.2s] streaming at
+[561.2s] the individual
+[562.7s] streaming at the individual LLM call
+[564.3s] layer. We can have streaming for like
+[566.2s] inspecting the turn state and not only
+[568.2s] the final state of the agent.
+[570.4s] And then any such combination thereof
+[572.4s] and any subset thereof. So the trick is
+[575.4s] to actually decide how you go do this
+[577.3s] and how do you make this possible,
+[578.8s] especially when you start doing things
+[580.4s] in parallel.
+[581.8s] Can you can you pull out maybe like a
+[583.4s] Claude code session cuz I think it's a
+[584.7s] good demo of this of like Claude streams
+[586.8s] each turn, but not each like token,
+[590.6s] basically.
+[593.5s] Uh I think I have it right here.
+[594.9s] >> Codex will actually stream the e single
+[597.2s] token.
+[599.1s] So like if you go here for example,
+[601.2s] I'm I was working on something.
+[603.4s] Um
+[604.6s] it's actually
+[605.8s] you'll notice that over here there's
+[607.3s] something really subtle that happened.
+[608.7s] If you caught that, it actually streamed
+[611.0s] this
+[612.2s] as stream this.
+[614.0s] But if you go into like a sub agent
+[615.4s] mode, Well,
+[617.2s] wait, did it actually stream that out?
+[619.3s] It does. Yep, they updated it because I
+[621.7s] mean streaming is a thing that you
+[622.9s] naturally do once you want stuff to
+[625.1s] happen. So this is a economy as well.
+[628.7s] Sorry.
+[629.8s] Um I'll make it bigger. So you can
+[631.1s] actually see that it's actually
+[632.2s] streaming my commands, the tool calls
+[634.6s] that this agent's making.
+[636.7s] >> Those are each individual tool calls.
+[639.0s] What it's not doing is streaming the
+[640.9s] tool call as it's being generated.
+[642.8s] >> It
+[643.4s] So right over here that streamed.
+[645.6s] So the output stream. But my point is is
+[647.3s] like if you tell it, "Hey, read read for
+[649.3s] like write a haiku to three different
+[651.1s] files." Yep.
+[652.5s] >> It's not going to stream the independent
+[655.0s] write calls as they're coming out. It
+[657.2s] only streams when the JSON block is
+[659.9s] finished, here's the here's here's the
+[662.8s] tool that was called. Yeah, and that's a
+[664.7s] UX choice that they make. And the reason
+[666.6s] that people make these choices, at least
+[668.2s] in my opinion, is that honestly it's
+[671.1s] really really really hard to build a
+[673.1s] good streaming system. It requires a lot
+[674.8s] of complexity and state management to
+[677.0s] build it actually good. And the other
+[679.5s] mistake that I think a lot of people
+[680.8s] make is that they realize that they
+[682.8s] forget that, hey,
+[684.4s] I don't have to only stream LLMs. Most
+[687.8s] things that offer a stream API can be
+[689.6s] streamed. So for example, a bash command
+[692.2s] can be streamed.
+[693.7s] And often times you want to stream a
+[695.4s] bash command because
+[697.2s] bash commands can take a long time. So
+[698.7s] Cursor I think does a great job at this
+[700.2s] and Cloud Code does not. When I go run
+[702.6s] But Cloud Code streams bash output.
+[705.2s] Uh no, sometimes.
+[708.2s] It it
+[709.6s] uh
+[710.3s] I find at least for me when I we run
+[712.3s] like cargo tests and stuff all the time,
+[714.4s] they actually don't stream stuff
+[715.7s] correctly because I think they only
+[717.5s] stream stood out not stood error. And
+[719.8s] that's only sometimes. I don't see it
+[721.1s] streaming stood out all the time when I
+[722.6s] run it.
+[723.9s] Interesting.
+[725.1s] Yeah. I know the Cloud Agent SDK
+[726.7s] definitely doesn't stream bash output.
+[728.5s] You just get the result when it's done,
+[730.0s] which is really can't show the
+[731.8s] >> Yeah, that's other part that's very
+[733.2s] annoying. So like the hard part about
+[735.2s] this stuff is building streaming is
+[736.8s] actually a fundamental layer of your
+[738.4s] system that you think about from the
+[739.8s] ground up. So let's think about what
+[741.5s] this means. So let's say um
+[744.4s] actually even better than a coding agent
+[746.2s] is a scraping agent. Let's say I built a
+[748.6s] web scraper. Uh
+[750.5s] and I want to go collect data about
+[752.0s] whatever the user asked me to. And the
+[754.0s] reason I want to use a scraping agent is
+[756.0s] to really make it obvious
+[758.1s] uh how parallelism should work.
+[761.5s] So a web scraper is going to go do this
+[763.2s] and you're going to spin up some agent
+[765.4s] that and I say agent not LLM
+[769.0s] that finds
+[770.8s] all the websites
+[773.3s] that are related.
+[777.1s] And for some reason we'll assume that
+[778.4s] this is a it's fully [snorts]
+[779.5s] exhaustive. It's I will not do anything
+[781.1s] else.
+[782.2s] Now what I want to do is I want to run a
+[783.5s] loop that says for each website
+[786.6s] extract all the
+[789.4s] site map.
+[791.3s] Okay, there we go.
+[792.7s] So does this kind of make sense what
+[794.2s] we're trying to do here?
+[796.5s] Yeah.
+[797.5s] You have Well, I mean it's it's funny.
+[798.9s] It's this idea of like sub agents or map
+[800.7s] reduce, right? Is like you kind of just
+[802.5s] want to like fan out and do a bunch of
+[804.7s] things in parallel and then come back
+[806.2s] together and uh
+[809.4s] and then tell me what the final answer
+[810.8s] is. So first things first, this last one
+[813.6s] is going to it's almost definitely not
+[815.6s] going to be a full agent loop. It's
+[816.7s] almost just like maybe an LLM call,
+[818.2s] maybe two. You don't really need to
+[819.4s] stream this part. But we know that these
+[821.7s] can be long-running tasks. So and these
+[823.5s] are like incremental. And not only are
+[825.3s] they incremental, there's like two
+[826.5s] reasons from a product perspective why
+[828.8s] you want to stream.
+[830.2s] One is I might want to stream this and
+[832.3s] then to really help inform like what are
+[834.2s] product reasons to want to stream.
+[836.3s] Let's talk about that really fast. There
+[837.9s] are product reasons you might want to
+[839.5s] stream stuff. There's different like
+[841.3s] jobs to be done for the user that the
+[843.1s] user might want to do that would like
+[845.2s] streaming would help them get a better
+[846.6s] product experience.
+[847.3s] >> Exactly. So like the main reason is
+[849.0s] observability. But observability alone
+[850.9s] isn't that useful cuz like this could
+[852.4s] easily be a background task that sends
+[853.9s] an update to the user when it's
+[855.1s] completely done. The real reason you
+[857.0s] want to do streaming is because
+[858.2s] oftentimes you want to have a user
+[860.1s] understand where failures are happening
+[862.3s] and how they can control and limit the
+[864.4s] map reduce system because this can be
+[866.2s] expensive. So for example, if some
+[868.5s] websites are known to be junk, I can
+[870.4s] just like click and remove them out of
+[871.8s] the queue. And I can build that system
+[873.9s] in only if I'm streaming. If I don't do
+[875.7s] that, it's impossible.
+[877.2s] Same things here.
+[878.8s] Um extract all site maps very similarly.
+[881.7s] I can just say certain pages don't
+[883.2s] matter or I can improve my system much
+[884.9s] faster by having either a human or
+[887.6s] another agent going ahead and like
+[889.4s] disabling these systems. Uh disabling
+[891.9s] certain sub pages or perhaps adding some
+[893.9s] pages that maybe the system misses
+[896.1s] because it's lossy for whatever reason.
+[898.3s] So you technically you you could I mean
+[900.7s] streaming
+[902.3s] is now like being overloaded into like a
+[904.4s] third category as well, right? Like you
+[906.4s] could technically build a workflow where
+[908.4s] like it gives you all the websites and
+[910.4s] then you review it and then you do and
+[912.8s] then you do the next step and then you
+[914.1s] review that. And like I wouldn't
+[915.8s] necessarily say you require streaming to
+[918.7s] do that. Like when you do deep research
+[921.2s] and the model is like, "Hey, here's the
+[923.0s] query plan that we're going to here's
+[924.2s] all the things we're going to do for
+[925.1s] deep research." and you like approve or
+[926.5s] deny it. Like that doesn't necessarily
+[928.6s] need to be streamed out. That could just
+[930.2s] be, "Hey, model is outputting structured
+[932.4s] output." and then the user approves it
+[934.5s] and there's no streaming involved. Like
+[936.4s] it's a it feels like it feels like a
+[938.1s] separate turn
+[939.5s] Uh the difference that I would say is
+[941.3s] that it's the amount of automation you
+[942.7s] have changes if it's streaming or a
+[944.9s] turn-based.
+[946.5s] The more automation you have, the more
+[948.2s] closer you are to streaming. The less
+[949.8s] automation you have, the more closer you
+[951.3s] are to discrete workflows.
+[953.1s] So if you want the system to
+[954.4s] automatically make progress, you got to
+[956.3s] stream effectively.
+[958.1s] Whether you're writing the system as a
+[959.5s] giant map reduce of like SQ SQ's or
+[961.4s] whatever, you're effectively streaming.
+[963.9s] So when we go do this architecture,
+[965.2s] let's think about how this actually
+[966.4s] works cuz let's talk about incremental
+[967.8s] approaches. So when we find all
+[969.9s] websites, let's break down this agent
+[972.2s] and see what it what it's actually going
+[973.8s] to do.
+[975.1s] We're going to ask some
+[976.4s] some LLM to basically produce individual
+[978.6s] website rows. And then for each of these
+[980.9s] website rows that comes out of here,
+[983.0s] we're going to run a second task.
+[985.3s] Uh make that blue I guess. We're going
+[987.0s] to run a second task that's extract the
+[988.5s] site map.
+[989.9s] Well, there's a few different ways to do
+[991.7s] this. And because even these elements
+[994.0s] are not even like these themselves could
+[995.8s] be like a little bit more agentic
+[997.2s] internally cuz it's an agent loop that's
+[998.9s] doing all of this.
+[1000.4s] Yep.
+[1000.6s] >> The way that I would think about this is
+[1002.0s] here's how this works. So those of you
+[1003.6s] that are not familiar with SSC
+[1004.8s] streaming, it's called server-side
+[1006.0s] events. The way it works is you send
+[1008.6s] like an event name
+[1010.3s] and then you send the data
+[1012.3s] and then you typically send a payload of
+[1014.3s] JSON, but you don't have to. It's just
+[1016.0s] data's the
+[1017.9s] keyword that you often
+[1019.0s] >> down a level cuz you said you send.
+[1021.3s] Client or server? Um
+[1024.6s] Well, as server. It's called server-side
+[1026.8s] events.
+[1028.6s] Um okay. So the way the way the way I
+[1030.8s] understand it is you have your client
+[1034.8s] and you have your server.
+[1036.7s] Yep.
+[1037.1s] >> And basically what happens is the client
+[1039.2s] will like connect maybe like, you know,
+[1041.5s] subscribe.
+[1044.6s] Well, I think you make I think
+[1046.1s] technically what's actually happening,
+[1047.7s] you actually say you make a you make a
+[1049.6s] long long-running HTTP connection. Yeah,
+[1052.8s] that's that's what I'm that's what I'm
+[1053.9s] drawing out here. Oh, okay. Okay, go
+[1055.8s] It's this idea of like you you post you
+[1058.3s] make a post request to the server and
+[1060.1s] the server sends back a packet cuz HTTP
+[1062.5s] is like once you get to the body is just
+[1064.0s] plain text. So you do like content
+[1066.6s] length
+[1067.6s] you know, vary or whatever it is where
+[1069.1s] it's like we don't know the length of
+[1070.4s] the response yet.
+[1072.9s] Yeah. And so the client stays open for
+[1074.8s] the whole thing and then the server will
+[1076.2s] send additional JSON payloads on the
+[1078.4s] same open connection and the client can
+[1080.4s] just respond to them. And the idea is
+[1081.8s] that each of these
+[1083.4s] is it's And this is actually like the
+[1085.0s] thing that is also like JSON RPC is a
+[1088.0s] message format that can be done over
+[1090.0s] SSC, but it's like this is how MCP
+[1092.6s] works. This is all these things. This
+[1094.4s] doesn't even have to be HTTP, right? You
+[1096.7s] could do this over standard IO. You can
+[1098.4s] do anything that can keep a long-running
+[1100.4s] pipe open and receive like discrete
+[1103.2s] message packets. The main difference
+[1105.5s] though is SSC is a very specific
+[1107.0s] protocol that actually has like an event
+[1108.5s] name and a data field attached to it.
+[1110.2s] And then data can be of any type. It
+[1112.1s] doesn't have I think this doesn't have
+[1114.1s] to be JSON. It doesn't have to be any It
+[1116.7s] just is data.
+[1118.3s] Right. Okay. Um is the main difference.
+[1120.2s] And like the
+[1121.4s] there's like a standard protocol on
+[1122.6s] this.
+[1123.4s] Um and then what's very important is
+[1125.2s] that during this process the client it's
+[1127.2s] not like web sockets. So the client
+[1129.0s] cannot send more information down to the
+[1130.8s] server during this. It's a one It's a
+[1132.4s] single
+[1133.2s] >> subscribed or created the like sent the
+[1136.0s] data and waiting for the response, it
+[1137.4s] streams down. And once the server stops
+[1139.8s] and close the connection, the client has
+[1141.6s] to reconnect for the server to be able
+[1143.4s] to send any data.
+[1145.2s] Exactly.
+[1146.2s] Yeah. So when you go do this, let's
+[1148.2s] think about how you're actually going to
+[1149.6s] go send this out. So the first thing
+[1151.0s] that I would typically would send out is
+[1152.4s] like for this event
+[1154.1s] because you don't know when you'll get
+[1155.4s] any of these sub events is you just send
+[1157.9s] out like a start
+[1160.0s] and you can even send like start uh
+[1163.1s] start uh scrape uh start search.
+[1168.8s] And you can even send like an empty data
+[1170.8s] object. You don't have to send anything.
+[1172.1s] But then what I as soon as you get one
+[1173.8s] of these, you get something like this.
+[1176.4s] Uh search element
+[1182.1s] ID and then you can send like D1 for the
+[1184.5s] first one, ID2 for the second one, and
+[1186.4s] etc.
+[1188.1s] Um you don't actually you can send as
+[1189.6s] much more data as you want. You can
+[1191.0s] enrich this. You can put the metadata of
+[1192.5s] the website, whatever you want. So, now
+[1193.9s] if you're doing this, you you will be
+[1196.1s] >> You can do a bunch of these in parallel,
+[1197.4s] too. Like, the client could open up
+[1198.7s] three separate SSE streams.
+[1201.3s] Oh, yeah, yeah. Yes. But, in this case,
+[1203.2s] let's just imagine it's a very
+[1204.2s] long-running SSE stream.
+[1206.2s] So, what ends up happening is you're
+[1207.5s] sending the data of like here's the
+[1208.9s] search element, here's a website URL, or
+[1211.0s] like URL.
+[1214.7s] But, what's interesting is because each
+[1216.5s] of these has has an ID now, you can do
+[1218.6s] something else, which is if for whatever
+[1221.3s] reason your back end, you do like a
+[1222.6s] parallel search, where once you get one
+[1224.8s] of these,
+[1226.2s] you start
+[1227.6s] um
+[1228.8s] Sorry, 1 second.
+[1230.6s] Once you get one of these, you start
+[1232.0s] doing
+[1233.0s] sub-agents on top of this,
+[1236.1s] where you're running another parallel
+[1237.7s] like a web scraper. Well, while this can
+[1240.6s] run, and this is a parallel map, it's
+[1242.8s] like for every element that comes in out
+[1244.8s] of this agent, you run a parallel map on
+[1246.8s] every sub-agent over here.
+[1249.2s] You can now send more SSE events, and
+[1251.5s] these can be intermingled however you
+[1253.1s] want. So, like this could be like
+[1255.4s] sitemap
+[1256.7s] um
+[1258.1s] You can say like web
+[1260.3s] search
+[1262.9s] ID one, and then like map whatever this
+[1266.1s] ends up being.
+[1269.1s] I don't know, maybe it's like a single
+[1271.0s] thing. So, this actually ends up being
+[1272.6s] quite easy for your front end to go do
+[1274.1s] because this is actually a very simple
+[1276.4s] system for your UI to start drawing. All
+[1279.1s] you're going to do is you're going to
+[1280.1s] say, "Hey, I have a start search. I have
+[1282.3s] a search element. For every element I
+[1283.9s] get sitemap calls. Sitemap calls tell me
+[1286.5s] the IDs, so I know exactly where to
+[1288.0s] store my data model
+[1290.0s] collecting more incremental
+[1291.2s] information." So, your front end
+[1293.9s] starts looking something like this.
+[1296.3s] You get URLs, and then you also can now
+[1298.0s] do like sitemap, for example.
+[1300.5s] And sitemap can be a record. And what
+[1302.9s] the optionals thing tells you is that
+[1305.0s] effectively
+[1306.5s] your UI doesn't render anything for the
+[1308.3s] sitemap, and optional can be pending. Or
+[1310.6s] if you want to be more explicit, you can
+[1312.5s] even say like
+[1314.5s] sitemap is this or pending.
+[1317.2s] Literally just a string literal. So,
+[1319.0s] when the first message comes in, you
+[1320.4s] create a search element where the
+[1322.5s] sitemap is pending. As soon as you get
+[1324.6s] the SSE event, you can go do this, and
+[1326.3s] you can go build this in.
+[1327.8s] Now, how do you do incrementality here?
+[1330.0s] Well, as you do incrementality, you can
+[1331.5s] do different rules. And this is just a
+[1333.0s] contract between your server and your
+[1335.5s] client.
+[1336.7s] So, for example,
+[1338.2s] you could make a data structure that
+[1339.5s] says my site In the case of sitemap, we
+[1341.8s] can choose how we stream. We can say we
+[1344.2s] only stream as as a key-value pair gets
+[1347.8s] completely finished.
+[1349.6s] Or we can say we stream as a key-value
+[1351.6s] pair is actually getting done. So, the
+[1353.9s] key has to be done, but the value can
+[1355.4s] stream. So, for example, imagine that
+[1357.0s] the sitemap is really
+[1358.8s] the path related to a description of
+[1361.1s] what the path is meant for, like a
+[1362.9s] summary of that page. So, clearly
+[1364.7s] summary can be much longer than actual
+[1366.6s] path.
+[1367.6s] So, when you stream from your back end,
+[1369.6s] instead of streaming just the map, what
+[1371.6s] you would do is you would stream You'd
+[1373.7s] always send a chunk, and then you'd say
+[1376.0s] summary chunk.
+[1379.2s] And you'd pass in whatever string delta
+[1381.3s] you want.
+[1383.3s] So, how do So, the string deltas might
+[1385.8s] look like
+[1387.8s] the site contains, and then your next
+[1391.1s] delta would be
+[1393.1s] you know, some other chunk.
+[1395.8s] Exactly.
+[1397.8s] I'm so mad at Excalidraw for breaking
+[1399.9s] this hotkey, and I still haven't learned
+[1402.5s] Writing code in Excalidraw is quite
+[1404.4s] hard.
+[1405.5s] So, like the site contains data about
+[1410.6s] products related to So, each of those
+[1413.0s] chunks
+[1414.4s] comes in its own
+[1416.5s] like little delta, and so you take this
+[1419.0s] entire JSON payload, and you pull out
+[1420.7s] the delta, and you like append it to the
+[1422.5s] screen.
+[1424.2s] Exactly.
+[1426.2s] Exactly. And what you're really doing
+[1428.0s] here is effectively just that. You're
+[1429.2s] going to write a function handle update,
+[1430.6s] where the event name is always sitemap,
+[1433.0s] and the data is going to be of that type
+[1434.6s] that we described over there. It's like
+[1438.7s] search ID. This is probably the wrong
+[1440.9s] place where I code. I should probably
+[1441.8s] write this in like an ID.
+[1443.4s] Um and that'll probably be easier. You
+[1445.3s] get search ID number, path string,
+[1447.0s] summary chunk is also a string. And the
+[1449.0s] first time you get any sitemap for that
+[1451.2s] search ID, you replace pending with that
+[1453.8s] path and that delta.
+[1455.7s] And why do you do that? Well, because
+[1456.9s] when you're in pending mode, you can
+[1458.1s] actually show the user something
+[1459.2s] interesting with the UI, or even opt
+[1461.4s] into hiding anything cuz the
+[1464.1s] the message you display on an empty map
+[1466.2s] is different than the idea of a pending
+[1468.0s] state because it hasn't been processed
+[1470.0s] yet, or an error state. Otherwise, your
+[1472.5s] empty map looks the same, so the user
+[1474.2s] can won't be able to tell if it actually
+[1475.4s] started or if it actually found an empty
+[1477.3s] sitemap.
+[1479.0s] And uh it's going to be impossible to
+[1480.5s] tell otherwise.
+[1481.8s] So, you're going to go build this out in
+[1483.2s] this way. So, now your UI gets really
+[1485.3s] nice UI format where you can
+[1487.7s] incrementally show even like this
+[1489.5s] dialogue showing up exactly this way,
+[1491.7s] where it shows you the main site, it
+[1493.6s] shows you a tree mode of a sitemap of a
+[1495.8s] path, and then now the actual summary
+[1498.8s] starts streaming in.
+[1500.6s] And what's interesting about this is you
+[1501.9s] can actually have multiple summaries for
+[1503.3s] the same sys for the same sitemap
+[1505.5s] streaming in at the same time. So, you
+[1508.0s] can get streaming for adding new
+[1509.2s] elements, and you're getting streaming
+[1511.3s] for adding the for actually document and
+[1513.1s] summary. Does this make sense so far,
+[1514.9s] Dexter?
+[1515.9s] Yeah, I follow this. Are we going to
+[1517.2s] write some code today? We're We're about
+[1518.5s] 30 minutes in.
+[1519.7s] Let's write the code after this right
+[1521.1s] here.
+[1522.0s] And I'm going to write a Python back end
+[1523.4s] that just shows you exactly how to go do
+[1524.9s] this.
+[1526.1s] Key add um
+[1528.6s] I'm going to simulate the stream. I'm
+[1530.0s] not going to
+[1531.1s] Maybe I'll make real LLM calls, we'll
+[1532.3s] see.
+[1533.2s] So, def generate sitemaps.
+[1538.4s] Uh so, this is going to be URL. This
+[1540.4s] thing is going to be a function that
+[1541.7s] returns a
+[1543.2s] dict of str to str.
+[1547.0s] Uh for a given URL,
+[1549.0s] key
+[1551.2s] is a
+[1553.8s] value
+[1556.6s] is
+[1557.9s] a summary
+[1560.7s] page.
+[1562.1s] Okay, cool. Uh we'll just do this for
+[1563.8s] now. Page summary.
+[1566.9s] >> Say again?
+[1568.6s] Your uh Oh, uh uh
+[1572.7s] I have been in BAML like for a while.
+[1574.6s] >> TypeScript on the whiteboard and Python
+[1576.6s] in in cursors.
+[1577.7s] >> Yeah, that's the I've been writing BAML
+[1579.4s] code for so long now that I feel like I
+[1581.2s] forgot how to go write basic things.
+[1584.6s] Uh and then def
+[1586.7s] get um
+[1588.8s] get pages.
+[1591.5s] I think this is what I want.
+[1593.4s] Okay, cool. This This should be good.
+[1596.5s] Okay, uh Google's a bad website.
+[1599.4s] Um
+[1600.5s] yeah, that website We don't have that.
+[1602.9s] We have a Wikipedia, though.
+[1608.4s] Uh that's probably also a bad sitemap.
+[1611.9s] Let's use the
+[1613.9s] blog thing for the podcast.
+[1617.8s] Nice. That was going to be my
+[1618.8s] suggestion.
+[1620.3s] Okay. So, we're going to go get the
+[1621.6s] sitemap of this page. Once I get the
+[1623.4s] sitemap, the sitemap is going to be a
+[1625.3s] list of
+[1627.6s] URLs, and then we should get the summary
+[1629.8s] for each one. Oops.
+[1631.4s] Um
+[1633.0s] And then let me fix this real fast.
+[1635.5s] String. So, that I can tell get
+[1638.8s] get summary of the page that
+[1641.8s] it's
+[1643.2s] about.
+[1645.4s] Okay.
+[1647.2s] Cool. [laughter]
+[1648.0s] It'll fill it out in a second.
+[1650.0s] Sorry.
+[1655.6s] Uh let's get
+[1659.1s] Okay, whatever. Uh it'll fill this out,
+[1661.0s] and then we'll have something working
+[1662.0s] over here.
+[1663.4s] Um
+[1664.8s] Run it.
+[1666.7s] Yes.
+[1669.6s] There we go. And then this is going to
+[1671.0s] be a very, very silly example. This will
+[1673.0s] not do anything, and once I have the
+[1674.5s] harness, then we can start writing the
+[1675.7s] code.
+[1676.7s] Maybe run main.py.
+[1679.2s] Uh so, clearly this is wrong. But,
+[1682.5s] what we're going to do is we're going to
+[1683.6s] start adding some AI stuff, and then
+[1685.6s] Claude's going to go write it.
+[1691.4s] I need to Claude MD, so I can just copy
+[1693.3s] and paste this thing.
+[1696.5s] Uh raw. I wish GitHub made it easier to
+[1699.2s] copy.
+[1704.1s] Should I put it in a Claude MD?
+[1706.3s] I have
+[1710.3s] Okay.
+[1711.2s] Claude.
+[1715.6s] Uh let me make
+[1718.3s] the
+[1720.0s] main.py
+[1721.6s] actually
+[1722.8s] do what it should.
+[1730.7s] This is demo code. I'm going to type Let
+[1732.9s] me talk.
+[1734.2s] This is demo code, so we don't really
+[1736.2s] want perfection. We just want
+[1737.7s] cleanliness and simple code.
+[1740.7s] Okay. Uh
+[1741.8s] yeah. There's a way to go see the actual
+[1743.9s] raw SSE streams.
+[1746.2s] Uh this should probably get us pretty
+[1748.0s] far.
+[1749.4s] So, the key part here is like one of the
+[1751.6s] few things that we're not doing yet is
+[1753.1s] once this is done, you'll notice that
+[1754.6s] the agent will work, but what we'll need
+[1756.6s] to do is take our agent and then enhance
+[1758.4s] it with streaming. It doesn't actually
+[1760.2s] sadly work naturally because once you
+[1762.5s] actually want to go do streaming, you
+[1764.1s] actually have to think of everything as
+[1765.2s] a yield rather than as a return type.
+[1768.8s] And that's really the complexity that I
+[1770.4s] see most people falling into, and why
+[1772.2s] most apps don't have streaming. So, like
+[1774.3s] for example,
+[1775.8s] I wrote functions here. And the way that
+[1777.2s] I wrote the functions here is actually
+[1778.5s] quite like not um
+[1782.0s] There we go.
+[1785.4s] Yes. Okay. The way that I wrote these
+[1787.1s] functions here is not that unreasonable,
+[1789.1s] but if I want this to stream to the top
+[1791.2s] level
+[1792.8s] if I want this to stream to the top
+[1794.6s] level system, I'm going to have to plug
+[1796.4s] them something that allows me to send a
+[1798.6s] message up to the final request handler.
+[1802.2s] The long-living connection that Dexter
+[1804.0s] was talking about when you do the
+[1805.2s] diagram, that needs to be passed in
+[1807.2s] somehow.
+[1808.6s] Yes, stop. Just allow all edits. Be
+[1811.8s] unsafe.
+[1813.8s] And that's that's really the hard part
+[1815.6s] about these systems, which is as you go
+[1817.3s] build this out, this is why like not
+[1819.0s] every even cloud code just recently
+[1820.9s] added streaming like we Dexter was kind
+[1822.6s] of surprised to see that just because
+[1823.7s] like
+[1824.7s] it's not a thing that is trivial to do
+[1827.1s] in your code because if you don't design
+[1828.8s] for it,
+[1830.0s] adding it later is like an infinite
+[1832.0s] amount of plumbing.
+[1834.0s] Oh, nice. That's great.
+[1836.7s] And I actually told it I want to stream,
+[1838.3s] I guess, and it kind of figured that
+[1839.5s] out.
+[1841.0s] Or is it streaming? It is. Oh, perfect.
+[1844.4s] I guess I won't even have to tell it how
+[1845.9s] to go streaming. It'll just go do it for
+[1847.3s] me. That's fantastic. Yep, it. The the
+[1852.2s] real problem is
+[1853.6s] the funny part is why does this work?
+[1855.2s] Well, because in our cloud MD, we
+[1857.2s] actually have instructions of how to do
+[1858.6s] streaming. I think it just figured it
+[1860.4s] out
+[1861.2s] from here cuz he gave it the
+[1862.7s] instructions of how to go do that. I
+[1864.0s] should have I should have hidden those
+[1865.1s] out to make actually show that
+[1866.2s] incremental change.
+[1868.4s] Um
+[1869.8s] but when I go curl this, it will. Let's
+[1872.2s] run it via the CLI really fast first.
+[1874.6s] Those C's are freaking great. Those of
+[1876.2s] you that haven't tried it yet, I highly
+[1877.7s] recommend it.
+[1880.4s] Lip service yet?
+[1882.6s] I have no idea, but it's just fast.
+[1885.4s] That's good.
+[1886.1s] >> I feel like that is like
+[1888.2s] that is like half the battle when I'm
+[1889.9s] using stuff.
+[1891.2s] Don't bet against
+[1894.6s] Mitchell.
+[1895.9s] Um as it runs it so give me a favor and
+[1898.9s] you'll see like once you add streaming
+[1900.5s] versus don't add streaming and I'll ask
+[1901.8s] them all to like swap this out to make
+[1903.4s] Nick streaming an optional thing.
+[1905.6s] But once we add that, you'll see the
+[1907.2s] main difference in how how different it
+[1909.4s] feels to have streaming versus not have
+[1911.8s] streaming.
+[1912.8s] And obviously a terminal event will look
+[1914.8s] very different.
+[1916.8s] Okay, let's run this again.
+[1919.5s] Nice, it bounced to two pages.
+[1921.8s] Uh let's turn off
+[1922.8s] >> Or you should turn off your baml log.
+[1925.6s] Yeah, YOU MISSED THAT ONE.
+[1933.3s] UM
+[1934.4s] THERE WE GO.
+[1935.6s] AND YOU'RE NOTICING OVER HERE, it's not
+[1937.6s] actually again, it's not streaming the
+[1939.4s] full thing, but it's definitely
+[1940.2s] streaming each incremental object, but
+[1942.5s] it doesn't really need to because it's
+[1943.6s] not running anything in parallel.
+[1946.2s] I'm going to start running something
+[1947.4s] parallel, but first I'm going to run the
+[1948.9s] curl response that I gave.
+[1950.8s] Give me a Give me a read me.
+[1952.0s] >> Yeah, you want to you got to run the
+[1954.0s] run the dev server.
+[1955.5s] Yeah, exactly. I want to show what the
+[1957.9s] Oh.
+[1959.1s] Add run instructions.
+[1964.5s] Add the run instructions to the read me.
+[1968.1s] No, the problem is if I haven't run the
+[1969.9s] dev server, then I every time it
+[1972.2s] changes, it won't hot reload or it's
+[1973.6s] going to try and do dumb things.
+[1975.4s] It's easier for me to run it
+[1977.9s] in a separate terminal.
+[1980.0s] Fantastic. Okay, and then it actually
+[1981.9s] gave me a link to click on.
+[1984.4s] See what the link does.
+[1989.7s] I'm loading and but I might have opened
+[1992.4s] the wrong tab. This
+[1993.9s] >> Or it's just not streaming properly.
+[1996.3s] If you run it with curl, does it stream?
+[1999.3s] Let me try running curl.
+[2001.6s] It is running the get command. That's
+[2003.8s] It's Oh, I know what's happening. Okay,
+[2005.2s] yeah.
+[2007.2s] Yeah, you're right, Dexter.
+[2009.0s] You got to put in quotes.
+[2011.3s] Oh my god. As you can tell, I am I've
+[2014.8s] gone way on the dark end. I only and I
+[2016.7s] never write code by hand anymore. Not a
+[2018.6s] shell boy anymore. I'm just not a shell
+[2021.2s] boy anymore.
+[2022.1s] >> I think you need to flagellate Claude.
+[2025.9s] I do need to flagellate Claude. Give me
+[2027.8s] one second.
+[2029.0s] When I RUN CURL
+[2036.4s] IT'S PROBABLY GOING TO BE LIKE YOU'RE
+[2037.4s] RUNNING THE WRONG CURL COMMAND. I also
+[2039.4s] suspect that there's no actual like
+[2041.3s] because this is purely an API,
+[2043.6s] it's almost definitely not actually um
+[2046.7s] running anything over here. Wait, it
+[2048.7s] switched from generator to I'll see what
+[2052.2s] it does in a second. I'm I'm about to
+[2054.0s] swap for a second.
+[2055.4s] Yeah.
+[2056.8s] Blocking Oh, because your baml was not
+[2059.0s] sync.
+[2060.0s] Your baml was not async. It was doing
+[2061.6s] blocking IO. Oh, there we go. Now it's
+[2064.0s] running. And you can actually see what
+[2065.3s] it's actually sending out. So, as you
+[2067.5s] can see over here, we're actually
+[2068.4s] sending out the data over here and
+[2069.7s] streaming every single one of them one
+[2071.3s] by one and it will go swap this out.
+[2074.6s] Uh and then
+[2076.2s] use async
+[2077.7s] instead.
+[2079.5s] Uh
+[2080.7s] Yeah, and then I'll show you how we
+[2082.4s] actually stream the individual events.
+[2084.8s] Uh and this will bring us to parallel.
+[2088.8s] And if we don't parallelize, you can't
+[2090.7s] Python is horrible for parallelization,
+[2092.3s] so we just have to go do this. Does
+[2094.2s] Python does the Python standard out have
+[2096.9s] a mutex like multiple things can't both
+[2099.2s] print to the same stream at the same
+[2100.8s] time, right?
+[2102.4s] Does the Python standard out have a
+[2104.1s] mutex? Uh standard out has a mutex, so
+[2107.4s] you can't actually write to there, but
+[2109.0s] you can
+[2109.3s] >> Right, cuz it's async IO, so there's
+[2111.0s] only one thing running at a time
+[2112.4s] anyways. You'll never have multiple
+[2113.9s] writers.
+[2114.6s] >> Yeah, it's mainly it's mainly just
+[2117.0s] yielding on when it's waiting for
+[2118.2s] network calls or syscall operations.
+[2120.7s] Yeah. Okay, um
+[2122.6s] so let's run this again. And now you can
+[2124.5s] see that it's running and now we'll go
+[2125.8s] run stuff in parallel.
+[2127.6s] Um and what I'm going to do actually is
+[2131.0s] I'm going to take our diagram
+[2133.7s] Uh oh, there we go. Now this loads right
+[2135.3s] here, too.
+[2137.2s] Wait, if you reload this, is it going to
+[2138.5s] print them to Yeah, it's nice. Okay.
+[2141.1s] So, you can actually see it happening.
+[2142.8s] So, now what we want to do is you want
+[2144.1s] to do a couple of things. We want to
+[2145.5s] make it so that the summary will stream.
+[2148.2s] Uh we want to make the summary stream.
+[2150.7s] And then we want to make sure that the
+[2152.1s] title doesn't stream, but we want to
+[2154.2s] make sure that Yeah, the URL and the
+[2156.4s] title should
+[2158.0s] not stream, but the summary should
+[2159.3s] stream and then we want to make sure
+[2160.2s] that all these happen in parallel. So,
+[2161.7s] let's do this incrementally together.
+[2163.9s] Can we stream Yeah, can we Okay, so
+[2166.3s] first we're going to split out specific
+[2167.6s] fields and then what are we going to
+[2168.8s] stream the summary token by token?
+[2170.9s] Exactly. So, we want the to summary to
+[2172.9s] stream token by token, but we want the
+[2175.7s] um
+[2176.6s] we want the all of these to also run in
+[2179.0s] parallel. So, I'm going to break this
+[2180.8s] down to a couple of steps because I
+[2182.4s] think this is where the magic is going
+[2184.0s] to start feeling much cooler. So, what
+[2185.8s] we're going to do is we're going to make
+[2187.0s] sure that we stream each one of these
+[2189.4s] and run them in parallel. But we won't
+[2191.3s] do fully in parallel, we'll run groups
+[2193.0s] of 20, which I think is more
+[2194.9s] fascinating.
+[2197.2s] Or we'll say groups of five. This is
+[2199.7s] working. Now, the next thing that I want
+[2201.2s] to do is when I actually run get page
+[2203.1s] summary, it it's running for a single
+[2204.7s] page. That's fantastic. I just want to
+[2206.4s] make sure that I batch calls to get
+[2208.3s] summary in batch sizes of five to 10.
+[2211.8s] That means the SSE event I sent should
+[2213.7s] have enough information to uniquely
+[2215.3s] identify
+[2216.6s] each page and I think the URL for that
+[2219.0s] should be enough. But I want the batches
+[2221.2s] to be sent and the yields for the SSE
+[2223.3s] events to be sent in parallel as well.
+[2227.2s] I talk a lot whenever I talk to Claude.
+[2230.3s] >> [laughter]
+[2231.6s] >> Um and give us a second and as soon as
+[2233.8s] this is ready, it will go ahead and
+[2236.3s] write the information. I want to show
+[2237.5s] the diff really fast before it starts
+[2239.2s] adding, so I'm going to start
+[2241.6s] missed it. Oops. Uh I'll show in a
+[2244.3s] second. It will It should add a little
+[2246.1s] bit of stuff in there. But the diff is
+[2247.9s] actually not that hard. And I recommend
+[2250.1s] other people get used to this because
+[2251.6s] you just have to get used to using async
+[2252.9s] IO and futures and then async
+[2254.7s] IO.as_completed, there's also async
+[2256.4s] IO.gather, etc. that you could do. And
+[2259.6s] obviously you have to remember that any
+[2260.8s] one of these can fail. So, we always
+[2262.4s] have to be a little careful about
+[2263.3s] failure points and describing them a
+[2264.8s] little bit better.
+[2266.3s] But as long as we're careful about that
+[2268.0s] and we make these a little bit more
+[2269.0s] robust, this is and if you don't make it
+[2270.9s] robust, the problem you run into is one
+[2272.3s] task fails and everything fails because
+[2273.9s] of it. We want to prevent that from
+[2275.2s] happening.
+[2276.3s] Mhm. Yes, we are making only a single
+[2279.2s] connection for each We're actually
+[2281.4s] making a single connection for the
+[2282.5s] entire summaries request. Every single
+[2284.8s] summary is coming in through a single
+[2286.4s] connection.
+[2288.2s] I'm not I'm not reconnecting and I can
+[2290.2s] We I'll show you the curl request in a
+[2291.4s] second.
+[2292.4s] Now when I go do this, we should see
+[2294.7s] groups of these come up at once. We have
+[2296.5s] batch size of five. Let's make it like
+[2297.9s] 10 just to make it even more obvious.
+[2300.0s] So, I'm going to rerun this now.
+[2305.8s] You see how much faster that is?
+[2308.4s] It's because it's running groups of
+[2309.5s] batches of five. It's waiting for every
+[2311.1s] five to complete and then it's
+[2312.8s] rendering.
+[2319.1s] And it's way faster than we did before.
+[2321.6s] But I'm going to do one more thing. I
+[2323.2s] remember when I do batches of five, it's
+[2325.0s] I know that there's five coming up, but
+[2327.4s] one of the things I'm missing to show in
+[2328.9s] my UI is I don't know which five are
+[2330.6s] coming up. Imagine each one of these
+[2332.6s] takes a while longer.
+[2334.3s] I can send one more event before I run
+[2336.7s] each batch of five of which five I'm
+[2338.6s] going to show.
+[2340.6s] So, we'll add that event in there.
+[2343.6s] And you'll notice that a lot of SSE
+[2345.4s] stuff and streaming is actually not
+[2346.9s] about
+[2348.1s] doing the work. Claude can write all the
+[2349.9s] work. It's about designing the system
+[2352.1s] that we want to design for. So, I'm
+[2354.0s] going to design What I noticed here is I
+[2356.0s] don't have the information for what
+[2357.7s] batch I'm sending until the batch comes
+[2359.5s] in. So, I I only get this event once
+[2361.8s] each one is done. I want to send one I
+[2364.1s] want to design an event that I send
+[2366.2s] first that's here's what this batch is
+[2368.1s] going to include.
+[2369.6s] So, I'll ask it to do that.
+[2370.4s] >> I have a I have another
+[2372.2s] question.
+[2373.2s] >> what I want to do is I want to send a
+[2374.6s] single event that tells me what pages
+[2376.8s] each batch is going to include.
+[2380.4s] Go ahead. What's your question?
+[2382.4s] Um
+[2383.7s] do you plan to have this stream HTML
+[2387.6s] elements instead of
+[2389.7s] Yeah, we can we can
+[2391.3s] I can I'll make a small little UI that
+[2393.2s] renders for this really fast.
+[2395.3s] And now it's going to go send a batch
+[2396.8s] start event and go do this.
+[2399.4s] So now check this out. We get a batch
+[2401.0s] start and we get five.
+[2402.8s] Then we get a batch start.
+[2404.8s] And then we get more data.
+[2406.8s] Or I guess it sends like 10 events in a
+[2408.2s] batch or something, whatever the number
+[2409.4s] I set. And you can actually see how you
+[2411.6s] can imagine how this UI is going to be
+[2413.4s] much prettier for a system to use
+[2415.5s] because of that reason.
+[2417.7s] Because and I'll show you what when I
+[2419.8s] build the UI and I actually build the
+[2421.1s] final UI, you'll get to see it really
+[2422.8s] clearly. And it's very fast with Claude
+[2424.4s] code.
+[2425.6s] Let's Can we also like instead of
+[2427.8s] building a like web app UI, which we've
+[2430.2s] done all the time
+[2431.4s] all the time? I think it it could be
+[2432.8s] interesting. I I've I've never tried
+[2433.8s] this before, but like have it actually
+[2435.1s] just stream out like chunks of HTML.
+[2437.8s] Uh is a like a a a a
+[2440.1s] >> browser can I don't know if the browsers
+[2442.5s] will render that because it's like when
+[2444.4s] you stream the data, you have to go send
+[2446.2s] out data blobs and the like the SSE
+[2449.2s] protocol requires data colon HTML and
+[2451.3s] you can't write data colon HTML and
+[2452.7s] render it. Oh, you can't can't The SSE
+[2455.7s] protocol won't let you. Okay.
+[2458.2s] Yeah, you need a S receiver on the other
+[2460.8s] end that parses the stream protocol.
+[2462.7s] It's like it has to do with some of the
+[2464.4s] way that they do like
+[2465.9s] uh
+[2466.6s] it's just part of the protocol.
+[2468.3s] Okay.
+[2469.5s] Now the next thing we want to do is we
+[2471.0s] want to stream it so that the summary
+[2472.5s] for each element comes back in a chunk.
+[2475.5s] So we're going to try and go do that
+[2477.1s] now.
+[2479.6s] Okay, that's great. Now I want to use
+[2481.2s] semantic streaming on the actual
+[2483.0s] summarization page so that the summary
+[2485.1s] itself comes back in a chunked form. So
+[2489.0s] what I want to do is I want to stream
+[2491.0s] the summary as it gets filled out, but I
+[2493.4s] want to guarantee that the title and the
+[2494.6s] URL are always completed and not really
+[2498.2s] open to and require completion.
+[2501.4s] Yeah.
+[2503.3s] There you go.
+[2504.6s] Okay. And you'll notice that this page
+[2506.2s] is just it literally just gets the text
+[2507.8s] of the page and then calls the bamo
+[2509.1s] function. This bamo function over here
+[2511.5s] just does this. And it just gets the
+[2513.2s] title and then gets the summary.
+[2515.6s] So you'll see exactly what happens here.
+[2518.7s] So what we did is we actually said this
+[2521.9s] this gets marked as stream.notnull.
+[2524.9s] The summary has no premises such as
+[2526.8s] that. It's allowed to be null. It's also
+[2528.4s] allowed to be
+[2530.0s] Um it's also allowed to be empty.
+[2533.6s] And
+[2535.2s] this is what you'll find. So it's going
+[2536.9s] to change the code not too much, but
+[2538.6s] very little. So instead of using the
+[2540.4s] regular function call like we had
+[2541.6s] before, we're going to use the stream
+[2543.0s] version of the code.
+[2544.4s] And you're going to get the partial.
+[2546.0s] And the partial is going to have a
+[2547.0s] title. Title cannot be null. That's just
+[2549.4s] it doesn't know that.
+[2550.9s] The URL we already have
+[2552.5s] >> streamed out of the from the LLM
+[2555.8s] provider web request, but the title is
+[2557.8s] null and so we know we don't have enough
+[2559.6s] information to actually render anything.
+[2561.4s] So we don't have emit any event.
+[2563.5s] Exactly. And you're noticing something
+[2565.3s] here. Notice again, this is this is the
+[2567.5s] annoying part about streaming. You have
+[2569.5s] to go pass in these queues almost
+[2571.6s] through the whole system.
+[2573.2s] So you're passing in these queues and as
+[2575.8s] you're getting them, you're creating a
+[2577.4s] queue, you're creating a task and you're
+[2579.2s] basically communicating to this queue.
+[2581.6s] And as you go through this, you process
+[2584.1s] the queue and as the queue gets
+[2585.8s] elements, you send it across the wire.
+[2588.3s] Yeah. So you're So you're basically
+[2589.7s] using this very simple in-memory data
+[2592.2s] structure to allow these async IO
+[2594.8s] different like co-routines to
+[2596.5s] communicate with each other and with the
+[2598.0s] parent. Exactly. So I'm going to run
+[2600.2s] this now.
+[2601.3s] And you'll get an idea for what this
+[2602.4s] looks like.
+[2604.9s] See what it did? Summary no, empty
+[2606.6s] string.
+[2607.7s] And all these And remember, we're
+[2608.9s] running everything in parallel all at
+[2610.5s] once.
+[2611.5s] So it's going to be a little bit hard to
+[2612.8s] see, but you'll notice that we got this
+[2614.3s] one.
+[2615.3s] Um
+[2615.9s] Let's let's just only filter for No
+[2618.0s] lives allowed in March.
+[2620.8s] So right over here, the podcast. The
+[2622.4s] podcast episode discusses The podcast
+[2624.4s] episode discusses the theme. The podcast
+[2626.2s] episode discusses the theme of No V. And
+[2628.1s] you're seeing exactly how it's streaming
+[2629.7s] out. So now I can build a UI around
+[2631.2s] this. And here I'm being really
+[2633.1s] redundant where I'm actually sending I'm
+[2635.2s] not actually sending a delta. I'm
+[2636.8s] sending the full thing every single
+[2638.5s] time.
+[2639.8s] Now I likely don't Go ahead.
+[2642.6s] Uh okay, cool. Sorry, keep going. Like
+[2645.1s] for the UI though, I'm I'm going to push
+[2647.7s] you. You should try to build a static
+[2650.0s] HTML page that just uses like static
+[2652.0s] HTML and JavaScript to like hit the
+[2654.6s] endpoint and append to the DOM. Rather
+[2656.7s] than building an entire Next.js app. I'm
+[2658.7s] not going to build a Next.js app for
+[2659.9s] this. You don't need to. Watch this.
+[2662.6s] Now fill in index.html
+[2666.0s] with basic JS
+[2668.2s] plus CSS
+[2670.2s] so that it hits the endpoint
+[2675.8s] and renders the streams
+[2679.0s] as they come.
+[2681.4s] Amazing.
+[2681.9s] >> This is going to be the really nice
+[2683.0s] part.
+[2685.4s] And I'm not
+[2686.2s] >> is one of my new favorite tactics. I've
+[2688.7s] posted about this a lot of like you
+[2690.4s] actually don't need Next.js or React app
+[2693.3s] or Veet or anything
+[2695.7s] to be able to um okay, this thing wants
+[2698.3s] to serve serve the HTML off of a route.
+[2700.9s] That's fine.
+[2701.6s] >> That's fine.
+[2702.5s] I'm not going to complain about that.
+[2703.7s] That's not too bad.
+[2704.5s] >> Yeah.
+[2706.0s] Um but yeah, just to be able to like
+[2708.6s] literally you can open an HTML file in
+[2710.3s] your browser and have it do all kinds of
+[2712.0s] interesting things before you actually
+[2713.8s] need React or anything. Like you're at
+[2717.6s] this point your bar for creating a
+[2719.9s] Next.js app or a Veet app or like a full
+[2722.6s] front end like in a framework like
+[2725.7s] should be significantly higher than it
+[2727.3s] used to be. Like it used to be
+[2729.9s] uh number one, it used to be really
+[2731.0s] annoying and hard to write an index.html
+[2733.2s] from scratch that used JavaScript or XHR
+[2735.6s] or jQuery or whatever it is. So you just
+[2737.3s] like would just use the framework cuz
+[2738.8s] one, it made it easier and two, you knew
+[2740.4s] you were going to need it eventually.
+[2742.0s] But now it is both easy to have Claude
+[2744.0s] riff one of these out and two, very easy
+[2746.5s] to take one of these and turn it into a
+[2748.5s] Veet app or a Next.js app if you need
+[2750.6s] it.
+[2751.8s] I have no idea what this is going to
+[2753.0s] show. Uh but let's try. Let's have a
+[2754.9s] look.
+[2756.8s] Summarize that bad boy.
+[2758.8s] Ready?
+[2761.1s] So first things first.
+[2763.2s] Oh, so dope.
+[2765.2s] I don't know if you saw that.
+[2767.1s] It's like you're actually watching it
+[2768.6s] fill out in real time.
+[2771.9s] Yep. And it doesn't show You don't see
+[2773.6s] partial titles. You only see the full
+[2775.3s] titles. The titles all pop in at once.
+[2777.3s] Exactly. The titles popping at once, but
+[2779.5s] you're watching this work.
+[2781.3s] Streaming is really [ __ ] cool.
+[2784.0s] Yeah. Like if you have if you have not
+[2785.8s] built streaming to your app, as you saw
+[2787.3s] like we did this whole episode, it's
+[2788.5s] been less than an hour. We discussed the
+[2790.8s] concept, we wrote the agent, and we
+[2793.7s] built the front end to show you
+[2794.9s] streaming. We were writing code for like
+[2796.6s] 20 minutes. And you only did like five
+[2798.6s] or six prompts. Yeah. And I don't even
+[2800.9s] think I knew the exact code I was going
+[2802.3s] to write when I wrote this. It just
+[2803.8s] happened.
+[2804.9s] Because the key and again like a part of
+[2807.3s] it is like
+[2808.8s] part of what makes this streaming really
+[2810.2s] easy is like
+[2812.7s] we have this Claude MD that just tells
+[2814.3s] you all the knowledge that we have in
+[2815.8s] there just has that Claude MD on there.
+[2817.9s] So it just makes some of those mistakes
+[2819.5s] easier. The other parts that make it
+[2821.4s] slightly easier is the fact that like
+[2825.1s] when you go do this, I can just tell it,
+[2827.2s] "Hey, don't stream the title." And I the
+[2829.5s] LLM and the code never has to think
+[2831.1s] about this. It's just guaranteed by the
+[2832.5s] type system that the title will never be
+[2834.6s] streamed. And the summary will be
+[2836.4s] streamed.
+[2837.8s] Uh so you get really nice value prop
+[2840.2s] there. Uh if you want to link to the
+[2841.8s] Claude MD, you can go to
+[2843.4s] docs.boundaryml.com.
+[2845.6s] You can check out the agent.md and it
+[2847.2s] has all the instructions for here and
+[2848.5s] you can just copy that Claude MD over.
+[2850.3s] And it'll have it there for you.
+[2851.8s] Uh we're working on slightly more
+[2853.3s] optimized Claude MDs.
+[2855.2s] But hopefully this gives you folks a
+[2857.2s] really good idea link for like why
+[2859.2s] streaming is useful and how much more
+[2861.3s] powerful it can make your applications
+[2863.0s] as you go about this.
+[2865.2s] And even here like one of the things
+[2866.6s] that I didn't do is I didn't show the
+[2868.2s] number of batches that we're expecting
+[2869.8s] ahead of time. I can literally just do
+[2871.8s] that. I can show you all the number of
+[2873.2s] batches that we're having ahead of time
+[2874.6s] and then I can give you a pagination
+[2875.8s] view in the beginning.
+[2877.5s] I can make it so you can interrupt one
+[2879.1s] of these. I can make it so you can
+[2880.1s] cancel one of these. I can build that
+[2881.5s] whole UI out.
+[2883.1s] Uh but the only difference is the minute
+[2884.9s] you start doing like interruptions and
+[2886.6s] batches, now you have to do the second
+[2888.4s] part of this, which is something that
+[2889.6s] we've talked about briefly, but have
+[2890.9s] never built a live example for.
+[2893.8s] Um
+[2895.0s] which is remember what we said, which is
+[2897.0s] server-side events are just one way. You
+[2899.2s] can't actually communicate from the
+[2900.4s] client to the server. So the minute you
+[2902.2s] want to do that, what you end up
+[2903.4s] actually doing
+[2904.8s] is you end up writing stuff to the
+[2906.7s] database.
+[2907.9s] >> right? Yeah. Uh of some kind. Don't use
+[2909.7s] web sockets. If you're using web
+[2910.8s] sockets, you're going to get screwed.
+[2912.2s] You write You write stuff to the
+[2913.4s] database and then you also let the
+[2914.8s] client communicate to the database,
+[2917.0s] which then changes the state of the
+[2918.7s] server.
+[2920.0s] Yeah. This is for any And we do this in
+[2921.8s] in Riptide as well. We have a
+[2923.0s] unidirectional data flow where all
+[2926.0s] rights go to an API server, which writes
+[2928.6s] to the database. And then every time the
+[2930.6s] database changes, those can get streamed
+[2933.0s] down to clients who are subscribed to
+[2934.9s] different like queries on that database.
+[2937.3s] Like for example, if I wanted to cancel
+[2939.3s] one of the events and I wanted to build
+[2940.6s] a cancellation system over here, what I
+[2943.0s] would do is I would say that this Let's
+[2944.9s] say I want to cancel this event. This is
+[2946.2s] dumb. I don't want to do this one. I
+[2947.8s] just hit X over here and I say cancel.
+[2950.5s] And then what this would actually do is
+[2952.1s] this would go and write to the database
+[2954.7s] and say cancel. And then what we do on
+[2956.6s] the server
+[2957.2s] >> that update streamed down. Well,
+[2959.1s] exactly. The UI would see that update
+[2961.1s] etc. But when we go to the server, the
+[2962.9s] other thing that you would do is you'd
+[2964.0s] say, "Before you actually go ahead and
+[2967.5s] run like uh
+[2969.0s] run this summarize page."
+[2970.5s] >> propagate a cancellation all the way
+[2972.1s] down to the like request point so that
+[2974.2s] it stops streaming.
+[2975.7s] No, you wouldn't do that. You would just
+[2977.0s] like catch if DB
+[2979.4s] {dot} is cancelled.
+[2982.7s] Skip.
+[2984.0s] Yep.
+[2985.0s] Like you basically like pass the URL to
+[2986.6s] the database.
+[2987.0s] >> right? You just early early exit.
+[2988.9s] Exactly. So, that way you have to build
+[2990.6s] into your control flow. That means there
+[2991.5s] can be race conditions. So, you can't
+[2993.2s] always cancel it. But you can cancel if
+[2995.2s] you do like weird event hooks. And you
+[2996.6s] can make this as good as you want. It's
+[2997.9s] just software. But I think that's a
+[2999.4s] topic for a different time. Uh we're
+[3001.6s] about nearing the end. Questions that
+[3003.2s] people have today. I think Ed asked a
+[3005.1s] question. Have we looked at data start
+[3006.6s] on that? I have no idea what that is.
+[3008.7s] Um I haven't looked at it personally. I
+[3011.0s] mean, as I see for me is like
+[3012.7s] >> It's a hypermedia framework by Bob. Oh,
+[3015.8s] what the heck? I'm sorry. I look at this
+[3018.0s] website and like my first gut is like
+[3019.9s] what is going on here? Um it's just not
+[3022.2s] the kind of website that appeals to me.
+[3023.8s] But I may let me try and like not be
+[3025.8s] opinionated and only give pure
+[3028.8s] application basic value prop. Um I have
+[3032.0s] no idea what this is.
+[3034.8s] Uh guy brought up
+[3036.4s] >> using SSR for everything and like not
+[3038.8s] having client logic.
+[3040.7s] Oh, yeah, that's fine. Um there's many
+[3044.0s] different ways to go approach this. I
+[3045.3s] don't think I'm really opinionated on
+[3046.4s] that. I think the most important part
+[3048.2s] for everyone here is just to recognize
+[3049.8s] that like
+[3050.8s] once you do this, the way that you
+[3052.1s] actually make this really um really good
+[3055.5s] is uh
+[3056.9s] you actually build a single type system
+[3058.6s] that actually shares these events
+[3060.6s] um in a very type-safe way across the
+[3062.8s] wire, across everything. And then that's
+[3064.6s] what you stream.
+[3066.1s] And that's how you make it phenomenally
+[3067.6s] good. If you don't do that, you kind of
+[3069.0s] get screwed because now you end up in
+[3070.2s] this world where um
+[3072.8s] uh if you don't if you don't do this
+[3074.4s] like event if you don't use types, then
+[3076.4s] it's really hard to make your front end
+[3077.4s] and your back end kind of synchronize
+[3078.7s] nicely.
+[3079.9s] So, like we usually what we actually do
+[3082.6s] um
+[3083.4s] is like It's it's giving
+[3086.2s] uh
+[3086.9s] It's it's giving a little Angular. Looks
+[3089.6s] like it's uh it's a closure thing.
+[3094.1s] It's like it's what I would actually do,
+[3096.1s] to be completely honest.
+[3097.2s] Yeah.
+[3098.9s] Uh And like this is summary or null.
+[3102.3s] And once you do this, I would just add
+[3103.8s] another generator
+[3105.4s] over here.
+[3108.1s] All right.
+[3108.9s] It's TS.
+[3110.7s] TS.
+[3112.0s] Okay.
+[3113.4s] And now you also get like TypeScript
+[3114.8s] code that matches to it. And now you can
+[3116.3s] just like import your types. That's
+[3117.9s] usually what we recommend to most people
+[3119.5s] cuz then you get uh where is it?
+[3121.7s] >> Then you don't need to just like
+[3122.8s] manually parse raw JSON.
+[3124.4s] >> Then you get raw JSON. Then you get like
+[3126.6s] then you basically get this. And now you
+[3127.9s] can just say I want to make my SSE
+[3129.7s] events this. Or you can say something
+[3131.2s] like uh
+[3134.4s] What's the challenge with WebSockets? is
+[3136.8s] one of the questions here. So, like if
+[3138.5s] you do this for example now, now you can
+[3140.3s] be guaranteed that your queue is only
+[3141.8s] going to be one of these and
+[3143.1s] well-defined events. And then what you
+[3144.8s] get told is even on your front end layer
+[3147.5s] Where did my front end layer go?
+[3149.9s] Types.
+[3152.2s] All right, my brain There we go.
+[3154.1s] Even on my front end layer, I have SSE
+[3155.8s] events as only these events. So, now I
+[3157.3s] know how to handle I can build a handler
+[3158.8s] for all of these.
+[3160.2s] Um what's the challenge with WebSockets?
+[3162.6s] The big challenge with WebSockets is if
+[3164.0s] you're building any of this stuff, um
+[3165.6s] almost definitely these are long-running
+[3167.3s] tasks. If they're long-running tasks,
+[3169.6s] that means they're typically going to be
+[3170.7s] running in some background process or
+[3172.4s] they shouldn't be running in your main
+[3173.6s] process.
+[3174.8s] And WebSockets are very ephemeral
+[3176.4s] connections. Like the minute someone
+[3177.6s] disconnects, someone reconnects, you
+[3178.7s] have to go maintain that life cycle.
+[3180.8s] It's much harder
+[3182.8s] uh to maintain that in a bug-free way,
+[3185.1s] especially with like state race
+[3186.4s] conditions. It's much easier to say that
+[3188.9s] you have a single model of truth.
+[3191.8s] Um from a like again, it's For me,
+[3194.2s] software is about how do I reduce bugs
+[3195.9s] as much as possible? If there's multiple
+[3198.3s] events that can read and write from the
+[3199.8s] system, uh subscribing to race
+[3201.6s] conditions is incredibly hard. You're
+[3203.5s] basically using like global variables to
+[3205.1s] modify race conditions. And most people
+[3206.7s] just are not good at using global
+[3208.0s] variables. You have to maintain a
+[3209.6s] WebSocket. Someone's going to hit a
+[3210.7s] cancellation event. That cancellation
+[3212.8s] event is going to
+[3213.9s] affect some in-memory data structure.
+[3217.0s] And what if you already kicked off the
+[3218.5s] event in the server to actually go do
+[3220.2s] the web service? The nice thing about
+[3222.1s] the database layer
+[3224.4s] is the design is actually really simple.
+[3226.1s] This is running. And the only point at
+[3228.3s] which you check for cancellation is like
+[3230.0s] one line over here.
+[3234.5s] And then you just check for
+[3235.3s] cancellation. If a cancellation comes in
+[3237.1s] any point after this,
+[3238.8s] it's not able to be cancelled. And what
+[3241.3s] you can do now is you can actually say
+[3242.7s] like if you make it past this stage, you
+[3244.8s] can say like DB {dot} starting
+[3247.8s] entry
+[3249.3s] URL. And now you can just say that this
+[3250.9s] URL is starting. And therefore, the UI
+[3252.6s] rejects the other system rejects the
+[3254.5s] cancellation sequence. Yeah, and you say
+[3256.9s] like you can't cancel what's already
+[3258.4s] going.
+[3259.4s] Exactly. Or maybe you can. And you can
+[3261.8s] build a system to cancel the thing
+[3263.1s] that's already going. But the point is
+[3264.4s] it's easier to model. It's way it's way
+[3266.8s] less likely that you make mistakes.
+[3269.0s] And when I think about software, I
+[3270.4s] always think about what are the
+[3271.3s] architectural decisions that I can make
+[3273.3s] as um as a team leader so that it's less
+[3276.8s] likely that people on my team and Claude
+[3278.8s] make mistakes by accident. Cuz remember,
+[3281.1s] we don't read all our code anymore.
+[3283.2s] Yep.
+[3283.4s] >> So, choose the simplest architecture
+[3284.9s] that is most sound.
+[3287.0s] Yep. It's uh what is the when someone
+[3290.2s] when someone ships code and breaks a
+[3291.6s] thing you depended on, but none of the
+[3293.4s] tests broke, it's like if you liked it,
+[3295.2s] then you should have put a unit test on
+[3296.8s] it. Like the reason we write tests and
+[3298.2s] have good architecture is to make it as
+[3300.5s] easy as possible. And it's like someone
+[3302.6s] ships code and it breaks something, like
+[3305.5s] the the reframe there is like what about
+[3307.8s] the system allowed them to break
+[3309.5s] something? And why wasn't that like
+[3311.4s] thing we depended on like enforced by a
+[3313.2s] contract or a type system or something
+[3315.7s] that runs before it gets merged.
+[3317.8s] >> It's the same reason here. When I write
+[3319.3s] this queue, the way that I should really
+[3320.7s] be writing this queue is this is not
+[3322.3s] like an arbitrary queue.
+[3324.6s] This queue
+[3325.8s] This yeah, this is the most annoying
+[3327.4s] thing about async queue. Async queue
+[3329.1s] doesn't allow you to have type safety.
+[3330.4s] It's so annoying.
+[3331.9s] Um it's not generic. It's so bad. Uh in
+[3335.0s] Python.
+[3335.7s] >> import types for this?
+[3337.5s] There's no like async io type? You can't
+[3339.7s] do this. This this doesn't make sense.
+[3342.0s] Ah, I see. Yeah, that's the problem.
+[3344.3s] It's not generic. Async queue should be
+[3345.9s] generic, but it's not cuz it's evil cuz
+[3347.5s] it's Python.
+[3348.7s] Um and
+[3350.4s] >> you write Python on every episode. Well,
+[3353.2s] even TypeScript doesn't have a good
+[3354.3s] solution for this. That's the problem.
+[3356.2s] Uh cuz
+[3356.7s] >> TypeScript doesn't have a queue
+[3357.7s] generics?
+[3358.9s] The reason that it's not that they don't
+[3360.1s] have generics, it's just that async
+[3361.3s] generators and async queues by default
+[3363.8s] just struggle with um
+[3366.5s] Let me describe this in a better way.
+[3368.8s] Most of these languages are designed for
+[3370.7s] a time when like SSE and um
+[3374.1s] like this streaming concept and like
+[3376.0s] async queues weren't really first-class
+[3377.8s] citizens, weren't first class thought
+[3378.9s] of. Yeah, it's all about the types.
+[3380.5s] >> It wasn't a design pattern. So, like
+[3382.0s] when when they added async io queue to
+[3384.3s] like Python,
+[3385.5s] uh I think they added it I don't
+[3386.6s] remember what version uh Python. What
+[3389.6s] version of Python added this?
+[3391.4s] Uh
+[3392.3s] Wait, is async io part of the standard
+[3394.2s] library now?
+[3395.7s] Yeah, but I mean Python um
+[3398.3s] It'll tell me in a second. I don't want
+[3399.7s] to think about this.
+[3401.2s] Like it only came in 3.10.
+[3404.2s] That's actually not that old.
+[3406.4s] >> it's Oh, sorry. 3.4.
+[3408.7s] Cuz that's when async io was added to
+[3410.5s] the standard library. And I'll tell you
+[3412.2s] what year 3.4 came out. But like that's
+[3413.9s] 2014. That's not that uh what I would
+[3416.9s] call as like
+[3418.7s] a lot of
+[3419.4s] >> That's a
+[3420.2s] That's
+[3420.8s] >> what the pattern of async was really
+[3422.5s] common. Think about React was barely
+[3424.4s] starting to make motions at this point.
+[3427.0s] Yeah, I wrote a React app in 2014 and it
+[3429.2s] was a disaster, dude.
+[3430.7s] >> It TypeScript had barely made the stage
+[3433.6s] at this point. Like this was like
+[3436.2s] >> Yeah, this was
+[3437.1s] >> writing TypeScript in 2016. It was like,
+[3439.3s] "Hey, there's this new thing that no
+[3440.4s] one's heard of yet." Yeah, exactly.
+[3442.5s] Right? Like I was writing CoffeeScript
+[3444.1s] in 2012 cuz like TypeScript wasn't a
+[3445.8s] thing cuz I wanted a little bit better
+[3447.1s] auto-complete.
+[3448.5s] Um and like that's the whole point about
+[3450.2s] these systems. Like none of these
+[3451.3s] systems were designed for the world that
+[3452.9s] we live in today cuz they're designed so
+[3454.4s] long ago when they had kind of a just a
+[3455.8s] compact that they have to live on.
+[3457.9s] That's why like async and that's why
+[3459.4s] like whenever no one Why does no one do
+[3461.1s] streaming? Like even though this only
+[3462.6s] took us an hour,
+[3466.6s] of time. But once you know it, it's
+[3467.8s] trivial.
+[3470.1s] And that's that's the magic here. It's
+[3472.1s] just having the knowledge base. So, now
+[3473.7s] all of you that are watching the stream
+[3475.4s] should be able to make all your apps
+[3476.8s] feel way more reactive.
+[3479.0s] And make it feel way more fun. And you
+[3481.1s] can And streaming isn't just about
+[3482.6s] streaming LM calls as we saw. You can
+[3484.7s] stream everything without streaming the
+[3486.2s] LM call itself. That's the first thing
+[3488.1s] we did. We streamed
+[3489.8s] just the events. And then we added the
+[3491.9s] ability to stream the LM call.
+[3494.5s] Yep.
+[3497.0s] All right. That's
+[3497.9s] >> Dude, this is a great episode.
+[3498.6s] >> totally with the original concepts.
+[3499.8s] Choose the amount of reactivity and
+[3501.4s] fluidness you want your app to have. And
+[3503.3s] like that's the main takeaway of today's
+[3505.2s] episode. All right. So, takeaways. If
+[3508.1s] you do one thing, uh design systems.
+[3511.0s] Uh go get the boundary cloud MD.
+[3513.4s] Uh do more streaming stuff. Uh make it
+[3516.2s] hard. This is not easy. This is not the
+[3518.0s] easy part. But what we always say on the
+[3520.4s] show is like go learn how to do the hard
+[3522.7s] thing and that's going to let you build
+[3523.8s] things that are better than what
+[3524.9s] everyone else who is not willing to
+[3526.2s] learn the hard thing will do. Anything
+[3528.0s] worth doing is worth working for.
+[3530.1s] Um
+[3530.8s] Question from Sid. Any more use cases
+[3532.6s] for streaming apart from cool front
+[3534.0s] ends?
+[3535.0s] Yeah, it's cancellations. It's uh
+[3537.6s] queuing. It's moderating the agent. What
+[3539.6s] I hate about like Why do I Why do I hate
+[3541.4s] the cloud code agent sometimes? Because
+[3543.5s] I can't send events in to the sub agent.
+[3546.2s] It's because they don't have a good
+[3547.2s] streaming UX that actually does the
+[3549.4s] central database protocol that like Dash
+[3551.4s] was talking about. Unidirectional data
+[3553.6s] flow. It's I want to interrupt the sub
+[3556.3s] agent. That requires a beautiful It
+[3558.3s] requires really clever UX to solve the
+[3560.5s] problem, but also a streaming
+[3561.9s] architecture that lets you go do that.
+[3564.8s] So, streaming is the read-only part of
+[3566.4s] it. But without streaming, you can't
+[3568.3s] make the right part of it. And the right
+[3570.0s] part of it I think would be good for
+[3571.2s] another episode for us to go talk about
+[3572.6s] like the cancellation flow. We could
+[3574.4s] easily take the example we built today
+[3576.4s] and add cancellation on top of it. And I
+[3578.7s] think that'd be a great use case.
+[3580.6s] Okay. Cool. That'd be fun.

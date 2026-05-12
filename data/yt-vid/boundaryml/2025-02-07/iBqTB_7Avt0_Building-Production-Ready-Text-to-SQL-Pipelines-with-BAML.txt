@@ -1,0 +1,43 @@
+hey everyone I'm going to give you a
+quick walkr on what this repository does
+so you have an idea of what to do ahead
+of time this repo is able to take a
+question prop posed by a user and then
+given a bunch of tables and columns
+associated with each table we're
+actually able to go ahead and then
+select the relevant tables for a given
+query from the user uh not just tables
+the relevant uh columns and then we'll
+filter out those columns and then go
+ahead and actually build the SQL query
+with a separate call so there's two AI
+functions that run over here so the
+first thing I'll do is tell me the most
+popular uh products by
+region and you'll see here that it can't
+actually answer this question it's
+because in all these tables there's no
+information about the region available
+and it's able to detect that and tell me
+that but if I add a region into the user
+table and then I pose the same question
+to it again
+this time it should get all the relevant
+Parts get the order IDs user IDs
+products and then actually puts together
+a SQL statement for me as well now this
+is not only good for asking questions
+but it can also detect totally
+irrelevant questions by the user as well
+like what is Obama's
+age and I'll detect that there's no
+tables and columns helpful there and it
+can just tell the user that I can't help
+you with that query um I hope you're
+able to dig through this code and play
+around with specifically these two
+functions select relevant tables you can
+see the bamel code here and also the
+generate SQL query where you can see the
+bamel core here

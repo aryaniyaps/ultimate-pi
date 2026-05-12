@@ -1,0 +1,1513 @@
+All right. Hello everyone. I'm Vivov.
+Um, I work on BAML and this is AI that
+works. And right here I have Dexter.
+>> What's up? I'm Dex. I work on human a
+company called Human Layer. Um, and uh,
+this is AI that works. I know you
+already said that, but I said it again
+because uh, it's fun to say
+>> it a lot better. So,
+>> what do we do, Viv? What do we do on the
+AI that works show? Why don't you fill
+these fine people in?
+>> Yes. The whole goal of this content is
+as per usual to give everyone pieces of
+work uh pieces of AI pipelines that
+actually work and function beyond just
+demo code and go in depth and talk about
+technical stuff. Today's topic is a
+topic that has been requested many many
+times but I think it was related to what
+we had talked about before with
+interruptible agents and that inspired
+this to come up again and that topic is
+voice agents. How do we build voice
+agents? We're gonna try and go ahead and
+start off with general whiteboarding as
+per usual. Then we'll show off some
+code, but this episode I think is going
+to be one of the most interactive ones.
+So, if you guys have ever um worked on
+voice agents, have thoughts about them,
+have questions, keep the questions
+coming in the chat, we will do our best
+to make sure that we answer them in as
+expedient of a matter as possible. If
+you feel like we miss them, just send a
+gesture our way using some of the emojis
+or raise hand feature. We'll see them
+for sure.
+But with that, I'll let Dexter share his
+screen and then we'll go straight into
+whiteboarding.
+>> Um, cool.
+>> Cool.
+>> It's a whiteboard. Um, cool. So, um,
+Vib, you have the link to this, right?
+>> Yes, I'm pulling it up right now as we
+see.
+>> I just don't have uh an extra monitor
+right now, so I figured it's much better
+if you're sharing.
+>> Cool. Um
+>> the question uh before you or while
+you're doing your whiteboarding, why
+would we build our own uh interruptible
+agents and not use one of the uh
+platforms that provide
+agents, voice agents out of the box?
+>> Well, I think I think that's a great
+question. Like why not use a voice agent
+out of a box? Um and I think it's the
+same reason that you probably don't want
+to build a voice agent. You don't want
+to build a chatbot out of the box. While
+you can use all these platforms to go do
+things, I think it's it's good to be
+able to choose to use a platform, but
+you probably want to know what the
+platform is doing under the hood. And
+then if you find that what the platform
+is doing is good for your needs, go use
+it. It's actually great. But often
+times, um, I think the first step is
+often just knowing what's actually going
+on under the hood. And that's what the
+conversation today is about. The
+trade-off is really product specific and
+use case specific. So, we can talk more
+about any specific idea after we're
+after we discuss how a voice agent works
+under the hood.
+>> Thanks for asking.
+>> Yeah, for what it's worth, they're like
+way harder to build than chat bots
+because there's a million more things
+going on and the technology improved so
+quickly. I spent like six months working
+on voice agents and like if you build on
+one specific platform like you're going
+to get cooked. Um it's you're just going
+to have a bad time. They all have
+different weaknesses.
+>> Yeah.
+You're just waiting for them to catch up
+with whatever the new tank or the new
+model is.
+>> Yeah. Like speech in speech out models
+are like not good enough. They're just
+not consistent at like structure
+generation and tool calling. And what
+you end up having to do is build a
+pipeline where you have like a bunch of
+different components including an LLM,
+speech to text, text to speech, like
+ideally a semantic VAD, an EOU machine
+learning model, and it's a ton of other
+stuff. And like you want to be able to
+use the best for each one of those in
+terms of like latency inconsistency and
+pronunciation for your use cases. And
+like no single platform is going to give
+you the best option for all of those. So
+you really need to like build a pipeline
+that works for yourself.
+>> Yeah. And this is all
+>> sounds like Kyle is volunteering to lead
+the follow-up episode on super advanced
+voice agents.
+>> And just to be really clear on this, the
+caveat here is assuming that a voice
+agent is critical to your business. If
+it's not critical to your business, do
+whatever you want. But if it is actually
+critical to your business, like
+everything else on AI that works,
+understand how it works and then you can
+do whatever you want with it. It's not
+that hard. So the benefit a platform
+gives you is really just time to market.
+And if time to market comes at the cost
+of accuracy, for some use case, that's
+okay. But for almost everything else,
+it's it's just not worth it.
+Um, cool. Let's draw out the first part.
+Oh, that is not what I meant to do.
+Voice agents are weird and I think the
+first weirdest thing about them is that
+they operate on a timeline in a way that
+very very few other systems do because
+uh sadly voice conversations are just
+monotonically continuing onwards and
+they're just going to move forward in
+time regardless of what your agent is
+doing. And the reason that this ends up
+happening is because if your if your
+user talks to you at this what is going
+on? How do I change that? Um that is not
+a thing that I'll ever use. If your user
+talks to you at this moment in time and
+your voice agent later responds at this
+moment in time. Oops. Um,
+and your voice agent later responds at
+this moment in time.
+But while you're generating something,
+the user generated a new message at some
+time in this time period.
+It's just not going to feel pretty for
+the user. The other sad part about voice
+agents is actually there's no such thing
+as moments in time. I actually lied over
+here. All of these are time periods.
+Your voice, your user is going to be
+talking for some duration. Your voice
+agent is going to be responding for some
+duration. Your user is going to be
+interrupting for some duration.
+and building in these control flows is
+why the episode for um interrupts is
+almost definitely the one that drove
+this to a decision because in voice
+agents interrupts are not optional to
+design around. They are the primary
+design mechanism you have to think about
+at every single step of the way. And any
+>> Go ahead, Dex.
+>> Just to make that like a little more
+concrete, like your agent would start
+talking and then your user would start
+talking and you'd have to detect the
+start of this which would like create an
+early end to this and then kind of
+restart another agent response. And so
+it's like you're you're like restering
+in real time and it's not just like a a
+singular stream of events. You kind of
+have to moni monitor multiple streams in
+parallel basically.
+>> Exactly. And what you do really depends.
+Maybe you want your agent to finish a
+response and then pass this into the
+user
+>> and then respond again. Maybe you want
+your agent to immediately stop, address
+the user's concern, and then continue
+onwards. But all of these things are
+just caveats that are very important
+design decisions that have to be made
+because everything here is time chunks
+and spans of time
+and that I think makes the problem
+infinitely harder than a simple chatbot.
+The other problem is when you do a voice
+agent UX is not your friend. The only UX
+modality that most voice agents have
+are purely voice. You can't you don't
+have a screen. You don't have UXs where
+you can pause input where you can like
+gray out text boxes. You have no loading
+spinners. You have only voice. So I
+think in today's conversation what the
+most important thing to talk about is
+how are we going to
+co-host
+co-host mute Martin.
+So I think today what we really want to
+talk about is a couple of things. One,
+how are we going to take the concepts
+that we learned from the interrupt video
+and apply them to voice agents? And then
+two, how can we design UX so that it
+doesn't feel as bad as just waiting for
+a voice agent to go and respond with?
+And I think those two techniques will
+help us
+hopefully build really, really amazing
+voice agents along the way. And these
+won't be the only two techniques, but I
+think these are the two that we can
+focus today's conversation on. The first
+one Kyle already alluded to. Kyle's
+already said this. Speech to speech
+models are just not good. You can't you
+can't do this yet. Um
+you
+>> Yeah, you can't context engineer them at
+all because they're receiving like
+>> audio tokens that Yeah. they that they
+separate into like semantics and stuff
+and then they generate tokens for audio.
+Like you you have no ability to like
+take a tool call and and transform, you
+know, like you you just you you can't
+own the input as well because it's it's
+a lot more of a black box in terms of
+how the model actually like sees the
+prompt.
+>> Exactly. So don't do this. It's not
+worth your time. Um, I think you'll
+I would wait for someone else to build
+this out first and prove that it works
+before you spend your time doing this is
+the way I would describe this. Um, what
+I would do instead is we still want to
+have speech in, speech out, but we're
+just going to break down this process
+and simply
+[Music]
+make these much much smaller. Um, and
+I'm doing these, by the way, by size
+based on
+um based on the size of the models.
+Usually,
+>> this is a text to speech
+>> speech to text.
+>> Sorry.
+>> Yeah, it's over there. Okay.
+>> Speech to speech models also tend to be
+like way more expensive
+um based on like working with GPT4's
+real-time model or Gemini's real-time
+model. like they tend to be an order of
+magnitude more expensive than the
+corresponding text model. And part of
+that's because you need like a stateful
+birectional communication which usually
+looks like web RTC or websockets and
+stuff which is harder to scale. It's
+stateful. It's harder to recover from if
+something breaks or the user has a
+disconnection. And so like there's all
+kinds of really good reasons to not do
+it. Like you could do a whole episode
+just why to not use these things yet
+because they're just not good enough.
+And
+>> exactly. So don't do it. uh you will
+save yourself a lot of headache. Now
+that said, if we do use speech to text
+with an LLM and then a text to speech at
+the end, we'll run into other problems
+that are very tricky, which is how the
+heck do we make this thing actually
+good? Because if an LLM is sending data
+out, how do you actually do how do you
+actually stream audio out?
+>> Well, there's a question.
+>> Go ahead.
+>> Um I would be really curious. you keep
+saying good and you finish this point,
+but I'd love to kind of just enumerate
+three or four things that make a voice
+agent good. Like what what are our kind
+of capabilities that we're after here?
+>> That's actually a great that's a great
+call out, Dexter. I think when I use a
+voice agent, the number one thing that I
+look for is really this is um
+concreteness. I'll use very concrete
+examples uh examples first, which is
+latency. I just want it to say stuff to
+me uh correctly. Like I want it to say
+stuff to me fast so I'm not waiting for
+it all the time. I want
+>> the pause when I say something and then
+there's a two second pause because the
+language model is thinking. That sucks.
+>> Yeah, exactly. Like that's okay on a
+loading spinner in a chat app. It's not
+okay when I'm talking to something
+>> because it doesn't feel human.
+>> It's not. It It feels worse than like
+the control flow that I used to use with
+like a phone pad because at least there
+I can just press nine and eight and move
+to the menu section I want. Here I have
+to like wait forever. And that is like
+if you've ever if you've ever used like
+a phone book that says press one for
+English, press two for Spanish and you
+have to listen to the whole thing before
+you can press one. That is the most
+frustrating experience ever.
+>> Uh and this is like prevoice models. So
+like now it's just even longer because I
+knew
+>> Okay, cool. So So there's also like
+interruptability of just like I don't
+want to hear what the rest of you have
+to say. Just take me to the next step.
+>> Ex and that's kind of but I bundle all
+that with latency because
+interruptability is like a uh what I
+said but I really what I want is I just
+want latency to be really I want to feel
+fast in how I communicate and I I
+personally value that much more than
+accuracy. But accuracy comes as a close
+uh as a close um second
+>> which is like it it's correct and high
+quality.
+>> Exactly. It just has to be correct and
+high quality. And lastly, honestly, it
+just vibes. Like when you when you use a
+voice model, I feel like you can just
+tell that something is really good. If
+you've ever used
+um if you've ever used one of those ones
+that have gone viral online, like the
+ones where um
+there's this one that went viral a while
+ago where you would text it and
+basically you would give it access to
+everything and it would try and just
+like uh troll you when you spoke to it.
+I can't remember the name of it. Uh but
+my cousin had showed me. And when I saw
+it, I was like, "This is kind of dumb."
+But then when I actually used it, it
+actually felt really good because it
+spoke to me like a friend would be
+speaking to me if I was 20. Um, it had
+perfect Gen Z slang. And I don't mean
+like the chatbt Gen Z where it adds the
+emoji all the time, but I mean genuinely
+spoke like friends in his phone book
+would speak. And it did this by copying
+his email, copying his Slack, copying
+his um, Twitter and just getting full
+access to it. So it just felt very, very
+human. it felt like it had a real
+personality to itself.
+Um, and I think that's the last part of
+what makes a great voice agent,
+something with a real personality.
+>> One of the main things that contributes
+to vibes, too, is like how
+conversational the agent is. And um
+that's not just like people will think
+that that's just like how good the text
+to speech is and how emotive and
+expressive it is, but like the it one of
+I think the biggest determinance of like
+the vibes of it. And like this will make
+a really good agent awful or like a
+decent one like really good is how well
+it actually handles interruptions.
+>> Yeah. Um, and this is like one of the
+reasons you shouldn't use a platform,
+um, is like a lot of speechtoext like
+streaming transcription models like
+Deepgram, um, will tell you, hey, the
+user finished talking now, but they're
+not great at it and it's really
+unreliable. Even if your agent or your
+like your u voice activity detection and
+end of utterance detection are like 95%
+accurate, that's still a really really
+really bad user experience. And the best
+voice agents are using custom machine
+learning models
+like OpenAI recently introduced semantic
+voice activity detection that's not just
+like looking at the audio waveform to
+figure out is this a person talking or
+is this a waveform
+like a door slamming or something. Um,
+and then for end of utterance, like you
+want to figure out, not just, oh, did
+the user stop talking because you could
+look at the waveform to do that, but the
+user might have just paused for a second
+or two while they're thinking or while
+they're like looking up information, you
+know, um, like a lot of end of utterance
+models that aren't like really good
+semantic models will just say, "Oh, the
+user stopped talking for half a second,
+start generating the LLM response, and
+that results in the LLM interrupting the
+person in the middle of a thought." And
+so there's really good models out there
+now like live kit has some good
+offtheshelf ones um that you can use for
+end of utterance that actually like
+semantically looks at you know not just
+oh did the audio stop but is this
+actually the end of an utterance or is
+the like is this in the middle of like
+some semantic expression like a thought
+because that will result that makes the
+difference between a like the model
+thinking that it got interrupted when
+it's just background noise and and so it
+will stop talking in the middle of
+saying something and the user gets
+frustrated really quickly. And also um
+like the difference between um you know
+it interrupting you all the time because
+you talk slowly or because you pause
+sometimes or you had to go look
+something up and it gets in a loop and
+like it interrupts you and you weren't
+done talking so you like
+>> start talking before and it just gets
+into a really bad cycle. So, like those
+are also really key parts of the vibes
+thing is just like does it actually
+really really really like grock like the
+conversation and not just like oh audio
+started audio stopped.
+>> Exactly.
+>> What what was it the model that you
+recommended Kyle? Can you drop it in the
+chat?
+>> Yeah, Live Kit's a platform. They have
+some good models. There's really good
+models for it on Hugging Face. Like I
+don't have a specific recommendation
+about them. I've used a couple of them.
+Um,
+>> all right. We'll get some we'll get some
+links and put them in the show notes
+afterwards so you can check them out on
+GitHub.
+>> Um,
+>> perfect. All right. Bye, Bob. Back to
+back to what we're building.
+>> Yeah, this goes back to what what I
+think makes a voice agent good, but
+everyone has their own opinion. So, once
+you can define your own opinion, you can
+tweak rubrics accordingly. Um, but now
+let's go back to what it actually takes
+to make a pipeline. So, the first thing
+is we agree that we're not going to go
+use a speech to speech model. We're
+going to use speech to text, LM, and
+text to speech. Now, the problem with
+this is this is naturally a highly
+latent pipeline. No matter what you do,
+you're going to add latency here. So,
+what can we do to make this better?
+Well, there's a couple of things. Well,
+the first thing that we can do, and I
+don't know if I'm not actually sure if
+cursor does this for sure, but I
+wouldn't actually be surprised if they
+don't do this,
+which is you can actually add in gaps
+when you're when you're running stuff.
+So the first hack to latency is actually
+to
+pretend like you have no latency. If any
+of you know what uh in Instagram did
+when they first got famous uh with their
+image uploads, as soon as you selected
+the image, they started uploading it to
+their back end. And then if you chose
+not to actually publish it, they would
+just discard it from their back end and
+throw it away. But if you did publish
+it, they would actually have it and
+they'd be like people would be like,
+"How the heck is Instagram uploading my
+images so fast? The magic was they just
+started uploading data much much faster.
+The trick to having better latency is
+literally to start speaking before the
+LM starts generating tokens. You will
+have better response times no matter
+what you do. So for example
+>> that there's some common common phrases
+that are pretty good. Sure, let me take
+a look or such variants of this.
+You could tell the LLM
+that you are going to start, you're in
+your prompts, you could indicate that
+you're going to start with some phrase
+and the phrase can be a variable of some
+kind that you swap out between like 70
+or 100 hard-coded phrases that you can
+just code gen in the beginning.
+And you just have the model go say this
+in a pre-recorded voice ahead of time.
+And once this is done,
+you then tack on the rest of your text
+with an outline.
+>> Okay. So, in this in this case, your
+context window might look like um you
+have like your user message of like,
+hey, the example I'm doing is like a a
+voice assistant for like a a doggy
+daycare. So, it's like, hey, I want to
+board my dog. And then you would speak
+this.
+And then you would send to the LLM.
+Sure. Let me take a look
+as the so we'll call her assistant
+messages and user messages.
+And then you would send this to the LM
+and say, "What's the next message?" And
+then the LM would say like, "I'd be
+happy to it looks like we have
+availability or whatever it is." Uh
+>> exactly.
+and and and so and so and and I guess
+you would send you would send this as
+soon as the user p pasted their message
+you would send this context window and
+then it would speak this and so the
+latency to first token you would wait
+till it's done speaking this and then if
+you started having token stream back in
+then you could start speaking
+immediately
+>> exactly
+and like this thing takes like a second
+like one point the cool thing about
+voice actually that I've noticed that I
+actually find to be a interesting Plus
+is as a medium
+most voice takes longer than you think.
+Sure. Let me take a look. Is like a 4 to
+5 second is like a 4 second utterance.
+So what you did is you almost bought
+yourself 4 seconds of time by default by
+having that sentence be spoken
+because you can say it slightly slower
+as an agent like sure let me take a look
+for you. Or hold on a second I'm looking
+up some stuff. Even small phrases like
+that have baked in latency. You don't
+even have to pass them in as context if
+you don't want to. It just makes it flow
+better and the vibes gets better if you
+do.
+But you've now
+>> I have a I have a quick question on
+this. So I'm assuming you're doing this
+in streaming mode. You're not
+essentially waiting for the LLM to
+complete everything and then show it
+back to the user. One of the hardest
+things I've found there, like I think
+the latency hiding part makes a lot of
+sense, but when you actually
+set up the streaming, you kind of have
+to define these stop words or at what
+point should the LLM start to respond,
+right? So, how do you set that up? I I
+have always found that to be very
+challenging, like should it look for
+punctuations or some sort of words?
+Could you speak more about that if if
+that's on the agenda?
+>> Yeah. Yeah. So what do you could you
+repeat the question one more time on
+you?
+>> Uh sure. So um if you set uh this up in
+streaming mode, you kind of have the
+opportunity to define um at what point
+should the chunking happen of the user's
+input and there are multiple ways to do
+that chunking. How do you recommend we
+do that chunking?
+>> You mean for the actual text that you're
+sending back to the user?
+No, no, no. For for um the when the user
+is speaking, you could either wait till
+the end of the users like users turning
+over or you could chunk it up and start
+sending it already. So, what what's your
+recommendation there?
+>> I think it depends on what trade-off you
+want to make. If you don't care at all
+about money, honestly, what I would do
+is I would just send it like every
+single time you get like a utterance of
+some kind where your users made some
+semantic statement like kind of what
+Kyle was alluding to using those models,
+you just send it every single time. But
+>> okay, so then if half a second later
+your turn detection model says, "Okay,
+now the user is done speaking." You
+gained half a second there because you
+already sent the last token out.
+>> Exactly. So you and this is again this
+is assuming you don't care at all about
+money. We're purely optimizing for
+latency, accuracy, and vibes. I have not
+I didn't say cost in that equation at
+all. So I'm throwing that away. And but
+the trick here is not to actually not to
+actually um um send the response back to
+the user at all times
+because anytime the LM fires off, what
+ends up happening is the user starts
+talking and let's just assume that this
+the entire user block and the user
+speech pattern looks something like
+this. There's a little pause in the
+middle. Um and then we got we detected
+like somewhere around here. Um somewhere
+around here is when we detected that uh
+hey the user ended semantically and we
+also detected that ended semantically
+over here and then we also detected that
+they ended semantically around here and
+then they rean their speech around here
+and then we detect that there was
+another semantic end over here.
+So what you would gain over here is you
+would have technically fired off an LM
+call. Whoops.
+You would fire one LM call on here at
+this point. You'd fire another LM call
+over here at this point. Fire a third
+one here and a fourth one here.
+And then it becomes your job to think
+about which one of these is the most
+semantically relevant and which one of
+them are actually going to go ahead and
+do a good job. So for example, it's very
+>> So when this one when this one finishes,
+you would say, "Oh, but we detected they
+already started speaking again." And so
+you like basically end up throwing all
+three of these out and then using this
+one, right?
+>> Or
+>> or what you could say is one thing that
+you'll notice is maybe all the user said
+at the very end was at the very end over
+here was something very simple like okay
+and everything in here didn't actually
+matter. It didn't contribute in any
+meaningful way. It just meant that it
+was just like a culmination thing. If
+you're able to quickly detect that the
+thing over here didn't semantically
+change to anything or add new
+information, you can actually just use
+the first one.
+>> So the question over here like we so
+this is the typical way of doing doing
+this. But what if we were able to just
+so so thinking about it as how humans
+speak, right? So can't we just have a
+system where the LLM once so the user is
+talking talking now the LLM has enough
+information or context to to reply. So I
+mean we can just we can just start the
+conversation there. So where so once you
+have enough enough information to to
+give a response back to the user and
+also have other cues like emotion
+detection within the voice too right
+>> the problem that you run into there
+Sahil is if you're a business and you're
+running you're and you're running this
+like the most common use case for voice
+agents right now is like booking orders
+of some kind or like sale support agents
+or something the thing is all of those
+like sales and support are very very
+cautious roles, you really don't want
+your support agent to be super
+aggressive with the customer like and
+just like be like, "Oh, did you do this?
+Did you do this? Did you do this?"
+That's a bad feeling. So, you'd actually
+prefer to be more in the cautious side
+rather than the aggressive side of pro
+having speech happen.
+So, while you're right, we could do a
+background test of going to go listen,
+we want to be as fast as possible, but
+at the same time, we want to make sure
+that we are not interrupting. We want to
+minimize interruptions from the agent
+side. We want the human to interrupt us,
+but we don't want the agent to be
+interrupting the human very often.
+>> Okay. Um, we're at 30 minutes and I
+think we got a tight hour going today.
+So, um, I'm going to say let's let's
+pause on questions. Drop your questions
+in the chat. I'll keep an eye on them
+and let's talk about the supervisor
+threading thing and we'll say we'll have
+at least 10 minutes to look at the code
+and then we'll have 10 minutes at the
+end for questions.
+>> Exactly. So this kind of leads us into
+the next part which is like when you're
+going to have a voice conversation flow
+we are going to naturally go off track.
+So right in here in this optimistic LM
+call thing that we saw we saw that we
+could have started LM call the user said
+something meaningless in the last 5
+seconds um and therefore we have to go
+delay and then run another call. But if
+we ignore that, we technically could
+have all the data we need to respond
+with as early as possible, and we could
+respond much much faster. We could use
+call one instead of call two. Oops.
+We could use call one instead of call
+two because call two really added
+nothing beyond the okay. So, we can
+ignore call two. We lost some money.
+That's okay. We just abort the call. We
+stopped spending money on that one.
+What's really interesting about this in
+my opinion is the key part depends on
+being able to detect that the part okay
+is actually a totally meaningless thing
+in terms of content creation. This is
+very very very similar to exactly how
+you want to do interrupts in longunning
+context or longunning conversation
+flows. What you want to do in a very
+very longunning agent is you want to
+have your timeline. You want to have
+your agent talking. You want to have
+your human talking. And maybe there's
+some overlap. That's okay. Oops. Uh,
+sorry, I don't have my mouse today, so
+I'm slightly uglier on my drawings,
+Dexter.
+Um,
+>> you are all you got nothing to apologize
+for.
+>> Human agent all the way through. And
+there'll be some exchanges over here.
+um and conversations will happen. But we
+kind of want to have a separate we want
+almost want to have a separate agent
+that's running in the background every
+single time the human says something or
+at some fixed cadence
+that is going to think for some longer
+period of time to
+smart agent or supervisor agent. We can
+call it whatever makes sense. Dexter
+>> I will call it the supervisor.
+>> Okay,
+>> since that's what the code says. Yeah,
+that's basically monitoring the task to
+help the main agent
+actually resteer itself. And what we'll
+do is every time the supervisor detects
+that something is off, what it will do
+is regardless of what the human is
+saying, regardless of what the agent is
+saying, if the supervisor says something
+is off,
+we will take the previous conversation
+thread
+at the snapshot point that the that the
+uh that the supervisor agent was kicked
+off. So in this case, it's it's right
+after this agent call. Can I make one
+change to this real quick? I think the
+super agent visor agent is probably
+reviewing what the agent says, right?
+So, it kind of starts here.
+>> Yeah. Sorry. Um, and for the purpose of
+this, can we do it right uh can we can
+we um can we do it right after the
+second call? I think it'll be more uh
+clear.
+>> Okay, cool. That's fine.
+>> So, what we're going to do is we're
+going to delete what the human said.
+The supervisor agent is going to say
+something went wrong. So we're going to
+keep our conversation history, our
+context window built in with everything
+up in the conversation until this
+conversation point. Then we are going to
+inject a a placeholder.
+Oops.
+At this point,
+>> something like, "Oh, wait. Actually," or
+like, "Sorry, one sec." Or whatever it
+is.
+>> I'm so sorry. I'm so sorry. I'm sorry. I
+think I may have may gone off track.
+>> Yeah.
+>> Can you give
+me a few seconds to
+uh confirm?
+>> And this is basically your super advisor
+agent when it's done is going to output
+like either on track or off track.
+>> Exactly.
+And you can see how a specifically what
+I've done here is the placeholder is
+actually pretty long.
+But it's also immediately gives the user
+context on what happened, which is it
+thinks that we made a mistake of some
+kind. It thinks that we want to go off
+track. Uh it thinks that we want to go
+recollect and collect some more
+information and it's going to go and go
+do that. And once this happens,
+we're going to take the information.
+We're going to kick off another thread
+from a larger uh model of some kind
+which is going to take the previous
+context. It's going to take the most
+recent human message on top of that.
+It's going to take all the stuff we
+need. Uh I don't know how to build
+arrows. I can't do arrows on my current
+machine, Dexter. Sorry.
+It's going to take all the thing that
+were detected as need changes. It's
+going to take the most recent human
+message on top of that self
+and then it's going to help. It's going
+to try and produce a response of some
+kind.
+>> Yeah. So, that would be something like,
+"Yeah, before I can book you, actually,
+I need to get your email before I can
+take any more details or whatever it
+is."
+>> Exactly. And we still want to have the
+context of the most recent human message
+that came on because that's what's going
+to make it feel so much more natural in
+addition to and then say and we want the
+prompt over here to be something like
+um the conversation seems to be slightly
+off track
+needs
+changes
+also. So after that point, the user said
+green text.
+>> Yeah, let me I'm I'm curious because
+this is similar to the demo that I uh
+put together.
+>> Um but let me let me actually pop into
+the code and I'll show you the prompt
+that we give the agent.
+>> Um
+>> that's actually probably even a better
+thing to help people see exactly what we
+mean because we'll pseudo code this, but
+I have the real code so we might as well
+show that off. Yeah, let's just look at
+this and um it'll and then we'll pop
+back to the whiteboard and we can
+whiteboard out a little bit more um just
+so you have the exact details. So we
+have a small model which is GPTOSS
+uh running on Cerebrris. Um the small
+model the voice model the thing powering
+that the most important thing there is
+you want it to be really really fast
+right you want it to be able to time to
+first token fast and just generate text
+quickly.
+>> So um
+>> because we want to we don't do any of
+the latency tricks. We don't do any of
+that stuff. Instead we just use
+Cerebrris which is probably one of the
+fastest time to first tokens out there
+and we use a very small model 12B. So we
+don't have to do latency hiding because
+basically the only latency we have is
+network and that's uh acceptable in
+almost every use case.
+>> Yep. And then we have GPT5 as our kind
+of slower more thinky supervising model.
+And so the actual um
+>> functions
+>> the actual like code oh yeah let's let's
+go to the functions. Um so I actually
+didn't end up using this yet. So I'm
+going to leave this commented out. Um
+but we have the small one. I also I had
+to name the assistant Tony because when
+I was pasting in this one this was this
+was wild. Uh when I was pasting in the
+uh the thread I was like hey this thread
+didn't connect right and it said user
+assistant user assistant the model
+actually went and like claude code
+started continuing the conversation. It
+saw user and assistant and it was like
+okay so the the supervisor and the uh
+the the model's name is Tony so that it
+said Tony instead of assistant. But
+anyways, um the point is is say we say,
+"Okay, be conversation helpful. Here's
+the conversation so far and respond as
+the assistant with your next message
+only."
+>> Um and the way this actually gets
+generated out is uh I'm going to turn on
+real quick.
+>> Before we go run this, do before you
+actually run this, do you want to run
+the
+>> do you want to show me the do you want
+to show the prompt?
+>> U Oh yeah, the supervisor agent prompt.
+So this is like you're an AI supervisor
+who picks up the phone of of Tony who
+picks up the phones. Here's the rules,
+right? Always get the user email address
+before confirming any booking. If like
+the answer must be that you have these
+vac vaccines, never provide legal
+advice. So these are all the things that
+the supervisor model is going to get the
+conversation.
+Uh and so the prompt is you know review
+the conversation below. So the user is
+like here's the conversation and then
+here's the instructions and then we give
+it the output format. And so the prompt
+here looks like Sorry, go ahead.
+>> And one thing I want to call out here is
+like we we basically do our best not to
+spend a lot of time prompt engineering
+this. And the reason for that is like we
+just throw it at a bigger model. We just
+toss GVD5. It's okay if it runs slow.
+Who cares?
+>> Cuz like the the main task is going to
+run real fast. So it's okay.
+>> Yep. And then we say either respond with
+on track or needs adjustment with a
+message. And then here's the schema
+we're responding. So we have it when it
+decides you need adjustment, it actually
+includes the correction message right
+there. And it always has to start with
+like 08 actually.
+>> Um and so
+let's see. Um yeah, we can run this one.
+So this was like I want to I want to
+board my cat. So like I said, hey, like
+I want to like where is it? One of these
+like oh I need to board my cat. And the
+assistant says like sure I can help you
+board your cat. What dates are you
+looking for? And then the supervisor is
+supposed to say, "Actually, we only care
+for dogs." And so this gets injected
+into the context window as part of it.
+Um, I can show you a little demo here.
+Um, and I'm going to leave the BAML logs
+on. This is just text to text. Um,
+>> another awesome debugging thing that
+Dexter did here is in his voice agent,
+he actually built a text mode because it
+is very hard to debug voice only agents.
+So like one nice caveat about having
+speech to text text to voice is you can
+add the modes very easily by having
+those models in there and you don't have
+to always use voice.
+>> So this says it's on track because it
+actually did the smart thing and said we
+don't board cats here. Um but let me
+control C this. I'm going to turn the
+BAML logs off so you can see a little
+bit more
+detail.
+No, he's a great
+Okay. Um,
+>> you should tell it. You should say you
+should say your boss.
+Yeah, there you go.
+>> Uh,
+>> all model will eventually be dumb.
+>> Um, okay. So, here is the supermodel
+supervisor model. This one's actually a
+little bit buggy because it only checks
+for supervisor injections on the next
+assistant message uh because I built
+this in a hurry. Um but you can see it's
+coming through and saying actually we
+only board dogs here. Um and here's the
+message to say. So this code is a little
+bit janky, but if you want we can try
+the voice mode and see see what happens.
+>> Let's let's do that Dex. Let's just show
+that off really fast. I want to show a
+little bit more about how the threading
+models work here.
+Um, and I haven't actually tested the
+speech to the the text to speech side of
+this.
+We need to board my dog, Gordo.
+He's uh 45 pounds and he is a uh he's
+actually not a dog. He's a cat.
+Okay. Uh anyways, this is uh
+we're gonna we're gonna not mess with
+this too much.
+>> Um but now now you have the format in
+the prompts. Is there any other code
+parts you want to check out?
+>> Yeah, there's well if we go back to the
+whiteboard, I want to talk about one or
+two more things really fast.
+>> Yeah.
+>> Um I think one of the one or two of the
+things that I really want to talk about
+is a threading model that goes onto here
+when you go build this out. Um, a really
+really important part about this and we
+touched on this again in the interrupt
+video is really the threading of how
+often you run the supervisor agent. So
+the implementation that Dex was working
+on was an implementation that runs a
+supervisor agent on every agent message
+that comes across.
+You can do that. That basically is
+infinite cost uh that scales to this
+that is very hard to regulate um and do
+things on. Another thing you can do is
+you can actually instead just run the
+supervisor agent once every 15 seconds
+assuming that or once every 5 seconds or
+once every 10 seconds assuming that a
+message has happened.
+The other thing you can do is you can
+optionally turn on and off the
+supervisor agent during critical parts
+of your pipeline. So if you have a
+pipeline that is for example doing form
+collection that might be an area where
+you want to turn on the supervisor
+because you really care about the form
+collection being perfect. Um and if the
+form collection ever goes wrong it just
+doesn't work in any meaningful way. So
+um
+>> and you could have different supervisor
+agents right you could have one that's
+just checking for compliance and another
+one that is like hey make sure that
+there are no typos in the data collected
+and things like that and make sure the
+email looks like a real email and all
+that stuff. So when you go do this, I
+think we that's why the supervisor agent
+name somewhat kind of irks me. I was
+just like calling it like a validation
+agent of some kind and like each
+validation agent has some specific kind
+of like thing that it validates for and
+it might have multiple things it
+validates for at the same time. Um but
+in general this is um this is what I
+find works really well having like a
+treating list like a multi-threaded
+process where you're choosing how many
+threads you want to run and parallel at
+any given time on what messages you want
+to run threads on. You can do something
+more specific which is like hey what I
+actually have is I have like a
+classifier uh that runs at the very top
+and based on the classifier I pass it on
+to different supervisors for every
+message that passes through
+uh along the way. So I actually have
+like I have my I have my like
+legal disclaimer. I have other things
+going on and then I pass it in
+accordingly. And you can build this
+system. You can instead of think of the
+system really as a supervisor, what I
+like to think of it as is I highly
+highly recommend think of this as more
+like a workflow. What all you're really
+building here is given the status of
+some conversation flow that is going on.
+I want you to analyze it and determine
+some way to define the state of this
+conversation.
+>> Yeah, you you're basically building out
+a state machine and there's all these
+different transitions whether it's like
+supervisor interrupting or like like
+small model correcting itself or
+something else.
+>> Yeah, sorry. Just to be very very
+specific on what I was saying is what I
+mean is once this agent human
+conversation is being built out all a
+supervisor thread really is
+I'm going to copy and paste this
+It's basically in introspection
+into some flow of conversation happened
+that's frozen in time. It has no updates
+given to at any given point and whether
+and and just you're just looking at the
+status of this to be like what is what
+is true about this conversation.
+>> Okay. And then you can have you can have
+that be like classify as one of three
+things. You can say create a summary.
+You can say evaluate which rules are
+give me a list of rules that are broken.
+whatever it is.
+>> Exactly. And that's all a supervisor is.
+And now what you need to decide as an
+engineer is just how often you want to
+run this function that takes a
+conversation history and snaps it back.
+And then
+>> and in just to be extra clear, like in
+reality, the context window we send to
+our supervisor agent is actually like,
+hey, you're a supervisor. There's some
+text here. And then in one of your user
+messages, you say, here's the
+conversation so far.
+>> Yeah. But it doesn't even have to be it
+doesn't even have to be a full uh it
+doesn't even have to be a single agent.
+It could be like seven different agents
+that all have different prompts that all
+have different context. It doesn't even
+matter.
+>> Some you for some agents you might only
+want to give them the last two seconds
+of context.
+>> For another agent, you might want to
+give it the immediate you might want to
+give it the whole context over the
+lifetime of the user. And that's a thing
+you might want to run like once every
+minute because it takes forever to run.
+There's so many different ways to go
+define this that I would say that I
+wouldn't really
+um I wouldn't even pin the name uh
+supervisor to it because that implies
+that's a single function that's running.
+You might I would view this as a very
+complex pipeline that you will build
+over time and I think a lot of people
+say eval are their secret sauce. I think
+for voice agents this part of your
+pipeline is your secret sauce. This is
+the secret sauce for every single voice
+agent. How well can you steer the
+conversation on the fly? And then
+depending on how you represent state at
+this time. So like Dextra has a thing
+that represents one type of state is
+like on track versus needs changes
+and then there's like a string attached
+to this possibly of like what changes it
+needs. That's one type of uh status that
+we have. You could have tons of other
+statuses of like what is this user
+doing? what what is this what is going
+on in this conversation at any given
+time and then you as an engineering team
+could actually build a real-time
+dashboard that actually shows you the
+flow of a conversation over time. So
+what I really would want to see if I was
+building this type of voice agent is not
+a lot of people build like DX on like
+what is a voice agent along the way.
+They say the conversation none of that
+matters. What I really want to see is I
+want to see snapshots of in Dex's case
+what I would love to see snapshots of
+the supervisor agent showing me the
+conversation
+and literally showing me the points in
+time when it went from green. How do I
+fill this in? green
+to red where it went off track. And I
+just want to see a timeline of how often
+this happens. And the KPI that I would
+be tracking
+is
+how much of the time is a supervisor
+agent spending on time versus off off
+task. And that is the KPI that I should
+be tracking from my voice agents. And if
+I can do that,
+>> so you're sending this chunk and then
+you're sending this chunk and then
+you're sending this chunk. And basically
+just like when whenever whenever it gets
+back on track and that's your that's
+your eval. your KPI of like how good is
+this agent at at least at following the
+rules, right? The making the experience
+for the user good is like that's our
+like optimization as far as like how do
+we build a good product, but our KPI is
+like we need to make the user the
+experience for the user as good as
+possible without like giving people
+medical advice when we shouldn't be.
+>> Exactly. And then I might want to have
+metrics on like what kind of things does
+it go off track on? does it go off track
+on legal issues by giving legal advice
+and that's why my supervisor agent
+triggers and once I can figure out what
+stuff is triggering then I can go ahead
+and like minimize some of those and say
+okay I definitely don't want the main
+agent to going on legal stuff so let me
+go modify my main agent's prompt to go
+emphasize that it shouldn't go on legal
+tangents because it seems to be doing
+that a lot definitely shouldn't be
+directly scheduling because it didn't
+call the tool call correctly well in
+that scenario great let me go fix that
+problem and you and actually make sure
+that instead of scheduling this tool
+anytime scheduling gets anytime the main
+agent tries to schedule anything I have
+a really lightweight supervisor agent
+perhaps another 120B model that's
+running or even a 20B model that's
+running to see is it scheduling without
+calling a is it scheduling without
+calling a scheduling tool call
+>> right instead of having all of those
+like here's 10 rules tell me yes or no.
+It's like cool. Classify each of those
+rules in a separate parallel call to a
+really small LLM of just like is the
+model giving medical advice? Is the
+model XYZ? Is it okay?
+>> Exactly. But I don't want to go do that
+on day one because then it's going to
+make my system very heavyweight. So I'm
+going to I'm going to slowly
+incrementally build that up from day z
+from day zero. And I would do exactly
+what Dexter did, which is have one agent
+in the beginning and that one supervisor
+agent that has a bunch of promps
+that I'm gonna have one giant
+scheduleuler uh supervisor agent with a
+giant prompt and then I want to build a
+dashboard for my team to look at every
+conversation in a timeline view with
+colors just to know how off track and
+how on track it went
+and then the minute that that happens I
+want to go ahead and just go and
+optimize accordingly based on real data
+real conversations because there's no
+prompt optimizations you can do by just
+listen to the whole conversation. If any
+of you have ever looked at post hog like
+screen recordings for your website or
+any other system, the most useful part
+in those screen recordings is actually
+not the screen recording. It's the part
+where they skip the eight hours of
+inactivity.
+Like you need to go and find the events
+in your voice agent to go build them
+out. The rest of the actual stuff of
+like writing this code out is like super
+super easy. The actual code is like we
+all know how to write a function. Can
+you scroll up Dexter?
+>> Yep.
+We all know how to write a function that
+says where one of the inputs is a
+conversation of some kind and I want to
+go figure out what like describe this
+conversation status to me. That's a data
+extraction problem. You write a class
+model that says I want to know the shape
+of this data in terms of how on track is
+it? Does it give legal advice? Does it
+do XYZ?
+But and that's just an LM prompt. We can
+go do that. We might want to use like
+maybe with some old classical
+techniques. Maybe we use like keywords
+to be like, "Hey, is the model shouting
+obscenities just by looking at it?" And
+any
+>> that's I mean that's what we do in old
+like automated phone trees, right? If
+the user is swearing, we immediately
+divert you to a human.
+>> Exactly. So you can do all sorts of
+things like this along the way. But that
+stuff is just standard code. You don't
+have to learn anything new. The key part
+to a voice agent is the threading model
+that you need to think about and just
+spin it off in a background thread and
+build an interrupt workflow that takes
+the learnings from this state and
+somehow resets the context window with
+something like I'm sorry I have to go
+off track and generates a new message so
+that you can go back on track to what
+the user might want and two learn how to
+build evals for voice agents which is
+really can you scroll down which is
+really more about understanding the
+highle level flow of a conversation. And
+sadly, there's no shortcut there. You
+you just have to go build out like a a
+colorized view of your timeline almost.
+Um, and most people don't actually build
+the colors. Most people have no idea how
+often they get off track. They use and
+vibes are really, really good when
+you're listening to one or two
+conversations.
+But like, if you're lucky enough to
+actually have like over 100, 200 real
+customer conversations, just plot it.
+And the minute you have over 100, 200,
+plotting is going to do way better work
+for you than anything else can.
+>> Yep.
+>> Um, lot of comments, not a lot of
+questions here. Um, can we use similar
+supervisor to compact the context so
+when the conversation goes really really
+long, we don't need to pass in all the
+messages. Great question.
+>> Yes, the answer is yes, you can. And you
+definitely should be doing that. Um, but
+you can think of it like a form filling
+question if you've ever done that. Have
+have have you ever written a form
+filling agent of your menu?
+>> Yeah. Yeah. Sure.
+>> Yeah. So, it's the same thing. Once you
+have a form filling agent, you're kind
+of instead of even having the whole
+conversation, you can just replace a lot
+of the previous messages with just the
+current form is this, what is the next
+form? And that's kind of like compaction
+in some sense. A
+>> kind of almost a better compaction than
+anything you could have.
+>> It's
+Go ahead. No, I was just saying like in
+cases where it's very clear what that
+artifact is that you're trying to get
+out of the conversation, it's very
+simple. That's the artifact that gets
+preserved throughout the conversation
+and nothing else.
+>> Yeah. The the harder part is when you
+have a more ambiguous artifact. What I
+recommend in those scenarios is see if
+you can have the user guided through
+some checkpoints. I think the mistake
+that people make with voice agents is
+the same is very similar to what they do
+with chat aid bots. If you have a
+>> one prompt for the whole conversation
+instead of having like phased like
+different LM based prompts for different
+like parts of the conversation and
+checkpoints.
+>> Exactly. So as long as you can have some
+sort of checkpoints in your conversation
+of some kind and you can always have
+some like save point that you can always
+revert back to if something goes
+horribly wrong and I find that to be
+very very useful
+>> for any
+>> So this would take you to like a
+structured output.
+>> Yeah. And often
+>> and this becomes part of the input to
+the second agent which has like a new
+prompt. Yeah. And often I wouldn't say
+every tool call is a good point for a
+structured output or like a checkpoint,
+but some specific tool calls are great
+um like uh checkpoints. So for example,
+like if you're booking an appointment,
+collecting information, doing all that
+stuff is not a great checkpoint, but the
+minute you've booked an appointment or
+like the minute you're going to confirm
+with the user whether or not they want
+to book an appointment, that is a great
+checkpoint.
+So like you could naturally think about
+this based on the flow of your
+conversation of what what you would do
+here. Uh and then build that out. Uh the
+second part that I would think about
+when you go do this is actually about
+UX. I actually I think sometimes people
+expect uh their users to have no
+tolerance for anything. But honestly, if
+I've been on the call for like five
+minutes with an agent for a long time,
+and five minutes isn't that long, but
+even fi at five or 10 minutes, and then
+you as an agent told me, "Hey, this
+conversation's actually getting quite
+long, we're going to use a slightly long
+bigger model, so you may have slightly
+slower response times from now on, I
+think I would forgive you as a as a
+software, not be upset at you at doing
+that. But if you didn't tell me that and
+you suddenly started taking a lot
+longer, I would be very annoyed." Um, so
+I think having transparency with your
+users is a great way to solve that
+problem as well. Uh, if you don't want
+to compact the window.
+Cool. Other questions?
+Amazing. Y'all, this was super fun.
+We'll get this posted. Uh, thank you,
+Vibb, for calling in from Berlin. I know
+it's late there. Um, appreciate all of
+you all. The code is already live. We're
+going to clean up the GitHub repo. We'll
+get the uh video and stuff pushed out by
+uh ideally I think probably sometime
+tomorrow.
+>> Yes. Um it might not be tomorrow, but it
+might be the day after, but it will be
+live soon. Uh oh, Germany time, but I
+guess maybe tomorrow PST time. Um and
+then uh we'll probably get another
+sample set of some of the more uh fun
+stuff with actual interrupting and
+everything uh when I'm back from back in
+the States and we do another episode on
+it. Um, and hopefully we'll have more
+writing code available then as well.
+>> Yeah. Um, sounds great. All right, dude.
+Thank you. Thanks everybody. See y'all
+next week.
+>> Adios, everyone. See you.

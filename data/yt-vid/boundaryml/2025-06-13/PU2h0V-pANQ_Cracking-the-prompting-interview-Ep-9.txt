@@ -1,0 +1,2112 @@
+you we've seen this in like SQL
+generation or maybe this is a tactic we
+can talk about today like we've seen it
+like SQL generation okay have the model
+generate a JSON object that can be
+determined turned into a SQL query for
+SVGs the TL draw guy was talking about
+this at AI engineer last week have the
+model generate a structured object that
+it's good at writing that then
+deterministic code can turn into an SVG
+and I think have the model generate code
+that then you can like bake it's like
+creating different views of the same
+thing. Um, and then once that's baked,
+then you can deterministically execute
+that code with a programming runtime.
+Yeah. All right. Well, with that, let's
+get started. Um, my name is Byov. This
+is Dexter. We've been doing this every
+week for the last few weeks now. Um,
+it's been months. We started in March,
+dude. Oh, wow. Yes. But we took a break,
+so I don't know if that counts. The
+break is where I define the line. Um,
+okay. But regardless, uh, the whole
+point of this these episodes with AI
+that works is to talk about real
+practical AI applications where we don't
+just talk about highle stuff, but really
+try and show the code behind how things
+work. Uh, we've talked about a bunch of
+things in the past from MCP servers with
+10,000 plus tools to 12 factor agents by
+Dexter all the way to human learn how to
+use humans as tools and then just really
+how to think about prompts. But today, I
+think we want to do something that was
+different. It's going to be a lot more
+varied in conversation than our previous
+conversations which are all about
+focusing on one depth thing. Today we
+want to talk about just prompting as a
+whole. Nothing fancy, just plain old
+prompting. And many of you
+uh and actually Dexter, do you want to
+give a little precursor while I get the
+screen recording up? Well, I think like
+many of the things that we end up
+talking about, you can take like what is
+a really simple problem that folks kind
+of can look at and just say, "Oh, that's
+solved." like like classification. It's
+like, okay, I know how to pass the LM a
+list of labels and get it to output one
+of those labels with structured outputs
+or something like that. And then you go
+and you look under the hood and it's
+like, oh, like actually there's a lot of
+room where I thought the ceiling was of
+like, okay, here's the techniques.
+Here's how you do it. There's so much
+more room to basically open up the box
+and rip out all the wires and redo
+everything and like engineer it to get
+much better results. And I think like
+the core of that is always prompting.
+Um, and so I'm really excited today to
+learn about both like just some basic
+techniques framed in terms of certain
+types of problems. Um, and and I think
+today one of the things that it will be
+cool is um, we're not going to talk as
+much about like one big overarching
+problem like we usually do. We're just
+going to give you a grab bag of um small
+tips and tricks that are reusable across
+problem spaces and like lower level
+advice that you can apply to lots of
+problems. And I think hopefully uh if
+folks are down, I think we put a thread
+in in the Boundary Discord. Um if anyone
+wants to share their prompts, uh the
+most I've ever learned about prompt
+engineering is showing Fib AI
+applications that I've written and
+having him roast my prompt and tell me
+what we're doing wrong.
+Um actually with that what I'll do is in
+the thing in here I will actually just
+post a link to this thread copy thread
+and I'll post this in chat if uh anyone
+wants they're welcome to post their
+prompts that they want to share. This
+will be recorded
+um and like just post it on here. We'll
+fix your prompts at the end and we'll
+just show you how we would think about
+them. Doesn't mean that they'll
+necessarily get better. It might just
+give you another technique or two. But
+with that, let's go into the topic.
+Cracking the prompting interview. I
+think prompting is literally like
+software engineering. And we're just
+going to use the same techniques to do a
+couple of things off the bat. So, let's
+start off with a very common problem
+that I always see, which is always the
+first one that I'm going to talk about,
+which is like labels.
+And this I think the most common example
+of this problem that I see is citations.
+So, imagine that I have a prompt. My
+prompt will have a bunch of text that I
+refer to it in for the context of rag.
+With the rag, I will have it give me
+like the URL or something attached to it
+and I will have a bunch of these
+along the way. So I have like a URL with
+some data and then I want to go get that
+and somehow in my answer I want the LM
+to give me out the URL.
+Uh this is this a problem that I
+resonates with this couple people. Does
+anyone have ideas for how we could make
+this better?
+If not, we'll just go right into it. Uh,
+if today's session is going to be Are
+you gonna are you going to replace the
+URL with a sentinel token?
+Kind of. Yeah, exactly. Because what I
+want is I want the answer that over here
+to be an answer, but I want to include
+the citations that that remap to that
+specific thing. Now, the problem is, as
+we all know, URLs can be really really
+funky. like just the URL for this
+Excalad draw is I don't know let me see
+if I can share one um like if I go to
+like I don't know the random browser
+page I probably have something open
+where' it go
+sorry
+if I just go to like for example our
+YouTube channel let me just show some of
+these videos the these URLs are
+basically you I could have this as the
+citation URL for my model and let's just
+take a look at what it would mean for
+the model to generate this.
+Let's just go look at the tokenizer
+because I think this is the most
+important thing to think about if a
+model can generate something accurately
+or not. This is what the model has to
+generate. There's a bunch of tokens. So
+these tokens make sense. It can probably
+do this. YouTube is a single token. A
+YouTube is a single token. That's kind
+of interesting actually. Um I learned
+that today. Uh watch is a single token.
+We're good. Question mark V is a single
+token which also probably makes sense
+because YouTube probably is a
+predominant force in the tokenizer for
+some reason. But everything else here
+breaks down. This ends up and this is
+there's like models can generate a
+string. If you type in that string, you
+say, "Hey, model make this string for
+me." It's going to make it. But your
+point is basically that like the more
+tokens that you're asking the model to
+generate accurately, the more kind of
+effort it has to put on that and the the
+less likely it's going to get it right.
+Exactly. So in order for the model to
+get this part of the URL correct
+specifically, it has to generate 10
+tokens perfectly. If we remove this
+part, let's assume it'll get question
+mark V correct. It has to get eight
+tokens perfectly correct. If it messes
+up in any of these, it becomes a useless
+link.
+So how can we change that? Well, we can
+do something really, really simple. And
+I will just use YouTube along the way.
+And I'll write a basic prompt that does
+this and tries to go about this.
+Oops.
+So, we're going to write a question new
+file like uh labels.baml.
+I'm going to have a function that's
+going to say given uh like answer
+question. I'm going to say here's a
+question. I'm going to give it a list of
+links
+or content.
+I'll say like this will have like a URL
+which will be a string and then content
+which will be a string and then
+what we'll return here is some answer
+and then citations
+string array at definition
+list of URLs
+that are relevant. Okay.
+Open AI GPT40.
+Great.
+And um ctx
+output format.
+Sorry, I'm on a live prompt, so I'm
+going to try and be as fast as possible.
+Full user question.
+Okay. So output format is you're telling
+it how to output the uh answer.
+Exactly. And you're and you're putting
+the output format and the relevant
+content into the system prompt and then
+we're putting the user the question of
+the user prompt.
+Exactly. So I'm going to do this. So now
+this my prompt um and I will literally
+just ask cursor to
+generate me a test case for this rag use
+case
+use
+resume.
+They're all the same file. They're all
+going to have a test case in them. I'm
+going to move this use.l as uh
+as a reference for how works. So, I'll
+just have it generate a test case really
+fast and then it'll just go do something
+for me. But we can see how like um and
+then this takes a little bit, but we can
+see how like the model might struggle to
+go do something. Great. Accept. Cool.
+Let's go do this. Um, and oh man, are
+you going to make these URLs really
+freaking crazy and then uh see if we can
+actually get the model to screw it up.
+We're just going to use this.
+So, this is one YouTube URL
+and I will copy another YouTube URL from
+a different video
+and I will point this out. It's not even
+a matter of like the model will screw
+this up. It the the point here is it
+doesn't matter if the model does this
+perfectly or not. The point that matters
+is the model might screw it up.
+And if it screws it up, I have no
+guarantee on this end. So there's small
+things that I can do. So now that I have
+some citation thing in here, I can do
+something nice in my Python code to help
+reduce some of these errors.
+Oh, you can put like a guard. This is
+from the eval thing. You can put a
+runtime guard of like, hey, if it
+outputs a URL that wasn't in our input
+set, bounce it back and tell it to try
+again. actually open just this one
+folder really fast. Uh
+that way it's gonna be a little bit
+cleaner. There we go. Uh otherwise
+Python versions don't work for monor
+repos which is the worst sin that Python
+have committed. We're getting there. I
+think the uv.python stuff might actually
+eventually fix it. I really hope so.
+So one thing I can do is I can literally
+just get the answer equals this and then
+I can say like for URL in answer uh
+answer citations I somehow assert that
+the URL starts with this. I could like
+build some small search. I could I could
+assert that the URLs are actually in the
+actual content array that comes in
+there.
+Um,
+oh,
+I got it. I'll I'll I'll get the link.
+Um, so we can actually go build this
+URL, right, for us. Now, we can actually
+go further. The problem is right over
+here, the URLs, as we saw, have a
+problem with how the model is going to
+generate them.
+So, let's go fix that actually. And
+let's say this is our actual URLs.
+uh
+from BAML client.types
+import content. Cool. Now what I can do
+here is instead of actually putting this
+URL as is I could literally put a I
+could first change this completely and
+say what I actually want to do is I
+won't list a return of citations. I will
+actually list an index
+index of the content.
+And now that this returns an index of
+the content, what I will do here is
+literally just print this out. Content
+loop.index0
+content idx. And now my prompt looks
+like this. Instead of actually dumping
+the actual URL, I just say content idx00
+0. I can actually put like dashes here
+separators. I can put them beforehand
+because that might actually better
+content.
+I can do this. Um, and now it's actually
+called content content one content zero.
+And now I just remove the idea of the
+URL completely from the model. And the
+model will not do this. And when I go
+run this,
+what we'll find is great, we get zero
+and one because those are relevant
+indexes. And like let's make up a third
+one that doesn't matter.
+Um,
+Europe
+is pretty cool and has great pasta
+and ideally it shouldn't pick up the
+right content. It should only pick up
+zero and one. And now what I can do in
+my code instead of doing it in the model
+is I can convert the URL into the actual
+citation. So now I can just say like
+content of URL dot um what is it
+contents of URL
+URL or the actual URL that I actually
+want. So it becomes an index based
+lookup instead of a real one. So the
+idea is you really don't you really want
+to do your best to not rely on models
+generating long sequences of tokens that
+don't make sense for the model to
+actually intuitively think about sim.
+There's no meaning. There's no meaning
+baked into that random string of
+characters. It's just a pointer.
+Exactly. And if you can go further and
+if you go back to our content about
+dynamic enums, you could, for example,
+make this a dynamic enum that then has
+an alias that gets mapped back to the
+actual value. I was going to say we
+could go into all of the fancy BAML
+features that make this even easier. Um,
+I'm going to say we are 20 minutes in.
+So, if you if you want to move on to the
+next tip or do you want to wrap this one
+up or or do you have more on the label
+stuff? Perfect.
+It's don't use sequence of tokens that
+don't make sense for the model. Go
+update it on your own. We got one
+question. Symbol simple tuning also
+applies here. Exactly. Symbol tuning is
+the exact same thing. Docs will cover
+that. Can't talk about that right now
+because of time constraints. We're going
+to do another one. Diorization.
+So, we've all seen diorization examples.
+We're like, um, do this. Make a make a
+transcript.
+to diorization
+diorization
+function
+use
+labels of ammo as an example.
+Do you want to do a quick uh whiteboard
+on like what what do we mean by
+diorization while it's working? Fine. I
+will go do this. I'll describe some
+words over here. So let's talk about
+diorization.
+Diorization. Diorization. Diorization is
+this idea that we have audio coming in
+and we want to turn the audio snippets
+into like a
+speaker plus transcript uh section. So
+each of these will always have a speaker
+and each of these will and then
+transform into like who said what. So
+the idea is most of these sequences come
+from
+and mo what most of these will do is
+they'll basically say l literally say
+speaker zero speaker one speaker zero
+speaker one
+um and you might actually want to go do
+something more than that because you
+might be having a conversation between a
+nurse and a patient. So you might
+actually want to say speaker one is a
+nurse, speaker two is a patient and
+transform your transcript to that. I'm
+going to show you a prompting trip that
+is going to reduce the amount of um text
+that we might have to generate by an
+order of magnitude to solve this
+problem. Because if I want to go from
+person one to
+uh speaker, I like nurse
+versus patient
+versus like other cuz maybe their
+husband or wife spoke up into it in the
+middle of it. I want to know exactly who
+these personas are. So, let's go do
+that.
+re real quick. Um, is there is does it
+is I imagine this is probably equivalent
+whether you're doing audio or raw just
+like a raw transcript of a conversation,
+right? Yes. So, I'm going to assume that
+the transcript is going to have a
+speaker. Uh, let's just say the
+transcript is on, let's simplify this a
+little bit. Let's say the transcript is
+literally just a string.
+And what I want to do is I want to
+identify the speakers that exist for
+each of these, right? So the transcript
+is literally just going to be a string
+and I I have um no other information
+about it.
+Uh transcript will turn into that. And
+then what I want is I want to return a
+di transcript which is going to be a
+bunch of speaker segments. Don't need
+this. And this will just have
+speaker string uh text. And you might
+even say that this is like nurse
+doctor patient or other. Uh so let's
+let's like write it like here.
+Cool. Um,
+identify identify the speakers
+output format
+and then
+roll user.
+Okay, cool. That's probably good enough.
+Oh, that's actually pretty cool.
+Um,
+let's change this. But you actually just
+want the raw text, right? Yeah. So I
+will Oh yeah, that's true. Thank you for
+identifying that, Dexter.
+Actually, I think our test case is
+converted correctly. Uh
+are you I'm hurt.
+My knee
+hurts.
+I'm sorry.
+Sorry. So, so this is
+already has the speakers identified
+though, right? Like, but it doesn't tell
+me who's who.
+Okay. Is so would this technique work?
+Like is this applicable also to just a
+like non like if I just have a a stream
+of text and I don't it's not already
+split up by speaker.
+I guess this Okay, so this just assumes
+you have turn detection but not
+necessarily um let's say we don't know
+who the speaker is. We don't know
+anything about this. What we really want
+to do is we want to go and convert this
+in a really quick way. Um so I'm going
+to go change it's been hurting for three
+days now. Uh fix um he's been
+complaining about it for a while. So
+this is interesting because there might
+be a lot of other content here. So let's
+just see firstly what the what the what
+the raw thing ends up being.
+Yeah. And cool. This this seems kind of
+interesting. It's like cool. It has
+other it has all these other things in
+here. Let's try and make this better
+really fast. Um and I'm going to combine
+like two or three different of the
+prompting tips right in one as I go. So,
+the first thing I want to notice is,
+hey, this is probably not very useful.
+So, let's try and just like fix this.
+Well, part of it is not useful. Well,
+one, I'm outputting the whole transcript
+over and over again. That sounds bad. I
+see. Let's see if we can do this in a
+slightly better way. Um, so what I'm
+going to do is I'm going to say
+dialogue
+index int. So, I'm going to give it give
+it the dialog index. And here, I'm just
+going to like write this in my prompt
+really fast so I don't have to think
+about this. But, uh, the right way to do
+this is honestly to just make this thing
+an array.
+H, sorry,
+I love cursor. And we'll make this an
+array. And now instead of dumping the
+transcript out as we are, what we'll do
+is we'll say for line and transcript
+print out the line. And now what we'll
+also say is this loop.index0
+dialogue
+this. We'll add an extra space in there
+and then we'll add that in. So now this
+is an assumption that the the script is
+already an array or are we just
+converting the script into an array like
+well you can just split by you can just
+split by I'm assuming if you have some
+way have a speaker colon here you have a
+way to convert this into an array of
+some kind. Okay. Right. Yeah. I think I
+think in yeah I think the questions that
+a lot of people are asking is kind of
+the like the real time actual speech to
+text use case is you don't have those
+like separators unless you're using like
+a separate like turn detection model
+basically. Yes, but most people should
+be using a turn detection model. So I'm
+assuming that you have that right now.
+You're analyzing a transcript in post.
+We can remove the speaker labels as well
+so it's like a little bit more clear.
+It's like we just have all the
+statements that are literally speech to
+text per line of some kind. I'm going to
+go run this now. Now, you'll notice the
+model's actually really really good at
+just spitting out the dialogue index and
+who the who the speaker is in each of
+these scenarios. Oh, so it doesn't have
+to reoutput the actual text itself.
+Exactly. Order of magnit you can imagine
+for long transcripts, this is an order
+of magnitude
+cheaper in terms of how much text it has
+to output. And we can reduce this even
+further and just like alias this to like
+alias idx.
+And then it'll be a lot shorter. And now
+it's just now it's just outputting the
+index in the speaker.
+I'm a little curious what would happen
+if you just put it all as one big
+string. What do you mean? Oh, like like
+if you didn't split them out. I imagine
+it's probably not going to work as well.
+But it it the reason that this works a
+lot better is twofold. one I'm actually
+telling the model what the index is. So
+the model has to go back and say I'm
+let's look at what the model does turn
+by turn. It's going to in first output
+idx0.
+Then all it has to do is in its token
+during the attention mechanism the model
+goes back into its tokenizer. So it
+literally will go back through all the
+tokens and just say okay what tokens do
+I want to look at? I want to look at
+next zero. It's going to go and just say
+okay I need to understand this part of
+this this part of the segment. It's
+easier for it to focus. So even though
+it's a little redundant, it helps the
+model be a little bit more focused on
+its part. Now it's like, okay, what who
+likely said this?
+And then it's like and then it goes out
+and starts spitting out the next token,
+spits out idx. So at the point of idx,
+now it says, oh, what's the next idx I
+need? Oh, let me go back a couple tokens
+here. It's like that was zero. I
+probably need one next. We're reducing
+the burden on the model. That's the main
+that's the main leverage here. the model
+at any point is able to do way less work
+and then therefore output more. Does
+that make sense, Dexter? Yeah, I got
+you. Cool. Cool.
+Now, the thing is we may not actually
+know exactly who's talking here. Like
+this other thing, we might have made a
+bug and not actually introduced other.
+And in this scenario, what we'll find is
+likely the model
+will do something just output to nurse.
+it kind of hallucinated on its own. So
+we can actually just add other as a
+fallback. So we the model doesn't tend
+to hallucinate. We want to prevent
+hallucinations when possible. And we do
+that by giving the model an out. That's
+another and this is the same with all
+the all the classifier examples that
+that we talk about, right? is like
+classify the things you know you are
+good at classifying in the fastest,
+cheapest, most efficient way and then
+allow the model to have an escape hatch
+in which case you'll handle it in a
+different way either by sending it to a
+human to classify or sending it to a
+bigger smarter model or whatever it is.
+Exactly. But now let's do another thing.
+Let's do another thing. Clues. Let's add
+some clues here. So I'm going to help
+model things that I'm Exactly. So I'm
+going to help the model think about what
+it is. And it's literally just like
+it's literally just dumping the text
+here.
+Um, and like this is not very useful.
+Add description things that help
+uh uh inference to
+let's just add a little bit more
+dialogue here and we'll see what it
+does.
+um
+uh let's say uh
+what uh might
+uh relevant. So let's so we're noticing
+that what it's doing is just outputting
+all the clues but a lot of the times
+it's kind of obvious who the speaker is.
+So let's just do this only if not
+obvious
+uh list out facts that uh help us
+um identify help us analyze yeah John's
+suggesting deductive reasoning steps
+which I think is gets a little towards
+some of the stuff we've done in the past
+around like structured reasoning stuff.
+Oh, a speaker. Maybe I had a much better
+test case pulled up earlier.
+So, and now you're noticing over here
+now something a lot more interesting.
+It says speaker zero other because they
+don't know yet. Speaker one uses
+personal pronouns indicating injury.
+That means that they're probably a
+patient.
+Speaking about the patient, so probably
+other
+along the way.
+So, it's actually a lot more useful to
+actually go do this. And now we can have
+a lot more com confidence behind what's
+happening. But it's also it's it's
+gotten it's it's gotten worse at picking
+the ones where it was the doctor. The
+doctor the doctor and nurse are worse.
+Yes. But that might be because when you
+really think about it, doctor and nurse
+are actually confusing because how does
+it actually identify correctly between
+the doctor and the nurse?
+And we can go about this one more time.
+And if we actually go look at this, if I
+were to read this transcript, there is
+no freaking way I as the human would
+actually be able to know if it's
+actually a doctor or pat doctor or not
+without knowing how many people are in
+the room.
+Very true. I could be talking to my
+brother. Exactly. Exactly. And that's
+the point. This could be my uncle
+talking
+Uh so whenever some when you said doctor
+and patient got nurse you're right we
+intuitively felt that way but remember
+the model has no context around this so
+let's add some more cont sorry could you
+go to so before you clear this out could
+you go to the third index index number
+two
+yeah this this time it seems to have
+gotten it because it's making
+assumptions yeah yeah about it right
+it's make but now it's taking more from
+the prompt itself like the actual output
+format Right. Exactly. It's literally
+just like ah you're probably either a
+doctor or a patient. Like there's no
+there's no way around this. But now that
+we forced the model to be like who uh if
+not only if not obvious go list out
+facts.
+And in fact the obvious answer for
+identifying speakers maybe other in all
+scenarios.
+And that's what I would do if I had I
+would unlabel everything. But then I
+would say, "Oh,
+but now we know for sure that this one
+is a patient because it has been
+nonobviously stated."
+But we can go further. We can make this
+a little bit better.
+There
+there were four people in the room.
+Doctor Josh,
+uh, nurse
+off
+text
+uh uh friend
+unidentified.
+So we can go do this because maybe for
+my EMR I know exactly who visited
+but I don't know I don't have any
+information on the other person at all.
+So now let's add this in here
+and say for context.
+And now let's let's run this.
+And now what we find is that the model
+gets a lot better.
+Right? So you could you could look at
+like if you want to do this for a random
+event, you could go get the people off
+the Google calendar event and just
+inject that at the top be like here's
+the people and here's their domains and
+here's you know two sentences of deep
+research about who this person is.
+Exactly. And this this mechanism of how
+we felt like it got more inaccurate and
+might have diverted us from actually
+exploring this prompt further is
+actually important to understand why the
+model did this. step back, rethink, and
+remember that the model did this because
+if I were to be completely objective,
+show this to a random person and tell
+them to identify speakers, they also
+would likely pick other. If they had to
+be like if the choice would be wrong or
+be correct, I too would prefer to be not
+wrong and just pick other because other
+is never wrong.
+Cool. Um, are we going to do triple back
+takes today? I'll do that in a second.
+That's tip number two where we use
+diorization.
+And I want to show one last ver variant
+of this trick which is these clues.
+So instead of outputting clues, we can
+just do this description
+uh as a precursor
+to the comment.
+As a precursor
+comment to this field.
+So sometimes we want
+but we don't want it to do reasoning as
+a data field. I don't want to deal with
+that. I just want to like output
+something and I want to show you what
+happens here.
+Um if this works
+uh example. Okay. So this is getting
+into like how do we how do we this is a
+great leeway. This is like how do we get
+the model to output busted JSON in a way
+that like actually helps it get better
+answers.
+Like comments in JSON are technically
+not valid.
+Yeah. Let's see if I can force it to do
+this. I have to actually read the prompt
+and see what it's doing.
+Uh
+use
+As
+if
+if not if speaker is ambiguous.
+List relevant comments
+to help narrow
+help
+narrow
+down
+uh
+to help narrow down um the
+use first.
+Well,
+I'm going to go run this and see what
+the model does.
+Okay, I can't get it to do it. Let me
+try and put this out.
+This is like the weirdest trick that
+I've learned and
+uh so not directly in the generated
+output format but just in the prompt
+and
+use for and had
+and then
+accident.
+Okay. So, you always tell me not to use
+a few shot prompting.
+I do
+because this is more about the structure
+of the response, not about the actual
+like learning from examples basically.
+Exactly. So, let's see if I can get the
+model to output this. And sometimes I
+can't. Sometimes the model doesn't
+really listen. Um, and just dump that
+info as another field. So, let's do
+another last thing. prefix equals answer
+with this. I noticed OpenAI has been
+doing this.
+Oh, where like I think for whatever
+reason whenever you use the word JSON,
+they trigger something special in the
+prompt that goes to like some other
+model or something
+or like secretly turns on. Oh, there you
+go. Yes, exactly.
+And now the model's actually um uh
+writing some more comments but it's
+writing the comments be after um
+if list relevant facts on speaker before
+the speaker field
+the reasoning before the output. Yeah.
+Uh question. So the reason to do this is
+to save the tokens on writing clue every
+single time or it is it's not always
+about that. It's just like the model
+might just it's just another tool in
+your toolbox for how you can get the
+model to output what you want. Clues is
+one way to do it.
+But and you can also do the thing we do.
+It's like put the reasoning at the top
+and then dump the JSON. And it sounds
+like this is just like, okay, if we want
+really targeted reasoning on each field.
+Exactly. And maybe like this is way more
+token efficient than having it output a
+bunch of extra JSON.
+Exactly. And you'll notice you saw me
+iterate a little bit on this prompt over
+here. Like I did a couple of things to
+go do this, but this goes into the very
+next tip that I want to really talk
+about, which is one,
+it's called RTFP. Um, for those of you
+that don't know RTFM, it means read the
+manual. RTFP means read the
+prompt. Um, and I say that with
+a lot of love because most people don't
+actually read the prompt. And you saw
+what I did when this didn't work over
+here. I just read the prompt. I was
+like, "Oh, the if I go back to the add
+description mechanism, let me give you a
+little bit more of a description of why
+I didn't like this."
+When I go read this, I'm like, "Oh, this
+thing over here. Maybe it's getting
+confused by the double comments.
+And you can see how that might be
+confusing to the model. So since I'm
+using comments like nested comments in
+comments, I'm like, okay, let me just
+try and simplify this problem for the
+model and give it that in a place where
+it can't be confused. And that was the
+intuition that I had out here.
+Um, so it really just boils down to
+reading the prompt because if we can
+read the prompt, then we can see what
+the model might be doing. And of course,
+we can never actually know what's
+actually happening,
+but it allows us to actually know what
+it allows us to iterate a little bit
+faster and then we can say, "Oh, that
+isn't working. Let me go fix that."
+There's a question about why not use fot
+prompting. There's a couple reasons.
+Typically, the way to have done fot
+prompting in this example would have
+been me to actually go and write an
+example and then write out the answer.
+But that's not what I wanted. I just
+wanted the model to understand that it
+has the ability to go do this. it has
+the ability to list out facts before it
+actually spits out the speaker field. So
+I just wanted to give it the structure
+so it understands the thing it has to
+mimic. I don't it's not the
+Go ahead, Dexter. Yeah. And and all this
+is again is like okay cool like yeah
+probably just outputting JSON is good
+enough. Outputting reasoning first is a
+little bit better. Having reasoning in
+your JSON fields is probably a little
+bit better. But if you're running this
+kind of thing a h 100,000 times a day,
+then a tiny half a percent improvement
+either in efficiency or in speed or in
+token efficiency or in accuracy is
+massively valuable. And this is what we
+talk about every week on this show like
+how do you how do you unlock those like
+near the top of the accuracy range? How
+do you push things even further? Yeah.
+How do you get another half a percent?
+And this isn't again remember this isn't
+say that this technique will work always
+but it is another technique that you
+have available to yourself just like we
+use this other technique to not spit out
+the entire dialogue but rather only spit
+out the index
+and we use this other technique to say
+oh dialogue index is actually a lot more
+tokens let's use purely the word index
+instead so it spits out the output
+tokens are way less
+it's small things that can make a
+difference and And if I actually were to
+look at this, my hunch actually says
+index itself. Where'd it go? Index is
+probably wrong. I should actually
+probably use like index
+because this is just a more popular
+token that the model will have
+understandings of or rather than idx.
+Even though idx is a single token, it's
+just more commonly understood
+existing processes. Um, cool.
+Question. Quick question. So we do this
+actually hundreds and thousands of times
+a day where we put out um um reasoning
+and we use the reasoning as um eval um
+for another model. So is there a way to
+achieve or make it a bit more efficient.
+Um so we literally spit out clues and
+these are at least a a long sentence.
+Um, so any any tips or tricks to make it
+more One way is like if you really
+wanted if you really wanted like um uh
+if you really wanted that I would
+actually put your reasoning afterwards
+like assessment.
+So if you want to do an eval thing right
+over here description
+final assessment
+of the speaker
+uh given any clues prior uh clues in
+comments
+I just do this
+um and just like let the model spit it
+out. Now you can use assessment as a
+thing. But now you'll see that
+assessment is actually kind of big. So
+what I'll do is like use phrases
+uh not complete sentences. And then I
+would also add into here.
+So now I'll notice over here what it's
+doing and it will just spit something
+out. And I would probably have to tweak
+this model. So sometimes GT4 is not very
+good. So let me try anthropic.
+Is that the right model? We'll find out.
+Oh, that is not the right model. Uh
+dude, I think it's 1020.
+Uh 2024 1020.
+Custom Sonic. There you go.
+Oh, I don't have an API key. One second.
+Um I will not be sharing my API key this
+time around.
+Oh, that's why I come here every week.
+It's because you always you always leak
+at least one key. I also forget to
+deactivate it.
+Um
+okay,
+let me um
+yeah, and just uh answering while he's
+doing that, answering the question from
+the thread. Um
+uh why not use fuchsia prompting? Um, we
+talked about this a little bit, but um,
+it's basically uh, the content of the
+examples uh, tends to greatly steer the
+model's response.
+And
+so like you can get you can get the
+right structural results without
+actually putting content in your
+examples.
+Yes. Um, so there we go. Uh so now you
+can see over here when I switch this
+cloud I actually get really nice things
+where it's assessment comes with this
+and now you could plug this into your
+evals. We got a way less tokens out
+here. It's way it's way shorter
+u because we're not using complete
+sentences. So if you really care about
+evals and want to like you want to store
+the data anyway go do that. But honestly
+if it were up to me I wouldn't do any of
+this eval stuff online. I would have a
+separate process that pulls all my data
+down and runs a separate eval including
+the assessment for each of these
+segments off the raw data itself and
+just run a completely separate process.
+It's going to be way cheaper, way faster
+because don't add more latency to a
+pipeline that has this. Each of these
+things that you're generating here is
+latency. So a very latency sensitive
+pipeline generally for speech to text.
+Cool.
+Um cool. Let's talk about uh so at this
+point we've covered labels. Don't use
+UIDs. Don't use URLs. Use like indexes
+whenever possible and remap them
+programmatically to the right thing.
+We've talked about diorization. Don't
+emit the full transcript. Have the again
+have the index have the model represent
+something that is way better than the
+full transcript. In this case, an index
+of transcript. We've talked about using
+inline comments to guide reasoning of
+sorts. We've talked about read RTF.
+Reading the prompt. Read it always,
+especially when you get stuck. Instead
+of trying to keep prompting more, just
+keep reading it. We've talked about
+fuchsia prompting with structure, not
+with actual content, and how we can
+leverage that along the way. And I think
+the next thing I want to talk about is
+something that we've mentioned a few
+times. Um, but it's all about codegen.
+So, I'm going to go ahead and pull up a
+random uh
+file. Hey, Webhub Anup here. Before you
+move forward, I in my mind I'm still
+confused about using this technique
+where you somehow use ginger to get an
+index on that array.
+I
+go ahead versus using symbol tuning
+thing. So when to use
+[Music]
+Okay, so just for context, let me just
+pull up a symbol example. So then I we
+can just talk about it.
+Um
+uh I have symbol tuning right here. So
+the idea of symbol tuning is I want to
+do a classification example. I guess
+I'll do this
+symbol
+tuning.
+Uh, oops.
+Okay. Uh, I have a classification
+prompt. Instead of actually classifying
+the prompt, I want the model to spit out
+one of these categories. And I have a
+couple different ways I can go do this.
+Oh, that's interesting. Um, I have a
+couple different ways that I can go do
+this. But one of the ways is like
+instead of the model actually spitting
+out
+um all of my um classes I can and
+instead of actually writing like the
+word refund in the prompt I can write
+just the symbol K1 and when the model
+runs this it will spit out K4 which then
+gets remapped to account issue for me
+automatically. The benefit of this
+approach is the model again it's same
+it's the exact same thing as a YouTube
+URL thing where the model when it sees
+the word account issue it associates
+these tokens with something semantically
+meaningful and what I want to do is my
+meaning of an account issue is actually
+encoded in my description way better
+than natural you want to say zero
+attention on the label name because
+that's for the coders and the program
+that's consuming this all attention on
+the description so that I can control
+exactly what the LM is going to output.
+Exactly. Exactly. It's about reducing
+the number of variability in the
+problem. Dexter said it beautifully and
+symbol tuning is a technique lets me do
+this. The thing that we're talking about
+with diorization where we output
+um where we actually output like the
+actual index here that's basically the
+same thing. Instead of the model
+outputting the actual text of the line,
+it's outputting the index of the line in
+the conversation.
+And instead of letting the model infer
+the index, because I could do that. I
+don't actually have to write this. I
+could just let the model infer the index
+by writing something like this instead.
+Just like a break. Yeah, model could
+count. But why make the life harder for
+the model? Like this is Yeah. Now you're
+asking the model to count Are you
+kidding me? That's terrifying. It's like
+it's like uh you know when you do these
+coding agents and you have like no line
+numbers in the file versus every time
+you give it to the model give it line
+numbers and suddenly it can do these
+edits way better. Right. Exactly. And it
+this goes back to RTFP. If I if I read
+this prompt even as a human I know
+exactly what index this is without
+having to spend any time about it.
+But if I don't have these lines in there
+that becomes a lot harder for me to go
+do. And I think it's small things like
+this that actually dramatically change
+the quality uh of your outputs in a way
+that I think um can make a huge
+difference. So Anov, I hope I related uh
+the questions uh across across the board
+for the one of how simulting relates to
+diorization and the examples. And I we
+won't go into this today, I think, but
+like again, take all the advice from the
+evals chapter and like don't go just
+applying all this stuff willy-nilly.
+Like get a real set, understand what how
+your performance is today. Try changing
+these small things, you know, whether
+it's like, oh, I found a bug from
+production. Let me drop it in as a test
+case and just change the prompt until I
+fix this one without breaking all the
+other ones. or even having a bigger eval
+set which is like hey our accuracy is
+84% and if I make this change and run
+the exact same data through the pipeline
+now it's 88%.
+Exactly. Exactly.
+Um
+let's start with the last part code
+genen. Um this is something we showed a
+couple times and this is kind of
+related.
+Well yeah this directly leads from the
+other one because it's again it's like
+how do we get the model to create
+invalid JSON for good? like how how can
+by getting the model to create broken
+JSON you can actually get way better
+performance and we'll talk about like
+why that works by looking like under the
+hood at like samplers and stuff right
+yeah let's do that that's actually a
+good idea um so in this case I want some
+code and I'll say uh a binary search
+tree with actually no let's do this a
+sorting algorithm
+with merge sort All right, cool. That's
+redundant. Um, so let's do this firstly.
+And it's going to output this. And
+again, if I have a chat app, this is
+excellent.
+Um, this is really, really excellent. I
+could show this to the user. They'll be
+pretty happy. And we'll see the quality
+of the code right here. It looks pretty
+good. Uh, it has some comments and stuff
+in it. It looks generally useful.
+But the minute that this is the way
+models want to write code by the way.
+Like this is if you if you just want to
+get the very best code performance, let
+it write it between markdown back ticks
+because that is what is the majority
+present in the training set. Yeah. Now
+I'm going to change this to actually
+return a data model because hey, I want
+the code so I can go find it. I don't
+want to do some parsing. I want to
+render it just the code part without all
+those prefix or maybe I want to go run
+it and go do something, right? You don't
+want to have to write code to strip out
+that like Python back tick thing cuz
+you're just going to turn around and run
+it. Maybe. And now we got this. And I
+don't actually know the quality of this
+code, but we'll see. All I do know is it
+did output a lot of things. And I want
+everyone to note something very, very
+important here. This is actually what
+the model output. This is raw. I just
+copied directly the string the model
+came out with. If I go back to the
+tokenizer, I'll show you. I want to show
+everyone what this means.
+We can see what it did. Yo, slash and n
+are two different tokens.
+Yeah, exactly. So, it's actually
+N. It's outputting a bunch of space
+characters. It's It's not actually
+outputting code. It's outputting
+something slightly different. It's
+something that looks like code. Will you
+Sorry. Can I screenshot that and then
+can you drop the other output into the
+tokenizer as well? Sorry. Pop back and
+let me get a screenshot real quick.
+Yeah, I'll put it side by side. How
+about that? Okay. Yeah.
+Because I think this is really
+important.
+Okay.
+So, if you get rid of the back ticks and
+the actual like preamble and stuff, how
+do the tokens compare? I'll I'll leave
+that in there actually. Okay. Uh because
+I think it's important. And this one has
+like a Java example as well. So, why
+don't I get rid of the Java example?
+Yeah. uh just to like keep it in. Um
+there's something in here.
+And this seems to have a print example
+as well. So we leave that in there. What
+we'll notice here is not it's not really
+about the token counter in the O. What's
+really important here is like the
+quality of the code that's being
+generated. First thing that we notice up
+front is recursively sort both halves.
+So this comes out and then if we go look
+at this all these backslash ends are
+actually having to be forcefully
+generated by the model to be correctly
+syntactical JSON out of here because you
+can't have new lines in JSON. You have
+to have escaped new lines. Exactly.
+Instead of letting the model just do
+escape new lines. So what if we just
+told the model to go do that instead?
+What we'll find is code description use
+use triple use back tick use triple back
+ticks to format code
+Python.
+Now let's go read the prompt. Let's see
+what the prompt looks like. This is what
+the prompt looks like. Use triple back
+to read the prompt.
+Um,
+and now when I go run this, what I get
+is the model will output code exactly
+how it was outputting before,
+but in a way that still allows me to do
+structured prompting. So this is not
+valid JSON. And like the subtle thing
+here is like and this is kind of like I
+think we were having a conversation
+yesterday about like one of the cool
+things you can do with BAML and why
+having a parser that is separate from
+the that is outside of the model itself
+is really powerful is because you can
+let the model use regular new lines and
+it's output and then turn them back into
+J like regular like JSON that works.
+Yes. Um so now let's go do this. Now I
+want to make this as a lesson plan for
+the following input as a lesson with
+diffs.
+So now what I'm going to do is I'm going
+to output an array of code snippets,
+not one
+but multiple arrays. And then I'm going
+to say make a plan um to for to go do
+this example
+section one blah blah blah section two
+blah blah blah blah blah. Cool.
+And again, we're using Fuse Shop the
+example of using comments as guiding
+principles. We're going to do the same
+thing here. Uh, and then we'll add a
+little title here. String.
+Um, this is funny. This is what I
+actually did for a workshop a couple
+weeks ago was we had said, "Hey, here's
+the final product. Output it as sections
+in a lesson plan."
+So, now we're going to do the same
+thing.
+And now what the model is I'm fixing
+this bug. I mean this is cool but uh why
+why would you want to do it this way?
+Why would you want to do this? I guess
+I'll show you the output because I think
+the output will make it more clear. So
+the first thing is I wanted to build a
+lesson plan of so I did reasoning for
+like what lesson plan I wanted to go do.
+So it said we're going to go do this.
+Then it's going to actually output the
+code and create a merge function that
+combines two sorted arrays. Great.
+Create a basic merge sort function with
+recursion. So it's actually incrementing
+it. Now you can imagine that I walk
+someone through the code one by one,
+right? And now it's intending create a
+sort with array splitting recursive
+calls. So now it's incrementally going
+to do this. Now I can build a UI on top
+of this that literally has step one,
+step two, step three and teach someone
+merge sort with this benefit along the
+way,
+right? And along the whole time, if I
+get rid of this section, I will I will
+literally just comment this part out.
+I'll show you how much harder it becomes
+for the model to actually generate this.
+like this is now like uh becoming
+significantly harder for the model to
+actually keep track of its own code
+because even as a developer this would
+be very very hard for me to even unread
+and understand this and most of the
+training data in the model's codegen
+doesn't actually have backslash ends as
+this. It has it as the actual back
+slashn. So the code quality that you're
+getting is going to be way worse. So
+when we go to like a harder problem,
+let's go into a harder problem because
+merge sort is something that we all know
+like even the basic models can go do.
+Um create a what is it? What's a harder
+problem next? Uh Kubernetes operator to
+spin up RDS instances in Golang.
+To spin up RDS spin up Yeah. instances
+in Golang.
+I have no idea.
+I have no idea what half those words
+mean because sadly I work in algorithms
+land. Um, and we're seeing what the
+model did. So, I want you to Oh, it made
+a diff. Yeah, model made a diff. I also
+want us to notice a couple other things.
+The model actually intuitively just put
+out back tick new lines anyway. It
+actually was like, you know what? I am
+not going to put out backslash ends. I'm
+just going to spit out this. So, the
+model intuitively did this for us.
+without us even having to prompt it at
+that. And that just goes to show that
+the model's intuitive behavior
+is not to spit out
+uh escaped JSON. And the reason it
+probably did this is because Go is just
+a lot more technical than Python or
+TypeScript and other things. So the
+minute it got to like a hard mode
+problem, it did the most basic things
+for itself.
+Yeah. Um, you want to pop back to the
+whiteboard for really quick and just
+highlight I I I want to highlight the
+sampling part of this. Um, you have it
+too. Yeah. Yeah.
+Um,
+there you go. So, okay. So, you got that
+up. Scroll down a little bit. Um so
+basically like if if if you know how
+samplers work essentially you have um at
+any given point you have you know the
+model is writing code and it's writing
+like you know code import OS and then at
+any given point it's it's we're at let's
+say we're right here and we're
+generating like the we're asking what's
+the next token at this moment there is
+you know an a distribution of what the
+next token's going to be right and in
+this case It's almost always going to be
+like new line, kind of classic new line,
+and then there's going to be a long tail
+of other characters that might be next,
+right? You might have, you know,
+semicolon here.
+Um, because maybe some code has like
+import OS, semicolon, and then another
+import. Maybe if it's red code
+serialized in JSON, maybe there is a
+backslash here which is going to lead it
+to correctly type the slashn. And maybe
+there's some other characters here
+defined by your temperature, right, of
+like different probabilities of that
+that's the next token. Does this make
+sense? Yep. So when you put on strict
+mode or strict JSON mode, and even in
+some of the more like old school
+function calling modes, they're starting
+to enforce this. Basically,
+that is going to when the model gets to
+its like time to do the correct output,
+it's just going to X out anything that
+would break the JSON schema. Which means
+that a new line is not a valid character
+because a new line is not valid JSON.
+And this is why when people say like uh
+you know using strict mode reduces the
+accuracy of your outputs, it's because
+now you're removing the big one and you
+have a very very like tight distribution
+of the other things. Now these
+probabilities get balanced out and you
+have a bunch of things that are like
+probably next but like not clear. And so
+you're likely to get weird janky code
+with like semicolons in it instead of
+backslashes or even like invalid syntax
+because you're not letting the model
+write code in the way that it's been
+trained to write code. Yeah. And this
+applies not just for codegen, but it
+applies to any domain where anytime
+you're having the model not pick its
+best token. You're basically telling the
+model you know better than the model,
+which may be true in some scenarios. I
+want to articulate that. But most of the
+time in machine learning, what we've
+learned is let the model do what it does
+best. and just let it output the best
+token. Uh and in computer vision we had
+this problem all the time where we'd
+always let the model like we trying to
+be very clever about the model where we
+do oh let's do this pre-processing let's
+do this post-processing it turned out
+the best answer as all the VLM have
+showed is literally just give it all to
+the model let it decide and I think the
+same thing is true with token generation
+or everything else too like don't try
+and be clever with token generation just
+let the model pick the best token
+um I think that's all we have time for
+today in terms of actual topics and
+prompting techniques techniques. Um, I
+hope that this was incredibly useful for
+everyone else. Um, what we'll do for the
+next 15 20 minutes is I'll go to the
+Discord and I'll see what prompts that
+we have submitted, if we have any at
+all. And there's a couple in here. Oh,
+there are. Oh, that's actually more than
+I expected. All right. Uh, there's two.
+Exact. That's more than I expected. Um,
+what I will do here is I will go do
+this. Uh, let's just bring this one up.
+I use this prompt to evaluate LMS on
+their ability to make sense of LM
+generated uh events. But before we go
+into this, does anyone have questions
+while I go read this prompt that people
+want to go ask for? Feel free to come
+off mute and just ask if you after you
+raise your hand and um come on in.
+So I do have a question about that code
+gen
+because like when we're talk I do agree
+that like letting the code gen do its
+thing is much better uh and produces a
+lot better results. But on the other
+hand um like when you're working in an
+established codebase usually it has its
+own like style and things like that. Um,
+how do you resolve that problem?
+Yeah, my uh Dex might have his own
+opinions. My answer for all of that is
+always the same thing, which is just add
+more software on top of it. If you want
+stuff to be formatted in a good way,
+literally just run a llinter on the
+generated code. It will be formatted
+exactly how you want it to be formatted.
+If you don't have a llinter with an
+opinionated formatting, it's probably
+not mimicking that. If you if you feel
+like you don't have the llinter rules,
+go write a quick LM prompt to look at
+your existing code, generate lint rules
+off of that, and then go run the
+formatter. Um, but oh, because what I've
+seen in coding agents is a lot of like,
+okay, cool, read a couple like the like
+using cloud code or something, it reads
+a couple files and then what it's read
+in the codebase already kind of
+propagates down to the next code it
+generates. But it almost sounds like
+what would be much more efficient would
+be like take a couple of the files and
+have the model generate either like
+hardcore lint because not all style can
+be enforced by a llinter, right? The
+llinters are getting better but not
+everything. But like either create a
+biome rule set or an eslint rule set or
+whatever it is or even just create a
+prompt that is like here's a bunch of
+examples of how we write code that so
+the model doesn't have to read entire
+files but you capture it succinctly.
+Exactly. Yeah. And like do a little bit
+of extra leg work to find the models
+that represent it. And I think this is
+the same way if you think about like
+just hiring a new developer. There's
+ways to build your dev team where you're
+like ah people on my dev team will just
+figure out some coding format and
+alignment. But if you really care about
+code quality and want it to be
+consistent then you add a llinter. You
+add a formatter and then it becomes
+uniform automatically. So like and the
+most ultimate way to do this is to end
+up using some language like go which
+like forces like if you want to export
+things that has to be capital like
+developers don't even get a choice or
+use black which is like a very
+opinionated python formatter which says
+no configuration it's just the way it is
+and I think the same things apply for
+like stylistic guidelines.
+Um does that make sense?
+Uh yeah I think um there's also like in
+cursor for example there are also cursor
+rules. Um, yeah. Uh, which I think also
+help with this. Although I haven't
+really explored a lot of cursor rules.
+Yeah. Yeah. Cursor rules are a great way
+to go do that as well. But I think like
+if you're building an app that generates
+code, then you can't use cursor rules.
+So then you have to build your own
+equivalent of cursor rules.
+Um, that's really if you're using
+cursor, then cursor rules should
+hopefully just fix that for you. Why
+cursor does this since cursor has built
+a system like this. They basically added
+a lot of software on top of their
+codegen to make their codegen more in
+line with your codebase.
+Cool. That makes sense.
+All right. Thank you. All right. Thanks,
+Jonathan. Uh, one last question and then
+I'm going to go into this prompt now
+that I've actually read it.
+Cool. Going once, going twice. All
+right. Hack night at GitHub. Okay. So,
+this was a prompt where it seems to be
+like someone wants to look at an LM and
+come up with like some sort of like a
+plan for the most of this event. I mean,
+it looks like the the prompt is
+basically come up with a plan and the
+rest of it is just input context, right?
+Yeah, exactly. So, the first thing I'll
+notice is like let's just go back and
+write this prompt.
+Um, and actually, oh yeah, plan.baml
+family
+function make event. Well, actually, I'm
+not gonna actually do this. I don't want
+this,
+[Laughter]
+right?
+And this thing will uh make uh this a
+better function.
+Okay. So, the first thing I'll notice
+about this is Oh, what the heck? Did I
+not pay? Oh, that's so funny. We have a
+bug. We have a
+That's so funny. We have a bug where uh
+com is it come as like markdown front
+matter or something. It's like d-
+comments. I think we strip it out. Uh
+that's so funny.
+Um fascinating. So like the first thing
+when it comes to So let's let's catch
+everyone else on what this prompt is.
+This prompt is pretty simple. does come
+up with a plan to make the most of this
+event and then you dump the actual event
+from like Luma or something else out
+there. Now, the most intuitive way is to
+just send that to the prompt and like we
+send the chat GPT it will go do
+something. So, like if I have this, by
+the way, if whoever wrote that prompt is
+is here, feel free to come off mute and
+give a little more context around what
+this is and what you use it for. Yeah.
+Um, so I'm the one who posted it. This
+is how I, you know, Luma has like a
+hundred events a month in San Francisco
+and I don't read them all manually at
+first. So I use something like this to
+try to surface the ones I want to go to.
+And this is how I found out about BAML.
+So you know, a pretty crude version
+works for me and I just want to make it
+a little more comprehensive, systemic,
+and all that. And you know, I just don't
+have an actual process for it, but I
+know it kind of it works for me to make
+the sense of San Francisco tech scene.
+And I think I could do more with it.
+Yeah. So over here you can see what it
+come up with. And this is typically what
+you'd expect out of this sort of thing.
+That said, what I actually want is and
+this is step number one. Literally just
+stop asking the model to actually go do
+like spit out the plan as a string. Have
+the model actually spit out a
+preparation sub for you of like what to
+go do. And when you actually go do this,
+let's actually paste. I'll just copy and
+paste this in myself.
+I think I copied and pasted this example
+as well. So, I'll make this a test case.
+Uh, I like the Discord only let you copy
+one time. I know. That's so funny.
+Cool.
+Great. So, I have this test case now.
+And when I go run this, instead of the
+model actually spitting this stuff up
+here, it's actually giving me something
+a little bit better of like what I can
+go talk to. And in this case, I have a
+way better experience of like who I
+actually should go meet. I can make this
+more targeted by simply just changing my
+schema class networking
+uh
+uh class networking
+opportunity.
+Okay. name
+season
+value
+uh value high medium low description how
+valuable
+how yeah we we'll push all this code
+John the person
+is to myself
+and my career
+goals yeah the other thing I think would
+benefit a lot here is like a lot more
+context about me and who I am although I
+guess if you're probably pasting this
+into chat GPT, then you have your memory
+and stuff at play to kind of like give
+that grounding. So the main thing that
+you'll notice here is I I'm actually
+going to change this. I'm going to make
+this a lot better. I'm going to say that
+this is I want to meet these people
+value and then it's going to dump out
+the reason for why. And you notice that
+actually changed out a lot of the more
+general generally specific ones. Like
+this was very
+like random, but this is a lot more
+pointed oriented. I can go act on this.
+What else I can do here is I can say
+like I can actually change this and like
+entity
+class
+company type
+company
+name
+class person
+type
+empty
+equals this. And now when I go run this,
+it should actually spit out what I
+actually want. So now I can actually go
+like specifically look these up and I
+can build a small little UI around this,
+like a React component that actually
+renders these in with like LinkedIn
+searches and follow-up sequences on top
+of that. So then I can just go ahead and
+say, "Oh, here's a link to the company's
+URL. Here's who they are, and here's how
+they are." And this is just like a IML
+speakers. Cool. No one specific was
+highlighted on there. So I don't
+actually have like anyone ambiguous.
+People are ambiguous there. But if you
+put first name, last name, you could
+also probably force it to like it. It
+wouldn't even output that, right? Like
+if you want to if you want to drive the
+output to the point where it's like,
+okay, I only want things that are
+actually useful. I don't want this kind
+of like hallucinating sloppy like talk
+to a IML speakers. Like, okay, that's
+Like I I only want like you to
+pull out people with actual names. So I
+was like, if there was a speaker name in
+the description of like this person will
+be speaking, then it could go tell you
+some things about them.
+And we can guarantee that at least the
+first name or the last name exist and
+then all other entities will just get
+dropped.
+So we still get these but then we they
+actually just get dropped from our final
+parsing because like it doesn't meet the
+constraint that we need which is first
+and last name need to actually exist. So
+all even if that all generates it you
+can drop it. But the whole point of this
+is instead of actually having the model
+spit out a string, what I really did is
+I focused on what I care about, what I
+want to see, and what I want to
+personally derive out of this prompt,
+which is I think what John, you're
+trying to do is like see if things are
+going to help you like grow out of these
+events. So then I would just focus the
+specific stuff on here to say like focus
+on how it helps me and myself it is to
+myself and my career goals. Yeah. Guide
+the reasoning with as much context as
+possible. And I bet if you took this
+JSON object and dropped it into V 0, you
+could make a nice UI for this in, you
+know, 60 seconds. Oh yeah, I bet. Uh,
+this is
+same in line with this. make a UI for
+I'll probably go do something
+um and I'll go build some out some UI
+for me and now we have a full app that
+we can just go use directly without
+thinking about it
+with small little rendering stuff as
+well. Come on, this takes a while. And
+then you can do one more.
+Uh, we got time for one more prompt.
+I saw someone else typing in
+or sorry, go ahead. Can I just drop the
+prompt in the chat or should I? Uh,
+it'll probably be too long, but you will
+have to do it in the Discord sadly. Oh,
+yeah. Yeah. Yeah. Okay, cool. Brashant
+had another one as well that was uh
+answering questions with like verbosity
+and things like that. Yeah. So, so
+actually you kind of answered many of
+these in the previous example.
+Yeah. Okay.
+Um, and then we'll do the last one
+really fast. Um, while we're out here
+and let's while while Vzero is loading,
+I hate this. I This is the part I hate
+the most about Vzero. It takes so long.
+Okay. While a lot of uh deterministic
+code,
+you are tasked with a video editing
+plan. Okay.
+I'm gonna This is sick. Okay, I'm just
+gonna
+do this. All right, so right over here,
+by the way, we can see this.
+So now it has a fun little UI for me to
+go do build this in. Uh not to not to
+edit, just to view the final outcome.
+Oh, do you find the frowny face makes
+Verscell make better content? No, I was
+just annoyed that it did the wrong
+thing.
+Video. Uh, well, maybe if you went and
+read your prompt.
+That's Well, I can't read the visor
+prompt. Um, so it's a little bit harder.
+Um, insert script expert here. What is
+this trying to do? Do you have your Do
+you have your data models and everything
+else on here?
+If you don't, then I I can try, but it's
+harder to do without like actual
+function types because this prompt is a
+little bit more complex. But let me just
+give you some general guidelines that I
+see right off this right off my right
+off the top of my head when I read this
+prompt. The first thing that I see is
+I don't actually think you need all this
+data. Like this is a lot more redundant.
+you're uh I'm not sure if this is all a
+system prompt or a user prompt, but when
+I go look at this, the first thing that
+I see is that this is not uh it's like
+mixing and matching both the content and
+the instructions all over the place
+because like you're listing out your you
+have instructions, content,
+instructions, content, instructions,
+instructions. It looks like more
+content. Oh, that's uh this is the
+output schema. Oh, this is the output
+format. Yeah. So, it looks like you're
+But then there's more instructions.
+Yeah. It just feels like you're we're
+mixing a lot of instructions and it
+doesn't read um in the way that I would
+write this if I were a human. And we're
+also writing a lot of things. It's like
+you are a blah blah blah blah blah. Like
+the model doesn't care who it is. It
+just has to know the job it wants to do.
+You don't need to tell it this is my
+role. If you notice in any of the
+prompts, I didn't I didn't like I wasn't
+like you're a senior engineer that does
+blah blah blah blah blah. I just like
+write the code um from this prompt.
+That's like the first thing I would do.
+So, let's just like there we go. And by
+the way, for people generating this now,
+you can generate this kind of UI
+automatically from here. And this would
+be super super easy for me to go code
+gen. And then I could put buttons on
+here that I'll call like enrich which
+calls another LM function that finds all
+the data about that company using like a
+research thing that I go built. Sorry, I
+context switch really fast.
+Um, but let me go back really fast and
+start a new chat thing.
+Uh, make this prompt better and no XML.
+Um, and the error markdown is the thing
+that hopefully we'll fix in. Yeah,
+Pashant the the you are we were just
+talking about this before the episode
+that like asking models to adopt a role
+is uh I think I think the best prompt
+engineers out there have been talking
+for months about if not longer about how
+that doesn't really work very well or
+like it doesn't have that much effect on
+the output. The funny thing is that um
+uh this comes right out of uh clawed ROM
+generation as well. Yeah,
+I bet this just because there's a lot of
+data in the training set doesn't mean
+it's correct or good data. Yeah, just
+like the most code out there is kind of
+You probably shouldn't follow most
+code. Uh but um a lot of code is still
+very good and you should follow that,
+but it's all about finding the right
+segments. So in this case, the first
+thing I do is like get rid of this.
+Create a segmentation plan for the
+following script. Break in logical for
+each segment. Ensure it contains
+complete thought or idea. Estimate a
+reasonable time. Consider the pacing.
+Um, and it's important to kind of like
+describe what these mean because it
+probably doesn't actually know and I I
+have no idea what it actually means for
+fast, slow, or medium. Like I'm just it
+just made stuff up. You need to go and
+actually understand your own uh thing
+for that. Uh, and like if you you could
+even force it in the schema, right? You
+could be like, "Okay, cool. I know how
+long this is and I can say I know I want
+exactly, you know, do it in code and say
+I want exactly 40 cuts because I want 30
+to 40 cuts versus something else. I want
+a
+because then we're not making the model
+count.
+There you go. And instead of actually
+outputting all the stuff,
+I will actually just literally tell the
+model to go do this. I will literally
+tell it exactly what I want the pacing
+to be. Instead of describing all the
+pacings, I will specifically only emit
+the pacing that's actually relevant to
+the model. And that's the same thing.
+The user and the program see a single
+word fast, but then you translate that
+into more verbose instructions, but only
+the LM sees that part. And the LM is not
+seeing everything else. So if I change
+this from slow to fast, it sees this
+one. Whereas in this one, it sees slow,
+right? So now it's able to actually go
+do this along the way. Um, and now when
+I go, you can run it. Why not? Yeah, why
+not?
+And I don't even know what transition
+is. Like if transitions have a separate
+cut, like sure, let's do this.
+Let's let's just run it this way.
+and it's able to go do this. Now,
+duration is kind of uh is kind of
+misleading and the description is kind
+of uh uh seconds. I'm going to change
+this
+uh
+I don't think we need duration because
+the duration is essentially the content.
+So, we can skip it. Yes. But um you
+might benefit from actually having uh
+duration in there just so that a model
+can like plan for each segment. It's the
+same thing expected duration kind of
+right cuz you have you have a thing in
+there where you're thinking about uh
+prompting but you want the model to also
+be thinking about duration like the
+amount of inference it has it's about
+the amount caches why do we have a
+reddis cache not because we can't go to
+the database because we don't want to go
+to the database all the time why are we
+putting duration here so the model can
+just like kind of think about this now
+we see that this content is like pretty
+uh short form which is totally fine but
+if we want this be full content. Then we
+can just do this. We can we can guide
+the model to generating more text. Use
+Well, I think your input test case is
+really is really um small. I think this
+is actually the right the right text
+straight from the input thing. So like
+we need like a way longer script to
+really test this. Anyways, so drop in a
+can I drop in a script? I have one.
+Yeah, drop in a script. Yes, send a
+script. Yeah.
+yeah.
+On the AI that works. There you
+go. This proof of computing.
+I like this. We should do this more. We
+should uh we should take people's real
+problems and solve them. Let's run it.
+Right.
+So, you can actually see what it did. It
+actually spit out all the content as a
+line,
+but the duration seconds is 60 for
+everything. No. Do you still want it to
+be a list by Bob or do you want it just
+be a single string? Uh, we can Oh,
+sorry. Yes.
+Estimated
+seconds. Um, let's give it some
+description like what how how do you
+estimate duration?
+Uh, let's say every 1,00 characters is
+um a minute or 60 seconds or
+something like that. Oh, are we going to
+make the model count characters
+every like let's try this a 1,00 every
+uh so typically every 120 words per
+minute so uh you can count words or
+characters I don't know words per minute
+uh what is average
+right and we might actually find that
+like hey if we do this it's actually
+when we do slower pacing it's going to
+be a little bit it's about 100 words per
+minute.
+If we do this, it's going to be like 120
+and we do fast, it's going to be like
+150. So, you might actually like find
+that it's useful to actually guide the
+model appropriately for the different
+use cases because that's what I would
+do. I would I would have a slightly talk
+faster voice in general, not just like
+the pacing.
+It would be interesting to also have
+this like start suggesting like, hey,
+what do you want to show on the screen
+during this cut? Right. Exactly. And
+then you do like a image search and pull
+that in um background image. So let's do
+that.
+This would be a fun building like an
+example of this end to end of like how
+to just like generate automated video
+content from little scripts an end toend
+content pipeline
+to make you can come help me build my my
+company. I was going to say yeah we have
+to be careful not to build a open source
+competitor to Sahill.
+I would love for that.
+Um uh a description
+description
+that is that is so I have a I have a
+couple of questions over here. So
+earlier in the example you were you were
+showing how we can create indexes and to
+to make sure that we are not spitting
+out so much uh text and saving tokens. I
+know like obviously this is a slightly
+different case where we have to spit out
+the text. Are there any tips or tricks
+we could use to
+do that index thing in here in any way,
+shape or form? Well, I don't actually
+know if you have to spit out the text in
+form. Like honestly, you could just make
+this a lookup table based on strings.
+Like you just spit out every line, every
+sentence into itself
+as like a thing. And then you could have
+the model spit out like a span
+of like from dialog one to dialog 7 do
+this dialog one to three and it'll
+naturally find break points in the
+dialogue and now you can go do that. You
+can ask you can build a separate
+pipeline that says if you really care
+about like cost and latency I would
+build a separate pipeline that says
+given all these dialogues what is the
+most intuitive break points to inject
+into here and then you go generate the
+background image and everything off of
+that.
+So you can solve this problem in many
+different ways but it's more about
+identifying the indexes of where the
+break point should be for where
+transition should happen.
+Oh, so becomes similar to kind of almost
+the diorization where maybe you just
+wanted to output like the first like the
+the biggest like the smallest unique
+chunk that like offsets the text there.
+Exactly. Exactly. Where would you go in
+that?
+Cool. Uh we're 90 minutes. We should
+probably wrap it up. Uh this was super
+fun y'all. Thank you so much Vib for
+sharing your prompting wisdom. For those
+of you who made it to the very end,
+congrats. We'll uh there's no prize
+except that you got to learn more. And
+uh we will push all the code and the
+video and we'll send out a blast and uh
+come catch us next week and um we should
+figure out what we're going to do next
+week. We have a we have a we have a long
+backlog of things, but we're going to
+figure it out and we'll we'll we'll
+update y'all with uh what's coming next.
+So, thanks everybody.
+Thanks. Awesome. Thanks y'all. See you.

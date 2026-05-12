@@ -1,0 +1,633 @@
+the developer experience around
+benchmarks is let's just say rough to
+terrible they're always cherry-picked
+and often leave out the true competition
+and it's hard to understand how a model
+truly performs when you take into
+account speed price and performance
+bundled together with the release of
+claud's 3.5 H coup and open AI predicted
+outputs we need a benchmark that we can
+really feel to understand and digest the
+cost Speed and Performance of these
+Technologies compared to existing llms
+so I wanted to take another crack at
+this and I built a simple tool that can
+be used to get a decent understanding of
+model performance speed and cost by
+looking at the simple use case of single
+word autocompletes across large language
+models as you know Claude 3.5 haou is
+interestingly priced let's see of the
+performance cost and speed of the new
+claw 3.5 model and the new predicted
+outputs feature from open AI is really
+worth your time and
+[Music]
+money if we type in analyze into our
+input field after 2 seconds it's going
+to fire off a debounced autocompletion
+call to every single llm we have listed
+in this table so we have this completion
+for every single model fired off thanks
+to our prompt which we'll get to in a
+second and you can see a bunch of useful
+metrics alongside this let's go ahead
+and break these down execution time if
+we go ahead and just sort this you can
+see which models were actually the
+fastest for this response the total time
+is going to keep track of the sum of all
+of our execution times we have the
+execution cost and this of course is
+going to keep track of our cost for
+every run of this prompt our total costs
+is going to be the sum of our costs and
+then we have this really interesting
+column relative cost is super
+interesting and it's been helpful
+already for me just to set the stage to
+how aggressively some of these llms are
+priced you can see our cheapest model
+Gemini 1.5 flash 8B is our cheapest
+version so we're going to say that this
+costs you know 100% from there
+everything scales up Gemini 1.5 flash is
+going to be two times more expensive
+right 2.1 times more expensive to be
+precise and then things go kind of you
+know Bonkers from there with the most
+expensive model that we're comparing
+today claw 3.5 Sonet latest is going to
+be 100 times more expensive than Gemini
+1.5 flash 8B that's pretty wild and as
+we look through this you know one of the
+big takeaways from this video is going
+to be wow there are some really
+incredible lowcost highpe Speed high
+performing models that are really worth
+spending more time looking at and
+utilizing so anyway relative cost is
+going to be really important we have
+that and then we have actions so actions
+is simple if one of our completions
+makes an error we can simply downvote it
+so that we can mark them incorrect so by
+down voting a model for one of its
+completions we can quickly just analyze
+the performance that's all of our
+columns let's go ahead and run a few
+more examples and then let's look at how
+this simple autocomplete prompt actually
+works I'm going to save the results as
+we go along here this is just saving
+into local storage and let's run another
+Auto completion so let's go ahead and
+type calc and let's see our models fire
+off you can see after a 2C debounce
+we're getting a bunch of responses and
+now we have some bad completions uh
+flash 8B made a mistake we're going to
+go ahead and dock a point we can see
+mini and mini predictive this is using
+the new predictive outputs also made a
+mistake so we're going to go ahead dock
+from those two and everything else
+nailed it let's run update and we should
+get this new update so you can see
+everything getting streamed in there and
+update inventory that's perfect so this
+is the you know completion we're looking
+for go ahead and dock 8B this should be
+update inventory and doc from Gemini Pro
+some key differences in model
+performance already let's go and run one
+more here if we run send we should get
+an auto completion here send
+notification okay not bad Hau Hau taking
+quite a bit of time there right 3
+seconds almost 4 seconds let's going in
+Doc gbg4 and four predictive um although
+we can see some interesting data here
+GPT 40 is running really quickly let's
+go and sort execution time for that run
+we can see you know some pretty
+interesting results actually across the
+board our slower models in general at
+the bottom here you can see you know
+Sonet and the latest IU uh they're
+taking quite a bit of time you know our
+total time is quite High here but you
+can see that they're correct over our
+you know very small very minuscule
+sample size of four you can already see
+some deviation in correctness but we can
+see here 40 and 40 mini are running
+incredibly fast in the not T here I have
+some details about the application the
+models were running uh some of the
+features but most importantly some
+limitations right this is not a perfect
+Benchmark there is no such thing as a
+perfect Benchmark you know there's
+Network latency I could be closer to
+open AI models geographically resulting
+in you know higher performance speed
+wise I'm not taking into account
+Gemini's price increases after 128k I'm
+not including any token caching cost
+saving so there are ways to improve this
+Benchmark this is just a general purpose
+quick ad hoc way to understand models so
+we're getting some interesting results
+already we can see our slowest model in
+total time is surprisingly our ha cou
+latest 3.5 ha cou is the slowest model
+which is not right uh to be fair again I
+have a really small sample size here
+let's go ahead and look at the prompt
+and then let's run some more autoc
+completions so that we can get our
+numbers up a little bit and you know
+make these make these numbers make a
+little more sense hopefully switch over
+to the prompt Tab and one of the
+important use cases I needed solved for
+in a benchmark like this is I needed it
+to be dynamic so we can come in here and
+adjust this and then rerun our Benchmark
+our prompt will include the updated
+information here that we change how does
+this work how does this prompt actually
+work and we can go ahead and pull this
+out into a code editor this is a simple
+single word autocomplete prompt the idea
+here is we pass in some instructions our
+completion content and then our input
+text right so this is the user input our
+completion content is what we're going
+to autocomplete against and then of
+course our instructions breaking down
+exactly how to do this the most
+important thing here is that we are
+replacing the last word in the input
+text and then we have an example of what
+that actually looks like so this is the
+prompt it's quite simple the key idea
+for this Benchmark is to create a
+concise prompt that has a yes no
+validatable response just by looking at
+our single words and by seeing the
+responses of every model in our
+Benchmark we can just say you know
+thumbs up thumbs down this is correct
+this is not correct and this gives us a
+simple way to compare models against
+each other and basically extract the
+information like runtime cost relative
+costs and a light performance Benchmark
+so let's go ahead and make a tweak to
+this we can add a couple more items here
+since this is fully reactive I can come
+in here and just say something like this
+I can say user list set that to an empty
+array um it's also important to know
+that this can be anything I just happen
+to be completing on um code you know
+this is like simple python code so we're
+mocking like a autocomplete application
+for a coding assistant but this could
+really be anything you can autocomplete
+phrases sentences help documentation API
+documentation really anything you want
+to again the goal is to create a simple
+prompt that you can quickly validate and
+compare your llms and new llm techniques
+like predicted outputs against so let's
+go ahead and finish up here we'll say
+tax rate and we'll just set that to 0.10
+and we'll create a new function right so
+confirm user sale pass and user and
+we'll just do the same as we have below
+here right we'll just say pass we don't
+really care um about the implementation
+detail because we're just running the
+simple autoc completion so this prompt
+is complete it's reactive it's
+automatically updating here and if we
+hit save if we type something like tax
+we should see our Auto completion come
+through some of these cases so very
+interesting apparently this was a hard
+one to complete only Sonet got this one
+right so let's go ahead and dock a bunch
+of points here so down down doc doc doc
+doc doc doc when our llm responds with
+none this is one of our uh instructions
+the input does not make sense it will
+try to autocomplete uh with none so
+maybe I'm being a little unfair there
+let me go ahead and try to give it a
+little bit more help and I'll type
+underscore here and let's see how we do
+now so after 2 second debounce there we
+go so we got got a lot more improved
+answers there I'll dock from flash 40
+and 40 predictive and we'll just keep
+rolling so use your list so I'll just
+type USC and let's see if we get a nice
+auto complete here after the 2C debounce
+okay nice right so you can see some
+results coming in dock these so just
+removing some points there go ahead and
+push this a little further let's try
+with an R let's see if we can get the
+user list
+here okay so a little bit better Haiku
+making a mistake there we have
+AB mini predictive mini predictive
+making a mistake you can see quite
+clearly who the the winner is if we sort
+by you know success it is good to see
+that you know for everything you're
+paying with Sonet Sonet is still the
+best model overall of course I'm
+excluding reasoning models reasoning
+models are frankly in their own entire
+category we need to think about how to
+Benchmark those in a you know different
+class of their own gen let see what our
+results look like here
+nice so everyone nailed that generate
+invoice let's go ahead and run update so
+we have this update here maybe I ran
+that one not sure we'll dock a point
+from AP flash here 40 40 predictive and
+what else do we have we also have our
+noncase so if there's no logical
+completion that can be made based on the
+last word we return none so let's go and
+just type in some nonsense abc123 and
+now we should get none responses from
+from all of our models there we go
+perfect perfect and we can just you know
+continue typing in complete nonsense and
+great so love to see that how many runs
+do we have here so we have 12 runs total
+let's try to trick up Sonic just a
+little bit so I'm going to type Cal and
+either one of these responses will be
+acceptable let's just go ahead and type
+Cal and see what we get here there we go
+okay yeah so great responses overall all
+Doc The Flash and mini predictive here
+and we have calculate discount that's
+fine the rest are calculate total so
+this all looks great so far and you can
+kind of see where this is going right we
+have a quick ad hoc way to look at the
+performance of multiple models against
+each other running in parallel we're
+tracking the results the costs comment
+down below what you'd like to see in a
+live Benchmark like this it can be
+anything from stats to individual
+features I think the next most obvious
+feature to add here is a list of dynamic
+models right basically a multi- select
+list where we can you know choose all
+these I have all these hardcoded in the
+codee base because these were the only
+models I wanted to look at and compare
+so let me know what you want to see in a
+benchmark like this and I'll plan it for
+a future video with the new Macbook
+releases I think we're going to have to
+be paying a lot more attention to local
+models like And subscribe so that you
+don't miss that Benchmark we will be
+getting a new Fresh high-end MacBook Pro
+with the M4 chip I'm really really
+excited for that to show up when that
+does we're going to run a bunch bunch of
+benchmarks using tools like this to
+really compare and see how are local
+models doing in comparison to the you
+know high class cloud provider models so
+stay tuned for that like And subscribe
+so you don't miss those videos decent
+number of results here let's go ahead
+and look at some interesting insights
+[Music]
+right let's look at total time to
+execute I would expect ha coup to be one
+of the fastest models here and what
+we're seeing is it's the slowest model
+something is going wrong there to give
+hku some Grace uh we do have it
+performing really really well so you can
+see here out of our 13 requests uh Sonet
+of course in first place making zero
+mistakes across this Auto completion we
+have 1.5 Pro performing next best and
+it's tied with Haiku so that is good to
+see right it is good to see that hku is
+a high performing model but you know
+previously I think part of a lot of the
+drama around the CL 3.5 H coup release
+is that the price is just significantly
+higher than what we were expecting for a
+model like this right we were really
+expecting CL 3.5 hu to be a model on the
+level and on the speed well beyond the
+level but at the speed of models like 40
+mini and 1.5 flash right in the kind of
+fast series I like to put these models
+in their own kind of category it's the
+fast cheap intelligence what what we're
+actually seeing here in the data in The
+Benchmark is claw 3.5 haou is actually a
+a high tier High performing model this
+is really really interesting to see
+right when we look at the relative costs
+when you compare a claw 3.5 ha coup to
+even Gemini 1.5 flash it is something
+like 15 times more expensive and it's 30
+times more expensive than Flash B this
+is definitely something to take into
+account when you're selecting these
+models right you know when we look at
+this data here when we look at even a
+small Benchmark like this and I
+definitely implore you and you know I
+definitely suggest you run your own
+every single Benchmark is flawed in some
+sense in some way I think there are
+interesting ways we can make this better
+we can do you know we can run each one
+of these models three times and take the
+best two out of three we can run
+multiple instances of each model you
+know there are many ways to improve uh
+the truth and to reduce the randomness
+of these models but nevertheless my
+notes on clot 3 5 I cou it's really like
+sonnet's little brother not that much
+smaller right we're talking like 2 years
+in age difference right like not little
+little brother just little brother we
+can see of course if we flip our
+relative costs we can also see something
+really interesting our 40 and 40
+predictive are quite pricey there are
+ways to improve this by the way I'm very
+sloppily passing in the entire prompt
+the code for this tool is in the
+description by the way I don't don't
+always have time to complete and ship
+code bases to share with you for two
+reasons time or it's proprietary pieces
+in the code bases so if you ever don't
+see a code base after a video that's why
+anytime I can and when there's no IP in
+the code bases I'm working on I always
+like to share with you on the channel so
+just a note there um I know I've been
+getting some comments about where's the
+code base the codebase will be there 80%
+of the time 80% of videos 20% of the
+time it just cannot be there anyway so
+if you end up taking a look at the code
+you'll see that for the predictive GPT
+40 and the predictive 40 mini I actually
+just pass in this entire prompt
+including the input text into the
+predictive variable and if we take a
+quick look at open ai's predicted
+documentation you can see here you pass
+in your prompt as you normally would but
+then you also pass in your prediction so
+I'm blowing up the context a little bit
+more than it needs to be I think
+autocompletes is an okay use of
+predicted outputs but I think really all
+I should be doing is passing in our um
+completion content and not the you know
+instructions or the rest of the prompt
+basically so just a quick note there it
+is interesting to see though if we look
+at our price we do see a price increase
+between GPT 40 and 40 uh predictive
+right and same thing with mini right
+from mini it's about you know 100% more
+expensive and that's a very small amount
+to be uh completely Frank because the
+100% is our base price which is our you
+know Gemini 1.5 flash 8B so there's a
+lot of interesting stuff here in the
+data let's look at the total time again
+I really just want to digest this on the
+fast end here we can see that 40 mini
+predictive and 40 predictive are the
+fastest across all of our runs right
+even though they made some mistakes here
+you know we're looking at 60% accuracy
+here it is great to see predictive
+running very quickly it looks like this
+is a real advantage that that you can
+gain from using predicted outputs so
+that's really good to see in a quick
+benchmark I am super curious why uh TP
+40 is the fastest maybe it's um usage
+maybe people aren't relying on 40 uh as
+the kind of go-to model for most cases
+I'm not really sure I could just be
+closer to a open AI server but with
+multiple runs we're going to see the
+times really start to average out
+interestingly we do see flash a bit
+slower than 40 so you know just an
+interesting note there a mini is coming
+in way slower than I'd like to see it on
+average uh 2 seconds slower than every
+40 model so that's odd to see we do have
+to call up though 40 mini is very very
+cheap very very cheap you can see our
+three cheapest models right in the
+center here flash 8B Flash and 40 mini I
+think most of us were really hoping to
+see claw 3.55 coup in that cheap price
+bracket but it's just not that's just
+not the model they put out so when we
+look at the percentage correct there's a
+pretty clear pattern here for the most
+part you know I would expect flash 8B to
+perform the worse here so it is you know
+good to see that the cheapest and one of
+the fastest models should be performing
+the worst right that's just the
+trade-off that we're making right now in
+the llm Eos system if you have a fast
+cheap model it's likely going to perform
+worse and this is why local models
+haven't really taken off in a major way
+yet unless you have a massive rig they
+just cannot perform at the more
+difficult tasks and any meaningful way
+when we move up the ladder here we can
+see a big kind of 60% range all of the
+kind of fast predictive techniques and
+models are kind of all in this 60% range
+I would expect gbg 40 to be in the
+higher tier of performance but we don't
+really see that it feels silly to
+continuously caveat but this is a very
+small sample size 10 13 runs is not
+significant definitely be something we
+improve on in future videos running
+probably 20 30 to 100 of these is going
+to get us better sample sizes but it's
+still interesting to look at and you
+know just kind of think about how we can
+dissect performance versus cost versus
+speed and then we have our kind of top
+three high- hitting models here claw 3.5
+ha coup pro version two and then of
+course Sonet I do love seeing Sonet just
+remain at the top of every chart this is
+the improved version also it may have
+been helpful to add the previous onet
+although honestly I think they both
+would get 100% with this relative cost
+pricing like if we just sort relative
+cost here Sonet better
+be it better be the best you know just
+because within this price range um Sonet
+is quite expensive when you compare it
+to any you know cheaper model it just is
+very expensive so if we sort total costs
+here you know pretty obviously about 1
+cent here predictive also hitting about
+a Cent and then we get down to 40 just
+under a scent and then it you know
+pretty rapidly falls off from there
+again it is a a bummer to see how at
+this price I think the important thing
+to note here with Haiku is it's not in
+that class of cheap fast models anymore
+it just isn't it's also not fast right
+if we sort by runtime for whatever
+reason Haiku is the slowest model here
+so um anyway that's enough time to ramp
+I'm I'm starting to go in circles
+looking at this small sample size of
+data you know couple things to note here
+having a reactive benchmarking tool like
+this where you can quickly test out new
+capabilities for with Dynamic prompts
+against existing llms is super valuable
+for understanding not just model
+performance but cost and speed as well
+right those are the three kind of top
+level benchmarks that really matter with
+models and model techniques like
+predicted outputs it's performance cost
+and speed you know this Benchmark as I
+mentioned several times it's not perfect
+we can go ahead and run another one
+right you know sometimes the models will
+get things right sometimes they'll get
+them wrong that happens and you know
+it's not a massive deal all of our
+models got this one right on average you
+know as we scale this up I think we'll
+see for this prompt the numbers I was
+seeing you know you get past 20 30
+sample size everything pushes up above
+70 80% correct so all the models in this
+list at least are quite capable the one
+exception maybe is 8B just because it's
+so small it's packing a lot of
+intelligence at a fantastic price um so
+it's bound to make some mistakes right
+from this Benchmark we can see Haiku is
+good but you have to make sure it's
+worth the costs especially when you
+compare it to other models right if we
+resort our costs here you can see the
+relative pricing in a really blunt
+forward way right starting at flash 8B
+that's our base price of you know just
+fractions of a fraction of a fraction of
+a scent which is just beautiful to see
+flash bumps it up quite a bit mini
+triple the price uh mini predictive four
+times the price and then all of the
+sudden Hau is charging it's a dollar per
+million tokens right yeah dollar per
+million tokens and as you can see that
+really kicks up the price right it it
+just really explodes these cheap fast
+models contain incredible intelligence
+fast intelligence at a really really
+cheap price so definitely a clear
+takeaway from running experiments like
+this is that we should probably be
+leaning on these fast models a little
+bit more another takeaway it's pretty
+clear that CL 3.5 Haku is not a cheap
+fast model it is a high- performing
+slower model model um much like claw 3.5
+Sonet but just a tier below claw 3.5
+Sonet uh we can see 1.5 Pro performing
+quite well it is interesting to see you
+can think of claw 3.5 H coup and 1.5 pro
+at about the same level right they
+scored the same and they have nearly the
+same price so again small experiment you
+want to add more data to this and most
+importantly you want to test against
+your use cases to make it all really
+make sense you know when we sort by just
+pure performance if all you care about
+is getting the job done right no matter
+the costs the answer is still very
+clearly Claude 3.5 Sonet followed by Pro
+and followed by Hau a note on predictive
+outputs it does seem to be if we sort
+let's go ah and sort by model here if we
+look at the um 40 mini predictive we do
+see a small pretty much non-existent um
+performance hit again we need more data
+to really show that that's meaningful
+and we see a slight price increase but
+what we'll notice here generally is that
+the predictive models are quite a bit
+faster especially for mini we may have
+had some data flukes here with the 40
+model 40 is fast foro predictive is fast
+and many predictive seems to be
+extraordinarily fast so these are all
+preliminary notes you know like all
+benchmarks take this with a grain of
+salt and be sure to test as many times
+as you can against your specific use
+case that's the only Benchmark that
+matters in the end I recommend Gathering
+hundreds of prompts and expectations for
+each prompt and then you can really see
+how the models perform drop a comment
+let me know what you want to see in
+benchmarks like this moving forward if
+there are any models or features that
+you want to see I'll make a plan for a
+future video where we dig into more
+benchmarks like this if you want to dive
+into this this code is going to be
+linked in the description for you to
+check out and test subscribe if you want
+to stay up todate on useful ways to
+digest new llms and new features so that
+you can better understand what you can
+do in the age of generative AI stay
+focused and keep building

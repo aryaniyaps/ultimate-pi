@@ -1,0 +1,26 @@
+[1.9s] Hey Moritz, I'm happy to report that the
+[4.0s] baml parsing issue you reported uh has
+[6.4s] now been fixed. Um it turned out what
+[8.8s] was happening is that Opus 4.6 was
+[11.2s] returning [music] a German opening
+[13.2s] closing quote opening quote uh but a
+[15.8s] normal ASCII double quote to close it.
+[18.8s] Um which was in turn causing a bunch of
+[21.8s] havoc [music] with the baml parser
+[23.4s] because it saw all of the rest of this
+[26.8s] and was like, "Oh, well, the string
+[29.1s] stops here because here is a double
+[31.5s] [music] quote, here's a comma, the rest
+[33.4s] of this just looks like noise garbage,
+[35.7s] and I'm just going to throw it all
+[37.0s] away." which was causing your parse to
+[38.4s] fail
+[39.4s] um which was the actual parsing issue
+[40.6s] you were running into. So, I've gone
+[42.6s] ahead and fixed that. Um this PR should
+[45.1s] go out in the next release which will go
+[47.5s] out sometime in the next week or two. Um
+[50.0s] at which point uh your issue should be
+[51.8s] fixed.
+[53.0s] Thanks for letting us know. Thanks for
+[54.8s] helping us make baml better.

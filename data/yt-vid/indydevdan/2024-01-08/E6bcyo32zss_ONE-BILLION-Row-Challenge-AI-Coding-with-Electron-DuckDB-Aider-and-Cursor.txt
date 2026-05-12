@@ -1,0 +1,1465 @@
+the 1 billion row challenge is a coding
+Trend that has been going viral so what
+is it exactly the original challenge
+created by gunar is a Java focused
+problem where Engineers take 1 billion
+rows and calculate the min mean and Max
+they then print the results to a file
+the goal of the 1 billion row challenge
+is to create the fastest implementation
+there are a lot of really incredible
+Solutions being built here someone got
+their results down under 7 Seconds this
+is really incredible but I want to take
+this Challenge in a New Direction in
+this video I want to use the 1 billion
+row challenge as an opportunity to show
+you how you can utilize Next Generation
+AI tools to code faster than ever we're
+going to utilize co-pilots like AER and
+cursor then we're going to utilize open
+ai's assistance API to construct and
+consume knowledge bases that can solve
+problems automatically for us instead of
+java we're going to be building an
+implementation of this challenge using
+electron typescript and to top it off
+we're going to store 1 billion rows in
+an inmemory duct database it's a simple
+inmemory database by the end of this
+video we'll have an end to-end solution
+where we can page through 1 billion rows
+in an electron app let's get started so
+I've got a mostly empty electron
+application here made some tweaks to it
+let's go ahead and just kick it off you
+can see we're using a Vite view front
+end front end language you're using
+doesn't really matter first things first
+let's clear out our template and start
+from scratch I'm going to open up cursor
+open the view component highlight I'm
+going to use control K and I'm just
+going to say clear out this view
+component and you can see step by step
+cursor is doing the work for us it's got
+this nice diff I'm going to hit command
+enter and just like that we have a brand
+new view component create an H1 and say
+1 billion row challenge electron
+addition
+now I want to increase the window size
+here of our electron application it's a
+little small and I want to automatically
+open up the dev tools on start up so
+let's go ahead we'll open up the main
+process and I'll explain what the main
+and render process is in the second here
+and again using cursor I'm going to
+highlight everything hit command
+K400 height 1100 Auto open Dev
+tools going to hit enter there and just
+let that rip so cursor is going step by
+step and it's going to go ahead continue
+to permeate throughout the rest of the
+highlighted code really been enjoying
+using cursor it's a hit most of the
+times every once in a while it'll miss
+something and you'll have to basically
+just reprompt but no big deal here it's
+got this perfect I'm going to go ahead
+and accept these changes we have the new
+height new width and we're going to open
+up Dev tools on Startup and an electron
+world this is exactly how you do that
+and Bam the application refreshed and we
+have a pretty nice size here that's
+going to be good for us to keep rolling
+here so I'm going to move this to the
+bottom in the 2024 predictions video i t
+talked about how frontend engineering is
+going to be the first to go due to
+Outsourcing and due to llm technology
+let me show you exactly why I said that
+and why I mean that so in order to
+render our front end we're going to need
+two specific types we're going to need
+pagination so that we can render pages
+and we're going to need our row types
+create two TS interfaces and then I'm
+just going to map out exactly what I
+want them to look like so I'm just going
+to say
+pagination and this is going to look
+like page and the BRC row is our 1
+billion row challenge row it's going to
+contain the results from uh gunars post
+here and it's going to look something
+like this so we're going to actually
+display both versions of this so we want
+to have the station and the temperature
+and then I want to have the station the
+min mean and the max here so let's go
+ahead and just type that out so station
+min mean Max and then measurement and
+I'll hit submit and let's see how cursor
+does this
+so great that's exactly what I wanted
+let's go ahead and proceed now that we
+have our types let's create some mock
+data instead of using cursor I'm going
+to go ahead and boot up AER AER is one
+of the best pair programming tools and
+it just came out with a new unified diff
+feature that improves code accuracy so
+let's go ahead and boot up AER I'm going
+to export my open AI key and then I'm
+going to run AER d-4 dturbo awesome I'm
+going to add the app. view file now a
+has the app. view file in its context
+and now what I'm going to say is
+generate rows of the a view ref and so
+you can see it's getting to work right
+away now it's just pushing through
+creating results creating some values
+for us this is really awesome while this
+is working I want to show off the highle
+architecture of an electron application
+so you can see here electron is quite
+simple we have the render process which
+is where we're working right now that's
+where AER is writing code for us we have
+the main process and you know the big
+difference here is that the main process
+and the renderer are separated for
+security reasons you don't want the
+front end application or a you know
+frontend user being able to access all
+of your computer's internal files and
+access to basically a full terminal
+where they can do anything so the render
+is isolated to just the user interface
+right the main process is you can think
+of it like the backend right so electron
+main is a node.js process that has full
+access to any functionality that you can
+run in a shell so this is really
+powerful this is how we're going to run
+scripts this is how we're going to build
+our measurements and it will connect and
+read and write to our duck database so
+that's the highle architecture here
+let's hop back over to our front end we
+can see thater created those rows for us
+that's perfect and so now let's create a
+table right let me just quick hop over
+to the beautifi documentation I'm going
+to grab the component I want to use here
+so we'll use AER again here and I'm
+going to ask AER to build out a simple
+implementation of the table so I'll say
+beautify build an implementation the
+table server component with our BRC rows
+b s in the example from the
+documentation and I'm just going to let
+that rip and now it's rendering for us
+so let's see how it's done we have our
+new load items function this is where
+we're going to call our backend to load
+new results with the pagination and here
+we have our front end so so we don't
+need value here so this is a slight
+error let me go ahead and get rid of
+this and we need to have our items per
+page set up somewhere here I'm going to
+go ahead and create some state for us
+for our paginations we also don't need
+use view Toy we're going to have this
+Global so we can get rid of that format
+this we'll collapse our rows we'll
+create the items per page variable here
+going to say 10 for now we need to make
+sure we configure VI defy let's go ahead
+and do that now I'll open up the main TS
+file where we configure vue.js going to
+highlight it all we'll just use cursor
+here I'll say add VY okay not bad but
+not perfect I'll add to the follow-up
+instructions and I'll say use the
+beautify
+CH awesome so now we should have access
+to beautify components let me go ahead
+and make one more tweak here I'm going
+to say import beautify components use
+dark
+mode okay awesome so you can see here we
+imported components I don't really need
+directives I'm just going to get rid of
+that and then we have theme dark that's
+not exactly right we want to use the
+default theme and we'll just set the
+default theme to dark so that's that now
+let's go ahead and look at electron and
+Bam you can see here we have 1 billion R
+challenge electron addition and we have
+a nice table below it has our mock
+entries here just like that we built out
+a table created a few prompts um we
+really did didn't do a whole lot we use
+cursor and AER to quickly build a
+working example of this so now we have a
+front-end prototype that we can work
+with let's go ahead and wire this up and
+start working our way from the renderer
+process to the main process to the
+database in the electron world we are
+exposed this variable here window.
+electron API and then we have send
+message and if we just search the send
+message here you can see in this preload
+is making the send message available to
+the electron front end and if we hop
+over to the main process you can see at
+the bottom here we have IPC on so so
+this is saying the main process is
+waiting for an event called message and
+once it receives that it's going to
+console log that message so what we want
+to do here is set up a couple events
+from into two the render process we're
+going to update the types of the
+messages that we want to see and then
+we're going to ask AER to implement the
+functionality for us and we want this to
+be git
+billion row challenge page and what
+we're going to pass in is the items
+number and items per
+page and then we want a on function so
+this is going to be an event listener
+and let me hop over to vs
+code there we go so now we have an on
+event that we can listen to on the front
+end to wait for results coming back from
+the main process and now we're going to
+do a couple things here we're going to
+use AER for this because this is going
+to be a cross file change we're going to
+hit add and then we going to add a
+couple files I'm going to add the
+electron DOD I'm going to add the
+preload I'm going to add main.ts on the
+main side so I'm going to add all those
+files implement the git BRC page and the
+on function app. view
+file and main.ts and preload
+dots
+okay awesome so one of the great Parts
+about AER is that it can write across
+files so this is really incredible so
+we're getting code changes coming across
+files the single prompt you can see
+applied edit to three different files
+and let's go ahead of course always walk
+through the changes that have been
+generated for you we can see here we
+have a duplicate send message no problem
+get rid of that we have our git BRC page
+what we want this to do is call the IPC
+and just go ahead and pass those
+parameters through so I'm just going to
+say Rams awesome and then we have our on
+channel call back here I'm just going to
+go ahead and make a quick tweak to
+this thisly is going to come in looking
+like this IPC render Doon passing the
+channel and the call back that's going
+to be the communication there let's go
+ahead and fix this we just have a
+duplicate Define here get rid of of the
+duplicate
+ref awesome so we're rendering okay and
+that gives us the ability to communicate
+through our from our render process to
+our main process so if we open up main
+now we can see that we have this on get
+BRC page let me just go ahead and move
+this to the bottom of the file and we'll
+update this to be the right value so
+this is going to be BRC page and then
+you can see it's responding so this is
+going to be the git BRC page response
+and this is just going to return some
+stubbed data fit the logs a little bit
+here so that it's super clear what's
+happening when the application starts on
+mounted we're going to list into the git
+BRC page response and we're just going
+to log that data there we're going to go
+ahead and run our electron API and as
+you can see here we now have this new
+type function we'll say get BRC page and
+what we'll do is we'll just pass in
+these params here table is just going to
+be to start we'll use the
+BRC items per page we'll just say 10 and
+then page we'll say one and actually we
+can pass in the actual values here so we
+have items per page all we need is a new
+page variable create that right now
+start on page one of course and let's go
+ahead and just
+use awesome and we'll create one more
+variable here for the table we'll update
+this later this is going to be BRC
+awesome
+so now when the application loads as you
+can see here we're going to get a
+response back so I'm going to hit
+refresh here and you can see here the
+electron process received a git BRC call
+with the table items per page and the
+page and the front end received a
+response from the back end and it looks
+like we have the wrong event there we
+want the second parameter let me just go
+ahead and tweak that go to app. view
+it's going to be payload and so we want
+to see exactly what that looks like so
+you can see here we have data this is a
+stubbed response and that comes all the
+way from our main process
+here and that's our stubbed
+response so awesome so so this wires us
+up to our backend process so let's keep
+moving right so let's revisit that
+architecture diagram if you look at this
+more detailed version what we've been
+working on is our appt view file right
+we've set up the communication between
+our app. view file and our main process
+so that's awesome now what we need to do
+is move on to the data side so let's
+move on to the more main process data
+side so we can generate the rows and the
+results that are going to go inside of
+our duck database so first thing we need
+to do is use this create measurement
+script to generate the rows right you
+can see here in the original blog post
+there's a script in here that generates
+the station and the temperature so what
+we're going to do is come in here and
+generate this file so I've already got
+this created here if we go to create
+measurements so if we look at the
+application structure we can see we have
+have our source there's a main process
+there's a render process this data
+directory and it's got this weather
+stations. CSV file so this what we're
+going to use to generate a whole new
+batch of these items if we open up
+scripts and create measurements I've
+built this create measurements script
+that's going to take the weather
+stations input and output the data
+measurements. txt so let's go ahead and
+just run our script I'll open up a new
+terminal here and let's run this so if
+we look at packages you can see here we
+have generate so I'm going to just type
+yarn run generate and then you enter in
+how many rows you want so let's just
+start with 100 rows right so you can see
+here we now have a new measurements. txt
+file and it's got 100 rows with random
+temperatures let's go ahead and bump
+that up let's go ahead and generate
+10,000 cool so we got an update there
+that's 10,000 records and you know where
+this is going we need to generate more
+to get to the 1 billion number so when
+you actually run this um it's going to
+consume about 8 minutes of time to
+generate the 1 billion rows for now what
+we're going to do is just generate what
+do we have here million rows we'll do 10
+million rows so I'm going to let that
+rip still a lot of data that completed
+in 5 seconds that's awesome so now we
+have measurements. txt so we're going to
+operate on this file so let's talk about
+the data side of things there's this
+great blog post this engineer used SQL
+induct DB to to load in the data for
+these measurements I thought this was
+really cool and I also saw this as a
+great opportunity to utilize the open AI
+assistance API to use this blog as a
+knowledge base for code generation let
+me show off turbo 4 in a assistance API
+wrapper that we've been using on the
+channel for this video I created the
+typescript version long story short with
+this is this is a wrapper around the
+open AI assistance API you can get and
+create assistance you can set
+instructions you can equip tools you can
+make threads add messages Etc so let's
+start with a basic example of how we can
+use turbo 4 assistant to run prompts
+create knowledge bases and generate
+useful code based on those knowledge
+bases so let's start simple the scripts
+there's this agent Ops file so this is
+Agent operations and you can see here
+it's got a nice clean format here it's
+got a couple of paths for us to work
+with but this is basically where we're
+going to run our assistant to generate
+code that we can then use to generate
+our duct database with all of our rows
+it's also going to generate our
+pagination functionality for us so let's
+start with a simple example if you've
+seen previous videos in the channel you
+know exactly what the turbo for
+assistant is and what it's capabilities
+are we'll start from the bottom up so
+turbo 4 we're going to get or create an
+assistant we're going to call it 1
+billion Ro challenge assistant await
+turbo 4 we'll then add
+message we'll say list one great thing
+about duck DB we'll say list three great
+things we'll then run this
+thread and then we'll get the
+messages and then we'll just dump these
+messages out right right so we'll just
+say messages this is a self-contained
+typescript file so what I'm going to do
+here is just run bum scripts agent Ops
+and just let that rip so you can see
+here it's running through the
+functionality we retrieved the assistant
+turbo 4 is great because it handles um
+upserting getting and using existing
+assistants and files you can see that
+it's describing duck DB and you know
+it's talking through some of the use
+cases of duck database which is really
+awesome so so this is the basic flow for
+uh 4 let's go ahead and up this a little
+bit right let's use turbo 4 to create a
+knowledge base based on a URL we're
+going to make just a couple tweaks here
+I'm going to create a knowledge based
+path so this is going to be the location
+in which we'll store our knowledge base
+and I'm going to set this to well
+billion roow challenge original so once
+we have our knowledge based path we can
+do is use turbo 4 to collect a knowledge
+base for us and so what this does is
+it's going to take a URL so let's go
+ahead and get the URL of our knowledge
+base here so let's use the original 1
+billion row challenge post by gunar
+let's just run some knowledge based
+queries against that so KB Source
+knowledge based
+source and let's pass that in as the URL
+and then we need the file path let's use
+that and then we're going to use turbo 4
+so this is going to generate the file
+locally in our agent output directory
+now we're going to use turbo 4 to upsert
+the file so we're going to upsert the KB
+path this is going to be a list of files
+we want to upsert and this is going to
+give turbo 4 and our 1 billion row
+challenge assistant access to these
+files one more thing we need to do here
+we need to make sure that we enable um
+retrieval so we're going to make that
+call there I'm going to update this
+prompt here and I'm just going to ask
+you know what is the 1 billion row
+Challenge and then I'm going to ask one
+more thing so I'm going to ask something
+really specific so that we know that
+this is working right so if we scroll
+down here um gunar talks about the
+machine that is operating on the so
+we're going to ask a question you know
+really specific question here I'm going
+to say what instance are
+submissions evaluated on so being really
+specific so one last tweak we need to
+make here when we upsert files we get
+file
+IDs and this is a list of the return
+file ID so you know this is going to be
+what
+string string like this and when we ask
+questions we need to pass in our file
+IDs so for both the add message we're
+going to pass in file IDs at the end
+there and and this will say when you're
+running this message make sure you refer
+to these files so let's go ahead and run
+so you can see here we have enabled
+retrieval we have our files upsert it
+we're adding a message about the 1
+billion row and then we're asking our
+second question and we should get some
+results here you can see here in the
+agent output 1 billion row challenge
+original the knowledge base got
+generated and here we go so let's look
+at this we asked the question what is
+the 1 billion Road Challenge initiative
+that invited coders to write a Java
+program capable of handling a large data
+set retrieve temperatures output the min
+max mean so dot that right and let's
+look at the evaluation so you can see
+here when being real challenge are
+evaluated on a heisner cloud CCX 33 so
+that's really specific let's go ahead
+and open up the blog and just search
+that so bam you can see it got it right
+so this is actively looking at this
+knowledge base to generate content so
+what I'm going to do here now is I want
+to pull the solution from this post
+since it's using duct DB and I want our
+turbo 4 assist
+to generate and write this code
+literally write the solution we need to
+a file by reading this documentation
+we'll also have it generate our
+pagination function that we'll use in
+typescript so I'm going to give it the
+duck DB documentation as well I want to
+show you how useful these tools can be
+and running out of time here so I'm
+going to speed through this part okay so
+from top to bottom here let's walk
+through exactly what we have so we have
+two knowledge bases duct DB blog and we
+have the duct DB documentation for
+nodejs I created a reference to a an
+agent spyware file so this is going to
+monitor our assistant between each run
+of its message after we have our
+knowledge based files we're going to
+create our assistant again we're going
+to set an instruction basically we're
+just saying you know you're a top
+performing engineer you know how to read
+knowledge bases and generate concise
+Solutions we're enabling retrieval we're
+collecting those two knowledge based
+sources we're going to upload those
+files to the assistance API and then
+we're going to equip this right file
+tool this right file tool uses the
+proper you know syntax for assistance
+API tools and all it really does here is
+it takes you know contents and file name
+and it's just going to write to a file
+right so using the fs node library and
+after we have that we're going to create
+a thread right just as you do with the
+assistance API and then we're going to
+run the following prompts read the
+knowledge base and generate SQL that
+will convert measurements. txt into a
+duck database table called BRC with the
+columns station min max mean with
+completed calculations so this is going
+to generate The Code by looking at the
+knowledge base and remember this
+knowledge base is going to be this duct
+DB blog we're then saying use the right
+function to write the SQL results to a
+file so this is going to allow us to run
+the generate table results directly
+right so it's going to generate the code
+for us and then we're going to run it
+after that we're saying given this duck
+DB table and we're using the power of
+threads here right so when we make a
+thread all of this content is going to
+be in the thread just like you're
+running a chat GPT message that has the
+previous messages above you'll be able
+to maintain these messages without doing
+any of the work right so this is the
+beauty of Turbo 4 and the assistance
+apis thread functionality so you know
+given the duck DB table and the duck DB
+docs create a typescript function where
+we can page through the results of the
+BRC table using page and size perams so
+remember we created the table B or C up
+here and then we're saying use WR file
+function to write results to a file
+called page table. TS okay so there's a
+lot going on here but it's actually
+quite simple build the knowledge bases
+equip your tools run your prompts
+reference the files when you need to and
+reference the tools when you need to at
+the bottom we're going to print out our
+messages we're going to go ahead and
+create a new script we're going to call
+this agent and agent is going to run TS
+node this allows us to run typescript
+node functionality TS node it's going to
+be scripts and this is Agent poops. TS
+sometimes bun works sometimes bun is
+missing some essential node apis it's
+one of the kind of crappy parts about
+bun right now but that's totally fine
+when it does work it is great let's go
+ahead and move back back and now we'll
+run yarn run
+agent awesome so you can see we created
+those two knowledge based files and we
+can go ahead and look at this knowledge
+based file I realized we didn't actually
+look at the last one so all it is is you
+know URL right path title and then we
+have the content of the blog so
+literally it just takes you know it
+scrapes the entire um web page and just
+kind of dumps into the string that our
+agents can can look at and and can use
+right so that's our knowledge based file
+and you can see there we also got the
+duck DB ducks and so this happens so so
+every once in a while between the agent
+commands they're going to generate a bad
+result so literally I'll I'll just rerun
+it and it'll push past it with uh
+usually one or two
+attempts okay so we're making progress
+here you can see now we have the
+generate table. SQL our first two
+prompts ran we'll dig into the SQL
+exactly in a second let's just go ahead
+and see the rest of this through we want
+to see that page table. TS file get
+created
+great so our agent just finished
+creating and writing that page table
+function for us we could look at the
+entire agent log here there's a lot here
+I'm not going to go through it I think
+we can just look at the assets that our
+assistant has generated for us so so you
+know starting from the top we have our
+agent spyware this is what our spyware
+calls are doing so this these are the
+individual logs we can take a look at
+that dissect see what our agent is
+thinking at any point the duck DB
+documentation so you know you can always
+verify it's good to do a sanity check if
+we just come in here we grab some text
+here where the call back is invoked and
+then we actually go to the duck DB docs
+and search you can see right at the top
+there um you know that's the exact Tex
+so our collect knowledge based
+functionality is working and then we
+have our 1 million row challenge with
+duck DB let's go ahead and just copy
+some go to the original blog and there
+we go so we got that content scraped
+properly and our agent has access to
+that knowledge base now let's go ahead
+and look at specific results right so we
+have this generate table SQL let's see
+how it's done so this is really cool so
+just by giving our you know assistant/
+agent whatever you want to call it just
+by giving it the right knowledge base
+the right prompt and you know the right
+resources essentially it is generated
+the results we're looking for here right
+so we can just go ahead and run this
+right now so I'm going to open up a
+terminal here and we're going to
+generate a new duct DB by running these
+commands so you can see here this is
+going to read the measurements. txt file
+and create a table called measurements
+and then we're going to get our BR orc
+table right right here and it's going to
+you know calculate the Min the average
+the max for us and just to call it out
+here you know this was
+pulled essentially right from the the
+knowledge base right so it's generating
+all this for us and it's extending it we
+don't actually get a full complete table
+with the measurements calculated in the
+blog so it's actually you know extending
+its knowledge of duct Tob and SQL
+generating that for us so let's go ahead
+and just run this file so this is a
+great opportunity to show off some of
+the Great cap abilities of duct DB so
+what I want to do is create a new duct
+DB inside this data folder so what I'm
+going to do is type duct DB make sure
+you Brewer install duct DB or you know
+install duck DB and then it's going to
+take the path I'm going to say data db.
+duct DB and then I'm just going to pass
+in this SQL file to generate the results
+that we're looking for so going to say
+less than and then we want data agent
+output and we have all the agent output
+coming to this file and I'm just going
+to say generate table. SQL and I'm just
+going to run this so we got a little
+error here says we can't find this
+measurements. txt file this is running
+from the top wherever we're running the
+script so what I'm going to do here is
+say data SL measurements that should be
+right I'm just going to rerun
+this awesome so you can see here we have
+a new db. ddb so this is our new
+database file and let's go ahead and
+jump into it and see what we have in
+there so same kind of command duct DB
+point to the data and then I'm going to
+run a really cool duct DB command just
+called
+tables bam so you can see here inside
+that database we have two tables let's
+go ahead and look at some results from
+the tables from
+measurements limit
+5 awesome so you can see here we have
+five measurements inside of our duct DB
+table and we can do the same thing with
+BRC so BRC should contain our min max
+and average so let's go ahead and look
+at
+BRC look at that Min mean Max so this is
+really incredible we now have a
+in-memory database built our agents
+basically built it entirely for us we
+tweaked one thing we just tweaked the
+location of the file it was all
+generated you know based off our
+measurements. txt and you know this ran
+pretty quickly again this only has 10
+million rolles which is pretty crazy to
+say you know this function ran so
+incredibly fast you know it's nothing
+like the the 1 billion row generation
+the 1 billion row calculation that the
+original challenge calls for I just want
+to highlight like our agent did so much
+work for us it's incredible and it
+actually you know wrote a lot of the
+implementation for us these knowledge
+bases really could be anything and your
+prompts really can do and be uh anything
+as long as you you know give them the
+right information so you know really
+want to call this out this is definitely
+one of the highlights of the video this
+is where things are going you know it's
+this customized and a really unique way
+to solve a very domain specific problem
+with a nice user interface wrapped
+around it right there are things that
+need to be improved but you know there's
+so much value here um got a nice
+spelling error here don't worry about
+that let's continue so it generated two
+files for us right one is our duct DB
+table and the other is our page table
+functionality so let's go ahead and just
+see what this looks like so execute
+query so this is not exactly right you
+know just from having implemented this
+myself it isn't perfect uh it looks like
+it didn't quite read the functionality
+right it didn't quite read the
+documentation right that's totally fine
+we just going to make a couple
+modifications here we'll copy this
+example here right from the docs and
+then we're going to go ahead and we'll
+use cursor here we'll say we'll say use
+this doc example to fix db. all wrap in
+promise and let's see how it does so
+it's going to return a new promise same
+path and there we go so now we have
+promise getting returned properly there
+um we do need to return page minus one
+or multiply by size we'll just do that
+ourselves manually no problem so this
+old example is outdated I'm going to go
+ahead and switch back you can see here
+I'm using both VSS code and cursor I'm
+going to go ahead and highlight this
+okay so I'm going to say create a new
+example given the
+new implementation shouldn't change any
+of the existing implementation but what
+it will change is the example here so oh
+it's actually trying to use the IPC on
+really interesting here so um I'm just
+going to go ahead and accept that um I'm
+going to pull it out into a flat call
+that we can just run right on this file
+so okay so awesome so we can see here we
+have results coming out of our example
+file here this is great so now our page
+table is functional let me go and get
+rid of this example and let's move page
+table inside of the main application
+here right so we're going to move this
+out of the data agent output into Source
+main page table so that we can utilize
+it inside the main function so let's go
+into Main and let's wire up our function
+so I'm going to call I'm going to import
+our page table get BRC page now we're
+going to run parameters we're going to
+say and we're going to pass in each
+parameter so table
+page and size once that's done we're
+going to go ahead and just send the
+items back that's all we need to respond
+with so you can see here we have an
+error paired statement let's go ahead
+and see what's going on here let's go
+ahead and follow the docs a little more
+closely we're going to use a connection
+we're going to say db. connect update
+these two variables to just SQL and
+let's see how that runs size let's
+update size to items per page so we have
+table page items per page let's make
+sure we're passing that in properly good
+table page and we're passing in size
+here so we actually need is items per
+page that's what the front end's going
+to give
+us there we go so we can see here data
+received for main process we now have 10
+different rows so let's go to the front
+end and wire up our response from our
+back end so let's go to app. view and
+we're going to be getting the responses
+here get BRC page response and let's go
+ahead and set BRC rows BRC rows. value
+equals
+payload don't worry about any of the
+type errors of course there's a better
+way to do that we can fix those clean
+those up it's not what we're focused on
+here and that should update and Bam so
+you can see here we have our variables
+so this is really cool so we can now
+select how many rows we want to see here
+but right now we're not updating any of
+the state to send to the back end so
+let's go ahead and make sure that we're
+updating our state on the front end and
+calling a function to fully load items
+right right now load items is empty so
+let's go ahead and just prepare what
+we're going to send so we're going to
+say and we're going to pull in whatever
+we need here so page perfect yeah table.
+value awesome so this is going to give
+us exactly what we need window. electron
+AP Pi get BRC page and just pass back
+the pagination right that's going to be
+our load items call and so when we start
+we want to kick off loading equals true
+and then when the response comes back in
+the on call you can go ahead and set
+loading equals false so that's great we
+can get rid of the set timeout great we
+have pagination now all we need to do is
+actually call our load items so we can
+see here if we update to 25 items we're
+getting now 25 rows if we update to 50
+we're getting 50 rows back now right so
+that's awesome um let's go ahead and
+make a couple more tweaks you can see on
+the main process we're logging the table
+the page and the items per page you may
+have noticed we don't have pagination so
+let's go ahead and add the pagination
+ask AER you know add the viy when
+updated call load items okay so we're
+going to fire that off there we
+go okay okay let's see what that looks
+like let's open up our electron
+application let's see where that is okay
+so that's down there so it does exist
+let's go ahead and look at what exactly
+that looks like so bam V pagination we
+have the page there and so length is
+going to be total items divided by the
+items per page let's go ahead and set
+our total items we know that we're going
+to have a crap ton so I'm just going to
+add a bunch of zeros here and that's
+going to give us some pages to cycle
+through so this is awesome one thing I
+noticed it's not actually updating we
+need to add a view Watcher here so that
+we're reactively calling load when the
+page updates so I'm going to go ahead
+and just use AER for that I'm just going
+to say Ed a view Watcher on page call
+Cod items on update so just you know
+leaning on our co-pilots to get some of
+that simple boilerplate kind of code
+done and if we just search the page now
+we can see we have a watcher on page and
+when it updates we're going to call load
+items so now if we come in hit two hit
+three hit four hit five you can see here
+we're cycling through our results and
+this is really awesome right so you can
+see you know just page page page page
+page and let's go look at our main
+process you can see we're looking at the
+BRC table page 50 items per page 10 and
+you know this is awesome so we have a
+end to end solution here but uh couple
+pieces left right so let's go ahead and
+push this all the way through right
+let's go ahead and add our headers so
+let's make sure our headers are coming
+through okay this is saying text here
+this needs to be uh I think it's title
+just go ahead and update that yeah there
+we go okay great and then I think
+there's an align you want to align
+Center just go and do quick manual
+coding just to clean these things up a
+little bit um okay station what's wrong
+with station lines there there we go so
+there's our headers nice that's looking
+a lot better and you can see here we
+have measurement so measurement doesn't
+exist or a station so what I want to do
+is create two sets of headers of course
+let's just go ahead and prompt this this
+let's have ader do this for us so create
+two sets of headers one for BRC table
+and one for measurements table uh BRC
+equals I'll just say U min mean Max say
+measurements equals I think it's just
+called measurement let's just hit enter
+see what happens there okay so let's go
+ahead and look at what we've got here so
+we have BRC headers and we have
+measurement headers and interesting so
+it's created this table variable for us
+that sorts when specific variables
+should be seen so it's not getting
+consumed yet so that's fine um what we
+want to do now is create a select
+component where we can select exactly
+what table we want to focus on so I'm
+going to go ahead and just do that again
+we're just going to use AER we're going
+to say I'll go ahead and create the
+state just so it has something to work
+off of I'll say um I think we already
+have a table variable actually yeah
+there we go okay table so create a v
+select component dates the table
+between okay so we'll let that run
+awesome and remember we're doing this so
+that we can toggle between both the BRC
+and the measurement results so let's go
+ahead and take a look at what we've got
+here so we have an error let's go ahe
+and see what's going on here looks like
+we have two headers looks like it just
+left these two headers in here I'm going
+to delete our first one and then it's
+going to look at table do value we just
+want table and it looks like what do we
+want to look at here yeah table and then
+it's got a ref for tables which gives us
+the options to look between both results
+let's go ahead and take a look at our
+app so far so there we go so now we have
+select table so we can choose between
+our two tables you can see here we have
+our headers updating to the BRC format
+let's tweak that we also want to have it
+looks like it's just missing the table
+so I'll add BRC to that and great so now
+we have that and now we can cycle
+through all these results let's see if
+we can get table switching working so
+select table table I'm going to go ahead
+and switch to measurements and looks
+like it did change the table structure
+we also want a new variable for our
+station column when the results are set
+to the measurements table so let's go
+ahead and add that there let's go Ahad
+toggle back and maybe station isn't
+exactly what we're looking for um but we
+need to regardless we go on change load
+items very good so we should be getting
+new results back here should be able to
+open up the dev tools and see the
+structure okay so you know as we switch
+here you can see we're loading the
+different tiers of
+results we have
+station and we have measurements what
+we're actually looking for is the
+station name so let's go ahead and
+update station name here in the header
+value is going to be station name so if
+we switch to measurements awesome all
+right fantastic so we can now select
+different tables we can select the both
+the BRC table which has the computed min
+mean Max we can cycle through and we can
+switch to the raw measurements which is
+just the you know raw with duplicate
+stations with different measurements and
+this is going to be you know the list
+that contains the 1 billion results so
+we've almost completed our electron 1
+billion row challenge the last thing we
+need to do is make sure that we're
+getting all the rows to the front end if
+we hop back over to the application nvs
+code you can get rid of the BRC initial
+results we're going to load those in
+from our server as soon as the app
+starts going to up the total items to be
+1 billion so normally this comes back
+from your server but I'm just going to
+do this so I can actually see how many
+zeros are there that gives us 100
+million and if we just add one more zero
+here we're going to have 1 billion rows
+so comma comma comma 1 billion rows
+incredible that's going to be how many
+items we're actually going to get back
+and you can see that that creates a ton
+of pages and uh you know let's increase
+our oh we got to get rid of that all
+that would be insane to try to render 1
+billion rows let's go ahead and add some
+larger sizes here for our front end
+we're just going to throw this at let's
+go ahead and use cursor so I'm going to
+open up cursor same file we'll inline
+this and we'll just say add items per
+page options and we want 10 we'll do
+factors of 10 right so 100,000 10,000
+100,000 and we'll stop there front and
+will just explode if we add
+more cool so that's exactly what we're
+looking for let's go ahe and save that
+and open up electrons check the front
+end let's see what we have there so nice
+so now we have 10 100 so now we're
+getting 100 and let's go ahead and set a
+height on this table I don't want it to
+overflow like this right so I'm me just
+highlight again this is my favorite
+thing about cursor it's just in editor
+like this is the way that the future of
+editing is going to be I think write in
+your editor ask for what you want to
+change and it will change it so let's go
+ahead and just say a limit height to
+we'll say 500 pixels so hopefully it
+knows that there's a prop you can do
+this with let's see if it gets that no
+it use style we're just going to say use
+a height
+prop and this was you know to be totally
+honest this was a kind of dumb thing to
+prompt like just add the height yourself
+uh it's fine uh great so let's go ah and
+accept that and now we got height 500
+great so that looks good let's bump this
+up to 1,000 very nice going through
+1,000 of the BRC rows and you know I'm
+actually curious how many rows we have
+so let's go ahead and check with you
+know I want to see using duct DB how
+many rows are actually in both of these
+tables right same kind of command we're
+going to look at duct B and instead of
+from BRC limit 5 what I'm going to say
+is from BRC select count
+star uh okay so we have a database error
+it's probably in use somewhere let's go
+ahead and see I'm going to kill our
+process to unlock duct DB and run again
+there we go okay so you know the
+combined min max mean uh we have a total
+of 3,000 rows so we can actually just if
+we boot up our front end again and we're
+looking at the BRC if we just bump this
+up to uh
+10,000 you can see here we're going to
+get just 3,000 rows there's no there's
+nothing else to render here so in our
+front end we're successfully rendering
+nice you know a hefty 3,000 rows that's
+great um and if we go to page two
+there's not going to be anything on page
+two it's at page 20,000 there's nothing
+there on the other hand if youve used
+SQL you know that this is the improper
+syntax but it actually reads not a lot
+more nicely this is one of the nice
+Parts about duct DB usually you work
+from high level down so you start with
+your table and then you have your
+columns SQL had you know developed that
+weird standard where you select the
+columns first induct DB lets you just
+reverse that right so the from comes
+before the select really nice feature of
+dctb so from measurements we're going to
+count star so you can see here we have
+10 million rows we go ahe and just copy
+this out it's always easier to just do
+this right 10 million rows here this is
+great if you run the measurement script
+that I created here this is what's
+generating this measurements. txt file R
+uh 10 million is a crap ton but to get
+to a 1 billion we're going to need a lot
+more rows you know I ran this command
+the other day I'm not going to run it
+again uh you know it takes about 8
+minutes to run if you have a good
+machine so what I'm going to do here is
+just copy in a measurements that I
+previously did an experiment on that has
+the 1 billion rows you can feel free to
+jack up the generate call as much as you
+like so it's just yarn rum generate and
+then you specify how many rows you want
+so you can see here this is the proof of
+concept version I created yesterday 14
+gigs this is the full version we can do
+a line count on this to prove it but
+let's go ahead and get rid of the I'll
+go ahead and just rename it so this is
+the 10 mil and let's go ahead and just
+drag and drop in this large file so you
+can see there's taking some time because
+it is a very large file 14 gigs but
+there it is we do not want to render
+this do not try and render that and then
+I can just prompt anything so I'm just
+going to say uh Mac bash word line or
+Total Lines in file so I just want to
+see to get this I think it's yeah work
+count DL perfect okay so that's all I
+need really nice inter terminal gbt
+command file there the you can utilize
+there we go this is Simon W highly
+recommend it I'll throw this of course
+in the description as well let's look at
+the line count on data. measurements.
+txt just to make sure that we have 1
+billion rows in here after we validate
+we have 1 billion rows we're going to
+rerun our generate table. SQL script on
+Duck database and that's going to
+populate it with 1 billion rows and then
+it's going to run the calculations for
+our BRC table so let's go ahead and just
+copy this out so we know for sure this
+is what we're looking at
+that's a billion rows so we have a
+billion rows in there let's go ahead
+close that let's clean things up a
+little bit and now that we have our
+measurements. txt with a billion rows
+we're going to rerun our generate table
+we're going to make one change here to
+the top I'm just going to say drop table
+if exists perfect yeah we just want to
+drop the tables and recreate them so
+let's go ahead and run that script same
+script we've been running before so it's
+duck DB and then it's left arrow and
+then it's generic table perfect so this
+is going to load 1 billion rows into two
+different tables measurements and BRC
+measurements is just the raw values from
+top to bottom so this is going to be a
+billion row duck database and then we're
+going to have the BRC table which is
+going to contain the M average and Max
+let's go ahead and run
+this awesome so that's loading when this
+completes uh our front end will
+automatically wire up through uh the IPC
+process that we've built out and it
+should fet
+with pagination all billion records and
+give them back to the front end for a
+clean user interface display so let's go
+ahead and just let this load definitely
+huge thanks for sticking around I know
+this is a much longer AI dep Vlog than
+normal but there's a lot of value here
+and I wanted to share you know how you
+can really use these AI tools to build
+out workflows to build out tools to
+build out software end to end so that
+just completed let's run some duct DB
+commands once again we're going to run
+our counts let me just quick look up
+counts and so let's see how many rows
+our measurements table
+has
+awesome bam 1 billion rows that's pretty
+wild okay and then let's do uh from BRC
+so let's count to our BRC there you go
+so that's got 3,755 so so there it is we
+have a billion records to operate on
+let's go ahead and restart our electron
+process and just cycle through so as I
+mentioned with the BRC uh we're going to
+have um up to you know 3,000 something
+grow so let's go ahead and just bump
+this up to 10K per page and you can see
+yep 3,755 but here we go so if we move
+BRC to
+measurements you can see there we have
+10,000 rows coming back at
+us and if we look at the main process
+you can see we're looking at table
+measurements page one items per page
+10,000 and you know tons of Records here
+um we can cycle through these a lot
+going on a lot of different temperatures
+and you know if we hit the next button
+you'll see there's some delay
+there um and there's actually enough
+time during that read for duct DB to
+actually put a lock on the database
+since it's in use um for an extended
+period of time so there it is uh there's
+page two and we can go to Let's jump to
+page
+10 okay nice so we get a clean load
+there
+and um you know I'm really scared to
+bump this up but let's bump it up one
+more time I want to look at 100,000
+records on the front end let's see if my
+machine Let's see if duck DB let's see
+if the electron process can pull this
+off
+wow okay so we're now displaying 100,000
+rows we're on page 10 if we look at the
+back end here look at the main process
+you can see page 10 100,000 rows we have
+access to 1 billion rows in our electron
+application end to end we did it using
+AI C Pilots we use cursor we use AER you
+know we use the assistance API I via our
+nice really clean turbo 4 wrapper with
+some new functionality we can now build
+knowledge bases and then upload them to
+the assistance API to use throughout the
+process of our threads we can run
+arbitrary prompts on our knowledge bases
+we can spy on the messages right we can
+we can look through if you've been with
+the channel you know exactly how this is
+done we did miss a little bit on the
+duct DB page table implementation but
+that's okay we came in we cleaned it up
+afterward I've said this a million times
+it's really improving at a rapid rate
+but it's not about where it is it's
+about where it's going you have to look
+at the ball catch it where it's going to
+be not where it is now and you know with
+a lot of this technology you need to be
+getting your reps in it's not simple and
+it's not easy to go from an engineer
+that's been coding writing every single
+line even if you're using Code Snippets
+right the transition from that the old
+school way of doing things to prompt
+engineer to a gentic engineer to
+engineer that utilizes llm technology
+gen whatever you want to call it right
+AI powered engineering enhanced
+engineering I I'm calling it all agentic
+engineering you're building software
+that can create software right you're
+writing prompts that can write content
+that can generate code that can generate
+other prompts right there's this whole
+incredible New Wave of Technology coming
+and it's important to get ahead of it
+right the AI wave is coming for all of
+us the only question is can you ride the
+wave or is it going to drown you when it
+hits we improved the BRC table and you
+know we ended up implementing this
+really great workflow that if we look at
+our final kind of document here it looks
+like this right so it all started from
+our electron app we buildt up the front
+end we communicated via the preload uh
+you know the electron IPC process hooked
+us up to our electron Main and in main
+this is our main controller um we then
+ran the create measurement script to
+generate our 1 billion rows we generate
+the rows and then we used turbo 4 to
+generate and use a knowledge base this
+gave our agent the ability to consume
+arbitrary knowledge bases and generate
+useful code for us or at least code that
+got us started right after that we ran
+the SQL that was generated by Turbo 4
+and the knowledge base and that gave us
+um you know our two tables the BRC and
+the measurements measurements contains
+all billion rows and BRC contains the
+compressed version right with the um min
+max and mean calculated after that we
+were able to go from the database to the
+main process all the way back to the
+renderer with the data uh via a nice
+clean you know pagination API that we
+can use to paginate through rows and
+through different tables and that's how
+we got
+our billion row challenge electron
+addition
+completed massive thanks for watching I
+know this is a long video there's a lot
+going on here I'm going to try to cut it
+down to the bare minimum to give you
+guys the most value in the least amount
+of time you know with every video I make
+I'm really trying to push myself and to
+push you into the future of engineering
+where we move up the stack just like I
+said in the 2024 predictions video It's
+All About Moving yourself up the stack
+move into a place where you're utilizing
+great tools great technology great
+prompts to generate results you want to
+be controlling these agents you want to
+be building these agents you want to be
+understanding llm technology
+understanding generative technology and
+building your building blocks right a
+lot of what I try to share on the
+channel is how can you build reusable
+pieces reusable patterns that you can
+use to keep building other technology
+replace your models swap out your models
+and you know just keep experimenting
+with this you know turbo 4 is one
+example of that all the code is going to
+be linked in the description there's
+going to be a lot of links for this one
+I want to really emphasize how important
+it is to give thanks to the engineers to
+the creators who both gp4 and all these
+other models are being trained on now
+right even in this video we pulled from
+two or three blogs and docs right we
+pulled from the duck DB docs directly we
+pulled from this really great duck DB uh
+SQL blog and we pulled from the original
+gnar's original 1 billion Road Challenge
+and built knowledge bases on top of that
+and I really see this as you know the
+future of how we're going to power our
+llms right they're going to need memory
+they're going to need context they're
+going to need information that gives
+them special abilities right when we
+built out our SQL duct DB with this blog
+post it now has unique knowledge that
+you know was created by this author so
+it's always really important I just want
+to you know emphasize that again uh you
+know big shout out to Robin um big shout
+out to Gar you know everyone putting out
+content for agents to consume and you
+know build the next generation of
+Technology The Prompt is the new
+fundamental unit of programming check
+out the 2024 predictions video where I
+talk about this a little bit more in
+depth but really be focusing on your
+prompt engineering abilities and tools
+that enable you to quickly utilize
+prompts to build valuable software um
+that's all I'm going to go into today
+one quick last shout out if you're
+interested I'm building an application
+called talk to your database this is
+going to change the way that we interact
+with SQL databases I'm really excited
+about this product I'm really excited
+about where it's going this launches at
+the end of January I have a crazy 50%
+off deal that stops on the 20th if
+you're interested the whole point is to
+do less typing do less query building
+and just ask your database exactly what
+you need and it generates the results
+for you right it generates the SQL it's
+a perfect use case for llm technology
+it's a great way for me to push my
+engineering abilities and provide value
+to you the engineer who's building the
+application who's building the tools
+who's building you know great products
+on top of this stuff so feel free to
+check this out if you're interested
+think of the web version as a proof of
+concept the full desktop version is
+going to come out like I said at the end
+of January huge shout out for watching
+just wanted to plug this one more time
+I'm really excited to bring this to you
+to share it with you if you use SQL on a
+daily basis definitely check the
+application out huge thanks for watching
+if you got value out of this hit the
+like hit the sub and I'll see you in the
+next
+one

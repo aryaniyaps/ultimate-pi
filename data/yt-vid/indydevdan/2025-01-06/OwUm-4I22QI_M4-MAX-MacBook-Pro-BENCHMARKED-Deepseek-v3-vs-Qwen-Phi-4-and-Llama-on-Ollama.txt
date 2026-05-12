@@ -1,0 +1,949 @@
+[Music]
+for
+[Music]
+what's up Engineers welcome back Andy
+Deb Dan here powerful local models like
+llama 4 are coming now the only question
+we have to answer is are we ready for
+them and more importantly how will we
+know this is where benchmarking becomes
+Ultra important today we're going to
+look at the two most important metrics
+for local language models tokens per
+second and accuracy we're going to do
+this on my brand new M4 Max MacBook Pro
+this is a fully specked out
+top-of-the-line M4 as you'll see in this
+video on a top-end device like the M4
+Max the gbt 40 level models may already
+be here let's understand local llms and
+really slms at a fundamental level with
+benchmarks to prepare us for 202's local
+models so how are we going to Benchmark
+the M4 let's go ahead and open up
+everyone's favorite we're going to be
+using o Lama we're also going to be
+using a tool I'm building out called
+Beni Beni is all about building out
+benchmarks you can feel if we scroll
+down here you can see here we're running
+the Llama 3.21 billion parameter model
+model we have some stats and we have a
+nice huge list of prompts that we're
+going to be testing against you can see
+here we're also going to be looking at
+llama 3.2 Falcon 3 54 this is an insane
+14 billion parameter model we're going
+to dig into these stats in just a moment
+here and then of course we also have
+Quin 2.5 coder 14 billion parameters 32
+billion parameters then we're going to
+compare it all to a top and multi 100
+billion parameter model deep seek
+version 3 whenever I'm running these
+benchmarks I like to have a powerful
+control kind of cloud model to give me a
+good relative Mark of where local models
+really stand you can imagine these local
+models will always lag behind powerful
+Cloud models that can run on massive
+Nvidia GPU rigs so we're going to run
+this and if I hit play Benchmark here
+you can see this kind of kicking off
+automatically but before we look at all
+these stats and before we really dig
+into this let's just run a simple test
+so on the right here I have my M2 Max
+MacBook Pro this was my previous primary
+developer device and I thought it would
+be cool to first you know take a step
+back start simple and just run the M2
+and the M4 side by side and to see if I
+really got my money's worth right I know
+a lot of people thinking about upgrading
+to these MCH devices are always
+wondering and comparing you know is it
+really worth it so in this video you're
+going to find out if upgrading to the M4
+is really worth it if you have an M2 and
+you're just looking for that local model
+performance let's open up the terminal
+on both sides here all we're going to do
+is run this prompt paste it in here and
+so we have this exact same prompt that
+we're going to run on both sides so
+let's break down this command piece by
+piece right we're running o l run llama
+3.21 billion parameter we're running in
+verbose mode so that we can see our
+tokens per second then we have this
+simple AI coding prompt we want python
+code and we want our prompt to Output
+code exclusively and then we're passing
+in this information dense function
+definition def csvs to SQL light tables
+then we're specifying two parameters for
+this function CSV paths and SQL light
+path the plural here is really important
+we're giving the model a lot of
+information just by passing in this
+function definition if you've taken
+principal AI coding you know exactly
+what this is and how this works if you
+haven't you'll see exactly what this
+prpt is going to do here in just a
+moment we have this running on both
+sides and all we're going to do here is
+hit enter at the exact same time so here
+we're going to be looking at one of the
+two most important metrics for local
+language models tokens per second we'll
+get to the second metric when we look at
+our Benchmark Suite but let's go ahead
+and just fire this off and let's see the
+performance between the M4 and the M2 so
+here we
+go so you can see both devices are
+extremely fast let's see what the final
+output was here so we can see on the M4
+Max we have 200 tokens per second and on
+the m two Max we have 160 tokens per
+second if we go ahead hit up and just
+give them another shot we should see a
+similar output
+here nice so around the same thing right
+200 here 160 here so what we're seeing
+here with our first comparison between
+the M2 and the M4 is that the M4
+definitely has a significant Advantage
+right 40 tokens per second is quite a
+lot this means that the M4 so far is
+about 20% faster right 20 to 25% faster
+so let's go ahead and scale this up
+let's see if this trend continues when
+we bump up the model size what we're
+going to do is Bump this up to a Falon 3
+10 billion parameter model same thing
+for the M2 and we're running that exact
+same AI coding prompt we want to get a
+function written out for us that
+converts csvs into SQL light tables the
+big difference here is that we're
+running a 10 billion parameter model
+shout out Falcon 3 big shout out to the
+local llama subreddit I was completely
+unaware of Falcon 3 10 billion
+parameters and as you'll see in our
+Benchmark uh this is quite a powerful
+small model let's see how the M4 Max
+compares to the M2 Max on a 10 billion
+parameter
+model okay so they're both kicking off
+they're a lot more precise we're getting
+a lot less text and a lot more actual
+function definition if we look at the
+stats here you can see that difference
+has shrunk quite a bit okay we're now
+getting 55 tokens per second on the M4
+and we're getting 42 tokens per second
+on the M2 let's go ahead and hit up and
+let's run this again I want to note that
+we're still getting great performance
+out of both of these devices we have 55
+tokens per second 41 on the M2 you can
+also see that the model performance has
+improved quite a bit right we're getting
+a more concise response you can see it's
+very similar on both devices as you
+would expect and uh you know it's
+outputting more code exclusively we are
+getting a description here but this
+happens let's go ahead and move on to an
+even larger model right let's scale this
+up and what I want to do here is give
+you a good sense of when you're running
+local models on device what's the
+performance you can expect as you scale
+up the parameter count of the model
+because that's the biggest correlation
+that you can draw the tokens per second
+of your language model and the total
+duration it takes to is going to
+correlate strongly with the parameter
+count let's scale it up once again let's
+use an even more powerful model we're
+going to paste this in and we're now
+using Quinn 2.5 coder 32 billion
+parameters so we're tripling the size of
+the model let's see how our M4 and M2
+Mac devices can perform while operating
+on a 32 billion parameter model here we
+go we're going to head enter at the same
+time we're running that exact same AI
+cring prompt on AMA in verbose mode
+all right so the M2 is now taking some
+time to load here uh it may just need to
+you know load the model I've noticed
+that the Quinn 2.5 coder 32 billion
+parameter is a bit more chatty so it
+adds a bit more textual information
+we're getting about 20 tokens per second
+on the M4 and on the M2 we're getting 14
+tokens per second if we round these both
+up we're getting 20 and 15 let's go
+ahead and run this again
+now they're kicking off at the same time
+that's good to
+see all right the M4 has completed and
+about the same stats right so we're
+getting about 20 tokens per second on
+the M4 and we're getting 15 tokens per
+second on the M2 really interesting to
+see this right we're continuing that
+trend of seeing about a 15 to 25%
+Improvement on the M4 Max over the M2
+Max so let's push this one step further
+we're nearing what I like to call the
+dead zone right now we're running you
+know still above 10 tokens per second
+when you dip below 10 tokens per second
+the model truly becomes unusable in my
+opinion comment down below let me know
+what's the minimum tokens per second
+that you run a local model at that
+you're willing to accept for me it's 10
+once we get below 10 it's just not
+usable it's too slow so when I'm looking
+at both these devices the M2 Max is
+going to kind of stop that out at this
+32 billion parameter count level right
+anything below this is good the M4 on
+the other hand is handling this at 20
+tokens per second that's still a pretty
+solid speed let's see if the M4 and the
+M2 can handle 72 billion parameter
+models final test here before we jump
+into our benchmarks let's see how both
+these devices handle 72 billion
+parameters okay this is a big model
+right for an on device model uh these
+are huge let's go ahead and kick these
+off and let's look at the performance on
+the M4 Max versus the M2 Max here we
+go all right so now they're both just
+spinning the M4 Max has kicked off M2 is
+still thinking still spending some time
+uh we can see here uh we are almost
+crawling here yeah we're below that 10
+tokens per second on the M4 Max it has
+completed and now we're kicking off on
+the M2 this is also crawling but but
+doesn't look as slow as I would expect
+it let's go ahead and give it some time
+here okay we're coming in at s tokens
+per second on the M2 and we're coming in
+at 9 tokens per second on the M4 so
+definitely the 72 billion parameter
+model is the hard drop off point it
+looks like we can run this on the M4 but
+as I mentioned this is my drop off point
+anything below 10 tokens per second is
+not really bearable it's not really
+functional I don't have the patience to
+wait for 10 tokens per second Maybe you
+do I'm going to run this one more time
+here now they're both kicking off at the
+same time there is some like initial
+model loading that happens fantastic
+okay so about the same thing right nine
+tokens per second and seven so again
+we're seeing that kind of 15 to 25%
+advantage to the M4 max if you fully
+spec it out over the M2 again fully spec
+out so really really interesting to see
+now what we're going to do is let's
+scale this up we're just looking at one
+prompt we're looking at one example M2
+versus the M4 you can kind of see the
+difference here if you're thinking about
+upgrading to the M4 my advice is if you
+have an M2 and you're not using local
+models every single day um I would just
+hold off for the next Generation if
+you're running on the M1 or anything
+older upgrading to the M4 will be a
+massive massive update and a massive
+upgrade for you especially if you're
+looking to position yourself ahead of
+the curve for local models in 2025 you
+can see on a 72 billion parameter model
+I'm getting about 10 tokens per second
+out of my M4 Max with 128 GB of unified
+Ram to make it absolutely clear the M4
+Max again with Max specs as many
+performance and efficiency cores as you
+can get and with the maxed out unified
+Ram of 128 GB this is the best single
+device purchase you can make if you want
+to get a ton of performance for language
+models out of the box without doing any
+configuration I know know there are ways
+to improve these numbers I know there
+are tools like mlx and LL file that I'm
+going to be spending time with to see if
+I can get these numbers cranked up like
+subscribe and comment if you want to see
+additional videos on how to crank up
+local model performance on your device
+now let's scale this up we're getting a
+good idea of the relative performance of
+tokens per second between the M4 and the
+M2 but in order to really understand how
+models perform for your specific use
+case we need to look at large Suites of
+benchmarks so let's go ahead and do that
+now so focusing in on the M4 here let's
+look at Beni so Beni is a benchmarking
+tool that I'm working on to build
+benchmarks that I can feel that I can
+understand and get a deeper sense of how
+models perform by looking at the
+performance of models relative to each
+other so let's break down this simple
+function coder Benchmark so first off
+let's configure this a little bit so we
+can see all of our models so I'm going
+to hit show settings I'm going to go
+into bench mode so that we can collapse
+the headers I'm going to move our model
+stats to simple mode so we can just get
+a reduced look here I just want to see
+accuracy and tokens per second we can
+see Lama 3.2 1 billion parameter is
+blazingly fast and if we reduce the
+block size here we can see all of our
+models so if we shrink down to about
+this size we can see the performance of
+all of our models side by side so you
+know just looking here top to bottom we
+can get some valuable information we can
+hide the settings and we can get some
+good information here right I'm using
+deep seek V3 as our control group
+whenever I'm creating benchmarks I like
+to have a powerful Cloud Model I like to
+have this as a control group to really
+see how powerful are these local models
+we can see here deeps V3 aced this
+Benchmark we can see Quinn 2.5 coder 32
+billion parameters aced it 14 billion
+also Ace it and then five acing it as
+well we pick up a couple errors when we
+drop down to Falcon 3 10 billion
+parameters and of course lber 3.2 latest
+this is the 3 billion parameter model
+you know the tokens per second here is
+really important to pay attention to
+right of course deep seek Cloud Model so
+there's no tokens per second information
+for us but you can see here you know by
+running this Benchmark and we'll dig
+into what exactly this Benchmark is
+testing in a second here but by running
+this Benchmark we can see that we don't
+need coin 2.5 Cod 32 billion right we
+can settle on a 14 billion parameter
+model coming out of AMA we can use use
+54 we can use uh 2.5 coder 14 billion
+and if we're okay with accepting some
+errors and you're willing to sacrifice
+for Speed you can do that here right we
+can even push it even further to get
+four times the tokens per second by
+using a 3 billion parameter model of
+course our accuracy is dropping down
+177% so this is the idea behind you know
+benchmarking and benchmarking tools and
+Beni specifically right so I'm building
+this benchmarking tool link is going to
+be in the description for you if you
+want to check this out it's a work in
+progress but this is something I'm
+working on to really understand the
+performance of local models against each
+other and also I'm just setting up a
+bunch of benchmarks for some really
+exciting work that I'm working on I'm
+setting up a lot of benchmarking work
+for upcoming releases around principled
+AI coding stay tuned for that but
+benchmarking is ultra Ultra important if
+you want to understand what capabilities
+are available to you today and tomorrow
+right because once you have the
+Benchmark up it's so easy to just plug
+in another model and then get results
+out of it all right so let's go ahead
+and just scale this up a little bit and
+we can see more details on a per prompt
+basis okay let's double click into this
+prompt and let's see what's going on
+here this is our llama 3.2 it's made a
+mistake on the first prompt here and if
+we just go ahead and open this up we can
+take a look at this prompt and matter of
+fact we can just copy the input prompt
+out let's open up code and before we dig
+into the actual prompt configuration
+file let's just look at the prompt and
+let's go to XML and we can see here we
+have have this very simple prompt
+generate a function for the given
+function request so you can see we have
+a dynamic variable here and we're
+passing in an AI coding prompt for a
+function definition this is a powerful
+AI coding technique you can use just by
+specifying the definition of the
+function and a small detail you can
+generate the entire function right so
+here's a super super simple example in
+this prompt we're saying you know
+generate the add function and then we're
+also passing in the function arguments
+Okay so so we saying use the provided
+arguments one and two and of course it's
+going to generate this we wanted to also
+print the result and this is the prompt
+we're building so you can see here we're
+building this prompt in a very unique
+way how is it unique it's a
+self-contained prompt that we can
+immediately evaluate in a pass fail way
+why is this so important if we look at
+this prompt again we can see our models
+response llama 3.21 billion parameter
+just completely fudged this okay misread
+the instructions completely and just got
+this answer completely wrong look at a
+successful model here so let's look at
+the 3 billion parameter response and if
+we click into this we can see a perfect
+model response so take a look at this
+model response output this is a unique
+type of output that is evaluatable okay
+so that means that we can build up
+benchmarks in a past fail way this is
+really important because it makes the
+benchmarking process much simpler we
+take this code and we run it through a
+python execute computer evaluator and
+it's giving us a fullon execution result
+right so inside of our Benchmark Suite
+we can then just set up the expected
+result and if it's not that it's wrong
+okay so obviously there are some parsing
+related things that go around this but
+this pass fail mechanism this fullon
+evaluation makes for really simple
+benchmarking really simple testing with
+your language models so let's go ahead
+and take a look at this exact
+benchmarking format so you can see here
+a couple of things let's go ahead and
+collapse everything and break it down
+one by one so you can see we have our
+Benchmark name we have the purpose and
+then we have our base prompt okay and
+the base prompt is of course what we
+were looking at before and here we have
+a XML is concise level for prompt I'll
+link the four levels of prompts video in
+the description if you want to check
+that out we have a powerful prompt here
+because it has a purpose clear
+instructions and then
+Dynamic variables we definitely could
+have added examples to this to improve
+it as well but it's not necessary this
+is the prompt that we're working with
+now the cool part about this
+benchmarking framework that I'm building
+out is that you can of course list
+several models so these are all the
+models that you want to run this prompt
+against but most importantly we have the
+prompts okay and so we have a list of
+prompts let's go ahead and just collapse
+to this level here so we have a whole
+list of dynamic variables and
+expectations and what happens here as
+you can see in our benchmarking test
+here is that for each model we're going
+to Loop over every set of dynamic
+variables right every set of prompts and
+the prompt has Dynamic variables and an
+expectation right so if we look at uh
+deep seek chat of course it's going to
+have every answer correct this is what
+we pay for so if we you know scroll down
+here you can see we have this test here
+where we're passing in the function
+definition count vowels and we're
+getting this nice clean simple python
+response out of deep seek in the
+instructions we say generate the
+function call the function and print the
+result and so you can see here we're
+passing in that function definition and
+then we're also replacing the dynamic
+variables right so for each run you can
+see here if we open this up we're
+replacing function and we can go ahead
+and open these up here so for each
+prompt we're replacing every one of the
+dynamic variables and that becomes a
+brand new execution right and so this is
+a great way to run your test run your
+llms and run your functionality at scale
+in a quick way so you can see here we're
+generating an ad method multiply list
+reverse string so on and so forth right
+I have you know 30 different unique
+prompts here that we're running to test
+all of these models in a specific way
+right and a really important piece of
+this like I mentioned you need to
+specify an evaluator a way to actually
+say that your models output was correct
+or not in code you can take a look at
+the code base if you're interested we
+have this execute python code with
+string output evaluator and of course
+you can build out different evaluators
+to test different outputs from your llms
+there are popular benchmarking tools I
+also like prompt Fu this is my take on
+building out a you know really kind of
+opinionated benchmarking tool again link
+is going to be in the description for
+this if you want to check out the
+benchmarking tool that I'm building up
+for my work products and projects so
+this is what this looks like right it's
+simple it's intuitive it scales well and
+it's all about just defining the right
+evaluators and then building up a nice
+Suite of tests so this is cool let's go
+ahead and look at some additional tests
+right this is just one set of tests that
+we can run if we hit reset here we can
+drag or drop our configuration file or a
+completed execution of a bunch of tests
+let's go ahead and run this simple math
+benchmarking file if I drag and drop
+simple math. yaml it's going to kick off
+the benchmarks and if we open up the
+server here you can see we're kicking
+off these benchmarks we're running llama
+3.2 running at a nice speed here then
+it's going to run the next model and you
+know you can see the list of models that
+we're going to run here 3.21 billion
+3.23 billion Falcon 3 54 two Quinn
+models we're looking at the 14 the 32
+and then of course deep seek V3 as a
+control Cloud Model so while this is
+kicking off let's go ahead and just look
+at the base prompt if you understand
+what the base prompt is doing you can
+really understand what's going on what
+we're doing here in this benchmark is
+we're evaluating the ability of a
+language model to perform simple
+mathematical operations in Python so
+here's another simple way to Benchmark
+local language models we're asking it to
+do simple math by writing the math
+operation in Python and then it just
+prints the result so a big key element
+of benchmarking and testing your prompts
+and testing your language models is
+making sure that it's evaluatable and
+the simpler the evaluation the less
+noise there is in the evaluation step
+the more confident you can be be that
+the changes that you're making to your
+prompt and the strength of the model is
+actually coming through your benchmarks
+we're saying simply evaluate statement
+in Python and print the result and then
+we're passing in the statement here
+right so super simple we can take a look
+at the dynamic variables here add five
+and five and our expectation is of
+course 10 add five and five then split
+in half then triple 15 multiply 3 by 4
+and add 7 19 so on and so forth right so
+you can add entire sets of these this is
+why using Dynamic variables in your
+prompts is so important because it
+allows you to scale to 10 hundreds
+thousands millions of executions right
+anyone building products with language
+models knows this Dynamic variables and
+level four prompts are essential for
+scaling your prompts into products and
+tools our execution should be about
+finished we're running Quin 2.5 coder 32
+billion nice ran through that and now of
+course we're running deep seek this is
+just hitting their API so this should be
+finished relatively soon I've been
+really impressed with deep seek V3 it
+does appear to be near the level of claw
+3.5 Sonet it's definitely fractions of
+the price and it's giving effectively
+the same performance it's allowing me to
+scale up a lot of my AI coding work
+using spec prompts to a insane level
+more on that in upcoming videos but you
+can see our Benchmark has completed so
+if we scale this down a little bit we
+can get you know a nice nice nice view
+of this let's look at the stats here
+right so kind of interesting right away
+let me open up to verbose mode here you
+can see we're getting 18 right 12 wrong
+from L 3.2 1 billion the 3 billion model
+is doing really really well look at this
+right looks like simple math operations
+you only really need a 3 billion
+parameter model to do simple mathematics
+right so this is a good thing to see and
+again this is why you make benchmarks
+you really want to know what parameter
+count do I really need for my use case
+how powerful does the local model or
+even the cloud model if you're
+benchmarking Cloud models how powerful
+does it really need to be to do this
+specific thing for me Falcon 3 same
+level of performance 54 gets everything
+perfect love to see that shout out
+Microsoft code Bros Quinn 215 perfect
+Quin 32 billion getting quite a few
+mistakes here that's very interesting we
+can dig into why that is but let's go a
+and just kick this off so to be clear
+you know this Benchmark runs and
+executes all the prompts and then it
+saves all the results if you look at the
+codebase here if we collapse inside of
+the server directory we have our
+Benchmark data so you know this is our
+you know yaml files here I'm going to
+commit this codebase with all these
+simple benchmarks for you if you're
+interested and then we have these
+reports so this is really cool right so
+every Benchmark that you run generates a
+full report and so what we've just done
+here is generated this new math report
+and you can see here we have all the
+results so what we're doing here when
+we're clicking play Benchmark is we're
+just replaying it as if it was live but
+we've already collected all the data so
+here we go we're kicking this off um
+it's really just incredible to see what
+200 tokens per seconds look like right
+llama is done let me uh scale this a
+little
+bit there we go so we got 30 Falcon
+still running coming in at you know 57
+tokens per second so this is what that
+looks like right uh we can see here 54
+39 tokens per second that's finished
+Falcon finished uh Quinn 14 and you can
+see here right as the parameter size
+grows tokens per seconds goes down right
+if I just highlight this you can see as
+the model grows larger tokens per
+seconds goes down right this is just a
+simple Trend really important to keep in
+your mind a simple mental model that you
+can use and build up as you're
+understanding local models and models in
+general right interestingly though
+accuracy isn't always going to scale
+parameter size it correlates very
+strongly but you can see here coder 32
+has made several mistakes that smaller
+models have not so if we click into one
+of these we can kind of see um it's just
+outputting the answer okay so it's kind
+of being a so it's being kind of too
+smart for its own good right instead of
+actually writing the python code you're
+looking for it just outputs the answer
+right that's not what we're looking for
+we can't execute that okay so let's look
+at another one yeah it also outputs the
+answer here um this is just wrong so
+it's printing the wrong answer again
+printing the answer and what we really
+are looking for for from this test is we
+wanted to generate the code in Python so
+that we can execute it right so you can
+see this is a correct answer and of
+course if we look at Deep seek we can go
+to problem 30 here and you can see this
+was correct right so the problem here
+was convert the fraction 38 to decimal
+form so you can see nailed that 100% for
+deep seek 100% for Quinn 2.5 coder 14b
+100% for 54 14 billion 96% for Falcon
+10B I am uh very impressed with Falcon
+um I had no idea this model even existed
+10 billion parameters uh performing
+really well performing really quickly
+take note of this right uh 67 tokens per
+second very very powerful model it is
+pretty crazy to see the difference
+though between if we just rerun this
+like watch the difference between the
+tokens per second between these top
+three right let's let's go ahead and
+scale these down a little bit um watch
+the difference between the speed of 210
+tokens per
+second and 50 first time we go up by 50
+then we go up by 100 so let's just
+replay this and then like look look at
+how quickly this is right 200 tokens per
+second is
+insane right so 1B is done uh the
+billion is done and you can see here
+Falcon had a slow start it had some boot
+up time but this is what 60 tokens per
+second looks like running 30 prompts
+right not as fast as you would think but
+again it is running 30 prompts and it's
+maybe running a I don't know how how
+large is this let's let that finish nice
+and if we look at this prompt we can see
+the size right so if we just highlight
+the base prompt we can see we're running
+154 token prompt very tiny prompt so
+this all looks great you know just by
+looking at this and by looking at our AI
+coding function generator and our simple
+math benchmark it kind of looks like
+local models are great already right not
+so fast let me show you a much more
+difficult problem that uh these language
+models will just trip up on pretty
+rapidly
+I'll hit reset here and let me pull up
+instead of dropping in a full
+configuration file for it to execute on
+what I'm going to do is open up a
+existing completion and I'll just drag
+and drop this over this is a completed
+Benchmark report so it's going to
+automatically just open up with the
+prompts completed it doesn't need to run
+these right if we just scale everything
+down if we go to simple you can see here
+we're only running uh five models and we
+have 15 prompts and look at the
+scores right 0% 0% 0% 0% 26% there are
+many problems out there there are many
+prompts that local models cannot tackle
+yet okay and I want to bring this to
+your attention I am very balanced in my
+uh portrayal of these tools and
+Technology great engineering is balance
+you need to always consider trade-offs
+in order to build out the best tools
+features products and to really use
+gener of Technology properly you need to
+be honest about where they're falling
+apart okay so I have this much harder
+problem we can go ahead and kick this
+off and talk about it so I'll just hit
+play Benchmark and I'll go into verose
+mode you can see the horrendous stats
+from basically every one of these models
+and then while this is running let's
+quickly just look at what this prompt is
+and why it's so challenging let's look
+at something that was correct so we have
+this first prompt here by Deep seek V3
+what is this so what's going on here so
+we wanted an llm to parse the given
+natural language request this is going
+to be a speech to text request and then
+produce the right CLI command so we want
+a command output to our terminal it's
+going to run typer commands and it's
+going to run that against a python
+script main.py so we're looking for
+something very precise here okay so how
+does this work right let me just pull up
+this full prompt let me just copy this
+all out let's go to vs code open this up
+we have a few instructions here we have
+four instructions and what we want to
+have happen here is we want our speech
+to text request basically our natural
+language query right ping the server
+quickly and what we want this to do is
+call the proper Command right call the
+proper typer command automatically for
+us with the right params based on the
+function definition so this prompt needs
+to read this code and there's quite a
+few commands here right you can see we
+have over what 20 maybe 30 commands here
+in this command set and our language
+model needs to read all these read in
+the natural language request and then
+give us the right command where we can
+immediately call this method right so
+you can think of it like function
+calling it's not exactly function
+calling because you need to position
+everything perfectly uh but it's very
+similar you definitely could use Json
+parsing to to get this moving but this
+is another great tests for language
+models so we can see here our expected
+result was python main.py pink server
+and the execution result nailed it right
+so this is a correct response so this
+evaluation gets marked as correct if we
+go over to to our typer command
+configuration file and we open
+everything up let's close the base
+prompt we're using a raw string
+evaluator and so again I just want to
+talk about evaluators they're really
+important they allow you to pass fail
+the response of your language model and
+so when we look at these prompts here we
+have a whole list of prompts and you can
+see that exactly right so we're passing
+in this variable that gets replaced from
+our base prompt let me go ahead and
+collapse the XML here we have one
+Dynamic variable here right spech of
+text request so that's getting replaced
+and we're expecting this result to come
+out right and so if this comes out you
+can imagine we're talking to our
+personal AI assistant and we say you
+know ping the server quickly we wanted
+to automatically execute this method for
+us okay and so this continues all the
+way down the line you can see we have a
+ton of failures basically every one of
+our small models bombed this we can
+click in and inspect why so you know
+Falcon 3 10 billion just responded with
+check Health okay so that's just wrong f
+for latest you can see here we pass in
+the natural language query delete user
+ID user 123 skip confirmation and so
+this is the expected result right delete
+user so we're calling this typer command
+user 123 confirm okay and you can see fi
+just talking giving us a lot of
+information not relevant we just want
+this one command so this is an example
+of a prompt that just completely falls
+apart even for powerful models now 100%
+um I can improve this prompt and you've
+caught me literally in the act of
+improving this prompt I wanted to create
+this video to kind of share my process
+share what I'm working on and share why
+benchmarks are so important right so I
+am literally in the process of improving
+this prompt when I'm writing prompts at
+scale what I always do is I make the
+prompt work for a powerful cloud model
+and then I try to improve it to scale it
+down to smaller models right often times
+this means you need to add additional
+information additional instructions and
+examples and you know we need to clean
+up the purpose and maybe you need to add
+additional um static or dynamic
+variables whatever the case is you'll
+often need to add more and more
+instructions to your prompt in order for
+it to work for you know the 10 to 30
+billion parameter model uh size once you
+get below 10 adding more things doesn't
+really help right because the model just
+can't handle it it cannot handle the
+complexity if we click into you know
+even llama 3.23 billion parameter um
+it's just completely wrong like this is
+just wrong it's giving us a whole set of
+it's giving us python code right it's
+just completely irrelevant if we go to
+13 here you can see it's writing code
+for us we don't need code we need a
+single answer you can see Falcon 3 also
+having some trouble right remove user
+with ID user 123 skipping confirmation I
+need the actual CLI command I don't need
+you to say this back right so this is
+the execution result this is what Falcon
+said back after we passed in this prompt
+okay so local models are improving it's
+important to have a way to understand
+their capabilities by benchmarking we
+can do that and we can position
+ourselves ahead of the curve you can see
+here I have the brand new M4 um I don't
+just make predictions I make predictions
+and I bet on them I am predicting we're
+going to get powerful local models and I
+would to be ready for it that's why I
+have this device I'm betting on my
+predictions so you can see that here I'm
+going to link last week's 2025
+predictions video that was a really
+important video everything we're going
+to be working on on the channel we
+talked about we discussed and really
+broke down in that video big shout out
+to everyone over the past couple weeks
+that's been digging into principal ad
+coding I am continuously constantly
+working on upcoming improvements
+stabilizing the product so that we can
+expand it and do new cool things with it
+hint hint that's why these benchmarks
+are going to be you know increasingly
+important over time if you're interested
+in benchmarks you can check out this
+tool called prompt Fu I'll also link our
+previous prompt Fu videos that we've
+worked on in the past that's a great
+benchmarking framework if you just want
+something out of the box if you want to
+experiment with Beni The Prompt
+framework that I'm actively building up
+right now you can go ahead and do that
+it's a work in progress but it's here if
+you're interested and you want to check
+it out thanks for watching if you like
+the video you know what to do drop the
+like drop the comment drop the sub and I
+will see you next week stay focused and
+keep building

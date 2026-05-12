@@ -1,0 +1,36 @@
+[2.3s] At Boundary ML, we really do have the
+[4.6s] best users and Invocid 404 is no
+[7.4s] exception to that. When he was having
+[9.2s] trouble with type builder in streaming
+[11.4s] context using the Go clients, he made a
+[14.2s] nice little repro repo for us. That made
+[17.2s] it extremely easy to fix the bug for you
+[19.0s] and we'll ship that with our next
+[20.6s] release. Thank you so much, Invocid 404.
+[23.3s] Here we've got a nice little quality of
+[25.2s] life improvement suggested by Jay
+[27.0s] Gazior. If you run a test block that
+[29.6s] doesn't have enough arguments for the
+[31.1s] function under test,
+[33.9s] now you get a warning telling you about
+[36.2s] the missing arguments.
+[39.0s] On the other hand, if you use too many
+[40.8s] arguments, including some arguments that
+[42.7s] aren't in the function under test,
+[48.0s] we tell you about that error as well.
+[50.2s] These are both warnings so that if you
+[52.2s] make this kind of mistake in your code,
+[53.7s] it's not going to break codegen of your
+[55.6s] clients. you'll just get a nice message
+[57.5s] about it. And when we release this,
+[59.6s] you'll also see these uh warnings in the
+[61.7s] playground. Thank you. Hey, Hideki. So,
+[65.2s] you open this issue pointing out that
+[67.0s] our previous fix for the glass field
+[69.4s] ordering in Python was not complete. And
+[71.7s] you're right. So, I pushed some changes
+[73.9s] that finally fixed this issue
+[75.5s] completely. So, in the next release, you
+[77.0s] should no longer have this problem.
+[78.6s] Thank you for reporting the bug.
+[85.5s] Hey,

@@ -1,0 +1,904 @@
+01 is finally available through the API
+this means you can use your favorite AI
+tools to get massive amounts of work
+done and it means you can prepare for
+what's next 03 mini and 03 if these
+benchmarks are anywhere close to True 03
+is going to give us capabilities far
+beyond 01 but until O3 drops 0 one's
+capabilities are the state-ofthe-art if
+you want to understand what's possible
+possible with generative AI 01 can tell
+you very few engineers and Builders are
+using the 01 model to its full
+capabilities myself included and there's
+a reason for that but if we want to know
+what we'll be able to do with 03 we need
+to put some reps in using the current
+state-of-the-art reasoning model let's
+practice by limit testing the 01 model
+against massive AI coding prompts
+[Music]
+first boot up your favorite AI coding
+assistant we're going to boot up AER for
+Triple C performance that's control
+customizability and consistency I'm
+going to run AER with 01 as the
+architect and let's use deep seek as the
+editor I'll fire this off and you can
+see here right away we have 01 in
+architect mode and then we have deep
+seek as our editor so what are we coding
+today we're going to improve Beni a
+suite of simple benchmarks you can feel
+we'll talk talk about what this tool is
+as we work through improvements we're
+going to ship three new features with
+three AI coding spec prompts but we'll
+do this with a Twist let me fire this
+prompt off and then I'll explain I'll
+copy it hop back to our terminal all SL
+load. aer1 this will load our context
+file for this feature paste this in and
+run this so what's the twist we're going
+to ship three new features today but
+when we complete feature one and two
+we're going to completely revert the
+code base back to its original state
+this way we can see how much we can
+really do with a powerful reasoning
+model and most importantly a powerful
+plan so when we ship feature one we'll
+revert then we'll ship feature two which
+will also contain feature one we'll
+revert again once we test out the
+feature and then lastly we'll run a 1K
+token long spec prompt which contains
+all three features so you can see here
+our architect 01 is writing this change
+the editor just completed the change if
+we close the terminal you can see our
+change came in for our first feature
+this is light work for 01 combined with
+deep seek you can see here we added
+descriptions light backgrounds to our
+tools and then we added this kind of
+fading blue background just to add some
+more feel to the tool so it's
+interesting to see the end result before
+you see the prompt that created it
+here's an interesting exercise for you
+can you visualize can you imagine your
+prompt to get this outcome we added a
+couple descriptions we added this faded
+background and we added some light
+touches to The Styling we add a single
+prompt with our AI coding assistant
+running 01 and deep seek do all the
+heavy lifting Force let's go ahead and
+take a look at this prompt on the bottom
+here we have our AER command running 01
+in architect and deep seek chat as the
+editor we're running yes always so that
+we always approve the suggested changes
+from the architect we want to skip URL
+detection and I don't want to commit so
+that we can roll back these changes
+whenever we want to you can see we have
+feature set 1 2 and three and if we look
+at the token sizes of each we have 275
+then we're going to run a 639 token
+prompt and then finally we're going to
+scale it up quite a bit and run a 1,600
+token prompt I'm really excited to run
+this last one stick around so you can
+see that it's quite incredible what you
+can do with these reeing models um but
+let's go ahead and start on the first
+feature so what do we building here how
+do we actually accomplish this this is a
+spec prompt this is a specification
+prompt also known as a plan as you may
+have noticed with generative AI tools
+with these incredible models that are
+coming out the limitation isn't the
+model anymore the limitation is now our
+abilities it's our tools and it's our
+access to the right knowledge that
+allows us to scale up what we can ask
+our AI tools agents and assistants to do
+for us and a big part of that of course
+is the prompt this is the spec prompt
+let's go a and just break it down we
+have a title we have our objective so
+you can see here we have objective with
+two subp points we then have our context
+which is a clear breakdown of the files
+needed to complete this task we need
+both the app. viw file and the Styles
+file available to make this edit then we
+have a couple of readon files and you'll
+notice that these context files are
+exactly what was used if I load up that
+context fileer 1 you can see that's the
+exact context I use to load up this AER
+instance the control and customizability
+you can get out of using is incredible
+this is a massive piece of why I use AER
+so that's the context and then if we
+look at the low-l tasks this is where we
+get into our list of prompts a big theme
+in 2025 is going to be looking for
+patterns and techniques that you can use
+to scale up what you can do like I
+mentioned the limitation is no longer
+the model with 01 and 03 the limitation
+is what you can do what are your tools
+what are your capabilities the spec
+prompt enables you to scale up what you
+can do how by creating a list of prompts
+that's what our low-l tasks are here
+right and if you've taken principal a
+coding you know this already so we have
+a single task with a couple of requests
+and then details within the requests
+right so you can see update the app
+container we're referencing a class so
+this is a great way to reference
+front-end locations we then have a
+couple details on what exactly we're
+looking for and then we're saying update
+the nav buttons and of course the nav
+buttons are the tools themselves so we
+added some details there and that's our
+first prompt so you can see here we're
+being very precise right we're not
+saying create a new snake game we're not
+saying you know add a new random tool
+with real projects you're really always
+going to be working with existing code
+so having powerful referencing
+mechanisms like class names files and by
+having these consistent keywords that
+you can use makes it a lot easier to
+update real production code so this was
+our first feature right this was our
+first spec prompt that did all this work
+for us thanks to the 01 reasing model
+with a solid editor model and there are
+variants here just to be super clear you
+can use Claude you could probably use a
+GPT 40 model here if you wanted to you
+can use Gemini Flash and if you're
+worried about deep seek or the CCP
+stealing your data um you can also run I
+have a version here where we have 01
+running deep seek from the fireworks API
+okay so this will of course be inside
+the Beni code base you have full access
+to this
+links going to be in the description so
+our Focus here is to scale up what we
+can do and is to understand the
+capabilities of the 01 model paired with
+a powerful editor model so as we talked
+about we're going to roll back these
+changes so I'll build up a new terminal
+instance and you can see there are two
+files that were edited I'm going to run
+get restore Dot and you can see our
+changes were fully reverted so now we're
+going to stack feature one and feature
+two together right so we're literally
+going to ship two features in in a
+single prompt let's copy this open up
+the terminal we're going to run reset
+reset is going to clear out every single
+one of our context files and it's going
+to reset the chat history so there's no
+cheating here it has no information
+about the changes that it just made so
+it's effectively starting fresh we're
+then going to run/ load. aer2 this is a
+great way to customize and control your
+context files again shout out AER this
+is the most powerful most controllable
+AI coding assistant you can get your
+hands on right now I highly recommend
+this and in principal AI coding this is
+the tool we use to teach the principles
+of AI coding so let's go ahead and fire
+this off you can see there we loaded the
+entire context you can load and save
+context with a single command so let's
+run/ tokens let's see what our bill is
+going to be so 17 cents per prompt not
+too bad but of course you know if you're
+looking at this and you normally Run
+Deep seek or claw maybe much higher than
+you normally used to right you got to
+pay to play to use the best models so
+that's that we have our second spec
+prompt and it's going to run two
+features for us let's go ahead and paste
+it run this and then we can break it
+down just by looking at the top of this
+you should be able to identify what you
+want done right and this is how you
+create powerful spec prompts and
+communicate the work you want done to
+your AI coding assistance we have two
+features we want landing page
+improvements and we want to add ISO
+speed bench Awards so this is one of the
+benchmarking tools and we're adding
+reward capabilities to this Benchmark so
+for things like speed time taken and
+accuracy we want some quick rewards that
+will help us visualize the work done so
+let's go ahead and see if our a coding
+assistant is complete yet you can see
+here the architect has drafted the
+changes you can see our W frontend code
+right here fastest slowest most accurate
+least accurate and then we have the
+Perfection model so far so good right
+our AI coding assistant running 01 and
+deep seek looks to be writing all the
+code for us doing all the heavy lifting
+all we did was properly communicate what
+we wanted done with a powerful spec prom
+this is the second maybe third time
+we're discussing the spec prompt on the
+channel why is that it's because it's a
+Ultra Ultra powerful pattern that can
+get you massive results just by adding
+more you can ask these models to do more
+for you if you're using the right
+tooling so this is a powerful theme on
+the channel powerful theme in 2025 ask
+the model to do more and be super clear
+about what you're asking and how you're
+asking it right the spec prompt the
+specification prompt also known as just
+a plan helps you scale up the work you
+can pass off to your AI coding assistant
+and in general your AI tools okay so we
+can open up the context and you can see
+you know we have few more files here we
+have some typing files we have a store
+file and we have you know another
+component we have those same readon
+files we have a new section here
+implementation notes we're asking 01 and
+deep seek you know make sure you don't
+skip everything fulfill every detail and
+then in our low-level tasks you can see
+here we're running several prompts if I
+just collapse the actual work we have
+three tasks instead of one okay so we're
+asking our a resistant to do three
+things let's see if our work's complete
+looks like it is so let's go ahead and
+review remember in the age of AI we're
+becoming cators we're becoming reviewers
+we're becoming managers of code and
+information I still have not written a
+single line of code myself and as you
+can see here we just had
+21,000 tokens generated for us we can
+see the cost coming out about half a
+buck the first and second prompt you can
+likely get away with using a deep seek
+or CLA 3.5 that won't be the case when
+we get to our third prompt we'll run in
+just a moment so let's go ahead and
+collapse and let's check out the changes
+right so same kind of deal you can see
+our first feature was again implemented
+properly you can see we have a little
+bit of extra padding but that's fine
+this is something we can easily tweak
+and then we have our cards let's go
+ahead and see if that second feature got
+completed for us it did so take a look
+at this right so this is the iso speed
+benchmarking tool we talked about this
+tool in a previous video on the channel
+I'll go ahead and Link that if you're
+interested in this tool but basically it
+lets us create these great benchmarks
+where we can see and compare the results
+next to each other so if we collapse the
+header there and reduce the block size
+you can see we have several models
+running side by side together and this
+is just a cool way to kind of visualize
+how models perform next to each other in
+a real live way again Beni is all about
+creating benchmarks you can feel but if
+we focus on the feature that we just
+created here you can see something
+really interesting we have the fastest
+model but we also have the least
+accurate and if we scroll down here we
+can see Quint 2.5 coder it's the slowest
+model and if we go all the way to the
+bottom here we have the 54 latest in
+this Benchmark it's the most accurate
+and it has the Perfection Award right
+and of course Perfection is 100%
+accurate so this is really really cool
+to see right with this single prompt we
+were able to implement two features
+again these are one shot features okay I
+haven't written a single line of code
+I've been prompting I've been planning
+this is a big big theme for 2025 let's
+go ahead and break this down so by
+looking at the lowle task just the
+headers right the highle description of
+them we can see what we asked for okay
+Implement gradient background and
+descriptions update types to contain
+Awards update ISO speed bench row to
+compute and display Awards just by
+looking at the descriptions here we know
+roughly what the prompt will look like
+right and as you're building out your
+specification documents this is a great
+format to follow the spec template is
+something that we use a lot in principal
+ad coding it's so useful in fact that I
+have a code here that will automatically
+spit out specification documents for me
+okay and this is something that I always
+want to emphasize on the channel um I am
+an engineer and a product Builder far
+before I'm a YouTuber none of the stuff
+is for show I think it's clear for most
+people watching the channel but there
+are a couple people that literally think
+that I you know create these patterns
+that uh it's like just for show none of
+this is for show okay you can see here
+we have the spec and that will output
+this you know entire template that I you
+know use quite often frankly every day
+at this point and uh you know this gets
+me uh started on a great format for
+writing these plans right writing these
+spec prompts okay just real quick we can
+dive into task two and three since we
+already know it's in task one we can
+open this up we can see here we're
+updating our types updating your types
+first in the earliest step possible is a
+key pattern because it lets your AI
+coding assistant know from that point
+forward we're going to be working with
+these types you can see here I'm saying
+add Awards we are again like I just
+mentioned we're referencing that type
+okay this is super important every M of
+principal a coding you've seen this you
+know this already you're actually much
+further ahead than what we can cover
+here in a single video but you can see
+here we added a computed property and
+then we added you know a div to contain
+these new items right and so that's how
+these you know show up just by giving
+our a coning assistant the right
+information and by using a powerful
+enough model the power of the 01 model
+really starts to shine the larger and
+the more you ask in your prompts so you
+can see here our contact is getting
+larger our asks are individual prompts
+right our list of prompts are also
+getting larger okay and that leads us to
+our final large specification document
+and we're going to do quite a few things
+here so before we kick this off let's go
+ahead you know take our code I'll reset
+under our AER instance right so we reset
+the chat and we drop all the files so we
+have a fresh AER instance here reset
+this we're going to run get restore Dot
+and you can see in the background we're
+going to lose this feature so that was
+fully restored so now we're back where
+we started right feature one one is gone
+feature 2 is gone you can see
+everything's back to the base State now
+we're ready to run the largest three
+features in one specification
+document this prompt is massive it
+contains three complete features and you
+can see here we have 1,600 tokens as the
+prompt that doesn't even count the files
+so let's go ahead and boot up our AI
+coding assistant/ load and we have the
+context in
+-3 if we enter here you can see this
+massive load of context to AI code
+feature 1 two and three okay so let's
+get this fired off before we look at
+this I'm going to get this in the queue
+right this is going to take a bit of
+time to generate from the architect and
+then for our Editor to run okay so we're
+going to copy this and we're going to
+paste it in here and we're going to run
+it and then let's go ahead and review
+okay so we're looking for feature one
+our descriptions background we're
+looking for feature two our words for
+fastest slowest and most accurate and
+then we're looking for a brand new
+feature here let's go ahead and open up
+the multi- autocomplete benchmarking
+tool you can see here we have a list of
+models to quickly summarize the feature
+we're adding here these models are
+static so they are enums in the codebase
+right now we need to update them to
+support any model from several providers
+okay so that's what we're doing here at
+a high level there's a lot of code
+surrounding these existing enum values
+and that's why we need a ton of contexts
+and a massive prompt to get that done if
+we open up our objective and our
+contexts you can start to see um exactly
+what we need done so you can see those
+previous two features are rolled into
+the objective and we have the third okay
+so we're updating our multi autocomplete
+tool to use models as strings with
+prefixes instead of model aliases and
+this spec prompt is quite a bit larger
+if we go ahead and collapse everything
+here um you know there's a bit more code
+needed to be done here and we are
+getting to the edge of what's possible
+here with the 01 model I brog this into
+10 individual tasks there's a lot going
+on here you know this calls to a really
+important aspect of writing these
+prompts at some point something is going
+to go wrong we are Engineers this is how
+things work at some point you're going
+to push your capabilities you're going
+to push what's possible and then
+something will go wrong that's okay it's
+all about having the tooling and the
+right patterns to quickly get back up
+and correct the mistakes the great part
+about using the spec prompt here is that
+when something goes wrong you can see
+we're still coding here this is really
+really fantastic right this entire time
+our a coding assistant is still writing
+code for us since we have our plan our
+specification document in an isolated
+file it's separated from any AI coding
+tool any AI agent any AI tooling right
+this might seem like a small detail but
+it's super super important why is that
+why is this important we have detached
+the outcome the work that we want done
+from any individual assistant right we
+have this separate asset that is our
+plan and now we can deploy it to any
+number of AI assistants and to be super
+concrete about it that means that at any
+point we can boot up another AER
+assistant it's very likely that we'll
+have to come in on this third massive
+specification Dock and set up another
+ater instance to just clean up some of
+the work that our powerful architect
+model did just because there's so much
+going on here okay and this is something
+that you know likely in the future 03
+and Next Generation base models will be
+able to handle for us right they'll be
+able to use you know just a single
+architect mode just a single shot and
+get all the changes done for us but you
+can see here at around you know 1.5k
+tokens really 1K tokens um that's where
+I found 01 starts to fall apart for
+large large code changes again if we
+open up this context file I mean large
+right we have what 15 files here okay so
+let's go ahead let's hop back you can
+see our code was uh completed we have
+actually a lot of cash hit here that's
+kind of good to see but this is over
+several several runs our aor AI coding
+assistant had several issues that it
+worked through here we had a couple
+lenting issues um you can see here we
+had 22 search and replace blocks right
+we're asking for a lot and this is what
+you want to be doing with these next
+Generation AI coding tools and most
+importantly with your great spec prompts
+and these powerful 01 models Here's the
+final test right let's see if if these
+changes actually came through so let's
+go feature by feature you can see here
+we have our original feature our a
+coding assistant added a nice glow
+effect to our text I like this version
+the best let's go ahead and click into
+ISO speed bench we'll use sample data
+you can see here um it's missing the
+awards right we asked our AI coding
+assistant to do a lot it missed this
+feature okay so like I mentioned this is
+going to happen the great part is we
+have a specification document that
+contains everything we want done in the
+right order and even more importantly
+all of these items are referenceable
+okay so let me show you exactly what I
+mean so we have a couple options here
+and let's go ahead and do both of them
+we'll fall back on the second hop back
+to the spec prompt and we'll look for
+the change that's missing we are missing
+steps two and steps three okay and so
+I'm just going to come back to our
+architect it already has all this
+information in its context window right
+if we hit SL tokens you can see here our
+chat history has five ,000 tokens in it
+already Okay so we're just going to
+reference what was missing and say you
+know make sure you add it so we're
+missing our Awards be sure to add it
+okay and then I'm just going to paste in
+those lowl tasks and while this is
+running I'll show you the alternative
+option right which is to boot up another
+AER AI coding assistant so we'll say um
+sh- and to be clear you know son is 3.5
+Sonet and so we have this running this
+is just a base model running on AER we
+can type SL load
+a-3 have a separate context file so we
+can reuse it across any AER agent and
+now if we wanted to we could write the
+change but as you saw in the background
+here awesomely that change came in okay
+so you know we have our rewards there
+and actually really like this version of
+the awards system we have these like
+kind of full width bars here and you can
+see we got that same result right so we
+can go Ahad and hit play Benchmark we
+have the fastest overall coming out of L
+3.21 billion parameter but also the
+least accurate right makes sense we
+scroll down we can see our slowest from
+coin 2.5 54 latest um and this isn't
+even the official 54 model we can see
+here we have most accurate and we have
+the perfect score award so feature two
+kind of just one click away and our 01
+deep seek model got that correct right
+but I want to emphasize the point here
+that by having a pre-planned
+specification document effectively an
+asset and and you know I want to make
+that really clear when you when you plan
+out all your work what you're doing is
+you're creating a reusable asset that
+you can deploy over and over until the
+job is done right and this is really
+important 2025 is all about AI agents
+and on the channel it's all about
+scaling up what we can do the spec
+prompt helps us get there if you've
+taken principal AI coding you know this
+and you also know what's coming next so
+this is feature one and feature two okay
+so let's go ahead and see if we got
+feature three I'm going to click into
+this hit reset nice nice nice um you
+know I'm going to be totally honest here
+future 3 is massive during future 3 is
+where uh you know this video could get
+much longer so it's good to see that
+that came through we have our model
+prefixes right so the model prefix tells
+us what provider to use okay but it's
+not all perfect it looks like we are
+missing something I'm expecting a scroll
+here for some additional models okay go
+back to this spec prompt and if we
+scroll down um at some point here yeah
+so task six I asked for new models so
+you can see here I'm asking for a decent
+slew of new models once again I have
+this reusable app set this plan that
+already contains all the work right I've
+thought through everything I want I know
+what this looks like when it's done
+right and this is the point you want to
+get to right this is that senior mindset
+right it's that senior principal staff
+engineer mindset think about what you
+want done don't just open up don't just
+open up you know don't just boot up your
+ad coding assistant and start typing
+right stop think plan and then execute
+okay you will save so much time and you
+will do so much more as these models
+continue to scale up and improve and as
+you stay subscribed hit the like hit the
+comment to stay plugged in to this stuff
+okay I don't know if you've noticed by
+now but we don't just look at this stuff
+we don't just talk about hype news on
+this channel we use this technology in
+ways that help us get more work done
+than ever before we're going to copy the
+sixth prompt here and we're just going
+to again open up our AER assistant like
+I mentioned we can make this change in
+our leader architect AI coding assistant
+or we we can hop over to a simple Sonet
+right this will save us a lot of money a
+lot of time we can just run it here if
+we want to but I'm going to continue
+using the state-of-the-art because it
+already has all the context it already
+has everything we need right and you can
+see here we had a 13k token cash hit so
+the cost did come down quite a bit right
+if we look at the open AI pricing the
+cash input tokens is about half the
+price pretty good the big price of
+course is the output token right it's
+hard to get around this right at some
+point here with these powerful City
+theart models you got to pay to play
+open this up and say missing models
+requested by task number six okay then
+I'm just going to paste task number six
+and so while this is running I can show
+off uh what this can do and maybe we'll
+find you know additional thing we need
+to fix here um this is the multi
+autocomplete Benchmark the purpose of
+this is to uh see how well models can
+autocomplete single words right so it's
+just a quick Benchmark to understand
+fundamental capabilities of these
+language models we can see that change
+got finished so if I hit reset we can
+see our additional models our power o1
+reasoning model and deep seek
+combination right our model chain our
+prompt chain is getting a lot of work
+done for us even though it's missing
+some details we have this powerful spec
+doc we can keep referring to we should
+be able to run this autocomplete I'm
+just going to type something like
+calcu okay and so we have an error so
+let's go ahead and quick see what our
+error is here on our server Union is not
+defined this is a super simple fix
+normally I advise against doing this but
+I'm just going to hop in here and do
+this for time sake you Union going to
+refresh run calue bam and so we can see
+our models kicking off we have a couple
+errors on these models if we scroll down
+we can see a lot of our newer models the
+o1 preview completed 01 completed and
+you can see what this prompt is doing
+right I typed calq and our completion is
+coming in here with the correct or the
+incorrect autoc completion option here
+right uh we get a breakdown of execution
+time costs and relative costs and number
+correct right we can up vote down vote
+to change the uh accuracy and now run
+arbitrary models right we're not tied to
+our previous model Alias anymore and we
+had one error there where we needed to
+add this Union again this is just a
+small thing that you have to be ready to
+come in fix and adjust when you're using
+these powerful 01 reing models they're
+they're good but you can see here we're
+brushing up against the limits our limit
+testing and our large spec prompts are
+exposing the true capabilities of these
+reasoning models our cost for all these
+sessions came out to two bucks 23 not
+too bad considering all the work we got
+done that quickly as you're looking at
+this you might be wondering where does
+the time go of course I spent almost all
+my time here building out the spec
+prompt specifically the third spec
+prompt you can see here the first one is
+really tiny only 200 Tokens The Second
+One 600 tokens but the last spec prompt
+I really had to sit think through
+everything I wanted look through the
+code make sure that I understood as the
+Builder as a Creator I understood what I
+wanted to see so that I could properly
+package it and hand it off to our AI
+coding assistant we use the 01 model
+deep seek and then we boot it up we
+never actually ended up needing claw 3.5
+Sonet as our kind of you know backup
+Quick Change Model but it was here if we
+needed it right so super powerful
+pattern I hope you can see how important
+all this is you know hit the like hit
+the sub join the journey although 01 and
+likely 03 are going to be pay to play
+models um the capabilities and the
+things they can offer you is going to be
+incredible right with 01 and Next
+Generation models the question is
+becoming less and less about what the
+models can do and it's more about what
+you can do with the models okay that's
+what we focus on here on the channel and
+that's why I created principled AI
+coding if you want to write massive
+amounts of code with AI coding patterns
+like the ones we talked about in this
+video I recommend you check out
+principled AI coding as you all know by
+now software engineering is changing it
+already has changed now the question we
+have to answer is are we willing to
+change with it that's what principal a
+coding is built to help you do
+principled AI coding is my take on the
+best way to learn AI coding in the
+current Tech ecosystem where every day
+there's a new research paper a new model
+a new tool claiming to solve all your
+problems turns out most of it is not
+useful actionable or material what
+matters is principles and patterns
+surrounding AI coding that you can reuse
+tens hundreds and thousands of times
+okay in the course I've distilled
+everything I've learned since gpg 3.5
+was first available I've been AI coding
+since the beginning if you don't believe
+me you can fact check it by looking back
+on the YouTube channel over a year ago
+okay I have put everything I've learned
+into pure oil so that you can not only
+stay relevant but Thrive by learning how
+to use AI coding assistant to do the
+heavy lifting of engineering for you in
+2025 this is the point of no return if
+you're writing code manually you are
+starting the self-deprecation process
+okay and if you're writing code with
+AI um disguise the limit here right as
+you just saw thousands of tokens right
+hundreds of lines of code were generated
+by knowing how to do it and by focusing
+on what's most important in this course
+we focus on principles not tools there
+are many Engineers watching the channel
+you have already taken principal AI
+coding you know how valuable this is uh
+many of you have left uh you know
+fantastic reviews huge shout out to all
+the existing members couple exciting
+announcements uh we have new updates
+coming in February it's not exactly what
+you think I'm not putting out new video
+content yet but it's going to be really
+exciting stuff that's going to help you
+write code with AI faster and better I'm
+also working on setting up a community
+for principal AI coding members you can
+expect that to come out in sometime in
+Q2 I'm still learning how to manage a
+community properly and kind of learning
+all the RPS there so stay tuned for that
+this is your last chance to get the New
+Year's limited price deal uh this is 33%
+off the full price um I think we're
+going to go up to near if not up to the
+full price after January ends so if
+you're interested if you like what you
+saw in this video there's a lot more of
+it in principal a coding we focus a lot
+on the kind of key principles and
+patterns behind great AI coding and less
+on the individual tools and models
+themselves this is a really really
+important differentiator because the
+tools and models will continue to change
+over time right this is why we focus on
+principles not tools all this stuff will
+change that's the only guarantee in
+software engineering things will change
+what doesn't change is the principles
+that can guide you throughout this
+entire process okay one of the key
+principles we talk about is managing the
+big three context model and prompt these
+are the essentials that you need to
+write great a coding prompts and get a
+ton of work done in fractions of the
+time so jump in here start with the
+beginner lessons go intermediate then
+Advanced if for whatever reason you
+don't like what you see or you're not
+interested or it's just not for you this
+is specifically for software Engineers
+you can get a full refund before you
+start Lesson Four okay I've made this as
+risk-free as possible for you so if
+you're interested jump in here get the
+New Year's deal before it ends and
+accelerate your engineering where we're
+writing code with AI assistance where
+we're packaging and handing off work to
+our AI tooling to get more work done
+than ever before with 03 right around
+the corner it's super important to play
+with 01 to get some value out of it and
+to understand what's coming next we're
+not just paying for top J performance
+when we use 01 through the API when we
+you know use 01 Pro mode inside of chat
+GPT what we're paying for is a glimpse
+of the future right and we're preparing
+to push compute even further Beyond with
+Next Generation Benchmark breaking
+models like the 03 model we want to be
+prepared for this when it happens and
+this is how we do it right we scale up
+our work with powerful spec prompts with
+powerful plans on the channel we're
+focusing a lot more on how can we
+package and handoff work this is where
+Ada and the personal AI assistant also
+come into play right we want to be
+handing off work to compute that's
+always on always available for us we
+want to be utilizing this API we want
+compute to be doing work for us the
+prompt is the new fundamental unit of
+knowledge work and now we need to stick
+to the the right principles so that we
+can use the right patterns that allow us
+to max out our computer and use the most
+intelligent models to get the most work
+done how will you even know how to use a
+model like 03 if you don't even know how
+to use 01 or even 01 mini food for
+thought if you don't want to pay that's
+fine I totally understand the next best
+thing to do is to stay plugged in to
+information channels like this one so
+you at least understand the potential on
+the channel we're on a mission to max
+out compute and get massive Roi on our
+time if that interests you like
+subscribe comment to stay connected to
+these actionable ideas stay focused and
+keep building

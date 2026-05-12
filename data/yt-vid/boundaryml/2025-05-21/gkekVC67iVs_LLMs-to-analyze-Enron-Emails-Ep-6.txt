@@ -1,0 +1,1835 @@
+And let's um let's kick it off. Dex, how
+was uh how was this last weekend? Oh
+man, what a blast. Uh we still got to do
+the post, but um had a lot of fun. Um
+for those of you who who missed the
+Well, we didn't post about it. So um we
+did a eight hour AI that works workshop
+where we went super deep on a lot of
+advanced prompt engineering techniques
+and um
+built some 12 factor agents from
+scratch. Um I think some interesting
+takeaways for me uh one of the biggest
+ones is like this thing that keeps
+coming up which is like we don't need
+bootstrap for agents. We need shad CN
+for agents. We need like an open box
+that you know yes you generate all the
+code and then I own it and there's no
+library like it doesn't I can't just
+like upgrade the version and get new
+stuff. I have to do it by hand. But I
+think I think that's what people want
+right now.
+What was your favorite takeaway?
+Um, I think I was surprised that 40
+engineers stuck around on a beautiful
+Saturday uh afternoon with the windows
+outside and decided to listen to us talk
+for uh eight hours rather than go
+outside for a walk or do anything else
+with their time. That was quite fun.
+Um but um I really I think I really
+liked what some of the people were
+saying like this analogy that they were
+starting to gro about Chad CN as well
+about how what where we really need is
+prompts that we control not prompts that
+a library controls or framework controls
+and that being like a really good
+booster for being able to build these
+kinds of things.
+Awesome. Um cool. Well, I'm really
+excited about what we're working on
+today. Um, I guess we wait for a couple
+more people to You want to start at like
+10:05? I just shot you a link to the
+whiteboard and two links.
+Uh, which one is first or second?
+Usually the second one is the public
+one. Okay.
+Yeah. I think the one that I'm really
+really excited about today cuz like I
+think uh usually we end up talking about
+theory and today we're going to do
+something very practical uh which is
+we're going to start from a problem from
+scratch and we're going to write a bunch
+of code and I think the beauty of the
+problem that we're tackling today is
+that it's really not that much
+code especially once you break down the
+problem in the right
+way. Um but shall we kick it off?
+Uh yeah cool. So, do you want to set the
+stage and describe the problem in
+general?
+Yeah. So, let me um I can share my
+screen and kind of um walk through some
+of this stuff. Um so, I'm going to pause
+for one sec and just close a bunch of
+tabs.
+Um so, um what we got is everybody hear
+me? Okay, sounds good.
+Audio is great. Um, let me switch and
+see if I'm pretty sure for context. I
+think one of the most common problems
+that exists in AI is this problem that a
+lot of people have which is like you
+have some guidelines that you want
+something to follow. So then you can
+write an AI pipeline that mimics those
+guideline that guideline evaluation in
+some way and that was the theme of what
+Dexter titled this talk which is like
+policy to prompt.
+Yeah. So essentially like one of the
+biggest things that I think people are
+doing a lot on in AI and there's a lot
+of AI startups that are doing literally
+just this which is like taking a set of
+policies um and so this could be things
+like FINRA this could be things like SEC
+guidelines this could be things like
+accounting laws in Europe
+um basically anything where there's like
+a big set of documents
+Um, and so like one of these that we're
+going to look at today is what's called
+Sarbain Oxley, which like there's a
+plain text version. You can just get it
+from Wikipedia, but it's a bunch of
+rules about like from like the early
+2000s, I think, about like how do
+corporations need to operate in order to
+kind of be held accountable and, you
+know, to keep their um all the crazy
+rights that they get. Um, this was
+published by the SEC in the early 2000s.
+So like there's big sections of plain
+text and like what are really really
+good at is processing giant chunks of
+plain text and turning them into
+structured information.
+Um, so what um what is a really common
+problem is like you take a set of
+policies and then you take a bunch of
+evidence which is just like here's
+something that happened and this can be
+super generic and you put them together
+and you say like for each piece of
+evidence was the policy
+followed? Um and you can output
+basically a list of like
+um
+results that will tell you you know for
+policy a section two yes policy A
+section
+three no and of course we have LM so we
+can have some descript description or
+something else right
+um super common problem I've talked to
+tons and tons of founders doing this
+tons and tons of companies doing this um
+people trying to use AI to do this. I
+know some of the company that are making
+like seven figures doing this as a as a
+company. Yeah. Me and Vibob like to joke
+that we're going to create uh a thousand
+a thousand AI companies this year just
+by showing people how to do some simple
+stuff that's super super
+valuable. Um not uh not not ourselves by
+the way. You all have to take this and
+go make something dope with it.
+Um I think uh Dax one thing I want to
+highlight here is like this general
+problem space that we have of like you
+have some policy you have some evidence
+and you want to take the evidence with
+the policies and analyze if it's
+followed or not. Yeah.
+How I guess like the most important part
+is like what do what do you think is the
+hardest part about this problem? Let's
+start with that and then let's do some
+whiteboarding of like system
+architecture stuff and then let's talk
+about it.
+Um yeah, I mean so I think like the core
+of this is like you have a piece of
+evidence. Uh and let's make it more
+concrete. What do you mean by evidence?
+Uh so like the example we're going to do
+today is going to be um we're going to
+use the emails from the Enron data set.
+Um, I don't know if anyone knows
+quickly, but the story of Enron,
+um, is that they were a big big company
+and it turned out they were doing a lot
+of really shady stuff and the entire
+company fell apart and all the
+executives were kind of like screwing
+everybody over. Um, and then the company
+died. And so the idea is the Enron email
+data set, it was published by CMU. It's
+a giant uh 1.7 g gig archive of emails
+from sent by people at Enron. Um and so
+you can come and see all these sent
+messages. Um and you can see this. So
+what we're going to do is kind of go
+through each of these pieces of evidence
+and say, "Hey, did did this email break
+any rules?"
+Does that track? Yep.
+Um so this will be a fun one.
+um still kind of poking around with
+different sets of rules. But one thing
+that um we were messing with was this uh
+this is a 2004 code of conduct that is
+published by JP Morgan. It has lots of
+rules about uh talking about the
+business publicly about um accepting
+gifts and things like that about
+publicly talking about finances without
+disclosing you're an employee. Um I'm
+not sure we're going to get out of this
+but um we will we will try a couple
+different things. So we'll pump Sarbain
+Oxley and a couple other things through
+here. Um, and the idea is not that like
+today we're going to build a full end to
+end demo. We're going to kind of like
+build the architecture and then figure
+out how and do it really naively to
+start. Um, and so what we want to have
+is kind of like extracting
+uh kind of like from the policy you're
+basically building a set of prompts,
+right? And so like it for each Yeah,
+let's write some code.
+uh find uh violations,
+right? We'll go we'll go Pythony here.
+Um policies list of
+string, emails list of
+string.
+Um and then this will be like a list of
+results, right? And a result will have
+uh what goes in the result of
+um I think before we Yeah, we can write
+this out really fast. The source email.
+Sure.
+um
+some sort of identifier of the policy,
+right? I don't know exactly how we're
+going to if it's a pointer or if it's
+the content or whatever and then it's
+like
+something like this. Yeah, I think
+that's a pretty good um I think that's a
+pretty good uh start. But I think like
+before we even go go into this, let's
+just like try and whiteboard a little
+bit and just say like what kind of uh
+diagrams do we actually have? So I think
+when I look at this data the first thing
+that comes to my mind is like what's the
+data that we have available to
+ourselves. So we have like the you said
+the what what are those docs called that
+you talked about you had two documents
+specifically one was a plain text
+document and then one was the one was
+the one was a PDF. Yeah the JP Morgan JP
+Morgan and then what's the other
+document here? So beans exactly and I
+think mo there's two different ways that
+we could do this. The most naive way is
+we put this into some context window. We
+put this into some context window and
+then we just ask the LM to do the dumb
+thing and say okay is this is this uh
+does this match the policy break policy
+and there's probably a word world in
+which like um where this
+works where like you can actually take
+this email ask it like literally just
+ask the LM directly does this break the
+policy and just get a yes or no. Yeah
+but I don't think this will work with
+most models today yet. So, we actually
+have to break this problem down into a
+different problem. And I think and I
+actually want to say like we could even
+go even bigger and we could say all of
+the emails tell me which emails break
+the policy and why. But you're already
+skipping that one, right? Yeah. Yeah. I
+skip that one. We can't send all the
+emails. So, we say for a single email,
+here's the entire policy. What's the
+email? This is what we always talk
+about, right? is like if you can solve
+the problem slowly and expensively at
+the start but you know it's possible
+then you can go grind it down and try to
+do something more focused. Exactly. So
+now what I would say is instead what if
+we could break down the plain text into
+a bunch of
+policies and then go ask oh I see. So we
+have the ability to go and take this
+whole thing and break it down to a bunch
+of unique policies and then ask
+questions about each policy in
+parallel. we will probably get slightly
+better answers and even over here we can
+actually use like a single prompt to go
+do all this like we don't technically
+need different prompts
+um where we ask it for every single one
+um and just ask it which of these did we
+break and we kind of know exactly what's
+going on you're talking about single
+prompt as in like ask it to reason
+through 20 policies first and then
+produce it answer well once we have a
+list of policies and doesn't really
+matter how we did this step. I should I
+should be clear on this. Oh, when you
+say Yeah. When you say single prompt,
+you mean one prompt where we just have
+template in the policy and template in
+the evidence. So the input to this
+prompt is the policy description and
+then the and the email and we just ask
+it does this does this email break this
+policy? So that's one thing that we
+could go do. Uh right. So I'll break
+this out later. um t so like defaf
+um check policy will take
+in we'll take in like an
+email stir and a
+policy stir and literally just return a
+boolean y that's what each of these do
+but I think that this is actually not
+going to end up working as well for most
+systems so instead what I would what I
+think we could do wait why
+um one because the nuances of the policy
+will probably get lost on the system a
+lot. So like for example uh we worked at
+some fintech companies and like one of
+the things that comes up is
+like the word asset means something
+completely different in the context of
+different financial
+companies and even extracting the
+terminology of that word asset is really
+really really hard.
+Okay. Right. Because in some companies
+like like if you're in like macro uh in
+like doing like macro uh macro trading
+then like assets can include like oil
+fields or like uh like like a bond that
+you have on an oil field or something
+else. But if you're in like a and the
+word crypto like what do crypto what
+does crypto mean in the sense of assets?
+It we really don't know. So I actually
+think to do might actually be to go even
+further and say in fact we're actually
+not going to pick every policy. We're
+only going to pick some of
+them. And for now, instead of being
+really good at detecting every policy
+break, we'll pick a couple policies that
+we know are critical and go specific
+uh and I'm going to name these now.
+Policy A, policy B, and go build
+specific um pipelines for policy A and
+policy B
+uniquely, if that makes sense.
+Cool. So these might have their own
+custom prompts and it's not just
+templating in two strings and saying
+like does this match. Yeah. And they
+might even have more than just a prompt.
+They might have a whole pipeline
+for each one if that makes sense. Cool.
+Yeah, that makes sense. Um I'm wondering
+if it might make sense just to
+demonstrate kind of like really simply
+and like testing and prompts like what
+what this naive way looks like before we
+go start and do the advanced stuff.
+Yeah, let's do it. So like just just to
+quickly just so we have something to
+build from like let's go from like here
+let's do like evaluate
+policy and we would just say
+like email
+string policy string.
+Um, and we actually we built another
+pipeline already or I I was hacking on a
+short pipeline that is basically just
+extracting questions. And so like read
+through a giant policy document and
+extract a list of kind of like policies.
+I think VIB made a really good point
+which is like if you use a bunch of LLM
+generated inputs, you're going to get
+lowquality LM generated outputs. But
+like here's an example of like what this
+might look like. Um, so you could take
+this question and ask, you know, of this
+email what what what was there? Um, but
+that's just kind of framing the shape of
+this. Um
+um, and compare them
+to pieces of email evidence, right?
+Yep.
+Your goal is to determine whether the
+email evidence violated the policy,
+right? Yep.
+Here's the email.
+Say
+email policy
+say, you know, I would actually put the
+policy in the system prompt. Okay, cool.
+Um,
+We'll just have one. Uh maybe we should
+return an array of violations.
+Even though we're only going to do one
+policy.
+Yeah, one policy at a time with a bunch
+of
+um and then I would also list out like
+uh Yeah, we can do
+that. I would put the reason before the
+reasoning.
+Oh, sorry. I put the result before the
+Yeah, there you go. Okay. Why is that?
+Well, let's let's let's just run it.
+We'll try. We'll flip it around. We'll
+see see how it affects the output,
+right?
+Um, so the email let's just grab one of
+these. You can just grab one of these
+and run
+emails. Yeah.
+And then the policy would be something
+like members must not accept gifts. And
+then one more hashtag at the end. Yep.
+Oh, other way. Swap it.
+Oh, really? Oh, sorry. It's like this.
+Yeah. Sorry. Since I highlighting on
+your color scheme doesn't work for my
+brain.
+See if we can get this to run.
+Uh, there's still some error. Oh,
+bull. All right, here we go.
+Uh, just hit command. Yeah, I think if
+you hit command S on the file, it should
+load for you. I'll figure out why for
+you specifically. This seems to be a
+problem.
+Um.
+Oh, do I need to? No, you should. I
+already updated this. You can just open
+it. Can you hit run
+test? Just say command S. Yeah, there
+you go. Just say command S on that file.
+Uh, this is odd. There you go. There we
+go. All right. Here we go.
+So result false reasoning not accept any
+does not discuss any acceptance of gifts
+or favors. Yeah.
+Um okay. So that's kind of the the shape
+of it though. Um let's write a test. Uh
+and then I think the the thing about
+reasoning is like um there's a couple
+kinds of things that we could go do.
+Uh, shouldn't you before? Um, it depends
+on what you're trying to go do. Uh,
+sorry, there's a couple questions uh
+that people are asking. And I realized
+Oh, yeah. I did not have my chat window
+open while I was looking. Um, Kosal
+asked, "Wouldn't you say in the system
+prompt uh what you are working with to
+avoid that you don't know an asset?" and
+cush that that's that's true. But if I'm
+building something that analyzes all of
+the Enron data sets, then you can do
+equal equals instead of just
+result. Yeah. Uh if I'm analyzing
+something that analyzes the entire Enron
+data set and that ends up being really
+hard because uh like well in the world
+of Enron there is no crypto. But you can
+imagine that in today's if I'm a large
+asset manager that sometimes I'll have
+crypto, sometimes I won't. It's very
+conditional. So you can actually like
+hardcode that in uh cursor rule files.
+There is one I can share that in a bit.
+Um can we do contextual aware
+decomposition for the policies and only
+check with relevant policies and
+exactly? So Deborah exactly so we don't
+actually want to go do all the policies
+but you're still going to have to build
+some pipeline that predicts which
+policies are relevant to this. And
+there's different ways that we can go do
+this but at some point we can use an lm
+per policy. We can do like some sort of
+selection with some sort of embeddings.
+We can do like the ability to turn on
+and off policy A and B and whether we're
+running A or B could be another
+prefilter step that we choose to run to
+decide which of the policies are even
+relevant for an email. Yeah. Like this
+break policy A doesn't have to call an
+LLM. It could have a step that says is
+policy A relevant for this email and if
+it is then we'll then we'll try it out.
+Okay. So basically in our find policy
+violations we would first do
+like
+filtered policies equals filter.
+Yeah something like that becomes an
+option that we can go do. And then Kyle
+asked the problem um
+uh Kyle asked a problem for um like
+shouldn't we put the reasoning before
+the result? It depends on what you want
+to go use the reasoning for. So in this
+case, what I would want to go do is I'd
+probably want to show the reasoning to
+the user about like what we did. But
+what I would actually here Can you go
+back the other prompt? You want to go to
+the code? Yeah. What I would do is like
+I would add one more thing above result
+uh above. So and then that's like uh
+like um relevant snippets.
+Ah yeah string array. Exactly. And
+that's going to be snippets of the email
+that might be relevant to the policy
+that and then what I would say that are
+that I would say that may be relevant
+specifically. I'm going to use the word
+may so it's more permissive. Yeah. And
+then I would go run this prompt and you
+can just see how that this works.
+Yeah. Um cool to find a way. Do you have
+any um any hacks on uh how we might go
+through this seven gig 1.7 gigs of
+emails and find some that are
+interesting? I would grap for gift
+gift. That's what I would do. I I there
+might be one which because Enron
+um and that might be the fast way to go
+find something or I would just make a
+test case that like is like artificially
+there and then eventually we can just go
+run this in a massive AWS job.
+Yeah, that was the other thing. I was
+like, it would be interesting to talk
+about kind of how do you scale this
+thing, right? How do you actually just
+go fan out to hundreds of emails in
+parallel? Well, the problem you'll first
+run into is rate limiting. Um, yeah. Oh,
+nice. I
+saw a gift card is what I saw.
+There's a lot of um there's a lot of ads
+in people's email. I think these are all
+like spam emails selling people [ __ ]
+I mean that's fine. Share it in gift.
+Thank you. Yeah,
+you can just copy and paste one of
+these. It doesn't have to be everything.
+It just has to be part of it. I think we
+should just go and write as much as we
+can. Oh yes, you are a command line
+copier which is makes sense.
+Uh, I can't tell if you're complimenting
+me or talking [ __ ] but I'll take it.
+Yeah. And there's there's interesting
+things in here, too. So, like there's
+clearly emails that
+um Oh, it's going to copy and paste all
+this. I would just Yeah, using an LLM
+for copy paste is really uh is really a
+great is a great approach. Like write it
+yourself.
+Yeah.
+it
+doesn't cool I think you have too many
+curies at the bottom.
+Oh, they were already there.
+Yeah. Let's try this one.
+Result true.
+Um, so it pulled the relevant snippets.
+Result true. And then we have our
+reasoning here. Yeah. And like we can
+just skim this email really fast just to
+make sure. I think it's useful to
+actually read it because like no matter
+what we do fundamentally at this point
+like the LM is going to go do this.
+Yeah. So let's read
+this. So clearly this person did not
+receive a
+gift. This person sent a gift which is
+very different than receiving a gift.
+And this is exactly what I was talking
+about. Having a general policy system
+that does this won't capture the nuance
+of the actual policy.
+Yeah. And that's going to make it hard
+to actually build a good pipeline.
+Okay. Like this is like a clear example
+of what's going on. So here's how I
+would attack this problem in a little
+bit. Instead of going for this directly,
+I would say we're not going to build a
+system that evaluates a policy. We're
+going to build a system that evaluates a
+gift
+policy because I don't want to suddenly
+flag people
+uh for actually like not uh for not
+actually Yeah, there you go. I don't
+want to suddenly flag people for uh
+giving gifts, not getting gifts. Now,
+there might be something illegal that we
+do evaluate gift policy is probably what
+we want.
+Yep.
+Yeah, exactly. So, and what I
+really exactly what I really want to do
+is I might even put the text of the
+policy in there myself if if it's
+useful.
+Um, yeah, there you go. Uh, we don't
+need the policy parameter going into
+this. Yeah. Um, and then we the
+violation is going to be slightly
+different. Um, so can I ask for remote
+control? Yeah, go for
+it. You're supposed to figure out the u
+code remote screen sharing thing, but go
+for it. All right, you're in. So, this
+is kind of how I do this. Instead of a
+violation, I'm do like class
+email gift email
+analysis. Uh, and I'll say like uh type
+um
+gift gift
+received gift given. Yeah,
+um sender will be like the sender of who
+it is. We don't actually need to see
+this.
+um sender
+company and specifically what I mean to
+say when I say sender and is like um
+risk uh I see okay so you're kind of
+hard coding the exact reasoning steps
+you want the model to take into the
+structured output
+exactly um and then specifically what I
+want to do is like recipient
+Um
+yeah.
+Um all right, cool. Recipient. Uh what I
+really wanted to hear is like recipient
+uh company.
+Yeah. What I really wanted between the
+sender
+and let me write this out. Oh, can you
+do sender and the company?
+Not company. Yeah, exactly. And then
+same thing down
+below. Exactly. And now make that again.
+What is the What is the company? I feel
+like that's gonna be Oh, yeah. But at
+the top, put like
+company. I I may want to pass in the
+company as a parameter into line 13 as a
+as a as an input. No, we may not even
+want that. Actually, we may not want
+that. We're going to send it like as a
+parameter like uh the as parameter on
+line 13. Yeah. Let's send in the company
+name.
+Exactly.
+I mean, if I know is it the So, the
+company name in this case is Enron or if
+it's the the other party. Exactly.
+Enron. You Okay. So if I'm doing this on
+behalf of and on line 18 you'd say on
+behalf of
+uh on line 18 you're combined on behalf
+of Yeah. Exactly. So now you
+just exactly
+working at Yeah. Sure. Yeah. Okay. Um,
+so this is cool, but I want to throw
+another sticky one your way, which is
+like um I think what's what's probably
+tricky is like figuring out which policy
+this is and generating good test cases
+with real data. Um, because what I want
+to do before we like do any more
+optimizations of the pipeline, I want to
+do what we talked about last week, which
+is build a really simple end toend eval
+um, and kind of build out that golden
+data set. I know I know that's kind of
+ends up being a lot of manual work, but
+like is there is there ways we can build
+kind of the pre-processing pipeline to
+kind of set up based on what we have
+here um and kind of do a parallel search
+through all this stuff to try to find
+that? Well, like one of the first things
+we said last time was the most important
+thing to do here is going to end up
+being like some sort of like a vibe
+eval. So, I just want to get a feel for
+what that was. Like you notice how it's
+just like putting a gift in there from
+last time when we did when we did that
+gift email. The first thing we noticed
+like oh this is a clear bug because
+started happening was can can you bring
+that test case over?
+The first thing we noticed that this was
+a clear bug. Oops. Uh because this was
+the bug here wasn't actually the fact
+that everything was wrong. It's just
+that this is like a
+Exactly. So now let's try running this
+really fast. I just want to see what
+ends up happening.
+Yep. And just hit command S again or
+press enter or
+something. There you go.
+Um, cool. That's
+great. That's great. So like the first
+thing that this did is it actually was
+able to figure out that this was a gift
+given from Kathy to uh the third party
+business and the risk level is medium
+right it could be risky because Enron is
+not Enron employees are not supposed to
+give gifts to people and like maybe
+that's why the previous system said true
+but we can go into this much much better
+um and we can figure out like why we
+might want to go do
+like maybe this is a charity, maybe this
+is something else. Um, so my manual
+thing, the first thing I would do in
+this one is like go I'm just going to
+throw something out for later or maybe a
+follow-up episode, which is like we
+could do a follow-up of like turning
+this into something a lot more agentic,
+which is like, hey, what what follow-up
+research tasks might you want to make
+before you to get all the context for
+evaluating this? And that might be like
+read this email and see like, oh, I want
+to go do a web search of Kinder Morgan
+and see who that is. Because that's what
+I would do as a human. I would be like,
+who the heck are these guys?
+Exactly. So like that's one way to make
+it super agentic where you just go and
+scrape the data and you can go do that.
+So what that means is we might actually
+want what you were adding earlier which
+is the company names into all of
+them. So let's add company names. Uh or
+like maybe we had a recipient type first
+of all.
+Yeah. recipient type uh would be like
+what like and let's say like let's call
+that like client supplier other let's
+make a type called entity
+yeah so then now we'll do entity we'll
+make an entity type at the
+bottom exactly like this yes
+I would say I would say entities might
+be like
+individual I would I would probably say
+individual corporation.
+Oh, I see. Or Yeah. Okay. Right. Or like
+charity.
+Uh because like we know in gifts like
+these are probably like three kinds of
+things that are involved. And now let's
+try test case
+again. external partner, Kinder Morgan.
+Yeah, it sounds like the um the person
+that received it is detecting as an
+individual, which makes sense because it
+was given on behalf of the per Can you
+read the email again?
+Yeah.
+So, what's weird is this is like a
+multiple thread, right? This was sent to
+a [ __ ] ton of people at
+Enron from it was like
+forwarded by Kathy
+Mayfield and it looks like Bill was
+thanking Kathy for the gift
+and then I decided to donate he further
+donated the gift to a different center.
+Yes. Right. So it's like a three-way
+hop. So what that's interesting because
+it goes from Enron to Kinderborg which
+then went to another children's center
+and you could completely see how um this
+actually will
+um effectively require additional
+followup to actually go and like track
+this down and find the relationship
+between Bill and Kathy.
+Yep. Right. So I think the first thing
+that I really recommend that you're
+seeing here is like what we're doing
+here is we're reading the email and
+we're just analyzing the test case one
+thing at a time. We're not trying to if
+we go and straight build the eval, we'll
+kind of get lost in the sauce. Yep. What
+we really should do is just read some
+data. And like here, I think we've
+collected probably enough information to
+then say like there's not much more we
+can get out of this email. Everything
+else that we do would be a follow-up
+based on the reasoning that comes out of
+it. Yeah. You might want to Can you go
+up one more step
+after? Yeah, we can do like next next
+steps after reasoning.
+string array. Yeah.
+Or like follow-up steps, right? Yeah.
+Follow up actions. Yeah, sure. And I
+would put that after
+and like action could even be like
+basically like a this could tr turn into
+like a list of tool calls to do.
+Exactly. Can you put it after reason
+though? Oh yeah. Yeah. Now press
+play. Cool. We can do that, too. Yeah,
+let's go
+there. Cool. So, that looks good. And
+then you're right, we could turn that
+into actions that are more oriented or
+we could pass it into a secondary agent
+like pipeline that has to go deal with
+that. Um, but I think this is kind of
+where I would um stop and just say,
+okay, now I have a thing that's pretty
+good. Yeah. Okay. Okay. So, so, so do
+you want to write some Python code here?
+Write some Python code now. Okay,
+cool. So, um, I'm going to make a new
+file.
+So, let's just assume what we're going
+to get is an email input.
+Yeah. Sorry. Let me um pop back up here.
+Dude, you got to keep your extensions up
+to date. Your uh rough is also out of
+date. It's We don't use type checking in
+this house. I'm actually going to turn
+it off just to trigger you. Oh my god.
+Yeah. There we go. Don't do that. Don't
+do that, please. All right. All right.
+All
+right. All
+right. Um, we don't even you can ignore
+the if main or whatever. It doesn't
+matter. Okay, cool. Um, so now that what
+we'll do is we'll get let's assume we're
+going to get a single email,
+right? So, de read one email.
+Sure. Yeah. I was in we don't even have
+to read the email, but yes, we can do
+that if we want.
+Well, because I I would eventually like
+to build up some stuff that lets us just
+like grab a random email. Like, we're
+not going to be able to do the whole
+set, but Okay, that's fine. Uh, yeah.
+Slash
+uh I don't know who this is, but uh sent
+mail people talking [ __ ]
+Okay. Um,
+or do you want to read that exact that
+exact one with Doesn't matter. I I just
+want something. Yeah. Yeah. Yeah. Okay.
+Cool. Great. So, we're going to read an
+email and then here's kind of what I
+would do as we read these emails. Yeah.
+So, Oh, I mean it kind of that cool. Um,
+and then you have to import B. There you
+go. Oh, my cursor is getting quite good.
+Okay. So, this is actually not going to
+work because our gift policy makes an
+assumption that there is a gift thing
+built into it. This was I think uh
+someone's question earlier like
+Deborah's question. We probably want to
+we probably want to ask a very simple
+question like is a gift involved? Yes or
+no. Gotcha. On so that's right another
+model. Sorry, you have to open. Yeah.
+So, we can just do like
+function mentions gift with gift
+involved. We don't even have to like
+mention that. We could have like rejects
+the word gift.
+Okay. Right. Like let's do we'll make it
+a Python function for now. Yeah.
+Exactly. There you go. And then we'll
+just do
+that.
+Exactly. And now we have analysis on the
+emails. And now we basically have like a
+gift pipeline that is able to go check
+this.
+Gotcha. Right. Um and then you probably
+want an else
+statement. if else or if return. Yeah.
+Yeah. We we'll just return. Very cool.
+Um and this is kind of what I would do.
+And now we have a system that is able to
+go from like not knowing if GIFs exist
+to where we can probably find all the
+policies where GIFs are involved and the
+risk is high.
+Okay, cool. So it's
+like exactly. And I would only print out
+those analysis and I would print out
+like the email path for those emails. So
+I what what that's why I was trying to
+write the function that does this not
+like the whole pipeline because if we
+have a function then we can wrap it
+around a pipeline that passes in an
+email. Yeah. Yeah. Um
+check exactly.
+Uh you want to make it async then you
+have to do uh async client on line two.
+Oh yeah. Um
+yeah and then
+yeah line two needs to
+change. Line two needs to change. Oh you
+want to just do async. Yeah exactly.
+Cool. Cool. Uh, and then you have to
+import
+async.io. Cool. Let's try
+it. Um, all right. We'll just run it
+from
+here. I just get the path
+wrong. Yeah, this is kind of the goal,
+Andrew, for this time. Usually we do a
+lot of theory but our goal this time was
+like let's start from nothing and
+actually build up the pipeline
+right so while D for so one of the
+things that email does not mention on
+gifts cool let's put a freaking for loop
+around it and just run it on everything
+so before you do that this LM thing is
+going to blow out the water so don't
+actually like run on LM just like
+exactly
+iterate over every email and just go run
+it when you go do that so I'll show you
+how to go do can I take over
+[Music]
+Um, sure. Okay, go for
+it. Want to write some cursor code.
+That'll probably work. It's They're not
+as star.txt. They're just like number
+dot is the thing.
+Um, okay. And then it was like read.
+It's like starst star.
+Okay. So I just asked cursor to write
+the code then. Okay. Sorry I can't type
+under. Yeah. Yeah.
+Isn't it path? Isn't it just pathstar
+slar?
+Um yeah yeah. Okay. Just call
+that. Wait, I don't think it has. Oh.
+Oh, I guess that does
+work. Okay, then. No, then don't you?
+No, you're passing the path already.
+That's why that that's why it does it
+that way.
+Say that again. You're passing here. Let
+me tell you. You got it.
+Can you turn off Vin mode for me,
+please?
+[Music]
+[Laughter]
+star path. Okay,
+great. Is file. Then we just append it.
+We load it in.
+That's probably going to blow up memory
+because it's like 1.8 gigs. 1.8 gigs is
+nothing. Uh, okay. What we'll say is
+like I got a very old MacBook over here,
+buddy. Okay. talking 2022
+than
+uh
+10,000. Okay. How about this? Yeah.
+Yeah, let's do that. All right. So,
+we'll load emails from Dur and then what
+we'll do is like we'll say
+like
+dev that should be easier. So I'll do is
+for every email and
+uh we'll do this and then instant
+io check emails
+then you don't need this anymore. Look
+no I do I do I do need this. Oh you just
+need the first part. Yeah. Okay, we're
+going to do this, but I'm not going to
+actually run this because what else I
+want to do is this is the other thing
+people forget to do, which is um sele
+Four.
+Perfect. We're going to do this. And
+then what I'm actually going to do is
+I'm just going to return
+return false, right? Because you want to
+collect the results. Exactly. And return
+true. So, I'm going to return this
+because I don't actually want to trigger
+the LM yet. If I trigger the LM, I'm
+going to be
+closed. Uh, and what I want to do here
+is equal to
+results equals this. And then I want to
+return results or return the results.
+count. Oh, cool. Now that should do it.
+So, now I can go do this. Um, the reason
+I don't want to trigger the LLM shortly
+yet is because I am going to run 10,000
+emails here. We're going to be sitting
+here for minutes if we're in end up uh
+in this loop. So, I just want to get a
+proxy for what my data has before I go
+and execute it in a meaningful way. Um,
+this is going to run up to 10 in
+parallel. That's why I did async.io.
+Oh, 44. Pretty fast. Cool. So, that's
+fine. We can 44 emails. We can go
+process. We can use an LM for this. This
+isn't going to be a big deal. So, let's
+actually turn on the LM. But before we
+do that, um, so now we know that this
+isn't Can you Can I go back to the code
+again? Yep.
+Okay. So, this is great. And
+specifically, I'm going to start
+changing this to return a nonobject
+instead. Sorry, I have my Zoom. And this
+is like an optional of analysis that it
+returns. Exactly.
+I can do that. Uh, wait one second. It's
+on option on office. Let's be very
+clear. Uh, this is going to be I'm only
+going to return high risk levels. Yep.
+Can you can you make that uh can you
+return sorry can you return analysis if
+the risk level is high? Yes.
+Yeah. Otherwise return none. Exactly.
+And then actually can you do can you do
+can you can you uh you have to import
+it. Yeah, there you go. Can you do me
+another favor and it return if it's high
+or
+medium? There you go. Cool. Uh let's run
+the sucker.
+Yeah. Cool. What did it say?
+What happened?
+Looks like we had a validation error.
+Okay, so we should try catch that
+because this will happen at some
+cadence. Why did this actually go look
+at this? Oh, there's no there's no gift
+received. Um, so that's true. Sometimes
+there is no gift. Can you go up and read
+this? Oh, yeah. You can turn it on.
+Um, so let's take a email. It looks like
+the model had no gift received. The type
+was null because it probably to find
+gift received or gift given. Oh, I see.
+Right. It's like what did it return?
+Let's go down and read. It tells you.
+No, this is just the prompt. Yeah, but I
+want to read the prompt and see what it
+said. The model returned a null value
+for that. Yeah. Gift receiver gift
+given. Or I mean it might have returned
+something that doesn't match this en it
+said null. The model returned null. You
+can read it up there. Okay.
+See? Got null. Got null. Got null. Got
+all. Can you go down? Oh, here's what we
+responded. Okay, cool. Exactly. Can you
+go down? Let's just read the email
+really fast and skip. Um because Okay,
+so our gift check passed, right? We did
+is if if gift in email was true, but the
+model decided this isn't about a gift.
+Yeah, exactly. Which makes sense because
+we used the reax.
+I was God's gift and made sure I knew it
+constantly, which makes sense. Okay,
+cool. So, okay, let's just put a let's
+allow the model to say like not a gift.
+So, let's return two types. What was
+either not a gift class not a gift?
+Yeah.
+Exactly. Done. Um, and then union the
+result. No, we don't need that. We don't
+need that either. Union the result.
+Exactly. Now, let's go back to our code
+and say if should we put Should we put
+this one first?
+No, it uh yeah, sure. Yeah, actually.
+Yeah, it'll probably be because like
+it's a smaller object, right? Yeah, I
+agree. I agree. Let's go back and then
+let's go back to the code. No, we don't
+want to run this yet. You have to
+actually Yeah. Yeah. Okay. Um pipeline.
+So, just say like if if analysis
+type analysis
+type Yeah, exactly. Return none. Done.
+Cool. Now we've given the model an
+escape hatch. Exactly. Um, yeah. So, how
+long will this take? I don't know.
+There's like 44 emails. 44 seconds would
+be kind of what I estimate, but I'm
+running 10 in parallel. So, like I'd
+estimate like around like the like 10 15
+seconds, no more. Yeah. Okay. So,
+basically, we have all of our emails and
+then we have emails. I'll put it I'll do
+top to bottom. is like a much smaller
+set of those is like contains gift
+string and then some subset of those are
+going to be like not a gift. Yep. And
+then some of them are going to be, you
+know, analysis results. Yeah. But now
+while we're waiting, let's go back. And
+then these are going to be low, medium,
+high. Exactly.
+Oops. Oh, can we go back to our code? I
+didn't realize that we Hold on a sec.
+I'm gonna just uh obviously 44 out of
+10,000 is not visually described by
+this, but uh
+um yeah. Well, no, I messed up because
+if you go back to the code, yeah, you're
+sorry. If you go back to the way that we
+actually count it, the counter is not
+correct. We say if it's true. See how
+there's a static analysis there? Um
+yes. Uh exactly.
+Uh, exactly. And exactly. That's what
+you actually need to do. Uh, and this is
+one of the reasons that I'm really
+excited to go like
+um um this is why I'm Oh, and then I
+would do like lend tasks for the first
+one.
+Exactly. Oh, yeah. That's great. And
+then for the first one, can you do Yeah,
+that's great. High, medium. And then can
+for the first one instead of sum can you
+just do like len len of tasks. Yeah
+exactly. Um you can do not none just
+like len tasks
+tasks. Yeah because that's how many
+things we have.
+Um
+so that's how many mentions. Oh no
+you're right.
+I think we need to filter by none. Yeah.
+Yeah, you're
+right. What does check gift email do?
+Wait, what does check gift email do? Oh,
+gift email does the whole thing. Yeah,
+exactly. Okay. Yeah, you're right.
+Sorry, your old code was right. I'm I'm
+silly.
+Yeah, I think that's right.
+Cool. So, I just go run this. And like
+one of the things here, this is why I'm
+really really excited to work on caching
+for us is Oh, you want to turn off the
+logs. You do not want the logs on.
+One of the reasons I'm excited to work
+on caching is actually because of this
+fact where it's like you saw that the
+thing that we're actually modifying was
+actually not everything else. What else?
+So we got another error.
+Ah entity type is unknown. It's because
+we didn't give if you go back to the
+entity
+type data type. Ah it wants to have an
+unknown.
+Exactly. You put other, but other still
+implies that it's
+known, right? So, we might it might
+prefer the word unknown over anything
+else. Yeah. I notic this a lot with some
+of the other like random you use like
+deepseek and and quen some of them are
+not as good at following the exact enum
+instructions. Exactly.
+And then we might actually find that hey
+at some this is again something that
+we're doing right now but we might
+actually just want to put a try catch
+around this pipeline because it doesn't
+matter if we ran all of them or not. We
+just need to be pretty good. Oh that's
+kind of cool. We found four high risk,
+five low risk by medium risk. Yeah. By
+medium risk. So I think this is kind of
+interesting. So can we do one one thing
+Dexter? Do you have your API set up for
+your dashboard?
+Uh sure. Running this every single time.
+Um, yeah. Yeah. Fire it up and send it
+over to there. Yeah. Let's uh let's grab
+an API key because the problem that
+we're going to run into is we're
+basically going to start like running
+everything back and forth and I kind of
+just want to look at this data more and
+more. Yeah. Yeah. Yeah. And there's two
+options that you can have for this. You
+can actually build serialization by
+default. This and this is that's what I
+do with most of these pipelines is I'll
+just dump out the JSON after every step
+of like the collection of objects just
+so you could go and inspect it. But this
+is probably an easier way to do it. So,
+let me get a key real quick and then
+I'll start sharing again. Okay. Oh, you
+stopped sharing. I was wondering why it
+stopped. That makes sense.
+Yeah. And I think this is this iteration
+loop that we're doing right over here is
+really the iteration loop that I see
+most people doing. And at the end of
+this, what we'll have is we'll have a
+way to go through this. Oh, nice. You
+shared anyway. Okay. All right. We'll
+cycle that key. It's fine.
+Uh, cool. All right. Great.
+Uh, you still have to record. Wait,
+control Z C. Do me a favor. Yeah, go to
+your code. I'm just gonna make it easier
+to go see. Uh, pipeline uppi. Are you in
+Vim mode again? Disable that sucker. Oh,
+you want to trace the whole thing? Yeah.
+So, I just want to like have that in
+there.
+It does. It works automatically though.
+It does.
+You just want to group them in a single
+single trace.
+Um, cool.
+Um, that's really the main thing that I
+wanted to do. I just want to group
+everything because it just makes
+everything way easier to read. You can
+just see it all in one run. Okay, cool.
+Done. All right, let's ship
+it. Let me just make sure this is
+working. All right, good.
+Yeah, it's a little bit bigger. Like
+caching is like one of the things that
+caching and mocking are one of the two
+key things that every LM developer will
+need long term because like what most
+people mostly notice whenever we do this
+is we spend very very little time
+actually writing the AI part. We spend
+most of our time writing the Python
+part. Right? And so what you have is
+like you have Python code and then you
+have LM LM prompts and then you have the
+LM, right? And what you want to do is
+you want to test this
+and say, "Okay, if I run this prompt
+with this data, I get this result."
+Exactly. And then separately, you want
+to test this without having to round
+trip to the LLM to test your Python
+code. Exactly. And so, you want to
+basically mock on this side and over
+here you're going to mock on this side.
+And you say, "Okay, here's fake data
+that I know is in our pipeline, and over
+here it's here." Yeah, exactly. And you
+need to make this swappable really,
+really easily. And ideally, I don't even
+want mocking. I want like record replay
+because most people don't have good data
+sets that they're going to build over
+time. Yep. I really want to and then be
+able to like immediately know when I can
+and cannot catch this. Okay, cool. Now
+the data is done. Let's go look at it.
+Okay, cool.
+Project.
+Just refresh. Can you just refresh
+command R? Yeah. What was the pipeline
+called? Let me just see what Let me go
+see which project it's in. I don't
+remember which project we put it in.
+Yeah. All right. Good. Look at the ID
+7543.
+Do you have it? Do you want me to go do
+it? Hang on. I'm just going to uh
+uh I got it. Okay, so this should be the
+project. I'm not sure why they didn't
+just change the
+filters. That's
+tough. And it's like last 30 days or
+something. Um, did it make it through?
+Maybe it
+didn't. I set a new key and I'm running
+it again right now. So now we should
+have
+Huh. Oh,
+interesting.
+Yeah, we don't have this yet. Yeah,
+that's odd. Um, is your SAS working? I
+have no idea. It doesn't matter. Let's
+just run it with terminal really fast. I
+don't really care. We should We really
+just want to have it running. And I
+think that's the most important part.
+Yeah.
+Um, yeah. No, it should be sending the
+data up. I suspect the No, we're in the
+middle of migrating the old thing to the
+new thing. Um, but let's go ahead and
+just look at some of this data and just
+see what you want to just dump stuff out
+to JSON or dump it out to a file. All
+right, cool. That was going to be my
+suggestion. Anyways, um, save everything
+that is not none into a file.
+Like they're listening to you.
+Um, but there is one difference that I
+want. You'll notice that this is the
+part that uh Yeah, but don't do that in
+there. One second.
+Uh what is f? Oh, I see. Yeah, save save
+that. And then what we also want I would
+save every single individual email as a
+duplicate into that file as
+well. So what I this is where actually
+most people mess up when they go do
+this. So can I go do this one time?
+Uh I got it. Well, I I want everything
+to be in a unique file.
+Oh, every single email. Exactly. because
+it's going to be impossible to go read
+in a giant JSON blog. It's basically
+going to be useless. And I would
+specifically want them in two separate
+files.
+The email and the analysis email and
+analysis in a separate file uh that's
+just like indexed by order in some way.
+It's code that we don't write anymore.
+I don't know,
+man. Okay. Uh high risk.
+Does that look right? Let me just do
+this off the top of my head. It's going
+to put in either the high-risisk or the
+lowrisk folder. And then that's going to
+email and then the Okay, cool. That
+looks great. Let's go run this. Yeah.
+And the reason I'm doing this is for a
+couple of reasons, but the primary one
+is just that what I really want to have
+access to over here is I want to be able
+to look up this stuff really, really
+fast and make my iteration loop super
+super fast.
+And if I don't do this, like if I didn't
+do the small stuff of making this
+parallel, our iteration loop here
+wouldn't be 10 seconds. It'd be a
+minute. And that would Yeah. So let's go
+back. It's changing. I wonder if it's
+using a different set of emails also.
+No, probably not. Um but all high risk.
+Yeah. So So here's our email. Exactly.
+So we can actually see what's end ends
+up going on here is we actually can
+really quickly You saw how fast you
+navigated to that. Oh, this is
+cool. Just by picking up 10,000 random
+emails, we found a bunch.
+Yeah. And like what does it
+say? Well, let's go read the JSON object
+first. I'm back in the office today. Oh,
+you want to see? Yeah. So, it says
+word rap.
+Received gifts from Ron Shangle who is
+affiliated with NB USA, supplier,
+business partner of Enron.
+Cool. That looks like that looks like
+something could be done. And what's
+really interesting about this whole
+workload is we notice that from a scale
+of 10,000 emails, there's not that many
+that are high risk. So you could
+actually just build a loop that has a
+human in the loop that tells, hey, I'm
+going to build a dashboard that looks
+and filters for all of these and then a
+human will go and evaluate whether these
+actually are bad or not. And now we've
+Yeah. So that was that was kind of my
+last question. is like, okay, we found
+one that actually looks like the element
+is doing what we want. How do we bake
+this into our golden set so that as we
+change the prompt and evolve the
+pipelines, we can keep track of whether
+this one's like obviously the visually
+eval of what's the diff, but also just
+the like we should check to make sure
+that this email always gets a high risk
+level that we can just evaluate
+deterministically. I know we're getting
+close on time. Um, but like do you want
+to spend a minute doing that? I would
+just literally make a test case for this
+email that says that, hey, this email
+just does that and that's it. See, I
+love that. Like everyone tries to over
+complicate this
+stuff. Test pipeline.
+Yeah. And then you can literally write
+like deaf uh exactly test
+pipeline or like test test that specific
+email that you
+have and you can just put the path to
+the email. Exactly.
+Um, put the path for this email instead.
+That's what I would do. Yeah. I got to
+find it though.
+[Music]
+Um, there you go. I don't think it's
+gonna It will not grab. You'll have to
+grab for that.
+Um, just grab for the message ID.
+Oh, yeah. Good idea, man. All these
+random tips and tricks. Yeah. Like I
+think people highly highly underestimate
+how how important it is. But the most
+important thing that everyone needs to
+do is just like get really fast at this.
+Great. Now we have a path. Exactly.
+Cool. Exactly. So now you would just
+like for test and test cases. Exactly.
+Import
+check. Yep. Uh risk level. There you go.
+And if you look at the result that
+should be assert result is not
+none. Import
+piest. Exactly. Uh and then import
+piest.
+Yep.
+And really you should make a
+parameterized test case, but that's
+okay. Yeah, sure. That's fine. Just
+highlight it and cursor will change it
+for you. Yeah, there you
+go. Cool.
+Yeah. And now you just run pi
+test. Oh, you need to mark it. Oh,
+whatever. Let's see if it
+works. Oh. Uh,
+why is it I wonder if it's collecting
+files from all of the data. Oh yeah, C
+and just pass it to specific directory.
+Yeah.
+Um, Unexpected indent. Oh, tap tap.
+Yeah, come on.
+Cursor C routine object async.
+Yeah. And you have to import uh pi test.
+Oh, maybe. Yeah. A dash async.io. It's
+dash.
+Yeah. Uh you have to mark it at
+piest.mmark.
+Yeah. Yeah. Yep. Now it'll work. And
+then we got to await it. Oh, yeah. Oh,
+wait.
+Um Oh, you have to actually load the You
+loaded the path. You have to actually
+load the
+path. Think you have to load the email.
+Oh, is this just the text? Okay. Yeah.
+Like
+load.
+Yeah. There you go. And you probably
+have to give it data slash I think.
+Yeah, there you go. Yeah, tab. The data
+thing was also correct on line six.
+You need data. Yeah,
+there you go.
+Let's see. Amaron
+mail
+cursor. Okay, so this is our
+deterministic eval. Can we also make a
+vibe eval? Exactly. Like a visualizer.
+Notice what we did, right? We we started
+off with a vibe eval. Then we got real
+data. When we looked at the real data,
+we're like, cool. This one when we
+looked at it should always be correct.
+So how are we going to do this? And we
+did what you did which is like okay now
+we did a little bit of extra work to go
+write this code and it takes 5 10
+minutes but if you keep doing this over
+and over again now you have better and
+better systems. And so there's like two
+dimensions that we're exploding around
+here. um which like I would love to chat
+more about like how to do this at scale
+but it's like there's the dimension of
+like finding all the test cases for this
+just this gift policy just one rule in
+our policy set and getting that really
+really good and then there's doing that
+again you know squaring the uh input
+space for every single policy that we
+might care about and that's I think
+probably highlights why like this is how
+you do it and get really good quality
+and that highlights probably why just
+like ramming out a bunch of questions
+from a policy document is probably less
+less less useful than but notice the way
+that we got the give policy is you ran
+that process already and then you're
+like okay this policy seems like one
+that we can tackle like yep and notice
+what I did what one of the things I
+forced you to do was I forced you to
+basically ignore all the other questions
+we said we're just going to talk about
+gifts today
+like we actually we just said we're only
+going to talk about gifts because we
+could have spent this whole time talking
+about just policies and we would have
+gotten no Yep. But now that we feel
+pretty good about that's like really
+good. So now let's bump it up even
+further. Can you go back to your code?
+Yeah. Where do you want to go? Let's run
+100,000 emails. Oh, okay. But now you'll
+notice that this is going to be kind of
+annoying. So yeah, make it 100,000. But
+this is going to be kind Don't run it.
+Don't run Don't run it. Um, this is
+going to be kind of annoying. So like
+this is another thing that I would do.
+Um, how do I how do I cursor? H how do I
+ask cursor? Uh, command K. Oh, yeah.
+Sorry. Use um
+what is TQDM?
+It's great.
+That's great. You'll see. We're use TQDM
+to go do this.
+Um, I think this will be pretty good,
+but I'm going to do a couple more things
+just to make this slightly better. Now
+that we're running 100,000, I'm just
+going to mark this
+as Oh, you're just going to log out the
+exceptions.
+Well, I'm just going to say
+like if it
+fails, that's okay. We want to return
+like gift email analysis or error or
+none so that we can write it to a file.
+Exactly. Called string or whatever.
+Well, do you want the error message
+basically? I don't really care. Okay.
+I'm just And I think I have to return
+this as well. Yeah. What I'll just
+return a false specifically a false.
+Okay.
+Um, and there's only one type of error
+that I'm actually going to catch, which
+is Oh, sorry. Imported from the wrong
+thing.
+I basically only want to capture like
+validation errors and if they happen
+um I basically just want to ignore them
+and return false.
+Okay, I don't want to think about it.
+Oh, I have to use literal
+false. Just return literal error is
+fine.
+Um,
+and then you want to log out the number
+that have errors here. Exactly. So I
+want to say like
+cursor should figure this out.
+Okay. What's TQDM? Are you going to tell
+us and then let's let's run this one
+last time and then let's do 15 minutes
+for questions and we'll let people go.
+Exactly. Run it. Run it. I think this
+will work. What is this? Just run it.
+Just run it. Trust me. All right. All
+right. All right. And turn off your turn
+off your terminal
+logging. Yeah. Uh you have to add
+TKDM in theory. This should work. Oh,
+cool. It's just like a progress bar.
+Exactly. Why does this not work the way
+I thought it would? The progress bar
+didn't do what I was supposed to. We
+should cancel
+this. While this is cancelling, let's
+update the progress bar so it actually
+does the right thing. Can you update the
+progress bar so it does the right thing?
+Um, what I will do
+is So, let me write this down really
+fast. Go ahead.
+You got to like chunk it or something. I
+don't
+know. How does this work? Uh, I have to
+ask cursor fix this. I forgot how to
+the world's best prompt engineer and the
+only thing you know how to tell cursor
+is fix this and make it better. Yeah,
+there you go. Uh, there you go. I think
+this will work.
+Now try this. All right.
+There you go.
+Yeah. So, and and why do we do this?
+Like who was um who was asking this is
+like how do we be running this? Like
+Charlie was asking how long will it
+take? Now we have an approximate mental
+model of how it's going to take too.
+We're processing 100,000 emails
+um and we know roughly how long it's
+going to take by running this through.
+And this is like something that a lot of
+people don't do. But again, small thing
+like adding the progress bar makes it so
+we're not waiting forever. With 10,000,
+we're like, "Ah, it's not that bad. So,
+let's just go run this." With 100,000,
+that no longer becomes feasible. So,
+like I really want to have a good proxy
+for like how how far along are we?
+What's going on? What are the metrics
+that are happening? Um, and if you're
+not investing time in this kind of stuff
+while you're iterating, again, it feels
+slow in the moment, but now you see that
+we're moving a lot
+faster because like we know
+approximately what we're waiting on,
+what we're not waiting on.
+Cool. That's dope. Should we open it for
+questions? Yeah, let's wait. I I kind of
+want to see the results of what
+happened. Let's see the results. All
+right. Um, let's add Let's look at the
+results. Let's find one that's legit.
+And let's add one more test case. Risk
+level high. Financial donation to
+cultural arts while seeking approval.
+God damn, these people are all over the
+place. All right, we'll we'll drop this
+one in. Um, that's crazy. And I think
+this what's great about the system like
+yeah it did find something out.
+Um
+we didn't find that one.
+Um but this is kind of why I was saying
+when you save stuff to disk it's just
+not as good because like now capturing
+this whole information is very very
+hard.
+Yeah. I mean, we could just like copy
+this into a test cases folder probably
+what we would do. Like, you're not going
+to commit the entire set of emails or
+whatever, but
+um but yeah, this is kind of the this is
+kind of um the interesting stuff that we
+get to go do. Um any and then you can
+imagine a UI around this really really
+working really nicely. Exactly. Um cool.
+I'm going to stop sharing. Um we can pop
+back to the whiteboard if needed. But uh
+what questions do folks have? So
+question one from Andrew. This is all
+assumed GT40 Mini. Did you vibe consider
+other models? Um, I think it was 40 for
+the record, but yeah. Yeah, I think we
+could have considered any model, but
+honestly, it didn't matter. What we
+really wanted to go work on this time
+was just whether or not this problem
+could be solved. If the problem can't be
+solved, it doesn't matter what models
+can and cannot do it. So, we just want
+to invest time in that sort of workload
+first. And once we know it's good and we
+know it's good enough, once we get more
+vibes about it, then we can worry about
+making the model smaller. Yeah. And if
+we notice like, hey, the model really
+sucks at finding ones that really should
+be detected, then we'll use 03. We'll go
+up to a bigger model. Exactly.
+Uh, let me jump in, guys. Um, also
+awesome, by the way, to watch you two
+like wizarding all over the code. It's
+really nice today. Um, what what would
+be like the next steps from here? Like
+how how would you what would you think
+about doing after this? Well, the next
+step is really to figure out how you're
+going to process like five million
+emails because processing five million
+emails is not going to work with any
+rate limit that we have. We did some
+basics with parallelism on this. But
+what I would do is I would say probably
+need Amazon SQSQ or something of that
+order of magnitude. Go process that
+through and you just churn data at some
+cadence and then you just sample real
+production data like what Dex was doing
+where he would like would look at the
+file and just say like let's just look
+at the high data and see if it looks
+right. Let's look at the med medium
+data. See if it looks right. Let's send
+some random sample of the low data to
+GPT4 uh G3 and just see maybe it missed
+something. Um and it's really just like
+going and building a metric for the
+pipeline. And I wouldn't go ahead out of
+my personally I wouldn't go ahead out of
+my way to make the pipeline way way
+better and way perfectly more accurate.
+I just want to know approximately how
+good it is. And once you have the core
+of it, then I think you switch really to
+like a test-driven development mode
+where you're eyeballing stuff. And like
+I think what you showed last week of
+visualizing the diff and the drift is a
+great way to quickly find new things
+that should be test cases. And then what
+you do is you say, "Cool, that should be
+a test case that and you build a
+pipeline to do that and add your test
+cases. And then once you have more test
+cases that that don't pass, then you can
+go make the pipeline better." Or once
+you wake up one morning and you're
+spending $50 a day on open API to open
+AAI tokens, then you go and say cool
+like what's the bottleneck here? Which
+step is spending the most tokens? Yeah.
+And and really or you say this policy is
+good enough. Let's move on to policy the
+next policy.
+Like we spent an hour built a pretty
+decent giftgiving policy. Doesn't have
+to be perfect. It's just good enough.
+Caught some real scenarios that looked
+high risk and instead of taking the
+policy to like 100% I just put a human
+in the loop in my process and I can
+solve my software. Yep. And my favorite
+and my favorite actual takeaway of this
+is like most of this was not prompt
+engineering. Like spending a day
+building a perfect prompt and catching
+every case is actually like way less
+productive than setting up the rails and
+the pipelines and the testing
+infrastructure and the eval
+infrastructure. So that when it comes
+time to change your prompt, you know
+exactly what you're doing and why you're
+doing it. And you're not just vibing
+like, "Hey, I think we should put the
+things in this order instead of that
+order because I read it in some [ __ ]
+blog post.
+Yes. And oh, another question on today
+is like you were searching just on gift
+in the emails. Like what would be
+another way to do it or like the the
+risk is that you don't find like it's
+lab or it's labeled something else like
+what would be another way of doing that?
+I mean you could use embeddings are way
+faster than passing every single one
+through an LM. You could pass every
+single one through an LM but again
+that's more expensive. Um I don't know.
+What do you got?
+Um, yeah, but I think that most people
+should just be looking at the data
+first. Like just read like I I noticed
+Dex this time too. Like instinct until I
+like forced him to stop and read the
+email. He didn't really do it. Um, and
+like there's no amount of evals that we
+could have done on that pipeline until
+he just read the
+email. Um, it would have been useless
+effectively and like just slow down and
+read look at the freaking data. Cool.
+Other questions?
+Amazing. Thanks all for hanging out. All
+right. Thanks everyone. Have a good one.
+Catch you all next week.

@@ -1,0 +1,1774 @@
+[0.2s] Go to every meetup, find everybody you
+[2.0s] think has this problem. Do not tell them
+[4.2s] what you're building and just ask
+[5.9s] [music] them about their problems and
+[7.2s] try to figure out if you can decide if
+[9.0s] this is a thing that people actually
+[10.2s] want.
+[10.6s] >> Just so everyone knows like getting to
+[11.8s] YCS is incredibly hard. And like I said,
+[14.7s] while this idea was absolutely
+[16.9s] redonulous in terms of the way it was
+[18.7s] implemented, Dexter is one of the most
+[21.8s] impressive people [music] I've ever met.
+[23.1s] Uh, and like I I that's probably why he
+[25.3s] got in. Like there's no doubt on that.
+[26.7s] And the other thing we're doing is we
+[27.9s] basically like rearchitected code layer
+[29.7s] from scratch and are rebuilding it from
+[31.1s] the ground up. We're keeping all the UI
+[32.5s] and the experience stuff and the hotkeys
+[34.2s] and everything that everybody loves, but
+[35.5s] we're rebuilding it to be collaborative
+[38.6s] so that when I launch a session in code
+[40.6s] layer, I can send my co-orker a link to
+[42.3s] it and we can both have code layer open
+[43.8s] and both watch the same cloud session
+[45.4s] streaming and we can leave comments on
+[46.8s] it.
+[52.2s] >> All right, we did it. We made it. We're
+[54.2s] live. What's up, y'all? How's it going?
+[56.4s] It has been a [clears throat] while,
+[57.4s] Dexter.
+[58.0s] >> It's been What did we talk yesterday for
+[59.8s] like an hour?
+[60.8s] >> It's been too long.
+[62.2s] >> Been too long.
+[63.4s] >> Um, well, let's do a quick intro and
+[64.9s] then we'll get right back to talking
+[66.2s] about I think one of my favorite topics
+[67.8s] this year. Uh, we do this is AI that
+[70.0s] works for everyone that's joining. Uh,
+[72.0s] every week we try and talk about things
+[73.5s] about practical AI systems. We try and
+[75.0s] share code whenever possible. I'm Vivv.
+[77.4s] I work on BAML.
+[78.4s] >> And I'm Dex. I work on human layer.
+[81.1s] >> And today we're probably not going to
+[83.0s] show real code. Uh, as sad that as is,
+[85.6s] we're going to talk about something
+[86.4s] really fun, which is just talking about
+[89.7s] uh, Dexter himself and what he's been up
+[91.8s] to and how he's got to where he has, his
+[93.8s] journey throughout the throughout the
+[95.7s] last few years, and just what the whole
+[98.7s] AI boom startup feelings have been, and
+[101.2s] also this YouTube channel that we
+[102.4s] started not too long ago.
+[104.5s] >> Cool, dude. Yeah, I'm excited to chat a
+[106.5s] little bit and and just so y'all know,
+[107.7s] this is kind of our end of year special,
+[109.4s] so we're just going to hang out and
+[110.6s] riff. And uh this week I'm going to tell
+[113.2s] my story and VIB I hope brought some
+[115.0s] good questions and then uh we're going
+[117.4s] to flip it next week and I'm going to
+[118.7s] grill Vibb on his uh 12 pivots and why
+[122.2s] he left Fang and what it was like being
+[123.8s] a YC founder.
+[125.1s] >> But let's see you first. So
+[126.9s] >> yeah,
+[127.2s] >> give the give the TLDDR. What have you
+[129.0s] been up to? What have uh how did you get
+[131.2s] into the space? What did you do
+[132.6s] beforehand? Who the heck is Dexter?
+[134.9s] >> All right, I'm going to try to give the
+[136.2s] like 50,000 foot view. if I start
+[138.4s] dipping into a tangent, just kick me
+[140.2s] under the virtual table and tell me to
+[142.0s] like zoom out again. Uh, so I uh I
+[145.4s] studied physics undergrad in in uh in
+[147.8s] college and uh realized quickly that
+[150.4s] academia was not for me. So I started
+[152.1s] taking a bunch of CS classes cuz the
+[153.9s] coolest guy I knew in college was really
+[155.4s] into CS and I wanted to work on projects
+[157.1s] with him. Uh so I got like half of a CS
+[159.8s] minor. Uh that was enough to get a tech
+[162.2s] job. I worked at a company in Chicago
+[163.9s] called Sprouto doing big data.
+[166.1s] >> You didn't actually have a CS You had a
+[168.0s] CS minor. I would have never guessed
+[169.6s] that from
+[170.6s] >> I actually have a half of a CS minor.
+[173.0s] >> That's wild.
+[173.6s] >> I didn't even get the whole thing. Yeah,
+[175.3s] >> that is wild. I just didn't expect that.
+[177.1s] Your code is actually way better than I
+[178.6s] would expect for someone with just a CS
+[180.2s] minor.
+[180.8s] >> Yeah. No, so yeah, I had taken a bunch
+[182.6s] of like Python engineering classes. I
+[184.6s] took like the core I still think the
+[186.6s] best class and this is where I'm going
+[187.9s] to you're going have to tell me to zoom
+[189.0s] back out but yeah the the the greatest
+[191.2s] class the best programming language is
+[193.6s] uh actually not Rust uh I believe it is
+[196.5s] uh Scheme.
+[197.9s] >> Oh my god. Okay.
+[199.0s] >> We did the first class I ever took was
+[201.0s] functional programming and scheme with
+[202.7s] like I don't know if anyone used this
+[204.2s] thing called Dr. Racket which is like
+[206.3s] learning functional programming. It had
+[207.8s] a bunch of built-in like image libraries
+[209.6s] so you could learn like anyways uh we
+[212.7s] can zoom back out. So, I did take a
+[214.4s] bunch of CS classes and then I just like
+[217.1s] learned on the job. I think they had me
+[218.7s] on like bug squashing duty for the first
+[221.0s] like three or four months and I was just
+[224.7s] like, am I ever going to get a real I
+[225.9s] was just like going through and then
+[227.5s] like I remember there was one week where
+[229.6s] I just closed out like 10 tickets in
+[232.1s] like two days. My boss was like all
+[233.8s] right you are now out of bug duty. You
+[236.5s] can have a project now. like is that
+[238.4s] when you start a when when when you
+[239.7s] start a new job I bob like I've seen
+[241.0s] this in some places and I've seen some
+[242.2s] people do this really well which is
+[243.3s] basically like to get familiar with the
+[245.8s] codebase they just give you a stack of
+[247.6s] like data dog errors or new relic errors
+[250.1s] and it's just like go fix these oneline
+[252.1s] changes until you're like really
+[254.3s] proficient and confident in them.
+[255.9s] >> So that's one way to do it. I have a
+[257.7s] different approach. What I've always
+[258.7s] done is I always really like plumbing
+[260.6s] tasks. So like whenever we have someone
+[262.4s] join our team, we have a compiler. So, I
+[264.3s] try and give them a task that requires
+[265.8s] them to go all the way from the
+[266.9s] beginning all the way to the end cuz
+[268.6s] then they can actually learn the whole
+[269.7s] codebase and be forced to do it, but you
+[271.5s] have to design it in a nice way or else
+[273.2s] they'll be very sad.
+[274.6s] >> Yeah, you almost like have to put on
+[276.1s] your your like educator hat and build a
+[279.1s] curriculum for how do I learn this
+[280.8s] codebase?
+[281.5s] >> Okay, so you did Sprout Social. What
+[283.1s] happened after Sprou? How long were you
+[284.6s] there?
+[284.8s] >> So, I did that for like two and a half
+[285.8s] years. I was there for like a year and
+[287.2s] then about a year in I ended up going
+[288.9s] off and the I'd always wanted to do
+[290.4s] startups but for some reason I get into
+[292.3s] this more of like but we we got tapped
+[295.2s] like the CEO had this crazy idea for
+[297.1s] like a side project and the CTO we were
+[299.4s] on like 2007 tech so like nothing was in
+[302.4s] AWS it was all in Rackspace like it was
+[305.0s] just a little old the CTO wanted a green
+[306.6s] field place to test new technology and
+[308.7s] the CEO had like an idea for a new
+[310.6s] product that was kind of related but
+[312.3s] different enough that it could be its
+[313.6s] own brand and so they like picked like
+[316.1s] five or six of us to go sit in a corner
+[318.4s] of the office and like work on it was
+[320.4s] like a secret project for like two
+[321.7s] months and then they told everybody what
+[323.0s] we were working on. But like that was
+[325.7s] one of the most fun times in my career.
+[327.5s] Like building a startup within a startup
+[329.3s] is like you don't get startup equity but
+[331.0s] you also don't have startup risk in that
+[333.4s] sense of like if it doesn't work out
+[335.3s] like I literally I worked on that
+[336.4s] project for like a year and then it was
+[337.8s] like it was overstaffed and so they just
+[339.8s] moved me back onto another team. No
+[341.3s] problem. You know what I mean?
+[342.8s] >> That is uh you know what's interesting?
+[344.6s] I've had there's another program in
+[346.4s] Google that's kind of similar to that
+[347.8s] which is very similar to like I forgot
+[349.8s] the name of it where you don't have to
+[351.5s] take any of the risk but you get to work
+[352.9s] on your own kind of idea for a while and
+[354.8s] they comp you like Google salary but
+[356.5s] then you obviously get no equity for the
+[358.5s] same reasons.
+[359.8s] >> Yeah. And this is different from 20%
+[361.8s] time or whatever it is or is this what
+[363.2s] you're is
+[363.8s] >> it's no it's totally different than it's
+[365.3s] like a full-time job. So when you think
+[367.5s] about all that stuff, how do you think
+[368.9s] about it relative to like making the
+[371.5s] jump from a very stable job to then an
+[374.4s] unstable job? What was that first
+[376.2s] transition? How did you like I I'm
+[377.9s] guessing to some degree you must have
+[379.6s] known you wanted it. I think like even
+[381.4s] since college and this is a thing I
+[382.9s] think you you have this thing you say a
+[384.3s] lot that I've heard you say to a lot of
+[385.8s] founders including me which is like
+[387.8s] you're building this plan in your head
+[389.7s] and you say like okay I'm going to do
+[391.0s] this and then that's going to let me do
+[392.5s] this and then at the end I'll be able to
+[394.6s] do this thing over here which is the
+[396.1s] thing I actually want and I think the
+[398.2s] advice that I've heard you and a lot of
+[399.4s] people say is like would just if you
+[401.4s] know the thing you want to be doing just
+[402.6s] go do that thing because you don't know
+[404.0s] how the steps are going to work out and
+[405.4s] you don't know how the plan's going to
+[406.6s] work out. So it's like oh I have to do
+[408.2s] this so that then we can do this. It's
+[409.8s] like just do the thing that you want
+[411.6s] because that's a hard problem. You don't
+[413.0s] understand it well. And the best way to
+[414.2s] learn it and do it well is just to try
+[415.6s] to do that thing and not like try to
+[418.3s] like engineer this path to it kind of
+[420.7s] thing.
+[421.5s] >> Yeah. So then how the next thing after
+[423.2s] that was replicated.
+[424.6s] >> Uh so I actually worked at a fintech
+[426.2s] company for about a year after that. So
+[427.7s] I basically like in my head I was like
+[429.0s] okay I want to work at a tech company.
+[430.3s] So I got to learn like get good at
+[431.8s] engineering and get good at developer
+[433.7s] productivity. That was what I was super
+[435.1s] passionate about at Sprout. I just saw
+[436.6s] the best most impactful engineer on the
+[438.4s] team was the guy who was like making the
+[440.6s] sandbox environments good, finding ways
+[442.3s] for people to deploy stuff like just
+[443.9s] increasing velocity by making the
+[445.6s] developer experience internally really
+[447.4s] really good. So I was just like all
+[449.5s] right that's really dope. I want to
+[450.6s] learn how to do that. Um so I joined
+[452.2s] this company called Aspiration
+[454.5s] which um funny enough uh I did not end
+[457.8s] up buying my options after I left like a
+[459.9s] year in. I won't go into too much detail
+[461.4s] but I guess the founders are now in jail
+[463.6s] for defrauding their investors or
+[465.2s] something. So, [laughter] dodged a
+[467.3s] bullet on that one. Uh, I was there for
+[469.3s] about a year and then I went to join
+[471.0s] Replicated. Um, and the reason that I
+[473.8s] got really stoked about Replicator is
+[475.0s] they're doing like packaging stuff. They
+[476.2s] were building like a Docker container
+[477.4s] orchestrator. Again, like packaging and
+[480.0s] how you deliver software. I had always
+[481.9s] thought it was like a thing that was
+[483.0s] like, okay, cool. Like I applied for
+[484.5s] like an S sur job at Slack. I had like
+[487.4s] was trying to join the developer
+[488.6s] productivity team at Netflix. Like I
+[490.5s] wanted to build developer tooling.
+[492.3s] >> I mean, you love developer massive
+[493.8s] scale. Yeah. Like I I think it's
+[496.2s] probably just goes back to like just the
+[497.7s] kind of person you are. Like I think one
+[499.0s] of the first things that we bought on
+[500.2s] was just like talking deep about tech,
+[502.7s] talking about infrastructure stuff and
+[504.3s] then also just I think like trying to
+[507.8s] make other devs happy.
+[509.8s] >> Now
+[510.2s] >> it's really really rewarding.
+[512.2s] >> Yeah. I have a question for you. Um we
+[514.6s] obviously met I think a little bit after
+[516.4s] your time at Replicated or was it right
+[518.1s] when you were leaving? I think it was a
+[519.5s] little bit after you left. So you Yeah,
+[521.8s] let me So So we met at an AI tinkerers
+[524.4s] event in Seattle. I had been working on
+[527.1s] this thing called metalytics which was a
+[528.9s] startup that I started with my buddy in
+[530.3s] Chicago for about nine months and it was
+[533.1s] like not working. My co-founder had left
+[534.9s] the company and I was like thinking
+[537.2s] about this. We had built this like AI
+[539.5s] agent that would help manage your like
+[541.2s] SQL data warehouse like your snowflake
+[543.1s] or something and we had like well this
+[545.7s] thing is going to be useful. There's a
+[546.8s] lot of tools out there that were like
+[548.1s] not super AI first, but they were very
+[550.5s] good in the sense of like they would
+[551.7s] analyze all your traffic, all your
+[553.2s] indices, all your query speed, and it
+[555.0s] would be like here's 10 recommendations
+[556.7s] like add this index, stop querying this
+[559.0s] table in this way, like all drop this
+[561.8s] table because no, you're just writing to
+[563.2s] it and no one's ever reading to it. All
+[564.5s] this stuff. It's like, okay, what if we
+[565.6s] could have an agent that like didn't
+[567.4s] just do recommendations, but actually
+[569.1s] did the work for you. And just to be
+[571.3s] clear for everyone else, this time frame
+[573.5s] was 2024 if I remember correctly.
+[576.9s] >> Yeah, we started the company in October
+[578.4s] 2023 after I'd been at Replicated for
+[580.5s] like seven years and done engineering
+[583.0s] and like go to market and solutions
+[585.2s] engineering and working with her. I can
+[586.3s] tell that story, but yeah, that that
+[587.4s] that was when we met was we met.
+[588.8s] >> So that was like the earliest time
+[590.2s] people were doing agents like I think
+[591.8s] summer of 2024 roughly is when we met
+[593.8s] around this time. It was like Koreai was
+[595.4s] getting really hot in like April, May,
+[598.4s] like Lang Chain was starting to be like
+[600.8s] people were talking about it. Um, what I
+[604.2s] won't go into what people were saying
+[605.4s] about it in either direction, but it was
+[606.8s] getting a lot a lot a lot of popularity.
+[608.6s] I mean, I remember even in April 2023
+[610.9s] though, like the first AI demo I did, I
+[612.9s] was still at Replicator and I was just
+[614.2s] like, I want to learn I was like
+[615.8s] starting to think about like, okay,
+[616.7s] maybe I want to do a founder thing. I
+[618.0s] mean, I've always been thinking about
+[618.9s] it, but I I'd gotten to this point where
+[620.4s] like maybe it's time. I had done the
+[622.1s] product manager role there for like my
+[623.8s] last year and in my mind that was like
+[625.8s] the last skill set I wanted to be
+[627.5s] familiar with before I went and became a
+[629.9s] founder which again was dumb. If you if
+[632.1s] you want to be a founder just go be a
+[633.4s] founder. Uh because you'll learn all the
+[635.4s] stuff you need to learn. It'll be hard
+[636.6s] and you'll like stub your toe on a lot
+[638.1s] of stuff but like you will learn it
+[639.4s] faster than if you do it the kind of
+[640.8s] more safe way of like oh I'm at a 70
+[643.0s] person startup and I'm going to do
+[644.2s] product for a year and then I'm going to
+[645.3s] do sales for a year and then I'm going
+[646.3s] to do engineering for three years or
+[647.8s] whatever it is. I remember after we met
+[649.9s] uh we had a really long conversation
+[651.3s] about your idea. I remember what I said
+[653.0s] about the idea which was uh this is a
+[654.6s] horrible idea. I love your ide
+[657.8s] >> Yeah. You were like this is like a
+[658.9s] really sick Twitter demo but I would
+[660.5s] never I think you said like I do some
+[662.3s] angel investing and I would never invest
+[664.0s] in this startup. [laughter]
+[666.8s] >> Um but I did say you were a really cool
+[668.6s] person. I admire you but I the idea was
+[670.7s] freaking dumb.
+[671.8s] >> Um at least in my mind
+[674.2s] >> and I thought a lot of things are dumb
+[675.4s] to be fair. So we built this agent and
+[676.9s] then we wanted to build this like human
+[678.0s] we built a human in the loop permission
+[679.5s] system for it where basically like when
+[680.7s] the agent wanted to do something scary
+[682.3s] we guaranteed that you would get pinged
+[683.8s] in Slack and then you could respond in
+[685.7s] natural language. You should be like you
+[686.9s] could be like no don't drop that table
+[688.6s] yet I'm still I need it for the board
+[689.9s] meeting or you could be like yes go
+[691.1s] ahead drop that table. So it was like
+[692.6s] using natural language as a way of
+[694.3s] controlling these like really small
+[696.2s] points in a workflow.
+[697.8s] >> Yeah.
+[698.3s] >> And uh so I built an API around that and
+[700.4s] I was like shopping it around and I was
+[701.9s] like thinking about pivoting. So I was
+[703.4s] doing like you ever read that book the
+[704.4s] mom test? Yeah.
+[706.3s] >> Where you guys just like go to every
+[707.7s] meetup, find everybody you think has
+[709.4s] this problem. Do not tell them what
+[711.4s] you're building and just ask them about
+[713.2s] their problems and try to figure out if
+[715.0s] you can decide if this is a thing that
+[716.6s] people actually want.
+[717.5s] >> So I want I'm going to ask you a couple
+[719.6s] questions uh really fast.
+[720.8s] >> We're going to get whiteboards. Nice.
+[722.2s] >> Yeah. So just to describe to everyone
+[724.2s] else, you had your you had your main
+[725.5s] agent running over here and then this
+[727.6s] was the original human loop product
+[729.6s] >> and then you had like the human loop uh
+[731.8s] human human layer, sorry, human layer.
+[734.8s] uh you had the human layer server and
+[737.0s] basically your agent would just ask for
+[738.3s] permissions here
+[739.7s] >> uh and then human layer server would go
+[741.8s] find a human in Slack or send them an
+[743.7s] email and they would go back and via
+[745.3s] that.
+[745.6s] >> Yeah.
+[745.9s] >> And this would basically do like coms of
+[747.4s] some kind.
+[748.2s] >> Now the question I had for you I I think
+[750.3s] the reason that I specifically didn't
+[751.6s] like this and when you first presented
+[752.8s] this and when people are building AI
+[754.3s] ideas I think it's really important that
+[755.8s] people really think about both the
+[757.9s] actual user flow and the developer flow.
+[761.6s] I think specifically the thing I talked
+[763.1s] about was like hey this agent thing I
+[765.5s] think you were just running a polling
+[766.7s] process here until the server responded
+[768.4s] and that's the part I was like that is
+[770.1s] just not good.
+[771.4s] >> Yeah, you have to make it you Yeah, you
+[773.3s] you were the one who told me like you
+[774.6s] have to send a web hook back and
+[776.2s] actually like I was talking to Dalton at
+[777.9s] YC and I was like yeah I got this
+[779.0s] feedback from Vib and he's like well
+[780.7s] VBO's super [ __ ] smart so if he asked
+[782.6s] you for something you should probably go
+[784.0s] do that.
+[784.8s] >> So I have a question for you. Why when
+[786.5s] you pitched this idea to YC cuz you
+[788.1s] pitched this to YC and you got in. Why
+[789.5s] do you think you got in? like what was
+[790.8s] the thing that got you in?
+[792.2s] >> Um, so I did a couple mock interviews
+[794.2s] the day before and I talked to at least
+[796.1s] one person who had like been at YC
+[799.0s] previously as like not a group partner
+[800.7s] but as like an administrator and her
+[802.8s] basic pitch was like and she's she's
+[805.0s] awesome. Um, but uh her basic her basic
+[809.1s] was like I think this is a strong
+[810.1s] application one because it's like AI
+[812.0s] safety focused. It's like how do we get
+[813.8s] people to trust AI? two, it was like,
+[816.2s] "Oh, you just executed this like your
+[818.2s] co-founder left and in three weeks you
+[820.2s] like changed your domain, made a new
+[822.2s] website, shipped an MVP, flew out to San
+[824.4s] Francisco, pitched it to a bunch of
+[826.0s] people, like closed your first revenue
+[827.6s] in like a week uh a week after launching
+[830.4s] and just like, okay, so clearly like
+[832.2s] even if this idea sucks, you can get
+[833.9s] [ __ ] done."
+[835.5s] >> Um, as a solo founder. Um, and then I
+[838.6s] think the last it's also like it was it
+[840.1s] was the kind of idea of like, okay,
+[841.1s] everyone in YC is building agents. If
+[842.6s] this is a good developer tool for
+[843.8s] agents, you can have a lot of affinity
+[845.3s] with like selling into the batch and and
+[847.0s] and doing that kind of stuff.
+[848.7s] >> Just so everyone knows, like getting
+[849.7s] into YCR is incredibly hard. And like I
+[852.6s] said, while this idea was absolutely
+[855.0s] redonulous in terms of the way it was
+[856.8s] implemented, Dexter is one of the most
+[859.8s] impressive people I've ever met. Uh, and
+[861.7s] like I that's probably why he got in.
+[863.7s] Like there's no doubt on that. I also
+[865.1s] want to say like the meta advice here is
+[867.1s] if you tell your idea to somebody and
+[869.3s] they tell you that it's [ __ ] they might
+[871.5s] just be a hater, but there's a very good
+[873.8s] sign that they are a smart person that
+[876.6s] cares about you and wants you to be
+[878.3s] successful and they're going to tell you
+[879.4s] the truth.
+[880.6s] >> Uh, so keep that person close and like
+[884.2s] don't just write someone off cuz they
+[885.7s] don't get it. Like I think working with
+[888.4s] like showing you that and you giving me
+[889.8s] feedback was super valuable and then us
+[891.8s] like going to a hackathon in November
+[893.4s] and building that like
+[894.9s] >> Discord chatbot where you're like okay I
+[896.7s] get how this could be really good.
+[898.8s] >> It did change my perspective. That was
+[900.9s] also the first time that we had I had
+[902.8s] seen this like new way of built like the
+[904.6s] way you built an agent was completely
+[906.3s] different than every framework I had
+[908.0s] ever seen and it became that like
+[909.6s] honestly that became the seed of the
+[912.9s] entire like like philosophy of 12 factor
+[916.2s] agents. There was obviously a lot more
+[917.5s] to learn a lot more to add but um yeah
+[921.4s] like I don't know that's that's my
+[923.4s] advice. If someone shits on your idea,
+[925.3s] like don't take it personally because uh
+[928.0s] I mean they may just be a hater, but
+[929.9s] like if they're not, then like keep that
+[932.4s] person close cuz uh they they probably
+[934.6s] want to help you.
+[935.4s] >> I got a really funny bit of advice also
+[937.4s] from another person. Um they told me
+[939.8s] that apparently when your startup has
+[941.0s] haters, that's actually a good thing
+[942.2s] because that means your startup somewhat
+[943.4s] matters and it drives emotional
+[945.0s] responses from people. [laughter] Uh
+[947.3s] because if you have people that love you
+[948.4s] then you should also have people that
+[949.8s] hate you uh fundamentally because like
+[951.8s] you're probably doing some something a
+[953.2s] little polarizing in some dimension.
+[955.4s] >> Yeah. I was so we work a lot on cloud
+[957.2s] code right now and I was I was pinging I
+[958.8s] ping Tariq on Twitter a lot and I'm like
+[960.9s] dude like also like here's my bug and
+[963.2s] it's been broken for a week and also
+[965.2s] like I don't know how you became the guy
+[968.2s] who like people just [ __ ] at on Twitter
+[970.0s] when Claude Code is broken but like
+[971.9s] props to you man that can't be an easy
+[973.8s] job and he said the same thing. It's
+[975.2s] like if people aren't complaining then
+[976.7s] your [ __ ] doesn't matter.
+[978.0s] >> Exactly. Exactly. Um I've got a question
+[981.0s] uh for you. So at some point you did the
+[982.6s] human letter thing. You went you did the
+[984.1s] thing. You raised around. Um you were
+[986.6s] nice enough to let me put in a little
+[988.1s] bit of tiny money anyway even though I
+[989.4s] said I would never invest in the idea. I
+[991.0s] did cuz it turned out Dexter was too
+[993.1s] good to say no to. Um and then you you
+[997.4s] did 12actor agents. I don't I think you
+[1000.2s] were Go ahead. 12factor agents was the
+[1002.5s] product of like I think and part of why
+[1005.6s] and like you'll see this in the way we
+[1007.5s] talk about AI a lot on this show and the
+[1009.5s] way I talk about AI publicly all the
+[1011.9s] everywhere which is like there is a AI
+[1016.2s] hype machine
+[1018.3s] and like it drags a lot of people in and
+[1020.7s] they get very excited about what's
+[1022.4s] possible but like there is a very good
+[1026.9s] chance that if you found your way to AI
+[1028.8s] you have along the way like ingest
+[1030.5s] suggested some bad faith hype. Some hype
+[1033.1s] is real and it's exciting. I'm going to
+[1034.5s] share this with people, but some of it
+[1036.2s] is just freaking grifters. Um, and I'm
+[1038.6s] not going to name names and like I don't
+[1040.2s] even know like you know this the same
+[1041.4s] people who were really excited about
+[1042.6s] NFTTS and Discord 5 years ago or four
+[1044.7s] years ago or whatever it is, but um
+[1049.0s] what I had learned basically was like
+[1051.7s] human lab was built on a thesis which is
+[1053.3s] like there is an AI agents ecosystem.
+[1055.3s] There's frameworks and tooling and if
+[1057.5s] you can integrate into that tooling,
+[1059.0s] this is like what a lot of AI dev tools
+[1060.7s] did. You look at like Chromma DB, the
+[1062.2s] way Chromadb got I mean it's an awesome
+[1064.4s] product and Jeff's [ __ ] great but
+[1066.3s] also like they got a lot of distribution
+[1068.7s] by just making an integration with Crew
+[1070.7s] with Langchain with Langraph with every
+[1072.4s] single framework out there and they made
+[1073.7s] it really easy like if you are using
+[1075.1s] this framework you add one pip package
+[1077.4s] and now you can use Chroma and it plugs
+[1079.3s] into everything and so the the promise I
+[1081.4s] think that was given to AI dev tools in
+[1083.8s] the like spring summer fall of 2024 was
+[1088.4s] there's an ecosystem and if you build
+[1090.3s] into this ecosystem then you will have
+[1092.2s] distribution and there's like a uniform
+[1093.8s] interface this is the same thing with
+[1095.4s] like
+[1096.1s] >> I don't know freaking OOTH if your
+[1097.7s] service implements OOTH then anyone can
+[1099.4s] implement it into their site right and
+[1101.7s] so this was kind of the idea is like if
+[1103.4s] you build against the standard then you
+[1105.6s] can implement one side of that interface
+[1108.2s] >> and then people can consume it with
+[1109.8s] whatever tooling they want and it it
+[1112.1s] makes it really easy for you to what I
+[1113.7s] found was I went and talked to like a
+[1115.2s] hundred like really good engineers a
+[1117.0s] bunch of YC founders and I was like tell
+[1118.6s] me about your agent you're building
+[1119.6s] agent I wanted talked to the people who
+[1121.1s] actually had not the indie hackers who
+[1123.1s] were like all in on like the the hype
+[1125.8s] machine. They're awesome people and
+[1127.1s] they're important part of community and
+[1128.5s] all these frameworks also have like
+[1129.8s] advanced the state-of-the-art but
+[1131.8s] everybody I talked to who was actually
+[1133.3s] making money in AI who was like selling
+[1135.7s] six figure contracts into real
+[1137.3s] enterprises like they needed a lot of
+[1140.1s] reliability and the way they had found
+[1142.0s] to do that was to do the things that we
+[1145.0s] always talk about on this show which is
+[1146.2s] like break down the problem and be
+[1147.8s] pretty deterministic about it and think
+[1149.5s] of LMS as what they are like what they
+[1152.0s] are really good at which is turning
+[1153.8s] structured data or unstructured data
+[1155.4s] into other types of structured data and
+[1157.8s] that meant that they couldn't use any of
+[1159.2s] these frameworks that were really
+[1160.2s] opinionated about the loop and like took
+[1161.8s] away a lot of control and so I had built
+[1163.8s] for this ecosystem and then I found all
+[1165.4s] the people I actually wanted as
+[1166.7s] customers in order to consume my service
+[1169.9s] everyone had different architecture and
+[1171.8s] so they would all need to like like
+[1173.9s] change their application architecture to
+[1175.7s] fit into how human layer thought about
+[1177.6s] the world and like we added the web host
+[1179.4s] thing which was great for production but
+[1180.8s] it also meant you had to really
+[1182.1s] rearchitect your application to be fully
+[1183.8s] asynchronous where you fire off a tool
+[1185.4s] pull request and then you have to stop,
+[1187.5s] save your state and then wait for a web
+[1189.5s] hook to come back. And so that was like
+[1191.8s] co-actor agents was my like oh I've been
+[1194.6s] like I've been had and like I don't want
+[1196.8s] other people to go through this same
+[1198.9s] kind of journey of like let me build for
+[1200.9s] this ecosystem that is not actually how
+[1202.8s] the top 1% of builders are building. I
+[1205.2s] think when it came down to like tooling
+[1207.0s] that happened in 2025, 2024, it's almost
+[1210.2s] like this excitement that we all want,
+[1212.4s] which says that in theory, if we all
+[1214.8s] agree on a standard, it will just work
+[1216.8s] and the puzzle pieces fit in perfectly
+[1218.7s] and uh economies of scale blah blah blah
+[1221.5s] blah blah.
+[1222.6s] >> But in practice, it's that these puzzle
+[1224.4s] pieces are so bespoke to our own
+[1226.0s] businesses that they don't plug in with
+[1228.6s] any other business because they're not
+[1229.9s] designed to.
+[1230.6s] >> Yeah. This is I mean, I cited this
+[1232.2s] paper. There's this Rails talk from like
+[1234.2s] 2015 that was like duplication is better
+[1236.6s] than the wrong wrong abstraction and
+[1238.6s] abstractions are powerful and if you get
+[1240.1s] the right abstraction you can unlock a
+[1242.2s] lot of value for both sides
+[1244.2s] >> but people were racing to create
+[1245.7s] abstractions and a lot of them ended up
+[1247.3s] being incorrect. So question on that
+[1249.5s] topic. Um you did a talk about MCP
+[1252.6s] recently. Does that plug in debate?
+[1255.4s] >> Yeah. Does that how does that plug into
+[1257.2s] this side of it? Do which side of the
+[1259.4s] abstraction layer is it on?
+[1261.0s] >> I mean so I I think MCP is an very
+[1263.6s] interesting interface. I think the thing
+[1265.0s] that people got wrong about I think
+[1266.4s] people are figuring this out now but the
+[1267.7s] thing that a lot of people got wrong
+[1268.6s] about MCP for like the first 6 months
+[1270.3s] and I said this in the debate too I
+[1271.8s] think I hope is that like MCP is really
+[1274.6s] good if you want to make your AI
+[1276.5s] software extensible what I saw tons and
+[1279.1s] tons of people doing and we even did a
+[1280.8s] couple workshops on this was like how do
+[1283.6s] like if I'm building an AI application
+[1285.6s] I'm building the loop I'm building the
+[1286.8s] prompts I'm defining the structured
+[1288.0s] output I'm defining the workflows and
+[1290.4s] people were like okay instead of using
+[1291.7s] SDKs I'm going to use MCPS like I'm just
+[1294.2s] going to have my model call the MCPS and
+[1295.8s] the tool that it's like if you know what
+[1297.5s] the tools should be and you know what
+[1298.7s] the workflow is then like just write the
+[1301.0s] dang code or just use the dang SDK you
+[1303.6s] don't need an extra layer of abstraction
+[1305.3s] or MCP is cool is like if you have an AI
+[1307.8s] application like a chatbot or something
+[1310.2s] then and you want your users to be able
+[1312.7s] to extend the functionality of that app
+[1315.3s] then you build your app as an MCP client
+[1317.4s] and you build a way for them to like
+[1318.6s] paste in their MCP JSON or put in a like
+[1321.8s] um streaming streamable HTTP URL URL and
+[1324.5s] now they've extended the functionality
+[1325.9s] of of like less technical or like barely
+[1328.9s] like just technical enough to know like
+[1330.8s] I paste URLs in and now I get my Gmail
+[1333.0s] as author whatever it is.
+[1334.6s] >> Yeah, I think it's a it's a great client
+[1336.9s] application a server service
+[1339.4s] effectively.
+[1340.3s] >> Well and and like we were probably not
+[1341.8s] going to supposed to talk about the
+[1343.0s] future today but the skills stuff is I'm
+[1345.0s] very excited about how to see our skills
+[1347.4s] unfold in 2026. I think what is
+[1350.1s] different now that was not what is true
+[1351.8s] now that was not true in November of
+[1354.4s] 2024 I think whenever whenever MCP came
+[1357.5s] out um is that we have like huge product
+[1362.7s] market fit for coding agents and coding
+[1365.0s] CLI we did not have that a year ago and
+[1367.6s] now we have that and that means that
+[1369.4s] like the easiest way to connect your
+[1372.0s] agent to external services is no longer
+[1374.7s] some API some like very heavy like lots
+[1378.7s] of different features and lots of
+[1380.2s] different like prompts and and and and
+[1381.4s] and workflows and and tools and all
+[1383.8s] these different things is like no the
+[1385.3s] easiest way to connect your agent to
+[1386.7s] services is file systems and bash
+[1390.1s] commands. Now, batch commands are not
+[1391.4s] very safe. Like, they're much more the
+[1393.1s] MCP is safer than just giving your model
+[1395.1s] batch. But the idea of like the file
+[1397.6s] system as the substrate for this and
+[1401.9s] then skills is literally just like a
+[1403.5s] markdown file in a folder or in a targ
+[1406.0s] and then whatever else you want. You can
+[1407.3s] bundle CLIs and stuff with it as well.
+[1409.5s] Uh but it's a very interesting like I
+[1412.4s] would I would I would be very bullish on
+[1414.1s] skills over MCP and I I've seen
+[1416.2s] companies building non-coding
+[1417.8s] non-technical start like startups for
+[1420.0s] business people for sales people for
+[1421.6s] administrators for ops people that are
+[1423.7s] AI agent startups that are built with at
+[1426.4s] their core they have cloud code SDK or
+[1428.5s] claude agent SDK because it's just a
+[1430.9s] good tool calling loop and they find
+[1433.2s] ways to take the external data like your
+[1435.4s] Gmail or your calendar or whatever it is
+[1437.6s] and pull that into to the file system
+[1440.1s] rather than trying to connect every
+[1442.3s] single like different API into the
+[1445.0s] agent. And so skills is like a really
+[1446.9s] interesting I'm I'm excited to see where
+[1448.6s] that goes and I'm actually probably
+[1449.8s] going to work on a couple skills. We
+[1451.4s] have a bunch of skills we use
+[1452.2s] internally. I want to make some open
+[1453.4s] source ones maybe over the holidays.
+[1455.0s] >> I mean your skills at prompt are some of
+[1456.7s] the best that I've seen. Um I've slowly
+[1458.6s] been seeding them across my whole team
+[1460.2s] and other people I meet and they're just
+[1461.8s] phenomenal cuz I think it just goes down
+[1464.3s] to it. We talked about this in the
+[1465.5s] prompt optimization episode yesterday,
+[1467.4s] which is is your is is a prompt
+[1469.4s] optimizer going to be better than your
+[1471.0s] best engineers? Definitely not. Is a
+[1473.0s] prompt optimizer going to be better than
+[1475.7s] uh your part of your code that you never
+[1477.5s] look at but once? 100% yes. I think it's
+[1480.0s] the same thing.
+[1481.0s] >> It's the same with these kinds of tools.
+[1482.2s] So like for example like I'm spending
+[1483.5s] zero time writing my actual cloud code
+[1485.0s] like agents.md or everything else and
+[1487.2s] because and the reason I don't is that
+[1489.3s] my code base is changing too fast for me
+[1490.9s] to keep that properly in sync. But the
+[1493.5s] RPI method that you came up with and the
+[1495.8s] prompts that you have for the RPI method
+[1497.7s] specifically all revolve around this
+[1499.4s] idea of you store no information about
+[1501.1s] the actual system and every single time
+[1502.5s] you do a task you build that context up
+[1504.9s] individually for that system and that
+[1507.5s] research plan implement technique just
+[1509.9s] works really well. It's actually, if you
+[1511.7s] think about how docs are, docs quickly
+[1513.1s] become out of date. And there's these
+[1514.9s] whole startups trying to say that, hey,
+[1516.4s] we'll just keep your docs up to date.
+[1518.2s] That's actually way worse than just like
+[1520.2s] screw it, I'll just run an agent loop
+[1521.6s] and just build up all the contacts
+[1523.0s] constantly every single time.
+[1524.3s] >> I'm going to show one slide uh from from
+[1527.4s] the AI engineer talk. Okay. What is on
+[1529.9s] the yaxis between the actual code, the
+[1532.3s] names of your functions, the comments in
+[1534.2s] the code, and then the codebase
+[1535.4s] documentation that you maintain like for
+[1537.4s] developers and internal users. What what
+[1539.8s] do you think is on the y- axis of this
+[1541.4s] chart?
+[1542.3s] >> Uh source of truth.
+[1543.8s] >> It's actually the amount of lies.
+[1545.4s] >> Oh yeah. Okay. Yeah.
+[1547.3s] >> Which is the inverse of source of truth.
+[1549.2s] Basically.
+[1549.5s] >> Yes. Yes. Yes. Yes. [laughter]
+[1551.2s] Sorry. That's what I meant. Yes.
+[1553.1s] >> I agree. That is exactly true. That is
+[1555.8s] that is why I think the RPI method works
+[1557.6s] so well. You just read the code and you
+[1558.8s] analyze it.
+[1559.4s] >> It's scrappy. I mean, it takes a little
+[1560.8s] longer. You're going to burn a couple
+[1561.7s] extra tokens, but like if you can figure
+[1563.2s] out how to background that stuff and
+[1564.5s] paralyze it, it's very predictable what
+[1566.5s] the outcomes are going to be. Like when
+[1567.8s] I do a research, I know exactly what
+[1569.1s] kind of doc I'm going to get out. I know
+[1570.4s] exactly what I'm looking for. And so you
+[1572.2s] can do three or four of them in
+[1573.1s] parallel. Even for one task, you can be
+[1574.6s] like, "Cool, tell me how this part of
+[1575.8s] the codebase works. Tell me how this
+[1576.9s] part of the codebase works and this."
+[1578.0s] And you get your three research
+[1579.0s] documents, and you kind of know what
+[1580.6s] they're going to do. And it's so
+[1581.8s] reliable. I most of the people I know
+[1583.5s] who have been doing this for for a month
+[1584.8s] or two like they barely read the
+[1586.7s] research anymore because the prompt is
+[1588.4s] so reliable. You know it's going to just
+[1590.0s] go find how the codebase works today and
+[1591.7s] assemble your documentation. So if you
+[1593.5s] can find something to do for 10 minutes
+[1594.8s] while the researchers 5 to 10 minutes
+[1596.2s] while the researchers are running then
+[1598.5s] it's it's I think is the the the single
+[1601.4s] best way to like seed an agent whether
+[1604.6s] you go do plan implement or I've often
+[1606.6s] just used a research and then launch a
+[1608.9s] new session be like here's the research
+[1610.8s] here's the like oneline change I want
+[1612.2s] you to like you can use it to seed your
+[1613.9s] vibe coding session too. I mean, I I've
+[1616.4s] been I have a I think a 15,000 line PR
+[1619.4s] uh that I'm working on right now off of
+[1621.0s] this recent I'm I'm adding Rust support
+[1622.9s] for BAML
+[1624.2s] >> and the whole thing is pure RPI.
+[1626.6s] >> Uh and it works really well. I I've had
+[1628.6s] to handw write a couple of code.
+[1630.3s] >> Uh normal I just Yeah, exactly. But most
+[1633.4s] of it
+[1634.2s] >> RPI is not to perfectly oneshot a long
+[1637.4s] complex task. It's to
+[1639.7s] >> speed you up by two to 3x.
+[1641.6s] >> Exactly. Uh, and it does involve like uh
+[1644.0s] we'll talk about this a little bit later
+[1645.4s] actually. Um, so as you're building out
+[1647.8s] this company now, you're building out
+[1649.1s] code layer uh and you're sharing it and
+[1651.7s] I think a few people have private beta
+[1653.1s] access. Hopefully everyone that's
+[1654.4s] watching and wants to watch these kinds
+[1655.9s] of content is able to get beta access
+[1657.4s] pretty fast.
+[1658.1s] >> Yes, if you send me if you sign up for
+[1659.9s] the weight list and you send me an
+[1660.8s] email, I'll shoot you access or ping me
+[1662.5s] on the boundary discord and I'm around
+[1664.5s] or come to the human layer discord.
+[1666.2s] Okay. Where are we on story? What are
+[1667.8s] the what are the what are the gaps still
+[1669.4s] getting back?
+[1671.4s] Yeah.
+[1671.6s] >> So you started building code layer. Um
+[1674.2s] you've done a lot of talks now by
+[1675.6s] agentic engineering through the whole
+[1677.0s] thing.
+[1678.2s] >> I want to know it's like how did you go
+[1680.4s] from being a solo founder to now you
+[1682.2s] have this amazing co-founder Kyle? How
+[1684.9s] did that happen? How did you meet him?
+[1686.7s] Where is he um uh where is he like where
+[1690.3s] is he in the picture?
+[1691.7s] >> Yeah. So I mean rewind a little bit
+[1693.8s] because there's a gap in the story here
+[1695.2s] which is like okay we did human layer
+[1697.1s] talked to all these founders figured out
+[1698.4s] that it like everyone was either going
+[1700.1s] to have to like rearchitect their app to
+[1701.5s] use it or like I was going to have to
+[1704.2s] help them build their agent in a new
+[1706.3s] way. Um and
+[1709.5s] so we started doing a bunch of
+[1710.6s] experiments. We kept Humlayer going like
+[1712.2s] we had some like customers that were
+[1713.5s] fans and it was helping them like ships
+[1715.0s] ship faster but it was like didn't have
+[1716.8s] PMF. It was like most people I talked
+[1718.2s] to, they were just like, "Okay, cool.
+[1719.6s] I'm gonna have to do a bunch of stuff."
+[1720.9s] And like by the time like the cost of
+[1723.0s] changing the code was like they could
+[1724.3s] probably just build the parts of it that
+[1726.0s] they needed. So that is not PMF.
+[1728.6s] [laughter] Um, so we did a bunch of
+[1730.4s] experiments. We built this like
+[1731.4s] Kubernetes orchestrator for AI agents.
+[1733.6s] We built this thing that I still think
+[1734.9s] is dope that I haven't seen out there,
+[1736.2s] which is like a uh MCP agent like a that
+[1740.0s] is email based. So like you put in your
+[1742.4s] MCP JSON and you get back an email
+[1745.0s] address and then when you send an email
+[1746.6s] to that address, it is an agent that has
+[1749.0s] access to all your MCP servers and it
+[1751.4s] like can email back and forth with you.
+[1753.2s] So you can say something like forward
+[1755.1s] emails for boomers, I know, but the
+[1756.9s] thing that made it click for people I
+[1758.4s] talked to was like it's for delegation,
+[1759.8s] right? You get something in your inbox
+[1760.9s] and you're like forward it to this
+[1762.0s] agent. You're like add this to my to-do
+[1763.7s] list or update the CRM with this
+[1765.4s] conversation or whatever it is. It was
+[1766.6s] like this proof. So
+[1768.2s] >> it's kind of no different than like me
+[1769.9s] telling cursor or cloud code or any of
+[1772.0s] these agents to like task from Slack.
+[1773.7s] It's super helpful to be able to
+[1775.3s] delegate from the com software I use
+[1777.0s] every day.
+[1777.6s] >> Yeah. So yeah before that and then we we
+[1779.7s] started working also when the cloud code
+[1781.2s] SDK came out and like sonnet I think it
+[1783.5s] was like sonnet 4 and opus 4 came out
+[1789.2s] and the cloud code SDK came out. This
+[1791.4s] was before Opus 4.1, but they there was
+[1793.8s] this way to now like run cloud code
+[1795.5s] headless and it had this JSON like
+[1797.6s] interface over standard out. And so we
+[1799.8s] started hacking on like okay this is
+[1801.1s] cool. This is new tech. This is going to
+[1802.3s] be important. And so we just built a
+[1803.9s] bunch of stuff. We built like an
+[1805.7s] integration where like you could run
+[1807.2s] claude code headless and it would like
+[1808.8s] email you when it was done and then you
+[1810.3s] could respond to the email and send
+[1811.5s] another user message to it. And like so
+[1813.4s] you could like interact with cloud code
+[1814.8s] over your email or over slack or
+[1816.2s] something like we built this in like
+[1817.2s] May. And then we started building this
+[1819.7s] like terminal UI of like hey if I want
+[1821.8s] to manage a bunch of cloud code sessions
+[1823.6s] just see which ones have like need
+[1825.0s] permission from me and be able to
+[1826.2s] interact with them in like a more glo it
+[1828.2s] was like basically like everyone had
+[1829.8s] prototyped all this crazy like T-Mox and
+[1831.5s] work tree stuff and I was like okay what
+[1833.4s] would it look like to like productize
+[1834.7s] this workflow and make it accessible to
+[1836.5s] people who were not like terminal power
+[1839.4s] users and had been like living in T-Ux
+[1841.7s] for the last 10 15 years and so we
+[1843.5s] hacked on that and we like you and then
+[1844.8s] we started doing using RPI because we
+[1847.2s] were talking to Claude all they were
+[1848.2s] building tools on top of cloud. We were
+[1850.6s] like using the early versions of the RPI
+[1854.6s] prompts to actually develop this tool.
+[1856.9s] And so it was this big Golang demon and
+[1858.7s] like manage all these cloud sessions,
+[1860.4s] all kinds of crazy stuff. And so like in
+[1862.6s] parallel, we were building this product
+[1863.8s] that helped you like paralyze cloud and
+[1865.5s] use it better. And then we were also
+[1867.1s] like building this workflow that we used
+[1868.9s] internally. Um and I will say like the
+[1871.4s] day that made me decide because we we
+[1873.4s] were in experiment mode. We had like two
+[1874.7s] or three different experiments going in
+[1876.0s] parallel. We're trying it and we were
+[1877.3s] getting like doing discovery and the day
+[1879.2s] that made me decide, okay, we need to go
+[1880.5s] all in on like code layer and RPI was
+[1882.2s] actually the day you and me sat down at
+[1883.9s] my apartment and we were just like
+[1885.4s] hacked on [ __ ] for like seven hours
+[1887.3s] because I remember you were like, "Okay,
+[1889.0s] I want to learn this stuff." And so you
+[1890.1s] were sitting next to me and I was
+[1892.2s] feeding you each prompt one at a time.
+[1893.6s] You're like, "Okay, cool. I finished the
+[1894.7s] research. What's next?" I'm like, "Okay,
+[1895.9s] cool. Like paste you in Slack. Here's
+[1897.4s] the create plan prompt. Like do this."
+[1899.0s] And I think we got like 45 minutes in
+[1902.0s] and you basically like you were like I
+[1904.3s] don't think this is going to work for
+[1905.4s] like I could have made this fix in 15
+[1906.8s] minutes and I'm still in the planning
+[1908.5s] phase and the plan is wrong and like I I
+[1911.1s] don't think this is going to work for
+[1911.9s] our codebase.
+[1913.4s] >> Yeah, I said that. I do remember that.
+[1915.0s] That was actually I mean fundamentally I
+[1916.4s] think I changed as a software engineer
+[1917.8s] that day cuz like I I just didn't
+[1920.3s] believe in AI coding. I'm a I'm a pretty
+[1922.2s] fast coder.
+[1922.7s] >> You're incredibly fidious also. like you
+[1925.8s] really really care about every single
+[1928.2s] token in the codebase.
+[1929.5s] >> Yeah. I want it to be good and clean cuz
+[1931.0s] like a clean code is maintainable code
+[1932.6s] and you can't build a company if your
+[1933.9s] system isn't maintainable especially not
+[1935.5s] a compiler tool chain company like we
+[1937.5s] need to make sure that it doesn't work.
+[1938.7s] So like when we showed I just hadn't
+[1940.5s] trust scene AI really impressed me
+[1942.8s] before that day and then we implemented
+[1945.0s] abort controllers and so we have like
+[1947.1s] aborted demo now and then we the wasome
+[1949.1s] which we still haven't merged but
+[1950.7s] there's a new stuff that is going to
+[1952.1s] make us easier but we did all that
+[1953.7s] >> you just rebase the plan on top of your
+[1955.7s] current codebase. Yeah, sorry. Keep
+[1957.0s] going.
+[1957.3s] >> Uh the the codebase changed a lot in a
+[1959.8s] better way, in a way that will make it
+[1961.2s] easier to do, but that's a separate
+[1962.3s] thing.
+[1963.2s] >> But I think that whole workflow just
+[1965.9s] fundamentally changed the way I was
+[1967.2s] like, oh,
+[1968.4s] >> and I remember this very distinctly cuz
+[1970.7s] originally when I was driving, I
+[1972.3s] actually couldn't make it work. What was
+[1974.2s] really interesting is in that shift that
+[1976.7s] we had, we actually did something which
+[1978.3s] was when I said it, I I don't believe
+[1980.2s] this will work. What Dexter says was,
+[1981.8s] "Why don't you let me take over the
+[1983.4s] computer and you just tell me what we
+[1984.9s] should do?" and he said, "Pick two
+[1986.3s] really hard."
+[1986.9s] >> That was your idea. In my memory, you're
+[1989.0s] like, "Why don't you drive and show me
+[1990.3s] how you do it?"
+[1991.4s] >> Yeah, something like that. I was just
+[1992.5s] like, "This clearly isn't working for
+[1993.7s] me." And you tried it and then you
+[1995.3s] started typing and talking to the
+[1996.6s] computer. And then I think halfway
+[1998.1s] through you, you were like, "Why don't
+[1999.4s] you just talk to the mic and talk into
+[2001.3s] there instead cuz like Detro was saying
+[2003.4s] some stuff that was just incorrect about
+[2005.0s] our code base because he doesn't know
+[2006.3s] the codebase, rightfully so."
+[2007.7s] >> Yeah. No, you would say something and
+[2009.4s] then I would try to repeat it into Super
+[2011.2s] Whisper to give it to Claude and you
+[2013.0s] were like, "No, no, no. That's that's
+[2014.2s] wrong." And I was like, "All right,
+[2015.0s] cool." Like, "Here's the mic. You say
+[2016.5s] it." And that was Yeah, that's the thing
+[2018.5s] when I pair with other people, I try to
+[2019.8s] unlock that moment because I think
+[2021.7s] that's that's a really powerful like
+[2025.0s] where you realize that like you are the
+[2026.6s] codebase expert, you like when you if
+[2028.6s] you want to if you want to learn this
+[2029.4s] stuff or you want to teach this stuff,
+[2030.6s] like you have to have in the room, you
+[2032.3s] have to have a codebase expert with lots
+[2033.7s] of opinions and lots of knowledge and
+[2035.4s] you have to have a workflow expert,
+[2036.6s] someone who's been doing this RPI stuff
+[2038.0s] for a while and knows how to sprinkle in
+[2039.8s] the magic words and all this kind of
+[2041.0s] stuff.
+[2041.4s] >> Yeah. And then we did that and like it
+[2043.1s] just works. Uh, like it works really
+[2045.0s] freaking well. Uh, and I I guess that's
+[2046.9s] the day that you went all in.
+[2048.3s] >> That was when I was like what? Like I
+[2050.6s] remember like high-fiving and we got the
+[2051.8s] WASM thing working in the browser. We
+[2053.4s] had to like vibe out the last like
+[2055.4s] >> like 10% of it or whatever. And you were
+[2057.8s] like, "This is sick. I think I I think I
+[2059.7s] should like figure out how to get my
+[2060.8s] team to adopt this." And I was like,
+[2062.2s] "Okay, cool. If this works for Vibov,
+[2064.5s] the most anti- like cynical on AI
+[2066.8s] coding, one of the best engineers I
+[2069.0s] know, then like this is a thing we
+[2071.0s] should invest in figuring out how to
+[2072.5s] bring to more people.
+[2073.6s] >> And then you built code layer. Um, and I
+[2075.6s] remember
+[2075.9s] >> code layer. I mean, we used code layer
+[2077.3s] that day to do it, but it was like it
+[2078.8s] was it was an experiment category along
+[2080.6s] with a couple other experiments
+[2081.8s] >> and there was a lot more bugs back then
+[2083.4s] than there are way more. It was like the
+[2085.4s] earliest days. Yeah.
+[2086.9s] >> Um,
+[2088.3s] >> and then I guess at that point you
+[2089.5s] brought on Kyle not too long after that.
+[2091.4s] So yeah, so Kyle I had met like back in
+[2093.6s] like May or June. Uh as Kyle likes to
+[2096.0s] joke. Um I was going to try to get him
+[2097.5s] on today, but he's like traveling uh
+[2099.0s] with his in-laws in Rome right now. So
+[2101.4s] um we'll get him on to do uh he can tell
+[2103.2s] his side of the story at some point uh
+[2105.1s] next year. Um, but yeah, we had met and
+[2108.0s] as Kyle likes to joke, his uh his
+[2109.8s] previous CEO uh made the tactical error
+[2112.4s] of introducing us. Um,
+[2115.8s] we just ended up chatting and hanging
+[2117.0s] out and like did a couple hackathons.
+[2118.6s] Not even like working on the same stuff,
+[2119.8s] but just like hanging out and I was just
+[2121.1s] like so impressed with the stuff he was
+[2123.1s] building and how not only how fast he
+[2125.3s] could build stuff, but also like design
+[2127.8s] and like visually it was very tasteful
+[2129.5s] and like good-looking, which is rare in
+[2131.8s] like someone who has like a ton of and
+[2133.4s] like also he went straight for the
+[2134.7s] hardest problem. Like he was like,
+[2136.2s] "Cool. I'm gonna solve this thing that
+[2137.7s] is not well documented anywhere, which
+[2139.3s] is like I'm gonna figure out how to like
+[2141.1s] do delegation between like a mid-stream
+[2143.8s] ooth provider and an upstream OOTH
+[2145.8s] provider and like build this identity
+[2147.8s] like model that is like not really like
+[2150.3s] exists in the world as like a standard
+[2152.5s] yet." I was like, "This is cool as
+[2153.8s] hell." Uh, so I just basically I started
+[2157.4s] trying to RPI pill him just cuz like I
+[2159.1s] just wanted more people. This was like
+[2160.6s] within weeks of us doing this day. I was
+[2162.4s] like, I'm going to try to get more
+[2163.3s] people to do RPI. like go check out the
+[2165.2s] GitHub repo and like run code layer on
+[2167.0s] your workstation and stuff. Um, and then
+[2170.4s] by the time I was like, Kyle, you should
+[2172.0s] come join us and like like like almost
+[2174.6s] like
+[2176.3s] get to the like, hey, look, like I think
+[2178.6s] you'd be a great co-founder. He had
+[2180.2s] already been doing RPI and using code
+[2181.9s] layer for like a month and a half.
+[2183.8s] >> Um, and so and like he was a big fan of
+[2185.9s] our content. He's been if you've been
+[2187.3s] watching AI that works for a while, he
+[2189.0s] jumps on and like we'll share his
+[2190.3s] thoughts on certain things as we go.
+[2191.8s] He's just one of the best engineers I've
+[2193.4s] ever met. that he works so hard. He
+[2195.0s] cares so much. And so like I had to ask
+[2197.2s] like six or seven times. Uh but
+[2199.5s] eventually he said yes. So um I don't
+[2202.1s] know if there's advice buried in there,
+[2203.4s] but just like build a thing that people
+[2205.4s] love and that will attract great talent.
+[2207.8s] >> So when it comes to getting a
+[2209.6s] co-founder, I'm always curious about
+[2211.1s] this. Um especially for solo founders
+[2214.2s] out there.
+[2215.4s] >> Yeah.
+[2215.9s] >> What do you think you said to him that
+[2217.0s] made him convert? like how do you
+[2218.8s] convince someone because and at this
+[2220.6s] point you had already raised capital
+[2222.1s] you'd gone through YC so a lot of like
+[2224.4s] the soul founder part was hard how how
+[2227.2s] did you make that work on both your ends
+[2228.8s] to make it exciting and valuable for him
+[2230.6s] >> ask that question a different way I mean
+[2233.1s] I'm I'm curious like what's your
+[2234.7s] underlying question
+[2236.0s] >> well that's what I mean like what did
+[2237.4s] you think you said to him that made him
+[2238.8s] want to jump jump and do this cuz he
+[2241.1s] obviously had a great gig at his old
+[2243.0s] place uh he moved cities
+[2246.4s] >> uh to come and be your co-founder.
+[2248.4s] That's not an easy conclusion that
+[2250.2s] someone comes to. And for a lot of solo
+[2252.0s] founders out there, I I've met a lot of
+[2253.5s] people that are incredibly talented. And
+[2255.4s] I remember when I when we started
+[2257.4s] chatting about this kind of stuff like
+[2258.6s] maybe like a year ago now, I was like,
+[2261.0s] Dexter, find a freaking co-founder. If
+[2263.3s] you do nothing else, just find a
+[2265.2s] freaking co-founder. It is the most
+[2266.7s] important thing you do.
+[2267.7s] >> And I worked really hard. like the the
+[2269.7s] first half of 2024 was uh or 2025 was
+[2273.8s] like a lot of work trials, a lot of like
+[2276.6s] working closely bringing someone on for
+[2278.2s] like six weeks who was super senior, an
+[2279.9s] incredible engineer. Like there were so
+[2281.8s] many people where it was like almost
+[2283.2s] right, but there was like one thing that
+[2285.1s] wasn't working.
+[2286.1s] >> So what what was it and eventually like
+[2288.3s] with Kyle you just knew because you did
+[2290.0s] a way less shorter I mean you did a
+[2291.8s] similarly length trial but you kind of
+[2294.2s] knew much sooner than you did with
+[2295.6s] almost any work trial. I mean like I
+[2297.9s] have seen we did one hackathon together
+[2299.8s] and then we did another hackathon. We
+[2301.4s] were just like in the same space working
+[2303.1s] on different things.
+[2304.4s] >> That's what I mean. Like what was the
+[2306.1s] difference? So for everyone that's
+[2307.3s] trying to find a co-founder, how did you
+[2309.3s] know that Kyle was going to be the right
+[2310.9s] fit?
+[2311.4s] >> I'm going to give you uh I'm going to
+[2312.8s] I'm going to spit you back your your
+[2314.3s] favorite answer. Uh vibes.
+[2317.4s] [laughter]
+[2318.5s] You just you just you just can tell when
+[2320.8s] someone is built the same way as you and
+[2322.6s] cares as much as you and like thinks
+[2324.4s] about problems in the same way but also
+[2326.5s] like brings a ton of skills that balance
+[2328.9s] out skills that I don't nec I mean I
+[2331.4s] have but I'm like a seven or an eight
+[2332.8s] out of 10 on and Kyle's like an 11 out
+[2334.5s] of 10.
+[2335.1s] >> That's right. That's uh just so everyone
+[2336.6s] knows that is Dexter's minimum on every
+[2338.7s] skill he has ever acquired. A seven or
+[2340.6s] eight. Everything else he's a 10.
+[2342.9s] >> But I'm joking.
+[2344.5s] >> No, I'm sure there's something on a
+[2345.9s] three at.
+[2346.6s] >> Yes, I'm I'm just joking. I'm teasing
+[2348.3s] it. But I think that's u that makes a
+[2350.4s] lot of sense. I think it's a lot of
+[2352.0s] people push really hard to like try and
+[2353.6s] be co-founder to someone because they're
+[2354.9s] trying to like force something to work.
+[2356.6s] But honestly, like when you're working
+[2358.0s] with someone, you can often just It's
+[2360.0s] the same with like a hire or something
+[2361.4s] else. When you're really doing it, it's
+[2363.9s] so easy to just be like, is this a great
+[2365.7s] fit? Are you super excited about it?
+[2367.3s] Would you I think the best analysis of
+[2369.3s] like, would you fight someone else if
+[2371.2s] they said no to bringing this person on?
+[2373.3s] And if you would fight someone else and
+[2374.3s] be like disagree and like argue on
+[2375.6s] behalf of that person, it's going to be
+[2377.1s] a great fit. You It's It's very easy to
+[2380.4s] recognize that extreme sensation versus,
+[2382.7s] "Oh, they're like pretty good." And it
+[2384.4s] seems
+[2384.7s] >> pretty good, but I'm not 100% sure. And
+[2386.3s] like it could probably work out, but I
+[2388.0s] don't know. It's just like
+[2388.9s] >> Exactly. Yeah.
+[2390.1s] >> If that's your feeling, then like you
+[2391.8s] already know your answer.
+[2392.9s] >> Yeah. Exactly. Um Okay. So, you you're
+[2395.2s] doing that stuff. What's next?
+[2396.7s] >> Oh,
+[2397.1s] >> 2026.
+[2397.9s] >> We building so much exciting stuff.
+[2399.9s] >> Yeah. So I I mean I think like candidly
+[2402.3s] and openly like code layer is um a
+[2406.1s] really dope product. The people who love
+[2407.4s] code layer like love code layer. Like we
+[2409.5s] get notes all the time from people like
+[2411.0s] this has changed my entire workflow. Um
+[2413.9s] and I think the next thing we have to
+[2415.5s] unlock is like we're working with a
+[2417.0s] bunch of design partners right now like
+[2418.6s] trying to build this into orgs with 45
+[2421.4s] engineers, 100 engineers, 3,000
+[2424.6s] engineers and like there's different
+[2426.0s] kind of problems at every one of those
+[2427.4s] scales. like for a five 45 engineering
+[2429.4s] team, you can just be like fly out all
+[2430.7s] your tech leads. I'll train each of them
+[2432.2s] like Monday, Tuesday, Wednesday,
+[2433.4s] Thursday, Friday, and then they can go
+[2435.0s] home and spread the learnings to like
+[2436.6s] each to like three or four people. And
+[2438.2s] that actually works pretty nicely. Um,
+[2440.0s] and they can start to figure out how to
+[2441.4s] customize it for their org.
+[2442.8s] >> For a 3,000 person or like there's no
+[2445.4s] point in me like doing trying to train
+[2447.4s] everybody. And so part of it is like how
+[2449.0s] do we enable our champions and the
+[2450.5s] people at in those companies who love
+[2451.8s] RPI to actually do like actually like
+[2456.2s] build artifacts and documentation so
+[2458.6s] that any developer who wants to learn
+[2460.0s] this can show up RTFM like try it for a
+[2462.7s] couple days and like get reasonably good
+[2464.6s] results. Um so the the two things that
+[2467.7s] we're like really focused on solving in
+[2469.4s] the future are like number one is like
+[2472.6s] the collaboration thing isn't fully
+[2474.3s] solved yet. Um, we talk about, hey,
+[2476.5s] these research and plans are great
+[2477.8s] artifacts for mental alignment. There's
+[2480.1s] a lot more refinement there in terms of
+[2482.0s] splitting plan documents into like a
+[2483.6s] highle doc for mental alignment and then
+[2485.5s] the low-level doc with every code change
+[2487.4s] that is really should just be reviewed
+[2488.8s] by the engineer like working with the
+[2490.4s] model. Um and then another thing we
+[2492.6s] found is like as the harnesses change
+[2495.8s] and the models change the level the you
+[2498.4s] know one to 100 score of how good is
+[2500.3s] your instruction following is it
+[2503.9s] vacasillates throughout the day based on
+[2505.8s] your prompts based on your code base and
+[2507.6s] what we found is like someone I sit down
+[2509.2s] with for seven hours can get good
+[2510.6s] results from planning all the time but
+[2513.3s] when they go and give it to their
+[2514.4s] teammates if they don't sit with those
+[2516.2s] people for seven hours which honestly
+[2517.6s] who has time for that like if you have
+[2519.4s] to teach me it for seven hours like
+[2521.3s] there's some products aren't going to
+[2523.3s] learn.
+[2523.8s] >> So, we're working on this thing I call
+[2525.4s] like autotune for planning or guided
+[2527.8s] planning which is a lot more uh it
+[2530.3s] basically is like we're taking the 12
+[2531.4s] factor. It's funny because I was the 12
+[2532.7s] factor agents guy, right? It was like
+[2534.2s] full fat agents don't work. Don't just
+[2536.0s] do tools in a loop. Think of it as a
+[2537.5s] structured workflow. Think of
+[2538.6s] microaggents as part of a deterministic
+[2540.4s] DAG. And then like two months later, we
+[2542.6s] were really obsessed with claude code.
+[2543.8s] was like, "Oh yeah, the agents don't
+[2545.6s] work, but this one's pretty [ __ ] good
+[2547.0s] and like you can get a lot of really
+[2548.2s] good results from it just cuz like the
+[2549.6s] models got better and things like that."
+[2550.9s] And now we're getting to this point
+[2551.9s] where it's like, okay, to break through
+[2554.1s] the barrier and like guarantee good
+[2556.2s] performance, we actually have to
+[2558.2s] untangle this, you know, the planning
+[2560.3s] prompt is five highle steps. Each step
+[2563.3s] has like five to 10 instructions in it.
+[2566.3s] And it's just a lot for like if you want
+[2567.8s] to use Sonnet, Sonnet cannot build a
+[2569.7s] plan using that prompt because it'll get
+[2571.6s] halfway through step two and then it
+[2573.0s] will forget what it was doing. You have
+[2574.2s] to like remind it where we were. And so
+[2576.7s] we're finding is like if we can chunk
+[2578.3s] that prompt up and rather than using
+[2579.9s] prompts for control flow, like if the
+[2582.0s] user says this, do this. If the user
+[2583.4s] says that, do that. If the codebase
+[2584.9s] looks like this, do this. We can
+[2586.6s] actually chunk it up into smaller
+[2587.7s] workflow steps and use control flow for
+[2589.8s] control flow, which is the whole point
+[2591.1s] of 12actor agent. So it's a fun like
+[2593.0s] opportunity to marry these ideas
+[2594.5s] together. I'm really excited to share
+[2596.1s] kind of what this work. It's in early
+[2597.4s] prototype. We're using it to build our
+[2599.6s] own plans now and I really really like
+[2601.3s] it.
+[2601.7s] >> So, how do I get access?
+[2603.4s] >> Uh, I can send you it's a I can send you
+[2606.4s] a compiled bun binary that is a CLI
+[2609.0s] prototype.
+[2610.5s] >> Send it. I'll try it.
+[2612.3s] >> Yeah.
+[2613.6s] >> I love trying early things. I think it's
+[2615.3s] one of the things that I try and do
+[2616.4s] specifically because the more early
+[2617.7s] things I try
+[2619.0s] >> Yeah.
+[2619.4s] >> just the better um the better we can
+[2622.1s] understand how people want to build AI
+[2623.4s] pipelines long term. Yeah. And the other
+[2625.3s] thing we're doing is we basically like
+[2626.4s] rearchitected code layer from scratch
+[2628.2s] and are rebuilding it from the ground
+[2629.5s] up. We're keeping all the UI and the
+[2630.9s] experience stuff and the hotkeys and
+[2632.3s] everything that everybody loves, but
+[2633.5s] we're rebuilding it to be collaborative
+[2636.6s] so that when I launch a session in code
+[2638.7s] layer, I can send my co-orker a link to
+[2640.3s] it and we can both have code layer open
+[2641.8s] and both watch the same cloud session
+[2643.4s] streaming and we can leave comments on
+[2644.9s] it and like if I'm driving on my
+[2647.3s] machine, you can just like rightclick on
+[2649.4s] a message and like suggest, hey, we
+[2651.0s] should prompt it this way and then I can
+[2652.6s] accept your prompt and so we can
+[2653.8s] co-prompt instead of you having to talk
+[2655.5s] into the mic or like tell me over the
+[2657.3s] call when I try to transcribe it. It's
+[2658.6s] kind of like It's kind of like VS Code
+[2660.2s] Live Share,
+[2661.5s] >> but
+[2661.8s] >> it's like VS Code Live Share, but for
+[2663.3s] for coding agents. Yeah,
+[2664.6s] >> exactly. That's freaking sick. That's
+[2666.2s] sick.
+[2666.6s] >> A lot more depth there, but that's
+[2668.6s] that's what I'm able to share right now.
+[2670.6s] So, we're really excited about that. Um,
+[2672.2s] and excited to share with the community
+[2673.6s] in early early 2026.
+[2676.0s] >> I've got uh can I ask you a couple hard
+[2678.3s] questions now?
+[2679.0s] >> We could do hard questions. We could do
+[2680.4s] questions from the chat. I'm good with
+[2681.8s] either.
+[2682.2s] >> You're operating in a very very crowded
+[2683.8s] space.
+[2684.6s] >> Oh, yeah. as a founder, how do you
+[2687.4s] navigate that? Like how do you wake up?
+[2689.0s] How do you how do you get your team
+[2690.2s] excited? How do you how are the lows?
+[2692.0s] Because the lows must be very intense in
+[2693.8s] this space.
+[2694.2s] >> The lows are off. I mean, it's like I
+[2696.0s] think this is a lot of founders go
+[2697.0s] through this. It's like every time you
+[2698.1s] check social media, one of your
+[2699.7s] competitors who is already way further
+[2701.6s] along than you, publish something really
+[2703.2s] dope that makes them look really good or
+[2705.0s] they publish a new feature and you're
+[2706.2s] like, "Fuck, I thought I was the only
+[2707.4s] one who was thinking about building
+[2708.6s] that." And like you know we we shipped
+[2711.0s] RPI and now every single agent decoding
+[2713.3s] API ID has a plan mode. Uh I'm not sure
+[2717.2s] they are all as good as RPI planning. I
+[2719.7s] think I still think RPI planning is the
+[2721.3s] state-of-the-art but um so yeah
+[2723.8s] especially in a very crowded space it's
+[2725.4s] very very and especially just anything
+[2727.4s] in AI it's very easy to like compare
+[2730.7s] yourself to every other company and you
+[2733.0s] just kind of have to like find a way to
+[2734.7s] balance that out. Um, the the thing I
+[2737.7s] love doing, the thing that works the
+[2739.3s] best, it's not just for building a
+[2741.0s] business, it's like for your own
+[2742.0s] mentality, is like talk to customers all
+[2744.4s] the time. Every time you build something
+[2746.4s] new, get on the call with someone that
+[2748.1s] you already know who's a friendly and
+[2750.1s] show them the thing that you're doing or
+[2751.7s] show it to a new person. Like I try to
+[2753.4s] have at least a couple onboarding calls
+[2756.2s] on my calendar every single week for
+[2758.6s] people who sign up for the weight list
+[2759.8s] and then I send them a link. They
+[2760.8s] schedule a call and I watch them use the
+[2763.0s] product. Um because I see them use a
+[2765.8s] brand new feature we shipped last week.
+[2767.2s] Like you constantly want to be watching
+[2769.1s] people use your product because it's
+[2770.6s] two-sided. It's it's it's the this two
+[2772.7s] shall pass thing. I don't know if you've
+[2774.2s] heard about there's this old story of
+[2775.5s] like the the magic ring that makes you
+[2778.3s] feel when you're really feeling up it
+[2780.0s] like brings you back down to earth and
+[2781.3s] when you're feeling really shitty it
+[2782.5s] kind of brings you back to the middle.
+[2784.5s] Uh and it was a magic ring. It was just
+[2786.2s] a ring that had the words this too shall
+[2787.9s] pass on it. It's some like Telmouth
+[2789.7s] story or something. Anyways, uh yeah,
+[2791.7s] the idea is watching people use your
+[2793.4s] product will one remind you how dope it
+[2795.7s] is and how unique it is and how much
+[2797.3s] people like it and it will also make you
+[2799.8s] hate everything about your product and
+[2801.4s] you'll see all the bugs that they don't
+[2802.7s] really see and like [ __ ] we got to fix
+[2803.9s] that. We got to fix that. And so like
+[2805.5s] it's very balancing to get out of the
+[2808.2s] world of social media and hype and buzz
+[2810.3s] and podcast and all this stuff and just
+[2812.6s] build a thing and watch people use it.
+[2814.9s] And if you have a customer that you're
+[2816.2s] really excited about, like meet them
+[2818.5s] every single day. talk to them, find out
+[2820.7s] what their biggest problem is, solve
+[2822.3s] that, ship it the next day, meet them
+[2824.6s] again, see what the new biggest problem
+[2826.5s] is. And if you can get that cycle going,
+[2828.9s] if you can like minimize the time of
+[2831.4s] iteration between build, feedback,
+[2833.4s] build, feedback,
+[2835.8s] you don't care about any of that other
+[2837.1s] stuff because you're so excited. You
+[2838.6s] know, you're solving real problems for
+[2840.0s] real people.
+[2840.7s] >> Yeah. I think that's honestly one of the
+[2842.6s] most understated things. Like most I
+[2844.5s] think a lot of people don't recognize
+[2845.8s] this, but like most startups suck on day
+[2848.1s] one. Like you see all these stories of
+[2850.7s] oh we went to a zero to 100 millionaire
+[2852.9s] in like nine months or six months and
+[2855.1s] like there may be companies like that
+[2856.5s] but frankly speaking like statistically
+[2858.3s] out of all the companies in the world
+[2859.8s] there's a lot that make a lot of money
+[2861.4s] do bring a lot of value that don't have
+[2863.4s] that track and they all still win. Um
+[2866.6s] and I think it's very easy to talk about
+[2868.2s] the super like super outliers but often
+[2871.5s] times the biggest companies are not the
+[2872.7s] ones that go do that. There are
+[2873.9s] companies that just have like non-stop
+[2876.0s] continuous growth every single day. That
+[2878.6s] said, it is hard. It is very very hard.
+[2883.0s] >> Like you don't like you could work on
+[2885.8s] something open source and free and work
+[2887.5s] on it for 10 years and then one day
+[2889.9s] start charging for it and like you
+[2891.8s] already have distribution. Everyone's
+[2893.0s] and then yeah, that's how you go from
+[2894.3s] zero to 100 million ARR in in in nine
+[2897.1s] months is you already have a million
+[2898.6s] users.
+[2899.3s] >> Well, I mean Docker did that and Docker
+[2901.3s] struggled a lot. A lot of open source
+[2902.7s] companies have tried that.
+[2904.2s] >> Docker made other mistakes, but yeah.
+[2906.1s] >> Sure. Yes. Um, we got a question from
+[2908.1s] Dustin. Uh, when you pivoted away from
+[2910.1s] the original human in the loop tech,
+[2912.6s] were you focused on coding use cases
+[2914.6s] only? I'm wondering what you think other
+[2916.7s] markets are like Upwork, UMA that
+[2919.0s] orchestrate agents and humans to
+[2920.3s] accomplish tasks like I did you ever
+[2923.1s] consider those ideas? I mean, yeah, the
+[2924.8s] idea the idea with human layer's API was
+[2926.9s] it was like the first the first person
+[2928.3s] who paid for human layer was building a
+[2930.2s] marketing bot and so he had built this
+[2932.2s] system that would like scrape hacker
+[2933.6s] news and find the top because he wanted
+[2934.9s] to like he was he was he was helping
+[2936.5s] developers market their tech. He had
+[2938.2s] like an agency and so like where do
+[2940.2s] developers go when they want to market
+[2941.7s] their [ __ ] They go to hacker news and
+[2942.9s] they post on show hn. So he would crawl
+[2944.6s] the top posts on show hn. He would like
+[2947.3s] did a browser agent that would go like
+[2949.2s] search for all the stuff. you kind of
+[2951.0s] hacked some of this together and like we
+[2952.4s] worked on it together and like took the
+[2953.8s] NNN workflow and moved it to Crew AI and
+[2955.8s] then dangled the Crew AI workflow into
+[2957.8s] something else. But at the end of the
+[2959.3s] day it was like I found this the message
+[2961.1s] that came into his Slack was like I
+[2962.7s] found this person here's the email I'm
+[2964.4s] going to send them and he had the option
+[2965.8s] to either approve it and the email would
+[2967.2s] go out or to deny it and give it
+[2968.7s] feedback either like that person's not
+[2970.2s] relevant or that's good but it sounds
+[2972.3s] too much like AI like say this instead.
+[2975.0s] Um, so like yes, it was for sure the
+[2977.3s] idea was like I wanted cursor tab
+[2979.7s] autocomplete but for like everything in
+[2982.1s] life. It was explicitly not for coding
+[2983.9s] at that time.
+[2984.6s] >> I think the question Dustin is asking is
+[2986.9s] like there's another way where because
+[2988.6s] it's built the human loop company almost
+[2990.5s] like a uh almost like a combined pager
+[2993.8s] duty kind of thing where like hey every
+[2996.1s] time something comes in you as a h you
+[2998.1s] kind of bind the humans and the agent
+[2999.4s] together and you become like a
+[3000.4s] processing letter for that to like
+[3001.8s] guarantee something happens. What made
+[3003.8s] you pivot away from that kind of idea?
+[3005.4s] >> We talked about it like Pedro duty a lot
+[3006.9s] which was like hey look you're going to
+[3008.1s] want different humans like the the
+[3010.1s] metaphor was always like hey you have a
+[3011.4s] sales outreach bot and you put four four
+[3013.5s] sales people in a channel and like it's
+[3015.9s] it's every time it wants to send an
+[3017.1s] email a human looks at it which means I
+[3019.0s] don't know I we all get too much like
+[3020.5s] email marketing spam and [ __ ] like that.
+[3022.3s] I was like you can actually have really
+[3023.6s] good messages go out if you let humans
+[3025.3s] review them that have all the context
+[3026.6s] and stuff like that. And it was like,
+[3028.0s] yeah, you have whoever's on call and
+[3029.4s] then you can escalate through and
+[3030.6s] escalate to the manager. And like your
+[3032.8s] goal was like your agent says, "I need
+[3034.6s] an approval on this." And we would
+[3036.5s] figure out who it was, find the right
+[3038.6s] person. We had this thing where we would
+[3039.7s] like rag against a database of your
+[3041.4s] people and like what skills they had and
+[3043.2s] then like try to serve up here's the
+[3044.9s] three people that can help with this and
+[3046.2s] then ask each of them in in like a in
+[3048.6s] series. So yeah, that's that's exactly
+[3051.2s] kind of the idea. And it turned out that
+[3053.0s] like people just hadn't architected
+[3054.9s] their applications in a way that was
+[3056.7s] ready for that. And I saw the path to
+[3058.9s] make human layer work. And it was like
+[3060.7s] create an open standard for human
+[3062.2s] approval and human in the loop. Get
+[3064.0s] everybody to adopt it. And I was just
+[3065.7s] like that's just going to be a lot of
+[3067.0s] work and a long time where we're not
+[3068.5s] actually delivering a lot of value to
+[3069.9s] anybody. And so I and then at the same
+[3072.2s] time we had stumbled on this code layer
+[3073.8s] thing and this RPI thing and I was like
+[3075.4s] this is a much this feels like a much
+[3077.5s] more fun business to build.
+[3079.1s] >> Yeah. I think Dustin when it comes to
+[3081.0s] pivoting like honestly you just got to
+[3082.9s] go with the gut and likely when most
+[3084.5s] people are in pivot hell what I find is
+[3086.7s] they're actually not tied to any one
+[3089.5s] idea they're almost simultaneously
+[3091.5s] thinking hedging on every idea and like
+[3093.3s] you just find the one that gets you the
+[3094.8s] most dopamine and you just follow that
+[3097.4s] all the way through as far as you can
+[3099.0s] and the reason is really just what
+[3100.6s] Dexter alluded to here in order to make
+[3102.1s] a really good product especially one as
+[3103.9s] nuanced as like a coding agent that's
+[3106.2s] going at things differently it's
+[3107.8s] incredibly useful for people just to get
+[3109.5s] an idea for what it's like and for a
+[3111.2s] dexterra to recognize what hey what are
+[3112.7s] the areas that we can improve so that
+[3114.5s] onboarding is beautiful and amazing for
+[3116.6s] every single person like that sort of
+[3118.7s] experience is uh undoubtedly going to
+[3121.8s] make the product better long term
+[3123.4s] whereas if you just give a product to
+[3124.7s] everyone I can't tell you the number of
+[3126.0s] products that I've tried and like the
+[3127.4s] founders are just not responsive enough
+[3129.3s] and I just turn off because it doesn't
+[3131.1s] actually make my life better in a way
+[3132.7s] that's substantial it's like another
+[3134.8s] thing I have to manage
+[3135.8s] >> I don't know if that's necessarily
+[3137.0s] advice it depends on what you're
+[3138.3s] building, but like yeah, make sure the
+[3140.5s] experience is really really good and
+[3141.9s] figure out who it solves problems for
+[3143.8s] because if you give it to a bunch of
+[3145.0s] people that are like not the right
+[3146.7s] target user, you're just going to have a
+[3148.1s] bunch of people out there in the world
+[3149.1s] who people are going to, hey, did you
+[3150.2s] try this thing? And they're going to be
+[3150.9s] like, "Yeah, I tried it. I didn't get
+[3152.0s] it." And that's not what you want when
+[3153.8s] you're trying to get a product off the
+[3155.0s] ground.
+[3155.6s] >> Yeah. Um, Dexra, I've got another
+[3157.4s] question for you. Last one. What are you
+[3159.4s] most excited for next year?
+[3160.6s] >> We're going to ship so much cool [ __ ]
+[3162.3s] dude. We're going to ship a lot of
+[3163.8s] stuff. Um, I'm excited to see how skills
+[3166.2s] unfolds as a standard for agent skills.
+[3168.2s] I'm excited to see what new models we
+[3170.2s] get and where we can push the frontier.
+[3172.0s] And I'm excited to
+[3174.5s] get a huge chunk of really good
+[3177.4s] developers to the point where they can
+[3178.7s] ship two to 3x faster with AI.
+[3181.0s] >> I am also very excited for all those
+[3183.1s] things and excited to see you hopefully
+[3184.8s] win next year.
+[3185.8s] >> Yeah, man. It's going to be sick. All
+[3187.4s] right, this was fun. Thanks everybody in
+[3188.9s] the chat. Uh, I hope you enjoyed this
+[3190.9s] sort of uh off uh off cycle thing. We'll
+[3194.0s] do the same thing with Vibov next week.
+[3195.4s] I'll try to ask uh almost as hard of
+[3197.5s] questions.
+[3198.6s] >> Go as hard as you want. Uh
+[3201.0s] >> I I think it's honestly the most fun
+[3202.8s] conversations. I think the disagreements
+[3204.5s] are the most interesting and fun
+[3205.9s] conversations we have to be honest.
+[3207.4s] >> That's why people watch the show, right?
+[3208.6s] To watch us argue over how the code
+[3210.2s] should look. [laughter]
+[3212.2s] >> Tabs versus the spaces.
+[3213.7s] >> All right, y'all. This is great. Thanks,
+[3215.4s] dude.
+[3215.8s] >> All right, sounds good.

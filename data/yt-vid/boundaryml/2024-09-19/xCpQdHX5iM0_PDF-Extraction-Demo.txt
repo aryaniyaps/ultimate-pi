@@ -1,0 +1,116 @@
+hey I'm Aron founder of boundary and
+today I'll show you how you can
+guarantee a specific schema when
+extracting data from financial documents
+um so in this demo uh we have a PDF uh
+but you can also have images or whatnot
+uh to extract this data and let's just
+try that
+now and so what we do here is we first
+uh ask the llm to categorize each of
+these rows in some predetermined
+categories that we defined uh so in this
+case we have cash mutual fund ETF
+Etc so those categories were defined by
+us but they can be like modified and
+such um and you always get the same
+categories no matter what the document
+says right so yeah we have this data and
+it seems to match perfectly so we have
+uh 1 million here 1 million here as well
+5,25
+5,25 so everything seems to matching but
+with financial data there is no room for
+error so what you can do is um you can
+add programmatic validations and so
+bamble makes it really easy because you
+already have like the full type like all
+of this data is in a nice structured way
+so we can just add programmatic
+validations to cross reference different
+fields and make sure that they add up to
+the right value so we're going to do
+that with the market value let's figure
+out if the quantity times the current
+price actually equals the market value
+that we expect extracted um so let's run
+that and uh here we added like another
+column called market value and this is
+just the Delta uh here are some notes as
+well from the llm um uh that may also be
+useful for like a human to read in case
+there's an issue uh so you can see here
+that all of these fields look like they
+were correct um and we can validate that
+they were exactly 100% correct cuz all
+the market values actually match perfect
+so that's one document um but this works
+with any document really so we have this
+Fidelity document uh let's run it on a
+different one so here's another one from
+Charles Schwab uh so let's extract all
+this
+data and you can see that these numbers
+are matching 90 51
+19 37 28
+16 so we have every row accounted for
+here so
+far um same with the numbers too as you
+can
+see but again uh we may need to validate
+some of this data to ensure that there's
+no
+hallucinations um we also extracted the
+ETF as well so this is one of the
+categories we defined and it correctly
+identifi that in the document uh and the
+cash amount as well so let's run the
+validation again we're going to also
+double check the market value so we can
+guarantee that that the quantity and the
+current price are accurate so let's add
+that in and you can see this one is not
+quite the same amount so this allows you
+to build ux um that allows maybe like a
+human to intervene here or maybe you can
+run it again through like a different
+validation step uh through a different
+uh llm for example to fix that field um
+and so yeah it makes it really easy to
+um to essentially double check those
+fields and make sure that everything
+looks
+good all right so then um we also have
+this other like page and like let's just
+see what happens if we try and extract
+the data from here
+right and as you can see it just
+categorized something as unknown uh and
+there's just nothing here so you can
+like guarantee that basically whenever
+there's junk data or something like that
+um you'll know about it in your code and
+you can act accordingly um here's one
+more example um so this is a sample as
+well um and let's just see what
+happens so again we're categorizing
+things first and then grouping them by
+each
+category and so we have all the
+treasures Etc and then let's just see if
+we can validate the market value and
+here it doesn't match because our
+calculation for um treasuries is in
+correct but this is what it would look
+like you know if you're like basically
+validating it yourself or there's a UI
+that you can like do these validations
+on uh you can have a human intervene and
+then like look at the data and like fix
+it uh or even just have a different llm
+step to fix it so yeah that's basically
+um the full demo so let us know if you
+have any other questions uh We've helped
+other customers deploy AI pipins like
+this um in a reliable way um so yeah
+we'd love to help

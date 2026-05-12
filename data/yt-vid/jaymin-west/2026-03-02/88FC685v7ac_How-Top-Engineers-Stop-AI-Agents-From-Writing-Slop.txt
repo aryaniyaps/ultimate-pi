@@ -1,0 +1,348 @@
+How do you make sure that AI agents
+aren't writing slop in your code base?
+How do you make sure that when you're
+running 5, 15, 30 plus agents at a time,
+that they're not just creating technical
+debt, that they're not just writing slop
+to your code base? Those are the
+questions that I'm going to be answering
+today in this video. If you don't think
+this is possible, I would recommend you
+read this article from Stripe talking
+about how they use agents in production
+in one of the most consequential coding
+environments in the world right now. So,
+these are the techniques that I use,
+these are the techniques that other
+top-performing agentic engineers are
+using, and today I'm going to cover them
+in depth. If you don't already know me,
+my name is Jim and West. I've been using
+LLMs to write production quality code
+for as long as it's been possible.
+Everything that I build, I build in
+public. So, if you're interested in
+seeing what I'm working on, seeing what
+anti-slop patterns look like, as well as
+learning more about agentic engineering,
+I would highly recommend you go check
+out my GitHub where I have all the
+resources that you would need. So, let's
+talk about the tools and techniques that
+go into anti-slop. The very first
+mindset shift that needs to happen is
+you have to stop assuming that LLM code
+equals slop. If you still think that
+tools like Claude code just produce
+slop, that their code will always be
+bad, you have to clear that mindset and
+realize that if LLMs are writing slop in
+your code base, that is an engineering
+problem and not an LLM problem. The
+models are capable enough to write
+high-quality code, and I'm going to show
+you why and how. So, before I dig much
+deeper into this, let's talk about the
+number one rule here.
+Um at least my personal number one rule
+when it comes to agentic engineering is
+never fix bad output. If you get bad
+output from an agent, you should
+diagnose that, reset the run, fix the
+issue that caused an agent to write bad
+code, and then rerun from scratch. So,
+don't worry about fixing technical debt
+produced by an agent. If the agent had
+bad results, scrap it and try again.
+Let's dig into the tools used by top
+agentic engineers to ensure that the
+LLMs writing their code aren't producing
+slop. First and foremost, we have hooks.
+Hooks are incredibly important. They are
+incredibly powerful. Hooks allow you to
+create custom harnesses around your
+agent as well as produce logging, stop
+destructive changes before they happen.
+They are the first layer of defense when
+it comes to agentic engineering. Some
+examples of hooks that I use are
+pre-commit hooks, which aren't even
+running in cloud code or the agent
+harness that I'm using. When an agent
+goes to commit their work, you know,
+tests are run, linting is checked, so on
+and so forth. That moves into quality
+gates. When it comes to quality gates,
+this is I think a shift that engineers
+have to make in how they approach things
+like linting and type checking because
+with LLMs, we can enforce the strictest
+possible rules when it comes to linting
+or type checking as well as with test
+passing. So, personally in my code
+bases, I always run the strictest
+possible linting as well as the
+strictest possible type checking for
+LLMs. So, when they are making code,
+they can ensure that that code is up to
+project standards. Additionally, I
+always make sure that every test in my
+code base is passing before it moves on
+to the next agent or, you know, gets
+pushed to remote or anything like that.
+Talking a bit more about testing, I
+personally use an anti-mocking testing
+philosophy. Sort of the guiding
+principle is never mock which you can
+use for real. And this is super
+important because if you have used LLMs
+to write code, especially tests, you
+know that they love to mock things and
+oftentimes the tests that they write
+aren't even testing the actual code. So,
+I always make sure that this philosophy
+of anti-mocking is baked into every
+single agent that I have running in my
+code base. High coverage is obviously
+something that's super important. You
+want to make sure that the code in your
+code base is actually tested. So, I use
+a super high coverage rate and then,
+again, 100% pass rate. Every single test
+should pass in my code base before any
+more work can be done. If I run into any
+failures or if an agent writes a failing
+test, I fix that immediately either
+within that agent or I will scrap the
+entire agent run and try again from
+beginning. The next tool that I use is
+standardization. So, this is making sure
+that issues are all tracked in one
+location, agent learnings are all
+getting stored in the same location so
+you don't end up with 600 markdown files
+across your entire project. You should
+standardize where agents are doing their
+work. What this looks like is work trees
+isolation. Where are agents actually
+doing their work and how is that being
+standardized and checked? And then who
+is reviewing the agent work? Do you have
+other agents reviewing agent work? Is
+everything being reviewed manually by
+humans via PR? What does that look like
+and how is that standardized in your
+code base? Per agent isolation is
+crucial when it comes to running swarms
+and multi-agent workflows. This
+essentially stops any agents from
+overriding each other or stepping on
+each other's toes. For me personally,
+what this looks like is I'm always
+running agents within work trees. Now, a
+guiding principle here is that an
+isolated agent is a safe agent. So,
+making sure that an agent working on
+your code base isn't going to mess up
+other agents working on your code base.
+This only becomes more and more
+important when you have swarms of agents
+or several different agents working in a
+multi-agent chain on your code base. The
+final tool here is hard blocks. So, what
+should agents never be allowed to do?
+What tools do you block? For example, I
+always block get push in my projects
+because I don't want agents pushing
+things to remote that I haven't checked
+and manually verified. Additionally,
+what tools are you blocking? So, a scout
+agent for example may not be allowed to
+write any files. They should only be
+allowed to read files and report back.
+How do you force correct behavior with
+agents? So, how do you make sure that an
+agent that has a specific task is only
+doing that task and if it gets
+distracted or runs off on a tangent, how
+do you make sure that that's caught
+early and reset that agent? Hard blocks
+ties very closely with hooks. These are
+very closely related because hooks allow
+you to establish hard blocks and sort of
+have those as code. I want to be clear
+here with the tools that this is not a
+comprehensive list, doesn't cover every
+tool that is in your tool belt. These
+are just the main ones that I personally
+am using and other top performing
+agentic engineers are using. Now, let's
+talk about some additional techniques
+that you can use on top of the tools
+that you already have access to to
+ensure this anti-slop philosophy. First
+and foremost, we have traceability. So,
+what agent made what changes, when were
+those changes made, where were the
+changes made? This is where things like
+hooks become super important because you
+can trace every single action that every
+single agent has made. Task
+decomposition is another tool that I use
+heavily in all of my code bases. The way
+to think about this is that a focused
+agent is a correct agent. So, I
+personally try to one-shot everything. I
+should only give the agent one prompt,
+and it should be able to work with that
+one prompt all the way to completion
+with whatever the task I gave gave it
+was. Indie Dev Dan came up with this
+really great slogan, one agent, one
+task, one prompt. Like I said, a focused
+agent is a correct agent. So, making
+sure that one agent is only ever
+operating on one task, and ideally only
+ever given one prompt, that is how you
+can place more and more trust into your
+agents. When that success rate with one
+agent, one task, one prompt goes way up,
+you realize, okay, I can place trust
+into these agents because I have seen
+that they are focused and successful.
+One of my personal favorite techniques
+with agentic engineering is this pit of
+success idea. This is a long-standing
+software engineering idea, but for
+agents it becomes even more important,
+and there are some caveats on top of the
+traditional pit of success. You have to
+think that when you are writing code
+with LLM's, the input tokens you're
+passing in are essentially fine-tuning
+that LLM. If you are passing in garbage
+tokens, you're going to get garbage out.
+You can think of this like a recursive
+loop. So, as the agents write
+higher-quality code, new agents working
+on that code are going to output
+higher-quality code. Next up, we have
+specs. So, specs should leave no
+ambiguity to the agent. You should not
+let agents infer anything about what you
+are trying to do. It's very important
+that your specs are perfectly aligned
+with your vision. And this is a process
+that takes time to learn. It takes
+writing several specs to make sure that,
+okay, this vision that I have in my head
+is perfectly outlined here in this spec
+file. The more detailed a spec file is,
+the better the result is going to be for
+an agent working on that spec file. So,
+personally, I like to have my specs as
+detailed as possible. You know, exact
+line numbers, exact file names, code
+snippets if it's relevant. Everything
+like that really goes into how
+productive an agent is going to be. Next
+up, we have multi-agent workflows or
+swarms. And this looks like a series of
+agents that are decomposing tasks, that
+are reviewing each other's code, that
+are writing detailed specs, and building
+out those specs. A very important thing
+when it comes to multi-agent workflows
+and swarms is that every step of the
+way, every agent should pass those
+high-quality check before passing their
+work off to the next agent. If a build
+agent finishes work before that work is
+reviewed, we should ensure that the
+tests are passing, that linting is
+passing, that type checking is passing,
+so that when the agent goes to review
+it, we already know that all of those
+things are good to go. And then, that
+just moves further up the chain. So, by
+the time code hits the coordinator
+agent, this top-level orchestration
+agent, you can ensure that, okay, every
+step of the way we had quality checks,
+and there is no slop in that chain.
+Agent scope is a massive factor, and
+this relates to specs and, you know,
+task decomposition, etc. This is just
+another way to think about one agent,
+one task, one prompt. What files should
+your agent be working on? What is
+outside of the scope of this agent? As
+well as how do we reduce ambiguity for
+agents? So, how do we make sure that an
+agent knows, "This is the only thing I
+should be working on. If I run into
+problems over in this section of the
+code base, I shouldn't worry about that.
+That should be left for another agent."
+This is a very tricky thing to do, but
+if you tie in all those tools and
+techniques we've talked about so far,
+this is going to make the agent scope
+much, much better. Finally, with
+techniques, we have standardization once
+again. So, agents should never surprise
+you. The output of an agent should not
+surprise you. Prompt structure, tool
+usage, these things should all be
+standardized in your code base, should
+be standardized between agents. What
+exactly do agents have access to, and
+how are they using it, and how is that
+standardized across different agents?
+When it comes to things like swarms,
+chain of command is super important. So,
+standardizing when the user needs to
+come back into the loop, when do I need
+to be notified as the developer um when
+an agent runs into problems? That's
+super important, and having those
+decision points is vital to making sure
+that you are not producing slop. This is
+by no means a comprehensive list of the
+tools and techniques available to
+agentic engineers. I highly recommend
+with all the clients that I work with
+that this is worked out amongst your
+team. This should not be something that
+you are just adopting or letting Claude
+code come up for you. You need to think
+about what tools do I have in my code
+base, what techniques do I want my team
+to follow, and how are those distilled
+into our agent workflows? If you are
+interested in hearing more from me and
+having conversations with me, I would
+recommend checking out Prompt to Prod.
+This is going to be the best line of
+communication with me individually, as
+well as checking out the the community
+that we have here. It's a really, really
+amazing community. It's gotten a ton of
+growth over the past month or so, so I'm
+super excited about prompt to prod.
+Additionally, if you're interested in
+working with me, I will link my
+consulting website down below. You can
+go check that out and see if there's any
+way that I can help you personally.
+Thank you for watching this video. I
+post weekly on Fridays as well as
+throughout the week. Be sure to
+subscribe, like, and leave a comment if
+you have any questions about this or if
+you have any other tool or techniques
+that you are using in your code bases
+because I'm always looking to learn more
+about agentic engineering. So, thank you
+so much for watching and I will see you
+in the next one.

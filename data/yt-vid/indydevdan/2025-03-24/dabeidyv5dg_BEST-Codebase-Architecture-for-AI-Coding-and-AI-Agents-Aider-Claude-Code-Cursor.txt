@@ -1,0 +1,781 @@
+what's up Engineers Indie Dev Dan here
+there is zero debate in the tech
+ecosystem you and I and almost every
+Builder knows that all code will soon be
+written by AI coding agents a natural
+next question is then how can we design
+our code bases to be optimal for our AI
+coding tools if our AI coding agents are
+going to be operating our code bases we
+should be designing our code bases to be
+token efficient it doesn't matter if
+you're using cursor Zed claw code AER or
+wind surf these tools will all change
+and evolve some will die some will
+Thrive what matters is how you architect
+systems of context that can be easily
+understood and operated by your AI
+coding tools always keep in mind the big
+three context model prompt so in this
+video we're going to explore the
+question what is the optimal codebase
+architecture for AI coding and AI agents
+why is this important it's important
+because if you manage your context you
+manage your results in the generator of
+AI age this is the name of the game if
+you manage your context you will manage
+your results let's break down the key
+questions we're going to answer what is
+the optimal code based architecture for
+AI coding what is the optimal codebase
+architecture for building AI agents and
+then lastly and most importantly does it
+matter at all as AI coding tools
+progress as new agentic tools like Claud
+code emerge we have to zoom out and
+answer the question does it matter at
+all great Engineers always stop to ask
+if the problem they're trying to solve
+is worth solving at all does it matter
+what our code-based architecture looks
+like if these three questions interest
+you stick around and let's start with a
+popular yet misused codebase
+architecture this is the atomic
+composable architecture there are many
+names for all the structures we're going
+to look at I'm using generic versions of
+these names what does this codebase
+architecture look like it looks like
+this we have atoms that are composed
+into molecules that are then composed
+into organisms for each one of our
+architectures we're going to break down
+pros and cons so what are some pros of
+this it's very very reusable right the
+entire architecture is basically
+reusable pieces reuse is off the charts
+this is fantastic this is going to be in
+contrast to some of the architectures
+we're going to look at that have really
+low reuse there's a very very clear
+separation of concerns as long as you
+have a brief description for your atoms
+molecules and organisms it will be very
+easy for your ating tools to understand
+this architecture by the way you know
+Adams molecules organisms these can be
+named other things this is the atomic
+design framework popularized by Brad
+Frost it was originally adopted for
+front-end code bases for composing UI
+components but it's really been adopted
+throughout the engineering stack and all
+types of code bases and it's because
+just like in nature there are often
+smaller pieces that create larger pieces
+right you have atoms that make molecules
+and molecules make organisms as you'll
+see in this video you can also extend
+this even further with membranes and
+ecosystems if you want to go above the
+organism level you can really create as
+many levels of abstraction as you need
+another super super important part about
+this architecture is that it's very easy
+to test let me show you exactly what I
+mean in a previous video we worked on
+pocket pick this is an mCP server built
+to help you store and retrieve
+information quickly if I run uh asza
+tree get ignore on the Source directory
+you can see a clean atomic structure
+here if we just isolate on modules we
+have a single layer of abstraction right
+we have one composable layer modules and
+to be super super clear our modules are
+just our atoms okay and then we only
+have one higher level we have the server
+right our mCP server that then consumes
+our modules okay so we just have one
+level of atomic units inside of our
+modules you can divide these up into
+additional director if you want but the
+key here is that these are all atoms
+right these are all small pieces that
+make big pieces okay and in this case we
+only have one big piece that's our mCP
+server I'll link the video where we
+build this in a single prompt with claw
+code in the description that video
+absolutely popped off what we get here
+is a clean architecture for writing
+tests right and this is probably the
+biggest advantage of the atomic
+architecture you can build fine grain
+functionality and then isolate them in
+tests right so we can quickly just run
+you know UV run P test and we can see
+all of our functionality validated 38
+tests ran this is a well tested you know
+well oiled compact code base thanks to
+the atomic structure and thanks to the
+small pieces you know if you're in your
+AI coding tools you can quickly come in
+here add the context and just start
+working all right so that's the atomic
+composable architecture it's a very
+simple pattern for AI tools to
+it also scales well because you can just
+keep adding atoms molecules and
+organisms what are the cons everything
+we do as engineers and Builders has
+trade-offs what are the cons of the
+atomic structure this suffers from
+something I call the new feature
+modification chain problem so what does
+that mean it's a bunch of words gobbled
+together it basically means when you're
+modifying an organism or you're adding a
+new organism or you know a new higher
+level composition and you want to change
+something in the lower level you now now
+need to go back and change everything
+that's using the lower level atom right
+and this can be really really annoying
+as you start building up more and more
+molecules and organisms and if you have
+even higher levels of abstraction like
+membranes or ecosystems this can be
+really really annoying to work with
+right because now I want to make it one
+change to insert now I need to back test
+everything else right every higher level
+composition so you know this is the main
+con right in addition to that it
+requires discipline to maintain your
+proper composable chain an annoying
+thing for your AI coding tools is that
+like I mentioned if you need to make one
+change to insert or even one change to
+you know a molecule you then need to
+update everything that uses it right so
+every higher level layer must be updated
+and that means that your AI coding tools
+will need to have even more context in
+its context window okay so this is the
+atomic composable architecture as you
+can see here there are pros and cons to
+the structure let's move on the layered
+architecture is the most popular widely
+known widely established pattern okay
+you basically just have arbitrary layers
+right arbitrary directories and they are
+a logical collection of files so you
+know typical one might be interface
+layer um you know your API endpoints
+your data models your business logic and
+then like utilities right there a very
+kind of typical structure um we can you
+know just quickly open up literally any
+code base and you can find that right if
+we look at the postgress code base you
+hit Source you can see this architecture
+uh everywhere right it's it's just the
+simplest architecture it's Dynamic it
+allows you to scale really well you can
+see we have a bunch of folders that
+contain specific functionality right we
+can see the same thing in the reddis
+code base redus is interesting because
+it is a relatively flat architecture
+with a bunch of header and C files but
+nonetheless this is a classic layered
+architecture just to Breeze through this
+one uh there's a clear separation of
+concerns it's easy to understand the
+responsibilities and boundaries of every
+directory uh cons here is uh basically
+you you have to import across these
+layers your AI coding tools must operate
+across API modules Services utils right
+they have to operate across everything
+this is the tradeoff that you make when
+you build when you use this architecture
+right and it's important to note that
+this is likely the most popular
+architecture right the most popular
+architecture is us having to import a
+bunch of stuff into the context window
+so I think this is a really important
+thing to keep an eye on is the layered
+architecture the best for AI coding
+tools I doubt that so that's a lay
+architecture you know the pros here is
+that you can really operate quickly and
+add new functionality right if you think
+about what this architecture means in
+terms of how businesses oper operate and
+how Dev shops operate you really want to
+be able to add and modify things quickly
+right that's kind of the core here and
+usually you know there is some type of
+layered um Atomic architecture embedded
+inside of the layered architecture for
+instance your utils is usually the
+bottom level right your utils are if we
+back up here your atoms right that's
+kind of where it all breaks down though
+right because after that you could have
+Imports cutting across all types of of
+modules right and it's it's not clear
+you know looking at a code base like for
+instance if we you know hop back to the
+um postgress database and when we click
+Source it's not clear at all who's
+importing who and what the rules are
+there right this is the layered
+architecture super popular I'm not
+saying this architecture is bad it's
+here for a reason um it allows us to
+scale and move and build without
+thinking too much right you need a new
+API jump into the API layer you need a
+new model jump into the models Direct so
+on and so forth right again the biggest
+con here is that your AI really has to
+look across every one of these
+directories right Cloud code cursor
+agent mode you have to look across all
+of these files and of course that's
+going to chew up tokens so let's move on
+to a super exciting architecture I've
+talked to several principal AI coding
+members about the vertical slice
+architecture it's come up over and over
+and over you know to give it away I
+think the vertical slice architecture is
+the optimal architecture for AI coding
+tools and for agentic coding tools let
+me explain why let's just take a look at
+this okay you're going to get it right
+away it's very very simple to understand
+why this could be optimal for AI coding
+tools everything is a slice okay we have
+a features directory that contains a
+directories which contain all of the
+functionality for a specific feature
+inside your product inside your
+application so we have the users feature
+slice and it contains API model service
+we have the images feature and it
+contains you know API model and FFM Peg
+just to kind of make it clear you don't
+need the same file structure although
+this will definitely help your AI coding
+tools if you have you know similar api.
+py across all your features and then we
+have the messaging feature at the bottom
+right so you can see here how this can
+be super super clean Super concise for a
+coding tools okay all you do is import
+this entire directory you context Prime
+with this single directory and We're Off
+to the Races right you can even do a
+couple features if you're working on two
+features at once right so I hope you can
+see why this is a very very interesting
+codebase architecture to pay attention
+to Pros um things are organized by
+feature rather than some arbitrary
+technical layer okay and and you know
+the arbitrary layer is some logical
+layer right it's there for a reason but
+by organizing into a feature Fe it's a
+lot easier to collect everything you
+need into a collection of context a
+beautiful thing you can do here this is
+all one prompt context priming so when
+you're sending up your AI coding tools
+it's just a single shot to get this
+working okay and I can show this off
+here uh very very quickly if we open up
+cursor and let's go into uh the single
+file agents code base I have this new
+directory here codebase architectures if
+we open up a terminal CD into this
+codebase architecture vertical slice so
+you know this is what vertical slice
+looks like we have our features and then
+we have you know projects tasks users if
+we do AER D- noit and if we just do
+slash add features slash users slash we
+just set up all the code based context
+we need right and this is it we're done
+so you know ask uh what does this do and
+you know We're Off to the Races our AI
+coding assistant is primed it's good to
+go right
+um we can do the exact same thing if we
+want to boot up Cloud code we can CD
+codebase architectures vertical open up
+Claud and then we can do our classic
+context priming read and then same thing
+right features tasks slst star that
+means everything and now you're going to
+see Claude read just these files and
+there it is we got that nice new
+parallel subtask read it read all those
+in parallel four tools love to see that
+and you know now we're good to go okay
+we saved a crap ton of tokens we saved a
+crap ton of time we have a simple
+context priming prompt you know of
+course we' probably want to throw in the
+read me in there right and and read me
+like this but we're good to go here
+right and you know something important I
+want to call out is that the tool only
+matters so much right it's about the
+patterns it's about the techniques it's
+about you
+know not not not to sound too gimmicky
+but it's about principled AI coding okay
+these principles and patterns that you
+know we discuss on the channel and
+inside the principal AI coding course
+they allow you to operate on any tool
+any model any codebase over time and I
+want you to win just today I want you to
+win tomorrow and the day after we can
+open up another tool okay let's open up
+uh agent mode in cursor and we're just
+going to say read this okay uh /ar fire
+that off and look at that four files
+right there it's reading all of them
+cursor agent also picking up on the read
+there's a model file there's a service
+file there's the app.py file you can see
+the read tools and that's it right it's
+ready to go okay we can Now operate on
+this feature doesn't matter what tool
+you're using it only matters that it has
+these capabilities right we've context
+primed cursor agent mode Cloud code and
+AER all of these a coding tools are now
+good to go they're ready for you to
+build and operate with that specific
+chunk of of context right with that
+vertical slice of context okay so this
+is why vertical slice architecture is so
+important we get one prompt context
+priming or one/ add command moving on
+here with the pros it minimizes cross
+cutting concern as the gears R turning
+in your mind um you know any engineer
+that's worked with this code based
+architecture or you know maybe you're
+just thinking through the trade-offs of
+this the fact that it minimizes
+crosscutting concerns is also a massive
+massive downside Okay so uh you know we
+also have feature Centric value Centric
+structure right which is fantastic you
+always want to be thinking from the
+perspective of your users of your
+customers not of your code base right a
+lot of good Pros here we of course you
+know can't get too high on our own
+Supply we're software Engineers we have
+to have balance takes what are the cons
+here this uh structure has terrible
+terrible code duplication a reason for
+that is because what you don't want to
+do is build out the util SL shared right
+you don't want that utilities folder
+where you share functionality you
+actually want to to not do that sharing
+cross cutting code here is a massive
+mistake it's a blunder it's an
+anti-pattern when you're using the
+vertical slice architecture why is that
+it's because you want all of the
+functionality isolated right as soon as
+you start building out that utils you're
+going to have it across multiple
+features and now all of a sudden your
+utils files is going to grow gr larger
+and larger and then when you update a
+util function you need to update it
+across multiple features and now you're
+losing that vertical slice architecture
+right literally defeats the point of
+this architecture for these reasons
+these are all roughly the same thing
+they you know kind of all talking about
+the same side effect code reuse here is
+terrible I would say probably newer and
+mid-level Engineers are going to have a
+really hard time with this architecture
+because you will duplicate code you're
+going to have that same API code here
+here and here you're going to have
+similar similar model scaffolding over
+and over and over so this is great uh
+but as you can see you know once again
+tradeoffs are everywhere vertical siiz
+architecture is something I'm going to
+be playing with a lot more this idea of
+isolating everything in a single context
+package and a single chunk is very very
+very powerful for AI coding tools moving
+on Pipeline architecture so we have to
+give a shout out to the pipeline
+architecture you know functional
+programmers the true
+programmers they love this architecture
+right um I don't think this is super uh
+powerful or important for AI coding
+tools but nonetheless it's not a bad
+architecture so I want to cover this one
+because it's important for any data
+engineer you know working on data
+pipelines any ml Ops Engineers you know
+this is a very very common architecture
+you have your pipeline you have shared
+utilities and then you have steps right
+and your steps are composed into your
+pipelines and then you run your
+pipelines right anyone fine-tuning
+training or building llms from ground up
+they have some type of pipeline like
+architecture so you know Pros uh great
+for sequential processing llms love
+types and clear paths right they love
+patterns so this is a great architecture
+for communicating your steps and your
+stages will always link together the
+appropriate types and data structures
+and or save them to that you know third
+party database structure and of course
+language model AI coding tools they love
+that they love the patterns they love
+the types it makes it easy for them to
+see and understand what they should do
+where they should do it it's easy to you
+know play with these steps you can
+reorder these very quickly parallel
+processing is a massive Pro for pipeline
+architectures so cons not ideal for
+basically anything else that's not
+pipeline driven uh and I'm just going to
+kind of Breeze through these other ones
+the big problem here is that it's
+nonsensical for most codebase structures
+not you know very few of us probably
+less than 10% Engineers are building out
+any type of pipeline architecture and
+then you know State Management can be
+challenging so these are just four you
+know there are many other architectures
+but I think these are the four most
+important most common structures to hit
+on for thinking about Building
+architecture for AI systems okay so for
+AI coding we looked at the atomic
+composable we looked at layered pipeline
+we looked at vertical slice okay these
+are all great options I am heavily
+leaning toward vertical and atomic for
+building out code bases that are
+optimized for AI coding there are of
+course as we mentioned tradeoffs in each
+one of these architectures as we turn
+our attention to AI agents um you know
+it is an interesting question and it's a
+question that a lot of us are asking
+more uh what about the optimal
+architecture for building AI agents
+three codebase structures stand out to
+me Atomic composable vertical slice and
+single file agents we covered single
+file agents on the channel what I want
+to do here is briefly walk through why I
+think these three structures are great
+if you're thinking about building out um
+AI agents and it doesn't matter if you
+want to throw a framework on top of
+these if you're using mCP if you like
+anthropic agents or openi agents or
+Gemini agents that doesn't matter this
+is all just structural these structures
+work with every provider okay so let me
+just highlight a couple things here if
+we hop into the single file agents code
+base and look at example agent
+architecture let me show you what an
+agent architecture could look like for
+the atomic composable architecture you
+can see that similar structure I'm using
+the names you know as defined in the
+atomic structure we have atoms molecules
+organisms and then membranes so let's
+start from the top so the membrane is
+your main file right and so you know
+this is what we'll use to actually kick
+off this agent it has a main down here
+so you know we can pass in args this is
+also where if you wanted to you would
+build out you know um mCP right so you
+could do something like this mCP agent
+and now you have a command line
+interface and an mCP interface okay so
+the membrane is quite literally you know
+the API layer okay it defines all the
+ways you can interact with the system
+right with your Atomic system and then
+you know moving into the the actual you
+know content um we have the organism
+right and the organism here using our
+file agent example is our file agent
+right so the file agent then composes
+whatever it needs to from the molecules
+it would compose the file reader file
+writer and then those files would
+compose the file tools right so you can
+see how this works top to bottom right
+the membrane is our access layer the
+organism is our actual file agent the
+molecule is the components that make up
+the file agent and then lastly that
+atoms are the like lowest level units
+that we can test we can run on their own
+you can see the insert file here it's
+just a function right it's a single
+function isolated easily testable easily
+composable okay so this is what an AI
+agent design could look like inside of
+the atomic structure this directory by
+the way is not runnable don't try to hop
+in here and run this I am exploring the
+space here we're just looking at
+different potential architectures so
+that's the atomic structure for AI
+agents I think another great option is
+going to be the vertical slice
+architecture for the same reasons we
+mentioned right you can imagine you have
+um your features or slice into agents
+okay so you know if we hop back to the
+vertical slice architecture instead of
+you know features here for a typical
+product application when you're building
+out agents you can look at agents as the
+individual features right and this is
+really fantastic because everything
+under your agent is all the contexts you
+need need to get started we can open up
+AER and then also go into vertical and
+then we can boot up AER D- no get/ add
+features SL blog agent and you can see
+that exact same pattern our agent is now
+good to go there's nothing else we need
+to do here it has all the tools it needs
+to operate the blog agent it has all the
+context has the you know the manager
+every tool and it has that top level
+blog agent okay so this is why vertical
+slice is really important I think it's
+going to be great for build AI agents
+because you can version them very
+quickly right say I want to create
+another version of the blog agent I can
+just copy this entire
+thing and you know update to whatever
+blog agent V2 just like below right we
+have file agent file agent V2 and then
+maybe you want to change the llm
+provider you know you can doore Gemini
+whatever you want to do here right so
+when we're thinking about building
+agents and architectures for agents uh
+the vertical slice architecture
+definitely stands out to me and so the
+last architecture single file agents
+this is something that we've explored in
+previous video I also think this is a
+massive Contender if we scroll down here
+you know in the single file agents
+codebase you can see that exactly right
+we have tons of single file agents if we
+click into one of these where's the
+latest one there it is file editor Sony
+37 you know if we click into this we
+have everything in a single file right
+700 lines in other code bases a 700 line
+file is an anti- pattern okay but in
+this structure right in the single file
+agents codebase architecture this is
+just a completely self-contained one
+file context agent you can imagine the
+pros of this right uh it's it's as
+simple as this right you you know hop up
+to the top directory you file reference
+and then you open up CLA you say read
+this right and and you don't even have
+to do this right you can just start
+prompting right open up Claud and you
+just you know you start prompting change
+the blah blah to the ble B okay whatever
+you want to do here this is an important
+architecture for building agents um I'm
+going to keep leaning on single file
+agents the fact that you have one file
+to allow your AI coding assistant to
+quickly update your agent I think is a
+you know massive win and just to
+explicitly mention it these are the two
+big themes we're focus on on the channel
+AI coding agentic coding and of course
+AI agent so you know here are optimal
+architectures you can use for building
+AI agents if you haven't checked out the
+single file agents codebase definitely
+check it out link is going to be in the
+description for you it's all about
+understanding agent architecture it's
+all about understanding code bases to do
+and to build with our new generative AI
+technology AI coding tools and AI agents
+so full circle does this matter at all
+right cool we looked at a bunch of
+architectures we you know we we we can
+see the advantage of them uh does it
+really matter uh I have kind of two
+answers here right now in the short and
+medium term yes I think absolutely good
+code based architecture means easier
+context management for us and our AI
+tools later and the more time that goes
+on I think you can more easily argue
+that as llms and geni evolves the
+codebase structure that you're working
+with matters a lot less but you know I
+think you can see here from just these
+few simple examples on you know small
+and you know really full on code bases
+um context management matters if you
+manage your context you manage your
+results so you know precise context
+management still matters AI needs clear
+Pathways right llms to be specific or
+llms or AI coding tools they need clear
+Pathways to you know not just one file
+but collections of files right colle C
+of information we all know you know clog
+code Klein a lot of these tools they
+chew up tokens and they chew them up
+just looking for stuff right they're not
+even doing work they're not even
+creating value and it's the poor
+organization of our code base right not
+to just harp on it but you know the
+layered architecture really forces our a
+coding tools to just read everything
+right look through all of it it's we
+know we're looking for an API file
+somewhere
+let's look through one of these 20 files
+in our API right um you know this is
+where the atomic structure and you know
+most notably the vertical slice
+structure the vertical slice
+architecture really stand out if you can
+build this codebase structure you will
+save a ton of tokens right and I think
+you can see why you know that's
+important when you organize your code
+base you make it easy to save time
+tokens and that means money right well
+structured code is cost effective okay
+the balance is really key here so you
+know most of us are still operating
+we're building for human readability um
+it's time to flip that Trend okay I am
+flipping that Trend I want you to join
+me I want you to get ahead of the curve
+AI will be writing most code moving
+forward right our AI tools AI coding
+assistants agentic coding tools they'll
+be writing most of code that means we
+need to start thinking about our code
+bases from their perspective how can we
+best organize things to be simple to
+both manage context but also just to
+hand off the entire process to our AI
+tooling right this is why AI readability
+is now greater than or equal to human
+readability the goal here is to help
+both engineers and your AI tools to
+navigate your code bases efficiently and
+effectively I have an announcement for
+all principled AI coding members I'm
+going to be releasing a state of AI
+coding essay at the end of March this is
+going to help you understand the current
+landscape of AI coding and agentic
+coding I'm going to share the tools I'm
+adding I'm going to share the tools I'm
+removing we're going to discuss what's
+next we're going to break down the tier
+list of where you should be as an
+engineer and where you can be as an
+engineer I'm going to break it all down
+into one comprehensive document one
+comprehensive essay this will give you
+an inside perspective on AI coding
+agenta coding and the big trends I'm
+seeing that I'm preparing for that I'm
+betting on with my money and time I'm
+going to share all those ideas and more
+with you in the state of AI coding for
+q1 2025 that's going to be exclusive for
+principled AI coding members that have
+completed the course if you're not
+already a part of principled AI coding I
+highly recommend you check out this
+course especially if you made it this
+far into the video you clearly have some
+chops you're clearly an engineer that's
+interested in great design and great
+architecture do not miss out on the AI
+coding train we're quickly moving from
+AI coding to agentic coding which is the
+next level of AI coding this is the new
+standard if you haven't caught on this
+already this is the way code is being
+written most code as we discussed will
+be written by AI coding tools 2025 is
+the last year to get on this train
+before you deprecate your career before
+you deprecate your engineering abilities
+over eight lessons we break down core
+principles like the big three right
+context model prompt that's going to
+help you win in the generative AI age as
+an engineer okay we go from beginner to
+intermediate to Advanced um we have
+great reviews from real Engineers
+operating in the space hop in here check
+this out link is going to be in the
+description for you for all my existing
+principal AI Co members stay tuned for
+the state of AI coding breakdown coming
+at the end of March I'm packing a ton of
+value into this is going to help you
+make decisions and stay ahead of the
+generative AI wave you know were to find
+me every single Monday like comment
+subscribe and I'll see you in the next
+one stay focused and keep building

@@ -1,0 +1,1627 @@
+[0.0s] It's really, really helpful for like
+[2.1s] iterating on our like mermaid renderer
+[4.4s] because like you don't actually want to
+[5.5s] go like generate a document that has
+[7.1s] mermaid in it in every single case. So I
+[9.3s] can just come in here and just put like
+[12.2s] And it just works.
+[13.0s] >> can edit the yeah, the mermaid thing.
+[14.7s] This one is not very, very very large,
+[16.5s] but yeah, you see what I mean? I see cuz
+[18.6s] it again, it's pure render only. I like
+[20.6s] this a lot. This really interesting
+[22.4s] >> conversation of an message. Here's the
+[24.2s] coding agent thing is like you can
+[25.3s] literally see every single possible
+[27.1s] thing that
+[27.6s] >> And now I can see how your iteration
+[29.6s] loop is much faster both for you and the
+[31.8s] agent because like you don't have to run
+[33.2s] the whole app, you don't have to run
+[34.4s] everything. You're literally just
+[35.7s] editing data in this place and you're
+[37.6s] just telling the model here's what I'm
+[38.8s] doing. And then you iterate. You can do
+[40.1s] it incrementally, right? You can just do
+[41.4s] like bootstrap storybook and you get
+[43.0s] like a couple of those like hello world
+[44.6s] stories just like with some buttons and
+[46.2s] then you could say like cool, take this
+[48.0s] component and add it to storybook and
+[49.9s] like split it into wired versus pure or
+[52.6s] if it's already pure, you can just you
+[54.2s] can just do it that you can just say
+[55.4s] like okay, put this pure component in
+[56.9s] storybook. You generally don't want to
+[58.1s] have your like stateful components that
+[60.4s] are making API calls and stuff in
+[62.0s] storybook. That's not what it's for at
+[63.4s] all. Um but yeah, let's see what this
+[66.0s] comes up with.
+[66.6s] >> This is so nice. Thank you Dexter for
+[69.1s] doing this and we can see exactly what
+[70.7s] the win here is. Like I don't have to
+[72.1s] like produce everything all the time. I
+[73.6s] can just come up with all these edge
+[75.8s] cases and just could decide exactly how
+[77.6s] we want to render it. By the way.
+[79.5s] >> And as soon as a user comes up with an
+[81.3s] issue, you just paste it into Claude.
+[83.0s] You'll be like hey, here's a bad state,
+[85.2s] add it to storybook and then we're going
+[86.5s] to fix it.
+[92.4s] Today's episode is something that I'm
+[93.8s] really excited about. It's a new thing
+[95.0s] that I'm actually going to learn from
+[96.1s] Dexter and by the end of this episode,
+[98.3s] thanks to what we learned here, we'll
+[99.5s] actually have watched the migration of
+[101.6s] our code base to use this new technique.
+[103.7s] This new technique is called storybooks.
+[106.2s] And the idea of storybooks is how do you
+[107.8s] build learning tests or unit tests for
+[109.8s] your UI components so you can iterate
+[111.5s] extremely fast with an agentic loop that
+[114.0s] doesn't require you to reload your app
+[115.5s] state continuously. One of the things
+[117.6s] that we do in our playground today is we
+[120.2s] actually have to go ahead and every
+[121.5s] single time we have something working or
+[123.8s] not working, we literally have to go and
+[125.7s] run the LLM all the way through and
+[127.4s] through to go look at the results. What
+[129.3s] I would love to do is be able to iterate
+[131.4s] with an agent purely on the UI and as I
+[133.7s] iterate on it, be able to test things
+[135.5s] out very quickly for different types of
+[137.1s] scenarios.
+[138.6s] That's what this episode is about. How
+[140.2s] do we all do that in our agentic loop?
+[142.8s] Let's get started. Welcome to AI that
+[144.8s] works where we talk about AI that that
+[147.4s] works. This is the show with the worst
+[150.3s] SEO of all time. There is no podcast
+[153.0s] with worst SEO than AI that works, but
+[155.8s] we're appreciative for you all you here
+[157.5s] trying to pump it up. We'll get to the
+[158.8s] top someday. Um this is all about going
+[161.8s] beyond the demo and building things that
+[163.7s] actually work in production that you can
+[165.2s] put in products and sell to customers,
+[166.9s] that you can put in your startup,
+[167.9s] whatever it is.
+[169.2s] I'm Dex, I'm the founder of Human Layer.
+[170.7s] We help people build cool [ __ ] with
+[172.0s] coding agents especially in large
+[173.3s] complex code bases.
+[175.4s] I'm going to let Vibhav introduce
+[176.5s] himself.
+[177.8s] I'm Vibhav. We're working on a
+[179.4s] programming language that hopefully is
+[181.1s] designed for agents first and no other
+[184.1s] language has done that to this state. So
+[185.9s] what happens when you run auto research
+[187.5s] on Vibhav's mode and build new syntax.
+[190.4s] Incredible. I love that. I talked to
+[192.9s] Jeff Huntley a lot about when he's going
+[195.3s] to finish cursed lang and he actually
+[197.7s] told or no, it was when is he going to
+[199.2s] finish his lights off software factory.
+[201.0s] And I think actually the alpha there is
+[202.3s] something around like we need new
+[204.2s] programming languages before the agents
+[206.5s] can actually build full lights off
+[208.8s] software otherwise they vibe code
+[210.2s] themselves into a slop corner.
+[212.3s] Yeah, you need you need a totally
+[214.3s] different paradigm of software
+[215.7s] development. Like the CICD needs to
+[217.8s] change. Everything needs to be different
+[219.4s] if you're going to run automatic loops.
+[221.1s] But that's not what we're here about
+[222.1s] today. Yes. Today we're going to talk
+[224.2s] about a really fun topic. We've talked a
+[226.2s] lot about crispy and and and research
+[228.2s] plan implement and like how to get
+[229.5s] coding agents to ship better. Um
+[232.9s] One thing that we have found internally
+[234.7s] and also working with a bunch of users
+[236.7s] is there is one area where doing a lot
+[239.4s] of planning and reviewing markdown docs,
+[241.2s] it's great for like back endy like
+[243.1s] system stuff. It is not as good for
+[246.6s] front end code. Like I can look at
+[250.0s] I'll even pull up let me see can I think
+[251.8s] I can find one of these design
+[253.0s] discussions.
+[254.9s] Incorrect. Lean is not a good
+[256.8s] programming language. It's unusable.
+[259.1s] >> Oh no.
+[260.5s] Anyway, go on. Show show show me what
+[262.2s] you got.
+[263.6s] >> uh talk. Thank you very much. So I have
+[266.6s] this thing so in um
+[269.0s] Let me go turn these on. So we have this
+[270.5s] feature called tips.
+[272.2s] Going to reset all of these.
+[274.6s] And so now we can display these tips.
+[276.9s] They're supposed to help you through the
+[278.3s] crispy workflow here. They don't work
+[280.7s] very well. People don't read them and
+[282.5s] they just leave them there.
+[284.1s] >> And they don't they also don't click
+[285.6s] don't Well, you already know how to do
+[286.7s] it.
+[287.9s] They are useless. You should turn them
+[289.3s] off, which I don't even know if you knew
+[290.9s] how to turn them off. The point is is we
+[292.7s] want to translate them to modals so that
+[295.0s] they just show up once and then you say
+[297.0s] got it and you're done and you don't
+[298.6s] have to read it again.
+[300.4s] Um so we have a bunch of copy changes
+[301.9s] here. Um and it has some front end code.
+[305.3s] Like I can look at this front end code
+[307.0s] and I can know does this like follow our
+[310.4s] design system, but I can't look at this
+[313.2s] and know whether it's going to look good
+[314.7s] or not. And so like what you end up
+[317.4s] doing something that you often do in
+[318.8s] front end is you can vibe code back and
+[320.7s] forth with the model and get it to look
+[322.8s] how you want. And in this planning flow,
+[324.7s] you actually don't know how it's going
+[325.7s] to look
+[327.2s] until much, much later in the in the
+[329.8s] system. And so even here in the
+[332.0s] structure outline
+[333.9s] um
+[334.6s] we kind of
+[336.5s] I I can read these components or I can
+[338.7s] read this like overview and I I don't
+[340.7s] know if this is going to look good or
+[341.7s] not. Um
+[343.2s] And so I want to talk about some stuff.
+[344.6s] Like basically like we talked about
+[346.0s] learning tests before. Do you remember
+[347.3s] this one Vibhav? We did. We've talked
+[349.4s] about them quite a few times. They're
+[350.8s] super useful. I use them all the time.
+[353.6s] So basically like
+[355.5s] you have these assumptions. You can read
+[357.3s] the code to understand how the system
+[358.5s] works and then you can go make a plan
+[359.8s] and then assumption carries through and
+[361.0s] then you can implement. And then you get
+[362.2s] to the last phase and you're like oh,
+[363.2s] that assumption was wrong or like there
+[365.1s] was some decision we could have made
+[366.6s] earlier on, but we didn't find out until
+[369.0s] implementation.
+[370.5s] And we talked about basically in the
+[372.8s] planning phase writing like learning
+[376.2s] tests and proof based development.
+[378.8s] Basically writing these little scripts
+[380.2s] that verify that the the code works the
+[382.6s] way you think it does or the external
+[384.2s] system works the way you think it does.
+[386.2s] So you find out your unknowns during
+[388.6s] planning instead of instead of like
+[390.7s] during implementation.
+[392.6s] This is the same idea, but it's it's for
+[394.7s] unknowns about how is thing how are
+[398.3s] things going to look and how are the UX
+[399.9s] experience is going to be.
+[402.4s] Does that make sense? Yeah, I think
+[404.5s] that's there's a few people in here
+[406.1s] talking about stitch. They're talking
+[407.4s] about a couple other platforms, stately
+[408.9s] AI, Figma.
+[410.8s] It sounds like some people just use chat
+[412.3s] GPT
+[413.3s] >> [snorts]
+[413.4s] >> So we what what we end up doing a lot is
+[417.2s] basically we'll do our research and then
+[419.9s] we'll do our, you know, design
+[421.0s] discussion.
+[424.3s] Um and then we'll sometimes instead of
+[427.0s] going straight to the outline and the
+[428.6s] implementation
+[431.6s] we'll pause and we'll do as part of our
+[434.3s] like quote unquote research, part of our
+[436.8s] pre-building is we'll make storybook
+[439.4s] stories. So we don't really use a lot of
+[441.4s] Figma here because Figma is just a
+[443.9s] WYSIWYG editor that agents are not that
+[446.3s] good at like interacting with, but
+[448.2s] they're really good at writing React
+[449.6s] code. And so storybook is this tool.
+[452.1s] It's been around for 10 plus years at
+[453.9s] this point, I think. Um basically since
+[456.2s] the beginning of React where you can
+[458.6s] basically take your component and let me
+[460.8s] go pull up the code here and you
+[462.4s] basically have we basically have this
+[464.0s] really simple like button story, right?
+[467.1s] Um and it has this is this is our this
+[469.5s] is our component that we would like
+[470.6s] build for our app. So I can come in here
+[472.9s] and I can change the font to you know,
+[474.3s] system UI sans-serif. We can change the
+[476.1s] border radius to you know,
+[478.3s] 100 px.
+[480.3s] And now all of our buttons are super
+[482.3s] rounded basically.
+[483.3s] >> So I know a few people that use
+[485.4s] storybook and I know people have tried
+[487.3s] to use storybook beforehand. I know we
+[489.3s] even tried to adopt it. Yeah.
+[492.2s] Tell me why this is better now for
+[494.6s] agentic experience. So I get that it's
+[496.7s] super componentized. What am I get So
+[499.3s] show me what happens. So yeah, so what
+[501.3s] we get to do is we get to do things like
+[505.5s] um
+[507.4s] 401 make all the buttons super
+[512.1s] you know, What what's a component you
+[514.1s] want to make? Make a page
+[517.4s] for
+[518.7s] um
+[520.2s] reading articles
+[522.4s] in a news story. So basically we you can
+[526.6s] you can vibe code your components and
+[529.2s] your building blocks and essentially
+[532.9s] um
+[534.0s] So this is the thing I would use in my
+[535.5s] app and I can explore it via props in
+[538.4s] all of the different like ways I might
+[540.4s] want to display it. And so in React you
+[542.8s] have this idea of like props versus
+[544.4s] state, right? So if your component is
+[546.2s] super stateless, then all it does is it
+[548.6s] takes these props and it renders
+[550.0s] something. And so storybook helps you
+[551.8s] get that right and you can use it to
+[554.4s] test all the different like ways your
+[557.2s] your item might display.
+[560.0s] Okay, so I understand that. Now I've got
+[562.2s] a question. Now I've got more questions
+[563.5s] cuz I can see how the agent loop here is
+[565.3s] much faster. What I do is I ask an agent
+[568.0s] to build this thing. I go look at it
+[569.5s] visually or maybe have an agent use
+[571.1s] playwright or like computer use to go
+[572.8s] access this locally and that kind of
+[574.9s] this hot loop that can do something nice
+[576.4s] and I can paste screenshots and all
+[577.6s] sorts of stuff around it. Yep. But
+[581.4s] how do you make your code actually
+[584.0s] persist in that way? What I run into is
+[586.2s] I don't have stateless components.
+[588.7s] All my components have state.
+[590.8s] They have like use effect or something
+[592.2s] else. Yeah.
+[593.5s] We'll get into that. So that's the idea
+[594.7s] that we get into that in like the the
+[596.4s] difference between like pure and wired
+[598.3s] components. Okay.
+[600.3s] And actually it's actually wrote written
+[601.8s] an article about this funny enough cuz
+[603.4s] that's what we were talking about. Um
+[605.5s] but you can basically text like okay, if
+[607.2s] there's no image what shows up? Okay, I
+[609.1s] actually don't like that it says no
+[610.5s] image. I want
+[612.3s] uh if there's no image in the props just
+[618.7s] don't show no image. Use Whisper flow or
+[622.8s] super Whisper.
+[625.2s] >> no.
+[626.5s] Okay. Um while you do that
+[628.4s] >> here is like I can go get the like
+[631.1s] basically like the stateless all of the
+[633.1s] different um
+[635.2s] like
+[636.3s] uh
+[637.6s] states that my component would be and
+[639.2s] I'll I'll get to a a more realistic
+[640.8s] example in a sec. Um
+[642.6s] here is like a storybook with a bunch of
+[644.7s] components from uh from Riptide. Uh so
+[648.2s] we can come and like do our theming
+[649.6s] stuff here and stuff. Um
+[652.1s] this is an example of like how how we
+[654.4s] tend to work.
+[655.8s] Um let's see this one doesn't have any
+[657.8s] interactive controls, huh?
+[660.0s] But where where this gets to is
+[661.4s] basically like I built a we built like a
+[663.5s] very small like dumb little web app here
+[666.6s] and this is wired with a back end and a
+[668.2s] front end and all kinds of stuff and I
+[670.5s] could vibe code against this but it's a
+[672.2s] lot more context to pull in if I just
+[674.6s] want to like work on a single component.
+[677.9s] One like it becomes a lot easier to to
+[681.3s] to build with. Do you know what I'm
+[683.0s] saying?
+[684.5s] So yes, okay. I understand why this is
+[687.7s] faster. Um Yeah. But I guess you can't
+[690.3s] really test interactivity with this.
+[693.6s] So you can. That gets a little weird but
+[696.2s] um one of the one of the things that we
+[697.9s] end up like
+[700.6s] building um
+[702.9s] for we use
+[703.6s] >> is this is really freaking cool. I I
+[705.4s] know for our playground for example, I'd
+[706.9s] love to see this kind of stuff where I
+[708.1s] could like visualize stuff.
+[709.9s] And just render out states like this.
+[712.8s] >> This ends up being like one of the one
+[714.6s] of the stories like that that that will
+[716.8s] build. Okay.
+[718.7s] >> and so I think these have these
+[721.7s] these have like basically yeah. So so
+[723.5s] you can't actually these are all
+[724.8s] clickable but they don't actually work.
+[727.6s] Makes sense.
+[729.1s] Cuz it's not running the full React
+[730.6s] server.
+[731.7s] Yeah. That's because [snorts] the well
+[734.3s] so it's it's not that it's not running
+[735.4s] React. It is full React. Um but if you
+[738.0s] come into we basically have pure
+[739.7s] components that just take props and
+[742.8s] render. And then we have the wired
+[744.9s] components. And so this has been for a
+[746.7s] while like a pattern since I don't want
+[748.4s] to say like 2014 or something where you
+[751.1s] would take you would create the wired
+[753.0s] version and this is where all your state
+[755.2s] and interactivity lives. In this case
+[757.8s] it's it's pretty like small but it's
+[759.5s] like this is fetching data from an API
+[761.5s] and stuff. And so the separation that
+[763.9s] like the architecture thing here that I
+[765.8s] would like have people take away is you
+[769.3s] have basically uh okay, they pulled in
+[771.4s] some like loading states and stuff like
+[773.0s] that. Um but then you have your table
+[775.3s] with all the information. And so the
+[776.7s] fetching of the information is in like a
+[778.7s] wrapper component and then you have this
+[781.1s] pure component that is just the display
+[783.0s] logic.
+[784.3s] That's interesting. That's interesting.
+[787.5s] That's very fascinating. I I say this
+[789.0s] because like while we're out designing
+[790.6s] the Babel playground, we have a really
+[792.2s] weird scenario. We we actually run like
+[794.2s] web workers and like WASM code in the
+[796.7s] browser and that gets you really weird
+[798.2s] state with lifetimes and everything else
+[800.1s] for these WASM objects that you need to
+[802.4s] refer to.
+[804.0s] Um and that fuzzes things a little bit
+[807.3s] but I can see how it would be incredibly
+[809.0s] useful to just have pure UI elements for
+[811.2s] rendering things and be able to test and
+[812.6s] debug that.
+[814.2s] Yeah. And we can actually create like
+[816.6s] you can create storybook stories for the
+[818.6s] wired components as well or you can
+[820.4s] create the interaction layer in
+[822.0s] storybook. So like
+[823.9s] >> Yeah.
+[824.4s] for the
+[827.4s] Is anybody else's Whisper flow like
+[829.4s] crashing all the time now? I'm telling
+[832.0s] you slop code is everywhere. for the
+[835.7s] um 03 uh data table stories, can you
+[839.5s] create a separate group of stories that
+[841.6s] actually demonstrate the interaction
+[843.3s] like the sorting and stuff like that? Um
+[847.0s] I I'm not sure if there's a good way to
+[848.8s] do this in storybook or if we just need
+[850.4s] to mount the wired components
+[852.1s] themselves. Um but we need to not
+[854.7s] actually fetch data from the API in
+[856.6s] storybook since this is like an
+[858.0s] interactive playground.
+[860.7s] Um I think storybook does have like you
+[862.4s] can you can program in interactions. But
+[865.1s] basically like the architecture of your
+[867.5s] app ends up looking like um
+[870.4s] and we actually have separate packages
+[871.8s] so we have like a you know, we have the
+[874.6s] core repo
+[876.4s] and then it's a turbo mono repo. So we
+[878.2s] have like the apps folder
+[880.5s] which is like all the things that
+[881.7s] actually run
+[883.6s] and then we have the packages folder.
+[887.1s] Yeah.
+[887.5s] >> have a packages {slash} UI that has all
+[889.6s] of our like building blocks.
+[891.8s] Uh
+[892.5s] and this is where basically all the pure
+[894.3s] components live.
+[896.8s] And then for Riptide UI versus like say
+[900.2s] Riptide Cloud
+[904.2s] if you go to these two different things,
+[905.9s] you can come and look in here's Riptide.
+[908.5s] It has like a visual language. It has
+[910.0s] buttons and things like this.
+[911.9s] And then you can come to you know, cloud
+[914.1s] our
+[915.8s] cloud app and it has the same visual
+[917.7s] language and it's actually like using
+[919.6s] the same uh buttons and everything here.
+[922.4s] Like this is the exact same component
+[924.1s] that's being imported in both places. So
+[925.9s] like part of this is like use a
+[927.8s] component library but the other part of
+[930.4s] it is like you always want to have your
+[932.6s] like
+[934.5s] um pure component.
+[939.6s] And then the only job of the wrapper
+[941.2s] component is basically to
+[944.1s] do a bunch of business logic, right? You
+[946.1s] have your like
+[947.8s] hooks, state, etc. that push props into
+[953.3s] the pure component that just renders.
+[955.8s] And so you would never actually run
+[957.2s] render the pure component in your thing
+[958.8s] but we can have multiple different
+[960.2s] wrapper components for like okay, in the
+[961.8s] cloud we're fetching from different
+[963.1s] APIs.
+[963.9s] >> So I'm going to ask another follow-up
+[965.4s] question. Um so this is actually really
+[967.3s] interesting. How do you not get laggy
+[969.9s] UIs when you do this? Cuz it seems like
+[972.7s] you're going to get like a lot of
+[973.9s] re-render loops in the wrapper component
+[975.7s] that'll cause everything sub below it in
+[977.3s] that subtree to re-render and now you
+[979.4s] have a laggy UI. I mean part of this is
+[982.1s] like I mean I I am not the person to
+[984.6s] lead an episode on uh React optimization
+[987.9s] and performance and memos and
+[989.6s] re-rendering and all this kind of stuff.
+[991.9s] Um but
+[994.2s] the the idea there is like every every
+[996.2s] component that you render matches this
+[998.4s] same pattern. So at any point you can
+[1000.4s] just take the pure thing off the shelf
+[1002.0s] and make it look different. Um and so
+[1004.6s] this this app that we built has you
+[1006.2s] know, it has users. So I can come in
+[1008.0s] here and search for Avery and then I can
+[1010.6s] click on this user and I can get their
+[1013.0s] didn't build a very smart but then
+[1014.8s] there's like a to-do system, right? So I
+[1016.2s] can see all this user's to-dos and like
+[1019.0s] let's say I wanted to like change the
+[1020.8s] look of this one. I don't like that this
+[1022.4s] is like like grayed out when it's
+[1024.4s] finished.
+[1025.6s] Yeah.
+[1025.9s] >> pull up the entire app and then create a
+[1028.0s] data state locally that matches that and
+[1030.8s] then go try it. Like this is fetching
+[1032.7s] ideally like fetching real data from the
+[1034.5s] API but because we have this as a pure
+[1037.3s] component, I can come in here and go to
+[1039.8s] the to-do card and we have every single
+[1041.9s] state modeled out and so I can test all
+[1044.6s] of these. I can come in and actually
+[1046.4s] like edit the props of any of these to
+[1049.8s] see okay, how does it behave in various
+[1052.1s] different states? Okay, that's cool.
+[1054.8s] Yeah, I can see how this is nice.
+[1056.8s] Yeah, I don't know what the actual
+[1058.2s] states are but
+[1059.0s] >> Well, you spelled you spelled it borken
+[1061.2s] instead of broken.
+[1062.4s] >> Well, I don't think we have yeah. It
+[1064.6s] does FYI.
+[1066.7s] Is it crit? No, I think it's critical.
+[1071.0s] Um Probably low is probably a
+[1073.9s] >> priority. priority critical. Yeah. So
+[1076.6s] the idea here is you can come and change
+[1078.2s] this. You can set the true like is
+[1080.3s] deleting. You can look at all the
+[1081.6s] different loading states.
+[1083.7s] Um
+[1085.3s] is toggling. So you can check the
+[1086.9s] loaders and things like this. You can
+[1088.3s] all the things that might be passed into
+[1089.8s] this. You can you can kind of separate
+[1092.4s] concerns between like the fetching and
+[1094.8s] the data management and the state
+[1096.4s] management from actually just like how
+[1097.9s] does it display in every single state?
+[1100.0s] And storybook I think is open source,
+[1102.0s] right? Very open source. Although they
+[1104.4s] they do collect anonymous analytics if
+[1106.6s] you don't turn them off. That's I mean
+[1109.2s] that's the least you can do for an open
+[1110.6s] source library. Offer them that. That's
+[1113.0s] cool. This actually tempts me to want to
+[1115.1s] make storybook for some of our stuff to
+[1117.0s] make it easier to go build.
+[1118.7s] We have the same thing where we have a
+[1120.3s] where we have like a WASM component
+[1122.0s] where we have like a
+[1123.6s] native component a pure web component
+[1125.4s] and having rendering for that would make
+[1126.8s] life much much easier. We find it really
+[1130.2s] really useful. The thing we use this for
+[1132.2s] a lot is like
+[1133.9s] if you look in like if you're building a
+[1135.8s] coding agent, there's like a million
+[1137.4s] different outputs that the coding agent
+[1139.3s] might give you. So I'll go back to
+[1140.7s] sharing my screen. Um and I actually
+[1142.4s] might just pull up the actual Riptide
+[1144.0s] one real quick.
+[1145.4s] Um all this code that I'm showing you by
+[1146.7s] the way is all pushed to the repo
+[1148.0s] already. Um but there's edits, there's
+[1150.8s] diffs, there's grep, there's all these
+[1153.0s] different things where we're just taking
+[1154.4s] the raw data and rendering it. Every
+[1156.2s] single row in this is actually a uh is
+[1160.7s] it is a separate stateless pure
+[1162.6s] component. Hm. And so if I come into
+[1166.4s] um
+[1167.7s] I come here and I run this storybook. Um
+[1170.6s] yeah, we can run it on 6009.
+[1173.8s] Um this should just open in my browser,
+[1175.7s] right?
+[1177.3s] So here's like the real production one
+[1178.9s] with all of our different UI components
+[1180.8s] in it. Um
+[1182.9s] So here's like the draft action buttons.
+[1185.0s] Here's all of our like keyboard shortcut
+[1187.0s] stuff. Here's like the badges on the
+[1189.5s] sessions. Um but I want to find the
+[1192.4s] actual like conversation events. Oh
+[1195.0s] yeah, it's really really helpful for
+[1196.8s] like iterating on our like mermaid
+[1198.8s] renderer because like you don't actually
+[1200.6s] want to go like generate a document that
+[1202.2s] has mermaid in it in every single case.
+[1204.4s] So I can just come in here and just put
+[1206.4s] like
+[1207.5s] And it just works.
+[1208.2s] >> I can edit the yeah, the mermaid thing.
+[1210.0s] This one is not rendering very large,
+[1211.8s] but yeah, you see what I mean?
+[1212.8s] >> But
+[1213.3s] I see cuz it's again, it's pure render
+[1215.0s] only. I like this a lot. This is really
+[1217.1s] interesting.
+[1217.3s] >> here's the conversation event message.
+[1219.2s] Here's the coding agent thing is like
+[1220.4s] you can literally see every single
+[1221.8s] possible thing that And now I can see
+[1223.6s] how your iteration loop is much faster
+[1226.0s] both for you and the agent because like
+[1228.0s] you don't have to run the whole app, you
+[1229.2s] don't have to run everything. You're
+[1230.2s] literally just editing data in this
+[1232.4s] place and you're just telling the model
+[1233.6s] here's what I'm doing. And then you
+[1234.8s] iterate. It's like, oh we found this
+[1235.9s] data state we don't support. I write a
+[1237.4s] little JSON. It's like it's kind of like
+[1239.0s] how you would do unit testing, right?
+[1240.4s] But it's unit testing for visual stuff.
+[1242.5s] Is you would just figure out
+[1243.9s] Yeah. Okay. Um
+[1246.0s] Is there a hook to get Storybook to
+[1248.3s] print out a PNG via CLI command? That
+[1251.0s] would be the next OP thing that I would
+[1252.6s] want. I think it has some stuff for
+[1255.0s] doing that. I just use agent browser
+[1257.8s] basically.
+[1259.2s] Oh, I think I'm going to I'm going to
+[1260.5s] I'm so going to go on the PNG loop cuz
+[1262.1s] then I can run an automatic loop with my
+[1264.0s] agent to just like be like converge
+[1265.5s] until it looks nice.
+[1268.2s] Yeah. So I I've already been using I
+[1270.1s] actually I use the agent browser skill
+[1271.6s] from Vercel, but that one is not
+[1273.4s] installed in this project. So it found
+[1275.4s] the the G stack install that I never
+[1278.2s] removed, but G stack [ __ ] ships with it.
+[1280.0s] Browser agent. It's actually one of one
+[1281.6s] of the parts of that project that I do
+[1282.9s] really really like.
+[1284.2s] Um, but this is going to go take the
+[1285.6s] screenshot and then yeah, I think we can
+[1287.8s] open this.
+[1290.5s] Open it in
+[1292.6s] my default G stack mentioned. Um, Dex is
+[1296.5s] secretly going for a fundraising through
+[1298.4s] Garry Tan. That's his goal here.
+[1300.2s] >> [laughter]
+[1300.4s] >> I'm joking. Scary Tan have money? I
+[1302.4s] don't know. I don't
+[1304.0s] >> No, don't open it in my browser. Open
+[1306.0s] the PNG.
+[1308.2s] He should have named it Tan stack. And
+[1310.5s] just beat them on SEO. I posted I posted
+[1313.0s] that a while ago. I was like missed
+[1314.3s] opportunity to call it the Tan stack.
+[1317.3s] The one true Tan stack.
+[1319.6s] Yeah. So you can yeah, you can
+[1321.2s] screenshot this stuff. But we use this
+[1323.2s] also like to like we'll do this in PR
+[1326.2s] review too is like we will as a team
+[1328.5s] review just the storybook stuff. Like
+[1330.7s] I'll pull it down and just look at the
+[1331.9s] components.
+[1333.3s] Um, I think it even they have a paid
+[1335.0s] thing where you can even leave like
+[1335.9s] comments on it, but you can see how this
+[1338.1s] ends up being like if you can pull in
+[1339.9s] your design system and you can enable
+[1341.2s] people, I think this is way better than
+[1343.0s] Figma cuz it is just the code. There's
+[1346.0s] no translation from how are we going to
+[1348.6s] take the thing in Figma and turn it into
+[1350.7s] React code, but it's just as
+[1352.8s] interactive. So you can you can see you
+[1354.9s] can see how like if you could get your
+[1357.6s] designers cuz like Figma and
+[1360.1s] and and code it's all it's all just
+[1361.4s] markup and flexbox and like all this
+[1363.2s] stuff all these concepts are the same
+[1364.7s] between like design systems and actually
+[1366.9s] writing the React code at this point or
+[1368.4s] writing the markup or whatever it is.
+[1370.9s] And so I I think like the thing that we
+[1373.4s] see people doing is like kind of
+[1375.1s] eliminating like they still have a
+[1377.6s] design step and they still review
+[1379.4s] mockups, but the mockups are just the
+[1381.1s] React components. And then when you go
+[1383.1s] to implement it, there is no like
+[1384.8s] translate the Figma into React. It's
+[1387.6s] just already there implemented with your
+[1389.2s] design system in code and it just it's
+[1391.8s] it's already like approved by everybody.
+[1393.8s] All you have to do is like the front end
+[1395.6s] engineer's job is to then work with AI
+[1397.3s] to wire up all that data layer. The idea
+[1399.5s] of being able to build that hot loop is
+[1401.0s] really the hard part. And it sounds like
+[1402.4s] this seems like a tool that might help.
+[1404.6s] Yeah. I mean we use this iterate on UIs
+[1406.9s] all the time. We use it to fix bugs in
+[1408.6s] UIs all the time. That's how our
+[1410.6s] Storybook got so big is every time we
+[1411.8s] hit an issue or something looked bad, we
+[1413.5s] would just like, okay Claude, I need you
+[1415.0s] to like reproduce this state with props
+[1417.9s] in Storybook and then we'll figure out
+[1419.5s] how to address it. Okay, so now tell me
+[1421.5s] how big is your how big is your
+[1423.0s] Storybook collection here?
+[1424.6s] It's too big and I need to clean it up
+[1426.0s] and it's really poorly organized. Uh,
+[1428.4s] but
+[1428.8s] >> the next question. Like in code I feel
+[1430.5s] like I know how to refactor code. How do
+[1431.9s] I refactor this system? You you said
+[1433.7s] you're about to go to It is all still
+[1435.2s] code. I mean the only the only thing
+[1436.8s] that you're like really working through
+[1438.6s] is like
+[1439.9s] Okay, every single one of these is a
+[1442.2s] code file, right? So you come in here
+[1444.5s] and you see all these different items
+[1445.9s] and you're
+[1446.8s] Claude likes to rip out a ton of these.
+[1448.7s] And the other thing Claude will like to
+[1449.7s] do sometimes it will like draw something
+[1451.8s] here and then also write the component
+[1455.0s] in the application instead of like
+[1457.3s] creating a thing that can be imported in
+[1459.0s] both places. So that's another thing to
+[1461.3s] watch out for if you're doing this is
+[1463.4s] like
+[1465.3s] making sure Claude understands this
+[1467.0s] concept of pure versus wired. It's not
+[1469.3s] super baked in the in the training set,
+[1471.2s] but if you prompt it properly, you can
+[1472.7s] get you can get there.
+[1474.8s] But um, we have stuff for comments. So
+[1478.4s] this is like how we display comments in
+[1480.0s] the app. Um
+[1482.3s] and conversations. So yeah, we we we
+[1484.6s] rift all of this out as a team, but
+[1486.7s] yeah, I I need to come through and
+[1488.3s] reorganize this and make it it like
+[1490.0s] anything else, it does become bigger and
+[1493.4s] there's a taxonomy of like how do you
+[1496.0s] order things? How do you organize things
+[1498.1s] that's true with like all code.
+[1501.6s] Um But it's sort of similar to the
+[1503.3s] learning test, right? Like so Kyle
+[1504.7s] wanted to integrate this charting
+[1506.0s] library for some of our dashboards.
+[1508.4s] The first thing he did was he came in
+[1509.9s] and got it working in Storybook. And
+[1511.4s] then once those components were baked,
+[1513.4s] then it just works everywhere.
+[1515.3s] That's really fascinating.
+[1516.7s] Yeah, that's really freaking cool. Um, I
+[1518.7s] think this is something that I might
+[1519.7s] try. They can hack at if I get bored.
+[1522.0s] Next week.
+[1523.5s] I don't have a ton more content. We can
+[1525.0s] do questions. We can architect some
+[1526.6s] stuff out. I can answer your questions.
+[1529.0s] But I just thought this was a useful
+[1530.2s] thing that people people would probably
+[1531.8s] get a lot of benefit out of as you try
+[1533.3s] to like become more AI native. Um, could
+[1535.5s] you summarize the problem you solved?
+[1537.6s] Could you summarize the problem that you
+[1538.7s] solved with this workflow? Someone's
+[1540.3s] just asking me to summarize everything.
+[1542.4s] Yeah. So I I guess the biggest problem
+[1544.8s] here is like number one is like taking
+[1547.4s] non-React code designs and turning them
+[1549.6s] into React code creates this like extra
+[1552.7s] feedback loop where you need to take
+[1554.3s] what the designer did and then put it
+[1556.1s] into code and then get their thumb sign
+[1558.0s] off on it.
+[1559.2s] And then the other thing is like
+[1561.4s] the same way with unit test like if you
+[1563.2s] want to test a logic change in your
+[1565.4s] code, you have two options. You can go
+[1567.8s] reproduce that state in your app, which
+[1569.8s] may take a lot of clicking and running
+[1571.4s] and running curls and things like that.
+[1573.5s] Or if you can isolate it and reproduce
+[1575.7s] it in a unit test, then all you have to
+[1577.9s] do is make that test pass and then
+[1579.5s] things are working again.
+[1581.2s] Um, and it's the same thing for this is
+[1582.8s] like you don't have to go spin up the
+[1584.3s] whole web app and click around and
+[1586.0s] create the state that reproduces the
+[1588.2s] bug. You just as long as you can figure
+[1591.2s] out, okay, these are the props. When
+[1592.8s] this component is in XYZ state, this is
+[1595.7s] what causes the crash or the ugly
+[1597.7s] rendering or whatever it is, then you
+[1600.2s] don't have to like go generate all the
+[1602.7s] data and it becomes really easy again
+[1604.5s] with like unit test. I can make a change
+[1606.4s] to the component and I can click through
+[1607.8s] the 20 other versions of it without
+[1609.7s] having to go reproduce all those states.
+[1611.6s] So it makes it really easy to iterate in
+[1613.6s] the same way that unit test make it
+[1615.0s] really easy to iterate on problems or
+[1617.8s] changes to back end code.
+[1619.7s] Yeah, it's like here like for example
+[1621.1s] like
+[1621.9s] I'm running this code. Yeah. You want to
+[1623.8s] test your like pass result thing. You
+[1625.6s] have to actually go write a program,
+[1627.3s] spin up the playground, run it in the
+[1629.0s] program, make a change and then do that
+[1632.0s] loop.
+[1633.3s] Exactly. This is so ugly cuz it shows
+[1635.0s] pass pass twice. I know this. But that's
+[1637.5s] cuz like the data object that I'm
+[1638.8s] rendering here is not aligned. Whereas
+[1640.4s] like I go like sentiment pass fire. I
+[1642.6s] may actually want to go ahead and like
+[1643.8s] increase like render my sentiment type
+[1645.7s] slightly differently.
+[1647.2s] Yep. And in order to do this, I probably
+[1649.3s] want to Today what we have to do is go
+[1651.6s] build this whole thing out. Now if you
+[1653.4s] guys are curious I can actually show you
+[1654.6s] call to the LLM to test if your change
+[1657.0s] looks good. Like you actually have to
+[1658.8s] run the full program. And like so how do
+[1660.7s] you unit test UI? Well, technically we
+[1663.1s] have a hot reload loop here. So once you
+[1664.8s] run it once you can do it, but it's
+[1666.3s] still not as nice as what it would take.
+[1668.1s] And like
+[1669.1s] Well, if you send it to somebody else
+[1670.9s] and they wanted to see it on their
+[1672.0s] machine, they would have to go do all of
+[1674.0s] this.
+[1675.1s] Um, for example for rendering the
+[1676.5s] prompt, we want to make this prompt
+[1677.8s] rendering be a little bit nicer. So it
+[1679.3s] actually shows it to you in like nice UI
+[1680.8s] formats.
+[1682.1s] Yep. I can't really do that here.
+[1684.4s] So I will have to go ahead and like
+[1686.6s] build a UI component now for rendering
+[1688.3s] the prompt.
+[1689.9s] Um
+[1691.5s] What is BAML for newbies? It's basically
+[1693.9s] a programming language that makes LLMs
+[1695.9s] good at doing things and like make
+[1698.2s] structured outputs really good. Protobuf
+[1699.7s] LLMs. That's a good way to describe it.
+[1702.0s] It's not a really a good for newbies
+[1703.9s] answer because Protobufs is a weird
+[1706.7s] advanced concept, but
+[1708.9s] >> [laughter]
+[1709.0s] >> It basically will make your LLMs just
+[1710.6s] perform better for without any effort
+[1712.8s] and it's interruptible with any other
+[1715.4s] programming language. So you can use it
+[1716.8s] as a LangChain replacement or Pydantic
+[1718.5s] replacement or a Vercel AI SDK
+[1720.5s] replacement.
+[1722.0s] Yeah. Question from Rajesh, how do we
+[1724.1s] add new feature in a big existing old UI
+[1726.8s] repo? Our Claude agent hallucinates a
+[1728.6s] lot. I mean, if you want to make coding
+[1730.3s] agents to work well in big repos, you
+[1732.1s] should use Crispy or RPI, which we've
+[1734.3s] talked about a lot on the show. Um, I'm
+[1736.6s] actually going to ask it to
+[1738.7s] I'm actually going to ask it to um
+[1741.4s] go do this.
+[1742.8s] What I want to do right now is
+[1745.3s] I want to migrate my repo to use a
+[1748.8s] little bit more Storybook components for
+[1750.8s] the TypeScript component, especially for
+[1752.3s] the shared components in the playground.
+[1754.2s] Can you build one of the components,
+[1755.9s] specifically the data renderer
+[1758.2s] as an output for the result of an LLM
+[1760.4s] call into a
+[1763.0s] Storybook system.
+[1766.1s] This is actually the prompt that I would
+[1767.3s] write
+[1768.2s] all the way. You'll probably want to ask
+[1770.0s] if you ask the model to bootstrap
+[1771.4s] Storybook
+[1772.9s] and like add There's like two things
+[1775.1s] there's two things here, right? And this
+[1776.4s] is getting into like Alan's question as
+[1778.0s] well is like you want to bootstrap
+[1779.8s] Storybook and then you want to like
+[1782.3s] purify components. You want to take
+[1784.1s] components that have display and
+[1785.7s] business logic mixed and said that split
+[1788.5s] that up.
+[1789.2s] >> one component that I already know is a
+[1790.8s] pure component. So, I specifically did
+[1792.4s] that already. But, Dexter's point is
+[1794.1s] correct. I Notice I did this very
+[1796.0s] contextually. I recognized what Dexter
+[1797.6s] said about wired and pure, and I did not
+[1799.5s] ask it to migrate all of my stuff. I
+[1801.1s] specifically said, "Can you build one of
+[1802.4s] the components?" Specifically, the data
+[1804.5s] render as an output for the result of a
+[1807.5s] It should be called function call
+[1809.7s] into a Storybook system. I know this is
+[1811.9s] going to work better, so I'm just going
+[1813.0s] to let this rip. Um can I run I actually
+[1815.7s] sadly Dexter, I don't want to run it in
+[1817.0s] Claude code because it's going to take
+[1818.1s] too long to run it.
+[1818.7s] >> free form, dude.
+[1820.4s] Just run a free form.
+[1822.9s] Free task.
+[1824.1s] And then just make a session.
+[1825.8s] Well, I was going to run the plan mode
+[1827.2s] and then run this. Cuz free form will
+[1829.2s] not work. That's why.
+[1831.3s] Um cuz I do want a little bit of plan
+[1833.2s] mode cuz I don't want the I want I don't
+[1835.0s] want all the code to be
+[1837.0s] You could do free form and jump straight
+[1839.0s] to uh structure outline skill is what I
+[1841.4s] do sometimes. It's basically like a mini
+[1843.4s] plan.
+[1844.6s] But, it's fine.
+[1846.2s] Sorry. I do really like uh Riptide for
+[1848.6s] almost everything.
+[1850.1s] Uh but for this This is good feedback.
+[1852.1s] No, we we want to try to make it more
+[1853.7s] accessible for like tighter, smaller
+[1855.8s] workflows like this. One-off [ __ ]
+[1858.6s] Yeah, like what I really want is I want
+[1860.2s] this, I want this, and I just want to
+[1861.7s] run it. And this will do something.
+[1864.3s] Um while this uh while this runs, um
+[1868.1s] Well, I think this will this will
+[1869.4s] probably address most of your questions
+[1870.6s] of like how good it is. And we'll get a
+[1872.1s] really quick answer
+[1874.0s] very fast about whether or not
+[1876.8s] uh we're able to produce a good outcome
+[1879.3s] um
+[1880.1s] for migrating to Riptide and migrating
+[1881.9s] to um
+[1883.2s] Storybook in a new code base. If this
+[1885.0s] works, then we know it works in like new
+[1886.6s] code bases, brownfield code bases.
+[1888.7s] Um pretty standard
+[1890.4s] >> it You can do it incrementally, right?
+[1891.8s] You can just do like bootstrap
+[1893.0s] Storybook, and you get like a couple of
+[1894.5s] those like hello world stories just like
+[1896.2s] with some buttons, and then you could
+[1897.4s] say like, "Cool, take this component and
+[1899.5s] add it to Storybook and like split it
+[1901.6s] into wired versus pure." Or if it's
+[1903.7s] already pure, you can just You can just
+[1905.5s] do it that You can just say like, "Okay,
+[1906.7s] put this pure component in Storybook."
+[1908.3s] You generally don't want to have your
+[1909.4s] like stateful components that are making
+[1911.6s] API calls and stuff in Storybook. That's
+[1913.6s] not what it's for at all.
+[1915.3s] Um but yeah, let's see what this guy
+[1917.0s] comes up with. Well, while this runs, uh
+[1919.2s] Jack, you asked, "How do I build a
+[1920.5s] classification workflow?" Uh here's like
+[1922.4s] one example, really fast.
+[1925.9s] Notice this UI is really bad because we
+[1928.1s] don't use Storybook. We're working on it
+[1930.0s] literally right now.
+[1931.5s] Um thanks to Dex.
+[1933.5s] Uh if you want to go like a
+[1934.4s] classification example, it's like
+[1935.7s] something like this.
+[1936.9s] You be A classification is basically a
+[1938.4s] function that takes in like a chat
+[1939.7s] history or like a user message,
+[1942.2s] and it spits out a category.
+[1944.1s] In this case, I have categories defined
+[1945.6s] as an enum.
+[1947.6s] Uh no, we don't take sponsorships. We
+[1950.2s] literally only
+[1951.9s] we only show code that we are
+[1954.3s] proud of showing and tools that we like
+[1956.2s] actually like using.
+[1958.7s] That's so hopefully it's unbiased
+[1960.0s] content.
+[1961.9s] Um and then you just define the prompt.
+[1963.7s] So, the prompt is written like this. You
+[1965.1s] can see the prompt. So, like in this
+[1966.3s] case, I've got a quick little test case.
+[1967.8s] And like if you just run this, we can
+[1969.1s] just see what this runs as.
+[1970.8s] It runs as account issue because it says
+[1972.6s] I can't access my password login
+[1974.0s] credentials.
+[1975.4s] You get rid of account issue, we can see
+[1977.2s] what it pops up in as.
+[1979.9s] And it comes in as technical support,
+[1981.2s] which again is probably right. So, you
+[1982.7s] can just like build
+[1984.1s] evals and test cases as you want to go
+[1986.6s] and quickly understand this workflow.
+[1989.0s] And for like more complicated systems
+[1990.3s] like extract receipt, you can have a
+[1991.7s] receipt data type. You can pass in
+[1993.7s] images.
+[1995.6s] And then it kind of just like works for
+[1997.0s] you. And there's small things it does
+[1998.4s] like if the LLM messes up on JSON, you
+[2000.1s] still get the right type. And it plugs
+[2001.9s] into Python TypeScript pretty
+[2003.0s] straightforward.
+[2004.9s] I still don't have a plan. God dang it.
+[2006.6s] I was really hoping I'd talk for a
+[2007.8s] minute and we'd get back to plan mode.
+[2009.9s] Yeah, your code base is really big,
+[2011.8s] dude. You got to make it You got to make
+[2013.6s] it little. We want little cute little
+[2015.8s] cute little code base.
+[2018.3s] Yeah, yeah, I know. It's very
+[2020.2s] unfortunate.
+[2021.5s] Yeah, this website is just
+[2022.7s] promptfiddle.com. Yeah, it's it's it's
+[2025.0s] the hard part about big code bases. Like
+[2026.4s] once you have a bigger code base, like
+[2027.8s] sadly
+[2030.0s] agents just runs everything in them is
+[2032.0s] just slower.
+[2034.0s] But, this is also why I wanted to run
+[2035.8s] plan mode because I didn't want the full
+[2037.8s] plan mode that like Crispy has, which is
+[2039.9s] like very, very rich.
+[2042.5s] Uh cuz that would take like 15, 20
+[2044.2s] minutes to go get anything out of. But,
+[2046.1s] this plan mode is also going to take
+[2047.4s] like 5 minutes.
+[2049.2s] Yeah. But, I think it should hopefully
+[2050.8s] one-shot it.
+[2052.1s] What is
+[2053.2s] WCAG
+[2055.1s] type stuff? I don't know what that is.
+[2057.9s] What WCAG?
+[2060.3s] Web Content Accessibility Guidelines.
+[2063.2s] Well, I mean accessibility, I think just
+[2065.3s] use Shadcn and Radix UI, and they do all
+[2067.4s] that for you.
+[2069.1s] Um but yeah, Storybook also will do
+[2071.3s] things like audit your contrast levels
+[2073.8s] and like tell you if your contrast is
+[2075.7s] high enough for certain guidelines.
+[2078.2s] Um
+[2078.9s] So, they yeah, they have they definitely
+[2080.0s] have plugins for that as well.
+[2081.9s] That's cool.
+[2083.0s] And then I definitely want to make sure
+[2084.4s] that uh Oh, Dexter, by the way, you will
+[2086.2s] have to take down the stream because I
+[2087.8s] shared my API key.
+[2089.4s] So, in Okay. Which API Just go Just go
+[2092.8s] rotate it, dude. Oh, that's a great
+[2094.8s] idea, actually. Let me go rotate my API
+[2096.9s] key. All right. While Claude is working,
+[2098.8s] Vibob's going to stop sharing and rotate
+[2100.8s] his API key so I don't have to go
+[2102.3s] through the Twitter stream.
+[2104.0s] >> All right. Uh
+[2105.4s] that's so annoying.
+[2106.7s] I wish it would made it so much easier
+[2108.1s] to
+[2108.5s] >> beta open a bit, the UI to choose Crispy
+[2111.5s] versus free mode would be the best of my
+[2113.3s] week. Ignacio, it's coming.
+[2115.5s] We are cooking hard on a bunch of things
+[2117.3s] right now. Let's see what else.
+[2119.8s] >> I'm logging into ChatGPT as we I'm just
+[2121.4s] looking for other questions here.
+[2123.3s] Um yeah, Storybook won't help if your
+[2124.8s] designer is Claude. Yeah. At the end of
+[2126.8s] the day, like certain things you just
+[2128.2s] want to write the code. Uh but Storybook
+[2131.0s] is really powerful. Like you can do all
+[2132.8s] the things in the browser, right? You
+[2134.2s] can right-click, you can inspect, you
+[2135.7s] can look at the padding, you can figure
+[2137.2s] out where weird spacing is coming from.
+[2138.9s] Like you can do all the things you can
+[2140.4s] do in Figma, but you're just doing it
+[2142.6s] directly in the browser. I get it. Some
+[2144.9s] designers are going to roast me for
+[2146.3s] this. They're just like, "You don't
+[2147.2s] understand design, and Figma does all
+[2149.0s] this stuff that like I can never do in
+[2150.6s] React or is like painful to do in
+[2152.4s] React." Or like, "Don't make me write
+[2153.9s] code." I'm like, "That's fine, I get
+[2156.0s] it." But at the teams I'm seeing moving
+[2157.5s] the fastest are getting uh folks to
+[2161.5s] adopt AI, and your options are either
+[2163.6s] like get your AI to write Stitch or
+[2165.5s] Figma or Canva and like interact via MCP
+[2169.0s] and do all this stuff that's not really
+[2170.3s] in distribution compared to just writing
+[2172.2s] React code, which is very much in
+[2174.2s] distribution. The models are really good
+[2175.9s] at it. And it's the same way. It's like
+[2178.2s] I know some
+[2180.6s] I know some folks I'll let you read
+[2181.9s] this. I definitely know some folks who
+[2184.4s] are like
+[2186.4s] they build coding agent tools, and they
+[2188.2s] work with large enterprises, and they
+[2189.7s] say like, "If you're not willing to
+[2190.7s] migrate to a mono repo, then we are not
+[2193.2s] going to work with you." Because the
+[2194.4s] teams that are willing to migrate to a
+[2195.7s] mono repo are just going to get so much
+[2197.3s] better results from agents that like it
+[2199.8s] is not worth our time and like you're
+[2202.4s] not going to get as much value out of
+[2203.7s] this unless you're willing to do that.
+[2205.7s] And I think this is the same thing where
+[2207.2s] it's just like yeah, it's new skills,
+[2209.0s] it's a new way of working, but there is
+[2210.7s] so much upside to being able to write do
+[2215.5s] all your design with Claude code in a in
+[2218.2s] a like place where Claude code is really
+[2220.4s] good, which is editing files on disk,
+[2223.0s] that if you adopt this, like yes, it's
+[2225.8s] new skills, and maybe it doesn't have
+[2227.2s] everything, but overall, you're going to
+[2228.6s] go faster, you're going to enable more
+[2230.4s] more types of people to contribute to
+[2233.5s] the visual and design of your website,
+[2235.9s] and you're going to make it so much
+[2237.0s] easier to take designs and get them
+[2238.6s] straight into production that I highly
+[2241.6s] advocate for like find find a way to
+[2245.1s] like move things out of Figma earlier
+[2247.5s] and earlier in the process and get them
+[2249.3s] into actual built components. Our
+[2251.7s] designer started using AI to code, and
+[2253.3s] he hates Figma now. There you go.
+[2255.5s] Okay, Justin said he only spent a tiny
+[2257.4s] bit of your token. Okay, we are good to
+[2259.8s] go. Tokens are saved, and my API key is
+[2263.2s] now swapped. Sadly, uh sadly, yes. Um
+[2266.7s] and then
+[2268.2s] um sadly, I do have to read this, so I
+[2270.0s] can't just vibe it because I have
+[2271.8s] opinions, and I'm in I like to read the
+[2274.3s] plan.
+[2275.6s] Um
+[2276.0s] >> Always read You have to read the plans.
+[2277.6s] You should read something.
+[2279.8s] Frameworks Storybook eight.
+[2282.0s] >> [snorts]
+[2282.5s] >> Are we on Storybook 10?
+[2284.9s] Okay, then let's let's talk.
+[2289.5s] Yeah, you need store You should get
+[2290.8s] Storybook 10. It's the latest. This is
+[2292.9s] why we do plan mode.
+[2294.6s] Yeah, because it would have installed
+[2296.4s] This is the problem with the models I've
+[2297.6s] been baking and stuff. That repo is
+[2299.5s] maintained by us. Claude is so annoying
+[2301.7s] sometimes.
+[2304.5s] Oh, it took a while to reset the API
+[2306.2s] key. That's so annoying.
+[2307.8s] Yeah, I agree. The web search fetch loop
+[2309.3s] is really dumb.
+[2310.6s] I think we could by 11:15, we should
+[2312.6s] have Storybook components running. It
+[2315.1s] should be very easy to have it running
+[2316.6s] end-to-end. Okay. I I believe that.
+[2319.8s] Yeah, I had a bootstrap Storybook and
+[2321.6s] add five components in about 5 minutes
+[2323.9s] earlier today, so This is actually the
+[2326.0s] problem that I run into most of the
+[2327.5s] time. Um
+[2329.1s] Sure, I don't care. This is the problem
+[2330.8s] I run into most of the time. I I like I
+[2332.6s] didn't know Storybook eight was the
+[2334.1s] latest, and I would have been a slightly
+[2335.4s] lazy, and I wouldn't have checked. But,
+[2336.5s] because Dexter knew off the top of his
+[2338.0s] head, boom, we're actually getting the
+[2339.6s] right fix.
+[2341.2s] This is probably one of the most
+[2342.5s] annoying things. I wish there was a way
+[2343.6s] to cross-check versions of stuff
+[2345.9s] uh and force the model to use the latest
+[2347.7s] stuff. When we There's this crate
+[2349.8s] >> Crispy, it would have used a web search
+[2351.9s] researcher to go find out what the
+[2353.7s] latest Storybook was instead of using
+[2355.8s] the default Claude Claude Claude
+[2357.1s] >> it by default. It doesn't do it by
+[2358.9s] default.
+[2359.5s] >> tell it to search the web for the latest
+[2360.8s] Storybook.
+[2361.3s] >> I would have I would have to tell
+[2362.0s] [clears throat] it cuz I Yeah, exactly.
+[2363.6s] It's like
+[2365.6s] It has
+[2366.5s] >> [laughter]
+[2366.8s] >> It has nothing to do with that. Just
+[2368.1s] like I just have to go
+[2369.9s] do this. We had the same problem when we
+[2371.8s] ran into uh when we used this crate
+[2373.7s] called Salsa.
+[2375.0s] The LLM It's a Rust crate for building
+[2377.1s] like compilers and like sta- like
+[2379.1s] caching and stuff in them, so they're
+[2380.5s] fast.
+[2381.6s] We had the same problem. We're like by
+[2382.7s] default it did not use the latest
+[2384.1s] version of Salsa.
+[2385.6s] Uh and like you had to prompt. And now
+[2387.2s] that we use the latest version it does
+[2388.4s] the right thing, but like the initial
+[2389.7s] plan was like use like uh a year older.
+[2393.1s] Yeah, so Joe's talking about doing
+[2394.6s] mock-ups in Figma make and or Google
+[2396.8s] Stitch and then create plans with the AI
+[2398.5s] based on that. The challenge there is
+[2400.6s] that you're not going to know how it
+[2401.7s] looks until your plan is actually
+[2403.6s] implemented. You can't read the plan and
+[2405.8s] know whether it's going to look good or
+[2407.5s] whether it's going to honor the like
+[2410.1s] thing that you wanted to build compared
+[2412.7s] to actually just pausing and having it
+[2414.8s] build the pure components, which is
+[2416.3s] really easy to do. Like you don't need a
+[2418.4s] plan to build one pure component or a
+[2421.2s] family of pure components from an
+[2422.9s] outline. And then what I will always do
+[2425.1s] is just like riff back and forth and
+[2427.0s] vibe all the states of that component.
+[2429.2s] And then we'll go do the plan that is
+[2430.9s] like working across four different
+[2432.7s] systems across two different repos to
+[2434.6s] wire everything in.
+[2436.4s] Um yeah, what do you got here?
+[2439.0s] >> That looks pretty good. Um Okay.
+[2441.2s] >> That's really nice. I like that. It's
+[2442.5s] actually showing like all the objects.
+[2444.1s] This is exactly what I want.
+[2445.1s] >> Yeah.
+[2445.8s] Yep. All right, ship it.
+[2447.6s] Let's run it. Um and notice I kind of
+[2450.0s] skipped a few things, but I just I did
+[2451.6s] want to read this part. And I was like,
+[2452.8s] oh, that's how it's what's going to show
+[2454.2s] me in Storybook. Great. I'd be very
+[2455.6s] happy with these stories.
+[2458.2s] So now we cook. Um you might want to
+[2460.8s] >> Now we cook. As soon as it bootstraps
+[2462.3s] Storybook you should be able to just run
+[2465.2s] it.
+[2467.8s] I wonder where it's actually going to
+[2468.9s] put it. Yeah, there you go.
+[2471.8s] You know what I hate about Ghosty? It
+[2473.5s] doesn't do split terminal. It's so
+[2475.2s] annoying. They don't have panes yet?
+[2478.3s] No, or maybe they do, but I don't know
+[2479.9s] how to do it.
+[2481.4s] See?
+[2483.8s] My my noob uh my noob coding abilities
+[2486.9s] don't allow me to use tmux.
+[2490.3s] Oh, they do have panes. How do we do
+[2491.7s] that
+[2492.6s] uh Prayash?
+[2494.1s] Yeah, Prayash tell us how to teach
+[2495.5s] Vibhav how to use his terminal, please.
+[2497.9s] Split right. There you go. Wait, it was
+[2499.6s] there.
+[2500.1s] >> Where?
+[2501.0s] File.
+[2503.3s] Oh my god, are you kidding me?
+[2505.6s] That's so hard. [laughter]
+[2508.0s] I think I just got leveled up. Uh this
+[2510.2s] is why I secretly do this podcast so I
+[2511.8s] get taught how to use basic stuff.
+[2514.6s] >> [laughter]
+[2516.9s] >> Yeah, and we do the same thing as what
+[2519.1s] um Dexter's talking about. We have this
+[2520.6s] core package playground that we actually
+[2522.2s] ship into like a WASM component, a pure
+[2524.6s] React component, everything else too. So
+[2526.0s] it looks the same everywhere.
+[2529.4s] Uh no. Uh I I know all of you like these
+[2531.8s] command shortcuts, but for me I'm I'm a
+[2533.5s] clicky boy.
+[2534.7s] Uh I like clicks.
+[2538.7s] Uh still don't have Storybook running.
+[2541.1s] I hate coding agents sometimes. I'm just
+[2543.0s] burning money out here.
+[2546.1s] All right, Dexter, while we wait
+[2547.6s] >> Manny says, "Was this episode sponsored
+[2549.6s] by Storybook? Just wondering how many
+[2551.6s] other tools workflows you guys tested?"
+[2554.1s] Look, man, it's not about the tool we're
+[2556.4s] using here. And actually like in 2014
+[2558.8s] when React was brand new and Storybook
+[2560.7s] didn't exist, our designer on the team I
+[2563.4s] was on built a version of Storybook.
+[2565.6s] Like it's not hard to build a component
+[2567.6s] that renders other components with
+[2569.0s] random props. You could probably vibe
+[2571.5s] code a version of Storybook that does
+[2573.4s] everything that you want in
+[2576.7s] the next in in in not a lot of time. If
+[2579.2s] you know what you want is you basically
+[2580.6s] want to I I want to be able to see six
+[2582.0s] versions of this component with
+[2583.4s] different combination of props. Like
+[2585.8s] yeah, you don't necessarily need
+[2587.1s] Storybook. We like it cuz it has a
+[2588.4s] couple of affordances and it has things
+[2590.2s] for like if you have a theme switcher in
+[2592.4s] your app, it does themes nicely and
+[2594.2s] stuff like that. Uh but no, we don't do
+[2596.6s] sponsors here. We just talk about
+[2598.0s] technology that we're excited about.
+[2600.0s] What is this? Why can't I run this,
+[2601.4s] Dexter? Oh.
+[2602.9s] >> Dude, don't talk to me. Talk to Claude.
+[2605.6s] Okay, here's your result display.
+[2607.7s] Doesn't have any of your styles, but
+[2611.0s] Why doesn't have my styles? I don't
+[2612.6s] know. Tell Claude it it's probably still
+[2614.3s] working.
+[2615.6s] Yeah, probably. Uh but click on some of
+[2616.9s] the other items. There we go. It
+[2618.8s] actually made a
+[2620.2s] I don't know what I want, but it's got
+[2622.2s] something.
+[2623.4s] Okay. Oh, I do want redaction there.
+[2625.8s] Look good for it for recognizing that.
+[2629.6s] I'm actually going to hide the
+[2630.6s] authorization key by default so I never
+[2632.7s] have that problem ever again.
+[2634.3s] Uh this is disgusting. And this is
+[2636.2s] literally what it sends. This is why it
+[2637.6s] sends this. I don't know if the logic is
+[2639.7s] redacting or if it just put redacted
+[2641.7s] props in, but
+[2642.8s] >> Wait, I think it did everything, but it
+[2644.2s] didn't pull up my
+[2647.7s] Okay. So what I'll do is I'll copy this
+[2649.5s] looks like [ __ ] It needs the it needs
+[2651.3s] more styles. Or yeah, drop in the
+[2652.7s] screenshot. I feel like I'm missing the
+[2655.2s] styles here.
+[2656.9s] Yeah. So bootstrapping this and getting
+[2658.5s] the styles brought in and stuff like
+[2660.0s] this is uh
+[2706.8s] But uh That's cool. placeholder.
+[2709.6s] Um
+[2711.1s] I think the the snapshot testing stuff
+[2713.1s] is it can get a little brittle sometimes
+[2715.2s] and it's
+[2716.4s] uh I like to test things visually right
+[2718.4s] now. Um but yes, if you want really
+[2720.7s] wanted to scale stuff and prevent
+[2722.4s] regression, then snapshot testing is is
+[2725.3s] a way to test our business logic and
+[2727.4s] make sure your like layouts haven't
+[2728.8s] changed, but I think the problem with
+[2730.2s] snapshot testing is like it's only as
+[2732.0s] good as the data set that you create. So
+[2733.8s] you have to be pretty rigorous about
+[2735.6s] like, hey, when something breaks and
+[2738.3s] like
+[2739.5s] fails in production or whatever it is,
+[2741.3s] then you got to pull in that data and
+[2742.5s] make a new snapshot test out of it so
+[2744.2s] that like people don't accidentally
+[2745.7s] break it in the future. Any thoughts on
+[2747.6s] QA and browser-based agents for QA? I I
+[2750.0s] mean I think automation just gives you
+[2751.9s] all the wins and the losses of
+[2753.5s] automation. The more you automate, the
+[2755.1s] more Like think about when COVID
+[2756.9s] happened. Like why did we have that
+[2758.3s] toilet like toilet paper gate? Well,
+[2760.9s] it's because like
+[2762.4s] like genuinely it's because our supply
+[2763.9s] chain is so intrinsically tied together
+[2765.9s] because it's fully automated that you
+[2767.7s] break one thing in the supply chain,
+[2769.2s] everything down the stream of it breaks.
+[2771.0s] And obviously that didn't happen with
+[2772.2s] toilet paper cuz like it turns out
+[2773.5s] people don't actually people just
+[2774.9s] hoarded toilet paper
+[2776.4s] as opposed to needing it, but did happen
+[2777.8s] with like technical stuff where like
+[2779.3s] some supply chains broke for like how
+[2780.8s] long shipments for like computer car
+[2783.1s] computers and cars ended up happening.
+[2785.7s] And that's because cars got really
+[2786.5s] expensive because chips got delayed,
+[2788.7s] right? Like did the chips didn't ship
+[2790.4s] >> delayed. And then all the ships that
+[2792.5s] they had pre-bought like Apple doesn't
+[2795.0s] magically get shipments working in
+[2796.5s] December. They pre-buy all of that
+[2798.4s] stuff. If any of you know like futures
+[2800.1s] markets are like people don't only just
+[2801.8s] like hope that wheat is a or corn going
+[2804.2s] to sell eventually. They actually
+[2806.0s] farmers like pre-sell all their wheat
+[2807.8s] and all their corn ahead of time.
+[2810.6s] And the reason for that is because
+[2811.8s] people like stability in systems. And
+[2813.3s] that's one of the things that you need
+[2814.4s] with automation. You need long-term
+[2815.6s] stability.
+[2817.1s] And then when you end up when you end up
+[2818.7s] in a world where like for example like
+[2820.1s] you automate everything with QA,
+[2822.2s] you will have a faster system, but when
+[2824.0s] things break, it'll be you have to
+[2826.3s] really slow down and then fix it.
+[2828.7s] So it's just like the trade-off that you
+[2830.0s] make.
+[2831.1s] Um and like [clears throat]
+[2832.4s] what I personally find is add as much AI
+[2834.6s] as your QA system is going to be able to
+[2836.7s] handle in terms of how much slow down
+[2838.4s] can you accept when you really have to
+[2839.6s] stop and reset. Oh, let's see if it
+[2841.5s] works.
+[2842.5s] This is sick.
+[2844.6s] And now you can see that arrays are not
+[2846.4s] good. So I can actually just tell it
+[2847.7s] this and I can say, great.
+[2851.4s] Oh, this is a thingy. Like this is
+[2852.8s] actually broken in the product, too. Oh,
+[2854.6s] yeah. It's broken right now. I know.
+[2857.1s] We can see over here that arrays don't
+[2858.6s] work well.
+[2859.9s] >> without having to go like reproduce the
+[2861.7s] use case. There you go.
+[2864.1s] We can see over here that arrays don't
+[2865.8s] render well. Um we should do something
+[2867.9s] clever for them. And like empty arrays
+[2869.8s] render differently than closed arrays,
+[2871.2s] which is nice.
+[2872.7s] This is what I'm going to have to fix
+[2873.6s] later, too. I don't like the This is so
+[2875.7s] nice. Thank you, Dexter, for doing this.
+[2878.0s] And we can see exactly what the win here
+[2879.7s] is. Like I don't have to like produce
+[2881.2s] everything all the time. I can just come
+[2882.6s] up with
+[2883.7s] all these edge cases and just could
+[2885.2s] decide exactly how we want to render it
+[2887.5s] right away.
+[2888.0s] >> And as soon as a user comes up with an
+[2889.8s] issue, you just paste it in the Claude.
+[2891.5s] You'll be like, "Hey, here's a bad
+[2893.2s] state. Add it to Storybook and then
+[2894.8s] we're going to fix it."
+[2896.6s] Exactly. And like I can actually see
+[2898.2s] exactly and like it it's going to do
+[2899.8s] this and like probably
+[2901.5s] boom. It actually does this.
+[2903.6s] Nice. And it made an array of objects.
+[2907.9s] It's actually like showing me different
+[2909.3s] things in here to give me what it does.
+[2910.5s] And it I agree, this still kind of looks
+[2912.5s] bad.
+[2913.6s] So the AI still want to kind of like
+[2915.1s] >> and you don't have to iterate it on the
+[2916.5s] app. You're just iterating on the pure
+[2917.9s] component. This is freaking awesome. Our
+[2920.3s] playground is going to get a lot better
+[2921.7s] just thanks to this.
+[2923.4s] Nice. See, I I like I I I pitched this
+[2925.9s] episode like it sounds dumb, but I bet
+[2928.1s] this is really useful for a lot of
+[2929.5s] people who are trying to figure out
+[2930.5s] agentic coding and like the new SDLC.
+[2932.6s] And I think I think doing these like
+[2934.5s] component preview style things, whether
+[2936.5s] it's in Storybook or something you vibe
+[2938.2s] coded or one of the many other things
+[2939.7s] that does this is going to be really
+[2941.2s] important.
+[2941.9s] >> Yeah. And I it's like it's kind of
+[2943.3s] weird. It looks kind of tacky, which is
+[2945.0s] why I don't like it, but like
+[2946.6s] uh the general thumb like I
+[2948.7s] it does it's going to look nicer to do
+[2950.6s] this
+[2951.6s] than it will to do anything else. So I
+[2953.0s] love this. This is great. Thank you,
+[2954.2s] Dexter, so much. Yeah, and you can
+[2956.1s] control the stage and the frame. Like
+[2957.9s] you can actually put a static image of
+[2960.0s] VS Code in here and so this will all
+[2962.1s] display in the in the VS Code thing.
+[2964.7s] Like you can you can customize a lot
+[2966.1s] here.
+[2967.5s] Oh, no. I I mean we don't have to Oh,
+[2969.3s] what do you mean like the frame?
+[2971.0s] Like see that white border around it?
+[2973.3s] Yeah. Like you can customize that. You
+[2975.3s] can pick what color it is. You can make
+[2977.0s] it literally a VS code thing, so all of
+[2979.8s] this renders inside on the left on the
+[2982.3s] right side of a VS code pane, so it
+[2984.5s] looks more realistic. You can do
+[2985.7s] whatever you want here.
+[2987.3s] >> That's cool. No, I think I just like
+[2988.9s] this idea of like even this alone I I
+[2991.5s] this has been something I've been trying
+[2992.6s] to get to for a while. It's just easier
+[2994.4s] to do this now cuz I iterate faster.
+[2997.0s] Yep. I think iteration speed is under
+[2998.9s] valued.
+[3000.0s] Make sure it's actually importing your
+[3002.5s] your your shared components and not just
+[3005.6s] vibing out a bunch of [ __ ] in storybook
+[3008.0s] that doesn't actually impact your app.
+[3009.6s] That's the one thing I've seen Claude do
+[3011.0s] sometimes.
+[3012.2s] Now what I can do is do this.
+[3017.4s] Uh it looks like it made this and it
+[3019.4s] looks like it made stories.
+[3021.6s] Yep. So just go I would just go yeah,
+[3023.9s] okay. So you modified result display. I
+[3025.6s] would just look in result display that
+[3026.8s] stories.tsx and make sure it's like
+[3028.6s] importing your actual shared component,
+[3030.9s] but I'm I have high confidence that it's
+[3033.8s] that it's happening properly.
+[3035.6s] So the structure of this is an
+[3037.0s] interesting file. So you create like
+[3039.1s] versions of it.
+[3040.8s] Um but it looks like these all come off
+[3042.4s] of yeah, story type of result display.
+[3044.3s] So it is importing it and using it.
+[3045.7s] Great. Interesting. And this is what it
+[3048.3s] actually renders now.
+[3050.2s] Yep. So it's just like hey, render that
+[3052.0s] component with these different sets of
+[3053.6s] props. I see. I see. Yeah, one of the
+[3056.4s] things that I've been trying to think
+[3057.6s] about I'm going to I'm going to see if I
+[3058.7s] can get a hackathon project here is I
+[3060.2s] really want users to be able to
+[3061.5s] customize how their objects render in
+[3063.3s] the playground. So imagine you have a
+[3064.8s] class and you want to say like I'm going
+[3066.1s] to render this class with like a custom
+[3067.9s] React component. Ooh. Exactly. Cuz
+[3071.6s] that's how we do this. That's how like
+[3072.8s] the system prompt and user prompt
+[3074.1s] renders differently. That's how like the
+[3075.6s] HTTP web request renders like this
+[3078.3s] instead of just like a plain object. We
+[3080.1s] have like a registry of like you can
+[3081.5s] register things to different types.
+[3083.8s] So you could imagine
+[3085.4s] >> in your test like function in BAML where
+[3088.2s] you're testing a prompt and getting an
+[3089.6s] output, you can set a custom component
+[3091.5s] instead of just printing the JSON, it
+[3093.1s] actually shows the user like card
+[3095.3s] streaming out or whatever it is.
+[3097.2s] Exactly. Exactly. And I feel like that'd
+[3099.9s] be so freaking cool. Like right over
+[3101.9s] here one of the things I want to test Go
+[3103.8s] ahead. You go ahead. No, it's it's good.
+[3106.0s] Um I've just it's 11:15, so we should
+[3108.0s] probably wrap up soon. All right. I want
+[3109.8s] to try one more thing and see if this
+[3111.0s] looks cool. I want to show an array of I
+[3112.6s] want to show an array of HTTP request.
+[3115.6s] Cuz I want to see what that UI looks
+[3117.2s] like. Cuz that's really This is like
+[3118.8s] something I couldn't have done before.
+[3120.7s] Mhm. Yeah, an array of HTTP request.
+[3125.0s] Yep. So you may not even be able to
+[3126.2s] produce that state in the app today, but
+[3128.5s] you can test it this way. Exactly. I
+[3131.2s] actually cannot produce I mean, I can,
+[3133.0s] but it's kind of annoying. But it's
+[3134.8s] >> now you haven't built all the wiring for
+[3137.1s] handle array of HTTP request, but you
+[3139.4s] can decide if it looks good and if it's
+[3140.8s] even worth building before you go do all
+[3142.7s] of it.
+[3143.6s] Exactly. And now I'm like oh, and like
+[3147.2s] um you know, I don't like this. I can be
+[3148.5s] like hey, if it's an array of objects
+[3150.1s] actually just make it like a pagination
+[3151.8s] thing.
+[3152.8s] Yep. Which could be kind of nice to be
+[3154.0s] able to just like paginate through all
+[3155.2s] the different elements of the array.
+[3157.6s] Yep.
+[3158.4s] Well, thank you. This makes life much
+[3160.1s] easier, much cooler to navigate across,
+[3162.7s] and I'm excited to be able to add
+[3164.7s] storybook. Time to peace out. Adios,
+[3167.2s] amigos. Thanks, everybody. See you.

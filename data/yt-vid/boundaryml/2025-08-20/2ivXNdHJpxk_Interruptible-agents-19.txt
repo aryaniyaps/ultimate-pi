@@ -1,0 +1,1624 @@
+Now's your chance to pay attention.
+>> All right. U welcome back everyone.
+We're back to talking about AI that
+works. And our whole content here is
+really based around trying to build
+pipelines that have real practical
+systems that you can deploy and take
+into your agents that you're building
+today. I'm Vivv. I make BAML and this is
+Dexter.
+>> Hi, I'm Dex. I'm the founder of Human
+Layer. Uh excited BAML user. uh big fan
+of Vibv and uh of everybody here and I'm
+really excited to learn more. As someone
+who works a lot in human in the loop um
+systems, I think interruptability is a
+way to take the next level of human in
+the loop. Not just hey agent asks for
+permission and human approves it but
+creating good user experiences about
+like oh no no no this is off track and
+like being able to rest steer and change
+an agent outside of the kind of like
+predefined steps and workflows. If you
+make a workflow so it can be cleanly and
+safely cancelled anywhere and still
+resumed then you are probably building a
+product that is in the 99th percentile
+in terms of like UX and safety and like
+usefulness in terms of like using AI to
+do bigger better things.
+>> Exactly. So before we do too much um I
+just want to start off with a quick demo
+of the agent that we're going to work
+with
+and I think that's the best thing that
+we can do at first. So, I have a small
+little research agent that I put
+together. I'm going to screen share my
+whole screen. So, if you see something
+you're not supposed to, please let us
+know so we can clip it out of the
+recording and we don't leak API keys.
+Um, we're going to start off with a very
+very simple agent. And what this agent
+does is it's able to perform some
+research on any sort of task that you
+give it. So, let's just run this UV run.
+Oops.
+you
+can't see my I'm sorry. I'm going to get
+my second screen on really fast. I think
+I should see everything that's going on.
+>> I'm gonna see if I can figure out how to
+change my layout here.
+>> There we go. And then I'm going to pull
+up the
+>> Hey. So,
+>> all right. So, what we're going to do is
+we're gonna run u uh hello. py. And what
+I'm going to do here is I'm going to ask
+it to research something. The thing I'm
+going to research is I'm going to say
+why do why is wombat
+poop square which it is if you didn't
+know.
+And what this agent is going to do is
+it's going to kick off my planning task.
+So it's going to go figure out what
+stuff it's going to go plan.
+And once this is done, I've now planned
+eight searches. It's going to go figure
+out what to go do. Then it's going to
+run those eight searches using web
+search from OpenAI.
+And you're actually seeing that it's
+actually going ahead and like running
+the searches. It's giving me a little
+progress bar and then eventually it's
+going to go write the report. This is
+kind of cool. But what's really freaking
+annoying here is I don't actually get to
+go interface with this at any point. I'm
+almost stuck here waiting until it's
+done. And what if I messed up? I
+specifically want to know like what
+about like the wombat's diet
+specifically makes that happen in the
+middle. Or for example, woodpeckers have
+really long tongues that wrap around the
+back of their head. Like why do they
+have that?
+Well, we should go figure that out. And
+I want to be able to interrupt the agent
+and not have to have it wait until it's
+very much done until that happens before
+we go in.
+>> But you also don't want to start from
+scratch. You want to kind of interrupt
+it where you can maintain some of what
+you've asked. But but not have to get
+all the way to the end before you can
+resteer it basically.
+>> Exactly. Because it did do it and it's
+like ah I really just wish it could have
+just done all of it at any given point
+and that would have been nice.
+>> For the record I didn't know what Vibb
+was going to demo today and I'm really
+excited to uh dig into how this works
+and how we make it better.
+>> Um so firstly uh what does what do
+people think?
+>> Do people have ideas? Has anyone built
+systems like that that is able to
+actually be interrupted along the way
+and then make it work?
+Feel free to either type in chat, raise
+your hand, or come off mute.
+Dex, what about you? I mean, not to be
+the guy who's literally on here every
+week talking about cloud code, but this
+is something I think the cla code does
+pretty well where they have um various
+levels of interruptability where you can
+stop it right where it is and you can
+just put in a new user message that is
+corrective. Um timing that when it if
+you stop it while it's awaiting a tool
+call, it will take your directive
+message as a denial of the tool call and
+what to do differently. And then the
+ability to cue a message is really
+really interesting where it's like I
+don't actually want to interrupt it, but
+at some point when you get to a good
+stopping point to the like agent
+program, I'd like to insert this message
+into the context window. And whether
+that stopping point is like all the way
+after the last assistant message or
+there's some policy of like where cued
+messages can be inserted uh that won't
+like mess up a tool call in flow or
+something like that. And so like there's
+a lot of there's a lot of thought that
+goes into building UXs around there both
+in like what's expected from my side and
+um what's actually like technically
+feasible.
+>> Yeah. Um what um while we're going about
+this, what I'd love to say is uh Dex
+send me over the whiteboard link. I'm
+going to while we do that, I'm going to
+go and show people how this agent
+actually works so we can get an idea
+around it. So firstly, I have some
+debugging steps. So everything with
+prints, you can just ignore of whatever
+it is. Um, but this agent is basically
+broken down into three specific steps.
+Now, this is more of a workflow than an
+agent. So, we'll swap it to an agent
+really fast so we can see how to go do
+that and then come back and do this as
+well.
+>> So, this agent has a couple different
+workflows. One workflow is the plan
+searches step. So, before it takes a
+query and then it plans the searches.
+The goal of planned searches is to go
+ahead and figure out exactly what
+searches I should make given the query
+the user has. Then for every single
+search the user has, what I want to do
+is in parallel, I actually want to take
+the entire web search that I've made and
+then return in return for it, what I
+want to do is I want to go ahead and
+like for every single search, I want to
+actually make the actual search itself.
+And in this case, what the search method
+does is it actually calls a summarize
+search term method which calls the LLM
+with a web search tool. So it performs a
+search, gets a result, and then
+summarizes it all in one go through the
+LLM provider
+and then assembles the summary for me.
+>> Oh man, I have so many questions. But I
+I know you're staying high level, so I
+won't derail you.
+>> Once I finish that, then I'm going to
+take all the query and the search
+results I have. So, the plan is now lost
+and then assemble a report for myself.
+I will pause really fast because it
+sounds like Dex has some questions. Ask
+ask away.
+>> Uh, I'd be really interested to see the
+prompt and how you're doing the like
+tool outputs there and like what an
+example like question would look like.
+Did you write any like tests for the um
+for the planning query?
+>> Let's just do that really fast. So, what
+is plan searches? Well, these are just
+wrappers around simple functions I have
+called plan web search. And what plan
+web search does
+is actually something really special
+easy which is I just use gt40.
+So a oops wrong thing
+[Music]
+word. I just use GT40 and I have a
+really really simple system that says
+why
+why is a wood pecker's tongue so long?
+It's a very common question actually.
+It's actually very fascinating. Um, and
+this is all I'm having it do. I'm simply
+having it return to me. Uh,
+we're given a query, come up with a set
+of web searches between five and 20
+based on what I'm trying to go do.
+And it's a it's not it's not too
+complicated at all. It's going to return
+a searches field and return the reason
+for the search and the actual query
+behind it.
+So, if I go run this really fast, you
+can see what it would do for the
+woodpecker.
+It says function of a woodpecker's long
+tongue, anatomy of a woodpecker's
+tongue, evolution, and these all seem
+pretty reasonable to be completely
+honest.
+>> And it's, you'll notice it's asking a
+couple more questions that are more
+broad. It's like unique features of a
+woodpecker croissant. Because maybe I'm
+wrong about it being long in the first
+place. So, it's actually kind of good
+that it came up with queries that aren't
+about it necessarily being wrong along
+the way.
+>> Okay. But basically, you're doing a
+little bit of um like in context
+reasoning um and then asking it to
+output and then do that five to 20
+times.
+>> Exactly. So, just tell me like five
+things like the user wrote this query.
+What are five to 20 other queries that
+would make sense for the user to write?
+Then I proceed to the next part which is
+I summarize the web search. And you'll
+notice here I'm actually using a
+different client. I'm using a client
+that is using the OpenI responses API.
+But I'm doing something special here.
+I'm requiring it have it's going to use
+the tool call by providing this. And the
+only tool I allow is web search preview.
+>> So the model is required to use the tool
+call along the way. So no matter what
+happens the first one of the things it
+will do is call web search preview. So
+it kind of enforces this no matter what
+that it will take the it will take the
+query along with the reason
+and then prop.
+>> Oh okay. So you are actually using the
+responses API which means the tool
+calling happens on the server side not
+on the client. We don't have to get the
+JSON back from the model and do
+something with it and then put that back
+on the context window. You're just
+saying one shot. Here's a string. Here's
+your prompt. Go do as many searches as
+you want and come back with the answer.
+>> Well, it should technically only do one
+search, but it might do multiple.
+>> Yeah. Cool.
+>> Right.
+>> Cool. And then the last thing I do is I
+write a research report. And I did not
+uh write a test case for this one. Um,
+and I I'll fill it out really fast just
+so we can read the prompt more easily.
+Well, whatever. Uh
+um and you'll notice what I do is I want
+it to give me like a short summary. I
+want it then give me a final report in
+markdown and then follow-up questions
+that I might have. So, it's still a
+little bit of structured summary, but
+then I'm able to go ahead and go do
+this.
+And there's small things about the
+prompt that I don't really like.
+like I might actually prefer something
+like this.
+Um,
+so it's a little bit more coherent for
+the model.
+Um,
+oops.
+I'm really bad at typing.
+There you go.
+So this might be slightly more coherent
+for the model. So I might write change
+it to this way. Um and now I'm able to
+go get my query. Now even if I have this
+workflow, there's a couple of things
+that I want to deal with, which are what
+I really want to do is
+I really want this manager to be able to
+be interrupted at any point along the
+way. So there's a couple different ways
+that I can go do that. But the very very
+first thing that I have to do is I
+actually have to run this thing in a
+thread. If I'm not running this thing in
+a thread, then I can't actually
+interrupt it. And this is going
+>> like a like a Python thread,
+>> like a Python thread. And this is
+because I'm building a terminal agent.
+But before we go really deep into it,
+the thing about
+interruptible agents is you can't
+actually build interruptible agents
+without doing some kind of state sharing
+across threads. So I'm going to outline
+What's some of this?
+>> You need state across threads. What else
+do you need? You need you need like a
+foreground and a background, right? You
+need to like the primary thing that the
+user is interacting with and then you
+need stuff happening in the background
+and how to like communicate between them
+basically.
+>> Exactly. So let's just assume we have a
+very very simple thing. We have a front
+end
+and then we have a back end.
+My front end is going to send a request
+to my back end that's like start chat
+and it's going to send some sort of like
+message to the user that's that's like
+what they want to start the chat with.
+Then what I'm almost definitely going to
+end up doing is I'm going to kick off in
+my back end. I'm going to have some
+agent loop
+that is running
+>> or pipeline
+>> or pipeline. But let's just assume I
+have an agent loop or pipeline. It's
+just like a sequence of calls that are
+being made. And remember, we all know
+what an agent loop is. It's like while
+true call lm
+>> if done
+>> if done return
+along the way.
+>> Else it's like else call tool basically.
+>> Yeah.
+>> Or call tool. Yeah. call tool
+and then
+>> update context. Yeah,
+>> update state.
+>> Yep, that looks right.
+I hate this orange. Um,
+>> I can fix that for you.
+>> Thank you, Dexter. This is hurting my
+eyes. Oh, that looks so much better.
+Okay, so this is my agent loop. And what
+I do is every single time the agent
+loop, if I've done any sort of streaming
+workflows, um, every single time the
+agent loop runs, I'm streaming something
+to the front end. Stream
+after every call L1.
+This is basically what a standard
+chatbot looks like. Anyone that's built
+an agent loop has done something like
+this at some point. If you haven't,
+there's some other videos that you can
+watch in the past that show off how to
+go build this. But roughly, this is what
+we're doing. Now, the problem is
+this thing, if I were to go send another
+message, is actually going to start a
+new chat. It won't actually interfere
+with this chat. That is a problem. So,
+you can't actually do it this way. So
+what you end up having to do is when a
+user sends a message while a message is
+in progress. So you first have to have a
+new thing called in progress.
+So you need to be able to track whether
+or not you're already in the progress of
+another message. If you do,
+you now have to you now instead of
+submitting new messages to there,
+you now save new messages on this side.
+And this li this new message instead of
+going directly to here actually makes
+its way over to your back end again, but
+it does a it does a separate call. This
+one goes into
+Q
+message.
+And this is where you'll notice that it
+gets very very dicey in terms of how
+things have to happen because it gets
+very race conditiony very very fast. And
+it this is where system design can help
+a lot. What and we'll make this we can
+we make can we make the original call
+blue Dexter so we can track it very
+easily all the things associated with
+the original call.
+>> What am I the color guy now?
+>> Yes you are. Uh and we'll keep it red
+for the
+>> the hot key is the hot key is S if you
+want to change the color.
+>> Oh thank you.
+>> SS to change to blue.
+>> I have I have another thing. It's called
+a voice command. It's actually very
+powerful. You should try it.
+Um,
+but I'll try it next time. Okay. Oh,
+that is really cool actually. The hot
+key. Okay. So, the next thing that we
+have is we're going to have a database.
+And it doesn't matter if it's an
+in-memory database or a long-term
+database, but you're going to have a
+database. And what you're going to have
+over here is every time that this
+message happens, one of the things that
+you're going to have to make an
+amendment for in this system is in the
+very beginning before you go stream
+this, you're going to send a message ID
+to this system.
+>> The message ID or is it like the
+conversation ID?
+>> We can call it combo ID. Um,
+so this is going to
+>> because right when I send another
+message, it's going to basically put
+that in a store that somewhere so that
+when while the loop is running, we can
+look it up later and see if there's
+anything cued. Right.
+>> Exactly. So we're as soon as this agent
+loop starts, one of the first things
+that we'll do is we'll send a convo ID
+to the system. And I'm going to move
+this um so it's a little bit more
+obvious
+>> in the order. Actually,
+>> Claude code does this exact thing is the
+first the first message emitted from the
+back end to the front end is a JSON
+object that gives you the session ID.
+>> Exactly. That's what you have to do. So
+now you've given a convo ID. Now
+whenever you submit new messages, one
+other thing you include in here is
+you're going to include the convo ID.
+And now this data payload makes its way
+to the back end.
+The other thing that you will do is you
+are going to do another thing which is
+at the very end of this service
+you're going to send another thing
+that's like a done event to indicate
+that this sequence is done to know that
+this message is terminated.
+>> And this isn't a system where you're not
+going to basically you're not going to
+allow continuation of an existing chat
+for now, right?
+>> We'll come back to that. That doesn't
+mean you can't do this. just to be very
+clear still continue an existing chat
+but I want to I want to have a slightly
+different uh conversation around this.
+>> Yeah because there's there's things
+where like from the from the state of
+the application it's like done but I
+think a lot of tools uh from a user
+perspective will call this like waiting
+for input or like ready for next message
+even though like hey the process is done
+nothing is running but it's kind of up
+to the user whether it's done or not
+whether they want to like archive it or
+they want to keep interacting with it.
+Sorry, I should be very clear. Let's
+You're actually right on this. Agent
+loop done.
+>> And that's the inner loop. So we talk
+about I think we talked a lot in the
+human
+>> loop is done. It's not the entire
+conversation. It's just that that loop
+is complete for whatever reason. We've
+hit this we've hit this return
+agent loop
+done sequence.
+Like this is what we're here.
+>> But what if we decided to exit out of
+this loop? We talk about this a lot um
+in the like 12 factor agents methodology
+is like inner loop versus outer loop and
+basically like inner loop is anything
+where you just keep calling tools and
+you go and go and go and process and do
+the pipeline and then outer loop is
+anything that requires a human to be in
+in in in the loop as it were. So the
+outer loop is like we hit a thing that
+needs permission. Okay, now we're now
+we're in the outer loop. We're going to
+the human. And that's tends to be
+especially with asynchronous stuff can
+be much longer breaks between the inner
+loop and the outer loop. But whether the
+model is done and says, "Hey, I have my
+final answer." Or the model is um like,
+"Hey, I need your input." Or, "Hey, I
+have a clarification question." That's
+transitioning control from the inner
+loop back to the human in the outer
+loop. Does that make sense?
+>> Exactly. Exactly.
+>> So now we're going to go do this and
+we're going to stream this after every
+single call LM, but we're going to do
+one last thing. Now we're going to
+insert some new text
+and
+on top of this
+which is
+>> this is the user's new message
+>> ask DB for any messages
+for this convo ID.
+>> Can I can I rename this method?
+>> Yeah.
+Oh, sure. Yes. Um naming is not my
+strength. I use LMS.
+Um and then what we're going to do is
+we're going to say state equals this and
+this thing will take in the previous
+state and modify the existing state
+accordingly.
+>> Oh okay. So now the logic for whether
+the state is is at a point. You can have
+different types of rules for when can a
+message be injected. And so this method
+can look at the current state look at
+the ceued messages. And if there's
+different types of cued messages, this
+method is in charge of saying, "Okay,
+cool. This message we can pull in. This
+message we can't get for whatever
+reason, but we're going to give you the
+new state hydrated with any cued
+messages that are eligible to be
+injected at this time."
+>> Exactly.
+>> And then you got to do a little bit
+more. We're not done yet. The last thing
+we have to do is we have to emit a new
+event.
+>> We have to tell the user that we added
+their message to the stream.
+>> Exactly.
+tell UI about message about update.
+>> Yeah, because that that would change the
+kind of display of it to be less like
+this message is cued and more to like
+this message is now sent and is being
+like acknowledged and processed by the
+agent.
+Exactly. And now this and then the user
+can now delete this uh stash that
+they're holding and say now I've up I've
+proceeded with this queue and moved it
+up to the next step.
+Um I'm going to pause here because we
+did a lot of stuff right here.
+>> Yeah, I almost feel like I don't know if
+it is makes sense to take the time to
+write it out. Um we should pause for
+questions, but this might make more
+sense as like a swim lane like sequence
+diagram.
+That's a good idea. Do people have
+questions first?
+>> And Char Charles had a lot of stuff in
+the chat that might be worth checking
+out. Let me read
+>> for interruptibility. I use a user input
+tool, but this is for chat UX my tool.
+Yeah. So having the user be on to
+interrupt is totally different because
+just because you have the user interrupt
+tool, that means the user can't actually
+be interrupting it because the thread is
+still running. What I need the tool
+>> interrupt in the middle of a tool call
+>> and and the tool would rely on the model
+deciding to call that tool. Right? Is
+that do I understand that right?
+>> The to exactly and the model may never
+call that tool.
+Um my personal opinion is this is
+something that you should build because
+there's so many nuances to how you would
+build this. And the reason that there
+are so many nuances that I want to talk
+about here are like for example this is
+one implementation of this but actually
+another implementation of this is I run
+this and I actually run wild true
+without this I'm going to I'm going to
+I'm going to not modify this so I don't
+>> yeah let's make another version
+>> what I want
+>> for the uh whiteboards later too because
+then we have like different different
+evolutions of it.
+I want to I want to run this in this
+way.
+This is thread one.
+This is thread two. And what I will run
+is I'll run an interrupt mechanism where
+anytime the database gets updated, I'll
+actually crash this thread and take the
+last known state and then restart from
+that point onwards.
+>> Okay. So your update state here is not
+just appending to a context window.
+You're actually like flushing to the
+database at the end of every loop.
+>> It could live in memory too. It doesn't
+really matter.
+>> Yeah. Right. When we say database, it's
+like but you're like flushing it to some
+shared data store, not just something
+that's on the stack.
+>> Well, in this case, just on the stack,
+but if if I do the multi-threaded one,
+then yes, exactly that.
+>> Then like this basically needs to append
+the thing and update the database. So
+when this one calls it, it can go fetch
+whatever the latest state was.
+You can view it like this.
+>> And is this going to have some kind of
+like loop in it?
+>> Well, what I'm going to The loop is
+actually going to live at a higher level
+and then we have some more questions
+coming up soon.
+>> Yeah, I wait. Um, gather
+async.io.
+And I I'll just write first because
+that's really what I want
+the red two. The red one.
+>> What is it? This like promise.Race or
+whatever.
+>> Yeah, exactly. Race is the right word.
+So, I'm basically going to run both
+threads in parallel. And this is a
+this is basically a while loop.
+While
+True.
+>> Okay. So, this thread exits when the
+agent gets final answer. This thread
+exits when there's a new message. And
+then you decide what to and then you
+basically would like kill them both or
+maybe
+>> kill them both and then restart. Kill
+them both because you're updating state
+in either one of them and that's how you
+go do it. So,
+>> in here it's like if thread two finished
+kill everything. If thread one finished
+then push it back out to the UX or
+whatever.
+>> Exactly. If thread do finish, kill
+everything and then continue.
+>> If thread won't finish, return out of
+the actual system.
+>> Okay. So, would the input to this is
+still like the user's initial message
+basic or it's like it's a state. It's
+still like a conversation ID or
+something.
+>> Yeah, it's still a conversation. You
+still need a conversation ID. You still
+have the state object. So, it's like
+state state uh query. So, I can write
+out I can flush out. Can you move your
+mouse texture?
+>> Oh yeah. Sorry. I'm like drawing on Zoom
+when we have a perfect whiteboard.
+>> Okay. So thread two, what you're really
+going to do is this is going to take
+thread two. This is going to and then
+like some ID.
+>> Yep.
+>> This is going to take in like some the
+ID into it.
+And then
+if
+return update
+and then this is going to run a return
+update if you have something in there if
+you have a cued message uh return
+>> message
+and then the second one thread one is
+basically going to go ahead and also
+take the ID but also the state as an
+input.
+And what this is going to do is it's
+going to go ahead and go do this. And
+then we're going to say like return
+value equals this
+if value from thread two for what I'm
+I'm not I'm writing pure pseudo code. So
+I hope that's okay.
+>> Yep.
+>> If value from thread 2 state.update
+value.
+>> Yeah. This is almost more like the go
+select thing where you want to listen on
+two channels and then take the first
+whichever one responds first.
+>> Exactly. Otherwise return result value.
+So this is basically what I'm doing. I'm
+listening on two separate threads and
+whichever one returns first if the
+thread two returns then I'm going to
+update the state and then rekick it off.
+If thread one returns then I'm going to
+return with a value and that's all I'm
+doing.
+>> Sick.
+>> Does that uh there's I see there's a
+bunch
+>> let's hit the chat. I mean the biggest
+the biggest theme in the chat right now
+is like should I use a framework or
+should I own this flow myself? Uh
+>> yeah I my theory is like you you just
+saw two totally different
+implementations here. One where I'm just
+doing it in the Y loop one where I'm
+doing it as a threading system. And they
+have both have fundamentally different
+approaches
+>> and trade-offs, right? Like there's a
+whole bunch of reasons to do one or the
+other.
+>> Yeah. Yeah, if I want to interrupt as
+soon as possible, I'll pick the
+threading approach cuz that's what this
+will do. This will interrupt right now,
+abort the message, restart from stat
+scratch.
+This one, on the other hand, is going to
+get to a good point and prioritize the
+L. I'm doing some work before I do any
+amount of queuing. And there are reasons
+to do both. In fact, cloud code lets you
+do both. You can hit escape and
+immediately submit a message, or you can
+actually cue a message and it'll pick it
+up when you want.
+And I think that's Amari asked like is
+it possible to calculate the urgency of
+the message? And I think like
+calculate's an interesting word, but I
+think building into your UX at least two
+levels of urgency, which is like
+interrupt and send now or like send at
+the next opportunity.
+>> I mean, you can you can build that right
+over here. You can like build another
+you can build another flow over here
+>> of what it should do.
+>> Yeah, that's true. Yeah. And that's
+that's the benefit of owning the flow
+yourself. If you want to add something
+like that to uh I mean a lot of
+frameworks will save you time setting up
+the initial scaffolding, but then if you
+want to like reach into the bo the black
+box and change something that's not
+exposed on the interface of the of the
+system you're using, things become
+really difficult. And so I think a lot
+of what we talk about is like yeah, this
+is not like the world's easiest code to
+write and there's a bunch of race
+conditions and you have to figure out
+locking and you got to test it really
+well. But if you want to build
+incredible experiences, I think you're
+going to want that control.
+>> Yeah. And remember, building is not as
+hard anymore because we have AI agents
+that help you write some of this code.
+So it's it's actually not as hard as it
+used to be. So I actually find the
+flexibility to always be worth it,
+especially because I can just vibe code
+most of this. I'm certain if you send
+this diagram out to an LLM, it could
+write this for you. In fact, we're going
+to try that real fast.
+>> Um, and you'll see what I mean. Uh and
+the the beautiful part about this
+approach is it's not actually either or.
+You can actually for example this is
+running on a while loop. You can just
+like sleep.io
+like every 1 second. Check this out.
+And so you're pulling every 1 second for
+interrupts. But over here you can also
+interrupt at the same time. So you can
+actually run both things in parallel.
+It's like hey if I get to a good state
+just do it right then. But if this thing
+has been running for like five minutes
+or like like we might even want to make
+this 10 seconds. If the agent has been
+running for 10 seconds, screw it. Just
+interrupt right now. It's too long of a
+wait time.
+>> And then you can actually even have like
+a custom ticker here which like resets
+the sleep every time the agent does a
+new thing or something like that or
+every time there's a new user message.
+>> Exactly. Like basically you can figure
+out when you reset this based on what
+other interactions happen. So, you end
+up building like some really funky
+relationship between how these two kind
+of interplay with each other. Um, how do
+I get an arrow head on both sides?
+>> Are you trying to get the non the Yeah.
+Okay.
+>> I don't know how to put an arrow on both
+sides. I should really
+>> We're gonna we're gonna do a meta
+episode where we teach Vibbob all of the
+uh all of the tricks in uh in Excal.
+>> I agree.
+Um I think that'd be very useful for me
+personally. I think I'll become a better
+engineer.
+Um, so that becomes something that now
+becomes possible because we can build a
+relationship between the sleep IO here
+as well where this changes based on a
+two-way system rather than a one-way
+system.
+Um, cool. I'm going to pause here. Let's
+take on some more questions because I
+know that this is architecturally
+complex. You'll notice that writing the
+code is not that hard, which is why I'm
+waiting a little bit. It I want to make
+sure we address any questions people
+have.
+>> Okay, we got a lot.
+Yeah, controlling the user experience.
+Um, when agent loops can ask users for
+optional explanatory queries.
+Uh, cool. I don't think there's any
+major questions. I guess we can go into
+just coding this up and seeing what this
+looks like. So, the first thing I'm
+going to do is
+uh I'm just going to take this as a
+screenshot.
+And then I'm going to go to chatgbt.com
+and I'm going to start a new chat.
+And I'm going to say make this a mermaid
+diagram that explains how to
+build um interruptable
+agents.
+And it should be able to make the
+mermaid diagram um automatically for me
+hopefully.
+um while this is happening and the
+reason by the way I'm making a mermaid
+diagram is because what I really want to
+do here is I want to give cursor this
+code and then I want to tell it my goal
+and then when I give it the goal I want
+to give it very simple context about
+exactly what I'm expecting so that the
+CLI tool can update itself automatically
+and this is what I mean of why I think a
+um why I think a framework isn't
+necessarily useful because as long as I
+can describe this problem really well to
+the model, I think it can just do it.
+And this isn't even exactly the exact
+sequence that we have.
+Um because in this case, this is an
+agent loop. We don't have an agent loop.
+We have a workflow. So, it's not even a
+onetoone. But what I Mermaid
+live this website is probably killer
+traffic if I were them right now.
+Um,
+>> yeah, it's crazy the
+there's some models that like or like uh
+inference like chat providers that
+render the mermaid diagrams in line and
+I'm always just like so surprised that
+like Gemini and chat GPT haven't adopted
+that yet because it's such a nice way
+for like an AI to communicate what it's
+thinking to you.
+>> I 100% agree. Uh, and now I have to
+maybe can fix it. It's going to make me
+sign it. I knew it.
+Uh, we're going to go to anthropic
+and do the same thing because I don't
+have patience for trying to figure out
+why the mermaid is not working.
+Uh, Slack,
+sorry about the delay here. Open demos
+link.
+Um, and then I don't want to copy my
+prompt.
+Cool. Um, and while this is running, um,
+I want to talk about like a couple more
+things. One is even though this seems
+really hard, I want to explain why I
+think this is really, really important
+for almost every single person to think
+about when they build agents. And really
+the big reason is that my opinion about
+how agents generally work is that what
+makes the best agents today successful
+is that almost every single one of them
+has reinvented UX in some way. Cursor
+reinvented the UX of how I use uh agents
+or like just LLMs in general when I
+write code. Cloud code did it again when
+it went ahead and made it through the
+terminal. And I think the reason cloud
+code picked up so much popularity even
+though cursor already exists and cloud
+code had no free option. You just have
+to pay from day one is because they
+really reinvented the UX of how queuing
+and waiting for stuff along the way
+feels. The fact that I can just press
+enter and not have to think hard about
+it is a huge huge win for me.
+>> Yeah. And the cursor one is like they
+give you really in the human in the loop
+steps where you're approving stuff. It's
+like a really rich UX. like showing the
+exact diff in the exact files with the
+syntax highlighting was an incredible
+step up in terms of like giving that was
+one of the things we struggle a lot with
+at at human layers like hey if you want
+to put a human approval in Slack like a
+lot of things require a lot of rich UI
+for a human to like yeah if you're
+reviewing an email that's going to go
+out like yeah you can just read it in
+Slack but if you're like labeling an
+image or reviewing let's say a loan
+application or something like this like
+you need a lot more rich context text
+and so yeah being able to customize the
+UI and being able to customize the
+experience by owning the flow of
+information through the system becomes
+really really powerful if you can do if
+you can if you that's like where all the
+good innovation is happening in AI right
+not all of it but that's where some
+really good innovation is happening in
+AI right now so I'm going to do
+something now which is I'm just going to
+talk to cloud I'm going to talk to
+cursor agent and I'm just going to tell
+it that I'm going to use GT5 max I'm
+gonna paste this in given that
+architecture Um
+let's try this.
+Given that architecture, I want to
+figure out how the terminal is going to
+interface with let's say a similar kind
+of agent where the main function can
+actually query and cue requests coming
+in from the CLI. But the research
+manager can still run in the background
+and be able to be interrupted with any
+new messages that come at any specific
+phase in its thing. I don't need the
+individual phases to be interrupted, but
+in between the actual phases, I want
+them to be interrupted.
+Cool. Um,
+don't implement. Just tell me what I
+should do in theory.
+Cool. And I'm just going to give it that
+along the way.
+And
+>> I had given you a prompt on Saturday
+that was optimized for building plans
+for implementing things
+>> you did. Uh but I can't do it within
+cursor. What voice agent am I using? Um
+I'm using whisper flow, but super
+whisper is another great one. Uh but
+really I find that this is much better
+because I can just like put in way more
+information than I normally would have
+otherwise.
+Uh first it's making a web service. So
+this is exactly why I did not have it do
+implementation of any kind because I
+knew it was going to do a web service
+given this. I don't want a web service.
+I want to mimic
+the architecture
+with just threads and in memory stuff.
+>> Yeah. Yeah. keeping it all in one
+process and using like in intra
+intraprocess communication the other IPC
+>> just so it knows what I'm going for and
+there's other ways that I could go about
+this for example um I could say over
+here okay now give me another diagram
+or how to do something similar with a
+CLI tool but no web server
+So stood in is the front end
+and some thread is the back end. And
+what I could do here is instead of
+actually having the model think about it
+in this way, I could simply
+and this will probably be fine. Uh
+>> yeah, you basically just want like a
+thread safe inmemory object, right?
+>> I don't even know what this is doing.
+uh in memory version, no web service.
+Great. Yeah, it's going to go ahead and
+go figure something out. It looks
+somewhat reasonable. A lightweight
+schedule thread if you want to cap
+concurrent agent threads.
+Um, cool. This looks somewhat
+reasonable. And
+this looks a lot more complicated, but
+this also looks somewhat reasonable.
+Let's just kick it off.
+>> Okay.
+>> Yeah. And so in the mermaid, you're kind
+of optimizing. We talk a lot about like
+when AI is going to do something you
+want to put human attention on the
+highest leverage thing and it's
+basically like understanding the like
+architecture of the system and then
+understanding the implementation plan
+and like if the architecture is wrong
+everything else is going to be wrong. If
+the implementation plan is wrong,
+everything you write is going to be
+wrong. And so it's like mermaid is a
+really powerful way to make that task of
+reviewing the because if the arch if the
+model just outputs 300 lines of markdown
+for the architecture like that becomes
+really hard to read and this is a much
+better way to kind of uh analyze what
+the model is thinking.
+>> Yeah, exactly. And I do spend a lot of
+time actually looking at these visuals
+because I find it to be really fast for
+me to actually understand what's
+happening.
+Um, but I think this should mostly be
+done pretty soon and then it should, I
+think, work without really requiring any
+new tools or anything along the way.
+>> Oh, is it actually going to do it now?
+>> It should. Yeah,
+it it will implement it uh along the
+way.
+While this is implementing, do people
+have ideas for other implications for
+how you might other architectures or
+something else along here? Dexter, have
+you thought about that along the way
+while this is running in the background?
+This is the only problem with live
+coding, which is we do have to wait when
+we go back to this diagram. Have you
+thought about other implications of how
+you might want to go do this? So, we
+talked about how you might want the
+sleep, for example, to be uh re-rotated
+based on how the agent loop is actually
+triggering. What are other UX things
+that you think would make a huge impact
+on how the user perceives this?
+>> Um, I mean, I think the idea of
+understanding when and how a message is
+eligible to be injected into the context
+window, like building your own logic of
+like these types of messages should be
+dropped in right away or like, hey, this
+type of message should wait until the
+entire research is done. Like basically
+being able to cue
+cue for different like urgencies, I
+guess as they said. like claude code has
+the like inject it whenever or inject it
+immediately. But I almost also want like
+a like inject it like at the latest
+possible moment. Like basically just
+treat this as the next user message
+rather than trying to put it in the
+thread. Like I want the model to finish
+what it's doing because I think it's on
+the right track and I want to see what
+it does. And so sometimes queuing will
+actually say like okay we're done
+calling the tools. Let's take the last
+user message before we output the last
+assistant message. And so yeah, the
+taring and the urgency and I think I
+don't know if there's a good way to
+detect that. Um unless the user is very
+clear about like if it says keep going
+but when you're done then I would
+classify that as you know okay this is
+going to be the next user message after
+the model is completely emits it's like
+stop token done calling tools here's my
+final answer versus like
+>> as you're working do xyz or like stop
+immediately and change it this way. Um I
+think stop immediately always just needs
+like user controllable but
+>> I kind of saw this in warp as well which
+is I'm I was doing this thing to reduce
+the size of the BAML repo uh by hope by
+like a third and bring it down from like
+280 g megabytes to like 170. But if this
+works you'll notice that warp does this
+uh warp right over here says like oh the
+topic has changed. Do you want to make a
+new conversation?
+>> Oh, nice.
+>> So, it's actually really interesting how
+you might want to go design that exactly
+along the lines of what you were saying,
+which is just because a message came in
+doesn't mean that you actually should be
+interrupting it right away. Um, is it
+done? Oh, wow. That was very fast. This
+is why I love
+>> um and it didn't have to like
+>> really do much. conversation runtime.
+>> We'll just try and run it
+>> and just see what happens and I think we
+can talk about if it actually did the
+right thing or not.
+Maybe run hello and I'll go ahead and
+continue. Uh why is a woodpecker's
+tongue long?
+And you'll notice I actually still have
+terminal available. I'm still planning
+the search along the way.
+I can say
+>> so you can say like make sure you
+checkno or something.
+>> Plan natio is a great resource for this.
+And if it does it correctly,
+>> I don't think I don't think it uh I
+think it's continuing to running through
+your plan. I don't think it interrupted.
+>> Oh, okay. So, you actually gave it this
+actually designed it to basically have
+this is how the user signals it
+>> is like what types of things. Okay,
+that's interesting.
+>> Exactly. So,
+>> was this already in here or did this did
+cursor write this?
+>> It cursor wrote all this.
+>> Nice.
+>> Yeah.
+>> Okay. So you almost can have like slash
+commands or some sort of like way for
+the user to specify exactly like hey
+interrupt and do this
+>> exactly replan query. Nachio is a great
+resource for this. It went in and now
+it's writing the report. Now the problem
+is this went in too late. What it should
+have done is re-triggered the
+cancellation and then gone back up if
+that happened.
+>> Yeah.
+>> Right. And what I suspect will happen if
+it does this correctly.
+Um if it did this correctly I can go
+tell it this. But you can see exactly
+what it's doing now is it's doing
+system. Q. Now I can go look at what
+system.q does runtime.q message.
+Runtime.q message. It just puts in the
+event Q. And then what it actually does
+is I see what this code does. Sorry. Q
+message. Let's go find this.
+In the actual loop that it's running,
+the agent loop,
+where' it go? I can't navigate this code
+very fast. In the actual agent loop that
+it's running,
+you'll notice uh that where did it go?
+This system.
+This is actually checking if the runtime
+is going to be completely done or not.
+And I suspect what's happening
+>> just looking at the like status. So the
+runtime itself implements kind of like a
+state machine.
+>> Exactly.
+Exactly. And that's what it does under
+the hood. So I can go modify this and
+figure out exactly what it's doing to go
+modify this and make it work. But this
+is the
+>> Go ahead.
+>> I was going to say like yeah, this is
+this is a lot of code. We weren't going
+to make you all sit and watch us do
+this, but this is kind of like the the
+flow you could go through to try to
+implement this. And like these
+principles if you can get them written
+down well you can turn them into like
+kind of core architecture for how you do
+all this stuff.
+>> Yeah. And you'll notice a couple more
+things uh where I actually the what the
+code actually did under the hood is in
+the actual runtime it's actually
+checking on every single boundary
+whether or not there is a new cued
+message.
+So, if I actually go look into my
+um uh why is a woodpecker's
+tongue so long? And then I'm going to
+prep this uh use
+net go for
+searching y
+info.
+And now I'm going to go cue that
+message.
+Then what should happen is you see what
+it did info merge merge additional
+instructions to the context right over
+here.
+And it's actually go able to go ahead
+and like probably search nature for
+this. But it definitely did merge this
+in. And we can go look at the code, see
+where this happened. Well, it's also
+your your model doesn't have any
+visibility into actually what's being
+searched, right? Because it's happening
+in the responses API.
+>> Yeah. But I could print it out if I
+wanted. But the current query right over
+here,
+>> yeah,
+>> is going through and the current query
+is being modified right along the way.
+>> Oh, cool. You're just pushing it into
+additional instructions.
+>> Yeah, I just said additional
+instructions. Nothing too fancy. That's
+well I I cursor just said additional
+instructions.
+So this allows me to basically go ahead
+and just have the merge along the way
+happen without having to go do it. And
+what plan
+>> So every time you push the base query
+into any of your prompts, it's going to
+have the the core context there.
+>> Exactly. And then what replan is doing
+is replan is just replacing my query
+with the new query.
+And that's a bad name, I guess, for
+this. And I should have looked at the
+code a little bit more clearly, but
+let's see if it actually found this.
+It did not actually use a search. I can
+go figure out where this query is
+happening or not. Uh, and see where this
+is being passed in along the way.
+It's definitely calling write report
+over here with the current query. So, it
+should be technically passing that in,
+but I can go double check and see where
+that happens.
+>> Yeah. Um, how about a live voice to work
+like with the LM? Like the input is
+stream transcripts. The LM's job is to
+keep a set of notes updated. Question
+from John.
+>> Yeah, I saw the thing about John. Um, I
+have opinions on how the voice agents
+should be built and I think they should
+be basically built in a super linear
+way. Uh, where every single voice agent
+that you build should operate really
+really fast whenever possible.
+And that is the only way to build a good
+voice agent in my opinion.
+The problem with this is, as you
+probably note, is if you build it really
+really fast, it will go off topic. The
+user will change topic. You won't be
+able to do correction. So, while you're
+running on this timeline, at a slightly
+separate timeline, what you need to be
+building is another system that is
+reviewing everything that happened
+before it at a slower cadence,
+>> like using a smarter model. basically
+like
+>> this it's hard to build high performance
+voice agents because you need really
+fast response times
+>> but then you're having a smarter model
+go through and maybe inject a message
+like oh actually I'm doing it wrong we
+should do this instead.
+>> Exactly. And like the way to think about
+this is this doesn't even have to be
+like you could use an even smart model
+on top of your smart model and go do
+that. And what this a agent is doing is
+this call is responsible for checking
+everything up until this point this
+point backwards. This call is
+responsible for checking everything this
+point backwards. This call is
+responsible for checking everything this
+point backwards. And they all just go
+back by one
+because they can't actually check the
+current message. So they always check
+the state historically along the way.
+And then what you do is if this agent
+detects that something has has gone
+wrong, it's a drift or something else,
+then this agent
+sends an interrupt message to this one
+saying, "Hey, you are off track." So
+even though the me agent is responding
+over here in your software, you haven't
+interrupted just like we had over here.
+Let me see. Problem with the research
+thing is actually kind of long. Just
+like we had over here where we actually
+like dumped out another thing, merge
+additional additional instructions into
+context and we printed that out to the
+console. We're going to print out to
+your voice agent something that says,
+"Hi, I'm sorry.
+It seems like I'm off track."
+Right? You're just going to force your
+agent to say that and then have it redo
+inference from a little bit rewound up.
+>> Exactly. So you're going to back play.
+You're going to redo replay inference.
+Exactly what Dextra says with a little
+bit more context that's added in from
+this agent.
+>> So it would be kind of like the thinking
+message in GPT or Claude kind of resteer
+the rest the thing. It's like, oh, it
+seems like I'm off track. I should be
+focusing on helping you with X instead
+of Y.
+>> Exactly. Exactly that. And that's it's
+the exact same architecture. Nothing is
+different except instead of printing to
+terminal, you're now printing to
+console. Oh, printing to console, you're
+now saying invoice. That's it. Only the
+stood out is slightly different.
+>> Um, I think this this is a really really
+important concept. So like perhaps we
+could later talk about like how to go
+change this from a voice agent.
+>> Actually, this would be a really dope
+episode is just like how to use a small
+model and use a supervisor to inject
+messages into the context. I would love
+to build that out. That sounds that
+that's really that's something I've been
+like thinking about for a while.
+>> If if we can polish up this code dexture
+then it's literally going to be the
+exact same code as before because what
+you'll notice here is what we're doing
+here is at a very very fast rate we're
+calling write report which is already
+the method that we are calling to write
+the actual report when we're calling the
+run method. Um when we're calling the
+run method right over here we're still
+calling write report. Yeah,
+>> there's no real difference there except
+except the runtime is actually just
+doing it with a threading based approach
+and the other one is doing it with a
+like sequential approach. So we're going
+to do the same thing when we go design
+these systems.
+Sick.
+>> Yeah. I mean, I think for any deep
+research like the the supervisor pattern
+is also really interesting and I
+wouldn't be surprised if that's kicking
+around the inside of like the OpenAI
+deep research tools where while it's
+running you have another model reviewing
+and like potentially interrupting and
+resetting the context.
+>> Exactly. It
+>> sick.
+>> I'll pause here. Uh we'll push out all
+this code. Um I'm actually surprised
+that it works. We clearly can do a lot
+better here because it doesn't actually
+reset the state in case I tell it to
+reset. So really, if I interrupt it,
+what it should be doing is it should be
+going back to phase one. If I interrupt
+in phase two, if I interrupt in the
+middle of phase three, it should go back
+to phase two or possibly even phase one.
+So I could do a little bit better there.
+>> Or I could if it's interrupted, I can
+ask a model how it should be
+interrupted. But at least for now, I
+think this shows the principles behind
+what you could go do.
+>> Yeah. And I think modeling this as like
+a formal state machine architecture,
+I've found that especially coding agents
+are quite good at working in that world
+where the boundaries and the transitions
+are like clearly enforced by the by the
+like structures and the interfaces that
+you build.
+>> Yeah, exactly. Questions from anyone
+today? If not, we have I have
+two interesting things to show.
+Okay, it sounds like there's not as many
+questions. So, I will I'll pause for
+like two seconds and then we'll see if
+people want to see something wild.
+>> Are you gonna Are you going to make me a
+liar about everything I posted in the
+BAML chat today or in the Zoom chat
+about BAML not doing uh not doing
+orchestration?
+>> No, but I'll show you something kind of
+cool.
+Um so this is something that we have
+been thinking about really really hard
+which is how how does it work if people
+want to really understand their code
+under the hood. So one of the things
+that we've been thinking about is how
+can you get visuals directly from code.
+So I'll play for a second and I'll show
+you what I mean. So here for example
+what we are using is we're actually
+using markdown syntax in code to signify
+sections of code that are meaningful
+under the hood.
+And when you go see this what ends up
+happening is you can now take your
+markdown syntax in your code and
+automatically render it as actually
+lines of code. What that really means is
+you can actually jump from markdown to
+code with clickth through definitions.
+So you can see exactly what parts of
+your code are doing what. And then more
+complicated graphs can also be
+visualized right away without you having
+>> This is so dope. This is really And
+because you own the parser and you're
+tokenizing the the a you can you can map
+those things together and imbue the
+meaning directly.
+>> Exactly. Um Exactly.
+>> That's sick. So the idea is that instead
+of having to go build the markdown
+separately and instead of having to go
+uh go do everything. Is it live already?
+It should not be live. Um
+this should not be live. I'd be so
+scared. It's not live. Thank god. um
+instead of having to go and do what we
+did over here, which is like we built
+the diagrams out over here, then we
+built the mermaid, then we're going to
+go write code, and now we become
+detached from the actual diagram in our
+code. Our theory is it should be really
+nice if you could actually attach
+everything together and just go write
+the code sequentially and not have to
+think hard about it. Uh and this will
+help with both like if cloud code is
+generating a bunch of code now I'll be
+able to go and actually review the
+diagram directly that cloud code
+generated instead of having to think
+about it. The idea is you get all the
+benefits of graph code without having to
+write graph code.
+>> That's when will it be live
+rocks.
+>> I mean it does work as you saw. U
+hopefully soon. We'll do we'll we'll
+talk about it soon but hopefully soon.
+Uh we're I think we're touring complete
+now. So we'll have a couple more updates
+coming in soon.
+>> No building programming languages as a
+bit and then suddenly turned it into uh
+that was one of the coolest demos I've
+seen in a long time. I can't
+>> soon as in more like when Halfife 3
+comes out.
+>> So never.
+>> Um well soon.
+>> Okay. Um, you can generate Minecraft
+block maps with code. Um, but yeah, I
+just thought that given that we were
+talking about sequence diagrams and how
+we think about it, I thought it was
+relevant to show people at least how we
+think about approaching all these
+things.
+>> Did you know the math works out? I have
+I have been waiting half of my life by
+by years for Halfife 3 to come out. So,
+I hope it's sooner than that.
+>> Well, I guess the next half your life is
+a lot longer. So, yeah, I hope so, too.
+Um, this was super dope, man. I I I I
+learned some things. Um, I think this is
+great. So, for everyone else, we'll
+we'll get the code pushed up and the
+show notes pushed out and you'll get an
+email with uh everything we talked
+about. Um, do we know what we're talking
+about next week?
+>> We do. We're doing how to use cloud code
+for non non-coding tasks. I thought that
+was going to be a really really fun
+episode.
+>> Oh, yeah. Um, yeah, that's going to be a
+blast. There's a lot of people talking
+about how to um how they're using cloud
+code to manage non-technical things just
+by having it, you know, work over a
+giant knowledge graph of markdown files
+and build small scripts and integrate
+them in. So, uh something I've been
+hacking on for a while and gotten really
+interested in. So, uh we'll give a deep
+dive on how we do that.
+>> All right, with that the code is going
+live and then you all will have it and
+then we'll send out the stuff soon.
+>> Super dope. Thanks everybody. Thanks.
+Byebye. Bye
+>> everyone.

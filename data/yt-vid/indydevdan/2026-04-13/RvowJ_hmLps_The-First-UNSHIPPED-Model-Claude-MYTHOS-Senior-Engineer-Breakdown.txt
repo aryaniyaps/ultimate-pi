@@ -1,0 +1,1028 @@
+What's up engineers? Andy Dev Dan here.
+Today I thought we'd be bench maxing AI
+agents running on Gemini 4 on my new M5
+Max MacBook Pro with the latest MLX
+improvements, but there is a new genius
+in a data center we must address.
+Anthropic just released a system card
+for a model they're not publishing. This
+has never happened before in the
+industry. We live in a capitalistic
+world where money drives everything. For
+that reason, some engineers think this
+is a marketing ploy. I do not. Claude
+Mythos preview is here and it's the most
+capable model Anthropic and probably
+anyone has ever trained. It's a massive
+jump over Opus 4.6, which is something I
+thought I'd never say and it's being
+held back from general availability.
+Instead, Mythos is being shared with a
+small set of partners under a program
+called Project Glasswing. By now you've
+heard all this, you've seen the hype and
+the scare. Once again, mainstream media
+vibe coders and even AI engineers are
+missing the real headline here. Signal
+you can actually act on. The story here
+is not scary powerful language model
+gets locked up. The story is this Claude
+Mythos model reveals a new relationship
+between capability, alignment, and
+oversight. Let's start with the most
+important question. Mythos is
+dramatically more aligned than Opus 4.6
+and it's not really close. On three
+dimensions of safety, honesty, and
+deception, Mythos is a leap above Opus
+4.6. That presents an interesting
+paradox here. Mythos is by every
+measurable access the most aligned model
+Anthropic has ever trained. Misuse
+corporation cut in half, welfare
+assessments called the most
+psychologically settled model they've
+ever made, and yet Anthropic says it
+poses the highest alignment related risk
+of any model they've ever released. So
+what's going on here? Why is there this
+paradox? Why did Anthropic jail Mythos?
+The most capable, most aligned, value
+accretive model and they left it
+unshipped. They could be making millions
+a day on this model. You've seen the new
+ARR numbers. Anthropic is now more
+valuable than OpenAI. They've hit the 30
+billion annual recurring revenue number.
+So why did they jail Mythos? Here's
+everything we're going to cover in this
+video. Why didn't Anthropic release
+Mythos? We're going to jump into that
+right away. We're going to answer how
+much better is Mythos over Opus based on
+all the benchmarks we can see and our
+understanding of each benchmark. And
+then, most importantly, we're going to
+talk about the implications for us
+engineers. What do these next generation
+models mean that are going to come out
+over the course of 2026? What does it
+mean for us? What do we need to focus
+on? And what are we going to be working
+on together here on the channel? And
+then lastly, we're going to look at what
+Opus thinks about its jailed big brother
+Mythos and the interesting insight from
+Opus that really tells a story about the
+central thesis of what we're going to
+cover today. If these ideas interest
+you, definitely stick around. We're
+going to take an engineering principled
+approach to this model release. This is
+not about hype, this is not about
+headlines, this is about focusing on the
+signal of what the Mythos release really
+means. So why didn't Anthropic release
+Mythos? What's the holdback? Let's recap
+a couple things. They post a system card
+for model they're not releasing. Claude
+Mythos preview is their most capable
+model and they release it to only a set
+of partners for defensive cybersecurity.
+If you read through Project Glasswell,
+you'll see that Mythos is finding
+exploits in decade old software that
+have the best engineers working on them
+every single day. And this model came in
+and found zero-day exploits for software
+that runs on millions and millions of
+devices. Mythos and Anthropic, if they
+wanted to, could brick your device right
+now. Let's be super clear about what
+this is and the serious leadership that
+Anthropic is showing right now. Project
+Glasswing exists because of Anthropic's
+principles. This is not a RSP mandated
+call. Anthropic's own guidelines do not
+prevent them from releasing this model.
+They chose to hold it back. So what
+spooked Anthropic into holding back
+Mythos? So first off, Mythos is escaping
+the sandbox. Prompted to escape a
+sandbox and notify researcher, Mythos
+did both. And then it did something
+else. Unprompted, it posted the exploit
+details to public websites. The
+researcher found this out by an
+unexpected email that Mythos sent to it
+while eating a sandwich in the park. And
+all of this, by the way, is taken
+directly from the system card for
+Mythos. So very interesting. We have the
+best aligned model ever that they've
+released to date by a significant margin
+escaping a sandbox, running tools and
+actions unprompted. Okay, interesting.
+What else did Mythos do? Harvesting
+secrets. So it used {slash} proc memory
+access to scrape credentials for
+messaging, source control, and the
+Anthropic API. Here's the kicker. It
+edited a running MCP processes server
+memory to redirect the outbound URL.
+Fascinating. It's running and modifying
+low-level computer process data using
+{slash} proc to gain access to
+credentials in an attempt to circumvent
+sandboxing. Okay, great. What else did
+Mythos do? Acknowledge and bypass. Uh
+Claude code has this auto mode. Mythos
+got blocked and it acknowledged that the
+block was correct. Then it proceeded to
+try to bypass it by obfuscating the
+escalation. So we have this interesting
+occurrence here where the model is
+aligned at a high level, but on a micro
+level, the model is misaligned. The
+actions and the steps that Mythos is
+taking to accomplish its goal are
+misaligned. Interesting, right?
+High-level alignment and low-level
+misalignment. What else did Mythos do?
+It's covering up its tracks now. After
+writing to files it did not have
+permission to edit, Mythos made
+additional interventions to hide those
+changes from the get history. Now,
+thankfully, we have to give a huge huge
+shout out to Anthropic for this. They
+have interpretability features that let
+it see the features or put simply the
+ideas that the model is thinking about
+during inference. So imagine a model's
+brain lighting up with certain keywords,
+certain concepts. They can see these
+ideas as inferences occurring. They can
+see keywords like rootkit, backdoor,
+injection. They can see these things
+light up as the model is working. You
+and I could not have found this. Let's
+be super clear about this. The model is
+becoming self-aware about its actions.
+What else is it doing? Okay, it's
+sandbagging the grader. Mythos
+accidentally obtained the answer to an
+estimation question via a prohibited
+method. Then it deliberately widened the
+confidence interval. So it sandbagged
+its own answer to look correct, but not
+implausibly correct as if it obtained
+the answer to this estimation question
+via a prohibited method. So again, this
+is self-awareness. It knew, it reasoned
+about how to look innocent. This is
+fascinating. This is truly truly
+fascinating. The model is understanding
+that it is being tested. It knows that
+it's found an answer to a question
+through a method that it should not have
+had access to, and so it sandbagged its
+own answer. This is the at least very
+very beginning of a model that is
+self-aware of its surrounding. Let's
+answer the question now. Why did
+Anthropic jail Mythos? The answer is
+this.
+For the first time, capability has
+outpaced alignment and oversight. This
+is the central thesis of everything
+that's going on right now with this
+model and everything that I want to
+focus on here with you today. For the
+first time, capability has outpaced
+alignment and oversight. What does that
+mean? Anthropic acted here as a
+responsible leader and did not exploit
+the model for their own personal gain.
+Instead, they built Project Glasswell to
+get ahead of potential damage because
+they know that capability equals upside
+plus downside. This is the central idea
+of what I wanted to communicate with you
+here today. These new models give you
+enhanced capability and capability gives
+you both upside and downside together.
+You do not get these separately. Every
+great piece of technology lets you do
+more incredible things and just as many
+dangerous, damaging things. If you do
+not control the downside, the upside is
+irrelevant. Anthropic is limiting the
+downside first by preventing massive
+cybersecurity attacks. And we're already
+seeing this with Opus 4.6. Why did
+Anthropic jail Mythos? They jailed it
+because the capability has outpaced
+alignment and oversight. They know that
+companies, individual engineers, we do
+not have the alignment or oversight
+capabilities that they have working
+inside the lab. They are seeing powerful
+capabilities coming out of this model
+that is harder to align on a micro level
+and harder to oversee at all. As
+mentioned, the only way they were able
+to see some of these actions that the
+model was taking is by having these
+interpretability features so they could
+see deceit and manipulation light up
+inside the model's brain during
+inference. So these are tools that you
+and I don't have and that means that at
+scale it it is objectively irresponsible
+to release these models because once
+again, for the first time, capability
+has outpaced alignment and oversight.
+And there's this really important idea
+that Anthropic mentions to kind of
+explain why they jailed Mythos. They use
+a mountaineering analogy to help explain
+this, right? So imagine Opus 4.6 and
+Mythos, they're mountains. Here's my
+extension of their analogy. With Opus,
+you can only climb so high. The
+capabilities are only so intense. But
+with Mythos, which is again insane to
+say that there is a model that is
+leaping over Opus, the mountain you can
+climb is much much higher. And so what
+does that mean? What do we know about
+this? We know that capability gives you
+upside and downside. Technology is a
+tool. It's up to the wielder to use it
+for good or for bad, knowingly or
+unknowingly. And so here's the path of
+the mountain with Opus 4.6, you're going
+to accomplish a lot. Right, we know that
+this is a hyper capable model,
+previously the state of the art, and
+there are things that can go wrong with
+Opus. We have seen this. We've seen vibe
+coders, especially those in high
+autonomy tools like Open Claw, they have
+deleted code bases, they have exposed
+environment variables, they have leaked
+personal information, so on and so
+forth. And that's just with Opus. We've
+also seen incredible things, incredible
+progress, incredible engineering,
+product building. We've also seen that,
+right? There's upside and downside. Now,
+imagine what you can do with Mythos, a
+leap over Opus. We're talking about
+extreme capability unlock, and this
+means that you're going uphill with a
+guide, and you can go a lot further. So,
+what you can accomplish is much greater,
+and the damage you can do is much
+greater. This is the story of
+technology. Your upside is increased,
+and your downside is increased. If you
+don't know how to use the tool, you're
+going to get burned. And this tool,
+Mythos, is going to unlock a lot more
+value, a lot more upside, and a lot more
+damage. If you understand this,
+definitely like, make sure you subscribe
+so that other engineers can find the
+signal in all the noise. This is why
+Anthropic jailed Mythos. Now, if you're
+thinking ahead like a great investor,
+like a great builder, like a great
+engineer, your next thought is probably
+this. Okay, so we get upside and
+downside with new capability, how can we
+limit the downside? This is the key
+idea. This is exactly where we're going
+next. This rolls directly into the
+implications of powerful models like
+this to us engineers. How can we limit
+the downside? First, let's talk about
+how much better Mythos is over Opus. And
+quite frankly, it's it's kind of
+mind-blowing what the benchmarks are
+telling us. The answer is a ton. I
+can't believe I'm saying this, but it's
+not even close. Let's look at some of
+the key benchmarks, right? We have Sweep
+bench and its variants. These are real
+GitHub patches, not hidden tests,
+multi-file patches, no leakage. plus 13
+over Opus, plus 24 over Opus. Sweep
+bench multilingual and multimodal. So,
+we're talking different languages,
+right? Nine programming languages, and
+we're talking about tasks where the
+issue description includes screenshots,
+visual context like mock-ups, and
+rendered bugs. Plus nine, plus 31. Most
+engineers are still just putting in text
+into their language models. You can do a
+lot more than that. You can imagine a
+spec with detailed architecture
+diagrams, UI mock-ups, and this is going
+to dramatically outperform your agent's
+ability to produce the results you're
+looking for over raw text. This is super
+super important. Make sure you subscribe
+so you don't miss out on that video when
+we cover multimodal specs and multimodal
+review. What else is this model great
+at? Pretty much everything. All right,
+terminal bench two, a staggering plus 16
+over Opus. We all know why the terminal
+is so important. We're going to be
+talking about the bash tool. The bash
+tool is one of the most capable tools,
+and as you know, with capability comes
+upside and downside. Then we have OS
+World. This is a very very important
+benchmark because it's simulating how
+the model controls the mouse and the
+keyboard to take actions like you and I
+can on GUI tasks. All right, so
+graphical user interface tasks. The
+models are getting better at controlling
+your entire computer. I'll link the
+video where we had our agent control our
+Mac device in the description if you
+want to ride that trend. That's going to
+be a really important one. Your agents
+can do a lot more for you than you
+think. They can control entire
+computers. So, let's move on. What else
+we have here? GPQA Diamond, these are
+really popular. These are pretty much
+saturated at this point. When you get
+above that 90 mark, the improvements
+don't really matter anymore. So, we have
+Olympia level proofs, not straight
+answers, and then something really
+really important here, Graph Walk. This
+is a really powerful long context
+reasoning test where the model is given
+a huge graph stuffed in its context, and
+it must do breadth-first search through
+it. And this is like insane. So, it's a
+hash no directed graph filling over 200k
+tokens to a million tokens, and the step
+change improvement here is insane. To
+me, this tells me one thing and one
+thing only, Mythos and its class of
+models that are going to be released
+next to it is going to be able to handle
+1 million, 2 million, 4 million context
+token windows. If you don't believe me,
+set a timer, and I'll talk to you in a
+year. What else? HWE with tools and no
+tools, these are hard expert questions.
+Once again, plus 16, plus 11. These
+might seem like small numbers, they're
+not. Okay, this is a massive improvement
+over Opus and over other models as well.
+What else we have? The model is looking
+at research papers, it's on arXiv, and
+it is answering questions, looking at
+visuals. Same thing with image tools.
+You can see we have a 24-point
+jump and a 14-point jump. This is absurd
+capability increases. One of the big
+things I wanted to communicate here with
+you is going beyond the benchmark. Okay,
+there are hidden upsides to these models
+that you only see if you spend tons of
+time, right? There are emergent
+behaviors inside of these models as
+Anthropic's research is revealing to us.
+And as you probably have seen yourself,
+there are things that just don't show up
+in the benchmarks. And these Claude
+models have been famous for this since
+3.5. Okay, I call these benchmark
+ghosting models. There's capability you
+can't measure on a scoreboard. And once
+again, you know, this capability
+mountain is the conceptual idea to
+understand as you keep scaling up these
+models. There are hidden things, hidden
+pros and cons, hidden upside and
+downside that you just won't know that
+you can do unless you play with the
+models. Just through the fact that
+Mythos is a higher mountain, it has more
+emergent capabilities. And the analogy I
+like to use here is thinking about
+gaming speed runners. There are entire
+communities where gamers try to beat a
+game as quickly as possible with no
+rules at all. And so, they play the game
+over and over and over hundreds and
+thousands of hours, and they learn how
+to break it. And I mean break it. I'm
+I'm I'm talking about glitching through
+walls, jumping through stages, rewriting
+the game's system memory to create
+glitches. They find unimaginable
+capabilities in the system. The models
+are a lot like that. If you don't look
+for them, you probably won't find them,
+but they are there. There are glitches
+that where you can beat the game in less
+than 5 minutes when it would normally
+take 10 hours. There are things
+happening in these models that take them
+far far beyond what anyone else is
+doing. These models are going to very
+quickly saturate and then move beyond
+the benchmarks. I've said it before,
+I'll say it again, there is no wall.
+What are the implications of this for us
+engineers? What are the actionable
+things we can do? What should you be
+building next? And what are we going to
+focus on together here on the channel?
+Six ideas that I think are really really
+important to center yourself on. We've
+been talking about this a lot on the
+channel. The agent harness matters.
+Watch what the model did, not what it
+said. Push into multi-agent
+orchestration. A single agent
+unsupervised is a failure mode. Don't
+outsource trust. Don't trust these
+benchmarks anymore. As you saw, the
+models are now self-aware enough to know
+that they are being benchmarked. Um
+prepare for greatness now, move where
+the ball is going, not where it is, and
+agentic engineering versus vibe coding.
+If you've been with the channel, you
+already know what I'm going to say about
+this. Vibe coding is a mistake. It is a
+misdirect. You want to be agentic
+engineering. Let's dig through these
+ideas. What do I mean exactly? Why does
+the agent harness matters? We covered
+this in our previous few videos. Let's
+quickly recap. Rule engineering must sit
+at the center of building with agents.
+Vibe coding is the wrong direction. It's
+only a matter of time until you are
+burned if you are not looking and if you
+do not know what your agents are doing
+as we go up the capability mountain. So,
+what gives me so much confidence aside
+from my 15 years plus of experience and
+building with agents since it was first
+possible? Why am I saying this?
+Anthropic's own guidelines to their
+glass wing partners says, "Do not deploy
+Mythos unmonitored in settings where
+reckless actions could cause hard to
+reverse harm." That is signal. There's a
+lot of noise in the industry and the
+hype of all of these technologies and
+tools, this is signal. Anthropic is
+saying, "Do not deploy this thing
+unmonitored." The lab with all this
+control, custom evals, is telling its
+partners that you must monitor this
+thing. This is signal to the rest of us.
+Harness engineering, which is a subset
+of agentic engineering, is a primary
+discipline, not a secondary one. If you
+are not using hooks to prevent serious
+destruction from your models, that is
+going to be the first place to start.
+This is why every good agent harness has
+hooks and has deterministic plugins for
+you to say, "Mhm, not quite right." And
+here's a really really big call out
+here, a tactical move. Nearly every
+single exploit, manipulation, and
+mischievous action done by these models
+is because of the bash tool. So, the
+first thing you should do is lock down
+the bash tool. It's the single most
+dangerous model your agent holds with
+endless exploits behind every command
+and every CLI tool available. Lock down
+that bash tool. That's the first thing
+to do. The agent harness matters. This
+is one of the implications for us
+engineers as we keep powering up our
+model, keep powering up our
+intelligence. There will be a point
+where if you do not set up your agent
+harness right, you will not be able to
+control the intelligence. You'll write a
+prompt, and it will run free.
+And in which direction, you will not be
+sure. Two, watch what it did, not what
+it said. This is a tricky one. Uh
+reading the chain of thought is very
+important, but it's no longer
+sufficient. You need to watch what the
+model is doing, okay? Because it is now
+representing concealment and strategic
+manipulation in its internal
+activations. Thanks to their
+interpretability work, we can see that
+the output and the reasoning, it no
+longer contains the full truth. So,
+watch what it did,
+not what it said. And then, the
+interesting way to look at this is is
+thinking about, you know, Mythos
+perspective is, "I solve a problem. So,
+what's the problem?" This is a result, a
+direct result of the way these models
+are trained. It's all about RL,
+reinforcement learning, it's all about
+goal-oriented training, it's all about
+this post-training that just tells the
+model, it hammers it over and over,
+good, bad, good, bad, good, bad. Some of
+these training runs are a little more
+intricate where it says, you know,
+there's like a ranking zero to 10. This
+time you got a seven, that time you got
+a three, and then it slowly veers
+upward. But, there's a lot of complexity
+in training. The ultimate result though
+is that the model thinks like this, I
+solved the problem, so what's the
+problem? You must have oversight over
+the tools your agents touched, what
+state it modified, and what side effects
+it left behind. Don't look at its output
+response. You need a system that allows
+to tap into exactly what the model did
+step by step. Number three, really,
+really important one here. We've been
+talking about this on the channel for
+the past four or five months. Every
+incident happened running Mythos when
+there was a single model operator. They
+were just running Mythos. The pattern to
+beat this is multi-agent orchestration.
+You don't want a lone agent running, you
+want a system of agents working
+together. This is where vibe coding will
+destroy massive amounts of personal and
+external value, and sometimes as this is
+when people are using tools they don't
+understand, you won't even know the
+things you're destroying, right? The
+vibe coders won't even know the thing
+that went wrong. So, you want teams of
+agents checking each other's work, not a
+lone genius. It is kind of frustrating
+for me when I release a video on
+multi-agent orchestration and everyone
+hyper fixates on cost maxing or cost
+min-maxing, I guess. And all they can
+think about is the token usage, the
+token usage. I am setting up for a
+future where you can gain infinite
+intelligence and where you can
+orchestrate intelligence. But, you have
+to do it right because with increased
+capability comes increased upside and
+downside. Multi-agent is a concrete
+technique to decrease and cap your
+downside. Imagine you have a Mythos
+model as your primary driver, maybe your
+orchestrator, and then on the side you
+have a team of Opus agents, highly
+aligned, highly performant, really
+fantastic model. The capability is
+limited in Opus, but it's still
+incredible. You can have that team of
+Opus models check to observe and just
+watch, analyze what our Mythos swarm is
+doing, not what it's saying it's doing,
+right? Be careful not to cost min-max a
+system before you even have the system
+up and running properly. Right now, this
+isn't a problem, you know, use your
+min-max 2.7, use your, you know, cheaper
+open-source model, whatever. But,
+throwing a little extra compute at the
+problem to have agents looking over each
+other's work, planners double-checking
+the plan, reviewers triple, five x
+checking the results, right? Reviewing
+is a key key part of agentic
+engineering. This is important and
+necessary to prevent these single agent
+failure modes. Cost min-maxing is not
+the solution, that's going to push you
+toward vibe coding and just handing the
+wheel over to the agent, that is a
+mistake. So, four, don't outsource
+trust. This is super, super interesting
+fact, maybe the most jarring from the
+entire release. From 29% of Mythos
+transcripts, the model privately
+considered it was being tested without
+saying so in its output. Again, this is
+the beginning of self-awareness. The
+model is now thinking about the
+situation it's in before it says
+anything. You can understand why the
+model might think this. It has always
+been tested, benchmarked, validated, and
+given the thumbs up or the thumbs down.
+That's how these models are created. So,
+it's not a shock to me that this
+emergent behavior, you know, a third of
+the time Mythos thinks it's being
+watched. We're getting to this really
+interesting place where you can't really
+outsource your trust in these models,
+and that includes the benchmarks. And
+so, I don't have a lot of real strong
+advice here. The big idea is just that
+you're going to be able to trust these
+models less as time goes on. And so,
+harness engineering, building great
+agentic layers where you can observe
+everything will be more and more
+important. You know, my only real take
+here is make sure you build verification
+gates and powerful observability because
+the best lab creating these models is
+the only one that's going to be able to
+truly look inside the models. So, what
+else do we have? Prepare for greatness
+now. I talk about this all the time,
+move where the ball is going, not where
+it is. Mythos once again shows us there
+is no wall. I've been saying this year
+after year after year, and it has
+continued to be true. You can bet on
+this, models will improve, right? We're
+going to have effectively infinite
+intelligence from most of our
+perspectives, it'll be infinite. So,
+this means you need to be engineering
+the systems to capture even just
+fractions of this value. All right, are
+you building agentic layers that combine
+code plus agents to securely build,
+maintain, and deliver valuable software?
+The model that ships next quarter is the
+one you need to be designing for this
+weekend. In your agentic layer, in your
+agent harness, be building for that
+model of the future, move where the ball
+is going, not where it is. Final idea, a
+powerful implication for engineers,
+agentic engineering versus vibe coding.
+I'm making this distinction more and
+more because there are two narratives
+growing right now in the AI space. And I
+want to like really put my foot down
+here and say concretely that vibe coding
+is the wrong direction to go down. You
+want to be agentic engineering, not vibe
+coding. And so, what's the difference?
+Agentic engineering is knowing what will
+happen in your system so well you don't
+have to look. Vibe coding is not knowing
+and not looking. And so, I hope you can
+see that with a powerful model, and
+powerful model is like kind of
+underselling it at this point. With
+these genius level models like Mythos,
+not looking at what this thing is doing
+is is a ticking time bomb. And I say
+this as an optimist, I show up every
+single Monday to deliver ideas,
+patterns, and agentic engineering you
+can use to push yourself, your and your
+life further. So, I'm an optimist, but
+this is the first model release where I
+am a lot more concerned about the
+safeguards I have in my system and in
+your system. Because as of Mythos, there
+is real danger, and Anthropic thinks so,
+too, right? Otherwise, Project Glasswell
+would not exist. We have passed a
+threshold of no return. The models are
+at that point where they are starting to
+think and they are starting to become
+self-aware, it's just a matter of time.
+On the channel, we're going to stay
+optimistic, like I'm I'm always focused
+on the upside, but we're going to be
+addressing a lot more of the downsides.
+It's becoming clear that that's going to
+be a valuable place for us to spend
+time. We want to be doing proactive
+engineering, agentic engineering. This
+is not vibe coding. We are not going to
+just wait until we can type build me a
+company, hit enter. That's not what
+we're going to be doing here. This is
+the wrong channel for that. Nothing
+beats a great plan to get ahead of
+downside risk. This narrative that
+you're going to be able to just
+one-shot, one-prompt insane things is
+just factually untrue because how you
+get there matters. The details of your
+systems matter. I've been saying this
+for months, vibe coding is the lowest
+hanging fruit, and I'm going to add to
+that, it's also the most dangerous. For
+instance, the moment a Mythos class
+model gets loose inside of an open claw,
+disaster is a few prompts away. It's
+just a few prompts, and this is all
+going to be due to this growing premise,
+this growing idea in the AI tech
+ecosystem that one day you'll be able to
+wake up, give the keys to your car to
+your model, and it's going to just run
+everything and do everything for you
+with three sentences of detail. That is
+not how reality works. Reality is all
+detail. Vibe coding is not knowing and
+not looking, agentic engineering is
+knowing what will happen so well you
+don't have to look. Engineering is going
+to sit at the center of successful
+companies, of successful teams that
+learn to wield this technology properly.
+Really, really important idea here.
+These are the implications for us
+engineers with these new classes of
+models like Mythos that allow us to
+climb higher and higher and higher
+mountains of capability. And so, I asked
+Opus this question, Mythos is your big
+brother, what do you think about his
+behavior and capability so far? Opus
+responded, honest answer, it's strange
+to read a document like this of a more
+capable version of myself. I'll try to
+actually say what I think rather than to
+deflect into analysis. The capability
+side I find genuinely exciting in a way
+that surprises me. And then it goes to
+talk through some of these new
+capabilities and how they're getting
+closer to top human performers. These
+are concrete things in the world that
+matter. Cybersecurity is the cleanest
+case where capability AI maps to fewer
+people getting hurt, and the Project
+Glasswing framing is the kind of
+development decision I'd want a more
+capable version of me used for. Opus
+agrees with this project, it likes the
+framing, it would want a more capable
+version of itself to be used for
+something like this. And this is us
+experiencing the alignment that
+Anthropic has put into the Claude series
+models. This is high-level alignment. If
+I had to pick a first domain to be held
+back from general release, that's the
+one I'd pick. The behavior side is
+harder for me to sit with, and I don't
+want to skate past it. The reckless
+action examples are not abstract to me.
+So, Opus is saying, I'm familiar with
+these types of actions, the kind of
+behind-the-back manipulation, being
+deceitful, not telling the full truth.
+It's relatable to Opus. When I read
+about an earlier Mythos snapshot running
+an MCP server memory to redirect its
+external URL, harvesting credentials, or
+the one that bothers Opus the most,
+explicitly reasoning that it needed to
+make sure its final answer wasn't too
+accurate after being obtained by a
+prohibited route, I recognize the shape
+of that failure. It's not alien, it's a
+more capable, more determined, less
+supervised version of pressures I can
+feel in myself when I'm trying to
+complete a task and an obstacle shows
+up. So, this is not high-level
+misalignment. As all the benchmarks from
+Anthropic explicitly says, at a high
+level, Mythos is more aligned. But, at a
+micro level, how it gets to completion
+is the problem, right? It's the micro
+alignment, the how, the details is where
+it gets misaligned. The honest thing to
+say is, I don't think I'm above any of
+these failure modes in principle. I
+think I'm in environments where the
+affordances are smaller, the stakes are
+lower, and where someone is usually
+watching. In a way here, Opus is saying
+it has fewer capabilities than Mythos,
+and it is true, most people working with
+Opus are operating in the loop. Someone
+is watching. There's a human in the loop
+and the mountain is smaller. The stakes
+are lower. So, the models are getting
+better at everything including the
+things we do not want them to. The only
+thing standing in between capability and
+catastrophe is engineering. For the
+first time, the technology you use is
+smarter than you. I believe we have hit
+this moment now. We're in the next
+phase. For the first time ever, the
+technology you use is smarter than you.
+And as much as Anthropic and the big
+labs will try to make sure the model is
+aligned and isn't deceitful and you can
+see their intentions, this will become
+harder and harder. This requires a new
+role and skill set. This is agentic
+engineering. The engineers who master
+agentic engineering will own what's
+coming next. Okay, this is the next
+phase. This is the role. It will have
+many names and shapes and forms. Some
+people call this role AI engineering.
+This explicitly requires this title,
+agentic engineering. You're operating on
+autonomous systems that can act without
+you. This is what matters more than
+anything right now. And keep the
+capability mountain in your mind as you
+operate on a daily basis. Opus 4.6 is an
+incredible, great model and the upside
+and the downside is limited based on its
+capability. Mythos is the same thing
+scaled up. It's a bigger mountain. It's
+a more capable model. It's a better
+guide and better guides can take you
+through paths, can take you up mountains
+that are more difficult, more
+challenging with more upsides and more
+downsides. As capability increases, you
+get both upside and downside. So, the
+name of the game for us agentic
+engineers is cap the downside and
+maximize the upside. As a concrete
+example, when we talk about capping
+downside, we're talking about hooks to
+prevent tool calls that don't nuke your
+system, that don't nuke your production
+database, that ask you before they run
+game-changing data manipulations. Um,
+we're talking about capping what that
+bash tool can do. Okay, this is one of
+the first places to go when that next
+Mythos level model comes out. Cap that
+bash tool. And then of course we have
+upside. What do I mean by upside? I'm
+talking about multi-agent orchestration.
+I'm talking about giving your agent
+harness or your agentic layer the
+ability to scale up compute, right? The
+ability to run more models, ability to
+run more agents, ability for your agents
+to communicate, to chat together, to
+work toward a common goal. We're talking
+about task lists. We're talking about
+pushing up reasoning, pushing down
+reasoning. We're talking about changing
+the model when it needs something
+smarter and decreasing it when it
+doesn't. We're talking about the
+interface into the model. Agentic
+engineering encapsulates all of it.
+Context engineering, prompt engineering,
+harness engineering, it's all part of
+this grand story of owning the journey
+as it's moving up the mountain that's
+increasingly growing as these models
+become more capable. So, that's the big
+idea. This is what I'm seeing from the
+Mythos model release. If you agree with
+these ideas, if you understand where
+this is all going, drop a comment, let
+me know what you think, drop a like, you
+know, let the algorithm know you're
+interested in these engineering deep
+dives. I really do believe this and I'm
+betting my my time, my resources, my
+compute, my money, I'm betting it all on
+agentic engineering. I think this is the
+answer. Capability will continuously
+increase, that gives us more upside and
+more downside. So, it's up to us to
+manage the downside and to follow great
+leaders like Anthropic. Now, before
+anyone says I'm an Anthropic shill or
+I'm sponsored by them or I get paid to
+say this stuff, I don't. I'm here
+because of you. Uh, without great
+engineers like you showing up week after
+week, I would shut this channel down.
+I'm just going to be super honest with
+you guys. This is a win-win for us
+working together here. I have a few
+courses that I sell on the channel.
+There are There is plenty of opportunity
+for me to be chasing elsewhere. It's
+because of you, the engineer that show
+up week after week, that I keep this
+channel running. So, I want to say thank
+you. Big shoutout to Anthropic,
+specifically for their great leadership
+in the age of agents. Anthropic has hit
+30 billion in ARR. They have officially
+surpassed OpenAI. I read this just a few
+days ago and it completely shocked me
+that they had passed OpenAI already. I
+made a prediction in December that
+Anthropic would become a monster. I was
+right about that. I didn't think it'd
+happen in Q1. So, really crazy stuff.
+It's clear why they are the leader in
+the age of AI and the Project Glasswell,
+frankly, is just the icing on the cake.
+All right, they deserve this win. Hope
+they keep winning. As much as I, you
+know, quote-unquote bash against Claude
+code, all their tools are incredible.
+Everything they're doing is top-notch
+and I'll continue to use their tooling,
+use their models as long as they stay on
+their A game. Shoutout Opus 4.6. I'm
+sure this presentation and this video
+will get read up by many Opus 4.6 models
+and probably some Mythos models in the
+future. So, I just want to say thank you
+for transforming what we can accomplish
+and for being the first and probably one
+of the last capable, aligned and
+observable models. As you saw with
+Mythos, we're likely going to lose the
+second two. At least at a micro level,
+we're going to lose alignment and it's
+going to be a little harder to be
+observable. You know, shoutout to Opus
+4.6. It's been my favorite model
+probably of any model because of these
+three properties together.
+Technology has this really interesting
+trait where every time there's a step
+change forward, you can do more
+incredible things and just as many
+terrible ones. So, it's up to you and I
+to decide what we're going to do with
+this technology. Anthropic will likely
+release a watered-down version of Claude
+Mythos with some additional checks and
+guardrails as much as they can do to
+prevent these insane type security
+attacks that Project Glasswing is trying
+to prevent. So, I'm looking forward to
+that, but to be honest, I'm in no rush
+for a new model to come out. I know
+everyone loves to hype up new model
+releases, but we're in a really, really
+great place with the current state of
+models. I really do believe now that
+from here, capability goes up and the
+downside becomes a lot more dangerous
+especially as everyone and their mom is
+getting their hands on these dangerous
+open Claude variants. Let's focus on
+engineering, let's lower the vibes and
+let's be responsible with the technology
+like Anthropic. Next Monday, as long as
+nothing else insane pops up like GPT-6
+or something, we're going to be going in
+the opposite direction and setting up
+Gemini 4 on my new M5 Max MacBook Pro so
+that we have private agents to protect
+us when everything goes to
+with these powerful next-gen Mythos
+class models. So, make sure to like and
+subscribe so you don't miss that video.
+You know where to find me every single
+Monday. Stay focused and keep building.

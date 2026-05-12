@@ -1,0 +1,471 @@
+here are three AI coding assistant
+prompt keywords you can use for fast
+concise AI powered engineering let's
+start with our first keyword mirror I'll
+open up cursor inside this module we
+have a function here click on navbar
+we're passing in a UI variable and you
+can see here based on whatever UI is
+passed in we run arbitrary code we run
+this add action function and then we
+open up this modal here so let's say
+we're adding a new feature and and we
+want to add a new upgrade button to our
+Navar functionality using our AI coding
+assistant and the mirror keyword we can
+get this done in just three words using
+this oneshot prompt I'm going to start
+an inline completion And all I'll say
+here is navbar upgrade mirror navbar
+community and that's it I'll hit enter
+and let it
+generate so as you can see here we coded
+that faster than never before it
+mirrored the community and everywhere
+you see Community here it replaced it
+with the upgrade keyword which is
+exactly what we wanted we now have that
+action we're mounting that new modal and
+then we're opening it in a single one
+shot prompt with three words we've
+replaced writing this entire if block it
+might seem like a small Advantage but
+over the course of an entire day of
+engineering an entire week you can see
+how this type of Rapid use of our AI
+coding assistant will Stack Up massively
+over the long term aot allowing you to
+do much more in less time let's look at
+another example of how we can use the
+mirror keyword here's another logical
+hook that lets us operate on table
+definitions you can see here we have a
+simple computed property that is just
+returning all the names of our tables
+let's go ahead and create a new property
+called column names we'll do the exact
+same thing using our mirror keyword so
+we'll come in here and we'll say column
+names mirror table names and just so our
+AI coding system has the context of our
+types we're going to add a reference to
+that file and so our table definitions
+is inside of render types and we'll just
+make sure that that is available to our
+coding assistant inside this prompt
+we'll hit
+generate perfect and you can see here it
+generated a 2d array for each table we
+have a list of the column names mirror
+is a very very powerful keyword you can
+use it to duplicate existing patterns
+variables functions and and even entire
+files so let's move on to our second
+keyword variable a massive component of
+programming is creating State creating
+variables being able to create and
+manipulate variables quickly gives you a
+massive Advantage as an engineer let's
+go ahead and flatten our column names
+and get them out of this 2D array here
+so to activate the variable keyword
+we're just going to type const this lets
+our AI coding assistant know that we
+wanted to create a variable now the
+question is what type of variable do we
+wanted to create so what we'll say is
+Con flat column names and that's
+it perfect so just with this single
+prompt here C flat column names it was
+able to infer exactly what we wanted the
+key with this co-pilot prompting keyword
+is to make sure that you're
+communicating exactly what you want
+through your variable name let's look at
+another example right so we'll go ahead
+and accept that so let's create another
+variable we'll say cost flap unique
+column
+names just by adding one additional
+keyword our co-pilot was able to
+identify that we want a unique set of
+column names and you can see here this
+is just coming back as a single list now
+we'll go ahead and accept this change
+it's all about communicating exactly
+what you need to your llm to your AI
+coding assistant and using the mirror
+and variable keywords can help you write
+your code in the blink of an eye I also
+just want to shout out you know if
+you're on a massive code bender and
+you've been you know coding for 30 days
+straight across hundreds of files it
+really does help to see variable names
+like this in an interesting way using AI
+coding assistance efficiently by
+prompting exactly what you need by being
+really detailed with your variable names
+with your function names it forces us to
+be more concise and precise without
+digging into the implementation details
+so much that really goes along with an
+idea a kind of principle that we hold on
+this channel in the age of AI and llms
+and AI coding assistants we want to be
+moving up the stack we want to be
+prompting more we want to be coding less
+we want to engineer more like a product
+manager or a ux designer where we have
+higher level control over what we want
+to happen versus how it happens tons and
+tons of code has already been written
+all the llms have it inside of their
+training set now it's all about learning
+to design the right prop and get the
+results out as quickly as possible and
+that's what these keywords help you do
+especially our next keyword but before
+we move on to the next keyword that's
+going to add another powerful tool to
+your co-pilot prompting toolbx I just
+want to stop and say you know thank you
+so much for all the support we are
+nearly at 10K Subs which is absolutely
+insane for a deep Tech Channel like this
+where we don't just talk about the
+latest AI news hype cycle we don't
+heavily edit on this channel we keep it
+pretty bare and we really try to avoid
+heavy clickbait without true follow
+through there are more than enough
+channels to do that from the very
+beginning almost 100 videos ago posting
+one video every single week I wanted
+this channel to be different I wanted
+this channel to be real something that
+you could go to to learn see what's
+going on see how you can take action on
+things right here we think plan and
+build we aim to use the best tool for
+the job we dig into concrete examples we
+use the latest great AI tools like AER
+and cursor and we use these to build
+real software right real production
+grade software faster than ever I just
+want to say thank you we are betting big
+on becoming agentic Engineers that use
+the best AI tooling to build software
+that build software on our behalf and
+using AI coding assistant is part of how
+we get there faster it's part of how we
+iterate through our products it's part
+of how we deliver value to our own
+personal work our own personal tools and
+of course for our jobs and for our
+career so anyway I just wanted to kind
+of you know reiterate what the Channel's
+all about and I just want to say thank
+you so much we're almost at 10K Subs
+it's really incredible to say that we're
+almost at 10K we'll be here every single
+week giving away something valuable for
+your engineering for your engineering
+career now let's go ahead and talk about
+the next AI assistant prompt keyword
+function so just like variables
+functions are a critical aspect of
+engineering that enable you to
+encapsulate blocks of code into reusable
+modular pieces with AI coding assistants
+the function keyword gives you the
+ability to generate entire functions in
+a fraction of the time let me show you
+exactly how so just like the variable
+keyword we're going to start with an
+endline prompt here with cursor and
+we're going to write this function out
+piece by piece detailing exactly what we
+want to have happen right so I'm going
+to type function G tables matching
+string and then I'm I'm going to specify
+the parameters here so I'm going to say
+to
+match and then I'm going to say the type
+again that's a little redundant but just
+to be super clear and then I'm also
+going to specify the return timee right
+so stir and then as an array right I'm
+going to kick this
+off something really important to
+highlight here just by reading the
+definition of this function you can
+essentially guess with really high
+probability what exactly this is going
+to do and that is a really really
+critical aspect of one shot prompting
+with with your llm can you the engineer
+writing the prompt know what should
+happen based on your prompt if the
+answer is no you should probably rewrite
+your prompt right but so just like that
+we wrote this function you know we're
+going to get tables matching the string
+so we're looking through this list of
+table definitions looking at our table
+names and if our table name includes the
+string we're going to filter and then
+we're going to return the table name so
+this is pretty good and in some cases
+this is what you would want but what we
+actually want is we want to return any
+table that is inside of the string to
+match and this is going to happen right
+this is why it's so important that your
+AI cing assistant can iterate if we h
+control Z here we can get back into the
+state where we writing follow-up
+instructions on this existing line so we
+can take this function definition and
+say filter table name is inst to
+match nice so this is more on the nose
+we're actually reusing the table names
+computer property up here and we're
+returning the table name that is
+included in the string so we'll accept
+this change and it's really crucial that
+the AI coding assistant can iterate
+because we'll make mistakes it'll make
+mistakes and we can resolve it just like
+that so this is really great really
+powerful let's go ahead and push this a
+step further let's create another
+function and add some more details to it
+right so let's say we want to make sure
+that our let's say we want to make sure
+that we don't care about our casing
+right we can do the exact same thing
+here and with the function keyword we
+can actually be more concise so let's
+say git tables matching string and then
+we'll also add no case we'll say the
+same thing string to match we'll specify
+string and then we'll also just go ahead
+and specify the return type once again
+and we are taking a little shortcut here
+as you saw we're using strr versus
+string our llm is going to know that it
+should type out the full string here we
+were able to compress our oneshot prompt
+even further by dropping the function
+and adding some more details into the
+function definition so that it knows
+exactly what we're looking for so let's
+fire this
+off perfect so exact same deal and it
+added the two lower case for us if you
+wanted to you could just iterate
+directly on this function this is a
+really really important really Mission
+critical tool in Your Arsenal as you
+know writing functions is a huge part of
+engineering let's push it one step
+further up till now we've been using gp4
+125 for this next example we're going to
+use what has been shown to be the best
+inclass model we're going to be using
+Cloud 3 Opus so it bump the model you
+might be thinking as we're working
+through this you know these are really
+simple function examples you're totally
+right about that we're still saving a
+lot of time but these have been kind of
+simplified more cherry-picked examples
+right these are all things you can run
+in you know two or three lines it's
+definitely giving you a huge speed
+Improvement let's push our function
+keyword prompt even further to generate
+much more complex functionality let's
+say I want to enhance this function
+where we're passing in a string to match
+and returning our table names we want to
+match table names on a string but we
+also want to match on individual column
+names right so just like we did up here
+we have our column names available so we
+want to match on that as well and we
+also want to run a leevin distance on
+every one of those possible Fields so
+both our table names and our column
+names you can think of lene distance as
+just a way to match how similar a string
+is so let's go ahead and prompt that out
+using the function prompt keyword so
+we'll say G tables matching string and
+we're just going to leave it with a more
+simplified name and then we'll specify
+some parameters here we'll say string to
+match just like as before we'll specify
+the return type and then what we'll do
+is we'll start creating these bullet
+points where we specify more details
+about our function right so we'll come
+in here and we'll say case and sensitive
+so I'm hitting you know shift enter
+there to not fire off the prompt yet but
+add some new lines I'll say also match
+column names but only return parent
+tables and then lastly in the things get
+really powerful I'll say lein distance
+string one string two and then I'll say
+distance equals 1 so we're just going to
+set a default and so let's fire this off
+let's see how Cloud 3 Opus performs
+here so it's doing some thinking
+interestingly it automatically bumped
+the function name because the previous
+function name was already taken up here
+so it's being very context aware and you
+can see here it is rolling through this
+it's using this new Lev steene distance
+function which doesn't exist created
+that and yeah yeah this looks really
+really great so it created a brand new L
+scene distance function and let's just
+quickly read through this okay nice and
+it's doing the deletion insertion
+substitution here and then it's checking
+the max distance that we're passing in
+which is going to be one so this is
+pretty incredible we have a top level
+function prompt right where we're
+specifying what exactly we want to
+happen there's enough information inside
+the function name the parameter and the
+return type for our coding assistant to
+get started we're then specifying
+details of the function right so we're
+saying case and so you can see here we
+have all these lowercase checks perfect
+we're saying we also want to match on
+our column names you can see here We're
+looping through the column names as well
+which is perfect so it picked up on that
+type that's great and then it's running
+the leevin distance which doesn't exist
+so it sees that it still prototypes the
+code out and then below Cloud then
+builds out this Levenstein distance
+function I've been spending a lot of
+time pushing these aiing assistance to
+the Limit seeing how much I can get out
+of them and these three prompt keywords
+are a majority of the prompts I'm
+running right now when I'm using AI
+coding assistants I wanted to share this
+with you because there's a ton of value
+here as you can see when you build out
+the right prompts when you give it the
+right context and when you're concise
+with your prompts not giving it the
+wrong information not giving it too much
+or too less information but just what it
+needs it's able to perform really really
+well I got to say I've been using and
+playing around with Claude Opus and it
+is incredible just like all the
+benchmarks and just like the llm
+ecosystem is saying the Opus model is
+outperforming gbg4 for now we we all
+know that open AI is coming out with
+their next Generation model this year so
+right now CLA 3 Opus is in first place
+but we know that that's likely to change
+it's great to see competition with these
+top- end bottles as we've explored today
+you know your AI coding assistant is
+much more powerful than you think it is
+especially with the keywords mirror
+variable and function since they offer
+you powerful shortcuts for engineering
+tasks they can truly transform the way
+that you write code these tools not only
+save you time but enhance our ability to
+think clearly about Problems by defining
+variables and functions clearly enough
+for a coding assistant to understand
+them which interestingly has this side
+effect of being more readable for us
+when Opus created this brand new
+function name because it saw the
+conflict here that was a great simple
+addition right get tables matching
+string fuzzy that's a legit function
+name that we would actually use in a
+production code base right so this is
+really great L machine distances here
+really incredible to see that come out
+of a single prompt coding assistants
+allows to focus more on designing
+Solutions rather than getting bogged
+down by implementation details
+especially when you're prompting code
+that's already been written like the
+line distance your AI coding assistant
+is going to have that information all
+you need to do is prompt it the right
+way there is a really important medium
+with AI coding assistance let's go ahead
+and contrl Z back to that prompt there's
+a really important kind of Middle Ground
+that you want to hit right if you're
+typing too much especially when you're
+writing these shorter functions and you
+find yourself just writing this like big
+massive prompt you know three sentences
+one PA paragraph long prompt it's almost
+like you should just go ahead and write
+that code anyway right which you don't
+want you don't even want to be in that
+position so using these keywords and
+there are definitely other keywords that
+can be utilized here mirror variable and
+function are just the three that I found
+to be the most useful in the most use
+cases and as we discover them I will
+definitely share them on the channel you
+want to be in that middle ground where
+you're giving the llm enough information
+and enough context to solve your problem
+but you also don't want to be spending a
+ton of time prompt engineering and
+that's where these co-pilot one shop
+prompt keywords are especially effective
+so just as a recap use mirror when you
+want to replicate patterns use the
+variable keyword with a more verbose
+name when you want to Define variables
+and properties and then finally use a
+function keyword with parameters and
+with return type in a function prototype
+like syntax to give you a powerful
+shortcut for your engineering tasks if
+you need to push the function keyword
+even further use the bullet point syntax
+just like we did here where you can get
+into this recursive scenario where you
+can also inside your bullet points
+Define additional function define
+additional variables and even use the
+Mir keyword in here as well I'll see you
+in the next one where we'll continue to
+Deep dive into the best AI coding
+tooling and techniques available that
+make us better engineers in the age of
+AI don't forget to like subscribe and
+hit the notification Bell to stay
+updated let's blast through 10K Subs
+stay focused keep building and I'll see
+you in the next
+one

@@ -1,0 +1,152 @@
+Fridays are for customers. Every Friday,
+each one of us picks a task and tries to
+ship it to make someone really happy.
+Let's see what we got up to.
+>> Hey, dead coder. Um, thank you for the
+bug reports on the API key dialogue not
+being scrollable. Um, I've gone ahead
+and pushed the fix. So now you can add
+as many environment variables as you
+want. And uh, thank you.
+>> Did you know that when you specify the
+role in a prompt, you can use cache
+control to control caching with entropic
+models? Well, you can, but as the user
+statico pointed out, our llinter
+actually didn't know about this. And if
+you try to use this feature, you will
+get an annoying llinter warning. We try
+to make our tooling as helpful as
+possible. So, I patched this bug. And
+now, if you use the cache control
+parameter, no llinter warning. Thank
+you, Statico. Hey, firstly Ben Epstein,
+I wanted to thank you for reporting this
+bug where it was taking you forever to
+get the request API out of uh BAML uh
+modular API. [music] And what we noticed
+was even in time it this was happening
+all of the time. It turned out that this
+was due to a bug in the vertex API where
+we weren't actually catching the
+credentials and we pinged Google every
+single time to get a new token. I've
+patched that bug for you since. And now
+when I run this code, as you can see,
+getting the mean after the warm-up time
+is incredibly fast and you should have
+no more issues. This is going to make
+life better for everyone else that use
+the vertex. Thanks, Benpstein. Hey guys,
+I want to share an amazing feature that
+we have today that you can do with
+Prompt Fiddle. Prompt Fiddle is this
+playground that we have that you can
+embed into other websites and blogs. And
+you can see here a little demo. Here's
+the playground. You can just hit run and
+it'll run the BAML code right in your
+browser. [music] And so why do we have
+this? Why it reduces friction to use
+BAML and it can showcase the capability
+without us having to do all the work.
+Let's say somebody else is going and
+putting this onto their website. Other
+day somebody came to us and asks uh we
+have uh 2,000 Medium followers and we
+want to write a article and we want to
+embed a playground uh directly into
+their blog posts. [music] So today this
+is what happens. prop preview coming
+soon. It does not work. Now it works.
+Happy bambling.
+>> So in this video, we're going to take a
+look at the new APIs added to the type
+builder because some users have been
+asking for specific methods like remove
+property, list properties, and so on,
+which are not currently available on the
+type builder. We're going to have the
+remove property method, which will allow
+you to remove any property that you've
+added to an existing class or to a new
+class in in both of them. So, as I was
+saying, we have remove property. We also
+have list properties, which gives you a
+key value object of all the properties
+that you've added so far. And then we
+have a simpleclear method that basically
+gets rid of everything you've added uh
+in this case to the user class, right?
+Same thing for um newly added classes.
+So, this will allow you to have some
+more control over the type builder. It's
+not just add stuff to it. Now, you can
+actually remove things from it. So it's
+a little bit more flexible.
+>> I'm excited to announce that we have
+shipped a new experience, an agentic
+experience for navigating and exploring
+the BAML documentation called Ask BAML.
+This is live today. You can go to
+docs.boundaryl.com.
+Try it out. You can go and ask it
+questions like what is an alias? And it
+will hint. It'll do exactly what you
+expect
+out of an AI search assistant and it'll
+give you a customized answer to your
+query. It'll automatically navigate you
+to the documentation you're looking for.
+You can ask it questions like tell me
+about the difference between field and
+block attributes, field and class
+attributes. It'll return the same
+answer. It'll automatically send you
+here. It'll give you a short summary as
+appropriate for your question.
+And instant search is still function
+perfectly functioning. So you can search
+alias, you can search attributes,
+dynamic, whatever, and you'll get all
+the autocomplete and it still allows you
+to actually like see the documentation
+if there's like something on the page
+that you're looking for. We really hope
+you enjoy this. Please do let us know if
+you run into any issues with this. We
+are always on the Discord and we are
+paying constant attention to it. Thanks.
+Hello American thinker and Andrew D on
+Discord. First of all, thanks a lot for
+reporting this bug where you all were
+not able to set pamel log using uh pamel
+options and even process.env in the case
+of TypeScript. I thought I'll record a
+quick video about how I fixed it and how
+you actually uncovered a big bug in our
+logger itself. So jumping straight to
+the PR, I started up with writing some
+integration tests and once I wrote some
+integration tests, I was able to
+reproduce the same buggy behavior myself
+and then I wrote some unit tests for
+logger to figure out where to to narrow
+down where the bug was. Actually plot
+code helped me a lot with this to write
+tests and to narrow down the problem.
+And once I knew where the problem was, I
+was able to fix it. And the fix
+basically was to read and update
+environment variables from the hashmap
+which is passed from the language
+runtime to bam's runtime. And previously
+the logger was using std env. So now
+that's all fixed. And I think this is
+also shipped in the latest release which
+is.203.
+And the best part of fixing this bug was
+actually getting this message from
+American Thinker here where they were
+really happy with the fix. So, I hope
+this helps you. The bay.

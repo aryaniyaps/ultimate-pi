@@ -1,0 +1,333 @@
+Otherwise, if
+>> Oh, were we not recording today?
+>> I think probably someone else joined
+with a noteaker or something.
+>> Awesome.
+>> Yeah. Um, if we do this then now the
+transaction is actually going to
+continue and I can go do dupes. Now,
+this might also be kind of annoying. So,
+I'll do the dumb thing and I'll just say
+like TXNS equals
+get TXNS
+without
+dupes. I'll just pass in the old TXNS
+and the new TXNS. pass through the
+model, give it context that these are
+coming from some new pages that might
+have overlaps from the previous page and
+then get out a new full array from the
+model
+and now we have our answer.
+>> Um, and this is only if I actually
+continued from a previous page. Uh,
+otherwise I wouldn't do it. Uh,
+otherwise I would just append everything
+all there on its own. And now I' have
+built a pipeline that is pretty good at
+extracting all this data.
+Um, before I get into it, any questions
+for people uh, as we're doing this? Does
+this kind of make sense? Like the
+process that we went through of all the
+way originally trying the PDF raw didn't
+work. Figuring out how to go do that.
+Well, we're going to apply some filters
+and only find pages with actual
+transactions for every single subsequent
+step. Then we're going to go ahead and
+solve the biggest problem, which is
+headers and footers. Get rid of that.
+And then we're going to solve the next
+big problem, which is data breaking,
+having page breaks. and continuing that
+down with a similar problem where I just
+ask an LLM, do these pages have
+continued data or break points? If the
+LM says yes, I do some special stuff
+like merge the image into a new image or
+paste both images in.
+>> Um, I'll pause the questions.
+>> Yeah, I mean this approach makes sense.
+Um, I'm trying to restrain like the
+receptive field of of an LLM basically.
+>> Um,
+>> I'm just wondering if like there are
+pretty good OCR models that do bounding
+box detection. Um, so would like
+would it make sense to
+restrain the field even more just by
+using a bounding box of the line item
+instead of trying to like do this the
+this page magic?
+You can try that. In general, what I
+have seen with bounding box models is
+that they're generally worse than LLMs
+at a lot of things. Um, so like it's the
+same as like using an OCR model instead
+of an LLM. On average, you're probably
+right. It might work, but like what I
+have seen in practice that the LM just
+does a much better job. I think LM can
+do more than you think. Um, but they
+just need a little bit more stability to
+help with them. So like if we get rid of
+all the transaction data, I think that
+like you you're definitely right. you
+will get that transaction pulled out.
+But I have found very very few bounding
+box algorithm that'll actually detect
+like every single bounding box on this
+correctly because the semantic meaning
+of a bounding box here is very
+different. The semantic meaning of a
+bounding box here is like this whole
+thing.
+Good luck getting a bounding box to give
+you that shape.
+That's just not going to work. What the
+batting box algorithm will do is they'll
+give you this one and it'll give you
+this maybe if you're lucky and then I'll
+give you this
+and then I'll give you this
+and now you're still stuck in a world of
+pain of connecting all this stuff
+together and that is a really really
+really really hard problem. This is why
+I think the math approach didn't really
+work and why like training models end to
+end would ended up being the answer
+because the math approach would connect
+all these together. Can you do this?
+Yes.
+It will just take more time, more tuning
+and more correctness to go do this
+>> and it will work on a less diverse set
+of data and inputs. The reason that I
+shared the header technique is not
+because I think that's one of the best
+techniques, but because there's a level
+of standardization that I know is true
+in headers,
+it's like almost definitively true in
+headers.
+>> And so why not give yourself the extra
+1% by just forcing the model to ignore
+everything there basically.
+>> Exactly. And this is only after finding
+out that like in in the case of
+financial data like headers are like a
+big problem. In the case of medical
+records, headers are a big problem. uh
+the model just gets like confused by a
+bunch of like numbers and stuff at the
+bottom. Uh is kind of what we found.
+It's like like these numbers end up
+hurting the model's performance a lot
+more. Uh passing in a page like this
+hurts the model's performance a lot
+more. So like just like
+removing extra context from the model
+does help that it doesn't need for sure,
+but I also don't want to accidentally be
+stuck in a world of pain where I have to
+go and find all these weird edge cases
+myself. I want to do the simplest thing
+that takes almost no code that I can go
+vibe code up that gives me that 1%. It's
+a time to ROI problem over everything
+else. Does that answer the question, AJ?
+>> Yeah, it does. Cool. No, that makes
+sense. Thanks.
+>> Yeah, of course. Uh VJ, you got a
+question?
+>> Yeah, I I had a similar scenario
+previously when we were processing
+invoices. Yeah,
+>> this is pre-LM days when we were all
+building RPA boards and automations and
+stuff.
+>> So, we had different uh invoices coming
+in from different vendors and we were
+trying to build these automation
+pipelines
+uh and as as you can imagine like a
+large enterprise has so many vendors and
+each vendor might have their own format
+for invoice and headers and stuff and
+they have their own different sizes. So
+what we ended up doing is we we again
+took the uh paro principle there. We
+took around 80% of the uh invoices which
+had like five or six formats and try to
+automate that another another 20%
+uh sort of either now you could say
+those are human in the loop but those
+are processed manually.
+uh I think that approach might be
+applicable here as well where let's
+let's imagine if you have a repo of a
+million records historically you want to
+process your entire data bank then uh
+then I think you'll have to adapt these
+pipelines using that uh uh approach as
+well correct exactly so what I would do
+if I really building this pipeline out
+from like scratch on my own is I
+actually wouldn't build headers and
+footers out on every single process what
+I would do is I would just save this per
+type of vendor that's coming in. Do a
+quick extraction of like what vendor is
+this like Chase, US Bank or like the top
+500 banks that exist.
+save PDFs
+together
+and just like have that saved forever
+and then literally every single week
+pull one% of my pipeline through this
+script to see if the header changes
+dramatically and if it does put a human
+in the loop in that process and then
+once I put a human in the loop in that
+process I will basically just go ahead
+and um solve um like validate the data
+that it's doing is not randomly a header
+and footer because it's financial data,
+I don't accidentally want to lose
+something critical.
+And that's kind of how I would solve
+this problem like more long term. I do a
+hybrid of exactly what you were
+repeating, Vay, which is like specialize
+for
+um specialize for um specific vendors
+and as much as possible and then the
+other 90% just get slightly worse
+quality or other 10% get slightly worse
+quality.
+>> Correct.
+Everyone that's listening should 100% do
+that for as much of their pipelines as
+they can. It's like you drive really
+high quality for u certain vendors that
+you know are well understood and like
+represent 80 to 90% of your data and
+like sacrifice some lower quality on
+10%. You have to understand that as a
+part of building your AI pipeline.
+um
+>> where sorry if I can have a follow-up
+question where I have difficulty in
+extracting since we are talking about
+multimodality
+uh is extracting legal clauses for
+example I have a use case where I'm
+building uh extracting contracts like
+vendor contracts vendor clauses those
+are so random and they're defined per
+use case per vendor one vendor can have
+100 contracts which with you know
+different contexts
+So it's so complex to extract these
+legal clauses that uh the the I mean
+writing EAS for that is is just a
+nightmare for me. What I would recommend
+for a scenario like um abstract
+scenarios like legal clauses where it's
+not even concrete what is a legal clause
+or not is I would honestly just go and
+write take 50 documents and by hand pull
+out what you would want to pull out and
+then see if you can semantically
+understand them. So I think a similar
+problem that we worked with a company on
+was around SEC violations like detect
+SEC violations from like emails. That's
+a really
+>> this was our uh policy to prompts
+episode that was like the example we did
+>> right.
+>> And the thing is like instead of trying
+to solve all of SEC in one prompt
+because models can't do that today maybe
+they can tomorrow but not today. Um
+we'll pick one policy and we'll make it
+work on that. Then we'll pick another
+policy make it work on that. It's
+exactly the same as an invoice problem
+where you instead of specializing per
+vendor, we take the general thing of
+legal clause and we break it down to
+specialized clauses and we get really
+high performance on those specialized
+clauses and we plan that out. So you
+could manually do something. Let me vib
+I think this is building a little bit
+but let me know if this sounds crazy is
+you could do something like take 50 to
+100 like legal clauses that you know
+turn them into kind of like almost like
+their own classification sets with
+really good descriptions. Have the LLM
+try to categorize into one of those
+hundred. If it can't do it, it goes into
+the other category. It goes into your
+manual queue to go, "Oh, this is belongs
+in this category. we need to change the
+prompt for that category or this doesn't
+belong in any category, we need to make
+a new category. And like that you can
+kind of build up where like even if the
+wording is slightly different, if
+semantically it fits into one of your
+hundred categories, then you have a
+solution. Does that sound accurate?
+>> Dexter has basically become the ultimate
+to value translator.
+A lot of words and Dexter says a lot of
+more better words and it's much better I
+say. Uh um I'll take one more question
+and then I think we're going to hop out
+for today. Um sadly can't go the full 90
+minutes, but if you post a question in
+Discord, we'll get to it by the end of
+the day.
+>> Also, for the for the record, this show
+runs an hour, so every minute after
+after 60 minutes. Uh you're welcome. Uh
+but thank you for bringing good
+questions. This has been super fun. Um
+yeah, Andre, you want to take us out
+with the last one?
+>> Yeah, really interesting techniques with
+cropping. So I'll tell you how I've done
+this with um medical records. So I I do
+the OCR and then just extract the text
+and the the OCR is pretty accurate um
+for the text and then I pass the
+language model both the text from the
+OCR and attach the PDF and for medical
+records that just seems to work and it
+might work for for bank statements too.
+Um but you would have to dduplicate
+things probably and check with your
+technique.
+>> Yeah, exactly. Yeah,
+>> exactly. That that's um yeah, this
+technique with OCR, we found the same
+thing for a lot of medical companies.
+They do OCR first, but what they found,
+what we found is actually every company
+that was doing that has now stopped
+doing that. They just pass the data
+directly to the model with no OCR in the
+middle and it actually works better.
+>> Nice.
+>> So, I would try that in the more newer
+models and see if you get better results
+and report back. We'd love to hear and
+see if that works for you as well.
+>> Thanks. Good stuff.
+>> Cool. Would that

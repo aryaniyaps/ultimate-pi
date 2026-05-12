@@ -1,0 +1,537 @@
+if you are not using AI coding
+assistants to write code I'm going to be
+real with you you are running out of
+time watch this we're going to run a
+single prompt to generate the beginning
+of an entire code base
+so with one command with a sentence and
+a half we've generated 70 lines of code
+and let's go ahead and run this to make
+sure it's real right this is a bond
+typescript application I asked for docs
+I asked for Cle documentation all Ron
+Bond index and you can see there we got
+uses docs all Ron Bond index view you
+can see this file doesn't exist let's go
+ahead and make sure that it doesn't bomb
+when the file doesn't exist so just
+highlight we another prompt don't bomb
+when file doesn't
+exist let that run it's going to add the
+existence check it's going to run
+through every single line I'll accept
+run this again no error this time let's
+go ahead and add an item if we check
+that API via our docs we can just say
+add and then we pass in a link so let's
+go ahead and add a link to add a new
+resource imagine we're building at a you
+know small tool that allows us to store
+AI resources maybe we'll read them into
+an llm ADD and then we'll pass in some
+link we'll use the AER website URL we'll
+hit add and then we've just added
+resource with i1 let's go ahead and run
+our view command again and you can see
+we have AER in there let's go ahead and
+add another link We'll add
+bun and let's go ahead and add cursor
+since we're at
+it okay and then we'll run our view
+command again and we now have our three
+resources great so if you've used AI
+coding assistant before you already know
+what's going on here you already know
+the power of AI coding assistance you
+already know how much they can multiply
+productivity in this video I want to
+share and show off some of my favorite
+AI coding assistant features I'm going
+to give you a couple tips and tricks on
+how you can get started and to progress
+your AI coding abilities and then at the
+end I want to look over some of the
+incredible blogs that the cursor Bros
+and AER are working on so AER shout out
+and cursor shout out the NYS spere team
+you guys are building great products
+these two products are by far right now
+the best AI coding assistants we've
+talked about them on the channel before
+it's important to bring up every now and
+then because the space is rapidly
+evolving let's go ahead and just
+backtrack a little bit right what just
+happened so we ran two prompts generated
+70 lines of code I just want to contrl Z
+this a little bit and I want to look at
+the actual multiplier that we just
+unlocked by using an AI coding assistant
+right I'll just control Z all the way
+back I'm going to copy the prompt that
+we use
+and I'm just going to go ahead and open
+up a node instance paste this in as a
+string and type length so you can see
+there that was 125 characters now let's
+go ahead and split it and what we're
+looking at here is the number of words
+that we use to generate 25 words to
+generate what what exactly did we
+generate let's go ahe and look at that
+first generation here you can see I have
+a word count enabled here this 25w
+prompt generated 208 words so if we take
+that let's just go ah and do some
+rounding right we'll round down so 200
+over 25 that's an 8X multiplier this is
+incredible right I just want to really
+shout out how important this is It's
+very rare that you end up in a scenario
+where you can directly analyze your
+productivity gains as an engineer by
+using a tool I think that when you look
+at a coding assistants and you look at
+what you can do with them it's blatantly
+obvious how much you can get out of your
+AI coding tool right it's just so easy
+to measure the productivity gain um adex
+right we had another prompt in there
+let's say we had a couple or round it
+down right let's say it's only a 5x
+that's still insane it's still
+incredible and most importantly I think
+one of the big highlights of a coding
+assistance is you're not wasting your
+mental Cycles on the boilerplate code
+right you're just you're just not
+wasting it let me go ahead and show off
+another feature that I'm really excited
+about with a coding assistant the
+ability to update multiple files so
+let's go ahead and switch over to AER
+the best free open source AI coding
+assistant what I'm going to do here is
+create another file I'm going to call it
+um I'm going to call it
+C.S and I'm going to open up another
+browser instance and run AER B this is
+my AER Shand command to kick off one of
+aer's brand new features you can now run
+AER in the browser so this this wrapper
+makes AER a lot more pleasant to work
+with so let's go ahead and just look at
+this let's go ahead and add some files
+so I'll add um see if that CR file
+didn't get picked up so let me go ahead
+and just commit my code here so ad can
+pick up that file go ahead and run that
+refresh and I'll go ahead and add that
+crud file and I'll add index.ts you can
+see here with this nice clean UI it's
+very visible it's very easy to digest
+I've just added two files to the context
+I like ader in that it's a lot more
+explicit than cursor you really know you
+really know exactly what AER is looking
+at and then I'll just type move the
+resource functions from index.ts into
+credts let it rip huge shout out to GPT
+40 open AI really popped off with that
+model it's been incredible to work with
+look at how fast this is at gp4 level
+with GPT 3.5 speeds uh pretty crazy
+stuff let's go ahead and check out those
+edits and so you can see here we now
+have our crud TTS and we also have our
+index.ts you can see here we're now
+operating with just some 30 lines we
+have that you know CLI functionality and
+then we have our import for uh the crud
+ttsa right let's go ahead and just run
+this again make sure everything works
+the same so bun index View and Bam so
+you can see here we have our same files
+everything's working as as previous
+let's go ahead and remove um what is it
+delete and we'll say two so resource ID
+to deleted that should take out the bun
+resource and if we run view again bam we
+have one and three AER and cursor so
+really incredible stuff right um
+multifile edits is a huge huge Advantage
+this is something that I would like to
+see cursor bring to the table I know
+they're working on a lot of really
+important cool features but I think
+multifile editing is a huge huge win uh
+again big shout out to to ader and Paul
+for having this feature and I've really
+been enjoying using the browser editor
+here for AER it just makes it a lot
+easier cleaner to work with you can more
+quickly add and remove files on the
+channel we've been using AI coding
+assistants for over a year now uh which
+is really really crazy to say the Space
+is really exciting this is the tool you
+need to be paying attention to if you're
+an engineer our productivity as
+Engineers is directly tied to the
+ability and the strength of our tools
+you can be a shitty engineer with great
+tools and get a lot done but if you're a
+great engineer and you have shitty tools
+you are limited by your tools you want
+to be a great engineer and you want to
+have great tools AI coding assistants AI
+code editors these tools are where we
+need to be focusing our time and
+attention to right now there is no
+bigger multiplier on your productivity
+than to increase your ability to
+generate more code in ranges in the 2 to
+10x range you do not want to miss the AI
+coding train and get left behind so
+that's awesome uh we can push this even
+further let me just show off a quick
+example let's say we wanted to create a
+test we'll call this cr.
+test.ts and again uh for that multifile
+capability what we're going to do here
+is open up AER in the browser and we're
+going to let me go ah and just commit
+this again and what we'll do is refresh
+crud CR test index and I'll do the
+following right I'll say add a new
+function delete all and add bun tests
+for the crud module so I'm asking to do
+two things in one here usually you'd
+want to go one at a time add this delete
+all and then afterward add BUN test but
+I'm doing it together uh just because I
+know that this will work so I'm going to
+fire that off and AER is going to start
+making changes to multiple files getting
+all this work done for us we type one
+sentence it's writing a bunch of code in
+the right places for us automatic Al
+it's so cool to see this come out and
+you can see here edits applied so it
+looks like we're not actually using
+delete all resources so I'll just go
+ahead and say I'll hop back over to AER
+and just say uh create a CLI command to
+run delete all resources let that run
+and so while okay so nice it it added
+that so quickly so I notice here it
+didn't add that delete all would just go
+ahead and highlight over this you can
+see we have cop Plus+ doing some work
+for us uh Delete all it's adding that
+into the loging for us I'll just hit tab
+that's awesome that's complete um let's
+go and take a look at the test you can
+see here we're using just I don't want
+to use just here so let's go ahead and
+just use cursor for this I'll just say
+remove just and I'll also say um don't
+mock anything I'm fine with this just
+running against uh you know my local
+file
+system just going to make all the
+changes for us here uh we're going to
+ignore this we do have bun automatically
+importing this is just a problem with my
+lunter that I don't care about and we
+can run BUN test you can see everything
+completed properly let's go ahead and
+bomb a test on purpose so let's uh let's
+change this to a five just to make sure
+that this is real and Bam you can see
+there we got one F test revert and BUN
+test good so we're all good we uh wrote
+test we modularized our crowd
+functionality we added a new delete all
+resources function and we exposed that
+via our CLI application all this
+happened in a hilariously small amount
+of time we are rearranging code at light
+speeds thanks to our two AI coding
+assistants I'm going to go ahead and say
+it these are the two best AI coding
+assistants right now a lot of the AI
+engineering the AI coding and the
+agentic engineering content that we
+share on the channel gets lost in time
+to the YouTube algorithm I mentioned
+this in the previous video but I'm
+working on a resource a website that
+that will be free that will allow us to
+you know kind of build up this
+repository of incredible AI tools AI
+resources and of course you know some of
+the most important content on there is
+going to be AI coding because that is
+the first really big use case for
+engineering productivity gains in the
+age of llms in the age of AI so those
+are a couple features I wanted to call
+out so I hope you see the value in this
+if you've been using AI coding
+assistants AI code editors AI pair
+programming everyone has their slightly
+own different terminology for for it in
+my mind it's all the same these are AI
+coding assistants they help you the
+engineer write more code faster than
+ever if you're using these yourself or
+you're going to start thanks to this
+video hit the like hit the sub it helps
+other engineers get exposure to these
+incredible tools as well one last thing
+I want to do in this video I want to
+look at where the cursor Bros and where
+AER are kind of hinting at what's coming
+next right so let's go ah and look at
+this previous blog that came out from
+the cursor team and uh they're talking
+about the problems that they're you know
+aiming to solve in 2024 2025 right and I
+think it really shows where their heads
+at and what they see coming next I love
+this idea of next action prediction this
+is when you're in cursor you're writing
+code and it's basically copi Plus+ it's
+this idea that once you start coding
+something and you start making tweaks
+there's a flow to it right there's a
+path there's a pattern to it and just by
+hitting tab just by knowing the most
+likely case the most likely position of
+the cursor you can essentially guess
+what we want to do next right and let me
+show you a concrete example of this if I
+started making a change here right let's
+go ahead and say I wanted to suffix this
+right and I said read resources method
+for whatever reason cursor in copat
+Plus+ will start looking ahead and
+Gathering context about what's the next
+move he would likely want to make given
+that change so if I just highlight the
+next method and hit tab it's starting to
+pick up on the trend right method method
+and now it's updating the method call
+inside here right and now it's looking
+at the next method and now it's autoc
+comp completing both the function name
+and the caller right so you can see how
+incredible this is right I'm not
+thinking I'm not wasting mental Cycles
+on this stuff my AI coding assistant is
+doing it for me right and that's the
+incredible part your AI coding assistant
+right now can handle all the boiler
+plate it can handle all the you know
+weird small name changes variable
+placements all the stuff like that
+that's you should be really confident in
+using AI coding assistance right so I
+just want to shout that out um again I
+want to shout out the uh you know cursor
+team uh great work on all this stuff
+please keep pushing this this is
+incredible it's been great using that so
+this is really cool I'm excited to where
+they take this I do think this is the
+right question to ask can we take this
+idea to its natural limit there is no
+reason why a natural logical flow of tab
+completion like this cannot be solved
+completely and I think you know C Is
+Right on track to do that because they
+have the full editor at their disposal
+pretty incredible stuff there they talk
+about some of the the ways they're doing
+that um I'll leave that up to you to
+read I'll link these in the description
+of course um perfect edits this is
+something that I think will come and get
+kind of close My Philosophy around you
+know models and Ai and predictions
+you'll never get 100% but you should try
+to get as close as possible I think the
+real trick here is can they make it fast
+and keep it accurate right um they
+mentioned multifile edits here this is a
+great call out I'm glad that they are
+you know taking note of this I'm sure
+that they you know pick this up from
+ader AER does support out of the box uh
+multi file edits which is amazing you
+saw us we did a couple of those here we
+have three files that edited all three
+in one shot um so that was pretty
+incredible it would be awesome to have
+that rolled into cursor as well it's
+great to see them looking at that
+optimal context if you're a fan of the
+channel you know that I am very anti-
+rag I don't think that retrieval
+augmented generation is worth anyone's
+time
+outside of like Brute Force pulling in
+relevant files and throwing it into the
+context I think that this is betting
+against uh the development of the next
+incredible generation models which is a
+dumb thing to bet against take whatever
+context you need throw it at the model
+and let the model handle the hard part
+of it right and just make sure that your
+prompt is solid I think that tools like
+cursor do have a slightly larger use
+case for a large context and for some
+type of rag based solution I hope that
+uh you know both both them but also
+everyone building out these uh agent
+pipelines I hope that you don't get too
+lost in this sauce context windows will
+go up needle in the hay stack uh
+accuracy will continue to increase uh
+one last thing here on cursor's blog and
+we'll hop over to a Blog from ader that
+I just want to highlight um they're
+looking at bug detection I think this is
+a really cool idea I think the question
+is when do they fire this off do they
+fire it off while you're writing code do
+they fire it off you know during the
+commit process during the pr process
+during the push process lot of
+interesting questions there for
+automatic bug detection I think this
+could be a really really killer use case
+since cursor again is operating right in
+an IDE they have a lot of power and
+control um it's a massive Advantage
+whereas something like AER is a lot more
+lightweight it's in the terminal it can
+read your code base it doesn't it uses
+something called a REO map and I think
+it's a a nice kind of lightweight
+hands-off approach I like how these
+tools are different I think they
+actually complement each other I think
+that cursor is like your Deep dive
+coating and face whereas AER doesn't
+want to make too many assumptions about
+your code base and it kind of stays on
+that like lighter wrapper layer we'll
+see how this progresses let's go ahead
+and just look at a quick blog from ader
+ader has taken the state-ofthe-art on
+the S bench light um I think this is
+really really cool it beat out um I
+think open Devon and uh what was the
+other one yeah open Devon beat out
+Amazon's agent which is really epic um
+and I love this you know just like we
+were talking about AER aims to be
+interactive not fully agentic this is a
+differentiated approach that AER is
+taking cursor is going a little deeper I
+do think that this like serves as a
+great differentiator for both cursor and
+AER being agentic versus staying
+lightweight just use the prompt put it
+on the code base and uh cuz things get
+really really complicated once you start
+uh digging your hands into you know
+making assumptions about uh the best uh
+agentic flows and the best agentic
+pipelines to set up I love this shout
+out again from Paul and ader ader does
+not use rag Vector search or you know
+tools or anything like that right and I
+do think again this is an advantage it
+might seem like a disadvantage I think
+over the long term we'll see other tools
+fill that space but the fact that ader
+is such a lightweight wrapper that can
+still do so much I think speaks a lot to
+its design but also you know the power
+of uh large language models and I do
+think a tool like AER will benefit the
+most from the continued improvements
+from Models because it's not digging its
+hands too deeply into the you know the
+agentic of it all so that's awesome to
+see um and I think this is the coolest
+thing so I I want to end on this note
+AER has written 7% of its own code um
+when I saw this I got so excited because
+to me this is the future of engineering
+I'm working on several code bases right
+now where this number is much much
+higher this is more close to 50% now I
+I'm I'm putting out so much more content
+so much more value as an engineer by
+handing off the writing the code the
+individual lines to my AA coding
+assistant and I think this speaks to
+this idea of you want to be upleveling
+yourself you want to be telling your AI
+coding assistant your AI pair programmer
+what to do and you let it figure out how
+to do it llms are text generation
+machines let them do that that's what
+they know that's what they can do code
+is a subdomain of text and llms know
+text better than any human being in the
+past ever you know on the channel we are
+basically spending all of our time to
+send this number to 99% it might sound
+really crazy but this is really what
+we're going for this is what we're
+aiming for we want to take this number
+and go to 99% let's just go ahead and
+hop in here and just you know filling
+the dream that we're aiming for here
+right we want 99% the end game really is
+full agentic tools applications
+workflows that create value on our
+behalf while we sleep I've said it on
+the channel over and over and I will
+continue to say it because that is our
+mission that's what we're doing that's
+what we're aiming for and AI cing
+assistants like cursor and AER you know
+big shout out to them not sponsored by
+either of these guys yet uh definitely
+would would love to be would love to
+work with either cursor and or AER
+there's a lot happening here it's
+progressing and I think this is a really
+important tool if you're an engineer
+right now you do not want to get left
+behind you want to be on the AI coding
+train you want to be using these these
+tools to generate more value than ever
+before if you want to stay plugged in
+and you want to stay close to AI coding
+and agentic Engineering hit the like hit
+the sub join the journey as I mentioned
+I'm working really hard on a resource
+that will take everything that we do on
+the channel and make it more accessible
+more usable with concrete guides and
+some really interesting AI coding
+related courses that you're going to be
+able to use sign up for and really
+understand how to maximize this
+technology to create value for yourself
+so if you're interested in that you know
+what to do thanks so much for watching
+I'll see you in the next one

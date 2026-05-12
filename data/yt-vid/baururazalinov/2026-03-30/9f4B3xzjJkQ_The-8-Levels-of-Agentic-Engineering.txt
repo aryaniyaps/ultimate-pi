@@ -1,0 +1,185 @@
+All right, today we're tackling
+something pretty big. The eight levels
+of agentic engineering. Think of it as a
+road map for getting really good at
+using AI to build software. So, let's
+get into it. So, here's a question a lot
+of people are asking. We've got these
+incredible AI models, right? But why
+isn't every developer suddenly 10 times
+faster? You see one team ship a whole
+product in like 10 days using the exact
+same AI that has another team totally
+stuck. What gives? Well, the difference,
+it turns out, is this gap. It's the
+space between what these AI tools can
+do, their raw capability, and how we're
+actually using them dayto-day. And if
+you want to unlock that insane
+productivity, you've got to close that
+gap. And that's exactly what this
+framework is for. It's a clear
+eightleggression. Think of it like
+leveling up in a video game, but for
+your engineering skills. It's a road map
+to systematically close that gap and
+really master these tools. Okay, so
+let's start at the beginning with the
+foundation. These are levels one and
+two, which honestly most of you are
+probably already familiar with. So level
+one, that was basically tab complete.
+You know, the early days of Copilot.
+Super simple, but it worked. Then we hit
+level two, the agent IDE. This is where
+tools like cursor came in. Integrating
+AI chat right into your editor. Suddenly
+multifile edits got way, way easier. But
+there was always one huge limitation.
+context. The AI could only really help
+you with the code it could see in the
+files you had open. All right, now we're
+getting to the first major turning
+point. This is where things get really
+interesting. Levels three and four are
+all about moving past one-off fixes and
+starting to create real compounding
+long-term value. So, that brings us to
+level three, which is called context
+engineering. And it's exactly what it
+sounds like. It's this whole practice of
+packing the most useful information
+possible into the smallest, densest
+prompt you can. It's all about
+maximizing the signal and just cutting
+out all the noise. Yeah, there's this
+mantra for level 3 that I just love.
+It's every token needs to fight for its
+place in the prompt. You become
+absolutely ruthless about what you feed
+the AI. You're constantly asking, "Does
+this line of code, this file, this piece
+of context actually help?" If the answer
+is no, you get rid of it. Okay? And this
+is super important. The difference
+between level three and level four is
+massive. Level three, context
+engineering, makes your current session
+better right now. But level four,
+compounding engineering, that's about
+building systems that make every single
+future session better. It's a total game
+changer. And how do you do that? Through
+this four-step loop. First, you plan the
+task. Then, you delegate it to the AI.
+You assess the output it gives you. And
+then, and this is the magic part, you
+codify what you learned. You don't just
+fix it and move on. You update a rules
+file or you add to some internal
+documentation. So that lesson is baked
+into the system forever. That's how its
+value compounds over time. Okay, let's
+move into the next phase. This is where
+the focus really shifts from you helping
+the AI to the AI starting to gain some
+real autonomy. At level five, we're
+solving for capability. You give your
+agent skills. What does that mean? It
+means giving it the ability to actually
+do things in the real world. It can
+create your database. It can hit your
+APIs. It can run browser tests. It's not
+just a codewriter anymore. It's an
+actor. It can take action. Now, this has
+a pretty wild implication. Think about
+it. As these agents start pumping out
+code at a massive scale, what becomes
+the bottleneck? Us. The humans doing the
+code review. And that leads to this
+pretty provocative idea that code review
+as we know it is dead. The old school
+manual pull request review just can't
+keep up. It's got to be replaced by
+automated skill-driven review systems.
+And all of that leads us right into
+level six, harness engineering. Now,
+this isn't just about giving an agent a
+tool. No, this is about building the
+entire system around it. The sandboxed
+environment, the guard rails, the
+feedback loops, the whole shebang that
+lets an agent do reliable work safely
+without you having to babysit it. You
+know, a really key insight at this level
+is this shift from giving instructions
+to setting constraints. If you tell an
+agent a step-by-step plan, it's brittle.
+It'll get fixated on that list and won't
+adapt. It's so much more robust to just
+define the boundaries of what it can do
+and the tests it absolutely must pass.
+You give it the goal, you give it the
+guard rails, and then you let it figure
+out the best path on its own. So, what's
+the mechanism that makes all this
+possible? It's something called back
+pressure. Think of these as all the
+automated feedback loops you might
+already have. Things like type systems,
+llinters, unit tests, security
+boundaries, pre-commit hooks. They
+automatically push back when the agent
+messes up, which lets it detect its own
+mistakes and crucially correct them, all
+without you having to step in. And once
+you have that solid harness in place,
+you unlock level seven, background
+agents. And honestly, this is a massive
+leap in how you work. You're no longer
+the one juggling a dozen tasks in
+different tabs. You're now delegating
+really complex work that just happens.
+It runs in the background asynchronously
+while you focus on the next big thing.
+Now, a really critical practice at this
+level is what's called the reviewer
+principle. And it's simple. You never
+let the same AI instance that wrote the
+code also be the one to review it. Why?
+Well, cuz it's biased. It's like letting
+a student grade their own exam. Of
+course, they'll give themselves an A. So
+you have one agent be the impleer and a
+totally separate agent, maybe even a
+different model act as the reviewer.
+Okay. So finally, let's look at the
+cutting edge, the real frontier of where
+all of this stuff is headed. Level 8 is
+pretty much where we are right now
+today. Autonomous agent teams. This is
+still the super experimental phase.
+We're talking about multiple agents
+working together on a shared codebase,
+coordinating directly with each other,
+not through a human or some central
+brain. Nobody has totally cracked this
+yet, but this is where all the most
+exciting research is happening. And
+what's beyond that? Well, the interface
+itself is probably going to change. We
+could be moving away from typing into a
+terminal and toward having a seamless
+voice-to-voice conversation with our AI
+engineering team. Just imagine
+describing the changes you want out loud
+and then watching them happen in real
+time. So there you have it. This
+framework gives you a really clear path
+forward all the way from simple
+autocomplete to actually orchestrating
+teams of autonomous agents. So the real
+question for you is what level are you
+on right now? And more importantly,
+what's the next step you're going to
+take to level up?

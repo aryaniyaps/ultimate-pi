@@ -1,0 +1,941 @@
+what's up Engineers Indie Dev Dan here
+we have an actionpack video today GPT
+4.5 was
+released and uh moving on from that no
+gb2 4.5 is an amazing model
+unfortunately it's insanely expensive to
+use through the API it's only really
+usable for chat GPT Pro members but of
+course we need to focus in on the most
+important release potentially of the
+entire year Claude 3.7 Sonet and Claude
+code not only did anthropic release the
+absolute best base model they released a
+Hybrid Base reasoning model with
+thinking capabilities embedded inside of
+the model they've effectively released
+two models in one and not only not only
+did they release a twoin one model they
+also released Claude code you've likely
+been using this if you're a fan of the
+Indy de Dan Channel you know how
+important air coding assistants are you
+know how important agents are this is an
+absolute crash out release okay I'm I'm
+telling you guys when I saw this when I
+read through this I started to lose my
+mind in this video we're going to
+Showcase several examples of how
+powerful this can be and of course we're
+going to use cloud code now we're going
+to break this down because uh this
+release changes things the most
+important image here it's this one
+agentic tool use the accuracy to be able
+to call the right tool at the right time
+is very very very important for the
+agentic future that we're moving into
+for building out effective powerful
+agents as we've been discussing on the
+channel over the previous few videos one
+more thing I want to point out before we
+jump in I am kind of mind blown that
+they called this
+3.7 the first thing I thought when I saw
+Cloud 3.7 3.7 Sonet is holy crap how far
+ahead are they inside the lab they they
+bumped soned up only two points and they
+gave it reasoning capabilities and it's
+the state-of-the-art based model now and
+they kept the price the same this is
+absolutely incredible uh let's dive into
+it what are we talking about today uh
+what's the idea for today's video how
+can we you know make sense of this and
+get value and all these incredible tools
+don't matter at all if we can't
+understand them build them and use them
+in our tooling and our developer
+workflows and then deploy them against
+real problems to actually create value
+okay let's be super clear and really
+honest about you know a lot of the tech
+ecosystem there are shells among shells
+of content creators and digital media
+idea pushers that don't actually use
+this technology and build with it I hope
+you can tell we actually build here on
+the channel if you've seen more than two
+of my videos you know that that's the
+case I always try to take everything
+we're getting of this incredible
+generative AI technology and I always
+aim to create useful packages of
+information and ideas and patterns and
+principles and I try to you know hand
+them to you as much as I can every week
+here every single Monday so this week
+you know I have something that I think
+will be really helpful I have the clog
+3.7 Sonet starter pack so inside of the
+starter pack you basically have
+everything you need to understand every
+one of the key capabilities of this
+model so that's what we're going to work
+through today this is going to be linked
+in the description for you this is my
+current model ranking and I'm super
+curious to see what you think about this
+leave a comment down below what do you
+think the current model ranking is in
+terms of raw power and intelligence uh
+despite any costs I completely forgot to
+add 01 in here that's going to be pretty
+high ranking too let's dive in let's
+break down the new 3.7 Sonet Hybrid Base
+plus reasoning model and let's talk
+about clog code
+so let's go ahead and open up the Claude
+3.7 Sonet starter pack we got to talk
+about the model stats 200k in 8k out as
+you'll see in this video you can extend
+the output token to 128k this is pretty
+crazy and then of course even crazier we
+have 64k thinking tokens that we can
+allocate we're effectively turning on
+and off our raising model capability
+with 3.7 on it at at will okay so we're
+doing this whenever we want we have one
+of the most up-to-date models by far you
+know November 2024 fantastic pricing um
+effectively no changes and they've
+boosted the capabilities I think they
+kind of learned a hard lesson from um
+releasing ha coup U at that frankly
+really terrible price we're going to
+dive into my uh extended thinking
+intelligence guide here's kind of how
+I'm framing where to set your thinking
+budget when you're using the uh
+intelligence model basically there's
+almost no reason to use any one of these
+high settings unless you're solving
+incredibly difficult challenging
+problems okay um but we're going to get
+into that in a second let's just go
+ahead and fire up some examples all
+right so we're going to start from the
+most simplest we're just going to recap
+the simple examples and then we'll move
+into some of the uh High hitting
+examples and you know what actually
+scratch that um I'm too amped on this
+stuff we're just going to hop right into
+prompt with extended thinking I'm going
+to copy this I'm going to open up this
+file and at the top of every one of
+these files here you're going to see
+Clean and Clear instructions on how
+exactly to use every single one of these
+scripts these are powerful single file
+UV scripts we've talked about this in
+previous videos this is a fantastic way
+to isolate code it's a great way to run
+proof of Concepts and it's a great way
+to run as we talked about in our
+previous video single file agents moving
+on let's go ahead and copy this and
+let's just paste this in and fire it off
+so you can see here right away with the
+parameters here we're setting both a
+thinking budget and a Max tokens now so
+let's Ry this off and let's check out
+the output so I've got this all
+formatted here for you so we have the
+request to Claud explain Quantum
+Computing to me all right and then we
+have some a thinking budget right so
+we're setting the minimum thinking
+budget 1,24 tokens so this is the raw
+API response coming back from Claude and
+you can see here we have a different
+type of structure than we're used to
+right we have not just the response
+block but we also have a thinking block
+all right so there's the signature of
+the thinking block which is just a hash
+and then we have the actual thinking
+tokens right so now this is visible to
+us so you can see it you know just
+working through the examples it's kind
+of setting up its response and then
+finally it's responding and if we scroll
+down here you can see here right that
+classic reasoning setup we have thinking
+tokens first and then we have the actual
+response afterward at the bottom of
+every one of these scripts I've added
+the token summary for you so that you
+can just kind of quickly see what the
+cost looks like right so we have inut
+tokens output tokens and now we have
+thinking tokens that we can push up and
+down based on our use case so if we look
+at the script for a moment here you can
+see we have our parameters that we can
+play with an important thing to note the
+minimum thinking budget is 1,24 tokens
+so if you need the reasoning model this
+is the minimum value you should set
+classic Model set up here nothing
+special happening but you can see this
+is the new uh input structure for
+enabling thinking mode you specify this
+thinking parameter and then you say
+enabled and then you specify what your
+budget is right so this is the budget
+tokens so very cool and then nothing
+special happening down here we're just
+outputting the result and formatting
+really powerful really simple right at
+kind of a great simple API let's go
+ahead and look at the prompt extended
+thinking with
+stream so let's go ahead and push into
+the actual value that reasoning models
+give us they enable you to solve hard
+problems where the model always benefits
+from having time to think just like you
+or I solving a hard problem thinking
+through a complex scenario I really love
+that simple example right if someone
+asks you a question uh that's
+challenging or difficult you don't just
+blurred out the first thing that you
+think of right um some of us do so when
+you're confronted with a hard problem
+you sit and you think right that's what
+these thinking budget tokens give us
+here's a whole list of actual reasoning
+problems that you can work through here
+that you can you know look at the
+answers are right above it so let's go
+ahead and just copy this one and let's
+let this rip we have 2,000 token
+thinking budget this is a simple math
+problem and this is a cool streaming
+example okay so this is a prompt with
+extended thinking with streaming let me
+go ahead and run that again so I'm going
+to paste this again and then check this
+out so we have the prompt tokens and
+then you can see the ANS are getting
+streamed in here right so we can see the
+live thinking process of our model and
+now here's the response bam and there's
+the output let's go ahead and check
+check it against the actual answer
+48924 that's the exact correct answer
+right so this is really cool right we
+have both the final answer but we can
+also see how our model got there and you
+can see this one actually took up some
+thinking tokens this was actually a math
+problem that required some real thought
+from the model so you can see here the
+output tokens was just 60 but it took
+232 tokens to actually think through the
+answer and give you a solid response so
+to be 100% clear this is what you know
+these powerful reasing models are all
+about and now you have full control over
+the scale of intelligence of the model
+with the thinking budget tokens let's
+just go ahead and run another one this
+is a simple you know uh logical puzzle a
+says that b is lying B says that c is
+lying C says that A and B are both line
+who is telling the truth right so we can
+give Claude 3.7 some time to think here
+and we can see that thinking getting
+streamed in you know really working
+through this problem with 2,000 tokens
+and now we have the answer so now it's
+formatting the actual output for us bam
+therefore B is the only one telling the
+truth and you know I've worked through
+this problem um B is telling the truth
+so this is the correct answer really
+powerful really capable and you can see
+here again I I I just love the
+visibility here and I love the fact that
+we can peer into the model and you know
+this is something that anthropic
+mentioned is going to be really
+important for model safety moving
+forward and I think it's just a great
+approach for that right when you can see
+the model thinking it's a lot easier to
+understand how it's deriving the actual
+answer for you right so this is awesome
+uh I think you can kind of get a good
+idea of the primary capabilities of the
+extended thinking let's go ahead and
+continue working through some examples
+but let's fire up plug
+first if we clear the terminal and just
+type CLA you can see here I have two mCP
+servers connected we'll talk about these
+in a moment but let's just at a high
+level really discuss what this is okay
+what is CLA code really um anthropic
+explicitly mentions this a couple times
+if we just search agent you can see this
+keyword coming up um a couple times okay
+this is a very very important keyword
+and paradigm shift that's happening
+right now we're moving up the
+abstraction chain of generative AI as
+we've talked about in many previous V
+videos over the course of the past 2
+years you start with the prompt then you
+move to the prompt chain prompt chains
+are also known as these agentic
+workflows or graphs but then the next
+step is give the agent the tool it needs
+give it a powerful model tell it how to
+solve your problem and then let it run
+off and actually solve the problem for
+you to be super super clear what is
+cloud code Cloud code is an AI agent
+this is pure genius from anthropic a
+research preview developer tool where we
+pay for their model send them our
+prompts so that they can improve uh the
+tool and their model I have upped my
+token usage maybe I'll throw a photo on
+the screen 100 fold using the new uh CLA
+3.7 model in agents and in the new Cloud
+code what what can we do with this tool
+I just want to run a couple commands
+that showcase uh what this thing can
+really do you know we had some examples
+here right some puzzle examples Cloud
+code obviously it can write code you
+you're going to see 100 videos on cloud
+code writing code we'll dive into that a
+little bit more later I want to stress
+how important it is that this is an
+agent so we can do agentic things right
+it has several tools available list
+files
+respect get ignore now cloud is thinking
+and it's going to use one of several
+tools available to it it's not using
+traditional LS it's using git LS files
+okay so I'm going to hit yes this model
+called The Bash tool let's run something
+else update and I'm going to uh use a
+hotkey I I strongly strongly recommend
+that you set up this hotkey for me it's
+command shift R now I have the relative
+path to this file so I'm going to paste
+this in and I'm going to say update this
+file add a usage example all right so
+CLA code kicking off it's running a read
+tool there was The Bash tool now we're
+running the read tool it's reading this
+entire file right I think that's the
+entire file yep 253 lines it's thinking
+it's working through this it's
+understanding what it needs to do and
+then in a moment here it's going to call
+the update tool okay update tool
+requires the file path and it also is
+going to have you know whatever it's
+it's actually going to update with right
+so you can see here here's another
+example it's a little too heavy for me
+so I'm going to say uh just going to tap
+Escape just add the UV run what is the
+dot dot dot to the usage examples
+nothing else as incredible as this tool
+is it's still going to make mistakes
+right so there we go so I had to be more
+specific with my prompt there and do you
+want me to make this edit yes so this is
+really cool right you can go into YOLO
+mode or you can run one by one all right
+so I'm going to hit yes and then you can
+see there uh it ran update file with
+that change I just want to really
+emphasize this point we have update we
+have read we have bash this is an agent
+this is an AI agent it has a suite of
+tools a really powerful prompt right a
+powerful comprehensive prompt as you
+likely know you can connect to model
+context provider
+server if we just go ahead and clear and
+rerun you can see there I have these two
+servers connected let's hop into our
+server fetch example so this file
+showcases how you can add an mCP server
+directly to CLA code I I've already run
+this so basically you run Claude mCP add
+Fetch and then you specify the clii
+arguments that you would need to run
+this we're using UV so that we don't
+have to do any setup and then you can
+run Claud mCP list if you open up a new
+terminal here and run this you can see I
+have those two servers set up and you
+can see the exact commands right so
+we're going to run my local mCP server
+in a moment here let's just go ahead and
+run this you know simple fetch example
+copy one of these examples and I'm being
+super lowlevel here with this prompt uh
+I can you know be a lot looser with it
+you can see there it's calling the fetch
+tool and there's the response fantastic
+let's go ahead and pull from the
+principal a coding page and list the
+names of the lessons and descriptions of
+every single lesson so let's copy this
+paste this and let's watch Cloud code
+get to work so again it's calling that
+fetch tool the tool has pagination built
+in it's going to you know get the next
+end pages so that we don't get too much
+back in one shot but you can see this
+right here right um these are all the
+names hello AI coding world the your
+idks spec base a coding let the code
+write itself so on and so forth it's
+doing a great job here it used that tool
+and it processed everything exactly the
+way we needed it to uh very very quickly
+and again I I'm going to sound like a
+broken record but it just called a tool
+these are tools that the agent has
+access to and can properly call this is
+why in the beginning I mentioned that
+this is the most important Benchmark
+chart here okay it's it's the agentic
+tool use I don't think it's truly
+understood currently how important this
+Benchmark is you need to be able to call
+the right tool when you need it for
+powerful agentic tools applications and
+to build powerful agents you need
+precise tool calling this is great uh we
+can do uh even more with this right so
+we can do the same thing is an agent so
+just you can just ask itself back to
+back to back so we're going to do the
+exact same thing and then we're saying
+then write these to a markdown file all
+right so just a couple more examples
+here I just want to you know really nail
+this point home searching through the
+page thanks to this tool it's making
+multiple tool calls to fetch and then at
+the end it's going to there we go it's
+going to run the uh right tool okay
+right tool right you can see file path
+uh let's go ahead and say uh yes
+normally I run this in Yolo mode and it
+just kind of you know does all the work
+for me we can type GS this is get status
+and you can see that new file created
+there let's open that up here's all the
+lesson names and the description okay so
+all I want to do here is dial in the
+point the idea that this is an AI agent
+with a slew of tools that you can call
+in any order as long as you're prompt
+communicates that to the agent and and
+and you know if you're using this tool
+you understand that you're working
+through that but this is just such an
+important Point why because claw code is
+just a single agent all right it's it's
+one agent they're going to be many many
+many more agents and you as an engineer
+um Can Build and harness the
+capabilities of these agents the the
+really key important part is that you
+understand that these agents are a
+series of tools powered by a great
+prompt fueled by a great language model
+and this is part of why this release is
+so great Claude 3.7 is exceptional at
+calling the right tool when you need it
+super impressed with the coding
+capabilities of claw code we'll dive a
+lot more into actually using this tool
+you know there's a lot of chatter right
+now you know does this replace cursor
+AER Devon in their release they
+explicitly mention you know cursor
+mentioned Claude uh cognition right so
+Devon far better than any other model at
+planning code changes and handling full
+stack updates right basically what
+they're saying here what everyone is
+saying is that this model Powers my
+agents very well all right and and then
+of course you know uh it's great at
+coding too right it's kind of expected
+this is the you know Claude 3.5 son it
+was the best-in-class base model for
+coding 3.7 takes it to the next level
+and again I'm I'm I'm super super mind
+blown that they only gave us two points
+here right they only incremented the
+minor version here by 2 points
+3.7 what else do they have in the bag so
+let's go ahead and run my local mCP
+server all this is going to do is just
+call a weather endpoint but this really
+showcases how uh quickly you can set up
+a mCP server when you have the right
+tooling so basically you just run this
+and then you fire up cloud and of course
+make sure you have UV installed let's go
+ahead and open up CLA and you can see
+here we have this local weather mCP now
+we can reference and just call our
+weather tools we can just copy this one
+what is the weather in Germany right now
+just go and fire that off and you can
+see there my tool is getting called
+right my uh mCP server get forecast
+passing in the parameter Germany all
+right so that's getting called 37 partly
+cloudy wow high humidity there right all
+right so great call it again and again
+and again right it's an agent just push
+it push the compute right so now it's
+going to make three tool calls Bam Bam
+Bam Germany Chicago San Fran very nice
+all right push it even further get the
+weather in all of these places output it
+to a markdown file right so copy paste
+same deal push the capabilities push the
+agent see what it can really really do
+right I can almost guarantee you you're
+not pushing this agent far enough you're
+not pushing agents far enough especially
+when it's powered by this incredible
+clae 3.7 Sonet look at this so you know
+pulled the weather it's calling the
+create tool right and of course we're
+going to hit yes now it's Sav GS get
+status we now have that new weather file
+open that up format it nice breakdown of
+the weather right single prompt firing
+off what was that six tool
+and you know that's the kind of key idea
+here I know I'm being repetitive this
+hasn't been made clear enough the actual
+Innovation that's happening here CLA
+code is incredible because it is putting
+together the model that can call the
+series of tools to get the job you want
+done completed right that's that's the
+real Innovation here it's the model it's
+the framework of mCP and it's a great
+Showcase of those things coming out of
+claw code right and of course you know
+some of the obvious commands here we can
+hit slash cost looks like it's modeled
+very closely after ader and you know
+other great terminal based tools let's
+go ahead and push it even further here's
+a fun one right warmest to coolest list
+of temperatures in the capital of all
+these countries and then output to
+warmest coldest Capitals in a markdown
+table right so all right so you can see
+here Washington DC unknown unknown
+unknown and now it's trying again now
+it's doing something really really cool
+it's firing off a Tas TK I don't know if
+there's a lot of documentation on the
+task tool let's go ah and see yeah so
+there's not really any documentation on
+the on the task tool but the task tool
+in itself is really really interesting
+you can see here it's fired off you know
+it missed Miss missed and then it
+created this task so this agent is kind
+of passing off work to a sub agent very
+very important idea there for agent
+orchestration and context management
+then we got a bunch of additional
+weather calls and then we got the create
+and now we can fire this off you can see
+that that is coming in sorted and once
+again we can just click open this file
+format and you can see there we have
+capital country temperature top to
+bottom the agent is doing a series a
+chain a you know a job set of work for
+us and we are typing in natural language
+we're making sure that our prompt is
+communicating what we want and we're
+moving more toward prompting something
+like this is a lot different than
+prompting a crap of code so you don't
+really need the mid lowl prompt details
+that we discuss in principal ad coding
+but you can see here just with the right
+details with the right amount of
+information we have you know 10 tool
+calls happening right and it's all about
+that information density in your prompt
+are you communicating the right ideas to
+your agent to get the job done so
+incredible stuff there uh that's the
+local mCP server again all this stuff is
+going to be linked in the description
+for you to check out uh really dive in
+and understand how this is set up and
+how you can build your own mCP servers
+how you can reuse existing mCP servers
+there are quite a few mCP servers that
+you can you know get and use just right
+out of the box right all the ones you
+would expect SQL light right we have uh
+post grass and we have tons of third
+party uh tools so you know it really is
+looking like anthropic with CLA code
+they are Paving the away in this next
+age in this next kind of phase of
+generative AI where what you really want
+is to be plugged up to all the right
+agent tools right and then you want a
+powerful model that can guide your agent
+so that it's always calling the right
+series The Right steps the right flows
+of tools with the right parameters
+really really big idea here you know
+once again on the channel we're right on
+track agents agents agents check out the
+previous few videos where we talk about
+about
+agents prompt with extended thinking and
+Tool use just going to go ahead and copy
+this open up this file scroll to the top
+as I mentioned there's going to be
+complete examples in every one of these
+scripts you can just copy and fire off
+ourselves I'm just going to paste this
+in and you can see here we have a couple
+of tools right so now we have two tools
+and what's going to happen here is that
+claw 3.7 is going to run the right tool
+based on our prompt right so you can see
+here prompt what's the weather in
+Minneapolis what should I wear and then
+we're giving it a little bit of thinking
+budget right the minimum thinking budget
+a little bit of thinking helps the model
+it really doesn't need to think here
+just as an example you can see exactly
+what's happening here all right and so
+we're thinking through there's the
+output and it's calling those tools
+right tool use request location
+Minneapolis great there's a response and
+then we have the uh another tool use
+request get clothing recommendation and
+this in itself is just another prompt
+that's running and it is returning this
+right I recommend wearing a you know
+medium weight jacket blah blah blah so
+just a simple example that you can work
+through to understand how you can call
+tools with claw let's go ahead and
+continue pushing here let's look at the
+biggest you know most heavy-hitting
+example we can prompt with extended
+output and extended thinking and
+streaming let's go ahead and just uh
+look at what's happening here another
+great part about claw 3.7 Sonet is that
+it is very precise and it truly follows
+your instructions so when we say
+something like this generate a 10,000w
+comprehensive analysis on Renewable
+Energy Technologies we set a high Max
+tokens and then we set thinking budget
+okay and then I'm enabling extended
+output right uh 13k tokens out this is
+going to go um above the
+8K output that uh Claude has here right
+so we need to boost this up to a
+potential 100 28k out uh so we can copy
+this and py this off this is going to be
+really cool so here it is here's our
+live you know stream right our live
+stream of the thinking process you can
+see Claude thinking and now it has the
+answer and now it's just going to run
+through these tokens all right so what
+did we ask for here we said 10,000 words
+so you can see there you know 500 this
+is going to just keep ticking up it's
+scrolling out of view here uh so we're
+we're just going to wait for the the uh
+response words to come in here but this
+is pretty incredible right we're getting
+um insane model instruction following
+again we have other examples here be
+careful when you fire these off this
+will you know hit the API and likely you
+know consume the tokens it takes to
+respond with the prompt right the
+extended output token flag really
+enables you to to push the output of the
+model far beyond you know any model
+we've really seen before so you can see
+here it's still pushing right 3K tokens
+you can see it's about 10% of the uh
+total available token usage that's great
+you can see it only used you know 300
+tokens to think far below the thinking
+budget we gave it of what do we give it
+here uh 8,000 yeah just this is not a
+reasoning problem to solve right so we
+could have easily dropped this down to
+1K while this is running you know let me
+give you my quick guide here on
+intelligence right how much intelligence
+do you really need to solve any problem
+a big takeaway here is that
+we now have fine grain control over the
+reasoning capabilities of this powerful
+model so this is the way I like to slice
+it up basically we have extra small
+intelligence all the way up to 4 XL you
+basically will never need this you you
+basically will never need to push the
+model this far this hard uh it is a lot
+more likely that you'll push into these
+ranges you know given that you're
+solving an interesting enough problem
+where the model actually needs to think
+as anthropic mentioned I found this to
+be really useful basically you just
+start with the bare minimum and you know
+track your token usage as we are here if
+you never hit the 1K Mark you never need
+to go to 2K all right so this is really
+cool so we just finished and you can see
+here um our output tokens chewed up you
+know 6K right so we really really pushed
+it we really got that uh wow look at
+look at that up you can really see that
+this model pushed uh really hard here my
+word calculation is likely off we're
+likely not counting it likely got a lot
+closer here than than we think when
+you're really pushing the out tokens
+this is when you're going to boost up uh
+the cost so this is really powerful
+right so this is an example of using
+both the uh streaming with the extended
+128k token output and we can just goe
+and search this so you can see exactly
+what that looks
+like right so if we hop down here you
+can see we're enabling that beta flag to
+enable these longer outputs this is
+going to be in the description for you
+to hop in and play with so you can
+really understand the capabilities you
+can also just you know give this to a
+model give this to your a coding
+assistant and have generate whatever uh
+you're looking for so last thing I want
+to show off here is an
+agent you can be building your own
+agents to solve your domain specific
+problem right now and I'm kind of giving
+you the a quick start here with the
+single file agent showcasing how exactly
+you can do this so before the cloud code
+release we built a um bash and editor
+agent on top of claud's bash and editor
+tools and what we can do is this so
+we're going to copy this and and run
+this agent here so agent Loop 1 out of
+10 it has 10 compute uses I asked it to
+do this right the user asked me to
+create a file called hello.txt with the
+content hello world inside it I can use
+the create file tool to accomplish this
+task it sees the parameters of that tool
+right so you can see the tool call right
+here reasoning path and file text you
+can see the thinking budget right the
+thinking tokens um walking through what
+it needs to do to call the tool you can
+see there's the tool call and then
+there's the file created response right
+so this is what that response looks like
+you can see we have the response raw
+text and then we have the actual tool
+use that's all the agent needed to do
+here right so it's now calling the
+complete task tool letting me know that
+it is done just like Claude code here we
+have an agent that has a series of tools
+and if we just look at tools we can see
+here that we have you know a nice slew
+of tools here this agent has a view file
+tool it has a create file tool it has
+string replace insert line so on and so
+forth here we have our own kind of you
+know mini version of cloud code and the
+idea here again is the is the same you
+can build powerful agents that can help
+you solve your domain specific problem
+by giving it the right tools that you
+would need to solve the problem and by
+fueling it with a powerful model like
+clog 3.7 sonin if we scroll to the top
+and we run this prompt here you can see
+duplicate whatever text is in hello.txt
+10 times on new lines then create a
+markdown file Json file Ando file with
+the same content in the format for that
+file type and you can see I'm upping the
+compute budget and I'm also giving it 2K
+thinking tokens okay so I'll copy this
+clear and fire this off we do have that
+you know hello world text right here so
+we can open that up you can see that and
+now it's walking through the process
+right so it's calling view5 it's calling
+string replace it's calling create file
+right it's creating the markdown file
+now it's creating that Json file you can
+see it's calling the create file tool
+over and over and now it's done okay so
+so you know this is really cool right we
+have our own bash file agent operating
+for us right completing arbitrary tasks
+because we've given it the right set of
+tools the right prompt and a powerful
+enough model clog 3.7 Sonet to
+accomplish the job and call the right
+tool
+this is why tool calling is so important
+this is why Claude 3.7 Sonet is an
+absolute crash out critical release okay
+it just gives you everything you need to
+not only you know create great prompts
+great prompt chains but also to take the
+next step in the composition of
+generative AI to the next step to agents
+okay when you think of agents this is
+what you should be really thinking about
+it's this this this composition of tools
+and the right prompt and a good enough
+model to understand what you want done
+and you know this this is this is the
+agent right this is the agent okay so um
+I know I'm I'm repeating myself over and
+over it's just you really have to uh
+kind of nail The Point again and again
+to really understand how important this
+is and you can see at the end here our
+powerful model um you know our hybrid
+Reasoner base model is calling complete
+task because it knows that it's done
+right it it fully is aware that it's
+completed the prompt we asked it to
+complete okay and you can see it did it
+how much compute did that take so it
+took six compute Loops all right so
+that's great if we run uh GS or get
+status you can see here look at all
+these files it created right uh look at
+how much work it can do obviously I know
+simple examples but you can see the
+power of the tool calling capabilities
+of the agent with the model right so we
+can go open this up hello. Json look at
+that uh hello. markdown check that out
+hello. yaml perfect yaml format and uh
+you know we have our other files here
+generated by our other agents generated
+by CLA code um I hope you can kind of
+see where things are going I hope you
+can see why this is so important this is
+just a such an important release lots of
+details here documentation all here for
+you uh check it out get yourself ramped
+up super quickly with this code base and
+understand the capabilities of this
+model this is a very very powerful model
+and um you know again let me know what
+you think about my ranking when we zoom
+out and take a look at the bigger
+picture you know it can be really easy
+to fixate on a single day or a single
+release but every once in a while
+there's a release that that really moves
+things forward and anthropic is really
+becoming that brand name of uh when
+anthropic moves when they think when
+they say something it's very very
+important to pay attention because it's
+it's what they're saying on the blog but
+it's exactly what they're saying and
+what they're showing that really matters
+lot of really fantastic stuff here when
+we when we zoom out a little bit when we
+look at the larger Trend what does the
+release of claw 3.7 Sonet mean for us
+engineers and what does Claud code mean
+it means exactly as I've been saying as
+I've been predicting and and
+communicating capable agents are here
+they're getting rolled out and the
+people the engineers the builders that
+have them are taking that next step
+they're getting that next level of
+asymmetric Returns on their time by
+using agents when you combine it with a
+powerful Next Generation hybrid model
+right base plus reasoning rolled into
+one what we can do and the systems that
+can be built it's not clear what we can
+do with these tools now it's not clear
+what one single agent can do the only
+thing that's clear is that agents are
+here and you can now take your compute
+to a new level there's now a framework
+and a you know set of infrastructure you
+can use inside of your tools embedded
+inside of the agent architecture to take
+your compute usage to the next level and
+as I've been saying on the channel there
+is a causal relationship between your
+compute usage and the amount of value
+you can create as an engineer and as a
+builder now here's the question that you
+can keep asking yourself to propel
+yourself forward do you have the right
+agent connected to the right tool
+to solve the problems you're facing if
+you made it to the end and you found my
+take valuable if you found the
+information valuable hit the like leave
+a comment subscribe stay focused and
+keep building

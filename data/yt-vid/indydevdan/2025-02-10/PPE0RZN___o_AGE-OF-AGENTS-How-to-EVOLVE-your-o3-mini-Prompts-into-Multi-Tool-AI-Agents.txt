@@ -1,0 +1,1023 @@
+what's up Engineers Indy Dev Dan here
+we've entered the age of Agents
+Microsoft is rolling out co-pilot agent
+mode open AI had back-to-back launches
+with operator right into deep research
+this is the most comprehensive deep
+research tool I've ever seen and used
+Gemini has a version of Deep research
+more notably they have their notebook AI
+agent meanwhile anthropic created
+computer use and kind of set off this
+entire stream of generative AI companies
+building agents on top of their own
+technology the computer use text editor
+and Bash tools are still some of the
+most slept on tools to date check this
+out here's a simple bun logging script I
+can open up the terminal I have a file
+editing agent built on top of anthropics
+file editing tool we can run this prompt
+and it'll make three distinct changes
+for us it's going to read this file
+update it it's going to add the
+directory pram just like we're asking
+and then it's going to add confirmation
+flag you can see that just came in there
+then it's going to create two new
+versions a shell script version and a
+Powers shell version there it is if I
+run that greb command again you can see
+we now have those three individual files
+here's the updated bun version clear
+logs. sh here's the shell version clear
+logs. PS1 here's the Powershell version
+with a single command I was able to
+generate three changes thanks to my file
+AI agent so is not clear to you already
+AI agents are extremely powerful why is
+that it's because they turn your prompt
+context and model into actions at scale
+it's important that you and I the
+engineer know how and when to build and
+deploy AI agents across your developer
+tooling projects and work in this video
+I want to take you through the prompt
+The Prompt chain and the AI agent to
+help you understand which one you need
+to get the job done we'll lean on
+anthropics incredible building effective
+agents post and I'll share my
+distillation of what matters and
+mistakes I've made when building AI
+agents so you can avoid making the same
+mistakes let me introduce you to my new
+video editing tool
+[Applause]
+a okay so before we dive into what
+exactly this tool does let's go ahead
+and go over to the elcut agent file and
+I'm going to kick off a benchmark that
+is going to run a series of problems for
+us using the prompt The Prompt chain and
+the AI agent version this Benchmark is
+going to tell us which one of these
+levels we need to actually solve this
+problem Bon run a cut agent and this
+Benchmark is going to run in the
+background in parallel to us and we'll
+Circle back to this to answer questions
+like are reasoning models always better
+than base models do gp4 AI agents beat
+03 3 mini prompts does a 03 mini prompt
+beat a 03 prompt chain how much more
+expensive is an AI agent versus a prompt
+chain and more importantly is it worth
+it so what's a cut how does it work and
+why did I build it aut is the fastest
+way to remove uh filler words repeats
+and nonsense out of your videos so you
+can go from scripts that you know have
+stuttering in them that have filler
+words and repeats and then it'll end up
+looking like this the scratchpad active
+memory pattern is going to be really
+important for rolling out useful
+personal AI assistance the key here is
+that it focuses on the transcript so
+let's walk through the process it all
+starts out with Word level transcript
+you can use a whisper transcription tool
+to generate this type of Json structure
+right we have all the text and then we
+have the individual words at specific
+start and end times this is the raw
+script what I like to call the base edit
+that we're going to have our AI agents
+edit for us so we scroll down here you
+can see we have you know a couple
+sentences worth step two is create
+slices so it is too much work to pass
+off an entire transcription for you know
+a 30 40 50 minute long video to any
+language model if we open up a
+transcription here you can see we have
+350,000 tokens in this single transcript
+and that includes all the text here and
+then Word level breakdowns just as you
+saw before and this is a real transcript
+from the deep seek personal AI assistant
+video there's just too many tokens even
+if you hand this off to Gemini it's not
+going to be able to solve this problem
+in any cohesive way at scale how can we
+handle this we can create slices so
+slice is a chunk of the transcript
+containing a few sentences each from the
+transcription above we could create two
+slices in these two slices there are a
+couple key things that need to be edited
+out next we're going to allocate our AI
+agents right so in our case this is
+going to be our prompt prompt chain or
+our full-on AI agent as we saw here
+right and we're going to walk through
+this in just a moment I'm really excited
+to share with you how the prompt versus
+The Prompt Chain versus the AI agent
+performs for this use case the results
+are not exactly as you would expect this
+is the really cool part about creating
+slices and it's a great part about
+breaking your large problem into smaller
+more manageable chunks right if ever
+you're feeling overwhelmed with a
+specific problem it's probably just too
+big and you haven't broken it down into
+small enough chunks engineering 101
+slices give us this incredible ability
+to for each slice we'll create an at an
+AI agent and basically hand off this
+problem to compute at scale so you can
+imagine we'll have hundreds of slices
+getting edited all at the same time in
+parallel now step four is where all the
+magic happens slice one you have this
+before text and then you end up with
+this after text right so this is
+happening in parallel slice one and
+slice 2 and slice n are getting edited
+all at the same time with compute and
+then finally we can bind the edits into
+the sequence of timeline edits and every
+video editor has a different format I
+use Final Cut Pro so I'm going to be
+converting these into FCP XML files
+we're not going to get into this too
+much but there's what the format looks
+like we're going to go from prompt to
+prompt chain to AI agent and we're going
+to see across these three levels of
+abstraction which one performs the best
+let's go ahead and run a prompt and
+really understand what this problem
+looks like B run upcut agent and then we
+can kick this off let's let this prompt
+run so this is just running a prompt you
+can see it got the problem wrong let's
+go ahead and figure out why so let's
+open up the logging and just look at
+this individual prompt so we can open
+this up I've been experimenting a lot
+lately with markdown based logging just
+for a more easier to read logging
+experience and let's go top to bottom
+here so here's the original text and
+here's the target text so every one of
+our benchmarking problems coming out of
+our benchmarking file it looks like this
+right here's the structure of it right
+so we have the problem ID we have that
+slice and remember the slice is a piece
+of the transcript and then we have the
+correct text and the beginning text
+inside of the slice here's what a slice
+looks like most importantly we have the
+words and we have the text so let's look
+at what we're starting with and what
+we're ending up with so bunch of
+gibberish in the beginning uh these are
+all real transcripts from videos from
+previous videos by the way so yeah this
+is me just you know stuttering and
+saying uh over and over turns out
+talking about technology can be
+sometimes harder than the technology
+itself we then say the scratch Pad actor
+memor is going to be really important so
+basically what we want to do here is get
+rid of this intro right so that's the
+target text right it's everything
+remaining this is what we want our model
+to edit down to okay so you can see we
+wrote The Prompt we'll look at what
+exactly this prompt looks like in just a
+moment our llm created these deletions
+for us start time end time the duration
+explanation you can see the exact words
+that it removed so it's going to remove
+of and then act um the here's the
+original here's what we wanted to Target
+and then here's what the prediction was
+right here's what our model output for
+us you can see it didn't quite get the
+edit right this is an example of where a
+prompt is not enough and I'll and I'll
+link just for fun I'll link the original
+one prompt is not enough video that
+really kick off the channel back then we
+were talking about the same concepts
+with much more primitive technology it's
+incredible to think about how far we've
+come since that video but you know one
+prompt is not enough when you're trying
+to do more and more at scale and you're
+trying to accomplish and hand off a ton
+of work to your AI tooling and here's
+the target text right so we can see here
+a simple prompt did not do the job let's
+look at what this prompt actually looks
+like so if we open up this prompt you
+can see here we have our classic clean
+XML is format we have our purpose we
+have our instructions and then we have
+our variables at the bottom this was a
+dynamic variable and our application
+replaced it so this you know looks like
+this in our code right so this is a you
+know variable that will be replaced
+and what it ended up doing here was
+placing the iteration slice that we're
+operating on right and remember the
+slice is just a small piece of the
+entire transcript so that's what the
+iteration slice is you can see we have
+some instructions here classic prompting
+nothing new here that we haven't
+discussed on the channel before let's
+scale this up right this is the prompt
+and if we open up our llms file collapse
+everything we have the intelligence
+comment here and this is what that looks
+like in code okay so nothing too fancy
+but it is important that I share it here
+because it's tool is proprietary prompt
+up there we have our XML slice that
+we're replacing with the incoming slice
+and then we're doing some logging
+reasoning effort check and then we're
+just pulling out a bunch of auxiliary
+information from the response right
+that's the prompt if we look at
+anthropics building effective agents doc
+it all starts with The Prompt what we've
+done here is we've given our language
+model access to an output structure so
+that we can pass in a prompt our llm
+then makes a judgment call on the output
+in the prompt version we don't have
+anything fancy here all we have is a
+structured outputs call that generates
+our deletions and so that's all our
+prompt is doing you can see here we have
+our response format that has our uncut
+uh deletion and we are using Zod
+response format for structured outputs
+let's go ahead and kick up our compute
+there's two levers we can pull here
+right away we can just do one of them
+for fun right we can quickly just take
+this right this is running GPD 40 we can
+go config we can go llm model we can go
+O3 mini and then we can just quickly you
+know kick this off again and now o03
+mini is going to take a hit at solving
+this problem let's take a look at the
+output that 03 mini gave us same deal we
+have the original text we have the
+target there's the prompt for O3 mini
+here's the deletion it created and so if
+you scroll down here you can see O3 mini
+got this problem right with just a
+prompt very cool to see this right so we
+have the original text and then we have
+the predicted final text coming out of
+our language model and then we have the
+target text so that's us answering the
+problem successfully and incorrectly so
+I'll comment this out and let's go ahead
+and look at the prompt Chain by looking
+at the log you'll understand exactly how
+it works so let's kick this
+off what we're doing here with the
+prompt chain is we're taking that same
+problem and we're throwing more compute
+at the problem you can see here gbg 40
+got this problem correct with a prompt
+chain so let's go ahead and look at the
+log and then let's break down how the
+prompt chain worked let's go ahead and
+open up V2 this is the UT prompt chain
+and let's look at how a prompt chain
+outperforms the single prompt okay so
+once again we have that exact same
+problem right uh this scratch bad kind
+of blah blah blah so basically we have
+the starting text and then we have the
+ground truth right this is the end
+result we're looking to get to and then
+we have this new piece of information
+when you're using prompt chains and AI
+agents you'll always want to limit the
+amount of compute or Loops that your AI
+tooling can run you don't want it to run
+infinitely you might have a bug
+something might go wrong and there is
+nearly always a sweet spot or a perfect
+range for the problem that you're trying
+to solve so you can see here for this
+prompt chain I'm allowing eight compute
+Loops eight iterations okay so we start
+with this one deletion here um this the
+scratch Pad kind of act um and then if
+we scroll down here you can see you know
+that made a pretty good edit then we can
+scroll down and then you can see it only
+took out um so it's taking another shot
+it sees that you know after this first
+ROM that I made I still need to edit
+more okay so now it's just taking out um
+third compute Loop right so it has you
+know five shots left and so now it's
+telling us that no deletions were
+generated so it's going to exit the loop
+so inside of this prompt which we'll
+look at in a moment there was a
+condition that says um if you're done
+return an empty list okay it created two
+deletions here's the first one with
+several words in the deletion and then
+we have in a follow-up Loop because it
+didn't create the perfect edit the first
+first time you can see here we have the
+words um edited that out and then we
+have the final iteration slice so this
+is what our final slice looks like with
+the edits made from the deletions okay
+so there's that nice Json object there
+and then you can see here here's the
+original here's what our prompt chain
+output for us and here's the target text
+you can see we of course have the
+correct answer this is really important
+because for this simple use case of
+effectively determining which words to
+remove that don't make sense you can see
+here that having a little bit more
+compute you know quite literally it just
+needed one additional run right so we
+had one deletion then we had another
+deletion and then on our third compute
+Loop it said there's nothing left for me
+to do here I'm done by turning our
+prompt into a prompt chain quite
+literally just saying run it again it
+was able to generate an improved answer
+for us so you know that's the log and
+you can see here we have three prompts
+right so one prompt for our first run so
+we have this first prompt here and then
+we have our second prompt and then our
+third prompt and it was in our third
+prompt where the prompt chain you know
+the language model returned no deletions
+so that means we're done okay let's go
+ahead and just take a look at the prompt
+for a moment here and you'll see a very
+similar structure except for the primary
+difference that we have an original
+slice and current deletions okay so in
+addition to the iteration slice which is
+the small piece of the transcript that
+we're working on currently we also have
+the current deletions so when our model
+is looping it needs to know what it's
+already edited and it needs to know the
+starting point okay so this is where it
+started this is the current deletions
+that it's made and then the iteration
+slice is the result of those deletions
+on the original slice so let me just
+show you the second prompt you can see
+here current deltion is empty and in
+this version our current deletions has
+some content right so in the second
+prompt we have made edits right and you
+can see here this corresponds to the
+edits we saw exactly in the log The
+Prompt chain it allows us to keep track
+of the state the original slice the work
+that it's done and the work that it's
+doing that's iteration two and then of
+course we have the third iteration you
+can see here same deal except we have an
+additional current deletion right so we
+have two deletions in here we can go
+ahead and separate this just to make it
+a little bit more clearer right so you
+can see those two removed
+words right there okay so this is our
+prompt chain and we can go ahead and
+dial into this code for a moment here
+prompt
+chain we can see here we're just setting
+up logging we're pulling out our model
+we're pulling out the problem slice
+starting text and then we're actually
+running the code here in the end every
+one of these versions right every one of
+our prompt our prompt chain and our AI
+agent is just going to return deletions
+it's really important to set up your
+workflows so that they're always
+returning consistent types consistent
+formats this allows you to operate on
+them at scale and create versions of
+them so all we're doing here is
+outputting deletions and then some
+auxiliary information right in this case
+we just have the cost so let's go into
+generate a cut deletions V2 this is our
+promp chain so V1 is just a prompt V2 is
+a prompt chain so let's take a look at
+what this looks like and you can imagine
+it is you know effectively going to be a
+loop and you can see here we're passing
+in Max compute and we're updating this
+to I think eight but you can see here
+what's happening right we basically have
+the same thing and we're just looping
+this time right we're keeping track of
+some more State there's our iteration
+slice there's our original slice and
+here's our you know list of deletions
+that we're keeping track of and then of
+course here's our Loop right so just as
+you saw before there's our instruction
+Rich prompt purpose and then our Dynamic
+variables that get updated inside of our
+application right if we collapse the
+prompt you can see we're always
+outputting our prompt file we have our
+actual execution Loop this is the prompt
+chain let's go ahead and run the most
+exciting version right let's run the AI
+agent
+let's kick this
+off this agent has 16 compute Loops so
+I'm giving it 16 compute uses and
+unfortunately gbd 40 got the problem
+wrong so let's figure out why why did it
+edit this problem incorrectly okay let's
+look at V3 you can see here it made four
+prompts in total and if we hop into this
+file we can see a lot of the same things
+the big difference here is that our AI
+agent now has access to a series of
+tools it has name and args it's running
+make deletions here just cutting out
+this one word it's running another tool
+call here editing out a few additional
+words so on and so forth right you can
+see here it just continues to call make
+deletion we run over and over and over
+and over and then once we get to the
+bottom it now calls an explicit tool
+instead of returning an empty list it
+calls complete edit when it's done so if
+we scre all the way to the bottom we'll
+get that exact same structure so you can
+see the scratch packed active memory
+pattern is going to be really important
+for rolling out useful person AI
+assistance it just took out scratch Pad
+didn't think scratch Pad was important
+so it edited that out okay so this is
+something that will just happen
+sometimes you know you can see here
+between the prompt chain and the AI
+assistant on this singal use case more
+compute isn't always better and this is
+a really important thing to call out
+okay so this is our AI agent and we can
+of course scale this up let's go ahead
+and let our 03 mini run the AI agent
+version and let's go ahead and take a
+look at the AI agent code okay so we'll
+go ahead kick this off and let's dive
+into what the AI agent version of this
+looks like so same deal on the top level
+just logging and setup and then this is
+where all the work happens okay so
+generate a cut deletions V3 so we'll hop
+in here and let's open this up couple
+things are different right away we have
+an entire class to support our AI agent
+why is that because we need to better
+manage State and Tool calls so just like
+the prompt chain you can see there's our
+Loop and we'll go into the class in just
+a moment here but you can see we're
+setting up the agent as a new class
+we're passing in our starting State and
+then the agent just gets updated with
+this one call right we just run prompt
+over and over and then it just returns
+if it's done right because our agents
+know what work to do they know when to
+tell us when they're done it's just a
+matter of you know letting them Loop
+letting them do the work and then
+they'll let us know when they're done
+right this is kind of an interesting
+Paradigm Shift when we move into these
+longer running assistants and these
+longer running jobs you know a while
+back we put out this video called the
+two-way prompting and that video really
+does set up the future of how we'll be
+operating with agentic technology it
+might start out with us prompting them
+but then they will prompt us right and
+we just saw this with deep research once
+you kick it off it asks you questions
+right and I think we're going to see
+more of that as these tools progress but
+I digress let's jump into agent prompt
+and let me break down this class
+structure so I'll just collapse and we
+can look at it at a high level so this
+is the AI agent version you can see here
+we have state that we're keeping track
+of tool calls messages so on so forth we
+have our individual methods um the most
+important thing is here inside the
+prompt you can see here more
+instructions I'm listing out the
+explicit tools it has access to you can
+see we just have three tools
+interestingly you know it doesn't take
+many tools to make your system in AI
+agent and then we have the state and
+this is really where the state becomes
+the environment okay if we open up
+anthropics building effective agents
+we're now in this state down here right
+so these are all different types of
+agentic workflows we have orchestrators
+parallelization we've talked about these
+on the channel before we'll bring them
+up again when they're relevant but we
+jumped all the way down here to agents
+okay and this is what's happening right
+we are prompting our AI agent it's going
+to run action and get feedback and the
+feedback that it's getting from its
+environment here is the edits that it's
+making right it's the edits and then the
+modifications to the original slice to
+the iteration slice okay so it's not far
+off at all from the prompt chain right
+that's something important to mention
+but this is a different design right
+we're not just looping over a structured
+outputs call we're now saying hey here's
+a bunch of instructions here's your
+purpose here's your tools here's your
+current environment solve the problem so
+it's it's quite a bit different even
+though the outcome here as you'll see is
+going to be relatively similar so now we
+have our AI agent and the action it
+takes updates its environment and then
+once again it tells us when it's done
+right it has access to this complete
+edit tool call and it also has a reset
+to original so if it decides that it's
+gotten itself into a bad state it can
+just reset okay and I personally don't
+care what tools it calls or what order
+it calls them I just want a good edit
+right I have an outcome that I'm looking
+for and then I'm packaging via this
+prompt context and model I'm packaging
+the work that I want done the right way
+and then I'm handing it off to this AI
+agent okay so that's what this looks
+like we then have a you know classic
+open Ai call here we have reasoning
+effort if we want to go high and then
+you know just classic stuff here right
+we're handling the tokens and making
+sure that we call the right tool and so
+this is the AI agent version so let's go
+ahead and take a look at the output
+right we just ran that with 03 mini
+let's see how it performed so you can
+see it got the answer correct let's see
+what it did okay so I'll close this 03
+mini logging session top to bottom make
+deletion it's going to remove a there's
+the before and after so you can see it
+just pulled out that single uh from the
+beginning right we have one deletion and
+then if we scroll down here so you can
+see these are all creating their own
+prompts and then we have a nicer larger
+edit I did change it so that it is
+making a single edit but you can still
+remove you know chunks of words right
+chunks of words at a time right you want
+to be able to remove phrases just like
+as if I were actually editing this it's
+important to make the AI agent or the
+promp chain or your AI tooling mirror
+the process you would take it's always
+removing one idea of an edit at a time
+right one piece of an edit at a time so
+you can see removed a and then removed
+this the scratch Pad we can see here
+this the scratch Pad act and then we
+have this right the scratch pack active
+memory pattern is going to be really
+important and then you can see look at
+this once it got to this state it said
+Perfect Right the tool decided it was
+done and this is this is really really
+cool right it's not that different than
+the prompt chain right but it explicitly
+here called a different tool there are
+all the deletions there's the final
+transcript slice and if we scroll to the
+bottom B we have the original the final
+and the target okay so this is correct
+fantastic so now let's go ahead and look
+at the
+Benchmark instead of just a single
+problem running against one model at a
+time you know just like in our previous
+benchmarking video in order to
+understand and solve problems with
+general of AI at scale you need to
+create tests and tests are just another
+word for eval or benchmarks for this
+tool I'm starting to build up a suite of
+bench marks right now I only have 10
+problems but you can see here I'm taking
+it and I'm multiplying it by whatever
+models I want to run against so this ran
+in the background let's go ahead and
+just take a peek at the results from
+this and let's see if we can answer some
+of the questions we put forth earlier in
+the video so if we look at the logging
+and if we open up logging Benchmark you
+can see here look at all these
+executions right you have to keep in
+mind you know it's two models running
+against 10 problems for for three
+different versions We have the prompt
+promp chain and AI agent that's 3 * 2 *
+10 so let's go ahead and just look at
+the top level Benchmark session so a
+benchmarking session is just going to
+contain the kind of high Lev results and
+so it's going to tell us you know for
+the problem and for the model what it
+got right and what it got wrong across
+the three levels is a prompt chain
+always better than a prompt is an AI
+agent always better than a prompt chain
+let's see if we can find some answers by
+looking at this Benchmark here we have
+The Prompt running GPT 40 it got the
+problem wrong and you can see here
+here's a start text here's our Target
+text it's incorrect it left this our
+prompt chain has four remaining compute
+uses so this is set at eight and our V3
+a agent this is set at 16 we have a
+little bit more leeway for our a agent
+because it can reset the entire state if
+it wants to so we can see here with gbt
+40 we have two correct and one wrong now
+we have that exact same problem running
+on 03 mini right so these are are both
+problem zero there's gbt 40 and here's
+problem zero with O3 mini same deal
+except O3 mini right a powerful
+reasoning model gets every single
+version right so what this you know
+individual test is telling us is that we
+don't need any more compute to solve
+this problem a reasoning model and a
+prompt is enough okay but that is not
+always the case as we'll see here as we
+look at a few more problems right so gpg
+40 problem two here's a simple one we're
+going to go right for we're going to go
+so how are we're going to Benchmark and
+then if we scroll here the correct edit
+is so how are we going to Benchmark the
+M4 this is from the M4 benchmarking
+video if we scroll down here you can see
+gbg4 in every single variant gets this
+right so prompt prompt chain a agent
+it's all good okay 03 mini interestingly
+the 03 mini gets the individual prompt
+wrong but you can see here the prompt
+chain and the AI agent get this problem
+correct okay so very cool to see that
+now we're moving to problem two in gbg
+40 so we can see here here this problem
+every single version of gbt 40 got it
+incorrect right false false false so
+this is a longer more interesting edit
+let's see how 03 mini has performed true
+true and then interestingly false so
+this is a case where more compute is not
+better interesting to see that and we
+can go on down the line here right I'm
+not going to bore you with every single
+thing here you can see here that this uh
+promp chain over edited so it ended up
+cutting out way too much text right it
+just kep kept going down this is the you
+know one of the problems with just a
+prompt chain that just runs rampid it
+just edited everything down okay and it
+didn't have the tools right didn't have
+the tools available to reset or fix the
+edit so if we continue down the line
+here it's that same problem with O3 mini
+you can see here prompt was wrong the
+chain was correct but the AI agent was
+not correct and so you can see here it
+looks close right if we pull this text
+out right and we can just highlight this
+to see so let's go ahead and open up
+everyone's favorite local model tool
+we're going to be using oama and here's
+where it branched and we're going to be
+using a tool I'm building up called Beni
+and what we wanted was and a tool I'm
+building out called Beni okay so so this
+is a better failure in the AI agent you
+know it made a clean edit but it wasn't
+the exact edit we're looking for and
+this is where this is where making the
+prompt more specific to the exact
+editing decisions and subjective editing
+tastes it's going to be more and more
+important okay there are many of these
+in here that could have been marked
+right um specifically with the 03 Mini
+model that could be marked true could be
+marked correct but it doesn't exactly
+hit the target text right this is where
+something like Leavin distance or some
+rough string comparison framework can
+come in okay so we're going to skip
+through these right there's a lot going
+on if we just scroll all the way to the
+bottom we can get some highlevel
+overarching Benchmark results okay
+here's everything that was correct and
+incorrect for a raw prompt we have
+across all models eight correct and if
+we break down by model we can see GPT 40
+got only two correct while 03 mini got
+eight of these problems correct with
+just a prompt even though O3 mini is
+half the price of gbg 40 it uses
+thinking tokens right it has to reason
+so the price is still you know something
+like almost four times as much right so
+there's just the raw prompt right so we
+have 8 out of 12 correct now when we
+move to the prompt chain we see
+something interesting right you can see
+we have one more correct and you can see
+here that the point is going to 03 many
+so this is pretty good right so out of
+10 problems 03 mini with a prompt chain
+solved 70% of them correctly okay and
+it's very likely like I mentioned um
+there are just some more subjective
+editing taste decisions in the language
+of you know what constitutes a correct
+edit maybe you can give a one or two
+point discount here if you wanted to
+okay that's the prompt chain
+interestingly here we can see that the
+costs have jumped up quite a bit for gbt
+40 okay so for all 10 problems running
+on the prompt chain you know 30 cents
+now when we move to the AI agent we see
+something very interesting right uh the
+results don't improve okay the results
+get worse so we have seven correct 13
+wrong for every AI agent version of this
+so you can see here gpg 40 has a really
+hard time operating the AI agent in a
+useful way and 03 mini half the time it
+gets it right half the time it gets it
+wrong again we can give or take a couple
+points for editing decisions so you know
+this leads me to kind of the big
+takeaway from the work I'm doing here
+and some you know potential advice and
+direction that you can take from this
+for your generative AI
+work very clearly you likely don't need
+an AI agent you know whenever there's a
+new tool that comes out we always want
+to use the tool and check out the tool
+and see what we can do with the tool
+that's fine but when you're really
+solving problems when you're really in
+the mindset of value creation you find
+problems first and then you apply tools
+to them from your tool belt you don't
+find tools first and then look for
+problems to solve it's just the wrong
+way it's the backward way to do things I
+was really happy to see that anthropic
+explicitly mentions this in their
+documentation it's about building the
+right systems for your needs start with
+with prompts then optimize them with
+evals and then add multistep agentic
+systems AKA prompt chains workflows
+graphs right whatever you want to call
+it it doesn't matter you only do that
+when the simpler Solutions fail it looks
+like for my problem here for the problem
+space of editing down words in a
+transcript it looks like what I'm
+actually looking for here is for my step
+four right my AI agents they actually
+don't need to be AI agents they can just
+be prompt chains these are concrete
+steps right predefined steps of
+executing a prompt and then updating
+some State and then running another
+prompt it looks like for my you know
+intelligent editing system I really only
+need prompt chains and that means that
+you know inside of this for my
+intelligence I really only need to you
+know let my assistant run over and over
+on a series of steps now of course there
+are tons of caveat to that I don't
+really have enough data right this is
+not significant data to make a complete
+decision to completely rule out AI
+agents obviously you know that's not
+enough but I think it's just really
+important to stress that point if a
+prompt chain can do the job for you use
+a prompt chain I think to push a little
+bit further you can experiment with an
+AI agent and see what that might look
+like to give your AI agent full autonomy
+over the system but I think that what
+we're going to see moving forward is
+that a lot of the AI agents that are
+going to to be built underneath the hood
+they're not actually going to be AI
+agents they're going to be agentic
+workflows and more specifically they're
+going to be uh just prompt chains so
+just to recap you know there are three
+levels to this you have just the raw
+prompt you have what are called
+workflows or prompt chains or graphs and
+then you have much more autonomous
+agents that just have a bunch of tools
+you give them a problem you give the
+right context and then you just say go
+solve my problem you know under the hood
+I think what's really going to happen is
+that we're going to see tons and tons of
+agentic workflows right or put simply
+prompt chains right there are many very
+interesting very powerful ways to use
+promp chains right and anthropic has
+detailed a lot of them here we have
+routing we have parallelization I like
+to call this the fusion chain we put a
+video out on this in the past and then
+we have you know orchestrators there's
+definitely a good call for using an
+orchestrator for a cut evaluator
+Optimizer and then we can go down the
+line right all the way down to the AI
+agent and the AI agent workflow is the
+most interesting because in a certain
+way it's the most hands-off I think
+there's a lot of value to be created
+here but the trick is always
+benchmarking the performance of your AI
+agent versus a predefined series of
+steps that call prompts and tools AKA
+prompt chains a couple of improvements
+that I'm thinking about making for aut
+it's pretty clear that this super harsh
+yes no response framework that I have
+here where we just have correct true or
+false isn't going to be accurate enough
+to create comprehensive of benchmarks
+rolling out something like Lin distance
+to allow for a 5 to 10 character
+difference is probably going to be a big
+win for improving these benchmarks going
+forward you know another big thing that
+piggybacks off this is that you know
+video editing even when you're just
+editing out transcripts it's a very
+subjective experience certain editing
+decisions that a model will make um are
+totally valid and legit and it might not
+match up with the exact target even
+within the five or 10 characters using
+the 11 scene distance that could
+actually work so I think a more concrete
+way to improve that is to add more
+comprehensive
+examples into the prompts themselves you
+know why is that important how can that
+change the outcome that's super
+important because you know when we add
+examples to our prompts to you know give
+it some idea about what types of edits
+we wanted to make it'll pick up on the
+taste of our editing and what words we
+like to keep in and keep out so on and
+so forth so more work to be done on that
+adding an examples tag here is going to
+be you know really important for making
+the model more consistent with my
+personal editing style so something to
+think about for your prompt chains and
+AI agents examples that guide your model
+in these more creative more subjective
+decision-making domains is a great way
+to guide your model and to guide the
+outcome and of course the best way to do
+this is benchmarking but also run this
+against Real data and then in a
+reinforcement learning type of way take
+the edits that are working coming out of
+the model and update the prompt that was
+feeling that model with those correct
+edits as examples right so more on that
+in the future have some pretty
+interesting ideas around automatic
+feedback looped prompts to add more Auto
+self-improving Behavior into the prompt
+another interesting problem that I'm
+running into is that idea of not solving
+the problem at all I think one of the
+strongest signs of you know a highlevel
+problem solver a senior level engineer
+is the ability to look at a problem and
+decide that it doesn't need to be solved
+at all right and this is tricky to teach
+or explain to an llm because you know
+these are next token generators not next
+token not generators for edits I've run
+into this several times with this tool
+already where the best thing to do is
+nothing right the the the slice in a
+real video will sometimes contain
+perfect script and nothing needs to be
+changed so you know I think probably
+more prompt engineering and explicitly
+mentioning when things need to be edited
+will be helpful for solving that problem
+inside of prompts prompt chains and AI
+agents so you know the next time you
+want to solve a problem with generative
+AI first start with a prompt then move
+to a prompt chain and only if your
+prompt chain and your you know graph of
+steps is not giving you the performance
+that you need only then should you move
+to a full-on AI agent that can operate
+in a domain for you automatically I
+highly recommend you know throughout
+that process the more important the
+problem you're trying to solve the more
+important it is to set up benchmarks so
+that you can know for a fact that your
+prompt chain is outperforming your
+prompt and your AI agent is
+outperforming your prompt chain agents
+give us the ability to scale our impact
+even further Beyond we're going to be
+talking and more importantly building
+agents on the channel over 2025 like
+subscribe and comment to stay connected
+to this content and no matter what stay
+focused and keep building

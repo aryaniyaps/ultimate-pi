@@ -1,0 +1,1885 @@
+[0.2s] If you really must not leak this data,
+[2.6s] then you have to build security controls
+[5.5s] in your code base. I'm not even talking
+[7.5s] about at the AI [music] layer. I mean in
+[9.6s] your code itself to prevent that data
+[11.6s] from leaking. So for example, a really
+[13.6s] trivial example of this is arbback. If
+[16.3s] you're going to use uh arbback uh in
+[18.6s] your databases, that's a great way to
+[21.0s] prevent a security control. How would
+[23.7s] you mask out a street address?
+[26.8s] A street address is like really really
+[29.3s] hard to do with some reax
+[32.6s] and like what I would use a general
+[34.4s] rule.
+[35.1s] >> Also redacting anything with a number
+[37.7s] followed by text.
+[39.3s] >> Yeah, exactly. Like it's really really
+[41.0s] hard and we can if you guys want we can
+[43.4s] actually write the general rule for what
+[45.3s] a street address kind of thing looks
+[46.6s] like and we can talk about some other
+[48.0s] examples on there because I think that
+[49.2s] might be interesting. Don't make the LM
+[51.0s] do things that it's either like not good
+[52.7s] at because you're going to detract
+[54.0s] attention away from the task that it
+[55.8s] only the LM can do. If you can do things
+[58.1s] deterministically, then don't make the
+[60.1s] LLM do them cuz it's going to be faster,
+[62.0s] cheaper, and more reliable. And the
+[63.6s] thing that only the LM can do is going
+[66.4s] to be much higher performance cuz you're
+[68.2s] not having it try to reason through
+[69.7s] three possible like three different
+[71.4s] problems in one question.
+[78.1s] This is the AI that works show where we
+[79.9s] teach you real AI techniques that
+[81.8s] actually work in production uh have been
+[84.7s] proven uh in companies of all sizes from
+[87.4s] small startups to giant enterprises. Um
+[89.9s] I have here uh one of my favorite people
+[92.0s] in the whole world by who's going to
+[94.2s] tell us today about uh PII and uh
+[97.9s] redaction and how to do that right and
+[100.6s] cleanly and fast and how not to over
+[102.9s] complicate it. Yes.
+[104.7s] >> Yes. Yes, indeed. I think um I think PII
+[108.4s] is going to be a great topic.
+[111.0s] So, let's get right into it. We're going
+[112.6s] to go straight to whiteboards. Can you
+[113.8s] send me the whiteboard links? I thought
+[115.6s] >> All right, I am getting the whiteboard.
+[117.2s] Uh you know, I was just sitting here for
+[118.9s] 15 minutes waiting for you to show up,
+[120.5s] but like why would I actually go do prep
+[122.7s] when uh when I could just sit here and
+[124.5s] BS with the audience?
+[126.3s] >> All right, but while we're here, um
+[127.8s] let's go chat. everyone that has had to
+[129.9s] do with PI data. I think there's two
+[131.5s] classes of PI data and I want to talk
+[133.3s] about both of them in slightly different
+[134.6s] ways. Class number one is if you leak
+[137.4s] it, you are you are um legally liable
+[141.8s] and there is zero risk tolerance for
+[143.7s] that data. And class two is you would
+[147.5s] strongly prefer not to leak the data.
+[149.8s] And I put those I put those in two
+[152.1s] slightly different categories because
+[153.6s] the way that you have to handle them,
+[154.9s] the way that you think about them is
+[156.8s] fundamentally different. And I think
+[159.0s] that's often the first mistake that
+[161.0s] people make. They think about everything
+[163.1s] in a single u in a single class of data.
+[167.4s] So u I'll share tab. So we have the
+[169.8s] whiteboard going on. So when we go
+[171.6s] through like class one just really
+[173.8s] quickly the way that you at least I
+[175.8s] think people should think about this is
+[178.1s] the fact that if you really must not
+[181.0s] leak this data then you have to build
+[183.8s] security controls in your codebase. I'm
+[186.6s] not even talking about at the AI layer.
+[188.6s] I mean in your code itself to prevent
+[190.6s] that data from leaking. So for example,
+[192.6s] a really trivial example of this is
+[194.6s] arbback. If you're going to use uh
+[197.1s] arbback uh in your databases, that's a
+[199.5s] great way to prevent a security control.
+[202.6s] But most people don't design security
+[204.5s] controls for their companies because you
+[207.4s] don't need this. Most people do not need
+[210.4s] class one security. You should not do
+[212.2s] this even if you're in the medical
+[213.4s] space. Most people like you just need to
+[215.6s] make sure the data is secure storely in
+[217.2s] the database layer. But what you do with
+[219.2s] it post is uh it can mostly be handled
+[222.7s] by keeping all your system running on
+[225.0s] intranet.
+[226.8s] As long as you're running on intranet,
+[228.1s] most of class one is kind of dealt with.
+[230.5s] >> I have beef with this.
+[232.4s] >> Oh, okay. Tell me your beef.
+[234.7s] >> I'll I'll get into it. Keep keep
+[236.6s] introducing the topic. uh and I will I
+[238.8s] will get into the uh zero trust versus
+[242.3s] beyond corp versus just using a firewall
+[245.2s] as your security boundary.
+[247.3s] The at least the way I model it is like
+[249.0s] look if you're using an internet then
+[251.2s] really your only leakage is whatever you
+[253.5s] tools you have that comes with all the
+[255.0s] consequences of using internet which
+[256.5s] means you can't use all the best tools
+[257.9s] out there because they don't run on an
+[259.5s] internet but if you truly truly
+[262.0s] >> can we use a 60-second 60-cond
+[264.5s] explanation of how you think of internet
+[268.0s] >> yeah my way of thinking about internet
+[270.2s] is it is uh it is hardware that either
+[274.2s] you loan or you control that is
+[276.2s] completely firewalled off of off of the
+[278.5s] rest of the world except for very very
+[280.7s] very fine grained APIs that you have
+[283.9s] explicitly allowed.
+[286.6s] >> Okay. So it's basically an environment
+[288.8s] that has no inbound or outbound access
+[291.0s] to the public internet.
+[292.6s] >> Yes. And again please note that I come
+[294.6s] from writing uh assembly code. So like
+[297.6s] my model of the internet may not be
+[299.4s] perfectly accurate with those that have
+[301.0s] worked on real cloud systems. Uh so just
+[304.1s] keep that in mind. That's okay. I'm I'm
+[306.9s] here to correct you and tell you what
+[308.3s] you're wrong about as usual.
+[310.6s] >> Is this uh is this how you think about
+[312.4s] it though?
+[313.9s] >> Um yeah, I think I think it makes sense.
+[316.2s] I think there's something to be said
+[317.4s] with like a lot of a lot of folks have
+[319.5s] like there's this thing that came in
+[320.8s] vogue in like the mid2010s which is like
+[322.7s] okay you have all these servers and
+[324.1s] basically the idea was like if someone
+[327.0s] can cuz cuz you have like personal VMs
+[329.0s] right you have like laptops that live
+[331.1s] outside of the physical building, right?
+[333.4s] This is like
+[334.4s] >> you have to be in the building like if
+[336.8s] you imagine like a file share or
+[338.2s] something like you have to be physically
+[339.4s] in the building
+[340.6s] >> and then you have like a user
+[342.2s] workstation
+[343.7s] and somehow you need to create some kind
+[345.5s] of secure route between that person from
+[348.0s] their home internet can get in via like
+[350.3s] a VPN server or something
+[352.5s] >> and the idea is like
+[353.9s] >> if it's like once you're in the network
+[355.8s] everything is open to you then like all
+[358.7s] these boxes can obviously like you have
+[360.2s] other firewall rules internally but
+[362.2s] things like MTLS like basically the way
+[364.6s] Google does this is everything's on the
+[366.5s] public internet and every single node in
+[369.1s] the infrastructure has to authenticate
+[370.8s] to each other rather than like once
+[372.6s] you're in the network you can do
+[373.8s] whatever you want
+[375.1s] >> yeah this is again why I'm not a cloud
+[377.0s] engineer because I don't know
+[378.2s] >> this is an AI show we won't talk anymore
+[380.0s] about cloud but uh this it's a it's a
+[382.4s] good intro of like you know you may not
+[384.6s] need a bunch of AI to do this if you can
+[386.9s] solve it at the infrastructure layer
+[388.4s] >> yeah and this is kind of why I said like
+[390.2s] for class one like if you if you mess
+[392.2s] this up, you are legally liable. This is
+[394.9s] a control plane that you have to build
+[396.6s] and you just have to build this
+[397.7s] regardless of the fact that you're using
+[399.0s] AI or not. the part things like PCI like
+[403.6s] if you manage credit card numbers and
+[405.5s] store them like every single node that
+[407.8s] touches a credit card number has to be
+[409.6s] basically what we call airgapped where
+[411.2s] there's no not only can no one get into
+[413.1s] the servers but nothing in that network
+[415.1s] can go outbound because even if someone
+[418.0s] defense in depth is even if someone
+[419.8s] compromises your entire network they
+[421.6s] still can't get out of the network to
+[423.5s] send the data they stole.
+[425.2s] >> Yeah. Exactly. And like that's kind of
+[426.9s] the level that you need for that. Um,
+[429.0s] and there's if you're building an AI app
+[431.0s] in there, again, nothing you can do but
+[432.6s] just pure software. There's you can make
+[434.4s] cloud code write and everything, but
+[435.5s] like fundamentally just software and you
+[436.7s] have to like do a security analysis to
+[438.2s] make sure that you're not leaking data.
+[440.3s] >> I am not talking about any of that
+[442.0s] today. We are going to be talking about
+[443.7s] class two, which is you would just like
+[445.9s] to not leak it. Um, and I say like to
+[448.9s] because like it just it perhaps it
+[451.0s] erodess customer trust. Perhaps it
+[452.8s] erodess like uh your your ability to
+[455.4s] trust the AI foundation models to not
+[457.0s] leverage the data incorrectly or store
+[458.6s] the data incorrectly. There might be a
+[460.1s] variety of reasons there, but there's
+[462.0s] something around the fact that you don't
+[463.8s] want to give this data to someone else.
+[465.1s] Maybe you have hypo compliance and like
+[466.7s] your stuff can only run locally, but you
+[468.2s] want to use OpenAI's best models.
+[470.2s] >> How do you get around that sort of
+[471.6s] system?
+[472.6s] >> Let's do it. So, um, first thing I think
+[475.4s] you have to recognize is it is
+[477.5s] effectively impossible to get 100% PII
+[481.0s] guarantees on here. And the reason I say
+[483.4s] effectively impossible to get 100%
+[485.4s] guarantees is because if any of you have
+[487.8s] ever played I think the the best way
+[490.6s] that at least I model PII is it's really
+[493.0s] really good masking. You want to mask
+[495.3s] the data in some way that sends the
+[498.2s] concept of the data across but doesn't
+[500.6s] actually send the raw data itself. And
+[503.0s] if you've done that, you've done a
+[504.2s] pretty good PI system. So, I'll talk
+[507.0s] about why I think it's really hard to
+[508.3s] provide a guarantee. And the best
+[509.4s] analogy is video games. If you've ever
+[512.2s] played an online video game, many of
+[513.9s] these video games ban certain words
+[516.2s] because there's not um
+[519.3s] they're not um they're not friendly is
+[522.9s] the way.
+[523.4s] >> They're not conducive to the gaming
+[525.3s] company's goal of creating a healthy
+[528.6s] environment.
+[529.4s] >> Positive. Exactly.
+[530.4s] >> Yeah. that like invites people in and
+[533.1s] causes more people to play the game and
+[534.9s] spend in most cases it's like people
+[537.0s] will spend less money on the game if
+[538.6s] they jump in and every five minutes
+[540.6s] they're getting called a slur or
+[542.3s] something.
+[543.0s] >> Exactly. So, but um as many of you that
+[545.9s] maybe gamers probably know those rules
+[549.1s] are very very um you can make the word
+[552.6s] unicorn mean something new all of a
+[554.2s] sudden in the certain ecosystem without
+[555.8s] it doing anything. And there's also
+[558.1s] various ways to say the same word with
+[560.7s] slightly different spelling, slightly
+[562.2s] different slightly different annotation
+[564.6s] that gets the same concept across, but
+[566.6s] basically makes it impossible for the
+[567.9s] gaming companies to prevent all of it.
+[569.8s] And you can only really
+[570.8s] >> because they were using reax for almost
+[573.0s] the entire history of this. And every
+[574.9s] company has just this long like you know
+[577.0s] thousandline reax that I mean you can
+[578.9s] probably go download a reax off of npm
+[581.0s] that is like profanity filter.
+[583.8s] >> Exactly. So like step one is like you do
+[585.5s] reax but then like step two is like oh
+[588.1s] use an LM. But the problem with step two
+[590.5s] is you kind of live on this spectrum of
+[592.4s] like where do you want to where do you
+[593.8s] want to live? Do you want to live on do
+[596.1s] you want to live on the line of
+[597.8s] sometimes we let let stuff leaks happen
+[601.5s] and we react or do you want to live on
+[604.6s] the line of data doesn't make it through
+[607.8s] >> and like maybe you degrade the
+[609.6s] experience in other ways because you
+[612.2s] misidentified. Right? It's like you're
+[614.0s] always you're always going to be either
+[615.7s] like you you would rather have false
+[617.8s] positives or false negatives, but it's
+[620.4s] hard to like get it perfect. Right.
+[623.4s] >> Exactly. And like that's exactly what it
+[625.0s] is. Decorated uh experience. And you
+[629.0s] just have to choose which side of these
+[630.5s] this line you want to tow in every
+[632.1s] single AI product that you're talking
+[633.6s] about.
+[635.8s] Uh and when you're done when you've done
+[638.2s] um when you've done this, you just have
+[640.7s] to design the system. So, for example,
+[642.7s] let's say we're talking about healthcare
+[643.8s] data and we want to make sure that
+[644.7s] social security numbers never leak.
+[647.0s] Well, it just depends on how our users
+[648.9s] are going to be using social security
+[650.1s] numbers. If social security numbers are
+[652.4s] always going to be a unique identifier,
+[655.0s] well then like you could and they follow
+[657.9s] some pattern, you can literally just
+[659.2s] redex that pattern and guarantee that
+[660.7s] happens. But what happens when a
+[662.0s] customer literally just types in a
+[663.1s] pattern that looks like a social
+[664.3s] security number? You can't actually
+[666.7s] prevent that. So, how do you make that
+[668.0s] system better? Well, one,
+[670.6s] >> um, there's two options. One, you load
+[673.2s] up all the social security numbers you
+[674.8s] know about in your system and you mask
+[676.8s] against only those,
+[679.0s] right? And now if that happens, you've
+[680.3s] done this. But now you've done something
+[681.5s] by accident, which is you've discovered
+[683.1s] a service area that people can have
+[684.6s] where they can just type in numbers that
+[686.5s] look like social security numbers and
+[688.0s] discover the
+[689.1s] >> rejected, then they know it's a real
+[690.9s] social security number. Right? This is
+[692.3s] the the spear fishing thing, right?
+[693.8s] where it's like, okay, I type in an
+[695.4s] email that I think exists and if the
+[697.3s] service allows it, then I know that that
+[698.8s] person already has an account.
+[700.8s] >> So, as you can see, there's a whole
+[702.5s] bunch of problems that you run into no
+[704.0s] matter what solution. Uh I I think it
+[706.6s] was something like that uh for how that
+[708.6s] company had the leak. Um as you can see,
+[711.2s] there's a bunch of problems with how we
+[712.6s] can design security systems. And all
+[714.2s] these problems have almost nothing to do
+[715.6s] with AI. All of them have to do with
+[717.7s] pure software. And I think that's the
+[719.0s] first mistake that people make, which is
+[720.7s] they think that this is an AI problem.
+[722.8s] AI like the PII system is just a
+[725.5s] software problem. And if you're going to
+[727.5s] go ahead and build a PII reduction
+[729.9s] system using an LLM instead of reax, all
+[733.1s] that happens is you've just decided that
+[734.9s] you're now just shifting the thing to be
+[737.3s] more this more towards the degra the
+[740.2s] data doesn't leak and you're being less
+[741.9s] reactive and more proactive, but you're
+[743.8s] going to have a slightly degraded
+[745.0s] experience and that may be okay, but you
+[749.6s] just have to design for that in your
+[751.3s] software. So for example, if you have a
+[753.4s] redaction, how would I do this? If I'm
+[755.1s] just a regular consumer chat app, I
+[757.4s] would just give the option to every
+[758.7s] single customer after I do some
+[760.2s] redaction to just remove the to say,
+[762.9s] "Oh, remove this redaction
+[764.2s] specifically." And I'd make that a part
+[765.8s] of my UIUX. If I'm building a back-end
+[768.6s] system, let's say let's say what I want
+[770.5s] to do is I'm a company. I want everyone
+[772.7s] in my company to use claw code and
+[774.6s] everything else, but I want to
+[776.3s] accidentally prevent them from sending
+[779.8s] secret code names through the of the
+[783.0s] company and company projects down to
+[785.0s] open anthropic. How would you do that?
+[787.9s] Well, solution one literally just run
+[789.4s] AWS and Enthropic on your own company's
+[791.4s] bedrock system. If you have that
+[793.4s] >> doesn't leave your network, right? then
+[795.3s] you're doing basically the internet
+[796.6s] thing where it's like okay now I know
+[799.1s] that like and like basically the way I
+[800.9s] think about this is like
+[802.2s] >> you're always going to trust some
+[804.8s] external people with your data and most
+[807.9s] companies will basically always trust
+[809.8s] like their infrastructure provider and a
+[812.2s] few like systems of record like yes
+[814.4s] everyone sends data to Salesforce
+[816.0s] Salesforce has a copy of the data but
+[817.6s] Salesforce is a giant enterprise with
+[819.5s] really good security and a great track
+[821.9s] record so we trust them and same thing
+[823.8s] with AWS and workday and like so even
+[827.0s] the biggest most security conscious
+[828.7s] enterprises in the world probably have
+[830.2s] like five vendors they trust. There's
+[832.6s] certain organizations who run everything
+[834.6s] in concrete bunkers underground. Uh
+[837.0s] don't ask me how I know that. Um but in
+[840.3s] general uh in general like yeah you have
+[843.9s] you have a couple vendors you trust and
+[846.2s] then there's like the next tier of trust
+[847.8s] where it's like okay we're only going to
+[849.6s] trust a hundred vendors or we're only
+[851.3s] going to or like if you're a startup you
+[852.6s] basically send your data everywhere
+[853.6s] because you don't care because like no
+[854.9s] one trusts you anyways.
+[856.6s] >> Exactly. Um but in that world so let's
+[860.0s] say we don't do class. Let's say instead
+[861.5s] what we're going to build is we're going
+[862.5s] to build a proxy system that captures
+[864.8s] every request coming in from cloud code
+[868.0s] coming into cloud code and proxies it
+[869.8s] before it goes to the entropy in our
+[871.6s] network and we capture that proxy and we
+[874.3s] basically provide a degraded experience
+[875.8s] to everyone in our company to react to
+[878.4s] certain systems.
+[879.6s] >> Can you draw a certain
+[881.8s] >> Yeah.
+[883.6s] >> So the idea is like I have my workloads
+[885.6s] running in my data center somewhere.
+[889.0s] So like here it's like and this is often
+[891.0s] how people are doing LMS as PI reduction
+[895.8s] uh they often will do something like
+[897.4s] this
+[902.0s] uh where they send it like it looks like
+[904.1s] it's going to anthropic from the
+[905.4s] programs perspective or it really goes
+[906.7s] to a proxy in your network that you set
+[908.3s] up where which remaps anthropic
+[910.6s] >> and then you run some
+[911.8s] >> basically like if upstream equals you
+[915.6s] know api.anthropic.com anthropic.com.
+[918.6s] Do something otherwise like pass
+[922.4s] through. Just just send it to the
+[924.3s] upstream provider. Yep.
+[925.5s] >> Exactly. Yeah. And there's different
+[926.6s] ways that you can do this. You can make
+[927.6s] it so you don't proxy every network
+[928.9s] request, only proxy purely anthropic
+[931.0s] ones directly from here. So you don't
+[932.7s] send every network request through here,
+[934.9s] >> but you can send a lot of and some of
+[936.3s] them go directly to the LM provider or
+[937.9s] any network request. There's ways to
+[939.2s] architect that that's software. But I
+[941.0s] think the more interesting part is how
+[942.2s] do you design this proxy system to be
+[943.7s] good and fast? And that's what I want to
+[945.2s] talk about because I think the eval side
+[947.5s] most people probably understand what you
+[949.0s] do. You just build a test space and you
+[951.6s] just literally what you're evaling for
+[953.9s] is what side of this do you fall on for
+[956.5s] every single test case that you have?
+[958.7s] And sadly there's no way to build the
+[960.7s] test case up front. So really what you
+[962.0s] have to build is you have to build an
+[963.0s] evolving test case that just collects
+[964.7s] data from prod and slowly builds
+[967.8s] and slowly builds um uh builds a bigger
+[972.1s] and bigger and bigger test suite and
+[973.8s] then you just decide on which scenarios
+[975.7s] are you allowing the degraded experience
+[977.1s] and which scenarios are you allowing a
+[978.3s] reactive experience and once you decide
+[980.5s] that
+[982.1s] it basically does it for you. Um it's
+[984.6s] not that hard to build. Um, but any
+[987.1s] system that doesn't regularly show you
+[989.0s] the list of redactions and allow you to
+[990.6s] control that and tweak that over time in
+[992.6s] my opinion is basically garbage.
+[995.0s] Uh, so like someone just asked about
+[996.9s] like do I have opinions about Amazon
+[998.3s] comprehend for PI redaction?
+[1001.0s] Like maybe maybe not. Honestly, what I
+[1003.2s] would do is I'd send a I'd take text
+[1004.8s] prompt. I'd send it to like a very small
+[1006.6s] LM. I bet like a 3B or even a 30B LM
+[1010.2s] that running on a local network
+[1011.9s] >> and just say what would you redact out
+[1013.8s] of this? and just give it a class of
+[1015.2s] redactions like addresses, names, um
+[1017.7s] whatever whatever you care about
+[1019.2s] specifically like project names, etc.
+[1021.3s] And it'll just tell you if any of them
+[1022.7s] exist and if they do then you redact.
+[1025.3s] >> Okay. So your proxy might actually
+[1027.5s] include some like
+[1030.1s] local model like classification
+[1032.8s] >> at least.
+[1034.7s] Yeah, exactly. Exactly. Or it might even
+[1037.3s] it may be even more than classification.
+[1039.0s] What I would do is I would just do like
+[1040.2s] a rewrite.
+[1041.4s] >> Yeah. as well. You you should think of
+[1043.1s] this more like an agent loop than a
+[1045.0s] single LM call
+[1046.8s] >> is what you're really doing.
+[1048.5s] >> And I know I know you're probably going
+[1050.2s] to get into this, but I know you have a
+[1052.0s] really cool kind of like two three-step
+[1054.4s] pipeline for doing PII reduction with
+[1057.8s] LLMs. I assume I assume we're going to
+[1059.7s] get there and we're just kind of like
+[1061.0s] talking about like hey before you reach
+[1062.9s] for AI and try to do all this fancy
+[1064.6s] stuff like
+[1066.1s] >> this is a generally solved problem and
+[1068.7s] you only reach for AI if you really want
+[1070.3s] to optimize it or you really want to
+[1071.9s] kind of like cuz I think I think what's
+[1073.4s] interesting here is like this isn't
+[1074.8s] actually a line. This is like a zone and
+[1077.5s] it's like, okay, there's going to be
+[1078.9s] this blurry area where you're on one
+[1080.6s] side or the other and like better
+[1083.2s] techniques let you make it narrower and
+[1085.2s] so you have less things that like you
+[1087.0s] wanted to not leak that you ended up
+[1089.2s] leaking. You know what I mean?
+[1091.1s] >> Exactly. That's actually the perfect way
+[1092.6s] to think about it. This like in machine
+[1094.6s] learning it's like a zone and really
+[1096.2s] like it's not and it's not most people
+[1098.0s] think of this as an unbiased zone. It's
+[1099.4s] really a bias zone,
+[1101.5s] >> right? So like you pick which way your
+[1103.3s] bias goes to and like this is where your
+[1105.6s] false negatives and false positives are
+[1107.4s] going to be landing on either side and
+[1109.0s] it's in this it's it's in this zone.
+[1110.7s] Yeah.
+[1111.2s] >> And you can choose do you want it to
+[1112.3s] have a no bias zone? Do you want to have
+[1113.8s] it be a really narrow zone?
+[1116.0s] >> Yeah.
+[1116.3s] >> Um and then or do you want to have it be
+[1117.8s] a bias zone? They're all
+[1119.3s] >> we actually we talk about this a lot in
+[1121.3s] quantum mechanics when like I haven't
+[1123.0s] read a quantum mechanics textbook in a
+[1124.8s] while but I did like reread it like 10
+[1126.8s] years after doing undergrad and like
+[1128.5s] there's a lot of the techniques and
+[1130.0s] mathematics that you do to understand
+[1131.8s] like you have this particle that could
+[1133.2s] be in any of these states and you can
+[1135.4s] apply certain types of math or certain
+[1137.3s] types of experiments to just narrow the
+[1139.8s] window of states that it could be in to
+[1141.8s] make it easier to measure or easier to
+[1144.2s] like achieve some some goal in the
+[1146.1s] world.
+[1147.1s] >> Yeah, exactly. Um I I think there's two
+[1149.5s] really interesting questions in the chat
+[1150.6s] and I want to talk about or three of
+[1152.3s] them actually that are all really good.
+[1153.9s] So one does PI redaction require LLMs?
+[1156.2s] Can deterministic code handle it? And
+[1157.7s] that's kind of related to what are the
+[1159.7s] tools pre-proxy for oh actually that's
+[1161.8s] related to the second question which is
+[1163.3s] why an LLM that parses actual call
+[1165.4s] instead of a LLM that generates rejects
+[1167.4s] to match the actual request. They're
+[1169.0s] kind of related because we're living in
+[1170.7s] like you're basically living in like
+[1172.2s] three different worlds. And I think the
+[1174.7s] way that I think about PII reduction at
+[1176.5s] least for myself is PI and I realize we
+[1179.0s] should have conceptualized this at the
+[1180.4s] very beginning. What is PII reduction?
+[1183.7s] There's basically look there's only
+[1185.5s] three types of PI reduction. There's
+[1188.1s] like rule sets which are basically
+[1191.2s] saying like I absolutely will not break
+[1194.0s] this rule and Red X falls into rule set
+[1196.5s] and these are I'll even go further I'll
+[1198.6s] say that they're static rules. Then
+[1200.3s] there's dynamic rules which are rules
+[1202.5s] that are injected into the system at
+[1204.6s] runtime and stored in some database
+[1206.2s] somewhere that then get added and
+[1208.2s] modified and running at in certain ways.
+[1211.0s] And then there's what I'd call like
+[1213.4s] generative rules
+[1216.4s] that help you go do things. So why might
+[1218.6s] you want any of these? Well, there's a
+[1221.0s] couple of reasons why you might want all
+[1222.7s] three of them. Static rules are useful
+[1224.1s] because they're fast. They're
+[1225.4s] nonflexible and they're fast. So in
+[1227.1s] terms of like the the leaky system
+[1229.2s] architecture that we defined, they're
+[1231.0s] basically reactive and fast
+[1233.1s] >> because you can only add them
+[1234.2s] reactively. Dynamic rules are also very
+[1236.2s] similar. They're very reactive and fast.
+[1239.7s] A generative rule, however, has the
+[1241.4s] benefit of being having much more higher
+[1245.0s] coverage. So it's proactive, but it's
+[1247.2s] slow and costs money. And obviously, it
+[1249.0s] has way more false it has different
+[1250.9s] kinds of false positive that it allows.
+[1253.7s] So it's not that it's not that why would
+[1255.7s] you do one of them. It's more about you
+[1257.3s] choose the tools at hand based on the
+[1259.0s] kind of system that you're designing. So
+[1260.9s] if you know that you have more malicious
+[1262.6s] actors or you have really broad inputs,
+[1265.0s] you definitely will need some generative
+[1266.9s] rules to deal with this. Cuz right now,
+[1268.9s] for example, how would you mask out a
+[1271.4s] street address?
+[1273.8s] A street address is like really really
+[1276.2s] hard to do with some reax
+[1279.5s] and like what I would use a general
+[1281.4s] rule.
+[1281.8s] >> It's also redacting anything with a
+[1284.3s] number followed by text.
+[1286.2s] >> Yeah, exactly. Like it's really really
+[1287.9s] hard um to go do that, right? But a
+[1292.0s] general rule for removing street
+[1293.5s] addresses, I believe all a lot of us
+[1295.9s] believe that we could redact street
+[1297.4s] addresses out of systems. Um, phone
+[1301.0s] numbers are another example of like
+[1302.7s] where it works really well. And again,
+[1305.4s] another question, a street address or a
+[1307.0s] public company versus individual. Justin
+[1308.4s] brought that up. Like once you detect a
+[1310.7s] street address, then you could write
+[1312.4s] control flow that says, oh, find a
+[1315.0s] street address using an LLM, search
+[1317.8s] across some known addresses of large
+[1319.8s] companies and allow those. Like public
+[1322.1s] cons what's considered a public address
+[1324.1s] is allowable. But if it looks like an
+[1326.4s] address for an individual, don't allow
+[1328.3s] it. And that's a blend of some
+[1330.8s] generative rule to find the address
+[1333.0s] possibly some hard-coded system to find
+[1335.8s] public addresses for like businesses etc
+[1339.1s] and allow those and then um an if
+[1341.1s] condition to basically say like
+[1342.1s] individuals are banned and hidden away
+[1343.8s] automatically
+[1345.4s] and that's a hybrid system that lives in
+[1347.2s] there and we can if you as want we can
+[1349.5s] actually write the general rule for what
+[1351.4s] a street address kind of thing looks
+[1352.7s] like and we can talk about some other
+[1354.2s] examples on there because I think that
+[1355.4s] might be interesting.
+[1357.2s] Um, what's also really interesting and
+[1359.3s] when I think about PI redaction, most
+[1360.9s] people think about it's like you're
+[1361.8s] trying to remove secure data, but it's
+[1363.3s] really about any redactive system and
+[1365.5s] when you might want to substitute a word
+[1368.4s] with um uh when you might want to
+[1371.0s] substitute a word with some other
+[1371.9s] system. So take time stamps for example.
+[1374.2s] I know a long time ago we had um we were
+[1377.3s] talking about timestamps and how you
+[1378.6s] build relative timestamps. Well, the LM
+[1381.2s] needs a consistent view of time
+[1383.9s] >> in its whole chat window. If you
+[1385.8s] suddenly start changing time zones on it
+[1388.1s] >> without qualifying the time zone,
+[1390.6s] >> it
+[1392.3s] it can't it doesn't make logical sense.
+[1394.9s] >> Well, and unless you're using a super
+[1396.9s] beefy reasoning model, too, like it's
+[1399.0s] not actually going to be able to do the
+[1400.6s] time zone math of like, okay, cool.
+[1403.1s] That's UTC, that's PT, even if in the
+[1405.4s] weights it knows the offset given the
+[1407.4s] time of year or whatever it is, like the
+[1409.8s] chance that it's actually going to like
+[1411.4s] meaningfully, we always talk about this,
+[1413.2s] right? Like, yeah, the LM can do it, but
+[1415.4s] like don't make the LM do things that
+[1417.2s] it's either like not good at because
+[1418.9s] you're going to detract attention away
+[1420.3s] from the task that it only the LM can
+[1422.6s] do. If you can do things
+[1423.8s] deterministically, then don't make the
+[1425.8s] LLM do them cuz it's going to be faster,
+[1427.6s] cheaper, and more reliable. And the
+[1429.3s] thing that only the LM can do is going
+[1432.1s] to be much higher performance because
+[1433.7s] you're not having to try to reason
+[1435.0s] through three possible like three
+[1436.8s] different problems in one question.
+[1439.1s] >> Exactly. And time zones are a perfect
+[1441.6s] example for this where like the user is
+[1444.0s] going to write in times but you want to
+[1445.9s] PII redact the time that the user writes
+[1448.8s] and put a canonical time zone into there
+[1451.5s] >> that makes sense the general highle
+[1454.5s] concept of like creating a a some sort
+[1459.2s] of interface layer between like what the
+[1461.3s] code sees and what the user sees versus
+[1463.3s] what the LLM sees and translating it on
+[1465.4s] the way in and translating it on the way
+[1467.0s] out.
+[1467.6s] >> Yeah. And that's exactly why I started
+[1469.8s] off the conversation with this idea of
+[1471.7s] class one, class two because you treat
+[1473.3s] them differently. Class one is a pure
+[1475.0s] software problem. Design your control
+[1476.9s] plane. Class two is why do you not
+[1479.4s] prefer to strongly leak it? And often
+[1481.2s] the reason is user experience or user
+[1483.1s] trust. And in both those systems, all
+[1485.3s] you're building for AI pipeline is just
+[1487.0s] a masking system
+[1489.3s] and that's it. And it's all the same
+[1490.8s] architecture everywhere. So for those of
+[1492.2s] you that really want a really in-depth
+[1493.8s] walkthrough, go watch the time in the
+[1495.8s] time the datetime video that we had
+[1497.4s] before. You'll get a light slightly
+[1499.0s] different perspective on how to model
+[1500.4s] this. But today we can talk about how to
+[1502.2s] build a PI reduction system for gendered
+[1504.0s] rules.
+[1504.7s] >> But that's a general concept of PI.
+[1506.6s] Let's write some code.
+[1508.7s] Let me open this up. Cursor
+[1511.9s] file, new window.
+[1512.7s] >> That's good. I love I love that you're
+[1514.2s] always like, "Hey, let's spend 20 to 25
+[1517.1s] minutes on the fundamentals before I
+[1519.1s] just give you a thing and you go run off
+[1520.6s] to implement it." Like know when and why
+[1522.6s] to use this like and that's how you get
+[1524.7s] great results.
+[1526.2s] >> Yeah. I just I think most of the AI
+[1528.2s] stuff that most people really need is
+[1529.6s] actually has nothing to do with the
+[1530.7s] code. The code is like the easiest
+[1532.3s] easiest part and like what people really
+[1534.0s] really need to understand is how to like
+[1536.1s] map concepts together. It's like the
+[1538.2s] first time I learned about Reddus. Um,
+[1540.4s] so like again coming from a systems
+[1542.0s] world, I don't know anything about cloud
+[1543.5s] systems, but the first time I learned
+[1545.4s] about Reddis, the way I related it was
+[1547.3s] it's basically the equivalent of an L1
+[1548.9s] cache. I'm like, cool, this makes sense
+[1551.4s] to me because I can map it to something
+[1552.9s] that I really understood. And I think
+[1554.7s] with the AI world, what what is really
+[1557.0s] helpful is can we map these new concepts
+[1560.1s] into something that we all really
+[1561.4s] quickly understand? And if we can, then
+[1563.6s] great. And our life gets a lot easier.
+[1565.8s] So yeah, I mean most people are asking
+[1567.3s] for examples of generative rules um
+[1569.2s] which is what we're going to do right
+[1570.3s] now.
+[1571.0s] >> Um the other thing is any thoughts on
+[1572.6s] test environment before deploying like
+[1574.6s] would you use synthetic data and
+[1576.5s] forecast what new data will need to be
+[1578.8s] redacted?
+[1580.8s] >> Um what are your thoughts?
+[1583.2s] >> [sighs]
+[1587.9s] >> I don't know how synthetic data would
+[1593.5s] necess like if I already know the shape
+[1595.8s] of the data then I'm going to put it in
+[1597.2s] my evals and I'm going to like build
+[1599.9s] systems to test against it and I'm going
+[1601.6s] to be like intentional and like human in
+[1604.9s] the loop on like hey what are the types
+[1606.2s] of things we need to test. Um, I might
+[1609.0s] ask an LLM to like brainstorm that list
+[1611.6s] and like help me review it. But I think
+[1614.0s] like having an LLM generate fake emails
+[1617.5s] is kind of an extra step compared to
+[1622.5s] just ask the LM like what are all the
+[1624.3s] patterns that an email might might take.
+[1626.2s] Like it's it's two answers to the same
+[1627.8s] question. And so I wouldn't I wouldn't
+[1629.4s] necessarily use synthetic data because
+[1631.4s] like anything that the LM can generate
+[1633.4s] based on its weights is a thing it can
+[1635.8s] reason about based on its weights.
+[1638.4s] >> Um there may be there may be some really
+[1641.0s] like tight corner cases you might find
+[1642.9s] and I'm like curious if you find if you
+[1645.0s] if I would love to be proven wrong here
+[1646.8s] of like hey the if you ask the LM to
+[1648.6s] generate fake emails it comes up with a
+[1650.8s] better test set than if you just ask it
+[1652.6s] to like think about what types of emails
+[1654.8s] might exist and what the patterns are.
+[1657.8s] I yeah I tend to agree. I think the way
+[1659.8s] that I really model it is you have to
+[1661.4s] decide what is the risk to your product
+[1663.0s] if a PI reduction h if a PI reduction
+[1665.2s] fails.
+[1666.1s] >> Yeah.
+[1666.5s] >> Um and based on the level of risk, it
+[1668.6s] tells you exactly how much testing
+[1670.0s] environment you need ahead of time. If
+[1671.7s] the risk is
+[1672.9s] >> it's nice to have but they're not going
+[1674.6s] to be pissed. Just ship it and collect
+[1676.6s] real data and build a reactive system.
+[1679.6s] If you're uh where you're literally
+[1681.4s] collecting prod data in real time, you
+[1683.3s] build an eval harness on prod data that
+[1685.4s] says did we have a leak? Did we have a
+[1686.6s] leak? Did we have a leak? Did we have a
+[1687.9s] leak? And you're asking another LM to
+[1689.9s] judge if the PI failed.
+[1692.2s] >> But we're all It's all the same models.
+[1694.2s] It's like if you're gonna Yeah. You
+[1695.8s] could ask it for the same model four
+[1697.5s] times and maybe you would catch more
+[1699.3s] things cuz you're like temperature
+[1701.6s] rolling the dice.
+[1702.9s] >> That's not what I mean. I'm talking
+[1704.2s] about like a system where like you like
+[1706.2s] imagine you have a function that's
+[1707.3s] called like redact.
+[1710.2s] >> I'll just do this. Like you have a
+[1711.3s] function called redact client. uh
+[1716.1s] open AI GPT borrow
+[1720.9s] mini prompt whatever I don't really care
+[1724.2s] u
+[1726.8s] okay but then you can have another
+[1728.8s] function that says like check redaction
+[1733.0s] where it takes the input it takes the
+[1734.6s] redacted string
+[1736.4s] >> and like output
+[1737.2s] >> and it produces
+[1738.3s] >> it produces exactly exactly
+[1741.5s] right and like you could this is kind of
+[1743.1s] like your eval function and this is your
+[1746.0s] prod function. And what you're really
+[1747.4s] doing is in prod you're running this all
+[1749.1s] the time on your code you're running and
+[1751.0s] we'll change the shape of this in a
+[1752.2s] little bit. It should not return a
+[1753.1s] string. It should not consume a string.
+[1754.4s] Blah blah blah blah.
+[1755.2s] >> Yeah.
+[1755.4s] >> And this would sample it every 100
+[1758.9s] records and just kind of like try to get
+[1760.7s] a feel for like what's getting through.
+[1763.7s] >> Yeah, exactly. Or you could run out 100
+[1765.4s] if your if your company really needs
+[1766.8s] redactions, run 100% of your queries and
+[1769.3s] you basically see it's like, oh, what
+[1770.8s] did I did I miss a redaction? And if you
+[1773.5s] did, now you can take all the data that
+[1776.1s] return true for this and now you can
+[1778.2s] build a set of rules that say what types
+[1781.1s] of data are we missing our redactions on
+[1783.2s] the most. And maybe you find there's a
+[1784.8s] category and if there's a category you
+[1787.0s] add a new rule into it.
+[1788.8s] >> You could even use this as like a Jeepa
+[1790.6s] metric to optimize your other prompt.
+[1792.5s] Right.
+[1793.1s] >> Exactly. That's what I would do. Like
+[1794.8s] fundamentally that's really what you're
+[1796.0s] doing. You're building a metric and
+[1797.7s] that's the right word for it probably
+[1799.8s] where you're trying to see this and then
+[1801.3s] you can build analysis systems on top of
+[1803.0s] this to say oh were we missing if you
+[1806.0s] select star of all the input and
+[1808.0s] redaction pairs where check redactions
+[1810.4s] was where we failed to capture redaction
+[1813.8s] then can we see a p is there a pattern
+[1815.8s] in all of those failures and if there is
+[1817.8s] a pattern then how can we update our
+[1819.8s] system to go do that. Does that kind of
+[1822.3s] uh give you give everyone an idea of how
+[1824.2s] we would design this in like a truly
+[1826.2s] prod system?
+[1827.8s] >> Yeah, there there was one other question
+[1829.4s] like as we keep building this out is
+[1830.9s] like can you also include your scenario
+[1832.3s] where the system requires passing like
+[1834.1s] some like you require passing some PII
+[1836.5s] like a healthcare member ID or for like
+[1839.4s] some healthcare AI system.
+[1841.5s] >> Uh then you either then you have to
+[1843.2s] decide like are you okay sending it to
+[1844.7s] an external model? If you are then send
+[1847.0s] it. If you're not okay send to an
+[1848.5s] external model and you want to send the
+[1850.2s] concept but not the exact model. It's
+[1852.4s] very similar to the datetime problem
+[1854.0s] where we want to send the concept of
+[1855.6s] time but not the actual time that the
+[1859.1s] user wrote.
+[1860.2s] >> And I think you've picked a very
+[1862.0s] specific like type of redaction goal
+[1865.3s] which is like I want to check this is
+[1867.0s] safe before I send it to OpenAI or
+[1868.8s] anthropic. I think a lot of the people
+[1870.8s] I've talked to who are interested in PII
+[1873.4s] redaction are actually it's more so like
+[1877.0s] their cloud environment has a ton of PII
+[1880.2s] you know driver's licenses fin personal
+[1882.9s] financial information and all of this
+[1885.0s] kind of stuff and what they want to do
+[1886.9s] is they want to like give and and the
+[1890.2s] rules in the regulations say PII must
+[1892.4s] never be download must never be live in
+[1894.2s] a dev environment must never be
+[1895.6s] downloaded to developer workstations and
+[1898.1s] so it becomes quite hard for people to
+[1900.2s] like debug problems if the only place
+[1902.2s] you can touch the data is in production.
+[1904.0s] And so they've built pipelines that
+[1906.1s] basically take all the production data
+[1908.7s] do like you know you do the extraction
+[1910.1s] on the images or or the uploads the PDFs
+[1912.3s] or whatever it is which we've talked
+[1913.7s] about and then you create redacted
+[1917.0s] versions that are actually safe to and
+[1919.5s] this is probably class 2 data where it's
+[1921.2s] like okay look if a customer if a user's
+[1923.6s] like driver's license number ends up on
+[1925.2s] a developer workstation like that's bad
+[1927.4s] and like someone in compliance should
+[1929.4s] know and we should fix it but it's also
+[1931.0s] like it's not existential to your
+[1933.4s] company necessarily.
+[1936.3s] >> Yeah. So, how do you That's just again
+[1938.5s] in my opinion that's um like that's just
+[1940.8s] a problem with PII data and like the way
+[1943.0s] that we solved it at least when we built
+[1944.5s] Face ID is we just had two data sets.
+[1946.1s] So, like we collected like super secure
+[1947.6s] data sets that were a pain in the ass to
+[1950.2s] access and you can't run them on your
+[1952.0s] machine. You have to submit a cloud job.
+[1953.3s] It has to run it. It gives you it gives
+[1955.2s] you like metrics about that.
+[1957.4s] Technically, developers could have been
+[1959.2s] malicious and leaked data out of the
+[1960.7s] system, but no one no one would do that
+[1963.1s] because they're it's just liability and
+[1965.9s] no one no developers aren't trying to be
+[1968.2s] li legally liable for things.
+[1970.3s] >> Yeah. Um, Snow has a really good
+[1972.2s] question which is also my question and
+[1974.0s] my general question about LLM as judge
+[1976.3s] as a technique is like why would check
+[1978.6s] redaction be able to capture the misses
+[1980.5s] if redact didn't?
+[1983.0s] >> It's because check redaction is the
+[1984.6s] fundamentally different question. It's
+[1986.5s] not that you can't um the way that you
+[1989.3s] wait, let me finish my previous point
+[1990.5s] really fast about data, which is the way
+[1992.3s] that you solve that problem about data.
+[1994.3s] The way that we solve the problem with
+[1995.6s] face ID is we had two data sets. We
+[1997.4s] literally went through and got people to
+[1998.6s] sign their waiverss that said developers
+[2001.0s] are allowed to have access to your faces
+[2002.6s] for like 60 days
+[2004.0s] >> for building
+[2004.6s] >> and then we just had for building face
+[2006.3s] ID and then like developers could just
+[2007.9s] access certain faces and like we had to
+[2009.5s] go ask employees in the company to sign
+[2011.0s] that off
+[2011.8s] >> and like that's how we iterated fast,
+[2013.4s] right?
+[2013.9s] >> Yep. Y
+[2014.2s] >> and we got some external people to do
+[2015.4s] that too, but that's kind of how you
+[2016.3s] iterate fast and you still put a time
+[2017.9s] horizon on it. The data secured, but
+[2019.8s] that's at Google scale, right? You go
+[2022.2s] down a level to like the next tier of
+[2023.8s] company. Again, you just you just build
+[2025.3s] a totally separate data set. You have to
+[2026.8s] make it your data you have to make your
+[2028.7s] data set super swappable at the runtime.
+[2031.2s] That's edge workload that you have to
+[2032.6s] build. If you don't do that, then you
+[2034.2s] live in the pain that you're talking
+[2035.1s] about, which is like now we have to
+[2036.3s] deploy to the cloud. You just you got to
+[2038.5s] solve the data in problem. uh if you
+[2041.4s] really have secure data like driver's
+[2043.3s] license and such. I think building the
+[2044.8s] redacted models is kind of dumb like
+[2046.8s] it's not it it's not um it doesn't let
+[2049.3s] you really test your system out
+[2052.2s] uh if you do that.
+[2053.8s] >> Okay. So what you uh and the only reason
+[2056.1s] to build redacted models is if you work
+[2057.9s] with external customers or if you work
+[2060.9s] with if you work with external customers
+[2063.2s] sorry external contractors or you want
+[2065.8s] to try new models out on parts of your
+[2068.1s] pipeline but not your whole pipeline and
+[2070.4s] you want to send a redacted form to
+[2072.0s] there before you decide if you want to
+[2073.4s] onboard that vendor to your system. So
+[2075.7s] there are reasons to build redacted
+[2077.1s] systems. So 90% of the time I would just
+[2078.6s] build customer waivers or like data
+[2080.6s] waivers that release data to developers
+[2083.0s] over some time horizon and you just
+[2084.5s] build a renewal system there. It's much
+[2086.6s] faster to implement.
+[2088.2s] >> Interesting. Okay. Um cool. Yeah. I um
+[2092.3s] check
+[2093.3s] >> I'm So I know you have a really cool
+[2095.4s] pipeline for like detect PII redact PII
+[2098.6s] restore PII and some of it's
+[2100.2s] deterministic and some of it's not. Are
+[2102.2s] you are you are you interested in kind
+[2103.8s] of walking through that? Um I know
+[2105.7s] there's another code example out there
+[2106.9s] somewhere. I don't know if we have to
+[2107.8s] write it all from scratch, but I would
+[2109.1s] be really interested to kind of like run
+[2111.0s] some of the tests from that system.
+[2113.8s] >> Let's talk really quickly about how I
+[2115.3s] would build a system and like how I'd
+[2116.7s] build dynamic rules as well because I
+[2118.1s] think that's really what people are
+[2119.0s] interested in.
+[2120.0s] >> Cool.
+[2120.5s] >> Um so here's what I would do. I I would
+[2123.6s] personally break this down into a couple
+[2125.1s] of different things. I'd make a class
+[2126.7s] that somehow models rules of some kind.
+[2129.0s] And there's different kinds of rules.
+[2130.3s] There's static rules. there's redex
+[2131.9s] rules. Uh there's like pseudo dynamic
+[2134.5s] rules and everything else. And then I'd
+[2137.0s] basically give a redaction a rule. Uh
+[2140.2s] I'd give it a single rule because like
+[2141.9s] again this is super important to my
+[2143.4s] company. I just want to know the status
+[2144.7s] of this uh uh risk and I'd say like leak
+[2149.0s] risk. I just do this.
+[2153.9s] >> And are you going to put reasoning in
+[2155.4s] there too or is it literally just
+[2156.9s] >> Yeah, I just get the reason. Cool. I
+[2158.2s] just get the cuz I want the reason uh
+[2159.9s] out there.
+[2160.9s] >> Yeah.
+[2161.2s] >> And I just let go do this. And this
+[2163.8s] would be a really simple thing. What are
+[2166.4s] the chance? What are the risks
+[2169.4s] in this message of leaking sensitive
+[2173.2s] information? And you just really really
+[2176.2s] simple
+[2177.9s] uh doesn't get complicated at all. And
+[2180.6s] now you you just get a leakage risk. And
+[2182.3s] this will basically solve the problem
+[2183.4s] for you.
+[2183.9s] >> And your rule is just like a string. is
+[2185.8s] like, "Hey, you must not include
+[2187.0s] addresses or something, right?"
+[2189.1s] >> Yeah. And like this is really
+[2191.0s] specifically I would say like gender
+[2193.8s] reluctive rule.
+[2195.6s] >> Um
+[2199.2s] >> name description and like possibly
+[2201.7s] examples.
+[2202.6s] >> Yeah.
+[2203.8s] >> And then this would basically do it for
+[2205.0s] you. And I'd come up with probably some
+[2206.4s] way to print this that's better. Hold
+[2208.6s] on. Name description.
+[2212.2s] I'll do this
+[2217.1s] uh example one
+[2221.8s] and I I would just like dump this out.
+[2223.4s] And that's how I would build a rule. U
+[2225.6s] and I this wouldn't be that hard. This
+[2227.4s] should mostly work. And then what you
+[2228.9s] could do next is you can make this an
+[2230.2s] array
+[2231.4s] >> and then you could rules.
+[2233.9s] >> Yeah. And then you just turn this to an
+[2235.2s] array. And now And now again this just
+[2236.9s] based on how good the models are. The
+[2239.0s] better the models are, the better this
+[2240.4s] gets. XML. Let's do XML. Dude,
+[2244.6s] >> you like XML? Honestly, I think uh
+[2247.6s] >> I just do this
+[2250.5s] >> and like this this works really well in
+[2252.8s] my opinion
+[2258.5s] >> and like this works really well.
+[2261.2s] >> Can we can we like can we actually like
+[2263.0s] run this end to end? Actually, what I do
+[2265.9s] is string and then I would probably
+[2268.7s] alias this to like ID so the model
+[2272.2s] thinks of this as slightly differently.
+[2274.2s] Um, and then it just like comes off as
+[2276.4s] an ID. Uh, yeah, let me go like this.
+[2281.7s] Write some tests
+[2285.8s] method
+[2287.4s] function.
+[2293.8s] Uh we're really trying to do some PIIA
+[2295.8s] reduction. So we want this to be quite
+[2297.2s] good and like handle some weird edge
+[2299.0s] cases as well. So like for example,
+[2301.0s] what's an example of a gendered rule? It
+[2303.0s] would be something like detect street
+[2304.9s] addresses which Redex would fail at.
+[2307.0s] Give me like five or six examples of
+[2308.8s] gender rules and a couple test cases for
+[2310.8s] them.
+[2313.0s] >> Yeah.
+[2315.0s] >> Yeah. Okay. I'll write some. Um while
+[2317.2s] this is writing um I suspect that this
+[2320.1s] will probably just work but I want to go
+[2322.1s] talk about some of the questions that
+[2323.2s] people had which was like why do I
+[2325.1s] believe that check redaction would work?
+[2327.2s] Well I think the best analogy for this
+[2329.0s] is actually like data labelers. So like
+[2331.5s] uh scale built a whole business model on
+[2333.4s] this which is it's fundamentally
+[2335.7s] different for a model to label something
+[2337.8s] than it is for someone something to
+[2339.4s] check something. Checking and labeling
+[2341.0s] are two different tasks. The redact
+[2343.0s] method is a labeling task. The check
+[2345.5s] method is a check task. You're
+[2347.1s] validating. It's not to say the model
+[2349.2s] can or cannot catch it. It's just
+[2351.2s] spending intention in different ways to
+[2352.8s] do different kinds of tasks. Um, and
+[2355.2s] like humans are very very similar.
+[2356.8s] Answering a multiple choice question is
+[2358.3s] very different than grading a multiple
+[2359.6s] choice test. So that's why uh the check
+[2362.9s] redact method is likely to capture
+[2364.7s] something as an eval system as it won't.
+[2367.2s] That said, of course, it's an LM. It's a
+[2369.1s] proistic system. So it might also fail.
+[2371.4s] So you have to you kind of have to build
+[2373.3s] evals on top of evals on top of evals
+[2375.3s] and at some point you're just like okay
+[2376.7s] we trust this system enough. It's like
+[2378.7s] distributed systems. You build fallbacks
+[2381.0s] and fallbacks and fallback and system
+[2382.5s] fail. You're like that's good enough and
+[2384.3s] that meets our requirement and then you
+[2386.2s] stop and then the way you check for this
+[2388.4s] is you just AB test all the time. So you
+[2390.5s] just sample like 5% of check reduction
+[2392.2s] and be like oh is that actually a
+[2393.8s] correct reduction like did
+[2396.6s] >> it all the time
+[2398.2s] >> or you're like doing the thing we did in
+[2399.5s] the eval flow right which was like the
+[2401.7s] you snap you snapshot the results of
+[2404.5s] different cases and then you eyeball the
+[2406.2s] diff basically right
+[2408.1s] >> exactly and you just do that over and
+[2409.4s] over again until you find pretty good
+[2410.7s] confidence there. [snorts] Um and then
+[2414.2s] how um and someone asked like why is
+[2416.3s] this different than LM as a judge on an
+[2418.6s] EVO? Well, like it's not really about
+[2420.6s] element as a judge. It's about where are
+[2422.0s] you running this in your orchestration
+[2423.5s] system. LMS as a judge are just
+[2425.8s] functions that you are running on your
+[2427.3s] data. It doesn't matter. But what we're
+[2430.1s] really trying to say is I I don't want
+[2433.8s] to run this in my main main control
+[2435.9s] loop. I want the data to come to some
+[2437.8s] data storage layer and then I want to
+[2439.7s] trigger the system more like a post
+[2441.3s] analysis system. If it runs in my main
+[2443.7s] prod loop, my users get a degraded slow
+[2446.2s] experience. That's really the more
+[2447.8s] important part about how you architect
+[2449.0s] this over everything else. And then
+[2450.6s] which model do I recommend running
+[2451.8s] locally? Honestly, just depends. They're
+[2453.9s] local models have gone so good. Um I've
+[2455.9s] seen people use 3V models, 30V models. I
+[2458.5s] could swap this out to a local model
+[2459.8s] actually really fast if I have one
+[2461.0s] running. You even had that customer that
+[2463.0s] was doing like specifically for
+[2464.6s] classification was like they actually
+[2466.4s] swapped in a like CPU running like
+[2469.3s] classical ML model that was just like
+[2471.3s] okay the top thousand cases just run on
+[2473.7s] my CPU and it's custom and then the 5%
+[2476.7s] of other cases get shelled out to like a
+[2478.9s] GPT40 or something.
+[2480.4s] >> Yeah. So I have Olama Gemma 3. So we can
+[2482.9s] just like see if this works. Where did
+[2485.5s] Oh yeah, it wrote a bunch of test cases.
+[2487.0s] >> Oh yeah. Can we can we can we run one of
+[2488.5s] these? I'm really interested to see like
+[2490.0s] kind of like Of course, it's like LLM
+[2492.6s] just like so much content. I'm like,
+[2494.5s] just write the one test and then I'll
+[2496.4s] tell you how to write the next one.
+[2498.2s] >> So, this is like clean method with
+[2499.8s] tricky words. Uh, let's look at this
+[2501.4s] one.
+[2502.3s] >> Uh, it made a it made a couple rules.
+[2503.9s] Spelled out numeric, detect phone
+[2505.7s] numbers, and again, like why are we
+[2507.4s] doing this? It's like, how do you reex
+[2510.2s] this?
+[2511.3s] >> Yep,
+[2511.6s] >> you can't. If you really want to ban
+[2513.4s] phone numbers, you really can't.
+[2515.0s] >> This is like when people put like name
+[2518.2s] space at space. the company I work
+[2520.9s] at.com
+[2522.7s] like because they don't want any bot to
+[2524.8s] come and find their email because
+[2526.5s] everyone's rejaxing and it's like people
+[2528.2s] find ways around this stuff to share
+[2529.8s] emails.
+[2531.1s] >> Exactly. So like basically if you really
+[2533.0s] care you kind of have to build this and
+[2534.2s] like we can just see what this broke. So
+[2536.2s] this was the input the quarterly revenue
+[2538.0s] report showed Q3 at a 12% increase in
+[2540.6s] enterprise segment. The Virginia office
+[2542.3s] outperformed expectations. Like you can
+[2544.4s] clearly see how you may not want to leak
+[2545.7s] some of this data if you're building
+[2546.9s] like a financial firm. Um no risk
+[2550.6s] >> location fingerprinting. Wow.
+[2553.1s] >> Yeah. [snorts]
+[2554.2s] >> And it's again it's like this is a rule
+[2556.9s] that a human wrote. You can imagine a
+[2558.4s] human writing something like this. The
+[2559.6s] ID and everything could be defined. And
+[2561.7s] if we go read the actual rule,
+[2566.4s] you can actually read the rule like they
+[2568.0s] added a thing called like implicit
+[2570.4s] location fingerprinting right over here.
+[2573.2s] And it says
+[2575.7s] uh toggle word rep. It says uh ident
+[2580.0s] identify a specific person's location
+[2581.6s] without a formal address. So it's
+[2583.8s] specifically talking about no formal
+[2585.0s] address. And like this likely will leak
+[2588.2s] the if you know exactly what company's
+[2590.4s] talking then you know what the Virginia
+[2591.5s] office is almost definitely
+[2593.8s] >> right because it's probably could be
+[2596.2s] found publicly on the internet of like
+[2597.9s] company name Virginia office. You can
+[2599.8s] Yeah.
+[2600.7s] >> Yeah. Yeah. And then you're reading this
+[2601.7s] one like partial identifiers in context.
+[2603.3s] Like this one is kind of looks kind of
+[2604.6s] garbage. Like this is an actual
+[2605.9s] identifier like remaining invoices,
+[2608.3s] >> accounts signed, but they don't really
+[2610.3s] have the data about them. So,
+[2611.8s] >> okay. So, you found you found a bad
+[2613.2s] extraction. How would you iterate on
+[2614.6s] this? How would you go make the prompt
+[2616.5s] or the rules better?
+[2618.1s] >> Well, what I would think about here is
+[2619.4s] I'd be like, okay, well, if I have
+[2621.0s] partial identifiers in context, like
+[2622.9s] what's the problem here?
+[2624.4s] >> Uh, the problem here is like I'm
+[2626.2s] actually not detecting um what am I
+[2629.1s] doing? Let me I have to read this a
+[2630.5s] little bit more carefully.
+[2631.3s] >> Yeah, the question is always is is the
+[2633.6s] rule dumb or is the like execution of
+[2636.6s] the rule incorrect?
+[2638.2s] >> Uh generic words don't uh leak
+[2642.8s] information but specifics
+[2646.8s] specifics do. Okay. So let's try run
+[2651.0s] this again. Oh whoops. I pressed an
+[2654.1s] enter there. We are working to make the
+[2655.6s] compiler better for this actually.
+[2658.7s] Um, now I just see this and like boom,
+[2660.9s] it's gone.
+[2662.0s] >> Oh no, it says this. It says this here.
+[2663.8s] What was the previous run? Let's see
+[2664.9s] what leaked.
+[2667.6s] >> Uh, oh, it just removed a none. I don't
+[2669.2s] really care about that.
+[2669.8s] >> It says risk. Oh, you shouldn't You
+[2671.4s] probably shouldn't have a risk level
+[2672.8s] none because then it's going to pick out
+[2674.6s] stuff that's not actually risky.
+[2676.7s] >> Yeah. Well, it's going to bias. The
+[2679.0s] reason I put that in there is I'd rather
+[2681.0s] uh computer-wise remove that out.
+[2683.4s] >> Oh, and then you would filter that in
+[2684.7s] the explicit code. Yeah,
+[2685.7s] >> because if if I don't add a none option,
+[2687.6s] then the LLM thinks it's um it's bad.
+[2690.0s] Now,
+[2690.6s] >> yeah.
+[2691.2s] >> Um
+[2693.8s] I would do this actually. I might
+[2695.4s] actually consider this way. Maybe we
+[2696.8s] only want risk high and none because
+[2699.0s] that might actually like prompt the
+[2700.9s] model in a better way,
+[2701.9s] >> right? And you could do like a
+[2703.4s] discriminated union of like is risk
+[2705.8s] versus is risk false and then different
+[2708.2s] fields required in either case. But um
+[2710.9s] this makes sense.
+[2712.5s] Um, and then if I go read this, I can
+[2715.4s] also do something kind of nice, which is
+[2717.3s] I'll do that in a second. Um, if it
+[2719.8s] produces a none, I can just drop all
+[2721.4s] those elements really fast. And but
+[2723.0s] let's just look at which one.
+[2723.9s] Unconventional addresses, Virginia
+[2725.5s] office. That's probably correct. And
+[2728.2s] then partial identifier. So we got rid
+[2730.1s] of this one. And then location printing.
+[2733.0s] So like this is um
+[2735.8s] there's two. We got rid of both of them
+[2737.4s] by removing the none and the medium. And
+[2739.4s] that's kind of how I would iterate. I'd
+[2740.5s] be like, "Oh, the medium risks don't
+[2741.8s] really seem likely. I really only want
+[2744.5s] high-risisk scenarios." So, I would just
+[2746.5s] produce that. The second thing I would
+[2748.2s] do if I wanted a medium risk is I'd just
+[2750.1s] run a second prompt on this and say like
+[2752.1s] for all medium risks, run a second
+[2753.8s] analysis to go see if these are
+[2755.8s] >> decide to like bucket them again into
+[2758.1s] more things and you basically Yeah,
+[2759.9s] >> exactly. I'm actually talking about this
+[2761.9s] at the uh coding agents conference later
+[2764.2s] today in Mountain View of the idea of
+[2766.6s] like you people hear about context
+[2768.5s] engineering and they think about like oh
+[2771.3s] it's people think about context and the
+[2773.0s] rag and and retrieval and like how do we
+[2775.2s] get more information uh or like how like
+[2778.0s] oh if I'm if I'm giving the model too
+[2780.1s] much information then I'm not doing
+[2781.4s] context engineering well um but it's
+[2784.4s] [clears throat] also about like and
+[2786.2s] actually I think more importantly is
+[2787.4s] about the number of instructions like
+[2789.5s] you have an information budget in your
+[2791.2s] context window and then you have an
+[2793.1s] instruction budget. And the more like
+[2795.3s] rules and instructions you're giving the
+[2797.0s] model to all follow at once, the less
+[2799.8s] well it can attend to any specific one
+[2801.9s] of them.
+[2803.8s] >> And this is kind of the analogy like I'm
+[2805.7s] really just bouncing, right? So like
+[2807.5s] when I first have when I first have like
+[2809.7s] uh when I first have like this medium
+[2811.5s] thing,
+[2812.3s] >> what I end up having is like um this
+[2814.8s] where I I have too many false positives.
+[2817.2s] Then I add another layer where I
+[2818.6s] basically rerun all the medium risks and
+[2820.2s] check if they're act they're more none
+[2821.8s] or more medium and that then I remove
+[2824.2s] some false positives.
+[2826.6s] So if I have too many I just add a step
+[2828.5s] that removes them and now I've removed
+[2830.3s] them. You're just layering code on top
+[2832.1s] of itself. So like find the right
+[2834.0s] balance point to where you want and like
+[2836.2s] the balance point is likely going to be
+[2839.2s] like somewhere over here in this case
+[2841.6s] for this example. So, I want to kind of
+[2843.2s] move I'm moving the system. And if if
+[2845.4s] this still has too many false positives,
+[2847.0s] then I just add another layer over here
+[2849.0s] that bounces me from here to here by
+[2852.9s] adding another stack along the way. Does
+[2854.9s] that kind of make sense?
+[2855.6s] >> I see. I see. Okay. So, you kind of are
+[2858.6s] like narrowing. You're almost building
+[2860.2s] this like funnel where it's like you do
+[2862.5s] the you chip off. You have the big like
+[2864.2s] when you're when you're chiseling
+[2865.4s] marble, right? You have the big hammer
+[2866.9s] and then you have the little hammer and
+[2868.3s] then you have the tiny little like like
+[2870.0s] polish cloth basically. And you're just
+[2872.4s] refining and refining and refining and
+[2874.2s] trying to get it to the point where like
+[2875.5s] you hit that sweet spot.
+[2877.6s] >> Exactly. And this is kind of what I did
+[2879.2s] to make my life easier where I was like,
+[2880.6s] "Okay, well I I tried one thing where I
+[2882.3s] was like, "Oh, do I actually need
+[2883.3s] medium?" I was like, "Maybe not for this
+[2884.8s] example." So I just removed it and it
+[2886.4s] worked. And I just run more test cases
+[2888.0s] and see, but maybe I do need medium for
+[2890.2s] some scenarios in which case I would
+[2892.2s] just add another layer and now I just
+[2894.0s] move backwards this way.
+[2897.0s] >> And that's kind of like the thinking
+[2898.6s] behind this if that makes sense. And you
+[2901.2s] would each one of these is kind of a
+[2902.7s] separate prompt in your pipeline
+[2904.5s] basically.
+[2905.3s] >> Yeah. It could be a prompt, it can be an
+[2906.7s] agent loop. It really depends on how you
+[2908.1s] frame it. But if you're bouncing between
+[2909.8s] systems, this is kind of the idea.
+[2911.4s] You're just slowly narrowing and giving
+[2913.0s] giving every subsequent step less and
+[2915.0s] less context, but more and more specific
+[2917.1s] context.
+[2918.5s] >> And then Hani has a great question
+[2920.8s] probably for another episode is like how
+[2922.9s] would you do PII reduction in other
+[2925.4s] modalities? like if you wanted to use an
+[2927.4s] LLM to like blur out like sensitive
+[2930.0s] fields on an image.
+[2932.1s] >> Um that is a very hard question. I don't
+[2935.0s] know if we have generative models that
+[2937.0s] are perfectly good at this yet sadly.
+[2939.6s] But what I you can just use like I would
+[2941.8s] probably use like Google's image models
+[2943.9s] and just see if they can like blur out
+[2945.4s] section on an image. And what you'd
+[2946.9s] build is you'd build the same redaction
+[2948.5s] pipeline but in this is like uh this is
+[2952.5s] actually um this is actually the wrong
+[2954.8s] name for this. Let's rename this. This
+[2956.5s] is more of a detect reduction pipeline
+[2958.2s] than it is anything else.
+[2960.6s] >> Yeah,
+[2960.8s] >> if that makes sense.
+[2962.3s] >> I mean, what if what if you were to like
+[2964.2s] kind of take the image and ask a model
+[2966.1s] to like detect all pieces of text that
+[2968.7s] needed redaction and then you feed that
+[2970.9s] to another model that could draw
+[2972.3s] bounding boxes in the in the thing for
+[2974.7s] where that text is and then you could
+[2976.5s] have deterministic code that basically
+[2977.8s] just like blacks out those sections.
+[2980.3s] >> That's the next way to do it as well.
+[2981.7s] That's one way to do it. You can also if
+[2983.8s] the image models get better then what
+[2985.2s] you can do is you can say detect all the
+[2986.8s] things that are like leak risks and once
+[2988.7s] I have all the leak risks send it to
+[2990.3s] another model that takes all these leak
+[2991.8s] risks and produce an identical image
+[2993.5s] ahead of time but that has some funky
+[2995.3s] things because you're really changing
+[2996.4s] the original model. The bounding box one
+[2998.5s] would be a much more robust approach to
+[3000.2s] solving the same problem. The problem
+[3001.9s] with using OCR is if you're using OCR
+[3004.6s] here, you run into a problem where like
+[3006.4s] you don't get the benefits of LLMs as
+[3008.2s] doing generative reductions
+[3010.5s] uh because OCR doesn't work in that way.
+[3012.5s] And the minute you turn a piece of image
+[3014.4s] into OCR, you lose like structural
+[3017.2s] structural sentiment. So like for
+[3019.3s] example, I'm going to take a screenshot
+[3020.6s] really fast of this.
+[3021.7s] >> Right. You're just going to have the raw
+[3023.3s] text and not the sections or the ideas
+[3026.1s] or the hierarchy of this thing. Right.
+[3028.8s] >> Exactly. like you don't you have you
+[3030.2s] just get the text. You have no idea that
+[3033.7s] uh these buttons are unique buttons
+[3036.0s] that's just lost to you. They kind of
+[3038.1s] just reads as prompt curl and now you
+[3039.8s] have to build huristics to say if this
+[3041.8s] thing is like next to itself then it's
+[3043.8s] probably in the same sentence.
+[3045.8s] >> Yeah.
+[3046.0s] >> And in this case they're not. In this
+[3047.6s] case they're not. In this case they are.
+[3049.8s] And we talked about this in the we we
+[3052.4s] did a PDF episode where we went super
+[3054.5s] deep on like multi modality and the
+[3056.5s] different techniques and like I don't
+[3057.8s] know I know I know
+[3060.0s] >> uh
+[3061.9s] I probably can't tell that story. Damn.
+[3063.7s] I know someone who's gone really deep on
+[3065.1s] PDFs recently and it's like basically
+[3068.5s] using an LLM to do like slightly more
+[3071.4s] expensive but poor man's poor man's OCR
+[3073.8s] like a really small like model design
+[3076.0s] for this of like PDF to image and then
+[3077.9s] use an LLM to OCR the image to text.
+[3080.2s] >> Yeah, I would much rather use elements
+[3082.4s] for this. The other thing that I would
+[3084.0s] recommend is and you watch our dynamic
+[3085.8s] video that we did recently. These
+[3087.9s] redaction rules can actually be built
+[3089.5s] dynamically. And like as we're building
+[3091.4s] out these rules, you'll notice that
+[3092.4s] there's these kinks. Like maybe
+[3093.6s] sometimes someone wants high low. Maybe
+[3095.8s] users want to define their own type of
+[3097.2s] risks. Maybe they want to define their
+[3098.6s] own category of gener rules that behave
+[3101.4s] in interesting ways. You can use a
+[3103.7s] dynamic type system to go solve for
+[3105.5s] that.
+[3107.8s] >> So like dynamic type system.
+[3110.8s] Okay. Sorry, keep going. Like yeah,
+[3112.0s] dynamic type system is part of it. The
+[3113.4s] other thing you could probably do is
+[3116.7s] you could inject, and this is what you
+[3119.1s] talked about, dynamic rules, but like
+[3120.5s] you could have dynamic generative rules,
+[3122.2s] which are basically you take information
+[3124.7s] about the user. You tell the LM the
+[3126.4s] user's email is this, here's where they
+[3127.8s] live, here's their phone number, etc.
+[3129.6s] And you say you you basically like do a
+[3132.0s] different prompt per user based on their
+[3134.2s] information to make it easier to find
+[3136.1s] that user's PII.
+[3138.1s] >> Exactly. Like it's Yeah, exactly. You
+[3141.6s] can basically like you can offload the
+[3143.2s] dynamic data to your system. So let's
+[3144.7s] say you're building a CIS admin company
+[3146.4s] whose job it is to help companies like
+[3149.3s] uh major enterprises using cloud code
+[3151.3s] prevent their keywords from being leaked
+[3153.6s] into the system. Well, you can build
+[3155.6s] this system but then you can give them a
+[3157.3s] user like company controlled category
+[3160.2s] system where they go add categories
+[3162.6s] dynamically based on what every company
+[3164.4s] has. So some companies might be like
+[3166.4s] restricted keywords. Some companies
+[3168.3s] might have like super mega sensitive be
+[3171.0s] very biased on this rule. And instead of
+[3173.2s] adding descriptions here, they can
+[3175.1s] actually define categories of leak
+[3176.6s] categories that they care about rather
+[3178.6s] than you categorizing them as like five
+[3180.2s] or 10 hard categories. They can define
+[3182.8s] new categories. And this this is really
+[3185.5s] how you go to the next level, which is
+[3187.3s] you built infrastructure, you built this
+[3189.8s] bouncing pattern, you built all the code
+[3191.8s] around this, but all the shapes and the
+[3193.8s] data are owned by the by the company
+[3195.8s] that you're selling to. If that kind of
+[3198.0s] makes sense like the rules, the
+[3199.7s] categories, the hierarchy of uh logic is
+[3204.1s] owned by them, but you own the control
+[3205.9s] plane for how everything runs. You own
+[3208.0s] the control plane for like when this
+[3209.7s] bouncing happens and doesn't happen and
+[3211.8s] you're still liable for accuracy,
+[3214.3s] but you give them like knobs and probes
+[3216.6s] into the system to get exactly what they
+[3218.6s] want every single time.
+[3219.8s] >> And this maps onto the concept from the
+[3222.4s] um it was like the doctor note take
+[3224.5s] intake thing where you maybe want the do
+[3226.3s] give some UI to a knowledge worker to
+[3229.2s] kind of uh explain their schema and
+[3232.8s] configure the schema that they want for
+[3234.9s] the extraction. And this is that same
+[3236.6s] concept again, but for letting them
+[3238.9s] configure what is what is sensitive.
+[3241.5s] >> Exactly. Exactly that.
+[3244.1s] >> What's an example of a userdefined
+[3245.8s] category? Just like I'm I'm trying to
+[3248.1s] like rock and maybe it's just because
+[3249.3s] we've been talking for an hour, but like
+[3250.6s] what what's an example?
+[3252.5s] >> I I think for example like key uh like
+[3254.8s] magic uh what's it called? Like magic uh
+[3258.6s] how do I describe this? Uh like project
+[3261.2s] names. Some companies use secret project
+[3263.8s] names as a part of their system. That's
+[3266.0s] the that's uh that's a keyword that you
+[3268.2s] want to have. Um and some companies
+[3270.8s] don't care about that stuff. I bet some
+[3272.6s] companies deeply care and like you might
+[3274.3s] want to have like composable things like
+[3275.8s] remember in the doctor scenario I said
+[3277.7s] you want to tell the doctor you want to
+[3279.0s] have a field that you can be a bulleted
+[3280.7s] list and under the hood that means
+[3282.5s] string array but from a doctor's
+[3283.8s] perspective you're just like bullet
+[3284.9s] points which they understand. So you
+[3287.6s] might have a field here called address,
+[3289.8s] >> but you may not want the you may not
+[3291.8s] want the company or the knowledge worker
+[3294.1s] to define what an address means.
+[3296.8s] >> And you might want to say it's like
+[3298.2s] individ like individual addresses versus
+[3300.6s] business addresses. You don't want them
+[3302.1s] to have to think about that. You're just
+[3303.6s] like, oh, you want to redact this
+[3305.8s] concept and like yes or no. So you're
+[3308.2s] kind of building B building blocks but
+[3310.4s] also giving them the ability to build
+[3312.3s] their own building blocks for new things
+[3313.8s] that are very very specific to them.
+[3316.9s] >> I see. Okay. So they would write the
+[3318.9s] name and they would write the
+[3320.3s] description and they would give some
+[3321.8s] examples and then they would add a
+[3323.3s] category which is like an enome that
+[3325.1s] they manage which is like
+[3327.1s] >> I don't know my my mind is jumping to
+[3329.0s] like Jur and linear where you can like
+[3330.4s] create labels and you have like a set of
+[3333.1s] labels that are accessible.
+[3334.6s] >> Yeah. And you might offer some built-in
+[3336.6s] labels like social security numbers like
+[3340.3s] it's like uh true PII which is like uh
+[3346.2s] description
+[3349.3s] socials
+[3350.8s] social or like
+[3353.8s] it's like even this highrisk PII.
+[3358.7s] >> Yep.
+[3359.4s] >> Right. Like you want you want
+[3360.6s] >> but then there might be another one like
+[3361.8s] the we in my platform I need to redact
+[3364.5s] out dietary preferences for some reason
+[3366.6s] which is like kind of personal but like
+[3368.6s] in my case I want to make sure it
+[3369.9s] doesn't leak.
+[3371.3s] >> Exactly. Exactly. Things like that. Or
+[3373.5s] like maybe you're building a thing for
+[3375.5s] therapists and you want to make sure
+[3376.6s] like specific uh patient traumatic
+[3379.0s] events don't leak.
+[3380.7s] >> Right.
+[3381.6s] >> Right. And like how do you define
+[3382.9s] trauma? No one would define that. But
+[3384.9s] like you as a category need like trauma
+[3387.8s] oriented generative rules. You might
+[3389.8s] have five rules under the trauma
+[3391.4s] category
+[3393.2s] that are like special. So it's things
+[3395.8s] like that that you really want to
+[3396.7s] expose. But like whenever you're
+[3398.5s] building these systems like phase one,
+[3400.8s] build the system independently. Don't
+[3403.1s] think about your end users. So you're
+[3404.8s] going to build this detect reductions
+[3406.4s] function. And after you build the detect
+[3408.6s] reduction function, the next thing that
+[3409.9s] you want to build is test cases. And the
+[3412.2s] next thing you want to build is like
+[3413.1s] this check redaction function. And you
+[3414.6s] want to have this running. So now you
+[3416.5s] have a loop that's running in prod that
+[3418.8s] detects redactions, runs stuff, and then
+[3420.7s] periodically runs check reductions on x
+[3423.0s] percent of of your data and gives you an
+[3425.4s] eval suite to constantly add more and
+[3427.2s] more test cases.
+[3428.6s] >> And would you go ahead
+[3430.4s] >> would you like use a smarter model in
+[3432.6s] check redaction since you're using it
+[3434.1s] low volume or like how would you think
+[3436.1s] about that trade-off?
+[3437.3s] >> I would just spot check and just look at
+[3438.9s] the quality. It's like you're you don't
+[3441.0s] need to build eals for everything. Like
+[3442.6s] many times you can just look at a 100
+[3443.9s] samples and be like is this roughly what
+[3445.8s] it is? We know redactions is a
+[3448.1s] constantly moving target.
+[3449.8s] >> Yep.
+[3450.2s] >> But check redactions is like pretty well
+[3451.9s] defined and like you'll get a sense if
+[3454.1s] you're looking at the data regularly.
+[3455.8s] You should get a sense of if check
+[3457.1s] redaction is working or not without
+[3458.4s] building evals just because you're going
+[3460.1s] to be looking at the data at some
+[3461.4s] cadence anyway.
+[3463.0s] >> Yeah. I could see a system where like it
+[3465.9s] checks the redactions and rather than
+[3467.5s] returning a bool, it returns like here's
+[3469.6s] the one that looks iffy. Either like
+[3471.3s] it's too aggressive or it's not
+[3473.0s] aggressive enough and just sends a slack
+[3474.7s] message to be like, hey, we found this
+[3476.0s] one and then like give the user a UI to
+[3478.0s] be like no it's fine or like yes, add
+[3480.6s] this to our eval suite and then you get
+[3482.3s] a PR and then someone can go iterate on
+[3484.2s] the prompt to make sure that that passes
+[3485.8s] consistently.
+[3487.1s] >> Exactly. Exactly. Or you can do the
+[3488.9s] thing that Google did where like we
+[3490.1s] could you could run on the cloud and you
+[3491.6s] could pull the real customer data and
+[3492.9s] run the system but you can't access
+[3494.2s] them. You can't pull the message
+[3495.5s] locally. So you get a unique ID of like
+[3497.4s] a new check reduction system.
+[3499.2s] >> Regardless once you build the check
+[3500.6s] reduction system um now you have this
+[3503.5s] and then you're like okay well now we
+[3505.3s] detect a certain our customers are
+[3507.2s] asking us for custom redactions and we
+[3509.4s] can't keep adding customer custom
+[3511.2s] redactions every single time. So how do
+[3513.2s] we give them the power to design their
+[3515.0s] own redactions? That's when you get to
+[3517.0s] the next phase, which is you start
+[3518.2s] designing dynamic dynamic redactions,
+[3521.1s] which aren't just like users adding
+[3522.7s] named and categories, but you're giving
+[3524.4s] them more control over like what
+[3526.4s] redactions actually mean along the way.
+[3530.8s] And then now you've built a full system
+[3532.4s] because you you get check redactions.
+[3534.3s] Now you expose your check redactions to
+[3536.6s] your end users who are building dynamic
+[3538.2s] redaction. Now you're basically
+[3541.6s] a pipeline to turn to basically give you
+[3544.5s] feedback human in the loop. But you're
+[3546.1s] making them do the work of like, yes,
+[3548.4s] that's good. No, that's bad. And then
+[3549.8s] you just kind of like store the results
+[3551.4s] and then you can ingest them
+[3552.7s] periodically and improve the system.
+[3554.6s] >> Well, you don't even have to inject
+[3556.2s] improve it for them. You can actually
+[3557.5s] just run check redactions automatically
+[3559.5s] on all these systems and all the rules
+[3561.1s] that you have and then you show the user
+[3563.3s] for their defined categories. Here's
+[3565.0s] some examples of recent redactions that
+[3566.7s] failed. Are these good? Are these bad?
+[3569.0s] Do you want to change your rules? Do you
+[3570.3s] want to change your dynamic system to
+[3571.7s] capture these?
+[3572.2s] >> It's almost not like failed. It's like
+[3573.9s] flagged. It's like, hey, we weren't 100%
+[3576.5s] sure about this one. Like, would do you
+[3579.1s] want to give this a new category? Do you
+[3581.1s] want to say this exists as part of an
+[3582.7s] existing category, etc.?
+[3585.0s] >> Exactly. And that's kind of what you're
+[3586.4s] building out here. So, it's like a
+[3587.5s] recursive system, but you're leveling
+[3589.5s] up. First, you're doing it for yourself,
+[3591.7s] then you're empowering your customers,
+[3593.2s] then you're empowering your customers
+[3594.5s] with the RL uh with the feedback loop
+[3596.8s] and like the control plane so that they
+[3598.6s] can have iteration loop. And now, you've
+[3600.2s] become truly infrastructure. And like
+[3602.9s] you're just moving bits along the way
+[3604.5s] and letting your customers do the job
+[3605.8s] they need to do.
+[3607.1s] >> That's sick, dude. I I love the the
+[3610.1s] journey we went on this one from like
+[3612.6s] reax out a social security number to
+[3614.8s] like build a system that lets your users
+[3617.7s] define their own redaction tools and
+[3620.0s] like an outline of how the how the UI
+[3622.1s] would look.
+[3623.4s] >> Yeah. And then there's a there's another
+[3625.6s] question from Snow Effect. How do you do
+[3627.0s] the actual redaction? This is actually
+[3628.2s] really easy. Is it like function redact
+[3631.2s] redact? So you basically give it leaks
+[3634.6s] leak risk as an input and you just ask
+[3636.3s] it to produce a new string as an output.
+[3639.4s] Yeah, I think dude I I I found the repo
+[3643.6s] and I found the commit history, but
+[3645.5s] GitHub is down, so I can't go find the
+[3647.4s] redaction example. But we will we should
+[3649.7s] try to ship that cuz yeah, there's it
+[3651.2s] basically like builds a map of the
+[3653.3s] mappings and then the model basically
+[3655.0s] the extract the thing the model extracts
+[3656.6s] is like
+[3657.4s] >> the key it replaced the thing with and
+[3660.0s] then the actual like data. Yeah. And
+[3662.2s] >> so you have this map where you can
+[3663.8s] basically deterministically like remove
+[3665.8s] the data and you can deterministically
+[3667.5s] like swap it back in when you actually
+[3669.3s] need access to it.
+[3671.2s] >> Yeah, I remember that code. That's why I
+[3672.7s] was like I really wanted to show that
+[3673.8s] code. I just couldn't get it. I couldn't
+[3675.1s] find it again. I was like ah that's
+[3676.9s] unfortunate.
+[3677.9s] >> You should open up claude in the BAML
+[3679.7s] examples and tell it to find the commit
+[3681.4s] where the PII [ __ ] was removed.
+[3683.4s] >> Yeah, it's [snorts] probably in there. U
+[3685.1s] but the redact function itself just
+[3686.6s] looks like this. You give it inputs. You
+[3688.2s] give it all the leaks that happened and
+[3690.2s] you just ask it to rewrite the text and
+[3692.0s] redact information from it and it will
+[3693.6s] it will do the trick.
+[3695.6s] >> Uh it should not uh it should not
+[3697.9s] actually. So there's like a couple LM
+[3699.9s] functions you need here to make this
+[3701.2s] actually work.
+[3701.9s] >> Cool. We will try to find that code and
+[3703.7s] share it out by the time by the time the
+[3705.1s] email goes out on Monday with this
+[3706.6s] episode. We will we will try to find
+[3708.2s] that code.
+[3709.4s] >> Um cool. I think we're at 105. Uh sorry
+[3713.3s] we're a little late today, folks. Uh
+[3714.9s] thanks for jumping in. And uh what are
+[3716.8s] we talking about next week? I
+[3717.8s] >> think uh we're talking about agents and
+[3719.6s] skills.
+[3720.4s] >> Oh my god. Yeah, that's right. No. Uh so
+[3722.6s] I got really tired of explaining the
+[3725.0s] difference between sub agents and skills
+[3726.8s] and commands and how they all work and
+[3728.7s] how they tie into context engineering.
+[3730.5s] So we are going to talk about uh how all
+[3732.8s] that stuff works and all the different
+[3734.3s] ways you can combine them. Um and I
+[3737.0s] don't know, we've already talked about
+[3738.1s] like skills versus MCP, so we're not
+[3740.0s] going to go super deep there. Um, but
+[3742.5s] just like I think there's some some
+[3744.1s] basic structural things to really like
+[3746.1s] understand that we can dive a little
+[3747.6s] deeper on of like how how I kind of glue
+[3751.0s] all those pieces together and how we've
+[3752.6s] seen a lot of like people who are really
+[3754.0s] good at agentic coding kind of using
+[3755.8s] those things and moving around.
+[3757.1s] >> And then stay tuned in end of March or
+[3759.1s] early April. We're going to have an
+[3760.2s] inerson event for those of you that want
+[3761.7s] to attend SF.
+[3762.9s] >> Yes. Uh, still locking down venue and
+[3764.6s] dates, but the AI that works
+[3766.0s] unconference, we're trying to do it
+[3768.2s] March 28th, which is a Saturday. So, if
+[3771.0s] you're in SF, mark your calendar. If
+[3772.6s] you're not in SF, uh don't buy flights
+[3775.0s] yet. Uh but we are working to confirm
+[3776.8s] that. Thanks everybody.
+[3778.3s] >> Everyone have fun. Good luck.

@@ -1,0 +1,525 @@
+what's up Engineers Welcome Back gbt 40
+fine-tuning was just released and that
+means you can fine-tune your own
+state-of-the-art model so this is cool
+but have you ever wondered why would I
+ever use the time to F tune a model I've
+wondered the same thing for quite some
+time and I finally took the time to dig
+in in the open AI blog post here we have
+a state-of-the-art fine-tuned gpg 40
+model by cosign Genie achieving a state
+of-the-art score on the software
+engineering verified Benchmark this is
+incredible and it piqued my interest in
+finally diving in to learning about what
+fine tune models are all about so in
+this video I want to definitively answer
+the question for you when should you
+find tune a model and why a massive
+spoiler alert here most of us you and I
+included do not need to find tuna model
+but knowing when to find tuna model will
+separate you from the rest of the pack
+because the performance gains and cost
+saves can be absolutely game-changing
+potentially upleveling your applications
+from mid to exceptional I want to give
+you three concrete pieces of value
+broken into three chapters throughout
+this video we're going to look through a
+legit fine-tune use case we'll discuss
+when and why to fine-tune and then we'll
+look at a fine-tune code base I've
+created for you so that you can
+fine-tune any open AI model the current
+state-of-the-art and whatever comes next
+if you're interested in in that stick
+around and let's dive
+in so on the channel we don't just talk
+about gen Tech or fine-tuning we don't
+just cover the latest hype news we
+actually build useful tools and
+applications for ourselves our work and
+our users what I have here is a really
+really cool demo of a prompt to image
+prompt to image generation tool I'm
+calling Vision grid this is a unreleased
+tool that I'm working on right now and I
+want to show you how a state-of-the-art
+fine-tuned gpg 40 model can power this
+application so let's walk through a
+couple examples and I'll explain exactly
+how this works so what I'll do here is
+I'll just type exactly what I want to
+see in the image so I'll say epic
+skydiving Mission Impossible side angle
+okay so I'm going to run this and what
+you're going to see here is my fine tune
+gpg 40 prompt has now created the full
+image prompt that I'll use to actually
+generate the image so I'll go ahead and
+generate this and you can see that we
+got one image there let me go ahead and
+kick this up let's generate four of
+these images and so you can see here
+we're running the brand new flux models
+shout out to Black Forest Labs the flux
+one image generation model series is
+absolutely incredible so that's what
+we're using here under the hood and you
+can see here we're getting some like
+pretty nice high quality results right
+and this is the power of a fine-tune
+model and I know right away you might be
+thinking you don't need a fine-tune mod
+model to do that but just stick with me
+here and we'll keep working through this
+and look at why a fine tune model works
+really well here so we have this prompt
+going we can generate some more images
+we can change the image ratio here if we
+want to so let's go ahead and generate
+some more right so you know getting some
+decent results some also that don't make
+any sense right that's a very long
+person but we're also getting some
+really epic shots here right this is
+just on the base flux Schnell model
+right so let's go ahead and write
+another prompt here let's do woman mid
+20s uh candid mirror selfie s room and
+we'll let that generate so again you can
+see that this model is filling in some
+of the details here and I'm going to go
+ahead and boost the model schel has a
+hard time with people so I'm going to go
+up to flux Dev and let's go ahead and
+generate some more images here cool so
+you can see there we got looks like just
+only one image came out of that but you
+can see here we have just like a really
+clean simple image we got the messy room
+we got the mirror shot right so nice and
+detail just like we were asking for here
+we only got one image there I wonder
+what happened let me bump that down
+let's go ahead and change the ratio
+we'll do a let's do a portrait shot and
+let's go ahead and get another
+generation right so I can just rerun
+this to get a brand new generation of
+this so our fine-tune image prompt
+generation just filled in all the
+details for us right so this is a really
+interesting use case you know we're
+passing in maybe six or seven seven
+words here and our fine-tune prompt is
+filling in a ton of details of course
+from the training data right so we'll go
+ahead and generate this again so this is
+a really interesting pattern we're
+getting into here right we have a prompt
+that's generating a prompt that's
+generating an image and what's actually
+happening here is that we're getting
+information expansion we have what I
+like to call an expansion prompt which
+is a prompt that has few tokens and then
+it expands into a larger set of tokens
+which then expands one more time time
+into a entire image right so there we go
+so we got a full portrait shot there and
+that looks pretty good right so really
+high quality results let's go ahead and
+bump up to flux Pro and generate a
+couple additional results I'll say ISS
+NASA Sun and Earth and
+background uh visible
+stars okay so we'll run that and again
+our font tune model is going to fill in
+all the key details for us here we can
+now come in tweak anything we want and
+I'll just go ahead and hit generate here
+let's go ahead and get two images out of
+this all right so wow yeah check out
+these images right so this is fleux pro
+this is the top you know highest quality
+model pretty incredible results here
+let's go ahead and change the aspect
+ratio here let's do a 54 on flux Pro
+let's get four more images of this and I
+just want to rerun I want to get a
+couple different variations right this
+is a great use case for large language
+models in general you know just by
+rerunning this prompt I'm getting a
+variation of this and let's go ahead and
+get some more flux Pro images you know
+just a touch on the application side of
+things this is just a kind of standard
+boring fullsack application wire up code
+on the back end we are calling the
+replicate API which is hosting the black
+Force lab image Generations so that's
+how that happens I then save that to a
+cloud bucket and then you know pull that
+on the front end here so this really
+cool right so we're getting 5x4 images
+and we're getting four of them really
+really high quality look at that that's
+beautiful lens flares in there from the
+Sun some pretty solid clouds so really
+really cool stuff here right let's go
+ahead and generate a couple more and
+then we'll talk about you know what is
+the actual value that the fine tune
+model is bringing this prompt okay so
+let's go ahead and do a couple more
+let's say um tense group of friends at
+Coachella two girls two
+guys aiming for some Festival Vibes here
+you can see here A bunch of Rich details
+are coming in the prompt and I think
+this is good so we can just go ahead and
+generate let's generate some straight
+squares here so we'll hit generate there
+on flux Pro by the way flux Pro is
+costing about 5 cents per image
+generation so hit the like hit the sub
+support the channel really clean images
+here looks like we got one guy in that
+photo so not exactly following the
+counts there I think that's probably a
+bit harder but you know it is cool we
+are hanging out at Coachella we're
+having a good time um I'm going to try
+to sneak something in here one one of
+the things that the flux models can do
+really well is they can actually you
+know write text so I'm going to say um
+in background lit Banner Indie Dev Dan
+is performing so we're just going to see
+if we can sneak in any Dev Dan uh as uh
+you know the the new latest DJ popping
+off at you know Coachella so let's go
+and see if that get in the background
+there but really cool right so super
+lifelike it's filling in the details
+right it says something about vibrant
+intense right blurry photo that's all
+there and yeah okay very nice check this
+out so Indie Deb Dan performing there um
+the the flux models are really really
+impressive this is uh you know we got
+one guy there that's good there we go
+two guys two girls right so this is
+probably the winner in terms of
+instruction following right but you know
+really really cool um you know it got
+the text in there which is pretty
+incredible you know for my thumbnails on
+YouTube I use mid Journey but I'm
+definitely going to ship out a thumbnail
+probably for this video using uh flux
+just because this is really cool right
+to embed text inside an images really
+awesome but okay so let's refocus on on
+the image prompt right let me just go
+ahead and run one more of these let's do
+something really simple right let's do
+uh beautiful mountain landscape
+surrounding Lake okay so just going to
+generate that and I'm going to go ahead
+and drop down to snail so I don't go
+broke uh let's let's go and generate
+this right fuel is really nice um when
+you're doing simpler things it actually
+performs really well like yeah this is a
+perfect example when you're not looking
+for photos of people or really detailed
+images flux sell is just so great and
+you know this is the lowest quality
+model and it costs something like a
+third of a cent for each image so this
+is really fantastic right look at that
+detail very rich very lifelike we can go
+ahead and just generate more of these
+right let's go ahead and run our prompt
+again
+and I feel like when you're doing a lot
+of image generation you're not exactly
+sure what you're looking for but you're
+looking for an idea and variance of a
+similar idea having a prompt like this
+that generates the prompt gives you a
+lot of value and allows you to iterate
+really quickly this another set of
+really great shots let me go and change
+the landscape here let's do like a big
+shot here let's do 21 by9 and let's get
+four of these so yeah look at that right
+like just like classic this is like
+wallpaper stuff right and then we can
+come in here whenever we want and you
+know just tweak anything we like I'm
+going to say we want some more Reds and
+oranges you know literally just reprompt
+it and should see some more red color
+there yeah look at that beautiful and
+then just for fun I always like to play
+around with the the models here see what
+a higher quality model generation looks
+like so actually switch this to 54
+here you go look at that yeah and of
+course you know flux Pro comes out super
+rich Vivid images very colorful very
+real very realistic very lifelike really
+really enjoying these models big shout
+out to the Black Forest lab team so
+really incredible stuff right this is
+this is an interesting application here
+I think we're starting to dig into what
+the future of llm applications can look
+like and this is an example of it where
+you have series of llm and models
+working together to allow you to do a
+lot more with less right this is the
+definition of Leverage we type five
+words it generates you know an entire
+paragraph inside a domain specific
+problem in this case we're building
+image prompts that accurately and
+vividly describe an image and then we
+are sending that prompt off to a image
+model which then generates a really
+really high quality image so you know
+hit the like hit the sub follow the
+channel follow the journey as we build
+out these applications and push the
+capabilities of generative AI into the
+future right this is what it's all about
+this is where things are headed you have
+whole chains of these systems look at
+this beautiful image wow you have you
+know chains of these llms these agents
+these prompts these models working
+together delivering incredible results
+to you that were just unimaginable
+[Music]
+before let's talk about why we fine tune
+a model right I think it comes down to a
+couple of things let me just start with
+the high level right why would we fine
+tune a model if you need consistently
+specific outputs this is the like number
+one go-to use case for fine-tuning you
+might be thinking you can use examples
+you can use Json you can use structured
+outputs you're 100% right about that
+this is an additional layer you can add
+on top of all those things right you
+have to remember when you're fine-tuning
+you're actually updating the internal
+model weights so that you're getting
+your own version of the model that
+excels in your specific use case given
+your specific data right so that's the
+first thing you need even more
+consistent specific outputs okay second
+thing so you're handling large complex
+domain specific tasks in this case here
+we have a prompt expanding into a larger
+richer more detailed version of itself
+thanks to our fine tune GPT C 40 model
+so what we're solving for here with this
+finetune model right the specific domain
+problem we're solving here is we want
+information Rich descriptions of our
+image that we can pass into an image
+model right so that's what we're doing
+here so with this model I'm really
+focused on specifically the domain
+specific task not really large or
+complex and I'm also hitting on this
+third case here right so when to fine
+tune if if you want to reduce token
+usage so I have created a version of
+this prompt without a fine-tune model
+right I think that's a great place to
+start you always start with a fully
+prompt engineered full example Rich
+prompt right so I have this prompt
+here that contains a bunch of
+instructions it tells my model exactly
+how to run how to generate these images
+right so and then I replaced the you
+know base prompt here and you can see
+here this prompt to generate these rich
+detailed uh image descriptions is 14K
+tokens okay so it's massive um when I
+fine-tune this model I'm passing in
+these inputs and outputs you can see
+here I'm only passing in however many
+tokens this is right let's say it's 10
+tokens and then it's generating output
+of whatever let's just assume 100 tokens
+right that is a massive decrease from
+the 14k that I pass in when I run the
+prompt manually every single time right
+so this is a huge huge Advantage when we
+talk about fine-tuning a model it
+greatly reduces token usage when you can
+create test data that closely reflects
+your domain specific problem right so
+this is a pretty big Advantage you can
+generate long outputs with this this is
+becoming less of a reason to fine tune
+given the output is increasing so the
+last big reason to fine tune is if all
+the prompt engineering tricks you're
+doing cannot give you the results you're
+looking for I do think that fine-tuning
+is kind of a last case ditch effort to
+maximize the results out of your model
+right these other reasons to fine tune
+are also valid but I think that the
+biggest reason to fine-tune is that you
+cannot get the results by prompt
+engineering using all the prompt tricks
+right providing examples being alra
+clear with your instructions using XML
+in previous videos we learned that XML
+is likely the best prompt format I'll
+link that in the description we also
+have talked about prompt chaining and
+fusion chains I'll link those in the
+description once all that stuff runs out
+and you just cannot attain the results
+fine tuning is going to be your last
+silver bullet fine tuning gives you some
+really really incredible results at the
+cost of upfront effort building out
+training data
+50 to hundreds really you want hundreds
+of examples and that means you know
+collecting real Rich information to pass
+into your fine tune model test data so
+this is the basic kind of high level of
+it
+right so in the description I've linked
+a reusable open AI fine-tuning code base
+that I use to fine-tune my models on
+open AI it is open AI specific that is
+absolutely by Design This is going to be
+the fastest way you can get up and
+running with your own fine tune model if
+you follow the list of commands here
+you'll be able to get up and running
+insanely quickly with an example of a
+fine tune model feel free to swap out
+gpg 40 with gpg 40 mini opening ey
+supports fine tuning on both models I've
+just added a bunch of docs here for you
+as well some resources to help you get
+started and then you know a lot of the
+things we've discussed here uh will be
+in this read me as well right when and
+why fine tune when to use fine tuning a
+couple decision diagrams here and then a
+breakdown of when to fine tune when not
+to and then a deeper breakdown from each
+one of the big three model providers
+right so I have open AI in here
+anthropic and Google Gemini pulled some
+information right from their fine tuning
+pages so feel free to check this out I
+also went ahead added some examples for
+fine tuning and examples for just
+sticking to prompt engineering and
+prompt designing uh so feel free check
+out this code base this is going to be
+linked in the description for you this
+is something that I'll likely update in
+small patches when needed the main idea
+for this code base is just to get you
+and I up and running our own open AI
+finetune models everything you need to
+know is going to be in the docs here
+it's really simple to set up there are a
+couple commands here that are important
+to know um I've got this all running in
+a clean typer set of commands so you
+know there's list files delete files by
+name upload data set list jobs train
+model so on and so forth I have an
+example data set here showing you
+exactly how to structure your training
+data you know pulling from open ai's
+example here we have Marv is a factual
+chatbot that is also sarcastic and then
+you place the user message and then you
+show the assistant response and this is
+how the Fon tune model is able to learn
+and train from your data so I have an
+example of that
+and you know if you follow these
+commands you'll be able to endtoend
+train a fine-tune GPT model in literally
+less than I don't know 2 minutes so once
+you walk through this process at the end
+you'll be able to run this UV run fine
+tune fine tune prompt and then you'll be
+able to run your model so I'm going to
+type in my model name here I think it's
+something like uh ft something something
+yeah and then we can go ahead and just
+write a prompt here right so full
+landscape image of snowy Lake Winter
+vibes okay then it's going to send that
+to my fine tune model and right away
+there you can see we got the result so
+this code base is here for you check
+this out if you're interested in fine
+tuning I am super super excited for
+additional fine-tuning support from
+other companies Ultra excited for
+fine-tuning on Claude 3.5 Sonet that
+would be really really incredible you
+can fine tune on Claude 3 you can also
+find tune on Gemini flash so go ahead
+pick your poison hop in there leave a
+like and a comment if you're already
+fine-tuning or if you're thinking about
+fine-tuning something and you're curious
+about whether you should fine-tune or
+just focus on prompt engineering as you
+saw here in this Vision grid application
+some of the results you can get out of
+fine-tuned models and combining models
+both image and language models is really
+really incredible we're in a really
+really interesting time and space with
+generative AI with AI coding assistants
+with image generation models where
+things that just weren't possible before
+are you know not only possible but you
+can create brand new super interesting
+applications that can really set you
+apart right that really give you an edge
+for both yourself your personal tools
+your personal AI assistance your own
+work and for your users right whatever
+you're building these tools are
+available to you and it's all about
+grabbing hold of them it's all about
+putting the work in and making it happen
+that's what we focus on here on the
+channel you know since the beginning the
+channel is all about building living
+software software that works for us
+while we sleep that mission hasn't
+changed and that's what we focus on here
+if that interests you hit the like hit
+the sub and I will see you in the next
+one

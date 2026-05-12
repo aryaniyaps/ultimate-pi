@@ -1,0 +1,561 @@
+what's up Engineers it's Andy Deb Dan
+here and I've got a different type of
+video for you today this is going to be
+a special video where we are AI coding a
+zero noise minimal agentic information
+dieting tool I'll be commenting over
+this AI coding session to give you some
+insights on what I'm thinking and how
+I'm building this in this tool we
+basically provide a list of URLs we're
+interested in then it lets you know if
+there are any in updates based on the
+last scene date you can see here we're
+looking at cursors change log and the
+last updated post was you know July 3rd
+so we can track this with a last scene
+date and a couple of great llm so you
+know in this video we're going to be
+using some of the best AI coding tools
+we'll be using AER with sonid
+3.5 we're going to be prompting almost
+every line of code and we're going to
+build out a tool to help us filter
+through the noise to kind of focus on
+the content that we really care about
+content that will help us make better
+decisions as product Builders and as
+Engineers so if that interests you
+definitely stick around and let's go
+ahead and get started so right now you
+can see I'm just walking through some of
+the previous scraping functionality just
+to make sure that it works make sure
+that it lines up with the actual
+documentation here the actual content
+you can see that that looks
+good we built some of this scraping
+functionality out in our previous couple
+videos we're kind of on a series of
+building out these different agentic
+workflows I want to not just talk about
+this technology I want to show you
+exactly how you can be building valuable
+technology with these tools so right now
+I'm just going through the scraped
+content I already have a little bit of
+code set up here uh reusing it from our
+previous video where we built out a a
+gentic Blog that automatically
+updates so you can see there we're
+kicking off AER with claw 3.5
+Sonet and now we're going to add a
+couple items to our
+context one of my favorite things about
+AER is that you just add items to the
+context Point Blank and now AER uses all
+of that content for its prompts so
+here's a useful AI code prompting
+technique you can use
+you can see at the beginning of that
+prompt there I say update main py colon
+main colon and then I start detailing
+out the changes I like to call this
+context chaining and it really allows
+you to be more specific with where
+exactly you want your
+change and uh you know the more code you
+have the more
+effective context chaining
+is because it allows your llm to really
+know exactly what you mean and where you
+want to changes to
+happen we're going to be using streamlit
+for the UI here and we are reusing our
+agentic workflow framework structure so
+you know we have the retrieve step we
+have the agentic step act learn
+notify and uh again check out the
+previous video I'm going to link the
+previous couple videos that lead up to
+this in the description
+you can see here we have a couple
+updates here we're going to update the
+title to zero
+noise and just do a little bit of
+tweaking with the streamlet
+UI now we're going to
+start adding our providers into the
+UI so I'm setting up some expanders for
+each one of the configuration providers
+in the config.js file you can see the
+prompt there I just want to highlight
+the importance of really curating your
+information
+stream it really comes down to junk in
+junk out novel ideas in novel ideas out
+the more you fine-tune your you know
+personal knowledge
+base the more potential you have to make
+interesting positive Roi decisions and
+actions and that all comes down to your
+information stream what are you learning
+what information are you taking in and
+based on that information what actions
+can you take because you knew that
+information all right with that prompt
+complete we now have a loop over each
+provider inside of an expander you can
+see cursor there and now we can click
+the URL and we have the last scene date
+if you look at my tabs I've got Simon
+Wilson's blog I've got the AER blog
+these are some of the blogs that I like
+to pay attention to it's really really
+important to be plugged in to the tools
+and the Technologies and the creators
+the builders the engineers that are
+really at the edge of a lot of the value
+that's getting created and this is where
+the real engineering is happened this is
+where the real value creation is
+happening and I think it's really
+important to be plugged into that so
+that's really the point of zero noise
+you know the best Engineers are not
+circlejerking their
+celebrations on Twitter to gain
+attention they write deeply they think
+deeply and they they execute on this
+stuff right these are the people that I
+curate into my information diet and
+that's what this tool is all about
+that's what zero noise is all
+about all right so if you're enjoying
+this video so far if you're learning
+something if you find this interesting
+definitely hit the like hit the sub drop
+a comment let me know what you like let
+me know what you don't like definitely
+let me know if you're interested in more
+AI Dev log videos like this I think it's
+really interesting to kind of put this
+all together for you to show you how I'm
+writing code in the current age of
+generator of
+AI these llms are getting more powerful
+our tooling is becoming more powerful
+and the way we code is changing there's
+there's no question about that right now
+if you're writing code with AI you have
+a sizable
+Advantage but soon there won't be any
+Engineers left writing code with without
+AI I want to help you get there I want
+to help you get caught up with the
+current state of things and hopefully
+beyond the current state of things AI
+coding is here to stay and it's a
+complete paradigm shift in how code is
+generated I think that's the new ground
+truth of the future of
+engineering all right so right now we're
+just updating the workflow statements so
+that we get the right streamlit logs
+when the
+identic workflow has
+completed
+and
+I prompted away my right calls in
+between the workflow functions so I'm
+just adding those back now with that
+prompt that ran basically
+instantly and now you can see each one
+of those workflows running we need to
+call st. Ron to trigger the UI to
+update we're getting to a really
+interesting point here I'm going to
+start adding the agentic block of code
+here and the agentic is where everything
+really
+happens so you can see I'm adding
+additional context to
+AER uh check out the channel for
+previous AER videos I'm not going to go
+into any detail here on how exactly it
+works but basically I am
+adding additional
+context so that AER has it I'm clearing
+out all my tokens right there just to
+kind of get a fresh start a fresh reset
+and then right now I'm writing the
+prompt that's going to
+generate um this kind of core workflow
+so it's going to read the script
+content
+from the providers in this case it's
+going to be the cursor change log
+and we want our AI coding assistant to
+you know for each provider in our
+config.js it's going to scrape the
+content and it's going to look and see
+if there are any new updates since my
+last scene
+date which we're also storing in that
+config.js file so you can see there AER
+is popping off getting all that written
+for us getting a good first draft of our
+AG
+gentics this workflow by the way like I
+mentioned is an outline of how I'm
+writing all of my agentic workflows
+right
+now we went in detail in this in a
+previous video I'll go ahead and Link
+that in a description for you but
+basically you retrieve all the
+information you need you then run your
+agentic this is your prompts your prompt
+chains your AI agents your assistance
+apis you then act based on the
+information and the decisions that your
+agentic has made you learn so this is
+you teaching your AI agent anything that
+it needs to to learn and then
+lastly um you
+notify and that's you notifying anyone
+that needs to be
+updated uh you know with the the result
+of your agentic workflow so that's the
+steps again I'll link that in the
+description check out that previous
+video and the video before that we
+talked about the prompt chain that's
+this minimal chainable run you can see
+on line
+84 uh we went in detail there but
+basically we're running prompts back to
+back that's what's getting passed into
+that minimal chainable run
+call in addition to the
+context you can see we're passing in the
+scraped content last scene date and the
+name and we can use all that information
+in our prompt chain so really powerful
+one function utility there that I wrote
+it essentially replaces you know maybe
+30% of a agentic llm library I'm
+certainly getting a ton of value out of
+it for these sequential agentic
+workflows so right now I'm doing some
+prompting on these
+prompts which is kind of funny to say
+I'm writing a
+prompt on
+prompts to and a i coding assistant so
+that it can update the
+prompts um but basically just updating
+to markdown format so I can create some
+more structured prompts so that I can
+you know just really clearly communicate
+with AER and the underlying llm and more
+importantly you know make it easier to
+read for myself and any theoretical
+other Engineers that would be you know
+looking at this code reading this tool
+just a very good pattern I think to use
+markdown uh you know for your
+prompts I'll probably have another video
+coming out on that at some point where
+we'll
+discuss the different input types for
+your prompts you know you can use XML
+you can use markdown like we are here
+and you can use no
+format uh you know there are different
+ways to structure your prompts I've also
+seen some Json prompts that look pretty
+good but I think the clear winter for me
+right now has been marked down prompts
+just a great structure to write in you
+can separate sections it's easy to add
+context it's easy to add static
+variables and dynamic
+variables okay so this is really the
+Crux
+of most agentic workflows right it's
+what are you telling your agents to do
+how do they collect information how do
+they Drive information so I'm using a
+prompt chain with two
+prompts and we're out the Json format
+we're setting up a specific response
+format in the Json
+structure we're looking for that Json to
+respond with a bing if it has changes we
+want a summary of the changes or null if
+there are no changes and then we want to
+get the date of the
+changes and of course the date of the
+changes is going to allow us to track
+the date in which the the change log or
+the blog or whatever the resource is
+it's going to allow us to track when it
+was changed we can then store that and
+use it for subsequent runs
+you can see there I just use a prompt to
+create a new
+type based on the Json format inside of
+a prompt this is a big shout out to
+aer's multifile
+capabilities um and also you know Sonet
+3.5 is just the top tier model right
+now uh getting some really impressive
+results out of
+that specifically with AI coding of
+course in other domains as well but it's
+just been so great for AI coding
+so you can see I'm parsing that last
+result coming out of the prompt chain
+results minus one is going to give me
+the last result we're parsing that
+because that should be
+Json and then we're looking to see if
+for this information stream if we have
+new content we want
+to
+uh you know log that we want to update
+our
+configuration and so again in the
+previous video you you can kind of learn
+more about the logging system
+but I'm formatting these changes here
+this is the result that came out of that
+last agentic run
+and you can see
+here we detected new changes coming out
+of
+cursor and you can see here these are
+the prompts that were filled in I like
+to call these context filled
+prompts not in size so we're not talking
+about the context window type field but
+you know variable context filled in
+there you can see the scrape summary was
+passed in from the last prompt
+chain and and
+uh yeah I remember at this point I
+needed to clean up that text it's not
+exactly how I wanted that to come out
+there so I just deleted that and um you
+know added a kind of nice simple
+continuation for Sonic
+3.5 to kick off the summary of the
+changes in Json format
+there um that is a really really nice
+part
+about uh these claw models specifically
+again 3.5 5 you don't have
+to pass in any signal like you don't
+have to pass in a bing saying you want
+Chas on you just ask for it in your
+prompt which makes it really really
+seamless so we're making some good
+progress here right now we're updating
+the configuration items that get parsed
+from the Json file we're kind of
+piggybacking up that type so that we can
+add you know some information to say say
+okay if something did change what
+changed and then we're also just adding
+a
+bing to
+the information items to say you know if
+it's true then something did change so
+just walking do that right now
+made a typo here as you can
+see I'm setting the parse results to the
+parse results so I come in here and add
+this just make sure that I'm setting the
+provider
+values there we go
+provider update summary and update date
+are getting set to the parse result out
+of the the end of The Prompt
+chain checking our token usage right now
+running about two cents a
+prompt I think it's worth it it really
+depends on how much your time is worth
+but you know to write
+this code this
+fast um I think it's well worth you know
+usually I'm paying about one sent a
+prompt yeah I'm just going to go ahead
+and add the change detected right into
+the configuration item here and make
+sure that that gets
+set so basically we're writing a prompt
+to say you know update
+the title of each configuration item to
+show if we have a change detected so if
+our llm detected a change we want to see
+that visually in the
+UI so just writing the prompt for that
+we can see AER and Sonet 3.5 blazing
+through that
+change and so now you can see there's a
+little sleepy Emoji next to cursor
+there and if there are updates
+detected we'll see that update to a star
+but uh I have a little bug here that
+we're going to solve in a second here I
+haven't actually set changes detected
+coming out of the prompt chain so you
+can see here I just opened the terminal
+real quick and just started writing that
+prompt
+AER I don't even have to look at the
+code because you know I know exactly
+what's there and I know that AER will
+detect it and write it for me so you can
+see on that that additional search after
+the prompt chain
+ran that got filled in and I was able to
+just search up to the agentic
+function so just making a couple more
+tweaks
+here all right so so now we're kicking
+off this
+workflow and this is where it's really
+going to come together that kicked off
+and it did detect an update so you can
+see here update summary it's giving us a
+quick summary it's telling us when it
+updated it's showing the last scene date
+and then we can just you know of course
+go in and click into the information
+stream the blog the change log whatever
+your url
+is you can just click into it
+it and get updated so now we're going to
+write the ACT function of our gentic
+workflow and the ACT method here is
+going to basically update our config
+last scen date based on the result so we
+need to Loop through all of our
+providers and update that if there's a
+change
+detected as I mentioned earlier you'll
+notice
+my prompting pattern here I'm saying
+update and then usually it's a file name
+or a class and then colon and then the
+specific
+function of course this gives your llm a
+lot more context allows it to
+focus and it prevents it from getting
+confused with any other code that you
+have and you know when you're writing a
+small project like this you're just
+getting started that's a lot less likely
+to happen when you're running your AI
+coding assistant on a larger file you
+know it's a lot easier for your coding
+assistant to get
+confused and for it to think you want
+something but you actually want
+something
+else so we now have the update logic
+thanks to the ACT function and we're
+just going to give it a run
+here there we go
+so we got changes because our last scene
+date is before the date that
+is on the resource URL so you can see
+that the the new updated date is now the
+4th instead of the
+1st of
+July and now if I run that workflow
+again
+the ACT function has updated that last
+scene date in our config and cursor
+should come up blank here yep so we get
+our sleeping Emoji there and there are
+no changes detected right and so this is
+really the power of zero noise this kind
+of
+small large language model
+tool and we're going to go ahead and
+just test to make sure that it's legit
+we're going to add AER we're going to
+look at the your blog and it's got a
+nice date for us to look at
+there I definitely should note that you
+know there are other ways to detect if
+changes
+exist um you could easily create a hash
+of the
+content and you know do a a simple hash
+diff but at some point you're going to
+want your AG gentics to you know
+summarize a content to let you know
+if there's something detailed that's
+changed so that you can you know really
+decide if you want to click all the way
+into
+it so right now we're adding the AER
+provider item using a
+prompt this is another you know AI
+coding prompt technique where we're just
+basically generating some Json from a
+prompt and of course you can infer the
+context and just like that got
+generated so this scales really well you
+can see just after refresh we added that
+Json item and it's just good to
+go so now running this for both cursor
+and
+AER and you know with this all we have
+to do is you know every morning or on
+whatever schedule you want you wake up
+you hit around
+workflow you see if there's any new
+changes to the resources that you care
+about and if you're interested in the
+changes you can go ahead and click into
+it otherwise you save a ton of time
+you're not constantly opening up these
+resources you can see here we're getting
+a great breakdown of what was changed on
+the AER page since June 1st to July 2nd
+and you know if you're interested in the
+changes you can hop into them you can
+click on the URL otherwise the Json will
+automatically update with the newest
+date and on the next run the following
+morning it won't pick up any new changes
+this is a great way to have information
+pushed to you in a zero noise fashion
+the there are new interesting changes or
+they're not and you can add as many URLs
+this is kind of just a proof of concept
+I wanted to put together thought it
+would be cool to make a video on this
+you can see we have the
+respective prompts and prompt results
+for AER and
+cursor this entire coding session took
+about 35 minutes and now we have a
+reusable
+agentic information
+filter we can now filter in and out
+content and we can easily add additional
+blogs I'm definitely going to be adding
+Simon w
+and a couple of the other really key
+information streams I really like to
+focus in on if you made it to the end
+you're an absolute Champion thanks so
+much for watching stay focused keep
+building and I'll see you in the next
+one

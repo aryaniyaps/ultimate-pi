@@ -1,0 +1,807 @@
+it started with open AI 01 next came
+Gemini 2.0 flash thinking and now you
+have the Deep seek R1 series The R1 600
+billion parameter model through the Deep
+seek API makes it nearly impossible to
+justify using 01 especially with its
+virtually Limitless rate limits the R1
+series lets us scale our compute usage
+and in the generative AI age compute is
+how we scale our impact not only do
+these reasoning models give you wellth
+thought out answers they also give you
+the Chain of Thought used to derive
+their answer the journey your machine
+takes to arrive at its answer can be
+just as important as the answer itself
+as you'll see in this video the internal
+monologue of these models gives you
+another feedback loop in addition to the
+response you can use to improve your
+prompts at scale let's play with every
+one of these powerful reasoning models
+side by side so you can understand how
+you can scale your compute when you
+scale your compute usage you scale your
+impact let's open up Beni we're going to
+use the thought bench tool today this is
+a new tool that lets you compare models
+and their Chain of Thought side by side
+we'll start out with a simple prompt
+ping so so every model is immediately
+trying to figure out how they should
+respond to the single word prompt ping
+if we open up the settings here and
+shrink the column wi you can see we have
+all of our model responses and we have
+their thoughts so let's go ahead and
+just focus on the thoughts alone so
+we're working with several deep seek R1
+models we're also looking at the latest
+Gemini 2.0 flash experimental thinking
+model and we're looking at the
+state-of-the-art reasoning model
+unfortunately with no thoughts although
+the Deep seek reasoning model has made
+huge strides it does not compare to 01
+and you'll see additional evidence of
+that in this video so the fascinating
+part about these reasoning models is
+that they have this thought output if we
+increase the column height here we can
+see these models thinking through how
+they should respond we can add both the
+thought and the response back and you
+can see we get several variant and two
+of these the Deep seek and the Gemini
+flash thinking help us understand how
+the model is giving us the answer you
+can see here Gemini flash thinking is
+really working through all the possible
+scenarios and what we mean by ping if we
+scroll down to the bottom here you can
+see it eventually just says pong and
+this is what we're looking for right
+when we type in ping we're just looking
+for a simple pong response this is also
+a network protocol command from the
+terminal and this is where deep seek
+reasoning decided to go with this right
+you can see open A1 understood this
+command better than any model it just
+responds with pong when you say ping all
+you want to get back is pong you can see
+8 billion parameter and 1.5 billion
+parameter giving us a response in a
+different language so you can see here
+even with a single word ping having the
+thought process available is helpful for
+helping us understand how each model is
+deriving its final
+answer so if we reset here with this
+benchmarking tool we can do a couple
+cool things here we can add any AMA
+model we have installed we can also add
+any one of the common provider models
+that we want so I'm going to go ahead
+and add deep seek R14 billion parameters
+so you can see that got added there and
+let's go ahead and add a anthropic CLA
+35 Hau so let's go ahead and get the
+latest Hau model just to have this in
+here for fun now let's go ahead and run
+an AI coding prompt and let's see how
+the Chain of Thought can be useful for
+improving our small AI coding prompt so
+I'm going to just type create def
+convert csvs to duck DB CSV paths and
+then DB path string as well and this is
+going to give us back nothing just with
+this function definition there is enough
+information here for our reasoning
+models to fill out the function let's go
+ahead and fire this off and let's see
+how our models respond every olama model
+you see is running locally on my M4 Max
+MacBook Pro this is a 128 GB unified
+memory machine this is the topof the
+line M4 Max so we are blazing through
+the 1.5 and we're also blazing through
+the the 8B the M4 can also run the 14
+the 32 and the 70 billion parameter
+models so let's go ahead and adjust our
+width so we can see all of our models
+here side by side let's see who's still
+running so we have the Deep seek uh 600
+billion parameter model this is running
+in the cloud hence the logo and then we
+have the Deep seek 14 billion parameter
+model on my machine you can hear my
+mforce fan kicking up here language
+models is the only time I hear these
+fans kick on if we knock down our
+displays to only looking at the response
+we can see what our models gave us here
+and so let me go a and shrink down a
+little bit more so we get Claude 3.5 H C
+something interesting we can do with
+this Benchmark is just compare a couple
+of models side by side so let's say I
+just want to look at Deep seek 8 billion
+parameter um let's get the Reasoner and
+let's go ahead and take a look at uh
+we'll use 01 as our control model right
+so we can go ahead and expand the widths
+here and let's take a look at these
+answers you can see the 8 billion
+parameter putting out a decent response
+here quite a bit of code we are using
+rm-rf it seems quite dangerous but
+that's what we have there if we scroll
+down here nice version from the deep
+seek Reasoner model and of course we
+have 01 giving us a great response here
+as well if we want to we can copy the
+outputs here and open up a
+editor and we can see exactly what this
+looks like right so if we just remove
+these pieces and take a look at the code
+you can see here we have a nice
+functioning result uh just just based on
+the function definition we gave right
+this is a common AI coding technique you
+can use to generate entire functions
+just by giving your llm the right
+information it needs to get the job done
+we can take a look at Deep seek
+reasonings response and we're going to
+get something very similar let's go
+ahead and drop everything here remove
+the explanation right very similar
+result that looks really good you can
+see that these models are picking up on
+the duck DB read CSV Auto method this is
+a really important command that is
+embedded inside of duct DB that you can
+use to automatically generate tables
+from CSV files so it's nice to see that
+our models are using that and we can see
+all the way at the 8B size if we copy
+this out and take a look at this
+response we do have that kind of scary
+rm-rf at the bottom here but we can see
+what that's all about um we have this
+duct DB SQL not sure uh what that's for
+but that's there um and so it looks like
+this is probably going to be a a bad
+answer it's making up some things and we
+can dive into maybe why that is by
+looking at um of course the thoughts so
+if we look at just the thoughts of these
+models let's go ahead and pull in our 14
+billion as well and let's shrink the
+column size just a little bit here pull
+in our 14 billion parameter model we can
+see something really cool and let's
+actually just go ahead and reset here
+and just get our R series models pulled
+into our view here right so we can see
+something really interesting right they
+all kind of follow a similar pattern and
+that makes sense because because every
+one of these models was distilled from
+the deep seek Reasoner model right so
+you can see the similar pattern if we
+search for okay comma pretty much
+everything starts out with okay I need
+so you can see this kind of similar
+pattern throughout all the distills and
+then we have a couple of interesting
+patterns that we see throughout the
+thought process so we see you know first
+comma we see lots of weight comma and
+you know the weight pops up quite a bit
+it's really interesting this is how the
+model kind of double checks itself as if
+you or I were thinking and solving a
+problem but we can see here you know
+just for this method there's quite a lot
+of thought going on right and to me this
+is telling me a couple things right you
+can see 14 billion parameter look at how
+much time it spends thinking right we
+can copy this out paste it in an editor
+and you know it generated 4,000 tokens
+of thoughts quite a bit for a relatively
+simple problem if we copy the thoughts
+from Deep seek Reasoner we can see
+something similar so we have 4K from R1
+14 billion parameters if we look at the
+600 billion parameter model we have you
+know about 2k tokens so you would assume
+that you know a larger more powerful
+Reasoner should be able to solve
+problems with fewer thought tokens but
+you can see it working through this
+something important I want to call out
+here even the top-of-the-line deep seek
+R1 model you know 600 billion parameters
+for a small prompt like this right or a
+small AI cing prompt it has to do a lot
+of thinking in order to get this done
+right this is a new signal that we can
+take and say hey let's help out these
+models right let's help them perform
+better by analyzing their massive
+thought process and let's simplify some
+of that for them right we can do
+something like this right let's let's
+continue on the trend of AI coding and
+let's go ahead and use a AI coding
+prompt specifically inside of a tool so
+this is not something that you would use
+inside of Aer or cursor or something
+that already exists uh since they're
+running their own AI Cod prompt formats
+this is just something you would use in
+a separate tool so I'm going to paste in
+this prompt and we can quickly just take
+a look at this there's nothing you know
+super special about this aside from the
+clean format so we're just saying you
+know generate a function for the given
+user function request we have a nice
+Dynamic variable that we're going to
+update as if this were you know an
+application and this is getting updated
+live over and over right so we can go
+ahead just paste this in here and then
+we can run that exact same a coding
+prompt right so we'll say create def
+string dnot so let's go ahead I'm going
+to drop our 1.5b so we're giving our
+model a bit more information right a bit
+more help on how exactly to solve this
+problem we have more instructions we
+have more details it should be easier
+for the models to think through this and
+solve the
+problem kick this off again let's go
+ahead and reset so you can see all of
+our models side by side we can see
+Gemini flash thinking already completed
+let's go ahead and shrink the column
+sizes here so we can see all of our
+models oh let's get out of thoughts only
+let's see both sections there we go so
+we can see a Claude Haiku has a response
+for us of course it has no thoughts um
+same with 01 unfortunately this Beast of
+a model does not give us insight into
+its internal monologue but we can see
+here Gemini 2 does have internal
+monologue we just got our r114 B
+completed 8B completed now we're waiting
+on deep seek R1 and the Deep seek
+Reasoner is hitting the Deep seek API
+this is the 600 billion parameter model
+so let's go ahead and start with Gemini
+so let's see the thoughts behind
+Gemini's new output and let's see what
+this looks like so I'll just go to text
+file paste this in and look at that so
+quite a few fewer tokens check this out
+right only 200 tokens now let's copy
+deep seek 14 billion
+parameter okay so deep seek 14 billion
+look at this 500 tokens okay so by
+giving our prompt more structure by
+giving our reing models a lot more
+information to work with right we have a
+clear purpose instructions and then a
+clear request it doesn't need to think
+so much right and if you're doing less
+thinking your answer to whatever you're
+trying to solve is likely more accurate
+more precise more performant right very
+cool to see that all the way down to our
+small model so let's look at our r18
+billion parameter model here paste this
+in and you can see here 600 tokens very
+concise it's working with you know the
+duck DB functionality it's figuring out
+how to uh play with csvs as well we can
+of course look at the Deep seek Reasoner
+so this is our you know large model and
+you can see here something really
+interesting deep seek 600 billion
+parameters is actually putting out 2K
+tokens so still quite a bit but down a
+lot from the 5K number right and you can
+see here it's picked up on that key
+method read CSV Auto so it does see that
+and it does know to use this method
+that's really important we going to push
+to looking at just the response and one
+of our keys here is that we only want to
+see the code okay so where do we see
+that here yeah do not include any other
+texts do not include any other code so
+we just want the output of this method
+right and let's go ahead and dial into
+just a couple uh answers right let's
+look at R1 let's look at R1 Reasoner and
+let's look at 14b close this up a little
+bit here expand the column width I'm
+really enjoying using this tool um Link
+in the description by the way for this
+we're building on Beni this is a suite
+of benchmarks that you can feel that I'm
+building on the channel as I'm working
+through analyzing and building with
+large language models I want to share
+some of my tooling with you that's what
+this is feel free to get this link in
+the description a tool like this is
+super important not only for the
+thoughts but just to compare models side
+by side with different prompts that you
+might have with different ideas you can
+easily come in here and just add
+arbitrary models um as long as you get
+the model name right and use one of the
+um available model prefixes you can use
+Gemini colon open AI colon any olama
+model and anthropic Link in the
+description for you if you're interested
+a lot of the work I'm doing behind the
+scenes I can't always share but when I
+can i' love to share it with you here on
+the channel let's look at these
+responses so we're looking for just this
+concise code if we copy deeps Reasoner
+you can see we're getting a great
+response out of its thinking tokens here
+it thought all of this and then it
+outputed just this if we go language
+mode markdown you can see how concise
+this is right this is a near perfect
+answer create replace table name and
+then select from read CSV Auto and then
+it's escaping this that looks great what
+we get out of this is a duck database
+with all of these tables created from
+these CSV paths right we can test this
+of course against 01 and we can see 0
+one's response as well it's going to
+look very similar because these are
+basically you know the perfect answers
+here let's go language mode python same
+deal right so you can see here Reasoner
+a little bit more ACC by pulling the
+Imports out of the function and so very
+interestingly here it looks like 01 may
+have made a mistake we are selecting and
+importing everything oh it's just
+creating the table here in the first
+statement you can see limit zero and
+then it's inserting from using read CSV
+Auto very interesting so anyway so we
+can see here with the small model right
+8B having trouble following the
+instructions right we don't want
+anything else we're just looking for the
+answer but still not too bad you can see
+it got uh in answer it's not going to be
+perfect here it's actually definitely
+wrong but that's fine um it is a small
+compact model so let's go ahead and look
+at the answer from our 14 billion
+parameter model here and we'll just copy
+that there and let's see how we've done
+here so a little bit more Rose we can
+see we have the table name there that's
+good started playing with the schema
+then it dropped it we have execute many
+we don't need all this so it's it's not
+performing very well right at some point
+the smaller you go the less these models
+are going to be able to do uh and we can
+see that here so how is this stuff
+useful having both the thoughts and the
+responses of these models gives you more
+information to help you improve your
+prompt even further right it's also
+helpful to just see where the limits are
+right we can see that for the 14 billion
+and the 8 billion parameter deep seek
+models they simply cannot accomplish
+this task without additional information
+so for instance we can give them another
+shot by improving the prompt a little
+bit more let's try and guide our 8B and
+14b what we'll do is we'll copy we'll
+reset we'll paste The Prompt get rid of
+1.5b we'll keep 8B and what we'll do is
+We'll add 14 and then we'll also add 32
+let's add a couple additional details
+here to help our model get the response
+we're looking for we can use the
+thoughts if available and the response
+from our large models like deep seek
+Reasoner open AI 01 and Gemini's 2.0
+flash thinking to guide the smaller
+models and more importantly to guide our
+prompt to more precise output so we can
+say something like this right use duck
+DB's SQL star
+from read CSV and I think we want read
+CSV Auto right yeah read CSV Auto read
+CSV Auto just input. CSV okay and then
+we saw the small models we making a
+couple mistakes here so I'll also say
+use the CSV name as the table
+name we're going to run deep seek r18
+billion parameter 14 and 32 that's
+running on my M4 right on my device
+we're running deeps gaser in the cloud
+01 in the cloud and Flash thinking in
+the cloud you can see here 01 came back
+with a great response we can go ahead
+and just dial into our top performers
+here right our Mega Cloud models uh you
+can see them spinning out just a great
+answer we can see again this trend
+continuing of Gemini the the more
+precise your prompt is the less the
+model has to guess right and we can see
+that we can confirm that through the
+chain of thought so we can see Gemini
+just thinking through everything it's
+looking at the parameters it's figuring
+out what that means and how to form the
+right response so you can see it's doing
+some nice table name manipulation off
+the CSV paths it's looping through those
+we can see a similar output here from 01
+and let's take a look at our small
+models so let's look at 8B 14b 32b side
+by side we'll drop the Comm width so we
+can fit them all here on screen and
+let's take a look right so we can see 32
+billion parameter is giving us a nice
+concise response let's copy this out and
+I actually like this a little bit more
+than you know this is uh open AI
+response and this is going to be uh deep
+seek R1 32b check this out right we have
+the connection We're looping through
+we're using the exact same code let's go
+ahead and convert this to python we're
+using the exact same code drop this down
+down here that's going to be much better
+to compare so if I go down here there we
+go deeps on the bottom open AI on the
+top While We're looping through this we
+can actually see like the perfect
+response coming out of this although you
+know now that I'm looking at this side
+by side once again you can see open AI
+01 is a little bit ahead right you have
+to create or replace this I don't know
+if select into Works without the table
+existing first right I need to actually
+run this command to C so R1 32b getting
+closer here right and we were able to
+get these models a lot closer by looking
+at both the thoughts and the output we
+can see 8B here um still having some
+trouble it is generating the code that
+looks a little bit better but we can see
+here in the 14 billion parameter we're
+still getting a little bit more text
+which we're not happy about uh but we
+are getting a more precise answer okay
+so this is great to see and we can dial
+into the big hitters deep seek Reasoner
+01 and thinking and you know we can see
+you know the kind of kind of you know
+perfect responses here deep seek with
+the create table 01 create or replace
+and then uh thinking with the create
+table so what's happening here why is
+this important it's important because
+we're acting at the intersection between
+two feedback loops now we have both the
+response from our powerful high-end
+Cloud reasoning models and minus 01 we
+have the actual thoughts that they use
+to help derive the answer and by looking
+at the thoughts we can use that
+information and the response to act as
+inputs to our personal feedback loops
+that can improve our prompt and I hope
+you can kind of see you know where that
+could take us here on the channel every
+detail of your prompt matters literally
+every single character can change the
+outcome and so the thoughts in
+combination with the response in
+combination with looking at models side
+by side like this gives us more
+information to improve the prompt so
+that ultimately we can at some point
+hand off the process of generating
+prompts to an AI agent we've talked
+about this pattern a little bit in our
+previous meta prompting video I'll also
+link that in the description and
+speaking of that meta prompt let's go
+ahead and use that as another example to
+see how many of these models how many of
+these powerful local R1 thinking models
+can keep up with a very very complex
+prompt that is the meta
+promp so we'll hit reset here this will
+get us back to a base state I'm going to
+go ahead right away and drop off 1.5b
+and 8B they will not be able to run the
+meta prompt and just to kind of show you
+what the meta prompt looks like I'll go
+ahead and clear I'll paste this in here
+let's change our language mode to XML
+and The Meta prompt itself is a 2,000
+token prompt okay so this is a
+non-trivial large prompt so this prompt
+is special because it generates other
+prompts okay
+so what prompt do we want to generate
+with our meta prompt let's keep it
+relatively simple I'll say purpose
+convert the given text into a markdown
+table instructions and then we see here
+we have some nice uh cursor tab
+completion coming in our examples we
+don't need that for a meta prompt we
+want user input we want text blob and we
+want uh table columns right so you can
+imagine this prompt is going to have
+these three additional XML blocks at the
+bottom where we can fill in Dynamic
+variables and then we have our
+instructions here um user input text
+blob and table columns
+create a markdown table great and I'll
+say cover every column detailed I'll
+also say and we can new onine this just
+to clean it up a little bit use mark
+down table syntax any other text include
+a table header H1 and a table footer H2
+with bullets one for each column
+explaining uh the column great okay so
+this is the meta prompt I'm going to
+copy all this we're going to paste it in
+our thought bench let's add a local
+model so let's go ahead and run 32b
+let's see if 32b can keep up colon 32b
+we'll hit add and let's go ahead fire
+off these four models and let's see
+let's also do a 14b I'm just curious if
+14b can pull this off I doubt it but
+let's go ahead and add 14b and let's go
+ahead and Fire Off The Meta prompt so
+this prompt will generate a prompt that
+does this for for us right we will hit
+thought prompt I mentioned I'm running
+my M4 Max and when I'm running 14b plus
+size models that's the only time I ever
+hear my M4 actually turn on so you can
+see we're getting some responses coming
+back in here let's go ahead and close
+the width a little bit so we can see all
+of our models you see how long this is
+for Gemini flash it's thinking quite a
+bit and we can see deep seek Reasoner
+also you know quite a bit of thinking
+tokens here we can copy it and take a
+look at what it thinks about the meta
+prompt so uh it's looking at the purpose
+instructions sections right it's
+breaking down the meta prompt itself and
+so really cool it sees that variables
+are correctly placed with this syntax so
+it's using two squares this here is an
+instruction so it is reading the
+instructions properly and let's see what
+our model actually output here so this
+is deep seek R1 and if we just paste its
+response perfect right this is perfect
+this meta prompt generator a new prompt
+for us you can you can see here it even
+has that uh it's using that leading text
+prompt engineering technique that helps
+the llm start its response it has our
+three Dynamic variables that we asked
+for user input text blob table columns
+it's got clear instructions and you can
+see here it's got a nice purpose you're
+an expert at transforming unstructured
+text into well-formed markdown tables
+fantastic right if we look at our 32b
+and our 14b they just can't do it right
+look at these responses let's go ahead
+and hone in here and look at these
+responses right somehow throughout this
+process right The Meta prompt in itself
+contains three other examples of running
+the meta prompt right so it's very
+confusing for a language model you need
+a lot of size to really understand this
+prompt so you can see our responses are
+just completely bogus here they're
+outputting like a garbage mock table
+these are just immediately you know
+unusable for this use case um but we can
+see here deeps Reasoner
+01 and Gemini thinking if we compress
+these a little bit these top tier Cloud
+models all likely above you know 300 400
+500 billion parameters these can all do
+the job well let's copy out 0 one's meta
+prompt so this is deep seek R1 this is
+o1 you can see here 01 is giving us
+these like table columns um and then we
+have let's pull in Flash here not too
+bad but here we have us user prompt and
+user input we don't need both of these
+we need one or the other so interesting
+to see that here flash is a little bit
+behind 01 and deep seek Reasoner this is
+one of the most complex things you can
+do with these language models ask it to
+be you know kind of self-aware ask it to
+do meta level thinking this is where a
+lot of the value is right now in
+generative AI in prompt engineering is
+having these models you know improve
+other models um we can see we're getting
+some decent responses out of this right
+and I want to mention once again we we
+can come in here look at the thought
+process let's go ahead and expand this
+height a little bit and let's just look
+at our reasoners that give us the actual
+output so let's look at these two and
+let's pull in our 32 billion as well
+right right so let's say we want to
+improve the meta prompt or simplified or
+something right we can go through and
+make improvements by looking at the
+thoughts of these models side by side
+especially when we have all three of
+these okay and so you can see
+here uh 32 billion parameter just go
+goes off the walls quite quickly here um
+it thinks that its job is to actually
+execute that prompt so anyway so last
+thing we'll do here just for fun let's
+go ahead and take the prompt let's take
+the generated prompt from Deep seek r1's
+meta prompt let's just copy this it's
+going to be fun let's clear let's we'll
+do a full reset we'll paste this in and
+we're actually just going to run our
+generated prompt from our meta prompt so
+um I want to say generate model
+comparison table given the text blob
+uh header is model price okay and then
+we can specify the column so I want
+model Alias input tokens uput tokens
+input costs uput cost okay and you can
+imagine what I'm going to paste in here
+I'm going to go over to deep seeks model
+pricing just going to copy all this and
+just as a blob we're just going to paste
+this in right so we have that there and
+then I'm going to go over to 0 one's
+model pricing page just going to copy
+the O Series model
+just going to paste this in here and
+then I'm also going to grab the 01 And1
+mini just copy their input and output
+and just paste that in there right and
+then um I'm going to also update the
+columns a little bit I'm going to say
+Max input tokens and Max output tokens
+and let's go ahead and see how models
+perform here once again I'm going to
+drop 1.5 I'll keep 8B and I'll add in um
+let's see how 32b does here okay and
+just for fun we got to show love to the
+OG I'm going to throw in anthropic CLA
+35 Sonet latest let's go Ahad and firey
+this off right let's see how our models
+perform here let's drop them all down so
+we see this side by side and we can see
+of course we don't have thoughts for
+anthropic but if we copy out um sonnet's
+response here so if we open up a new
+file here and paste this in format the
+results we can see from Sonet we can get
+a decent breakdown of the model Alias
+the max input Max output input costs per
+million and our output costs per million
+you can hear my M4 working hard to get
+the 8B and the 32 there's the 32 let's
+copy the 32 billion parameter model
+let's see how it's performed here so
+this also looks good 32 billion
+parameter model actually doing some good
+work for us here giving us a nice model
+comparison and this can go on down the
+line right we don't need to check 01 we
+know that'll be great we can quickly
+look at uh deep seek do a quick model
+preview here you know deep seek looking
+great for us here you can see here we
+have the model aasis set up properly uh
+we're missing 01 here that's fine these
+are all Minor Details but you can see
+this working and you can see this being
+useful right so if we just expand
+everything we can get that and if we
+want to we can just focus in on the
+responses alone this tool is going to be
+linked in the description if you want to
+check this out this is called thought
+bench and it's a way to look at models
+side by side and iterate on prompts
+across many models in a live
+benchmarking way with new generation
+reasoning models like R1 and Gemini
+flash thinking we can peer into the
+thought process of our machines this
+enables us to gain insight into how we
+can improve our prompts to drive improve
+results across execution of our language
+models at scale it's important to call
+out that the Deep seek R1 series
+represents a massive continuation and
+really acceleration of the trend we've
+been betting on and predicting on the
+channel price is going down reasoning
+abilities are going up up and speed is
+going to go up basically we're getting
+massive amounts of compute every single
+month now and it's up to us to figure
+out how to best use it and how to best
+ingest the capabilities of these models
+this is why I built Beni by the way it's
+up to us to figure out how we can best
+use this compute and understand these
+models so that we can deploy them at
+scale like I said in the introduction if
+you want to scale your impact in the
+generative AI AG you need to be scaling
+your compute there's going to be a one
+one to one linear line between your
+impact your output and how much compute
+you're using the correlation is going to
+be a causation very very soon the models
+are improving but as we saw here even 14
+and 32 are still lacking I didn't test
+70 billion here for time sake but that
+model is a step change above 32 so I
+highly recommend you check that out but
+the very clear winner here is R1 the
+price for this is insane it makes using
+o one basically impossible just because
+you're getting so much more value about
+25x value with only a slight loss in
+capabilities so let me know in the
+comment section how are you liking the
+R1 series are you getting value out of
+the Chain of Thought of these models if
+you enjoyed this video you know exactly
+what to do drop the like comment and sub
+stay focused and keep building

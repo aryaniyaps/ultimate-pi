@@ -1,0 +1,707 @@
+We are only scratching the surface of
+what generative AI can do. Chat is just
+the first, simplest, and most overused
+AI interface. While everyone's stuck in
+the chat box, let's step outside and
+unlock a new way to create value with
+agents. With one command, ADZ, I've
+enabled a suite of agentic workflows.
+All we have to do is drag and drop the
+right files into the right directories
+to kick off one of eight specialized
+agentic workflows. If we drag and drop
+cast.txt into the generate images zone,
+we're going to kick off in a gentic
+workflow that uses the new nano banana
+aka Gemini 2.5 flash model. This is
+going to generate images at scale based
+on whatever was in our prompt. Let's
+edit some images as well with our edit
+image drop zone. Let's process our
+monthly finances for August. Finance
+drop zone. I have this video that I want
+to transcribe and format. So, we'll drag
+and drop this into the morning debrief.
+Twitter classification data set that I
+need to expand training data set drop
+zone. Drop after drop. We're activating
+unique agentic workflows that are going
+to operate end to end accomplishing work
+for us with a single drop of a file.
+Let's get out of the chat interface and
+talk about a gentic drop zones.
+[Music]
+A lot of engineering work is file-based.
+What does that mean exactly? The
+architecture for this workflow looks
+like this. We have input files that we
+drop into specific directories. These
+directories are programmed to kick off
+specific agents that run specific
+prompts that produce specific outcomes.
+We have this unique drops.yamel file
+that configures our entire system. The
+great part about this is that it's agent
+agnostic. You can fire up any prompt you
+want and then it gets the work done.
+We're in the age of agents and with
+Agentic drop zones, we have a new system
+to automate filebased agentic workflows
+with ease. And it's all based on this
+one drops.yamel file, this one
+configuration file that's insanely
+simple to operate. Now, let's see how
+our workflows are doing. You can see
+here we have some images generated.
+Let's check them out. This is using the
+new Google Nano Banana image generation
+model. As you can see here, we just have
+three great photos of cats. Our Twitter
+classification CSV file got additional
+rows added to that. So we'll take a look
+at that in a second. And we have our
+edit cat images here. This workflow is
+saving all the prompts side by side the
+images that were generated. Fantastic.
+This was our create image workflow. We
+drag and dropped over the generate
+images directory. Now we have edit
+images. So Nano Banana is famous for its
+ability to edit images. Check this out.
+So here's the original image and here's
+a version with the fur of the cat gray.
+Not, you know, this is pretty
+incredible, right? Very accurate. It's
+maintaining a lot of the detail. And we
+have a version of a black cat here as
+well. Black cat, gray cat, yellow cat.
+The image edits are nearly perfect. And
+here in our output of this agentic
+workflow, you can see the exact prompts
+we use. There's the source. There's the
+replicate URL. We're going through the
+replicate MCP server and the replicate
+API. Two workflows right there. Now, we
+also had our Twitter classification.
+typical data classification problem
+where you just have a CSV of several
+columns. In this case, we're just
+looking at, you know, example mock
+tweets. And what we wanted this workflow
+to do for us was extend this data set.
+So you can imagine you have a data set
+that you want to extend with additional
+information. And if we move to the left
+here, you can see we generated 25 new
+rows based on the existing rows. That's
+the key here. It created that extended
+data set final output and a report for
+us. We have Agentic Workflows getting
+work done for us in the background.
+They're specialized workflows. We are
+getting out of the chat interface. All
+right. So, you can see we have our
+finance categorizer. It's finishing up
+some work here. And our other agentic
+workflows have summarized their work
+already. You can see exactly how
+powerful this can be. And here we go.
+So, here's our finances. Our agent
+generated several assets for us. You can
+do anything under the sun with aentic
+workflows. All right. There we go. It's
+got a summary there. You can see in this
+mock data set, we're going crazy on our
+AI services, our Amazon bills, crazy.
+Let's go ahead and look at some of the
+the generated assets, right? So, here's
+spending by category. This workflow
+looked at our finances and it generated
+a concrete pie chart for us breaking it
+all down. 55K on AI services this month.
+We might have an AI addiction. Who
+knows? Amazon, of course, cloud
+technology, compute, and then it goes
+down from there. Right? Here's the
+original input CSV file that our agent
+looked at. And here is the categorized
+input statement that our agent looked
+at. So it's taking all these rows,
+categorizing them, and then operating on
+them. Right? So we also got this nice
+graph here showcasing a couple key
+expenses and it has the start and the
+end of the month. This is just a random
+example that I'm showcasing here. Right?
+So we also just had our transcription
+finished, right? So remember we dropped
+that audio file into morning debrief
+zone. And so this is what it came up
+with here. Right? If we open this up,
+you can see five agent interaction
+patterns for engineering impact. This
+was the transcript for last week's
+video. Top three priorities, some key
+ideas. Human in the loop trade-offs,
+five level scalability framework, ad hoc
+prompts, reusable prompts, sub agents,
+MCP servers, full apps. We're in the age
+of agents, not LLMs. Agents provide
+exponential leverage. Great stuff. It's
+creating some extensions. So, our agent
+is extending the original ideas from
+whatever transcript we drop in. It's got
+some interesting questions for us. And
+then here we have the full-on
+transcript. Uh we're using OpenAI
+Whisper with the tiny model. Here's the
+opener for last week's video. If you're
+an engineer using the best tool for the
+job, you know this as a fact. Agents are
+not the future. They're already on our
+desks, blah blah blah, so on and so
+forth. Check out last week's video to
+see the five agent interaction patterns
+for engineering impact. We have all
+types of engineering work getting
+accomplished for us just based on
+dropping in the right file into the
+right zone. What's going on here? How
+were we able to specialize so many
+different workflows and set up this cool
+drop zone pattern?
+The first thing I want to highlight
+here, we have the entire application
+packed into an SFS, a single file
+script. Okay, so this one Python file
+using Astral UV is loading dependencies
+right inside the file and doing all of
+this work for us in some 700 lines of
+code. I love when I can pack in a ton of
+value into a single script. So, how does
+this work? This all operates with a set
+of prompts. You can see we have doclot
+here. It operates with our single file
+script and most importantly our drops
+YAML file. Let's break down how the
+drops work and how you can configure
+brand new drop zones. And as we're
+working through this, think through what
+types of workflows that are filebased
+that you could use this system for.
+Think about repeat workflows where
+you're just taking a file and you need
+to operate on it. All right, so this is
+what a drop zone configuration entry
+looks like. We of course have the name
+of the drop zone. We have our file
+patterns. This drop zone will only kick
+off if we drop in a text file. We have
+the prompt that we want to kick off. And
+so we can go ahead and just open up
+EchomD. And you can see what this prompt
+looks like exactly. We have our purpose,
+we have our variables, we have the
+workflow, and then we have our example
+output format here. And now we can kick
+this workflow off right now. Right, this
+is the simplest possible working version
+of the application. Here's echo.txt.
+Let's go ahead and copy this. So we can
+run this twice. Let's drag one into echo
+zone, right? So we're going to kick off
+that simple echo prompt. And let's drag
+one into I have a Gemini echo zone here
+as well. This is agent agnostic. So this
+works with any agent you want. Obviously
+cloud code is going to be the most
+powerful agent, but um I also have this
+workflow working with Gemini. We can
+drag and drop that in here. cloud code
+echo drop zone workflow. I'll execute
+the echo command workflow for the drop
+file. Simple Gemini CLI drop zone test
+and this is just the content that was in
+that file. Right? And if we go back over
+to this, you can see that's exactly what
+we wanted the output to be. If we open
+up, if we control Z that file and just
+take a look at that, you can see in this
+file we just have simple Gemini CLI
+agentic drop zone test and it just
+echoed that for us. Okay, so you can see
+how this works end to end with a simple
+example like this, right? We have a drop
+zone configured. This triggers a prompt.
+We're using a special file path string
+to make this prompt agent agnostic. If
+we were using cloud codes arguments like
+this, we would be locked into cloud
+code. And then we're specifying a, you
+know, a couple of variables here that
+get used throughout the actual workflow
+definition of this prompt. And as you
+create your agent workflows, this is a
+great prompt structure to use, right?
+Very concise, very simple. You have the
+purpose at the top. Variables come next.
+LLM's agents are good enough to
+reference your variables throughout the
+rest of the prompts. You can see here
+we're doing that exactly. And then the
+workflow step of course breaks down step
+by step what your agent should do. And
+then at the bottom you can always
+specify some type of reporting header
+structure with the details of what you
+want the output to look like for this
+agentic workflow. So that's the echomd.
+You see we have specific events. So we
+have event types for the file created,
+modified, deleted, moved, on created or
+modified. We're going to kick off this
+drop zone agentic workflow. And you saw
+that right here. Looks like Gemini had
+an error here. Too many requests. Okay,
+whatever. You can see that when we drop
+this in here, right? Let's go ahead and
+copy this again. When we drag this in to
+our echo zone, this is going to count as
+a file creation from the perspective of
+this directory. Right? So we have a
+watcher looking at this directory and
+it's going to kick off this respective
+aentic workflow. This is how this works
+at a high level, right? We can of course
+specify the agent. We can specify the
+model and then the color that's used
+throughout the logging process. And then
+we have one more additional kind of
+configuration variable here. This single
+drops file controls everything we need
+to get out of the chat interface and use
+a different file inputbased AI
+interaction layer. So this is
+interesting, right? Don't underestimate
+how powerful this can be. You can put
+anything you want in one of these
+prompts and you can pass in any file
+type, any file configuration that your
+prompt then reads and supports. Okay, so
+for example, what do I mean by that
+exactly? If we look at the image
+generation drop zone, as you know, this
+is going to kick off image generation.
+So, same format, right? Reading in all
+text and markdown files. Then we'll kick
+off create image markdown. So, let's go
+ahead and open this up. Check this out,
+right? So, we have a typical prompt
+format all of our sections. So we can
+just collapse and we can see we have
+create image variables and workflow. So
+this is a simple agentic prompt with
+these three key sections. Couple
+variables here drop file path. This will
+get replaced with whatever file we
+dropped in. Okay, we have our image
+output directory. And then we have an
+image model variable here. You can see
+we're using the replicate API model
+syntax for this. And then we're running
+a workflow. First you read the file,
+create the output directory, and then
+for every image detailed in this file
+here, do the following work. And so if
+we go into our generate images zone and
+go to the archived files and just pull
+back out cats, you can see here, you
+know, we just had three simple prompts.
+But we can update this file to really do
+and be anything, right? So drag and drop
+this file here. We can do something
+simple like this, right? We'll just go
+ahead and use cursor add seven more
+image generation prompts. And so this is
+where this becomes really really
+powerful. We can use agents on files. We
+can use LLMs to generate the input files
+at scale. We can detail whatever work we
+want done, whatever work that are drop
+zones accept as files. Right? So we have
+this enhanced cats.txt.
+And let's go ahead. You know, we can
+take a look at it again here. That looks
+great. Okay. Gemini is freaking out. I
+actually have no idea what's going on
+there. So we're going to reset our drop
+zone there. Now we have this new cats
+file, right? So let's say cats enhanced.
+Let's go ahead and drop this in, right?
+I'll go ahead and copy it so we can
+reuse it. And then I'll drag and drop it
+into our image generation zone. This is
+going to kick off that agentic workflow.
+You can see all the configuration right
+here. If we open up that detailed prompt
+again, it's just reading that file,
+right? So it's going to read the file
+and then it's just going to do this
+operation based on the contents in the
+file, right? So important for every
+image prompt detailed and dropped file
+path. You can see we're referencing that
+variables. Very important. This is an
+advanced capability of modern LMS. You
+can reference variables and set them to
+arbitrary things inside your prompts. So
+we have that and then we have our image
+loop. So for each image do this work.
+Okay. And then we're calling the
+replicate MCP server and doing some
+arbitrary work, right? You get the idea.
+Um after all images are generated, open
+the directory, right? So wherever they
+were generated, I'm saying open that
+directory and then move the drop file
+path into the archive. And so our agent
+right now is doing all of that work for
+us. Um it looks like I just ran out of
+replicate replicate uh credits. So uh
+give me one second. All right. So you
+can see this workflow kicking off and
+getting work done. So uh the first image
+is ready. Now it's going to run just the
+steps inside the workflow, right? It's
+just running top to bottom whatever we
+define inside the prompt. Okay. And this
+is this is the value of a system like
+this, right? The reusability is off the
+charts. Keep in mind whatever idea
+you're having, right? Whatever
+inputbased agentic workflow you want to
+build, you just add an entry like this,
+you define the prompt and that's it.
+It's quite simple, right? This is
+something that I've been using uh for
+quite some time now and it's given me a
+crap ton of value. It's so easy to set
+up. Just create a text file. Create
+whatever file you have, right? Whether
+text entries, whether you're editing
+files. See here we've enabled text MD
+and JSON for whatever image edits you
+want to make. We also have a training
+data generation. So let's say you're
+working with CSV or let's say you're
+fine-tuning a model, right? So you have
+that.json L, you can just generate more
+training data based on whatever prompt
+you have. Any system that's simple,
+that's extensible, that's interoperable
+with existing technologies is going to
+give you a massive advantage, right?
+Especially when it's letting you access
+more compute. We are using the oldest
+interface known to engineers, right?
+Right outside the terminal, right? We
+have the operating system, right? We
+have the finder. We have the explorer.
+It's folders and files. All the great
+ideas I think are obvious in retrospect,
+but you know, simple filebased agentic
+workflows are extremely powerful. You
+can see we're generating uh looks like
+we have 10 images from our cat enhanced
+text file. And there it is. So there's
+all of our images that we generated and
+all the respective prompts that we use
+to generate them. Right? So you can see
+we have, you know, a variety of prompts
+here. Black cat, green eyes, sitting on
+chair. Rule of thirds, strong sunlight,
+rainy window, sits on chair. And then we
+can just look at the exact images
+generated, right? Cat sitting on chair,
+sunlight coming through the window,
+rainy day. Uh there's another one
+sitting. There's a group of cats. Cat
+with the yarn ball. Sleeping cat by the
+window. Classic stretching cat. Cat in
+some majestic place. Okay, so you get
+the idea, right? Our agentic workflow
+can now solve this problem repeatedly.
+Okay, we have Cloud Code, the top agent
+here. There's something going on with
+Gemini CLI, right? It's not really built
+for this yet. Same with the codec CLI.
+I'm waiting for these M providers to
+really build out everything that you
+need for a great agent coding tool.
+That's probably a dedicated video on its
+own just talking about all the essential
+features that every agent should have.
+Obviously, it's going to be a lot of
+what Cloud Code has. You know, you can
+see here theoretically, you can wire up
+any agent to operate on whatever
+workflow you have end to end. Okay, the
+this is the agentic drop zone. Input
+files drop into specific directories,
+kicking off specific agents, running
+specific models on specific prompts that
+generate outcomes that you're looking
+for. And the key here is repeat
+workflows, right? If you're working with
+media, you're going to have to generate
+hundreds and thousands of files. You're
+going to need to edit them. And if
+you're working with training data,
+you're going to need to build, tweak,
+and modify training data. So why not set
+up a clean, repeat file-based workflow
+to do this for you, right? The workflow
+that really inspired this agentic drop
+zone architecture was really this uh
+morning debrief. Every morning I have
+this process where I just record my
+thoughts, my plan for the day, my plan
+for the week, goals I want to hit, so on
+and so forth, right? And I just record
+it and then I drag and drop it. I get it
+onto my device. I transcribe it and then
+I have an agent uh review it, add notes,
+add some interesting ideas. You know,
+you saw that get spit out right here. If
+we enter morning debrief, debrief
+output, it generated this great debrief.
+Drag it here. You know, we have this
+great ride up here. For this example, I
+gave the audio of a previous YouTube
+video, but you get the idea, right?
+Every morning I'm working with agents,
+gathering, collecting, prioritizing my
+ideas, getting feedback on them, right?
+Key ideas, extensions, leading
+questions. There are many, many pretty
+much infinite workflows to build out
+here. This architecture has been very
+valuable to me. So, I wanted to share it
+here with you. Let's briefly talk about
+how this works at a code level. And more
+specifically, I don't want to walk
+through this with you. What I want to do
+here is highlight the importance of
+having programmable agents.
+As mentioned, the chat interface is just
+the entry point, right? It's the the
+first most fundamental way to interact
+with intelligence with LLMs, with AI
+agents, with agentic workflows, but it's
+just the beginning, right? Then drop
+zones let us reuse a popular extremely
+common interface to interact with our AI
+to interact with our compute. It's the
+simple filebased system, your file
+system. Okay, we have files, we have
+directories. Why not reuse tried and
+true technology to deliver new value
+with generative AI? The key here is no
+matter what workflow you're setting up,
+you need programmatic agents. All right,
+and Cloud Code is absolutely leading the
+way for programmatic agents. They have
+uh two SDKs. They have a TypeScript SDK
+and a Python SDK. We're using of course
+the Python SDK. Basically, it lets you
+program with cloud code. We had a big
+video on this a couple months ago where
+we covered this main idea, but we have
+built this into our system, right? So,
+if we just copy this, search for this,
+you can see we have this built into the
+system, right? Prompt cloud code. All
+right. And if we just collapse
+everything inside of our agents, you can
+build this out for any agent. Gemini
+Codex is still a work in progress. Right
+now, cloud code is the primary completed
+implementation. Gemini and Codeex don't
+have SDKs built in yet. So, you need to
+go right through the subprocess, which
+takes a little bit more effort to work
+with with Cloud Code. You know, you can
+see here we're building our prompt and
+this method is super simple, right?
+We're taking whatever prompt we pass in,
+let's say, um, our image generation
+prompt, and we're just replacing this
+with the file path that we dropped in,
+right? So that our agent can read the
+specific file. So, that's all the build
+prompt is doing. And then we're taking
+that full prompt. We're making sure that
+everything is set up properly. And then
+we're kicking off the cloud code SDK and
+continuously get results out of it.
+Whenever there's a message, right?
+Whenever cloud code is responding to us
+and reporting some progress, it just
+spits that out. We're using rich logging
+here for a great terminalbased
+interface. And that's basically the
+whole process, right? We're taking the
+prompt, we're setting up some
+configuration, and then we're executing
+it programmatically. Okay, this is huge.
+Agentic workflows are powerful because
+it helps us get out of this human in the
+loop mindset, right? We're so stuck in
+this chat interface across all
+generative AI domains, right? We're
+prompting back and forth. And this is
+something that I say all the time now on
+the channel. Do you want to be stepping
+out of this realm? Think about the
+repeat workflows that you can now
+automate with agents. Okay? And then
+find yourself a great agent SDK.
+Obviously on the channel, we're big fans
+of Plot Code because they are the
+leaders in the space. But I am preparing
+and very ready for any agent to pop up.
+Right? You can see here we have that
+Gemini echo drop zone. Still having some
+problems working through these other
+agents. But I think it's all about the
+direction that's important here. Right?
+I'm a big fan of Cloud Code, but you
+want to prevent lock in. It's too early
+to pick a winner. With that being said,
+uh I'm using Cloud Code 24/7. They have
+the best support for the real agentic
+engineering work that we're all going to
+be doing in the very near future. If
+you're on the edge, you're already doing
+uh a lot of this agentic work. Let's get
+out of the simple chat interface, right?
+Even right here with cloud code, right?
+This is a chat interface. Let's push
+beyond this. Let's build out agentic
+workflows, right? They're called agents
+for a reason. They're capable of agency.
+So, let's lean into the autonomy and
+build workflows that operate end to end
+on our behalf. This is a massive theme
+of the phase 2 agentic coding course I'm
+building right now. It's the successor
+to principled a coding. This back and
+forth in the loop prompting is just the
+beginning of what's possible. All right,
+so make sure you're subscribed so you
+don't miss the release. It's going to be
+one of the most valuable things I've
+ever built. It's shaping up to be an
+incredible resource. A lot of engineers
+are going to get massive value out of
+it. So make sure you're subscribed. Make
+sure you're plugged into the channel so
+you don't miss the launch. We want to be
+getting out the loop more and more. We
+are engineers so we can build out and
+leverage this technology better than
+anyone. Now when you're building right
+when you're operating of course there's
+nothing wrong with hopping in to a cloud
+code instance to a gemini CLI instance
+to a codeex instance whatever but you
+know more and more we should be
+automating work with these agentic
+workflows and the agentic drop zone is
+one way you can do this and to end it is
+so funny that prompt engineering is the
+most important skill any engineer can
+have now so whenever you see a prompt
+spend some extra time and really dig
+into it ask questions like why is this
+prompt structure like this. Look at
+interesting prompting techniques like we
+have here, right? We have variables that
+we're reusing throughout the workflow.
+We're embedding some XML so that we can
+specify specific sections and so that we
+can template out specific variables. So
+the rest of this single file agent to
+drop zone is actually fairly easy to
+understand. You can imagine what
+happens, right? Um if we go to main, all
+we're doing here checking environment
+variables and we're passing in our
+configuration file and then we're
+hitting run. The agent architecture is
+super simple. If we open up the readme,
+you can see exactly how this works. All
+right, files dropped. We're using
+Watchdog to detect events. If we match a
+pattern, we load the prompt template. If
+we don't, we ignore, replace the file
+path, we select our agent, and then we
+run whatever work we need to do with the
+agent, stream the response, and we
+display it. So, that's exactly how this
+works. And the key features here of the
+agentic drop zone is this, right? Single
+simple file script, figurable drop
+zones. It has the framework for running
+any agent. You can run them in parallel
+and you can run arbitrary agentic
+workflows. I've been playing with this
+quite a bit, thinking about all the
+workflows that I do on a daily basis
+with files. I recommend you do the same.
+All it takes is a single input file and
+then you can encode repeat solutions.
+Just dropping files into directories and
+we're getting work done, right? Super
+simple, really powerful idea. The chat
+UI is the first simplest and lowest
+hanging fruit. agentic drop zones or
+simply put, you know, these reactive
+directories let you automate file
+inputbased workflows. We're going to
+have more agents available to us. We're
+going to have more powerful models. I
+can guarantee you right now the models,
+the agents, they are no longer the
+bottleneck, okay? It's now a complete
+skill issue. You can do incredible
+things with this technology if you're
+plugged in to the right information
+channels. Of course, like this channel,
+we talk about big ideas like this every
+single week. Make sure you're plugged in
+so you don't miss what you can do. Okay,
+this is yet another big idea I'm sharing
+here on the channel with you. As you
+saw, I have a workflow that takes my
+morning debrief, it transcribes it, it
+adds additional thoughts, it formats it,
+it prioritizes things for me, and now
+this is just available for me to drag
+and drop every single day over and over
+and over. Okay, so think about how that
+stacks up, right? Think about as you
+build up these agentic workflows, think
+about the the lead. Think about the
+advantage you gain by using the right
+compute in the right agent architecture
+like the agentic drop zone. This
+codebase is of course going to be
+available to you. Link in the
+description on the channel. We're going
+to be working to step outside the chat
+box. Think about all the repeat
+engineering work you do and think about
+how you can automate it with an agentic
+workflow. No matter what you do, stay
+focused and keep building.

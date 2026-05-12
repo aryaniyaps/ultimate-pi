@@ -1,0 +1,86 @@
+[0.2s] And now we write agents like this.
+[4.0s] We write a bunch of fstrings. We do some
+[6.2s] templating. Then somehow we use some SDK
+[9.0s] to call the language model. At some
+[10.9s] point the prompt gets lost. And then we
+[13.0s] have to use uh the responses to somehow
+[15.4s] get the data that we actually want out
+[16.9s] of it. This feels a lot like HTML. This
+[21.2s] feels a lot less like React.
+[24.1s] But now I think we can do something a
+[25.8s] lot better. That's exactly why we made
+[27.7s] BAML. I'm going to quickly set up a BAML
+[30.4s] project.
+[34.9s] And now I'm going to open this in part
+[36.6s] uh in cursor. Unlike most other systems,
+[40.4s] the way BAML represents prompts is like
+[43.5s] functions.
+[45.7s] Prompts are functions that have names.
+[48.0s] They have input parameters. They have
+[49.8s] return types. Prompts unlike regular
+[53.4s] functions use models to go execute them.
+[56.6s] and prompts are written as strings. And
+[60.2s] then we have tests. And what BAML does
+[63.1s] for you is BAML gives you a way to
+[66.6s] actually see your prompts without ever
+[69.0s] leaving VS Code or the editor of your
+[71.2s] choice. So as I type my code here, my
+[73.7s] prompt updates. As I change my test
+[75.9s] cases, my prompt updates. As I write
+[79.0s] more test cases,
+[87.7s] my prompt updates and it is able to go
+[90.2s] ahead and reflect this along the way and
+[92.1s] I can have many tests. I'm able to just
+[94.7s] run my tests easily without having to
+[97.8s] think twice.
+[100.7s] Now I can see exactly what the model
+[102.3s] does. And no matter what the model does,
+[104.6s] BAML guarantees that the model will
+[106.8s] always respond in the data model that
+[108.8s] you represent. No matter how many times
+[110.7s] you run it and regardless of the model
+[112.7s] outputting any sort of content, you will
+[115.0s] always get structured data. At some
+[117.6s] point, you'll decide to use your BAML
+[119.7s] code in Python files or JavaScript files
+[123.6s] or Go code or Ruby code or any other
+[125.8s] language that you happen to love. BAML
+[128.7s] is where you define your prompts. Baml
+[131.0s] isn't where you write all your
+[132.1s] application logic. So you just do this
+[136.5s] from BAML client import B ré equals B do
+[140.9s] extract R some string
+[145.2s] and resume.experience
+[147.2s] is guaranteed to be a list of strings.
+[150.0s] If I go back to my BAML code and I
+[152.5s] change experience
+[154.3s] to be a list of experiences, my Python
+[158.1s] code will reflect that. and experience
+[160.4s] will be a list of experiences. The whole
+[162.7s] point of BAML is to take us out of the
+[165.8s] era of smashing a bunch of strings
+[168.0s] together and hoping that the models do
+[170.5s] what we want. We want to treat models
+[173.1s] like software.
+[175.1s] We're going to have inputs, we're going
+[176.6s] to have outputs, and we're going to be
+[178.5s] able to treat everything that we do as
+[180.4s] inputs and outputs like we do in regular
+[182.6s] software. This isn't new. We've done
+[184.6s] this for a long time.
+[187.4s] The whole reason that we built this was
+[189.2s] because when we build software and APIs
+[191.2s] fail 5% of the time, we shut down those
+[193.8s] companies. But we changed that from API
+[196.2s] to LM. And a lot of us are currently
+[198.2s] okay with that. We don't think that's
+[200.9s] okay. We think reliability is the crux
+[204.0s] of what makes apps that use AI feel good
+[208.2s] versus feel like prototypes.
+[210.6s] And the whole point of BAML is to do
+[212.6s] less prompting and more engineering. We
+[214.8s] think that gives us more reliable
+[216.7s] systems and more importantly more
+[218.7s] maintainable systems. So both AI agents
+[221.3s] and developers can contribute to the
+[223.8s] systems over time.

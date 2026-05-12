@@ -1,0 +1,822 @@
+Welcome back engineers. Indydev Dan
+here. We have the new Gemini 3 Pro
+anti-gravity next generation IDE and we
+have the Nano Banana Pro, not to mention
+OpenAI's GPT 5.1 Codeex Max Premium XL.
+Okay, we really got to improve our
+naming here. Let's dial in to the
+signal. What actually matters here? What
+are these releases actually saying? So,
+only two out of three of these releases
+matter if you ask me. Gemini 3 is the
+new best model. Clawed Code running 4.5
+Sonnet has been usurped. There's some
+nuance there. There's some detail there,
+but as you can see, uh, the benchmarks
+speak for themselves. Gemini 3 Pro wipes
+the board. Google anti-gravity is a VS
+Code fork that acts more like a cursor
+ripoff that is actually cascade. Okay,
+to me there's very low signal here. If
+you want a great out ofthe-box, highly
+opinionated editing tool, just open up
+cursor, use this. I am super curious to
+see when these larger companies
+understand that they can't beat the
+startup that's doing just one thing.
+Cursor only works on cursor while Google
+has 500,000 products. They will not beat
+them like this. Low signal here from
+anti-gravity. And then we have the best
+image editing tool, the best image
+generation tool out, Nano Banana Pro.
+This is high signal. This is high
+capability. This model is absolutely
+insane. But the real headliner here is
+of course Gemini 3 Pro. Every time
+there's a release like this, I ask
+myself one question. What can us
+engineers do that we couldn't do before?
+There is a new capability that most
+engineers are missing right now that I
+want to share with you. I've been
+obsessed with this capability recently.
+You can give your agents their own
+computers.
+Here we have the Gemini CLI running the
+brand new Gemini 3 Pro preview model. We
+can run this prompt back slash sandbox.
+So, we're looking for a pelican. This is
+a twist on Simon Willis's Pelican on a
+bike. I grew up skateboarding. I want to
+see this pelican ride a skateboard. And
+then I want to see the results hosted.
+We're giving Gemini 3 its own computer.
+Let's hit enter here. Command tab. And
+let's boot up another Gemini CLI
+instance running, of course, the top
+state-of-the-art model, Gemini 3 Pro.
+Back slash sandbox generate host
+results. Another sandbox. We want an SVG
+of three Pokémon cards. Banana themed
+showing their evolution. Host the
+results. Bam. Let's fire it off. Cool.
+But aren't you sick of these demos where
+someone's just building out a simple,
+you know, oneshot user interface. Let's
+push these models further. These
+state-of-the-art models can do a lot
+more than you think you can. I can
+guarantee you you're not using enough
+compute. I'm not using enough compute.
+So, let's fix that. a new terminal
+again, G3PY. Let's run an agentic
+workflow. Back slash agent and I'll
+explain this backslash in a second.
+Sandboxes colon plan build post test.
+And then I'm going to paste in a prompt
+here. This is going to cat a specific
+prompt. You can see we're going to build
+out an easy SQLite crud interface. And
+then we just have a name for this
+workflow so we can identify it's fired
+off. Now, Gemini 3 Pro is running not
+one, not two, but three instances of
+their own computer. You can see the
+sandbox ID right there. This is going to
+build out a full stack application.
+Engineering work is about much more as
+you know. Let's keep pushing. Bam. G3PY.
+Let's scale our compute to scale our
+impact. Back slash agent sandboxes. This
+time, we want a nano banana interface.
+is going to build us a UI to operate the
+new Nano Banano Pro model. Okay, so
+we're kicking that off. Now we have four
+individual Gemini agents operating their
+own computer. Guess what we're going to
+do next? We have compute on tap when we
+use state-of-the-art models running in
+their own devices. G3PY. I want to show
+you how much compute you can really use
+here. Okay, we're going to paste in
+another prompt. Back slash agent sandbox
+plan buildhost test. Here we want a
+notetaking application. Again, full
+stack. This is not a UI. This is a full
+stack application. Hit return. We have 1
+2 3 4 five Gemini sandboxes operating.
+You can see here we already have one
+result. But before we touch that, I want
+to raise the stakes a little bit. I want
+to add some competition to this and I
+want to throw in of course Claude code
+running Sonic 4.5 and the new codeex
+running GBT 5.1 codeex max high. What am
+I going to do here? I'm going to do the
+exact same thing with agent sandboxes.
+When you give your agents their own
+dedicated devices, you can do absurd
+things at scale. Exact same prompts. All
+right. SVG Pelican fired off. SVG three
+Pokémon cards fired off. SQL light
+visualizer fired off. Nano banana UI
+fired off. And our easy notetaking
+application fired off. We're going to do
+the exact same thing inside of Codeex.
+Okay, so we have 15 agent sandboxes
+running, executing, doing work in their
+own environment. In this video, I want
+to show you how you can reprogram any
+agent to use agent skills. I want to
+show you how you can scale your impact
+by giving their agents their own
+devices. And then we need to dive into
+the meat of it all. How much does model
+performance really matter anymore? How
+much better is Gemini 3 Pro than the
+rest? And does it really matter?
+So, first things first, if we open up
+our agent sandbox interface, you can see
+here we have many, many, many agent
+sandboxes running. Looks like we have 12
+sandboxes running so far. But this is
+the incredible part about agent
+sandboxes. You can just scale. You can
+just throw more compute at your
+problems. E2B is the service I'm using
+to host and run my agent sandboxes, my
+computers, for my agents. These
+sandboxes enable more autonomy for your
+agents and less management for you. Fire
+off a bunch of compute against a problem
+and then choose the best result. This is
+the best of end. While these are
+running, getting work done for us, let's
+address the elephant in the room. Claude
+Code running Sonnet 4.5, the best agent
+and model finally has competition. If we
+open up artificial analysis from this
+third party analysis, never trust the
+benchmarks you see on the host page.
+These all look great. We can look at
+these, but you always want that third-p
+partyy review. If we look at this and we
+just search, you know, Gemini 3 Pro, the
+results are in. This is very very
+clearly the top model. Let me just
+search Gemini 3 here so we can see it on
+the individual benchmarks. Almost every
+single benchmark has Gemini 3 sitting at
+the top. I've been using this model
+since it was released. Comparing it
+against Cloud Code and Sonic, it's very
+clear that this is an absolutely insane
+model. Google cooked hard and of all the
+ways they are spread thin as a big
+company with many many objectives, it's
+very clear they are serious about
+building the best model, the best
+compute, the best chips, right? all the
+way down to the TPU. Now, the real
+question I always like to ask is, what
+can we do that we couldn't do before? I
+think there's a very clear new
+capability you can have your agents run
+their own computers. Our results are
+going to start trickling in here. Let's
+wait a little bit longer. There's
+something kind of underneath all these
+model releases that I think it's really
+important to discuss and really talk
+about, and it's the question of how much
+does this actually matter anymore? I
+think there are a few benchmarks that
+matter a lot more than others. You do
+want to continue to see terminal bench
+tool calling long durations of agentic
+work going up. You want to see that
+duration constantly increase. I think
+this is high signal, right? Any agentic
+coding related benchmark. This is really
+great stuff. It is running longer. It's
+getting the job done. It is actually
+accomplishing engineering work for you.
+Again, as you'll see, right, these are
+not just front-end applications. We're
+not saying build pong. These are going
+to build full stack applications, front
+end, backend, database. I want to put
+something out there and I want to get
+your thoughts on this. I don't think
+model intelligence is actually giving us
+that much new capability anymore. Okay,
+I think what really matters now is the
+full experience, the agentic experience.
+Okay, we're moving away from the LLMs
+being the things that matter to the
+agents being the things that matter and
+the agent ecosystem that you build. And
+now for this reason, all the performance
+measuring is only so useful. What
+matters the most is how do these models
+and now specifically how do these agents
+perform against your specific use case?
+That is the only benchmark that truly
+matters. We're getting to the point
+where it doesn't really matter what
+these big labs put on the blog release
+because what truly matters is your
+benchmark and then how they perform
+inside the agent. So although all these
+are good, they all correlate to better
+performance. There are just so many
+things that all of these models can do.
+Now the limitation is no longer the
+language model. The limitation is in the
+agent. The limitation is in what agentic
+systems you and I can or cannot build.
+and it's in us really pushing these
+models against our specific use cases.
+So, do models matter anymore? Every
+single release, they matter less.
+So, by the way, just to take a a moment
+here, uh I just want to say huge thanks
+to everyone that's been tuning into the
+channel. We just crossed 100,000 subs.
+as a deep tech channel where we really
+dive into engineering use cases,
+engineering principles and agentic
+engineering. We were never supposed to
+get this big. I built this channel to be
+your favorite engineers favorite
+engineers channel. Okay, so is by design
+it was supposed to be so focused, so
+engineering based and really
+forwardleaning on what we can do. Um,
+it's hard to hit that mark every single
+week. um you know creating videos every
+single week. There's so much preparation
+that goes into it that no one wants to
+hear about. But um it's just so
+incredible to be at this point and I
+just want to thank you know everyone
+that's been a part of this journey so
+far. The goal of this channel is to
+build living software that works for us
+while we sleep and we are getting
+closer. I just want to shout out
+everyone that's been along for the
+journey. If you're new, welcome and
+buckle up. 2026 is going to be insane
+for us engineers. There's a lot of fear,
+but there's also incredible opportunity,
+right? When everyone's running away,
+when everyone's turning off, when job
+loss is happening, this is when it's
+time to kick into gear and figure out
+what's next. And that's what we focus on
+every single Monday here on the channel.
+All right, I've got big ideas to share
+with you. I've got huge prototypes uh
+that agents are actively working on
+literally right now, and I can't wait to
+share them with you in 2026. Um, couple
+things just to mention coming up to the
+end of the year here. I have a couple
+big ideas to share with you. We're going
+to have our big year-end predictions
+video where we look back at all the bets
+that were made, see how many we got
+right, and then I'll be making my bets
+and predictions for 2026. I'll also be
+releasing the two final lessons for
+Aentic Horizon before 2026. So stay
+tuned for that. This channel will always
+be about focusing on the signal, looking
+for the best tool for the job of
+engineering. Huge thanks to every
+engineer that tunes in week after week.
+100K is an insane number. Let's tune
+back in to see how our agents are doing.
+So remember our original prompt here,
+back slash sandbox. This is not the
+right syntax, right? This is a backslash
+command, not a slash command. So what
+did I do here? I have reprogrammed this
+agent and really every single agent to
+use clog agent skills to use a shared
+skill that any agent can now access.
+Let's first look at the result here. So
+I'm going to copy this. Go ahead and get
+this opened up. Okay. And so we have our
+Pelican shredding. All right. So this is
+the Gemini Pro Pelican Shredding. Looks
+great. Let's go ahead and also open up
+our Pokémon cards. Right. We wanted SVGs
+of Pokémon cards. So let's see what we
+get here. Okay. So fantastic. We have
+Bananite. We have banana ring and we
+have king banana knight. So keep in mind
+these are SVGs. So this is not a simple
+thing to build out, right? We had our
+agent Gemini 3 Pro agent build out SVGs
+of Pokémon cards. So pretty impressive.
+And again, I just want to keep
+emphasizing this point. This all ran in
+its own computer. None of this touched
+my computer. You can see there we have
+several instances running 15 running
+sandboxes as requested. So this looks
+great, right? This is running right out
+of the sandbox. So the great part about
+the agent sandbox is you can just deploy
+compute against the problem and then
+whenever you want to you can pick the
+best one right the best of end. So we
+can just go ahead and do something like
+this. Copy that application out into
+temp G3 banana Pokémon something like
+that right and I think it's just going
+to be one file or a single file with
+some SVGs. We now have a temporary
+location where this file is hosted and
+now we can just do whatever we want with
+them. Right? So, our Asian operating at
+sandbox can also just copy all the files
+locally when we want them if we want
+them. Here's our Pelican skateboard from
+our codeex got some issues here, but
+good attempt. And here's our version
+from again codeex with our Pokémon card.
+So, pretty good. You can see here that
+Gemini definitely created more cohesive
+SVGs here. But let's go ahead and check
+out the clog code Pokémon card version.
+Got Bananito, we got Banana Chew, and
+Banana Zar. But these are all simple
+problems, right? Our agents can do a lot
+more than just this. Before we jump into
+our agents work, our agents concrete
+output, let's talk about how you can
+reprogram your agents to have special
+functionality like running clawed agent
+skills. So let's go ahead and open up
+this codebase. In the beginning, you saw
+that we ran that kind of special
+command, right? If we go back to our
+Gemini terminal, go here, we ran this
+command. Okay, so let me just quickly
+copy this out. Right? how we're able to
+take this and turn it into a concrete
+prompt, right? Our agent knew exactly
+what to do. What happened here? So, we
+did something like this. You can see we
+have all of our agent files here. And if
+we open up Gemini, it points right back
+to the claw memory file. If we open up
+agents, it points right to the cloud
+memory file. And if we open up claude,
+you'll see something really interesting
+here. Executing reusable prompts.
+Anytime the engineer starts a command
+with backslash, look for the file and
+execute the command. We're looking for
+standard prompts and we're looking for
+nested prompts and we're looking for
+agent sandbox prompts. Okay, so we've
+actually reprogrammed backslash to look
+at our agent sandbox skill. You can see
+here we have an agent skill that is
+going to redirect the prompt that's
+running. And this is a capability of
+powerful language models wrapped in the
+right agent. They can understand that
+you want to reprogram. And this is a
+great use of memory files by the way.
+You can add your own special syntax to
+your agents so that they operate in a
+unique way. So inside of this codebase,
+if we go to skills agent sandbox skill,
+you can see this is exactly what our
+agents are running and referencing,
+right? So this backslash command mapped
+to the individual prompts we have here.
+You can see there's that sandbox and
+there's our agentic workflow, right?
+Plan, build, host, test. We don't need
+to dive into this too much, but you can
+imagine what this does if you've been
+following along with the channel. This
+is a powerful agentic prompt that does a
+ton of work in a single prompt, a
+170line prompt. And here's what it looks
+like at high level. If we just open up
+workflow collapse again, you can see
+here are all the steps. Read the agent
+sandbox documentation. So every agent
+learns how to operate this skill.
+Initialize the sandbox. So here's the
+plan step. Create a full stack plan. We
+then have build, host, and then test. So
+we have individual prompts that get
+broken down in this workflow. And the
+cool thing about this is they're
+actually continuing to use that
+reprogrammed backslash. Okay? And so
+maybe backslash isn't the best
+character, the best key to use. You can
+use whatever you want here as long as
+it's available and unused. And so you
+can see here we're running a classic
+chained agentic workflow. You can slice
+and dice up your prompts. This is how
+I'm getting prompts built in to agent
+skills. So that's very powerful. Let's
+go ahead and dive into some of the
+content results. Feel free to, of
+course, check out the skill, check out
+these prompts. This will be all
+available for you. Link in the
+description. And let's start taking a
+look at some of our results. Can
+state-of-the-art agents like Sonnet 45,
+like the new Gemini 3 Pro, like Codeex
+5.1 Max XL Premium, can these models run
+their own computers? Let's find out.
+Right? These simple generate UIs,
+generate SVG examples, those aren't
+important. I don't care about those. You
+probably don't either. That's not real
+engineering work. real engineering work
+is combining services. It's full stack
+application development.
+We have Sonic here and let's see what we
+have here. So, this is Sonnet's SQL like
+CRUD interface. All right. And let's
+open up the developer panel. Nice. No
+errors. So far so good. Let's hit posts.
+Okay. This is a UI and a backend and a
+server. We need to keep pushing these
+models. What can they do on their own if
+we give them the right tooling? Our
+agents have their own computers to
+operate. This is awesome. And and let's
+prove that this works, right? Let's uh
+what's this trash icon? Delete row.
+Nice. Row successfully deleted. Delete
+another. Delete another. Now I'm going
+to refresh. Nice. Only seven rows. 4 3
+53. This looks great, right? It's
+persisting. This is a full stack
+application. We have Python backend,
+some front end, and then we have an SQL
+like database as the back end.
+Fantastic, right? Create random row row
+12. Got some Lauram Ipsum coming in
+there. And this is great. So we can uh
+inspect the data and then of course we
+can edit it. Fantastic. Let's go ahead
+and bump up the change the user ID
+there. Save that. Awesome. We can see
+the tags. We can delete tags. We can add
+a new row. And again just to you know
+nail the point home. Refresh cloud code
+running sonet 45 delivered this all a
+full stack application in one shot.
+Okay. So great. We just threw compute at
+a problem. It solved the entire thing.
+We can now take this download the code
+if we want from the agent sandbox
+operate on it improve it. so on and so
+forth, right? That's great. What else do
+we have here? How is Gemini doing? All
+right, so it looks like Gemini has
+finished the notetaking application.
+Let's go ahead and see how it's done
+here. So, Crl S to enable copy. That's
+kind of annoying. Wish we could just
+copy things like normal. Let's see what
+we have here. Okay, so looks like we
+have a note-taking application. The
+console log looks good. Let's create a
+note. Keeping track some details. And if
+we hit save, we should see this persist.
+You can see the coloring is a little off
+here, but this is working. Okay, we can
+search our notes. External note. Nice.
+that hides the other one. We can create
+a few more notes, right? Save. That
+looks great. New note. Save. That looks
+great. We can switch notes. We can
+delete notes. And you know, moment of
+truth. Can we refresh and have Yes.
+Persistence. We can. Okay. So, this is
+great. And you know, let me be super
+clear here. Open up the network. Close
+that filter. Refresh. Let's hit delete.
+And you'll see a new network event come
+in. This is delete 4. Full stack. This
+was built in one shot by Gemini 3 Pro.
+Looking good so far. UI could use some
+work. Not super worried about UI, right?
+So, that's the note-taking app. Let's
+see what we have here. Okay, looks like
+we have a nano banana image generation.
+Let's copy nano banana uh on a table.
+Click generate. Okay, so we have an
+error here. It's not found or Okay, so
+it got the model name wrong. That's
+fine. It should have that model name.
+Let me just pull up easy nano here. And
+we do have this documentation. So, I'm
+just going to copy this bad model name
+redux fix. Okay. And you can see here,
+you know, these are long running agent
+decoding tasks. This is a 37 minute run
+and it's still working through this. And
+this is our what application is this?
+This is the table view coming out of
+Gemini CLI Gemini 3 Pro. That looks
+good. Let's see how codeex is doing.
+Let's look for that public URL right
+here and let's see how this is. Ooh,
+okay. Very nice. Wow, that's kind of
+insane. You can see there it's got the
+API key set already. I had the agents
+look for an environment variable file
+and just push it into their sandbox.
+This is so cool. Well, what is this?
+Modern nanobanana illustration on a dark
+gradient background. Very cool. Let's
+just uh rerun this. So, let's have this
+generate. And this is running the 2.5
+flash image. So, the previous nanobanana
+version. Um, looks like it just
+generated the exact same thing. Is this
+actually updating? So, let's say light
+gradient background. And let's run this.
+Not sure if that actually generated
+anything new. Let's see. Okay. I don't
+think this is actually creating new
+images. Refresh. See if there are any
+errors coming in here. Cool. Loading UI.
+Okay. No, this is not actually updating
+anything. So, let's just go ahead and
+reprompt a little bit. The images don't
+actually generate. Nothing hits the
+front end. We just see the one image. We
+really should have some iteration
+prompts here. Back slash sandbox uh
+debug something like that just to give
+the model a little bit more direction.
+But this is fine for now. We'll just do
+random ad hoc prompts. Let's go ahead
+and take a look at another result here.
+This one's coming out of Codeex 5.1
+high. Let's see what we've got here.
+Very nice. So, pretty impressed with
+Codeex's UI. You can see it's got that
+same kind of style, same kind of theme.
+But let's see. Let's make sure we have
+no errors because, you know, the most
+important thing your models can do is
+give you a working version, right? We
+don't want to sit through errors. We
+want to sit through working prototypes
+that we can then vet and determine which
+one we want to move forward with. And
+the same thing with PRs for existing
+brownfield code bases, right? We want to
+operate on things that are working. We
+want to improve. We want to iterate.
+Let's see what we got here. So you can
+see here, great breakdown of these
+tables. Again, just great UI and we can
+view, right? So some styling issues
+here. That's fine. See if we can create
+new rows. Fantastic. So we're generating
+random rows. I think so far it looks
+like, uh, you know, Codeex has the best
+UI. Uh, so that's great. We can delete.
+And then here's the, you know, real
+test. You can see we have five rows. If
+we refresh, perfect. We're getting those
+five rows again. You can see that this
+service is actually running against a
+full stack application. And again, we
+can prove this, right? Pull this repo
+under temp codeexite
+table app. Okay, we want everything it
+just did to get pulled down locally. You
+can see here we are really making great
+use of that context window trying to do
+this all in one shot. This is of course
+a limitation of handing a ton of work to
+individual agents. What we really want
+here is an agent pipeline. Um, and
+interestingly here we just gained some
+20% context. This might be that new uh
+context compression and and kind of tool
+calling deletion that Codeex has
+mentioned. Very interesting stuff. Let's
+hop back to Gemini and see what we have
+cooking here. Output here. Let's go
+ahead and see what this looks like.
+Okay, so here's our Gemini version.
+Let's go ahead and just generate an
+image. Random image of a banana. Let's
+open up Dev Tools. That looks like we
+have an error already. Let's see if we
+get something here. There we go. Okay,
+so nice. So, it's nice to see this model
+pull through end to end. Let's try the
+pro model and let's do something a
+little bit more intricate, right? I I
+like that Pokemon card generation. I
+feel like that's something detailed that
+we can have the model really work for.
+So, I'm just going to paste this prompt
+in here. Three Pokémon cards side by
+side. Each one is a evolved version of
+the previous. Let's go ahead and set
+this to um let's do a landscape and
+let's have that generate. So, this is
+running the new pro model. And so, let's
+go ahead and see what this generation
+looks like. Looks like nothing happened.
+Let's just go ahead and run that again.
+Okay, so nothing is happening here. Not
+sure what's going on there. Let's go
+ahead and refresh. Okay, so check this
+out. We have something generated here.
+We have Bananit. We have Plantean Musk.
+Okay, so not really sure what's going on
+there, but here's another version. This
+one's coming out of the Gemini 3 Pro. As
+long as they create a full working
+version. That's what we care about. All
+right, but we did have this version here
+that was stuck for quite a long time.
+Not sure if this version will get out.
+We'll see. So here's the Nano Banana AI
+image generator coming out of Clawude
+Sonnet. Let's go ahead and see what this
+looks like. Okay. Um, so these buttons
+don't appear properly, but that's fine.
+Let's use this same prompt here.
+Generate. You can see no console errors.
+That looks good. This is full stack work
+happening. Backend, front end, database.
+And there we go. Nice. We got some
+Pokémon cards here. So, that looks
+great. Let's go ahead and open this up
+to a wide image. Let's use pro. And
+let's run this again. When it comes to
+truly delivering on the work, it looks
+like the best result so far is still
+that Claude 4.5 sonnet model inside of
+Claude code, right? There's something
+about the agent that puts it all
+together. And this is something, like I
+mentioned, this is a huge
+differentiating factor. It's not just
+about the model anymore. It's very clear
+that Gemini 3 is a very powerful model.
+It's super capable. It generated four
+out of five of these. It's still working
+on that fifth example here coming out of
+the sandbox. But Cloud Sonic, it looks
+like it's going to get every single one
+of these versions, right? Let me go
+ahead and look at this last version.
+This is the note takingaking
+application. This Where's that final
+output? Where's the Where's the public
+URL? Let's see what Codex has done here.
+Let's copy this on a table generate. So,
+let's see if Codex was able to correct
+its mistake here and actually get the
+image generating. It did not. Okay,
+that's fine. You can see here we're
+close. Probably one or two steps away
+from having this work. No errors here
+coming into the front end, so that's
+fine. This kind of stresses one of the
+points about why it's so important to
+have agent sandboxes, right? I don't
+care that some of these versions, and
+you can see our sandboxes are starting
+to close up. It's been enough time, so
+they're starting to actually expire.
+Every one of our sandboxes has concrete
+name inside of the metadata, and they
+all have their own working environments.
+We can pull code out. We can ask for
+specific things to be done inside the
+environments. This is super powerful.
+I'm going to be pushing on this trend a
+little bit on the channel. I think this
+is too important to miss. You can spin
+up dedicated environments for your agent
+to own end to end. This gives you
+isolation, right? And isolation gives
+you security. This gives you scale. You
+can deploy many agents solving many
+problems. Then you can choose the best
+of end. And this gives your agents more
+autonomy, right? Let them do whatever
+they think they need to do to get the
+job done. Now, of course, there are
+guidelines here. Of course, there are
+some constraints you're going to want to
+spin up. This is where great prompt
+engineering and context engineering
+comes into play. If we jump into the
+skill, this is all inside the skill by
+the way. None none of this is operating
+outside the skill. So if we hop into
+claude skills agent sandboxes,
+everything here is happening inside the
+skill. We have the sandbox CLI. We have
+some dedicated prompts that guide the
+entire experiences. And then we have
+some examples of how this can be run and
+executed, right? And the skill details
+everything that the agent needs to know
+to run and operate the actual skill
+itself. Super powerful stuff. And we
+kick this all off by reprogramming our
+agents to understand that backslash maps
+to one of the following things. Standard
+prompts, nested prompts, and agent
+sandbox prompts. We really can open this
+up to just be mapped to a skill prompt.
+So very powerful stuff there. It's very
+clear that the model is not the
+limitation anymore. It is what you and I
+can do. It is the technology that you
+and I are deploying against these
+agents. Whether it's Gemini 3 Pro or the
+new GBT 5.1 Codeex, brand new editing
+experiences. I think that directionally
+anti-gravity is going down the right
+lane. I don't know if you've used this.
+There's a lot of work that needs to be
+done on this tool for it to be truly
+viable. It just felt unprepared to me.
+The launch felt very unprepared. So,
+we've had this uh Gemini instance here
+stalled for quite some time. Previously,
+this was stalled at 40 something
+minutes. I ran a continuation prompt
+here. It's getting stuck. That's fine.
+Again, this is one of the great parts
+about the best event pattern about
+giving your agents their own sandboxes.
+You can just let them go off and run.
+You can spin up many versions and you
+can just fully expect that some versions
+will not work successfully. You know, we
+had a version here. Looks like this
+cloud code version did not complete. One
+of our codeex versions also did not
+complete. But we also had some good
+generations, right? Um, we had some
+solid generations out of every one of
+these state-of-the-art models. And this
+brings us back full circle. You know,
+all these models are very very capable.
+Okay, there are many capabilities. You
+know, the way I like to think about this
+is, you know, there are many
+capabilities that are unlocked at
+certain levels of intelligence. And most
+of us, myself included, we're we're not
+using the full, you know, 73
+intelligence index of Gemini 3 Pro.
+We're probably somewhere at 50, right?
+or or you know 60 right if you're really
+pushing things. So the question is what
+techniques what systems what pieces of
+compute what leverage points of agentic
+coding can you put together to get more
+work done with agents. How much more
+work can you hand off to your agents?
+Trust me the answer is more more. Look
+for scale. Look for these cool patterns
+like reprogramming your agents. Look for
+tools and systems that help you get out
+the loop so you can scale and throw more
+compute at the problem and then choose
+the best of n and then go from there.
+Right? There's always still going to be
+real engineering work to be done, but
+the shape and form of it should change
+as you deploy more compute. We talk
+about it on the channel all the time. If
+you want to win as an engineer right
+now, you scale your compute to scale
+your impact. You know where to find me
+every single Monday. Stay focused and
+keep building.

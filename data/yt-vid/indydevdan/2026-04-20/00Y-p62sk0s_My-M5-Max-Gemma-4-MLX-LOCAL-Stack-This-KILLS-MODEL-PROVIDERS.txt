@@ -1,0 +1,1097 @@
+[music]
+>> What's up engineers? Today we're going
+to have some fun. On the left I have my
+new fully specked out M5 MacBook Pro. On
+the right I have the previous generation
+fully specked out M4 Max MacBook Pro.
+Today we're going to push the limits of
+these devices by using some of the best
+models and tooling from Apple, Google,
+Alibaba, and Nvidia. I'm filming at the
+perfect time here because once again the
+Claude APIs are down. You know what I
+wish I could do? I wish I could use
+private, cheap, fast, performant, local
+models right on my device. Here's
+everything we're going to cover in this
+video. If you want to see the insane
+gains you can get from using the
+dedicated MLX models specialized for
+Apple hardware, definitely stick around.
+Many engineers are wasting time not
+using the dedicated MLX models. We're
+going to look at the M5 versus the M4.
+We're going to look at GGUF versus MLX
+models. And if you want to see how much
+Google cooked on the Gemma 4 model,
+stick around as well. We're going to
+compare Gemma 4 versus the Qwen 3.5
+series. All of these innovations are
+coming together to create
+state-of-the-art model performance from
+Apple, Google's Gemma 4, Nvidia
+optimized models, of course the cracked
+Qwen 3.5, and then we're going to
+supercharge it with Apple's MLX machine
+learning framework designed for Apple
+silicon. This helps us push away from
+our dependency on Anthropic's APIs, on
+OpenAI's APIs, on any cloud provider's
+APIs. It's almost a guaranteed future we
+will be running powerful models on our
+devices in a private, cheap, fast, and
+performant way. It's only a matter of
+time. But the only way to know when the
+time has arrived is to prepare ahead of
+time. That's what we're doing here. So
+the first thing we're going to do here,
+when you're running local models, is you
+have to warm them up. We have our M5 on
+the right, we have the M4. I want to
+show you the models we're going to be
+using here. So on both sides we're going
+to run Jade Bench Ping, and we're going
+to kick off our models on both sides. So
+at the same time, we're going to run
+these and we're going to compare them in
+this simple first prompt test. 1 2 3.
+This is what's called a cold start. The
+models are not in memory yet, so both
+devices are loading the models into
+memory. And here we're going to show
+exactly the models we're going to be
+using throughout our benchmarks. But
+we're going to start small, we're going
+to start simple. So the first run always
+takes a bit of time. You can see here my
+M4 actually was able to warm up the Qwen
+3.5 before the M5. There we go, there's
+the M5 device. M4 just got Qwen 3.5 with
+the NVFP4
+format from Nvidia. M5 just completed.
+Gemma 4s are complete, and then we have
+the Gemma 4 MLX variant also complete.
+I'm going to run this again and get
+another cleaner benchmark now that these
+models have warmed up. So we have that
+first result on the M5. There's the
+second result on the M5. There's the
+third result, and we should get the
+fourth result here in a second. Stats
+look great, and on the right you can see
+the M4 with the Qwen GGUF model 35
+billion parameter is coming in as well.
+So here are the key metrics we're going
+to cover here. Prefill speeds. This is
+the processing of the incoming prompt.
+Decode. This is what people refer to as
+the true tokens per second. And then the
+wall. This is the thing that really
+matters. Wall is the end-to-end time to
+actually execute with all costs,
+including the cold start, including
+prefill, decode, and a couple other kind
+of hidden costs of running models
+locally. So this is the true time. This
+is what we really, really care about.
+Already you can see here on the M5
+prefill and decode speeds across the
+board for every single model are
+generally higher. We're prefilling
+faster and we're decoding faster,
+resulting in faster times. We of course
+can't benchmark anything meaningful
+going one prompt at a time. Instead
+we're going to use a live benchmarking
+tool to track what's going on with each
+one of these models. So over on the M4
+here, you can see we're going to live
+track prefill, decode, total wall clock
+time, and then random access memory at
+peak usage. So this is really important
+because if you can't fit the model into
+RAM, it just can't run. There are new
+LLM innovations coming out all the time
+to help with the KV cache to get some of
+that hard work out of the RAM. But right
+now this is how it works. So now we're
+going to run five prompts increasing in
+complexity. We have all of our models
+aligned at the top. So let's go ahead
+and kick off our first benchmark to
+really compare these models side by side
+by side.
+>> [music]
+>> We'll run these on both devices. J Bench
+QG. It's Qwen versus Gemma. And this is
+going to be the M4. We're going to copy
+this over, and with the screen
+connection feature here, jump right over
+to the M5. And then we're going to kick
+these both off. 1 2 3. So you can see
+the available baseline memory. And now
+we're going to start booting up these
+models and actually executing on each
+prompt. I'll share more about the
+architecture of this application. The
+big idea here is that you can run
+benchmarks from multiple devices, and
+the results are going to be streamed
+right to this live interface. Open up
+your new terminal on the M5, and if we
+type J Ping, you'll notice on the live
+bench UI ping received. Our first
+benchmark just came in. On the right
+we're going to have our M5 Max device,
+and on the left we're going to have our
+M4 device benchmarks as well. And so how
+this is going to work is across these
+five prompts we're going to kick off
+Qwen 3.5 GGUF Nvidia optimized version
+with the MLX variant, and this is the
+model that Ollama announced. Ollama now
+supports models that can run directly on
+MLX and Apple silicon, and this is that
+exact model. Gemma 4 GGUF format. But
+then we also have a MLX community built
+version of the Gemma 4 model that's
+going to be optimized to run on Apple
+silicon, and you'll see that as the
+numbers come in. So right now things
+look pretty close. There isn't a huge
+difference between the M4 and the M5. If
+we scroll down to the wall time, our M4
+is actually moving a bit faster with
+this Qwen 3.5 GGUF model. And so we're
+kind of going back and forth a little
+bit, but as these models execute the
+clear advantage of the M5 Max chip is
+going to emerge. Our M5 device has just
+finished running all of the Qwen 3.5
+GGUF formats, and now it's going to kick
+off the MLX. Now this is where things
+get really interesting. So the MLX
+variants are going to run very, very
+fast. They're going to smoke the GGUF
+format.
+>> [laughter]
+>> And it's not really even going to be
+close. You can see we already got the
+second response from the M5 Max using
+the Qwen 3.5 MLX variant. There's a
+couple big optimizations in this thing.
+First off, MLX, it's the mixture of
+experts just as the GGUF format is. So
+that's great, but it's also the Nvidia
+optimized NVFP4.
+This thing is souped up. It's quite
+powerful and it's quite fast. You're
+going to see this on both devices, but
+you can see it especially on the M5
+here. So if you look at some of the
+stats, prefill speed is almost double
+using the MLX variant. You can see the
+M4 is also completing very, very
+quickly. The difference isn't as big on
+the M4 device, but it's still there. If
+we check out the decode speeds, the GGUF
+format on the M5 got 60 tokens per
+second. Pretty good, right? Very fast.
+But it's not close. The MLX Qwen 3.5
+version got 118 tokens per second. You
+can see that this is pretty consistent
+across each one of these prompts. After
+you run prefill, which is the more
+variable speed, this is that initial
+loading of the prompt, the decode is
+very, very consistent. 118 tokens per
+second for every single one of these
+prompts. And so speaking of the prompts,
+what are we actually running here? These
+are very, very simple tasks. And so if I
+just click into this, you know, the
+first prompt here is explain what a hash
+table is in two sentences. So just very,
+very simple surface level questions.
+We're not pushing the performance quite
+yet. We'll do that in our future
+benchmark coming up. But what we really
+want to see here is what are the model
+statistics on these different models on
+both devices. The Gemma 4 model is
+starting to run on the M5 device. This
+model is really, really incredible. The
+Gemma 4 GGUF model that we're running
+right now. It's got about 100 tokens per
+second, so it's not as fast as the MLX
+variant, but the prefill speed is
+faster. So in the prefill step we're
+getting about 550 tokens per second, and
+it's beating out in every prompt. And
+now if we look side by side, right? If
+we just scroll down to wall time, this
+is the total time it takes to run.
+Overall we're getting faster speeds out
+of the M5 with some variants, right?
+These are non-deterministic systems, so
+you can see here the first three Qwen
+3.5 GGUF runs on the M5 were quite slow,
+but the MLX and the Gemma model are
+much, much faster. They're getting a lot
+more performance. There are a lot of
+ways to measure local model performance.
+The thing that matters the most is the
+wall clock time. How much time did you
+actually sit and wait end-to-end? You
+can see something really special
+happening now. The Gemma 4 MLX variant,
+our last model, is blitzing through this
+stuff. And that's going to lead us to
+our first big takeaway here. You know,
+there's a clear trend. I set these
+models up in this order on purpose. If
+we focus back over in the M5, the
+benchmark is complete. It's run all the
+models back-to-back. You'll notice here
+my M4 Max MacBook Pro, the fan is on and
+it's pretty heavy right now. But
+throughout that whole time, the M5 Max
+was relatively quiet. We're getting
+really, really great prefill speeds out
+of both of our Gemma models on both
+devices. The blue here is our Gemma
+models. If we scroll to the bottom here,
+we can look at our max random access
+memory, and you can see the smallest
+model here we have is that Gemma 4 MLX
+variant. And so this thing is compact.
+It's fitting in just 16 GB of RAM. And
+we can actually visualize this as well,
+right? If I open up a new terminal and I
+type MacMon, we're going to see a live
+visual here. This is what really
+matters. We have 128 GB of RAM, and
+we're using about 42 right now. Looks
+like things are completing, memory is
+getting swapped in and out here. So, it
+just completed. It just kind of dropped
+down that memory back to some base
+level. That looks good. Let's just
+understand and internalize this first
+benchmark run. Prefill speeds. What do
+we see here? We see that the Qwen 3.5 GG
+of model is the slowest at prefill. From
+there, pretty much every model just
+increases up till the GG and MLX. So,
+the MLX is not prefilling as quickly as
+a GG file. Now, if we take a look at the
+actual prompt we're running here,
+prefill speed doesn't matter a ton. Why
+is that? It's because our prompts are
+relatively small. But for our next
+context benchmark, prefill speed becomes
+very, very important because this is the
+time you're waiting for the model to
+actually load the prompt into its memory
+and to start processing it. All of these
+prompts that we just ran, very, very
+simple, two, three, four sentences, and
+that's it. And then we can see the
+responses for each model here on the P5
+deep, the final prompt, design a rate
+limiter. And you can see how every model
+went through that example and kind of,
+you know, came up with its response. So,
+fantastic. So, that's prefill speeds,
+but let's look at tokens per second.
+What is the pattern here? The pattern is
+very, very clear. The MLX model variants
+of Qwen 3.5 and Gemma 4 are extremely
+fast. We're talking about 100 tokens per
+second. The slowest here is the Qwen 3.5
+GG of coming in at just 50 tokens per
+second, which is fully usable, by the
+way. Anything over 30 tokens per second,
+I consider fully usable. Once you drop
+below 20, I consider that the dead zone.
+I just can't wait for that token speed.
+Comment down below, let me know your
+minimum viable speed for these models.
+All right? And so, again, in our next
+context benchmark, we're going to see
+how the total wait time is affected by
+the prompt length. This is something
+that's often left out of small local
+model benchmarks. The bigger that prompt
+gets, the bigger the total context
+that's going to run in your agent, which
+will be our final benchmark, the slower
+the total time is going to be because
+they have to process all that context.
+But you can see here, the theme is
+pretty consistent. The Gemma models are
+faster in general, both formats. But
+when we start using the Apple silicon,
+the performance goes up by quite a lot.
+I mean, almost double from the Qwen 3.5
+GG format. And I do think we need to
+give credit to Nvidia's floating point
+format here, NVFP4, but it's also due to
+the MLX. Right, it's very clear that MLX
+is a huge, huge, huge speed gain on the
+Mac devices. So, 5 is clearly faster on
+average. The slowest speed here we got
+was 60 tokens per second over that 45
+tokens per second wall clock time, which
+is the thing that really matters. The
+big takeaway here between the M4 and the
+M5 is that the M5 is about 15 to 50%
+faster than the M4, which is a pretty
+massive jump. And we're going to see the
+trend continue as we increase the
+context size of the prompts that we're
+executing. And then memory, pretty
+simple. Gemma 4 is an incredibly packed
+model, like they say it here themselves,
+right? They're maximizing intelligence
+per parameter, and they've definitely
+accomplished that. It's great to have a
+model coming out of the US that's truly
+open and actually competitive with the
+Qwen series and the other Chinese labs.
+So, that's great to see. I don't really
+discriminate at all when it comes to
+where the model's coming from, but it's
+great to have something from the US.
+Fantastic. Let's move on to our next
+benchmark. These are simple prompts.
+These are a fraction of the prompts that
+people are actually running now. We've
+run some pretty heavy, serious prompts
+with the state-of-the-art models. Let's
+start to scale this up. Let's throw
+harder problems at this. So, I'm going
+to hit back here, and we're going to
+move into our context scaling benchmark.
+So, here we're just going to look at
+these MLX models. The big takeaway, by
+the way, from these four models is if
+you're running on Apple silicon, always
+find an MLX model. There's just really
+no debate about this, and they're up to
+twice as good as their GG counterparts.
+So, this is big. This is a really
+important thing to understand. If you're
+on Apple silicon, use MLX. Now, whether
+to use the MLX Qwen model or the Gemma
+model, that's not so clear. Let's see if
+we can get some more clarity out of Qwen
+versus Gemma in this next benchmark. So,
+let's go to our context scaling, and
+let's go ahead and kick this off. So,
+we're going to run just bench context,
+and this is the M4. And then I'll copy
+that same thing over, cross over to the
+M5. So, let's go ahead and kick this off
+at the same time. Here we go. 1 2 3.
+>> [music]
+>> And now we're going to start streaming
+updates to our live bench tool from both
+our M4 and our M5. Let's see how they
+run. So, side by side, they're both
+kicking off right now, and this is
+running the graph walks benchmark. So,
+this is something we looked at in last
+week's video when we were talking about
+Claude Mythos. Graph walk is really
+interesting. The models have to perform
+breadth-first search across increasing
+contexts. 200 tokens here, 500 tokens
+here, 1,000 tokens here. And so, we're
+scaling up the prompt size. Let me be
+super clear, this is the size of the
+prompt. And so, here we're keeping track
+of prefill, decode. You can see results
+coming in already. The M5 is running
+pretty steadily here, 117 tokens per
+second. And then we have our total wall
+clock size. So, this is the most
+important thing, just how fast did that
+thing run? And then we have the
+accuracy. So, we're all keeping track of
+the actual graph walks F1 score, higher
+is better. And if we click into this, we
+have an expected answer. They're
+performing breadth-first search along a
+graph. I'm not going to go into the
+details of that too much. If you're
+interested, you can check out the graph
+walks code base. This is the benchmark
+we looked at last week. Mythos was
+performing a staggering 80% success rate
+on this benchmark all the way up to a
+million tokens. And so, you know, just
+for comparison here, you can see our
+model already made a mistake here at
+just 8K tokens of context length. If you
+want to get the behind-the-scenes scoop
+on my take on the Mythos model, check
+out last week's video where we dug into
+the Mythos model and really looked
+behind the curtain at what Project
+Glasswing really means. Anyway, back to
+local models here. So, once again, we
+are seeing as these models perform
+breadth-first search through
+increasingly complex and longer and
+longer graphs, the machines are starting
+to work. I'll be quiet for a second
+here, and you can just hear the M4.
+Okay. So, the M4 is making some noise,
+and we're even going to get my M5 fan to
+really kick on here in a second. You
+know, for instance, let's look at some
+of the work that these have to do. You
+can see some of the chain of thought
+here. This is the Qwen 3.5 35 billion
+parameter MLX variant, and you can see
+it's thinking through, working through
+the
+uh traversing the nodes inside of a
+graph. And you can see, you know, the
+expected answer is becoming more and
+more complicated. And this is just at 4K
+context. It got close to the answer,
+actually. Looks like it made a mistake.
+So, we docked some points from that.
+These devices are fully on. So, we're
+making these Mac devices work all
+through ultra hard to perform this work,
+right? The fans are on, GPUs are
+cooking, and we can go ahead and just
+see that as well, MacMon here. And let's
+go to the M5 MacMon as well. GPU
+utilization here is quite high, almost
+100% here, 55 RAM. So, we're only
+running two models here, so and they're
+running one at a time. Both of these
+devices absolutely cooking right now.
+Uh working through breadth-first search
+as a language model, which is pretty
+crazy. That's very precise token
+reading, token traversing, and
+reasoning. This only works because these
+models can now think. And so, you can
+see here, on 32K, both systems are now
+processing that. The 32K is what I'm
+seeing as the proper context limit for
+these small language models. I'm talking
+35 billion parameters and below. Even
+with the mixture of experts running,
+right? We have A4B here and A3B. These
+are both the MLX variants. We are
+getting that top-tier performance thanks
+to the Apple silicon we're running on
+here, but yeah, it's very clear that
+this is a hard problem for our models,
+both Qwen and, as you'll see here, Gemma
+as well. But the differences are pretty
+apparent here. The M5 is really chewing
+through these problems relatively
+quickly. And here we go. So, now we're
+getting the Gemma
+Gemma 4 MLX variants running here. It's
+actually getting fewer tokens per
+second, right? Tokens per second is not
+the full story. The full story for us is
+wall clock time. The Gemma model's
+starting to come through here on the M5
+device side. We're just focusing on the
+M5 Max. You know, you can see that
+accuracy is coming in nicely here as
+well. The correct graph nodes are being
+mentioned by both models. So, it looks
+like the performance is going to be
+pretty neck and neck here between Gemma
+and Qwen 3.5. So, that's great to see.
+You know, the devices are fully, fully
+working now. Maxed GPU, the efficiency
+cores, performance cores, and this new
+super core is quite activated, doing a
+lot of work. It's clear that the M5
+doesn't need the performance core for
+this work, and it's only using the super
+core for this work. But what is for sure
+being used is our RAM, our GPU, our
+power utilization is quite high as well.
+On the M5, we got 35 W, and on the M4,
+we're up to 40 W. So, the M4 is doing a
+lot more work here, and this is pretty
+consistent. So, prefill looking good.
+Prefill is the prompt processing. The M5
+is nearly double the M4. Just to say it
+super clearly, you know, out loud, if
+you want local model performance,
+upgrade from your M4, from your M3, from
+your M2, from your M1, whatever you're
+currently using. I have a fully maxed
+out M4, and the M5 is outperforming it
+by a wide margin. It especially
+outperforms in prefill speed. And this
+becomes very, very important as the
+prompt size increases. Look at the M4,
+it's still processing the 32K context
+prompt. So, this is a huge graph that is
+a set of nodes that our language model
+has to work through, and it has to give
+the correct answer to. But the Gemma 4
+MLX on the M5 is just burning through
+this. It just completed the 8K and and
+how quickly they do that? In 13 seconds.
+All right, so it's very very fast, but
+you can see here something interesting.
+The wall clock time, so the total time
+of the Quinn models are actually
+performing a bit faster here. You know,
+Quinn's got a nice leg up here even
+though it's a 35 billion parameter
+model. Of course, this is mixture of
+experts, so they're both only using
+three or four billion parameters to
+answer each question. Gemma models are
+going to be a little bit slower here and
+actually quite a bit slower if you look
+at this on an average basis. We'll see
+how this last 32K
+>> [laughter]
+>> context window prompt looks. Overall
+though, performance looking really good.
+They're both answering the question,
+which is really important. These models
+are incredible now. These local models
+are doing significant challenging work.
+Let's look at the 16K. So they have to
+work through a very very complex set of
+nodes. Looks like it's looking at 14
+depths of trees in a graph. And then
+here it's a little tricky, it has to
+find just one answer. Just one node. MLX
+got the correct answer. Gemma did not
+find the correct answer. It's really
+really important for these models to
+think and to process properly. Looks
+like our M4 just completed that huge
+run. Look at this wall clock time. So
+this is end-to-end time. So about 400
+seconds on the M4. And my M5 took 280
+seconds. Okay, so that's, you know, 40%
+improvement in speed for a large prompt.
+And right now the M5 is working through
+that final prompt on the Gemma 4 MLX
+variant. This is taking quite a bit of
+time as well. I'm expecting it to come
+at you know, 308 seconds or something
+for the Gemma 4 26 billion parameter MLX
+model. But once again, in terms of like
+raw usage, the M4 is working its ass off
+to compete with the M5.
+And you can hear it. Pretty incredible
+stuff. Again, stats, if we look at the
+tokens per second, M4 versus the M5 is
+getting about what is this? Maybe 15%?
+No, a little bit more than 15. It looks
+like 20% tokens per second, but we do
+lose tokens per second here as the
+prompt size goes up. So this is an
+interesting observation. And it kind of
+leads us to another big takeaway from
+running these models side by side and
+really seeing what they can do. As
+prompt size increases, local model
+performance goes down very very quickly.
+This might sound obvious, but it's
+important to realize the impacts of this
+when you're expecting your local model
+to do agentic work. These one-off
+prompts aren't really that important
+anymore. Everyone is putting language
+models inside of an agent. And that
+context window stacks up very very
+quickly. I can almost guarantee you
+every time you put up Claude Code and
+you run two or three prompts, you're
+already at 32K tokens. What's limiting
+our models now, our local models, isn't
+so much the performance because we're
+doing breadth-first search on up to
+32,000 tokens and getting correct
+answers out of these local models. Looks
+like we're breaking down here a little
+bit at the 8K and 16K mark. You know,
+the point here is uh performance
+matters. And in our last benchmark,
+we're going to look at how these models
+perform inside of the Pi coding agent to
+get a real like agentic view at these
+models. But the bottleneck here for
+local models is context window size. At
+that 16K mark, we have to wait 30
+seconds for a response. That's tough,
+right? [laughter] In fact, it's
+unusable, I would say, right? Waiting 30
+seconds for a response is frankly just
+unusable. Again, as a general rule,
+these local models say they can handle,
+you know, 250 context windows, 160K
+context windows. That's all great if
+you're running it on Nvidia cracked
+GPUs. We are not, right? We are running
+it on local hardware. And even with the
+best state-of-the-art M5 Max MacBook Pro
+device here, we are consuming a lot of
+time when the tokens hit about, you
+know, 16,000 token context window
+length. Accuracy is still there. What we
+do lose is these models completing in a
+reasonable amount of time. Just like
+large language models who say they have
+a 1 million token context window, it's
+really like the true context is 500K,
+maybe 700K, maybe 800K. The Claude 4.6
+series has been the best so far with
+their true 1 million context window. For
+local models, it's much much more
+limited than that. We're running a lot
+of like state-of-the-art game-changing
+hardware and now we're getting the wrong
+answer at 32K, right? This is just too
+complex. Check this out. Expected answer
+is all these nodes and Quinn didn't
+respond. It just crapped itself. And
+Gemma 4 gave an answer, but it's not
+correct. So we spent all that time to
+get a incorrect answer out of these
+models. 32K is pushing it. 16K is it's
+still viable. But again, at 16K context
+window, we waited 30 seconds for an
+answer. So, you know, this is going to
+kind of tell a story as to what you can
+actually do with these models locally.
+And so now we're just waiting for my M4
+to finish the final 32K long prompt
+running the Gemma 4 26 billion parameter
+MLX variant. And, you know, final notes
+here, you can see tokens per second
+looking pretty good, then going downhill
+at that 8, 16, 32K mark. That is a
+signal that the model is just not
+processing. It's having a hard time. And
+then prefill speeds kind of that same
+deal on the M5 where prefill speeds are
+improving as we increase the size of the
+prompt. And then around 8K, 16K, we
+start to hit a wall. At 32K, we really
+fall off the cliff. Before I filmed this
+video, I actually had an agent cut out
+the 64K just because it took too much
+time. If you scroll down here, you know,
+280 seconds and we have 400 seconds here
+and we're probably going to get like
+maybe a 500 second run here out of the
+Gemma model on the M4. We'll see. The M4
+Max worked its butt off here and finally
+completed the final graph walk at 32K
+and it got the answer wrong. So again,
+just reaffirming this idea that larger
+context windows are really really hard
+for local models to process. And really
+the falloff starts at that 8K context
+window length level. So if you're doing
+work underneath that level, you're
+probably in good shape to use a powerful
+local model. Gemma 4, Quinn 3.5, they're
+both equally viable if you look at the
+benchmarks here in accuracy for long
+context. They're both about the same.
+They're going to answer right or not at
+all with a slight edge to Quinn 3.5. But
+you can see here wall clock time, this
+benchmark took a lot longer to run. Just
+really that key takeaway, context window
+length is the true limitation for local
+models now. It's not really performance,
+right? The intelligence of these models
+is great, but you can only use them up
+to a certain context window length.
+Otherwise, the speed just takes too
+long. The wall clock time, the
+end-to-end latency is just too high. The
+numbers are even worse on the M4, right?
+At 2K, we're already up at 30 seconds.
+At 1K, we're already at that 20 second
+mark and the 36 second mark. M5 running
+the Quinn 3.5 MLX model, very very fast.
+So we're using the best local models
+with the best tooling at a decent
+parameter size. So the speed is here.
+This is at that 35 and the 26 billion
+parameter mark. If you push the
+parameter size lower, you can expect to
+see your accuracy go down while you
+increase your speed a little bit. For
+simple problems, this is fine. But I'm
+really looking at this 26, 35 billion
+parameter level model to get top-tier
+performance in a decent amount of time.
+Let's move on to our final benchmark
+here. Let's look at the Pi coding agent.
+What happens when we put these models
+inside of the Pi coding agent and make
+them do agentic work for us. Let's find
+out. All right, we're going to run
+Jbench Pi M4 and we're going to take
+that exact same prompt, go over to our
+M5. Let's go ahead and kick this off and
+let's see how our models perform inside
+of an agent. This is where most agentic
+work is happening. One-off prompt calls
+aren't really that useful, right? We
+want agents operating our software and
+our products. Here we go. One, two,
+three.
+>> [music]
+>> Unloading the models, restarting them,
+and then they're going to do a quick
+warm-up. And after that, we're going to
+start doing agentic work. So here's what
+we're looking at here with our Pi coding
+agent. M5 just came in really really
+fast followed by the M4. You can see our
+model lineup here. We are leaving off
+the Gemma 4 MLX variant due to some
+configuration issues. As I mentioned,
+the Claude API just went down
+and I didn't want to finish the work
+with GPT 5.4. We didn't get the full MLX
+server up. That's some local model work
+that I have to continue doing in agentic
+coding tasks. What's going on here? So
+we do have a correctness check here. And
+we're also tracking total tokens and
+total tool calls. All right, so you can
+see two, two, three. Looking good so
+far. We want to see these numbers be the
+same on both sides. Of course, we know
+that our M5 device is going to do a
+little bit better here when it comes to
+the raw speed and performance of this.
+But you can see the correctness looking
+the same on both sides, which is
+fantastic. And you can see the total
+tokens that our models are using to
+complete the task. So input and output
+tokens. So this is going to matter here
+as you saw in the previous benchmark, as
+tokens increase, performance goes down.
+Already we're starting to see a break in
+performance. M5 completing all these
+tasks, 7 seconds, 10 seconds, 14
+seconds. And let's go ahead and look at
+some of the tasks, right? What are we
+actually running? So we're starting
+simple, create file hello, print hello
+world, nothing else. Super super simple.
+Testing file writing, testing execution.
+And then our correctness test is
+actually going to execute the code and
+make sure that it's right. We're moving
+to Fibonacci. And so just slowly scaling
+up the difficulty for these models
+inside of the Pi coding agent. Create a
+file called fib. Here we're memoizing
+with a dictionary. And then we're
+printing out Fibonacci 10, which should
+be 55. Easy to validate, very very easy
+to scale and add complexity. So right
+now we're running the Quinn 3.5. We're
+going to run Quinn 3.5 MLX and then
+finally Gemma 4 GGUF. So this is what
+really matters now. It's can your model
+run inside of an agent. Both these
+models are really really great at
+running inside of the agent up to a
+certain context window length, okay?
+Because of course, as mentioned, as that
+context window increases, performance
+goes down in these local models. You
+know, something I'm really happy about
+here with both is serious real work you
+can do on your local device. These
+models are great at coding, they're
+great at parsing, summarizing, doing
+what I like to call micro agent tasks.
+I'm starting to incorporate these local
+models into my pie coding agent
+specifically and into skills and into
+kind of sub agent processes where I can
+run micro agents to do a little bit of
+work in a very consolidated simple way.
+Why am I doing that? I'm preparing for a
+future where these local models become
+more viable. If you don't understand
+what these models can do now, you won't
+understand the next step. And I, maybe
+like you, want to have the advantages of
+these local models, private, fast, zero
+dependency on an outside API. We want
+these properties inside of local
+intelligence that we can run on our
+device. I'm really, really excited for
+what Apple could do next here. They've
+really fallen into or fallen into a
+position is
+not giving them enough credit here, but
+they're taking advantage of their
+silicon, their chips, right? The M5
+Ultra or the M6 chip running in a Mac
+Mini is the next device that I'm really
+waiting on, that I'm really keeping my
+eye on because that is going to be the
+moment. If they give you 500 GB of RAM
+in one of those, we are going to have
+very, very powerful local models right
+on device. Truly, it's going to change
+the industry. So, I'm looking forward to
+that and all that to say, when that time
+comes, you want to know what you can do
+with these local models. You want to be
+able to spin them up in micro agents and
+sub agent processes. That's really the
+frontier I'm looking at for local
+models. What simple work can I hand off
+to my local model to run very quickly,
+very cheaply on my device? There's
+engineering work, there's your, you
+know, personal life work, and then
+there's product work, right? These are
+kind of three key buckets that you can
+think through when you are assigning
+tasks to these small models, cheap, fast
+models, to workhorse models, and then to
+state-of-the-art models. So, as you
+would expect, our large packaging
+prompt, so we're actually having the
+agent build a full package or some
+files, multiple writes. That's been the
+right format, it has to execute
+properly. For you have a bunch of pure
+functions that we want them to implement
+and we're using clean function syntax
+here. This is going to take quite a bit
+of time. What we effectively have is a
+spec for our agent to work through and
+build out a simple calculator app. And
+this could be anything. The trick is
+that we're having our agent do more
+work. Look at the tool calls down here
+on the M5 and on the M4. Test T1 through
+T4, relatively simple, three tool calls.
+But, test five and test six is requiring
+our models to do 14 and 26 plus tool
+calls. Okay, nice. We got 26 out of both
+the Quinn 3.5 and the MLX. That's good.
+You want to see these be relatively
+similar. Total tokens, you can see that
+used quite
+>> [laughter]
+>> a bit of tokens to complete. So, our
+models are really, really being pushed
+here. To be super clear here, these are
+running one-shot prompts. We don't
+actually have the full 200K inside of
+the context window of the agent as it
+continues to stack up its work.
+Correctness is looking really good. So,
+these models are actually able to
+perform and to get the job done. Once
+again, of course, you can see that the
+M5 is quite a bit ahead uh thanks to its
+lower total end-to-end agent execution
+times. You can see here the M4 across
+Quinn 3.5 GGUF and MLX and Gemma, you
+know, 9 seconds, 10 seconds, 20 seconds,
+40 seconds, 60 seconds, 160 seconds.
+While the M5, 7 seconds, 10 seconds, 14
+seconds, 25, 50, 180, 100, so on and so
+forth. So, the M5 is the device you want
+if you're doing any local model work. I
+recommend you max this thing out if you
+have extra cash in the bank and you
+really want to understand what you can
+do with local models. I would just go
+all the way. I don't really think
+there's a purpose in buying the lower
+tier of these models unless you're
+getting the base model. Just go all the
+way, get all the RAM, get all the cores.
+If you boot up even a 35 or a 20 billion
+parameter model, you will be using a
+decent chunk of your RAM and all of your
+GPU when that thing executes. You know,
+side note, whenever you run these
+models, plug your device in. Running
+this, running the fans, running the GPU,
+running your cores like this saps your
+power very, very quickly. So, we're
+coming up to the last test here for M5.
+I don't think we need to let the M4
+complete. It's going to take some time
+for the M4 to work through all this.
+Local models can absolutely run inside
+of agents now. They can do agentic work
+for you. The complexity of that work is,
+of course, going to be on the simpler
+end for now, but you can absolutely do
+useful local model work up to that 8 to
+16K token level. So, really, really
+impressive here. Okay, yeah, Gemma's
+doing a lot of work here. It didn't
+quite get the answer right. Looks like
+it got 0.7 on the package generation,
+but um it ran this with just five tool
+calls. Moreover, I'm really impressed
+with both of these models, both the
+Quinn 3.5 and the Gemma model. But, a
+big takeaway here is if you're on Mac
+devices, find the MLX model variants.
+Absolutely use the MLX model variants.
+Okay, so it got the answer wrong.
+>> [laughter]
+>> The M4 just kind of gave up here, one
+tool call, and then it just like could
+not finish. But, um all benchmarks are
+now complete. Yeah, you can see that
+this is clearly not a legitimate result.
+It tried, uh that's fine. This entire
+code base is going to be available to
+you. I can go ahead and just pull this
+up quickly here. The structure is
+relatively simple. You have four
+benchmarks, including a simple mock test
+YAML file benchmark. This is what
+defines every single benchmark. You can
+see kind of the general structure there.
+Um and then inside of apps, we have the
+kind of core back end, front end, the
+CLI that the M4 and the M5 use to ping
+messages to the server. And then we have
+the actual benchmarks that execute all
+of the tests. All of this is going to be
+here for you uh from me as a thank you
+for making it to the end of the video.
+Link will be in the description for you.
+This benchmark isn't perfect. There's
+always something to miss when you're
+creating these benchmarks, these local
+benchmarks, and cloud benchmarks,
+frankly. But, I think it's useful to sit
+down every once in a while when there's
+a stack of innovations coming out of the
+local model space and just understand
+what you can really do. So, feel free to
+play with this, customize this, create
+your own benchmarks, and, you know,
+throw an agent at this, throw a
+state-of-the-art agent at these
+benchmarks, have them tweak it, tune it,
+make it your own. Couple additional
+directions I want to go here. We saw
+here that, you know, the decode speeds
+are really, really good on these models
+up to really, really large context
+windows. This means that we can push to
+even larger parameter models. I'd love
+to find a good 50, 60, 70 billion
+parameter model to run on my M5. So,
+we're going to be looking out for that.
+Um I'm also going to be running a ton
+more pie coding agent related
+benchmarks. Uh the pie agent is just the
+simplest way to customize and understand
+what your agent can do. You can imagine
+a fully customized uh pie agent harness
+that can spec out a lot of the model
+performance right inside the UI since if
+you're using the pie coding agent, as
+we've talked about in previous videos,
+you can customize the entire agent
+harness. This is a big idea in 2026,
+control your agent harness to control
+your results. So, I'm going to be
+digging into specialized pie agent
+harness variants specifically built for
+SLMs. And then, you know, there's a ton
+of other directions here. The Gemma 4
+models can also take in images and
+audio. So, that's another benchmark.
+Quinn model can also take in text and
+images. So, there's a lot more work to
+be done here to understand what you can
+really do with local models. But, when
+it comes down to it, local models are
+still a work in progress. For 90% of
+tasks, using a model provider is the way
+to go. But, this is a space I'm keeping
+a sharp eye on because as soon as you
+can save all the costs, all the time by
+just running your model locally on your
+hardware, it's going to be a massive
+advantage that's going to compound very,
+very quickly. Those who prepare for
+local models and understand what's
+possible will be the ones saving
+resources. If you don't need a large
+model, don't use one. This especially
+matters for product engineering when you
+have hundreds, thousands, and hopefully
+hundreds of thousands of users hitting
+your service and your models over and
+over and over. The future is agentic, so
+make sure that you can control the
+performance, the cost, and the speed of
+your models over time. And of course, as
+you know, local models are going to play
+a huge role in that. Comment down below,
+let me know what other types of
+benchmarks, what other models, what
+other input types, output types you want
+to see in a local model benchmark. I can
+spin up my M5 and showcase what you can
+do with the best Mac hardware right now.
+So, feel free to comment down below.
+It's clear the AI improvements are not
+going to stop. In fact, they're speeding
+up. That means costs go down and
+performance goes up. It's only a matter
+of time, you know, and I'm predicting by
+the end of the year we should be able to
+run a Sonnet or Opus 4.0 level model on
+your device. Now, how useful it'll be
+and for what use cases will depend
+directly on the hardware you have
+available to you and the software
+improvements that come out over the
+years. So, make sure you're
+benchmarking, make sure you're vibe
+checking these local models. So, when
+they're ready, you know, and you can
+start getting the privacy, speed, and
+cost benefits the model providers don't
+want you to have. Let me super clear,
+model providers want you and I super,
+super hooked on their Kool-Aid, on their
+models, on everything they're building
+in their agent stack. You know where to
+find me every single Monday where we
+focus on hands-on agentic engineering.
+Stay focused and keep building.

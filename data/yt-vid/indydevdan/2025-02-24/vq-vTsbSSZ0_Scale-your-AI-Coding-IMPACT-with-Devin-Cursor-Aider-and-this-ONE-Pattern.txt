@@ -1,0 +1,961 @@
+what's up Engineers Indy Dev Dan here in
+this video I want to show you the one
+most important AI coding pattern you can
+use to maximize the impact you can have
+with powerful reasoning models and Next
+Generation language models like GPT 4.5
+and whatever new model anthropic is
+cooking up this is a threepiece combo
+video we're going to be using everyone's
+favorite AI code editor cursor this is
+the name brand in AI coding right now
+we're also going to be using using a new
+tool built on top of Aer AER is the best
+open- source AI coding tool we're going
+to be using AER inside of a brand new
+lightweight exclusive AI coding tool I'm
+excited to share more about this in the
+video this is an experimental tool for
+surgical AI code changes and finally you
+saw it in the title we'll use the tool
+many Engineers fear the editor of the
+future the engineering career killer
+Devon I've been waiting to pull the
+trigger on this one and after after the
+03 Mini model was released I knew that
+Devon would be in a good place to try
+and I think I was right about that
+you'll see what you can do with Devon in
+this video without spending the massive
+$500 a month that it takes to get this
+thing online so it's been a while since
+we've done some handson AI coding on the
+channel I have to warn you guys things
+have changed a lot this video is going
+to be both weird and awesome what is the
+one pattern you can use with any AI
+coding tool and any powerful model to
+scale your your air coding to new
+heights let's get right into
+it so what is the pattern what is the
+technique it's planning planning is the
+single most powerful pattern you can use
+right now to scale your engineering to
+new heights let me show you how and why
+instead of cranking out AI coding
+prompts we're just going to open up
+cursor and we're just going to start a
+brand new plain text file this is the
+beginning of everything we want to build
+no agent mode no tab tab tab just a
+blank file so what are we building what
+are we planning what are we thinking
+about last week we put together single
+file agents you can see I'm in that code
+base right now every one of these files
+hold some unique capability in an
+agentic Loop and we can kick one of
+those off right now with this command
+I'm going to paste the S and this is
+going to run a query against an SQL
+light database in an agent Loop so we're
+looking for all active users between the
+score created in 2024 this agent Loop
+had 10 total compute Loops it only took
+four to accomplish the task and you can
+see here here's our exact result coming
+out of our SQL light database and it
+automatically understood and interpreted
+our query properly it fixed all the
+column names you can see is active
+equals 1 score between and uh year 2024
+right and it also corrected the table
+for it so this is the power of a compact
+single file agent I'll go ahead and Link
+this video in the description if you
+want to learn more about single file
+agents in this video we have three tools
+so let's go ahead and build build three
+new useful agents first we're going to
+build a CSV agent this is going to run
+data analytics queries on top of large
+th000 10,000 line plus CSV files we're
+going to hand off this work to Devon and
+then we're going to build a precise web
+scraper that pulls content and then
+reformats it into the right form and
+then lastly we're going to rebuild
+anthropics bash and file editing tools
+into an all-in-one agent we're going to
+have pack patterns build this up for us
+so you have a blank file open and your
+boss just walked by and sees you staring
+at a blank screen he starts to wonder
+why he hired you so you're about to show
+them why I have code Snippets for all of
+my you know specs and all my plans but
+let's just go ahead and write this from
+scratch okay polar CSV agent High
+Lev overview tasks AKA prompts I don't
+want to waste your time so I'm going to
+skip through some of this typing and
+we're going to walk through the key
+ideas as we go create a polar
+open Ai and state API UV run SFA po V2
+instead of this we want prompt so this
+is going to be our user prompt so this
+is going to be our feedback loop and we
+can go ahead and just be specific get
+the relative file path and paste that in
+and let's say something like what's the
+average age of users and then at the end
+here we're going to have- C compute
+count so how many compute Loops do we
+want our agent to have yeah CSV pathi
+since we're passing this work off to
+Devon Devon can also read links so what
+I'll do here is just paste in some links
+that could be useful so I'll say docs
+and we'll past in both the polers and
+the UV inline scripts so for our single
+file agents we are using the inline UV
+dependencies this allows our python
+script to run with dependencies as a
+single file we're going to use that same
+pattern here implementation details all
+right so we have a bunch of
+implementation details here and what I
+really like to do with the details is
+just kind of of Consciousness walk
+through everything that I want the agent
+to do so just to highlight a couple
+things here we want to reuse our current
+existing agent structure we want to
+specify some of the libraries we're
+using right so open AI M Rich I'm saying
+use the O3 model you can see all the
+tools that we want to agent to have
+access to list columns sample CSV so on
+and so forth so the task here AKA
+prompts is a series of steps that you
+would take or that you would hand off to
+a you know junior or mid-level engineer
+to actually get the job done and we're
+going to see how important this is you
+know for tools like Devon for any tool
+like cursor having these predefined
+steps inside of the workflow is going to
+be really really important so I'll go
+ahead right now and I'll walk through
+all the individual tasks that I want to
+actually build out this new single file
+agent fantastic so what we have here is
+effectively a list of prompts and you
+know you may be thinking if you've been
+with the channel for a while you might
+be thinking hey we've talked about these
+before these spec prompts these plans
+and if you've taken principal AI coding
+you know that this is a kind of really
+really key pivotal idea inside of the
+course yes and yes this is where all
+engineering will go over time we need to
+be focusing on packaging our work so
+that we can do the following instead of
+actually writing any code instead of you
+know going into detail I'm just thinking
+through everything here top to bottom
+you know we have almost 1,000 tokens
+here 500 Words detailed in this really
+clean concise plan and I'm going to do
+something really amazing now with this
+I'm just going to copy all this I'm
+going to open up Devon so how does this
+work with Devon basically you just write
+a prompt and Devon has access to your
+code base and then it operates on your
+code base on your behalf and then at the
+end it will create a PR this is going to
+be really fun so I'm going to paste this
+write a couple lines here at the top
+workflow Branch from and I'm just going
+to pull my current Branch name I think
+I'm operating on experimentals
+Implement verify PR back to
+experimentals branch
+kick this off so now we're kicking off a
+Devon AI assistant to do this work for
+us okay here's kind of what the user
+interface looks like right you can see
+all the engineering tools here on the
+right and on the left you have a chat
+conversation with Devon and basically
+it's just going to say you know I
+understand you want me to do blah blah
+blah and then it's going to walk through
+its process live and go kind of Step by
+Step through everything I'm very
+impressed with this tool as you'll see
+it really emphasizes the importance of
+of creating powerful plans and you know
+really detailing the work that you want
+done we talk about maxing out your
+compute and leveraging compute a lot on
+the channel this tool is a you know very
+powerful manifestation of that for the
+AI coding workflow for engineer you can
+see here it's created an entire plan
+that it's going to work through right it
+has its own agentic planning Loop it has
+access to the terminal you can see it
+has my box here with another code base
+and it is starting to get some work done
+here so this is really cool we're going
+to to let our AI coding tool do its job
+and we're going to continue working on
+our own okay so we're going to close
+this and let's go ahead and continue
+with our second agent and this is going
+to be work that we're going to hand off
+to cursor agent mode a really cool part
+about these new long running plan based
+AI coding Tool jobs you get into this
+kind of three-step process where you
+have a plan step you have a wait step
+and then you have a review step and so
+you can do something really cool during
+this flow I've got into a nice kind of
+flow here where I am planning awaiting
+and then reviewing one kind of stream of
+work and then during the await step
+right during the weight step I kick off
+another plan weight review and another
+AI coding tool and then you can kind of
+you know basically just continue doing
+that and eventually you come back to
+some review step looks like you know uh
+Devon is not ready for review yet it's
+still getting work done we're going to
+go ahead and give it its space so let's
+go ahead and open up the terminal here
+and instead of using a a kind of blank
+file let's go ahead and use pack
+patterns so we're just going to use pack
+patterns to create the template so I'm
+just going to type pack spec new and
+then inside the specs directory precise
+scraper agent and this is going to be
+the markdown so this is going to create
+a brand new plan for us here we can see
+here we have this precise scrape agent
+and so this is a markdown template that
+we can work with so this is one of
+several patterns inside of this tool
+that we'll talk about more in a moment
+the great part about this tool is that
+you don't have to actually run the
+generated document the generated plan
+with the tool you can use it with any AI
+coding tool you want so you can see here
+we have this brand new plan and let's go
+ahead and I'll work through this again
+I'm going to skip through some of this
+so you don't have to sit through the
+entire plan but it is important to kind
+of highlight some of the key elements of
+this right and so I'm going to just
+delete mid-level objectives you don't
+really need that here and then I'm going
+to fill out some of the implementation
+notes so scraper agent.
+scrapes based on users it's going to
+look something like that and so you can
+see here we're starting to fill out the
+details I like this idea of starting
+kind of at the end right starting at the
+end vision of what you want to see what
+you would run UV run scraper agent pass
+a URL pass the output file optionally
+then we pass in the prompt right and we
+also have the compute there that we can
+specify we are at a point where it's
+important to have some code so I'm going
+to actually open up the fir crawl
+documentation here I have it right here
+you know never be afraid to just throw
+additional information at at your agents
+at your plans this is the fir crawl UI
+I'm going to hit get code and I'm just
+going to copy kind of the main workflow
+here for python okay so I'm just going
+to take that and make sure this is
+Python block and then I'm just going to
+paste that in all right so that looks
+good and if we just scroll through this
+this looks pretty good we can get rid of
+some of this noise going to continue
+with the implementation notes here all
+right so fantastic so we just have a
+bunch of details mostly just code and a
+couple notes on the user prompt details
+so we going to collapse this and we have
+this context block since we're operating
+in uh cursor it's pretty good at picking
+up on context and reading files is
+running an agent mode and they can pull
+that in so we don't really need this I'm
+just going to go ahead and delete this
+last but not least you know this is a
+really important part of every one of
+your plans it doesn't matter if you're
+running a yaml plan a plain text file
+plan markdown plan I highly highly
+recommend that you have steps tasks
+right these are effectively prompts that
+you can run so we're going to walk
+through these tasks right now and just
+kind of continue to build off of the
+implementation notes and the highle
+objective so that we can pass it off to
+composer and let composer do the heavy
+lifting for us so here we have a suite
+of tasks and without even looking at the
+details which are effectively themselves
+prompts remember these are lists of
+prompts um you can kind of see what this
+is going to do right build out the
+scrape tool build out the read local
+file and update local file tools double
+check verify the implementation and this
+is something really cool that you can do
+and I highly recommend that you do this
+more and more with these new class of
+agent based AI coding tools you can ask
+them to verify their work right so we
+can take something like this and at the
+end you can just say you know in
+addition to like a double check step we
+just kind of recap everything that you
+want you can say now run this command to
+make sure that everything you're doing
+is up to par right you're literally
+saying great go ahead and run so you can
+see here at the end here we're going to
+query the principal a coding landing
+page and ask what the names and
+description of each lesson output in a
+markdown table so this is how we'll know
+that our agent did the work so let's go
+ahead and fire this off and then we'll
+step back from this plan wait review
+Loop and while we're waiting we're going
+to go back to the review step of our uh
+Devon assistant here which should be oh
+wow Devon's still working here okay so
+not quite complete yet we're going to go
+ahead and let Devon keep cooking um so
+not exactly sure what's going on here
+but we're going to let it continue to
+kind of run there so let's go ahead and
+run this plan inside of cursor composer
+with agent mode on so agent Mode's
+really important because we need to
+operate on tools we need it to read
+context we need to uh run terminal
+commands edit files so on and so forth
+right so we're giving cursor the control
+that needs to implement this
+feature
+Implement precise agent scraper great
+verify your work once it's complete with
+with this command and so that's going to
+let cursor self validate right so I'm
+going to go ahead and hit submit here
+and let's watch cursor in agent mode
+build out this new agent this is really
+cool running several tools here in it's
+agent loop it's listing the directory
+it's reading file so it's referencing
+this file that we said to you know
+reference throughout our plan and so now
+it's working on actually generating this
+code so now it's generating our uh
+scraper agent great so you can see there
+it got the single file UV depend
+Tendencies at the top we got our fir
+crawl import and if we open up the file
+here you can see it making progress
+right it's implementing it looks like
+step by step clearly it's not done yet
+only 200 lines there we go we got a nice
+patch coming in there bunch of work
+coming in look at this we have 2.5k
+tokens and let's just go ahead and see
+how everything's going that's good so
+it's checking to make sure that I have
+the fir craw API key you can see it read
+that um and I need to make sure that it
+doesn't leak my API key anywhere here
+okay looks like we're good you can see
+here it actually ran my execution Loop
+and it saw that there was an error right
+so so this is really really powerful it
+has all the context of my plan all the
+code that it generated and it has the
+execution Command right it's able to
+close the loop and actually run things
+end to end and then if there's something
+you know that's gone wrong it'll fix it
+itself right this is a key idea from
+Principal a coding that we've discussed
+and we can see it coming through in a
+lot of the modern you know agent-based
+modes right the loop is being closed
+here in a lot of these tools you can see
+here cursor just walking through several
+things here now it's just continuing to
+smash that output command and make sure
+that things are looking good and so as
+we'll see in a moment this is a pattern
+that I built directly into pack patterns
+this is a lightweight AI coding tool for
+large scale Max compute low error
+Engineering in the generative AI age I'm
+trying to pack a lot of value in this
+video here um so I don't want to you
+know over stuff it but this is going to
+be a new tool available for principal a
+coding members that have completed
+principal a coding I wanted to create
+something that has the patterns that
+we've discussed embedded inside of a
+lightweight tool that's what this is
+again more on that in a second when we
+write the plan that will execute inside
+of pack patterns but um if we hop back
+to Devon here we can see that it uh
+created a PR for this agent let's go
+ahead and view this PR and this is
+really cool right now right we have two
+agents running two agents getting work
+done for us our uh cursor agent here is
+running and has exceeded our Max Loops
+I'm going to go ahead and stop it here
+it looks like it's gotten the kind of
+main flow down I'm going to accept the
+changes here so we can review this code
+in a second let's go ahead and check the
+response from Devon to see how we're
+doing here this is really cool so when
+you're operating in Devon it acts like
+an engineer so you can see here it wrote
+a bunch of code changes here it ended up
+with 600 line changes from our 100 line
+plan um that's the multiplier you want
+to see and if we hop into the file
+changes it will perfectly only have this
+one file right we just said create a new
+single file agent that's what it's done
+here we can quick scroll through the
+changes and see all of our open AI
+pantic structures we can see our tools
+here here's our prompt this looks
+fantastic it's really listening to what
+I wanted and it's listening to the exact
+prompt that we gave it you can see are
+two Dynamic variables inside of our
+prompt there's our tools and the tool
+here that really matters is if we look
+for our Ron poers code let's look at
+this so where's our polers code poers
+python code and if we just search this
+it is actually just going to split the
+lines on a temporary file and just run
+the polar code after pulling in the data
+frame here okay very interesting so uh
+this looks good and you can see here we
+have our main loop with all of our
+arguments pretty impressive stuff right
+there's our open AI 03 mini call a lot
+of work is happening here a gentically
+big shout out to Devon and all the work
+done here just to make it super clear
+there's likely going to be some issues
+inside of these kind of harder to run
+you know methods I'm literally having
+the agent generate polar's python code
+and then run it inside of a temp file as
+a single tool call so I'm going to be
+super impressed if this runs all the way
+through if nothing else this code is
+what 80 90 maybe 95% there and then we
+can push it all the way home or if we
+want to we can come in here and
+explicitly just add additional feedback
+for Devon but but this looks good I'm
+not going to do anything else here you
+can see that it did self verify talking
+about this pattern a lot right Clos Loop
+systems self verifiability inside of
+your AI coding tools Devon can do this
+right both Devon and you saw here in
+cursor cursor can also do this all right
+so we have self verifiability inside the
+tool it ran this and it successfully
+calculated the average age here 37.87
+years as a way to quickly validate that
+those changes might be good we can just
+go into Data we can look at the
+analytics file we a prompt at this
+what's the average age you know just
+running an inline selection prompt here
+from Sonet uh it looks like it's 37.8 so
+this looks right let's go ahead and
+close this and I'm just going to go
+ahead and merge in this change from
+Devon so I'm going to uncomment that go
+ahead and let that merge so this is
+great we have that new agent while we're
+working on this agent right so I really
+love that idea right you have this stack
+of plan weight review and again during
+the weight step you can start another
+plan weight review and then during that
+weight step you can review or start
+another plan weight review right so this
+is a new workflow I'm playing with I'm
+getting a lot more done with a two to
+three AI cing assistants that have some
+type of agentic workflow that have some
+long running plan based flow inside of
+it before we merge in let's go ahead and
+finish up our scraper AI agent that
+we're building with composer agent and
+cursor here so I want to let the agent
+continue to make progress here so what
+I'll do here is I'll just copy this I'll
+go to the terminal and I'll just want to
+test this out so I want to see content's
+been scraped next I'll read okay I've
+retrieved I've extracted names have been
+okay so something is not going right
+here let's just copy the issue here and
+hand it back to composer so what's the
+issue here from our SFA scraper and I'll
+just past in the error here and let's
+see what it comes up with so let me take
+a look at this prompt here we have the
+URL user prompt this all looks good it
+looks like we are
+scraping and what's getting run here
+actually okay so it looks like it has to
+update the prompt for something so this
+is not operating exactly as we wanted to
+that's okay I don't want to overstress
+on the implementation here we're going
+to give it another shot and then we'll
+move on from cursor agent mode here if
+we're not seeing the exact results we
+want to see so let's go ahead and let it
+spin a little bit further here it made
+some changes now it's going to run again
+and let's see if it can properly call
+these tools I am seeing that we're
+missing some of the inside uh tool calls
+these just aren't showing up in the log
+so it looks like it's actually not um
+you know completely calling the right
+tools um actually that might be the
+issue so I want that log here right so I
+want to console print here and I want it
+to look like this there we go now let's
+run this again run again there we go so
+this is the issue you can see here this
+is why logging is very important you
+want to create visibility for your agent
+think from your agent's perspective uh
+the problem here is that the tool call
+names were actually wrong this if
+statement did not match properly so it
+did not even call the right tool all
+right so we're going to stop the process
+here um this workflow has you know kind
+of gone Ary I'm sure it's a couple steps
+away if we go ahead and zoom out wow
+okay so this is definitely a problem
+right we're running TBT 3.5 there's
+clearly something going on here right it
+looks like our tools are actually not
+bad it definitely went off the rails
+this is a good example of me giving the
+agent a little bit too much agency as
+soon as it added that kind of workflow
+step here it broke that typical agentic
+Loop so you know my fault for not using
+the tool right but also frustrating that
+even with this really kind of clear
+concise plan the agent wasn't able to
+properly get to the right space that's
+fine this is something that I'm going to
+you know fix up tune and I'll make sure
+this actually lands in the code base
+let's go ahead and pull in our changes
+from Devon so I'll just run uh get pool
+okay and so we have our brand new polar
+agent here from Devon let's go ahead
+let's give this a whirl and if we open
+up that plan and just copy out that
+validation you know verification command
+and let's just run
+[Music]
+this and I'm just going to kick this off
+all right so nice there's our clean
+agent Loop just like we asked for in
+that same structure as our previous
+uh V2 agents and wow look at that so we
+have list
+columns nice there's our sample CSV ARS
+wonderful so you can see there our agent
+is getting a sample and wow and there's
+the code right so it generated code it
+ran the code and then it just ran oh we
+got a little issue here okay okay so not
+too bad right for a task as complex as
+this um Devon actually made this run
+first go this is really really cool and
+if I just search I wonder if I just
+search for age I should not see this in
+the code at all right CU that means that
+it generated it itself okay so this is
+good I don't see this at all outside of
+this comment and if we just search for
+you can see our sample code there sample
+CSV method list that looks great and if
+we go to run test polers yeah you can
+see here we're passing in polar python
+code and then that's getting executed so
+this is pretty fantastic so it looks
+like we got a little error here and this
+should have fed back into our agentic
+Loop that's fine you know this is
+something that we can run with a
+follow-up prompt I'm going to hold off
+on that you likely already understand
+the iterative process but this is really
+cool right we handed off this entire
+process to Devon by writing this plan
+here polar CSV agent right so we have
+this nice four-step plan fourth step is
+verify uh we gave it all the details it
+needed implementation details docs and
+state and you know even though our
+cursor agent didn't get the job done for
+us it did a pretty good job of getting
+us you know to that first draft here in
+our scraper agent right there is
+definitely still uh work to be done in
+the agent space you're seeing a lot of
+AI coding tools push toward
+that pack spec new and we're going to
+write specs bash file
+anthropic agent and for the pattern I'm
+going to use list director this is an
+experimental pattern but it is very
+powerful so let me show you exactly what
+this looks like here is a spec prompt so
+you know starting from the top here
+we're running the director pattern pack
+patterns comes with a suite of patterns
+that you can run we're running in
+architect mode remember this is built
+directly on top of Aer so all the you
+know niceties and model names and
+conventions it's all built right on top
+of Aer and so we have a main model we
+have an editor model and then we have
+something cool here we have an evaluator
+model we then have our editable context
+and our read only context and then just
+like you saw in our previous plans we
+have our highle objective also
+implementation details and then last but
+not least we have our tasks so there's
+something really important about these
+tasks that you'll notice here not only
+do we have a title and a prompt we also
+have evaluator count and evaluator
+command this is basically saying when we
+finish this AI coding prompt when our
+assistant finishes writing this code for
+us run this command take the output and
+feed it right back in to the assistant
+and if it fails do it end times so this
+allows us to you know close the loop on
+the system and this is something that's
+really important that we talk about in
+principal AI coding this is my take on
+how to transition from the old ways of
+engineering to the new ways of
+engineering with a coding assistants
+this is a topic we dig into a lot in
+lesson s let the code right itself like
+I mentioned throughout this video you're
+seeing this new pattern emerging inside
+of these powerful AI coding assistants
+with agent mode and agent mode is just
+the first version of this right we saw
+here in Devon that it was able to you
+know run this uh
+verify um you know we said verify you
+can see verification verified verified
+right this is a pattern that powerful AI
+coding tools agentic tools must build in
+we're going to see this in every single
+powerful a coding tool that stays
+relevant you need to close the loop to
+close the loop you need to you know
+concretely have a verification command
+and inside of pack patterns that's known
+here as the evaluator command so you're
+going to run that and that enables you
+to take the output from whatever prompt
+you just ran right the current state of
+your application say you're running you
+know Pi test is the most obvious one you
+know you can take that command you can
+take the output feed it back into a
+model and then take that model and have
+the model talk to your AI coding
+assistant all right and so that's what
+the evaluator model is again we talk
+about this a lot and you know among
+other kind of really key AI coding
+principles and patterns that are you
+know slowly going to become mainstream
+talk about all this in principal a
+coding feel free to check this out link
+is going to be in the description it's
+going to be available to all principal
+AI coding members that have completed
+the course consider this just a bonus
+you know this tool is a simple way for
+me to provide more value to principal a
+coding members to access this tool you
+can go to the dashboard and then once
+you have completed every lesson you
+unlock exclusive member only assets the
+new asset here that we're going to have
+available is the pack patterns CLI AI
+coding Library so again this is a thin
+experimental lightweight tool built on
+top of Aer and it consists of several
+different patterns I've you know put a
+lot of work into the documentation here
+so feel free to jump in here check it
+out uh get installed you know set up
+your API key it's going to be really
+really simple to get started the key
+idea here is that um plans are the
+future of engineering plans are how you
+package and set up large scale changes
+and then you hand it off to Great air
+coding tools like like Devon like cursor
+and like pack patterns uh that I'm going
+to show you here right now so I'm going
+to Blink through creating this prompt
+all right so I've filled out this spec
+prompt with pack pattern spec files you
+specify both the editable context and
+the readon context just as if you were
+in an AER instance same deal here right
+we have all of our implementation
+details you can see here I have the
+example API call here with our bash
+editor agent from anthropic to kick off
+these spec prompts we can run pack spec
+run and then just pass the path and uh
+that's it so now our AI coding assistant
+is going to uh take all of these details
+format it for us in the right way and
+then run our prompts top to bottom we
+covered a lot of ground here in this
+video from Devon to cursor to pack
+patterns what I want to showcase here
+really is you know a concrete
+methodology a concrete pattern for
+scaling up your compute usage as these
+AI coding tools and really just as
+generative AI tools gain the ability to
+run these long running a gentic Loops
+we're going to be able to do more and
+more so how can we do more instead of
+just running a single prompt instead of
+going into uh chat mode or opening up a
+single AER instance we can always just
+go you know AER Sonet sfas right we can
+always hop in here and you know ask what
+is this and you know write a coding
+prompts right um but we can do a lot
+better you saw here with Devon with a
+great plan it was able to end to end you
+know with many tool calls with prompting
+with whatever systems they have going on
+here systems like this are going to
+continue to emerge and in order for us
+to take advantage of them in order for
+us to really hand off more and more of
+our work in order for us to scale up the
+amount of work we can accomplish it's
+going to be really important that we
+create the right packages for these
+tools the kind of key package is very
+clearly uh plans right it's very clearly
+just plans where you can detail out
+exactly what you're looking for at
+implementation details and then most
+importantly a list of prompts all pack
+patterns is by the way for anyone that
+wants to implement this on their own you
+basically just create a loop over your
+AI coding assistant and some prompts
+right that's the kind of you know
+fundamental version of what pack
+patterns is doing obviously I've added a
+lot of bells and whistles and the list
+director pattern here is one example of
+that and you know literally it's right
+out of the principal AI coding course if
+you've taken the course you'll know
+exactly what's going on uh with this
+tool you know you'll be able to really
+fly through all the documentation here
+it's going to make a ton of sense to you
+right you have a pattern you want to
+create a new spec file and it all starts
+with a simple list pattern right so
+literally just a list of prompts and
+then from there we can add more
+interesting patterns like the director
+pattern to scale or compute and to hand
+off more of the work to our AI coding
+assistant right and you're seeing that
+here with the director Loop probably
+going to get there in a second here yeah
+so we're on the last prompt here and so
+after this prompt kicks off we're going
+to be add a review and validate step in
+which case after this a coding prompt
+runs we're then going to have pack
+patterns executed and take any feedback
+any errors and feed it right back into
+our AI coding assistant all right um You
+can see here yep so now we're on step
+three review and validate if we scroll
+up here you can see all the previous
+work right we had linting issues that
+were fixed and here is you know all of
+our tools this is all getting built out
+this looks really really great right so
+look at this massive you know large
+scale change and if we scroll to the
+bottom here we should get into our
+director Loop so yep so here we are so
+this is really cool so now we're getting
+our agent to you know execute the code
+and then provide feedback there it is
+wow fantastic um so this is crazy I'm
+actually shocked to see if this actually
+uh oneshotted this entire process
+um let's let's see uh that's crazy
+success true okay so let's just try it
+so I'm going to take this command and
+you know it's running a simple prompt
+right this is our anthrop bash editor
+agent and I'm not even going to open the
+agent um and all we're doing here is
+list all python files all right so our
+new tool has bash access and it can also
+edit files for us so I'm just going to
+say list all python files let's see how
+it does
+here okay so let's see okay so the agent
+Loop definitely completed successfully
+and where's that LS if we just search LS
+we should see that here yeah LS star
+python okay fantastic so it looks like
+we're not getting the actual output here
+let's go ahead and open up this agent
+and this should be relatively simple to
+fix we actually might be able to have
+csor just quickly come in here for us
+and get the result for us so exactly
+yeah so that's that and then let's go
+ahead and just rerun this now we should
+get our results uh printed out for us
+yeah look at that tool results fantastic
+so incredible uh just to highlight it
+again you know this is the power of a
+great plan okay I just one shoted that
+work it looks like we have you know
+1,000 tokens 99 lines here you know it
+does take some upfront work some upfront
+investment to think through all the work
+you went done as you can see here but
+once you do that and once you pair it
+with powerful models you can see here we
+have a model stack of three models that
+ran 280 seconds here and you can see
+here we have an evaluation Loop that's
+confirming right it ran this code for us
+and it confirmed that things are working
+all right so this is really cool um I'm
+going to clean up these agents you can
+check these out in this code base and
+you know something really cool here
+you'll be able to see the uh PR that
+Devon made that's going to be merged in
+here merg into the code base you can see
+its commits here um so really cool stuff
+unfortunately we didn't get agent mode
+to properly you know work through those
+changes for us that's fine we gave it a
+little bit too much agency and you know
+I don't think that um cursor's composer
+can handle these large plans yet uh
+we'll see how that you know develops in
+the future I think really cursor is more
+for iterative step by step I really want
+to highlight you know the tools that let
+you create plans that you can then hand
+off tons of work you know entire
+features those are the tools you're
+going to want to look for all right so
+you know once again just a pitch it
+principal a coding pack patterns is
+available now for all principal a coding
+members that have completed uh the
+entire course this is just an extra
+bonus for members and it's more
+incentive for anyone that's interested
+in principal a coding to you know go
+ahead sign up give it a shot you know
+once again there's a uh full refund
+guarantee if you bail before the fourth
+lesson this is my take on how to stay
+relevant in the age of AI with AI coding
+as you saw in this video there's a lot
+of interesting new powerful AI coding
+techniques and fullon agentic workflows
+you know agents that are going to be
+tackling this problem and you know if
+you're not on this boat if you don't
+understand what you can do 2025 is it
+I'm going to be the first guy to just
+say it to your face if you're not using
+AI coding Tools in 2025 you won't make
+it to 2026 you will not be on an upward
+trajectory anymore you need AI coding
+tools to scale your impact if you like
+this video you know what to do like
+comment subscribe thanks so much for
+watching stay focused and keep building

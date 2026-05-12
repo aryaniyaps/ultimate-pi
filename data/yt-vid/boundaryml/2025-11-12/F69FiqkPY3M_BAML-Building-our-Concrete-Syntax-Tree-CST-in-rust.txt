@@ -1,0 +1,257 @@
+[1.2s] Hi, today I'm going to give you a tour
+[3.2s] of the parser architecture in BAML's new
+[5.5s] incremental tool chain with a focus on
+[7.7s] the concrete syntax tree or CST. There's
+[11.0s] a lot to cover, so come on, let's get
+[12.6s] started.
+[17.7s] Oh, you want to do it over here? That's
+[19.4s] fine. We can keep it over here. We don't
+[20.8s] have to move. To understand the CST,
+[22.7s] we'll focus on three things. How we
+[24.9s] produce it, what it is, how we consume
+[27.7s] it. We produce a CST by calling parse
+[31.6s] file with cache to parse a stream of
+[34.3s] tokens.
+[36.0s] What is a token?
+[38.1s] It's a single piece of text from an
+[40.0s] input file. Our parser tokens correspond
+[43.2s] to grammatically interesting chunks of
+[45.0s] text like a single word, a block of
+[48.0s] white space, a single bracket or an
+[50.0s] operator. We also define tokens for
+[54.0s] keywords in the BAML language like
+[55.9s] function and if since the parser will
+[58.0s] give those tokens special treatment. The
+[60.3s] process of breaking an input file into a
+[62.4s] list of tokens is called lexing and we
+[64.5s] use the logos library to implement our
+[66.5s] lexer.
+[69.3s] Let's see lexing in action. We have
+[71.5s] golden tests under baml tests and you
+[73.9s] can see that for this example input BML
+[76.2s] file we have this lexer output.
+[80.0s] You can also use a tool called BAML
+[81.7s] onion skin to get an interactive view on
+[84.2s] the different compiler passes like
+[85.7s] lexing.
+[87.4s] Here we see the BAML file on the left
+[89.0s] and its corresponding lex on the right.
+[91.8s] If you want to see how a change to the
+[93.6s] BAML file would impact the lex, take a
+[96.4s] snapshot and edit the file.
+[101.8s] Let's come back to our parse file with
+[103.6s] cache function. The second parameter is
+[106.4s] node cache and the return type is a pair
+[108.8s] of green node and a ve of parse error.
+[112.2s] The node cache is something the parser
+[113.7s] will use to store parsed expressions.
+[116.2s] When an expression or sub expression
+[117.8s] gets parsed, it gets stored in the
+[120.2s] cache. That way multiple occurrences of
+[122.3s] the same node can be shared saving
+[124.3s] memory. Now the return type. Rather than
+[127.8s] returning a result of green node or
+[129.7s] parse error, the parser returns a tupole
+[132.2s] of green node and a ve of parse errors.
+[135.7s] This is a theme you'll see over and over
+[137.4s] in the new compiler tool chain. When
+[139.5s] something unexpected happens during any
+[141.3s] phase, we don't just give up and return
+[143.0s] an error. We return as much valid
+[145.4s] compiler output as possible alongside a
+[148.0s] list of errors. That's how we'll
+[150.0s] continue to be able to serve information
+[151.5s] like autocomplete and type under cursor
+[154.2s] even when a function is in a halfwritten
+[156.1s] state and has syntax errors. Finally,
+[158.7s] the last piece of the type signature,
+[160.2s] the green node. What's that? The red
+[163.0s] green algorithm was developed by the
+[164.5s] Rosalyn team for the C# parser. It has
+[167.0s] green nodes and red nodes
+[171.0s] in our parser. These come from the Rowan
+[173.0s] library which calls green nodes green
+[175.0s] nodes and red nodes syntax nodes.
+[179.4s] Green nodes are nodes in a syntax tree
+[181.7s] that are immutable and fully
+[183.8s] self-contained.
+[187.8s] Red nodes are views into green nodes
+[190.1s] that give the green nodes context. You
+[192.6s] can view a green node through a red node
+[194.7s] to get the absolute positions of the sub
+[196.8s] expressions within the green node. If
+[199.1s] you have a red node that contains
+[200.3s] several green nodes in a sequence, you
+[202.6s] can swap the orders of the green nodes
+[204.2s] without invalidating the green nodes.
+[206.4s] That's what it means for them to be
+[207.7s] self-contained. Why are they called red
+[209.9s] and green? Those are the colored markers
+[212.0s] the Rosalyn team had in their conference
+[213.6s] room when they designed the algorithm.
+[215.4s] So why do we want this kind of structure
+[217.0s] to represent our syntax trees? There's
+[219.3s] two big reasons. First, we need a CST,
+[222.6s] not an A. We're going to be writing
+[224.6s] these syntax trees back into files, and
+[227.0s] that means that we need to keep track of
+[228.6s] all the white spaces and comments so
+[230.4s] that we don't lose those when we do that
+[232.2s] writing. Green nodes have an efficient
+[234.3s] internal structure for representing all
+[235.9s] that data. Second, we need to support
+[238.6s] incremental parsing. That means at some
+[241.1s] point we're going to be able to say
+[243.0s] insert these new characters between
+[245.2s] lines 15 and 16. Most of the green nodes
+[248.2s] before line 15 and most of the green
+[250.1s] nodes after line 16 won't be affected by
+[252.6s] that insertion. And we want to be able
+[254.6s] to slide them around in the file without
+[256.8s] invalidating them. That's exactly what
+[258.7s] the green node structure gives us.
+[262.2s] The next thing to get familiar with is
+[264.4s] how we parse the token stream into the
+[267.0s] CST.
+[268.6s] CST nodes are untyped, meaning that they
+[271.5s] have the same Rust type. To tell them
+[273.9s] apart, they carry a value level syntax
+[276.4s] kind.
+[277.9s] Let's look at that tag.
+[285.2s] You can see we have tags for keywords,
+[288.1s] control flow keywords,
+[291.5s] punctuation,
+[293.9s] operators. It looks a lot like uh tokens
+[296.8s] from the lecture
+[299.8s] except that we also have syntax tags for
+[303.1s] composite nodes like function def which
+[306.1s] would contain the entire definition of a
+[308.2s] function class def which is the entire
+[311.3s] definition of a class.
+[313.5s] So how does parsing actually work?
+[317.3s] Parsing is implemented on top of a
+[319.1s] parser strct which is a stateful view
+[321.9s] into the parsing process. It contains a
+[324.6s] list of tokens and the current token in
+[326.9s] focus and a list of events.
+[330.7s] The implementation of the strct contains
+[332.8s] functions that parse individual syntax
+[334.9s] forms from the BAML language. Let's look
+[336.8s] at a concrete example. This method of
+[339.6s] that same parser parses field
+[341.7s] attributes, for example, at the
+[344.6s] attribute name and then any parameters
+[347.0s] of the attribute. We're finally going to
+[349.2s] see some low-level parsing methods that
+[351.1s] work inside this parser. We have a
+[353.4s] method called with node which starts a
+[356.2s] new green node with a specific syntax
+[360.4s] kind
+[366.9s] of that node.
+[368.6s] To populate the children of the
+[370.0s] attribute node, we're first going to
+[372.2s] expect the at token. What expect means
+[375.5s] is that we consume that one token from
+[377.4s] the stream and we push it into the event
+[380.2s] stream underneath the particular syntax
+[383.4s] node that we're working on. Next, we use
+[386.2s] at, which is a peaking operation that
+[388.9s] checks the value of the next token
+[390.8s] without consuming it. And for field
+[393.4s] attribute parsing, we see that we're
+[395.8s] checking that the next token is a word.
+[398.5s] If it is a word, we call bump.
+[400.2s] Otherwise, we emit an error and
+[402.0s] continue.
+[403.5s] What does bump do? Bump consumes one
+[406.1s] token and emits one new event under the
+[408.6s] syntax node that we're currently
+[409.8s] building.
+[411.4s] Finally, we check if we're at a left PN,
+[413.6s] which signifies the beginning of the
+[415.0s] argument list. And then we defer to a
+[418.0s] sub function called parse attribute
+[419.8s] args. So here's where we're recursively
+[422.7s] descending into another parser method.
+[426.5s] I don't know about you, but I'm curious
+[428.2s] to see if all that worked. So let's go
+[429.9s] back to Onion Skin and we're going to
+[431.6s] look at the parser output.
+[434.3s] So we've defined our class foo before
+[436.6s] and we'll add name.
+[441.7s] We'll refresh the snapshot
+[444.6s] and we want to see what changes when we
+[446.5s] go ahead and add a field attribute
+[450.6s] alias
+[452.4s] name.
+[455.0s] So we see that we got some new syntax
+[456.6s] notes. We got an attribute whites space
+[460.1s] at the word alias and our attribute args
+[463.9s] which came from the sub function that we
+[465.8s] deferred to with our recursive descent
+[467.4s] parser.
+[470.8s] The very last thing that we do to get
+[472.6s] our CST is to iterate over all those
+[475.8s] events that we built up in the event
+[477.3s] stream and call the green node builder
+[479.8s] methods to turn those events into the
+[481.6s] nodes themselves. The events are all
+[483.8s] either tokens which are leaves in the
+[486.2s] CST or there are compound nodes which
+[488.4s] can construct other nodes and have
+[489.8s] children. The iterator over those events
+[492.3s] that builds green nodes is very
+[493.8s] straightforwardly defined in parser. RS
+[497.1s] if you're interested to have a look.
+[500.5s] There's an important thing to keep in
+[501.8s] mind when you're writing these parsers
+[503.0s] yourself. If you hit an error case, it's
+[505.8s] important not to just leave that token
+[507.6s] on the stack. You have to eat it before
+[509.8s] you move on. Otherwise, the other
+[511.4s] parsers are going to see it, not know
+[513.0s] what to do, and you might just recurse
+[514.8s] forever, seeing that token failing and
+[517.7s] uh and never making progress.
+[520.7s] You finally understand how the CST
+[523.3s] works. Congratulations. Holy Now
+[526.6s] the very last topic is what we do with a
+[529.0s] CST once we have it. As you might
+[531.4s] expect, the natural thing after
+[533.3s] constructing the CST is to build an A.
+[536.9s] One difference between the incremental
+[538.8s] compiler world and the traditional
+[540.5s] compiler world with respect to a is that
+[543.6s] you don't generally need to materialize
+[545.7s] them with incremental compilers.
+[548.0s] Instead, we just think of them as views
+[549.9s] on top of the CST. So here is how it
+[553.1s] works. We have a trait called BAML a
+[555.8s] node that will implement for everything
+[558.6s] that is a node of the a and then we're
+[561.2s] going to use a macro to create a whole
+[563.6s] lot of different a node types. Here's a
+[566.9s] small sample. Source file is an a type,
+[570.2s] function defaf is an a type etc. And
+[573.2s] what we do for each of those rust strcts
+[575.1s] that we've just defined is we imple them
+[578.6s] in a way that's appropriate for each
+[580.6s] syntax element. So for the a element of
+[583.5s] function defaf, we want to be able to
+[585.5s] get the function defaf's name. And we do
+[588.2s] that by looking at the children of our
+[591.0s] own syntax node and then using a
+[593.7s] heristic, namely the first word in the
+[597.0s] children after the word function is
+[599.4s] going to be this function's name. You
+[601.4s] follow the same pattern for all the
+[603.0s] other a node types in the entire
+[605.3s] language.
+[607.1s] Congratulations on completing this
+[609.0s] course in the BAML parser. Please choose
+[611.9s] the certificate that you prefer using
+[614.5s] commandshift4 to screenshot whichever
+[616.7s] one you like. Save it to the desktop and
+[619.1s] be sure to present it with any poll
+[620.6s] requests you make to the BAML repo about
+[622.4s] the parser. Thank you.

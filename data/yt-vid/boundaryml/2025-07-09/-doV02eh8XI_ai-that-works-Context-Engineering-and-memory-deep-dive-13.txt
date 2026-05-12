@@ -1,0 +1,2640 @@
+Um, do you want to
+I know a couple folks have not takers in
+here. Do you want to make me host and I
+can I can We're going to drop the
+notetakers because we'll be pushing this
+to YouTube.
+Yes, I generally do that. But yes, we
+should do that.
+I hate the summaries that they put in
+the chat sometimes.
+Um
+Oh, yeah.
+I think today's episode is going to be
+really really fun. Uh we'll start at
+10:05 as per usual. But while we're um
+while we're catching up on this, a few
+of you probably got our email from last
+time uh that was coming through it. What
+did everyone think? Uh did it feel good?
+Did it feel too AI generated? Give us
+feedback so we can make it better.
+You can type in the chat or just hop off
+mute and just ask.
+You're outsourcing your 5e valves. I
+see.
+I am outsourcing my 5e valves.
+Yeah. I mean, my feedback, I guess, is
+that it was very human. I'm currently
+disappointed to hear that it was not
+human written.
+[Laughter]
+He got you. Vibbov got you.
+Yeah.
+That's a hard problem I think facing our
+industry which is
+it does not feel good to be you know
+reading AI content.
+Well, one of the things that we do is I
+I agree but one of the things like we do
+is we do this content live. So for
+people that want the human content, they
+can come out here, but it does take like
+10 or so hours to do a lot of the
+follow-up work that comes from the
+content afterwards
+like send you everything
+and like just No, I'm not saying I don't
+understand like just the pure
+human hours saved. Yeah.
+Right. That's why it's a problem. If if
+it was just like why are you doing this?
+Stop. Then it wouldn't be a problem, you
+know?
+Yeah. I also like I've definitely I I
+definitely feel the like exhaustion from
+AI content. I was having like a
+conversation with a guy on X last week
+and every question I had, he would
+respond to me with like a link to like a
+notion page that was clearly just like
+entirely written by 03 and it was like
+10 pages of slop and I was just like,
+"All right, man. If you're not even
+going to try, then I'm out of here."
+Yeah.
+I think the I think the slop is what
+really bothers me. I we actually have a
+thing in our team where like
+we don't want to discourage people from
+using AI for writing docs
+but one of the things that we do is we
+put a little snippet in the notion that
+says this was written by Chad GBT and
+then it's like a collapsible section
+that people can read. So it's very
+upfront, very and like no one has to
+guess whether you chat GPT your notes or
+not because that's the worst when it
+feels like you ask them to write a doc
+and like [ __ ] did you just chat GBT this
+whole thing and like not even read it
+where but if they
+you start with this was AI generated
+content and you let someone know that I
+think it's a lot better of a dynamic and
+a relationship between both people
+because both people can opt
+well and you did that in the email right
+the email says at the end I mean we were
+talking about doing an episode on like
+tactics for authenticity but here's
+Here's your here's your mini episode
+which is uh yeah if you declare that
+something is AI generated it becomes a
+lot easier to um
+I think if I can find it
+get away with uh I'm not saying get away
+with it but it's just like it it becomes
+a lot more authentic of like hey I made
+this with AI like let me know if it
+sucks like I actually put in time and we
+reviewed it but it was it was originally
+AI generated I think you polish these a
+little bit before you paste them in
+right
+um no this one was actually directly
+past
+this one was just raw Huh?
+Oh, I did do some I did do some editing.
+Um, let's see if I can find the unicorn
+emoji.
+I I actually just went through in zero
+inbox this morning. Um,
+I can I can find the email from you.
+Uh, I can pull up on just to give people
+context like this is a problem that I
+think is really really hard to go solve.
+So, we spent about two episodes talking
+about this in the last two episodes
+which was specifically how can you go
+send
+a content that doesn't feel as bad.
+Let's see if I can see the preview. So,
+this is what the email was listed as
+like hello coder. We linked to the
+actual repo. We didn't get the exact
+full path in the repo. That's something
+we want to improve. We got the YouTube
+link in there. We got a little summary
+with things uh in there. The bolding
+didn't work. I did have to do that
+manually. I It gave me double asterisk,
+but
+mark down.
+Uh we have the next session link that
+was AI generated uh thanks to the work
+that Dexter did that we talked about.
+And then this thing was uh manually
+added by me and that was done for that
+reason which was just to let people know
+that's an AI generated email using our
+content pipeline that we built over the
+last two episodes and just shared that
+with folks.
+So if you if you haven't gotten this
+email, sign up. You'll get an email this
+week from this week's recording. Um, but
+with that, uh, let's get back into
+today's
+Let's talk memory.
+Let's talk context engineering. But
+yeah, it's gonna be really fun. Um, so
+for those of you that don't know, I'm
+VIBO. I'm one of the co-creators of
+BAML. And this is
+Dexter. Who is
+I'm Dexter. I am uh I work on uh a
+company called Human Layer. um build
+tools to help people build better AI
+agents and agents that feel more like
+real people. And we have a very special
+guest with us today. Um we got Brian
+who's another very awesome YC founder
+who is actually building products that
+all the things we've been talking about
+for the last two months. Brian is
+building these into a real product that
+real people use and get value out of. So
+I Brian, you want to uh any further
+further intro or you want to talk about
+kind of what you've been working on
+briefly?
+Sure. I mean, we're gonna go more into
+depth later on, but um I'm Brian. Um no,
+Dexter, no viab. Um but yeah, we're I
+work at a company called Orin. Um we're
+basically building all of these like AI
+principles into like proactive um first
+AI tutors for mostly middle schoolers
+these days. So, it's a very very
+hands-on application of all of these
+things into education space. So, excited
+to jump into it.
+Cool. Cool. Thanks, Brian.
+With that, let's let's talk about the
+thing that we're going to talk about
+today, which is context engineering. The
+word has been going around a lot.
+Dexter, you gave a great talk about it
+at the AI engineer summit, but what the
+heck is context engineering? What are
+all these terms that people toss around?
+Is it a real thing? Is it more just like
+vibes? I Let's talk about it in detail
+today. And I think the thing I want to
+start with is actually the diagram that
+Dexter has made because I think it
+really solidifies what this is.
+Yeah. You want to pull it up?
+Pull it up. Go ahead and screen share.
+I'll let you drive.
+Um, so this is a chapter from
+one second.
+Yeah, go ahead.
+Uh, and just so everyone knows, the
+benefit of the Zoom call is you're
+welcome to chime in, ask questions as
+you go on. Otherwise, you can always
+watch the recording on Fridays as it
+goes live.
+Um, but if you have questions, just hop
+off uh hop off mute or if it gets to be
+too wieldy, uh, just like raise your
+hand and then or type in the chat. We'll
+keep an eye on it.
+Yeah, this is not meant to be totally
+this is not meant to be totally one way.
+uh drop in your questions, come off
+mute, ask tell us tell us what you think
+is wrong, tell us what you've seen in
+the real world. Um we're all figuring
+this out together. Uh which is uh leads
+us into speaking of figuring this out
+together. So this is a chapter from
+12actor agents um which was published in
+April and one of the diagrams I think I
+think I remember actually when I vibar
+reviewed an early version of this in
+like late March and he saw this diagram
+said this is the best diagram in the
+entire paper. Um and it's basically this
+idea that like LMS are completely
+stateless functions. Um, and the only
+thing that affects the quality of your
+AI application is the quality of the
+tokens that are coming out of your
+model. And the only thing that affects
+the quality of the tokens that are
+coming out other than like tuning things
+like temperature and uh training your
+own model is the tokens you put in. And
+so while people will say that rag and
+memory and agentic history and prompt
+engineering are all kind of like
+different like disciplines and you need
+different tools and they're all like
+have their own like blackboxy
+implementations. Um at the end of the
+day it's all just strings going into
+models and tokens in and tokens out. Um,
+there's a little bit of the structured
+output thing, which I think uh is uh
+probably part of why Vibb really likes
+this because structured outputs is not
+just what the model outputs, but what
+you do with it and how you parse it and
+how you turn it into data for a program
+to use. Um, but this really popped off.
+I think it was like June 12th that uh
+the cognition guy did a blog post. I'm
+actually going to put a I'm going to
+post something soon of like the history
+of the term context engineering and
+where it came from and all the different
+people who kind of like I think kind of
+came to the same conclusion around the
+same time. Um but there was a tweet from
+Toby Lutkkey in June um talking about he
+loves context engineering. Andre
+Karpathy jumped on the train. There's
+now a hundred blog posts about context
+engineering that you can go read about.
+Um but today we're going to go deep into
+code and we're going to talk about the
+anatomy of a prompt and the anatomy of a
+context and how you can build this stuff
+programmatically.
+Yeah. And I think um do you want to pull
+up the whiteboard really fast?
+Yeah, let's do it.
+And just to give everyone a summary of
+all the concepts that we'll be covering
+today uh just as a brief high level
+overview. The agenda for today is we're
+going to go share um how to build each
+of these contexts into the prompt. We'll
+do a very high level overview of exactly
+how rag is context, how prompt and
+during is context, how state and history
+are context, and how memory is context.
+So we'll actually build out some of
+these prompts, write them by hand, talk
+about some of the analogies in there. Um
+after that we're gonna deep dive into
+memory and focus a little bit more on
+memory because we've got this awesome
+guest Brian um on the show and he is
+going to he's generous enough to talk
+about some his blog post that both Dex
+and I were super impressed by uh that
+really outlines some details around
+memory that I think a lot of people
+overlook. Um, and but I think that level
+of context engineering of how you go do
+that is the key to making applications
+feel like magic when using LMS. It's
+like the same thing like when you when
+you first use an app and like you use a
+gesture on it, it just feels right.
+Like for those of you that don't like
+reverse scrolling on your Mac, you're
+wrong. But for the rest of us, it feels
+natural when you scrolling.
+And that's the whole point of it. um it
+just feels right when you try a UX
+pattern for the first time. And the same
+way when you use an L1 and to do that to
+make it feel right, you got to context
+engineer, right? So with that, let's
+write some prompts and look at how all
+this fits into the actual context
+engineering piece.
+So in the whiteboard, we've got a few
+things.
+Yeah.
+The first one is then that like what is
+your prompt going to end up looking
+like? So I think the first thing that
+people write is a prompt that has a
+bunch of like a you are kind of role
+with a system instruction or something
+up here. Um I have opinions about that.
+I will refrain from sharing that right
+now. Um because I think that's
+irrelevant to the point that we're
+trying to make here. uh which is
+well it's just like prompt engineering
+is one one element of your context that
+you pass in whether it's the system
+prompt or the user message and I think
+it's kind of like we're going to stay a
+little more high level than like advice
+on any particular one and we're going to
+drill down memory because I think it's
+the most underserved the most hotly
+debated and the most like valuable thing
+to get right
+exactly so this UR concept is uh is like
+a prompted juring trick that we're So,
+every single thing you've heard from
+like I'll tip you $10 to do things or
+you must be correct or do not
+hallucinate. All of those are prompt
+engineering tips. And whether you choose
+to put this message in a pro in a system
+message or whether you choose to put it
+in a user message
+um is really also prompt engineering.
+The fact that Enthropic only allows you
+to send a system message if you send at
+least one user message. That's a prompt
+engineering constraint that they've
+applied on their system. The fact that
+images can't be passed into user
+messages or can't be passed into system
+messages for a lot of things. That's
+again another constraint applied by the
+model that you have to go do. So
+whenever people do prompt engineering, I
+think they stop at just the words that
+they're using. But I think one important
+thing to think about when you do prompt
+engineering when you think about the
+context building around it is the kind
+of model that you're using and what
+affinities it has and what you should be
+doing. So for example, OpenAI is clearly
+doing some work to capture prompt
+injections and stuff that disobey the
+system message and try and train the
+model for that benefit. So you might
+benefit towards trusting OpenAI more and
+more and using system messages for them.
+On the other hand, Enthropic seems to
+have guidance that you should just use
+the user message whenever possible
+instead of a system message. So you
+should just do that because the model
+people are they're biasing the way that
+they train the model to go do that. And
+part of context engineering isn't just
+assembling this. It's actually being
+aware of what affinities each model has
+and actually learning that along the
+way. And that that's just vocab that we
+have to learn. It's kind of like when we
+use databases, we decide that Reddus is
+really good for a quick in-memory
+system, but you would never put your
+entire database purely on Reddus if you
+need cold storage that can never die.
+It's just the wrong database to use for
+that tool. And most people don't have to
+know that, but your database engineer at
+your company better know that. Similarly
+true for models. At some point, the best
+context engineers are going to know the
+nuances about the models, and that's
+just part of the job. Anything you want
+to add on to that, Dex?
+Um, no. I think that makes a ton of
+sense. Sorry, I'm just going to pause
+for a sec while I go close a bunch of
+tabs.
+Okay. Yeah, go for it.
+Cool. With that, let's talk about the
+next thing. Rag.
+Cool.
+I think the way that most people do rag
+is also very um very interesting because
+rag is I think rag actually in my
+opinion rag lives in a hybrid both in
+and outside of the model. Uh it's a
+little bit it it kind of behaves like
+structured outputs in that sense. Um and
+I think the reason for that actually
+with that let's talk about structured
+outputs first then go into rag. Um, I
+wanted to go in the circle, but I think
+because rag behaves slightly
+differently, I want to talk about
+structured outputs. It's like why is
+structured outputs in and out of the
+model? Well, we've probably all seen
+these things about like where you can
+use like a whole bunch of different
+tools. You can use XML, you can use like
+we can use BAML's format, we can use
+like JSON, we can use like uh we can
+have it emit Python code that we then
+run into a Python data model directly.
+There's so many different ways of doing
+structured outputs and All of these
+methods involve two parts. They involve
+a method that involves both. Actually, I
+have a great diagram for this.
+Drop it in.
+Let me Yeah, that's what I'm meant to
+do.
+Are you able to just paste the image
+into the whiteboard?
+I can I can
+cool.
+Um,
+I think when it comes to structured
+outputs, there's like these three
+diagrams that a lot of people
+um Let's see. Oh, I cannot I I can
+screenshot and then paste the image in.
+When it comes to structured outputs,
+there's like three parts that we
+basically have in the model. We have the
+prompt that we actually have. We have
+the actual model itself and then we have
+the code that we run outside of it. The
+context
+so JSON schema.
+So JSON schema and this is part of it is
+like when you when you use the OpenAI
+SDK and you put tools in like if you
+read their docs essentially or any any
+of these model SDKs, right? When you
+when you pass tools into a method or
+push them into an API endpoint, you're
+passing JSON schemas that then get
+encoded and injected into the system
+message in a way that like the model has
+been trained on basically.
+Yeah. And I'm going to I'm going to put
+like a couple different tools in here
+just so we have the screenshots
+um as I go talk really fast. and go
+capture these.
+Yeah. No, these are great.
+Um, and just so people know how context
+engineering works with structured
+outputs because it is very nuanced and
+it's not to say that there's one right
+answer. I think that's the whole point
+of these conversations. There is no
+right answer. Um, all of it is really
+really based around
+uh just understanding the tools that you
+have at your leisure to then go ahead
+and go make these things actually better
+along the way. Okay. So I think I have
+all the
+this one is constrain generation, right?
+Uh
+yes, exactly.
+Yeah. Where it's like the output is
+actually like the sampler gets struck
+out for anything that's not valid JSON.
+Exactly. So like how is structured
+output context engineering? Well, the
+point is I think in the very beginning
+at the thing at the very top if you want
+to scroll up.
+Yeah.
+Yeah. There you go. This is the most
+trivial way to do structure generation.
+You write the prompt, the model does its
+thing and you run JSON.parse.
+There's different tuning things that we
+can do. So for example, we can do
+context engineering by using some prompt
+engineering to say your output should do
+exactly that. The model does whatever.
+Then we run JSON.parse.
+We can do better.
+Jason, you got a question.
+Yeah, I didn't want to interrupt by Bob
+there, but
+go for it. Would you consider like MCP a
+structured output like uh the the schema
+that goes along with an MCP server and
+then the tools that go with it? Would
+you consider that like a structured
+output of sorts for the for the model
+that then gives back a different output
+of its own?
+Um I think MCP falls into it's like a
+higher level concept than just like
+purely context engineering. And if
+you're using an MCP server as an input
+into a prompt, then yes, you're
+basically doing structured outputs with
+an MCP server.
+That's all you're doing.
+Go ahead.
+Yeah, the canonical way to use MCP is to
+use the list tools endpoint, get back
+the JSON schema in a format that then
+you can just send to the uh model
+endpoint in the same way that like any
+normal nonMCP client would request a
+tool call and tell it about the schemas.
+For what it's worth, it might work. It
+might work a little differently with
+anthropics models because it's like the
+protocol's opinionated about anthropics
+models, but that's how everything else
+implements it like Gemini or whatever
+and cursor is it's yeah it's just
+calling list tools and then passing them
+in as like normal nonMCP tools like the
+model doesn't know that it's that it's
+MCP only anthropics like models are
+aware of MCP as a thing which exists
+separately from normal tools and prompt
+context. Oh, they're actually aware of
+that in the prompt API.
+Yeah. So, this is like why um anthropics
+models support other primitives like
+resources for example. um is
+because and like why cursor and one surf
+don't support resources is because it's
+a separate MCP like
+primitive or API or whatever you want to
+call it that
+yeah it's different from tools but it's
+difficult to model as tools and so most
+and so it's not portable to other models
+because they don't have a predefined way
+to understand it in their system prompt
+and so you would kind of have to educate
+the model about what they are and what
+they do or kind of like wrap them as
+tools and So it's not portable. So
+people just generally use tools.
+Okay, cool. Thanks, Kyle.
+Cool.
+Um, all right. So go to go back into
+that. The next thing that we could do is
+we could do better prompt engineering
+where we say say I don't know if it
+doesn't know the answer and then we'll
+literally say if I don't know is in the
+output, return something else otherwise
+JSON.parse. And you can clearly see how
+we're doing context engineering on the
+left side and doing something else on
+the right side. And that's the point of
+this. This is not all context
+engineering.
+The other thing you can do is you can do
+constraints.
+So you're saying this stuff on the left
+is like the tokens you send into the
+model is context engineering but there's
+a little bit part of this where like
+your parsing afterwards needs to kind of
+know about what you put into the context
+and so it's kind of bridges those two
+sides.
+Exactly. You're kind of touching both
+ends. The next part of the approach is
+something like this where you actually
+modify the model. you send you you do
+send some tokens in like the JSON scheme
+or something else and then the model
+basically limits you to only follow JSON
+grammar specifically.
+So we're not we are doing context
+engineering in the fact that we're
+giving it JSON schema or some spec. But
+then instead of our parser having
+knowledge the model has knowledge of
+what to go do and this has trade-offs
+that we've talked about many times.
+Basically constraint generation probably
+hurts that output quality but it is a
+technique that you can leverage.
+The next thing that
+yeah we'll link to the other episode
+where we talked about that a little bit
+more in depth especially for codegen.
+Yeah the other episode the other thing
+you can do over here is you can use tool
+calling. Tool calling is very similar.
+You do you do a special kind of context
+engineering where you send in the tools
+in a special field into your API call as
+special tokens into the model. And now
+the model limits what tools you return
+using the JSON struct using the JSON
+approach that they have over there as
+well. the same approach as this
+constraint generation and then you also
+have to change your parser to read
+output.tools instead of just the raw
+string from now on. So now we have we've
+modified both the context and the model
+and also the parser.
+And then you have the last technique
+which is one that we do which is you do
+context engineering to inject the data
+type into the prompt but you don't
+change the model and you basically just
+run a special parser that is able to go
+ahead and take again take knowledge of
+what you put into the prompt and parse
+it out. XML is the same way. You have to
+know that you gave the prompt XML format
+to then run XML.parse instead. It
+doesn't just magically work. And that's
+exactly why the thing at the top that
+Dexter is showing you, you go to the
+top. That's why structured outputs lives
+on this bridge. Your context has to know
+about structured outputs, but so do many
+other things, including possibly the
+model and the supporting code around it.
+Um, I saw that there's a question in the
+middle. Sorry to have uh gone on for a
+bit. Do you want to hop on and ask your
+question?
+Yeah, come on. Yes. So I I was just
+thinking of context as different
+sections or different types. One could
+be knowledge again or you have memory
+and etc. that ven diagram actually
+explains it better. So when you talk
+about context I think giving some nuance
+or basically where we uh give tags or
+different identifiers for the context is
+helping it break down. So that also sort
+of helps us map out what the context is.
+Right? For example, you might give
+knowledge, you might give instructions.
+Uh for example, even a structure for its
+output or input is also again an
+instruction for the LLM to follow. Do
+you agree?
+Kind of. I think the fact that you're
+labeling a section as some section is
+just a prompt engineering technique. So
+like if you're labeling this as like if
+you add an instruction here that says
+like structure uh is like schema and you
+like let's say you did some tags like
+this
+where you you put some tags like this in
+your prompt.
+That's a prompt engineering trick you're
+employing to go do this. The thing that
+is context is the full prompt that you
+send in. The full prompt as is the
+actual API request you make fully is
+your context.
+The sections of it are an abstract
+concept that we are making up right now.
+But really the only context that matters
+is the tokens in and the tokens out
+even.
+And you could put this stuff in any
+order. You could put your structured
+output instructions in the system
+message or the user message. They're
+kind of orthogonal concepts.
+You could put it at the beginning, you
+could put at the end. Like all of these
+are totally different. You could scatter
+it four times in your prompt, repeating
+it different times. You could put it
+without these tags, without these tags.
+or or with these tags it doesn't really
+matter but you have to try different
+things to get the right model to
+understand.
+Does that answer your question BJ?
+It does. Thank you.
+And so we split this up into
+Yeah, sorry. Go ahead.
+I was going to say we split this up into
+kind of parsing and instructions
+basically. That's how kind of would
+clarify this. And it's kind of like when
+you're writing an essay, like there's a
+general guiding for writing a good
+essay. You have an introduction
+paragraph, you have three body
+paragraphs, and you have a conclusion
+paragraph. That's a pretty good
+structure in general, but not all essays
+have to follow that format. It's the
+same with prompts. There's probably good
+guidelines for prompts, and you should
+probably follow them, especially if the
+model providers are giving you some
+suggestions.
+But they're not the end all beall. And
+you have to remember that everyone is
+discovering the capabilities of these
+models at roughly the same time. Even
+the model providers are also discovering
+them at roughly the same time. Like all
+this emergent behavior is new to them as
+well. So whenever a company whenever
+someone comes out and says this is the
+best prompting technique and they happen
+to work at openthropic,
+they just discovered that for the first
+time. No one has all the context right
+now because the space is moving so fast.
+So just remember
+like no one designed the models to be
+good at XML or be good at parsing XML.
+people just over time we're trying lots
+of things and realize oh if you put XML
+into the model it's really good at
+focusing the types of attention on the
+certain stanzas that you want
+and the reason by the way that people
+seem to perceive XML is better I don't
+actually think it is is because the
+parsing of XML is much more tolerant to
+escape tokens than the parsing of JSON
+so YAML is whitespace specific JSON
+doesn't even allow most types of whites
+space XML is a lot more forgiving and so
+like if you have the model writing code
+and the code has new lines, it's very
+hard for the it's much harder for the
+model to write slashn instead of an
+actual new line character because most
+of the code in the training set is
+written with real new lines, not with
+the slash and the n.
+Exactly. So when that happens, what ends
+up happening is you're just biasing
+towards certain directions. Anyway, we
+got we're Yeah, we're almost 20 minutes
+in. We got to we got to hit the other
+categories quickly.
+Yes. What's up, John?
+Sorry, I couldn't figure out the how to
+raise a hand, so I'm just dropping in.
+Um, so I love this diagram, but one of
+the thing I'm kind of struggling with is
+that the right now it's kind of like a
+mixing up both um behavioral instruction
+like a how to with the factual
+information like either rag or memory
+we're going to talk about. Is it is it
+helpful to like even split out that
+Yeah. Yeah. there like a instructional
+versus factual like a context.
+Depends on the model. It honestly
+depends on the model. Some models
+benefit from having it in different
+places. Um
+I will we'll show some prompts in a
+second that show how to go write this,
+but it really really really varies. Um I
+wish I think about machine learning that
+a lot of people I think have a hard
+thing is like we all in software
+engineering we have llinters that make
+us say like this is the right way to
+name our variables. this is the right
+way to structure our code and there's
+often a right answer for so many things.
+But
+this whole context engineering piece is
+much more like a system design interview
+question where it's all about trade-offs
+in different dimensions and just
+understanding the trade-offs
+and that's how you
+and like observability as well. I'll use
+that more generally obviously in in LM
+world it's more like eval but like the
+idea of like how will you know when you
+try I I work with a lot of teams and
+they end up like just trying every
+technique and every paper without
+knowing how they will know what's better
+and what's not and like I don't know
+what's better and every problem domain
+and every model is different and so when
+you think of this as all kind of like
+overlapping parts of this challenge of
+how do I get the right tokens into the
+LLM so I get the best quality answer
+it's it's a mindset shift and This
+encourages you to kind of like open your
+awareness and your your approaches. I
+don't know what's best, but I know the
+more things you can try and the more
+flexible you are with how you mix this
+and interle this information together,
+the more likely you are to stumble on to
+and discover some emergent property of
+like, oh, when we do it this way, it's
+actually like 20% better. And that makes
+our agent go from like kind of just a
+toy to like, oh, this actually solves
+real problems reliably.
+Exactly.
+Yeah. That's kind of like John's comment
+right now is that how to measure best is
+like is it more factual? Is there more
+like a usable for next like software to
+use. So anyway,
+let's keep going. I'll probably follow
+up with you guys.
+Yeah, we did a chat on eval like a
+couple episodes back. If you go on the
+YouTube channel, you'll find it. Um
+let's talk about rag and I'll talk about
+why rag is very similar to structured
+outputs in this sense and why we should
+update this diagram accordingly. Um,
+well, the way rag works is also very
+similar. You have a bunch of context
+that lives in some database somewhere,
+and we're going to want to pull parts of
+this. Oops, sorry. Pulled the wrong
+diagram. I'm not as fast at Excel Draw
+as Dexter is. Um, he's a beast at this
+stuff. Uh, we have a bunch of
+I just love I played too many RTS games.
+I I'm obsessed with hotkeys.
+I can tell. Um, and what we will want to
+do is we'll want to pull some of these
+contexts and put them into our prompt.
+That is naive rag. That is the most
+naive form of rag that you can do. It's
+just like in structured outputs. If you
+scroll down, Dexter,
+the most naive form of structured
+outputs that we can do is literally dump
+the uh is literally dump the JSON schema
+into the problem and just JSON pars.
+You're right.
+And hope it didn't put markdown back
+ticks around the JSON. Hope. Pray.
+Right. Exactly.
+That it didn't.
+Yeah.
+So, but on the other hand, what we
+really want to do with rag is rag is a
+problem. And the way that I think about
+the problem is it's basically a problem
+that looks at this function signature.
+It takes in some query of some type T
+and returns a ve of another of a data
+type. That's all a rag function is.
+Whether I use a vector database or
+anything else for that doesn't really
+matter. It's really up to me as an
+engineer to decide
+retrieve retrieval. This is just the
+retrieval part, right? Like I would say
+like
+this is the R, this is the a
+augmentation augmenting your context
+with more info and then the generation
+happens when you send it all to the
+model.
+Exactly. And a lot of people think rag
+is about the model. Rag is not about the
+model. Rag is purely about retrieving
+the right data and then the way you
+augment it into the prompt is the way
+that you're rendering into the prompt.
+So you could dump it in directly. You
+could dump it in reformatting it in a
+way that's different for the model. So
+we talked about like rendering XML
+schemas instead of JSON schema or
+rendering BAML schema instead of JSON
+schema or wrapping with these schema
+tags around your schema part of it. It's
+the same thing. The way you render is up
+to you. There's a thousand ways to
+render the same context in your prompt
+and you have to decide which way that
+is. And that's why rag sits on the
+border of context interning because you
+have to choose how you augment the model
+and you have to choose how you get the
+context. And the parameters that you
+choose to get the context may not even
+be ones that are fed directly into the
+model. It may be a totally different
+query than the direct user message
+you're putting in. It's just a function
+that takes in a query, spits out some
+data, and then you have a function that
+has a
+I should write this this way. Dev render
+to prompt.
+Yep.
+That takes in a data object of type data
+and spits out really this should speak
+spit out
+a ve of tokens, but I will just say it's
+a string.
+I'll say it's a ve of tokens. And the
+reason I'll say that specifically is
+because one rag context doesn't have to
+be a string. It can easily meet it can
+easily just be like for example each rag
+context could be its own user message.
+It could be a user and system message
+pair. It could be a system message. It
+could be a user assistant message. If a
+new model comes out with a new message
+type, it could be that.
+And that's why there's overlap here.
+That's why the prompt engineering is
+overlapped with rag because how you use
+these system and user tokens might be
+interled with how you pass context to
+the model. And I've seen a lot of things
+where it's like you go retrieve all the
+documents, but actually the thing that
+works best is user asks a question and
+then the system returns I need this and
+then you put it in as a new user message
+for the answer. And that's a better way
+to get the model to pay attention to the
+data in the rag chunks.
+Exactly. Um, and as you can probably
+guess, state and memory are the exact
+same thing. People call it rag, people
+call it state, people call it history,
+people call it memory. All of them are
+basically the same thing. You're using
+context to pull some data in and then
+you're rendering it into the model. The
+rendering part is the context
+engineering. The pulling part is some
+excess code that you will write that
+looks like this. And that is
+I think the naive
+sorry I was going to say like the
+the naive uh the naive rag is basically
+uh just embed the query and send it in.
+We did a long thing about embeddings and
+rags and stuff like that. Memory can
+just be thought of as like rag against
+past conversations. And again, that's
+the naive thing. But it doesn't have to
+just be an embedding comparison in a
+cosign distance, right? This function,
+this query of t, this t object could be
+a string that the user asked. It could
+be a string that the user asked plus the
+user's ID plus like the date of the
+query and a time range to query memory
+for because all of that could be stuff
+in your UI where they say I only want to
+consider memory. So like memory becomes
+this more complex thing where like when
+you get your memory context, your object
+that you use to fetch it could be a
+combination of like okay we're going to
+filter only things from a certain time
+range. We're going to summarize them
+before but at the end of the day we're
+going to come back with data that's
+going to get pushed into the prompt.
+Yeah. And I think like conversationally
+the way that we use rag is rag is
+usually a backed against factual data
+and that's what people nomenclaturely
+call rag. Memory is usually the same
+kind of conversation but against
+previous uh like information about the
+about the person that's interacting with
+the system or the entity that's
+interacting with the system. And then
+state and history usually refers to like
+conversations more focused on the actual
+uh stuff that's going on currently in
+the or more focused on the context that
+like the past interactions that that
+system has had. memory.
+It's like your actual like chat history
+basically.
+Yeah. And it's very different than
+memory because memory to me is more like
+factualized information that are already
+aggated in some summarized. So for
+example, if I go to chat GBT
+let's just see what it says. Um uh am I
+screen sharing? I don't know if you want
+to screen share.
+You are not. You want to screen share?
+Uh did you put a link in?
+Um I'm screen sharing.
+No, I I I don't know if you want to
+share. Yeah, I am now.
+Stop share.
+I did. Yeah, go for it. Uh, it is
+sharing. Yeah, if you go to the top
+tabs, if you don't see Vibe off screen,
+you can go to the Zoom top tab and
+select it.
+Okay. So, like for example, it's like,
+well, I like what are five words that
+describe me.
+If I put this on here,
+this is going to be a memory task. And
+this is slightly different. Uh, nice.
+I'm playful. Uh, this is slightly
+different. uh than than a lot of other
+uh uh things as opposed to state in
+history. Stay in history is me asking it
+about the same conversation two or three
+times. That's stay in history. But
+memory is more just like using
+factualized information having being
+able to have a conversation about this.
+Um
+yeah, Brian, that's why I did that and I
+didn't ask Desk to do it because I
+wasn't sure. I didn't want to make him
+say no in case he didn't want to do it.
+I was like whatever. We'll see what it
+says. Impatient and irritable would
+probably be mine. I like I like to yell
+at GPT in all caps. It seems to work
+well.
+Um,
+cool. Um, that's the whole point of
+engineering.
+Does this make sense to you in terms of
+like assistant and user as part of state
+and history? Like this is like your chat
+history and how you tell the model. And
+like again, you could use assistant and
+user messages or you could just put,
+hey, here's the past conversation and
+stuff it all into one user message. And
+this is the context engineering part.
+Yes. So, what I want to do for the next
+uh 10 minutes uh really fast is I want
+to do some live prompting, but before we
+do that, I want to check really fast
+with Brian and see if we want to get him
+on first to talk about some of the stuff
+that he's been doing in memory and talk
+about his blog post. And then after
+that, we'll do some of the actual
+prompting in the second part of the
+show, which goes over. So, you can watch
+the recording if you'd like or stay on
+where we do live coding. But I think
+what we should be doing right now is I'd
+love to have Brian come on and actually
+Deck, do you want to pull up his blog
+post while he does it?
+Yeah. So, Bri Brian sent me this a while
+ago. I thought this was one of the best
+uh like practical guides on how to build
+agents. It goes through all this
+proactive stuff and when to trigger
+things and there's a really nice like
+concise zero slop section on like how
+they do short-term versus long-term
+memory and stuff like this. So, I saw
+this and I was like, we're going to do a
+memory episode. I would love to have
+Brian come in and talk about kind of how
+he thinks about this and sort of the
+lessons they learned along the way and
+maybe maybe if we can convince him if
+he's feeling generous to uh share some
+code.
+Do you want to blog post
+and Brian can walk us through?
+Yeah, I can I I can share screen with
+the blog post and should be able to go
+show some some code and some logs and
+stuff just for local data.
+Can you guys see the blog post on my
+screen?
+Yes.
+Are we good? Wonderful. Um,
+I think like all the stuff you're saying
+about memory is correct where it's like
+it's really just a form of context
+engineering, but how you do it I think
+is very use case specific. Um, like for
+example for for us for tutoring, it's
+okay like we want to have this agent
+kind of exist and and kind of be a
+partner to families throughout months
+and hopefully years as well. And so it's
+okay if like it can't remember the exact
+thing that happened like 14 months ago,
+right? Like if it can just get the
+general like what were we doing roughly
+in that season, you know, that's fine,
+right? Um and but we need to be very
+like very episodic where it understands
+like how has the students progressed
+through time, right? Um we care less
+about like, you know, your dog's name is
+Charlie versus uh what were you like bad
+at a month ago, right? We want to know
+more of the episodic stuff than the
+factual things.
+And so we basically had to had to figure
+out a way to like
+how did we Yeah. Go ahead.
+To interrupt you. It sounds like the
+first thing that you guys did is you
+defined really clearly what was the
+success criteria for your thing. Like it
+sounds like very clearly, you know, you
+don't care about knowing your dog's
+name. You do care about knowing like
+educational progress of the student over
+time. And I know that seems obvious
+obviously like hearing that that seems
+super obvious to me about your problem
+statement. and it's like, "Oh, you're
+brilliant tutoring app. Obviously, you
+don't care about your dog's name." Um,
+but I can also see how someone did an
+email or like showed their boss that
+didn't do that. Someone could be upset
+by it, but like you've clearly made a
+very hard stance. So, like this is like
+it seems like you communicate across
+your team even what is a success
+criteria with a pretty good like herring
+test that someone else can run and be
+like, "Oh, does should this pass? Should
+this not pass?" Which I kind of really
+like about what you just said there.
+Yeah. It's less about like the dog's
+name or like that specific fact, but
+more like what type of information do we
+care about having in the long run,
+right? So, uh, a lot of times like the
+core insight here is that when people
+are buying or paying for tutoring, um,
+they need to feel like they're able to
+offload the cognitive workload of of
+managing somebody's learning, right?
+Like that's kind of the value that
+you're you're you're actually
+purchasing. And so if if you can't trust
+that the solution that you're purchasing
+is um like able to keep track of what
+your kid is doing in the long term and
+like how they're progressing and all
+that stuff and like maybe like
+remembers, oh you're on vacation this
+week and so let's not do lessons, but
+also like you know last year we had
+trouble in math like let's let's hammer
+in the algebra this year, right? Like
+stuff like that is kind of what you're
+paying for. And so if we'd obviously
+love to know what your dog's name is and
+and remember that, but like if we had to
+pick one, we have to optimize for one
+first.
+Um,
+and I'm not having the chat up, so if
+there's questions in there, let me know.
+Yeah, show off the diagrams that you I
+think those are sick.
+Well, I like also this like conversation
+about like how you decided to like
+basically like what made you decide to
+want to build this yourself versus like
+outsource it to one of the frameworks
+out there that are all quite popular and
+in broad use.
+Yeah. Like honestly like after doing a
+deep dive and this was a few months ago
+stuff has changed like I didn't really
+see products that were super focused on
+this like episodic temporal memory. It
+was a lot of stuff that was focused on
+like these knowledge graphs, which is
+great for for use cases that are like
+much more workflow driven where it's
+like I want the agent to do a certain
+thing but also know a bunch of stuff
+about doing the thing. Um, but like that
+just wasn't as important to us.
+Um, and so we basically decided like,
+hey, let's just build our own temporal
+agent memory because like the naive
+solution to this, which we thought was
+kind of naive, but um, turns out like
+required a lot of nuance, ended up being
+really good. Um, and so because we
+didn't care as much about like knowing
+what was happening exactly, you know, a
+year ago and like this the exact
+specifics of that, we ended up building
+what we call decaying resolution memory.
+Um, which is like kind of exactly what
+it sounds like. We basically take all of
+the ground truth of what has happened
+and it's this diagram is actually a
+little bit out of date right now. Um, we
+don't take the actual messages, we do
+summaries of the direct interactions. So
+like after one um one like run of the
+agent
+it's uh
+someone question
+uh Jerry mute that person.
+How you doing?
+I think he's on the phone or something.
+All right, Jerry is now muted. Jerry,
+come off mute if you have a question.
+Cool.
+um we we take all of the the direct
+summaries of um kind of what we call
+like interactions, but there doesn't
+actually have to be a human on the other
+side of the interactions. Like our agent
+can wake up and not be talking to you.
+It can just be doing stuff behind the
+scenes. Um we take a summary of all of
+those things and that's like our ground
+truth of what happened, but like the
+agent might be waking up 10 or 20 times
+every day depending on like the
+relationship. And so that's like way too
+much to just throw into a, you know, the
+front of your prompt and do context
+engineering that way. And so we have
+this like memory system that as memories
+get older, it clumps them into like
+lower resolution summarized chunks,
+right? And so we're like a year ago, um,
+you'll have monthly chunks of like,
+okay, last June we were doing this,
+right? and kind of this is all the
+notable stuff about last June which
+isn't going to be that big right it's
+like we're going to it's very lossy but
+our hypothesis is that like most of the
+stuff from last June is like not that
+important to remember you know but then
+as you get closer to now like for this
+week you have much more specific
+granular data about like I think right
+now we do um I can look at this in a
+minute but I think right now we do um
+like every for the for today we store
+the direct interactions and that gets
+fed into the model. But then for uh
+like the last week's worth of days um we
+have daily summaries and then for like
+the last n weeks we have weekly
+summaries and the last forever we have
+monthly summaries for the rest of it.
+And so what that becomes is like this
+kind of chunked up pretty like
+compressed context window of what kind
+of is like the the background of this
+agent's memory. And the nice part is
+that this scales sublinearly, right?
+Like that's the most important piece is
+that as as you have more interactions
+and more and more time with this agent,
+uh your number of tokens to keep the
+memory like uh up to date is not a
+linear scaling anymore. Um and there's
+bunch of chats in here. Um no, this code
+is not open source, but I'm happy to to
+share snippets of people if if you know
+they would like that. Um
+Josh,
+would you not summarize
+Go ahead.
+Again.
+No, go ahead.
+Uh Josh, we we we don't summarize um by
+topic. This is specifically for the
+agents memory. And I'll go into a bit
+more about like the how we store topic
+stuff later is like we make heavy heavy
+use of stateful tooling which is again
+kind of like a reversed like spun around
+version of rag. Right.
+This was so cool. Right. You're using
+the tools themselves to offload some of
+the context management and they have
+their own kind of stateful memory like
+like isolated to the context of each
+agent instance that is might be using
+those tools. Right.
+Yeah. So to me this this was like
+obvious. I didn't know this is like not
+a thing that people were doing a lot of
+yet. But it's like it's very obvious
+that like I don't remember all of the
+emails in my inbox. That's why I have an
+inbox, right? Like there there are tasks
+like this that I just am not able to do.
+I can't compute those in my head, you
+know, and so I know that like my
+workflow for this is check my inbox,
+look at what's in my inbox and whatever.
+And so we we distinctly don't actually
+include that data for like inboxes, SMS,
+we don't really do specific stuff in
+this memory summarizations because we
+don't want them there, right? We want
+the memory summarizations to only be
+about like what's happening during the
+tutoring relationship, where's the
+student and their progress, all that
+stuff, right?
+um
+out of the model design.
+Yeah.
+Uh with with long-term versus with
+variable just on this chart um is with
+variable that's the DRM the decaying
+resolution where it just gets more and
+more summarizy over time.
+Mhm.
+Okay. And what is with long-term? Is
+there a is that like an in between
+diagram that's actually not in here?
+Well, with long-term, it's just like if
+you make big summaries of what's
+happening, but it's still just summaries
+every n like every unit of time. Like
+maybe you do weekly summaries as your
+long-term memory, right? Because then
+you can say, "Hold on, we got a
+short-term memory, which is here, and
+then weekly memory, which is here, but
+it still scales linear linearly with
+weeks." Um, which is just like better
+than just having short-term, but it's
+not quite as good.
+Um, I see a head up from Steve
+insight before sleep goes on. I think
+the real insight. Can you scroll up
+here, Brian?
+The real the real problem here is I
+think a this is like when first people
+are first introduce like merge sort for
+the first time like oh [ __ ] that works
+and you keep sorting in a small bit. It
+actually works really well and it's
+really elegant and it feels really
+intuitive the first time you see it and
+the first time you write it. Um, but I
+think what you're probably running into
+here is for the first time like people
+are like, "How do I get this thing to
+remember everything I've done over the
+last two years?" And the answer is you
+don't.
+That's the thing. The trick is you
+don't. And once you reframe that problem
+and say, "How do I get to remember the
+most important things?"
+Now you have a separate task which is
+how do I make good monthly summaries
+which is a separate LM problem that you
+constrain and say are my monthly
+summaries good? And you can build an
+eval
+and that will be use case specific too.
+Um, exactly like you can you can choose
+what you want to happen and what you
+want to be in a summaries. Um, and but
+monthly summaries for monthly summaries
+for a tutoring bot is going to be very
+different than monthly summaries for
+chat GPT than is going to be different
+for every other use case. And so you can
+eval this and you can test it and you
+can stub it out and you can build a
+product around it and you can look at it
+in isolation which makes it easy to kind
+of build these different this this is
+the engineering part. How about even
+how about milestone? How about
+milestones summaries?
+It's all the same.
+What do you mean by that?
+Uh I I think the whole concept here is
+like you you understand your problem
+definition and once you understand your
+problem definition, you then have to go
+and scope it out accordingly. So in this
+case in the tutorbot case, I don't care
+about details like the dog's name. I
+care about seeing the academic progress.
+So what I want to make sure is actual as
+I funnel down from actual messages to
+daily summaries to weekly summaries to
+monthly summaries. I basically am
+expecting a loss of information in each
+of these steps. It's like a funnel of
+information being lost. That's by design
+a good thing. That's what I want. But I
+want
+you want smaller context. You want
+tighter, more focused context.
+How do I question in zoom?
+I haven't used Zoom much. Uh why are we
+focusing why are you focusing so much on
+time rather than just token size?
+Well, that's the context window that
+that seems to work well for Brian's use
+case, I'm guessing. But that's the
+point. You can decide as a developer
+what you want to go use for your thing.
+So you might say that hey for me token
+window size matters but semantically
+what I suspect is for many use cases
+time is a good orientation because what
+I'm doing a month ago is probably very
+different than what I'm doing today.
+It's very very unlikely for it to be
+continuous. But what I'm doing today,
+like when I'm doing a cloud code task,
+every single cloud code session is its
+own session pretty much. Very rarely do
+I resume a new session. But whenever I'm
+doing that, it doesn't matter how big
+that context is. That is all
+semantically relevant. And I might still
+Claude code does something called
+compacting the context window, which is
+very relevant. But it's the same thing.
+They realize that the context for them
+now is getting too big. Let's build a
+smaller subset of it that we can
+actually pass in and maintain. But then
+we go into cloud code rules. If you
+scroll up again, Brian, sorry, can you
+scroll up? Yeah. Then we go to cloud
+code oh into that diagram. Then we go
+into cloud code rules. And cloud code
+rules kind of behave like these monthly
+summaries which are being injected in
+every prompt that are almost like static
+constants. Um, and I say static
+constants because they're not changing
+very often, but they're being injected
+in and then the model is kind of
+understanding that. And this part is the
+part that is growing ephemerably as I go
+on. Okay.
+And this is like what the model
+compacted and put on.
+Stephen,
+hold on. Let's just I we have a ton of
+questions piling up. I I want to let
+Brian finish his walkthrough of the blog
+post and then we'll do all the questions
+because otherwise I don't think we're
+going to finish.
+That's a good point.
+Uh, sorry Brian. I'm gonna I'm gonna
+mute myself too.
+All good. Um I think the really
+important here someone asked about
+context or about token count is that not
+only does this method scale sublinearly,
+it actually like tapers off. It's like
+not quite asic, but it's like pretty
+close. Um and so like even if you're
+doing if we're if we're working with a
+family for five years, you're still only
+at a max of like maybe call it 60
+summaries, right?
+um maybe maybe a little bit like 65,
+right? And so each summary is like a
+like maybe a hundred words. That's like
+still not that much tokens. And so our
+at least our our bet is like the context
+windows that are available with these
+models will scale faster than our memory
+will require, right? Um
+um so yes, all of that memory is being
+put in the prompt. Um but it's because
+it's lossy. It's like it's not all of
+the information, right? It's like it's
+only the most important stuff from the
+past that's being put in. Um,
+the other thing I want to harp on
+Yeah.
+No, go ahead, Brian, please.
+The other thing I want to harp on is uh
+how like what we store in memory and how
+our to use of tools actually changes
+this where like like the email inbox
+stuff like Orin which is our our tutor's
+name has an email inbox and and that
+email inbox is isolated based on uh kind
+of every like customer unit which is
+like a family for us. And so when he's
+querying his email inbox, we only show
+him the stuff that would be like
+isolated to this family, right? And what
+that means is that we now don't have to
+store all of that information in memory
+because whenever he wants to look at his
+email inbox, he can just go look at his
+email inbox, right? And we do the same
+thing for email. We do it for SMS. He
+has a calendar that he can use. like all
+these very basic like just knowledge
+work tools that all of us use um to
+offload our own memory onto these like
+software systems we also can give to
+agents to basically give them the same
+abilities. Um
+let me let me describe that really
+quickly just so I I articulate exactly
+what I think you're saying. Typically
+when people do like querying a tool
+that's like a tool call or like a
+structured output kind of concept that
+people are doing and usually they'll
+have the model output like the user ID
+of the person they want a structured
+output. You're saying the only tool that
+you're giving the model is query search
+the inbox search the inbox then has an
+implicit ID attached to it
+for that user. So the model doesn't have
+to think it doesn't have to think about
+the idea of user permanent users at all.
+there is only one user from the
+perspective of the model and is that
+what you're saying?
+Well, that's not entirely true. Um there
+there's only one family from the
+perspective of the model, but when you
+search the inbox, he also has a contact
+book that he can use, but that contact
+book like there's an implicit idea of
+like every Orin has
+family's contact. It's it's that
+family's contact.
+It might have like the mom and the dad
+in the contact book, right? and it will
+have to give one of those ids as part of
+the tool call. But the the model itself
+is like sandboxed into only being able
+to operate within the scope of this one
+family. Right.
+Yeah. I see that mistake a lot in a lot
+of prompts when I see them is like
+people are asking it to load some
+database ID and they're literally having
+the model regurgitate the database ID
+from the prompt or something that they
+injected in. I'm like why even do that
+work? just let the model pretend like it
+doesn't have to think about that and let
+just like pass that along to the tool
+manually
+rather than having to go do that work on
+in the model side because it it's more
+complexity on the model side
+I do still have that where it's like I
+want to go check my email but from this
+email address right which is like the
+dad's email right or the mom's email but
+there's there's the the scope of valid
+options is much much smaller than if you
+were to give it access to the entire
+database right and there's also like
+because our customers have direct access
+to the to the agent, there's huge
+security concerns
+where like
+I we we cannot like we cannot put in
+context information about other
+families, right? if for your agent that
+you're working with like you just can't
+do it. What if it leaks something just
+like a zero you have a zero tolerance of
+risk for that because there's also a lot
+of kid information in there
+and that's
+yeah so there's like we have to like
+there's fura stuff like there's there's
+just structurally we cannot have any any
+leaking risk here and with this there is
+no leaking risk right
+yeah because the tool itself is
+inherently tied only to that ID that you
+have hardcoded in to your system
+pretty much yeah
+do you want to see before we answer the
+questions is I'd love to see one of your
+prompts
+Can you share that with us?
+Yes, I can share prompts. I can share
+codes.
+I'm not going to share evals, but I can
+share everything else.
+I Yeah, I actually I understand that
+sentiment. A lot of companies that I've
+talked to share that same sentiment. The
+secret sauce is the evals
+and the prompts and everything else is
+is like, "Yeah, sure. You can take the
+prompt. We'll have a better prompt like
+two months from now. It's fine." Uh,
+I can even share like how we made the
+evals, but I'm not going to share the
+evals.
+Yeah.
+Um,
+let's take a look at some of the
+prompts. I'd love to see them.
+Yeah. So, I I I do think it's worthwhile
+also briefly going over the productivity
+piece just people understand like why
+these things are running without human
+input,
+right? Um, like basically we let the LLM
+set their own wake schedules and so Orin
+can wake up at midnight while you're
+sleeping and do something if he want if
+he wants to, which might be creepy, but
+like it's possible, right? And so what
+happens is that like when he wakes up,
+it's not just in response to something
+that something that the user has done.
+He can wake up and then like text you a
+reminder, right? Um, and I can show uh I
+just I just ran this locally and I can I
+can show kind of another one in a minute
+how how it works. But this is like one
+one trace of running the actual what we
+call entity which is like a deployed
+version of orin for one family.
+Um,
+and so what we do is like before
+anything runs we make sure that all the
+summaries are updated again. In this
+case it was all it was all done. And
+then this is like one of the prompts
+that would be piped into these models.
+And so we basically like okay, first
+thing we tell here's your memory
+context. Uh and we include the the the
+date and time. Um and then this actually
+is a bit out of order, but we give it
+all of the tools with descriptions of
+what it can do more so than just the the
+schema in um like in in the structured
+uh outputs kind of tool schema.
+And this is again why structured outputs
+is part of context engineering, right?
+is and I've seen a lot of people do this
+where you put the scheme in at the end
+but then you also put the descriptions
+in the system message.
+It's more it's also just because like we
+we care about um being very like we want
+him to be very human in when and how he
+uses these tools, right? Because if if
+we frame the tool as like here's your
+email inbox, he has many examples in
+sample of the model training of when and
+how to like use a email inbox, right?
+Um, and so like the framing of the tool
+matters a lot. Um, so yeah, we have a
+lot of different tools that you can use
+here. Um, but then like we have a we
+basically have a big prompt that's just
+like here is um here is like your job
+manual. This is very high level like
+what you want to be doing as a tutor
+like you know what you're supposed to
+like what what does healthy look like in
+engagement? What's a healthy customer
+look like? All that stuff. a bunch of
+like not really if then instructions but
+just general stuff. Um, and I guess this
+one actually didn't have any memory
+because I ran it fresh. Um, but what
+happens here is it goes through and let
+me condense this input out. So it goes
+through and um now starts to call some
+tools and we basically do a while loop
+where it's like it calls tools until it
+calls the sleep tool, you know. Um, so
+like it's going in here and it's saying
+um tool is this.
+It needs to
+Yeah. So it needs to like check the
+email threads. So it's checking its
+inbox right now. And then we we come
+back and at the end of all this we
+return back the JSON of of the email
+API, right? U we don't really do a lot
+of like augmentation in this part of the
+rag. We just kind of get it back like
+JSON responses and that works pretty
+well. Um, and so it's like, cool, I've
+called the email tool. I got my response
+back. Cool. I can see there's emails
+here. Let me open the test email, right?
+To see if there's a student. Um, it
+calls that tool. We append the content
+of that email to the prompt. And then it
+says, great. Okay, let's open the second
+thread, whatever. This uh for this for
+this version of Orurin that we're
+looking at right now, there's like
+pretty much nothing in the stateful
+tools except for like one or two test
+emails, which is why it's like, you
+know, kind of just like scrambling to
+figure out what to do.
+Um, so it keeps opening up email threads
+and then it's checking its calendar,
+right? Looking for upcoming lessons
+within the next 48 hours. Um, of which
+there there are none, right? And so, um,
+all emails are old, no actual messages,
+whatever. And then it basically decides
+to, uh, go to sleep. And it has just
+like a tool it can call. It's just go to
+sleep. And it's going to set a time of
+like where when it wants to sleep until.
+And the important part is like none of
+this happened in response to a user
+input. We do have certain wake events
+that come in and and all that stuff, but
+like none of it happened in response to
+user input. And then we take all of
+those messages at of what happened
+during this conversation. And uh we do
+what we call enshrine them, which is
+just like summarize them and store them
+in the longer term memory. And so after
+this one run ran um it goes through this
+tutoring step, right? which is like it
+takes in or sorry this summarizing step
+which is like it takes in all of the
+messages from this uh this history
+including all of the data including all
+that stuff. Um
+and then we basically ask it to uh
+summarize what that would look like and
+somewhere in here oh here we go wait
+somewhere in here there is a prompt
+about how to summarize stuff but if it's
+not in here I can just show you it in
+the code. Um
+yeah, let's see.
+Code is code is always a lot easier.
+Yeah. So like we we have a lot of
+examples about uh how to summarize
+different types of uh different types of
+summaries like like direct interactions,
+daily summaries, whatever. Um, so for
+for summarizing this direct interaction
+of like what happened just now as you
+did this, we care about like I don't
+know what what mediums did you interact
+with, who did you talk to, like what did
+you do? Um, that kind of stuff.
+And I also find
+way a lot of I should pause a lot of
+people over here don't do the stupid
+thing. Do the DED thing. Don't
+do the DED thing.
+That's good. Anyway, I'll
+do the dead thing.
+And then we give examples of just like
+what a good summary for a certain
+interaction like could look like, right?
+Just, hey, fot prompt this, you know,
+here's here's what it might look like.
+Um,
+and then we've also like
+I want to note one more thing about your
+fot prompt really fast. Can you go up?
+The one thing I noticed about the fot
+prompt is you're not actually telling it
+the input. You're only describing
+outputs, which is good because you're
+basically helping understand the
+structure of what kinds what is a good
+summary without actually telling it
+here's how you summarize this piece of
+content exactly.
+You're giving it like clues about
+examples, not really prescribing that
+this is a summary for this example.
+That's a great few shot example. I I you
+people on the call know that I harp on
+fuchsia all the time. I think it's ass.
+It's because people do it wrong. This is
+a great way to do fa.
+Love it. Love it. And we do this for all
+the different like uh like types of of
+how long how long we want to chunk up.
+But also this has been surprisingly
+helpful just adding this to every like
+like almost waterfall of memory where
+it's like
+when you're summarizing the day what
+should be remembered for the rest of the
+week, month and year like include all
+that stuff too. And like we use 03 to do
+all of our summaries as well.
+It's pretty good at that. like it it can
+kind of just like figure it out and be
+like, "Oh, that's an important thing
+that I should include in today's summary
+because it should be remembered for a
+lot longer than just today, right?" And
+that ends up waterfalling up into like
+becoming like basically getting put into
+um like some of these buckets and not
+just this bucket.
+And the idea here is in the daily
+summary, if you highlight that this is a
+good weekly summary note, then when the
+weekly summary prompt runs, it's like,
+"Oh,
+yeah, it has that
+part of the daily summary. this is a
+good weekly summary. I should probably
+take care of this. And if I see too
+many, I'll pick the best ones out of all
+of them.
+And that's kind of the idea.
+And and and you'll see in the future
+stuff like our examples get more and
+more broad kind of like how we would
+want the summaries to get where it's
+like, you know, you're not really saying
+much about like specifically at four
+o'clock we did this thing. It's just
+like, okay, this is the daily summary.
+So today we did a session here like the
+parent reached out in this way and kind
+of we set up set up a plan, right? And
+then weekly it gets all the daily
+summaries of that week. Um and so it's
+like even more broad, right? Like more
+focus on student progress, more focus on
+like the pedagogy of all this, right?
+And then monthly you get you get very
+broad.
+Yes,
+your examples are listed in different
+formats for different parts of the
+prompts. There's a part where you do
+example one, example two, and then
+another part of it where you do
+um
+ah true
+just calling it out. Please go
+there's only one for the longer ones
+there's only one example rather than
+multiple examples
+it looks like right
+these are examples
+I just
+but then
+I just changed it from from this
+yeah uh but none of these are run
+synchronously so it only ever will see
+one or the other and like you said it's
+a staple reducer so it's like
+you know
+I'm sure I could ease out to figure out
+which one's better but honestly just
+haven't
+and then like we have a more broad like
+prompt for everything which is like cool
+here's a who you are making memory
+summary whatever
+um we also like we want uh we we allow
+for like long like longer summaries when
+it gets to more like weekly and monthly
+stuff um and we also we we plug in the
+existing condensed like like summarized
+memory we call this whole thing just
+like the memory context like all of the
+buckets right we plug in the existing
+memory memory context in the memory
+summarization prompts which has actually
+been really important, right? Like it we
+found that if you didn't give the
+summarization prompt all of the memory
+from before of what's happened in the
+entire history of this like this or
+being deployed, uh it it would miss
+things that were previously identified
+as important,
+right? We
+we saw similar things when we were
+building the AI content pipeline where
+we had like there are parts of it where
+giving it the full transcript was useful
+but at some point we stopped giving it
+the full transcript and gave it
+summaries that we wanted to give away
+and it's the same idea but some steps we
+did need both the summary and the
+transcript and other steps we only
+needed to just
+like for example here maybe you have a
+kid who has a history of like some kind
+of executive function problem and that's
+well documented within in the existing
+memory that's happened before. But then
+if you're summarizing what happened
+today, that might not have come out to
+play today, which is actually a notable
+thing that you should summarize, right?
+Like you should include the fact that
+there were no executive function
+problems today in today's summary
+because that's notable bas based on the
+past summaries. And so if you if you
+don't have all the past context, then it
+you know, even your summarization it
+kind of goes goes is off. Um,
+and then yeah, there's not a lot else to
+the summarization part here. Um,
+basically we just like fill up the
+string.
+I just want to say by the way, thank you
+for sticking with the vibe of today.
+Like I know Dexter and I usually try and
+actively write code, but uh today I know
+we had seen Brian's article and we
+thought it was much more useful to see
+his code rather than like have us write
+code like we normally do. So I just want
+to say firstly big thanks to Brian for
+actually being bold enough to share the
+code live. Not a lot of people are
+willing to do that, especially for a
+startup that he's building out there.
+This is a recording so people have
+access to these for a while. And I'm
+sure Bri is going to make his props
+better because like you said, emails are
+the things he can't share.
+Um um
+and eval with this type of agent are
+like especially hard.
+I feel pretty confident in our
+deliverable is that
+um we should talk about that. Um but
+with that, I I know we're 10 minutes
+over, we're 11 minutes over. I want to
+take the rest of the time to really help
+answer questions that people might have
+uh in the chat. I know people wrote a
+lot of questions in the middle and we
+kind of glossed over some of them.
+Um but if people want to go back and ask
+some questions again or raise your hand
+really fast. Uh we'll let you come off
+and then we'll we'd love to have you on
+to do a quick little
+uh Q&A session for next 15 or 20 minutes
+as long as Brian's willing to stay on
+with us.
+I'm good.
+Cool. I don't see how I can raise a my
+hand here.
+It's at the bottom in Zoom. There's a
+thing called raise hand. There you go.
+Uh but Radu, you since you spoke up,
+come on up.
+I'm sorry. Yeah. So, question to
+uh Dexter. So, Dexter, your diagram, I
+showed um context, engineering context,
+and uh I I was keen to see if there is
+an intent.
+uh part of that um because as you can
+imagine especially in SLMs
+you don't want um uh any kind of
+question prompts to do to be sent to the
+SLM but uh the if it's MCP tools it
+knows it can do XYZ
+and also um it could uh say that the
+tool description
+uh matches or does not match the user
+question intent. So capturing
+inferring that um how how important that
+is.
+You're talking about kind of like
+capturing the user's intent to in terms
+of like protection and guard rails.
+uh not just authorization
+um but also um
+think about that um the user
+uh the entire user base asked um all the
+questions are 75%
+are uh for this kind of intent category
+and the rest is that so you you get a
+feel of what the the end user community
+is is how is it using the SLM?
+And of course, yes, uh that once this
+intent uh um u I would say list or
+taxonomy is
+um
+more so fleshed out than it could be as
+a base become as a base for
+authorization as well.
+Yeah. Yeah, I think that's probably
+slightly off topic for the context
+engineering thing. I understand the
+value of it. Maybe maybe it's another
+episode we could tackle.
+What do you think?
+I agree.
+Yeah, go ahead,
+John.
+Yeah. So, I I think I think I know the
+obvious answer to this, but I just want
+to validate my thinking. Um, if there's
+a memory from three months ago that it
+realizes from that memory dump is
+important
+or irrelevant is probably a better
+answer. it's relevant, but it needs more
+detail about that memory that is not uh
+that is not there.
+Do you just do a tool call to whatever
+system is obvious from the memory to go
+get that information? Like is is the
+memory dump you're giving an indicator
+of where to get more details and then it
+does a tool call to get those details
+and then it processes that. Is it that
+simple?
+Do you want me to write the code real
+time? Let's do it.
+Not not function. I think I'm thinking
+of it more in terms of a line of
+thinking. We're doing this in a business
+context and like that's how we're
+architecting it is the way a human
+would, right? I'm not going to remember
+every single term of some enterprise
+deal we did six months ago, but I'm
+going to remember the name. I'm going to
+remember what this guy's talking about
+today is relevant to that deal and then
+I'm going to go look up our how we dealt
+with that one, right? Like is that the
+Brian?
+Brian, do you have like agentic
+retrieval tools for like drilling down
+into memory stuff, I guess, is the
+question to summarize it. I I I don't
+think that the paradigm of
+giving the agent tools to access its own
+memory is a very good paradigm because
+it pro to me it just smells that there
+are like you should just add tools that
+are act as surrogate memory that makes
+semantic sense about what you're trying
+to do. So for example it's like maybe
+you're in a business meeting and it
+needs to remember details about the
+business meeting. Cool. You shouldn't
+give it a tool to let it go access its
+own memory. You should build grain for
+your agent,
+right? Like you you should build a a
+meeting recorder for your agent that
+sits in the meetings and then summarizes
+that in a notepad for it that it can go
+query later. So like it's kind of the
+same thing when you think about it, but
+the framing for the agent actually makes
+a lot of difference where it's like the
+agents don't have a good intuition, at
+least in my experience, of what exactly
+memories I should go get and like how
+those interfaces should work and like
+there's a lot of insample data about
+that. But if you have a tool that's like
+here's your notepad, all of your meeting
+recordings get auto summarized in this
+notepad. It knows what to do. Like cool,
+let me go find the meeting that I had
+with this guy six months ago. only go
+like query you know the recording for
+that meeting and get the transcript or
+get the summary points
+what's the difference in that case of
+making clear that fathom or granola is a
+tool it can use or pipe drive is the
+sales CRM or those types of things like
+what is there a functional difference of
+why you wouldn't do it like that
+just accessing these third party tools
+yeah I mean if for us it doesn't doesn't
+quite work because we have to like build
+our own internal tools for it but yeah
+if you can just use Fathom like do that
+man like just have Fathom join all your
+your agents calls and then web hook that
+in to like store the data somewhere and
+then just tell it like hey we use Fathom
+like go get your Fathom stuff and like
+it will have insample data about what
+Fathom is and how to use it. Like
+we have our own little uh like version
+of like a Zoom client that we use.
+It just wants to use Zoom like it
+continuously tells users that it's just
+going to send it a Zoom link and like no
+it's not a Zoom link you know but like
+it's it's biased toward wanting to use
+the in sample tool. So if you can do
+that like just give them the example
+tools man.
+Got it. I think that's the part I need
+to dig into.
+How how how will it choose the right
+one? I I'll dig into that particular
+part.
+John, to highlight that point a little
+bit, we talked about this a little bit
+in our 12 factor agents episode. And I
+think this is the part that a lot of
+people think about which is like how do
+you define these concepts? But I think
+what you really want to say is there's a
+decision point that the LLM or some
+function is going to make that says
+instead of emitting the final result
+that I want. I wanted to request more
+information.
+So in this case, I have a really simple
+thing like extract a resume. I'm going
+to use a really really basic example so
+we can all go over it. It's going to go
+do this thing and like we have boundary
+ML over here and what I'll say is
+company startup
+or enterprise. I'll just say that
+there's a company type over here and I
+want to return what company type it has.
+Um, and I've just wrote the prompt if
+information about if information is
+missing, request more information before
+continuing,
+right? And when I go run this prompt,
+you'll see what I'm actually doing. I'm
+literally just telling the model like
+either dump out the resume
+or request more information. That's it.
+And I might even put into here like
+action resume uh extract
+complete. And I'm naming this very
+differently than the previous one. I'm
+naming it extract complete resume
+intuitively.
+And this thing is not complete. It
+doesn't have a start date. It doesn't
+have an end date. It doesn't have
+anything. And I'll make requests um a
+bunch of this. And I'll even put like a
+reason kind of thing in here. Why not?
+Reason string.
+And I'll say here's all the requests I
+have. And I should probably name this
+request.
+And when I go run this in theory, I
+don't know if this will do the right
+thing.
+It did the right thing.
+it was able to go through and decide
+that it doesn't have it doesn't have
+experience for the company name the full
+name associated with initial VBV is
+different from vivov gupta just go
+double check everything so now you can
+imagine what I would do in my python
+code is I can then opt into what I want
+to go into here so I can do something
+like
+and I think it it ends up being the same
+concept to what you're talking about
+from client import bh
+sorry import
+So when I get like a res is it going to
+be extract resume and I actually pass in
+like the string into here whatever the
+string ends up being this thing is going
+to be either request more information
+type or resume type. So now I have a
+choice of what to do
+if it's a client.types types
+import request more information if now I
+can basically go ahead and handle these
+requests in some way and that can be an
+agentic loop it can be something else it
+can be and now what I have is like
+initial resume
+uh state is going to be like a
+resume stir
+why I pass in a resume stir into this
+and this can just be like a state how do
+I do
+I mean,
+you're basically building a tool calling
+loop. I think this is kind of what John
+proposed is like, do I give it tools or
+structured outputs that it can give and
+like yes, your code can decide whatever
+you want to do with those outputs,
+whether it's just direct query from Zoom
+and stuff it back in the context window
+or you want to send a Slack message to
+somebody who can help or whatever it is.
+Is like the model's only going to just
+say, "Hey, I need more information about
+this stuff." You can decide how you
+handle that.
+And and the thing that decides whether
+you need more information or not is just
+the function. The fact that this
+function happens to use a model is an
+implementation detail of how I did this.
+You could write a different function
+that is not an LM. For example, you
+could write a simple function that's if
+the word bank statement is in there like
+a simple reax match, then I will always
+request information about the Chase bank
+account associated with this account.
+I will just require that. In fact, I'll
+tell the user if you haven't connected
+the plaid can't do this action. I won't
+even go to an LLM.
+But that's the whole point of thinking
+about everything as a function
+signature.
+Does that answer the question really
+well?
+Yeah. Yeah, that makes sense. I think
+we're on the right track with the
+pattern. Um, I appreciate it. Thank you.
+Uh, Derek,
+thanks. Took me a second to come off
+mute. Um, just a quick comment that's
+worked well for us is um, owl time. Uh,
+specifically the Allen algebra with
+temporal um, like time intervals. So if
+you have multiple agents working as a
+team uh you know with the turns in the
+conversation it can help to keep track
+of what happens in what sequence.
+Um so I know you've got a different
+notion of the roll up with time. Um I'd
+just be curious if you've thought about
+any of the temporal or if you've got
+agents working together. Um I appreciate
+what you said. I think it was not we use
+mentoring but you used uh the term
+tutoring. Uh so we've got like you know
+a whole thing with that. Uh but the
+larger the teams get that are working
+collaboratively
+uh we found it to be pretty complex.
+We've maxed out at about kind of 25 on
+one team to be able to manage that. So
+I'd be curious of any aspects about uh
+the temporal relationships you have.
+Thank you for Thank you for today. This
+has been really great.
+Could you repeat the question again?
+Sorry. Uh
+so you said owl time which is I believe
+the like ontology knowledge graphy like
+expressions of time right?
+Yeah specifically and in fact using that
+with BAML and Neo4j as as well but uh of
+ontology of temporal relationships with
+time there are 13 time intervals that
+are defined uh uh you know during
+etc. Uh yeah, so this has been we've
+integrated this over the last like six
+months uh to to for so everything kind
+of happens those ones at the bottom the
+relationships and their inverses is a
+clear way to look at it. Um so when you
+have multiple agents running together
+kind of in stasis and then coming back
+where they're active. uh with
+multi-threading. This is how we keep
+those async operations amongst a
+collaborative team
+uh all working together with different
+roles uh and instantiations of those
+threads because we don't just like
+instantiate one and run it. We run like
+the full context window uh typically um
+and have a whole onboarding process
+for for an agent. So I just was curious
+if you've incorporated anything. I
+became aware a few months ago of of what
+you were doing with these different
+grouped rollups. It was a nice nice
+thing or just take a different approach.
+Um but I' I'd be curious. Thank thanks
+again for your time.
+I haven't personally tried that
+approach. Uh it looks really
+interesting. I think um in general all
+these attempts that I see are always
+around like this idea of like somehow
+there's this loose structure of like
+what is a prompt and it's these really
+sequence of tokens and all these
+attempts are just attempts to like put
+into some structured format that is a
+little bit less loose than just like raw
+strings and that looks like another
+really interesting format like I would
+be really keen to hear more about your
+feedback as you've been doing this and
+like what learnings you had maybe in
+another episode Derek and it' be really
+especially
+if you're willing to share some of the
+code. I think that the idea of
+connecting it from knowledge graphs to
+entities and relationships over time is
+a problem that a lot of people are going
+to have long term.
+Oh god. Um, one thing I just want to tap
+into that was brought up a couple times
+and um, that Brian mentioned is this
+idea. It's actually in 12 factor agents
+is factor 13 is um, I think Brian
+mentioned something about like why why
+let me know if I'm paraphrasing this
+right um, but like the idea of like why
+wait for the agent to call a tool to get
+information it needs when like if you
+know the agent will always need that
+information or will always be useful
+just inject just fetch it yourself and
+inject it into the context like
+deterministically.
+Yes.
+Is that right?
+Yes.
+Yeah. This is why I'm like not always
+the biggest fan of of like letting the
+agent control what like memory is in
+context because
+all of the stuff that are in our like
+canonical memory should be in context
+all the time. It's important, right? If
+it shouldn't be in context all the time,
+it should probably be in a separate
+siloed state full tool is our that's
+kind of our philosophy around it where
+it's like it's like why do you think
+that should be only in there sometimes
+and like what about that information
+can't be stored in like a separate tool
+that makes like semantic sense.
+Nice. 100%.
+All right, we'll do one more question.
+Josh,
+hey, thanks. Hey, thanks um Brian. Um
+it's usually helpful. So, two questions.
+one um in the um in your blog you
+started with the hey we saw problem. So
+uh first question is that the after you
+implemented the this memory what did you
+see what behavior change did you see or
+benefit did you see and second question
+is that the um at the bottom now next
+steps you kind of highlight that the uh
+better like um more persistent temporal
+memory why did you select that as a next
+step as versus like slicing by different
+topics or whatever so I'm kind of
+curious about those two
+we kind of do with with topical things
+um Again, topical information should be
+in context some of the time. It's kind
+of our viewpoint. It's like it's useful
+for some things and not for others. And
+so, like we we've basically we're
+building an internal LMS right now for
+our agent to use which stores topical
+information about like the students
+progress and kind of the frontier of
+their knowledge, all that stuff, right?
+I mean,
+if you had like a a kind of like a tutor
+who was like maybe had a memory issue,
+like a human tutor that just couldn't
+remember stuff very well, like you'd
+want to give them all these tools to
+enable them to to be able to still tutor
+somebody effectively, right? And so we
+want the temporal side of like
+relationship management, which is
+honestly mostly for for like
+interactions with the family and not
+actually for the the tutoring quality
+itself. And then we're gonna we're
+building like tools around storing
+certain information about what the
+person knows. Um that like maybe you
+could use a graph to represent that in
+like a different a different context. Um
+but like the point is like silo out kind
+of what your memory should be. We care
+about the temporal part because we want
+it to be like a relationship that you
+have for months and years, but then also
+we care about things like uh like
+topical information, but we just store
+that somewhere else, right?
+Hopefully that answers the question.
+Got it. And the first question is what
+benefit did you see after you implement
+this?
+Well, we didn't really anything before
+this like this was our we started
+building this from scratch basically. Um
+but the biggest benefit is like for us
+parents actually feel like this thing is
+responsible and will like like it feels
+less like a tool and more like a service
+because it has this temporal memory. It
+can be proactive.
+um like it'll hit you up and be like,
+"Hey, do you want to do this stuff for
+your kid this month or like you know,
+you mentioned going on vacation, I'll
+I'll give you this week off, you know,
+stuff like that." Things that would have
+had to been built into like very
+specific workflows without temporal
+memory are now just they just happen,
+right?
+I think I think one of the similar ideas
+is uh like when when we first do like
+use like something like Google search or
+like any sort of new technology for the
+first time there's these wow factors
+that we look for that make it really
+amazing and Brian's technique that he
+applied here gave his parents the first
+wow factor in AI which is proactivity
+I think when everyone knows that you can
+go try and have it go do something the
+magic is when somebody texts you and
+says does the right thing happen it's
+like kind of like the email when we The
+fact that the email doesn't feel super
+automated. It feels somewhat human
+written.
+That's what makes AI feel good. And this
+temporal memory strategy
+did that for Brian in his use case for
+the constraints that he defined for the
+evals that he wrote. And it looks like
+they did a lot of work to make it work
+for their problem, but that required a
+deep understanding of their problem and
+their users to go give them that wow
+factor. For everyone else that's going
+into this, it's not to say that DRM is
+going to solve your problems.
+The point here is understand your
+problem. Understand that one wow moment
+that you really truly need for your
+business situation to work and figure
+out what data structures you need to
+solve that problem. These are all just
+fundamentally data structures and
+algorithms problems. We're going to have
+leak code. Leak code is not going away.
+Leak code is just about to get a whole
+lot [ __ ] harder. That's all that's
+gonna happen. Um,
+yeah. I think
+I think this like DRM productivity thing
+is probably going to hurt your business
+if you're not selling a service
+honestly. Like like if you're trying to
+sell a tool, I would stay away from
+that, right? Like the people who are
+using tools want like the kind of cursor
+feel where it's like it's not quite like
+I don't like think about like an
+individual that I'm working with, you
+know? like I'm I'm able to to mess with
+stuff and like just just do it at my
+speed, right? But if you're trying to
+sell this like full stack service,
+temporal memory is like super important
+for just continuity, right? Of like
+like just like the normal like PM [ __ ]
+Like
+if I have an EA for example, like that
+EA if it's an AI agent,
+it better not need to be reminded what
+the [ __ ] BAMO is every single week. Like
+that just doesn't work. and it should
+know the vision of what your company is
+doing every single week and like be able
+to like understand semantically what the
+notion is going on on top of my head and
+what's top of mind today and the best EA
+are the ones that proactively go do
+things so whoever builds that service is
+going to have to go build something like
+this whether it's CRM or some other data
+structure that ends up being even better
+or not but this is a pretty good start
+um
+the other warning I will give about
+proactive stuff just just real quick on
+the last
+is uh if you want to be proactive and
+you're giving the keys of like
+scheduling to the agent itself, you now
+have to work with time zones again. And
+that is a whole mode in itself because
+the models are not good at time zones
+and you have to do a lot of
+normalization and augmentation of your
+context windows to make it look nice and
+have and basically cater to the model
+about what like how they should output
+stuff.
+And would that I can write a whole
+article about that. with that.
+Don't try to solve time zones in a
+prompt, right?
+Yeah.
+Sorry. What did you say?
+I said with that, we're back to context
+engineering. It's all context
+engineering. Put the right tokens in,
+you get really good tokens out, but
+understand the problem. Put great tokens
+in.
+We're two minutes over. Um
+we
+This was awesome, y'all.
+We normally do.
+This is super fun.
+Uh yeah, thank you guys. Uh we'll send
+the recording like we normally do on
+Fridays. Expect to go see it. If you
+want to continue the conversation, join
+the Discord. Uh send us an email if you
+have any questions. Uh see you guys next
+week. Next week is going to be a lot
+more coding. I hope that we can do some
+of this context engineering tips and
+actually start writing some code next
+week. So we'll maybe we can do a part
+two where we actually do the coding from
+this week and actually real live code it
+from scratch. Thank you guys. It was a
+pleasure. Thank you Dexter. Thank you
+Brian for making time uh and everyone
+else that steps steps aside. See you
+guys next week.
+Luck. Catch y'all later.

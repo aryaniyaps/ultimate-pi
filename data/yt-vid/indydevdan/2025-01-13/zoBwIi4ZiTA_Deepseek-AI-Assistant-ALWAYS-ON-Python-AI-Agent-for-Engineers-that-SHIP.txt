@@ -1,0 +1,579 @@
+Ada list all
+users command executed successfully Dan
+let me know what's
+next fantastic Ada create a new user
+named Steve give him the admin role and
+then list all users that are admins
+command executed successfully Dan let me
+know what's
+next a show our config in verbose mode
+and then show files in the current
+directory command executed successfully
+Dan let me know what's next
+[Music]
+welcome back Engineers Andy Deb Dan here
+so we have something really really
+interesting here I have an always on
+personal AI assistant as you can see
+here I'm still talking and my personal
+AI assistant is still active this
+assistant is always on this is a massive
+step forward toward the always on
+compute system systems we talk about on
+the channel why is this important it's
+extremely valuable because it adds
+another dimension for you to get work
+done with compute if I stop talking here
+for just a moment we're going to see
+this transcript come
+through awesome so we can see we had
+that transcription come through it took
+1.12 seconds this is running locally on
+my M2 and you can see here we picked up
+on every piece of text welcome back
+Engineers Andy Dev Dan here so we have
+something really really interesting here
+blah blah blah blah blah you can see
+here that my personal a assistant did
+not do anything a did not do anything
+she did not get activated but I just
+literally just said a so now she's going
+to look for a command to run on this
+incoming transcription that will
+complete and execute when I stop talking
+so you know this is known as the
+activation keyword for your personal AI
+assistant now I need to give a a command
+to run um if we go ahead and you know
+just keep talking here so she doesn't
+execute anything if we look at our
+template. py file we have a whole list
+of commands that you can execute let's
+go ahead and run one here Ada generate a
+report for our tasks
+table command executed successfully Dan
+let me know what's
+next as you can see here that executed
+perfectly we have this you know really
+long transcription ad was able to take
+that you know powered by Deep seek V3
+and generate the proper command for us
+right here we took that command and we
+executed it using our you know entire
+Suite of commands here and we got a
+awesome output here the technology has
+lined up for us to have an always on
+personal AI assistant that's what we're
+going to break down in this video I'm
+going to walk through a working version
+of a useful personal AI assistant for
+your engineering work that's built on
+incredible open source Tech as well as
+the insane coste effective deep seek V3
+language model so I'm going to clear and
+just boot a back up there's no problem
+having her just on listening in the
+background as long as we don't say our
+activation keyword she won't look for
+commands she won't try to execute
+anything there are three and a half and
+really three Essential Elements to any
+personal AI assistant let's go ahead and
+focus in here if I open up our
+configuration file we can see all these
+items really clearly so there are three
+elements to the personal AI assistant
+speech to text language model and we
+have the text to speech there's a
+simplified version of this that I like
+to use we have the ears the brain and
+the voice just by looking at our
+configuration file here you can see all
+the tooling we're using for our personal
+AI assistant we have our assistant name
+we have our human companion name this is
+of course you or I and then we have
+those three key components right ears
+brain voice and then the actual voice
+configuration we're using a very very
+powerful open source Library I'm really
+excited to share with you here there are
+tons of tools in the open source
+ecosystem every once in a while a
+foundational piece of generative AI
+technology comes out AER is that tool
+for the AI coding ecosystem and realtime
+speech text is a key piece for the
+personal AI assistant ecosystem I'm
+going to talk about this more in this
+video so as the ears we have a realtime
+speech to text tooling as the brain we
+have the Deep seek V3 language model
+this is an absolutely incredible model
+for an always on AI assistant why is
+that it's because as you know this model
+is insanely powerful while being
+extremely cheap we then of course have
+the voice um I like to use 11 laps for
+this now sponsored not an affiliate or
+anything like that but they are my
+favorite and they have the classic voice
+that I like to use for Ada you can then
+of course select the specific voice and
+that's our configuration we in this code
+base I'll be sharing with you here we
+have two assistants we have the typer
+assistant which wraps our typer AI agent
+functionality we'll double click into
+that in just a second and then we have a
+base assistant where where we're just
+running speech to text a language model
+and then the language model is simply
+responding the great part about the
+tooling here is that when you combine
+them with a local llm provider like AMA
+we can now use 100% local private
+personal AI assistants that run right on
+your hardware for instance you can do
+something like this brain to AMA colon
+54 Microsoft just recently released the
+official 54 version we can set that
+there and then we can also update the
+voice to just local with this
+configuration this AI assistant runs
+100% locally obviously the voices and
+the Brain will take a performance hit
+there are things you just cannot do with
+these small slms they are getting there
+as we saw in our previous video when
+you're benchmarking these local models
+we can see that the performance is
+constantly increasing while the size of
+the models are coming down lumo 4 is
+like you're going to shake things up
+quite a bit like subscribe comment to
+stay plugged into that I'm really
+excited for the next wave of local
+models coming out I have the M4 Max over
+here in the corner that uh we're going
+to be testing and benchmarking local and
+Cloud models on in the future with this
+configuration we can now run a version
+of a personal AI assistant fully local
+right now let's run our powerful version
+with deeps V3 and 11 Labs these are the
+three essential elements of the personal
+AI assistant before we dig into the
+realtime speech DET text functionality
+where you can have your assistant always
+on always listening awaiting to hear
+their activation keyword let's look at
+this brand new scratch Pad
+pattern so this is something that's
+really important that I think has been
+missing from the personal AI assistant
+it's been hard for me to really get True
+Value out of the personal AI assistant
+without this so every time our AI
+assistant ran it was generating output
+and attaching it to the scratch Pad this
+is a super important pattern because it
+gives your personal AI assistant active
+memory this is why I was saying three
+and a half Essential Elements the active
+memory lets your personal AI assistant
+be updated with information that it
+gives but also really importantly
+information that you give this is key
+for engineering tasks because we're
+often learning discovering and tweaking
+our mental model of the problem or
+feature we're building as we go we're
+literally updating our active memory as
+we solve the problem I've found that in
+order to make personal AI assistance
+useful we need a similar structure for a
+personal AI assistant this scratch Pad
+serves that purpose very well there are
+many permutations of this pattern but
+this gives us the parto 80% so let's
+look at a concrete example of how this
+works Ada list users that are
+viewers command executed successfully
+Dan let me know what's next all right so
+if I pause a here if I open this up and
+let's edit this scratch Pad right so a
+ran a command she saw our request here's
+our run command and then here's the
+output so this scratch Pad is fully
+updatable right so if I just come in
+here and I take a couple of these IDs
+and I create something new update user
+block and I'm going to have another
+block here create user
+block and then we'll have a delete user
+block okay in the create user block I'm
+going to say this
+Alex viewer Mary editor and then Steve
+admin and then for the delete user block
+all I'm going to do here is give a list
+of a couple of these IDs right so paste
+a couple of these user IDs in so that's
+great we now have this you know updated
+active memory okay our personal a
+assistant Ada can see this entire
+scratch Pad she can work with everything
+here she can also see all of her
+commands here right so we have a couple
+key commands here you know list users
+create user delete user let's go ahead
+give a reference to this blog I hope you
+can see where this is going I'm going to
+give her a reference to this block and
+then I just want her to execute and do
+all the work that we would normally do
+much faster and all we're doing is kind
+of thinking at a high level we're
+updating our active memory our scratch
+pad and then letting our always on
+personal AI assistant do the work for us
+so I'll kick her off right here Ada go
+ahead and look at the update user block
+and run the respective create user and
+delete user commands
+command executed Dan let me know what's
+next okay so check this out so this is
+really cool right she created the
+command she you know created this giant
+execution statement and we got a couple
+of outputs here our created commands and
+then we also have our delete commands
+that failed so something went wrong here
+and I think it's because let me look at
+exactly how this delete user Works user
+ID might just be a single ID so yeah
+that looks right so what I'm going to do
+is I'm just going to ask a to to correct
+this for us right so I'll say a rerun
+the delete commands but only use the
+actual um user ID so not the user undor
+prefix just use the numbers for the
+deletion command executed successfully
+Dan let me know what's next okay so
+really cool stuff here right we're
+talking natural language we're talking
+to our personal AI assistant and so I
+want to be able to say her name so I'm
+going to shut it down here so we're
+talking to our personal AI assistant Ada
+and she is taking this let me go ahead
+and go into formatted mode Let's Go full
+screen she's taking the entire scratch
+pad that we have set up here and she has
+access to all of it right so this is a
+dynamic variable inside of our prompt
+which we can take a look at in a second
+you know a can see everything in this
+prompt for her brain she's running the
+powerful deep seek version 3 so she's
+able to really reason about this and
+take our natural language request and
+really work through it right it also
+helps that she's seeing my entire stream
+of thought as I'm you know talking to
+you here the key is at the ending here
+right where we just say you know rerun
+the delete commands only use the actual
+ID do not use the user prefix right so
+she picked up on that rewrote all the
+commands and then executed them right
+this is really powerful this is
+something that has been stopping me from
+using personal AI assistance and I think
+this pattern is finally going to enable
+you know a more fluid experience for
+myself and for you which is why I'm
+sharing it with you here if this makes
+sense if you can see where this is going
+if you can see the value of having an
+active memory and a personal AI
+assistant that can execute commands on
+your behalf hit the luck hit the sub
+follow the journey personal AI
+assistants AI coding AI agents this is
+what we're focused on on the channel our
+North Star is to build living software
+software that works for us while we
+sleep a big milestone and a big pattern
+toward that we're working toward is
+having these always on compute systems
+and with some of the key technology that
+we're breaking into right now if we open
+up that config file once again we are
+moving closer to this goal every single
+day with every single video release you
+can see here ears brain voice we turn
+this on and it's always on the real key
+is that you know it costs nothing to
+have our ears always on right and
+whenever we want to we can say our
+activation keyword to activate our brain
+so so I hope you can see where this is
+all going right the scratchpad ACT
+memory pattern is going to be really
+important for rolling out useful
+personal AI assistance we ran that
+command she generated all of the output
+for us part of the command worked part
+of it didn't and then we you know asked
+her again to correct it to make some
+modifications to it I think the scratch
+Pad is going to be a really important
+powerful pattern for the personal AI
+assistant so before we talk about the
+actual prompt that's feeling it and you
+can see it right here right before we
+talk about this there's another key
+piece of this that I I want to dig into
+for a moment here the real time speech
+to text
+libraries there are tons of Open Source
+tools released you know every single day
+most of them aren't super important most
+of them don't move the needle but this
+is a library that absolutely changes the
+game for personal AI assistants that are
+always on this is a library called real
+time St realtime speech to text massive
+shout out to the author this is
+incredible technology the key here is
+that you can just leave this on running
+all the time it has several models that
+you can work with if we search
+tiny this is the one I'm using this is
+what you can use for maximum speed the
+trade-off here is that the
+transcriptions are not going to be as
+accurate you can scale this up as much
+as you want you can use basan small uh
+and medium if we hop back over to our
+assistant here open up the typer Main
+typers assistant and search for tiny Ian
+you can see I'm playing with these model
+settings here if we boost this up to a
+small Ian model or even a larger right
+we can go super big we can use large V3
+and if we boot adaa up again and if we
+just you know talk a little bit uh get
+some content here for Ada to transcribe
+for a personal AI assistant to
+transcribe it's coming in the ears which
+is powered by real-time speech of text
+and then if we pause for a moment the
+transcription process will actually kick
+off and notice how much slower this is
+than our previous execution
+okay so where was that you can see here
+the large V3 running on my device
+locally took 18 seconds okay the
+transcription was I think perfect right
+you know you can play with these models
+the larger models are going to be more
+accurate but you're going to lose a lot
+of speed right if we bump all the way
+back to our
+tiny and we restart this this is really
+incredible and we just you know say a
+couple things here we just want to pick
+up on some new information for a real
+time speech detects to transcribe for us
+and then if we
+pause bam that ran insanely quickly
+right less than a second to transcribe
+and I have my post speech silence
+duration set to 1.5 I like to have a you
+know a little bit larger of a gap
+between the commands I'm running and you
+know ending my speech so you can adjust
+this U as much as you want that's the
+key here I think this is one of the most
+important you know pieces you can set
+the tiny model will give you those you
+know super fast uh but of course not as
+accurate transcriptions if we pause here
+we'll get another one out of this there
+we go right so again really incredible
+stuff 1.28 seconds for you know one kind
+of full paragraph of text let's go ahead
+and pause this really incredible stuff
+right this is foundational personal AI
+assistant technology I'm going to be
+using this moving forward for all my
+personal AI assistant Tech there's also
+a kind of opposite side Library real
+time text to speech as the author
+mentions the counterpart of this Library
+feel free to check that out I have a
+little bit of that tooling rolled into
+this this code base but I'm not super
+strung out on it uh and this should be
+St because I prefer 11 labs for my voice
+uh technology but if you want to hop in
+check out this code base I recommend
+just to get started you use the base
+assistant and you switch it to local
+mode right so you can run this fully
+locally so that's the real time speech
+to text Library
+every piece of generative AI technology
+is some combination of code logic data
+information and variables that all at
+some point get inserted into one or more
+prompts this is where all the magic is
+happening here's the typer command
+prompt so let's just break this down top
+to bottom we have the purpose we have a
+set of instructions which detail exactly
+what the model should do and how it
+should do it and then we have our you
+know set of typ or commands so this is
+you know quite literally this file so we
+insert 5K tokens into this variable we
+can optionally pass in context files and
+if we go to that main typers assistant
+file go to the top here you can see our
+key commands here right and if we also
+open up our adaa script you can see
+exactly how this is getting kicked off
+we're running UV python main typer
+assistant with the awaken command and
+we're passing in a couple variables the
+path to our typer file the path to our
+scratch pad and our execution mode okay
+so if we look at the variables to this
+we're effectively taking these variables
+loading them and then inside of our
+prompt replacing them right so here's
+our type of commands here's our context
+files here's our scratch Pad super
+important and then here's our of course
+natural language request so this will
+come in as we ask for things to be
+completed for us right so this is our
+typer assistant one massive problem I
+see in the general AI ecosystem is that
+everyone's going way too wide they're
+trying to build systems that do
+everything you can see this most clearly
+in the AI coding ecosystem people who
+are building these all-encompassing AI
+coding uh editors that try to do
+everything I think that's a massive
+mistake when you're building a product
+this is the opposite of how great
+products are built if you want to build
+something great you start small you
+start focused you start Niche and then
+you learn how to do it well and then you
+expand once your users customers are
+actually interested then you expand and
+build up to more use cases right you
+know dialing in on this personal AI
+assistant I wanted something that I
+could reuse and something that could be
+useful today I'm not waiting for more
+stuff to happen for more things to be
+released there is more than enough
+incredible generative AI technology for
+us to work and build for years and years
+even if all progress stopped right now
+the typer AI agent underneath our
+personal AI assistant is what our
+assistant interacts with to get work
+done
+given a list of typer commands so if you
+have you know a set of typer commands
+like this right just like we had you can
+use this right away right as long as you
+have a consistent command structure this
+is useful immediately and over and over
+for typer based commands and typer is
+one of my favorite python CLI command
+Builders lets you build out clis around
+specific use cases so you can see that
+in the prompt right we have all of our
+commands we have additional context
+files and then we have the scratch pad
+and of course the natural language
+request personal AI assistants are a
+untapped dimension of engineering it
+gives you access to another layer of
+engineering that can run in parallel to
+you it's definitely a different way to
+work and just like all new technology
+just like you know continuing that trend
+of learning new skills this new
+technology is going to take practice to
+understand how to use personal AI
+assistant the right way it's going to
+take time to adjust to you know typing
+getting work done and speaking out loud
+to your assistant which can take work
+offload it put it on to compute and work
+with you alongside you right we want to
+take incremental steps toward compute
+that's always on always solving problems
+for us always getting work done on your
+behalf when we look toward the future of
+personal AI assistants to me it's easy
+to see that once you start using it they
+can make you incredibly capable the next
+steps of this are very obvious they're
+kind of already getting rolled out into
+you know for instance chat GPT Claude
+you can give your assistant Vision let
+them see your screen right right this
+effectively expands the uh scratch pad
+to a kind of additional live feed you
+can let your assistant write code for
+you right imagine if one of our template
+commands here is you know execute code
+or write code or delete code or modify
+this is a big big Trend that we are
+steps away from if you've taken
+principal AI coding we do nearly all the
+preparation work both mentally and you
+know digitally with our AI tooling that
+enables us to break into personal AI
+assistant based AI coding more on that
+in future videos an obvious Improvement
+here is to wire up different AI agents
+different purposes tweak the underlying
+models and prompts that your personal AI
+assistant can see and use and get work
+done with we can really play around with
+the ears brain and voice so those are a
+couple next steps for this feel free to
+Fork this code base get your personal AI
+assistant up and running at least kind
+of understand where things are going I
+think that personal AI assistant are a
+you know kind of next gen pattern that
+uh you know we can get into here early
+on the channel I'll be using this
+literally today after I you know
+finished filming this video to scale up
+my engineering even further I'm going to
+make this more reusable I'm going to
+make it easier to use so that I can you
+know write in the CLI Ada awake and then
+pass in the configur ation variables
+inside of whatever code base I'm working
+on right so I can run this anywhere
+everywhere and we use this typer agent
+built inside of the personal AI system
+if you found these ideas and the easy
+access to this technology valuable hit
+the like hit the sub drop a comment and
+I'll see you in the next one stay
+focused and keep building

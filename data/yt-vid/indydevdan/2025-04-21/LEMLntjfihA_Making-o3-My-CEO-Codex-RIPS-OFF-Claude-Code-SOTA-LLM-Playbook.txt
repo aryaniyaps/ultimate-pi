@@ -1,0 +1,730 @@
+Engineers, close the terminal. Open AI
+just double dropped 03 and 04 mini and
+Greg Brockman himself hit the launch
+button. The king of AI is officially
+back. There are three insight packed
+quotes from Greg and his crew that you
+may have missed that gives us massive
+insight on where to focus our
+engineering effort. See if you can spot
+the most important of these three ideas.
+There are some models that feel like a
+qualitative step into the future. GVD4
+was one of those. Today is also going to
+be one of those days. We are going to be
+releasing two models, 03 and 04 Mini.
+These are the first models where top
+scientists tell us they produce
+legitimately good and useful novel
+ideas. It's like we we haven't really
+seen anything like this. And the thing
+that's really amazing about these models
+is that they're not just models. They're
+really AI systems. We've trained them to
+use tools. They actually use these tools
+in their chain of thought as they're
+trying to solve a hard problem. For
+example, we've seen 03 use like 600 tool
+calls in a row trying to solve a really
+hard task. I found that these models are
+actually better than I am at navigating
+through our openi codebase, which is
+really useful. Definitely better than I
+am for a long time. Yes. Okay. So, super
+relatable idea there. You know, I've
+been shipping production software for 15
+years and building with generative AI
+since it was first possible. There's no
+doubt in my mind 03 Gemini 2.5 claw 3.7
+they are better programmers than you and
+I. Keyword programmer not engineer.
+Writing code is just a piece of the
+puzzle of engineering. The most powerful
+idea here that Greg mentions is tool
+calling. Intelligence is not enough
+anymore. The real limitation is now our
+ability to tool craft and build agents
+that powerful state-of-the-art models
+like 03 can call to get real engineering
+work done. It's truly incredible how far
+these models have come all the way from
+GPT4 and we have open AI to thank for
+this. But none of these releases matter
+if you don't understand how to tap into
+these new capabilities of compute. I
+have three ideas today that can help you
+exploit and navigate these new
+state-of-the-art models to maximize
+their potential. First off, let's break
+down how 03 compares to Gemini 2.5 Pro
+and the new Gemini 2.5 Flash. Then we
+have to talk about what is going on with
+the halfbaked codeex release. This looks
+like a very blatant response to claw
+code. I'm going to be honest, I don't
+like the way this looks. Comment down
+below. Maybe I'm being harsh, but this
+tool seems incredibly unbaked, not ready
+for production, not ready for prime
+time, but I would be shocked to learn
+that OpenAI is actually using a tool
+like this. After we do some AI coding
+with codeex and compared to Ader and
+Cloud Code, I want to show how you can
+use 03 as a CEO to make hard decisions
+in your engineering work simple. If
+these topics interest you, stick around
+and let's double click into
+[Applause]
+03. The first thing we have to
+understand is how this model stacks up
+against the existing models. We can
+compare the state-of-the-art language
+model pricing and see a couple really
+interesting things right away. 03 is
+expensive. It's still burning a hole in
+our wallet with $40 per million output
+tokens. It's clear that OpenAI is
+positioning themselves to be the premium
+model provider. On the other hand, we
+have to respect Gemini 2.5 Pro and the
+new Gemini 2.5 Flash. Look at how cheap
+15 cents per million in, 60 cents per
+million out. It is important to call out
+that 03 is about 2/3 the price of 01. It
+is great to see that the trend is moving
+downward. The new GPT4.1 model is double
+the price of 04 Mini. Now, of course,
+the output tokens are going to add up a
+little bit more when you're using 04
+Mini because the model will be thinking
+based on your reasoning effort, low,
+medium, or high. By default, I recommend
+O4 as your new workhorse model in
+combination with Gemini 2.5 Pro and Claw
+3.7 Sonnet. When you need to really push
+the capabilities of what you can do,
+then you tap into 03. As you'll see in
+this video, 03 is a very, very powerful
+model that can solve hard problems for
+you. This model is a massive step change
+forward. Let's talk about context
+windows. So, context windows is what
+limits the model's capability to do more
+in single swings. For the first time,
+OpenAI released the GPT 4.1 model with
+the 1 million context window. We can see
+03 and 04 mini are still sitting at that
+200k context window. If you're using
+cloud code as your primary agentic
+coder, as your primary AI coder like I
+am, we really want to see Enthropic open
+up their models so that we can get
+access to these larger context windows
+because 200K is not cutting it anymore.
+We really want to see model providers
+move this up 300K, 400K, 500K. We have
+to start expanding the context window so
+that we can do more with our AI tools. A
+key benchmark that everyone goes to.
+Now, big big shout out to Ader and Paul
+on the Ader Polyglot coding leaderboard.
+OpenAI and other big model providers are
+listening to you and I. They're
+listening to everyone. This is the
+benchmark that we care about for AI
+coding. Why is that? It's because we can
+boot up ADER and actually run these
+models ourselves, right? This is a
+benchmark that we can quite literally
+feel and understand unlike most of the
+other benchmarks. So, we can see some
+really interesting things here coming
+out of the Ader benchmark. We have a
+brand new state-of-the-art 03 beats out
+Gemini 2.5 Pro by some 7 8%. Okay, this
+is massive. Now, you can quite clearly
+see here the cost of using 03. For that
+8%, you're going to pay for it. But
+you'll notice something interesting
+here, and this hits on a theme that we
+talk about on the channel a lot. You can
+combine 03 in high mode with
+GPT4.1 to get state-of-the-art
+performance. This is something that the
+ADER benchmark clearly states you can
+use architect mode. So, one model is
+planning and the other model is
+executing. And look what happens here.
+This is every business owner's dream,
+right? Price goes down, performance goes
+up. This is a big trend. You want to use
+as much compute as possible to get the
+job done. And if you can, you want your
+costs to go down while you're maximizing
+your compute and increasing your compute
+advantage. All right, so it's it's very
+clear by looking at one of the most
+important benchmarks. O3 is
+state-of-the-art. There's there's no way
+around that. Don't cope and and try to,
+you know, dance around that that fact.
+Don't ignore the incredible performance
+gains you can get out of 03, especially
+in high mode. We do have GPT 4.1 as a
+new kind of uh base model. I'm not
+finding a ton of uses for GPT4.1 aside
+from its long context, but even still,
+Gemini 2.5 Pro beats pretty much every
+model downward from here with a few
+exceptions. The key one being Claw 3.7
+Sonnet. There's something magical about
+the Clawed models. They figured out
+coding and tool calling in such a unique
+way. I'm still largely paying for Claude
+3.7 Sonnet inside of Cloud Code, but I'm
+also, as seen in previous videos, using
+a MCP server to delegate some of my AI
+coding work out to some of these other
+more powerful models, specifically
+Gemini 2.5 Pro and now 04 Mini and 03.
+This says a lot, right? Because this is
+a benchmark that you and I can truly
+feel and understand by using Ader, the
+best open-source AI coding tool. Now,
+let's talk about codecs. So, we talk
+about AI coding and agentic coding a lot
+here on the channel. I opened this up
+upon release and my first thought was
+this is a steaming pile of
+garbage. And and you know, as as we work
+through this, feel free to comment down
+below. Tell me if I'm being too harsh
+with this tool, but I cannot for the
+life of me believe that OpenAI, a
+leading AI lab, is using a tool like
+this that's so unbaked. Compare this to
+Ader, compared to Clawude, compare it to
+Cursor Agent Mode, Windsurf, uh Klein,
+even this tool feels extremely
+premature. Of course, it's open source
+now. uh we're going to be able to
+improve it very rapidly. But my god,
+from a product strategy perspective, I
+am kind of just in shock here. Let's go
+ahead and dive into a concrete example
+and see how this compares to ader and
+cloud code. All right, so we're going to
+open up just prompt. This is a MCP
+server that you can use to scale up your
+compute. Instead of just calling one
+model, you can call multiple models at
+the same time. Here are all the tools
+available from this MCP server. Just
+prompt is all about multiplying what you
+can do and then using advanced prompt
+engineering techniques like fusion
+chaining to combine results and get more
+out of it. You know, after we look at
+codeex, I'm going to share with you how
+you can use 03 as a CEO by sending
+multiple prompts to board members,
+right, which are models and then we'll
+have our CEO model make a final
+decision, right? So we can use this, we
+can quite literally use compute to help
+us make hard decisions about engineering
+work, about business strategy, really
+about any question that we have. So how
+are we going to use codec? So what are
+we going to add to this codebase? If we
+open up the mcp.json file, you can see
+we have our cloud code configuration. So
+if you boot up cloud code with this,
+it'll automatically load this MCP server
+with these default models. So the great
+part about just prompt is that you run
+with multiple models in parallel. So you
+can see here I have the new 03 04 mini
+claw 3.7 with 4K thinking tokens 2.5 pro
+and the new 2.5 flash. So this is super
+powerful. We can fire up claw code and
+just run a prompt. So I'll just say just
+prompt text hello. And what this is
+going to do is kick off a multilm
+response. So you can see there's the
+tool call automatically validated. All
+of our models are running in parallel.
+There's our response. You can see
+classic LLMs. Hi, can I assist you
+today? The great part is I ran a single
+MCP server and look how much compute I
+just kicked off to perform arbitrary
+work for me, right? Great. So how are we
+going to use codeex here? We're going to
+add reasoning model effort to our open
+AAI reasoning models. So you know how
+that typically works. You have low, you
+have medium, and you have high. So this
+is exactly how we're going to implement
+this. We want to suffix low, medium, and
+high on the end here, just like we do
+for sonnet. I already have the work
+planned out here inside of the spec
+prompt. If we look for slash OEI
+reasoning level, you can see here we
+have the plan already ready to go. So
+you know with AI coding, I always
+recommend you want to be planning your
+work. You want to be creating packages
+for your agentic coding tools to do the
+work for you. Feel free to pause the
+video here. We're going to use this
+inside of codeex so that we can look at
+the pros and cons of this tool so far.
+So we're going to type codeex. We want
+dash m03. I want to give it the maximum
+chance of success by using the
+state-of-the-art model. Now it looks a
+lot like cloud code minus a bunch of
+features. So how do we kick this off?
+The first thing we need to do is context
+prime. What is context priming? It's
+setting up our AI tool with the right
+context to understand where files are so
+that it doesn't have to chew up a bunch
+of tokens, figuring out where things are
+itself. In the readme, I have this
+header here that describes the initial
+prompt to get the agent up and running.
+We can copy this, paste it, and kick
+this off. And to be super clear here,
+you know, context priming is managing
+your context window. In principled AI
+coding, we talk about this essential
+idea of the big three context model
+prompt. You'll need to manage these
+across your AI coding tools. This is a
+principle of AI coding that exists in
+every AI coding tool. Even if you don't
+see it, this stuff is happening in the
+background. So you can see there the
+agentic behavior is coming through. We
+do like to see this. It's giving us the
+commands. We can go into auto mode. We
+can adjust the feedback if we want to.
+So so far so good. It just validated
+that tool. It is now context primed. If
+we were in a tool like Ader, we would do
+something like this, right? Let's go
+ahead and set up Ader with the state of
+the art models and setup. We can do
+Ader-model03- architect. So, this is
+going to give us state-of-the-art
+performance inside of Ader. And you
+know, we can see that this is how we get
+the best possible performance to context
+prime or you know, just set up our
+context in Ader. We would do something
+like this. And I'll just be super lazy
+here. Add source slash readme. And then
+let's also do our
+project.tottoml. Okay, there it is. All
+the contexts, right? We have this entire
+codebase now ready to go inside of ADER.
+We can do slash tokens. And we can see,
+you know, you got to pay to play to use
+the state-of-the-art model. And if
+you're going to be super sloppy with
+your context here like I am, um, it's
+going to, you know, add tokens. So you
+can see here 25k tokens in Ader. We have
+context primed ader in our new agentic
+coding tools like claw code. We can do
+this simply by just having the AI coding
+tool be aware of where the files are.
+Right. So now let's go ahead and
+actually fire off codeex. We're going to
+go over to the openi reasoning level
+spec prompt or our plan. If you know
+what you want to see, create a plan,
+think everything through, and then fire
+it off. Top agentic coding tools like
+claw code can get this work done. So
+let's see if codeex can pull it off as
+well. I'm going to copy the path and
+then I'm going to say implement our
+plan. We'll fire it off and let's see
+how codeex does. So a couple things that
+I do like here. It's running these
+commands and it is iteratively chunking
+through the files. So instead of just
+grabbing the entire thing, no matter the
+size, it grabs a smaller chunk. So this
+is something that is good to see out of
+a model like this. You know, we are
+running here in 03 and as we know from
+our price comparison, we are burning up
+a lot of money. We're lighting money on
+fire in just the setup process of
+OpenAI's codeex. You can see here it's
+thinking. It's looking through files.
+It's figuring out what it needs to do to
+implement the new reasoning model
+capabilities. Right? We want to have uh
+low, medium, high. So, it's thinking
+through how to get this set up inside of
+the just prompt codebase. something uh
+kind of weird already. It wants to
+validate that we have specific OpenAI
+capabilities in the package. We'll just
+hit yes. It's trying to use a module
+that doesn't exist. Okay, that's fine.
+Got another approach. Whatever. I'm just
+going to improve it. And there we go.
+So, we got some uh responses back there.
+Hopefully, that's useful. You can see
+the OpenAI version there. And there we
+go. So, finally, we have some code. You
+can see we're patching our OpenAI file.
+Looks like we're just adding a comment
+at the top of the file. Uh it looks like
+it's setting itself up a little bit with
+some more information. Okay. Not sure
+why it needed to comment the top of that
+versus just write the code, but there we
+go. So again, not sure what this patch
+is for. So we'll just give it its space.
+We'll let it do its thing. Okay. So
+there's the actual code. This looks
+great. So we have that prompt with
+reasoning. We're going to pass in that
+reasoning effort. That looks great. We
+have parse. And then we have our
+reasoning eligible models. Awesome.
+Reasoning levels is great. So let's go
+ahead and allow this. Now we're updating
+our prompt method to first parse the
+reasoning model suffix. And then if we
+have effort, we're going to go ahead and
+run our prompt with reasoning. If not,
+we just run our regular prompt method.
+Looks great. So this is where we're
+actually starting to tap into 03's
+coding capabilities versus codeex's
+system management and tool calling
+functionality. So there's an update.
+It's validating functionality. So, I do
+like that it is double-checking the work
+that it's done. And now we have our
+test. This looks fantastic. I like to
+see this. This is just classic AI
+coding. Going through the motions,
+writing tests, making sure things are
+working. And finally, we're updating the
+readme with the brand new Oer update.
+That looks awesome. Okay. And now we're
+running um pip list G grap open AAI. Uh
+we're just running a bunch of extra
+commands. This doesn't need to happen at
+all. We're just going to allow it. You
+know, let the model continue to push
+through this feature. Weird OpenAI
+version checking happening. I don't know
+why the model continues to check whether
+OpenAI is available. It's doing it again
+here. It wants to see where this file
+is. This is completely unnecessary. It's
+not in the plan at all. Piest-Q. This is
+okay only because we're in the activated
+environment. Okay. So, I'm going to have
+to blur this. It's showing the OpenAI
+API key. There is no reason to do this.
+So I'm going to stop here. The feature
+looks like it was implemented. So you
+know we can give some points to codeex
+there but it is being very very intense
+with its checking validating the system
+and making sure that every little thing
+is in place. Um you could see this as a
+perk in some scenarios but a lot of
+these steps are just completely
+unnecessary. That's fine. Let's check
+our costs. Right. Let's go ahead and see
+how much um it costs us to run this 03
+model across you know several files in
+this codebase right um so I'll type
+slashcost okay invalid
+command/tokens okay invalid command/help
+hm interesting there is no way to get
+the costs out of codeex um I have no
+idea how many tokens I'm using I have no
+idea how much this costs this is just
+one additional thing that really makes
+me question open aai Codeex. How is this
+tool this unbaked? To me, this feels
+like they just copied cloud code. They
+rushed this to market. They're acting a
+lot like a startup here. You know, I I
+do love the idea. You want to ship
+before you're ready. That's super great
+and it's great advice for startups for
+OpenAI. This just feels super super
+unbaked. It feels like a a a strong
+response to claw code, which I really
+really don't like. They're not
+innovating like they innovate with their
+OpenAI models, right? Codeex does not
+have that nuance, that innovation, that
+that new feature set, that novelty that
+their models have, right? So, I'm I'm
+just overall confused about Codeex. I
+don't recommend this tool yet. Cloud
+code takes the cake here every single
+day of the week. Other AI coding tools
+are much better. When serve, cursor,
+clin, this tool is just like very
+confusing to me. I'm actually just
+confused as to why it exists at all. Uh,
+enough about that. Let's go ahead and
+validate the code. So, you know, we can
+just quickly come in here, UV run pi
+test and just validate that the the code
+that 03 wrote is good. And, you know, to
+be super clear, I think 03 is a massive
+step forward in terms of intelligence. I
+can almost guarantee you the code itself
+is going to be great. It's the tool that
+I have a massive problem with. There's
+nothing new happening here. All the
+tests ran. You know, like I mentioned,
+03 is a very, very powerful model.
+Generating code with AI is a very solved
+problem. The question of how solved it
+is comes down to individual benchmarks,
+right? You can see here all the tests
+pass. We can open up this file. We can
+look for our new, you know, low, medium,
+high. This is all here. So, you know, we
+were able to validate all this against
+the production API. This is fantastic.
+And we also got our updates in the
+readme. We have the new reasoning effort
+for the O series. This is fantastic. So,
+let's go ahead and now run our CEO and
+board tool call coming out of just
+prompt. This is a really, really fun
+capability that you can use whenever
+you're making hard decisions. So, I'm
+going to update 03. I want 03 in high
+mode. And I also want 04 mini in high
+mode as well. Fantastic. So, if we open
+up the directory here and look for our
+CEO medium decision, you can see a
+really interesting prompt here. I'm
+going to bet massive amounts of time,
+money, and resources on one of the big
+three generative AI companies, OpenAI,
+Anthropic, or Google. And now I'm having
+my board of models and 03 as the CEO
+help me decide. So I'll open up a new
+terminal, type Claude, and I'll paste in
+this prompt. I'm using an IDK here to
+let Claude code know I want to run the
+just prompt MCP server. I want the CEO
+and board tool. And then I'm specifying
+the input file. Here are all the
+parameters. We have three optional
+parameters and one required parameter.
+So let's go ahead and fire this off. Of
+course, claw code is going to suggest
+the right tool. Let's go ahead and kick
+this off. You can see our CEO model here
+is OpenAI 03. And if we wanted to, we
+could override this, right? We have the
+board's responses and the CEO decision
+saved. So we have our CEO prompt and our
+CEO final decision. So we can just open
+up this current directory. I didn't
+specify an output directory, so they're
+all saved here. And check this out. So
+we have multiple models giving us
+multiple perspectives. And then we're
+using our fusion chain pattern to have
+the CEO decide on a final decision. So
+this is a great way that you can use a
+lot of compute to solve hard problems.
+Let's go ahead and look at the CEO
+prompt first and then we'll look at the
+final CEO decision. So the CEO prompt
+looks like this. We have our purpose. We
+have sets of instructions and all this
+is going to be available inside this
+codebase if you want to check it out in
+more detail. Link will be in the
+description for you. We have our
+decision resources. And then here we
+have all of our board decisions. Here's
+the 03 high decision. Here is the 04
+mini high decision. Here's claw 3.7's
+decision. Here is Gemini 2.5 Pro. And
+then of course 2.5 flash. And when you
+put all this together, right, we get a
+10K token prompt that then runs. and our
+CEO, which is 03, is going to make a
+final decision based on all of these
+perspectives. So, let's go ahead and
+take a look at the final decision. Which
+company should we bet on? Let's see what
+03 thinks. You can see here it's getting
+broken down into nice table of contents.
+We have a quick summary. And you know,
+maybe we can see some bias coming out,
+but you know, it says, "I'm opting to
+place a primary multi-year bet on OpenAI
+with explicit architecture and
+commercial hedges to keep Anthropic and
+Google as tactical alternatives." Love
+that. You do want to go allin, but you
+also want to hedge your bets just like
+we're doing here with our multi- LLM
+tool call. You can see here it liked the
+path presented by 03 High. No surprise
+there, right? We're running the most
+up-to-date compute here. There's the
+question at hand. And then check this
+out. It's going through the vote. We can
+see some bias coming out of these
+models, right? Gemini Flash recommends
+Google. 2.5 Pro slight edge to Google.
+Anthropic Claude bet on Anthropic. 04
+Mini High conditional matrix. I actually
+really like this. 04 seems to be the
+least bias. And then 03 High is betting
+big on OpenAI. So let's see why they all
+thought this, right? We have the
+decision-making framework. And now we're
+going through each one of the board
+members recommendations masked as
+models. This is something I explicitly
+mentioned in the prompt to preserve an
+amenity. We'll use model names instead
+of real names of your board members. And
+if we open up any one of these files,
+let's look at anthropics answer here. We
+can see in itself is a fairly
+comprehensive write up on the decision.
+So we can open this up and we can see
+anthropics breakdown for our investment
+decision very concisely 3.7 saying if
+you're prioritizing raw intelligence and
+cutting edge capabilities open AI is
+your best bet though you'll pay a
+premium great call out here great
+awareness if cost efficiency and
+competitive performance anthropic deep
+integration existing productivity tools
+most financially stable company you'll
+want Google great breakdown here we can
+get a final vote tally so I think this
+is a really powerful system. You can
+have multiple LLMs give an opinion and
+then have your CEO model tally up the
+votes and get concrete opinions back.
+You can see there's the aggregated
+result. And then you can see uh the 03
+model defending OpenAI here. OpenAI
+loses on a simple weighted vote but wins
+on relevance coherence. So it directly
+optimizes the two highest impact factors
+performance and tool use which was
+weighted you know in our original
+question and our original prompt. If you
+look at the CEO prompt here that was our
+most important factor right model
+performance and tool use ability. These
+are the two things that I care about the
+most above all else. And then of course
+model costs. So you can see there's the
+final rationale final thoughts. Very
+importantly, you can see here uh I do
+like this hedging, right? Even though it
+clearly states our big bet here is
+OpenAI, it wants us to build an
+abstraction layer so that we can drop in
+and swap Claude and Gemini. This is
+great advice. Uh there's no reason to go
+all in on anything. This is why I held
+off on MCP for so long. Um it is backed
+by Anthropic, but the fact that it's
+open made MCP an easier decision to
+make. Models are not the same way. When
+you commit to a model, when you commit
+to a provider, you're adding a lot of
+risk, a lot of dependency risk. And as
+we've seen over the past year, the
+leader is going to switch over and over.
+I'm still sticking to my bet. I do
+believe OpenAI will be the winner by the
+end of 2025. You can see we're getting a
+great suggestion here. Budget reserve,
+you know, save 15% of your inference for
+Claude and Gemini. I love this breakdown
+actually, right? This is a very mature
+breakdown. Look at this. quarterly eval
+bench automated eval to benchmark all
+the model providers. This is fantastic
+advice for our domain tasks. You need to
+have eval set up for all these models
+and all these model providers. This is
+fantastic advice. We're seeing a really
+cohesive result coming out of 03 here.
+And then it's giving us immediate next
+steps, right? So as if we're a company
+kickoff negotiations with OpenAI,
+Microsoft build the abstraction stack.
+Love that. Eval pipeline, love that. R&D
+pipeline to track open weights, open
+source models. Great idea as well. And
+then reconvene with the board with more
+information. Iterative planning. This is
+a just a powerful powerful technique. I
+love that it mentions this. And then of
+course we have closing thoughts. You
+know, to be super clear, it doesn't need
+to be a big decision that you use these
+models on. You can use this just to gain
+some additional insight, right? If you
+wanted to, you could do something as
+simple as this, right? Should I learn
+Python or TypeScript next? Okay, so you
+can run this. This is all here inside
+the gist prompt MCP server codebase uh
+available to you. Link will be in the
+description. This is a powerful way to
+harness more compute to get real
+engineering work done to make hard
+decisions to gain another perspective.
+In the beginning, Greg mentioned that 03
+made suggestions for system architecture
+and is giving novel ideas to research
+scientists. So if 03 is helping the
+leaders in research, if it's helping the
+engineers at OpenAI, you can be very
+confident that using 03 to help you
+solve your problems is a great idea.
+It's a great step forward, which is why
+I built it as a standalone tool inside
+the gist prompt MCP server. Again, link
+in the description for you if you're
+interested in using compute to make hard
+problems simple. 03 has a lot more to
+give than we have time to cover. In
+future videos, we'll cover its powerful
+vision capabilities by building it
+inside of an agent as a tool. This will
+allow us to solve visual problems faster
+than ever before. Like, sub, and
+comment. Let the algorithm know you're
+interested in content like this. Stay
+focused and keep building.

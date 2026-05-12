@@ -1,0 +1,52 @@
+[2.8s] Hey Avarus. So you found this very
+[4.6s] interesting bug in our type system with
+[6.7s] unions of different media types. In the
+[8.7s] example that you gave me, you have
+[9.8s] [music] a union of an image or a PDF and
+[12.0s] you're trying to pass that union this
+[14.0s] argument that has a file of type PDF.
+[17.0s] Now the problem with this argument
+[18.3s] [music] is that any object that has a
+[20.8s] file key matches as an image. And what
+[22.9s] our cursor does currently is it's going
+[25.1s] to try to match the argument against the
+[27.4s] union in order. [music]
+[28.8s] So if the first step is an image, it's
+[30.4s] going to try to match it as an image.
+[31.7s] And it does match as an image. That's
+[33.7s] why you see it here rendered [music] as
+[35.2s] an image. And it's passed to the LM as
+[37.9s] an image. Now if I change this to be a
+[41.0s] PNG instead, you see that it works
+[43.2s] because the first step is an image. This
+[45.0s] does match as an image and now it's
+[46.6s] correctly rendered. However, if I swap
+[49.0s] the order of the union, now it no longer
+[52.2s] works again because it's trying to match
+[53.5s] it as a PDF even though it's an image.
+[56.2s] So I have added some huristics based on
+[59.4s] the file extension that will try to
+[62.0s] match the file based on whatever
+[65.0s] extension it has and also the type that
+[66.7s] you're expecting. So in this example,
+[68.2s] you see that I'm expecting an image or a
+[70.2s] PDF. But since this has PDF extension,
+[72.7s] [music] it does match as PDF instead of
+[74.5s] image. If I swap this to be a PNG, now
+[78.8s] it's an image and I can still swap the
+[81.4s] order of the union and it should it
+[83.9s] should still parse as an image. Now take
+[87.4s] into account that this only works with
+[89.0s] file extension, it doesn't actually read
+[91.0s] the content of the file, which means
+[92.8s] that if you have a PNG, but it's
+[95.6s] actually a PDF, you're still going to
+[97.5s] have the same errors. And the reason
+[98.9s] [music] I don't want to read the
+[100.2s] contents of the file is because that
+[101.4s] would make the parser slower. So for now
+[104.2s] you have these huristics that should
+[106.0s] work for most use cases and should keep
+[107.7s] the parser as best as it is. So thank
+[110.6s] you for reporting this and I hope it
+[112.0s] [music] fixes your problem.

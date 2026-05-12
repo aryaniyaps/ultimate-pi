@@ -1,0 +1,1674 @@
+[0.3s] And this is the thing of like building a
+[2.6s] harness that I think is the new thing
+[4.7s] that is like worth hyping up. And people
+[6.5s] [music] who are talking about like
+[7.8s] shipping their own harnesses who are
+[9.4s] doing this uh are able to build products
+[13.4s] that are better than what you could do
+[14.9s] with [music] just context engineering
+[17.0s] and just agent engineer.
+[18.6s] >> I agree. Yes. If you own the harness and
+[20.6s] you own the model, you do have alpha uh
+[22.7s] to build a better harness because you
+[24.3s] can you can like divert the model to
+[27.1s] prefer that harness. The hardest part is
+[29.0s] picking the part of the code that should
+[30.4s] be written in assembly. And that's all
+[32.6s] vibes. There's no objective way to know
+[34.6s] that because you can't survey the code
+[36.3s] realistically. You just have to be like,
+[38.5s] ah, I'm pretty sure this is a good use
+[40.2s] of time and like I'm pretty sure if I
+[41.7s] handw write this, I can beat the
+[43.1s] compiler. All right? And most people
+[46.2s] probably can't beat the compiler for
+[47.6s] most situations, even extreme experts,
+[49.6s] cuz compilers are really damn good. But
+[52.5s] every now and then, you're like, I
+[53.7s] understand something about the data
+[54.7s] pattern. I understand something more
+[56.2s] about cache locality that I know the
+[58.1s] compiler cannot generalize [music] and
+[60.1s] therefore I should handw write the
+[61.4s] assembly and I'll whoop its ass.
+[63.4s] >> Like every engineer needs to build an
+[66.1s] agent and do their first tool
+[69.0s] registration, play with the system
+[70.6s] prompt, but that's not necessarily where
+[72.4s] you're going to [music] spend your time
+[75.3s] for the business. But if you don't
+[77.0s] understand the inner components, then
+[79.5s] how are you going to be able to work at
+[81.0s] the next level of abstraction?
+[83.8s] If really good code is really easy to
+[86.4s] produce, which I don't think it is, then
+[88.8s] you should be totally okay [music] in
+[91.0s] the next version of of like the model to
+[93.8s] throw all that stuff away
+[95.8s] >> and just do the right thing for your
+[98.6s] problem like at this time, right? If
+[100.2s] like code is super easy to generate,
+[101.8s] then just like throw it away.
+[105.5s] [music]
+[108.2s] >> This episode is going to be a ton of
+[109.6s] fun. We're going to go through and talk
+[111.3s] about all sorts of things ranging from
+[113.9s] context engineering to harness
+[115.4s] engineering to what sort of things you
+[117.2s] should learn in this world of software
+[118.9s] engineering. We're excited to have Viv
+[120.9s] over from Langchain and then Jeff uh who
+[123.0s] is one of the creators of uh the Ralph
+[125.6s] Wim Loop. I hope you guys learn a lot.
+[127.8s] Let's get started.
+[128.9s] >> What's up guys? We are live uh I am at
+[132.6s] uh live from AI Engineer Miami right
+[134.8s] now. Uh, and our buddies at uh, we don't
+[137.6s] do sponsors on this show, but I will
+[139.0s] give a shout out. Our buddies at Code
+[140.4s] Rabbit were nice enough to furnish us
+[142.4s] with their uh, podcast studio for the
+[144.3s] hour. So, um,
+[145.6s] >> thank you. We use you. We use you in our
+[148.4s] PRs. They're great.
+[150.6s] >> Okay. All right. Take it easy.
+[152.0s] [laughter]
+[154.9s] >> No, genuinely though, honestly, every AI
+[156.9s] every every team that doesn't have an AI
+[158.4s] code review bot is freaking dumb. Add
+[160.6s] that to your code system right now.
+[163.0s] >> Hot tape dropping. Nice. No, that's not
+[164.7s] even a hot take. That's just an
+[165.8s] objectively right take.
+[168.3s] [laughter]
+[169.3s] >> Uh, we got Viv here from Langchain. Viv
+[171.4s] is one of the uh in the last three
+[174.0s] months, but also since like early like
+[175.8s] midl last year, one of the most prolific
+[177.5s] writers on agent engineering and harness
+[179.6s] engineering. Uh, so welcome Viv.
+[182.6s] >> Yo, thank you guys. Thank you guys. I
+[184.3s] guess you know sometimes the yap does
+[186.0s] pay off. So we've been yapping for like
+[187.5s] six, seven months and like let's just
+[189.4s] let's continue the yap.
+[191.2s] >> Yeah. And next time in New York I want
+[192.9s] to hang out. I think last time it didn't
+[194.6s] work out, but we're gonna make that
+[195.8s] happen.
+[196.3s] >> I know.
+[196.9s] >> Um, we may or may not have a surprise
+[199.1s] guest joining us here if he can find his
+[200.8s] laptop and we don't have too many AV
+[202.6s] issues. Uh, [laughter] but today is an
+[205.4s] episode that uh I really wanted to do uh
+[208.4s] because I've been seeing a ton a ton a
+[210.3s] ton of discourse and uh about harness
+[212.8s] engineering uh on Twitter and on the
+[215.0s] news and everyone is like diving into
+[217.4s] this hype cycle. And you know what we do
+[219.4s] on this show is cut through the hype and
+[221.4s] cut through the the demos and actually
+[223.2s] get you what what is new, what is
+[225.3s] actually kind of like intellectually
+[227.3s] value and build AI that that really
+[229.6s] works. And so I'm really excited to chat
+[232.2s] with some people who've been thinking
+[233.0s] about harnesses and agent engineering
+[234.5s] for a while. We're going to talk a
+[235.8s] little bit about like where we came from
+[238.0s] like even all the way going all the way
+[239.4s] back to like 2024 in agent engineering
+[241.5s] and context engineering and like what
+[243.7s] about hardness engineering is new and
+[245.3s] worth getting excited about? what about
+[247.2s] harness engineering is like kind of just
+[249.8s] rehashing stuff we've been talking about
+[251.5s] for years and uh hopefully maybe get
+[254.0s] some tips from some experts on how to do
+[255.7s] it well.
+[256.2s] >> All right, let's go do it.
+[257.5s] >> Let's do it. Systems designs
+[259.6s] conversation.
+[261.3s] That's what I'm hearing.
+[263.0s] Okay, I think we talked we've talked a
+[265.5s] lot about agents and context windows and
+[267.3s] all sorts of fun stuff on this show and
+[269.7s] like the most basic definition of an
+[272.6s] agent was uh you know uh you send a
+[277.2s] context window full of like tool calls
+[279.2s] and system messages and user messages
+[282.4s] and you would take these in and over and
+[284.6s] over again you would send this
+[285.6s] recursively to an LLM
+[288.6s] and the LLM would output the next step
+[290.6s] which might be like a tool call
+[295.4s] and then your agent at the time we
+[297.1s] called them agents but the agent would
+[298.7s] then go execute that against some system
+[301.0s] you know they would call an API or read
+[303.6s] a file or whatever it is uh you would
+[306.7s] put the answer back in
+[311.7s] you get the response
+[314.2s] uh and then you would send this to the
+[316.6s] LM the LM would send you the next tool
+[318.8s] call or maybe eventually would send you
+[320.4s] a final answer and then maybe you could
+[322.9s] put in like another user message if you
+[324.6s] wanted to to append to this context
+[326.2s] window. And uh yeah, and this was an
+[329.4s] agent. I remember I think the first
+[330.7s] agent I built that did this was in April
+[333.7s] of 2023 and I used Langchain to like
+[337.0s] >> ingest an open API spec and like call an
+[339.8s] API over and over again and you would
+[341.6s] print out the thinking messages and it
+[343.1s] would do the reasoning and it was like
+[344.6s] all kinds of stuff that you need a lot
+[345.8s] of code to do well back in the day. And
+[347.5s] now a lot of models can do this without
+[349.1s] a ton of like code around them, but like
+[352.3s] Oh, we all align. This is kind of like a
+[354.0s] good definition for a 2024 agent.
+[357.6s] >> Yep.
+[358.5s] >> Yeah. Yeah. Yeah. Yeah.
+[359.9s] >> I'd say it's a good definition for just
+[361.6s] an agent in general, but uh
+[364.0s] >> Yeah. Yeah.
+[365.8s] >> Regard You can remove the timeline in my
+[367.5s] opinion, but I think it's probably a
+[368.9s] good definition there.
+[370.5s] >> Okay, cool. And then at a certain point,
+[373.0s] we had this thing called cloud code,
+[374.8s] right?
+[377.8s] which was,
+[380.6s] you know, it was a really good model.
+[384.6s] Oops.
+[386.2s] We had a model
+[387.6s] >> here. There's your LLM.
+[389.2s] >> Thank you. Oh, yes. Sorry. Thank you.
+[390.8s] You had your LLM and then you had your
+[393.3s] tools,
+[395.2s] uh, your like tool definitions and then
+[398.2s] you had kind of like the tool
+[399.8s] executions, right?
+[403.4s] I would they're kind of tied together,
+[405.5s] but yeah, we can we can say that they're
+[407.4s] separate. I think that's fine.
+[408.2s] >> Well, it's like this is like because
+[409.3s] these are like JSON schemas, right?
+[412.5s] >> And these
+[413.5s] >> I mean they could be they could be just
+[415.0s] parameters of the function, but I would
+[416.6s] say that like the effectively these are
+[418.2s] linked.
+[419.4s] >> Yes.
+[419.8s] >> But you can't really have one without
+[421.0s] the other.
+[422.2s] >> Yeah. This was your deterministic code
+[423.9s] that would actually go run the stuff.
+[425.8s] >> Yeah.
+[426.0s] >> And this at some point we decided this
+[428.4s] was called uh a harness, right?
+[433.0s] What? Uh, this part, the bottom part.
+[436.1s] >> Um, yeah. So, like the harness was all
+[439.3s] of the deterministic code that would
+[440.8s] come in. Hello. Welcome. Uh, we got we
+[443.3s] got Jeff joining us as well. Jeff, get
+[444.8s] the mic really close to your face
+[445.9s] because it's super noisy in here.
+[448.0s] >> Jeff, always good to see you. Great
+[449.5s] outfit.
+[452.4s] >> I told Jeff he actually needs to get you
+[454.1s] one of these hats. This is his lamb hat
+[456.1s] from New Zealand.
+[457.5s] >> Oh, hey Jeff, if you don't get me one,
+[460.0s] I'm offended. need all that. I I will
+[462.9s] come to New Zealand to collect it as
+[464.3s] well.
+[465.8s] >> Yeah. Um I'm going to get his AV set up.
+[468.1s] You guys riff on harnesses for a sec.
+[470.2s] >> I mean I So I would say what's
+[472.4s] interesting at least from my perspective
+[474.1s] is when I see this stuff I kind of I
+[476.6s] don't know if you agree with it, but
+[477.6s] like what I do is I just take the first
+[479.2s] thing and I just like swap this out with
+[481.7s] like Claude and it's the same thing for
+[484.2s] me. like the architecture fundamentally
+[486.3s] doesn't really change even though it's
+[487.8s] using a different intelligence mechanism
+[489.5s] rather than just pinging a model.
+[491.8s] >> Yeah.
+[493.0s] >> Some agree agree also like kind of
+[496.2s] disagree because I think like there
+[498.2s] there is probably a decent mental model
+[499.8s] where it's like the first things we were
+[501.8s] actually doing were basically doing like
+[503.1s] a bunch of like harness wrapping around
+[505.0s] chat completions
+[506.6s] >> and like there was tons of like little
+[509.0s] plumbing stuff that we had to do, right?
+[510.5s] And like all of this actually like
+[512.9s] defined the harness. So like I think
+[514.5s] tool calling is is basically underlying
+[517.4s] primitive around all of it but there
+[518.7s] there's like other stuff as well. So I
+[520.3s] think like we had like chat completions
+[522.1s] API and like slowly over time we like
+[525.1s] turned into agent API and like we never
+[528.0s] really ever discussed when like hey like
+[530.2s] when did this shift happen and like what
+[532.1s] was like all the stuff that we actually
+[533.8s] put in the agent API that's like
+[535.4s] different. I think like one immediate
+[537.2s] thing from here is like what happens
+[538.8s] when you run
+[539.4s] >> what's the difference
+[540.4s] >> like okay so like it's basically just
+[542.2s] like a bunch of decisions that we had to
+[544.7s] make based on like what's going in the
+[547.3s] context window right I think like a lot
+[549.1s] of this like centers around context
+[550.6s] engineering which is like okay like I
+[552.2s] have this like chat completions loop
+[553.8s] like what the hell do I do when I run
+[555.4s] out of context like that that's like a
+[557.1s] decision that someone has to make at
+[558.8s] like some API level or like I handle
+[561.0s] that or like cloud code handles that
+[563.8s] like someone needs to like cut off the
+[566.3s] top of my message history or like we
+[568.6s] need to do like compaction offloading
+[571.1s] but like the the model object itself
+[573.8s] will not even like accept the thing that
+[575.8s] I'm putting in there and like it's our
+[577.7s] job to facilitate that like intelligence
+[582.1s] >> I think what you're I think what you're
+[584.1s] saying is like the main difference to
+[585.4s] you is like this agent loop has no
+[588.2s] batteries included the right side has
+[590.4s] batteries included
+[592.0s] >> yeah well I I I think I think some some
+[594.7s] This is batteries, right? And like some
+[596.0s] of the stuff is like like is it really
+[598.8s] that complicated batteries? Like what
+[600.4s] are you what are you even going to do
+[601.8s] like when you run out of context, you
+[603.1s] know? It's like uh yeah. So I would say
+[604.9s] like somewhat light batteries we kind of
+[607.4s] need useful stuff.
+[608.6s] >> Well, I would say most of this is
+[610.3s] systems engineering. Like when I look at
+[611.8s] this like Dexter, what I was saying and
+[613.3s] Jeff, what I was saying is like you have
+[614.6s] this agent loop over here. From my
+[616.6s] perspective, all that happened in the
+[618.2s] last year is you just took this agent
+[619.7s] lead, you copied and pasted it, you
+[621.0s] swapped out the LM call with cloud code
+[623.0s] calls and that gave you some nice little
+[626.6s] benefits in the form of like what Viv
+[628.7s] said like you have all these benefits of
+[630.2s] like it loads a cloud MD for you
+[632.4s] automatically. You don't have to think
+[633.6s] about that. So users get that for free.
+[636.0s] It gets you context management like
+[637.7s] context compression and all these other
+[639.4s] things. But it kind of still feels like
+[641.4s] your app is still designed the same way.
+[644.4s] Maybe
+[644.7s] >> okay. So, so one things that the harness
+[646.6s] adds over here is extension points,
+[649.2s] right? So, you have MCPS and Claude MD.
+[652.5s] >> Oh, yes. The So, like loading the skill
+[654.4s] MDs. I'll add one or more over here. MCP
+[657.6s] MCP built in. So, you don't have to do
+[660.6s] that work yourself.
+[662.6s] >> Yep. Um, well, yeah, it's it's well,
+[665.9s] it's it's basically it's extend it's
+[667.5s] ways to take additional things out of
+[669.2s] your environment and insert them into
+[671.0s] the system prompt and make them
+[672.4s] available as tools and things like this.
+[675.3s] Um, and this is kind of where we got to
+[677.4s] like by the end of 2025, right? I I I
+[679.8s] kind of gave it this name and Viv Viv
+[681.4s] coined this term harness engineering and
+[684.0s] I did not see that paper or read it. So
+[686.3s] I I tried to coin it as well and my take
+[688.9s] was like harness engineering is not like
+[691.0s] how do you build a harness but it was
+[693.8s] some sort something towards like how do
+[696.3s] you engineer on top of the harness that
+[698.7s] you're given? How do you take the
+[701.4s] configuration surface area of something
+[703.5s] like cloud code and bring a engineering
+[707.3s] systems engineering context engineering
+[708.9s] approach to how you use the like harness
+[713.8s] plus model how you use the agent. It's
+[716.0s] funny we stopped using the word agent
+[717.3s] and everyone said uses harness to mean
+[719.6s] what we used to think.
+[721.4s] >> You know what I mean? By the way, Jeff,
+[723.1s] can you try saying something? I just
+[724.2s] want to make sure you have uh your audio
+[725.4s] is working.
+[726.6s] >> Yeah. The way I look
+[730.2s] Oh [ __ ] He's going to give us real
+[731.5s] content
+[736.4s] and the agent is the wild true loop.
+[739.4s] >> Yeah.
+[742.1s] >> Yeah. I I don't know at least what what
+[744.9s] do you guys see as a big difference?
+[746.0s] Like what other batteries come in when
+[747.4s] you swap out from an LLM to like Claude
+[749.2s] Code?
+[750.7s] >> I don't think this is a
+[752.3s] >> I don't think this is a faithful like
+[754.4s] representation because there's still
+[755.5s] just an LLM here. Like cloud code the
+[757.6s] LLM thing is not a separate machine.
+[760.3s] It's just
+[761.8s] >> it's it's just the it's cloud code thing
+[765.4s] is cloud code thing is this
+[767.8s] >> it's this part of it.
+[769.6s] >> Yeah.
+[769.8s] >> Oh interesting. I kind of view this
+[771.8s] really important like I feel like like
+[773.7s] the the unit that I work backwards from
+[775.8s] is actually like the model. It's it's
+[777.8s] like the LLM and like these arrows
+[780.3s] pointing to clog code like this red box
+[783.6s] like this red diamond here is also the
+[786.0s] same as this like rectangle here
+[788.0s] >> just with like tons of opinions in there
+[789.9s] on like how it works and and I think
+[791.6s] actually like this is my mental model
+[793.4s] but I think it's really useful to
+[794.9s] basically work backwards from like the
+[797.0s] model artifact that the labs are making
+[799.9s] and then like what is the whole like
+[801.8s] like Jeff OS but like what's all the
+[803.9s] stuff that we're going to put around
+[805.0s] that to make it do useful And there's
+[807.3s] like tons of like limitations of like
+[809.2s] this bundle of weights essentially. It's
+[811.1s] like basically just like takes tokens in
+[813.5s] and it like it outputs tokens and like
+[816.9s] the first version of making that useful
+[819.0s] was to give it some sort of like
+[820.3s] execution environment which is like
+[822.2s] these like JSON packets that are coming
+[824.2s] out of it that actually maps to like me
+[826.2s] taking an action in the execution
+[827.7s] environment and like running code
+[829.8s] basically. And like we basically like
+[831.7s] extended that mental model to saying
+[833.9s] like okay it's it's tool calls but it's
+[836.3s] also like okay this harness will also
+[839.1s] engineer context into the context.
+[841.8s] >> Can I get everyone's perspective on here
+[843.7s] really fast? What's another engineering
+[845.6s] paradigm that perhaps isn't like this
+[848.1s] but feels very similar for you guys? Do
+[851.5s] you guys have one?
+[852.8s] >> So then we can like cuz we might or or
+[854.8s] do you guys think this is truly
+[855.9s] different than previous engineering
+[857.4s] systems? I mean like I don't know how
+[859.7s] would you compare this to something like
+[861.0s] temporal where there is like a very kind
+[863.4s] of like baked and like specific
+[866.7s] interface you get to a very complex
+[868.6s] system that you don't have to like think
+[870.2s] about so much. Is that is that is that a
+[872.7s] helpful metaphor or is that too
+[874.3s] different?
+[875.2s] >> For me it feels different. For me, the
+[877.4s] closest one probably feels more like uh
+[879.8s] Tailwind and CSS. Tailwind and like Shad
+[882.3s] Cen almost. Like the Shad Cen feels like
+[884.2s] the harness kind of stuff where but like
+[886.5s] Tailwind is like the very bare primitive
+[890.1s] and they're kind of built off of the
+[891.8s] same thing. They kind of compose in
+[893.0s] interesting ways and people generally
+[894.6s] prefer using Shad CN over Tailwind
+[896.8s] directly uh when you get like built-in
+[899.3s] components but then you still tweak the
+[901.5s] Tailwind system to go do interesting
+[903.6s] things for your own personalization.
+[907.1s] Interesting. Okay. So, you're you're
+[908.8s] because you're reaching in through some
+[910.9s] interfa. The interface is shad CN and it
+[912.9s] makes the components, but it's very open
+[914.4s] in the way that you can actually just
+[915.7s] reach in and change whatever you want
+[917.1s] about what's happening in the component
+[919.2s] that's generated
+[920.3s] >> and it's all the same primitives if that
+[922.3s] makes sense, right? It's all built on.
+[927.1s] >> I would say like the cloud code harness
+[928.8s] is is interesting in a way because like
+[930.6s] I I want to get to like an an
+[932.7s] interesting point here that like made
+[934.5s] made the harness engineering thing like
+[936.9s] uh different from just agent
+[938.9s] engineering.
+[939.7s] >> Okay,
+[940.1s] >> which is like the idea of um RLing a
+[943.4s] model for a specific harness, right?
+[946.0s] Like if you look at like codeex down
+[948.3s] here in the right like you have apply
+[951.1s] patch which is how codeex edits files
+[955.4s] and it has this weird syntax of like you
+[959.0s] know it's it's it looks like a git patch
+[961.0s] right? Have you seen this?
+[961.9s] >> Yeah. Yeah I have.
+[963.4s] >> Yeah definitely right.
+[965.3s] >> You're having like you know plus line
+[967.3s] minus line.
+[968.7s] >> Don't write a git patch man. Don't we
+[970.6s] believe you. We know what a get patch
+[972.0s] looks like.
+[973.0s] >> Yeah right. Whereas like pod code has
+[977.4s] this other thing which is like old
+[978.9s] string new string, right?
+[980.6s] >> Cloud code has this edit tool, right?
+[983.8s] >> And this is just literally like find and
+[985.8s] replace.
+[987.1s] >> Yep. I think it takes
+[988.8s] >> The problem was like the idea
+[992.0s] >> uh it's like a file. Well, the old
+[993.6s] string is the span that you're
+[994.7s] targeting. Um
+[996.8s] >> um yeah, I think it takes in like a file
+[999.1s] range because sometimes you have the
+[1000.3s] same thing because if you have like the
+[1002.4s] same string in multiple parts
+[1005.4s] >> but regardless point sands.
+[1007.2s] >> Yeah. Yeah. Yeah. Yeah. Point sands. And
+[1009.0s] so what you would do is you would go
+[1010.6s] take this, you would take your cloud
+[1012.4s] code
+[1014.2s] and you would put it in an RL in an RL
+[1016.7s] environment and you would have it solve
+[1018.6s] uh coding problems and then you would
+[1021.0s] have some you know cost function
+[1023.2s] >> function that actually like gives back
+[1025.0s] pressure.
+[1025.6s] >> Y
+[1026.4s] >> and then the model inside the harness
+[1028.6s] gets better
+[1030.3s] >> at calling specific tools because this
+[1032.6s] was the problem before before cloud
+[1034.1s] code. It was sort of like we weren't
+[1036.4s] able to like the models just like people
+[1038.6s] said they weren't good at tool calling.
+[1040.6s] They weren't good at selecting the right
+[1041.9s] tools. They weren't good at passing the
+[1043.4s] right data to the tools. And the way we
+[1045.8s] did this is we made the model we took a
+[1048.2s] dedicated a huge chunk of the weights in
+[1050.4s] that model to being able to call these
+[1053.1s] tools really really well. And like you
+[1055.5s] can see this in that like if you try to
+[1057.3s] use cloud code models in the codeex
+[1059.4s] harness it's complete trash. It does not
+[1061.8s] work. And like GPTOSS
+[1064.6s] 12B can call apply patch really easily.
+[1067.0s] It cannot run an old string new string.
+[1068.8s] It has no idea how to do it. And this is
+[1071.2s] the thing of like building a harness
+[1073.7s] that I think is the new thing that is
+[1075.4s] like worth hyping up. And people who are
+[1077.4s] talking about like shipping their own
+[1078.8s] harnesses who are doing this uh are able
+[1082.6s] to build products that are better than
+[1084.6s] what you could do with just context
+[1086.3s] engineering and just agent engineering.
+[1088.9s] >> I agree. Yes. If you own the harness and
+[1090.9s] you own the model, you do have alpha uh
+[1093.0s] to build a better harness because you
+[1094.6s] can you can like divert the model to
+[1097.4s] prefer that harness.
+[1098.6s] >> I want to introduce another concept
+[1099.8s] that's been kicking around in my head a
+[1101.0s] lot, which is like you have the harness
+[1102.2s] and the model, right? And between these
+[1103.5s] two things, you have something like
+[1104.9s] cloud code um or codeex. And then what I
+[1107.9s] what we started seeing like sometime
+[1109.5s] last year was what I would call like the
+[1111.4s] outer harness. Um
+[1114.3s] >> and the outer harness may not even look
+[1116.6s] anything like the inner harness. Uh the
+[1118.5s] outer harness could be something like uh
+[1121.2s] a bash script that says, you know, while
+[1123.0s] true, you know, run
+[1126.0s] >> yeah, keep running
+[1126.7s] >> odd code with a prompt and then uh you
+[1131.4s] know, print looped and just do this
+[1133.4s] forever, right?
+[1134.8s] >> Uh it's almost like uh uh something that
+[1138.5s] Jeff came up with last year.
+[1141.1s] And I think Jeff's smiling at me because
+[1142.6s] he doesn't want to talk because he has a
+[1143.9s] lot of echo. But um Jeff, does that
+[1146.4s] sound right to you?
+[1148.7s] of harness three world that is like an
+[1150.7s] orchestration layer way I look at it
+[1153.7s] >> okay like I see an agent as being
+[1156.9s] essentially the it's the while true loop
+[1161.9s] with tools registered in I see an agent
+[1165.1s] harness as being like the orchestration
+[1168.0s] layer around that agent or while true
+[1170.2s] loop that handles permission checks um
+[1174.6s] handling policy enforcement topics
+[1177.6s] provisioning of like secrets
+[1181.0s] configuration
+[1182.8s] that control the agent. Like for
+[1185.3s] example, if you've got port code is
+[1187.8s] interesting because it's both an agent
+[1189.3s] and a harness. So for example, if you
+[1192.3s] want to deploy code out, you can do it
+[1195.4s] with the Ansible playbook. And when you
+[1197.3s] do the Anible playbook, it pushes that
+[1199.3s] configuration. The configuration for the
+[1201.8s] harness controls the agent. there's this
+[1204.6s] really blurred line. They're almost the
+[1207.0s] same thing. Um but I think the most
+[1209.2s] simplest thing is in Asia is the while
+[1211.2s] true loop like like infrancing state
+[1214.2s] machines turns and then the harness is
+[1216.9s] anything that wraps around it like
+[1218.6s] configuration layer type topics and the
+[1221.8s] execution environment because that could
+[1224.1s] it's undefined. execution environment
+[1225.8s] could be local. It could be remote. It
+[1228.2s] could fan out to other. And then we're
+[1232.2s] this is where we get into gas town Ralph
+[1234.5s] and other things. You have these
+[1236.2s] orchestrators that allocate memory to
+[1239.0s] the harness and instructions what needed
+[1241.7s] to be done. I think the everything
+[1244.1s] really kind of got good after RLing.
+[1246.2s] That that was a huge part. But it was
+[1248.4s] also
+[1250.3s] it was also uh people just remember the
+[1253.9s] fundamentals. These context windows are
+[1255.8s] good for one goal, one activity with the
+[1258.2s] right context and they'll autogress
+[1260.0s] towards that and you'll see a really
+[1261.8s] good implementation of this in code.
+[1263.8s] They're continually recycling those
+[1265.4s] context with those.
+[1267.7s] I like it. Yeah, I think I think yeah
+[1269.8s] this this idea of um you're right.
+[1273.0s] There's there's way more to like I mean
+[1274.7s] this is the idea behind Ralph Wum in the
+[1276.6s] first place, right? It was like you have
+[1279.4s] this is the dumbest possible
+[1281.7s] orchestration layer you could possibly
+[1283.8s] have and it still works pretty well. And
+[1286.1s] so the technique of building
+[1288.6s] deterministic or nondeterministic code
+[1290.9s] around a good harness is incredibly
+[1293.8s] powerful.
+[1295.4s] >> Um
+[1295.8s] >> you know I guess ahead based off what
+[1298.2s] you guys are saying and I think there's
+[1299.2s] a couple questions in chat that are kind
+[1300.6s] of similar. I think all of these
+[1303.3s] primitives kind of go off this concept
+[1305.3s] that there's a while loop that at some
+[1307.2s] point terminates and like we had these
+[1309.1s] level one agents which were very very
+[1311.4s] basic and directly required you to work
+[1313.2s] with the model and then we said okay
+[1315.4s] well now we're going to make we're going
+[1316.8s] to bump up intelligence. Well, how do we
+[1318.3s] do that? Well, we take our Y loop and
+[1321.0s] inside of the thing that we call we put
+[1322.6s] another Y loop inside of that thing so
+[1324.6s] that thing does more work, right? And
+[1327.4s] like what's the next thing? Right. Well,
+[1330.2s] yeah, exactly. Well, I would say like
+[1331.9s] this thing has an environment. That's
+[1333.2s] what make cloud code. And then we said,
+[1334.7s] you know what? Let's add intelligence
+[1335.9s] level 2B. And then we added the
+[1338.3s] environment. And then we also gave sub
+[1339.8s] aents here, right? And like what we did
+[1342.7s] was we said instead of just giving cloud
+[1344.2s] code a thing. Well, the thing I call in
+[1346.4s] cloud code, I'll give that thing a while
+[1348.4s] loop inside of itself. So it basically
+[1350.6s] just gets nested while Y loops with
+[1352.3s] different layers. And every layer of Y
+[1353.8s] loop that we add basically gives you a
+[1355.4s] level of abstraction that says I'm a
+[1358.2s] little bit smarter. on top because the
+[1360.2s] thing underneath me is doing more work.
+[1362.6s] That's the basic idea of what we're
+[1364.4s] really trying to do here, right? Like a
+[1366.6s] harness is just another Y loop that
+[1368.4s] happens to have environmental controls.
+[1370.3s] Then we said sub agents are a harness
+[1372.6s] that has another Y loop that has another
+[1374.2s] Y loop inside of it. And then someone's
+[1376.0s] going to go and say, you know what,
+[1377.6s] Ralph is pretty good. What if I put a Y
+[1379.8s] loop around the Y loop? And then you get
+[1381.4s] Gas Town. And all you're
+[1383.6s] >> like six while loops, but
+[1385.5s] >> it's the same concept though. All you're
+[1387.4s] doing is like to basically like abstract
+[1389.0s] away this idea of intelligence. You're
+[1392.4s] just saying intelligence is defined by
+[1394.7s] work happening autonomously. Well, the
+[1397.4s] core primitive that everything builds
+[1399.0s] off of that is do this again is a while
+[1402.3s] loop. So you just nest them infinitely
+[1404.7s] and that's how you get more layers. And
+[1406.3s] this I think goes into a question that
+[1408.1s] someone else is saying in the chat which
+[1409.5s] is like when does it make sense to build
+[1411.3s] your own harness or uh environment or
+[1414.0s] like orchestration layer? Well, when the
+[1416.7s] Y loop that you're operating on is no
+[1418.6s] longer smart enough for your task, well,
+[1420.2s] just add another Y loop around it and
+[1422.6s] add some more configuration there and
+[1424.2s] all of a sudden you've got a little bit
+[1426.2s] smarter of a system that's more bespoke
+[1428.2s] to your thing.
+[1430.2s] >> But then you haven't built a harness,
+[1432.0s] you've built an orchestrator. And I
+[1434.1s] guess my question is like when when
+[1435.8s] should you build your own harness? My
+[1437.4s] take is like if you are going to RL a
+[1440.3s] model on a specific set of tools that it
+[1442.5s] is not currently going to call. But I
+[1445.7s] guess they all if architecturally it all
+[1448.3s] looks like Y loops that fundamentally
+[1450.1s] each one of them calls an API which
+[1452.7s] itself has its own Y loop and doesn't
+[1454.7s] matter what its Y loop is. They're all
+[1456.8s] the same piece of code. We can call them
+[1459.0s] orchestrators, we can call them
+[1460.4s] harnesses, we can call them agents, but
+[1463.0s] the code is always the same at the top
+[1465.3s] layer. It's just a little bit smarter.
+[1468.1s] I don't know if you guys agree. Well, so
+[1470.8s] I I think there's like other interesting
+[1472.3s] concepts in here that we can kind of
+[1473.6s] drill into to kind of pull more out of
+[1475.4s] this. So like I think Jeff pulled up
+[1477.4s] like there's other things that the
+[1478.6s] orchestrator needs to do birectionally
+[1480.6s] with the harness like uh you know
+[1483.0s] managing MCPs maybe if you want to keep
+[1485.5s] them outside the harness can do that
+[1487.0s] itself. There's like permissioning stuff
+[1489.1s] like if you want to ask permissions from
+[1490.7s] the user and then like fy those back and
+[1493.7s] then Viva said something that's really
+[1495.0s] interesting to me which is like there's
+[1496.8s] this idea of like you know like
+[1498.2s] providing a file system here like by
+[1500.6s] default the cloud code tools just talk
+[1502.2s] to your file system and the alternative
+[1504.6s] to hey I built a bunch of tools that are
+[1506.9s] not a file system but they read and
+[1508.5s] write and search data. the alternative
+[1510.9s] to like, oh, okay, I'm going to RL a
+[1512.9s] model on my set of tools is a thing I
+[1515.6s] think that you guys have gone really
+[1516.7s] deep on over there, which is like, or we
+[1518.6s] could just make the other systems look
+[1521.2s] like the tools that the model is RLED
+[1523.0s] on. And then you don't need to do
+[1524.4s] training and fine-tuning of a model.
+[1526.6s] Then all you have to do is make the make
+[1529.4s] your thing fit into the tool set the
+[1531.7s] model already is really freaking good at
+[1533.6s] using.
+[1535.2s] >> Yeah. Yeah. I I think I think there's
+[1536.6s] like one question around this which is
+[1537.9s] like okay like we had we had like base
+[1540.3s] model and it like sucked at every it
+[1542.2s] like sucked at tool calling and then
+[1543.8s] like we RL it or like not we like Open
+[1545.7s] AAI and like anthropic RL the models on
+[1548.5s] like particular tool schemas to make
+[1550.9s] them like really good at that and like
+[1552.9s] there's one question which is like if
+[1555.2s] this whole like in context learning
+[1557.0s] thing was like true and like the model's
+[1559.5s] like really really smart enough to like
+[1561.0s] fit to everything then like you you
+[1563.4s] shouldn't really need to to you
+[1565.9s] shouldn't really need to do any of that
+[1567.1s] stuff really like you should be able to
+[1568.7s] like fit that model intelligence like to
+[1571.8s] your task and that's why like I sort of
+[1574.2s] get like vibe's thing which is like okay
+[1576.2s] I'm just going to like keep nesting
+[1577.4s] while loops to like higher levels of
+[1579.9s] abstraction and it is just a while loop
+[1581.5s] but like the part that I disagree with
+[1583.0s] is like the details at each stack matter
+[1586.9s] like so importantly that like um that
+[1590.6s] like it doesn't to me it doesn't make
+[1592.3s] sense if I'm like talking to a customer
+[1593.6s] or someone like builder like hey like
+[1595.4s] just keep stacking like while loops.
+[1597.0s] Actually, I'd be like, "No, like go to
+[1598.7s] the like the most like simple like
+[1600.9s] harness, which is like the tool calling
+[1602.4s] thing with a file system, right? And
+[1604.7s] like you should just like grind super
+[1607.4s] hard on the system prompt, the the tool
+[1610.2s] design, like how context gets like
+[1612.7s] funneled into the context window and
+[1614.7s] like you should totally exhaust all the
+[1617.1s] avenues and this like intelligence one
+[1619.3s] stack before you even think about like
+[1621.3s] adding the second wild loop because it
+[1623.2s] would basically be like I'm just going
+[1624.7s] to throw more compute at the problem and
+[1626.1s] it'll fix it. I'm like, or you could sit
+[1628.0s] down with your team and the customer and
+[1630.2s] like figure out like what are these
+[1631.4s] instruction sets, like these skills I
+[1633.7s] need to put in here. I think that's it's
+[1635.2s] like the details like matter so much
+[1637.6s] actually. And it's like uh
+[1639.6s] >> you know what's really funny about that?
+[1641.4s] Like Dexter can probably attest to this.
+[1643.1s] I was really big on that camp uh on that
+[1646.2s] exact same camp like a year ago. I was
+[1648.0s] like, "Hey, you should learn every
+[1649.5s] single bit about this." But the thing
+[1651.4s] >> you should become an expert prompt
+[1652.7s] engineer, right? You should build
+[1654.0s] perfect intuition about how LLM's pro
+[1656.2s] process every single token
+[1658.4s] >> before you go try to fine-tune a model.
+[1660.2s] Like do everything you can with first.
+[1663.0s] >> No one should fine tune in my opinion.
+[1664.6s] Like
+[1664.9s] >> so I put RLine
+[1667.0s] camp.
+[1667.7s] >> Okay. RL to me is different than
+[1669.4s] fine-tuning cuz it's you're more
+[1671.7s] building a general purpose model rather
+[1673.3s] than a like a specific purpose model.
+[1676.3s] >> But I think the big difference
+[1677.8s] >> use an RL. You could RL a model to just
+[1680.3s] >> I agree. There's companies that are
+[1682.2s] doing like vertical RL and like
+[1684.4s] >> yeah that's fine vertical RL is fine
+[1687.8s] >> in my opinion but like like very niche
+[1690.3s] RL for like a classification task or
+[1692.0s] something is like not worth it unless
+[1693.1s] you really save money
+[1694.2s] >> like if you're concerned about money or
+[1695.8s] latency then like train a tiny model and
+[1697.5s] like do like some sort of distillation
+[1700.1s] but what I was trying to say earlier is
+[1701.5s] like the thing that probably changed for
+[1702.8s] me is yeah
+[1703.7s] >> there is a big factor now in today's
+[1705.8s] economy where like speed to execution
+[1707.7s] matters a lot
+[1709.1s] >> and the benefit of using like an
+[1711.2s] intelligence 2 or a 2B layer in my
+[1713.8s] opinion is that you get to have reap the
+[1715.8s] benefits much sooner and then actually
+[1717.8s] decide where you spend your time context
+[1719.9s] engineering. So like like I come from
+[1722.3s] like per high performance optimization
+[1723.8s] mostly writing low-level assembly code
+[1725.7s] and the hardest part is not actually
+[1727.0s] writing assembly when we did that work.
+[1729.0s] The hardest part is picking the part of
+[1730.6s] the code that should be written in
+[1731.8s] assembly and that's all vibes. There's
+[1734.5s] no objective way to know that because
+[1735.8s] you can't survey the code realistically.
+[1738.0s] You just have to be like, "Ah, I'm
+[1739.8s] pretty sure this is a good use of time."
+[1741.4s] And like, "I'm pretty sure if I handw
+[1742.7s] write this, I can beat the compiler."
+[1745.4s] All right? And most people probably
+[1747.4s] can't beat the compiler for most
+[1748.7s] situations, even extreme experts,
+[1750.5s] because compilers are really damn good.
+[1753.2s] But every now and then, you're like, I
+[1754.6s] understand something about the data
+[1755.6s] pattern. I understand something more
+[1757.0s] about cache locality that I know the
+[1759.0s] compiler cannot generalize, and
+[1761.0s] therefore, I should handw write the
+[1762.2s] assembly, and I'll whoop its ass.
+[1765.2s] And in this this metaphor like beating
+[1767.6s] the compiler is beating a Frontier Labs
+[1770.5s] RL model basically is like I should ever
+[1775.7s] >> Frontier Labs like 40 person or 50
+[1777.8s] person engineering team who's sitting
+[1779.4s] there like evaling cloud code every
+[1781.3s] single day trying to make it slightly
+[1783.0s] better and their compaction team and
+[1786.0s] their like uh tool defi definition team.
+[1790.3s] >> It's like do you think you have alpha
+[1791.8s] over that time? it's time compression
+[1793.9s] over anything else. you might reach in
+[1796.4s] and say like I need to change the
+[1798.3s] definition like the the the declaration
+[1800.6s] string of this tool or I need to change
+[1802.6s] the response that comes back for I need
+[1804.2s] to do my own custom compaction because I
+[1807.0s] know for this specific set of problems
+[1809.0s] and even B maybe based on my eval that
+[1811.3s] is worth me like breaking from the happy
+[1814.3s] path of what the compiler what the you
+[1816.7s] know I guess the open AI or cloud code
+[1818.7s] team of 40 or 50 engineers is compiling
+[1821.7s] you know problem solving and and user
+[1823.7s] information into like how to build the
+[1825.6s] highest performance harness in this
+[1827.3s] case.
+[1827.7s] >> Yeah. It's like Chang, right? Like Chang
+[1829.3s] worked on React for a while. You all saw
+[1830.7s] like pretext, the thing going around on
+[1832.3s] Twitter for a while where he made that
+[1833.6s] thing.
+[1833.8s] >> Yep.
+[1834.2s] >> And like most people cannot do that not
+[1836.8s] because they can't do it, but because it
+[1838.2s] takes a level of creativity to recognize
+[1840.1s] that that is worth doing,
+[1842.4s] >> right? It's it's not just abilities
+[1845.0s] based. It's like ability to see the
+[1846.5s] thing that is worth spending time on and
+[1848.4s] having the time to spend on it to go do
+[1851.0s] that kind of thing. So like for harness
+[1852.3s] engineering and context engineering, I
+[1853.6s] view it the same way. Like 90% of your
+[1855.8s] prompts, I bet you an LM will write a
+[1857.9s] prompt. You can write a JSON spec or
+[1859.6s] like some type definition or something
+[1861.4s] and it'll mostly work. And then you're
+[1863.6s] like, holy cow, this system needs to go
+[1865.4s] from like 90% or like 80% to like 99.8%
+[1870.0s] because we're in a financial regulation
+[1871.7s] and this thing is the final thing that
+[1873.4s] we use for filing taxes for our
+[1875.0s] customers and we can't [ __ ] up. And then
+[1877.7s] you spend all your team's energy on that
+[1879.4s] part but not on all the other harnessing
+[1881.4s] journeying everywhere else in your
+[1882.9s] company.
+[1883.4s] >> And you build an eval for it first,
+[1884.9s] right?
+[1885.4s] >> Yes. Of course, if you really need that
+[1887.0s] high level accuracy, like don't waste
+[1889.4s] don't waste time trying to understand
+[1890.9s] the system without building like some
+[1892.4s] sort of like evaluation loop cuz how do
+[1895.0s] you even know you got better?
+[1897.1s] >> Uh we got a good question from Kevin in
+[1898.8s] the chat about the bitter lesson and uh
+[1901.9s] you know thinking you're better at code
+[1903.2s] design for agents is hubris. I think
+[1905.1s] that's a whole another episode.
+[1906.9s] Honestly, we talked a little bit about
+[1908.4s] this in the MCP debate thing. Um, I
+[1912.0s] mean, do you wanna do you want to draw
+[1913.3s] the bitter lesson thing and why uh why
+[1915.8s] why we've been ignoring it for the last
+[1917.4s] year and a half?
+[1918.6s] >> I mean, I think in a world where stuff
+[1920.9s] is moving really fast, the best thing
+[1922.7s] like very akin to what Viv said, like
+[1924.3s] the way that you gain the most alpha is
+[1926.2s] by being one of the best people in the
+[1927.8s] industry at something. And to do that,
+[1930.0s] you just have to be better. Like
+[1931.8s] Enthropic just hires regular engineers.
+[1933.6s] It's not like these engineers are like
+[1935.4s] spawned out of magic. They're just
+[1937.5s] regular engineers that get jobs there
+[1939.2s] that are working on this stuff like you,
+[1941.4s] like us, like anyone else.
+[1943.7s] >> Um, so like you can do better than them
+[1945.8s] because you're the same kind of
+[1947.1s] individual.
+[1948.2s] >> That's my take.
+[1948.8s] >> I'm going to I'm going to give you my
+[1950.9s] take, which is basically whenever
+[1952.3s] someone says to me, uh, what about the
+[1954.9s] bitter lesson? This is, by the way, the
+[1956.7s] voice I assume that you're saying that
+[1958.3s] to me in. This is the this is the face I
+[1960.6s] hear and the [laughter] voice I hear
+[1961.8s] when you say this. Um, here's how here's
+[1965.3s] how I think this works. Basically, you
+[1967.4s] have a specific model that has a
+[1969.2s] specific performance level on a specific
+[1971.3s] set of tasks and by naive prompting, you
+[1973.4s] can get it to be some percent accurate
+[1975.4s] on this group of tasks.
+[1976.6s] >> Yeah.
+[1976.9s] >> And you do some context engineering and
+[1979.1s] you get it to be a little bit better on
+[1980.8s] all those tasks, right? And then of
+[1982.6s] course, as we know, new model comes
+[1984.5s] along. Apply it to advance.
+[1989.2s] New model comes along and it's better at
+[1991.2s] most of those tasks. Every once in a
+[1992.3s] while it's worse at certain tasks, but
+[1993.7s] most of the time it just like makes all
+[1994.9s] of the code you wrote completely
+[1996.0s] irrelevant.
+[1996.9s] >> But you can immedately do more context
+[1999.4s] engineering and make it better. And like
+[2002.0s] Dan Shipper calls this like basically
+[2004.2s] like and this is why that matters, but
+[2005.6s] like he calls it surfing the models. I
+[2007.4s] think this is a really like important
+[2008.9s] concept is like yes, the models will
+[2010.8s] keep getting smarter and nothing you do
+[2012.5s] now will be relevant in a year, but also
+[2015.6s] like if you can keep doing this, you can
+[2017.9s] use the models better than the models
+[2020.0s] can get smarter. Exactly.
+[2021.4s] >> Like you can learn to use them faster
+[2023.0s] than they can release another model
+[2024.4s] every 6 months. And so you will always
+[2026.1s] be 5 to 10% ahead.
+[2028.0s] >> The principles constantly apply. I think
+[2029.8s] performance engineering is probably the
+[2031.3s] best analogy for this cuz like hardware
+[2034.5s] has gotten infinitely better when I
+[2036.2s] first started coding. Like it is so much
+[2038.5s] faster today than it used to be like 10
+[2040.3s] year 105 years ago. But guess what? They
+[2043.9s] pay performance engineers a lot more
+[2045.8s] today than they used to pay 10 years ago
+[2048.2s] [laughter]
+[2048.7s] >> because there's so much high delivery.
+[2049.9s] But exactly. And it's so much harder to
+[2052.2s] find people that are good at it. And the
+[2054.0s] best people at it are people that have
+[2055.3s] been doing it for a while. Um, and like
+[2058.2s] you just can't make this stuff up.
+[2059.5s] Experience makes the biggest difference
+[2061.0s] here. And like there will be people
+[2063.4s] right now.
+[2064.2s] >> Yeah. Viv, I know you've been writing a
+[2065.6s] lot on this lately. I'm curious if you
+[2067.8s] want to like screen share something
+[2069.4s] you've written recently that you think
+[2070.6s] is relevant and kind of walk through.
+[2071.9s] But we're going to make you write a
+[2073.4s] bunch of diagrams from scratch, but if
+[2074.7s] you have something you think would be
+[2075.7s] relevant um that you want to share uh
+[2077.4s] and kind of walk us through, I'd be
+[2078.7s] interested to kind of get your take
+[2079.8s] because I know we actually probably
+[2081.0s] disagree on a couple of these things.
+[2083.4s] >> Yeah. Yeah. Let me let me
+[2085.4s] >> while you pull there's some interesting
+[2086.6s] questions in the chat of like how do you
+[2088.2s] know where you spend your time to be
+[2089.9s] completely honest. I think Amazon has
+[2091.5s] this great leadership principle called
+[2093.0s] leaders. Great leaders are right a lot.
+[2095.8s] Like the skill issue like hopefully
+[2098.7s] we're all right in what we're spending
+[2100.0s] time on. Hopefully you're right on what
+[2101.2s] you're spending time on and if not
+[2102.9s] hopefully you can you can get data
+[2104.6s] really quickly revert and like go on the
+[2106.9s] direction that is correct
+[2108.7s] >> and like that muscle is really
+[2110.7s] >> yeah or learn so you can make the better
+[2112.6s] decision in the future. I wish we had a
+[2114.6s] golden orb. Sadly, Claude code is not
+[2116.7s] there yet where you just ask it what
+[2118.2s] should I do next.
+[2120.0s] >> Another need orb. What you kind of do is
+[2124.5s] you buy build an intuition or making
+[2127.4s] things as easy to delete. That's the
+[2130.3s] skill is like designing so it's easy to
+[2132.9s] delete and thinking about like if if
+[2135.6s] what I'm building now is that adding
+[2137.5s] capability to the model. Cool. What
+[2140.7s] happens when the model advances? Does
+[2142.5s] that new capability become a tech debt?
+[2145.4s] Well, if you surface that capability to
+[2149.0s] a user, you've now hamstrung
+[2152.3s] because people expect this feature to
+[2153.9s] exist as a product substrate, but it's
+[2156.2s] no longer needed because the models got
+[2158.2s] better. So, what you do is you develop
+[2160.0s] that intuition
+[2161.8s] about being easy to delete and being
+[2163.9s] very careful what you expose to users.
+[2168.0s] And that's where a lot of time should be
+[2169.9s] spent. And I also think the bitter
+[2172.9s] lesson was coined and defined and
+[2176.3s] suffered in a time like the idea right
+[2179.0s] is like you write a bunch of code around
+[2180.6s] a model to make it better and then the
+[2182.1s] model gets better and all your code is
+[2183.5s] irrelevant and you wasted all that time
+[2185.9s] that was designed and like discovered in
+[2188.2s] a time when code was really freaking
+[2190.2s] expensive. like the the if you have a
+[2193.0s] decent eval or you have the ability to
+[2195.8s] create new evals fairly quickly, you
+[2198.0s] have a skill at that then the code is
+[2201.1s] actually not that hard to write. I mean
+[2202.7s] we have freaking auto research now. So
+[2204.6s] like I don't think you should be so
+[2205.8s] concerned about writing a bunch of code
+[2207.2s] that is irrelevant in 6 months because
+[2209.2s] half the people writing these like you
+[2210.7s] know lights off slot factories are going
+[2212.2s] to be end up throwing up half throwing
+[2213.8s] out half their code base in 6 months
+[2215.3s] anyways. I think there's somewhere
+[2216.9s] halfway between it. Like every engineer
+[2219.4s] needs to build an agent and do their
+[2223.0s] first tool registration, play with the
+[2225.0s] system prompt, but that's not
+[2226.3s] necessarily where you're going to spend
+[2228.5s] your time for the business. But if you
+[2231.5s] don't understand the inner components,
+[2233.9s] then how are you going to be able to
+[2235.4s] work at the next level of abstraction?
+[2238.2s] So everyone needs to work at the most
+[2240.2s] basic things and rebuild the engine,
+[2242.2s] rebuild clawed code and like the source
+[2244.8s] code of claude code leaked to go look at
+[2246.6s] it. Codeex source code is there. The
+[2249.7s] next level from there is looking at the
+[2251.6s] techniques of how they and why they're
+[2254.0s] recycling the context windows and how
+[2256.8s] they do the explore tool or the plan
+[2259.5s] tool. And the plan tool goes to a
+[2261.8s] different type of model or maybe if you
+[2264.5s] look at claw code how it does is this
+[2266.4s] command safe. It it delegates down to
+[2268.6s] haiku for example. learning that tricks
+[2271.7s] or all those tricks and like gain an
+[2273.8s] understanding of the techniques and
+[2275.8s] tricks before you start going to like
+[2279.5s] level three type harnesses where that
+[2283.4s] stuff happens for you automatically. A
+[2285.2s] weird way I kind of look at this is you
+[2288.5s] you start the most fundamental level
+[2290.8s] which is you're programming in C and
+[2293.2s] you're you're malicking memory to the
+[2295.0s] array and next thing you know you got
+[2297.0s] these thing called sub aents. sub agents
+[2299.2s] are really just disposable heaps of
+[2301.0s] memory and if you look at cloud codebase
+[2305.1s] from the right lens they're just rebuilt
+[2307.0s] Erlang and they're just doing pointer to
+[2309.2s] pointer passing using file names it's
+[2311.2s] just message passing backwards and
+[2312.6s] forwards and understanding those things
+[2314.7s] at that level is going to be very
+[2316.9s] important for every engineer
+[2318.5s] >> you know we have like leak code with
+[2319.8s] data structures 101 just got to learn
+[2321.9s] the data structures 101 for building an
+[2323.6s] agent and if you don't know those like
+[2325.2s] >> absolutely
+[2326.2s] >> it's just going to be hard to talk
+[2327.8s] software where like fundamentally like
+[2329.7s] if you don't know what a sub agent is
+[2331.5s] like if you don't even know like
+[2333.3s] principally what it is down the hood to
+[2335.4s] some degree
+[2338.4s] [laughter]
+[2340.3s] uh Jeff that hat keeps all the wisdom
+[2342.8s] into Jeff.
+[2344.4s] >> Yeah, that's [clears throat] how he
+[2345.4s] keeps it safe in his brain.
+[2346.7s] >> But I think that's the biggest
+[2347.7s] difference like people really just need
+[2349.0s] to do those one-on-one courses and sadly
+[2351.0s] I don't think there is really we're all
+[2353.3s] discovering this kind of at the same
+[2354.5s] time.
+[2355.5s] >> Yeah. Yeah. I I think it it moves really
+[2357.2s] fast too. Like it's like you need the
+[2359.4s] primitives but also like if you want to
+[2360.8s] be at Frontier like you have to be like
+[2363.0s] on the edge just like trying a bunch of
+[2364.6s] stuff essentially and like seeing kind
+[2366.3s] of what breaks
+[2367.7s] >> and Okay, let me give like quick
+[2372.3s] kind of disagree with it because like
+[2373.8s] that would be sick. Um yeah, so I think
+[2376.1s] like this is actually super related to
+[2377.4s] what Jeff said. So I think like
+[2379.0s] basically the way that I think about it
+[2380.7s] is like I have like model object
+[2382.6s] basically and I have like goal, right? I
+[2385.0s] like the agent needs to do like
+[2386.2s] something for me and I have like model
+[2387.8s] and like my job as a harness engineer is
+[2390.5s] just like bridge that gap essentially.
+[2392.2s] This can be at like layer one. This can
+[2394.3s] be like a while loop on top of my while
+[2396.3s] loop or like
+[2397.3s] >> I actually like don't even care like how
+[2399.4s] it happens. But like there's primitives
+[2402.3s] that we've roughly settled on that we
+[2404.9s] think makes some of the stuff work. I
+[2406.4s] think it's like working backwards from
+[2409.4s] agent behavior and that's like wrapping
+[2411.8s] the model into what do I need to like
+[2414.7s] put around the model to get that
+[2416.2s] behavior like that to me is a super
+[2419.4s] useful mental model and it's like okay I
+[2421.9s] need to like work with real data durably
+[2423.8s] right that's like file system right I
+[2425.3s] need to like execute code that was like
+[2426.6s] the first okay like this JSON string
+[2429.0s] means I'm going to go and like execute
+[2430.2s] this Python code I'm going to return the
+[2432.1s] context like back to the model so this
+[2433.6s] is like react right um there's infra
+[2436.4s] stuff, right? Which is like, okay, I
+[2437.6s] need like permissions. I need all that
+[2439.0s] sort of stuff. Okay, like sandboxes,
+[2441.2s] like perms, all that sort of stuff. And
+[2443.7s] I think like there's there's like one
+[2446.4s] maybe like one more layer of this, which
+[2448.7s] is we there's there's sort of this like
+[2451.4s] double thing that happens right now,
+[2452.6s] which is like code is really really easy
+[2455.4s] to produce, but I have a bunch of like
+[2458.1s] alpha in my harness. And like both of
+[2460.5s] those can't exactly be true at the same
+[2462.5s] time in my mind.
+[2464.3s] If really good code is really easy to
+[2466.9s] produce, which I don't think it is, then
+[2469.2s] you should be totally okay in the next
+[2472.0s] version of of like the model to throw
+[2474.6s] all that stuff away and just do the
+[2477.7s] right thing for your problem like at
+[2479.8s] this time, right? If like code is super
+[2481.4s] easy to generate, then just like throw
+[2483.1s] it away.
+[2484.0s] >> Yeah, you should. Well, especially
+[2485.6s] especially if you can make a good eval
+[2487.2s] because because your eval becomes the
+[2489.1s] ultimate deterministic spec is the model
+[2491.0s] can just
+[2492.0s] >> like write new code, see if it did
+[2493.8s] better on the eval or not and keep
+[2495.4s] adding more determinant. This is this is
+[2496.9s] like the core behind auto research,
+[2498.3s] right?
+[2499.3s] >> Dude. Yes. So, so I think like maybe
+[2501.8s] like just one more thing I'll add which
+[2503.0s] is like super related to this one is
+[2504.4s] like basically to me like harness
+[2506.3s] engineering is all about wrapping the
+[2508.0s] model to do useful work on like some
+[2510.2s] task that I care about. Like I think
+[2511.8s] there's like some talk about like
+[2513.0s] general purpose agent versus not general
+[2515.3s] purpose agent. Like I actually like
+[2516.6s] don't even know what that means. I just
+[2518.0s] know like there's like work that I need
+[2520.1s] to do or like that my customers need to
+[2521.8s] do and like I need to build a machine
+[2523.8s] learning system to like make that work
+[2525.7s] possible. Like I actually don't even
+[2527.2s] care if it sucks at everything else
+[2528.5s] because like I'm just selling to my
+[2529.8s] customers like this thing basically. And
+[2531.8s] I think like what Dex just said, this is
+[2533.8s] what I'm most bullish on, which is like
+[2536.2s] auto research and like eval are
+[2538.8s] basically encoding the behavior that I
+[2541.8s] need this agent to do. And like the the
+[2544.4s] easiest leverage thing I can do right
+[2546.3s] now is like edit the harness. And like
+[2548.0s] what editing the harness basically is is
+[2549.8s] like what skills do I need? What system
+[2551.8s] prompts do I need? Like what context
+[2553.4s] engineering stuff do I need? And like if
+[2555.4s] we really are a bitter lesson, then my
+[2558.3s] evals encode the behavior that I want if
+[2560.8s] they're good eval. And like maybe I get
+[2562.4s] them from like production traces and
+[2563.8s] like they're really really good and like
+[2565.0s] I I fit my harness to like make those
+[2568.0s] evals pass and like if we get really
+[2570.3s] smart models then this should be easy
+[2572.7s] actually and like we should be able
+[2575.1s] >> I disagree. I I think this is the thing.
+[2577.9s] Um so I said this
+[2581.2s] the principle of eval being done is
+[2584.8s] I agree with that like this is how code
+[2586.7s] should be written. You should build
+[2587.8s] metrics and then you basically just
+[2589.0s] optimize around the metrics. But the
+[2590.7s] part I disagree with is that if code is
+[2594.1s] easy this is easy because I don't think
+[2596.6s] that's I don't think coding is the hard
+[2598.4s] part about this. So like when I look at
+[2600.0s] the best engineers I've ever worked
+[2601.2s] with, the skill set that they really
+[2602.6s] have was they have this thing called
+[2604.0s] like what I call like long horizon for
+[2606.1s] humans where like they can basically
+[2607.8s] like look far ahead into the future and
+[2609.4s] be like and their the thing that they
+[2611.7s] suggest is going to outlive a lot of
+[2613.8s] things. So like some of the best
+[2615.9s] engineers in this domain are like and
+[2618.2s] video game engineers get a lot of crap
+[2619.8s] for this but their games last for a long
+[2622.5s] time and their code is pretty good and
+[2625.1s] like obviously the S3 and the EC2 team
+[2627.8s] is similar. Their code lasts for a long
+[2630.2s] time. Embedded systems engineers, their
+[2632.3s] code lasts for a long time. They're able
+[2634.5s] to predict systems and architectures
+[2636.2s] that outlive them. And the hard part
+[2638.3s] about this system has never been coding.
+[2640.1s] It's been like designing the system that
+[2642.4s] will be still like the invariance of the
+[2645.4s] system that will hold true today and the
+[2647.8s] invarian of the system that hold true 6
+[2649.4s] months from now or a year from now when
+[2650.8s] you've added five new features that now
+[2652.7s] need to compose together.
+[2654.6s] >> Okay.
+[2654.9s] >> And that is really
+[2656.7s] >> I in general agree. I think some of your
+[2658.6s] examples are not great because you're
+[2660.4s] talking about code that is not changed.
+[2664.2s] Like there's a difference between like
+[2665.4s] shipping an embedded system where it's
+[2666.8s] like okay this needs to serve purpose
+[2668.5s] for the lifetime of the hardware or like
+[2671.0s] hey this video game needs is going to
+[2673.0s] like be in circulation for 10 years but
+[2675.0s] it's not actually like changing every
+[2676.3s] week over time. Some of those examples
+[2677.8s] were good though of that idea of people
+[2679.0s] who can like design the architecture of
+[2681.0s] something like EC2 or S3 which will the
+[2684.4s] API won't change but it will be
+[2686.0s] constantly evolved internally over time
+[2688.6s] and it needs to like
+[2691.0s] blasting the developer.
+[2692.4s] >> Hopefully the core algorithms you write
+[2694.0s] don't get evolved like for example like
+[2695.9s] the like git's core abstraction is so
+[2698.8s] beautiful that it really hasn't evolved
+[2700.4s] since it was created. the Linux for
+[2702.8s] abstract
+[2703.5s] >> beautiful is the word I would use but
+[2705.6s] yes git has a good abstraction in it
+[2708.3s] >> okay well okay I like art coding is art
+[2710.6s] to me so it's slightly different but
+[2712.0s] that's how I look at it sadly uh it's
+[2714.4s] it's an emotion sadly and unlike most
+[2716.3s] artwork
+[2717.4s] >> um but when I look at like um like um
+[2720.3s] >> like same with like the Unix philosophy
+[2721.9s] of like you do simple instruction that
+[2723.4s] compose with a pipe operator that thing
+[2725.9s] composed and that principle withheld
+[2727.9s] itself that's why some of these people
+[2729.2s] are like legendary engineers is because
+[2732.3s] most people can't come up. It's not
+[2734.5s] everyone can code that, but not everyone
+[2737.4s] can invent that. Not like and
+[2740.2s] >> philosophy.
+[2741.5s] >> Exactly. And the philosophy engineering
+[2743.4s] is what what makes eval hard. It's not
+[2745.4s] that eval hard to code up. It's like how
+[2747.6s] do you like
+[2748.8s] >> how do you look at a problem like
+[2750.4s] >> this is what I'm going to define as the
+[2751.7s] eval for this problem. This the right
+[2753.3s] metric.
+[2754.2s] >> Are we going to have to call this
+[2755.3s] episode philosophy engineering? Dude,
+[2758.2s] that honestly that's what I feel like
+[2760.1s] that's what coding has mostly evolved
+[2761.4s] into.
+[2763.6s] >> Let's quickly play with this. Um, it's
+[2767.0s] actually
+[2768.8s] harnesses now like and even workflows.
+[2773.1s] It's potentially too soon to lock in.
+[2775.5s] Like I've been playing around with like
+[2777.2s] ideas of Loom and like what's next after
+[2780.0s] Ralph and there's gas towns and like
+[2782.7s] there's clawed codes and there's
+[2784.6s] codeexes and people are building their
+[2786.6s] GS stacks and stuff on top. The biggest
+[2789.6s] risk is it kind of can shape how you
+[2792.8s] think and encodify your way of work
+[2796.6s] and that changes everything starts going
+[2799.9s] okay how do I build with loops me for
+[2803.0s] example sequential loops and then so
+[2806.7s] that's essentially I'm taking the uni uh
+[2810.3s] uni computer like single processor and
+[2812.6s] you look at like Yagi Yaggi's like let's
+[2815.2s] do everything from the 1990s with
+[2817.1s] parallel computer and figuring out what
+[2818.8s] we're going to do with parallel
+[2819.6s] computers with loops and workflows and
+[2822.0s] that shapes how he thinks is in his
+[2823.6s] direction and I have my direction in his
+[2825.3s] direction and then you look at like Gary
+[2827.9s] and like the skills is the operating
+[2830.3s] system and these these all shape how you
+[2832.8s] think and it starts reinforcing your
+[2834.9s] world views on how it should be.
+[2837.3s] Meanwhile, the models are working in a
+[2839.2s] completely different direction to your
+[2841.1s] world views. So, it's almost it's almost
+[2844.6s] too soon to lock in particular things.
+[2848.9s] People ask like, "Jeff, how do you build
+[2850.6s] these days?" And it's like,
+[2852.3s] >> "I'm still randomly making stuff up and
+[2854.9s] trying different things cuz I don't want
+[2856.5s] to lock in a particular way." This is
+[2858.7s] Simon Wilson's advice, too, is Simon is
+[2861.1s] always saying things like, you know,
+[2863.2s] >> you need to constantly be trying things
+[2865.0s] that you don't think will work or that
+[2866.6s] feel dumb or that feel futuristic or
+[2868.9s] whatever it is because every once in a
+[2870.6s] while,
+[2871.5s] >> it will work. And this is how you keep
+[2874.2s] your understanding of what models are
+[2876.0s] capable up to date.
+[2877.2s] >> I agree. I mean, being flexible is like
+[2879.2s] I think one of the most useful skill
+[2880.5s] sets right now.
+[2882.2s] Most people are just uh they think it's
+[2884.6s] I think adapting your engineering
+[2885.9s] workflow and thinking is so [ __ ]
+[2887.4s] hard.
+[2888.2s] >> Um answer question in the chat. Uh this
+[2890.2s] will be published on YouTube. Uh we send
+[2892.3s] the videos out Monday morning. If you're
+[2893.9s] on this event, you will get an update in
+[2895.4s] the email. I also guys I have 10% on my
+[2898.2s] laptop and this is the only laptop
+[2899.7s] hooked up to AV here. So we should
+[2901.4s] probably think about wrapping it up. Uh
+[2904.1s] Viv, I don't know like you we we like to
+[2905.9s] interrupt each other on this show. So,
+[2907.4s] if you had kind of like a final point
+[2909.0s] you wanted to make in terms of harness
+[2911.1s] building, I would love to get you in,
+[2913.3s] >> dude. Yeah. Okay. May maybe like a throw
+[2915.7s] out to like chat also to you guys
+[2917.5s] because like I I totally agree. I think
+[2919.7s] it's like we we don't exactly know like
+[2921.9s] what primitives are going to be super
+[2923.9s] useful like four or five months from
+[2926.2s] now. And I think actually that's like
+[2928.8s] one of the reasons why like pi type of
+[2931.7s] stuff like really took off because it's
+[2933.6s] like it's super simple and like there's
+[2937.1s] no opinions actually in terms of like
+[2939.0s] the primitives that you're going to use
+[2940.6s] and like you basically like bring task
+[2944.2s] and like you're supposed to like self-
+[2945.4s] evolve the harness building process to
+[2947.7s] like fit to your task basically. How you
+[2949.8s] do that might be like you chat with Pi
+[2952.6s] and like it builds stuff for you or like
+[2955.0s] you point it at a bunch of evals and it
+[2956.7s] like auto research like self-discovers
+[2958.7s] but like what do you guys maybe think
+[2961.0s] about like those two things? I'm like
+[2963.5s] super bullish on one use case which is
+[2966.2s] like I know Vio says like eval are like
+[2969.4s] the the whole point is like you you make
+[2971.0s] something that transcends this like
+[2972.8s] harness like agent building process. I'm
+[2974.9s] in like sort of an other camp which is
+[2976.3s] like sounds to me like that's sort of
+[2978.0s] like wishful thinking to me at least.
+[2979.6s] I'm like actually what we should do
+[2981.2s] right now and like not be like super
+[2984.5s] like uh paralyzed by like bitter lesson
+[2987.6s] stuff or like we'll never figure this
+[2988.8s] out is basically like take really
+[2990.9s] unopinionated harness take like task
+[2993.8s] plus like production traces like eval
+[2995.6s] sets and just like fit them and then
+[2997.8s] like look at it as a human and like try
+[2999.4s] to improve it basically. And I want to
+[3001.3s] get like maybe your takes on that. I
+[3002.8s] think like that is the best way maybe
+[3005.4s] today at least given what the models are
+[3008.3s] to to build stuff.
+[3009.8s] >> I'm aligned the while loop having a
+[3011.4s] human in the loop is a great process of
+[3013.4s] making it way smarter. That's a great
+[3015.3s] way to inject intelligence in that part
+[3017.0s] of the layer.
+[3018.6s] >> Yeah. And I I think I think there's uh
+[3020.7s] we do a lot of um big brain engineering
+[3023.8s] on this show sometimes and I think
+[3025.5s] there's something to be said for like
+[3027.5s] >> a lot of people are trying to
+[3029.2s] overengineer stuff uh and like oh how do
+[3033.1s] we automate this thing that I could do
+[3034.6s] in in in a day like great automate it
+[3037.2s] but if it would take you 5 seconds and
+[3038.9s] you would get the same result then like
+[3040.4s] why are you spending a week trying to
+[3042.1s] automate it kind of thing.
+[3043.6s] >> Just look at the damn thing. Like look
+[3045.7s] at the damn data. Actually, I think
+[3048.3s] that's a mistake that many people make
+[3049.8s] when they do any sort of context
+[3051.2s] engineering or harness engineering or
+[3052.7s] this eval loop that Viv is talking
+[3054.2s] about. They never look at the data.
+[3055.8s] They're just like, "Claw, figure it
+[3057.4s] out." And I see this all the time.
+[3059.8s] >> Yeah. Yeah. Well, maybe like maybe quick
+[3061.8s] question.
+[3062.1s] >> Jeff's laughing because it sounds like
+[3063.2s] he's saying so like real quick on this
+[3066.2s] thing. I think like auto research is
+[3068.1s] sick, but have you guys like ever like
+[3070.1s] uh I like when people like post like the
+[3072.2s] auto research things and you go and like
+[3073.4s] you sort of like debug them and then you
+[3075.0s] look at them you're like dude like we've
+[3077.4s] just like overfitit to the entire email
+[3080.2s] set and this will like completely like
+[3082.2s] not generalize
+[3083.6s] >> like the second after it's like if you
+[3085.1s] look at like the prompt that the
+[3086.6s] autoresing like created it's like oh it
+[3089.0s] like basically enumerated like 60 if
+[3091.5s] else cases
+[3092.6s] >> and like just put those in the system
+[3094.1s] prompt like whatever those I'm like,
+[3096.3s] >> and it works.
+[3097.5s] >> Yeah, it works. It work. It's like the
+[3099.6s] the people who cheat on terminal bench,
+[3101.6s] right?
+[3102.6s] >> Yeah.
+[3103.0s] >> The terminal bench system prompt with
+[3104.6s] all the solutions embedded in or
+[3106.0s] whatever.
+[3106.7s] >> Oh, that's funny. I mean, have you guys
+[3108.6s] you know what or what orchestration that
+[3110.4s] I think we're going to end up with? Have
+[3111.5s] you guys ever seen like Facebook or
+[3112.9s] Google's deployment system inside of
+[3114.7s] their uh engineering teams? they do
+[3118.1s] something really elegant which is um
+[3120.6s] what they end up like what Google and
+[3122.3s] Facebook end up doing is they say every
+[3124.5s] engineer pushes code to prod and they'll
+[3127.1s] do an automatic roll out for like up to
+[3129.4s] 1% of traffic slowly and they slowly
+[3131.7s] scale it up but every engineer when you
+[3133.5s] push a feature at the uh prod has a
+[3135.7s] metric tied to their feature and at
+[3137.4s] least when I was there like super early
+[3139.0s] in 2015 if you did not hit I am at my
+[3142.7s] desk effectively on the button your
+[3144.6s] feature did not go out with the release
+[3146.6s] they wanted you looking at the metric at
+[3148.4s] the point of release cuz if [ __ ] hit the
+[3150.3s] fan, you could just hit no and undo
+[3153.2s] >> and like that's kind of what you need in
+[3154.8s] this agent loop where it's like you want
+[3156.2s] that metric. You need prod data cuz if
+[3158.2s] you don't have prod data, you'll overfit
+[3159.6s] to like the wrong thing.
+[3161.0s] >> Yeah.
+[3161.5s] >> But then you need something to be like
+[3163.2s] ship it, measure it, and just like run
+[3165.2s] that in forever and like put a human in
+[3166.7s] the loop if you want high super high
+[3168.2s] intelligence.
+[3170.3s] >> Well, hopefully your humans are super
+[3171.8s] high intelligence on your team.
+[3173.1s] >> I don't know. I remember the days of
+[3174.8s] having a release master and uh if you
+[3177.8s] weren't there when the release master
+[3179.7s] says your stuff's going out and you
+[3182.0s] weren't there with an emergency bottle
+[3183.7s] of scotch when you never [ __ ] up
+[3185.8s] happens [laughter]
+[3187.1s] >> like like that's how it used to work.
+[3190.2s] Like like
+[3191.2s] >> there was someone figuring it out that
+[3193.1s] the features out. You had to be all
+[3194.6s] hands on deck when it happened and you
+[3196.6s] needed an emergency bottle of scotch to
+[3198.4s] apologize when you made a mistake.
+[3200.4s] >> Bring back the scotch. Yeah, bring back
+[3202.9s] scotch-driven development.
+[3205.1s] >> Scotch. Yeah. Uh the question we should
+[3207.5s] ask on which is uh this is a really good
+[3209.5s] question in chat which is uh what advice
+[3211.8s] would you give to young people who are
+[3213.2s] getting into coding software engineering
+[3214.6s] and AI? Is it still worth learning how
+[3216.2s] to code the traditional way? Should they
+[3217.8s] learn something else? Should they pair
+[3219.0s] program?
+[3220.0s] >> Fundamentals that they should learn. Um
+[3222.5s] they should understand uh the tool
+[3224.7s] calling loop at the most fundamental
+[3226.6s] level. They should be able to draw a
+[3228.4s] sequence diagram showing how the
+[3230.3s] infanting works. They should be able to
+[3232.6s] design a tool. Uh they should be able to
+[3236.0s] be able to teach someone at that level.
+[3238.1s] And that's like that's the new skill.
+[3239.6s] That's not even someone brand getting
+[3241.1s] brand new into engineering. Um a
+[3243.7s] shockingly am a large amount of
+[3245.4s] engineers
+[3246.9s] right now cannot even do that. Um you're
+[3249.9s] not a senior engineer unless you can
+[3251.4s] teach these primitives. From there, the
+[3254.0s] fundamentals still matter. Um, like
+[3257.3s] learn into why things like like functors
+[3260.9s] exist. If you're in functional
+[3262.4s] programming, learn about like ports and
+[3265.5s] adapters or hexagonal architecture and
+[3268.6s] learn why it's not needed when you're
+[3270.7s] doing functional programming. Like learn
+[3273.1s] about things like property based testing
+[3275.8s] and all these other things. Think about
+[3279.0s] library design. Like the these these
+[3281.6s] agents copy and paste bad patterns
+[3283.6s] everywhere in the codebase. So what you
+[3285.9s] want to do is think very carefully about
+[3288.0s] software uh modularity
+[3290.8s] and like the the old topics of clean
+[3293.1s] code and solid. They're still still
+[3296.1s] important as ever. Over to you uh Viv.
+[3298.9s] >> Yeah. Yeah. I'm down. I obviously echo
+[3301.0s] everything Jeff said, of course, but I
+[3302.5s] think like one maybe like practical
+[3304.4s] thing for me is like like if you're like
+[3307.0s] maybe like not doing CS or like
+[3308.6s] graduating with CS, I would say like
+[3309.8s] just like pick like one thing in AI that
+[3313.4s] you're like really kind of like down
+[3315.0s] with or like passionate about and just
+[3317.0s] like I would say like go ham on that
+[3319.3s] like maybe write a blog about it and
+[3320.6s] like post it on Twitter and like some
+[3322.6s] random people will see it if you like do
+[3324.7s] that loop enough times and then you can
+[3327.4s] like branch out from there. So, I think
+[3329.5s] it's like I'm I'm like a big proponent
+[3331.7s] of like depth driven learning like today
+[3334.1s] with AI because like you can actually
+[3336.4s] like go super deep and you can become
+[3338.2s] like you can become like top 20% if you
+[3340.9s] like grind on something for like a month
+[3342.9s] or like two months if it's like narrow
+[3344.4s] enough. And I think like doing that and
+[3346.4s] I'll also say like posting about it on
+[3349.0s] Twitter asks like wherever you feel
+[3350.4s] comfortable. That's like a great way to
+[3351.8s] like meet cool people and like get get
+[3353.8s] good feedback along with like learning
+[3355.2s] the like learn the basics then tell
+[3357.9s] >> you have to manifest your uh lux surface
+[3362.8s] and that exactly that you need to write
+[3365.1s] in your blog and you share ideas
+[3368.2s] and that is really important like start
+[3370.9s] if you want to be entrepreneur start
+[3372.6s] building your distribution and your
+[3374.1s] mailing list now today cuz identify
+[3377.9s] yourself as a builder and then they're
+[3380.0s] going to be other people doing the same
+[3381.4s] and then you become friends with those
+[3382.9s] builders and they're all on the same
+[3384.4s] journey together. Really important.
+[3386.9s] >> Amazing. Guys, this has been a blast. We
+[3389.4s] got to drop cuz I'm at 2% battery.
+[3391.3s] >> Give me give me give me your learning
+[3393.3s] value before you hop off and maybe
+[3394.9s] you'll die.
+[3395.4s] >> Learning value. I don't know. Pair
+[3396.8s] program more. There's a ton of intuition
+[3398.6s] in all this stuff. Obviously, knowing
+[3400.2s] how context windows and OLM work under
+[3402.0s] the hood is super important. Uh, but I
+[3404.3s] think that everyone's discovering weird
+[3406.0s] new corners of this space and you should
+[3408.4s] go explore together with people and
+[3410.2s] learn what they're learning and share
+[3411.4s] your learnings. That's the fastest way
+[3413.0s] to grow and that's why I love hanging
+[3414.4s] out with people like you.

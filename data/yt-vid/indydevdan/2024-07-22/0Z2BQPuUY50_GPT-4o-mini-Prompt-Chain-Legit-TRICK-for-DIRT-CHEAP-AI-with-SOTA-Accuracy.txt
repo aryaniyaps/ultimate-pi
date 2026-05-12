@@ -1,0 +1,515 @@
+as predicted the price of intelligence
+is going to zero gbd 40 mini just came
+out and is the most coste effective
+model while maintaining a majority of
+the performance of a state-of-the-art
+model I think the numbers here are
+actually really really staggering the
+gb40 mini is insanely close to the
+performance of GPT 40 in many of these
+cases and many of these benchmarks with
+a trick we've been looking at on the
+channel you can maintain the exact
+performance gains that you can get from
+gpg 40 and even Claude 3.5 Sonic that's
+what we're going to look at in this
+video but we really do have to express
+how crazy this is gb40 mini really is
+insanely affordable intelligence 30
+times cheaper than gbt 40 this is
+roughly averaging their input and output
+token costs and then it's roughly 20
+times cheaper than 3.5 on it and again
+the crazy thing here is the performance
+gains don't drop off a cliff Gemini
+flash is the only model that's come as
+close but with every one of these other
+models once you go down in size once you
+make your model cheap you lose all of
+the state-of-the-art performances this
+is why gb40 mini is so incredible you'll
+notice here you know 82 to 88 that's a
+5% accuracy difference 13% we have a 3%
+difference here 6% difference 3%
+difference this is really really crazy
+considering the costs right we're
+talking about percentages often smaller
+than 10% right the accuracy is at the
+worst a 133% drop off and again with
+this trick I want to show you in this
+video you can maintain a lot of the
+benefits of using one of these models
+we're going to talk about that in just a
+second here but it's really really wild
+that by only a drop of 10% you have a
+gain of 30,000. 30X and a 20x so you
+know if you're using Cloud 3.5 Sonic
+which is already priced at $3 per
+million tokens it's only going to be a
+20x but still uh only is a silly word to
+use there because a 30 times Improvement
+in price and a 20 times Improvement in
+price are both absolutely incredible so
+you know gbd4 o mini confirms what we've
+been kind of betting on on the channel
+the price of intelligence is going to
+zero so what does that mean for us how
+can we utilize this how can we play with
+both the absolute state-of-the-art
+models like claw 3.5 Sonet and also how
+can we take advantage of the cheaper
+second tier but still high performing
+model like gbd4 mini everything starts
+out with a prompt but you can take the
+prompt and chain together the results
+and by chaining your prompts together
+you can accelerate the results by having
+your models think step by step blow up
+their context window solve problems one
+step at a time you've seen this we've
+discussed this on the channel we pushed
+this a step further in our previous
+video you can do this with multiple
+chains running across different models
+so you can have the state-ofthe-art
+results running you take your inputs and
+instead of just running a single prompt
+chain to get that accelerated result you
+run 2 3 4 five or more prompt chains and
+then what you do at the end is you merge
+the results with an evaluator function
+this evaluator function is very
+important because it forces you to say
+this is what it means to get a good
+result out of my llms out of my prompts
+and out of my prompt chains so in the
+end it looks like this right prompt one
+feeds into prompt two two to three and
+this can go all the way to n as many
+prompts as you need to chain together
+you can but then you take your results
+and you merge them together with the
+evaluator this is called the fusion
+chain link is going to be in the
+description we talked about this a lot
+in the previous video this allows you to
+get the state-of-the-art results out of
+the best performing models of course at
+the price of running all of these models
+on your same prompts and on your same
+prompt chains in the end this is going
+to be more expensive the incredible
+thing here is thanks to gp40 mini now
+that we have a high performing model
+that is extremely cheap what we can
+actually do here is take our Fusion
+chain and just run a gb24 mini fusion
+chain the price of this chain
+effectively has dropped to zero while we
+maintain most of our results because
+we're using prompt chains and we're
+using the fusion chain here right so
+we're going to get three takes of a step
+by step task by task prompt we're going
+to then evaluate the results using a
+clean evaluator function and then we're
+going to finally get that that last
+output so you know running nine prompts
+of these you know higher-end models can
+now be done at a fraction of the cost
+every single one of these prompts is
+going to cost us 20 to 30 times less so
+that means we can really really exploit
+this idea of using cheap high-
+performing models with prompt chains and
+fusion chains so this is a big idea that
+I've been playing with a lot and I've
+been getting some really really high
+class results so what does this look
+like in action let's go ahead and look
+at an application we've been building on
+the Channel this is called zero noise
+it's an application that allows me to
+fetch information from blogs from change
+logs from tools from webites only when
+there are relevant changes when there's
+new content this allows me to aggregate
+information faster and only consume
+information when it's time to consume
+information I think one of the most
+important things you can do in the age
+of AI is make sure that your information
+diet is as clean as possible there's
+going to be so much content generated
+there already is so much content you
+feel the on a daily basis you know what
+this is like I think it's important to
+build and use tools that help you filter
+out the noise keep yourself in a low
+noise focused environment in previous
+videos we built up the fetch workflow
+where we go scrape all these blogs for
+Relevant content for new relevant
+content we built up the learn workflow
+and in this video I want to show off the
+Run recommendations the recommendation
+workflow so we have a recommendations
+prompt chain with multiple versions of
+gbt 40 Mini running in every single
+prompt chain and all it's going to do
+here is based on the content we have
+already set up in our fetch so you know
+you can see in here we have the cursor
+change log we have the AER blog we have
+Simon W's blog shout out Simon W and
+then we have a couple additional ones
+here what this will do is take related
+keywords and go ahead and perform a SEO
+type search I'm using ex AI you can use
+really whatever you want scrape some
+related results based on some related
+keywords so thanks to gp24 mini this
+agent workflow is nearly free when
+before it was you know 20 30 times more
+expensive so you can see here I'm
+getting some great and some not so great
+results but that's kind of the whole
+point of this right I have a nice
+variety of recommendations that I can
+now look through that my agentic
+workflow has surfaced for me
+automatically based on these related
+tags now I can hit thumbs up and thumbs
+down and it's going to save a brand new
+recommendations feedback data type which
+will then change the flow of the
+application in the future based on the
+thumbs up or the thumbs down that I give
+so this is really cool this is what it
+looks like let me go ahead and just show
+you what the code looks like just a
+little bit I want to focus on the prompt
+chain and show you how cool this is that
+we can take gpg 40 mini a cost effective
+high accuracy model and generate some
+still very state-of-the-art prompts and
+prompt chain so we have this workflow I
+like to use this agentic pattern here
+where we retrieve we're on our agentic
+we act learn and notify and all the
+magic is happening right here in the
+recommend workflow so let's go ahead and
+walk through this a little bit so in our
+agentic we're taking all the scraped
+content from every one of our you know
+currently
+existing uh information sources that
+we're interested in we're creating
+content in markdown format we're then
+Gathering our previous positive feedback
+items and our negative feedback items
+that's created by hitting the thumbs up
+and the thumbs down here from previous
+runs and then we're just you know
+creating some context for these prompts
+then we're actually running our promp
+and you can see here we have an
+evaluator and here is the important part
+so we're using this Fusion chain which
+allows us to run a series of prompts
+over a series of models there's
+something kind of interesting happening
+I am just running a prompt chain with
+four gbto mini models so I'm running the
+fusion chain over these two prompts let
+me just show you these two prompts real
+quick so based on all of the scraped
+content we're going to extract keywords
+and then based on our positive and
+negative feedback back we're going to
+filter out those keywords that are not
+relevant and make sure that we maintain
+and explore the keywords that are
+relevant to the positive feedback right
+so the thumbs up and that means that you
+know we have two prompts here instead of
+three prompts we have two prompts and we
+have one more chain and they're running
+into the evaluator method and the
+evaluator all that's doing here is we
+can just go ahead and minimize a lot of
+this the evaluator is basically just
+taking all of the last results just
+taking the results from the last last
+layer of prompts right so this last
+layer here and it's merging them all
+into the evaluator function and all
+we're doing here is we're going to get
+all the keywords and all the items that
+we do actually want to search for and
+then it's going to return that response
+and then a score for each one of our
+final outputs the evaluator is really
+really powerful it forces you to Define
+what it means to get a great result out
+of your prompt chain and out of your
+llms basically what we do is given the
+final layer of every single prompt chain
+you merge them together using whatever
+logic you like but the interesting part
+here is that this Fusion chain is
+powered by four gbg 40 Minis and it's
+giving us this like great set of results
+based on the script content from the
+existing URLs right so what does this
+look like in detail let's go ahead and
+look at some of the log files we have
+the fusion results here the top response
+here is that fuse response from our
+evaluators so you can see we have a list
+of URLs here which we pulled we have an
+entire explanation for every single
+keyword and then here you can see all
+the keywords we have right so these
+keywords then create additional SEO
+searches and then the SEO searches are
+surfaced here and then I can just click
+in and see what I'm interested in right
+so we have some uh we have a fireworks
+uh cursor blog here and looks like
+there's a coll lab happening here and
+yeah this just happened recently so very
+interesting I actually did not know that
+cursor was working with fireworks and
+they achieved this really really crazy
+1K tokens per second um so you know this
+is really cool so if I was interested in
+this type of content this type of
+information and I wanted to see more on
+cursor prediction I would just come in
+here thumbs up and now what's happening
+is based on my thumbs up here this is
+going to save in my configuration. Json
+file and on subsequent recommendations
+it's going to see that I thumbs this up
+and specifically look for more content
+like this right so we can see exactly
+what that looks like in the
+configuration if we close our providers
+you can see here we have some
+recommendation feedback and I'll just
+collapse all this so we can just see
+that most recent one that I just added
+but you can see that that's here right
+so we have the URL coming in we have the
+keywords and then we have positive
+feedback negative feedback so this is a
+positive one right since I gave this a
+thumbs up and now this cursor prediction
+SEO keyword is going to be prioritized
+in subsequent search is so if I was now
+interested in fireworks content their
+blogs I could come in here take a good
+look at their uh you know content and
+then I could you know run the previous
+workflow which we covered in another
+video a different agentic workflow will
+run and start to put together the
+information that we need to know if
+there are updates on this blog that I
+haven't seen before with every agentic
+workflow they start to feed back into
+each other right so here's a quick
+diagram that kind of shows that off so
+in the beginning we have our config.js
+on and you know that's this file f it
+contains our recommendations and it has
+our you know providers here so you can
+see we have the cursor change log there
+and and we have the HTML elements that
+are used to you know find new content we
+load that we scrape those websites we
+run our gp40 mini fusion chain that
+gives us our keywords we then run our
+keyword search generate the
+recommendations as you saw and then we
+displayed them so you know that was you
+know this UI here and then want to hit
+thumbs up or thumbs down this is where
+we get into this really intering
+feedback loop where this actually
+updated the config.js right with some
+new recommendations which then fuels and
+populates the subsequent workflows right
+and you can see that in one of the
+prompts here we're actually pulling in
+you know all of our positive feedback
+and our negative feedback from our
+config and then this is passed in as
+context into the prompt chain right so
+this gets passed in down here into the
+fusion chain and we're running the uh
+parallel run here which will run all of
+these prompt chains at the exact same
+time and we can dig into the prompts a
+little bit so the first prompt is
+keyword extraction in the markdown
+format giving it some rules to follow
+placing the scrape content and asking
+for the output format ending with a you
+know leading sequence to lead the model
+into the right results we're using the
+five key elements of the prompt here
+that's our keyword extraction prompt and
+then our prioritization and filtering
+prompt is doing the work of of you know
+listing the positive items listing the
+negative items and then we're just
+asking you know based on the previous
+prompt which will be the you know Json
+result of the keywords that were
+extracted from the scraped content we're
+saying you know filter out we're saying
+keep and for anything new just leave it
+in there there are unexplored keywords
+we just want all those to surface right
+this is a simple prompt this could be a
+lot more complex you might be thinking
+you can just you know match on keywords
+and just you know pull them out yes and
+no really there are many keywords that
+your prompts could extract that will be
+similar and the whole idea is to give
+more of these capabilities to your llms
+to your prompts to your AI agents let
+them do the work you just ask exactly
+what you want to happen and it's going
+to be a point where you're going to want
+to feel this workflow by a prompt
+instead of with code right the whole
+idea is to be practicing building out
+these identic workflows so that we are
+coding less and prompting more so that's
+that workflow we pass into positive
+negative then we ask for that same
+output over time this will get more
+sophisticated and our prioritization and
+filtering logic will improve but then
+this is really cool you know instead of
+passing in you know for the big top tier
+models I'm just passing in four GPD 40
+mini models and getting you know
+basically the exact same results as
+running the big three models right so
+instead of running 40 Gemini 1.5 we're
+just running om mini and saving a ton of
+ton of money we're then saving this we
+can go ahead and just finish looking at
+the fusion result here so you can see
+all the keywords from the top result
+this is the part of the prompt chain
+because llms these models they're not
+deterministic right so every single gbt
+40 mini call is going to be different
+every one of these arrays here
+represents a
+gbg4 mini prompt chain right so we have
+two prompts here where it returned the
+keywords that we're looking for right in
+the first run of gbd4 mini we got this
+result here right for that first prompt
+and you know so extracted some good
+keywords we have ai API comparison you
+know code lening gener of AI we have it
+explain every SEO keyword and how it
+relates to the content from the URL so
+that the llm is you know thinking a
+little bit more about the decisions it's
+making and then it runs the second
+prompt right so this is the filtering
+prompt it looks like nothing got changed
+between these two runs so you know that
+meant that our feedback loop didn't
+include or exclude any one of these
+keywords right so that's the first
+prompt chain and then we have another
+prom chain here right and we got
+completely different keywords right
+cursor editing AER llm models open Ai
+and if we just go and collapse this you
+can see that we did filter out open AI
+because I had the open AI in the
+negative keyword if we go ahead hop over
+to Json you can see I had open AI here
+in the negative feedback on a previous
+run I don't really need to know anything
+about the open AI API so I gave this a
+thumbs down and you know this prompt
+chain of gp40 mini actually just
+filtered that out right and this is
+really nice because if I was writing
+code I wouldn't have been able to filter
+on this exact keyword right but since
+I'm using llms and they have good
+reasoning ability it's all open Ai and
+it just filtered it out for me right
+that's really awesome so you can see you
+know also this prompt chain working you
+know here's the first set of keywords in
+the first prompt and then after the
+filtering with my recommendations you
+know got rid of some items which is
+exactly what I wanted so this is just a
+way that you can utilize both prompt
+chains and gp40 mini to get some really
+really incredible results I've run this
+workflow and I've run you know the big
+three plus the mini and I can tell you
+that during four mini models into this
+Fusion chain is effectively doing the
+exact same job as the state-of-the-art
+models and you know this is all a big
+shout out to you know coming full circle
+here all the work that open AI is doing
+really leading the pack here with the
+release of gp4 many you know keep your
+eyes on prompt chains I know that you're
+likely working with AI agents and llm
+libraries but prompt chains and chaining
+in general is a really really powerful
+way to kind of bridge the gap between
+second tier and top tier Model results I
+do think in the future we're going to
+see this trend where anthropic Google
+and open AI are going to keep pushing
+out like very very topend models and
+really charging for it it's going to get
+cheaper of course but they're going to
+charge for the best model and then
+they're always going to have some type
+of secondary model right we saw that
+with Gemini Flash and Gemini Pro and
+we're seeing it now with gbd 40 mini
+open ey was really the first to kind of
+kick that off with uh gbt 3.5 and then
+gbt 4 and then everyone followed we have
+you know Claude Haiku Sonet and Opus so
+I think this is going to be a trend that
+we continue to see and I just want to
+give you a technique to kind of bypass
+all the noise right you can using the
+second tier models like gbg4 oh mini and
+a great Fusion chain or even just a
+prompt chain you can really really get
+the top state-of-the-art Model results
+when you're using the right prompt
+chaining techniques let me know if you
+like this idea let me know if that makes
+sense let me know if you're
+experimenting with prompt chains in the
+comments below we are on a journey to
+building intelligence that works on our
+behalf we're building software that is
+living that works while we sleep if that
+interests you hit the like hit the sub
+and I will see you in the next one

@@ -1,0 +1,662 @@
+the pace of AI developments continues to
+accelerate Google announced Gemini Pro
+1.5 boasting a mindboggling 1 million
+token context window with experiments up
+to 10 million this is absolutely insane
+we're going to dig into what that means
+for you and I as engineers in just a
+second but first we have to talk about
+Sora announced literally 2 hours later
+Sora revealed open ai's latest text to
+video model this model will break the
+internet these models are absolutely
+incredible and they have tons of
+implications for you and I the big
+question for us as Engineers with our
+boots on the ground putting in the hard
+work building products for our companies
+working on our own businesses and our
+own tools the big question for us is how
+can we keep Pace with the incredible
+momentum of these Technologies how do we
+decide which tools to adapt and use in
+our software and how do we know where to
+focus our attention as we know attention
+is everything focus is everything in
+this video we're going to talk about
+what these two incredible announces mean
+on a macro level and then we're going to
+focus in on the micro level and talk
+about what this means for you and I as
+engineers and product Builders by the
+end of this video you'll have concrete
+principles on how you can operate and
+keep Pace with these incredible
+developments in Ai and then I want to
+push that a step further by revealing a
+tool set we've been building here on the
+channel over this three-part video
+series in it we've been building
+concrete principles and patterns that
+you can use that allow you to adapt your
+technology your software your products
+to keep up with the insane rate of
+development in the AI ecosystem we're
+going to talk about the indev tools and
+the patterns and principles inside this
+code base that you can use in your
+software so stay tuned for that first
+let's talk about this insan Ane
+mindboggling 1 million token context
+window from Gemini 1.5 Pro as you can
+see here that's 1 hour video 11 hours of
+audio 30k lines of code 700k words this
+is far beyond what anyone has done
+before on a macro level if Google has
+actually achieved this 1 million token
+context window accurately let's go ahead
+and pull up that original blog post so
+if there able to pull this off with high
+accuracy if this is actually true this
+is going to change the way that we think
+about prompting it's going to change the
+way that we need to prompt engineer so
+this has a couple implications we're
+assuming that Google actually is going
+to deliver on this we still need to see
+Gemini Ultra performing at gbt 4 levels
+at gbt 4 speeds hopefully faster and now
+we're going to be eagerly awaiting to
+see if Google was actually able to ship
+1 million tokens in production this is
+absolutely insane so what does this mean
+on a macro level what's going to change
+so some of you may have noticed on this
+channel we have never once really talked
+about Rag and similarity search in depth
+why is that since the beginning I
+realized one key thing the rate of
+improvements with these models is not
+going to stop so as everyone rushed
+toward rag databases and similarity
+search and you know these different ways
+to chunk your information to chunk you
+know your PDFs to chunk your code I
+realized that we can just wait and we
+can just focus on building great prompts
+because one thing is clear I've said
+this on the channel before the prompt is
+the new fundamental unit this is going
+to sound really stupid but you need food
+Water Shelter internet and the next wave
+is prompts this sounds so dumb but the
+next level of like key technology the
+next level of key in inovation in one's
+life is this prompt when you walk up the
+chain you learn how to read some of us
+learn how to code that next level is the
+prompt if you know how to prompt there
+is going to be a whole massive wave of
+opportunity that you can access that
+others cannot right it's just like
+having access to the internet it's just
+like having access to writing code it's
+just like having access to really
+important technology that changes what
+you can do the prompt is the new
+fundamental unit of programming but more
+broadly the prompt is the new
+fundamental unit of knowledge work so my
+prediction for rag is simple rag is dead
+once this is released if this is true
+that 1.5 Pro found the you know embedded
+key text right this needle in the Hy
+stack is a really really important
+framework for evaluating if a large
+context window model is accurate right
+if this is actually true that it found
+the embedded text in the Hast stack 99%
+of the time within 1 million tokens rag
+is dead similarity search is is dead
+none of that stuff matters anymore and
+in a moment we're going to talk about
+what that means for us and how we can
+utilize this insane technology in our
+work and that ties into the Indy tools
+and how we've engineered and utilized
+principles that help us stay resilient
+to this new technology coming out it
+doesn't matter what you're building if
+you can't adapt it to this new
+technology coming out right Sora Gemini
+1.5 Pro hopefully Gemini Ultra we need
+to be building adaptive software
+adaptive products so let's talk about
+what else this means right second autom
+mro level we have to point out how crazy
+this is coming from Google by crazy I
+mean Google from The public's
+perspective just joined the AI race with
+the announcement of Gemini and Gemini
+Pro in December right now it's
+mid-February coming up to late February
+right this was just announced on
+February 15th Google has innovated so
+insanely quickly that one of two things
+have to be true one they have been
+sitting on llms for years let's keep in
+mind that they put out that original
+attention is all you need Transformers
+architecture papers right they put those
+out that's their Tech they are the
+founders of that technology right that
+serves as the foundation for all this
+llm technology so that's case one right
+Google has been sitting on this or the
+second case is true this one is much
+scarier from a competition perspective
+if this second case is true open AI has
+a lot to worry about and it really makes
+the Sora announcement look like a
+defensive move frankly from open AI
+releasing Sora just 2 hours after Gemini
+Pro 1.5 was announced almost makes it
+look like open AI is scared of Gemini
+1.5 Pro and wanted to reduce the post by
+putting out something incredible and not
+to say that Sora isn't incredible if
+Google was actually able to inate from
+basically zero to Gemini 1.5 Pro with 1
+million token context window Sundar
+Dennis these guys are absolutely cooking
+they are cooking the future up at Google
+right now and it is terrifying frankly
+to think that you know first of all the
+the pace of all this is really
+incredible right just 18 months ago chat
+gbt was announced right completely
+gamebreaking right completely
+mindboggling we can now talk to our
+computer and it can respond to us in
+natural language but if this is true
+that Google you know saw what open AI
+was doing saw chat GPT and said oh yeah
+we can do that too watch this if they
+keep this pace of innovation up and they
+back all this stuff up us Engineers we
+will have no choice but to use Gemini
+1.5 and whatever The Future model are
+because they're going to be that good so
+that's case two the second case is
+really gnarly if they just started
+innovating from nothing and they hadn't
+been really sitting on llms and you know
+they've been just like kicking up the
+heat over the past 6 months announced
+the Gemini model family in December and
+now they're already talking about 1.5
+with 1 million tokens right like just
+just think about how how fast and how
+insane that Innovation is right that's 3
+months of innovation that's crazy that
+that's frankly really crazy big shout
+out to everyone just absolutely cooking
+at Google let's be fair here right we
+have open AI also putting in a lot of
+work right now let's talk about Sora
+before we switch over to Sora one last
+idea here I want to leave you with when
+it comes to Google and their models you
+know there's this idea that all of the
+models are going to kind of flatten out
+in their capabilities why is that why
+are all these models kind of going to
+hit a ceiling in terms of results and
+performance most of them are using the
+same architecture there are some
+innovation around that which is amazing
+it looks like Google here is using the
+mixture of experts architecture and that
+would make sense because in order to
+break the linear limitations of large
+context window and error rate they would
+need to innovate on this pretty heavily
+why are all models going to flatten out
+it's all about the training data if
+you've worked with models if youve built
+your own models you know that you want
+high quality accurate domain
+representing training data ground truth
+of your knowledge needs to be very very
+accurate and you want a ton of it I want
+you to think about who owns large
+pathoras of incredible information
+that's proprietary to them right I want
+you to think about the Reddit database
+right I want you to think about the
+Twitter or X database right and then
+what else what are you watching on right
+now I want you to think about the
+YouTube database YouTube has something
+like they gain like a kabyte of data
+every single day and and what type of
+data is it it's the best kind it's Rich
+photos it's Rich video and of course
+tons and tons of text right via
+transcripts think about the incredible
+amount of data that Google has that no
+one else has this is part of what makes
+them unbeatable open AI might not have
+as long as we think they do unless they
+have something incredible coming and
+let's pivot to that right now let's talk
+about Sora so the first thing I have to
+say about Sora is this model is going to
+break the internet I think you can
+easily agree with that and I think you
+can understand and see why I'm saying
+that right like we're engineers we
+understand the variability and how
+people want to use these products but
+let's talk about why this model is so
+groundbreaking it's really hard to
+really comprehend what they've done here
+it looks like they have trained a model
+that understands the physics of our
+world and this is a lot more complicated
+than than text to text right llms
+they're doing a lot of you know some
+text to photo work and once you start
+thinking about text to image there's a
+lot of really interesting applications
+that happened there but this is like
+look at this look at this shot this is
+this is insane this is absolutely insane
+so it understands mirrors it understands
+the reflection of the glasses it's
+rendering that image back out and
+throughout this it's holding a steady
+image of this woman walking she right
+she's not aging up she's not aging down
+she's not transforming into like a bear
+or a donut like a lot of these current
+video models are doing right where the
+images are getting mixed up it's it's
+holding the ideas of what it means to be
+an object in a 3D space throughout an
+entire minute and it understands style
+it's understanding the culture of where
+she is this model is like Beyond
+groundbreaking it understands locations
+it understands the physics of water
+which if you've done any game
+programming you know that this is a a
+massively difficult problem to such a
+degree that Engineers usually hardcode
+Water by creating deterministic uh
+physics models for them so there's just
+a whole slew of things that this model
+should not be able to do and it looks
+like it's doing it very very well now
+you know from a macro perspective you
+know counter to everything that we were
+just talking about with Google and how
+Google is you know making insane Pace in
+Innovation this shows that open AI has a
+moat of their own right their team is
+also cooking a ton of value right now
+and again reflection this this is
+capturing reflection it's capturing
+camera motion
+there's just so much like native
+contextual understanding that you need a
+model to understand to be able to render
+this right extreme closeup of a
+24-year-old woman eye blinking and it
+again the reflection in the eye again is
+like this is this that's so incredible
+and it requires the model to just
+understand our world so well so this is
+absolutely incredible but let's talk
+about what Sora means on a macro level
+right this is an infinite content
+generator let's let's be completely
+clear about that in in our world of
+social media in our world of content in
+our world of attention this model is the
+game changer this model like I said this
+model will break the internet as soon as
+this goes out whatever people have to
+pay they will pay it 50 bucks literally
+at 100 bucks a month it doesn't really
+matter open Ai No Doubt in combination
+with Microsoft they will realize how
+much pricing power they have with this
+model and make no mistake at all they
+should and likely will charge a bucket
+load for this technology so this will
+change content creation forever this
+will change storyboarding forever this
+is going to change how movies are
+getting created this is going to allow
+you know independent filmmakers
+independent video game creators to
+create Worlds at a much more affordable
+cost in a you know much more Dynamic way
+than ever before this is also of course
+going to be a really interesting
+development in the adult film industry
+how this is going to be used um I don't
+need to say much more there you can use
+your imagination most technology gets
+utilized there first before anywhere
+else we do have to talk about the cost
+of running a model like this and the
+time of running a model like this right
+now dolly is something like let's go and
+just look up uh open AI model prices I
+think Dolly runs at 12 cents yeah it's
+it's it's cooking at you know 12 cents
+for the HD model at the largest size and
+so if we upscale that let's say that Sor
+is running at 30 FPS 12 cents time 30
+reach frame time 60 to run the full
+minute that's going to be something like
+200 bucks basically for that video at
+Dolly 3 pricing that's unusable no one's
+going to render one minute video at that
+cost at this variability right we I can
+almost guarantee you that if they run
+this prompt again it's going to produce
+a different output and when you're
+creating content there are only some
+cases when you're creating content when
+that is okay when you can render
+something completely different the
+second time around right the consistency
+of these models have to be improved
+that's something we see with you know
+even current Tech text models like gp4
+and text to image models we want the
+ability to be able to iterate on what we
+already have Sora is the ultimate
+content creation tool this is going to
+uh reframe how content is created it's
+going to make way for a lot of um
+automated content a lot of personalized
+content this is all really fantastic a
+lot of great Innovation here these
+companies now have to prove this value
+to us us Engineers need to get this
+stuff in our hands let's talk about the
+micro level effects for us on the ground
+of these incredible Technologies right
+let's talk about what this stuff means
+for us you know these incredible
+releases really highlight an important
+aspect for us engineers and US product
+Builders with our boots on the ground
+building software on a daily basis this
+stuff is accelerating you and I need to
+be able to keep up with this stuff or we
+will be left behind we'll be using old
+Tech while someone else is using fast
+tech getting 10 times more done than we
+are we want to be that person getting 10
+times more done we want to be the person
+getting 50 100 times more done and a
+pillar of this YouTube channel is just
+that I want you guys to see what's
+coming next I want to help equip you
+with the right principles and tools that
+you need to know how to react to this to
+know how to build to know how to think
+about this stuff over my decade plus
+long career actively Building Products
+there are reoccurring themes if you've
+been writing code if you've been
+building products you'll know these
+principles to be true we talk about them
+here on the channel quite often because
+principl Le development and principal
+focus and oriented mindsets is how you
+not only only survive but can Thrive
+with these incredible Technologies so
+what I want to do right now is look at a
+concrete example a concrete code base
+we've been building over the last three
+videos this code base is now live this
+is the indid tools repository link is
+going to be in the description you can
+check this out you can pull it you can
+install right from pip and just real
+quick I want to talk about this code
+base as it relates to how you can build
+applications and how you can quickly
+adapt to the rapid change that we're
+going to be facing and have faced over
+the past year and the year looking
+forward so what I want to do here is
+just highlight some of the key
+principles that the IND tools is built
+on and then we can look at the future of
+how we can build tools like this to help
+us quickly adapt ADD test and build on
+top of new technologies like Gemini Pro
+and like Sora so let's go ahead and
+focus in talk about this codebase for a
+little bit so let's just look at the
+application flowchart of what this tool
+does let's go ahead and full screen this
+the first application and the Indy tool
+Suite is a YouTube metadata data
+generator so you start over here you
+have your rendered YouTube video massive
+process in the Middle where you're
+thinking about title ideas you're
+generating your hashtags you're writing
+the description for your video You're
+creating thumbnails you're experimenting
+with different titles this problem is
+not just specific to YouTube metadata
+content generation right this is a
+reoccurring problem where you have a
+core asset maybe it's a codebase maybe
+it's a Blog maybe it's an an altimate
+post maybe it's a you know a video and
+then you have a bunch of metadata that
+isn't your core asset but it's just as
+important right and all this stuff needs
+to happen in order for you to ship your
+core asset in our case upload our video
+to YouTube so now we have this tool
+inside the anev toolbox that allows us
+to do this entire process with a couple
+commands let's go ahead and look at a
+concrete example so you can quickly pip
+install this just pip install IND Dev
+tools and then you run configuration set
+up your configuration file set your
+operating directory wherever your audio
+or video files are set your open AI key
+and then you can just start running
+these commands and the way that these
+commands are set up is really really
+fantastic so let's go ahead and just run
+this one command here right so let's go
+ahead and run any Dev Tools YouTube so
+we're in the YouTube Tool we're going to
+generate a title and we're going to use
+the rough draft title using AI C Pilots
+to code faster than ever so we're going
+to go ahead and just hit enter there
+we're going to let this run it's loading
+the configuration file and it's going to
+now automatically generate titles using
+an llm right cool so that's written you
+can see there the outputs written to
+this directory so let's go ahead and
+just open up this file open that up for
+us and you can see just like that by
+using the indub tools by using this
+framework that we' built I now have
+several titles that I can use and
+experiment with with an explanation and
+a score and you know we can look at a
+couple of these I use an AI coding
+system for 30 days my mind-blowing
+results that's pretty good how AI coding
+systems are revolutionizing programming
+not too bad and then the ultimate guide
+boosting your coding skills with AI
+assistance also not too bad just a quick
+plug the AI coding assistant to tutorial
+videos and courses are in the works I'm
+putting in a lot of effort behind the
+scenes to get those courses and
+tutorials rolling for you guys so stay
+tuned for that definitely hit the sub if
+you haven't that's going to be
+gamechanging and it's going to help you
+keep Pace with the incredible technology
+it's going to help you stay sharp
+writing code faster than the guy next to
+you is going to help you do more in less
+time so stay tuned for that just like
+that in one command that's run there are
+several other commands here the most
+important one is this Indie Dev tools
+you yoube generate meta Auto and so this
+will automatically run it'll generate
+all the YouTube metadata after asking a
+couple key questions about your video
+It'll ask for SEO keywords It'll ask for
+a rough draft title so there's a bunch
+of commands here the key aspect here is
+to focus on everything as an individual
+unit of code let's go ahead and look at
+some of the principles so let's talk
+about these principles right so couple
+key principles here use the red tool for
+the job we've talked about everything as
+a function in the previous two videos
+this is the most important aspect of
+this code base but also create reusable
+building blocks and this is a really key
+idea that I want to touch on here and
+then we'll look at how it translates
+into code but in the age of AI where
+code data and models are becoming a
+commodity the most valuable thing you
+can create is a reusable building block
+that can be used to solve many problems
+in this code base and in your work you
+should be focused on building small
+composable reusable functions that can
+be used together or only one at a time
+so real quick I just want to show off
+how that translates into this code base
+I'll open up inep tools and let's just
+look at how this code base is composed
+top to bottom so we open up the indev
+tools directory we can see we have
+commands and we have main we're using
+typer to divide and conquer you can see
+here we have the YouTube application
+under this namespace if we type indev
+Tools YouTube d-el you can see here all
+of our commands have individual top
+level methods and name spaces that they
+operate under right this allows us to to
+divide our work into individual
+functions and sub commands that will
+then have their own individual functions
+so we just generated titles let's go
+ahead and look in that title subcommands
+that allows us to generate arbitrary
+video titles and let's type help there
+and you can see here now in that titles
+subcommand namespace we can create
+titles and then we can compose titles
+right so this pattern of subcommands and
+in creating a clean command line
+interface allows you to chunk up what
+your code can do and allow you to run
+them on a individual level as well as
+allog together right if you run the
+generate metadata Auto this will run a
+step-by-step interface and if we hop
+into that flow this that's the generate
+metadata flow it'll then run every step
+of the flow of multiple tools right so
+we can see here this is the you know
+create title for a video that flow will
+get run inside this larger generate
+metadata flow right so this allows us to
+in this code base both run these large
+composed functions that do their their
+own set of unique work with concrete
+inputs and outputs just as we discussed
+but it also allows us to you know come
+into this create title command and look
+at just creating a title right and
+that's exactly what we did before if we
+hop back and we look at that create
+title command we pass in the r flag if
+we go to that top level and look at the
+titles command you can see this is
+exactly what we did earlier right so we
+have this individualized command that is
+simply an interface to the underlying
+function this is our small reusable
+building block we can create titles
+anytime anywhere with this function but
+then we can also run this method right
+we have this create title we can run
+this in larger flows like the generate
+metadata flow all this is here in the
+codebase feel free to check this out
+feel free to Fork It Do Your Own Thing
+with it or follow along the development
+I'm going to be building this up we're
+going to have additional tools like
+talking to one of your open AI
+assistants as soon as Sora comes out
+we're going to of course quickly add a
+tool that allows us to generate video
+content this tool is something that we
+work on and refer to throughout the
+channel as you guys know I want to be
+not just talking about this stuff but
+really showing you with my boots on the
+ground a lot of my Technologies a lot of
+my applications and work that I'm doing
+is built literally on top of these
+principles and some of the code that was
+fed by these principles right you know
+the most important ones here if I just
+had to say you know we have prompts
+being the new fundamental unit of
+programming we have reusable building
+blocks and then everything as a function
+right these are the most important to
+keep in mind when these Technologies are
+coming out right so feel free to check
+out that codebase following the Journey
+of that if you're interested there's a
+lot going on I'm really excited about
+the future I know this stuff can be a
+lot to handle it can be really
+terrifying at some moments but we're in
+this together one video at a time one
+week at a time we're going to talk about
+the stuff we're going to dissect it and
+we're going to build great technology on
+top of this we're going to solve
+problems faster we're going to write
+code faster and we're going to keep our
+heads on our shoulders throughout the
+entire process if that interests you hit
+the like hit the sub thanks so much for
+watching and I will see you in the next
+one

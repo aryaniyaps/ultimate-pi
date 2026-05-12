@@ -1,0 +1,62 @@
+[0.3s] Nikito is using BML to do some really
+[2.7s] interesting research on LLMs. While I
+[5.3s] can't spoil the details, I can tell you
+[7.0s] he is pushing small open source models
+[9.1s] to their limits, making it hard for them
+[11.3s] to produce valid JSON. We help Nikita's
+[14.4s] research and maybe yours a tiny bit by
+[16.2s] adding some more tunability to be
+[17.8s] prompts. Whereas we used to encourage
+[19.7s] models to omit double quotes around
+[21.4s] class fields, now that's a parameter
+[23.4s] that you can choose on context output
+[25.5s] format. So you can trade away a couple
+[27.6s] tokens in response for simpler
+[29.5s] generations.
+[31.0s] Nikito, thanks so much for reaching out.
+[32.6s] We hope that this change helps you get
+[34.3s] the last little bit of data that you
+[35.6s] need for your project.
+[37.8s] Hey everyone, so I found this bug in
+[39.8s] Bamos CLI test where if you have the
+[42.2s] boundary API key set, uh the CLI will
+[45.2s] panic and so I fixed this bug. So in the
+[48.6s] next release, even though you have the
+[50.3s] boundary API key set, the CLI test
+[53.5s] command should no longer panic and test
+[55.8s] should run perfectly fine.
+[58.4s] Hello, I wanted to point out an issue
+[60.6s] thanks to GR who gave me a great bug
+[63.2s] request of the fact that our
+[64.6s] documentation wasn't actually giving a
+[66.8s] valid example for how to use React with
+[68.8s] BAML. Thanks to deploying that, I was
+[70.8s] now able to update our documentation to
+[72.9s] where if you actually try to go build a
+[74.2s] chatbot with BAML, all the code is now
+[77.0s] correct and let you get started. We also
+[79.4s] added work to actually show you exactly
+[81.0s] how streaming works. So if you wanted to
+[82.8s] do streaming on a chatbot, you can go
+[84.3s] build that as well directly out of React
+[86.1s] using a React SDK. Thank you.
+[90.0s] >> Hi everyone. So, a bunch of you have had
+[92.0s] feature requests for BAML's TypeScript
+[94.1s] library, specifically requesting that we
+[96.3s] support a wider range of platforms in
+[99.1s] our native TypeScript builds. I'm happy
+[101.4s] to report uh to you, Noir, that we have
+[104.7s] a PR ready to go to add support for
+[107.6s] older GIC C versions on Linux RM64.
+[111.2s] Tyler and Parsa, I'm happy to report
+[113.3s] that we have a PR that the same PR will
+[115.4s] also add Windows RM 64 support for
+[117.4s] TypeScript. Um, unfortunately
+[120.6s] we have not yet had a chance to actually
+[123.4s] test these, but we are cautiously
+[125.9s] optimistic that these things will work.
+[127.9s] Um, so please do take these for a spin
+[130.0s] when this lands and go goes out when
+[131.8s] these releases go out next week.
+[134.7s] >> Thanks for thanks for supporting us and
+[136.9s] hopefully these work for you.

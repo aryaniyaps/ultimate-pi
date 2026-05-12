@@ -1,0 +1,69 @@
+[0.1s] Hello Alison, thank you for asking a
+[1.9s] great question on symbol tuning and
+[4.0s] helping us improve our documentation.
+[5.6s] For everybody else, symbol tuning is a
+[7.6s] concept where if let's say you have a
+[9.3s] chatbot that is doing intent
+[10.8s] classification, you might typically
+[12.4s] write a prompt that has a category names
+[14.7s] and then category descriptions. But in
+[17.0s] symbol tuning, you would actually
+[18.4s] replace all your category names with
+[20.6s] symbols like K1, K2, C2, class 2, etc.
+[24.0s] That way the LM can focus 100% of its
+[26.3s] energy on exactly what the descriptions
+[28.7s] of what you have instead of using its
+[30.6s] implicit biases on it what its
+[32.8s] understanding of these words are.
+[34.4s] Allison without your question our docs
+[36.2s] would have been incomplete and way less
+[37.8s] detailed. Thanks to you we've made it
+[39.7s] way better. Have a good one. This Friday
+[41.9s] project goes out to Pashant and your
+[43.5s] techbud who have been giving me some
+[45.3s] amazing advice and feedback about our
+[47.4s] prompt optimization feature inspired by
+[49.8s] DSP. This documentation page goes over
+[52.6s] how to run basic prompt optimizations in
+[54.6s] BAML. Uh how to customize the
+[57.0s] optimization and importantly our
+[59.1s] limitations and future planned features.
+[62.1s] Thank you so much for all the help and
+[63.8s] we hope to get this in your hands for
+[65.3s] your experiments soon. Hey Pericost Pero
+[67.8s] SD not sure how to say your username but
+[69.6s] I did fix the bug that you found. So you
+[71.4s] found this bug in our codegen where we
+[73.6s] shadow BML functions parameter names
+[76.1s] with internal variable names. And so I
+[79.0s] found all the cases where that happens,
+[80.8s] not just the one you mentioned in the
+[82.5s] GitHub issue. And I fixed all the cases
+[85.0s] by adding underscore prefixes and
+[86.8s] postfixes to all the variables that we
+[88.7s] generate with our codegen. So you should
+[90.9s] no longer run into this problem from now
+[92.7s] on. Thank you for opening the GitHub
+[94.8s] issue.
+[95.6s] >> Hey Sanjan, just wanted to let you know
+[97.7s] you can now comment out blocks of text
+[99.5s] with command slash on the prompt or
+[102.7s] anywhere in the prompt. So it's just
+[104.7s] much easier to use. I can select this
+[106.6s] line and just comment it out
+[108.5s] immediately. And uh I it'll still work
+[111.8s] here. I can still write a comment and
+[113.7s] it'll work fine. So now it's uh it's
+[115.8s] contextual. The other thing is that if
+[118.2s] you command F here, you can also search
+[120.2s] the prompt. So I can search for question
+[123.1s] and then iterate over all the all the
+[125.9s] different responses.
+[128.1s] Um thanks for the feedback and thank you
+[131.0s] for the suggestions. Hey folks, just
+[133.9s] wanted to let you know we just put a new
+[135.5s] blog post uh talking about structured
+[138.0s] outputs and why we believe that even at
+[141.3s] the end of 2025, schema line parsing is
+[143.9s] still the way to go over structured
+[145.5s] outputs. Thanks.

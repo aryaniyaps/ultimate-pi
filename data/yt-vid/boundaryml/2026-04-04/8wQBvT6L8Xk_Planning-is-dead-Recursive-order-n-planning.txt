@@ -1,0 +1,309 @@
+[0.6s] All right, this tweet went over a little
+[2.0s] popular where plan mode only works for
+[4.0s] order one difficulty tasks and for order
+[5.9s] end difficulty tasks, you kind of need
+[7.4s] to really get into the depths of hell
+[9.8s] here to go solve
+[11.6s] to make an agent go be able to go wild.
+[14.4s] Two people had requests about how I do
+[16.4s] my planning mode and what I use for
+[17.6s] recursive. So I'll just show you and
+[18.7s] I'll try and show with a real example
+[20.9s] throughout this loop and like maybe
+[22.1s] you'll find some of the prompts useful,
+[23.3s] maybe you'll find the workflow useful,
+[24.5s] who knows, but I'm I'm going to try and
+[26.4s] share as much as possible.
+[28.6s] TLDR, I'll show you what I'm trying to
+[29.7s] do. So context, we make BAML, it's a
+[32.0s] programming language designed to be
+[33.2s] agent first. One of the things that we
+[34.6s] want to do is make testing really easy.
+[36.7s] So we have a new syntax for defining
+[38.0s] testing. And the task I'm working on
+[39.9s] right now in the background as you see
+[41.0s] over here is making tests work really
+[42.5s] well. So one of the things we have is we
+[44.2s] have the ability to be able to load test
+[46.0s] test sets and test sets should be able
+[47.5s] to load data from, let's say a database
+[50.0s] or S3 or production to be able to create
+[53.4s] tests dynamically on the fly. So in this
+[55.2s] case, you can see I'm making a test and
+[57.1s] it's running and it's going to run a few
+[58.3s] times. It's going to run kind of slow
+[59.4s] cuz there's a sleep here.
+[61.8s] This task that I've been working on now
+[63.7s] for like roughly like four days is fully
+[67.0s] agentic driven and I'll show you what
+[69.3s] happens when I
+[71.0s] run this purely with
+[73.2s] code. So I want to be able to submit
+[74.7s] this task. Now there's clearly some
+[75.8s] problems here. Obviously, if I have a
+[77.5s] long running database query, this can
+[79.4s] take forever. So now every time a user
+[81.0s] types, that all has to be run and it
+[82.4s] triggers this to be kind of slow and we
+[84.0s] don't want that to happen. We don't want
+[85.5s] the test collection to be extremely
+[87.0s] slow.
+[88.1s] So I've been designing how to go fix
+[89.4s] this. I'm going to show you the
+[90.3s] workflow. Now that you have some
+[91.6s] context, we have some syntax we're
+[93.2s] adding to the compiler or we have some
+[94.4s] runtime impacts cuz we don't want to we
+[96.6s] want to run this asynchronously and kind
+[98.6s] of as lazily as possible whenever
+[100.5s] whenever it's too slow.
+[102.2s] I'll show you the workflow that I used
+[103.3s] to get Claude code to be able to one
+[104.6s] shot this kind of thing.
+[107.0s] So let's start off from the very
+[108.3s] beginning.
+[109.5s] The first thing I did was actually I
+[111.0s] started as you can see there's a lot of
+[112.8s] workflows here that are all of different
+[114.2s] levels of execution.
+[116.3s] They're all about
+[117.9s] testing.
+[119.3s] So the first thing I did here is I
+[120.4s] actually took this ticket that one of my
+[122.0s] co-founders wrote, Aaron, about how
+[124.1s] we're going to go to find syntax. And
+[125.3s] this was the very very first version of
+[127.0s] it. This version of the syntax had not
+[129.1s] discovered problems with like lazy
+[131.1s] loading and timing issues that we had
+[133.9s] over there. It was just purely about the
+[135.1s] syntactical implementation and very very
+[137.0s] tiny
+[138.4s] runtime
+[139.9s] impacts that we were going to have in
+[141.4s] considering all that. So this is more
+[143.2s] about like semantics. So we defined the
+[145.1s] ticket. I went through, I iterated on
+[147.0s] it. I used this product called Riptide.
+[149.4s] It's freaking great. If you don't use
+[150.7s] it, try it out. Makes it a little
+[152.2s] better.
+[153.1s] It does [snorts] some research
+[154.0s] questions. So it tries to ask questions
+[155.5s] about the code base based on the ticket.
+[157.5s] It then goes ahead and makes research
+[159.3s] based on those questions and tries to
+[160.6s] answer those questions.
+[162.1s] And then it goes into like a design
+[163.3s] discussion to try and answer all these
+[164.6s] questions and like what design choices
+[166.6s] do I want to make. This this step is
+[168.7s] like probably the most important step.
+[170.0s] And the reason is like everything in
+[171.4s] software is all about trade-offs. So all
+[173.4s] I want to do is I just want to read all
+[174.8s] the options and questions that it's
+[176.1s] posing and I read this in really good
+[177.8s] detail. I read every single line, every
+[179.3s] single sentence and I make choices about
+[181.4s] every design decision.
+[182.9s] 90% of the time, the option that it
+[184.6s] suggests is pretty good. But what I've
+[186.7s] noticed is when I go into plan mode,
+[188.2s] because it doesn't go through this
+[189.2s] concept of breaking down the design
+[190.6s] questions, plan mode basically just like
+[192.2s] picks one of the options
+[194.2s] and all of them picking one of the
+[195.4s] options is often not as good as it
+[196.9s] picking
+[198.0s] an option from three choices because Oh,
+[201.1s] shut up, dog.
+[202.4s] Anyway, and it's often not going to be
+[204.0s] as good as picking one option from three
+[205.8s] choices that it's already selected
+[207.2s] because it's going to be much more
+[209.2s] it's going to think a little bit more
+[210.7s] with that context. It also makes other
+[212.6s] design decisions that should be made in
+[214.0s] context of other things much easier to
+[215.8s] make
+[216.8s] because now you can go back and say,
+[218.0s] "Oh, if I chose A over here, I would
+[219.6s] choose this, but if I chose B over here,
+[221.0s] I'd choose this." So this is the most
+[222.4s] important step and I'll iterate on this
+[223.6s] step for quite some time. If you
+[224.9s] actually look at my chat logs,
+[226.8s] it'll give you an idea of how long these
+[228.2s] steps how long of an iteration that that
+[230.1s] I do.
+[230.9s] So like this thing started at like 12:47
+[232.5s] p.m. And then like I think I
+[235.4s] at some point it made the doc, it did
+[237.2s] some research
+[239.0s] and it made the doc at like uh 12:55
+[241.1s] p.m.
+[242.8s] I don't know if this is a good example.
+[244.7s] Um
+[246.7s] And then I guess I chatted with it till
+[248.2s] about like 1:36 p.m. I spent some like
+[250.5s] serious time chatting with it and like
+[252.3s] reading the doc in extremely good
+[253.5s] detail.
+[254.7s] But once it does all of this, I'll I'll
+[256.6s] often iterate on like different stages
+[258.1s] of it. After it does the design doc, it
+[259.7s] does what's called like it takes the
+[261.0s] design doc and puts like some sort of
+[262.3s] structured plan around it.
+[264.2s] This doc is like more like phase
+[265.7s] breakdown. It's closer to typical plan
+[268.4s] that you have, but the key difference in
+[270.0s] this in the plan is it doesn't really it
+[271.5s] refers more to like files and like
+[273.5s] names, but it doesn't typically have
+[275.2s] like code snippets in it unless it
+[276.6s] really needs to have some.
+[278.5s] In this case, I told it to make tests
+[280.4s] first so I can like test it better.
+[282.8s] And then I'll iterate on this a little
+[284.7s] bit, but often this is like pretty good.
+[287.2s] If it's really nuanced, I'll go iterate
+[289.4s] on it again.
+[290.6s] And this will go through and this will
+[292.4s] go do stuff and eventually it'll go
+[293.7s] through planning, which is like a little
+[294.9s] bit more detailed.
+[297.3s] And the plan is a lot more detailed. It
+[299.6s] has a lot more code snippets and I
+[301.6s] typically won't really read this.
+[303.6s] I'll just glance through it to make sure
+[304.8s] nothing's like absurd.
+[307.1s] And then I'll let it go implement. Now,
+[309.5s] once it's done implementing, what I do
+[311.0s] is I go actually like scan all my test
+[312.8s] cases really aggressively and make sure
+[314.6s] the tests do what they want. Like this
+[316.6s] implementation loop, you'll actually see
+[318.0s] it's like
+[319.5s] quite long.
+[321.2s] I don't even know how many chat messages
+[322.4s] I had
+[323.5s] implement beginning to end.
+[326.1s] This thing I don't this thing started
+[328.5s] like 2:11 p.m.
+[331.2s] And then I chatted with it till like
+[333.6s] 10:00 p.m. There's like a one or two
+[335.2s] breaks in there, but like I was
+[336.2s] basically chatting with this nonstop
+[338.0s] trying to make this work because it's a
+[340.4s] very big feature. It's going all the way
+[341.9s] from the compiler, the parser, the HIR,
+[344.5s] the TIR. Basically every single layer of
+[346.3s] our compiler goes through it and it even
+[348.2s] impacted the runtime layer, like the
+[349.9s] virtual machine that we have.
+[351.6s] So it made quite a big difference in
+[353.6s] terms of the accuracy just by having to
+[356.2s] go through this and even when I had a
+[357.6s] really good plan, I did have to go and
+[359.2s] make some final adjustments because
+[361.0s] there's things that I didn't consider
+[362.6s] much later on. And then what ended up
+[364.9s] happening
+[366.4s] is even though this worked and this went
+[368.3s] pretty far,
+[369.8s] um
+[370.8s] there are still things that I had failed
+[373.3s] to recognize when I was doing this. And
+[375.6s] one of the things I failed to recognize
+[376.8s] was what I was showing you in this UI,
+[378.5s] which was I want to do this in a lazy
+[380.2s] loaded way and I only got that working
+[382.0s] once I made the full playground work.
+[384.6s] And once I made the full playground
+[385.6s] work, I was like, "Oh, shoot. I have to
+[387.3s] go fix this." So then what did I start
+[389.2s] doing? Well, I started spinning off
+[390.8s] research task. I put this ticket in
+[392.3s] there. I and you can see it's a very
+[394.5s] very barely described ticket. It has
+[396.7s] some details cuz I know the code now.
+[398.2s] I've read through it.
+[399.5s] But it's really like I want to run stuff
+[400.7s] in parallel was like
+[402.6s] It did the RPI process, it pulled the
+[404.7s] design doc, but one of the things I did
+[406.6s] this time is and now you'll notice I
+[408.6s] iterated quite a lot on this design doc.
+[412.6s] And once I iterated quite a lot on this
+[414.8s] design doc and this is like a 5-hour
+[417.1s] task,
+[418.1s] then I at the end of it I actually said,
+[420.4s] "Okay, well, take this design doc." And
+[422.0s] the last message in there was like
+[423.3s] basically produce a new ticket as if we
+[425.0s] had all the context in the design doc.
+[427.1s] It actually wrote a pretty decent
+[428.5s] ticket. And this is a good enough start,
+[430.8s] but there's still like some foundational
+[432.2s] stuff missing. So then I took this
+[433.6s] ticket
+[434.8s] and I fed it into
+[437.9s] one of these questions. I don't know
+[439.0s] which one. No, I fed it into this one.
+[441.4s] I basically made the ticket over here
+[443.5s] where I said, "Okay, now start the
+[444.9s] design process again." So basically what
+[446.3s] I'm doing is I'm like compacting
+[447.8s] information as much as possible and I'm
+[450.0s] trying to make Claude forget that it
+[451.6s] basically did some of the design
+[453.3s] decisions earlier. And I'm also trying
+[455.3s] to make myself forget some of the design
+[456.8s] decisions. I'm really trying to focus on
+[458.0s] like what I know to be correct at every
+[459.4s] single layer of the way. And that
+[461.0s] doesn't mean that I get everything right
+[462.6s] in the beginning. All that means is I
+[465.0s] try and get as much right as possible as
+[467.2s] early as possible. And as soon as I make
+[469.6s] a lot of decisions that drift away from
+[471.8s] the original system,
+[473.6s] my main goal is to actually
+[476.2s] is recreate a new session as if I've
+[478.6s] started with that knowledge from scratch
+[480.2s] because these models and the like all my
+[482.0s] directory structure, for example, like
+[483.8s] wherever all these artifacts in these
+[485.2s] folders are,
+[486.6s] I can show you where they live. They
+[488.5s] kind of live in these folders over here.
+[490.5s] And because Claude is only getting
+[492.3s] access to the relevant folders that are
+[494.0s] in here, not really like cross folder
+[495.6s] contamination,
+[497.2s] I want to make sure that I restart every
+[499.1s] time I made a lot of decisions that
+[500.5s] drift. And the reason for that is let's
+[502.5s] say I have something in my plan in my
+[505.1s] research that was relevant to another
+[506.7s] previous
+[508.1s] design decision that I made, but now
+[509.5s] I've drifted completely into a totally
+[511.4s] different architecture.
+[513.3s] Well, then in that case, I want to make
+[515.4s] sure that Claude doesn't refer to that
+[517.1s] document again. When it reads it, it
+[518.4s] doesn't get biased in any way cuz it
+[520.2s] every single time I start a new phase,
+[522.2s] it's going to read all these tickets.
+[524.1s] So at sufficient of drift, you want to
+[525.8s] drift, restart and you want to keep on
+[527.6s] going and you just have to have some
+[529.3s] vibe for how often you want to restart
+[531.4s] versus redo it.
+[533.4s] Hopefully that was useful and gives you
+[535.3s] guys context for how I do like this
+[536.8s] recursive planning kind of loop.

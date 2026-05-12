@@ -1,0 +1,636 @@
+you've probably already been swarmed
+with tons of hype alarmist click bity
+videos about 03 mini deep seek and the
+US tech ecosystem falling apart let's
+push through the narrative and hype and
+focus on how 03 mini is a differentiated
+model that can help us accomplish real
+engineering work like every model 03 has
+tradeoffs in this video we'll break them
+down and all share my three-step process
+I use to understand new models at a
+fundamental level Vibe compare eval
+instead of asking O3 mini to solve
+riddles for us and to do arbitrary
+problems that don't actually create
+value let's use o03 mini to solve a
+legitimate
+[Applause]
+problem meta fourth quarter and full
+year 2024 report were just published and
+that means we can extract
+key information to help us inform
+potential investment decisions we'll
+start by taking a look at metas Q4
+earnings call transcript let's go ahead
+and open up our brand new reasoning
+model and compare it side by side we're
+going to look at 03 mini in high
+reasoning mode next to the previous
+state-of-the-art so how we're going to
+extract information from this earnings
+call we're going to use a prompt that I
+built here this is a 12K token prompt in
+a highly structured XML format you can
+see here we have the quarterly report
+here and then we have a unique structure
+here that we'll break down in a second
+for now I'm just going to copy this and
+paste it in 01 and 03 mini in high
+reasoning effort mode and we'll just
+kick these off side by side so while
+these are running let's break down the
+stats of 03 mini next to the previous
+state-of-the-art so the big headline for
+me when I'm looking at 03 mini is that
+it is effectively 01 at an eighth of the
+price
+I think that's the most concise way to
+look at this model so just running
+through some insights here it's 8 times
+cheaper than 01 eight times more
+expensive than deep seek R1 important to
+note 03 mini maintains the 200k context
+window and the 100K Max output tokens
+this is absolutely incredible especially
+when you compare it to deepy car 1 when
+you realize it only has a
+64,000 token context window and a measly
+8K Max output tokens R1 is a great model
+for many many reasons most importantly
+the cost but this is something that if
+you're a advanced user of generative AI
+if you have large prompts if you have
+lots of information on the input and
+output side you likely ran into this
+issue as I did relatively early on with
+this model uh 64k and 8K out is very
+limiting a couple other insights more of
+a qualitative thing but O3 mini provides
+state-of-the-art instruction following
+I've never seen a model that follows
+instructions better than o03 mini couple
+other key features reasoning effort lets
+us trade off speed and cost for
+performance I love this feature I want
+to see them add additional settings for
+reasoning effort I want more control
+here with how much the model is thinking
+okay and then on the speed side O3 mini
+is fastest um specifically when you're
+in low mode when you use medium and High
+um it's about as fast as o01 so again
+guys none of this is a take away from R1
+it's an incredible model but we just
+have to look at the stats okay my
+oneline summary for 03 mini is that it
+is 01 but 0 to 15% better at an eighth
+of the price with all the capabilities
+it's built to help you accomplish coding
+math reasoning planning and large
+context tasks let's return to our result
+here let's see what our meta quarterly
+report parsing prompt has returned for
+us so we can see a nice markdown
+formatted blob coming out of 01 and then
+on the 03 mini high side you'll see
+something interesting this is more
+precise we explicitly ask for a Json
+response and O3 mini is being more
+precise and let's take a look at the
+result and the prompt we use to get this
+result so this is really cool this is
+something that only powerful reasoning
+models can do what we have here is
+effectively a list of prompts you can
+see the purpose here right given a
+quarterly report extract the information
+requested and the information to extract
+so we have this Dynamic variable that we
+filled out and let's just start top to
+bottom we're looking for total revenue
+for quarter so if we look at this prompt
+search this you can see that that
+information was parsed perfectly we can
+copy this and go over to meta's
+quarterly earnings call you can see Q4
+total revenue was
+48.4 billion all right so our prompt
+running on 03 mini parsed that out for
+us perfectly and so you can see this
+prompt is a effectively a Json object
+where the keys and the values are
+themselves prompts that we want a
+reasoning model to pull information out
+of the quarterly report for so if we go
+down the line here you can see we have
+llama 4 information we have speakers
+which is every speaker on the call we
+have your over your growth we have deep
+seek response I want to see Mark's
+thoughts on deep seek I have operator AI
+agent thoughts I want to get marks
+thoughts on open ai's operator and then
+we have the largest Department growth
+and in this list of prompts we can
+basically query anything we want in one
+shot and get precise answers thanks to
+the capabilities of the reasoning model
+if we just ask for one piece of
+information here this is something that
+a powerful base model like GPT 40 or clo
+5 Sonet could definitely pull off and in
+a benchmark you'll see in a moment they
+can pull that off but when you start
+adding additional information and you
+start asking for the response to be
+itself a specific type of structure this
+is where reasoning models really shine
+right because they can iterate over your
+instruction so anyway let's continue you
+know let's learn about Lama 4 Lama 4 is
+an advanced development Lama 4 mini has
+completed pre-training and its reasoning
+models as well as larger model are
+performing well so this is potentially
+really important news if we look at the
+call transcripts and we search mini we
+can find exactly where Zuckerberg is
+talking about llama 4 so we can scroll
+up here we can see you know Markus zberg
+CEO this is him responding talking about
+llama 4 saying here you know llama 4
+mini is done with pre-training and our
+reasoning models and larger model notice
+the plural there that's really
+interesting multiple reasoning models
+one plural One Mini are looking good too
+super interestingly our goal with llama
+3 was to make open source competitive
+with closed Source our goal for llama 4
+is to lead okay very bold very bold we
+don't have a release date you can see
+here in the query I asked for three
+pieces of information here right llama 4
+in production expected release date
+reasoning model right just really quick
+offthe cuff questions we can see
+speakers we can see year-over-year
+growth and deep secret response so
+something really interesting about the
+list every speaker is that I actually
+asked the model inside this prompt to
+respond in a Json list with this format
+okay this is a really interesting
+capability that you can tap into with
+these powerful reasoning models this is
+not exclusive to o03 mini this is not a
+you know emergent capability that only
+O3 three many can do all reasoning
+models have this capability so respond
+in Json list and then we give it a
+format here right so name and Rule and
+if we look at the response here you can
+see speakers and we have all the names
+and all the roles right and this makes
+for a really really interesting
+Benchmark as you'll see later on in the
+video so you can see here really cool we
+have all the names all the roles we even
+got the operator right conference call
+Operator you have your growth 21% deep
+seek response Mark noted that deep seek
+has introduced several novel advances
+that meta is still ingesting okay so
+some interesting information there C
+also asked for sentiment if we look back
+at the prompt I wanted you know at least
+three items in objects that look like
+this right I want sentiment and thoughts
+and know3 many understood this well and
+processed it he believes meta can learn
+from Deep seeks Innovation and
+potentially incorporate similar
+improvements into its own systems good
+stuff he mentioned that it's too early
+to definitively assess deep seeks
+long-term impact on infrastructure and
+capb backs so this is part of the reason
+the markets are in complete shambles
+right now deep seek came out at a very
+low price point um us companies are
+putting up models at a much much higher
+price point okay so you can see Mark
+explicitly mentioning that that's cool
+to see we're not going to focus on that
+too much we're here to get worked on
+we're here to understand model
+capabilities so then you can see here we
+have a guidance for next quarter good
+stuff his thoughts on the operator a
+browser agent that open AI released very
+interesting I've been talking about uh
+how we need new uis new uxs new systems
+for interacting with our models that are
+not just a chat interface really looking
+forward to this and uh I'm working on a
+couple of my own very cool and then we
+have the largest Department percentage
+increase I thought this is really
+interesting information approximately
+90% of the year-over-year headcount
+growth was concentrated in the research
+and development driven by aggressive
+hiring in technical areas such as
+infrastructure gen monetization reality
+lab so VR AR so this is a powerful
+prompt I'm going to link this prompt for
+you in the description deson it's going
+to be in a Guist so you can just try
+this out if you're interested find a
+quarterly report paste it in and then
+specify key value pairs that are
+effectively prompts themselves and then
+go ahead and run it against your
+favorite powerful reasoning model feel
+free to use this prompting technique
+where you effectively have a list of
+prompts within a prompt you can do a lot
+more than you think with these powerful
+reasoning models especially as they
+progress O3 many represents an
+improvement of what you can do inside of
+the prompt this is one of many prompt
+engineering and AI coding techniques we
+explore on the channel like sub and
+comment to let the YouTube algorithm
+know you want more actionable
+information like this remember that we
+fired off both in 01 and in 03 mini
+prompts right if we copy 01 and just
+take a look at this side by side 01 03
+mini High see a couple of things here
+okay so 01 missed some speakers you can
+see it got the information about llama 4
+right so we have llama 4 we have mini we
+have we have reasoning and we have
+larger okay so it got all this so that
+looks great uh it missed a bunch of
+speakers you can see here 03 many found
+a bunch of speakers it got our
+year-over-year growth correct right we
+have 21 year-over-year solid responses
+for deep seek in that exact object
+structure we were looking for good to
+see and then it filled out our last
+three prompts here and it looks like
+they did a great job right nearly 90%
+year-over-year headcount growth okay so
+when you see this you can see that their
+outputs are fairly similar we can see
+that 03 mini High outperforms or1 just a
+little bit in this single case and that
+brings us to you know the question you
+should be asking at this point after you
+run a couple Vibe checks after you run
+the new model a couple times what
+happens next now that we have an okay
+feel of the capabilities right it looks
+like it's doing work a little bit better
+than 01 how can we push this further how
+can we understand the model at a more
+intimate foundational level this is
+where we move to the second step in the
+three-step process First We Vibe check
+and now we're going to compare
+so we've already kind of done a small
+comparison here but let's scale this up
+so in the Second Step the comparison
+step when you're interested in the model
+and it has something to offer you that
+previous models did not right the vibe
+check is telling you there's something
+here there's something more to learn
+then you can take it to the next step
+which is the comparison step this is
+where we compare the model against a
+series of additional models okay so we
+start with a single node and now we're
+going wide right so now we have multiple
+nodes that we want to look into multiple
+models that we want to compare so this
+is where a tool like thought bench from
+Beni comes in you can use any tool you
+want but basically you just need the
+capability of having multiple models
+running side by side we're going to do
+the exact same thing we have our
+quarterly report here we're going to
+paste this in and we're just going to
+run it something really awesome about
+the o03 mini series o03 mini gives you
+three reasoning level efforts low medium
+and high by default o03 mini is going to
+run in medium mode but you can see here
+our O3 Mini in low reasoning effort mode
+completed already right it's done now
+we're starting to look at multiple model
+responses we have 03 Min in low medium
+and high mode so if we just want to take
+a look at these three we can see that
+low mode dropped some of our speakers
+right we have those three speakers while
+medium and high gave us all of our
+speakers right if we look through this
+we have all of our speakers year overy
+year Revenue growth 21% across the board
+that looks great total revenue right we
+have that exact same number here across
+the board that looks great and we can
+continue to look down the line right we
+can look at our 01 mini you can see 01
+mini giving us a nice response there
+formatted we have 01 across the board
+multiple models can perform this task
+okay looks like multiple mods are doing
+a decent job here once we get to deep
+seek we can see something kind of
+interesting we are kind of falling off
+the bucket a little bit here deep seek
+has split up our guidance and our
+operator AI agent thoughts into key
+value Pairs and our last uh key value
+pair here which is not what we asked for
+so we can see a little bit of deviation
+there and then as we scroll down away
+from the powerful models deep seek 32
+just had to run this on my device just
+to check it out and you can see it's got
+some Naas here it's got uh you know
+multiple things wrong here so obviously
+a much smaller model but we can see
+Gemini flash thinking um missing
+speakers but putting out a good effort
+here overall it nailed the structure and
+it looks pretty good right so step two
+in the process is to compare models side
+by side when you're looking for brand
+new capabilities in models you need to
+compare them to the previous versions
+right and you need to compare them
+across all capabilities so here we have
+low medium and high so this is pretty
+straightforward right I don't need to go
+on about this much longer you can see
+exactly what we're doing here in step
+two We compare now step three is where
+things get really interesting after you
+Vibe check after you go wide now we go
+tall now we're adding a additional
+Dimension this is where we EV valve this
+is where we actually run
+[Applause]
+benchmarks and so for benchmarks of
+course um I've been building up Beni a
+suite of interactive benchmarks you can
+feel Link in the description we've
+covered this in a couple previous videos
+this is something I'm building up
+putting a lot of effort into right now
+because it's helping me gain insight
+into these models in a more interesting
+interactive way go ahead and drag in a
+completed Benchmark file this is the
+final stage in the benchmarking process
+once you run a Vibe check once you
+compare the model side by side to other
+models finally you run multiple models
+against multiple use cases right
+multiple instances of the prompt so here
+if we run flash Benchmark we'll
+autocomplete everything and you can see
+we have multiple prompts running against
+multiple models okay and if we scroll
+all the way down here we can see our O3
+minis as expected and as we would assume
+we have O3 mini in high mode getting 96%
+correct with only one incorrect answer
+if we click into this we can see the
+prompt and the information Ed right so
+we have the expected result and we have
+the execution request okay so this is
+effectively the same prompt we have the
+meta quarterly earnings report pasted in
+here if we scroll all the way to the
+bottom here you can see the information
+we're extracting once you've gone to
+step one and step two most Engineers
+most Builders stop at step one some make
+it to step two but if you want to go all
+the way and dig deep and truly
+understand the capabilities of your
+models you need to set up benchmarks and
+EV valves and it doesn't matter how you
+do it it doesn't matter what tool you
+use I'm not trying to sell you on my
+tool this is completely open source I'm
+building this in public just in case
+there are other Engineers that want to
+check it out use it get ideas from it so
+on and so forth you know the third step
+for truly understanding models in the
+generative AI age is evaluations you
+need to take a use case you're
+interested in and then you need to run
+multiple versions multiple use cases
+against multiple models okay this is
+super super important there's going to
+be a point where you can't do anymore if
+you don't Benchmark what you're trying
+to accomplish okay if you're not
+building a product if you're not using
+you know level four prompts with Dynamic
+variables I'll link our prompt framework
+video in the description so you can
+understand how to write high quality
+prompts if you're interested if you're
+not writing you know high quality
+prompts with information right with you
+know tens 20 50,000 plus tokens
+benchmarking probably doesn't matter for
+you and that's okay but if you are this
+is the most most important step for
+scaling your impact for repeat prompt
+usage right for prompt templates for
+prompts that you're going to improve
+over time to solve a specific problem
+very well so that's why we Benchmark
+that's step three let's go ahead and
+take a look at some Data Insights so as
+I was scrolling down here you might have
+noticed something really interesting
+right GPT 40 got at 83% correct okay 25
+correct only five wrong to be super
+clear I have simplified The Prompt like
+I mentioned before only asking for you
+know one piece of of information it's a
+lot simpler I'm not asking for eight
+pieces of information right I'm not
+running eight prompts at once with you
+know structured responses inside the
+prompts okay this is a little bit easier
+right I've scaled down this Benchmark
+here I'm in the process here of adding
+some more complexity uh some more
+problems for 03 mini in high reasoning
+mode to handle because as you can see
+it's completely saturated this Benchmark
+right The Benchmark is is almost solved
+by o03 mini really cool to see that and
+we can see here 01 preview and 01
+performing really well but look at this
+price tag right let's just zoom in on
+that price tag look at this right to run
+30 prompts of 12K tokens each I'm
+burning s bucks here right and even more
+here we likely had more reasoning tokens
+here right so the total cost is so so so
+important when you're looking at these
+models and this is how you can really
+understand the value again benchmarking
+just allows you to understand models
+with more Dimensions we can also see the
+average duration here 01 preview you
+know 15 seconds on average 01 about 9
+seconds on average when we look at 03
+mini right we are seeing Our Time
+Savings come in here right both time and
+cost right let's look at that look at
+the cost uh 7 bucks for 03 40 cents okay
+42 cents 03 mini medium 45 cents okay 03
+mini High 57 cents okay so you can see
+the step increase in both the low medium
+and high effort and and this is what we
+love to see right we love to see when
+you know these blog posts these you know
+release posts actually back up what
+they're saying right you always want to
+see your benchmarks align at some level
+with what they're showing right even if
+it's a you know simpler use case data
+extraction Benchmark like this right we
+can still see that relationship you know
+no difference here in performance we
+paid a little bit more time and money
+here but then when we went to high mode
+our model turned on for us and it solved
+three additional problems out of 30
+right that's significant you know once
+you have a benchmark you can really
+start to improve the prompt at scale and
+really understand the capabilities of
+the model because you're seeing it side
+by side by side against models and
+against prompts right so if we go into
+this prompt here that 03 mini and high
+effort mode got wrong if we scroll down
+here let me zoom out you can see here it
+made one very silly mistake out of all
+the things to get wrong you can see here
+it returned 600 million instead of 700
+million right so very silly very silly
+mistake I'll bet if I ran this again it
+would get that right and it would get
+something harder wrong um although you
+know if we look across what was correct
+and what was incorrect um this is what
+you want to see right you don't want to
+see 26 26 26 incorrect because that
+means something's probably wrong with
+The Prompt or the prompt itself is
+really difficult right it's a hard hard
+thing to answer what you really want to
+see is the variance and the
+non-deterministic nature of the models
+come through which looks more like this
+right 03 mini High mode it only got this
+one wrong medium Got 5 16 21 and 22
+incorrect right but then we go to low it
+got 1 17 30 and 23 wrong right so so I
+think it's good to see that versus
+saying you know something like this
+right you see problem one wrong 01
+preview got problem one wrong 01 got one
+wrong 01 mini also got one wrong right
+so on and so forth right this means that
+uh the models just cannot solve the
+problem right and this is if we look at
+this problem this is a really
+interesting one too this is where we're
+saying list all the speakers and this is
+where we're asking for that list of
+speakers and I hope you can see why this
+is important right benchmarking gives
+you a deeper understanding Beyond model
+comparison side by side against one
+prompt and Beyond uh the vibe cheat
+which is just when we come in here and
+just play and type a couple things and
+and go oh wow it's amazing at five RS in
+Strawberry or whatever people are
+running right that's not how you
+understand model capabilities so this is
+really interesting um I'm a huge fan of
+open ai's work I do agree with the Bold
+statement Sam put out a while back it is
+much easier to copy than it is to
+innovate I'm not saying that R1 hasn't
+innovated they definitely have I'm not
+you know making a commentary on that but
+just in general overall they took the
+Transformers architecture from Google
+and they have created immense immense
+value with it and mostly you know 60 70
+80% everyone else is playing copy with a
+couple variants and again I'm not saying
+that's bad I'm not saying it's wrong I'm
+just saying that's the way it is right
+open AI as I predicted so far are the
+leaders we obviously want to see the
+price point come down I'm hoping we're
+going to see 03 base model come out
+something like five bucks per input and
+10 bucks per output something you know
+more affordable than 01 but at the same
+time if these models are giving us
+state-of-the-art powerful capabilities I
+think paying the price is always worth
+it to understand what's coming next
+don't look at where the ball is look at
+where the ball's going prices are coming
+down reasoning capabilities are going up
+and models are becoming more accessible
+deep seek and 03 mini are both
+Testaments to that and it looks like
+meta is going to be following that up
+with llama 4 very very soon so first you
+run a Vibe check then you compare models
+side by side to each other so you can
+see how they compare and then finally
+you run additional models with
+additional prompts the more variations
+of your prompt you throw at your models
+the better your benchmark is going to be
+and the better your understanding of the
+models are going to be okay not everyone
+has a ton of money to blow this is just
+one test and I literally torched $7 you
+know let me do the hard work you know
+let myself let uh other leading
+Engineers like Simon Willison and Paul
+the creator of Aer do the hard
+benchmarking work for you if you don't
+want to go all the way I completely
+understand all you have to do drop the
+like drop the sub stay focused and keep
+building

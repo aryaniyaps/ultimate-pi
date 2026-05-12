@@ -1,0 +1,529 @@
+the pieces are lining up for the most
+important agentic application to emerge
+we're talking about the most important
+agentic application you can build and
+use so why is this tool so important
+because it adapts with you it writes
+code for you it collaborates on your
+ideas it helps you create obtain and
+organize information and ultimately it's
+an extension of your own mind so what is
+this incredible tool that I'm talking
+about what is this tool that we've been
+slowly building up to over the course of
+of this Channel video by video of course
+it's none other than your personal AI
+assistant in this video I'm really
+excited to share an early early proof of
+concept that showcases the potential of
+having a truly personal AI assistant
+here's what we're going to cover in this
+video here the Big Ideas first I want to
+take you right into the proof of concept
+a project I'm calling Ada my personal AI
+assistant so let's just jump right in
+let me show you exactly how this works
+I'm working on this PC and the agent OS
+let's just go ahead and fire off this is
+operating in main 7 hey a I have a
+question for you I'm building an
+application on gcp does Google provide
+any text to speech services sure Dan
+Google Cloud's text to speech offers an
+API that converts text into humanlike
+speech would you like to explore its
+features and integration options okay
+nice awesome yeah a let's go ahead and
+open up a browser and just go to
+Google's Texas beach documentation
+done I've run Source Tilda SL bashore
+profile and and browser what would you
+like to explore next in the text to
+speech docs nothing there thanks for
+that a um what's the shell command to
+recursively read all python files in the
+current
+directory okay Dan I've attached find
+name Pi exec cat was plus to your
+clipboard what's next
+awesome aah that's going to be it for
+today go ahead and exit thanks for your
+help it was a pleasure collaborating Dan
+until next time asterisk Ada exits
+asterisk okay so there's the you know
+first kind of run through proof of
+concept of the personal AI assistant as
+you can see there just going through
+that process there are some things that
+didn't work well but there are a lot of
+things that worked really really well so
+if you're excited to learn about exactly
+how this works definitely hit the like
+hit the sub we're going to be building
+and sharing our AI personal assistant
+over the course of this channel this
+first version is super Scrappy I'm not
+sure it's even worth sharing just
+because it's 300 lines of complete junk
+but in future videos we're going to be
+sharing early versions of a fully
+customizable personal AI assistant we're
+going to be talking about the high level
+architecture all the way down to lines
+of code in this video we're going to
+touch on the high level of exactly how
+this works so go ahead hit the like hit
+the sub if you want to join the journey
+things are getting really interesting in
+the AI agent agentic workflow personal
+assistance space and I'm expecting that
+to accelerate let's go ahead and talk
+about some of the highle details right
+so that was a proof of concept of ADA
+that is activated via voice then it goes
+to text then it goes right into an agent
+workflow so let's talk about a couple of
+the key pieces that makes this work and
+then let's talk about some improvements
+I want to talk about the par framework
+this is a simple framework you can use
+in your AI assistance to engineer the
+high level flow of how things work then
+I want to talk about the kind of key
+part of that framework to help you
+choose your agent which is this simple
+keyword AI agent router this has also
+been called the llm router it's very
+similar in that it directs the flow of
+your application to the specific AI
+agent flow that you want to run with
+this specific agentic workflow that you
+want to run and then finally let's go
+ahead and talk about flaws improvements
+iterations what's coming next after this
+kind of first version that we're going
+to be building and sharing here on the
+channel so let's talk about that power
+framework right how does this actually
+work under the hood let's talk about the
+power framework so this is really simple
+p a r prompt agent response you can
+imagine at the very beginning you have
+your prompt right that was the uh speech
+to text so I spoke a natural language
+there and just asked my assistant a
+question my assistant then took my
+prompt looked at the contents of it and
+looked for Activation keywords to
+activate our different sets of agents
+and we'll get to exactly how that
+routing Works in a second that's where a
+simple keyword agent router comes in but
+basically your prompt triggers an agent
+and then your agent runs whatever your
+agentic workflow is you could be using
+Lang chain you could be using autogen
+you could be using crew AI it doesn't
+really matter it's it's an isolated
+function that does a particular unit of
+work and then after your work finishes
+we of course want to create a response
+that our AI coding assistant can say
+back to us and just report how do things
+go if there was an error or if
+everything worked properly so this is
+exactly what this looks like right P
+prompt agent response and it starts with
+the speech to text we then run our AI
+agent routing all the interesting things
+happen in our AI agent router in our
+previous video we talked about the agent
+OS and how we can build compos ible
+reusable pieces of agentic software all
+of that goes in our AI agent routing so
+you can imagine we have our speech
+attacks running into one or more agents
+built on top of agent Os or whatever
+you're using whatever you're building
+for your agent architecture that all
+goes in the center right the routing
+decides exactly which one of your flows
+to run and then after your routing runs
+you want to create some type of response
+so that this Loop is clean we want
+concrete feedback when we're working
+with our systems our personal AI
+assistant is going to be no different we
+need concrete results of our system and
+then of course after that finishes we go
+ahead and loop back to the start and you
+saw that exact Loop happen right here
+when you see our recording kick off once
+again you can see the interaction time
+about 20 seconds there the one above 36
+seconds and then the one above that you
+know took 20 seconds but the recording
+is where our Loop officially resets
+right and so you can see that happening
+over and over there this sets up what I
+believe is the simplest architecture for
+building your personal AI system you run
+a prompt your prompt runs into your
+agent routing and then your agent
+routing does all the cool agentic work
+there and then at the end we need some
+type of response we need some type of
+feedback we're building at a
+conversational workflow with our
+personal AI assistant so then we run
+text to speech to get a solid response
+back out that is the par framework let's
+talk about what's going on in this
+middle step because this is really where
+all the magic happens right AI agent
+routing let's talk about the simple
+keyword AI agent router this is one of
+the simplest and most intuitive ways to
+route your prompts into different
+agentic workflows into different AI
+agents it all starts as most things do
+with just simple strings and functions
+so it looks like this so remember one of
+my prompts Ada let's open the browser
+and go to you know Google's text speech
+service docs right something like that
+when this gets broken down using the
+simple keyword AI agent router it looks
+something like this right so adaa that
+was my agents activation keyword let's
+open the browser so you can see here
+that's a keyword that actually does the
+routing and then you can see here and go
+to variable right so that's whatever
+information that that specific workflow
+is going to take in and so if we hop
+back to the code here we can see exactly
+what that looks like so we have this
+personal AI assistant Loop running
+basically while true we're going to run
+this key function here record audio
+we're going to wait 10 seconds and
+collect whatever audio we can within
+that 10 seconds right that's why you saw
+this recording Kick in here and then we
+basically just wait 10 seconds collect a
+nice chunk of audio and then we operate
+on on that remember this is a proof of
+concept it's just to get something up
+and running to prove out a personal AI
+assistant from end to end so that's
+going to be a record audio step we then
+take that write to a file get that
+transcript back in Future videos we're
+going to dig into specific services for
+text of speech and speech to text to
+satisfy both ends of our par framework
+The Prompt and the response but the key
+Parts here for our simple keyword AI
+agent router is right here so you can
+see here we have the activation keyword
+and the activation keyword here that's
+just the name of my personal AI
+assistant so I just said Ada there so
+that activates looking at keywords at
+all so it's kind of a two tier system
+once the activation keyword is found
+let's go ahead and just do some
+separation here clean this code up a
+little bit I was really Scrappy putting
+this together but so once the activation
+keyword is found we're going to run our
+on keywords function right so we now
+have our activation and this is where
+all the magic happens right we paride
+our prompt a little bit we want to grab
+everything after our activation keyword
+so if I said you know Ada let's open the
+browser it's going to cut everything
+before Ada and just take the prompt
+after that and then we're running this
+function get first keyword in prompt so
+this is the really simple agent router
+you can see here we're doing some string
+manipulation that doesn't really matter
+what really matters is this function
+here so this is our simple llm router
+this is our simple agent router each one
+of these functions contains your key AI
+agents your prompt chains and your
+individual prompts right whatever level
+of llm you need is going to be here you
+can see here we have keys mapped to
+functions notice how in these Keys we
+have both bash and browser so if I say
+bash or browser in my prompt my run bash
+command will run and we don't need to
+dig into the details of all these
+functions you can imagine there are
+prompts running I'll throw this
+functionality into a gist just so you
+can read it just so you can check it out
+it's not going to be a complete module
+or repo you can see I have like seven
+main files up here this is a rapid
+prototyping session and I have a bunch
+of random files going on here I just
+need to get in here quick and dirty and
+and build out the first version so I'll
+have more concrete versions for you in
+the future but you can see here we have
+bash browser shell we have question we
+have hello hey hi and then we have exit
+and if you notice you know if you play
+back the intro of this video we
+activated every one of those functions
+with one of these keywords so you know
+we said let's open the browser and that
+browser keyword is going to kick off our
+run bash command it's kind of weird but
+ideally you're going to want your AI
+assistant listening all the time in the
+background so as soon as your assistant
+name is mentioned the prompt kicks off
+and then inside the rest of the prompt
+there's a keyword that specifies which
+function flow gets run and so you can
+see here you know let's open the browser
+so that officially kicks off my run bash
+command and my run bash command of
+course in the prompt has that browser
+bash Alias that gets run and then we
+have you know and goto variable and in
+this case I'm saying go to Google's text
+to speech service docs and this is where
+the magic of you know the llm really
+shin
+the llm knows to place the location that
+I want to go the variable inside this as
+the full URL so that's how we ended up
+on the you know cloud. gooogle text
+speech documents right so that's awesome
+this is basically you know the simple
+keyword AI agent router this helps you
+take your prompts and turn it into
+custom functions that you can run which
+likely will have just pure functions and
+then some of those functions will be
+individual agents there'll be agentic
+workflows there'll be prompt chains and
+then of of course just some individual
+prompts right I'm not doing a ton of
+interesting things here a lot of really
+simple stuff you know one of the cool
+things I did here with the shell command
+that you saw actually had it generate
+the command and then respond and then
+whatever that command was that they
+responded with I used a paperclip
+library to get that directly onto my
+clipboard so I could quickly you know
+use that command and I think that that's
+one of the huge advantages of your
+personal AI assistant you're going to be
+able to take a lot of shortcuts and then
+after that I just ran a you know another
+completion prompt another the response
+so that I complete the loop of the par
+framework right prompt agent response we
+always want to have some concrete
+response I want to know that my
+assistant did exactly what they were
+supposed to do right it kind of closes
+that feedback loop for us if we H back
+to the power framework right this keeps
+exis and simple it gives our system some
+structure to work with so that we know
+we are back at the beginning of our Loop
+ideally you know when you're really
+using your personal AI assistant in the
+future you know this is running on a
+loop you're just having conversations
+it's you know popping up Windows on the
+left left on the right it's helping you
+manipulate data it's you know giving you
+information in a modal window it's
+writing code in the background right and
+you're seeing that code change live your
+personal AI assistant is going to be
+doing research for you it's going to be
+writing docs for and with you
+summarizing helping you write if I had
+to summarize why this is so important
+it's because you know specifically your
+personal AI assistant it knows you it
+knows your workflows right like in the
+future you'll have built out your own
+agent router and it knows exactly what
+you want when you say certain things and
+things can get super meta when you let
+your AI agent modify this functionality
+literally modify you know its own code
+to improve and work alongside you that's
+going to be in the future I'm sure we'll
+cover that at some point but right now
+we're taking one step at a time we have
+the first version here of our personal
+AI assistant so let's go ahead and
+continue let's go ahead and talk about
+you know we have a great framework for
+building our assistant with the par
+framework right prompt agent response
+and then we Loop that this lets us build
+our agent in ins side the agent routing
+that's where all the interesting
+functionality actually happens sometimes
+we're just running a simple function
+that does something but most of the time
+we're going to be running prompts prompt
+chains AI agents and agentic workflows
+wrapped in some clean architecture like
+the agent OS just like we talked about
+in the previous video I'm going to go
+ahead and Link both those videos in the
+description definitely check those out
+on this channel we're building on a lot
+of the work that we do over time just
+like we do when we're engineering
+knowledge Stacks this content Stacks
+everything we're doing on this channel
+is stacking up to something big so that
+was the par framework we also have the
+simple keyword AI agent router they're
+definitely way more complex ways way
+more intricate ways to do this but
+essentially it's all going to do the
+same thing given your prompt you have to
+figure out how you want to route your
+prompt to real actions that you can take
+right and in this case I'm just using
+this simple keyword router functionality
+that then gives back the agent to run
+and the agent keyword that ran if no
+keyword was matched we just go ahead and
+Skip again this is a proof of concept
+there are many more intricate ways to do
+this this approach definitely gets us
+80% of the value this is a great proof
+of concept is great first version but
+what's next right how can we take this
+to the next level how can we improve our
+personal AI assistant right so just a
+couple things to mention here text to
+speech and speech to text is pretty slow
+I'll be looking out and researching and
+you know experimenting with fast
+services for you so that we can quickly
+get that response if you saw here in the
+finalized video I'm definitely going to
+edit these down just to kind of get the
+Point through but this interaction time
+took 20 seconds this one took 36 seconds
+this one took 20 seconds and really the
+back and forth between you know my
+prompt and my assistance response is
+really only about 10 seconds here some
+improved text to speech logic would also
+be good here I'm just doing 10-second
+chunks it's working pretty well but as
+you're working throughout your day you
+don't want to have to wait for the
+beginning of the 10 seconds to start
+speaking right if I kick this off again
+we can see this is going to be the
+beginning of our 10-second chunk
+everything we see say right now in this
+10 10-second interval is going to get
+picked up so it's going to miss that
+last chunk and anything we're saying
+right now is not going to get picked up
+right so you can see here you know
+everything we're saying right now this
+10c interval it missed that next section
+right and so only 4 seconds there this
+was the time it took to send to our you
+know speech detect service come back and
+then see if there were any keywords
+right in both of these sessions
+including this one here right this next
+transcript there was no keyword said
+right I didn't mention Ada at all or any
+actual um keywords to run right but
+you'll notice I just said Ada and so now
+in this next upcoming chunk it's going
+to look for an agent keyword but it's
+not going to find one right so you can
+see here no agent was found for the
+given prompt so there are some
+improvements to be made to that Loop
+right there again proof of concept not a
+huge deal but we'll definitely want to
+improve that as time goes on right and
+there are lots of ways to work around
+that you know the next Improvement we
+want to add some composability
+reusability with an agent OS like
+architecture we talked about this in the
+previous video this is going to make our
+agent layer so wherever we're actually
+calling our agents and our function
+flows this is going to make this portion
+really really cool really really smooth
+and you can imagine we're going to have
+you know quite a few more keywords that
+activate AI agents and agentic workflows
+as we're building those out we're going
+to be wanting to you know reuse and
+compose these that's where using an
+opinionated agentic architecture really
+comes in so I'm going to be using the
+agent OS and building up up the ideas we
+shared in that video and in that
+architecture so I want to improve the
+human in the loop tooling there are tons
+of really cool opportunities here to run
+one of these workflows and then when our
+assistant needs more information for us
+for instance like I have this idea to
+you know build out new frontend
+components on the fly right so we
+activate you know building out a
+frontend component here on the Fly you
+know with some component keyword that
+then kicks off a workflow inside that
+workflow you know our agent can pop up a
+modal it can give us a file so that we
+can complete our prompt it can ask us a
+question about what we want to have
+built so a lot of opportunity here for
+human in the loop tooling and then of
+course we want more agents we want more
+capabilities this is where your personal
+you know all the prompts all your prompt
+chains all the work you've been doing so
+far that's where all that comes in where
+you come in and you build out you know
+your actions that run based on your
+system I'm really excited about this I
+hope you can see the value in the
+personal AI assistant I hope it makes
+sense why this is the most important
+agentic application that you and I can
+build and use we're going to be covering
+this a lot on the channel this is going
+to be one of our main topics in addition
+to building great agents in addition to
+AI coding assistant so if you enjoyed
+this if you got value out of this you
+know what to do hit the like drop the
+sub stay focused keep building and I'll
+see you in the next one

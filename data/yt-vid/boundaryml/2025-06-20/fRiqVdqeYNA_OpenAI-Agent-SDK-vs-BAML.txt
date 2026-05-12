@@ -1,0 +1,440 @@
+Hello. Okay, so
+uh we're going to talk about the OpenAI
+agent SDK today. Um so I was recently
+actually just trying this out and um at
+first blush it was like wow, this is all
+you got to do. You create a new um uh
+agent. Uh you import this. This is the
+TypeScript version, by the way. Um, you
+give it an instruction uh and you just
+run it and it goes amazing. That seems
+super simple. Um, right. Their their
+docs are are great. Um, they have some
+good examples. Uh, their guides are
+really intuitive. Uh, I actually really
+love this being able to say um, you
+know, how do you do tool calling? Um,
+you know, they have built-in stuff. Web
+search. This is amazing. a oneliner for
+being able to say like, "Oh yeah, I want
+my agent to go search the web." Um, and
+then file search and computer use code
+interpreter, right? Like you can just
+like add oneliners here. Um, it's
+incredible. So they also allow you to do
+stuff like adding tools really easily,
+uh, which have execute callbacks, so
+you, you know, do whatever API calls you
+want after that. Um, very intuitive,
+very nice. So um
+uh they can have these these multi-
+aents these things called handoffs right
+they talk about guard railing streaming
+um pausing doing human loop interactions
+um MCP right they have their own tracing
+um this is all really good stuff um one
+of the cool things too is that they can
+integrate with thirdparty providers like
+different SDKs like the Burcell AI SDK
+um this is really nice because they ISDK
+has their own stuff going on. Um, so
+this was all really great and I and I
+did a little demo and I'll I'll show you
+kind of um how how it all works. Um, but
+caveat uh I I kind of ran into some
+stuff um kind of like when you start
+iterating on a project and you were
+like, "Hey, I'm ready to go to
+production." Um, you know, what does
+that look like and and how does that
+feel from a developer experience
+perspective? Um so I I uh yeah so let's
+let's get started. Um so coming over
+here to cursor um it's pretty easy as
+you saw to uh define your your agent. Um
+and the use case here that I am doing is
+I want a a startup validator idea. Um, I
+want and and the way that I want to do
+that is to create synthetic profiles to
+be able to go and ask product questions
+about it and have these uh synthetic
+profiles uh created by an LLM agent um
+that has different backgrounds, pain
+points, needs, that kind of thing. Um,
+and so I want it to go out there and do
+it and and you know, search the
+internet, have these personas um out
+actually go out and use real data from
+the internet. Um and and I'm doing this
+here. So um basically you can see how
+easy this is. Create new agent. Um
+create your prompt. Uh they have this
+really nice thing for their structured
+output JSON. Um caveat, you have to use
+the word JSON in here. They will throw
+an error if you do not. Um and then you
+can see what this person schema looks
+like. Right? This is just a Zod schema.
+We've seen this. um we pass back a name,
+age, occupation, um you know, all these
+all these different things that um are
+relevant. So, um so coming back here,
+when we actually run it, um we want to
+say, you know, generate these these
+personas. Um the really nice thing about
+this is you can just literally say run.
+Um this is getting imported from the
+aisk.
+Um and this width traces is also really
+nice. I'll show you this in a second. Um
+what this looks like on their dashboard
+to be able to group um uh agents uh
+running together uh in in one section.
+Um all right. So you get the final
+output. This is typed um right? You get
+personas and this is the odd schema. Um
+and then you can just output this. So um
+I'm doing a little bit extra stuff in
+here yielding um intermediate uh areas
+because we're doing streaming um and
+things like that. So let me show you um
+let's go into kind of like a iteration
+loop here of what it's actually like to
+do prompt engineering on here, right?
+Because you know as we all know maybe we
+want to add you know another thing that
+says and um make sure they're not too
+similar to each other, right? This is
+the prompt prompt uh engineering
+iteration type. So, so let's just run
+this. Um, and let's say our idea is um,
+uh, to have sustainable food delivery
+services and we want to create five, uh,
+different personas. So, okay, let's run
+this. Uh, it's doing a little bit of
+streaming. Uh, we can't get the exact
+output because it's trying to create an
+object. Um, so we actually have to wait.
+We can't get that structured output
+until it's actually done. So streaming
+in this case um only gets you a little
+bit of information. Um but here we go.
+So first we get this invalid output
+type. Um not super useful. Okay. So what
+do I what does that mean? You know I
+would imagine okay maybe it couldn't
+coers it into the output type. Um we
+don't get a lot of information. Uh so my
+next thing would be logically let's go
+check out the logs. So uh we come over
+here. Um, now we're looking at the logs
+for today and let's just see. Uh, you're
+an expert in this. Da da da. Generate
+five user user personas. Okay, great.
+Okay, here's the JSON output.
+Looks pretty good. Looks like some JSON.
+Don't know why that's not working. Very
+interesting. Okay. Um, doesn't give me
+any data. How do how do I debug this?
+Right. Um the other thing here is this
+is where the traces come up that with
+trace uh and we do grouping by uh okay
+yeah okay so we get text output is this
+even the same one I don't know right
+this is like you can see how hard this
+is to start debugging
+um was this the one I actually I I don't
+know. I've been like running these a
+whole bunch. I can't call it. This is a
+string output. Did it try to coersse
+this inside the agent SDK? Right.
+There's a lot of stuff in here that now
+you can see, okay, well, I'm going to
+try to prompt my engineer my way through
+this. Um, and it's like, how do I what I
+don't even know what it's failing on,
+right? It didn't give me a good error.
+Um, I have already kind of gone through
+this and and uh fixed it. Um, so here I
+kind of gave it a, you know, few shot
+example, um, where it says, okay, this
+is what it should look like. Here's the
+example JSON format. Um, now let's do
+it. Even though I would assume I
+wouldn't actually have to do this
+because I'm already passing in the JSON
+object type. Um, I think it should do it
+for me in my opinion. Um, so let's run
+this one. Um, same thing. Sustainable
+food service processing. still have to
+wait because it's a a generic it's a
+formatted output, JSON output. Um, so it
+wouldn't really make sense to stream it.
+Okay, sweet. Um, this is just how I've
+formatted it in the CLI. Great. We did
+Persona. Um, they're getting
+backgrounds. Perfect. We got five of
+them. Great. Love that. Okay, so now
+coming back over to logs. Okay, looks
+like we got a new one that came in.
+It has the updated prompt.
+The output looks exactly the same. Okay.
+Have no idea why the other one failed.
+Come back in here.
+Okay. Now we have a little bit more
+information here. Um,
+again, the output looks fine. So, so you
+can see here like it's very hard to
+debug uh um which is which is very
+frustrating. So, um I'm going to plug a
+little bit here because uh I shall um my
+own product uh which
+simplifies a lot of this experience uh a
+lot of like the developer loop um the
+developer experience through being able
+to prompt engineer yourself um through
+this doing structured output streaming
+structured output all these things that
+are very much needed when you're
+building any sort of um LM application.
+So um what we're going to use here is
+called BAML. Uh and so BAML is another
+library uh but it's also a programming
+language that allows you to build your
+agents and your LM apps um uh with this
+new programming language which is which
+is amazing. I mean it just like works
+out of the box. Uh it gives you
+low-level primitives to be able to see
+and and debug and be able to actually do
+your prompt iteration. um inside of VS
+Code right where you're living. You
+don't have to jump out to a logs page.
+You don't have to come back all these
+things. So I'll show you a little
+example of what that looks like. So
+so um the difference is uh you know
+defining your agent in your TypeScript
+code, your Python code, whatever it is.
+Um you do that here uh with the agent
+SDK. With BAML
+you actually have these new files uh
+BAML files. So here's the exact same
+prompt. Um, and so we have a generate
+persona prompt. It takes in a startup
+idea. It takes in the number of
+personas, right? And you can see now how
+much easier this is to just like look at
+this is the whole prompt, right? Um, and
+it there's no mixing in extra stuff.
+Like I don't like the agent SDK
+sometimes injects extra information that
+I just, you know, don't know what
+actually was showing up until I go to
+their UI and look at the logs. And it's
+just again the iteration loop is is very
+difficult to see. So you can see here
+we're going to output a persona. It's
+going to have these things. We don't
+need descriptions on them. You know,
+we're going to let the LM course it into
+that. Um and one of the really cool
+things is for the other one, we had to
+create an entire CLI uh that tried to
+stream this output and and do all this
+stuff, right? there's is like a, you
+know, if you're doing a web app, if
+you're doing anything else, you have to
+basically create your own tooling just
+to be able to test these prompts and do
+iterations on them. Um, right? And it's
+just like, you know, everybody's going
+to have their own version of tooling and
+and all these things. So, what BAML did
+is they said, we're going to provide the
+tooling for you. Uh, we're going to
+allow you to run your own tests based
+off different things. Let's say this is
+um sustainable food service delivery.
+and let's run this test. And so let's
+see what happens here. So immediately we
+get inside cursor, VS code, whatever. Um
+you can see the exact prompt that we're
+about to send to the LLM. Um you can
+even see it in different ways. You can
+look at the actual tokens that it sent.
+So now you can see, hey, how much how
+much am I going to be um spending here?
+Um and then you can even see the raw
+curl. You can copy paste this to your uh
+command line and you can just like
+actually run this. So there's no
+obuscation of like we're adding more
+stuff in there. What you see is what you
+get and it's and it's very clear.
+There's no magic happening behind the
+scenes. So
+um so yeah, so let's test this. You can
+see we've injected these variables. Uh
+we're going to do three profiles. Uh and
+let's run it. So you see right away
+we get this output right in VS Code and
+you can see this it's streaming the
+actual output. We don't have to wait for
+the whole thing. It's already coercing
+it into the correct format. It's doing
+partial JSON object types. Um which is
+incredible which is something that you
+can't get you can't get in these other
+libraries. Um, and the only reason you
+can get that is because this custom
+programming language we've defined, we
+know the type that you're trying to
+coersse it into. So, we know ahead of
+time before um the LM actually spits
+anything out that you're looking for
+background, you're looking for name,
+you're looking for age, and that's how
+we can get these partial type streaming
+types. Um, which is incredible. It
+allows you to do all sorts of things.
+Um, especially when you're doing UIs,
+you can do these these streaming UI
+types, which we can we can go in a
+little bit later, but you can see how
+easy it is. Let's say uh we wanted to
+add uh let's say what do we want to add?
+Cursor make something up the validation
+questions. Okay, maybe they have some
+stuff. Okay, so what did what did this
+do? Um that's the only place we updated
+it. Uh but you can see here
+all it is is because we have this
+context output format it just says okay
+great we just added this validation
+questions we didn't update the prompt we
+didn't do anything let's just see what
+happens
+okay it's coming out it's creating
+background painoints
+boom validation questions incredible I
+didn't have to do anything um I mean
+that's that's not just the power of BML
+you know it's that's also the power of
+of LMS and how it can infer that okay
+based off of this prompt you're also
+asking for this now um so super powerful
+you can see the iteration loop and how
+much faster it is um and if there's if
+there's an error um you you'll see it
+right away there's no question of oh I
+have to go over to this UI uh I have to
+find the specific log output was it this
+one was it this one and then you're
+like, whoa, what is this prompt? It's
+not formatted.
+What was my where's my input? I don't I
+can't differentiate between that. Okay,
+great. You did JSON output, but there
+was an error here. So, like like where's
+my where are you going to tell me that
+there was an error? I have no idea.
+That's you know, and going into
+production, it's like, you know, you
+start seeing errors and they're not
+showing up in any of these these
+observability platforms. It's like, you
+know, you would think that your stuff's
+working perfectly fine and and yet the
+user is is uh you know, seeing these
+errors. So, um so the power of BAML um
+you can see it here. It's amazing. Your
+iteration loop is is uh super quick. Um
+and and so let's let's just actually I
+also created a little CLI just to do a
+direct onetoone comparison. So this um
+streaming output uh you can see here we
+actually export these types for you. So
+when you import um this the the uh the
+code actually gets generated for you and
+so you can see here we actually are
+exporting this type this is the same
+type that you defined in here this
+persona. So you can see this persona has
+um these same types. This is a
+TypeScript type uh which now allows you
+to work with um with all this stuff. So
+So here's how you call the the stream
+output. You say, "Hey, this is my
+function. This is type safe generate
+personas." Um we're passing in the idea.
+We're passing in the the number, right?
+Those are the two inputs uh into the the
+thing. And we're going to return this
+persona output. So,
+so right now you can see this returns a
+balance stream. Uh it's a partial
+stream, right? As we were talking about
+before, um you can get that like
+intermediate state of the JSON object.
+You don't need to wait until the entire
+um stream from the LLM is done um uh
+trying to parse that JSON. Uh we do that
+behind the scenes on your behalf. So, so
+again the normal for await loop on a
+stream. Um, but you can see here the
+stream is a partial of this persona. So
+now we can do things in the middle of
+this and yield um things like we're
+processing this person. We can we can
+output their name. Um, uh, processing
+person. Yeah. Yeah. And so um, then we
+can tell which persona it is, right? And
+then at the end of it, we say, okay,
+great. Now we we know we're done with
+the stream. um let's get that actual
+full full object back and return that.
+So let's just look at that um CLI.
+Same thing. Here we are. We're going to
+stream this. Okay, you can immediately
+see the difference. We're processing the
+first person. Now we're going to process
+the second one. Okay, we're getting
+intermediate data uh back in between.
+So, um, this is because the LM is
+streaming things in different, um, and
+we're getting information back, um, in
+different orders, uh, that we're being
+able to parse it in that partial, uh,
+format. But again, perfect. So, we got
+the same exact, um, information out, uh,
+as we did before, but you can see here
+that it it did it in a in a real
+streaming way, not just a, hey, we're
+looking for structured output and we
+can't do it until the end of of the
+thing. So, um, yeah, I think that wraps
+it up. Um, the TLDDR, I think, you know,
+again, the they open AI has done a great
+job at simplifying how you build um,
+agents. Um, but they also offuscate a
+lot of stuff that once you start running
+into issues and errors and you want to
+do prompt uh, iteration um, you know, it
+just becomes really difficult. You know,
+to me, this is like the the Vzero or um
+or Bolt or any of those great
+prototyping tools. Um but as soon as you
+get past a prototype and you want to go
+to production becomes very difficult. Um
+and and so you know coming back to to
+BAML and some of the the pros there is
+just like it gives you that
+observability right next to where you're
+actually coding the prompt, right? And
+that's the the power um of giving you
+low-level uh um uh functions and and
+prototypes for for being able to to do
+that. So anyway, um I'm biased uh but I
+think um boundary is the the clear
+winner here. So all right, thanks again

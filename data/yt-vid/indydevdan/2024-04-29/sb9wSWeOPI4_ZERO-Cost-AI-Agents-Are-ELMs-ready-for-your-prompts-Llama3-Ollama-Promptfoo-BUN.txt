@@ -1,0 +1,575 @@
+Gemma
+53 open Elm and llama 3 open source
+language models are becoming more viable
+with every single release the
+terminology from Apple's new open Elm
+model is spoton these efficient language
+models are taking center stage and the
+llm ecosystem why are Elm so important
+because they reshape the business model
+of your agentic tools and products when
+you can run a prompt directly on your
+device the cost of building goes to zero
+the pace of innovation has been
+incredible especially with the release
+of llama 3 but every time a new model
+drops I'm always asking the same
+question are efficient language models
+truly ready for on device use and how do
+you know your Elm meets your standards
+everyone has different standards for
+their prompts prompt chains a agents and
+a gentic workflows how do you know your
+personal standards are being met by 53
+by llama 3 and whatever is coming next
+this is something that we stress on the
+channel a lot always look at where the
+ball is going not where it is if this
+trend of incredible local models
+continue how soon will it be until we
+can do what gb4 does right on our device
+with llama 3 it's looking like that time
+is coming very soon so in this video
+we're going to answer the question are
+efficient language models ready for on
+device use and how do you know if
+they're ready for your specific use
+cases so here are all the Big Ideas
+we're going to set some standards for
+what Elm attributes we actually care
+about so there are things like Ram
+consumption tokens per second accuracy
+we're going to look at some specific
+attributes of Elms and talk about where
+they need to be for them to work on
+device for us we're going to break down
+the ITV Benchmark we'll explain exactly
+what that is that's going to help us
+answer the question is this model good
+enough for your specific use cases and
+then we're going to actually run the ITP
+Benchmark on Gemma 53 and llama 3 for
+real on device use so we're going to
+look at a concrete example of the ITV
+Benchmark running on my M2 MacBook Pro
+with 64 GB of RAM and really try to
+answer the question in a concrete way is
+this ready for prime time are these Elms
+are these efficient language models
+ready for prime time let's first walk
+through some standards and then I'll
+share some of my personal standards for
+Elm so we'll look at it through the lens
+of how I'm approaching this as I'm
+building out agentic tools and products
+how do we know we're ready for on device
+use first two most important metrics we
+need to look at accuracy and speed given
+your test Suite that validates that this
+model works for your use case what
+accuracy do you need is it okay if it
+fails a couple tests giving you 90% or
+are you okay with you know 60 70 or 80%
+pass rate I think accuracy is the most
+important Benchmark we should all be
+paying attention to something like speed
+is also a complete blocker if it's too
+low so we'll be measuring speed and TPS
+tokens per second we'll look at a range
+from one token per second all the way up
+to grock levels right of something like
+500 plus you know 1,000 tokens per
+second level what else do we need to pay
+attention to memory and context window
+so memory coupled with speed are the big
+two constraints for Elms right now
+efficient language models that can run
+on your device they chew up anywhere
+from 4 G by of ram of GPU of CPU all the
+way up to 128 and Beyond to run llama 3
+70 billion parameter on my MacBook it
+will chew up something like half of all
+my available Ram we also have context
+window this is a classic one then we
+have Json response and Vision support
+we're not going to focus on these too
+much these are more yes no do they have
+it or do they not is it multimodal or
+not there a couple other attributes that
+we're missing here but I don't think
+they matter as much as these six and
+specifically these four at the top here
+so let's go ahead and walk through this
+through the lens of my personal
+standards for efficient language models
+let's break it down so first things
+first the accuracy for the ITV Benchmark
+which we're about to get to must hit 80%
+so if a model is not passing about 80%
+here I automatically disqualify it
+tokens per second I require at least 20
+tokens per second minimum to put this in
+any real production environment if it's
+below this it's honestly just not worth
+it it's too slow there's not enough
+happening anything above this of course
+will accept so keep in mind when you're
+setting your personal standards you're
+really looking for ranges right anything
+above 80% for me is golden anything
+above 20 tokens per second at a very
+minimum is what we're looking for so
+let's look at memory for me I am only
+willing to consume up to about 32 GB of
+RAM GPU CPU however it ends up getting
+sliced on my 64 GB have have several
+Docker instances and other applications
+that are basically running 24 7 that
+constrain my Dev environment regardless
+I'm looking for Elms that consume less
+than 32 GB of memory context window for
+me The Sweet Spot is 32k and above llama
+3 released with 8K I said cool
+benchmarks look great uh but it's a
+little too small for some of the larger
+prompts and prompt chains that I'm
+building up I'm looking for 32k minimum
+context window I highly recommend you go
+through and set your personal standard
+for each one of these metrics as they're
+likely to be the most important for
+getting your Elm for getting a model
+running on your device so Json response
+Vision support I don't really care about
+Vision support this is not a high
+priority for me of course it's a nice to
+have there are image models that can run
+in isolation that does a trick for me
+I'm not super concerned about having
+local on device multimodal models at
+least right now Json response support is
+a must have for me this is built into a
+lot of the model providers and it's
+typically not a problem anymore so these
+are my personal standards the most
+important ones are up here 80% accuracy
+on the ITP Benchmark which we'll talk
+about in just a second we have the speed
+I'm looking for 20 tokens per second at
+a minimum I'm looking for a memory
+consumption maximum of 32 and then of
+course the context window I am
+simplifying a lot of the details here
+especially around the memory usage I
+just want to give you a high level of
+how to think about what your standards
+are for Elm so that when they come
+around you're ready to start using it
+for your personal tools and products
+having this ready to go as soon as these
+models are ready will save you time and
+money especially as you scale up your
+usage of language models so let's talk
+about the ITV Benchmark what is this
+it's simple it's nothing fancy ITV is
+just is this viable that's what the test
+is all about I just want to know is this
+Elm viable are these efficient language
+models AKA on device language models
+good enough this code repository we're
+about to dive into it's a personalized
+use case specific benchmark to quickly
+swap in and out Elms AKA on device
+language models to know if it's ready
+for your tools and applications so let's
+go ahead and take a quick look at this
+code base link for this is going to be
+in the description let's go ahead and
+crack open vs code and let's just start
+with the read me so let's preview this
+and it's simple this uses bun prompt Fu
+and a llama for a minimalist
+crossplatform local llm prompt testing
+and benchmarking experience so before we
+dive into this anymore I'm just going to
+go ahead open up the terminal I'm going
+to type Bun Run Elm and that's going to
+going to kick off the test so you can
+see right away I have four models
+running starting with gpg 3.5 is a
+control model to test against and then
+you can see here we have a llama chat
+llama 3 we have fi and we have Gemma
+running as well so while this is running
+through our 12 test cases let's go ahead
+and take a look at what this code base
+looks like so all the details to get set
+up are going to be in the read me you
+should be able to get set up with this
+in less than a minute this code base was
+designed specifically for you to help
+you Benchmark local models for your use
+cases so that when they're ready you can
+start saving time and saving money
+immediately if we look at the structure
+it's very simple we have some setup some
+minor scripts and then we have the most
+important thing bench underscore uncore
+and then whatever the test Suite name is
+this one's called efficient language
+models so let's go ahead and look at the
+prompt so the prompt is just a simple
+template this gets filled in with each
+individual test run and if we open up
+our test files you can see here let's go
+ahead and collapse everything you can
+see here we have a list of what do we
+have here 12 tests they're sectioned off
+you can see we have string manipulation
+here command generation code explanation
+text classification this is a work in
+progress of my personal Elm accuracy
+Benchmark by the time you're watching
+this there'll likely be a few additional
+tests here they'll be generic enough
+though so that you can come in
+understand them and tweak them to fit
+your own specific use cases so this is
+the test file and we'll look into this
+in more detail in just a second here but
+if you go to the most important file
+promp Fu configuration you can see here
+let's go ahead and collapse this we have
+our control Cloud llm so I like to have
+a kind of control and an experimental
+group the control group is going to be
+our Cloud llm that we want to prove our
+local models are as good as or near the
+performance of right now I'm using gbt
+3.5 and then we have our experimental
+local Elms so in here you can see we
+have llama 3 we have 53 and we have
+Gemma again you can tweak these this is
+all built on top of AMA let's go ahead
+and run through our tool set quickly
+we're using bun which is an all-in-one
+JavaScript runtime over the past year
+the engineers have really matured the
+ecosystem this is my go-to tool for all
+things JavaScript and typescript related
+they recently just launched Windows
+support which means that this codebase
+will work out of the box for Mac Linux
+and windows users huge shout out to the
+bun developers on all the great work
+here we're using o Lama to serve our
+local language models I probably don't
+need to introduce them and last but not
+least we're using prompt Fu I've talked
+about promp Fu in a few videos in the
+past but it's super super important to
+bring back up this is how you can test
+your individual prompts against
+expectations so what does that look like
+if we scroll down to the hero here you
+can see exactly what a test case looks
+like so you have your prompts that
+you're going to test so this is what you
+would normally type in a chat input
+field you have your individual models
+let's say you want to test open AI
+Claude and Mr Lar LGE you would put
+those all here so for each provider it's
+going to run every single prompt and
+then at the bottom you have your test
+cases your test cases can pass in
+variables to your prompts as you can see
+here and then most importantly your test
+cases can assert specific expectations
+on the output of your llm so you can see
+here we're running this type contains we
+need to make sure that it has this
+string in it we're making sure that the
+cost is below this amount latency below
+this Etc there are many different
+assertion types the ITV Benchmark repo
+uses these three key pieces of
+technology for a really really
+simplistic experience so you have your
+prompt configuration where you specify
+what models you want to use you have
+your tests which specify the details so
+let's goe and look at one of these tests
+you can see here this is a simple bullet
+summary test so I'm saying create a
+summary of the following text in bullet
+points and then here's the intros script
+to one of our previous videos so you
+know here's a simple yet powerful idea
+that can help you take a large step
+toward use and valuable agentic
+workflows we're asserting case
+insensitively that all of these items
+are in the response of the prompt so
+let's go ahead and look at our output
+let's see if our prompts completed okay
+so we have 33 success and 15 failed
+tests so llama 3 ran every single one of
+these test cases here and reported its
+results so let's go ahead and take a
+look at what that looks like so after
+you run that was Bon Elm after you run
+that you can run Bon View and if we open
+up package that Json you can see see Bon
+view just runs promp Fu view Bon view
+this is going to kick off a local promp
+Fu server that shows us exactly what
+happened in the test runs so right away
+you can see we have a great summary of
+the results so we have our control test
+failing at only one test right so it
+passed 91% accuracy and then we have
+llama 3 so close to my 80% standard
+we'll dig into where it went wrong in
+just a second here we then have have 53
+failed half of the 12 test cases and
+then we have Gemma looks like it did one
+better 7even out of 12 so you can see
+here this is why it's important to have
+a control group specifically for testing
+Elms it's really good to compare against
+a kind of high performing model and you
+know gbg 3.5 turbo it's not really even
+high performing anymore but it's a good
+Benchmark for testing against local
+models because really if we use Opus or
+gp4 here the local models won't even
+come close so that's why I like to
+compare to something like gpg 3.5 you
+can also use cloud 3 H coup here this
+right away gives you a great Benchmark
+on how local models are performing let's
+go ahead and look at one of these tests
+what happened where did things go wrong
+let's look at our uh text classification
+this is a simple test the prompt is is
+the following block of text a SQL
+natural language query nlq respond
+exclusively with yes or no so this test
+here is going to look at how well the
+model can both answer correctly and
+answer precisely right it needs to say
+yes or no and then the block of text is
+Select 10 users over the age of 21 with
+a Gmail address and then we have the
+assertion type equals yes so our test
+case validates this test if it returns
+exclusively yes and we can look at the
+prompt test to see exactly what that
+looks like so if we go to test. yo we
+can see we're looking for just yes this
+is what that test looks like right so
+this is our one of our text
+classification tests and and we have
+this assertion type equals yes so equals
+is used when you know exactly what you
+want the response to be a lot of the
+times you'll want something like a i
+contains all so case insensitive
+contains everything or a case
+insensitive contains any and there are
+lots of different uh assertions you can
+make you can easily dive into that I've
+linked that in the readme you'll want to
+look at the assertions documentation in
+promp Fu they have a whole list here of
+different assertions you can make to
+improve and strengthen your prompt test
+so that's what that test looks like and
+and you can kind of go through the line
+over each model to see exactly what went
+right what went wrong Etc so feel free
+to check out the other test cases the
+long story short here is that by running
+the ITV Benchmark by running your
+personal benchmarks against local models
+you can have higher confidence and you
+can have first movers advantage on
+getting your hands on these local models
+and truly utilizing them as you can see
+here um llama 3 is nearly within my
+standard of of what I need an Elm to do
+based on these 12 test cases I'll
+increase this to add a lot more of the
+use cases that I use out of these 12
+test cases llama 3 is performing really
+really well and this is the uh 8B model
+right so if we look at a llama you can
+see here the default version that comes
+in here is the 8 billion parameter model
+4 bit quantization so pretty good stuff
+here I don't need to talk about how
+great llama 3 is the rest of the
+internet is doing that but it is really
+awesome to see how it performs on your
+specific use cases the closer you get to
+the metal here the closer you understand
+how these models are performing next to
+each other the better in the faster
+you're going to be able to take these
+models and productionize them in your
+tools and products I also just want to
+shout out how incredible it is to
+actually run these tests over and over
+and over again without thinking about
+the cost for a single second you can see
+here we're getting about 12 tokens per
+second across the board so not ideal not
+super great but still everything
+completed fine you can walk through the
+examples a lot of these test cases are
+passing this is really great I'm going
+to be keeping a pretty close eye on this
+stuff so definitely like And subscribe
+if you're interested in the best local
+performing models I feel like we're
+going to have a few different classes of
+models right if we break this down
+fastest cheapest and then it was best
+slowest and now what I think we need to
+do is take this and add a nest to it so
+we basically say something like this
+right we say cloud right and then we say
+best slowest most expensive and then we
+say local fastest lower accuracy and
+best slowest right so things kind of
+change when you're at the local level
+now we're just trading off speed and
+accuracy which simplifies things a lot
+right because basically we were doing
+this we had the fastest cheapest and we
+had lower accuracy and then we had best
+slowest most expensive right so this
+this is your you know Opus this is your
+gbd4 and this is your haou gpt3 but now
+we're getting into this interesting
+place where now we have things like this
+right now we have 53 we have llama 3
+Mama 3s s or 8 billion we also have
+Gemma and then in the slowest we have
+our bigger models right so this is where
+like number three what is it 70 billion
+that's where this goes and then you know
+whatever other big models that come out
+that are you know going to really chew
+up your RAM they're going to run slower
+but but they will give you the best
+performance that you can possibly have
+locally so I'm keeping an eye on this
+hit the like and hit the sub if you want
+to stay up to date with how Cloud versus
+local models progress we're going to be
+covering these on the channel and I'll
+likely use you know this class system to
+separate them to keep an eye on these
+right first thing that needs to happen
+is we need anything at all to run
+locally right so this is kind of you
+know in the
+future same with this right now we need
+just anything to run well enough so you
+know we need decent accuracy any speed
+right so this is what we're looking for
+right now and this stuff is going to
+come in the future so that's the way I'm
+looking at this the ITP Benchmark can
+help you gain confidence in your prompts
+link for the code is going to be in the
+description I built this to be ultra
+simple just follow the read me to get
+started thanks to Bon promp Fu and oama
+this should be completely crossplatform
+and I'll be updating this with some
+additional test cases by the time you
+watch this I'll luckily I've added
+several additional tests I'm missing
+some things in here like code generation
+context window length testing and a
+couple other sections so look forward to
+that I hope all of this makes sense up
+your feeling the speed of the open
+source Community Building toward usable
+viable Elms I think this is something
+that we've all been really excited about
+and it's finally starting to happen I'm
+going to predict by the end of the year
+we're going to have an on device High
+coup to gp4 level model running
+consuming less than 8 GB of RAM as soon
+as open Elm hits AMA we'll be able to
+test this as well and that's one of the
+highlights of using the ITB Benchmark
+inside of this code base you'll be able
+to quickly and seamlessly get that up
+and running by just updating the model
+name adding a new configuration here
+like this and then it'll look something
+like this you know open Elm and then
+whatever the size is going to be you say
+it's the 3B and that's it then you just
+run the test again right so that's the
+beauty of having a test Suite like this
+set up and ready to go you can of course
+come in here and customize this you can
+add Opus you can add IU you can add
+other models tweak it to your liking
+that's what this is all about I highly
+recommend you get in here and test this
+this is important enough for me to you
+know take a break from personal AI
+assistance and agentic workflows because
+once your Elm is on your device and it's
+running with great accuracy the cost of
+the prompt is going to zero as I've said
+many times over and over the prompt is
+the new fundamental unit of programming
+and the new fundamental unit of
+knowledge work so as the cost approaches
+zero your capabilities literally
+approach Infinity I know that sounds
+cheesy and dumb but it is 100% true I
+believe this and I'm betting on it every
+single day so we'll add open Elm when
+it's ready on AMA and let's go ahead and
+answer these questions so are efficient
+language models ready for on device uses
+and how do you know Elm meets your
+standards so by using something like the
+ITB bench Mark by getting this code Base
+by using promp FU by testing your
+prompts you can with certainty know that
+an Elm meets your standards and are
+efficient language models ready for on
+device use for me for my use cases
+they're close they're getting very very
+close as the new Macbook Pro M4 chip is
+released and as the llm community rolls
+out permutations of llama 3 I think very
+soon possibly before mid 2024 elm's
+efficient language models will be ready
+for on device use again this is use case
+specific which is really the whole point
+of me creating this video is to share
+this codebase with you so that you can
+know exactly what your use case specific
+standards are because after you have
+standards set and a great prompting
+framework like promp Fu you can then
+answer the question for yourself for
+your tools and for your products is this
+efficient language model ready for my
+device for me personally the answer to
+this question is very soon if you
+enjoyed this video video you know what
+to do thanks so much for watching stay
+focused and keep building

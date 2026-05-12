@@ -1,0 +1,729 @@
+What's up engineers? Andy DevDan here.
+We've got a couple mass releases to
+cover. Of course, there is the brand new
+Claude Opus 4.6. It's a fantastic model.
+What else is there to say? It's beating
+all the benchmarks. You've already
+heard, you've already seen this. This is
+not what I want to focus on here. The
+real big idea I want to cover with you
+today is multi-agent orchestration. The
+game on the field is changing. It's no
+longer about what the models allow us to
+do. As of Sonic 4.5, these models can do
+much more than you and I give them
+credit for, than you and I really know
+how to unlock. The true constraint of
+agentic engineering now is twofold. It's
+the tools we have available and it's you
+and I. It is our capabilities. It's our
+ability to prompt engineer and context
+engineer the outcomes we're looking for
+and build them into reusable systems, to
+build them into powerful agentic layers
+that you and I can wield. The true
+limitation is you and I. So, let's take
+another stab at improving what we can
+do. Front ends, back ends, scripts, it's
+too simple for these models. So, what I
+have here is eight unique applications
+that I had Claude Opus 4.6 create. I
+touched none of these, by the way. These
+were all one-shotted. I like to use E2B,
+use whatever you want. So, agent
+sandboxes are very powerful, but once
+again, this is not exactly what I want
+to focus on here. We're going to use
+agent sandboxes as a playground to
+understand and to really dive into two
+key big ideas: multi-agent orchestration
+and multi-agent observability. Once you
+put these two pieces together, you can
+do much more with your powerful Claude
+Code Opus 4.6 agent.
+>> [music]
+>> So, first things first, we're going to
+crack open the terminal. If we create a
+new Claude Code instance on our
+multi-agent observability, you'll see
+that we have a new agent joining the
+session. And we have that session start
+hook captured. We have a rocket and
+we've officially kick off a new session.
+But, before we touch our new multi-agent
+orchestration capabilities, we need to
+boot up Cloud Code in a different way.
+Close this, and you'll see we got that
+session end event captured here. And
+instead of opening this up in a classic
+terminal, we're going to use tmux. And
+so, this is going to give us some
+powerful capabilities, you'll see in a
+second. The next thing we're going to do
+is, I just want to make this super
+clear. I'm going to type which and then
+cldyo, so you can see this exact command
+that I'm running. We're going to export
+the new Cloud Code experimental agent
+teams feature. Set that to one, we're
+enabling that feature. So, now we're
+running Cloud Code inside of a tmux
+session. You can see we kicked off a
+brand new agent, and this is where
+things get interesting. If I type ls,
+these are the agent sandbox directories
+that you saw here. We're going to have
+our agents investigate and break down
+how we can set up these applications.
+So, this is going to be our first agent
+team. Build a new agent team for each
+code base in this directory. Have an
+agent summarize and how to set it up.
+What you're going to see here is really
+extraordinary. You can see all of our
+events getting captured. Observability
+is really important for knowing what you
+can really do with your tool. You can
+see here, we're going to start streaming
+in all of our agent events. Let me make
+sure that this is stuck to the bottom
+here. The first thing our agent does is,
+it creates a task list. We covered this
+in our previous video. What happens next
+is extraordinary. So, we're in tmux, and
+so tmux has panes. Our agent is now
+opening up brand new panes for each
+sub-agent that it wants to run. All
+right, so I'm going to go full screen
+here, so that we can really take a look
+at this, and I'm going to downsize this
+a little bit. can see all eight agents
+that we kicked off here, okay? So, on
+the left, our primary agent set up the
+task list, created a team, and then it
+assigned a task to each member of the
+team. And you can see our status lines
+giving us the agent, looks like we have
+Haiku agents. You can see our context
+window, and our agents are going to
+figure out how to run and summarize each
+code base, right? And so, if we scroll
+back here in our agent observability,
+you can see a lot of work happening. Our
+Haiku agents are running all the tools
+they need to accomplish the work and we
+can dial into an individual agent here
+if we click this. You can see this is
+all the tool calls for one of our
+agents. Looks like this is our primary
+agent here, right? Opus 4.6. You know,
+you can see here a lot of work is
+happening here, guys, right? 160 tool
+calls within just a minute time span,
+okay? We are scaling our compute to
+scale our impact, all right? If we hop
+back over here, you can see all the
+panes are gone now. What happened? All
+of our agents finished, right? They
+finished their work, so we can go ahead
+and get out of full screen mode and it's
+just our primary agent running now. Uh
+we can go ahead and get rid of their
+swim lane here. And this is a really
+powerful capability of multi-agent
+orchestration. You want to spin up
+specialized agents that do one thing
+extraordinarily well, right? They focus
+on one task and then they finish. So,
+our primary agent now is just putting
+together a summary of the work done by
+the eight agents and, you know, take a
+look at the context window here. We've
+only used 31%. So, that means that all
+of our other agents, they explored eight
+different code bases and and to be super
+clear here, guys, these are not just
+front ends. These are full stack
+applications, okay? Every single one of
+these are full stack applications. We
+can fully interact with these and, you
+know, these are fully built out. They
+were one-shotted by Opus. Very powerful
+capabilities here and none of this
+matters if you can't first trigger these
+features and prompt your primary agent
+to control these powerful workflows and
+if you have no idea what's going on
+underneath the hood, right? This is
+where vibe coders fall apart. They don't
+actually know what's going on. And so,
+the engineers, the builders, and even
+the vibe coders that know what's going
+on underneath the hood can do so much
+more. This whole idea that uh engineers
+are going to be replaced by this
+technology to me is absurd. And it's
+because engineers are the best
+positioned to use agentic technology.
+So, you can see here that um if I hit
+control B and left bracket, I'm in
+scroll mode now. The annoying thing
+about tmux is that it does change the
+controls a little bit. I'm in control
+mode and if I just scroll up, you can
+see we have summaries for every single
+agent sandbox application that's stored
+in my local directory, okay? So, you can
+see here, nice summary of all eight, and
+the primary agent knows how to spin them
+up. Let's push our multi-agent
+capabilities further.
+>> [music]
+>> Here's what we're going to do now. So,
+I'm going to get out of this mode. I'm
+just going to hit escape, and we're back
+in our primary window here. Let's go
+ahead and actually spin up new agent
+sandbox instances with each one of these
+applications, all right? And we'll do it
+in two teams. We'll have a team of four
+mount the first four applications, all
+right? Because we have eight unique
+applications here, if we run ls. And
+then we'll have a team of four doing the
+last set of applications, okay? Let's
+prompt engineer this properly, all
+right? We're going to start with the
+most important piece, build a new agent
+team. So, we're triggering right, these
+are information-dense keywords that tell
+the agent we want a specific set of
+tools to execute, all right? And then
+I'll say using agent sandboxes, so this
+is my agent sandbox skill, and backslash
+command. This is a special skill that I
+have to do wacky stuff like this, use
+the backslash reboot and mount one
+through four in their own agent sandbox.
+Be sure to set up every agent. So, part
+of my workflow when I'm doing rapid
+prototyping, what I like to do is just
+build it all in an agent sandbox, like A
+to B, as you saw here, right? This is an
+agent sandbox. And then, what I'll do
+is, if I like one of the versions, I'll
+copy it down locally, and I have prompts
+for that, of course. So, what we're
+going to do now is basically rehost
+these applications with a specialized
+agent team. So, I'll fire this off, and
+you can see here right away, our
+observability system picked up on that
+new user prompt submit event, and now
+things are going to get awesome again.
+>> [laughter]
+>> Our agent is going to first run the
+agent sandbox skill, and it's going to
+run the backslash command skill, so that
+it understands what backslash reboot
+does. And then it's going to actually
+kick off the reboot for every one of
+these directories. And so, our agent has
+figured out all of our tooling, it ran
+our agent sandbox skill, it ran our
+backslash command skill, and now it's
+creating that task list again. And so,
+the task list is the centralized hub.
+This is where everything gets kicked off
+from. There we go. Okay. So, very cool.
+Now, we're kicking off our agent team.
+You can see we have that new pane. So,
+we have our primary agent kicking off
+the first agent, and this agent is then
+going to run that skill. So, every
+single agent has its own context window,
+right? So, they all need to run the
+skill, they all need to run the setup
+commands. You can see it's running
+through the E2B setup process, and these
+are all Opus 4.6 agents. But, you can
+see here, all of our agents are getting
+kicked off again, and I'll just go ahead
+and and, you know, downsize this a
+little bit and go full screen here, so
+we can get a good picture of what's
+going on, right? All four Opus agents
+are running in parallel. They're each
+going to reboot the application. You
+know, what we saw here in the beginning,
+basically we're going to recreate these
+agent sandbox instances with this new
+multi-agent orchestration tool. And so,
+if we hop back to our agent [laughter]
+observability system, once again, you
+can see tons and tons of work happening,
+right? If we dial into one of these swim
+lanes, we can get a better understanding
+of the tools and the impact that every
+agent is creating. And, you know, really
+importantly here, if we search for our
+brand new tools, you can see we have
+these new task list tools. Uh we should
+see some If we scroll up here, you'll
+see, right, we have task update, and we
+have task, right? So, this is kicking
+off the generalized agent, and you can
+see here, this is the exact command that
+was run to kick off a sub-agent,
+sub-agent that is executing right here.
+And, the great part about running this
+in tmux is, of course, the panes. We can
+continue to zoom out a little bit, so
+you can get a better view here. Every
+one of our agents has their own context
+window, their own model, their own
+session ID, and you can see they all
+have their own unique name here as well,
+right? SBX agent, sandbox agent 1 2 3
+and 4, right? So, this is fantastic. So,
+I'm focused in this individual window
+here. Inside of tmux, we need to hit
+control B and then left to change our
+cursor position. What I want to do here
+is get the the names of the other
+sandboxes that we didn't kick off. So,
+I'm just going to ask the primary agent
+because it's actually not doing anything
+right now. The primary agent is sitting
+waiting for events to come back. List
+sandbox directories we didn't kick off.
+And you can see here sandbox agent
+number four has completed its setup.
+It's pinged a command back to our
+primary orchestrator agent. So, what I'm
+going to do here is while this is
+running, I'm going to go ahead and open
+up a new terminal and kick these off.
+Let's see if I got a clean paste out of
+that. We're not going to kick this off
+in our flat window, right? We need tmux
+to get that visualization, to get those
+multiple panes. So, I'm going to run
+tmux once again, then I'll boot up
+Claude code, and then I'll effectively
+run that exact same prompt. Then what I
+want to do is get the names of those
+agents that did not run. So, I'll copy
+this. And I'm doing a little bit of
+correction here on another screen. I'm
+having trouble copying this, and so I'm
+I'm just going to ask my agent to do
+this for me. Uh copy the four sandbox
+directories to my clipboard. Should do a
+PB copy. There you go. And then I'll
+just paste this. So, only post these
+four. There we go. And I'll kick that
+off. Now, we're going to get the
+remaining sandboxes kicked up, and
+>> [laughter]
+>> I'm sure you may have noticed this, but
+if I go into scroll mode here and scroll
+to the top, I have run out of my API
+usage for today on my Claude Max plan.
+So, I'm using API billing, and uh yeah,
+this is going to burn a hole in my
+wallet. Drop a like, drop a comment
+>> [laughter]
+>> uh so that the YouTube algorithm can can
+pay for some of this API usage. But,
+I'll hit escape, and I'll go ahead and
+let this second agent start kicking off
+this workflow. And so, we're going to
+see the same thing. And if we look at
+our agent observability, we can see
+everything. We can understand everything
+that our agents are doing top-to-bottom.
+And if we go ahead and look over here,
+you can see that we have one more agent
+finishing up its work, right? Sandbox
+agent number two is the last one still
+in progress. So, this is a very powerful
+feature. We can now observe our agents
+in a more improved way just with tmux,
+just by seeing these new panes open up
+as our primary or orchestrator agent
+starts to set up and scale up this work.
+Then, whenever we need to, we can just
+scale up and create a brand new team.
+So, here's that second team of agents
+doing a whole different set of work in a
+brand new window. All right, so you can
+see that same process. Go full screen,
+minimize this a little bit so you can
+get a better view. We have two teams of
+agents working and we have an
+observability system to trace the whole
+thing. And so, whenever we want to, we
+can just come in here. It's got all four
+agents running. It's going to mount
+these applications. We're going to
+create a new E2B agent sandbox, upload
+the app code base, install, get
+everything set up as if it's a brand new
+environment. So, we're combining several
+really, really powerful ideas here that
+we've been talking about on the channel
+week after week. We have multi-agent
+observability, so we know what's going
+on, so we know how to improve and
+understand our systems. We have spaces
+to place our agents so that they can do
+whatever they need to to accomplish
+their work without jeopardizing our
+local machine. And then, of course, we
+have the new multi-agent orchestration
+capabilities coming out of Cloud Code on
+top of a brand new ultra-powerful model
+that can run long-duration tasks. All
+right, so we're talking about long
+threads, we're talking about big
+threads, and we're handing off more and
+more work to our agents. That is the
+theme here. How can you prompt engineer
+and how can you context engineer with
+great powerful models to get more
+engineering work done than ever with
+confidence, all right? We want to be
+building systems of trust with our
+agents. Now, scaling up the model is
+always going to help with this, but this
+is not something we're really in control
+of. Whenever the new model ships,
+whatever it costs, we are just subjects
+to that. But, what we can control is the
+great tooling we use alongside these
+three powerful capabilities. And so,
+that's one of the big ideas I wanted to
+share with you here today. Multi-agent
+orchestration, multi-agent
+observability, so you can dial in to
+anything your agents are doing. And
+then, of course, we have agent
+sandboxes, a secure location to place
+whatever you want to have your agents do
+at scale, all right? And so, we have two
+teams of four. To be clear, the agents
+are running on my device, but the work
+they're doing is operating off the
+device. They're using their local
+agentic capabilities, their local
+skills, and then they are creating and
+operating inside their own agent
+sandboxes. Okay, so our first team is
+all set up. And if we go into scroll
+mode here, control B, left bracket, and
+we do some scrolling, we should be able
+to see everything set up live. So, let's
+go ahead and open these up. I'll take
+these existing windows, these existing
+sandboxes, I'll just move them up onto
+my monitor here, and then we should see
+them open up in this browser window
+here. We'll take a look at the the brand
+new tools that allow and enable these
+workflows in just a second. But, let's
+go ahead and just get these opened up,
+so we can see how our agents have done.
+I'll say, open in Chrome. You can see
+these sandboxes are going to be alive
+for 12 hours, all right? And it looks
+like they did open up in this other
+window, super annoying, that's fine. I
+will copy these four newest ones, drag
+them in. Here we go. So, here's our
+agentic support. It looks like we're
+missing some data here, and looks like
+we're missing data here. Let's see if we
+got our gallery. Nice. Okay, so we did
+get some nice information there, and we
+have our data here. All right, so very
+cool. And so, we can continue to prompt
+to resolve these issues. I'm going to go
+ahead and just give this a shot, and
+I'll say, data is missing from this, and
+let's go ahead and go here as well.
+Basically, our sandboxes were rebooted,
+but it didn't reboot with the exact same
+data, or with any data for those two
+applications. So, we're going to go
+ahead and have these agents do this
+work, and what I'll do here is I'm going
+to stop this, cuz the primary agent
+started working, right? You saw that.
+The primary agent's trying to take over.
+I'll say, spin up a new agent team to do
+this work for you. Give them all the
+context they need, skills, Sandbox
+backslash command. And so I'm just being
+super verbose there with my prompt
+engineering with that agent. You can see
+here our second team finished. So let's
+see how this team did. Yeah, open all
+four URLs in Chrome. Okay. So kick these
+off. All right, so we have these opened
+up. Let's go ahead and get these dragged
+and dropped over here. Okay. We have our
+mission briefings dashboard. We have our
+portfolio application so we can track
+our forecast for our portfolio. We have
+a recipe app and we have a ad dashboard
+to see how our ads are performing. Nice.
+So we got all the data for these. So all
+of these four worked. Love to see that.
+And the two issues we had with these
+code bases are getting resolved here
+with our two agent agent team. So this
+is an iterative process as well. We're
+going to want to be firing off ad hoc
+agent teams to perform specific sets of
+work. In our previous video where we
+talked about the task list feature, uh
+let me go ahead and see if I have that
+diagram pulled up here. Yeah, so in our
+previous video we talked about the
+CloudCode task system where you prompt
+your primary agent and your primary
+agent creates a task list that multiple
+agents, basically an agent team,
+operates on. This is a very powerful
+feature that is taken to the next step
+with the multi-agent orchestration
+feature that you can now tap into. All
+right. But the idea here is really,
+really important. As you're building out
+real features, as you're scaling up the
+work you can do with your agents, it's
+not just about a single agent or even a
+couple agents or even parallel agents.
+You want to be building teams that
+communicate together, that are all
+driven toward accomplishing one specific
+goal. Think about building out a
+feature. That's way too much work,
+especially as you enter real, legitimate
+production code bases. Building out a
+full feature requires organization. It
+requires communication, right? And so
+this new agent orchestration feature
+allows us to really tap into that brand
+new system, that way of thinking. All
+right. And And this is what this feature
+looks like end to end. We're going to
+create a team. We're going to uh create
+tasks which spawn agents. They all work
+in parallel, and then they shut down,
+and then we delete the team. And we'll
+look at the tools here in just a second.
+But, a really important aspect of this
+is that when the work is done, you want
+to delete the agents. This forces a good
+pattern of context engineering where you
+reset the context and start over. So,
+you can see here's the agent shutdown
+process happening from our primary
+agent. These are shutting down, the
+tasks are gone, the panes are now gone.
+And so, apparently, this has fixed the
+issue. You can see here DB wasn't
+tagged. We restarted uh both processes
+were down, so we should be good on these
+two uh applications. Let's refresh.
+Still not good there, that's too bad.
+And let's refresh here. It looks like
+this one did load its data here. Let me
+see if that actually worked. Loading
+pull requests. And still nothing here.
+All right, so we have issues here. I
+don't really care about these. You get
+the point here, right? We got six out of
+eight sandbox environments spun up in
+brand new systems. And you know, just to
+be super clear and transparent, here are
+the new environments and the new URLs.
+Here are the old ones. I just want to
+show that I have these in the These are
+actually different URLs. All right. So,
+these are all unique agent sandboxes.
+And we can be even clearer about this. I
+have a bunch of these running right now.
+If I go to a terminal here, and I say um
+I pass in this skill, we should spin up
+a new agent for this. We always want to
+be operating on fresh instances. We
+don't need tmux for this. It's going to
+be a single cloud code instance. And I
+just want to show you all the current
+running agent sandboxes. So, I'll kick
+this off. I'll fire off my agent sandbox
+skill. And I'll just say list all
+running sandboxes. And so, we should
+see, I don't know, some 20 or 30
+sandboxes here. You can see it's
+validating my EDB key. And then um let's
+go ahead and see. There we go. Working
+through some issues. And of course,
+that's the sandbox list. You can see we
+have 24 sandboxes. Let's go ahead and
+get that list. Just to make it super
+clear here how much compute we're
+running in parallel. There we go. Looks
+like that was the command. It's getting
+the information for each sandbox
+environment. I'll link a previous video
+where we talked about how you can set
+this up and how this really works in the
+description for you if you're
+interested. I think agent sandboxes are
+and will be a big, big, big trend as we
+scale up what our agents can do on our
+behalf. You're seeing this with the
+whole Mac mini craze. As you can see in
+the background, I have a Mac mini. I've
+had this thing for a while and was, you
+know, decent amount ahead of that trend
+and having my agents run in its own
+dedicated environment. As you can
+imagine, I have multiple sandbox
+environments. One like E2B operating
+purely in the cloud and then for more
+personal workflow where, you know,
+privacy is important, you can have
+agents run, of course, on your own local
+devices like everyone is doing with
+Multibot or Cloudbot or whatever it's
+called now. But you can see here, you
+know, I have 24 agent sandboxes running
+and, you know, you can see I have
+duplicates of a lot of these things that
+we've been looking at here, right? So I
+have multiple versions of this. Just
+wanted to make this super clear. I have
+a skill, I have an agent that operates
+and can manage all of these agent
+sandboxes at scale. This is going to be
+really important moving forward. When
+you're scaling your compute to scale
+your impact, which is the big theme of
+everything we're looking at right now.
+All right? Here we looked at how to spin
+up teams of agents, okay? And it all
+comes back to things we talk about on
+the channel all the time. All these
+fantastic new tools coming out of the
+Cloud Code team, all these new
+capabilities. There is a lot of
+engineering work they put into this, you
+know, big shout out to the Cloud Code
+team, but I do want to say that
+underneath all of it is a concept we
+always discuss. It's the core four
+context model prompt tools. Everything
+boils down to that, all right?
+Everything is the core four. Okay? And
+just quickly, you know, we saw all this
+work happen. We saw our multi-agent
+system track all of this and you can see
+all of these new task tools. Team
+delete, team create. We have these new
+task tools. Task create, task get. So
+what are all the new available tools?
+Let's go and take a look at this. We
+have kind of three categories of tools
+that this, you know, new multi-agent
+orchestration system gives us. Team
+management, task management, and
+communications. Team create task, team
+delete task has been around for a long
+time. This is how you kick off an agent
+in parallel, but then we have all the
+new task management tools, right? Task
+create, task list, task get, task
+update. But the most important one of
+all probably is the send message. This
+is how the agents were communicating and
+after they communicate, after they do
+all the work as we described here in
+this workflow, right? This is the kind
+of the multi-agent orchestration
+workflow built out with this new tool.
+It's it's this, right? Create the team,
+create the tasks, spawn the agents, work
+in parallel, shut them all down, delete
+the team. This is the full workflow of
+the brand new Claude multi-agent
+capabilities. So, with every new
+capability, with every new feature
+coming out of Claude code, coming out of
+all these agentic coding tools, with
+every new release of the new model, the
+question is always the same for you and
+I, the engineer with our boots on the
+ground working with this technology
+every single day. How can we understand
+the capabilities available to us to
+accelerate our engineering work. Models
+will improve, tools will change, and
+that means that you and I will always be
+the limitation. It's about what you and
+I can do. So, with every feature
+release, make sure you're digging in,
+make sure you're understanding what's
+available to you so that you know what
+you can do. Every engineer is limited by
+their tools and their knowledge of their
+tool. So, that's why multi-agent
+observability is super key. Throughout
+any point in this workflow, we can jump
+in here and we can investigate and see
+the communication, see the tasks between
+our agents that we kicked off. We see
+all the events. I'm going to leave my
+multi-agent observability updated to
+support all these new tools, link in the
+description for you, and I'll also link
+a previous video and my agent sandbox
+skill for you to play with. Again, link
+in the description for you if you're
+interested in taking your agentic coding
+to the next level, check out tactical
+agentic coding. This is my take on how
+you can accelerate far past AI coding
+and vibe coding with advanced agentic
+engineering so powerful your code base
+runs itself. We're seeing multi-agent
+orchestration come out of the Cloud Code
+team. We have had this documented and
+covered inside of this course, inside of
+Agentic Horizons specifically. We have
+had working versions of multi-agent
+orchestration for months now. This is
+all here. You know, a lot of the ideas
+we talk about on the channel are taken
+to the next level inside this course. If
+you're interested, check this out. I
+know a lot of engineers on the channel
+have already checked out this course and
+you know, to be super clear, there are
+thousands of engineers that have taken
+this and then have gotten great value
+out of this. So, I'll leave this linked
+in the description if you're interested
+as well. We're going to be covering
+multi-agent orchestration a lot as we
+move forward. It's going to be a big
+trend because it allows us to do what we
+always do on this channel, scale our
+compute to scale our impact. Thanks so
+much for sticking around. You know where
+to find me every single Monday. Stay
+focused and keep building.

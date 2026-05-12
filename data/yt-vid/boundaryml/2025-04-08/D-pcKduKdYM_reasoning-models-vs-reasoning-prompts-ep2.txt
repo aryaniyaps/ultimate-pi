@@ -1,0 +1,1921 @@
+All right. So, we're going to do another
+episode today of AI that works with
+myself and
+Dexter. And last week, we talked about
+how to do classification with a thousand
+plus classes. And this week, we want to
+talk about something I thought was
+really relevant, especially with all the
+new models coming out recently. Uh,
+Llama 4 came out, a few other approaches
+came out. And the things that we want to
+spend the most time on is how do these
+reasoning models actually help us? Do
+they help us? Is there an advantage to
+using them? Is there an advantage to not
+using them? Um, could we leverage some
+of the reasoning capabilities in
+existing models without using a
+reasoning model? Um, and with that,
+let's go off and start talking about
+some of the stuff. But as we always say,
+it's really hard to go and have a
+conversation about these techniques that
+seem so
+abstract without actually a concrete
+example. So, Dex here has put together a
+really, really good example. uh that I
+think is going to be helpful and
+somewhat um good grounding for all of us
+to talk about. So we're going to talk
+about the example first and then dive
+into the reasoning
+capabilities. You want to take it away
+next? Yeah, let's do it. Um so we have
+built um really quickly there is a
+public neo forj database for movie
+recommendations. So this is just a
+public data set. Anyone can plug into
+it. It's kind of got like public
+username and password. And we've just
+built a small little AI agent that can
+answer questions about movies. And it's
+using agentic tool calling to generate
+cipher queries to query against the
+database for and cipher is the um name
+of the SQLish dialect that they use. So
+I can ask this thing something like hey
+who's in point
+break and we see it gets back and it
+runs this query and then you can see
+kind of what came back from the database
+and it gives you the main actors and so
+you can ask it even more complex queries
+like what else are they in
+um and it gets this very
+long pile of JSON.
+Um, one of the challenges with this is,
+uh, you'll notice, uh, it's just not
+that smart in certain cases. Uh, so if I
+say who's in the matrix,
+um, it's going to run this query and
+it's going to get it wrong and it's just
+going to keep trying over and over again
+until it breaks. Um, but I can come back
+here and say like who's in matrix the
+and then eventually it'll figure it out
+and get the right title. Um, so there's
+some interesting things around like
+giving it correct like directions and
+instructions to follow that I think
+we're I think we're using 40 mini right
+now. Um, but we'll get into kind of some
+of the interesting challenges uh with
+how to how to get this thing to do. So
+for like writing SQL, writing code, and
+other types of tasks that like reasoning
+models tend to be much better at. Um,
+we'll look at kind of hey, let's drop in
+a reasoning model and and see how how
+powerful this is. And then we'll uh dig
+into some techniques for hey, how can
+you use smaller models or non-reasoning
+models and uh build your own reasoning
+pipeline um and kind of what's happening
+under the hood there. So the code for
+this is in the repo. Um we'll add some
+more outlines and stuff to this as we
+go. Um but like five, what do you want
+to do? You want to jump into like the
+architecture of just what's going on in
+the inside? Yeah, I think let's just
+grab a whiteboard and just really
+quickly outline the code that we have
+today. Once we have the code that we
+have today um and then we can go ahead
+and kind of go from here and uh uh talk
+about the reasoning structure. Yeah,
+cool. So, um I think the core of this is
+just the chat loop.
+[Music]
+Um so, uh essentially what we've got
+here is we've got this big for loop. Um
+I'm actually going to draw this out. So,
+a message comes in from the front end,
+from the
+user. Um, and uh, Vibob, I also sent you
+I I just shot you a link to this
+whiteboard as well.
+Um, and we basically going to pass that
+into our prompt um, that we called chat
+with
+graph. Um, so you can see that is
+uh, as you may expect a BAML function.
+Um, actually, let me just pull up the
+actual
+code. Um,
+wonderful. Okay, cool. So, um, we're
+basically asking it, hey, try to help
+the user out. We give it the schema of
+the database which is
+um a big file that looks like this that
+just describes the different nodes in
+the graph. Um, and then for each
+message, we put that in. And then we put
+in a system message that basically asks
+it to output things in a specific
+format. And our response is either going
+to be a, you know, string, hey, here's
+your answer um, action reply, or
+um, it's going to be a graph query where
+it's going to tell us what query it
+wants to run. So, those are the two
+options. And we're basically going to
+ask the model to output one of those two
+things. If it outputs a graph query um
+we will we will go run that tool. Um so
+let's say it outputs you
+know query
+graph then we actually go connect to the
+neo forj database
+uh and then we add to what we call the
+working context here. Thank
+you. Right. So it starts with the user
+message and
+then we will append to the working
+context query graph with actually like
+the the cipher that it uh
+selected and then we add the neo forj
+result neo forj result
+um including if there was an error there
+or something like that.
+Um, and then we basically pass that back
+into the LLM and it may decide, oh, if
+there's an error or it didn't get any
+results, um, we saw in the matrix
+example, it just kept trying the same
+thing again as 40in is want to do. So,
+it may loop back through this way or it
+may at some point realize, okay, cool.
+I'm done calling tools and I want to
+just
+reply. And then at that point, we kind
+of exit out and send that reply back to
+the user. And while these are happening,
+we're also streaming those back into the
+uh into the kind of context window. You
+got it. I'm just trying to make a curved
+arm line really fast here. I got
+you like that. Yeah, exactly. Yeah.
+Yeah.
+Cool. Uh does that make sense?
+Questions?
+Um I'll just recap really fast um on
+this really fast. Um, so the idea is
+basically that if an LLM is going to go
+reply to something, we want to be able
+to iterate on iterably over time in this
+sort of approach as what Dex showed. And
+if we can't iterate on it, then the
+problem is we rely on the model to be
+perfectly correct. So the front end
+really doesn't care about any of these
+things. And the reason that the code
+that you see is a little bit more
+complicated is because what we're
+actually doing under the hood is every
+single time we add something to the
+working context, we're also streaming an
+event out to the front
+end, letting it know what we're doing to
+the working context. So the user doesn't
+actually see an opaque block until we
+reply. The user is actually seeing the
+the working context as it's happening.
+And there's interesting things that we
+can do in the front end if we wanted to,
+which is once the front end is actually
+done, we could technically just delete
+the working context and only show the
+reply. So, so the user doesn't have to
+know that it can see like it's an in
+progress training. That's a front end
+only query that we could like we could
+hide. Go ahead. So, we did like who's in
+uh who's got a good movie.
+Um, finding Nemo. That's
+great. I just thought about it.
+Um um yeah so like our working context
+is this query and the response and then
+here's our final answer and I think the
+implementation right is that actually
+even when I ask another question this
+gets cleared out of the context window
+right the steps and we only just see the
+messages that have happened right
+exactly
+so the idea is that over time the chat
+doesn't need to preserve all the cipher
+queries that I have it just kind of
+needs to preserve the answer
+um so like on the X chat, we still send
+the whole contacts window, but we
+actually clear these things out. And so
+you just have the reply and then the
+user message. And then as we're building
+up the continued working context, it may
+have a bunch of queries here until we
+get to the next reply and then these get
+crossed out again. Exactly. You nailed
+it, Dex. So can I ask a quick question
+about that?
+So I've been doing similar queries with
+uh Neo4j and GraphQL as well. Is there
+any advantage keeping the context around
+to help correct it? So I found like
+sometimes you can't get that first shot
+of a query. You prompt it and then it
+gets the right one. Have you have you
+noticed that pattern? So here's what we
+actually do under the hood. So whenever
+this Neo4j result comes, this Neo4j
+result could be either green because it
+actually solved it or it could be red
+because it doesn't have the answer. If
+it's red, we literally what we really do
+is like if this sorry I'll I'll write
+this as an error. What we really inject
+is something that looks like this.
+Oops. An error happened.
+You could imagine injecting something
+like this where you just say oops an
+error happened add it to the context and
+now send it back to the model and the
+model now generates a new query which we
+then get a new neoforj call oops which
+we get a new neoforj call and if it's
+another error then we keep on adding it
+um but if it's not an error it's
+actually a result then we add the result
+and then we ask the model to go again
+but anytime it's not an error what we do
+is we actually delete all the previous
+queries and all the previous context and
+just add it in like this.
+Gotcha. Okay, that makes sense. And that
+that error as you called it, there's
+obviously like a a UI a user could
+interject and say, "Hey, you got it
+wrong." And that gives us this
+opportunity to develop that again,
+right? Well, we actually just let the
+model know that the errors happen like
+Neo4j is telling us the citra query is
+wrong. But I think this gets in Yeah,
+sorry. I think this gets into um kind of
+your point on the last episode as well,
+Vibb, which was basically like you can
+build whatever you want. And if you have
+things structured like this and you have
+each step and you have control over it,
+then yes, you could build something of
+like, oh, when we have two errors in a
+row, don't send it back to the model.
+Actually send it to the user, but keep
+those errors around and send a
+deterministic message to the user of
+like, hey, we've got two errors, like
+what do you want to do about it? And
+then append that rather, you know what I
+mean?
+Yeah. just I mean I guess there's
+there's two forms of error, right?
+There's the it created an invalid query.
+The other form is it got the query
+wrong. Um quite complex queries like you
+know um give me all the people who did
+this who are also starring in that who
+are friends with this. Um I find those
+queries can break down they break down
+slower in cipher than GraphQL. Um, yeah.
+But then a really easy thing you can do
+is like me and Dex talked about how you
+could delete the user messages and then
+add in a and we what we do is like we
+basically just delete the user message
+and we only add in the reply. You could
+say an if statement that says if the
+query is more than 5,000 characters then
+include
+it in the context window. It's a choice.
+Yeah. like the way you build the context
+for the user is really a choice of what
+you do.
+And if you go back to the UI dance,
+yeah, you could even do this in a
+different way where you could actually
+put checkboxes into your UI that says
+like should the should the model
+preserve this into the context or not.
+So you could even make it user driven
+about whether or not the queries are
+passed in. It's really turn your users
+into context engineers. Yeah, exactly.
+turning your users into context
+engineers along the way so they can make
+an educated decision. You can have good
+defaults like very long queries get
+added in very simple queries
+don't. Does that make sense u?
+Yeah definitely that's a that's a really
+clear way of looking at it. Thanks.
+Awesome. Um but now that we have this
+framework, I want to talk about the next
+part which is actually the reasoning
+models because we if without an example
+it seems really abstract on how do you
+go do this but let's talk about a little
+bit about what a reasoning model is in
+the first place.
+Um so uh D I'm going to go to the
+whiteboard really fast. I'm Oh yeah,
+let's do it. Yeah, sorry. Um okay. Yeah,
+because the whole point of this is less
+about this content. This is more just
+like setting the stage for how this
+thing works. So when you're reading the
+code, you get it. Because what we're
+going to go do is actually make this
+pipeline way more complex because like
+and
+like do some whiteboarding, but then
+like we're going to come up with some
+really interesting and complex questions
+that 40 mini is just like no way it's
+going to get the cipher query right.
+Yeah. So let's talk a little bit about
+what a reasoning model is and I think
+that's going to help us understand what
+they do under the hood and then we can
+talk about it. So, we all know what an
+uh uh well, okay, well, I'm assuming
+most people that come here know what an
+LLM is. It's a thing that takes in input
+tokens and then spits out
+Oh. Oh, interesting. inputs and arrow
+choice. Uh it's a thing that takes in um
+input tokens and then spits out another
+only a single token at at a time. And
+what we do is
+uh interesting uh here I got you.
+Yeah. Oh interest. Thank you. What we do
+under the hood is we keep on generating
+this as long as uh the token is not this
+special token called eof or uh there's
+some like we'll call it eof or eof which
+is some like termination token. If the
+token is a termination token, then we
+stop and then um and then we go do
+things.
+Now, let's talk about what a reasoning
+model does. A reasoning model does
+something very very very similar to
+this. Um, and I'm not going to claim
+that OpenAI does this exactly, but in
+theory it should be somewhat similar
+where there's a special token that we
+add into our So like we have an EOF
+token, we actually add in another
+special token that the model is allowed
+to generate that looks like
+this. Reason start. There's like a
+couple tokens that it's allowed to do.
+Reasoning
+start, reasoning
+N. Like this. Got it. So the model is
+actually deciding when its reasoning
+starts and oops I spelled reasoning
+wrong. The model is to some degree
+deciding what when the reasoning will
+start and end and if it should reason at
+all. The model may not generate the
+reasoning start token. Now I as open AI
+could enforce that the model generate
+the reasoning start token and it has to
+reason no matter what. So this first
+token, in fact, my input token could
+just be when I start off, like when I
+have my text, I could do text plus
+reasoning
+start. Yeah. Have you seen I feel like
+I've seen people like prompt engineering
+with like either like, you know, doing
+the oh, but wait inside the thinking or
+doing the like Yeah. just starting the
+thinking and then passing all of that
+into the LLM where it's like you
+actually you write the first three
+sentences of thinking yourself
+put it on a certain path even if you
+actually write the first three sentences
+of thinking just remember that the model
+provider itself actually has to do the
+thinking themselves the model provider
+is actually the one doing the thinking
+so the model provider is the one doing
+thinking even if you write the thinking
+text yourself you write something like
+um prompt
+And then you can write something like
+this. You can write thinking and then
+you can say blah blah blah. You'll go
+write your thinking part over here.
+Eventually the model provider will add a
+special token
+called reasoning start of some kind that
+is not under your control. Oh,
+interesting. Cannot make all of it
+orange.
+um that is not under your
+control that they control that adds it
+in. So technically your thinking part
+looks still more like the prompt than
+the actual reasoning part of the base.
+Oh, I see. They don't actually let you
+input the reasoning token. Exactly.
+Because there's there's a token that
+indicates that the reasoning starts. Now
+it's possible that this is an
+implementation detail and they don't
+actually need the reasoning start but
+they probably need some token to
+indicate that the reasoning is hap that
+this is a reasoning segment. It's e it's
+going to be easier to train the model if
+it knows that these are reasoning
+chunks. Yeah. Um and then the model will
+generate a bunch of text down
+here. Uh and I'm going to make this
+white because this is this is regular
+generation. So we can think of purple as
+inputs from a user. We can think of blue
+as
+um uh reasoning. So it's just like
+regular text that the model generates.
+Then the model will generate another
+special piece of
+text and then the model will generate
+more
+text, right? And this is really what a
+reasoning model to some degree is doing
+under the hood. And what the model is
+trained to do is it's trained to
+understand the meaning of these two
+tokens as being like extremely useful.
+If you think about what the model can do
+now is in the training loop, someone can
+go ahead and go train the model to go
+say that uh how do I do can you do a
+curve thing again? Sorry.
+Yeah. uh
+someone can actually train the model to
+say that hey the text that lives between
+reasoning start and reasoning end is
+actually highly informative and you
+should consider that a lot when you uh
+make decisions on what text to generate
+next right draws a lot of weight from
+the like attention mechanism exactly and
+that's a thing that the model could just
+be fine-tuned to go do uh and that's
+really what fundamentally what a
+reasoning model is doing under the hood
+and again can't really claim to know
+exactly what models do. Uh it is very
+hard to go predict anything about
+models. Well, we've been doing parts of
+this in prompts since way before it was
+like baked into the model, right? You
+could like ask it like, "Hey, always
+think about what to do, step one, step
+two, step three, and then give your
+answer." And some models that are good
+at instruction following might actually
+just like it's not fine-tuned to trust
+that stuff more, but it does you do
+force it to kind of like expand out on
+like what it thinks about the problem
+and what needs to happen before it
+actually gives you the answer. Right.
+Exactly.
+I think that's the whole point. So we
+could go do this, but this thing just
+allows the model to go have this in its
+training loop. Now the problem is in the
+basic training loop of what a model is
+doing, it's really just trained to draw
+attention from whatever it thinks is
+relevant. So if you just do
+this in the model generation loop, the
+model is really just drawing attention
+from anything that it thinks is
+relevant.
+I call this like standard generation or
+normal generation or something. Yeah.
+Yeah. The generation is the same. All
+I'm saying is what the model is trying
+to do is learn the difference between
+tokens between these two tokens. Yeah,
+have extra weight. The text, the actual
+tokens in here have no special meaning.
+It's just that this is a good marker for
+the model
+to know that everything in between has
+special weight and it should be
+considered a little bit more uh
+logically flowing. And it might even
+bias things at the bottom. I don't
+really know how the model works, but it
+you could reason that it could bias
+things at the bottom of the reasoning
+loop more than things at the top of the
+reasoning loop. Right. Right. And like
+the the old school way you would do this
+would basically be like you would you
+would call an LLM
+um and you would put in your input
+tokens and you would say like make a
+plan like think about this thing and
+tell me what you
+think and then you would put that in the
+LM and then it would output your like
+answer which was like okay here's the
+plan and then you would take that plan
+and you would pass it into another like
+either probably the same LLM but just
+like a fresh prompt.
+And then it would be like okay based on
+that plan here's the answer and the plan
+is something like you know do a complex
+math problem or generate a bunch of code
+or whatever it is right if you've used
+cursor or clots on it like you've seen
+it do this right exactly so like if I go
+over here
+um if I go over here in the above
+section decks
+in the wrong thinking so this is one way
+to go do that where it's still standard
+generation and I'm just taking advantage
+of the fact that I can force the model
+to generate these thinking
+tokens. The only difference is instead
+of the model like knowing what these
+thinking tokens are and having to infer
+that things between these are thinking,
+I can just train it in the training loop
+to know the difference.
+Yeah. Otherwise, it's just taking
+whatever its normal sort of like
+interpretation of thinking as just what
+is the meaning of that token in general,
+but not as a special token. Exactly.
+Exactly. That's it. So that's really all
+that's happening here is the model is
+somehow able to come up with
+understanding what a thinking model is.
+Um there's I think uh there's a question
+in the chat. Yeah. Which which elems are
+these reasoning tokens applicable to?
+Um so these reasoning tokens are u again
+this is like one possible implementation
+of how reasoning could work in. Um this
+there's a few other different ways that
+you could implement such a thing. Um for
+example the you could technically say
+that reasoning start is not required. I
+will only generate a reasoning end token
+nothing
+else. Uh you could use tool calling or
+something else as an implementation
+detail of how this works. But most have
+something of this akin of where reason
+starts. They need to have some de
+demarcation in the way that the LM
+generates tokens that tells you where it
+ends and where it starts. Yeah. So like
+the the tool calling one's really
+interesting. I want to I want to pause
+on that for a sec. So like you could
+have a function like send email and then
+you could have the parameters be
+something like uh you know oh let me
+make proper JSON here you know thought
+process and that's a string and then you
+have email content right
+and so in this case if you ask the model
+to output those fields in that order
+it's going to tell you like oh here's
+what I was thinking about and then also
+here's the email. So you're kind of
+forcing it to output tokens about its
+thought process.
+Yes. But that is very much akin to like
+this option right over here. Exactly.
+Yeah. Same idea. Like people have been I
+think I think when function calling
+first came out in like April 2023,
+OpenAI had advice actually to put the
+first parameter of your function to be
+like thought or like thinking or like
+whatever it is. And I think I've seen
+like like the early lang chain function
+calling loops would actually do that.
+They would have it output the thought
+and then they would strip that out and
+print it to the console and then go run
+run the function that it output.
+Exactly. So, we'll talk about this in a
+few seconds. Um, but just to catch
+everyone else up. Um, oh, I'll leave
+that there. Um, do these two different
+approaches of how thinking works under
+the hood makes any questions about them
+so
+far? I'll wait a couple seconds just to
+see if people are typing them out.
+Um, but if not, I think I want to move
+on to the next part that I think is
+going to be a lot more interesting.
+Yeah. Which is going to be more along
+the lines of how do we actually get
+models to do thought processes kind of
+akin to what you were saying? Uh, Dex.
+Yeah. What one thing I'd be one thing
+I'd be interested to try is like I have
+a couple like top of mind like really
+hard cipher queries like like text
+descriptions of queries and we can try
+and see if this thing can get it. We can
+drop in like switch the model to a much
+smarter model and see that that model
+can actually figure it out and then go
+back to see hey how can we pipeline boro
+mini to get it to get close to the sim
+same same same results. What do you
+think about that? All right cool idea.
+Um, so I'm going to refresh this. Let's
+ask something like tell me how many
+movies that Kiana
+Reeves and Alan Degenerous this might be
+zero are both in.
+Okay. Yeah. So, I don't know if this
+query is wrong or what, but I don't
+know.
+Um, what's another what's another one
+that's hard to get right? Um, as it
+turns out, it's actually very hard to
+write. Um, uh, you can try the Kevin
+Bacon
+number's Kevin Bacon number.
+Yeah.
+Um, what's the definition of Kevin Bacon
+number?
+It's six degrees of Kevin
+Bacon. He's like, um, you can just ask
+it to do six degrees of play play six
+degrees of Kevin
+Bacon with K
+Reeves. Spell it
+right. Okay.
+What
+happened? Just say try again.
+Let's see. I think this might be a back
+end problem.
+Uh,
+okay. There you go.
+So as we saw I think the most
+interesting part here was that this kind
+of
+uh
+um this kind of has an issue where we
+was having a lot of variability coming
+into this. So the question becomes how
+could we make this better if we wanted
+to? Let's swap it out to 03 reasoning 03
+mini. Uh what's the 03 model that you
+have? Uh I think you have 03 preview in
+here.
+Uh, let's use mini.
+Uh, yeah, 03 mini. Okay. Oh, 03 mini. I
+think that's a reasoning model. So, we
+should just
+Okay, that did a regen, right? Yeah.
+Okay,
+cool.
+Ah, lazy.
+So one I mean firstly the model is going
+to get a lot slower. We all know this
+because it's going to be start
+thinking. Hey sorry people
+um it started to go do this and it was
+able to go do something that's kind of
+similar. But what will end up happening
+is that this model is going to be a
+little bit more um how do I describe it?
+A little bit more reliable on a lot more
+questions. So like for example right now
+we have to add a lot more context about
+what Kevin Bacon is. Just restart you
+start a new question say compute the
+Kevin Bacon number
+for a particular actor uh for Kevin Spy
+or uh yeah Kevin Spacy.
+Sure. And what this model will do is
+because it kind of knows what the Kevin
+Bacon number is will probably produce
+some of the answers of exactly what that
+is along the way.
+And it was all everybody's number is
+two. Okay, so let's do another one. What
+actors have a Kevin Bacon number five?
+Good question. Now, this is going to be
+a very interesting query,
+but I think what I want to start playing
+around with that, I'm going to ask for
+Yeah. Um Yeah. Yeah. Yeah. Um,
+uh, once it's done, there's also, I will
+say there's a bunch of, um, if you go if
+you go to the database, I'll just show
+you as well. There, they have a bunch of
+interesting queries with good prompts
+that we could try as well. So, if you go
+to connect to the server and you do play
+this
+thing, there we go. Uh this gives you a
+bunch of HTML with like problems and
+things you can do. So we can put in some
+of these like really complica complex
+like chicardian distance things and we
+can ask it to like do this kind of
+stuff. But um anyways, yeah. You want to
+jump in the code? Yeah, I'm going to
+request remote control for participate.
+Yep. Cool. Uh let's talk about how we
+could if we wanted Oops, I'm still on
+drawing
+mode. Let's talk about how we could if
+we wanted take advantage. And I'm going
+to have to do no vim mode because I'm a
+flood. Uh if we want to take advantage
+of GPT40 mini and somehow turn this into
+a reasoning model. Well, the first thing
+we could do is we could just tell the
+model
+um before
+answering note what is useful and
+particularly hard.
+And we can answer this right here.
+example. Okay. And before we go into
+this, I kind of want to just walk
+through this without having to go and do
+the entire prompt the whole time. Um,
+can you do me a favor and paste the
+scheme? Oh, yeah. Let's get I'll get the
+scheme in there for you. Uh, one second.
+One second. Uh, let me just add the
+hashtag. So,
+cool. You can plug that. Yep.
+Don't need the uh
+Yeah, let me just uh real quick.
+Yeah, we definitely don't need this.
+Cool. So, let's look at what the prompt
+ends up being like just so we can get a
+good feel for this.
+Um so a prompt has a massive input with
+the actual schema but then at the
+very at the very bottom what we do is we
+add in the user's messages and after the
+user's messages we tell the model what
+it should be doing. We tell it that it
+should be answering in one of these
+schemas but then before answering I
+actually wanted to go and note these
+things that are particularly hard.
+So, and now we'll say that the model
+will actually note what things are
+particularly hard and I'll start with a
+cipher and then I'll go ahead and go
+return it for us. So, I've in effect
+I've turned this model into a reasoning
+model without actually using any
+reasoning under the hood. If I Well,
+this is still 03 mini, right? Nope. Oh,
+you switch it. Okay, nice.
+Yeah. If I make this part go
+away, now this part is no longer in the
+problem. The model is going to output
+just outputs the JSON. Exactly. So it's
+going to we there's an interesting
+balance that I'm able to strike which is
+I can turn an existing model into a
+reasoning model and make it go do things
+by telling it how to go do things. Now
+if I out I I think one technique that
+someone mentioned in the thing is I
+could tell the model to output thinking
+tags
+um and again this is
+uh
+notes and my notes and then go
+answer and if I go okay
+so here you can actually like experiment
+which like which which thinking token
+name is actually the best for for
+getting good results right and you can
+see that the model is actually not even
+outputting this and maybe it's cuz the
+word example is bad. So we can go play
+around with this and it's still not
+outputting this. It seems like it's a
+little bit easier for the model to just
+not have to think about this from like a
+notes perspective and just like answer
+with this as a point as a as a list and
+one thing to note here is it's actually
+really bene now what I could have done
+is one of the and I want to comment what
+I was noting earlier is I could have
+added a thing into here a little bit
+better.
+It's called
+like Oops. Yeah. Let's skip the action
+first. Yeah.
+Reasoning
+string. I can add this into both of
+these instead of doing
+this. And now when I get answer, I
+actually get like a little answer, a
+reasoning behind what the model is
+trying to do. This was the function
+calling version of what we're This is
+the function calling version of getting
+reasoning out. And this has a couple of
+benefits. But in reality, the this
+actually has if I make a more
+complicated query like
+what
+is it
+reads like what is RE's most uh
+reasoning number. You can see that like
+this is feels a lot lot more constrained
+for the model. So let's try and let's
+try and not do this and instead use a
+more previous thing. Um over here when
+you what do you mean by constrained for
+the model? You mean you're just like
+forcing it to output it in a specific
+format instead of like what it's used
+to? This reasoning is kind of
+um it's kind of like um really uh what's
+the word I'm looking
+for? It's really it's not how models
+write. It's not like the training data
+set is not going to have large blocks of
+useful text in JSON objects. They're
+going to be in plain text before the
+JSON object. Exactly. Yeah. Like now
+what we can do is now we can see this
+for
+example where now when it's outputting
+the reasoning if I just can I make this
+bigger really fast? Sorry. Yeah. Yeah. I
+can also zoom out. Oh yeah, that's
+great. Okay. Now if I actually look at
+just the difference between these two
+things to determine Kevin I need to
+perform a giraffe query that connects to
+reeves to the actors and movies through
+this and it's trying to do this but if I
+look over here it's actually able to
+just output this a little bit more now
+and it's able to go understand what uh
+the text here is in a little bit more
+well and it's cool sorry what's really
+dope about this that I'm just noticing
+is like it's outputting the cipher and
+then it's use and it's doing that in
+whatever format it wants and then it's
+converting that into a JSON format. So
+it's like writing cipher in the way that
+like most of the training set will be
+written as as like cipher in markdown
+explaining [ __ ] and then it's going to
+put that into the actual structured
+object. Exactly. Now you might say that
+when you display a graph query to a user
+you might still want to include
+reasoning because there's multiple
+impacts of how you can leverage using
+reasoning. One is to make the model
+better and this technique of outputting
+the uh reasoning in the context actually
+just makes the model better. Now there's
+another way that we might want to do
+this which is I might want to show the
+user exactly what's going on behind the
+scenes. So if I want to go do that then
+I can add reasoning over
+here description and of like the like
+post post reason kind of thing. Exactly.
+And what I want to hear I want to write
+here is like a short
+message to the user
+uh
+summarizing the notes.
+So when I go run this I still get
+reasoning as I
+want and then I can give the re a
+shorter version of the reasoning to uh
+the end user. So I can kind of man
+reasoning is now becoming a thing that I
+can choose what I'm doing with rather
+than a thing that I have to go do in a
+specific way. So I think the blend of
+what reasoning is it's very overloaded
+for a lot of users.
+Go ahead. It's like the the same thing
+we did last week where it's like okay
+you have one version of this that goes
+into the embedding, one version that
+goes into the LM and one version that is
+read by deterministic code and those are
+all three different things. And so now
+you're splitting out like what's the LM
+reasoning versus what's a thing that's
+valuable for me to show in the UI for
+the user. Exactly. And the fact that we
+happen to call it all reasoning is a
+totally different concept. Um it's just
+like we're humans are bad at naming uh
+and we're using the same name to do two
+different things which normally you
+wouldn't do but you can just see how
+much better the reasoning is now. So in
+some effect by nature of me telling the
+model that I actually have to go and
+display reasoning to the user I actually
+got a better reasoning process right
+over here as well.
+Hey uh could you clarify if this is the
+same as chain of thought.
+Uh it's it's very similar to chain of
+thought. I think it's a little bit more
+free form
+uh than chain of thought. I think um you
+can I think when I I think when people
+first introduced chain of thought it was
+like a very structured approach to how
+you approach a problem. It's a subset of
+reasoning. Reasoning is a bigger group.
+Um because reasoning doesn't necessarily
+mean like I'm going to chain of thought
+to me I think when the paper came out
+implied that there's a sequence of
+things that I will go
+do here. the model happened to believe
+that a sequence made
+sense. But if I change my test case to
+to something else where it's like uh
+what it's going to read is bacon number.
+It's
+like how do I make
+cookies and the model's actually going
+to reply and the answer might be like I
+actually don't want the model to reply
+here. Um I can actually inject that into
+the reasoning over here. Uh it's over
+here before entering. Know what is hard?
+Um know what is it
+hard or things that indicate the user is
+not
+using. Let me try and find my way out of
+this. trying to help the ether out
+as let's add another class.
+Uh,
+let me get added to the return types.
+Yeah.
+Um, so I can go do something like this
+and give an action like to the user of
+like not relevant.
+It's interesting that it didn't print
+out all of the text though. It's just
+going straight to JSON again. So I think
+it's more about what the model's able to
+do. So chain of thought is again very
+prescribed in what it's going to go do.
+Yeah. Because when it does something in
+chain of thought, you're kind of forcing
+it to go down that line of reasoning.
+What I'm doing here, I specifically ask
+the model to note what is useful and
+particularly hard or things that
+indicate the user is not using the
+schema. But if the model feels that it's
+a very direct query, then it doesn't
+really have to go and go make that line.
+It doesn't have to generate those
+tokens. It's easier for it to just
+generate the final output. And that's
+where I think reasoning is a slightly
+bigger superset of chain of thought.
+Chain of thought is almost prescriptive.
+If it doesn't do chain of thought, that
+is bad because I added a chain of
+thought prompt. Reasoning, I think, was
+invented with this premise. And that's
+what I think Openi did really amazingly.
+this premise of elasticity on how much
+reasoning I'm allowed to do, how much
+reasoning I don't want to do. And in
+this case, the model is choosing none.
+And in the chain of thought world, it's
+almost going to have to it it almost has
+to do chain of thought. Does that answer
+the question about the nuance there,
+Pashant? But I think they're very very
+similar.
+Yeah. Uh I think it does. I mean, I'm
+still trying to wrap my head around like
+the model choice here. So if you had an
+actual reasoning model, it treats the
+prompt completely differently. So you're
+not talking about that form of reasoning
+here. This this reasoning here is purely
+related to the model's internal thinking
+process. Exactly. And if you go back to
+the other thing that's the you want to
+go back to the UI. No, no, not the UI,
+the Excalibur.
+Yeah. Yeah. So in the reasoning model
+what ends up happening is a model that's
+fine-tuned with reasoning is forced to
+generate a reasoning start token. So it
+has to out it has to do reasoning to
+text and now after it does the reasoning
+text then only eventually it'll output
+the reasoning end token then it can
+generate the regular text that I need
+for the actual u
+response. But in a chain of thought
+world there's no such thing as reasoning
+text and reasoning end. But I I almost
+am chain of thought is more like this.
+If the model doesn't generate thinking
+text as a part of its response, it is
+bad.
+Reasoning all right because it doesn't
+abide by my instructions of what I told
+it to do. Reasoning is a little bit I
+think the whole goal of reasoning is
+elasticity. So the amount of tokens that
+the model generates in here could be
+zero, it could be 500, it could be a
+thousand. And that's why OpenAI even
+gives you a choice of how many reasoning
+tokens you're allowed to generate,
+right? How hard do you want it to think?
+Right. Well, how hard do you want it to
+think is one concept, but it's really
+around like how many tokens are you
+allowed to generate in this block? Yep.
+Right. Um, and that's kind of associated
+with thinking, but think about what that
+does to the model. It actually it could
+technically terminate
+midthought because open is saying that
+there's no more tokens that you can
+generate after this because they can't
+predict the future tokens. They can only
+generate tokens up until now. It's kind
+of like the conraint constraint
+generation thing, right? When you force
+the model to only generate tokens that
+are valid JSON, you kind of you kind of
+screw up with it trying to write like
+whatever like in the way that it's been
+trained to write things. Yeah. But the
+only caveat here is that the tokens here
+that it generates in the reasoning text
+could have a huge
+impact if I were them. Uh you could have
+a huge impact in how these next tokens
+are generated in a little bit more
+nuanced way than it would normally be
+generated. So if you if you're doing
+this, there's no special things that
+things in the thinking tag are getting.
+It's giving no special
+weight. But you could imagine that in
+the training loop, the model has learned
+that things between the reasoning block
+are actually extra useful. So there's
+one advantage to thinking models that
+can't really be replicated with any
+prompt engineering technique.
+Now the problem with thinking models is
+you will they cost a lot more because
+fundamentally you are asking the model
+to generate special tokens in here that
+are just going to be a lot more tokens
+right it's just what this whole thing
+about like inference time test time
+compute is just like oh if the model
+generates more tokens before it actually
+puts its answer in you get a better
+answer uh and so people realize like oh
+we don't need way smarter models we just
+need them to generate more tokens before
+they answer and so now it's like okay
+cool So we need more GPUs and we need
+more inference and we need more compute.
+Exactly. And the real thought process if
+you go back to our to our other thing
+the code the code. Yeah. The real
+thought process that I'm really having
+when I make these decisions of do I just
+swap out for a reasoning model or not?
+It comes along the lines of the
+following. when I decide to go use this
+thing and swap out a reason model, what
+I'm really saying is I want to spend
+less time on this prompt side of it and
+I wanted to mostly just work out of the
+box. So, I today am willing to spend
+more money. So, I spend less time
+prompting and the model spends more time
+prompting. It's a monthly equation and a
+time equation. I want to spend less time
+and and I want to spend more money in
+favor of time to get a better slightly
+better response. Now, you go ahead. Go
+ahead. I we we have 10 minutes left and
+I wanted to kind of propose just like um
+a couple interesting things I' I'd be
+interested to mess with um in the time
+we have left. Cool. Uh go for it. Um so
+I have you seen debate prompting? Have
+you seen this paper? Yes. Yes. Yeah. I
+was interested to see like hey if we if
+we kind of take out um how do I get this
+stupid annotation thing off? So like
+Yeah. Okay. So, if we change this back
+to like, you know, which actors have a
+Kevin
+Bacon number of five, which was the
+thing that like the model just like
+completely like floundered on the last
+time. Um, and can we put in some debate
+prompting where it's like we ask it like
+initial
+reasoning problems with initial
+reasoning?
+Um, you know, well, we could we could do
+this in the main prompt. We don't even
+have to do this in the structure.
+Um, okay. Let's try this and then we'll
+we'll put in the main prompt as well.
+Um, or you want to do that? Yeah. Yeah,
+let's play the main. It'll probably work
+out a little better. Okay, cool. So this
+is like initial
+reasoning, problems with initial
+reasoning, improved reasoning,
+uh final
+reasoning, and then the schema. Right?
+So now there's a do you want to put this
+down here or do you want to leave it
+like that? That's fine. That's fine.
+That's good. That's good. Okay. So
+there's a actually you can run this and
+I'll tell you a couple things that h
+happen off the bat. So Okay. So the
+first thing that you'll notice is you're
+you're getting very short reasoning
+responses. Yeah. So and the reason for
+that is because
+because we put it on bulleted list. It's
+because No, no, no. It's because How do
+I type? Can I Can you give me the typing
+thingy? Oh yeah, there's a way to turn
+off Vim mode. Hold on. Does anyone
+remember which one it is? It's okay.
+Just give me normal VI mode. I just need
+typing. Uh I I type like a plug. Yeah,
+that's fine.
+You have you have other uh you have
+other you want to put this in like a
+markdown header just just by nature
+putting it in
+um putting into here. Yeah. Make a huge
+difference in how things do
+and we can even do something like we can
+even tell it it's like I want to
+generate a cipher. Oh yeah. I was going
+that was the next thing I was going to
+suggest is like you know one of these
+headers is like propose cipher cipher
+query and then problems with query and
+then
+and
+exactly and now we can actually go do it
+like over here and we can actually kind
+of guide the model and the kind of
+reason that we wanted to do and again
+it's more about like
+it's more about how we're guiding the
+model really more than anything else and
+it turns out if I know what kind of
+approach I'm building and I'm not
+actually building like
+um if I'm not actually building a uh
+sorry if I'm not building an an
+everything chatbot like open AI and I
+know building specifically a thing that
+talks about cipher queries and uh rag
+pipeline cypher queries on like a graph
+database then I'm actually able to guide
+the structure of my technique a lot more
+if I don't know this then I want to go
+fall back to a more free form approach
+or like you know you have a router at
+the top that is like oh is this about
+Neo forj movies and then route it to
+this prompt to handle that. Exactly.
+Yes, you can do it that way as well. So
+kind of build our reliability up over
+time but it's all a trade-off on this
+elasticity thing that I was talking
+about which is like look at the very
+beginning I can have one prompt that I
+just throw at a mega model and it has to
+do everything and go figure it out. The
+problem with this onep prompt approach
+that I go right where I use and oh can
+you you I can just do it on the black
+screen it's fine. Okay. The problem with
+this one prompt approach that I will
+often end up with is that my
+distribution will end up looking
+something like this. It's a very like
+it's a very like normal distribution
+that's very quite spread out. I get a
+lot of variation in my responses. Now,
+what Dex just suggested was I could have
+a route where I build a specific prompt
+that is really really good at cipher
+queries and another it's going to be
+trash at making cookie recipes though.
+Yeah, it's going to be trash at making
+cookie. Exactly. Um, where I could go
+ahead and like say something that this
+is like about like an intent
+router and then oops uh cipher
+prompt and then I can have I can still
+do my my everything prompt over here.
+Yeah. Everything else. Right. Exactly.
+So now what what ends up happening Oh my
+god, this so hard. What ends up
+happening is my distribution for these
+prompts will get slightly better. This
+prompt should technically have a pretty
+high distribution with low spread where
+I can accurately get their intent
+classification. Yep. And then what I aim
+for is I want this prompt to have a
+really really high distribution on
+cipher queries and kind of perform worse
+on everything else at the benefit of
+outperforming on cipher queries. And
+then I can actually have another one
+that says that it's going to work again.
+It's going to have a high it's going to
+have a high spread and low accuracy on
+everything else. I can slowly compose
+these systems together to build a
+slightly more accurate system. And this
+is where I can still throw a reasoning
+model at this part of my pipeline, but
+have more specific reasoning on this
+side of my pipeline. So I can slowly
+build the system that I actually want to
+build with more guidance along the way.
+So it's the blend of the two. And what's
+amazing about this technique is there's
+nothing here that actually says I can't
+actually do this with 03 mini. Like I
+can kind of blend. I can let a reasoning
+model do its thing and on top of that I
+can also leverage non the non-reasoning
+approach to go ahead and think about
+this as well and once it's done it will
+go do it. I wish we thinking tokens. We
+really should.
+Um yes I would like that too if you'll
+spit out the thinking tokens. Yeah, if
+you do the curl, you can see both. And
+thinking tokens come, it's so crazy
+because like the thinking tokens just
+get spewed out raw and then it spits out
+JSON at the end, which is actually kind
+of bambly when you think about it. Yeah.
+Um I want to try one more thing um in
+the five minutes we have left on the
+clock and then we can um hold for time
+for questions at the end. Does that
+work? Let's do it. Um I want to take
+these three things and uh put them in
+the response.
+um do it.
+So, and then I want to spit them out to
+the user in the UI because like this
+becomes kind of a magical kind of AI app
+building experience as
+well. Um so,
+uh and just be like a short summary of
+initial message, a shorter a short
+summary to display to the user.
+Yeah, it's specific that we want to talk
+about displaying to the user because we
+don't want to bias the actual generation
+token that's going to go generate.
+Um, cool. Um, sick. And then in our
+actual server code, like the fact that
+we have kind of built this agent at
+hawk, we can do some really interesting
+things and like kind of take the outputs
+of our fancy prompting and throw it
+through everything else. Um, I added
+another one which is called not
+relevant. Can you delete that? That's
+why this uh Oh, yeah. Yeah. Yeah. Yeah.
+Um on line 39. Yeah. We'll just get rid
+of this.
+Yep. Chat doesn't work. That's why.
+Yeah. Um I love that JavaScript. I'm
+actually going to
+um cool. and then completion the send a
+reasoning event. Yeah.
+And then on the front end we can
+actually try to display this
+um ah where is our app app.ts page app.
+Yeah components. Here we go. Um,
+nice. This is going to be a little bit
+janky, but let's see. Let's see how this
+looks.
+Um, or this is live coding. I've never
+tried this before. Oh, you're on 03
+Mini. Can you get Oh, whatever. Uh,
+sure. Love the GT40 mini so it's faster.
+Yeah, let's go to 40 mini. I don't have
+time. No, we don't have time for that
+crap. Yeah.
+[Music]
+Um, let's go
+here. Let's
+go. Cool. Um,
+um, do a simple one and then we'll do a
+really hard one. Yeah.
+It didn't show our
+reasoning. This is the fun part of live
+coding.
+Um, did you see what's going on there?
+Um, you might have to restart the app.
+Just restart the app really fast.
+Also, this is just absolutely wrong. Um,
+okay.
+How many movies is
+uh Patrick sees and we'll start with a
+simple one.
+Um do you render the reasoning object?
+Uh I think we're trying to. Let's see.
+It's also not getting added to the
+messages stream here.
+Okay. Um, you should just see on the
+back end as you're setting it
+up. Okay, so this definitely came
+out.
+Um, we we'll time box this to like two
+more minutes. If we can't get it
+working, we'll we'll flip to questions
+or people want to start asking
+answering. Well, let's see if we can get
+this working.
+You go to send events.
+No, this one is working. And then what's
+the event name that you sent it as? Uh
+reasoning.
+Yeah. And then just double check that
+you're actually receiving it as that
+event in your thing.
+So event reasoning event graph query.
+Okay, so we did get a reasoning event.
+It's just like a UI bug. Yeah. Oh, see
+Reasoning
+message. Um,
+oh, you have to set messages.
+Go up to the top and you just miss one
+line after that. After reasoning
+message, just enter. Oh, yeah. Here we
+go. Great. There you go.
+Uh, it didn't do the query. It won't do
+it again because it has the answer.
+Yeah. uh in the message context. Yeah.
+Yeah. There we go. So, you could style
+this however you wanted. Um
+um uh I'd love for questions that people
+have if they want to type into reason
+models. Otherwise, I have a few other
+notes that I think might be worth it to
+talk about, but uh questions first.
+I think I posted mine which is like what
+are the like ideas we can like condense
+from all of this because I know we had
+like things thrown in different
+directions but what would you say is the
+biggest takeaway? I think the biggest
+takeaway is really about time management
+of your engineering team is the biggest
+thing that I think about which is if you
+really want to ship something really
+really fast just throw an 03 model let
+it do its reasoning and you basically
+save time and you get the generation you
+want out on average this will be better
+just like using GPT40 on average will be
+better than GP40 mini on average a
+reasoning model will have a slightly
+better
+curve then of like like if I talk about
+accuracy versus varian A reasoning model
+will just be slightly less like this
+will if this is 040
+uh then a reasoning model will be
+slightly le slightly better uh than than
+40. Oh yes, thank you. That's I'll
+remove that for posterity. Um just I
+want it to be in the in the whiteboard
+for when we do the recap. I'll draw it
+on here. Um the reason model will
+basically just be like slightly um
+slightly better like the reason like
+this. So the correlary here is like if
+you need performance and speed and
+things like this, then you can go into
+engineering your own version of this.
+Right. Exactly. Then Exactly. So if you
+need better speed, you need better
+performance, you need better choice,
+then you can go ahead and go down the
+direction of actually picking the
+reasoning model of your choice. And or
+like if you need to run models on prem
+and you can't run deepseeek R1 or
+whatever and you can only run little
+llama models because you're at the edge
+or something. Exactly. And then the
+other thing you want to note is that
+like De said, not every model will
+support reasoning. So this is how you
+can leverage almost any model to go get
+reasoning out of it. Um, and really
+spending a little bit of time on what
+the reasoning that you want the model to
+generate is specifically with like the
+guided prompts that we showed earlier
+can improve your accuracy of evening
+reasoning models because free form
+reasoning as good as it is just going to
+be worse than guided reasoning if you
+know the domain you're operating in.
+Yeah. Right. So like if and that's the
+example of like asking it to actually
+like hey when you're reasoning output a
+cipher query and then review it and then
+output another one like there's no way
+to prompt a thinking model to do this
+other than like by asking it to do this
+basically like it's not going to come up
+with this structure probably. Yeah. And
+this structure might be good it might be
+bad. Obviously this is going to make it
+way worse for generating cookie recipes.
+Um, so don't do that. Uh, if you're if
+you need it to generate cookie recipes
+and this, but if you know that it
+doesn't have to do this, then it can um
+it can do something kind of I think you
+can get way better results.
+Yeah. See, it's like just gave up and
+said I can't do cookies because of how
+like intense its prompt was.
+Dex and Weber, I have a question here.
+So I understand for
+the for the normal models we have done
+some kind of prompt engineering where it
+is where we are asking it to reason over
+create a cipher then reason over it. Is
+it the same thing like splitting it into
+two maybe actor and checker kind of
+thing? One is acting then creating a
+loop between these two and refining it.
+Is that same or what is the difference?
+The only thing network curves that's a
+slightly different thing. Um because the
+way that that is working is
+um I'm going to go in solid draw and
+just draw what that ends up looking
+like. D I'm going to draw at the bottom.
+Yep. I'm here. I'm following you. Um so
+what that ends up looking like is this.
+So you're going to have a model go
+generate some let's say you have like
+some question by a
+user. I don't know why it's green. Um a
+user will ask a question. Then what
+you're doing is you're having the model
+go generate some um some
+response. Then what you're doing is
+you're having another user then you're
+having another model like do like do
+like like a
+checker response. And this is like the
+actor response. This is what you're
+talking about. This is like LM is judge,
+right? It's like, hey, review the
+question and the answer and see if it
+makes sense kind of thing, right? And
+then you kind of do this and like an
+iteration loop. Now, the thing that
+people don't realize when they do this
+is that your costs here are actually
+exponential. So, the first time you call
+the active response, your cost is just a
+question. When in order to generate the
+uh and I'll make this red so it's a
+little bit more clear. In order to
+generate the checker response, your cost
+is the question plus the
+checker plus uh uh plus the sorry
+question plus the actor. Yep. In order
+to generate this next one, it's question
+plus act
+actor plus checker again. So just to do
+like um just to do like a two-step
+process, you're passing the question
+three times, you're passing the actor
+twice.
+So your costs boil up exponentially
+really fast with this approach and if
+you're able to do it in line in the same
+prompt now your cost is basically just
+once for the question the actor checker
+actor response like the thing Dex showed
+in the in the code that he generated
+with the cipher query that is a single
+cost for all these things but isn't
+sorry isn't every token here like every
+every token that it's emitting you're
+still reprocessing the entire thing. So
+is this just like a context caching kind
+of thing we're taking advantage of
+models? Yeah, there's an optimization
+loop that allows them to not price you
+for that every single time, right?
+You're not rerunning them into a new
+request. You're just open pricing you is
+only for the new tokens that you're
+generating. If you go back to the other
+thing, yeah, now OpenAI is pricing you
+in a way where it's like the question is
+being priced three different times here
+because they're all separate requests to
+an LLM and they're treated as separate
+and it's like re reloading all the Yeah.
+Okay. Exactly. Does that make sense uh
+for the person that asked the question?
+Yeah. Yep. It does. Perfect. So, there's
+a benefit of basically cost, accuracy,
+and latency. In general, with this loop,
+you can get a little bit more control,
+but your cost will be a lot more and
+your latency will be a lot more. If
+you're able to do it in a single system,
+you might as well.
+Great question. I love that question. I
+hadn't thought about it this way, but
+that makes a ton of sense. Um, other
+other key other question also vibe. Does
+that does this capture all the key
+takeaways? like basically like time
+management versus co cost management and
+like being able to basically do really
+specific guided reasoning better than a
+generic model that's just trying to like
+spew a lot of nonsense before it
+answers. Yeah. And then one thing to
+note remember is that I showed that you
+can always use the combination of a
+reasoning model with guided reasoning as
+well.
+We have one more question over here.
+Um while asking LLM I can be wrong about
+many names. Sorry I'm I'm I'm not into
+movies. I don't know any of the names
+but I saw you writing caves or something
+reenu keys or some something like that.
+U if it if it's a wrong typing from the
+user do we actually go and check or is
+it like LLM correcting on behalf of us
+first and then generating cipher? How is
+it working? There's a really interesting
+blog post that I want to write about
+this which is how LM are just amazing
+spell checkers. Um
+oftentime if you go back to the code I
+think it's just easier to show in a
+demo.
+I understood that point I guess but uh
+think of it in in con uh in perspective
+of organizational data for example
+employee database right LM has no idea
+about it. So if I create a knowledge
+base let's say skill database of every
+employee and I'm I'm just asking that uh
+graph to give me answer about how many
+are you know skilled on
+BML right and then I say someone uh I
+give it a I give it a name basically and
+I want to get back all the skills of
+that particular employee from the graph.
+So how does it work? Can you go to the
+can you go to the
+uh codebase? I want to show a couple
+examples because I think it's going to
+be easier to talk about this with code
+because I think what is how can I get
+the model to reason about something in
+the case of it like being really unique.
+So it turns out because LM are really
+really good spell checkers. They will
+they will not abide by you. And I'm
+going to use like very simple examples
+to make this a point of how you could go
+do this. So let's say I'm I'm looking at
+a resume thing. I spelled name wrong.
+it is going to be virtually impossible
+for me to get the model to spit out
+NAE. It is going to be really, really,
+really hard. So, if an employes name
+just has a totally different misspelling
+of it and it never works, it is going to
+be really, really, really hard for me to
+guide the model in that direction,
+right? Um, so how would I actually go do
+this? It turns out the only real way to
+go do this is you will have to give the
+model a name that it can output and then
+convert it post programmatically into
+the name that actually generates. So if
+you a model is just a statistical
+distribution of
+tokens. So if an if a thing is just
+statistically super super super super
+unlikely to be the thing that you want
+it to be then you have to fall back
+towards techniques like constraint
+generation. you have to fall back
+towards techniques like aliasing where I
+let the model see the content that I
+want to go see it and then that's the
+only real way to navigate that scenario.
+In the case of names, it's a little bit
+more interesting because
+like so like I just wrote my name
+without any
+vowels or actually I'll do this. My last
+name is pretty
+popular and like we'll just see what the
+model thinks when I go and go output
+name.
+It might output my name directly. But if
+I use a slightly worse
+model, see if I can get to or let me
+try. Yeah, there you go. You got it. It
+No, it still output the name correctly.
+So I want I want I want to show like a
+slightly worse model like doing dumb
+things with
+like Mitch.
+Dom
+Smith. So I
+want
+smit correct.
+Yeah. Jithgmail.com. And I'll go run
+this. So in this it's actually doing it
+correctly. But you can imagine a much
+dumber model actually just outputting
+John instead of JHN. And the only real
+thing you can do in this scenario is
+actually in your codebase just write
+another system that just checks and says
+that the name is actually in one of the
+names that you provided. And if it
+isn't, then I make a smaller query that
+says what is the exact name from this
+list of names that makes sense and
+actually uh have the model go and
+generate one of those as a corrective
+measure because in case the model
+doesn't output something that's actually
+in your employee database, then you can
+go double check that. That would be the
+approach that I would take in this
+approach. And like no amount of
+reasoning model or something else can go
+fix this because models are just
+predictive systems and they will at some
+point be wrong and you have to build
+systems on top of it to make it correct
+not just let it go out and hope that it
+is
+correct. Does that answer the question
+on above?
+Yes. Yes, I think it does. One one more
+question here. So I I see a lot of
+things happening on grounding LLM using
+graph and database and especially giving
+your ontologies and business related or
+do domain specific things to it. For
+example, I I only have lawyer and super
+lawyer that kind of stuff and then
+letting it decide whether someone is
+reporting to some other person because
+these two people are having different
+descriptions on their job post such a
+was was there originally a plan to
+discuss this point as well use to ground
+LM in this call or no? No, I don't think
+we were going to talk about necessarily
+graph databases or something here. What
+we really wanted to go do is graph
+databases are a complex type of query.
+So, we just wanted to use that to show
+off like different reasoning techniques
+that you could use for graph databases.
+I'm probably not the best expert. I
+don't know about that, but like I know
+I'm not the best expert on like graph
+databases and like all the different
+applications of them. Um, yeah, the idea
+here is I think like for complex things
+that reasoning models are really good at
+like coding and like writing queries and
+doing these structured things. um that
+there's all these techniques you can use
+and so the the using the graph database
+was more of like here's an example of a
+thing that reasoning models tend to be
+better at how do we get reasoning model
+level performance out of a tiny model.
+Yes. Uh if you if I think if you join
+the B boundary discord and ask Pashant
+he has a lot of knowledge about graph
+databases.
+Thanks. Yeah, happy to bounce ideas. I'm
+right here on the call but I I'm on BAM
+and Discord as well.
+Um, other questions from anyone else
+that they might want to have answered
+while we're here. Actually, I I have a
+question Weber. So, just to follow up
+with this original question above hand.
+So, I think I had the same thought when
+he asked that, which is let's say you
+had a graph database of uh employees and
+their skills and BAML was one of those
+skills and then you issue a query saying
+give me all the employees who have the
+skill BAML but you misspell BAML as BA B
+A L M. Yeah. Now LLMs will that's a
+classic case where the misspelling is a
+correct term and the correct spelling is
+the is the misunderstood term right so
+in that situation your your LLM is going
+to actually search for bum and it's
+going to fail because you're going to
+get an empty response from that sit from
+the database t right this would be like
+if we misspelled ke ree name right
+search for exist yeah so so the point is
+I notic in the implementation that you
+you have decks it's just giving you
+empty results all the time in an
+infinite loop it's just not doing
+anything after the empty result So the
+right way to handle this would be
+something like you have a fallback where
+if you don't get like this uh if you get
+an empty result you don't assume that
+the information does not exist you try
+the query in a different form uh in a
+way that the you at least try from a
+different perspective because the issue
+is that you don't know whether the
+answer is wrong missing or in uh correct
+like there's three possibilities right
+exactly so there's no real way for you
+to know that unless you potentially like
+especially when you have an empty result
+you don't know whether it's wrong or
+missing
+Yeah. So you could come here and check
+and say like if if the result is empty,
+you can instead push something into the
+context that is like you did. Beautiful
+example. Yeah. Reb had a really good
+example of this in the Neo Forj stream
+that he did with the Neo Forj people. Uh
+that's something I highly recommend
+whoever's on this call, please go and
+watch that one because uh the way you
+handle the retry and you know preventing
+failure modes when you have misspellings
+or typos or whatever other minor issues,
+those are different ways to think about
+it.
+Oh, let me try again. Yeah, just making
+an assistant message.
+And now you're kind of done.
+So, we can actually add like a special
+thing into here that adds that in for
+the user that says we actually forcibly
+add this into the context where we say
+something like, oh, the query didn't
+result return any results. Perhaps it's
+wrong. W wrong or
+misspelled.
+Uh should we ask the user for more?
+Right. You're injecting thoughts
+for
+more information there. Yeah. This is
+this is kind of what you Yeah. had
+before. This is a good one. And now what
+can happen is I'm actually injecting
+stuff into the context that comes again
+from me from all of us kind of knowing
+upfront that this is a this is a
+contextual application built around
+talking to a graph database and that
+these kinds of things where it's
+empty might
+uh might not not for sure might uh be
+wrong. But you can't do this generically
+if that makes sense.
+Yep. Makes total sense. Cool. You can
+Yeah.
+Um cool. Super interesting. What What
+else we got?
+Awesome. Um I think that's it for this
+time. Uh next week we're going to have a
+really really fun conversation about a
+topic that I am personally really
+excited about. Um, you have a thing
+available on under on there uh text.
+Okay, I'll pull it up. Oh, you want
+Yeah. You want to pull up the uh the
+card? Yeah. Which is I think
+um or are you pulling up? I can pull it
+up. Yeah, go for it. Which I think is
+going to be something that is really
+relevant to a lot of people as we go
+forward, which is people talk a lot
+about like fine-tuning and how we can go
+do this. Um, this one is going to be a
+lot more conceptual on how we can
+actually leverage human feedback and how
+we have to collect data in a way for our
+AI pipelines so we can fix them with rag
+versus fine-tuning.
+That's that's in two weeks, I think.
+Unless we're switching the schedule
+around. Oh, sorry. No, no, sorry. Yes,
+that's the last one. Oh, I I was I was
+blown away. We're gonna talk about code
+generation. I think code generation will
+be a really fun one. Yeah, I agree. Um,
+but um excited to see you all again.
+Thank you all for joining. Uh, see you
+again next Tuesday. Yeah. Thanks y'all.
+This was super fun.
+Fun.

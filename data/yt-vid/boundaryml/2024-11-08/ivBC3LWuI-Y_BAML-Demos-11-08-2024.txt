@@ -1,0 +1,2031 @@
+oh yeah friend uh Francisco Perell could
+you mute I think I can mute
+you yeah we met at the one of the
+conferences in San Francisco yeah yeah
+thank I was just asking if you can mute
+yourself so then we can um reduce the
+echo that's coming
+in thank you all right thank you
+um all right uh I guess um what we'll do
+now is I'm just going to go ahead and do
+one last thing and then we will start
+this on at 10:05
+specifically and then I'm going to
+ask all right and then while we're here
+uh I'm just going to post a quick
+question for everyone um and this will
+just help us guide the conversations and
+help answer the questions as much as
+possible uh so if you guys go ahead and
+fill out the survey that'd be
+amazing four and then first person up on
+the docket will be Antonio so I will
+screen
+share all right uh let's uh 10:04 so
+we'll start doing an introduction for
+Antonio really fast Antonio do you want
+to turn on your camera and then we'll go
+ahead and briefly introduce you hold on
+a second
+uh there you
+go you see me
+yes so just to give everyone a little
+bit of context uh what we're going to be
+doing today is we're going to give
+everyone a quick preview of four demos
+that we've built out on the Tool uh as a
+team the real purpose of this week was
+for us to go ahead and go understand how
+people use baml what are some of the
+pain points of it and like how complex
+of an application could we build if
+possible first up is going to be Antonio
+Antonio worked on a bot that is able to
+go and analyze our Discord uh where you
+guys have been asking a bunch of
+questions uh and making feature requests
+and helping us go ahead and see how
+could we take that and make it more
+actionable uh Antonio I'll let you take
+it off from here
+right so yeah I guess I'll just show how
+my bot works
+right let's do
+it hold
+on can you see my screen
+yes
+cool so I basically wrote a little um
+python script that I can
+basically read the Discord messages from
+our Discord server and it classifies
+them as either bug reports feature
+requests or just normal questions about
+BMA and then it uh basically displays
+like a
+notion table with all the all the
+messages so I'm not sure if you can
+see can you see the table yeah yes we
+can
+cool so I can see the messages
+here hold on I can wrap this so these
+are Discord messages they're filtered by
+category feature requests questions um
+bug reports and then in the case of
+threads we can also get a summary of the
+of the conversation
+here so that way you know it's worth
+responding to this or continuing the
+conversation
+and uh we also get sorry uh do you want
+to show it running really fast Antonio
+let's start with that let's start off
+with a real live demo of it just like
+running and filling this out I was just
+showing uh like what's what's this I was
+supposed to work because it's G to be
+kind of slow but yeah I can show it in
+action let's see it in action and the
+whole point behind this is what one
+thing we do as a team is every Friday
+what we do is we go over the Discord all
+our Discord issues all our get up issues
+and decide what is one feature that we
+can all go build guaranteed and actually
+ship by next Monday it helps us stay
+motivated and shipping fast but a big
+pain point is me and Aon literally spend
+hours the day before scrolling through
+the Discord finding all the issues
+scrolling through the give issues
+finding everything and being like what
+can we actually go do so the question
+here was could we do it accurately and
+then one could be also DD issues could
+be go ahead and identify problems that
+aren't working and then help us go ahead
+and just buy back a couple hours of our
+time so what Antonio built here let's
+let's let it
+rip yeah so this basically tries to kind
+of automate finding all this issues that
+we can work on so I can just call the
+but and give it a start date let's say
+let's say we start with August and then
+I could give it a an end date if I don't
+it'll just do from the start dates up
+until today so end day is going to be
+today so we're try all the all the
+messages I mean obviously it's not going
+to it's not going
+to display all the messages but just
+those that are bugs or features so it's
+going to filter them out and yes run
+this it's going to log into Discord
+um create the notion
+database
+here and as some point going to
+start displaying
+messages and this is you guys can kind
+of see like where how did you do the
+streaming part of this Antonio like how
+did you get that to work yeah I'll
+explain that once it
+ends you can see the summary
+here and it also links GitHub issues if
+they're related to to the message or
+PRS
+oh yeah depending on can't even click on
+this it depends on on which one is the
+most related to the message
+that's awesome so then like we can
+actually pick issues that are actually
+not handled versus ones that are
+handled yeah we could also check if if
+they're closed or open we can get a
+state of the
+issue that's pretty cool and then how
+did you um how have you found it in
+let's look at a couple edge cases I'm
+sure you've been looking at a little bit
+of the data let's look at some of them
+that you had and just uh take a look at
+like um maybe like the thread summaries
+for one of these like the bug report one
+that just popped in issue 2048 let's
+just take a look at that 248 the first
+one yeah yeah
+okay the summary for this one is not
+ready yet I think it's still so you you
+actually have a pipeline that's running
+here that's going to go ahead yeah
+because everything is kind of running
+concurrently it reads messages from
+Discord classifies them then it has to
+summarize threads and find issues all of
+those are running concurr so now you can
+see that the summary is ready for the
+thread so I guess we can can check the
+thread on
+Discord so found out about B earlier and
+been trying to use V
+kit so this I guess a threat about about
+this particular bug in
+there so let's
+see the summary for this is
+no that's cool it even uh it even lets
+them know that the bug was fixed so we
+can know that this is like uh even
+though it's a bug report it's like
+actually addressed already in a later
+version we've got a question from the
+audience um how are you matching
+issues um so we got a question from
+someone uh how are you matching issues
+semantic similarity between the comment
+and Discord and the pr comment or is the
+code itself being
+inspected no I'm just matching them
+based on the title and the disc
+description or the body of the issue
+using similarity or an llm llm ideally I
+know it should be stored in like a
+vector database and you should use that
+but what I'm doing is I'm just sending
+them in the prompt as context and then
+I'm just asking the L to return the
+issue number and how link it nice have
+you seen any hallucinations pop up
+here well from time to time it does
+hallucinate and return like wrong idas
+and I can't find it in my
+code but it doesn't happen that
+often awesome and did you add a
+filtering step for that to make sure
+that it only finds IDs that are actually
+valid yeah well the code doesn't crash
+if it hallucinates but it's just going
+to skip the one that's that's wrong it
+is just going to skip
+it is a scraping bot part of the code
+custom built by you or uh do or are you
+singing a
+are using or are you using a third party
+API uh what you mean my third party API
+I'm just using I'm using the
+Discord python client and that's the
+Discord API the notion one to just
+display all the stuff here and the the
+GitHub one to get the pr so I I can show
+it to you awesome and then one last
+thing that we should do really fast is
+can you show some of one of the most
+bamel prompts you wrote while you were
+doing this um
+there a b
+PRS let's pick one of the ones you found
+interesting and how you structured it
+really fast so this is one that
+classifies messages um the
+classification is done in batches let's
+say because I don't want to send one
+request per message that would be too
+much so you basically get a list of
+messages each message has an ID and then
+the content of the
+message then you basically ask the llm
+to classify all the messages into one of
+the categories which is this thing here
+say a feature bug report a question or
+and categorize because otherwise it's
+going to fail so this is
+like this is the one that we ignore
+because we don't want any of this to be
+on notion because then we would just
+copy Discord notion doesn't make sense
+so we just filter for for these
+categories and yeah that's that's the
+prompt like little system prompt to let
+it know that it's we're dealing with a
+language here and then just classify
+whatever you get and
+and uh uh and it looks like one other
+thing that I'm noticing is you have some
+test cases can we show one of the tests
+that you have like just so we can like
+go ahead and see how you were iterating
+on this and how it works so let's run
+run test for one of
+those yeah so the test is giving you the
+list of
+messages and then if we run
+this get here the classification for
+example the first one B should support
+recursive types that's a feature request
+on the bug that's bug report how do I
+install that as question and the other
+one is just general feedback it's not
+any of the other any of the above so
+just and
+categorized that's awesome uh and then
+we have a couple more questions here um
+uncategorize enam and we'll go into it
+we'll cover all these questions in a
+little bit we're going to try and hit
+all the demos and give them all 10
+minutes minutes all this code that um
+Antonio wrote Friday bot is going to be
+available on our baml examples repo so
+you'll be able to dig through it uh and
+take a look at this yourself and we'll
+add a little bit of read me it looks
+like you already added one for how to go
+run this so I'll put a link to the repo
+at the bottom right after a few seconds
+thanks Antonio that was really cool was
+really cool to see it running it was
+really cool to see the notion populate
+from the Discord itself um and I know we
+had just a few minutes to go over the
+code but um thanks for describing it the
+way you did it was really
+thorough up next we've got
+another demo coming up and this time the
+demo is going to be one of our biggest
+Bane point one of the biggest um and
+most interesting things that I saw which
+was we all saw computer use happen I'm
+not sure if you guys all saw it um but
+computer use was idea where anthropic
+could go ahead and almost like
+manipulate your computer using an LM now
+the question we asked
+was could we draw a horse could we draw
+something way more fancy than just boxes
+and lines on a screen and this was
+really trying to push the limits of what
+lm's today can do and this uh and I'm G
+to let Greg over here take it over uh
+Greg are you live yeah awesome so Greg
+is going to go ahead and share and what
+he's going to do is just show what we
+learn from this experience of can
+anthropic draw a horse anthropic draw a
+horse
+uh before I spoil you with an answer um
+I just wanted to talk about like why is
+this an interesting question uh we've
+all seen generative AI uh images they're
+incredibly beautiful but it's a little
+bit Black Box how how they're created
+and they're not the most steerable thing
+in the world so yeah Claude uh demoed
+their computer use framework um it can
+drive your mouse and keyboard uh they
+showed it doing a little bit of Art and
+it can do things like enter data into
+spreadsheets based on what it observes
+in a video really amazing
+stuff um and I thought it would be
+interesting to see how far we can push
+that because like art that's done
+through computer use could be a little
+more steerable than your stable
+diffusion based stuff you could even
+imagine interesting like two player
+drawing scenarios where the human is
+doing some stuff Stu and they hand it
+off to the AI for some other parts to
+get the shading on the upper lip perfect
+and then the human goes back to some
+other bit of of of the artwork um also
+drawing is a super agentic and like
+cognitive task that involves lots of
+planning so it's a great stress test for
+lm's ability to do those
+things um now we'll answer the question
+the question's answer is no uh we can't
+really draw horses um so what you might
+have expected based on what you see from
+Dolly Sor in M Journey this beautiful
+Elmo cake but what you get in the mail
+uh you know when when llms use Ms paint
+is uh you know the the the reality
+state-of-the-art today is is not quite
+what we get from from those fully like
+blackbox
+Solutions uh so yeah I'm going to tell
+you a little bit about my exploration to
+why this is uh and then we'll try to
+replicate that whole framework in baml
+and then use baml to sort of play with
+what we imagin the pain points are for
+an llm who's trying to
+drop um so first um just a quick fire on
+how computer use Works uh rather then
+read this list to you I'll I'll like run
+the demo uh anthropics demo so you can
+you can see it working and I'll talk
+through what's happening as it's going
+so I'm running a Docker container
+locally that contains something called a
+computer use uh
+client and what that does is it lets you
+send prompts to anthropic so I'm going
+to send this prompt to anthropic and
+then what anthropic is doing is it's
+looking at the prompt and it's deciding
+which computer's action it needs to have
+carried out on my side locally to
+fulfill my prompt so some of its options
+are it can request a screenshot it can
+request the coordinates of the mouse it
+can request a click it can request a
+drag uh okay thanks oh yeah I also want
+to say please ask questions um I'll I'll
+have my friends try to monitor the
+questions if I can't see the the
+questions coming up and uh it'll be more
+fun if if you ask questions during this
+so yeah um anthropic generates a request
+for an action and then the client
+locally executes that action it'll take
+a screenshot of fast it'll click if fast
+to click and then it uh after it does
+that action uh it it sends all the data
+about what happened locally back to
+anthropic to get anthropic to generate a
+new
+request and
+um uh yeah so you see that process
+happening on the bar in the left a
+series of um requests coming from
+anthropic and then on the right you see
+the view of of uh my virtual machine uh
+where a horse is being drawn pretty
+nicely in this case uh sometimes you do
+get well okay uh yeah I'm sort I'm uh
+I'm like uh you know leaking the the
+secret here this this is a this is a
+really good horse for drawing within uh
+computer use and this is about as as
+good as As Good As It Gets if you
+randomly do this a few times you you
+won't get anything anything
+better um okay so we will stop this so I
+don't use all my
+tokens all
+right yeah so uh the the initial results
+are kind of mixed um here's me uh
+prompting for smiley face um uh the
+computer use demo uh Drew this face uh
+half smiling drooling face uh and then
+responded the smiling face has been
+drawn and safed um so that sort of
+reflects what we just saw uh you know
+with the horse demo
+um uh after this I prompted again I said
+can you please erase the mouth and make
+it look nicer um and what uh what the
+the system did was uh draw a couple
+lines on top of the mouth admittedly if
+you squint it does look a little bit
+more like a smile um and uh and then the
+the uh the system reports back it says
+um I have erased the original mouth and
+drawn a new one that's wider and has a
+nicer curve to it the smile now looks
+more natural and friendly um so yeah we
+we see that the uh there there's some
+sort of discrepancy between uh what the
+system sees what the systems drawn and
+uh you know how how it it's it's
+subjective report on on the quality of
+of the
+image um and uh you know my original
+plan was let's take whatever whatever uh
+amazing drawing ability
+um computer use currently has an extend
+them um but I I realized quickly that uh
+we've got a lot of work to do to get it
+um up up to like a better
+level um and
+uh yeah so the um what I went down was a
+little bit of an exploration of like
+where in this process is the drawing
+going wrong um so I did a little bit of
+like spatial reasoning uh exploration
+and just asked the the system
+to do basic spatial reasoning things
+like click if I draw a smiley face can
+you click on the left of the face can
+you click on the right can you click
+where the nose should be and this uh
+this kind of basic sanity check is uh
+was the first place that failed and I I
+think this is going to lead either us or
+uh anthropic working directly on
+computer use uh to sort of uh tune
+things to to perform better in the
+future it's just this basic task of
+localizing things in the image by
+reference and getting the mouse to go
+right where you want it um computers
+does an amazing job of picking tools
+from the toolbar um but there's
+something about registering coordinates
+uh in terms of of an image uh that
+that's tough um do I see a question from
+the audience yeah there's two really
+interesting questions one how expensive
+is it I think what we found expensive
+wise was it wasn't too bad was like
+maybe like how much do you remember the
+cost that you saw was like a couple
+bucks back of the envelope experimenting
+with this all day uh yeah a few dollars
+yeah um and yeah it's it's not horribly
+expensive in terms of tokens it's a lot
+of tokens because what happens is every
+frame uh of the screen I'm not talking
+about 60 frames per second but every
+time uh every time there's a a pingpong
+between the client and anthropic the
+entire history has to be sent up so that
+includes all the screenshots yeah um
+there's another question but I I want to
+and I think it's related to what you're
+talking about about being able to go
+click on uh specific areas of the screen
+that one one really interesting thing
+was we were all as a team super super
+super um excited about the fact that hey
+computer use came out we believed that
+the technology was going to be good
+enough to go do things that were more
+interesting one really interesting thing
+Greg found out after we implemented it
+was the testing it wasn't working so the
+debug path that we found of saying that
+hey let's just figure out where it's
+broken was a really important learning
+and the breakdown of click on specific
+key points in the face became an almost
+like an EV B that we did where we as a
+human would just go see where it clicked
+and could just see if it was good or bad
+we could obviously use more AI or even a
+search or something else to go double
+check that but the next test was
+actually exactly what when she asked in
+the chat was how well does it do with
+imitations do you have an image of that
+uh oh yeah yeah that's actually my next
+slide so yeah great job anticipating
+that so the next thing I did was I drew
+a start uh this is this is VI's prompt
+here and I asked the system just copy
+the dark pleas you can't see it in the
+screenshot but what what uh computer
+used did was it drew Five Points in a
+perfect uh pentag they're they're to the
+left I'll put my mouse over them uh I
+can't find my mouse it's where the mouse
+is in the picture if you guys see it oh
+thanks yeah um that's why oh oh okay
+yeah yeah sorry so we're having some
+technical difficulties with my mouse but
+to the believe me that to the left of my
+star there are five teeny tiny points uh
+which anthropic Drew perfectly in a very
+nice Pentagon and then it put one point
+in the middle um what it did after that
+you can't see in this still was it uh it
+repeatedly moved its Mouse to those
+various points it visited each point
+three or four times and then it said I'm
+done and it it It produced a text that
+that I've written on the slide there
+I've now drawn a second star to the left
+of your original Star they're similar in
+style both having the same five point
+star shape and inner lines forming a
+pentagon in the center obviously that's
+not true of the image so that's a
+hallucination and one I guess
+interesting science question that
+doesn't pertain to the rest of the talk
+but I think it's fun to think about is
+did Claude hallucinate just the nice
+words or is Claud hallucinating an image
+of a star like if you could go look at
+the um the activations of the neurons
+and then register them back to whatever
+you know superposition of uh
+features would you just get nice word
+features or would you actually get
+whatever the representation of of a you
+know of a pentagon is um for anyone
+really doing multimodal stuff this was
+actually one of the key things when we
+started thinking about that to think
+about which is really where is the
+problem is the problem the fact that
+there genuinely is a star as far as the
+model can see because those Five Points
+look exactly the same in the embedding
+space as the drawing on the right or is
+the model just trying to be nice and
+tell you it did something even though it
+knows that it didn't and it could also
+be prioritizing the the tokens in the
+text that you know went through the
+whole flow of drawing the star and then
+once it finished that it was like I I
+see all the steps to draw a star
+therefore the star is already drawn and
+so maybe there's some experiments here
+where you you have to remember sometimes
+I'm just
+listenting in the video conference scan
+is a separate document and this is can I
+mute you Joe sorry yeah
+sorry okay yeah so then uh you know it
+could be the case that um if you delete
+all the content and only show it the
+image and ask it is there a star are
+there two stars here it may just have a
+different example um but yes and then um
+I'm gonna have to stop before we get too
+deep into this sadly um but all this
+code that uh Greg wrote is also going to
+be a version of this is going to be
+displayed in the BMA examples repo will
+you able to dig into and actually go run
+it yourself and go find the same
+findings if you go back to Greg's little
+smiley face and get your own little
+erasers not working everything else
+yourself as
+well um awesome Greg I'm going to go
+ahead do you have any last thoughts that
+you want to share uh yeah so check out
+the the repo if you want to see how you
+can do all this in bamel and um you you
+might be having ideas of how to solve
+some of these problems if you could just
+like add a little bit uh of of
+information to the the event Loop um
+yeah we won't have time to go through
+that but uh but I promise it is a uh a
+nice experience in bamel to add those
+things Y and that's all thanks all right
+thanks Greg that was really fun thanks
+for sharing the slides as well um so now
+what we're going to go do is address one
+of the biggest problems that we have uh
+Sam give me one second which is
+documentation as you guys know we're
+writing a new programming language and
+documentation is one of the most
+important things for us to do and as
+every other developer in the world we
+hate writing docs but we have to do it
+anyway and writing really really good
+Docs can be extremely tedious for
+example one of the tasks of just adding
+hyperlinks into your doc so when someone
+goes to one page they can quickly jump
+to all the other Pages just takes
+forever and as you remap Pages move them
+around it can become even more
+frustrating so Sam here took on the task
+of
+saying what
+if we didn't have to do that manually
+what if there was some way to automate
+the whole process and Sam I'm gonna let
+you take it out over from here
+cool
+um there cool awesome oh I see yes we're
+on that camera yeah um okay so uh this
+is our documentation so obviously the
+first thing I had to do to go and
+actually like test this um is go
+and set up documentation without links
+um so one thing I the thing I started
+with is actually um taking our existing
+do documentation and then just stripping
+all the links from it and setting up and
+so now we have an app that we can just
+point at our documentation and say like
+hey suggest a whole bunch of fixes um
+and what I ended up doing um it'll it
+taking a little second to run
+um but this is the underlying prompt uh
+for all of this um so it runs through
+and says on per document basis um hand
+back and I'll make this one a bit wider
+so you can see it
+um but the prompt is here um for every
+link show a suggestion um hand it back
+in the output format
+and this is what it ends up being um oh
+what that is not my
+my bad I was screen share yeah got it um
+and so the output format ends up being
+suggests like tell me what the current
+link text is tell me what the current
+destination is if there is any because
+most of the time we're going to be
+running this on our actual docs um give
+me an actual suggested link um whether
+it's within the docs website or if it's
+on some other website and also the line
+number um and then the file we're
+passing it in uh with line number
+annotation and then we embed the S map
+um of all the links that we know about
+um and just feed this all in and ask
+Elum to do it um kind of zero shot but
+also few shot um and so just a hop back
+to the results this is what we have um
+we have a whole bunch of suggestion link
+suggestions um nextg starter now points
+at next like the actual nextg starter
+docs live Mo points at prompt fdle.com
+um react query will point at the tan
+stack docs um and so if I just point
+apply these two and so this is the
+actual like this is running on my local
+machine you'll notice that it's pointing
+to Local Host um and the links are not
+there so if I just apply those
+two there we go um I have a hot reload
+Loop running in the background for this
+one so one thing I want you guys to
+think about here is how did you Sam how
+did you get to the point where you made
+it not like some how did you decide how
+how did you get to the point where the
+links were correct yes um so it was a
+mix of two things um the first was that
+for some links um the choice of model
+made a difference here Haiku is actually
+pretty good at following instructions
+for a specific subset of the input
+prompt um and would generally be pretty
+good at returning docs within the
+documentation sitemap so like if it was
+on docs at boundary ml.com
+um it was good at handing back a link if
+it wasn't on on the website it was
+really bad at that um that was the thing
+I noticed when I was like doing eval
+runs on every page in our docs um the
+other side of it was also just adding an
+actual automated verification step of
+saying like Okay I am getting back a
+link um is it a link to our
+documentation itself um if so I can just
+check if it's on the sit map that's
+really easy the other side of it is I I
+just need to make sure and like actually
+do an hjp request to it and check if
+it's there or not and there's more
+sophistication we can add here um I can
+go in right now actually um for example
+like looking at the prompt I'm only
+asking it for a single link suggestion I
+can go and ask it to produce multiple
+suggestions
+um but then that creates more that has a
+very
+fundamental trickiness of coming back to
+this Loop because right now this is
+essentially a yes no interface um
+without any feedback mechanism um so the
+thing that I would have to go back and
+do if I wanted to add more
+sophisticated retry or select mechanisms
+is I'd also have to go through in this
+UI and say like okay how am I going to
+present multiple options to the user
+what is that experience erence of if I
+choose a different option going to look
+like um so right now uh everything
+that's handing back is getting verified
+um but it's all it's that's entirely
+done through manual heuristics of a is
+it in the site map and B can I just make
+an hgp request to it and get back a
+successful response yeah and I guess one
+really interesting part that we noticed
+when we were doing this was actually uh
+I remember this question that we talked
+about Sam when you were starting to
+debug this and I think a lot of people
+might have this question which is when
+you start building an application like
+this how important is it to actually
+build the UI to change your iteration
+Loop cuz we I think when we started
+building this we built this as a
+terminal based application yep it was
+purely a script that we ran how helpful
+was actually adding the UI element to it
+the UI made a huge difference um it's a
+lot easier when you can just click
+around and like ask it for to go and do
+different things um and in particular
+like one of the things I had actually
+started with was in the same vein of
+like is CLI better or is like UI based
+better um it's a lot easier to scroll
+through a list like this when you're
+doing an eal set as opposed to I don't
+know if I have the as opposed to like
+scrolling through this entire mess which
+like is readable like the I but I had to
+spend a fair amount of time like on
+actually just like making this readable
+cuz I was using this as my own eval Loop
+um of like of comparing like and like
+this is how I was able to say like hiou
+versus son it which one is better at
+which but this like terminal based
+version compared to being able to see
+everything like right there um just the
+human cognitive processing makes that so
+much easier yeah and I think this was
+the way I'd summarize that for everyone
+is that if you're building an llm
+application and you don't really have a
+large testing Suite that you can go run
+in an automated way it's probably a real
+high value ad for everyone to go and
+build a small little UI component to go
+render it and one of the nice things
+about having structured data uh like the
+way you were getting you weren't just
+having the LM spit out text you're
+having it Go spit out like I want on
+this line I want you to go change this
+which then allows you to build these
+nicer UI components which dramatically
+changes how much more fun experiences
+for actually like reviewing these things
+and now let's talk about the idea that
+you had which was I want to suggest
+multiple links all of a sudden it
+becomes really easy for us to go ahead
+and perhaps add a little button here
+that says oops I'll draw that that said
+oh I'm drying
+white uh that
+says fix with AI right next to here you
+press it you run a separate prompt
+purely on that specific data structure
+and then you just go ahead and get a new
+update this is only really possible with
+structured
+data and a strong UI Loop and when you
+have a lot of data this would be the
+main takeaway that we really have here
+not only can you build really highly
+accurate pipelines but spend some time
+on the UI it will make your it feels
+slower in the beginning but it will
+speed up everything else down
+turn um yeah thanks for sharing Sam that
+was really cool I'm really excited that
+like if you guys ever see broken links
+on our dots now you know who to blame
+it's Sam and we don't think we'll have
+them because we have guaranteed checks
+to make sure that they're actually uh
+correct so we'll run this every single
+week and we'll have new links updated
+all the time we should be able to
+hyperlink everywhere now thanks for that
+Sam and again like everything else this
+is going to be on bow
+examples oh yeah what what did you use
+to build this UI uh so I actually did
+not go with so this I think the standard
+recommendation that have M sheer are
+gradio or streamlet um I haven't
+personally used any of them actually
+this was the first time I was doing a UI
+based app in Python um this one is
+actually built using shiny um which
+comes out of the r Community um but um
+who haml Hussein um who you've C
+probably read one or two of his blog
+posts if you haven't they're amazing um
+you should go check check them out um
+but shiny is where uh I picked that
+recommendation up from cool all right
+thanks Sam um so we've done three demos
+so far we did we did one demo on uh we
+did the first demo on the notion update
+K claw draw and the last one was about
+making documentation really good now
+last one uh we're going to do some live
+demos we tried to build a fairly
+sophisticated
+pipeline um and this was with myself and
+Erin so I'll let him come on the screen
+as well and we put two people on this
+because it was a lot of work and the
+whole ambition here here uh was what if
+we could go ahead and uh can you bring
+what if we could go ahead and actually
+help people write baml in a more
+automated way because one of the most
+annoying things about baml is writing
+baml it's what any code from now on I
+want to use cursor to autocomplete
+everything so we started tackling that
+problem I'm Shing uh can I screen share
+first with the demo yeah so we started
+attacking that problem and I just want
+to show you a demo of what we put
+together and we're going to release this
+for everyone to go use in the community
+either this Monday or the following
+Monday we'll see how based on what it
+goes like so I'm going to share my whole
+screen and we'll to start this from here
+so let's just start with a very basic
+prompt how do uh what is at
+Alias and Alias as you guys know is a
+way for us to go ahead and um describe
+what this does so you can actually
+you'll see over here it's able to answer
+questions about our documentation it
+uses a rag pipeline over here but what
+gets really fun is say uh show me an
+example using
+classification let's see what it does
+now and sometimes this works it
+is and it's starting to build some
+classification it looks like it's going
+to use symbol tuning to go and show me
+this and boom we're seeing a live
+example of bamel code being generated on
+the fly with test
+cases and then you actually get the same
+bamel playground that you're used to
+seeing with all the prompt previews that
+you can go run and you can actually see
+what the prompt is doing down here uh
+and you're seeing it's plugging it in
+you can go ahead and see the token
+visualization we're we're working
+rendering this as well you can see the
+rock curl request I just leaked my API
+key oops um and then you can always run
+the test as you're used to doing oh
+let's use open a ey anthropic really
+fast open a ey
+uh
+GPT
+40 and let's actually make a user prompt
+while we're over here
+uh
+and all user and like with everything
+else in bam you can actually go edit the
+code it's always code first and once the
+code is edited you can actually see the
+prompt as always as we toggle around in
+different test cases you can go see them
+like you're used to being able to do and
+then you can still run everything have
+it stream in have it do the parsing and
+just see the same experience that you're
+used to seeing in BS code so not only am
+I able to go ask questions about it but
+I can actually have it generate code for
+me to go do something so let's do a more
+complicated example show me an example
+of function
+calling hey good how are you hey let's
+mute yes I'll mute him uh and then can
+you man the chat yeah um and then it's
+going to go ahead and go do this it's
+going to go ahead and show me an example
+of function calling and every now and
+then we'll get some of the bits wrong
+like it'll do it'll actually like put
+some back ticks over
+here uh so let's go fix that let's go
+fix that and then we're back oops oh
+second you're G to save it right I don't
+know I'm working on the save button to
+be honest the save button is almost
+there oh there's more stuff here yeah
+there we
+go and now we can go ahead and see this
+and boom can go run these tests and I
+can just see what it's doing oh I I
+don't have my anthropic API key plugged
+in correctly so I can go fix that out um
+but you're able to get the same
+experience here so anytime you're able
+want to go write tests you're able to
+just go write those tests in a slightly
+nicer way and then actually have your
+users go ahead and understand it and if
+you want to port code over now from Lang
+chain or anthrop or uh instructor or any
+other Library it should be really easy
+to go and figure out how to go frame
+this problem and as we make our docs
+better this will get better and as you
+guys go ask more questions here we'll
+get an idea of what kind of questions to
+go build but before I go and talk about
+uh what else this can do I want to take
+I want to hand it over to Aaron to kind
+of show what a pipeline like this looks
+like and really what the flow of
+building something that can go anywhere
+from answering documentation questions
+all the way to actually like generating
+code how do we go do this yeah so uh the
+first step when you're designing a
+chatbot or some sort of AI agent is to
+just start with a diagram uh let me make
+this
+bigger so just start with a diagram uh
+that's the best way to just get started
+because if you just try
+and because llms can do anything it
+almost makes it harder to code with them
+because you're like okay how do I split
+this up into pieces do I make the LM do
+the everything or like small bits at a
+time and so here's what we came up for
+our pipeline you get the user context
+like a list of messages into a chat
+prompt so purple means it's uh it's
+basically a prompt and then the chat
+these this function can generate a bunch
+of like tools to use uh so like one of
+them is a project generator another one
+is like just explain the user's question
+another one is other and another one is
+like basically doc
+search uh and so then the L llm chooses
+what to use there and if it chooses doc
+search like for example when when V asks
+what is Alias we just do basic rag Ure
+we have the information and then ask the
+llm to explain it again uh that's like
+the basic flow and then for generating a
+project which is where where you see the
+baml code and you can interact with it
+we actually uh are splitting this into a
+couple pieces first we actually generate
+a plan so there's actually another box
+here that's uh not here yet but we
+generate a small plan of what we're
+going to do which will let the llm just
+think out loud on like how are we going
+to solve the problem in code
+then after you have a plan uh it writes
+a bunch of bamel prompts and we generate
+all the bamel code that we need and then
+after that you know we can do more stuff
+like we can generate more python code
+maybe in the future you actually run the
+python code in this website uh and and
+the last thing that we do is generate
+baml tests uh as well why did you break
+down the step of generating tests into a
+separate prompt um so the reason why I
+did that is because if we want to
+generate more things after generating
+the bamel code like for example maybe we
+want we want to generate python code and
+tests you can do that in parallel so
+it's just an efficiency thing and the
+last thing is that splitting things out
+also helps you um it just helps reduce
+hallucinations like the less context
+there is in the prompt the better your
+output will be um because you're not
+asking the LM to do a thousand things I
+we're literally asking the to write a
+whole new syntax and there's a bunch of
+rules that we have to
+prepare it with um and so that helps how
+one question that I always like to ask
+is when you're going down this road of
+actually uh you want to dive into more
+how it generates a plan and how it
+dynamically writes new prompts we'll go
+into that in a second that's a great
+question I think one of the most uh
+interesting questions that I like to ask
+here is how did you come up with this
+Loop and like how much of this was draft
+zero how much of this was like draft n
+so I mean there's a we definitely went
+through a couple drafts like the first
+draft was just me trying to do like
+maybe one big prompt and figure out like
+what I need from there I was just like
+how let's just figure out what the
+chatbot does if I just give it all these
+instructions um but I did know from the
+start that like you just have to use
+like some sort of tools like the llm
+needs to be able to use some sort of
+tools right one of them is clearly doc
+search another one is like maybe you
+have all the context and the LM can just
+explain you in a different way like the
+user's like I don't understand please
+tell me like I'm five and then for that
+you don't really need doc search you
+just need a tool that is just like
+explain the content um and then just
+looking at VZ I don't know if you guys
+are familiar
+v.d uh they have and also anthropic
+anytime you ask anthropic for like a
+react app it generates like this special
+component that looks like a I don't
+knowre I'll screen share it just looks
+like a it's just a separate like a very
+unique component that like tells you
+that there's a project and like there's
+special things that you can do with it
+yeah like in our in our example for
+example all the code on the right is AI
+generated main. bamel but we want to be
+able to do things are you screen sharing
+I am okay it's at to screen all the
+things that I really want to be doing
+here are based off the baml code so if I
+can't reliably generate bamel code and
+make that a custom UI component it is
+impossible for us to go build this
+playground it just will not work so in
+our case we almost have like the burden
+of figuring that out at the very
+beginning with no real call for it and
+then there's some prompting things that
+you guys are noticing like for example
+it generates backck back uh baml because
+it's trying to Output uh like markdown
+inside of a Json object one cool thing
+while building this is we have learned
+some improvements to our par show that
+we're going to make so we already
+support like generating multi-line code
+without uh escaping and everything but
+what I would really love to do is be
+able to parse triple back ticks and not
+have to worry about this for anyone else
+generating code we feel the pain we're
+going to go solve these problems and
+make it so that you just don't have to
+worry about it uh to answer one question
+is Doc search a vector DB retriever yes
+we use pine cone for
+this yes um and then what we do
+critically can you go back to your
+architecture diagram um eron what we do
+critically for this is actually the fact
+that once doc doc search gives us back
+the answer we throw it back into the
+chat Loop because sometimes a
+documentation that doc search pulled out
+may not actually have the right uh may
+not actually have the right a data in
+there so we actually throw it back in
+there and it might go back to Doc search
+again because after making one doc
+search it may need to make another and
+this is just the loop that we run until
+it's ready similarly when we ask it to
+go generate code you can imagine it
+doing the same thing before it generates
+like a code of aliases it looks up maybe
+our Mega prompt that describes all the
+concepts has enough information about
+aliases but we we released a new feature
+recently called at we released a new
+attribute called check can you pull up
+the check
+documentation
+um would we actually descri would we
+actually go ahead and let you
+uh um oops that's a wrong
+redirect well we actually will go ahead
+and actually like let the LM go ahead
+and where we let it do validation now we
+have two ways to solve this problem
+either we can update our Mega prompt or
+we can send it back to Doc Search and
+say oh the user is asking for check I
+don't know what check is in this Mega
+prompt let's go find the context to add
+additional instructions into our Mega
+prompt and then go ahead and produce
+this example page so we can kind of feed
+doc search in as this way to get
+relevant context until you're ready to
+go answer the question and once the
+model is ready to go answer the question
+it can go ahead and actually then
+finally produce a good answer that's why
+sometimes in that demo when I was going
+to go render it back to the
+diagram it can sometimes take a little
+bit for the LM to go and actually show
+you some Final Exit moment where you're
+you as a user are seeing something
+because actually running a couple loops
+of this behind the scenes now one
+dangerous thing about this is what
+happens if it runs in an infinite y Loop
+and just continuously this doc search
+because you're asking a question that
+doesn't exist and it's just going to run
+forever the way you can restrict this
+is you can actually put a wrapper in
+your software of saying how many times
+you're allowed to call the chat function
+in any one given user message if you
+call it up to five times then we're good
+if it calls it more than five times just
+tell the user sorry I can't help you can
+you reframe the
+question
+uh kind of but the only difference that
+you'll get with cursor is that it won't
+be as accurate so while you could add
+the docs WR the cursor and it will do a
+pretty good job the hardest part about
+that is how do you guarantee that it
+generates a test every single time it's
+kind of like for those of you have you
+how many of you guys have actually can
+just type in the chat really fast how
+many of you have heard of
+vzer uh just like give me a thumbs up or
+something uh a few people have heard of
+VZ I'll just show you what vzer is
+really fast uh because it looks like
+people have it and I think it's pretty
+cool and I use it all the time to
+actually go do this and cursor can can
+do this too but there and so can
+anthropic but let's just start a new
+chat and I'm just say going to say like
+sash pricing calculator and it does
+something very similar for UI components
+where it goes ahead figures out some
+components and then it then renders the
+code for you what it does is it uses two
+specific libraries like it uses Lucid
+icons and then uh Shad CN now can cursor
+do this 100% but with AI one of the
+hardest things to do as we seeing with
+all the tooling and demos that we showed
+today was you always have this balance
+of generality versus uh versus accuracy
+the more General the system you have
+it's really nice but you'll never be
+able to you'll have to do more work to
+get it to do exactly what you want in
+this case if I ask anthropic to go ahead
+and generate the same component they
+probably won't necessarily use shadan
+they may not use Lucid icons they may
+not use the same theming that I use but
+v0 knows that it's already using ATN and
+knows that it's already using Lucid icon
+so if I'm doing zero effort then I can
+go just plug it in and it'll just
+work that said some we use an we use a
+library called J Tai for managing state
+in react v0 sucks at generating code
+that does this why because it's just not
+specialized so you always have to strike
+strike the balance between generality
+versus specificity but because baml is
+so self-contained and it is kind of a
+little bit more isolated than everything
+else we can do something much better by
+giving you by forcing it to go do this
+for example one of the things that we do
+is without any prompting we generate
+test cases normally it your your code
+may not go actually ADD test cases you'd
+have to add a bunch of rules to go do
+that and there's just some level
+optimization that we're able to do ahead
+of time and we can just make this better
+and better and better for example let's
+say that there was a thing here where
+you want to improve your prompt or add
+something like add symbol tuning add um
+Chain of Thought add more advanced
+prompting
+techniques because we have tooling to
+actually go parse this code we could
+just go add Chain of Thought to this
+prompt directly without you having to
+really prompt or teach the LM what Chain
+of Thought is it's just the amount of
+work that you would do hopefully that
+answer the
+question um I'll pause here for the last
+five minutes does anyone have any other
+wild question questions uh or any other
+general question they want to throw out
+there uh feel free to just raise your
+hand or uh unmute yourself either one is
+fine or type in
+chat all right well in all other cases
+what we're going to oh how you build
+agents with baml yeah uh we can go it's
+really a diagramming code do you you
+want to show some of the code
+Erin yeah I can show some of the code
+we'll show that in a second um and we'll
+pull up some of the code while we're at
+it uh how you go do it um have you tried
+Bano DSP wide what we've actually found
+most of the times is verbose a lot of
+prompting libraries like prompt
+optimizers including anthropics prompt
+Optimizer uh including uh DSP what they
+do is they actually generate incredibly
+verbose prompts
+so while I can kind of help the real the
+reality is the more verbose your prompt
+the worse quality of output you'll
+likely have so we would actually
+recommend writing the prompt manually
+and taking a look at it and just
+modifying it um uh by hand rather than
+actually going to go ahead and having an
+AI generate the prompt at least in the
+beginning but if you have a bunch of
+test case computer use in B yes so
+Greg's demo will be live and you'll be
+able to go see exactly how that works to
+do computer use with
+baml hi
+I hello yeah there hey how's it
+going I your thing I think your audio is
+breaking out uh breaking up quite a
+bit um meanwhile let's give a yeah can
+can you about and meanwhile I'm going to
+go answer the question about Gustavo had
+how to build agents with Dam let's um
+let's dive into the eron yeah so um
+here's here's the basic uh the basic
+prompt one
+second here's a basic prompt um so
+there's a chat prompt right here and it
+just outputs an action uh and so
+currently you know we could also have
+like we could also out put like an
+action in some text as well there like
+there's many ways to like model this but
+for this we just chose a very simple
+thing where like we just choose one
+action and from there we'll kick it off
+into other prompts so we do the chat
+message get an action if it's
+documentation search we get the related
+docs and then answer the question if uh
+it's an explanation we just like call
+the explanation like prompt here uh if
+it's generate an example project we just
+plan the project and then we generate
+the project so while we don't have a
+loop at the moment we're like thinking
+of adding a loop so it's just like more
+generic uh and actually just like
+figures out all the information that it
+needs to answer right now it's a little
+bit more hardcoded because the problem
+space is a little smaller and we're like
+we know um what we need to give it to
+like just create a decent prompt from
+the start uh and so this is a current
+architecture yeah and one thing to note
+over here as you guys go look at this is
+let's go and look at the actual code
+once you're able to break down your
+problem into these type of sequences
+function calling or agentic
+architectures are really just doing this
+all they do is let's let's just show you
+how to go do this really
+fast you can let's say we had an action
+called
+done all we do over here is this
+while true
+uh
+oops right over here we just do while
+true oh I did I put in the wrong place
+whoops where is the action you just
+command Z probably it's right here so I
+went ahead and did all this and I put a
+while true Loop over here and all I do
+is say case done
+break go save yeah and now case done
+break that's all I have to do and now
+I've basically built an agent and the
+only thing I have to do is somehow
+update this bamel messages loop on every
+single update that comes into this so as
+the messages come in I just do bamble
+message. push and I I just add this
+in and now I've built an agent an agent
+is really fundamentally just a while
+loop around a action selection with
+routing for how to handle that action
+that's all function calling is really
+doing and it won't take that long you
+just have to go and just figure out how
+to go help the LM indicate that it's
+actually done at some point so it can
+stop or if your tokens run out Etc in
+other use cases uh hopefully that
+answered um answered that and yes we'll
+share out some of this code for you guys
+as well for actually building the agent
+we actually have a couple demos that are
+already built out that do the agentic
+work for you um I think there was a demo
+we released a little bit ago called
+notorious RG uh that'll do that as we're
+at the end of the uh hour um I we'll
+stay on for a couple more minutes
+actually go ahead
+and
+um exactly VES got it it's multi-agents
+it's literally just multiple separate
+while Loops consult cooperating with
+each other that's the best way to think
+about it the best way the best thing
+that you can actually do without
+actually doing um
+multiple uh the best thing about having
+all these things be completely separated
+is like Aaron was talking about in that
+diagram that he showed why did we
+generate tests and python code in
+separate calls because we can actually
+do them in parallel if we do it in the
+same call we're suddenly beholden to
+calling the LM just singly and once to
+show you a and by the way while we're at
+this this entire recording will be
+posted on YouTube
+uh before I take up a bunch of
+everyone's time we'll stay on for an
+extra 15 to 20 minutes to answer any
+questions if you guys would like to stay
+on everyone else is definitely welcome
+to uh hop out and head over all the code
+will be available like I said on our
+github.com
+boundary mlbo examples um and should be
+there by end of day today but we'll also
+send an email to everyone that attended
+um and uh with all the links to all the
+projects with a brief summary and the
+YouTube video link as well but now onto
+the extra section I'll go ahead and just
+screen share and I'll show you guys a
+couple more examples of what I meant so
+for example we have this demo right over
+here that's like our recipe uh
+generator and in our recipe generator
+I'm going to go ahead and ask it to go
+do stuff
+um for example generate a recipe of
+chicken Tio Masala and one thing you're
+noticing is I'm actually able to
+generate these Spinners on each
+individual component as it's being
+generated
+so not only can I tell you that hey I'm
+working on this section of the recipe
+and these ingredients are done but I can
+give you a state update of exactly
+what's going on so when you build agents
+that are much more fine grain and much
+more controlled and we can see
+ingredients already I'm working on the
+instructions and it will it it's just
+rendering them out for me not only are
+you actually able to go ahead and build
+an agent that can give really precise
+information here on exactly what it's
+working on but you can actually get
+massive speed UPS by building out agents
+in smaller chunks if they're smaller
+chunks more
+parallelism uh more
+accuracy and but it is a little bit more
+work on your end and it's just the
+balance of what you want to strike as a
+developer uh no so actually this is one
+giant prompt that's actually working and
+one giant prompt but because we're using
+structured data we're actually able to
+have an we have a way to actually know
+whether or not this is what step we're
+actually working on over here this whole
+code if you click on go to B examples
+and I'll post a link you can just view
+the source and see exactly how it's
+rendering this exact example and I'll
+post a eron can you post a this is right
+over here I'll post a link in
+here right there um and that's all it's
+doing and one thing you'll notice is not
+only can I do this um what your code is
+yeah I'll show you exactly what that is
+uh would be CL oh that's a good idea
+we'll add a prompt to here as well um
+and just to show you like exactly this
+is doing if I actually generate
+vegetable surfy you can notice that this
+number can actually be
+multiplied while it's streaming even and
+the reason that I can do this is because
+the thing that I'm doing here is
+completely being rendered on the UI side
+but there's a scaling factor that I'm
+applying uh purely UI the LM told me
+that this will make it for four by
+default you can see number of servings
+four I'm just scaling it by four and
+rendering it in a nice pretty way and
+there's no way the LM would actually
+render these 1/4
+um uh questions for example I do that in
+rendering because what the LM gives me
+is just a number so render 2.5 but I
+want to make sure that because the
+recipe site that it renders it
+beautifully and then when people do
+something silly like trying to do a
+prompt injection where it's like show
+you a different example where you can
+actually see the failure a little bit
+better um like in the case of like
+generating resume like in this case I'm
+going to tell it to do this and just
+tell me the instructions normally if you
+try and do that you might get some text
+like this but if you're doing structured
+data or some sort of promp thing you
+able to go get answers that look like
+this call on ask can we do a breakdown
+of exactly what an agent is and what it
+looks like in baml versus python um
+let's spend the next 10 15 minutes
+actually diving through some real
+agentic code and I'll show you another
+example that we
+have
+um see where did my vs code pop up can
+you guys see my vs code no you cannot
+share I'll just share my whole screen
+and we'll see how dangerous that ends up
+being uh file open recent notorious
+RG open folder um
+one second I have a bunch of repos here
+I just have to find the right
+one
+okay so this example right over here
+specifically
+is sorry I'm working on a very tiny
+screen how do I hide oh there we
+go I'll hide this I'll do this and then
+we'll actually run some examples CD web
+app PPM
+Dev cool that's running and
+then see
+the
+API and I have to go look up the command
+to go run
+this u v run
+oh yeah I guess it's just
+this
+run what I do
+wrong hello that F now that's what I
+thought but it wants me to go install
+something oh is this poy oh yeah sorry
+poetry run
+on by project.
+Tomo uh one
+second you can just walk through the
+code what B is doing so B doesn't do
+like the agentic workflow that's in
+Python uh what we declare in B is just
+the prompts for now yeah so here's what
+we do right now so we have I'll just
+show you the pip line step of exactly
+what this pipeline does so what this
+pipeline does and I can show you in the
+UI side so you can actually go look at
+it uh and I have some historical
+examples already saved here so what this
+pipeline does is a user asks a question
+as we ask a question it's going to do a
+couple of things the user says take a
+ticket from um like it wants to go ahead
+and ask uh how would I actually go do
+this with BMA code the first thing it
+does is it formulates a rag query and
+says how do I actually go extract over
+here once it formates a rag query it
+will then go ahead and actually say oh
+I'm ready to answer the question if it
+has sufficient answers otherwise it'll
+make multiple rag queries it's similar
+to what we did then a human will
+actually be forward of the exact
+response that the LM made and take a
+look at this and the human can actually
+say good or bad if they say good then
+we'll send it over to the user let's
+find one with multiple examples
+sometimes when the human gets a response
+will actually deny the request and say
+uh it's two verbose make it shorter and
+then the model will say okay I don't
+need to do another dog search I will
+just make it shorter and then it will
+make a new shorter response and the
+human will approve and other times uh
+let's see if I can pull other
+example and then other times what it'll
+do is it'll actually go ahead and
+sometimes even do another rag search
+after feedback because the thing that
+the human told it to do was actually not
+good enough to go answer this question
+so what does this pipeline actually look
+like and I think this is similar to that
+flowchart diagram that Aon was showing
+at the very beginning and I think before
+we look at the baml code it's really
+easy to just think about this from a
+pipeline
+standpoint all we do in this pipeline is
+we say that we're going to limit the
+number of steps to five then in every
+single step what we're going to do is
+we're going to go ahead and just first
+formulate an answer and when we
+formulate the answer um oh 60 what is
+this set let's update this 67 nice once
+I form answer I will get some response
+and what formate answer does is for
+minute answer responds with one a few
+different types it either responds with
+a rag answer or it responds with um put
+this down to the
+bottom
+oops where is for respond either
+responds with a rag
+answer oh and this was me just showing
+people more about B
+um it either respond with a rag answer
+over here on the right hand side a rag
+query or a final answer a rag query will
+contain the intent of rag action
+attached to it or and they'll have a
+question of how we actually search the
+docs because the question we ask the
+docs could be different than the way the
+user phrases it because we know more
+about baml than the user does for
+example the user may be like how do I
+rename something and we know that's an
+alas
+concept and then we can also filter it
+so the the place where we do the rag
+could either be documentation disc ORD
+or
+both uh because a lot of times we have
+the anwers living in our Discord and
+could be referenced by a previous
+answer so based on what this responds we
+just see if the instance is a final
+answer we'll do some stuff and if it's a
+rag action we'll do some stuff and we'll
+run this in a while loop if it's a rag
+action all we do is we get all the
+results of the rag query we inject it as
+part of context as part of the chain
+that's running on and then we and then
+we'll just push it into our context uh
+by pending it there and then our context
+will again just get passed back into the
+next format the same format answer query
+and be run in a while loop until it's
+ready if for some reason we've hit too
+many Max steps we'll actually just raise
+an exception say no answer
+found and then we'll broadcast that to
+the user as well and then lastly let's
+say the LM says I have done all my rag
+search I now have an answer for you when
+the LM hasn't answered it'll tell you
+the reason of why it thinks it has a
+final answer ready then we'll actually
+call a totally separate
+prompt and actually tell you exactly how
+to go ahead and answer the question and
+we actually do this with
+streaming and then uh when I go ahead
+and go get this answer what does this
+answer prompt do this answer prompt will
+literally take the context printed out
+and literally tell the user to
+specifically
+answer uh for this um for this question
+and the premise is the answer exists
+somewhere in this context somehow
+because we've already deter that another
+LM the previous call has already said
+I've done enough rag I've qued it
+out and now that I've done this I'll get
+a string response but because we're so
+specific on the response of being super
+accurate then what we will do over here
+is we'll actually not send this out
+we'll actually send this out to our
+server to say hey go ensure that a human
+actually approves this um uh answer
+answer and the human can tell us two
+things the human can actually tell this
+is good or this is bad if the human says
+it is good then we just send the
+response back and we're like good to go
+there's now when the human says that
+when the human says this is not good
+enough there's two things they could do
+they can actually say ah screw it I
+don't want the AI to do this anymore
+it's good enough but I don't want to
+really prompt it to get it correct so
+just abort and let the human take over
+if the human sends the string as
+feedback my exit prompt the human will
+literally take over and they don't
+actually type in my exit prompt they
+press a button that
+triggers um my exit prompt and then all
+the button says is I'll take
+over and then lastly the other thing
+that happens is if it's not good enough
+then we take the feedback that the human
+gave us and add it back into this
+context object that we have and this
+Contex object says this was a draft of
+the answer that we got based off of this
+answer question prompt not the
+reasoning and then we'll go ahead and
+actually add the feedback from the admin
+and we call it admin not in human
+because admins just have more
+power uh and then they're actually able
+to go ahead and go get the answer out of
+this and then the other thing that we do
+that is really critical is we reset the
+amount of steps the LM is allowed to
+take again we give it five more steps
+the premise is at any given time use up
+to five steps if a human gives you
+feedback you refresh your step count
+back to five steps and this is kind of
+how we're able to go and control this
+all the way down and the thing that you
+get out of this and I'll show you some
+working Discord
+Bots
+uh where is this right here so I'll show
+you some interesting responses that the
+model does is it's actually able to go
+ahead and not only tell the person that
+they it's working on it at and that
+constantly gets updated on every single
+step and if I had this running it would
+be much
+nicer but if the human says I'll take
+over it can actually tag the person that
+says that they'll take over and say that
+this person will go tag it so you can
+actually easily find the thread as well
+and this interaction again is really
+driven by having deep control over the
+agentic loop that isn't just like
+handing it off and say hey to some other
+library that says just run a while loop
+and go run this hopefully the Colin this
+was a good enough Deep dive into exactly
+what the bamel code is responsible for
+which is really just a simple take in a
+message get a response back and then you
+can write while Loops for Loops if
+statements in whatever order you want
+with the language of your choice with
+really good type safety and accuracy so
+then you can actually build your actual
+agent
+awesome uh and Justin yeah thanks for
+than says we should definitely um we
+should definitely probably write a blog
+post on this uh it took us a while to go
+build out these agents and that's why we
+spent this last week kind of building uh
+having everyone on the team go build
+these out
+um any other questions from anyone
+there's two scroll back oh I missed some
+uh what are the questions that I got
+Chris Watts says are you guys planning
+on adding any native rag uh so rag is
+probably not something that'll be added
+directly to baml because to be
+completely honest there's a couple of
+reasons why we don't think adding rag
+natively here makes a lot of sense sense
+and I'll show you why uh I want to I
+want to jump back to actually showing
+you why we don't think rag is something
+that we should control and a big part of
+it is the way that you inject context
+into the prompt is really really really
+important you can't just render like a
+lot of times people will take Json
+objects and render into the prompt let's
+see what that looks like on promp
+fiddle just so I can show oops what
+happened there
+and I want and I think this point gets
+lost by a lot of folks a lot of times
+when you get raged maybe you have some
+document that lives somewhere and you'll
+just add it in so if I add something
+like this into my
+prompt and and with with rag it's going
+to look something like this like
+title uh article about uh
+something content and your content is
+like markdown content or something so
+it's going to say something like Hash
+Hash
+hashtag why is this oh that's a bug we
+should fix that oh I know it's because I
+have to do this sorry I have to block
+off oh syntax highlighting breaks we
+should fix that uh F sln Bar and this is
+what your prompt looks like this is a
+horrible prompt it's going to be really
+hard for you to do this what you really
+should be doing for all your rag content
+is actually writing something like
+this something and actually like
+literally just write the article
+here content this is just way easier for
+the model to ingest if we do rag we
+actually believe that it's going to be
+harder for you to go do these and it's
+just really easy to pass in the context
+as a parameter or even as like a string
+array parameter that you can Loop over
+and actually render it exactly how you
+want in the prompt and there's no real
+reason for us to go add that integration
+with the vector database when it's just
+a simple API call there with not much U
+attraction as we build out more we
+probably will go ahead and figure out
+some way to do it but it's just not a
+priority right now VES has an
+interesting question about so is
+streaming with structured outputs
+allowing you to know when a field out um
+so the way that we actually did it for
+that specific
+example uh why don't I just show you
+what that code looks like uh because I
+think that's
+interesting is generate recipes and we
+don't have a feature for this in baml
+but we are working on this where you
+could actually go get the state of it
+coming out so let's just look at the
+source code because I think the source
+code is always a source of Truth um why
+think hard about it um recipe.
+TSX I believe that this is it um here's
+how we do this we actually have
+a uh where is this we actually have a
+flag
+on uh ingredient list
+renderer boom and we can actually know
+what the state is so we actually just
+track the state based on here and I'll
+show you how the state is
+managed the state object gets passed in
+from here
+sorry
+uh oh
+nice the state object actually gets
+computed right over here and I'll show
+you how the State get computed and we do
+this for every single object and this is
+how we learn that we probably want to go
+do this one we just check if it's
+loading so loading is something in xjs
+that we do provide as a service where
+you can just know if something is
+loading or not then if it's loading we
+look at the streaming data and we just
+see which of the fields are actually
+being populated if we're loading and
+then we're working on the instructions
+and the instructions have at least one
+instruction in them we know we're
+working on the instructions if they have
+none then we know we're definitely
+working in the
+ingredients and we're able to go do this
+because the actual code for describing
+this B
+RC uh get recipe list out the fact and I
+can't wait till we have THX and GitHub
+we're almost there with 200 Public repos
+we can finally get syntax highlighting
+for bamon GitHub which is going to be
+really
+exciting um but when you actually go
+look at the actual uh recipe over here
+ingredients is listed out before
+instructions so ingredients from the the
+LM will always be returned first before
+instructions does so we can just know
+whether or not we have we're working on
+ingredients or instructions based on
+where we're at and then if serving tips
+starts coming out we know we're dumb
+with instructions we're working on
+serving tips it's just a way to go
+tracti this and soon the bamel type
+system will be able to just give you
+that in typescript during streaming as
+well and then for arrays the way that
+we're able to do it for every individual
+ingredient is we actually can actually
+look at the array and say we're if we're
+partially working if the state is
+currently working ingredients the last
+element in the array is always going to
+be actively worked on so we just did
+this as a hack but the baml parser
+actually knows this a little bit better
+uh and to give
+you to give you an idea of what that
+actually looks like I want to let you
+guys think about these numbers so when
+you guys think about streaming numbers
+for example typically when you stream
+numbers it kind of makes sense to stream
+them in and parse them as you want but
+if you're streaming them 55300 all of a
+sudden you're having massive changes so
+if you're visualizing a graph for
+example and you're visualizing years
+years are just not going to work because
+it's going to year it's going to every
+single graph is going to snap to the
+back and say two then the year 20 then
+year
+2,22 then finally year
+2025 uh and that's just going to be a
+big struggle for someone to go and debug
+down so what we do in baml is is instead
+of having it stream numbers like this we
+actually do sequ what we call semantic
+streaming where we'll only give you the
+number when it's completed and now you
+can imagine that we do this not just for
+numbers but actually entire data models
+itself so that in the rest example what
+that we are looking
+at it becomes almost easy to go build
+out a UI like this because we can
+guarantee that the only things coming
+out are entire completed chunks of
+anything that you specifically specified
+so that's how that's how you could go do
+that big
+Nish um a couple more questions that I
+saw okay uh separate Loops I hopefully I
+didn't miss any other questions um did I
+miss any tried B plus dpy or is that
+over I I addressed that one earlier um
+generally dpy or clads and prompts are
+just going to lead to much much bigger
+prompts and then the reason that you
+probably don't want to end up doing that
+is because
+let me show you guys again uh one of the
+things that you'll run into when you go
+do this is a lot of prompting can be
+improved by actually writing structured
+prompts like this rather than actually
+adding the instructions in here instead
+of saying that the date should be ISO
+formatted let's say I put that into my
+prompt and I actually put this into my
+prompt like this the problem with this
+prompt is not the fact that it's going
+to be um it's going to be formatted it's
+just that look how far away way this is
+from the actual date field if I actually
+show the tokens the LM is going to have
+to like somehow take this instruction
+understand it and then associate this
+with this date field which is like 1 two
+3 four five like around like 20 or 30
+tokens away it's just more complicated
+so the closer in proximity you can keep
+your instructions to the aspect of the
+data model that you're trying to produce
+the better you can constrain the model
+that's kind of promp
+don't
+sorry that's kind of why prompting
+techniques don't work that
+well cool um I think that's it for today
+hopefully this was fun and hopefully
+this was u high value of everyone's time
+as you guys have more questions
+definitely join the Discord ask more
+questions um and then we hope to ship
+some of these features out for you guys
+soon and look forward to the email that
+we'll send out later
+today all right guys thank you so much
+we'll talk soon and we'll try and do
+these more often and more frequently

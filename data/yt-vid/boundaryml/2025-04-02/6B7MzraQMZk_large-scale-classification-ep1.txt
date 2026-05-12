@@ -1,0 +1,2042 @@
+Cool.
+And we'll we'll send a recording out to
+the learner list, right?
+Yeah, exactly.
+Sure.
+I should have a screenshot.
+All right. Firstly, hello everyone.
+Welcome to our first
+online talk.
+Um I think one of the reasons that
+really inspired
+I'll try again.
+One of the things that really inspired
+this talk for us was this whole premise
+that
+it's been about 2 years and the AI
+models seem to just be stuck
+in demo land.
+And we've seen a lot of apps get
+actually built and shipped to production
+for some companies.
+And we just figured we'd share some of
+these techniques for most of April.
+With exactly how some people are
+addressing some of the problems that we
+have.
+Um as you have questions, as you have
+thoughts, we'd love to make this more
+engaging and actually like welcome you
+to like uh ask whatever you want.
+And then if you have topics that you
+think are worth mentioning, mention
+those as well and we'll try and cover
+them.
+But I'll give you a quick background on
+who we are and then we'll get to the
+meat of it, which hopefully is going to
+be the most fun part, which is actually
+coding.
+And talking about scenarios and how to
+make them work.
+Um so I'm Vaibhav, I'm one of the
+co-founders
+of Boundary and we make BAML. Uh it was
+uh and we'll be using that mostly for
+work today, but in effect any of the
+techniques we use can be done with any
+of the
+um
+uh AI layers of your choice.
+And our goal is to really just share
+techniques.
+Dex.
+Yeah, what's up? I'm Dex. I'm the
+founder of a company that spends most of
+my days building tools called Human
+Layer,
+uh helping people deploy safer, more
+reliable AI applications. Call them
+agents if you if you insist, but uh I
+think we're going to blur that line in
+the next couple talks anyways.
+Cool.
+Um let's talk about a Go ahead. You're
+good. I was just going to say like I I I
+I think let me let me know if I read
+this right, Vaibhav, but I guess the
+idea is like let's do really hard
+problems with tiny models to prove that
+like with the right techniques and the
+right prompting and the right kind of
+surrounding code, you can even get small
+models to do impressive things because
+then go apply that to actual big like
+frontier models and you'll be able to do
+incredible things.
+That's kind of the goal. Like if we can
+do this with small models, we can
+probably get away with very large very
+large models doing
+doing things as well.
+Um and I I personally have this belief
+that like GPT-3.5 honestly was already
+pretty good for a lot of scenarios.
+There's some scenarios where it doesn't
+work for.
+But I've seen people ship really
+impressive pipelines. I think the only
+problem that I've seen be a struggle for
+a lot of models has been SVG generation.
+But honestly now with the new image
+model that GPT-4 released, it's possible
+that that actually got a lot better.
+Just because of how much cleaner the
+images are getting.
+But we can talk about that later.
+Um let's talk about the topic at hand
+today, large-scale classification. So
+when we talk about large-scale
+classification, there's a lot of
+different applications that people have
+here.
+And specifically, I want to narrow down
+and articulate some of these
+articulations, but how many of you have
+actually had
+um how many of you have actually like um
+dealt with needing to classify, let's
+say, over 100 things in your
+uh in your AI pipelines?
+You can just type in the chat if you'd
+like.
+What
+What we've seen what kind of domains
+have people worked in? If you want to
+share like the domains that you worked
+in, that might help us um
+uh make sure that we can contextualize
+as much as possible for today's
+conversation.
+Some of the applications that we've seen
+has been mostly in the medical industry.
+Has been in the uh or regulatory docs
+have been very very common.
+Uh there's been a lot of stories in the
+manufacturing space. We've seen some
+spaces in the
+um
+uh in the world of MCP
+where how do you deal with an MCP server
+that has over a thousand tools?
+Because LLMs are not going to produce
+that very well.
+And then we've also seen that really be
+true in like routing agents. Cuz if you
+have a routing agent with more than 20
+routes that it can route to,
+we sometimes see degradation of
+performance where it starts to pick the
+slightly wrong uh routes out there.
+So let's talk about how
+um how we could go and address this
+problem. And I think to address this
+problem, the best thing to do is just
+start off with like diagrams.
+The biggest thing that we often see is
+Let me go ahead and
+open the scalar draw.
+The biggest problem with all these
+systems
+is that
+they're often not very probable. And the
+minute a system becomes non-probable, it
+really becomes hard to go edit because
+now you're at the mercy of the model
+updating to actually give you the
+results that you want.
+And that just isn't uh
+that's just a sad world to live in
+because now you're stuck waiting for
+GPT-26 to come out.
+And if GPT-26 doesn't come out that
+year, then you're finally just waiting
+and twiddling your thumbs.
+And the problem with tweaking just the
+prompt is that the prompt is very
+Our prompt is actually very very hard
+um
+to go edit yourself. I'm actually going
+to get a mouse really fast. Give me 1
+second. Dex,
+you want to start uh
+Um yeah, I can start sketching a couple
+things here. So um
+I think
+I'm curious like when when
+when when Vaibhav says probing, maybe
+drop in the chat like what is what does
+that mean to you? Or actually, okay,
+you're back. Um also, if you give me
+co-host, I can like help mute people and
+stuff like that.
+Yeah, let me give you co-host really
+fast.
+Sorry, technical technical setup stuff.
+There you go. I'm added as co-host. I
+didn't get to the checklist.
+Okay, cool.
+Okay, so I'm going to start screen
+sharing really fast.
+Um and talk about how this works at the
+very top level. So obviously, we can do
+a very simple thing where we have
+some LLM and if this LLM is given a what
+we do in this LLM
+is we give it a prompt.
+And we give it a list of categories.
+And I think the solution that most
+people have is somehow they add
+Oops, sorry.
+They take this list of categories and
+then they just
+uh
+put this into the prompt somehow and
+then they hope that the LLM
+picks from these categories. I think
+that's like the most naive solution that
+we can do.
+Now, you can do a little bit better
+by using an LLM with structured outputs.
+Where you then
+um
+where you then go ahead and instead of
+putting it directly in the prompt,
+you're kind of putting it in the prompt,
+but like there's a special part of the
+prompt
+um that is
+Oops.
+the schema. And specifically, you add
+the categories to the schema.
+And like the the opening highway of
+doing this, right, is like it it
+basically is injecting JSON schema-ish
+things into the system prompt in a
+special way, right?
+Exactly.
+So I got to one way to do it. Obviously,
+you can do this in BAML as well. But the
+problem that you run into when you go do
+this is you're still not really able to
+probe. The only thing you can really
+probe is this category list.
+And that I think is the most naive
+solution that we can do.
+sorry, when you say probe, you mean like
+make small changes and see how they
+affect the outputs, right?
+Like what do you mean by probe?
+Yeah, I I think um I come from like an
+electrical engineering background, so
+perhaps that's where my brain is going.
+But the hardest part about like
+circuits, whenever you do circuit design
+on any chip, is you obviously once the
+chips get really small, you can't really
+introspect them in any way.
+So often points, what you'll do is
+you'll build like little detection
+points
+um where like you can actually go ahead
+and like go and measure and like
+manipulate the inputs or measure the
+input at certain points.
+The problem with LLMs
+it yeah, exactly. Jonathan got it. The
+problem with AI pipelines is we don't
+really get these probing points and we
+don't really get an area to manipulate
+this. Right now, the only real point
+that we have to manipulate these is the
+category list.
+But if the category list is like
+massive,
+how do you get LLMs to actually do what
+you do? So let's talk about the most
+trivial solutions that people have might
+have seen before.
+But option one, once your category list
+gets really massive, is
+you take your category list
+Oops.
+And instead of putting it into here,
+you actually put it into a
+um
+Oh.
+Sorry. You put it into a
+uh vector database.
+And I'll talk about why a vector
+database in a second. It doesn't
+actually have to be a vector database.
+So you push your category list into
+here.
+And once your category list lives in a
+vector database, then what you have is
+instead of
+your query
+instead of your user query coming in and
+immediately taking the entire category
+list and going with it,
+what we do instead is we draw
+into here and then we set down a smaller
+list of categories.
+And then we go into and then we only
+pass those in instead.
+And this can do a couple of nice things
+for us.
+But instead of all the categories I've
+selected, now we're able to prune this
+down to whatever count the LLM can go
+deal with.
+Um
+So hierarchical categories and multiple
+prompts is um
+is often what people think about, but
+often what I find is that actually leads
+to a lot more confusion.
+And the reason that leads to a lot more
+confusion with hierarchical categories
+is because most people don't have clear
+definitions of hierarchies and
+hierarchies end up bleeding over a lot
+more.
+So it ends up being a little bit more
+troublesome. And I'll talk about a
+technique of how you can use
+hierarchical categorization
+with this vector database technique to
+get way better results.
+But I think the general rule of thumb is
+every single LLM, no matter which one
+you use, operates really well on some
+count of categories.
+But I think the way that you think about
+which count of categories, like how many
+categories it's able to selectively
+select from
+really varies based on the categories
+themselves.
+And I think this is another part that a
+lot of people overlook. Um and I
+apologize for not writing code right up
+front, but I think it will help to have
+some framing of diagrams before we go
+and code it up.
+Um but let's say I have category A and
+category B
+over here. And if category A and
+category B are completely disjoint, I
+can have a lot more of these categories.
+Like I can have up to Z if they're all
+totally disjoint. But the minute I start
+having category A and category B overlap
+with each other
+it becomes really hard for an LLM to
+pick the right ones.
+So if I have like um
+if I have
+um
+if I have like five categories, I
+but they're all really really closely
+overlapped with like very very small
+nuances differences
+it's just not going to perform very well
+on an LLM scenario. I probably need a
+smaller prompt that is really good at
+disjointing only these two categories
+separately from each other to identify
+when it's one or the other or could be
+either one.
+But if I have categories that are
+totally separate
+then it doesn't really matter.
+Then we can get away with a lot more
+categories in the same prompt. In the
+case of like MCP tools
+most MCP tools are very very disjoint
+from each other.
+Uh sometimes there's overlap, but most
+of the time they're very disjoint, so we
+can get away with having a lot more. In
+the case of like hierarchical categories
+and hierarchical organization there's
+actually a technique that we found works
+really well.
+Um at least anecdotally um in production
+that seems to work.
+But let's talk about what is nice about
+this approach.
+Now
+there's this thing here that we all made
+an assumption of
+in our current approach
+where the things going into the vector
+database
+are going to be exactly the categories
+and we just apply an embedding on the
+categories and we put them in.
+But again, we don't really have any
+probe points in the system.
+We have a couple of probe points. We
+added another one, which is we can
+control how many
+like exactly how we can control the
+count of these categories.
+We can control
+in your vector search. Yeah. Exactly.
+It's your top K in your vector search.
+So we get one control point. You want to
+label that, Dex?
+And then we get another control point,
+which is like we can choose what
+embedding system
+what embeddings model we use.
+So now we have two control
+too, right? Like can would you embed
+like a description of the category with
+the actual like if it's like Apple,
+orange, banana, would you describe that
+as well, put it in the embedding? So
+exactly. So that's where I would say
+like there's like a separate option here
+that I'm going to draw out where a lot
+of people I think overlook this concept
+as a whole
+which is the naive thing to do
+is to just put this category directly
+into here.
+But there's this more sophisticated
+thing that we can all do
+that can really give us a lot of control
+into the system
+which is
+we apply um
+category
+function category
+to the string.
+Let's see how well writing code works in
+here.
+Make this white.
+Embedding text.
+Where you actually like return a custom
+text for every single category that you
+pass in. And that's the thing that you
+embed.
+And surprisingly, this becomes a really
+really nice control point for us.
+Because now whenever the model doesn't
+return something, doesn't select the
+right category, we have two areas to
+probe at.
+We can see one, did the model select the
+right category?
+If it did
+then okay, that means that this part of
+the system is good. If it didn't, then
+we know that we have to change the
+embedding text of either that category
+or the one that it selected in favor of
+itself. So now you have a probe points
+that you can actually sit on that aren't
+your whole system.
+It becomes a special probe point
+just either for that system. Yourself.
+So if you have a category like that's
+like
+like for an MCP tool for like Slack and
+an MC tool tool for calendars and it's
+picking Slack actions when it should be
+picking calendar actions
+we can do different types of embedding
+text as the thing that we actually
+embed.
+And that can be a huge unlock in terms
+of your iteration loop.
+Now the last thing you can do
+um
+the last probe point that I really want
+to talk about is up here. Now once again
+people often make the assumption that
+the embedding text that you put into
+here has to be the same embedding text
+that you put into your prompt.
+That's what they naively do.
+But the minute that you stop doing that,
+you end up in a really really nice
+world. Where you no longer have to think
+about it that way.
+You can apply selected categories
+and go through another function.
+Oops.
+Sorry.
+The selected categories can go through
+another function, which is
+LLM text.
+Which actually tells you how to put the
+text into the prompt or the structured
+output or anything that you want for the
+model.
+So now you we all have like two really
+key
+uh we have three key points that we can
+go manipulate really really easily that
+we can go introspect into our system.
+One point becomes the text that we put
+in for embeddings.
+Another point becomes the number of K's
+that we select
+out of the vector database.
+And a third point becomes the actual way
+that we serialize the categories into
+our prompt.
+And obviously you can add more and more
+sophisticated algorithms here
+um in this system.
+But just with these three points, we can
+really make our system not really be as
+much of a black box that just happens to
+go do things
+but make it a lot more controllable.
+I'm going to pause for a little bit.
+Dex, go ahead.
+I got I got a question and you can
+totally tell me like, yes, we'll do that
+in 20 minutes or whatever and we're
+getting there, but I'm curious like are
+there established kind of like
+structures for doing kind of end-to-end
+testing on this kind of stuff so I can
+change my probe or is this a thing that
+people are mostly kind of hand-rolling
+themselves and building a big table of
+evals for every single every single
+thing they they hit in production?
+Well, actually you kind of have an eval
+built in.
+Remember like in the end what we're
+passing in is we're passing the user
+query as an input
+and expecting some category as an
+output.
+Yeah.
+Right. Okay, so your prompt is basically
+some instructions on how to behave. It's
+the user query, which is like here's the
+actual thing you're classifying, and
+then it's a bunch of data about like
+what are what are valid what are valid
+input what are valid output categories.
+Exactly. And again, we can add another
+probe here.
+Where it's like what if the LLM doesn't
+we don't we allow the LLM to pick
+multiple categories?
+And then we apply another method
+after the fact
+to pick
+a single category.
+So we can do multiple levels of pruning
+as well. We don't actually have to pick
+one. This this idea of going from many
+categories to one in this scenario we
+used a vector database.
+But if your system is truly truly
+complex
+we could have the LLM pick multiple
+categories and it might be really
+complex cuz your categories have a lot
+of overlap.
+So we allow the LLM to pick all valid
+categories and then we use perhaps
+another LLM if we want
+to actually go ahead and turn it from a
+single category into multiple and from
+multiple categories into a single
+category.
+Okay, so you could have a basically a
+function there in between the category
+list and the single category that is
+either deterministic or
+non-deterministic depending on what gets
+you the best results. But having that
+step there gives you it's like the the
+right place to manipulate and and and
+change and kind of be able to do yeah.
+And this actually
+this this layer here becomes really easy
+to like unit test in isolation, right?
+You could just say like, hey, if the
+model returns these four categories and
+here was the input, we should almost
+always we should always be returning
+this one.
+Exactly. And actually this I think
+that's that's the whole thing about this
+whole layer.
+If you If you really think about this
+whole system that I built, all we all
+we're doing
+in reality is we're writing a function
+that says pick category
+or some text or some input
+and we're returning a category type.
+That's all we're doing. We're writing a
+function that does that.
+And every single technique that we
+described from beginning to end
+every single one of these techniques
+that we described in the most simple one
+of just an LLM using structured output
+using a vector database to pick a
+category doesn't really matter. All of
+them are just implementations of this
+function.
+Pick category.
+We just have different implementations
+of this function where we add more and
+more sophistication
+because if we if this whole thing is
+done by an LLM, then we know the only
+point of input we have is a prompt.
+But if we change this function, how do I
+change Can you change this to mono text?
+Oh, there we go. There you go.
+If we change this function to suddenly
+be like
+narrowed
+categories
+equals
+prune categories
+input um space on the
+database query.
+It It could be a vector database. It
+could be an LLM. It's just a thing that
+reduces the number of categories from
+many
+to some.
+But
+we can we can In our example, it is a
+vector database. So, I'll write that
+down.
+All right. So, we prune the categories
+from a vector DB.
+And then what we do is like we save
+um
+best equals
+uh use LLM picker
+input narrowed
+categories.
+And now we just return best.
+That's one variation of this system.
+We can We can add another one where it's
+like
+we can change this simply best three.
+Yeah. Yeah, the same thing.
+Best three and then this returns the
+best
+and then we go we go down there.
+And we can keep on making these systems
+better and better and better and just
+keep on adding more steps into the
+system to make it more accurate.
+Is this a system that other people have
+ever built before? Just out of
+curiosity.
+All right.
+So, let's get down to
+We got to kind of
+to
+Yeah.
+Classifying for real estate.
+Let's use Let's actually write this
+code. I think I think the best thing to
+do here is write the code um because
+it's going to make things a lot
+Sorry, quickly before you move on, just
+a question.
+Uh on the transition from user query to
+the selected categories, like how are
+you uh coming with the selected
+categories? Are you doing a similarity
+search
+uh within the vector database?
+can do
+Exactly. So, we we can do a similarity
+search from a vector database where
+you'll find the top K uh out of it.
+Challenges are that your user query
+might not reflect the
+Does it really So, so you mean to say
+the semantic embeddings would fall
+closer and that's how you're able to
+pick it, right?
+Yeah, and and if it doesn't, we can
+force the semantic embeddings to get
+fall closer
+by changing the text of how we embed the
+actual category.
+So, usually what people do when they add
+an embedding is they just take the raw
+string and add it directly into the
+vector database. They say, "Here's the
+category name. Add it into the
+database."
+Mhm. But what if the thing that we
+actually embedded into the actual
+database was like this? We put the name
+of the category and I'll do that over
+here.
+We put the name of the category like
+this,
+right? We put we put
+uh we put the name, we put like example
+uh 15 example queries that match it.
+And then we put like uh another like 20
+scenarios.
+Um and then we put like uh like a
+a list of 20 keywords.
+So, now we have this ability
+to almost force the embedding to be
+closer to the thing that we want it to
+go be into.
+Mhm. Because now instead of just like
+adding And how can we get these?
+Literally, you can just LLM generate
+these. That's what I do.
+I LLM generate The initial thing I do is
+I LLM generate that person.
+Um
+Okay. I got it. Um yeah, thank you. So,
+you can actually you can actually like
+LLM generate these. Or if you have a
+domain expert in your company
+the domain expert in your company can
+actually go ahead and um go do this as
+well.
+And this will end up working quite well.
+I've seen this work many times for many
+companies that have like over 500
+categories plus.
+Um and the key part here is because this
+becomes a thing that you control now
+now you're not relying on the model to
+produce the best results because the
+embedding model is a black box. Neither
+me or you or any of us can really
+control it. Yes, we can fine-tune a
+model, but like fine-tuning a model is
+so painfully slow in your iteration loop
+that like if you fine-tune it wrong, now
+you have to go back and refine-tune the
+whole
+uh the whole thing.
+Mhm. But if we if we have strings that
+we're using to manipulate the actual
+vector that we generate that we put into
+the embedding system
+then this becomes really really fast
+to go do.
+So, well,
+taking an example of let's say my my
+categories are a bunch of columns within
+a table.
+In that case, the way I'm embedding the
+text here is maybe the column name and
+with a bunch of description around it
+and maybe a bunch of questions that it
+can answer. Embedding that whole stuff
+in it, is it?
+Can you say that one more time? Sorry,
+my headphones cut out.
+Uh so, um I'm just trying to think about
+an example. So, we are not going to
+embed the exact text that we have.
+Instead, what we are saying is describe
+it in a better way, write it more
+verbose maybe. I I I don't know. But
+taking an example
+Yeah.
+Taking an example of columns column
+names in an analytic SQL kind of
+solution where you have to kind of
+classify which columns would you use for
+your SQL query.
+Yeah.
+In that case, multiple columns would
+come and you would eventually write a
+description for it. Maybe you would
+write a bunch of queries that these
+columns can answer and then embed that
+kind of text to
+here and then use that later. But in the
+top if I go where you are going from
+selected category categories box to the
+prompt and you have this function LLM
+text category in between, what is that
+doing here? So, so now there's another
+part. So, we have one probe that we want
+to manipulate the embedding vector so we
+can get more likely the categories that
+we care about. Mhm.
+Now there's another thing you can do,
+which is the way that you put them
+the text that you use to get the best
+embedding out of the vector to make it
+match your user query may not be the
+same text that we have to do to put the
+to make the LLM
+pick the right category.
+And recognizing that these two texts are
+very different because the models under
+the hood are very different
+is an important distinction to hitting
+really high accuracy.
+Understood. Understood. So, like here,
+this thing might want This thing want
+might want a name
+and then like a just a plain text
+description
+of its use.
+Understood. But right, if you put in 15
+examples, you're going to kind of poison
+the LLM and like the do this like issue
+we see in few-shot prompting where you
+kind of like influence the behavior too
+much.
+Yeah.
+Understood.
+But recognize
+recognize that we can have two
+Now, recognize that we could use the
+same function as well. It's always
+possible to use the same thing. But it's
+more about building probes into our
+software so that when things don't work,
+we have a thing to change that isn't
+like praying to the prompting gods.
+It's It's exactly what what I've heard
+you say a bunch, which is basically is
+like I don't know what the best approach
+is for a given problem space, but I know
+that the more control you have and the
+more knobs you give yourself access to,
+the faster you're going to find the best
+way to solve a particular problem.
+Exactly.
+And what about top K here? So, I I see
+me and other people struggling with the
+top K value because we you are not never
+sure three five. You miss it, you
+under pin it and you get less
+data into the context. So, is there a
+way around it as well that we have
+figured it out
+already?
+Uh pick top K.
+Yeah. There's no I think that's it's
+it's just a probe that you have to go
+decide. And I think the best way to look
+at this is now the system becomes an
+introspecting system. So, if I know what
+I'm expecting for a certain user query.
+Let's say I'm expecting category A for a
+certain user query.
+And if I look at the vector database, I
+see that A doesn't come out when my top
+K is three.
+Then then I know what I have to do is I
+have two choices. I can increase top K
+or I can change my embedding category
+embedding text.
+Or six of the other probes you have out.
+Well, I do I think these are the only
+ones that we can we can modify.
+Can you modify LLM text? Oh, I see.
+Yeah.
+But it's it's it's the end-to-end thing,
+right?
+Well, yeah, so well, even though it's
+not even if it's not coming out
+end-to-end, my first approach would
+actually be to see where is it failing.
+Oh, you can test just between You can
+test just between the user query and the
+selected categories and optimize just
+that loop to make sure that at least the
+category that you're looking for is in
+that selected batch, and then you have
+fewer knobs that you have to turn. Okay.
+it's not in this batch, then there's
+nothing I can do about. The LLM will
+never get it right.
+So, at least now I have a
+waterfall-based approach where I can be
+like, "What It's like when I'm step
+through in debugging in code."
+It's like I like to know how far did I
+get the right answer and when did I get
+wrong. If I know that this answer has
+the right system,
+then I can just go work my way down and
+be like, "Okay, this thing was correct,
+but this thing is not correct. So, I
+know I need to focus all my debugging
+energy on this, not on this."
+So, it allows me to know that the thing
+that I should probably modify is not
+embedding
+text, but LLM text.
+Does that answer your question, Anubha?
+Yes, yes. I I think it's more around
+precision K measurement kind of thing
+that we do.
+Yeah, and you just have to sit down and
+pick the top K. Like, there's no And top
+K, by the way, here is
+uh is the number of vectored entries
+that return from a vector database
+match. Correct.
+It isn't It isn't the same as top K in
+an LLM, just to be very, very
+particular. Yep, yep.
+Any other questions from anyone?
+No. Okay, let's do some code.
+Um
+Uh what is the disadvantage of having an
+um
+Can you read that question out to me,
+Dax, while I set up the code? Yeah,
+yeah. So, it's essentially like, you
+know, what is the what is the
+disadvantage of going back to zero
+probes, but have two LLMs spend a few
+cycles in some kind of evaluator
+optimizer workflow? And then the probe
+is just the stop condition for this
+workflow.
+Um while you're coding, I can kind of
+try to tease out the question there,
+Anubha, if you want to come off mute and
+kind of give a little more color. Um but
+it's sounds like
+um I mean, I think those are just
+different kinds of kinds of probes, and
+your probes end up being like, "What are
+the prompts, and what are the number of
+cycles, and how do you have those two
+LLMs collaborate with each other?" And I
+think kind of the big lesson to take
+away is like, maybe you don't use a
+vector database. Maybe you don't use
+hierarchical categories, but whatever
+you use, like, how do you chunk these up
+into smaller problems where you can
+tweak smaller knobs and evaluate the
+performance of kind of some of these
+like subfunctions.
+Does that sound right? Um yeah, yeah. I
+think yeah, that's uh basically yeah, it
+sounds right. Basically, what I'm
+driving at is that I do My intuition is
+that if you have a lot more probes,
+yeah, it does add introspection, but
+that introspection is also going to come
+at a cost, right? Like, there's going to
+be a cost of having one probe versus
+five probes. Um
+um the knobs having more knobs is going
+to
+also make uh
+uh the debugging or introspection more
+complex. That's kind of where I'm
+driving at.
+The only real problem Normally, I think
+that's correct in software, but the diff
+the big difference in the software that
+I'm writing with models today is that
+that ends up being way worse, because
+you you actually have the worst system
+right now, which is a model you cannot
+modify in any meaningful way.
+So, when it's a complete black box, you
+have effectively no probes in the system
+except the prompt. And the prompt is
+just not a great
+place to manipulate it when you have As
+your prompts get bigger and bigger,
+any individual manipulation you make
+has more and more consequences.
+So, if you're picking between like 100
+categories
+and picking between five categories,
+changing the word in 100 categories is
+way more likely to poison your output
+than with 10 categories. And I know that
+sounds a little counterintuitive.
+And the reason for that is just because
+you're not going to be able to
+manipulate the model as quickly by
+changing a word, so you'll have to
+change a lot of words when you have 100
+categories, and now the model will be
+less likely to do what you want in other
+scenarios.
+So, I think the the way that I look at
+this is
+you end up in a scenario Sorry, my dog
+is looking at me. Uh
+like, when you have like less when you
+have more of a model system, you basic
+when you basically are like building a
+really, really good Gaussian
+distribution that has
+really bad standard deviation. As we add
+more and more probes, what we're really
+doing is we're trying to we're trying to
+make the curve look more like this.
+We're trying to remove these soft edges
+and pull the model in closer and closer.
+Yeah, I mean, I I think that comes back
+to kind of the core thing, right? It's
+like, if you're just using LLMs and just
+using prompts, like, yeah, you could
+have six different prompts, and those
+become knobs, and if you have smaller
+Like, you could do all the vector stuff
+with just, "Hey, let's loop over the
+Instead of doing embeddings, I've heard
+a lot of people have success and I don't
+know if we'll have time to get to this
+today, but like, rather than doing RAG,
+just pass every single option through a
+small model with a very specific prompt,
+which is like, you know, "Is this
+relevant to the query?" and use that to
+cut the data set in half, and cut it in
+half again, and do things like that.
+It's like, the point is like,
+the smaller and simpler the steps are,
+the easier they are easier they are to
+optimize, right?
+Yeah, prune categories. There you go.
+You nailed it, Dax. That's exactly it.
+There's nothing that says that prune
+categories vector DB has to be a vector
+DB.
+This could be a bunch of models that
+take in every single category of them as
+an option, like Dax said, and just
+return it and select only the ones that
+are relevant to the model.
+Yeah. Or determine just thumbs up or
+thumbs down, is this is this category
+kind of relevant, or is it totally
+unrelated, and just use a Boolean
+classifier, right? Mhm.
+All right, cool.
+Um okay, let's let's I'm going to start
+off writing the writing the code in very
+pseudo code format, because I think it's
+just going to help us know how to go
+piece everything together, and then I'll
+go actually go execute it and make it
+work.
+So, we're going to have one thing that's
+going to load the categories from
+somewhere. Um Dax has a bunch of
+categories that we have, so we'll go
+load that up in a second.
+Um we're going to have a category, which
+is going to have embedding text, so the
+text that we use for the embedding, and
+an LLM description, which is going to
+use uh which we're going to use for like
+the LLM.
+Now, we're going to have one function
+that's going to be able to narrow down
+categories. So, I'm going to give it
+some text and a bunch of categories, and
+it should return to me some list of
+categories that is here, and this
+function owns everything like top K and
+everything within itself. We don't
+really care.
+Now, what we'll do is we'll have another
+function that says like
+pick best category,
+where we'll give it a list of
+categories, and it'll pick another
+category.
+So, our code actually ends up looking
+relatively simple.
+Uh and these are all like private
+functions, so
+this here.
+def uh
+pick category. So, given a text, we
+should go be able to narrow it down.
+So, given some text, we're going to load
+all the categories. We're going to
+narrow down the categories, then we're
+going to pick the best categories.
+That's all this code ends up being. It's
+not too complicated.
+Is there Sorry, we Are we are we missing
+a step that is like cuz cuz in ours it
+was like
+filter the list down, and then pass it
+to the LLM to do the classification and
+output the list.
+And then Okay, that's going to go down
+here.
+we're not going to let the LLM pick
+multiple categories right now. For now,
+we're going to let the LLM We're going
+to force LLM to pick just one.
+Okay, cool.
+So, that comes down into here.
+Cool. Um and then we're going to list
+that return the actual category that we
+want.
+Uh and specifically, let's just say like
+we're going to return a string,
+which is the actual name of the category
+that we want. So, we'll return like
+category I'm going to return
+category.name, just to be a little bit
+more again on what it's doing.
+Um
+So, now let's go ahead and go do this.
+Let's implement how narrow down
+categories is going to work.
+So, this is going to be embeddings
+equals this.
+Uh
+uh
+Cool. That It's kind of doing this for
+me.
+Um
+embeddings.append,
+and specifically, I'm going to append
+the category itself as well, so I have
+access to it.
+Okay, so you're a bet you're you're
+appending a tuple there of of the like
+the category itself becomes the label on
+the embedding, right?
+Exactly. So, that way I can just go look
+find it really fast.
+Yep.
+So, then I'll embed the text, and then
+I'll find like um
+cosine
+uh
+best matches.
+That's funny. It actually did it for me.
+I don't know.
+Um
+and then this is going to return uh
+sorted matches of this based on this,
+and then let me just import NumPy.
+Add NumPy.
+All right.
+So, this code is ends up being fairly
+straightforward. It's just like an
+embedding system, and I'm not even using
+any LLM or anything. I'm I'll define
+embed method later. Uh we can use any
+sort of embedding system that we want.
+Um
+We do cosine similarity. It puts all the
+categories into here. Uh and then let me
+Let me make this better.
+There you go.
+Nice.
+Um So, now we get slightly better.
+Best matches.
+We'll get all the best matches and then
+we'll sort them and then
+we'll return
+What we'll do is max matches will return
+like five.
+And we'll turn that.
+So now this will actually go return
+matches.
+There you go. And now we're actually
+going to go turn those categories.
+Here.
+I'm going to go turn on.
+Oops. Sorry. I'm going to zoom out for a
+second.
+Turn on type checking mode.
+For some reason Python has chosen not to
+make type checking
+be a thing.
+By default. I mean the types are the
+types are fake, right? They're all they
+all disappear runtime anyways. I know,
+but it's still annoys me to know it.
+So now we're able to narrow down the
+category.
+Now I think the next part is the most
+interesting interesting part, which is
+how do we get an LLM to go do this for
+us? Like given all this of categories,
+how do we get an LLM to pick out the
+right categories?
+This is what I usually do.
+I write a function.
+Pick category.
+Write a function whose job is like pick
+best category. It's going to be given
+some text.
+And then we're going to return a
+category type out of it.
+And category will be an enum of
+category.
+But this enum is not one that's going to
+be described in our BAML code. It's
+actually an enum that's going to be
+described dynamically at runtime.
+And we'll use OpenAI
+GPT-4o mini
+to go do this.
+Uh
+Which category best describes the
+following text?
+ctx.output_format
+So that's going to output the list of
+categories that it should use
+in its answer. And then as the user
+message we're actually going to put in
+the text. So let's just take a look at
+what this prompt does really fast.
+So here's what this prompt is going to
+do. And I'm going to use GPT-4o mini.
+Which category does this? Now there's no
+categories here, so let's add the
+categories at least for this test case.
+Uh
+type builder
+dynamic
+There you go.
+Uh and we'll write like a we'll write
+like a category one
+at description
+for placeholder
+text.
+Um
+Okay, cool. And that's that's being
+built out kind of on the right
+dynamically added to the prompt as you
+add those categories. going we're
+actually we're adding categories
+dynamically for I don't know what is
+this going to be for for
+for logging.
+Okay. So log levels.
+So in um logs
+Yep. So so when we go get our big list
+of tools that we slurped up from a bunch
+of MCP servers basically rather than
+this category one category two category
+three we'll be injecting these those
+categories into the prompt like this.
+Exactly. So and then if we go run this
+that's what we should see that this
+should in theory have picked category
+one. We're good to go.
+It actually said category one for
+placeholder text, but we got out with
+the thing we wanted, which is category
+one. So I think we're good to go here.
+This this function should given a bunch
+of tools dynamically be able to select
+this.
+So now let's write this category tool.
+Um So we do is
+from BAML
+from BAML client import
+import B.
+Um
+Python is dumb. It needs to be reset.
+Um B.pick_best_category.
+We're going to pass in the text into it.
+Matches. Pull this.
+But now we actually have to build
+build the type builder so we can
+actually
+dynamically pass in those categories
+into it.
+There we go. Autocomplete.
+And what we'll do now is tb.
+Uh we have our category enum that we
+define programmatically in BAML.
+add_value
+And we're going to add a bunch of values
+in here. So we'll do for category in
+category categories.
+Okay, cool. So at some point we're going
+to need some kind of global var
+somewhere to load in all the categories
+from JSON or kind of just like hardcode
+them in the in the source here to start,
+right? Exactly.
+And then what we can do is
+val.description.
+And we can just pass in
+category.description into it.
+So now that's what we that's that's our
+second or third probe or whatever it was
+where we customize how we describe it to
+the yep, cool. Now to make sure that
+that probe has really really high value,
+I'm actually going to add an alias into
+the system.
+Where I add an alias and I use an alias
+as my default one.
+And what does that do exactly? I'll show
+you in one second exactly what it does.
+So here's what an alias does.
+Let's just look at this prompt and let's
+go add an alias so we can go see this.
+Add alias K0 K1 K2. So it's actually
+changing my prompt. It actually takes
+the name of the category out of my
+prompt
+and only puts in
+the description. That helps me in a
+couple of ways. Remember we're talking
+about probes. So we want to make sure
+the probes we have have the most amount
+of impact into our prompt.
+I see. So you don't want the category
+name to like cloud. You want to be
+basically be like the only thing the LLM
+sees is what we have selected to be the
+thing that the LLM sees. And the
+category name can be whatever we want
+that makes it easiest to write the best
+cleanest code, but that when we pass
+things in the LLM we want complete
+control over what the LLM sees. Exactly.
+So the LLM saw K0 for placeholder text
+and it was able to like it it basically
+takes none of its attention metric and
+puts it onto K0. It puts all of its
+attention metric onto the description
+that we want and it recognized that K0
+is purely an identifier.
+And now that it knows K0 is an
+identifier it can go and like spend all
+its We don't have to worry about the
+nuances of words overlapping. Cuz what
+if you have a category called account
+issue and technical issue? And the
+descriptions are very unique, but the
+names kind of overlap. And single word
+names tend to overlap by default. So
+when you have a lot of categories, alias
+can give you a lot of power building.
+You can like remove the concept of
+whatever that whatever like subtext the
+name comes with and purely add it into
+category and like let it focus on just
+the category itself.
+Um oh yeah. And our our example data set
+has a lot of tools with very similar
+names or like the same different MCP
+servers have tools with the same name in
+them. Exactly. And now I have a bunch of
+matches and now I have to do something
+slightly inefficient, which is I have to
+go and like
+for uh
+I think that I thought it only returns
+one match.
+Yeah, oh sorry. But I can't use the
+match keyword cuz that's the word.
+Select it.
+Uh category.
+Uh so it has to select a category and I
+do for category in categories. Return
+this and then I just do this.
+And this should be impossible to happen
+because BAML will guarantee that this
+will return one of the categories in the
+list.
+So this is just like triple checking
+that the LLM returned something that's
+in our list. Well, this is returning the
+This is specifically trying to return
+the type that we returned here. Ah,
+you're just you're just looking up out
+of our list. Yeah, okay. Yeah, I
+cuz yeah, exactly. Cuz this list is
+different than like the string that this
+is returning.
+Right. You want to return our like
+native category object by matching on
+the name.
+Exactly. So I want to return our native
+data model object for matching on name.
+This is all the code is here. That's all
+we have to do. And now there's clearly
+things that we can do here to manipulate
+both of these.
+And let's can we throw in like a const
+just like global list of a couple
+categories? Oh yeah, here we go. Okay.
+Wow, it's like cursor is listening to me
+over the zoom.
+Uh and right now you're clearly seeing
+what I'm doing. I'm passing this in as
+is.
+Um
+And there's no real difference here.
+Um and then let me get an embedding API
+really fast.
+There's probably something here.
+How come?
+This seems like it's
+installed upside down.
+But yet this holds the grill.
+Okay, I'm going to go and make executive
+decision that's not about our uh our
+problem here.
+All right.
+For a second I heard installed upside
+down. I was like is that a comment on
+the on the on the code we're building? I
+also did doubt my own coding skills for
+a few seconds there.
+Uh okay. He's actually a plant. I I
+figured we would we would give you some
+self-doubt
+in the middle of this this year
+this year surprise challenge. Hey, look
+at that.
+Does it do that?
+Why is it not auto completing?
+There's something wrong with it, I
+think.
+Uh do you need to add the types for it?
+Well, it's in there.
+Uh maybe it's just it's just a little
+slow.
+Um Sorry, are you getting an error?
+Uh it just says unknown and I get very
+uh angsty whenever I get unknown text.
+Um
+of any kind. Uh and then I think
+Well, I think this will work. Uh and
+this was the trick.
+Let's do it really fast. Let's run this
+code.
+Ship it.
+How do we do this?
+Uh and I have my open AI key already
+plugged in.
+Uh UV run hello.py.
+Oh.
+Wrecked. Import .env.
+Um can you do me a favor and just uh cat
+your .env file for me just so I can make
+sure you've uh set it up right?
+Yeah, of course.
+All right.
+Um what did I do wrong?
+Oh, I didn't actually feed in the
+categories. Um that was a bug.
+Um I actually never fed in the
+categories into my system. I actually
+have to tell this function that I'm
+passing in a type builder object into
+it.
+Oh, nice.
+And we actually see exactly what this
+does.
+So now you can see it and it picked the
+debug category. Let's add a bunch more
+tools. So I'm just going to cursor to
+add like
+um
+uh I
+add 15 tools
+categories here that describe user
+intent
+on a e-commerce
+on an e-commerce
+site.
+This new cursor thing is annoying me to
+no end. I don't know why the auto mode
+never works.
+Um we're almost at time, but I'm happy
+to run over for a little bit if you want
+to try to do this like thousands of
+tools list. Yeah, let's do it right
+here. So I added like I let's do let's
+do this one really fast. Yeah. Um and
+send you the JSON file. You can just
+paste that into cursor probably and it
+will generate everything you need.
+So I put here I I want to buy a new
+phone. We can see our like little
+um
+We see our little text over here and
+we'll just see what this does.
+How many categories I added? I only got
+to pick five. So you can see what I was
+able to do. It actually did search
+products. I want to buy a new phone.
+And now I can go and see exactly what
+happened and where it happened.
+So the first thing I noted is user wants
+is looking for deals or discounts,
+looking to search a product, looking to
+add a product to their shopping cart, or
+wants to sign up for an account.
+Um it looked
+Oh, okay. So you actually this is the
+narrowed categories that came back after
+the cosine comparison. Exactly. I want
+to buy a new phone.
+And like that looks about right if I had
+to really pick one.
+Uh where it's actually able to go ahead
+and say
+um
+uh that the user wants to go pick a
+product. Now, it's possible that I had a
+thing in here called let's add one.
+Buy
+product.
+Let's add that in there and let's see
+what happens when I start running the
+same script again.
+And I can start to see kind of what's
+going on.
+And obviously you can do things like
+cache these embeddings so everything
+just for like the purpose of expediency
+I'm trying to do it right here.
+So the first thing here is like we can
+see that now this popped up in my
+embeddings list so it's actually able to
+go select it. But if it didn't pop up
+into my embedding list then I know what
+I have to go modify. All I have to do is
+modify the embedding text of the buy
+product category.
+Like um
+do something with money. Like I'll I'll
+change my category right now
+to do something with money for my
+embedding text.
+And what we should be able to see is
+it didn't pop up. So like of course the
+model won't be able to select it because
+it's not even one of the categories
+that's available to the model to buy.
+So it gives me a really nice way to go
+probe it and go manipulate the system
+that doesn't affect my whole system
+holistically in every other outcome as
+much. It allows me to tweak just the
+parts that I really care about and now I
+can get really fine grain control on
+certain category systems.
+Uh I know we're about 2 minutes left to
+go.
+Um I'm going to pause really fast.
+Any questions from anyone?
+Oh man, I got that reminder, too.
+But is it
+Um is is uh is LM description the thing
+So you're asking is LM description the
+thing it is. Let's look at what LM
+description does. All I use LM
+description for is
+it's actually going to head and adding
+text. Whenever I add the Whenever I add
+the category into the LM, I'm adding
+some context associated with it.
+So the category often has context. And
+now I can go ahead and actually add
+context on exactly what this category
+is.
+And that's what the description is doing
+for me. It's the text of the description
+for that category. So the model kind of
+knows what that category is used for in
+context. And that text is very different
+than the embedding text
+because I may want to manipulate in
+different ways.
+And all this code will be pushed to
+GitHub. I'll send the GitHub repo out
+right afterwards.
+Um
+So all those functions we wrote as
+probes of like, you know, embedding text
+and we're really just encapsulating that
+as fields on the class basically.
+Exactly.
+Yeah.
+Um and like we can do different things.
+We can have them saved in a database. We
+can have them living in a live database
+that we're constantly editing with our
+users. And for example, like our users
+can be given this context.
+Um but that's kind of the goal here.
+Question.
+Yes.
+You can is a video uh recording of this
+going to be sent out to afterwards? Yes,
+the video recording and the um and the
+live code will be sent out afterwards.
+And if you'd like, I'll give you some
+homework uh as well to go play around
+with it with the data set.
+Yes. Love homework.
+Yeah, there you go.
+Um if you guys found this to be really
+useful, we'd love for you to just go uh
+give us a give us a like on LinkedIn
+when you see the next one. If it sound
+useful, star the GitHub repo for BAML
+Human Layer. Always have to ask, it's
+part of our job as founders. Um but uh
+we hope that you if you send out more
+questions or more topics that you'd like
+us to cover next time, we'd be glad to
+go do that. And then we'll stay on for
+an extra 10-15 minutes answering any
+questions if people have them.
+Perfect. Hey, thanks everybody. And uh
+y'all be hanging out as well. Yeah,
+now's the extra time if anyone wants it.
+So
+quick question.
+I'm also You have dynamic Yeah, go
+ahead.
+dynamic enum. So what is the purpose of
+that since like
+of that existing cuz at least the way
+you had the example you were putting,
+you know, putting all these enums in
+there. So that presumes
+that because it's linking to
+The whole reason that this exists is for
+a couple of reasons. Um so one of the
+biggest reasons is as we know, the LM is
+not always going to spit out the same
+text every single time. Sometimes it
+spits out K0.
+Sometimes it'll spit out like um
+like it'll say text like this, category
+dash dash dash dash K0. Like this is
+garbage. You if you we relied on the LM
+to do this then you'd have to do a lot
+of parsing. BAML is able to say that
+based on the data that you gave it about
+the enum. In this case we know that we
+have these categories in here. We know
+that the user is expecting only a
+category object.
+So we can run all the algorithms that
+BAML runs for you and spit out just the
+category under the hood.
+So you are guaranteed, no matter what,
+when you call this function in your
+Python code,
+um
+this this function over here for uh pick
+best category, you are guaranteed that
+selected category will match one of the
+enums coming out of dynamic out of the
+ones that you set into here.
+Got it. It helps you provide a
+guarantee. And because these things are
+set dynamically,
+um yeah, thanks if you can put the
+LinkedIn uh the LinkedIn post today's uh
+session that'd be great.
+If you could
+um
+uh if you could basically have this
+guarantee then you know that this
+is now a reliable pipeline that will
+return one of these. So now this for
+loop will always work and then
+this is just uh impossible.
+Yeah,
+uh I think the gap was just in sort of
+the
+interplay between the LLM and the text
+that it's injecting and what you're
+playing back. And then you you literally
+said it. I'm like, yeah, obvious, duh.
+Okay. No, it's not obvious. I probably
+said it like way too fast. I should have
+slowed down. So.
+Um any other questions?
+Uh I have a question about latency.
+Yes.
+So, um you mentioned about the you know
+Excalidraw diagram that you could have
+like three to four different stages
+where you probe. Uh so, what what is the
+implication of this? I know I know
+people are using open source models to
+bring down costs for a lot of these
+things, but they're slow. And then if
+you don't use the open source models,
+and you have I don't know hundreds and
+thousands of API calls, that adds both
+cost and latency, right? So,
+uh there's a trade-off between doing too
+many of those versus
+increasing your application's response
+time.
+This approach actually ends up being way
+faster from a latency perspective.
+Cuz narrowing down your categories is
+really fast. We're using vector
+databases.
+Okay.
+really really fast. Right? And I'm
+running this locally. You can have a
+vector Most people have less than like
+100,000 categories. You can run that in
+memory in your machine without any other
+software. You don't need to actually use
+a vector database. Like you saw that I
+just ran this local I I just did this.
+And you just cache the vector You cache
+the database file on some like random
+pickle object on your system. And
+obviously you can do this in TypeScript
+or anything else you want as well.
+But you cache
+Adam, do you have the Excalidraw window
+open? Could you go back to that again?
+Yes, I do. The the the vector database
+part I get, but the parts downstream
+that part.
+Yes, this part. Yeah. So, it turns out
+that because the number of categories
+you're sending into the LLM itself is
+way less than your original kind of
+categories, you also get way less way
+better speed up. Because imagine you're
+passing the LLM like 500 categories
+versus 20 categories.
+The LLM will respond faster with 20 LLM
+LLMs are quadratic in nature. I mean,
+exponent
+like non-linear based on the number of
+input tokens you have. Mhm. So, if you
+have fewer input tokens, they will be a
+lot faster.
+Awesome. Yeah, makes sense.
+And if if we change this function to
+like
+uh if we let's say we change this
+function, and we say instead of pick
+best category, we want to write the same
+thing.
+Uh pick best categories.
+Count.
+And then we return an array which cat
+which
+count
+best describe the following text. And
+now we can now return multiple from
+multiple categories out of this system.
+Uh and then we can run another narrowing
+search that says given those categories,
+now pick now prune it down and add more
+categories into it.
+If that makes sense.
+Yeah, yeah, makes sense. Right? So, we
+can write another function in Python
+that says like pick multiple categories
+and call pick best category from only
+those categories. Like narrowing the
+categories just happens to be a thing
+that we're doing with a vector database.
+You can easily call def
+narrow down categories
+LLM.
+And this will return like categories.
+Oops, selected
+categories.
+And then I guess it did this for me.
+And then let's say I want to return like
+three categories.
+Now I'm returning three categories from
+the ones that the LLM picked. And then
+I'm calling this down.
+And now my pipeline
+can do this.
+So, I'm kind of choosing where where I
+where I take in the paths of my system.
+I can easily I don't have to do this
+if I don't want to.
+Yeah, I think um a really natural
+follow-up to all of this would be like
+how do you write like unit tests and
+end-to-end tests on all this stuff? I
+mean, I I might even be down to like on
+our We have a I think we have another
+topic for the next session, but we
+should find some time to just like, hey,
+how do you make this all the way to like
+production grade engineering rigor of
+like in terms of testing each individual
+part and then testing the whole pipeline
+end-to-end and building building up your
+eval set for for how this like how we
+want this to work.
+Yeah, that's a good point. We should
+probably consider a topic on that on how
+how do you go from this to like an eval
+pipeline that you can actually go and
+test.
+Cuz that's a whole different workflow.
+You can every time the model gets
+something wrong, you can quickly spin
+out new tests at the like like probe
+layer and at the end-to-end layer. Um
+and then go iterate on your prompts or
+your embedding algorithms or your top K
+or whatever it is.
+You want to see how I do that? I can do
+that really fast.
+I'll go do it really fast. Um
+it this this ends up being like way
+faster than most people expect.
+So,
+Oh, here it comes. Here it comes.
+Um
+let's do a little test.
+I'll go do this, and in theory, let's
+see if this works.
+I'm going to API key.
+Um Fine, I will I will ro- I will follow
+up and remind you to rotate that key
+before we share the recording.
+Oh, yeah, that's okay.
+It's okay. I already took three
+screenshots. And
+uh sharing options, which is
+how do I stop screen sharing for like 1
+second?
+Uh cuz now I actually do
+I think you can pause screen share, and
+it will keep everything, but just like
+Oh, that's great.
+for a sec.
+Thank you.
+Um I do need to check my dot env file.
+Um I'll play again.
+So, here's how I do it usually.
+Um
+And this will give us some nice little
+probes.
+And we'll trace.
+And what I want to do is I want to trace
+this catego- this method.
+And then I want to trace this method.
+And then uh that one will trace for me
+automatically.
+Um then also trace this method
+as well.
+Um no, I don't need to.
+Okay.
+So, now I'm going to go rerun the same
+thing here.
+In theory,
+um this should pop up and go do
+something. So, we see that I want to buy
+a new phone.
+So, it returned search products. And
+what I can go do when I go debug, and I
+do this for all my eval sets
+is
+This is great. This is a great preview.
+See the system I'm able to get, and I
+can see, okay, what did narrow down
+categories do? It actually returned some
+of these categories. Oh, I need to
+change this to our object here. The new
+system does that slightly better.
+And you can see exactly what the LLM
+actually picked out of. And then what
+you do is you can debug and say, was the
+problem the fact that this didn't have
+the right categories, and it didn't pick
+the right thing?
+And in this case, I can clearly see that
+it's the case. Like I don't have the
+ability to buy a product. It So, it had
+to click search a product. So, clearly
+something went wrong in here. So, then I
+can go ahead and go and update just my
+category. Then I know I have to go and
+debug my iteration loop on only the only
+the embedding text.
+Um and really nothing else. So, I go So,
+then I go and just update my embedding
+text.
+I think if I do it like I update it if I
+make this a base model,
+um
+I'll play that with base model, and I
+think it's slightly better. Then this
+should work a little bit better.
+Oops.
+There we go.
+Is this not working Pydantic?
+You have to put You have to use the
+keyword args. You can't use positional
+args. I think it's also you can use data
+classes. But anyway.
+Oh, okay. That probably explains it. But
+that's okay. I have AI to help me write
+my code faster and better.
+Um and then you'll basically get the
+category object bumped up.
+Uh and that will kind of give you more
+data. And this I find to be a really
+fast introspection way for me to really
+quickly just understand where my system
+is broken and like where it's actually
+not working.
+Um
+And then if I rerun this again,
+um oh, category has no field. This is
+not a Pydantic object.
+Um I may have a bug in my code
+somewhere.
+Cool.
+Uh I'll figure out what the bug in my
+code is, and I'll go update it when I go
+update it. But that's the debugging flow
+of being able to introspect and see
+exactly which part of my pipeline messed
+up is really the eval set. And really
+the best eval you can have is yes, you
+write down like 50 pie tests yourself,
+and you call this function, you write
+asserts on them.
+But the best thing you can do is
+actually
+to let your to ship this product into
+the user database and actually go and
+collect this data off your real user
+queries, and then go and evaluate the
+pipeline and see where it's going wrong.
+And if you can somehow associate that
+the user intent didn't match the thing
+that they did. So, if you suggested an
+action based on what category you picked
+and the user user said nah
+on that action,
+then you can always go back and say,
+"Okay, then I know something is wrong.
+Let me go introspect as a developer and
+go see what went wrong." And I can see
+was it in the narrowing down or was it
+in the actually picking?
+And that can help me navigate this
+faster.
+Yeah, and that's the thing I think in
+like product dev in general is like
+having having engineers have direct
+access to user feedback on what LLMs are
+doing. Um
+super super important to like have that
+tightest possible iteration loop.
+Cool.
+Other questions?
+Available is this uh
+the observability tool that we have? Is
+it currently available to be on trends
+as well?
+Um
+that will be available in about 4 weeks,
+I believe. Uh and then yes, it is.
+Uh we have a couple customers that are
+asking for on prem, so we've been
+working on that.
+Okay. Okay.
+And is the sign up still free? I thought
+it was for school users.
+it is uh it's going to be free for about
+2 more weeks.
+Uh
+and then in 2 more weeks uh well, there
+will it will no longer be free. So, use
+it while you can.
+Okay. Uh but we have a new version
+that's even better and uh it'll have a
+freemium
+option on it for people that don't have
+high volume of data.
+Okay.
+Other questions?
+Cool. I think next week's topic is going
+to be really fun. I'm really excited to
+talk about the difference between like
+reasoning models and like versus
+reasoning prompts. Me and Dax talk about
+that quite a lot.
+Cuz like now these reasoning models are
+coming out, the question is
+is it better to offload some of the work
+to the model and let it do its own
+reasoning or is it better for me to
+control the reasoning in my prompt like
+we did today?
+And
+like in all things in ML,
+the real answer is my favorite little
+meme.
+Um
+It and SpongeBob.
+Oh, they don't have it?
+It depends.
+Uh and we'll talk about when and where
+next week and we'll have a lot of fun
+and I hope uh we get to see you all
+again.
+Absolutely. Thanks everybody. Thanks, my
+Bob. Get you all in the next one.
+everyone. Dax, this was really fun.
+Thank you for joining me.
+Super dope. Next time you're going to
+have to let me write write write some
+code, too.
+Yeah, we'll do it. Next time we'll have
+you write the code.
+Oh god. All right. I love I love it when
+Vi Bob yells at me while I'm writing
+code. It's one of my favorite
+experiences.
+Um have a great week, everybody. Catch
+you all later.
+Bye. Bye.

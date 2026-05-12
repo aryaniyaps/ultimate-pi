@@ -1,0 +1,1785 @@
+All right. Hey everyone, I'm Both. This
+is Dexter. Hi. Um, I work on BAML and I
+make uh programming language. Dexter.
+>> Uh, I'm Dex. I'm the founder of human
+layer and I make tools to make agentic
+coding easier and better. And this is
+the AI that works show where we give you
+uh about an hour a week of practical
+coding tips for advanced usage and to
+improve your use of AI.
+>> Exactly. Um and then our whole goal here
+is always um sorry one second
+I apologize for that. Uh I'm working
+from home today because the internet at
+our office is dead. Uh, so sadly I was
+stuck here and our cleaners were around
+so I was like, let me go tell them not
+to do the top floor. Um, but one of the
+things that Dexter and I was talking
+about is context engineering. We talk
+about how to go build these systems. And
+I think a lot of people forget that all
+these AI applications that we are all
+building, whether we're the user or the
+engineer building them, every single one
+of us has to think about context
+engineering along that loop. You have to
+as a user of an application you have to
+be like how can I context engineer
+claude the best to make it generate the
+code I want as a builder of claude uh
+cloud code I need to go ahead and think
+about how can I make it so that the
+agent will do what the user wants more
+of the time and that it's that symbiosis
+of both systems that it's actually makes
+a really beautiful experience that makes
+us be like wow and blows our minds away
+and says these AI agents are actually
+really good and well normally a lot of
+our past episodes have been talking
+about how to be actually write some of
+these agents today. I think there's some
+real magic in really thinking about how
+we're going to go ahead and almost be
+the users and think about how can we as
+users do our best efforts to go and make
+these agents do the way uh make them
+work the way that we really want them to
+work. And one really interesting insight
+that I have personally learned uh
+working with Dex on these kinds of
+things and I've been learning from him a
+lot actually on these topics.
+>> Sorry. Um, it comes down to the fact of
+like
+I actually become a better agent builder
+by becoming a better agent user because
+it helps me think about like what are
+the UX patterns that I wish existed in
+these apps. What are the mistakes that
+the agent is making and how do I
+actually want to interface with them?
+For example, last week's episode was
+about how to build agents that you can
+interrupt.
+Why does it why does that matter? Well,
+the most frustrating thing is when I'm
+in chatbt and I tell it to do something
+and it starts spitting out text and
+halfway through I'm like, "No, no, no,
+go in that direction." And what I have
+to do there is I have to hit cancel,
+edit my previous message, and then press
+enter. I wish I could just send a
+message.
+And there's small things like that that
+help us think about the design patterns
+that we need to do when we build these
+agents. And so today, we're going to do
+something really exciting, which is be
+users of cloud code.
+text, you want to take it away?
+>> I would love to. Yeah. Um, so yeah, I
+think um, just kind of hammering that
+down a little bit, like one of the
+things we say a lot in context
+engineering is um, you know, LMS are
+stateless functions, right? So you have
+your LM like the LM outputs some kind of
+tokens and that's like, you know, you
+have your answer and this answer has a
+spectrum of quality from like, you know,
+it's slop
+to hey, that's really really good.
+Um, and the only thing that kind of
+affects the quality of this answer if
+you're using a fixed LLM and kind of
+fixed parameters is the quality of the
+tokens you put in. And the tokens you
+put in is essentially going to be a
+context window. Right? You can think
+people talk about prompt engineering and
+a prompt, but at the end of the day,
+you're going to have a bunch of
+different components of what you put in.
+You're going to have your system
+message.
+you're gonna have some you know maybe if
+you did some rag or injected stuff um
+you may like pull some data from
+somewhere else you're gonna have
+actually if you're building an AI
+application right then you may pull in
+the user message um and then you may put
+in some like you know instructions
+and then you may also put in some like
+memories right there's there's all kinds
+of stuff you could put in this context
+window and you can shuffle we've done a
+lot of episodes on like shuffling the
+order of these things and figuring out
+how to make them more concise and more
+optimized for the LM. And so that's if
+you're writing the code and you're just
+structuring everything around this LLM
+call, then um you have a lot of um
+levers you can pull to improve the
+performance of this answer that your
+system gets or that your user gets. Um,
+but today we're going to talk and and
+and two weeks ago we talked about like
+just if you are not the agent builder
+and you're just the agent user and the
+only thing you control is the user
+message, why it's so important to
+understand um actually we'll change this
+to tools because that's more relevant.
+Um why it's so important to understand
+the other parts of the prompt and where
+your message gets injected because at
+the end of the day you're just one step
+removed but you're still doing context
+engineering. you just have less control.
+The agent builder owns these parts and
+you only own your user message. Does
+that make sense?
+>> Exactly. And like one important thing to
+think about as an agent builder here is
+while we all aspire to almost hide all
+these parts purely from our users and
+hope that they're purely implementation
+details. In practice,
+you actually make it harder for the
+users of your app to go do something
+better when you make it totally
+abstracted. It's important. Uh, I would
+say it's almost your obligation as an
+agent builder to at least have some
+provide some insight to your users about
+how things work. It's kind of like if
+you ever use like any sort of like um
+like social media, there's some feedback
+loop that you get from like Twitter or
+LinkedIn about like what content is
+doing well and you're able to navigate
+that yourself. Even if you don't know
+exactly what's going on, there's some
+feedback loop that's available to you
+that you can iterate. Some people become
+amazing content creators because they
+learn how to grasp that signal way
+better than other people do. Same thing
+here. But if you're building a tool and
+you make it too hard for most users
+understand how to minute hack your tool,
+they're just not going to use it because
+it'll it'll end up more on the slop side
+than the really good side.
+>> Yeah. And there's a spectrum there,
+right? Like some users sometimes you
+want to make an AI for users that are
+not very sophisticated and don't
+understand that tool calls are just JSON
+objects that get injected in with a
+schema and things like that. And then in
+that case, it's like if you're building
+like an AI for uh people to get, you
+know, uh let's say medical advice, an AI
+veterinarian that's going to help people
+like figure out what's going on with
+their pets. It's like unlikely those
+people are very thoughtful context
+engineers. Some of them may be, but then
+when you're building a coding agent
+that's going to be used by really
+technical people, then this becomes a
+lot more important.
+>> Yeah, exactly.
+>> Um two quick like kind of throwbacks. Um
+I think it's here. Yeah. So we did this
+episode about um cloud code and and
+using like kind of like context
+engineering and applying it to how you
+use coding agents. Um we're not actually
+going to talk much about that today,
+although some of the same concepts are
+going to be in there. A thing we get
+asked about a lot and a thing that I've
+been doing a lot really enjoying that I
+thought I would share some some
+experiences on is how to use cloud code
+to do things that are not writing code.
+um because it's actually just a very
+good general purpose agent and the fact
+that it can write code is really
+interesting because instead of instead
+of having to find MCP tools for
+everything, Cloud can kind of just write
+its own scripts. So, I'm going to walk
+through a couple concepts that I think
+are really important to understand here
+and then we'll demo I have a demo set of
+code in the repo about um kind of how we
+use this. And Andrew, yes, the cloud
+code system prompt is all about code,
+but it still works pretty well for other
+things as well. Oops. Um,
+so this is um I've set up a
+>> Yeah, there's a Brian uh while you pull
+that up, Dex. Brian, that's a question.
+Isn't there a spectrum of like novice
+users to power users? There completely
+is,
+>> but that's kind of why it's important
+for you as an agent builder to think
+really carefully about what that
+spectrum is for your users and where
+they fall on. If your users fall more
+towards the novice side, like they're
+not going to go do it. It's not just
+about exposing user messages. It's
+actually about building really
+interesting UI paradigms so that a thing
+that is typically viewed as a user
+message is actually going to be act have
+like some additional metadata. For
+example, let's say you're building a rag
+system that's going to go answer
+questions about it. Um, can I draw on
+your screen text?
+>> Go for it. Um, oh, let me share the link
+so you can actually draw on the
+whiteboard itself.
+>> That would actually be much better. Um
+and then we'll go back to this really
+fast and then uh uh Amo yes all the
+recordings that are shared if you've
+signed up on um if you signed up on the
+Luma link you will get an email
+automatically at the end of either
+tomorrow or uh by the end of this week
+at the latest
+>> and they are also all here in the repo.
+If you go to the AI that works repo
+there is an index of all of the past
+episodes. So if you want to go binge
+them, um, please go go do that and have
+fun.
+>> So just to be really concrete, really
+first on this, like one way to build a
+search box is to just say search box and
+now I'll magically do rag under the
+hood. Another way to build a search box
+is just to say like here's a rag I'm
+pulling from under the hood and I will
+actually like what cursor does you can
+use the at symbol to refer to other
+documents
+and whether it's a word doc or something
+else or Google docs doesn't really
+matter but it allows the user to have
+some UX that basically intervenes into
+the context building without even
+feeling like it's intervening into the
+context when uh context um building. And
+you can do this with tools, you can do
+this with rag, you can do this with
+almost anything,
+>> but and it doesn't even have to be pure
+green. It could be half user,
+>> right? You have the blend, right?
+>> Yeah, you can have a blend.
+>> But this is kind of where you can think
+about how you like how how easy and hard
+something feels is purely based on the
+amount of developer experience that you
+are willing to impose on your end users
+based on the amount of engineering work
+you're willing to do. If you're willing
+to do more engineering work, you can
+basically give your users full control
+of everything. If you're really good at
+UX, it won't even feel bad. If you're
+really bad at UX, you'll basically make
+them reinvent context engineering from
+scratch. And then you better hope your
+uh users are extremely extremely
+technical.
+>> Yeah, I love it.
+Um, great. So, um, one thing that we've
+been doing is essentially we create a,
+uh, we've created a a git repo that we
+use to do all of our non-technical
+things. And so, I'll walk through kind
+of one example, which is a CRM. Um, we
+don't use a CRM anymore. Um, Cloud Code
+runs our CRM. And while you could have
+cloud code have an MCP tool that talks
+to Salesforce or linear or air table or
+whatever you're using for your CRM,
+we've actually just found this works
+really well with markdown documents. And
+so um I have um I'll push all this code.
+I haven't pushed it yet. Um but we have
+kind of a core structure of a fictional
+company that is a ondemand burrito
+delivery platform. Um I also have a
+couple real examples from our internal
+stuff that I will not be sharing. Uh,
+but I will show them to you here. Um, so
+I've cleaned this up a little bit, but
+this is uh let's just delete this folder
+just in case there's still stuff in it.
+Um, this is like um reveals another
+company in our YC batch. They do really
+cool stuff. Um, but you'll see a couple
+things here is like this is a markdown
+document that explains the people we're
+talking to and what's happened so far.
+Um, we also have contacts for all of
+these people. Um, and then we have
+events. So like this is an event of and
+so like these are all things that you
+could imagine being SQL objects in a
+database. But what's been working really
+well is like if you keep them as
+markdown then there's no tool calls
+required other than just reading and
+writing files. And what you have is you
+start to build out basically rather than
+like a relationship graph that you would
+use with a SQL database. We're kind of
+faking it with building a knowledge
+graph as markdown files that kind of
+just point to each other. And it's a lot
+more free form and it's a lot more
+structureless. Um, but that gives you a
+lot of flexibility in terms of and like
+claude can rewrite any of this stuff.
+You can fire off a back. If you decide
+you don't like the structure, you can do
+something else. But it's basically the
+combination of like front matter for
+deterministic things. Um, so you could
+feed this part to code and it's metadata
+about the document and then Claude can
+read the document and the front matter
+but like read the document and
+understand how it's going.
+>> And I want to I want to call out a
+couple things really fast. Uh the reason
+that this works now and it didn't used
+to work before is because the models are
+getting better. So and this is just an
+emergent capability that we'll all
+discover over time of exactly what's
+going on. But if you go ahead and assume
+that the model can never do something,
+you won't be able to push it to the
+limit of what it's actually able to do.
+>> Yeah. And this isn't perfect yet. And
+it's it's not just the models too. I
+would say it's also the agents
+themselves.
+>> Yes. Um, and so here's like a here's our
+engagement history, right? So, and I'll
+show you how this data gets in, but it's
+like it's not just the models
+themselves. It's like the agent harness,
+right? Cloud code is not just cloud's a
+great model and it's really really well
+trained and tuned for doing this kind of
+work, but it's also that the harness
+around it is really really tailored to
+modifying files in a repo.
+Um, and so, oh, we got a lot of notes in
+the chat. Uh Tyler, the way you so this
+is a great question. So it's like would
+this scale over thousands of contacts?
+Um and so the way that we scale this
+across thousands of contacts is
+basically by doing deterministic context
+packing basically. And so what what we
+have in here is we have a make file that
+essentially um is ways to kind of
+deterministically build up your context.
+And so rather than having the agent go,
+this one's very specific to like, hey,
+let's just show the first hundred lines
+of of a couple different files. Oh god.
+Uh, sorry, I was doing some last minute
+prep here, so uh, excuse my uh, insane
+cursor stuff. Um, and I know I said I
+don't really use editors anymore, but I
+do use cursor when I'm in a hurry and
+I'm procrastinating on the episode prep.
+Um,
+so here's the one that we had for human
+layer basically, which is, you know, um,
+our company, everything we have, our
+readme, our bi-weekly meeting notes, our
+weekly updates, our monthly investor
+updates, and just kind of passing in
+certain bits of context. And so you can
+imagine doing this similarly with a file
+that um, basically traverses this
+knowledge graph or slices and dices by
+tags and things like this. And so, um,
+we build tools for this. Let's see. I
+actually don't have one right now. Um,
+but let's see if we can make one. Um,
+>> do you want to show the pole
+measurements?
+>> Um, yeah. So, this is uh this is another
+like so. So, so the other part of this
+is um SOPs. So, you have sort of like
+markdown
+as database
+and you have kind of two sections,
+right? You have your front matter
+index/deterministic
+and then you have your actual document
+which is like mostly for models.
+Um
+so that's and
+>> when Dexter says the word front matter
+can you pull up the code really fast the
+I want to be a little bit more explicit
+about what he means by this. Front
+matter is this part
+>> is the Yeah. The so so markdown docs
+support this format.
+>> Yeah. And the and what you can think of
+this as is we all know if you ever have
+seen cloud code and this is just
+intuitive knowledge that Dasher is using
+based on how he has seen cloud code
+work. It might change if cloud code does
+something different. But cloud code what
+it does when you first refers to a file
+that's really long is it actually just
+dumps out the first 100 or 100 lines or
+so of it. Just see what it does
+approximately.
+>> Yeah. What that means is if you're an
+engineer and you're not writing dock
+strings at the top of a file explaining
+what it does, you're just hurting your
+ability for super long files to be super
+useful. Similarly, in markdown files,
+can you go back? Um,
+>> yep. in markdown files. Dexture is doing
+the same thing by saying like, "Hey, if
+I want to deal with Aman, what is the uh
+uh an sorry the most important thing
+that I have to deal with is I really
+want to know like recent information
+that is super super uh important for me
+to know. I probably want to have contact
+info and everything else on there. And I
+probably want to know like any relevant
+file that I might want to look into in
+case I I want to have like quick jumps."
+And what that does for the model is any
+agent that's using this has really quick
+interaction like is this relevant, is
+this not relevant, and you can make a
+decision for that without having to go
+ahead and actually
+um without having to go ahead and
+actually like uh read the entire file.
+What that means is if we go back down
+context engineering works the best thing
+you can do in forms of context
+engineering whether as a user or as a
+developer is give the answer to the
+model and that's it. If you give it the
+exact answer you want to spit out it
+will spit it out for you. The second
+best thing you can do is give it as much
+data that is related to the actual
+answer without having to actually think
+about it. However,
+that is also really hard. So the next
+best thing you can do is give it as
+little noise about what isn't relevant
+so that it can actually do the right
+thing. So in this scenario by only
+pruning it to the most relevant sections
+at the top dexter can effectively give
+the model the least amount of noise and
+the noise being all the other noise on
+in every single file
+>> without having to think about it.
+>> So
+>> yes,
+>> there you go. We muted.
+>> Um yeah, that makes a lot of sense. Um
+yeah, I muted them. Uh this is in get
+ignore. So Claude can't find it. Um, but
+what we have I will show you. Um,
+there's a couple fun things you can do.
+So like I want to talk about kind of
+like deterministic context packing. And
+this is like a really
+>> spend $2 just to run a make command.
+>> Is it $2? Where does it say $2
+>> or like at least a dollar because you're
+running Opus?
+>> Yeah. Oh yeah, we use Opus for
+everything.
+Um, so yeah, this thing is going to
+Okay, there's a typo. So anyways, you
+can use Claude to build out these
+systems and you can tell Claude like,
+"Hey, I want a script." Let's make
+another one. I need a script that only
+fetches files modified the last day.
+read some files for examples
+and put it in a TS file I can run with
+bun in tools. So you can start to build
+out kind of programmatic ways to work
+with this information and then hand
+those tools back to Claude. And one of
+the things we do a lot is um we use
+slash commands to kind of automate some
+of this stuff. Um, so this is like
+and run the daily review SOP. So we have
+um things called SOPs. And this is what
+I spend most of my time doing is like,
+okay, you're you're working a company.
+What are all the things you're doing
+manually? Okay, I check my email and I
+do this. Okay, I got to go check this
+thing once a week. Okay, I got to pull
+these metrics. And so you can start
+building these into SOPs. This is kind
+of a redacted version of what we what we
+use at human layer. So every day there's
+kind of like, hey, you're going to
+output a comprehensive markdown file.
+This actually related also to how we do
+compaction. Um, so I turn this on every
+morning and I just brain dump into it
+everything that's going on. I read my
+calendar. I read a couple other things.
+Um, the one we use also has a bunch of
+tools to like check email and check
+calendar and stuff like that, which I
+haven't included yet, but you can
+imagine how those would fit. Um, but we
+say, you know, do a brain dump.
+um do a metrics review. So, let me see
+if I can actually kick this off.
+Um
+see how this goes.
+I haven't tested this. Um but we have
+another one for our investor updates.
+So, I have fake investor updates for the
+uh burrito now monthly. And so the idea
+would be every day you log in or every
+couple days you log in and you generate
+a daily review. And then once a month I
+just compact all the daily reviews and
+then have some tools to do things like
+pull metrics or pull PR links or pull
+product updates from other systems and
+compact them into a really nice investor
+update. And you can write basically the
+the SOPs become your prompts and your
+commands. Um and then the Yeah. So one
+really tangible example for everyone
+here because I know a lot of people are
+engineers are all of us probably execute
+some team that does some stupid amount
+of standup and most standups while
+standup is a great ritual to actually
+have a forcing function for everyone to
+connect the actual content of the update
+is
+um is actually very hard
+uh and very useless for a lot of people
+to have. So what we can do is you could
+imagine running a standup where instead
+of actually having everyone go do it,
+you just look at the PRs that happen,
+look at all the git commissions, expect
+everyone to just like regularly be
+pushing featured incomplete branches and
+just run a system that's going to get
+clone every single branch that everyone
+is actively working on or pushed in the
+last two days. Get a summary of it, get
+the person, get the system, and then
+just write it down. And then boom, you
+now have standup updates for free backed
+by sources of truth. Uh, and you can
+actually make sure stand up is under
+five minutes guaranteed.
+>> Yep.
+>> It's a really cool thing that you can
+do. But this requires you as whoever's
+running this to actually have access to
+the GitHub repos and be able to write
+some amount of knowledge about how uh
+how it's going to work, but it doesn't
+really have to be that good.
+>> Cloud the rest.
+>> Yeah. So, usually I would come in here
+and do like a big long rambling brain
+dump of like, okay, I had these meetings
+yesterday and we got these new clients
+signed and I need to I need to follow up
+with these six people because and it's
+just like brain dump what's on your mind
+and then you would paste that in here.
+Um, so, uh, in this case, I'm not going
+to send that. I'm just going to say,
+hey, we sold a lot of burritos
+yesterday. And then it's going to go
+through and run through this SOP. So,
+it's going to review yesterday's work,
+which like in our in our in our in our
+repo, we have a journal file. So the
+model kind of tracks it's like all these
+different ways of doing memory and right
+now I'm like kind of in prototype mode
+and so we write there's a lot of
+duplicated data and then as we refine
+the process and figure out what works
+we're getting more and more concise like
+the CRM stuff is actually pretty baked
+and concise but the some of the more
+like journaling and memory and like
+update stuff is still we're still
+figuring out how we want that to all
+work.
+>> Tyler asked a really interesting
+question. How do you think about agents
+versus workflows when automating these
+non-coding tasks? I think my perspective
+on all this is like I think the word
+agent or workflow doesn't really matter.
+What I always think about is just like
+how much automation are you actually
+getting and how clean is the result that
+you need. If you need it to be perfect
+then like write the code. Just write a
+tool that pulls the data that you want
+and then have cloud code format into
+human readable format. If you're okay
+with loosey goosey stuff like standup
+updates, honestly I would just tell
+cloud code to get clone every single um
+get clone the repos. look at all the
+branches that are modified in the last
+48 hours. Give a summary of every single
+diff against the main branch. And I
+don't need it to be perfect. And I just
+I would just tell it to go do that. And
+I'd say use sub agents for every single
+branch.
+>> So we actually do this um because I'm
+not exactly sure what the workflow is
+and I'm a little less like concerned
+about like exactly what happens here. We
+built this release notes SOP as a
+prompt, not as a workflow. But you could
+easily see how you could be like, okay,
+fetch the last things with an API call
+and then grab the body of each one and
+then send that to an LLM to format into
+an update. Um, where it's like, okay,
+use use a BAML call to extract two
+sentences about the release and then
+extract each feature and then like the
+deterministic code builds the markdown
+file. And we may actually do that
+someday. But what this becomes is a
+really nice way to do prototyping. And
+so this thing like now that I have this
+workflow, I'm changing it every day and
+that I can just change the prompt and I
+get the results that I want because the
+stuff that is like deterministic, which
+is like using the GH CLI, is pretty
+straightforward and Claude is really
+good at doing these kinds of things. If
+I have Claude write a tool to check my
+email, that's pretty easy for it to like
+run and then change the kind of like how
+the workflow is supposed to work. And
+I'll show you actually the trace of one
+of these conversations that we had. Um,
+but I use this every morning to go fetch
+the PRs we merged last night and write
+release notes for the latest nightly
+build. And so, um, we'll come back to
+this daily review one, but I'm going to
+show you the
+let's see, is there a release notes? I
+think I archived it.
+Oh, here we go. This is it. So, this is
+our release notes from this morning. So
+it ran our print context which is
+showing the company identity and um some
+of the other examples and you know how
+to get help from humans and like the
+people on the team and all this stuff
+and then it does a make print index. So
+this is like rather than this is the
+context packing thing, right? Rather
+than having it go like aentically search
+or use the built-in ls tool, I know that
+I'll get more like context efficiency by
+just having it look at every single like
+markdown file. And as this gets really
+really big, um, I will probably have it
+only look at recent projects and stuff.
+But the nice thing is like this becomes
+really easy to tune. And because it's so
+interactive and human in the loop, you
+can kind of just keep updating it every
+day as you go.
+>> Yeah.
+>> Um, but what this did was it found it
+listed out the PRs and saw the merge PRs
+that we had from last night. It did the
+JSON body stuff. So like this is all
+stuff that could be programming and
+scripting, but it's all meta work. It's
+all things that are like tedious back
+office things that I would usually just
+spend time going and compiling release
+notes every day. Um, and like yes, there
+are tools that will do this for you, but
+they're kind of hard to customize, but
+you know what can customize text really,
+really well is like a prompt and an LLM.
+And so this went through and it edited
+the release and it created this um
+release tag for code layer last night.
+And here's what it looks like. So, I I
+literally did this this morning and then
+when it was done, I went and made a
+video demoing it and then it even made
+me a like Slack, we have a couple like
+Slack channels, private channels of like
+our kind of I call it trusted testers.
+Um, I think some of y'all are in here.
+Um, but then it just made the
+announcement post. So, I've given it the
+format in the SOP of how to do this and
+all of the steps including like, hey,
+when you're done, like prompt me and I
+will give you a video demo and then you
+go put that in the release notes. Yeah,
+I think the mental model that I have
+found worked really well here is um Can
+you go back to the whiteboard?
+>> Yeah,
+>> this is at least the mental model that I
+use. Uh where did it go? It figured from
+>> here.
+>> Sorry, I'm pulling it up again.
+Yep. Um the mental model that I have
+found worked really really well. I'm
+going to be at the bottom Dex is I think
+we're entering like an kind of like I
+think Karpathy said this really
+interestingly which was like you have
+software and then you have like software
+1.0. know which is like pure code
+and then you have like traditional
+machine learning
+which is all about uh like writing uh
+writing actual training writing training
+models collecting data all that stuff
+and like now we have this like new box
+that somehow like sits in the middle of
+this stuff
+as like LLM stuff is kind of what I
+would put it as and now all of a sudden
+a lot of the random stuff that we used
+to do how to get rid of the arrow. I
+don't know how to get rid of the arrow.
+Okay, well, I'll figure that out later.
+Um, a lot of the stuff that we used to
+do with like pure code can now just be
+done by an LLM. The only caveat is that
+some of the stuff that now happens in
+this box is just going to break some of
+the time, but you can the trade-off is
+while it breaks some of the time, it
+also can be a lot more flexible and
+adaptable.
+So, when you think about engineering, I
+think there's a discussion thread going
+on about like agents versus workflows,
+all this other stuff. I think the
+easiest way to think about this is it's
+not actually about like agents or
+workflows. Agents and workflows don't
+really matter. You can use agents as
+tools. You can use workflows as tools.
+Agents can have workflows. Workflows can
+have agents. It it's really just the
+matter of like whether it's a sequence
+of stuff or whether you have a while
+loop. But what I find the easiest way to
+think about this is how much tolerance
+do I have for my software not being 100%
+like consistent
+generating generating notes. I have a
+lot of tolerance if I miss something at
+least not that's okay. I probably trust
+if I add something that's not there also
+okay because I can go back and edit it
+if it's not there and then it's really
+just a mental model of like how much
+trust can I build in the model to go and
+go do this. Turns out I have a lot of
+trust in the model to go look at a bunch
+of git logs and like summarize what
+actually happened based on that system.
+>> Therefore it be a great task to actually
+do LM stuff in it. And I think another
+analogy that really breaks this down
+like whether this is like coding or not
+coding whether you're in that's coding
+or not is just this analogy of like
+think about how Python we used to have
+Python then we had C++ then we had C
+then we used to have assembly and even
+before that we had like machine code
+and if you go to the era in which each
+of these is invented and you ask like a
+CDev in like 1990s if Python is a real
+language they'd say no you have to know
+garbage collection and memor memory
+management to be able to write code.
+Turns out in 2025 that's not true. You
+can write a lot of good code by just
+writing Python.
+And it's very possible that the world
+that we live in is whatever is going to
+happen here is the same thing. You use
+the right Python code to be called
+yourself an engineer and the definition
+of it just changes. So the thing we're
+doing that Dex is showing you may very
+well be exactly what engineering is 5
+years from now. There's no reason that
+it doesn't have to be. So thinking of it
+as like kind of almost like an extension
+to what you're doing today and being
+like oh for some stuff I have to write
+C. If I want to invent numpy even in
+Python I have to write C. I might even
+have to write some assembly but for most
+stuff I can write Python. Similarly this
+here is for coding tasks or non-coding
+tasks
+>> you're really engineering whether you
+whether you call it that today or not.
+>> It's just what level of engineering are
+you doing?
+>> Yeah. And it's the conversation might
+not be like, "Hey, am I going to go
+write C because the Python's is going to
+be like, okay, cool." Like the LM is not
+quite getting it right. I'm going to go
+write Python code because I need I need
+a certain level of quality or
+performance or accuracy for this one
+little part. And so for that part, we
+drop down out of the specifications and
+the words and the prompts and okay, this
+part I'm just going to do by hand
+because it has to be very very it's
+super impactful.
+Um, but I will say on this like
+workflows versus agent stuff, like what
+I will probably do once I get this to a
+satisfactory place, this workflow, is
+I'll probably just pop open and be like,
+great, turn this whole workflow into a
+TS script in tools releases.
+Um, and basically like once you figure
+out like tuning exactly and you get kind
+of the flow you want, you can have the
+model bake it as a workflow and then it
+becomes faster, more reliable and it
+just is kind of like doing the I mean
+who knows how it's going to use the
+tools to do the summary. Like I probably
+have to prompt it to say like okay use
+my Antropic API key and call anthropic
+for these phases. Um, but in general, if
+you can figure out the workflow and then
+you can pinpoint which parts of this are
+AIdriven, then you can make the
+deterministic parts deterministic
+faster. Don't spend tokens on them.
+Don't wait for the model to figure it
+out because it's the same every single
+time.
+>> Can I show something related to that,
+Dexter?
+>> Yeah. Yeah, go for it.
+>> Okay. So, this is again inspired heavily
+by what Dexter does. Let me just make
+sure that I'm okay. I'll share my
+obsidian because I can do that safely.
+Um, I wasn't sure what's on my desktop
+right now, so I was like, "Let me let me
+make sure it's safe." Um,
+um, so when you think about this stuff,
+for example, like one of the things that
+we do is we think really hard about
+we've been doing a new thing where we
+write design docs heavily using clot
+inspired by
+>> Is this your Obsidian thing?
+>> Yeah. Um,
+>> I've been waiting to see this. This is
+sick. Okay,
+>> so we write all our design docs now
+through Claude. It's very useful. And
+for example, one of the stuff that we're
+investigating right now is how is um
+actually this is a bad design doc
+because this is going to have too much
+context for people, but I will talk
+about this.
+So one of the things that we'd love to
+add into BAML is discriminated unions. I
+would love for people to be able to
+write things like this. So then they can
+actually get like really beautiful
+TypeScript classes that look like this
+automatically
+that actually have state and stuff
+attached to them. It's really hard to do
+naming for some reason. But part of
+doing this discriminated union stuff is
+sometimes at the top of every doc I
+wanted to go ahead and have like links
+to files and everything. And this is
+super abstract so I don't actually
+restrict it too much. But a lot more of
+the design docs I have a new prompt
+actually that I'm using. I actually want
+a summary of everything in here so I can
+quickly find stuff about like what
+branch was I working on, what was the
+date on this, who's the person that
+worked on this. And I don't do something
+very smart here. This is actually seven
+different API calls to cloud code
+because it runs like seven different
+commands to go assemble this.
+What I should be doing is I should have
+a
+>> make a script.
+>> Make a script that gets the metadata.
+Yeah, we did that. So we used to have it
+be four calls to cloud code and then
+we're like okay this is the same every
+time and actually like the way that the
+bash works is that you have to pull in
+like you can't whitelist it in
+permissions because of how the hi coup
+call evaluates your allow policy. And so
+we were just like okay cool. We'll make
+a script and we'll allow list the
+script.
+>> Exactly. And by doing this, you can one
+not only have your agents work faster
+because now instead of waiting for four
+calls to get this happen before all this
+dumps out, we just do one call. Um, and
+it just pulls out all the data and go
+dumps it out immediately to the file. So
+one, you get expediency one, you save a
+lot of money because remember the way
+that these the way that you get charged
+for all this stuff is by your context
+window. And if you're running four
+scripts with the same context window
+before writing the final document, one,
+two, three, four, your context window is
+being built to you four times to collect
+this data.
+>> So if you spend
+>> well part of it is cached, but
+>> you're still being built to you four
+times to build this data. Um, and the
+way cloud code does the caching from
+what I understand is cloud has at most
+four caching segments built in. So at
+best you're getting a 4x uh reduction on
+parts of the window, but for really
+really large segments you're not getting
+that much
+>> and you're you're still always paying
+for the generation, right? The model has
+to say bash this, bash that, bash this
+thing over here. And so each one of
+those you're still paying for output
+tokens.
+>> Exactly. And this was if you go back and
+look at the if you go back and look at
+the I'm going to throw out a different
+thing. Su agent tool chain. One of the
+best innovations they had was instead of
+giving the model super highle tools like
+just bash. So for example, we could say
+cloud code's only tool is just bash and
+it can do everything via bash. Problem
+is the model just works better if it can
+just run like read file
+instead of having to write the bash
+command for reading a file. Read file
+with this line number instead of having
+to go write the bash command for reading
+this file with a line number or range.
+It just like reduces the amount of
+effort the model has to do and it can
+think at a higher level. And it's kind
+of like how when you do a design doc if
+in the process of writing this design
+doc I have to be like here's the exact
+implementation of this at the same time
+of designing the system my brain can't
+operate in that way. So it's really
+useful for me to actually just write the
+design doc like what is the end user
+going to see what is the end user going
+to interface with and only after that go
+forward and then work on the
+implementation plan in some way or
+another. But it's the idea is you can
+break down the problem and similarly
+when you go do non-coding tasks you want
+to think about it in the same way. What
+are the systems of the prompt that I can
+do in the very beginning that are super
+super verbose and repetitive and perhaps
+have some ambiguity to them and then
+eventually I can apply an optimization
+function like if you were to optimize
+code you'd make it faster and more
+reliable. Same thing I can say hey I'm
+doing the same thing four times. This
+thing is very deterministic. Let's move
+to software 1.0 and write regular code
+to go solve this problem. And the rest
+of my system will still be software 3.0,
+which is more about LM driven uh
+software.
+Super dope. Um should we see if our
+script I have a couple other things I
+can show off, but any questions so far?
+I really like Kyle's point on like MRA
+has a good take on this. Agents and
+workflows need to be composable, right?
+Workflow can call agents. Agents can
+call workflows. They're just kind of
+these different building blocks that can
+have like infinite depth if you want
+them to depending on the complexity of
+your problem.
+>> Um John asked a question of like has
+this been able to keep the codebase
+consistent, coherent and um coherent and
+consistent. Um
+I will not share with you what I said. I
+will actually share with you what one of
+my engineers said because obviously I'm
+going to be biased in many different
+ways. Um so I will share with you
+general and that's going to and this
+technique by the way really really
+inspired by uh actually I'll just show
+you the DM. Um
+so firstly first thing while he's been
+doing this is cloud code doesn't read
+really large files. We have some really
+really large files in our codebase. His
+response immediately
+we need to optimize for this. So he's
+like we should not have large files
+anymore. So, we'll probably add a
+linting rule in our codebase to go solve
+this. Um,
+like it's just that good. And our
+codebase is complex. We're building a
+compiler in Rust. It's not the easiest
+task for the language to go do. Um, the
+model is really surprised the fact that
+it works. But the most important part is
+actually um I don't know if it's in
+here. We're discussing this for a while.
+The hardest part that actually turns out
+to be is 80% of it is just using it
+efficiently. the whole planning phase
+that we do with the research phase. I
+was heavily heavily inspired by Dexter
+would have never thought about it. I
+didn't believe in Claude code to that
+degree. Like it works, but I didn't
+think it could do hard things.
+>> We just merged the PR today. Last
+Saturday, me and Vibb sat down and I was
+trying to teach him this stuff. And I
+was like, "Here's the prompts. Go try
+them for a thing." And after about 45
+minutes, I think Viabot said, "I don't
+know if this is going to work for our
+codebase. Like, I already knew where
+this was. This would have taken me 15
+minutes. Like, I don't think this is for
+us." And I said, "Okay, what do you want
+to He's like, "Dex, how about you
+drive?" And uh and I was like, "Cool,
+I'll drive, but I want you to pick a
+really big complex thing that we're
+going to work on because I want to prove
+to you that this works in big code
+bases."
+>> And we sat there for seven hours uh and
+we coded two features. We added WASM
+support to BAML. So now you can run in
+the browser.
+>> Be very transparent. That one is not
+merged yet.
+>> I know. Well, yeah. Neither of them got
+merged that day. But abortion
+the abortion one the the abort
+controller one uh adding cancellation to
+BAML got merged
+>> um which is like I think it was what
+like 35,000 lines of code and a lot of
+it was generated but it was like a a
+crap ton of code that we wrote.
+>> Yeah. Um to give you context here this
+whole process that we built this problem
+was a very very hard problem. We've had
+three people on our team try and attempt
+it. They've spent four days each
+individually at different time periods
+of the BAML project. No one merged it.
+And there's reasons why it didn't merge
+or no one was able to solve it. But
+what's interesting is that this
+technique allowed us to go and build
+this out and get it working demo in
+about 7 hours while in parallel doing
+some other really hard thing which is
+web assembly support. And then we're
+actually able to go ahead and actually
+build playground support in our VS Code
+extension that actually allows you to
+cancel something while running. So, not
+only did we add it to the core runtime,
+so you as a TypeScript dev can just like
+abort a method that's running under the
+hood, but you can also cancel it in web
+assembly and this project would have
+just never happened uh if it wasn't for
+VI coding. So, it does work. That said,
+while it did produce almost the right
+code, it didn't produce what we call
+like clean code. So while once we got it
+working, we had to go do something which
+is we had to go ahead and issue some
+sort of react um
+uh some sort of um cleaning I would say
+along the hood where we had to go and
+say like hey here you created some
+methods that don't need to exist use the
+existing methods instead and don't
+extend the API interface but that was
+much much easier to do once we had a
+working example and it worked end to end
+and it actually had unit test and
+testability to just change the internal
+mechanisms to be more along the design
+that we had. It's definitely 80% less
+work than it would have been otherwise.
+Like no doubt in my mind.
+>> Anyways, we're not here to talk about
+Claude for coding, but that was a great
+like little side tangent. Um, what else
+do you think would be useful to talk
+about? I mean, I have more demos. We can
+look at this daily review thing and see
+if it's running. So, it's like running
+our polemetric script, which
+>> yeah,
+>> is
+>> while this is running, I'll take a
+couple more questions. Someone Slava
+asked like why not use a local database
+as SQL instead of MD files. Well Slava
+the question is really just the same
+thing that we've talked about the whole
+time which is it's an optimization
+spectrum. The V0 the most lossy form of
+this data is a markdown file. If you
+find that hey we are selling to
+thousands of people you can optimize it
+to use a SQL database over time. But the
+whole point of this is you don't have to
+on day one.
+>> Uh is it running yet Dex?
+>> Yeah. So these are some of our tools. So
+I showed the like makep printint context
+command which shows you know the company
+overview the recent investor updates.
+This is how you can kind of
+deterministically pack your context
+without claude needing to go do again
+the same thing that you mentioned about
+like hey rather than like doing this we
+just do it all as a script. same idea is
+like if I know that every time this
+thing runs I want it to have all this
+context and I don't want to put it all
+in cloud MD for whatever reason because
+sometimes I might not but it's like 90%
+of workflows I'm going to tell it to
+call the like make print context print
+index things and then we actually used
+something called like ctx.md
+which is like run make print context
+make run make print index
+all of the users ask And so now I can
+say um
+slashctx
+what's the last investor update and it
+will get all this context automatically
+without having to go read a bunch of
+files. So if there's stuff you always
+want to know and this gets back into
+context engineering right because if you
+just put everything in then you were
+going to take up too much of the context
+window and you're going to distract it
+and there's going to be flows and things
+like this. But this is kind of a
+hopefully this technique is clear of how
+you could basically give the model
+access to or you can kind of like
+streamline your workflows and just kind
+of guarantee that the model will always
+um have kind of the core base context.
+Um and the reason why we don't use
+cloudmd for this is because what we
+talked about two weeks ago is if you
+look in the cloud code system prompt it
+does inject cloud MD but it says a
+system instruction at the end because
+most people don't know how to write a
+good cla because they're not context
+engineers. they or they're they're
+they're aspiring context engineers. They
+gota they gotta figure figure out like
+learn this stuff is it says this may not
+be relevant. Only consider this advice
+if it's highly relevant to what you're
+working on. And so if you want to
+guarantee stuff ends up in the context
+window in a way that is sort of will get
+more attention from the model um then
+you can be a little bit more
+deterministic about how this works.
+>> Yeah. And I think you asked an
+interesting question of like how do you
+deal with it if you have a longunning
+task that claude needs to go run uh and
+you want to take a dependency on it in a
+future task. Well, this really goes back
+to like you as a user need to understand
+the restrictions of the agent that you
+are using. Cloud code doesn't really
+have a way to add dependencies on
+background tasks. There's nothing you as
+a user can do to really make that work
+super super reliably. Cloud code lets
+you run a background task but it doesn't
+let you depend on that background task
+for some other task. So until the agent
+builder enables that capability you
+can't do it. So sadly that's just like
+understanding what the limits and stuff
+are. And if you really need that because
+your workflow is constantly like that
+well then you'll have to build your own
+agent loop. Um and that actually builds
+that in as a mechanism for what the
+system does.
+And the reason for that is because if
+you're running a background task and you
+want to put dependency on it, then
+whatever system task you're using has to
+have context on here's all the
+background tasks that I'm currently
+running and therefore here's how you go
+build this out under the hood.
+>> Um, a lot of questions about the claude
+code system prompt. We did uh I think we
+dropped a snippet of it in the last AI
+that works or the one where we talked
+about Claude. Oh, not that.
+Let's just have a look at the whole
+repo. So, context engineering for coding
+agents, I believe it was.
+No, that's context engineering.
+Where is
+>> um you can definitely see the system
+prompt of cloud code because under the
+hood, it's just making a network call u
+and you can just like proxy it and then
+you can just see the prompt.
+Um,
+>> you have it somewhere.
+>> Traces. Yeah, here's the trace. So, this
+is you can literally just point clude at
+a proxy and have it log everything out
+and then send this the the the request
+upstream to Anthropic. This is what all
+lots of people doing, but like yeah,
+here's our user message as you answer
+the user's question. So, you can kind of
+see all of this and it says
+here it is important. This context may
+or may not be relevant to your task. You
+should not respond to this context or
+otherwise consider it in your response
+unless it is highly relevant to your
+task. So every time you put something in
+cloud MD it gets suffixed with this.
+Most of the time it is not relevant.
+>> So that means if you are trying to tell
+it to do something cloud MD like this is
+really important and it my model might
+decide that it's not important because
+this is just part of the context window
+that the cloud agent does no matter what
+you do and there's nothing you can do to
+edit this except have a proxy and remove
+that manually from the prompt in your
+proxy layer. And this is the engineering
+part, right? This is about if you don't
+know exactly what's put in, if you don't
+know the tool descriptions, if you don't
+know kind of how Claude is being. So
+here's the raw body, but we can actually
+go get the JSON. Um, so here's yeah,
+here's the system message. Here's the
+um here's the tools. So here's the task
+tool. People talk about sub agents.
+Here's the prompt for the sub agent.
+Launch a new agent that has access to
+all the tools when you're searching for
+a keyword that you're not confident. So
+this is like understanding how this the
+tool the task tools exposed to claude is
+really important for when you're
+prompting it. And so I don't say launch
+a sub aent. I say launch a task because
+that's more likely to have the right
+effect. And when I tell it to launch a
+task, I tell it to put in the in the
+prompt how to prompt the agent because I
+want to get more clear specific things
+out of that sub agent.
+I don't know if that answers the
+question.
+No, I think that does Dex um Richard
+asked a really interesting question
+about hey makes me think that an IDE had
+a window for determinously managing
+context windows that would be super
+useful. I think today that would
+probably be true. I think tomorrow it
+won't matter. And the same realization I
+think is with Python. I think a lot of
+people used to say that in Python if you
+if you're not garbage collecting
+automatically or at the right time and
+you can't manually control it you can't
+write good code doesn't matter today and
+I think as the models get better like
+deterministically managing every single
+word matters less and less if you're
+using a 1B model it does matter you do
+really need to manage every single word
+that goes in but if you're not it
+honestly if you're using the latest
+models today I suspect what you as a
+user need to do is just like manage the
+sections of context not necessarily
+every single word to that degree.
+Um, and there's probably some usefulness
+because even as an agent developer, like
+I would have ne I have never actually
+read the research and um I've never
+actually read the research prompts that
+Dexter gave me. I've never read the
+create plan prompts that Dexter gave me.
+I've never he gave me and they work. And
+the whole point here is that if they
+didn't work, I would go read the prompt.
+And you can think of it like how you
+would debug as an engineer. Like if
+something works, you don't really care
+what the API does under the hood. You
+don't care how much of a black box it
+is. Same with context journey. If thing
+is working, don't bother understanding
+it. The model's good enough. It's
+working. The minute working,
+>> go figure out why.
+>> Yeah. I've never read the source code of
+the cat command and I have no no reason
+to or desire to because the API is clean
+and it always does what it says.
+>> Exactly. And I think that's really what
+context injuring is about is like you
+don't you can when we did performance
+engineering for the last 10 years
+whenever I did that every line of code
+that you write I promise you there's
+some way to make it faster. Almost
+definitely there's something you can do
+to make it faster.
+You don't need to. The value of
+performance engineering is not about
+making every line of code faster. It's
+actually about knowing what lines of
+code to spend your effort on so you can
+make that part of the system faster.
+Same with context engineering. Don't
+make every single system perfectly
+engineered. Focus on the parts of your
+system that actually need to be
+perfectly engineered. So in this
+workflow that we did today, Dexter
+really didn't have to optimize a lot of
+his stuff because like it works. It does
+the thing it wants. Doesn't matter how
+expensive it is. And most of the stuff
+that he's doing is allowed to be lossy.
+>> It's allowed to be lossy. And it's the
+kind of thing that like without a lot of
+prompting, the model can still get it
+right.
+>> Yeah. Or at least 85% right. And for the
+task that you're doing, it doesn't
+matter if it's 100% right. It just needs
+to be directionally correct, like change
+locks or contact conversations like
+here's the last thing you talked about
+with Vivof. Like none of that stuff
+needs to be perfect or capture every
+single word of it.
+>> Yeah. And the reason why it doesn't have
+to be perfect is like when I build this
+stuff, I work backwards from the
+workflows, which is like what's the end
+goal is like I want to send my team an
+update every week. I want to send my
+investors an update every month. I want
+to send a public update to our mailing
+list every month and I want to send our
+like trusted testers good release notes
+that are high signal and high quality
+every morning. Um or every couple days,
+but mostly every morning because we're
+shipping too much to do two releases in
+a day.
+>> Yeah. Um we'll take a couple questions
+and then I've got a flight to Amsterdam.
+So we're going to we're going to
+probably cut it a little bit shorter
+than normal. If you guys haven't seen
+the code layer tool, um Dasher will drop
+a link. It is the coolest thing that I
+have used for paralyzing how much code I
+can get done at any given time. I have I
+consider myself a pretty good engineer,
+but I realized that I was a novice
+before I used this thing and now I use
+it and I'm so much better than I used to
+be and I think I aspire to be as good as
+>> uh buddy. So,
+>> uh check it out if you're not using it.
+Uh definitely check it out. Give some
+feedback.
+>> Y there's a weight list there. I just
+put the link in. We'll put it in the
+show notes. Um,
+you can go find it on GitHub and use the
+brew install command. I am asking early
+users to jump on the wait list so that I
+can watch you use it for the first time
+and get your feedback and get you added
+to some of our like private testing
+channels. That'll probably be true for
+another couple weeks as we iron out the
+last of the stability things and really
+pull in user feedback. So, yes, techally
+you can go find it, but I would prefer
+to onboard you uh directly. And so,
+we're going to start letting people in
+off the weight loose pretty soon. Uh,
+so, uh, I can't stop you because it's
+free and open source forever and you can
+just go find the release. But if you
+want to help out, you can join the wait
+list and you can get added to the group
+DMs with Vivov and some other cool
+people who are early testers.
+>> And definitely just like if you really
+want to skip the list, just like add us
+a DM on Discord or something and you'll
+get through much faster. Um, and that'll
+be the easiest way.
+>> Cool. Questions?
+would be that's would have same sense of
+>> any other question for anyone. Uh it
+sounds like not too many.
+>> Uh do you think the domain of task that
+can be achieved with this approach is
+going to keep growing? Will we hit some
+point where humans don't even determine
+the SOPs and communication strategies?
+Um
+my opinion is honestly I think it's like
+software yes like yes inevitably so and
+not just because the models will get
+better I think even if the models don't
+get better like the agentic loops that
+we write write you that we use to
+leverage the models will get better and
+the tooling around them will get better
+so like it's an inevitability like even
+if python doesn't like change
+fundamentally architecturally the
+libraries people built make it more
+usable every week every day um when we
+built Baml like part of BML on day one
+was definitely works but like we just
+add more stuff into it so people can
+build more complicated things like
+that's just the way software works. So
+anything that is pure bits on a machine
+generally bits moving around on a
+machine generally gets better over time
+and the capabilities extend over time as
+long as people give great feedback and
+leverage it further.
+>> Uh Richard question is project
+management software going away? Project
+management software is the only SAS we
+still use every day. Um
+>> that's funny. um that and superhuman. Uh
+so that's things like GitHub and linear
+we still use because it provides a nice
+collaboration space and shared
+artifacts. It's a little bit harder to
+do with just like markdown files in
+GitHub when you want to have lots of
+comments and multiplayer and attach
+assets and things like that. Although
+Vibb, I don't know, I have to try your
+Obsidian workflow because if you could
+create a shared Obsidian space, maybe
+you can just drop everything in Markdown
+and it's not that much more efficient
+than having the model fetch the stuff.
+But like I don't like the linear MCP
+because it dumps a bunch of JSON into my
+context window. So we wrote a script
+that wraps it and pulls all the comments
+in one go.
+>> Yeah, exactly. And that's again because
+the linear team doesn't understand
+context engineering. So they're doing
+dumb things with it and they're just
+giving you stuff in a way that doesn't
+make sense that you know how to do
+better. So you're like I can get way
+better choose if I don't use it
+directly. Um I also agree with like I
+think people always are like oh cloud
+code is going to do everything. I
+actually think it's wrong. Um, I think
+the best way to think about it is like
+we don't have one website to rule them
+all. We have a ton of different websites
+that we all go to that do slightly
+different things. Um, and I don't see
+that ever really changing. We'll have
+different tools that we use all the
+time. U, tools are just a natural way of
+humans interfacing data and people have
+different patterns and different UX they
+like.
+Um, yeah, Dexter's comment about what
+strategies you use to keep context from
+getting uh too big. always be compacting
+whether you're using slashcompact in
+cloud code whether you're using manual
+compactions like what Dexter and I do
+with research and planning the idea is
+you want to have some sort of state
+system that isn't the chat log itself
+and you want to be able to review that
+read that understand that which is why I
+personally have found Dexter's way of
+having a file as a source of truth that
+I can just go read at any point to be
+extremely powerful because whenever the
+agent does steer off I can restart the
+context feed in that file and then boom
+I'm
+Yeah, I actually almost wrote always be
+clearing because clear is actually what
+we use. We don't use the slash compact.
+So when I say compact, it's little C
+compact, which is like find your own way
+to squeeze down the context into the
+things that are important to you. Not
+and whether the cloudway works well for
+you, that's great. But what we have is
+kind of custom prompts that are like,
+cool, make a list of every file you
+touched and snippets of all the changes
+you made and what you were working on
+and what's currently broken and what are
+the next steps. And that works having
+that write that to a markdown file. and
+you can edit it, you can see it, you can
+control it, you can learn how to get
+better at that prompting um is a really
+powerful skill and is again it's all
+about context engineering. How do you
+take a bunch of information and distill
+it down into fewer tokens that are just
+as valuable to the model?
+>> Um you asked a question, what do you
+think about the role of MCP over time? I
+think we just stated it with Dexter
+being like the linear MCP does a dumb
+thing so I just wrapped it and actually
+made it through the right thing. MCPS
+are just API calls. Um, if the a API
+caller knows what they're doing, it's a
+API calls are great to use. If you're
+using as a dumping ground to just have
+it do a lot of things, your agent
+probably won't work because 90% of the
+tools that people build probably are
+built incorrectly because most people
+are not on the bleeding edge of actually
+think about context engineering. And if
+you are, you're being held back. It's
+just where you think the median is
+versus where you are. Um, and the median
+right now is pretty bad.
+>> A
+>> um,
+>> let's make it better. I mean, that's why
+we're here, right?
+Yeah, we want to lift it up.
+>> John says, "This is the kind of stuff
+people will sell courses on in 18
+months. We should get a CC by NA so that
+uh people can't sell our shit."
+>> That's right. Uh I don't really care. Uh
+I think the best kind of education is
+given out for free and that's what all
+good content is. Um why not take the
+user's content completely by dynamically
+generating them before each agent um
+execution?
+I think that's a thing that you can do,
+Slava. But really, it goes down to again
+the same point, which is if you're going
+to go ahead and take over the users's
+context completely, you better hope that
+your users are real noviceses because
+they're advanced users. They will not be
+okay with that. They'll be like Dexter
+and be like, "This thing isn't working
+because I'm trying to have it something
+do something much more complicated than
+what you planned to to have it do." And
+then
+>> Hussein, this is show me the prompt.
+>> Exactly. It says it's show me the
+prompt. And the whole point is like by
+taking over the user's context
+completely, while you do lift the floor
+a little bit, the thing that you don't
+do is you actually bring down the
+ceiling a lot.
+>> Yeah.
+>> So, it's a trade-off of what you're able
+to go build. And if you're okay bringing
+up the ceiling because the usability of
+what people want is very low, it's okay.
+That's that's totally useful. Generating
+release notes seems like one of those
+things where you can bring them on the
+ceiling a lot and just make your users's
+life a lot better by bringing down the
+floor bringing up the floor. But if it's
+something like generating arbitrary code
+in cloud code, you probably don't want
+that. And cloud code works best because
+Dexter can put in whatever he wants into
+the context window and have it do
+roughly the right thing.
+>> Sick.
+>> Um let's take one or two more questions.
+Um are those here in the Yeah, we'll
+push the code out soon. I think we
+should do you want to push the research
+and prompts out too or we can do that
+different episode actually. We should do
+that later. I think
+>> Yeah. No, I mean we should do another
+episode where you walk through your
+Obsidian flow like really in practice,
+how does it work? How do people interact
+with it? What's your workflow? Um I
+think that would be really interesting.
+Um
+>> yeah, we'll share the prompts out then
+we'll tune them a little bit. Um and
+then let's just see if there's any more
+questions.
+Um Kyle, the GraphQL will never be the
+answer. It never was. It never will be.
+Uh good try though. Um
+and I think um
+I think that is it from questions.
+>> Excellent.
+>> Um all right. Thank you everyone for
+joining. Um we'll see you again next
+week. I will be in the middle of the day
+at Germany time. So we'll see how well
+that goes. Uh but uh we'll have a fun
+time and we'll get a couple more bits of
+episode out and content out.
+>> Awesome. Thanks. Bye Bob. Thanks
+everybody.
+>> Always good seeing you Dex. All right. I
+lighter.

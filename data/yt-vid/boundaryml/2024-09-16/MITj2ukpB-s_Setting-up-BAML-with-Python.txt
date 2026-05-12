@@ -1,0 +1,218 @@
+all right so today I'm going to help you
+set up baml with python and give you a
+quick tutorial on how to go do this the
+first thing we'll do is we'll create a
+quick python project from
+scratch awesome and we initialize this
+using poetry which is just a package
+management system for python but you can
+use anything you want including pip VM
+or anything else directly so at this
+point we have a python set up let's go
+ahead and open a virtual
+environment we open a virtual
+environment let's go ahead and open this
+in BS code so we can do more things
+the rest of this demo I'll do all this
+inbs Cod just to show you a complete
+example what it looks like so let's just
+make a b python file Main and print low
+World your project um now what we'll do
+is we'll go ahead and add some basic
+starter bamel files to your
+project awesome now that we've added the
+bamel project you notice the bamel SRC
+folder Pops in the bamos or C folder
+include a file called clients generators
+of baml which you can modify anytime you
+want to change what sort of client you
+want to use whether you want to use the
+async or the sync version and also
+update the version so that your vs code
+extension stays in sync with your python
+library now the first thing that you'll
+notice when you have a baml function is
+that you have um when you have a bamel
+PA is that you can write functions in
+baml baml functions are very simplistic
+they have a name they have par
+parameters and you can have multiple
+parameters that you pass
+in at any
+point and then they have a return type a
+baml return type can be any type it can
+be a basic type like a string or um an
+array or something else but it can also
+be a class in this case this extract
+rume is going to take in a string and
+then output a
+rese you can then go ahead and set uh
+clients in baml where you can actually
+Define exactly what model you're using
+in this case we're using up4 but why
+don't let me go ahead and set that to
+GT40 mini and lastly you can have a
+prompt that you're setting aside so
+you'll notice that I'm changing around
+this prompt and going to go do things
+CTX output format is a special thing
+that will help output the format for the
+return type of the function into the
+prompt
+itself but let's go ahead and quickly
+see what this prompt actually does you
+can actually open the vs code playground
+and you'll be able to see the entire
+prompt as rendered as directly sent to
+the model additionally you'll be able to
+see the raw web request that banel
+actually makes you can see tokens that
+the B bamel makes available and lastly
+you can also set environment variables
+for any API keys and such you might need
+which might include Google or anthropic
+openi or anything else you use across
+the
+system once you define tests in baml
+which can be done like this um where the
+test takes the function the name of the
+test the fun function that it applies to
+and then any parameters of that function
+will be outlined right here but once
+you've done this you can actually go
+ahead and run these tests directly in B
+and as long as your API keys are correct
+you'll be guaranteed to get outputs out
+of baml that match the exact response
+type of the format now if for some
+reason you don't out add CTX at output
+format you may see an error like this
+where weren't unable to M parse the data
+that's because the model nowhere in the
+prompt actually explains what the resume
+data type is so if you ever see that
+just make sure you have included CTX at
+Alpha format somewhere in your
+prompt um if you want to do a user
+system roll you can go ahead and go do
+this
+do roll user so this will break the
+prompt into a system prompt and a user
+prompt automatically for you and once
+again you can go run this and you can
+see that it is working as we'd
+expect now as you go forward you're
+going to find a couple more things that
+you may want to do you may want to
+figure out how do I set temperature or
+other parameters as part of these
+clients well that's why this client. B
+file exist let to show you an example in
+this case gy 40 mini and I can actually
+just pass in the temperature variable
+and this will set it's a temperature
+zero and then I can just use this client
+in my
+function and go set that up um we'll fix
+that but as you can see over here that
+the playground actually renders and now
+I'm using CHD 40 Mini client when you go
+do this you can actually see that this
+temperature is being set to zero now I'm
+going to change my open a environment
+varibles so you don't see my
+keys
+um and I'll show you
+exactly um now what you can do over here
+is you can actually set
+your now I'll show you what this web
+request looks like for temperature
+notice that temperature will actually
+get p pass into the web request right
+over here these are just pass what you
+saw in clientop
+baml is just a pass through parameter
+that any parameters you pass into here
+will just get passed through into the
+model as a part of the web request what
+we recommend is make sure you read our
+docs for each of the providers to know
+which parameters are pass through
+parameters versus like model or API key
+which are
+not now let's continue and see a couple
+more things the next thing to look at is
+how can you use baml in Python code
+well the first things first is that
+you'll notice that we now have a baml
+client folder bam the bamel client
+folder is just a generated code that
+interfaces your baml code with your
+python code let's take a look at how one
+would use a bamel client you would do
+from bamel client import
+B and let's actually put all this inside
+a folder really
+fast cool so we'll do from B client
+import B and then all you have to do is
+you can see B do extract resume is a
+function that is now
+available now when I call this function
+this function will magically call LM
+kind of like your test cases do and will
+keep your data types in sync so that
+means resume.
+experience will always be a list of
+strings now if I open my bamel code and
+I change this to let's say um I want my
+email to also be a string array watch it
+happens to email it'll automatically be
+a list of strings and you can just
+expect that your baml types will stay
+perfectly in sync with your other types
+so if if we go ahead and now break down
+the problem
+and go ahead and change this problem to
+this once again you know experiences Now
+list of experiences so we'll construct
+data types for all your types in baml
+for equivalent python types or pantic
+models now if you decide to go streaming
+you can also go like
+this stream equal b. stream do extract
+resume and then for
+partial and stream you'll notice the
+same thing uh partial whenever partial
+do name for example will always be an
+optional uh version of the resume data
+type completely type safe without you
+having to think about
+it uh and if you ever want the final
+response rese equals stream. getet final
+response and now you'll notice that this
+is going to be a completed ré type or
+resume. name
+will be the full data model that you
+would normally get from here now you may
+want to do some async programming so you
+can do this as
+well um and similarly you would get a
+similar kind of Chunk over
+here um
+async death wrapper
+and noce now over here this becomes an
+Asing 4 weight Loop and
+similarly it will be the same thing for
+waiting for the final resume type if
+you're ever waiting for the partial
+resumé type you can do the same
+thing resum equals wait b. async resume
+and again this will be an async version
+of this of the same library that you
+were exposing
+before um I believe that's all you
+should need to get started if you run
+into any questions or roadblox
+definitely join our Discord and ask for
+help over there we'll do our best to
+stay up to speed thank you

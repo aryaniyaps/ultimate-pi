@@ -1,0 +1,513 @@
+I freaking love Cloud Code skills. I
+think you do, too. But sometimes they're
+a little bit unreliable. I would say
+about 70% of the time I run a skill, I
+get an intended output. About 30% of the
+time, it's a bag of rocks. What I wanted
+to do in this video is I wanted to show
+you how to combine Claude Code skills
+with a new development in the AI space
+called Auto Research to achieve
+significantly higher reliability,
+accuracy, and allow your skills to quite
+literally improve themselves overnight.
+So, I'll keep this as simple and as
+straightforward as possible. First, I
+need to show you where this idea of auto
+research comes from. To make a long
+story short, one of the former founding
+members of OpenAI and later head of AI
+at Tesla, it's called Andre Carpathy,
+released an auto research GitHub repo a
+few days back. And what this does is
+this allows a team of agents to
+autonomously optimize some process. This
+process in his case was the training of
+another machine learning model called
+nanoGPT. But in our case, it's going to
+be our skill and actually improving that
+skill over time by making the prompt
+better, better, and more airtight. Now,
+you don't need to read the whole repo.
+There actually only a couple things in
+here that I think are important and
+immediately applicable to the purposes
+of, you know, business or improving
+skills. And they are as follows. This
+repo is deliberately kept small and only
+has three files that matter. The first
+is this file called prepare.py. The
+second is a file called train.py. And
+the third is program.md. So to make a
+long story short, this prepare.py, this
+is like machine learning specific stuff.
+So we don't actually need to worry about
+it. This is something that is specific
+to uh training a tokenizer and so on and
+so forth. The stuff that actually
+matters for us is train.py and
+program.md. And so I want you to pretend
+for a second that this train.py is
+actually your skill.md.
+And then your programm is just your
+agent. And basically what we do is we're
+going to provide a prompt to our agent
+in a program.md. And the prompt is going
+to say, "Hey, I want you to improve this
+skill using the method discussed in auto
+research." The way that you're going to
+measure whether or not the skill is
+fantastic or crappy is as follows. And
+then we're just going to give it some
+brief uh criteria, which in machine
+learning terms is typically referred to
+as an eval. And then in that way make
+the skill better and better over time.
+Now, just before I go any further, I
+want you to know this is a pretty big
+development. You don't just have to use
+it for skills like I'm going to show you
+here. And I want to make that clear in
+this video. uh just as I did in my last
+video. You know, earlier this morning I
+was a little bit bored and I was like,
+"Hey, what can I use this cool auto
+research library on and I realized that
+I had this old app that I developed many
+years ago and I was just curious, hey,
+how much faster could I make this
+thing?" So, all I did was I took the
+same repo that I just told you guys and
+then I said, "Hey, I want you to use the
+same approach to make my website
+faster." And over the course of about 67
+different tests, this auto research
+methodology took my load speed from
+about 1100 milliseconds literally down
+to 67. This is sort of the same thing
+that we're going to do with our skill.
+It's just we're going to be responsible
+for developing the eval set, which I'm
+going to cover in a few moments. So, I
+mean, in our case, we had an 81.3%
+improvement in time. In your case, it
+might be an 81.3% improvement in
+accuracy. Who knows? Uh, but what's
+really cool about this is not only will
+you get the actual improvement itself,
+you get a big list of changes that the
+models will have tried to make in order
+to improve your skill. Which means since
+AI models are getting smarter at any
+point in time over the course of the
+next few years, you just take this big
+list of things, just pass it on to the
+next agent. You could take this big list
+and pass it on to GPT6 or Opus 5.0 and
+it'll be able to pick up where its
+predecessors left off. I think this is
+actually probably soon to be one of the
+most important and valuable assets of
+our time. just a bunch of research data.
+But anyway, you don't care about that.
+You care about how to make your skills
+better. So, let me run you through it.
+Uh, in order for auto research to work,
+you need three ingredients. You need an
+objective metric. Okay? Now, that's a
+number that you can measure. It's
+something that doesn't feel faster or
+resonate more or or whatever the heck
+vibes the kids are talking about these
+days. It's an actual number. So, in my
+website example, it was a load time in
+milliseconds. Um, I'm now running auto
+research on cold email campaigns, so
+it's my reply rate. In our case for
+skills, what this is going to be is this
+is going to be called our eval or
+evaluation pass rate. I'll show you guys
+how to make that in a second. Next, you
+need some form of measurement tool. This
+ideally would be automated, reliable.
+There'd be no human in the loop. For
+that website example I just showed you
+guys, I used a suite of basically
+website testing tools called Lighthouse
+that Google provides out of the box.
+That's how I figured out how long it
+took to load the site. You know, for my
+cold email uh suite, I'm using API
+analytics for instantly. Now, for us,
+what we're going to do is we're actually
+going to have an agent write what's
+called a test suite, which is just like
+an order of operations saying, "Hey, I
+want you to run the first evaluation,
+then run the second evaluation, then run
+the third evaluation, and so on."
+Finally, you obviously need something to
+change, right? So, you know, in my
+website example, that's the code
+changes. My cold email example from
+yesterday, that's the email copy itself.
+In our case, it's just going to be the
+skill instructions. Basically, it's
+going to be the prompt, okay? It's going
+to be the markdown file. And so if you
+think about it logically, what we're
+going to be doing is just like in Andre
+Carpathy's auto research repo is we're
+going to be providing the skill as sort
+of like our I don't know our train. py
+over here. And then we're going to be
+providing the agent some highle
+instructions. We're just going to stick
+that right over here in like the
+programm.
+And then we're just going to have it
+basically say, hey, every time you run
+the skill, I want you to evaluate it
+against a suite of tests that we've
+developed and then tell me whether or
+not it's better than what we did the
+last time. And then in this way, I just
+want you to get better and better and
+better over time. And I want you to run
+this every 5 minutes. And that takes me
+to this concept of eval. Now skills are
+just prompts, right? And prompts are
+inherently noisy. What I mean by that is
+sometime you'll run a prompt and it'll
+do X. Another time you run a prompt and
+it'll do Y. And so in order for us to
+develop a standardized set or suite of
+ways to improve the quality of our
+skills over time, we can't just run them
+once. What we have to do is we have to
+run them many, many times. And then we
+have to take the mode which is the
+frequency and then the median which is
+kind of like the average of results. You
+know if I run 20 skills and all of them
+are task to generate me an image which
+is going to be what we're working on
+today. Um you know every single time
+there going to be some slight
+differences but there are going to be
+things within each diagram or every
+image that is similar and there also
+going to be some things that are
+different. In reality, all machine
+learning and all AI outputs are
+distributions of data. And so, in order
+for us to control against that and allow
+us to make iterations and improvements
+on them, we just need to run them many,
+many times. But running multiple times
+is not enough. We also need to evaluate
+the outputs of our skills according to
+some standard. You know, it's kind of
+like testing back in school. You could
+know everything there is to know about
+astronomy, okay? But there's no way to
+assess your knowledge unless we give you
+a test on it. And those tests are going
+to be similar sorts of questions asked
+in similar sorts of ways. So what you
+can think of is what we're doing here is
+we're basically benchmarking the
+performance of our skills. And the best
+way to do that is using binary yes or no
+true or false questions. So as a really
+meta example today, I want to show you
+how to improve a skill that I call
+diagram generator. If I scroll over here
+to the right, you'll remember this
+diagram that I showed you guys and used
+to mark up a moment ago. Well, I
+actually used AI to make that. And
+that's the skill that today I want to
+improve successfully over time with
+standardized evals and out of research.
+Now, in our case, it's hard for me just
+to look at it and say whether it's good
+or bad, right? And so instead, I want to
+have a series of standardized questions
+that I could ask another agent to review
+it to tell me whether or not this thing
+is good. And realistically, I can't just
+say, "Hey, you know, is the text
+legible?" I can't just say, "Hey, you
+know, does it look good?" I need to
+break it down a lot more granular than
+that. Now, you might be wondering, well,
+what the heck does that look like for a
+diagram? In my case, I have narrowed
+down four criteria to make a
+high-quality diagram. The first is, is
+all of the text in the diagram legible
+and grammatically correct? If so, odds
+are it's an okay diagram. The second is,
+does it fit my color palette, which is
+defined as pastel colors, soft colors. I
+don't want like super bright reds or
+oranges or neon greens because I find
+that just looks unprofessional and lame.
+The third is, is it linear? Does it go
+left to right or top to bottom? You
+know, previously I was generating a lot
+of images that just were all over the
+place and I don't know, there was spread
+out bob bubbles and bobbles and so on
+and so forth, which just looked odd. And
+then fourth, is it free of numbers,
+ordinals, and ordering? in case you
+didn't know that basically is just the
+presence of 1 2 3 4 which is kind of
+meta because that's how I decided to
+number this. But the point is if all of
+my diagrams are free of all of these
+things, odds are that's a good prompt.
+You know, it does something that I want.
+So what I'm going to do is I'm going to
+take this give these requirements to my
+agent. I'm going to ask it to create an
+evaluation test set for me and then I
+can just run this thing on auto loop
+over and over and over again until my
+skill is fantastic. Okay, the first
+thing you need to do is set up something
+that allows you to communicate with
+Claude Code. In my case, I'm doing this
+in anti-gravity. So, I have an
+anti-gravity window set up with the
+Claude Code extension inside of it. You
+guys could do this in whatever way you
+want. Second thing you need to do is
+grab the um Andre Carpathy auto research
+repo. So, I'm going to go back over here
+and then I'm going to copy this link.
+Then, I'm just going to feed this
+directly into my agent. I'll say read
+this. Next, we need our eval test suite.
+So, I'm going to go back to my Chrome
+instance and just grab these four and
+head over here. And then for third, I
+should say, we actually need to tell it
+what we want it to do. So, I'm just
+going to use a voice transcription tool
+called Whisper Flow. And then just in
+natural language, ask it to do this.
+Hey, I want you to use the auto research
+convention in the above repo in order to
+build out a self-improving skill system
+for my diagram-generator
+skill. The eval suite I'd like you to
+run is the four constraints above. What
+I want to occur is every 2 minutes I
+want you to generate 10 diagrams for a
+specific function. Whatever those
+functions are are okay. And then I want
+you to pass them through this eval test
+suite, rate how many of those made it,
+and then alter and improve the prompt as
+necessary to get it to the point where
+it's knocking 10 out of 10 out of the
+park. Okay, I'm then going to press
+enter over here. And this is going to
+feed everything into, in my case, Opus
+4.6. It'll start by reading the auto
+research repo, which is up here. Then
+it's going to explore the diagram
+generator skill. You might be wondering
+what the diagram generator skill is.
+Well, it's actually really simple. It's
+basically just generate clean handdrawn
+style diagrams from natural language
+descriptions. The output should look
+like a whiteboard sketch with pastel
+rounded rectangles, simple line art
+icons, thin arrows, and clean labels on
+a white background. The way it works
+under the hood is we send the request
+over to Nano Banana Pro 2, and then we
+get these things that we could paste
+onto my Excaladraw. My total cost is
+about 2 cents per generation using this
+super fast model. And that means, you
+know, if we're going to run 10 every
+single time, logically speaking, I'm
+going to spend about 20 cents per test.
+So, if within 50 tests I can get it to a
+good place, I will have optimized the
+skill for about $10. And just given how
+much money my YouTube videos make me,
+you know, a good banger video might make
+me several hundred in ad revenue per
+day. Um, obviously this is like a pretty
+positive return on investment for me.
+So, I'm going to give it some time, let
+it read everything it needs to read, and
+then circle back when it's ready. And
+just halfway through, I decided to
+clarify the scoring mechanism. So, what
+I want, as mentioned, is I wanted to
+generate 10 images. I have four
+criteria. So, that'll be a max score of
+40. Um, that means that I'm going to
+generate 10, evaluate all 10 against the
+four criteria, count the score out of
+40, make iterations the prompt, try
+again, and then pick the winner. Um, and
+I just gave it that because I I realized
+after I did the voice transcript, I
+didn't specifically mention I wanted to
+run 10 times. And it's now opening up a
+real time dashboard for me to show me
+the results, which I think are really
+cool. So, as you can see here, we have
+the first test already in with
+legibility scores and total scores right
+over here. And it looks like another
+experiment just concluded where we went
+from uh 32 up to 37. And it's just going
+to continue making this prompt better
+and better and better to adhere to my
+specifications over time. I mean, in my
+case, we started with a 32 out of 40.
+So, that's pretty dang good already.
+Realistically, I imagine this is only
+going to take a few runs to get to where
+we want to get it to. But that is the
+magic of auto research because we're all
+going to have different uh definitions
+of good. We're all going to have
+different, you know, constraints in Eval
+test suites. So what might be 32 out of
+40 for me might have started for you at
+like a two out of 100. The one thing
+that matters is just how much time you
+let it run on. So if it runs for, you
+know, a couple of days, couple of weeks,
+couple of months, you can imagine you
+could start basically wherever the hell
+you want and eventually it's going to be
+fantastic. The core thing is just
+defining the right set of evals. And my
+recommendation is always just make them
+simple yes or no answers uh good or bad.
+And now it's just going on in the
+background. You can see here it's
+already done run one and run two. Did
+these two inside of the thread just so
+we could see how they go. Now everything
+else is just occurring autonomously. 10
+diagrams every 2 minutes evaluating via
+cloud sonnet vision mutating the prompt
+and then just keeping the winner. So we
+can apply this to any skill we have. I
+can apply this to my proposal generator.
+I could apply this to auto research
+itself. I could apply this to my agent
+review. I could apply this to my model
+chat. And you know, I will I'm going to
+create a meta skill that goes through
+and then performs a sort of optimization
+for literally every skill in my repo
+just to get it as close as I can to
+perfect. And you can see that it's
+actually taking my advice on the second
+run, okay, as it's written here. Um,
+none of these letters or words or
+anything like that are illeible. There
+are no problems. It just finished up
+another one, by the way. Um, it's
+linear, so it's left to right. It's
+experimenting with a few different
+styles here, but it does have those nice
+pastel colors, like those cute icons,
+and then ultimately those randed
+borders, which I like. And it's just
+getting better and better and better.
+This is probably one of the ones that
+failed. It didn't spell authorization
+right. Eventually, the runs get so good
+that it's in this sort of handdrawn
+pastel uh uh style, which is more or
+less exactly what I want. And, you know,
+we eventually hit 39 out of 40 on this
+experiment, which I think is pretty
+good. You know, for me to get 39 out of
+40, sort of like equivalent to me
+getting 97.5% on a test. I'm fine with
+97.5%. Some quick tips on the eval. Um,
+you know, yes or no is the simplest way
+to pitch it. Does this diagram contain
+X, Y, and Z? Only two possible answers
+there. You can try implementing some
+sort of scoring or scaling like a liyker
+scale. You know, evaluate this out of
+seven for X, Y, and Z. In my experience,
+not so good. Just because you're
+compounding probabilities here. The more
+variability you give the model at every
+step along the chain, the more like
+variable it gets in total. Imagine like
+a little cone, right? It starts over
+here really really narrow but then the
+more variability the more we compound
+out until eventually my my my answer you
+know my out of 40 could be at 39 out of
+40 or it could be a 2 out of 40. So um
+yeah go binary wherever possible. Also
+don't go so concrete and so like narrow
+that the model starts optimizing for
+silly things like I've seen a lot of
+people say stuff like hey make sure this
+is under x words. Make sure this doesn't
+include these symbols or these
+characters. That's pretty that's pretty
+stringent I would say. And um you know
+if you give the model way too many of
+these evals what it'll eventually do is
+it'll just like find a way to parrot
+every single one of the evaluation
+points back to you. So even if the
+actual quality of the thing is not very
+good it'll technically say passes the
+test and it's good to go. That's sort of
+like a student who you know doesn't
+really understand the material but then
+still gets 100% on the test. And that's
+that. I'm going to give you guys access
+to this down below. No email, no
+gatekeeping whatsoever. Feel free to
+take this and then use this for your own
+skills. and I'm going to get to
+employing this on the rest of my own.
+Hopefully you guys learned how to
+optimize your own skills using auto
+research. As mentioned, there are a
+million things that you can apply auto
+research to. It's not just your skills,
+nor is it just your prompts. You can use
+auto research for your websites, for
+your landing pages, for split testing
+titles, thumbnails, emails, literally
+whatever the heck you want. I'm sure a
+lot of people in the ecosystem are
+figuring out better and uh uh more
+powerful ways to do so over time. If you
+guys like this sort of thing, but maybe
+we're a little bit lost in the actual
+Claude portions, definitely check out my
+full 4hour Claude Code course below. I
+cover everything, including skills, but
+also how the interface works from start
+to finish. Aside from that, leave me a
+comment down below with whatever you'd
+like to see in the next video. I read
+every one, and I'll catch all y'all in
+the next. Thank you very much for your
+time.

@@ -1,0 +1,76 @@
+[0.5s] In October, we released a version of
+[2.1s] BAML with a bug in request timeouts that
+[4.6s] caused errors in user code. We fixed
+[7.1s] this issue for the next release soon
+[8.6s] after users started reporting errors.
+[10.6s] The analysis of the bug led to some
+[12.2s] interesting observations about our
+[13.7s] process, especially regarding vibe
+[15.5s] coding and code review. Because our
+[17.5s] users experienced some outage, we wrote
+[19.2s] up those observations as a postmortem
+[21.2s] and posted it to our blog, which you can
+[22.9s] read here.
+[25.5s] We apologize for any issues or downtime
+[27.6s] that this caused you and we hope you
+[29.0s] find the postmortem interesting
+[30.4s] especially if you're using coding
+[31.7s] assistance to ship complex features.
+[35.0s] So a number of different users have been
+[36.9s] asking us to implement the skip
+[38.8s] attribute for class fields namely
+[41.2s] seedart Benpain eligas and gclomax and
+[45.0s] I'm sure others have asked for this. I'm
+[46.6s] sorry if I missed uh your requests or
+[49.0s] issues but the point is uh this
+[51.6s] attribute currently only works for
+[53.2s] enums. doesn't work for classes. And so
+[55.4s] what I did is I made some changes where
+[57.5s] now I can add the skip attribute to
+[60.1s] class fields. And as you can see here in
+[61.8s] prompt fiddle, whatever uh field
+[64.5s] contains skip, it will not show up in
+[67.0s] the prompt when you send the request to
+[69.4s] the LLM. Now the only caveat is that
+[72.7s] these fields with skip they must be
+[75.3s] optional otherwise you will get an error
+[77.4s] because it wouldn't be possible to parse
+[79.1s] the LLM response if the LM skips this
+[82.6s] type. Right? So that's why for now this
+[85.0s] has to be optional but I think this
+[87.5s] covers most of the use cases that you
+[90.1s] guys are asking for. So thank you for
+[92.2s] opening all these issues.
+[94.8s] Hello tune is getting a lot of noise and
+[97.5s] regardless of our own personal opinions
+[99.2s] we realize that it's very important for
+[100.9s] developers of BAML to have the choice to
+[103.0s] do whatever they want with rendering
+[104.7s] tokens in the prompts. So we've done our
+[107.4s] best to actually support multiple output
+[109.3s] formats for values printed inside of
+[111.3s] BAML prompts. So now you can use JSON as
+[114.0s] you already have been using. You can use
+[115.7s] YAML and you can use tune. And I'll show
+[117.5s] you how easy it is. As you can see over
+[119.9s] here, you can use tune values, you can
+[122.3s] use normal values as we're used to
+[124.1s] seeing. You can use JSON minified values
+[126.9s] by using the new format filter available
+[129.4s] to yourself. You can use YAML. And in
+[132.4s] addition, you can also use tune. If you
+[135.9s] go ahead and modify aliases, you'll get
+[137.8s] aliases printed out. If aliases go away,
+[140.0s] you get the original types.
+[142.1s] So, it actually works with all types
+[144.0s] along the way without you having to
+[145.6s] think about it. The whole point is BAML
+[147.8s] works as you want it to work and you now
+[150.0s] have the flexibility of many, many
+[151.7s] different output formats. Thank you to a
+[155.0s] thank you to Jake on Twitter who
+[157.9s] actually convinced me that for his use
+[159.7s] case, Tune has been saving them tons of
+[161.5s] money. So, I'm excited to offer this to
+[164.0s] every new BMA user as an experimentation
+[165.8s] that they can run to see if Tune helps

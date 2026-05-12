@@ -1,0 +1,854 @@
+What's up engineers? Andy Devdan here. I
+have a simple trick question for you.
+How do you know you're improving from
+the vibe coder to the senior engineer
+shipping to production? With each
+prompt, how do you really know you're
+improving your ability to ship with
+agents? Even Andrew Carpathy, one of the
+greatest engineers of our generation,
+feels left behind. He says, "I've never
+felt this much behind as a programmer."
+I think this speaks to a larger trend
+going on right now where we see a
+widening gap between engineers that are
+using agents and engineers that haven't
+been able to keep up. And with the
+creator of Claw Code himself sharing his
+individual setup, I thought this would
+be a great time to talk about a new
+mental framework I've been using for
+over 2 years that's helped me
+operationalize my agents so that I can
+continuously improve. One step is not
+enough. You need to be thinking about
+how to continuously day after day
+improve what you can do with agents
+because the ceiling keeps moving higher.
+This framework I'm going to share with
+you here strikes a common thread between
+everything happening right now in the
+age of agents from some of the best
+engineers feeling like they're falling
+behind which by the way Andrew Karpath
+is going to catch up with no problem.
+All the best engineers have one thing in
+common. They are self-aware. You can see
+he knows that this feels like a skill
+issue and he's 100% right about that.
+Agentic engineering is a new skill. New
+skills need new frameworks to measure
+progress against. This mental framework
+I'm going to share with you will tie
+together the Ralph Wickham technique
+with Boris Churnney setup and it'll give
+you a concrete road map for knowing for
+a fact that you're improving. If you
+don't measure it, you will not be able
+to improve it. So let me introduce you
+to threadbased engineering.
+So what do I mean when I say a thread?
+I'm talking about a unit of work over
+time driven by you and your agents. A
+thread has two mandatory nodes. You show
+up for the prompt or the plan and the
+review or the validation. Now, the
+middle piece here is your agent doing
+work. These are the individual tool
+calls that your agent makes. The
+beginning is you prompting or planning.
+The middle is your agent doing work. And
+the work here is the string of tool
+calls. And the end is you reviewing or
+validating. This should look very
+familiar. Every time you hit enter on a
+prompt in a tool with an agent, you are
+starting a thread of work. Let me be
+super concrete here. Every time you open
+a terminal and you fire up your agentic
+coding tool and you run a prompt, what
+is this codebase about? You are firing
+up a new thread of work. So, I've just
+ran the prompt and now my agent is doing
+its line of work. It's running a chain
+of tool calls. In this case, it's firing
+off a sub agent to accomplish work. But
+you can see there are all the tool calls
+running. When this completes, I'm going
+to have to review the work. So, you and
+I show up at the beginning and the end.
+So, 10 tools, 21K tokens. Now it's going
+to give us a summary and this is us
+reviewing the work. This line of work,
+this thread has now completed. This is
+what I mean when I'm talking about
+threads of work. So why do we care about
+the base thread? It's because this gives
+you everything you need to know to
+improve. And the key insight here is the
+fact that you can measure the value your
+agents creating in tool calls. Tool
+calls roughly equal impact assuming
+you're prompting something useful. Now
+pre2023 you and I were the tool calls.
+We were updating the code. We were
+reading. We were doing the web requests.
+We were doing all of that. But
+everything has changed. Now we show up
+at the beginning with the prompt and the
+end with the review. The base thread
+represents a unit of engineering work
+over time driven by you and your agent.
+Now the base thread itself isn't that
+interesting, but everything we do from
+here builds on that. Because after you
+have one thread, guess what you can do?
+Yes. Scale it.
+parallel execution. You can set up
+multiple threads of work running
+simultaneously in your terminal, in your
+git work tree, in your sandbox. And
+normally these will be spread across
+time. You can kick your prompts off in
+sync together like this, but oftent
+times you'll be firing off a new
+terminal or work tree or some process,
+right? some cloud out of the loop agent
+decoding tool across time because you
+can't really review or prompt everything
+at the same time. There's always a
+little shift over time. So here's a
+prompt. Once that line of work gets
+going, you can write another prompt.
+Once that line of work gets going,
+you're freed up to write another prompt
+or plan and then you eventually review.
+And we can concretely see this from an
+engineer like Boris Churnney, the
+creator of Claw Code. How does this tie
+into everything happening right now in
+the industry? Everyone is running
+threads of work. Boris has this great
+tweet here. He's talking about his
+vanilla setup of cloud code. It's
+relatively simple, but you can see here
+he is running the P thread parallel
+threads. All right, he runs five clawed
+codes in his terminal and he numbers his
+tabs one through five. So out of the
+gate, Boris Churnney expects to run
+multiple agents. It's not even a
+question. He just defaults to running
+five agents in parallel. Guess who's
+getting more done? The engineer kicking
+off a single agent in one terminal or
+five agents in five separate terminals.
+This is the Pthread in action. Now, if
+we scroll down even further, he mentions
+this as well. He also runs five to 10
+additional cloud codes in the Cloud Code
+web interface. All right, so he's got
+background clouds running and he kicks
+them off using the at symbol you can run
+in Cloud Code to kick off sessions in
+Chrome that he teleports back and forth.
+This is very cool. And once again, he's
+keeping track of multiple threads of
+work. So this is very powerful. After
+you have a single line of work running,
+you can then kick off additional lines
+of work, right? Units of work. You can
+kick off additional threads. I do this
+so often that I have tools like the fork
+terminal skill that I can use to kick
+off brand new terminals and kind of
+branch out. And I also have tools like
+this pthread review the Ralph Wiggum
+implementation in apps/star. And I want
+to run four of these. All right. So I'm
+going to fork my terminal and I'm going
+to kick off a brand new process. I have
+Pthread alias. And so what I'm going to
+do here is kick off multiple threads of
+work with a single prompt. All right. So
+check this out. I forked a terminal and
+it's created four instances of this
+Asian. I'm using a few different tools
+and a few different skills combined
+here, but the idea is simple. I can have
+my agents and I can run commands that
+spin up additional agents. So, what I'm
+doing here is I have four agents running
+in parallel with that same prompt.
+They're all figuring out what this
+codebase does. And if we scroll up here,
+you can see these are all individual
+instances review the Ralph Wickham
+implementation in apps. So, I have four
+agents, right? I just spun up 4x the
+compute that a normal engineer would by
+parallelizing. All right, so this is the
+P thread and this allows me to tap into
+more compute. This is ultra useful for
+things like reviewing. In addition to
+the way that Boris uses cloud code,
+where you are spinning up one to 10
+parallel cloud codes to accomplish
+individual units of work, you can also
+spin up agents to run the exact same
+prompt to get more confidence in their
+responses. For example, one of my
+favorite ways to use a tool like this is
+to run codebased review. Repeat threads
+let you scale your engineering output
+through parallelism. This is one
+concrete way to know that you're
+improving. Can you spin up more threads
+of work where you are prompting and then
+reviewing after your agent has
+accomplished the work? If you have to
+sit and babysit a single agent, you
+probably need to scale down your threads
+and just work on a single thread of
+work. So, this is just two of six
+threads we're going to talk about in
+this video. We're going to work through
+these to showcase how you can think
+about engineering with agents and
+improving what you can do. And there's a
+common thread. There's there's a common
+idea among all of these, right?
+Ultimately, what we're doing here is
+increasing the total tool calls your
+agents are making on your behalf. So,
+we've covered the base thread and the P
+thread, the two most common types of
+threads, the two most common lines of
+work you can do with your agents. We're
+going to cover C, FB, and L threads
+right now. And to be super clear, we're
+not talking about traditional, you know,
+CPU process threading. These are lines
+of work that you and your agent
+accomplish where you show up at the
+beginning for the prompt or the plan and
+then the ending for the review and the
+validation. All right, this is a new way
+you can think about engineering with
+agents.
+What if you have a massive multi-phase
+plan? You can use a Cthread. The C
+thread is perfect for this. This is a
+chained thread. You can chain together
+work into phases. Now, these checkpoints
+aren't because your agent has messed up.
+That's not what a chain thread is.
+That's bad agent coding. All right. What
+I'm talking about here is intentionally
+chunking your work. Why would you use a
+Cthread? There are two main reasons.
+Maybe the work can't fit in a single
+agent's context window. Or maybe you're
+doing high pressure production work and
+you want to chunk it down to make sure
+every single step is right. This is the
+tool you can pull out of your pocket
+when you have a large chunk of work that
+needs to be broken down into smaller
+pieces. Say you have a 50-step plan that
+is very sensitive and if one thing goes
+wrong, things will crash in production.
+Say you're doing like a migration or
+something, right? Some type of high-risk
+production level work. You can run in
+chunks. So you can plan and review one
+chunk of work and then after you review
+you can continue the next phase of work
+with that agent or another agent and
+then you can continue to phase three. So
+this is a great way to chunk up work.
+Cloud code has the ask user question
+tool where your agent can stop
+midworkflow and ask you a question. This
+is great for Cthreads. You can also just
+use the system notification and this is
+something that Boris does. He mentions
+the system notification when cloud code
+needs input. So when it's finished its
+chunk of work that it just did, you can
+have your agent use natural language to
+communicate to you that it's finished
+work. I have a text to speech hook that
+runs in some of my code bases that will
+have my agent summarize the work and
+then spit it back to me in natural
+language. It's super useful for hopping
+back in the loop for that next phase of
+work. So Cthreads are very powerful for
+this reason. It's great for production
+sensitive work. Of course, on the
+channel, we always talk about increasing
+the trust you have with your agent so
+that you need fewer human in the loop
+review steps. But still, we have to be
+realistic. There's a lot of production
+work that we want to decompose down into
+single steps so that we increase our
+trust in the work that was done. All
+right? And the trade-off here is your
+time and energy. The Cthread is the
+first thread where you really want to
+question yourself before you use this.
+Do you need to break this work down into
+phases? If you do, C threads are great.
+If you don't, just use a base thread.
+Let's move on to the F thread. This is
+by far my favorite type of thread. All
+right, this is the fusion thread. This
+is also known as a fusion chain. We've
+talked about this pattern for over two
+years now on the channel, and it's never
+been more relevant. The idea is simple.
+You send the same prompt or a similar
+prompt to multiple agents. You then
+review all the results and then you
+combine them. You aggregate them. You
+fuse them. And in previous videos, we've
+talked about the best of end pattern
+where you spin up multiple agents and
+then choose the best. This is that
+pattern exactly with entire lines of
+agent work. All right. So now, not only
+are we parallelizing, we're spinning up
+more agents using more compute and then
+taking the result we like the best and
+then combining it. And you can aggregate
+any way you want, right? It's not always
+best of end. Sometimes you want to
+cherrypick ideas and results from many
+different agents to get a superior
+result. Again, I use this all the time
+with my Pthread tool. If we open up a
+terminal and then we can prompt
+something like this. I have this queued
+up already for us. So, I'll just paste
+the send. Use Pthread with three CC3 gem
+three codecs and then use this prompt.
+Exactly. We're firing up multiple agents
+inside of a single workload. We're
+parallelizing a result. And this is one
+of my favorite ways to use agents. By
+the way, I'm doing rapid prototyping all
+the time now. And my Pthread skill, my
+paralleliz skill helps me do this. Now,
+the fusion thread starts out as a P
+thread and then you combine the results,
+right? You choose the best event or you
+aggregate or you merge the result,
+right? You fuse them and then you have
+your final result at the end. And so
+what's going to happen here is my agent
+is going to kick off nine agents in
+parallel, three running cloud code,
+three running Gemini, three running
+codecs. And you can see here uh with
+this great MROS tool. I'll link it in
+the description for you. I've kicked off
+multiple agents and they're all going to
+spin up their own agent sandbox. We've
+talked about agent sandboxes in the past
+on the channel. I'll go ahead and link
+those as well if you're interested. Um
+agent sandboxes are great because you
+can defer trust with your agents. This
+is the pattern for rapid prototyping,
+running many versions, right? For
+looking into the future with multiple
+branches of what a solution could look
+like. Again, this is my favorite thread
+by far just because you can do so much.
+You can experiment so much and so fast
+by deploying more compute. So anyway, so
+these agents are going to spin. This is
+a P thread I've spun up, right? So I
+have multiple lines of work running. I
+have nine lines of work technically
+running right now. And when they finish,
+we're going to synthesize them, combine
+them, choose the best, and then when it
+comes to agent sandboxes, we would pull
+down maybe one or two versions, and then
+combine them to select the result we're
+looking for. The key insight here is
+simple with the fusion thread. The
+chances you'll have a successful agent
+complete the work go up when you have
+more agents trying to complete the work,
+right? Just take more shots at the
+problem. Fusion threads scale through
+consolidation. And the idea is so
+simple. Here we're using more compute to
+gain more confidence. If you ask one
+agent a question, it'll say something
+back. If you ask five, you'll get a much
+higher confidence in the answers that
+were returned. Say four out of five of
+them gave you the exact same answer. you
+can be more confident in that answer.
+Research agents use fusion threads
+pretty often. You know, using sub aents
+or, you know, spinning up multiple
+versions to do multiple web searches.
+That's the kind of most blatant example
+out there. But there are many other ways
+to use the fusion thread. This is where
+we start stepping into advanced agentic
+engineering territory. Most engineers
+haven't used a fusion thread outside of
+spinning up multiple sub aents, which is
+absolutely an example of a fusion
+thread. The big difference there is your
+primary agent is fusing the results for
+you. So you need to be clear about how
+that work occurs. The fusion thread is
+the cream of crop for rapid prototyping.
+And I'm just going to go ahead and say
+this. The future of rapid prototyping
+will be done with fusion threads. You
+can mark my words on that. I'm betting
+big on this trend. This is the F thread.
+Now things start to get interesting. Now
+we can start scaling and getting kind of
+meta with our threads. All right.
+Everything in engineering eventually
+recurses back on itself. You build the
+thing with the smaller pieces of the
+thing. Bthreads, also just known as a
+big thread, is a meta structure. Now
+your prompts are firing off other
+prompts. So the clearest example of this
+is firing off sub aents. When your agent
+prompts other agents, those sub aents
+can do more specific well-defined work
+for you. The simplest example of this is
+the plan build workflow where you have
+one agent plan and the other build. The
+great thing is here with the Bthread is
+from your perspective as the engineer
+you're just running a prompt and you're
+reviewing it at the end. Of course you
+will agent engineer all the stuff that
+happens on the inside whether you're
+running a base thread a P thread C
+thread F thread whatever you're doing
+inside of your big thread that is all
+hidden from you. It's a black box. You
+don't care because you've engineered it
+the right way and it's just going to run
+that way. So the whole idea here with
+the B thread is by deploying more
+compute here you create a thicker
+thread. You can run more threads, you
+can fuse your threads and you can create
+thicker threads. More stuff happens here
+within a specific unit of time when you
+deploy the right subthreads. All right,
+so this is the meta structure. The big
+thread contains threads. The key pattern
+here is that you have an agent that is
+writing prompts for you. The first
+version of this showcased by claw code
+is the sub aent. When you prompt your
+primary agent to run sub agents, it is
+prompting the sub agents. Now on the
+channel, we've also looked at the
+orchestrator agent, which is the next
+higher level up to this where you have a
+orchestrator agent kicking off primary
+agents. There's a lot more you can do
+there, but you know, imagine a team,
+right? Your orchestrator agent can kick
+off a team, a plan agent, a scout agent,
+then a build agent, then multiple review
+agents, then finally a, you know,
+pre-eploy staging agent. Then you come
+in at that last step for the review and
+then you kick it off, right? That's the
+B thread. A bunch of stuff, other
+threads of work happen inside, but you
+don't care about them. That's where your
+B thread to manage. From your
+perspective, you kicked off one thread
+with a prompt and then you reviewed it
+at the end. You showed up at the
+beginning and the end under the hood.
+Your system of agents or your teams of
+agents orchestrated running a base P or
+of course another Bthread underneath.
+All right, Bthreads are really important
+and very powerful because they start
+pushing you into not just running
+agents, right? They start pushing you
+into this idea of combining code plus
+agents to get outsiz return on your time
+and your effort. All right? And a
+pattern that does exactly that is
+starting to emerge. We now have this
+Ralph Wiggum pattern which is
+effectively AI engineers are starting to
+figure out that agents plus code
+outperforms agents alone. Right? Ralph
+welcome is literally a loop over an
+agent to accomplish specific work. I'm
+being a little bit reductive there, but
+that is the idea. We've talked about
+this idea for over a year now. This is
+in both courses, principal AI coding and
+tactical agent coding. We know this as
+AI developer workflows, ADWs, but it is
+great to see a pattern like this really
+hitting the mainstream. Big shout out to
+Jeff Huntley for bringing this idea to
+the masses and really scaling it. That's
+the B thread. Now, speaking of Ralph,
+there is one more thread that ties it
+all together. So, how do you get thicker
+threads? You build teams of agents. You
+build workflows, right? You build
+agentic workflows. You build prompts
+that call other agents. You build sub
+agents, custom agents. Ultimately here,
+what we're doing is you're specializing
+your agents. You teach your primary
+agent how to use the right tools. And
+then they do it end to end.
+Now this brings us full circle to the L
+thread. So the L thread is high autonomy
+endtoend long duration work. All right,
+extended agent autonomy without human
+intervention. You can have a huge huge
+prompt that runs and it can be hundreds
+and hundreds of steps long. It could run
+for hours. You've seen Boris and other
+engineers run prompts for hours and
+hours. Some, you know, over a day long.
+And I think he had a post down here
+somewhere showcasing one of his long
+duration runs. Yeah. 1 day, 2 hours.
+Very, very impressive longunning L
+thread. And he even mentions the Ralph
+Wickham plugin here. But the idea is all
+the same. Scratch all the, you know,
+fancy prompting threading work from all
+of our previous steps. Just write a
+clearer, better prompt with the right
+tooling that lets your agent run longer,
+high autonomy, massively long duration
+workflows, calling many, many, many
+tools. We're talking hundreds and
+thousands of tool calls. And this is the
+Lthread. Now, notice what this looks
+like. The Lthread comes full circle
+right back to our base thread. Same
+shape, just longer, more tool calls.
+That means more autonomy. Nothing fancy
+going on here, right? We're getting
+better at prompting. We have better
+models. or manage our context better and
+our tools help drive that effort
+forward. Once again, I'm referencing the
+core four context model prompt tools. If
+you understand the core four, you
+understand agents and therefore agentic
+engineering. Everything comes back to
+this. The engineer running longer
+threads of useful work is outperforming
+the others. There's a ton of untapped
+potential in figuring out how to kick
+off agents to run longer. This is where
+great planning pays off because great
+planning is great prompting. And this is
+of course why Ralph Wiggum is gaining so
+much traction right now because
+engineers are realizing that if you can
+have your agent keep running against the
+problem you want to solve, it will run
+longer chains of work with more
+autonomy. Right? Even if we are kind of
+conducting the autonomy with something
+like the stop hook. Now I want to give
+the stop hook a little attention here
+because I think Ralph Wickham again
+great idea Boris mentions this as well
+right stop hook for very longunning
+tasks the L thread I will either prompt
+claw to verify its work with a
+background agent so here this is in fact
+a C ththread after it finishes it work
+he's going to run another agent to
+verify its work okay so he's chaining
+together multiple calls to make sure the
+work is done or he uses the agent stop
+hook all right so this is super
+interesting the agent stop hook is
+something we're going to be talking
+about more on the channel. I didn't want
+to put it in this video, but I wanted to
+briefly kind of showcase the workflow.
+Your agent tries to stop, the stop hook
+runs, and then there's some decision
+code that you run. This is the
+deterministic code. The stop hook can
+intercept, it can run some code, it can
+check a progress file, it can run a
+validation command, and then it can
+continue the workflow where you reloop
+over again or it completes the work. All
+right, so the stop hook is super
+important. It allows you to tap into
+that deterministic traditional code plus
+agents. Again, if you're inside of
+tactical agent decoding, you've already
+seen this. You're already working with
+this. We call these ADWs there. All
+right. The stop hook lets you tap into
+that inside of the claw code ecosystem.
+Very powerful. What do all of these
+techniques give us? Thread-based
+engineering is a way to think about
+operating with agents. You show up at
+the prompt and the review, but this
+means that there is a huge intermediate
+stretch of time where your agent is
+doing the work. This gives you the
+opportunity to spin up additional
+threads of work in different shapes and
+connect them in different ways. So, we
+have six threads here. These are the
+most common that I've seen and the most
+important for quickly getting results
+out of your agents and for knowing that
+you're improving. So, let's dive into
+that more. Right, we kicked this all
+off. We started this video by asking,
+how do you know you're improving? You
+can think of improving in terms of your
+total threads, the length of your
+threads, the size of your threads,
+ultimately boiling down to one thing.
+The number of tool calls you're running
+with your agent.
+There are four concrete ways to improve
+with the threadbased engineering
+framework in mind. You can run more
+threads, you can run longer threads, you
+can run thicker threads, and you can run
+fewer human in the loop checkpoints. All
+right, when you do this, you're
+increasing the trust you have in your
+system. So these are the four ways you
+can improve when you're thinking about
+engineering with agents, right? When
+you're thinking about agentic
+engineering, more threads, longer
+threads, thicker threads, or fewer
+checkpoints. And you can see this, you
+know, for me, Boris's post here is so
+valuable because it showcases how he's
+doing more with his threads of work.
+He's got five clouds in parallel in the
+terminal. Fantastic. And then he puts
+them on the background, probably short,
+medium to long running threads, but he's
+scaling up even further. Right? If we
+hop back to parallel, right, our P
+threads, he's got multiple threads
+running. He's got 10 threads running at
+most based on his post. So very very
+powerful, very cool. There are a couple
+other mentionables here. He always uses
+Opus 4.5. Makes sense. Claude in the
+repo, but they don't let it get too
+large. That's great, right? He's got
+inloop agent decoding inside of his
+terminal, and he's got outloop agent
+decoding with the cloud code web
+interface, so he can step away. Let's
+see. Anything else here? Interesting. He
+does not use dangerously skip. He sets
+up specific permissions. I think this
+makes sense if you're working in a
+single codebase for the most of your
+work. But you can see all in all he's
+got multiple threads running of work,
+specifically parallel threads, right?
+And then his final tip here is the most
+important thing to get great results out
+of cloud code, give it a way to verify
+its work. Essentially creating a
+validation loop or a closed loop system,
+right? A feedback loop so that your
+agent can resolve its own work. And this
+speaks to both the strengths and the
+weaknesses of the Cthread. You don't
+really want to be hopping in the loop.
+In fact, this is one of the four ways
+you can improve. reduce the number of
+times you have to review your agent's
+work. Again, there's some critical
+scenarios where you do want to step in
+the loop and make sure that your agent
+has done the right thing, but as much as
+you can give your agents the tools to
+validate their own work. All right, so
+again, four ways to improve your
+engineering. Run more threads, run
+longer threads, run thicker threads, and
+run fewer human in the loop checkpoints.
+I know this is a little high level. It's
+a little void of details of how you run
+more, longer, thicker, or fewer, but the
+ideas are there. Spin up more terminal
+windows. Make sure you have inloop agent
+decoding tools and outloop agent coding
+tools. Of course, Boris uses cloud code
+and the cloud code web interface. You
+can use whatever you want. I always
+recommend, you know, for your production
+assets, you build your own net new
+agentic layer around your codebase.
+That's one of the critical topics inside
+of tactical agentic coding. Why do I say
+that? It's because you want a
+specialized set of agents operating your
+specialized codebase built to solve a
+specific problem. So these are four ways
+you can improve your agentic engineering
+by looking at everything you do as
+threads of work.
+And so I want to share just one last
+thread here, kind of a teaser thread for
+you. What happens when your agentic
+engineering evolves to such a high level
+that you're able to push your agents far
+and they're reviewing all their work and
+they're accomplishing tons and tons for
+you. What is the future of engineering?
+Right? What happens when you increase
+your trust with your agent to the max?
+You blow away the review step. All
+right? There is a hidden seventh thread.
+I call it the Zthread. This is the zero
+touch thread. All right? This is the
+maximum trust you have with your agents.
+I've teased this in the singularity
+video we put out last week or a couple
+weeks ago and this is a big idea of
+where engineering is going. I'm not
+going to talk about this one too much
+because it's one of the big ideas we
+talk about in tactical agent coding near
+the ending advanced lessons and a lot of
+engineers just don't believe that this
+is possible and I don't want to confuse
+any engineers especially newer engineers
+in thinking that this is vibe coding
+this is not vibe coding this is very
+very high level very advanced agentic
+coding this is maximum trust it isn't
+that we don't look at the code it's that
+we know we don't have to that's the
+endgame let's come full circle here how
+can great engineers like Andrew Carpathy
+keep up in the age of agents that we
+live in. You can think of all of your
+work in threads. A thread is a unit of
+engineering work over time conducted by
+you and your agents. You prompt and plan
+in the beginning and then you review and
+validate when your agent has finished.
+In the middle, your agent is doing the
+work through tool calls. This is
+threadbased engineering. So, how do you
+know you're improving? You know you're
+improving because you can do one of the
+following. You can add threads. You can
+run longer threads. You can combine the
+results of different threads of work.
+And then you can compose threads
+together so that you show up at the
+prompt and review step while additional
+threads run in between your agents work.
+So your agents are firing off other
+agents to complete and chain together
+work. And then in the end you just run
+longer threads. You do this by learning
+great agentic prompt engineering and
+great context engineering. In the end,
+remember that everything boils down to
+just four pieces. The core four,
+context, model, prompt, and tools. You
+can use these six threads as a
+foundation for you. But the core idea is
+to remember if you want to improve,
+you're running more threads, you're
+running longer threads, you're running
+thicker threads with nested threads
+underneath, and you're running fewer
+human in the loop checkpoints, right?
+because you've built systems that you
+trust, because you're using better
+models, better tools, better context,
+and you're writing better prompts. All
+right, the most important thing to
+remember, too, is that agentic
+engineering or engineering with agents
+is a new skill. At first, you'll be
+running short threads of work with one
+agent in the terminal. Then, before you
+know it, you'll be more like Boris,
+running five agents in the terminal and
+five more out the loop in the cloud
+somewhere. You'll add more threads.
+You'll make them thicker and then you'll
+make them run for longer. Then once
+you've pushed to the edge of agentic
+engineering, you'll access the final
+thread level, the Zthread. This
+represents the northstar of the big
+ideas we talk about in tactical agentic
+coding. I'll leave a link for that in
+the description for you if you're
+interested. But in the end, we're
+running Zthreads, zero touch threads.
+There's no more review node. This is
+what you want to be pushing toward. This
+is what I and other top engineers are
+pushing toward. I don't want to have to
+review my agents work. I want to be able
+to push past that, scale past that. All
+right? I want to accomplish the mission
+of this channel, which is to build
+living software that works for us while
+we sleep. That's been the mission for
+years. That hasn't changed, and we're
+going to work toward that every week
+here, every single Monday. This is the
+future of engineering. So, start pushing
+toward it. Don't be afraid of it. Don't
+run away from it. Software engineering
+has changed again and again and it will
+continue to. But by thinking in threads,
+you can know that you're improving
+because you're giving more work to your
+agents and you're showing up where it
+matters most, the planning and the
+reviewing. If you want to scale your
+impact, you must scale your compute. If
+you want to push what you can do further
+and fast track your journey into this
+new role of Agentic Engineering, check
+out Tactical Agentic Coding, link in the
+description. As always, I'll see you
+next Monday. Stay focused and keep
+building.

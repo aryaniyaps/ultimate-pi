@@ -1,0 +1,86 @@
+Fridays are for customers. Every Friday,
+each one of us picks a task and tries to
+ship it to make someone really happy.
+Let's see what we got up to.
+>> Hello Yoshi. Thanks for your report on
+Bama Playground. Now you can run tests
+and at the same time you can open the
+sidebar as much as you want.
+>> Hey Hunter, thanks for letting us know
+that our licenses were not getting set
+correctly in Baml Pi. Um that is now
+fixed. We have tracked it down and we
+have also added a step to our CI to make
+sure that this doesn't happen again.
+>> VIP gave a popular workshop on prompt
+engineering in December of 2025.
+Baltifix was asking for notes from that
+meeting. They're a little hard to find
+so I just added them to our blog.
+Thank you Luke for submitting this PR
+that fixes egg script modules. The only
+entry that you missed in the export map
+was the logging entry but other than
+that you nailed it. So this PR is being
+merged right now. Thank you for
+submitting it.
+>> With Prompt Fiddle, you have the ability
+to see all your files and tests uh all
+in one place and run them. Uh we were
+having some issues though um with
+scrolling behavior that uh we uh
+released on a recent issue. Uh and so
+now um we've been able to fix that uh
+with a couple things uh by having our
+test fly out like this. Um, and
+uh, we no longer have uh, any issues
+with sizing.
+>> Hi Zuski, thank you for reporting the
+issue where multimodal types weren't
+working with the OpenAI responses
+provider for BAML. We were actually
+rendering the prompt but not rendering
+the actual content inside of the prompt.
+We've actually fixed this issue and now
+as you can see multimodal types for the
+OpenI responses API works perfectly. The
+URL gets generated correctly. The
+preview works and we've also gone ahead
+and added a bunch more tests into our
+core system. So we actually validate the
+core web API request is exactly what
+you'd expect. Thanks for your help,
+Zooski.
+Hey, Alec. Uh so you called out for us
+that the way that aliases override enum
+value rendering um was inconsistent or
+is inconsistent today uh between context
+output format and enum values. And I'm
+happy to report that this is now fixed.
+So if we alias the refund category enum
+enum value uh to give me my money back
+you'll see that context output format
+does exactly what you expect it to but
+values are now also uh now instead of
+showing the string refund now show like
+the actual alias. In addition we have
+also added the ability to actually
+access enum values um in prompt
+templates as just direct literal the way
+you expect it to. Um, and this is pretty
+important because the way the reason
+that we would render enum values as the
+value string and not the alias is
+because the way that this used to work
+is that you could actually do something
+like
+this where you would compare the enum
+value with the string representation
+value starting in 20 BAML 206. Hopefully
+uh this will no longer be allowed and we
+will require users uh to actually use
+the enum literals um in their templates
+moving forward. There are probably still
+one or two edge cases that we have to
+hammer out um but with any luck we'll
+have it out in 206.0. Thanks.

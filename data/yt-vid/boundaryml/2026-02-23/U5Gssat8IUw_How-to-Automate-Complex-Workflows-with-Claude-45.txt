@@ -1,0 +1,1614 @@
+[0.2s] I've found that when you have it
+[3.0s] generate the kind of the rationale that
+[5.6s] leads to what it's ultimately producing,
+[7.9s] it does it better because you you give
+[9.3s] it that thinking space.
+[11.0s] >> We're doing the chain of thought but via
+[13.0s] structured output field.
+[14.8s] >> Exactly. [music] That is it. That is all
+[17.3s] it takes now to prep an episode. Once we
+[19.4s] have the title and the description,
+[22.3s] we can kind of just roll with it. Run
+[24.8s] this and
+[27.0s] >> we got the thumbnail. It's a created in
+[29.0s] Riverside. The Luma event is created the
+[33.0s] and and the RSS feed will pick it up and
+[36.6s] that's it. That's how an episode gets
+[38.4s] created.
+[39.0s] >> Make a prompt that is everything you
+[40.5s] have to do. You can always leave in like
+[43.0s] stop and get the human to do this part
+[44.9s] and then you can slowly fill it out with
+[46.6s] more and more automations as you go.
+[53.0s] This is AI that works that uh this is
+[55.3s] the show where we teach you real AI uh
+[57.2s] techniques that work in production for
+[59.0s] real hard problems. Uh I'm Dex. I'm the
+[61.4s] founder of a company called uh Human
+[63.0s] Layer. We help you use coding agents
+[64.4s] better. Kevin, do you want to do a quick
+[66.9s] little intro and then I can kind of talk
+[68.4s] about what we're making today?
+[69.8s] >> Sure. So Kevin Gregory, I work for
+[71.8s] Evolution IQ where we build software
+[75.0s] that uh it's insurance tech software for
+[78.4s] disability companies that helps the
+[80.2s] examiners take the right action on the
+[81.9s] right claim at the right time.
+[83.4s] >> That makes sense. And yeah, um uh over
+[86.1s] the summer me and Vibb spent two days
+[88.6s] building a bunch of automations to
+[90.2s] automate the show because when we do the
+[92.1s] show, there's a ton of stuff of like
+[93.7s] taking the transcript and turning it
+[95.2s] into a summary and then making a good
+[96.9s] email that doesn't sound AI slop and
+[98.7s] then like getting the whiteboards and
+[100.4s] uploading the video and generating
+[101.8s] thumbnails and posting the next episode
+[103.4s] and all this stuff. Uh and we built some
+[105.6s] lightweight automation and then our
+[107.1s] process changed and it was a little bit
+[108.7s] brittle. Uh and so we stopped
+[111.0s] maintaining uh and then uh Kevin started
+[114.1s] helping us out uh and Kevin actually
+[116.2s] automated all this stuff properly. Uh
+[118.0s] and so today we're going to talk about
+[119.5s] uh a bunch of different types of AI uh
+[122.4s] and applications of AI for uh and how to
+[124.9s] glue this all this stuff together to
+[127.1s] make this show uh run smoothly. Does
+[130.2s] that sound right?
+[131.1s] >> Yeah. Yeah, that sounds right.
+[133.8s] >> Amazing.
+[134.2s] >> Cuz I think there's a lot more process
+[136.2s] pieces that go into it than I think most
+[137.7s] people realize. So I think the first
+[139.5s] thing is someone has an idea for an
+[142.2s] episode. Right.
+[146.1s] >> Okay.
+[147.7s] Right. By says I want to teach people
+[149.6s] about semantic streaming or latency or
+[152.6s] whatever it is.
+[154.0s] >> Right. So typically that that idea is
+[157.0s] just um a topic. It's nothing really
+[159.4s] more than a a topic. Right. Like Dex
+[161.3s] said, I want
+[162.6s] >> Yeah. I want understanding latency,
+[164.8s] right? That's it.
+[166.7s] And so
+[168.5s] then what we need to do is we need to
+[171.0s] come up with after that we need to kind
+[173.4s] of flesh that out a little bit more.
+[176.4s] And
+[178.0s] I have not used a scal draw in a minute.
+[180.2s] So bear with me as I kind of figure out
+[181.8s] all these hotkeys.
+[185.4s] You draw a guy now or something.
+[188.3s] >> I just don't do a lot of drawing and
+[191.6s] architecting on um in my dayto-day.
+[195.0s] Well, the next automation, I don't know
+[196.4s] if you saw, but they have uh they have
+[198.2s] Claude has can hook up to an Excalibur
+[200.3s] MCP now. So, we can uh we should we
+[203.8s] should do an experiment where we we we
+[205.4s] hook up the audio stream to uh Claude
+[207.8s] code and then just kind of like dump
+[209.7s] little like snippets to it and say like
+[211.8s] draw what we're talking about.
+[214.3s] >> That would be cool.
+[215.1s] >> Sorry. Uh anyways,
+[218.6s] >> so the next step is to flesh out the
+[220.2s] episode because we have a lot of episode
+[222.1s] ideas and I think part of it is like
+[226.9s] okay so we have this idea let's put it
+[228.5s] in the backlog on the back burner and
+[230.2s] then at some point we get to say okay so
+[233.4s] so for next week what episode do we want
+[235.4s] to do? We pull out the topic from our
+[237.0s] topic bank and we say like okay what do
+[238.3s] we want this to what do we want to talk
+[240.1s] about in this episode? So at that point
+[242.2s] >> basically like two to three sentences,
+[244.1s] right? Because this is the sum you need
+[245.9s] for the event. Yeah.
+[247.8s] >> Right. So description and then maybe a
+[250.1s] full episode title.
+[252.2s] >> So do you want to show an example on
+[253.6s] like one of like like what goes into one
+[255.3s] of those? I guess just like what's on
+[256.4s] one of the Luma events, right?
+[258.2s] >> Yeah, I can open Luma.
+[261.6s] So we can see so this one, right? So say
+[264.2s] we had a topic of hey Kevin, I want you
+[267.1s] to do some automating. Uh let's have an
+[269.0s] episode where we go over it. Right? That
+[270.7s] is that first box. So that is this. Let
+[273.7s] me just move you all to my other screen.
+[275.0s] That is this box here. Kevin, let's have
+[277.1s] an episode at some point where we talk
+[278.5s] about every way that you've automated
+[280.2s] the AI that works podcast. Okay, cool.
+[282.8s] And then once we get to the point where
+[284.2s] it's like, okay, we're doing this
+[285.8s] episode in this date.
+[287.8s] Let's actually come up with the the
+[289.8s] title, which is going to be AI content
+[291.5s] pipeline revisited, and then the actual
+[293.4s] description, which is this part here,
+[297.1s] right? So, what are we going to send out
+[298.4s] to people to get them interested and get
+[300.0s] them to join?
+[303.2s] >> That make sense? Okay. I'm excited to
+[305.1s] get to the AI part of this.
+[307.0s] >> Yeah.
+[307.4s] >> So far, this is just you hammering me
+[309.1s] and Vib to fill out fill out the cards
+[311.6s] in notion.
+[313.0s] >> Yeah, I know. Speaking of which, we're
+[314.6s] gonna you're going to be hearing from me
+[315.8s] later today.
+[317.7s] [laughter]
+[319.0s] >> Amazing. I'm I'm ready. You mean do your
+[321.8s] work.
+[322.8s] And so one more thing that uh is
+[326.5s] required is kind of a human input into
+[328.6s] this whole process is
+[331.7s] Luma calls it a slug
+[334.6s] but it's the short Luma URL. So this is
+[338.2s] I typically I come up with this. I don't
+[340.4s] really hammer dex or vibe up for this
+[342.3s] too much. Lumo slug/ URL because this is
+[346.5s] pretty easy to come up with. But it is
+[348.4s] one piece that um is is kind of one more
+[353.4s] human input to this whole process. And
+[355.1s] what that is is that's something where
+[358.0s] where is it? When we have luma.com
+[362.1s] whatever uh like this one I think is
+[364.6s] luma.com/
+[367.4s] uh AI pipeline or AI AI content
+[370.5s] generation, right? This right here,
+[372.3s] lumin.com content generation. And all
+[374.7s] the episodes have a quick short, they
+[377.8s] call it a slug.
+[378.8s] >> Call it a slug. Yeah. Okay, cool. I use
+[380.7s] that word all the time. I use the word
+[382.2s] slug all the time. And some people are
+[383.6s] like, not everybody knows what that
+[385.2s] means. And I'm like,
+[386.8s] >> well, they can learn.
+[389.1s] [laughter]
+[389.5s] >> Google exists.
+[390.9s] >> Yeah.
+[391.2s] >> It is a weird word, though. Like it is
+[393.0s] it's it's a weird thing to call that.
+[394.8s] >> Yeah.
+[395.3s] >> Yeah. U because the default is just some
+[397.8s] Yeah.
+[399.2s] >> Sorry. Go ahead. Okay. So, we're
+[400.2s] generating a slug.
+[401.6s] >> We take the description, we take the
+[403.1s] title, we make a slug, and then and then
+[405.2s] what comes next?
+[406.6s] >> And then I have a claw code command that
+[410.1s] uh kind of kicks off the whole
+[413.8s] I call it the episode. Yeah, the episode
+[416.0s] prep. So, the first thing that I do is
+[421.0s] I have to generate an image for the
+[424.0s] episode. And so you can see if I go back
+[427.0s] here, this image here, I don't know how
+[430.0s] to easily get to it. Let me just go back
+[433.2s] one more time. Just go to luma.
+[437.2s] So this image is AI generated.
+[442.1s] Um,
+[442.5s] >> okay. And so that's the first thing that
+[446.3s] the pipeline does is it takes the
+[448.6s] description and it takes the title and
+[451.3s] it runs through a couple of things and
+[452.7s] uses Nano Banana Pro to generate this
+[455.2s] image. And the way it does that is it
+[457.6s] has a base image. And really all it's
+[459.4s] doing is it's coming up with the
+[461.0s] subtitle
+[462.6s] and this kind of graphic here in the
+[464.7s] middle. It's really all it's doing and
+[467.1s] then it's kind of, you know, generating
+[469.6s] the actual image itself. And for the
+[471.8s] record, we used to just have a giant
+[473.4s] Figma board that would uh
+[476.2s] [clears throat]
+[477.3s] that just had all of these every episode
+[479.2s] we would manually like paste in an image
+[481.8s] uh to figure out what the next episode
+[483.7s] title would look like.
+[485.3s] >> Yeah. Well, it's being annoying, but
+[487.5s] yeah, we had a long
+[490.3s] >> just like Okay.
+[492.4s] And and do you want to show us kind of
+[493.8s] like how that I mean do you want to go
+[495.8s] like high level and then dig into the
+[497.2s] code or do you want to like jump like
+[498.6s] show us the code for this part and then
+[500.2s] jump back zoom back out again? How do
+[501.5s] you want to how do you want to go
+[502.4s] through this?
+[503.7s] >> Um I'm fine doing it either way.
+[505.5s] Honestly, I think
+[506.8s] >> Okay.
+[507.3s] >> Uh kind of see the Let's jump from the
+[510.2s] whiteboard. Are you Are you able to pull
+[511.8s] up the quad command and we can kind of
+[513.2s] like figure out if we hit something that
+[515.3s] needs whiteboarding, we can pop back to
+[516.7s] the whiteboard?
+[517.8s] >> Yeah, definitely. Okay, cool. So, is
+[519.9s] this zoomed in enough first of all?
+[522.0s] >> Uh, I think you probably make it a
+[523.8s] little bit bigger. It's It's enough, but
+[525.8s] I would. Yeah, there we go.
+[527.0s] >> All right, cool. So, actually over here,
+[529.4s] you can see there are just a handful of
+[532.2s] clock commands. This socials one existed
+[535.0s] before me. I didn't do this one.
+[536.5s] >> Yeah, I wrote that one. It's not very
+[538.1s] good. The tweets it writes are very bad.
+[540.4s] >> They're very bad. Um,
+[541.8s] >> you should rename it to cringeweets.mmd.
+[546.2s] >> Dex's cringe. MD. Yeah, exactly.
+[549.2s] >> But yeah, so the way it works is we do
+[551.7s] >> we do episode prep and then I even think
+[555.4s] email prep at this point is deprecated,
+[557.1s] but we do episode prep and then once the
+[559.4s] episode airs, we do find clips because
+[562.0s] that gets us we've started generating
+[564.1s] shorts that go on YouTube and find clips
+[566.3s] suggests shorts to our editors and then
+[569.5s] once the episode is done and the YouTube
+[571.5s] video has been uploaded, we run the
+[573.0s] complete episode clock code command and
+[575.8s] that does that kind of finishes
+[577.7s] everything and I'll go over kind of all
+[579.1s] this and I think what's really
+[580.6s] interesting to take away from this is
+[582.0s] it's I think it's very easy to
+[584.9s] have an all or nothing mindset when it
+[586.5s] comes to automating right I want it to
+[589.0s] be push button like I want to run one
+[591.1s] command and then everything to happen
+[593.5s] >> and then everything is you have this
+[594.8s] kind of fired up almost like
+[596.0s] interactively right it's like run the
+[598.1s] command I don't have to know which args
+[599.8s] to pass into it claude will ask me what
+[601.8s] things need to go into it to make the
+[603.3s] next thing happen
+[604.6s] >> exactly but I think something else to
+[606.4s] keep in mind is even if auto automate 95
+[608.9s] or 90% of something, that's still a huge
+[611.7s] win, right? So, we're at the point now
+[613.4s] where the emails that it generates are
+[615.8s] good, typically only need one round of
+[617.8s] comments, but we still have to review
+[619.8s] them, right? You and you'll see in here
+[622.2s] I don't have it com uh create the
+[625.2s] Riverside event, create the description,
+[627.6s] and post to eyeballs LinkedIn, right? I
+[630.5s] there's I am an a human in the loop
+[633.1s] there to make sure that everything is uh
+[635.5s] buttoned up and correct before it posts
+[637.5s] to viol LinkedIn and same
+[639.2s] >> there's almost this like it's I think
+[640.9s] about this a lot people talk about like
+[642.1s] sandboxes and it's come up a lot with
+[643.7s] the openclaw conversation of like
+[646.5s] >> you kind of want to like define what are
+[648.2s] the boundaries outside of your agentic
+[651.2s] sphere that you want human approval like
+[653.8s] what what requires approval to go out of
+[655.6s] the out of the box and it's like posting
+[657.8s] publicly on LinkedIn is sending an email
+[659.8s] to thousands of subscribers. These sorts
+[661.6s] of things you want to like guarantee.
+[663.0s] And so so you've engineered this process
+[664.6s] so that the things that you uh can
+[667.2s] change later are are kind of just get
+[669.4s] happen automatically and the things that
+[671.2s] like are let's say one way uh are done
+[674.7s] manually.
+[676.2s] >> Exactly. That's a great way to put it.
+[678.3s] >> Cool.
+[678.6s] >> So I think automating doesn't have to be
+[680.1s] an all or nothing.
+[682.0s] >> Cool. So yes, this was the entire thesis
+[684.6s] behind human layer was like, okay,
+[686.2s] automate the things, but also like
+[687.8s] maintain control and guard rails around
+[689.9s] the the parts that are high impact,
+[692.2s] >> but are also high value, right? If it
+[693.9s] can write the post for you and get it
+[695.3s] right 90% of the time, and you're only
+[697.4s] making changes once in every 10 times,
+[699.8s] that's great. But you still want to have
+[701.0s] the like it's worth reviewing it every
+[703.2s] time,
+[703.8s] >> right?
+[704.3s] >> Rather than trying to automate it to
+[705.8s] 99.9%
+[707.4s] like quality. How much time did this
+[709.8s] whole process take you before like
+[711.9s] before all of this? How maybe what two
+[714.4s] hours a week?
+[715.5s] >> So before we had the V1 of it, which was
+[718.6s] like the web app that like had like
+[720.6s] Firebase and would like pull all the
+[722.3s] stuff and it was like probably like
+[724.1s] three or four hours a week.
+[726.3s] >> And once we built that automation
+[727.7s] pipeline, it was like
+[729.8s] >> one hour a week between the two of like
+[733.3s] half an hour and knock everything out.
+[735.0s] >> Yeah. Um, and then our process changed
+[737.5s] and their like the the the web app
+[740.0s] actually like broke down and I was never
+[741.8s] able to run it on my machine because
+[743.1s] never got all the right keys and stuff.
+[744.6s] It was just like
+[746.1s] >> we stopped using that and then rather
+[747.6s] than going back to spending three or
+[748.9s] four hours a week, we were already used
+[750.6s] to uh spending only 30 minutes a week
+[753.8s] and so we just like stopped doing our
+[755.4s] homework on the on the show and then we
+[757.1s] would get together like once every four
+[758.4s] weeks we'd be like, "Holy we're so
+[760.3s] behind." And we get on for like two
+[761.6s] hours on a Saturday and like catch up on
+[763.4s] everything.
+[765.2s] Yeah, this process takes once we have
+[767.3s] the title in the description, this whole
+[769.4s] process probably takes about 10 minutes
+[771.0s] totaling and most of that is I can't
+[773.5s] wait to see it. Also, for the record for
+[775.2s] everybody watching, I have not seen
+[776.6s] this. I just know that things are
+[778.1s] happening and I'm I'm super excited to
+[780.2s] learn like how this works at the end.
+[782.9s] >> So, and we can actually create an
+[784.6s] episode here if we want to.
+[786.2s] >> Um, we don't have to actually post it,
+[787.5s] but we can we can we can watch it work.
+[789.6s] >> So,
+[790.0s] >> amazing. That would be sick.
+[792.1s] >> So, okay. So yeah, so here's the first
+[794.6s] part, right? It gets all this
+[795.8s] information from from the user and any
+[798.4s] additional guests, right? Sometimes
+[799.8s] we'll have guests on, like in the email
+[801.4s] episode, we had that guest on. So anyone
+[803.1s] else that is um uh a presenter, we want
+[806.8s] to add them to the Riverside event.
+[809.6s] So this is all it needs, right? Title,
+[812.7s] description, which number is it, the
+[815.1s] date, and the slug, and then the guests.
+[817.2s] And then the first thing it does is it
+[818.5s] creates the image. And this entire thing
+[822.0s] is just CLI that cloud code calls.
+[824.6s] Right? The first thing it needs to do
+[827.0s] for the image is kind of the first
+[828.7s] module is it creates the subtitle. And
+[830.6s] so I think the subtitle for this one is
+[833.4s] um it's like AI that makes this podcast
+[836.2s] work or something like that.
+[838.4s] >> The subtitle that's the thing that goes
+[840.0s] on the image itself.
+[841.7s] >> Exactly. It goes on the image itself.
+[843.8s] So, it creates a subtitle and then it
+[846.6s] asks the user if they uh if they like
+[849.4s] the subtitle and if not then it you know
+[852.8s] reruns it
+[855.0s] and then it creates the image, right?
+[858.5s] And so the image is kind of just that
+[859.9s] Figma image that we all saw before.
+[863.7s] And we can actually do this, right? So I
+[865.6s] mean we can um
+[867.1s] >> Yeah. What episode do you want to make?
+[869.6s] Well,
+[871.1s] next week is supposed to be the no
+[872.6s] another no vibes allowed. Do you want to
+[873.9s] go ahead and do that? And we can just
+[875.0s] create a test one, right? It doesn't
+[876.3s] have to actually
+[878.5s] be
+[880.6s] um
+[881.5s] >> Okay.
+[881.8s] >> Like we don't actually have to publish
+[883.1s] it all the way through.
+[885.0s] >> Yeah. Um sure. Let's go. Let's go fire
+[887.6s] that off.
+[888.8s] >> Okay. So, let's open up cloud code. All
+[891.8s] right. So, let's do it's just episode
+[895.0s] There it is. Episode prep. And so takes
+[897.9s] a minute to get fired up. And this is
+[900.1s] all using
+[901.3s] >> Clauders want to do.
+[903.0s] >> Yeah. Yeah. This is just using Summit
+[905.7s] 45, right? I'm not even using Opus 45
+[908.3s] or, you know, the um the the new 46 cuz
+[913.1s] I don't want to burn that many tokens.
+[915.8s] >> Okay.
+[917.0s] >> And it's using the ask user question
+[918.7s] tool. I know. I know. They they've added
+[920.2s] more steering for this. It's good.
+[922.3s] >> Yeah. This is new. Yeah.
+[927.2s] It's so interesting because I was doing
+[928.7s] this as a practice so many times and I'm
+[930.9s] sure you saw a bunch of Riverside events
+[932.6s] come and go. Um, and every time I did
+[935.3s] it,
+[935.5s] >> there's one day last week I have like
+[937.4s] test I have like 12 test events on my
+[939.8s] calendar.
+[940.5s] >> I was wondering where those were coming
+[941.8s] from.
+[942.7s] >> Yeah. And it's so funny because every
+[944.6s] time it does the the interface is a
+[947.2s] little different. It's so interesting.
+[948.6s] Okay, so episode title. So we can just
+[951.0s] do it however we want.
+[953.4s] Uh, I'm going to do I found this to work
+[955.5s] really well. We'll just call it uh what?
+[958.9s] No vibes allowed February
+[964.6s] description.
+[970.4s] Uh, let's see. Dex, any any thoughts
+[972.5s] here? Or we can just say in this episode
+[975.8s] we will do another live coding event
+[982.0s] where
+[984.5s] we uh advanced context engineering
+[987.8s] principles to ship real features.
+[996.2s] >> Are we doing it in yours this time or or
+[998.6s] BAML? Uh, we should figure that out.
+[1003.4s] >> We could just We can just put um see is
+[1006.6s] it It's not co there anymore, right?
+[1008.2s] It's riptide.
+[1009.5s] >> Yeah.
+[1010.7s] >> All right. Real features in Rip Tide and
+[1014.0s] we can
+[1015.0s] >> Yeah. Uh or whatever. Yeah.
+[1017.7s] >> Yeah. Exactly. Episode number I think.
+[1022.2s] See, I always forget and this is
+[1023.9s] something that I'm going to eventually
+[1025.6s] >> say. Can Cloud figure this out?
+[1027.6s] >> It probably could. It probably could. I
+[1029.7s] just need to point it to how to do it.
+[1032.2s] So that's gonna be episode 46.
+[1035.6s] And and then the date is going to be
+[1041.7s] 24th.
+[1043.6s] And then the luma
+[1048.9s] I'm just going to call it no vibes
+[1054.2s] February. February.
+[1058.3s] and then no additional
+[1062.1s] guests. So, we just do that and then it
+[1064.9s] gets cooking. So, the first thing it's
+[1066.3s] doing is it's making the subtitle and
+[1068.1s] the image and it's going to
+[1071.0s] give us the image and ask us if we do or
+[1073.7s] don't like the image. And we can for a
+[1077.4s] while I didn't have a a good feedback
+[1079.9s] loop. It was just like I don't like the
+[1081.2s] image regenerated. I don't like the
+[1082.5s] image regenerated.
+[1084.1s] >> Yep. Um, and I went back into it and I
+[1089.3s] created another kind of feedback loop in
+[1091.3s] there where it figured out it allowed me
+[1093.2s] to tell me it what I did or didn't like
+[1095.2s] about the image and then update the
+[1098.4s] prompt and regenerate it kind of with
+[1100.7s] that
+[1102.3s] that that new feedback which I found to
+[1104.6s] be way way way more helpful.
+[1107.1s] >> Interesting. Okay.
+[1108.8s] >> Mhm.
+[1109.7s] >> Okay. So, you see our BAML response.
+[1112.0s] Yeah. What is the what is the Do you
+[1113.1s] want to pull up the code for this while
+[1114.2s] it's working?
+[1115.0s] >> Sure.
+[1115.4s] >> Or at least the the BAML functions.
+[1118.0s] >> So, uh, BAML source. So, for thumbnail.
+[1122.9s] So, first it has a subtitle.
+[1126.6s] Uh, so generate subtitle.
+[1129.3s] You're generating artifacts for podcast
+[1131.1s] episode AI that works. So, I'm not going
+[1133.0s] to read the whole thing um because this
+[1135.0s] is all going to be pushed, but you can
+[1136.6s] basically see it's like given the topic,
+[1139.0s] generate a rationale and a subtitle. Um,
+[1142.7s] I've found that when you have it
+[1145.4s] generate the kind of the rationale that
+[1148.1s] leads to what it's ultimately producing,
+[1150.3s] it does it better because you you give
+[1151.8s] it that thinking space.
+[1153.5s] >> We're doing the chain of thought but via
+[1155.4s] structured output fields.
+[1157.2s] >> Exactly.
+[1158.3s] >> Cool.
+[1159.1s] >> And gave it a couple of
+[1161.5s] examples
+[1163.3s] and then I just Yeah. It it takes the
+[1166.4s] feedback and that's
+[1168.0s] >> And what's the output schema?
+[1170.6s] The outfit schema is just the rationale
+[1173.4s] and subtitle. Okay.
+[1174.6s] >> Okay. And how does the thumbnail work?
+[1176.2s] Because you're using like nanobanana for
+[1177.7s] this, right?
+[1178.2s] >> Yeah, I use nanobanana for that. Yeah.
+[1182.2s] >> So, this is the sub I came up with
+[1183.8s] engineering. Ship it.
+[1186.6s] >> I like it.
+[1187.3s] >> Okay. Uh [laughter]
+[1190.0s] >> Dex doesn't like it.
+[1191.3s] >> We can iterate on that one.
+[1193.1s] >> Yeah. And we we can tell it like so so
+[1195.4s] we can do this now. So, Dex, what don't
+[1196.7s] you like about it?
+[1199.0s] Um,
+[1200.8s] I don't know. It's too campy. It sounds
+[1202.6s] LLM generated.
+[1205.9s] [snorts] Hopefully, um, hopefully this
+[1208.9s] this feedback works. Okay. So, all
+[1212.4s] right. Let me regenerate the subtitle
+[1213.7s] with your feedback. Cool. So, it is
+[1215.5s] working. So, that's the BAML function.
+[1219.2s] Unfortunately, BAML doesn't have an
+[1220.6s] image generator yet. So, I did have to
+[1223.8s] just go straight to the Nano Banana API
+[1226.3s] for that. Cool. But is is is are you
+[1229.4s] generating the prompt for the image in
+[1231.5s] BAML?
+[1234.9s] >> Uh I think so. This is the first thing.
+[1238.3s] Yeah. So the thumbnail.
+[1240.8s] >> Um this some of these might be
+[1244.4s] deprecated.
+[1246.0s] >> Um
+[1246.6s] >> yeah, generate icon prompt.
+[1248.0s] >> Yeah, there it is. Yeah, there it is.
+[1251.0s] Generate icon prompt. So that's what
+[1253.2s] gets fed into
+[1255.3s] the nano banana thumbnail generator
+[1257.8s] which happens in this CLI here.
+[1262.9s] There's this generate icon image. I've
+[1264.7s] got a bunch of little mini modules here
+[1268.0s] that this one like it loads the base
+[1271.2s] image which the base image is here is
+[1273.7s] this guy. And then Nano Banana is just
+[1276.3s] putting something here. Main title
+[1277.8s] subtitle adding in this um number.
+[1281.6s] >> Okay. So you pass this in as one of the
+[1283.8s] arguments to Nano Banana and then you
+[1285.6s] tell it to like fill in the text and add
+[1287.4s] the image.
+[1288.4s] >> Exactly.
+[1290.1s] >> Sick. Okay.
+[1291.4s] >> All right. So let's see what it came up
+[1292.6s] with now. Uh so the news is contention.
+[1296.4s] Uh oh. Okay.
+[1298.4s] >> Oh, you give it away. You gave it away
+[1299.9s] to chain the chain the feedback in.
+[1302.5s] >> Yeah. All right. Let's see what it's
+[1303.9s] coming up with now.
+[1306.2s] Shipping contact engineering shipping
+[1308.1s] features not hype. That's the new
+[1309.8s] subtitle, but we can
+[1312.5s] >> because you told it it was too hyped and
+[1314.5s] so it said this is not hype. [laughter]
+[1319.7s] >> Okay.
+[1320.1s] >> Um, but again, we can iterate on this. I
+[1321.8s] don't want to spend a bunch of time.
+[1323.1s] Let's
+[1323.7s] >> let's move on to the next the next part.
+[1325.4s] This is cool that you've built in the
+[1326.6s] feedback stuff though. I like it.
+[1328.2s] >> Well, let's see what image it generates,
+[1330.2s] right? So, this is the the image,
+[1334.8s] right? No vibes February. And you see
+[1336.6s] this is the subtitle came up with this
+[1338.6s] little graphic.
+[1339.3s] >> Put a calendar with a heart because
+[1341.1s] Valentine's Day falls in February.
+[1344.1s] >> I don't I think so
+[1347.0s] which is [laughter] just kind of crazy.
+[1349.4s] No.
+[1350.0s] >> Okay. This is why we use the loop for
+[1352.2s] parts of this.
+[1353.3s] >> Exactly. So we would iterate on this a
+[1355.6s] little bit more. Um but we'll just keep
+[1358.8s] going. So I'll say I like it.
+[1360.2s] >> Just let's just keep rolling.
+[1363.0s] >> It can be an inside joke. The people who
+[1364.8s] see that episode are like, I know why
+[1366.4s] it's why it has a weird image. That's
+[1368.6s] right. [laughter]
+[1370.3s] [snorts] So, the next thing it's going
+[1371.2s] to do is create the Riverside event.
+[1373.2s] Riverside, this was a fun one. This had
+[1376.0s] um Riverside has an API, but it's a very
+[1379.4s] expensive to get to the account level
+[1381.6s] where you have the API. So, now you can
+[1384.2s] see it is shoot.
+[1388.6s] It is doing it is a brow. It's doing
+[1390.5s] this live.
+[1392.3s] It's opening a browser and it's creating
+[1394.3s] the event
+[1397.4s] in Riverside with kind of all the
+[1400.2s] elements that we've created or told it
+[1402.0s] to. And it's doing this live.
+[1406.2s] >> Cool.
+[1406.7s] >> You see, it's going to add this is all
+[1408.3s] the stuff that goes into it, right? It's
+[1409.5s] going to add decks. It's It doesn't do
+[1411.7s] great at the time,
+[1414.0s] right? So, it created the event.
+[1415.4s] >> Interesting.
+[1416.8s] Um,
+[1418.4s] but the next step is I could have it
+[1421.6s] auto automatically post that divine
+[1423.4s] bub's LinkedIn. Um, but
+[1427.0s] that's not a great idea because you saw
+[1428.8s] it just got the time wrong. It struggles
+[1430.6s] to figure out how to get the time
+[1433.0s] exactly where it wants which is kind of
+[1435.6s] a strange problem I didn't anticipate.
+[1437.8s] So there's a browser agent that
+[1441.7s] I can open that part.
+[1444.2s] So the create riverside event is done
+[1445.9s] via the API and then you tune it with
+[1448.4s] the browser agent.
+[1449.9s] >> No, it's all done. It doesn't use the
+[1451.5s] API at all. It's all done with the
+[1453.5s] browser agent.
+[1454.7s] >> Oh, sick. Okay, so this is really fun.
+[1457.2s] This is like, okay, we found a thing we
+[1458.7s] wanted to automate and so we just did it
+[1460.5s] with a browser agent. So how does this
+[1462.0s] work?
+[1463.7s] Um
+[1465.3s] so what's fascinating is
+[1469.0s] um
+[1471.0s] it uses
+[1473.7s] let's see where's the so this is the CL
+[1476.2s] uh where is it actually
+[1480.2s] so this is the test session
+[1484.1s] so let me go to CLI that's where it kind
+[1486.0s] of starts so we go to CLI and let's see
+[1490.7s] if we so oh so the read is probably very
+[1493.1s] helpful. I forgot I wrote a read me.
+[1497.2s] It's [snorts] been a been a couple weeks
+[1498.4s] since I did this. But so what it does is
+[1501.6s] it
+[1503.1s] go actually opens a browser, it logs in,
+[1507.9s] and then it does the schedule session,
+[1509.4s] which it basically just clicks through
+[1511.7s] all the things that I would individually
+[1513.3s] click through. Right. And it's so cool
+[1515.4s] because I I used um Dex, I used your
+[1520.8s] product to build this. And what it was
+[1522.5s] doing is you could see it when it didn't
+[1524.2s] know how to do something, it would take
+[1526.2s] a screenshot of the dashboard before the
+[1529.0s] schedule and it would figure out here
+[1532.1s] what it needed to click
+[1535.0s] and kind of where in the window it
+[1536.6s] needed to click and then it would code
+[1538.3s] that and then it would
+[1539.4s] >> So you built your own browser like this
+[1542.6s] thing that like agent browse and agent
+[1544.4s] browser and like all these like
+[1546.5s] playright CLIs do under the hood as like
+[1548.3s] a sub agent move. You basically built
+[1549.9s] this like screenshot click, screenshot,
+[1553.3s] click, screenshot, click kind of thing.
+[1556.5s] >> Well, that's how it was. That's how it
+[1559.8s] figured out what to click and where to
+[1561.5s] click. Right now that it's rolling, it
+[1563.8s] doesn't click anymore or it doesn't take
+[1565.4s] the screenshot anymore. Still click,
+[1567.1s] doesn't take the screen
+[1567.6s] >> because it figured out what dama
+[1569.0s] elements matter.
+[1570.3s] >> Exactly.
+[1571.8s] >> Okay. So as Claude is writing the
+[1573.9s] automation script, it's using this to
+[1576.0s] build the actually like mostly
+[1577.9s] deterministic
+[1579.5s] browser browser automation.
+[1581.6s] >> Yeah. Yeah.
+[1582.8s] >> I see. Yeah. Like this there's this big
+[1585.8s] like jump towards like you sort of like
+[1590.2s] I don't know I don't know how to say it.
+[1591.3s] It's like that the thing that the agent
+[1592.8s] learns while it's working which is like
+[1594.4s] screenshot. Okay, I got to click here.
+[1595.8s] And then you end up throwing all that
+[1597.1s] out versus like, okay, we figured out
+[1598.8s] the workflow. Now, let's bake that into
+[1601.9s] a deterministic code that we don't we no
+[1604.2s] longer need to use AI to learn about the
+[1606.6s] page. Uh assuming it doesn't change that
+[1608.6s] often, right?
+[1609.9s] >> Right.
+[1611.3s] >> Okay.
+[1611.9s] >> Cool.
+[1613.2s] One interesting thing though for anyone
+[1615.2s] who who tries to do this on their own or
+[1617.0s] do something similar,
+[1618.2s] >> it is very the the best way I found to
+[1621.3s] to to build this is to watch what it is
+[1623.9s] doing because it was clicking the wrong
+[1626.5s] thing for a while in one of these. It
+[1629.8s] was supposed to click on like new. Yeah,
+[1632.5s] new here. Supposed to click here and it
+[1634.2s] was clicking on here which is what's
+[1635.8s] new. And it was getting it was getting a
+[1639.0s] popup of like new features in in
+[1642.0s] Riverside and then it was trying to
+[1643.9s] figure out how to close the popup.
+[1646.4s] >> Yeah.
+[1646.7s] >> And so it was going down this rabbit
+[1648.2s] hole that it was creating and it
+[1650.1s] couldn't figure out and it kept closing
+[1651.9s] it then rec-clicking then closing it and
+[1653.4s] it just kept getting in this loop and
+[1655.7s] you could watch it happen. Right? So
+[1658.9s] it's when it's opening a Chrome window
+[1660.4s] you can just watch the Chrome window and
+[1661.8s] make sure it's doing what it should be
+[1663.0s] doing. Um, and now what it's saying is
+[1666.6s] the Riverside event has been created
+[1668.0s] successfully. Next step, your action
+[1669.8s] required. Turn on the live streams and
+[1672.3s] upload the generated thumbnail image. So
+[1675.1s] if we
+[1675.5s] >> is this stuff that like is this just
+[1676.8s] stuff that like you could automate but
+[1678.9s] you just haven't yet or is this stuff
+[1680.7s] that is like too hard to automate? So
+[1683.1s] the thumbnail image I could automate and
+[1686.5s] and I will the live streams that is
+[1689.4s] where it gets posted to your ex account
+[1692.5s] in Viob's LinkedIn.
+[1694.3s] >> I see.
+[1696.3s] >> So if we just but if we just open this
+[1698.8s] it goes right to the page.
+[1701.1s] >> Nice.
+[1701.8s] >> All I would do is edit session.
+[1705.4s] Come in here
+[1707.5s] and click these upload the thumbnail and
+[1710.2s] press update session. And then I'm done
+[1711.9s] with Riverside.
+[1713.6s] >> Okay.
+[1715.8s] >> So now I can just say done.
+[1720.0s] And now it's going to create the Luma
+[1721.8s] event, which
+[1723.9s] Riverside is what we're all on. That's
+[1726.1s] where the actual like video conference
+[1728.3s] happens. Luma is where the event exists
+[1733.3s] and it gets emailed out and kind of
+[1736.1s] manages the guests better. Dex, am I am
+[1738.7s] I understanding how these two pieces
+[1740.2s] work together better?
+[1742.0s] >> That makes sense. Yeah. No, I mean,
+[1743.4s] yeah, we use Riverside for the hosting,
+[1745.0s] but we use Luma for the actual like
+[1747.7s] invites and reminders and sending blasts
+[1749.8s] out to people and like, hey, this is the
+[1751.9s] thing that actually puts it on your
+[1753.1s] calendar and all all of that.
+[1756.3s] >> Um, just did the Luma via some CLI.
+[1760.2s] That's I assume using the API and not
+[1762.3s] >> Yeah, this is the API. So, that that
+[1764.5s] one's easy. Uh let's go back to episode
+[1766.9s] prep.
+[1768.6s] See
+[1770.8s] event now it's all right. So created the
+[1773.3s] luma
+[1775.4s] which a couple interesting things right
+[1777.2s] that that I um that I realized when we
+[1780.9s] come up with the the episode title right
+[1782.7s] no violence allowed. We actually need to
+[1785.4s] prepen the title with this AI that works
+[1788.4s] tag right. Um, but when Dex 5 and I are
+[1792.7s] coming up with the title, we're not
+[1793.7s] going to we're not going to play that
+[1794.7s] every time. So, we needed to add that to
+[1797.7s] the title uh before the Luma event.
+[1802.9s] So, it does that, which that's all just
+[1805.9s] the API. That's
+[1808.3s] very basic. Nothing nothing crazy there.
+[1811.6s] It updates the episode meta MD. Um,
+[1816.9s] so what this does is I don't know if a
+[1818.9s] lot of people know this, but if you go
+[1820.8s] to boundary
+[1822.7s] boundaryml.com/mpodcast,
+[1824.8s] like this is the actual page for the
+[1827.4s] podcast. And this pulls from our GitHub
+[1830.1s] repo and the metamd file that exists in
+[1834.6s] each folder
+[1836.5s] helps inform [clears throat] what is on
+[1838.2s] that website.
+[1839.7s] >> Yeah. You want to pull one of those up
+[1840.9s] just so we can kind of like see what's
+[1842.2s] in there. I'll pull basically this is an
+[1844.6s] RSS this is an RSS feed that we host in
+[1847.4s] the GitHub repo that is built off of
+[1850.6s] these meta MVs so that it can like build
+[1853.2s] those little like cards in the grid.
+[1856.3s] >> Yeah.
+[1858.3s] So, it has the basically the number, the
+[1861.6s] title, the description, the Luma link
+[1864.9s] with the slug. And one thing, oh, I
+[1867.1s] forgot to say, one thing the Luma CLI
+[1868.8s] does is
+[1871.6s] it checks to make sure this slug is
+[1873.5s] available. And if it's not, it asks you
+[1875.4s] for a new one.
+[1876.7s] >> Nice.
+[1878.6s] >> And then it has the YouTube the URL to
+[1881.7s] the video,
+[1883.6s] the link to the GitHub repo. in this
+[1886.0s] video. Obviously, the episode that we're
+[1887.9s] creating, the video doesn't exist yet.
+[1891.2s] So, what it does is it just links to the
+[1893.8s] uh the podcast page on YouTube,
+[1896.6s] >> which is kind of a good for now.
+[1899.2s] >> Yep.
+[1900.5s] >> And yeah, so it does that. Let's go back
+[1904.0s] to I need to double click on some of
+[1905.9s] these so I don't keep losing them.
+[1911.2s] And it reads a couple of the past ones.
+[1913.0s] And then it runs this tool which all
+[1915.1s] this does is it updates the what the RSS
+[1918.8s] feed reads.
+[1920.2s] >> Yep. Yeah. So there's another script
+[1922.1s] that translates that YAML f not YAML MD
+[1925.3s] file into actual like RSS XML.
+[1928.8s] >> Mhm. And you'll see it happen here
+[1930.9s] because first what it needs to do is it
+[1932.3s] needs to create the directory in GitHub.
+[1934.8s] And now it's creating the meta MD
+[1937.8s] which if if I just click here you'll see
+[1942.1s] it's just the podcast page.
+[1943.9s] >> Okay.
+[1944.3s] >> And in the complete episode CLI that'll
+[1946.9s] get updated to the actual like video.
+[1949.5s] >> Yep.
+[1950.1s] >> And so Yep. Let's do that. And then it's
+[1952.5s] going to rerun the manifest
+[1955.7s] which I won't push this code because I
+[1957.3s] don't want to um mess up Viva's website.
+[1961.5s] Uh, say yes.
+[1966.5s] I think it's mad at some linting stuff
+[1968.1s] from past episodes, but it's not a
+[1970.7s] concern.
+[1973.5s] And then it
+[1976.3s] is at this point it's pretty much done.
+[1978.8s] It's just double checking a couple
+[1980.1s] things. And that is it. That is all it
+[1983.3s] takes now to prep an episode. Once we
+[1985.2s] have the title and the description,
+[1988.2s] we can kind of just roll with it. run
+[1990.6s] this and
+[1992.9s] >> we got the thumbnail. It's a created in
+[1994.9s] Riverside. The Luma event is created the
+[1998.7s] in and the RSS feed will pick it up.
+[2002.2s] And that's it. That's how an episode
+[2004.0s] gets created.
+[2006.0s] >> You can see [clears throat] and this is
+[2007.3s] this is only part of it, right? Because
+[2008.9s] there's also what happens after we
+[2010.8s] record the episode, right?
+[2012.3s] >> Yep. That's the next command, the
+[2015.1s] complete episode.
+[2016.8s] >> Yep. Cool. So this is what it does to
+[2018.6s] prep an episode, create all the
+[2020.2s] artifacts, and make sure everything
+[2021.7s] lines up.
+[2023.8s] >> Whereas you I mean,
+[2024.6s] >> yeah, this is the kind of thing we used
+[2026.1s] to just sit and like slog through for
+[2028.3s] again like an hour. Every every Tuesday
+[2030.6s] it was like there was a slot on my
+[2032.0s] calendar. I was like, "Okay, we got to
+[2033.0s] go get the next episode ready."
+[2034.7s] >> Yeah. And you and there's so much room
+[2036.7s] for human error. Like so many times I
+[2039.2s] would forget to put the meet the
+[2041.9s] speakers in the description. It's just
+[2043.9s] like damn it. like I you because we
+[2046.0s] would go back and forth like getting the
+[2047.2s] description right and then I'd be like
+[2048.3s] all right we got it and then I would
+[2049.3s] paste it in and post it if I was
+[2050.8s] LinkedIn and I would have forgotten to
+[2052.1s] done the the meet the speakers and so
+[2054.4s] now it's it just it just happens it's so
+[2056.8s] so nice cool
+[2058.2s] >> um yeah this is dope
+[2060.4s] >> and so now
+[2063.0s] now that we've created the episode the
+[2065.6s] next part is obviously we have the
+[2068.1s] episode and then after that so episodes
+[2072.1s] happen on
+[2074.4s] Today's Tuesday happens on Tuesday. I
+[2075.8s] don't know why it took me a second to
+[2077.3s] think through that. So, episodes happen
+[2079.2s] on Tuesday.
+[2081.0s] Now, what we want to do
+[2083.5s] is the Riverside
+[2086.7s] put uploads the transcript
+[2089.4s] um like Tuesday afternoon sometime. And
+[2092.7s] so now what we want to do now we start
+[2094.1s] getting to the stuff that's a little
+[2095.4s] less deterministic. This is where it
+[2096.9s] starts to get interesting. The only
+[2098.6s] parts that we've had so far that there's
+[2100.7s] back and forth is in the the subtitle
+[2103.0s] and the image generated, which the image
+[2105.7s] itself doesn't really matter too much.
+[2108.2s] The subtitle is more important because
+[2109.4s] the image is kind of just like a cute
+[2110.5s] graphic that ends up getting
+[2111.4s] overwritten. But
+[2112.9s] >> yep,
+[2114.1s] >> this is where things start to get fun.
+[2115.8s] So, the next thing that we do is once a
+[2117.7s] transcript is uploaded, we run
+[2122.3s] find clips. And what this does is this
+[2126.0s] suggests some clips to our video editor
+[2129.4s] for shorts.
+[2131.3s] And if I come in here or let me open the
+[2133.4s] find clips
+[2136.5s] so we can see what this does.
+[2142.3s] So what we want to do is we want to find
+[2144.5s] clips for like the episode that just
+[2147.0s] ran. So like today's episode or
+[2149.0s] yesterday's episode depending on when
+[2150.3s] this gets run. So, it checks the current
+[2153.0s] date, it gets the folder,
+[2156.7s] and it makes sure that there's a
+[2158.6s] transcript.txt and a meta.md in the
+[2161.5s] directory. So, we have to go download
+[2163.7s] the transcript from Riverside and just
+[2165.8s] paste it into
+[2168.2s] one of these in the the proper folder.
+[2171.2s] Probably is automatable, but it takes 30
+[2174.6s] seconds to do, so I'm I just kept it as
+[2178.5s] this.
+[2179.6s] >> Yep, that makes sense. So
+[2181.2s] [clears throat] you could make another
+[2182.1s] browser agent that goes and does that.
+[2184.2s] >> Right. Right.
+[2185.2s] >> Yep. Cool.
+[2187.4s] >> And then it pulls the title and the
+[2189.5s] description from the episode MD. And
+[2191.4s] then there's another CLI that extracts
+[2194.9s] the clips. And so we can look at that
+[2197.2s] quickly.
+[2199.3s] Go to source. We go to clip extractor
+[2203.0s] CLI.
+[2205.4s] Um so extract clips.
+[2208.7s] >> [clears throat]
+[2208.8s] >> So something interesting is is you'll
+[2211.3s] see there's a part there's one element
+[2214.1s] that we have that writes to emails and
+[2215.7s] there are several steps to that and the
+[2219.4s] first step is to extract kind of the key
+[2221.7s] takeaways
+[2223.3s] for an email and I thought
+[2226.7s] >> at this point the email's already been
+[2228.2s] written or are you doing
+[2229.4s] >> not yet not yet okay cool
+[2231.6s] >> so what I thought is that would be
+[2232.9s] useful to reuse just that BAML function
+[2235.9s] that extracts the key takeaways for the
+[2238.2s] clip
+[2239.4s] cuz you could dump the whole transcript
+[2240.7s] in and say, "Give me high impact clips."
+[2243.2s] >> But what I thought would be more helpful
+[2244.4s] is you give her the transcript, say,
+[2245.8s] "Give me high impact clips. Also, here
+[2247.8s] are the key takeaways that I want you to
+[2249.7s] kind of focus your attention on."
+[2251.8s] >> Yep. Sick.
+[2254.2s] And so if we do taking the like
+[2256.3s] highlevel email structure and then
+[2258.6s] passing it in as you know one thing to
+[2261.2s] remember key takeaways episode title
+[2263.9s] >> getting CLIs for cloud code to run game
+[2267.2s] changer right it makes it so easy
+[2270.1s] >> because it can you mentioned you're use
+[2272.2s] you mentioned you're using sonnet for
+[2274.1s] this um
+[2275.8s] >> which I think tracks with a lot of what
+[2277.2s] I've seen a lot of and like good AI
+[2279.5s] engineers I know have been talking for a
+[2280.9s] while which is like sonnet is great at
+[2282.8s] tool calling, right? It's actually
+[2284.6s] almost like too good at tool calling.
+[2286.0s] All it wants to do is just go do stuff
+[2287.4s] all day and it doesn't think that much.
+[2289.8s] >> But like again, for like short little
+[2292.0s] workflows like this where you can
+[2293.5s] offload all of the hard AI, I mean, it's
+[2296.0s] not really a sub agent, but it's the
+[2297.5s] same model of like, hey, let's have a
+[2299.0s] separate context window that goes and
+[2301.4s] does the thing and your top level model
+[2303.1s] is just orchestrating all of these tools
+[2306.0s] that under the hood are doing their own
+[2307.7s] AI stuff.
+[2308.8s] >> Right. Right.
+[2311.6s] Um, so let's say we're creating which
+[2314.0s] episode? Yeah.
+[2314.9s] >> Right. So, let's just say we're just
+[2316.0s] doing it for this one because we don't
+[2317.4s] have the transcript for today's episode.
+[2319.8s] So, it's going to make sure there's a
+[2321.0s] transcript and then it's going to run
+[2323.8s] the two BAML functions which we'll see
+[2325.5s] kind of pop out in the terminal
+[2329.0s] and it's going to give us some clips.
+[2332.9s] >> Maybe it'll come up with the same one. I
+[2334.4s] mean, the one the one that we got for
+[2335.8s] this episode I ended one of them was
+[2337.3s] really good. But I ended up like posting
+[2338.5s] it on Twitter and you could go you could
+[2340.0s] go you could go find it if you want. Uh
+[2341.8s] but it's yeah it's like the best
+[2343.4s] engineers are using using back pressure
+[2345.8s] to figure out uh to be able to run their
+[2348.3s] agents kind of autonomously for days
+[2350.2s] because the agent's able to check its
+[2351.7s] own work. Right.
+[2352.8s] >> Mhm.
+[2354.3s] >> And this is another point where we use a
+[2357.8s] human a human a human in the loop.
+[2360.3s] Right. Our video editor Mario all I do
+[2362.4s] is I send him the output of this which
+[2364.3s] I'll show you what it looks like in a
+[2365.4s] second. I send it to him in Slack and I
+[2367.3s] say, "Hey, Mario, here are some
+[2368.5s] suggested clips." He I think I mean I
+[2372.0s] don't really know Mario's background,
+[2373.5s] but he seems to be really good at this
+[2375.7s] kind of thing. And so I think it's like,
+[2376.8s] "Hey, use your discretion, right? Do
+[2379.0s] these clips look good? Are there other
+[2381.9s] clips that you think would be better?"
+[2383.2s] This is I think kind of just more of a
+[2385.0s] suggestion for what clips we're going to
+[2387.2s] post,
+[2387.8s] >> right? Mario's a good good editor and a
+[2390.1s] good content person. He's not a uh AI
+[2392.9s] engineer, so this this guidance helps
+[2394.6s] him kind of pick out which parts of this
+[2396.4s] are really really meaningful to our
+[2398.1s] audience.
+[2399.3s] >> Mhm.
+[2401.3s] And again, it probably I imagine saves
+[2403.2s] him quite a bit of time because he
+[2404.4s] doesn't have to think through, all
+[2405.9s] right, three separate clips. It kind of
+[2407.5s] prime it almost like primes it a little
+[2409.4s] bit and says, here are kind of the three
+[2410.8s] clips that we think would be useful.
+[2412.6s] This is kind of you can either use them
+[2414.3s] or it's it can you know act as a warm-up
+[2416.8s] and kind of get you started or
+[2419.8s] um you can just not like them at all. It
+[2421.9s] just depends. So let's see. So if we can
+[2425.8s] it gives us it prints this out.
+[2430.6s] >> It makes a JSON file somewhere.
+[2432.2s] >> It makes a JSON file. Yeah, it does.
+[2434.6s] Which I've this is the first time I've
+[2436.0s] ever seen this get printed out. It's so
+[2437.6s] interesting. Every time I run it, the
+[2438.8s] output is a little different. So it
+[2440.6s] makes a JSON file where it has the
+[2442.5s] rationale, the transcript, start and
+[2445.2s] end, the speaker and the actual
+[2447.4s] transcript and then the hook, right? And
+[2450.0s] this is
+[2452.6s] I do this a lot where I structure the
+[2455.8s] thinking, right? Like give me the
+[2457.0s] rationale before you actually give me
+[2458.2s] the output.
+[2459.6s] >> Yep.
+[2460.6s] >> Um, so let's see. Are there any
+[2465.7s] good
+[2468.8s] uh
+[2469.0s] >> I mean this makes sense. I I I I get
+[2470.8s] this.
+[2471.5s] >> Um cool. Okay. So, this is how you make
+[2473.4s] the clips using the transcript,
+[2475.5s] >> right?
+[2475.8s] >> Um what what else is worth is worth
+[2478.6s] digging into here. I know we're we're at
+[2480.6s] 850. So, um
+[2482.1s] >> the email.
+[2483.7s] >> Oh, yeah. Building the email. This was
+[2485.1s] the one where it was like it's very easy
+[2487.4s] for I mean I'm sure everybody here is
+[2490.1s] bombarded with AI slob emails. We work
+[2492.7s] really hard to and we end up doing a lot
+[2495.8s] of like hand editing of the email. This
+[2498.6s] has been true about this show for a very
+[2500.7s] long time.
+[2502.1s] >> Uh Vibb has eventually claims to have
+[2505.0s] figured out that and it sounds like you
+[2506.2s] have figured you guys worked together to
+[2507.4s] get the right prompt to make it not feel
+[2509.4s] AI generated. And of course we still
+[2511.4s] review that before that goes out.
+[2513.8s] >> Yeah. And Vibb is
+[2517.0s] a master at figuring out something AI
+[2519.3s] generated. Right. I would have an email
+[2520.5s] that I thought looked good and five
+[2522.2s] would say, "No, this sounds like AI slop
+[2525.1s] [laughter]
+[2526.7s] so many times."
+[2527.7s] >> He reads a lot of the man reads a lot of
+[2529.6s] AI outputs.
+[2531.1s] >> Yeah, it's un it's uncanny.
+[2534.1s] Uh so the complete episode CLI is or
+[2537.2s] Claude command is the last one. The
+[2539.4s] first thing it's doing is it goes to
+[2541.1s] YouTube, looks for AI that works, finds
+[2544.3s] a YouTube link for the most recent AI
+[2546.7s] that works, and updates the URL in the
+[2549.0s] meta MD file. So, we'll just say yes, so
+[2551.5s] we can get to the email portion. Um, but
+[2554.4s] I can just go ahead and show you what
+[2556.0s] the email portion looks like. And this
+[2557.8s] is the
+[2559.7s] um once we did it this way,
+[2564.5s] um, we ended up getting much much better
+[2567.6s] results. Like Dex said, we still review
+[2569.3s] it and typically we have one to two
+[2572.2s] updates. Typically it's just one, but I
+[2574.3s] mean it's way better than the four, five
+[2576.7s] or six updates that we were doing. So
+[2579.1s] the first thing that we do is we extract
+[2581.4s] the email structure, right? Because you
+[2583.4s] could the most naive way to do it is to
+[2585.6s] say,
+[2587.1s] "Here's the transcript, write an email,
+[2590.2s] have three takeaways, and have this sign
+[2592.2s] off."
+[2595.0s] >> Okay,
+[2595.3s] >> that didn't work. That just didn't work.
+[2597.1s] [laughter]
+[2598.6s] Um so the first thing is this email
+[2601.9s] structure right so the output uh so
+[2605.8s] let's see oh where is it
+[2609.1s] so extract email structure where we give
+[2611.0s] it the transcript the title and the
+[2612.5s] description and we say extracting key
+[2616.2s] information
+[2618.2s] we want compelling subject line what the
+[2621.4s] session covered two to three bullet
+[2623.4s] points with the main insights and the
+[2624.8s] single most important takeaway and then
+[2626.3s] any mention of an upcoming session.
+[2628.9s] >> Yep.
+[2629.3s] >> And then we have an example email that
+[2630.6s] we feed it.
+[2631.8s] >> And this is just coming off the the
+[2634.0s] transcript and then the example email.
+[2636.3s] What? And the example email is just a
+[2638.1s] past one that we you know as humans
+[2640.0s] built a built a built one that we were
+[2641.8s] happy with. Right.
+[2642.8s] >> Right. And then the title and
+[2645.1s] description.
+[2648.5s] >> So this is just the structure, right?
+[2651.0s] This is not writing the email.
+[2653.6s] >> So what is Yeah. What is this? Okay.
+[2655.4s] Okay. So the structure is just uh and
+[2657.2s] then what do we push that into a
+[2659.0s] template or do we give it the the
+[2660.5s] structure and have it okay compose is
+[2662.2s] also an
+[2663.8s] >> yeah so compose is the next one. So
+[2666.9s] compose email is we transform the
+[2669.0s] structured email to a polished email
+[2670.7s] newsletter. Here's the subject we
+[2673.8s] covered a lot on
+[2674.5s] >> but this doesn't this doesn't see the
+[2676.7s] transcript at all. that yes, you doing
+[2678.9s] like a two pass generation where we kind
+[2680.9s] of it's almost like uh
+[2683.2s] >> I mean that's it's a dumb analogy but
+[2685.3s] almost like a Laura Laura or something
+[2687.1s] where like okay let's make it smaller
+[2688.5s] and more specific and then we're going
+[2690.0s] to expand it back out.
+[2692.1s] >> Right. Right. because the transcripts
+[2694.0s] are typically really long and
+[2695.4s] [clears throat]
+[2696.2s] I don't know you the context might very
+[2698.2s] well degrade with that really long
+[2700.2s] transcript
+[2701.4s] >> and if I think the idea is like if this
+[2704.7s] first function works really well then
+[2707.1s] the compose email will work
+[2709.4s] >> right and so this first function is
+[2710.7s] really the key one to focus on so you
+[2713.0s] kind of have to trust that your helper
+[2715.4s] functions work sort of [laughter]
+[2718.8s] >> yeah no this makes sense okay cool and
+[2720.5s] then we compose it and then what what is
+[2722.4s] like I'm really curious the guidance
+[2724.0s] you're giving it on like how to make the
+[2725.6s] tone really good.
+[2726.9s] >> Yeah. So, it's it's it's so funny,
+[2728.9s] right? We have identified AI patterns,
+[2733.2s] >> right? Which basically all that is is um
+[2736.2s] hey, this looks like [laughter] the
+[2738.3s] following email sounds like it sounds
+[2740.4s] like you always tell because it always
+[2742.1s] does. It always does. [laughter]
+[2744.9s] >> It always has repeated sentence patterns
+[2747.5s] every time. So, you just tell it it
+[2749.5s] sounds like AI slop. Tell me why it
+[2752.0s] sounds like AI slop. Right? So there's a
+[2755.4s] subject, the body, and the call to
+[2758.1s] action. And then we say, analyze the
+[2760.0s] email. Identify specific patterns that
+[2761.7s] make it sound AI generated. So name the
+[2764.2s] pattern. Give me an example and explain
+[2766.0s] why this sounds artificial.
+[2768.7s] >> Cool. And the LMS judge like just throw
+[2771.5s] more tokens at the problem and make it
+[2773.3s] think more. And and and and and then you
+[2776.1s] just like keep turning the crank
+[2777.4s] basically.
+[2778.2s] >> Yeah. But all this is doing is this
+[2780.6s] isn't rewriting the email. This is just
+[2782.6s] saying what the AI patterns are. This is
+[2784.5s] just, hey, here's an email. Why does it
+[2786.5s] sound like AI?
+[2787.9s] >> Yep.
+[2788.2s] >> And then the final part
+[2791.0s] fixes that. It says the following email
+[2792.6s] or the Yeah, it was written by AI. It
+[2794.4s] sounds like AI slop. Fix these patterns
+[2796.9s] to make it not sound like AI slop.
+[2799.8s] >> Incredible.
+[2801.4s] >> And are you at any point like logging
+[2804.1s] out the intermediate like objects?
+[2807.4s] Like I thought I think it would be
+[2808.6s] fascinating to like have it just like
+[2810.4s] print out basically like here's the
+[2812.7s] original email. Here's the patterns we
+[2814.4s] found. Here's the fixed version.
+[2816.9s] >> I'm not but that would be very cool.
+[2819.6s] >> That would be cool. Okay.
+[2821.3s] >> Maybe we'll maybe we'll post those like
+[2823.1s] three versions as part of the as part of
+[2825.2s] the episode. I don't want to make you go
+[2826.7s] live code [clears throat] a bunch of
+[2827.5s] print statements, but I mean if you if
+[2829.0s] you want to we could try that. That
+[2830.2s] would be that would be that would make a
+[2831.8s] really cool demo. Okay.
+[2833.0s] >> Yeah, let's let's do it. So, let me
+[2835.9s] well, let me just cancel this run
+[2838.6s] because I forget
+[2841.8s] uh well, shoot. Let me I forget when the
+[2844.2s] the lock goes into place with claw code.
+[2847.0s] So, let me go here and we can just put
+[2849.0s] break points.
+[2850.6s] >> Oh, nice. Okay.
+[2854.0s] >> So, let's do that here, here,
+[2857.5s] uh here, and yeah, sure, why not? Cool.
+[2863.3s] And so now let's just rerun.
+[2868.9s] It's going to take a minute to get
+[2870.1s] there, but that's okay. We'll just kind
+[2873.4s] of auto accept everything on the way.
+[2879.4s] And then there's also one other thing is
+[2881.4s] is even after this I have Claude do one
+[2885.5s] final pass.
+[2887.3s] >> Okay. Okay. So, once it gets it out from
+[2889.0s] the script, you're like, "Go make this
+[2890.7s] even less even less uh sloppy."
+[2894.1s] >> Yeah, exactly. But it's it's pretty
+[2897.0s] specific in what it's looking for,
+[2898.6s] right?
+[2900.2s] So, um let's see. So really it's just
+[2903.8s] making sure that we have that it still
+[2906.2s] follows the structure that we want
+[2907.7s] because it could be very easy when it's
+[2909.3s] fixing the patterns for it to kind of
+[2912.2s] lose that initial instruction of hey we
+[2915.3s] want the greeting the opening we want um
+[2918.7s] you know the sign off by vibe of index
+[2922.1s] right it'd be easy for it to lose that
+[2924.0s] so we we do one final pass to make sure
+[2927.0s] it still has the structure that we want
+[2930.0s] >> okay
+[2930.5s] >> and I could I could have another bam
+[2932.0s] function that does this but
+[2933.4s] >> right
+[2934.8s] >> I don't
+[2937.4s] >> you know it's uh it's interesting when
+[2939.2s] you mix in different different system
+[2941.0s] prompts and different models and
+[2942.4s] different hardnesses of the like hey
+[2944.1s] straight inference just an API call
+[2945.9s] versus like hey this thing is running
+[2947.5s] with like you don't know all of the
+[2949.8s] random context it might have picked up
+[2951.7s] while while running the slash command
+[2953.6s] that might be randomly helpful to make
+[2955.7s] it slightly better
+[2957.5s] >> right exactly and I mean this getting
+[2960.5s] this email tone own right took so long
+[2963.8s] that I'm really hesitant to make any
+[2966.2s] changes to it.
+[2968.3s] >> So, we'll do we'll do agent back
+[2971.1s] pressure deep dive we just did. So, it's
+[2974.3s] going to do the folder update all the
+[2976.7s] stuff regenerate the the JSON manifest
+[2980.5s] so it would um update the RSS feed to be
+[2984.6s] pointing to the correct YouTube video.
+[2986.9s] But again, I'm not going to actually
+[2987.9s] push this code because we already have
+[2989.8s] that. Yep.
+[2991.8s] >> But let's just get to the I should have
+[2994.3s] just commented everything else out now
+[2995.8s] that I'm doing this live, but [laughter]
+[2998.9s] Whoops.
+[3000.4s] What happens when you do stuff live,
+[3001.7s] right?
+[3002.4s] >> Yeah, that's good.
+[3004.2s] >> All right. So, yeah, we'll just do that.
+[3006.3s] It's fine. It's fast.
+[3009.5s] And we'll do this and then we'll we'll
+[3010.9s] we'll we'll get to wrapping up. Um and
+[3012.9s] we'll make sure we include our key
+[3014.4s] takeaways and one thing to remember so
+[3016.4s] they land in the transcript.
+[3017.9s] >> Yeah, there you go. Uh, if anyone has
+[3020.2s] questions in the chat, by the way, feel
+[3021.5s] free to let them rip. All right, we're
+[3024.2s] getting closer and closer to the
+[3025.7s] generate email. So,
+[3028.8s] I I at some point I do save out the
+[3031.0s] email JSON.
+[3032.6s] >> Yep.
+[3033.0s] >> So, it has a subject, body, and call to
+[3034.8s] action because that just makes it easier
+[3036.5s] to structure.
+[3037.9s] >> Yep.
+[3038.4s] >> But yeah, let's
+[3042.4s] see what happens.
+[3046.0s] >> Go ahead. What happens with breakpoints
+[3048.4s] in in um in
+[3051.0s] >> I was literally about to ask you the
+[3052.5s] same question. I was like, have you used
+[3054.1s] the breakpoint thing in claude code? I I
+[3056.4s] thought was going to be you were going
+[3057.8s] to like grab the CLI invocation and then
+[3061.4s] uh run it yourself so you get the
+[3063.2s] because like Claude doesn't have a pty
+[3065.1s] so you can't actually go back and forth
+[3067.4s] with it.
+[3068.4s] >> Yeah, I'm just realizing this now. Yeah,
+[3071.8s] it's going to get mad.
+[3073.8s] >> Um okay, so what script did it run? It
+[3076.6s] ran just to generate email CLI. So,
+[3078.8s] >> can you just grab that CLI so you can
+[3080.8s] run it? Yeah.
+[3082.7s] >> So, complete episode. Let's go to
+[3086.4s] >> my favorite part of the show is like,
+[3088.0s] hey, what if XYZ?
+[3092.1s] >> So, let's see. Agentic
+[3095.2s] back
+[3096.7s] pressure.
+[3103.5s] Let me just come in and grab the
+[3106.3s] description from the meta MD.
+[3115.7s] And what else do we need? We also need
+[3119.3s] transcript. So just the path to the
+[3121.2s] screen transcript and the path to
+[3122.6s] output.
+[3125.5s] So the path to transcript is just this
+[3129.4s] copy path.
+[3132.3s] And then the output
+[3135.0s] we'll just do the same except just call
+[3137.9s] it.
+[3138.2s] >> Yep.
+[3139.8s] >> Uh emaild
+[3145.8s] directory. Don't like that.
+[3150.4s] Oh, I got to give it the full path. Uh
+[3153.0s] >> oh, the folder path. Yeah, yeah, yeah,
+[3155.0s] yeah.
+[3157.8s] Let's just go ahead and
+[3163.7s] where are you? Email generator
+[3169.2s] source email generator.
+[3170.2s] >> I think you just need the folder path
+[3172.0s] like you just need to add the episode
+[3174.1s] like oh yeah front there
+[3178.4s] to
+[3183.0s] >> Yeah.
+[3185.4s] Oh my god. Let's Oh, I think I think
+[3188.2s] what if we just do
+[3192.5s] email I think here it's not in the init
+[3197.8s] source email generator.
+[3204.0s] Well, this is kind of stuff that clog
+[3205.4s] code typically cleans up for us.
+[3208.5s] >> Yeah, it just figures it out.
+[3211.2s] So, but I can I will
+[3213.8s] >> if you CD into there, I bet it will work
+[3215.9s] because you just like you need your UV
+[3217.7s] end that you need your UV end at the
+[3219.8s] root probably.
+[3228.5s] This one.
+[3234.2s] Yeah, there we go. Okay,
+[3238.8s] there we go. Oh, no. I forgot to Oh, no,
+[3240.6s] no, no. But I got the path to the
+[3241.7s] transcript.
+[3243.0s] >> Okay. So, let's see what the structure
+[3246.5s] looks like.
+[3252.6s] So, subject
+[3255.8s] learning tests and proof driven dev for
+[3258.2s] black boxes what we covered.
+[3260.8s] >> Um, and then let's just do a continue.
+[3264.0s] And so, the next thing that it's doing
+[3266.0s] is it's
+[3267.8s] composing the email. And this is almost
+[3269.4s] certainly going to sound like AI slop.
+[3277.5s] Okay. Actually, let me just do this.
+[3280.0s] >> A dropped out body.
+[3281.7s] >> Yeah.
+[3283.4s] Okay.
+[3283.8s] >> There we go.
+[3286.6s] >> All right. Dex, why does this sound like
+[3288.2s] AI?
+[3288.7s] >> You got an M dash in there.
+[3290.6s] >> Oh, yeah.
+[3290.9s] >> You got AI powered assumption vetting.
+[3293.0s] Sounds super hypy.
+[3295.8s] The problem with assumptions AI power
+[3297.8s] assumption vetting um let's see another
+[3301.6s] another dash
+[3306.3s] for fuzzy external contracts.
+[3311.0s] I mean if I were here he'd be able he
+[3313.0s] would like nail this sounds like AI
+[3314.8s] slots. The guy's phenomenal at that.
+[3318.4s] >> Yeah. Um, but yeah, and so if we do
+[3320.7s] another continue,
+[3323.4s] we get the Yeah, let's see what AI
+[3326.6s] patterns are.
+[3328.8s] >> This will be fun.
+[3330.0s] >> This is fun because we also talked about
+[3331.4s] doing an episode on like how do you make
+[3333.3s] the content sound authentic? So, you're
+[3335.3s] getting you're getting that as well
+[3336.5s] here.
+[3337.5s] >> I guess verbose listing enumeration
+[3339.5s] within sequences.
+[3341.5s] >> All right. So, meta commentary. So,
+[3345.0s] um, humans do not exclude explicit
+[3348.7s] structural labels like call to action.
+[3351.0s] That's actually true. No one actually
+[3352.6s] puts call to action in an email.
+[3355.2s] >> In an email,
+[3356.0s] >> right? You have one, but you don't
+[3357.8s] actually say this is the call to action.
+[3359.4s] That's [clears throat] very silly.
+[3361.2s] Inconsistent tone and register. Uh,
+[3363.5s] let's see. Japos with highly technical
+[3365.8s] terms like uh deterministic feed out
+[3368.6s] loops and proof driven proofdriven dev.
+[3373.2s] I don't know if I totally agree with
+[3374.6s] this one because we do like the unicorn
+[3376.2s] emoji, but that's okay. That's why we
+[3379.1s] have the clog code that comes there at
+[3380.7s] the end and does the final cleanup.
+[3382.7s] >> Yep. Okay, cool.
+[3384.9s] >> And then overused and density of jargon
+[3387.0s] and buzzwords.
+[3388.0s] >> Yep.
+[3389.8s] >> I kind of like the jargon and buzzwords
+[3391.3s] in this one particularly, but anyways.
+[3392.9s] Yeah. Okay, cool. Let's uh Okay, so
+[3394.6s] let's see what it cleans it up to.
+[3397.3s] >> Here's a quick recap instead of super
+[3399.5s] quick recap. I like that. what we call
+[3402.6s] back pressure. I like this. Yeah, this
+[3404.5s] is less like it actually explains the
+[3406.5s] terms uh instead of [clears throat] just
+[3408.9s] like using them,
+[3410.5s] >> right?
+[3411.8s] >> Nice.
+[3414.3s] >> Yeah. And then the command would do or
+[3416.9s] the cloud code again would do one more
+[3418.2s] cleanup to make sure it it has the
+[3420.3s] structure that we want
+[3422.6s] and then that email would get generated
+[3425.3s] and then that would get sent out. Well,
+[3427.5s] it'd get reviewed by you and in VBO and
+[3429.2s] then it would get sent out. Amazing.
+[3431.8s] Yeah. Okay. This is dope. This is super
+[3433.5s] interesting. I, you know, I know you
+[3434.7s] guys rift on this like how to make the
+[3437.0s] email less sloppy, but I hadn't actually
+[3438.5s] seen it. And I love this is like a
+[3440.2s] classic vibe of like, okay, take the
+[3442.6s] output and then do a different structure
+[3444.2s] generation on it to find all the things
+[3445.8s] that are wrong and then bring the input
+[3448.1s] and the what what we found wrong and
+[3449.9s] pull those together and then and then
+[3451.8s] and then actually generate the new
+[3453.2s] thing.
+[3453.8s] >> So, what what would we say our key
+[3456.2s] takeaway here is Dex? Um, for me, I
+[3458.6s] mean, there are a couple. It is hard to
+[3460.3s] get AI not to sound like AI slot. Even
+[3463.1s] after all this and multiple
+[3465.0s] [clears throat] AI reviews, we still
+[3466.7s] need humans in the loop to clean it up
+[3468.8s] and we still typically do one or two
+[3470.6s] rounds of of edits on it. So, it's hard.
+[3473.4s] It's hard to do that. And then I would
+[3475.1s] say the other main uh thing that I
+[3477.4s] learned is
+[3480.2s] figure out, like we said earlier, figure
+[3482.5s] out where you where it's okay to
+[3485.0s] automate and where it's not okay to
+[3486.2s] automate. Right? If you're going to send
+[3487.3s] out an email to 2,000 people, make sure
+[3490.5s] that you don't have um make sure that
+[3494.3s] you don't have an AI doing that because
+[3496.2s] if it messes something up, then that's a
+[3497.9s] really embarrassing mistake.
+[3499.3s] >> Yep. And I I think another thing here
+[3501.0s] that is uh almost like starting to
+[3502.8s] become taken for granted, but back in
+[3504.9s] over the summer it was a whole episode
+[3506.7s] topic which was like using cloud code
+[3509.4s] for less technical tasks or using cloud
+[3512.3s] code as kind of your top level
+[3513.8s] orchestrator for a process where you can
+[3517.0s] actually the agent gives you a little
+[3518.8s] bit of robustness and flexibility and
+[3522.5s] almost like squishiness over a set of
+[3525.2s] deterministic tools. um and kind of
+[3528.1s] using just like a dumb tool calling
+[3529.6s] model with a simp to like go execute a
+[3532.2s] process and like I think skills are kind
+[3534.1s] of in this direction but yeah this idea
+[3535.9s] of like make a prompt that is everything
+[3538.0s] you have to do you can always leave in
+[3540.4s] like stop and get the human to do this
+[3542.3s] part and then you can slowly fill it out
+[3544.2s] with more and more automations as you
+[3545.8s] go.
+[3546.2s] >> Yeah. And something that we we saw was
+[3548.6s] the actual instructions in the cloud
+[3550.2s] code command were wrong. I moved a
+[3553.7s] function add the init and into it I I
+[3555.8s] renamed it and the instructions were
+[3557.9s] wrong in the cloud code instructions but
+[3559.4s] cloud code was able to figure it out. So
+[3561.0s] it's it's almost it's it's almost like a
+[3564.1s] front end for CLIs in some way where you
+[3566.4s] don't have to be super specific. You
+[3568.0s] don't have to be exact in what
+[3570.9s] everything is supposed to do and how
+[3572.1s] it's supposed to look. And it's smart
+[3573.6s] enough that it can kind of fill in the
+[3575.3s] gaps and sand out all of those burrows
+[3577.5s] for you.

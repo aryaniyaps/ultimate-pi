@@ -1,0 +1,870 @@
+we then create a brand new thread and
+then we run this three-step pattern this
+pattern can be reused for any situation
+diagnose the situation generate the
+solution execute the solution all the
+greatest developers I know and have
+worked with have really tight feedback
+loops you want to keep the distance
+between you and your next iteration as
+short as possible you can use llm to
+autocorrect any system that outputs
+concrete results put it back into your
+system just like we did here add a
+little bit more context you're going to
+get some Rich self-correcting agentic
+systems I think it's risky to go all in
+on gpts and the assistant API LMS are
+the new oil that's been made pretty
+obvious but there's going to be a
+massive Gold Rush there is a gold rush
+happening right now to build out all the
+gpts right GPT for everything I
+recommend just taking notes sitting back
+in your chair skipping the obvious use
+cases and focusing in on very Niche
+problems what if you could use the new
+assistance API with GPT turbo to run
+your software business even if you could
+only automate one segment of your
+business wouldn't that be amazing that's
+a load of time and cognitive energy
+saved I think this future is not far off
+at all in this video I want to give you
+ideas on how you can use GPT Tech to
+automate feedback loops in your software
+to explore this idea we're going to use
+the assistance API to automatically
+correct errors in our postgress data
+analytics tool we've been building over
+the series this is the ninth and second
+to last video in the series next week we
+officially launch talk to your database
+right here exclusively on YouTube this
+is exclusive for you and I to help us
+seamlessly talk to our postgress
+database in a new way we built the
+product right here from scratch on the
+channel over the series on top of GPT
+Tech it's going to be completely free so
+feel free to sign up let's add a self
+correcting assistant to our postgress
+data analytics tool let's look at where
+we are right now in the previous video
+we built out three front ends we
+experimented with AER to rapidly
+prototype our front ends we have a
+simple user interface where we can type
+in actal language and get results out of
+our postgress dat Analytics tool if we
+open up vs code we can see that we have
+two applications running we have our
+frontend View application and we have
+our flask application that can be
+deployed to versal or any other backend
+let's go ahead and just run a natural
+language prompt so we can see where
+we're at select users that submitted job
+feedback with a rating less than three
+let's go and let that run you can see
+here we have our prompt we have the
+results and you can see the SQL query
+that was generated so we're getting
+distinct users enter jooin job feedback
+rating lesson three if we open up table
+plus you can see that that query is
+going to give us all of our ratings that
+are less than three so that's fantastic
+that's the high level of the application
+before we start digging in how we can
+make our backend self-correcting let's
+boot up AER and let's just make some
+improvements to our front end I really
+like this idea of having an agent
+working for you in parallel while you're
+getting something else done so in a new
+terminal I'm going to CD into our VJs
+front end I'm going to boot up AER I'm
+going to add the app.js file that you
+can see here and this file is really
+simple you can see here we have the
+icons we have the headers we have the
+input and we have our prompt results
+here the JavaScript is simple as well we
+have our prompt we have our prompt
+results and then we have the Sim prompt
+function which sends the prompt that we
+enter in the input field to the back end
+to generate our SQL and run it against
+our database the result then gets parsed
+and add it to our prompt result list I'm
+just going to run a quick prompt here
+add the assets ttdb SVG logo next to the
+view logo and Link it to talk to your
+database.com so this is pretty cool this
+is going to run it's going to add the
+logo just want to show this off a little
+bit I think pair programming is really
+going to take off over the next year
+here so I want to get you guys into it
+ahead of the curve let's see how that
+looked awesome so that automatically
+updated we have the black background
+here so let's go ahead and update the
+background to Black real quick as well
+update the logo image backgrounds to
+Black we just want to make that a little
+more consistent sweet so that update
+came in live we have written zero lens
+of code and we have changed two things
+already let's go Ahad and throw one more
+prompt at this and then let's switch our
+Focus to our self-correcting agent add a
+created date to The Prompt result create
+a computed property sorted prompt
+results the rows just going to let that
+rip and we'll come back to this so let's
+talk about what our application is doing
+right now and what wanted to do so right
+now our application looks something like
+this right we have our VJs front end we
+also have two other versions we made a
+spell and react version check out the
+previous video to see how we built that
+but we have a frontend version here that
+then makes an HTTP post to/ prompt just
+like we saw we then have our data
+engineering team that generates SQL and
+runs the SQL and it communicates with
+our postgress database to pull in the
+tables it needs for the prompt and to
+also run the SQL right after that runs
+we have two different kind of states
+that happen here but they both result in
+just returning to the front end right so
+that's the current state of our
+application we'll walk through the
+backend code in a little bit here's the
+application that we're going to build
+out right now a very similar version but
+as you can see here a big difference if
+we have an error we come into our self
+correction assistant and we run these
+three steps AKA three prompts diagnose
+this SQL query based on your diagnosis
+implement the resolution and then run
+SQL after that happens we then return to
+the front end so we're getting Two Shots
+here at generating a result our
+self-correction agent is going to use
+the new openai assistance API so that's
+what we're going to build right now
+let's quick jump back to AER to see if
+it's implemented those results for us
+okay sweet so we can see we have created
+we can see we have a new computed
+property uh sorted prompt results we can
+see that updated the section for us and
+we can see that we have created now
+getting added to the result this is
+awesome I just love showing this off
+that you know while we're working on
+something else we can have an assistant
+uh running for US writing code for us
+just to give a sneak peek of where the
+channel is going in 2024 we're going to
+be building out autonomous agents that
+run alongside us just like AER and
+fulfilling and building software for us
+while we're doing something else AER is
+just the first step it's a really
+important step all built on top of this
+amazing GPT technology of course so I'm
+just going to make another change here
+let's uh let's say input with 300 pixels
+awesome let's let that run and let's go
+to the back end so in the current
+version we have a simple flask API with
+a/ prompt route we have some chors stuff
+happening here so we can run this
+against local hosts we're opening up our
+postgress agent instruments which you
+can just think of as state and functions
+for our application to run with we have
+our postgress database right here we
+pass in the database URL we're pulling
+out the prompt from the request we're
+Gathering similar tables we're updating
+our prompt with our similar tables that
+we just pulled out of our SQL database
+we're then setting up our GPT llm tools
+and we're running two prompts here one
+prompt here is generating SQL the other
+is running it we then load back out our
+results from the file saved by running
+our run SQL function and then we return
+with our response and and that's how we
+get the results here you see on the
+front end we can see that our input size
+did increase that's awesome and that's
+the current version of our application
+now let's look at a natural language
+query that's going to fail real quick I
+want to get some space in here so I'm
+going to ask ader to gener that for me
+while we talk about a failing query
+going to open up vs code I'm just going
+to say input add space below okay so
+let's look at a query that's going to
+bomb so get all users with job that have
+completed status job is not a table now
+when this runs we're going to get back
+an error from the back end as you can
+see we got an error here that looks like
+a Coors error but it's actually a
+database error because we're trying to
+look at a column that does not exist
+because we're looking at a table that
+does not exist if we open up table plus
+we can see that we have a jobs table not
+a job table so this is a small kind of
+contrived example but it's going to show
+off how a gentic software can be
+self-correcting so we have that error
+normally I like to code through this and
+make the experience a little more
+interactive for this video I'm just
+going to Thanos snap this coding session
+so we can discuss right away I'll see
+you on the other
+side so we've implemented our brand new
+self-correcting assistant let's look
+through what's changed so you can see
+here we have a brand new function at the
+top self-correcting assistant let's look
+at the application flow that leads up to
+that first so in the prompt function
+just as before we're Gathering tables
+we're putting together a prompt we have
+our tool but instead of just returning
+if we see a postgress error here and the
+postgress error here has just been
+aliased so you can see we have import
+error as postgress error if this happens
+we're going to run our self-correcting
+assistant we're going we're going to
+pass in the DB our state and our
+functions the tool with the Run SQL
+function and of course the error all the
+code below is exactly the same so let's
+hop into our self-correcting assistant
+and see what it looks like the first
+thing we do is roll back our database
+commit since it's stuck in a failed
+transaction we need to roll back then we
+start building up some state for our
+correction agent we grab all of the
+table definitions from our postgress
+table so we're going to get all the
+create statements for all of our tables
+we're going to load a file path that we
+can save that to we write the table
+definitions to a file we then read out
+the SQL statement that was run then we
+start building our prompts you can see
+we have our prompts in three steps here
+diagnose generate and run we then build
+a turbo 4 assistant turbo 4 wraps the
+assistant API if we come to Turbo 4 you
+can see we have a nice clean wrapper
+class for all of the open AI assistance
+API function calls we built turbo 4 out
+in the previous video I definitely
+recommend you check that out people are
+getting a lot of value from the
+postgress data analytics tool and the
+code basee the link to this code base is
+going to be in the description feel free
+to check it out every single video in
+this series links to a specific branch
+in the code base so you can time travel
+to each step and parse out just the
+information you need so that's turbo 4
+if you want more details into the
+implementation here check out the
+previous video where we built out turbo
+4 from scratch so now that we have our
+turbo 4 assistant and we have our table
+definitions written to a file we can use
+the turbo four assistant to upsert these
+files so it's going to create or update
+this file that contains the table
+definitions for our postgress database
+we then kick off our turbo 4 assistant
+and this is the meat of it I'm really
+excited about how turbo 4 has turned out
+it allows us to jump in here and do
+really powerful things like this so the
+turbo 4 assistant is what enables us to
+run back to back prompts with tools
+without tools with files without files
+run validation on it look into into the
+messages that our agent system is having
+so on and so forth you can see here it's
+broken down in a nice clean fashion
+turbo 4 is a building block that I have
+and will be using for a while it reads
+so cleanly and so nicely thanks to its
+chainable functionality let's walk
+through this top to bottom we set
+instructions we enable retrievals so
+that we can read from files we enable
+our tools and you can see here our tool
+here is the same tool that was passed in
+we have the Run SQL tool here this is
+just a simple class that wraps name
+config and a callable function and you
+can see here we're passing in the SQL
+tool config and our run SQL function
+okay so that enables our agent to run
+these tools we then create a brand new
+thread for the messages to run on top of
+and then we run this three-step pattern
+this pattern can be reused for any
+situation it works like this diagnose
+the situation generate the solution
+execute the solution so in step one
+we're passing in our diagnose prompt
+with our file ID remember the file ID is
+the table definitions of our SQL table
+so now using rag or whatever
+implementation openai has figured out it
+can reference our SQL table create
+statements when it needs to if it needs
+to The diagnos Prompt looks like this
+right given the table definitions. SQL
+file and the folling SQL error and the
+SQL query describe the most likely cause
+of the error think step by step then
+we're passing in two capitalized
+references here we have the SQL error
+which which will of course reference
+back to this variable and then we have
+the SQL query which of course references
+this and just since we're here we have
+the generation prompt which says based
+under your diagnosis generate a new SQL
+query that will run successfully and
+then finally we have our same run prompt
+that we used before use the Run SQL
+function to run the SQL you've just
+generated okay so let's hop back to the
+chainable functionality here of Turbo 4
+we add this one message and then we run
+the thread so we don't need to give any
+more information here we're running that
+one step so you can imagine we kick off
+you know a chat GPT chat that's running
+right now and now we're going to get a
+response after this finishes right so we
+we run everything up to this point and
+now we're going to run our spy on
+assistant functionality again we built
+this in a previous video video 5 I think
+where we added spying functionality that
+allows us to generate a clean chat file
+so that we can monitor the success of
+our application so that runs here and
+you can see here I'm running this spy on
+assistant after every step I want to
+make sure we have logs to look at no
+matter if there's failure on step two
+three or near the ending right we want
+to always have that chat file updated we
+then r on step two generate and you can
+see here of course we're passing the
+generation prompt so that runs another
+thread run so you can see here we have
+that run thread running there and same
+thing spy an assistant and then finally
+execute so you can see here in the Run
+thread we're actually going to pass in
+our toolbox which has our tool and we're
+just passing in the name and this is
+going to activate and say Hey you have
+this function I want you to run it and
+the great part about the assistance API
+is that it has the context of all the
+previous information that's been running
+here in the thread right you can think
+of this like the thread contains all
+this information and it's running and of
+course also has the file so it really
+looks something like this right with our
+file right here right so it has the
+context of the entire file and that's
+super awesome let's go ahead and back
+that up so and then at the end here
+we're just running some validation we're
+running some another uh chat file log
+and then we want to get the cost of you
+know everything that just happened there
+based on the um chat file right so so
+that's everything so this is our brand
+new turbo 4 assistance API wrapper
+self-correcting assistant so let's run
+this right I've just been talking this
+whole time does this even work let's go
+ahead and see so we have the server
+running and we have the uh front end
+running that's great let's hop back to
+the application so let's go ahead and
+run that exact same prompt right let's
+get that get all users with job right in
+valid table that have completed status
+so I'm going to let this run let's hop
+over to the server and let's look at
+what's happening here so okay so it's
+got the base prompt in there right and
+let add some space here so you can see
+this okay so you can see there's the
+error right and now right away our
+assistant just got kicked off right so
+it's saying you know here's the error
+here's the query um now I'm going to run
+thread right so it's starting one of the
+threads you see you can see the make
+thread up here and okay so basically
+your diagnosis generating SQL statement
+so it's already on the second also it's
+on the third so you can see run thread
+add message run thread run thread
+there's a response so let's go ahead and
+look so get all users with job that have
+completed status right and you can see
+here self-correction we have jobs and
+you can see of course we got an actual
+result and this query looks good right
+so paent ID where j. status equals
+completed if we gra over table plus so
+here's job and you can see there there's
+a completed status we can just go ahead
+and sort that and see we'll have you
+know some amount of results there and
+the respective users so awesome that
+self corrected so let's go ahead and see
+what exactly happened there right let's
+go ahead and copy out this run let's
+move this to a file and let's let's look
+at this top to bottom right so there's
+the base prompt get all users with job
+that have you know completed status you
+can see there let me change the file
+mode go to PL text file great okay so
+you can see here we received the error
+right so and then you can see here it's
+saying running self-correction team to
+resolve and and then here's the exact
+error right we're loading table
+definitions here and then you can see
+we're starting to run um our function so
+at the top of every one of the turbo
+four let's open up turbo four top of
+every one of the turbo four functions I
+have this kind of debugging pattern
+where I'm saying you know basically just
+printing out the name of the function
+and you know so you can see make thread
+right there you can see add message
+right I'm dumping that right at the top
+just so it's easy to read and easy to
+see so if you just do a quick regex for
+this pattern you can you can see that
+you know coming up over and over you
+know you see we're upserting this file
+right so there's our table definition
+file getting upsert to the open aai
+Assistant API you can see here we have
+our existing files there found existing
+file and then it's checking it already
+exists no need to update it great so now
+we're running self correction assistant
+we're setting the instructions we're
+enabling retrieval right and if we hop
+back you can see here set instructions
+that's exactly what's happening here so
+set instructions enable retrieval equip
+tools and you can see that reflected
+here right set instructions enable reval
+equip tools make thread add message we
+also have the message getting printed
+out here right given the table here's
+the SQL right this is just our uh
+diagnosis prompt so that's happening and
+then we run that thread right so open a
+does a bunch of work here for us and
+then we run to the next message and then
+the next and then the next and then the
+next right so this is good let's look at
+our actual chat logs that we're shipping
+out right here thanks to our spy on
+assistant call we can see that in agent
+results here we have our entire agent
+conversations earlier in the series when
+we're using autogen we have this between
+several different agents right now it's
+just from and to us so that's nice and
+clean but you can see here top to bottom
+it's running our diagnosis prompt and
+then this is where all the magic happens
+right so to the user from the assistant
+so our assistant's telling us you know
+there's no user ID column in the jobs
+table and so this is really fascinating
+it actually pulled an invalid variable
+instead of the invalid table name so I
+was thinking this would come in and
+actually just grab um you know job and
+not get the S on the job table but it
+actually did find that so that's really
+cool um it but but the problem here is
+that it referenced this user ID and user
+uncore ID doesn't exists right if we
+open the jobs table we can see here we
+have parent user ID so this is actually
+really cool I didn't predict that that's
+what this would attempt to fix but um it
+kind of just proves the point that when
+you're building out these complex
+systems you can use software agents you
+can use llms to self-correct problems
+that you couldn't even foresee right we
+literally just saw that happen I I was
+you know trying to create this
+environment where one error was going to
+happen on purpose obviously but
+something else happened entirely and it
+still caught it it still corrected right
+so you can see here we have user ID and
+it self corrected that to parent user ID
+right so really fantastic stuff but you
+can see that all in the message whatever
+llm systems You're Building you know it
+doesn't matter what tool you're using
+make sure you have really good log all
+the greatest developers I know and have
+worked with have really tight feedback
+loops you want to keep the distance
+between you and your next iteration as
+short as possible that's where great
+debugging great logging and great
+success monitoring really comes in even
+if it's something as simple as a chat
+message just like this right no one said
+it needed to be complex so that's great
+so you can see here we're then building
+that self-corrected query right here and
+then we run that next chat conversation
+based on your diagnosis generate a new
+SQL that will run successfully the agent
+looks at this it sees that we need to
+build this statement and then we're
+saying run this exactly right so use the
+Run SQL function has been successfully
+run and then you know classic chat stuff
+if you have any further request or need
+to see the results please let me know so
+that all ran there that's fantastic and
+it was all thanks to our really kind of
+clean really simple to reason about
+turbo 4 assistant which is a wrapper a
+round open AI assistance API link for
+all the codes is going to be in the
+description this will help you get up
+and running quickly if you're not
+already using the open AI assistance API
+and if you are maybe it'll help you you
+know create and maintain you can use
+this to you know build your own patterns
+tweak it to your liking whatever you
+need to do I wanted to share this with
+you to help you on your engineering
+Journey so this is fantastic let's talk
+about some pros and cons of the
+assistance API little bit of strategy
+assistance API let's talk about it so
+the biggest win here is memory with the
+combo of gp4 turbo file uploads with rag
+or whatever again whatever open AI is
+doing under the hood we don't actually
+know along with tools makes the
+assistance API a nasty amazing
+combination with both short and
+long-term memory right uh the fact that
+we can upload files here and we can go
+ahead and look at this this agent right
+on the API SQL self-correction agent the
+fact that this can hold files can use
+retrieval you know and it can also run
+functions uh makes it incredibly
+powerful right like especially with a
+clean wrapper like turbo 4 this is a
+really really powerful tool that allows
+us to basically create arbitrary agents
+to do anything again specifically thanks
+to the long-term memory the real
+Innovation is the combination of
+long-term memory and the tools the fact
+that we have access to the previous chat
+conversations inside the threads and the
+capability to start new threads is also
+a really fantastic tool at our disposal
+theoretically I think we should all be
+building use case specific agents that
+ultimately replace chat GPT right this
+is likely what open II saw and that's
+why they put out the gpts a lot is Just
+Happening Here magically under the hood
+right I I have um 15 lines of code
+obviously there's a decent amount
+happening in the wrapper but just 15
+lines of code after the abstraction
+that's pretty amazing you know to build
+something like this before you'd have to
+build an entire graph database that
+understands sqo really well multiple
+models to be able to self-correct like
+this and three comps basically you know
+three llm calls is really extraordinary
+right so so there's a lot of good
+happening here just want to highlight
+once again the biggest win here of the
+assistance API is the ability to create
+extremely use case specific assistance
+with your knowledge based right I don't
+think this is new information um I just
+want to highlight that that's really the
+key here and that's like when you're
+thinking of use cases and when do I use
+the assistant that's what you should be
+thinking do I need a ton of memory do I
+need very use case specific knowledge
+where I can upload files and also do I
+need some type of function calling
+capabilities I think with any agentic
+system like many of the agentic systems
+we're going to be building here on the
+channel I have so much exciting stuff to
+share in 2024 I I really can't wait but
+with any agenic system we're going to
+need all of these components right and I
+think open AI has correctly identified
+that likely by you know listening to us
+Engineers but also by being Engineers
+themselves and really tackling this
+problem head-on we have this really new
+fantastic idea of the llm OS highly
+recommend you you watch this entire
+video by one of the open AI kind of key
+creators key Builders key researchers I
+think it is really telling about where
+things are going but I think assistance
+API is probably one of the first it's a
+heavy step and it's a kind of a big step
+but it's a really great Step at putting
+all this together so that we can build
+our own assistance with enough
+capabilities to get the job done it's
+going to be clunky you know it's going
+to make a little noise it's going to
+cost a bit that actually is a perfect
+segue to some of the negatives right so
+what are some of the negatives of the
+assistance API um this is going to hurt
+a little bit right if we look at the
+pricing here and we look for retrieval
+assistance API um you know it's not
+exactly going to be cheap the the big
+problem is it's going to be pretty hard
+to scale this at this at this cost it's
+it's good I hope it continues to come
+down I really hope open AI continues to
+like really ship and stick to that
+mission of making it really cheaper
+handing off all the gains to the
+developers so we can build a really rich
+ecosystem for and with open a but you
+can see here this is going to stack up
+another issue I see is limitations
+around how many agents you can create
+right how many custom agents you can
+create how many different versions of
+these you need to have live to serve all
+of your customers right let's say you
+have you know uh a th000 customers
+operating on your application every
+single day right can these agents
+support that type of throughput I'm I'm
+not sure yet um you know something that
+I hope to experiment with in the future
+so I'm curious about that is the
+assistance API sustainable if you look
+at the logs for one of these open AI
+calls right convert this nlq into a and
+created after okay just a random query
+just making something out but here's my
+point right is it really sustainable to
+to be making API calls like this per
+user right this was just a single run
+and in our example here we ran three
+thread runs happening here right so we
+have essentially three times uh these
+you know requests coming in and out of
+open AI uh that's a lot and this is
+going to slow down your application
+quite significantly right even backed by
+one of the best AI infrastructure
+providers you know Microsoft on the AER
+stack as you know they have a lot of
+information coming at them right now
+coming out their servers if anyone can
+do it it's them for sure but you know
+definitely something to think about
+another really important point we're
+adding a lot of risk to our application
+for several reasons first off we're
+depending on open AI being up as we see
+uh some days open AI is not running
+properly right the API is bouncing the
+API is is is is not functional this is
+something I'm thinking about for talk to
+your database the full productionize
+version I'm going to have to build in
+some type of airor message that just
+says like sorry open AI API is down so
+the app is down you know and that type
+of dependency is obviously really bad
+right like that's risk manifested you
+know in your application it's a key spot
+to have backups to have you know more
+Brute course technology um you know just
+raw code imagine that just writing raw
+code to solve problems um you know
+definitely there's a huge space for that
+still we can't fully switch over to this
+LM technology obviously it's not quite
+there yet it's not quite as sustainable
+as we wish it was yet of course it's
+getting there and then last thing I'll
+say here is you know with the assistance
+API there's a bit more state to manage
+right you have to manage your tools you
+have to manage your your files and you
+have to manage you know your reporting
+functionality so you know something else
+to think about there all in all I think
+it's risky to go all in on gpts and the
+assistant API specifically for non Niche
+use cases right llms are the new oil
+that's been made pretty obvious but
+there's going to be a massive Gold Rush
+there is a gold rush happening right now
+to build out all the gpts right GPT for
+everything I recommend just taking notes
+sitting back in your chair skipping the
+obvious use cases and focusing in on
+very Niche problems that you're in a
+unique position to solve that you have
+unique knowledge you have unique data
+and you have the ability and you you're
+watching channels like this and you have
+an advantage here where you can build
+out a very specific use case extremely
+well using assistance API using gpts you
+know I think the real value is going to
+be generated kind of in the background
+in some of these companies um given that
+assistant API stable enough you know a
+custom assistant API is going to be able
+to do a ton of work and create a lot of
+value I'm going to say that you know
+just to kind of call that out you want
+to be using the assistant API only if it
+it fits the problem that you're trying
+to solve well for instance for talk to
+your database you know am I going to
+build something like this out definitely
+right I I love this idea of having a
+self-correcting agent self-correcting
+assistant um but is it going to be on
+top of the assistance API firing off you
+know um firing off you know 20 HTTP
+requests to open AI probably not I can
+probably do this with a couple prompts
+maybe three prompts right I can I can
+replicate each one of these prompts just
+make three requests fire the tool and be
+done with it also something to think
+about don't Overkill it with the
+assistance API for most use cases
+assistance API is overkill so that's it
+kind of a a deeper discussion really
+wanted to dig into the assistance API
+and talk about this use case um I highly
+recommend you try to build something
+like this out some type of
+self-correcting pattern this is really
+powerful and it can be used for several
+things self correct code generation
+correct and improve email generation
+language syntax spelling formatting
+basically you can use llms to
+autocorrect any system that outputs
+concrete results either success or error
+right and if you can take that error put
+it back into your system just like we
+did here add a little bit more context
+you're going to get some rich
+self-correcting agentic systems that's
+basically it guys thank you so much for
+watching if you made it to the end you
+know definitely like sub really
+appreciate you being here 2023 has been
+really incredible for us the channel has
+really taken off but things are going to
+get a a lot crazier in 2024 the things I
+want to build after we roll out talk to
+your database it's going to be really
+exciting but yeah once again next week
+talk to your database goes live it's
+going to be a self-contained application
+where you can provide feedback right in
+the application and really be a part of
+the direction of talkto database I'm
+really big on user Le development so I'm
+going to take that to an extreme as much
+as I can here and you know put
+everything I can inside the application
+so that we're work working and building
+on it uh together in some type of way
+right so feel free to sign up for this
+this goes live next week what's next I
+need to focus all week basically on
+launching this making sure it's as great
+as possible for you the 10th video will
+likely be a really cool demo of this
+application in the productionize
+environment you know we working on kind
+of toy versions um but in the background
+here I have put together what I think
+it's going to be a really kind of fun
+interactive simple functional
+application that allows us to interact
+with their database in a brand new way
+so again feel free to sign up for that
+we built it from scratch on the channel
+over the previous eight now n videos
+like sub hit the notification Bell so
+you don't miss the release I'll see you
+next
+week

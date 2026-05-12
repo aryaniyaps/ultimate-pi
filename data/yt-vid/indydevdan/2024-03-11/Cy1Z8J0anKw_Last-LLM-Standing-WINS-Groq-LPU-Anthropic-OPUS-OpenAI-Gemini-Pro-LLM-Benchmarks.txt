@@ -1,0 +1,489 @@
+LLM benchmarks are really great, and
+they're very important, but they're hard
+to truly understand and really
+comprehend. Every LLM provider comes out
+with some clearly a little biased,
+slightly fine-tuned prompt comparisons,
+and absolutely there's a lot of truth in
+what they're sharing, but you always
+have to take it with a grain of salt. Of
+course, the LLM provider wants to
+promote their own LLM over others, so
+that developers like you and I try their
+LLMs and spend our time and money
+checking out their tech. For that
+reason, I wanted to create a type of
+benchmark that you can really feel. So,
+I built this simple benchmarking tool,
+Last LLM Standing Wins. It's really
+simple. You select how many lives you
+want, you drop in your prompt testing
+results, and then you let your LLMs
+battle on their specific models. So,
+before we dive into this anymore, I'm
+going to let these models duel. We have
+a Grok model here, we have Vertex Pro,
+we have GPT-3.5 Turbo, and of course, we
+have the new Claude Sonnet. So, we're
+going to let these LLMs battle, and
+we'll walk through exactly what's going
+on after. So, here we go.
+So, as you can see right away, Grok is
+ripping. Grok is already done with the
+10 prompts. GPT-3.5 finishes, Gemini Pro
+finishes, and it looks like Claude 3
+Sonnet doesn't make it to the end here.
+So, let's talk about what exactly just
+happened there, right? So, each one of
+these squares represents a single prompt
+test, and every LLM runs the same test.
+If we hover over one of these squares,
+you can see here, the prompt is this.
+So, given the natural language query,
+select five users, generate the SQL.
+That's all this prompt is doing. Given a
+natural language query, we want to have
+the LLM generate the proper SQL
+statement for us. You can see at the
+bottom, GPT-3.5 generated the correct
+select statement, select star from users
+limit five. So, that runs for every
+single model and every provider. Each
+LLM is given specific awards. So, you
+saw here, Grok finished first, but it
+also finished with the least cost. It
+got the frugal award. We have two
+bull's-eyes, so these LLMs completed
+with no mistakes, and we had Claude 3
+Sonnet die, and it also was the first to
+die, first and only to die, so it got
+the dead award, it got the first blood
+award, and it also got the Grand Theft
+Auto LLM award, which means it cost the
+most. Let's go ahead and run another
+test. Go ahead and pump our lives up to
+four, and let's run this. So, this is a
+battle between the top two LLMs
+currently with their APIs open to the
+public. So, this is OpenAI's one of the
+latest preview versions, and of course,
+up against Claude 3 Opus. They have four
+lives each. If you're excited for this
+LLM battle, and you're super stoked for
+the results here, hit the like, hit the
+sub, and let's watch the two best models
+battle it out.
+So, right away, you can see GPT-4 quite
+a bit ahead, Claude 3 Opus lagging, but
+still 100% accuracy. Love to see that
+for both of these models. They have four
+lives, so let's see how far they both
+get. So far, so good. They're running 20
+natural language query to SQL prompt,
+and there we go. So, we got some errors.
+Okay, so Anthropic just bombed four in a
+row, and we're going to have OpenAI's
+GPT-4. Okay, so we got two errors from
+OpenAI's GPT-4, but it did complete.
+This was the fastest LLM alive, but it
+also got the Grand Theft LLM award, so
+it did cost us the most out of these two
+models. Of course, Claude 3 uh bombed
+four in a row here, so it lost all of
+its health, it died. It also got the
+first blood award, and the frugal LLM
+here doesn't mean much since it's, you
+know, just two models up against each
+other. Here is a really big, exciting
+example. Here's the big final seven-way
+LLM battle. We have Grok, we have GPT-4,
+we got Vertex, we got GPT-3, we got
+three variants of Claude in here. But,
+before we dive into this one, I want to
+show you exactly how this works. We're
+standing on top of a framework called
+Prompt Foo. We've discussed this on the
+channel before. I'll make sure to link
+those guides and those videos in the
+description, so you can get caught up on
+how you can write tests for prompts to
+gain confidence in the value that your
+LLM's are bringing to your work, to your
+products, and to your tools. It runs
+right in the CLI, and it also has a nice
+user interface for you to look and
+visually see the results of your LLM's.
+Real quick, we'll take a look at the
+code. You can see here we have our
+Promptfoo configuration file, and let's
+just go ahead and create another test
+quickly. Let's do a speedster test. So,
+this is going to be a test between kind
+of the two fastest and most accurate
+models out right now, GPT-3.5 and Grok
+Mixtral. Let's go ahead and look at the
+tests that are going to be run against
+those items. You can see here we're
+running NLQ to SQL. Here's the prompt
+that you saw in the tooltip. So, just as
+you saw before, you know, given a
+natural language query, bam, and then
+the database dialect, bam, it's going to
+be Postgres. We're giving some table
+definition information, and then we're
+asking it to fill in the SQL statement
+that will satisfy the natural language
+query. We then run a suite of tests. So,
+this is what the individual tests look
+like. Let's just go ahead and collapse
+here so we can just take a look at one
+of these. So, you can see here, NLQ to
+SQL, we're passing in the NLQ, the
+database, and then this is how we're
+asserting. Any LLM block here that you
+saw that lost their battle, let's
+refresh and go ahead and let these duel
+again. So, any LLM that lost and got an
+invalid response was unable to assert
+these values or something went wrong
+with their API call, right? I think in
+one of these tests, Anthropic is timing
+out in a lot of these cases, right? Just
+cuz their API is getting absolutely
+destroyed right now. And they also have
+strict rate limits on their API. So,
+that's why we're seeing some of these
+clawed errors. It's actually performing
+a little bit better than we're seeing
+here in the test, but it's still really
+cool to see it visually how it comes
+out. So, the interesting thing about
+these tests you're seeing is that these
+are deterministic tests. So, it's
+running on a Promptfoo configuration
+output file that has already completed.
+Let's go ahead and run a speedster test
+for these 10 items. Inside my package
+here, I have LLM to SQL 10, and it's
+going to run on top of that prompt food
+configuration file. So, let's just go
+ahead and do that right now. So, we'll
+say yarn LLM 10, and let's make sure
+that we don't have anything else
+enabled, otherwise they'll show up as a
+LLM trying to join the battle. We just
+want Turbo and Grok. So, let's go ahead
+and let them battle here. Let's fire
+that off. And so, right now in prompt
+food with a delay timer, both GPT-3 and
+Grok Mistral are running right now, and
+bam. So, we just saw them complete. We
+have one failure out of 19. That's
+great. But, if we come into the output
+file, you can see here in the
+package.json, we are actually outputting
+these to a output 10.json file. So, we
+open that up. You can see here we have,
+you know, all of the results. So, it's
+results, we have stats, and then prompt
+food developers give us a nice set of
+information here to work with from our
+test output. We focus on the results.
+So, so what we can do here is just take
+this. We can open this, go back over to
+our application, refresh, and then here
+we're going to drag and drop a brand new
+LLM last man standing battle. We're just
+going to drag this over, drop it in, and
+you can see here we have a battle
+between Grok Mistral and GPT-3.5 Turbo.
+So, let's go ahead and see how these two
+compare to each other. Let's see who can
+win first, right? This is really a speed
+test between Grok and 3.5. Let's have
+them battle.
+All right. So,
+yeah. Really impressive.
+But, interestingly, right? So, this is
+why this is so cool and important to see
+how this really looks and feels, right?
+Just by seeing this visually, we now
+know that, you know, Grok Mistral and,
+you know, I realize that this is spelled
+wrong, forgive me. But, we can see here
+that Grok Mistral is really fast, but,
+you know, it did get a prompt wrong,
+right? It did bomb on this test here for
+whatever reason. The assertion statement
+for this test did not go through. At the
+same time, we saw that complete very,
+very quickly. You know, we can refresh,
+go ahead and drag and drop again, and
+we'll run it again, and really just like
+it's so cool to visually see this,
+right? Grok is almost twice as fast as
+3.5, but as you can see, GPT-3.5 is more
+accurate in this test case scenario. So,
+really cool to see that. We got the
+fastest LLM alive over here on the left,
+but we have the bullseye on the right.
+At the same time though, you know, Grok
+least expensive. Really cool to kind of
+just visually see this. Comment down
+below and hit the like, hit the sub if
+you guys are interested in this getting
+hosted so that you can, you know, run
+your prompt food test and then drag and
+drop it in here into what will be a, you
+know, it's just a simple hosted website
+and then you can kind of watch your LLMs
+duel. This is probably something that
+I'll be adding to the ND Dev Tools at
+some point just because it's something
+that I really enjoy using and it
+definitely fits the purpose of the ND
+Dev Tools tool set. So, it's all about,
+you know, building agentic software.
+It's all about understanding prompts.
+It's all about, you know, building LLM
+software and building technology that
+will help you, you know, create your
+reusable building blocks and really dig
+into these, you know, agentic principles
+like prompts are the new fundamental
+unit of programming. One of the key key
+parts of building important software is
+making sure that you have tests and
+making sure that you really truly
+understand the technology that you're
+building with and the technology that
+you're building on top of. So, I'll
+probably build this into the ND Dev
+Tools, but let me know if you guys are
+interested in a tool like this. This
+doesn't have to be a public thing. I can
+keep this private. I just thought this
+was really cool and wanted to share it
+with you here. So, let's go ahead and
+look at that final battle here. This is
+a 20 set prompt, so there are 20 prompts
+here. It's all NLQ to SQL tests. We have
+a lot of LLM providers here. The cool
+part about this test is it's all built
+on top of Prompt Foo. So, after you run
+your test and, you know, you specify an
+output file, right, using, you know, uh
+their dash dash output flag here and you
+go ahead and get your results into a
+concrete JSON file. Then we can drag and
+drop and then just run a test, right?
+So, it's really as flexible as your
+Prompt Foo tests are. So, whatever your
+outputs are here, basically it's just
+built right on top of promptfood. And
+it's a more intuitive way to really
+understand what your prompts are doing.
+Enough talk. Let's go ahead and let this
+last big massive LLM battle run. Let's
+see who the last LLM standing is here.
+So, right away, you can see Grok is off
+to the races. That LPU is insane. We got
+some dead Claude dead Claude models and
+we have Is this GPT-3? Very nice GPT-3
+with two errors only. Okay, we have Grok
+dead. We have Gemini Pro dead and GPT-4.
+Nice. GPT-4 lives with one health.
+GPT-3.5 Turbo lives here with one
+health. Um everyone else is dead here.
+We do have some awards. So, Mistral ran
+so fast. That was really kind of
+difficult to see. Let's go ahead and
+let's go ahead and run that again. It's
+It's so cool to see how fast Mistral is.
+We'll just kick this off again. And And
+these down here, these are just in
+memory files. So, if we go ahead and
+look at the code here, I just threw a
+couple of these battles just right in
+memory, right? So, I fired off my
+promptfood test using the {dash} {dash}
+output flag and then just copied the
+results directly into these battles. And
+all the information is right here.
+That's what these three starter battles
+are. Let's just go ahead and watch how
+fast Grok is here. I think it really
+shows, you know, being able to see this
+visually really shows how much faster
+Grok really is. Bam, so fast. But also,
+we have to shout out 3.5 Turbo. Probably
+one of the least appreciated models is
+OpenAI's GPT-3.5 Turbo. It's fast. It's
+very accurate. And we can see here, you
+know, to be fair, I'm pretty sure all of
+these Claudes are just hitting a rate
+limit. That's on me. If you guys are
+interested, I'll set up better tests to
+share on the channel. Drop a like. Drop
+a sub. We can have more LLM last man
+standing battles. I'm pretty sure
+Anthropic is just timing out here both
+with rate limits and multiple times I've
+had issues with their API. They're
+getting hammered a lot right now. But we
+had uh GPT-4 uh come in, finish strong,
+and you know, Vertex Pro, not too bad.
+It made a decent way there, but it did
+ultimately, you know, bomb a couple of
+times, not satisfying the prompt
+assertion statements. Really interesting
+way to kind of feel the prompt. I'm sure
+you can relate to this. Like, it's so
+great seeing these like hardcore
+benchmarks with a bunch of really
+intense problems and really
+domain-specific things that you and I
+care about and, you know, the LLM
+industry as a whole cares about because,
+you know, they really dial into how
+powerful is this at solving really
+intense, at the edge of field problems.
+These benchmarks are really important,
+but they're really hard to feel. They're
+hard to understand, which is why I think
+something like Last Man Standing,
+something visual that you can just see
+like, you know, let's just take four
+models and give it my personal prompt,
+right? I think that's a big advantage
+here when you're prompt testing. These
+are all prompts that I want to see how
+my personal prompts I'm building for my
+products compare when used with
+different LLMs, with different
+providers. And that's really the big
+value here of not just the Last Man
+Standing, but just prompt testing in
+general. I highly, highly recommend you
+guys check out my previous videos, and
+more importantly, just check out Prompt
+Food. This is a really, really important
+tool in the age of LLMs, in the age of
+AI. I've said it a million times on the
+channel, and I'll keep saying it, the
+prompt is the new fundamental unit of
+knowledge work. So, it's super important
+to truly know and understand how
+powerful are your prompts. How good is
+this LLM, right? Really know what's
+happening. You really want to be truly
+comparing and really internalizing, when
+should I use this LLM? When should I use
+this prompt? How good is this prompt?
+So, you know, there are a lot of really
+interesting things that you can test and
+tweak with your own LLM tests. I just
+want to shout out Prompt Food and all
+the engineers working on it. Such a
+fantastic tool. As a concrete example, I
+plugged this product on the channel a
+couple of times, but I'm building this
+product called Talk to Your Database. It
+basically takes your natural language
+queries and converts them into SQL and
+automatically runs them. Not just text
+to SQL, it's text to SQL to results.
+Copy JSON, you can export, you can do
+whatever you want. Let's just go ahead
+and open up the app right now. And so,
+when you're, you know, building out your
+application, it's so important to know
+that your prompts are going to work,
+right? Even before I hit enter here, I
+can tell you with 99% certainty if my
+NLQ is going to work because I have
+tested it thoroughly. Let me just search
+for a good query to make. So, you know,
+something like products price less than
+50 and quantity between, you know, two
+and five. Before I even run this, I know
+this is going to run because I have
+prompt tests that have already validated
+it, right? Not only did it run, it ran
+insanely fast. As you can see here, we
+got no results. There's nothing in the
+database that fits this criteria. Let's
+go ahead and play with that a little
+bit. I'll tap that and let's do a
+quantity between, you know, we'll do
+five and 15. I'll do price uh equal to
+greater than and we'll fudge some of the
+spelling. Let the LLM fix it for us,
+right? Bam, already complete and nothing
+there either. Let's go ahead and get
+some concrete result out of this. So,
+let's go ahead and drop this down to 20.
+I just actually want to see some
+concrete results. We'll do three, 10.
+Let that run. Bam. And we can see that
+we got one product that fits this exact
+criteria. The point here is that you
+want to be absolutely certain when
+you're building your products that your
+prompts are doing exactly what you think
+they're going to do. I don't want to
+over plug this. If you write SQL on a
+daily basis, I highly recommend you
+check out this application. I built it
+for myself and other engineers you know,
+that spend a decent amount of time in
+databases, operating on data. There's a
+free forever version and if you want to
+upgrade, you absolutely can. We just
+rolled out the agent configuration for
+pro members and of course, it's got Grok
+in here, the hyper speed SQL agent. This
+thing is fast. It's helping really
+propel the application forward. But
+again, I just want to pull this all back
+and say I couldn't have built this into
+this product, into that application
+without first really, truly testing to
+make sure that I'm confident that these
+SQL statements will be able to properly
+run in a production database. I just
+want to pull that curtain back again and
+you know, just say that it's really
+important to test and have proof of
+value and fully understand and validate
+that just like you know your code is
+going to run the right way. You really
+want to know that your LLM's are going
+to run the right way, right? And give
+you the right results you're looking
+for. It's so incredible how well GPT-3.5
+Turbo performs. It's fast and it's
+accurate. And you know, inside of the
+Talk to Your Database application,
+that's how I've kind of graded it in
+this simple performance measurement. And
+this is all thanks to again, prompt
+testing. There's no way I could know
+this and build this into an application.
+And there's no way you can know this and
+build this into your applications and
+your tools without, you know, first
+really setting up some really clean
+tests and running it. There's not going
+to be any code for this yet. So again,
+let me know if you guys are interested
+in this Promptfoo Last Man Standing
+prompt testing visualizer. And
+definitely definitely spend some time
+looking at Promptfoo. This is again, the
+best way to test your LLM's right now in
+the age of AI, in the age of prompts,
+where the prompt is the new fundamental
+unit of knowledge work. Thanks so much
+for watching. Hit the like, hit the sub,
+and I'll see you in the next one.
