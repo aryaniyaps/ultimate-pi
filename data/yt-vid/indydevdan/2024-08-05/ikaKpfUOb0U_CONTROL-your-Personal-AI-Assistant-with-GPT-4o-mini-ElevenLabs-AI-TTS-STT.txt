@@ -1,0 +1,489 @@
+a what do you think is the best use case
+for large language model technology if
+you had to pick a single top highest
+return on investment use case for llms
+what would you
+pick that's a great question Dan I think
+one of the top use cases for large
+language model technology is customer
+support automation by integrating llms
+into chat systems businesses can provide
+247 support handle a massive volume of
+inquiries and improve response times all
+while reducing costs it enhances
+customer experience and allows human
+agents to focus on more complex issues
+what do you
+think those voice is kind of cringey I
+love it and I also hate it yeah I think
+that's a great use case definitely one
+of the more obvious ones my favorite
+though is probably education and
+learning large language models give us
+unprecedented abilities to learn at
+incredible
+rates that's an excellent point Dan
+education is such a transformative area
+for llms they can personalize learning
+experiences provide instant feedback and
+create interactive tutoring sessions it
+really empowers students students to
+learn at their own pace what specific
+aspects of education do you think
+benefit the most from
+llms okay that sounds good let's uh
+switch gears I want to ask you about uh
+programming languages what do you think
+is the best programming language for
+rapid prototyping I want to get
+something shipped out
+yesterday for rapid prototyping Pyon is
+often considered one of the best
+programming languages it's easy to read
+has a vast array of libraries and
+supports quick iteration you can build
+and test ideas very quickly voice
+another great option is Javascript
+especially for web applications as it
+allows for fast development and
+immediate results in the browser what
+type of project are you looking to
+Prototype all right love your answer
+there let's switch gears once again I
+want to know what your thoughts are here
+between Google anthropic and open AI who
+will win the AI race specifically around
+llms that's an intriguing question Dan
+each of those companies brings unique
+strengths to the table Google has vast
+resources and data which can enhance
+their models anthropic focuses on safety
+and Alignment in AI which is becoming
+increasingly important open AI has made
+significant strides in accessibility and
+collaboration with their apis it's hard
+to say who will win as the landscape is
+so Dynamic each could lead in different
+areas do you have a favorite among them
+or a specific angle you're curious
+about here is a Ultra fast personal AI
+assistant powered by Gro 11 labs and GPT
+40 mini voice assisted work is a
+massively untapped superpower that can
+super charge productiv up until now
+building a personal AI assistant just
+hasn't been viable it's too slow and the
+voices have been subpar this has changed
+and we can see that open AI chat gbt
+with the advanced voice mode is
+absolutely leading the way in this video
+though I want to show you how you can
+build your own personal AI assistant and
+have full control so you can escape the
+Walled Garden that companies like open
+aai and Apple and Google are slowly
+starting to set up for us as they build
+out their own Suite of AI products as
+software Engineers personal AI
+assistants are too valuable to hand off
+to a company we need to control at least
+some of this technology to boost our
+personal productivity in this video
+we're going to look at three personal AI
+assistants I want to show you the
+fastest and highest quality speech to
+text large language model and text to
+speech tooling you can use to build your
+own personal AI assistant literally
+today you just heard the gro 11 Labs
+combination with our amazing Super
+cringy Voice leave a thumbs up and a
+comment if you enjoyed that voice we're
+going to look at a pure open AI
+implementation and then lastly we're
+going to look at assembly Ai and 11 Labs
+we'll then discuss the three key
+components that make up a functioning
+personal AI assistant you can see here
+I've broken this down into this reusable
+class we'll break these down in just a
+moment then I want to show you my
+personal AI assistant prompt that I use
+to create really concise helpful use ful
+conversations with my personal AI
+assistants we'll wrap it all up we'll
+look at all the stats between our
+personal AI assistants and see who is
+the fastest what personal AI assistant
+combination gets us results in the
+shortest amount of time I'm going to
+update the assistant type here we're
+going to use the pure open aai
+implementation and let's go ahead and
+kick this off and ask a few
+questions Ada in our previous video we
+looked at the best format for prompts it
+seems like large language models prefer
+XML format why do you think that
+is that's an interesting observation Dan
+XML is structured and allows for Clear
+hierarchy and organization of data which
+can be really beneficial for large
+language models it helps them parse
+information more easily than plain text
+making it simpler to understand the
+relationships between different pieces
+of information
+what do you think about using XML going
+forward in our projects yeah that sounds
+great I think my idea is for smaller
+products for smaller tools I'll use
+markdown just because it's super
+readable but for anything we
+productionize we'll use
+XML that sounds like a solid plan
+markdown is definitely userfriendly and
+quick for smaller tools using XML for
+production makes sense because of its
+structure and Clarity do you have
+specific projects in mind for each
+format yeah definitely but uh I want to
+change gears here I want to ask you a
+question about who do you think is going
+to win the large language model race
+between open Ai and
+Google that's a Hot Topic both open aai
+and Google have impressive cap abilities
+but they each have their strengths open
+AI is really focused on refining user
+interactions and safety while Google has
+vast resources and data access it could
+go either way depending on advancements
+in research and user adoption what do
+you think do you lean toward one company
+over the
+other yeah okay so hot topic definitely
+not going to dig into that one at all so
+this is great so we have some more
+results and let me just show you exactly
+how I'm benchmarking this every
+assistant type is getting its own
+timetable saved here you can see all the
+previous results we'll sum these up at
+the end this is duration in seconds so
+this works bottom to top so the zeroth
+position is the newest item inside of
+our action list here it starts with
+transcription this takes open AI 1.7
+seconds to transcribe our audio it then
+takes the text from our audio and runs a
+prompt and you know we can see that here
+we'll cover our personal AI assistant
+prompt in just a moment here so thinks
+uses an llm to return a response we're
+using gp40 mini for highp Speed high
+performance that takes about 1.6 seconds
+and then lastly this seems to be the
+longest step we need to then convert its
+response into voice so this is our
+generate voice audio step and this takes
+about 3.7 seconds for open AI to run the
+great thing about the open AI personal
+AI assistant is that it runs everything
+with a single API key if you open up the
+sample here all you need to run the open
+AI system is just the open AI key but
+this is what the timetable looks like
+you can see we have our Gro timetable
+here we'll go ahead and sum them at the
+end but let's go ahead and discuss the
+key pieces of every personal AI
+assistant so the first step is the
+transcription step you first speak to
+your computer you record audio and
+that's what we saw in the first step
+here right the first thing that happens
+is we press enter get a recording and
+then we hit enter again to stop the
+recording the next step is the think
+step so this is giving your response and
+giving a prompt how do you want your llm
+to actually respond that's step two the
+final step is speak so giving the
+response from the think step you need
+your assistant to actually say something
+this is really important because the
+speak step also entails what voice
+you're using and how fast that runs with
+these three steps you can recreate your
+own personal AI assistant with any tool
+if we look at our last tool here we can
+dig in and look at how exactly this is
+all running so first we're running
+transcription here we're using assembly
+AI they have some really nice simple
+tooling that allows us to just pass in a
+file path this is our recorded audio
+file and then we just grab the text from
+that right so now we have our
+transcribed text then we have our think
+step right so this is where we're
+literally just passing our prompt to our
+llm with our text embedded and let's go
+ahead and take a look at this prompt I'm
+passing in some information here I'm
+giving my assistant a name you then give
+your assistant your name and then you
+write whatever instructions and rules
+you want your personal AI system to
+follow maybe you like more detailed
+responses I prefer the short
+conversational concise responses I like
+to use single prompts here versus the
+chat history messages so I like to pass
+in our previous interactions and then
+our latest input so the latest thing
+that I have said and then we end with a
+nice leading command your conversational
+response this leads the LM in the right
+direction so it knows exactly how to
+start responding feel free to jump in
+here tweak this to your liking this is
+probably one of the most essential
+prompts as it kind of creates the tone
+and the structure that your personal AI
+assistant responds with when conversing
+with you so that's the think step and
+then lastly we have the speak step I
+like to break this into the generate
+voice audio because I don't need to time
+how long it takes to actually play the
+audio all I want to know is how long did
+it take to generate the audio here we're
+using 11 Labs V2 in our grock personal
+AI assistant we're using the 11 Labs
+turbo v2.5 model which is supposed to be
+25% faster so that's the framework all
+this code is going to be in the
+description for you to get started with
+your own personal AI assistant imagine
+an AI assistant that knows your data
+your work style and responds in a blink
+of an eye that's the future we're
+heading toward you can see this with
+open AI chat GPT advanced voice mode
+it's all heading in that direction I
+just want to make sure that you and I
+have our own version that we can operate
+on that isn't inside of a Walled Garden
+closed Source company if this framework
+makes sense and you can see where this
+is going hit the sub hit the like and
+let's continue to our next step here so
+you can see in our model setup here
+we're using the build mini model and
+we're doing this in every single one of
+our assistants we're just running the
+build mini model and that's going to
+return an llm model that is the gpg 40
+mini this is the best way way to get the
+highest performance with the highest
+speed at the lowest cost this is a
+different way to interact with your
+computer we've been chatting with our
+computer we've been typing it's time to
+start talking to your computer and
+taking things to the next level so let's
+go ahead and fire off the last assistant
+type here this is a combination between
+assembly Ai and 11 labs and if we go
+ahead and split the screen here we can
+see the results come in at the same time
+so I'll go ahead run this split the
+screen and then I'll load that file as
+soon as it comes up so let's go ahead
+and just ask another random question
+here what's up aah do you think that
+Society shapes technology or does
+technology shape Society be concise be
+short
+here all right so we should have that
+file here we're going to see this file
+pop up there it
+is hey Dan that's a great question I
+think it's a bit of both Society sets
+the needs and values that drive
+technology while technology also
+influences how we live and interact it's
+a dynamic relationship what do you
+think yeah I think that's spoton they
+both affect each other in this kind of
+in this kind of circular endless
+pattern there you go absolutely so you
+can see the new results coming at the
+top feack Loop where each one evolves
+based on the other do you see any recent
+examples of this interplay in your daily
+life let's switch gears Ada I want to
+know your opinion on the effect that
+personal AI assistant will have on
+us Switching gears sounds great Dan I
+think personal AI assistance will
+significantly enhance our daily lives by
+improving efficiency and accessibility
+they can help us manage tasks provide
+information quickly and even assist with
+personal growth however it's important
+to consider privacy and Reliance on
+technology what aspects of personal AI
+assistance Intrigue you the most all
+right so we have some more data out of
+the assembly AI plus 11 laps combination
+you can see the times coming in here so
+it took 2.7 seconds to generate voice
+audio it took GPT 40 mini 1.5 seconds to
+think um it looks like transcribe step
+though is coming in pretty slow from
+assembly AI when you're working with
+your personal AI assistant you want
+things to be fast you want results
+quickly and you want to be able to jump
+in and out of work as if you were just
+typing right let's go ahead and open
+this up and let's see what our results
+look like overall so now we have
+concrete responses from our open AI
+results from our grock 11 Labs
+combination and our assembly AI 11 Labs
+combo so I think I want four numbers
+here from each one of these I have
+cursor open right now so I'm just going
+to select everything and just run a
+quick prompt using Claud 3.5 to get this
+done summarize the duration for each
+function add a new row at the bottom
+with the totals for each function just
+going to let that rip let it do the work
+here
+great cool so those numbers look correct
+just doing a quick prompt check uh add
+the total duration of all
+steps just doing some quick fun
+prompting work here looks like the total
+time it took to run three interactions
+back and forth using assembly Ai and 11
+Labs took about 30 seconds okay so not
+too bad not too great either let's go
+ahead and move on let's go ahe and do
+open AI next and I'll just run the same
+thing sum the duration for each function
+bottom and then I'll just give it an
+example example
+so let's go ahead and let that
+rip cool so that looks great it looks
+like our Pure open AI personal AI
+assistant took about 19 seconds so
+that's really really great right
+compared to our previous AI assistant
+that's about 10 seconds faster and you
+can see here our transcribe is faster
+and our generate audio is just a bit
+faster you'll notice here the think is
+the same as I mentioned all of these
+models are using the the GPT 40 mini for
+their think step let's go ahead and
+finish off strong with the gro 11 Labs
+combination and this 11 Labs is using
+the 11 turbo 2.5 model for the text to
+speech run that same prompt I'll just
+hit up drop that example in and fire off
+so we're just letting our coding
+assistant here do the hard work for us
+okay well this is actually really really
+close so if we just quickly look through
+the results to make sure that these
+numbers look good 2.8 2.5
+three yeah that looks right okay so I
+mean the results are in we can just pull
+these in to a new file here and it is
+you know as expected open AI coming in
+at first place assembly AI in 11 Labs a
+far third place this is largely assembly
+ai's fault very slow to be fair I'm on
+the free version of assembly AI they
+might have faster speech to text
+functionality on their upgraded plans
+that's likely to be the case so pretty
+interesting results I was pretty
+confident that Gro would come in first
+place here but it looks like open AI
+stack is really really great of course
+the disadvantage is 11 Labs gives you a
+ton and ton of customizable voices you
+can work with open AI only has a few
+voices to play with they only have you
+know six voices and you know the quality
+is you know not ideal but also not
+terrible whereas 11 Labs has an entire
+Suite of voices for you to pick from and
+they're all pretty great at a high level
+this code is going to do the following
+on a loop press enter to start recording
+this is going to pick up audio from our
+microphone when we press enter again
+it's going to capture that recording
+we're going to run our personal AI
+assistant transcribe step we're going to
+let our personal AI assistant think with
+our prompt and then given the response
+of the prompt it's going to speak the
+response we'll delete the audio and then
+we'll update our previous interactions
+which is basically just our chat history
+and then it will just continue to run
+the in a loop all this code is going to
+be in the description for you to check
+out and get your own personal AI
+assistant up and running today I
+recommend starting out with the open AI
+assistant it seems to be the fastest and
+also the easiest to set up the
+disadvantage there is that you're
+limited to their six or seven voices
+that they provide so you can see here
+based on our assistant type we're
+running a different assistant and our
+assistant just runs the exact same
+commands right we have the setup call we
+have the transcribe step we have the
+think step and then we have the speak
+step it really is that simple these are
+the three essential methods of a
+personal AI assistant so these are the
+results of a conversation of length nine
+we have a pure open AI personal AI
+assistant in the lead we then have Gro
+and 11 labs in second place and then in
+a distant third we have assembly Ai and
+11 labs and it looks like the big loser
+here is assembly AI my personal AI
+assistant combination will likely be
+open AI plus 11 Labs I'll likely combine
+these two specifically because we get
+the bonus of having customizable voices
+and that completely changes the pseudo
+digital relationship that you have with
+your digital AI assistant so that's it
+for this video I wanted to share this so
+that you're aware that you know you can
+build and use your own powerful personal
+AI assistant right now definitely leave
+a comment and let me know if you're
+using any one of these Technologies for
+your own voice assisted work I think
+personal AI assistants are going to be a
+massive massive game Cher for engineers
+looking to push their productivity to
+the very limits thanks so much for
+watching and I'll see you in the next
+one

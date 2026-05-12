@@ -1,0 +1,1103 @@
+engineers, it's time to buckle up. Open
+AAI's brand new codeex and anthropics
+claw code sit at opposite ends of the AI
+coding spectrum. On the one hand, we
+have the new OpenAI codeex, an
+all-in-one developer agent running on
+Open AI compute that completes tasks for
+you in parallel in the background. On
+the other end, we have Clawed Code, the
+most performant programmable agentic
+coding tool. Claude Code represents a
+new engineering primitive. This is a
+massive two for one video. We're first
+going to take a look at codeex to see
+how it looks, feels, and performs. While
+tasks are running in the background, I
+have five key insights you don't want to
+miss right from the Clawed Code team.
+They put out this great interview with
+the latent space podcast that we must
+discuss. We need to talk about why
+terminal AI coding always wins. Then
+we'll look at why composability matters.
+We'll talk about ader versus clog. We'll
+discuss why simplicity always builds the
+best products. And then we'll talk about
+how you can scale your engineering
+output with parallelism and background
+tasks. As you'll see in this video, with
+brand new tools like codecs, you can run
+many background tasks putting more
+compute to work for you throughout the
+day. Remember, if you scale your
+compute, you scale your success. If you
+want to understand the state-of-the-art
+agentic coding tools like Codeex and
+Claw Code, this video is for
+you. Let's put Codeex to work. You can
+see a nice clean familiar interface. It
+looks just like Chat GPT. I do like the
+product consistency. I have to say when
+I first saw this tool, I thought, "Wow,
+now they've copied Cloud Code with the
+codec cli and now they've copied Devon
+with the codeex chat GPT interface."
+Anyway, more on that later. Let's kick
+off some tasks. So, you can see here I
+have the cloud code is programmable
+codebase connected on the main branch. I
+have no active tasks. Let's fix that.
+I'm going to kick off multiple tasks in
+parallel. Let's make the tool do what it
+does best. Teach me about this codebase.
+How is it organized? Why does it exist?
+One task kicked off there. Find a bug in
+this codebase and write a fix for it.
+Let's kick that off. And then let's kick
+off something more interesting. I'm
+going to say create a new engineering
+plan that aligns with the codebase
+purpose. Create a new markdown file.
+Don't change any code, just plan. Let's
+kick this off. We are setting up three
+instances of our codebase. We have three
+junior engineers, you know, three
+interns now working on this codebase for
+us and we are just sitting here. Okay,
+so this is a big selling point of codeex
+of all these powerful agentic coding
+tools like Devon, like Replet, right?
+We're just prompting and now we have
+full ecosystems, right? We have full
+codebase environments being operated on
+by an agentic coding tool. So, let's go
+ahead and hop into one of these tasks to
+see what it looks like in our simple
+explain codebase and organize. We can
+jump in here and we can see exactly
+what's happening if you've used the
+codec CLI. You can tell this is
+definitely using the codec under the
+hood. We can click view log and we can
+see the entire run of this. I do love
+the visibility of this. We can see the
+entire log. We can see everything that's
+happening inside of this agent
+workspace. So, if you're ever curious,
+you can always see exactly what's going
+on. There's our output. Let's go ahead
+and see exactly what this looks like.
+Explain the codebase. Nice summary
+product organization. It's summarizing
+all of the cloud code is programmable
+tools. And this is very accurate. If I
+grab this file, open up cursor, look at
+the codebase. You can see we have that
+exact file there. We can of course
+search and we can see this file here.
+This is basically what it does, right?
+Integrates cloud code with the notion
+API. This all looks great. And here's
+the purpose. I'm really curious what it
+says here. So overall demonstrate and
+document programmable approach to cloud
+code. Perfect. The scripts show how to
+automate the CLI from Python, JavaScript
+and shell voice input and how to
+integrate cloud code with other tool
+chains. Great breakdown here. A+ on this
+task. Nothing else to say. You can see
+our other two tasks are still operating
+in the background. And bam, they both
+just finished here. So let's take a look
+at these tasks and then let's dive in to
+the creators of Cloud Code breaking down
+cloud code. I'm really excited. This is
+a fantastic podcast. Let's check out
+these tasks. So find and fix a bug. You
+know, a very small thing here. I
+actually don't think this is needed or
+necessary, but nevertheless, they have a
+fix here just to show off this workflow.
+We would hit push create new PR. Now we
+can view this pull request. So if we
+click this, we can see this is still
+work in progress. So now on GitHub, we
+can see that pull request. This looks
+great. I can go to conversation and just
+merge this in. And if we keep track of
+this change here, we open up cursor. And
+if we run
+gitpool, we're going to see this change
+come in right here. And it looks great.
+That was aically done. Eight lines of
+code ran outside of my developer
+environment. Pretty cool stuff there,
+right? If we hop back into the codeex
+interface, you can see that this is now
+merged. We can now hit archive task. So
+that's it, right? This is codeex, right?
+That's the basic workflow. You write a
+prompt, the task gets executed. You then
+review the code. Then you merge the code
+into your codebase. For these
+explanation tasks, basically it's
+justformational. So whenever we want to,
+we can just archive that. Let's go ahead
+and look at the create engineering plan.
+This plan looks fine. I don't think it's
+that interesting. I don't think it's
+that useful. So I'm going to make
+another suggestion. Rewrite this based
+workflow into clawed code in order. Can
+codeex pivot to a brand new idea here.
+Can it scrap what it's previously done?
+Let's see. So, I'm going to fire that
+off. And while this is running, I'm also
+going to fire off a couple different
+prompts. Again, we just want to keep
+this thing running in the background.
+How would you design a testing system
+for this codebase that arbitrary
+engineering tasks completed? I'm going
+to kick that off and then I'm also going
+to say look for any additional bugs. All
+right, so we're going to look for
+another bug and I'll kick that off. And
+so, it looks like our spec plan failed
+here. Let's see what's going on here. It
+looks like it just got clogged up. I'm
+just going to hit retry. All right, so
+that container is getting kicked off
+again there. Let's go ahead and turn our
+attention to this fantastic interview
+with the claw code creators. Well, thank
+you for making the time. We're here to
+talk about cloud code. Most people
+probably have heard of it. We think like
+you know quite a few people have tried
+it, but let's get a Chris upfront
+definition like what is cloud code?
+Yeah, so quad code is quad in the
+terminal. You know cloud has a bunch of
+different interfaces. There's desktop,
+there's web, and yeah, cloud code. It
+runs big shout out to Boris and Cat.
+Cloud Code is an incredible product
+because it runs in the terminal. It has
+access to a bunch of stuff that you just
+don't get if you're running on the web
+or on desktop or whatever. So, it can
+run bash commands. It can see all of the
+files in the current directory and it
+does all that agentically. Okay, so
+already we have to stop and talk about
+what that really means. Okay, the fact
+that cloud code runs in the terminal is
+a critical detail to understand. Okay,
+the terminal is the highest leverage
+point for engineering work. On the left,
+we have control. On the right, we have
+ease of use. This is the plane in which
+all a coding and all agentic coding
+tools sit on. On the left, where we have
+maximum control are all of our terminal
+applications. The terminal is where the
+greatest highest leverage engineering
+work can happen. Why? because you have
+the most control. You can do everything
+from the terminal. But it doesn't come
+for free, right? Control costs time.
+Control costs effort. It costs
+experience. Okay? Now, as we move up, we
+get to desktop apps. Okay. This is the
+happy medium. You get a lot of control,
+but you also get web applike features,
+right? This is where our cursors, our VS
+Code, and our wind surfers sit. So, this
+is a great place to be. And then at the
+top, we have our web apps. Web apps are
+fantastic. They're the easiest to use.
+both vibe coders and senior plus level
+engineers spending a lot of time with
+web apps. This is because they are the
+easiest to use. The bang for your buck
+is the highest here at the cost of
+control. These easytouse tools are
+highly opinionated. They tell you what
+you need to do. They tell you how you
+need to do it and you must for the most
+part do it their way. So this is the
+trade-off we make. We have the brand new
+codecs. This is a web application. It's
+easy to use but we give up a lot of
+control. As engineers, you want to be
+able to have maximum control. And the
+brand new programmable Agentic coding
+tool, Cloud Code, gives us maximum
+control over what we're building. Right?
+We can build out these brand new ADWs,
+also known as Agentic Workflows that
+were quite literally impossible to build
+before this tool came into existence.
+This is the spectrum. It's really
+important to know when to trade off
+control for ease of use. I'm not saying
+any one of these is better than the
+other. It's really about managing
+trade-offs and using the best tool for
+the job. But yeah, it's just sort of
+this crazy research project and
+obviously it's kind of bare bones and
+simple. Um, but yeah, it's like a agent
+in your terminal. Right. Right. So this
+stuff starts. Yeah. So it's really
+important to call this out real quick.
+It's a crazy research project. Barebones
+agent in the terminal. I've talked about
+this a couple times on the channel, but
+the fact that this is an agent makes it
+a different type of tool. Okay, so how
+do you make a great agent? You have a
+powerful LM that can call any tool that
+has the right agent architecture. This
+is a differentiated tool. This is a
+different type of application structure.
+Cloud code is a brand new form factor
+that has not existed before. It's one of
+the first successful multi-purpose
+agents. Here are the Cloud Code built-in
+bakedin tools. If you want to understand
+the capabilities of an agent, all you
+need to do is look at the tools and
+understand them. This list is likely a
+little outdated just because of how much
+the cloud code team ships, but you can
+see the core tools inside of this list.
+What's the process within Enthropic to
+like graduate one of these projects?
+Generally at Enthropic, we have this
+product principle of do the simple thing
+first. And I think that the way we build
+product is really based on that
+principle. So you kind of staff things
+as little as you can and keep things as
+scrappy as you can because the
+constraints are actually pretty helpful.
+For this case, we wanted to see some
+signs of product market fit before we
+scaled it. Yeah. So this is a big idea.
+Pack members know the KISS principle.
+Keep it simple stupid is the same idea.
+This is how you build the best tools and
+ship before anyone else. Simplicity is
+one of the most important properties in
+engineering work because it lets you
+generate proof of value. After you have
+a working system, it's much easier to
+build a bigger working system, but only
+because you have a small working system
+first. Always look for proof of value
+first. chip the smallest amount of
+useful features and then build from
+there. You can see this inside of Cloud
+Code. It's so minimal. Everything is so
+intuitive. You just start writing. It's
+just a prompt. Cloud Code is clearly a
+simple tool that's gotten more capable
+over time. So, let's go ahead switch
+back over to our codeex tasks. It looks
+like we have two tests successful and
+our engineering spec task failed. That's
+fine. I don't really care about that.
+Let's look at our test system design.
+So, we have a nice write up here. We
+have the output format text writing to a
+text file and then to a JSON file. It's
+nailed it. So the answer I was looking
+for here is you want to use the output
+formats provided by the claw code to you
+know write to files and then you can
+validate those files after you write to
+them. Right? So this is a powerful form
+of validation. So you can see here using
+JSON or streaming JSON output makes it
+straightforward for a test harness to
+parse results programmatically. This is
+exactly what I was looking for. And you
+can see here it's even referencing uh
+one of the files here inside of the
+codebase from Enthropic to kind of
+summarize how to validate the output
+from cloud code. This looks great. If we
+want to, we can go ahead and say write a
+example test/ I'm going to say
+test_star.py. So I'm just being really
+specific here. I want to see if it can
+follow my instruction. Make sure to
+place it here and use this prefix,
+right? We want this test prefix. use
+piest with the
+d-output format flag. All right, so
+we'll just kick that off. A great part
+about these workflows, a great part
+about codecs is that we can just test
+out ideas, right? Code is fully
+commoditized. We can just use this
+compute to experiment, try different
+ideas, run it in the background. You
+know, the effective cost for us, of
+course, after we pay for the crazy
+subscriptions that we're paying for
+nowadays, is zero. So, you know, make
+sure that you're using um the compute
+that you've purchased. Locate additional
+bugs. Let's check this out. This does
+not look like a real issue at all. I'm
+not even sure what this is reporting.
+So, I'm just going to back out of this
+and archive this task and let's see
+what's going on here. It looks like this
+instance is just bricked for whatever
+reason. I'm going to copy the prompt.
+Back out of this. Paste this in here
+again. Kick this off. And I'm going to
+archive this previous task. Okay. One
+thing I want to stress about this new
+paradigm of agent coding with codecs,
+right? This fully uh cloud-based system,
+right? Uh it's all happening in the
+cloud. It's super easy to use. So just
+blasts out prompts, right? Just fire off
+ideas. It's never been easier and
+cheaper to explore, to prototype, to
+rapidly create fixes, right? That's the
+biggest unlock here with codecs. It just
+reduces the friction once again between
+your ideas and them being uh at least
+prototyped. I think if you're building
+something meaningful, you're really
+going to want to build out a powerful
+spec, right? A powerful plan that you'll
+then paste in here, merge into a
+separate branch, pull down the PR, and
+then you'll operate on it in your own
+developer instance. And then you'll boot
+up something more handson, right?
+something more lower lower level like
+cursors agent inside of the desktop
+application level of controllability or
+go all the way down to the bare metal
+get full control with a tool like cloud
+code. So this is great right we have
+lots of options here we have lots of
+ways to use and wield compute now the
+question is can we do it and how much
+all right so while these tasks are
+running here in the background let's
+continue learning from the you know
+goats of the industry the cloud code
+creators so I'm kind of curious for for
+cat like how do you view PMing something
+like this the velocity is something I've
+never seen coming out of the topic I
+think I PM with a pretty light touch um
+I think Boris and the team are like
+extremely strong product thinkers. So
+very little actually is tops down. I
+feel like I'm mainly there to like clear
+the path if anything gets in the way and
+just make sure that we're all good to go
+from like a legal marketing etc
+perspective. Yeah. Yeah. So I just want
+to shout this out. I think this is
+excellent PMing and really just great
+leadership, right? Um, at a previous
+position, I was a lead platform engineer
+using AI to predict uh information in
+the accounting document space. Okay,
+that's the TLDDR. And it was one of my
+favorite places to work because the CTO
+would do exactly what CAT has mentioned
+here. Clear the road, make sure that we
+had every resource, every tool, every
+answer that we needed. This made it easy
+for the entire engineering org to focus
+all their time, energy, and attention on
+one job. And not only that, it let us
+spend our time in long unbroken chains
+of focus. That's everything in
+engineering. There's so much noise in
+the space. There's always something to
+miss. But that long chain of focus is
+what is going to differentiate your work
+from the engineer sitting next to you.
+And a lot of this is driven by great
+engineering culture and great leaders
+like Cad and Boris where they're just
+focused on keeping things simple and
+they're focused on clearing the road for
+the team. This is a big theme for every
+engineering leader, every engineering
+manager. Clear the road for your team.
+Lead by example and give them access to
+every piece of compute that they could
+possibly have and get compute integrated
+into your engineering. I'm sure you're
+familiar with Ader which is another
+thing that people in our discord loved
+and then when cloud code came out the
+same people love cloud code. Um any
+thoughts on like you know inspiration
+that you took from it things you did
+differently kind of like maybe design
+principle in which you went a different
+way. Um so Ader inspired this internal
+tool that we used to have at anthropic
+called Clyde and that's the predecessor
+to quadcoten. So yeah it was uh Ader
+inspired Clyde which inspired quadcoten.
+Yeah. So, this is so cool and it makes a
+ton of sense. Ader is a massively
+important tool, not just because it's
+the best open source AI coding tool, but
+because it's paved the way for nearly
+every tool since its release, and that
+includes the new breed of agentic coding
+tools. On the channel, we've used Ader
+for years now. Uh, we were one of the
+first channels to really discuss and
+showcase AI coding. It's really, really
+cool to see the impact Ader has had on
+every tool since then. Big shout out to
+Paul Aer's creator. And you we can't try
+everything all at once. My question
+would be where do you place it in the
+universe of options? Um well you can ask
+quad to destroy all these tools and
+I wonder what it would no self favoring
+at all. Quad play quad plays
+engineering. I don't know. We like we
+use all these tools in house too. Like
+we're big fans of all all this stuff.
+like cloud code is uh obviously it's
+it's a little different than some of
+these other tools in that it's a lot
+more raw. Like I said, there isn't this
+kind of big beautiful UI on top of it.
+It's raw access to the model. It's as
+raw as it gets. So if you want to use a
+power tool that lets you access the
+model directly and use cloud for
+automating, you know, big workloads, you
+know, for example, if you So this is
+really important, right? As we've
+discussed, it gives you maximum control.
+Gives you raw access to the model with a
+nice thin lightweight agent architecture
+that really hits and and this is what
+cloud code is, right? It's an agent a
+thin agent layer on top of a model with
+the right tools, right? And and and
+again, this is why cloud code is a
+differentiated tool. It's a new
+primitive of engineering that lets you
+really design and build out workflows
+that were just frankly impossible before
+this tool's release. All right, so this
+is that maximum control that we were
+talking about. This is the big
+difference between cloud code and all of
+these other tools. I also want to
+mention I love that Boris said this.
+They use all these tools in house.
+They're different types of tools and you
+want to use them together to increase
+your compute advantage.
+like a thousand lint violations and you
+want to start a thousand instances of
+quad and have it fix each one and make
+then make a pure then quad code is a
+pretty good tool. Got it. It's it's a
+tool for power workloads for power
+users. Yeah. Um and I think that's kind
+of where it fits. Nice. Yeah. Yeah. That
+that's that's the best way to say it,
+right? A tool for power workloads for
+power users. So again, just hitting on
+that theme of maximum control, maximum
+capability. This is why we focus so much
+on cloud code. And you know to be super
+clear you know ader is what that was in
+the previous generation we first had AI
+coding now we have agentic coding right
+AI coding is just writing code it's
+using prompts to generate code this is
+great you can do a lot here this sets up
+everything we're going to do on the
+channel moving forward make sure you're
+subscribed and then we now have agentic
+coding right any tool powerful model the
+right agent architecture this is the key
+idea this is what differentiates a
+low-level powerful agentic programmable
+tool like cloud code and then all the
+other tools, right? The cost thing is
+interesting. Do people pay internally or
+do you get free? If you work at Andra,
+you can just run this thing as much as
+you want every day. Um, it's for it's
+for free internally. Nice, man. Imagine
+that.
+I I think if everybody had it for free,
+it would be huge.
+Um, oh, that cost 20 cents. I can't
+believe I paid that much. How much do
+you think of that being your
+responsibility to try and make it more
+efficient versus that's not really what
+we're trying to do with the tool? We
+really see quad code as like the tool
+that gives you the smartest abilities
+out of the model. We do care about cost
+in so far as it's very correlated with
+latency and we want to make sure that
+this tool is extremely snappy to use and
+extremely thorough in its work. We want
+to be very intentional about all the
+tokens that it produces. I think we can
+do more to like communicate the cost
+with users. Um, currently we're seeing
+costs around like $6 per day per active
+user. And so it's wo wo $6 per day. I'll
+I'll pop up my previous week's uh cost
+on the screen. I'm doing way more than
+$6 per day. You know, I I probably am a
+power user of of Cloud Code. Comment
+down below. Let me know, you know,
+roughly what's your price price range. I
+recently did pick up the Claude Mac
+subscription which has been a, you know,
+massive dream to work with. Now I just
+pretty much prompt as much as I want to
+and uh I got to say so far it's been
+fantastic. I've hit zero rate limits
+although I know for certain I need to
+scale up my compute even further with
+this tool. I have a couple big ideas on
+how to do that. Some powerful agentic
+loops we're going to talk about on the
+channel. Make sure you're subscribed.
+But yeah, I just wanted to mention that
+I did make the jump. I now have the chat
+GPT Pro and the Cloud Max subscription
+so that I can scale my compute even
+further. I think these are probably the
+two most important subscriptions every
+engineer should have right now. Going
+cheap here is going to hurt you, but $6
+a day. I mean, those are rookie numbers,
+right? It does come out to a bit higher
+um over the course of a month in cursor.
+Um but I don't think it's like out of
+band. The way I think about it is it's a
+ROI question. It's not a cost question.
+And so if you think about, you know, an
+average engineer salary, like engineers
+are very expensive. And if you can make
+an engineer 50 70% more productive,
+that's worth a lot. Yeah. Yeah. Yeah.
+Yeah. So this is this is huge. I'm so
+glad they mentioned this. Um this is
+where a lot of engineers make a critical
+mistake. Your time is your most valuable
+resource. Let me say it one more time.
+Your time is your most valuable
+resource. Understanding what it's worth
+will pay you so much. You want to
+understand what your engineering time is
+worth and then pay to get more work done
+in less time. Right? If you can pay 50
+bucks and get a $100 worth of
+engineering work done, you should press
+that button over and over and over.
+Okay? And you know, to be completely
+clear, this is why I picked up the cloud
+code subscription. It's why I have the
+chatbt pro subscription. It's all about
+getting access to premium compute and
+using it to get more work done than ever
+faster. Right? Speed is super super
+important. It doesn't matter if you do
+the task in a month. It matters if you
+can ship that work next week or in 3
+days or tomorrow or in 2 hours. That's
+the big difference we're going to see
+between a lot of Genai engineers that
+really know how to wield their compute.
+We spend a lot of time on the channel
+talking about that, right? It's all
+about increasing your compute advantage.
+Use these tools together, get more done,
+wield compute like no one else. You want
+to be in that rare bunch on the end of
+the curve that can wield more compute in
+parallel with great tools like cloud
+code and codec. Speaking of codecs, um
+how are our tasks doing here? Let's
+let's see how we're doing. So create a
+new engineering plan. Let's go ahead and
+check this out. So this is that same
+prompt, right? I'm just saying, you
+know, come up with a new idea. Uh future
+enhancements. The goal is to showcase
+programmable agentic coding across
+multiple languages and workflows.
+Basically, it just wants to create new
+examples. I'm not going to think about
+this too much. I'm not going to use
+again too much of my time. We can just
+throw compute at this and see what
+happens. See what ideas we like. I think
+a big underutilized aspect of compute is
+just ideiation. Just, you know, let
+ideas flow. Try things. Experiment. See
+what the compute thinks about your work
+that you've done. Every once in a while,
+you know, one out of five, one out of
+eight prompts. It'll come up with
+something novel that'll actually help
+you in a way that you could not have
+imagined before. So, this looks great.
+Okay, I'm just going to say go ahead
+implement these ideas one and three
+cross language examples and automated
+testing. Let's go ahead and fire that
+off and let's just see what it comes up
+with. Right, we have compute at the
+ready. Why not use it? And we have a
+design new testing system. It looks like
+this is still in the works. We can view
+the log and we can see that this system
+is still running. Okay, so there we go.
+So we have an example here. Very
+interesting. Clawed testing v1. It looks
+like this is a module and then we have a
+test for this here. Nice. And it's a
+safe prompt. is going to first check for
+the clawed tool. So this is fantastic,
+right? So once again, if we like the
+changes that we see, we can go ahead hit
+push, create new PR, hit view, pull
+request. There is our new PR. Going to
+hit merge and get that in the codebase.
+So now, of course, I can open up cursor.
+We can pull, fast forward, and now we
+have these brand new two files ready to
+go in the codebase. So again, this is
+really great, right? We have compute
+working for me in the background. I'm
+not doing anything here. And you can
+imagine where this goes, right? We can
+scale this up to bigger, heavier-hitting
+features, which circles back to a big
+idea that we talk about inside of pack
+and on the channel. Great planning is
+great prompting. The way to scale up a
+powerful tool like Codeex and Cloud Code
+is to write more comprehensive plans
+that do more work for us, right? So
+instead of passing in, you know, a
+little randomized prompt here, we would
+look through our codebase, plan out an
+entire feature or plan with our AI
+coding tools, right? at our agent coding
+tools. We would AI plan draft and then
+drop that entire plan in here and have
+it build for us. But this is merge.
+Let's go ahead and archive. And this is
+fine. Let's go ahead and archive this as
+well. So, I got to say I'm a big fan of
+codeex. I like this tool so far. The
+question is, how far can we push it?
+We're going to be exploring that on the
+channel. Make sure you're subscribed.
+Let's go ahead and finish up key ideas
+from the cloud code creators. Paul from
+Ader always says how much of it was
+coded by Ader, you know. So then the
+question is how much of it was coded by
+cloud code? I wonder if you have a
+number like 50 pretty high. Probably
+near 80. Yeah, very high. Yeah. Yeah,
+80% I think is a that's a great number.
+If you're still typing code manually, uh
+I think that's an absolute disaster. You
+need to you need to move into at least
+iteratively planning with AI coding
+tools. Focus on the ends of the process,
+right? The planning and the reviewing.
+Lots of reviewing. A lot of human code
+review though. Yeah, lot of lot of human
+code review. I think yeah yeah yeah
+that's that's that's perfect right lots
+of human code review for quad code
+internally in the GitHub repo we have
+this GitHub action that runs and the
+GitHub action invokes quad code with a
+local uh slash command and the slash
+command is lint so it just runs a
+llinter using quad and it's a bunch of
+things that are pretty tricky to do with
+a traditional llinter that's based on
+static analysis there's a bunch of these
+specific things that we check that are
+pretty difficult to express and in
+theory you can go in and you know write
+a bunch of lint rules for this honestly
+It's much easier to just write a one
+bullet in markdown in a local command
+and just commit that. Yeah. Yeah. So, so
+I mean Boris, this is huge. Boris has
+just literally spelled out the future of
+engineering in in its like really kind
+of first version, right? Linting
+documentation, writing tests. These are
+just the the the lowhanging fruit of the
+type of workflows you can build out,
+right? You can with cloud code, right?
+Again, with a programmable low-level
+terminal based tool like cloud code, you
+can now build out these powerful
+workflows, right? You can embed your
+coding agent and put it anywhere in your
+stack. In pack, we call these ADWs.
+They're more commonly just known as
+agentic workflows, but in the future,
+they'll just be called scripts. And
+we'll fully expect agent coding tools
+like cloud code to run uh these prompts
+inside of the scripts with really really
+high accuracy across our engineering
+stack. Right. This is a big idea. More
+on this in the future. I think the
+llinter part that you mentioned I think
+maybe people skipped it over. It doesn't
+register the first time but like going
+from like rulebased linting to like
+semantic linting I think is like great
+and super important. And I think a lot
+of companies are trying to do how do you
+do autonomous PR review. I'm curious how
+you think about closing the loop or
+making that better. Wow. Close the loop.
+Really, really powerful idea. Close the
+loop. Uh, you know, let the code write
+itself. Pack members. You're very
+familiar with these ideas and figuring
+out especially like what are you
+supposed to review? You know, it's like,
+am I really supposed to read all of
+this? It kind of seems most of it seems
+pretty standard. Yeah, I know it's a
+very open-ended question, but any
+thoughts you have would be great. Yeah,
+we we have some experiments where Quad
+is doing code review internally. We're
+not super happy with the results yet.
+So, it's not something that we want to
+open up quite yet. The way we're
+thinking about it is cloud code is, like
+I said before, it's a primitive. So, if
+you want to use it to build a code
+review tool, you can do this. If you
+want to, you know, build like a security
+scanning vulnerability scanning tool,
+you can do that. If you want to build a
+semantic llinter, you can do that. And
+hopefully with code, it makes it so if
+you want to do this, it's just a few
+lines of code. Yeah. So, this is
+incredible. And and again, that really
+hits on this the key idea, right? Cloud
+code is a primitive. It gives you full
+control. You can build whatever you
+want. And as engineers, it's important
+to gravitate toward, you know, an array
+of tools so that you can reach for the
+right tool for the job. And the general
+move for engineers is just to use the
+tool they're most familiar with or the
+most popular tool or tools that are just
+easy to use. But you always want to have
+that granular tool in the age that
+you're in. We are in the generative AI
+age. The most granular, performant,
+programmable tool for us right now is
+clawed code. At the same time, you do
+want to have, you know, your powerful
+codecs, your Devon, your, you know,
+replet v0ero, whatever. You want to have
+that in the bag as well. But it's really
+important to distinguish that, right?
+That's that's the tool for the agentic
+era. For the, you know, AI coding era,
+you know, Ader was that low-level uh
+tool. But I just want to give you a you
+know concrete framework of how you can
+think about how you can maximize your
+compute at the right level with all
+these tools available to you. Cloud code
+is a primitive. Even if we use cloud
+code to write a lot of our code, it's
+still up to the individual who merges it
+to be responsible for like this being
+well-maintained, well doumented code
+that has like reasonable abstractions.
+And so I I think that's something that
+will continue to happen where cloud code
+isn't its own engineer that's like
+committing code by itself. It's still
+very much up to the IC's to be
+responsible for the code. Yeah. Yeah.
+This this is really important. I've
+never believed that narrative that AI is
+replacing engineers. Um even when you
+get to powerful agent coding tools like
+codeex uh Devon lovable what whatever
+the tool is it never replaces the
+engineer because someone is still
+reviewing that final output that final
+you know block of code just as you saw
+here right as you write your task you
+need to review them you need to see that
+there it's doing what you want the the
+big advantage now is that we can
+automate a lot of this process right we
+can hand off a lot of this to compute
+but you still need to validate You still
+need to plan and review. You still need
+to apply your taste and judgment to
+what's going on and what's the best way
+to have taste and judgment. You've built
+tools yourself. You analyze the inputs
+and outputs yourself. Right? It doesn't
+matter how great or how agentic whatever
+the tooling gives us. You still need to
+at some point enter a review process.
+Right? AI is not replacing engineers.
+engineers using AI are going to replace
+the nonAI engineer. As it gets easier to
+build stuff, it changes the way that I
+write software where like like cat
+saying like before I would write a big
+design doc and I would think about a
+problem for a long time before I would
+build it sometimes for some set of
+problems. And now I'll just ask quad
+code to prototype like three versions of
+it and I'll try the feature and see
+which one I like better. And then that
+informs me much better and much faster
+than a doc would have. Very interesting.
+So this is something that I have been
+playing with a little bit more. I think
+that there's a line between, you know,
+which one you choose with these powerful
+agent coding tools. Do you go the rapid
+prototype route where you create
+multiple versions or do you, you know,
+go into design doc world AI plan draft,
+right? Build with your AI, plan with
+your AI, but you first, you know, spec
+everything out. I think you want to be
+doing a little bit of both depending on
+the situation. Um, I think the doc PRD
+or spec first approach is still optimal
+right now. So I'm going to be comparing
+and contrasting the multiversion rapid
+prototype approach versus the spec first
+approach. I'll definitely share my
+findings on the channel. So for example,
+something I'll do sometimes is if I have
+a planning question or a research type
+question, I'll ask bud to investigate a
+few paths in parallel. And you can do
+this today if you just ask it. So say
+you know I want to refactor X to do Y.
+Can you research three separate ideas
+for how to do it? Do it in parallel. Use
+three agents to do it. Yeah. So, so, so
+this hints on a really powerful idea,
+right? I mean, you can quite literally
+see this inside of codecs, right? We use
+this idea in codec, right? It's
+parallelism. Um, with compute, with
+these machines, with the right
+technique, you can do multiple things at
+the same time. In fact, as mentioned,
+this is a capability built directly into
+cloud code. Right? This is what Boris is
+talking about. You can batch and you can
+run tasks, right? So, you can create sub
+agents and you can run multiple tools in
+parallel. Just real quick, I know this
+video is getting long, but you know, you
+can do this very quickly, right? We have
+cloud code is programmable. You can do
+something like this, right? Read all py
+files in parallel. Even at the micro
+level, right? You can use parallelism to
+speed up your work very quickly. So
+watch this. Cloud code is going to
+return some tokens here and these tokens
+are going to enable there it is parallel
+reads. Okay, so very cool. We can do the
+same thing here. write a oneline summary
+at the top of each of those files in
+parallel. So after the permission check,
+this will kick off a parallel write of a
+summary to each one of these files.
+There's the first right update. But if
+we scroll up here, you can see we have
+that call sub aent parallel task call.
+And then we have this multiple update
+happening. Now something really cool is
+going to happen. Once I hit shift tab,
+all these changes are going to roll in
+at the same time. Okay, so bam. Look at
+that. Right, right, right, right, right,
+right, right. All in parallel, right?
+These are nonsequential tasks. You can
+see with our prompt, right, with that
+IDK, right, that specific keyword, we're
+able to kick off a parallel read on the
+micro level, right? Where we're fully in
+control of our agentic coding tool,
+cloud code. And on a more macro level,
+we saw that in codeex as well, right?
+So, you really want to be thinking about
+how you can parallelize your tasks. We
+can apply these old very consistent
+ideas of engineering, right?
+parallelism. When you don't have
+blocking tasks, just apply parallelism
+to get more things done at the same
+time. And this is something that you
+really want to think about, right? If
+your tasks are non-blocking, try just
+throwing this keyword inside of your
+claw code prompt. Okay? Just parallelize
+it. Yeah. Like context, for example, is
+a big one where like a lot of times if
+you have a very long conversation and
+you compact a few times, maybe some of
+your original intent isn't as strongly
+present as it was when you first
+started. And so maybe the model like
+forgets some of what you originally told
+it to do. And so we're really excited
+about things like larger effective
+context windows so that you can have
+these like gnarly like really long
+hundreds of thousands of tokens long
+tasks and make sure that cloud code is
+on track the whole way through. This is
+huge, right? This happens to me all the
+time. I'm sure it happens to you if
+you're using cloud code, right? You
+always have to compact at some point.
+You know, they have this great
+autocompact feature, but compact, just
+like rag, always suffers from
+information loss. It's a band-aid, a
+decent one, but a band-aid for a problem
+that can only truly be solved by longer
+context. I think, you know, Anthropic
+realizes this. I think other orgs
+realize this. We can see this in some of
+the larger, you know, context window um
+language models. Right now, sonnet stuck
+at 200k. I'm predicting that Anthropic
+puts out a new 500kish token context
+window model, Claude 4, Sonnet, and
+hopefully Claude for Opus. But we'll
+see, right? What we really need to do is
+get this larger keyword that Cat said
+there, effective context token window
+increased. Right? A lot of the current
+state 1 million context models, they're
+not really 1 million contexts, right?
+They lose track somewhere in the middle
+here. That's what we really want to see.
+And I think we're definitely going to
+get this this year. in 2025. Um, and
+it's going to be a huge lift for tools
+like cloud code. What do all these
+powerful atentic tools mean on both ends
+of the spectrum? So, a couple things
+here. You can scale your compute even
+further. You want to be thinking about
+having compute working for you all the
+time, right? As much as possible.
+Background tasks, parallel tasks, local
+terminal tasks running. You want an app
+in every one of these categories that
+you can quickly jump into and get
+engineering work done. Ideally, you're
+always running something. something's
+always getting completed for you in the
+background. Okay, this is a big theme on
+the channel. We're going to be
+exploring. This is our northstar. Build
+a living software that works for us
+while we sleep. All these tools also
+mean that engineering velocity is going
+up. If you want to keep up, you have to
+scale your compute to scale your impact.
+You want to make sure that you have a
+low-level fully controllable
+terminal-based tool. And you really want
+to understand the terminal, right? This
+is the highest leverage point for
+engineering work. On the other end, you
+want to have a tool that's easy to use
+that you can quickly just spin up, fix
+bugs, fix issues, build out small to
+medium-sized tasks with a single prompt.
+We know that great planning is great
+prompting. And if you can write a great
+prompt or a plan, you can get a lot of
+engineering work done. Have your web app
+ready. And then in the middle, we
+basically all already have some type of
+desktop app, some, you know, cursor, VS
+Code, wind surf, zed, whatever you want
+to use. You know, this one is less of an
+issue, but I think that you do want to
+have a highly controllable programmable
+tool where you can build up powerful
+agentic workflows at the ready in your
+tool belt. And you want to have a
+powerful web app that operates fully in
+the cloud where you can hand off a lot
+of work. You want to have your
+environments all configured. We're going
+to be using codecs. We're going to be
+pushing it to see how far we can really
+take it on the channel. Make sure you're
+subscribed. The big theme here is the
+same. We've been talking about it week
+after week after week. To scale your
+success as an engineer, scale your
+compute. I'm going to leave the link in
+the description to this full podcast.
+Check it out. This was a fantastic
+interview. I didn't have enough time
+here to cover a lot of the other key
+points, but I wanted to quickly give you
+the five most important ones. Check out
+this podcast link in the description.
+And no matter what, stay focused and
+keep building.

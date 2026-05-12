@@ -1,0 +1,842 @@
+Welcome back engineers. Indie Dev Dan
+here. Imagine starting your day. You of
+course open up the terminal. You fire up
+Claude Code. Then you kick off a single
+prompt/cook
+that does the work it used to take you
+hours in minutes. You're able to
+accomplish this with Claude Code sub
+aents. You've created workflows of
+specialized agents that do one thing and
+do it extraordinarily well. You can see
+I have this agent called meta agent. My
+agents are building my agents. Code is a
+commodity. Your fine-tuned prompts can
+be valuable. And now your cloud code sub
+aents can yield extreme value for your
+engineering if you know how to avoid the
+big two mistakes engineers are making
+with sub aents. In this video, we're
+going to break down how to build
+effective cloud code sub aents. We'll of
+course use this powerful meta agent to
+build new agents. But before we get
+there, sub agents have serious
+trade-offs and pitfalls you should know
+about so you don't waste your
+engineering time and tokens. Let's
+understand how to take our agentic
+coding to the next level with clawed
+code sub aents.
+So, first things first, what are claw
+code sub aents? I can almost guarantee
+you sub agents don't work like you think
+they work. Let me explain. Here's what
+the flow of claw code agents look like
+end to end. Starts out with your prompt.
+Your primary agent then prompts your sub
+agents. Your sub agents then do their
+work autonomously and then this is
+important. They report back to your
+primary agent and your primary agent
+reports back to you. The flow of
+information here is absolutely critical.
+You prompt your primary agent and then
+your primary agent prompts individual
+sub aents based on your original prompt.
+Your sub agents respond not to you, they
+respond to your primary agent. Okay?
+Many engineers are going to miss this
+fact and this changes the way you write
+your sub agent prompts. Let's break down
+exactly what claude code sub agents look
+like. So inside this codebase, we have a
+simple hello world agent prompt. You can
+of course see this is operating inside
+of the brand new agents directory. We
+have a new agentic directory to focus
+on. So, we'll get to the important meta
+agent in a moment. Let's start simple
+and understand what sub aent prompts
+look like. We'll open up a new shell
+here. Fire up claude in yellow mode. And
+you'll notice here in the description,
+if they say hi claude or high CC or high
+claude code, use this agent. Hi CC. And
+now cloud code immediately finds this
+agent, right? It finds the description
+for this agent and kicks it off. You
+have your agent name. This is its unique
+ID. The description, which is very
+important. This communicates to your
+primary agent when it should call this
+agent tools. So, you can specify
+specific tools available.
+>> Sub agent complete
+>> and the color which you can see right
+here. You can see we have a nice
+formatted response there. That natural
+language text to speech by the way
+that's set up with cloud code hooks on
+the stop event. But if we look at this
+format, there's something really
+important here. And we're coming up on
+the first big mistake engineers are
+making when using clutter code sub
+aents. If we open up this prompt here,
+you can see we have a classic markdown
+format, purpose and report. The first
+mistake engineers make is not
+understanding that what you're writing
+here is the system prompt of your sub
+agent. Okay? This is not the prompt for
+your agent. Okay? It's the system
+prompt. This is important. It might not
+seem like an important detail, but it
+changes the way you write the prompt and
+it changes what information is
+available. That's a big mistake. But
+even bigger is this. Notice how I have
+this section here. And remember in our
+diagram here, remember who your sub
+agents are responding to. It's not you.
+It's your primary agent. Okay? This
+report, this response format is going to
+be really important. You can see here
+I'm explicitly having the sub agent
+communicate to the primary agent. I'm
+saying Claude, respond to the user with
+this message. And guess what happened?
+Look at the response. Hi there. How can
+I help you? Did you know Nvidia blah
+blah blah blah blah. Right? We had it
+research some random uh tech news.
+Right? This is the sub agent prompt
+format. We have variable declaration at
+the top. The cracked cloud code team is
+going to tweak, improve, add to these as
+time goes on. They're probably going to
+add the model here at some point. We
+have our system prompt, right? And you
+can see this right in the docs. If you
+don't believe me, you can always just
+open up the docs, search system, and you
+can see what we're actually writing here
+is the system prompt. To be super clear,
+this is not the user prompt. Okay, when
+you're writing uh let's open up the
+prime command. When we have something
+like this slashp prime, this runs right
+into our primary agent. This is a
+prompt, right? A user prompt that goes
+right into the context window of our
+primary agent. Okay, our agents
+directory is very different. This is a
+system prompt. We're defining the top
+level functionality. These prompts are
+going to look similar, but it's
+important to delineate, right? You can
+pass variables into this. This is a
+system prompt. This is not what triggers
+what's actually done. And so, you know,
+again, just to bring this up, if you
+understand this, you're going to perform
+very well with your sub agents, and
+you're going to be avoiding the top two
+mistakes engineers make with cloud code
+sub agents. You don't prompt your sub
+agents. You can write a prompt for your
+primary agent to prompt your sub agents,
+but you're communicating with your
+primary cloud code agent, right? The top
+level agent. We'll call this the primary
+agent. It's cloud code that prompts your
+sub agents, right? It is delegating. You
+really want to be thinking about your
+cloud code sub aents as tools of
+delegation for your primary agent. And
+this is why the big three is so
+important. Okay, we we cover this all
+the time on the channel. This isn't
+going away anytime soon. In fact, it's
+only going to become more important as
+we scale up our agent coding to multi-
+aent systems, right? Context, model,
+prompt, and specifically the flow of the
+context, model, and prompt between
+different agents. Okay, this is super
+important. Okay, so I think you get the
+point. I don't need to keep harping on
+this. This is just really important. If
+you make these mistakes, this will
+eventually go ary, right? especially as
+you start scaling up what you can do
+with chains of sub agents,
+right? So, we're just getting started
+here. You can chain the call and
+responses and call and responses, right?
+It's funny that we started out prompt
+chaining years ago and now we're still
+prompt chaining. We're just prompt
+chaining with bigger compositional
+units. You and I, the user, prompt the
+primary agent. They can then run tasks
+and then based on the prompt they come
+back into the primary agent and you can
+have your agent keep cooking, right? It
+can keep doing important work for you.
+So you can fire off another set of sub
+aents. And so this is the true flow.
+Your sub aents are responding to your
+primary agent. And if you're doing
+powerful multi- aent orchestration,
+which you will be pretty soon here, if
+you're watching the Dev Dan channel,
+make sure you're subscribed and you
+comment to stay plugged in to key
+engineering information like this. You
+can tell um I don't just copy and paste
+the documentation. Um you know,
+everyone's using this. I think cool,
+that's good. Use this. But um read the
+documentation, guys. Like really read
+through this stuff. It's important.
+Okay? This is the most important
+technology of the year, probably over
+the next few years, right? Agents are
+how you win as an engineer. Understand
+what they really do, right? Don't
+offload all the cognitive work to your
+agents, right? understand the most
+important technology. Okay? And to be
+super clear, there's nothing more
+important right now than agents. And the
+leading agent is Claude Code. If you've
+been following the channel, you already
+know this. You've been listening to me
+glaze the team and glaze the the
+product. You know, really communicate
+the value of this, right? But it but
+it's all for a reason. I focus on the
+signal that every engineer has a
+superpower. Every engineer is super
+super good. They're cracked at
+something. One of my key abilities is to
+focus on the signal and cancel out the
+noise. Okay? I can focus I can focus
+directly on the signal of where the
+valuable information is. Truly, there's
+no other way I could show up here for
+you every week with something valuable
+if I wasn't constantly just obsessed and
+passionate about finding the signal.
+Okay, this, you know, again, this is
+super powerful. Copy it, throw it into
+an LLM, but don't offload deep
+understanding, right? You're basically
+just vibe coding then. Okay. Deeply
+understand your tools so that you can do
+more, better, faster, cheaper, so on and
+so forth. Okay. Anyway, where were we?
+Um, we were talking about chaining. Yes.
+So, this is super important, right? If
+you want to scale up, you need to
+understand the information flow. Okay.
+We're not just prompting a chat
+interface anymore. We're not just
+dealing with one context model prompt
+agent system. We're dealing with multi-
+aent systems. Okay? And there's a reason
+I put out that multi- aent observability
+video. I knew this was coming. It's
+here. Okay, multi- aent systems are
+here. The best engineers, the most
+cracked seniors. We're scaling up hard.
+Okay, compute, compute, compute,
+compute. And you can see it here. This
+is just a simple flow, right? You prompt
+your agent, hit fire sub aents, collect
+results. Okay, then the next step in
+that custom/comand is going to be great,
+collect the results, fire off more sub
+aents that, you know, create a concrete
+solution. This is all fantastic. Let's
+actually use this. I did mention I'm
+going to share my meta agent with you.
+I've built uh 50 probably 100 plus
+agents already, which is kind of crazy
+to say, but it's all thanks to this meta
+agent, right? As soon as you get access
+to a new feature, figure out how you can
+scale it up. Oftent times, you know,
+with Genai, you build a meta version of
+that, right? The thing that builds the
+thing.
+What are we going to do here? Let's just
+delete a bunch of stuff. Okay. If this
+causes you pain, you know, if deleting
+causes you pain, you probably aren't
+deleting enough. Uh, so let's get rid of
+this. Let's get rid of this. And, uh,
+let's get rid of this as well. Let's
+create new agents with our meta agent.
+And so, to cue this up, you know, a big
+issue I see in the engineering space, in
+the Gen AI ecosystem, is that I'm seeing
+a lot of engineers uh, using technology
+to create solutions for problems that
+don't exist. Noobs and beginners, they
+start with the technology and work
+backward. If you want to become a real
+engineer, if you want to continue being
+a valuable engineer in the generative AI
+age, work the other way. Work the right
+way. Work the way that product builders
+think. You have a problem first. Next
+comes a solution and then the tech comes
+third. Okay? Problem, solution, tech.
+Okay? So, what do I mean by that? Let me
+show you a concrete example. Let's use
+our meta agent to solve a real problem.
+Let's start at the top, right? What's
+the problem? When I'm a magenta coding
+at scale, I lose track of what some
+agents have done. Okay. Problem
+statement. Solution. Add text to speech
+to my agents so they notify me when
+they're done and more importantly what
+they've done. Okay. So now we have a
+problem and a solution. Now let's use
+the technology. Okay. Only after you
+have a problem and solution should you
+move the technology. So technology we
+can use cloud code sub aents. I have a
+meta agent here that I can use to build
+up a new textto-spech agent that
+communicates what was done. Okay,
+fantastic. Order matters problem
+solution technology. So inside of
+MCP.json.sample,
+we have a setup for the 11 labs MCP
+server. I have this configured in
+my.json here. This is get ignored
+because of course we have environment
+variable information here. First I want
+to understand what my agent can do. So
+I'm going to run all tools. All tools
+looks like this. It's a simple reusable
+prompt. List all available tools in your
+system prompt. I want bullet points. I
+want TypeScript function signature
+format. This is going to allow us to
+understand the tools available to us.
+And specifically, I want to see the 11
+Labs tools. Great. So, here are all the
+available tools. I'm just going to copy
+these out so I can quickly search. I
+need two things. Text speech and we
+probably need some way to play, right?
+So, I'm going to search text
+forwardlooking
+speech. There it is. Text to speech. So,
+I'm just going to paste that here. And
+we also want to find a play. There it
+is. Play audio. Great. Okay. So, we have
+these two methods that we can use. And
+we actually want the entire definition
+so we can know the exact parameters that
+we're playing with. Right. Let's paste
+this all in mode back to text format
+real quick. Great. Now, let's go ahead
+and just run these. Right. So, this is
+in our primary agents context window.
+I'm just going to say 11 labs. I've
+completed. Next, we can and I think we
+have voice ID here. Let me quickly copy
+one of my favorite 11 labs voice IDs.
+Voice ID. Just going to be super clear
+in the prompt. Output directory. Right.
+Output. Great. Output directory. Output
+to pwd, which is current working
+directory/output.
+I'm going to have cloud code opus fire
+off this tool here. And all I'm doing
+here is validating the workflow. I'm
+going to encode into an agent. So, text
+to speech. Great. Save the file. And now
+we want to run.
+>> All set and ready for your next step.
+>> Great. Now we're going to run play
+audio. And I should just be able to say
+play audio
+because all the context is loaded. Um,
+our agent is prime. Okay, that was good.
+I was talking over it. So I'm going to
+run it again. Run again.
+>> I've completed XYZ. Next weekend ABC.
+>> Great. So we can see that we have text
+to speech working. We now have full
+capability to have our agents
+communicate with us via a sub agent.
+Okay. So fantastic. So now we can crank
+open our powerful metaprompt. Okay. So
+now that we know the workflow and the
+work that we want done, we can build a
+new agent that encapsulates this work.
+So we can open this up and we can see
+exactly what our meta agent is doing. It
+has a system prompt that details how to
+create a new agent, right? It's doing
+all this work in the isolated context
+window. And so I'll fast forward through
+this. I'm going to type up the prompt
+right here. So this is what it's going
+to look like, right? Build a new sub
+agent. So I'm asking cloud code to build
+the agent. And you can see here uh
+generate a new complete cloud drive sub
+aent configuration file you from a
+user's description. Okay. So use this to
+create new agents proactively. So we're
+using the information dense keyword
+encoded by anthropic and that we should
+probably make this uppercase just to
+make it more dramatic. When a user asks
+you to create a new sub aent. Okay. So
+we want to make sure that we have that
+language inside of our prompt. Build a
+new sub aent. Great. We're defining when
+it's proactively triggered based on our
+conversation so far. Our agents will
+have blah blah blah blah blah. I'm just
+detailing exactly the flow that we went
+through. Okay. Get the current working
+directory. Text to speech. Play. Great.
+So again, copy this. Let's fire this
+off. And now you're going to see the
+description of our meta agent here. Get
+activated. This is very important. You
+need your description to properly set up
+when your agent should call a specific
+sub aent. So you can see cloud code is
+thinking about this. it knows and now
+it's going to use the sub agent. So,
+couple key pieces inside of this prompt.
+I'm not just having this build on zero
+information. I'm repooling the cloud
+code documentation live. Okay, I want
+the most recent updated AI
+documentation. viewers of the channel,
+you know that I like to place this in AI
+docs, but there's a more powerful way to
+do this where inside of AI docs, you
+just place a readme and then on the fly
+you have, you know, a prompt or now a
+sub agent pull in live documentation
+with some type of refresh command. And
+so you can see we have a brand new agent
+generated there. Let's go ahead and
+understand what's happened. Great. So
+through tool uses, our meta agent
+successfully created now wants to read
+and verify. So this is great. So, our
+reasoning model is double-checking the
+work. It's read the file and now it
+exists.
+>> All set and ready for the next step.
+>> Let's go ahead and check it out. This is
+a great summary. Voice proactive output
+autoplay. Looks good. Let's go ahead and
+look at our new agent. You can see it's
+in the exact format as we asked.
+Fantastic. So, we can see here, you
+know, always review. Every word must add
+value. That's great. I like that line.
+No pleasant trees. Yep. Exactly. I'm
+going to add a couple of things, right?
+So, variables, username, and what else
+we're going to do here? I want just one
+sentence. Uh, these can be quite long. A
+concise one sentence looks great. I'm
+going to make a couple tweaks here
+specifically to the description. This
+determines when your primary agent is
+going to call your sub agent. Cloud code
+has this IDK, this information keyword
+that they mention um proactively, right?
+They even have a little section for it.
+Use proactively or must be used. What we
+can do here is something a little bit
+extra, right? You noticed in my hello
+agent, hello world agent, I like to have
+these concrete tags or these concrete
+triggers for my sub agents. So if they
+say X, Y, or Z, use this agent. So I'm
+basically just going to reuse this
+pattern. Frankly, I should encode this
+into my meta agent. I'm just going to
+add this here, right? If they say TTS,
+TTS summary, use this agent. um review
+user prompt given to you a concise
+summary of what it does. By the way, um
+one of the big reasons I'm using cursor
+still is for writing prompts. It's great
+for that tab completion. I also want to
+add one thing here. So, coming full
+circle here, remember that if we go back
+to our basic flow here, it's your
+primary agent that prompts your sub
+agent. What your primary agent can see
+and has access to is this description,
+right? This is how it knows when to call
+any given sub agent you have. So you
+really want to leverage the description
+and tell your topable agent how to
+prompt this agent. When you prompt this
+agent, describe exactly what you want
+them to communicate to the user. And I'm
+going to add even more detail here. I'm
+going to say, remember, and again, this
+is something that I really just need to
+encode in my meta agent. Um remember
+this agent has no context any questions
+conversations
+between you and the user and something I
+like to do to increase prompt adherence
+um anthropic has another information
+dense keyword that you can use it is
+this so important colon I want to be
+absolutely clear with this agent do
+these following things right we want a
+concise summary of what was done and
+also I want to add one more here best
+practices important run only bash pwd
+and the 11 labs mcbp tools. Don't use
+any other tools. Base your response.
+Exactly. Okay, let's fire up another
+claw instance. We'll go ahead and just
+use sonic for this one. What does this
+codebase do? Use tts summary. After we
+add details to when this should be
+called, after we add instructions to the
+system prompt for our work completion
+summary sub agent, we now have an
+operational agent that can quickly
+summarize in natural language for us
+anywhere, anytime on any piece of work.
+Right? This is the beauty of agents and
+reusable prompts. Now we have this
+problem solved for good and we can reuse
+it and improve it when we need to.
+codebase has been analyzed and now we're
+getting text to speech structure, text
+to speech response. There it is. There's
+an input prompt.
+>> This codebase demonstrates Claude code
+hooks mastery with all six life cycle
+events implemented for deterministic
+control featuring security filtering,
+intelligent TTS feedback, automatic JSON
+logging, and UV single file
+architecture. Next step, explore
+specific hook implementations or test
+the security filtering functionality.
+>> Nice. Okay, so that looked good or that
+sounded good rather. You can see here
+there is work to be done here. That was
+still longer than I wanted it to be. If
+we open up logs, thanks to cloud code
+hooks, we are recording all the
+conversation that just happened. So, we
+can do something really cool. If we want
+to, we can dive in and actually see our
+top level agent prompting our sub agent
+and our sub agent prompting the response
+back to our top level agent. I'll leave
+that up to you after you finish watching
+this video. Run this. fire off the hello
+world agent and the meta agent so you
+can really understand what the flow of
+information is between multi- aent
+systems inside of cloud code.
+So the benefits are pretty
+straightforward, right? Cloud code
+engineers said it themselves. Context
+preservation. This is both a benefit and
+an issue. We'll talk about how this is
+an issue in a moment, but each sub agent
+operates in its own context, preventing
+pollution of the main conversation. So
+this is powerful. We are booting up
+fresh agent instances for every one of
+these tasks that we have for our natural
+language text to speech for our meta
+agent. They all have their own isolated
+context window. This is very powerful.
+On the channel, we're going to talk more
+about how you can use this to scale
+agents across your large complex code
+bases. You could already do this with
+sub aents, but now you can do it even
+better with specialized sub aents. All
+right, so you get to save your context
+window. This is a big idea that's going
+to come back up over and over again
+until we get those two 5 million plus
+context windows. You know, I can tell
+you those aren't coming uh anytime soon
+as far as I can see. I would love to be
+wrong about that. Specialized agent
+expertise. We can of course fine-tune
+the instructions and the tools. So, you
+know, you can see this here for our text
+to speech agent. You can see we wrote a
+nice rich description on not only when
+to trigger this, but um we're giving our
+top level agent instructions on how to
+prompt this. Okay, a lot of engineers
+are going to miss this. Don't be one of
+them. You can instruct how exactly you
+want the prompt to flow in here in the
+description. Reusability. This is a
+classic one. By storing this inside your
+repository, you can build agents for
+your codebase. There's a powerful way
+we're going to discuss on the channel to
+use a meta agent to build specialized
+localized agents that excel at operating
+specific parts of your large codebase.
+Again, subscribe, comment, all that good
+stuff so you don't miss out on future
+valuable information like this. Flexible
+permissions. You can lock down the tools
+your agent can call. That's fantastic.
+Obviously, if you're in YOLO mode, you
+have to be more explicit about what
+tools can run, which is why I have this
+I added this important best practice
+here. But that's that. So, these are the
+kind of four key benefits that Enthropic
+lists directly here. I think these are
+all true. There are a couple hidden
+benefits as well. You get focused
+agents. All right? And you know, the
+cloud code team does mention this, but
+you can really take this far, right?
+Just like booting up a fresh agent with
+a single prompt, when you use cloud code
+sub agents, the agent is fresh. It only
+knows what your primary agent tells it.
+That means it's less likely to make
+mistakes given that you design a good
+system prompt. Why is that? It's because
+your agent is focused on one thing. Just
+like a focus engineer, when you're
+focused on one thing, you perform
+better. Full stop. Another hidden
+benefit of cloud code sub aents is
+simple multi- aent orchestration. And
+this is something that I'm most excited
+for with custom slashcomands combined
+with cloud code hooks combined with sub
+aents
+right just kind of stacking up these
+powerful features you can build powerful
+yet simple multi- aent systems. So you
+know as a concrete example we have this
+in our commands we have this classic
+prime command and we can easily improve
+this right. So now we can have prime
+tts. So say I want to kick off prime. I
+can say when you finish run the TTS
+summary agent the user know you're ready
+to build. I already have uh cloud code
+hooks with text to speech. We did this
+in a previous video. I'll link that in
+the description if you're interested.
+But we can of course you know run this
+now in a fresh instance. We can run
+prime tts. And now when this finishes
+we're going to run right we're going to
+chain text to speech summary agent at
+the end. There it is. And so here's a
+summary. It wrote the text to speech. So
+we have the audio file
+>> code hooks mastery project with complete
+coverage of all six hook life cycle
+events.
+>> There you go. So it's ready to go. So if
+you open up that that summary there,
+control E. You can see cloud code
+analyze hooks mastery blah blah blah
+blah blah. So it's letting us know that
+it is complete. You know, we were able
+to guide our primary agents prompt to
+our sub agent right here. Right? When
+you finish, run the TTS summary agent
+and let the user know you're ready to
+build. So this is another hidden
+benefit. Right? we improve our multi-
+aent orchestration. Okay. And so another
+pro and con is prompt delegation. So
+again, this is kind of on the line.
+You're delegating your prompts to the
+primary agent oftent times just like you
+saw here and just like you saw in the
+work completion summary agent right in
+the description. This means you have to
+do a little bit more work guiding your
+primary agent to call your sub agent
+properly. This is powerful though. It's
+still good. We are offloading work,
+right? We're encoding powerful
+engineering practices into our prompts
+and now into our sub agents. So all in
+all, it's good. So what are the issues
+of this? Right? The opposite of context
+preservation is that and and you know
+this was a great example because you
+kind of saw that you need to be super
+clear to your sub agents and to your
+primary agent what you're passing in to
+the sub agent because it doesn't have
+any previous context. By definition,
+every sub aent having its own context
+means that there is no context history.
+It doesn't have the rich context that
+your primary agent has. It has only what
+your primary agent prompts it with. This
+is the equivalent just to make it ultra
+clear. This is like firing up claude in
+print mode, you know, whatever. You can
+run yolo or dangerous blah blah blah.
+And don't run this by the way if you
+don't know what you're doing. Uh this
+will run any command. We're starting to
+see in the industry uh yolo mode coders
+are getting cooked by this command. So
+be really careful. Um, but this runs the
+following, right? So, it's basically
+saying call work completion summary
+agent and then you're passing in one
+prompt. Okay, this is what your primary
+agent is doing when it's calling the sub
+agents. It's it's literally like it's
+you calling a oneshot prompt to the sub
+agent. Okay, there's no context. This is
+a problem, right? It's a problem and
+it's a benefit, right? It's the it's the
+opposite side of the coin of context
+preservation. Another big issue, these
+sub aents are hard to debug. You can see
+every time we've run one of these,
+right? If we run high CC, even with this
+simple prompt, we have no idea what's
+going on here. We'll get the tool calls,
+which is super super nice. But the
+actual workflows, the prompts, the full
+parameters for every tool call, we don't
+get these. And this is by design, but it
+also makes these harder to debug and
+understand what's going on. Right? So,
+another big issue here is decision
+overload. As you start scaling up the
+number of agents you have, it's going to
+be harder and harder for your agent to
+know which one to call.
+>> Sub agent complete.
+>> Okay, commands are a bit different.
+Although, you know, you the engineer
+might forget all the commands that you
+have, right? You just might start
+forgetting all these commands, right?
+All the powerful commands you've built.
+Agents are a little different because
+based on the description and based on
+the number of agents you have, your
+primary agent might get confused here.
+Okay, so this is important. You really
+want to be keeping track of your agents.
+Otherwise, it'll come back to bite you
+and you're going to kick off these
+agents when you don't want to. As a
+solution, you really want to be clear
+about when to call your sub agents with
+the description variable. This is the
+most important variable right next to
+the name. Two remaining issues here.
+Dependency coupling is going to be a
+problem here. So, once you start setting
+up prompts, primary agent, reusable
+prompts or custom slash commands, and
+once these are calling out your sub
+agents, which this is how you, you know,
+start scaling up into multi- aent
+systems. Once you get that going, it's
+going to be hard. Again, back to
+debugging. It's going to be hard to
+understand what's going on. You're going
+to have dependency coupling. Inevitably,
+you're going to have an agent depend on
+output from another agent, depend on the
+format of the specific response from
+another agent, on and on and on. And
+then one day, you're going to need to
+change something to improve it or to
+ship something new, whatever. You're
+going to change the planner agent right
+here, and it's going to ruin everything
+else because one thing changed. We're
+already operating in nondeterministic
+systems. When that one thing changes, it
+could blow up everything else. Okay, so
+this is another problem with sub aents.
+As you start scaling them up, keep your
+eye on this. Try to keep them separate.
+Try to keep them in isolated workflows.
+Don't overload your sub aent chain.
+Okay. And then last thing, and this is
+just kind of a request on my side, even
+though it is literally counterintuitive
+to what I was just saying, you cannot
+call sub aents in your sub agents. Okay?
+Probably for all the reasons that I just
+mentioned. You know, it would be cool if
+we had, you know, kind of like dangerous
+um sub agent true, right? So that inside
+of this agent or, you know, it's
+probably like sub sub aent true. So that
+inside of this agent, we enable this
+dangerous powerful setting of calling
+sub aents inside of sub aents. So this
+is me just being picky. That's not
+actually a real issue, but it's
+important to note that, you know, you
+can't call sub aents in your sub aents,
+at least not yet. That's me being
+hopeful. So this is a very powerful
+feature. We have quite a few more ideas
+to explore here with the combination of
+agents and custom slash commands aka
+reusable prompts. Remember that
+perspective matters as you start scaling
+up your multi- aent system. Right? The
+flow of the big three context, model,
+and prompt matter more than ever and
+more and more as you scale up the number
+of agents who have shipping work on your
+behalf. There's a reason why it's a
+principle of AI coding. As usual, link
+in the description if you want to learn
+the other principles of a coding that
+will help you differentiate what you can
+do with agent coding. And I'll go ahead
+and bring back the other uh prompts that
+I had here just for fun. But the meta
+agent is going to be here available to
+you. Link in the description. I'm going
+to add these to the cloud code hooks
+mastery codebase. If you made it to the
+end, be sure to like, subscribe, and
+comment your thoughts. No matter what,
+stay focused and keep building.

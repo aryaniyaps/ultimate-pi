@@ -1,0 +1,892 @@
+Engineers, the king is back. This model
+is like that top tier engineer. When
+they walk into the meeting, everyone
+shuts up. Check this out. Cl
+Man, have I missed running this command.
+Claude code opus.
+I'm always looking for new capabilities
+that were impossible before the models
+release. Let me show you two unique
+advantages Opus 4.5 can give you and
+your engineering. One is obvious and
+it's the reason why Opus 4.5 destroyed
+Gemini 3 on launch and the other is less
+obvious and it's the reason why Opus 4.5
+is the best model for a gentic coding
+for engineers. Let's take this claw code
+Opus 4.5 instance and have it delegate a
+non-trivial task to sub agents
+slashgeneric
+browser test. We're going to paste in a
+URL plan file parallel true headed true.
+Enthropic has their eyes on a key pillar
+of great engineering. Enthropic briefly
+mentions this inside of their blog. If
+we search for sub aents, they explicitly
+mention Opus 4.5 is also very effective
+at managing a team of sub aents enabling
+the construction of well-coordinated
+multi- aent systems. This is one of the
+key pillars of what makes Opus 4.5 so
+great that most engineers miss. Our Opus
+4.5 agent is kicking off five Opus 4.5
+sub agents to accomplish work. Now, what
+are these agents actually doing? They're
+all operating their own browser. They're
+all running tasks on the Opus 4.5
+release. This one is in the system card
+and it's going to download and do some
+work there. You can see this one is
+doing a models overview check. We've
+deployed more compute against a specific
+problem at scale. Every time a new
+powerful model like this is released,
+specifically one of the clawed models,
+you don't just get the benefits one
+time. You get it end times if and only
+if you're delegating to multiple agents.
+Opus out of the box is better at writing
+prompts for your agents and your sub
+agents. This is the first capability
+Opus 4.5 unlocks for your engineering
+work. It's enhanced agent delegation.
+This release concretely showcases that
+you can automate your UI testing. You
+can automate entire swaths of work when
+you spin up multiple agents. And to be
+clear here, every one of these agents is
+operating Claude Opus 4.5. So, you've
+seen this diagram before if you've been
+following the channel. This is what it
+looks like to automate with sub agents.
+It can be easy to misinterpret what's
+happening in this workflow. You might
+think that you are prompting your sub
+agents. You're not. Your sub agents are
+not responding to you. What's happening
+here is you prompt your primary agent.
+Your primary agent prompts your sub
+agents. And then your sub agents, they
+don't respond to you. They respond back
+to your primary agent. And your primary
+agent responds back to you. We covered
+this a while back in our first sub
+agents video, but this is critical to
+understand because with every great
+model release, you can see we're
+summarizing the workflow. With every one
+of these releases, Anthropic is dialed
+into this signal. To be super clear
+here, what am I saying? I'm saying
+they're training Opus 4.5 to be a better
+prompt engineer, right? Just like you or
+I prompting our agents, right? Prompting
+one to N agents. First, you want better
+agents, then you want more agents.
+They're training Opus to prompt sub
+agents. And to be super clear here, what
+does that mean? They're calling the task
+tool and they're writing a prompt to the
+task tool. That means if you can prompt
+a sub agent, you can prompt any agent.
+Okay, this is what makes Obus 4.5 in the
+clawed series distinct. They're
+specializing their models to be
+engineering models, right? Where you
+delegate and you hand off work to other
+units of compute. This is super super
+critical for scaling your compute to
+scale your impact. All right, so what
+happened there? Here's our five agent
+summary. You can roughly look at tool
+uses and token usage as value generated
+from your agents. Of course, they have
+to be doing useful work. We have a
+summarized document. And then you can
+see here everything that we asked them
+to do. Superior agentic capabilities for
+autonomous task. We love to hear that.
+Multi- aent orchestration for managing
+teams of agents, for managing sub aent
+teams. If your agent can prompt sub
+agents, it can prompt any agent. Agents
+will be calling agents in the future.
+This is a big theme we focus on on the
+channel. Make sure you're subscribed so
+you don't miss what we do with this
+incredible pattern. You know, we asked
+for a nice model recommendation. This is
+great. We can dial into these results as
+much as we want. Before we do that,
+let's talk about one of the most
+important pieces of this release, the
+pricing.
+So, the pricing looks like this.
+Remember that previous Opus 4.1 abysmal
+pricing $15 per in the output was $75
+per million output token. They've
+slashed that all by a third. This is now
+a state-of-the-art model with
+state-of-the-art pricing. Okay, premium
+pricing for premium compute. I like this
+positioning from Enthropic. A lot of
+engineers want everything to be free.
+That is simply not reality. Valuable
+things are by nature not free. If
+something is free and it is valuable,
+someone put a lot of work into making it
+that way for you or you are the product.
+Okay, this is common knowledge. Keep
+this close to heart as you see these
+model prices drop and drop and drop. You
+see this on the free plans, all that
+data is being collected by the
+generative AI company, right? Open
+router reports Opus at about 60 tokens
+per second. Somehow it's both very
+cheap, very fast, and state-of-the-art
+for engineering work. Um, that's
+absolutely incredible. I have no idea
+how they broke that barrier. I assume
+there's some model optimizations
+happening here. Maybe they have some
+chip optimizations happening with their
+collaborations with Google and AWS,
+Amazon. Who knows? It's really wild that
+within just one week, uh, Gemini 3
+really was at the top of the
+leaderboard. I was using the Gemini CLI
+a lot more and then Opus 4.5 dropped and
+now it's a nobrainer. You can't compete
+with this model. Specifically, I want to
+make this super clear for software
+engineering work. Anthropic is putting
+their foot down and they're saying the
+most important thing for these models is
+to be great at engineering and for you
+and I, the engineer with our boots on
+the ground every single day looking for
+the value, looking for the signal out of
+these models. This is the best model. It
+is the perfect model for scaling real
+engineering work. A nice side effect of
+that is that it is great for product
+development work as well and many other
+areas. hints, custom agents, and the
+cloud agent SDK. Let's go ahead and dial
+in and see what our agents did for us.
+If this model is so great at delegation,
+let's see what the results actually look
+like.
+Open results in cursor. Here is our
+browser UI testing results. Here's that
+original prompt. Remember, if I open the
+terminal, hit up a few times, we had a
+URL, and then we passed in a prompt, a
+markdown file, which itself was just a
+prompt. Let's go and copy this. Open
+this up and you can see exactly what
+this looks like. And so we have a
+taskbased list. Summarize the release.
+Screenshot every image. Get the price.
+Get the system card and summarize the
+orchestration details. I'm always
+looking for orchestration keywords, you
+know, sub aent keywords, long running,
+right? Duration. So I had my agent look
+for this stuff. Look for signals inside
+the system card of the Opus 4.5 release.
+And then I wanted to understand how to
+use every one of these models because
+remember all of these models can be
+useful at specific points and times for
+different problems. Right? If Haiku can
+solve the problem, why would you use
+Sonnet or Opus? It's much faster. It's
+much cheaper for you. Of course, if
+you're using the Max or Pro plan and you
+don't care about waiting a little bit,
+just go ahead and use whatever model you
+want, right? But if you're deploying
+these agents into real custom agents
+into your applications into your
+products like you should be, it's not
+just about agentic engineering. It's
+about deploying agents against real
+problems that you and your users have.
+Right? So the way I like to think about
+this is the model stack. Fast, cheap.
+You have your workhorse and then you
+have your powerful model. Right? Now it
+looks like Opus is going to be both the
+workhorse and the powerful model, right?
+But let's go ahead and see what Opus has
+said with these results. So summarize
+the release that was summarized right
+here. We had screenshots of every single
+image on the page, right? Browser test
+plans and you can see all the images. If
+we just click through these, you know,
+we can see here was that Ader polyglot
+performance shout out Ader, the original
+AI coding tool. I don't know if you know
+this, but Cloud Code is actually
+inspired by ADER benchmarks. A couple
+additional benchmark items here. And
+then we just have a bunch of, you know,
+SVGs that they have on the site. So, you
+know, one of our agents, just one of our
+agents went through the site, downloaded
+all the images. It looked at all the
+images, and then it named the files.
+Very powerful workflow. What are the
+advantages we're getting out of this new
+Opus 4.5 model? We can delegate a lot of
+work, detailed work to our sub agents.
+In combination with that, every single
+agent, sub agent or not, they can do
+longer running, harder tasks. Those are
+the big two takeaway items from this
+release. And we're going to push that
+capability even further in just a second
+here. Right? So we got the pricing
+information here. We have the system
+card and we want to summarize
+orchestration details. So we have the
+PDF here. Obviously this is not useful
+to read here but it used PDF to text and
+it extracted the text and then from
+there it searched for specific keywords
+and it reported on these details. Then
+we had another sub agent look up all the
+prices for the current generation claw
+models. So, all the 4.5 models,
+summarize the pricing, and then tell us
+how to use each. Of course, we know that
+Haiku is for speed and cost. Sonnet.
+Now, it's actually not so clear. This is
+the model's recommended default, but I
+don't think this is true anymore. I
+think by default, we want to use that
+powerful workhorse. It's got great
+speed. It's got everything you really
+want. I'm using Cloud Opus 4.5 24/7.
+Now, this all happened with a browser
+automation task where we just dialed in
+what we want to have happen. You can
+redeploy prompts like this over and
+over. If you have specific browser
+automation workflows you want to run,
+this is running inside of our agent
+sandbox skill codebase. All right, I've
+made some enhancements to this. I want
+to show you the kind of end results of
+putting together the right tooling with
+your agents, right? The right skills,
+the right tools, right? We have an
+entire browser suite tool that agents
+are using to operate. We're not blowing
+away our context window, right? We have
+better agents operating our agentic
+coding jobs. Browser automation is
+powerful, but the real value here is a
+gentic browser testing at scale. You can
+have Opus 4.5 accomplish nasty, nasty
+engineering work on your behalf at scale
+over and over and over. Opus 4.5 running
+in cloud code offers you top tier multi-
+aent on the-fly testing. What does that
+mean and why is it important?
+Testing is important in general because
+it increases your review velocity. One
+of the two primary constraints of
+agentic coding. There's planning and
+there's reviewing. If you're engineering
+properly with agents, you're probably
+stuck spending most of your time in one
+of these two locations. Planning and
+reviewing. Now, in last week's video, we
+gave Gemini 3 Cloud Code and CodeCli
+their own computers for a total of 15
+agent sandboxes. As you can see here in
+my agent sandbox UI, I have five
+sandboxes running. These of course were
+all built out by Opus. In fact, Opus
+oneshotted these applications. What are
+these? How is Opus able to oneshot
+these? And how much work can you really
+do with these models? The answer is it's
+a ton. Okay, let's run another prompt
+here. So, I'm going to open up the
+terminal here.
+Then fork terminal
+claw. code opus with summary. Use the
+agent sandbox skill,
+then list sandboxes, then open every
+public URL in Chrome. Okay, so I'm going
+to fire this off. We haven't talked
+about forking agents on the channel yet.
+Make sure you like and comment so the
+YouTube algorithm doesn't miss you next
+week when we release that video. Forking
+your agents and spinning off work is
+ultra important when you're engineering
+on multiple different problems day after
+day. Notice how intricate this prompt
+is. You can see our forked terminal
+right there. It's immediately running
+Cloud Code Opus in a brand new window.
+And here's all of our sandboxes. We'll
+hold that off for one second here. CD
+back to root. Then fork terminal. Grab
+some instructions for that skill. And
+then we have a prompt that we're passing
+in. All right. So this agent understands
+that as of here, this is the prompt that
+we're passing to another agent. Okay.
+Again, like multi-agent orchestration is
+ultra powerful. All right. And just to
+showcase like really what this looks
+like, we understand that in our first
+prompt, we ran this workflow, right?
+User prompt, primary agent spun up five
+browser agents which then, you know,
+responded back to the primary agent
+which then responded back to us. But you
+can push this a lot further, right? This
+isn't what real engineering work looks
+like. This is one concise example of
+doing some engineering work with a
+single prompt. Really, we want something
+powerful like this, right? Automate your
+UI testing. You want to spin up a plan.
+You want to then have your agents build.
+You then want to host that application,
+okay? And then you want to have your
+agents test. Then those agents respond
+back to your host prompt your agent that
+ran this. And then they respond to you.
+And there's actually a piece missing
+here where if there's something wrong
+that our browser agents report on, the
+host will actually run back to the build
+step or back to a debug or resolver
+step. Right? And so this is what I've
+done with these agent sandboxes. This is
+how I created these agent sandboxes,
+right? So, this is all running in the
+agent skill codebase, which I'm going to
+have available to you for free, link in
+the description. And you can see here
+what's happening, right? It has tools to
+help it operate sandboxes. This agent
+listed all the sandboxes, right, with
+this tool here and then opened all of
+them in Chrome. And now we have these
+links. So, what do we have here? Why are
+agent sandboxes so powerful? And why is
+it another avenue, another technique you
+can use for scaling your compute to
+scale your impact? Uh check this out,
+right? We have several applications
+here. Every single one of these
+applications was built out by this
+agentic workflow, right? This AI
+developer workflow. Plan, build, host,
+browser, test, respond back to host. If
+we need to make improvements, do it.
+Otherwise, respond back to me. These are
+all running in their own dedicated agent
+environments, right? I'm using E2B as my
+sandbox host. I like this tool. I'm a
+big fan so far. But you can see here,
+right? We have multiple sandboxes that
+our agents are operating. Last week we
+were looking at Gemini 3. It did a
+decent job of spinning these up. Opus
+4.5 is completing this longunning agent
+workflow these longunning jobs to build
+entire full stack applications. So you
+know just to break one down right we
+have a voice notes application. Let me
+just show you what this does. If I hit
+record allow this time and you know
+we're just talking into our computer
+here and live we're getting
+transcriptions. Okay these are live
+transcriptions. This is running 11 Labs
+brand new. I think it's called Scribe
+2.5. Big shout out to 11 Labs. Huge fan
+of that company. Huge fan of the
+products they're putting out. Um, a lot
+of untapped potential there. We'll be
+talking about 11 Labs on the channel in
+the future, but um, I'm going to stop
+talking now so that this can uh, lock
+in. You know, that transcription came in
+all the way and it's here live. Right.
+So, we have this live voice notes
+application. At any point, we can stop
+and the delta will lock in. There we go.
+And then we can, of course, stop. This
+creates a brand new voice note. If we go
+back to notes and here's the important
+part. If we hit refresh, right, we can
+see that all the data is still there.
+This is hosted inside of one agent
+sandbox. I had Opus 4.5 create this
+entire sandbox from scratch. Okay. And I
+can show you the exact prompt I used to
+do this. It's a complex full stack
+prompt. Right here it is running inside
+the skill. There are a lot of steps to
+it, but you should be pushing your
+agents further and farther beyond
+because with every model release, you
+can do more. And the only way you can
+find out what you can really do is by
+pushing your agents further. I have a
+single prompt now. Let me just make this
+super clear. Let me try to set the stage
+for you. Right? This is how engineering
+is evolving. I have a single prompt that
+I can use to build full stack
+applications to quickly prototype or
+change new and existing applications.
+Okay, we're talking green field code
+bases, brand new and brownfield code
+bases. All right, existing work. You
+know, you want your agents to create
+PRs. You want them to give you feedback
+on things. You want to engineer new work
+with them. Plan, build, host, test, the
+whole suite. All right, this is how you
+should be thinking about your
+engineering work. This is one of the
+critical ideas we break down in my take
+on how to use agents tactical agentic
+coding. I'll leave a link for that in
+the description. I don't want to pitch
+that too much here. Check out that
+landing page. See if you're interested
+and push what you can do further. All
+right. Agentic Workflows, specifically
+the evolution of Agentic Workflows, AI
+developer workflows where you have
+multi-step agents doing work, handing
+off work from agent to agent, is how you
+deliver more value as an engineer right
+now. So, check that out. Link in the
+description. Back to this prompt. We are
+doing a four-step workflow, and you can
+see that in the workflow step, right?
+So, we have a great agentic prompt. Once
+again, notice the consistency. I show up
+every week sharing the exact same prompt
+format. Why is that? It's because when
+you have a winning formula, you keep
+using it. Stay consistent. Make it easy
+to communicate to you, your team, and
+your agents. All right, same prompt
+format. And you'll see that throughout
+every single prompt I'm writing now. But
+if we dial into the workflow, you know,
+you can see several steps here. We're
+activating our agent skill. We're
+initializing our sandbox. And then we
+start to run prompts. All right. So
+prompts, running prompts inside of
+skills. You need to be able to control
+your agentics. All right? It doesn't
+really matter how you get it done. It
+matters that you can do it and that you
+know the options available to you.
+Right? So there's that host, there's the
+uh test workflow and this is what's
+doing all that browser testing work for
+us. Right? Check this out. Step seven,
+browser UI testing. Again, I want to be
+super clear. These are full stack
+applications running in their own agent
+sandbox that claw code running Opus 4.5
+built out end to end. Okay, oneshotted
+applications, right? Scale your compute
+to scale your impact. These are the two
+massive advantages that clawed code
+running clawed opus 4.5 can offer your
+engineering delegation and longunning
+engineering tasks. You can do much more
+than you think with these models. And
+you know to be super clear I'm not
+sponsored. I don't receive any you know
+funds or anything from these companies.
+I focus on the best tool for the job of
+engineering. And right now very very
+clearly to me the best tool for
+engineering is an agent that lets you
+delegate and run longunning engineering
+tasks accurately. Right? So that's how
+we got these agent sandboxes. You know
+kind of showcase some of this
+functionality here. We have a simple
+kind of graphing tool. You know we can
+chart things out. We can change the
+color. We can add a data point here and
+that's going to update right. We can
+change the format here. Bar pi line. We
+can download PNG. We can update the
+titles blah blah blah XYZ. You get the
+point here, right? It's a graphing tool.
+Then we have a more challenging, more
+technical, medium level full stack
+application. I like to prompt and
+evaluate these agents in tiers of
+challenging, you know, difficulty,
+right? And then we have a design tool
+here. We also have a decision making
+tool. So this is my favorite one. And it
+looks like we have an extra sandbox here
+that 1 2 3 4 5 that I think is paused.
+So this one just aired out for us. But
+check this out. Right. So this is my
+favorite one. Decision matrix. So if I
+click this one, this is one that I was
+playing with before. best agent decent
+coding tool. We can add a couple options
+and you can basically use this tool to
+help you make decisions, right? So you
+have options that you're weighing that
+you want to decide between and you can
+add criteria to help you determine which
+one you should pick, right? And so I
+just use this as as a random example.
+Cloud code versus Gemini CLI,
+simplicity, features, model selection,
+you know, we can add other things. I
+don't know what you would want to add
+here, cost. And so this is effectively a
+winning tool for helping you compare
+things. And again, this is all just to
+showcase the point that you can do a lot
+with these powerful models if you have
+the right tooling. If you understand
+that you should be pushing these models
+really hard, really far. All right, so
+great, we have these tools. How was I
+able to increase the capabilities of
+Claude Opus 4.5? I just deployed more of
+it. Okay, I deployed more of it in a
+different way. So instead of just
+running plan build test with your
+minimalistic pi testing just test, you
+can actually just have several agents
+boot up a browser and really test your
+application, right? Full stack, just
+look at the whole thing. All right, and
+that's what we've done here. And this
+greatly increases the chance that your
+agent delivers a working version to you.
+All right, and let me show you exactly
+what that looks like. Here we have this
+prompt that I ran in the beginning,
+right? Our generic browser test. I have
+n user story workflows. So you can
+imagine this is your user clicking
+through your application. You can see we
+have several just simple steps easy to
+verify. You want verifiable workflows to
+create closed loop prompts. So we'll
+take this prompt and we'll run it
+against our workflow. Right? So we'll
+type generic browser test. There is our
+autocompletes coming in there. And let's
+go ahead and have this run against just
+copy this URL. Paste. True. True. Fire
+it off. Claude opus 4.5 is going to spin
+up somewhere between four and eight sub
+aents and claude opus 4.5 is spinning up
+claude opus 4.5 agents to do this job
+and you know I've detailed that here the
+model inside this prompt is going to run
+opus agents so there we go you can see
+it is understanding the workflow I need
+to execute each workflow in a separate
+sub agent there we go our agent is
+queuing up these tasks and we can see
+this prompt here again same great
+agentic prompt format there the
+instructions. Here's the workflow. This
+is the piece that matters. And you know,
+you can see here step by step. We're
+just instructing our agent to do these
+things. Let me try to collapse here to a
+decent level. There we go. Setup.
+Determine execution mode. We have a
+sequential mode and a there we go. Bunch
+of windows here. Let me try to minimize
+this so you can kind of see what's
+happening here. All right. There's this.
+There's this one. There's this one. And
+it is challenging to display all these
+on screen, but I'll do my best here.
+I've lost track of how to set these up
+properly. Uh but you get the point,
+right? We have agents operating on the
+browser. I'm not doing this work, right?
+An agent is is running this browser in
+headed mode. It's actually, you know,
+making changes to the site. And you you
+can see this throughout every one of
+these windows, right? An agent is
+running a specific user story,
+validating specific work. And this is
+valuable not because you know classic
+playwright just whatever testing
+framework you want to use inside of your
+code that's all great that is the old
+way of doing things right deterministic
+code that's great we still want that
+right that's part of why ADWs are so
+powerful but we also want these
+workflows where your agent can or in
+agent can plan another agent can build
+and then another agent can actually run
+tests against the work that was spun up
+having that dynamic natural natural
+language interface that your agent can
+quickly operate on is very important.
+All right. And so you can see the agent
+is doing stuff to these UIs. Again, my
+hands are off. This is what it really
+looks like to deploy agents to do
+engineering work for you. All right.
+These are testing this full stack
+application. Okay. So very powerful
+stuff here. I just want to emphasize the
+point. Engineering is changing. Okay.
+And the name of the game is about not
+what you can do. It's about what you can
+teach your agents to do, right? It's
+about how you can direct your agents.
+It's about how you can communicate to
+your agents. And then you need to be
+able to chain that work together
+throughout long chains of engineering
+work, right? Via agents. Okay, agents is
+the new compositional unit that you and
+I need to pay attention to. All right.
+Last year uh 2 years ago maybe even 3
+years ago now my top quote that I would
+share with engineers is the prompt is
+the fundamental unit of knowledge work
+and programming. So if you master the
+prompt you master knowledge work. Now
+that is still true but something has
+changed right we have a new unit. It's
+not a primitive anymore. The prompt is
+still the primitive but we have a
+compositional unit that is exponentially
+more valuable. It is the agent right?
+The agent architecture wrapping the
+model. Now the the quote that I would
+share, you know, the the idea, the core
+behind everything is um let's go ahead
+and open up our agent here. You know,
+the core behind everything is now if you
+master the agent, you master knowledge
+work. If you master the agent, you
+master engineering. Okay, it's not just
+about the prompt anymore. Of course,
+prompt engineering, context engineering,
+the core four is critical for knowing
+how to operate your agents, but now
+we've moved up. Okay, it's not just
+about the prompt. It's about the
+compositional unit, right? It's about
+the agent and the agent architecture and
+what you can do with agentic systems. A
+clear framing you can use here is first
+you want to learn how to operate a
+single agent. Then you want to learn how
+to operate a better agent, right? And
+you do this by learning how to prompt
+engineer and context engineer. And then
+you want to learn how to operate more
+agents. Okay? Scale them up like we're
+doing here. Sub agents and then prompt
+other agents eventually. All right? Then
+you have custom agents, right? Embed
+your agents into your applications.
+embed them into your personal
+engineering workflows. Scale your
+compute to scale your impact. Lastly, we
+have the orchestration level which
+really helps you manage every previous
+level. And the first version of this
+that you experience is likely with cloud
+code sub aents, but you can go far
+beyond that. But the ideas here are all
+the same. You must master the agent and
+you must look for tooling that gives you
+the best agent and the best model. And
+it is very clear opus 4.5 is that model
+for engineers. Now when you couple that
+with powerful technology like agent
+sandboxes, you give your agents their
+own isolated devices so that they unlock
+three things for you. Isolation, scale,
+and autonomy. I've been doing some wacky
+crazy things with these agent sandboxes
+with these powerful language models
+inside of the right agents only because
+I have the right environment for my
+agents. All right, so there are many
+pieces here starting to come together.
+We're going to be talking about many of
+these ideas on the channel as we move
+forward. But let's recenter around our
+uh test here. So, you know, I'll refresh
+this and notice we have four four
+charts. And you can see here that a
+fifth chart has been created by one of
+our agents doing some test, right? It's
+got a test chart here, right? So, agents
+are operating on this. They're testing.
+They're validating. And if we close
+this, we can see a nice summary, full
+complete file here. We can go ahead and
+open this up. All completed. All Opus
+agents. We have once again scaled our
+compute to scale our impact. So this is
+what's happening when I'm building you
+know these agent sandboxes spinning up
+agents to accomplish engineer work set
+up prototypes push the agents understand
+the capabilities plan build host browser
+testing step here with a bunch of
+browser agents all right so very
+powerful stuff you know when you do
+stuff like this and you do it properly
+you are conducting um multi- aent
+orchestration all right so your
+engineering you have an orchestrator
+agent managing agents that then execute
+work for you okay this is a big trend
+orchestration is that final tier you
+should be, you know, playing with it
+with sub agents and then delegating work
+to other agents as we move forward,
+right? And another example of
+orchestration that we ran here is we had
+that fork terminal call. And this is
+probably going to be a topic for next
+week's video. I'll showcase exactly how
+I built this that fork terminal skill
+and really just build a skill from
+scratch. Understanding how to build the
+right agentics to help you engineer with
+your agents is a critical critical task.
+So, next week we'll dive into building a
+skill from scratch. We covered a lot. We
+jumped around a little bit. All the
+ideas point to a few things. We're
+coming up against the end of the year.
+We're coming up against the end of 2025.
+What does the release of Gemini 3 and
+Cloud Opus 4.5 really mean for us
+engineers? What high conviction bets can
+we make as engineers in the age of
+agents with powerful compute at our
+fingertips? This is going to be the main
+topic of our 2026 predictions video
+coming up on the channel in December.
+Make sure you're a part of the journey.
+Let the algorithm know you're
+interested. Like, comment. You know what
+to do right away. Opus 4.5 makes three
+things crystal clear. You can hand off
+more work to powerful agents like Clog
+Code than you think you can. You need to
+be pushing your prompts harder, push
+your skills harder, push your agents
+harder, further, longer. Understand what
+you can really do. All right. Premium
+compute is absolutely worth the price.
+It's now more affordable than ever to
+run Claude Obus 4.5. You have to always
+consider the time that you're getting
+back from using this model. Keep in
+mind, you know, if Cloud Opus does the
+job in five tool calls and it takes
+Cloud Sonnet 10 or Gemini 3 10 tool
+calls, you have still saved money. It's
+done it in half the time, right? This is
+why companies hire great engineers
+because they get the job done not only
+faster. Sometimes the job is only
+possible by highly intelligent, by
+highly skilled, by highly experienced
+builders and agents and models. So there
+are new capabilities unlocked by this
+model. And you will only find out if you
+are pushing it if you're writing bigger
+and better prompts. All right. And as we
+mentioned in our previous Gemini 3 agent
+sandbox video, I'll link that in the
+description. Definitely check that one
+out as well. It's not just about model
+intelligence anymore. All right. It's
+about the agent harness. So you know,
+cloud code. What are you putting the
+model in? And it's about the agentic
+tooling that you give your agents to
+operate. And so we're talking about
+everything from sub agents, other
+primary agents, agent sandboxes, your AI
+tooling in general, specifically your
+agentic tooling. What unique
+capabilities, what advantages are you
+giving your agents that allow you to
+scale your compute, to scale your
+impact? Orchestrating many agents to
+accomplish work is a massive theme for
+us here on the channel. One agent is not
+enough. All right, I'll leave a link to
+my agent sandbox codebase. If you
+understand that valuable things are not
+always free and if you want to
+accelerate your agentic coding, check
+out tactical agentic coding. This is my
+take on how you can scale far beyond AI
+coding and vibe coding with agentic
+engineering. So powerful that your
+codebase runs itself. The big theme that
+we focus on here is you want to build
+the system that builds the system,
+right? Build the agents that run your
+application. Don't build the application
+yourself anymore. You have agents for
+that. Focus on the agentic system. All
+right, link in the description for this.
+This is my handcrafted course I built
+from scratch by using the technology.
+This is for mid to senior level
+engineers. If you're a new engineer or
+if you're a vibe coder, this is not for
+you. You have to be a cracked vibe coder
+to understand what's happening here. So
+again, this is not for everyone. Check
+this out if you're interested. Link in
+the description. Powerful compute is
+here. Once again, the question for you
+and I. What can we do with this
+technology that we couldn't do before?
+And the answer is very clear. We can
+delegate more and better than ever. And
+we can run longer, more challenging,
+more complex workflow with powerful
+models like Gemini 3 and especially the
+new Claude Opus 4.5 running in Claude
+Code. You know where to find me every
+single Monday. Stay focused and keep
+building.

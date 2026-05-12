@@ -1,0 +1,33 @@
+[2.3s] Hey Obby. So it turns out there was
+[4.4s] indeed an issue uh in how the Z
+[7.0s] extension installed the language server
+[9.4s] on Windows. We have gone ahead and fixed
+[11.5s] that issue. So you can see now that we
+[13.8s] are correctly downloading and running Z
+[16.5s] uh BAML CLI.exe. So hopefully this fixes
+[19.7s] your issues when the next Z release goes
+[21.3s] out. Thanks.
+[23.7s] Hello Anders. So, you reported this bug
+[25.8s] on Discord where streaming doesn't work
+[27.5s] with retries cuz you don't get the
+[29.4s] streaming chunks of the second request
+[31.1s] if the first one fails. So, I pushed
+[34.1s] some changes that should do exactly
+[35.4s] that. You should get the streaming of
+[37.8s] the consequent requests even if the
+[40.3s] first one fails. So, I hope this fixes
+[42.6s] your issue. Uh, thank you for reporting
+[44.2s] the bug.
+[46.1s] Hey Chris, thank you so much for not
+[47.9s] only pointing the issue you're currently
+[49.5s] having with NexJS 16 and the Turbo Pack
+[52.6s] situation, but also filing the PR with a
+[55.6s] fix. I just got the opportunity to look
+[57.8s] at it and it seems all good. I
+[60.1s] reproduced it locally, tested your
+[61.8s] solution, and as we speak, we are
+[64.2s] running the uh checks to merge it to
+[67.7s] Canary. So hopefully it'll be in your
+[69.7s] hands in just a few moments. Uh thank
+[71.8s] you very much. Cheers.
+[79.7s] Everything.

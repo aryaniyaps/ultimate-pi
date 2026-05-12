@@ -1,0 +1,364 @@
+here's a simple yet powerful idea that
+can help you take a large step toward
+useful and valuable agentic workflows I
+have to warn you this is one of those
+things that sounds really obvious after
+you hear it because it's hiding in plain
+sight the idea is simple it's called the
+two-way prompt so what is this why is it
+useful and how can it help you build
+better AI agent workflows two-way
+prompting happens all the time in real
+collaborative workspaces you are itively
+two or more agents prompting each other
+to drive outcomes two-way prompting
+happens all the time when you're at work
+with friends with family online in
+comment sections on PR reviews you ask a
+question your coworker responds they ask
+a question you respond now let's double
+click into what this looks like for your
+agentic tools right in agentic workflows
+you are the critical node in a
+communication process between you and
+your AI agents that are aiming to drive
+outcomes in most agent workflows we fire
+off one prompt or configure some system
+prompt and that's it but we're missing a
+ton of opportunity here that we can
+unlock using two-way prompts let me show
+you a concrete example with Ada so Ada
+of course is our proof of concept
+personal AI assistant and let me just go
+ahead and kick up this workflow so I can
+show you exactly how useful the 2A
+prompt can be AA let's create some
+example code Dan I don't see a URL on
+your clipboard please paste one into
+your editor Okay so so right away my
+assistant found that there wasn't a URL
+to create example code from and that's
+what this workflow is going to do for us
+this agentic workflow is going to create
+example code based on a URL that we give
+it so it's going to scrape it and create
+a nice single file where we can run code
+based on the documentation so my
+personal as assistant is actually
+prompting me for information so let me
+go ahead and open up this blog this is
+Simon Wilson's blog he's a prolific
+engineer a true chronic developer just
+creating products left and right he has
+this really really great blog post where
+he's concatenating an entire code base
+to prompt using claw three Opus right so
+basically he's taking a bunch of files
+combining them into a single prompt a
+single piece of text that you can then
+run a prompt on so what I'm going to do
+here is use this as our prompt value so
+I'm going to go and just paste this in
+this is going to be the example code
+that we want to look at so I'm going to
+save that file close and let our
+assistant look at that Dan I found the
+URL I'll scrape it and whip up some
+example code any preference on what the
+code should focus on okay awesome so you
+know another back and forth prompt this
+is the key value of the 2A prompt so now
+my assistant is asking me for additional
+information what do we want to focus on
+so you know basically I just want an
+endtoend example of runnable code where
+we can utilize Simon files to prompt for
+Claud so concise end to end example
+using Simon code to combine files to run
+a prompt against mirror his code AS
+closely as possible so I'm going to save
+and just close that sounds good Dan
+focusing on a concise endtoend example
+using Simon's code to combine files and
+run a prompt mirroring his code closely
+generating the code now awesome so you
+know my assistant is saying exactly
+what's happening um I really like this
+touch of the personal AI assistant it's
+a conversational um event where you're
+talking back and forth and really feels
+like we're talking to a computer in more
+collaborative way where we're driving
+outcomes together which is really really
+cool so you can see there there's the
+first version coming out this is going
+to run a prompt chain I'm not going to
+dig into the code in this video
+definitely check out the previous video
+where we walked through some of this
+code in detail we have the llm agent
+router you can see I've added a couple
+new agent workflows here but long story
+short you know we're running this
+example code workflow which has a
+agentic workflow that has this two-way
+prompt interaction and then we have a
+prompt chain where we scraping the
+content and then we're running several
+code generation prompt chains to make
+sure that we're just going tocode and
+then we're going to save it to a file
+I'll make sure that the previous video
+is in a description where we went in
+more depth of how exactly all this is
+working let's see how our assistant's
+doing Dan I've added getting your file
+cheer. to the working directory anything
+else awesome so we've restarted that
+Loop you can see that took quite a bit
+of time this agentic workflow is using
+the latest gbt and the text to speech
+speech to text functionality still a
+little slow we're working on that but
+let's go and and just see the results
+here so let me stop my assistant here
+and let's open up this file and let's
+take a look at this so nice this looks
+pretty spoton this looks exactly like
+Simon's code that looks nearly identical
+it's got some really clean comments for
+us explaining exactly what's happening
+on each line super useful I'm not going
+to run this it's not the point of this
+video but you can imagine this is going
+to give us a huge Head Start when we're
+looking at new code bases new
+documentation this workflow provides a
+lot of value and it provided it in a
+pretty clean simple way where our
+personal AI system is prompting us for
+information right so let's go ahead and
+run one more workflow I want to show
+this off in one more example but let's
+go ahead and create a view component so
+let's say python main 9 Ada let's create
+a new view component Dan let's generate
+a view component please choose an image
+okay so again we're starting to hop into
+a workflow here so my assistant is
+asking me to give it an image so we're
+using the new gp4 vision with Json model
+from open AI my assistant is prompting
+me the user the Builder the engineer to
+give it a file right so it needs a file
+to look at and we'll go ahead and use
+this uh pre- 10K Subs so this is a you
+know Simple Text view of before the
+channel hit 10K Subs so we'll just go
+ahead and drop that in and we'll leave
+this up so we can compare right so go
+ahead and we'll hit pre 10K Subs got it
+Dan generating that view component now
+so there's the basics four print message
+there's a component there's a prompt for
+gener sounds good Dan I finished the
+view component and called it Channel
+analytics card view any edits needed
+okay so here's another really cool
+two-way prompt Ada is opening up those
+files and it's showing me exactly what
+we have here so I have a simple view web
+application running here and all we're
+going to do is place this new component
+which should be placed right in the
+components directory nice all we're
+going to do is say uh what was that
+called Channel analytics and let's go
+ahead and get this
+imported and Bam so you can see there
+that's the component generated this
+looks pretty good so there's the current
+version there's the original version so
+not too bad it's got this blue
+background it's got green on the entire
+lower text and needs a little bit of
+space and so all I'm going to do here is
+create a simple prompt that's going to
+you know request some of these changes
+so in the prompt I'm just going to say
+let's add more padding and only the plus
+645 should be green trailing text is
+gray so I'll just save that let that run
+close this as well hop back to our
+assistant and let's see how
+that plays out sounds good Dan I've
+updated the view component what should
+we tackle next awesome okay so that's
+finished let's go ahead and take a look
+at that nice so you can see here we have
+some additional padding not the exact
+padding that I wanted I wanted some
+vertical padding I should have been more
+specific there but we did get padding
+and we did get this trailing text in
+Gray and of course we can look at the
+component to see exactly how that
+manifested and yeah so as you would
+expect it added that span text Gray
+using tell wind awesome stuff here so
+really really simple examples but I hope
+that they show you you know the power
+and the potential of using these two-way
+prompts in your agentic workflows you
+can really get a lot more done and
+reduce complexity of your system by just
+having your AI agents prompt you the
+driver of the workflow and there are
+many manifestations of how this can look
+so that's a couple simple examples of
+what the 2-way prompt looks like you can
+imagine much more complex back and forth
+systems where your agent needs
+information from you where it's not sure
+on how to you know phrase and email or
+it doesn't know exactly how you want
+your code to look or it's asking
+questions about what to develop next and
+this can all be happening in the
+background right where your agent has
+done a bunch of work for you and it
+needs some review it needs some of your
+input to make next steps in a really
+concrete way so so if that makes sense
+and you can see the value of you know
+adding some two-way prompts to your
+agentic workflows hit the like hit the
+sub and let's address the elephant in
+the room right you might be thinking
+wait isn't this just human in the loop
+this is a like common PA of having the
+human provide feedback and 100% two-way
+prompts are multi-step human in the loop
+I would say the big differentiator is
+that you're not limited to just simple
+text prompt responses to just giving
+feedback you can provide all types of
+feedback in our example we showed off us
+selecting specific files we showed off
+us pasting URLs we want to be examined
+we showed off providing feedback for
+improvements on our view component and
+there are many many many more ways to to
+add multi-step human in the loop AKA
+two-way prompts into your agentic
+systems the key Insight here is that you
+the engineer the product Builder and the
+user are an essential guiding force in
+your agentic workflow right your
+workflow should be centered around you
+and your users right whoever's using
+your application whoever's using your
+product or tool this is the key Insight
+don't get caught up in trying to build a
+gentic workflows just because it's
+agentic right it's the new Kool-Aid to
+drink it's the cool thing everyone's
+doing it this is what engering is all
+about now like of course that's
+important but always focus on the end
+result for you and your users add
+two-way prompts and multi-step human in
+the loop to drive results in your
+agentic workflows this can be especially
+useful as stepping stones as you're
+developing your fully agentic workflows
+don't be afraid to create some you know
+partial agentic workflows with the human
+in the loop right using these two-way
+prompts you know especially as these
+co-pilots and assistants are built out
+and as you build your own agentic
+workflows keep in mind that you and your
+users are the critical asset in this
+communication process I want to close up
+with one more idea here and that is
+where this is all going right how I see
+this breaking down so I see three tiers
+of agentic workflows increasing in
+complexity as we go down the list
+there's humans prompt this is us we are
+effectively pulling information from our
+large language models and then we get to
+this next level where we're two-way
+prompting in the two-way prompts we're
+doing both pulling and pushing right our
+agents are pushing information back to
+us asking us questions I think right now
+when we're talking about agentic
+workflows and applications that are
+built on top of llms we're doing a lot
+of number one and some of number two
+right where the user and the agentic
+workflow talk back and forth to each
+other via a domain specific uiux and
+this is very powerful there's a lot to
+be uncovered here I predict that most
+applications will end up in the second
+Zone in the future this will all change
+and it'll be primarily agents pushing to
+us right our agents will be the one
+prompting us and this things accelerate
+to the next level where you wake up in
+the morning and your agents have been
+doing a ton of work for you overnight
+right they're responding to emails
+they're reviewing code they're writing
+code for you they're generating new
+ideas for your business they're setting
+up plans they're monitoring your key
+infrastructure they're you know they're
+looking at your gcp Cloud your zero
+Cloud making sure everything's stable
+they're reporting anomalies to you and
+then and you know when you wake up and
+you you know go to your device whatever
+app it is whatever tool you're using
+they're going to ask you a bunch of
+questions on things they need your input
+on right it's going to be this really
+interesting flippening of who's
+prompting who and that's really the key
+Insight here right you the engineer and
+the product Builder and your users are
+the essential guiding force and it's
+important to utilize that definitely dig
+into this idea put yourself in your
+agentic workflows more often so that you
+can simplify things and also really just
+drive the result that you're looking for
+right that is the reason we're building
+on these agentic systems it's a huge
+powerful unlock but it's really to drive
+a result for us and our users so that's
+the end game our agents will be
+prompting us right now we're building
+and working with tier one agenic
+workflows and two-way prompt workflows
+right where it's not just you firing off
+some initial prompt and your workflows
+doing everything you can create a lot
+more intricate interesting results with
+these two-way prompts so I think that's
+where things are going I hope this idea
+was helpful for you in future videos
+we'll continue discussing and building
+our personal AI assistant we'll be
+pushing our AI coding assistance and our
+AI coding skills even further and we'll
+keep building great AI agents that can
+operate these agentic workflows on our
+behalf thanks so much for watching if
+you enjoyed this video If you like this
+content if you like these ideas you know
+what to do stay focused keep building
+and I'll see you in the next one

@@ -1,0 +1,786 @@
+Welcome back engineers. Indie Devdan
+here. I'm going to spoil this one and
+just tell you this video is an absolute
+banger. Thanks to Enthropic, we have the
+brand new Clawude 4 model series. We
+have a new Sonnet and a new Opus model.
+And very importantly, a lot of engineers
+are going to miss this, but we have Claw
+Code now generally available. This means
+we can bet big on the best agentic
+coding tool with now the new
+state-of-the-art models for effective
+agentic engineering at scale. We have
+the Opus 4 and the Sonnet 4 models
+beating out every model for real
+engineering work. This is big. Today I
+want to share a dirty dirty parallel AI
+coding trick you can use to put multiple
+agentic coding agents to work for you to
+generate multiple versions of the future
+of your codebase. I have to warn you
+this is advanced agentic coding and it's
+not cheap. We're going to put together a
+plan. Then we're going to deploy that
+plan against multiple agents working on
+their own versions of your codebase.
+Then we're going to take the best
+version and merge it back into the main
+timeline, the main branch. Thanks to the
+Clawed 4 series, this technique has
+never been more important and it's never
+been more possible. Let me show you
+exactly what I mean. Let's parallelize
+our agent coding with the new Claude 4
+series.
+So, we've gone from iteratively planning
+to writing larger prompts to writing
+plans. And now we're going to take it a
+step further. We're going to put
+multiple agents to work for us at the
+same time in parallel. This advanced
+agent coding technique has massive
+benefits. Let's understand what we're
+working on. We're going to operate on a
+simple codebase called Beni. This is the
+thoughtbench application. This is a
+simple frontend plus backend application
+that lets us talk to multiple models at
+the same time. You can see we have the
+brand new Claude and Opus 4 models
+running. So it's really important to
+showcase multi- aent agent coding
+against a UI application. So we're going
+to improve this UI, update the styling
+here a little bit, but we're going to
+run multiple versions of cloud code to
+accomplish this task for us. Let's set
+that up. Cloud code is updated. It's
+generally available. This is big news.
+That means we can bet big on clawed
+code. We can type /model. We can select
+our model. I'm going to go ahead and use
+the brand new topofthe-line Opus 4 model
+here. In order for us to get this work
+done, we create plans. Adobe AI coding
+is the 2024 way of doing things. If you
+want to ship a ton of value, you want to
+sit down, plan out your work, and then
+fire it off to a powerful agent coding
+tool. So, we have this UI revamp prompt
+inside of the codebase. Basically, it's
+detailing all the work we want done. The
+top line here is that we want to
+transform ThoughtBench into a high
+density information dashboard while
+maintaining a great user experience. So,
+this is the prompt we want to run.
+Normally, I would copy the reference to
+this with command shift R. That's my
+hotkey for this. And then I'd say
+implement this. And then cloud code
+would run this, execute it, you know,
+update our current branch. But we can do
+a lot better by running multiple agents
+in their own environments. So, what does
+that look like? If we open
+up.claude.coms inside of the beni
+codebase, you'll see this simple init
+parallel prompt. What is this prompt
+doing? This prompt is going to set up
+our new git work trees. As you saw here
+in this diagram, we can use this git
+command get work tree add to specify a
+location. Right? So you can see in our
+trees directory here, we're going to
+create a UI revamp one directory and
+it's going to basically duplicate our
+entire Beni codebase. We can of course
+scale this up, right? We want multiple
+agents building out the exact same
+feature. LMS are non-deterministic by
+nature. So by parallelizing them, we can
+get different versions of the future of
+our codebase and then we can select the
+best one. So let's kick this off and
+then we'll break down the prompt as it's
+executing. So, we're going to type slash
+simple and it parallel. You can see here
+inside of the prompt, we're setting up a
+variable. This is a technique I like to
+use to reference variables throughout
+the prompt. Cloud code / commands lets
+us set up and pass in variables. So, I'm
+going to name this feature. We're going
+to call it UI rewrite. And that's it.
+So, we're passing in one parameter. This
+is going to replace this here. And let's
+kick this prompt off. So claude code
+running on claude 4 opus is going to
+create our trees directory. You can see
+that command right there. And then it's
+going to execute these steps in
+parallel. It's going to create a new git
+work tree. It's going to copy the end
+environment variable into the write
+folder. And it's going to CDN to the
+server. Install dependencies. Do the
+same thing on the front end using bun.
+Update our vite config to run on a
+different port. Remember we want to run
+these in parallel. We want to compare
+all the results. And you can see here
+our agenda workflow is running in
+parallel. It's kicking off all these
+tasks in their own dedicated
+environments. If we open up UI rewrite
+one, you can see here we have a direct
+clone of the entire codebase. There's
+cloud, there's the client, there's the
+server, right? So it's the exact same
+thing as the root of the application.
+We've quite literally, thanks to git
+work trees, cloned our entire codebase
+into three separate versions. I hope you
+can see where this is going. Right there
+we go. We have our Vite config update.
+Let's go ahead and turn on autoedit
+mode. And now we're going to get
+parallel writes. And as Opus runs into
+errors, right? It's just going to work
+through them. It's going to fix them.
+It's updating every version of our
+application. We have entire environment
+set up. There's the get work tree list.
+We now have three brand new work trees.
+And Cloud 4 Opus has completed this
+agentic workflow. And to be completely
+clear, you know, that's what this is.
+All right. This is not a prompt, right?
+We're not running traditional prompts
+anymore. We're running agentic
+workflows. Principal AI coding members
+know these as ADW's AI developer
+workflows. AI coding is not enough. We
+need more than just generating code. We
+need engineering workflows. We're
+interacting with Git. We're interacting
+with the file system. We're writing
+code. We're updating files. Right?
+There's a lot more going on in
+day-to-day engineering tasks. We've
+created three new work trees and they're
+all operating on their own branch. So
+this is the setup process. All right, we
+already have our plan and now we're
+setting up our code bases. So we're not
+quite building yet, but we do have our
+branches and our trees set up for our
+agents to operate in. So this is a
+powerful parallel agentic coding
+workflow you can use to scale your
+impact. I'm going to show you in just a
+second how powerful this can be. All
+right, because we're going to get
+multiple versions. is we're going to get
+multiple future realities of this
+codebase that we can pick the best
+pieces from and you can choose exactly
+what you want to go back into the main
+timeline aka your main branch. All
+right, so right now we're about right
+here. Let's go ahead and continue our
+journey. We have all of our code bases
+set up. Let's go ahead and give our
+agents access to what they need to ship
+this feature. Let's go ahead and open
+up.claude back into the commands
+directory. This is one of three
+essential directories for agent coding.
+But let's open up the exe.p parallel. So
+this is where we're actually going to
+fire off every one of our agents. You
+can see here we have that same workflow,
+right? We have variables at the top. Our
+variables here are the plan that we want
+to execute and the number of parallel
+work trees. So the number of agents that
+we want to fire off. You can see the
+rest of this prompt is pretty
+straightforward. We're basically saying
+give every agent their own dedicated
+codebase and pass off this plan to them.
+Okay, so let's just kick this off,
+right? I'm going to run /exe parallel.
+Um, the plan we want to execute is let's
+go ahead and pass in our UI revamp.
+Okay, so we're going to update the
+thoughtbench application. All right,
+copy the reference to this and I'm going
+to pass this in here as the first
+argument. When you're working with cloud
+code/comands, it's based on the index.
+So the first argument here is going to
+be you know our first parameter and then
+the second one is going to be whatever
+we pass in next for the number of
+parallel work trees and our simple init
+parallel we set up three. So I'm just
+going to pass in the number three there.
+This is going to be really powerful.
+Claude 4 Opus is now going to spin up
+three instances, right? It's going to
+set up three subtasks, three parallel
+subtasks, and it's going to start
+building out this feature that we've,
+you know, fully planned here. Uh, you
+know, viewers of the channel and
+principal AI coding members, you know
+that great planning is great prompting.
+Um, I'm going to repeat this over and
+over and over because it becomes more
+and more relevant as you get access to
+more compute. The best way to
+communicate is to write clearly, is to
+think clearly, it's to plan. And then we
+hand off these great packages to our AI
+coding tool. This is what we're going to
+do now. But instead of doing it with
+just an AI coding tool or even an agent
+coding tool, we're passing it off to the
+state-of-the-art cloud for Opus in
+multiple instances. Okay, this is this
+is big. Okay, we talk about scaling. We
+talk about longunning agentic workflows
+and longunning agentic coding jobs. This
+is how we scale even further beyond.
+Let's kick this off without further ado.
+Bam. This is going to get to work for us
+in the background. Okay. So, you know,
+we had a couple of commands to run. I
+wanted to understand the codebase. Well,
+first I wanted to go back to the root. I
+then wanted to understand the highle
+structure of the codebase by looking at
+the server and client directory. It's
+going to run tree to understand, you
+know, a deeper look at the codebase. And
+then it's going to read the plan we
+passed in. Right? So, UI revamp. So,
+there we So now it's going to read the
+UI revamp plan. Fantastic. So this is
+where you know a lot of your engineering
+work is going to happen now moving
+forward is in the planning, it's in the
+thinking, it's in the engineering of the
+work you want done and then we're going
+to create three parallel agents to
+implement the spec in their own
+respective code bases. Okay, so this is
+going to be really important. You're
+going to see three tasks kick off here.
+And uh I'm really excited for this. Um
+this feature is absolutely insane. So
+there's we got some tokens leaking in
+here. Um some Opus tokens, right? So
+this is this is very expensive. You
+know, by the way, you know, kicking off
+this many agents doing this much work is
+expensive. This is advanced agent
+decoding. So there it is. These are all
+running in parallel. Okay, it looks like
+this top one is the only one running.
+These are actually all running at the
+same time. We're going to let this run.
+This is actually going to take quite a
+bit of time. This is a non-trivial set
+of work. So we're going to let our
+agents run. Here we have auto accept on
+uh inside of our settings we have
+enabled several um let's go ahead I can
+show that to you know inside of our
+settings we have several commands just
+default on enabled to let cloud code
+cook. So that's that. Um while this is
+running let's talk about why you would
+want to do this. Okay why do you want
+parallel workflows? What are the
+concrete advantages of this? Right? What
+what what's the true edge that we're
+getting? Right? Every week, every
+Monday, I try to come to the table,
+quite literally, to the table here and I
+I want to give you valuable engineering
+insights you can use, right? Handson in
+your engineering work. Okay, so how is
+this useful for you handson? Let's talk
+about it. Um, you know, you can see
+we're still working there. Uh, let's go
+ahead and open up the readme and let's
+break down a couple of key ideas here.
+Okay, so why run in parallel? LLMs are
+nondeterministic probabilistic machines.
+Okay, that means that every time you
+run, you're going to get a different
+result, right? The same prompt will give
+you different results, especially when
+we're talking about the scale that we're
+trying to operate at. Okay? I don't care
+about one-off uh quick changes. I don't
+care about green field applications. I
+don't care about small tweaks here and
+there. I'm talking big longunning jobs
+running tons of engineering work. That's
+where we're aiming on the channel. We
+want a ton of work done by Aentric
+Coding tools and beyond. With those
+longunning jobs, we can be guaranteed
+that if we run it twice, we're going to
+get different results. Okay? Now, you
+might think that's a bug. It's not. This
+is a feature, right? Just like you and
+I, we are nondeterministic token
+generating machines. Okay? That the
+thing I'm going to say next, duck,
+banana, infinity stones, right? You
+won't always know what I'm going to say
+next. Okay? You can guess, right? You
+can have high probability, right?
+especially if you're operating in the
+domain space that I am and that we are.
+But you cannot know for sure the next
+token I'm going to generate here, right?
+That's part of why you show up every
+single week. Okay? It's because the
+tokens I'm generating, right? They're
+differentiated tokens, right? In this
+video, it's it's another example of
+that. Make sure you're subscribed. Blah
+blah blah. Okay? So, so this is a
+feature, okay? Not a bug. That's my
+point here. We can leverage this to see
+multiple versions of the future. Okay?
+uh we now have the capabilities to build
+out multiple futures of our codebase and
+then you can choose the best outcome.
+This is why this is so powerful. Okay,
+by running multiple agents in parallel,
+we can do this. We can hedge against
+model failures on complex tasks. It's
+very possible one of these tasks is just
+going to fail. All right, it's it's not
+going to update the UI. It's going to
+run to some bug. You can see 17 tool
+calls there. It's just going to fail.
+Okay, so that's very possible. And and
+the advantage here with multiple agentic
+workflows running, right, we have
+multiple agents working for us. The
+advantage here is that, you know, two of
+these might work or one of these might
+work, right? And you can spin up way
+more than just three agents here. Okay?
+I'm just showing this off. This is a
+simple minimalistic example that I want
+to share with you here. So, so this is
+one reason to run multiple agents in
+parallel, right? This already beats out
+you doing this by yourself, running a
+single instance. Okay, let's look at
+number two. We can get different
+perspectives on the same problem and
+then you know once again we can choose
+the best. So why is this important? So
+for something like user interfaces which
+is a great example of this we might have
+a general direction of what we want but
+we might not know the exact version we
+want right in our case we are revamping
+the UI. There are many acceptable
+versions of this right and as you'll see
+in this video there are multiple end
+states here that we're going to end up
+looking at. All right. So, third, we can
+isolate and delegate our engineering
+work to, you know, two to n agents.
+There really is no limit on this. Okay.
+I just chose three. It's a great number.
+It's a great place to start. You want
+three different versions. And, um, you
+know, this is going to give you a great
+starting set of futures of your codebase
+to choose from, right? We're going to be
+able to merge the best of three, right?
+So, we're getting, you know, again, 3x
+chances. because we're using directx
+compute to improve the final result that
+we have. So this is why we run in
+parallel. So let's go ahead and take a
+look at our code here. It looks like
+agent 2, check this out. Agent 2 is
+complete. Used only 10 tools. Very
+interesting. Uh let's go ahead and uh it
+looks like it wants to tail. It looks
+like it's fixing something. Let's go
+ahead and just accept. So you can see
+very cool, right? So, uh, Opus ran 10
+tools, 67,000 tokens, ran for 5 minutes
+inside of task 2. Okay, so task 3 and
+task one are still running. You can see
+here we have a ton of tool uses in
+codebase 1, we're definitely going to
+get some very different results, right?
+We can already see that just based off
+the number of tool calls. Okay, so this
+is going to need some more time to run.
+You can see uh task one still stacking
+up there the tool calls. You can see we
+just got our results.m MD, right? Um,
+and that's that should be the end of the
+parallel tool. If we search for
+results.mmd, you can see there that was
+one of the last commands there. All
+right, so you can see here we got task
+one also completed now. So task one took
+9 minutes. Okay, basically 10 minutes.
+All right, so look at these long running
+agentic workflows, right? 80k of Opus
+tokens. There's going to be a lot of
+value in there. And our third agent is
+still running. So, it's got 24 tools in
+use. So, this is going to be a pretty
+great result. Let's go ahead and let it
+finish up. And let's just briefly talk
+about when to use this powerful
+technique because you don't always want
+to whip this out, right? Again, as you
+can see, it's going to take some time,
+but the nice part is we're building out
+multiple of these in parallel. So, it's
+almost like it'll always just take the
+duration of your longest agent. There's
+definitely an argument for just
+constantly using multi- aent get work
+trees, but let's go ahead and just take
+a look at this. Okay, so you know when
+to use the technique. It's fairly
+simple, okay? It's perfect for, you
+know, instate ambiguous tasks. When you
+have UI work where many versions can be
+acceptable, okay, when you think one of
+your hits, one of your agents might
+fail, when you think you're working on a
+hard task, fire off three, fire off five
+agents and then see which one, you know,
+maybe pulled it off. And then, of
+course, this is probably the most
+important one. I probably should have
+put this one first. You need to have a
+clear plan, okay? Okay. And you need to
+have enough work worth putting in its
+own branch. Okay. There is a huge
+argument for always using plans, right?
+Pretty much all my work comes out of a
+spec. Now, I'm thinking, I'm writing,
+I'm planning, I'm AI drafting with my
+agent coding tools. They're helping me
+plan. Now, if you can't write a plan,
+right, if you need to iteratively
+prompt, you probably shouldn't use uh
+parallel workspaces, right? It just
+isn't going to make sense. You probably
+should just iterate on your own
+codebase. If you have any one of these,
+and specifically if you have three,
+right, if you can plan your work, if you
+can see ahead, if you do know what
+you're looking for, uh, parallelism is
+going to be really, really powerful. So,
+here we are, agent 3. We're up to 33
+tool uses. So, while this is working,
+we're going to need a front-end script
+to boot up all of our front-end servers.
+So, inside of the initialization uh,
+parallel script here, I only updated the
+client port. This is because we're only
+making a front-end change. So, we can
+actually run the main server here, which
+so we should be able to just use our
+existing code bases. Okay, check this
+out. This is awesome. We have all three
+agents finished. So, let's go ahead and
+look at that total runtime. Okay, so
+check this out. Right, we have three
+agents that ran 9 minutes, 5 minutes, 14
+minutes. There is our summary. So, we
+got our results summary. In order to
+spin these up, I would love to just look
+at these side by side. Create start
+treeclients.sh
+sh say for each work tree start the
+client and let's go ahead and kick that
+off. Okay, there we go. Let's go ahead
+and check this out. Start clients. We
+can go ahead and just look at this. Yep,
+this is perfect. UI rewrite and then you
+can see we're running. It's got some
+nice logging here for us and then we're
+going to wait for all the processes.
+Looks great. Let's go ahead and kick
+that off. Okay, there we go. It's giving
+us the permission to unlock that file.
+Great. So, let's go ahead and kick off
+this file. And you know to note if we
+type gs here get status uh we only have
+this one change in our primary branch
+right all the other changes have been
+isolated into our trees but okay without
+further ado let's go ahead and yeah copy
+this sh kick that off we're going to
+start all of our clients at the same
+time so let's go ahead and boot these up
+client one client two client three these
+are all connected to the main server so
+let's go ahead and kick these off you
+can see a little bit of difference
+already let's go into the thought bench
+application because that's where change
+was focused. So there's one, there's
+two, there's three. And check this out,
+guys. So here's the original, right? So
+we can type hi here. There's the prompt,
+right? It's going to kick off. Blah blah
+blah. All looks good. And then here are
+our other versions. Okay. So here's the
+uh version one. You can see we have a
+terminalike style. Here's version two.
+Look at this. Really like this one.
+Really clean, right? Kind of modern. I
+love this like highlighting blue modern
+style here. And yeah, we can kick off a
+prompt here. Let's see this work. Yeah,
+nice. Look at that. So interesting. Kind
+of an overlay setup, right? Very kind of
+futuristic look. Um, a little bit harder
+to read here. And obviously, you know,
+there's some styling problems here, but,
+you know, that's not the focus.
+Obviously, we can come in with follow-up
+prompts, clean things up. I really want
+you to focus here on the fact that we
+have multiple working versions of the
+application that we can play with.
+Here's version three. Very interesting,
+right? So, we can say, "How are you?"
+Just some whatever filler prompt. And
+check this out. Right. So, I like this
+version, too. It's a bit more just
+straightforward. Let's go ahead and
+reset here and type hello. This version
+is like really compressing the overlays
+to save space. You can see all the font
+is a lot smaller. This is really cool,
+right? We have multiple working versions
+of this new application. Okay. Um, I got
+to say I like the second version the
+best, right? Thought bench. It it kind
+of fits our our previous kind of, you
+know, theme. It just kind of takes it to
+the next level. Obviously, we have some
+styling fixes here to improve. But I
+love the buttons. I love the styling. I
+love the feel of this. And we do save a
+little bit more space here by having
+them a little bit more compressed.
+Right. We can go ahead and reset. Type
+high. And yeah, I like the way that
+these these loaders are set up as well.
+Anyway, this is awesome, right? We have
+multiple versions of our workspace,
+right? We created three versions of our
+application. We updated the client in
+every version with cloud code running
+cloud for opus. We wrote a plan. This is
+really important, right? We have to know
+where our role is. Okay, so we wrote a
+plan. We parallelized our agents to run
+in their own isolated environments
+executing against the exact same plan.
+And then here we are. Let's go ahead and
+merge the best take. So I like right
+this second version just as if I was an
+engineer operating in this codebase. I'm
+going to open up cursor and I'm going to
+go into trees. This is UI rewrite. I
+think this is two. All right. So, you
+know, we are now inside of a version of
+the application. And um let's see how
+can I identify this. We should be able
+to search this port. Let's go ahead and
+search this port. Perfect. Right. So, we
+can see that that port is right here.
+So, this is indeed the second version.
+Okay. We can run get status here to see
+all of our changes. And then we can run.
+You can see we're on that second right
+second branch. Here's the results file.
+This is a great pattern for having your
+independent agents summarize all their
+work. Everything's working as intended.
+And now we can uh also just check uh get
+diff. So we can see uh I think we need
+stat head. Is that right? Yeah, there we
+go. So you know compared to the main
+branch, you know, we had uh 630 lines
+changed here agentically. We didn't
+touch anything. We didn't do anything.
+All we did was plan. Right? Once again,
+great planning is great prompting. Every
+principal a coding member knows that. I
+highly recommend if you're not planning
+your work. I think you're probably
+starting to fall behind the next wave of
+what can be done with with agent coding
+tools like this. Okay. So, let me go
+ahead and what I'm going to do here is
+I'm going to fully commit. So, I'm going
+to say GCM. I'll say UI rewrite um agent
+2. And I'm just making some crap up here
+just as if I was an engineer operating
+on this branch. I'm just going to get
+push this. Okay. Okay, so we have
+rewrite two pushed. Now I'm going to
+come back to the main branch. Okay, you
+can see there's the work trees. If we
+run git branch here, this is, you know,
+git branch. I have short codes for all
+this to move faster. You can see all the
+primary branches there. Now we're going
+to merge in uh branch two, right? So we
+can see we have our start client. We can
+go ahead and commit that and let's go
+ahead and merge that branch in. So I'm
+going to copy this and just as as you
+would with another engineer, we run git
+merge this branch. Bam. There are all
+those changes. Now we should be able to
+see our original branch. Right here's
+the original version. If we refresh,
+oops. If we open up that vite file, we
+can see we did get that merging. So I'm
+going to reset this back to the original
+port. I'm going to kick off our script
+here. Open this up. And if we go into
+thoughtbench now, we of course have that
+new updated version. Okay. So like I
+mentioned, you know, there's still some
+fixes here, right? We need to make sure
+that make sure that this text is
+readable. Um, we can now back in our
+main branch if we wanted to, you know,
+deploy a quick change to make sure that
+that text is is readable, you know, we
+can always just open up clawed instances
+and fix these changes. I'm not going to
+focus on that right now. I just wanted
+to highlight this interesting idea of
+having multiple agents working for you
+in parallel in the background. Now, we
+have multiple versions of this
+application that we can pick and choose
+from. And the sky is really the limit
+here. You can set up as many agents as
+you want to. If you check out the Beni
+codebase link in the description, I have
+a nit parallel as well, which takes a
+more dynamic approach where we can
+create however many parallel work trees
+we want in a single shot. All right. And
+this enables, you know, once again,
+instead of just running three agents, we
+can run, you know, three to n agents.
+And the whole purpose here is that we
+have multiple shots at the future that
+we're looking for, right? We have
+multiple perspectives. We have multiple
+versions. some successful and we get to
+pick right we get to merge the best.
+This is git work trees parallel agentic
+coding plan your work run multiple
+agents in parallel with git work trees
+pick the best merge the best and then
+keep shipping this enables you to pick
+multiple best versions you're not just
+writing fast you're not just you know
+generating a lot of value for your
+company for your work you're generating
+the best of end possibilities for your
+work for your company for your
+engineering okay merge the best this is
+just one of many ways is we're exploring
+how to maximize our engineering impact
+with compute. Make sure you're
+subscribed and if you haven't already,
+make sure you check out principled AI
+coding. This is a foundational course I
+built to help you excel with the AI
+coding tools of today and tomorrow. In
+this course, we use the old school AI
+coding tool Ader. In the next course
+that I'm working on as we speak week
+after week, we're going to be talking a
+lot more about agentic coding. But it's
+really important for you to set up your
+foundations. Okay? In this course, we
+set up the foundations, the principles
+of AI coding. And this is the only way
+I'm able to literally 6 months after
+this course has been released, I'm able
+to still reference this course and the
+ideas in it. Okay? Context, model,
+prompt, go from beginner to intermediate
+to advanced, it's all there. Make sure
+you get the value embedded inside this
+course. Close the loop. Let the code
+write itself. ADWs, as you saw here, AI
+developer workflows, also known as
+agentic workflows. This is a reality.
+This is no longer something that's hard
+to do. This is something that you can do
+right now. If you want that extra ump,
+if you want to prepare for what's next,
+check out principal AI coding. Like I
+mentioned, I am actively working on part
+two, phase two of this course where
+we're going to push everything we've
+done in principal ed coding into the
+next level with agentic coding. Cloud 4
+is here. Cloud code is out of research
+preview. This is all big news. Cloud 4
+Opus is insane. Cloud 4 sonnet is a
+great workhorse. We have more tools to
+leverage compute. Take these ideas,
+write with multiple agents at the same
+time. Get more work done. Choose the
+best of N. You have more compute than
+ever available to you. I highly, highly
+recommend you invest in this tooling.
+There's a reason I've talked about cloud
+code literally month after month now.
+You know, literally like eight videos in
+a row. It's because I can sense the
+signal. And as we've seen here with the
+code with claude, you know, announcement
+and everything that was released here, I
+hope you can start to see the signal
+too. Cloud code is a differentiated
+agentic coding tool. Check out previous
+videos to understand more. There's lots
+more to discuss here. There's lots more
+edge I have to give you. So make sure
+you don't miss it. We're pushing into
+the agent coding future. We're now
+running multiple agents in parallel to
+scale our compute, to scale our success.
+You know where to find me every single
+Monday. Stay focused and keep building.

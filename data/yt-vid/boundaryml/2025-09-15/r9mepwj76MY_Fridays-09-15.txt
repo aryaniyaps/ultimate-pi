@@ -1,0 +1,76 @@
+Fridays are for customers. Every Friday,
+each one of us picks a task and tries to
+ship it to make someone really happy.
+Let's see what we got up to.
+>> Hey everyone. So, currently we have this
+annoying bug in the playground where I
+can't scroll vertically in the prompt
+preview and I can't see the scroll bar
+either. Now, this has been fixed. So, in
+the next release, uh, scrolling is going
+to work again. Hey Vetre, you guys
+mentioned you wanted to see fallback
+error history uh in BAML errors and that
+is now available. Um now if you print
+out uh BAML client HP error or any of
+the other errors validation error and so
+on uh there will now be a detailed
+message view detailed message field that
+has the full history.
+>> Hello Renee, thank you for the feedback
+that our docs were out of date for our
+clients. We've now updated every single
+client so it has the latest examples of
+every single model that's out there. So
+whether it's Enthropic, the bedrock
+models or anything else, you will be
+able to see all the models easily from
+now on with the latest examples. And for
+anyone starting a new BAML project,
+you'll also get the latest examples when
+you do BAML CLI in it along with great
+examples for Gemini Vert.ex anything
+else. Thanks. Hey Baka xn not we have
+now added versel AI gateway to our
+documentation so you should be able to
+use it with a bunch of models from the
+versel endpoint. Elijah you also
+reported there was an issue with BAML
+with options and I've confirmed that in
+the latest version of BAML we don't have
+that issue anymore. So, I added a test
+here that confirms that uh if you use
+these be with options, the uh the
+options inside of here still get
+preserved. Finally, because I noticed
+that you didn't know how to test PDFs in
+the playground. So, I've gone ahead and
+added that to the documentation.
+So, if you search for PDF and click on
+the first result, you'll be able to see
+how to test PDFs in the playground. The
+BAML parser is very forgiving. That's
+what lets us guarantee that you're
+always going to get back structured
+data, no matter how creative the LLM
+gets with its output formats. However,
+there's some types of parsing errors
+that we can't fix without breaking the
+parser for more regularly shaped data.
+And in those cases, we've written up a
+little recipe for how you can deal with
+those situations. The gist is like this.
+You write a function that takes the
+parse error and the original message and
+just tells a new LLM to fix it up. That
+way, the LLM doesn't have to think about
+the semantics of its answer and the
+formatting at the same time and is more
+likely to create a well formatted
+output.
+We also have documentation for how to
+use this pattern from your client code
+and some advice for how to choose a
+model for the reformatting.
+Thanks to Vetre for noticing this issue
+and for testing out our

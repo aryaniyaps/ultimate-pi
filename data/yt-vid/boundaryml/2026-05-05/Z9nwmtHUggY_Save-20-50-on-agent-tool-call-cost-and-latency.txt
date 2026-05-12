@@ -1,0 +1,136 @@
+[0.0s] What's up Spacey? Let me show you how
+[1.5s] what I meant by saving you a bunch of
+[2.8s] costs and tokens when you're using
+[4.2s] Bammel. So, I'm just going to set up a
+[5.4s] project really fast in Python
+[7.2s] specifically, but this works with any
+[8.8s] language, not just Python.
+[15.9s] So, I set up a quick Bammel project. Um
+[18.6s] Bammel's this thing that we built that
+[20.4s] is designed to help you do incredibly
+[22.1s] good tool calling by using models. So,
+[24.6s] I'll just show you a couple examples of
+[26.0s] how it works.
+[27.2s] Um all this tooling you're seeing is
+[28.5s] provided by Bammel. If you do Bammel in
+[30.2s] it, it just auto installs everything for
+[32.1s] you.
+[33.0s] So, let's just swap to using GPT-4 mini
+[34.8s] model really fast. I'm using the mini
+[36.5s] model. You can see the prompt. This This
+[38.9s] function gets transformed to this
+[40.4s] prompt. There's a test case written over
+[42.5s] here, and I'm going to go run the code.
+[44.5s] Now, typically when you run the code,
+[46.0s] you get something like this. You get
+[47.4s] backtick backticks. You get JSONs. And
+[49.2s] then, what we do, we do very simple
+[51.0s] stuff and just do error correction here,
+[52.3s] so you get the right value.
+[54.1s] But, how do we save tokens here? Well,
+[56.0s] let's show you something.
+[57.6s] What if we told the model we don't care?
+[60.1s] Prefix equals answers like this. So, now
+[62.2s] the prompt has changed to say this
+[63.6s] instead. ctx.output_format takes the
+[65.8s] return type of the function and just
+[67.1s] schematizes it.
+[69.2s] When we run this code,
+[71.1s] you'll notice that the model didn't use
+[72.4s] quotation marks here cuz it's answering
+[75.5s] like this. And that brought us down to
+[77.6s] 64 tokens from 72 tokens.
+[80.3s] Let's do something else. Let's Let's be
+[82.6s] more explicit. No quotes around strings.
+[85.2s] Now, when I run this,
+[87.1s] now I get no quotes at all. I'm still
+[89.0s] getting all the values out. Now, we're
+[90.8s] down to 56. So, 72 down to 56 is 56 /
+[95.0s] 72, and we have now saved 77%
+[98.6s] uh fewer tokens. Or I guess 23% fewer
+[100.9s] tokens.
+[102.6s] If I go to Now, this is one part of it,
+[105.1s] but let's go further. Let's talk about
+[106.9s] how we really push token savings to the
+[108.6s] limit. So, what if instead of using the
+[111.2s] compiler,
+[112.4s] we're going to start hardcoding what the
+[114.3s] prompt says.
+[116.3s] But, we're going to change things. This
+[118.1s] function will now return an array, but
+[120.0s] nothing in the prompt says that. The
+[122.0s] experience class will actually return an
+[124.1s] experience class.
+[126.9s] Well, what happens now? Well, a couple
+[129.1s] things happen. One, the model runs.
+[132.2s] But, even though it produces data,
+[133.7s] notice what you got on the right side.
+[135.1s] You got an array. You got experience
+[137.2s] tokens, and it's an empty array cuz
+[139.1s] string can't be cast to the experience
+[141.3s] class.
+[142.3s] If I made this a experience or null,
+[145.4s] what happens now?
+[147.9s] Well, now you get three nulls because
+[149.6s] each of these strings
+[151.4s] can not be cast to experience, but it
+[153.4s] can be cast to null as a best effort, so
+[155.4s] it gives you null.
+[156.8s] So, the idea is you as a developer no
+[158.6s] longer have to force the model to think
+[160.3s] about schemas or orientations. We let
+[162.8s] algorithms do this work. This is all
+[164.4s] happening in like millisecond time. You
+[165.8s] saw it happen while it's streaming.
+[168.2s] And you get really good control over
+[169.9s] exactly what happens. And then, you can
+[172.2s] see how this is dramatically fewer
+[173.8s] tokens from two angles, not just the
+[176.1s] perspective that we can just cut
+[177.7s] absolute tokens, but even when a model
+[179.9s] misunderstands you or makes slight
+[181.8s] errors, instead of having to retry or go
+[184.0s] again, we pull out as much data as
+[186.6s] possible with really rich information
+[189.0s] that says, for example, items may be
+[190.6s] dropped, and you actually know exactly
+[192.0s] what items are dropped as well.
+[193.8s] So, you can decide if you want to retry
+[195.3s] or not based on certain constraints.
+[197.5s] I'm going to switch this back to doing
+[198.7s] the right thing.
+[203.9s] So, output format.
+[207.1s] And as you're noticing, doesn't really
+[209.2s] matter. You pull out all the
+[210.1s] information. It pulls out backticks.
+[211.9s] Doesn't matter. No quotes are in here.
+[213.7s] Has quotes somewhere else. It doesn't
+[215.2s] really matter. We basically built a
+[216.7s] really good algorithm for parsing data
+[218.8s] from non-deterministic systems into the
+[221.3s] type system of your choice.
+[223.0s] Now, when you want to go use this in
+[224.8s] another language like, let's say,
+[226.0s] Python, you're able to do something
+[227.8s] really cleanly like this.
+[230.6s] From Bammel client import B.
+[233.7s] And R equals B.extract_resume
+[236.3s] {dot} {dot} {dot} and pass in whatever
+[238.0s] string you want into here, and
+[239.6s] R.experience is guaranteed to be a list
+[242.9s] of experiences or none. So, let's update
+[245.0s] that to be purely a list of experiences
+[247.6s] and no longer make it optional. Well,
+[249.0s] now it's a list of experiences. So, we
+[251.1s] do bridging across type systems in every
+[253.0s] language of your choice. So, again, when
+[254.9s] you're thinking about coding or
+[256.0s] agentically coding, everything is type
+[257.8s] system driven.
+[259.2s] And the hard work of getting the type
+[261.3s] system data is left to the compiler or
+[263.2s] tooling that is built to do it robustly.
+[266.0s] Hopefully that helps. If you have any
+[267.2s] more questions, let me know. This
+[268.4s] technique is called schema-aligned
+[269.9s] parsing.

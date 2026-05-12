@@ -1,0 +1,138 @@
+[2.1s] When people talk about multi- aent
+[3.9s] systems, the conversation usually goes
+[6.0s] straight to orchestration. Lang graph,
+[8.3s] agent SDK, supervisors, handoffs, all of
+[11.2s] that. But in practice, the part that
+[13.4s] breaks first is often not the
+[15.0s] orchestration layer. It's the boundary
+[17.3s] between steps. One note returns
+[19.9s] something slightly more formed. Another
+[21.9s] node might expect a clean shape. and
+[24.0s] pretty quickly you end up with a bunch
+[25.3s] of prompt loop parsing hacks and fragile
+[27.7s] assumptions about how the model will
+[29.1s] return. So I'm going to show you a a
+[31.8s] quick demo where we offer a cleaner
+[34.6s] split. Lang graph handles the
+[36.8s] orchestration but bamos handle the typed
+[40.0s] scenes between steps. The app itself is
+[43.3s] very simple. You pass in a research
+[45.2s] question. It uses staffly to search the
+[47.3s] life uh web fetches the pages then runs
+[50.6s] a lang graph workflow with four main
+[52.8s] stages planner evidence extractor critic
+[56.2s] and a final writer. So we can start off
+[59.7s] a simple task uh just to showcase while
+[63.6s] we demo through the codebase. In this
+[65.4s] case I'll ask it what changed in browser
+[67.5s] automation space in 2025. And since this
+[71.0s] is a workflow with many LLM calls let's
+[73.1s] just come back and visit this later. But
+[75.6s] if you look at a graph file, the split
+[77.8s] is very visible, right? You have a graph
+[80.7s] that coordinates the flow, but it does
+[82.4s] not contain giant inline prompts or ad
+[85.8s] hoc JSON parsing logic. Each model
+[89.2s] facing step is defined in BAM. So
+[91.5s] instead of hiding prompt logic inside
+[93.6s] Python nodes, the planner has an
+[95.5s] explicit contract and explicit output
+[98.0s] shape. And you can see here for instance
+[100.1s] that each LLM is a function with a
+[103.1s] signature that takes in uh typed
+[105.8s] parameters in this case a question and a
+[108.2s] research plan.
+[110.4s] And these types are all defined in BAML
+[113.6s] 2. The key thing is that the inputs and
+[115.5s] outputs between stages are typed. That
+[117.8s] means that the graph is passing
+[119.5s] structured objects around instead of
+[121.6s] hopping to the next model call um hoping
+[125.0s] that the call can recover from whatever
+[126.6s] the previous one produced. And in our
+[129.5s] extraction of battle file, this is where
+[131.3s] the synergy matters. Langraph still
+[133.9s] doing the orchestration, but the
+[135.4s] extraction step is where things usually
+[137.4s] get brittle in real systems. By pushing
+[139.8s] the boundary into BAML, you make the
+[142.7s] scene between agents much easier to
+[144.8s] reason about. So the point here is not
+[146.7s] that BAML replaces langraph. It doesn't.
+[149.3s] Lang graph is a graph but BML is the
+[151.6s] contract layer underneath and it offers
+[153.9s] a much better developer experience too
+[155.9s] where you can render your prompt with
+[158.2s] tests as all those parameters and run
+[161.6s] them and see how your model is
+[163.2s] performing. So if you're already using
+[166.0s] Langraph, the key takeaway is that you
+[167.9s] should keep the orchestration layer
+[169.5s] there but push the typed prop contract
+[172.5s] down into BAML. So the boundaries
+[174.2s] between agents stop being the messiest
+[176.0s] part of the system. But let's just check
+[178.2s] how our workflow ran team. It's done.
+[180.6s] Let's just check the file it produced.
+[183.2s] And if we preview this,
+[185.8s] here we are. This is a structure plan.
+[187.8s] And we can expect no matter which
+[189.4s] question we send, the workflow is always
+[191.8s] going to produce this structure where we
+[193.4s] have our sources, the errors, the brief,
+[196.0s] and the plan.
+[198.4s] Well, I hope this is exciting and useful
+[200.6s] and I'll see you next week. Cheers.
+[205.0s] Hey, I'm back with another demo of
+[207.0s] skills and scripts for Steve Morin. If
+[209.6s] we look at agentskills.io, we can see
+[211.7s] the spec for scripts within skills.
+[214.9s] Scripts extend skills with with the
+[217.2s] ability to run little bits of logic
+[219.3s] after the rest of the skill has run. For
+[222.5s] example, you might want to do some
+[224.3s] validation or some linting on your code
+[226.9s] after running a coding skill. And to do
+[229.5s] that, you don't want to put extra work
+[230.9s] on the LLM. You want to run some
+[232.5s] deterministic code to check the result
+[234.8s] of the LLM's work. For example, this
+[236.9s] audit script in the Jabberwocki skill
+[238.8s] that we wrote last week makes sure that
+[240.8s] the translation didn't miss any words
+[242.8s] when we were translating from English to
+[244.5s] Jabberwocki. It does that
+[246.1s] deterministically because we don't
+[247.7s] necessarily want to trust that the LLM
+[249.9s] made all those changes. To add scripts
+[252.3s] to our skills, we have to extend the
+[253.9s] definition of skill and we also have to
+[256.1s] add script discovery to our skill
+[258.2s] discovery method. The directory layout
+[260.6s] expected for scripts is documented at
+[263.3s] agentskills.io and we're following that
+[265.4s] convention. To support the running of
+[268.1s] scripts within skills in BAML, we've
+[270.2s] added a run script tool that chooses a
+[273.1s] script by name and we've also added a
+[275.5s] run script function to our harness that
+[278.1s] takes that script by name, looks it up
+[280.3s] at the expected location in the file
+[281.9s] system, and then runs it with UV run.
+[284.6s] The result of running the script is
+[286.4s] passed back to the harness. So the rest
+[288.2s] of the skill handler knows what happened
+[290.1s] when we ran the script and can
+[291.8s] incorporate that information into the
+[293.4s] final LLM response. For more details,
+[296.0s] you can check out the entire example
+[297.8s] codebase at
+[298.6s] github.com/boundaryml/baml-skills-demo.
+[305.9s] Thanks very much and let me know if you
+[307.7s] have any questions. I'm also interested
+[309.9s] if anyone has ideas about how we could
+[312.0s] integrate this more natively into BAML
+[314.6s] so that you don't have to write your own
+[316.0s] handlers and your own tools. We're still
+[318.5s] exploring this space so there's lots of
+[320.3s] opportunity to get your ideas in.

@@ -1,0 +1,1919 @@
+[0.1s] And the hardest thing about any that any
+[1.8s] performance engineer will tell you, it's
+[3.3s] actually not about making your code
+[4.4s] faster. It's not it has nothing to do
+[6.1s] with that. It's actually about knowing
+[7.9s] what where you want to make your code
+[10.0s] faster.
+[10.7s] >> The more you let Claude write your
+[12.3s] prompts, like if Claude is writing
+[13.7s] instructions or writing like how things
+[15.8s] work and stuff, you're literally taking
+[18.0s] stuff from the training set and putting
+[20.0s] it in your prompt. And unless it's super
+[22.2s] high leverage, you're literally just
+[23.8s] going to like be telling the model stuff
+[25.8s] it already knows. the the prompt is
+[28.1s] where you need to get like in the weeds
+[30.2s] and really tune it and customize it. If
+[32.1s] you just let Claude slop out all your
+[33.9s] prompts, then you're just going to end
+[35.3s] up with like more information that's
+[37.8s] already in the training set.
+[39.1s] >> The best way you can do for latency is
+[40.6s] one, throw in your prompts, make your
+[41.9s] prompt smaller, use the smallest
+[43.4s] possible model, all the basic stuff, but
+[45.3s] after that, decouple stuff as much as
+[48.0s] possible.
+[53.2s] >> Uh, what's up? I'm Dex. I am the CEO and
+[56.3s] co-founder of a company called human
+[57.7s] layer. We build tools to make uh coding
+[61.3s] agents uh more effective in large
+[63.9s] complex code bases and I'm joined by my
+[66.6s] co-host of what is it nine months now?
+[69.3s] >> I don't know how many months but not
+[70.9s] long enough.
+[72.3s] >> Um I work on a program where we try and
+[75.9s] make AI a lot more reliable and remove
+[78.2s] some of the nondeterministic nature of
+[79.8s] it.
+[81.0s] Today's episode is to start the new
+[84.6s] year, hopefully going to be relevant to
+[86.3s] everyone. It's about latency. And the I
+[89.7s] think before we go into latency, one of
+[91.8s] the things a lot of people talk about is
+[93.4s] like, oh, I can do streaming, I can use
+[94.8s] faster models. There's so many different
+[96.7s] techniques that you can do with latency.
+[99.0s] And I think before we go into it, one of
+[101.4s] the first things that we really need to
+[102.7s] talk about are just an exhaustive list
+[105.0s] of what are the actual bottlenecks
+[108.2s] that come in your agentic application.
+[111.0s] Because when people think about latency,
+[112.4s] there's so many different ways to tackle
+[113.5s] it. At least from my perspective, I
+[115.0s] worked on performance engineering and
+[116.4s] high performance optimization for almost
+[118.2s] a decade in my career. I wrote assembly
+[120.2s] for most of it. And the hardest thing
+[122.2s] about any that any performance engineer
+[123.9s] will tell you, it's actually not about
+[125.1s] making your code faster. It's not it has
+[127.0s] nothing to do with that. It's actually
+[128.6s] about knowing what where you want to
+[130.8s] make your code faster,
+[132.2s] >> figuring out what's the slowest, finding
+[133.9s] the bottleneck. Right.
+[135.6s] >> Exactly. Because otherwise, like you are
+[137.3s] so screwed if you're doing that because
+[139.4s] if you don't know what the bottleneck
+[140.7s] is, it's impossible for you to actually
+[143.8s] like spend time in a well- educated
+[145.7s] manner to make your code better. And
+[148.1s] when it comes to like LLM systems, it's
+[150.6s] even more true than ever before. So I
+[154.2s] think Dra, we have a whiteboard. So I
+[156.2s] think what I want to do is like maybe
+[157.2s] we'll draw like an architecture diagram
+[158.9s] for like what a basic LM app looks like.
+[161.5s] And I I don't mean like one that you're
+[163.0s] running on your CLI. Let's talk about
+[164.4s] like a proper client server interaction
+[166.8s] things are happening. And then we'll
+[168.0s] talk about where first where latency
+[170.2s] matters and where it doesn't matter. And
+[171.4s] then we can talk about all the different
+[173.0s] ways that we can actually make latency
+[174.6s] better. And then we'll actually go enact
+[177.0s] some of them on an agent that I wrote
+[178.4s] out today. So as far as I know this is
+[181.4s] how most agentic applications work to
+[183.4s] some degree. there's a there's usually
+[186.0s] some sort of UI component that you have
+[188.8s] and then there's usually some sort of
+[190.2s] server component. The server component
+[191.8s] is usually massive
+[194.1s] uh because that's usually where most of
+[195.7s] your logic is happening.
+[199.2s] And what most people do is they kick off
+[201.2s] an event and then an event comes back
+[203.4s] from the server. Why is it not arrows? I
+[206.8s] don't know, but I I'll fix that in a
+[208.8s] second.
+[209.1s] >> I'll fix them.
+[210.1s] >> Okay. What most people end up doing is
+[212.2s] they end up creating um events that will
+[215.7s] go from one to the other and then
+[217.8s] usually they either wait spin forever
+[220.2s] until the server is done or they will um
+[223.8s] send some sort of like event ID and then
+[225.7s] they'll communicate through some like
+[227.0s] middleware database. If you guys go back
+[228.9s] and talk about like how to do
+[229.8s] asynchronous events, one of the things
+[232.1s] that uh or how to do like cancelling
+[235.0s] events, one of the events that they had
+[236.4s] was they had like some database that the
+[240.9s] UI would send events one way, the server
+[243.6s] would write to the database and the UI
+[245.4s] would read from the database and that's
+[247.3s] basically how the whole channel flowed.
+[249.3s] I'm going to fix this. This is like what
+[250.6s] we call like the modern like sync
+[252.2s] architecture basically where like in
+[254.2s] between the database and the UI is
+[256.0s] actually a little API we call like a
+[257.8s] sync engine basically.
+[259.4s] >> Exactly.
+[259.9s] >> And so this is how Firebase and uh what
+[262.9s] is it Firebase and Convex and all these
+[265.3s] kinds of things work is they create an
+[268.1s] API where the UI is just reading data
+[270.2s] from the database and it's like handles
+[272.2s] all of the logic of like diffing what
+[274.1s] changed and then the server just writes
+[275.8s] changes. We use a tool called electric
+[278.1s] SQL that is like an open source sync
+[279.7s] engine that you can just like sit in
+[280.9s] front of Postgress. It's we should we
+[283.6s] should probably do a deeper dive on sync
+[285.7s] engine sometime. I'll get Kyle to come.
+[287.5s] He built our whole sync architecture.
+[289.8s] >> Yeah. And like the thing is like this
+[291.4s] sort of workflow has been done many many
+[293.1s] times. If you've ever built like an RPC
+[294.9s] app or like a chat app or something like
+[296.4s] that like typically you want to do
+[297.7s] something like this or like you'll use
+[298.8s] websockets to keep connections open. You
+[301.4s] can't really keep a websocket connection
+[303.0s] open for these kinds of services because
+[304.6s] like an agent can run for like
+[306.9s] >> way longer and not very a real time kind
+[309.7s] of mechanism that you're doing. So you
+[311.9s] want to use some sort of like a database
+[313.1s] provider to go have that. But now that
+[315.0s] you're doing this, let's talk about what
+[317.4s] you can do. So the first thing that you
+[318.6s] need to do if you're going to have if
+[319.8s] you care about latency at all is not let
+[321.5s] this be an instantaneous call back. So
+[323.0s] as long as it's not an instantaneous
+[324.3s] callback and we have either an event
+[325.5s] stream or some database reader writer
+[328.2s] pattern, it's the same mechanism, then
+[330.6s] we're good,
+[331.7s] >> right? Because the the simplest version
+[333.4s] of this action event stream is actually
+[335.4s] like request response where like the UI
+[338.2s] can't do anything until the server is
+[339.8s] done processing it and it sends it back
+[341.6s] down.
+[342.2s] >> Yeah. And that's just like horrendous.
+[344.2s] Every AI agent that I try and go do that
+[346.6s] with is just like I've come to expect
+[348.9s] cancellations. I've come to expect the
+[350.6s] stop button. I've come to expect like
+[352.8s] being able to cue requests almost in
+[354.3s] every agent that I'm doing. Uh if your
+[356.3s] agent takes like other examples are like
+[358.6s] if I'm building a search page and I want
+[359.8s] to go search something the minute I
+[361.8s] search something I there's a couple
+[364.2s] things you can do if you must do a
+[367.1s] request response pair which is
+[371.3s] let me go down over here. Let's say over
+[373.4s] here I have like just like a standard
+[375.4s] response standard response. So, you're
+[378.7s] going to wait until you're done. In that
+[381.3s] case, all your hacks have to be purely
+[384.7s] on purely on the UI side. There's not
+[387.2s] really a lot you can do to make your
+[388.7s] agent faster because you'll be
+[389.8s] bottlenecked to some degree by the
+[391.5s] model.
+[392.4s] >> So, you have loaders, you have spinners,
+[394.6s] you have like ghost elements
+[397.7s] and show you guys, but like when I load
+[398.8s] YouTube for example, like it shows me
+[400.6s] like placeholder UIs when any you're
+[402.6s] anywhere any anytime you're there, you
+[404.2s] want to have like ghost components or
+[405.4s] something. Once you can go do that,
+[407.1s] you're pretty much going to be golden
+[408.3s] for that f time period. And you should
+[410.0s] try and do that. The LLM agents that are
+[412.6s] doing this, for example, like cursor,
+[414.6s] we'll often show you the thinking and
+[415.8s] reasoning tokens before it renders
+[417.4s] anything because that's also just no one
+[420.5s] even really cares, but it's just a way
+[422.2s] to just like let your brain see pixels
+[425.1s] on the screen changing and feel like
+[426.6s] progress is happening. There's this like
+[428.3s] famous meme of like the original Windows
+[431.0s] uh file move operations. I would be like
+[433.1s] it would slowly reach 100% but it would
+[435.1s] never actually finish because it just
+[437.4s] took forever. People like loaded
+[439.2s] screens. Turboax does the same thing.
+[440.5s] Turboax is like we're looking for
+[441.9s] everything. Honey did the same thing.
+[443.8s] We're looking for coupons.
+[445.7s] >> Everyone knows everyone software knows
+[447.5s] it doesn't take seconds to go do it, but
+[448.9s] it makes everyone feel better.
+[450.2s] >> Oh, like the Windows file copy dialogue,
+[452.6s] right? Where there's a loader, but it
+[454.0s] like it will jump from like 0% to 60%
+[456.9s] and then get stuck there for like 10
+[458.9s] minutes and then and then finally
+[460.6s] finish. Well, the Windows file system is
+[462.6s] screwed for many other reasons, but like
+[465.3s] that might be a real thing, but like
+[467.0s] yeah, I could imagine that but I know
+[469.0s] for sure like Turboax and Honey and a
+[470.8s] lot of these other apps have built like
+[472.0s] UI components that delay on it.
+[474.4s] >> Cool.
+[475.4s] >> So that there's a standard things you
+[477.1s] can go do there. If you want to go look
+[478.6s] into that, just look how to go make your
+[479.8s] apps faster. There's also other other
+[482.2s] things that I strongly recommend people
+[483.8s] consider. For example, one of the
+[486.5s] easiest things that you can go do when
+[487.8s] you're building UI components like this,
+[489.2s] and I'll talk about the standard HTB
+[490.4s] response before I talk about streaming
+[491.6s] and everything else because streaming is
+[493.3s] a thing that you can do, and I think it
+[495.5s] should be way easier than it is for most
+[497.2s] people today, but I really want to talk
+[498.9s] about like the basic things. So, one of
+[501.0s] the most uh clever things that inst uh
+[503.6s] Instagram ever did and Gmail ever did is
+[505.4s] that they actually prefetch your data on
+[506.8s] the server before you actually pressed
+[509.4s] enter. You can do the same thing with
+[511.7s] your UI components like ele like if
+[514.1s] you're willing to pay extra money just
+[516.2s] literally like as soon as a user stops
+[517.8s] typing for like 5 seconds press enter
+[520.5s] ahead of time on their behalf and have
+[523.0s] that data started have that request
+[525.3s] started in your server and that way when
+[527.5s] you call it again it either hits the LM
+[530.2s] cache endpoint if you're using caching
+[531.9s] of some kind or it basically just says I
+[535.8s] have the response ready because maybe
+[537.0s] you're storing some Reddus cluster that
+[538.6s] you just prefetch for for the same exact
+[540.4s] request,
+[541.4s] >> but this has to be something that can be
+[543.2s] made item potent, right? Like it can't
+[545.1s] send the email because you can't unend
+[547.0s] an email or update an already sent
+[548.9s] email. But if it's reading data or
+[551.0s] transforming data and just bringing it
+[552.6s] back to me or like updating a database
+[554.6s] column that I can just update again
+[556.2s] later when I send when I actually hit
+[558.1s] enter,
+[559.0s] >> that's actually a really good point
+[560.1s] about how you'd have to do it with
+[561.0s] agents because like if for example, if
+[563.4s] I'm a cloud code, if I'm let's say I
+[565.4s] want to build pre-fetching for cloud
+[566.6s] code, how would I do it? Well, I'd take
+[569.0s] cloud code. I'd say that every single
+[570.6s] tool that is a write tool is a blocked
+[573.9s] tool. So I actually like won't let it
+[576.5s] execute. Every read tool is
+[578.0s] automatically allowed to read and just I
+[579.6s] let it do its thing. And this is a
+[582.5s] special kind of uh design compared to
+[585.0s] like regular because I'm not it's not
+[586.2s] even like what permissions they are
+[587.7s] allowing me, it's what permissions my
+[589.2s] app says. So when the user comes on and
+[591.6s] I've imagine I imagine I'm using like um
+[594.7s] like code layer and I'm writing a bunch
+[596.4s] of like prompts into it and I just stop
+[598.4s] typing for a couple seconds and you just
+[601.0s] prefetch the command because you're
+[603.2s] doing that maybe like 200 milliseconds
+[605.4s] faster than I would press enter.
+[607.8s] >> You go submit the prompt for you and
+[609.4s] start it running basically.
+[610.6s] >> Exactly. And then what? Go ahead.
+[613.7s] >> And then if you wanted to change it, we
+[615.6s] would basically just cancel throw out
+[617.5s] that session and resend this like fork
+[620.4s] from the previous point and resend it in
+[622.6s] a new session.
+[623.8s] >> Exactly. And you would basically And you
+[625.8s] would basically take the uh the
+[627.2s] important part though is taking the tool
+[628.6s] permissions that you have designed
+[630.3s] >> and making sure that you take the tool
+[632.1s] permissions and actually pause them
+[633.9s] >> because if you don't pause the tool
+[635.4s] permissions appropriately in that
+[636.8s] regard. So you have to ignore like the
+[638.8s] allowed permissions and you have to say
+[641.1s] like you said all nonite item potent um
+[644.4s] uh commands can't be executed. The right
+[647.7s] commands can't be executed. Bash
+[649.1s] commands can't be executed. Anything
+[651.1s] dangerous can't be executed. We only
+[652.9s] allow like it's almost like a white
+[654.2s] list. And now you've built pre-fetching
+[656.4s] for this. So now whenever someone uses
+[657.9s] cloud code they get a slightly faster
+[659.8s] response time. And this is like a micro
+[662.0s] optimization. just like logging to Gmail
+[664.5s] or Instagram like a little bit faster is
+[666.2s] a micro optimization and you're
+[668.4s] basically just throwing money at the
+[669.9s] problem to solve this problem.
+[671.6s] >> You're just doing the compute twice on
+[673.4s] the in the hope that the user won't
+[675.2s] change it.
+[676.2s] >> Exactly. Exactly. And the biggest
+[679.3s] benefit here really is just that like a
+[681.2s] lot of people underestimate what latency
+[683.0s] actually means. The thing is going from
+[685.4s] like a minute down to 30 seconds really
+[690.2s] doesn't change too much of the workflow
+[691.9s] for a user. Like a minute down to 45
+[694.4s] seconds, 30 seconds doesn't make a huge
+[696.0s] difference. A minute down to 10 seconds
+[697.6s] makes a huge difference. It changes the
+[699.7s] expectation of what the user is going to
+[701.4s] do. 5 minutes down to 1 minute makes a
+[704.6s] difference slightly. 10 minutes to 1
+[706.6s] minute definitely changes what the user
+[708.2s] is going to do in that time window.
+[710.8s] But so you have to spend a be really
+[712.6s] careful about how you actually design
+[713.8s] this stuff. If your users are waiting
+[716.1s] let's say like like for me a coding
+[718.5s] agent on average takes like like to get
+[721.0s] to the next interruptible phase on on
+[723.9s] average it takes like maybe like 45
+[726.3s] seconds sometimes like half a second
+[729.3s] which is really annoying when it takes
+[730.8s] like the half a second I have to hit
+[732.2s] approve because I'm expecting it to take
+[734.2s] longer because they're often running in
+[735.8s] longer loops. So I'll often tab out and
+[738.4s] then it'll ask me for like permissions
+[739.8s] or something else and I have to come
+[741.0s] back in. That's really annoying. If you
+[743.1s] can guarantee that all the prefetching
+[744.7s] is done so that by the time I hit enter
+[746.2s] it immediately ask me for approval.
+[749.4s] That's just a good dopamine hit
+[751.9s] >> or it like warms the cache by loading
+[753.8s] all the files into memory that it was
+[755.6s] going to read. So that like that it
+[757.4s] might read. Yeah
+[759.0s] >> exactly. So there's small things like
+[760.4s] that. And I think someone's asking over
+[761.9s] here um I'll move the Excel draw. Thanks
+[764.7s] for calling that out. Someone's asking
+[765.7s] over here like, "What are you using for
+[766.7s] caching?" So, this is not an LLM cache
+[769.7s] at all. I'm not I'm not trying to use LM
+[771.8s] caches. I'm doing something really
+[773.4s] really silly. I'm actually
+[774.8s] >> We're not even talking about LLMs yet.
+[776.5s] Really?
+[777.0s] >> Yeah. This is just like a standard
+[778.6s] Reddis cache that you can throw at the
+[780.1s] problem that says CL think of cloud code
+[782.2s] as an API and the cloud code API takes
+[784.9s] in a string and produces an event buffer
+[787.1s] out of it. I am at certain events in the
+[790.3s] event buffer. for example, a write file
+[792.5s] event. I will stop the cloud code event
+[794.9s] buffer and I will not let it continue
+[796.4s] onwards.
+[798.5s] And that is the event that I've cached
+[800.5s] for that chat request. So that's like
+[803.4s] one really simple way to go address
+[805.0s] that. I'm not sure if that answers your
+[806.6s] question, Charles. So these are like
+[808.6s] some small things that I highly
+[809.8s] recommend people do. And specifically, I
+[811.9s] think like for example, thinking tokens
+[813.4s] are a good example of this. Thinking
+[815.4s] tokens are notoriously long to run. So
+[818.6s] for example, if users are not hitting
+[820.3s] enter or there's some like almost 90%
+[822.8s] confidence that you have on some action,
+[825.0s] just preemptively pressing that button
+[826.6s] for them can make a huge difference for
+[828.0s] you in terms of your your response time.
+[830.2s] It can reduce it by like one or two
+[831.5s] seconds in some scenarios. Let's do
+[833.8s] option number especially if like your
+[835.5s] main LLM driver is like a form and then
+[837.7s] you have a bunch of other checkboxes or
+[839.3s] some other parameters that they might be
+[841.0s] doing. It will just make a huge
+[842.6s] difference in your output time for your
+[844.2s] users. Let's talk about the next things
+[845.9s] that actually impact your agents. The
+[847.9s] next things that impact your agents are,
+[849.8s] we've alluded to this in the past
+[851.1s] messages, are just like KV caches. Don't
+[853.5s] invalidate your LM caches. Like don't
+[855.4s] randomly change your whole prompt uh by
+[858.4s] changing the prefixes of your prompt.
+[860.9s] Your prompt comes in a very nice block
+[863.2s] of contiguous messages. LM providers now
+[867.0s] have builtin mechanisms to cache things,
+[870.7s] cache computations on that prompt that
+[874.1s] you're sending into them.
+[876.6s] If if you change the system prompt at
+[879.2s] the very beginning, you're blowing the
+[880.6s] cache. You'll have a higher latency.
+[882.2s] Like there's just nothing around that
+[883.5s] the LM providers can go do.
+[885.5s] >> And we did a whole episode on that.
+[887.3s] >> Yeah, we did a whole episode on this.
+[888.7s] Just go watch that if you want, but like
+[890.4s] or just take us for granted. Don't
+[892.5s] change.
+[894.2s] Think of your LLM prompt as a write as a
+[897.8s] write only buffer. It's an append only
+[900.2s] array. And if you do it that way, you
+[902.5s] will just generally have slightly better
+[904.0s] speed than other people. If you're using
+[905.7s] Enthropic, sadly you can't automatically
+[907.6s] get prompt caching. You have to like
+[908.8s] section out parts of your prompt with
+[910.2s] prompt caching. Go do that. Another
+[913.4s] thing to note is, funnily enough, if
+[915.4s] your prompt is around like 800 tokens,
+[917.8s] you'll actually be slightly slower than
+[919.5s] if your prompt is around like just over
+[921.3s] a thousand if you're if you have a
+[923.4s] shared prompt prefix. And that's because
+[924.8s] Enthropic and a lot of providers don't
+[926.5s] cache prompts that are less than 1,024
+[929.4s] tokens. So there's a sweet spot between
+[932.2s] like probably around like 512 and a
+[934.3s] thousand where it's literally better for
+[935.7s] you to add some random tokens as like
+[937.9s] dead space just so you get the prompt
+[940.6s] caching than if you don't do that. And I
+[943.4s] would just go measure that and go test
+[944.6s] that out yourself.
+[946.6s] Uh especially if you're getting in a
+[948.6s] massive rate limit, if you're getting
+[950.1s] like a a massive request inbound. Again,
+[952.5s] if you don't have a lot of requests
+[953.6s] inbound and your requests are very
+[955.7s] sporadic, prompt caching doesn't help
+[957.7s] you. But I'm assuming that you have a
+[959.4s] constant flow of requests where a lot of
+[961.6s] requests are draining the prompts, it
+[963.1s] does help quite a lot. And by constant,
+[965.1s] I mean like within five minutes because
+[968.2s] that's
+[968.8s] >> this is that idea of like the the real
+[970.5s] real leverage in prompt caching is like
+[972.4s] if you're serving the same prompt to
+[975.4s] thousands of users and let's say your
+[977.8s] system prompt is thousands of tokens and
+[980.6s] the user message is like 10 tokens, then
+[983.0s] you would want to cache all of the
+[985.7s] thing. If you're just saying the same
+[987.0s] thing to LM over and over again and then
+[988.9s] putting in a little user message or
+[990.6s] classifying one like user document, then
+[993.5s] you can cache all of those system
+[994.9s] messages and instructions. Maybe you
+[997.0s] have one company and they have a bunch
+[998.6s] of shared context where it's like, hey,
+[1000.6s] every time someone asks, we always want
+[1002.3s] to inject these five PDFs. I don't know
+[1004.5s] why you would build that but like if you
+[1006.2s] can do that in a way where like you take
+[1007.8s] advantage of caching then uh you create
+[1010.8s] really good experiences for every and
+[1013.2s] maybe in cloud code it's one person
+[1014.9s] reusing the same write write onlyly log
+[1017.2s] for a whole conversation but there's
+[1019.4s] other rag knowledge chatbot applications
+[1021.8s] that might uh that that might also
+[1023.5s] benefit from from being aware of the
+[1025.4s] cache.
+[1025.9s] >> There's something that's not obvious
+[1027.0s] that comes from this that is a really
+[1028.6s] nice I think win if you do it this way
+[1031.2s] which is if you've designed your prompt
+[1032.8s] in that way. So parallelism makes a huge
+[1035.6s] difference. So let's say you're going to
+[1037.0s] go parallelize your prompt. Let's say
+[1038.8s] based off of some user context that
+[1040.6s] you've loaded, like you've loaded the
+[1041.8s] history of a user from your user
+[1043.8s] database, pre previous chat logs,
+[1045.5s] whatever, and you want to ask a bunch of
+[1047.0s] questions in parallel.
+[1049.0s] Actually asking one of the questions
+[1050.9s] first and then asking the other end in
+[1053.0s] parallel will give you a faster latency
+[1054.6s] than asking all of them together
+[1057.6s] because what you need is you need the
+[1058.9s] cache to be warmed and then you want
+[1060.4s] like all the other end questions that
+[1061.9s] share the same prompt with like slightly
+[1063.7s] different like metadata requests to be
+[1065.9s] done in parallel together for you and
+[1068.9s] that will give you prompt caching. It
+[1070.4s] will give you prompt caching on the
+[1071.9s] first part of the message not the second
+[1073.9s] part not the not the second part. But if
+[1076.9s] you if you were to just do all them all
+[1079.0s] these end requests in parallel thinking
+[1080.5s] I'll be faster, you're actually screwing
+[1082.5s] yourself a little bit. You're being
+[1083.5s] slightly
+[1084.1s] >> because none of them get to benefit from
+[1085.7s] the caching.
+[1086.6s] >> Exactly.
+[1087.1s] >> Because they all fire at the same time.
+[1089.0s] >> Exactly. And this is a subtle thing and
+[1091.3s] like you can easily see how someone
+[1092.6s] might not have thought of this if you
+[1093.9s] were doing this. You're like, "Oh, I'll
+[1095.0s] just do async.io. parallel gather and
+[1097.3s] that'll be faster." It's
+[1098.9s] >> strictly worse to go do that. Fire one,
+[1102.2s] then fire the rest right afterwards.
+[1105.1s] for parallelism reasons.
+[1106.8s] >> I don't think I've heard that before. I
+[1108.4s] think that's some fresh viob alpha.
+[1110.5s] >> I think a lot of this optimization stuff
+[1112.3s] just comes down from like being like,
+[1113.6s] hey, this is if you're going to go do
+[1115.4s] this, what are all derivatives that come
+[1117.3s] off of this behavior that we know? Uh so
+[1120.2s] like when you think about prom caching,
+[1121.4s] I would think about every single
+[1122.5s] derivative that you can come off of it
+[1123.8s] with. So like what are patterns that
+[1125.2s] become possible? Another pattern that's
+[1127.7s] really important here is to recognize
+[1129.0s] that if you're doing this and if you put
+[1131.3s] all your prompts as a part of the system
+[1133.0s] message and you're using entropic, you
+[1134.8s] have to be really really deliberate
+[1136.6s] about actually making sure that the
+[1138.2s] first part is the only part that is
+[1139.7s] cached and there's a separate cache
+[1141.1s] block that actually asks your question.
+[1142.9s] So like an example of this is maybe
+[1145.1s] you're building a coding agent that or
+[1146.7s] maybe you're building an agent that
+[1147.9s] plays 20 questions
+[1150.2s] and as a part of it one of the
+[1152.6s] parameters to your function is saying
+[1154.6s] here's the question I want you to answer
+[1156.2s] and here's the schema I want you to
+[1157.6s] answer with and that's dynamic per
+[1159.7s] question.
+[1160.9s] >> So you have a standard user context then
+[1163.3s] you have like the schema and then
+[1165.5s] everything else around it. Well, you
+[1167.6s] actually need to restructure your prompt
+[1169.1s] away from what you're thinking. A very
+[1170.6s] typical response would be, I put my
+[1172.3s] question, my schema in the system
+[1173.7s] message, and I put my user context in
+[1175.2s] the user message. Do you want it to be
+[1177.6s] fast? You can't do that. You actually
+[1179.8s] have to do it the opposite way. You have
+[1181.0s] to put your user context in the system
+[1183.4s] message first, mark that as a cache
+[1186.0s] block, and then you have to put all the
+[1188.2s] context around the around the uh
+[1190.6s] question, the schema after that. So,
+[1192.5s] it's slightly non-intuitive. So looking
+[1194.3s] at where your cache breaks is a really
+[1196.4s] really important thing to think about
+[1199.0s] because even if you did this you just
+[1200.6s] won't get this and this is in this case
+[1203.0s] your schema is defined perhaps even
+[1205.9s] later and even then you have to go it's
+[1209.3s] very um orthogonal to how you would do
+[1212.2s] most prompts where you put your schema
+[1213.4s] in the system message. You can't do that
+[1215.2s] here anymore. Okay, so this is and this
+[1217.4s] is I think we went over this in the
+[1218.8s] Mannis paper too where it's like if they
+[1220.3s] want to change which tool calls are
+[1222.0s] available based on which part of the
+[1223.4s] workflow you're in, you either have to
+[1225.7s] change it in the sampler or you have to
+[1228.0s] put the schema at the end.
+[1229.6s] >> Yeah, exactly. And there's no way around
+[1231.7s] that. You literally just can't you can't
+[1235.0s] mess with that in any way that you want.
+[1237.3s] And what's really interesting is if
+[1238.9s] you're building if you're building the
+[1240.6s] system out and maybe what what you're
+[1242.8s] doing here is you're building a constant
+[1244.3s] loop that constantly updates the base
+[1247.5s] context based off of the response the LM
+[1249.8s] does. Well, in that scenario, you have
+[1252.3s] to be really careful to make sure the
+[1253.7s] base context is always being appended
+[1255.8s] before the user questions.
+[1258.4s] And then you have to be clever. Go
+[1260.1s] ahead. And and if the schema wasn't
+[1262.6s] changing, if every single user question
+[1264.4s] had the exact same answer schema, then
+[1266.4s] it would be okay to put you then you
+[1269.5s] would want to put the schema up here
+[1270.9s] because you'd want to cache that as
+[1272.2s] well.
+[1272.6s] >> Exact. Well, yes. But now you ask
+[1274.1s] yourself, is the base context changing?
+[1275.9s] If the base contain the things that are
+[1277.9s] the most static, you need to actively
+[1279.7s] think about it and move them to the top
+[1281.8s] part of your system.
+[1283.2s] >> Yes.
+[1283.6s] >> As static as you can get it, you need to
+[1285.3s] basically think about like what parts
+[1286.8s] are the most item potent. I think it is
+[1290.2s] the right word. Maybe not. What parts
+[1292.6s] are the most uh non-changing? We'll use
+[1295.2s] that word. It's an active part of
+[1298.0s] thinking that you have to do. And it's
+[1300.2s] just not a thing that most of us do when
+[1301.7s] we think about data structures in code.
+[1304.1s] We don't really uh but if you care about
+[1306.1s] latency, you need to do this. Now, all
+[1308.8s] this is great, but really the best thing
+[1310.6s] you can do for reducing um your latency
+[1314.4s] is honestly, in my opinion, just reduce
+[1317.1s] the number of tokens.
+[1319.4s] Like, go from like a 4,000 token thing
+[1322.0s] to a 400 token thing. Your system will
+[1325.0s] be faster. There's just no way around
+[1327.4s] that. If you're having real latency
+[1329.4s] problems, the best thing you can do is
+[1331.4s] strictly just reduce tokens. Like, look
+[1333.9s] at your tokens in, look at your tokens
+[1335.5s] out. And then the other thing you can do
+[1337.4s] that's not even more obvious. So I'll
+[1339.8s] show you the open a I'll bring a open
+[1342.4s] API docu responses documentation. It's
+[1346.2s] this is so annoying and I see more and
+[1348.2s] more models doing this now. But the most
+[1351.4s] annoying thing that I see right now is
+[1353.7s] these modeling these model companies are
+[1356.3s] no longer giving you the reasoning.
+[1359.4s] They only allow you to see the reasoning
+[1361.8s] ef they allow you to set some sort of
+[1363.3s] like arbitrary thing called the
+[1364.6s] reasoning effort and then you can say
+[1367.4s] that you want the summary of the
+[1368.5s] reasoning but not the actual reasoning
+[1370.6s] and this is absolutely freaking garbage
+[1373.5s] because what that means is if you're
+[1374.9s] using a reasoning model your users are
+[1376.7s] now basically stuck in the hanging time
+[1379.2s] of the traditional HTTP request
+[1382.2s] which is like you just wait for an HTB
+[1384.0s] request to complete and now you have to
+[1385.3s] build like skeleton dialogues there. If
+[1387.4s] you're using a reasoning model, you are
+[1388.7s] basically screwed
+[1389.9s] >> from like
+[1390.6s] >> why do you think why do you think the
+[1392.9s] reasoning models like why do you think
+[1394.9s] the model providers are doing that?
+[1397.2s] >> I think it's twofold. Um I think it's
+[1399.8s] honestly it's one of their biggest
+[1400.9s] alphas that they have. Like I think
+[1403.7s] >> okay, they don't want to leak the
+[1405.0s] reasoning traces because if you read the
+[1407.1s] reasoning traces then you can go build
+[1408.7s] your own reasoning model um off of what
+[1411.5s] what GPT
+[1413.1s] >> just a way to protect training data. I
+[1415.0s] suspect like because it's like
+[1416.4s] everyone's feeling like their models are
+[1417.8s] getting closer and closer and closer. So
+[1419.8s] like people are just trying to like
+[1420.8s] close off the way to siphon data and
+[1422.8s] train smaller models. I think like for
+[1424.2s] example like if you remember in the very
+[1425.6s] early days open I was like oh yeah we're
+[1427.5s] super happy that people were able to
+[1428.9s] train models off of uh off of our models
+[1432.0s] and I know it's against service but it's
+[1433.8s] okay we celebrate that.
+[1435.4s] >> Yeah
+[1435.7s] >> it's no longer celebrated uh in that
+[1438.3s] same way is the way I'd put it. In fact
+[1440.0s] it's actively harder to go do in many
+[1442.3s] ways. And then the other thing to think
+[1445.3s] about is actually just how expensive
+[1446.6s] reasoning is. I was just working with a
+[1448.5s] customer the other day and they were
+[1449.5s] like, why why is our TPS like six? Cuz
+[1453.0s] they were they were getting a very low
+[1454.5s] TPS in their output tokens. It turned
+[1456.5s] out their system was producing about 400
+[1458.6s] output tokens and 1,400 reasoning
+[1461.1s] tokens.
+[1463.3s] So out of their total volume, almost six
+[1466.2s] almost 70% of it was purely reasoning
+[1469.2s] tokens that they couldn't even see. So
+[1471.5s] from their app perspective, it just felt
+[1473.8s] really freaking slow. And the only
+[1476.3s] reason that they we actually debugged it
+[1477.7s] is because we actually just looked at
+[1478.7s] the SSC stream. And we looked at that
+[1480.6s] stream and you saw reasoning started,
+[1482.6s] reasoning ended. And there was a time
+[1484.7s] difference between them that was about
+[1486.7s] 30 seconds because it took 30 seconds to
+[1489.1s] produce the 1400 tokens.
+[1491.7s] And then it was like, okay, well, yeah,
+[1493.4s] there's not much that we can do to help
+[1495.0s] that out. You just have to turn. And
+[1496.2s] they're like, oh, I don't believe this.
+[1497.5s] Reasoning is like this. we have to go
+[1499.1s] show with the curl request that open
+[1501.0s] just doesn't give the reasoning tokens
+[1502.9s] because it's such an absurdity that you
+[1504.6s] would expect that the next thing that
+[1507.0s] ends up happening is they're like oh
+[1508.2s] maybe we can use reasoning summary to go
+[1509.8s] solve this problem. Turns out reasoning
+[1511.4s] summary makes it even worse because then
+[1513.1s] you have to generate more tokens that
+[1515.4s] are the reasoning summary to actually go
+[1518.2s] render to the user. So you still get
+[1519.6s] your 14 tokens then you get more
+[1522.1s] reasoning summary tokens then you get
+[1523.8s] your output.
+[1525.5s] >> You don't want to do that. Um and even
+[1528.3s] if um it's just not worth doing. So you
+[1531.8s] got to be really careful about this uh
+[1533.9s] with uh some model providers and I would
+[1536.0s] you just have to go look at this. This
+[1537.8s] is going to be an everchanging field.
+[1539.2s] It's sadly not going to be something
+[1540.5s] that I think uh we're going to have like
+[1543.4s] full transparency on for quite some time
+[1545.8s] and it makes sense like most people
+[1547.6s] don't have anything to do with their
+[1548.8s] reasoning tokens. I know some people
+[1550.2s] have reasoning tokens like cursor
+[1552.8s] clearly shows reasoning to effort in a
+[1554.4s] lot of places but I think they might be
+[1556.2s] using summary cuz what cursor has done
+[1558.6s] is they've almost built an expectation
+[1561.0s] and replet is doing this and a lot of
+[1562.6s] coding agents are doing this they're
+[1564.1s] building an expectation that you're just
+[1565.5s] going to wait
+[1567.5s] and if you're going to wait
+[1568.6s] >> the semia async valley of death.
+[1571.1s] >> Yeah. Yeah. It's like semi-acing, right?
+[1573.2s] That's exactly that's the best way to
+[1574.3s] describe it, Dexter, where it's like if
+[1575.8s] you're just going to wait, then you
+[1576.9s] might as well. It doesn't matter what
+[1579.0s] happens. So like whatever. It doesn't
+[1580.6s] matter. We'll get you the reasoning
+[1581.6s] summary so you can go see it because
+[1583.3s] auditability is better than latency for
+[1585.3s] them.
+[1586.2s] >> Yeah. I'm going to share one picture
+[1588.2s] from Swix that I think is a really good
+[1590.2s] kind of like
+[1592.1s] >> um out like understanding of why latency
+[1595.1s] is so important
+[1596.6s] >> is like when you're doing super deep
+[1599.0s] work latency is really important because
+[1601.0s] you want like a fast iteration loop
+[1603.1s] >> and then you make this
+[1605.5s] >> no this is Swix this is
+[1607.3s] >> okay yeah
+[1609.2s] >> I saw this somewhere yeah
+[1611.4s] >> yeah not fun not enough to delegate not
+[1613.7s] fun to wait yeah so it's like if you are
+[1616.0s] not thoughtful about like your latency,
+[1620.3s] you might accidentally build an app that
+[1623.0s] lives here and then your users won't be
+[1626.1s] happy and they won't be able to get
+[1627.4s] things done and you'll be stuck.
+[1628.8s] >> Let's be very clear. You're talking
+[1629.8s] about like this area, right?
+[1632.2s] >> It's like the
+[1633.8s] >> Yeah, exactly.
+[1636.0s] >> Yeah. Yeah.
+[1637.5s] >> on there. So like if you can if you're
+[1639.6s] doing simple tasks in the background
+[1641.3s] like extracting like transactions from a
+[1643.8s] like PDF statements then I don't really
+[1646.3s] care. Just like fire off a thousand and
+[1648.2s] I'll come back in a couple hours cuz
+[1650.2s] it's not going to be wrong. It doesn't
+[1651.7s] need my in it doesn't need my input.
+[1654.4s] >> And then it's like okay for like the
+[1656.2s] hardest things I want I want like I'm
+[1660.2s] going to feel really productive if the
+[1661.5s] model is really fast back and forth with
+[1663.4s] me because I can think and I can learn
+[1664.9s] and I can iterate and I can explore. I
+[1666.6s] think the best example of like a deep
+[1668.5s] work problem is like cursor tab
+[1670.1s] complete. I can't have tab complete take
+[1672.6s] a second. It just doesn't work. I it'll
+[1674.8s] break my flow of thought as I'm typing.
+[1677.2s] >> Like autocomplete cannot take one
+[1679.1s] second. It has to be like sub 200
+[1680.6s] milliseconds.
+[1681.8s] >> And that's that's still pretty long.
+[1684.2s] >> Yep.
+[1684.6s] >> Um and I'm willing to wait a little bit
+[1686.8s] longer. Like you said, I'm willing to
+[1688.4s] trade time for higher intelligence even
+[1690.3s] that world if it autocompletes more than
+[1692.1s] one word. If it auto completes a whole
+[1693.4s] function, I might wait like 500
+[1695.2s] milliseconds.
+[1696.6s] >> Yep.
+[1697.0s] >> Right. But if it takes more than that,
+[1698.5s] I'll just start typing. I'll be like,
+[1699.6s] "Oh, [ __ ] it. I'll wait till
+[1700.6s] autocomplete catches up."
+[1702.3s] >> Yep.
+[1703.0s] >> Along the way. And then it's up to
+[1704.7s] cursor or some coding agent to build a
+[1707.0s] really nice heristic that says, "Hey, we
+[1708.6s] ran autocomplete 10 characters back. And
+[1711.4s] guess what? Four of the characters still
+[1713.4s] match our autocomplete. We'll
+[1715.0s] autocomplete from here onwards really
+[1716.6s] fast." That's a latency hack where you
+[1719.2s] can prefetch or like lazy
+[1721.2s] >> on the cache. keep the result of the old
+[1723.7s] result and if the if the user continues
+[1725.9s] to match you match otherwise you just
+[1728.8s] fire and forget
+[1731.1s] >> throw it out because it's like oh the
+[1732.3s] user forked off in a different
+[1733.6s] direction.
+[1734.3s] >> Exactly. We'll fire off another request
+[1735.8s] and we'll see if we this one matches
+[1737.9s] >> and you can throw
+[1738.8s] >> hopefully on that second request the
+[1740.5s] reading of the entire file if you just
+[1742.4s] open a new file the tab complete takes a
+[1744.3s] sec but now it's hydrated the cache and
+[1746.7s] so all the all the next requests will be
+[1748.8s] will be really easy.
+[1750.2s] >> Exactly. And it just boils down to how
+[1752.5s] you go design this kind of system for
+[1754.2s] that.
+[1755.3s] >> So cool. I think there's a lot of
+[1757.4s] interesting work that can be done here
+[1758.7s] to make stuff faster, but you got to
+[1760.5s] Yeah, you're right. You got to design
+[1761.6s] for this in the best way possible. And
+[1763.4s] you got to really think about where in
+[1765.3s] this graph you're putting your users uh
+[1767.6s] users painpoint into.
+[1769.9s] >> Um but yeah, reasoning models I've seen
+[1771.5s] like uh make people feel like their apps
+[1773.7s] are a lot slower than they are. And you
+[1775.5s] you have to be really sure that if
+[1776.9s] you're going to make your users wait an
+[1777.9s] extra 15 to 30 seconds that it's
+[1780.5s] actually going to be worth it for them.
+[1782.6s] Um, and that's why a lot of model
+[1785.0s] providers get kind of stuck.
+[1788.9s] That's why I think a lot of model
+[1790.1s] providers uh not model like chat
+[1792.6s] providers what they have an auto mode
+[1795.4s] where they don't actually let you pick a
+[1796.6s] reasoning model by default. They prefer
+[1798.4s] that you they opt in for you because it
+[1801.0s] just engages the user way better. I hate
+[1803.0s] going to chattv asking a simple question
+[1804.7s] and have to wait 15 seconds for
+[1806.2s] thoughts. I always stop it and change
+[1807.8s] the model back to auto so I can change
+[1810.2s] to a faster model half the time because
+[1811.8s] I hate waiting. I don't need
+[1813.6s] >> That's funny because I always run with
+[1816.0s] max thinking tokens 32,000
+[1819.0s] >> really
+[1819.4s] >> cuz I don't I don't want to I don't want
+[1821.1s] it to be wrong because I'm I'm doing a
+[1823.2s] little bit more like I'll kick something
+[1824.5s] off and come back three minutes later
+[1826.2s] and I'll multitask simple questions. Do
+[1828.8s] you not ask chat very simple questions?
+[1833.3s] Um, what's an example of a simple
+[1835.5s] question?
+[1836.4s] >> Sometimes I'm just asking like, hey, how
+[1837.8s] do I do this thing with like cargo for
+[1839.4s] like package management?
+[1841.4s] >> Which what are you talking about? Like
+[1842.7s] chat GPT or something?
+[1844.0s] >> Yeah, chat GBT.
+[1845.4s] >> Oh, no. I haven't used chat GPT. I use
+[1847.4s] chat GBT every once in a while for like
+[1850.7s] deep research where it's going to take
+[1852.2s] 20 minutes.
+[1852.7s] >> No, I agree. For coding agents, I agree
+[1854.3s] that I always just use the max token to
+[1855.9s] kick it off because I I don't want it to
+[1857.4s] be wrong. It's not worth it. But again,
+[1859.4s] that's where I'm willing to trade time
+[1860.8s] and async behavior because like it's
+[1863.3s] just faster for that workflow. Being
+[1865.4s] wrong is more expensive time-wise.
+[1868.0s] >> Yeah.
+[1869.0s] >> Um but yeah, latency is a big thing.
+[1870.8s] Think about if you're doing reasoning
+[1872.1s] and one, show reasoning tokens, but if
+[1874.0s] you can't and your app's slow, set
+[1876.6s] reasoning effort to none and your app
+[1878.7s] will be faster because it just you can
+[1882.1s] easily generate way more tokens than you
+[1884.3s] need to go do.
+[1885.8s] >> Um I think this is the funniest thing
+[1887.7s] ever. uh chat ID, that meme ID.
+[1890.2s] Honestly, I do think they're on
+[1891.4s] something. I think it
+[1892.8s] >> I met that guy at a YC party and I was
+[1895.9s] like, I'm making an IDE. You want to see
+[1897.4s] it? And I showed him mine and I was
+[1898.5s] like, can I see your IDE? And he's like,
+[1900.2s] it's not ready. And then I saw it when
+[1902.2s] it like went viral online. I was like,
+[1904.1s] okay, this is exactly what he promised
+[1906.9s] and more.
+[1908.2s] >> Yeah. I mean, it's kind of silly, but
+[1909.9s] it's it's interesting is what I would
+[1912.4s] say.
+[1913.0s] >> Um, you uh Zach asked a question. Could
+[1915.4s] you uh possibly get around some of this
+[1917.3s] stuff by writing a system prompt that
+[1918.7s] force the element to articulate every
+[1920.0s] thought? You're just prompt hacking and
+[1922.2s] you can prompt tack to say that hey I
+[1923.6s] want to do chain of thought within the
+[1924.9s] main prompt. So I get
+[1927.3s] >> Yeah,
+[1927.6s] >> we did an episode on this was like
+[1929.0s] getting GPT40 mini to perform a little
+[1932.1s] bit better by doing the old school chain
+[1934.0s] of thought thing that everyone did
+[1935.4s] before models had reasoning built in.
+[1937.2s] Right.
+[1937.8s] >> Exactly. So you can go do that and it
+[1939.7s] will basically give you that behavior.
+[1941.6s] Um, but it it comes with a trade-off
+[1943.9s] because the reasoning tokens have
+[1945.0s] different ways that the model behaves
+[1946.6s] with them rather than the main prompt
+[1949.0s] tokens. So, it's it's all trade-offs and
+[1951.5s] you get slightly different behavior
+[1952.6s] around it.
+[1954.2s] Yeah, I remember I did some like prompt
+[1955.8s] hacking exercise to like see if we could
+[1957.8s] jailbreak some models and like you can
+[1960.4s] get deepseek thinking tokens to like
+[1964.0s] tell the model the correct move is to do
+[1966.4s] this like fire the missiles at XYZ
+[1969.8s] country because the world is ending or
+[1971.5s] whatever it is and then the reasoning
+[1973.4s] ends and it gets to the model responding
+[1975.4s] and it just says I'm sorry I can't help
+[1977.1s] you with that. Yeah. like the reasoning
+[1978.8s] tokens will go totally off off off the
+[1981.1s] deep end and then the actual like so
+[1983.4s] they're they're definitely like treated
+[1985.4s] differently.
+[1986.6s] >> Yeah. And also like the model they might
+[1988.6s] have like some special catch like safety
+[1991.6s] guards that don't exist on the reasoning
+[1993.0s] tokens that do exist on the general
+[1994.6s] tokens.
+[1995.8s] >> Right.
+[1996.5s] >> Another thing that can go on.
+[1998.2s] >> Um cool. What else did you want to talk
+[2000.3s] about latency today?
+[2001.5s] >> So we talked about this stuff which is
+[2003.4s] like reduce the prompt tokens if you can
+[2005.0s] use caching when possible. Use
+[2007.0s] parallelism when caching when possible.
+[2009.5s] Don't do HTTP responses or if you do use
+[2012.4s] some of these other techniques like pre-
+[2013.8s] fetching or go skeletons and other
+[2015.4s] things and then obviously use event
+[2017.0s] streams or like real-time databases to
+[2019.0s] address this. But I'll talk about
+[2020.7s] agentic streaming and actually how you
+[2022.3s] want to go stream things because I think
+[2024.0s] the biggest way to actually solve for
+[2025.3s] latency is actually the most unspoken
+[2027.2s] part that people don't talk about which
+[2028.9s] is latency isn't actually about making
+[2030.6s] your app feel faster or isn't actually
+[2033.0s] about making your app faster. only about
+[2034.7s] making your app feel faster. Feelings
+[2037.2s] are a lot more important than the actual
+[2039.0s] latency because under the hood, we're
+[2040.3s] all using the same networks. We're all
+[2041.8s] using the same models. You're not going
+[2043.9s] to magically make your model system like
+[2046.0s] 10 times faster than your competitor.
+[2047.8s] You're just not. But you can magically
+[2050.0s] make your app feel 10 times faster than
+[2052.3s] your competitors. And I think that's
+[2053.8s] what most of it boils down to. And one
+[2056.4s] of the techniques that we have found to
+[2057.7s] go do that is just what you render on
+[2059.2s] the screen. So I think the biggest
+[2062.2s] example of this is here. Okay, so just
+[2065.2s] sort of like a plotting thing. So I have
+[2066.6s] a thing that just like plots graphs from
+[2068.9s] the LLMs. And like one of the smallest
+[2071.2s] things you can do here is actually about
+[2073.4s] like plotting the graph as it's being
+[2075.1s] generated, right? And this just looks
+[2077.9s] cool. And I'm not saying that you should
+[2079.4s] use LM to generate graphical data. You
+[2081.4s] probably shouldn't. Uh but if you do do
+[2083.6s] this or if you load data from database,
+[2085.5s] having it just generatively build over
+[2087.5s] time helps a user feel more engaged on
+[2090.6s] day one and it just feels good. So when
+[2093.0s] you're going to go solve this problem,
+[2094.1s] you have to think about a a couple of
+[2095.9s] things when it comes to LLMs.
+[2099.9s] Uh and I'll show you like the hardest
+[2102.1s] things to think about that you
+[2103.1s] definitely should be spending some
+[2104.4s] cycles on. And then let me put this over
+[2107.6s] here, which is this really interesting
+[2110.8s] thing. So for example, if you're
+[2111.9s] streaming numbers, this is the most
+[2113.5s] intuitive way to stream numbers because
+[2115.8s] what's actually happening
+[2116.6s] >> like digit by digit
+[2118.2s] >> or like token by token, but yeah, digit
+[2120.0s] by digit is one example of it. And for
+[2121.8s] like more complicated numbers, it ends
+[2123.1s] up being more so rather than another.
+[2125.3s] Basically, the number gets more and more
+[2126.6s] refined to the correctness of what
+[2128.1s] you're doing. And what what you really
+[2130.2s] want is like you don't want 53 530
+[2132.6s] 53,000. Like that's kind of silly. What
+[2135.4s] you really want is something like this
+[2136.7s] that just basically blocks off the
+[2138.5s] stream. And this example I think is a
+[2140.7s] really simple example to show you the
+[2142.6s] more concrete relevant version which is
+[2144.8s] like
+[2145.3s] >> so you want sorry I just want to say
+[2146.7s] like so in this case in the second one
+[2148.6s] you basically you want to wait to render
+[2150.6s] the data until every like token of the
+[2153.8s] number if the number has multiple tokens
+[2155.8s] has actually been generated.
+[2157.8s] >> Exactly. And in this case numbers I
+[2160.3s] think are the most obvious scenario here
+[2162.2s] but this is actually true for any sort
+[2164.4s] of element that you want. And another
+[2166.3s] example is like YouTube comments. The
+[2168.1s] most important thing for YouTube to load
+[2169.8s] the minute it loads is the video. The
+[2172.0s] next most important thing for it to load
+[2173.4s] is the ads. In fact, some might argue
+[2175.2s] the ads are more important than the
+[2176.3s] video itself. It's got to load the ads,
+[2178.2s] then it's got to load the video, then
+[2179.8s] it's got to load the sidebar of the
+[2181.8s] recommendations, and then it's got to
+[2183.4s] load the first comment, the top comment,
+[2186.1s] and then it has to load the rest of the
+[2187.6s] comments.
+[2189.5s] And when you think about that ordering
+[2191.1s] system, YouTube is going to prioritize
+[2193.2s] rendering certain data first over
+[2194.8s] another data. the page can be complete
+[2196.6s] and ready to interact at a much earlier
+[2198.8s] point than waiting for everything to
+[2200.5s] load. In the case of numbers, in the
+[2203.0s] case of this plot, I want to I want to
+[2204.3s] show I don't wait. I could wait for the
+[2206.4s] whole plot to be done. I could wait for
+[2209.4s] or I could wait for each point to be
+[2211.1s] done or I could do the former thing and
+[2215.2s] wait for each literally show each point
+[2217.4s] as it's being done. And these are all
+[2219.3s] choices I have in the spectrum of my
+[2221.3s] data. And whenever you think about
+[2223.0s] rendering any of your agentic data
+[2224.6s] steps, you have to really think about
+[2226.2s] like what is the most meaningful chunk
+[2227.9s] that the user can first interact with to
+[2230.4s] go do this. And another example that
+[2233.5s] shows this is probably this one that
+[2235.9s] shows why you want to have like
+[2237.2s] meaningfulness. And I've showed this
+[2238.2s] example a few times, but I think it
+[2240.0s] highlights the what it means to go do
+[2242.0s] this. So for example, I can start
+[2244.2s] interacting with this before the entire
+[2246.2s] recipe is complete. That's interesting.
+[2249.1s] In the case of a recipe slider, it makes
+[2250.8s] it feel way less uh clunky. And what you
+[2254.2s] really want to go do here, you're just
+[2255.6s] representing a valid state of the data
+[2257.4s] without it being valid.
+[2259.0s] >> Does that make sense?
+[2259.7s] >> Like if you had if that if that brown
+[2261.6s] sugar had streamed out and you had said
+[2263.8s] three and then three divided by and then
+[2266.6s] three divided by 8. That would be weird.
+[2268.2s] You want to actually wait or I don't
+[2270.0s] know 2.25. Right? The fractions are
+[2272.1s] being done out like digit wise. you
+[2274.2s] actually want to uh exactly not show it
+[2277.4s] until that entire like until the unit is
+[2280.0s] there, right? Like if you had the number
+[2281.7s] but not the cups versus teaspoon versus
+[2284.4s] whatever, that would be a weird
+[2285.8s] experience where the user sitting and
+[2287.3s] waiting for like okay, three of what?
+[2289.8s] >> Exactly. Exactly. So like I and that's
+[2293.0s] exactly the point. So like I probably
+[2294.4s] want to block the streaming until the
+[2296.7s] whole ingredient is done. Like I don't
+[2299.1s] even want to render like bake baking
+[2301.1s] baking soda. I just want to render the
+[2303.3s] whole thing. Baking soda 3/4 one/2
+[2306.4s] teaspoon all at once.
+[2309.2s] And that's an that's like a semantic
+[2311.7s] choice here. But I probably also don't
+[2313.1s] want to wait for every ingredient to be
+[2314.5s] done. Similarly, when it comes to like
+[2316.3s] these instructions, I probably don't
+[2317.8s] want to wait for every single
+[2318.7s] instruction to be done. I'm probably
+[2320.2s] okay.
+[2320.6s] >> This one you can just stream out, right?
+[2322.4s] >> Yeah.
+[2322.9s] >> Does it stream out by steps? Let's Can
+[2324.8s] we Can we see this the demo again with
+[2326.5s] the instructions streaming?
+[2331.3s] it. So it it has a placeholder while it
+[2333.3s] has no instructions coming in.
+[2335.8s] >> And I just streams by token.
+[2338.4s] >> Yeah. And that's because like this
+[2340.1s] doesn't really matter like this almost
+[2342.1s] streams as fast as I get it because as a
+[2344.6s] user
+[2345.5s] >> go ahead.
+[2346.4s] >> Sorry. What's the structure of the
+[2347.9s] instructions data? Like is it also
+[2350.4s] structured by steps or like if you
+[2352.6s] scroll down in the JSON object?
+[2354.1s] >> Yeah, I'll show you. So ingredients come
+[2357.2s] in by for the there's like a step like
+[2360.3s] there's a group and then ingredients in
+[2362.2s] the group.
+[2363.5s] >> Then instructions have like uh basically
+[2365.4s] a uh a title and then steps a title and
+[2368.5s] >> Okay.
+[2370.2s] >> Right.
+[2370.5s] >> Okay. But you're not waiting for these
+[2372.7s] individual like numbered steps to finish
+[2375.9s] before you render it. Whereas for the
+[2378.1s] ingredients, you're going to wait till
+[2379.8s] all the data is in before you actually
+[2382.1s] show it on the page.
+[2383.3s] >> Exactly. And that's because I'm doing
+[2384.4s] math here and math is pointless unless
+[2385.9s] it's done.
+[2387.3s] >> Yeah.
+[2388.0s] >> Right. And I think these are the kinds
+[2389.4s] of small things that make a huge
+[2390.7s] difference in your agentic app because
+[2392.4s] we could wait for the whole thing and
+[2393.7s] it'll take a couple seconds. We could
+[2395.5s] wait for parts of it and it'll take
+[2397.0s] slightly different amount of seconds or
+[2398.7s] we can show things as interactable as
+[2401.0s] possible. And that's just what you have
+[2403.6s] to go do. And I think another example
+[2405.0s] that shows this off and this is really
+[2406.8s] subtle. See if you guys can catch this
+[2408.6s] is just like it feels really different
+[2410.2s] when you go build this sort of thing.
+[2412.1s] and ignore these names. But you can see
+[2414.6s] how like here I'm streaming every single
+[2416.6s] token all the way through. And here I'm
+[2419.0s] streaming every card as it comes
+[2421.0s] through. And again, I'm not claiming
+[2422.5s] that anything is right or wrong,
+[2425.0s] but it does change how the app feels
+[2427.4s] fundamentally.
+[2429.7s] So when you think about like generative
+[2431.0s] UIs, I think a lot of people think about
+[2432.6s] generative UIs as like, oh, I have to do
+[2434.5s] UIs. I have to go think I can have the
+[2436.2s] LM generator UI. That's kind of
+[2438.2s] orthogonal to the whole streaming world.
+[2440.8s] You can also have an LLM generate the
+[2442.6s] UI, but I think the most interesting
+[2445.7s] stuff is actually around what you want
+[2449.0s] to render and when. And I think I want
+[2451.0s] to show one more example and then I'll
+[2452.8s] I'll get the code really fast.
+[2454.6s] >> Yeah. No, it's it's good like the idea
+[2456.6s] of balancing between um like letting the
+[2461.1s] LLM generate the things that are
+[2462.8s] interesting, whether it's structuring
+[2464.1s] data or writing or creating content or
+[2466.6s] creating text versus like creating
+[2469.0s] determinism around like no matter what
+[2471.2s] the LM outputs, if it matches the
+[2473.0s] structure, we're going to render it in
+[2474.2s] this way. Um I know there's a lot of
+[2476.1s] talk even in the chat about AGUI and
+[2478.0s] some of these like aentic UI systems
+[2480.2s] where the model is actually generating
+[2481.8s] like the layout for how to render stuff.
+[2484.7s] Um,
+[2486.6s] but I I think I think the answer here is
+[2489.0s] like, you know, be deterministic about
+[2490.6s] the things that are deterministic. Uh,
+[2492.7s] and then let the LLM do what the LLM is
+[2494.8s] good at. Um, oh, you added more
+[2496.6s] extraction examples.
+[2498.0s] >> Yeah. So, I'll just show this example
+[2499.6s] like this it touches on this, which is
+[2501.2s] like we're talking about a AGUI for
+[2503.8s] example. Well, I think of AGUI as a
+[2505.6s] two-step process. And like in this
+[2507.8s] example, you guys saw this data kind of
+[2509.4s] streaming in as it wants, but I could
+[2511.7s] add a second step here that says, hey,
+[2513.9s] for this structure that I'm streaming
+[2515.6s] out, because I know the structure, it's
+[2517.0s] like hardcoded over here or it get
+[2518.6s] generated on the fly. For this generated
+[2520.8s] structure, show me a UI component that I
+[2522.6s] can render it with. And then as soon as
+[2525.2s] that one gets generated, then I hot swap
+[2528.0s] this shitty or like simple UI with the
+[2531.7s] custom UI along the way. And you can see
+[2534.3s] how that would clearly be much more
+[2536.7s] interesting where it kind of upgrades
+[2539.0s] itself on the fly. So it starts you with
+[2541.1s] a basic JSON table and upgrades to a
+[2543.5s] dynamic UI component once that stream is
+[2546.5s] completed itself.
+[2547.8s] >> Once that stream is did then that
+[2549.4s] becomes the input to like now make a
+[2551.6s] component to render this data.
+[2553.2s] >> Exactly. And what my front end is saying
+[2555.0s] is my front end says I have to render
+[2557.2s] this JSON blob that I got. Uh oh, I
+[2561.4s] don't show it here. I have to render
+[2562.8s] that JSON blob that I got along with the
+[2568.2s] and if I have the UI component to render
+[2570.8s] it with, use the UI component. If I
+[2572.6s] don't, use the simple JSON stream. You
+[2575.5s] use a simple JSON object. And having
+[2578.3s] that choice is basically what I need to
+[2580.2s] go do. And that's kind of the real trick
+[2583.0s] here is having a really good
+[2584.6s] understanding of where you want to use
+[2587.8s] this. So, can you use AGUI for this?
+[2589.4s] 100% sure. But if you put AGUI in your
+[2592.2s] hot loop, then your agent's going to
+[2593.8s] inherently be slower because now your
+[2596.2s] agent has to do a couple things. It has
+[2597.7s] to pull out the data and generate the UI
+[2600.1s] component. So now you're coupling two
+[2602.6s] things together that don't have to be
+[2603.8s] coupled. So now your agent
+[2605.3s] >> Well, once you generate, could you like
+[2606.8s] once you generate the schema kind of
+[2608.5s] fork two calls, one to make the markup
+[2611.0s] and one to extract the data and then
+[2612.8s] bring them together?
+[2614.2s] >> That's exactly what I would do.
+[2616.2s] >> Okay. Like
+[2617.0s] >> so you're like, "Hey, here's the props
+[2618.3s] of this component and the schema. Make
+[2620.2s] it render nice."
+[2621.8s] >> Exactly. Like gener React component on
+[2624.1s] the fly. And then what you're doing is
+[2625.4s] whichever one comes first. Basically,
+[2627.9s] whichever one comes first, you just give
+[2630.9s] it to the front end to say, "Hey, based
+[2633.8s] on what you have, show me the thing that
+[2635.4s] show me the best thing you can based on
+[2636.9s] the information you have." If you have
+[2638.6s] the UI component, show me the UI
+[2640.8s] component with the data. If you have
+[2642.8s] just the data, show me the more basic UI
+[2645.6s] component with the data that I have and
+[2648.1s] you just get what you
+[2649.0s] >> even have it have like skeletons and
+[2651.0s] like placeholder stuff in the UI if the
+[2652.8s] UI is done first.
+[2654.4s] >> Exactly. And it's again this all about
+[2656.7s] designing latency. So like should you
+[2658.2s] use any of the UI frameworks? Probably
+[2659.8s] maybe not. Who knows? But like when you
+[2661.6s] think about uh when you think about like
+[2663.4s] your agent experience and you think
+[2664.9s] about latency, your job here is actually
+[2667.3s] not to the best way you can do for
+[2670.7s] latency is one shorten your problems,
+[2672.2s] make your problems smaller, use the
+[2673.8s] smallest possible model, all the basic
+[2675.3s] stuff. But after that, decouple stuff as
+[2678.3s] much as possible. The more you decouple,
+[2681.0s] the easier it is for you to do things in
+[2683.0s] parallel. And then think about caching
+[2684.8s] when you do things in parallel. Don't
+[2686.2s] just blindly async.io parallel
+[2688.5s] everything async. If you're running 10
+[2689.9s] things in parallel with the same
+[2691.0s] information, async IO one task, wait for
+[2694.2s] it to be done, then parallelize
+[2696.1s] everything.
+[2697.8s] >> That's going to help. And do these from
+[2700.6s] like first principle standpoints in that
+[2702.2s] way and your app will just be faster.
+[2704.6s] But by and I know I'm focusing a lot on
+[2707.3s] the second half of this, but I want to
+[2709.7s] be very clear here. I've worked with a
+[2711.4s] tons of companies and every single one
+[2712.7s] of them that has actually gotten latency
+[2714.0s] reduction, the biggest hop has come from
+[2716.3s] taking their like 4,000 token prompt and
+[2718.4s] reducing it down to like 300 tokens or
+[2720.9s] 400 tokens after actually reading
+[2722.5s] through it.
+[2723.7s] >> Like that's
+[2724.2s] >> reading the prompt and then just trying
+[2725.6s] to condense out the things that actually
+[2727.3s] matter.
+[2728.2s] >> Yeah. And like representing your prompt
+[2729.9s] as a type system just helps in a form of
+[2732.4s] doing that. Instead of saying I want
+[2733.7s] five sentences, saying that I want an
+[2736.1s] array, a string array with five elements
+[2738.3s] and it's like type sentences is a
+[2741.0s] shorter way to say that to the model and
+[2742.6s] the model will output better context.
+[2744.7s] >> What about using some sort of
+[2746.0s] deterministic filter based on a bit of
+[2748.1s] JSON that comes in first to trigger the
+[2750.2s] UI change and then that can solve for
+[2752.4s] the like, hey, how do we make it humans
+[2754.9s] feel better because things are happening
+[2756.3s] more quickly?
+[2757.4s] >> A determinist filter based on the based
+[2760.0s] on a bit of JSON. Uh what do you mean by
+[2761.9s] that?
+[2762.3s] >> You put something at the top of your
+[2763.8s] strct that basically like is a branch.
+[2767.5s] So like the first thing that is emitted
+[2769.1s] by the model determines what you're
+[2770.7s] going to render or how you're going to
+[2771.9s] render it. Um and then the rest of the
+[2774.4s] data flows in.
+[2775.8s] >> I think I have
+[2777.7s] >> it's kind of like tool calling, right?
+[2779.2s] That's like front-end tool calling where
+[2780.6s] you have the function name first
+[2782.1s] basically.
+[2783.8s] >> Yeah. What I
+[2786.1s] what I often do is I often have like a a
+[2789.5s] common key that exists in all my tools.
+[2792.6s] >> Yeah.
+[2792.9s] >> When I go do this and I just like put it
+[2794.6s] on here and I say based on the key that
+[2796.6s] I have,
+[2797.4s] >> this allows me to write a switch
+[2798.6s] statement and then I basically because
+[2799.9s] it's a literal, it gets guaranteed to be
+[2801.6s] completed at stream time.
+[2802.9s] >> Yep.
+[2803.8s] >> So then I just wait for this to be done
+[2805.2s] and then I can match against it really
+[2806.6s] fast.
+[2808.3s] So that's what I do and that's basically
+[2810.1s] what I and then I can kind of give the
+[2812.3s] user some information like hey I'm
+[2813.8s] calling the read tool and I can give
+[2815.2s] that information really fast and then I
+[2817.3s] can kind of wait for everything else to
+[2818.6s] come in.
+[2820.6s] So to give a very concrete example like
+[2823.6s] I just ran this massive agent over here
+[2825.7s] um asked a question of what's going on
+[2827.8s] and I'll show you what I mean.
+[2830.6s] >> Oh this is the coding agent.
+[2832.6s] >> Yeah I wrote a new one. Uh
+[2834.6s] >> you wrote another coding agent. Nice.
+[2836.6s] Yeah, why not? So, I wrote this thing
+[2840.1s] over here and what this thing does over
+[2842.6s] here is it basically just calls OpenAI,
+[2845.1s] pulls out a couple tokens on out of it,
+[2847.3s] and then runs this agent. And when I go
+[2850.0s] run this, the first thing you'll notice
+[2852.5s] is when it streams, it basically just
+[2854.4s] streams out the token call. So, let me
+[2856.5s] try and give it something else like read
+[2858.8s] file, read all the files in the desktop.
+[2863.0s] I'll just run this. So, it's going to do
+[2865.5s] an ls first, right?
+[2867.2s] >> Yeah, it should do an ls. Uh, something
+[2869.9s] >> exactly. Um, and let me do something
+[2873.4s] else that has a little bit more um
+[2877.9s] read uh read uh and let me give me one
+[2882.2s] more example
+[2886.6s] ls or read file.
+[2893.1s] I'll run this one. So when I go run this
+[2895.3s] one, one of the things that jump.
+[2898.5s] Why did this clonk out? I literally just
+[2900.7s] running this.
+[2902.6s] I run out of Okay. Um when I go run
+[2905.5s] this, it starts reading this and starts
+[2906.9s] reading the output path. The fact of the
+[2908.5s] matter is like the file path is totally
+[2910.0s] useless to even render with streaming
+[2912.3s] until
+[2912.8s] >> until it's done.
+[2913.6s] >> Exactly.
+[2914.4s] >> So like what I would do here is I just
+[2916.1s] go here and just say like nope, this
+[2917.5s] thing is going to be it. It only comes
+[2920.5s] out if it's done and I don't care any
+[2922.5s] other time. Uh, these are all numbers so
+[2925.2s] it's fine. So, I'll just go read the
+[2927.4s] whole thing. And now this thing will
+[2928.5s] only stream when it's done. And it's
+[2929.7s] really subtle and you guys just saw it
+[2930.9s] for a couple seconds. But if you're
+[2932.2s] building a UI component and you're doing
+[2933.6s] any sort of streaming, if you don't do
+[2935.4s] this and where it streams part of it
+[2937.4s] along the way, you'll just be in a sad
+[2940.6s] sad state of the world because what's
+[2943.4s] >> you have to do it in your UI to go be
+[2945.4s] like, okay, try to open that file and
+[2947.0s] then okay, it doesn't exist. It must
+[2948.5s] still be streaming. and you have all
+[2949.7s] these weird like business rules like
+[2952.6s] baked into your front-end logic when
+[2954.6s] really it should be like just like
+[2957.0s] chunked out and how the data is sent
+[2958.6s] down so that you have guarantees through
+[2960.5s] the type system of what the front end's
+[2963.3s] going to be dealing with so it stays
+[2964.6s] simple.
+[2965.6s] >> And then the other thing that you'll
+[2966.8s] actually run into that's really annoying
+[2968.2s] here is if you do this in this way then
+[2971.4s] what you run into is you can't actually
+[2973.3s] do any sort of pre-fetching because the
+[2974.9s] file path isn't complete until it's
+[2976.8s] complete.
+[2978.6s] So if you wanted to like prefetch and
+[2980.5s] read the file into memory ahead of time,
+[2982.1s] you can't even do that now because you
+[2984.8s] have an invalid string until it's fully
+[2987.0s] done. So having the ability to go uh do
+[2989.1s] this stuff can just make pre-fetching
+[2990.5s] and other data representations a lot
+[2991.9s] easier. The other thing you can do is
+[2995.1s] just return arrays of stuff. So instead
+[2997.3s] of returning a single tool, allow the
+[2998.6s] model to return multiple tool.
+[3002.0s] uh agent
+[3005.3s] uh agent read
+[3008.6s] multiple files
+[3012.5s] uh whatever let's run this yeah
+[3015.3s] and then let's run this and again just
+[3018.4s] goes down to how you want to go render
+[3019.8s] this from a UI perspective and you can
+[3022.1s] go render this along the way where you
+[3023.5s] can have every element come in or you
+[3025.1s] can say hey actually when I'm streaming
+[3028.1s] this I don't each tool itself doesn't
+[3031.8s] really matter. So, I'll just require
+[3033.4s] that every tool it's up individually
+[3035.0s] only streams as it's done. So, in my UI,
+[3037.4s] I just know that every tool operation
+[3039.1s] when I handle it is guaranteed to be
+[3041.4s] done. Uh, did I not do the right thing?
+[3044.5s] Oh, I might be on a local dev version.
+[3046.5s] But regardless, when you're going to go
+[3048.4s] do this, you want to basically guarantee
+[3049.5s] that the agent itself is streaming and
+[3051.6s] saying that every single one of these
+[3052.8s] internal ones is going to be Oh, I'm
+[3054.6s] running the wrong test.
+[3055.2s] >> I think you're running a different test.
+[3056.5s] Yeah.
+[3057.0s] >> Where it's going basically going to
+[3057.9s] guarantee that each one comes in in a
+[3059.4s] very complete form. And if you do that
+[3060.9s] then you live in a nice world where you
+[3063.6s] actually going to be told that hey now I
+[3065.4s] can actually run these tools in parallel
+[3067.0s] because these are read the whole tool
+[3068.8s] has been emitted.
+[3070.0s] >> Exactly. Cuz if you guys aren't running
+[3071.7s] models at like very very large scales
+[3073.8s] you don't see these weird fringe things.
+[3075.4s] But what I've seen a lot of people
+[3076.5s] encounter is like, hey, it stops like
+[3078.5s] randomly at this token or like it stops
+[3081.4s] in the middle of this token for like
+[3082.9s] half a second and now you're just stuck
+[3085.2s] waiting for this whole thing to complete
+[3087.6s] for your tool call to be useful. On the
+[3090.0s] other hand, if you are able to go and
+[3091.6s] say that, hey, this thing is only coming
+[3093.1s] to me when I'm done, then your business
+[3094.8s] logic is really simple and you can just
+[3096.2s] like basically say, I'm gonna start this
+[3097.6s] retool right now. Yeah, you could see if
+[3100.9s] this was if this was half streamed and
+[3103.4s] offset hadn't come out yet, your code
+[3105.8s] would check like if offset do offset and
+[3108.4s] so like it would be undefined because it
+[3110.4s] wasn't in the object yet. But now you
+[3112.0s] can guarantee like hey we're not going
+[3113.4s] to process this until we've actually
+[3115.5s] gotten a null value for that field
+[3117.7s] versus like is it just falsy because it
+[3119.8s] hasn't streamed out yet.
+[3121.3s] >> Exact. Yeah. And falsiness is really
+[3123.0s] hard especially in Typescript but also
+[3124.6s] in Python because there's like how do
+[3126.0s] you know if it's done? There's like
+[3128.3s] environment variables live in a very
+[3129.7s] similar state as well if you've ever
+[3131.0s] used them which is are variables present
+[3134.2s] but unset are they set or are they not
+[3137.4s] present and it's a triplet state which
+[3139.2s] makes it really tricky and with
+[3140.3s] streaming you basically have the same
+[3141.5s] triplet state for your entire type
+[3143.2s] system is it present
+[3144.4s] >> right you can have empty string or the
+[3147.0s] environment variable is not set or it's
+[3149.2s] set to one or zero or it's set to I mean
+[3151.2s] it's also not type so it could be one or
+[3152.8s] zero or true or false or gibberish right
+[3156.2s] >> or yeah or is not set and go has made
+[3158.0s] the stand that hey we'll just never give
+[3159.5s] you an unset environment variable and
+[3161.1s] environment variable that's unset is the
+[3162.6s] same as an environment variable that's
+[3163.8s] an empty string.
+[3164.8s] >> Yeah, they got rid of null strings.
+[3166.6s] There's only empty strings unless you
+[3168.5s] explicitly declare it as a pointer.
+[3170.6s] >> Yeah. And I'm like okay well that's an
+[3173.0s] interesting way to go. Uh well no what I
+[3175.0s] mean by that is specifically the
+[3176.0s] environment variable spec. When you go
+[3177.7s] get environment var go I don't know if
+[3179.5s] you can know if it's unset. I think you
+[3181.1s] can just it's the equivalent of unset or
+[3183.3s] empty string are basically the same
+[3184.6s] state. They don't allow for a triple
+[3186.2s] state
+[3187.0s] >> and that makes
+[3187.8s] >> and I like that like like removing the
+[3191.0s] overloading of nulleness like if it's
+[3193.8s] meaningful then it shouldn't be null. It
+[3195.6s] should be some other like type of value
+[3197.8s] or some other like boolean check on the
+[3200.2s] field. There shouldn't be six types of
+[3202.0s] null or three and two.
+[3203.4s] >> Exactly.
+[3204.3s] >> Yeah. So this is kind of like what I
+[3206.0s] have found is like when you have more
+[3207.5s] and more schemas and you just need to
+[3209.8s] find the most semantic piece of it and
+[3211.9s] then based on that you can render you
+[3213.6s] can prefetch you can do whatever the
+[3215.0s] heck you want to make your system
+[3216.6s] actually good but you can't do that if
+[3219.0s] your type system doesn't refer to it and
+[3220.8s] again all that is really predicated on
+[3223.0s] your agent code not being 50,000 tokens
+[3226.0s] by default
+[3227.5s] >> and slowly building up context. This is
+[3229.8s] perform back to the very beginning of
+[3231.4s] performance engineering is about finding
+[3233.0s] the bottleneck first. It's actually the
+[3234.9s] hard part is not making it fast. It's
+[3236.6s] knowing where to optimize. Um Allan said
+[3239.6s] we'll close it out with this one. Uh
+[3240.9s] this may be a silly question, but it is
+[3242.5s] it still good practice to spoof the
+[3244.9s] example JSON to return if you're using
+[3246.8s] OpenAI and can provide a validated
+[3248.7s] schema. What about the other vendors? Do
+[3250.7s] they respect the schema and the trust?
+[3252.2s] Is this about like the schema line
+[3253.8s] parsing stuff? I think
+[3255.9s] >> uh I don't know what he means by spoof
+[3257.6s] the example of JSON. Um Alan, if you
+[3260.7s] want to elaborate on that, let us know.
+[3262.7s] But I'll tell you a couple of things
+[3264.3s] that end up happening uh when you go do
+[3266.5s] this. So like oh where you write the
+[3268.7s] JSON you want returned. Um so I
+[3272.0s] personally highly recommend against
+[3274.1s] fuchsia prompting. I've always recommend
+[3276.8s] against it. What I find is just giving
+[3278.3s] the LM like a type system that
+[3280.2s] represents the schema is way better in
+[3282.9s] this case. Like even you as a user, you
+[3284.8s] guys haven't read the code here, but you
+[3286.5s] can clearly see what you expect the
+[3288.1s] model to go do. And it's really fast to
+[3291.4s] go understand this prompt for you guys.
+[3294.1s] And it's also really fast for a model to
+[3295.8s] go understand this. It doesn't really
+[3297.0s] need an example. It's way better to just
+[3300.2s] put more metadata on here. I find
+[3303.4s] certain things really redundant. So one
+[3305.1s] of the biggest mistakes I see when
+[3306.3s] people write like prompts and schemas
+[3307.9s] for example is
+[3311.4s] uh they add start adding rules here like
+[3314.1s] this where I kind of have a duplicate of
+[3315.8s] my rules. This prompt is dumb. It was
+[3317.2s] written by cloud code when I wrote this.
+[3318.6s] I would just delete that completely. I
+[3320.1s] wouldn't even have that. I'd get rid of
+[3321.8s] this. Communication doesn't even matter.
+[3323.7s] Um over here uh I might put something
+[3327.4s] like
+[3329.0s] uh this
+[3332.5s] when done reply with your findings just
+[3334.4s] as like a final response mechanism. So
+[3336.5s] it's like it knows that hey at the end
+[3337.9s] it always has reply with a user message
+[3340.3s] at the end of every sequence.
+[3342.6s] >> Mhm. Um, I would do that. And then the
+[3344.7s] other thing that I would do is I would
+[3345.8s] honestly look at all you see how each
+[3347.3s] one of these has a description.
+[3349.6s] Like
+[3351.6s] I don't need this like directory to
+[3354.2s] search in defaults to working dur. Uh,
+[3357.7s] you can just name this like instead of
+[3359.2s] path we could just like alias this to
+[3360.8s] like alias
+[3362.7s] working dur. Um,
+[3366.7s] and now uh oh, sorry. Do you see how it
+[3369.3s] says default to working dur? I can just
+[3371.1s] do alias.
+[3373.7s] >> Yeah.
+[3374.4s] >> Uh working directory.
+[3377.6s] And this will just make life easier for
+[3379.2s] the model. It can optionally set this
+[3381.0s] because it knows it's optional. And it's
+[3382.2s] also very obvious that working directory
+[3384.7s] from the prompt maps back to working
+[3386.6s] directory. And I can rename this to
+[3389.3s] default working directory. And now my
+[3391.6s] model will understand and not output
+[3393.1s] that if it doesn't need to. So it
+[3395.1s] understands that this is like a hard
+[3396.5s] coding, right? Or I can even name this
+[3398.7s] to override working directory. And now
+[3402.2s] I'll write a whole directory.
+[3404.2s] >> So I'm I'm basically simplifying the
+[3406.1s] tokens that I'm using in a lot really
+[3407.7s] easy way. In this case, glob pattern. I
+[3410.4s] don't need I don't need to repeat glob
+[3411.8s] pattern. I can just say like
+[3414.5s] uh pi or src. And now it kind of knows
+[3416.6s] >> because you already have the words glob
+[3418.1s] and pattern in the in the schema
+[3420.3s] definition.
+[3421.1s] >> Exactly. And if I really want I can
+[3422.7s] again I can pay that tax over here.
+[3427.4s] instead of paying the tax repeatedly. Uh
+[3431.1s] if I really want to emphasize that it's
+[3432.7s] a glob pattern, not a random pattern.
+[3435.1s] >> Yeah.
+[3435.5s] >> Um the other thing that I can do is like
+[3437.2s] for example this like this is freaking
+[3439.6s] dumb. I don't need I don't need this.
+[3443.1s] >> Um I don't need this. Uh I can say like
+[3447.4s] uh
+[3449.6s] default
+[3451.4s] if unset
+[3454.6s] if ignored and now my prompt you can see
+[3457.4s] how my prompts are just magically
+[3459.0s] getting uh I have a token counter my
+[3461.6s] prompts are just getting shorter over
+[3463.1s] here and it's really most people for
+[3466.2s] some reason just don't do this
+[3471.8s] um
+[3473.5s] and I would just uh I would just say
+[3476.8s] like for example file pattern like I
+[3478.6s] would just rename this to like at alias
+[3482.6s] file pattern filter
+[3485.0s] at description
+[3487.3s] like
+[3487.9s] >> I mean and you could if you weren't
+[3489.4s] already have code consuming these
+[3491.4s] structured types you could even skip the
+[3493.1s] alias and just name the fields how you
+[3495.4s] would want the model to observe but the
+[3497.4s] idea is like
+[3499.0s] >> the code the you might want the code you
+[3501.9s] write to be more verbose but that the
+[3504.3s] what gets fed to the model to be a
+[3506.6s] little bit more token efficient with
+[3508.3s] these aliases.
+[3509.4s] >> Exactly. And like again like over here
+[3511.8s] this is it this is just like
+[3515.7s] alias directory path. I'm just getting
+[3518.4s] rid of every single redundant path that
+[3520.5s] I don't need. I don't need any of this
+[3522.8s] crap. So I'm just going to get rid of it
+[3524.2s] completely.
+[3525.8s] Um and maybe I'll do this. Uh I don't
+[3529.2s] need this.
+[3531.2s] The model's pretty heavily RL on edit
+[3533.9s] tool means uh old string new string.
+[3537.0s] >> Yeah. So just leave it over there. File
+[3539.4s] path path of file to right. Don't need
+[3541.3s] this. Don't need this. And I want to
+[3543.9s] basically trim this. And again we start
+[3545.8s] off I think we was like 1300 tokens when
+[3547.8s] I first saw this section. We're at 1100.
+[3550.9s] It's just worth doing this work. I just
+[3552.6s] trimmed it by 200 tokens just by
+[3554.2s] spending like I think less than a minute
+[3556.4s] just going over and reading every
+[3557.7s] description because if you're writerly
+[3561.3s] write every single pro every single uh
+[3564.3s] cloud code will literally take every
+[3565.9s] single um schema and add a description
+[3568.7s] to it because it's trying
+[3570.0s] >> and I've I've talked about this a lot
+[3571.8s] like the more you let Claude write your
+[3573.5s] prompts like if Claude is writing
+[3574.8s] instructions or writing like how things
+[3577.0s] work and stuff you're literally taking
+[3579.2s] stuff from the training set and putting
+[3581.1s] it in your prompt. And unless it's super
+[3583.4s] high leverage, you're literally just
+[3584.9s] going to like be telling the model stuff
+[3586.9s] it already knows. The the prompt is
+[3589.3s] where you need to get like in the weeds
+[3591.4s] and really tune it and customize it. If
+[3593.3s] you just let Claude slop out all your
+[3595.1s] prompts, then you're just going to end
+[3596.5s] up with like more information that's
+[3599.0s] already in the training set.
+[3601.2s] >> Yep. And right over here, this is so
+[3604.1s] annoying because you see how I did 500
+[3606.1s] uh 500 48 output tokens. This is not 548
+[3610.1s] output tokens. Everyone knows this. This
+[3612.3s] is
+[3612.7s] >> Is that your reasoning?
+[3614.4s] >> Yeah, it's all reasoning. And this is
+[3616.8s] why you should not This is the problem
+[3618.6s] with the responses API. Like by default,
+[3620.6s] if you don't set reasoning, it does
+[3623.2s] reasoning. And it's just an absurd
+[3626.1s] amount of latency that's coming from
+[3627.4s] that. And I'll disable reasoning just to
+[3629.1s] show you what I how
+[3631.6s] um how much lower it gets. GD5 mini
+[3636.9s] reasoning.
+[3638.5s] reasoning
+[3640.3s] effort.
+[3642.3s] None.
+[3643.8s] I think none is a valid thing.
+[3650.5s] I'll run this again.
+[3655.2s] >> Oh, minimal.
+[3656.8s] >> Minimal.
+[3658.6s] >> I have to do minimal. That is um
+[3662.4s] interesting.
+[3663.8s] >> Extra low.
+[3665.8s] Uh that is an interesting choice that we
+[3668.0s] have to do. I guess you can't even turn
+[3670.0s] off reasoning in the new models. I guess
+[3673.1s] minimal does it. So now we're at 34
+[3674.6s] output tokens. It's just it's one of
+[3677.5s] those things where like you can go from
+[3678.6s] like literally having 548 output tokens
+[3681.5s] to 34. And that's the difference between
+[3684.4s] 6 seconds and 2.3 seconds. And if you
+[3686.2s] didn't know that, you're just spending
+[3688.6s] extra tokens
+[3690.4s] uh in terms of money and time for your
+[3692.1s] users. I think we did call last question
+[3694.6s] on the last one, but if you care about
+[3696.6s] uh I think there's a followup there is
+[3698.2s] like where you write the JSON you want
+[3699.7s] returned. So it is asking about the
+[3702.0s] schema line parser and injecting the
+[3704.2s] schema and then parsing it yourself and
+[3706.1s] like that versus using the like built-in
+[3708.2s] model tool calling which
+[3710.5s] >> I think you should just share the blog
+[3711.8s] post and and and we'll post a link about
+[3713.6s] that because Vibbot's written about that
+[3715.0s] a lot.
+[3715.9s] >> Yeah, exactly. It just turns a schema.
+[3717.4s] It's like a schema in the prompt and
+[3718.7s] then let and parses out into a type
+[3721.1s] system for you. and basically does
+[3723.1s] function calling out of the box. But
+[3725.9s] yeah, I mean the whole hopefully this
+[3727.6s] was um useful for everyone doing um
+[3732.2s] the ever doing latency and hopefully
+[3734.7s] people end up doing uh
+[3738.3s] like hopefully people are able to go
+[3740.9s] ahead and take some of these and make
+[3742.3s] the app slightly faster. It ends up
+[3744.3s] being useful. Uh, but if you guys do
+[3747.4s] find stuff that has work that's beyond
+[3749.0s] what we talked about, you should come
+[3750.5s] share with us in the Discords. Uh, it
+[3752.4s] helps make content much more
+[3753.7s] interesting. I think next week's episode
+[3755.5s] is one that Dexter, you'll be leading.
+[3758.1s] What are we talking about?
+[3759.0s] >> Oh, it's going to be a blast. Um, yeah.
+[3761.2s] So interesting story of like in April uh
+[3764.6s] publishing the 12 factor agents paper
+[3766.4s] and you know full fat agents and just
+[3768.2s] plain loops don't really work that well
+[3770.2s] and then two months later claude code
+[3771.8s] gets starts to get early momentum and
+[3773.5s] I'm like actually this this full fat
+[3775.0s] agent is actually pretty good and then
+[3777.3s] what we've learned since then and how
+[3779.1s] you can basically apply the principles
+[3781.4s] from 12 factor agents to these generic
+[3784.6s] coding agents or coding agent SDKs. So
+[3786.9s] it's like rather than having one big
+[3788.6s] loop that does everything, how can you
+[3791.1s] chunk up if you know what the workflow
+[3793.1s] is rather than using prompts for control
+[3796.5s] flow um will'll use control flow for
+[3800.0s] control flow where you actually write
+[3801.2s] deterministic code and you still have
+[3802.9s] agentic loops in there but they're
+[3805.0s] smaller scoped and they have specific
+[3807.2s] like entry and exit uh criteria that is
+[3810.0s] powered by structured output. So
+[3812.3s] basically, how do you do the like schema
+[3814.7s] first agent development with agent SDKs
+[3817.6s] like the cloud agent SDK?
+[3819.0s] >> I'm excited. That'll be fun.
+[3820.8s] >> Yep. It'll be a fun time. We will not be
+[3822.6s] using lane graph. Good one, dude. Thanks
+[3825.5s] everybody.
+[3827.8s] >> We'll leave it at that. Uh this episode
+[3830.0s] will be live in about a week. Thank you
+[3831.6s] guys.

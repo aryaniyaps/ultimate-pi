@@ -1,0 +1,2428 @@
+computer. All right, sounds like we got
+quite a few folks signed up today. I'm
+really excited to talk about 12 factor
+agents. How many of you read the blog
+post? Did everyone read it so far that
+Dexter made?
+Nope. Oh, you're you're in for a real
+treat. The gonna be a good time. One of
+the one of the most fun blog posts I've
+read in a while. Um,
+and it's this interesting concept that
+we had percolated on for quite a while
+and then Dexter just put it down to like
+these beautiful words to really help
+outline it in a more concrete way.
+Well, yeah, I
+think I kind of stumbled on this. We did
+I think you and me did a hackathon back
+in like October or November and we were
+building agents and we were building
+them from
+scratch. Uh, and that was kind of the
+seed and the the initial idea there that
+I then went and hacked on and talked to
+a ton a ton of founders
+and was just trying to trying to figure
+out what makes what makes good agents
+and like how can we how can we can
+distill this down into building blocks.
+Yeah. Yeah. Like the building blocks I
+think are that's really what's missing
+right now.
+Well, and and so the problem with with
+not having good building blocks, I
+think, is you I know we said we're going
+to wait till people got here, but I'm
+just going to start going. The problem
+with not having good building blocks is
+I think you end up with this problem of
+you're like, "Oh, I want to build
+something pretty cool with AI. I want to
+build something agentic. I want to do
+something a little bit more than just a
+chatbot or uh, you know, summarization
+in my web app." And and so you're like,
+"Cool, we need an agent." like okay like
+I don't want to write all this code from
+scratch really learn it all from
+scratch. Uh maybe you do, some people
+do, but a lot of folks are like, "Cool,
+let's go get some frameworks and some
+libraries." And I think what it leads
+you down this path of like, "Hey, let's
+build rather than like just making our
+existing software a little more AI
+integrated." You end up
+with people who are just like, "Hey,
+let's go build something from scratch.
+Let's we're building our agent. We're
+gonna we have our thing now and we're
+going to go do green field from scratch.
+Build an agent." And uh I think what
+happens
+is that never works. And what I wanted
+to figure out was like how can I help
+people who already have really good
+software and have ideas about how how AI
+could make it better
+and what what things did they need to
+take from the agent
+paradigm that they can take one by one
+that they can take peace meal that they
+can kind of like just carve up this
+problem and slowly over time take
+deterministic code and sprinkle in some
+LLM calls in the right places to make it
+really man like magical without tanking
+the quality or making it unreliable or
+having this sort of like chat GPT
+hallucination effect where like one in
+five times you're like, "Oh, this is
+useless. This is never going to work."
+Yeah, I agree. Let's um All right, it's
+104. Let's do a quick little brief
+background who we are um to everyone
+that's on the call and then let's get
+into it and like what this thing is
+about. So, cool. Um I'm Vibe. I'm one of
+the co-creators of BAML. Um, I'm a YC
+founder from Winter 23 and uh this is my
+co-host, I guess.
+Uh, go for
+it. Uh, what's up? I'm Dex. Uh, I'm the
+founder of uh, Human Layer, uh, another
+YC company. Uh, we are working on um,
+safer, more reliable agents and, uh, how
+to build agents that can actually get
+real, meaningful work done. And uh yeah,
+and the whole point series that we've
+got here is really just we all see a lot
+of demos that come with AI and we'd like
+to go past the demo stage. We've seen uh
+between Dex and I, we've seen like
+probably hundreds of companies that have
+actually shipped to production and found
+patterns that work and we've found our
+own techniques that work and we just
+want to use this session to go share
+some of those and not really at a high
+level, but really at the layer of code
+because honestly, it's just there's a
+lot of things that talk about the the
+words behind the AI, but there's not a
+lot of stuff that talks about the code
+that we have to go write and that's the
+whole point of these sessions. So, as
+you guys have any questions, um, please
+go ahead and post them in the chat or if
+you really want, you're welcome to
+unmute and go ask questions as you go.
+What we're going to go do is typically
+we include a whiteboard session and then
+we also include some coding sessions
+because whiteboards are just a great way
+to convey ideas before the code. Um, so
+be patient. You will see code, we
+promise. Um, but also the whiteboarding
+is just to help contextualize and make
+sure we're on the same page.
+Cool. Awesome. Let's get today's session
+I think. Let's get into it. Um little
+preface. There will be some um question.
+Okay, let's go on. That's Let's go. All
+right, we're gonna keep rolling. Let's
+go into 12 factory. You want to screen?
+Yep. I'm gonna screen share and um
+there's gonna be a little bit less uh
+what I would call
+um let's
+see a little bit less of what I would
+call the like hands-on live
+whiteboarding just because there's a lot
+a lot a lot of content to cover. Um and
+so I'm going to jump through kind of a
+little bit more of a slideshow kind of
+thing, but this is all the content in
+the repo. You can see all of this. Um,
+so I want to start with kind of like a
+little bit of like how we got here and
+how to think about writing code in
+software. Um, and this is a concept
+here, this like software is a directed
+graph. Um, because there's a lot of like
+frameworks today that help you think in
+graphs, but at the end of the day, code
+is a graph. And the theme we're going to
+keep coming back to here is you want to
+have control over the code. You want to
+have hands in the code because that's
+what gives you the control to add probes
+and changes and tests and things to help
+you improve the quality. Um after a
+while we ended up with these things we
+call like DAG orchestrators. If you're
+familiar with your like prefects or your
+airflows or your um dagsters, these
+sorts of things where each one of these
+nodes it's still a directed graph. You
+still have logic that is moving
+information whether it's variables or
+data in a pipeline through different
+steps. Uh and it's very declarative and
+deterministic.
+Um, the promise of agents is essentially
+like the the real hype around agents is
+you can take an LLM, you can give it a
+bag of tools, you can say like here's
+all the steps you could take. I'm not
+going to tell you which steps to take
+and which order to do it in, but here's
+your goal and here's the steps you can
+take
+and like go figure it out basically. And
+that the LM will traverse the graph,
+figure out which steps to take in which
+order and get to that goal. And it might
+skip some steps as well. I might not
+need to take all the steps. And the idea
+here is cool, now I have to write a lot
+less software. Whether it's like a DAG
+that is in code or it's a DAG that's in
+my infrastructure. Conceptually, the
+agent's going to figure out the ifs and
+the logic and the and the looping for me
+instead of me having to go write all of
+that and test it and make sure it's
+really really good. And as LM get
+smarter, they'll be able to handle more
+and more complex workflows.
+Um, and the way we model this, um,
+especially when we talk about like
+agents, um, and structured outputs is
+essentially like an agent is just a
+prompt that determines a next step. And
+so you have an event and you say, "Hey,
+LM, what's the next step with this
+event?" And then the LM might say,
+"Okay, we have to call this API or we
+have to kick off this pipeline or we
+have to update this database." Um, or
+maybe it's like, "Cool, we're done.
+We've done those things and now and now
+we're finished." And just and the way
+this kind of Sorry, go ahead. Just to
+really highlight to a lot of people,
+it's like a lot of people use this word
+of like the agent is calling the tool.
+It's not calling the tool. An
+LLM is really just a really really smart
+go-to statement. Like in our code, we
+used to write goto statement. That's
+really all this boils down to. I love
+that you said goto because I literally
+have a blog post I want to write that is
+like do do you remember that post that
+was uh goto considered harmful? Yeah.
+Yeah. Yeah. It's Yeah. What an LM is. So
+uh I I actually think the concept of
+tool use is harmful. The idea that a
+model is smart and is interacting with
+its environment is actually like it's a
+little bit of hype. I mean it's you can
+think about it in that way and it's a
+good way to like introduce the concept
+but at the end of the day when a model
+calls a tool it's taking a bunch of a
+bunch of input tokens as the prompt and
+maybe some tokens about what's happened
+so far and it's outputting JSON that
+says I think the next step in this
+workflow is X. We should play the one.
+Yeah. Yeah. Yeah. Yeah. So the way this
+works as you kind of uh move through
+this stuff is
+um you would you would kind of like pick
+a step, call an API, and then add that
+to the context window, feed that new
+context window in. It says, "Okay, we
+had this event, we called this API, we
+got a result." Then the LM is going to
+say like, "Okay, cool. With that result,
+I can now kick off a pipeline and get
+the result of that." And then we add
+that to the context window. We feed it
+back into the LLM and we then we update
+the database and we get the result. And
+then then we add that to the context
+window. And then the LLM may say, "Cool,
+we've done our job." Based on the event,
+based on the goal, based on this is
+super generic, but every time you do a
+tool calling. And if you've built these
+tool calling loops with the OpenAI APIs
+or the anthropic APIs, like this, this
+will seem super familiar. We just want
+to break this down conceptually into,
+you know, what is um what is this
+really? Um, what's the shortcut for
+opening the file browser? Command B.
+Command B. I'm trying that. Yeah, there
+we go. Okay, cool. Thank you. Uh so in
+this kind of like uh dynamic loop what
+was materialized is this DAG right the
+agent figured out the DAG for us. We did
+this step and then we did this step and
+then we did this step and uh at the end
+of the day that's that's kind of that's
+kind of what happened. Um if we come
+back to this loop there's basically four
+components right you have
+uh you have a prompt and then the
+prompt's going to output JSON. You have
+a switch statement which is going to
+basically say based on the JSON that was
+output which code path do we want to go
+down or do we want to exit and then you
+have how you're building how you tell
+the model again because this is totally
+stateless. The only way it knows what
+happened in the past is if you p pass in
+tokens strings JSON XML whatever it is
+uh and tell it what happened before so
+it can make the decision of the next
+step and then you have a for loop. The
+whole idea behind 12 factor agents is
+really like you're a good
+engineer. I hope probably you can write
+a switch statement. You can write a for
+loop and you can turn some data into a
+string. And the most important part
+that's going to control how good your
+agent is and how good the performance is
+is this prompt. The prompt of how to
+behave, how to do it. what's the context
+that we put in and how to call these
+tools, the description of the JSON that
+you're asking it to output. And I I want
+to highlight one thing here. A lot of
+people just I I know what you mean when
+you say prompt, but I think a lot of
+people are going to assume that prompt
+means a system prompt all the stuff.
+That is not what Dexture means. Just to
+highlight that again, what Dexter are
+trying to say is it's the full
+serialization of the state. We talked
+about this determine next step being
+completely stateless. Yeah. Context that
+you're putting into it. Somehow you turn
+that context into a where are you going
+to the whiteboard? Someow you're going
+to turn that context into a string.
+Somehow you're going to include
+instructions for what you want the model
+to do. Somehow you're going to model the
+exact outputs you want the model to
+output. All of those things together are
+the prompt. It is not individualistic.
+It is not simply to say exactly what the
+system prompt is. It is everything
+together. That is what Dexter is trying
+to highlight of what the prompt is. And
+even here where you we're using the word
+system and user prompt because that's
+just terminology people have used. You
+may find that putting the entire context
+into the pure system prompt is going to
+get you the best response. You may find
+putting instructions in the user prompt
+gets you the best response. Even that
+itself, whether you use the system
+prompt or the user prompt or what tokens
+you're using to represent this
+dramatically makes a difference. And
+being aware of that fact of like what
+you're what you're doing here is somehow
+you're taking a data model that you have
+that represents a state that you save in
+your database and turning it into an API
+call that matches the best output format
+that you want somehow. That's and the
+point and the point is not to kind of
+say there's a right way to do this or
+there's a right thing to do here. The
+point is if you think of this whole
+thing as just one big string. You can do
+anything you want with this. And I don't
+know what the best way to handle the
+prompt for your specific problem. But I
+know that if you don't have full control
+over what goes in there in what order
+with what special tokens, you may be
+missing out on optimizations that you
+could make. And so the more control you
+have, the more ability you have to
+customize all of this and to take full
+control, the more likely you're going to
+be able to get to the best performance
+for a given task that a model could get.
+And that's all that we talk about in
+this show is how do we get the best
+possible performance out of today's
+models. Yeah, that's perfect. Yeah, and
+we'll get into kind of as the models get
+smarter as well, but um I'm going to
+quickly run through the 12 factors as we
+talk about them and we may pause on a
+couple of them to go a little bit
+deeper, but um from there from there
+we'll get into some code. So, uh number
+one is like natural language uh becoming
+tool calls. And this one's really really
+straightforward, but it's basically, you
+know, taking words from a human and
+turning them into JSON. That's all we're
+going to do. We'll go through this in
+the in the in in the demo. Uh, but being
+able to take human human words and turn
+them into actions in the world.
+Uh, Carlos has a question. Does that
+mean ditch the frameworks? We'll talk
+about we'll talk about frameworks in a
+second. Yeah, we'll have a second coming
+out about Nobody here is saying ditch
+the frameworks. I actually think of a
+lot of this year as like feature
+requests or like a letter to the
+builders of frameworks of like the kinds
+of control knobs that I think they
+should be exposing.
+Um, factor two is own your prompts. This
+is what we just talked about. Basically,
+like rather than building abstractions
+around something that's going to build
+you a great prompt, you can hit a
+framework like Langchain, like Crua,
+they all have really, really good prompt
+engineering primitives built in. And if
+you're not a good prompt engineer like
+me, I'm a shitty prompt engineer. You'll
+you'll see Fibb shout at me for my
+prompts later today. Uh you can turn
+some like highle sentences into a banger
+prompt, which like you'd need months to
+go to prompt school to learn. I don't
+know if there's a prompt school, but bye
+Bob if you're thinking of other schools
+to do. Um
+uh but
+eventually like with the blackbox,
+you're going to hit the limits and
+you're going to be reverse engineering.
+Okay, how does this prompt get built and
+how do I flip these tokens around so
+that it happens in the order that I
+think is actually going to be better?
+And so at the end of the day, it's
+really just worth like full ownership.
+Yeah, it's just like any it's not an
+additional framework, but you really
+want you don't you probably don't want
+to build a prompt from raw strings on
+your own, but you also don't want a
+framework that makes it harder for you
+to own the prompt. That's really what I
+would look for. like how closely do you
+own the prompt and how much control do
+you have over the final prompt that is
+being sent out? Yeah. And again, this is
+I don't know what's better, but I know
+you want to be able to try everything.
+Yeah.
+Um, cool. The other one is own your
+context building. This is you know when
+we say prompt like this is a kind of a
+subset of that but it's a very
+specialized one because I think a lot of
+people uh think of tool calling and
+context building as separate from
+prompting but it's all just tokens going
+into the model. So if you want to use
+the standard format of like system user
+assistant tool assistant tool and like
+you're giving it back and forth in this
+official format you could do that. But
+in this moment when you're giving the
+model a prompt, your only job is to tell
+the model what happened so far and ask
+it what the next step should be. And you
+can put all of the events of like, hey,
+what's the weather in Tokyo? Hey, we did
+a check weather call. Hey, we got a
+response. Ask the next step. And then we
+would probably get our final answer. You
+can do that all in one user message if
+it works better. And I don't know what's
+better. Every model is a tool calling
+model is the way to think about it. As
+long as you can describe your tools in a
+good way.
+Yes, exactly. Um, tools are just
+structured output. We're going to these
+are a lot of these are clearly like
+related and and come together. Um, but
+whether you're telling OpenAI with a
+JSON schema to output certain tool to
+output a function call to a certain
+function or you're using something like
+BAML to just ask it to output JSON
+plane. Um it's all just part of the
+prompt and then what you do with the
+output and parsing it and turning it
+into structured data for your model to
+use. Um let's find this one. Yeah. So
+all you have to do is get JSON out of
+the model. And so thinking about this in
+terms of special tools or special
+functions is is can be can be sometimes
+a little bit uh counterproductive. Yeah.
+Instead of calling a tool, it's just
+honestly way easier to say it's a type
+that I want the model to produce. I want
+the model to return a class. I want the
+model to return an array instead of
+using the special word tool because we
+have tooling for all the other things
+pipe systems in the past. Yep. Um, cool.
+Here's another one. Uh, unify execution
+state and business state. I'm actually
+going to do the animation for this one.
+Um but basically you know as you are
+iterating through this flow and you have
+your different JSON outputs um being
+able to serialize what's happened so far
+your context window that you're passing
+into the model
+um is not just like the business state
+of what is the model thinking about and
+what the logic is but you can if you can
+you should trivially like make the
+context window itself be a
+representation of your execution state
+as Well, a lot of these frameworks like
+uh if you look at something like um lang
+graph which I I think is very good for a
+lot of reasons but you have kind of two
+states here. You have the graph state
+and then you have the like uh like the
+object that flow you have your business
+state right you have like the object
+that flows through the graph and this is
+usually like some strruct that is just
+like messages and it's a list of
+messages and you can store other things
+on here as well like you know pending
+tool calls or something like that.
+Um, but basically your like business
+state of what what the model operates on
+is separate from this big I don't have a
+screenshot of it, but there's this huge
+like a bunch of tables that go into
+SQLite or Postgress or whatever it is
+that kind of outline every single step
+that's been taken. If you can unify
+these things, you're going to simplify a
+lot. There may still be reasons to have
+this. And this gets back into like own
+your context window. If you have an
+object that you control that tracks like
+the state of your application, you can
+put methods on it that tell, hey, when
+we send to the model, just send it this
+way, like here's how you serialize this
+for the LM versus here's how you
+serialize this for rag versus here's how
+you actually like use this to pump the
+execution state. Um so it's again it's
+all about control but if you unify those
+things then you can get uh you can get a
+lot of simplicity and you can get this
+is what a lot of people are doing in
+terms of just like I think building AI
+agents in production. Go ahead. The best
+analogy for this kind of stuff is I
+don't know if any of you have ever
+worked on like massively online
+multiplayer games, but like the way you
+build these systems is that they're
+built to have a unified state of source
+of tree and then you basically use that
+everyone views and renders.
+You view that as the thing that everyone
+that builds and renders and that's just
+the easiest. If you have like seven
+different objects that reference the
+source of truth, you have discrepancies,
+you have untruths and you you have a
+really hard time representing the data.
+But if you have a single state,
+debugging and everything else building,
+maintaining our systems becomes a lot
+easier and that simplicity is really
+really important. Yeah, nailed it. Um,
+cool. We're gonna keep running again.
+Uh, what this lets you do is you can
+pause and resume with like very simple
+APIs. So as you're running through this
+workflow and your model is maybe you
+know you launch a workflow over rest or
+MCP and that causes some kind of context
+to be input into the model maybe it
+calls a longunning tool and you need to
+kind of like interrupt or pause your
+workflow that's great store your context
+in the database and the fact that you've
+most recently called a longunning tool
+and then basically when the job is
+finished you would post a web hook back
+use that to pull the state out of the
+database and then take the result and
+push it onto the thing and send it back
+into the model. Man, I wish that thing
+paused. I think this is it. Yeah. So,
+essentially like resume later using a
+state ID that tells it how to pull the
+context out of the database and then you
+take the job result. And so you can
+build if you own this logic here, this
+API endpoint, you can catch a web hook,
+you can reassemble the context from the
+past, you can append the result to it,
+push it right back into the model, and
+there's no other execution system.
+There's no, you know, distributed
+workflow system that you also have to go
+integrate into because all we care about
+is our context window. Exactly. And
+because it's a stateless function, it
+doesn't matter. It's really easy to make
+everything work. Yeah. LMS are
+stateless. The only Yeah. The only state
+is basically this context window, which
+is also nice because it's very
+inspectable. Like as a human, you can
+look at it and see, okay, here's what's
+happening. Here's where it got stuck.
+Here's where it's looping on an error,
+whatever it is. Exactly. And as a
+developer, that means you can build UIs
+for your tool, for your customers as
+well to see exactly what's happening on
+a long running async task. Yeah. Um,
+this one's subtle. I think we could do a
+whole 20 minute on just this one. But um
+basically when a model is making a
+decision about whether to output a tool
+call or whether to output plain text,
+there's like a very very like
+highweighted like token choice which is
+like the JSON token or the I'm going to
+contact a human token
+um and or sorry not contacting you but
+I'm gonna output my answer that goes to
+the chat UI or wherever wherever it is.
+And um what I've seen a lot of people
+doing is one there are different reasons
+you might want to send a note to a human
+whether it's like requesting
+clarification or a final answer. And
+there's also different like types of
+humans a model might want to contact.
+And if you want like better AI
+experiences you need something you need
+to give the model the option to involve
+multiple players. And so you have
+standard tool calls like call a function
+that's deterministic, but then you
+basically are having the model declare
+its intent before it goes in. So it's
+always outputting JSON. And you have a
+little bit more um focus on basically
+this this string of what do we want to
+do next versus do I want to call a tool
+or or say something to a human. Does
+that make sense? I think you're saying
+almost the right thing. And just like
+really clarify, I know we keep saying
+like JSON. What we really mean is we
+just we're just outputting some specific
+structure that we want. There's many
+ways to do the structure. Yeah. Like
+JSON is one technique that a lot of
+people know commonly, but there are
+other techniques that can make it
+better. But I think what like
+representing everything with as a tool
+of like intent and giving the model some
+way to go do that, then definitely yes.
+Yeah. Cool. And there's no such Carlos
+as a great question. Can a human be a
+tool? So it's universal. There's no such
+thing as universality with the world of
+LMS. There's no when when you go to
+Google search and when I search for like
+how do I print a string, how do I do
+like a print statement, I use a lot of
+Rust code. Google will show me mostly
+Rust results. When when someone
+anonymous goes and search, it'll
+probably show them Python or JavaScript.
+There's no universality. And for your
+users and your tooling, you might be
+using the most average tool. So maybe we
+can just call it a human. But the more
+specific you can make it, the more
+control that you are taking over your
+system, the more accurate and a better
+experience you'll provide to your users.
+But it's all about testing and
+iterating.
+Anyone the best tool is is probably not
+correct because they just don't have the
+data for your use case. Okay, we got
+five more minutes for slides and then
+we're going to jump into code. So, I'm
+going to fly through some more of these.
+Um, control flow. I mean, we we've kind
+of hinted on this a lot, but basically,
+if you own your control flow, if you own
+that switch statement, you can decide
+when to break out into another workflow,
+when to pause and resume later, when
+these are all kind of like complement
+each other. But the idea is you can pick
+two or three of them at a time and start
+incorporating them. And so, if you own
+the switch statement, you can insert
+little like modes to summarize things or
+add an LLM as a judge to break out and
+bring things back in. You can pause and
+do something asynchronous and then
+resume later. So this is this is kind of
+we've gone over this one a little bit.
+Another thing that I think I is is worth
+mentioning is this like adding errors
+onto the context window. If a model
+calls a tool and that tool is bad,
+either the API is down or it used bad
+parameters or whatever it is. Um let's
+say that result caused an error. We can
+put that on the context window and hand
+it back to the LLM and have it say like
+let's try
+again. And then maybe that will give it
+enough to get to success. super s simple
+concept. Almost every framework already
+does this. Um, but that's another
+interesting one that we talk about a
+lot. Uh, the next one is kind of small
+focused agents. Again, the longer and
+bigger you have this like workflow owned
+by the agent. Um, the more tools you
+have and the more steps you have, the
+more likely this thing's going to spin
+out and fail. Uh, you may say like,
+well, what if the agents get smarter?
+Um, this is kind of how I see all this
+progressing where you have a fully
+deterministic workflow. You replace
+small parts of it with agents and then
+over time you can get bigger and more
+interesting agents and they start to
+overlap and maybe in a couple years say
+what and I think this point what Dexter
+is saying is that like when when these
+principles that we're sharing here are
+not just about like models getting
+better like Sam Alman might tell you
+that we have to go wait for the better
+model it's going to go do everything but
+that just means that the box gets bigger
+like this visualization shows.
+Yeah. And I think remove the need for
+the box. Yeah. And I think even as the
+as the models get smarter and you can
+get better results with less
+engineering, there will always be tips
+and tricks that will help you get more
+out of a given model. And I think the
+Notebook LM team put this really well. I
+haven't seen anything on Notebook LM in
+a while, but when they launched it was
+super popular. And the reason why it was
+is because in their own words, the only
+way to create really impressive or even
+like magical experiences in AI is to
+find something that is right at the
+boundary of what the model is capable of
+and get it right consistently. And so
+even as the model gets smarter and you
+don't need to do so much engineering, if
+you want to do something that is 10x
+better than what already exists, you are
+going to want to do some engineering and
+you want to have the flexibility to to
+be intentional about this. And to give
+everyone like an analogy that I think is
+relevant to like current software is
+technically most websites are really
+just the same thing the different views
+on similar databases.
+the way people interface with it makes a
+huge difference and because it just way
+that you re like react to a site and the
+way that you see the data the same is
+going to be your agentic systems like
+we're all using the same models quad
+code versus cursor they're both using
+sonet 37 there's no difference it's just
+the the UX and all the engineering in
+between exactly that is the only thing
+so like if you want to make a
+differentiated product there's no moat
+and saying, "I'm going to use the best
+model." Everyone has the best model. You
+assume that and assume people have a
+better model than you. Yeah. Make a
+better product anyway. And do that with
+engineering.
+Cool. Um, all right. We're going to
+speed through the last few of these. So,
+um, yeah, factor 11. Trigger from
+anywhere. Meet users where they are. I
+think, uh, chat GBT is the like geo
+cities era of like AI UX's. There's
+going to be a lot better ways to
+interact with AI. Um, I think a lot of
+people who are building really
+impressive things are building AIs that
+you can interact with fully from your
+email inbox, from Slack, um, from lots
+of places beyond just a web application.
+And this one's a bit of a meme, but it's
+kind of the the culmination of
+everything else that we've been talking
+about, which is, you
+know, LM are stateless, agents can be
+stateless, you're just operating on a
+context window. And uh actually someone
+commented on LinkedIn. I think it's
+actually because there's multiple steps.
+It's a transducer, not a reducer. But uh
+that's that's kind of a good summary.
+Maybe. All right. We can get into that
+one later. One second. I just want to
+appreciate one thing for everyone. Can
+we appreciate that the naming that Dex
+used was hex code? That is amazing.
+Well, I wanted it to sort. I wanted it
+to make sure. No, I get it. I get it.
+So, I want everyone to just appreciate
+that. All right. quick little thing and
+then can you go to the to the browser
+really fast your uh drawing thing I just
+want to draw the whiteboard yeah someone
+asked a really good question that I
+think is relevant and going to help us
+out so the question someone asked um
+Jonathan asked like what's the advantage
+of using small number big agents versus
+a large number of smaller agents and I
+think the analogy that everyone should
+use is that these systems are really
+about like we these systems are all
+fallible they fail all the time so let's
+look at if we use a small number of big
+agents you end up with a curve curve
+that looks like this. You have some
+distribution of how well it works and
+you have a wider array of things that
+you might work well on, but you also
+have a wider array of things you will
+work poorly on. If you use a large
+number of small agents, then you
+basically change the distribution to
+look like this. You'll work better in
+certain areas and you may not work as
+broadly. But if you build it really
+well, you can actually make a curve. If
+you the more engineering you put into
+it, you can basically change that curve
+into something that looks like this. You
+can make it wider and taller as you
+wish. And that's really the difference.
+It's like the amount of engineering
+effort you put into it. The orange curve
+is no engineering effort. Let the model
+do everything. The green curve is some
+engineering effort. The red curve or
+pink curve, I can't see on my screen's
+pink is is more engineering effort. And
+that's how you scale up these systems.
+It's like databases. The way you make a
+database go scale to like five nines is
+you just put more engineering behind it.
+You can make it really damn good. It
+just uh amount of engineering and same
+thing is true here. Hopefully it answers
+Jonathan.
+Awesome. All right, let's write some
+code. Let's write some code. This is my
+favorite part. Um okay, cool. So, uh
+what I have here is a empty TypeScript
+project. Um, we're gonna do TypeScript
+today because I wanted to coin flip and
+uh we've been doing a lot of Python
+lately. So, uh, what I'm gonna do is,
+uh, I'm gonna just start grabbing files,
+uh, for this walkthrough. We're going to
+start with just a really simple, uh,
+hello world. So, literally, here's our
+script. I can run it with, uh, let make
+that terminal a little bit
+bigger. Um, so if I run this script, uh,
+it just prints hello world, right?
+Great. We can commit that. That's all
+we've That's all we've done so
+far.
+Um, sorry. Um, the next thing I'm going
+to do is I'm going to install BAML,
+which is what we'll be using for
+prompting our agent and building our
+determine next step prompt. Um, and
+there is one default file that comes
+when you do that BAML in it. That is the
+resume that I'm going to uh close out.
+So now we have in our BAML source we
+have clients which is things that talk
+to LLMs and then we have generators
+which is some BAML config. I'm going to
+write a really simple agent here um that
+basically just has one tool call which
+is we'll call it done for now but it's
+basically respond to the user.
+Let's yep. So we have a prompt called
+determine next step. Um, and it is
+basically can return one type which is
+done for now where the model will
+declare its intent and then we'll just
+get the message that it wants to send.
+You want to zoom out a little bit? Yeah,
+there we go. Cool. There we go. And do
+you want to click on open playground so
+people can just read the prompt fully
+for that one test case a little bit
+better? Yeah. Yeah. Okay. Yeah. There
+you
+go. So, um, the system messages you're a
+helpful assistant. We'll go in and show
+you how like we'll, as an example, we'll
+add reasoning and some fancy stuff to
+this prompt. We'll add more tools and
+types to it. Um, but you can basically
+say, hey, you're working on this thread.
+If we wanted to test this or play with
+this, um, you know, we can run it and it
+says, hey, here's our answer. So, if we
+wanted to give it other instructions
+like talk like a pirate,
+save this and we can run it again. And
+now it's going to talk like a pirate.
+Great. And I want to highlight this.
+This is one of your factors. Respond to
+agents with tools. Instead of having it
+just respond as a string, we could
+change the return type of determine next
+step to not be deter done for now, but
+instead be a string. Can you make that a
+string type? And press play. We could do
+this. Like that's totally a valid way to
+do this, but by using a tool, we're able
+to get a couple of wins for users, which
+is now we can just render the message
+field to the user. Exactly. Um, so I'm
+going to generate the uh models for this
+uh the TypeScript code for this and then
+I'm going to enable the BAML debug
+logging and I'm going to add a couple of
+TypeScript files. So we're going to add
+we we're going to add a CLI which
+basically just pulls a user message off
+the command line, turns it into this
+thread object that we'll get into a sec
+and sends it to our agent. And then our
+index.ts TS is going to call that CLI
+function. Um, the agent itself is pretty
+simple. I'm going to start here. This
+this is called agent loop. This actually
+doesn't do any Oops, sorry. Close that
+out. This doesn't do any looping yet.
+It's just going to call our determine
+next step and then it's going to uh
+return it. Um, we have this thread
+object which is just a li list of
+events. Um, which we'll get into, but
+this is like the items in our context
+window. And so when I run this quickly,
+I'll show you
+um if we can say
+hello, what happens is we have kind of
+the BAML logs will actually output the
+prompt that was passed in. So here's the
+thread we actually gave to the agent in
+our determine next step prompt. Um we
+serialize that for the agent and then uh
+so we build this thread and it gets
+passed in as JSON and then we ask it
+what the schema should be and it says
+cool. So I can say, you
+know, hello, talk like a
+pirate, this is the best the best LM
+example that exists. There we go. So now
+it output this thing and we just kind of
+print it out. So that's our that's our
+literally natural language to tool
+calls. The only tool right now is done
+for now, but um we'll add more tools in
+a sec.
+Um Carl, while you get your next step
+set up, I'll describe Carlos as like
+BAML code is interpreted. So, BAML code
+is just uh code that you write and then
+we use that command line tool that
+Dexter ran BAML CLI generate to convert
+BML code into native TypeScript code.
+Yes. So, if I if I were to actually use
+the native like uh VS code clickth
+through, you can see here's the
+generated code that got generated from
+this function. Yeah. And u people might
+be wondering like why the heck do you
+use BAML for this? Um yeah, go ahead. uh
+you should probably tell them but like
+the main reason I think Dex and I first
+met is one we're just YC founders but
+two the part about BAML that makes it
+easier for people is just that it gives
+you full control over the prompt like
+the fact that the entire prompt is
+accessible to Dexter and he can see it
+and modify there's no default things
+built in the prompt is where the is
+where like why it becomes useful and I
+think as we do unions it's going to be a
+lot more interesting so let's go on to
+the next part yeah and if you yeah if
+you come back over this and you go watch
+the recording. Watch this and then go
+back and watch the We've already done
+factors one, two, and three. And we're
+about to do factor 4. Yeah. Um
+demonstrated in here. So, um we'll
+commit that. Here's the kind of diff of
+everything that we did. Um so, now we're
+going to add uh what I'm going to call
+the calculator tool. And so, this is
+just uh again a bunch of structured
+outputs defined in BAML. That is the add
+tool, subtract tool, the multiply tool,
+and the divide tool. Um pretty simple
+stuff. And then what we're going to do
+is we're going to update our agent.baml
+to return either done for now or
+calculator
+tools. That's it. Um did you define
+calculator? Oh, we need to Yeah, there
+we go. Oh, it's calculator tools plural.
+That's why. Okay, cool. Um and so if we
+regenerate our our code here, um there
+now we can ask the agent. We're not even
+going to change the TypeScript code.
+We're just changing the basically by
+changing the tools that gets passed into
+here, it changes our prompt. And so this
+is just prompt engineering right now.
+Yeah. Um and so now you can see the
+prompt is going to ask it to answer in
+any one of these schemas. So I can run
+and add it. And uh again, we're not
+actually doing anything with this
+output, but this is factor one. We turn
+natural language into a structured
+object that says add three and four. And
+this is like the most important part.
+We're the lime remember is not calling
+the tool. It is simply returning a data
+model that I then interpret as a thing I
+can do something with. It's like any
+other API call. It's just a stateless
+API call that we were able to convert
+the model into. Yep. So here's the only
+change we made is we added tools and we
+told the LM it can return those tools as
+well. Yeah. Um now let's actually go
+process that. Um
+um so I'm going to update our agent.ts.
+And essentially now we've updated this
+to have a full what we call like agent
+loop
+where yeah okay that looks
+good. Did we not generate? No I think it
+did just there. You probably just didn't
+generate there. Okay. Um so now we're
+going to get our next step out and we're
+going to do a switch statement. We're
+going to say if it's done for now we'll
+just return the message. If it's add
+then we're going to compute the result
+one. we add that to our context window
+and I'll show you what that looks like
+as we go through and then we're going to
+push the result onto the context window
+and we're going to loop again to the top
+and we're going to just check now with
+our new thread what's the what's the new
+next step
+so while Dex runs this and executes this
+like one thing to think about is we all
+see these frameworks we all see like
+lang chains tool calling API we all see
+agent api uh we all see like um the
+openai API SDK they're all doing this
+loop. They're just not giving you
+control over the loop. Own the loop. Own
+the loop. That's it. It's not that hard.
+Um, so here's here's we we passed in our
+first prompt and we got out the intent
+was add. And then we printed our next
+step and our tool response was seven.
+Um, we'll turn up the logs in a second.
+This will make a little bit more sense.
+And then here's the next context window
+we put in. We just said display to not
+be so dark by chance. Is that possible
+in your terminal?
+Uh, I was trying to get it better
+yesterday. I actually changed a bunch of
+my colors to work better with the BAML
+output colors. Uh, but you all need a
+solarized theme. I will apologize for
+that. Uh, ANC color art is very poor as
+I've learned. Maybe like black. Yeah,
+it's not good.
+High contrast. Oh, yeah. There you go.
+Uh, you know what? I can't change the
+profile of an active shell. Oh, okay.
+Never mind. Go on. Sorry, folks. Um, you
+can run this code yourself in whatever
+show you want though. Um,
+so let me turn this off and I'll just
+show you kind of how we're logging this
+stuff out. Um, can turn it back on. Oh
+yeah, we can turn off the log. That's
+actually better because then we can see
+the tooling part of it. Yeah. So this is
+this is just our logs that our
+application is printing. And so I asked,
+you know, can you add three and four and
+then add six to that result. So it it
+emitted this attempt. We gave it this
+result and then it tried to add them
+together and then it gave it this one.
+And then we have done for now and it's
+good. And you could easily see how we
+could build a UI off of this. Like
+pretend that this isn't even an outline.
+I think the most important part of the
+Grock is this doesn't have to be an
+outline. I just have a machine that is
+outputting events and now I can build a
+UI on top of this whether it's a chat
+pro chat system or anything else. And
+that's all this ends up being.
+Um, cool. I'm going to break this uh and
+ask it to subtract things. Um, because
+we haven't actually implemented we've
+only implemented add. So, if it's not
+done for now or add, we're just going to
+blow up with, you know, unknown intent.
+We don't know what that intent is. So,
+I'm not going to make you all watch me
+code out the handlers for all of these,
+but we'll basically pull this into a
+function called handle next step. And
+that handles add, subtract, multiply,
+divide. And so now our loop becomes
+determine next step, add that to the
+context window, and then handle next
+step. So, if it's one of our break-in
+conditions, we'll just return. But if
+it's one of these four, um, we'll fall
+through the switch statement and we'll
+do handle next step. And this handle
+next step is basically going to append
+the thing to the thread and then return
+it. That make
+sense? So now we can ask it to subtract
+three from four. And now we can ask it
+to multiply three and
+four. And now we can ask it to do big
+complicated things like add and multiply
+and divide and uh run through all
+this. So that's tool calling loop.
+There we go. We now we own our control
+flow and we can do lots of things. The
+the idea of like when we the control of
+when we break and return versus when we
+continue and loop through I think is
+really important and interesting. So
+let's let's look at this code a little
+bit just so people can see this a little
+bit better. Yeah. What do you want to
+look at? Just like describe maybe we
+should describe to people exactly what
+we're doing. So like how are we doing
+this? So so our CLI comes through and
+takes the input message. We build a
+thread with that message and then we pop
+and then we hand that off to the loop.
+So that's our base
+thread. We pass that thread into the LLM
+and I'm going to get into testing as the
+next thing. So we can actually look at
+what some of these prompts are returning
+and stuff. But
+um yeah, we pass that into the LM. We
+get back a next step. Um, when we push
+our results on, we want the LM to know
+not just what was the result, but also
+like what did I call because the LM
+doesn't know that it called it. When you
+pass the context window back in again,
+it only knows what we tell it. And so,
+we want to be able to tell it, hey, you
+called a tool that is this next step
+that is this
+um, you know, you called this intent
+multiply 34. We can turn on the BMA logs
+again so people see the full prompt as
+well. the next time it run. Um, actually
+what we're going to do just for time,
+I'm just going to do it in the test
+instead. Oh, better. Um, so I've added a
+couple tests to this file. So here's a
+math operation here. Um, and so we can
+uh pop through here and run this test.
+And so basically the prompt that we put
+in was, you know, your helpful
+assistant, here's the user input, what
+should the next step be?
+Um, cool. Uh, and then the output was
+multiply three and four. Carlos, that's
+a great question. Like, why doesn't the
+LLM know what tool it's called? Unless
+you put something into the context
+window of the model. It doesn't know
+anything. So, I could have gotten the
+answer of maybe add a test case. Ed, do
+you have another test case that you want
+to add in? Uh, I have a bunch more test
+cases. Go on. I'll let you go do that.
+All right. All right. Cool. Just just
+for the sake of time. Um and happy to
+kind of do follow-ups and if people can
+we can we have time blocked after if
+people want to hang out for questions.
+So we can run these tests now. Um we can
+also do add what's really interesting
+here as far as like being able because
+your context window and your input is
+just a string. We can make assertions
+and basically build really simple evals.
+dinga um
+um and like make assertions about what
+the model returns for certain inputs. So
+if I change this to add and I run the
+test again, this is going to
+fail. Um so I can run this every time I
+make a change to my prompts. And then we
+can also make assertions that like all
+right, cursor doesn't know this yet, but
+that's fine.
+Um so we can make assertions about the
+whole thing that the model outputs. Um
+and the important part here is like we
+don't need LMZ val like when you use
+structured outputs you stop you l val
+still might be useful but for a lot of
+use cases I just need to know that the
+intent was correct and the parameters I
+got out were correct. That's what I need
+to really nail down.
+Yeah. So uh let's let's do a test for
+the long math thing and this will get to
+kind of what you were asking for before.
+I'm going to turn the logs back on just
+so I can see the prompts that are
+getting put in um as it's going through
+this. So by the end of this we have this
+really long kind of thread as our
+prompt.
+[Music]
+Um and since it's just strings, we can
+have cursor format this however we
+want. Great. Um, so, so this is what
+we're passing into the model on that
+last thing. And if we run this test,
+we'll see that the output was, "Hey,
+we're done." And we got our final
+result. But, um, if we took like a
+subset of this and we said,
+um, let's do you want to remove the tool
+response. Yeah, exactly. Um, let's
+format this again. Live coding, folks.
+And this is like another thing that
+Dexter was talking about like you need
+to be able to test like we no one knows
+what's the best thing for your system.
+The only way you can know is to actually
+just run the test and like so here's go
+ahead Carlo question of like oh sorry
+one last thing Carlo has a question like
+doesn't know what tool it's called if I
+that's what I'm gonna Yeah. Okay cool go
+for it go for it. Sorry. Yeah. So I
+actually so let's let's just rewind this
+a little bit and let's say that we take
+away this tool call. So instead of
+telling it um I mean it might be smart
+enough to figure it out but basically if
+we just put the tool responses
+in I have no idea what this is gonna
+say. I've never tried this. I don't
+know. I don't know. I think you but this
+is the point is like you should be able
+to try everything and you should be able
+to see like actually it doesn't matter
+the model for a calculator app the
+model's smart enough to figure out that
+we want to add these things. So multiply
+three and four and then add 12 to that
+result. Correct. So I think it actually
+figured it out in this case because it's
+a simple problem. Yeah. And the model is
+What model are you using? Can you show
+the prompt again? This is uh GPT40.
+Okay, cool. Yeah. So, GT4 is try
+switching it to Mini and seeing if Mini
+it up. But,
+um anyways, I hope that answers the
+question. Um I'm going to keep rolling
+just so that we have more that we can
+get to all the topics. Yeah, I want to
+talk about the more interesting stuff
+you have lined up, too. I know we only
+have 10 minutes, so let's keep going.
+Cool. Uh, if I can get my shell back in
+the right place, we can roll. All right,
+cool. Um, so here's like the actual like
+big pile of tests. And now we have a
+bunch of them. So, let me hide the
+playground here.
+Um, and so this has like five or six
+longer tests. And I can do npx panel CLI
+test. And so as we're building this, as
+we find things we want to change our
+prompt, we can go through all of that.
+So I'll commit this again. And in this
+chapter, all we changed was
+agent.baml.l. We just added a bunch of
+tests. We didn't write any TypeScript
+code for that
+chapter. Um, cool. Let's add another
+human tool. So, this is where we talk
+about having multi different reasons to
+contact a human. There may be a model
+saying, "Hey, I need to request more
+information." Or there may be like an
+intent that is like, "Hey, we're done.
+We have the final answer." And your code
+might want to handle those things
+differently. um either display them
+differently or have different workflows
+or put in a text box for them to fill
+out, whatever it is. Um if you have
+control over stuff, then then you can do
+it. So, I'm going to regenerate off of
+this and we're going to see how that
+works. So, what I'm going to do is I'm
+sorry, go ahead. Auto regenerating every
+time you hit command S anyway. Oh, yeah.
+That's true. Anyway, that's fair. Um I
+was running this walkthrough from
+scripts and stuff, so it didn't have it
+in there, but that's fair. Um, so I'm
+going to ask it, can you multiply three
+and a bunch of garbled nonsense? And
+it's going to request more information.
+Actually, it's going to keep going over
+and over again because we're not
+actually handling this in our TypeScript
+loop yet. We don't have a case in our
+switch statement for this one. But you
+can see it's at least output the intent.
+It looks like there's some in incomplete
+information. So I'm going to come in
+here and update our agent and basically
+say, you know, in this case, we're going
+to handle them the same, which is just
+to return the message. and they both
+have a field called message. But you can
+see us handling those two things
+differently. And we're actually able to
+use like the static analyzer there. So
+that way like TypeScript can tell us
+that they both have the same field
+message. If you hover over message like
+it knows TypeScript isn't yelling at
+you because the intent of request
+information has a field called message.
+Yeah. Because we're in this part of the
+switch statement, TypeScript knows that
+it's either one of these two things.
+Exactly.
+Um, cool. And then I'm actually going to
+tweak this a little bit more where we're
+going to actually have this return the
+whole thread. And we'll see why we do
+that in a sec. But basically, we want to
+know in our CLI whether uh when we run
+the loop, we want to know whether it was
+request more information or final
+answer. So if it's final answer, we're
+just going to print it on exit. If it's
+request more information, we can
+actually like write a function that is
+like ask human. In this case, it's just
+on the command line, but um this is how
+you can take two ways that the model may
+want to contact a human and handle them
+differently. Dex, can we slow down for
+one second before we run the code and
+just show the show the data models one
+last time just to make it in the in the
+in the source code? Yes, in here. Yeah,
+let's let's look at like what these
+messages are. So, we have a class called
+clarification request which has an
+intent attached to it called request
+with the label request more information.
+And then there's another class called
+intent uh with intent done for now. And
+if you look at the prompt, can we render
+the full prompt in the prompt view?
+Yeah. Just so people can read it because
+I think there's a couple questions about
+this. And let's just like hide the test
+at the bottom. Yeah.
+And let's just like read this. So you
+can see the model is kind of letting us
+output one of those tools because on
+line 19, what Dexter has said is that
+the model can respond with two different
+ways. Can you respond with human tools
+or calculator tools? And can we hover
+over human tools? Oh, yeah. Human tools
+is defined as we don't hover. Oh,
+whatever. Human tools defined as
+clarification request or done for now.
+So, it must be one of those two data
+models. And if you can you change the
+data model instead of request more
+information to be like request fu just
+so people can Yeah, just I think Carlos
+is having a go down. Just change the
+line instead of intent. Use the word
+like intent. Fu fu. Yeah, just change
+that string. really briefly. So you can
+see that the prompt is updating to mimic
+that. That's how the model is getting
+this. We're just writing code and the
+code is being added to your
+prompt. Um and that's how the model is
+able to go. You can undo your changes.
+Yeah, don't do that because but you can
+do your changes. And then if you scroll
+down one more time into the prompt, uh
+one last thing I want to show ctx format
+that is you remove that line really
+fast.
+Yep. That is what's actually adding the
+instructions into the prompt. And if you
+add it back, that's all that's doing.
+That is taking the return type of the
+function and injecting it into the
+prompt for you. And so that's a nice
+BAML BAML feature that is basically,
+hey, based on your return type, what
+should what should we tell the model to
+output? And then we're just letting the
+model do the magic. The model is kind of
+telling us what to go do. Yep. Let's go
+on. Perfect. I'm going to restore us to
+where we were. Yep. Um, so we have our
+our loop and stuff. Basically, if the
+model outputs this request more
+information, we'll ask for info on the
+CLI.
+Uh, you might want to regenerate. Sorry,
+I think you did a Oh, because you we
+updated the file and you hit command S,
+but then Yeah. Yeah. Yeah. Yeah.
+Okay. So, yeah, now it says uh request
+more information. I could say use 12
+instead.
+And now when it's done, it still exits.
+So we're handling these two different
+requests to for info in different ways.
+This is really cool. And like just for
+someone just to reemphasize this point.
+This is how you in your chat agent that
+you're building. You could do this in a
+website too. Can you go back to your
+loop code that you're doing where you're
+actually getting read line like where
+you're actually making? Yeah. Exactly.
+If we have time today, we only have five
+minutes, but if we have time, we can
+actually instead of using a CLI loop, we
+can make this a web API that is either
+synchronous or async like this. The
+agent is the agent is decoupled from the
+UX so that you can plug this agent into
+multiple different interfaces.
+Exactly.
+And the input to the agent is just a
+list of events and the output is
+last event that was exactly what what's
+the next step and it's up to the
+framework can handle it. In this case
+it's actually not it's not the last
+event it's the full event thread. Yeah.
+because then we when we add a when we
+get a response from the user we get the
+response and that is now coming from um
+it's coming from
+um just to be very it's coming from like
+CLI but it could come from a web API it
+could come from a database request it
+could come from an event on Slack
+doesn't really matter it comes from
+somewhere and then all we do as Dex said
+is boom we just pass it back to the
+agent loop again on line
+29 that's all we're really doing? Yep.
+And so then we just we do it we do it
+once and then we loop until we get the
+done token. Exactly. This could actually
+be more clear if we did like not equals.
+Yeah. But we can for now optimization.
+Um anyways, uh I'm going to add some
+test cases for this behavior because I
+think it's cool. So now we can see, you
+know, if we pass in nonsense and I'm
+actually going to change this one to be
+not hex because sometimes it sees hex
+and gets figured it out. And that's just
+testing. Like the only reason you know
+that is because you tested that. Yeah.
+It's nonsense. It's insufficient. It's
+like, oh, it's too smart. It thinks it's
+it's it will actually think it's u Yeah.
+X code. So, so we can add evals and
+guardrails. Now, we make sure if the
+math is garbled, it must request more
+information. That's what we expect the
+agent to do. And if someone changes the
+prompt in a way that breaks that, we
+will know before that gets merged in
+because the unit and then here's one
+that shows how it interprets the
+clarification. Right? So we gave it some
+garbage and then we said you know uh the
+model called the tool which was like hey
+can you clarify this and then the human
+responded with let's try 12 instead and
+we can test this one and we can see like
+okay cool now it's going to it like
+listen to the human's feedback and we
+can prove that we're passing the human
+info back into the model in the right
+way. Um so let's run all of our tests.
+While you do that I love the word that
+you use. You use the word prove because
+that's really what it is. You want to
+prove to yourself that it's working.
+Yep. So, one of our tests failed. Um, it
+was our hello world step. So, now we can
+see, okay, we changed our prompt by
+changing the structured inputs, but it
+broke one of our other tests. So, let's
+go look at this. Sometimes you break a
+test and it's because you changed the
+behavior intentionally, and sometimes
+it's because you actually broke
+something. So if we just say hello to
+the model now that we're telling it that
+it can respond with either done for now
+or request more information, it's
+actually decided that if it doesn't know
+what to do, the correct intent is
+request more information. So to maintain
+this and keep it up, I'm going to come
+and update this test because I actually
+think that is also the correct answer.
+It's like the conversation is still
+ongoing. And now we can run this and we
+can see that it passes. And by the way,
+we could have decided that wasn't the
+case and we could go back and change our
+prompt for what request more information
+means. Can you go back one last one on
+one? Go up really fast. Yeah. You want
+to change I want to change one prompt at
+the top. At the top for your No, no. For
+your request more information. Yeah. Add
+a description to there. The description
+says to clarify mathematical equations.
+Yeah. Yeah. To clarify math
+stuff. It's a dumb prompt, but like it's
+just math stuff, right? Yep. Now, let's
+see what the hello test does.
+Um, okay. Still still request. It did
+actually change what it said about a
+math problem though. It said y to
+clarify existing math problems.
+Do
+not so you can come and you can hear
+come here and mess with this and you can
+write tests. But this is a really
+productive way to make changes and
+improve your agents over time without um
+without losing without losing steam. We
+have one minute left. I'm going to power
+through the last bit. Uh, inv you got 15
+20 minutes to go over for people who
+want to hang out. We'll stay over a
+little bit because I u it sounds like
+we're getting some really good questions
+and we're we'll record the whole thing
+and post it on YouTube as well. So,
+including the Q&A at the end. Yeah,
+folks have to drop. We'll have the
+recording of the Q&A. Um, cool. So, now
+we fixed all our tests and I'm going to
+get out and commit this and quickly we
+can review the changes we've made. So,
+um, what do we do? We added
+clarification request. Um, we changed
+the type of our return to include both
+of the human tools. We added a couple
+tests for the using the clarification
+stuff. We updated our test here so that
+it passes. Um, we changed our agent loop
+to return the whole thread instead of
+just the
+message. And then we updated our CLI to
+kind of power that interactive loop a
+little
+bit. Cool. Um, now we're going to get
+into some fun stuff. These the next two
+are really quick, but they're really
+worth doing, which is like customizing
+your prompt with reasoning. Oh, yeah.
+Um, so I'm going to add I'm going to
+update our prompt here that we use and
+basically just give it this um, you
+know, always think about what to do
+first, like, you know, these steps.
+This, if you watched our reasoning
+episode last week, um, this should look
+very familiar. If you haven't, go check
+it out. But this is a really easy way to
+get small models to think and perform
+more like reasoning models. So from
+here, why you run this code. Um, yeah, a
+lot of you are like, why the heck are we
+doing dot dot dot? Like what what is
+that? That's not really reasoning. Turns
+out these models are really really good
+at just what we want to tell it is the
+structure of how we want it to reason.
+In some ways, some format that it might
+use. Yeah. And it to go do things. We're
+not tell we're not going to prescribe
+what it should reason about in any
+meaningful way. That's why we're not
+using few shot examples. That's why
+we're not doing anything. We just want
+the model to be like reasonable on its
+own.
+So, I'm going to pass in a little prompt
+here and I'm going to turn on the logs
+temporarily. What? Oh, sorry.
+You have like Oh, I like that was it was
+like trying to do a git operation. I was
+like, why are you going to need my keys?
+So, here we have printed out um
+basically uh you know this and what
+should the next step be and then we have
+our reasoning prompt. Ah, see it was
+working yesterday. Sometimes sometimes
+it works, sometimes it doesn't. Can can
+you use a can you uh the reason that can
+make it a slightly more complex thing?
+Um can can you add the can you add the
+first four digits of pi together? Make
+that the question that you're asking.
+No, this prompt is fine. The prompt is
+just too simple. The model first four
+digits of pi. Yep. Now let's go do
+that. So the model determined that it
+doesn't need to reasoning at all. That's
+why it didn't do it. But now so here now
+it's done a bunch of reasoning here.
+I will perform the calculation then I
+should proceed. So now you have your
+reasoning and
+[Music]
+then yeah each so it is reasoning each
+time and there's probably some stuff you
+could do to like cache that reasoning
+basically. But
+um here you can see it's outputting this
+and then it has the final JSON here and
+then what we pull out with BAML which is
+also really cool is just like hey we let
+the model output whatever tokens it
+wants and then we rip out the actual
+JSON and we get the answer. Yeah. So the
+user doesn't even have to see the
+reasoning. We just get that done for
+now. And again I mentioned like oh you
+could cache the reasoning and it's like
+cool. There's all kinds of ways you
+could do that now that you own the loop
+in the control flow and customize how
+you build your context window. You
+nailed it. Speaking of which, let's
+customize how we build our context
+window. So, um, there are a lot of ways
+you can optimize this. Um, but the first
+optimization I'm going to make is just
+instead of doing raw flat JSON like we
+have been doing here, I'll just
+stringify the JSON. Probably doesn't
+make a difference for the model, but
+this is just kind of a demonstration.
+Um, so we'll turn on the logs again and
+we'll give it this answer and we can see
+over time. Definitely makes it more
+human readable. So you can see over time
+uh here's what was put in user input
+tool call tool response tool call tool
+response what should the next step be
+here's your output and then it says cool
+our intent is add and so you can see now
+as the it's a little more clear like as
+we loop through the context window is
+growing and growing and growing but we
+still get the same result we're we'll
+talk about this a little bit more Carlos
+and you want do you have any more
+examples of how to serialize the L1
+content yeah dude we have a really fun
+one this is what I do when I build my
+agents I use this thing that's a little
+more um
+XML. Um and so we have user input and
+then as we loop through we have user
+input and then we have multiply and then
+we have tool response. The point is you
+can do whatever you want to take that
+list of events in your thread and
+serialize it for the LM. So here we're
+mapping it to this like serialize one
+event function. Can you go back really
+fast? I want to highlight something for
+people because I think they might not.
+Do you see what Dexter did here? He did
+multiply a col 3 b col 4 and multiply
+it. Can you compare that to the JSON one
+that you had above? Oh, are we going to
+do the token the token counting thing?
+People should look at the tokens. You
+don't have to We don't have Should I
+drop Let me drop this in the Let me drop
+this to the playground. Yeah, we should
+do that.
+Um, just add it to your test case. Yeah,
+it's Yeah, this the serialization is
+completely up to you. And if you don't
+own it, you're Oh, sorry. I used
+that word. We're recording. Uh, I'll
+bleep it. But if you don't I already did
+too. It's fine. If you don't own the
+You'll fit right in. If you don't own
+the serialization, you're really not
+making life easy for yourself because in
+this case, why are we wasting so many
+tokens? Uh, yeah, let's just do the
+prompt preview. Uh, okay, cool. So,
+let's look at the prompt preview and
+we'll look at the token view. So, this
+is tokens one and we'll look at another
+one already has JSON in it. So, we can
+just compare these. So, token
+visualization. Here we go. Oh, dang. We
+don't highlight the tokens correctly.
+Um, I'll fix the Hey, I don't think this
+is right actually because I think the
+XML is supposed to be really efficient,
+right? No, no, it is. It is. We just
+don't write render the escape characters
+correctly. But just so people understand
+is like go to the Can you go to the
+OpenI tokenizer? I'll fix that, right?
+I'll fix that in today's release
+actually. Yeah. Um, is that like a web
+app or something? Just go to OpenI
+tokenizer. This is like one
+serialization everyone should think
+about is like we can use a serialization
+technique of what um yeah that's
+basically the view that we're supposed
+to have. We just render the quotes the
+things incorrectly slightly. Oh because
+this is supposed to be HTML as long as
+the fix HTML thing will be fixed. Uh so
+I'll fix that today. But now post the
+JSON view of it. You have a previous
+JSON example as well in in your test
+cases. Yeah. Yeah. Yeah. Exactly. So
+let's get Yeah. This thing grab
+anything. It doesn't matter. Yeah. Yeah.
+And that's Do you see how every single
+quote and everything that we're using,
+every time that we put quotes in there,
+it's extra tokens. Every time that we
+put whites space in there, it might may
+or may not be extra tokens. The count of
+whites space matters um because we're
+using like commas at the end. That's
+extra tokens. So, there's small things
+that are adding up. And these tokens are
+not as trivial as like cost. People
+think about costs. It's just the way
+that you're explaining the thing to the
+model. It has to If Dexter and I were
+saying the word like and um every 30
+seconds, you would have such a hard time
+reading what we're saying. You'd have to
+like do so much brain power to just
+understand the nuances of our
+words. There's just less likes and that
+text. That's I love that metaphor likes
+and that's great.
+Um so you asked like ination
+customizable. Yes, you can control it to
+do whatever you want.
+Yep. And so now we can add some tests
+that kind of match this where we've
+we've updated our tests to be XML
+instead. And you can run these the same
+and you can make sure like, hey, we
+changed how we format our context
+window. Do all our tests still pass?
+Which is again what you should always be
+doing. Every time you make a change, you
+should know, okay, the the same input is
+still the same output. Exactly.
+Or yes. Cool. Um I think we can uh let's
+we can do you want to pause for
+questions here? Um or do you want to put
+it behind a web server? I want to answer
+um location's question of like how do
+you build your first agent? This video
+that we just made and all the source
+code is going to be available for you uh
+probably within like by the end of the
+day today. So we'll send it out on
+email. If you signed up on Luma, you'll
+get the email. Um, this is probably
+We'll also create a template repo with
+this stuff in here so you can just kind
+of pick up the calculator tools and
+start running with it. Exactly. Um,
+yeah. All the code we ever do will
+always be open source for AI that works.
+Like that's the premise. Like we just
+want to share code so we can all learn
+the best architecture designs together.
+Uh, because as Dex always says, none of
+us know what the right answer is. We
+just wanna we all just need to figure it
+out. And the best way to figure it out
+is to
+test. Um, let's let's let's uh how about
+this? Why don't we take some questions
+in the chat? While that happens, why
+don't you do the web server stuff? So,
+we'll paralyze cool. Web server stuff is
+so freaking cool. Uh I me and you were
+one of the first people to start
+building out this kinds of things and I
+think it like blew our minds as we were
+building it out and then like it just
+became the template for like how I think
+we both think about agents. Yep. So if
+you anyone has question, type it out.
+Dexter is going to do some typing stuff
+uh while that happens and then we'll uh
+I mean that's it. That's the web server.
+Oh, okay. Cool. So we put it behind an
+API. Um what we can do is make this like
+pause and resumeumable though. Um pause
+and resumable. That'd be sick. So uh
+here we have we I basically I won't go
+in super in-depth on the code, but you
+can go read it. We have a thread store
+that kind of just stores our things in
+memory, but this could be Reddus or
+SQLite or wherever you want to put it.
+And then we basically have this server
+with an endpoint to start a new thread.
+This code looks a lot like our CLI code.
+Um, and basically if the last data
+intent is request more information, we
+add kind of a hook to it to basically
+tell the client like, hey, when you have
+a response to this, post it to this URL.
+And then we have another endpoint that
+can handle responses. For people that
+are familiar like web interface, think
+of it like a web hook. Like when GitHub
+just you just register your web hook and
+that's what we're telling the front end.
+It's like when you get an update and it
+doesn't have to be a front end. It could
+be another backend service. It just says
+when you're ready with the answer call
+this API and we're just telling it.
+So I called with this garbled you know
+and XYZ and it's requesting more
+information and it says hey when you
+have the answer you know you can post it
+back and so I will post this back and we
+will use this thread ID here and and by
+the way this is how we made like a
+slightly uh stateful system but because
+we save the thread system in our
+database but we could may have made it
+completely stateless by send object back
+instead of a thread ID. we just did this
+because it's it's a better API
+experience for the end user uh and we
+can do migrations on the thread and
+everything else. But this context that
+we're sharing here today is about owning
+the loop. If you own the loop, if you
+own the way that the model is being
+called, you can build this trivially
+because you can use existing paradigms
+that you're already familiar with in
+software engineering to build your
+agent, not have to relearn like this LLM
+voodoo magic to go build your agent.
+That's all just software. It's all
+software. I think we have another thing
+that is like we'll I'll probably do a
+follow-up or something on like, hey,
+what if you have human approval, right?
+You can have a tool like divide is
+scary. We don't want to run that without
+checking with the human because we don't
+want to divide by zero error or
+something. You have that up. You hit
+show them. Uh, no, that's not ready to
+go. I mean, we could try to live code it
+for the for the extra linkers, but we'll
+send it out. We'll send it out or maybe
+we can do one a whole episode on just
+that because there's so many nuances to
+the way that you do human approval that
+I think it'd be worth it does it does
+get a lot more complex. Yeah. So, and
+like this is so like what you saw today
+was a lot around like these
+infrastructure that we built. This is
+the philosophy of BMW and what what
+Dexter is going to share about this
+human approval stuff is kind of the
+whole philosophy behind human layer.
+Like if eventually at some point we'll
+want one lay layer of control that we
+want because no matter how much
+engineering we add around these systems
+at some point just like in a normal
+workflow you want a manual process to
+approve it. I don't want my release to
+be fully automated no matter how good I
+am. I'm paranoid I have a human presence
+to release it out so people don't get
+versions of BAML automatically. It's
+like a manual process no matter how good
+our pipelines are. in your LM workflows,
+you'll want that. And that's where I
+think a tool like human layer really,
+really, really shines because no matter
+how much engineering you do, at some
+point you want to process because you
+want liability and other things built in
+and that's the value.
+Yeah, I think you nailed it. So, there's
+much more here and we can get way more
+advanced with this and like probably if
+we do a follow-up on this, I know we're
+gonna, by the way, we're going to take a
+break for two weeks after this. Um, so
+this has been the kind of first four
+episodes of AI that works. We'll call it
+season 1. We'll be back in what is it?
+Three weeks from today. Three weeks from
+today with season two. Um, in some point
+in season two, we'll probably do a
+follow-up on this and do like, hey, how
+do I take my 12actor agent and put it
+behind email or put it behind Slack and
+deploy it to a place? Because if you
+have this and you have these principles,
+you can run your agent anywhere. You can
+run it as a small component of a bigger
+system. Um, and everything just works.
+Go back to your server.ts.
+Yeah. So, uh, read your server.
+Sorry, there was a thing blocking my uh
+my UI. Making this a Slack API, some of
+you, I'm sure, are are familiar with it.
+It's not that hard. Taking that web
+request and making a Slack API is really
+easy.
+So, we're going to go into that and talk
+about the nuances though with AI and
+Slack because there are nuances that
+become different there that are were
+very very different than just like a
+normal Slack API and that's what I think
+like I've seen some of Dexter's work on
+this. It's freaking phenomenal.
+It's funny. Other questions from
+everyone? By the way, I know we spoke
+for a long time. It was supposed to be
+an hour. We did an hour 15. So, I
+apologize for taking 15 minutes extra of
+your everyone's time. No, no, no, no.
+Don't apologize. You're welcome. These
+people got 15 minutes extra content.
+That's right. Um, what questions do
+people have if they have any? Feel free
+to unmute and come on or just uh ask on
+chat.
+Cool. So, so you guys uh played around
+with uh like uh the reasoning models too
+and how does they perform here?
+So, the beauty is Dexter, do you want to
+screen share again? Oh, are we gonna Are
+we going to switch? Are we going to put
+on uh 03? Make an amazing model. Just
+switch it to 03. The beauty is remember
+the what you're doing here. Just go to
+your agent.ts. Yeah. Yeah. Make your
+agent just make it 03. Doesn't matter.
+01. It doesn't matter. Like the way do
+03 mini. I don't think I my verification
+went through yet for 03. So, all right.
+Then just do baml live. Yeah. Just run a
+test case.
+Uh let's see. easier. Sure.
+And this is a little bit slower because
+these models are slightly slower, but
+now we got it. So it and you can see
+called 03 mini 2025 131. So it's the
+model you use is completely independent
+of this concept. You can choose any
+model of your choice and and you could
+write this function with four different
+models and run all the models through
+the same set of tests. Exactly. So then
+you and then you can and you might say
+that hey as if I want to have like the
+ad tool then I want if I want the ad
+tool then I want um then I want to use
+this model if I previously you can make
+all of this dynamic and it's your choice
+and I think a lot of people ask like how
+good are people with like uh using
+frameworks or anything any framework
+that owns that while loop that essential
+while loop and doesn't give you full
+access to it it's like if you've ever
+used So, uh, a CSS
+library, a CSS library that doesn't give
+you the raw CSS that you can just edit
+in your code is way more painful to use
+than shad CN where you can just like
+have it in your code and edit it. And
+that's actually this is I think when we
+build more tooling around this, I
+basically think what we need is shad CN
+for agents. We need something that
+scaffolds everything out for you with
+some good opinions and a couple
+different variations, but then it's your
+code and you can do whatever you want
+with it. You should wait till we release
+packages for BAML. That's basically what
+that is.
+Sick.
+Question for Steve. Got a question.
+Uh sort of as an aside, but I noted a
+lot of the philosophy you've done in
+this series of where you say, "Hey,
+expected output and then BAML extracts
+it out." I was reading the new prompt
+guide for 41 with more literal calls and
+it basically sort of says don't do that
+or you know a variance of that. I was
+wondering your thoughts. Yeah. Bye Bob.
+When are you running that new benchmark
+to prove that BL's still better at
+extraction? Here's the here's what I
+would really say. You want to share the
+BFCL thing? Uh do you want Okay, I was
+gonna Yeah, I'll share I'll screen
+share. There's a couple of things. Uh,
+one I think um I think uh there's before
+I screen okay I'll screen share. Um but
+before I go really really into it I want
+to I want I think one important thing to
+keep in mind for these kinds of
+concepts. Am I screen sharing? Cool. Uh
+one important thing to keep in mind is
+remember everyone's biases. So my bias
+is obviously I work on so like be aware
+of that. Um OpenAI's bias is they want
+to lock you into their SDK. Be aware of
+that. Open eyes SDK is very different
+than Anthropics SDK. they really want
+you to lock in because then you can't
+move over. Um, and two, like it's
+possible that um, it's definitely
+possible that it's better, but
+fundamentally it seems unlikely. And the
+primary reason that it seems unlikely is
+that is just like we run these
+benchmarks and every time we run them,
+it's pretty much come out in the same
+way. Uh, which is what OpenI says is
+don't add JSON to your system. And I
+agree with them. Do not ask the model to
+output JSON and JSON.parse it. That is
+bad. That is really, really, really bad.
+The model will mess up on JSON,
+especially if you have a bunch of escape
+characters and everything else. The
+difference
+is BAML doesn't actually use JSON. So
+like in this case, don't
+use
+quotes around
+keys. The model is extracting data from
+an image.
+It's not use you see it's streaming it's
+not using JSON this is not
+JSON right so the premise that's saying
+that and you can see like it's pretty
+complicated there's like there's a whole
+string with ands and spaces and
+everything it's still pull it out so and
+the idea is that like the engineering
+work to turn the thing on the left to
+the into the thing on the right is not
+something that you should do and like if
+you are not going if you are not going
+to write your own parser you should
+probably just let like force the model
+to output JSON. Yeah. So if you're if
+you're not going to write do the work
+that we did behind the scenes, I agree
+that their thing is probably way better
+than
+JSON.parse, right? And if you're going
+to do something more sophisticated like
+for example like an idea of like
+generating code,
+uh write me a thing, write like watch
+this. Write me a thing that generates
+that takes in leak code questions that
+takes in a prompt and generates code for
+it and generate it takes in a uh text
+and
+generates Python
+code. Right? So what I want is I want to
+write an AI pipeline that can take in a
+random thing from a user and like
+generate some Python code for it.
+So this will do its thing. And once
+again, this just tool calling this whole
+thing. Like what I did here was this was
+tool calling that responded to this.
+This is another tool call that's
+generating actual BAML code for me. And
+then this is separate tool call that's
+generating the Python code to use that
+BML code. These are all just tool calls.
+And all I'm doing here when I go do this
+is if I were to go and I'll do this in
+profit because it's a little bit easier
+to go see.
+So really use these tools a lot, huh?
+Huh? This is impress. You're you're very
+quick with this stuff. I gota learn. I
+got I got I got I gota jump between
+these faster. So now it's going to go
+run the code, right? So now it's going
+to generate Python code. And check this
+out. See how the model did it? It just
+responded with a Python code snippet
+afterwards as a markdown snippet and it
+produced this out. So you're right, JSON
+is bad.
+But serializing it in a way that the
+model can output things and I can go
+parse it is useful. And this is getting
+that point of like the model's been
+trained on a lot more code in markdown
+than code in JSON. And so if the model
+wants to write code in markdown, you
+should let the model write code in
+markdown. And then that will give you
+better results than constraining its
+output and forcing it to use like slash
+ends and saying, "Hey, you can't use new
+lines." Because then every time the
+model wants to output a new line, that
+token is going to get zeroed out. and
+all the other tokens which were all like
+1% in the sampling, it's just going to
+pick a random one of those instead. And
+the chance that it picks slashn is like
+very low. Yes. Yes. Yes. Yes. Yes. Yes.
+Dexter nailed it. So open as guideline I
+agree with. JSON is bad. Um but I'm
+still not convinced that tool calling is
+good because tool calling is basically
+doing JSON in a forced way and there's
+no way you'll get this large quality of
+code out. And the model did this
+naturally. This isn't me prompting in
+any way. I just like the prompt says
+this. This is all the prompt.
+That's all. This is the web request
+going into the model. There's no tool
+calling, nothing else. And the model is
+naturally able to say that the best way
+I want to output these tokens. The
+tokens that are best for me to represent
+this data is this.
+Yeah, that's some trash JSON. Good job
+parsing. That's a good ass parser, dude.
+That's a good ass parser. Cool. Um, I
+gotta get running. Let's uh let me just
+stay on for any more questions that
+people might have and then uh I think
+we're mostly done. We don't tell the
+model how to out how it outputs. We do
+we tell it the structure that we wanted
+to go have and that's mostly it. So
+whatever it outputs you your parser sort
+of like um it mostly works.
+We've processed like million tens of
+million I don't even know like I have no
+idea how many data models that we've
+gone through at this point. we have but
+and Dexter has pushed a lot of limits of
+them with his tool calling systems a lot
+along with a bunch of other companies
+and it's made it um the benchmarks show
+that it's good but would in different
+LLM models sort of like lean towards
+something different. Yeah. So you can
+just use a different model and it mostly
+works because it's a very unrestricted
+parser and there's like you can read our
+blog post about it and that'll probably
+outline it a little bit better. That's
+cool.
+Um, any other questions for anyone else
+left? I know there's just a few people
+and then we'll call it quits and then me
+and Death have uh other meetings to
+attend to. So, what do you think about
+the MCP and the agent development kit?
+Uh, do you plan to use it in your uh
+products or how do you plan to integrate
+with with them?
+You want to go first? Okay. This is uh
+this is not on behalf of Dexter. This is
+my personal opinion of it. So just to be
+very very clear and I don't know what
+Dexter's opinion is. I don't think we've
+explicitly talked about this. It's
+complicated. Um yeah I think all those
+frameworks are basically just like API
+calls around rest
+endpoints. Um and like they have some
+way to do REST
+endpoints and I guess they've made some
+decisions around it but I'm not yet
+convinced that it's the perfect
+decisions. I think like lang chain for
+example was very hyped for a while and
+clearly doesn't work because of
+engineering constraints
+um and not really because like I mean
+there's value in lang chain too but like
+langraph is I think more thought through
+than lang chain is is for example what
+I'd say think mcp is
+uh I wouldn't build a company on it
+today is what I would say
+um I think it's in anthropic's best
+interest for MCP to get adopted because
+they're building UIs that everyone uses
+and they want to have a standardized way
+for people to plug into their UI with
+them doing less work. They're kind of
+using MCP as a way to build and
+bootstrap an app
+store is the way that I kind of think
+about it. But I'm still not I think when
+I look at code, what I look for is
+beautiful code and that's where I decide
+if something is good or bad. That's like
+when I first saw React, it honestly felt
+beautiful. Like it was like it's
+actually really pretty once you
+understand it and I don't look at it.
+When I look at lang chain, it doesn't
+feel beautiful. That's why I didn't like
+it. When I look at paid AI, it doesn't
+feel beautiful. There's things about it
+that feel a little off. When I go look
+at MCP, I have the same feeling. I don't
+look at it and be like, "Wow, that's
+beautiful
+code." And that's kind of where why I'm
+not personally like 100% bullish on
+let's go do this today. It might prove
+to be amazing, but I don't think it's
+beautiful today. And be beauty is really
+important in code, especially for
+frameworks and systems.
+Cool. Um, wait, no, I'm gonna give my
+MCP rant and then you're up,
+Carlos. Uh, I think it's I think
+protocols are very powerful. I think we
+saw a similar thing play out in the
+Kubernetes world, which was basically
+like you had this thing called Helm,
+which was like super scrappy and didn't
+have I think probably arguably all the
+right abstractions, but it was at a
+level that people could understand it.
+it was good enough for people to adopt
+and move on to the next thing. And once
+it got momentum and everyone was using
+it, it was basically locked in. And it
+didn't matter that Google came along a
+year later and released like a much
+better solution for the problem, a much
+cleaner protocol, much more well thought
+for, a much more like engineer friendly.
+It didn't matter. It had already taken
+off. So we may MCP may be the thing that
+we're stuck with. Not stuck with,
+whatever you want to call it. Um, I
+think REST is pretty good already. I
+don't not 100% sure why we needed it.
+There's a lot in it. Um, but we building
+stuff on top of MCP. I want to build a
+BAML agent that queries MCP tools and
+pushes them into the context window as
+tools because I'm curious how the actual
+performance is because if it's an easy
+way to consume APIs, then I will
+probably use it. Exactly. Even if it's
+not perfect. MCP is basically a REST
+service that has a very specific query
+that you can make that says tell me all
+the other services you have. That's
+it. And that sounds useful.
+Yep. And oh, the other fun thing if you
+want to uh if you want to mess with
+people is, you know, MCP servers, most
+of them are actually clients. They're
+not servers. You don't call them over
+the web. You you run them locally on
+your machine and then they make the call
+to a real server. But that's we won't
+get it. That's just a naming thing.
+Um any uh Carlos, you had one last
+question. Yeah, you sort of answered
+that question. I was going to ask
+whether um the BAML can be integrated
+with MCPAS and I guess um Dexter working
+on it if you watch the first. Well, IAS
+is is working on it a lot more, but we
+should do an episode on that by Bob. We
+should be like how do you how do you
+great MCP with factor? Yeah. Yeah, we
+should go do that. I think that'd be a
+fun one. I think especially for like the
+next season, we'll go one thing we're
+gonna go do, uh, I know a few of you
+left. We're gonna go send out a survey
+at the end of this with this episode. If
+you have time, we'd love like a detailed
+response to it. It will just help us
+tune the next few things and then it'll
+start every Tuesday after that. And you
+should expect to see this uh detailed
+code examples pretty regularly with Dex
+and I.
+Amazing.
+Thank you. It's been a blast. Thanks
+everybody.
+Um, and then we'll stop the recording.

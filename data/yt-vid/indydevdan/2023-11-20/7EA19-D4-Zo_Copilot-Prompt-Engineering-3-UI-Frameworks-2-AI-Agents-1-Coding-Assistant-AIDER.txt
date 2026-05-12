@@ -1,0 +1,674 @@
+in this video we're building the vital
+front end components for a postgress
+data analytics tool but just like our
+100x Engineers of the future we're not
+typing this code we're prompting it in
+natural language using a technique I
+like to call Triple C we'll get into
+what exactly Triple C is but we're going
+to bring out what I believe is the best
+pair programming assistant right now
+we're going to use AER to show off this
+technique and give you ideas and add
+another tool to your toolbox to help you
+on your engineering journey to help you
+build your products to help you stay on
+the edge of AI engineering let's AI
+engineer our data analytics front-end
+MVP we're going to build this UI in
+three different Frameworks one of which
+I've never programmed with in my life so
+let's crack open vs code you can see I
+have two sets of terminals with three
+terminals each let's boot up our front
+end I'm using bun I'm going to leave all
+the documentation you need to get
+started with this in the description and
+of course the code is going to be in the
+description as well bun runev bun runev
+bun runev vew TS spell TS and react TS
+these are all generated using bun and
+Vite then we just cleared out a little
+bit of the application no big deal there
+we're working on the front end for talk
+to your database right this is the
+Prototype front end for the application
+that allows us to seamlessly interact
+with our postgress data analytics
+multi-agent tool that we've been
+building over the series feel free to
+look back check out all the videos we've
+done a lot of work so far I want to
+introduce you to something called Triple
+C Comet co-pilot coding let's boot up
+AER in each one of these applications
+copy this paste paste paste play play
+play okay let's go ahead and clear AER
+looks at your files to know what it
+needs in its context to start writing
+code we type SL add and for view we need
+app. viws add app. spell slad app. TSX
+you can see that right here perfect what
+is Comet co-pilot coding this technique
+is actually very simple you write
+comments you open AER and you ask AER to
+fill in the comments I'm going to come
+to the bottom of this VJs file I'm going
+to type code colon and then I'm going to
+start saying exactly what I want to
+happen here build a dark theme for input
+button pre section and code tag let's go
+ahead and create another right create
+two variables prompt string prompt
+result I'm going to say where prompt
+result equals some structure so that's
+going to be a record and that's going to
+be a string create an input field that
+updates variable and then right at the
+bottom we're going to say code create a
+list of the prompt results wrap. results
+in a scrollable pH section with a dark
+background I'm just feeling really
+verose with exactly what I want to see
+here that looks good so I have a couple
+comments here I'm just going to go ahead
+and let this rip so I'm going to save
+come into my view AER terminal read the
+comments and wherever you see code colon
+generate the request keep all code
+generation in the component right we're
+working with single file components in
+each one of these examples I going to
+keep it lock down just to these so
+that's done so I'm going to hit enter
+it's going to say that we have a code
+change that needs to be committed it's
+going to ask if you want to commit it
+I'm going to say yes I'm going to hit up
+and then rerun that request okay let's
+go ahead and make this a little larger
+and you can see AER doing its AER thing
+so it describing the changes we wanted
+to make it's walking through iteratively
+step by step right so it's showing the
+previous showing the new and it's
+already done so before I can even fully
+explain that it's finished it committed
+the changes it ran the changes it's now
+live in the file right right we have the
+interface that we asked for the prompt
+result typed exactly as we specified we
+have the two variables with perfect
+view3 script setup syntax we have the
+sections we have the input field setup
+with v model we have the section looping
+over our prompt results so you can see
+here this is working really well let's
+look at the front end we have this live
+we now have our enter your prompt input
+field right here right we can zoom in on
+this a little bit so this is good to go
+all we did was add a couple comments
+right I'm going to go ahead and get rid
+of these now added a couple comments and
+then we ran this exact prompt I'm going
+to go ahead and add this to the
+description as well there're going to be
+a couple different variants you can set
+up of course you can add your own you
+know code tag your code ID for AER for
+GPT to pick up it doesn't matter what
+you use as long as you use something
+consistently right this is how this
+works I'm going to go ahead and run this
+across the app felt and the app TSX
+right the nice part about ader I've
+mentioned this before but you can contrl
+Z and just go back in time I'm going to
+go ahead and copy out our comments here
+and then move back forward with control
+shift Z or command shift Z whatever you
+using based on your OS and I'm going to
+go to the spelt version just going to
+paste this right at the bottom and the
+app TSX version going to paste this
+right at the bottom as well and we're in
+TSX so you need to wrap this in another
+comment here right so that's that looks
+like I cut off this a little bit let me
+fix this there you go okay so now I'm
+going to let AER run this in the other
+two terminals one for spell and one for
+react committed the changes go ahead and
+run and now it's going to rip and as you
+can see here I think long term this is
+really the magic of prompt engineering
+in and Building multi-agent Systems to
+work alongside you and with you you can
+see here right now I am actively in two
+places at once really three places but
+I'm not currently doing anything right
+um so you can see these changes got
+committed let's go ahead and look at how
+they look so I've never worked with
+spelt I don't know what's going on I can
+of course make some sense of it it has
+this kind of cool three block style just
+like VJs we collapse everything you know
+script main style importing the icons
+you know one of the things I'm I really
+like about this technique this PR
+technique and using llms in general is
+that while I'm using this I actively
+learning spell I don't know how it works
+exactly but we can kind of see right we
+have this each block which you know we
+can assume will Loop over then we have
+this prompt as results so you know list
+and then iterative value and then we can
+see that getting placed and we have the
+prompt results and then we have the type
+so this looks really clean it looks a
+lot like view that's really awesome
+let's look at the react version you can
+see here we have the exact same thing we
+have the prompt result we we have two
+State variables we have the input with
+the onchange event setting the state and
+then we have a nice Loop let's go ahead
+and get rid of the comments here let's
+go ahead and tweak this a little bit
+this is a little off we need to push
+this down copilot is not going to be
+perfect it's getting close so sometimes
+you need to make a little tweak just
+like that let's hop over to the
+applications we can see three versions
+view version spell version and we have
+the react TS version looks like the
+react version gave us a little button
+there that's kind of interesting so this
+is great let's keep moving let's keep
+pushing this over the series we've been
+building a postgress data analytics tool
+that allows us to accept a natural
+language query generate SQL and run it
+against database right now we're going
+to hit our first kind of mock API that
+we have set up in our server directory
+we have two new directories here we have
+the clients where we have our react felt
+and view front ends then we have our
+server which has our postr dat Analytics
+tool kind of a strip down version just
+to get something live so we can
+experiment with it right so now we have
+this API we can hit let's go ahead and
+open up one more terminal which has our
+server in it and I'm just going to CD
+into server going to start a python
+environment python API index. py so this
+is running a versal flask application
+really minimalistic the application
+looks something like this we have our
+postgress database URL our open AI key
+we have this cores request helper just
+so that we can quickly make API requests
+and then here's the meat of it we have
+this SL prompt post endpoint right we're
+doing a little bit of cores work up here
+and then as you've seen before in the
+series we have our postgress agent
+instruments opening up functions and
+state that we can use and our postgress
+database instance rep puring out tables
+from our SQL database or pining the
+tables to a prompt we're then setting up
+our small two agent system to generate
+SQL and then run it against our database
+using open AI tools and then at the
+bottom we're reading those files out and
+we're returning this object which we're
+going to pass back to the front end
+right using our AI pair programming tool
+let's go ahead and generate this request
+on the Fly let's start with the vue.js
+version so I'm going to write right here
+just like we have been code colon and
+I'm going to ask for exactly what I want
+add a enter key event that takes the
+prompt and makes a HTTP post request
+Local Host 3000 SL prompt the Json
+response into the prompt results make
+sure to use json.parse it will be a Json
+string so just like before I'm just
+going to run the exact same prompt to
+AER this is kind of a magical thing
+constantly firing the same prompt while
+updating exactly what I want to change
+in the code I think this might be a
+pattern we see going forward as AI
+coding assistence uh develop and as you
+know the big guys Microsoft you know
+with their co-pilot and smaller startups
+really trying to tackle this problem I
+think we're going to see something like
+this a lot more right where you have
+these like smaller insets of prompt
+engineering I've kind of designed a
+whole product around this of course
+haven't gotten to it don't have enough
+time but let's go ahead and just run
+this right okay we need to make another
+commit go ahead and say yes and then
+rerun okay okay so you can see AER is
+talking through the change it's showing
+everything that already exists and then
+it's generating the new code so it's
+doing this right now okay so we do we do
+run into this issue so this is a problem
+that I've run into a couple times with
+this technique you've probably seen this
+too where AER whatever tool you're using
+really GPT as well they'll write code
+for you but they'll do this import
+existing block and they'll just delete
+the rest of your code right so this is
+something that I think um needs to be
+improved let's go ahead and hit contrl Z
+do a little bit of time travel let's get
+our previous block just go ahead and
+just copy your previous script block and
+then move forward again and jump down to
+the script paste that in and also I
+noticed it looks like it's generating
+two script blocks so again not perfect
+it's still getting there I'm going go
+ahead and remove the previous script
+block find our new script block get that
+out of the template and bam we're good
+to go so let's look at the change right
+key up. enter this is exactly how you do
+this in view you have send prompt and it
+has this new function for us check and
+see if the prompt is empty if it is
+return and then it's making this post
+request for us right hitting SL prompt
+parsing this out parsing the Json just
+like we said data. results needs to be
+checked and parsed Via from Json and
+then we reset the value and push into
+our prompt results list we've been
+looking at the code a lot let's go to
+the front end I'm going to hit refresh
+here this is the latest version our
+server is up and running on Port 3K
+let's just type in natural language
+let's see if AER and gbd turbo helped us
+put this UI together faster than ever
+before so I'm going to type all unoff
+users and hit enter okay so let's check
+this out so we have our prompt at the
+top all unoff users we can see we have a
+nice list of results and then we have
+our SQL statement so you know we can
+check the back end here looks like we
+have a big print here this is the all
+the content coming from the response
+object from our postgress database um
+but this is really great so all unoff
+the users so if we you know just real
+quick Copy this paste this in a file we
+should see all of our users um not off
+so you know if I look for for uh regex
+uh search you know off to false that
+looks good and if I look for True here
+we'll see nothing so that worked
+perfectly and you know just like that we
+kind of have a nice jump start to this
+user interface let's go ahead and impr
+prompt again right all users with job
+feedback. rating less than three let's
+hit enter of course there's a lot more
+UI improvements we can make here but
+let's let our server run okay let's go
+ahead and scroll down let's see how this
+looks okay this looks good so we have
+couple it it here you can see it
+corrected my mistake here so I said job
+feedback L that got autof fixed for me
+which is great um and it just kind of
+put this together so this is great this
+is working the VJs version is looking
+decent let's go ahead and just add this
+prompt to our other two versions right
+our our spelt and our react version so
+let's go ahe and do that right now so in
+the in the spelt version I'm going to
+try pasing this right at the top to see
+if it can make sure it reads all of the
+code below it and I'm going to do the
+same thing for the react version now we
+have that comment in both versions right
+at the top let's see how this works
+again really cool part about this
+functionality you just take this line
+and you keep running it all you're doing
+is in line updating your code and then
+you just blast this prompt to AER over
+and over so let's go ahead and run that
+let's go ahead and run it here and here
+and as you can see that really cool like
+parallel feeling where you know feels
+like we're getting a lot of work done
+and as this progress as we learn how to
+use these tools we will be getting a lot
+more done because just like that in two
+code bases essentially I've made two
+changes simultaneously with one prompt
+right so let's go ahead and see how this
+worked so this is the spelt version
+again I don't really know spelt so I'm
+kind of just you know going by gut feel
+going by my coding senses you know my
+coding experience um but this is also
+really cool so we have handle key down
+okay it did add another script Buck here
+kind of annoying right uh not perfect so
+let's go ahead and just copy this out
+and now we have what looks like a Onkey
+down Handler so Onkey down Handler calls
+this function we're checking for the
+enter key key and then just like in the
+VJs version it's running that same HTTP
+request right this is really clean
+really slick and as you can see here AER
+only has context of the one file we're
+operating in right let's go ahead and
+see how this looks so here's the VJs
+version and here's the spelt version get
+all unof users let's get off users
+instead right hit enter let this load
+let the back end get a nice response for
+us and let's see how the SP version
+looks okay so nothing happened our
+prompt did get cleared so we do know
+that this last line is running you know
+something's going on here so let's go
+ahead and make a more specific prompt to
+see what's going on and I I think I can
+already see what's happening right we
+have a DOT push here and my guess is
+that something is not being reactive
+right so let's go ahead hop AER The
+Prompt results St push is not updating
+anything please address go ahead and
+commit our previous changes hit yes
+rerun okay nice to address this issue
+with prompt. push not updating we need
+to ensure that spell is aware of the
+update and the prompts result to trigger
+reactivity you need to use a race spread
+okay yeah so classic reactivity and a
+framework so go ahead we're just going
+to spread the object over let's go ahead
+let's jump back to the front end and see
+if that worked so all off users awesome
+so as we can see here we have all off
+users so that was our prompt and then we
+have a nice list here a not scrolled
+list which is you know kind of missed
+that but that's fine so we have a nice
+list here of all the results and then at
+the bottom we have our SQL queries
+probably move the SQL query above the
+list whatever that's one prompt away
+from happening uh but this is working
+let's go ahead and look at our react
+version looks like we got a little error
+here let's go ahead and check that out
+looks like the react version uh thre
+some of the functionality right inside
+the component so again not perfect still
+needs some work we can just copy this
+out though paste this above before our
+component definition for our jsx and
+that is looking a lot better and let's
+prompt in our react t c s version so all
+off users with jobs that have status
+completed okay so I'm going to hit enter
+there that should prompt Also let's go
+ahead and check the server to make sure
+it's running up so our server is running
+here you can see it's Incorporated the
+jobs table and it has the base prompt
+all off users okay and it has results
+there so let's go and look at this
+awesome so we have our list of results
+here we have our select statement here
+and let's just go ahead and like look at
+this statement so select distinct great
+enter jooin jobs great parent ID so
+great so it found that relationship
+between the job and the users table and
+then it said status complete and user is
+off so perfect that is absolutely the
+statement we can see that we're missing
+the prompt here in this version let's
+just throw AER at that let's say update
+the results list UI to also show The
+Prompt of course commit the changes
+let's go ahead and run that and should
+be a fairly simple change just need to
+update that cool so that was applied
+let's goad and look at our list you can
+see here we now have prompt getting
+placed in the TSX let's go ahead and
+perfect so already there right another
+fantastic part about AER it just saves
+your file for you automatically right
+away so really cool you know we could
+add another prompt here make sure you
+clear out the input you can add another
+prompt for uh getting a little bit
+better formatting we can add some
+defaults let's do something else let's
+do something a little more complex right
+I'm going to hop back over to the VJs
+version and you know we have this list
+of items but if we refresh in every
+version we lose our state right so so in
+the production version of course we're
+going to have this behind a nice server
+with a nice database behind it for right
+now let's just experiment some more with
+ader and let's just add this to local
+storage let's go ahead and flex our AI
+coding skills a little more here I'm
+going to create a comment right above
+the state in VJs and I'm going to say
+code colon load this from local storage
+or default to empty list and then when
+we save I'm going to say comment code
+colon save this to local storage exactly
+so this is kind of funny right we have
+uh Microsoft co-pilot helping us
+co-pilot AER okay so that's done let's
+go ahead and clear this up we're just
+going to hit up we're going to rerun the
+exact same prompt it's going to ask if
+we need to commit our changes which we
+will we'll say yes we'll hit up again
+and hit enter and now it's going to make
+this change for us it should load from
+local storage and save to local storage
+so if we refresh we should see these
+changes persist let's go ahead and look
+great so we have local storage set item
+and we have prompt results Json
+stringify going in there great let's
+search upward and make sure that perfect
+in our reference here in view we're
+going to be parsing the local storage
+parse or parsing in empty array right
+okay so I've just refreshed The View TS
+version so let's just say get all jobs
+that have failed status let's hop over
+to our server we can see this running
+base prompt there's the response already
+back and Bam now we have all jobs with
+the failed status let's go ahead and
+just refresh right now and as you can
+see we do have the refresh running right
+here our changes are persisting let's go
+ahead set up the exact same thing for
+our spelt and react versions okay so now
+we have the spelt version with the
+co-pilot comment there one here one here
+save prompt to local storage load this
+from local storage same thing in the
+react version right at the US state call
+load from local storage and save prompt
+results to local storage let's fire
+these off in the respective versions
+let's go ahead and say yes to commit
+rerun The Prompt and we'll let it rip
+all right let's just go right to the
+front end let's run a prompt in this
+felt version get all users with created
+after sept 2023 let's let that run
+there's all users created after
+September 2023 you see here we have 2023
+and 10 if we just search that we should
+see no records at N9 we can go ahead and
+look for 09 here and that looks perfect
+right so select everything after
+September and if we hit refresh we have
+it in local storage fantastic one more
+test test let's go to our react version
+we'll say get all jobs created in sept
+2023 let that run if we hop over to the
+server we can see that this is indeed
+running live right now and we're going
+to get our results pretty quickly here
+awesome and let's look so here we have a
+react version of all of our results
+created in September 2023 so you can see
+here where jobs created greater than and
+created less than perfect and if we just
+scroll through that we can see that
+those results are coming through and and
+right so so this is a really cool
+technique I've been using to build
+applications faster than I ever have
+before there's this really powerful
+feeling you get when you're using AI
+coding tools like ader where you're
+running a prompt and it's writing code
+for you in one file and one set of files
+and then you're off somewhere else also
+writing code planning designing
+architecting something and then you come
+back it's complete sometimes it works
+sometimes it doesn't it's all going to
+improve remember it's about the
+direction of where this is going going
+add this tool to your toolbox I'm a huge
+fan of ader I'm a huge fan of all the
+work that Paul has been doing he's
+really built a fantastic application I
+think it is really the mold of in editor
+in terminal AI coding assistance that uh
+everyone should really be paying
+attention to so again add it to your
+toolbox this is an incredible tool now I
+wanted to go into a little bit of detail
+in hosting but I figure that's not a
+really great use of our time talking
+about deploying backends there's there's
+tons of content already really that
+cover that we don't need to talk about
+that and in reality when we put our
+postgress data analytics tool talk to
+your database behind a API behind a
+server it's going to be a real kind of
+heavier heavy duty scalable solution
+it's going to be AWS gcp you know and it
+there's going to be a lot more
+complexity I just want to show this off
+a little bit to show where this is all
+going show off some of the capabilities
+and you know get this hosted so this is
+ready to go in a versal application so
+this can be hosted using versal I'm
+going to leave of of course links in the
+description so that you can get to setup
+and running that's all going to be
+available there there are low code
+Solutions there are no code Solutions
+but they all lose that fine grain
+capability of full control over your
+code full control over your product
+there's definitely a place for low code
+and no code but I want to make you aware
+of these capabilities and I want to you
+know keep bringing it up on my channel
+uh because these tools are really
+important I know there's open Terminal
+I've heard of chat Dev I've heard of all
+these other ones um I've tried a decent
+amount of them they're they're all
+fairly good I'm I'm looking at these
+tools constantly comparing contrasting
+seeing which ones give me a bigger Edge
+a bigger lead in my engineering and
+product building skills and you know
+ability to create valuable products AER
+is just swipe the board there are
+definitely some improvements that can be
+made to some of these prompts to get it
+to you know deliver code more accurately
+you can give it more templated section
+so that it knows you know don't
+duplicate the script tag we saw that
+happen a couple times right just just
+like you saw here I'm using it to build
+out the front end of talk to your
+database feel free to sign up this is
+what the series has been leading up to
+all 10 videos is about us starting from
+nothing to building a full Complete
+product over the next two videos we're
+going to push our AI coding assistance
+even further we're going to build out
+more of our frontend user interfaces
+we're going to lock into one of these
+Frameworks we're going to clean this up
+a little bit and the whole time we're
+going to use co-pilot and we're going to
+hit our mock back in API and we're going
+to treat this like a real production
+application all with the backbone of llm
+GPT power technology that is changing
+the way that we engineer it's changing
+the way that we write code it's changing
+the way that we interact with our data
+with our databases feel free to like
+feel free to sub join the journey we're
+staying on the edge of air engineering
+it doesn't matter who's the CEO of what
+company it doesn't matter the tool or
+technology we stick to core fundamental
+engineering principles to help us make
+high probability decisions on where to
+spend our time where to spend our energy
+where to spend our life as Engineers
+we're going to be here as long as it is
+possible for us to be here before AI
+fully takes over we have a lot of time
+left I don't want to sound like a Doomer
+but the time is coming let's stay on the
+edge let's keep our Edge as Engineers
+alive as long as possible I'll see you
+guys in the next
+video

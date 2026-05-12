@@ -1,0 +1,590 @@
+the way we code is changing and so is
+the way we interact with our databases
+if you find yourself burning up time
+writing debugging and reading SQL and
+have been curious about a better way to
+interact with your data using the latest
+and greatest AI technology you found the
+video you've been looking for this is
+the first video in a series where we
+build out our very own postgres data
+analytics AI agent from scratch don't
+worry if you use a different database
+altogether all the concepts you'll learn
+here are transferable to any SQL
+database if you're sub to the channel
+you know that in nearly every video
+we're pulling the future of programming
+into the present across the series
+you'll see how you can push your
+engineering using AI tools and
+techniques on this channel we don't just
+talk about the new cool technology
+coming out we build real valuable useful
+applications with them I can guarantee
+if you stick around you'll learn
+something new let's code our very own
+postgres data analytics AI agent let's
+overview our tool set we're going to use
+chat GPT with gpt4 we're going to use
+neon a serverless postgres host and
+we're going to use our favorite AI pair
+programming tool later our Tech stack is
+going to be a combination of poetry and
+python let's go ahead and initialize a
+brand new poetry application
+open up vs code
+and here we have a plain poetry
+application let's go ahead and create
+some structure
+let's create our Scripts
+now let's go ahead and install some
+dependencies open AI install our
+postgres driver
+or our departs to parse command line
+arguments
+python
+dot m to set up our environment
+variables and we'll run poetry install
+generator readme
+awesome let's create our environment
+file postgres database URL I'm going to
+use a full URL string here and then we
+want our open AI API key I'm going to go
+ahead and set these set up a git ignore
+and now let's make sure everything looks
+good by just printing something in our
+main
+awesome fantastic so now we have a basic
+python application all set up and we are
+good to go so what I'm going to do here
+is walk through the functionality that
+we want to run in our application I'm
+going to fast forward this part so don't
+waste into your time
+okay so this is what we're gonna do in
+this application we're going to parse a
+prompt response we're going to type in
+natural language querying our postgres
+database to give us a certain result
+right so let's go ahead and take a look
+at our table I'm using table plus here
+connected to my postgres instance and
+I've just got two simple tables right
+I've got a user's table which has an ID
+created updated auth plan name email and
+I've got a jobs table which has also ID
+created updated and then it has the
+parent user ID which is a reference to
+the users table and then I have a couple
+of statuses here and a total duration so
+imagine some arbitrary system where you
+know you have users and your users uh
+you know run some type of job in your
+application so we're going to connect to
+our postgres database and get access to
+these tables we're going to call a
+function that will have a couple of
+nested functions within it this function
+is going to take our tables in our
+postgres database and convert them into
+a readable format that the llm can use
+to right SQL queries against after that
+we're going to add two references
+basically we're going to add variables
+to our prompts to help our prompt be
+more accurate and concise then we're
+going to call the open AI endpoint and
+actually run our prompt after that we're
+going to parse our SQL response from the
+gbt response and then finally we're
+going to run that SQL we parse back on
+our postgres database and get a full
+query back so what we're going to end up
+with here is an application that we can
+use to type in natural language and get
+a response from our postgres database
+normally what we're going to do here is
+you know start coding away we would
+import our parse get that rolling you
+know we would build our database module
+we would build our llm prop module you
+know just like I said in the beginning
+of this video guys we're not programming
+like we used to in 2020 anymore in 2021
+even we're using the latest and greatest
+llm technology to help us do our job for
+us right we're using this technology to
+get Talent value and to get a ton of our
+time back so we can focus on the
+critical aspects of writing software so
+I'm not going to do any of that what we
+are going to do though is prompt
+engineer our entire database module
+right now so let's go ahead and create
+that file and create a new folder called
+modules and I'm going to go ahead and
+create our llm.py and I'm going to
+create our BBW live we're going to
+prompt chatgpt to generate our entire
+database module using this prompt
+so here's the prompt create a python
+class that enables objective I need I
+need the following function support and
+then you can see here I have a
+capitalized reference if you've been
+watching the videos you know exactly
+what these are ignore the spelling
+mistake what we're going to do here is
+Define functions that we need generated
+but we're going to give a little bit of
+information right you can think of these
+as function prototypes we're giving the
+llm more information about what
+functions we want to see in our class
+okay you can see here we have a couple
+different examples playing a net
+function a individual function here a
+function with a parameter and then a
+function here with some precise
+explanation of what exactly it does I'm
+going to replace the objective template
+string and we're going to say create a
+python class that enables us to operate
+on a postgres
+database using our python library and I
+need the following function support for
+I'm going to speed through this right
+here
+okay so I have completed mocking out the
+functions for our python class let's
+just walk through this so that it makes
+sense for when you generate your higher
+python classes using this prompt I'm
+just going to jump us back to plain text
+right create a python class that
+operates on a postgres database using
+our library I need the following
+function support right so I'm saying I
+need a init function I need enter I need
+exit this allows us to use the with
+statement we're looking for a connect
+with URL function we're looking for an
+upsert we're going to pass in a table
+name and then a dict and here I'm using
+the dash and specifying some more
+information right so what does upster do
+it inserts or updates a row in the
+database if ID is present in the
+dictionary right so this is pretty cool
+we also have delete git get get all and
+we have run SQL run SQL is going to let
+us run arbitrary SQL this is what we're
+going to use after we get the response
+back from our llm we have git table
+definitions here it's going to get a
+table definition in a create table
+format directly from postgres as a
+string this is what we're going to pass
+in to our llm to build what is going to
+be our postgres AI agent right this
+allows us to tell the llm what our
+tables look like here we have a get all
+table names function which is just going
+to give us all of our table names so
+that we can call get table definitions
+on it and then in the last function what
+we're going to do is combine git table
+definitions and get all table names to
+get a list of table definitions in a
+create table format for all tables in
+the database as a string I want to clear
+up some of my language here I said list
+and as a string you want to be really
+clear and concise with your descriptions
+you can reuse this prompt to basically
+generate any class you need to so I'm
+going to take our prompt fully filled up
+I'm going to hop over to chat GPT and
+let it rip
+fantastic so as you can see here it gave
+us an entire thumb class that mocks out
+this functionality right so before what
+was a entire situation of looking up
+documentation typing The Code by
+yourself is essentially all completely
+automated now all completely abstracted
+Away by gbt and a good prompt I've been
+using this prompt for a while I think
+you want to be like really storing these
+reusing these there's a lot of value
+here in creating these reusable
+structures that you can send to your
+favorite llm gpt4 whatever it might be
+to generate code to generate text to
+generate content for you so let's go
+ahead take this class we're going to
+dump it in db.py and we're just going to
+give it a skim here look for any serious
+errors this looks great let's go ahead
+and test out the connect with URL
+function and let's go ahead and just run
+the get all statement and just for those
+who are wondering I'm using table plus
+my favorite database UI for Mac
+let's import our postgres manager and
+now let's pull in our environment
+variables
+I'm going to dump in the DB URL from the
+dot end file I'm going to call our get
+all function and pass in users here and
+then we're just going to print this out
+awesome
+so as you can see here these are the
+complete results from our users table as
+a list so we can see here we got john.do
+outlook.com hop over to table plus go to
+the users table we have john.do
+outlook.com all we did was construct a
+prompt specify what our functions look
+like in an abstract simple way and then
+it generated this entire python class
+for us right now we can get rid of the
+example usage very likely there's some
+issues in here but we're going to work
+through them the point is likely in the
+worst case we have 80 percent of a
+module you know our postgres database
+connectivity module completely done for
+us already all right so let's turn our
+attention to the llm side of things so
+we basically just need a way to run
+prompts and we need an additional
+function to add capitalized references
+to our prompt so that we can attach our
+tables onto the prompt so let's go ahead
+and just pull in something that I just
+keep reusing I have this up as a gist I
+found myself reusing this over and over
+again I've taken one of my old props and
+reused it feel free to use this I'm
+going to go ahead and just copy this
+as you can see here all it essentially
+does is it has these two key functions
+here we have prompt and we have ADD
+caparef which I'll explain in a moment
+here so I'm just going to dump that in
+the llm let's just give it a quick look
+here and as you can see we have the
+prompt function we're just going to make
+sure that we have the open AI key just a
+little bit of safety and then we're just
+going to check completion we're default
+to the gpt4 nothing special happening
+here we do have this additional function
+though we use capitalized references to
+add memory to our llms so this function
+just does that for us we're going to do
+some simple string concatenation and
+you'll see the output of this as we
+proceed and I'm going to import this
+entire module here so say import llm now
+we have both of our modules set up we
+have a connection to postgres now we
+could again just continue coding piece
+by piece we would get this done right
+we've already done a lot by generating
+the db.py file we have our postgres
+manager but we can push this even
+further right I mentioned we're going to
+use my favorite programming assistant
+ader so let's go ahead and break that
+open and see how ader can help us
+accelerate our engineering I'm going to
+throw a link up to my ader video If you
+haven't seen it definitely that's going
+to be the place to get started all right
+so now I'm going to export my openai API
+key and now I'm going to type ader
+awesome so eight is open I'm gonna add
+Main llm and db.py
+awesome there are some text content in
+here so I'm just going to take a look at
+the total tokens we're at 2K that's
+perfect here's where the magic happens
+I've tabbed forward these comments what
+we're going to do here is have ader
+generate code based on our comments to
+the best of its ability so let's go
+ahead and do that right so we have I'm
+going to say
+read the comments generate
+code based based on the comment read
+db.py and lmrpy functionality you have
+available only update the main function
+and let's fire off
+so it's walking through step by step
+reading the comments and generating
+individual steps
+for each comment
+if you use eight or you know that it
+spits out the previous version then it
+starts generating the new code
+all right so let's see how it's done
+the great part about aider is that it
+runs a git commit so you can always see
+the previous version git log you can see
+exactly what was changed and even better
+on the file that it's updated you can
+simply hit Ctrl Z to see the previous
+version of your code and then Ctrl shift
+Z or whatever your redo keyboard
+shortcut is to go backward to undo the
+undo and so as you can see here it's
+using art parse it did import OG Parts
+I'm going to go ahead and just bump that
+up to the top that looks good so we are
+going to look for a prompt and I'm going
+to get rid of our users table it's just
+noise now and now we have table
+definitions get table definitions for
+prompt this is really cool right it's
+actually looking at that ad Capra
+function we wrote and it's filling it
+out for instance you know we could write
+a prompt something like this right
+um
+show jobs that were created after
+September 5th 2003 right and if we hop
+back over to our table you know we can
+see here
+you know we have you know a few jobs
+that were created after that date right
+so that's going to be what the prompt is
+and now it's saying here are the table
+definitions and it's creating a
+capitalized reference
+and it's going to then place the table
+definitions right after the table
+definitions capitalize reference don't
+worry if that doesn't make sense it'll
+all make sense when you see the output
+we'll have to make a little tweak here
+and we're going to prompt using
+llm.prompt which is the exact right
+function name there as you can see in
+the lm.ui file then it's going to split
+the response and then it's going to call
+DB run SQL so you know I just want to
+take a moment to highlight that with the
+combination of ader and Chad gbt we have
+essentially generated 80 of the code
+needed to run this application now I can
+almost guarantee you there are going to
+be some errors here that we're going to
+work through but eight percent of the
+work is done now it's time for you the
+engineer to dig in after you've used
+your technology use the great llm
+technology to you know generate
+boilerplate it's time for you to come in
+and verify tweak change validate right
+so I'm going to do that right now let's
+add some print statements let's see
+what's going on let's clean up some of
+this code let's add some constants so
+let's do that now
+okay so after a little bit of code
+cleanup we have a couple of print
+statements
+we've filled out our capitalized
+references with some constants and more
+accurate prompt modifications and at the
+end here we're going to print out the
+prompt response we're going to print out
+the parse SQL query and then at the end
+we're going to print out our postgres
+data analytics data agent response
+and that'll look like this
+okay so there's a lot more for our agent
+to do and learn to do but this is a
+really great start basically from
+natural language we'll be able to
+generate and run SQL so let's go ahead
+and see where application chokes under
+on poetry Run start all right so we need
+to now specify a prompt same thing but
+we're going to say prompt show jobs that
+were created after September 25th 2023
+this to be dash dash prompt let's go
+ahead and rerun
+local variable prompt reference before
+assignment let's go ahead and see where
+that's falling apart right here I'm just
+going to say prompt equals R does not
+prompt right that doesn't need to be
+inside the width let's move that out
+where I got cool so it looks like we
+have an error from the chat GPT
+generator code so let's go ahead dive
+into that and see what's going on there
+what I'm going to do is copy the error
+verbatim just as is I'm going to copy it
+with the entire command here and hop
+over chat GPT we have an error the code
+here's
+the error again we're using capitalize
+references we're going to dump the code
+there and then I'll dump the error here
+awesome so it's working through the
+error here looks like there is a change
+with postgres version 12 and newer let's
+see if this updated version does the
+trick first I'm just going to go ahead
+and copy I'm not going to worry too much
+about the exact details I'm going to let
+gbt worry about that
+Go tab in here and just simply rerun our
+code
+okay awesome so looks like we got our
+table definitions here and looks like it
+built the entire prompt first I'm going
+to go ahead and copy this here's what
+the entire prompt looks like right
+before we query open AI so as you can
+see here we have our prompt pass send
+show jobs that were created after
+September
+then we have our capitalized references
+that were attached so it says use these
+table definitions and you can see here
+there's a capitalized references to
+satisfy the database query okay so we
+have the table definitions looks like
+they're getting successfully generated
+and right after that we have respond in
+this format and then I specify the table
+format and it's a again another
+capitalized reference and we're going to
+reference this here and it's basically
+I'm specifying exactly how it should
+respond so that we can use this set of
+dashes as a delimiter to separate our
+SQL so we can easily parse it out so
+let's jump back over to the code and see
+what's going on okay so it looks like we
+had a parsing error we tried to execute
+an invalid variables so what we're going
+to do here is just clean up this prompt
+a little bit right as you can see we got
+this kind of lingering
+functionality here this isn't operating
+exactly as I wanted to so let's go ahead
+and throw a couple new lines at this to
+see if we get a better result
+so I'm going to say respond in this
+format I need to be able to easily parse
+the SQL query from your response so
+we're just going to make a small tweak
+here and we're going to rerun
+all right so looks like same problem
+it's still leaving that text let's
+figure out what else we can do here this
+the
+text
+between
+open close
+with its request
+I'm going to update this capitalized
+reference I just wanted to say response
+format let's go ahead and tweak that
+and then let's go ahead and rerun
+generating the right prompt to get
+consistent results is the trick here it
+looks like this one got through we have
+our postgres data analytics AI agent
+response and as you can see here we have
+the individual worlds looks like we have
+you know four rows returned which lines
+up with exactly what we would see from
+the response of that query and if we dig
+into the SQL you can see that we
+perfectly parse select star from jobs
+where created it's greater than it's
+September 9th 25th 2023 and we ordered
+by creative ascending nice touch
+and this is the first step to really
+creating our own analytics agent so you
+know a couple things to call out here
+definitely the trickiest part of this is
+getting the llm to respond in a specific
+format in future videos we're going to
+experiment with ways to get the llm to
+respond in a specific way so that we
+don't have to dance around exactly how
+we need our prompt to return so we were
+able to build this out pretty quickly
+there are definitely some startups and
+some companies building this out right
+now but they're basically just doing
+this right this is one of the things
+that I want to show and kind of reveal
+on this channel is that you can build
+these tools all on your own all the
+technology you need to do extraordinary
+things like this is here right now by
+typing a natural language you can query
+your postgres database the queries and
+the databases of course are going to get
+a lot more complicated than just these
+two tables but let me show you a couple
+more examples to show what else we can
+do with this there's that are off
+that have had jobs running for longer
+than three seconds right so we have that
+off variable here we have three users
+all and then we have jobs here with a
+duration in Ms right so these are in
+milliseconds and I want everyone that's
+been running longer than three seconds
+so let's go ahead and just fire out this
+prompt let's see what happens
+awesome so as you can see here we got
+back the rows we were expecting ideally
+I want to get this back in key value
+form and a nice clean object we can
+tweak that this is just the first video
+in the series we're getting up the
+basics we're getting the scaffolding of
+our full agent in place let's push the
+problem a little bit further that have a
+job with the status
+okay so this is kind of tricky with the
+completed statement we should expect to
+see no jobs return we're looking for a
+count of zero here so let's see if it
+can pull this off
+there it is
+and if we highlight the statement here
+we can look at exactly what was run
+across a series and across all the
+videos that I'm putting out right now
+what I'm trying to do is build up Your
+Arsenal of tools and technology that you
+can use to build the application that
+you want to build I hope you guys can
+see where this is going we're building
+out our own postgres analytics agent
+we're giving it queries in natural
+language in future videos we're going to
+be building out our agent we're going to
+be setting up apis we're going to be
+building out a nice clean user interface
+and we're going to be making our agent
+run autonomously you're not going to
+want to miss out on this and throughout
+the series once again you know we're
+going to be building it using modern
+tech modern techniques thanks for
+watching sub like I'll see you guys in
+the next video

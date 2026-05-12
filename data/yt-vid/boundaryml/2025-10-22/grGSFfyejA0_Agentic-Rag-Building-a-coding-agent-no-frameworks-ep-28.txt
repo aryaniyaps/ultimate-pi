@@ -1,0 +1,2516 @@
+[1.2s] All right. Hello, hello, hello.
+[4.2s] We're gonna go right into it today.
+[6.4s] We're going to go start talking about
+[8.5s] agentic rag and talk about if we can get
+[11.6s] to work, how you would might want to go
+[13.3s] do it, and exactly what we want to do.
+[16.1s] Before we get started,
+[17.0s] >> this is
+[18.4s] >> Go ahead, do the intro. You're doing the
+[19.8s] intro. Go for it.
+[21.1s] >> All right. This AI that works. Every
+[22.6s] week, Dexter and I get together and we
+[24.6s] talk about building real pipelines that
+[26.2s] actually work.
+[28.1s] If uh if you can think it, you can build
+[30.8s] it. That's the whole idea. And my name
+[33.1s] is Vivov. I work on BAML, which is a new
+[35.8s] programming language.
+[36.6s] >> I'm stacks. I work on uh lots of things,
+[39.7s] including code layer, which is a new ADE
+[41.6s] to get coding agents to solve hard
+[43.8s] problems and complex code bases.
+[46.3s] >> And I'm super excited to get into it.
+[48.9s] This is going to be I have a feeling we
+[50.9s] were thinking about this episode before
+[52.3s] we got on. And uh I have a feeling
+[55.1s] there's going to be some spicy takes and
+[56.8s] some back and forth. So my favorite
+[58.5s] episodes are when me and Vibv actually
+[60.2s] don't fully agree on stuff. So we might
+[61.9s] get a little bit of that today, but I'm
+[63.0s] going to let him get into the demo. Show
+[64.1s] them what we're building and uh looking
+[66.1s] forward to it.
+[67.1s] >> Okay. So as many of you probably know, a
+[69.4s] rag system is not an aentic system like
+[72.4s] cloud code or something is not something
+[73.7s] you can really build um in let's say
+[76.0s] like within 1 hour. So, I did something
+[79.6s] else, which is I built this thing um
+[82.7s] mostly uh last night just to show you
+[85.4s] what it could do. But I want to just
+[87.4s] start with the demo and show you exactly
+[88.8s] what it is and then based on what it
+[90.6s] works, we can then talk about how it
+[92.7s] works. So, I'll just make the terminal
+[95.4s] the whole thing. Uh can you see? All
+[97.6s] right, Dexter.
+[98.8s] >> Yeah, it looks good. That's a that's a
+[100.2s] good zoom.
+[101.0s] >> Okay, then I'll leave it at the zoom
+[102.5s] level. Um I'm just going to run this
+[105.5s] thing. Uh we're what this thing is I
+[108.6s] gave it a directory. I'm in the BAML
+[110.0s] directory right now and I'm just going
+[111.0s] to ask it what does the form fern folder
+[112.8s] do and you'll notice what this agent
+[114.9s] does. It actually has the ability to go
+[116.9s] ahead and set some stuff. So it's going
+[118.2s] to take the user query. I'm using GD5
+[120.3s] for now because I don't want to think
+[121.8s] about model stuff. So I just used the
+[123.5s] best model I could on the market.
+[125.0s] >> Did you just did you build a coding
+[126.6s] agent?
+[127.8s] >> Yeah, I built a coding.
+[128.9s] >> Is that what this is?
+[129.8s] >> From scratch. Um
+[131.3s] >> Okay.
+[131.6s] >> It took me a net of about 3 hours. So it
+[133.8s] actually went through it did a glob
+[135.1s] looked through the firm folder and I was
+[136.2s] like cool this worked.
+[137.7s] >> Um I'll ask it question using these
+[140.3s] docs.
+[141.8s] How does how do I use the Gemini models
+[146.2s] with BAML? Cool.
+[147.8s] >> It should in theory take this agent and
+[150.6s] there's my user query. It'll go ahead
+[152.6s] and probably glob some stuff. Um make
+[155.4s] some other GP. It has a GP tool that it
+[157.4s] looked into. It's going to go take the
+[160.0s] results. And I don't stream the thinking
+[161.7s] tokens yet. I haven't built full
+[163.0s] streaming into this yet. That'll
+[165.6s] probably take another two or three hours
+[166.8s] to get working. Uh file
+[170.2s] >> and then what will it do? Let's just
+[171.8s] keep seeing what it does.
+[173.0s] >> I got a question.
+[174.0s] >> Yes.
+[175.0s] >> Um where you're snipping that result at
+[178.5s] the end where it says 4,300 cars total.
+[180.9s] Is that also being snipped for the model
+[182.7s] or is that just being
+[183.7s] >> trimmed? The model sees the full 4,000
+[185.8s] characters.
+[186.6s] >> Okay.
+[187.2s] >> Um cool. It actually gave me an example
+[188.8s] of how to do this. Um, can you check
+[191.8s] against the Google Docs if Gemini 2.5
+[194.6s] Pro is the latest model or not? Or are
+[196.2s] there newer ones?
+[198.2s] >> Did you also give it web search?
+[200.4s] >> And while this thing runs, like I guess
+[203.6s] a really really important part to think
+[205.4s] about here is what exactly are we trying
+[209.5s] to do with agentic rag? I know there's
+[211.8s] quite a few people who probably have an
+[213.6s] idea of what agentic rag is. What is
+[215.8s] your definition of it, Dexter?
+[218.2s] Um, and I think it's probably worth
+[219.7s] zooming out a little bit now that we've
+[221.0s] kind of seen the demo. Um because I
+[224.2s] think for me agentic rag is basically um
+[228.6s] to be to be like counterposed with um
+[232.8s] traditional rag which is a little bit
+[235.0s] more actually aligned with what we might
+[237.5s] describe as context engineering which is
+[239.8s] you know uh some query comes in I do a
+[243.5s] bunch of deterministic code to fetch
+[245.5s] data related to that query whether it is
+[248.3s] doing a search on an API like linear or
+[251.4s] notion or something like that or whether
+[253.6s] it's like pulling things out of a vector
+[255.6s] database. Like for me like
+[258.6s] retrieval augmented generation doesn't
+[260.3s] have to use vectors. It doesn't have to
+[261.6s] use search. It's just based on what the
+[264.4s] user asked or based on some logic that I
+[267.1s] know in my business application. We're
+[268.6s] going to retrieve data and give it to
+[270.3s] the model deterministically every single
+[272.3s] time. So when the model gets the user's
+[274.2s] question or query or task or whatever it
+[277.8s] is, you are always going to be injecting
+[280.1s] some set of and it's probably not the
+[281.6s] same every time, but it's deterministic
+[283.4s] code mostly that defines what goes in
+[285.4s] there. And maybe there's searches and
+[286.6s] lookups and XG boost and vectors and
+[288.4s] things like that, but that's kind of
+[290.1s] basic like your code decides the logic.
+[293.6s] And so with agentic rag, it's it's kind
+[296.1s] of a little bit more open-ended. It's
+[297.6s] this just agent calls tools in a loop.
+[300.1s] And so it's the agent's job to define
+[303.2s] what context gets pulled into the
+[304.8s] context window. And sometimes if the
+[306.6s] context is bad, it's still in the
+[308.0s] context window, but it's the agent's job
+[309.7s] to call tools to try to get the enough
+[312.6s] information to resolve the user's query.
+[315.4s] >> Yeah, I I'll tell you how I think about
+[317.0s] it. And probably it's probably slightly
+[318.6s] different, but slightly aligned as well.
+[320.6s] Um
+[322.2s] my theory is
+[324.7s] I think agentic rag the whole purpose of
+[327.1s] it is it's actually not a definition of
+[329.9s] how you implement it. It's actually more
+[331.4s] of a definition of what the goal of the
+[333.0s] problem is. So when I think about the
+[335.4s] world, I think about a rag system as a
+[338.5s] much narrower system. And this might be
+[340.5s] exactly what you're saying. But when I
+[342.9s] think about um in the sense of like a
+[345.4s] narrow system, what I mean by that is
+[347.4s] you have a you as a developer have an
+[349.9s] understanding of the scope of the
+[351.7s] problem that the user is asking. And an
+[354.2s] agentic rag pipeline is designed to go
+[356.6s] solve for a problem where you as a
+[358.9s] developer don't have a scope for knowing
+[360.5s] what the user is asking. Well, and this
+[362.6s] is what we always talk about is the the
+[364.3s] kind of spectrum between the kind of
+[366.2s] full open-ended yolo just call tools in
+[368.8s] a loop versus the specific pipeline. And
+[373.1s] so when you write the pipeline, you have
+[374.5s] more deterministic code. You have less
+[377.5s] like the problem space you can solve is
+[380.8s] smaller. But the idea is by by being
+[383.8s] deterministic about the things you know
+[385.3s] are always going to work in a certain
+[386.7s] way, then you can actually solve that
+[389.2s] problem better. like the open-ended
+[391.0s] agent can do more things, but if you
+[393.4s] want accuracy, you actually want to say,
+[395.0s] "Well, we're always going to do these
+[396.1s] three steps in this order. Why are we
+[397.5s] going to prompt the agent to call those
+[399.4s] three tools? Just we'll just call those
+[400.8s] APIs and inject it every time."
+[402.6s] >> Yeah, exactly. So, here's the thing. I I
+[405.4s] want to talk through the code that we
+[406.6s] built today, but I think one of the most
+[408.8s] important things that I really want to
+[409.9s] talk about is
+[411.8s] I I had a hot take that I built while
+[414.1s] building the system. I think
+[416.3s] >> you you learned something new by
+[417.7s] building.
+[418.5s] >> Yeah. Uh well,
+[420.2s] If you are deciding whether or not you
+[421.6s] should build an agentic rag system or
+[423.2s] not, um you should just build one. It's
+[425.2s] way easier than you think. I built the
+[426.5s] whole thing, like I said, in 3 hours
+[427.8s] using cloud code. Um I wrote I wrote
+[430.5s] probably around um I think I wrote about
+[433.8s] 30% of the code by hand and 70% of it is
+[436.8s] AI generated. I don't think I could have
+[438.5s] done 100% uh by AI generated personally
+[441.4s] uh just because of how nuanced and like
+[443.0s] some of the decisions were, but like 70%
+[444.9s] of the code is actually all UI code.
+[447.2s] very little of it is actually agentic
+[448.8s] code. Almost all of it is pure UI UI
+[452.0s] stuff I have to build. But I think one
+[455.2s] of the first things that I realized
+[456.3s] while building this is actually that
+[457.5s] most people should not build
+[460.6s] rag aentic rag systems for their
+[462.9s] workflows. If you're building a software
+[464.9s] stack, most problems are not so wide
+[468.3s] that you need an agentic rag system.
+[471.6s] And the reason I felt this was because
+[474.9s] it turns out it's it's very similar to
+[477.8s] different kinds of problems. But the way
+[481.1s] if you have an Excalibur, let's do some
+[483.1s] drawing.
+[483.4s] >> I'll send it to you on Slack.
+[484.6s] >> I'll show you exactly why I came to that
+[486.1s] conclusion after building this. And you
+[488.3s] might disagree.
+[490.2s] I did not use the cloud agent SDK. I
+[492.3s] actually specifically whenever I really
+[493.8s] want to go learn something, one of the
+[495.8s] first things that I try and do is I
+[498.3s] really want to learn it from first
+[499.6s] principles and I just find personally
+[501.7s] for myself writing the code helps me
+[503.4s] understand how it works. If I use the
+[504.7s] cloud agents SDK, I don't actually
+[506.9s] understand how like what a system is
+[511.2s] doing. And by actually writing the code,
+[513.7s] I now just I can tell you every little
+[516.2s] bit of a system design decision that you
+[517.8s] might make trade-offs for and like where
+[519.0s] the cloud agent SDK might be useful and
+[520.7s] where it might not. But honestly, I
+[523.1s] don't think I would have won any more
+[524.6s] time by using the cloud agent SDK. I
+[527.4s] think it would have actually like cost
+[528.7s] me probably more time because certain
+[530.1s] things would have been harder and other
+[531.2s] things would have been easier.
+[534.4s] >> Code in a second.
+[536.2s] >> Yeah. And I I would love to talk through
+[538.2s] also like the implications for like
+[540.6s] building the SDK when you are also
+[544.6s] working at the lab that creates the
+[546.8s] model because it gives you some
+[548.2s] interesting other unlocks that we can
+[549.8s] dig into and we'll look into some of the
+[551.3s] stuff under the hood in cloud code that
+[553.0s] that that you can see if you look at the
+[555.6s] full tool responses.
+[557.9s] >> So I'm going to go share my screen and
+[559.6s] show you the whiteboard.
+[562.3s] >> Amazing.
+[562.7s] >> Uh share screen. Um,
+[565.9s] all right. We're going to talk about
+[568.0s] this and we're going to talk about
+[569.1s] agents and how how I at least learned
+[571.7s] about it. Oh, that was not a good ink.
+[575.0s] Uh, whatever. We're going to do it. Um,
+[577.2s] so I think the first thing that I
+[578.2s] learned was actually the fact that what
+[580.2s] is it? What is this agentic rag system
+[582.4s] that we have? So, there's actually two
+[584.0s] parts here that are really interesting.
+[585.6s] The first part is we're going to have a
+[587.7s] user query come in and then we're going
+[589.8s] to have a we're going to have a response
+[591.1s] come out like a user is going to send us
+[592.6s] a message like what I've said like what
+[594.0s] does the Fern folder do or how do I use
+[595.4s] a Gemini API at some point I'm going to
+[597.6s] get some sort of reply from the user
+[599.0s] that is like something friendly for the
+[600.8s] user to go do. Now there's a whole bunch
+[603.3s] of hoopla that's going to happen in here
+[604.8s] as well that I probably want to deal
+[606.6s] with at some point. Uh that is probably
+[609.8s] some agent stuff but for now as far as
+[612.8s] the user is concerned they're going to
+[614.0s] send a query. they're going to get a
+[615.2s] response and then after that what I'm
+[617.4s] going to do is I'm going to I'm
+[618.5s] basically just going to build blocks of
+[620.4s] this over and over again in sequence and
+[623.6s] that is what builds this agentic system
+[625.7s] and I think that is the first insight
+[627.5s] that I had which was like what is this
+[630.2s] stuff a user query comes in a bunch of
+[632.1s] stuff has to happen here and the model
+[633.6s] is deciding what is going to happen in
+[635.2s] here and at some point the respond comes
+[637.4s] out and then I go in that is the key
+[639.0s] part that made it agentic for me and
+[640.6s] then I decided what are all the tools
+[641.9s] that I want to give it over here so I
+[643.4s] just came over the list of tools.
+[646.5s] Um, and come up is a is a bad term. What
+[649.2s] I really did is I just took the list of
+[650.7s] tools that cloud code has and I built
+[652.4s] all of them. Uh, GP, uh, I had GP, I had
+[656.9s] Glob, I had ls,
+[660.2s] and then I built these in along with
+[661.8s] like a bunch of other tools and I'll
+[663.1s] show you every single tool I have in
+[664.2s] there. And like I said, all the code is
+[665.3s] completely open source so you can
+[666.2s] actually go read it really easily. And I
+[668.2s] built all these tools out and I even
+[669.8s] have like an agents tool that actually
+[671.2s] allows you to spawn sub agents. I didn't
+[673.8s] show that off. I'll show
+[674.6s] >> you build sub agents.
+[675.7s] >> I built sub agents too. Sorry. I built
+[677.1s] the whole
+[677.4s] >> of course.
+[678.2s] >> I mean subtasker is like actually
+[679.8s] conceptually not that complicated. We've
+[681.8s] talked about it a lot. It's just new
+[683.1s] context window.
+[684.0s] >> Most of the time actually came from UI
+[685.9s] time, not from anything else.
+[688.6s] >> And I just wanted to build this
+[689.7s] workflow. And once this thing completed,
+[691.4s] I then wanted to get the response from
+[693.0s] the user. And then once the response
+[694.5s] came in, the user could send another
+[695.9s] message. And then I just do this over
+[697.2s] and over again. So for for terminology
+[699.5s] just because we're kind of talking about
+[700.6s] a lot of things. I think you called
+[702.2s] these like the internal things in one of
+[704.7s] these blocks is you have like n
+[706.2s] iterations. You name calling them
+[708.1s] iterations through the tools.
+[709.8s] >> Yes.
+[710.1s] >> And then I would call one of these like
+[711.8s] a turn.
+[713.3s] >> Sure. Yeah. We let's we can call that. I
+[715.2s] think that's a good that's a good
+[716.6s] nomenclature. Uh it's going to make it a
+[718.7s] lot easier. I I did come up with a name
+[720.2s] for the internal thing cuz I was like
+[721.3s] getting confused.
+[722.8s] >> What did you call it? I just called it
+[724.8s] iterations uh because I needed a word
+[727.4s] and that was the word that existed and
+[729.9s] I'll post some screenshots just so you
+[731.3s] guys have an idea of what that means.
+[732.7s] This is Google Chrome is hiding my so
+[736.3s] when I go over here this is kind of what
+[738.0s] it looks like. I do the same thing. So
+[739.3s] like an iteration over here is an
+[741.3s] iteration I call a tool and it's
+[743.7s] basically a tool transaction list that
+[745.5s] runs forever until it basically decides
+[748.0s] the only tool that I choose to terminate
+[749.8s] on is a tool that replies to a user.
+[753.0s] Now, because this can go off spinning
+[754.9s] into a loop forever, I actually have to
+[756.4s] do some work to just set max iterations
+[758.0s] as well. So, like at some max iteration
+[759.6s] loop, I just stop it. Uh because I don't
+[762.0s] want it to spin forever um and just burn
+[765.0s] money. Uh but in theory, I didn't have
+[767.9s] to do that. Uh I just needed that. Uh
+[769.7s] but now that this worked, what was the
+[771.6s] hard part about this? Like why do I
+[773.0s] think that most people should not build
+[774.9s] this system? Well, it turned out that
+[777.6s] the number one problem with this system,
+[779.5s] I wonder if anyone can guess. Dexter,
+[781.2s] what's your guess about what you think
+[782.2s] the hardest part about this whole system
+[783.4s] is?
+[783.9s] >> Designing the tool prompts and the tool
+[786.5s] responses to be usable by the model and
+[790.1s] context efficient for the model.
+[793.1s] >> Um, tool prompts was actually the I
+[795.2s] actually never touched the tool prompts
+[796.8s] after the first time of writing them.
+[799.1s] >> Did you just steal the cloud ones or did
+[800.6s] you write them yourself?
+[802.2s] >> I you asked
+[803.3s] >> Claude wrote them.
+[804.2s] >> I just asked cursor to write it.
+[805.7s] Actually, oh, sorry. I said Claude. I
+[807.4s] actually used cursor this whole time. I
+[808.7s] just wanted to try new age agent. I
+[809.7s] actually used cursor the whole time. It
+[811.2s] was 70% cursor, 30% me.
+[813.4s] >> Um,
+[813.7s] >> how was how was the cursor agent?
+[815.5s] >> I told you I built the whole thing. If
+[816.8s] you think this agent is cool, I built
+[818.0s] the whole thing up there.
+[819.5s] >> Okay.
+[819.8s] >> Um,
+[821.4s] so I did that. Um, I also did a couple
+[824.5s] more things while I did this. Um, what
+[826.9s] what I found was the hardest, sorry,
+[828.6s] I'll talk about that in a second. What I
+[830.0s] found the hardest part about here wasn't
+[831.6s] actually the tool definitions. It was
+[834.2s] actually the implementation of the
+[835.6s] tools. And when I noticed agent quality,
+[838.5s] what's surprising is when I tried this
+[840.3s] thing uh with even the best models, the
+[842.6s] key difference to making this work was
+[844.2s] actually how I changed how the tools
+[845.8s] were implemented. Everything else made
+[848.6s] zero impact or negligible impact on the
+[851.3s] quality of the agent based on the kinds
+[852.6s] of tasks that I was doing and the way
+[854.6s] >> that's the that's the promise of agents.
+[857.0s] That was the promise of agents a year
+[858.5s] ago, right? which is like use use a
+[860.7s] framework, use the loop and then just
+[862.6s] bring your own tools and you control
+[865.2s] kind of your own destiny by just like as
+[867.6s] long as you build good tools and you
+[869.0s] implement them well the agent can do
+[870.6s] anything
+[871.5s] >> kind of but effectively what I found was
+[873.7s] if I need if I define my tools well then
+[875.9s] it did work but the other problem that I
+[877.8s] did have to do was I did need to have my
+[879.7s] tool def my prompt was semi- tied to my
+[882.6s] tools and that part was very tricky to
+[884.4s] go do right
+[886.1s] >> yeah I've seen that a lot I've seen a
+[887.5s] lot of people building coding agents
+[888.9s] They have it in the system message and
+[891.0s] in the tool definitions and then
+[892.9s] sometimes even injected to the end of
+[894.8s] the user message as well.
+[896.5s] >> Conniey's got a very interesting comment
+[898.2s] about like testing and evals. Um yes,
+[901.0s] while I was building this whole thing, I
+[902.3s] was actually constantly testing. So my
+[903.8s] iteration loop for running this was
+[905.3s] actually one of the first things I did
+[907.2s] as I actually built a really really good
+[910.2s] CLI tool that was pretty good. And as
+[912.7s] soon as I built a CLI tool, I actually
+[914.3s] built a TUI because the CLI tool quickly
+[918.0s] became unusable
+[920.1s] because of how printing stuff came out
+[922.0s] to be. And I needed something to
+[923.8s] actually
+[925.6s] uh I actually needed something to make
+[927.8s] my problem be a lot easier to
+[929.8s] understand. So, for example, when I get
+[931.9s] the GP tool, when I had a giant log
+[933.7s] system here, I needed to see the
+[935.4s] difference between one tool versus the
+[937.1s] next tool very clearly and I needed to
+[939.6s] not override my 2E when I was actually
+[942.3s] like writing stuff and typing stuff out
+[944.8s] into the terminal and that was really
+[946.8s] hard to do with just a pure CLI. So, I
+[948.7s] found it to be very useful to actually
+[950.1s] just build a TUI and just tell the model
+[951.4s] to do that. And once I did that, funnily
+[953.9s] enough, cursor actually built the right
+[956.1s] abstraction layer for my agent as well,
+[957.8s] which was it was an agent that ran that
+[959.7s] had hooks for every interaction that
+[961.7s] happened. Then I could just like observe
+[962.9s] it with different states. And that's the
+[965.6s] exact UI I wanted. So the CLI and the
+[967.3s] TUI both interface the same thing. And I
+[968.9s] could have built a web UI that
+[970.2s] interfaces the same thing because it's
+[971.9s] all
+[972.2s] >> so it just emits events and then there's
+[974.3s] an out like the interface to it is you
+[976.2s] just render the events as they happen
+[978.2s] >> basically. Yes.
+[979.5s] >> Okay.
+[979.8s] >> Uh along the way. So
+[981.9s] UI UI loop was really hard designing it.
+[984.9s] And then once I designed the UIUI loop
+[986.6s] for actually iterating on the tools and
+[988.6s] then I could actually go ahead and try a
+[990.3s] bunch of prompts. So I actually tried
+[991.4s] the Fern thing over and over again until
+[992.9s] I finally made it work. And the first
+[994.6s] version of this system did not work. The
+[997.4s] second version of um the second version
+[1000.7s] of the system
+[1002.7s] also didn't work. And eventually I just
+[1004.4s] annealed it closer and closer to finally
+[1006.5s] make it work. And I think what I really
+[1008.0s] want to share today is one the coding
+[1010.2s] architecture of how I had to go do this.
+[1011.8s] So let's talk about the tool
+[1012.8s] definitions. The second thing I want to
+[1014.9s] talk about is what I did to actually
+[1017.2s] make the tools better. And the third
+[1019.4s] thing I want to talk about
+[1021.0s] >> is what I would do to make this even
+[1022.8s] better going forward.
+[1024.7s] >> Cool. So I I I would love to hear more
+[1027.1s] about kind of what you had in the tools
+[1029.1s] before you changed them and what you
+[1030.7s] learned about like what works well and
+[1032.3s] what didn't.
+[1033.0s] >> I will I will gladly do that. So let's
+[1035.8s] get into this. Uh, Dexter, I won't be
+[1037.5s] watching the chat at all. Uh, so if you
+[1039.4s] see stuff on the chat, that is worth it.
+[1041.0s] I'll let you track it. And I'm just
+[1042.8s] going to walk straight through um
+[1045.3s] straight through the code.
+[1048.0s] Um, I'm going to share my whole screen.
+[1049.8s] Again, if you guys see something I'm not
+[1051.3s] supposed to, please flag in the chat so
+[1052.7s] we can cut it out of the stream um
+[1055.6s] eventually.
+[1056.3s] >> Careful. We're now live on on Twitter.
+[1058.7s] So, uh,
+[1059.8s] >> shoot, this is forever. Um, let's start
+[1062.0s] with the code architecture now that this
+[1063.7s] thing works. Uh, I can show sub agents
+[1065.8s] if you want, but I'll do that at the end
+[1066.9s] because I think that's the least
+[1067.8s] interesting part about this. So, I'm
+[1069.9s] just going to start with the tool
+[1070.9s] definitions because I think that's the
+[1072.1s] best entry point to the system. So, I
+[1074.5s] have two systems that I built. I built
+[1077.8s] an agent loop that just takes a state.
+[1079.8s] It has a giant prompt in here. I don't I
+[1081.5s] don't even think this prompt makes a
+[1082.6s] difference. I just wrote a cursor wrote
+[1084.2s] and I just like, okay, leave it as as it
+[1086.0s] is. Uh, and I just dump out the state
+[1088.4s] into the prompt and I let it run. And
+[1090.4s] then I have a separate function for sub
+[1091.8s] aent loop. And the main reason I have
+[1093.5s] this is because uh and I don't like this
+[1095.8s] about BAML. I had to go fix this u once
+[1098.1s] I discovered this is I have a bunch of
+[1100.3s] tool definitions. But one second before
+[1102.5s] I show the tool definition, remember all
+[1104.2s] this agent can do is it can either reply
+[1105.8s] with one of the tools or a response to a
+[1107.8s] user to render something. That's it.
+[1109.6s] Nothing else is allowed to happen. Same
+[1111.8s] with this agent. It can either pick one
+[1113.1s] of the sub aent tools or reply to a
+[1114.7s] user. Now what are the tools that I
+[1116.3s] allow? An agent tools are basically the
+[1118.6s] sub aent tools plus the agent tool.
+[1120.6s] That's it. That's so the agent tool is
+[1123.0s] actually call a new agent basically.
+[1125.1s] >> Exactly. It spawns a new agent. I can go
+[1127.1s] read this if you want. This is what it
+[1128.2s] does. Launch a new agent that has access
+[1129.6s] to any of this stuff.
+[1131.8s] >> And there's a bunch.
+[1132.5s] >> This looks like the claw code prompt.
+[1134.6s] >> I literally just copied the and pasted
+[1136.2s] most of it.
+[1137.3s] >> Okay.
+[1137.9s] >> And then what I did, it's just a
+[1139.4s] description plus a prompt like nothing
+[1141.5s] special. It just kind of plumped it
+[1143.4s] through. Then the sub aent tools are
+[1145.8s] basically I have a batch tool, a glob
+[1147.4s] tool, grab tool, less tool, exit plan
+[1149.4s] mode, read tool, write, web fetch,
+[1151.8s] to-do, to-do, write, and web search. Web
+[1153.9s] fetch and web uh search are slightly
+[1156.3s] different. This uses search API. This
+[1158.0s] uses actually only the like a fetch to
+[1160.6s] get a specific URL along the way.
+[1162.3s] >> Can you can you zoom in a little bit?
+[1164.3s] >> Yes, I can.
+[1165.4s] >> Yep. And then the other question from
+[1167.0s] John was, is it on is the code on GitHub
+[1169.2s] yet? I think we're going to push it
+[1170.2s] after this. So, we'll send out an email
+[1171.8s] after the episode with all the code.
+[1173.4s] Exactly. So I just want to look at some
+[1175.5s] of these tools and I this what I want to
+[1177.2s] talk about is like I actually never
+[1178.5s] changed these definitions at all. Once I
+[1180.2s] wrote them it just works. Um and the
+[1183.4s] only key part to every tool is every
+[1185.0s] tool has a field called action called
+[1187.5s] glob action with the name of the action
+[1190.2s] itself and then the actual pattern that
+[1191.8s] it rendered. uh and then all the
+[1194.0s] parameters that came with it and some
+[1195.8s] and that why I use the action key is
+[1197.7s] because it makes it a really cool
+[1199.0s] discriminator for any sort of stuff I do
+[1201.3s] afterwards to make sure what is actually
+[1202.9s] happening.
+[1204.4s] Now this was the easy part. Writing the
+[1207.8s] actual system was actually quite easy
+[1209.0s] and once I actually wrote this I think I
+[1211.5s] have a test case somewhere here. I might
+[1213.4s] not uh
+[1216.4s] one second
+[1218.7s] restart.
+[1220.6s] There we go. Okay. Once I actually wrote
+[1222.6s] this, I actually read the prompt and I
+[1223.9s] think it's worth reading the prompt a
+[1225.2s] little bit. Uh the model can basically
+[1227.4s] answer one of these. Uh it just lists
+[1230.7s] this down and says, "Okay, one of the
+[1232.1s] actions is bash, tells describes that
+[1233.7s] one." It then lists the glob action and
+[1235.2s] then lists all of these. Um funny
+[1237.4s] enough, I actually only read this prompt
+[1240.3s] at certain points, which was when a tool
+[1242.4s] failed. So I actually started off not
+[1244.3s] reading the prompts at all. Uh and then
+[1246.7s] I just let it vibe. And the reason I did
+[1248.4s] that is because I know Cloud Code works.
+[1250.2s] I know a lot of these tools are probably
+[1251.9s] based off of cloud code directly. So I
+[1254.0s] kind of had a good intuition that this
+[1255.4s] was going to work up front.
+[1257.6s] Um what I did do however that I think
+[1260.0s] was not ob what I did do pretty much on
+[1262.4s] within the first iteration is I I listed
+[1264.5s] some scary tools. Edit tool, multi-edit
+[1266.7s] tool, write tool, uh notebook edit tool.
+[1268.9s] I just didn't want it to write to the
+[1270.0s] file system. So I just plum these out. I
+[1272.8s] just
+[1273.2s] >> I love using scary tools. I was I've
+[1276.1s] been using the word scary tools since
+[1277.8s] since we did all this human layer stuff
+[1279.4s] for human in the loop. What are the
+[1280.6s] things you want to get approval on?
+[1281.9s] Right.
+[1282.2s] >> And really bash tool should also be in
+[1283.9s] scary tool, but bash is too useful. So I
+[1285.7s] kind of left it.
+[1289.1s] >> Scary but not as not as uh as uh plus
+[1292.1s] EV, I guess.
+[1293.1s] >> Yeah, I really just didn't want to
+[1294.7s] change the file system because this was
+[1295.9s] a reader agent mostly. It's like
+[1297.4s] supposed to answer questions about docs.
+[1299.6s] >> One one question in the chat that I
+[1301.1s] think we should make sure we get to is
+[1302.2s] like um how did you eval these tools?
+[1304.2s] How did you score? How did you know that
+[1305.8s] new definitions were better than old
+[1307.4s] ones? Was it just vibes or do you have a
+[1309.5s] testing harness?
+[1310.4s] >> I just kept on running the tool over and
+[1312.4s] over again and rather than doing
+[1313.8s] anything else. And the reason I did that
+[1315.6s] is because like when I'm in the flow
+[1318.0s] when I'm in like flow state and I'm
+[1319.4s] trying to just make it something that
+[1320.8s] works
+[1322.4s] running an eval system and like like
+[1325.1s] okay, I'll show you guys what what the
+[1326.9s] actual chat log looks like so you guys
+[1328.3s] can get an idea.
+[1328.8s] >> I mean, you did you did make an eval. It
+[1331.4s] was just you uh you picked a a test case
+[1334.8s] and you ran the same case over and over
+[1336.6s] again live test case looks like for this
+[1338.7s] eval right like at at iteration loop
+[1340.7s] number at iteration loop number seven I
+[1342.9s] just have a giant message array that I
+[1344.6s] have to deal with and like how do I eval
+[1347.8s] this thing in a way that's reasonable I
+[1349.4s] can't I can't actually go read it. So I
+[1351.0s] started doing instead is I would just
+[1352.2s] run the loop and I just look at what
+[1353.8s] sequence of tools were called in what
+[1355.1s] order and once I knew what sequence of
+[1357.1s] tools the parameters I would look at
+[1359.0s] sometimes cuz the parameters rarely
+[1360.5s] mattered. I just need to look at the
+[1361.7s] sequence of tools and there's different
+[1363.0s] ways I could have done that. I could
+[1364.2s] have looked at it here. I could have
+[1365.6s] looked at it in the terminal UI. It
+[1367.7s] really doesn't
+[1368.2s] >> what's the chronology here is the the
+[1370.6s] read is the last one is at the top
+[1372.6s] right.
+[1372.9s] >> The top one is the most recent time
+[1374.0s] stamp right here.
+[1374.9s] >> What's this red? Why is it red? What
+[1376.6s] does that mean?
+[1377.1s] >> So I'll talk about this stuff. It turns
+[1378.6s] out models don't always follow tool
+[1380.1s] calling uh in a lot of scenarios. So
+[1382.5s] I'll talk about hacks that I had to do
+[1383.8s] to make it actually work like super
+[1385.4s] reliably.
+[1386.7s] >> Did it like output a tool that wasn't
+[1388.2s] valid or like blew up the parser or
+[1389.8s] something?
+[1390.2s] >> Yeah, exactly. It would just make up
+[1391.8s] tools sometimes. And even if it didn't
+[1393.9s] make up tools, sometimes it would reply
+[1395.4s] to a user with some interesting code.
+[1397.4s] >> So
+[1397.7s] >> that's uh I read that in the crew AI
+[1399.5s] prompt a long time ago was like do not
+[1401.2s] hallucinate tools. Do not make up any
+[1403.0s] tools. They even built a feed feedback
+[1405.3s] system in to like if the tool was
+[1407.1s] unknown, it would feed that error back
+[1408.6s] into the model and be like you picked a
+[1409.8s] tool that doesn't exist, try again.
+[1411.4s] >> Yeah. So that that is not that is kind
+[1413.6s] of pointless. So I didn't do that, but I
+[1415.8s] did do something else that I think made
+[1417.1s] it a lot better. So what do I do? I
+[1419.4s] basically have a run loop system where
+[1420.7s] you take in a user message and as a user
+[1422.8s] message comes in you just basically run
+[1424.2s] the iteration loop and then you just go
+[1426.2s] exit out and then you wait for another
+[1428.3s] user message
+[1430.3s] and once a new user message comes in
+[1432.2s] then you just keep on going again. So
+[1433.5s] basically as soon as the user gives you
+[1434.7s] a new message you just run this loop
+[1436.2s] over and over again. Why do I have two
+[1438.6s] loops here? Well one I just want to run
+[1440.9s] an n number of iterations. So you can
+[1442.2s] think of this as a turn. Dexter calls it
+[1443.9s] a turn. I
+[1445.0s] >> call this the the inner loop versus the
+[1447.4s] outer loop is what we'll talk about when
+[1449.3s] we talk about 12 factor agents
+[1450.8s] >> and I called iteration like this was
+[1452.6s] kind of how I thought about it and then
+[1455.5s] the all the iterations themselves ran
+[1457.4s] inside of this and what each iteration
+[1459.2s] did was something really simple um it
+[1461.9s] basically took the iteration it called
+[1463.5s] the agent loop function that I had over
+[1465.0s] here uh which is defined over here which
+[1467.1s] is the agent tools which had all the sub
+[1470.0s] aent tools and the agent tool described
+[1471.8s] into it um and then I got the response
+[1474.4s] and ignore all this stuff. Ignore the
+[1475.6s] retry logic over here. I'll talk about
+[1476.9s] that in a second. But once the response
+[1478.9s] came in, I basically just checked if
+[1480.5s] it's a reply to the user, I basically
+[1482.2s] just called the call back for reply to a
+[1484.3s] user which was rendered on the screen.
+[1486.0s] And then I exit out of the loop and then
+[1487.6s] I kept on going. So that iteration has
+[1490.2s] ended at that point. Uh this iteration
+[1492.6s] also told me a couple more things. It
+[1494.4s] was telling me whether or not I should
+[1497.1s] exit the exit this um whether or not I
+[1500.9s] should exit the iteration. So what this
+[1502.3s] thing returns is it returns is complete.
+[1505.2s] If it tells me I am ready then I return
+[1507.9s] the result to the outer loop. Otherwise
+[1510.2s] I just keep going in this loop. And
+[1512.3s] that's how I manage the system cuz this
+[1513.9s] system had was a single iteration.
+[1517.2s] Now once the once the instance came
+[1519.2s] through I basically checked the um I
+[1521.7s] didn't need to do this response adder.
+[1523.4s] It's guaranteed to have it. But I I
+[1525.5s] guess Claude the cursor wrote that code.
+[1528.1s] Once it actually wrote this, I did some
+[1530.1s] hook stuff over here.
+[1531.7s] >> I checked for interruptions because I
+[1533.4s] wanted to be able to interrupt it with
+[1534.8s] control X and other stuff along the way.
+[1537.1s] So, I was only able to check for
+[1538.6s] interruptions. Basically, if an action
+[1540.1s] tool came in, if other tools came in, I
+[1541.7s] didn't. I checked right beforehand. And
+[1543.3s] then again, uh cuz it's like
+[1545.2s] multi-threading, I guess.
+[1547.7s] I sent a hook to the front end to say I
+[1550.2s] have a tool call that I'm making. And
+[1552.5s] then I actually go ahead
+[1554.7s] and uh where'd it go? Then I go ahead
+[1557.2s] and execute the tool. Now this was again
+[1560.1s] most of it. So there's very important
+[1561.4s] thing. If the tool was a sub aent then
+[1563.2s] the sub aent we know spawns another
+[1565.2s] loop. So it would just it actually had
+[1567.2s] to be handled slightly differently and
+[1568.6s] it just wrote the re it rewrote the loop
+[1570.9s] in here with some duplicate code which I
+[1573.3s] really didn't like but that's okay. It
+[1575.2s] did the work and then it does it. And
+[1577.0s] remember sub agent can't spawn other sub
+[1578.8s] aents. Um so I didn't have to worry
+[1580.8s] about it calling this over and over
+[1582.3s] again. It was kind of guaranteed to be
+[1583.6s] safe. It could originally call sub
+[1585.6s] agents and that was one of the key
+[1587.0s] things that I had to stop it from doing.
+[1589.0s] >> Question.
+[1589.8s] >> Go ahead.
+[1590.9s] >> How much of the outer loop passes along
+[1593.0s] context and history or does it start
+[1594.7s] fresh on every iteration?
+[1596.0s] >> Every sub agent starts fresh
+[1598.3s] >> but uh the outer loop in general.
+[1599.8s] >> The outer loop preserves the history.
+[1602.2s] >> Cool. Because you have that array of
+[1603.7s] messages and so you're just keeping all
+[1605.3s] of the message objects. So like if I
+[1607.4s] send another message object here uh if I
+[1610.0s] actually show what okay if I actually
+[1612.9s] I'll refresh this page again. If I
+[1614.6s] actually show my messages object here so
+[1616.2s] you can get an idea like every single
+[1618.2s] time I ran this it actually just kept on
+[1620.5s] building into it or it just built more
+[1623.4s] and more into it. And you can actually
+[1624.5s] just read the full prompt and I'll go to
+[1625.7s] the bottom so you can see these get
+[1628.0s] really long. It just like when I did
+[1630.1s] extract the latest announcements from
+[1631.6s] Gemini, it actually like go did this and
+[1634.5s] it would just like render this for me
+[1635.8s] and let me know if it was going on if
+[1637.4s] that makes
+[1637.8s] >> sense. So I just stacked everything. I
+[1639.4s] didn't I did not clear the context
+[1640.7s] window at all.
+[1641.8s] >> So two more questions. What is this eval
+[1643.8s] tool you're using?
+[1645.2s] >> Um this is a thing for boundary studio
+[1648.8s] but I'll talk about that later.
+[1650.2s] >> Uh this wasn't really uh we'll talk
+[1652.2s] about this separately.
+[1654.3s] >> Uh what I really want to talk about is
+[1655.6s] how the agent works. So how does the
+[1657.0s] agent actually work?
+[1657.7s] >> Keep going. So, we have the sub agent.
+[1659.4s] We're able to execute tools. Let's look
+[1661.1s] at some of these tools. So, what's cool
+[1662.8s] about this is I actually just did this
+[1664.2s] and I just said tool.action. I rendered
+[1666.0s] this. What's really nice is you guys
+[1667.5s] remember how my certain tools were scary
+[1669.5s] tools and they're not included in here.
+[1671.2s] I can actually see that because it knows
+[1673.7s] that even though these tools exist,
+[1674.9s] it'll actually never get called cuz
+[1676.1s] action is not allowed to be any of those
+[1677.4s] types. So, you get really nice type
+[1679.4s] safety of knowing what tools you're
+[1680.6s] using. But now that we're doing this,
+[1682.7s] what is actually happening? Let's look
+[1684.1s] at one of these tools.
+[1686.0s] I think LS is a good No, not LS.
+[1690.1s] LS is not a good
+[1691.0s] >> I'd like to see like Glob or Grap or
+[1693.0s] something.
+[1693.4s] >> Let's look at Glob. Glob is actually I
+[1695.4s] think a good example. No, Glob is also
+[1698.0s] not a good example. I Glob actually I
+[1700.2s] didn't have to do much with to make it
+[1701.4s] work. I just did the GP was the one that
+[1703.6s] I had to do. GP was actually really
+[1705.7s] challenging to get right. And there's a
+[1707.8s] couple things. The first thing is the
+[1709.4s] first bug I had is I wasn't actually
+[1710.7s] passing the working directory into the
+[1712.2s] system. So I had to manage state for the
+[1714.1s] working directory. That was very
+[1715.4s] annoying. Um, once I got that working,
+[1717.8s] it was much better. This is also why
+[1719.3s] cloud code has a CD tool. It's because
+[1721.8s] when it does the CD tool, it's able to m
+[1724.2s] it's able to change its own working
+[1725.8s] directory and its own state
+[1727.1s] representation
+[1728.6s] as it's running. And when it's doing
+[1730.4s] that, what it can do now is it can
+[1732.2s] actually have it can pass in better
+[1734.0s] context into the model. If you just call
+[1736.1s] CD via GP or via bash tool, the model
+[1739.1s] can't detect that. So what I would do if
+[1741.2s] I were running the bash tool is I would
+[1743.0s] at the end of the bash tools execution
+[1744.9s] loop I would actually grab the current
+[1746.6s] directory and pass that in. So the
+[1748.6s] current directory is always relatively
+[1750.9s] correct for the agent agent.
+[1754.1s] >> Sorry I want to I want to double down. I
+[1755.9s] know we have a lot to cover but um
+[1757.5s] you're saying that if cla in if the
+[1759.8s] model while running commands includes a
+[1762.4s] change directory you want to preserve
+[1764.8s] that directory and leave the agent in
+[1766.8s] that directory going forward.
+[1768.7s] >> Exactly. I think that's trash. I hate
+[1771.0s] that. I actually there's a there's a
+[1772.6s] flag and claude code where you can
+[1774.0s] disable that behavior where like when it
+[1776.6s] runs bash and changes directories
+[1778.6s] afterwards it will always put the agent
+[1780.8s] back in the directory it was in. And I
+[1783.0s] find I get so many better results that
+[1785.2s] way. And I can I can tell you why if you
+[1786.7s] want, but I know we have a lot more to
+[1787.9s] go through. I'll tell you actually we
+[1790.2s] should talk about this. I'll tell you
+[1791.1s] why I found it to be better for my agent
+[1793.1s] specifically because my agent preserves
+[1795.4s] the entire call stack. the model thinks
+[1798.0s] it's in that directory.
+[1799.3s] >> Yeah. But also, can we go back to the
+[1800.7s] whiteboard?
+[1801.5s] >> Yes, we can.
+[1803.4s] >> Um, so here's the here's the problem I
+[1806.1s] always hit with that is um Claude's
+[1809.0s] let's say Claude's trying to run the
+[1810.2s] test, right? And so you go and it runs
+[1813.0s] this command like, you know, cd uh hld
+[1817.2s] and go test dot dot dot, right?
+[1820.6s] >> And then it gets the results back. uh it
+[1823.6s] makes some changes
+[1825.5s] and then it tries to run that again and
+[1827.6s] it so it's it's fshot prompted itself
+[1829.8s] that the way to run the test is do this
+[1832.0s] cd and go test dot dot dot but the
+[1834.3s] problem is is that if you keep the
+[1835.6s] directory this then fails and so you get
+[1838.5s] an error and then it has to like think
+[1841.3s] about like oh I'm actually
+[1843.7s] >> and like reason about what directory
+[1845.4s] it's in and then it has to run go test
+[1847.5s] again or it needs to like cd do
+[1850.1s] >> I I do my comp which I actually tell it
+[1852.3s] that the directory change.
+[1853.6s] >> Ah okay.
+[1854.6s] >> So see so it makes a s
+[1856.7s] >> tell it the current working directory in
+[1858.6s] the prompt so that it knows where it is
+[1860.3s] and it can think of things.
+[1861.6s] >> Exactly. Okay.
+[1862.4s] >> Like if you actually go what do you go
+[1865.0s] if you go read the prompt that I sent to
+[1866.5s] the model.
+[1867.5s] >> Yeah
+[1867.9s] >> I do that and I give it the full path. I
+[1870.7s] don't give relative path actually.
+[1872.3s] >> Yeah. Yeah.
+[1873.7s] >> I tried relative paths and that actually
+[1875.3s] did not work. I had to go to full paths
+[1877.4s] >> at the end.
+[1878.0s] >> How did you decide to put this at the
+[1879.7s] top? did you try putting this anywhere
+[1881.4s] else or were you always just your
+[1882.7s] instinct was to have
+[1883.8s] >> queries that I was running over and over
+[1885.1s] again to go test it and like it just
+[1886.7s] worked. So I was like okay good enough
+[1888.3s] and remember I'm using the openi
+[1889.9s] responses with the GBD5 thing. So like
+[1892.8s] it's possible that if I was using a
+[1893.9s] shittier model like sonnet or like uh
+[1895.9s] GPD4 or something it wouldn't work as
+[1897.8s] well but like this worked pretty well. I
+[1899.6s] know openi specifically really heavily
+[1901.6s] indexes on trusting the system directory
+[1903.8s] system uh stuff. What I would probably
+[1906.4s] also do if I were doing this again is
+[1909.4s] whenever the directory changed uh if I
+[1912.6s] ran the batch to I actually built the
+[1914.1s] thing that detected that in batch tool I
+[1916.2s] would actually put a additional message
+[1919.4s] as a part of the prompt that actually
+[1921.7s] solved for that. So like what I would do
+[1922.8s] is like whenever I did CD as soon as a
+[1924.7s] tool happened I would actually just plum
+[1927.0s] in it's like the directory changed and
+[1928.5s] put that into there personally because I
+[1930.3s] think that would make life a lot easier
+[1932.0s] for the model.
+[1933.4s] >> Okay. Um cool. Okay. Okay, so you were
+[1935.1s] in the middle of explaining the GP tool
+[1936.3s] and how it pulls a directory through.
+[1937.8s] >> So firstly, I know there are a couple
+[1939.0s] questions there. I did use RG. You
+[1940.9s] should use rip grap. If you're building
+[1942.2s] a grap tool and you don't use rip grap,
+[1944.4s] uh, incorrect. Just use rip grap. Uh,
+[1948.4s] rust is great for developer tools. Rip
+[1950.5s] is rust grap built in Rust and just way
+[1953.4s] better ergonomically.
+[1955.0s] >> Yeah. And it used to be so the original
+[1957.7s] fun trivia the original RG was based on
+[1959.7s] a tool called AG which is called the
+[1961.5s] silver searcher which was like written
+[1963.5s] in pearl and did all this parallelism
+[1965.8s] through like threads. Uh but it was yeah
+[1968.6s] it was time to rewrite it in rust.
+[1970.5s] >> So firstly every single GP tool every
+[1972.8s] single tool I have is that it will
+[1974.3s] always return a string. That's what I
+[1975.7s] did over here. I wish I didn't have to
+[1977.0s] but I did. The last thing I did was
+[1979.4s] every single time I ran any subprocess
+[1981.0s] every single one of them has a timeout
+[1982.3s] built in guaranteed. I had to do that.
+[1985.8s] I did a couple more things in here. I
+[1987.8s] actually had to limit how many files
+[1989.1s] were allowed to be returned. It just was
+[1991.9s] going to be too bad in a lot of
+[1993.1s] scenarios because sometimes like uh the
+[1995.8s] other reason that I have scary tools is
+[1997.1s] I saw the model look at my root
+[1998.6s] directory and I was like hell no, I'm
+[2000.6s] not going to let it look at slash and
+[2002.8s] that also had problems with glob and
+[2004.6s] other tools that I was trying to run. So
+[2006.2s] I had to go simplify that. So the first
+[2007.6s] thing was limit directory searches.
+[2010.3s] Now, once I did that, I realized that
+[2012.3s] there was another problem that ended up
+[2013.6s] happening, which was when I did the read
+[2015.6s] tool.
+[2017.2s] Many of you probably know Cloud Code
+[2018.6s] doesn't read every single line of code.
+[2021.0s] It can't in every file. It's because
+[2023.0s] it's too complex. So, I had to go build
+[2024.7s] the same thing out. So, I actually built
+[2026.6s] a limiter on how reading worked. And I
+[2029.2s] originally when I didn't do that, it
+[2030.9s] actually had a much smaller limit of
+[2032.5s] like 2,000 characters or something that
+[2034.0s] was just too small. So, I increased the
+[2035.7s] limit to 20,000 characters, but also
+[2037.7s] 5,000 lines. So either one of those two,
+[2040.5s] whichever one is fine.
+[2041.1s] >> But that's 20k per line, right?
+[2043.4s] >> No, no, no. It's total.
+[2045.4s] >> It says line characters. Line truncated
+[2048.0s] at 20,000 characters.
+[2048.9s] >> That's a bug. I should fix this.
+[2050.8s] >> Um,
+[2052.2s] >> it should have been 20.
+[2053.3s] >> Really, it should be by tokens, right?
+[2054.9s] But you're not going to bring a
+[2055.7s] tokenizer.
+[2056.3s] >> I'm not bring tokenizer. It's not worth
+[2057.5s] it. But the other thing I had to do when
+[2059.3s] this actually worked is I actually had
+[2060.6s] to go write this code to say when with
+[2062.6s] the truncation notice. Originally, I
+[2064.1s] wrote just truncated.
+[2066.2s] But now what I actually had to do was
+[2067.8s] actually say that oh instead of
+[2068.8s] truncation this I actually wanted to
+[2070.9s] have the output the output is truncated
+[2072.9s] starting at this line to this line and I
+[2074.5s] gave it information about where the line
+[2076.2s] was
+[2077.0s] >> so that it can go through if it really
+[2079.2s] wants to. Right.
+[2080.2s] >> Exactly. And then I actually told it to
+[2082.5s] use a read tool with this parameter. So
+[2084.2s] I was very very specific in how to go
+[2086.3s] deal with this along the way. And once I
+[2088.6s] did this this was actually the crux to
+[2090.9s] making this work the whole time because
+[2092.2s] a lot of stuff was actually a lot of
+[2094.0s] stuff is actually designed to be
+[2095.0s] truncated. So, for example, web search
+[2096.6s] and fetch was also truncated. This one
+[2099.4s] doesn't work as well because I didn't do
+[2101.0s] that. I had another one where I did
+[2102.5s] this. Uh, what? No, that's different.
+[2105.1s] This is the UI stuff. I had another
+[2106.7s] truncation somewhere. I have to go find
+[2108.2s] it.
+[2108.8s] >> Um,
+[2109.2s] >> so AOS is asking, um, this is great
+[2111.9s] explanation, but I don't see the rag
+[2113.8s] related context here. Am I missing
+[2115.6s] something? Do you want to talk about how
+[2116.8s] this like maps on to retrieval and
+[2118.8s] search?
+[2119.3s] >> Yes, let me go do that really fast. So
+[2121.9s] what this probably just goes down to
+[2123.8s] definitions of exactly what is rag. So
+[2126.1s] rag is a system that takes in a user
+[2127.8s] query and looks into some database of
+[2130.5s] some kind that says hey given this
+[2132.2s] database let me go get a subset of the
+[2135.0s] database that is relevant here.
+[2138.4s] I can't delete that dot. So it's going
+[2140.2s] to go ahead and get like a subset of the
+[2141.6s] database from this system that matches
+[2144.3s] the query in some form factor. The
+[2146.3s] typical way of doing rag is you use a
+[2148.8s] vector search and you basically look at
+[2150.2s] all this and you say hey given the
+[2152.3s] vector search which ones are the ones
+[2153.8s] that have the highest score and then I
+[2155.3s] will just go get those and now you have
+[2157.3s] a rag system that takes a query look
+[2159.7s] through a database gets you the top
+[2161.4s] scoring element. Yeah, I think it's it's
+[2163.7s] really like the difference between like
+[2165.4s] traditional rag and agentic rag is again
+[2167.5s] like are you letting the agent call
+[2169.4s] tools to search for stuff whether it's
+[2171.6s] GP or glob or vectors or whatever or web
+[2174.6s] search or whatever it is or are you
+[2177.0s] basically doing that ahead of time and
+[2179.1s] just almost like not quite
+[2180.6s] deterministically but kind of more
+[2182.7s] deterministically injecting stuff into
+[2185.1s] the context window regardless of what
+[2188.2s] tools the agent calls.
+[2190.2s] >> Exactly. So what I do over here is 100%
+[2192.6s] of the time when the user query comes in
+[2194.0s] I call a vector database and like what
+[2195.8s] is an example of this well like this
+[2198.2s] system is agentic rag right over here
+[2200.1s] give it a second so I'll search like how
+[2203.0s] do I use gemini this thing every single
+[2205.5s] time queries the database finds all the
+[2208.5s] relevant pages to this and I hopefully
+[2210.0s] this will work finds all the relevant
+[2211.5s] pages to this and like right over here
+[2214.3s] and then produces a response and this is
+[2217.0s] great I think for a doc search this is
+[2218.8s] not bad But what this system is able
+[2222.2s] what this system is able to do when we
+[2224.1s] don't 100% of the calling call a vector
+[2225.8s] database is I decide
+[2229.3s] if I need to rag anything at all like
+[2233.9s] for example in order for this system to
+[2236.9s] actually decide what let's say I sent
+[2238.9s] this query is that is 1.5 pro the latest
+[2244.4s] model what this will do in this scenario
+[2247.5s] is this is still going to actually make
+[2249.8s] the vector database call and go do this
+[2251.8s] and it just looks only at my at our blog
+[2254.0s] post and our docs to go do this because
+[2255.9s] it's hardcoded to 100% of the time pull
+[2258.3s] out context in that form factor.
+[2260.0s] >> Okay. So there's no tool call there.
+[2261.8s] You're just when you ask when you ask
+[2263.7s] the question you will always do a search
+[2265.7s] and always hand that to the agent based
+[2267.5s] on you know vector similarity to the
+[2269.1s] user.
+[2269.7s] >> Exactly. What I do over here is I just
+[2272.8s] decide if the the model is deciding if
+[2275.0s] it needs to rag anything at all. And I'm
+[2277.9s] basically letting it decide exactly
+[2279.7s] which of the few things I may want to
+[2282.2s] rag. So for example, one of the things I
+[2284.6s] could give it is I could give it access
+[2286.1s] to the same vector database that that
+[2287.6s] Bammy chat has in our docs. I can also
+[2290.8s] build what I did today, which is I built
+[2294.0s] a I basically gave it access to our
+[2295.7s] entire source code and I said, "Hey, you
+[2297.6s] can just use this source code however
+[2299.8s] you want." like search through or do
+[2301.0s] anything else you want on it. And what
+[2303.0s] that does for it is it basically treats
+[2304.7s] it like a rag problem. Um,
+[2308.0s] >> and you can still do all the rag stuff
+[2310.2s] in your tool calls. You can do the
+[2311.7s] reranking, you can do the embeddings,
+[2313.2s] you can do the search. It's just the
+[2314.8s] agent is saying, "Okay, I'm going to
+[2316.5s] search for this." It's going to look at
+[2317.9s] what it got back and then the model can
+[2319.7s] decide, do we need to do another search
+[2321.0s] or do we have all the information? And
+[2322.6s] that's all kind of encapsulated
+[2324.2s] generically in the agentic loop. Right.
+[2326.5s] >> Exactly. It's basically the key part is
+[2328.5s] like how the decision is being made.
+[2330.6s] Usually in some code you have some you
+[2332.7s] have some system making the decision and
+[2334.6s] here you're just letting the model make
+[2336.0s] the decision completely and this covered
+[2338.5s] a lot of different trade-offs. One of
+[2340.2s] the trade-offs is this question the
+[2342.0s] ability to ask if 1.5 Pro is the latest
+[2344.2s] model. That was just something we can't
+[2345.9s] do in this in the current system as it
+[2347.7s] is today. We can do it in this system
+[2350.6s] where I asked the model like is Gemini
+[2352.2s] the is this the latest model? And what
+[2353.9s] it did is actually just did a web
+[2355.4s] search, looked into Google Docs,
+[2357.5s] actually got the change I guess got the
+[2359.2s] change logs from the Gemini API.
+[2361.0s] Additionally, got another change log
+[2362.6s] from the models page and also uh I think
+[2365.9s] it did a web where did it go and it also
+[2368.8s] did a web search for like just where do
+[2371.3s] I go look for the Gemini API on this
+[2373.0s] page and that's how it found those
+[2374.6s] links. It got it and then it was
+[2376.2s] actually able to tell me way more
+[2377.9s] information than my docs could ever have
+[2379.3s] because I'm not indexing and like
+[2380.5s] updating the vector database every
+[2381.7s] second of the entire internet.
+[2383.6s] which is it saying that it is the latest
+[2385.5s] GA model but there are nonGA models that
+[2387.6s] are available and there's pros and cons
+[2389.7s] to both approach
+[2391.7s] but that's the key difference does that
+[2393.2s] answer the question well
+[2394.8s] >> I think that was a great I think Akos
+[2396.4s] said it was answered well that was a
+[2397.9s] great question Akos glad we spent time
+[2399.5s] on that um we have a little bit of time
+[2402.1s] left um I want to make sure um we can
+[2406.7s] talk a tiny bit about like RL and owning
+[2408.9s] both the model and the tool chain and I
+[2411.0s] also would think it would be really
+[2412.2s] interesting on this search topic to look
+[2414.5s] at how you implemented the web search
+[2416.0s] even if it's even if it's simple because
+[2417.8s] I imagine you're doing some stuff of
+[2419.4s] like hey let's take all the HTML and
+[2421.3s] then use a model to make it more context
+[2423.6s] efficient things like that
+[2425.0s] >> that is actually I did none of that
+[2426.4s] stuff
+[2427.4s] >> amazing
+[2428.2s] >> enough like I said this took me a total
+[2430.7s] of three hours to build the whole thing
+[2432.6s] so most of the stuff I did was I
+[2435.0s] implemented to-do tools I implemented
+[2436.6s] most of these tools every single one of
+[2437.8s] these tools is basically just baked by
+[2439.6s] generated by cloud code I did modify
+[2442.1s] some of them. I'd like to show you the
+[2443.3s] ones I modified. So, I modified the read
+[2444.8s] tool.
+[2446.5s] I did modify the execute batch tool. For
+[2448.4s] some reason, it didn't have the timeout
+[2449.9s] in here. I don't know why. It just
+[2451.1s] didn't. So, that was important to go add
+[2452.6s] in. The error messages were really
+[2454.3s] important. Having custom error messages.
+[2456.0s] Cloud code did that pretty naturally cuz
+[2457.4s] I prompt not cloud code. Cursor did that
+[2459.1s] pretty naturally because I prompted it
+[2460.2s] that I wanted good error messages that
+[2461.7s] were human readable every single time.
+[2464.0s] Um,
+[2465.5s] Glob I had to go change like I said with
+[2467.3s] the limit to the matches. That was
+[2469.0s] important. Otherwise, it just added
+[2471.1s] everything. GP. I showed you how I
+[2472.6s] changed Grep. Uh, Grep. Did I show you
+[2474.8s] how to change GP? The big change that I
+[2476.4s] made to GP was whenever GP was resulting
+[2479.3s] in itself, uh, one of the things that it
+[2481.9s] did was it actually outputed the full
+[2483.8s] path to the directory. I actually
+[2485.5s] changed GP to always show you relative
+[2487.2s] path
+[2488.1s] >> and that was really important for
+[2489.1s] accuracy. It actually worked way better
+[2490.9s] once I did that. Before that, it just
+[2492.4s] >> that's context engineering, dude. That's
+[2494.1s] context engineering. How do you make it
+[2495.4s] more context efficient? How do you give
+[2496.6s] model just the information it needs?
+[2498.6s] >> Love it. I really wish there was an
+[2500.3s] easier way to model this, but there
+[2501.8s] wasn't and it was really annoying. But I
+[2503.6s] really wish that whenever I rendered
+[2504.9s] this in the prompt, it would actually
+[2506.0s] render as just the relative path.
+[2507.6s] >> But that's that's context engineering.
+[2509.4s] It's like go under the hood, do the
+[2510.8s] janky weird thing, whatever it takes to
+[2512.8s] get the right tokens into the model and
+[2515.0s] every single token counts. When you're
+[2516.9s] especially as your contacts get long,
+[2518.6s] when you save 20 tokens per call and
+[2521.5s] you're going to GP 30 times, that makes
+[2523.4s] a huge difference in your outcome.
+[2525.1s] >> It was really, really different. It was
+[2527.4s] really, really big. This was one this
+[2529.3s] was like one of the first failure cases
+[2530.6s] I ran into. This is also why I started
+[2532.5s] passing the working directory because I
+[2533.8s] realized that the reason I need to pass
+[2535.5s] this in was actually to produce relative
+[2537.3s] paths and then that also made me uh want
+[2540.5s] to go update the path as it was running.
+[2543.8s] This is the other reason by the way
+[2545.0s] Dexter that you really want to do where
+[2547.0s] you want the agent loop to have access
+[2548.8s] to the working directory because you
+[2550.6s] kind of need to know what directory
+[2551.8s] you're in to go do this
+[2553.4s] >> to set up the relative paths and things
+[2555.0s] like that.
+[2555.2s] >> To go relative paths. Yes,
+[2556.9s] >> there was a good comment as well, and I
+[2558.4s] know we're not going to have time to
+[2559.3s] talk about it, but having the directory
+[2560.8s] at the start of your prompt basically
+[2563.0s] wrecks the entire cache probably, but
+[2565.4s] that's like an optimization we can do
+[2566.9s] later, right?
+[2567.6s] >> I I wasn't trying to optimize for that
+[2569.4s] in that way. I could have left it as is
+[2571.0s] and I could have just injected new tools
+[2572.3s] saying like directory change, directory
+[2573.6s] change, directory change and not have
+[2575.8s] modified that if I wanted, but I do know
+[2577.6s] OpenAI really favors that. So, I would
+[2579.9s] if that was
+[2580.6s] >> they favor the first the first beginning
+[2582.8s] of the system prompt more so than like
+[2585.0s] down problem. I would actually just move
+[2586.8s] it out of the system prompt and put it
+[2588.0s] into a user message saying this is my
+[2589.4s] current directory artificially and then
+[2591.4s] inject that in. That's how I would
+[2592.6s] modify that if I had to.
+[2595.6s] I definitely wouldn't leave it as a
+[2597.0s] system prompt and then not modify it.
+[2599.0s] >> Execute ls, ls had similar things uh
+[2601.4s] that I had to do where instead of
+[2603.1s] outputting everything when I ls it, I
+[2605.4s] actually like tell ls tools exactly if
+[2607.6s] it's a directory or a file when it
+[2609.1s] actually ls. So, like if I go up here
+[2610.7s] and you go look at this. Um
+[2612.6s] >> Mhm.
+[2613.4s] >> what you'll see what I mean. This is
+[2616.2s] another big difference that came out of
+[2618.2s] this. I hate that I use a thinking
+[2620.8s] model. Do you see how I actually run
+[2622.6s] this out? Makes a huge difference in how
+[2624.7s] you actually read this. It just makes it
+[2626.2s] easier for the model.
+[2627.9s] >> And it looks noisy for a human, but it's
+[2630.8s] actually that's always going to be just
+[2632.7s] one token. Dur and file are each
+[2634.5s] probably almost certainly going to be
+[2635.5s] one token.
+[2636.2s] >> Yeah, probably. So, it's just not worth
+[2637.8s] it. It's just way better for me to do
+[2639.4s] this and not. So that was one thing I
+[2640.6s] had to do with the ls tool. The read
+[2642.3s] tool I compressed using the line
+[2644.3s] truncation thing with instructions of
+[2646.0s] how to deal with shorter lines, how to
+[2648.6s] deal with longer lines. Uh execute edit
+[2651.8s] uh edit tool. I didn't look at I just
+[2653.2s] removed it.
+[2653.8s] >> So your edits, did you do old string,
+[2655.4s] new string, just like string replace
+[2657.0s] basically?
+[2657.8s] >> That's clock code.
+[2658.6s] >> Okay.
+[2659.7s] >> Um Jupyter notebooks, they actually have
+[2662.0s] to be dealt with differently compared to
+[2664.4s] most systems. So the model
+[2666.0s] >> which is easier to interact with the
+[2667.8s] cells instead of like editing the raw
+[2669.8s] JSON. Right.
+[2670.5s] >> Exactly. So that's why cloud code builds
+[2672.3s] like a Jupyter notebook editor in that
+[2674.0s] way. Uh web fetch I didn't really
+[2676.0s] modify. This is exactly the same. I just
+[2677.4s] use BS4. Uh
+[2678.7s] >> when you say you didn't modify it like
+[2680.4s] what do you mean? Like you mean it's
+[2681.8s] just once it was generated I didn't
+[2684.6s] touch like once cursor wrote the
+[2686.4s] function I just didn't touch it.
+[2688.6s] >> So how are you okay? So soup.get text is
+[2691.2s] just stripping out all the HTML and just
+[2693.1s] giving you the raw text content. Yeah,
+[2694.6s] that's it. That's all I do in fetch and
+[2696.4s] I just give a really long give it
+[2698.2s] truncated and there's no way to get more
+[2699.7s] truncated. So
+[2700.7s] >> I know that uh when you use cloud code
+[2702.6s] it will take the some maybe it's ripping
+[2705.4s] the text out but I think it just take it
+[2706.9s] might even just be all the HTML and it
+[2708.6s] passes it to haiku and it's like here
+[2710.2s] was the question that the parent model
+[2711.9s] asked. Can you strip this down and
+[2713.4s] summarize it as markdown? This is
+[2715.3s] interesting.
+[2716.6s] You could add a BML call or something
+[2718.0s] and this is like deterministic LMS
+[2719.8s] inside your non-deterministic agentic
+[2722.1s] rag pipeline the same way you could have
+[2723.9s] a reranker pipeline or something like
+[2725.5s] that inside a tool.
+[2726.7s] >> I could do that here to do call haiku to
+[2729.6s] summarize the content given the query
+[2732.2s] >> um and how it's related. I could do that
+[2736.7s] and I could pass in the summary. The
+[2738.2s] other thing I could do is I could say
+[2739.8s] truncated. If you need more information,
+[2743.9s] use bash to fetch the content.
+[2746.6s] >> Just tell to use curl to a file or
+[2748.5s] something.
+[2750.0s] >> Oh, wait. Not to store.
+[2752.9s] >> Then you don't get the HTML stripping,
+[2754.8s] but it's probably
+[2755.8s] >> I mean, I can I can probably uh And then
+[2759.5s] what I can pro I could probably do
+[2761.0s] something around this like or write a
+[2762.2s] Python command or something.
+[2763.9s] >> Yeah. Or you could give it a code
+[2765.1s] execution tool that runs the Python for
+[2767.5s] you and goes and fetches the thing and
+[2769.1s] does it. Yeah. Cool.
+[2770.2s] >> Yeah. Or or I can or I can just modify
+[2772.2s] my Here's another thing I can do. Agent
+[2775.4s] tools.
+[2776.0s] >> I think context 7 has in some of their
+[2778.2s] fetch tools, they have a parameter that
+[2780.1s] is like max tokens. And so the model can
+[2782.4s] call the tool again and allow for more
+[2784.9s] tokens and it goes into whatever
+[2786.7s] summarizer model uh has that limit as
+[2789.7s] its max tokens and like its expected
+[2791.9s] amount of output.
+[2793.0s] >> Yep. There you go. Um, path.
+[2796.7s] >> Ah, cool. Okay.
+[2797.8s] >> I can just tell it this just like tell
+[2799.3s] me
+[2799.6s] >> and then you would just tell it, hey, it
+[2800.9s] was written to this path and the model
+[2802.3s] can use the read tool to go get it. I
+[2803.8s] love that. Actually, that's how that's
+[2805.3s] the right way to solve this.
+[2806.7s] >> Exactly. So, like
+[2807.6s] >> we do this with our linear tool as well.
+[2809.1s] Sometimes our linear tool, our CLI
+[2810.9s] brings back way too much markdown
+[2812.4s] content and so it's like cool, it will
+[2814.9s] just automatically save it to a file,
+[2816.9s] the CLI will, and just output, hey, it
+[2818.6s] was too long, so we put it in this file
+[2819.9s] and then the model can go read it.
+[2821.2s] >> Exactly. Um,
+[2823.6s] uh call the web fetch tool again with
+[2826.9s] the rest of the content. That's actually
+[2829.0s] a really good like takeaway in general
+[2831.4s] for building these agents and designing
+[2833.0s] these tools is like if you know the code
+[2834.8s] it's a coding agent and it has a read
+[2836.6s] tool and a search tool then you should
+[2838.9s] almost always rather than truncating the
+[2841.0s] output for the model you should just
+[2842.3s] write it to a file tell the model where
+[2844.1s] it is and then let the model decide
+[2845.7s] which parts of it it wants to read
+[2847.0s] >> and this is the whole point of like what
+[2848.2s] an aentic rag system can do it's very
+[2850.2s] dynamic so in this case I know some web
+[2851.9s] pages are going to be really long so
+[2853.2s] I'll just tell that but I'll
+[2854.6s] specifically put a cloth if you need
+[2855.8s] more information call the web fit
+[2858.1s] go again to get the rest of the contents
+[2860.1s] with a file path and it will probably
+[2862.3s] figure itself out. Like I I don't have
+[2863.8s] to think about this too hard. Um, and I
+[2866.0s] trust that this will work.
+[2868.6s] Uh, and then like it'll go ahead and do
+[2870.2s] its thing and then marin content will go
+[2872.8s] into here. And specifically what I would
+[2874.5s] actually do is over here. This error
+[2877.0s] message should actually not go there.
+[2879.9s] Uh, what I should do truncation. I have
+[2883.4s] a feeling this one's going to go more
+[2884.6s] than an hour, which I'm super down for.
+[2887.8s] >> Message this. And I apologize for the
+[2889.8s] live coding. Boom. And now I add this
+[2893.0s] added trim.
+[2894.3s] >> Oh, your your audio your audio bell is
+[2896.6s] is fascinating. I do not have that
+[2899.2s] turned on.
+[2900.3s] >> I I use it now because of like cursor
+[2902.9s] and stuff all the time. Um, so now we
+[2904.8s] have this we have a truncation message.
+[2906.4s] Uh, to-do rewrite tools. I didn't modify
+[2908.2s] at all. They just kind of worked along
+[2909.5s] the way. Uh, web search. I just used
+[2911.8s] Excel. I didn't even try. Um, it was
+[2915.0s] actually really easy to just use Excel.
+[2916.5s] It was great.
+[2917.0s] >> They just have a Python SDK. You don't
+[2918.7s] have to use the MCP or anything. You
+[2920.2s] just you just launch
+[2921.3s] >> Python SDK. Don't even think about it.
+[2922.8s] It's not worth it.
+[2924.5s] >> And it worked. It was beautifully
+[2925.7s] worked. And I didn't have to think about
+[2926.6s] it. Boom. Got the results. Joined it.
+[2928.2s] Put it in.
+[2929.3s] >> Uh, again did some more truncation. Uh,
+[2932.0s] and I can say the same thing again. And
+[2934.9s] I can again I should do I should
+[2936.3s] probably do the same thing right over
+[2937.5s] here too. Uh, and I should really just
+[2939.4s] make this 5,000. Sick.
+[2942.0s] Coming up on time, we got another
+[2943.6s] question.
+[2945.5s] What do you think about mapping the GP
+[2947.0s] results to metadata turn one, it shows
+[2949.5s] file names along with count per year and
+[2951.2s] tool response and then you search Q?
+[2953.7s] >> Yeah, I mean you can do a variety of
+[2955.7s] things to make this better. But I think
+[2957.4s] the key part that I really want everyone
+[2959.0s] to take away is what was the difference
+[2961.0s] here? The bulk of the time that I spent
+[2963.1s] wasn't actually on tool definitions at
+[2965.2s] all. almost all uh almost all the time I
+[2967.9s] spent was actually looking at how the
+[2969.1s] tools were implemented and like making
+[2971.1s] sure that it was really really friendly
+[2972.6s] for an agent. I spent a lot of time I
+[2975.0s] spent the first I probably spent about
+[2976.9s] an hour getting the whole thing up and
+[2978.4s] running. Then I spent another hour
+[2981.3s] purely getting um uh then I spent
+[2984.6s] another hour purely doing um basically
+[2987.2s] UI work to make the UI really good to
+[2989.8s] iterate on and then once I did that then
+[2993.0s] I actually add made the tools better. So
+[2995.9s] that and the reason was because I tried
+[2997.6s] to make the tools better without making
+[2998.8s] the UI better and I just couldn't I just
+[3000.8s] couldn't process the information well
+[3002.4s] enough about what was going on in the
+[3004.8s] agent loop to decide like where the
+[3006.3s] failure cases were.
+[3007.8s] And once I understood where all the
+[3009.3s] cases were, then and once I could
+[3011.4s] actually see and feel the agent, then I
+[3014.1s] could be like, "Oh, cool. Yes, the LS
+[3016.5s] tool needs to have dirt and file."
+[3019.0s] >> Oh, yes. Obviously, the GP tool should
+[3021.6s] be relative or the the uh the glob tool
+[3024.5s] should or GP one of those tools should
+[3026.7s] give the relative directory, not the
+[3028.1s] full directory. Oh, yes. Obviously, I
+[3030.5s] need to change my working path and the
+[3031.9s] system message and make sure the model
+[3033.2s] knows what directory it's in.
+[3035.0s] >> You want to see something cool? Um yes,
+[3037.5s] always.
+[3038.2s] >> Okay, so um one thing that we found in
+[3041.3s] digging in uh is like if you're going to
+[3043.3s] build these agents, it's actually
+[3044.4s] interesting to see how the coding
+[3046.2s] harness. So you won't see this if you
+[3047.5s] run cloud code. Um but in code layer, we
+[3050.1s] like to actually show you the exact
+[3052.1s] responses from the agent, not just the
+[3054.4s] contents of the file.
+[3055.9s] >> And one thing you'll notice is like I
+[3057.2s] assumed you didn't do this where you
+[3058.5s] actually put the line numbers in
+[3061.1s] >> to the file
+[3062.0s] >> if Well, I didn't do an I I should
+[3063.8s] >> Well, it depends on the model, right? So
+[3065.4s] you this is cloud code and this is like
+[3067.2s] the benefit you get when you're building
+[3068.5s] the model and the coding agent harness
+[3071.4s] is you can RL the model because the
+[3073.0s] model's going to have to make edits to
+[3074.2s] this right and so what's useful here is
+[3076.4s] like you can see when it does this old
+[3079.3s] string new string it can pick the line
+[3081.5s] numbers and it can see when it's
+[3083.1s] navigating or reading or pulling through
+[3084.8s] the file there's something been done
+[3086.9s] where these numbers are kind of rled in
+[3089.8s] such a way that it doesn't have meaning
+[3091.8s] as a number
+[3092.8s] >> I think you can do it with any model I
+[3094.1s] bet if I did this in my For instance,
+[3095.3s] some GPT models would work. Gemini
+[3096.7s] models would work on this.
+[3098.2s] >> I'm sure I'm sure it would work, but I'm
+[3100.1s] sure if you wanted to like push it push
+[3102.0s] push the limits of like exactly exactly
+[3104.3s] what outputs you would want from this.
+[3106.6s] Um, the training the training would help
+[3108.5s] to basically like deemphasize the
+[3110.7s] meaning of these things to ensure that
+[3112.6s] the weights imply when it's in this
+[3114.4s] format in this kind of file that it's
+[3116.1s] line numbers and not any other meaning
+[3118.0s] of that number. Maybe um maybe um but
+[3121.8s] like
+[3122.1s] >> we can only theorize at this point
+[3123.4s] because it's a closed model but
+[3125.0s] >> yeah my my hunch says that like most of
+[3127.3s] these systems probably work just fine
+[3128.9s] with any model. I think if you take a
+[3130.6s] model of like equivalent capacity the
+[3132.6s] key thing that makes a model really good
+[3133.9s] is how well it understands semantics and
+[3136.3s] that semantic of like hey this is a line
+[3138.2s] number not content should be pretty
+[3139.8s] obvious with the pattern of it
+[3141.5s] >> even without like any extra training. I
+[3143.4s] suspect training will get you a little
+[3145.0s] bit of a boost on top of it, but like as
+[3147.4s] the models get better and better and
+[3148.6s] they have more training data, that
+[3149.6s] probably matters less and less would be
+[3151.4s] my hunch.
+[3153.0s] >> Interesting. Yeah, I haven't looked
+[3154.2s] under the hood at things like Codex and
+[3156.0s] AMP and see if they use the same format.
+[3157.9s] But that would be that would be a sim if
+[3160.6s] you looked at Cotus and how it does file
+[3162.3s] reads and it didn't have those line
+[3163.8s] numbers, then that would be a signal to
+[3165.8s] me that they are being trained
+[3167.6s] differently as far as like how they
+[3169.4s] interact with the coding harness itself.
+[3171.4s] May maybe probably where my my hunch
+[3174.0s] comes from is that the cursor agent is
+[3175.5s] pretty good. I don't think it's it's
+[3177.1s] that much worse than like cloud code or
+[3178.8s] anything else like all these agents are
+[3180.2s] roughly the same from my perspective. Um
+[3183.0s] >> interesting
+[3183.8s] >> cuz I've been toggling now between like
+[3185.4s] cursor I've been toggling between codeex
+[3186.7s] and I've been toggling between um cloud
+[3188.7s] and I personally don't see a huge uptake
+[3190.7s] on any one specific agent. I actually
+[3192.8s] find that the thing that makes the
+[3194.1s] biggest difference to my efficiency is
+[3196.2s] actually the UX of how I interface with
+[3197.8s] these agents, not the actual like
+[3201.0s] uh context. And I find that like the way
+[3203.0s] that they implement the tools probably
+[3204.4s] makes a bigger difference. But because
+[3206.6s] all the tool calls are basically going
+[3208.4s] to be sending web API requests anyway,
+[3211.8s] all of these basically converge on very
+[3213.4s] similar tool calls because as soon as
+[3214.6s] one strategy gets discovered as soon as
+[3216.0s] enthropic discovers that hey we should
+[3217.9s] do GP in this way, I can promise you
+[3220.2s] cursor is like we should do GP in this
+[3221.8s] way and as soon as cursor discovers that
+[3223.6s] Enthropic is like we should do GP. It
+[3225.0s] just basically just cycles forever and
+[3226.6s] this stuff
+[3227.2s] >> because cursor is using the same models,
+[3228.7s] right? So they kind of have to take the
+[3230.0s] lead from anthropic to like figure out
+[3231.6s] okay here's what
+[3232.2s] >> I use the Gemini models I use code clog
+[3234.0s] GBT5 models but what I'm saying is I
+[3236.6s] think like if I were if I were Codex I
+[3239.0s] would just watch and I would just have a
+[3240.2s] harness test that says hey let's just
+[3242.8s] have a unit test that says anytime the
+[3244.5s] tool changes in I would just write a
+[3246.2s] bunch of unit tests that say trigger
+[3247.9s] these specific tools with these unit
+[3249.4s] tests observe what is happening
+[3253.0s] >> for all these tests and anytime the
+[3254.5s] format changes notify a user on the team
+[3256.8s] to be like we should look at this the
+[3258.6s] other agents have changed the format in
+[3260.2s] some way
+[3260.8s] >> because it might make a difference.
+[3262.6s] >> I'll show you another one is if you come
+[3264.7s] in here and you you we're using the
+[3266.5s] cloud code harness uh for everything in
+[3269.4s] code layer. Um and I will zoom in. Thank
+[3271.8s] you for thank you for the nudge. Um but
+[3274.6s] um if you go here and you change the
+[3276.7s] model to a different like if we go use
+[3278.9s] like um oh I'm going to stop sharing so
+[3282.3s] I can set my API key real quick. Sorry.
+[3285.4s] >> Um talking for a second. I I think some
+[3287.8s] of the models are definitely worse, but
+[3289.1s] I would try using like OpenAI GBT 5.
+[3291.6s] >> Uh so that one I don't have right now.
+[3294.0s] Um but if we go to open router and we
+[3296.7s] put in our open router API key, I'm just
+[3299.9s] going to show you what happens if you
+[3301.1s] use the like a non-cloud code model with
+[3304.8s] a uh with a with a cloud code harness.
+[3309.5s] >> Interesting.
+[3310.2s] >> Go. Let's grab this.
+[3314.6s] While decks are setting that up, what I
+[3316.2s] would advise everyone is I actually
+[3317.6s] wouldn't the reason that I actually am
+[3319.3s] really bearish on everyone implementing
+[3321.3s] aic rag and the these live agent systems
+[3324.2s] is because most people don't have
+[3325.6s] systems that need to be that broad. Like
+[3328.4s] while it is kind of nice, your users are
+[3330.9s] going to be a lot more confused when it
+[3332.4s] doesn't work. And I only spent 3 hours
+[3334.6s] making these tools better, but before I
+[3336.1s] shipped this, I would have to spend a
+[3337.3s] lot more hours actually trying a bunch
+[3339.0s] of scenarios on every single type of
+[3341.4s] system that I built. And there's a lot
+[3343.2s] of other stuff that is really hard to do
+[3345.0s] with these systems. For example,
+[3346.2s] streaming just takes a lot more effort
+[3347.4s] and engineering time to get right. If
+[3349.5s] you want to go do like for example
+[3352.3s] uh while I go what model are you using?
+[3355.0s] >> This is GPTOSS120B.
+[3357.0s] >> Okay. Yeah.
+[3357.9s] >> Much smaller model than Clad or Claude
+[3360.1s] Sonnet or Clad Opus, but we'll see. It's
+[3361.8s] also going to be a little bit faster
+[3363.0s] which is cool.
+[3364.6s] >> Yeah. So like before you go do any of
+[3366.6s] this stuff and decide to build a aentic
+[3367.9s] rag system I personally have found it
+[3369.4s] very useful to go ahead and build a
+[3371.9s] regular system without agentic rag and
+[3375.9s] once you've implemented that then you
+[3378.1s] can go ahead and then build uh a gentic
+[3380.3s] rag on top of that because then you have
+[3381.6s] some sort of expectation and baseline
+[3383.0s] that you're comparing against and it's
+[3385.8s] very similar to like a reference
+[3387.0s] implementation in any sort of software
+[3388.7s] where you always say like do the
+[3391.0s] reference implementation every single
+[3392.2s] time and that I personally find helps
+[3394.8s] you iterate much faster. It's kind of
+[3396.2s] similar to an eval loop, but instead of
+[3398.0s] regular eval, you're just doing AB
+[3399.4s] comparisons, which is actually what I
+[3401.0s] think is the more useful thing in these
+[3402.8s] sort of outcomes.
+[3403.5s] >> Okay, this GPT OSS appears to be
+[3405.7s] working. Um,
+[3407.3s] >> so yeah, you can you can do this for
+[3409.1s] simple stuff probably.
+[3410.6s] >> I Yeah, I think it's actually more about
+[3412.2s] model capability more than specifically
+[3413.8s] anything. I that's why I said like you
+[3415.1s] can you can probably swap in any model.
+[3416.6s] I was actually trying I I did GT5. I did
+[3419.6s] try the quad models. I tried Sonnet. I
+[3421.8s] did give it GPD40 nano uh GPD5 nano that
+[3425.2s] did not work very well
+[3428.2s] and like it just does it just doesn't
+[3429.9s] have the capacity I think that like GP5
+[3431.9s] has uh on the nano models.
+[3435.1s] >> Yep.
+[3436.4s] >> Like
+[3436.9s] >> uh Okay,
+[3438.2s] >> go ahead.
+[3438.6s] >> Sorry. Yeah, go ahead. I I was just
+[3440.2s] Let's just do like two more questions
+[3441.3s] and then we can call it for the day.
+[3443.1s] >> Um we've got a couple more questions
+[3444.7s] here. Let's just identify like where
+[3446.2s] does RL help here?
+[3447.8s] >> Um I think the point that Dextro is
+[3450.0s] making
+[3451.5s] Econ uh is that if you if you as a model
+[3456.2s] provider are also building a coding
+[3457.6s] agent, you can collect special data that
+[3460.0s] is specifically tied to your tool
+[3461.5s] implementations and you can actually
+[3462.9s] post-train the model to favor your
+[3467.1s] tooling format. So like fundamentally
+[3470.4s] anytime you're doing fine-tuning or
+[3471.7s] prompt engineering or context
+[3472.9s] engineering of any kind, all you're
+[3474.0s] doing is you're trying to tweak the
+[3475.0s] weights of the model to do what you want
+[3476.2s] it to do. with with fine-tuning and
+[3479.4s] reinforcement learning, you're doing it
+[3480.6s] at the weight layer. With prompt
+[3482.6s] engineer and context engineering, you're
+[3483.8s] doing it by modifying the input tokens.
+[3486.2s] >> Mhm.
+[3486.6s] >> So technically, there's a way to go in
+[3489.4s] RL here without having to change the
+[3491.4s] prompt again. Say for the static prompt,
+[3493.4s] make the result better.
+[3495.4s] >> Yeah. And so like I think if you
+[3497.0s] probably if you took an open model and
+[3498.8s] you trained it on this like harness that
+[3502.6s] you have built your your tools, your web
+[3504.8s] search, your file reading, all this kind
+[3506.3s] of stuff and you gave it a bunch of
+[3508.0s] coding problems, you could probably get
+[3510.0s] it better at using your specific tools
+[3512.8s] and in the exact way that they give
+[3514.8s] their outputs.
+[3515.8s] >> I mean, let's just do it really fast.
+[3517.0s] Why not?
+[3517.5s] >> Mik wants us to do a nano chat episode.
+[3519.9s] >> The GVD5 Mini is the model name, right?
+[3522.8s] >> Uh, sure.
+[3525.1s] I I don't know. Probably.
+[3526.6s] >> And if this thing runs and I know it's
+[3528.1s] working. Okay, that seems to work. Cool.
+[3531.8s] So, we can just see what this does. It's
+[3534.0s] going to run the same Fern tool as
+[3535.3s] before. What does a Fern folder do? It
+[3538.0s] read my to-dos. It was like, okay, cool.
+[3540.2s] No to-dos. It's going to glob the Fern
+[3542.0s] folder. And it seems to have produced
+[3544.6s] something
+[3546.4s] right over there. Uh, so it did produce
+[3548.2s] this and is able to understand this. How
+[3549.7s] do I use Gemini
+[3552.4s] with BAML? And I think this is again the
+[3554.3s] thing that Dash always say just like try
+[3555.8s] it and build your own intuition for
+[3557.2s] whether or not this works.
+[3559.6s] >> Um,
+[3560.2s] >> all right. We're going to make you learn
+[3561.4s] nano chat for the next episode. It's
+[3563.2s] been decided.
+[3564.1s] >> The first thing that I noticed that's
+[3565.4s] different, by the way, is check out this
+[3566.6s] GP. See how I did Gemini over here for
+[3568.4s] the GP tool?
+[3570.1s] >> When I did my old system, it actually
+[3572.2s] didn't when I actually did my old GP,
+[3574.1s] you'll notice the model actually made a
+[3575.4s] much better grip. It actually came up
+[3577.0s] with way more turn. So, that's one big
+[3579.0s] difference that we see right away in the
+[3580.6s] tiny model versus the small model.
+[3583.1s] Um, and also it didn't automatically
+[3585.3s] give me their example. It actually just
+[3586.6s] dumped out simply an understanding of
+[3588.6s] what it is, but it didn't actually give
+[3589.9s] me the example because it didn't
+[3591.0s] actually trigger the read tool probably.
+[3594.0s] So that was like another learning I had
+[3595.4s] when I was going to go do this was just
+[3597.0s] a really quick understanding of what is
+[3598.6s] actually happening under the hood. That
+[3600.3s] said, if we go look at how much this
+[3602.2s] thing costs, I suspect
+[3604.9s] >> cheaper.
+[3605.4s] >> Um, we are going to get very different
+[3607.0s] cost functions over here.
+[3609.7s] >> That's still right. we are getting much
+[3612.3s] much smaller costs and why is this split
+[3614.3s] uh this is split because the model
+[3616.1s] changed so the so the data database
+[3618.6s] actually split on itself automatically
+[3621.8s] uh because if the type signature of the
+[3623.2s] model changes then you get two different
+[3624.4s] data points
+[3626.4s] uh so when I did the grab like it's just
+[3628.1s] a lot cheaper and I think I find that to
+[3630.4s] be interesting to go look at and think
+[3632.3s] about
+[3632.7s] >> cool
+[3633.6s] >> so as always uh try stuff look at what
+[3636.0s] happened understand it feel the vibes
+[3638.1s] look at the data understand the accuracy
+[3640.0s] and the timing and the cost and all of
+[3641.6s] this and uh you know there's no right
+[3644.5s] answer. Agentic rag versus deterministic
+[3647.4s] rag versus a mix of the two versus
+[3649.8s] reranker pipelines inside your tools.
+[3651.8s] The answer is like what solves your
+[3653.1s] user's problem.
+[3654.5s] >> Do you want to see one last thing while
+[3655.8s] I'm here? Uh one really interesting
+[3657.4s] thing that I actually did when I was
+[3658.7s] running this code.
+[3660.6s] >> You might enjoy it.
+[3662.0s] >> Yen says you promised you'd get back to
+[3663.8s] this eval tool that you showed us.
+[3666.2s] >> Sorry. Um I'll talk about the code a
+[3668.2s] little bit more. Bob's building a really
+[3669.6s] cool evolve tool over at BAML and he's
+[3671.5s] embarrassed to talk about it cuz it's
+[3673.4s] it's really dope.
+[3674.9s] >> It's not ready yet. But um the whole
+[3677.6s] point of this is when I did the Asian
+[3679.4s] loop, there's a couple of different
+[3680.4s] things that happen. Sometimes the model
+[3681.7s] didn't respond to tools. Um but if you
+[3684.0s] notice my actual prompt that I actually
+[3685.4s] sent to the model,
+[3687.8s] uh let me render this again so you can
+[3689.2s] actually go read the full prompt. Like
+[3690.6s] the actual prompt that I sent to the
+[3691.9s] model, the way that I render tools, I
+[3693.4s] did a bit of context engineering. I
+[3694.6s] don't actually render tools the right
+[3695.5s] way. I actually render them this way.
+[3696.6s] It's like to-do read, here's no to-dos.
+[3699.0s] Then I actually render the tool again. I
+[3700.4s] say clob and then here's the actual tool
+[3702.2s] response. So I actually render the tools
+[3704.0s] in a very trivial way rather than with
+[3705.8s] pure JSON because again it's like I
+[3707.4s] don't want to render JSON and stuff in
+[3708.7s] the tool pattern. I want to dump it in
+[3710.0s] as a part of the context message. But
+[3712.2s] every now and then the model would
+[3713.5s] actually reply with like a similar kind
+[3716.2s] of reply where it just would say like oh
+[3718.6s] here's the here's a tool that I want. In
+[3721.7s] that scenario, I would actually want the
+[3724.2s] model to know even if it replied in that
+[3725.8s] way, I want to be very explicit and tell
+[3727.4s] the model it's like invalid response,
+[3729.4s] you must respond with one of the types.
+[3731.4s] So the model knows that hey, this is
+[3733.0s] invalid and I actually hide this from
+[3734.3s] the user. So the user will never see
+[3735.7s] this. Similarly, sometimes the model
+[3737.9s] will not reply with the reply to user
+[3739.6s] tool. It won't actually reply with this
+[3741.2s] structure. In that scenario, I actually
+[3743.4s] do a couple trivial checks. I'm like,
+[3745.0s] hey, if the model responds with a J with
+[3747.0s] back to JSON and doesn't start a curly
+[3748.6s] brace or um or this, then the model
+[3751.4s] probably was trying to reply to the
+[3752.9s] user. It just messed up. So rather than
+[3754.2s] doing a retry, I just take that
+[3755.4s] assumption. What does that look like in
+[3757.2s] practice? Is like some of these parsing
+[3758.7s] failures that you see over here.
+[3761.1s] I'll show it. Yeah, like this one. This
+[3763.2s] is a parsing failure because the model
+[3764.7s] actually responded like this. It said it
+[3767.6s] just responded plain text. And that's
+[3770.2s] okay because the model responded plain
+[3771.9s] text. What I do is I just say, "Oh, if
+[3773.8s] you're running in plain text and you're
+[3775.0s] not starting with a curly or this or
+[3777.0s] like tool something, then it's probably
+[3779.5s] right." So just send take it as a reply
+[3781.0s] to the user and just assume that the
+[3782.6s] model meant the reply here.
+[3783.8s] >> The model was just like too small and
+[3785.6s] dumb to follow the explicit instructions
+[3787.4s] of like here's the entire
+[3789.0s] >> context window got really big. So like
+[3790.3s] sometimes you'll see like a cursor gives
+[3791.8s] this error message. I saw this yesterday
+[3793.3s] where it's like the tool format wasn't
+[3795.0s] correct. It's like you can just patch
+[3796.2s] this really trivially. This is what I
+[3797.5s] mean by implementing your tools can make
+[3798.8s] a huge difference in some ways. getting
+[3800.7s] what tool to use is another tool of its
+[3802.9s] sort. So the way I implemented it was a
+[3805.1s] little bit smarter basically where it's
+[3807.1s] like if the model was trying to go do
+[3808.6s] something and it didn't exactly obey it,
+[3810.2s] I would just like recognize that it's
+[3811.8s] trying to do that and just like let it
+[3813.4s] keep going with that assumption. The
+[3815.5s] other thing I did was I said in the case
+[3817.8s] of it actually run turning an inval if
+[3819.8s] again if it parse if it was a parsing
+[3821.8s] failure rather than taking the exception
+[3823.5s] and dumping it in directly I actually
+[3826.1s] again made a slightly prettier error
+[3828.5s] message that says return an invalid
+[3830.0s] response dump the response I said must
+[3831.6s] be one of the types specified and with
+[3833.1s] that the model was able to go and fix
+[3834.6s] almost every bug and I never had any
+[3836.4s] more issues with the model not obeying
+[3838.6s] tool calls and I I put max retries three
+[3841.6s] I only ever really took one and what's
+[3843.6s] really important here is that this these
+[3845.9s] temporary states are actually temporary
+[3847.8s] states. They never go into the pure
+[3849.8s] state array of the of the final agent.
+[3852.6s] >> Uh so you put the feedback in, you let
+[3854.2s] the model correct itself, but then that
+[3856.0s] doesn't stay in the context window.
+[3857.8s] >> Exactly. And this was also really
+[3859.4s] important to making this work.
+[3861.0s] >> Yeah. And that's the other trade-off,
+[3862.4s] right? The manis folks are big on like
+[3863.9s] leave the errors in so it doesn't make
+[3865.3s] the same mistake again. But I think I
+[3867.1s] think you you were vibing with it and
+[3868.8s] you found what worked and and and this
+[3870.8s] was the thing that you wanted to do to
+[3872.5s] get the right results. Exactly. And the
+[3874.6s] model just doesn't make this message
+[3876.5s] make this type of error very often. So
+[3878.6s] because it doesn't make this kind of
+[3879.9s] error very often, it's not worth
+[3881.8s] breaking, if that makes sense.
+[3885.4s] >> And you and you've proven that this
+[3887.0s] reliably fixes it. So like it's not
+[3889.2s] really actually that expensive to drop
+[3891.5s] this in and then rip it back out because
+[3893.5s] >> I sent it to the full agent loop as a
+[3895.6s] whole just in case it made a different
+[3897.0s] error message. But I could have sent it
+[3898.5s] to a more trivial function that only job
+[3900.6s] is to fix it.
+[3902.7s] I just didn't want to risk it, so I just
+[3903.9s] send it to the full agent loop.
+[3906.1s] >> A look under the hood at how to best
+[3908.4s] build AI AI pipelines and AI agents.
+[3911.0s] This has been a really fun episode.
+[3912.2s] >> Yeah, this whole thing is going to be
+[3913.5s] live. Uh you will be able to just run UV
+[3915.8s] install and UV run sync and just run it.
+[3918.4s] Um it was a ton of fun to build and
+[3922.2s] while this was really really fun, I
+[3924.3s] would highly highly highly recommend
+[3926.4s] that every single one of you like
+[3928.4s] actually go build something like this.
+[3930.1s] you will learn so much by writing the
+[3932.3s] code and I like I always had an
+[3935.0s] intuition that aentic rag was uh pretty
+[3937.7s] cool. Uh but I didn't think I realized
+[3940.1s] how
+[3941.8s] how interesting it is for different
+[3943.7s] product surface areas for certain kinds
+[3945.2s] of things that I could never build
+[3946.4s] without it. So our Bammy chat agent what
+[3948.8s] I actually plan on doing is actually
+[3951.0s] plan on giving it a way to go abort out
+[3953.4s] of its main rag pipeline so it can go
+[3955.9s] into an agentic loop. The problem I have
+[3958.4s] with agentic loop is that it's just
+[3960.6s] super freaking slow. I just don't want a
+[3964.1s] system to be that slow. And for that
+[3966.6s] reason alone, I'm going to keep the
+[3968.6s] deterministic rag pipeline because it's
+[3970.2s] way faster. But every now and then,
+[3972.2s] someone will ask it a question like,
+[3973.5s] "Hey, how does this work?" And I want a
+[3975.9s] way to go trigger it into an agentic rag
+[3977.9s] pipeline. And the answer to that might
+[3980.6s] be there might be a button in the UI
+[3982.2s] that we build at the very bottom that
+[3984.9s] says something like uh let me clean my
+[3988.5s] window again. There might be something
+[3990.2s] here in here that says oh does this look
+[3993.4s] wrong to you? And I might put a button
+[3994.9s] here that says does this look wrong? And
+[3997.4s] if you press it it will actually trigger
+[3998.9s] the aentic rag system instead of the
+[4000.4s] main rag system. And that's a way for me
+[4002.8s] to opt into this without doing it all
+[4004.6s] the time and design it in a really nice
+[4006.3s] way. This is the same thing as you're
+[4008.2s] like, "Hey, look, we have a really tight
+[4010.7s] specific model that does 20 kinds of
+[4013.2s] classification." And then if the model
+[4014.8s] selects other or the user says it's
+[4016.8s] wrong, then you go to the big slow
+[4018.7s] expensive LLM to try to solve it.
+[4021.1s] >> Imagine imagine you're on this doc site
+[4022.9s] and you ask how to do this and it takes
+[4024.1s] you like you saw how long the other
+[4025.4s] system took. It's better, but it's
+[4027.0s] slower.
+[4028.8s] I just don't want that for here. And
+[4030.4s] like coding is different because in a
+[4031.9s] coding, why does why do coding agents
+[4034.1s] tolerate this kind of UX? Well, it's
+[4036.2s] because like the cost of me typing the
+[4037.7s] code is always long. It's always long.
+[4040.9s] So, it doesn't matter how long it takes
+[4042.4s] because it's always going to be faster
+[4043.5s] than me writing the code.
+[4045.3s] >> Hey, Ken, you want to do something fun?
+[4047.9s] >> Do you want to paste the research
+[4049.2s] codebase prompt into your coding agent
+[4051.5s] and see what happens?
+[4053.4s] >> My cloud code agent?
+[4055.4s] >> Your no your CLI agent that you wrote.
+[4057.9s] Take the take the research codebase
+[4059.8s] prompt that we use for uh working with
+[4061.7s] Claude.
+[4062.2s] >> That's actually really fun. And just see
+[4063.8s] if it works
+[4064.7s] >> here. I'll put it in the chat here.
+[4066.7s] >> Um, before I do that, I will take two
+[4068.6s] seconds and show you guys how this thing
+[4070.0s] works if you guys are curious.
+[4071.7s] >> Um, I think one of the key premises that
+[4073.5s] we had when we started this thing was
+[4074.8s] just I think it's important that people
+[4076.5s] should be able to see their code really
+[4077.9s] easily. So like one of the things that
+[4079.3s] we started with is just we just like
+[4080.6s] types. So we just store all your type
+[4083.0s] systems into the codebase and then you
+[4085.0s] can see your state messages and this is
+[4086.4s] a rendering bug because you can actually
+[4089.2s] turn this system into a quick little
+[4091.0s] test case that you can run locally
+[4092.7s] really really really fast. So, like if I
+[4094.6s] for whatever reason that agent wasn't
+[4096.2s] working, boom, I can just put this test
+[4098.5s] case over here. And now I think there's
+[4101.9s] some bug.
+[4102.4s] >> Now you have an eval of like, hey,
+[4103.8s] here's a long context. Can we get it to
+[4105.7s] still spit out the right answer even
+[4107.0s] with this long context?
+[4108.3s] >> Exactly. And then I can just build this
+[4109.6s] eval out really easily. And there's some
+[4111.0s] small stuff that I have to do uh in this
+[4113.2s] syntax like get rid of these commas.
+[4116.2s] But we're working on this and making
+[4117.4s] this better. So as soon as this is live,
+[4119.2s] we'll share it out. But one of the key
+[4121.0s] parts that we really wanted was just a
+[4122.3s] really easy way to understand how type
+[4124.1s] system work. Uh you want to be able to
+[4126.0s] see like the raw web requests that the
+[4127.4s] model actually made and make it super
+[4128.6s] easy for you to go see. So if it did
+[4129.9s] like reasoning of any kind, you should
+[4131.6s] just be able to see that trivially.
+[4133.7s] >> Cool.
+[4134.2s] >> You should be able to see network
+[4135.2s] requests, see timings, and everything
+[4136.8s] else on here. So like this took 60. That
+[4138.8s] looks wrong.
+[4139.8s] >> It's cuz you busted the cache, dude. Or
+[4142.0s] there's a bug.
+[4142.6s] >> No, that that's a bug. This is why this
+[4144.9s] isn't ready yet. We're just doing like a
+[4146.2s] quick few things on the type system. And
+[4147.8s] like one of the coolest things that we
+[4149.0s] really worked on was if you change the
+[4151.0s] type signature of any kind or you change
+[4152.9s] like the model or something else, the
+[4154.2s] data gets split out automatically for
+[4155.8s] you. So in this in this scenario that we
+[4157.9s] changed the model. So you notice that
+[4159.6s] there's two agent loops. One for model
+[4161.4s] A, one for the GD5 mini models and the
+[4165.3s] other one for the GD5 model that we had
+[4167.5s] here. And this kind of happens without
+[4168.9s] you having to think about it. So your
+[4170.2s] data is extremely clean is the premise.
+[4172.8s] And obviously stuff
+[4175.6s] >> had a really good summary of this. Let's
+[4177.1s] do the thing.
+[4177.6s] >> You want to paste it in. All right. I
+[4178.8s] put it in the in the chat if you want to
+[4180.5s] grab it.
+[4181.3s] >> Where? In the chat. In Riverside.
+[4183.0s] >> You scroll up like four messages in
+[4184.4s] Riverside.
+[4185.3s] >> I see it. I'm going to take this.
+[4186.4s] >> Paste it in. See what happens. I don't
+[4187.7s] think you you don't have a right file
+[4189.0s] tool, so it might not actually uh
+[4191.9s] >> it might not actually write the file,
+[4193.0s] but it will probably print it out to
+[4194.3s] you.
+[4195.4s] >> So, I've copied the codebase. Sorry, I
+[4196.7s] had to not screen share just in case I
+[4199.3s] showed something that I shouldn't.
+[4201.6s] Um, so let's go run this over here. What
+[4204.5s] we're going to do is we're going to do
+[4205.8s] two ti uh when we do this.
+[4207.4s] >> No, I mean just paste it into the CLI.
+[4209.1s] Oh, you're going to give it the edit
+[4210.1s] tool.
+[4210.6s] >> Of course.
+[4212.2s] >> Uh so you want the right tool then cuz
+[4213.8s] it's going to write a Oh, yeah. There
+[4215.0s] you go. Okay.
+[4215.4s] >> I'll give it all the scary tools. Screw
+[4216.8s] it.
+[4217.2s] >> Ship it.
+[4218.5s] >> Yeah, I guess
+[4219.5s] >> you already gave it bash.
+[4221.4s] >> Yeah, basically.
+[4222.8s] >> You're going to have to like cat that
+[4225.3s] thing.
+[4225.8s] >> No, no, no, no. I I have I have You
+[4227.6s] don't have to do that. It just starts.
+[4228.9s] Can I not? Okay. Well, that's not going
+[4230.6s] to work.
+[4232.1s] Um, I did not build command V into here.
+[4234.9s] Uh, let me run this again.
+[4237.8s] >> Oh, you can't paste.
+[4239.6s] >> No, I did not build command V into
+[4241.5s] there.
+[4242.4s] >> All right,
+[4244.2s] there might be quotes in here. So, you
+[4247.3s] will have to use I think try single
+[4249.4s] quotes around it instead.
+[4250.9s] >> Okay, let me try. Sorry, guys. This is a
+[4253.2s] live demo.
+[4253.8s] >> I'm putting Vib on the spot.
+[4256.0s] >> Okay, I'm
+[4257.0s] >> think there's any single quotes.
+[4258.3s] >> Okay,
+[4259.3s] >> unless there's like punctuation. What
+[4261.5s] does the fern folder do there?
+[4265.1s] >> Didn't like that. All right, we'll try
+[4267.0s] this later. We can put up a clip of it.
+[4268.6s] All right, we'll try one more. I think
+[4270.1s] there's punctuation. You got to do like
+[4272.1s] cat out of eof or whatever.
+[4276.1s] >> Here. You know what you got to do is uh
+[4278.1s] it's dash I
+[4280.6s] >> dash I What do you want me to do? I
+[4282.5s] >> I'm going to put it in I'm going to put
+[4283.5s] in the chat here. make this
+[4285.7s] >> welcome to the uh
+[4287.7s] >> into uh terminal within single quote.
+[4291.0s] >> You just got to give it the path to
+[4292.4s] that.
+[4292.8s] >> I'll just see what this does. This might
+[4294.3s] work.
+[4295.3s] >> Okay.
+[4297.0s] >> Um
+[4297.4s] >> No, you're just going to remove all the
+[4298.6s] single quotes.
+[4299.6s] >> I don't know. Um probably.
+[4301.4s] >> Oh, yeah. You could put in a file and
+[4302.6s] then just make it read the file. Nope.
+[4305.0s] Wrong.
+[4306.1s] >> No. What did it do? No.
+[4307.8s] >> Just save the file and then give it the
+[4309.3s] path to the file.
+[4310.6s] >> I haven't built that.
+[4313.0s] Oh, it can't read a file.
+[4314.5s] >> Yeah, it's Oh, maybe it can. Um Oh,
+[4318.1s] maybe. Oh, I didn't think about that.
+[4319.3s] That's a good idea. Uh I'm dumb. MD.
+[4321.9s] Okay, cool. Let's run this. Uh I think
+[4324.5s] this will work.
+[4326.0s] >> Yeah. Okay. So, just tell to read
+[4329.0s] research.m MD.
+[4330.2s] >> Okay. Read research.m
+[4333.8s] MD. Then uh then figure then use that to
+[4340.3s] learn what the fern directory does.
+[4345.0s] >> I have no idea what's going to happen.
+[4346.4s] >> See what's up. This is like a full like
+[4349.0s] curses toy. So when you resize the
+[4351.1s] window, it doesn't rerender.
+[4353.0s] >> It does eventually. Okay. So it did read
+[4355.8s] research MD. Did it not find it? I I
+[4358.2s] spelled it wrong. Okay. It's going to ls
+[4360.3s] and then it'll run again. Oh shoot.
+[4363.7s] Sorry.
+[4365.4s] Uh, my interruption was not built
+[4367.0s] perfectly. It was correct.
+[4369.4s] Read research.m
+[4372.6s] MD then uh, learn what the fern.
+[4379.7s] Yeah, it only rerenders every few loops.
+[4381.4s] This is what I meant. The hardest part
+[4382.4s] about building this whole system is
+[4383.8s] actually not the agent loop. It's
+[4385.2s] actually all the tooling around it. So,
+[4386.6s] like making this UI really good actually
+[4388.2s] took way more than I found. And like you
+[4389.5s] saw that it's kind of cool. Like I made
+[4390.7s] a to-do. Um, and like it's just going to
+[4392.6s] go build this out. But like having the
+[4394.4s] UI in influence was actually really
+[4396.8s] really hard. So we'll just see if the
+[4399.2s] cloud code prompt works.
+[4400.7s] >> Is this rich or typer or what is you
+[4403.0s] what is your UI framework?
+[4404.6s] >> I have no idea. This is cursor picked
+[4406.3s] one.
+[4406.6s] >> Updated the to-dos.
+[4408.1s] >> Yep. And eventually it'll rerender. I
+[4410.7s] think uh maybe that's a bug in the to-do
+[4412.5s] implementation.
+[4413.8s] >> This is also going to prompt it to use
+[4415.2s] sub aents. We'll see if it actually
+[4416.6s] launches sub agents. I don't know how
+[4418.3s] your sub aent UI looks. It just it will
+[4421.1s] trigger a sub agent. It'll show you. It
+[4422.7s] should be very obvious if it's
+[4423.6s] triggering a sub agent. Did you call it?
+[4425.6s] It should call a sub agent. If it
+[4427.1s] didn't, I mean, we can see if it did or
+[4429.0s] not.
+[4430.1s] >> You had a reply. It just said it read
+[4431.9s] that file path. Are you still using GPT5
+[4434.6s] Mini?
+[4435.3s] >> Yeah, I am.
+[4436.3s] >> Yeah. So, that's just not going to work.
+[4438.1s] There's too many instructions. Yeah.
+[4439.6s] See, it returned with tool colon.
+[4442.3s] >> Yeah. Yeah, exactly. Oh, that's because
+[4444.4s] my freaking loop was not good. Uh, I had
+[4446.9s] another bug over here. Uh,
+[4448.9s] >> yeah. This it looks like this block
+[4450.4s] didn't get hit.
+[4451.2s] >> There you go. This one, too. I need
+[4452.6s] both.
+[4453.4s] >> All right.
+[4455.7s] >> As you guys can see, this is a very,
+[4457.4s] very, very, very live demo. I did a
+[4460.9s] couple things. I swapped the model and I
+[4463.0s] returned and I also added that edge case
+[4467.0s] over here.
+[4467.5s] >> There's no way you're going to get GBT 5
+[4469.6s] mini to be able to to to do research
+[4472.3s] like that. Did you switch it back to
+[4473.7s] main?
+[4474.2s] >> I did.
+[4475.2s] >> Okay, cool. All right. And then in four
+[4478.4s] minutes, we're going to call this
+[4479.4s] episode for real because I know we both
+[4481.0s] have we both have companies to build.
+[4482.9s] >> So, it did build the to-dos. That's kind
+[4484.8s] of cool. I think I just don't have a
+[4487.3s] good UI for to-dos. There's some syncing
+[4489.0s] issue that I have in my UI.
+[4490.8s] >> Did you know that Claude removed the
+[4492.6s] to-do read tool because they they had
+[4494.7s] found that like the model was trained
+[4496.2s] well enough to just reinforce itself
+[4497.9s] with to-do write and it doesn't have to
+[4499.6s] be able to read its own to-dos.
+[4501.7s] >> Interesting.
+[4503.3s] >> Um
+[4503.7s] >> that might be it. So another thing to
+[4505.7s] notice is that one of the things that
+[4507.0s] cloud code does is you'll notice that it
+[4508.7s] sends you error messages and how it
+[4510.0s] keeps state. So like if you try and
+[4512.1s] write to a file that you have not read
+[4513.6s] yet, it forces it to read the file first
+[4516.4s] >> before it does that. That's another kind
+[4518.7s] of thing that you can do over here.
+[4520.2s] Cloud code also keeps track of what
+[4522.0s] files have been modified.
+[4525.5s] >> It like hashes it every time you read
+[4527.4s] it. And if you try to write it since the
+[4529.4s] last time you wrote it or read it, then
+[4531.5s] you don't get to
+[4532.2s] >> exly and it basically will say, "Oh, the
+[4533.7s] file has changed since you last read it.
+[4535.0s] Read the file again." And it actually
+[4536.6s] does a lot of work in that world to make
+[4538.6s] that easier.
+[4539.4s] >> It's same with context engineering
+[4540.7s] around how you keep like file iteration.
+[4542.2s] So like for example, one of our past
+[4544.0s] episodes were about dynamic memory and
+[4546.7s] like I think the person in that episode
+[4548.3s] or perhaps the episode after that was
+[4549.8s] talking about how like if you read the
+[4551.6s] same file five times, you probably don't
+[4554.0s] need to keep all five versions of the
+[4555.7s] file in the in the actual history of
+[4557.9s] what you're showing off. You probably
+[4559.1s] can show a different variation of it. So
+[4560.6s] like there's ways to manipulate the
+[4562.0s] context window historically and show a
+[4564.2s] different thing based on what your
+[4565.4s] current state representation is. And I
+[4567.6s] think having that idea is personally
+[4569.5s] like very useful.
+[4571.2s] >> Yeah. I mean, I think a lot of people
+[4572.6s] have been talking about like, hey, look,
+[4574.0s] like small context gets better results.
+[4575.9s] And people would rather just like be
+[4577.8s] constantly mutating the context window
+[4579.6s] to make it smaller and more compact than
+[4581.8s] lean on like even if it breaks the
+[4583.4s] cache, it just like I'd rather have that
+[4585.8s] cloud code do that thing where it's like
+[4587.8s] it will file reads from 10 turns ago
+[4590.5s] basically get condensed down into like,
+[4592.2s] hey, you read this file and here's what
+[4593.5s] happened versus like the fullon like
+[4595.8s] every single file we've read being
+[4597.5s] sitting in the context window.
+[4599.0s] >> That's cool. So, it made the to-dos and
+[4600.6s] now it finished reading that one and now
+[4602.2s] it's locating the fern folder. Um, and
+[4604.3s] then it should
+[4605.7s] >> 17 already.
+[4607.4s] >> This is the problem with the aentic rag
+[4608.9s] systems is like while they might work in
+[4610.9s] the end, they are really really
+[4612.0s] unbounded and how many times they work
+[4613.8s] and like I have no idea why it's calling
+[4615.2s] to-do right and to-do right over and
+[4616.7s] over again. Um, I'd have to like debug
+[4619.3s] that slightly better. So, like if I go
+[4620.6s] look into this like why is it doing
+[4622.0s] this?
+[4622.6s] >> You should just get rid of the to-do
+[4623.9s] tool. I think to-do lists are silly. You
+[4626.0s] should just not have along you should
+[4627.5s] you should not give a model enough tasks
+[4629.2s] that it needs a to-do list. You should
+[4630.6s] just use fresh context all the time.
+[4632.7s] >> Why is it? Oh, it's because it's doing
+[4634.3s] like globs and stuff like along the way.
+[4636.6s] And then it did a spam of to-dos.
+[4638.7s] >> Oh, it's just not showing those in the
+[4641.7s] >> Yeah, it's just not showing them in the
+[4642.8s] UI. And this is again why I like this.
+[4644.5s] It's like I can actually go see what
+[4645.6s] it's doing. Like why is it globing? It's
+[4646.9s] like infern. Okay, cool. That makes
+[4648.6s] sense. And like why is it writing to-do,
+[4651.4s] right? It's probably because there's
+[4652.3s] some bug in my to-do rendering. like
+[4653.8s] whatever bug is causing this to not
+[4655.4s] render here. It's probably the same bug
+[4657.2s] that is causing the model to go do this
+[4658.9s] and like and like not
+[4660.6s] >> it is slowly making progress though.
+[4662.5s] >> It is. And I think it will make progress
+[4664.2s] like it actually added a lot more docs
+[4666.5s] into like what the to-do is based on
+[4668.6s] this. And like why is doing a to-do read
+[4670.6s] every single time? I have no idea.
+[4671.9s] >> Yeah.
+[4672.6s] >> Um sick.
+[4673.4s] >> I have I should probably figure this out
+[4675.0s] and get this working a little bit more
+[4676.4s] fully. But if someone wants to go play
+[4677.9s] around with this and gets the to-do app
+[4679.4s] actually working, I think that'd be
+[4681.0s] super worth it for someone to go pursue
+[4682.5s] and think about. about how can you make
+[4683.8s] this system uh to do and figure out what
+[4687.0s] the bug is yours. I think it's like a
+[4688.2s] cursor bug to be honest.
+[4689.3s] >> Apache 2 license, go steal Vibbop's code
+[4691.4s] and turn it into a company.
+[4693.2s] >> Yeah, go do that. I don't care. Yeah,
+[4694.7s] this is a great do. If you make if you
+[4696.8s] if you make a business doing this, I'd
+[4698.2s] be so happy for you.
+[4699.8s] >> Amazing. All right, this was a super fun
+[4701.6s] episode. Uh biggest takeaway, I think
+[4703.7s] we've already said it, um but is
+[4706.9s] basically a rag, deterministic rag, it's
+[4709.4s] all balance. It's all solving problems
+[4710.8s] for your users. Make sure you actually
+[4712.4s] have a real use case to build against
+[4714.2s] and uh engineer the right amount of
+[4716.2s] things in the right places in the right
+[4717.8s] way.
+[4719.0s] >> Yeah. Uh just write a [ __ ] ton of code
+[4721.7s] and you will probably get better at
+[4723.1s] building this kind of system.
+[4725.0s] >> Amazing.
+[4725.4s] >> Um
+[4726.5s] >> cool. Thank you.
+[4727.8s] >> Next episode, Tuesday, 10 a.m. Pacific.
+[4730.2s] We'll see you there.
+[4731.2s] >> All right. See you.
+[4732.2s] >> All right, fam. Take care. Tip.

@@ -1,0 +1,133 @@
+[Music]
+all right welcome back if you haven't
+seen the previous two videos where we
+learn how to write and authenticate with
+notion definitely check those out in
+this video we're going to learn how to
+read from the notion apis we're going to
+be creating this structure all right so
+we're going to have a list of objects
+that specify the text the type and the
+ID of your notion blocks so let's go
+ahead and Jump Right In let's start our
+five minute timer I'm going to drop in a
+new function that's basically going to
+write a dict to a file so we're going to
+be able to easily see what's going on
+with our content by writing it to a Json
+file so just adding that function there
+and now let's go ahead and stub out a
+couple methods all right so let's create
+read text and
+GitHub copilot is going to help me out
+here so we're going to read text we're
+going to take a client and a page ID and
+this is going to fetch the content from
+the notion API so let's return response
+results all right so that's client
+blocks children list pass in your block
+ID which in this case will be the page
+ID and we're going to parse the response
+create simple blocks from content
+all right we'll pass in our client
+um
+and we'll pass in our content all right
+and so what we're going to do here is
+say simple blocks
+we'll call this page simple blocks and
+we're going to create a new object for
+now we'll just return that at the top
+for block and content
+we're going to create a simple block
+object we'll film the items in a second
+here and what we're going to do is say
+let's get our block ID
+perfect let's get our block type let's
+get our block let's see we'll say it has
+children
+perfect we'll just call this Rich text
+not exactly what we want here let's
+change this out a little bit call this
+block type let's go ahead and say if not
+rich text so if we don't have any text
+we're just going to go ahead and return
+and I'm going to update this this is
+actually going to be a rich text and
+let's quick take a break here and hop
+into the documentation so I can show you
+guys exactly where I'm getting all this
+from so if you go to the notion
+developer API hit API reference and hit
+retrieve block children you can see here
+it takes a block ID just like our
+function did and in the examples you can
+see here that it returns results with
+the individual notion formatted items so
+you know right now I'm parsing through
+the type and the rich text so that we
+can get our content so let's go ahead
+and hop back into our method and keep
+building so
+perfect so after we know if we have Rich
+text or not we can start creating our
+block content now let's go ahead and
+recurse if we have nested items like
+this notion won't pick this nested item
+up so we need to check if we if has
+children
+and if we do have children what we're
+going to do is get the nested children
+and we're going to set that equal to
+read text just like we did to get this
+initial page and then we're going to get
+our simple block children and set that
+equal to a recurse call on this function
+if it doesn't make sense don't worry
+about it too much basically we're just
+populating the children of this block
+because it has children all right after
+that we're going to run our append call
+on our blocks and add our simple block
+to that and proceed from there so let's
+go ahead and update our main function is
+going to get our content equals read
+text then let's go ahead and write to a
+file and then let's go ahead and get our
+simple blocks and let's write that to a
+file perfect absolutely love GitHub
+copilot here and let's just go ahead and
+run this and see if we made any mistakes
+bam let's check our content
+we'll format this file and you can see
+it's in the format just like over here
+in the notion initial response so that's
+perfect and now the moment of truth
+let's see if we can look at our simple
+blocks
+awesome
+fantastic so as you can see guys this is
+our final notion response we've parsed
+out the ID of the block the type and the
+text and if you look over here at our
+notion page you can see we have the
+items perfectly aligned
+with our
+actual notion page content so we have
+the tutorials we have the auth
+we have the root item and that's going
+to be it guys uh if any of this was like
+kind of complicated you know stop the
+video at any point I'm going to have all
+the links in the description it's going
+to be there to help you out really
+appreciate you guys watching these
+videos if any of this was confusing you
+got stuck anywhere drop a comment down
+below if this helped you get up and
+running super fast definitely definitely
+like And subscribe it helps the chat out
+a lot we just hit 100 Subs so I'm super
+excited to get to the next Milestones
+two three five one thousand so I hope
+this helped you guys out and I'll see
+you guys in the next one

@@ -1,0 +1,698 @@
+what's up Engineers Andy Deb Dan here
+today I have something incredible to
+share with you I want to introduce you
+to marimo a Next Generation python
+notebook I've got a three course special
+for you today these three pieces of
+value will help you win in the age of
+generative AI first we're going to break
+down the marimo reactive notebooks and
+talk about why it's so important to have
+a rapid prototyping tool like this well
+then see how we can use marimo to
+quickly run individual prompts and run a
+single prompt against every
+state-of-the-art large language model by
+clicking a single check box lastly I
+want to share the early stages of what
+my prompt Library looks like to give you
+ideas on how you can build maintain and
+grow your own agentic Library so first
+things first we have to talk about
+marimo this is a brand new tool that
+aims to replace Jupiter notebooks python
+notebooks and notebooks in general are
+places where Engineers can rapidly build
+out ideas and features it's often used
+in Ai and ml engineering to pull in data
+to experiment on data to get insights
+build artifacts test out ideas so on and
+so
+forth marimo has a couple of really
+really interesting killer features first
+they're importing they're then creating
+a markdown item and you can see here the
+markdown H1 gets rendered directly
+directly above the block they created a
+variable in items let me go and zoom in
+on this a little bit they created a
+variable in items as soon as they
+changed it the cells that reference that
+variable you can see here there are n
+items it automatically gets updated now
+they've changed it to a slider and the
+slider automatically updates that value
+and every other cell that has a
+reference now they're pulling in a chart
+and this chart then of course is getting
+fully rendered and is reactively
+updating based on this slider they're
+then going to hop into some data
+exploration and honestly things are
+moving so quickly here it's better if we
+just jump into this ourselves and really
+see how these notebooks can help you
+build and rapidly prototype software in
+the age of
+AI here we have a code base that we're
+going to slowly build up on so we have
+three notebooks here we're going to
+start with this after you run the
+installation instructions you'll be able
+to kick off this command here we're just
+going to go ahead and fire this off so
+right away a notebook gets opened up for
+us and the first thing I'm going to do
+here is get out of Dev mode and go into
+what I like to call user mode I'm going
+to hit command Dot and now we're
+presented with this simple UI now a key
+part about marimo that differentiates it
+between other notebooks is that it is
+reactive so if I look at the slider here
+and I slide this you can see we have a
+value just below getting updated let me
+go and bump the size a little bit so if
+I scroll here you can see that value is
+getting updated right if I click this
+check boox again we have state getting
+updated right so we have UI
+automatically updating state right let's
+type in this input field hello Maro is
+awesome and if I blur or hit enter we're
+going to get the text field value I want
+you to hold onto that key idea while we
+move through this so what else can we do
+with marimo we have reactive data
+visualization right so we have this plot
+here it's a simple data frame with some
+random data right now it's a scatter
+plot if we want to we can change its
+form we want to see a line chart perfect
+if we want to see the bar version we can
+go ahead and do that as well nice and
+clean nice and simple so you can already
+kind of see this being useful for data
+exploration right if we scroll down we
+do have conditional output and control
+flow if I hit this checkbox of course
+based on a bing we can render different
+content right if we check that off it'll
+change turn it on it'll change again if
+we drag and drop a CSV file we can
+automatically get a breakdown of the
+data and so this basically just
+converted a hand's data frame and gave
+us a really really clean layout of a
+bunch of fields right you can see here
+all the columns we can do some sorting
+let's descend on location let's Ascend
+on age right so you can see this mock
+user data set getting broken down right
+and then we have some Advanced UI
+components right we have classic uh
+accordion we have nested slider in here
+and then we have a data frame display
+okay we have things like tabs we have
+forms images videos layouts and fullon
+interactive data Exploration with just a
+few lines of code so this is incredible
+what we're going to do now is hop out of
+user mode so I like to call this user
+mode and then if we hit command dot
+we'll hop into Builder mode or
+engineering mode right so basically
+these notebooks are now showing the code
+surrounding them so we have all of our
+Imports here you can see we have all the
+markdown getting displayed in these
+sections and then we can see what
+exactly these components look like right
+so super clean Super declarative if
+you've used Swift UI or any framework
+where you define your elements in line
+you'll be very familiar and you'll be
+very accustomed to how marimo creates
+components right so we have slider
+checkbox input field and then we're just
+rendering them in a vstack right and if
+we want to we can just switch this right
+now hstack command enter and all of a
+sudden we're floating left to right and
+we just you know really quickly updated
+the UI of our elements so I'll revert
+that back and we can do the same thing
+in developer mode right I'm checking
+this I'm changing this I'm typing you
+know test input input value hitting
+enter and you can see that all gets
+updated there if you want to we can hop
+in here and do something kind of fun we
+can paste this and say
+slider. Val and multiply it by the text
+input value and of course this is going
+to render that value multiple times
+right so let's go ahead and do something
+else let's change text input to like
+just an emoji or something right so if
+we do something like this place a star
+here rerender we can now change this
+value and reactively one of the
+highlights of Maro is that this is fully
+reactive right so as the slider goes up
+our stars go up and down so let's talk
+about how we can use this wonderful
+reusable very visual interactive
+notebook to get an edge in the age of AI
+let's look at a concrete use case of
+using this tool for prompt engineering
+for prompt management and ultimately to
+build your own prompt Library
+[Music]
+all right so if we hop back to the
+readme and copy this paste this and run
+it you can see here that we have a ad
+hoc prompt notebook and again command
+dot we're now in user mode right so
+before we were in kind of deep
+engineering mode you can see all the
+code you can see all the details you can
+quickly tweak and modify you hit command
+Dot and now you're just focus in on
+consuming the tool right consuming the
+use case and you can imagine this is
+super useful for yourself looking back
+at products for you and I on the channel
+sharing ideas sharing tools but also for
+other Engineers on your team and for
+your product managers and your product
+team so you can see here we have a
+couple input fields we have prompt we
+have temperature we have a model and if
+we click the model drop down you can see
+we have all the state-of-the-art models
+at our disposal and then we can hit run
+on all models so let's just do a test
+prompt we'll just say ping we'll run on
+son 3.5 and we'll hit submit so you can
+see two new blocks have appeared we have
+the form values which are just the
+values of our form from above and we
+also have the prompt output so let's go
+ahead and run something else we'll say
+count to 10 Z then Implement python then
+in typescript okay and then we'll just
+hit submit so just running another
+random prompt here on Sonic 3.5 you can
+see they got kicked off and we got a
+nice response there we have markdown we
+have code and this is just a simple
+reusable ad hoc prompt tool again if we
+just hit command dot we can switch into
+to engineering mode and we can see
+exactly how this works so we have
+Imports we're pulling in our models
+we're creating a map between the name
+and the value of our model we have our
+inputs so you can see here you know
+we're literally just creating m.i. text
+area m.i. slider drop down and then we
+have a checkbox and so remember I said
+in the beginning you know one checkbox
+is going to run this prompt against
+every single one of our models so you
+know what while we're looking at this we
+can go ahead and just kick this off so
+I'll say run on models and let's make it
+do something more interesting right
+let's say uh create a pros and cons of
+typescript versus python explain when to
+use both and then we'll hit submit here
+so that's just going to be kicking off
+in the background and you can see here
+we're taking Maro components and we're
+throwing them in a form you know that's
+how we got our text rendered that's how
+we got our temp our model and our run
+all right so really kind of simple
+declarative UI uh it's easy to reason
+about it's easy to consume and think
+about you can see here we just have ad
+hoc prompt and then we just in text we
+place our four components we then run
+this batch to kind of insert our data
+into the MD and then we call form on
+this so theform is what creates the
+submit button we can then click that and
+get our submitted output right we can
+see our form values just as before and
+this is a simple you know looping
+through our form and just grabbing the
+values based on the key and then we use
+the mo ui. component and then we just
+throw that inside of a markdown block
+right so that's how we get that if we
+scroll down here you can see this is our
+loader for our single prompt execution
+takes the form value form prompt and the
+form temperature if we're running the 01
+or Gemini prompts the temperature just
+gets set to one inside of this llm
+module prompt with temperature function
+so if we scroll down some more you can
+see we have our multimodel prompt
+completed we have a H1 you can see we
+have a nice clean table right model ID
+and then the output we have the Sonet
+3.5 answer to our pros and cons table
+comparing typescript and python we also
+have our 01 mini 01 preview you know you
+can already kind of tell that the
+reasoning model outputs are much richer
+and then we have gpg 40 latest o mini
+Gemini 1.5 and Flash and if we scroll
+down to see what that looks like it's
+really really simple right we're taking
+our our list of objects placing that in
+the table and then we're just throwing
+that in a vstack since I'm not running
+any computations in the cell it just
+reruns no problem all the data in the
+previous cells that it's used inside of
+this cell uh doesn't need to change or
+update right so this is really really
+powerful I hope you can see the value in
+this we're in engineering mode we can
+come in here we can add models we can
+update our list we can add new UI items
+very very quickly if we haven't clicked
+submit you know our our form won't have
+any values to display so this block just
+won't show up same thing with the values
+down here and in just two cells we're
+able to build a multi-model execution
+prompt that runs the same prompt against
+several models in just eight cells or so
+we've replaced a ton of tools right you
+you you've probably seen or use a tool
+that does basically just this right it's
+a simple chat GPT replacement with a
+couple extra nice features and and
+tweaks right so this is just a minimal
+example of how you can build a simple
+reusable prompt notebook that you can
+hop into run prompts test your prompts
+against different models and just kind
+of get an idea for prompts and easily
+see and read the output right if you
+want to we can uncheck we can fire off a
+mini and then we can just get that
+response right so if we hit submit all
+of our reactive cells that are dependent
+on the form are now recomputing and
+giving us a concise result right so you
+can see there the 01 mini is giving us a
+really really great breakdown of when to
+use typescript versus python so before
+we move onto the prompt Library I want
+to call out another incredible Maro
+feature inside of the display user mode
+we can come over to this drop down and
+display as a grid and as slides great
+engineering really comes down to two
+things build great software and then
+communicate the great software that
+you've built this tool allows you to do
+both of those things so let's switch
+over to grid mode here and as you can
+imagine we can now drag and drop the
+cells that we've been building up right
+so we now have this cell here let's just
+say I wanted this View and I wanted I
+want my prompt output view right I just
+want to keep it really simple here when
+I'm in this mode widen this a little bit
+okay so let's just go ahead and run
+another prompt right so let's just drop
+down to 40 and let's just rerun you can
+see we got the loading State and now
+we're just looking at these two cells
+left to right super concise super simple
+it's rendering our prompts and we can
+pull in any cell that we want for
+instance if we wanted to we can pull in
+our form values component and move that
+over here make this a little wider so we
+can see everything that's actually
+getting computed from this and again
+it's all reactive so if I you know
+maximize this if I switch to 1.5 Pro
+resubmit both of these items because
+they Depend and have state referenced in
+this original
+cell all of those States will get
+updated right so now we have our new
+model temperature so on and so forth
+Maro notebooks are incredible right we
+have rapid prototyping we have reactive
+notebooks we have data visualization
+which we haven't tapped into too much
+yet and we have easy interactivity let's
+go ahead and keep pushing you know this
+is just another fantastic way to view
+the work you've done there's also a mode
+where you can run it in slides for o
+latus let's make it super specific and
+then we can hit submit and then in our
+you know future items here you know
+while this is loading it's going to run
+in this slide mode really interesting
+way to kind of view manage and update
+your code so let's go ahead and switch
+back to Vertical view so that you have a
+good idea of how this works go ahead and
+hit the like hit the sub and let's hop
+into how we can use Maro Next Generation
+python notebooks to build a reusable
+prompt
+Library so let's dive into our third
+notebook I'm going to copy this UV run
+command and this is going to kick off
+our prompt Library notebook right away
+I'm going to collapse all the code and
+we're just going to talk about this from
+a high level we don't need to see all
+the nitty-gritty details we're reviewing
+the product we're reviewing the tool and
+we're just talking high level so you can
+see here we have a similar UI have a
+nice H1 header we have a form with a
+submit button and here we can select an
+llm so let's go ahead and just select um
+let's go and use o1 Mini and now we're
+going to select a prompt so you can see
+here I have four prompts three of these
+you'll recognize from the previous 01
+reasoning model video we're going to use
+the bullet knowledge compression prompt
+and hit submit so we've now locked in
+our prompt if I hit click to show you
+can see we can view this prompt right
+here and if we want to we can go ahead
+and change our prompt hit submit again
+and you can see we've now selected that
+other prompt right so this is a YouTube
+video Chapter prompt that automatically
+generates YouTube chapters based on
+timestamps and SEO keywords let's go
+ahead and hop back let's keep this
+simple for this example here's the
+amazing part that makes this prompt
+library and that makes Maro notebooks
+really powerful we have this block that
+we want to update you want to reuse your
+prompts right you don't want to spend a
+bunch of time and then throw your prompt
+away there's massive value in reusing
+your prompts and most importantly adding
+variables to your prompts so you can see
+here we have a variable content and this
+Maro notebook takes that content and
+finds this pattern it takes the variable
+within it and creates a text area so now
+we can fill in this text area here and
+what I'll do here is I'll pull I'll pull
+the legendary how to succeed in Mr be
+production PDF this PDF went viral a
+couple weeks ago I think there are some
+seriously valuable nuggets of
+information in here so let's go ahead
+and just grab a piece of content one of
+my favorite sections was where is a
+critical components yeah this is so
+relatable in engineering so I'm going to
+copy this and what I'm going to do is
+just paste this inside of our prompt
+variable and I'll hit prompt so we have
+another cell that just got kicked off
+now that we have a value and something
+really cool is going to happen here 01
+mini is churning and now it has a result
+for us it followed the prompt perfectly
+by creating a list of ideas with a theme
+and then some bullet points underneath
+we can click to show the context filled
+prompts which has our variable filled in
+and replaced with this Dynamic text area
+I hope you can see where this is going
+right and I hope you can see how
+valuable this is in the age of
+generative AI let me just go ahead let's
+do a refresh here let's restart reset
+the kernel and let's go back into user
+mode and let's just run that over again
+we're going to select the prompt we want
+to select a model hit submit we want to
+pass in the context and prompt okay so
+in literally no time right and four
+clicks
+I have reused a it's a fairly simple
+prompt but this could be much much more
+complex right in our previous video we
+looked at an AI coding meta review
+prompt if we look at that prompt you can
+see we have two variables here right so
+this is an AI coding prompt check out
+the previous video to see more details
+on this but we'll pass in our code files
+and the diff of our code and then we're
+going to get a full comprehensive code
+review right so this prompt can be
+easily and quickly reused using Mar
+notebooks there are a ton of ways to
+push this further but I want to share
+with you how I'm starting to build out
+and organize my prompts inside of a
+reusable prototyp notebook marot is also
+really incredible because it's a great
+tool we can use on the channel to kind
+of share and show ideas in a more visual
+datar Rich way but if we hop into the
+code here if we hop into engineering
+mode you can see we have Imports you can
+see I have this method that is pulling
+in my map prompt library and you know we
+can just dial into this if we want if I
+just hit enter here and run this you can
+see it's a simple map between the file
+and the prompt that's inside of the file
+if we open up our editor we can just
+crack that open and you can see
+underneath prompt Library I just have
+four prompts here we can click into that
+and you can see the you know AI coding
+meta review you can see the bullet
+knowledge compressor and the other
+prompts are here as well right so we
+just have a simple python function
+that's pulling that in and creating this
+dictionary for us right it's just fully
+reactive super easy to just dive in see
+what the code is doing see what it looks
+like I'm building all of our models here
+creating a map we have some simple CSS
+styles that I use for the prompts and
+then we have our user interface for our
+primary controls you can see here MMD
+we're using batch to pass in these
+values and then we're using form to turn
+it into a form so that we can utilize
+these items after they're submitted
+specifically throughout the rest of our
+cells let's go ahead and run our haacker
+newes sentiment analysis uh we'll use 01
+mini this is a heavier prompt so now we
+have a vertical stack with just a simple
+H1 header right that's just our selected
+prompt header and then we have this
+accordion right so this is really cool
+click to show and then it maps to
+another component so we'll click to show
+and then you can see there it's just
+showing the prompt that we selected
+right so this is our Hacker News
+sentiment analysis prompt we can go
+ahead and close that and then here we
+have the text area right so we're doing
+some dynamic work here to find every
+item inside the prompt between these
+delimeters right so we have this you
+know left curly right curly and then we
+use that to dynamically create text area
+components you can imagine us pushing
+this further maybe you want some PDF
+components maybe you want a file
+selector where you pull in all the files
+just a kind of hint hint at where this
+prompt framework is going and then you
+can of course run the prompt so when the
+prompt runs it comes down here we have a
+couple variable Stoppers so you know if
+we don't have any array items or if the
+button hasn't been pressed just do
+nothing right that's what this stop does
+this is really important in this
+reactive environment down here we
+actually have the run so let's go ahead
+and just kick this off let's quick hop
+on Hacker News let's find a post this
+one looks interesting so I'm just going
+to go ahead hop into this copy the ID go
+to hn. algolia paste in the ID copy
+these items just like before four
+instead of going to the CLI and creating
+a file we're just going to paste it all
+right here and something that would be
+really great to add to this would be to
+create a simple token counter or at
+least a word counter for now I'm just
+going to open up a cursor hit paste and
+you can see here I have about 8,000
+tokens that's fine I'll go ahead and hit
+prompt down at the bottom here you can
+see our prompt is now spinning this is
+what's running right now right so we're
+running the 01 model you can see we got
+the model dropped down from our form and
+then we're passing that in along with
+our context fill prompt and into our
+python method this is just a classic llm
+prompt function and there's our results
+right so this is our hacker new
+sentiment analysis if we hop into user
+mode we can see this in a clean format
+we got both the markdown and the Json
+version with negative sentiment analysis
+of this Hacker News Post a Nuance View
+and then a positive view so this is
+awesome you know don't worry about
+what's in the content too much again
+check out the previous video to see
+what exactly we did there with The
+Hacker News sentiment analysis prompt
+this is a much much faster way to to use
+and consume your prompts in the age of
+large language models and in the age of
+generative AI the most important thing
+we can do as Engineers is increase our
+ability to rapidly prototype and iterate
+products and tools and also increase our
+ability to rapidly prototype with large
+language models prompt engineering
+although originally a complete meme joke
+is probably one of the most serious
+professions there are now and as
+Engineers we have a massive Advantage
+because we can utilize tools like Maro
+to build out these incredible reusable
+notebooks that allow us to manipulate
+information faster than anyone don't let
+anyone confuse you you and I and every
+engineer we are the kings of knowledge
+work the ability to use tools like this
+to manipulate data to build out prompts
+to build out prompt Frameworks and
+prompt libraries like this means that
+you can control and manipulate
+information faster than anyone I wanted
+to share this with you the link for this
+code base is going to be in the
+description I highly recommend you check
+this out there's a ton of value here in
+getting started with Maro notebooks for
+agentic engineering but also just for
+you know standard software engineering
+where you're Building Products you're
+testing out ideas and again you're
+sharing ideas there are two m of pieces
+to software engineering there's building
+products and then there's sharing the
+value that the product has notebooks
+like Maro and Jupiter notebooks help
+communicate the value that has been
+created the massive Advantage I see here
+with Maro is that it allows you to think
+about things in an interactive user
+focused way again I know I've been a
+broken record about this but the command
+dot switching from product Focus from
+high level from user focused to the
+engineering level is just a to die for
+feature that I absolutely love to see in
+a tool like this so again you know
+command dot we're switching between
+engineering and product mode in no time
+one of the really important things about
+these notebooks is that it's air quotes
+just python so you know if we hop over
+to our prompt Library notebook and
+collapse everything you can see here
+that it's just a bunch of appell decor
+ators with some really fancy graph State
+Management happening and you can see
+here right we have that cell where we're
+building out our models at the top and
+if we go into developer mode in the UI
+you know that's exactly what's happening
+here right so line one is our LM Sonet
+and if we search that you can see that
+that is that cell exactly right so you
+know exactly what this means it means
+that you can easily commit and modify
+these files right so we can you know
+commit these files push them easily
+manage them and understand them this is
+a massive advantage over jupyter
+notebooks because jupyter notebooks they
+store all of the output but it also
+enables us to very importantly use AI to
+write this for us in fact most of what
+you're seeing here I generated using AER
+and using cursor you can imagine you
+open up AER you add the file to the
+context and then you just start
+prompting right so you can say ask how
+can I add another sell so you can get a
+nice breakdown there we don't need to go
+into this we have other videos on that
+and more coming in the future great
+engineering is all about rapidly
+building valuable software and
+communicating that value to others marmo
+is a fantastic tool that helps you do
+that and I had to bring this to you and
+I had to share this with you I have not
+been excited about a non-generative AI
+tool since duck database came out and
+this is a tool that is going to change
+the game for you if you give it a good
+shot and if you understand how valuable
+it can be to have a reactive notebook
+that can help you rapidly prototype your
+tools and products in the age of
+generative AI you need every Edge you
+can get and this is a massive one the
+idea to take this and create your own
+prompt Library I think is very novel
+very interesting very cool because you
+can come in here switch to Dev mode and
+just start hacking away on exactly how
+you want to organize your prompt
+framework this is just the beginning of
+this I'm going to be sharing more on my
+personal prompt library and how I'm
+organizing my prompts to help give you
+ideas on how you can do the same thanks
+so much for watching if you enjoyed the
+video drop a like drop a comment and
+I'll see you in the next one

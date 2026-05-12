@@ -1,0 +1,124 @@
+[0.0s] Our advice to users has always been if
+[2.6s] you want reliable outputs, you need to
+[4.4s] write a lot of tests and your tests need
+[6.9s] to have inputs that are similar to those
+[9.0s] you're going to see in production.
+[10.8s] Unfortunately, that puts you in a little
+[12.6s] bit of a bind because we didn't have any
+[14.6s] way of sharing data between tests. If
+[17.0s] your production strings are long, like
+[18.7s] this receipt, if you want to have
+[20.6s] multiple tests, you need to just copy
+[22.7s] that long string.
+[24.7s] For users like Vivvec at Case Guild
+[27.1s] whose inputs are often hundreds of lines
+[29.6s] long, that meant either writing one or
+[32.1s] two tests or having many hundreds of
+[34.3s] lines of copy pasted input text. And
+[36.9s] that's just not acceptable. So what we
+[39.4s] released last Friday was the ability to
+[42.2s] put strings into template strings and
+[44.7s] call those template strings from within
+[46.6s] tests. Now multiple tests can share the
+[49.4s] same string and not have a large number
+[51.0s] of copy pastes.
+[53.2s] At the same time, we're releasing
+[54.5s] another feature that helps you cut down
+[56.1s] on code bloat. When you're generating
+[58.2s] your BEML client, pass d- no tests. Now,
+[61.7s] the BML client will not contain a copy
+[63.9s] of your tests. So, even if you have just
+[65.8s] one instance of a very long input
+[67.8s] string, that won't make it into your
+[69.7s] generated files. Thank you, Vivc, for
+[72.3s] pushing us to fix this. Hey, GR. So, you
+[74.9s] told us you were running into a couple
+[76.2s] issues with our extract anything example
+[78.5s] from the BML examples repository. One of
+[80.6s] the issues was with PDFs because we were
+[82.6s] trying to convert PDFs to images. But
+[84.5s] this is no longer required because now
+[86.3s] we have a built-in PDF type. And then
+[88.1s] the other issue you were running into
+[89.5s] was due to an error in the BAML prompt
+[92.0s] in the BML function. So I fixed both of
+[94.5s] these issues. And so now this should
+[96.2s] work perfectly fine. I'm going to show
+[97.6s] you here that I can upload a PDF in the
+[99.8s] front end of this example and then hit
+[101.8s] generate BAML and I can see the
+[103.5s] streaming of the BAML schema. And you
+[105.9s] should no longer run into the PDF error
+[108.1s] because now we are using the actual uh
+[110.8s] BAML PDF built-in type. So no more PDF
+[113.7s] to image uh system library errors. Thank
+[116.6s] you for reporting this. Now the example
+[118.2s] is better thanks to you.
+[120.8s] Hey everyone. So today I'm sharing some
+[122.3s] feedback regarding Open Router. So if
+[124.6s] you don't know, Open Router allows
+[126.2s] developers to access a wide range of AI
+[128.9s] models without rate limits, setups, and
+[131.0s] quality of life features like server
+[132.6s] routing and much more. For the longest
+[134.8s] time, you could use open router through
+[136.7s] BAML by using the openi generic
+[139.2s] interface which would just be defined
+[141.0s] like this. You have to pass the base URL
+[143.6s] specific API key and of course any model
+[146.6s] you'd find at open rout open router
+[149.0s] website. Just to show you this is
+[150.9s] working. I'm using the same model we
+[153.4s] just defined and testing out this
+[155.5s] function on our playground. And you'll
+[157.3s] see the results stream in right here.
+[159.6s] Good stuff. Well, now let's just
+[161.9s] simplify a letter. can now just call
+[164.6s] router directly since we have these as
+[167.6s] defaults which of course you can
+[169.2s] override. This is going to work just the
+[171.5s] same. Now for those you're curious you
+[174.3s] can also pass in headers just like this
+[177.5s] as you would and this is going to work
+[179.8s] exactly the same.
+[183.0s] Hope this is useful. Cheers.
+[186.3s] Hi folks. So we've got a whole bunch of
+[189.3s] releases ready for you going into this
+[191.2s] holiday season. Um, we have fixed the
+[193.8s] mpm packages, uh, the zed release
+[196.2s] process, uh, and also the Jetrains
+[198.3s] release process. Um, for those of you
+[200.3s] waiting on Zed and Jet Brains updates,
+[202.8s] you will probably have to wait a little
+[204.4s] bit more, um, because there are third
+[206.2s] parties involved in those releases. Um,
+[208.0s] but for everyone waiting on prompt
+[210.1s] optimization uh, in Typescript, uh,
+[212.5s] 215.0 O for BAML is now out. We had to
+[215.7s] do some release process uh hardening uh
+[219.0s] because MPM itself um has imposed
+[221.0s] stricter requirements on the release
+[222.7s] process due to the shy hallute attacks
+[224.5s] back in September. Um for those of you
+[227.4s] waiting on the zed extension, I'm so
+[229.6s] sorry this has taken so long. Um, we
+[231.8s] have finally gotten around to fixing uh
+[233.6s] the release automation for zed and we
+[236.3s] now have automation properly working to
+[239.0s] push zed updates uh into the zed
+[241.8s] industries extension repo which is the
+[244.2s] publishing channel for zed extension. So
+[246.3s] once the Z team uh reviews and approves
+[249.1s] this one, hopefully that will that is
+[251.8s] the last blocker. And for Jet Brains
+[254.4s] folks, uh if you're using any of the
+[256.7s] newer versions of Intelligj IDE past uh
+[260.5s] 2025.2,
+[262.6s] um we have now lifted the upper bound on
+[266.2s] our Jetrains extension.
+[268.9s] So once the Jet Brains folks approve uh
+[271.4s] 215.1,
+[273.6s] your extension should be able to work on
+[275.4s] your latest version of Intelligj, Russ,
+[278.2s] CLI, and whatever you're using. Thanks
+[280.5s] everyone.

@@ -1,0 +1,59 @@
+[0.1s] Hey everyone. If you were trying the
+[1.7s] playground before, uh you would just
+[3.8s] press play here and the play button
+[5.6s] would disappear the second time. So,
+[7.4s] it's not available anymore, which is
+[9.2s] very confusing. And I actually fixed
+[12.4s] that. So now when you press play, it
+[14.8s] doesn't actually disappear. One of our
+[17.2s] users named Kevin noticed something a
+[18.9s] little bit spooky. Normally his terminal
+[21.2s] scrolls like this, but after running
+[23.1s] BAML CLI in it,
+[25.9s] his terminal started scrolling like
+[27.7s] this.
+[29.1s] Kevin started to wonder if he was going
+[30.6s] a little bit crazy, but no, we were able
+[32.6s] to reproduce this and fix it. So now
+[34.7s] when you in it,
+[36.9s] you get your normal scrolling behavior.
+[38.9s] Thank you for reporting this, Kevin.
+[41.8s] >> All right. Thank you, V, for reporting
+[44.0s] an issue where some local source models
+[46.3s] didn't work with audio inputs because
+[48.5s] they don't match the open API format.
+[51.3s] What we've done now is we've actually
+[53.0s] made this better. Before, if you use the
+[55.0s] audio, it had to be B 64 data. done. If
+[57.1s] your data didn't support that, then too
+[58.6s] bad. We've since fixed that. Now, you
+[61.6s] can actually control how URLs are
+[63.3s] resolved in BAML. So, if you don't want
+[64.9s] audio URLs to be resolved, you can just
+[66.7s] set a media resolver in your client
+[68.3s] definition to never resolve it. And
+[70.2s] we'll pass it forward purely as the HTML
+[72.6s] format regardless of OpenAI's
+[74.2s] compatibility issue. And of course, the
+[75.7s] docs are updated for the media resol
+[77.9s] media URL resolver documentation.
+[81.3s] Hey Eli, just quick update for your
+[83.4s] issue about better error messages for
+[85.3s] missing LLM client variables. So now
+[87.8s] when you run a function and the client
+[90.1s] requires some environment variables to
+[92.1s] be set, you're going to get an error
+[93.8s] that looks like this. LM client X
+[95.9s] requires environment variable Y to be
+[97.8s] set, but it is not. And if you end up
+[100.4s] doing something stupid unintentionally,
+[102.7s] like having an environment variable
+[104.6s] that's set, but it's actually empty,
+[106.6s] you're not going to get an error, but
+[108.1s] you're still going to get some kind of
+[109.5s] warning that says, "Hey, um, require
+[112.2s] environment variable uh, Open API blah
+[114.6s] blah blah for client uh, GP40 is set,
+[117.5s] but it's empty." And you're going to see
+[118.9s] the value. So, I hope that fixes your
+[121.6s] issue.

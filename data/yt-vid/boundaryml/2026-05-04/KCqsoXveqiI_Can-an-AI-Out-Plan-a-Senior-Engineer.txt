@@ -1,0 +1,1396 @@
+[0.0s] I think the the key thing here is when
+[1.7s] you say fighting like this is how you
+[3.1s] fight AI slop with slop, right? You're
+[5.7s] using slop to build these internal tools
+[8.5s] that make it really easy to get a really
+[10.6s] high quality document.
+[12.3s] >> And I think the inspiration that we had
+[14.9s] is very similar to async.io, but the
+[19.0s] main difference is instead of a function
+[21.0s] forcing yourself to be async.io,
+[23.5s] We want to go ahead and say that the
+[25.8s] call site determines if it's happening
+[28.2s] right if it's happening concurrently or
+[30.8s] in uh or in congruence. So the example
+[34.8s] code is like this. You'll ask the
+[36.3s] fastest model. You'll go ahead and spawn
+[39.1s] and you can name spawned context with
+[42.4s] various things. And each one of these
+[44.2s] will actually just run this code
+[46.6s] directly on here.
+[47.4s] >> Oh, interesting. So the return type of
+[50.2s] this is a future type. Someone asked
+[53.1s] like how do you how do you keep track of
+[55.0s] everything in your head uh while you go
+[56.9s] do this? The answer is like one get good
+[59.4s] but two real answer is not get good. The
+[61.8s] real answer is build tooling so that you
+[63.8s] don't have to keep track of everything
+[64.9s] in your head.
+[70.0s] >> All right everyone. Today's episode is
+[71.8s] going to be tons of fun. We're going to
+[73.0s] go ahead and talk about how we do design
+[74.9s] docs for extremely complicated concepts.
+[76.9s] We're going to show you some internal
+[78.0s] tools that we built of how we share
+[79.4s] markdown files with comments integrated
+[81.5s] with Slack and also talk about how what
+[83.7s] level of detail we go into with our
+[85.6s] actual design docs for a really
+[87.2s] complicated feature threading in the
+[88.9s] BAML language. Um, let's get started.
+[92.6s] Welcome everyone. Today we're going to
+[94.1s] be having a really fun episode of AI
+[95.6s] that works. This is a show where we try
+[97.2s] and show real-time effort of how to use
+[99.5s] AI models in really practical ways. This
+[102.4s] is our monthly episode where we do No
+[104.2s] Vibes Allowed. The whole point of no
+[105.6s] vibes allowed is you get to watch us
+[106.9s] code in real time. We chat about it. We
+[108.4s] share our processes and talk about
+[109.6s] something very practical that talks
+[111.8s] about both how we engineer things on our
+[113.5s] teams and how we use models uh for
+[115.6s] agentic engineering. I'm joined by
+[118.0s] Kevin. You want to give a brief thing?
+[120.0s] >> Sure. Uh so Kevin Gregory, I've been on
+[122.6s] a couple of episodes before, but I'm a
+[125.8s] ML AI engineer at Evolution IQ where we
+[128.0s] build disability in disability insurance
+[130.6s] claims guidance systems.
+[131.9s] >> Yeah. Uh Kevin's underelling it. He's
+[134.0s] built a large portion of their agentic
+[135.5s] engineering systems while he's been
+[136.7s] doing this. And he's been really
+[138.1s] improving their uh stuff behind the
+[140.2s] scenes. He's been there for a while. And
+[141.7s] Evolution IQ, I think, was recently
+[143.4s] acquired for how much?
+[144.5s] >> Uh we were acquired for 730 million
+[147.3s] about a year and a half ago.
+[149.1s] >> Yeah. So, you know, not a not a tiny
+[151.4s] company out there. So,
+[152.9s] >> yeah,
+[154.3s] >> pretty big acquisition.
+[156.1s] >> And then, uh my name's Fib. I work on a
+[158.2s] programming language called BAML. And
+[160.3s] today's episode, I think, is going to be
+[162.0s] one that I think isn't really done much
+[164.2s] with AI stuff, which is how do you
+[166.1s] actually build design docs using AI? How
+[168.0s] do you use agentic engineering to build
+[169.7s] various kinds of design docs? Um, I
+[172.6s] think this is something that we do a lot
+[174.2s] on the BAML team because a large part of
+[176.1s] building programming languages is
+[178.2s] actually having really good thesis and
+[179.8s] like background research on how you go
+[181.4s] do something about this. Um, and while
+[184.5s] you guys are in the chat, if you have
+[185.5s] questions, if you have thoughts that
+[186.6s] perhaps make your design process really
+[188.2s] good, um, just drop them in. But when we
+[191.1s] think about it, design docs are, and
+[193.6s] Kevin, I want your thoughts, but like I
+[195.6s] kind of find that implementation can
+[197.0s] often be oneshot if the design is
+[198.9s] phenomenally correct,
+[200.8s] >> but
+[202.0s] >> phenomenally correct design is very hard
+[203.8s] to do.
+[204.6s] >> Yeah. No, I completely agree. I mean,
+[206.0s] we've all heard the story of the um the
+[209.2s] the guy who founded or the guy who built
+[211.3s] Cloud Code. Um from what I've heard,
+[213.3s] what he does is he basically just goes
+[216.2s] back and forth with the plan and then
+[218.9s] whenever the plan's done, he just kicks
+[220.2s] it off and then starts another one. So,
+[222.6s] >> yeah. And I found the same thing. If my
+[224.0s] design doc or my plan is really, really
+[225.8s] good, a lot of times club code cursor
+[228.4s] can get it in one shot.
+[230.3s] >> Yeah. And I think a lot of people have
+[231.8s] spent a lot of time in the planning
+[233.3s] phases of their system. But today I
+[235.9s] think I want to talk about a what if
+[238.2s] you're doing an incredibly hard problem.
+[240.0s] I'll tell you an example of a problem
+[241.4s] that I'm working on right now that I
+[243.0s] have been working on for almost 4 days
+[244.6s] now. Um and I haven't even started
+[246.9s] coding yet. It's pure designing for 4
+[248.6s] days. Uh the problem is threading. We're
+[251.9s] designing our threading system for BAML.
+[254.7s] Um if any of you know how async.io
+[257.1s] works. If any of you know how threading
+[258.6s] models work and like core language
+[259.9s] runtimes, they're not what I would say
+[261.5s] the easiest thing to implement. There's
+[263.2s] a lot of design trade-offs in terms of
+[264.6s] what feels good, what feels bad. Um, and
+[267.4s] I want to show the process of how we're
+[268.9s] doing this and like how I'm actively
+[270.6s] doing this today. So, I'll show you
+[271.9s] stuff some stuff that's more polished.
+[273.7s] I'll show you some stuff that's I'm
+[275.2s] actively working. I'll literally show
+[276.5s] you how I move forward with it. Um,
+[280.1s] and the idea of this task is I don't
+[281.8s] predict that this task is oneshot
+[283.6s] implementable, no matter how much good
+[286.3s] work we do in design. But I do believe
+[288.2s] that we could, if we design it well, we
+[290.2s] could break into like four or five
+[291.3s] different chunks that are each
+[293.0s] individually oneshot implementable and
+[294.7s] each of those could provide meaningful
+[296.2s] upgrades to the system.
+[298.8s] Um, but before I go into that, Bart, you
+[300.9s] said, I'd love to know how you work
+[302.0s] through trade-offs and decisions where
+[303.4s] you are out of your depth. I think
+[304.8s] threading is probably one of those. I
+[306.9s] don't know how Go's threading model
+[308.4s] works. I don't know how um I have some
+[310.7s] idea how async.io works in most
+[312.4s] languages, but I don't know like
+[313.6s] definitively how it works in V8 and I
+[316.0s] don't know definitively how it works in
+[317.4s] CPython. The first process I find
+[319.1s] actively useful is actually just the
+[320.9s] ability to go ahead and have a good way
+[324.4s] to read design docs. So we actually
+[326.5s] built uh we've done a talk on this at
+[328.2s] the AIN conference. You guys will see it
+[329.7s] soon on YouTube. Um but it's this idea
+[332.9s] of fighting slop with slop. We all know
+[335.0s] we're going to generate slop. How do you
+[336.4s] do this? Well, we built tools internally
+[338.0s] to make slop really easy to understand.
+[339.7s] So, like one of our engineers, Kai,
+[341.8s] wrote a whole thing about why we want
+[343.4s] daytime. Uh we want daytime in Bamma
+[345.6s] because daytime is nice. We want if
+[347.0s] you're building agentic systems, you
+[348.3s] want a date way a way to deal with
+[349.8s] dates. Um we wrote a whole map around
+[352.3s] it. And part of it, it wasn't actually
+[353.5s] just doing this. It was like doing a lot
+[354.8s] of background research and understanding
+[356.5s] how it's used in not our just our
+[358.6s] system, but also other languages. And
+[361.0s] you go do this. So, you build tooling
+[362.4s] that allows other users in the team to
+[364.1s] comment um like review design docs. And
+[367.3s] obviously like GitHub doesn't really
+[368.6s] work well for this cuz GitHub's not
+[370.7s] built for like sharing a massive amount
+[372.1s] of markdown files really easily. So, we
+[374.0s] added this little bit of tooling. Then
+[375.7s] we went ahead and added a little bit
+[377.2s] more tooling to actually like connect
+[379.1s] all this to Slack. So every single time
+[382.6s] stuff gets created, a Slack thread gets
+[385.4s] created for every single thing that
+[387.4s] comment that uh reflects it on here
+[389.4s] because again we don't have notification
+[390.8s] systems on our website. We don't want to
+[392.1s] build that. So we latch on to Slack as a
+[394.2s] notification system to make sure that
+[395.5s] design docs can actively be shared once
+[398.2s] they're in like a more ready state. Um
+[400.6s] so one way to kind of deal with
+[401.9s] decisions out of your depth is how do
+[403.1s] you involve more people in your team
+[404.3s] into it? And you have a couple different
+[406.0s] options here. And the easiest option in
+[407.9s] my mind is just make sure that people in
+[409.9s] the team can read it. And some of these
+[412.1s] threads, let's see if I can find a good
+[413.7s] one.
+[415.5s] Um, and like we don't always use this.
+[417.8s] Sometimes we just use Slack directly.
+[420.4s] But often times people just read these
+[422.3s] and like we'll just start leaving
+[424.6s] comments and we did extra work to like
+[426.3s] tag the person connect the person in
+[428.2s] Slack to the person in our system over
+[431.4s] here
+[433.0s] as you go do this. And like we actually
+[434.9s] built the and again most of this stuff
+[436.5s] is hard like we can actually see all the
+[438.5s] users here and like some people are like
+[440.1s] have different privileges like me and
+[441.9s] Aaron have slightly different
+[443.0s] privileges. Um since um and everyone on
+[446.0s] our team gets automatically connected
+[447.5s] because if their GitHub account has
+[449.0s] their boundary ML email they
+[450.9s] automatically become a member of the
+[452.2s] team and members of the team have
+[454.3s] different privileges than like random
+[455.9s] wild users that want to go do this. So
+[457.4s] like for example if you guys go to
+[458.6s] bs.boundaryml.com boundaryl.com. You
+[460.3s] should be able to log in when you're
+[461.4s] GitHub and just see random work that
+[463.0s] we're doing. Uh but yes, this tool is
+[465.3s] completely in house. We haven't really
+[467.2s] um if you're curious, it's actually
+[470.0s] fully open source as well. If you go to
+[472.0s] our repo um
+[475.3s] uh where is this TypeScript 2? Somewhere
+[477.8s] in here. If you just ask Claude to find
+[479.4s] it, it's somewhere in here. I don't know
+[481.8s] where. Yeah, this is this is really I
+[484.4s] really like this idea because some of
+[485.7s] the one of the big things that I think
+[487.1s] that that we struggle with and I imagine
+[489.1s] a lot of other companies too or a lot of
+[491.3s] other companies do as well is you end up
+[493.2s] in like design doc help right? So, we
+[495.6s] use we use Google Google Drive a lot.
+[497.8s] So, we have Google Docs kind of all over
+[499.4s] the place, and we don't have a good way
+[502.3s] of
+[503.8s] of tracking what design docs are being
+[507.0s] discussed, what's been approved, what
+[508.9s] comments are are where. You most of the
+[511.0s] time people kind of just send it out.
+[512.6s] There might be one round of comments and
+[513.8s] people reply, but there's no like sense
+[516.2s] of when you have a PR, it's merged and
+[518.4s] it's done. There's no sense of that. And
+[520.7s] so, something like this, I think, could
+[521.8s] be really, really helpful. Really
+[523.8s] helpful. I actually might might steal
+[525.5s] this.
+[525.8s] >> The one I'm working on right now is
+[526.9s] spawn cuz I'm building concurrency and
+[529.0s] like they have different states on here.
+[530.3s] You can mark special things as like good
+[532.0s] for the LM.
+[533.5s] >> So then other L other things working at
+[535.7s] new design docs automatically pull them
+[537.2s] into context as like reference. And I'll
+[539.1s] show you how we do that in a second. And
+[541.0s] then the other thing we have is like
+[542.0s] this export ability where you can just
+[543.4s] like export things. Um but yeah, it is
+[545.8s] effectively a tool to uh to just um kind
+[550.7s] of like be able to leave comments and
+[552.2s] share information about them. Now
+[554.2s] there's a big assumption in this tool
+[556.6s] which is the person that's producing the
+[558.2s] design doc once they move it from draft
+[560.4s] over to proposed
+[562.6s] actually goes ahead and has done the leg
+[564.7s] work to say that it is good and it is it
+[568.3s] is good to read. I trust you uh to go do
+[572.0s] this. Um we haven't built a notification
+[574.5s] system where you can like ask specific
+[576.0s] people to review. That's kind of a pain
+[577.4s] in the ass.
+[578.6s] >> Uh but like we just tag people on Slack
+[580.2s] and say hey go read this. But um now
+[583.9s] we're taking this a few steps further
+[585.4s] because again the problem with any
+[586.7s] website back system is if you're doing a
+[589.0s] website back system, Claude can't edit
+[590.7s] it. So we have a thing that allows you
+[593.4s] to export all these beeps that gives you
+[594.9s] a nice little zip file. And when you
+[596.5s] have the zip file, what you get is you
+[598.8s] get a nice little folder structure that
+[600.5s] downloads every single beep and every
+[602.5s] single version and uh gives you all the
+[604.6s] data about it and all the pages on here.
+[607.8s] Now, the other thing I've been building
+[609.7s] on top of this next step is actually
+[612.2s] some cloud skills. I haven't checked
+[613.4s] this in yet, but this is a cloud skill
+[616.6s] that has like another CLI tool that I've
+[618.8s] been working on. That's a Python script.
+[620.6s] And the whole idea of this tool is this.
+[623.6s] Watch this.
+[626.1s] Clear. Uh oh, I just spent some tokens.
+[629.9s] Oh no, that cost me money.
+[633.9s] It's really interesting just typing
+[635.6s] things into your seal internal now. just
+[637.5s] randomly bills you. Um,
+[640.7s] but
+[642.2s] it's not really an empty U. So, let's
+[645.8s] let's do the next thing. So, what I'll
+[647.0s] do is like pull pull the data. So, when
+[651.4s] it pulls the data, there's this CLI
+[653.7s] actually runs. There's like a cloud
+[655.6s] skill called BEP. Uh, let's see if it
+[657.5s] auto uses it. Nope, it didn't use it.
+[659.7s] Beep pull. I can say beep pull. And what
+[663.5s] this will do is it'll actually just run
+[665.4s] the script and this will pull the data
+[667.1s] and it'll tell you something is out of
+[668.2s] sync. Uh so let's change this really
+[670.6s] fast. I'm going to go ahead and like
+[672.3s] change the script to like add some new
+[675.4s] data.
+[677.2s] And now let's run bp pull. And now
+[679.2s] you'll notice it's going to pull the
+[681.1s] data and actually tells me that this
+[683.1s] thing has two lines removed from readme
+[684.7s] md. Like there I guess the diff is
+[686.2s] wrong. So I should update the script.
+[688.1s] Oh, if I pull I'll remove two lines from
+[690.1s] readme.md. I can even ask which two
+[692.5s] lines.
+[694.8s] And because this is all backed by Claude
+[696.9s] and Claude is using this, I'll show you
+[699.1s] in a second what the B app pull actually
+[700.6s] shows you.
+[701.9s] >> So this is making sure that your local
+[705.1s] folders, your local bets are in sync
+[707.1s] with the what you were showing us
+[708.5s] earlier in the UI.
+[710.1s] >> Exactly. Because we don't want the
+[711.4s] problem with using Git for this is then
+[713.0s] you can't build all the tooling that you
+[714.3s] want around this because Git doesn't
+[715.6s] have a good way to really guarantee
+[717.4s] certain kinds of tooling. So it
+[719.3s] actually, as you can see, I'm I'm just
+[720.7s] working with claude to ask it which two
+[722.6s] lines. It just did the thing. It pulled
+[724.2s] the thing. Now I say, uh, yep, just just
+[729.4s] use the cloud thing.
+[733.0s] >> Cloud thing.
+[733.8s] >> And this will just kind of do the do the
+[735.7s] thing for me without me having to do any
+[737.1s] more work. And like boom, my apps are
+[738.4s] now up to date.
+[740.7s] >> U, and it does all sorts of things like
+[742.5s] renaming. It's kind of robust for this.
+[744.1s] And this is kind of where I think the
+[745.3s] blend of software versus hardware of
+[747.4s] software versus AI really comes in. I
+[750.0s] worked with Claude to write this script.
+[751.4s] I haven't I don't even know what this
+[752.7s] code is. I don't care because this this
+[755.1s] code is a means to an end. And this is
+[757.3s] what we mean by fighting slop at slop.
+[759.8s] You generate slop code. Don't really
+[761.9s] care what it does. As long as this
+[764.0s] workflow is good and this is nice, I'm
+[767.4s] very very happy with my life. And this
+[770.2s] workflow is I can just say like I want a
+[772.2s] concurrency beep. Let's go work on this.
+[774.6s] And then what I can do as a developer is
+[776.7s] I can spend all my time working with
+[779.6s] Claude on a concurrency system. And
+[782.6s] we'll talk about the concurrency system
+[783.9s] in a second.
+[786.4s] Claude can be editing this for me. I
+[788.6s] have to spend zero time thinking about
+[789.8s] this. I can do all the background
+[791.3s] effort. I can do all the effort around
+[793.0s] understanding how current currency
+[794.3s] models work. Uh, and then I can write a
+[797.0s] bet for my colleagues to go review and
+[799.9s] read and they can read on a nice little
+[802.6s] UI on a dashboard while I can edit with
+[804.9s] a markdown file with Claude. Does that
+[807.5s] workflow overall kind of make sense,
+[809.0s] Kevin?
+[809.8s] >> Yeah. Yeah, it does. And I think that
+[811.3s] the key thing here is when you say
+[812.7s] fighting like this is how you fight AI
+[814.4s] slop with slop, right? You're using slop
+[817.0s] to build these internal tools that make
+[819.5s] it really easy to get a really high
+[821.6s] quality document.
+[823.8s] >> Exactly. Yeah.
+[825.1s] >> And that's okay because it's not it's
+[826.5s] not customerf facing. It's a pretty
+[827.8s] simple workflow and it doesn't matter if
+[829.5s] it's sloppy or or doesn't follow solid
+[832.2s] principles or whatever. If it just gets
+[833.8s] the job done and it helps you get to
+[835.7s] this state faster and easier. So then
+[838.6s] what you actually end up shipping is a
+[841.0s] lot better and more reliable then that's
+[842.6s] that's a worthwhile trade-off every
+[844.8s] time.
+[845.4s] >> Exactly. The for those curious if you
+[847.6s] look into the BAML repo you'll find the
+[849.5s] beeps folder. That's kind of where this
+[851.1s] is. Um, yeah, I would I don't think I've
+[855.1s] ever looked at the code in the beeps
+[856.7s] folder. It is a pure AI slot mess and
+[860.2s] like I have we the only way I add
+[863.1s] features to beeps is via slack and
+[866.4s] tagging coding agents to go add
+[868.2s] features. I have never even opened
+[870.3s] claude myself to add features into beeps
+[873.5s] because it's not worth it. If folks have
+[875.4s] more questions about this workflow, let
+[877.2s] me know. Uh but otherwise I want to
+[878.9s] share like how we go really deep into a
+[881.1s] really hard problem. Uh any question on
+[883.4s] your end Kevin?
+[885.2s] >> No nothing for me. Seems like the the
+[887.8s] chat people are ready to get into the
+[889.2s] threading.
+[890.5s] >> Okay let's talk about threading. Uh
+[894.3s] this is a super super preview. So if you
+[896.6s] guys have opinions share them as you do.
+[899.7s] So let's start off with the problems of
+[901.4s] threading really fast. And this is how
+[903.4s] we start. The first thing that we do
+[905.4s] when we often write BAPS and at this
+[907.1s] point we've gone through like many
+[908.4s] versions of BAPS. This over this
+[910.5s] actually overrides like this previous
+[912.2s] version that some Antonio on our team
+[913.8s] wrote. Oops. Um we're like at least for
+[919.2s] me the worst why do we want threading?
+[921.2s] Well, if you're writing aic workflows,
+[922.7s] you're writing any sorts of systems um
+[924.6s] oh what does BEP stand for? BEP stands
+[926.7s] for BAML enhancement proposals. It's a
+[929.0s] way to add new language features into
+[931.0s] the BAML language.
+[933.4s] Um, so when we think about threading, I
+[935.9s] think the worst worst worst part about
+[938.3s] threading is actually the fact that you
+[941.4s] have colored functions everywhere. Most
+[944.4s] people don't do threading. We've decided
+[946.1s] as a society that asyncio is more
+[949.0s] convenient than threading and easier to
+[951.1s] model for most people than threading. So
+[952.7s] we do async.io. And async.io That was a
+[955.8s] really nice system that allows us to get
+[957.7s] par I wouldn't say parallelism but
+[960.0s] rather concurrency because it doesn't
+[962.6s] run things at the same time. It actually
+[964.5s] runs things just once. And let me see if
+[967.3s] I can find a doc over here. It's on
+[970.0s] here. Uh the problem with async.io
+[972.6s] However, is that if you've ever used
+[975.5s] TypeScript, you will often see a
+[977.6s] function like read file sync read file
+[980.4s] async because once you are in a async
+[983.5s] context, it is really hard for you to
+[985.6s] leave and go into a sync or once you're
+[988.4s] in a sync context function create user.
+[991.6s] If you if create user was a database
+[994.6s] call, you can no longer write a weight
+[996.4s] here unless you mark this function as
+[998.1s] async. And I think that painoint exists
+[1001.7s] almost as a legacy painpoint. Um what is
+[1004.5s] it? TypeScript. And I think the reason
+[1006.7s] that this painoint exists as a legacy
+[1008.4s] painpoint is because concurrency was not
+[1011.2s] something that most languages had on day
+[1013.4s] one. So if you don't have that, you now
+[1016.1s] have two code bases. And many times I
+[1018.8s] have run into this problem where
+[1020.0s] somewhere deep in some nested stack I
+[1022.3s] need to use some async function. And now
+[1025.2s] I have to freaking wait and I have to
+[1027.1s] change the whole stack upstream to make
+[1029.2s] it completely sync. Have you done that?
+[1030.5s] >> Everything's got to be Yeah.
+[1032.0s] >> I I've I've done it a couple of times.
+[1033.8s] Yeah. Everything has to be Yeah. You
+[1035.3s] have to change it all the way up and
+[1037.0s] down.
+[1038.5s] >> Exactly. And I think when you do agentic
+[1040.3s] engineering and we want code to happen,
+[1042.6s] >> you want to have the minimum amount of
+[1044.2s] diff to make sure that the right thing
+[1046.6s] happens in the right way. So that's one
+[1049.8s] of the problems that we are dealing with
+[1050.9s] is we don't want function coloring. We
+[1052.6s] don't want to have an async version of
+[1054.2s] the function and a sync version of the
+[1055.9s] function just to support how our callers
+[1058.0s] might want to use it. But we do want
+[1060.5s] parallelism because if you're calling an
+[1061.9s] LM, if you're calling five LM functions,
+[1063.9s] you kind of want them to run in parallel
+[1066.6s] when when they can work in parallel.
+[1070.5s] So that kind of inspired us to think a
+[1072.9s] little bit more. And I think the
+[1075.1s] inspiration that we had is very similar
+[1078.6s] to async.io,
+[1080.2s] But the main difference is instead of a
+[1082.2s] function forcing yourself to be
+[1083.8s] async.io,
+[1085.3s] we want to go ahead and say that the
+[1087.6s] call site determines if it's happening,
+[1090.0s] right? If it's happening concurrently or
+[1092.6s] in uh or in congruence. So the example
+[1096.6s] code is like this. You'll ask the
+[1098.1s] fastest model. You'll go ahead and spawn
+[1100.9s] and you can name spawned context with
+[1104.2s] various things. And each one of these
+[1105.9s] will actually just run this code
+[1108.3s] directly on here.
+[1109.2s] >> Oh, interesting.
+[1110.9s] >> So the return type of this is a future
+[1113.4s] type R2-D2. Why is superseded in the new
+[1116.6s] miss missable row? Uh it's just a slop
+[1120.6s] artifact and we don't really care about
+[1122.2s] reading um reading superseded. So it's
+[1125.9s] not a thing that has really bothered us.
+[1129.4s] Um, and you can see over here each of
+[1130.7s] these is a feature and then you can
+[1132.0s] await any of the features and then you
+[1133.6s] get the first response back. The other
+[1135.6s] thing that we want to be able to make
+[1136.9s] really easy and I I should help that
+[1140.0s] what helps us design these systems is
+[1141.8s] actually starting off with one of the
+[1144.0s] premises of BAML is to be a great
+[1145.4s] language for application development. So
+[1147.3s] when we do design work on here, we
+[1148.9s] always think really hard about there's a
+[1151.2s] cloud MD that has some rules, but
+[1153.0s] effectively effectively the rules that
+[1155.2s] we have are like think really hard about
+[1157.8s] what is a frequent behavior
+[1160.9s] and the things that are the most
+[1162.1s] frequent should be the syntactically the
+[1163.9s] most convenient
+[1166.3s] while not compromising correctness to
+[1168.9s] some degree. And if uh correctness does
+[1171.8s] have to win to some degree, but
+[1173.4s] frequency is really important. We don't
+[1175.3s] want to make it harder to do the right
+[1176.6s] thing.
+[1178.2s] That's important to us. So, one of the
+[1180.5s] things that we realize that a lot of
+[1181.8s] people want to do is thread pools. If
+[1184.2s] you want to run an array in parallel,
+[1185.9s] you want to kind of say that, hey, this
+[1187.8s] thing is running on like I oh, it's a
+[1190.2s] it's not supposed to be this. I have a
+[1191.7s] different version of this, but his idea
+[1193.9s] is you should be able to say that I want
+[1195.0s] to spawn things and run at most three
+[1196.8s] things at the same time. So, we have
+[1198.8s] this concept of a Q.
+[1201.1s] But the basic way that we did this work
+[1203.8s] and you'll see kind of how I do the
+[1205.3s] inspiration for this is especially now
+[1207.0s] that this beep is getting more and more
+[1208.6s] complete is we kind of have to come up
+[1211.3s] with some analogy to some existing
+[1213.4s] system. So, we've done previous leg work
+[1215.5s] to recognize that where what languages
+[1218.5s] do async await, what languages do
+[1219.9s] virtual threads, what languages do OS
+[1221.9s] threads. We know we don't want to do OS
+[1224.5s] threads because they're extremely
+[1225.6s] heavyweight and really complicated to
+[1227.1s] get right. Um, and most application
+[1230.2s] developers don't want to think about OS
+[1231.6s] thread levels. You don't want to be
+[1232.9s] thrashing your threads.
+[1235.0s] We do likely want to copy Go or Cotlin
+[1237.0s] who have co- routines and many languages
+[1238.6s] Python has co- routines etc. and go make
+[1240.6s] that work. And again we don't want async
+[1243.6s] aait because async aait leads to the
+[1245.4s] problem of coloring where we have to
+[1247.1s] label every function as either async or
+[1249.0s] non async. And if you want to use fetch
+[1250.9s] now everything upstream must be async.
+[1253.2s] So we want to avoid that problem when
+[1254.9s] possible.
+[1256.7s] So once we started with that we
+[1258.4s] basically just forced the model to go
+[1260.4s] ahead and and I'll go through this in a
+[1263.0s] second. Every single part of this beep
+[1265.0s] has to kind of be written in a way that
+[1267.0s] is somewhat readable. We invented
+[1269.3s] something called middleware that allows
+[1270.7s] you to do things like wrap a spawn with
+[1273.0s] a retry over here.
+[1275.6s] >> And that's kind of convenient because
+[1277.8s] >> many times you want to be able to just
+[1279.2s] retry arbitrary blocks of code.
+[1282.0s] >> Uh you want to be you might want to say
+[1283.7s] that a spawn has like I'll talk about a
+[1285.9s] few more examples
+[1287.4s] >> a fallback where if it fails just give
+[1289.8s] me a value and that guarantees that this
+[1291.9s] fun this future can never error anymore.
+[1294.5s] the error type is never as opposed to
+[1296.2s] whatever it was given to be
+[1299.0s] and a few other options that we came up
+[1300.6s] with.
+[1302.3s] We'll go into this in a second, but as
+[1304.9s] we go through this, one of the things
+[1306.1s] that you'll notice about this beep is
+[1307.4s] that it's extremely thorough and
+[1309.1s] complete with the examples. Normally,
+[1311.5s] I'd be really lazy, but I don't have to
+[1313.4s] be. I can literally say like, "Give me
+[1314.8s] an example of retry. Give me an example
+[1316.3s] of timeout. Give me an example of
+[1317.7s] timing." And what does timing do? It
+[1320.0s] takes the spawn and every time you run
+[1321.6s] it, it just logs how long it took to run
+[1325.0s] the task name, the name of the task or
+[1327.6s] uh that's given to it. So in this case,
+[1330.2s] it would just log how long the extract
+[1331.7s] took and it tells you like it'll run the
+[1333.4s] retry and with the retries it will log
+[1335.4s] the timing of the total system, not each
+[1337.5s] individual retry.
+[1339.4s] >> Oh, cool.
+[1342.0s] >> And obviously like with retry and with
+[1344.1s] timing is different than with timing
+[1345.5s] with retry. This measures the full
+[1347.7s] system. This measures timing of every
+[1349.8s] single retry individually.
+[1353.7s] And one of the things that you'll notice
+[1355.0s] when I go through this is there's
+[1357.0s] examples like fire forget. There'sam and
+[1359.2s] I I'll read through the beep a little
+[1360.5s] bit more slowly in a bit, but I want to
+[1362.9s] show the process first. And I want to
+[1364.2s] show the level of thoroughess that we go
+[1365.6s] into in here. We talk about unhandled
+[1367.8s] spawns. We talk about how how futures
+[1370.2s] that spawn futures work, especially for
+[1372.1s] example, if we do cancellation.
+[1375.0s] Uh we talk about rate limiting. We talk
+[1376.8s] about the cancel token and then we go
+[1379.3s] ahead and like talk about how you do
+[1381.2s] conditional spawning how select works
+[1383.2s] for example like if you want to pick one
+[1384.6s] thread or the other see which one got
+[1386.2s] completed but the point is this docet's
+[1389.1s] very very thorough now
+[1392.2s] once someone reads this it's we found a
+[1395.2s] what we do is we actually record the
+[1396.6s] slack meeting using transcriptions and
+[1398.7s] I'll show you the meeting that we had
+[1399.9s] about this talk recently
+[1403.0s] it's like a giant transcription um
+[1406.2s] language.
+[1408.0s] Where'd it go? So, we literally just
+[1409.8s] recorded. We had a Slack huddle. We got
+[1411.8s] the notes from the Slack thread and then
+[1413.5s] we actually just have the huddle
+[1414.5s] transcript. I The notes don't really
+[1416.0s] matter, but I literally would take the
+[1417.8s] full huddle transcript and we were in
+[1419.7s] person, so it's just that's why it says
+[1421.0s] just me talking.
+[1421.7s] >> It's just you talking.
+[1423.2s] >> Uh and it's a pretty long meeting as you
+[1425.8s] can tell. Like we were talking for like
+[1426.9s] an hour and a half here. Yeah. Um at
+[1429.2s] least maybe two.
+[1430.9s] >> Uh two and a half. I don't think we
+[1432.2s] recorded the whole thing sadly cuz
+[1433.4s] granola broke on us. So I literally just
+[1435.4s] went through I copied this whole
+[1436.9s] transcript and after I copied this whole
+[1438.8s] transcript I literally say something
+[1440.6s] like this beep 34 is very complex. We
+[1443.9s] make a and I literally just reorganized
+[1445.7s] this because I realized that this beep
+[1447.5s] which is spawn is implicitly done very
+[1451.0s] it has so many design decisions that we
+[1452.9s] have to make
+[1454.7s] uh like cancellation like cancelling
+[1456.4s] threads and cancelling workloads is a
+[1458.2s] whole complicated workstream. we have so
+[1460.6s] many design decisions that we have to
+[1461.7s] make that even someone reading the BEP
+[1463.7s] doesn't have the full context and I
+[1465.2s] think I paste it in the trans at some
+[1467.4s] point I do paste in the conversation and
+[1470.0s] I basically just force the model
+[1472.9s] to go ahead and just sprint out an
+[1475.3s] outline of how it should rewrite the
+[1477.0s] beep and this be I want to say the
+[1478.6s] summary the motivation the simplest form
+[1481.2s] the design decisions and this time it
+[1482.7s] outlines all actual syntax decisions
+[1485.4s] that we make like our future sharable
+[1488.6s] can you like send futures across threads
+[1491.1s] themselves. What happens when you await
+[1492.6s] on a future multiple times? What happens
+[1495.0s] when you What happens when you throw?
+[1496.9s] How are cancellations taken? The fact
+[1499.3s] that a parent being canceled means that
+[1501.2s] all children get canceled by default and
+[1503.2s] you need to do work to detach
+[1504.7s] themselves.
+[1506.6s] Um can you have a thought then on a
+[1509.0s] future where you actually choose what it
+[1511.1s] does what it does in different
+[1513.2s] situations?
+[1515.0s] So these these are these are decisions
+[1517.2s] that you discussed in your meeting or
+[1519.5s] that is implicitly decided in the
+[1521.4s] document
+[1522.6s] >> both. So some decisions got changed and
+[1525.2s] got introduced because of the meeting
+[1527.0s] and some are just locked into the
+[1528.6s] document.
+[1530.0s] >> Gotcha. And then what we did is I
+[1531.8s] basically asked the model to look at
+[1532.9s] these design decisions, look at and then
+[1535.8s] uh pull out the more complicated ones
+[1537.4s] and then pull out a whole bunch of
+[1539.4s] examples over here for each of these and
+[1542.3s] then just call out what we're explicitly
+[1544.1s] not doing because that's important for
+[1545.3s] people to read at the uh at the map of
+[1547.2s] like here's just like I'm not talking
+[1548.5s] about test local storage like thread
+[1550.6s] local storage is not in scope of this
+[1552.4s] thing. We're not we actually remove
+[1554.3s] select after talking about this design
+[1556.8s] decision. Uh, conditional spawning is
+[1559.5s] just like we don't it's just a little
+[1561.0s] complicated. It's not relevant of
+[1562.2s] putting in here. And deadlock detection
+[1564.2s] is something that we can do, but it's
+[1565.5s] not something that we're going to talk
+[1566.5s] about in this map. It's just out of
+[1567.9s] scope.
+[1570.8s] >> So like having a really good philosophy
+[1572.6s] of what we do ends up being very useful.
+[1575.0s] And what we end up doing is I'll show
+[1577.2s] you the final optimization for this was
+[1579.9s] actually like I want to reduce the scope
+[1581.4s] of this beep to be much smaller and much
+[1583.4s] more direct. And the final thing went
+[1585.3s] from like 104 kilobytes is how big this
+[1587.6s] total beep was down to 62 kilobytes. So
+[1590.2s] I reduced the amount of like verbosity
+[1592.5s] by half and I kind of have to go read
+[1595.0s] the whole thing to make it actually
+[1596.3s] good. And I'll show you what the final
+[1597.5s] thing looks like over here.
+[1600.9s] And now you can see that the beep 34 V2
+[1603.3s] and I made it right in V2 because if I
+[1605.0s] delete V1 what you'll notice is it will
+[1608.7s] if you replace in place for design docs
+[1611.1s] models will often just mess up
+[1613.2s] >> really.
+[1614.2s] >> Yeah because like
+[1615.3s] >> that's really interesting to know
+[1617.6s] >> for complicated design docs I've seen
+[1619.1s] this 100% of the time and if you think
+[1620.9s] about intuitively it makes sense too
+[1622.7s] like why would a model think about a
+[1624.7s] human humans get lazy and they're
+[1626.3s] inconsistent when they edit things. Edit
+[1628.9s] editing is a more hard exercise to be
+[1631.2s] coherent in than rewriting from scratch.
+[1634.6s] >> Yeah, that's a good point.
+[1636.3s] >> That's a good point.
+[1636.8s] >> Like imag take any software architecture
+[1638.9s] like take any agentic system you built.
+[1641.0s] Think about how much cleaner you would
+[1642.5s] write it the second time around than the
+[1643.8s] first time around.
+[1644.6s] >> Yeah, I think it's it's something
+[1645.7s] similar where when you see um a system
+[1648.9s] that has a lot of tech debt, the there's
+[1651.0s] that part of you that just wants to
+[1651.9s] rewrite the whole thing from scratch
+[1653.2s] rather than kind of just editing it.
+[1654.7s] Right. It's just it's the same thing.
+[1656.9s] >> Exactly. Um, and I think there's like
+[1659.0s] the sunk cost fallacy that a lot of
+[1660.6s] people have, which is like, oh, I'll
+[1661.6s] just edit it. I'll keep editing. But
+[1663.1s] often times when you're doing like in
+[1664.8s] this case, I'm effectively doing a major
+[1666.8s] rewrite where I want to like re I want
+[1669.2s] to be like, hey, spawning is way
+[1671.9s] different than every other BEP that
+[1673.2s] we've done before. It has so many more
+[1674.9s] implicit design decisions that are being
+[1676.6s] made that are not obvious. I want to
+[1678.9s] just label them one by one by one and
+[1681.4s] then in a separate document talk about
+[1683.4s] prior art and like how other people do
+[1685.1s] it.
+[1686.4s] So the first document was the first
+[1687.8s] document combining both of those two.
+[1689.9s] >> It was literally just interweaving all
+[1691.6s] the design decision all over the doc.
+[1693.8s] And
+[1694.2s] >> so that's that's how you were able to
+[1695.7s] get it from the larger to the smaller
+[1698.2s] even though you're saying
+[1699.8s] >> here are like discuss all these
+[1701.5s] decisions in more depth.
+[1703.3s] >> Exactly.
+[1703.8s] >> Because you're splitting it out into two
+[1705.9s] different ones.
+[1707.1s] >> Exactly. And like now if you read the
+[1708.9s] spawn doc I'll show you what it starts
+[1710.6s] off with. It still has a motivation
+[1712.1s] section cuz every time you propose a
+[1713.4s] language feature, there should be a a
+[1715.4s] user value here.
+[1717.1s] >> It very much highlights function
+[1719.1s] coloring as like a very top level
+[1720.7s] priority that we have, which is we don't
+[1722.4s] want function coloring.
+[1724.8s] >> Um, and then it just starts off with the
+[1726.7s] very simplest forms and the na um you're
+[1730.7s] not keeping all the versions. So, I'll
+[1732.2s] talk about versions and how we deal with
+[1733.4s] versions in a second. We talk about the
+[1735.8s] simplest spawns and all the name spawns.
+[1738.6s] >> Mhm. And then we literally just start
+[1739.9s] off with every single design decision
+[1741.4s] and we talk about why. Uh like when do
+[1744.6s] spawns start? Do spawns start when you
+[1746.4s] hit a wait or do spawn start immediately
+[1748.3s] as soon as you spawn? That's a choice
+[1750.7s] >> or do spawn start explicitly when you
+[1752.5s] hit dot start right like threads don't
+[1756.3s] start often until you hit start
+[1759.0s] >> uh in a lot of libraries. But in our
+[1760.9s] case we've decided that spawns actually
+[1762.5s] start completely immediately as soon as
+[1764.0s] you hit spawn because why wait? Um a
+[1767.1s] future is sharable. So once you have
+[1768.6s] futures, you can actually like await
+[1769.9s] something twice. It's item potent. It
+[1771.4s] gives you the same exact response.
+[1773.7s] Futures actually outlive their spawners.
+[1775.5s] So you can have a future that gets
+[1776.9s] returned by a function. Why? Well,
+[1779.4s] that's just useful for marinating
+[1780.6s] paradigms like map functions will do
+[1782.4s] this. If you want to take an array of
+[1784.4s] URLs and like run them all in parallel,
+[1786.9s] well, you make a future.
+[1789.1s] >> Um, we had a choice. Do we want a weight
+[1791.2s] to be in front of the thing or do we
+[1792.9s] want a weight to be a postfix like f.8
+[1794.6s] Oh wait, like Rust style
+[1797.0s] and like our target audience is Python
+[1799.2s] and Typescript devs. So we prefer
+[1801.0s] looking like TypeScript. But if a lot of
+[1803.4s] people end up doing a do have like
+[1805.3s] chained awaits which often like if
+[1807.7s] you're writing like
+[1809.6s] you'll run into this if you write a web
+[1811.2s] system which is like await fetch
+[1815.4s] dot uh JSON await. you have to like
+[1820.1s] double catch your awaits over here if
+[1821.6s] you do this because the first one gets
+[1822.8s] like the metadata and the second one
+[1825.0s] actually gets a payload.
+[1827.3s] >> But like that's like one edge case. So
+[1829.3s] we're okay with that pain since it's
+[1830.9s] already familiar to Python and
+[1832.2s] TypeScript apps. Um await rethrows
+[1835.3s] errors from futures. So if a future has
+[1837.1s] an error, a wait just throws the error
+[1838.7s] of the future and it's completely type
+[1840.1s] safe.
+[1842.0s] Um cancellation is a panic. So one of
+[1845.3s] the things in the BAML language that we
+[1846.8s] have is errors are completely type- safe
+[1848.9s] and we infer whatever error message
+[1851.0s] error type a function can throw
+[1852.7s] regardless of you doing that. The
+[1855.1s] problem with inferring error messages
+[1857.3s] and having like exhaustedness on errors
+[1859.9s] is it's very easy to have a wild card
+[1863.3s] accidentally uh like hide a
+[1865.8s] cancellation.
+[1867.8s] >> So we have two kinds of error messages.
+[1869.8s] One is like an error that you deal with.
+[1871.4s] one is an error that you
+[1874.3s] um that you kind of have to like
+[1876.2s] explicitly catch. If you want to avoid
+[1878.4s] cancellations, you have to explicitly
+[1880.2s] say no, if I get a cancel signal, ignore
+[1883.4s] it and give me this value instead. But
+[1885.9s] by default, it'll just get rethrown.
+[1889.8s] Um cancellations when cancellations
+[1891.9s] happen, when a points happen. But I
+[1893.5s] think the big difference you can see,
+[1894.6s] let's see if I can pull this doc side by
+[1895.8s] side. One big thing that you should be
+[1897.9s] able to hopefully see almost immediately
+[1900.3s] is like just like how this doc starts
+[1903.0s] versus this one.
+[1904.9s] >> Um, and like almost immediately there's
+[1907.4s] way less pros. I think I'm zoomed in
+[1909.2s] more in one of them, but I'll zoom out
+[1910.6s] so it's the same size. Almost
+[1912.5s] immediately there's way less crows.
+[1916.4s] Um,
+[1917.7s] >> there's the uh mental model is kind of
+[1920.4s] like garbage, so I got rid of that. The
+[1922.0s] motivation is way thinner and way easier
+[1924.2s] to read.
+[1925.9s] uh in my opinion, it's just less text
+[1927.9s] like size-wise.
+[1930.1s] >> And then it starts off directly with
+[1932.0s] like just like the very very basic
+[1934.0s] example
+[1935.5s] talks about the most common use cases,
+[1937.2s] the fact that you can name stuff for
+[1939.1s] debugging use cases. Um um and then it
+[1943.6s] goes straight towards like like the
+[1945.4s] previous example just started talking
+[1947.1s] about middleware. Well, why are we going
+[1949.0s] to middleware right away? we should talk
+[1950.5s] about the design decisions that we
+[1951.9s] actually made and it's way easier for
+[1953.4s] someone that's just skimming to digest
+[1954.9s] it.
+[1955.5s] >> Yeah, I think it's it's important to
+[1957.3s] remember that the models tend to read
+[1958.7s] this a lot like a human would, right?
+[1960.2s] And so if you just jump into the kind of
+[1962.6s] an immediate rest, you start with
+[1964.1s] something very specific and you don't
+[1965.5s] have this like layered top- down
+[1967.4s] approach, it's going to be a lot harder
+[1969.4s] for the models to understand
+[1971.1s] >> exactly implement. So we spend a we
+[1972.8s] spend a lot of time this thinking about
+[1974.6s] how we're going to go have a model think
+[1976.0s] through this. And once it helped,
+[1978.1s] >> this is probably one of the most complex
+[1979.4s] design docs we've done to date,
+[1981.2s] >> which is why it's very different. But we
+[1983.2s] did have a set cancellation if anyone's
+[1985.2s] ever tried is a really really hard
+[1987.4s] concept to go model. But for us, we know
+[1990.6s] our target audience. It's people like
+[1992.2s] Evolution IQ who are building massive
+[1993.8s] agentic workflows. Well, we know the
+[1996.3s] default here, which is if you're
+[1998.4s] actually going to go ahead and cancel
+[2002.0s] like I'm an app developer. I spawn an
+[2004.7s] API that I I spawn some library code
+[2007.0s] that does deep research and spawns like
+[2009.1s] 500,000 agents to go do stuff and
+[2012.8s] something comes back to me and gives me
+[2014.3s] a result faster. I kind of want to
+[2016.1s] cancel all the work that that that
+[2018.6s] research started and just kill it and
+[2021.0s] who cares what that thing said. And so
+[2023.0s] cuz before API calls didn't really cost
+[2027.6s] money.
+[2028.8s] >> Yeah.
+[2030.2s] >> And now like every API call
+[2032.2s] >> it's a tool use. Yeah,
+[2033.4s] >> it's a tool. Uh, exactly. It's money.
+[2036.2s] So, you kind of want the right to be in
+[2038.8s] the app developer hand to decide when
+[2041.0s] they cancel work. And I think at the
+[2043.0s] bottom we talk about like prior art and
+[2047.0s] what happens here.
+[2048.7s] >> Mhm.
+[2049.8s] >> Um, oh, it's not enough detail. Okay.
+[2052.2s] So, this is like one quick readout here.
+[2054.1s] I immediately see that this prior art
+[2056.0s] section is very weak. So, what I would
+[2058.2s] do is I'd say I want a subpage on prior
+[2060.6s] art about design decisions that we made
+[2062.8s] on a board controller, for example. Like
+[2065.0s] a board controller is probably the best
+[2066.6s] example. So, let's I'll show you exactly
+[2067.8s] what I'm going to do. This is pretty
+[2069.4s] good, but the biggest miss here is a
+[2072.4s] lack of understanding for the end user
+[2074.8s] on why we didn't go with explicit
+[2077.7s] cancellation tokens. For example, like
+[2079.4s] go or controller in Typescript.
+[2082.2s] Obviously, there's a syntactical error
+[2084.7s] and both languages have made different
+[2086.8s] trade-offs. In the case of Go, every
+[2088.7s] function has this thing called ctx. So,
+[2091.2s] if you're layering things through like
+[2092.6s] 17 different layers of functions, every
+[2094.6s] single one of them well now has to carry
+[2096.4s] ctx and pass it down. While this is
+[2099.6s] technically more explicit, it is a
+[2102.4s] burden for app developers that are first
+[2104.4s] being welcomed into the language to just
+[2106.9s] have to know this magic parameter and
+[2109.0s] they later learn that it's about
+[2110.5s] cancellation. and we want to avoid that
+[2112.2s] burden. On the second hand, TypeScript
+[2115.0s] has a different philosophy. There is no
+[2116.6s] philosophy around passing in a cancel
+[2119.0s] token. So 99.99% of the time, no one
+[2123.0s] uses an abort controller and no APIs in
+[2125.6s] Typescript are ever cancelable by
+[2127.3s] default. And no library has cancellation
+[2129.2s] semantics really built in. And we don't
+[2132.0s] really want to be in either of those
+[2133.2s] worlds. So we prefer the the implicit
+[2135.6s] cancellation of Python, for example.
+[2138.6s] You'll notice that I'm not actually
+[2140.2s] trying really hard to teach the model
+[2142.2s] anything here. I'm very explicit in
+[2144.2s] these in this learning. Uh make this a
+[2148.2s] subpage. I'm very explicit in the
+[2150.6s] learning here. Uh because what I don't
+[2152.7s] want to do by accident is I don't want
+[2156.2s] the model to really make its own
+[2157.5s] inference. I will ask it about its own
+[2159.7s] inference once it's done. But I wanted
+[2162.8s] to really capture the thing from the
+[2164.2s] design discussion that we had more true
+[2166.4s] to myself,
+[2167.8s] >> but I'm not going to put it in the main
+[2169.2s] read me. I'm going to make a separate
+[2170.5s] subpage about this because I know for
+[2172.4s] someone that's new to
+[2175.0s] uh reading the this beep. They will
+[2177.7s] probably prefer like why we didn't pick
+[2179.8s] existing semantics in a whole different
+[2181.8s] page because it is somewhat nuanced and
+[2183.5s] detailed. And we likely want code
+[2185.0s] samples about this. We've got a couple
+[2188.0s] questions come through in the chat. So,
+[2191.2s] one is about versions of all these
+[2193.2s] different documents. Do you keep the
+[2194.5s] different versions? Models go nuts when
+[2196.8s] they see multiple versions of something.
+[2198.6s] >> Yes. So, we actually have two different
+[2200.1s] ways of working with beeps. Um,
+[2203.9s] one is this what I showed you where you
+[2205.3s] download all the beeps and you work off
+[2206.6s] of them. Um, because you kind of often
+[2208.9s] need context of other beeps to design
+[2211.1s] other beeps.
+[2212.2s] >> Mhm. Um the beeps are not usually
+[2214.3s] designed in independence but the other
+[2217.2s] approach we have is actually this
+[2218.2s] approach. Let's say I'm uh we're working
+[2220.0s] on reflection for example actually this
+[2221.8s] is approved
+[2224.0s] uh we're working on reflection. You'll
+[2226.0s] notice that we do have versions built
+[2227.7s] in. Actually let me pick one that
+[2229.1s] actually had a lot of versions
+[2231.4s] patterns. We're working on pattern
+[2232.8s] syntax. There's seven versions on this
+[2234.7s] beep. Every single version of this beep
+[2237.0s] has its own comment chain. Has other
+[2238.6s] things driven by it. There's a quick
+[2240.2s] little thing to remind you, you're on an
+[2241.6s] older version. Uh, you can't edit
+[2243.8s] comments on old versions. They're read
+[2246.5s] only. You can't see them ever again.
+[2249.7s] Uh, but if you export this beep, I'll
+[2252.2s] show you what we do. We actually, when
+[2253.9s] you export just a single B, you actually
+[2255.6s] get all the versions baked in place.
+[2258.2s] >> Uh, you also get all the discussions and
+[2260.2s] all the questions that people have and
+[2261.9s] you get all the comments and everything
+[2263.4s] baked into agent context.md.
+[2266.0s] >> That is very cool. So,
+[2267.7s] >> so sometimes if you're working on a map
+[2269.4s] and you want to refer to other versions,
+[2270.7s] then you have to go through this
+[2271.8s] workflow. Ideally, we can merge the
+[2273.7s] workflows, but this is the problem with
+[2275.1s] slot based design like you kind of have
+[2277.5s] you kind of just do what you need to do
+[2279.1s] at any given time to make it work.
+[2281.9s] >> Um, but this is kind of the approach uh
+[2284.4s] for like versioning. You do want
+[2285.9s] versions. It's useful for humans. It's
+[2287.6s] useful for agents. But the reason that
+[2289.8s] we don't use git is because you often
+[2293.2s] like one comment tracking is really hard
+[2295.8s] on git uh for like various diffs once
+[2297.9s] you start doing diffs and also we want a
+[2299.9s] very linear history for our beeps. It
+[2302.8s] needs to be like purely linear. You push
+[2304.4s] to it and that's it. Um so the
+[2307.8s] versioning story is slightly simpler and
+[2310.0s] that's what works for us at least. We
+[2312.2s] might switch to a git based approach
+[2314.2s] eventually
+[2315.9s] um but at least for now this works well.
+[2317.9s] Yeah, I I'm curious how much because
+[2320.1s] we're spending a a lot of time and this
+[2322.4s] is kind of what we talked about up front
+[2323.5s] with how important it is really really
+[2325.7s] getting a good design doc now because
+[2327.3s] you can almost oneshot it. Maybe not
+[2329.0s] with threading but how how much more
+[2332.9s] time would you say you've spent now
+[2335.2s] doing this kind of work than you know 2
+[2337.8s] 3 years ago?
+[2339.2s] >> I think I'll show you an example of a
+[2341.1s] beep that I would not have written in
+[2343.0s] nearly as much detail without without
+[2345.4s] this. Um, one of the things our our
+[2347.8s] middleware BEP for example,
+[2350.9s] >> I want to show how many examples we have
+[2352.4s] in the middleware. Our middleware BEP,
+[2355.2s] which is like a way to add middleware
+[2356.9s] into the system. Like you want to say
+[2358.2s] that this scope of code has a cost limit
+[2360.2s] of $5. That'd be nice to have
+[2363.1s] >> like don't spend more or like hey use a
+[2364.6s] cloud use like the cloud SDK with the
+[2367.6s] string passed in
+[2369.2s] >> or run like a retry with a timeout on
+[2371.8s] this fetch. Um, it's kind of like our
+[2375.0s] middleware
+[2375.4s] >> BE
+[2376.4s] >> and I want to show like how complicated
+[2378.2s] and we talk about all sorts of things
+[2379.3s] like why don't you do wrapper functions
+[2380.6s] and everything here too.
+[2382.4s] >> Um, but when we write this
+[2386.3s] one of the expectations we have is like
+[2388.3s] this prior art I want to see code
+[2390.4s] snippets of like real systems and I just
+[2393.0s] I would have been lazy. I would have
+[2394.7s] said express has this. I would have said
+[2396.7s] Python decorators have this and Python
+[2398.3s] decorators I know off top of my head as
+[2399.6s] well write the code. Uh I but I no way
+[2402.1s] would have found like the poly.net
+[2404.0s] mechanism of writing middleware. I don't
+[2406.4s] know. Net so it's just not something I
+[2408.6s] think about. Um so I think there's small
+[2411.1s] things like this that would have made a
+[2412.3s] big difference. And then and when you
+[2414.6s] actually go down
+[2417.0s] like I wrote all sorts of middleware
+[2418.7s] here to prove that it works. I wrote
+[2420.5s] like a with retry retry and I actually
+[2422.7s] wrote out all the code. Then I went
+[2424.6s] ahead and implement the timeout and
+[2426.2s] timeout uses spawn and because I have
+[2428.4s] all the beeps in context it can actually
+[2430.2s] go do that and write how timeout would
+[2432.8s] be written. Then I wrote timing. Then I
+[2435.3s] wrote fallback. Then I did composition.
+[2438.8s] But then I started doing more advanced
+[2440.4s] things. What if I want a retry that has
+[2443.0s] a backoff of a certain type or you have
+[2445.8s] exponential backoff or like jitter or
+[2448.0s] constants?
+[2449.7s] Um I'll if you want to read the beeps
+[2452.2s] you should go to beeps.boundaryml.com.
+[2453.2s] boundaryml.com.
+[2454.7s] If you want to find uh if you want to re
+[2457.6s] see the beep repo that's in the baml
+[2459.3s] repo we have a monor repo pattern but
+[2462.0s] then I did selective error handling.
+[2463.5s] What if I want to retry on only on
+[2465.0s] certain errors?
+[2466.9s] Well like now you can pass this in and
+[2468.6s] your code looks like this. You do a you
+[2471.0s] you're running this code called fetch
+[2472.3s] with this API named this section of code
+[2474.9s] named fetch with API calls. It has a
+[2478.2s] retry of three and it'll only retry
+[2480.1s] timeout error rate limit error.
+[2481.4s] everything else will not retry on and
+[2482.7s] just throw the exception. So like
+[2483.9s] authentication errors will not run the
+[2486.5s] retry loop.
+[2488.7s] Um and then you we built a circuit
+[2490.7s] breaker which is like it's kind of like
+[2492.5s] a rate limiter but slightly different.
+[2493.8s] You can look into the pattern later if
+[2495.5s] you're curious. Then we built a rate
+[2497.0s] limiter. Um then we went further and
+[2500.0s] said how do you compose different
+[2501.8s] compositions here? And just this level
+[2504.2s] of example building is just not
+[2506.2s] something I would have ever done before.
+[2508.2s] There's like zero time I would have
+[2510.1s] spent on like
+[2511.4s] >> doing this. I was like, I built a
+[2512.6s] caching system. I want to say like, hey,
+[2514.4s] run this block of code with a cache with
+[2516.1s] this key.
+[2518.1s] And again, I would kind of know it
+[2520.6s] works, but the point of discovery for
+[2523.2s] whether or not there's a bug here would
+[2524.6s] be much later rather than earlier. I'd
+[2527.8s] discover it during implementation, be
+[2529.1s] like, "Holy cow, we have to redesign
+[2530.4s] this thing."
+[2531.8s] And I like the basically the best
+[2535.6s] engineers would make less skill issue
+[2538.7s] problem would have less skill issue
+[2540.1s] problems. So their implementations would
+[2541.7s] be better because their intuition is
+[2543.4s] better.
+[2544.4s] >> Mhm.
+[2545.2s] >> But now like everyone everyone's median
+[2548.2s] kind of rises in my opinion and your
+[2550.1s] median is so much better than it used to
+[2551.8s] be.
+[2552.7s] >> Right. For sure.
+[2555.0s] >> That's fascinating.
+[2556.1s] >> How much time do you spend on writing
+[2557.3s] beeps? I spend like or not beeps but
+[2559.3s] like writing design docs. I spend a lot
+[2561.0s] of time like writing design docs and
+[2562.6s] plans for almost all of my work now.
+[2564.6s] It's like
+[2565.5s] >> 50%
+[2566.1s] >> I think. Yeah, I would say I would say
+[2568.2s] it's more than 50%.
+[2570.7s] Most of my time I spend writing docs,
+[2573.4s] coming up with plans. I like to keep it
+[2575.7s] I heer on the side of more detail. Um
+[2577.9s] and I think it's similar to kind of you
+[2579.8s] know what we've seen. I'm not going into
+[2581.0s] more detail than you're threading one,
+[2582.5s] but
+[2585.1s] I I spend most of my time reading design
+[2588.8s] documents and plans and iterating on
+[2591.4s] them and um because the code you kind of
+[2594.6s] just again if it's good enough, you can
+[2597.0s] kind of just oneshot it. So you just
+[2598.3s] send the design doc and the code kind of
+[2599.8s] writes itself and then you review the
+[2601.0s] code and or and then and then you merge
+[2604.2s] and then you're done.
+[2606.8s] >> Yeah. So now that the the job of hands
+[2610.2s] on keyboard typing code is kind of just
+[2612.6s] been
+[2613.5s] >> solved,
+[2616.2s] >> we I have a lot more time to do to write
+[2618.4s] these design docs and it's so much more
+[2621.8s] important to do that since you're not
+[2623.2s] writing the code. You have to, you know,
+[2625.3s] if you're giving instructions to someone
+[2626.8s] how to do it, all the stuff that's kind
+[2628.7s] of in your head that you or assumptions
+[2631.2s] that you've made, you have to make sure
+[2632.3s] is really explicit in the doc. And it
+[2634.5s] also helps question
+[2636.1s] >> And it also helps um question your
+[2638.3s] assumptions, right? Like it comes up
+[2641.0s] with
+[2642.7s] >> it finds that you're assuming different
+[2644.6s] design patterns and things like that
+[2645.7s] that you didn't realize you you didn't
+[2647.3s] even realize that you were assuming and
+[2649.2s] that that might not be best.
+[2650.9s] >> Yeah, exactly. Like the cost limit one
+[2652.6s] is kind of interesting. When I was doing
+[2653.9s] the middleware, I was like, "Oh, I want
+[2655.0s] to build a cost limit here where I just
+[2656.4s] say like this thing runs and I want to
+[2658.2s] spend at most $5 here." Well, in order
+[2661.0s] to implement this, you have to implement
+[2662.6s] a thread local variable. Like you just
+[2665.1s] need thread local storage. There's no
+[2666.8s] way around that.
+[2667.9s] >> Mhm.
+[2668.3s] >> Well, if you're going to do that, well
+[2669.7s] then like there's really not much around
+[2672.9s] this except doing that. And in order to
+[2676.1s] go make that happen, well then it's kind
+[2677.9s] of your responsibility to discover this
+[2680.1s] problem. And it might have been
+[2681.4s] impossible for me to have thought about
+[2683.4s] that really hard and said like oh oh
+[2685.8s] holy holy cow we actually have thread
+[2687.8s] local storage
+[2689.8s] >> and like
+[2690.8s] >> but LMS like LMS will write every piece
+[2693.4s] of code that you ask them to. You will
+[2694.7s] you can say I ch I want you to challenge
+[2697.0s] me with what should not be possible in
+[2699.3s] this design but is going to actually be
+[2701.5s] done here. I think this is also
+[2703.5s] something that you brought up in a
+[2704.7s] previous episode where you and Dex were
+[2706.2s] talking about. Um, it was if if you
+[2710.2s] don't if you just tell the LLM
+[2712.3s] something, it's going to assume you're
+[2713.4s] correct because they've been trained to
+[2715.8s] to to basically to trust you and that
+[2717.5s] you have context that they don't. And so
+[2719.0s] something that's really helpful is is
+[2720.6s] almost like a here's what I'm thinking
+[2723.4s] for something, but I'm not sure what
+[2725.7s] other ideas do you have for this design
+[2727.1s] pattern or this part of the system. I
+[2729.2s] found that to be very very helpful
+[2731.2s] because it will just assume what you're
+[2733.0s] saying is correct and then it'll
+[2734.8s] implement it when it may not be.
+[2736.2s] >> Yeah, exactly. I think someone asked
+[2738.3s] like how do you how do you keep track of
+[2740.1s] everything in your head uh while you go
+[2742.0s] do this? The answer is like one get
+[2743.9s] good. But two real answer is not get
+[2746.4s] good. The real answer is build tooling
+[2748.2s] so that you don't have to keep track of
+[2749.8s] everything in your head.
+[2751.0s] >> Like
+[2751.8s] >> the fact that we built this tooling let
+[2753.4s] you download every beep and go do this.
+[2755.8s] I don't keep track of everything. I
+[2757.0s] write the BEP and I literally say, can
+[2758.6s] you go check every other implemented BEP
+[2760.6s] and see if we are if we're consistent
+[2763.2s] with it and if the syntax is correct and
+[2765.4s] if there's any like weird interactions.
+[2767.8s] I do try and like have my own model of
+[2770.0s] it, but these things are nuanced and
+[2771.6s] they make a lot of mistakes very easily.
+[2774.2s] Sam on our team just make it a really
+[2775.7s] good suggestion. We used to name our BEP
+[2778.2s] folders with just the numbers
+[2781.7s] and now we don't. Now we name them with
+[2783.7s] numbers plus the name because if you do
+[2785.6s] ls and the model does ls, it sees
+[2788.6s] >> exactly what dep is without having to
+[2790.2s] read anything.
+[2791.6s] >> Um, and just constantly reinforces where
+[2793.7s] it has to go do the work. So I think
+[2795.7s] there's small kinds of tooling that you
+[2797.0s] can build along the way to make this
+[2799.0s] really really helpful.
+[2801.0s] But I mean that's it for today's
+[2802.6s] content. If you guys have more
+[2804.0s] questions, happy to stay on and help
+[2805.4s] answer them after the fact. But I think
+[2807.7s] that's it. Kevin, thank you for joining.
+[2809.9s] >> Yeah, thank you so much. Hopefully you
+[2812.0s] guys got some interesting insight on the
+[2813.5s] tooling. If you're interested in
+[2814.6s] checking out, go to beps.boundml.com. Or
+[2816.7s] if you want to go read how the code
+[2818.9s] works or don't read how the code works,
+[2820.5s] ask Claude to read how the code works.
+[2821.8s] Uh check out a GitHub repo and ask it to
+[2824.4s] the uh check out uh GitHub and ask it to
+[2827.1s] like ask Cloud to say where where's the
+[2828.7s] beeps folder and how do I run it? It'll
+[2830.7s] get you set up and it should do
+[2832.2s] everything for you.

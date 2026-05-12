@@ -1,0 +1,592 @@
+What you're about to see is simple and
+powerful.
+Running a single Cloud Code agent is
+just the beginning. Once you realize
+this and you start scaling up the number
+of agents you have shipping for you, you
+quickly run into a massive problem.
+There's too much to keep track of. When
+it comes to multi-agent systems,
+observability is everything. Check this
+out. With cloud code hooks sending
+events to a minimal client server
+architecture, you can see everything.
+Let's break down a concrete approach to
+cloud code multi- aent observability
+that let you scale up what you can do
+with not just one cloud code instance
+but 3 510 and beyond.
+So, as you can see here, we have a
+multi- aent observability system that is
+taking events in from every cloud code
+instance I have running. Doesn't matter
+if they're running subtasks, if they're
+planning, building, web scraping, web
+searching, deep research, calling MCP
+servers. Every event is getting tracked
+and traced into this simple multi- aent
+observability application. Here's what
+the application architecture looks like.
+We have multiple agents firing their own
+respective claude code hooks. Each one
+of these hooks hits a bun server which
+stores data to an SQL like database for
+persistence and simultaneously it uses
+websockets to stream the events right to
+the client you see right here. So no
+matter where your agents are running, if
+you're running on multiple devices, if
+you're running, you know, 5 10 plus
+agents, every event's going to get
+streamed in. You can see I have
+different applications streaming in
+events with different cloud code session
+IDs getting recorded here. And every
+tool call, every hook.
+>> Dan, your agent needs your input.
+>> You can see there every hook, every
+event type is getting recorded. I just
+got a notification event. So, one of my
+agents needs my input. We can go ahead
+go back to the terminal and we can see
+which one needs it. So,
+>> Dan, task nailed. Moving forward.
+>> There we go. We got a stop event coming
+in and we can see this custom theme
+feature is looking good. It looks like
+it needs a couple tweaks to this. Of
+course, we'll just accept and let it
+keep cooking. We have one Asian complete
+and you can see we have a multitask sub
+agent event getting a bunch of work
+done. All these events are streaming in.
+And so this is the power of
+observability. As you scale up your
+agents, as you specialize and build
+agents into your workflows, right, into
+your agentic workflows, you want to
+understand what they're doing. So let's
+break down this
+>> needs your input.
+>> Okay, so we got another input request
+there. Once you start using cloud code
+and once you start using agentic coding
+tools, you realize that you can do a lot
+more by just adding agents by just
+scaling up the number of agents you have
+working for you at any time. This is
+also great for specialization and cross
+app usage. This is just
+>> agent complete.
+>> Awesome. So we got sub agent complete
+calls here. You can see every type of
+cloud code event. At the top here we of
+course have filters. We're operating out
+of two code bases right now. the
+infinite agentic loop codebase and this
+brand new cloud code hook multi- aent
+observability codebase. We can filter
+down of course
+>> your agent needs your input
+>> to one or more of these code bases.
+Let's just go ahead and set back to all
+sources. You can hear in the background
+text to speech that we put together in
+the previous cloud code hooks video. My
+agents are letting me know when they
+need my input or when they're ready for
+more work.
+>> Sub agent complete.
+>> So we have session IDs which detail the
+exact cloud code instance and then of
+course we have event types. So these are
+all the current available cloud code
+hooks that you can tap into. And we're
+of course getting a stream of every
+single event. So we can easily filter
+down. Let's say we just want to see all
+of the stop events, post, tool use,
+notifications, so on and so forth. And
+so you can of course see something
+really, really cool, right? We have a
+live activity pulse of all the events
+coming in in real time. All the work our
+agents are doing across every
+application, across every cloud code
+instance. You can see our infinite
+agentic loop agent is doing a lot of
+work and this is one of the heavy
+hitters, right? Go ahead, let this
+continue. You can see that we have five
+subtasks operating in parallel. So, a
+lot of events are going to stream in
+from this. This agent here built out a
+plan. Now, I'm going to have it actually
+implement this plan. So, I'm just going
+to copy this /implement. Paste that in.
+And now, it's going to build out that
+plan. I'm still building this. I'm still
+working on this as I'm presenting it to
+you here. I need to make this mobile
+friendly so I can you know shrink this
+down and use this on my phone on my
+device on the go accept this cool stuff
+right this live activity policy is great
+for seeing all the events coming in live
+throughout all agents and we can see
+highle breakdown of what this looks like
+let's get to the bulk of it right the
+agent event stream you can see all the
+events are streaming in here we have a
+total of 63 events and this does cut off
+and refresh if we scroll down here we
+have the application that the events are
+coming out of we have the clawed code
+session ID.
+>> Your agent needs your input.
+>> Okay, thumbs up. This application and
+session IDs uniquely mark this instance
+for good UIUX. We have color coding here
+on the app and the session ID. So, we're
+hashing the incoming app name and
+session ID so that we can consistently
+see which agent is posting.
+>> Mailed. What's next?
+>> There we go. We got a task complete with
+that cloud code hook stop event. That's
+awesome. App name here, session ID, tool
+that we're actually calling. And then
+over here on the right, we have
+something really, really powerful. So we
+have summarizations of the work done in
+some of our tools here. We're actually
+running, and I'll show this off in the
+codebase in a moment here, where every
+event coming in before the cloud code
+hook sends it off, it's running a
+summarization prompt using a small fast
+model. So in this case, I'm running haik
+coup to get a summary on all of the
+events that I care about. So
+specifically, pre-tool, post tool, I
+want to see what is going on and just be
+able to read at a glance, right? I don't
+want to click in here and have to look
+at the exact payload which of course you
+can. What does event represent? So you
+can see here infinite agentic loop
+writes HTML file for medscan pro
+clinical dashboard at a specified
+project path. That's the post tool use.
+>> Sub aent complete.
+>> There we go. We got another sub aent
+complete. And post tool use fires of
+course after the tool has run. Of course
+we have pre-tool use right there. You
+can see these events are tied together.
+Right. Pre-tool post tool
+>> sub aent complete. It's the same agent
+15CC5C and the running in the infinite
+agentic loop codebase. This is this
+agent here. My implementation agent is
+still working and we are getting
+infinite UIs generated over here. These
+of course are just presentational
+examples. Although these two are
+actively, you know, working on
+multi-agent observability codebase. But
+anyway, I hope you can see the idea
+here, right? This is something that's
+going to be really really important for
+you as you scale up your agents. This
+architecture that we have here is a
+one-way data stream. This keeps things
+really, really simple. Everything flows
+here from cloud code agents through
+their hooks to the server. When they hit
+the server, they're stored in SQL like
+database. And then right after they're
+saved, they're streamed to the front end
+here. And so we're getting these live
+events coming in. And of course in the
+activity pulse, we can also, you know,
+we're looking at a 1 minute feed here,
+but we can go 3 minute and we can go 5
+minute. And you can see, you know, a
+larger collection of all these events
+coming in at a larger time frame. You
+can also see, you know, every individual
+line represents the actual agent that
+did the work.
+>> Sub agent complete.
+>> Right? This is the session ID hashed
+color. You want your observability to be
+fast, easy, quick.
+>> Sub agent complete.
+>> Right? This is why we have the
+summaries. If we scroll down here,
+getting summaries for post tool use. If
+we want to open up our sub agent stop
+event and see what that looks like, you
+can see here this is the exact payload
+for that cloud code hook. And we're
+putting it all together here in this
+one-way data flow architecture where
+Cloud Code uses its hooks after it
+finishes events. And these events then
+send information to the server. There
+you go. You can see five agentic loop
+tasks kicked off there. And then the
+server takes those events, stores it in
+SQLite, and then streams them right to
+the client we're looking at right here.
+So this oneway data stream keeps things
+really simple. Every agent is
+responsible for summarizing their work
+in the cloud code hook before they send
+it off. And we'll dive into the codebase
+in just a moment here. I just want to
+highlight how important this is. It's
+the same deal. If you don't measure it,
+you can't improve it. If you don't
+monitor it, how will you know what's
+actually happening? If you want to scale
+up your work, if you want to scale up
+your agents, you need to know what
+they're doing. And it is really
+interesting too to watch this data flow
+come in and really trail what the agents
+are doing to understand how your agentic
+coding tool really works. All right, but
+this is all powered, of course, by cloud
+code hooks. This is an incredible
+feature that lets you build on top of
+and understand what's going on in Cloud
+Code's life cycle. They give us
+deterministic control over Cloud Code's
+behavior and it lets us steer, monitor,
+control our agents. All right, so this
+is a big feature. I'm covering it again
+here week after week. Last week, we
+covered cloud code hooks in a more
+fundamental way. This time in this
+video, as you can see here, we're
+putting cloud code hooks to work for
+multi- aent observability. If you want
+to do more, if you want to scale up your
+agentic coding, if you want to become an
+agentic engineer, you're going to want
+multiple agents working for you,
+accomplishing tasks across all of your
+code bases. Of course, as you scale that
+up, another problem emerges, right?
+Solutions create problems, another
+problem emerges where we need a way to
+track and understand what is going on.
+And the cool part is, you know, I don't
+need to open up these terminals, these
+instances to know what's going on now,
+right? I can keep these closed and just
+look at what's happening here. I think
+you understand why multi-agent
+observability is so important. If you're
+scaling up your impact, if you're
+scaling up your engineering work, you
+need to understand what's happening,
+where it's happening, and what agent is
+doing the operation, right? Because
+eventually something will go wrong. A
+system will not do the right thing. And
+then it's going to be essential to have
+a trace throughout your system that you
+can fully control. All right? So, I'm
+not saying this is the right way to do
+it. I'm just saying this is a way you
+can start with multi- aent
+observability. You can see
+>> task accomplished and ready to roll.
+>> There's our stop task there. And
+something cool about the stop event,
+just to mention it here. If we click
+stop, we can see the entire chat
+transcript. So you can see this agent,
+agent07
+inside of the cloud code hooks multi-
+aent observability codebase. It has 500
+messages, right? And if we click into
+this, you can search through them and
+understand exactly what was happening at
+a glance. The stop event is the perfect
+time to copy you know the entire log via
+the transcript path right here and use
+it to operate on the work that happened
+right so for instance say I wanted to
+find all the read commands we can
+quickly filter all the reads and
+understand where that's happening we can
+do the same with all the glob usage
+assistant responses you can see that
+here to do all the responses here for
+this chat anyway so you get the idea
+right observability is ultra important
+and you something we've talked about
+before on the channel. Keeping track of
+what your tool can do teaches you, the
+engineer, what you can actually do with
+these tools. Monitoring lets you tap
+into the potential that your tool can
+have. So, it looks like our mobile
+version shipped. Okay, this is something
+of course we can come in and tweak event
+streams here. We probably want to
+increase the default size of this, the
+default height on mobile. That's fine.
+So, what does this look like? How does
+this actually work? Let's look at the
+events flowing through the system. Let's
+look at our small fast haik coup model
+giving us summaries on the event. Right,
+this is really powerful. We want to be
+able to observe very quickly at a
+glance. We got a notification here from
+one of our agents. Accept the changes
+there. That looks great. Infinite agent
+loop still running here. That looks
+great. All right. So, let's go ahead and
+understand how this works. Okay. From
+end to end cloud code agent to hook to
+server to client, we can see the
+following structure. As you know from
+the previous video, we have the claude
+directory and we've added a new hooks
+directory. If we open up settings, we
+can understand what's going on. And of
+course, it all starts from the hooks and
+see we have all of the events getting
+tracked. And let's just look at pre-tool
+use. We've added another hook. So
+instead of running one hook, we're
+running two hooks. Something very cool.
+We have this pre-tool use specific
+script. We're of course using Astral's
+UV single file Python scripts. This is a
+great way to isolate code and to create
+standalone scripts. But then we have
+something really cool down here. We have
+this new script here. And we can, you
+know, just shrink all this so that it's
+a little bit more readable. This looks
+like this, right? So in this directory,
+we have this send event method and it
+has a couple of args. We have the name
+of the application we're operating in.
+We have the event type and then we're
+adding this summarize flag. And the
+summarize flag is of course what's
+creating these summaries here on the
+right with our small fast haiku model.
+>> Sub aent complete. Sub aent complete.
+>> We're not going to dive into the natural
+language responses here. We covered this
+in our previous video. I'll link that in
+the description. Check that out after
+you understand multi-agent observability
+in this video. So if we look for send
+event, we have this running in all of
+our hooks. You know, you can see post
+tool use has it, pre-tool use has it,
+notification has it, stop.
+>> Dan, task nailed. What's next?
+>> We have sub agent stop and pre-ompact,
+right? The new cloud code hook that runs
+right before you compact. These are all
+running it. They're all passing in their
+own information. This enables this
+script to be dynamic and to handle every
+one of our hooks. What happens in send
+event? Let's look at this. We have the
+event data, which is just whatever JSON
+payload you want to send to the server.
+We have our local server running that's
+capturing events. We have apps, client,
+server, and demo. The server is
+receiving all of these events. And
+you'll notice this pattern that I'm
+adopting in every video and every
+codebase I operate in. Now, the actual
+application is inside of the wrapping of
+our generative AI technology, of our
+generative AI scaffolding. We're
+starting to build out an aentic layer
+around our codebase. and I'll highlight
+all the essential folders that make up
+that agentic layer. There are more of
+these agentic directories that we're
+going to be talking about on the
+channel. Make sure you're subscribed so
+you don't miss those. This new layer
+around your codebase is going to change
+the way you engineer forever. But you
+need to know where to put the right
+thing. More on that in the future.
+Again, make sure you're part of the
+journey. Here's apps. You know, the only
+thing we need to look at in the server.
+You can see the ESCO like database right
+there. Nice and portable. And then in
+the source, we're going to have our bun
+server. Our cloud code event gets kicked
+off no matter where this cloud code is,
+right? Keep in mind, we have hook set
+up. So the hook just fires off a, you
+know, HTTP request with the event. So it
+can go anywhere you want it to. And so
+that's what our send event is doing. So
+that's the cloud code and cloud code
+hook side of things. It then gets passed
+off to the server. And if we open up the
+server here, run a quick collapse, you
+can see all we have here is our
+slashevents. This is just a simple
+manual bun server. We are inserting this
+into the database and then broadcasting
+the event to our websocket client. Nice
+and simple. This is the server and this
+is of course the client. We have a use
+websocket event like this which mounts
+and handles our websocket. So classic
+stuff, right? This is Vue.js. Every
+front-end framework has their own
+version of this code. You know, you can
+easily use an agent, use a powerful
+model to completely convert this to
+whatever front-end framework you want.
+These things don't matter anymore.
+Frameworks are irrelevant when it comes
+to raw productivity. Your agent knows
+all of them. The key here is we have
+connect after it's connected. We have
+this websocket on event and we're just
+taking all of our events, slicing them
+because we don't want to overflow with
+too many events. Add them to this
+reference. And then, of course, our
+reference here is going to be available
+via this composable, right? via this
+hook use websocket and then our front
+end consumes this. So if we just search
+all for this, you can see in app.view,
+we're using this websocket event here
+and then we're passing in our events to
+anyone that's interested in our
+components and then the rest is
+front-end boring component stuff, right?
+So nothing special there for your
+observability systems. The key is you
+want to keep it simple. You want to put
+something up right away. And the
+quickest way to do that is a oneway data
+flow from your cloud code agents to your
+server. Server is going to store to both
+our SQLite database and our websocket
+client. So if we hop into our database,
+you can see exactly what this looks
+like. And then you can see all the data
+we're storing. And I can even open up
+our SQLite database. This is what it
+looks like with a quick preview. You can
+see source app, session ID, event, and
+then the raw payload. And then some of
+the stop events will of course have the
+entire chat attached. And this is what
+the data structure looks like at a high
+level. And then we of course just emit
+all the events to the front end. If we
+open up the readme, you can understand
+how to get the setup on your own. And
+really what I want to do here is I'm not
+here to tell you how to observe your
+agents. I'm here to show you what you
+can do. I'm here to help you tap into
+your potential with this powerful
+generative AI technology. This codebase
+is going to be available to you. Link in
+the description. use this as a starting
+place to understand what you can do with
+cloud code, the best agentic coding tool
+in the game. We're taking our big three.
+We're taking our principles of ad coding
+and of agentic coding, and we're
+starting to put them to work. And the
+key is that as you scale up the number
+of agents doing work for you,
+specialized agents working on specific
+code bases, solving specific problems
+very well, you want a way to observe
+them, right? You want a way to monitor
+your agents. You want a concrete way to
+monitor success. None of this generative
+AI technology matters if you have no
+idea what's going on. If you don't know
+how to steer, correct, and control your
+agentic systems, it's as good as
+garbage. Okay, so this is what we're
+doing here. You can see our summaries.
+So powerful, so useful. Just quick,
+highlevel, small, fast language models.
+This is a great use case for these
+small, fast, cheap models. I've sent a
+thousand of these events so far just in
+testing. I haven't even set these up
+against my real multi- aent system yet,
+but I've spent less than 20 cents on
+thousands of events. So, this is where
+small fast models really shine, right?
+These one-off quick summaries, these
+quick prompts. Once you start scaling up
+from one agent running on your machine
+to multiple agents running on your
+machine like this to multiple agents
+running on different machines, you get
+something really incredible. You start
+pushing in to true off-device agentic
+coding. This is the future of
+engineering. You want to be on this
+trend. You want to be writing this. You
+want to be pushing toward this.
+Prompting back and forth, one prompt at
+a time is not the way to engineer. It's
+a great place to start. It's a terrible
+place to finish. Things are going to
+continue to progress and on the channel
+we're going to continue to progress
+beyond the curve.
+>> Your agent needs your input.
+>> We're going to move beyond the state.
+We're always looking at where the ball's
+going, not where the ball is. Pay
+attention to what your agents are doing.
+Understand what your agents can do. Use
+multi- aent observability. Start
+spinning up multiple agents focused on
+one specific task for you. Specialize
+your agents and then scale them up. The
+big idea here is that we want to get out
+of back and forth prompting mode like
+this and we want to move into fully
+trusted, fully agentic, programmable
+agentic coding. I'll also link that
+video in the description. Everything
+we're doing on the channel is pushing
+towards something big, hence the phase 2
+agentic coding course coming in the next
+couple of months. I'm ultra excited to
+share that with you. What we're going to
+do next is going to be truly
+mind-blowing. So anyway, stay tuned for
+that. Make sure you're subscribed so you
+don't miss what's coming next in the
+Agentic coding and the Agentic
+engineering world. You know where to
+find me every Monday. Stay focused and
+keep building.

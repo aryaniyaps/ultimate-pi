@@ -1,0 +1,67 @@
+[1.8s] Hi Kevin, thanks for showing the issue
+[3.3s] where the prompt optimizer would
+[4.6s] randomly fail if the number of
+[5.9s] evaluations allowed was not high enough
+[7.8s] for the number of tests. As you can see
+[10.2s] here, it'll now give an error if there
+[12.8s] aren't enough evaluations allowed to run
+[15.8s] even a single optimization cycle.
+[17.7s] Additionally, it'll [music] give a
+[18.7s] warning. you would be able to reach the
+[21.0s] target number of iterations with the
+[22.7s] number of evaluations you allowed given
+[24.8s] the number of tests and you're able to
+[26.7s] accept or reject continuing with the
+[29.2s] number of optimization iterations that
+[30.9s] could be run given the maximum
+[33.3s] evaluations allowed. Thanks. Hey Blanket
+[36.6s] Mountain, we have finally updated our
+[38.2s] docs to include a link to the new
+[40.2s] studio. um you [music] can access it
+[42.6s] here and uh it gives you an insight of
+[45.6s] what the new studio looks like and how
+[48.2s] traces are displayed and events are uh
+[51.0s] rendered. Um we hope you like the new
+[53.7s] studio, give us some feedback on discord
+[55.7s] and uh thank you. Hey everyone who uses
+[58.5s] and loves prompt fiddle, you might have
+[60.2s] noticed recently that if you have an
+[61.8s] error in your code, the red squiggly
+[63.8s] line would show up in the upper leftand
+[65.4s] corner. That was just a little bug that
+[67.2s] slipped in as we've been doing a lot of
+[68.6s] work behind the scenes, but I fixed up
+[70.2s] that regression. So now your errors show
+[72.0s] up where the errors are. [music] Thanks
+[73.6s] a lot.
+[74.2s] >> Hello particular name. Thank you for
+[76.4s] reporting the bug where our Rust code
+[79.0s] did not compile for AR 64 targets.
+[82.6s] Since you requested that we now use
+[84.2s] characters instead of U8s and now
+[85.8s] [music] we compile on all architectures.
+[88.2s] Hope this helps.
+[90.3s] >> Hey everyone. So today we are adding CLI
+[92.9s] telemetry. there is a very [music] vast
+[95.1s] discrepancy between the amount of
+[96.8s] discord users we have for instance and
+[99.4s] uh npm package downloads. So we wanted
+[101.7s] to have more visibility of how um
+[104.1s] [music] is breaking is working for
+[106.3s] everyone and you know the vast silent
+[107.9s] majority that we have. Uh we're just
+[110.1s] connecting very general stuff. [music]
+[112.8s] So what version are you on? What
+[114.4s] language are you using? Things like
+[115.8s] that. And of course we aren't collecting
+[117.5s] anything specific to your user or
+[119.7s] machine. [music] And all of this can be
+[121.1s] disabled by the simple uh end variable
+[124.2s] with any truthy value. [music] Um this
+[126.6s] shouldn't get in the way as well. It's
+[128.0s] fire and forget. It breaks. We don't
+[129.8s] care. Uh but hopefully [music] that will
+[132.2s] allow us to bring more uh awesome Babel
+[135.5s] products for you all. So thank you so
+[137.4s] much and have a good one.
+[142.8s] [music]

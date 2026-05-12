@@ -1,0 +1,1613 @@
+[0.1s] What's really interesting about this
+[1.3s] approach is like I use this all the
+[2.5s] time. Uh and I do in slightly different
+[4.6s] flavors, but the idea is like the more
+[6.3s] assumptions that you can bake in ahead
+[8.1s] of time and the more correct your design
+[10.4s] is, the more likely it is that your
+[11.8s] implementation will be correct. It's
+[13.1s] [music] 307% the dumb zone detection.
+[16.1s] Generally, the less context you use,
+[18.3s] that's that's a smart zone. So once you
+[21.2s] start hitting like 40 50 70 80 90%. It
+[25.0s] it's not that you're in the done zone,
+[26.2s] you're just being less efficient with
+[27.7s] answering questions.
+[28.7s] >> Yeah. you're you're getting worse. If
+[30.3s] your if your problem is really easy, you
+[32.2s] can solve things in the dumb zone. The
+[34.6s] harder your problem is, the more you
+[35.9s] want to optimize for doing most of the
+[37.6s] work in the smart part of the context
+[39.2s] window. By the way, here's the here's
+[41.0s] the learning test output that got added.
+[42.9s] So, we actually have like the observed
+[44.6s] output from the test, which shows
+[46.5s] exactly like how the state machine of
+[48.8s] the internal quad thing behaves when we
+[51.0s] feed additional messages into it. So,
+[52.6s] this is super valuable. This did exactly
+[54.2s] what I wanted.
+[59.8s] Hello everyone. I'm Bipal. I'm one of
+[61.5s] the [music] co-hosts of AI that works.
+[62.9s] Every Tuesday, Dexter and I get together
+[64.6s] and we like to go talk about AI stuff
+[67.0s] that kind of works. I work on BAML which
+[69.7s] is a programming language for building
+[70.8s] AI pipelines. And this is my co-host
+[73.1s] Dexter who works on human layer and has
+[75.2s] been known for context engineering.
+[76.8s] >> Amazing. Uh incredible intro. And today
+[80.2s] we are going to do uh a very fun segment
+[82.2s] that we do uh roughly once a month uh
+[84.6s] called No Vibes Allowed where we are
+[87.0s] going to put a bunch of this stuff into
+[88.4s] practice and we are just going to live
+[90.4s] stream me and Vib collaborating on a
+[92.7s] feature in uh one or both of our tools
+[95.8s] that we work on every day. So you're
+[97.6s] going to get a peak under the hood of
+[98.9s] how we build uh using all this stuff
+[101.2s] putting it all into practice. Uh so
+[104.0s] today uh I guess we can get into it. Um
+[108.5s] we are going to be building um if you've
+[110.6s] seen other live streams we use a tool
+[112.6s] called uh Riptide uh which is the
+[115.3s] working title for the human layer IDE uh
+[119.0s] named TBD uh but if you hear us say
+[121.1s] Riptide or code layer that is what we
+[123.3s] were talking about. So I'm going to pull
+[125.0s] this open. Riptide is basically a
+[126.8s] manager workflow thing. Um just to just
+[130.2s] to walk you through kind of what we're
+[131.5s] doing here. Um I'm just going to launch
+[133.4s] a Cloud Code session here. Um, and
+[136.6s] essentially what you're going to see is
+[139.2s] a demo of what we're going to build
+[140.9s] today. So I can say this, I can say, you
+[142.8s] know, bash sleep 10. And then the issue
+[146.3s] that we have with this is I cannot
+[149.1s] actually uh if I want to send another
+[152.1s] message when you're done sleep again.
+[155.8s] There's no way to cue this. I can
+[157.4s] interrupt the model and send another
+[158.9s] message which will cause this like
+[160.2s] interruption thing to flow through the
+[161.6s] tool call pipeline. But what we really
+[163.7s] want is the ability to cue a message.
+[165.4s] Does that sound right, VBOV?
+[167.8s] >> Exactly. Because one of the most
+[169.4s] annoying things that I love to do in
+[171.7s] other agent systems is I press enter and
+[173.7s] it waits until it's done and then cues
+[175.5s] it on.
+[176.6s] >> Yep. And we've actually done uh an
+[178.4s] episode before about interruptible
+[179.9s] agents and how to build message queuing
+[181.6s] and how to decide when and how to
+[183.7s] interrupt and what to provide in the
+[185.4s] interruption message. Right.
+[186.6s] >> Exactly. Because interruptions are
+[188.1s] slightly different than queuing, but the
+[189.4s] technology stack is the same.
+[191.6s] >> Yep.
+[192.8s] So, I'm just going to get this ready
+[194.6s] real quick. Um,
+[197.1s] I'm just going to make sure we have the
+[198.6s] latest main pulled. Okay, we're there.
+[201.8s] Um, and then basically what I've done is
+[204.5s] uh to prep for this episode is I've
+[206.0s] actually done the early parts of the
+[207.4s] workflow. So, we've talked about a
+[209.3s] little bit about um kind of the the
+[212.7s] workflow steps and I'm actually going to
+[214.9s] pull um so we have this long workflow of
+[217.4s] going from research questions through to
+[218.6s] research through to design. We're going
+[219.6s] to walk through this. We've walked
+[220.5s] through this on previous episodes as
+[221.8s] well. Um, since the last time we did one
+[224.2s] of these episodes, we kind of only made
+[225.5s] it through to the structure outline and
+[227.5s] the planning phase. We didn't actually
+[228.8s] ship any code. I have actually gone
+[231.0s] ahead and gone through to the design
+[232.8s] discussion. I haven't looked at it yet,
+[234.2s] but just this morning I kicked off a
+[235.8s] job. So, um, if we come into Rip Tide,
+[238.6s] we've created our research questions.
+[240.8s] Um, and you can come see here's the
+[242.4s] ticket that I wrote which has a couple
+[243.8s] comments between me and Kyle of like,
+[245.7s] hey, we want to support message queuing
+[247.4s] using the cloud agent SDK.
+[250.5s] And so those questions were used to
+[252.6s] create a large research doc which kind
+[255.7s] of outlines how we use the async
+[257.6s] prompting, how the state machine for
+[259.6s] sessions works,
+[261.6s] um the states in which we allow you to
+[263.4s] send a new message, the interrupt flow,
+[265.8s] the continue session flow, all this kind
+[267.5s] of stuff. Um Vibb, do you want to go a
+[269.6s] little bit deeper on any of this stuff
+[270.6s] or like you're you're kind of familiar
+[271.9s] with the tool and the architecture. So
+[273.8s] >> yeah. So um I'll hop into the doc really
+[276.3s] fast just to catch people up on what
+[277.7s] what we're going to be doing.
+[279.2s] >> Yeah,
+[279.5s] >> I'm at the bottom Dexter.
+[280.8s] >> Yep, I got you.
+[282.1s] >> So this ID uh and today what what the ID
+[285.4s] allows us to do is you can press this
+[287.3s] button and you can hit interrupt
+[290.4s] interrupt
+[292.0s] while the process is happening. That's
+[293.5s] the only way that you can actually go do
+[295.0s] things. I think the the default that
+[297.8s] we're trying to go do is make it so the
+[300.1s] default here changes from interrupt into
+[304.7s] Q. And of course, you should still be
+[307.0s] allowed to interrupt as before.
+[309.4s] >> Yeah,
+[309.8s] >> but by default when you press enter it
+[312.4s] should just add the message on and wait
+[314.4s] until the system is done and then
+[316.2s] proceed onwards. This isn't that hard
+[318.6s] especially because we're living in a
+[319.8s] single process machine that makes it
+[321.3s] life much easier. We're not doing a
+[322.6s] distributed system. So some of the race
+[324.6s] condition stuff is kind of handled for
+[326.2s] us for free which is kind of nice. And
+[328.4s] then the only other question to ask is
+[330.2s] how do we make it so that it's very easy
+[331.8s] to modify the cued messages? How are we
+[334.3s] allowed to cue multiple messages at
+[335.8s] once? Do they all can get concatenated
+[337.5s] together as a single message? Like what
+[339.5s] happens in the queueing behavior there?
+[341.8s] Um, but otherwise like I think this
+[343.8s] should hopefully be a straightforward
+[345.2s] task and hopefully people can get a
+[346.8s] pretty good idea of how we would
+[348.0s] technically what the difference is
+[349.8s] technically between an interrupt and a Q
+[351.4s] and we'll get to talk about some of the
+[352.5s] technical concepts as well.
+[354.0s] >> Yeah. And just to kind of demo how this
+[355.8s] works maybe briefly in the cloud code
+[358.7s] CLI itself. Um, I can launch claude
+[362.9s] here. I could say
+[365.3s] bash sleep 10 and then I can say when
+[367.5s] you're done sleep again.
+[371.0s] >> Yeah.
+[371.3s] >> Uh and so that gives the message. Yeah.
+[373.4s] This is the behavior we want to
+[374.6s] implement. The cloud SDK supports it and
+[376.6s] we've done some research. Um and I even
+[378.6s] had our one thing that's really fun is
+[380.1s] you can actually have claude I think one
+[381.5s] of these actually did like a rip gp
+[383.3s] through the SDK source code itself
+[388.2s] um
+[388.6s] >> to go find it. see to go find actually
+[391.9s] just like the types
+[394.2s] for let's see yeah cloud agent SDK. So
+[397.0s] we looked in node modules and actually
+[398.8s] like went through and found the types
+[400.3s] and the the interfaces and some [snorts]
+[403.0s] of the code inside cloud is minified but
+[404.9s] you can at least explore the types
+[406.2s] itself.
+[407.4s] >> Yeah. Uh, Riverside is not open source
+[410.3s] as of right now, but it's it's a you can
+[413.6s] go ahead and actively sign up for the
+[415.1s] weight list and then get access to it
+[416.6s] pretty easily. Yes,
+[418.5s] >> especially for people on the show.
+[420.3s] >> Yes. So, um, I've gone and created our
+[423.3s] design discussion um, which was just a
+[425.4s] session um, here used the create design
+[427.4s] discussion skill went through and did
+[429.0s] some analysis and then we've built this
+[430.6s] design discussion doc. So, I haven't
+[432.2s] looked at this yet. Um but one thing I
+[434.6s] want to do before we look at this is I
+[436.9s] know that we don't have we talked a lot
+[438.6s] about learning tests and about how do
+[440.1s] you create feedback for uh claude to
+[443.3s] understand especially libraries which
+[444.6s] are closed source like the cloud code
+[446.2s] SDK the the wrapper parts are open
+[448.5s] source but the binary itself is not. So
+[451.0s] we really really like to build some what
+[453.2s] I call learning tests here which um
+[457.9s] uh let's see let's find one here. So
+[459.7s] this is an example where we're actually
+[461.2s] going to run the cloud agent SDK and run
+[464.0s] it in bypass permissions and like make
+[466.2s] some assertions about how like what
+[469.3s] sorts of messages and JSON come out of
+[471.5s] this. Does that make sense?
+[473.7s] >> Yep.
+[474.8s] >> So I've actually primed it as well in
+[477.2s] another session of just like cool read
+[478.7s] the design discussion and then um
+[482.6s] and then basically like come up with a
+[484.6s] proposal for proving how this stuff
+[486.9s] works. And so one thing that we found
+[489.5s] was like our we do have a streaming
+[491.4s] input test but it uses a timeout and it
+[493.8s] doesn't actually test that you can like
+[495.4s] cue a message. So I think um this is
+[499.0s] probably the right one. So, I'm just
+[501.0s] going to come on here and um um can you
+[504.1s] just create exactly one test where the
+[506.3s] model has a tool approval for the bash
+[509.5s] tool and ask it to do bash sleep 10 and
+[512.7s] then immediately cue another message
+[514.5s] that says, you know, when you're done,
+[516.1s] sleep again. We'll actually do bash
+[518.6s] sleep 3 just so the test runs more
+[520.2s] quickly. Um but let's get this running
+[522.2s] and let's get enough example code that
+[523.8s] you're able to um update the design doc
+[526.2s] with any findings um with how the SDK
+[528.4s] actually behaves.
+[530.3s] Does that make sense?
+[532.0s] >> Yeah. And again, these models are really
+[533.8s] good at pattern recognition. So really
+[536.0s] what Dexter you're doing here is you're
+[537.7s] helping you've built a pattern in your
+[539.7s] repo that says we use this opaque tool
+[542.6s] called cloud code that doesn't really
+[544.6s] document very well its behavior. So in
+[547.3s] order to deal with that we have a
+[548.6s] pattern for how to explore the SDK in
+[550.6s] the form of learning test. We talked
+[551.8s] about this aentic back pressure.
+[554.0s] >> Yep. uh uh like either last two episodes
+[556.7s] back and then when now that the model
+[559.6s] can just replicate it doesn't have to
+[560.9s] innovate anything it's literally
+[562.2s] replicating its existing learning test
+[564.6s] and most importantly you're using the
+[565.8s] same terminology there called learning
+[567.4s] tests
+[568.2s] >> so like you're using the same word so it
+[570.0s] knows exactly what to do replicates a
+[571.4s] pattern really fast the harness knows
+[573.4s] what to make happen so then what's
+[575.8s] happening now is if it is able to go and
+[578.9s] confirm something about the queuing
+[580.6s] behavior it should be able to give you
+[582.4s] all the design information you need on
+[584.1s] your end
+[585.7s] >> to make that behave properly.
+[588.5s] >> Right? And this is kind of like one of
+[590.1s] the one of the challenges with this
+[591.9s] whole like planning workflow and we
+[593.7s] talked about this in the in in the back
+[595.2s] pressure episode, but like what happens
+[596.9s] if you have some assumption because you
+[598.4s] read the docs but the docs were wrong or
+[600.2s] misleading or you misunderstood them or
+[601.8s] Claude misunderstood them. Like you're
+[603.4s] not going to find that out till you're
+[604.6s] like two phases into your implementation
+[606.7s] and then you're going have to go rewind
+[607.8s] and redo all of this work. So, this is
+[609.9s] kind of a an opportunity to jump back
+[613.2s] and kind of do some like there's there's
+[615.0s] a couple flavors like there's research
+[616.6s] from code,
+[619.1s] >> there's research from the web, and then
+[622.2s] there's like research from like proofs.
+[625.1s] B, I call them proofs or learning tests
+[626.8s] or whatever you want. But there's like
+[628.2s] multiple different ways to build up
+[629.9s] knowledge about what is true about the
+[632.3s] world, whether it's my codebase or
+[634.1s] external things before we decide how
+[636.6s] we're going to approach building
+[637.8s] something. What's really interesting
+[639.1s] about this approach is like I use this
+[640.5s] all the time uh and I do it in slightly
+[642.6s] different flavors but the idea is like
+[644.2s] the more assumptions that you can bake
+[645.8s] in ahead of time and the more correct
+[647.4s] your design is the more likely it is
+[649.7s] that your implementation will be
+[650.8s] correct.
+[651.7s] >> Exactly. You want to minimize minimize
+[653.8s] the chance of surprises because then
+[655.6s] you're like deep in a thousand lines of
+[657.9s] code changes and you have to try to like
+[660.1s] ren your way out of it.
+[662.1s] >> Exactly. And now imagine a scenario and
+[664.7s] there's this I mean Amazon's famous for
+[666.8s] leadership principles but like and I
+[669.0s] know they're a meme almost in a lot of
+[670.6s] scenarios for I know them but there is
+[672.9s] one that I I personally abide by really
+[675.0s] well which is just that great leaders
+[676.6s] are right a lot and the fundamental
+[679.4s] matter is like the way that you get
+[680.6s] right a lot is you make really good
+[682.2s] decisions up front and when you're when
+[683.8s] you're right it's not that you're good
+[686.0s] because you're right. It's that when you
+[687.8s] are right, you move so much faster than
+[689.9s] any other competition because you don't
+[692.0s] have to go back and fix your mistakes.
+[694.9s] So what ends up happening in coding is
+[697.7s] the more the less mistakes you make even
+[699.9s] though it feels slower
+[702.6s] actually the way faster that you move
+[704.5s] because you're not backtracking. And
+[705.8s] backtracking is the hardest thing to go
+[707.2s] do. Even even though now in cloud code
+[708.7s] you can rewrite the whole system from
+[710.0s] scratch. If you're going to make a
+[712.3s] mistake, you will you will literally
+[715.2s] just move way slower. And especially if
+[717.5s] you make an architectural mistake, then
+[718.8s] you'll move even slower. And if you if
+[720.8s] you detect that mistake 5 days later
+[723.4s] after you already merged it, then you're
+[725.8s] still going to be even um make even more
+[729.6s] mistakes along the way. Like you really
+[731.3s] want to minimize the chance of mistakes
+[732.6s] and you want to be technically correct
+[733.8s] whenever possible.
+[735.2s] >> Yeah. It's like decisions take not a lot
+[737.7s] of time and have a lot of impact.
+[740.4s] Whereas execution can take a lot of time
+[742.5s] and so if you waste time in execution
+[744.3s] when you could have just made better
+[745.6s] decisions then uh you're you're not
+[747.6s] going to make as much progress as
+[748.8s] quickly.
+[749.2s] >> Exactly. So like that's why I think most
+[751.1s] people uh get like this learning test is
+[754.0s] going to be phenomenal because once we
+[755.2s] know exactly how to use the cloud code
+[756.8s] SDK for queuing
+[758.0s] >> and it's confirmed with a test that it
+[759.9s] works that way the design doc here is
+[761.8s] trivial.
+[762.6s] >> Yep. Well so I will say you mentioned
+[765.3s] this is not a distributed system. This
+[766.9s] this really is a distributed system. So
+[768.6s] the architecture here is like you're
+[770.6s] entering a form in a UI which then
+[772.6s] stores things in an API which has a
+[774.6s] database of like cued messages and then
+[776.6s] the demon is actually like fetching
+[778.6s] those and then relaying them down to
+[780.5s] cloud code multiple cloud code sessions.
+[783.0s] >> Yes.
+[783.4s] >> So we will have some interesting
+[784.6s] infrastructure stuff to go through here
+[786.1s] >> but it's not you don't have the same
+[787.4s] race conditions that you have across
+[788.6s] network packets.
+[790.2s] >> That's true. Okay.
+[791.4s] >> That's what I mean like uh networks
+[793.8s] packets coming in and out of order in
+[795.7s] various ways. Like it's basically
+[798.6s] the order of delay here is like sub a
+[801.7s] mil. It should be like one or two
+[803.0s] milliseconds.
+[804.6s] >> Yep.
+[805.1s] >> Which gets rid of a lot of like the
+[806.5s] human the human pressed enter and oops I
+[809.4s] I pressed enter again before the message
+[812.2s] came back to me on round trip what the
+[813.4s] state of the world was.
+[815.1s] >> Yep. Um so this is going to keep working
+[818.2s] while this is running. Um we can pop
+[820.4s] back to our kind of main design I'm
+[822.2s] going to archive that one. we can pop
+[823.4s] back to our kind of main design
+[824.6s] discussion and just start reading this.
+[826.6s] And I'm actually going to create a uh
+[828.9s] anyone can view link and I'm going to
+[830.6s] send this to you Vibb quickly in the
+[832.4s] chat if you want to kind of like skim it
+[834.2s] on your own.
+[835.0s] >> Perfect. And then while we're here, do
+[837.0s] people have questions? Uh have other
+[839.2s] people built queuing or interrupts or
+[840.8s] other workflows along the way? I know
+[842.8s] Josh, you asked a question. Uh is 37%
+[845.8s] the dumb zone detection? Generally, the
+[848.3s] less context you use, that's that's a
+[850.8s] smart zone. So once you start hitting
+[853.3s] like 40 50 70 80 90%. It it's not that
+[857.0s] you're in the dumb zone, you're just
+[858.0s] being less efficient with answering
+[859.6s] questions.
+[860.2s] >> Yeah. You're you're getting worse. If
+[861.8s] your if your problem is really easy, you
+[863.7s] can solve things in the dumb zone. The
+[866.0s] harder your problem is, the more you
+[867.4s] want to optimize for doing most of the
+[869.1s] work in the smart part of the context
+[870.6s] window.
+[871.2s] >> Exactly. Exactly. That's like the best
+[873.5s] way to frame it. All right. We're going
+[874.9s] to be a little silent while we go read.
+[876.5s] Um but um I will uh maybe perhaps
+[879.8s] entertain people while you go read this
+[881.4s] lecture really quickly.
+[882.8s] >> Uh saying you're asking if Riptide is
+[884.3s] like cloud code. I think Riptide is a
+[886.6s] more analogous to a harness around cloud
+[889.1s] code because if you think of cloud code
+[890.6s] as a way of doing work, Riptide is more
+[892.5s] like a workflow
+[894.3s] on top of cloud code. It's a slightly
+[896.3s] more opinionated in the fact that it
+[897.8s] makes you do a little bit more like
+[899.6s] thinking up front and helps you discuss
+[901.7s] and go back and forth with the system.
+[904.2s] Whereas typically with cloud code, even
+[905.8s] in plan mode, the default um work uh
+[910.5s] workflow is like when you do cloud code
+[912.3s] planning, it produces a plan and that's
+[915.0s] often it. I see most people just hit
+[917.2s] straight enter, clear context, go
+[918.8s] onward. And that's because most people
+[921.2s] don't actually read the plan in detail
+[923.8s] >> because it's not designed to be read in
+[925.2s] detail. Like you're let's be real, no
+[926.8s] one there's a reason we don't use less
+[929.2s] to read uh the less command and grab to
+[931.8s] go read our terminal. very very few
+[933.6s] people are reading like vamp most people
+[936.1s] like to open neoim or like some other ID
+[938.4s] to go read code because UIs are nice um
+[941.7s] and reading faster
+[944.2s] >> what what what I'm doing when I'm going
+[945.6s] through this doc right is I'm like
+[946.9s] making sure it understands what the end
+[948.3s] state is of like okay yes we need to
+[949.8s] show a message in the UI they're running
+[951.6s] in they're delivered in order the demon
+[953.5s] picks them up the existing flow works as
+[955.4s] is
+[957.0s] um I would also add one thing here which
+[959.7s] is like for desired end state we want to
+[962.6s] make the default action um when you
+[965.4s] command enter while the session is
+[967.2s] running to Q message. And so there's a
+[969.5s] new button for Q message and then
+[971.6s] there's another button that will be
+[973.6s] persistent for interrupt. And so rather
+[976.1s] than a single interrupt and send button
+[978.3s] while the session is running, we'll have
+[979.9s] those two buttons. So let's highlight
+[981.3s] that in the desired end state and
+[982.7s] reflect that throughout the doc.
+[986.3s] >> And again, this thing wouldn't have been
+[988.0s] caught unless Dexter was actually
+[989.2s] reading the doc, which is why sadly
+[991.0s] Dexter is That's why he's got to be
+[992.8s] silent for some time cuz like there's no
+[994.4s] way to talk and read at the same time.
+[995.8s] >> I could I could talk through kind of
+[997.2s] like open in my like just basically like
+[1000.1s] talk thinking out loud of how I'm like
+[1002.5s] reading this or what I'm looking for.
+[1004.1s] Like we have the desired end state and
+[1005.5s] then the next level down is patterns to
+[1007.0s] follow. Right? We talked about how AI
+[1008.5s] models are really really good at finding
+[1010.9s] and understanding and like matching the
+[1012.9s] patterns that already exist in your
+[1015.4s] codebase. And so one of the reasons I've
+[1018.0s] built this into my design doc system is
+[1021.1s] basically because I want to get a brain
+[1024.6s] dump of what the model is thinking and
+[1026.3s] what it has seen because if the model
+[1028.7s] goes and starts coding you might catch
+[1030.3s] it in the middle of coding like oh you
+[1032.0s] picked up the wrong pattern. Now, our
+[1033.6s] codebase is only a couple months old, so
+[1035.4s] it's got mostly good patterns.
+[1037.3s] >> But when we work with people who have
+[1039.8s] very old codebase, have been around for
+[1041.4s] 10 years, and have five different ways
+[1043.0s] of doing something like let's say an
+[1045.0s] atomic uh SQL update, we want to make
+[1047.4s] sure that we're doing those inserts
+[1048.6s] correctly.
+[1049.5s] >> Exactly. And like the idea is like
+[1051.8s] >> and really it's like look, one bad GP in
+[1054.6s] your cloud code uh like code research
+[1057.0s] system is all it takes for your system
+[1059.3s] to be bad. like that. Great leaders make
+[1063.0s] right decisions. That's one bad GP and
+[1065.5s] you've made the wrong decision. And if
+[1066.8s] you're not even reading it, let's be
+[1068.6s] real, we don't read all the code
+[1070.1s] generates. That's just slop that gets
+[1072.3s] amplified over and over and over again.
+[1074.0s] And that also has consequences because
+[1075.8s] next time the odds of getting that bad
+[1077.8s] GP go up because like it's like, oh, you
+[1080.9s] just reinforce the pattern in a very
+[1082.6s] modern way in a more recent time frame
+[1084.5s] saying that pattern was acceptable. It's
+[1086.2s] like, of course, I'll do it again. Your
+[1087.8s] codebase will always regress to the
+[1090.0s] average of the best pattern and the
+[1091.8s] worst pattern in the codebase. It will
+[1093.7s] just have more of the bad ones and also
+[1095.9s] maybe sometimes pick up more of the good
+[1097.3s] ones, but it will just
+[1098.4s] >> you say your code will probably converge
+[1100.2s] on the most common patterns in your
+[1101.8s] codebase. It converges to the mode more
+[1103.9s] so than anything else.
+[1105.8s] >> Yeah,
+[1106.2s] >> because like whatever it finds more
+[1107.6s] often is what it works.
+[1109.0s] >> Um, Alvaro, you've got a great question.
+[1111.0s] How do you handle when agent when the
+[1112.9s] agent is constantly getting into issues?
+[1115.9s] I've been asking it to update its
+[1117.6s] progress and blockers in an
+[1119.0s] implementation summary file, but is
+[1121.6s] there a point where I try a different
+[1123.6s] approach? Do you persist these progress
+[1125.0s] files somewhere after you're done with
+[1126.3s] the done with the task? So, one of the
+[1128.6s] other nice things about Riptide is you
+[1130.0s] do get all these files preserved in a
+[1131.7s] nice little like sharable link. So, like
+[1133.1s] for example, Dexter just shared that
+[1134.4s] with me.
+[1135.4s] >> Well, I can tell you our workflow, I
+[1138.5s] don't actually check in these plan files
+[1140.2s] everywhere into my repo. Plan files are
+[1141.9s] throwaway.
+[1142.9s] >> Research files are throwaway. They're
+[1144.2s] like task specific. It's very similar
+[1145.8s] like um if any of you have ever worked
+[1147.8s] in like a large company like for example
+[1149.6s] like when I worked at Google we wrote
+[1150.9s] design docs all the time but we also
+[1152.9s] never referred back to design docs after
+[1154.6s] the implementation and that's
+[1156.1s] >> the code base as soon as it's shipped
+[1157.9s] the code is the new source of truth.
+[1159.8s] >> Exactly. So every time you want to go
+[1161.4s] learn what the system does like sure
+[1162.8s] maybe you'll give a design doc to a new
+[1164.1s] hire that came in to understand it
+[1165.5s] conceptually but I would never tell a
+[1167.0s] new hire to be like this design doc is
+[1168.8s] what is true.
+[1169.8s] >> Yeah.
+[1170.1s] >> If you want to know the truth read the
+[1171.8s] code. So, and that's why we always
+[1174.0s] generate the research on the fly as
+[1175.5s] well. We don't we don't really rely on
+[1176.9s] like codebased context, high level.
+[1178.6s] >> And you definitely don't want to
+[1179.7s] preserve. Yeah. You It's just so cheap
+[1182.6s] and like timewise and moneywise to go
+[1186.5s] determine um the research that it's
+[1189.2s] literally not worth uh storing this
+[1191.6s] information.
+[1192.5s] >> Yep. So, here's
+[1194.4s] >> by the way, here's the here's the
+[1195.9s] learning test output that got added. So
+[1197.8s] we actually have like the observed
+[1199.4s] output from the test which shows exactly
+[1201.9s] like how the state machine of the
+[1203.8s] internal quad thing behaves when we feed
+[1206.0s] additional messages into it. So this is
+[1207.8s] super valuable. This did exactly what I
+[1209.3s] wanted.
+[1210.2s] >> Yeah. Uh Joshy, you've got a question.
+[1214.2s] Um
+[1215.8s] can you specify new patterns? Uh for
+[1218.2s] example, let's say I'm creating a V2 API
+[1221.3s] that's diff that uses a different
+[1222.9s] pattern than V1 API. How can I say use
+[1225.8s] the new V2 pattern? Well, that's really
+[1227.6s] easy. You just tell it use the new V2
+[1229.4s] pattern and like cloud code when it does
+[1231.0s] the research like as a part of your
+[1232.2s] ticket definition or your original task
+[1234.4s] that you do before performing the
+[1235.9s] research. You just say we strongly
+[1238.6s] prefer V2 over V1. Then you let it
+[1241.0s] discover the research, produce the
+[1242.2s] design doc. Then you read the design doc
+[1243.7s] to confirm that it made that critical
+[1245.6s] design decision of your choice saying it
+[1248.1s] better be using V2, not V1. and it might
+[1250.4s] still reference V1 as like an older
+[1252.3s] pattern, but it still says, "Hey, V2 is
+[1255.4s] the more consistent pattern that we want
+[1257.0s] to go use." Uh, but it's it's twofold.
+[1260.2s] It's one about telling it to do it, and
+[1261.8s] two about actually just verifying that
+[1263.2s] it did do it. Again, it's very similar
+[1265.0s] to hiring a junior engineer. Like when
+[1266.6s] you're first implementing a design dog,
+[1268.6s] you have a design dog that you wrote as
+[1270.1s] a more senior engineer, you hand it off
+[1271.8s] to a junior engineer,
+[1273.3s] >> they're almost definitely going to mess
+[1274.6s] it up somehow.
+[1276.2s] >> Like almost definitely. And that's not
+[1277.9s] because they're bad. It's probably
+[1279.2s] because you missed something in the
+[1280.2s] design dock or you had some small thing
+[1281.8s] that was slightly off or you had a
+[1283.4s] bakedin assumption that was in your head
+[1284.8s] that you didn't feel necessary to write
+[1286.2s] it down. So how do you validate that
+[1288.3s] system? Well, you go read their system
+[1290.6s] like whatever they implement that you go
+[1292.1s] read and validate that it matches the
+[1293.9s] doc at least for the most critical
+[1295.4s] parts.
+[1296.2s] >> Well, and the inverse is also true,
+[1298.2s] right? So like Kyle, my CTO is like kind
+[1300.5s] of the end all owner of this codebase.
+[1302.5s] And I actually don't know the answer to
+[1304.7s] like like in in this codebase, you
+[1307.1s] consider me junior to Kyle in terms of
+[1309.0s] like ownership and like opinions and
+[1311.1s] like having the last word on how this
+[1312.7s] stuff builds to make is built to make it
+[1314.6s] the most maintainable. I actually don't
+[1317.0s] know the right tradeoffs between option
+[1319.1s] A and option C. Um, so I'm just going to
+[1323.2s] take the recommendation, but if we
+[1324.6s] weren't live on a podcast, I would
+[1326.3s] actually just like copy the link to this
+[1327.9s] and send it to him. Actually, I think we
+[1329.4s] get them autolin to the to the linear
+[1331.4s] issue, but I would just copy the link to
+[1332.7s] this and send it to him and ask him to
+[1335.0s] like tell me which of these options is
+[1337.0s] correct or if we want to actually do
+[1338.3s] like an option D that's not even
+[1339.8s] surfaced.
+[1340.5s] >> Let's what are the options here?
+[1342.1s] >> So, the option one is basically we're
+[1344.0s] going to add a new uh collection
+[1345.8s] watching the conversation events table
+[1347.7s] which is like
+[1348.6s] >> it's a little bit over. So, conversation
+[1350.3s] events powers all of the events in this
+[1352.4s] stream. Um, so it's the the user
+[1355.1s] messages that the user enters merged
+[1357.4s] with all the events we got from the
+[1358.9s] cloud SDK. So we already kind of use it.
+[1362.6s] Um, I'm actually like,
+[1364.6s] >> can you add more detail on the tradeoff
+[1369.0s] >> between a option B is a terrible idea.
+[1371.4s] It's like putting a cute messages JSON B
+[1374.3s] array which makes it really hard to doc
+[1376.6s] really hard to do atomic updates on that
+[1377.9s] one.
+[1378.2s] >> Yeah, exactly. Yeah, that's a no-go.
+[1380.4s] That's like clearly a nogo. Option C is
+[1382.8s] basically create a new table in a new
+[1384.6s] collection. Um, I think like option C is
+[1389.8s] a little cleaner slash safer, but option
+[1394.7s] A seems simpler. I just don't know what
+[1399.4s] the consequences will be of overloading
+[1402.6s] that table even further since it's
+[1404.4s] really meant to be a like display logic
+[1406.9s] for what shows up in the session. Well,
+[1408.9s] in some ways, Q messages actually are
+[1410.9s] good to display the logic because they
+[1413.2s] are basically also going to be displayed
+[1415.0s] and the state of the message is going to
+[1416.9s] be displayed. If you remember back to
+[1418.0s] the Q and interrupt episode,
+[1419.7s] >> I actually that's the right way to think
+[1421.1s] about it. There's a single source of
+[1422.5s] truth.
+[1423.7s] >> Yeah, my take is that we might want a
+[1425.4s] message Q table because that'll make it
+[1427.4s] also easier to show in the UI and then
+[1429.4s] we would just only show cued messages
+[1431.7s] matching some filter that like they
+[1433.7s] would get flagged as once they were
+[1435.4s] delivered and acknowledged and we have
+[1436.7s] the explicit life cycle. So, I'm leaning
+[1438.5s] towards C, but add a little bit more
+[1440.0s] detail and we'll come back to that one.
+[1442.3s] >> Oh, I meant like keep it in the same I
+[1444.3s] actually meant keep it in the original
+[1445.9s] one and then just basically make all
+[1448.0s] edits also like incremental on top of
+[1450.4s] it. So, and then whenever you process
+[1452.2s] the next event, you pop off all the all
+[1454.4s] the cute events and you process them all
+[1456.1s] together.
+[1457.1s] >> Yeah, I mean I think we can do that with
+[1458.7s] option option A or C. So, I'm going to
+[1461.6s] >> I'm going to just actually fire that off
+[1463.4s] and it's going to go do some thinking
+[1464.6s] and searching. And while that's
+[1465.8s] happening, I'm going to come to question
+[1467.5s] two.
+[1468.8s] >> Okay. And someone's got another question
+[1470.2s] really fast. Is there a way in human
+[1471.7s] layer to specify this? There's nothing
+[1473.6s] specific. I mean, human layer is more of
+[1475.2s] a process. Like rip tide is more of a
+[1477.1s] process of how you use cloud code than
+[1480.6s] like, hey, there's something uh and the
+[1482.8s] process itself is highly opinionated,
+[1485.0s] but it's still flexible enough to do the
+[1486.9s] thing you need to go do. So like if I I
+[1489.9s] Dexter, you you build the product. Like
+[1491.2s] I at least I can I would personally hate
+[1493.4s] it if they started opinionating very
+[1494.9s] specific things like the way my code
+[1496.1s] should be structured.
+[1497.3s] >> Oh yeah. No, we won't do that. The whole
+[1498.9s] point is like
+[1500.0s] >> I don't want to make decisions about
+[1501.5s] your codebase. Claude should you should
+[1503.9s] not want Claude or Codeex or any agent
+[1506.5s] to make decisions about your codebase.
+[1508.3s] The idea of this design discussion doc
+[1511.2s] is that like it forces the human to do
+[1514.4s] the highstakes decisionm about the
+[1516.6s] architecture of the system. But
+[1518.7s] everything up until this point is
+[1520.5s] something that AI is very good at
+[1522.0s] automating of going and reading a
+[1523.3s] 100,000 lines of code and figuring out
+[1525.2s] which ones are relevant and asking
+[1527.1s] really good like architecture questions.
+[1529.4s] But you the human are in the driver's
+[1531.0s] seat. And again like we don't even have
+[1533.0s] to answer option A or option B for this
+[1535.9s] question. We can we can even um we can
+[1539.6s] even say oh actually I want to do option
+[1541.1s] C or like kind of resteer the whole
+[1543.2s] thing. But this is your chance to before
+[1544.7s] the model starts working and coding or
+[1546.6s] even building a plan like do brain
+[1550.2s] surgery on the model and like update the
+[1552.8s] the patterns it's going to follow and
+[1554.5s] the approaches it's going to take before
+[1556.0s] we go further down this uh this process
+[1559.0s] to um
+[1561.0s] >> the structure and how we're going to
+[1563.0s] break this down into tasks and then the
+[1564.7s] actual code we're going to write and
+[1566.0s] then actually going and shipping it. So
+[1567.9s] for context, one of the things that I've
+[1569.8s] been doing is we've been reworking our
+[1572.3s] our proto system to be a lot more robust
+[1574.6s] so that you can construct more arbitrary
+[1576.2s] types and do more interesting things in
+[1577.7s] BAML. And part of that was doing a whole
+[1580.0s] migration on basically redefining our
+[1582.2s] proto. And what that really meant was
+[1585.3s] some of our types like media types and
+[1587.6s] like prompt types aren't available to
+[1589.4s] you inside the language of your choice.
+[1591.6s] We're they are available in a slightly
+[1593.4s] fuzzy way. We're making it much more
+[1595.1s] wire friendly and relatable. So I
+[1597.5s] actually went through and this was
+[1599.0s] exactly what this was. We had a V1
+[1600.5s] migration. We had a V1 version of the
+[1601.9s] portal and a V2 version of the portal.
+[1603.7s] And there's two ways that people can
+[1605.2s] approach this. One way is you have the
+[1607.1s] same codebase and you kind of create a
+[1608.9s] you kind of um make it so you kind of
+[1611.4s] kind of keep both alive together. That
+[1614.0s] Joshy is the problem you're probably
+[1615.2s] running into is like how do you tell the
+[1616.5s] model that you need to keep one thing
+[1617.7s] alive or not? Well, the way that you way
+[1619.9s] that we found best work to actually
+[1621.6s] solve this again because writing cheap
+[1623.1s] code is so cheap, they're actually just
+[1625.0s] creating a whole new folder at a at a
+[1626.8s] new top level and almost a new package
+[1628.7s] and just writing all the code in the new
+[1630.3s] package. And then anytime you have code
+[1631.8s] that's in the old package that needs to
+[1633.1s] be migrated over, you just migrate it
+[1634.6s] over and it's so so cheap to go
+[1637.3s] implement this. It doesn't matter. And
+[1639.0s] then I just went through the approach
+[1640.1s] and I basically just went through and I
+[1641.5s] did the research questions. I did the
+[1643.1s] and it came up with a bunch of questions
+[1644.6s] along the way about like what it needs
+[1646.7s] to go answer. Then it went and produced
+[1648.3s] the doc for what it needed to go do and
+[1650.1s] understand the existing type system and
+[1652.3s] actually like pulled out everything
+[1653.8s] perfectly out of here. And once I did
+[1656.2s] that, then I spent the 90% of my time
+[1658.0s] basically just iterating on this one
+[1659.6s] file over and over and over again until
+[1662.3s] it produced a really good design doc.
+[1663.8s] And you can actually see like once it
+[1666.0s] produced a design doc and I iterated on
+[1667.5s] this for quite some time, there's the
+[1669.4s] chat log is pretty big. Then I actually
+[1671.9s] did another thing which is it produced a
+[1673.6s] structured outline for what I'm actually
+[1675.0s] going to go code. And the problem is
+[1677.4s] this is a massive refactor. So it has
+[1679.0s] massive consequences across the whole
+[1680.7s] codebase. Um and a lot
+[1683.1s] >> you have to be really thoughtful about
+[1684.6s] the order you make the changes in
+[1686.2s] basically right.
+[1688.1s] >> Not not just that but I need to be
+[1689.6s] complete and I really can't have any
+[1691.6s] bugs because if if I have bugs like
+[1693.6s] testing this is like really freaking
+[1695.2s] hard because I'm basically redoing the
+[1696.9s] whole like serialization layer. So what
+[1699.6s] I do is once I've produced the layer,
+[1701.3s] not only do I read this structured
+[1703.0s] outline really carefully,
+[1704.8s] >> but then I do this really silly thing
+[1707.3s] which is I start like multiple prompts
+[1709.3s] that do this what's inconsistent missing
+[1712.2s] for the structured outline and I just
+[1713.7s] have the model rip on it and I discuss
+[1715.4s] design decisions and then after that
+[1717.8s] happens
+[1719.8s] I ask it again
+[1722.5s] what's missing inconsistent for the
+[1724.2s] structured outline. I just keep on doing
+[1725.8s] that and
+[1726.6s] >> you're basically Ralph wiggleaming your
+[1728.2s] structure outline. You're just throw
+[1729.8s] more tokens at the problem and tell it
+[1731.4s] to think more and it's giving you a more
+[1733.3s] complete result.
+[1734.4s] >> Well, no, it poses design question
+[1736.2s] design decisions to me at every single
+[1738.0s] stage of like, oh, here's what's bad,
+[1739.4s] here's what's good, here's what's bad,
+[1740.8s] here's what's good. And then I actually
+[1742.3s] think about each of these individually
+[1744.8s] >> and then I update the structured outline
+[1746.6s] and then I produce a plan. And guess
+[1748.6s] what? Once I did this, I actually
+[1750.0s] oneshot the whole implementation. I
+[1752.0s] never I never had to go edit this code
+[1753.8s] again.
+[1755.0s] And this was like maybe I I can I can
+[1756.8s] pull up the PR um just to show you how
+[1758.9s] many code was this
+[1760.5s] >> 17,000 lines of code added 13,000 times
+[1763.0s] removed.
+[1764.2s] >> Wow.
+[1764.8s] >> This was roughly what this was. But it
+[1766.6s] one shot the whole thing.
+[1768.9s] >> That's sick. Did you Did you check in in
+[1771.1s] between the phases? Like did you do any
+[1772.9s] verification or you just have it run the
+[1774.5s] test at the end of each phase? I just
+[1776.7s] had it run the test and it went through
+[1778.2s] and then and then just to be very just
+[1779.8s] to be very very transparent code rabbit
+[1781.8s] uh which is our CI which is the thing
+[1783.3s] that we use for validation actually
+[1785.0s] found a bunch of bugs and like I don't
+[1786.7s] know if I batch our code ra specifically
+[1788.2s] all these tools are roughly the same and
+[1789.4s] pretty good but like code rabbit's good
+[1790.6s] enough for us and it found some bugs we
+[1792.4s] addressed them I did a bunch more pushes
+[1794.2s] and then I merged it but like end to end
+[1796.5s] time you just look at my commit time
+[1797.8s] because this will give you a better idea
+[1799.0s] of
+[1799.6s] >> like when did I make the first commit
+[1802.1s] >> of how many commits there were so there
+[1803.5s] like roughly 18 commits I'm making this
+[1807.0s] Um, and this was two weeks ago all the
+[1811.4s] way to five days ago. So, I made some I
+[1814.6s] I got wasn't working a while ago and
+[1816.6s] then I slowly made the whole prototype
+[1818.3s] buffer stuff. So, like this is roughly
+[1820.4s] the workflow. It's just more about like
+[1822.2s] really quickly iterating in a really
+[1824.5s] good way.
+[1825.4s] >> Uh, that was a great that was a great
+[1826.8s] detour while I'm over here uh coaching.
+[1830.2s] >> Yeah. Um, so for question for question
+[1832.5s] one, we remember I asked it to add a lot
+[1834.3s] more detail and it kind of like figured
+[1836.1s] out, okay, this is kind of noisy.
+[1837.7s] There's no host ID column. There's a
+[1839.3s] bunch of stuff. So I actually like
+[1840.6s] steered it towards option three. And the
+[1843.4s] cons are like dual infrastructure, dual
+[1846.2s] right, and host ID. Like this is
+[1847.8s] actually nice. This is going to make the
+[1849.1s] system easier to maintain and debug. So
+[1851.1s] I'm going to proceed with option C. Um,
+[1854.4s] for question two, it's just asking about
+[1857.1s] um like how do we pass this in? And it's
+[1858.8s] like one of them is proven to work by
+[1860.2s] the learning test. So I'm like cool,
+[1861.6s] we're going to do that one. Um for the
+[1864.0s] API endpoint, I'm want to extend the
+[1866.6s] continue endpoint because when I send a
+[1868.5s] I don't want a separate endpoint for
+[1869.8s] queuing. I just like want an endpoint
+[1871.4s] that is like send a message and let the
+[1873.1s] API figure out the business logic
+[1875.0s] >> and then you just give it like a boolean
+[1876.5s] of like a continue or interrupt like Q
+[1879.3s] or interrupt.
+[1880.7s] >> Well, we we already have an interrupt
+[1882.5s] endpoint. And so I was like, okay, do we
+[1884.1s] extend the interrupt end on point? Do we
+[1885.4s] extend the continue endpoint or do we
+[1887.0s] add a new endpoint? And I'm like I like
+[1889.0s] the idea of like cool there's just a
+[1890.4s] thing to send a message and
+[1892.6s] >> I would unify all three of them. I would
+[1894.4s] literally just unify all three of them
+[1895.6s] to a single message that comes in with a
+[1897.2s] boolean
+[1898.1s] >> that says like that comes in with like a
+[1900.2s] state of like what kind of method you
+[1902.0s] have and like one of the states say is
+[1903.7s] auto
+[1905.7s] >> that actually would I think that that
+[1907.4s] will actually simplify your logic
+[1908.6s] because again when you're designing the
+[1910.5s] system what do I think about what I
+[1911.7s] think about is like what I want is I
+[1913.1s] want the UI to be dumb and the dumber
+[1915.3s] that I make my and this is also
+[1916.5s] applicable to everyone building like a
+[1917.6s] chat app on their website the dumber
+[1919.5s] your UI the easier it is for you to
+[1921.0s] consolidate state and business logic on
+[1922.9s] the back end when your server side which
+[1925.0s] has a couple of benefits which means
+[1926.6s] that when you eventually make your
+[1927.8s] backend agent friendly and I believe
+[1929.5s] everyone will eventually make their back
+[1930.8s] ends agent friendly
+[1933.0s] in that world now you have a uh really
+[1936.8s] nice world where your your because your
+[1940.5s] front end is dumb even the dumbest agent
+[1942.3s] can use your back end without a mistake
+[1945.1s] because the logic is consolidated in one
+[1947.1s] place not in two
+[1950.4s] and like even here like the back the
+[1952.5s] front end is basically sending a request
+[1954.4s] or a preference. It prefers that you
+[1956.5s] cue. It prefers that you continue. It
+[1958.0s] prefers that you interrupt. It prefers
+[1960.2s] that you auto. But let's say like the
+[1962.8s] back end has finished a message and you
+[1964.4s] spent Q. Q automatically becomes a
+[1967.3s] continue on the back end. Or let's say
+[1969.4s] you hit Q and there's some race
+[1970.6s] condition in the back end for that
+[1972.3s] reason. Continue automatically becomes
+[1973.9s] Q. Y
+[1975.0s] >> it's a it's a preference on the UI side.
+[1977.3s] So that deals with that's how you deal
+[1978.6s] with race conditions in this world.
+[1980.2s] >> Yeah. So, I've said basically we're
+[1981.6s] going to pass an enome which is like Q
+[1983.3s] or continue or interrupt or auto. And
+[1986.3s] basically, if you try to continue while
+[1987.7s] it's running, you'll get a 400. If you
+[1989.4s] try to queue while it stopped, you'll
+[1990.6s] get a 400. But if you do auto, it will
+[1992.6s] basically route it to the right
+[1993.8s] behavior.
+[1994.8s] >> I Yeah, I would actually not even do the
+[1996.2s] 400. I would just make it do the right
+[1997.4s] thing.
+[1999.0s] >> Interesting.
+[1999.5s] >> By default, so that way there's any lag.
+[2002.1s] If there's any lag, then you just like
+[2004.2s] >> like default to the best known state.
+[2007.6s] just have a boolean interrupt
+[2011.1s] bool that determines whether we
+[2016.1s] >> instead of the enome. Yeah, I like that.
+[2018.6s] Um
+[2019.2s] >> cuz it's it's simpler, you know.
+[2021.4s] >> Yeah.
+[2022.5s] >> And like simplicity, I think, is key
+[2024.2s] when designing these kinds of APIs
+[2025.4s] because you're not really queuing.
+[2026.6s] You're just pressing enter.
+[2028.6s] >> Yeah.
+[2029.4s] >> And you're it's just a question of do
+[2030.8s] you press cancel and enter or just
+[2032.9s] enter?
+[2033.8s] >> Yep.
+[2036.2s] And again, the logic is keep your front
+[2037.9s] end dumb. Keep your front end as dumb as
+[2040.2s] possible.
+[2041.1s] >> Yep. Um,
+[2043.1s] >> Russ, you asked a really good question.
+[2044.6s] If engineering code is so cheap, why not
+[2047.3s] build both or even all the options? Test
+[2049.0s] which one works better?
+[2050.2s] >> Well, it is cheap, but it does still
+[2051.8s] cost finite time and finite brain power.
+[2053.8s] So, let's say I could build all of them
+[2055.2s] in parallel. I would still have to
+[2057.0s] evaluate all of them in parallel.
+[2058.9s] Instead, an alternative way to spend
+[2060.4s] that same time is to build another
+[2061.9s] feature in parallel to building this
+[2063.4s] one. And that is a higher value prop
+[2065.5s] than building one thing seven different
+[2067.3s] ways. Especially if I know
+[2068.5s] architecturally the right decision to
+[2069.9s] make already.
+[2071.0s] >> I'll have to explore bad paths.
+[2073.1s] >> You're going to have to make that
+[2074.5s] decision either way. Um like which which
+[2078.5s] approach are we going to use? And so
+[2080.8s] like yes, sometimes if I don't know what
+[2083.0s] the right what the right approach is,
+[2084.6s] then I maybe I will like what we did
+[2086.4s] here is we forked off and did a learning
+[2087.9s] test because I'm like, "Oh, I want to
+[2089.1s] try a couple different approaches and
+[2090.4s] find out which one actually works here
+[2092.6s] versus the um versus versus just picking
+[2095.9s] certain architectures and stuff. Um, and
+[2098.9s] I'd rather review it at this stage,
+[2100.6s] which is a shorter, you know, 200line
+[2102.6s] artifact, than go have to review two
+[2105.0s] versions of the same thousandline pull
+[2107.1s] request
+[2108.2s] >> and test that code end to end. Like,
+[2110.2s] >> if you really have no idea, then you
+[2112.0s] should go figure that out by building
+[2113.9s] little PC's or building prototypes or
+[2116.2s] like one thing we do a lot is we use
+[2117.6s] storybook. Um,
+[2120.3s] let me see if I have this in my history.
+[2123.3s] >> Yeah, the premise is just like look, you
+[2125.1s] have to do the work no matter what. It's
+[2126.6s] just like how early can you do the work
+[2128.2s] and the earlier that you can make the
+[2129.6s] right decisions the better. The less
+[2131.1s] data you need.
+[2132.6s] >> You basically want to make decisions
+[2134.3s] with the least amount of information
+[2135.9s] possible.
+[2136.9s] >> Yeah. So another thing we'll do for like
+[2138.6s] back pressure and like design up front
+[2140.6s] is like here's a bunch of like rich
+[2142.3s] complicated components that we were
+[2144.1s] working on that like instead of waiting
+[2147.0s] until the implementation and building
+[2148.5s] the whole feature end to end with each
+[2150.2s] version of this we actually just like
+[2153.1s] okay for UI stuff that the agent's not
+[2155.0s] really going to be able to have good
+[2156.2s] like back pressure or like bring taste
+[2158.2s] on it. we can actually uh do this uh do
+[2162.0s] this in storybook and kind of like carve
+[2164.1s] off the parts of the decision making
+[2166.6s] that we're gonna do. Does that make
+[2168.6s] sense? I don't think we've talked about
+[2170.1s] this by Bob. We were going to do an
+[2171.2s] episode on this as well
+[2172.0s] >> because like if you it's just again it's
+[2173.6s] about moving decisions to making the
+[2175.4s] fastest possible decision in the right
+[2177.1s] system.
+[2178.3s] >> Yeah. Yep.
+[2179.5s] >> Um so
+[2180.3s] >> and Jensen you asked the question of
+[2182.3s] like did we cover where the docs live?
+[2184.0s] Yes. They don't live anywhere. you
+[2185.2s] delete the docs after you merge this in
+[2186.9s] because it's pointless.
+[2189.1s] >> So technically like I can open this in
+[2190.9s] my editor and it does exist on my file
+[2193.0s] system and I can edit it here.
+[2194.8s] >> But the idea is like I have a ton of
+[2197.4s] like go to archive tasks. I have a ton
+[2200.2s] of archive tasks and like these are all
+[2202.2s] things that I finished working on and
+[2203.9s] like yeah technically I could come look
+[2205.6s] at these old docs but you you don't want
+[2207.4s] to think about managing them. You kind
+[2209.0s] of just want them once once you're done
+[2210.5s] with them.
+[2211.4s] >> Yeah.
+[2211.8s] >> Go back to traditional companies.
+[2213.5s] Traditional companies have millions of
+[2215.4s] design docs all over them. No one reads
+[2217.7s] them. And that's okay.
+[2219.4s] >> Yeah.
+[2219.8s] >> Like we survived in software.
+[2222.6s] >> Exactly. Design docs are purely an
+[2224.5s] execution concept. They're they're to
+[2226.9s] make it so that you don't make mistakes
+[2228.5s] by accident because you made some
+[2230.5s] fundamental architectural decision that
+[2232.1s] someone else could have known if they
+[2233.7s] just read one sentence in your design
+[2235.7s] doc. That's the purpose of all these
+[2238.1s] docs is to make sure that when cloud
+[2240.2s] code actually executes, it makes no
+[2242.1s] mistakes.
+[2243.7s] Yeah. And it's it's just like it's it's
+[2245.0s] it's so much easier to iterate on the
+[2247.0s] design here of like, cool, we want a
+[2248.5s] unified continue endpoint. Uh we want
+[2251.2s] two buttons in the UX. It's just like,
+[2252.8s] okay, now I know I have high confident
+[2254.6s] that the agent's going to do what I
+[2255.8s] want. And I didn't have to wait for it
+[2257.0s] to start writing code and then have to
+[2258.4s] try to rest steer it or start over or
+[2260.2s] check out the code again because it's
+[2262.2s] just going to it's it's it's just it's
+[2263.8s] dumped out its understanding. And we are
+[2265.5s] aligned.
+[2267.3s] >> Gotcha. How far do you think we can get
+[2268.6s] in the implementation? How close are we?
+[2270.6s] Um, we can certainly
+[2274.0s] >> turn on the auto advance and I can rip
+[2276.1s] it through the next couple phase. Have
+[2277.4s] you tried this yet, by the way?
+[2278.7s] >> I have. It's great. I I auto advance
+[2281.0s] through design discussions every single
+[2282.6s] time. It's freaking pointless to do
+[2284.4s] research with like a manual loop.
+[2286.3s] >> Um, so
+[2289.3s] give me the Ralph Wiggum loop that I
+[2290.6s] want.
+[2291.8s] >> I want to add that step. I want that I
+[2293.4s] have that iteration step that I do which
+[2294.8s] is like iterate on the structure because
+[2296.3s] I do that every single time I create
+[2297.8s] something really complicated and I've
+[2299.4s] had 100% hit rate with that.
+[2301.4s] >> That's actually the next thing is like
+[2302.7s] the inverse of auto advance is like cue
+[2305.8s] extra passes of just like go through the
+[2308.2s] research vet every assumption add more
+[2310.0s] detail find more things fill in more
+[2311.9s] gaps and you can do that at every stage
+[2313.8s] is basically just like cue another round
+[2315.4s] through it. Yeah, with like I really
+[2317.4s] like the message I have works really
+[2319.3s] well. Literally just what's inconsistent
+[2321.8s] >> uh missing and it works really freaking
+[2323.8s] well. I'll let you finish reading this.
+[2325.6s] There's like one more question. Brandon,
+[2327.0s] you comment that your team has
+[2328.0s] accumulated a lot of skills. I agree.
+[2329.9s] You should probably prune the number of
+[2331.2s] skills that your team is using to a
+[2333.3s] minimum set that you can get away with.
+[2335.3s] And the reason, and actually I don't
+[2336.8s] know your opinion, but the reason I
+[2338.0s] personally recommend that is because
+[2339.0s] your team probably can't even remember
+[2341.2s] all the skills that you have checked
+[2342.4s] into your repo. It's way easier to have
+[2344.6s] five or to seven skills that are
+[2347.3s] phenomenal and being used all the time
+[2349.6s] and actually being edited and maintained
+[2351.5s] in your codebase than it is to have like
+[2353.7s] 70 of which all of them are one hop used
+[2356.2s] by each individual randomly in like
+[2357.9s] different totally different ways. And
+[2359.6s] this is how I think about all tools
+[2361.4s] actually is like people want to just
+[2362.8s] like give everybody everything and every
+[2364.3s] everybody figures stuff out and every
+[2365.8s] everybody's kind of going their own path
+[2367.4s] but like the things that give you
+[2368.6s] compounding returns on engineering teams
+[2371.4s] is like everybody is kind of using the
+[2374.4s] same things and they're all iterating
+[2376.1s] like every week your tooling gets a
+[2377.8s] little bit better and that's really
+[2379.0s] really hard if like you have 50 people
+[2382.2s] and like two tools are being used by
+[2384.0s] three people and six tools are being
+[2385.4s] used by some other people. So it's like
+[2387.5s] I would even say like like product
+[2389.0s] manager like the the the skills you
+[2391.0s] build for your team are products and a
+[2393.2s] good PM goes and looks at their usage
+[2395.0s] metrics and they find the features that
+[2397.2s] only like 10% of users are using and
+[2399.8s] they remove them from the product to
+[2402.2s] kill the features that are not getting
+[2403.5s] massive adoption and so I would focus on
+[2406.0s] a small number of things that everybody
+[2408.6s] uses that everybody I mean not every
+[2410.0s] right you may have some backend
+[2411.1s] engineers who never use your front-end
+[2412.6s] skill right but like get good adoption
+[2414.8s] on a small number of skills
+[2417.1s] Because then then you're like guaranteed
+[2418.6s] that like okay this is going to become
+[2420.2s] part of our culture and the time the
+[2422.0s] time we invest in making things better
+[2423.7s] is actually going to pay off versus like
+[2426.2s] having 70 things and not knowing which
+[2429.3s] one is going to which one is going to
+[2430.6s] help which people and not knowing where
+[2432.1s] to invest because you yeah
+[2434.6s] >> yeah prune prune prune prune prune that
+[2437.2s] is the magic word
+[2438.3s] >> cut scope iterate focus on a small
+[2440.5s] number of of skills but like
+[2441.8s] >> focus on your product not on your
+[2443.4s] engineering workflow like like your
+[2444.9s] engineering workflow like learn from
+[2446.6s] other people, leverage it and like copy
+[2448.3s] and paste. Don't reinvent. You will just
+[2450.7s] move slower if you do. Uh Jenn, how do
+[2454.2s] we deal with bike shedding or irrelevant
+[2456.6s] uh design discussions like security
+[2458.1s] stuff that comes up?
+[2459.7s] >> So, is this human to human or human to
+[2461.8s] agent? I
+[2463.0s] >> I assume agent. Like agents proposing
+[2464.7s] like stupid things. Um I suspect that's
+[2466.6s] because you're probably just not
+[2467.9s] prompting it well. I've actually never
+[2469.4s] had it come up with like arbitrary
+[2471.0s]  that doesn't matter when I'm
+[2473.0s] doing like the workflow well. Uh, and
+[2475.3s] that's because like it really depends if
+[2476.7s] you're working in an existing codebase
+[2477.8s] or new codebase. In a new codebase, it's
+[2479.5s] actually very likely to come up with
+[2480.6s]  that doesn't matter. But in an
+[2482.9s] existing codebase, it really just
+[2484.4s] follows the patterns that your codebase
+[2485.8s] has. So if you have like dumb unit tests
+[2488.0s] that basically check like no ops and
+[2489.9s] like things that don't need to be unit
+[2491.4s] tested, clawed code during the user
+[2493.4s] phase will be like, I need to add unit
+[2494.7s] test for every little thing that I do,
+[2496.2s] which is actually a drag, not a value
+[2498.1s] ad. If you're deliberate about what unit
+[2500.1s] test you add in, it will also pick up
+[2501.9s] that, oh, we only unit test this kind of
+[2504.1s] pattern.
+[2505.0s] >> And this is the interface we need to
+[2506.8s] unit test, not every interface
+[2508.3s] underneath the sun. And I and I think
+[2511.0s] that's really what it replicates. It
+[2512.5s] replicates the patterns that you already
+[2513.8s] have in your codebase. And if you have
+[2515.2s] no patterns in your codebase, that very
+[2517.0s] beginning phase, like the green field
+[2518.3s] phase, you have to replicate.
+[2520.0s] >> Yeah.
+[2520.3s] >> But 90% of code bases are not green
+[2522.1s] field.
+[2522.9s] >> And if they are like just you can just
+[2525.4s] prompt it, you can simply ignore that
+[2527.2s] concern. Yeah. Exactly.
+[2528.6s] >> But even if you have a Greenfield
+[2529.7s] codebase, it's going to become not
+[2531.2s] Greenfield within like 3 to 6 months and
+[2534.3s] then you're going to need to know how to
+[2535.5s] do this or you're going to have to throw
+[2536.6s] it out and rewrite it from scratch,
+[2537.9s] which like at the rate that code gets
+[2540.6s] written now,
+[2542.5s] >> depending on how careful you are. Yeah.
+[2544.2s] Um I'm going to talk about quickly
+[2545.4s] what's happening here. Um so this is
+[2547.5s] building. So we talked about like
+[2548.7s] basically like the design discussion is
+[2550.2s] figuring out where we're going. The
+[2551.5s] structure outline, how we do this, um is
+[2553.8s] basically like how do we get there? And
+[2556.4s] so like the models by default tend to
+[2559.6s] want to do what I call like horizontal
+[2561.8s] planning which is so I'm going to delete
+[2563.9s] all of this where it's like okay we're
+[2565.4s] going to do the database and then we're
+[2566.5s] going to do the service layer then we're
+[2567.8s] going to do the front end we're going to
+[2568.9s] do the API and then we're going to do
+[2569.9s] the front end and like before you know
+[2571.5s] it you're at the other side of 1200
+[2573.6s] lines of code and there's been nothing
+[2575.1s] along the way for you to test. And so
+[2577.4s] this is what I call horizontal planning.
+[2579.0s] The models love freaking doing this. I
+[2580.8s] don't know why. Um, and so what I have
+[2583.6s] found works really really well,
+[2584.9s] especially for larger features where
+[2586.2s] like you want to kind of check in and
+[2587.7s] make sure it's good along the way is we
+[2589.7s] do what's called vertical planning where
+[2591.2s] we will like take a slice and like mock
+[2593.5s] the API and do a stub frontend component
+[2595.8s] and then we actually build out the
+[2597.0s] front-end component on real data and
+[2598.8s] then we mock the services layer and we
+[2600.6s] wire the API through and then we do the
+[2602.2s] database migrations and then we add more
+[2604.2s] bit everything up. we wire everything up
+[2606.0s] and then maybe here we add some like
+[2608.3s] special like business logic stuff that
+[2610.3s] is like the meat of the issue but is
+[2611.9s] like the same way you would build you
+[2613.5s] wouldn't write 1200 lines of code and
+[2615.2s] not check on it. Um you would at least
+[2617.3s] run the test in between phases and you
+[2618.9s] might spot check a couple things in
+[2620.4s] between to make sure it's good. This is
+[2622.6s] the art of vertical phases.
+[2625.9s] Um, and so the idea of the structure
+[2627.4s] outline is like instead of reading the
+[2629.5s] entire plan with every code change, you
+[2632.0s] want to just kind of review the the
+[2634.4s] approach that is being taken. Um, and so
+[2637.1s] this is going to surface some of the
+[2638.3s] stuff from before and then it's going to
+[2640.0s] talk through it's like, okay, we're
+[2641.0s] going to make the schema and a message Q
+[2642.6s] table. Then we're going to make the
+[2644.7s] route and the collection. Then we're
+[2647.1s] going to like cue messages in the prompt
+[2649.2s] generator. And then we're going to do
+[2652.2s] this unified continue endpoint. Okay.
+[2654.7s] Interesting.
+[2656.0s] So the problem here is like we're not
+[2658.5s] going to be able to test this endpoint
+[2660.4s] until the very end. Like
+[2664.5s] >> I would rather
+[2665.9s] >> well so I would rather do the endpoint
+[2667.7s] first because then we can at least check
+[2669.0s] in the database that messages were like
+[2670.9s] inserted correctly and then we'll do the
+[2673.6s] actual logic that causes the cloud side
+[2675.5s] because like you can't test this until
+[2676.8s] you have a way to send the messages in.
+[2678.3s] So why would we build the demon side
+[2680.1s] before we build the API side?
+[2682.4s] >> Oh, interesting. I I see I see why why
+[2684.6s] you do that. Okay.
+[2685.9s] >> Because like basically like this is a
+[2687.3s] lot of complicated stuff. We're making
+[2688.5s] new database tables. We're making new
+[2689.9s] contracts. I want to be able to click
+[2692.1s] something in the UI and just go look
+[2693.6s] that a thing was inserted into the
+[2695.0s] database at least. And by I I mean I
+[2697.2s] mean Claude's I'm going to basically
+[2698.6s] like click the thing and then like
+[2700.2s] Claude's going to go check what's in the
+[2701.4s] datab in my dev database on my local
+[2703.3s] build. Um and then we'll go and actually
+[2706.8s] wire it through to the other side.
+[2708.2s] >> Yeah. And that's just like preference
+[2710.1s] for what for other people like why are
+[2711.6s] we doing this? Well, Dexter said a very
+[2713.5s] good reason. He's like, "I want to test
+[2715.4s] sooner, not later." And the sooner that
+[2717.7s] you can test the system, the better it
+[2719.5s] is. And if you have no way to test
+[2721.0s] something, then what Dexter is basically
+[2723.2s] betting on is not the fact that like his
+[2725.4s] design is right or wrong. He's just
+[2727.2s] reducing the probability that he has to
+[2728.7s] backtrack.
+[2729.8s] >> Yes. You want you want to optimize for
+[2731.8s] for being able to finding surprises and
+[2734.1s] finding incorrect things as early in the
+[2736.2s] process as possible. So like if this
+[2738.3s] front end thing looks like I want
+[2739.8s] to like get that looking right and make
+[2741.2s] sure I like the behavior there
+[2743.0s] >> before we go and actually wire in real
+[2745.1s] data because I want to not have to debug
+[2747.8s] the data layer and the front-end
+[2749.6s] experience at the same time. I want to
+[2751.3s] like test and val validate one piece at
+[2753.2s] a time.
+[2753.4s] >> I also want to chime in on like one
+[2754.6s] other point here. Like we're doing this
+[2755.9s] live on the podcast. We there's no way
+[2758.2s] Dexter had time to read this as
+[2759.9s] thoroughly as he would normally if he's
+[2762.3s] coding. So like part of that means well
+[2763.9s] if I haven't test I haven't read
+[2765.4s] everything super thoroughly I need to be
+[2767.2s] more rigorous about testing earlier
+[2769.2s] rather than later even more so than
+[2770.9s] normal. So even though in like my
+[2772.7s] example I showed you that I went all the
+[2774.0s] way through and like the plan just
+[2775.2s] executed one way through.
+[2776.6s] >> Yeah.
+[2777.0s] >> What I had to do was I had to go ahead
+[2780.1s] and actually read everything super
+[2781.8s] meticulously and you saw how many
+[2783.4s] commits it took to actually get to the
+[2784.8s] final point to make it work.
+[2786.8s] >> Yeah. But it was very meticulous here.
+[2789.4s] By moving the UI phase up and actually
+[2792.2s] making sure the database gets correctly
+[2794.2s] done, we're just reducing the risk that
+[2796.2s] any design decisions we made were going
+[2797.8s] to be incorrect along the way. And
+[2800.2s] again, there's again no right or wrong
+[2802.1s] answer. It's just a it's just a
+[2803.8s] preference based on what tolerance you
+[2805.7s] have for redoing work when something is
+[2807.5s] incorrect.
+[2808.4s] >> Yeah. And I'll sh I'll we won't actually
+[2810.2s] finish this today unfortunately because
+[2811.6s] I know Vib's got a hard stop. But the
+[2813.5s] way I think about this is like you want
+[2816.2s] to let me delete some of these things.
+[2818.2s] Um, basically like the more time you
+[2821.1s] spend on the plan
+[2824.2s] chance you have to backtrack. The more
+[2828.5s] time you spend on the like so vertical
+[2830.4s] is like the correctness of the plan,
+[2831.8s] right? The more time you spend on it,
+[2833.2s] the closer you can get it to like full
+[2835.3s] oneshotable.
+[2836.9s] Um, but the idea is like there's some
+[2839.0s] sweet spot where it's like, okay, if I
+[2840.3s] can spend 10 minutes and get it 90% of
+[2842.4s] the way there, then that's better than
+[2845.4s] spending an hour to get it 99%. Cuz
+[2848.1s] there still might be surprises. And at a
+[2850.0s] certain point, it's easier to read the
+[2851.2s] code and play with it than it is to like
+[2853.0s] stare at a thousandline plan doc. Um,
+[2856.5s] and so like this is actually split up
+[2858.2s] into a number of different probability
+[2859.8s] curves, which is like, okay, what's the
+[2862.6s] chance that you have to iterate on it
+[2864.1s] live? That's the area below this curve.
+[2865.8s] So that goes down the longer you do it.
+[2867.1s] And then what's the chance I might have
+[2868.4s] to like resteer and restart the
+[2869.8s] implementation and what's the chance I
+[2871.6s] might have to restart the design. And
+[2873.0s] it's like at every phase it's like the
+[2875.4s] the chance you will have to backtrack
+[2877.4s] goes down the more time you spend on it.
+[2880.0s] But you're never going to guarantee that
+[2881.6s] you can oneshot it. And so there's this
+[2883.4s] weird like optimization problem that I
+[2885.8s] think is like just takes a lot of
+[2887.0s] intuition of like how much time should
+[2889.2s] you spend at any phase making sure that
+[2891.1s] it's good versus like how how big of a
+[2894.2s] how much time will it waste if you have
+[2895.7s] to backtrack.
+[2896.9s] >> Yeah.
+[2897.1s] >> Does that make sense?
+[2897.9s] >> Exactly. And then David, you're asking a
+[2899.6s] really good question of like are are you
+[2901.8s] asking anyone else on team to review
+[2903.0s] these docs? Um I know Dexter clearly
+[2905.0s] said like if he had this question, he
+[2906.2s] would have norally sent Kyle to go look
+[2907.5s] at it. We kind of operate the same way
+[2909.3s] as well, which is the way that we we we
+[2911.5s] operate on our team is like by default
+[2913.3s] we just trust individual developers to
+[2915.1s] make good decisions. But that part of
+[2916.6s] that making good decisions is to
+[2918.2s] recognize when something is complicated
+[2919.8s] and to bring someone else into the fold
+[2921.8s] as they need to because it's impossible
+[2924.4s] for everyone to read everything. It's
+[2925.7s] just not worth it. But for really
+[2926.9s] complicated things, you want more pe the
+[2929.0s] more relevant people reading it whenever
+[2930.5s] possible.
+[2931.2s] >> Yeah. And it's optional in our process,
+[2933.0s] but like I am incentivized to send Kyle
+[2936.0s] this design discussion and have him
+[2937.6s] review this and help me answer the
+[2939.0s] questions because the alternative is I
+[2941.5s] make the decision. I make the decision
+[2943.3s] that he doesn't like and then I go spend
+[2945.3s] all this time building it and testing it
+[2947.2s] and playing with it and exploring it in
+[2949.6s] the um
+[2951.0s] >> in the um how do I say this? Like the
+[2953.8s] the implementation phase and then by the
+[2955.8s] time it gets to PR, it's like oh no,
+[2957.4s] this is all wrong. we can't make another
+[2959.1s] endpoint because of some random electric
+[2961.0s] sequence.
+[2961.4s] >> There's some reason like something or
+[2963.4s] something Kyle's working on right now
+[2965.1s] that's going to conflict with this
+[2966.4s] >> that's going to conflict with this. So
+[2967.6s] it's like basically everyone's like
+[2969.2s] complaining about drowning in like AI
+[2971.6s] developed PRs or like PRs written by
+[2974.1s] people with AI that are slop and like I
+[2976.2s] actually don't think the problem is too
+[2977.8s] many PRs. I think the problem is too
+[2979.8s] many bad PRs and like even even a 500
+[2982.8s] line PR like not a big one if it needs
+[2985.2s] 20% rework that is like a huge like
+[2988.6s] >> mental and emotional burden on both the
+[2991.4s] submitter and the reviewer to go and
+[2993.5s] give the feedback and coach the person
+[2995.1s] and all this stuff and so it's like if
+[2997.5s] you can elim if you can maximize the
+[2999.4s] amount of time when like I send Kyle
+[3001.0s] this PR and he's like yep that's what I
+[3002.7s] asked for yes that's good yes you've
+[3004.3s] done that right because we aligned on a
+[3006.6s] lower stakes dock that I'm not attached
+[3008.6s] to yet because I haven't dumped all this
+[3009.8s] time into making sure it's right and
+[3011.2s] polishing it. That is hugely valuable I
+[3014.2s] think to any software team.
+[3015.7s] >> It's the same reason that like look you
+[3017.8s] just you want to you focus more on the
+[3020.3s] plan than you do on the code. You focus
+[3022.0s] more on the plan than you do you focus
+[3023.6s] more on the design discussion you do on
+[3025.4s] the plan.
+[3026.3s] >> Yep.
+[3026.8s] >> Bring people in earlier into the fold.
+[3029.0s] That's that's the magic. Bring yourself
+[3030.8s] in. Bring the agent in. Like spend more
+[3033.0s] and more time earlier on the fold making
+[3034.9s] good decisions. The better your
+[3036.6s] decisions, the better your output. It's
+[3039.3s] a direct onetoone correlation there.
+[3041.5s] >> This was super fun, man. Uh, thanks for
+[3043.3s] joining. I think we shared some some
+[3044.6s] interesting lessons. Uh, hopefully this
+[3046.2s] didn't just feel like a rip tie demo and
+[3047.7s] you learned a little bit more about how
+[3049.0s] we think and and and how we build stuff
+[3051.1s] internally. Um, so thank you all. Uh,
+[3053.5s] Vibb, any any last thoughts? Any big
+[3055.3s] takeaways here?
+[3056.3s] >> No. Uh, for everyone interested, next
+[3057.9s] week we're going to talk about how to do
+[3059.1s] PI redaction and how to actually design
+[3061.5s] a system both on the eval side and the
+[3063.4s] code side to go build that out. excited
+[3065.6s] to share.
+[3066.2s] >> Awesome.

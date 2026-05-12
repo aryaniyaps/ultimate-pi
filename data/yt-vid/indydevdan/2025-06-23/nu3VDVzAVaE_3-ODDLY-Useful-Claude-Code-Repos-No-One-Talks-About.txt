@@ -1,0 +1,339 @@
+Your impact as an engineer is directly
+limited or enhanced by the tools you
+use. Some tools compound your impact
+while others hold you back. Claw Code is
+clearly a tool that compounds your
+impact that's built for real engineers
+doing real engineering work. A sign of a
+great tool is how much the open-source
+ecosystem rallies around the tool. In
+this video, I want to share three oddly
+useful repositories you can use to get
+more out of claw code and push your
+agentic coding further. If you don't
+know what your tool can do, you don't
+know what you can do.
+[Music]
+In the terminal, we can type a single
+line and understand how much value we're
+really getting out of cloud code. We can
+run npx CC usage latest since beginning
+of this month on the 1st. When we fire
+this off, this of course is a breakdown
+of my clog code usage. As you can see,
+I've spent well over my $200 clog code
+max plan. I am saving a ton of money
+with this plan. If we scroll up, you can
+see my dayby-day breakdown of each
+model. You can see all the input, all
+the output, and all the cached token
+usage along with their price with a
+dayby-day breakdown for true off-device
+agent coding. I have API keys running.
+It would be awesome if we could roll in
+even more usage into our max plan, but
+you know, you can see here I'm getting
+plenty of value out of the max plan. I
+don't blame Entropic for not supporting
+that. API keys are simple. I highly
+recommend you run this simple command.
+If I hit up here, you can see exactly
+what we just ran there right through npx
+cloud code usage latest and then you can
+pass in a sense state. They have a bunch
+of command line flags you can use. And
+when you look at your cost breakdown,
+you have to remember it's an ROI
+question. It's a return on investment
+question just like the creator of claw
+code mentioned. The way I think about it
+is it's a ROI question. It's not a cost
+question. And so if you think about, you
+know, an average engineer salary, like
+engineers are very expensive. And if you
+can make an engineer 50 70% more
+productive, that's worth a lot. Yeah.
+Yeah. Yeah. Yeah. So this is this is
+huge. I'm so glad they mentioned this.
+Um this is where a lot of engineers make
+a critical mistake. Your time is your
+most valuable resource. Let me say it
+one more time. Your time is your most
+valuable resource. I've saved 30 to 50
+hours, probably more of engineering work
+just this month so far because I'm
+offloading more and more agentic coding
+to tools like cloud code. Run this
+command to get a breakdown of your cloud
+code usage so you can understand the
+true value you're getting out of this
+tool.
+Vibe coders use tools blindly, firing
+off prompts after prompts after prompts.
+Good engineers use their tools well and
+have a highle idea of how things work.
+Great Genai engineers know exactly what
+their tools are doing on a fundamental
+level. This next oddly useful tool can
+help you really master cloud code on a
+fundamental level. Let's move into the
+quick data MCP server we built in a
+previous video to explore reusable MCP
+server prompts. Now, if I run this
+command here, this is going to fire up a
+clawed trace. Let's fire this off. And
+right away, it looks like a normal claw
+code bootup, except we have this log
+file, this trace file getting stored
+toclude
+trace. Let's run a couple commands and
+understand what this tool does for us.
+Hello. Classic hello response. What does
+this project do? And then while this is
+running, I'll queue up use a sub agent
+to document the primary flow of MCP
+server prompts in this app. All right,
+so I'll get that queued up as well. So
+you can see that first task was
+completed there. Five tool uses, 32K
+context. You can see exactly what this
+tool is all about. It's for simple data
+manipulation. We're also using resources
+and prompt templates. And now we're
+running another prompt here to
+understand the flow. So this is not new.
+We've been looking at cloud code subtask
+and sub aents on the channel for weeks
+now. After our sub agent finishes, right
+now it's gathering context in its
+isolated subtask context window. When it
+finishes, it's going to return a result
+to our top level cloud code agent. Then
+we'll close cloud code and something
+really interesting is going to happen
+here. So there it is. Took a minute.
+That's a lot of engineering work that I
+didn't do. Our agent did it for us. And
+there we go. So we have the entry point,
+core flow analysis, specialized
+analysis, so on and so forth. So, but
+now comes the interesting part. I'm
+going to close this version of cloud
+code here. And right away, we get this
+HTML file. You can see here it's inside
+of this cloud trace directory. And this
+is actually just a full-on local HTML
+file that we can use to inspect all
+Claude code traffic. You can see here if
+we start scrolling, we have a complete
+breakdown of our conversation with cloud
+code. But very interestingly here we can
+see cloud code firing off sub aents. And
+look at this cloud code is let me zoom
+in a little bit. You can see here cloud
+code is acting as a user when is kicking
+off the subtasks. So it's literally like
+we're prompting cloud code but this is
+cloud code talking to its sub agent.
+Okay. So this is a really really
+interesting pattern. We've been talking
+about cloud code sub aents and parallel
+agents but this is what's actually
+happening under the hood. There are two
+really important, very informative
+details that Claude Trace offers you
+that can help you uplevel what you can
+do with Claude code. We have full access
+to the system prompt. So, you can just
+read through this and really understand
+how much information and how much detail
+anthropic engineers are packing in to
+the system prompt. And then we have the
+tools. So, I think the tools are the
+most fascinating part here because we're
+getting a long description breakdown of
+what exactly every Cloud Code tool does
+and how it's written. So, you can see
+the parameters here with a shorter
+description, but then you can see the
+actual description here, right? This is
+the full-on tool description for
+launching sub aents. All right, so this
+is what Claw Code is using when it's
+firing off sub agents to do engineering
+work on your behalf, right? Launch a new
+agent with access to the following
+tools. And you can see there it has a
+couple tools we're going to get to in
+just a second via a custom MCP server.
+And then it's got a couple different
+sections and some great usage notes,
+right? Launch multiple sub aents
+concurrently whenever possible to
+maximize performance. Very important key
+note here. And you can look at this for
+every single tool in cloud code. By
+understanding the exact tool
+definitions, we can leverage cloud code
+in new powerful ways. And we can really
+understand how all these tools work at a
+deep level. So outside of the system
+prompt, all the tools, the full
+conversation with the sub agent call
+breakdown where cloud code fires off sub
+aents, right? We can trace all the
+conversations of the sub aents. This is
+very powerful. But outside of that, we
+can see all the raw calls, right? So
+these are all the requests and the
+responses. You can really truly
+understand what cloud code is doing here
+by looking under the hood. This is a
+powerful tool to give you deeper
+insights on what's possible with claw
+code. We also have JSON debugging here
+all the way on the right if you just
+want to see the raw JSON calls and
+responses. In the age of agents, knowing
+what your tool can do can have an
+exponential impact on your performance
+because we're multiplying our impact
+across one or more agents. We're
+parallelizing our impact and we're
+scaling our impact up. For instance, on
+the channel, we've been exploring
+parallel sub aents, git work trees, and
+programmable agentic coding using cloud
+code, the best agentic coding tool of
+2025. As usual, you know, make sure
+you're subscribed and you like so you
+don't miss out on hands-on AI coding.
+And now, agentic coding tips we're going
+to break down here, every week, every
+Monday. If you've been following the
+channel, you know how gamechanging some
+of these insights are, right? Even just
+knowing having the awareness of the sub
+agent task tool uh really lets you
+multiply what you can do, right?
+Investing the time to master your tools
+pays you back in a massive way,
+especially when you use the tool often
+and especially agentic tools that
+literally multiply what you can do with
+agents.
+The last repository I want to share with
+you here is an interesting one. It's a
+simple threetool MCP server called
+Snaphappy. There are many of these and
+there going to be a ton of these tools.
+This is simple. It has three tools. Get
+screenshot, take screenshot, list
+windows. This is a screenshot MCP server
+for your agent. If we paste this in,
+we're going to add the snapy cloud code
+MCP server. We have that. Now I'll type
+claude. And now Cloud Code has tools to
+let it see your desktop and interact
+with you in a more rich way. Now your
+agent can see. Let's run list open
+windows. There it is. Let's fire that
+off. And now you can see all the windows
+I have open right now on my screen. I
+have a monitor in the background here.
+Very cool. Let's go ahead and hide that
+and let's take a screenshot. I'm going
+to open up the author of this library
+here. So this is Mario's GitHub repo.
+And let's go and run this list open
+windows one more time just to make sure
+we get that right window positioning.
+The ids can change. Now this is in the
+context window. Now I'll say screenshot
+the browser. All right. And now the
+browser is going to map to one of these
+IDs. There it is. Window two. We'll hit
+take screenshot. There it is. So the
+screenshot has been saved. And you can
+see here this is saved in the context
+window of cloud code. And now I can type
+something like this. What are Mario's
+top three repos by stars? Okay. So there
+it is. 1 2 3 and Lemie by the way is
+where he has this repo. So if we look up
+snap happyappy we can see a couple of
+nested libraries. Big shout out to Lei.
+Let's go ahead and shout out both Lei
+and Simon Willis which is how I found
+this uh claw trace library in the first
+place. Finally found some time to take a
+look at this. Simon posted about this I
+think June 2nd. Yeah. So so this has
+been on my to checkout list for a while.
+Let's go ahead and screenshot the
+browser again. will run the same flow.
+List windows and screenshot the browser
+again. Fantastic. And then let's go
+ahead and shout out. Can you give a
+direct shout out to Bad Logic aka Mario
+and Simon W for great repos
+and great tech writeups respectively.
+Let's go ahead and get a a live, you
+know, Claude code shout out to both
+Mario and Simon Willison. There we go.
+There aren't a ton of engineers I follow
+closely anymore, but Simon and Mario are
+two of them, and I've been following
+Simon for quite some time now. I think
+it's been multiple years all the way
+back to the uh GPT 3.5 days. So, it's
+cool to see his work just continue to
+develop and have serious impact. I've
+been meaning to actually, let's just go
+ahead and do this right now while we're
+on air. Definitely check out Simon
+Willis. I'm going to link all this stuff
+for you in the description. And I've
+actually been meaning to just go ahead
+and sponsor Simon for a while now. I
+like how we just threw this on his
+website here. Sponsor and subscribe.
+Let's do this. Go ahead and sponsor
+Simon here. Fantastic. So, that's a
+no-brainer. Feel free to check out Simon
+Willis's blog here. You know, this
+snapshot tool is going to be one of
+many, right? I'm almost confident big
+labs are going to put out, you know,
+more comprehensive screenshot, screen
+watching tools so that cloud code is not
+only in the terminal, but it can also,
+you know, help you manage and run your
+device. So, more on that in the future.
+I think this going to be an interesting
+development as our AIS continue to be
+not just multimodal, but multifunctional
+and start, you know, uh, expanding into
+the physical world. The terminal is the
+great first place to strike. We see
+cloud code right here in the terminal.
+But I think you know the next place us
+engineers that are really leaning into a
+gentic engineering and a gentic coding
+the next place we can go is to give our
+tools give our agents more tools
+understand our impact and really try to
+focus on where the value is. Big shout
+out to Simon and big shout out to Mario
+here. Something incredible is happening.
+Our tools can do much more than we ever
+imagined. That means it pays big to
+understand your tools and maximize what
+they can do because every action, every
+keystroke is now multiplied by one or
+more agents. Check out these three tools
+link in the description and let me know
+what are your favorite repositories.
+What are some of the MCP servers you're
+using to take Claw Code to the next
+level? Stay focused and keep building.

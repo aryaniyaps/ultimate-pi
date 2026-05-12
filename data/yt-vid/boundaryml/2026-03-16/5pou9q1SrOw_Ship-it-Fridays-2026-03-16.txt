@@ -1,0 +1,44 @@
+[1.9s] Hey Alson, thanks so much for the great
+[3.9s] feedback you provided us about the BAML
+[6.2s] CLI optimize command. We took some of
+[8.5s] that feedback and turned it into a bug
+[10.6s] fix for you. So now if you run the
+[13.4s] optimizer and you don't have your
+[15.0s] environment variable set or if the LLM
+[17.0s] fails for any other reason, we just
+[18.4s] crash out and show you that error
+[19.8s] message. Whereas before the error
+[21.6s] message was getting hid underneath the
+[23.5s] interface. So great improvement. Thanks
+[25.6s] for calling it out.
+[27.2s] Hey everyone and we have a quick and
+[28.8s] easy one for you all. For most of you,
+[30.6s] you don't even know we have a studio
+[32.2s] product. But for those that are using
+[33.8s] our studio product, we now added a uh
+[36.4s] status page to track out the uptime of
+[39.4s] all services from the dashboard, the
+[41.6s] API, and all the underlying
+[43.3s] infrastructure. Hopefully now whenever
+[45.6s] something happens, you'll know exactly
+[47.4s] whether it's on us or new. Um but let's
+[50.5s] hope that never happened and you never
+[52.4s] need to see this page. Well, I hope this
+[54.4s] is useful and I'll see you next week.
+[56.2s] Cheers.
+[57.4s] >> Hello Batman. You recently requested
+[59.6s] that we support Entra ID for Azure login
+[62.2s] when using OpenAI. Well, I'm pleased to
+[65.0s] support the next version of BAML. We'll
+[67.2s] support Entra ID for using Azure with
+[69.7s] BAML. As you can see over here, when I
+[72.0s] go ahead and open the playground,
+[74.6s] not only are you able to see this, you
+[76.0s] can firing off to any of our Azure IDs.
+[78.2s] We're getting the correct authorization.
+[79.7s] We're redacting it obviously for curl
+[82.6s] and it works in both the playground and
+[84.6s] CLI.
+[87.4s] Now you can go ahead and use enter ID
+[89.2s] for using BML. [music]
+[90.4s] Thank you.

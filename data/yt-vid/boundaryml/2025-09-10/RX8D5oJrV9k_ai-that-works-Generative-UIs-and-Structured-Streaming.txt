@@ -1,0 +1,1522 @@
+Oh, wait. We're waiting for the
+recording. There we go. What's up? I'm
+Dex. Uh, this is the AI that works show
+where we teach you real hands-on
+advanced AI coding, AI implementation,
+AI pipeline, AI engineering, context
+engineering, um, real world solutions to
+building uh, really good AI apps. Hi,
+Bob. What do I have to add there?
+>> I think that's it. I think today is
+going to be
+one an episode that will be I think
+hopefully educational to a lot of people
+which is more about streaming and how
+streaming can make your app a lot more
+feel almost like a whole different
+application uh with and without it and I
+think it's one second I'm gonna get this
+I'm gonna open the end um okay there we
+go
+>> yeah this is a really cool topic that
+I'm really excited about um I think it
+goes really under the hood of some of
+the like weird hard annoying problems
+with using LMS and especially like
+creating really good UX's when LMS are
+streaming like partial JSON objects and
+how you can show incremental progress
+updates in your UI and in your app or on
+your CLI well without having to wait for
+the entire JSON object to be streamed
+out.
+>> Exactly. But before when we go into
+this, typically you start with
+whiteboards, but today I want to do
+something different. And I want to start
+with examples. I want to go straight to
+our example and just show a couple
+examples along the way. And before we do
+any of this stuff, let's just go look at
+chatbt.
+When any of us ever use chatbt and I ask
+it to go do something, and I'm using the
+thinking model right now. It's like
+explain why traits are not good for LLMs
+for LM generated
+generated code and I'll add the more
+and I go do this. This whole experience
+that's designed by chatbt is actually
+goes through and tells you oh you're
+thinking you can look at the thinking
+code. You can see what it's going to be
+thinking along the way. If you want, you
+can opt in and skip thinking and go
+straight to content generation.
+This is all content that actually and
+right over here made a section for what
+it is. It's actually I can click on and
+see exactly what it's thinking for
+different steps of the way. Why it does
+this is because the generation of code
+is all based on the same thing that we
+have when we first build websites, which
+is response time. anytime I I've never
+met someone I've never met a single
+major website provider that says, "Hey,
+Google loaded fast enough. If you go to
+google.com and you search something and
+you say like, uh, dogs,
+they talk about their search time." I
+guess not anymore, but like there's
+never been a single time where they've
+stopped optimizing load times on Google.
+There's never been a single website that
+does that. Similarly for your LM
+generation code, there's no point at
+which no matter how fast the models are
+that it will be fast enough because the
+fastest thing you could have done is as
+soon as the you before the user even
+typed out the question, know what
+question they were going to ask, have
+the answer already ready and load it up
+into their machine. The next best thing
+you can do is take their answer and take
+the question that as soon as they type
+it, have the answer already ready on
+their exact machine in the exact app in
+memory, load it up and answer it back.
+At some point, you're going to go down
+and make a network call and that will
+always be slow even if the LMS are
+instantaneous. And the thing is that
+today's models are all based on token
+generation models. So the mechanisms
+that you use to go and display these
+responses makes a huge difference. If I
+couldn't see what these thought
+processes were along the way, it makes
+it
+>> you just get pissed off and you drop.
+You'd be like, I don't have time for
+this. I just see a spinner, right? And
+so, okay, so you're talking about like
+basically this the more you can show
+something happen, the earlier you can
+show something happening, even if it
+isn't the final answer, the more likely
+people will actually sit there and wait
+for it to finish. And going back to the
+theme of our previous last uh last
+conversation and the conversation before
+that, this UX is important for
+steerability. You're not only helping
+the person be entertained along the way,
+you're helping them have confidence that
+this thing that is going to take a
+couple seconds to run. It's actually
+going to give them something that's
+worthwhile and worth sticking around
+for. It's like the little doping giving.
+>> So if I see the thoughts are wrong, I
+might just like exit. I mean, I do this
+with cloud code all the time. you exit
+out and you'd be like, "Nope, nope,
+that's wrong." Like, "Let me go and
+start over." without having to wait for
+it to do the whole thing.
+>> Exactly. That's one of the things I find
+very frustrating about sometimes using
+cursor, for example, because it doesn't
+give me a good incremental UX. So then
+I'm kind of stuck trying to digest all
+the information and resteer it
+correctly. But one of the cool things
+cursor has done is they let you go back
+and click on a point and checkpoint your
+code and go back to that point in the
+codebase. It's very, very similar for
+anything else. So let's take something
+really really simple like ré parsing for
+example.
+If I were to do any sort of ré parsing
+and typically you ask an LM to extract
+information. We all know that an LM can
+information markdown and we can render
+the markdown in a useful way
+that is totally valid. But this markdown
+uh even if I go render in a really
+pretty markdown format and I syntax and
+like bolded etc is just going to be a
+lot less attractive than something
+that's actually like for example these
+are real hyperlinks I can click on this
+hyperlink is broken. I can even give you
+a little notification that's an invalid
+URL. The skills can be listed as tags
+experiences can be listed in more drop-
+down form in a more visually appealing
+format. There's a reason most websites
+aren't plain text or plain HTML. They
+have like CSS on it because style does
+matter. But if I were to go and stream
+this, I have a couple options. This is
+easy to stream. I just render it as it
+comes out and the markdown naturally
+streams token-wise. This gets a lot more
+complicated. So, we're going to talk
+about how it actually looks to go and
+build more stable streaming systems
+along the way over here. And there's a
+very
+>> Okay, so you're you're converting to
+some sort of structured output under the
+hood and then you have a renderer like
+React components or something that take
+that like JSON object and turn it into
+this like beautiful view.
+>> Exactly. And if we go take something a
+little bit more complicated like a
+recipe generator, when you go do
+something like this, chat GBT is
+definitely just rendering tokens, but
+what this allows me to build is very
+interactive components where even while
+it's streaming, I can actually interact
+with it. Okay. So, pause this. So,
+you're you're running the slider is
+basically how many servings do I want?
+And you're basically at any given point,
+you're able to combine logic that's
+interactive in the UI with whatever
+incremental output has to date been
+streamed by the LLM
+>> and it updates in real time. Okay.
+>> Exactly. So, if I if I and this is the
+beauty of doing things like this is the
+code is actually not complex. So,
+everyone I think should be able to build
+applications like this along the way,
+but I'm just going to do a really quick
+thing to talk about what this is and
+what the data separation path is. So, if
+we're down here and we have like our UI,
+which is a React component. Let's we'll
+use a recipe as an example. I don't know
+how to spell, but we'll assume that
+spelling is not a thing that I have to
+care about anymore thanks to LMS. Um, we
+have a recipe example. And what does a
+recipe take in? Well, this renderer
+takes in a type of recipe.
+This takes in a recipe data model. And a
+recipe data model is just a class or I
+guess interface in JavaScript TypeScript
+that has a name string
+uh number of servings
+in
+and on top of that it's going to have a
+couple more things which are ingredients
+which is going to be a string array
+And it's going to have a instructions
+finger array as well. Well, all of us
+know how to render this type. I don't
+have to write the react for code for
+this. Any chat GBT model can do this.
+So, all I need to be able to do is
+provide some sort of backend service
+that can somehow produce this recipe
+type. And if I am able to do that, then
+this UI should just work. and any
+interactivity I build on this, for
+example, a recipe slider that multiplies
+um oops, ingredients is wrong. We'll
+need something else.
+Um, in order to make this interactive
+based on number of servings, I actually
+need to uh change my data model a little
+bit
+and I need to write it
+>> where ingredients needs to be a list of
+items.
+But if I did this, it should be possible
+to make for me to make an interactive
+recipe view pretty straight in a
+straightforward manner.
+This is really clear how I would turn
+this into React components and render
+the different things and however I
+wanted and I could have the slider logic
+and stuff.
+>> Exactly. The problem however that I'll
+run into is
+right now as as of right now if I had an
+LLM generate a recipe type I won't
+actually be able to send it to the model
+until it's done.
+So that's kind of the problem that I
+want to talk about today. How do you get
+around this? And how do you make it so
+that this interactive component doesn't
+turn into a nightmare of code?
+>> Uh,
+>> can I change this to interface real
+quick? That's going to bother me.
+>> Sorry. Yes. Uh, that's a good point.
+Um, and we really, really want to go
+nail this problem. The thing is, this
+problem is actually really quite easy.
+It's not that hard. Um, and I think
+we'll be able to do this in real time
+when I screen share over here. Let me
+pull this up over here. Give me one
+second.
+Okay. And then let me screen share my
+actual VS Code to show how we'll turn
+this thing into code.
+Share VS Code. Actually, I'll just share
+my whole desktop. And again, as per
+usual, if you see anything you're not
+supposed to see, please let us know.
+We'll clip it from the video and um
+we'll keep going.
+So right over here I have a very very
+basic uh next.js app that I just made.
+You can see if I have the commands that
+I ran. I basically just ran pnvpm create
+next app and added baml into it. Um and
+the only thing I'm going to do is I'm
+going to go ahead and just start off
+first with just a example of the exact
+thing that we did which is recipes.
+I can't type.
+My computer doesn't let me type. Okay,
+that works.
+Rec.
+I'm going to zoom in and write this over
+here. We want to start off with function
+generate. Oh, there you go. Okay, cool.
+name string ingredients
+uh servings
+and then class ingredient. Okay, cool.
+It kind of figured it out over here
+anyway. I didn't have to write any code
+which is kind of nice.
+Cool. And let's just play around with
+this prompt really fast and see what we
+do. Uh let me know if this font size is
+acceptable for everyone else.
+Yeah.
+>> So, right over here, we're going to make
+a recipe. And this will be like, let's
+say like uh I love SOG paneer. Uh that's
+what I had for dinner last night. So,
+let's let's use that.
+>> I want a recipe for so paneer.
+>> All right.
+>> When I go run this, uh someone's
+talking. Can you mute them, Dex? Okay.
+>> Yeah, I got it.
+>> Go run this. The first thing that's
+going to happen is the model's going to
+start generating stuff.
+>> And I'm going to try and show some
+subtle stuff along the way. So you can
+see how it's streaming and how it's
+actually rendering stuff. I don't know
+if you guys caught that. I'll rerun it
+really fast.
+So you can see how it's streaming.
+>> Okay. So on the on on the left you have
+broken JSON and on the right you're kind
+of just like always producing a valid
+object. Right.
+>> Exactly. So this is pretty much a
+guarantee that BAML does for you. So now
+you don't have to worry about this. But
+there's something that kind of bothers
+me over here, which is ingredients don't
+really mean anything until the full
+ingredient has come out of it. I don't
+really want ingredient to be used. I
+don't really care if the name is paneer,
+but the quantity is uh is not yet
+defined because the model's only printed
+out these tokens. How could I do that?
+Well, one thing you can do is we can
+just tell the model that, hey, this
+thing only should come out when it's
+actually done. So every ingredient will
+only stream as it's done. So I'll show
+you what that means. Now you'll notice
+the streaming mechanism only prints out
+the whole object instead of partially
+regardless of what the model is doing
+along the way. So what this does is it
+actually gives you good guarantees on
+the types of the object over there. On
+the other hand, instructions, I'm
+actually very happy to have these stream
+out along the way because they're long
+forms of text. So it's not that useful
+for me to have it.
+That said, the serving size is almost an
+essential necessary thing that I need.
+So why don't we also tell the model that
+hey this thing cannot be null when it's
+processing it needs to be at least
+somewhat present. So now when I actually
+run this even if the model has dumped
+out some tokens until the serving size
+has appeared nothing will be rendered at
+all to the model. So it allows me to go
+and control this purely by giving some
+minor annotations into the code. what
+these small things I did make a huge
+impact in exactly how
+>> the stuff is actually going to be
+rendered in the UX that happens.
+>> So you don't push an an ingredient into
+the final object until the whole
+ingredient object has been streamed.
+>> Exactly.
+>> Okay.
+>> Sick. I haven't gone super deep on this
+part of BAML or doing this like
+otherwise. I know like AI AI SDK has
+some stuff that kind of does this. Um,
+but this is really cool to see.
+>> I'll show you the exact manifestation.
+And this is really subtle, so see if you
+can catch it. Um, of what this actually
+does.
+Let's see if the images load. Once I do,
+give it a second. There we go. Okay.
+See if you guys can see what's happening
+over here.
+Anyone have a guess?
+I'm just streaming numbers and a plot
+line. I'm plotting uh how many
+tablespoons of water are there on Earth
+and I'm accumulating numbers. And here I
+asked it to list out a bunch of XYZ
+coordinates.
+>> All right. Where's our super cracked
+chat? Tell us what's going on here.
+>> So exactly it it defaults to zero.
+That's part one. The other thing it's
+doing is while the numbers are actually
+generated, LLM spit out numbers from
+left to right, which is reasonable.
+That's how I write them as well. So, it
+actually renders a five, then a 53, then
+a 530, and a 53,000. It actually makes
+for a very, very, very jarring
+uh UX on there. But what if you said
+that, hey, numbers can't actually stream
+until they're fully done by default?
+Well, once you do that, you now get a
+view like this. It's a little bit
+slower,
+but every single point is rendered at
+the exact same point that it needs to be
+on the XYZ axis without you having to
+think about it. And what this means is
+there's no point at which rendering this
+graph that it's invalid or incorrect.
+There's no such thing as an invalid
+state. It's incomplete, but there's no
+invalid states like this where it's like
+slowly hopping up to the right digit.
+And more tangibly, what this leads to is
+if I was rendering this graph, which is
+just book popularity over time. You can
+see how this would be much much harder
+to deal with without you having to think
+if you had to think about this along the
+way. This axis would just not work cuz
+you'd render at one. So your graph yaxis
+would snap all the way to the left and
+then go all the way down along the way.
+>> Question in the chat. How do you
+determine when a number is complete?
+a lot of algorithms uh that we've built
+out there. You can go read the BAML
+source code. But the idea is that if we
+know what fields what fields are in a
+data type or something else, we can
+basically run a bunch of heristics to
+know if a number is complete along the
+way or not. For example,
+>> the simple the simple version. Yeah, go
+ahead.
+>> Let's take an let's take an example of
+like an integer for example. If I'm I'll
+draw on my screen. If an example is like
+if you know that the type is an integer
+and the model spit out one two three,
+you don't actually know if it's complete
+yet. But if the model put a comma there,
+you also don't know if it's complete. If
+a model put a period there, you also
+don't know if it's complete because you
+could be in Europe um or you could be in
+Europe instead of um in America because
+periods don't mean something else. But
+on the other hand, if the model put a
+question mark there, you know it's
+complete.
+So you can kind of have intuition about
+how numbers are going to be dealt with
+uh in different contexts based on what
+you know
+and we just have done a lot of this work
+under the hood for you.
+>> Uh kind of
+>> right like I would be looking for a
+comma, right? It was like if I integer
+specifically integer and JSON I feel
+like is an easy one. You're like okay
+when is the field like JSON has a field
+terminator which is a comma in most
+cases or a like closed bracket for the
+object.
+>> Exactly. So let me let me go into
+Exactly. So that's kind of how we can
+build intuition hunches around this. Let
+me clear my notation.
+>> So we need reax or grammar for every
+data type basically. I'll clear it.
+>> Yeah, that's kind of what the BAML
+parser does under the hood. But what
+this lets you do is I want you guys to
+take a look at this UI really fast and
+see if you can catch the difference. and
+it's named incorrectly, object and
+array. But there's a very subtle
+difference here.
+>> I like the I like the the second one
+better. I like the array one better.
+>> What do you like about it better?
+>> I I don't know. It just feels more pol I
+mean the other one is like more
+interactive. It has more like the where
+the token stream one by one. It feels
+more but like just feels super polished.
+>> I think it's just I think what I
+>> what I would describe it as is u Andre
+Karpathi talks about this autonomy
+slider all the time. But here we kind of
+have like this UX slider of how much
+streaming do you want to do? The object
+one is basically full streaming. Stream
+every token as soon as it comes there
+like show the user everything. The array
+one is somewhere down here which says,
+hey, I'm only going to show you cards as
+they finish and nothing else. And a
+totally different approach would be,
+hey, I'll show you nothing until it's
+completely done and then I'll show you
+the whole thing all at once. It's not to
+say any one of these are better or
+worse, but definitely your users will
+have a preference for different ones of
+them. And what you'll want to do is
+you'll want the ability to control that
+very trivially. So you can actually go
+ahead and decide what you do.
+>> I would almost want like I feel like
+something in the middle would be really
+good. Like not don't stream every single
+token, but like show the header and then
+once all the text is there, show all the
+text in one go. Like the streaming every
+token just feels like chat GPT and it
+feels like every AI app I've ever seen.
+The second one feels like it is real
+time and I can tell it's AI. Maybe if
+there's like a spinner here after each
+one of these. But like I I yeah I think
+there's like yeah having I think I think
+your point about like having control and
+granularity on every field is is the
+right one to be focusing on.
+>> Exactly. And I think the point here is
+like the thing that differentiates most
+AI applications today is purely the UX
+and this is a big part of the UX of how
+you're actually streaming stuff around.
+So why don't we take this example that
+we're building out here, the recipe
+example to fruition and just complete it
+uh in complete it.
+Let's do this.
+So what we have here is we have a
+function called generate recipe. It's
+going to take in a recipe produce a
+recipe data model. We put some streaming
+traits around it. So we actually get to
+know that hey servings it won't pop up
+until servings are complete. Um, let's
+also guarantee that name will also exist
+at all points. Like this data model is
+kind of useless until the name and the
+servings are done.
+Uh, ingredients, they don't have to be
+done. Uh, they don't have to like I
+don't I'm okay if the ingredients aren't
+yet started, but I definitely want to
+make sure that ingredients only pop in
+as an ingredient is fully complete. And
+lastly, I want to make sure that
+instructions only pop in uh can stream
+as much as they want. I don't really
+care. So, let's build a UI for this um
+really quickly.
+layout.tsx page.tsx.
+Um, so I'll just do this in the main
+React app because I why not? So the
+first thing I'll do is import.
+>> Okay. So this is and this is I guess is
+using the built-in BAML generator for
+creating for creating like React hooks
+that you can use to stream this stuff
+down.
+>> Exactly. So it's just it will just do
+we'll do purely purely on the react side
+but we don't have to think about
+anything
+from
+do I have it here src
+client slash react slash hooks
+use generate recipe
+>> nice
+And what I have here is I've used
+generate recipe. This thing is going to
+spit out data to me. It's either going
+to be a recipe type or undefined.
+And I think it streams by default.
+So, and the type of data is going to be
+as you can see name is guaranteed. Uh
+where is this? Oh, sorry.
+If data
+data name is guaranteed to be there as
+it's filled in name dot
+name
+ingredients.m mapap
+I
+and all these are guaranteed to be
+completed along the way. So I actually
+don't have to worry about streaming over
+here because this thing will just do the
+streaming work for me and it basically
+guarantees that my type system matches
+the type I have over here. In theory, if
+I remove this and I only use
+ingredients, then unit should become oh
+data is
+sorry
+when I'm writing ingredients unit
+becomes uh where is this?
+Let me just make sure the types.
+>> Okay. So the the point here while you're
+while while you're fixing that I guess
+the point here is that you don't have to
+put like question mark everywhere to do
+these like optional checks on everything
+because you're like okay once once an
+item is in that array I can guarantee
+from the parser that that field will be
+non-null rather than having to be like
+okay if this is true then show it
+otherwise don't show it and have all
+these like conditional checks down like
+streaming into my render function or
+leaking down into my render function
+basically
+>> I can put all that logic declar
+comparatively in my class definitions.
+>> As 408, is that right?
+>> Sorry, I write a lot more Python code
+than type code.
+>> Scale issue.
+>> Yeah, probably
+uh ingredient. Yeah, when I go do this,
+unit becomes like optional when I'm
+actually returning this type along the
+way. So, let me catch up to what we're
+doing again. So what we're doing here is
+we're calling the generate recipe method
+we have in a streaming mechanism. For
+every single instance that we get of the
+stream, we loop through every ingredient
+and we see unit. Unit is a string or
+undefined. But if we go back here and we
+actually say that ingredient can only
+pop in when it's done. Then in theory,
+unit should actually no longer be
+undefined. It should only be defined at
+compile time. And that is exactly I
+think what happens.
+There we go. That's exactly what
+happened. So unit now becomes known at
+compile time. So now I when I do
+rendering, I know how to render
+ingredients and I just render an
+ingredient with this thing. So when I
+actually render the new quantity, I can
+do unit quantity times
+uh dunk dot servings. And this is
+guaranteed to be a number. There's no
+streaming constraints. So I get a lot of
+simplicity. Otherwise, what I would have
+to do if I didn't have all these things
+on here.
+>> Okay. Okay. And the is the chunk going
+to be the incrementally updated object,
+right? It's not it's not just the like
+diff of the tokens that were sent. It's
+literally every chunk that comes off of
+that iterator in in Typescript is going
+to be the full object.
+>> Exactly. Otherwise, now to build a
+reactive component, I have to write some
+code like this. And if every single time
+I want to build some sort of
+interactivity, I have to write code like
+this, I basically won't do it because
+I've made life a lot harder for myself.
+So what I find is adding a few type
+constraints on here can go a long way in
+terms of making life easier for
+developers to actually go ahead and
+build the system that they want under
+the hood because now this thing reflects
+the type system correctly and I'm
+reflecting my UX in the type system. So
+now rendering a UI object off of this
+ingredient type is just infinitely
+easier
+>> because yeah, what I can do now is I can
+say Oops. Yeah, let's I would love to
+see this like mixed in with a nonI
+generated variable like your slider or
+something.
+>> Well, exactly. So now you just do like
+you say something like this. So let me
+show you that code. I'm going to go
+write this over here.
+There we go. Okay. Um so when I go write
+this, I'm going to say like
+state uh servings.
+So, we'll do this.
+>> Oh, I see. Okay. So, you have a state
+thing here. Cool.
+>> I have a state right over here. And what
+I will do here is I'll say like
+now I have to actually make another
+object.
+And then you're going to iterate over
+this.
+And because I'm doing the partial
+version of it, I'm going to render a
+recipe from the partial versions of it.
+What is this?
+I don't suppose this uh Okay. Well, I
+will
+Sorry, I uh finish the original demo and
+then uh and then we can come here and
+make it toggleable.
+>> Well, I can I can write the UI type out
+really fast. It's not good.
+>> Yeah.
+>> So, what I'll do over here is now I'll
+do this and I'll do use effect as long
+as I have stream data. What I'll do is I
+will take the serving scale and I'll say
+sets
+set recipe.
+>> Yep.
+They're right over here. I'm going to go
+multiply this together.
+>> And as soon as I
+>> Okay, so you're just basically
+>> overwriting the recipe and then mapping
+it in to update the quantity.
+>> Uh I'm actually silly. I've I haven't
+written front end code in a very long
+time.
+I'll do this. I have to import this.
+Uh as soon as I get streamed, I do this.
+And now what I will do is
+I don't actually know how to build a
+renderer in
+>> I'm sure I'm sure uh I'm sure Claude can
+help you out with this.
+>> There you go. I'm just going to go fill
+this in. It's going to fill it in for
+me. I like if not recipe. Cool.
+Uh
+um and I'm going to go fill this out.
+And what I'll say is ingredients will
+convert over here. Um
+e
+add a little bit of space.
+Oops.
+M.
+There you go.
+And now I've built myself a nice little
+unified symbol right over here.
+>> Oh man, we got some React experts in the
+crowd telling you that.
+>> Yeah. So I apologize for not being a
+React expert. Um, but what you
+>> we will push this code. You should put a
+PR in and uh update it to be more
+correct.
+>> Uh what you do over here is you just do
+you just take the quantity and just
+multiply by the serving skill and then
+you can turn this into a slider in React
+along the way and go do this. So if I
+actually were to show you the real code,
+um I actually wrote this code with
+actual react and you can go
+the exactly what we do where we actually
+have like we do the exact same thing
+that I was showing earlier which is we
+have servings that we set over here then
+we have servings ratio and then we
+basically use a slider to go and change
+the ratio along the way and that sets
+the number of servings. So the initial
+state is always set by the recipe
+providing me a number of servings. And
+then we just use the serving state to
+tell me what I'm doing.
+And what this lets me do is when I go do
+this, I just take
+if uh where is this? Sorry, let me find
+this.
+Every single time I list out an
+ingredient recipe, I just list it out
+with the ratio of the serving ratio. And
+that solves the problem for me. If I go
+down to here and I show you what this
+code looks like. Oops. Over here.
+This thing render.
+We made too many abstractions when we
+did this.
+>> Yeah, actually like you probably don't
+even need to use effect if you're just
+computing it live in the thing. But
+>> yeah, probably not. Uh, well, we use a
+slider to go do it. So I maybe we do. I
+have no idea. I'm not a React expert. I
+do mostly Rust code sadly. But we're
+able to is we just take the amount and
+we just like format it according to
+this.
+>> And
+>> the reason that we do format amount is
+because it turned out that when you
+actually multiply numbers together, you
+actually don't get nice fractions. And
+what I wanted to do over here in this
+UI, if you take a look at this is notice
+what I actually do is I actually have
+like halves with like proper UTF UTF8
+half tokens and 14 tokens and etc.
+So I actually wanted the fractions to
+look good. So we did a little bit more
+effort to take the fraction you have and
+actually render in a really really nice
+way.
+>> But again, these sort of things aren't
+possible. And there's nothing I can do
+in the LM prompting to actually make it
+render this out in the right way.
+There's just it's just not possible.
+>> Also, if you have a scale that can
+measure four and 38 grams of something,
+there's might be other problems going
+on.
+>> Oh, my skill can do that. You just need
+a better You just need to cook more.
+Um, but I I think a large part about
+what the conversation today is about is
+really around like designing these UXs
+and different challenges that you can
+have. So, one of the most basic things
+we showed you is you can go and control
+exactly how you're streaming along the
+way. But I think another thing that's
+worth talking about is actually like
+what is the implication of this?
+Assuming you can go build this, what are
+interesting UI things you can do to
+actually make life better for your
+users? Because building is one part, but
+another thing you can do in this
+approach is now let's say I'm building
+an invoice generator. So we've all seen
+a lot of invoice generators. If I'm
+actually streaming out objects and I
+have certain things be like editable.
+What I could actually do in this in this
+UI, imagine this is an invoice thing is
+or but in the same case of recipes, I
+could actually put an edit icon right
+next to chicken breast and say I'm going
+to edit chicken breast and replace what
+500g is because I know the real answer
+should actually be like 750 grams for
+four servings
+or the unit should actually be like one
+breast or two breasts instead of 500
+gram of chicken breast. So, I can
+actually make edit uh UI components that
+are editor editor only edit the state of
+this. And even though the LM is
+constantly going to be spitting out
+chicken breast 500 grams, I have edited
+it to be one breast or um Thank you.
+I've edited it to be a single amount.
+So, if you're building any sort of
+application, you can actually like build
+a user interactivity flow much much much
+sooner than you think. So, if you're
+doing I know folks that are running like
+that are generating like on the order of
+like 8 to 5,000 5 to 8,000 tokens out of
+LLMs.
+If your user can only interact with your
+component at the end of 5,000 or 8,000
+tokens, you've basically built an async
+workflow.
+>> Like your user is basically tab and come
+back to it later,
+>> which is a totally different mindset to
+go in.
+>> If um let's say my code a bit a lot of
+your engineers, you've probably seen
+this one.
+um my code is compiling
+>> um my tokens are my LM is generating
+like my tokens are streaming it's the
+same thing like the gap is long enough
+your users will leave and go do my AI is
+thinking exactly your users will leave
+and go do something else and it doesn't
+matter if you made it a little bit
+faster because fundamentally what's
+going to happen is your user is
+distracted. So, if you can keep your
+user more engaged, you can actually lead
+to a higher outcome workflow much much
+much faster. And for anyone that's
+building agent code, you're basically
+doing structured outputs all the time.
+You're basically just streaming
+structured outputs. That's what tool
+calls are
+>> cuz yeah, you're showing the tools,
+you're showing the thinking, you're
+showing the like, okay, here's what's
+happening. No, I love this. This is this
+is sick. I've been meaning to play with
+this for a while and I haven't had a
+chance to. Um, are you guys still
+talking about that? You showed me like a
+to-do app a while ago which was like
+even more interactive, right?
+>> Is that still live? Is that still
+kicking?
+>> I think so.
+>> And then we should probably we should
+probably transition to uh questions and
+stuff.
+>> Yes. So, let's see if I can get this
+to-do app kicking. Um so, like this is
+one example what you can do with a to-do
+app. And again, these structured
+outputs, let me refresh this.
+Um sadly, this is not maintained by my
+team. is maintained by me and I am not a
+very good reactive and probably we
+should put someone on this in a better
+way. Uh so I'm going to go run this
+really fast. It's like I'm a um I want
+steps I want by things to get better at
+chess.
+And so when you do some sort of
+streaming here, you can see that this
+thing is actually uh
+uh create five steps. No, create five
+steps.
+Remove
+that task.
+Five steps.
+No, this did not work. Did not. Let me
+reset this.
+>> I thought you just put in your to-do
+items and then you like tell it what's
+been done.
+[Music]
+>> We swapped this to use a really dumb
+model and I was curious how that would
+behave. There you go.
+Okay.
+>> So, what did what and you guys saw
+something kind of interesting here,
+which is this thing actually streams
+everything.
+This thing only streams as it comes out.
+I'm a pro chess player.
+I'm a pro.
+I do chess.
+I think this will work. And what's
+interesting here is actually adds
+another tag to it dynamically along the
+way. But now as a you as a as a user I
+can say like I actually just did this
+myself or I can uncheck this. So I've
+built interactivity into an application
+that is almost typically only LM
+powered. If I go through and said like
+I reviewed
+games yesterday
+and all of this is actually just
+streaming streaming results. It doesn't
+feel like it. It feels like it's an
+agent, but I'm actually streaming
+everything, the entire background. And
+that's what makes it, I think, feel a
+lot more natural. It is very, very
+similar to the example that I was
+showing over here, which is the
+difference between this versus this.
+I have chosen to be on the more the left
+hand side of the streaming here, where I
+don't want to stream everything. I only
+want to stream a couple of things.
+>> This is dope.
+But I'll open up to questions today. Uh
+Dex, firstly, what are your thoughts on
+this kind of stuff? H how do you
+envision people using these kinds of
+tools?
+>> Uh I mean, I'm obsessed with coding
+agents, so I'm just kind of sitting
+around thinking about like almost none
+of them support streaming. Codeex kind
+of does, but it's a mess. And like I
+would love it. I think open code has
+some good streaming stuff in it, but
+it's like there's there's so much you
+can do to make the UI more interesting
+when you give kind of the model a
+stateful object to interact with and
+either like patch and send updates to or
+uh it almost feels like I don't know I'm
+I'm I'm getting like flashbacks to 10
+years ago when I was like learning about
+the React virtual DOM and you basically
+just have like a system interacting with
+like a set of state um and it feels much
+more like if you're building browser
+like the browser was designed to handle
+this kind of stuff. And I feel like
+we're in like the stone age in terms of
+hooking LLM up to be able to interact
+with visual state in that world.
+>> What's really interesting actually on
+that idea is I' I know a couple of
+people that do this, which is
+ingredients are really just an array of
+items.
+But there are a lot of scenarios where
+you ask an LLM to talk about generate an
+array of items. But if you know that the
+items are only coming in as they
+complete, you can actually kick off
+future workflows
+on top of those items. So if you're
+going to run like a if if you're going
+to run like a item uh what
+>> oh like emit the item and then go do a
+deep research to like hydrate it with
+like links that I can click on to learn
+more or something.
+Like if you were going to go write this
+kind of task, it's like uh it like use
+LM for research
+on I typically this thing would be a
+thing that you would have like think
+about your latency workflow here. You'd
+have to generate every item and then go
+do this. But now you can actually go
+build this out really really easily
+simply by running an iteration loop on
+every single item that comes through.
+So like the speed boost that you get is
+just insanely high along the way.
+Uh and I think coding agents especially
+can make a lot of uh benefit from this.
+Um someone asked a really interesting
+question. You talk about birectional
+communication managing state between the
+front end and the back end.
+>> Thoughts about a couple of different
+things.
+Um, birectional state is a thing we
+talked about a lot last episode as well
+and the voice agents and in the
+interruptability thing. So, I'll pull
+that up really fast.
+Also, Dex, is your website up? We should
+give you an exact one to one copy of
+this stuff.
+>> Oh, yeah.
+>> I actually load up everything down here
+and I think we have whiteboards where we
+talked about how birectional agents
+work. It's actually a pretty complicated
+system to go build out because the
+fundamental problem is biirectional
+stuff especially when you're streaming
+is choosing exactly when you interrupt
+the thing that's streaming to inject the
+new information. um if that's of
+interest at this concept uh episode 19
+interruptible agents probably talks
+about it in a lot more detail albeit
+it's a very specific use case of how you
+um how you actually how you do it in
+terms of interruptions but the exact
+same things in terms of birectional
+you're basically interrupting the stream
+to go rest steer it in some other way
+>> I have one question for you before we
+get into the rest of the questions did
+you just ask me if my website was up
+>> for the code for the code thing. Uh it's
+>> Oh, you mean the new the new website?
+>> Yes, the new one. It's so freaking cool.
+>> It's coming. It's coming. We're going to
+ship it Friday. Uh keep an eye on Hacker
+News on Monday. Um there will be fun
+things, fun fun announcements coming.
+>> Okay, you should copy and paste the
+podcast page and put it on so then you
+have access to it. It's all This
+website's open source.
+>> Amazing.
+>> Yes. It was not meant to be a shots
+fired at is your website. And so I'm
+just excited to talk about it more. So I
+was like, I'll link you to it.
+>> Um, okay. Ice dev2 dev said I'm
+>> sorry. I'm just making sure answer's
+question as well.
+>> You didn't comment on Agui, which I'm
+curious your thoughts.
+>> Let me go pull it up really fast. I
+don't think I've seen AGUI. I'll pull it
+up so everyone can see what it is.
+>> This is the like co-pilot kit project,
+>> which is awesome.
+Okay, let's look at it. Um, it's a
+standard protocol to help you go manage
+information through your application.
+Um, I haven't used it, so I don't have a
+strong opinion right now. Um, I don't
+really know how they do it. I think the
+hardest parts about these systems isn't
+actually like the isn't the hardest way
+to sync these systems isn't actually
+about sending data. Isn't actually about
+like the UI and everything else.
+Building UI, there's lots of frameworks
+that go do that. This might be one of
+them. The hardest things about it is
+actually like the mechanics of how you
+write it. So for example, the fact that
+I could actually like not know this and
+only use like the done version of the
+ingredient type and I get the type
+safety instead of having to write
+something like
+uh instead of
+>> you have like six different renderers in
+these all these different conditional
+blocks of like okay if we have this show
+this we have this show this otherwise
+show nothing and all that stuff.
+>> Exactly. It's all about like the
+question like if I have to write like
+for example if I have to write something
+like
+stream data ingredients on map and I if
+the way I have to write this is I can't
+actually write this I have to write
+something like
+this
+then I've kind of lost the benefit of
+any framework there's no framework that
+I can really use where if I have to go
+it's just the ergonomics of writing this
+code is very challenging
+>> it's declaring You're doing you're doing
+declarative versus imperative and we all
+we all know I don't know if there's any
+list pads in here but we all love
+declarative code over here.
+>> Yeah. Yeah. I think so like I don't know
+if the framework actually supports like
+types and propagating types correctly
+but if it does it it would be that's
+really the most important part about
+doing this stuff in my opinion.
+>> Um I think we covered decision workflows
+that can update based on inputs to
+previous steps. I think the to-do app
+covers that well. Um, could this be the
+AI equivalent of progressive disclosure
+UI pattern? Meaning, could streaming be
+used to reduce cognitive lo while
+showing the essentials to start and
+letting the user choose what they want
+to see?
+>> Yeah, I don't I don't know who said
+that, but that is probably that's a
+great way to put it of what I think the
+power of streaming is uh for AI
+applications.
+Um, and then there's someone talking
+about letting the AI design the UI
+itself instead of just managing the
+data. Uh, I think my take on that is
+probably like I wouldn't put that in a
+production app that I wanted to sell to
+people, but I bet you could do it for
+certain use cases and it would look
+really dope.
+>> Well, actually, Dex, I have a way to do
+this that I think would be really
+freaking cool.
+>> So,
+>> okay,
+>> I know that I know the shape of my data
+over here, right? As long as I know the
+type of my data,
+>> what I could do is I could say, "Hey,
+hey, model, I have a type that is
+described with this interface. Can you
+give me a React component that takes in
+that interface and renders it?"
+>> There's some people doing that.
+>> Like there's some I think like the Tambo
+guys are working on that.
+>> Yeah. And I actually think it's a great
+idea long term because what's
+interesting now is I can actually have
+one model generate the data and a second
+model render it. And the rendering is a
+one-time task. As soon as I know what
+the shape of my data model is, I can
+actually like pull it out and I just
+render that React component dynamically
+every single time.
+>> This is like the um like the dynamic
+extraction example almost where you're
+like, okay, here's the here's the
+document, generate a schema, and then do
+the extraction, right?
+>> Exactly. So I want I'll run this again.
+So like what I'm going to do here is I'm
+going to take this invoice. I'm going to
+go run it out. And what I'm doing here
+is I'm first having the model spit out
+what it thinks of what it thinks the
+schema of this data type is. And it does
+that and it builds out the schema. And I
+run a secondary task to actually extract
+data from the schema.
+>> Now,
+>> and so you use the schema to render this
+UI. And then you just render. Yeah.
+>> And the third task I could have done is
+say, hey, I have this schema I'm going
+to produce. Give me a React component
+that takes the schema and renders it.
+And if I did that 100% I can make this a
+lot prettier. In fact, I should probably
+do that. I think this example would be
+so much more fun if I built that in. You
+could see something even
+>> You should have a third button here that
+is like dynamic render and it's like
+different every time.
+>> Exactly. Yeah. Um because like the AI is
+generating the React component that
+renders that type, but it's different
+but stable. And that's an important
+distinction to make along the way.
+>> So that's cool. Yeah, whoever asked that
+question like 100% you can do this and I
+think you can do it in a way that's
+actually good as long as this place that
+you start with is actually a type system
+and not really arbitrary code. Whether
+the type system is described in JSON
+schema, whether it's described in Zod,
+whether it's described in BAML doesn't
+really matter. But the premise of what
+you do with it is um is that you use the
+type system to power what the AI does
+rather than uh rather than just do it
+with vibes.
+sick. Uh there's a lot of chatter, but I
+don't see any more questions. Anybody
+got any last minute things? Otherwise,
+VIB Bob, let us know what uh the big
+takeaway here is.
+>> I'll wait one more second and see if
+there's any more questions. But
+otherwise, like really the big takeaway
+is like when you're designing your AI
+applications, spend a couple more
+minutes thinking about what the UX is.
+And then like if it's easy enough, if
+it's literally as easy as writing one
+line of code to make your object stream
+to like and feel more ergonomic, just go
+do it. It's not hard. It's really really
+easy to make your applications feel
+natural.
+Um, could this be used to optimize token
+usage? Streaming really doesn't optimize
+token usage in any way. Uh, so I don't
+think there's that would be orthogonal
+things that you could do to make uh
+better. If anything, streaming lets you
+use more tokens without having the user
+have to wait. Like you can like stream
+out the thing and then be like, "Okay,
+now we're doing the research." And
+you're burning lots of tokens to improve
+the quality iteratively over time while
+not having the user have to wait 20
+minutes for deep research.
+>> Uh this Rolando said something really
+interesting over here. You can guard
+rail the design with a design system
+instead of generating schema. And I
+would generate a layout kind of like
+this. So,
+>> so you already have the components, but
+it's taking from your design library to
+to actually render the stuff. I like
+that. That's sick. Awesome.
+>> Exactly. So, then you could have a form
+that literally matches the theme of your
+website. And if you're using something
+like Shad CN, that's kind of what you're
+doing manually as a developer, but now
+you just tell the AI to only use these
+specific components and boom, it fits in
+right away. So, it's even more it's even
+more like tied together. And I think
+like personally for me, this is what I'm
+most excited about AI and I think we're
+not really there yet as generally
+engineering teams because the complexity
+of doing this stuff is like like I said
+if every single time I want to stream
+something and make it slightly better I
+have to do like five extra tokens or my
+my app is going to re yell at me because
+TypeScript says no. I'm just not going
+to do this thing especially if streaming
+partial JSON is hard. But if it's really
+easy and I can add one line of code to
+do the thing to make it do the behavior
+I want, I'll do it more correctly. It's
+the exact same thing of like why use
+state and react makes it way easier to
+build reactive apps because I don't have
+to think about like I just change the
+state and somehow React will rerender
+the home component and do the right
+thing. My brain cycles don't go on it.
+And I think that's the same thing over
+here as a developer. You probably don't
+want to spend brain cycles thinking
+about how to do partial streaming or any
+of this stuff. You just kind of want it
+to work.
+Oh yeah, there's there's so much cool
+stuff to build.
+>> Yeah, I think so too. I we have a couple
+more things that we've been thinking
+about how streaming works for like long
+agentic systems. So maybe we'll do a
+future episode on that.
+>> Uh but that is also a whole different
+ballgame of how you go do that.
+Um Tambo UI is pretty cool. If you
+haven't checked it out, they do some
+interesting stuff for generating UI
+components on the fly.
+>> Yeah.
+Um,
+>> sick y'all. This was dope. Thank you,
+Vib. I have been looking forward to this
+episode for a while.
+>> Where do you actually persist results?
+Um, so just for more context on how this
+thing works.
+Uh, this use generated recipe actually
+comes from the BAML code you write. But
+under the hood, what we do is we
+actually codegen BML code. We actually
+codegen react code and we code genen
+react server action code
+that actually does the uh that actually
+makes the calls for you and then does
+all the work behind the scenes to
+propagate data straight to the front
+end. So there's a server action file and
+a um and a hook that gets codegen. So
+then when you use this it's actually the
+data is living in the hook itself. Um if
+you go read this code somewhere down.
+>> Okay. So if I wanted to, I mean that
+server action was pretty pretty small.
+Like if I wanted to, I could stream it
+and like shim part of it out to a
+database and stream the rest of it down
+to a UI if I wanted to. Right.
+>> Exactly.
+>> Do like optimistic updates basically.
+>> Um are there any um security
+implications to be aware of with
+streaming? Um no, I don't think so. I
+mean, sometimes you might like, for
+example, you might want to be really um
+I can think of a couple actually that
+will happen in like eventual apps. Like,
+for example, sometimes I want to hide
+some secret words and I don't want to
+show them off to users. Um, and I think
+the most the easiest example of this is
+like when an LM is streaming markdown,
+sometimes you'll see it go from like
+title here and before it actually makes
+the title bold, it just spits out like
+asteris title and then eventually it
+snaps to bold and I'm doing this and I
+kind of as a user I kind of wish I never
+rendered the asterisk at all. I just
+waited until the title word popped in.
+Um, and you could do the same thing with
+like rendering some sort of sensitive
+data where like for example a password
+field should not render the raw password
+until the password field is complete and
+it should render as dots and the user
+should opt into seeing it like envirs or
+something else.
+Um, you probably would have to do a
+little bit more engineering work to go
+solve that problem on your own in some
+use case. Like if you have a raw text
+field and you want to just hide parts of
+it, that's just not a thing you can do.
+But it it's not really a major security
+flaw because the data is available
+anyway. It's in the raw text. If you
+wanted to cancel the data generation
+like for example chat GBT does this
+where like if you if you start talking
+about things it's not supposed to talk
+about and it starts answering in the
+middle
+>> it dies midstream right it's just like
+oh nope
+>> exactly so the way you solve that
+problem if you go back and look at our
+interruptions video episode 19 I think
+is
+you have to go interrupt the stream you
+have to be monitoring the stream and
+checking for something in an invalid way
+and then go cancel it. Uh but that's the
+only real way to go do this. There's no
+inherent security problems in streaming
+itself.
+Uh does this work with Tanstack? Yeah,
+it should it should work with Tanstack
+as well. But you don't really need to
+use Tanstack uh for at least these calls
+because these calls are just calling the
+LM directly in the server action itself.
+So you don't have to make a use query
+mechanism out of it along the way. It's
+kind of a self-contained hook for every
+function that you define.
+Sick. Cool. I think that puts us at
+time.
+>> I am extremely jetlagged. So, uh, today
+we're going to go and reset this and I'm
+going to go get some rest. But it was
+tons of fun. Thank you everyone for
+joining. Dexter
+>> super fun.
+>> Real quick announcement. We are changing
+we are changing the platform up next
+week. We're going to try to move this to
+Streamyard. So, they do have live
+streaming. Um, there will be a better
+chat experience. The recordings will be
+much higher quality. Uh so thank you all
+for the first I think it was episode 20
+episode 21. Everyone here for supporting
+and being a part of this community and
+giving us the bringing us your energy
+and your great questions. We're going to
+double down on the show and maybe uh
+give you all a little bit better
+production quality going forward. So
+super stoked about that.
+>> Yeah, we are too. Um and also like
+firstly thank you everyone. We just hit
+I was going to make I totally forgot the
+beginning. like we've uh we just crossed
+1.5K subs and that is awesome to see
+everyone supporting us and actually
+watching these videos that start off
+with just me and Dexter talking at each
+other for an hour about weird AI topics.
+Um
+>> a lot of shouting. It wasn't just
+talking.
+>> We're both very passionate humans as you
+as most people can probably tell at this
+point. Um,
+>> we're still learning to share the toys.
+>> And please keep sending um topic ideas
+if you ever want on our on the GitHub
+for AI that works. If you ever have
+topic ideas that you think would be
+awesome to see, like post them on there.
+If some code feels unflushed out,
+comment. We'll do our best to make sure
+that it's actually helpful and guiding
+people in the way that they want. But
+this was great, Dexter, as always.
+>> Awesome. Thanks everybody. Catch you all
+next week.

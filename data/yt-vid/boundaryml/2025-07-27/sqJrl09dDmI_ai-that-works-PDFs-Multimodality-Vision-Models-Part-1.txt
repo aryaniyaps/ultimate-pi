@@ -1,0 +1,1692 @@
+All right,
+>> let's do it.
+>> Welcome back everyone. Uh it's another
+uh week of AI that works. You've got
+myself Vibov and my co-host Dexter. And
+today uh we're going to talk about a
+topic that I think is a little shift
+from what we've been talking about a
+while. We're going to go back into the
+depth of models for a long time. We've
+been talking about concepts context
+engineering and other application level
+stuff. Today we're going to go deep.
+We're going to talk about multimodality.
+There's a lot of models now. Models
+support APIs take PDFs. APIs take
+videos. APIs take audio. APIs take
+images. APIs take text. How do we think
+about that from a foundational level? I
+think is I think is the goal of what I
+would love to talk about today. Dra,
+does that sound about right?
+>> Uh, yeah. I'm looking forward to going
+under the hood and and looking also I
+think um we talked about if there's time
+going into some of the more full stacky
+multimodal experiences like chat GPT
+image gen or like the Gemini PDF parser
+and kind of just looking I know you're
+spend a lot of time understanding how
+those things work under the hood so
+learning how to best implement those
+things I think could be really
+interesting. Um, yeah, I think let's
+let's just start off with something
+really really basic. Um, and we're going
+to do a screen share, but before I do
+that, I'm going to make sure that I have
+access to the whiteboard.
+>> Um, Dexra, can you give me access to it
+really fast?
+>> Oh, did that not work? Hold on.
+>> No, it didn't. Um, but I think what I
+want to start off with is how many of
+you in the chat and you can raise your
+hands, type in chat, whatever you want,
+uh, actually use multimodality
+uh, with models today beyond just text.
+A couple people
+um, it sounds um, how many of you trust
+the multimodality of systems as they
+work out there?
+Hit or miss? That's generally uh some
+people say yes. Um I think generally
+what I have seen with multimodality is
+it's definitely gotten better from how
+the systems worked to how they used to
+be when they first came out. Models are
+in my opinion like in front when it
+comes to OCR.
+>> There's no better OCR system than a
+multimodal LLM. Those are
+state-of-the-art.
+That doesn't mean that you should only
+use LM for OCR. Um I think um one of the
+experiences that I remember the most is
+when I worked on Face ID. Uh when I
+first got into there, I came from a very
+different background than a lot of other
+folks. I come from a background where I
+think of um
+I used to hate machine learning. I don't
+really believed in it for a long time. I
+came from geometric. I was like, we're
+going to use math to solve all the
+problems and math is correct because
+math I can see, I can understand these
+multiplications that somehow make valid
+data is like I don't even know like I
+don't know what to do with it and my
+brain didn't really compute. Um, so I
+just ignored it for a long time and
+every time someone on my team said we
+should use not LM like transformers or
+CNN's or anything of that sort, I'd say
+nah, let's just do math. Um and the
+people
+>> just do it deterministically and not do
+the like back back propagation and
+machine learning thing.
+>> Exactly. Um and we used to do all this
+pre-processing like we take these images
+of faces and like items and we'd say
+okay let's use math to find contour
+lines. So we could find like uh like you
+see the wall behind me. You can find
+contour lines by like tracking down like
+contrast ratios over here. And there's a
+lot of math you can do to like make
+contrast more applicable and everything.
+Oh, like looking like from pixel to
+pixel and almost like you would draw
+like an elevation map with like rings
+based on solar elevations. The same
+algorithms you can use to Okay.
+>> And there's all sorts of algorithms you
+can do here to go find them like LCN
+other things that you can go do.
+>> We do that and then we say okay now
+let's make sure that we hide away pixels
+that are really far from the edges so
+the model has cleaner data to train on.
+We were trying to pre-process the data
+before getting into the model. It turned
+out that was dumb and the better thing
+to have then would have been to just
+collect more data and train a bigger
+model. We're wrong. Models are really,
+really, really good. Um, but I think
+there's a thing that a lot of people
+forget which is when you try and do uh
+models,
+people try and do everything with
+models. And that's not to say that that
+won't happen, but it's really good to
+understand the constraints of a system.
+If I'm trying to build a like let's say
+a URL encoder where I take a URL and I
+encode it into like a string that I can
+actually pass to a model uh into a
+website. You're right. I can ask an LLM
+to go do that. I can even ask an LM to
+generate random gooids or UUIDs for my
+database entries. Should I? No. It's the
+wrong tool for the job. And it's the
+same way with like uh VLMs and image
+processing pipelines. Can you trust AI
+pipelines that use images? 100%. Will
+you trust them a lot more if the images
+have backed data with verification?
+110%.
+And when you're using AI, that's what
+you need. You need that 110% guarantee
+to feel really good about it. So, and I
+think that's what I want to that's
+really what I want to talk about. How do
+we get to 110% guarantee? And I think
+the Excala draw is working. And my stall
+time worked. Uh, so let's screen share.
+Uh, and go do that. Dexter, do you want
+to screen share by chance? Or I can
+actually better.
+>> I can I you should screen share.
+>> I realize I don't have two screens
+today, so I will just screen share.
+>> As per usual, if you see anything you're
+not supposed to see, please uh let us
+know so we can edit it out of the
+YouTube video. Um, but otherwise, the
+game is uh fair play. So PDFs,
+multimodality, and vision models. Let's
+start off with a really, really simple
+problem. Let's say my goal is to take a
+bank transaction statement and extract
+all the transaction out transactions out
+of it. The bank transaction statement is
+going to come in PDF form.
+Problem with PDFs is models don't
+actually directly understand PDFs. So
+let's understand what a PDF is. PDF is
+going to be multiple pages. So I'll
+actually have multiple pages.
+>> And just before we get into the pages
+thing, like PDF under the hood is
+basically a bunch of XML, right? It's
+like metadata. It's like characters and
+metadata about how they display, right?
+>> I think so. But I also think the way
+that PDF is done is really PDF
+implementation specific because like
+sometimes load it purely as an image,
+some stupid PDF systems don't actually
+like make the
+>> kind of format and it's a pure image
+saved as a PDF.
+>> Yeah. Right. When you scan pages for
+like a link or something that's you end
+up with Oh,
+can you hear me? Okay.
+Oh, I lost all my audio. Sorry. One sec.
+>> There you go.
+>> Hear you. I was lost my back.
+>> Okay, there we go. Sorry. Um, when you
+like scan a book in the library and you
+get the PDF or like when you're in
+college, you have those like PDFs that's
+just like literally pictures of the book
+text. It's not actual renders as text.
+>> Exactly. So, like you run into all sorts
+of problems like that. So, like how do
+we how do we go and deal this? So, I'm
+just going to break this problem down
+and just talk about PDFs as PDFs first.
+And when I think about PDFs, I'm going
+to stop thinking about the PDFs. I'm
+going to just think of it as pages. The
+simplest thing you can do is not think
+about like pages. Take your PDF, toss it
+to the Open AI or some other API point
+that takes like a PDF object directly.
+Um, and they take it as like a B 64 or
+as a um what's the other option they do?
+Or like a file URL or something and you
+pass it in and the model basically just
+spits out whatever you want and injects
+in part of the prompt. Now, a lot of
+people assume that they train the model
+on PDFs.
+I probably wouldn't assume that
+personally because if you actually go
+read the documentation about most of
+these systems,
+most people what they actually do with
+PDFs is they do the same thing that we
+were going to do, which is we take every
+PDF, we turn into pages and then open
+tells you this directly. What they do is
+they take they pass in the pages as
+images.
+pages as images plus OCR text. That's
+all they're doing when you pass in the
+image as a PDF. They're converting the
+PDF from pages to images and then adding
+in those text as a part of the prompt.
+I think Gemini does something similar as
+well and I believe um Enthropic likely
+does something similar as well. That's
+not to say that this method is good.
+That's not to say this method is bad.
+All that you have to know is that
+someone is doing some work on your
+behalf to convert it into the API format
+they want. Why does that matter? Well,
+it's because the way that you pass in
+the PDF, the way that you convert a page
+into an image can vary a lot with PDFs.
+You can choose what ending resolution
+you want the image to be at. You might
+have PDFs of extremely long shapes.
+Enthropic might end up cropping it by
+accident because they
+>> right. They chunk it up into square
+regions of the thing and send those all
+as separate images maybe.
+>> Exactly. Like you you have no idea. And
+it might be good, it might be bad. But
+if you're if you're operating on a
+standard 8 by like A4 page, you're
+probably fine. The minute you start
+skewing from that, you have to remember
+that people are probably not doing the
+standard stuff and you're not doing
+standard stuff. using a standard API is
+probably going to hurt your performance.
+I think if you actually look at the
+anthropic docs, uh, images docs, and I
+think I was reading this and I've been
+surprised by how few people actually
+read this, which is there are aspect
+ratios that tell you the maximum image
+size. And I constantly see people
+passing in images bigger than this size.
+And I'm like, okay, that's okay. But you
+got to also remember what people are
+going to be what these companies have to
+do. If you pass in an image that doesn't
+meet this size, they're going to have to
+either crop or resize your image to
+scale it. If your images aren't exactly
+one of these ratios, you're probably
+hurting your performance because
+>> and that's because the actual like uh
+like encoding layers on the transformer
+can only or on the model can only handle
+like images of certain sizes and they
+basically it's like cheaper for them to
+pre-process to a set of specific sizes
+than like train the model to handle
+every single size.
+>> I suspect it's just what they've trained
+to be honest and these recommendations
+probably just come from training. I
+don't know. I don't work at these model
+companies.
+>> Um, just to be very very uh clear and
+with machine learning like remember
+everything is just a see where the wind
+goes kind of thing and it's hard to know
+exactly what things are happening
+especially in closed source systems but
+like my intuition would really just urge
+me to believe that like if they
+recommend certain image uh aspect ratios
+like models perform based on training
+data. So like if they've if they've only
+trained on images of this data set
+resolution,
+the model can probably infer a lot of
+things, but if 95% of the data is this,
+it'll probably just work better on
+something like this.
+And I'm going to guess that where we're
+going with this is basically like if one
+of the thing one of the takeaways for me
+so far is like if you're going to hand
+an image to the model provider and let
+them basically be the ones that uh that
+do the resizing for you. You might as
+well do the resizing yourself so you
+have more control and more kind of
+determinism around like exactly which
+region of the image is there or exactly
+how it gets cropped or whatever.
+>> Yeah. And at least I think at the very
+least knowing it it's like what we say
+with every with using the best model use
+the fastest thing first. Not in terms of
+speed but the thing that gets you up and
+running first. So like what do I do? We
+use big models. We use GPT40. We use 03.
+We use opus. We use these bigger models
+at first and then we realize that we
+have a performance problem or cost
+problem. So then we bring it in. I
+actually would advise the same to these
+image models. know that you if you don't
+know that the model providers are doing
+this, then you then you get stuck. But
+if you know that they're doing this,
+then you can do the standard thing, just
+dump it into the model providers. And if
+it doesn't work, then we'll pull out
+tools out of our tool belt and apply
+what we know by understanding the system
+and do better than what they do.
+And that's usually my advice. But before
+we go into this and like go really deep
+into how to solve this exact problem
+because this is the one we'll be coding
+today. I want to spend a little bit more
+time talking about how multimodality
+actually works. Um anyone have a hunch
+about how uh how images work differently
+than text
+in multimodal systems?
+Uh let's see. You can uh if you guys
+have thoughts by the way feel free to
+raise your hand. Just come on mute and
+let's I'd love to hear someone's take.
+And remember, no one actually knows the
+answer to this, so everyone is
+speculating at best. Um, so I want to
+call that out,
+Dex. Do you have thoughts?
+>> Um,
+probably, but they'll probably make me
+sound pretty dumb.
+>> Well, I'm going to sound really dumb
+when I start talking. So
+>> I mean I guess uh my my rough
+understanding is essentially um similar
+to how a model can embed text and like
+take a bunch of text and then apply
+attention to it and build a set of
+vector tokens that represent meaning. Um
+there are similar kind of um encoders
+decoders that can take an image and turn
+it into a vector that has that same sort
+of meaning.
+Yeah, I think that's basically it. I
+think the key answer that I the key
+thing that I think about is like in the
+end all we have is tokens. The ELM
+architecture doesn't fundamentally
+change when you toss multiodality into
+it. It's still just tokens. So when we
+go and use these tokens to go do
+something
+um the way that I always look at it is
+with text we know how the tokenizer
+works. So if I go and show the where did
+it go?
+H OpenAI tokenizer and we look at this
+you'll notice that you can like actually
+see the tokens that are being typed in
+and open even shows you this. None of
+the multimodal providers will show you
+their tokenizer except perhaps the open
+source ones for how images tokenization
+works. And I suspect that's because it
+turns out images are much much harder to
+train and there the vocabulary there is
+much harder to like generalize on like
+what these token ids mean or maybe
+there's a novel technique that I don't
+know about or any other such thing but
+no one so far is really revealing this.
+So and that's also why when you look at
+cost everything is always just an
+approximation of cost and there's no way
+to actually go and predict uh tokens as
+well. Um, and it's always an estimate.
+That's because I bet people are doing
+weird things with tokenization
+uh under the hood that per images to
+make them really work really really
+well. Like they probably do image
+compression. They probably do all sorts
+of like taking out background images out
+of PGs might be treated differently than
+like JPEG. Who knows?
+So what I would think about when you
+have an image is as a general rule of
+thumb without knowing any specific
+tokenizer we can think about what
+tokenization means and all tokenization
+means and I do not want arrows. I want
+no arrow heads.
+How do I get rid of arrow heads? Um
+oh I do have to do L. Sorry. An image
+gets broken down into tokens like this.
+I b and this is the most simplistic
+version that you can do is you just
+break it down to a grid and you would
+take each grid cell and each grid cell
+will become a token of some kind.
+The other thing that we can do is if I'm
+doing this, I'm going to run into
+problems. Like for example, if I have
+text like this, the horse is lonely
+today.
+Clearly, I'm going to run into
+conditions where things that live on the
+boundary of these systems are just going
+to perform worse than content that lives
+within a single cell because it's harder
+for it to generalize.
+Especially if I'm asking for like really
+really um summarized information because
+in order for it to summarize information
+across the whole image, it's going to
+have to not only read every cell, but
+it's going to have to draw inferences
+between how each cell connects and how
+inference is done on each cell.
+Uh, did you have a question, chat?
+Okay. On the other hand,
+if I have a cell that has a bunch of
+small text, like the horse is doing fine
+today, I don't know why I'm talking
+about horses. I don't even like horses.
+Um, and all of us lives in a single
+cell. Then we'll have we'll run into a
+different problem, which is I've now
+done compression on the token side. So
+where one token now has a lot of
+information in it. So while I do really
+good summarization tasks, I'm going to
+do much much worse at like detail
+oriented tasks. Like if there's like a
+two whole paragraphs in there, I just
+lost information.
+You can kind of relate it to like the
+DRM concept that we were talking about
+uh in the last few episodes where like
+you could have memory for the month, for
+the week, for the day, and for the
+entire chat history directly transcribed
+in and they provide different purposes,
+but the tokenizer for an image is
+inherently going to end up doing that
+accidentally or on purpose. It's really
+up to you. So
+>> the claw thing was made it look like 750
+like they're divided by 750 which makes
+me think that it's the regions are
+around 750 pixels right per token
+>> maybe.
+>> And so you could easily have a whole
+sentence in 750 pixels.
+>> Yeah. So like I I don't really know to
+be honest. Like maybe that's just like
+the raw math that they did. They might
+have like
+>> Yeah. Like when we do like
+>> it's not they're not all going to be the
+same size, right? There's something in
+there that is basically chunking up the
+image in a smart way to try to make the
+regions into like contiguous bits. I
+would assume
+>> like the fact that the strawberry is red
+is four tokens is like like no one would
+know the word strawberry. I didn't know
+the strawberry is going to be one token
+in the tokenizer. Um like but it is uh
+and it didn't used to be. It used to be
+two tokens. Uh I can find other there's
+some other tokens where it used to be
+has two tokens or something. Um, and I
+know like strawberry without a space is
+definitely two tokens or multiple tokens
+because like the lack of a space at the
+beginning changes the word, but
+>> Oh, wait. That's crazy.
+>> Yeah, people got to know tokenizers. Um,
+um, but the whole point here is like and
+and by the way, you can see how this
+fundamentally changes the meaning of the
+sentence to the LLM. Not to us, but to
+the LM it does. It means something very
+different.
+And this is also going to be true for
+your images. So when when you talk about
+like what resolution should you use for
+your image, it's not just a question of
+like what resolution do I use and what's
+the highest resolution I can get. You
+also have to think about what is the
+task I'm trying to do. If you're using a
+very detail- oriented task where I have
+to pull out all the pixels in it, you
+might actually benefit from not just OCR
+and not just like high-res images, but
+breaking down your image into smaller
+images that are all high-res
+individually
+because you might just get better
+extraction out of it.
+The same on the other hand, if you're
+doing a bunch of summarization tasks and
+you don't want details in the image like
+you're doing like a um where is this?
+Where's Waldo desk?
+Like let's just take an image of where's
+Waldo. If you're doing this kind of
+task, you definitely don't want this
+going in as a as a single image. Just do
+where's Waldo. The LM just can't do
+that. And this is equivalent to how do
+you how many Rs are there in strawberry?
+That's the equivalent problem I think.
+But if we were to break this image down
+into tons of tiny images and upscale
+them, the LM is much more likely to be
+able to solve. Where's Waldo?
+>> It's funny. I I definitely saw this
+picture before. Waldo's right there
+because someone actually did the example
+of passing this image into an LLM and
+the LLM finding Waldo.
+>> Yeah.
+>> Did you see that?
+>> I have no idea where Waldo is. I don't
+understand this. Um but like this is
+kind of what I would how I would LM and
+like the Is that where it is?
+>> Yeah.
+>> Oh, I found him. Nice. Um yes. Um, I'm a
+really shitty LM. Um,
+but I think the point still stands when
+you think about images linked through my
+video. Just remember this whole game
+that all LMs do is always tokenization.
+Uh, the fact that OpenAI and everyone
+else just does something with like PDFs
+with OCR is like if you just go to how
+they do it, I think they tell you this
+um in your document, they tell you all
+all sorts of things and they actually
+tell you exactly what they do in the PDF
+documentation. I can go find it in a
+second.
+Uh, OpenAI PDFs.
+Is this it? Yeah. And you can just go
+read this and like what you'll find is
+they basically just convert the PDFs to
+images and they process that in. So
+they're not actually training the model
+specifically in PDFs as far as I know.
+um they train this they just use a they
+use the multimodality capabilities of
+the model and go leverage that
+and uh sorry I pause I'm going to catch
+my breath really fast and oops wrong
+thing
+>> so when it comes to extracting
+transactions uh out of PDFs how would we
+go about this well I think the simple
+thing is let's do the very very dumb
+thing I take the entire PDF I toss it to
+a model it gives me the answer and then
+I just say whoop I tell the user yes and
+here's the answer the most comp and now
+let's add a little bit more complexity
+I take the PDF I toss to the model as is
+and I have it instead of answering the
+question I first have it extract data
+based on the type of PDF that I know it
+is I know it's bank transactions so what
+I will do is I will extract extract all
+transactions
+out of this data up
+and then I'll feed a different prompt
+with this question and all the
+transactions and then answer the model's
+question. So I'm simplifying the problem
+for the model and you've seen us do this
+a few times with a bunch of other
+problems where if the problem ends up
+being too hard, break it down to two
+problems and now we pass the problem
+down.
+This still might not be good enough
+because we have a two problems. The L
+might hallucinate at the point of
+transactions or it might hallucinate at
+this point of actually answering the
+question. The harder one to correct is a
+transaction on one. If we can get this
+data correct, this thing will probably
+work because
+>> you're talking just like breaking down
+the problem basically.
+>> Yeah.
+>> And being able to test and optimize each
+F separately.
+>> And then also understanding where the
+failure point is. Like I bet that's like
+80% correct. And I bet I'd be surprised
+if LLMs given correct data are going to
+be really bad at questions like what's
+my ending balance,
+>> right? Take, hey, here's a whole blob of
+text and JSON. Find one of the values in
+it. Yeah. Spit it back out to me.
+>> It seems unlikely, but I think this
+thing is going to fail a lot and then
+because of that reason, it's going to
+feel like a it's going to feel like a
+Oops.
+>> Oh, you leaked your trace code.
+>> Oh, it's okay. I'm about to show PDF, so
+it's okay. It's going to feel like this.
+So, it's going to feel worse. And if the
+back half is a 90%, it's going to feel
+even worse. It's going to feel like a
+70% pass rate. But really, the problem
+is the first one as a whole is not
+really good. So, if we can bump up both
+of these to 95%, we'll just feel better.
+So, let's try and go do that.
+Well,
+>> and this a really interesting concept I
+think you talk about a lot but but
+doesn't get like like really like
+explicitly stated. Um, which is this
+idea of um basically like if you have a
+if you have a 75% success rate and you
+run one if your pipeline has one query
+then your accuracy is 75 or let's say
+90, right? So like if your accuracy is
+90% here.
+>> Oh my god. Um,
+>> I got something for you to text. You can
+take a screenshot.
+>> All right, just paste it in.
+>> Oh, what the heck? I can't open it. Um,
+yeah, I'll paste the screenshot in. I
+think what you're trying to do is
+somewhere in there.
+is this when you have a pipeline that's
+like 99% accurate and you have like 20
+steps, it ends up behaving like a
+pipeline that was actually like 80%
+accurate.
+When you have a pipeline that's 97%
+accurate and you have 20 steps, it
+behaves like a pipeline that's 50%
+accurate.
+And it's really really hard to
+understand this concept. It doesn't feel
+intuitive, but it falls off really
+really fast.
+And just like a 2% difference in your
+pipeline accuracy is a 27% difference at
+a 20st step mark.
+And that is like not intuitive at all
+for a lot of people. But this is why
+agents feel like they don't work because
+agents typically have multiple steps and
+people are like, "What the heck? It's
+not working." It's because
+>> damn, this should really be the 12
+factor agents presentation.
+>> This is such a dope graphic. Yes, this
+was what I was trying to draw.
+>> Yeah, you can add a screenshot of this
+if you want.
+>> I did. It's on the It's on the
+whiteboard. Um, so when we do this, uh,
+let's see how we can make transactions
+better. Well, we can make this really
+good by saying that we know that LMs are
+going to be, if it's extracting 50,000
+things, it's going to get one of them
+wrong almost definitely. It's just like
+probabilities, right? It's the same
+thing. Probabilities matter. If it's 99%
+accurate on extracting everything and
+has to extract 67 like 20 things, it's
+going to behave like a thing that's 80%
+accurate extracting those things.
+So let's change that and say what I will
+actually do is I'm going to have it
+extract two things. I'm going to have it
+extract the both the transactions and
+the summary balance as a whole. And then
+at the very end of this I won't feed
+this directly into my system.
+What I will do instead
+is I'm going to run a different loop
+that's just going to be basic math that
+says does the summary
+equal the sum of transactions.
+>> So this is the runtime eval basically.
+>> Exactly. I'm going to write a runtime
+eval that validates this. If it doesn't,
+I will try and find where it breaks.
+Like where does it actually break? Does
+it break on page one, page two, page
+three, page four? And then I can send
+just that page back to the model and
+have it go and run in this loop until it
+meets some constraint that I defined.
+And even better would be if I can do
+intermediate checks within each
+transaction as well.
+So sometimes like bank statements have
+like a before and after balance for
+every transaction. I can check that
+balance as well.
+So if that balance individually ends up
+being wrong, then what I can do is I can
+go to an LLM and say, "Hey, the balance
+for this purchase entry seems wrong. Can
+you what is the right answer?" And now
+the LM is going to focus all of its
+attention, even if I'm giving a bunch of
+tokens only on the
+>> that really really matter because LM are
+pretty good at generally answering the
+question that you want.
+>> They're just really bad at like
+answering every question correctly all
+the time. that you'll be like, "Okay, I
+only look at these two tokens to answer
+the question about that subtransaction.
+I'll answer it and we update our data
+model. We run a loop and we're getting
+this going." You can kind of
+approximately see how this how this loop
+would work and at some point two things
+will happen. Either this thing will work
+and I'll get things where all the
+constraints are matching and then I will
+send it to my prompt or it won't work in
+which case maybe I'll build a human in
+the loop system that sends this out to
+like someone that like literally reads
+these transactions manually and just
+corrects the right uh corrects the right
+output. I record exactly where it messed
+up so I have good understandings for my
+engineers to understand where the
+failure points are and I send it on to
+the next pipeline.
+If this is a completely real-time app,
+then I will literally just tell the user
+that someone who finds the failures
+where I can't correct for it anymore,
+I'll literally just tell the user, I
+found these four mistakes. Can you help
+me with this? Or I'll tell the user,
+sorry, I can't answer you from these
+questions. I seem to be having trouble
+understanding these four um these four
+data points and I seem to have
+mathematical errors in validating them.
+So I can almost build it into my UI into
+my process and in different works of the
+way so that my end pipeline
+it might not have 100% coverage on the
+data but on for all the data it has
+coverage on it will be 100% correct.
+Does that kind of explain what I what
+I'm saying?
+This makes sense that like the human
+here could either be like the builder of
+the app or the user of the app and like
+soliciting human input from one or the
+other of those.
+>> Exactly. And then we know elements are
+really good at answering questions given
+data. Uh the hard part is getting the
+right data in there. That's all context
+engineering is. So we're doing some
+pre-processing to get the context
+engineering data into there.
+>> Okay. So in both these cases whether we
+have works or not works you have
+validated transaction data.
+>> Exactly.
+>> And basically you can have really really
+high confidence if the LM's doing its
+summing if it's doing all the things and
+then your deterministic code is doing
+all the sums and all the sums work out
+you are very very confident that like
+99.9% that this was extracted correctly.
+>> Exactly. And it's and obviously they can
+make make a mistake. The bank itself
+could have typed out the wrong digit and
+written out the wrong thing. Like
+there's tons of mistakes that could have
+happened.
+>> Um it's not to say this is perfect,
+>> but it's all cross-checkable and
+verifiable. And I think that's as good
+as you can really do.
+>> Cool.
+>> Um and I think this is how I think about
+this. Now I'm going to talk about a lot
+of techniques to make this part better
+today. We're not going to talk about
+this at all. I only really want to talk
+about this part. And we're not even
+going to talk about this eval loop. I'm
+really going to focus on this one
+>> because we already we already talked
+about the eval loop and like we'll
+>> go watch episode number five if you want
+to see it. We talked about that in a lot
+more detail. Like that stuff isn't going
+to be that hard that it's different and
+you might as well learn from there
+instead. Today I really want to talk
+about this image part a little bit more
+details. So I'm going to start off with
+just showing you how we would start with
+this problem. So I tried to do
+something. I started actually writing
+some code. I wrote some code earlier. I
+apologize. I typically try and do it
+live on the fly. PDFs are funky, so I
+wanted to make sure it really worked.
+Um, and I wanted to make sure the data I
+shared was perfectly good. So, I'm going
+to start with just sharing what the data
+is. Um, open on
+Oh, reveal and finder. Okay. So, first
+things first, this is my bank data. If
+you see something that is really PII,
+please tell me so I can crop it out and
+make it go away. Um, I think I took out
+everything that is relevant out of this,
+but I do want to add a disclaimer. This
+is my personal thing. Let's not um let
+me get poned.
+>> Yeah, please don't steal Vib's identity.
+I I need him to keep doing podcast with
+me.
+>> Um so I took out page one that has a lot
+of PII, but page two has less. Um page
+three is basically just like account
+transaction history. So like uh things
+that were bought. Um has a bunch of
+stuff on there. It's got some fun little
+transactions from Canada. It's got some
+transactions in Seattle. I live in
+Seattle. I guess you doxed me. Um, and
+then we've got some other things about
+the interest payments. I don't pay
+interest because interest is a scam on
+credit cards. If you pay it, you [ __ ]
+up. I'm sorry. And getting out of that
+situation is really
+>> Oh, are we going to pivot this into a
+financial advice show?
+>> Um, no. Just don't don't get a credit
+card with interest rates. Um, and like
+or don't pay interest on your credit
+card. Um, but this is a PDF and I want
+to call out some nuances out of this
+PDF. The first thing you'll notice is
+that these pages are not standard pages
+at all. They're like slightly longer
+than normal.
+>> The second thing that you'll notice is
+that these pages have headers and that
+they have footers
+and like that might confuse the model.
+It might not. I don't really know. Um it
+has these summaries, but overall it
+seems to mostly be correct. It's
+interesting because I don't know what
+the actual dollar rate here is. Like is
+this Canadian or is this USD? It should
+be USD. But you can see how there's an
+ambiguity here to uh anyone that's
+glancing at this without knowing. It
+seems that the conversion rate is
+defined here.
+But it's it's impossible for someone to
+actively know for sure uh that is the
+case unless they look at the details of
+what this is doing. There's some
+inferences that we're making. So I'm
+going to just real quick infer just
+looking out loud is you have 940*.778
+and I assume that is 732. So that would
+be my guess is these are USD and that
+these are Canadian. But
+>> you got a great example too where the
+top that like last line on the page
+above that like that 234 is actually the
+three like that's transaction split
+pages,
+>> right? So we're going to run into all
+sorts of problems here if we were to
+transact this data out of the model.
+Like I think we could all believe that
+this thing might not be perfect, but
+let's
+>> Did you go to B?
+>> I I did. Um B is awesome.
+>> I went on a backpacking trip. We did
+like 55 70 miles or something.
+>> It was
+>> Wait, that's sick. I want Let's put your
+backpacking photos into the multimodal
+model. See what No, I'm just kidding.
+Sorry. Continue continue your live
+coding.
+>> They're from a time when I was less fat.
+Um, but okay, so I wrote the code
+already for this, but we're basically
+going to have a function. It's going to
+have a content. Content is going to be a
+PDF type. We're going to return a
+transaction array, which I've already
+defined over here. It's name and amount.
+Amount is a float. We're going to use a
+GP4 mini model. We're going to write a
+really basic prompt. Extract all the
+transactions from this content. And the
+content is just going to be that PDF
+that I passed in. Let's look at the
+prompt. That's the first thing to do.
+The first prompt is just going to be a
+system message as expected. Just comes
+from here. And the second prompt is
+going to be just a PDF. So like we have
+the PDF. We can make sure that it's the
+actual content that we have. Seems like
+this is probably good. Let's run. Let's
+run it.
+It should run. And sorry I have to move
+the errors.
+And it's going to run and do its thing.
+Sorry about the blinking. Streaming is
+as it turns out partial data is very
+very hard.
+Um but it will become stable and it'll
+go out. While this is running, let's do
+the other thing and this the next part
+of our task which is like understand our
+data. So is this thing even um uh before
+we can do anything we just have to count
+how many transactions there are. If we
+don't if we don't count, how can we
+actually know? 1 2 3 4 5 6 7
+8 9 10 11 12 13 14 15 16 17
+18 19 20 21 22 23 24 25 26 27 28 29 30
+31
+32 33 34 35 36 37 38 39 40 41 42 43 44
+45 46 47 48 49 51 One, two, three, four,
+54 transactions. So, at the very least,
+I know I expect 54 transactions out of
+this. Cool. I already know what that all
+messed up. It only got at 48 items.
+>> So, that's my first validation loop.
+Like, it's guaranteed the page boundary.
+>> I have no idea.
+>> You have one that spans a page boundary.
+Okay, cool.
+>> We can just check, right? So, like we
+just take this data out and we just look
+at it. We know that the things that are
+hard are this one. So, to see if we got
+this one.
+Uh, Blinky App QC. This is 234. It got
+311. Why did it get 311? I have no idea.
+It clearly just hallucinated that thing.
+Uh, oh, there's two of them. Yeah, it it
+just got that was just wrong. Uh,
+there's
+>> those ATM fees,
+>> huh?
+>> Are those ATM fees?
+>> I have no idea.
+>> I think Blinky, those are $3. I bet
+that's uh
+>> I have no idea. Keep going.
+>> Um, Chase Travel right over here. It's
+$347.90. This one pulled out correctly.
+Marine Lake 732 that pulled that
+correctly. It just dropped data right
+here. It dropped the one at the
+boundary. So, we know we at least missed
+one. And I think the the first thing
+that you're noticing that I'm doing here
+is like I'm just understanding what the
+model can and cannot do. I did the dumb
+thing. I tossed it at the model. I said,
+"Figure it out." Turns out the open API
+spec is probably not the right way to
+pass in a PDF. That's a spend bank
+transaction because a naive thing
+doesn't work. Well, the next thing I can
+do is I can do some images. I can
+convert the stuff to images myself.
+Um, and then we can just go solve this
+problem. Well, I think the biggest
+problem that we'll run into is actually
+headers and footers. So, I actually
+started writing some of this code. And a
+lot of people don't realize this, but
+it's actually really easy to detect this
+stuff. Let's think about what it means
+to find headers and footers. Well, the
+first thing we'll do is we'll convert
+every page to a uh to an image. Once you
+convert every page to an image, I'm
+going to write a really really basic
+prompt. And this prompt is job is only
+going to be like
+function has transactions
+page image
+right there. And that's all I'm going to
+do. I'm just going to ask this. And
+because this is such an easy problem,
+I'm going to use a mini model for this.
+I won't even think about this.
+Test has transactions file uh page. And
+the image I'm going to pass in, I
+already have all the pages. So I will do
+slash data slash
+page zero.png
+uh title page
+transactions page one and page one.
+We'll run these. And I kind of want to
+run this test just to make sure model
+isn't
+okay. This model is dumb. So, I'm going
+to use anthropic um
+song.
+>> Yeah, it's weird especially when you get
+to like processing. I've had a lot of
+issues with getting 40 and 40 mini to
+process like ID cards if you want to
+like test extraction on like your
+passport or something. It like refuses
+to do it, which makes sense. The odds
+that you're doing something naughty is
+pretty high if you're trying to parse an
+ID. But
+>> yeah, auto model.
+>> Oh, I did the wrong thing.
+You did a long page transactions. Oh
+yeah, models don't like answering in
+boolean all the time. I've noticed that.
+So like
+answer I usually just do this kind of
+thing and that helps them all because
+they hate answering with just true and
+false.
+>> Um
+>> I actually want to make that yes or no.
+And that actually usually works better.
+And now it said the answer is true. And
+this this makes sense because
+does it make sense? This makes no sense.
+What is the model doing?
+Okay, it's a dumb model. Let's use
+>> finance transactions.
+Okay, let's try it.
+>> Okay, a smarter model seems to do
+better. Uh, does this page have
+transactions? Does this page have uh
+financial transactions for a specific
+does this have
+financial
+specific
+transactions credit debit
+um type
+credit debit other and I'll just make
+this a array
+and specifically I'll I only care about
+credit or debit. So I'm actually going
+to help the model do even better is like
+now even the dumber models will probably
+do better because it will just tell me
+what type it is. So if I ask like haiku
+does this have
+uh page type. This is probably going to
+work. uh uh
+actions
+cover page
+non
+financial.
+So I'm actually going to and you're
+watching me prompt him here on the fly
+because what I'm really trying to do is
+I'm trying to understand what this page
+is doing and this page has transactions.
+Cardune
+does this actually I mean it might
+>> I mean it has language about
+transactions but it doesn't have the
+transactions themselves. I would almost
+say like transactions with amounts
+because I don't think this has amounts
+in it.
+>> I mean it might I have no idea what this
+page has. Yeah.
+Um it does. I mean it has information
+about financial transactions and does it
+I mean I might I should just look at the
+data really fast.
+At this point like there's two things
+that could go wrong.
+Oh I mean it talks about payments.
+How to avoid payments on interest
+charge. Uh what would I call this page?
+Um like a
+uh what's it I'm looking for
+transaction rules.
+>> Let's try this.
+>> But you get the point is like extracting
+the data is a really like clean way to
+like look inside what the LM is seeing
+instead of just pushing in the image and
+your prompt and being like why the [ __ ]
+isn't this prompt working? Well, at this
+point, I kind of solved the problem for
+myself. The number of transactions is
+zero. I don't even care if the number is
+correct or not. It really doesn't
+matter. And I run this thing and like
+the number of transactions 20. It
+doesn't matter. The point is what I'm
+going to look for is page type
+transactions and number of transactions
+greater than zero is going to filter my
+images for me. So for every image where
+I have more than zero transactions, I'm
+basically going to run a function def uh
+take page
+uh image
+uh
+what I'm going to say is I'm going to
+say um B dot
+don't write B yet
+import B I'm just going to take the page
+I'm going to say B dot
+B extract transaction or has
+transactions I'm going to pass in the
+page I'm going to say like def res
+equals this if res dot
+uh page type equal equals transactions
+and
+uh res number of transactions equal zero
+then I'll then I'll proc the image
+otherwise I won't
+and now what I'm able to do is I'll go
+do something in this scenario otherwise
+I won't really do anything down here now
+get pages get data once I have all the
+pages what I want to do next is I want
+to detect headers and footers so how do
+we do that I think that problem people
+say is a very hard problem it turns out
+it's really really easy all you do is
+you just pick one page to be your anchor
+page. In my case, I just picked like the
+first page that has transactions to be
+the anchor page. And I just do a diff on
+it. And you can see what this does.
+Let's see if I can save the diff. And uh
+there's a lot of Python libraries,
+typical libraries. I'll do this for you.
+And you can just see what I did. I'm
+able to remove the top level thing
+because it all it does takes a it turns
+the image from uh black um from RGB to
+black and white and just paste it on top
+of the other image. any place
+>> and then what it zeros out any pixel
+that is exactly the same between the
+two.
+>> That's it.
+>> Sick.
+>> It's really it. Um and then after you do
+that, you basically find all the places
+where you have diffs and it should
+become almost perfectly evident where
+your pages are and where you have
+similarity and it becomes really really
+easy to go do this. But then what you
+can do is you can do the next thing
+which is you can take the diffs that you
+have and you can say okay let me scan
+every row in the image and wherever I
+have exactly the same pixels I can
+assume that that is common uh common
+across pages and you'll notice that I
+have some stuff at the top over here
+some stuff at the bottom and then I get
+some stuff over here and I get some
+stuff at the bottom as well
+>> looks like this is mostly just whites
+space that matches right
+>> so exactly it matches a lot of whites
+space but it's also matching top and top
+and headers and And I was really
+confused when I looked at this image.
+Why does it match this top part of this
+page but not top part of the second
+page?
+>> Well, it turns out when you look at the
+data, you quickly realize, well, one,
+this page gets ignored. It doesn't
+matter. This page is our base page that
+we use as our anchor.
+Page two for some reason doesn't
+actually have headers.
+>> Huh?
+>> Right.
+Page three does.
+And like this is like the randomness
+that you deal with in the real world.
+But when you deal with this problem, you
+quickly realize, okay, it sounds like
+while page two and page three don't have
+headers, page three and four both have
+headers and footers, pages that are like
+page two both have footers that are
+exactly the same, but the header is not
+there. So the header is either exists or
+it doesn't exist. So what I can do is I
+can write a really really basic heristic
+that says given 10 pages find the
+headers and footers that are common on
+them. And some pages may or may not have
+a header, but once I find a common
+header, I'll just take that header and
+I'll just ask an LLM.
+Um, is there anything but the header
+missing from these from images that
+don't have that header? So, I will
+literally part Go ahead.
+>> I've Okay, so there's a lot of stuff
+happening here. I'm I've lost a little
+bit track of like the steps in the order
+you're doing them. And I'm wondering if
+if either we can go through the code or
+if you want to whiteboard a little bit
+more to kind of show how all of these
+different techniques like work together
+and in what order and which ones are
+kind of mutually exclusive versus the
+ones that work together.
+>> Let's do that. Let me write some uh
+pseudo code. That's probably the best
+way actually.
+>> Cool.
+>> So I'm going to start writing some
+pseudo code. Um so we're going to take
+this. So we're going to say def given a
+bunch of pages pages with analyze pages
+with transactions and this is going to
+be a list of pages. What we're going to
+do for every page is we're going to pick
+our reference page
+which is going to be image zero. We
+won't we won't even think about it
+anywhere else. Then for every page in
+for other in um image one to on what I'm
+going to do is I'm going to compare
+pages to find a shared uh shared um
+headers
+footers.
+And then after I find shared headers and
+footers I'm going to say
+>> what is the what is the type of shared
+headers footers? uh headers, footers.
+And you can think of this as basically a
+list of ycoordinates.
+>> The y1 y2 list,
+>> right?
+>> So it's a list of like vertical like
+horizontal slices of the image that
+contain headers and footage.
+>> And this is just semantic information
+that we all know in the idea of headers
+and footers is like headers are
+generally across the whole head and
+across the whole footer. Um, and this is
+semantic.
+>> Um,
+>> if if one if one horizontal part of the
+page is header, the entire row of that
+image is part of the header
+>> probably. And and
+>> almost always, I'm happy to assume that.
+>> Yeah. And this doesn't imply in all
+cases like if if people are doing messed
+up things like taking pictures from
+their phone of tilted bank transactions
+and like uploading them like you will
+run into problems. But we can detect
+that by saying that we will just apply a
+constraint on the system that this is
+only images that we think will abide by
+this rule.
+So we're going to do headers and
+footers. And because we're reading bank
+transaction statements, we're going to
+assume that most of the PDFs are coming
+from PDFs directly generated by some
+bank. Most of those systems will have
+standardized headers or footers. So I'm
+going to find the header and footer of
+every page.
+Um and I'll just append this into a
+list.
+So these are all our candidates for what
+may or may not be headers and footers.
+Then I'll do find best find most common
+header footer
+most common. I won't even do this. What
+I will literally do is I'll like ask llm
+which one this is and I'll give it like
+a bunch of pages as an input.
+>> Yep.
+>> Right. So I'm not even thinking about
+this in the same way as that. It's just
+like ah screw it. I I could do an
+algorithm, but like let's do the dumb
+thing. Let's just ask an LM which of
+these headers and footers makes the most
+sense. And now we have our most common
+header.
+>> So the sorry the headers footers is a
+pair of XY coordinates. Is the LM going
+to be able to figure that out? Like
+what?
+>> Uh you'd be surprised is kind of what
+I'd say. Uh but I I think it would do
+fine. If that doesn't work, I'll
+literally send it in the box entries of
+these headers and footers with the black
+area with it writing XY.
+>> Okay.
+>> And I'll just like fill that in myself.
+>> Okay.
+>> So, I'll go ahead.
+>> Have you tried like compared like
+Gemini's ability for like boxing things?
+Because Gemini's a lot of training I
+know for like bounding box detection in
+this sort of like use case.
+We can do bounding box detection but
+like I think what I like to think about
+is just like it's just good to have like
+practice of tools. I think one of the
+things that you'll see in a lot of our
+talks is we talk about like just like
+general software engineering techniques.
+This is basically like a leak code
+problem in the world of AI. Uh and like
+this is I think for that purpose useful.
+Gemini is not bad. I know a few people
+use it for uh for that as well. Um
+but I think it goes back to just like
+knowing that your data is weird in this
+scenario. I know my data is weird
+because these images are just not
+standard size.
+So like even if it is really good, I
+just want to have a deeper understanding
+of where I'm messing up because like I
+want to have a better audit log because
+of its financial data.
+Uh but I haven't actually tried Gemini
+for this task. I do know that the
+customer that built this pipeline is
+very happy and it works really freaking
+well. Uh so this idea is actually not my
+own original. I am stealing it. Um, I
+had some of these ideas but not all of
+these ideas.
+Um, but it does work.
+>> It's proven. It's provably working is
+what I would say. Cannot share how much
+data they're processing, but it is it it
+does work.
+>> And this technique works in a couple of
+other domains, not just healthcare, uh,
+not just finance. We've seen it work in
+healthcare and a few other systems as
+well. But we strip out headers and
+footers. Now we find out the most common
+headers and footers. We literally just
+like uh remove mask
+uh images mask image and we pass in a
+page uh most common header for page and
+pages uh new image equals this and then
+press. Okay. So, we we could use some
+fancy algorithm to figure out which of
+those x like y pairs were the most
+common set and like the right overlap or
+we could just ask the LLM to look at all
+the all the y pairs and just be like,
+okay, this is the one and we'd just
+start with that and see how that see how
+that performs.
+>> Yeah, exactly. I'm just doing dumb
+things and I think that's with LM like I
+and I can also
+>> Yeah, use the LM to do it and like if it
+gets it 99% right then just leave it as
+LLM and if it gets it 80% right like go
+write the code. Fine. or or ask an
+>> they both
+>> That's what I mean. Yeah. Yeah. No, no
+one's writing code anymore except for
+you on this live stream. I assume all of
+us are just shouting at shouting at uh
+coding agents at this point.
+>> And now we just pull out transactions.
+Um right txnextend.
+>> Okay.
+>> And now
+>> then you run your other LM call. Your LM
+call that actually like pulls them out
+of the image that's been kind of masked
+and cleaned up.
+>> Exactly. Right.
+>> It's all about attention management,
+right? context engineering, right?
+You're just controlling which tokens go
+in.
+>> Literally what I'm doing, I'm literally
+deliberately choosing what tokens go in
+to the ultimate degree by effectively
+spellchecking my images.
+>> You all thought you were going to get a
+break from context engineering, but it
+turns out every episode of this show is
+actually about context engineering.
+>> Yeah. Now, the next thing that we'll run
+into is that sometimes uh well,
+actually, I think there are a couple
+questions, so I'll just double check
+really fast if there are any questions.
+>> Uh, is it possible to do in context
+learning with images?
+Is it possible to do in context learning
+with images? Um, I have no idea.
+Probably. These model people are pretty
+smart.
+That's probably what I'd say. I don't
+know that. I don't have an absolute
+answer for that one.
+Um,
+run. Only if we use this technique, uh,
+we wouldn't need human in the loop. Um,
+what is most common header stored as?
+Honestly, it can just be your header
+type. It really doesn't matter. Um I
+don't you can define header as just like
+a y1 y 2 range. You can define as a
+proper bounding box. You can define as
+whatever you want. Uh in this case it's
+going to be like two things where header
+is the
+>> header and then like
+um header equals
+this and then footer equals this. And
+there's different ways that we can go
+about and go do that. Um and then the
+next thing that we can go do there's one
+more question.
+>> Yeah, one more question is good is so
+yeah like we talked about doing kind of
+like runtime guards and runtime evals
+for like summing transactions. Do you
+have any sort of like version of that
+for plain text like extracting a legal
+clause from a legal document?
+>> It's honestly going to be really similar
+to what you just saw me doing at the
+very beginning of this uh system. Like
+when I was playing around with this and
+trying to make this work like has
+transactions, it didn't actually work.
+You guys all saw that in real time, it
+didn't work. And you
+>> you saw the prompts that I went with. I
+was like, "It's not working. It's not
+working." So I kept on iterating. I
+tried different techniques. I said, "Let
+me add a page type." Then Dexter was
+like, "Try transaction with them." We
+tried about 12 things to make this thing
+work. And we did make it work because it
+turns out the answer was I both will
+require a page type and number of
+transactions. and the mutex of both of
+those together tells me whether or not
+the answer has transactions.
+>> So it's going to be the same thing with
+textual data. Try and understand if you
+can apply constraints and sometimes the
+constraints are not as direct as you can
+think of. They sometimes require you to
+do two different things and being
+creative with that is the real answer uh
+with those things and then obviously and
+pull data from other stuff as well.
+um such as like if you're doing medical
+data transaction like validate data
+against your actual database uh and go
+do it from that perspective.
+Now with that I want to do the second
+part is how do you do page over page
+overlap because like that I think is
+another big problem. Well it turns out
+that's also a really easy problem. What
+we do is like we we'll we'll say related
+to
+previous page
+enumerate I equals this if I greater
+than zero we'll ask we'll ask the model
+this uh and we'll just ask the model
+like is there is this continued from a
+previous page
+and we'll We'll just give it two pages.
+We'll give it the
+new image. What is this?
+>> Mhm.
+>> Previous image.
+And what does it say?
+Previous page over there. And we'll just
+ask it to compare and just say like does
+this data continue? If it does continue
+what we'll say is like
+oops sorry pages equals
+new image
+u per pages
+cur ctx. So my current context is going
+to be this just this page that I'm
+looking at. If it does continue from my
+current page I'm going to append the
+previous page to it. Now I'm going to
+get the context from like the uh current
+context and I'm going to pass in both
+pages into my transaction array. So at
+any given point I'll I'll pass in both
+the previous page and the current page.
+Now because it's transaction data I have
+another bit of knowledge that I have
+which is the previous page fully doesn't
+really make sense.
+Um so I would literally crop this page.
+Crop top half.
+Uh,
+>> oh, you could literally ask it to find
+incomplete records and then just like
+stitch those together into their own
+image or something.
+>> Exactly. And I'll crop 75% of the
+previous page. The top 75 uh to crop the
+top 75% of the previous page. And
+we'll only give it the bottom 25%
+and then pass that in. And now my model
+will see the previous page plus the
+current page. And then I'll feed that
+into the model.
+And now basically you're going to see
+there's a continuity of the page.
+>> If that doesn't work and I feel like
+that's a little too tricky, I might even
+stitch the page together and create a
+new image that actually continues it
+from that page.
+>> What about the that that makes sense and
+there may be more here. I'm I I'm
+curious. Maybe the when I read the
+question, I thought it was about the
+like like overlaying the images on top
+of each other and then zeroing out the
+pictures that were exactly the same.
+>> That's not what I meant. What I meant
+about the previous pages like sometimes
+data gets cut off like this thing is
+here but it's also on page two.
+>> Getting a model to extract data between
+pages is very hard.
+So the way that I would do that, Ian has
+a model of that. I would literally pass
+in page one and page two together to the
+same prompt.
+>> Yeah,
+>> I'll pass in a different version of page
+one, which is cropped to just the bottom
+25%.
+>> Along
+>> um No, I mean I guess I I think Charles
+question and he hits it wrong, but um it
+says I feel like I missed the page
+onpage overlap technique to find the
+headers, footers, and common stuff.
+>> Well, is that a separate image
+processing library? Oh, yes. Um, for
+that I use um I use just OpenCV.
+Uh, and there's this thing in it that's
+called and we'll push all the code live.
+Uh, there's this thing in it called
+image chops in the Python image library
+pill. Um, and when you go do this, you
+can just do a really really simple
+function and you this is all chatbt
+generated. You don't have to hand draw
+this. It's called image difference and
+just differs diffs the images for you
+and it produces all this stuff
+automatically.
+>> So you can clean up code. Okay. And that
+gives you like a pixel by piscal pixel
+mask that you can then use to like
+remove or or invert. Okay.
+>> Yeah. And then you can find horizontal
+bands. So you can find the horizontal
+bands by looking at the pixels and it
+literally does this code right here. It
+converts it to a numpy array, finds the
+array, and then goes through and does
+that.
+>> Gotcha. Gotcha. I wasn't sure if the LM
+was doing some of that for you, but
+that's awesome.
+>> It's really fast and really easy. It
+makes this trivial to go do. So like
+detecting headers is a nonLM problem.
+It's the thing I was talking about at
+the beginning. Don't use an LM to do
+like generate database IDs for yourself.
+Probably a dumb idea. Don't use an LM to
+generate common headers and footers.
+Probably a dumb idea. Um especially when
+it's really easy and really cheap to do
+it this way.
+>> Nice.
+>> But uh now continuing of how we get data
+across multiple pages. This is what we
+do. We just take the images, we stitch
+them together, we find previous pages,
+uh, and then we just crop it, uh, and
+then we add it to our context Nope.

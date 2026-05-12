@@ -1,0 +1,783 @@
+The channel has absolutely exploded
+after our previous two autogenic
+Postgress AI videos. While this is
+great, I got to be honest, I don't
+really care about the views. I care
+about building a Gentic software and I
+care about helping you push your
+engineering into the future of
+programming. This means using the best
+tool for the job. And right now, as you
+know, we have a whole new playground of
+LLMdriven AI tools to explore,
+experiment, and build with. We're
+building real valuable software with
+Autogen, ADER, Advanced Prompt
+Engineering, all on top of GPT4. I say
+this to set the stage and welcome
+everyone new to the channel, but also to
+make it absolutely clear. This channel
+is about finding the best tool for the
+job. It's about raw engineering and it's
+about true product ccentric value
+creation through software. This is not a
+hype train overly edited channel where I
+report the latest overhyped GitHub repos
+or AI related news drop every single
+week. There are many channels that do
+that. You know where to find them if you
+want them. On this channel, I share tech
+that I truly believe will help you solve
+your engineering problems. As for all
+the views and attention and you know uh
+new subscribers, really appreciate you
+being here, but I'll be here every
+single week with serious skin in the
+game just like I was when I was getting
+less than 100 views per video. That out
+of the way, huge thanks once again. I
+really appreciate you being here. Now,
+let's build some agentic software. All
+right, so first things first, let's
+recap our current Postgress agent. So,
+I'm just going to go ahead and run a
+full example of our application. I'm
+going to kick up our poetry environment
+and then I'm going to run our program
+with a prompt give me all outlook email
+users. So in natural language we're
+going to query our Postgress database.
+You can see here we have the table
+definitions at the top. We have users
+and jobs and our current flow of LLM
+agents. They're going to read from our
+Postgress database figure out what query
+needs to be run it. And then as you can
+see here they're going to report the
+results. I asked for all Outlook emails.
+You can see here we got Joe and we got
+Jane Smith. If we hop over to table plus
+and we look at all of our Outlook
+emails, you can see we have two Joe and
+Jane. So we correctly got the right
+results back. And how do we accomplish
+this? We utilize a couple of environment
+variables here. We have our database URL
+and our open AI key. We pass in a prompt
+using arg parse and we have a Postgress
+manager. I can check out the previous
+two videos to catch up. I'm just going
+to flash through this. We have our GBT
+config that we pass in the autogen. We
+have a single function map that gives
+one of our agents the ability to run SQL
+against our database. We then have
+prompts and we have our flow of AI
+agents that perform specific tasks to
+help get the job done. And as you can
+see here at the bottom, we set up
+Autogen's group chat and group chat
+manager and then we initiate the chat
+with all of our agents. And this is how
+we're able to type in natural language
+and get results out of our Postgress
+database. So, this is really great, but
+as you may have found, working with
+Autogen is not a simple walk in the
+park, especially when you start running
+your own unique agent combinations, each
+with their own detailed prompts and
+functions. I ran into similar problems
+and found it quite difficult to
+consistently get the output I was
+looking for when I was building out more
+detailed and more advanced agents with
+their own functionality. In this video,
+I want to share two architectural
+patterns I've used to largely solve
+these problems with consistent agent
+conversations and consistent function
+calls. And I want to show you a glimpse
+into the future and and see how we can
+use these two patterns to truly start
+building out real agent systems that can
+solve your engineering problems. So, the
+first thing we need to do is get control
+of our agent conversations. How and in
+what order our agents converse to solve
+our problem is critically important.
+Right now, as you can see, we're relying
+on Autogen's group chat and group chat
+manager. The backbone of this
+application is of course OpenAI's GPT4
+model and Microsoft's Autogen, which is
+a framework for building multi-agent
+applications. Shout out to everyone
+who's worked on this from the
+contributors to everyone at Microsoft,
+Penn State, and University of
+Washington. So, right now, we've been
+relying on Autogen's group chat and
+group chat manager to direct the flow of
+our conversations. And while this is a
+great starting point to really get
+control of how our agent system runs, we
+need to get closer to the metal. If we
+dig into the group chat manager, you'll
+find this run chat function, which
+essentially controls the flow of the
+conversation. It does a decent job for
+specific use cases, but it's not great
+for other use cases, and I found it not
+great at consistently calling functions
+when it needs to. So to improve this,
+we're going to code our own group chat
+like class that we'll call the
+orchestrator. I don't want to burn up
+your time. I'm going to speed through
+this to show you exactly how this works.
+Okay, now we have a brand new
+orchestrator class that can control the
+flow of our conversations between our
+agents. So, we're going to go into more
+detail here in a second, but first let's
+just rerun our poetry command, give me
+all Outlook email users, and let's make
+sure that our new orchestrator flow
+works. So just like before we have the
+table definitions, we have the admin
+passing it to the engineer. We have the
+engineer generating the SQL that needs
+to be run. And then we have the SQL
+analyst reporting the results to the
+product manager. And as you can see
+here, we have our results and we have an
+approved message and we have our
+orchestrator reporting success. As you
+can see here, we now are assembling a
+team. We have our data engineering
+agents. we pass them to a new
+orchestrator class and then we take this
+orchestrator class and we kick off a
+specific conversation type. This is
+really important. We kick off a
+sequential conversation type. And if we
+dig into this function here, we can see
+that what we're doing here is passing
+the message from A to B to B to C, C to
+D, and D to E between our agents from
+start to finish. At a prompt to our list
+of messages, we can hop up to the
+definition here in the init. Basically
+the core of our orchestrator is this. We
+have the name, our agents and the
+messages that are spoken between our
+agents. We then have a bunch of
+properties. We can dive into these one
+by one quickly. We have total agents.
+Last message is a dictionary. This
+allows us to know if the last message
+we're getting is a function call or a
+function call response. We have last
+message is string. And then we have last
+message is a function call. So this is
+GPT4 saying we need to call a specific
+function. And then last message is
+content is saying we just called a
+function get the result from the
+function. And then of course we just
+have latest message. It will give us
+none or the actual result that just
+occurred. And this is optional string.
+This should actually be a union between
+dict and string. But I'm just going to
+leave this like this for now. So if we
+jump back to the sequential
+conversation, you can see that we're
+basically just running this flow, right?
+The last message was just a string. just
+continue the chat conversation, right?
+We go from A to B. But if the last
+message was a function call, we instead
+of doing this basic chat where we just
+pass a message from A to B, we run this
+function called chat which allows A and
+I'm actually going to call this function
+chat just to keep it more accurate and
+contextual. Agent A to communicate and
+call its function before passing the
+message to agent B. And we do this check
+so that we know that if agent A has a
+function, we expect it to call that
+function. This adds some really key
+logic where if your agent has a function
+and you want it to run, make sure that
+it always runs. We go up to the second
+to last agent because we don't want our
+product manager at the end of our list
+to pass its message to someone that
+doesn't exist, right? And then we check
+our complete keyword which is just
+approved thanks to the completion
+prompt. So if everything looks good,
+product manager will just respond with
+approved, right? And that's basically
+that. Let's quickly dive into the basic
+chat. I just want to show you exactly
+what this looks like so that you can
+replicate it. We're taking two agents
+and a prompt message. We're mimicking
+conversation. So agent A is going to
+send this message to agent B. So it's
+like agent A is saying something to
+agent B. We then have agent B generate a
+reply. This is where the open AI GPT4
+requests actually occurs. And then we're
+just adding this message to our list of
+messages. And the only thing our
+messages list is doing. It's just
+keeping track so that it's easier to
+debug when you need to go in and see
+what's going on and what has been said
+between agents. And then the function
+call is where things get a little more
+interesting. We have a basic chat
+between agent A and itself to basically
+continue to trigger the function call
+that needs to occur. And then after
+that's complete, we have agent A pass
+the content from the function call to
+agent B. With OpenAI function calls, it
+first needs to prompt the function call.
+And we can see this in our working
+example. The senior analyst first
+suggests a function call and then it
+executes the function call. And so in
+the suggestion, we need agent A to send
+that back to itself so that it can then
+execute that function call and send the
+response of the execution to B. So that
+concludes our orchestrator. Basically,
+what we're doing here is we're getting
+control over the flow of conversation
+between our agents. And if we want to
+see exactly what this looks like at a
+high level, the sequential conversation
+is just this. Agent A passes a message
+to B, B goes to C, C goes to D, D goes
+to E, and E goes to F. Just exactly as
+you would imagine, right? After agent E
+to F finishes, the conversation ends.
+So, I hope you can see the importance of
+needing to control the conversation.
+Right? If you're not if you're not in
+control of the conversation that your
+agents run and you're not directing the
+flow with an orchestrator, you're just
+up to the mercy of the functionality
+that you know Autogen's group chat and
+group chat manager forces you down,
+right? You want to be building your own
+specific flows to handle that specific
+flow of logic, right? So, let's keep
+pushing this forward. Now that we have a
+better pattern for the control over the
+flow of our agent conversation using our
+new orchestrator class, let's give our
+agents more unique functionality. Let's
+say that after we generate this um data
+orchestrator result, right? We want to
+do some reporting and like data
+visualization on our Postgress response,
+right? So for example, just to keep
+things simple, let's say we want to
+output the result to raw text, JSON and
+YAML all together. So, let's say, you
+know, we're generating a bunch of
+different types of reports. Maybe our
+clients want different reports of the
+data, right? Or maybe we're generating
+the uh data for our product managers and
+they want it in a couple different
+formats for whatever reason. With our
+new conversation flow in our
+orchestrator, we can build a new type of
+conversation where we essentially just
+broadcast out what we want our agents to
+do, right? So, let's take a look at a
+agent conversation that handles message
+broadcasting versus a sequential
+conversation flow. Right? So if we hop
+over to a broadcast conversation where
+we have agent A just saying, "Hey, I
+want you guys to uh report this data in
+this format, we can then have agent B
+just be a raw text agent while agent C
+is a you know JSON agent which handles
+and reports JSON data and then agent D
+can be you know YAML and then you know
+so on and so forth. So, with this, you
+can kind of see how having specific
+conversation types really matters when
+you're putting together your agents.
+It's not just a free-for-all because
+passing information along like this
+through an organization, through a
+system of agents, through a through any
+system is very different than
+broadcasting it out, right? Let's see
+what this really looks like. So, I'm
+going to build this new broadcast
+conversation flow and then we can take a
+look at how that helps us build more
+concise agentic systems.
+All right, I've just finished. This is
+where things get really cool. Let's
+collapse our code and look at the
+changes we made here. So, first things
+first, we added a brand new type of
+conversation to our orchestrator. We now
+have a broadcast type conversation where
+agent A just yells out at all the
+agents, "Hey, I need you to do this."
+And then they all do it in their own
+unique way, right? If we hop back to
+this chart, this is what this looks
+like, right? It's a different
+conversation flow than our sequential
+flow where we're passing information
+along. In this conversation flow, we're
+broadcasting a message out to all of our
+agents. As you can imagine, we have the
+broadcast agent just yelling out its
+message using basic chat. And this
+should actually be a memory chat. And
+the only difference between the basic
+chat and the memory chat is that memory
+chat will have agent B store its own
+reply. When agents generate a reply,
+they're not actually saving this in
+their own personal memory. Then if we
+pick up a function call agent iterate
+which is you know our base level agent
+here agent B c D E and F it's going to
+then given that information run its
+function right and we're going to
+basically assume that it's going to be a
+function call and so there's no one else
+to pass the message to in the function
+chat. So we're just going to send the
+message to itself which is totally fine.
+It's not going to do anything with it.
+This is our new broadcast conversation
+type. And if we jump up to the top
+level, we have a couple new things here.
+Let me go ahead and expand this. And you
+can see previously we had our data
+orchestration pipeline here, data
+engineer orchestrator, which contains
+all of our agents. And then we're
+running this sequential prompt. I'm
+going to go ahead and just leave this
+commented out for now because we now
+have a brand new pipeline here that I
+want to show you. We're doing two things
+here. We're expanding the types of
+conversations our agents can have and
+we're going to give our agents a bunch
+of new specific functionality. As you
+can see in the prompt, we have a text
+file report analyst, a JSON version, and
+a YAML version. And the prompt is
+simple. You exclusively call the
+function you've been provided to call,
+right? We then create three new agents
+respectively. And here's the really cool
+part. You're going to specifically
+provide the type of function you want
+that agent to run and it's exclusive to
+that agent. Right? So, this is how we
+get really cool agents, really built-out
+agents running specific functionality,
+solving specific jobs. Just as I said in
+the previous video, you want to keep to
+that clean Unix philosophy. Do one thing
+and do it well. This is a JSON file
+reporter agent. It just writes JSON.
+That's all it does. So here we're going
+to build out a mock data to report. This
+is just a run from our previous agent
+flow with some results so that we can
+pass it and test our new data
+visualization agent team. And you can
+see here I'm putting together the
+agents. We're just going to go ahead and
+use the user proxy as we did before. But
+then as our receiver agents, we're going
+to set up the text JSON and YAML report
+analyst. We then wrap them in the
+orchestrator class with their team name.
+pass in the agents and then we create
+the prompt. Here is the data to report.
+Pass in that data from above and then we
+run our broadcast conversation. One last
+thing to mention, I quickly just
+imported this file class which contains
+the specific functions to help our
+agents write. So we have the write file,
+we have write JSON file and we have the
+write YAML file. And that's what we pass
+in to our function maps which have been
+expanded. As you know, we need a
+configuration object to be passed into
+our agents so that they know what
+functions they can run as well as the
+function map. So, we've broken apart the
+base version of the configuration to be
+passed into agent specific
+configurations. So, you can see here we
+have the runs SQL configuration which
+contains the mapping for the runsql
+function. We now have a write file
+config which contains the definition for
+the write file in our file. py. You can
+see that here. And then moving along, we
+have the right JSON file and we have the
+right YAML file. And if we go down to
+our agents, of course, in their
+respective LLM config, you pass in the
+proper configuration file and their own
+specific configuration map. There's a
+much better way to organize this
+information, this code. Right now, I'm
+just doing it in a single file just to
+keep it really clean, really simple,
+really obvious. We just go ahead and
+collapse all this. You can see we have
+base config which builds out the
+specific configs and then we have the
+individual function maps. We then have
+our prompts, our agents and now our new
+set of agents and prompts, the report
+analysts and then those agents. We have
+the mock data to report data viz agents
+where we built a list of our agents.
+We've set up our orchestrator set up a
+brand new prompt and now we're going to
+run the broadcast conversation. So this
+prompt is just going to be skipped over.
+Make sure we import our file module
+here. Let's fix this lowerase true. Need
+to make agent agents so we can get the
+first broadcast agent here from our list
+of agents. We need to change the self
+latest message to prompt. When we're
+passing our message from our broadcast
+agent to our receiver agents in the
+broadcast conversation flow, we need to
+send the prompt to every agent, not the
+latest message. Let's go ahead and run
+our data viz agent team. So the output
+here should be three files. We have a
+text file, we have a JSON file, and we
+have a YAML file. Okay, so we can see
+that we had the right file run happen.
+And now now the admin's talking to the
+JSON agent. that file, right? Went
+through. Now we're talking to the YAML
+agent. And let's see what we got here.
+So, okay. So, looks like the YAML agent
+had some error. Looks like a JSON error.
+I'm not going to dig into this exactly.
+I'm sure there's some legitimate reason
+for it, but I just want to prove the
+point of setting up agents that can
+broadcast messages out, right? So,
+here's a user report. So, we did get
+that clean write to the user report text
+file. And here's the user report as
+JSON. You can see here we have this data
+viz team operating on specific types of
+data. Right? So this is pretty cool. But
+most importantly, it shows how important
+controlling the agent conversation is.
+To really get control of the flow of
+conversation between our agents, we need
+to build our own conversation flows out
+with some type of orchestrator
+structure. And the real time will be
+spent in understanding how to send
+prompts and run functions between your
+agents. There's definitely a good
+argument for doing all this manually and
+just cutting out autogen to keep it
+simple. But I think autogen gets you a
+decent way there with the
+conversationable agent and the base
+agent class that can help you. And you
+know again the beauty of code is once
+you kind of have this working um in a
+clean modular fashion you can solve this
+problem forever right like these agent
+pipelines can be reused to solve any
+configuration of problems between agents
+right that's going to be the next push
+and the next area to really focus on
+after you understand you know basic
+prompt engineering you want to push your
+agents to the next level so that they
+can autonomously solve problems for you
+the next place to go is going to be to
+understand this process, this idea of
+orchestrating the conversations that
+your agents have. Full complete honesty
+and transparency. It took some time to
+build out this class the exact right way
+it needs to be to run the agent flows.
+But again, after you have this in place,
+after you have your mode of
+orchestrating agents, it's there and
+you've done it and it's reusable. Uh, I
+hope you can see where this is going,
+right? Let me just do one last thing in
+this video. I know this is a super long
+video, but hopefully I can edit it down,
+get it as short as possible for you guys
+so you can get the maximum value and the
+least amount of time. Now, what we're
+going to do is put our two agent teams
+together. So, if we get the result back
+from our sequential conversation, what
+we're going to end up with is success
+and then messages, right? So, I'm going
+to call this data messages. We want to
+get the second to last message which has
+our response from our senior data
+analyst which is the SQL statement right
+so data result and this is going to be
+-2 and it's going to be in the content
+part of that dictionary right so this is
+the SQL response that our data analyst
+gets from running the runSQL call and
+now that we have this which is
+essentially going to be our data to
+report we can do something that
+functional programmers will love we can
+compose our agent pipelines, our agent
+conversations together. We take the
+result from the data engineering team
+and instead of using this mock data, I'm
+going to comment this out. We're going
+to use the data result. Right? So, with
+that done, we can go ahead. I'm going to
+code collapse. Get rid of our mock data
+to report. And now we have our data
+engineering team. We're adding content
+directly into our data visualization
+team. I'm going to update this. Give me
+all unoff users. Right? Just keep it
+simple. And now we're going to run the
+entire flow. Right? So we're going to
+have team one hand off the result to
+team two. So already you can see team
+one finished. Right? Our data
+engineering team finished. They handed
+the result to our data visualization
+team. And now they are writing their
+content respectively to you know
+whatever output form they're supposed to
+write to.
+Okay. And if we look oh looks like we
+did get that yl ready. Open up our users
+report. right? Uh that our team of
+agents created for us. Um you know we
+got authenticated is no. So you know we
+got both of our um unauthenticated
+users. We can check our database here in
+table plus. We can see we're expecting
+Bob and Charlie. And we have both Bob
+and we have Charlie. We can go to JSON.
+Now we have a JSON format we can work
+with. You know this will be a good good
+file to just like pull data out from
+really quickly. And then looks like our
+for whatever reason our agent uh you
+know pushed through with our YAML
+response and we have the same thing
+right so here I'm going to paste in that
+entire run and let's quickly just look
+over everything that just happened there
+right so give me all unoff users right
+so first things first we instantiated
+our data engineering team and we're
+going to run with these iterations right
+so we can keep track by searching these
+iterations but first thing first the
+admin to the engineer passes the table
+definitions, right? The engineer then
+generates the SQL needed and then on the
+next iteration, our agent is now talking
+to our senior data analyst. Remember
+this is sequential chat goes top to
+bottom and it passes the SQL and it's
+saying, you know, execute this command.
+On the next iteration, we have the
+senior analyst reporting to the product
+manager suggested function to run. The
+senior analyst is going to then run this
+function first and then it's going to
+send the result to the product manager.
+The product manager then in the
+sequential conversation confirms the
+result with the approved and then this
+marks the end of that team. Right? So
+the results complete and then we pull
+the result from the senior data analyst
+and then we kick off our data
+visualization team. Right? On the first
+iteration here you can see that the
+admin is the broadcast agent and the
+iteration agent is going to be our text
+report analyst. Right? We have Bob and
+Charlie both unoff. Then our text report
+analyst is going to run its function
+write to a file. We get none here
+because the function you know write file
+it returns nothing. On the second
+iteration again this is a broadcast
+conversation. So our admin is now
+broadcasting to the JSON report analyst
+and it does the same thing for JSON. Our
+JSON report analyst writes the JSON
+file. And then lastly we have
+conversation iteration 2 index 2
+broadcast agent admin is now uh you know
+saying to the YAML report analyst do the
+same thing and then our YAML analyst
+writes that file. So that's the overall
+flow that is exactly everything that's
+happened here. Debugging and logging is
+going to be really important. So I
+recommend using, you know, believer
+verbal logging and writing out to a file
+so you can see exactly how your agents
+and your different teams are working
+together. And this is all through our
+orchestrators, right? This is all
+through our prompt engineering work.
+This is all through our composition
+work. This is all through our
+conversation work, right? Building
+blocks. Engineering is all about
+building blocks. You know this already.
+These are the next level building
+blocks, right? when we have systems that
+can build for us. This is a new paradigm
+shift for the way that we engineer. I
+hope this makes sense. I know there's a
+lot of complexity kind of abstracted
+away in this orchestrator class. It's
+really important to get your chat so
+that you're passing the right
+information between agents. It's really
+important to set up your own specific
+conversation flows. If you take nothing
+away from this video, I really hope that
+you take that. The order and the
+conversations that your agents are
+having really matters and you need to
+control when they're just chatting and
+when they're calling functions. So, our
+orchestrator is really important. I'm
+going to be reusing this class, building
+upon it, setting up different types of
+conversation flows that can solve
+different problems. In this video, we
+just use two conversation flows. These
+are probably going to be two really
+common scenarios you're going to see,
+right? top to bottom, sequential, and
+then broadcast conversations where we
+just fan out the information from our
+primary agent to all of our other
+agents. And at the center of the center,
+we have autogen which is helping us out
+with our agent specific functionality.
+Then again, at the center of the center
+of the center, we have GPT4, LLM
+technology, helping us drive arbitrary
+content generation. And you know, kind
+of wrapping that layer, we have good
+prompt engineering, right? good,
+concise, simple prompt engineering. We
+built out two flows of agents, two teams
+of agents, right? We're separating,
+we're we're dividing and we're
+conquering, right? So, we have the data
+viz team that takes input directly from
+the data engineering team, our data
+visualization team, which you know, the
+data viz team right now is just writing
+to files. Just want to prove a point
+that you can set up systems of agents,
+teams of agents to do specific things,
+right? Again, let's remember
+orchestrating our LLMs gives us
+superpowers to recreate any
+organizational structure. Right? Let's
+open up the readme.
+Just like we were talking about in the
+last video, right? This is important
+because it allows us to create a more
+accurate model of the world and allows
+us to become orchestrators enabling less
+engineering and more product level work.
+Right? That's what the orchestrator is
+all about. We got some agents going,
+guys. We're building some agenting
+software. I've been really
+passionate/obsessed
+with where this is all going and where
+this can take us. There's a lot of rough
+edges to this technology. It's really
+non-deterministic by nature. So, it's
+kind of hard to work with, but once you
+get your flows going, once you get your
+nice orchestrator going, the results are
+a lot more consistent. A lot more
+consistent than you would think. All
+great things uh require effort, grit,
+focus, and patience. On this channel,
+we're going to the edge. We're pulling
+the future of engineering into the
+present so we can build a software that
+works on our behalf faster than we ever
+could. And even better, they can work
+with us while we're working in parallel.
+A lot of talking, a lot of content in
+this one. Again, thanks for all the
+views, all the subs, all the likes on
+the previous couple videos. Like I said
+in the beginning, I'm just going to keep
+rolling. 10 views, 100 views, a
+thousand, 10K, 100K, I don't really
+care. I want to keep shipping this type
+of content because I know that there are
+a couple key people watching. This might
+be you that are going to take this and
+push it to the next level and start
+building out your own agenting software.
+So, in the next video, I want to get
+back on the original track. We need to
+expand the number of Postgress tables
+that our agent can consume. And as you
+know, there's a context limit to the
+window that we can pass to our LLMs,
+using GPT4, whatever. Likely, we'll be
+using vector embeddings. Stick around
+for that. It's going to be a real
+hands-on way to use vector embeddings to
+get concise results. Made it to the end
+of this video and got value out of this.
+Drop a like, sub, hit the notification
+bell, and I'll see you in the next one.

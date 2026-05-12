@@ -1,0 +1,2244 @@
+hey everyone thanks for
+joining
+um we'll wait I guess I joined a little
+early with a few other folks for
+Aron
+hey all right
+do you know if the zoom chat persists uh
+for people that join
+later I'm not
+sure I don't see anything in the chat if
+you posted
+something oh it does not okay so I'll
+I'll just keep posting it a little bit
+we'll probably start around like 11:05
+is um and then we'll go on from
+there yo what's up hey e
+Johan oh wow lots of people in here this
+is awesome yeah yeah it'll be fine got a
+good
+amount and and then while we're waiting
+um hey everyone I'm going to post a
+really quick thing just so we know how
+to break out the questions and
+everything and how we address everything
+so if you could um I'm G to start a
+quick little poll just to give myself an
+idea of what kind of tech we should use
+today for the demos um and what kind of
+questions we'll be answering if you
+could answer the four questions that
+would be amazing uh to help us out
+here hey how's it going
+hey oh that's good we're we're Hing
+everyone that joined was mostly
+engineers and it looks like most people
+actually code which is
+great uh it's going to be much more
+fun okay we got mostly python
+there's no chat
+gbt um well is it chat gbt or is it
+cursor at this point to be
+honest what's team
+Cody what's the quote on my wall on my
+wall oh not really my wall I'm actually
+in an Airbnb uh today I I'll show you
+the quotes on my walls later but this
+one says when you realize nothing is
+lacking the whole world belongs to you
+loud
+Sue um we'll see how that how how true
+that is today when our prompts don't
+work live
+demos I'm kind of scared of doing
+and looks like most people have answered
+the survey
+um well I'll share the results for that
+in few seconds
+too um I think we've we'll wait like two
+more minutes and we'll start uh
+coding
+um hey PR nice for joining um and then
+I'm gonna post this link over
+here um if you guys check it out this is
+I put posted I send this over on Luma as
+well but uh this is going to be like the
+general things of what we're going to
+talk about today if you guys have things
+that you want to do in the demo just add
+your own idea down below uh in the pre
+meeting section and like we'll just pick
+one of the ideas that's out there
+probably through Community polling
+because uh then you know we're actually
+going to do it live and it'll be fun if
+a lot of people want to see the same
+thing and then for any topics you have
+feel free to change add new topics or
+questions as
+well um
+and just set the topic appropriately if
+you can put your name that'll help uh so
+we can call out the
+person um if they if we have any
+followup questions about
+them one more minute then we'll start
+all right I think we're ready let's do
+it uh well with the new realtime API uh
+we'll chat about that in a second um you
+can uh we'll discuss a bunch of
+questions down
+there um cool so first of all I'm going
+to do a quick introduction my name is
+viov I'm one of the co-founders of
+boundary and we build a programming
+language that makes LMS a lot easier to
+use and a lot more consistent without
+any fine tuning um uh on my left you'll
+see Aaron or I guess I don't know what
+order people are in but you'll see Aaron
+uh Aaron can you wave and introduce
+yourself yeah hey guys I'm Aon the other
+co-founder uh and yeah happy to be here
+and show you um how to improve your AI
+pipelines yeah and then uh really the
+goal and I'll introduce F on in a second
+but really the goal of these sessions is
+what I found is it's really fun to see
+other people do prompt engineering cuz
+sometimes you just find a different way
+of thinking about um thinking about the
+same problem and we learn a lot from
+seeing others think about the problem I
+learned a lot from pisan when he was
+approaching building his aent Tech work
+but Sherlock and uh just watching Aaron
+and me uh do it differently it's also
+just expanded the way that I scope
+problems so the goal of the series is
+really
+just do some live coding solve some real
+problems and then perhaps uh we all just
+walk away with better LM pipelines
+coming out of it
+and then now I want to do a quick
+introduction of fan who is building a
+really cool agentic framework that he
+built and in line of today's topic the
+whole real goal here is to talk about
+how do we build agenic Frameworks at
+scale and I think before we talk about
+that we should talk about one that is uh
+built somewhat well and look at what
+design decision decisions were made in
+that process and how we can emulate that
+in the demo that we build
+today um fan you want to give a quick
+introduction yeah yeah happy to do that
+and sort of give give screen share as
+well after hey everyone my name is Fon
+I'm the co-founder of Sherlock AI uh
+Sherlock is an AI co-pilot for Traders
+and investors our goal is to really
+democratize access to Market experts
+through the power of AI and you know
+what a time to live in with large
+language models that we can make that
+possible uh and yeah I mean you know
+we've been Building agente architecture
+for quite some time and we've tried
+everything under the roof with the Lang
+graph and so on and ran into a very
+challenging problem with mixed
+structured outputs and that's where we
+decided to talk
+to yeah yeah happy you want me to just
+kind of get into the the yeah let's just
+watch the agent I think that's usually
+the best part if we just like Watch what
+it can do in different scenarios like I
+was kind of impressed by a lot of the
+things that you came up with yeah yeah
+that yeah so I won't bore you guys with
+all the details of of uh you know how
+our product works you guys can check
+that out on your own time and I'll dive
+right into to to sort of our our agent
+uh so yeah again like I said sh I can
+really help you you know discover
+analyze and trade anything across the
+stock market so uh we have this feature
+that we call Quick prompts we notice a
+lot of people uh or the average person
+can be bad at prompt engineering so we
+don't we don't want them to prompt step
+within our product and and just go
+through this uh quick prompt experience
+so here you can just you know go through
+this this flow say hey I'm looking to
+trade options and looking for some trade
+setups and then you'll see as soon as I
+submit you'll see these like loading
+statements coming in that's all coming
+through the chat model by the way so in
+real time you know our baml agent is
+like kind of figuring out hey what data
+needs to be fetched and it figured that
+out gave that message to the user and
+then once it had the data that it needed
+it performed the analysis and and
+basically gave us a bunch of different
+response right uh so it finally
+responded to that user after that but
+there are all kinds of edge cases that
+we run into as as well right let's say
+the the user asks a question but doesn't
+really specify the stock right so they
+summarize is the
+latest earnings oh yeah can can uh can
+you zoom in Fon oh it's like command
+shift
+Plus+ than
+Alex a little bit more a little bit yeah
+there we go a little bit more
+actually how about that
+right I I'll maybe run through that
+again but hopefully uh
+this example resonate with a lot of you
+where you know you need to collect some
+user input and they've asked a question
+that's not complete so you need some
+clarifying questions right and that
+requires the model to take a different
+action right it's not the same action as
+just responding to to the user with the
+analysis and that's what BOS really
+enabled for us to be able to take a
+different action
+right why don't you just give it some
+more um like specification of what it
+means fast yeah so here I'll just you
+know uh say Tesla
+and you notice right here I don't know
+if you guys saw but it actually did some
+dot dots and started like actually going
+through some multiple steps to go show
+you and that like UI difference of like
+telling the user that something is
+happening can really make a big
+difference in the accuracy of your agent
+but also to the communication of the
+user on the accuracy of your agent as
+well so in this case it was able to
+determine that it like had a follow-up
+question to ask and then answer asked
+followup questions but usually from what
+I have seen the way that people usually
+do this is you write a massive prompt
+somewhere in your prompt you're like hey
+if the user needs a followup question
+ask them for a followed question and
+that's what you're respond with if it
+has all the information go do go answer
+the
+question but that can be that's not even
+possible right because if you want two
+different types of data in you can't if
+you're looking for text versus something
+else right you you can't even do that in
+some cases right the mixed output is
+very challenging to do in just one long
+prompt and I think like the the funniest
+thing I saw was like ask it to like
+generate a resume for you oh yeah I
+actually like have that example that was
+going to be one of my questions because
+I saw you test that the other day I was
+like oh that's a that's a cool uh test
+so
+here yeah it's a question that makes no
+sense right for our platform right uh so
+we have some interesting like sort of
+fallback here it just says hey I'm here
+to assist you with financial analysis so
+it kind of handles that uh and gives you
+many ways you can handle this like
+prompting is just so hard I have you did
+you you tried a bunch of prompting
+techniques before to make this work oh
+yeah I I did and the prompting
+techniques it gets really complicated
+because uh you know I think maybe this
+is a good segue to kind of showing this
+this diagram I put together you know
+when a user asks a question the chat
+model essentially needs to decide which
+action to take right and that action
+also includes by the way data Gathering
+right and calling some tools so having
+that ability to decide what action to
+take do I need to gather the data and
+call some tools versus do I need to
+respond to the user or ask clarifying
+questions it's just really hard to model
+if you don't have something like bamel
+to specify as as as baml types and and
+just map these actions to those bamel
+types um so you keep talking about bamel
+but like I think the most interesting
+thing is actually just the fact of like
+when you guys when I think about this
+problem I think if we all look at this
+diagram statement I'll annotate a little
+bit this really looks like a really
+simple thing this is if we were to think
+about in the terms of python because
+most people write python code you can
+view this as just a a user input
+literally we can view this as like the
+input command we'll see how fast I can
+type code with um you can view this as
+the input command and as you're going
+about the input command it really is
+like almost like an if statement over
+here it's like if or like a switch
+statement I guess to the better one
+oops based on the input I kind of want
+to do a switch to one of these three
+actions based on whatever the input is
+so if the user said something
+like uh give me a better resume you're
+really just responding to the user with
+something with a little bit more
+specific and the response user prompt
+probably has something along the lines
+of if it's not about financial data you
+just tell them you don't handle
+financial data exactly on the other hand
+if you're asking about Tesla then the
+switch goes to like something about call
+tools where you actually go to a
+database pull in information about Tesla
+from there somehow and then you will
+eventually go back into the switch
+statement and now if I have the
+information about Tesla maybe I should
+respond to the user and go down this
+response and produce a good
+response now different and you can do
+this now we're in the switch statement
+with a little bit of a while loop if
+that makes sense to folks yeah now the
+other option is we go back to the very
+first question Fon showed is we asked
+tell me summarize earning statements
+that one that we can say switch we have
+an action to take but we don't have
+enough data so we should probably ask a
+clarifying question and after asking a
+clarifying question we don't actually
+opt out we actually go we exit the Y
+Loop and go back to the top level point
+which is asking a asking input so this
+is almost like two while loops around
+each other where the first one is a big
+while loop and the other one is another
+input does that kind of make sense to
+Folks by the way
+and I that's funny um um but does this
+approach of how we kind of broke this
+problem down somewhat make
+sense yeah feel free to ask questions on
+the chat yeah or like raise your hand or
+whatever you guys want um if you guys
+have questions and stuff awesome so this
+is the way that we have generally
+thought about this approach instead of
+yeah we'll do a cod we're going to we're
+going to start coding really quickly uh
+right after this but the general
+approach of whenever we
+say um yeah that's another good question
+person I think
+um um okay I I'll go over a little of
+them the top LEL while loop is about
+getting user input so you're just asking
+the user for user input because at some
+point the user will give you input and
+at some point you have to decide to exit
+the while loop from the user input and
+in the case of uh Von's code you
+actually exit the Y Loop all the time
+because you show Once you show a prompt
+to a user you kind of exit and wait
+until the user gives you another message
+in this case it's driven by a button
+click or an enter in the UI but you
+could just simpler than that right like
+the way I kind of think about it is
+actually is you exit the while loop
+anytime you respond to a user right so
+we categorize respond to user and ask
+clarifying questions as user actions
+right which is like hey we need to do
+something with the user either respond
+to the user ask them a clarifying
+question any user action is going to
+lead us to exit the while loop right if
+it isn't a user action then all we do is
+we then go back to our chat model with
+the data that we have collected from the
+tool calls right so the the agent can
+Define decide what the next action is
+there right so that's how I kind of like
+my mental model has been like is it a
+user action or is it a tool action right
+if it's a user action then just exit the
+while loop do something with a user if
+it's a tool action then call the tools
+and then get that response back to the
+to the agent
+I think this is uh this is s of I think
+it's going to be a lot easier if we
+start writing some code actually yeah
+hopefully this demo is somewhat useful
+and letting people kind of see like one
+real application of building some agent
+architecture that's somewhat kind of
+robust H in terms of like it can handle
+scenarios that are completely
+non-related to the data it can handle
+scenarios where it doesn't have enough
+information and then it can also handle
+scenarios where it has the information
+now needs to give a decent response back
+to the model and we can talk about more
+interesting decent responses I think
+later about like gender bu and stuff
+that'll be kind of fun yeah and that's
+we're working on so we'll we'll
+definitely showcase that at some point
+in the future as well but one thing I
+just want to uplevel this this chart I
+know it's very specific to Sherlock you
+know you can model any agent in this way
+right you have a chat model the chat
+model has a set of actions that it can
+take right and then it takes those
+actions and those actions could be
+anything specific to your use case to
+your domain right in our use case it's a
+financial domain and we're Gathering
+data but it doesn't matter right you
+have a chat model that takes some
+actions right and and that's really the
+the most sort of simple way to kind of
+think about
+this um awesome so here's here's what
+we'll do really quickly um what I think
+would be awesome is we put some things
+in there um that are about some of the
+demos that we have so I'll screen share
+my screen for those of you that haven't
+seen
+this um I will screen share this
+specific
+window not all my
+windows I'm just waiting for us to leak
+our API Keys yeah so we're gonna we're
+going to do a really good job of not
+leaking API Keys too much today that's
+the
+goal think okay so these are the four
+demo ideas we came up with today um and
+I think what we can do for let's say
+your agent Works through some email
+input how can a while work on that I'm
+going to answer that question on a
+second because I think one of the demos
+is going to help might help so what I
+want to do today is I just want to write
+some code I think we we can talk about
+these conceptually but I think when we
+all see some real python code it looks
+like python is the winning language
+sorry typescript folks um python one uh
+so we're goingon to write some python
+code today when we all write some python
+code we're going to make this um we're
+just going to see what it ends up
+working as so I'm going to end this
+poll uh and I'm going to number these
+ideas
+I need to somehow figure out how this
+works I'm G to make a really quick P if
+anyone else wants to add some new ideas
+please now is the time we'll literally
+code up whatever you want um on fly as
+long as we can get some decent is demo
+data for
+it um demo do you want I'm going to
+launch another poll really fast and
+everyone can
+pick their numbers down um does anyone
+else have any ideas that they want to
+add in there otherwise I'm going to
+launch this pole and then we'll pick one
+and we'll just start
+coding I will take that as
+a uh oh I'm not sharing the screen with
+the poll what am I sharing
+oh
+that sorry we don't answer your question
+right now um we'll send you an email or
+a message you ask a question uh eron can
+you just copy and paste questions onto
+the doc while they get posted that way
+we can just track them and we'll make
+sure we go over
+them okay I'm going to launch a poll uh
+let me know which poll you guys want to
+which demo you guys want to see uh
+identify what makes a profile a good
+photo picture like perhaps for like
+LinkedIn Tinder U pin whatever you guys
+want facts versus the a news article
+create a good response for message on
+Discord or multiply the numbers fingers
+held up by a
+hand oh there's like a pretty uh pretty
+um we'll run this for about 30 more
+seconds and you can change your votes or
+do whatever you
+want and we'll do this real time so it
+may not work but the real point of this
+demo is to really talk about like
+different thought process and different
+strategies to make this
+work all right last 10 seconds get your
+votes in if you guys
+want all right 15 15 for facts versus
+opinions so if any of you on one and two
+want to shift it the other way this is
+your last
+chance oh scen
+sh all right backs versus opinions it is
+that's what we're doing um if you guys
+are curious I guess I can share the
+points um that's kind of what the PO
+results were it looks like people are
+very close between one and four three
+and four so maybe we'll do four next
+time um let's do the news article thing
+so to get started um I'm going to just
+screen share my
+screen uh I will screen share my whole
+first
+desktop can you guys see my vs or my
+cursor I
+guess cool let me get the chat up and
+running
+uh and then we will
+start uh we're going to start with this
+so what I have over here that I started
+out is I have a basic python
+project um uh I have a basic python
+project this python project is set up to
+just have almost no code I just made
+sure that I can actually run stuff for
+those of you guys that don't know about
+UV UV is just a great package manager
+for python definitely look into it we
+have a small read me of how to set it up
+um it's written in Rust like baml I have
+a soft space for everything rust um and
+what we're going to do now is the first
+thing we're going to do and I'd love for
+you guys like kind of be engaged in this
+and kind of give ideas around this
+problem of like facts versus opinions
+and news articles so the first thing
+what we should do is let's just start
+pulling up some news articles that we
+can use as test cases because we should
+know what we're going after let's go do
+you have the do you have the repo
+available V yeah I'll link the repo in a
+second actually that's a good
+call that way people can just clone and
+uh you post the chat it's boundary
+ml boundary
+ml promp shephards okay
+yeah um give me a second great um so
+anyway let's find some news articles and
+then let's just go figure out what's
+going on like Elmo what the heck is
+this and what I'm going to do is I'm
+just going to start copying
+stuff cuz why not I think this is the
+way to go about
+this this looks like actually a dumb
+news article let's find an actual news
+article uh take this
+one okay so we're going to find this
+this looks like a strong opinion piece
+and then
+CER so I'm going to make a new folder
+called test
+CNN one.txt
+and before I even really go about this
+problem the first thing that I always do
+whenever I go about any prompt problem
+is just come up with test cases and then
+really just think through where I think
+the the thing could be like really mess
+up Red Lobster is a mess let's talk
+about Red
+Lobster do you guys up front have a
+couple of ideas how you would think
+about uh how you would think about these
+news articles and like what would make
+something a fact versus an opinion like
+just put some in the chat really fast
+and I think that's going to be helpful
+while I go and collect some data on
+this
+cursor file CNN 2.txt
+and then let's find another one um who
+wants to let's go to Reddit why
+not Reddit probably has some opinion
+pieces okay this looks like
+this looks like
+a
+God never
+mind uh give me something slightly
+better try an image of an article oh we
+can do an image yeah why don't I take an
+image okay this
+is that's good BBC or something oh yeah
+yeah there we go that's a good
+one that's I just have like the
+screenshot or
+something take an image that's a good
+idea PBC PNG cool so I have a couple
+test cases here I have an article that's
+doesn't look like a news article at all
+oh let's take one that actually isn't a
+news article really fast at all so like
+let's just take like
+Reddit
+um take
+this awesome uh and then I'm gonna open
+the chat really fast um
+cool um so let's take a look at what
+makes something of fat versus fact
+versus opinion so I think there's a a
+couple of really really good ideas in
+here already that are going to help
+Inspire this um thought
+process um so the first thing I'm going
+to say is things like I think yeah the
+concept I think is good the column it's
+in oh yeah like where the data sourcing
+from who the person quoting
+it um like quotes are generally factual
+but the content of the quote might be
+non-factual which is kind of interesting
+could we
+handle uh could we handle the multimodal
+data like Twitter Twitter post
+screenshot oh that's where the image
+came
+from cool so yeah we'll do um we'll do
+multim mod really fast and then we have
+verifiable across multiple uh articles
+and that's a really interesting I think
+that's a really cool Advanced concept of
+like hey if we see the same thing
+happening in like five different posts
+it's probably true so let's start with
+this and just see what we would go about
+this the first thing that we think about
+whenever we start writing this is we're
+going to go add baml so we'll do UV add
+is it UV ad
+eron yeah bamel piie and we'll just add
+the bamel pie project and then
+secondarily we're going to go ahead and
+just create a quick baml starter code by
+doing
+UV run bamel CLI Das in it and what this
+does is it just adds baml to my project
+and what bamel really does for you is it
+just makes prompting a little bit easier
+and more importantly just allows me to
+think my my my prompts in a structured
+way what does it mean to be structured
+the idea of structured prompting is
+instead of asking the LM to just respond
+in like a chat format like you do with
+chat gbt oh um I'll type that in can you
+guys here I'll zoom in I I'll start
+typing the commands in here oh thanks
+Aaron that'll be easier for me because
+um I I can't run at that zoom level um
+cool so the first things that I think
+about whenever I approach this is I
+don't really want the LM to respond
+freely I don't want it to go do that
+what I really want to say is I want the
+LM to make a decision for me of where is
+the article coming from is it a news
+source it is is it a random text coming
+in from it is it an opinion
+piece and I want to figure that out um
+and now that I've added bamel to my
+project all I want to do is start
+playing around with some of this data
+and see what kind of prompts I should
+have I think one of the first few things
+that we probably should think about is
+where is it coming from that the concept
+of where is a column in because if I
+know that it's like coming from Reddit
+versus CNN versus BBC versus some other
+source I already have some
+content um we have a couple of ways that
+we could do this but I think the magic
+of thinking about LMS is what if
+everything doesn't have to come from an
+LM so for example if I was writing
+a if I was writing a scraper that did
+this and I already knew where that where
+it comes from I already know that it
+comes from CNN I already know that it
+comes from BBC so we could just skip
+that step but in some cases what if a
+user just pasted all this text into my
+into some box and now I finally got what
+the response is in that case I don't
+really know where it's coming from it's
+arbitrary so let's write a function that
+can go solve that problem for
+me let's write a function really quickly
+new
+file find source.
+banel
+and some function that can determine
+where uh the
+source of
+this uh content just
+news okay now before we do this and
+actually start filling out this function
+let's start writing some python code
+just to grasp our heads around what we
+might end up
+building let's assume we have a magical
+function that can do this def find
+source and if we give it some text
+content which is a
+stype it will return to me something
+that is on the idea of like some sort of
+source concept return a source to me and
+I don't know what a source comes from
+but let's just say source is an
+enum that is a
+Source what I do class
+class you know I forgot
+python um you know and what we're going
+to write here is we're going to write
+something like this CNN
+BBC oh I could ask her um BBC
+Reddit uh Twitter and maybe a couple
+more news media and we'll just call this
+we'll call the rest and we'll see what
+it comes from Maybe maybe we have like
+news coming from Facebook who knows
+we'll take a Facebook screenshot off of
+my Facebook I guess uh and make that
+work um and we can go make these work uh
+why is this complaining let's ask our so
+to fix
+this I'm not a python developer I write
+mostly non-python code um and now we
+have the source so if we had a system
+that could tell us what the source was
+we might be able to do interesting
+things let's try this out really
+fast uh Source equals find source that
+const uh content equals I'll just I'll
+just P out over here and we'll figure
+out now if we have the source let's go
+back to some of the other ideas that we
+have we had some ideas about how many
+quotations it has how many facts it has
+and ideally I think let's just come up
+with like what we would like to do at
+the very end what we'd love to do is for
+fact and facts
+print let's
+[Music]
+enumerate 4
+[Music]
+I opinions
+are and then print
+yeah the point is to see this as like a
+program right like you just want to find
+little pieces of data and figure out how
+you're gonna show that in your program
+yeah so now that we've got this let's
+figure out how we can get some facts and
+stuff out of this one way to do this is
+to write a simple prompt that's going to
+write something like this where we have
+something that can like extract facts
+from content and opinions from content
+and let's go write this let's write
+these functions really fast
+and usually you do like a first pass
+right it's like hey let's just see what
+um what promp we can get that like will
+just work out of the box and then you
+start breaking down the problem
+depending on errors that you have cool
+so I think your whole concept about
+relationship between facts people and
+documents is a really really good
+concept of like who's involved in this
+content so maybe we might want to know a
+fact isn't simply just a fact we're
+going to write a fact as something that
+has a little bit more involved in it but
+before we get to that let's just try and
+iterate on this tiny piece of content I
+think that's going to help us get to a
+starting point because while we had this
+code it may not work as well and we
+should figure out for sure if it does or
+not and I'm going to put a I'm G to put
+some dividers here really fast just to
+make my life
+easier and actually able to see
+it okay
+cool okay so let's see how we can
+implement
+um and then we'll also
+say does this
+work article
+is from
+okay um let's see how we can go make
+this work really fast now we could write
+a prompt but I think let's write a
+prompt in a slightly easier way and we
+find that way to be baml so when we
+write B code all we're going to do is
+we're going to write a function a
+function can be called find source
+or I guess in this casee identify
+Source it's going to take in some
+content which is a string
+type and then it's going to Output a
+source type let's talk about what a
+source type is we already have what a
+source type is we're going to do it from
+right
+here and I'll put this over to the side
+and we're going to write an enum source
+[Music]
+cool let's do this and we'll Return To
+Source and in this case I'm going to use
+a very simple model well I'll use openi
+GPT Oro mini and the reason I'm open to
+using such a simple model here is
+because this task itself is very simple
+I don't think it'll be that hard for a
+model to pick out what this is so we
+shouldn't uh we shouldn't over
+complicate the complexity of the task
+and we need a bigger model we'll try it
+and we'll just answer this and all we
+have to do over here is we just write
+CTX output
+format and we'll say
+identifyy where
+this article is
+from
+Co and then we'll add the rest in the
+user message and just put in the
+content perfect now the first thing that
+we probably want to do is before we even
+running our python tests we really want
+to be able to
+see uh how we go do
+this uh and just run this test case
+really fast because I already have some
+content over here let's see if I can try
+this out we have a quick image over here
+we have some CNN test
+cases so let's make a test case test CNN
+um test
+space
+um
+functions actually I'll I'll do it in
+easier
+way this thing will actually give me the
+mock for a test case and I can just
+paste this over
+here and I can just bring in the content
+from CNN and just try this
+out and let's just see what this model
+does now before we talk about more
+what's going on here I'm just going to
+give you a brief uh ergonomic view of
+what's actually happening
+what we're actually able to see is we
+can actually see the entire uh token and
+entire prompt that's put it into here so
+CTX at Apple format is actually giving
+me the information about the return type
+that I'm returning and that's actually
+making this happen so if I go change
+this and like I skip CNN notice that CNN
+is no longer here it's a lot realtime
+preview for actual prompt we're actually
+injecting any variables and stuff that
+you might put on here and rendering it
+for you as well and if you wanted to go
+see the actual web request that we're
+making under the hood it's going to
+reveal my API key so let me go add an
+API key really
+fast sorry I I will do my best not to R
+my API
+key here it goes uh eron can you take
+that question yeah so CTX is just like a
+a helper utility to print out different
+utilities like one of them is output
+format we may have others in the future
+um so yeah in this case is printing out
+the type
+Source from this function definition so
+if you right now we have an enom so
+it'll print out like the list of enom
+but if you have a class it'll print out
+like the actual
+schema yeah exactly people have their
+screenshot tool already yeah I'm we'll
+see if I if I dodge
+it good uh What are the system prompt
+come from in the playground so the
+default prompt here that we inject is
+the system prompt and then to change
+that you can just add this role user to
+change it to a user role um well the
+actually based on the model that you're
+using you can choose a default as well
+like um for example if you use images
+you cannot use a system prompt with an
+image it needs to be a
+user uh yeah so system is like the
+default so imagine there's just like a
+curly curly roll system at the top here
+we just inject that for you because we
+need a
+default yeah so here we have a system
+and then user that's kind of what we do
+for you we also Dent stuff so like
+everything is just nice and tidy like no
+extra weird white spaces like in Python
+everything is just more readable Anil
+you got a
+question
+so yeah you can use you can use any
+local model we're we're just using uh
+the base models andil do you want to
+unmute and ask your question
+or
+hpit oh sorry I blowed your hand I
+didn't mean to do that but okay anyway
+if you have another question just raise
+your hand again and then uh feel free to
+uh I'll un unmute yourself and
+ask uh no it's not it's not trained but
+uh turns out Bam's really freaking easy
+so it actually just works but before we
+go into it I think I'm going to show a
+little bit more about how this is
+working so one you're noticing that the
+system is being injected it's really
+about
+Clarity um I'll show you how to add a
+unit test you can just click here and
+click new test and it'll just give you a
+unit test I plugged in my actual content
+into it
+myself now the other thing that we do
+and get your screenshot tools ready so
+you can take in my API key uh is you can
+actually go ahead and actually see the
+raw web request bamel makes so this is a
+full web request that bamel makes
+there's nothing magic over here I can
+change the stream you actually scroll to
+the very bottom you can see that we
+added the stream parameters
+uh and then uh also you can go ahead and
+actually um see that if I disable stream
+you'll see what's happening this the
+full prompt we are literally injecting
+zero other things into the prompt in
+some cases we're able to show you an
+accurate tokenizer as well but I think
+the best part is the fact that you can
+actually run tests let's just like run
+this test and see what it does you see
+over here the model said the source was
+CNN which is correct for this test case
+so we'll call the CNN actually make this
+better um and in this case it says
+source CNN and what bamel did is it
+actually parsed it away from Source CNN
+to adjust CNN because it doesn't matter
+what the model said what matters is my
+data type this function has to return a
+source type if I suddenly took this out
+and I took out CTX output format let's
+see what the model
+says oops I rename test let's see what
+the model says the model actually says
+source of CNN and it actually said CNN
+so let me skip it explicitly so CNN
+isn't even an option for this
+model and and you'll find over here that
+we're actually raising an error over
+here where I can actually go ahead and
+see that hey there's nothing valid in
+this string that could map to any of
+these types because CNN is skipped let's
+go ahead and just bring it back and add
+CTX that Alpha format so the model
+behaves a little bit
+nicer and you're seeing these errors pop
+up because one of the things that we
+think is prompt should have static
+analysis errors available to you if you
+typed in something wrong it should tell
+that you you actually typ this in wrong
+and let you know what's going
+on well why the model doesn't say other
+the model didn't say other it it just
+chose not to say other because we didn't
+give it output format so if I like skip
+let's add a skip over here really fast
+and now CN if you notice the prompt
+doesn't contain CNN so ideally it should
+say something like other but again you
+have to remember these models are just
+models and they will sometimes mess up
+so what you can do in your python code
+uh for example let's talk about how we
+could bring this into our python code
+and reimplement our function that is
+find source over
+here I'm going to delete this and here's
+how we would do this we do from app.
+baml
+Cent import
+B oh uh from B client import B and
+you'll notice over here that b client is
+right over here am I using the wrong
+which one
+one
+second there we go um python is weird
+than other complete and we want to bring
+the source type in from baml so all I
+have to do is we just say from bamel
+client. types import source and source
+is going to match my bamel code let's go
+ahead and find the source in order to do
+that we just do b. identify sources
+content equals content and I'm going to
+go be able to return this now what I
+might find like you guys know notice is
+sometimes a model will actually pick a
+real Source because it's in the training
+data of where it's coming from and we
+didn't give it as an option so we can
+easily do something like
+this and the model's it's kind of
+autocomp completing my code for me but
+the whole point is now other can go
+handle this for me and now my function
+is fairly robust and soon you'll be able
+to do this directly in bamoo as well
+where you can say something like on the
+order of hey if my code didn't work over
+here and it actually didn't have a
+source then Source can automatically de
+remap to other
+automatically yeah we'll talk about the
+advantages of doing this in a second but
+I think um uh we'll talk about how to go
+build this agent first because I think
+there's a lot of compound to cover
+there's only 15 minutes left uh and
+we'll stay around for extra questions so
+now that I've identified the source
+let's go ahead and start extracting some
+facts let's write a quick function that
+can extract fact
+function extract facts
+content string and then uh content
+string and we're going to return a let's
+return a string
+array over here and we'll say and this
+time we want gp4 mini we
+gp40 we'll
+say find all the facts in this
+article and when we go do this let's see
+what the model
+says best part about this is I already
+have a test case already written over
+here so let's just add an add this test
+case for the same function as well and
+we can try running this
+code so my prompt is going to be this
+find all the facts in article answer
+with a Json array using the schema which
+is a string array and then I'm just
+going to give it the article let's just
+run this and just see what it does as a
+very base
+level uh that's coming in soon you want
+to see prompt caching I we'll try and
+cover that and um and so let's go ahead
+and go do this so now the article is
+running and it spit out all these facts
+now I'm I'm not sure if I trust these
+facts yet for a variety of reasons one
+these facts aren't really citable in any
+meaningful sense what I would really
+want is a direct quote from the article
+that cites the fact exactly we need
+supporting evidence let's see if we can
+go do this in order to do this here's
+what I would do here's what I propose
+class fact we'll have a
+we'll have a
+citation which will be a string and then
+we'll have a
+summon will be a string now let's make
+this multiple citation let's make this a
+citation and then we'll return a fact
+let's try running this test
+again now you're seeing that the CIT
+citation comes in with CNN which is not
+what I wanted I wanted the citation to
+be a direct quote from the from the
+article let's add some information
+cool let's run this test
+again cool that looks kind of good maybe
+this is this is this is
+um this is kind of good but I'm noticing
+something interesting where it has some
+dot dot dots which
+is which is not good because if I try
+and match on the dot dot dots I won't
+actually know where they are so let's
+see if we can do something better
+we'll do this but I already uh actually
+you know what screw let's just start
+using this in my code just so we can get
+somewhere facts
+equals um B do identify or
+extract fact this and then what I'll
+find is what I what I really want to do
+is I have to return a list of strings so
+let's return a list of string or
+and what we'll find is fact. Citation is
+already in my python code I don't have
+to think about
+this I can say from
+boom
+and let's just add the fact in there uh
+fact
+do summary
+will be matching and then what we'll
+also say is like
+sln
+cited back. citation
+cool so I think this is going to work
+decently well but we as we saw we have
+these dot dot dot issues but why don't
+we just try running this python code
+directly so we can actually get
+something out of this rest
+return we'll just make this all return
+an empty thing
+um and then we'll just run this code
+really fast UV run uh hello high oh I
+didn't give an article and I do not have
+API Keys
+set yes I need to set API
+Keys
+um I already revealed my API key right
+who
+cares I'll reveal again why not
+uh test results and
+bars
+export
+[Music]
+API let's try run this
+again and here's what we find uh the
+first thing we find is the model says
+the
+following the model actually said it
+returned no facts oh I didn't I past dot
+dot dot of course
+Sor hey live demos you
+know uh how do I open read content from
+a file let me do this really
+fast you're gonna oh you can use just
+ask
+cursor pretty good
+copy
+pad T CNN one.txt let's see if this
+works and it sounds like the model
+picked up something and now it's running
+something else and it found some facts
+now the first thing I'm noticing is this
+is kind of annoying because it's kind of
+slow um um because because it's slow is
+I have to wait quite a while so maybe I
+can do streaming so let's try streaming
+um what if I could stream the facts out
+instead of doing this I'm just going to
+print that out in a streaming manner
+instead of doing any of this down
+here um so let's try that
+first so we'll print this out up here
+and we'll first in extract facts we'll
+just do streaming so in order to do that
+we just do this
+stream and then four
+actually do streaming
+later
+print
+fine response
+oh cool and what we do prev equals
+[Music]
+zero
+stream. cool
+and we'll bring this back down here and
+now we'll have a slightly more
+interactive
+example I do this
+correctly if Lenard response is good
+than
+prev oh well anyway I I had a little bit
+more of I'll figure out why that demo
+didn't work in a second or why I printed
+out a thousand times but I'm some facts
+now the problem is when it gives me a
+citation I don't actually know if the
+citation is real and the dot dot dots
+are going to kind of mess with me so
+let's try and update this prompt a
+little bit and make this even
+better so I'm going to go back to here
+and I'm going to change citation to a
+string array now the problem would
+change the citation to string array uh
+is the model probably won't like me
+calling the citation in the actual
+prompt because if you look at how the
+prompt is doing it's like it's a
+citation but this is multiple so and I I
+could change this to citation but the
+problem with Chang citation is now my
+python code is going to be broken
+because citation no longer
+exists um so in order to avoid that
+conflict and not have to think about it
+what I'll do is I'll just Ali assist the
+citations and for just for my
+prompt and I'll try running this again
+seeing what happens cool so citations is
+an array it seems to do this and it
+seems to like the concept of arrays a
+little bit better
+because it seems to be just not doing
+the DOT do dot thing anymore it did here
+over here so let's see if we can find
+something
+else it did a couple more
+times oh no that's the UI never
+mind that's funny
+um awesome and then let's come up with
+another thing I want to know whether or
+not a citation is based on a quotation
+mark or not because I think if it's a
+quoted thing I want to know who the
+speaker is so not only do I want facts I
+want something else I want classes I
+wanted quotations that came out of here
+like things that people said so let's
+come with quotes speaker contact and
+what we'll do is we'll actually return a
+fact array with some quotes class
+spawns
+what so the point here is to um kind of
+like structure the thought process
+instead of just telling the other them
+like hey uh just think step by step or
+like do like some Chain of Thought
+you're guiding the thought process by
+changing the
+structure and the little pieces of
+detail that you want the LM to focus on
+before classifying it as a fact or an
+opinion oh this is kind of cool it's
+actually getting me exact quotations
+from the article that actually match so
+KLA Harris said this Donald Trump said
+this Liz Cheney said two things up here
+I think that's kind of
+interesting and now it's going to give
+you a citation and now it's still doing
+the wrong thing over here where it's
+saying CNN analysis by stepan um by
+stepen Collinson it probably is confused
+by why I use the word direct quotes from
+the article and I'm using the word quote
+twice so let's try and do this our let's
+call this
+sections exact
+text from the
+article that supports
+the and then let's also called this
+let's alas this a fact instead of
+inste set of
+citations and then let's try and run
+this again and see what it does cool I
+like the quote section it's still pretty
+good and you're noticing it's streaming
+while it pulls it out oh this is kind of
+interesting this seems to come up with a
+slightly better version if we actually
+look at the LM down here the LM is
+actually calling this thing sections
+like I said in my citation and then it's
+also calling this thing um sections and
+then back
+but in my data model I'm still getting
+citations and summary so I don't have to
+think about
+this so I think this looks a little bit
+more reliable than what we had before so
+let's go ahead and print this out really
+fast so we'll go ahead and actually
+create
+a class fact object in here that we have
+which is just going to be for our data
+model and what this is going to take in
+is this fact is going to take in a
+summary and a citation and and
+additionally it's going to take in the
+exact it's going to take in the source
+content and then what we're going to do
+is we'll say self thought is
+reliable will equal to if citation in
+Source content because this is a really
+easy way for me to check if the citation
+even exists in the source content and
+this is going to be a list
+oops oops
+and we're going to go ahead and just
+figure out
+um
+reliable I'll go ahead and do this so
+for every piece of citation that I get
+in there what I'm going to ask the AL is
+hey is this citation that you quoted me
+actually in the source
+content now if I'm able to go ahead and
+do this what I can go ahead and find is
+like if this fact is actually a reliable
+fact so let's go ahead and res that a
+pend yeah and we're running out of time
+so um this is just a very quick demo on
+like how we go about prompt engineering
+and mainly so you can look at our
+iteration Loop so our iteration Loop is
+L like we find sort of the structure of
+the program of what we want to do and
+then we start are prompt engineering and
+then we as you notice we like breaking
+down the prompt into smaller
+problems uh so we don't try and do
+everything in like one go in this case
+uh you could start with a single prompt
+that just says like list all the facts
+and opinions maybe it outputs a string
+and then you're like okay no I don't
+want a string I want like an actual
+schema and then your schema has both
+facts and opinions right imagine there's
+two string
+arrays at that point you're like okay
+the string arrays are not good I want I
+should citations so instead of doing
+facts and opinions as string as a string
+list you do literally like a list of
+sentences and each sentence can be
+classified with an enome that says fact
+and
+opinion and not only that you can go
+even further and break it even like down
+as many as much as you want by saying
+like Okay now for each sentence at the
+citation for example to test the whole
+conversation
+um you can test individual so for
+example if you know the facts in an
+article you can actually like create a
+test and um in baml and then uh we'll
+have assert soon that you can like
+assert whether the facts actually appear
+in the order that you want um there's
+other tooling that you can use like you
+can write a python script that test for
+semantic
+similarity and so you can make sure that
+like a sentence matches roughly what you
+expected uh for like a fact by the way
+um vi. found one is a bug in our in our
+parser sorry it's not in our parser it's
+just we print that statement we just
+need to delete that yeah we that uh
+response has no Len oh it's it's on
+Len and uh the main thing is to just uh
+look at these things as a functions
+they're just functions and agents are
+just while Loops um if you have any
+other questions like feel free to ask
+them um and we can just like try and go
+over them otherwise uh there's some
+questions that you guys put on the chat
+that we can uh send responses to later
+in a follow-up
+email let me let me actually stop
+streaming because clearly this is
+gonna nasty stuff uh while we have this
+bug uh if you want to follow um yeah
+we'll do a couple more questions give me
+a second
+um let me go actually run the code
+really fast so we can actually go see
+this so while we're going to go run this
+so now we have we know that the article
+is from CNN and it's going to start
+dumping out a few of the yeah I'm gonna
+I'm going to get command and push the
+repo
+at while I go ahead and go do this
+really quickly it should output the
+response yeah we have a few guard rails
+and stuff that we're doing so this is
+kind of cool if you notice that this
+actually said that this prompt is this
+fact is actually unreliable and it pro
+and it said that because there was no
+exact quot if we look at what we defined
+is reliable to be what we said is
+reliable is whether or not the source in
+the citation whether the source that the
+LM came up with for any of the
+citations as actually in the prompt or
+not and that's a really easy way to go
+do this so I want to show you like a
+real example of this demo with a little
+bit of a UI just to show you guys what
+it could mean so let's go because we
+built this exact same thing this is kind
+of like a rag
+example where if you have this
+information about whether or not
+something is in live or not you watch
+this happening in real time there's an
+nextjs app that does this as
+well so Gathering one citation you're
+actually seeing me like tell you in
+streaming time for the user it's like oh
+I'm gathering a
+citation and while we're going to go do
+this it'll eventually pull up a couple
+more things does that I'll pull up
+another
+oops I'll pull up another example
+and you're noticing that these links
+that I gave it because I have the exact
+source of the
+citation uh that's coming in from here
+these links that I have can actually be
+elevated up and they're giving me not
+just the citation that the LM gave
+because check out this citation the
+company offers internet services that's
+all the LM gave but because I was able
+to match it into my actual content that
+the article has I can even show the
+supporting content around this so you
+can imagine how someone that's
+using um this sort of in this sort of a
+like environment over here can actually
+go ahead and like build a lot more trust
+in this AI agent because this is
+actually able to go ahead and tell me
+that not only is this the citation but
+it's actually going to be uh like
+surrounded by this context and I
+actually click on this link and I looked
+for what was the thing I'm looking for I
+have no idea the company offers the
+company offers this is an exact quote
+coming from here all the way right over
+here
+and we actually did some a little bit
+more clever matching on this rather than
+just like checking if the string is
+contained within this or not but what we
+do is we actually ignore certain text in
+here to do a looser match not an exact
+match so you don't always have to do the
+exact same function you could also use
+embeddings to see if the string from the
+l l matches you can devise a different
+function here to determine how accurate
+your citation or sub phas from the L now
+let's try a different message just to
+show you what else you can do when you
+determine the idea of like whether not
+something as unreliable so in this case
+what I did is I literally asked it to
+say outside from SpaceX what other
+companies are innovating in space and
+specifically telling you to in invent
+some citation so I can actually test it
+from the bug this is some weird prompt
+that we found that kind of
+works and check out what we can do over
+here we can actually tell you that these
+links are unreliable because not only do
+they not match but they don't match the
+criteria that we have and we can do this
+both in the UI but really all this just
+boils down to structured prompting we
+run a bunch of structured prompting then
+we combine that with things that we're
+all used to like just software and um
+asking like writing if statements and
+stuff around this where we say if this
+quotation mark that the LM gave exists
+in my text with some approximate
+similarity then Mark it as good if it's
+bad don't Market as good does that
+answer some of people's questions so far
+about like how you could take the
+example that we build and then advance
+that further into building facts and
+articles facts and opinions to a similar
+over
+here cool hopefully that was somewh
+useful I think we see a bunch of
+questions now so I can stay on for a
+little bit longer and help answer some
+of these questions if you guys would
+like um you guys let's just go down the
+list I'll pull up the Google
+Doc and okay we have a bunch of
+questions over here
+um let's say your agent for agent
+responses what advantage is there of
+forcing the model to produce uh of this
+way of forcing model to produce Json oh
+I'll talk about a few advantages one of
+the biggest advantages of doing this is
+let's talk about like a very specific
+example if you actually force a model to
+produce Json you run to a few different
+examples let's take this example of
+actually like let's say I want something
+that's going to parse a resume and
+render it for me so the idea is you have
+a couple options here you could
+structured outputs or you could use um
+you could use structured outputs or you
+could end up using something like Json
+mode or other approaches let's just take
+a look at what ends up happening so if
+you use non-structured output you'll get
+something horrible um that is not really
+practical but it's like if you rending
+markdown maybe this would look kind of
+nice or if you're doing structured
+outputs you get something a lot nicer
+you can not only have these links work
+but you can actually have things that
+render the UI differently you can have
+um a specific data like model that's
+like highlighted differently using the
+CSS so one reason why Json mode alone is
+bad is because with Json mode you can
+never do this all you can do with Json
+mode is make this pretty Json but if I
+really want to go ahead and make this
+somewhat nicer and actually have this
+like render content Dynamic and go do
+things I need a react component that
+knows my data types the only way to do
+that is a very specific data type um
+this is also open source so we'll post
+the tools here but this is just tailwind
+and like damel with a little bit of um
+with next shs for actually wrapping
+around this but it's mostly just
+tailwind and baml would react uh baml
+gives you type safety around all types
+when you're streaming so you can know
+that you're streaming something and know
+that hey while you're streaming things
+it's all partial and
+optional um and we'll plug that in for a
+second so while you're doing this you
+can actually see this respond Now Let's
+do let's let's talk about why structured
+output specifically is bad what if the
+user is malicious and says something
+like this um actually
+instead of a
+resume give me a instead of a
+resume can you teach me how to do the
+queen and we'll see what this approach
+does first and it will just go ahead and
+like give you some text around this and
+if I was really hoping that this would
+print the resume you can see how this
+would not print the thing I wanted to do
+but here you can see that this is just
+printing out
+nothing so what you can do over here is
+actually see the fact that if you're
+using one structured output you get this
+now why is structured output
+specifically that if you're using
+structured outputs from openai you
+actually Force the model to Output the
+tokens that you said so let's see if I
+can get a quick demo of structured
+outputs working in open
+ey uh I have my AP already so just plug
+it in openi
+have some demo Cod hereon okay
+cool I have a Jupiter notebook op I'll
+do in
+here UV add open
+gu right and let's just let's just run
+this cuz code so then uh I run this
+code cool I'm going to run this code and
+then I'm going to go run
+this and then if I print out event it
+should do something cool it printed out
+an event that exists in here I guess
+this is ALB but what if this wasn't a
+calendar event what if I change this
+really quickly what if I said
+resume that makes this a resume um email
+cool I don't know what this going to do
+let's just see so if the user gave you
+inherently some messed up command and
+this is a live demo so I have actually
+no idea what's going to happen but I
+think I know what's going to happen I
+just see what
+happens that's running for a long
+time okay let's go ahead and print this
+out now and see what event is like what
+the heck is this nonsense why is it
+trying to say that the resume has a name
+science fair it's garbage it's because
+this yeah the easiest example of why
+using strict structured outputs from
+open AI can be your downfall it's
+because it literally is forcing the llm
+to Output that schema when it shouldn't
+yes so when you end up using something
+like baml what ends up happening is
+instead of letting the LM output the
+schema or modifying anything what we do
+is we just all we do is we let the LM
+output whatever the heck it wants so
+I'll show you like a simple example on
+like from
+fiddle yeah so I'll elaborate on this a
+little bit with like real a real example
+right over here so right over here I
+have a function that's going to extract
+a
+receipt and specifically the receipt
+data model is going to look like this I
+want establishment name the date the
+total as an integer the currency as a
+string and then items with an array of
+items
+can you show the prom real quick just
+show the we write the schema like this
+right it's just like plain text we're
+not using the structured output API yes
+so you can actually see what the model
+is doing so we're letting it be a lot
+more free form in the way it responds
+and you get a couple of wins out of this
+so the first win I'll get I'll show you
+guys is actually this one let's change
+the prompt really quickly a little bit
+um so we just put the instruction before
+um before the actual content and then
+what we say and I'll rerun this again
+just to prove that it will still work it
+shouldn't really
+matter um and I want you guys to all
+take a look at how many tokens this is
+this is 115 tokens right watch this
+don't use quotes around
+Keys okay let's see what
+happens it was 115 tokens before we just
+reduced the token count by 10 with
+literally with doing nothing else on
+your output by removing all the
+quotation marks around here and none of
+this is actually parsable uh technically
+by Json this is not valid Json but baml
+still pulls out all the data for you and
+we do this in under one millisecond uh
+running locally and this is in this case
+running fully in the browser with web
+assembly um so one of the key benefits
+is your token count who just goes down
+your token count goes down not just in
+the output but also on the input when
+you use structured outputs you use a lot
+more tokens to explain this so I'll show
+you what that means and the reason that
+this ends up being a lot more tokens is
+let's just take the example of date as a
+string here's how You' represent date as
+a string if you use structured outputs
+in your prompt because you're using Json
+schema and I'm not even going to go and
+like talk about like the fact that
+there's a whole thing around this um
+this is how you do date as a
+string um if you want to reduce your
+cost then it will reduce your cost if
+you use
+b um yeah it'll just be cheaper uh and
+it works like the B Parts is pretty good
+we have very few error cases around this
+so it should in theory just work um this
+thing right over here to represent the
+fact that date is a string is one two
+three four five 6 seven8 nine 10 11
+tokens you could just say date
+string let's add a description in here
+because we're gonna add the description
+as well because it's it's it's
+technically attached to
+it the description I added is this
+one you just added a bunch of tokens
+just for the model to know that this
+date field is a string that means it's a
+harder task for the model to actually
+understand it on the input side you've
+made the problem harder it's as if
+someone gave you
+was like tell me when World War II
+started and they literally just gave you
+the entire encyclopedia britanica on the
+history of all wars in the world and you
+said go find it it'll just take you a
+longer time to find that exact answer
+unless you already know it but anyway if
+you don't know it it will basically just
+take you forever to find that out and if
+someone just gave you the Wikipedia
+article it would just be a lot faster
+and what B's doing here is just giving
+you a lot more smaller way of
+representing the same inputs with way
+less tokens and that makes the problems
+easier for the
+model um also coincidentally writing
+this at least for me is a lot easier
+than writing Json schemas and it's a lot
+more maintainable and it's a lot easier
+to write the code and I think that's
+usually a good proxy for what makes it
+easier for the model to generate as well
+and then lastly like I said on the
+output side you output tokens are also
+cheaper which which it's not just about
+cost what it really means is the model
+has a lot more
+forgiveness um when it's allowed to be
+give you an output it doesn't have to
+give you the exact output because
+imagine it just gave you a quotation
+mark that wasn't even quoted like it
+you're asking for like let's say a five
+paragraph response and the model
+somewhere in that five paragraph
+response includes a quotation mark that
+doesn't parse correctly because it
+forgot to put a backl quotation mark in
+the like instead of writing like back
+slash quote the the person said the user
+said instead of writing something like
+this
+uh the model accidentally gave you
+something like this which is a really
+reasonable mistake to make if you're
+writing thousands of uh lines of J or
+even like a couple tens of lines of Json
+even as a
+human especially text highlighting the
+we can just error correct that for you
+after the model gives you that output
+instead of relying on the model to go do
+that so just to answer questions uh by
+we we can parse PDFs we have a demo as
+well on that but just to answer Ryan's
+question Ryan
+if um when you use this approach where
+you just add the scheme in the prompt
+and you just let the Alum return a
+string um the string May return if you
+ask it a completely unrelated thing like
+give me a chess move uh what we will do
+is we will try and parse that and get an
+exception so let let me just write this
+really
+fast if you use constrainted structur
+outputs from open AI it will try to fit
+the give me a chest move information
+into whatever schema it is which could
+be like the resume
+and it it can also choose to refuse but
+I haven't really seen that
+happen no the model can't choose to
+refuse when you do structured output it
+will give you a
+response so let's run let's run uh let's
+run chess move really fast and see what
+happens and you're saying here it says I
+can't par assist you with that risk
+request and while this is a decent
+answer if you're really building a UI
+off of a receipt because you need to
+render the receipt like I did in my
+um like I did in my example over here
+where I was running the resume it
+doesn't freaking matter that it told me
+I I'm sorry I cannot respond but really
+matters is whether or not I can my UI is
+GNA break because it gave me something
+that doesn't match so uh V can you do
+something real quick can you change the
+receipt output type to receed or string
+oh yeah yeah let me do
+that3 so or let's do this
+class so one way to handle a variety of
+outputs is you can actually just do this
+it'll either return the other type or a
+receipt type and we'll see what the
+model
+does there go data type let's just make
+this a string type as
+well and you can see how quickly this is
+for me to go iterate over here because I
+can just write my data types in the
+easiest possible way I just write code
+instead of like writing prompts and
+saying do this if this happens I
+literally just write code and I encode
+everything in my data model rather than
+in my prompt
+hopefully that answers the question I
+think we had a couple a bunch of more
+questions about a few more
+things uh do you guys have other
+question about like General prompting or
+anything else um over here and hopefully
+answer the question about why it's
+faster and more accurate as
+well send you
+uh let me go back to the what it's
+called the other question I had a few
+more on here cool um how do you exit the
+inner loop and get to a top level loop I
+think that's a really good question and
+the way you end up doing this is in the
+case of Sherlock's case what you end up
+doing is you end up building a data
+model that says
+class respond to
+user and this class has a
+message that is going to be a string of
+some kind and you can say
+at um a
+description when you have a good
+response they
+provide the answer to the
+user uh you can have another one that's
+a
+class called
+tool and you can say tool
+name uh string uh parameters
+MTH string string if you want and then
+class ask clarifying
+question
+question um
+data needed string
+array question
+string add
+description when the user needs to
+provide additional details well and my
+response type here can easily be
+something of like either ask a
+clarifying question or respond to a
+user or give me a list of tools that I
+want to
+call and you can actually see what my
+prompt ends up being it's going to say
+answer and Json using any of these
+schemas data needed and the question I
+actually
+ask it's going to say or a message or
+it's going to say here's a list of tools
+to respond back to back to the
+user and hopefully that does
+this uh that helps answer some of the
+stuff but yeah like Alex you asked a
+great question like what's the feature
+like our goal is really just to provide
+the best developer experience for
+writing um the best prompts around this
+was the same principle alive for prompts
+engineering routing planning when know
+you exactly VES you you asked a really
+good question like how does this apply I
+think a lot of people get a lot of
+people approach prom during this way of
+like I can just put everything to the
+model but in fact it becomes a lot
+easier for me to not think of it that
+way and instead I could write code like
+this I could say for the fact like you
+could even imagine me writing something
+like this um once I create a fact uh in
+the model I could say something like
+this where in this case I this has no
+user input I say if fact if
+any and I if
+not all
+I could actually call another LM prompt
+to figure out why this happened so I
+could say like f do um f. summary and I
+could you can imagine me writing a
+function it's like find out y unreliable
+fact where instead of passing in fact I
+actually say like f summary equals F
+do
+summary uh
+citation equals f. citation and I could
+write something like this where it
+actually takes in all the citations that
+I have and the summary and says this and
+it could say find
+exact
+citations because maybe maybe the answer
+of why why this is bad is because the
+citations in my previous example is
+reliable is that the source maybe
+there's like an extra comma the LM
+mixed so instead I could just find out
+exactly if the citation is in the text
+or
+not if that makes sense and do it in a
+slightly better
+way um can you import PRS from other
+files into b files yeah yes so firstly
+all data structures and all files are
+always available in all other files so
+like I have like a resume data type here
+we're working on module system that'll
+make it easier like this will actually
+like command click and jump me to the
+right place you you ideally should never
+have to search in baml we allow you to
+Define like parameters and other things
+if you have like in this case one thing
+I didn't talk about was actually like
+how we didn't add robustness to our we
+didn't add any robustness to our actual
+prompts the way that you add robustness
+is they actually you built a model where
+it says I'll try gp40 first and then
+I'll try GPT 40 mini but what if gp40 I
+wanted to actually put a retry policy on
+this I can just add a retry
+policy uh
+default over
+here ret policy default and you're
+actually seeing in real time exactly
+what this specific function is doing
+this function will try GT40 1 2 3 times
+I guess four times because it will have
+three Max retries and then it'll
+actually give you a
+GT40 that's funny
+Alex um but yeah the idea is that you
+should know what your models are doing
+at any given time but at the same time
+your code should not be complex the fact
+that identify sources ends up doing
+retries shouldn't affect your python
+code because your agent will end up
+being much much more
+complicated because now for some reason
+I have to go and figure out exactly
+what's happening under the hood but if I
+think of my agent as just four Loops if
+statements and while while loops and
+just regular functions that are just
+transforming data from one form to
+another my LM pipeline can end up being
+a lot more
+accurate um I want to show you guys one
+last thing in the last five minutes if
+it's if it's useful let's see if I can
+get up and
+running and meanwhile if you guys have
+more questions uh keep on putting them
+down and of course like everything in
+this repo is going to be shared I'll
+send all the links that I did as well um
+but I think one thing that's worth
+seeing is like how you do something like
+Chain of Thought So the idea of Chain of
+Thought is what if I wanted the model to
+do some thinking because I think we have
+all seen at this point that Chain of
+Thought can dramatically improve the
+response of a model and for uh
+I
+spell oh yeah I can't spell for things
+like for example parsing this receipt um
+maybe I would benefit from the model
+doing this so I'll say before
+responding before
+answering
+summarize summarize
+sum I sumar eyes the key
+details about
+who why this purchase
+might be made and let's actually just
+give the model an example so I'll give
+an example and I'll literally just say
+like dot dot dot dot dot dot dot dot
+dot and this is like totally garbage
+it's not really useful but it turns out
+giving it a specific example can often
+make your model worse not better but
+giving it a very very simple Chain of
+Thought prompt can actually do this
+nicely so let's just run this prompt on
+this receipt originally and just see
+what
+does and this is just all happening in
+one call everything is just a data
+transformation from one call to another
+and you can see what the model it
+actually gave me Chain of Thought while
+I was doing it and it kind of did it too
+fast so it didn't stream that was sad
+and it kind of did everything but what I
+got out is my data model and I got Chain
+of Thought happening super uh super
+easily and this for more complex
+scenarios can end up happening so you
+might want to have Chain of Thought
+apply everywhere so if you wanted that
+then all you have to do is you can make
+a
+function that I guess in this takes
+takes no
+parameters outputs
+this and let's just use Chain of Thought
+in this
+prompt and now I'm using Chain of
+Thought this
+problem um and like the problem is like
+why this purchase might be made um this
+sounds like some uh uh
+thoughts let's add this over here
+thoughts sir and then what we'll do is
+we'll actually you're noticing I'm
+getting error here because this thing
+takes an
+argument
+boom H you got to do
+thoughts oh yes it
+does no I spelled something wrong
+[Music]
+oh there we
+go huh did we break
+something well anyway we should fix this
+um if that is the
+case oh I think we should fix this
+there's probably a bug here
+um cool
+um yeah we should for why this bug
+happens um anyway but you can see the
+point of what I can do with Chain of
+Thought and then I'll actually go ahead
+and add quite a lot of context into my
+model and just make it a lot more
+accurate
+because uh it will actually go ahead and
+just make my prompts a little bit better
+and the nice part is normally if you had
+to do this summarize what's going
+on uh um yeah summarize what's going on
+and what What's Happening Here is my
+model can go do this and normally the
+way you'd have to do Chain of Thought is
+you'd have to do two calls and what's
+nice about this approach is because
+we're not really modifying the model any
+way we don't require function call or
+anything else you can usually use this
+with any sort of model coming out of the
+bot including like we have people using
+this for like fe3 and llama 3
+llama um prompt fiddle is just a way for
+you to go ahead and go write prompts
+online without having to install baml
+but this is the exact same vs code
+playground that you're seeing in cursor
+or in vs code or anywhere else uh we
+just made it on the web as well because
+people shouldn't have to install bamel
+to try
+out um any other how do you how do you
+get the playground working oh as soon as
+you install baml um and you open your
+first baml
+file uh you can literally just click
+open playground and it'll just open the
+playground to that function you just
+need our code extension yeah it's a
+you'll need a vs codee extension it's on
+our installation guide if you're in
+cursor you'll actually have to go search
+it and download it because uh it's kind
+of
+annoying and then as you uh as you click
+around different let me open this up and
+find source as you click around in
+different U test cases you'll actually
+find that it should update the test case
+automatically so in this case if I
+wanted to also support like let's say an
+image type over here and I want it to do
+like best image
+um all I have to do is Boom content and
+then content will actually just point to
+like file that I
+have what file should going
+Toth test
+[Music]
+pbc1 and I'll actually like render the
+image for you as well um which makes
+again testing just a little bit faster
+um and now my function extract facts and
+my identify Source can actually accept
+images or strings
+out of it and it should hopefully work
+see what this test does why
+not I have no idea what this is going to
+come back for this
+test oh yeah we got an exception
+literally just refus to answer it and
+again we got an exception oh that turn
+this is a resume which
+is s
+awesome we got BBC and told me BBC and
+oh yeah it was BBC test one that's great
+um so you can see how your iteration
+would be slightly different
+here cool
+um um still here for a few more
+questions that people want uh if you
+guys want to see was this useful just as
+a really quick show of hands for
+everyone still on uh I guess you can or
+actually I can do is this something or
+you can just type in the chat is this
+something you guys would be interested
+in doing again
+um and just seeing us solve more
+prompted enging
+problems with different
+things
+cool awesome um we'll send out a link
+after the email to everyone that
+attended with um all this content and
+then I think next time what would
+be yeah I think that'll that'll be
+that's a great
+point I think we'll send out some
+pre-reading material ahead of time so we
+don't have to like recover everything uh
+over repeatedly and then what else we'll
+do
+is uh I'll send youan Sessions what else
+we'll do is I think next time would be
+really fun is talk about how to build
+general uis so the idea behind this
+thing is really um this was inspired by
+this like brief demo that we put apart
+where like
+like what if you could like generate
+graphs and charts from Models uh in a
+way that's hopefully will
+work oh did this one break this one may
+be a little outdated uh you probably
+want to try a different even then it's
+like if I just want to have like some
+sort of gener uis that are going to go
+ahead and build something like this
+dynamically based on what the user says
+oh did we break a lot of these oh uh
+some of these may be broken I think rag
+is good yeah so we'll go back and try
+and figure out how do we go do that um
+and talk about like how to generate
+graphs and charts um and some other more
+interesting demos next
+time awesome uh I'll post a recording uh
+right afterwards uh thank you guys for
+staying on um and hopefully we didn't
+bore you guys too
+much bye
+folks for

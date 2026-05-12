@@ -1,0 +1,494 @@
+what's up Engineers welcome back Indy
+Dev Dan here the generative AI ecosystem
+continues to move at a light speed Pace
+although the releases haven't been that
+exciting open AI has continued to
+release every single day I'm really
+excited for them to round out with a
+huge final model hopefully a gbt 5 some
+type of Next Generation model at the end
+of the week my favorite Announcement by
+far has been the 01 and chat gbt Pro I'm
+looking forward to having the 01 model
+available in the API alongside open AI
+there's been a massive release by
+Microsoft the 54 14 billion parameter
+model is absolutely groundbreaking this
+thing is performing at GPT 40 plus
+levels and it's Ultra Ultra tiny we're
+going to look at this model side by side
+Gemini 2 another Fantastic Model I'm
+really excited for this model to fully
+roll out so that we can get access to
+every single input and output format
+available last but not least we have
+llama 3.3 this model has been great to
+work with another model on the level of
+GPT 40 with all of these releases I
+thought it would be a good time to take
+a step back and share my large language
+model use case framework I've been using
+this framework to move quickly in
+degenerative AI age and filter through
+all of these new model releases and all
+of these new tool releases I want to
+share it with you here to help you break
+down the types of prompts you're writing
+and the AI tooling that complements the
+generative AI work that you're doing
+we're going to walk through examples
+using Gemini flash llama 3.3 and the new
+54 so what does this framework look like
+this framework is a simple mental model
+that I use for categorizing large
+language model use cases so what are
+these use cases and how do they help you
+and the generative AI age let's break
+them down we have expansion compression
+conversion Seeker action and reasoning
+just by seeing these categories alone
+I'm sure the wheels are starting to turn
+in your mind so let's break down these
+categories one by one expansion prompts
+are what you use to generate content
+learn new things get explanations and
+generate new ideas this is one of the
+most common categories of prompts
+compression prompts are the opposite of
+expansion prompts instead of writing a
+little bit of content and getting a lot
+of output compression prompts take
+information they take blog posts
+research large swads of information and
+they dtill it down for you the most
+common use case here is of course
+summarization conversion prompts change
+the format of information from one
+format to another you can think text to
+SQL you can think typescript to python
+you can think French to German
+conversion prompts take information in
+one format and convert it to another the
+core information is still there but
+these prompts transfer that information
+information between different formats we
+have Seeker prompts Seeker prompts are
+used to find information this is what
+gets run at the end of your rag pipeline
+we then have action prompts these are of
+course our tool calling prompts that
+execute commands that have concrete side
+effects and then of course last but not
+least we have reasoning prompts these
+provide judgments conclusions insights
+and ultimately they help Drive action
+they help Drive decision- making so
+let's explore each category in a little
+bit of detail and run a couple prompts
+to kind of show off how each category is
+different so that you can easily
+categorize your work your prompts and
+the tooling you need to support each one
+of these types of prompts okay so before
+we move on let's talk about who cares
+why is this framework important why you
+need to categorize at all can we just
+write random prompts organizing
+generative AI work into categories will
+help you speed up and simplify your gen
+AI work how will they do that mental
+Frameworks create better and faster
+decision-making one type of prompt only
+needs certain tooling only needs certain
+syntax only needs certain prompt
+structures it also simplifies your
+prompt engineering by classifying
+generative AI problems into one of these
+six categories you simplify the process
+of writing prompts and selecting the
+right AI tooling you also find that
+these categories are a great way to
+create reusable benchmarks for the
+problems that you're solving the way
+you'll Benchmark a expansion prompt is
+much different from the way you'll
+Benchmark a Seeker prompt okay and then
+last but not least this framework is
+really fantastic for guiding agentic
+design when I'm thinking about building
+agents and agentic workflows the chain
+of the prompt categories can help guide
+and simplify the shape and structure of
+your AI agent as we're pushing toward
+the north star of this channel which is
+to build living software that works for
+us while we sleep we need to be putting
+together these larger AI agents and
+agentic workflows with chains of prompts
+and work flows of these prompt
+categories and having concrete
+categories makes it easier to design and
+build the structure of your AI agents if
+the ideas interest you and you want to
+accelerate your generative AI
+engineering with this simple framework
+let's go ahead and dive into this hit
+the like hit the sub join the journey
+prompt engineering AI coding AI agents
+this is the bread and butter of this
+channel this is all we're focused on
+this is the most important technology
+this is the best tool for most
+jobs so let's start with the expansion
+prompt so this is where you're taking
+small inputs and converting them into
+large outputs you're literally expanding
+your input text into something larger
+the obvious Ed cases here are content
+generation explanation learning ideation
+storywriting code gen documentation so
+here's an example prompt we have the
+Gemini 2.0 flash model here llama 3.3
+and of course the new 54 here's a simple
+prompt right write the intro to a blog
+post about Ai and its impact on software
+if we just click you 2.0 here Gemini is
+going to take this prompt and generate a
+response for it so you can see here it's
+generating a couple options for us we're
+taking a little bit of information right
+a query a question a request and it's
+being expanded out into something larger
+right so this is say an entire category
+an entire class of prompts that you
+likely have and will write so you can
+see here we're getting a couple
+different options from Gemini that's
+cool let's run llama 3.3 that ran really
+quickly I'm using fireworks as LL 3.3
+provider this is a great 70 billion
+parameter model you can see we got a
+nice response here we got a title and a
+nice block of content and then of course
+we can run 54 54 is running locally on
+my device I love that this is running on
+my device has incredible intelligence
+for a 14 billion parameter model but you
+can see we have a really nice response
+here from fi this is a proper expansion
+prompt you have a little bit of
+information you have a query and you
+want to blow it out into something
+larger these are one of the most common
+categories of prompts next we have
+compression prompts so compression
+prompts are the opposite of expansion
+prompts this is where you're taking
+large inputs and compressing it down
+into small outputs you're distilling
+you're summarizing you're Gathering key
+points you're extracting key information
+You're Building summaries for meetings
+let's look at a simple prompt here this
+is information from the Gemini 2.0 Flash
+release and we can of course use Gemini
+2.0 Flash to summarize its release this
+model is insanely fast I'm really
+excited for everything that's being
+announced around the Gemini 2.0 series
+the multimodal input and output is
+making this model truly unique you can
+see there we compressed the information
+inside of this prompt to get a concise
+result we can also use llama 3.3 here to
+execute our compression prompt and of
+course 54 14 billion parameters it can
+definitely do this job you can see there
+we also have three bullet points from 54
+so compression prompts are a great way
+to condense information right I use this
+one all the time there's so much
+information out there compression
+prompts allow us to learn faster they
+allow us to compress information and
+these are essential for compressing
+large amounts of information for AI
+agents and for agentic workflows so
+moving on we have conversion prompts so
+this is where we take an input format
+and we want the response to be in a
+different format so you can think you
+know text to code text to SQL language
+translation format conversion you know
+Json to XML uh style conversions this is
+a really powerful category for prompts
+you can see how they're distinct from
+compression and you can see how they're
+distinct from expansion so here's a
+classic scenario where we have an SQL
+table and we want to convert a natural
+language query into an SQL statement we
+can pass this to any model and it's
+going to give us a really nice concise
+result here right we want to show all
+customers and their total spending in
+the last s days we pass in the table as
+a variable for the prompt and then of
+course uh you know llama flash fi um
+this is a very very solved problem for
+language models language models are
+great at converting formats because they
+know and have internalized the language
+of many many formats these are
+conversion prompts let's move on Seeker
+prompts are very very valuable many
+businesses are built around the secret
+prompt this is where we're querying
+information and we're extracting data
+this slightly overlaps with the
+compression prompt the big difference
+here is that we're pulling specific
+information with the Seeker prompts so
+you think of things like codebase
+question answering right you can think
+of things like support keyway Bots right
+information extraction document search
+when you're running OCR or parsing
+information out of documents pattern
+recognition and knowledge retrieval the
+secret prompt is all about pulling
+important information for your specific
+use cases so a prompt will look
+something like this right this is a
+really simple example we have this sales
+report and we want to know what's the
+best performing product in Q3 right so
+we're looking for a specific piece of
+information this differs from
+compression because we're not taking
+information and changing the format of
+it into a smaller form what we're doing
+is looking for a key piece of
+information that's embedded inside a
+document right there's one version of
+this answer that we're looking for not
+multiple so you can see here the answer
+here is product B right we have 95k
+sales let's go ahead and see if llama
+3.3 gets the answer right here perfect
+95k sales you can see llama 3.3 working
+through the answer here and of course 54
+great model 14 billion parameters once
+again it's going to get the answer right
+here product B at the higher sales
+figure and that quarter Q3 so these are
+Seeker prompts right you have
+information and you want to extract
+specific data Seer prompts are very
+valuable and you can see how by looking
+at the Seeker prompt you would use
+completely different AI tooling between
+Seeker prompts versus conversion prompts
+impression and expansion prompts right
+so let's move on to our action prompts
+these are really simple action prompts
+execute real commands so the most
+fundamental form of this of course is
+tool calls most llms have some type of
+tool calling mechanism we can kind of
+mock this functionality by writing this
+prompt generate get commands obviously
+this is not actually going to execute
+these commands but you get the idea
+action prompts have a concrete side
+effect this is where our prompts and our
+large language models start acting in
+the real world these are powerful
+distinct prompts that really allow llms
+to take control over things in the real
+world world and have larger effects
+outside of different types of text
+generation and manipulation okay so we
+have you know Gemini 2.0 flash here
+giving us a great answer there 3.3 will
+spit out effectively the same thing and
+54 of course will also do the same thing
+okay get check out get add get commit
+get push so these are action prompts you
+can summarize this category roughly as
+text to Tool or text to action it
+doesn't always need to be in the form of
+a tool call you can manually set that
+flow up yourself for instance if you
+execute Json and parse you know function
+calls or parse functionality that will
+then get executed by code that's also an
+action prompt and finally we have the
+most powerful type of prompt the
+reasoning prompt these are becoming a
+lot more popular right now because this
+is the prompt that is going to make
+decisions for you right so this is where
+we're taking complex sets of inputs
+we're taking State we're taking you know
+the current kind of application State
+we're taking variables and we're letting
+our language models make judgments give
+us insights and make fullon decisions
+based on our complex inputs okay so use
+cases here are decision- making planning
+problem solving risk assessment Trend
+analysis recommendation systems threat
+analysis these all fit under reasoning
+prompts so for example we have this
+prompt where we're looking for an
+opinion right we're looking for judgment
+on three different approaches for
+implementing user authentication in our
+web app Custom jwt's Classic o and then
+Firebase off these models are going to
+inform us they're going to give us
+insights into a decision that that we
+might want to make there is some overlap
+here with expansion prompts but you can
+see how this is completely distinct
+because we could use this reasoning
+prompt to inform a chain of prompts
+right so we're getting a great long
+breakdown here from Gemini flash we can
+run the exact same thing in llama
+it's giving us a breakdown of you know
+when to use each you can see llama 3.3
+breaking down a nice concise answer for
+us it's giving us information it's
+making a judgment call and giving us a
+recommendation of a best option okay so
+you can see how this is again completely
+distinct from the other five categories
+we're not expanding information here
+we're not compressing it we're not
+converting it we're not firing an action
+we're not seeking any information we're
+looking for an opinion we're looking for
+insight we're looking for information to
+guide a decision right we can run this
+on 54 as well and we'll get a similar
+breakdown fantastic so you can see our
+54 response came back here you know this
+gave me the exact same quality of answer
+and it and this model ran on device
+really loving this if we changed the
+inputs gave us some more information
+about our team or our current Tech stack
+it very likely would have changed the
+Judgment Insight or decision that this
+reasoning prompt would have returned for
+us the these are the six categories
+categorizing your llm use case
+immediately Narrows Down The Prompt
+engineering approach and tooling needed
+if you're writing a Seeker prompt you
+might need a rag pipeline if you're
+writing a reasoning prompt you need
+information to help Drive the decision
+if you're just doing Simple expansion or
+compression just paste in the
+information and then let it expand into
+more details or compress into the key
+bullet points or content that you're
+looking for this is a big takeaway um
+categorizing has helped me a ton and I
+think it can help you which is why I'm
+sharing it with you here today so chain
+categories to guide AI agents and
+agentic workflows I think when you're
+designing agentic workflows and AI
+agents you can break things down into
+individual prompts in sequence for
+instance you might have a Seeker look
+for specific information based on
+information from your database then it
+might reason over that information in
+your database say you might want to uh
+pitch an upsell to a specific user in
+specific scenarios and you want to have
+your llm do that you would seek then you
+might do reasoning and then you would
+act right then you would actually fire
+off an action prompt to call a specific
+tool categorizing llm use cases is a
+great way to build and design your AI
+agents and agentic workflows you can
+reuse tooling for each category each
+category has a distinct success metric
+patterns tooling benchmarks prompt
+structures so on and so forth right this
+makes it easy to reuse tooling and
+benchmarks for prompts that fit in the
+same category okay the power of this llm
+use case framework lies in its
+Simplicity every large langage model
+will likely fit into one or two at most
+of these categories they each have their
+own distinct patterns prompt structures
+success metrics and tooling Associated
+which will make your gener of AI
+engineering more systematic and
+efficient ultimately leading to speed
+and easier decision- making so just to
+summarize one more time the six categor
+for the most common large language
+modeled use cases you have expansion
+compression conversion Seeker action and
+reasoning right expansion prompts are
+expanding content expanding text you
+have compression prompts where you're
+distilling summarizing pulling key
+information from a larger body of
+information you have conversion where
+you're transferring between formats
+Seeker prompts where you're looking for
+specific information inside of a larger
+body of data we have action prompts
+where we can execute workflows and
+commands that themselves can run entire
+chains of prompts agents and agentic
+workflows and then of course we have the
+reasoning prompts reasoning prompts are
+especially powerful and especially
+unique they help you actually make
+decisions and when you put this in an AI
+agent or an agentic workflow they guide
+the flow of your tool this is where
+everything is going tool calling is is
+still I think super super underutilized
+in developer workflows in AI agents in
+general this is something we're going to
+be spending a lot of time on in the
+channel actually using all these
+categories of prompts to put together
+concrete reasoning machines AI agents
+that solve specific problems really well
+on their own thanks to these categories
+I have developed you know entire Suites
+of patterns benchmarks and AI tooling
+that specialize in each one of the
+categories so let me know what you think
+about these six categories do you find
+this grouping useful do you see
+completely different categories am I
+missing one drop a comment down below
+let me know what you think of my
+categorization here so that's it for
+this one I wanted to share this with you
+to give you an idea of how you can move
+faster with all of these incredible
+releases coming out from open AI
+Microsoft Gemini llama Google none of
+this matters if we can't categorize and
+use and build with this stuff I'm ultra
+excited for the releases coming up I
+hope you are too if you're not
+subscribed to the channel hit the like
+hit the sub and I'll see you in the next
+one

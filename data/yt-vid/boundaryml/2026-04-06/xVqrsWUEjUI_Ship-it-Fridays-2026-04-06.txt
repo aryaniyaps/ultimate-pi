@@ -1,0 +1,101 @@
+[2.3s] Hey Grisco, thanks for sharing the issue
+[4.2s] about adding caching support for AWS
+[5.9s] Bedrock. We looked into it and I've
+[8.6s] opened a PR that should add that caching
+[11.1s] support.
+[13.4s] You should see the update soon, so stay
+[15.0s] tuned for that. How's it going, A
+[17.0s] Brownie? You mentioned that we don't yet
+[18.6s] have on tick support for our Rust SDK.
+[21.2s] Well, this weekend I took a stab at
+[23.4s] trying to fix this for you. And as you
+[25.6s] can see on here, we now support on tick
+[29.0s] for our Rust SDK. You can actually pass
+[31.3s] in the tick. You can get the logs. This
+[33.0s] means you can now get thinking tokens
+[34.6s] and other tokens out of um LMS when
+[38.9s] using Rust. Thank you, Steve Morren, for
+[41.7s] your question about how to use agent
+[43.3s] skills in BAML. I've put together a
+[45.4s] little demo of that to show you how it
+[47.1s] works. Agent skills are a directory of
+[49.1s] files that follow a specific format to
+[51.3s] tell LLM how to do specific tasks.
+[54.3s] They're a lot like MCP service
+[56.0s] definitions, except that they use a
+[58.0s] technique called progressive disclosure
+[60.1s] to prevent bloating or context. When an
+[62.8s] agent starts, it's going to receive a
+[64.3s] list of the skills that are available
+[65.6s] which have been found on the file
+[67.0s] system. Then, when responding to a user
+[69.4s] prompt, the agent is going to look
+[71.3s] through the list of skills to see if any
+[73.0s] of them apply to what the user asked
+[74.7s] for. If there are matches, the agent
+[77.6s] reads the rest of the skill file to pull
+[79.2s] that whole skill into context. And then
+[81.8s] the real LLM request is going to have
+[84.2s] that skill in context when answering the
+[86.1s] user's prompt. So let's see all of this
+[88.0s] in action. I put together a little demo
+[89.8s] which you can download at
+[90.9s] github.com/boundaryml/bmlskills
+[94.2s] example. Let's look at two skills. First
+[97.4s] we have a Jabberwocki translation skill
+[100.4s] which tells an LLM how to convert
+[103.1s] between English and the fictional
+[105.0s] language Jabberwocki by replacing
+[107.5s] certain English words with certain
+[109.2s] Jabberwocki words. These skill files are
+[111.9s] written in plain English and are meant
+[113.9s] to be consumed the same as your system
+[116.5s] prompt might be. A slightly more
+[118.6s] interesting skill in this example is
+[120.6s] called calculator. And the calculator
+[122.8s] skill kicks in when the user wants to
+[124.4s] compute some arithmetic. This one is
+[127.0s] slightly more interesting because the
+[129.1s] instructions in the skill involve making
+[131.2s] a tool call. So far, nothing in these
+[133.7s] skills has been BAML specific. to use
+[136.3s] these skills in our agent. First, we're
+[137.8s] going to discover them in the file
+[139.1s] system using this function, which you
+[141.2s] can read in detail if you're interested,
+[142.7s] but it basically just searches a
+[145.0s] hard-coded directory for skill.md files.
+[148.1s] Once we've loaded those files, we can
+[149.6s] call this BAML function called select
+[151.3s] skills plane, which takes the user's
+[153.5s] initial query and the list of skills
+[155.8s] that have been found in the file system.
+[158.2s] Let's run some tests of this LLM
+[159.9s] function. In this test, we're expecting
+[162.8s] that the skill selector will select the
+[165.5s] calculate skill.
+[169.1s] And indeed, it does. After selecting a
+[172.0s] skill, depending on what skill gets
+[173.9s] selected, we're going to do a number of
+[175.4s] different things. If no skill was
+[177.3s] selected, then we're going to call
+[178.7s] another LLM function that simply
+[180.3s] responds to the query as though it were
+[181.8s] a normal chat request. But if a skill
+[184.0s] was selected, then we're going to read
+[186.2s] the body of that skill and put it into
+[187.8s] the context for our follow-up LLM
+[189.9s] function called execute skill. And what
+[192.6s] execute skill is is another LLM function
+[195.5s] that contains the original user message,
+[197.9s] but also the body of the skill that we
+[200.2s] just looked up. In summary, skills are
+[203.1s] files that are mostly managed and
+[204.7s] inserted into the context by the
+[206.6s] harness, not directly in BAML. But this
+[209.1s] demo also shows you how you can use
+[210.6s] BAML's context engineering tooling to
+[213.0s] choose exactly how these skills are
+[215.2s] going to integrate into your prompts.
+[218.4s] Hey,
+[223.0s] hey, hey.

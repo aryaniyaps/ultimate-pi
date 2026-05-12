@@ -1,0 +1,231 @@
+open AI is aiming to become the Monopoly
+for your AI agents that's become clear
+with the release of structured outputs
+in the API not to mention all the drama
+around this I rule the world M Mo
+Twitter account that apparently is a
+gentic powered by the next version of
+GPT you've already seen this though via
+the other channel so I don't want to
+waste your time but we do have to
+highlight the three most important
+details of this release number one we
+have 100% guaranteed structured outputs
+for function calling using pantic or Zod
+you wrap the object that is going to be
+the parameter for your method and you
+can be guaranteed gbg4 will respond in
+that format number two we have 100%
+guaranteed structured outputs for data
+models following the same line instead
+of wrapping it in that method you pass
+it in the response format and you just
+give the exact Zod or pantic object
+structure that you want your llm to
+respond with and it gives it to you 100%
+guaranteed lastly we have a 50% cost
+reduction in the state-of-the-art GPT 40
+model that cuts the price on inputs by
+50% and outputs 33% this release makes
+it dead simple for you to build domain
+specific agents that are highly reliable
+in this video I want to show off an open
+AI exclusive super agent that you can
+use to build highly reliable domain
+specific agents that you can interact
+with in natural
+[Music]
+language hey aah how are
+you hey Dan I'm doing great thanks for
+asking how about you what's on your mind
+today yeah I'm doing well thanks can you
+go ahead and generate three images of a
+beautiful sunset landscape focus on the
+ocean and sunset gradients between the
+blue Reds and orange colors generate
+these in landscape format
+hey just wanted to let you know that
+I've run the generate image prams tool
+what's
+next awesome thank you a can you go
+ahead and convert versions zero and one
+into jpegs
+hey just ran the convert image params
+tool for you let me know if you need
+anything else I need a square icon of
+version two can you resize version two
+to be 100 by 100 pixels for me sure I'll
+resize version two to a square icon at
+100 by 100 pixels right now give me a
+moment a go ahead and resize version two
+into a 100x 100 pixel version that's 100
+width 100 height
+hey I just ran the resize image params
+tool let me know what you need
+next fantastic AA go ahead and open the
+image
+directory I've just run the open image
+di params tool what do you need next
+all right so what you just saw was a
+Showcase of a open AI assistant using
+speech to text and text to speech
+running the brand new structured outputs
+to call these four functions you can see
+here generate image convert image resize
+and open image directory that opened
+this directory here on my Mac just like
+I asked and you can see here we have the
+three original versions as pgs we then
+got the converted jpegs and then lastly
+the resized that all happened in natural
+language talking to my personal AI
+assistant which underneath the hood is
+powered by this open ai ai agent that
+contains these four tools you can see
+here just like in their documentation
+you specify a list of tools you pass in
+the prams that will be needed to call
+each function and better than ever this
+just works I don't know about you but in
+the past for me function calling and
+Tool calling has been a huge pain to try
+to get your assistant to call the right
+method as you saw there in the demo we
+did have to correct the resize function
+tool call we had to ask twice to get
+that resize done but overall the
+function calling a ities have gotten
+much better and they've gotten a ton
+simply let's go ahead and look at the
+generate image peram so we can just look
+at what that looks like I asked Ada to
+generate three images and that means
+three prompts I didn't specify the
+quality but I did ask for an image ratio
+to be landscape mode and you can see
+here in the image ratio enum we have
+three options and Landscape was selected
+for each image if we pull up one of
+these versions you can see here we have
+that wide image and we have the correct
+pixel size here so this is great I'm a
+huge fan of specifying the eoms it
+Narrows down the number of options that
+your AI assistant can select from versus
+it just being a raw string so this is
+what the generate image params looks
+like and that's how it calls the
+function that it needs to call if we
+scroll down here a little bit if we
+detect a tool call from the parse
+response we print out the arguments and
+you can see that here so if we just
+search tool call found you can see that
+our resize image params got printed out
+here I specified version numbers two and
+I wanted the width and height to be 100
+by 100 we then have a simple map between
+the parameter name and the function that
+it gets passed into and then of course
+we just call that method so building AI
+agents that are domain specific and
+highly reliable is now simpler than ever
+it's easier than ever open AI is
+becoming the framework for building a
+gentic
+software you can imagine a whole
+different slew of these tools that power
+a Twitter bot for instance right it
+could have a get tweets function call it
+could have a tweet function call it can
+have a generate image function call
+right it can do literally any one of
+these things that it's doing here here
+the trick here is how interesting the
+content coming out of this is again
+assuming this is actually an agentic
+Twitter account assuming this is a GPT
+next powered account but you know you
+can put all these things together and
+it's not a far-fetched idea to really
+see that this could be fully run by an
+agentic workflow that on a loop on some
+period calls one or more uh Twitter
+related functions and information
+gathering functions and you know
+creative copy and image generating tools
+it also has some really great uh retweet
+requote functionality and you know it's
+got linking functionality so it's very
+likely that this is the gbt next model
+with a bunch of really really cool uh
+function calling but you know I don't
+want to speculate on that too much I
+think it's really interesting uh all the
+drama and all the hype that this account
+has stirred up big shout out strawberry
+big shout out Sam Alman this guy is a
+marketing hype genius structured outputs
+really enables you to build high quality
+highly reliable AI agents that could
+really solve any problem we plugged into
+Dolly 3 to generate images we are using
+pillow to convert images resize images
+and then just basic operating system
+calls to open up our image directory so
+this is really cool really interesting
+there are many many many use cases for
+this if you're interested in this you
+know drop the like drop the sub and
+check out the code base Link in the the
+description I'm going to reuse our fast
+personal AI assistant codebase and just
+push up this structured outputs Branch
+for you to take a look at this and get
+started really quickly I also have an
+example of open AI code that they have
+on their blog where they are using both
+the response format and their tool
+calling with their exact examples so
+this will be in the description for you
+let's go ahead and do some quick
+reflection on this
+right now everyone is obsessed with
+agents on the channel we try to stay one
+step ahead of the game I'm predicting
+what comes next is personalized
+assistants that have many agentic
+workflows and AI agents underneath them
+that you can work with quickly to get
+work on faster than ever in terms of
+building out your specific AI agents I
+highly recommend digging into one
+specific problem build out your agent to
+solve one specific problem build a image
+modification agent build a domain
+specific copywriting agent build a
+codebase specific coding agent I do
+think that we are trying to expand and
+going too wide when really there's a ton
+of immediate value that can be had uh by
+going narrow and building out agents
+that do one thing and do one thing well
+from what I can see anthropic has a
+decent lead with Claude 3.5 Sonet and
+artifacts a especially for writing code
+nothing compares to claw 3.5 despite
+what the benchmarks say and with all the
+news about strawberry it seems the
+arrival of GPT next seems near and
+that's likely to shake up the entire llm
+ecosystem once again the best thing we
+can do as software engineers and product
+Builders is build reusable building
+blocks that we can use today tomorrow
+and over the next years as these models
+continue to improve as price goes to
+zero and as the next generation of
+models are released if you enjoyed this
+video drop a like drop a sub get this
+code based in the description and I'll
+see you in the next one

@@ -1,0 +1,891 @@
+it's been a wild few months in the AI
+coding ecosystem with the biggest
+players racing to outdo each other
+curser is leveling up fast and gaining
+market share as the go-to AI editor
+while GitHub claps back with their own
+revamped co-pilot and their own rapid
+prototyping tool spark ader's new
+architect mode is setting new standards
+and 01 based coding is changing the AI
+coding game before the official model
+has even dropped and then there's
+anthropic quietly releasing powerful
+bash and editor tools that most
+Engineers haven't fully appreciated yet
+with all these moves my own AI coding
+workflows have transformed completely
+today I'll share one of my fine-tuned AI
+coding development workflows to show how
+you can do more code faster get more
+done in less time great AI coding is
+much like great engineering it all
+starts with a great
+plan so our goal today is going to be
+create a simple generative AI UI client
+server application it's going to be
+built with a simple chat interface that
+allows us to prompt specific generative
+UI components we have a simple Cloud
+chat application we can type hello and
+we'll get back to typical response I've
+been eyeing the generative UI pattern
+for a while and finally have a use case
+for product I'm building open AI just
+released their GPT search and you may
+have noticed they're using some version
+of generative UI with a few of their
+components to build this we're going to
+use a combination of my favorite AI
+coding tools AER and cursor it's just
+too early in the generative AI age to
+think you can confidently pick out the
+single best tool for any problem I
+recommend one closed source and one open
+source tool so here's the outline for
+the plan we're going to execute on today
+this specification or plan consists of
+three sections we have our highle
+overview this is the highle steps we're
+going to take we then have our team
+which is our set of AI agents that we're
+going to delegate all of our work to
+we're using architect mode in both of
+our scripts here the AER architect mode
+is gamechanging and leads to highquality
+code generation we'll Circle back to
+that in just a moment and then lastly we
+have our task breakdown and in the task
+break down we have our setup step and
+our individual tasks each task has a
+highlevel item and then the actual AI
+coding prompt that we're going to
+execute so you can see here we have all
+the work we want to get done in a mid to
+highle outcome and then a low-level
+detailed prompt so here we're going to
+operate with four agents total we're
+going to be using two AER instances one
+for the client one for the server and
+then we're going to be using anthropic
+based document editor agent and Bash
+agent sh scripts AER client here sh
+scripts AER server okay so we have our
+client editor on the left server editor
+on the right and then let's open up two
+additional agents so this is our
+document editor I'll run sh scripts doc
+get this started and this is a AI agent
+that wraps anthropics file editing tools
+we'll do the same with the bash agent
+same deal scripts bash it's the same
+type of wrapper but this wrapper is
+around anthropics bash editing tool
+let's let's start with the setup so
+let's add our context to our client and
+server we'll say add server slash and we
+can open up our file editor here front
+end and the source directory and then we
+have a couple server items in the server
+directory so you can see we have the LM
+and the server add source and in AER you
+can recursively add files by just
+specifying a directory you can see here
+we imported all of our files into the
+chat and all these are now editable on
+both instances we're going to add a
+couple additional items so we want the
+server to be aware of our geni chat but
+we don't want to update I want to
+separate the concerns here into server
+only and client only this allows us to
+move faster and reduces error so I'm
+going to say SL readon and we're going
+to add this
+genui component as a readon context file
+and same thing on the left side I want
+to actually read only all of the server
+files I'm just going to say server slash
+and then start so you can see we now
+have these two readon files and we have
+the one readon here couple things we're
+going to do now we need to get some
+documentation around how to use tool
+calls with Sonet and we also need to add
+documentation around using Dynamic
+components in vue.js many front-end
+component Frameworks will have support
+for some type of dynamic component we're
+using VJs for our frontend and we're
+using Express for a
+backend documentation collection is a
+common pattern when you're integrating
+with thirdparty applications so much so
+that I've built out a tool to help me
+collect information I highly recommend
+you set something like this up Gathering
+documentation and having it local on
+your device means that you can pass in
+the context into your AI agents so in
+order to pull in this documentation you
+can see I have this empty AI docs
+directory I like to set this up in every
+code base that I work in now and what
+we're going to do is just scrape a
+website add the content here and then
+have our file editor agent clean it up
+so that it's easier for other agents to
+read so we're going to do that now let's
+open up a new terminal here and run the
+following commands we're going to use
+anthropics tool use docs to generate the
+generative UI components automatically
+for us and so what we're going to do
+here is just collect tool use documents
+I'm going to run imp going to run Alo
+one this is a new agentic tool I'll be
+discussing on the channel more in 2025
+we have this command collect and now we
+pass in a URL and so all we're going to
+do here is take the URL for this and
+we're going to run this collect method
+on this and then we're going to save it
+to our AI docs in tool use raw. MD so
+this is going to scrape this URL for us
+and place the content in our tool use
+raw so you'll see this come in here and
+you can see that that's done so this is
+great but you'll notice that there's 9k
+tokens in this file it's messy it's got
+a lot of content that we don't really
+care about this is where our file
+editing agent is going to come in and
+clean this file up for us so if we go
+back to our specification document and
+run our next command we're going to ask
+our editor agent read the tool use raw
+and then create tool use MD with
+examples and docs specifically around
+tool use so we'll copy
+this and go to our file editing agent
+and just paste this in and run it and so
+you can see our anthropic file editing
+tool thinking through what needs to
+happen here you can see it's running the
+view command and I'm going to link the
+previous video where we discussed the
+anthropic tools specifically the editor
+and The Bash tool that are super
+underrated super underappreciated
+that'll be linked in the description
+definitely check out that video this is
+a huge huge win for engineering and so
+right now it's scraping and it just
+wrote this brand new file and let's go
+ahead and hop in here and we can see how
+much cleaner this looks right we're down
+to 1.4k tokens from 9k and if we just
+scroll through this file we can see how
+much cleaner this is and how much value
+we can get by asking a file editing
+agent to clean up the larger markdown
+file for us so all we do was write a
+prompt for this and the Sonet file
+editing tool now has cleaned up this
+documentation for us it's got a ton of
+great breakdowns for us it's even got
+their links to other documentation in
+here as well let's go ahead and close
+these files and we're going to repeat
+this process for the vue.js dynamic
+component because this is what we're
+going to use to automatically swap out
+which generative UI component gets
+generated so we'll run the same process
+here we're running our collect URL and
+then we have our output file so I'll
+just copy this go back to our blank
+instance paste this let's go ahead and
+get this content scraped into this file
+you can see that that's done and if we
+scroll you know not too bad only 1,300
+tokens but let's run our file editing
+agent to clean this up for us same deal
+I'll just hop back to the file editing
+agent paste this in and now it's going
+to generate the non-raw formatted
+version for us so our anthropic file
+editing tool is Reading in the Raw
+format and then creating this new
+document with examples and docs
+specifically around Dynamic components
+and it's going to clean it up for us so
+that it looks more like this right so
+this is the new reformatted version you
+can see how clean this is it's easier
+for you and I to read and that means
+it's likely easier here for a large
+language model to read and this is great
+in this developer workflow it works like
+this first you make a plan right which
+we have here then you collect all the
+information you get it into your
+codebase now we have our AI docs then
+you run your prompts let's move back to
+our AER assistants for ader to see these
+files we need these files committed so
+I'm just going to go ahead and run a
+slash run get stage dots now we should
+have access to/ readon and AI docs there
+we go now we can see all these files for
+the front end we only want want the
+dynamic components we'll just add that
+formatted file and for the backend slash
+readon the a do tool use markdown file
+now we have all of our collection
+complete right our AI coding assistants
+have everything they need to accomplish
+the tasks we want them to accomplish
+let's go ahead and Shrink our screen
+here and get to work so we'll close this
+get back to our genui chat and let's
+move to the actual task execution so I
+know you might be thinking wow that's a
+lot of setup but this is going to be
+worth it for us as we're just going to
+start rolling through these a coding
+prompts at first will be helpful to just
+look through what we have so far so if
+we open up server you can see we just
+have this simple prompt endpoint and
+this prompt endpoint is just hitting a
+classic anthropic chat call what's your
+favorite programming
+language it will you know create this
+typing interface and then give us a you
+know stock I don't have a favorite cuz
+I'm an AI assistant blah blah blah this
+is what's happening here on the back end
+we just just have our llm file and we
+have our server file as well and our
+front end looks like this so This Is A
+View application frankly all the
+frontend Frameworks are converging to
+basically being the same thing now so it
+doesn't really matter what you're using
+if we open up our template you can see
+we have our list of messages and we have
+our input field pretty simple you can
+see We're looping through a bunch of
+messages and displaying them so let's go
+ahead with our first
+change the first thing we need to do to
+get our generative UI is create a new
+tool end point my Approach for creating
+generative UI components is to make
+every response that we're getting back a
+tool call so let's just go ahead copy
+this paste this in let's let ader get to
+work and then let's open up server so
+that we can see these changes get
+streamed in and we can full screen while
+we're working on this earlier I
+mentioned that we're running in
+architect mode this is an incredible
+mode that AER has that essentially runs
+your prompt twice once as a planner and
+then as a editor and you can see here we
+have a linting issue it didn't get
+imported this got automatically fixed
+ader saw that automatically fixed it as
+you'll see in a moment inside of our uh
+scripts here inside of our setup scripts
+we are automatically having AER
+self-correct itself and confirm every
+change that it wants to make let's go
+and close this we'll get to that in a
+second so if we review our changes you
+can see we have this new tool command we
+can go ahead and Auto Import this and we
+actually want to import this from our
+tool file let's make sure that this is
+exported and so now we have that tool
+there we can see we have our new / tool
+endpoint and we're passing in our tool
+parameter if we hop into our tool prompt
+we can see we have this brand new tool
+created we are missing the tool call
+here so we can just go ahead and add
+this right we can just do Force tools
+and then we also want one more thing if
+I remember correctly we want to use the
+force tool mode here so we can pass this
+in here so if we say a tool
+choice because we always want this to
+run this is something that we just you
+know missed in the prompt I always want
+this tool to execute every single time
+we call this we have the wrong tool type
+here I think we probably want anthropics
+tool so we'll just say I believe we can
+look for anthropic do messages
+tool there we go and then we can update
+our uh type here we can actually just
+get rid of this type yeah just
+completely get rid of this and then we
+can just have our server also import
+from here and yeah there we go get our
+tool using cursor here to tap through
+changes and now we can see we have our
+generative UI component that's getting
+passed in right and the idea here is
+quite simple basically you have a tool
+that will always run and generate one of
+these items okay so let's go ahead and
+hop back to our spec documentation this
+was our first prompt let's go ahead and
+run our next one so now we're going to
+go to the client and now we're going to
+ask our client to actually use this tool
+call after the enter key is pressed
+right so you can see this prompt this is
+exactly what this is going to do let's
+go ahead and open up our editors here
+and let's run our client side now right
+at the left of the client just go ahead
+and execute on our client side and we're
+going to update this component and call
+SL tool tool instead of if we run that
+and quickly switch back we are running
+SL prompt right now so we're going to go
+ahead and run this
+and great so now this is running SL tool
+we saw that get updated and let's go
+ahead and just see if we can run this
+now so we'll refresh we'll type hello
+and you can see there we have an empty
+response so let's go ahead and figure
+out what's going on here printing out
+our data let's just go ahead and see
+what's in this and response is just an
+empty string so let's go ahead and clean
+up our response format okay so this is
+what's happening right let's change this
+what we're actually looking for is we
+always know this is going to be a tool
+use return and so we just want to pass
+back this entire block refresh and type
+hello wonderful so now we're getting
+that entire response block back if we
+look at this you can see we're getting
+that tool use response back from Sonet
+which is perfect and you can see we're
+calling this component type text right
+so we just passed in hello forcing the
+ex execution of this tool to run every
+single time and if we hop back to server
+where this tool lives the component type
+is always going to be one of these enums
+so we're having Sonet pick which one of
+these uis do we want to generate based
+on the incoming prompt so if I type
+something like I want to leave a rating
+you can see we're going to get this
+component type star rating okay so this
+is really cool so we can also get the
+Color Picker and the contact form these
+are going to be components will be you
+know having our AI coding assistant
+automatically generate for us and then
+we have just the plan all text response
+I think as a pattern here you know if we
+needed responses from star rating Color
+Picker or contact form what we would do
+is you know add them here so we would
+say uh star rating response and then
+have the response exactly get added just
+like this for these other components
+though we don't need it we're just
+testing out this as a proof of concept
+for generative UI so let's go ah and
+continue so that's our first two prompts
+you can see how we're starting to speed
+things up a little bit and now let's go
+ahead and update our client to store
+more information right so I've got this
+all planned out we do want to be saving
+these messages over time if we look at
+the client you know we have this simple
+messages typescript interface let's go
+ahead and enhance it right we need some
+more information we need to be able to
+store responses and submission so let's
+just go ahead and grab this prompt and
+execute this on our client side
+and we're just going to update this
+message type and when we create these
+new messages we're going to make sure
+that our code is actually you know
+filling in all of these items here right
+so let's see that change gets synced in
+and it's important to note with this two
+agent configuration we have two AER
+instances with this setup we can execute
+client and server prompts simultaneously
+if I wasn't filming this video that's
+what I would be doing right I'd be going
+top to bottom I'd run these both at the
+same time unless there's some context
+conflict then we can just stream these
+both down side by side and execute them
+together right okay so that changed got
+submitted there let's go ahead and take
+a look at what's happening here so the
+great part about planning everything out
+is that we can just take a look at what
+step we're on in our you know feature
+building process and then just review
+the code that was generated right so
+we're going to go ahead and check our
+message to see if we have these new
+Fields ID create app component type so
+on and so forth fields we have our new
+generate ID function we can search this
+and see this getting used throughout so
+when we submit a new message we're
+getting that brand new message attached
+and let's go ahead and run this let's
+see if all of our responses are still
+looking okay let's say hello okay so we
+can see that this is coming back all
+right so let's go ahead to step three so
+here we're actually going to create our
+UI components and our Dynamic component
+we have all these steps laid out and
+we're just once again going to copy this
+and you can see here we have these cool
+component generation prompt so we're
+saying create Source components geni
+text one for each type and at the bottom
+we have you know update use component
+instead of raw text of response right so
+we're going to use the dynamic component
+instead so let's go ahead and highlight
+these and go to our front end AI coding
+assistant paste the send fire that off
+while this is running let me just go
+ahead and show you how we're
+instantiating these AER architect
+instances if I click on ader client you
+can see this exact run command so here
+we're running AER with the Sonet model
+and we're running in architect mode and
+then we have our editor model also Sonet
+model and we're running with yes always
+so what is architect the architect mode
+means AER is going to run two prompts
+right this is going to be a prompt chain
+of length two and it's saying our first
+prompt is just going to be about
+drafting the changes and then our second
+prompt is going to be about executing
+the draft changes
+if I did not have yes always I would
+have to constantly hit yes and confirm
+the change by just having yes always
+here as a flag this will have AER draft
+the change using the Sonet model in
+architect mode and then once the change
+is ready and fully drafted it will then
+pass it to the editor model which will
+actually implement the changes so by
+using a prompt chain of length two AER
+is able to increase the AI coding
+accuracy by quite a substantial am
+amount by having one model draft and one
+model execute you can think of this as a
+manager Builder pattern or a draft
+editor pattern or as AER you know aply
+put it in architect mode we've talked
+about prompt chaining quite a bit on the
+channel I'll link a couple of videos if
+you want to learn more about prompt
+chaining and it's more powerful
+varieties so that you can use it in your
+own agentic workflows there are tons of
+variants of the architect editor prompt
+chain that can be used to improve AI
+coding even further we'll explore that
+in upcoming videos I'm really excited
+and I want to wait till the official 01
+reasoning model comes out and then we'll
+explore a bunch of heavy hitting AI code
+generation using the architect pattern
+with 01 and then a you know fast high
+quality editing model like claw 3.5 you
+can imagine different variants of this
+pattern for instance we could have a
+architect an editor and a reviewer or a
+mode where we have two architects and
+then a lead engineer that merges the
+best of both drafts and then an editor
+right there's really no limit to the
+types of combinations you can make with
+a gentic workflows like this I really
+like that AER took a little bit of risk
+and implemented one pattern like this
+that gives really concrete results but I
+like that AER is still keeping itself
+simple lightweight and unopinionated
+this is how you build great AI agents so
+that's what's going on in the ader
+client we're doing effectively the same
+thing in the ader server and let's go
+ahead and move on from that let's check
+out our generative UI components if we
+look at our UI you can see it generated
+four new components we have this massive
+multifile edit we got all these new
+components we can open up the file
+explorer and just see these right we now
+have genui text star contact and picker
+open up text you can see we just have a
+text response and a submit button and
+then some styling so you know looks like
+A's doing a great job it's running all
+the modern V3 script setup syntax that's
+great to see let's go ahead and look at
+the top level UI so if we close script
+here you can see we're now using the
+dynamic component and really important
+to really plan out all your work and
+give your AI agents all the information
+they need to solve the problem you have
+in this block if we're not the user we
+now have this V else that's wrapping our
+Dynamic component if we refresh here
+that documentation came right out of
+dynamic component. MD and so we have
+this cool Dynamic component and and
+we're looking for component type and we
+want to make sure that it's in our
+component map so it created a component
+map for us let's look at that perfect so
+now we have a map from the component
+type to the actual generative UI
+component and again this is really great
+context management we have three readon
+files so our client AER coding agent can
+see our server files but it does not
+edit them right so it knows that in our
+server. TS and we can go ahead and just
+command click this in our server TS it
+sees these enum types right it knows
+that's what component type is going to
+be and that means it knows that it can
+map them right here okay so a lot of
+really awesome stuff coming together
+here the tricky part is going to be
+seeing if our a coding assistant mapped
+the message properly in the response
+because this is just a little tricky in
+general so let's go ahead and make a
+couple tweaks to this and first off
+let's just run it right so let's just go
+ahead and say hello so let's see if we
+get our text component okay so not quite
+we need to modify the response here a
+little bit what we really want to have
+happen is we want our component type to
+get set and we want our component props
+to get set to this entire output block
+so we can go and just copy
+this and we'll just paste it down here
+just for reference this is not the
+correct response so let's just go ahead
+and close this out and all we want to do
+here cuz we're remember we're always
+going to be calling this tool call so
+we're always getting this format back so
+we can paste this and then we can just
+tab this this is giving us our response
+component type and we can look at data
+here right we have this nice log message
+and we have response and all we want to
+do here is pass input into both of these
+so not quite right but close so we want
+input and then we want Dot and then we
+have component type and then component
+props we just want to pass everything
+into that so component props is just
+going to be our input so whatever is
+here like text response we just want
+that to stream in so let's refresh type
+hello and now you can see we have our
+generative UI text component we don't
+need submit here let's open up our AI
+assistant and let's just say remove
+submit from gen UI text and I missed the
+T there but doesn't matter that's going
+to get removed and cleaned up so you can
+see there we had the architect draft the
+change and now we have the editor making
+the change and so now this component is
+it's just text wonderful so let's
+refresh and say hello how are you
+there's no reason to generate any other
+type of component here so of course this
+component type coming back is just a
+text component but if we say I want to
+leave a review you can see here we now
+have our star component right our our
+rating component let's go ahead and open
+this up and see what this looks like
+this was all generated in one shot by a
+CLA upgraded and and you know we can
+review this prompt here we can see here
+that it generated everything we needed
+right it created all these components it
+inferred based on all this context you
+know this is why it's so important to
+specify the right context with your AI
+coding assistant and inferred everything
+we wanted to have happen inside of our
+individual components right so now if I
+hit let's see how this works now if I
+hit four right we can see that four star
+rating and then if I hit submit we can
+see component submitted type rating
+value 4 so let's go ahead and look at
+that we can now handle Dynamics
+submission let's goad and create a quick
+prompt for this so when we submit this
+we want to say update this function
+update the tempbot message right so our
+temp Bop message is the one is our most
+recent message and all we want to do is
+set the submit response set submit
+response so pretty simple and let's go
+ahead we can hold on this and we can see
+the architect and the editor making
+those changes for us so archetype drafts
+editor writes the change okay so we can
+see it finding that most recent message
+and saving this let's update the color
+so we also have the Color Picker right
+so this is going to select the Color
+Picker and we have a little UI issue
+here so I'll just highlight and I'll say
+update Flex call and now we can pick a
+color here and hit submit and now that
+was submitted so when we click submit I
+also want to update the state of our so
+there we go we got that Flex called
+change rolled in so when I click submit
+I also want to lock the UI right so that
+we don't keep making changes the
+generative UI component update all gen
+UI
+components when we have submit response
+say uh response
+submitted and then value so that we can
+see what exactly was submitted in every
+message right our AI coding assistant is
+going to again in architect mode make
+all these changes and then editor mode
+is going to actually write all the
+actual changes so this is really
+incredible right um that's quite a
+significant change to go through and add
+a submission text state to every one of
+these you know to every one of our
+generative UI components but you can see
+here AER on sonnet 3.5 with architect
+mode is just plugging away right it had
+a clear draft to work with it can see
+all these files it has the right prompt
+now it's just working through all the
+changes wonderful so that was submitted
+so you can see there we have that
+submitted response and we can go ahead
+and update the Color Run submitted
+response again this will update the
+component awesome so that looks good um
+what other component do we have we have
+one more right so I want to I want to
+contact uh someone and if we type that
+you know you can see here we have our
+submitted contact form and response
+submitted should not show if there is no
+value so again we're just going to throw
+a prompt in here should not show unless
+there is a value hide it let's go ahead
+and just keep working through this so
+I'll type Dan Dan at indie
+message and then if we hit submit you
+can see we have that submitted value and
+property is going to get upgraded that's
+awesome so this video is getting really
+long uh there's a lot of value here in
+writing out your specification prompts
+let me just show you one more thing here
+let's go ahead and create the SQL light
+database to save our messages so what
+we'll do next is have our bash anthropic
+agent just do all this work for us right
+so we need a new SQL light database and
+we need a new table setup and we we want
+them to have you know all the basically
+the exact same structure as our chat
+messages here right so here's our file
+editing agent we'll open up our bash
+agent and then we'll just copy this
+prompt here and fire this off and you
+know the key thing here to look up for
+is this is going to generate server app.
+DB so it's going to create this brand
+new sqli database in this file right
+here so I'm going to hit enter there and
+then let's go ahead and watch our server
+directory so the agent is making sure
+that the file exists this it's creating
+this you can see the create table
+statement there and that's it it's done
+so you know we can test and you know we
+can use the bash agent to just validate
+for us show all the tables generated in
+app. DB perfect I wanted to touch on
+this agent just at least a little bit to
+show how powerful this is you can type
+in natural language and have your bash
+agent accomplish tasks for you
+automatically in the terminal right so
+we just had it create an SQL light
+database at this specific file path and
+create a brand new table right with
+these specific columns and it just did
+that for us right so this is right here
+but this video is getting really long
+I'm going to cut it here you can see
+where this is going right we're going to
+set up load and save commands next
+here's the prompt for that basically
+contining down the same line a great
+kind of lowlevel prompt specifying where
+things are you know we're going to
+update the server to have these load and
+save endpoints and then we'll have our
+genui chat update to just call the load
+and the save on mounted and on key press
+right so you can see where this is going
+I think we've gotten to the kind of Core
+theme of this video by creating a great
+comprehensive plan and by using AI
+agents you can get a lot of work done
+with new AI coding paradigms like aer's
+architect mode you can just do a lot
+more and when the 01 models are released
+this trend is going to continue right
+we're going to continue seeing the
+amount of code you can generate go
+absolutely parabolic and you know with
+01 preview which we're going to cover
+I'm really really excited to do video on
+01 when that drops for AI coding
+specifically because the amount of code
+we be able to create with a very well
+planned out spec document specification
+document also just known as a plan right
+when you plan out all of your work for
+whatever feature that's coming up that
+you want to build and you have it in
+this document I can almost guarantee you
+in the future we're going to be able to
+just contrl C this entire document boot
+up in AER window with the1 model and
+pass this into it and it's going to do
+all the work right it will literally do
+all the work that we're walking through
+right now I've run this experiment with
+01 preview it gets close you still need
+to kind of come in and you know make
+improvements make changes make tweaks
+but I do think with 01 we'll be able to
+write comprehensive plans that detail
+all the work we want done for a feature
+for a tool for an application and then
+you just fire that off into a powerful
+AI coding assistant that can actually
+make the changes for you using a
+powerful reasoning model right right now
+now we have 01 preview this gets Us
+close 01 is going to take us all the way
+so I'm really excited for that video uh
+November or December so really stucked
+on that and I hope you can see the power
+of planning in the age of generative AI
+right we have a team of AI agents that
+can do arbitrary work for us in the
+beginning we use our doc agent to pull
+in documentation clean it up for us so
+that we can use it and then we have two
+AI coding assistant both on the server
+and the client side it's nice to split
+up our agents like this so that we can
+run work in parallel Al to create
+another video on that where I showcase
+that a little bit better in this coding
+session we were running very
+sequentially but you can see where that
+can go right we have one instance on the
+server we have one instance on the
+client and then we can prompt at the
+same time in parallel it's also great
+for reducing context our front-end AER
+instance is only modifying and creating
+front-end related components while being
+able to read the server components
+thanks to aer's read only context
+management solution and our server of
+course you you know is really only
+looking at these two files so
+specification AKA plan based AI coding
+is a huge Advantage I recommend you dig
+into not only are AI coding tools
+evolving but models like the upgraded
+son 3.5 and soon the full 01 reasoning
+model will enable you to hand off 90% if
+not nearly all of the coding process
+tier AI agent the full version of 01 is
+going to push that AI coding developer
+work worklow into reality it's going to
+make that a real thing that we can do
+you write a great document you write a
+great plan and frankly you use um your
+editor and Bash tools to help you create
+your great plan by collecting you know
+documentation by collecting uh specific
+files that you need and then you have a
+powerful reasoning model execute that
+using a great AI coding assistant build
+that change out you use a powerful mode
+like AER architect mode so that you get
+a clean draft of everything that's going
+to happen and then you have an editor
+model something fast like son that can
+read through all the changes and
+actually make the changes for you and
+that improves the performance even
+further right so you have a draft agent
+and you have an editor agent the big
+theme for us moving forward here is more
+capable models that can reason process
+and generate output more accurately that
+means we need to scale up our prompts
+and therefore scale up our planning
+abilities if you enjoy this video Drop
+the like drop the sub to stay on the
+edge of what you can do and what you can
+build with these next level generative
+AI tools thanks for watching and I'll
+see you in the next one

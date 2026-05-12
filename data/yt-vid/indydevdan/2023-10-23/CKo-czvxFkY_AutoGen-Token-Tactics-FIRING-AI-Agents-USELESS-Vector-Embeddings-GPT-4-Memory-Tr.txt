@@ -1,0 +1,883 @@
+Engineers analysts low code no coders
+welcome back we've been making great
+progress on our multi-agent postgress
+data analytics tool over the past three
+videos we've built out a multi-agent
+framework on top of autogen gb4 and a
+couple new patterns we built from
+scratch on the channel we created the
+orchestrator as a way to manage our
+agents and we obtained full control over
+our agents with specific multi-agent
+conversation flows like the sequential
+and broadcast conversations we can type
+in natural language and our two team
+multi-agent system will get to work for
+us generate SQL run it and present
+results to us this is fantastic we're
+pushing into a new field of agentic
+engineering and that brings us to this
+video our multi-agent postgress data
+analytics tool has one major
+problem it's only reading two postgress
+tables if you've worked on any
+production database you know that you're
+often operating on 10 50 and potentially
+hundreds of tables with over hundreds of
+thousands and millions of rows this
+renders our postgress agent effectively
+useless and that violates a major tenant
+and principle of what we do on this
+channel build valuable software so let's
+make our postgress agent valuable Again
+by giving our system the ability to
+focus on tables specifically relevant to
+our natural language query we'll also
+add token count and price estimating so
+that we know how much we're spending on
+gb4 throughout the life cycle of our
+orchestrator and our agents as
+overwhelming as it has been I've really
+been enjoying reading everyone's
+comments seeing what you're thinking
+what you're building getting feedback
+and hearing people complain about the
+captions at the center of the screen so
+at the end of this video we'll go over a
+couple of the most popular comments like
+where's the code at can you use local
+models and a few more stick around if
+that interests you and you want to be a
+part of the conversation now let's
+refocus on managing our postgress
+multi-agent memory and costs all right
+so let's crack open vs code and let's
+review what we've done so far I'll start
+by running an example and what we're
+going to do is we're going to get all
+users with the Enterprise plan so again
+we're typing in natural language it's
+going to hit our agent Pipeline and then
+we'll get the results back from our
+postgress database let's go ahead and
+run this so just as before we we have
+the table definitions at the top we're
+then passing that prompt and the results
+that flow between two teams our data
+engineering team and our data
+visualization team our data engineering
+team is responsible for generating the
+SQL and running it and our data
+visualization team is responsible for
+reporting the results to three different
+files fantastic so our agents just
+completed we can look at the responses
+you can see here we have one result with
+the Enterprise plan in Json format here
+we have an in text format and we have it
+in yl format that's thanks to our data
+visualization team so let's quickly look
+through our code just as before we have
+two environment variables postgress
+database URL open AI key we're pulling
+our table definitions I'll explain the
+mock suffix at the end in a moment we're
+building out prompts we're building out
+our open aai configurations and our
+function maps for each one of our agents
+we have our prompts for our data
+engineering team we then have our
+orchestrator that we built in the
+previous video and then we're running
+our data engineering team using the
+sequential conversation type after they
+complete we fetch the SQL result from
+their messages and then we pass it right
+to our data visualization team which
+represents a team that reports data to
+files that's just a highle review of our
+application so far check out the
+previous videos and the series if you
+want to get fully caught up I've been a
+little deceptive at the beginning of
+this video and I want to show you why
+exactly as you can see I've added up to
+about 100 new users in our user table
+and on the here you can see I've
+generated about 50 tables to better
+represent a production like postgress
+database if we hop back over to the code
+and jump into this git table definitions
+you can see that I've basically just
+mocked out a string that happens to be
+our previous create table responses
+we're no longer dynamically fetching
+this out from our database and even the
+prompt I specified here is a bit
+deceptive because the only user with the
+Enterprise plan is Alice and there's
+only one of the these right so if we
+sort these and look for Enterprise Alice
+is the only one with the Enterprise plan
+so I basically completely avoided what I
+like to call token explosion or when you
+exceed the available context window for
+your llm in this video we're directly
+addressing this issue we're going to
+make a few major changes to our code
+base so let's get to it the first thing
+we need to do is reorganize the code
+base it's getting a little sloppy it's
+getting a little unwieldly it's kind of
+hard to read so I'm going to do a little
+bit of code refactoring right now as
+usual I'm going to skip the this to save
+your
+time fantastic so I've just refactored
+our code a little bit we now have two
+new modules we have a directory called
+agents outside of the modules directory
+inside of Agents we have the agent
+config and agents. py so let's dive into
+those and see how we've broken things up
+at the top level main.py is now just
+this right about 68 lines pretty clean
+saning our variables pulling out the
+prompt from ARG parse we're still
+building out our table definitions we
+set up our prompt but now we're setting
+up our teams like this we call agents.
+build team orchestrator very clearly
+we're building a data engineering team
+we're making them run the sequential
+conversation getting their result and
+we're passing that along to the data
+visualization team right let's see how
+we've broken this down inside of Agents
+so inside agents we now have all of our
+prompts right at the top we then have
+all of our agents with a special build
+function for the senior analyst since it
+needs the context of the postgress
+database then we have our orchestration
+and the orchestration is as simple as
+this you simply pass in a string and the
+database and then we build up the
+appropriate team based on the team name
+so you can see here we have support for
+two different teams the data engineering
+team and the data visualization team in
+the last file we have the agent
+configuration which builds the
+appropriate configuration for each one
+of our custom agents functions that it
+needs to run and then we just broke
+things apart a little bit creating a
+couple helper functions to quickly
+create the function maps that we need
+and handle special cases like needing
+the database postgress manager to create
+the Run SQL function map so this is
+super nice it just cleans things up for
+us a whole lot it makes the program a
+lot more understandable so so this is a
+great place to kick off our next task
+which is to filter out the tables were
+running let me go ahead rerun the same
+example so we know our code's working
+clean up some
+bugs great so this ran perfectly just as
+before now I'm going to light a dollar
+on fire to showcase the problem of llm
+memory by querying without the table
+mock function and by using a natural
+language query that will return even
+just 50 rows I'm going to replace this
+we're going to get our old G table
+definitions for prompt we're just going
+to pull all the tables from our
+postgress database and remember we now
+have some 40 5050 tables and instead of
+reusing this prompt I'm going to do
+something more detailed so um if I want
+to for instance fetch all users with the
+example.com domain let's do that give me
+all users with the example.com email
+address and now I'm going to run this so
+right off the top you're going to see a
+ton of tables come into a prompt right
+this is all going into a single prompt
+and we haven't even run a single agent
+okay so right away we got this model's
+maximum content limit is hit um this is
+the problem we face right we can't
+actually do anything interesting with
+our agent in this current state so we
+have to do two things to resolve this
+issue we must fetch only tables relevant
+to our natural language query in this
+example we only really need the user
+table and then second we need to
+refactor our application and our agent
+pipeline so that we don't process The
+Returned results through any open AI
+request right now I'm going to build up
+a brand new embeddings module to help us
+embed our tables and then we're going to
+do a similarity match against all
+existing tables let's code this up right
+now we now have a brand new database EMB
+better class we're going to run poetry
+ad Transformers torch so I kit learn to
+count our tokens we're going to use tick
+token token great so we now have that
+installed should be all good there now
+let's look at our database in better
+class so we load the models and we
+create two mappings remember what we're
+trying to do here is filter out the
+tables we don't need for our natural
+language queries in order to do this we
+have this add table method this add
+table method takes a table name and it
+takes the text representation it's the
+SQL create statement for table which
+details all the columns that our tables
+have and then we're going to compute the
+embeddings so you can see we have the
+compute embeddings function here I'm not
+going to go into a ton of detail with
+Computing embeddings there are tons of
+videos already that do that pick your
+favorite embedder and then build out the
+text to embedding function and also your
+cosine similarity function or whatever
+the equivalent is that you're using but
+basically we have the add table function
+which is going to create a map between
+the name of the table and the computed
+embeddings after we have that we can run
+G similar tables via embeddings which
+takes our natural language query
+converts it to an embedding and then it
+runs through each one of the tables we
+have mapped as embeddings and Compares
+them so this Compares our natural
+language query as an embedding to table
+definition as embeddings and then we'll
+get the sorted values from most relevant
+to least relevant if we hop over to the
+top I'm going to do a little test here
+we have a return statement to block out
+the rest of our code inside of our
+database module I created one new
+function it basically just gets a map
+between the table name and the table
+definition we then build a new instance
+of our database embedder we add every
+table to our embedder and then here I'm
+just printing out the name to the
+embedding so it's super clear and then
+the final key line we take our raw
+prompt and pass it in to get similar
+tables based on the prompt and then
+we'll print out the similar tables here
+so let's go ahead and run this and what
+we should end up with is a list that
+contains taable
+relevant to this prompt okay so you can
+see several interesting things happen
+there right first off we have a massive
+list of embedding so I'm going to go
+ahead and just remove that Rerun you can
+see here we're adding the tables to the
+embedder and now we have our list of
+similar tables so we got order details
+we got suppliers and we got user
+profiles couple things to notice here we
+don't have our users table right our
+embeddings gave us three tables none of
+which is our users table looks like
+we're getting relatively close and and
+if we dig into the table definitions a
+little bit for order details and
+suppliers we can see that we didn't
+really get anything related to the user
+from order details let's go over to
+suppliers so kind of tricky here in
+suppliers we do have email so you can
+see why our embeddings would match
+against this if you look at the user
+profile table definition you can also
+kind of see why we have user ID and we
+have address if we look at our natural
+language prompt again you can see we
+have the word users you can see we have
+and then we have email and address so
+address also got picked up there so what
+can we do about this we're actually
+completely missing the users table which
+we need to query on so let's make a
+couple tweaks in our G similar tables
+via embeddings we have an integer here
+that specifies how many tables we want
+to pull in due to the similarity right
+so let me go ahead and just bump this to
+let's just say um you know 10 tables so
+let's bump 10 let me remove this ad line
+and let's rerun let's check out our list
+we now have order details suppliers user
+profiles product reviews product images
+several other tables here again still no
+users now there's a couple different
+routes you can go here we can increase
+this even more and hope that we get some
+more accurate results we can look at a
+different embeddings method and
+technique but I'm going to do something
+a lot simpler notice how within our
+string we're actually
+specifying the table we need we can kind
+of just hack around this entirely for
+our specific use case and build kind of
+a fallback slork around where if we see
+a table name in our query just pull the
+table name in let's code that
+up we now have two new functions in our
+database and better class let's take a
+look at them we're now doing this really
+simple kind of intuitive of word match
+against all tables inside of our
+embedder by basically taking the table
+name and looking inside of the query to
+see if the table name exists there if it
+does we're adding it to a list in which
+we return we then have one more function
+which combines both the embedding and
+the word match results into a single
+table we also updated our via embeddings
+function to return just the table name
+and not the probabilities on the top
+level here we're running the same code
+we're getting all the tables as a map
+from our postgress database module we're
+building out our database EMB better
+we're adding each table so that it can
+be embedded and then we're running our
+new get similar tables function which
+runs both the word match and the
+embeddings we can now drop our n equal
+10 down to something like five and let's
+run our query again so give me all users
+with example.com email address let's see
+what tables we get back so awesome we
+get you know five tables and then we
+also have user users at the end here we
+have users because we specified it
+exactly so there's definitely an
+argument for just doing this word
+matching I'm going to leave the
+embeddings in I think it's useful and
+it's a good technique to know when
+dealing with string matching for llm
+memory and for other applications as
+well now that we have this functionality
+what we can do is add one more function
+to our database module that given a list
+of tables we want to get those create
+statements
+awesome so now we have the full flow to
+get our reduced list of table definition
+so let's go ahead and run this one more
+time sweet now we have our users table
+and a couple auxiliary tables we can
+increase and decrease this get similar
+tables value just in case that doesn't
+work just in case it's not getting
+picked up we can specify exactly the
+table we need in natural language and
+it'll get picked up let's run one more
+query here give me all users with job
+that have been completed and their let's
+look at one more table here let's get
+job tags and their job tags so just to
+test out this functionality we should
+now get perfect the jobs tag table we
+also have the jobs table and we also
+have the user table that's how we can
+manage our table definitions coming into
+our application flow so let's reconnect
+our application here to run the full
+flow given our new table definition
+string instead of using our old method
+where we get all the tables we're now
+going to get a set of filter results and
+then we can continue with the original
+flow of our application and if we run
+this on a again a smaller size example
+where we're just getting let's say we
+want to get users with the
+gmail.com email address with jobs that
+are completed so let's go ahead and
+reconnect this and I'll probably break
+this in the middle cuz we know our agent
+system works I just want to get that top
+level working so we can see a SQL query
+get gen generated so we got the tables
+necessary right we have the users table
+and our jobs table and Bam that's
+perfect so let's scroll back up you can
+see the SQL that got generated is this
+you know user select and we're also
+going to get job ID job status we can
+see that we're doing uh the proper query
+here we got the users email like Gmail
+and the job status completed so awesome
+so now we have a reduced list of tables
+coming into our application so let's go
+ahead and add a token counting system so
+that we can better understand how much
+each run of our postgress data analytics
+system is going to cost
+us okay we now have a new function in
+our orchestrator called get cost and
+tokens as you can see it returns both
+the cost and the tokens for that given
+team within the orchestrator let's dive
+into this method here all we're doing
+here is calling into the llm estimate
+price and tokens and we pass in a string
+to that we're doing a little bit of
+string parsing from our orchestrator
+agents messages from that list of
+messages that we built up over the
+conversations that we have this is why
+the ad message is important so we know
+all the conversations that have been had
+and then we're doing inside of the llm
+estimate price and tokens function we're
+doing a really rough price calculation
+here I like to round up I like to be
+really safe on how much is actually
+getting spent gp4 is currently costing 6
+cents per 1,000 tokens uh for the output
+and about half for the input so you know
+the prompts that you send in to open AI
+gp4 cost about 3 cents the output cost
+about six I'm just rounding up I frankly
+prefer being uh you know conservative in
+my estimates things always just work out
+better that way you end up saving money
+in the long run if your models are
+projecting uh higher cost than actually
+are um you can definitely get get more
+fine grining detailed with this
+basically we're just using the tick
+token encoding on all of our text and
+then taking that and converting it into
+actual costs dollar costs based on uh
+you know 1,000 tokens and the price of
+gp4 specifically I'm looking at the
+output tokens now we can run our fix
+this organization now we can run both
+teams and we can see you know how much
+is it costing to run each one of these
+teams and we can see how much it cost to
+run our multi-agent system as a whole
+again we're going to run a safer prompt
+that's not going to uh token explode our
+system it's not going to give us an
+overflow breaking the context window
+switch this back to just Enterprise
+users so we're just going to get that
+one user so we can just look through and
+see if our pricing functionality is
+coming through all right our yaml agent
+is wrapping up its right to the yaml
+file and then we should get our token
+cost great so as you can see here the
+orchestrator was successful that's the
+data visualization team finishing up and
+it looks like this run cost us about 5
+cents with a total of about 900 tokens
+we can see the data inch team costs 2
+cents and the data viz team wow dat of V
+team cost 3 cents um I'm going to have
+to uh you know let the staff know
+they're really chewing up um eating into
+our margins uh no this is pretty cool
+though right so and then we can see the
+total organization costs right this is
+really important you want to be
+understanding whatever system you're
+building with LMS I highly recommend you
+build this don't just blindly blast out
+cash to open AI they are the best in the
+business right now I'm going to continue
+using them I'm going to continue frankly
+throwing money at this but you also just
+want to be aware uh when you're really
+blowing things up it also helps you
+write better prompts when your prompts
+only have the information they need to
+complete the job you've requested right
+so there we go we're building out some
+more functionality to help us to help us
+create more sustainable more aware
+modules and you know now it's time to
+deliver some bad news now we need to
+make sure our agents are never exposed
+to the possibility of thousands of rows
+from our SQL query it's time to put
+manager had on it's time to do the hard
+job it's time to let go of some of our
+employees it's time to let go of some of
+our agents right the orders has come in
+from upper management you know the the
+cost of the data visualization team is
+just too high it's time to fire our data
+visualization team let's downsize our
+agents and update our run SQL function
+to run and Report the results directly
+to a file to prevent token explosion to
+prevent exceeding our GPT memory window
+there are tricks and methods we can use
+to tap in to the SQL response you know
+we can use techniques like random
+sampling to like take a peek in and grab
+just a couple items for agents to look
+at but we'll explore that in another
+video play's hitting it's time to make
+some Cost Cuts it's time to act like a
+you know big tech company we got to make
+the Cost Cuts data visualization team
+it's just got to
+go okay that was pretty tough to do I
+just fired our data visualization team
+that was hard but here we are we now
+have just our data engineering team and
+you know we've now put more
+responsibility on our senior data
+analysts um you know really kind of key
+employee that run SQL function is now
+writing those results to a file and then
+you know reporting successful delivery
+to the product manager so let's go ahead
+and now run a larger response and see
+what our organizational cost are and
+let's see what the results look like so
+let's go ahead and you know look at one
+of those larger queries let's go ahead
+and look at example.com email addresses
+let's also look at this feedback table
+and make our query even more complex to
+really see what's going on so I want to
+also get with ratings above three users
+with example.com email with jobs that
+are completed and let's make sure we get
+that completed right with the casing I
+believe that was let me just put head
+quotes around that make that uppercase C
+and with job tags or sorry job feedback
+with ratings higher than three okay so
+there's a decent amount going on here
+this is you know two joins a couple of
+wear statements let's see how our new
+trim down team does and let's see how
+much this cost to run let's go ahead and
+fire off our refined postgress
+multi-agent
+system okay so we got the job feedback
+table we got the jobs table and we have
+our users table here great so it looks
+like that join statement came through
+fantastic this looks really good you
+know it's hard to cut costs as a as a
+business owner you know it's hard to cut
+costs but uh it's really great to see
+when it works out let's go ahead and
+look at that results file fantastic
+there's 2,000 uh characters here let's
+go ahead and go to the open API
+tokenizer we can see that you know 800
+tokens were used here in this response
+we want to make sure that our agents saw
+of that so that we save costs as we're
+operating on our postgress Analytics
+tool so we got 800 tokens here if we
+look at our actual token scene we only
+saw 400 so you know throughout the
+entire application run we only saw a
+total of 400 which yielded a
+organizational cost of just 3 cents
+right all in all this is pretty good 3
+cents running a query like this it got
+us the correct results we can see we
+have strictly example.com email
+addresses here and if we wanted to do
+more validation you know we could pair
+them up and run an exact query the nice
+part about this functionality and I
+think we'll want this in some of the
+versions that we're going to build out
+is we can also just return this query
+and run it and modify it even if we
+don't want all the results given back
+and we just kind of want help working on
+a query building out a query or we want
+to you know make modifications to a
+query we just hop in here and make that
+happen right we can just pull this out
+this is great so let's run one more
+larger example let's say I want to get
+on my failed job right let's do some job
+analysis let's get all failed jobs show
+me all failed jobs and again to activate
+our word matching against our table
+we're just you know directly referring
+to the jobs table here as it's named so
+we're going to get all failed jobs doing
+some data analytics here I want to see
+all the failed jobs that are harming our
+feedback so I want to look at Job
+feedback with ratings less than three
+with job ratings oh job feedback that
+have rating less than three present the
+rating along
+side the job okay let's go ahead and run
+that so our data engineering team is
+leaner it's faster it's got some
+upgrades have some new reporting
+capabilities nice there's our statement
+there job rating feedback less than
+three good good good and okay so let's
+look at what happened here looks like we
+got nothing at all so let's make sure
+that everything looks good status equals
+failed I'll bet we have that same issue
+yeah so you know this is something that
+can be improved uh you know we need to
+specify the exact casing of status and
+let me just get that quotes failed Jobs
+go ahead and rerun that so nice let's
+take a look at what happened here so the
+query that was built uh you know kind of
+nailed it exactly so now we're getting
+all the job IDs and their job rating so
+nice kind of trimmed down example and
+we're also getting the SQL back and you
+can see the token usage again really low
+really lean you know with just what 2
+three four agents although we did fire
+our data Vis team we we still have
+access to them whenever we need to if we
+want to you know make a rehire or you
+know use them uh you know down the line
+for anything you know we still have that
+we still have the pattern we still have
+all of the conversation flows to build
+out you know any arbitrary team of
+Agents right so again want to emphasize
+that idea of building blocks you're
+orchestrated your conversations your
+agents your prompts keep collecting keep
+building stack these up and eventually
+what you're going to end up with is a
+really cool built out complex system
+that can solve problems that before were
+not solvable so this is awesome guys uh
+we can now run our postgress multi-agent
+application on a database with you know
+50 or hundreds of tables without
+worrying about hitting our context
+window and even if similarity search
+doesn't get the records we need we can
+specify the exact Tables by calling them
+out by name we also have a nice token
+counter so we're getting the price we're
+getting the cost of our agents this is
+really turning into a more fullscale
+product that is usable in production
+systems what's next where do we want to
+take this I think we can do a couple
+different things for sure we need to get
+this application behind an API so that
+we can call this from a clean user
+interface we can start to imagine a
+front end where we type in natural
+language we get both the SQL query and
+the results uh you know in varying
+formats based on the size and the number
+of rows returned we're talking tens of
+thousands of rows maybe we just return a
+CSV but if we get something less than
+that you know the front end can can
+handle that it can you know show a a
+nice clean table so you know in the next
+video we'll be looking at that we'll be
+looking at how we can build out
+different teams without blowing up our
+context window with a token explosion
+and we're looking at ways we can improve
+our system utilize our agents utilize
+our conversation flows while monitoring
+the costs on our system a lot of this
+has been done already but this is
+important this is one of those Stepping
+Stones that's really important and I
+want to kind of you know make it really
+obvious for you guys when you're
+building out your agentic systems you
+need to monitor your costs and you need
+to be able to really use your
+application be real with the limitations
+of llms right memory is a huge huge
+limitation right now so we have to work
+around it the right way if you can get
+away with simple techniques absolutely
+use them I know there's a big wave of
+using embeddings on large documents
+that's definitely going to be important
+we'll likely touch on combining PDF
+documentation large docks with your
+database since that's what a lot of
+product data analytics work has to do
+with you know you're looking at
+documents you're comparing reports from
+companies you're looking at reports rep
+from statistical analytics and then
+you're combining it with your own post
+database the information you have in
+your database so that can definitely be
+something we look at in the future
+before we go let's discuss some of the
+top comments from our multi-agent Series
+so far where's the code at long story
+short the code is coming it's been
+evolving a lot as we push this through
+week by week it's evolving it's changing
+and I want to ship a version of this
+code to you guys that is stable that is
+helpful that is useful and really easy
+to understand I'll definitely be sharing
+what we built on this channel so that
+you can use it in your own work building
+your own agentic software I just frankly
+haven't had time to really formulize
+this code base yet I want to make sure
+that we're at a more complete version
+that is stable and consistent before I
+release it to you guys because I want it
+to work I want it to work for your use
+cases okay next question can you use
+local models this is a good question but
+I think it's not the right question I
+think the question should be should you
+use local open source models and right
+now the answer to that is no why
+shouldn't you use local open source
+models they're not even close to GPT 3.5
+let along GPT 4 gp4 is in another galaxy
+compared to the performance of gpt3
+currently at the time of you know
+releasing this video all open source
+models are far behind gbg3 and very very
+far behind gbg4 I can talk more about
+this in depth if you guys want and I
+know it's not a popular opinion to be
+like Pro centralized companies that are
+gatekeeping their models but you know
+they're running a business and frankly
+open AI Microsoft they're running a
+great business just to reemphasize as
+part of the principle set on this
+channel we use the best technology for
+the job that means when it comes to
+building a gentic software software that
+writes code for you software that does
+marketing for you software that does
+data analytics for you right just like
+we're building right now with our
+multi-agent postgress system right now
+that means using gp4 from open AI why
+because it is the best in the business
+this is the series that we were all
+hoping for the other YouTubers just go
+over to examples I love your focus on
+building powerful valuable pieces of
+software I really want to say thank you
+for saying this thank you to everyone
+that's lik the comment it makes it clear
+that you guys are also you know huge
+fans of this I often find myself
+frustrated with the existing engineering
+Tech YouTube channels because they're
+typically discussing like really high
+level things which is you know it has
+some value but when they dive into code
+it's usually rehashed pre-existing toy
+examples usually from the documentation
+of the tool you know if I wanted a
+pre-built example i' just go look at the
+docs myself right we can all just go
+look at the docs we don't need you to do
+that on your channel right that's part
+of why I started this channel I wanted
+to go deeper I wanted to build real
+valuable software and I thought it might
+be interesting for other Engineers to
+you know see what that really looks like
+and to you know get and share ideas so
+I'm really glad you all are here I'm
+really glad you're all interested in
+that you can expect unique valuable
+pieces and chunks of software from my
+channel in every video we'll skip the
+rehashed to examples pulled right from
+the docks other channels have that
+handled more autogen you got it put all
+prompts in one file so this is a really
+great approach I'm definitely behind
+this definitely recommend this when
+you're building out more complex prompts
+you'll have to build out string
+templating um when you have variables
+that you need to insert into these
+prompts but definitely sing up a huge
+library of prompts in text files is a a
+great idea I've been working on a
+unified solution for sharing prompts
+I'll share more on that in the future
+this is low key the most important
+Channel on YouTube um wow this is a
+really huge really bold comment I think
+although this is one of the best
+comments I think I'll likely ever see I
+think what's even better than that is
+the 21 likes that this comment has to me
+it shows that you and others understand
+what we're doing here the immense value
+that can be created when you build
+software that operates on your behalf in
+parallel to you I truly believe that
+this idea is the most valuable thing
+happening right now in software once you
+get your agentic software online you get
+one of these online you get two of these
+online you get three of these online
+working with you in parallel the value
+you're going to be able to create will
+be like none other we're not talking
+about 10x we're not talking about 50x
+we're talking about crazy numbers that
+we cannot imagine why because you'll be
+an agentic engineer who has seemingly
+living software executing on their
+behalf so with that context and I really
+believe that this viewer and the 21
+people that thumbs this up understands
+that you know with that context is this
+lowkey the most important Channel on
+YouTube let's find out like sub hit the
+notification Bell I'll see you in the
+next one

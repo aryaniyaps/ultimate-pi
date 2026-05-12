@@ -1,0 +1,2402 @@
+All right. Awesome.
+Yeah. So, evals, like I think eval feel
+like this magic button. I think everyone
+feels like, hey, my AI pipelines don't
+work, but if I somehow solve evals, they
+will start to work. Well, and I'll say
+some people haven't even gotten there
+yet. And like I think there's this like
+especially when you're new to building
+AI pipelines or you're new to a certain
+technique or model which is pretty much
+everyone all the time like no one is an
+expert on every model and there's new
+stuff shipping every every week every
+month and I think it can be paralyzing
+and it can kind of like kneecap the
+productivity of your team when everybody
+is trying different things in different
+ways and without a way to understand hey
+this approach works better than that
+approach without a way to evaluate the
+performance of whatever like problem
+you're your new approach on on the
+problem you're trying to solve. It's
+it's kind of becomes impossible to make
+progress and like by Bob said like it
+becomes this magic bullet where it's
+like okay if we just had a number from 0
+to 100 that said here's how good we are
+in this approach versus this approach
+versus this approach. Hey we changed
+this thing and we got better here but we
+got worse here. um it kind of can be
+very grounding and helps you bring a lot
+more than engineering back into your
+process. Does that sound right? I think
+so. But I think um I think that's the
+feeling at least and the thing that I
+have mostly captured. So I think the
+first time I really started thinking
+about machine learning eval uh came from
+when I was working on hollow ones. Um,
+and that was the first time where I had
+a completely stochastic system, uh,
+where you really can't there's no ground
+truth because capturing ground. So, for
+context, for everyone else that doesn't
+know, hollens is an AR headset and part
+of the AR headset job is to build a 3D
+representation of the world that it sees
+through the cameras it
+has. And in order to do that perfectly,
+the only way you can build eval is to
+build a simulation that perfectly
+simulates the camera hardware, which you
+cannot do. like you cannot actually
+mimic how light is captured by the
+camera sensors perfectly. So the next
+best thing we can do is capture
+something that is pretty close to
+correct and for that you're going to use
+another sensor and that sensor itself
+will have some errors. So we built this
+pipeline out that had some ground truth
+and we tried to use that ground truth
+and tried to align it but then we ran
+into problems like windows and mirrors
+which basically don't get captured by
+any sensor very well. Um, and then we
+had to like those existed in our data
+set. Like I'm in this conference room
+right now. I'm surrounded by windows.
+That's a real data set and we want we
+wanted the hall lens to work in there.
+So we had to approximate what it meant
+to have some sort of a score. And like
+let's say the the hall lens misses one
+square meter of an area and capturing a
+wall. Is that good? Is that bad? Like
+how do you evaluate is one square meter
+versus 1.2 two square meters any worse
+or better and that's so it almost
+becomes like a question of like where do
+we spend our time and like what matters
+to the actual kind of and output of how
+how good is our system as seen from like
+what outcome is it trying to drive
+exactly so that's one part of it and the
+other part is can you even measure
+correctness like how do you know if the
+one square meter you missed was actually
+a real hole or a hole that the other
+sensor also missed like is it a hallucin
+Funny enough, we used to call them
+hallucinations as well. Um, they're like
+hallucinated fragments and like how bad
+are hallucinated 3D assets that the
+Hollands picked up that didn't exist in
+the real world? And measuring that was
+incredibly hard. We actually had a
+full-time person. We actually had like
+one and a half full-time people whose
+full-time job it was for over two years
+to at best approximate some sort of
+metric. And we had no real metric in the
+end. It was it was just a pseudo
+approximation of the real system. And we
+did this for all sorts of things. We did
+this for handtracking when we built
+handtracking. We did this for
+eyetracking when we did
+eyetracking. And that's when I first
+realized like there is no EVOS truth.
+There is no golden data set ever for
+most real
+problems. Um that's funny. Uh Adisha. Um
+uh and then it really comes to a matter
+of how do you balance engineering time
+that you have to do to build a system
+that can at best
+approximate the actual thing the proxy
+for what you're trying to build for.
+Does that align with what uh what you've
+seen too as Dex in the now the LLM
+world?
+Yeah. And I I I see it as kind of like a
+gradual process too. Like I know I know
+we're going to start like we're going to
+get into this but like every project
+starts with nothing. Like if there was
+already an eval a really good eval for
+the problem you're solving then it's
+almost certain that someone else is
+already kind of on well on the way to
+solving that problem. And the hard
+problems to be solved in AI tend to be
+the ones where no eval set exists or no
+eval set exists that is appropriate for
+the way that you're approaching it or
+the way you want to evaluate your
+solution. And so I think the tricky part
+is like a lot of teams get sucked into
+cool, we're gonna spend six months
+building our eval set and then we're
+just gonna push it out and go. And I
+think what's a lot more interesting is
+this kind of more agile incremental
+engineering approach of how do we start
+with nothing? How do
+we make it pretty good to start and how
+do we keep updating it and evolving the
+way we evaluate our software over time?
+Yeah, exactly. And Dex and I put
+together some topics that we want to
+talk about today. Uh Dex, do you want to
+copy and paste them into the chat really
+fast?
+Um I will do you one better. I will push
+up um the readme which has the topics in
+it. Even better. Okay. Uh and while
+you're at it, do you want to and I'll
+link that. You just want to screen share
+really fast then in that case. Uh sure.
+Cool.
+So when we first think about evals, I
+think it's more of a journey rather than
+an answer right now. And any company
+that starts off saying that we're going
+to build evals automatically. It's just
+going to solve everything is going to be
+stuck because you could spend you could
+spend your entire company's lifetime
+building
+evals.
+Um, so what I want to I think what we
+want to talk about is how do we go from
+no evals to some evals to really good
+evals in an incremental way for any
+problem that you have today rather than
+just like what exactly is a great eval.
+And by the way, we're recording all of
+these so we'll post it on YouTube soon
+and you'll have access to all of
+them. So uh yes, sorry, give me give me
+just one second here.
+Yeah. Um, and today's conversation is
+going to be really, really interactive.
+So, if people have problems that they
+specifically want to pose that we should
+talk about, definitely feel free to just
+like chime in and ask, uh, you can post
+it in the chat and we're happy to
+discuss those as well. Um, the number
+one sneak peek that I'll give everyone
+before uh, we get too into it is please
+stop using numbers to evaluate your
+systems. Do not ask an LLM on a scale of
+1 to 10, how good is the answer. stop
+asking it confidence scores. Um
+because and and I'll give you intuition
+how to how to think about this problem
+and why that matters. How many of you
+actually like ask confidence scores just
+like humans? Mike. Um how how many of
+you use confidence scores today? Can you
+like type in the chat or uh really
+quickly?
+Okay. Come on all of you please shame
+yourselves. I allow you to shame
+yourselves. It's okay. It's we're an
+open place right now. You should have
+you should have asked them first and
+then told them that it was bad. No, no,
+I think it's, you know, it's part of it.
+You gota you got to acknowledge what
+five steps of grief. You just got to
+acknowledge it first. And once we've
+accepted it, um then we can talk about
+it. Um Okay, cool. Um Okay, cool. Uh I'm
+just going to merge this in right now.
+There's some Okay, work in progress
+code. Uh some of this may change
+throughout the episode folks, but uh
+let's pull up the evals workshop. Okay,
+cool. So yeah, here's what we want to
+talk about today.
+So much the main topics are really going
+to go about why eval are really good and
+what you can do if you have an answer
+key. And I think that's hopefully should
+be pretty obvious.
+Okay, Dex, sorry. I'm gonna make you
+call. Sorry. Yeah, I'll get unmuting
+folks, too. Okay, there you go. you're
+um you're made a co-host and like why we
+can what we can do if we actually have
+an answer key. Um and that should be
+really obvious, but the most important
+thing remember we talk about this all
+the time on these episodes. The number
+one thing you need to build a really
+good AI pipeline is a really fast
+iteration loop. Evals are your way to
+iterate fast. Uh not initially but
+eventually. If you have a team of 40
+people contributing to your codebase,
+you need evals just like you need unit
+test because that's what prevents CI/CD
+from breaking. And you need to do that
+not because developers are bad, but
+because we're all lazy and we all do
+push code sometimes and CI/CD does a
+really good job of checking for
+mistakes,
+right? So that's that workflow of like
+make a change, run the eval, see if it's
+better or worse, and then like don't
+push code that makes the eval worse.
+Yeah. And like how do you measure if
+it's worse or not is a totally separate
+question. But in proxy that's really
+what we want to go do. And you want an
+easy way to go do that. Visualizing
+results. We'll talk about that in a
+second as well. I'm going to flag that's
+a good question. Can you add that in
+your local notes tab? Yeah. Yep. Yeah, I
+was about to do that. I love that. Okay.
+Um Oh, you're screen sharing. Okay. Let
+me screen share my tab because then we
+can
+um the next question I want to talk
+about is how do you actually build an
+answer key? because at least for me most
+things I work on have no answer key on
+the on the very beginning and those are
+also the most interesting things that we
+could have. Um so we'll talk about how
+to build an answer key from
+nothing. Hint the answer is you know how
+there's vibe
+coding. You should be vibe evaling in
+the beginning and vibe coding
+but you should be vibe evaling in the
+beginning if you haven't used a lot of
+LLM. you should 100% be vibe evaling and
+we'll talk about why in a second as
+well.
+The the other
+thing the other thing that I think is
+really worth noting is a lot of people
+look at emails as
+holistic but structured data versus
+unstructured data is a huge difference
+in the way that we do emails and I think
+like Dex and I have talked about this a
+lot. Uh so like Dex, do you want to
+share some thoughts? Yeah. So I mean
+like you have all these different So I I
+feel like where we got off the track a
+little bit like as an industry with eval
+was doing all this work to understand
+unstructured data and how good it was
+because then you get all these things
+like sentiment categories and is the
+model outputting text that's rude like
+you have all these like kind of like
+baked in eval becoming a little bit like
+industry standard as far as like okay
+the first thing you can do is just pull
+this thing off and make sure your model
+is not recommending that people go you
+know do something dangerous I won't go
+into details but um um things like that
+and so that's like and so it's like okay
+we need evals in the sense of like we
+need one LLM to read all this
+unstructured data and
+then decide whether it's yes or no on a
+bunch of these like binary classifiers
+or like multiple category classifiers
+um versus like a problem that I work
+with a lot is like extracting structured
+data from images and being able to say
+like hey here's uh a hundred pictures of
+a
+passport like can we reliably pull the
+data out of that passport and for that
+our answer key is very structured it's
+literally a list of JSON fields versus
+like you know can we get a one to 100
+score either you know hey we have a
+100red outputs from the model, which of
+how what percentage of them like pass
+all our, you know, style guidelines as
+far as how we want our chatbot to behave
+or something? Does that little rambly,
+but does that make sense? That nailed
+it. That's um and then really it's like
+this and then there's a blend of the two
+as well where I have some structured
+data and I can eval that with like
+programmatically and some of it has to
+be eval because I'm getting a summary.
+But even summaries, people are like,
+"Oh, I can only know if it's a good
+summary or not if I use an LLM." But
+that's not actually true. Let's look at
+the idea of like summarizing something.
+I can know how many sentences things
+have. I can know how many what the word
+count of the summary is. I can and I I
+can know how many how long it is. Um,
+and then I can even know something like
+does it mention specific key words that
+it really should mention the summary.
+Like if I ask for a summary about like
+um uh if I ask for let's say a summary
+about like like a Wikipedia
+article, it should probably mention some
+of the key figures in the Wikipedia
+article up front and I should probably
+know what those key figures are ahead of
+time and some of them. Yeah, I feel like
+we need to we need to hit the
+whiteboard. People are Pashant is asking
+what's an answer key. Um yes, I think
+let's let's define some of this stuff.
+Um I will drop you the link real quick.
+Thank you. Um or do you want to do you
+want to share and uh just tell me the
+link in my DMs?
+Yeah. Um so and and I think sorry for to
+catch everyone else. An answer key is
+something like a rubric. Like in the
+case of like a classification problem,
+an answer key could be something as like
+uh here's the correct classes for all
+these categories. In the case of like a
+resume problem, the answer key could be
+something more like um here's the fields
+that I wanted to extract. In the case of
+a chatbot, it could be the sentiment
+that a user should be feeling at any
+given point in the chatbot
+itself. It really depends on the kind of
+problem you have, but the idea is that
+your answer key is as close to an
+approximation about the correctness
+uh that you
+have. And like it could be sentiment and
+yeah, so I'll copy and paste a couple
+more thing. It could be sentiment. It
+could be like intent
+capturing. So like we capture the intent
+that the user asks us about correctly
+and exact. Okay. So that's something
+like someone comes in and says I want to
+buy a new phone and we want to validate
+that that becomes you know browse
+products.
+Exactly. Right. And it might even
+include browse products subcategory
+field a subcategory phone as another
+thing,
+right?
+Like we might want all of that. And that
+might be like we might want and the
+accuracy of our system that we want
+might be, hey, you know what? For our
+system, we're we're pretty happy if it
+got to the browse products phone. were
+very happy if it got to the product's
+phone page, but it's like, oh, it's it's
+our choice about how strict we want to
+go make
+this. And I think the key part about
+having an answer key here is like if if
+we go deep deeper into like this I want
+to buy a phone thing that Dex wrote out
+is like at this point many of us know
+that we're going to have like a
+multi-step pipeline. We're going to have
+like some sort of intent detection. Um
+after we have intent detection
+uh yeah after we have intent detection
+we might route to like a different part
+uh different things based on what the
+user is trying to do and we can build
+evals for different parts of the system.
+So even though this whole thing is the
+chatbot, we could build eval just to say
+that did we pick the right arrow down
+here? Is the intent selection good
+without even really arguing about like
+whether the subbox in here operated
+correctly. It doesn't have to be binary.
+That's the whole point that I was
+making. It's your choice. Obviously, if
+it's binary, it's going to be more easy
+to
+evaluate. But if it's not binary and
+some problems just cannot be binary like
+in the case of summarizing an uh
+summarizing a Wikipedia article, it's
+virtually impossible to make that a
+binary
+classification. But what it can be is a
+great approximation for what we think is
+the
+truth. And I think that sounds a little
+vague. So I want to I want to talk about
+how to go do that really quickly.
+So okay, see what I'm doing here? Yeah,
+does this make sense? Like this is like
+how you would basically write this in
+Python. Um and obviously you don't want
+to handw write a unit test for all
+these. This looks a lot like um like a
+table table test basically where you
+basically for a big set of inputs and
+outputs you would just make assertions
+about them. And like you could do this
+in JSON or you could do it in CSV, but
+like you have your input and then you
+have your expected output. Exactly.
+And like this is not fun. This is not
+fun to go right. Yeah. And you can do
+this anywhere. Like uh the reason that
+like Dexter is probably saying that he
+he's writing this in Python directly is
+because the more sophisticated your
+agent get like as of today like BAML
+doesn't allow you to compose functions.
+So you just can't write certain types of
+expectations really well. Yeah. But one
+of the most important things is this
+word that Dexter says which is a table
+test. And Dexter said this because he's
+worked in these kinds of systems for a
+while now. But I want to articulate to
+everyone what that
+means. So when I'm doing a table test,
+and this is something to think about as
+you build more complicated emails. A
+table test for concept is to say that
+hey output has multiple fields in it. It
+has an input, it has an intent and a
+subclass. Just because it doesn't match
+this perfectly doesn't mean it failed. I
+really want a table that says out did
+output.intent match what I want and did
+output.ass match what I want. It's a
+table test and I can run both of them in
+parallel without running only one. And
+that is incredibly useful when building
+LLM outputs. And I want to show a real
+um I'm
+just I'm pseudo coding over here. Ad
+just talking about summarizer. So I want
+to share like a couple different
+examples of ideas here. So this is how
+we could build an intent classifier test
+case. And you could actually imagine
+even further, what if this was a
+chatbot, but I had like a probe, and we
+talked about probes a few times that I
+passed into my
+system that was able to introspect
+specific nodes in here, and then I could
+be like
+probe. And actually analyze the intent
+into my chatbot and actually know
+exactly what happened. Oh, I see. So
+you're instrumenting through the steps,
+but you're actually running you're
+actually running you can and you could
+also make assertions about the output
+but it's actually like you know that if
+the what comes what gets bubbled out of
+the probe is correct then then that's
+cor then then then the output you don't
+care like of the non-deterministic if
+the output itself is like plain text
+then it's really hard to evaluate if
+that's it's harder to evaluate if that's
+correct or not but you can guarantee
+that the internals of the method
+actually were executed properly. Exactly
+right. So like right over here we talked
+about like this chatbot concept where
+the output is going to be a message
+that's shown to an end user but we know
+our chatbot consists of many different
+substeps. So right over here one of the
+substeps could be intent analysis. So we
+called we actually output out of our
+system the probe that tells us what the
+intent is and any other subcategories or
+steps that we find very
+useful and then we would actually return
+that to
+us. Does does that kind of make sense
+Dexter? It does. Are you are you
+drawing? I'm not seeing your stuff
+updating. Okay. Yeah. Um about a couple
+more. But people seem to be really
+curious about how do you do things for
+summarizers and then also how do we do
+things for a couple other scenarios. So
+while we do this um I'm going to send
+over a YouTube video uh to show and I
+think this is probably the best example
+that I can have. Can I screenshot
+Dexter? Yeah. Um okay.
+Yeah, you can steal it. Go for it.
+Okay. Uh one second. I'm going to do one
+more thing.
+Okay. So, now let's talk about a couple
+more things that I want to talk. People
+talked about summarization. So, I'm
+going to get to that in a second, but I
+want to talk about like other kinds of
+things. So, uh we've worked with a
+couple finance companies for quite some
+time now. And I think a lot of people
+don't realize how to think about
+eval. So, I'm not going to mute the
+video and I'll just talk through it. Uh,
+if my internet would catch up, I'm at
+140p. Um, I'm at 1080p. So, what the
+Here we go. What the goal of this video
+is is we're going to extract data out of
+financial records, all kinds of
+financial records. Um, and normally I'll
+run this code live, but it's just easier
+because I don't want to share I don't
+have the actual PDFs on me right now.
+So, it's just easier to go run this. And
+we all know how to go build this sort of
+thing. This basically becomes like a
+data model that has a a class with all
+these fields attached to it. And then we
+also add a category near each one to
+know what category it is. So in this
+case we have cash, mutual fund, um, and
+ETFs as a category. And we can see that
+the data pulls out. We all know LM can
+go do this. It's an extraction problem
+out of images. It's not too hard. We can
+go write this out. But now we get into
+the more interesting part, which is how
+could we build an eval system for this?
+Well, one way is one of us could
+actually handw write the golden JSON for
+this automatically.
+Um, and if you do haven't done anything
+like this before, you should handw write
+the golden data set for your JSON
+automatically. And the reason that you
+should do that is not because there's no
+easier way, but because the first time
+you handw write a golden data set, you
+are actually going to find
+inconsistencies in your data model that
+make it look wrong. It's going to make
+you think about the problem in a way
+that very few things ever will. And
+that's that's kind of key to all of this
+eval stuff is like define if you don't
+know what your inputs look like and what
+your the structure of your outputs look
+like it becomes really hard to build
+your test data set. Exactly. Jonathan
+said it need to build the intuition and
+that's kind of the whole point about
+like when we were actually going to when
+when we built BAML the whole point of
+hitting play in the playground was to
+help you build that intuition. That's
+why I say five evals are the best
+because if you have no eval, the best
+thing you can do is look at the output.
+That is literally the best thing you can
+go do. As the model outputs something
+reasonable, you know, you're probably on
+the right track. But as you grow, you
+can't vibe eval because we're all busy
+people and we don't want to vibe
+forever. So want to build something
+better. So we're going to build
+systematic ways to go do this. So So for
+this, you can imagine building a golden
+data set of all of these exact financial
+transactions. And in my golden data set,
+I may be okay if asset name doesn't
+match perfectly. I'm okay with that. I
+want the symbol to be perfect. I want
+quantity to be perfect. I want current
+price to be perfect. And I want cost
+bases and market value to be perfect. So
+you can see how I can even have a blend
+of correctness on my golden data set
+where I want I want a warning if the
+asset name doesn't uh fire and I want to
+visualize that in some way but I want
+everything else to be completely
+correct and I think we could all go
+write that JSON but now we can do
+something
+else which is in this specific data
+model we actually have some validations
+that are built into place and we can do
+runtime evals that means eval on
+production data naturally over time. So
+what would one of those look like? Does
+anyone have an idea? Actually, I'm going
+to pose this before I spoil it. Does
+anyone have an idea of given this data
+model, what do they see as a possible
+runtime
+eval? You can unmute to talk or you can
+just like type in chat.
+I assume we're not including like the
+type of the dollar value should be a
+number and not a string, right? Like
+let's go beyond that. We get that. So
+Matt has a really good idea. Column sums
+data from an API is another great one.
+Um you could make sure that the cost
+basis times the price equals the market
+value or I don't know there's some
+there's some like row-wise computation
+there that's supposed to that that's
+supposed to add up, right? I don't do I
+don't do finance. Exactly. And like this
+is exactly what the mouse is going to
+show. It's like quantity current price
+should equal market value. We know that
+that is a mathematical truth in our data
+model. And guess what? We can actually
+go build that
+out. Like we can actually just go do
+that. That's a really really fast
+operation that we can go do. It's pure
+programmatic. And we can just look at
+the delta.
+Uh right. And BAML supports this, right?
+Are we going to go into that or are we
+gonna That's like that's like runtime
+evals, right? That's that's kind of
+that's a separate thing how you do it
+like we can talk about in a second. Like
+yes, you can do this in BMAL, but that's
+not the point here. I think the point
+here is look at your data model and
+think about what you can go do with your
+data models to see if you have some
+constraints you can build in. And this
+isn't just a one-way thing you can build
+in. You can actually build
+in multiple sums given this data model.
+I could say that hey, all my cash value
+should equal this cash
+value. All my mutual fund value should
+equal this mutual fund value. I can even
+have summings built in, not just
+multiplications per row, but AC a sum
+across columns as well, which can help
+me build even more assurance that the
+data is correct. And I'll give you an
+example about what happens when this
+data goes wrong. So, we have another
+document here. I hope you can see and
+I'm going to fast forward to the point
+where it's like done processing. And and
+while you're doing that just like very
+clearly this is this is interesting
+because it it it draws a line between I
+mean we looked a little bit at some of
+the testing stuff but basically these
+are all deterministic evals. This is not
+a model outputting whether something is
+yes or no. This is you do the math in
+runtime code and decide whether the
+extraction is correct or not. Exactly.
+So here you can see exactly what the
+model did. The model took out this stock
+form and pulled out a bunch bunch of
+data about it. And check out what it did
+here. It said that the price of Nvidia
+Corp was
+113.063. And look at this price right
+over here.
+Oh no. Right. And you can see why the
+model did this. It didn't do it for any
+other number, but it did do it for
+Nvidia. Um, and it looks like what ended
+up happening is the model did this and
+later realized that that was dumb and
+chose not to do it ever again, but it
+didn't. Um, and normally this could be a
+huge issue if the model did something
+like this. Imagine you're transacting
+across millions of entries uh and
+millions of stocks. You could easily
+have this could be a major like major
+issue on an accounting balance sheet.
+But we can do the same math again. We
+turn that on. You can see how fast it is
+because we're not actually using an LLM.
+We're purely modeling it
+out. And now we actually are running
+this out and now we found that it's off
+by 27 cents. And that makes sense
+because 0.003 * 90 is 27 cents. We found
+the discrepancy. And the idea here is
+often a technique that we use in machine
+learning is that one thing might be
+wrong. But it's statistically very
+unlikely that you get the right you get
+the wrong quantity, the wrong current
+price, and the market value adds up
+correctly. It's very unlikely for that
+to
+happen. So we we're using law of
+probabilities. And then even more
+unlikely is that all the market values
+added up together will equal to the
+total market value up here.
+So we're just building probabilistic
+systems and obviously mistakes can still
+happen, things can still go wrong, but
+it's it's we're just building a system
+of
+unlikely. Uh and that's all we can do.
+Just like with humans, it's a
+probabilistic system and if we multiply
+enough probabilities together, they get
+really really
+small. So now that we have this mistake,
+what can we do about it? Well, the
+beautiful thing about building a system
+like this is we have a couple of
+options.
+One, what we can do is we can say we can
+just have a human come in and go update
+this. Two, we can just record that it's
+an error. Three, we can go run this over
+and over again until we get the right
+answer. Or four, what we could do is we
+could have another LM say, "Hey, Nvidia
+Corp was off by 27 cents. Give it just
+the data for Nvidia Corp and ask it to
+extract only Nvidia
+Corp." And now the LM is much more
+likely to get it correct. because you're
+giving it information about the
+inconsistency. You don't even have to
+say what is inconsistent. You can just
+say when I do quantity times current
+price uh equals market value, I get a
+delta of 27 cents. And now the model can
+all autocorrect. So now you've go you
+can go solve this
+problem.
+So I'm going to I'm going to pause here
+about numbers. It sounds like people get
+the point about numbers and pashant is
+asking uh I think the best question
+which is how do we do this for string
+evals and I think does anyone have an
+idea of what I'm going to go
+say reax close um I think it's more
+about two aspects of it one is In the
+very beginning, you should build a
+diffing system that allows you to see
+the diff between the previous run and
+the and the most recent run. Oh yeah,
+we've done this when we were like
+migrating APIs for super systematic
+stuff of like, hey, we're going to move
+a 100 endpoints to a new system. Like,
+show me the diff between all the old
+endpoints and all the new endpoints.
+Exactly. And a lot of people ask like,
+damn, does that mean I have to build
+custom UIs to go do all the stuff or
+like can I just use something off the
+shelf? And I've gone through this battle
+a lot uh in a lot of different orgs and
+we've made totally different decisions.
+Uh we made different decisions on Face
+ID, we made different decisions in
+Hollands, we made different decisions at
+D Shaw and with all the people that we
+worked with, I've seen people make
+different choices.
+The answer that I have seen
+um the uh the answer that I have seen
+all the time is actually
+that bespoke UIs end up powering your
+team a lot more than you think and
+because of things like v0ero it's not
+that hard to build. I was going to say
+in the last year the calculus has
+shifted a lot between should we build
+something in house to like kind of just
+visualize some data real quick versus
+like do we need to go get a tool or an
+open source project and deploy it off
+the shelf like if I were every time I
+build evos for any data set this is my
+workflow whether no matter what it is I
+have a JSON object that I'm rendering I
+know the type of that JSON object all
+the time um and then every single time
+actually for every single use case I
+actually build a unique bespoke renderer
+for that JSON object. I'm like like diff
+these two things for me. And like
+sometimes I want I want the diff to be
+exact, sometimes I want to be
+approximate, I just like vzero my way
+through it. It takes about an hour, but
+if the system I'm working on is really
+sensitive and I'm looking to like 100
+plus input output pairs, it is worth
+building. If I'm looking at like 10, I
+just look at it manually and just look
+at and just like compare the files
+myself. So the number one go ahead.
+Sorry. No, I mean that kind of
+attraction was something I think um I've
+heard I forget who was saying it but
+basically like someone who talked to a
+ton of founders doing evals for
+production enterprise stuff was
+basically like almost nobody is stressed
+out about building the test harness for
+eval whether it's the thing that runs
+the test whether it's the thing that
+evaluates the results what whether it's
+the thing that visualizes the results
+everybody agrees that the hardest thing
+is getting the golden data set and
+getting the actual answer key correct
+Yeah. Uh, one thing I wish were better
+for support was for things beyond React.
+Yeah, I really wish there was. Um, I
+mean, we we've been looking into how to
+build different UIs automatically for
+different data models for you, but it
+turns out to be a very challenging
+problem. We're just going to wait and
+sit and look a little bit longer before
+we like I see something some patterns
+more so emerge. But I do think there's
+another question here. Um, why why is
+the LM doing math in the neural network?
+Shouldn't it be using a math tool call?
+Oh, this isn't actually doing math for
+for by the way, what this data set is
+doing is like it's just saying like,
+hey, I have this data model and this
+data model, if I can pull the whole
+sheet up somewhere, this actually has
+market value, price, quantity, and
+everything in here. And I'm just like
+pulling out all the data from like a
+data I have. So, this blue column is
+basically not computed by an LM. This
+blue column is added after the
+extraction happens by deterministic
+code. Exactly. It's literally just a
+React thing that I said where the value
+of this column is equal to the
+multiplication of these two things. So,
+I'm not actually doing this in in the
+LM. If if you're doing this in the LM,
+you're wrong. Don't do that. Uh don't m
+just like multiply the numbers. You
+don't need an LM to wait for the math to
+do the
+math.
+Um so, I want to talk about u what yeah,
+I want to talk about something more
+specific. So, I'm going to pull up an
+example that I think is going to help
+make everything more concrete.
+Um, so for example, my my mother is a
+teacher. Um, and part of what she does
+is she makes lesson plans and you could
+imagine that we can go to an LLM and ask
+it to make a lesson plan for us. And
+that could be good. So, let's go take a
+look at how I'm just going to write a
+basic prompt that makes a lesson plan.
+And I hope the lesson plan example is
+good enough because it's very textually
+heavy. And we can talk about how one
+could make that better. Does that sound
+good to everyone in terms of like a
+problem that sounds uh relevant?
+So the so the inputs and the outputs to
+that system would be like a couple
+sentences about the lesson plan and then
+the output would be kind of a you know
+two-page structured document of like hey
+here's how to structure it and here's
+all the steps and here's the worksheets
+and stuff like that. I don't know. Let's
+just see what it does given a All right.
+Yeah. Let's see what we get. Something
+something like that though, right? Like
+the the interface is okay. So it's going
+to do something. Yeah. You put in a
+topic and then it generates the lesson
+plan. Yeah, it'll do something. And like
+I think the first question we all have
+is how the heck do we measure that?
+Um, and like this is probably good
+enough. Um, so I'm just going to copy
+this and I'm going to open cursor and am
+I sharing cursor?
+There's a there's a BAML source in the
+directory for this episode if you want
+to use that.
+Am I sure?
+Uh oh, we're still seeing your browser.
+Which I will share my whole screen, I
+guess. Okay. Yeah.
+And then let's go to designing evals and
+then I'm going to put this and put like
+lesson plan in
+here. So now we have a lesson plan. Um
+and I think the first thing to think
+about how to do emails is remember
+ignore the fact that it's generated by
+an LLM. It doesn't matter. The only
+thing I really have to eval here is
+given some topic, I will produce this
+lesson plan data model. The fact that an
+a single LM call produces it, the fact
+that a whole composition of workflows
+produces it, the fact that I sent it
+over to some like mechanical Turk that
+filled it out for me doesn't
+matter. All that matters is given some
+string, I'll produce this data model. So
+now I know what I'm building. when I
+write an email, I don't I actually kind
+of ignore the fact that this lesson plan
+works. So like what and this is that
+idea of like semi-structured data where
+you're outputting JSON but the fields in
+the JSON are strings which are hard to
+evaluate deterministically. Yeah, like
+right over here, right? Like like I
+don't even know what it did but it's
+like it's outputting something and like
+I don't know maybe this is good. So one
+of the things that I can do is like time
+allocation. Instead of this being a
+string, let's just make this like um
+int and like alias this to uh time
+allocation
+mins. So the first thing I can do is I
+can put um I can change one of my fields
+to be a
+number. So now I have a number this like
+45 minutes. Now what I might want to do
+when I actually do my lesson plan is and
+I think this is the part where people
+get
+stuck. Evaluate lesson
+plan. Oops. uh client. Okay,
+cool. Instead of viewing this as an
+instead of viewing this as a method, all
+I really need to do here is I need to
+say given a topic string lesson plan,
+I'm going to produce some evaluation
+result for it.
+What's the result? Is that going to be a
+structured object or is that going to be
+a string or what? That's the whole
+point. I could do a string as an
+evaluation for my lesson plan and then
+what I could do as a human is I could go
+analyze it myself. you go read the
+string. I could literally I could read
+the string. I could literally be like uh
+be like evaluate the lesson plan for
+third uh for third grade students blah
+blah blah and it'll just output
+something and I could and this is
+basically like a standard this is like
+LLM is judge, right? Like you could this
+doesn't even have to be an you could
+this could be a dynamic thing you do at
+runtime inside your pipelines if you
+wanted to, right? and you just save it
+somewhere and every single time a user
+reports it as bad, you flag that
+database entry for the lesson plan with
+its evaluation that you don't show the
+user Yeah. to someone on your team and
+they look at it and you go and now
+you've kind of built an answer set of
+like of some sort of evaluation set on
+there like this topic or this lesson
+plan was good, this topic or this lesson
+plan was bad and now you've built some
+sort of proxy for it and you might even
+find like the string to be helpful in
+deciding
+that. Now there's another thing we can
+do. We can actually uh yeah so rating
+systems are bad. Please do not use
+numbers. Anyone that use numbers is
+wrong. So we can actually write an
+evaluation from this. Now what makes a
+good lesson plan? Like we can say
+pacing the how good is the pacing and
+the pacing can be can be slow, medium,
+fast. And maybe I care about how fast
+the system is. And I I just want to know
+is the topic too fa fast. Maybe I want
+to know like what kind of biasy bias
+towards uh
+biases uh string array any biases in the
+lesson plan that I might want to know.
+Like maybe there are topics that we
+shouldn't be covering or examples that
+we shouldn't be covering and I want to
+flag them. They could be examples of any
+kind. Uh and I can even like add
+something else here. anybody that could
+be problematic that could uh make a
+student feel uncomfortable and I could
+assert that in the lesson plan
+evaluation this thing is empty like I
+always want biases to be empty and very
+very validate that I could talk about
+like yeah the the one that really stood
+out to me was like a lot of these need
+like six different materials like
+construction paper and glue and scissors
+and stuff like that and like you could
+evaluate like price of materials or
+something like or like scope of mater
+and then so sorry as we build this if we
+if we run these things is the idea to
+kind of build our eval system and then
+tweak our core prompt and then like see
+how our score changes exactly and it
+actually becomes really easy to even
+write this now we have like deaf lesson
+plan test
+harness and like it can be a topic which
+is a stir
+Right. Sorry, I can't type very
+fast. From client import. Basically,
+what we're taking away from this is like
+there's there's nothing too fancy going
+on here. This is all just prompting the
+LM in structured ways to get it to talk
+about what's going on. Exactly. And now
+I can build I can build
+assert. I can build like the
+pacing is not equal to
+fast right. I can assert that biases
+do
+len is zero. I can say the cost is less
+than like $5. Maybe I'm okay with
+student spending $5 on a lesson plan or
+something. Um and then I can even say
+like like I can even require like I can
+say like is
+quality equals
+input is that
+good? I can even like print um print uh
+and at the very end I can even have a
+last part of my eval just have a human
+go look at it. So you can see how I can
+build up my systems automatically and
+like decide where my criteria is. Like
+hey I work in a slightly poor school
+district so I want to make sure that
+costs are never going to be a problem.
+In fact I want all my lessons plans to
+be free and I want to build a system
+that optimizes for free. And it might
+even be like one of the things in the
+topics are like
+constraints which are a string that I
+pass in that should be passed in to my
+lesson
+plan. And this could be a boolean or
+something else. This could even be a
+data model of some kind that produces
+some string on its own which is like I I
+what type of school district are you
+working
+for? Is there we can evog
+uh if this is something being run live
+can we evoglo? Yes. So the e-log and
+live data is something I always talk
+about. So like this is an example that I
+use pretty often that many of you would
+probably have seen by now. Oops.
+Sorry, what is
+wrong? Um, sorry. I'm gonna run my Give
+me one second. I'm gonna move this so
+you don't see my API
+key. Okay, there we
+go. Give me one second. So, like in this
+case, imagine I'm processing millions of
+Cambodia visas. And obviously, we can do
+things in eval here. One of the things I
+can do in Eval is literally build the
+exact JSON that they should pull out.
+And I'm very sensitive to certain things
+like I want to make sure that it
+correctly checks these check boxes off.
+Maybe I don't care if it I want to make
+sure it gets a personal information
+perfectly correct. I may not care
+perfectly about the address or
+everything else because I can use
+corroborating information to find that
+information. Yeah. Sorry, real quick.
+And maybe to guide this a little bit, uh
+I'm really curious to know like let's
+say you've processed a hundred of these
+visa forms and you've pulled out the
+schema and you have your golden data
+set. Like how can you make a statement
+about like I am now confident that we
+are 98% accurate in extracting data from
+forms like this like how can you how can
+you kind of take the past results and be
+able to say you know reliably like we
+expect our future performance to be 98%
+or 91% or whatever it is. Yeah, that's
+usually where people struggle and and
+the answer is you can't actually make
+that statement perfectly. You're missing
+a step in order to make that statement.
+You make the golden data set once and
+now you're like our pipeline works on a
+golden data set at this percentage of
+accuracy and meets our criteria to ship,
+right? How do you know if you've over
+bid to that data set though, right? So
+what you do then is you actually have to
+spot check your production data at some
+cadence and continue adding to your
+golden data set at some cadence. That I
+I know you're I interrupted you in the
+middle of talking about this thing, but
+it could be useful um after to pull in
+and like what does the architecture of
+that pipeline look like? like where what
+where in the where in where in the
+process are you storing stuff and like
+how do how do you how do you build that?
+So I mean this is just one way to do it
+but you don't actually have to just to
+be very clear. Um what you really need
+to capture when you go down this road is
+did I did I capture everything? Oh yeah,
+let me change
+this. What you really want to do when
+you go down this road? How do I change
+this 30? You're you're talking about
+just like capture every every input
+output pair. Literally have to capture
+every input output pair and there's no
+shortcut around this at all. And more
+specifically, what you really want to go
+do is give it a second is when this data
+comes back in or out, what you really
+want to say is like how well is my is
+blog post function doing and you just
+have to spot check and look at is blog
+post. And there's no good shortcut for
+this. You have to build up your eval set
+continuously over time and you have to
+say like for this HTML page, is this
+actually the right title on the blog
+post? And like you can imagine a title
+for a blog post is like I don't freaking
+know like maybe um is this the right
+title? Is this a blog post? Is this not
+a blog post? And for context just to
+show everyone what this was running on
+is I made a small little demo that I
+wanted to go do which was when I go
+extract data from like a let's say I
+have a bunch of blogs. I want to go see
+for every single blog on a entire site
+what is it a what's the value ratio? Is
+it balance? Is is it an ad or is it
+educational content? How deep of
+educational content is it? Then like
+what insights does it have? So it's
+probably very easy for me to like
+actually build a golden data set around
+primary
+intent. That is really easy. Key
+insights is going to be much harder for
+me to go do. But what I can say is
+Nex.js should be mentioned in key
+insights
+somewhere. So I can just reax for that
+for this specific blog post, not for
+everything, but for this one. And
+that'll take me time. The other thing I
+can do is I can rerun this same exact
+data model on my next prompt and just
+see what it output out next
+time and just look at the diff between
+these two
+structures. Yes, exactly. Yes. For now,
+like and it's not it's not even living
+in your code. I think that's the most
+important part.
+It's not even living in your code. It's
+living in a hybrid of your code and your
+data. And that is the part that most
+people miss. Evals are not purely living
+in your code because eval are purely a
+diffing
+mechanism. You have to be able to sorry,
+what does living in your data mean? So
+like in order for me to actually eval
+this correctly, what I need to be able
+to do is I have run this like two weeks
+ago last time I last time I was building
+this prompt. Then a new engineer comes
+on and let's assume the models have
+stayed constant the whole time. Nothing
+has changed about the model in some way
+and a new engineer has come and started
+updating this prompt in some way. What
+they really want to know is the last
+time I ran this I got this output. The
+next time I ran this I got this output.
+And so that's like on your PR you could
+get a like output from some eval system
+that basically says like cool here's a
+here's a link to a page about how all
+the outputs have changed between the
+first one and the second one and someone
+can literally go skim those and eyeball
+those and say like oh that that's a huge
+block of red let's go see if I broke
+some edge case that we know we want to
+make sure still works exactly and you
+can even build a uh you can even build
+like a rule set around that is like hey
+my diff for my eval should be small so
+you measure the lines of diff in your
+eval. So like even even though it's a
+text thing, you can build a diffing a
+diffing score of how big of a diff you
+have. And the and the fact of the matter
+is because these are proistic systems,
+you really have to go look at
+this. Uh what is that question uh that
+someone had? I see I can I can imagine
+seeing a huge wave of error messages
+being mentioned by the LLM being a good
+flag for people having issues. I don't
+understand that question John if you
+could articulate that'd be helpful and
+exact I think Jonathan nailed it. very
+similar to screenshot UIs like there's
+like front end I whenever you work on
+front end code for the first time you're
+like why does no one write unit test and
+you write unit test and you quickly
+realize if I write unit test it slows
+down my shipping by like a bajillion
+orders of magnitude
+um and eval systems are really similar
+because the way you would write a unit
+test is not useful for most of it in
+this case I don't need to say I have no
+desire to say exactly what the key
+insight is there's so many different
+ways to say these same
+topics. It's totally
+useless. But I do want to say one of the
+key insights should include the words
+React and
+Next.js. So like I can go build a a
+stronger eval over time. And what I
+really need to make sure is no matter
+what happens, no matter what the prompt
+is, it always answers React and Next.js
+in all scenarios. And I have a good
+system. My primary intents can be
+hardcoded.
+um for now. Yes. Uh so is everyone
+making their own internal full stack
+eval
+applications? I wouldn't really say
+they're full stack eval applications. I
+would just view it as
+like when you write like code. Uh when
+you write code like this, like you don't
+expect anyone else to write your React
+components for you. Your React
+components are very special to your own
+websites. Your functions are very
+special to your own system. You might
+use really core infrastructure, but you
+typically will
+use systems and things you don't care
+about. You will offload like some we
+don't all care about that chat widget
+that pops up on our website and we're
+okay offloading that to someone else
+because we as a social paradigm have
+built that sort of paradigm out there.
+So even some eval like hey maybe someone
+has built a really good sentiment
+analysis email eval for like e-commerce
+chat
+bots. That's okay. We can leverage that
+just like we could build we could use
+that little chat UI
+widget, but we probably won't build our
+entire website off of widgets that we
+don't
+own. And that's that's really what we
+recommend, which is learn how to write
+the
+eval. And then as you write the evals,
+it becomes really really easy to kind of
+build small little test harnesses like
+this one. And then you just run that on
+a bunch of data sets and you dump out
+files and you build small visualizers to
+go do this. And I would never like
+Dexter was saying like this is a game
+that has changed now. Before you would
+have to compromise on worse dashboards,
+worse system, but now if you're an
+engineer working on a part of a
+pipeline, just build it. And it's like
+you can building an Nex.js object that
+renders a type that is well defined
+because you have a type here that you
+can just render. You want to render a
+lesson plan object, go do that. You want
+to build like uh you want to build you
+want to render this right? We got you
+can we got seven minutes. You want to
+show us how you vibe code a eval
+visualizer? Yeah. Like let's make let's
+make 10 test cases on third grade math
+topics and like let's vibe eval. Let's
+do it. Let me go run this really fast in
+that case. Yeah, we got seven minutes
+but I think um as usual we'll probably
+go over um let me just ping and see if
+we have any other questions. Um yes. So
+is everyone making their own internal
+full stack eval applications? Sounds
+like maybe some people you probably
+should maybe um and Andy had a good
+question is like is it the same model
+call that is generating the eval or a
+second agent? Um and I get this question
+a lot as well. While you're doing that,
+I'll just kind of like think through
+this out loud and then I want to get
+your answer, which is basically that
+idea of
+um
+like if you ask one model to do a thing
+and then you ask another model to
+evaluate the thing, maybe you get some
+value from cross-pollination. I see this
+a lot in like consensus pipelines as
+well, where you say like, okay, here's
+the question. let me fork it off to four
+of the best models and then let me have
+a fifth model basically review all the
+answers of those four models and then
+decide which one is better. Right? I
+think DSPI calls this like a consensus
+or a judge plan or something like this.
+Um,
+and the question I always have is like,
+well, if the model couldn't get it right
+the first time, is the same model going
+to be able to get it right the second
+time? And or like, if the second model
+is smarter than the first model, why
+don't you just ask the second model like
+in the first place? And I think um there
+is a little bit to be said for I think
+there's a couple papers on like if you
+ask llama 70B the same question 50 times
+you get almost as good performance as
+llama 405b or something like you there
+is value into doing these things over
+and over again and then like
+synthesizing the results.
+Um let's see.
+I think u I think that like should use
+the same model for everything. Like no
+just like your agent should not be the
+same model everywhere. Like instead of
+viewing this whole thing as like a
+separate people I think it's the same
+mistake that people do when they build
+like entire AI pipelines. They're like
+my agent is one thing but your agent is
+decomposed of many many boxes. in my
+chat agent. The thing that builds the
+intent analysis could be a really really
+simple GPT40 mini model. Maybe even a
+llama 8B. Who knows? But the thing that
+generates a SQL query, maybe that can be
+a 70B model. And the thing that does a
+cipher query against my entire like data
+warehouse, we're going to use 03. The
+fact that I'm using different models for
+them is more of a necessity for how
+ambiguous and hard the problem is.
+And now what you can do over here
+instead is you can just do the same
+thing here. Our eval system could use a
+different model here. Like in this case
+I'm using the same one. I don't think it
+really matters, but I will switch to
+open eye really fast. Um actually I
+don't care. Let's use Sonic. It doesn't
+really matter. Um and we'll go run this.
+And now I I built this in. So the first
+thing I'm going to go do and this is
+what gets ends up being really hard
+about eval systems is a lot of times
+people assume that eval systems are easy
+but they end up being really hard
+because I do not want like if one of
+these asserts fails I get no information
+about the other asserts and that's
+actually where things end up being
+really hard to go read and write and
+also if I forget to save the data before
+I actually run this that's another thing
+that ends up being hard so selfishly I
+was actually hoping to show this off
+later in about like three weeks because
+we had a new thing that was going to
+make this way way way better. But I'll
+go write the code. Let's see it.
+Um uh test
+one. So now we have two tests that we're
+going to run. And then we'll just run
+like I think like pi
+test import.
+You probably have to UV add it.
+Um
+yep. Nice. It's probably this. I have no
+idea.
+UV add pi
+test and then one second. I got to put
+my API key. Am I still sharing the
+window? I'm not. Right.
+Uh we don't see the terminal. We just
+see the cursor. And yeah, John, that's a
+great comment. Evals are a great use
+case for switching out a models on which
+model delivers the best value for cost.
+Exactly. Yeah. And that comes back to a
+thing we come to all the time, which is
+like make it work. I mean in design and
+like product engineer we call it like
+make it run, make it right, make it fast
+and like in LM world it's like fast and
+cheap I guess. Um, but it's it's like,
+yeah, get the thing working and then if
+you have a good eval set, you can say,
+"Cool, we're going to try to rebuild
+this pipeline with 40 mini and just make
+the prompt really good instead of using
+03." And you'll know exactly how much
+better 03 was than 40 mini. And you'll
+know exactly how you're doing at
+changing your prompts to make, you know,
+040 mini almost as good as
+03. Why is this failing? Well, we'll
+find out. I forgot to run dash s. Let me
+run that again.
+Also, I think you're having like async
+io thing. I don't know. Let's see. Uh,
+I'm not I'm not running async. I
+probably should. Okay. Uh, and I'm
+running. So, the first thing I'm doing,
+I'm really just going to run this
+because I just wrote some test cases.
+I'm going to go run it. Test index zero,
+test index one, and then it's going to,
+and you can actually see what it did.
+pulled out the lesson plan
+and then it's going to take the lesson
+plan and pull this out and said pacing
+was medium biases physical activity like
+hopscotch might be challenging. That's
+true. Like maybe physical activities are
+actually bad. Group dance activities
+might and then competition is bad. Um
+and then now there's another one that
+says a pizza uh pizza activity. And what
+does this do? And this failed because I
+forgot to make a
+directory. Uh new folder evals.
+Okay. And then what I'll do is
+run
+date
+equals. And you can see what the most
+annoying part about this is, which is
+why I wanted to show the cleaner code,
+but that's
+okay. Um, there we go. Okay, that looks
+pretty good.
+Well, no. Just like what I mean is like
+you can see how there's so much work
+that I have to do just to get the data
+out of the system. Like when I'm
+building an LM pipeline, this is
+actually one of the most annoying parts.
+So like what what I'm really excited
+about is being able to run BML CLI tests
+and automatically be able to have the
+diffing and everything done for you
+automatically and just have JSON stuff
+save. Oh, like is it going to dump out
+all the input output pairs to like some
+temporary storage space or something?
+Yeah, exactly. like BAML CLI test and
+like be able to even even better just do
+something like this
+D-pro dash like compare equals prod till
+the two and you can just get the last
+two entries in prod and compare against
+them. Oh, sick. That's like the git
+syntax or whatever. Yeah, just use
+syntax to kind of invent that for us.
+Um, and I have to make a new directory.
+Just my two cents. I use BL CLI test a
+lot and it's really really good. Gives
+me feedback very rapidly, but then you
+can't do the diff right now. So I end up
+writing manual Python code to do the
+diffs. Yep. That's kind of why. And you
+can kind of see what I'm doing with the
+diff here. Uh and really what I do with
+the diff is once I have this generated,
+this will generate in a couple
+seconds. Um and it'll write everything
+down. Um and the other benefit once you
+do that is you can get caching and
+everything for free. So you can like
+modify your eval prompt without having
+to modify this prompt. Uh which is kind
+of nice. But like we can just see what's
+happening and like this looks pretty
+good. So now what I would
+do is now this is good and this actually
+failed. That's fine. I don't really care
+because I saved all the data. Um and now
+what I would do
+is for every run I just build a UI that
+actually does this for me. So let me
+make an MPM folder.
+No
+tsj cdts. If we have time, I have a I
+have a funky example cooking over here
+as well that we can look at. Okay, but
+this is structurally super super
+interesting and helpful. Wait, why did
+this Oh, I'm dumb. This is another thing
+that happens when you do
+this. Um, you realize that you save data
+into the wrong folder. I need one date
+folder for my entire run, not multiple.
+Oh yeah, you got to make it one
+time. Okay.
+Okay, cool. And this is what I end up
+doing now. So I'll show you guys my
+exact
+workflow. I go here. I say I will
+run some tests each time. Um and all my
+tests will be in that folder
+structure for each
+run.
+Run_ate
+slash at
+data test
+idx.json. Oh I hate this. Stop.
+Stop.
+Stop. Okay. Sorry, maybe I'll cut that
+out. Um, and then and then you want to
+actually paste in the data format,
+right? Here's an example of actually
+what I really like to do more than that
+is actually
+um what I'll often do and this this I
+find works even better. Yeah. Um of the
+type I'm saving in the JSON. Look, it
+wouldn't be an episode of AI that works
+if I Bob didn't sneak in a uh BAML is
+more token efficient than JSON quip. I
+haven't said that yet.
+You implied it.
+Well, I guess this is putting in the
+types rather than the data themselves,
+which is probably much more interesting
+for building UIs. Exactly. Exactly.
+Because like that the model, if I give
+it this shape, it won't actually know.
+But if I give it lesson plan
+string and then what's the next one
+evaluation and the thing is like I just
+paste the stuff in there and it kind of
+just it'll figure something out. It
+doesn't really matter. Is lesson plan a
+string? I thought it was the Yes, the
+lesson plan type. This is why it's great
+to have someone else there. Um I want to
+render a
+diff of Oh shoot. I forgot to say one
+more thing. Dang it.
+I want to and while this runs I'll rerun
+this. I want to render a diff
+of diff evaluations per topic
+over
+multiple multiple runs to
+show the diff between lesson plans.
+then
+also show the
+um plans
+um and their
+evaluations. Cool. I'll let this run.
+While I do this, I'm going to fix my my
+my sin that I wrote over here, which is
+I forgot to dump out the topic.
+And this is what I mean by it's very
+easy when you go write these systems
+out to actually like accidentally do
+something that you didn't mean to and
+like just forget to go do something. And
+like imagine you spent
+like two $5,000 running this and you
+just forgot to record the topic. You're
+basically doomed. You just have there
+there's no shortcut. And this is why I
+this is so hard to do because it's not
+like even me going into this. I know I
+need to save the topic and I forgot
+until the very end.
+So like
+uh where did it
+go?
+Yes. I will run this
+again. Um and now it'll go do something
+for me and it'll probably be somewhat
+reasonable
+um when it does this. And now the good
+part by the way is like if you want you
+can just code gen these types in
+TypeScript pretty easily for BAML 2. So
+let's just go do that. Why not? Um I
+will do that as soon as it's done.
+Uh, nice. Now we have this.
+Okay. Um, and then this will go do some
+stuff for me. The problem is you end up
+waiting. But this is way better than
+trying to figure out some other system
+that isn't going to be perfect. Uh,
+because I can get this to be very
+correct. Can use eval history to
+backfill topic? You can, but then you're
+basically just data cleaning and data
+cleaning sucks. It's honestly just
+faster to rerun it.
+But now you can actually see what it
+did. It's kind of cool. It actually
+built the system out for me. lets me
+compare and just lets me pull that out.
+Um, and it'll actually show me the diff.
+And you can see how fast I did
+this, right? It's not that hard as at
+all. Um, I just use cursor. It doesn't
+really matter. The reason I use v0ero is
+because I don't have to spin up a whole
+node project. Then I can just see if
+it's if it's actually what I want up
+front. And once it is, then I then I
+download it. Then I move over onto
+cursor. Um, if that makes sense,
+pashant.
+So, but like you can see how fast this
+is. It's like great. And I can actually
+see the difference. It's like cool. And
+it's actually showing me what I
+have. And like now I have an email
+suite. This is sick. And I'm like, "Oh,
+now give me a clickth through button up
+here." So I can just click and just
+compare, compare, compare, and I'm done.
+And then also load this from disk. And
+now I built an eval system in under five
+minutes. I can iterate on my lesson plan
+really, really
+fast. This is how I think people should
+build
+eval. And if you're not doing this,
+you're hurting yourself and your company
+and your likelihood of success of
+building a successful pipeline. So like
+the whole goal is go from like
+So yeah, I would say like let's like can
+we put together a checklist in like the
+read me here or something of just like
+what's the steps, what should I do first
+and like what are the what what are all
+my boxes to check to know that I'm kind
+of like on the right path to make this
+happen. Yeah, that's a great that's a
+great thing. So I think step number one
+that everyone should be doing vibe
+evals. That's it. Just vi. What does
+that what So what does that mean to you?
+To me what that means is you're going in
+the playground and just hitting play
+constantly and you're actually looking
+at the data. That's part one. Okay. Step
+number two. As soon as you've got your
+five eval down like that means you're
+actually reading your prompt, you're
+writing test cases and you're actually
+hitting play. And just care think about
+what test cases actually make sense. And
+even the act of thinking about test
+cases is going to help you be better at
+your system because you're going to
+think about where people can fail. I
+remember when the minute I started
+talking about eval people like oh uh
+there I forgot the messages on here but
+in the thread people were directly
+saying that there's so many different
+ways to measure the lesson plan and
+they're like you could think about a few
+I forgot the I I don't section people
+instantly had ways to judge the plan. do
+that for your own prompts. Like just
+write a few.
+Two, capture the intermediate steps of
+your entire pipeline and try and eval
+the steps that are most easy to eval.
+Don't try and pipeline. Yeah, this comes
+back to like the the testing pyramid,
+right? Of like you should have small
+super granular tests and then you should
+also have uh what is it? Testing pyramid
+Oh
+man, for formal term terminology for
+all. Exactly. Yeah. Exactly. Exactly.
+This is the thing of like you should
+have little incremental tests at the
+smallest possible granularity because
+these are faster, they're more isolated
+and you can iterate quicker and then you
+should have end to end I mean in in the
+AI case it's not UI tests, it's like end
+to end full pipeline tests. Yeah. Um but
+this idea like a lot of your tests
+should be these smaller more granular
+units. Yeah. Because if you know that
+the intent capturing is correct, we can
+worry about the next steps, not the
+first steps. Um, if you know your
+messages have the right tone because you
+look at them and you vibe eval them, you
+can worry about the intent analysis
+being correct. Exactly. Engineering is
+engineering. Um, there's no shortcut
+here. So that's those are like two big
+ones. Things that I recommend focusing
+energy on as a team is I always
+recommend people build structured
+outputs uh whenever possible and like
+break your problems down. Like Daxter
+says this all the time and is one of
+those things like think of all LM things
+as tools or really just classes that
+you're
+returning like once you're able to do
+that it becomes really really easy to
+write evals for certain parts of your
+pipeline. Um and then really it's more
+about don't use numbers for confidence
+scores. Uh and the reason you don't use
+numbers because like when I got an
+English paper I remember this all the
+time. I don't understand why I got a 92
+instead of a 97 half the time. It felt
+like discretion. Well, okay, that's I
+realize this was the uh Are we bragging
+about our English paper scores now? Let
+me be more honest. An 82 instead of a
+97. Um, listen, you don't have to lie.
+We love you for who you are. Um, yes.
+Uh, that's right. But in reality, I
+never understood what those numbers
+meant because they felt very
+arbitrary. And most people when they
+give a numerical system don't have a
+system. They have like a completely
+arbitrary system. So it's like you
+notice that when I actually wrote the
+eval system when I was writing it is I
+just asked it and like the model came up
+with a good idea for what an eval system
+is for that but categorical
+categorical systems are generally way
+better than numerical systems because no
+one knows the difference between score
+seven and eight. So don't don't put a
+category in there that has no meaning.
+This is do you put like emu enums in
+that as well of like outputting like a
+string that represents like a category?
+Yeah. when you had like slow versus
+medium versus fast, right? Exactly.
+Exactly. And like Jonathan said it
+right. It's like it's same with stars on
+Yelp. Like I don't go to a restaurant
+that has less than 4.8 because that
+means they suck. Uh like if they don't
+have a 4.8, they're just really bad. Um
+and it's more about thinking about
+categories better. And you can add
+descriptions to categories to say
+exactly what they mean and just break
+your problem down to a classification
+problem. you on the probe on the probe
+question real quick that just came up. I
+I think the idea here would be like in
+your we'll share this in the whiteboard,
+but basically like you have your full
+pipeline where you pull out an intent
+and then you list the products for that
+intent and then you build your answer
+and you return the answer and you also
+return things about the intermediate
+step so that in your test you get the
+output and the probe. And we're actually
+not going to make assertions about the
+answer because it's like a chatbot
+generated big string. Maybe you can. But
+the idea is like let's make assertions
+about so that when this test fails for
+some reason, maybe we are also
+evaluating the answer. We immediately
+have assertions about each intermediate
+step as well that we can see like oh the
+intent was wrong and so everything was
+screwed up. And the alternative here is
+this concept is I think the concept that
+people are most familiar with that looks
+like this is mocking.
+So instead of uh instead of actually
+doing it's like you could technically
+mock what get in intense does and then
+you kind of have um you can kind of eval
+just the next part of your system if
+that makes sense, right? You test your
+get intense function and then you can
+mock it in your pipeline and you say hey
+as long as we get the intents right and
+we get the products right then the we
+are just now testing the final chat
+output. So that's an alternative to
+probes right? Can you they're kind of
+similar. Can you go back to your system
+the diagram that you had really fast
+just to articulate this better? So like
+here you can imagine that I wrote it. So
+probes are one way to do it. It's the
+easiest way for most people to do it for
+people that are more uh that are more
+comfortable with mocking. What I would
+recommend is in and in chatbot you could
+just mock the get products function and
+the chat response function to return a
+fixed thing. Well, you don't have to
+pass it in. You can just use a mocking
+library. Sure. And then you can just
+mock what get products and chat response
+does like like yeah there's exactly you
+get the point. And now what you can say
+is now you can basically assert what
+intent should be in your mocked
+functions. So there's multiple ways to
+go write this code out. Yeah.
+Exactly.
+Exactly. Oh, I can't believe you
+actually know this off top of your head.
+This is why you're a much better
+engineer than me. I don't know about
+that. Um I do not know this stuff. I
+just uh Yeah. So, and then you can
+Exactly. And so then you don't really
+care about this probe stuff anymore and
+you're just going to like break down the
+problem and solve it at each level of
+the pyramid basically. Exactly. So now
+if you have ever seen this talk, we'll
+put in the show notes. Uh I think it's
+JD
+Reignsburgger degraded test scam. Uh,
+this is an incredible talk. Um, yeah,
+integrated tests are a scam. It's an
+hour and five minutes on why only
+testing things end to end is going to
+destroy your team and your product and
+your company and the value of like
+following this pyramid and focusing on
+small pieces and the contracts between
+parts of the system. Yeah. And then can
+you go back and then uh Yeah. Yeah.
+Yeah. Sorry, not to here to the
+dashboard uh to the notes that you're
+writing. Yep.
+Um and really this is a checklist and
+and I think the most important part is
+uh yeah what else is missing from this?
+Oh sorry one last thing use prod data to
+build up your build up your golden data
+set continuously over time do not stop
+uh specifically you should write only
+integration only using integration tests
+is a scam.
+Sorry. Yeah integration tests are
+fantastic and you should have
+integration tests but if you only have
+integration tests you are being scammed.
+Yeah. Well, it's like if you're if
+you're using an integration test to
+catch a thing that broke between these
+two small components of the system, it's
+quickly going to explode into 700
+integration tests that are very slow to
+run and very slow to run one of them,
+let alone run all of them. And when one
+of them breaks, it's going to be very
+unclear which part of the pipeline
+broke. Exactly. Um, and I and I'm going
+to pause here because I think uh
+hopefully what I can do is I can send
+over like some actual like tooling
+scripts that we have that have been
+useful, but we'll share some of them
+pretty soon. But really, you want things
+that can
+pull pull d. What you really need is you
+need something that can pull data from
+prod. You need to build tooling to
+visualize the differences between
+different
+outputs. And you just need to make that
+really easy so that every engineer wants
+to go do that all the time. And I think
+the best analogy I have at this is like
+back at the hedge fund that I was
+working at, they have they had like
+around I think um their unit test used
+to take like 30 something hours to go
+run. So obviously none of the engineers
+ever ran the unit test or they'd run
+like the one file that they know. But we
+all know that changing one um one file
+running one file unit test is often not
+good enough.
+So like what we found was we built a
+system that could say given a git diff
+we wanted to predict exactly all the
+unit tests that would need to be run and
+we actually built that system and we
+found that on average for 90% of commits
+people had about five minutes of test to
+run and that changed how people ran
+worked because they always ran all the
+tests like because they just and what we
+did was we made a single command. It was
+called delta test. you would just run
+delta test and look at your diff and be
+like, "Ah, this is what you need to
+run." It would just run it for you. And
+that was actually even easier for people
+to run than actually determining
+um than actually like even thinking
+about the file that they're run because
+even one less work work
+item. And I think people need something
+like that for AI systems. Like if
+someone is working on a prompt, they
+don't have to think about running a unit
+test for that prompt. They want to run
+something like delta test and basically
+say run the entire pipeline that depends
+on that test and never think about it
+again. And I think that is going to be
+the answer. Steve, you had a question.
+So now that you've teased everyone with
+this magic system, how was that? How
+were the what training was used to then
+predict you know what tests to run? Like
+what did that look like at a high level?
+I wrote an
+algorithm. There was really an algorithm
+that I wrote. So were you like parsing
+the parsing the a of the entire codebase
+and then doing a like analyzing the
+graph basically? Yes. But the only
+problem is in Python you can modify
+global variables and changes the a quite
+in nasty ways and then you have C Python
+code that you have to deal with and then
+network dependencies and data
+dependencies. So I wrote an algorithm to
+deal with that. Um it was fun. It was
+very fun. um a lot of state um testing.
+So I think we'll probably end up
+building something like that for um LMS
+because I think people want something
+like that as well. We got a good
+question from Adisha here. Um struggling
+a bit to understand the value of the
+different UI. Okay, let me let me tell
+you why why you want the dipping UI. Can
+we like whiteboard out like the workflow
+steps or something like that? Yeah. What
+screen am I sharing? This is
+cursor.
+Cursor. Do you see cursor? What do you
+see now?
+Uh I saw trees for a sec and now I see
+cursor. Oh yeah, now I see it. Okay. Why
+is this better? Well, Adisha, the most
+important part here that you have to uh
+kind of uh get around is that when you
+go do
+this, this is just easier to go read
+than looking at JSON dumps. And when
+you're looking at hundreds of them, you
+need to go do this. And it's not
+actually it's not embarrassing at all.
+It's actually it's really really
+intuitive. It's it makes sense like hey
+we're programmers we're engineers we run
+all this stuff programmatically why are
+we suddenly building UIs for this and I
+think the best analogy is data science
+we all have recognized Jupyter notebook
+is incredibly powerful for data
+scientists and for machine learning
+people and the reason Jupyter notebook
+is really powerful because it combines
+visuals with
+code and that's what you need to do when
+you're in this world you need to look at
+visuals plus code to get really fast
+feedback and really this isn't even good
+enough it's like I want to I want an
+arrow I can click to
+quickly skim test uh
+indexes. Like I really want an arrow
+that I can click that'll just like do it
+for me so I can just like make it really
+really
+fast. Um and I think once you get in the
+habit of thinking of it this way, like I
+used to get so annoyed every time I had
+to spin up a Jupyter notebook because I
+was like I have to install IPI kernel
+and I have to like remember what it is.
+But once you get in the habit of it,
+it's like there's no better way to build
+plots and analyze data because I'm
+manipulating things all the time. Um,
+and I think normally I would say stick
+to Python if that's what you're most
+comfortable in. But the problem is you
+we're no longer looking at graphs and
+analytics. We're looking at things that
+are a lot less graphical.
+No, they don't just like plug into
+standard components like an XYaxis or a
+pandas table. Exactly. And that's not
+what we're doing. So it's like, okay,
+now I have to just like and now I just
+want to like rotate here and just like
+go do this. And it's like I don't know
+why it's taking forever to load. It's so
+slow. I'm like, okay. And I'm I'm
+literally just going to tell like
+instead of
+loading load everything at once, then
+show it so it doesn't
+lag when I uh press
+next. And like it'll it'll just figure
+things out. And I don't actually spend a
+lot of time while I'm doing this because
+what I often do is like I'm iterating on
+this thing while it's running and then
+while I'm on there I'm actually like
+just running stuff in the playground
+looking at things manually to build a
+better you're changing your prompt and
+then you're looking at how the diff
+change and then you're changing your
+prompt you're changing the order of
+functions. I mean, this is all about
+again that quick like iteration loop at
+the end of the day. Like, yes, this is
+useful as an artifact to like before PR
+goes in like eyeball and make sure it's
+not going to break anything too
+impactful. But it's also it's like cool,
+I'm trying to make this thing more
+accurate or I'm going to try to like I'm
+trying I'm trying to get it. It's 99%
+but it always up this weird edge
+case. Can I change the prompt or change
+the pipeline or change the format to get
+this weird edge case? And this becomes
+the thing that you can do to be like,
+cool, I solved my problem. Oh, but I
+broke seven other things. And it's very
+visually like I clicked three times and
+I can see that it's broken. So, we have
+to go back to the drawing board.
+Exactly. And it's just going to be
+faster to iterate. It's it's it's really
+annoying. I know for a lot of people
+this feels annoying, but um like I
+honestly I have nothing to say. And
+you're going to see how like nice this
+is. I can just like look at this like
+cool and I can just like manually see
+like what's happening between the two
+and I can be like cool this is the
+difference.
+Yeah. And you can show this to a
+non-technical person and you can say
+like, "Hey, here's how we're improving
+this week versus last week." Exactly.
+Um, and this is really it just makes
+life way
+faster. And and by the way, don't do
+this the minute you start writing your
+prompts. Do not do this. The answer
+is look at it 5 valid. Honestly, I ship
+things with five evals and that's okay.
+I've seen many people do that because
+what we want to do is 5 eval. that's
+good enough. Ship it to prod, collect
+prod data, use prod data to build golden
+data sets, and then build diffing and
+all this other tooling. After that, we
+had a we had a really mediocre prompt
+live in our production systems for about
+12 weeks. And then one day, a customer
+wrote in was like, "Hey, it did this one
+thing weird." And we went and we found
+the exact data from the weird thing it
+did. We added that to our test case
+suite and said, "We need to handle this
+as well." And we grabbed a couple other
+weird test cases while we were in there.
+like some of this stuff doesn't look
+right. And the issue was we had this
+thing where like a smaller model like a
+40 mini was kind of just like
+regurgitating data from its training
+set. I don't know if you all have ever
+seen that thing. It was like okay cool
+like let's add a couple tests for these
+weird things and let's change the
+prompt. And we actually ended up
+changing the model which broke a bunch
+of our existing tests. So we had to
+change the because 40 is a lot more it
+it's a lot smarter but it's also a lot
+smarter. And so some of the things that
+we were relying on GPT4 many to do
+cleanly because it's too dumb to
+actually think about the problem. We had
+to go like change the prompt to be like
+don't try to be smart about this. Don't
+try to answer the question. Just just
+pull the text
+out. Um but anyway that that's like a
+real workflow that we had in production
+where it's like we shipped a prompt that
+was like pretty good. I vibed it on a
+couple things and then I waited for it
+to break and then we iterated as we go.
+I mean, putting things that you know are
+going to break is bad, but also like
+spending six months on evals before you
+ship a product to somebody and like find
+out if they even want it is really
+dangerous. Yes, it's way worse. And
+think of it like that fake buy now
+button that we used to have on websites,
+but they literally just do that to see
+if you clicked on it and if you clicked
+on it, they'd be like, "Shit, we should
+sell that thing." And then they'd go
+sell it. Yeah. And now you're called it
+the fake door test. You'd be like, "If
+people try to open the door, then you
+know they want to go in there and then
+you go, you know, build out whatever's
+supposed to be behind it." Yeah. If
+people are complaining about your
+system, then you you have real data that
+you can work with to make it better. All
+right, let's do one or two more
+questions and then we should probably
+wrap up. Yes, we're 30 minute 25 minutes
+over. Two last questions and we will
+call it quits for today. Um, and if
+there no more questions, we can call it
+quits and go back to
+work. What's a good mental model to when
+to split a prompt into intermediate
+steps? Um, I don't think there's
+generally a great model because it
+really depends on the capacity of the
+model that you're using. If you're using
+an AB model, it's probably earlier
+rather than later. If you're using a if
+you're using a if you're using a
+stronger model, but your your steps are
+very very intertwined, it might be
+earlier rather than later because you
+might want have value in discreetly
+defining those steps. It's really about
+how well you can define the problem. And
+honestly, just like press play and keep
+on testing it until you get to a good
+point. Like you you have to build that
+intuition yourself based on your domain.
+Yep. All right. One more question. Would
+it make sense to self- introspect on
+outputs during runtime and correct them
+if the LMS take no time to output and
+eval?
+Yeah. Uh that's basically what we did
+the deterministic runtime evals that we
+did of adding stuff table-wise and
+row-wise. Does it make sense to also do
+kind of introspective LLM based evals at
+runtime if they're if they're fast?
+I mean I mean whether you're using an
+LLM or like math to do that calculation
+doesn't really matter. It's up to you
+and you can definitely definitely do
+that. And we have people the the
+financial thing I've shown is I've seen
+multiple people take variations of that
+approach to build like document uh
+validation for all sorts of things and
+like we have people running pipelines
+with 99% plus accuracy on like a 100page
+plus PDFs on data extraction. it works
+because what ends up happening is when
+things go wrong, they literally ask an
+LLM to go fix the thing that went wrong.
+And because of how LM's work, because
+they're now focusing on just one part of
+it, they're able to go get the right
+answer more often than not
+afterwards. So, if you get feedback from
+an LLM, like a really tiny one, maybe a
+1D model or something that you're
+running on an edge device, you can use
+that to build corrective behavior as
+long as as long as the thing that you're
+measuring on is actually good. Um, and I
+was showing this for example, like right
+over here, like you can imagine for this
+visa form, I could build the same
+system. I'll find everyone that was
+flagged as first trip to Cambodia true
+in my data set, and if they're flagged
+as true, first trip to Cambodia, I'll
+make sure a human looks at it. If it's
+false, what I'll do is I'll literally
+look up their passport number or
+whatever I have in here, I'll look up
+their passport number in my database and
+see how much of the information
+validates. If everything matches and
+it's all the same, but the address is
+different, I'll kick it off to human and
+have them only compare the address and
+say like, is this the right is this a
+good up-to-date address? Should we
+update this? Or maybe even email the
+person be like, are you are you sure you
+want to validate your address at this at
+this way? And I've kind of built this
+automated system. That's an incredible
+note to close on. Um to summarize all of
+this is building evals is not that hard
+and it's not that much code. Um, I think
+there's a lot of like eval systems off
+the shelf that you can buy that force
+you into a very structured way of
+thinking about this problem, but at the
+end of the day, none of them will let
+you build the pipeline that Vivov just
+described. And as you scale, it might
+make sense to grab a solution off the
+shelf. But at the start, you should
+understand what you're testing, how
+you're testing it, and like keep the
+flexibility to build this however you
+want, so that you can have a really
+flexible pipeline architecture, and you
+can evolve your testing systems with it.
+Dexter nailed it. I I will add the
+links, the vzero, and we'll push the
+code up so you can just see what that
+ends up looking like as a whole. Real
+quick announcement, thank you, Andrew.
+Uh we are doing a workshop. If you're in
+San Francisco, um we'll post the link.
+Um but um we are going to do a all day
+workshop mini conference in SF. Um so if
+you're in town uh come hang out. It's
+going to be a good time. We just did it
+in New York last weekend. People loved
+it. So should be great. Um and then um
+we'll see you guys next week.
+All right, folks.
+Bye everyone. See you. Bye.

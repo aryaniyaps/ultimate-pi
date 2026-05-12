@@ -1,0 +1,3885 @@
+[0.0s] I want to I want to work on two features
+[2.0s] at the same time. So, we're going to
+[3.5s] show off that workflow. But then there's
+[4.9s] a thing I want to actually make me
+[6.2s] better at context switching.
+[7.5s] >> You cannot out outsource the thinking,
+[9.5s] man. I mean, that's the thing I've
+[10.6s] learned in working in complex systems is
+[12.3s] like if you don't come with opinions,
+[14.2s] the model will not I mean, you could ask
+[15.8s] the model to do that, but like if you
+[18.7s] know what you want, just tell the model
+[20.1s] what you want. That's my advice. Hey,
+[22.2s] look at that.
+[24.1s] >> Wow,
+[24.6s] >> it's there cuz now it's just pulling it
+[25.9s] from the database. So, any one of these
+[27.7s] that has the thing in the database is
+[29.4s] going to work. [music]
+[33.2s] All right, we are live. We're going to
+[35.7s] do some live coding today. I'm super
+[38.1s] stoked. Um, welcome to the AI That Works
+[41.3s] podcast where we show you real practical
+[43.4s] examples of how to use AI that works. We
+[45.7s] do a lot of live coding. We do a lot of
+[47.1s] whiteboarding. Um, I'm Dex. I'm the
+[50.2s] founder of Human Layer. We build tools
+[52.1s] to help you solve hard problems with
+[53.4s] coding agents. I'm going to pass it over
+[55.1s] to Vibb.
+[56.3s] >> Hey everyone, I'm Vivof. I build BAML.
+[58.8s] Uh we try and make tools that make it
+[60.9s] really easy to reduce increase the
+[63.6s] reliability of L1 pipelines.
+[65.3s] >> Amazing. And what are we working on
+[66.6s] today?
+[67.2s] >> I think today is going to be a fun live
+[68.7s] coding session. We've done we've done
+[70.9s] one more of these in the past and you
+[72.3s] and I have obviously live coded
+[73.7s] together. But I think today I wanted to
+[76.2s] go ahead and go deep into that
+[78.1s] conversation and just go really hard
+[79.8s] into understanding uh and not just
+[82.1s] understand but showing some features
+[83.8s] here. But also I want to add some
+[86.6s] features to the code layer that I've
+[87.7s] been wanting myself uh and that you have
+[90.3s] around to.
+[91.0s] >> Last time we did I I I coded up a BAML
+[94.2s] feature and Vibb was navigating. Today
+[96.0s] we're going to do Vibb's going to drive.
+[97.6s] He's going to write the code layer
+[99.3s] features that he's always wanted and I'm
+[100.8s] going to help navigate. So, why don't we
+[102.2s] do this? Why don't I start? Um, I will
+[104.5s] share and we can do a quick little
+[106.1s] whiteboard of just like the the three
+[107.9s] things we talked about building today
+[109.1s] and then we'll get right to it and this
+[110.4s] will probably be a little bit of a
+[111.2s] longer episode which is going to be a
+[112.8s] fun time. Amazing. Okay. So, feature
+[115.2s] number one is AI summaries
+[119.0s] or like AI generated session titles,
+[120.9s] right?
+[121.9s] >> Exactly.
+[123.4s] And I guess everyone knows what we're
+[125.0s] talking about. Let me put a snippet of
+[128.4s] uh code learner in there so then people
+[129.8s] know exactly what I'm trying to do.
+[131.6s] >> Oh, screenshot.
+[133.0s] >> Yeah, I'll include one. So, the idea is
+[135.2s] that in this tool I want a couple of
+[136.9s] things. One, I hate manually adding this
+[139.4s] title in every single time. It's a
+[141.0s] really small thing, but it's very
+[141.8s] similar to chat GBT where chat GPT
+[143.4s] autotitles every chat that you're into.
+[145.4s] It's really nice.
+[146.7s] >> The other thing that I want
+[147.7s] >> you're talking about up here basically.
+[149.1s] >> Exactly. I don't want to manually type
+[150.6s] that in. The other thing that I want is
+[153.8s] sometimes you open markdown files and uh
+[156.3s] code generates a lot of markdown files
+[157.8s] especially during the planning phases. I
+[159.4s] personally love using Obsidian for it.
+[161.0s] Obsidian is amazing. Um I want to open
+[164.2s] those files in Obsidian and that's a
+[166.0s] little bit trickier because Obsidian
+[167.8s] really works off of vaults, not really
+[169.5s] pure files. So we'll have to go manage
+[171.6s] that system and understand it.
+[173.5s] >> Yeah. So, just to show um what he's
+[175.8s] talking about, we have this option in
+[177.1s] the settings where you can pick your
+[178.3s] default editor and then when you're
+[180.2s] editing a file or something, you can
+[181.6s] quickly pop this open in VS Code or
+[183.9s] something just to view that file
+[186.1s] directly.
+[186.8s] >> The last part is a part that not a lot
+[188.7s] of people think about when they're live
+[189.9s] coding. Um, which is how do you actually
+[192.9s] context switch really really quickly?
+[195.6s] Now, context switching I think is the
+[198.3s] most important part. Oh, there you go.
+[199.8s] Yeah, you can show that off. So you can
+[202.0s] show Yeah, you can just open this file
+[203.6s] in your editor.
+[204.6s] >> Yeah. And personally looking at markdown
+[206.8s] files in VS Code is trash. So I'm not
+[209.6s] going to do that with my life.
+[210.7s] >> You're entitled to your opinion, man.
+[212.6s] >> My opinions are correct opinions. Um
+[215.7s] >> uh probably.
+[217.5s] >> But h No, I'm just joking. But
+[219.6s] regardless of that fact is like I just
+[221.2s] want to make it really easy as a
+[222.4s] developer to do like Mark a lot of I
+[225.8s] think there's there's a subtlety here
+[227.0s] that not a lot of people think about
+[229.1s] which is just like how are you what
+[230.6s] what's the kind of work that you're
+[231.7s] doing when you're doing work in um in
+[234.2s] like planning mode or generating specs.
+[236.2s] You're actually doing a lot more reading
+[237.4s] than writing. And while code is really
+[239.5s] really good because of syntax
+[240.7s] highlighting in like dark mode, the it
+[243.0s] turns out there's a lot of research that
+[244.2s] shows [laughter] that
+[244.9s] >> specifically dark mode.
+[246.6s] >> Well, code is really good in dark mode
+[248.6s] because uh like the high contrast makes
+[251.4s] it really easy to like understand the
+[252.8s] [snorts] flow and the structure of code
+[254.8s] >> because of syntax keywords.
+[256.5s] >> But on the other hand, markdown files
+[257.9s] aren't actually high contrast because
+[259.9s] they just have headers and they're it's
+[261.6s] contrasting the right thing. And what
+[263.6s] you actually need to do is you actually
+[264.7s] need to read the words carefully. And
+[266.8s] when you're actually reading the words
+[268.0s] carefully, what you really need to do in
+[269.5s] that scenario is you actually do need to
+[273.8s] um
+[275.4s] like let your eyes not just gloss over
+[277.2s] it. In that context, light mode is just
+[279.8s] better. Light mode has been shown to be
+[281.9s] significantly better at reading large
+[283.8s] like reading specs. There's a lot of
+[285.8s] research on this. I can share this in a
+[287.1s] bit. So now this what I want to do is I
+[291.0s] want to use the best tool for that job
+[292.2s] which is in my opinion obsidian. Um,
+[294.9s] >> you know, they have a dark mode. You
+[296.4s] could use it in in dark mode.
+[298.0s] >> Why would you do that? The default is
+[299.5s] light mode for [laughter] a reason.
+[302.0s] >> Okay. All right. All right.
+[304.9s] >> But as we go down this road, um, and
+[307.7s] then the third feature I want to talk
+[309.1s] about is actually context switching. And
+[310.6s] I hope we can we can show this off in
+[312.8s] the time that we have today. And the
+[314.6s] reason for that is because context
+[315.9s] switching is one of the most important
+[317.4s] parts when you're doing AI codegen of
+[319.7s] any kind. And
+[321.0s] >> because it's slow, right? You're often
+[322.4s] waiting a lot and so you're going to
+[323.8s] work on multiple things in parallel.
+[325.9s] >> Exactly. I want to I want to work on two
+[327.8s] features at the same time. So we're
+[329.5s] going to show off that workflow, but
+[330.7s] then there's a thing I want to actually
+[332.0s] make me better at context switching
+[333.7s] because context switching is an
+[335.0s] expensive process. It's expensive for
+[337.0s] programs, expensive context switching is
+[339.2s] the most expensive thing you do in your
+[340.5s] software. Anytime you do
+[341.4s] multi-threading, threading context and
+[343.2s] swapping that over is expensive. Async
+[344.9s] contexts are expensive to swap over.
+[347.2s] >> [snorts]
+[347.2s] >> So, we want to go try and solve that
+[348.5s] problem here for a human.
+[350.4s] >> And I want to do that by doing a quick
+[351.9s] thing, which is every single time I look
+[353.4s] at a certain previous message, I want it
+[356.0s] to both remind me what I was doing
+[357.4s] really quickly in like one or two
+[358.6s] sentences, remind me the directory I was
+[361.3s] last working in, and also remind me what
+[363.7s] it thinks I should be doing next. Uh
+[366.8s] whether it's like actually reviewing the
+[368.4s] plan, whether it's like implementing the
+[370.2s] plan, whether it's looking at a certain
+[371.7s] phase, I just wanted to like quickly
+[373.3s] remind me that context.
+[375.3s] >> [snorts]
+[375.4s] >> Um, and I don't know where it's going to
+[376.8s] go in the UI. I haven't thought about
+[378.2s] that. But I just want that reminder for
+[380.3s] myself because I'll get much faster at
+[382.1s] it. So, without further ado, I think we
+[386.3s] should just go straight to doing this.
+[388.2s] And part of this is we're going to do
+[389.8s] the first two.
+[390.9s] >> I have one thing we should do first. Um,
+[393.0s] and this is the thing I always do. I
+[394.7s] always say is like when you're doing
+[395.8s] this stuff, it's it's helpful to have at
+[397.4s] least one person who's really good at
+[399.0s] the workflow of research plan implement.
+[401.3s] And you need someone who's an expert at
+[402.9s] the code. Um I'm gonna propose we spend
+[405.8s] two minutes. I'm just going to draw a
+[407.1s] little architecture diagram of the parts
+[408.8s] of the system so that we have shared
+[410.2s] language while we're talking about this.
+[412.0s] >> Let's do it.
+[412.6s] >> And so what matters here is in the code
+[414.8s] layer stack you have uh tower which is
+[417.4s] the back end of the desktop app. You
+[420.2s] have what we call the wooi. This is a
+[421.8s] vit application. This is just a plain
+[424.2s] front end application that gets run by.
+[427.7s] Tower will also launch a process called
+[429.8s] CLLD, which is the code layer demon,
+[432.4s] which for legacy reasons launches a
+[434.4s] process called HLD, which is the human
+[436.6s] layer demon. This is in Go. We're moving
+[439.6s] it to TypeScript. And why we're doing
+[441.0s] this is like through the strangler
+[443.1s] pattern. So, right now, most traffic
+[445.0s] gets proxied from the web app, makes
+[447.4s] REST calls to CLD, and just gets proxied
+[449.6s] straight through. um for the new stuff
+[454.0s] because of the value of like having the
+[456.5s] cloud SDK in Typescript, we're just
+[458.5s] going to write new endpoints uh into
+[461.9s] CLLD for the new like AI summarization
+[464.3s] stuff.
+[465.0s] >> Cool. Uh so the title summaries and
+[467.8s] everything else live in there.
+[469.4s] >> Yeah. And then this is going to talk to
+[471.1s] a SQLite database and then this SQLite
+[473.5s] database goes through endpoints here
+[475.2s] which is used to like seccee and send
+[477.2s] updates down to the web app.
+[480.0s] >> Got it. So th that's the I think that's
+[482.2s] the basics of the architecture. Any like
+[484.1s] questions here?
+[484.6s] >> Can I ask you a quick question really
+[485.8s] fast? Um since we're doing this in a
+[487.6s] time frame, I feel like it's going to be
+[489.4s] probably hard to get the data spin up a
+[493.0s] new pipeline that uh initializes in CLLD
+[496.6s] and then goes into HLD and spins back
+[499.1s] around.
+[499.8s] >> Uh yeah. So the idea is literally um the
+[503.5s] the vap will invoke the cloud SDK from
+[507.9s] here. And so we're not going to go all
+[509.1s] the way to SLD. We're not going to
+[510.5s] store.
+[512.3s] Oh, because we do want to store this in
+[514.6s] the
+[514.8s] >> data. That's why it's going to be really
+[516.4s] complicated otherwise.
+[517.8s] >> Okay. Yeah, we can add a new endpoint
+[519.4s] into HLD.
+[520.5s] >> That's what I figured that. And by the
+[522.4s] way, these are the kinds of
+[523.3s] conversations that we can have in like 2
+[525.1s] minutes.
+[526.4s] >> Actually, I'm going to I'm going to I'm
+[527.5s] going to I'm going to I'm going to do
+[528.5s] another pitch because the HLD has an
+[530.3s] endpoint for like post slash session ID
+[534.3s] update title. I'm going to I'm going to
+[537.4s] suggest just cuz like this isn't going
+[538.8s] to be the final state of this code, but
+[540.8s] as we're in this like migration state, I
+[543.0s] say the endpoint here, front end gets it
+[546.2s] back and then sends it to HLD to update
+[548.6s] the title.
+[549.4s] >> So, [snorts] I'll make another
+[550.6s] proposition really fast.
+[551.8s] >> Yeah.
+[552.2s] >> So, the place that I was going to do
+[553.8s] this was the create session tab.
+[557.1s] >> So, when you create a new session, part
+[559.1s] of it that it was going to do was
+[561.8s] >> if you provide a session ID, it's just
+[564.3s] going to provide one right there. So it
+[565.8s] was actually going to be a much faster
+[567.1s] change I think.
+[568.8s] >> Ah okay. So then yeah. So then you don't
+[571.1s] even need to it's just when you
+[573.5s] >> updating the method inside HLD.
+[577.5s] >> Um so the way the draft launcher works
+[581.1s] here like yeah we just see what it does.
+[583.7s] >> Uh I think it can be very helpful when
+[585.4s] you're implementing to again have your
+[587.4s] codebase expert to come with opinions
+[589.5s] and especially with this one we have so
+[591.0s] many different ways to do it. We should
+[592.4s] kind of have an approach in mind.
+[594.1s] >> Cool. Let's do it.
+[595.4s] >> Um, so I think maybe what we can do is
+[598.1s] like when you you're saying when I
+[600.3s] launch the session, just have HLD go
+[602.9s] make a thing during the session
+[604.6s] creation.
+[605.8s] >> So I think the best way to do this is I
+[607.9s] care I I don't want there to be a lag in
+[610.0s] spinning up session cuz like it's just
+[611.9s] annoying for the user. So what I was
+[613.4s] thinking is you create the session then
+[614.8s] the HLD as you named it is going to
+[617.5s] create a new background process like a
+[619.5s] deferred ghost code routine that is just
+[622.5s] going to go ahead at this point and then
+[624.2s] spin up a way to like go retitle that
+[627.1s] retitle that session.
+[628.5s] >> Interesting.
+[630.0s] Um
+[630.4s] >> yeah because I don't want like it's a
+[631.9s] two second lag for every user
+[633.6s] >> to create a title and that's freaking
+[635.0s] dumb.
+[636.8s] >> Okay cool. Um,
+[639.8s] >> and since we have Go, we can do a
+[641.3s] deferred uh we can do a Go routine
+[643.5s] really easily and it'll be really fast.
+[646.6s] >> Okay. I'm
+[649.0s] I think that should work. I'm curious if
+[653.4s] I'm just going to go pull up this
+[654.8s] session because we have two we can test
+[656.4s] actually the like live updates on the
+[658.2s] front end. So, if I go to this say hi
+[660.1s] session over here, I've just have two
+[661.8s] builds running. But if I edit this here
+[665.4s] and change it.
+[669.8s] Okay. So on the next message, the title
+[671.8s] does update over here. It doesn't live
+[674.3s] stream in, but I think that's fine for
+[676.2s] now. I think that's for our MVP.
+[678.7s] >> If you're doing SSE,
+[679.8s] >> we're not doing SSE for title changes
+[682.2s] because it's not expected that it
+[683.8s] happens asynchronously right now.
+[685.3s] >> But we can make that part of the
+[686.6s] asynchronous request to go update that
+[689.4s] >> to go send an event and have it resync.
+[691.4s] Okay,
+[691.8s] >> that's part of the RPI process, I would
+[693.5s] say.
+[694.3s] >> Cool. And yeah, and then my advice is
+[696.5s] basically like we'll leave that to a
+[697.9s] later phase. Uh cuz we want to make sure
+[699.8s] this works and we can test the core of
+[701.7s] it and then we'll uh like move on to
+[704.2s] optimizing the experience.
+[705.6s] >> Cool. Shall I screen share? Do you want
+[707.4s] to do it? Do you want to try?
+[708.4s] >> Uh yeah, let's let's kick it off. I
+[709.8s] think I think that's probably good
+[710.6s] enough. Um, and I think one thing that's
+[713.0s] probably worth doing is like writing up
+[716.0s] the like ticket for I mean we can we
+[719.0s] don't have to, but like when we did it
+[720.2s] with um the VAML features, we did have
+[723.6s] like a somewhat written up like GitHub
+[725.7s] issue of the thing we were doing.
+[727.5s] >> I will I will just articulate this to
+[729.6s] the user and I'll show exactly how I do
+[731.5s] this.
+[732.2s] >> So I already have the repo spun up. Um I
+[734.6s] cloned it out uh and then I can run the
+[738.2s] dev version of this. And before even
+[740.2s] running the dev version, I'm just going
+[741.4s] to start the command. We'll use opus, I
+[743.9s] guess. Is that the best model now?
+[746.4s] >> Uh, yeah, opus is pretty good for
+[747.8s] everything at this point.
+[750.9s] >> Uh, code layer
+[754.2s] research codebase. Okay,
+[758.9s] when a user creates a new session, I
+[761.8s] want to create a AI generated title
+[764.4s] throughout this process. Now, the AI
+[766.7s] generated title should cause no lag. So
+[768.4s] what I want to happen is technically the
+[770.0s] HLD should spin off a go routine that
+[773.9s] creates a
+[775.9s] uh that attempts to create a title based
+[777.7s] on the session as it's running and the
+[779.4s] message that the user gave us and then
+[781.4s] after that what I want to happen is it
+[783.4s] should send an event to the front end
+[785.6s] that actually uh via SSC that actually
+[788.4s] tells the model uh that tells the UI
+[791.8s] exactly what the new title is. So
+[794.6s] therefore there's no lag to the user and
+[796.2s] we get AI generated titles. So users
+[798.1s] don't have to predict what the title is.
+[801.6s] I'd also like some sort of nice UI
+[803.4s] indicator to know that we're actually
+[804.9s] generating a title in the front end in
+[806.9s] this case that it happens so it's not
+[808.2s] like randomly changing for the user.
+[810.8s] >> I'm going to give you some more things
+[812.3s] to add there.
+[813.3s] >> Tell me.
+[813.7s] >> Are you on are you on headphones or if I
+[815.2s] talk will it be able to
+[816.8s] >> If you talk it should go in. So, we're
+[818.9s] going to want to check for um how Claude
+[822.3s] Code sessions are launched um from HLD
+[825.0s] via the Claude Code Go library. Um we're
+[828.8s] going to be creating a new session with
+[832.3s] Haiku and creating it in a temporary
+[834.7s] directory. So, this isn't going to go
+[836.2s] through the main code path where the
+[837.8s] demon like manages a session and tracks
+[840.2s] it in the database. This is just going
+[841.6s] to be a one-off throwaway disposable
+[843.5s] thing where we put in a plain prompt and
+[845.8s] we get an answer back. So, we're going
+[847.2s] to need to override the system
+[848.5s] instructions. We're going to need to run
+[850.8s] it in a small tempter so there's no git
+[852.9s] or codebase context clouding the system
+[854.9s] prompt.
+[857.1s] >> Yeah. Can I make a comment on that?
+[859.4s] Should we try and do this after we
+[860.8s] actually do the research sentence and
+[862.6s] then add that in?
+[863.1s] >> Yeah. So, I think this is really your
+[864.8s] Wait. So, put this in. Hold on. Let's
+[866.9s] keep all of this. All of this is
+[868.4s] implementation details. And what I like
+[870.4s] to do during research is just tell it
+[872.4s] the parts of the codebase that are going
+[873.9s] to matter without telling it what we're
+[875.9s] building. I would almost stash all of
+[878.2s] this in a text file and save it for our
+[880.3s] planning.
+[880.8s] >> That's actually different than how I
+[882.0s] approach it. Um
+[883.1s] >> I know that's why we're going to
+[886.2s] >> do you want to try Okay, I can I can try
+[888.2s] your approach, but I was going to try my
+[889.4s] approach if you're down for it and just
+[890.5s] see what it comes out with and then we
+[891.8s] can just backtrack and retry again with
+[893.1s] the Obsidian system for years.
+[895.5s] >> Okay, let's do this. Let's launch this
+[897.4s] one and we'll launch another one in
+[899.0s] parallel and then we can compare the two
+[900.7s] documents and maybe combine them. The
+[902.2s] problem is is this is going to come with
+[903.5s] a research that includes lots of
+[905.2s] implementation advice which is like when
+[908.6s] you do implementation during the
+[910.2s] research phase, you don't get good
+[912.4s] answers because the model just picks the
+[914.0s] first thing it thinks of. Whereas the
+[915.9s] the whole point of the planning prompt
+[917.6s] is to work back and forth quite a bit in
+[920.6s] order to make sure that you're
+[922.6s] considering all options. the research
+[924.9s] one is just going to dive into okay
+[926.7s] here's how we're doing it great that's
+[928.0s] how we're doing it and it's going to let
+[929.0s] the model decide which is not going to
+[930.7s] yield the best results
+[931.9s] >> so I have a question for that do you
+[933.5s] find that that is necessarily bad u in
+[936.3s] the case of like smaller features like
+[938.3s] the one that we talked about
+[940.2s] >> if you if you already know exactly how
+[942.2s] you want to do it then you can sometimes
+[944.6s] get away with it I don't think this is a
+[946.6s] small feature though like this is
+[948.5s] probably like a a day's worth of work if
+[951.0s] if you were going to really like go
+[952.3s] through and code it by hand or code it
+[954.0s] just like tab complete. So, let's do
+[956.0s] another research and I will I will give
+[957.4s] you like if I were building this not on
+[959.5s] a podcast, here's how I would prompt it.
+[961.4s] So, you ready?
+[962.3s] >> Yeah.
+[963.8s] >> Uh, find everywhere about how the demon
+[966.9s] launches cloud code sessions through the
+[968.7s] cloud code go library. find everything
+[971.8s] related to um
+[975.2s] how the front end uh creates sessions
+[978.6s] and launches draft sessions and uh how
+[983.4s] SSC events are streamed down to the
+[985.8s] front end and everything about how
+[988.1s] titles are set the the logic for
+[990.6s] autotitle versus human specified title.
+[994.1s] What? Uh, so change SSC to SSE.
+[999.1s] Um, and then I'm just going to give you
+[1001.4s] I I'm going to do another thing which is
+[1003.1s] like just pulling in documentation. Um,
+[1005.7s] if you go get the Cloud Code TypeScript
+[1007.6s] SD or No, we're not going to use that.
+[1009.4s] Damn. Uh, is there a Cloud Code
+[1013.7s] SDK like CLI docs?
+[1017.6s] Because we want to just have all these
+[1019.0s] flags. I suspect that it'll be easier
+[1022.1s] than you think here, Dexter.
+[1023.8s] >> Okay. Yeah. Uh
+[1027.8s] >> because I think the other research will
+[1029.1s] mostly do the task. I I can run this if
+[1031.0s] you want.
+[1032.7s] >> And we need to look at the
+[1033.7s] >> Yeah, let's let's see what that looks
+[1035.0s] like. That's just a double submit. It's
+[1037.9s] fine. It's working.
+[1039.4s] >> Okay.
+[1040.0s] >> The event fired twice. That's a bug.
+[1042.6s] >> Um and now while we're doing this, it's
+[1044.2s] going to off actual task.
+[1045.8s] >> And then we're going to go do the other
+[1046.8s] one, right?
+[1047.5s] >> Yeah.
+[1049.0s] What I want to do here is I really want
+[1051.0s] to add u the ability to open markdown
+[1055.3s] files through Obsidian instead of the
+[1057.2s] default file editor. What are the parts
+[1059.0s] of the codebase that are relevant for
+[1060.4s] this?
+[1062.6s] >> Perfect.
+[1066.4s] Oh, you're hitting that a lot.
+[1067.9s] Interesting.
+[1069.0s] >> That's really interesting. Um it's
+[1070.6s] probably going to take forever to do
+[1071.8s] this research. That's why I actually
+[1072.9s] hate using Opus, to be honest. Well, the
+[1074.9s] new office is faster and also all of
+[1076.6s] these sub agents run with sonnet.
+[1079.8s] >> Oh, do you do you guarantee that or do
+[1082.3s] you
+[1083.3s] >> It's hardcoded in the uh in the agent uh
+[1087.4s] header.
+[1088.8s] >> Oh, interesting.
+[1090.3s] >> Um you can look at the tool call
+[1091.8s] actually if you hover over one of those
+[1093.3s] and hit I uh sorry uh so you can use H
+[1097.5s] to contract this.
+[1100.2s] So, not here, but actually the tool call
+[1102.4s] on the sub agent itself. So, there's no
+[1105.2s] way to click and open that one. You have
+[1106.7s] to focus the sub agent and hit I use
+[1110.6s] >> no use J to go down to the sub agent.
+[1114.2s] Sorry, I'm going to make you use the Vim
+[1115.6s] key bindings,
+[1116.6s] >> right?
+[1117.1s] >> Uh down. Keep going down until you're
+[1119.1s] focused on the top level of the sub. So,
+[1121.2s] go up. Yeah. Now, hit I. So, this will
+[1124.6s] tell you what prompt was passed to the
+[1126.4s] sub agent. And sometimes I've seen the
+[1128.9s] model will actually pick a sub agent. So
+[1130.8s] sometimes it will like choose haik coup
+[1132.6s] here. It looks like it's just chosen the
+[1134.5s] prompts so far.
+[1135.8s] >> I see.
+[1137.4s] >> Um and then like just to show why this
+[1139.3s] is an issue like let's go put titles on
+[1141.2s] these so we don't lose track of what
+[1142.8s] they are.
+[1147.0s] >> Uh this is research uh code
+[1151.5s] uh research. Uh what am I doing?
+[1153.8s] Obsidian.
+[1164.2s] Cool.
+[1169.5s] That's interesting. Yeah. What I found
+[1171.8s] is when I go do this, um, it usually
+[1175.0s] works pretty well without me having to
+[1176.5s] do too much work. There we go.
+[1179.3s] Uh, and then it's going to write the
+[1180.4s] research document. So, this one will
+[1181.6s] come out. Let's open obsidian
+[1184.6s] file.
+[1195.7s] Byopots's working in sync layer, which
+[1197.5s] is our kind of like preview playground
+[1200.2s] for uh more experimental stuff.
+[1206.8s] And then I should get research popping
+[1208.4s] out pretty soon if this generates stuff
+[1211.1s] correctly.
+[1212.9s] And while we're doing this hide
+[1216.7s] mo gave us the uh CLI reference which is
+[1219.8s] probably useful.
+[1222.2s] Um do you want to grab that and add a MD
+[1225.0s] on the end and kind of we can we can
+[1227.1s] reference that during the planning.
+[1233.2s] Let me just read this really fast.
+[1237.1s] >> Yeah, this is because what happens is
+[1238.9s] like cloud code go is our library that
+[1240.8s] wraps the CLI and so it just like if
+[1243.5s] we're going to make changes to that to
+[1245.0s] create a new kind of like hey just do a
+[1247.0s] one-off session that is like text in
+[1248.7s] text out no tools.
+[1249.8s] >> I'm going to try this really fast. Can
+[1251.2s] we just try this and see if this works?
+[1253.8s] >> Yeah.
+[1254.6s] >> Um so what do we want? And how do you
+[1257.3s] delete uh session IDs?
+[1260.6s] because it'll always create a new
+[1261.9s] session I believe here.
+[1263.8s] >> So it creates a new cloud code session
+[1266.0s] but human layer creates the human layer
+[1268.0s] session. So like it won't actually
+[1269.8s] create a human layer unless we unless we
+[1271.9s] create one. And I don't think we
+[1273.4s] necessarily want to show that because
+[1274.6s] this is just like a little one-off
+[1275.9s] throwaway session.
+[1277.3s] >> Yeah, exactly. And then it's going to be
+[1279.0s] recursive in problem.
+[1280.6s] >> Yeah. And this is actually a really
+[1282.1s] interesting, you do this with claw or by
+[1283.6s] hand, but it's really useful to have a
+[1285.0s] little proof of concept script before
+[1287.1s] you go into planning of like, hey,
+[1288.6s] here's an example of how I do this on
+[1290.5s] the shell. This is I know this works
+[1292.9s] kind of thing.
+[1293.5s] >> Do you want to read this?
+[1295.1s] >> Yeah, let's do it. Okay, cl go.
+[1299.0s] Okay, we add a new event type.
+[1306.9s] Go routine can be used in the session
+[1308.4s] manager after a session is created.
+[1310.0s] Yeah. See, this is a lot of
+[1311.0s] implementation details, which is
+[1312.4s] probably
+[1312.7s] >> I don't think it's a bad thing, though.
+[1314.8s] >> It's I will tell you why it's a bad
+[1317.0s] thing is like you don't want like you
+[1320.1s] want to brainstorm with the model. You
+[1322.4s] don't want the model to pick its first
+[1323.8s] choice because it's nondeterministic.
+[1325.6s] Like what gets much better results
+[1327.3s] especially for more complex things or
+[1329.1s] like when you have strong opinions about
+[1330.5s] the codebase and this happened in the
+[1331.7s] last stream where it was like do you
+[1332.9s] want to do this, this, or this? Okay,
+[1334.3s] for this part, do you want to do this,
+[1335.6s] this, or this? Hey, for this part, do
+[1336.9s] you want to do this, this, or this?
+[1337.8s] Maybe I should show you. When I was
+[1339.6s] doing this at least, it actually doesn't
+[1341.2s] often pick just one. It actually picks
+[1343.3s] like multiple options when it when I
+[1345.2s] when I ask it to go propose options
+[1346.9s] except for the areas where there's
+[1348.0s] really like one or two right choices.
+[1349.6s] >> But this is a plan. This is a plan. I'm
+[1351.6s] talking about research.
+[1352.4s] >> I'll take the research too. Sorry. The
+[1354.2s] research is very similar too.
+[1356.0s] >> Oh, sometimes it will propose options
+[1358.0s] here. Yeah. But like for example like
+[1360.5s] this research I worked on it for quite
+[1361.9s] some time and it actually generated like
+[1363.8s] multiple design like see
+[1366.3s] >> it actually just does that uh whenever
+[1369.8s] >> okay I have seen that sometimes um
+[1373.0s] >> where I go
+[1375.0s] >> all right cool let's go back to the yeah
+[1377.1s] synchronous oneoff sessions launch and
+[1379.0s] wait
+[1381.1s] session config options
+[1384.7s] okay cool this has uh these are the
+[1387.4s] fields we would choose.
+[1390.8s] Okay. All right. This is actually
+[1392.2s] probably going to be pretty good.
+[1394.0s] >> Yeah. Cool. That's what I figured.
+[1398.1s] >> Um,
+[1401.5s] >> cool. And because we haven't actually
+[1403.0s] tried this, I'm actually like when we go
+[1404.9s] to the planning, I would like one thing
+[1407.0s] in planning that I think is really
+[1408.2s] important is like put your biggest
+[1409.4s] unknowns as the first phase. And
+[1411.4s] >> Oh, you said added an SSC event, too.
+[1414.1s] >> Yeah. Well, it's it's it's proposing how
+[1417.3s] you could do this. Yeah.
+[1418.5s] >> Yeah.
+[1420.2s] Title change API
+[1423.6s] update session.
+[1441.9s] >> Does this look right?
+[1443.5s] >> Yeah, this looks pretty good. the um
+[1445.4s] yeah, one thing we'll add in the plan is
+[1447.1s] I'd like the query to be a little bit
+[1449.2s] viewshotted, which is like not just
+[1452.0s] here's the prompt, make a title, but
+[1454.2s] also here's the prompt and here's the
+[1457.3s] last 20 titles that the user put in. And
+[1460.0s] there's a difference in the system
+[1461.4s] between the like some sessions won't
+[1463.5s] have a user user selected title. Some of
+[1466.4s] them just use the prefix of the prompt,
+[1468.2s] but those are two separate columns in
+[1469.7s] the database. And so it's like I want to
+[1471.7s] grab the last 20 titles because if we
+[1473.4s] can make it follow their pattern, that's
+[1475.0s] going to be delightful.
+[1476.6s] >> But I think that's going to bias the
+[1479.0s] model in the wrong way because we're
+[1480.1s] going to have an AI generated title.
+[1481.4s] Where is that going to go? Is that in
+[1482.7s] the user generated title or the or the
+[1485.4s] >> So that's interesting. I think um yeah,
+[1488.2s] if the AI is going to generate a title,
+[1490.3s] uh a lot of people have already
+[1491.8s] developed systems for how they like to
+[1493.4s] manage their titles. I would say let's
+[1495.1s] plan to split that into separate phases
+[1497.0s] where it's like okay phase one or phase
+[1499.4s] n is going to be like just generate the
+[1502.1s] title and then phase n plus one will be
+[1504.6s] now try doing it with injecting the past
+[1506.8s] the past 20 titles and we can just play
+[1508.6s] with it at the end of each phase and see
+[1510.0s] how it feels.
+[1511.0s] >> Sorry, let me reframe the reframe the
+[1514.1s] thing. Um, what I meant that by that was
+[1517.1s] that if the user is generating the
+[1518.5s] title, what I'm worried about is going
+[1519.9s] to happen is that
+[1521.7s] >> how will you differentiate titles that
+[1523.2s] are generated by the AI model versus the
+[1525.8s] user?
+[1526.8s] >> We can add a new column for them. Yeah,
+[1528.4s] because at some point if the AI
+[1529.6s] generates a bad title, then you want to
+[1531.4s] go um Yeah, I think that's also worth
+[1533.7s] like that's that's a really good point.
+[1535.3s] Yeah, you're not getting that's why like
+[1537.0s] I think fuchsia prompting is actually
+[1538.3s] not going to work too well here
+[1541.4s] >> because it's not you won't know which
+[1543.3s] samples to actually use for fuchsia
+[1544.8s] unless you distinguish that in your
+[1546.0s] database somehow.
+[1547.0s] >> We should distinguish that in the
+[1548.2s] database though because if there's a
+[1549.7s] there's a if there's a AI generated
+[1551.6s] title and a user generated title I want
+[1553.8s] to I want to show the user title.
+[1555.8s] >> Cool. So shall we make a plan in that
+[1557.6s] case from this?
+[1558.1s] >> Uh yeah, let's make a new one. New new
+[1559.6s] session and we'll do create plan.
+[1561.5s] >> Uh okay. Do you need a new session?
+[1563.6s] We're pretty good on context. I think
+[1565.0s] it'll be fine.
+[1567.4s] >> Um
+[1569.3s] I think we should make a new session
+[1571.4s] >> into a plan. Okay, let's do that. Uh
+[1574.3s] I'll make a new plan for you. Uh this
+[1576.6s] one is still running.
+[1578.7s] Uh
+[1579.2s] >> yeah, can you just click into that one
+[1581.1s] and just can you title these properly?
+[1583.3s] >> Yes.
+[1586.2s] Research uh research uh what is this
+[1589.7s] called? Uh session titles with with
+[1593.6s] spec. This is like Yeah. Okay. And then
+[1597.0s] this is like research session titles. No
+[1599.7s] spec,
+[1602.6s] right? No. No. Like implementation that
+[1605.4s] we're trying to do.
+[1606.6s] >> Cool.
+[1608.0s] >> Uh and then I'm going to kick that off
+[1609.4s] while I before I go read the
+[1612.2s] >> Yep.
+[1613.6s] >> Okay. Plan.
+[1615.0s] >> So fire this off with nothing.
+[1618.2s] No, just No, with nothing in it. just
+[1620.5s] just create plan. Again, this is like a
+[1623.3s] trajectory thing. The reason why we do
+[1625.1s] this is because the thing that makes
+[1626.6s] planning really powerful is that it's a
+[1628.2s] back and forth conversation.
+[1630.2s] >> Uh and so you want to from day one set
+[1632.6s] the trajectory to there is user and
+[1634.9s] agent back and forth. If you just do
+[1636.6s] create plan and give it the research and
+[1637.9s] tell it what you want, it is much less
+[1640.0s] likely to follow the instructions of
+[1642.2s] like ask me questions then tell me the
+[1644.5s] outline only then write the file. And
+[1647.6s] the idea there is like you want to do as
+[1650.0s] much steering as possible before you eat
+[1652.2s] the like 8% of the context window that
+[1654.5s] is required to write out this 600 line
+[1656.5s] markdown document.
+[1658.0s] >> That's interesting. I have found it to
+[1659.8s] be much faster to not do it that way
+[1662.3s] because
+[1663.0s] >> depending on how complex it is, right?
+[1664.5s] It's like the the answer is like
+[1666.2s] depending on how hard and big the
+[1667.8s] feature is that it dictates the amount
+[1670.6s] of context engineering that you have to
+[1672.5s] do. The more context engineering you you
+[1674.6s] do, the the the the better the more
+[1677.0s] careful you are with guiding the
+[1678.2s] session, the bigger and more complex
+[1679.6s] features you can solve. And so the only
+[1682.1s] way to do this is to get a bunch of reps
+[1683.8s] and figure out like, okay, sometimes
+[1685.1s] you're going to use way too much context
+[1686.4s] engineering. It's going to feel like
+[1687.4s] overkill. Sometimes you're going to use
+[1689.1s] not enough context engineering and your
+[1690.6s] plan's going to suck and you're going to
+[1691.6s] have to go do a bunch of manual cleanup
+[1693.0s] on it. And the only way to know which
+[1694.9s] one is like right is just get a bunch of
+[1696.9s] reps and do it all the time.
+[1705.6s] I'm just skimming this really fast just
+[1707.0s] to make sure this is all correct. Um,
+[1709.0s] and what it's doing. I don't know this
+[1710.9s] codebase as well, so I just don't know
+[1712.3s] if it's picking up the right files.
+[1713.6s] That's up to you.
+[1715.3s] >> Yeah. Yeah. Yeah.
+[1718.6s] No, I think this is all fine.
+[1721.2s] We're we're simplifying a lot of this
+[1722.9s] architecture soon, so I haven't spent as
+[1724.5s] much time in this lately, but
+[1727.7s] Kyle's ripping out zoo stand and putting
+[1729.4s] in a proper like sync tanstack DV thing,
+[1731.9s] which I'm very excited about.
+[1734.8s] >> Yeah, when I look at this, I don't uh
+[1738.3s] >> No, this is fine. Keep scrolling and
+[1739.4s] I'll let you know if I see something.
+[1740.8s] Cool.
+[1744.8s] >> Yeah, this is probably fine.
+[1749.1s] >> Oh god. Actually this is this is useful.
+[1752.5s] Yeah. So this is more objective about
+[1754.1s] like how does the system work today
+[1756.2s] compared to the other one which is like
+[1757.6s] here's how it will work.
+[1760.8s] And the idea is like if you separate out
+[1762.8s] the like you want to keep the model
+[1764.3s] objective as long as possible because
+[1766.3s] it's very good at explaining what's
+[1768.4s] there. Models are very bad at evaluating
+[1770.5s] whether something is good or not. They
+[1771.9s] just want to tell us what we want to
+[1773.0s] hear. Right? We talked about this in the
+[1775.6s] like uh the email classification episode
+[1778.9s] too of like don't say scale of 1 to 10
+[1781.9s] how how bad is this. It's like give me a
+[1784.1s] bunch of boolean flags about like what
+[1785.8s] is true about this email and then I'll
+[1787.4s] use deterministic code to
+[1789.0s] >> is this good? Should I use this to
+[1790.5s] create the plan? What do I need to do
+[1792.4s] here?
+[1793.4s] >> So I think you I think you did you
+[1794.6s] already kicked off the plan, right? Or
+[1795.8s] you want to you like let's just use the
+[1797.7s] first one. I think the first one is
+[1798.9s] fine.
+[1799.8s] >> Oh well I I think we should run both
+[1801.4s] because then we can get an idea. um okay
+[1803.9s] about it
+[1805.1s] >> and then people can get an idea for like
+[1806.6s] exactly what the different processes end
+[1808.2s] up releasing because I think that's I
+[1811.0s] think a key part
+[1811.9s] >> okay so let's create another planning
+[1813.4s] session and and you give the other one
+[1814.9s] the other research but then I would say
+[1816.7s] the one with no spec so we made this we
+[1818.6s] made this research
+[1819.3s] >> we answer this one
+[1821.1s] >> so this is um can you which is this the
+[1825.0s] one with with spec or no spec no spec oh
+[1828.2s] this is with
+[1829.0s] >> this is the one with the spec this is
+[1830.3s] the one with no spec Yeah.
+[1833.2s] >> So this is see these questions are
+[1834.8s] objective. This is what these questions
+[1836.6s] are supposed to be which is like here's
+[1838.9s] the things I couldn't figure out by
+[1840.3s] reading the code. The other one is all
+[1842.0s] the questions are implementation
+[1843.4s] questions and you want to make sure the
+[1845.4s] model doesn't start thinking about how
+[1847.0s] to build it until it you you're
+[1848.7s] confident that it actually understands
+[1850.2s] how it works today. That's that's why we
+[1852.6s] try to keep the research objective.
+[1854.0s] >> So what should we do over here? [snorts]
+[1856.4s] >> Um I think most of these are probably
+[1857.9s] irrelevant. Um,
+[1861.7s] >> okay.
+[1864.2s] Time to gaslight.
+[1866.2s] >> Time to gaslight. [snorts]
+[1867.8s] >> Okay. Um, in that case, u I will even
+[1871.5s] >> So, you have your you have your planning
+[1873.4s] session.
+[1875.6s] >> So, yeah, let's do create plan. CL
+[1878.4s] create plan. Yeah,
+[1879.6s] >> create plan. And then I will put a path
+[1882.5s] as file. But you you prefer doing this.
+[1884.3s] >> I'm saying ship ship this and then go.
+[1886.0s] And there's the other thing you missed
+[1887.2s] on the last one, which is uh what I call
+[1889.2s] the magic words, which is like
+[1890.9s] reinforcing the instructions and the
+[1893.0s] like set of orders. Um, so before you
+[1895.6s] hit send on this, I'm going to give you
+[1896.8s] something else to add.
+[1898.1s] >> That's so interest. I feel like we vibe
+[1899.7s] code very very differently. Um,
+[1902.9s] >> well, I've learned as I've done this and
+[1904.4s] like worked with a lot of different
+[1905.6s] people on this, I found the things that
+[1907.7s] help like especially people who are
+[1909.8s] newer to this, I've found the things
+[1911.3s] that help keep this on track because
+[1913.0s] like I've done thousands of these at
+[1914.6s] this point. I have a very good sense of
+[1916.7s] like, oh, this thing skipped the
+[1918.4s] questions. That's bad. It needs to ask
+[1920.3s] the questions. But if you only done this
+[1921.6s] twice, you're not going to notice that
+[1922.9s] it's like skipping steps.
+[1924.4s] >> Yeah, I think even for like the way that
+[1926.4s] we code is very different on this, which
+[1927.8s] is just I think fascinating.
+[1929.2s] >> Um,
+[1929.7s] >> so this is objective. So in order to
+[1931.8s] actually get good results, we're going
+[1933.0s] to need to give it our spec, which is go
+[1935.5s] grab the prompt you used in the first
+[1939.2s] one, like the research session titles.
+[1943.4s] go like scroll to the top and just get
+[1945.4s] that first user message and copy it
+[1948.2s] >> the whole thing.
+[1949.5s] >> Yeah.
+[1951.4s] Yep.
+[1953.0s] Because Yeah. Because this one is is
+[1954.9s] actually what we're building. And so I
+[1957.0s] would tell it that and then before you
+[1958.3s] hit send Oh my god. You guys
+[1961.3s] >> just hit control X and we're going to
+[1962.8s] fork this.
+[1964.2s] >> Um wait till it actually emit. Yeah. Hit
+[1966.2s] control X. Uh hit command Y to fork.
+[1970.6s] Command enter. It's a funny Y bug.
+[1973.8s] >> Command enter. Yeah. No. What?
+[1978.6s] Command Y and then command enter.
+[1981.8s] And then at the end, you're going to put
+[1983.5s] something else. Put on the voice thing.
+[1985.4s] >> Yo. Okay.
+[1986.7s] >> Work back and forth with me starting
+[1988.6s] with your open questions and the phases
+[1990.9s] outline before you write the plan.
+[1994.5s] This is in the slash command. It's just,
+[1996.7s] you know, especially actually Opus 4.5.
+[1999.4s] Sometimes it follows instructions
+[2000.6s] better, but sometimes it skips steps.
+[2002.3s] Um, even Opus 4.1 would skip steps all
+[2005.4s] the time. So, okay. So, this is the Will
+[2007.7s] you just title this so we know which one
+[2008.9s] this is? So, this is the uh planning
+[2012.2s] session titles from research with spec.
+[2022.8s] So, key discoveries and then it's going
+[2024.8s] to have some questions.
+[2035.4s] I think those prompts are fine.
+[2038.4s] So I would just say like we're going to
+[2039.6s] write all the feedback in one message
+[2041.0s] and then send it all in one go. So you
+[2042.8s] can say one. Yes, that's fine.
+[2052.8s] Uh
+[2054.6s] silently fail and keep the default fall
+[2056.6s] back. That's great. Yeah, we can add
+[2059.3s] retries later.
+[2064.7s] Three
+[2069.8s] manual edit wins because we will always
+[2073.9s] show the manual the users manual thing
+[2077.6s] over the AI generated thing because
+[2079.5s] we're going to create a separate
+[2083.9s] the AI generated title should actually
+[2085.5s] be stored in a separate database column
+[2087.1s] that we'll have to create and in the UI
+[2089.4s] the manual edit will just generally win
+[2091.1s] because that column will take
+[2092.2s] precedence.
+[2095.6s] Perfect.
+[2100.6s] Always haiku for now. We can make it
+[2102.5s] configurable later.
+[2108.2s] >> Oh, unique.
+[2108.9s] >> Uh
+[2112.1s] well, which one do you want?
+[2117.2s] >> Yeah. Okay,
+[2121.7s] >> let's give this more bypass permissions
+[2124.9s] expire.
+[2125.5s] >> And then this is the planning session
+[2128.9s] titles. No spec, right?
+[2133.4s] This is the one we didn't give it a spec
+[2135.2s] during the research. Okay, cool. Those
+[2137.9s] are running. You want to jump to
+[2139.0s] Obsidian?
+[2140.1s] >> Do it.
+[2141.3s] >> Okay, cool.
+[2143.8s] And this one is is small. So I'm fine if
+[2145.9s] if the research is low quality because
+[2147.8s] it has like specification in it. Uh
+[2150.6s] that's that's fine because there's
+[2151.9s] pretty much only one way to do this
+[2153.2s] thing. There's not a lot of like
+[2154.4s] brainstorming that needs to happen.
+[2158.0s] Um yes, the app name helpers are
+[2160.9s] correct. The existence validation looks
+[2163.4s] good.
+[2165.9s] Um
+[2167.4s] preference stuff. Yeah, this looks
+[2168.9s] correct.
+[2170.8s] Settings dialogue. Yep. Um, file link,
+[2173.9s] use file shortcuts, active session,
+[2175.9s] additional directories. Yeah, those are
+[2177.8s] all fine.
+[2178.4s] >> I mean, I don't even know how to open a
+[2179.9s] file in Obsidian.
+[2182.2s] >> Um, I think I mean we can try it on the
+[2184.6s] CLI, but um, can you just find like what
+[2188.8s] folder is your Obsidian in?
+[2191.0s] >> Research
+[2192.9s] to open a file via a CLI command from
+[2197.8s] Obsidian.
+[2199.4s] >> I think we just use Yeah. And uh
+[2202.2s] >> I don't I don't know if Obsidian allows
+[2203.5s] this because Obsidian I don't think
+[2204.7s] allows for opening files.
+[2206.5s] >> Yeah,
+[2208.6s] >> but you can't open
+[2209.5s] >> I am pretty sure. So yeah, we need to
+[2212.2s] figure this out. Yeah.
+[2213.1s] >> Yeah, that's my point. So like we'll
+[2214.5s] just let this run.
+[2217.8s] Um and I think that's the one thing I
+[2219.2s] didn't see in the research right away. I
+[2220.5s] was like I did not see anything related
+[2221.8s] to opening a file in Obsidian.
+[2223.6s] >> Yeah. And this is where I get into like
+[2225.0s] PC's like if you can get the bash
+[2227.0s] oneliner to open a file in Obsidian
+[2229.2s] that's great guidance like and prove
+[2230.7s] that it works to yourself. This is a
+[2232.3s] thing that's like not really baked into
+[2233.4s] the methodology yet but is like the
+[2235.1s] value of like doing little one-off tests
+[2237.6s] as part of your research. Today research
+[2239.6s] is like search the web and search the
+[2241.8s] codebase as it exists. that there's not
+[2243.7s] a stage in here that is more around um
+[2248.7s] that is as much around uh what is it
+[2252.0s] like reverse engineer a blackbox system
+[2254.0s] where we don't have the code for it. Um
+[2256.2s] we do this a lot with like the cloud
+[2257.7s] code CLI. All right, cool.
+[2259.4s] >> Should we generate titles for draft
+[2260.9s] sessions? Drafts might not have a
+[2263.0s] >> No, do it on launch.
+[2276.4s] Two. Sure. Three. Draft session handling
+[2281.4s] only on launch. I kind of like the idea
+[2283.7s] of drafts having them too. But that's
+[2285.1s] okay.
+[2287.0s] >> That's later. Yeah. The problem is with
+[2288.4s] the draft thing is that if people don't
+[2290.7s] know that it's autotitled and they just
+[2292.4s] always make a title for all their
+[2293.8s] sessions, then they're never going to
+[2295.1s] see this feature. But we couldn't kind
+[2296.4s] of like this is all this is all stuff
+[2297.8s] where I'm like I really want to just get
+[2299.4s] this working as quickly as possible and
+[2301.4s] then we can go back and iterate on the
+[2302.8s] UI a little bit.
+[2314.8s] I also um one thing I will say is like
+[2317.7s] putting just option B and not like a
+[2320.6s] tiny summary of like what it actually is
+[2322.6s] is like put more is going to put more
+[2324.4s] load on the model's like attention. Um
+[2327.3s] so for five I would say like small
+[2329.2s] spinner.
+[2330.9s] >> Yeah. Especially for like a complex
+[2333.6s] thing where there's a lot of options.
+[2335.6s] >> I find it to be
+[2337.4s] >> um
+[2337.9s] >> that's been pretty good at this for you.
+[2339.4s] Okay.
+[2339.8s] >> It just depends. Um I think what I
+[2342.2s] >> it depends but you like the problem is
+[2344.7s] what I don't want is like it goes and
+[2345.9s] writes the plan and then you're like
+[2347.0s] [ __ ] it didn't follow my instructions
+[2348.5s] like this
+[2349.4s] >> in my opinion like um
+[2352.2s] uh no uh
+[2355.0s] the AI generator title should be saved
+[2356.6s] in a separate database column and
+[2358.5s] therefore whenever the user edits it
+[2360.2s] they're adding a second database column
+[2362.2s] and we can guarantee that the user title
+[2363.9s] will always win no matter what.
+[2375.4s] Seven. Yeah, just keep the inherited
+[2377.0s] title. That's fine.
+[2385.0s] >> Cool.
+[2386.8s] And then I would um again do like tell
+[2389.5s] me the phases I Okay. I would say tell
+[2391.4s] me the phases outline before you write
+[2392.8s] the plan because sometimes it skips that
+[2394.7s] step and that's like part of what makes
+[2396.7s] this so powerful.
+[2398.0s] >> Okay, so let's try this.
+[2401.0s] Um
+[2403.5s] >> oh
+[2405.0s] yeah, actually everyone in the chat is
+[2406.5s] also sending links to how to do this.
+[2408.9s] >> Oh, does it work?
+[2411.0s] >> If this works, this is this is going to
+[2413.1s] change my uh workflow a lot.
+[2418.4s] users.
+[2423.2s] >> I don't think your shell autocomplete is
+[2424.9s] going to work here.
+[2429.1s] >> I think you probably need a triple
+[2432.7s] slash.
+[2440.3s] >> Yeah, I'll just add that in.
+[2444.1s] >> Nice. Can you open a directory with
+[2446.4s] that?
+[2453.6s] Um um let me close
+[2454.8s] >> Can you Can you do one that's not Yeah.
+[2456.6s] Can you just do like a file on your
+[2457.9s] desktop or something that's not already
+[2459.4s] open? Cool.
+[2461.9s] >> Um I don't think it opened it.
+[2465.6s] >> All right, let's try again.
+[2468.5s] >> Uh and this is just like making sure
+[2470.2s] that this actually works. All right, so
+[2471.7s] this definitely works because it's
+[2472.7s] already in my thoughts.
+[2474.6s] a separate thing.
+[2476.8s] >> So yeah, this so then we will use like
+[2478.6s] in the planning we're going to use like
+[2479.8s] the tower plugin opener.
+[2484.0s] >> I'm just going to assume that this
+[2485.2s] works.
+[2485.7s] >> TildaVbV just do tilda repreos.
+[2489.6s] >> Oh yeah, I can do that.
+[2496.9s] >> Yeah. So I need to have a vault already
+[2498.6s] made in order for it to open it.
+[2500.9s] >> Okay. But that's usually like
+[2503.1s] >> I should have one.
+[2503.8s] >> You're gonna have that.
+[2504.6s] >> Yeah. Cool.
+[2506.9s] >> Um but we do need to handle that error.
+[2509.0s] >> And we can always do a follow on
+[2510.2s] feature, right? Like this is still you
+[2511.9s] universally adds value and then later
+[2513.8s] you can add another feature that it's
+[2515.0s] like make the vault if it doesn't exist.
+[2516.8s] >> Yes.
+[2518.6s] Uh path is here third party. Nope. We
+[2521.8s] don't want that. We want method one.
+[2524.1s] >> Yep.
+[2529.1s] >> Oh, the other one is a tower plugin. I
+[2531.1s] think, right?
+[2533.8s] >> Um,
+[2536.4s] app.opener. Yeah, app.opener is actually
+[2539.0s] probably the best one.
+[2541.5s] >> App.opener
+[2543.6s] is the best one.
+[2546.4s] >> So, we're going to tell it to like
+[2547.6s] include that in the research.
+[2549.5s] >> Yep. Tell do that. Now, we can go read
+[2552.3s] this one.
+[2553.4s] >> Okay. So, here's our phases.
+[2557.3s] Ah,
+[2557.5s] >> let's go back to obsidian. Let's read
+[2559.4s] this one. I'm not going to
+[2561.0s] So it's it's still it's still proposing
+[2562.9s] the phases. So it hasn't written a file
+[2564.7s] yet.
+[2565.7s] >> Did it write a file?
+[2566.6s] >> It did. Yeah.
+[2568.6s] >> See, this is the thing is you really
+[2570.2s] want to iterate on the phases before you
+[2571.8s] go write the file. Um because now you've
+[2574.6s] used a ton of your context window and
+[2576.2s] you're either in the dumb zone or you
+[2578.1s] need to go rebuild all that context when
+[2579.8s] you want to iterate on this plan.
+[2581.9s] >> The idea of having it talk through the
+[2583.8s] phases with you is for it to outline the
+[2586.2s] phases. still has a ton of meaning, but
+[2588.3s] it's only a couple hundred tokens versus
+[2590.2s] writing this plan as thousands of tokens
+[2592.2s] and now you've like exhausted a lot of
+[2594.5s] the like useful part of the context
+[2596.6s] window.
+[2599.2s] >> But the question I have for that is does
+[2601.4s] that matter for a phase where the phases
+[2603.2s] are correct? Cuz I can just go back.
+[2605.0s] >> No, if everything is correct is is good,
+[2606.7s] but I guarantee you that this is wrong.
+[2608.9s] >> Uh let's take a look. Let's see if I can
+[2610.8s] >> because it's not.
+[2612.0s] >> So schema update is fine, but it's it's
+[2614.3s] not. So the thing is I want to get the
+[2616.6s] unknowns out of the way as quickly as
+[2618.3s] possible which means that I want to get
+[2620.2s] the like a standalone endpoint to test
+[2623.7s] the haiku call and make sure it can pull
+[2625.9s] from all this stuff before we update the
+[2627.9s] database schema. See this is what the
+[2629.4s] models always want to do and we need to
+[2630.7s] update our create plan prompt to fix
+[2632.2s] this better. They're very horizontal.
+[2634.2s] They're like do everything in the
+[2635.5s] database then create the service class
+[2637.8s] with no like entry point that I can
+[2639.7s] access it and then update open API. So
+[2641.8s] like by the end of phase three is the
+[2643.4s] only time you'll even be able to like
+[2645.2s] run a curl command to validate anything.
+[2647.4s] And by that time you're going to have
+[2648.9s] hundreds of lines of code. And if it's
+[2650.7s] wrong, you're like stuck. And so I
+[2653.4s] really actually what I will say is like
+[2655.8s] I want to fork this session and have it
+[2658.9s] create a new plan and tell it what the
+[2661.0s] phases should be.
+[2663.4s] >> Interesting. But so help me understand
+[2666.0s] what's wrong with this plan. So like
+[2667.3s] just
+[2667.7s] >> so the problem with this plan is like
+[2668.8s] you're going to do the database schema
+[2669.9s] update which I think that's fine that
+[2671.5s] can be phase one but then it's going to
+[2673.0s] generate a title generator service which
+[2675.8s] there is no way to test that. This is
+[2678.1s] the most like critical part of this and
+[2683.3s] >> well I can write a unit test in go that
+[2685.2s] test that function.
+[2686.8s] >> No you can't write a unit test because
+[2688.2s] it involves invoking the cloud code.
+[2690.6s] It's I mean it's an integration test
+[2692.1s] basically.
+[2692.7s] >> Yeah that's fine.
+[2695.0s] Um, so I mean, yeah, we can iterate on
+[2697.4s] this plan in place.
+[2698.4s] >> It's going to create one function and
+[2700.1s] then I can test that function though.
+[2702.4s] >> No, it's going to create the function
+[2703.7s] and then it's going to wire it in and
+[2705.1s] it's going to add all this stuff. And I
+[2707.0s] guess my thought is like
+[2709.4s] >> but
+[2709.8s] >> I want to you want to split your phases
+[2711.6s] up into things that can be individually
+[2713.5s] and like where it matters like manually
+[2716.1s] verified beyond just reading the code.
+[2717.8s] You want to be able to run a shell
+[2719.0s] command or run a really like read a
+[2720.8s] really good like integration test and
+[2722.4s] make sure it's doing what you want.
+[2724.1s] because otherwise you're just stuck
+[2725.4s] reading the code and like your goal is
+[2727.7s] leverage. You want to be able to have
+[2729.0s] the AI write the code and as long as the
+[2731.2s] code is like clean enough for you, you
+[2732.8s] don't want to have to go read the logic
+[2734.2s] and make sure it's correct. You want to
+[2735.7s] be able to be like, "Yep, I hit a I hit
+[2737.5s] that endpoint with a curl and it works."
+[2739.8s] >> So,
+[2740.2s] >> and I'm ready to proceed.
+[2741.6s] >> The question I have for you is what I
+[2743.1s] want to do here is like fundamentally
+[2744.9s] you're not going to be able to hit this
+[2745.8s] endpoint with a curl because it's doing
+[2747.0s] a background process. So I mean what you
+[2749.2s] can do is you can just build the service
+[2751.6s] and hook it up to a endpoint and then
+[2754.3s] reuse the same service elsewhere but
+[2756.2s] like I want to be able to validate it in
+[2758.1s] a running process.
+[2760.3s] >> I agree. But do you not think that we
+[2762.1s] can just like test this? Like we can
+[2763.4s] test the generate method and make sure
+[2764.6s] it does something sane.
+[2767.6s] So yeah, I the the fastest way and
+[2769.9s] probably the thing you'll like the best
+[2771.2s] is probably like, hey, add an
+[2772.6s] integration test to phase 2 that
+[2774.4s] actually doesn't mock anything, actually
+[2776.2s] invokes the cloud SDK and just runs the
+[2778.4s] service as part of a test.
+[2780.2s] >> It like uses my anthropic use actually
+[2782.7s] it doesn't even use your anthropic API
+[2784.1s] key because we want to make sure it
+[2785.0s] inherits your cloudmax subscription.
+[2788.5s] >> Yes, but that I think would work.
+[2790.3s] Correct.
+[2791.1s] >> Yeah. So let's let's give it feedback
+[2792.9s] like the first bit of feedback is uh
+[2796.6s] need some testing so I can actually make
+[2798.2s] sure that the stuff is working
+[2799.4s] correctly.
+[2800.6s] >> What's Maybe I'm confused. What's the
+[2802.3s] thing that you're specifically looking
+[2803.4s] to test in phase 2?
+[2805.4s] >> I want to make sure that this function
+[2808.2s] actually like launches the Cloud Code
+[2810.1s] CLI and like builds the thing properly
+[2813.0s] and like and like actually like I want
+[2815.9s] to be able to put in what's 2 plus two
+[2817.6s] and get an answer back or I want to be
+[2819.1s] able to like make sure that the part
+[2820.9s] where it's like here's the user's
+[2822.3s] prompt, give me a title. I want to make
+[2823.8s] sure that's working.
+[2825.7s] Well, integrated with like the cloud
+[2828.3s] stuff. I want to do an integration test
+[2830.1s] here.
+[2833.5s] >> We I shouldn't tell you that. I should
+[2835.4s] have just told the model that, but
+[2837.5s] [snorts]
+[2839.2s] >> even more so true. But what I'm trying
+[2840.9s] to figure out here is like when I go
+[2842.3s] look into this, like
+[2844.3s] >> I can just generate this async and then
+[2845.8s] this will do the trick. But I can just
+[2847.0s] go generate.
+[2848.8s] >> You don't want to be reviewing the code
+[2850.6s] for correctness because then you're not
+[2852.3s] getting much leverage. you're just using
+[2853.8s] all the same mental space, but you're
+[2855.5s] not editing it in an editor. You're
+[2857.0s] editing it in markdown. And that's
+[2858.6s] actually like less good than just
+[2859.9s] writing the code in an editor. So, you
+[2861.9s] want a very easy way to convince
+[2864.2s] yourself that the code itself is
+[2865.8s] correct. And that could be an
+[2866.8s] integration test. It could be a shell
+[2868.4s] script. It could be like a one-off go
+[2870.2s] program with its own main function.
+[2871.9s] Like, I don't care what it is, but like
+[2874.5s] I wouldn't feel good about this plan
+[2876.5s] because we're just going to rip through
+[2877.7s] to the very end and like see if it
+[2879.3s] works. And I don't I don't like that
+[2881.4s] because I want to be able to actually
+[2883.4s] like
+[2884.8s] >> validate along the way so that if
+[2886.4s] something is broken, I'm only working
+[2888.0s] with a couple a hundred or a couple
+[2889.9s] hundred lines of code rather than trying
+[2891.4s] to debug a thousand lines of code cuz
+[2893.2s] that just [ __ ] sucks.
+[2894.6s] >> But what's going to be broken here?
+[2895.8s] Maybe maybe I'm confused.
+[2897.1s] >> I don't know. I don't know what's going
+[2898.6s] to be broken, but I know that if you
+[2900.0s] can't validate it until the end of step
+[2901.8s] four, then like you're it's more likely
+[2904.6s] to I'm it's like how do I get leverage
+[2906.9s] over over the model?
+[2910.0s] I I can see that perspective. I think
+[2911.6s] what I have found at least when I vibe
+[2913.7s] code is I actually do read the code that
+[2916.0s] it snips out because I find it
+[2918.0s] >> no you do you should read the code but
+[2920.0s] also like
+[2921.3s] >> I think that it's faster and like the
+[2923.8s] thing that makes models like models are
+[2925.2s] not good at evaluating whether code is
+[2926.8s] correct. Yep.
+[2928.3s] >> So, you want a thing that you can valid
+[2930.2s] validate is correct, which is like if
+[2931.8s] you're just going to read every single
+[2933.0s] line of code and try to mentally model
+[2934.6s] the whole thing. Like I'm telling you
+[2937.0s] that my plan my my my approach here
+[2939.6s] would be add unit. So, I don't want unit
+[2942.5s] tests. I want full integration tests
+[2944.7s] that actually invoke the cloud CLI.
+[2948.1s] >> Is this not what this does?
+[2950.2s] >> It says unit tests.
+[2952.2s] >> Uh I think it's just trying a bunch of
+[2953.8s] inputs. Let's go look at the No, because
+[2956.1s] this is about publishing events. This is
+[2957.5s] about the integration into the demon. I
+[2959.5s] just want to make sure that our code
+[2960.9s] that like invokes claude is correct. Let
+[2963.5s] me add the test.
+[2966.2s] >> So, it's it says it's adding a test. It
+[2968.2s] said it added test. We can go read what
+[2969.5s] the tests are, but I guarantee it's
+[2971.0s] going to like mock the things that we
+[2972.3s] care about.
+[2975.3s] >> Blah blah blah phase two.
+[2978.8s] >> So, it's in 2.5.
+[2980.6s] >> Yeah.
+[2985.8s] Are you worried that the cloud prompt is
+[2987.8s] going to fail or the parameters for the
+[2989.4s] cloud prompt are cloud CLI are wrong?
+[2991.6s] >> I'm worried that there's like seven
+[2993.5s] layers of call stack to wire this
+[2995.1s] through correctly. And I'm looking for
+[2997.3s] an easier way to tell if that's correct
+[3000.4s] um
+[3003.9s] than to read every line of code or to
+[3006.4s] wait till we get to the very end and be
+[3007.8s] like, "Oh, it's [ __ ] broken." And I
+[3009.3s] have no idea where cuz we just changed
+[3011.0s] hundreds and hundreds of lines of code.
+[3012.9s] >> Do these unit tests look correct to you?
+[3014.6s] Do these look useful?
+[3015.7s] >> I don't see anywhere.
+[3019.4s] >> No, these don't look useful.
+[3021.5s] >> Okay,
+[3031.8s] >> keep going
+[3032.5s] >> cuz I think this is going to trigger the
+[3034.0s] bus and you're looking to see that
+[3035.3s] sessions are generated for all of them.
+[3037.3s] I'm not I'm not interested in the like
+[3039.6s] there's two things that I want to test
+[3041.2s] and if they're complexed then it's going
+[3043.4s] to be really hard to figure out which
+[3045.0s] one of them is broken. One of them is
+[3046.6s] like are we sending the right things to
+[3048.2s] Claude? Are we correctly overwriting the
+[3050.0s] system prompt? Are we setting the model
+[3051.4s] correctly? Are we wiring that through?
+[3053.8s] And the other part is like the demon
+[3055.9s] getting that back publishing to the
+[3057.6s] event bus and doing all this like all of
+[3059.2s] that should not be in one phase and it
+[3061.0s] should be like those two things should
+[3062.5s] be independently testable.
+[3064.6s] >> I see. You just want to break phase two
+[3066.2s] into two separate things. One is like
+[3067.8s] calling Claude and one is hooking it up
+[3069.3s] to the Damon. That's I mean that's part
+[3072.2s] of it, but like the I that's the what
+[3074.7s] and the how, but the why is the thing I
+[3077.4s] want to like drill in here, which is
+[3079.1s] that like we need to be able to
+[3082.2s] >> um validate this before we add like we
+[3085.9s] cannot if we add like a bunch of
+[3087.8s] complexity in one set of and maybe
+[3089.7s] that's just like because of the some of
+[3091.2s] the complexities in the architecture of
+[3092.8s] this system like I know from working in
+[3096.0s] this codebase that it's going to be I
+[3098.6s] mean we can just go it's also like this
+[3100.2s] The other thing that I say is like don't
+[3102.1s] obsess too much over getting the plan
+[3103.9s] 100% right. Like if the logic is wrong,
+[3106.1s] that's fine. You just want it right
+[3107.7s] enough that you can like if you get to
+[3111.0s] the end of the phase, you'll have enough
+[3112.8s] context and enough it'll be close enough
+[3114.5s] that you can like vibe out the end of
+[3116.2s] it.
+[3117.5s] >> That's kind of what I was thinking. It
+[3119.0s] looks like this thing looks right enough
+[3120.7s] to me and like I think models are
+[3122.6s] getting better. Like the new cloud model
+[3123.9s] is probably pretty good.
+[3126.6s] So like the previous assumptions we held
+[3128.6s] might not be as true anymore.
+[3130.8s] >> But I
+[3132.9s] like what we can do I think is just
+[3134.6s] launch this see if it generates tests.
+[3136.2s] If it generates tests and it all launch
+[3137.8s] it in a work tree and while it's running
+[3139.4s] I'm I really want to go create a new
+[3142.0s] version of this plan because I don't
+[3143.7s] like this plan. I wouldn't implement
+[3145.1s] this plan. I would throw this out and
+[3146.3s] start over.
+[3146.7s] >> Okay, then let's do that.
+[3148.6s] >> All right. So uh yeah, let's do go back
+[3152.6s] to that's fine.
+[3155.2s] No, not this one. Go back to before it
+[3157.8s] wrote the plan.
+[3160.2s] >> Uh, command Y.
+[3161.8s] >> So, yeah. Yeah, that one.
+[3165.2s] Um, cool. Uh, and then just, um, tell me
+[3169.5s] the Yeah, show me the phases outline
+[3171.6s] before you write the plan. I want to
+[3173.6s] here. Can I can I talk?
+[3175.8s] >> Go ahead.
+[3176.7s] >> I want to be able to validate early on
+[3179.8s] that the integration with the cloud CLI
+[3182.6s] and the Haiku model is working. So we
+[3184.8s] will need one phase to make the cloud
+[3187.4s] code go changes and have an integration
+[3190.2s] test in that v phase that shows me that
+[3193.1s] that part is working. From there we can
+[3196.3s] go to adding phase two we can add the
+[3199.3s] database column and then in phase three
+[3203.0s] we will wire in the go routine into the
+[3205.8s] event bus and publishing. Um but
+[3208.1s] actually phase three should just fire
+[3209.8s] off the go routine and write the result
+[3211.3s] to the database and we'll verify that
+[3213.2s] manually like with a command uh just to
+[3215.5s] check the SQLite and then in phase four
+[3218.8s] we will wire up the SSC and event bus
+[3221.4s] stuff to make sure that the front end is
+[3223.0s] notified and then in phase five then we
+[3225.9s] can we can actually like catch the event
+[3227.9s] on the front end and do something with
+[3229.3s] it.
+[3233.4s] This is how I would build this. This is
+[3235.3s] optimized for being able to verify that
+[3237.7s] the parts of it like we have very strong
+[3239.5s] opinions about how this should be built
+[3240.9s] now after reading through it and talking
+[3242.3s] about it. I want to build this the way
+[3244.3s] that I would build this as an engineer
+[3245.9s] which is like that's the order I would
+[3247.4s] go in because that's how you like kind
+[3249.5s] of like consolidate all your
+[3251.8s] >> I feel like you're not leveraging the
+[3253.1s] model as much.
+[3254.3s] >> Uh you cannot outsource the thinking
+[3256.8s] man. And I mean that's the thing I've
+[3257.9s] learned in working in complex systems is
+[3259.5s] like if you don't come with opinions the
+[3261.8s] model will not I mean you could ask the
+[3263.3s] model to do that but like if you know
+[3266.1s] what you want just tell the model what
+[3267.5s] you want. That's my advice. I mean you
+[3269.4s] could see if the model could get there
+[3270.9s] but it's the same thing with 12 factor
+[3272.2s] agents right? Like if you know what the
+[3273.6s] [ __ ] workflow is that you want just
+[3275.5s] make that in deterministic code and then
+[3277.2s] let the model do what the model is good
+[3278.6s] at which is like writing correct code
+[3280.2s] writing tests running the tests and
+[3281.6s] fixing it.
+[3282.0s] >> So check out what it's doing now. It's
+[3283.4s] using anthropic API key.
+[3286.4s] Yeah, that's uh so
+[3290.4s] um phase one doesn't need anthropic API
+[3292.3s] key. We need to test that the invocation
+[3295.0s] of the cloud code will uh use the user's
+[3297.9s] cloud code max plan.
+[3301.7s] >> Oh, you might um try it.
+[3303.4s] >> All right, try it again.
+[3305.0s] Read phase two meanwhile.
+[3320.6s] Yeah, this is great. We can go to phase
+[3322.5s] two. Uh that's uh sorry. Uh
+[3328.3s] that that's not good enough.
+[3331.0s] Uh no, your phase one is not is not
+[3333.0s] enough.
+[3334.5s] Uh we want to make sure that um we are
+[3337.5s] using the user's claude code max
+[3339.4s] subscription when invoking the haiku
+[3341.2s] call.
+[3346.7s] Fine. Uh okay. Go routine integration.
+[3353.7s] Yeah. Phase three looks good.
+[3360.1s] Phase four looks good.
+[3364.3s] Uh yeah, I think this is good. Again,
+[3366.9s] like I'm not going to micromanage this.
+[3368.5s] This took the plan for me from like 70%
+[3370.7s] to 90%. And 90% for me is good enough.
+[3373.5s] And like this is the other thing that
+[3374.8s] like I'm always advising people is
+[3376.8s] people like this takes so [ __ ] long.
+[3378.4s] I'm spending an hour reading the plan.
+[3379.9s] It's like, okay, one is as you get reps,
+[3382.0s] you'll you'll learn to you'll learn what
+[3383.6s] good looks like.
+[3385.8s] Um,
+[3390.8s] yeah, this looks fine.
+[3392.3s] >> That's incorrect, right? You don't
+[3393.4s] actually want to use the CLI. You want
+[3394.6s] to use the routine thing that you have,
+[3396.2s] the manager thing that you have.
+[3397.1s] >> No, no, no, no. Um,
+[3400.0s] so
+[3405.3s] no, that's good because cloud code go is
+[3407.1s] just invoking the cloud CLI off your
+[3409.2s] like system path.
+[3412.0s] All right.
+[3416.3s] This is the one without spec that we had
+[3418.2s] from earlier.
+[3419.0s] >> Yeah, I I'm I'm I'm happy to throw this
+[3421.1s] one out. I think the other one is good
+[3422.2s] enough.
+[3425.1s] >> Um
+[3428.5s] >> Oh, I like that. This Yeah, the other
+[3430.4s] thing we could have done is like test
+[3431.8s] the event stream wiring and just have it
+[3434.0s] like do a mock event and show it in the
+[3435.6s] front end and get the front end right.
+[3437.2s] That's another like tactic that I think
+[3438.8s] that's really useful is like figure out
+[3440.6s] the contract between the front end and
+[3441.9s] the back end and figure out a way to
+[3443.2s] like mock the backend side and get the
+[3445.0s] front end right and then go implement
+[3446.4s] the back end
+[3447.7s] >> because when you know the front end is
+[3449.2s] right and you know the contract is
+[3450.7s] connected correctly then you have a
+[3452.6s] visual way to debug.
+[3454.2s] >> I'm going to spin up a great
+[3458.4s] >> create plan.
+[3459.2s] >> You going to do it in the same session?
+[3460.9s] >> I am. I think you're actually wrong on
+[3462.6s] how much context you can use personally.
+[3464.6s] Like I'm not saying it's like always
+[3466.2s] true, but I do think that for a lot of
+[3467.8s] things it's actually quite you I think
+[3469.6s] people can push the context windows
+[3471.0s] further than they think.
+[3473.4s] Especially
+[3473.8s] >> Yeah. But also you're the guy who told
+[3475.4s] me that you don't do as much coding in
+[3477.1s] in code layer because you don't really
+[3478.7s] trust the plans and the execution of the
+[3480.6s] plans. And I'm like maybe that's a side
+[3482.2s] effect of the fact that you're
+[3483.2s] constantly pushing the context window to
+[3485.0s] 70%.
+[3486.3s] >> Well, that's not what I mean. I do use
+[3488.1s] code for more complicated features.
+[3489.6s] Actually, I use it for most of the
+[3491.3s] complicated features, but for simpler
+[3492.9s] features, I found it to be like uh too
+[3494.6s] much.
+[3495.0s] >> Jump a cursor and do it in 15 minutes.
+[3496.8s] >> It just Yeah, exactly. It's just like
+[3498.1s] context switching. It's actually not
+[3499.3s] about like not using it, just like
+[3500.5s] what's the app I have open. That's the
+[3502.2s] one I use.
+[3503.2s] >> That's actually code.
+[3505.5s] >> You've been working in your codebase in
+[3507.0s] cursor for over a year now. And I have
+[3511.3s] pretty much only worked in this codebase
+[3513.1s] using using clot and code layer. Um, but
+[3517.2s] I think what I'm trying to say is like
+[3518.5s] for me it's more about context switching
+[3519.7s] over anything else. And like when I have
+[3521.0s] like a really complicated research
+[3522.2s] pipeline to do, then I love using code
+[3523.8s] layer. It's amazing for that.
+[3525.1s] >> Yeah.
+[3525.8s] >> Oh, there we go.
+[3527.4s] >> Okay, we got a plan. Let's uh let's peep
+[3529.4s] it.
+[3529.9s] >> There. Look.
+[3531.2s] >> Oh, did it overwrite the other one?
+[3533.0s] >> I deleted it.
+[3534.4s] >> Ah, okay. Cool.
+[3536.0s] >> Smart.
+[3536.8s] >> Yes, because again, I'm not going to
+[3538.4s] make the model do that.
+[3541.3s] >> Cool.
+[3544.4s] Okay.
+[3550.2s] Okay. We make attempter.
+[3552.0s] >> I don't think this prompt is going to
+[3553.3s] work every single time, but that's okay.
+[3554.3s] That's separate.
+[3554.8s] >> Yeah, we can go we can come back and fix
+[3556.3s] the prompt. I actually was thinking we
+[3557.9s] should have it do JSONish and then pull
+[3560.0s] in the BAML parser or at the very least
+[3562.0s] like do XML tags and like string
+[3565.0s] splitting.
+[3567.0s] >> Yeah, we can try a few different things.
+[3572.3s] Cool. Does this look right to you?
+[3576.3s] >> Um, yeah, this looks great.
+[3578.7s] >> Cool.
+[3579.1s] >> This is good enough to test and then
+[3580.6s] we'll we'll try it and then uh Okay. And
+[3583.0s] then add integration test. Yeah, let's
+[3584.5s] kick it off and tell it to just do phase
+[3586.1s] one.
+[3587.5s] >> Um, don't you want to read all of it
+[3589.0s] first?
+[3589.9s] >> Uh, no. So, this is the thing we did
+[3591.1s] last time, too, which I think is great
+[3592.2s] is like if phase one is good, kick it
+[3593.9s] off and then we'll come back and read
+[3595.1s] phase two. So, we'll just kick it off
+[3596.3s] and say just do phase one. And there's a
+[3598.7s] new command I'm going to show you as
+[3599.8s] well which we're rolling into the
+[3600.7s] product system which is like
+[3601.8s] >> this is not going to work very well
+[3603.0s] because
+[3603.4s] >> yeah make make a new session.
+[3606.0s] >> Oh yeah. Uh have it make a work tree for
+[3608.1s] the work. Do you have cloud instructions
+[3609.8s] for work trees?
+[3611.4s] >> No, we'll find out. Um
+[3617.2s] >> oh that'll work.
+[3627.9s] Uh well, you want to create a you'll
+[3629.4s] have to create a new session in the work
+[3631.1s] tree to do the implementation.
+[3634.5s] >> Uh I'm going to let this run really fast
+[3636.5s] once it makes a work tree.
+[3638.2s] >> Yeah.
+[3644.5s] >> And then I'll hit control X.
+[3653.2s] Okay, let's see.
+[3656.2s] Tell it to run the script with the no
+[3658.4s] thoughts flag
+[3666.2s] and uh don't do a human layer launch.
+[3668.6s] Just make the work tree.
+[3679.8s] >> Let's see what else it does.
+[3681.5s] >> Cuz this is going to launch it to do the
+[3683.0s] full implementation. And actually like
+[3684.6s] this part of this command is like very
+[3687.0s] alpha
+[3688.9s] >> which is why we're like resteering it a
+[3690.6s] lot.
+[3692.1s] >> And the war is rid of it. Okay. So I
+[3695.1s] have war tree.
+[3697.2s] >> Okay. It's going to go do the setup.
+[3699.0s] Yeah, it tries to copy yourcloud
+[3701.4s] settings local and if you don't have
+[3702.7s] one, that part's probably going to fail.
+[3704.3s] >> I see.
+[3706.6s] >> But now it's going to go do the setup.
+[3707.9s] And then yeah, you can make a new
+[3709.0s] session in that work tree and tell it to
+[3710.3s] start implementing.
+[3711.5s] >> Cool. And how do I tell it to use that
+[3713.2s] work tree?
+[3714.8s] >> So you it's just um yeah, hit C.
+[3721.3s] Yeah. So just hit make a new code layer
+[3723.6s] session and in that directory let me
+[3726.6s] copy and paste this.
+[3736.5s] >> Yep. And then do slashphased implement.
+[3739.6s] This is a new one. We moved all our
+[3740.8s] implementation to sub agents. Uh this is
+[3742.6s] a cool thing we'll be rolling out soon.
+[3744.2s] Yep.
+[3746.5s] thoughts, [snorts] shared plans.
+[3752.4s] Boom. Ship it.
+[3755.5s] >> Interesting. Did you use phase
+[3756.7s] implement? I have found that the model
+[3758.5s] once it does the testing, I don't need
+[3759.9s] to actually go validate anything.
+[3761.8s] >> Well, so here's what's cool is with
+[3763.0s] phased implement, it launches a sub
+[3764.6s] agent to do the work. The sub agent does
+[3766.2s] the testing and validation and then
+[3767.7s] reports to the parent model and the
+[3769.4s] parent model also checks it and then
+[3771.0s] asks you for for manual validation.
+[3774.2s] All
+[3775.4s] right, [snorts] let's look at the
+[3776.2s] Obsidian thing. Well, so also I want to
+[3778.6s] try to like focus on one thing at a
+[3780.0s] time. So, we just launched phase one of
+[3781.9s] that one, and we need to review the rest
+[3783.4s] of the plan. Yeah, you can answer this,
+[3785.0s] too.
+[3791.1s] >> Wait, well, you're saying yes, but it's
+[3792.9s] giving you two options.
+[3794.0s] >> It wants to make No, I'm answering these
+[3795.7s] questions.
+[3798.5s] >> Uh oh. Here, let me see what it does.
+[3800.4s] >> No, just add obsidian to the existing
+[3802.2s] editor list. Wait, why?
+[3804.8s] >> Because I don't want to add another type
+[3806.3s] of setting that is markdown editor.
+[3808.6s] >> But how are you going to open code
+[3810.3s] files?
+[3813.5s] >> All right, fine.
+[3814.6s] >> Cool.
+[3816.4s] I think the [laughter] the thing it's
+[3818.2s] saying is actually correct.
+[3820.7s] >> Yeah, I guess it makes sense.
+[3824.1s] Like it's not even like it's not an
+[3826.1s] incorrect choice, right? Like you do
+[3827.5s] need a secondary setting for this where
+[3829.2s] it's like it's just
+[3830.2s] >> Yeah. Okay. And they can be the same
+[3832.4s] thing. Like the the one thing I want to
+[3834.7s] make sure is that the markdown editor
+[3836.6s] like that it has all the same options.
+[3842.8s] >> Well, we'll just read the plan and we'll
+[3844.4s] see what it does.
+[3845.0s] >> Yeah. Yeah.
+[3846.3s] >> Yeah. Okay. Cool. So, it did say the
+[3847.8s] code editors handle both code and
+[3849.3s] markdown. So, that they should all be in
+[3850.8s] the list.
+[3851.4s] >> Yeah.
+[3857.5s] >> Okay. Yeah. The Obsidian URI requires
+[3860.0s] file files to be in a vault. I'm
+[3861.5s] curious. I'm going to test something
+[3862.5s] real quick with just like if you do
+[3865.2s] open- a obsidian and give it a path to a
+[3867.8s] file that's not in a vault.
+[3881.2s] >> Oh, your phase implement has like a sub
+[3883.4s] agent that does stuff.
+[3885.0s] >> It does the the Yes. All the
+[3886.4s] implementation instructions are in a sub
+[3887.8s] agent. So this way you can actually do
+[3889.2s] all the phases in one session.
+[3894.9s] >> Yeah.
+[3896.1s] >> This worked for me. I'm going to just
+[3898.4s] put this in the in the chat here in the
+[3900.8s] public chat. But if you just do open and
+[3903.0s] give it a directory, you can actually
+[3904.9s] have you can do Obsidian
+[3907.4s] uh without needing to
+[3909.7s] >> really. Are you sure you don't accident?
+[3912.3s] >> Let me try again. Let me make sure it
+[3913.9s] actually worked.
+[3915.5s] Let me send it.
+[3917.1s] >> Yeah, that just works if you give it a
+[3919.2s] path. So, we can actually maybe we don't
+[3921.0s] want to use the Obsidian URL and we just
+[3923.3s] want to use open- a, which is what all
+[3925.1s] the other editor opens use
+[3928.4s] because then you don't need a vault in
+[3929.8s] there.
+[3934.4s] Yeah, try that.
+[3938.0s] Nope.
+[3939.5s] >> Give it a sec.
+[3944.9s] No chance.
+[3947.2s] >> It's probably just really big. Use a
+[3948.7s] smaller thing. You have a [ __ ] ton of
+[3950.0s] rep. Yeah, there you go.
+[3951.4s] >> No, then it just opens.
+[3954.9s] >> Uh, give it a smaller repo. Give
+[3956.9s] [snorts] it like just your thoughts
+[3958.0s] repo.
+[3959.2s] >> Um, well, I already have a thing on
+[3961.0s] there. I can do like um I can do like
+[3963.6s] AI.
+[3965.4s] >> Yeah. See,
+[3966.2s] >> it doesn't open it.
+[3968.1s] >> What version of Obsidian do you have?
+[3970.0s] Mine just did this perfectly.
+[3973.0s] Maybe I already had one in there.
+[3976.9s] >> Yeah, you can't run it that way.
+[3979.8s] I I mean, it makes sense. Obsidian works
+[3981.4s] off of vaults for everything.
+[3983.3s] >> Okay. All right, fine. We'll just
+[3985.0s] require a vault. We can figure that out
+[3986.3s] later.
+[3987.4s] >> Cool.
+[3989.0s] Running this.
+[3992.2s] Lots of good conversation in the chat.
+[3995.0s] >> What do we have? Add uh Yeah, I'm not
+[3996.8s] seeing the chat at all while I'm working
+[3998.2s] today.
+[3999.2s] >> Yep. Backend preferences
+[4003.6s] UI components settings UI. Yeah, that's
+[4006.4s] fine.
+[4009.4s] >> Are these good scopes?
+[4011.4s] >> Yeah, that's fine. Yeah, this one also
+[4013.8s] like isn't really like eminently like us
+[4016.2s] unit testable. So, we can just ship this
+[4019.0s] or there's not a lot of like if there's
+[4020.5s] testing patterns in place, it'll add
+[4021.8s] them. But otherwise, I don't want to
+[4023.9s] force it to write tests because parts of
+[4025.7s] this are just like kind of plumbed
+[4027.0s] through.
+[4037.8s] So, it built some test cases and then it
+[4040.1s] has this. So, do you want me to go open
+[4041.4s] this? How do I open this file? Why
+[4042.7s] wouldn't it open?
+[4045.0s] >> Uh, you can only open We're getting
+[4047.0s] there. Uh, this is another AI feature
+[4048.6s] you could do is just detect file paths
+[4050.7s] and add links to them. But we only um
+[4055.5s] Yeah. Um, so if you scroll up to the
+[4057.8s] write call, yeah, it only works on like
+[4059.5s] edit and write call basically like tool
+[4061.2s] calls where like one of the JSON fields
+[4063.4s] is a file path and we know that it is.
+[4066.2s] >> I see.
+[4067.2s] >> Um, but it looks like it ran our test.
+[4069.3s] So, um, I would be interested to read
+[4071.0s] that test and like see that it's passing
+[4073.2s] because that's kind of how I do this.
+[4074.4s] Like, okay, if the integration test
+[4075.8s] passes, then I don't have to worry too
+[4077.6s] much about the You need to set your
+[4079.4s] default editor.
+[4081.1s] >> Go into settings
+[4083.8s] uh, at the bottom.
+[4087.0s] Yeah, there you go.
+[4089.6s] Uh, yeah, set your default editor to
+[4091.4s] whatever you want to use. Yeah, there
+[4093.9s] you go.
+[4099.0s] Oh, I didn't know what. Okay.
+[4104.2s] >> Yeah. Cool. Okay. So, what is this
+[4107.1s] actually going to do? Client.generate
+[4108.9s] title. Can you click into client
+[4110.5s] gengenerate title?
+[4111.5s] >> Well, we can just look at the results,
+[4112.8s] right?
+[4114.2s] I Well, I just want to make sure that
+[4115.5s] that's the right function.
+[4118.2s] Yeah, this is the one we wrote. Okay,
+[4119.5s] cool. Um, sick. Okay. And uh let's yeah,
+[4124.2s] let's look at the test cases.
+[4127.6s] Query generated title. And it's just
+[4129.3s] doing basic sanity checks. Uh, so let's
+[4131.8s] go look at the test output and look at
+[4133.2s] the logs because it's it's just logging
+[4135.5s] the stuff and then doing like a sanity
+[4136.9s] check.
+[4137.0s] >> Where's the test output?
+[4138.0s] >> So if you go into the code layer
+[4139.8s] session, you can see where it ran that
+[4141.0s] test.
+[4145.8s] Nice.
+[4147.6s] All right. Yeah, this looks pretty good.
+[4149.0s] Okay. This was one of the bigger
+[4150.3s] unknowns for me. So, I'm glad we got
+[4151.9s] this working. Let's uh let's tell it
+[4154.2s] we're good and we can proceed to phase
+[4155.4s] two.
+[4157.0s] >> Okay, cool.
+[4159.9s] >> It's just did it in tail. So,
+[4166.2s] >> phase two.
+[4167.4s] >> Yep. Let's do it. Yeah, because we can
+[4170.2s] always come back and mess with the
+[4171.2s] prompting. Um, I just want to make sure
+[4173.4s] this is wired all the way through. This
+[4174.9s] is again, this is like vertical slices.
+[4177.0s] Get it like you should be sprinting to
+[4179.3s] as quickly as possible get to wired all
+[4181.9s] the way through. [snorts]
+[4183.9s] >> That's interesting. I think I
+[4187.7s] It's interesting. We develop it very
+[4189.3s] differently, I think, in our repos.
+[4192.4s] >> Yeah. Well, this is why we we hang out
+[4194.4s] and swap ideas and learn things from
+[4196.2s] each other. That's the goal of the show,
+[4198.2s] right? Yeah. Uh what we end up doing is
+[4200.9s] we actually just focus on building a
+[4202.8s] really good test harness where we can
+[4204.0s] add more tests incrementally.
+[4206.2s] >> Yeah.
+[4206.6s] >> And then just focus on um getting each
+[4210.0s] layer perfectly correct and then work
+[4211.6s] through the to the end.
+[4214.1s] >> Yeah, that's what I found to be red
+[4216.9s] green refactor iterate right.
+[4219.3s] >> TDD.
+[4221.2s] >> Yeah,
+[4221.5s] >> red green. Sorry, I don't know what that
+[4222.8s] is. TDD is like you write the red test
+[4225.0s] and then you make it green and then you
+[4226.4s] refactor it and you keep it green.
+[4228.7s] >> Yeah, exactly. And then I found well
+[4230.6s] I've also found like in general like
+[4232.2s] just for example like making it work
+[4233.8s] from like the very back end layer is at
+[4236.3s] least in our repo it's very hard to make
+[4237.9s] it work all the way end to end and just
+[4239.4s] get something plumbed all the way
+[4240.6s] through.
+[4241.7s] >> Yeah.
+[4242.0s] >> So we just try and make it so that uh
+[4244.4s] the right data
+[4246.4s] >> is present as much as possible in each
+[4249.4s] layer and then just test each layer
+[4250.8s] individually.
+[4252.1s] >> Yep. Um, okay, cool. Let's just scroll
+[4254.5s] down. This looks fine. Obsidian open
+[4257.1s] path equals. That's what we were doing.
+[4259.3s] I don't think that's right. I think the
+[4261.4s] format was just
+[4262.6s] >> It just requires you to have a vault.
+[4263.9s] That's all it is. That's a URI.
+[4265.4s] >> No, but wasn't the command you were
+[4266.9s] running was very different.
+[4269.0s] >> No,
+[4270.3s] >> go in your terminal. You were opening
+[4272.2s] obsidian and it's just the path.
+[4275.2s] Uh,
+[4281.4s] we also have the app thing that we were
+[4283.3s] doing before, right?
+[4289.9s] I would just give it that feedback.
+[4293.4s] I don't know if that also works. I mean,
+[4295.3s] you could try it, but
+[4304.0s] also where'd it go?
+[4310.6s] >> What is it called?
+[4313.7s] Also, we want to use appetite opener.
+[4315.5s] Oh, this is this we told it to do this.
+[4319.0s] >> Well, it it decided that that's that's
+[4321.2s] the thing. I don't know if it
+[4322.2s] hallucinated this or if this also works.
+[4324.4s] You can try we can test it if you go to
+[4326.3s] the your terminal. Just try just try
+[4328.5s] doing the open with that with that um
+[4330.7s] path.
+[4331.8s] >> Yeah, that's true.
+[4334.7s] >> So, it's open question mark path equals
+[4341.3s] >> Yeah, it is.
+[4341.8s] >> Okay, don't worry.
+[4342.6s] >> That's fine. All right, we'll do that.
+[4346.6s] Uh, cool. So, let's keep reading the
+[4348.6s] plan then.
+[4353.7s] Cool.
+[4355.3s] Uh, updating file link.
+[4360.2s] Uh,
+[4361.4s] >> there's nothing else with the markdown
+[4362.6s] file.
+[4365.1s] >> Wait a minute. Scroll down.
+[4368.9s] >> Yeah, this is wrong because it's like it
+[4371.0s] should be open in. So, so look at how it
+[4372.9s] does the editor stuff
+[4375.0s] >> where.
+[4375.4s] >> So, scroll down a little bit. So, editor
+[4377.0s] is get preferred editor.
+[4378.6s] >> Yeah. Y
+[4379.0s] >> and then it does invoke open in editor
+[4381.4s] with the path and the editor.
+[4383.8s] >> The other one if you scroll up it's
+[4385.5s] calling a special function called open
+[4387.8s] in no uh down
+[4391.6s] like literally in that same function
+[4392.9s] like five lines up it's doing get
+[4395.7s] preferred markdown editor and then it's
+[4397.2s] like if the markdown file is this and
+[4399.6s] the markdown editor is obsidian then we
+[4401.4s] do open in obsidian.
+[4404.4s] Uh oh I see. Okay. It's trying to be
+[4407.3s] clever. I mean, this code is ugly, but
+[4408.9s] it's technically like slightly less code
+[4411.6s] to write because it's just doing if it's
+[4414.1s] Obsidian, then we just open in Obsidian.
+[4416.8s] Otherwise, we fall through and open it
+[4418.6s] in your editor.
+[4419.8s] >> Yep.
+[4420.9s] >> I'm fine with this. It's not beautiful,
+[4422.9s] but it's I'm
+[4424.1s] >> What do you want to do?
+[4425.4s] >> Uh, propose alternative.
+[4427.5s] >> Uh, I was thinking that it would like
+[4429.8s] match. There's basically like we always
+[4432.3s] calling open in editor and the rust side
+[4435.4s] of it because this is calling like
+[4437.0s] invoking a rust function from the front
+[4438.7s] end. I would prefer if open and editor
+[4442.1s] just handles like the markdown logic on
+[4445.5s] the back end.
+[4446.6s] >> Okay, let's just do that. That I mean
+[4448.5s] that's the good thing about vibe coding.
+[4449.7s] It's not hurting my feelings, right?
+[4451.1s] Like model doesn't care.
+[4453.0s] >> Yeah. Um Yeah. I So it's like I'd prefer
+[4456.4s] if the markdown splitting happens in
+[4459.1s] >> I'd prefer if the markdown splitting was
+[4461.3s] happening in the open and editor
+[4463.7s] capability rather than in the logic
+[4465.8s] ahead of uh in front of this function
+[4473.4s] for this function.
+[4475.8s] Yes.
+[4477.9s] Cool. All right. Let's keep reading
+[4479.3s] while it's fixing that.
+[4484.4s] I personally take everything my model
+[4486.4s] does personally. [laughter]
+[4490.6s] Um, okay.
+[4495.1s] Yeah, because then we have that that
+[4496.5s] block duplicated in this function too,
+[4498.3s] which is annoying.
+[4500.8s] Um, oh, then settings UI.
+[4505.5s] Did we add a database column for
+[4509.4s] this setting or is it just in local
+[4511.2s] storage? Oh, I think it's cuz the
+[4514.2s] preferred editor is in local storage.
+[4516.0s] It's not in the It's not in the It's not
+[4519.0s] in the database.
+[4523.0s] All right, fine. Just leave it as is.
+[4526.3s] Um,
+[4527.8s] this one's still implementing phase two.
+[4529.5s] Let's go back to the Obsidian one. I
+[4531.0s] Let's just keep this how it is. That's
+[4532.5s] fine. We I will go back and refactor
+[4534.7s] this to use settings later.
+[4536.4s] >> I think it should be really easy for it
+[4537.8s] to do. Oh, because you need the
+[4538.9s] database.
+[4540.1s] >> Oh, no, no, no. It can just fetch it and
+[4541.6s] then send it in the endpoint. Yeah.
+[4543.7s] >> Yeah.
+[4544.3s] >> Yeah. Yeah. Okay. We just send them
+[4546.0s] both. Open an editor has a new thing
+[4548.1s] called markdown editor. Yeah, that's
+[4549.8s] much better.
+[4553.8s] >> [ __ ] yeah. Okay, cool. Yeah, this is
+[4555.6s] going to work.
+[4557.4s] >> Cool.
+[4559.3s] Let's go read this.
+[4561.8s] >> Um,
+[4567.3s] cool. We already read this. Yeah, we've
+[4569.1s] been through this. It made a whole new
+[4570.2s] thing.
+[4571.8s] >> Uh, okay. Cool.
+[4573.1s] >> It It updated. You can't skip.
+[4574.7s] >> Okay. So, it takes editor and markdown
+[4576.2s] editor. Yep. Okay. So, he's markdown,
+[4593.6s] >> right? Then it has a way for obsidian.
+[4595.3s] Otherwise, it just does it that way.
+[4597.4s] >> Yeah. I'm okay. This could be factored a
+[4599.1s] little more nicely, but I'm I'm I'm
+[4600.8s] happy with this. This keeps all that
+[4603.5s] like logic like kind of isolated to one
+[4605.6s] place that's testable.
+[4607.8s] >> Cool. Should I do it?
+[4609.9s] >> Yeah, let's let it rip.
+[4611.4s] >> Okay. I don't think we need phase
+[4612.6s] [snorts] implementation for this. I'm
+[4613.8s] just going to
+[4614.2s] >> do phased implementation. It's just
+[4616.2s] better. You just want to give yourself
+[4618.4s] >> It's be It's the same reason why you use
+[4620.4s] a bigger model even though you might
+[4622.2s] want to use a smaller one.
+[4625.7s] CL implement plan.
+[4628.2s] >> Fine. [snorts]
+[4629.1s] >> Just trust me.
+[4630.5s] >> All right.
+[4632.2s] Vibes.
+[4633.8s] I trust you, buddy.
+[4635.1s] >> The I think a lot of what a lot of
+[4636.6s] people underestimate is just like, like
+[4638.2s] I said, this is something I say a lot
+[4639.5s] like a lot of people start locking in
+[4641.3s] their perspective of model way too fast.
+[4644.2s] >> Yeah. You got to you got to binary
+[4645.7s] search on either side and like try
+[4647.7s] things that you really think won't work
+[4649.2s] and see because that's how you learn
+[4650.6s] what the boundaries are. I I suspect
+[4652.8s] that you're like, "Hey, we need phase
+[4653.9s] implementation." Like looking at this,
+[4655.0s] I'm like, "No, you probably don't." Like
+[4656.6s] I my personal opinion says like, "And
+[4658.1s] even if I don't, worst case, I waste
+[4659.7s] like five minutes or a couple with a
+[4661.1s] thousand tokens. I just redo it."
+[4663.6s] >> Phase implement you can just tell it
+[4665.1s] like, "Do every single phase in a row.
+[4666.9s] Don't wait for my input." And all that's
+[4668.9s] the only difference is you're doing the
+[4670.1s] exact same work, but you're using
+[4671.6s] smaller context windows to do the work.
+[4678.6s] >> Uh, you're in the work tree, dude.
+[4680.9s] Oh [ __ ]
+[4682.6s] >> Yeah. Um, so you'll have to go do that
+[4685.1s] work tree thing again or go to the one
+[4686.6s] where you made the work tree and be
+[4687.8s] like, make another one for this thing.
+[4689.8s] >> No, I'm just not going to do the work
+[4691.2s] tree.
+[4692.5s] >> All right. You're so confident.
+[4696.2s] >> Um, I think this is the other thing that
+[4698.7s] I really want like in any coding editor.
+[4700.5s] I want it to detect when I'm making
+[4701.9s] mistakes like that to be honest.
+[4703.9s] >> Yep. No, I mean that's that's uh
+[4706.7s] >> like that's what actually makes this
+[4708.2s] stuff really good. like this like part
+[4709.7s] of
+[4709.8s] >> well I mean giving you a first class
+[4711.9s] like you hit command K implement and it
+[4714.7s] like looks at the plan and figures out
+[4716.2s] what it should be and like having the
+[4717.8s] stuff organized into tests and projects
+[4719.6s] is a big part of that too. One of the
+[4721.0s] things I would push back on on that is
+[4722.6s] like I think while that is kind of
+[4724.1s] interesting, what I really want is just
+[4725.9s] like I just want to catch mistakes for
+[4727.5s] me
+[4728.3s] >> and like if it's the more opinion it is
+[4730.3s] and how I do my work, the harder it is
+[4733.0s] as a edi as a developer to really abide
+[4735.8s] by it 100% of the time because as a
+[4738.5s] developer
+[4738.8s] >> that's the trade-off. There's there's
+[4740.7s] other tools that like really do all the
+[4742.6s] work tree [ __ ] for you, but they also
+[4744.6s] bring a lot of opinions, which like I
+[4746.6s] for me some of some some of my like
+[4748.7s] friction there was like I don't like how
+[4751.0s] opinionated this is and I want something
+[4752.8s] a little more like I want to be able to
+[4754.6s] decompose it like and the goal is like
+[4757.2s] first experience it does it all for you
+[4759.2s] but then you can decompose it into
+[4760.7s] building blocks and get more flexibility
+[4762.6s] as you grow
+[4764.1s] >> kind of. So maybe I can show you a
+[4765.7s] couple things that at least I'll show
+[4766.8s] you that I have found interesting now.
+[4768.3s] So like what I have found is like this
+[4769.8s] tool is freaking dumb to be honest. But
+[4772.1s] like whenever I actually create a plan
+[4773.8s] now what I actually do is I'll show you
+[4775.5s] exactly what I do. Um like let's say I
+[4778.2s] was doing uh
+[4780.2s] >> this is read your quad commands now.
+[4782.2s] >> Yeah.
+[4782.6s] >> I see.
+[4783.8s] >> Exactly. Um but I'll show you like
+[4786.3s] exactly what I would have done from
+[4787.8s] scratch if I were doing this. Uh like
+[4790.6s] what I actually do is whenever I create
+[4791.9s] plans I actually do this uh cl
+[4796.2s] like research codebase I'd say something
+[4799.4s] like um figure out how I can add AI
+[4804.6s] generated summaries
+[4808.1s] and I just like swap it on like this
+[4812.0s] and this has been um
+[4816.0s] >> Oh and then you do like four in
+[4817.4s] parallel.
+[4818.5s] >> Exactly.
+[4819.8s] And I don't even care. Just go read at
+[4821.8s] the end because it's just saving me a
+[4823.4s] bunch of time, right? Like um and this
+[4827.3s] GPT codeex is so dumb. I hate codeex.
+[4830.9s] Um and now that it's doing this, it
+[4832.7s] doesn't really even matter what model
+[4833.8s] I'm using to be honest because I don't
+[4835.7s] I'm not tied to a model. I'm not tied to
+[4837.3s] anything else. But like the ability to
+[4838.6s] like multiplex is super useful. And what
+[4841.4s] I have found at least for a lot of our
+[4842.8s] code bases is rather than focus on
+[4845.6s] getting this one prompt really right,
+[4846.9s] what I let it do is I let like three or
+[4848.4s] four models produce similar uh similar
+[4851.0s] outputs and then based on what the
+[4853.0s] models produce cuz it's way faster than
+[4855.2s] me going down to this is
+[4858.3s] then what I do is I just read this thing
+[4860.1s] and this I hate so I actually end up
+[4861.8s] reading this in Obsidian.
+[4864.5s] Uh and the way I do that is I have to do
+[4866.6s] some stupid process of like syncing this
+[4869.4s] back. So, what do I have to do? I have
+[4871.6s] to like accept this thing.
+[4875.2s] Where do I go?
+[4877.7s] >> Yeah, this is the funny thing, too, is
+[4879.2s] like
+[4879.9s] >> it's uh the like cursor UX is for for
+[4883.8s] like code changes that matter versus
+[4885.9s] like if you're just dumping a markdown
+[4887.4s] doc like we don't use work trees for
+[4889.3s] that. We don't really feel that you need
+[4891.1s] like it's just like you're you're doing
+[4892.6s] it's like a write only like single.
+[4895.4s] >> The minute I start doing stuff in
+[4897.2s] parallel, it's actually super useful.
+[4901.2s] to have if you're editing code, but if
+[4903.8s] you're just dumping out new research
+[4905.1s] documents, I'm like, I don't know if
+[4907.8s] super useful. And the reason that it
+[4909.4s] ends up being super useful even in that
+[4910.7s] scenario is because
+[4912.6s] >> you just
+[4914.0s] >> is because it will end up over if I have
+[4916.1s] like two parallel things. Sometimes
+[4917.4s] it'll end up overwriting each other with
+[4918.9s] the same name that it generates for the
+[4920.4s] thought for the research that it
+[4921.6s] produces.
+[4922.9s] >> Oh yeah, that's bad. I mean, that's why
+[4924.3s] you would want Yeah.
+[4925.9s] >> work trees. It's more about when I'm
+[4927.8s] multipplexing, right? cuz that's really
+[4929.4s] the problem when I end up doing things.
+[4931.9s] It's easy to have like a single work
+[4934.0s] work experience and like that is the
+[4935.9s] only reason I actually found like it was
+[4937.6s] kind of interesting with multipplexing
+[4939.2s] for like really really complex things
+[4940.6s] cuz there's just no way.
+[4943.5s] Uh
+[4945.0s] how do I do this? Okay, I'll just try
+[4947.4s] this. Why not?
+[4949.0s] >> Yeah. So, you have to so you have to go
+[4950.7s] take your running version and actually
+[4953.1s] go like check that out. This is wrong. I
+[4956.3s] will give you the this is the other
+[4957.5s] thing is like we read the plans but we
+[4959.0s] didn't actually this is the thing
+[4960.1s] everybody does including myself is you
+[4962.0s] like forget to check the like actual
+[4963.9s] testing steps uh but I can just help you
+[4966.6s] do this. So uh you have sync layer
+[4968.6s] running somewhere. So what you want to
+[4969.6s] do is you want to create a new session
+[4971.0s] and then go make sure that it wrote the
+[4972.5s] new title to the database.
+[4975.4s] Yeah, there we go.
+[4978.2s] >> So I'll run this.
+[4979.7s] >> Yep.
+[4985.1s] Yeah, the multiplexing has been super
+[4986.9s] clutch. I really am excited for when you
+[4989.0s] add that in because I think it'll be
+[4990.5s] super nice to be able to just be
+[4992.0s] >> talking about multiplexing. You mean
+[4993.1s] like being able to launch multiple
+[4994.6s] sessions with different models?
+[4996.4s] >> Different models and then be able to
+[4997.6s] merge them trivially.
+[5000.4s] >> I like that. Cool.
+[5001.7s] >> Yeah, it's really like in this case like
+[5003.4s] see in this case it's not too bad.
+[5006.2s] >> Yeah.
+[5007.0s] >> Uh where is this? Okay, so this the
+[5009.0s] thing and
+[5009.5s] >> so I'm going to I'm going to show you a
+[5010.6s] couple things. Number one, you're not
+[5011.8s] going to run that command again. You're
+[5013.0s] not going to run that. So, uh, at the
+[5014.5s] bottom there, click on the debug, uh,
+[5016.7s] button. Yeah, that one. That's going to
+[5018.3s] tell you your database path. Uh, yeah.
+[5021.0s] Okay. So, at the bottom there, there's a
+[5022.6s] path to your database in the bottom.
+[5026.9s] Uh, debug information path. Yeah. So,
+[5030.6s] you're going to you're going to use that
+[5032.5s] as the path instead
+[5036.1s] into SQLite 3.
+[5041.5s] I actually have no one ones today
+[5042.9s] because technically I'm on vacation.
+[5045.4s] >> Nice. What better way to spend your
+[5047.4s] vacation?
+[5048.6s] >> Okay.
+[5049.4s] >> Okay. So, it's not in there yet.
+[5059.9s] Okay. Uh, was there a migration to run?
+[5064.5s] Can you go see Can we go read the code
+[5066.5s] layer output instead of just pasting in
+[5068.1s] random commands?
+[5070.2s] >> I don't know. Let's look at diffs.
+[5073.2s] >> No, can we can we go see what it said to
+[5074.9s] do? Because it might have had you like
+[5076.4s] run something before you actually go and
+[5078.3s] do this.
+[5080.2s] >> Um, let me pull this up. Okay.
+[5083.2s] >> Yeah. Okay.
+[5084.8s] >> Oh, it wants me to go run the test.
+[5086.6s] >> No. So, it said it says those work. It
+[5088.2s] actually, if you scroll up, it actually
+[5089.4s] ran these for you.
+[5091.1s] >> And then it says start the demon and
+[5092.5s] verify migration applies cleanly. So,
+[5094.2s] you probably have to
+[5097.6s] Yeah, that's interesting.
+[5100.4s] Um,
+[5103.0s] can you just do it into GP AI? Um, or we
+[5105.8s] can go look in the migrations.go and
+[5107.4s] just see if it actually added it.
+[5109.4s] >> I mean, I think it's the title's not
+[5111.1s] here. So, it's like I I suspect it's not
+[5113.3s] there.
+[5114.1s] >> It's definitely not here.
+[5117.3s] >> So, that's interesting. It's also
+[5119.8s] interesting like can you uh can we do
+[5122.0s] something else? Can you in your bun can
+[5123.8s] you add one more uh parameter to your
+[5126.0s] end bars or just export like build type
+[5128.9s] equals experimental cuz this is actually
+[5131.0s] sharing your prod database for your
+[5133.0s] stable version and I don't like that.
+[5135.3s] >> Build type
+[5136.7s] >> type equals experimental semicolon and
+[5139.7s] then yeah then run it. This should give
+[5144.5s] you like a dev database that is
+[5146.5s] >> I think I'm running experimental dev
+[5147.9s] build. I would stop.
+[5149.1s] >> No, you're running the front end in
+[5150.6s] experimental mode, but not the back end
+[5152.5s] because it's using your prod database.
+[5155.9s] We also onboarded Vib into into how to
+[5159.0s] run this stuff last night. So, uh, some
+[5162.2s] some speed bumps perhap perhaps
+[5164.2s] expected.
+[5166.0s] All right. So, now if you go into debug,
+[5168.2s] you should have a different database
+[5169.6s] path. And let's try that SQLite again.
+[5172.2s] Uh, not here.
+[5174.9s] Debug.
+[5177.0s] Oh, why is it still using that database?
+[5180.2s] I don't like that.
+[5182.1s] >> Is Is that the right build type?
+[5185.7s] >> Yeah, that should be right.
+[5189.1s] >> Spelled experimental wrong.
+[5190.6s] >> Mine.
+[5191.6s] >> I spelled experimental wrong.
+[5193.6s] >> Oh, okay. Nice.
+[5195.4s] >> Yes. I mean, that should have been
+[5197.0s] obvious. It loaded a bunch of my
+[5198.6s] prompts.
+[5202.2s] I mean also like I said this this to me
+[5204.4s] is like so sort of debug this like
+[5206.1s] clearly the database doesn't have any
+[5207.5s] SQLite
+[5208.8s] >> so my hunch says
+[5212.9s] >> nope
+[5216.1s] um
+[5216.8s] >> we can look at this code
+[5219.6s] >> are you sure you spelled it right
+[5221.3s] experimental well it's like I think this
+[5223.4s] code is definitely correct but the
+[5224.7s] problem is we can't validate it because
+[5226.5s] when you I think when you run the local
+[5227.9s] demon it falls back to the one that's
+[5229.5s] already running part of your like prod
+[5231.4s] instance.
+[5233.9s] >> Um,
+[5235.8s] >> when I run this, does it use the prod
+[5237.4s] database?
+[5240.8s] >> But why does that matter?
+[5243.9s] >> Uh, cuz I think that like if there's
+[5246.9s] already a demon running for your prod
+[5249.8s] build, it may be basically like cuz this
+[5251.8s] migration happens when the go back end
+[5253.8s] spins up. And so if there's already one
+[5255.5s] running, then it's like not working.
+[5258.5s] like I just I don't want these things
+[5259.9s] competing over the same database.
+[5262.7s] That's the number one thing that I am
+[5265.8s] quite certain is not the right idea. So
+[5267.5s] this is an issue with your dev
+[5268.7s] environment though at the core.
+[5270.3s] >> Okay. So I mean I have AI generated
+[5272.6s] titles here.
+[5274.0s] >> Yeah, it's all coming through.
+[5277.8s] >> Do you want me to turn off code layer
+[5281.1s] like close it and then run it through
+[5283.0s] developing it?
+[5284.6s] Uh, I don't like that either because
+[5287.0s] Yeah, mine's doing the same thing. Um,
+[5297.4s] uh, just in your end set, uh, human
+[5300.8s] layer database path.
+[5303.4s] >> Okay. Or
+[5303.9s] >> just export path equals. Yeah, that's
+[5306.6s] fine. tilda slash.hum human layer/human
+[5311.2s] layer experimental db.
+[5313.8s] >> Uh, you want to send me the command?
+[5315.2s] >> You're not sharing.
+[5316.2s] >> We have some We have some questions from
+[5317.4s] people. I'm not me sharing.
+[5319.0s] >> That I think should work.
+[5320.9s] >> And we're getting a bunch of questions
+[5322.0s] from people actually.
+[5324.4s] >> People have questions on this show.
+[5326.9s] That's crazy.
+[5329.0s] >> That end.
+[5329.6s] >> Can the research agents panel of cursor
+[5331.0s] spawn sub agents? I don't know. I don't
+[5333.4s] think so.
+[5335.0s] >> Um, that's a good question. Yeah, it
+[5337.0s] doesn't actually use the sub agents, so
+[5338.4s] it probably won't work as well. I'm sure
+[5340.7s] cursor will have sub agents in no time.
+[5342.6s] I'm sure it's happening.
+[5344.2s] >> I figured out the problem. It's because
+[5345.5s] of work trees. Actually, work trees need
+[5347.9s] a end file that is copied over and that
+[5349.9s] is not tracked by git. [snorts]
+[5351.6s] >> Oh, so we did update that script to also
+[5354.2s] copy in your end file, but I don't know
+[5355.8s] if that got merged yet.
+[5357.0s] >> I'll add it to both. Uh, yeah.
+[5358.7s] >> Oh, wait. Are you running sync layer in
+[5360.6s] the work tree or are you running it in
+[5362.1s] your main branch? Cuz that would also do
+[5363.7s] it. I was running in the work tree, but
+[5365.2s] I'll run it again in the work tree, but
+[5367.0s] the work tree definitely did not have
+[5368.5s] nvars. Uh, let me just make sure I'm not
+[5370.8s] going to copy and bars and show them on
+[5372.8s] screen.
+[5373.4s] >> Yeah, I tested with the database path
+[5374.8s] and it is working better now. Yeah, we
+[5377.8s] had this working in the other repo and
+[5380.3s] some
+[5380.7s] >> Yeah, David, the go repo is directly
+[5383.0s] directly in the BAML repo.
+[5386.5s] >> Uh, you can just but most the go layer
+[5389.0s] is actually quite thin. So if you need
+[5390.5s] if we want to add support to stuff and
+[5391.8s] you have ideas, I would love to take you
+[5393.0s] up on it.
+[5395.1s] >> Um
+[5395.6s] >> yeah, today we're working on on human
+[5397.4s] layer code, not on BAML. All right. So
+[5399.7s] you launched it.
+[5409.0s] >> Uh what is the command called?
+[5410.4s] >> Did you Wait, did you export that?
+[5416.2s] >> Did you export it or did you file just
+[5418.6s] set it? Oh, okay.
+[5421.8s] Cool.
+[5423.0s] >> All right, cool. Uh, this is running.
+[5427.4s] And again, I think like a lot of people
+[5428.8s] underestimate like like should I be
+[5431.0s] running this cursor? Maybe. But I don't
+[5432.4s] have the work to reopening cursor. So,
+[5433.8s] it's just not worth it. I think my
+[5435.6s] default behavior as an engineer is I
+[5437.1s] just use the lowest friction task to go
+[5438.7s] do it. Like when it comes to like any
+[5440.8s] sort of coding agent or tool, I always
+[5442.8s] want to just like have it contextualized
+[5444.9s] because it just makes me way faster.
+[5446.7s] >> We're putting a terminal in code layer
+[5448.3s] soon.
+[5449.4s] Um,
+[5449.8s] >> so you can just run it from your from
+[5451.8s] your uh from your ter code layer session
+[5454.6s] >> then I might do that but it's really
+[5456.8s] about contextualizing stuff for me.
+[5459.1s] >> Yeah. Yeah. You want to keep everything
+[5461.3s] grouped in the same place. And when you
+[5464.0s] contact switch you want everything to
+[5465.4s] get updated.
+[5466.6s] >> Yeah. It's the same reason what I really
+[5468.3s] want is I really just want like freaking
+[5469.8s] like AI chatbot in in Obsidian. That'd
+[5471.9s] be freaking sick for me when I'm working
+[5473.9s] on plans.
+[5475.0s] >> How about Obsidian in your AI chatbot?
+[5478.2s] Either way, it doesn't really matter. I
+[5479.5s] just figured it's harder to probably
+[5480.8s] more import Obsidian.
+[5482.7s] >> Yeah,
+[5483.3s] >> because there's just way more code. And
+[5485.0s] like the UX of editing Obsidian is so
+[5487.0s] fast and it's so nice.
+[5488.8s] >> Yeah.
+[5490.7s] >> Damn, you came around fast on that one.
+[5492.6s] All right, here we go. This one's going
+[5494.4s] to be empty.
+[5497.3s] Amazing. All right, this should have
+[5499.1s] like launched and done the database
+[5500.7s] updates and stuff. So, can you Yeah, get
+[5502.7s] that path and let's run the SQL. Well,
+[5504.3s] you have to make a session. Well, I
+[5506.6s] guess we can check the schema.
+[5509.7s] Well, you killed it.
+[5512.8s] Yeah, fine.
+[5522.5s] >> I hate code. I should really be using
+[5524.9s] warp.
+[5525.4s] >> All right, it's there. Sick.
+[5527.0s] >> All right, so make a session and then
+[5528.6s] like query that field and then
+[5530.6s] >> No, it's probably in there. I don't need
+[5532.3s] to do that.
+[5533.3s] >> No, I want to do that. I want to make
+[5534.8s] sure this is working because if it's
+[5536.3s] broken later, I want the confidence that
+[5538.2s] it was working after phase two.
+[5542.3s] Sorry, dude.
+[5544.0s] >> This is how it's done.
+[5545.9s] >> Well,
+[5546.8s] >> I'm sorry we don't have two years of
+[5548.5s] incredible test coverage and our problem
+[5550.6s] is in a programming language which is
+[5552.3s] immensely verifiable.
+[5554.4s] >> Well, I would say there's different
+[5555.8s] parts of it. Our VS Code extension is
+[5557.3s] not very verifiable. That's actually
+[5559.0s] like the hardest part about our system.
+[5562.3s] >> Uh, cool. All right. Pick a session.
+[5563.9s] Don't put a title. Yeah.
+[5569.2s] Amazing. How fast can we do this?
+[5573.7s] Um,
+[5576.2s] so what we should see
+[5579.4s] is
+[5583.6s] >> Oops.
+[5584.2s] >> Oh no.
+[5586.0s] >> I got to cut the stream. Uh, [ __ ]
+[5589.8s] Um,
+[5590.2s] >> you want to pause it and go delete that
+[5591.5s] key real quick? Yes, I do.
+[5593.8s] >> Love some visual organizational feature
+[5595.7s] whereby related code layer sessions are
+[5597.2s] grouped together in the main view. Yes,
+[5598.5s] nested under a title. Once we have AI
+[5600.3s] session titles, then we can also have
+[5601.8s] grouping by themes. We can have
+[5603.4s] classification and labeling.
+[5605.9s] Um, I noticed I can get super indignant
+[5607.8s] when it confidently does something I
+[5609.3s] later think is obviously stupid. Instead
+[5611.8s] of treating it okay, yeah, I agree. All
+[5615.0s] right, I'm going to go find actual
+[5616.3s] questions
+[5618.3s] instead of comments.
+[5621.6s] How do I disable key?
+[5623.5s] >> Yes, Max. 100% agree. Yeah. Uh being
+[5626.1s] able to have nested sessions on we're
+[5627.9s] actually not going to call them projects
+[5629.0s] because people use projects as like too
+[5631.8s] big. Project just becomes a bucket of
+[5633.8s] stuff.
+[5634.6s] >> Um I think the lowest unit of like
+[5637.1s] grouping will probably be a task because
+[5639.3s] for one linear ticket or one GitHub
+[5641.7s] issue, you will likely have
+[5644.6s] >> you know one or two researches, one or
+[5647.0s] two plan sessions and then one or two
+[5649.2s] implementation sessions. And that's just
+[5650.8s] to ship one thing. Um, and so that's
+[5653.4s] kind of the idea of of of of how we we
+[5655.9s] might also have projects or workspaces
+[5657.9s] or something, but I think the top level
+[5660.0s] dimen like the lowest like grouping
+[5661.7s] dimension is like more like task than
+[5663.7s] project.
+[5664.4s] >> Cool. Let me rerun the stream again and
+[5666.4s] then we'll be back.
+[5667.5s] >> Nice. Sorry about that, dude.
+[5670.0s] >> That's fine. The key is now revoked.
+[5672.5s] >> If you manage to go spend 5 cents on by
+[5675.0s] open AI account, I'm impressed.
+[5676.9s] >> Um, yes. The problem is that key has a
+[5679.0s] lot of spending power,
+[5680.6s] >> a lot of lot of budget. Yeah, but you
+[5682.4s] still can't get the throughput.
+[5685.2s] >> Um, I think you can on that key. Uh, but
+[5688.2s] in within 1 hour you can do some serious
+[5690.3s] damage on that key.
+[5692.5s] >> You can just tell this to keep going.
+[5694.4s] >> Um, well, first I wanted to Okay, sure.
+[5704.7s] >> Yeah, you can just tell it to do the
+[5705.9s] whole plan if you want. Uh, just put
+[5707.5s] this back on DSP.
+[5709.8s] >> One second. I want to go look at what's
+[5711.9s] the command that I have to run.
+[5714.4s] >> Oh, yeah.
+[5718.2s] And now we can go run this thing.
+[5723.9s] Tilda. Layerhuman layer experimental
+[5730.1s] human layer. Yeah.
+[5732.8s] Amazing. And then just do select star
+[5734.8s] from set. Select select AI generated
+[5736.9s] title from sessions
+[5738.6s] >> from here.
+[5740.0s] >> Yeah.
+[5749.3s] Uh
+[5751.3s] I think maybe you can only run one query
+[5753.5s] this way. Oh yeah, there you go. Yeah,
+[5755.4s] just get rid of the pragma stuff.
+[5759.2s] >> I understand. I didn't know you can only
+[5760.4s] run one query from that way.
+[5762.6s] Maybe there's a flag you need.
+[5765.7s] >> Nope. You can run multiple. Just
+[5768.3s] >> Why is this empty?
+[5772.9s] >> Oh, this was just creating the column,
+[5775.0s] not doing the backend thing. So, it just
+[5777.7s] created the column. Yeah.
+[5779.0s] >> Yeah.
+[5780.3s] >> Okay.
+[5784.7s] >> So, I'm going to let this rip.
+[5786.2s] >> Yeah. Throw this back on DSP.
+[5790.2s] Option Y.
+[5795.2s] Will you will you turn on the auto
+[5797.4s] accept flag?
+[5798.7s] >> Yes, I will.
+[5800.6s] >> Thanks.
+[5802.1s] Um, okay. You want to go back to the
+[5803.6s] other one?
+[5805.1s] >> Um, I do need to do one more thing. I
+[5807.0s] need to stop this from running in the
+[5808.3s] background
+[5810.4s] because it's going to hot reload on
+[5811.9s] every file change.
+[5814.8s] >> That's fine. Is that not fine? Can your
+[5817.0s] computer not handle that?
+[5818.4s] >> [snorts]
+[5818.5s] >> Uh, it can, but it's going to hot reload
+[5820.7s] calling cloud code over and over and
+[5822.4s] over again. And you don't want that to
+[5825.0s] happen as a developer.
+[5828.1s] >> Sorry. It's going to what?
+[5829.5s] >> It's just going to call cloud code over
+[5831.1s] and over again on every single grade
+[5833.0s] session launch, right?
+[5835.4s] >> Um,
+[5836.6s] >> because that's the part
+[5837.8s] >> only when you go launch a session over
+[5839.4s] there. Not it's not going to do it on
+[5841.0s] this one. These two are now sharing like
+[5843.4s] separate database, separate demon,
+[5844.9s] separate state. So
+[5846.5s] >> that's true. Okay.
+[5848.4s] Let's see what this does. One second.
+[5853.2s] >> Kind of new here. What is human layer?
+[5855.0s] How does human layer plug into BAML?
+[5857.8s] >> Great question. Well, the goal for today
+[5859.6s] was to put some BAML into human layer.
+[5861.4s] But, uh, I talked by into doing a
+[5863.8s] smaller, simpler thing to start. Um, but
+[5865.7s] once we get the TypeScript demon
+[5866.9s] working, there will be lots of BAML in
+[5868.4s] human layer. But, um, human layer plugs
+[5872.3s] into Yeah, human layer is the ORC. We're
+[5874.6s] building code layer. Yeah. So, we talk a
+[5876.3s] lot on this show about AI engineering
+[5877.8s] and AI pipelines and ended up being like
+[5880.5s] the first show to start talking a lot
+[5881.9s] about uh this idea of context
+[5883.3s] engineering, which was honestly
+[5885.1s] something that like I will say like I I
+[5887.4s] made the word, but it was uh mostly come
+[5889.6s] from spending way too much time talking
+[5891.2s] to Vib and naming a thing that he uh is
+[5894.6s] constantly rearticulating in different
+[5896.4s] ways. Um and so the bridge here is that
+[5900.4s] uh code layer is a way to apply context
+[5902.2s] engineering to how you use coding
+[5904.4s] agents. Um and BAML I would say among
+[5908.4s] any among many other things is a
+[5910.3s] framework that makes it really easy to
+[5911.7s] do really good context engineering and
+[5913.4s] to test it and to validate and to
+[5914.8s] iterate on it.
+[5915.8s] >> Let's see what this does.
+[5918.1s] Uh keep going.
+[5923.4s] >> Now I'm stuck. This is why I need to
+[5924.8s] paralyze. This is why I usually try and
+[5926.2s] run four things in parallel at once. Uh
+[5928.6s] because when I don't do this, I get
+[5930.2s] bored and now I want to go on Twitter.
+[5931.8s] >> Well, so let's make another plan to
+[5933.8s] because the third feature you wanted was
+[5935.2s] like session summaries, right?
+[5936.4s] >> Can't do that until this this one is
+[5938.2s] done cuz once it knows how to do AI
+[5939.7s] stuff, it's way easier to go replicate
+[5941.1s] that. Doing that from scratch is going
+[5942.9s] to be silly.
+[5944.6s] >> Yeah, but we validated the AI parts that
+[5946.6s] matter.
+[5947.4s] >> No, because what's going to end up
+[5948.7s] happening is I want to really leverage
+[5950.5s] the same plan and the same code that it
+[5952.0s] generated as a git diff and say here's
+[5953.8s] the diff. I now want you to take this
+[5955.6s] diff and then now go study this and then
+[5958.6s] produce a new feature.
+[5960.0s] >> That's actually the best way to go do.
+[5961.6s] >> So you don't want to use the plan. You
+[5962.9s] you want to use the diff cuz like the
+[5964.4s] plan's going to be very close to the
+[5965.7s] diff, but I understand you want to
+[5967.0s] actually use the diff because
+[5968.1s] >> the diff is like verifiably true. It's
+[5970.2s] it just works way better. We do this all
+[5972.1s] the time. We produce sample git diffs
+[5974.1s] that are really small features that are
+[5975.6s] guaranteed to be really generalizable.
+[5977.0s] And boom. Now you just like tell
+[5978.5s] everyone to use that PR and that diff
+[5980.7s] number and that commit ID to say this
+[5983.0s] diff this commit does this feature
+[5985.4s] implement a very similar feature to this
+[5987.0s] one.
+[5989.0s] >> Makes sense.
+[5990.0s] >> Yeah,
+[5990.6s] >> I'm I mean I'm with you. If you want to
+[5992.6s] get the best results for the least
+[5995.2s] amount of effort, the get diff will
+[5997.0s] probably be better.
+[5998.2s] >> Yeah, it's there you go.
+[6001.6s] >> Uh ID title AI. Okay, so test. So make
+[6005.4s] another one that is like you know
+[6006.6s] refactor the XYZ or whatever.
+[6009.9s] >> Um
+[6011.0s] >> in your in your like dev in instance of
+[6013.4s] code layer.
+[6014.9s] >> Oh
+[6016.3s] >> it wants you to launch wants you to
+[6018.0s] launch a new session. Yeah
+[6020.0s] >> we should just keep this running.
+[6022.9s] >> Let's see what it does.
+[6024.7s] >> Yeah.
+[6026.5s] >> I think we'll be done soon.
+[6029.1s] >> Yeah. We've been going for almost almost
+[6031.7s] two hours.
+[6033.1s] >> Yes. So, I think we'll be done at right
+[6035.8s] around the two-hour mark. And if we're
+[6037.0s] not, I will have pop up because I have
+[6039.9s] vacation stuff to do today.
+[6042.0s] >> Okay. Hey, listen. Uh, vacation work's
+[6044.5s] really important.
+[6045.3s] >> Vacation.
+[6045.8s] >> If you do not pick a time to relax and
+[6048.1s] recharge, your body will pick it for
+[6049.8s] you.
+[6050.6s] >> Hey,
+[6052.6s] help me.
+[6057.0s] >> Will you make a real prompt like, "Hey,
+[6058.7s] we're going to re we're going to refac."
+[6063.6s] Um, I just want to see
+[6064.9s] >> like a long prompt that needs to be
+[6066.4s] summarized because otherwise it's just
+[6068.0s] going to
+[6069.3s] >> Well, it should still produce a summary,
+[6070.9s] right?
+[6074.6s] >> Hey, so that works.
+[6076.2s] >> Uh, so the summary is just going to be
+[6077.8s] the prompt itself. So we don't have the
+[6079.9s] AI generated title being generated here.
+[6082.5s] >> It's right here.
+[6084.0s] >> No, it's that column is empty though.
+[6086.2s] Yeah,
+[6086.6s] >> only the last column is populated.
+[6089.4s] >> But it should have that in there. No,
+[6091.8s] >> no. So the idea of this testing of this
+[6093.6s] phase is that when you launch a session
+[6095.2s] the background thing runs and then you
+[6097.2s] actually get the output from it.
+[6101.0s] >> Um add generate and store title method.
+[6104.1s] So it should be storing it. No,
+[6106.4s] >> I'm saying it should be it thinks it is.
+[6108.4s] That's the test it's giving you. But the
+[6110.2s] problem is is that AI generated title is
+[6112.6s] not actually being populated or it's
+[6114.6s] taking way too long.
+[6117.9s] >> Well, we can just see like a debug log
+[6120.0s] maybe. Um, I think because it's a
+[6123.8s] process managed by another process, you
+[6125.9s] might not actually get the HL you might
+[6127.7s] have to get the HLD logs from a file.
+[6129.4s] So, click click the little debug panel
+[6131.3s] >> right here.
+[6133.8s] >> No, in the in the code layer, you can
+[6135.6s] get the you can get the path to the log
+[6137.3s] file.
+[6140.1s] Um,
+[6142.0s] it might be in settings.
+[6146.4s] Yeah, see the uh yeah, the logs actually
+[6149.1s] you can see the logs in the terminal
+[6151.4s] console too. If you just command I,
+[6153.5s] command shift I or whatever in in code
+[6155.9s] layer, you get you can get the web
+[6157.0s] console and it'll show.
+[6160.6s] >> Okay. So, are there any errors here in
+[6163.0s] the
+[6172.2s] >> might be okay?
+[6175.0s] Uh, this is t logs.
+[6177.5s] >> No, it also includes the demon logs. If
+[6179.5s] you scroll up, you should see demon logs
+[6181.2s] in here. Yeah. See,
+[6191.3s] that's the client that talks to the
+[6192.8s] demon. This is fine. This is a error
+[6194.5s] that we're going to get rid of.
+[6197.0s] Um, scroll down. Can you go to the
+[6199.0s] bottom? This is way too verbose. also
+[6203.8s] um
+[6205.6s] okay so let's go back to the model
+[6207.1s] imprompt this is why like phase this is
+[6208.7s] why I split the phases here because if
+[6210.0s] this doesn't work we need to go debug
+[6211.6s] this live and I don't want to have
+[6213.0s] written too much code to have to debug
+[6214.8s] in one so we know phase one is working
+[6216.6s] we know phase two made the column so I'm
+[6219.0s] going to tell it here um
+[6223.4s] isn't working
+[6228.3s] uh don't hit send yet Um,
+[6233.4s] >> one second. Here's here's how I do it. I
+[6235.6s] try and give it like a
+[6238.1s] um what are is there any other file that
+[6240.2s] I can give it?
+[6242.2s] >> Um,
+[6244.8s] no, this is this is it. I Yeah, you can
+[6247.0s] give it the command and you can say like
+[6248.6s] see the summary isn't populated.
+[6261.1s] Um, say you may need to add some logs.
+[6266.6s] >> Oh, interestingly, I think the model
+[6268.3s] infers that, but we can tell it that.
+[6270.2s] >> No, I always tell it that I sometimes it
+[6271.9s] doesn't, and I don't want to wait for it
+[6273.8s] to figure it out
+[6275.9s] to see. Yeah.
+[6278.8s] Uh the only thing other thing I would
+[6280.7s] tell it is like you like I need to
+[6284.1s] restart the demon. You can't do it. So
+[6285.9s] tell me when you've added the logs and I
+[6287.4s] will restart it for you.
+[6288.6s] >> Why do you need to restart it? Doesn't
+[6290.1s] it auto restart?
+[6290.6s] >> Because the hot reloading doesn't reload
+[6292.4s] the go process right now, which is also
+[6294.5s] part of why we're moving to TypeScript
+[6295.8s] cuz that's a pain.
+[6297.2s] >> Oh, that's funny.
+[6298.2s] >> So you need to like control C it and
+[6299.8s] restart it and have it rebuild the Go
+[6301.5s] process.
+[6308.5s] And rather than interrupting it here, I
+[6310.4s] would just controll X and fork it and
+[6312.8s] just add that to your original
+[6314.0s] instructions.
+[6316.1s] All right.
+[6319.7s] No, I need to restart the go process.
+[6324.7s] So when the logs are ready, ask me.
+[6329.4s] >> All right, fine.
+[6331.9s] I mean,
+[6332.3s] >> yeah, I know you can do hot reload and
+[6333.8s] go, but it's it was it was slow and we
+[6336.1s] didn't have time to debug it. So, coming
+[6338.5s] soon.
+[6339.1s] >> Yeah, we spent a lot of time making
+[6340.7s] internal tooling really good for
+[6342.1s] debugging because of this.
+[6343.8s] >> Yep. Congratulations on having a
+[6346.7s] three-year-old codebase. We'll we'll get
+[6348.4s] there eventually.
+[6349.3s] >> Are we three years old?
+[6350.6s] >> Two years old, maybe.
+[6352.3s] >> We start working on BAML in like mid
+[6354.1s] 2023.
+[6355.2s] >> Yeah, we've done um uh some good
+[6358.7s] rewrites.
+[6365.8s] Yeah, we're we're in the middle of that
+[6367.6s] rewrite which will make all this way
+[6369.4s] easier.
+[6374.6s] Put this over on a different window
+[6377.2s] again
+[6379.9s] while this is running and then we'll see
+[6381.4s] what this does.
+[6389.7s] Yeah,
+[6391.6s] >> nice. According to this, this thing is
+[6393.2s] ready.
+[6394.7s] >> Okay, so you can run another like bun
+[6397.9s] rundev in in that thing and I think it
+[6399.9s] should work.
+[6403.2s] >> V repos.
+[6406.0s] >> No, it's just it repos. Yeah, it's tilda
+[6409.7s] repos.
+[6410.5s] >> Yeah, it's
+[6411.0s] >> I need to explain Unix to you, dude.
+[6413.4s] They basically
+[6415.1s] think where uh
+[6419.0s] uh that's not that's not how deter
+[6421.0s] command history bun d-bun rundev
+[6425.9s] I think this will work. There might be a
+[6428.2s] port conflict.
+[6435.8s] >> There's a port.
+[6437.8s] Okay. Uh yeah,
+[6441.7s] you
+[6446.3s] ah oh yeah, you have to probably go
+[6448.7s] restart the one that was wrong. You did
+[6451.4s] restart this one. Yeah, let's make
+[6452.6s] another session.
+[6454.1s] >> Um
+[6454.5s] >> refactor the
+[6455.9s] >> learn new things about this code.
+[6459.4s] >> Uh specifically how
+[6462.6s] >> MCP works.
+[6464.9s] >> Great. Is that sufficient info?
+[6482.7s] >> Okay.
+[6486.0s] So, I give it a sec.
+[6488.8s] Yeah, you can say done
+[6493.0s] >> now. See what this does. and this sort
+[6495.2s] of test.
+[6495.8s] >> I know you got to go in a minute, but
+[6497.2s] this has been I think this has been
+[6498.6s] super useful and interesting. And uh I
+[6501.5s] might ask you to just push all this up
+[6503.0s] and I'm gonna I'm gonna keep running.
+[6504.2s] >> Download title logs.
+[6509.0s] Um
+[6515.0s] see like this
+[6518.9s] what I suspect
+[6519.8s] >> I might be checking the wrong log file
+[6521.9s] also.
+[6530.0s] I think maybe our log consolidation
+[6533.1s] might be busted and it's it's pulling in
+[6535.7s] the TypeScript demon logs but not the
+[6537.8s] logs of the process that spawned. Oh,
+[6540.1s] there you go. Yeah, you are getting the
+[6541.1s] go structured logs there.
+[6543.0s] >> I am.
+[6544.2s] >> Yeah. Yeah. So those those like key
+[6546.1s] value pairs of logs, those are from the
+[6548.0s] demon. So you actually have them in your
+[6549.7s] output there.
+[6553.5s] Let's try again.
+[6555.8s] Uh, another request. Uh, let me know
+[6559.1s] when you are ready
+[6561.9s] for researching MCP.
+[6567.3s] Cool.
+[6573.0s] I'll just tell to try again in there.
+[6579.7s] Oh, it's actually making changes.
+[6582.4s] >> Yeah,
+[6585.4s] that's funny. It is doing like a go
+[6586.9s] build.
+[6589.8s] >> This is just a test.
+[6594.3s] >> Okay.
+[6601.5s] Uh and then what I will do is I'll make
+[6604.0s] this testing loop really fast.
+[6610.3s] Do you not have a CI/CD way to like
+[6613.0s] create a new session?
+[6615.2s] >> There is a CLI to create a new session.
+[6616.9s] Yeah, you can use like uh code layer
+[6619.8s] launch.
+[6650.1s] That's funny. It reads as you found
+[6652.2s] something.
+[6657.6s] >> That does that look right?
+[6659.8s] >> I don't think that's Oh, it's working
+[6661.5s] now. Okay. Okay. So, it just like didn't
+[6664.2s] put the kick off. Let's here. Click on
+[6666.3s] that output. Let's see if it got a
+[6667.6s] title.
+[6668.2s] >> Yeah, it did. It worked. Amazing.
+[6672.0s] Um, cool. I would say since you got a
+[6674.2s] jump and you want to pause like I would
+[6675.8s] just say like update the plan with what
+[6677.3s] we learned and then commit everything
+[6679.4s] and push it.
+[6681.4s] >> I think phase four is the last phase,
+[6683.2s] right? So,
+[6684.6s] >> it's just the front end side. Okay. I
+[6686.6s] mean, you said you had to go in three
+[6687.8s] minutes. If you're down to go over like
+[6689.0s] 10 minutes, let's see if we can actually
+[6690.1s] get working code here
+[6690.9s] >> and then we'll get this done.
+[6692.5s] Yeah,
+[6693.5s] >> I'll start recapping recapping some of
+[6695.4s] the learnings I guess is like again is
+[6697.4s] like phase ordering and being able to
+[6698.9s] test like imagine if we had gone all the
+[6700.2s] way to the front end and we were
+[6701.2s] debugging this the scope of what could
+[6703.0s] be wrong would be way bigger and so
+[6705.1s] that's why I was like really wanted to
+[6706.5s] test these things one by one.
+[6710.6s] >> Yeah, I think we were probably just
+[6711.9s] doing different levels of testing like I
+[6713.4s] was just like I would just test the
+[6714.8s] event stream and if the event stream is
+[6716.3s] working then I'm pretty happy with it.
+[6718.4s] [snorts]
+[6720.9s] But I think it's
+[6721.8s] >> like if the event stream wasn't working,
+[6723.4s] like you weren't getting the new title
+[6724.7s] in, then you wouldn't know if it was the
+[6727.5s] front end wire to the back end or that
+[6729.7s] the back end wasn't actually doing the
+[6731.2s] work properly.
+[6732.7s] >> Uh uh slash
+[6737.4s] uh just where what files mention
+[6743.5s] MCP.
+[6749.8s] So, this won't trigger a new run through
+[6753.8s] like because we told it to just inherit
+[6755.6s] the parent session title. So, this won't
+[6757.4s] actually
+[6757.7s] >> Well, this is not the title one. I This
+[6759.2s] is the Obsidian one that I'm switching
+[6760.6s] context to. Sorry.
+[6761.9s] >> Oh. Oh, cool. Okay.
+[6763.8s] >> I just want to see if it points out an
+[6765.0s] MTP file and then when it does this.
+[6767.6s] >> Yeah, you're using Haiku, so it's not
+[6770.6s] going to follow the instructions.
+[6775.0s] >> Cool. Or just tell it read one file.
+[6777.0s] >> Do the research.
+[6780.7s] >> Okay,
+[6783.4s] great.
+[6787.5s] >> Approve.
+[6788.8s] >> Oh, now it's following the instructions.
+[6791.1s] >> Uh, I mean, it did before, too. It just
+[6792.8s] did a GP and then it found everything.
+[6799.7s] >> Haiku, you so fast.
+[6802.3s] Yeah, I literally hate using anything
+[6805.1s] but haiku for that reason for most tasks
+[6807.3s] because it's just speed. I find speed is
+[6809.2s] my actual number one alpha.
+[6811.6s] >> Yeah.
+[6812.2s] >> Um and then in theory it should work.
+[6815.8s] Oh, I got to write this.
+[6818.6s] >> Nice.
+[6821.1s] >> I got to go here. Default letter
+[6824.5s] Obsidian.
+[6826.2s] >> Nice.
+[6828.5s] All right. Now you should be able to
+[6829.5s] click it.
+[6832.2s] You can use O also to open files. Oh
+[6835.0s] [ __ ] Damn, you shipped it. Let's
+[6838.3s] [ __ ] go.
+[6839.7s] >> Yeah,
+[6840.0s] >> this is a good feature. Oh, I like this.
+[6843.4s] >> Cool. Um,
+[6846.7s] get the get the
+[6855.4s] fun.
+[6857.4s] I might do the code layer thing and do
+[6859.4s] it the code way.
+[6861.9s] Great.
+[6864.9s] >> And that's what I like. I didn't need
+[6867.0s] phase commits for that at all. For
+[6868.4s] example, yeah, that one just worked.
+[6869.7s] >> Yeah, that one was that one was simple.
+[6871.0s] That one you just rip through. I mean
+[6872.1s] that could have all been in one phase
+[6873.4s] basically.
+[6874.1s] >> That's what I mean. And I I don't even
+[6875.8s] mean research in the same way. Like I I
+[6877.5s] think it's just building an intuition
+[6878.8s] for what things can work really well and
+[6880.4s] what things
+[6881.9s] >> it takes reps.
+[6883.4s] >> Create create a branch and add all
+[6887.4s] relevant files.
+[6889.8s] Not the thoughts.
+[6902.2s] Cool.
+[6903.7s] There you go. You got obsidian. And now
+[6906.2s] this thing is
+[6914.8s] Yes. Oh, this so annoying. I said yes
+[6917.2s] already.
+[6919.2s] This is why I hate this stuff.
+[6922.1s] Um,
+[6923.3s] >> I mean, again, it just takes reps. You
+[6925.3s] realize yes doesn't work, so you start
+[6927.0s] typing instead. You say like, great, do
+[6928.6s] the next phase.
+[6930.7s] And it's takes an extra 3 seconds of
+[6933.3s] your time.
+[6935.2s] >> But no, I mean, this is one of the
+[6936.6s] things we're working on a lot is like
+[6937.7s] there's a lot of like oral tradition
+[6939.4s] that goes into this stuff and like vibes
+[6941.2s] and instinct that you have to develop.
+[6942.9s] And we're trying to make it easier for
+[6944.5s] like people who haven't like you and me
+[6946.6s] who haven't spent years talking to
+[6948.1s] models all day and like really have an
+[6950.0s] intuition about it. How do we make the
+[6951.8s] like fewer foot guns that just kind of
+[6954.7s] like make it work even if you're not an
+[6956.6s] expert at LLM? How do we make the
+[6958.2s] planning and the implementation actually
+[6959.8s] like pretty straightforward? People can
+[6961.2s] get the hang of research pretty easily
+[6962.6s] because research is like the the the
+[6964.8s] only thing you get wrong with research
+[6965.9s] is like baking in too much
+[6967.0s] implementation stuff and even that for
+[6968.7s] smaller stuff is fine.
+[6971.6s] I think my my biggest uh my biggest
+[6975.7s] gripe here is like
+[6977.8s] it just I feel like sometimes it feels
+[6980.3s] like uh the answer is it's my fault as a
+[6982.5s] developer. But honestly, when I think
+[6983.9s] about developer tooling, my biggest
+[6985.4s] thing is I think the tooling should be
+[6986.8s] doing as much of the work as possible.
+[6989.0s] >> Yep. You got to you got to let the AI do
+[6991.6s] the things that the AI is good at. You
+[6993.1s] got to let the tooling do the
+[6994.7s] deterministic things that like you know
+[6996.4s] you're going to want to do every time.
+[6997.7s] and like make sure the user is only
+[6999.4s] doing the high leverage human stuff
+[7000.8s] which is like thinking and design and
+[7003.0s] systems architecture.
+[7004.3s] >> Well, that's what I mean. For example,
+[7005.7s] like I'll just give you like a tooling
+[7006.8s] feature here. If you know I wrote a
+[7008.6s] really short response and it's like
+[7009.8s] affirmative in some way and then this
+[7011.4s] thing was asking me to proceed and then
+[7013.5s] like really quickly it just asks me to
+[7015.1s] proceed again that you could in you
+[7017.6s] could auto inject yes on my behalf.
+[7020.2s] >> Yeah.
+[7020.7s] >> As part of as as someone building
+[7022.3s] toolink.
+[7023.4s] >> Yeah. almost like uh cursor cursor tab
+[7026.2s] complete but for prompting the model not
+[7028.3s] for the code that it generates.
+[7029.5s] >> It's not even it's not even tab complete
+[7031.0s] it's just like it's just it's basically
+[7032.9s] helping the model steer in the direction
+[7034.2s] that I want it to especially if it's
+[7035.6s] running in the background process. You
+[7037.0s] probably don't want to do that if I'm
+[7038.1s] here.
+[7039.1s] >> Yeah.
+[7039.6s] >> But if I am outside I'm running
+[7041.7s] something else and like it's a great
+[7043.0s] thing to go do.
+[7045.0s] >> Oh, it made a PR. Nice.
+[7047.4s] >> You want to pop it open and just give it
+[7049.0s] a quick scan?
+[7053.8s] Um,
+[7055.5s] I'll leave this pull the files. Yeah,
+[7057.5s] I'll I'll review this and we may pull it
+[7059.3s] down and make a couple more tweaks, but
+[7061.1s] >> I'm probably going to delete the This is
+[7062.6s] just the built-in agents that you added
+[7064.2s] just so we could make sure you were
+[7065.5s] using the non-thoughts versions of the
+[7067.3s] of the prompts just because that's a
+[7069.1s] bunch of extra stuff to set up.
+[7071.5s] >> Yep.
+[7079.2s] >> Cool. This does the trick.
+[7082.2s] Yeah,
+[7082.6s] >> I mean, like I said, we watched the
+[7084.0s] implementation phase by phase, so I'm
+[7085.7s] pretty confident in this one, but we'll
+[7087.0s] we'll have Kyle do a review.
+[7088.5s] >> For this one, we didn't. For the
+[7089.9s] Obsidian one, we just vibe the whole
+[7091.7s] thing.
+[7093.1s] >> We skimmed the plan, though. We changed
+[7094.6s] parts of the plan.
+[7096.0s] >> We haven't been looking the face by
+[7097.8s] face, but
+[7098.5s] >> you let me know when you merge it. Uh,
+[7100.1s] I'm going to clean out these really
+[7101.4s] fast.
+[7102.6s] >> Yep.
+[7106.4s] >> When I go run this,
+[7109.2s] what is this doing? Sick, dude.
+[7111.3s] >> Yeah. And this thing I think will should
+[7113.4s] just work. Phase four, my hunch says
+[7114.9s] will just work. Uh
+[7116.2s] >> just go do it. Let's just go test it
+[7117.7s] real quick.
+[7119.6s] >> Yeah.
+[7121.1s] Well,
+[7121.4s] >> the front end part you can just leave it
+[7122.9s] running like this. That that part will
+[7124.7s] hot reload. You don't need to you don't
+[7126.4s] need to restart it.
+[7128.6s] >> Yeah. So, we'll see what this does.
+[7131.2s] >> Yep.
+[7134.9s] This is fun, man. I'm already getting a
+[7137.4s] bunch of like DMs and Slack messages
+[7139.2s] that people really like this episode.
+[7141.5s] >> That's cool.
+[7143.4s] Once this launches,
+[7147.4s] >> let's go into here.
+[7164.2s] I hate that there's no loading indicator
+[7165.9s] here.
+[7167.7s] >> It's coming. It's one of those tickets
+[7170.2s] that I'm like, I thought we already did
+[7171.5s] that three times.
+[7174.5s] >> Um
+[7178.1s] Oh, you're talking about loading on the
+[7179.4s] title.
+[7180.0s] >> Yep.
+[7181.8s] Uh I got to correct the database.
+[7190.3s] >> SQLite.
+[7191.9s] >> Oh my god. That's the key. You deleted,
+[7194.2s] right?
+[7194.6s] >> Yeah, I think so.
+[7196.7s] Yeah, it's got deleted, so I don't care.
+[7198.3s] Go at it.
+[7199.7s] >> Yeah, go try to use it. Equal. We got to
+[7203.8s] fix your shell history.
+[7205.9s] >> Um, I should use oxide.
+[7211.0s] >> Okay.
+[7212.0s] >> Uh, where is this? I gave it the CLA
+[7214.4s] command. This, see, this is the other
+[7216.0s] reason that I find like using new tools
+[7217.7s] to be really hard because then when I do
+[7220.0s] that, it's very hard for me to find uh
+[7222.3s] it's very hard for me to adapt.
+[7224.8s] >> Yeah.
+[7226.3s] >> It's a discontinuous innovation.
+[7228.4s] >> Exactly. So, this one did not trigger
+[7230.6s] this.
+[7231.5s] >> It did.
+[7233.0s] >> Nope.
+[7233.9s] >> Researching MCP. It did. It made a
+[7235.8s] title, but it's not showing up in the
+[7238.0s] front end.
+[7245.5s] So we might be missing the fallback
+[7247.2s] logic of like hey it should be showing
+[7248.9s] the AI title.
+[7250.6s] >> No,
+[7251.0s] >> just say like the AI title got written
+[7252.4s] to the database but it's not showing in
+[7253.8s] the front end.
+[7254.6s] >> The AI title is in the database but it's
+[7259.0s] not showing in the front end.
+[7262.3s] Um,
+[7262.9s] >> yep. Is that a logic bug or a
+[7267.6s] in the event stream or a front end bug?
+[7273.0s] >> Yeah. And the other thing I'm realizing
+[7274.4s] is that I we didn't update the open API
+[7276.7s] schema which means like we're not
+[7278.4s] actually sending down the new thing.
+[7280.7s] It's
+[7281.4s] >> Are you sure?
+[7282.3s] >> Yes. Greater than uh default
+[7285.0s] placeholder.
+[7288.2s] Can we look at the diff and look at the
+[7289.9s] open API schema
+[7292.5s] and cursor?
+[7297.4s] >> It it had in it in its spec at least.
+[7300.2s] Oh, but I can't look at the freaking
+[7301.9s] history against against main because
+[7304.2s] this is only one commit
+[7307.8s] graph.
+[7308.3s] >> Uh
+[7312.6s] uh open API. Where is this? This one
+[7316.4s] >> yeah just search for AI just search for
+[7320.0s] title or that works.
+[7338.4s] How do I see the last name? There we go.
+[7343.3s] This is the last one here
+[7344.8s] >> from Yeah, I don't think I don't think
+[7347.3s] our I think this is actually an issue
+[7348.6s] with our plan.
+[7351.7s] >> Oh, it's doing phase five.
+[7356.2s] >> Oh, the event is being published.
+[7357.6s] >> It's just doing the streaming, which
+[7359.2s] means like if you close it or restart
+[7360.7s] it, it's not going to stream down.
+[7363.3s] >> I see. I see. I see. The front end just
+[7366.0s] isn't handling that event yet. Yeah,
+[7368.1s] they were doing the I think we had it do
+[7369.7s] the SSSE streaming and the testing for
+[7371.4s] SSE is like curl the event endpoint and
+[7373.6s] make sure the event comes down.
+[7374.7s] >> I see. Cool.
+[7376.4s] >> Yeah, which we could still test if you
+[7379.0s] wanted to.
+[7380.3s] >> That's too much work. [laughter]
+[7382.6s] >> That's actually why the manual
+[7383.8s] verification I don't actually do most of
+[7385.4s] the time.
+[7385.7s] >> You would have skip this and just
+[7386.6s] combine them into one phase. Yeah,
+[7387.9s] that's fine.
+[7388.8s] >> It's also like depending on your timing
+[7390.3s] and your tolerance.
+[7391.0s] >> For example, when we work when we work
+[7392.6s] with BAML, um
+[7393.9s] >> yeah,
+[7394.4s] >> that's how we do it. We've actually done
+[7396.7s] a lot of work to create these like
+[7398.6s] snapshot tests.
+[7400.8s] >> Oh yeah, you were showing this last
+[7402.2s] week.
+[7402.6s] >> Yeah. And like I actually don't actually
+[7404.6s] vibe this most of the time. I just let
+[7406.1s] the model go and do the thing it needs
+[7407.6s] to do.
+[7408.6s] >> Yeah.
+[7409.8s] >> Why is this not letting me type?
+[7415.4s] >> Agent terminals are read only.
+[7419.9s] [laughter]
+[7421.8s] >> That's an agent terminal. Um, what I let
+[7423.9s] it do is I let the model run. And while
+[7425.9s] it's running, I actually really quickly,
+[7428.1s] what the snapshot test does is it
+[7429.6s] creates like a new diff. So like I'll
+[7431.0s] show you what it does. Um,
+[7434.3s] uh, I I'm making a whole new repo for
+[7436.7s] us. Uh, BMA language
+[7448.7s] cargo test-list.
+[7452.4s] What is it?
+[7455.2s] L
+[7456.7s] I forgot. I don't actually have a list
+[7458.2s] test
+[7461.0s] in cargo.
+[7463.4s] And what I end up doing is I'll I'll
+[7464.9s] show how this runs really fast
+[7470.5s] is when this test runs, I'll run like
+[7472.6s] basic types. Yep.
+[7478.6s] basic
+[7480.7s] basic types
+[7482.7s] when I run this test from here and I
+[7484.5s] let's say I edit this file to like put
+[7486.2s] like a get status to
+[7490.8s] and when I run this it actually produces
+[7492.3s] like a really quick diff and not only
+[7494.0s] does it produce a diff you'll notice
+[7495.7s] that it creates a file on the disk that
+[7497.8s] it can go
+[7498.6s] >> snapshot
+[7500.1s] >> exactly for the specific ones that
+[7502.0s] failed so now what the model can do is
+[7503.8s] it can actually go compare and contrast
+[7505.8s] and actually like be like, "Oh, this is
+[7507.7s] the part that's broken."
+[7508.8s] >> And you'll notice that we actually we
+[7510.5s] actually did other things. Not only do
+[7511.8s] that, we actually named the phases in
+[7513.4s] order.
+[7514.2s] >> So like obviously phase two fails if
+[7516.0s] phase one fails
+[7518.4s] >> and it's easy for the model. Oh, I
+[7520.7s] should fix phase one before I fix phase
+[7522.4s] two. It's it makes inferencing the model
+[7524.2s] way easier.
+[7526.0s] >> Yeah.
+[7527.1s] >> So these are small things that we have
+[7529.1s] seen make a huge difference in
+[7531.8s] incorrectness.
+[7534.6s] >> Cool.
+[7535.6s] Uh, how's our how's our implementation
+[7537.6s] going?
+[7541.0s] What? Yeah. Can we look at this? What is
+[7542.5s] it doing? Is it actually regenerating
+[7543.8s] the SDKs?
+[7545.2s] >> I have no idea.
+[7546.9s] >> We don't have search on here yet. It's
+[7548.6s] coming. For what it's worth, Ghosty also
+[7551.8s] doesn't have search.
+[7553.7s] >> I
+[7554.3s] >> People give Mitchell a lot of [ __ ] for
+[7555.8s] that.
+[7556.6s] >> What I will say is as a developer, I
+[7558.5s] don't care.
+[7558.9s] >> Oh, look. It is. Yeah, it's doing the
+[7560.1s] fallback. Okay, scroll up.
+[7561.9s] >> Yeah. I just want to make sure because
+[7563.9s] sometimes it will
+[7565.4s] >> sometimes it will not update the open
+[7567.0s] API scheme. It'll just like edit both
+[7568.8s] sides of the contract which is like very
+[7570.7s] wrong. Like it technically will work but
+[7572.5s] it's very wrong.
+[7574.5s] >> Um I think this is the wrong way to go
+[7576.6s] look at this.
+[7579.4s] >> Sure.
+[7579.6s] >> It's just easier to go read this
+[7585.6s] >> uh session title
+[7586.9s] >> lib demon types.
+[7591.9s] Okay, that's the event type.
+[7594.9s] Yeah, it didn't update the open API
+[7596.6s] spec. Okay, if we had more time, I would
+[7599.5s] be like, this is a great time to re
+[7600.8s] steer of like backing out some of what
+[7602.4s] had happened and like actually like how
+[7605.1s] do you edit a plan in flight when you
+[7606.8s] realize something was wrong after three
+[7608.6s] phases of implementing?
+[7613.3s] >> Do you want me to rerun it or?
+[7614.8s] >> Yeah, let's try to restart probably
+[7617.1s] because it go
+[7617.9s] >> No, don't restart it. Don't restart it.
+[7619.5s] >> Whatever.
+[7620.1s] >> Stop restarting it.
+[7622.3s] It's fine.
+[7623.4s] >> Building hot reload is very very
+[7625.1s] important uh for developer workflows
+[7628.2s] especially agent systems that require
+[7629.8s] like UI testing.
+[7632.3s] >> I mean the UI part does hot reload.
+[7634.3s] That's why I said don't restart it.
+[7636.1s] >> But it changed go code. Did it not?
+[7638.1s] >> Did it? I don't think so. with types
+[7640.0s] types I go
+[7651.0s] refresh this
+[7654.1s] command R
+[7670.4s] Yeah. Yeah. So, that's working.
+[7680.0s] Yeah. Uh, it seems like the title's not
+[7682.2s] I mean, we can tell the model this like
+[7683.8s] the title's not being brought down. This
+[7685.0s] is also the other thing is like you get
+[7685.9s] to the end of phase and something's not
+[7687.0s] working. Usually, if it's small, you can
+[7688.5s] vibe your way out of it.
+[7691.3s] Um,
+[7693.1s] so a
+[7698.4s] Can I can I can I tell you what to say
+[7700.6s] here that's actually going to get you
+[7701.7s] the result you want fastest?
+[7704.2s] >> Uh, one second. Let me add this in. All
+[7706.1s] right, now go.
+[7707.8s] >> Um, I think you need to update open
+[7710.4s] API.yamel and regenerate the types to
+[7713.0s] make sure that it comes down from the
+[7714.6s] demon when fetching sessions.
+[7729.7s] Oh, that's going to be I don't know.
+[7731.6s] That's funny.
+[7733.6s] It that is not going to work, is it?
+[7741.7s] I mean, yeah, I wouldn't have put that
+[7743.0s] whole image in there because you just
+[7744.3s] used like thousands of tokens for a
+[7746.6s] thing you could have told the model. I
+[7749.0s] it I think it gives a model affirmation
+[7751.0s] that again it's more about speed for me.
+[7753.4s] Um and I'm I found images have been a
+[7755.7s] great way to communicate UI stuff.
+[7759.8s] >> Cool.
+[7760.9s] >> Uh let's see if it actually figures out
+[7762.5s] how to regenerate the types. Okay,
+[7764.2s] fantastic.
+[7764.8s] >> So why why are we even doing the title
+[7766.4s] logic here? Shouldn't it just send the
+[7767.8s] title correctly when it fills it out?
+[7771.1s] >> So what's happening is it's launching it
+[7773.6s] and then it should be sending down an
+[7775.0s] SSE event. I don't know if the SSSE we
+[7777.0s] don't use SSE for a lot so I don't trust
+[7778.6s] it but also like what I want is like
+[7780.4s] even if you get the SSSE event if you
+[7782.9s] refresh the page it should be able to
+[7785.8s] pull it from the database and the
+[7787.3s] problem is like the session object and
+[7789.0s] the contract is not getting updated and
+[7790.8s] so like maybe it'll update live if you
+[7792.9s] stay on the page for long enough because
+[7794.6s] we want title AI generated title and
+[7796.6s] user title and the fallback logic lives
+[7798.8s] on the front end.
+[7801.0s] >> Oh is that how you do it?
+[7803.0s] >> Yeah and yeah that was what's in the
+[7805.0s] plan. Uh, you need to be running Docker
+[7806.6s] to do the type generation.
+[7809.9s] >> Oh my god.
+[7812.0s] So, I have a different idea. Instead of
+[7813.6s] doing the type generation, we don't
+[7814.7s] actually have to do that, right? What I
+[7816.1s] can't
+[7816.5s] >> It's just going to It's going to go hack
+[7817.7s] around it. It's going to go find a
+[7818.9s] workaround.
+[7819.5s] >> But can't I just make the go part just
+[7821.9s] fill in the
+[7822.5s] >> That's what it's doing.
+[7823.6s] >> That's what it's doing.
+[7825.4s] >> It's going to go find the like go store
+[7827.3s] and like add the JSON tag to it.
+[7831.5s] Also, you're about to get autocompacted,
+[7833.4s] which means that everything's going to
+[7835.4s] go to [ __ ]
+[7839.2s] >> Well, I think that's one of the things I
+[7841.1s] will challenge you on. Um, I agree.
+[7843.0s] Autoco compaction is usually bad, but
+[7844.7s] sometimes it's not too bad.
+[7846.6s] >> Sometimes it's okay, but again, like I
+[7849.0s] don't want to sit here and hope that
+[7850.6s] it's going to work.
+[7854.6s] >> Um,
+[7856.6s] oh, I think I'm I'm talking about
+[7857.9s] something different than what it's doing
+[7859.0s] right now. Instead of even modifying the
+[7861.0s] API spec, can't they just make the title
+[7862.9s] field contain the AI generated title or
+[7865.4s] the user generated title?
+[7868.4s] >> Um,
+[7871.0s] no, because uh yeah, you could do the
+[7873.6s] oring on the back end if you wanted to.
+[7876.5s] >> How about we do that?
+[7877.2s] >> Let's see. Let's just see where this
+[7878.2s] gets here.
+[7880.0s] >> Oh, see it's trying to do the generation
+[7881.7s] again. It's like already forgotten that
+[7883.8s] that doesn't work because Docker's not
+[7885.4s] running here. I'll I'll I'll I'll
+[7889.9s] >> You're going to hit a compaction, dude.
+[7892.5s] >> Open a uh instead of
+[7896.2s] >> I have an idea. How about we do a fork?
+[7899.8s] >> Yes. Fantastic.
+[7902.4s] >> Oh, I realized I can't actually do that
+[7904.6s] because
+[7906.9s] I don't want to edit these files
+[7910.1s] and edit a bunch of random stuff.
+[7912.8s] >> No. What do you mean? It's not going to
+[7914.9s] edit anything.
+[7916.6s] >> Well, didn't it edit all these files?
+[7923.2s] >> Like, didn't it edit this file?
+[7930.4s] AI title.
+[7934.8s] [sighs]
+[7937.4s] AI generated title. Uh, is that not in
+[7940.2s] here?
+[7942.7s] It's going to be with the underscores,
+[7944.2s] dude.
+[7947.1s] Use the underscores.
+[7948.9s] >> What do you mean?
+[7950.2s] >> AI underscore generated. Yeah,
+[7952.3s] >> it's not yet.
+[7953.0s] >> Yeah, it hasn't added it here yet.
+[7956.3s] >> I'm going to delete this.
+[7959.4s] I'm going delete this.
+[7961.6s] I'm going try again. I'll use your fork
+[7964.5s] feature.
+[7970.2s] >> Yeah. So fork that one and just give it
+[7971.8s] very specific instructions instead of I
+[7973.5s] think you need to update the open API.
+[7977.4s] >> Um in the back end when
+[7981.2s] you return the session
+[7983.8s] the title should be the or of
+[7988.3s] UI user title or the uh AI title.
+[7995.7s] Sure.
+[7998.6s] >> The summary fallback
+[8001.5s] we can we can do in the front end.
+[8005.8s] >> Yeah. Okay.
+[8010.0s] >> I hope it doesn't read that picture
+[8011.5s] again.
+[8012.9s] >> It probably will.
+[8014.3s] >> Yeah.
+[8021.7s] >> Yeah. There you go.
+[8025.5s] Like I think it's just way easier if the
+[8027.1s] back end is sending out events for this
+[8028.6s] rather than the front end doing it.
+[8031.3s] >> Yeah. I mean I don't I don't like from
+[8033.0s] an architecture perspective of having
+[8034.6s] two different fallbacks in two different
+[8036.2s] places. But in the interest of getting
+[8037.5s] this working and like viewing something
+[8039.5s] cool end to end and then like this is
+[8041.0s] the idea is like make it work and then
+[8042.8s] figure out your test loop and then
+[8044.2s] refactor.
+[8047.9s] >> Yeah, it's interesting that you do it
+[8050.3s] there. I would actually do it purely in
+[8051.8s] the back end for everything. Why why
+[8053.2s] doing the front end or the back end?
+[8057.4s] >> Because we may want to display both like
+[8066.4s] what you display is I think is client
+[8069.8s] logic. It's not business logic.
+[8071.5s] >> I see
+[8074.0s] >> there's an argument for either way. It
+[8075.4s] probably doesn't matter. I think it was
+[8076.6s] like it was like cool whatever works. I
+[8078.6s] think even in the moment we were having
+[8080.2s] this conversation, there was probably a
+[8081.8s] like, yeah, it doesn't matter. Just pick
+[8083.3s] one.
+[8087.1s] >> There you go.
+[8089.2s] >> Easy.
+[8091.0s] All right. Go. Uh, you got to Now you
+[8093.0s] have to restart it because you're making
+[8094.0s] go line changes, though.
+[8095.7s] >> Yeah. Once this is done, though.
+[8097.8s] >> Yeah.
+[8100.6s] Oh, the RPC handlers don't matter.
+[8105.6s] Um, but then the event stream I think is
+[8107.8s] not working, but everything else I think
+[8109.1s] should be.
+[8110.3s] >> Yeah. And this is why I was like, I want
+[8112.1s] to do the event stream part last because
+[8113.8s] I just want to make sure this works
+[8115.1s] first.
+[8125.0s] Amazing.
+[8129.9s] All right, you can go restart it.
+[8136.5s] Let's go. Moment of truth.
+[8142.6s] And what have we learned? Let's see.
+[8145.4s] >> What we learned is that if we get really
+[8146.9s] close to solving something, we can get
+[8148.6s] Vib to sacrifice an extra 20 minutes of
+[8150.9s] his vacation.
+[8152.1s] >> Yes, that's basically [laughter] the key
+[8154.2s] takeaway.
+[8155.8s] I do really like code. It's really hard
+[8158.1s] for me to uh uh it's really hard for me
+[8161.1s] to step away from code. I freaking love
+[8162.9s] code of all kind. It doesn't even matter
+[8165.5s] what it is. I just love coding.
+[8167.4s] >> Hey, look at that.
+[8169.8s] >> Well,
+[8170.3s] >> it's there because now it's just pulling
+[8171.5s] it from the database. So, any one of
+[8173.2s] these that has the thing in the
+[8174.6s] database, it's going to work.
+[8180.2s] >> There you go. It popped into right here.
+[8182.0s] >> Oh, it came in with the stream. Nice.
+[8185.0s] >> Sick. Ship it.
+[8187.0s] >> Ship it. I mean, I'm going to pull this
+[8189.0s] down and clean up a couple things. But
+[8190.6s] yeah, this is I'm probably going to
+[8191.7s] rework it to use the open API just so
+[8193.7s] the pattern matches, but
+[8200.3s] there's a slash commit command if you
+[8202.1s] want.
+[8205.6s] It's fine.
+[8209.0s] >> Let's see what this does. Ah, that's too
+[8210.7s] much work
+[8213.4s] >> to run the slash command. Yeah,
+[8216.6s] it's I think I think you I think you're
+[8219.0s] one of the people that is very adaptable
+[8220.6s] in your workflow. And I think one of the
+[8222.2s] things to recognize here is like it's
+[8223.9s] very hard for most people to really
+[8225.5s] change their workflow. Like in theory,
+[8227.7s] yes, we should all be doing the optimal
+[8229.2s] things, but most people don't want to
+[8231.1s] anneal like most developers that have
+[8233.5s] experience can't just like anneal to a
+[8235.2s] new workflow [snorts] very fast.
+[8237.9s] I mean, it is definitely like I mean,
+[8239.3s] that's what cursor is good at is like
+[8241.2s] it's a slightly faster way of doing the
+[8244.4s] same thing I was already doing versus
+[8246.2s] like this is very much a what like the
+[8248.2s] crossing the chasm guy calls like
+[8249.8s] discontinuous innovation.
+[8251.8s] >> Yeah.
+[8252.2s] >> Um I actually think you probably have a
+[8253.7s] similar thing with BAML, right? Where
+[8255.0s] it's like, okay, I don't just use a new
+[8256.6s] library. I actually have to change the
+[8257.9s] way I think about structuring my code.
+[8259.5s] >> Yeah. Or like
+[8260.2s] >> it's like valuable to make that hit, but
+[8262.1s] it takes longer to get to like over the
+[8264.1s] first hill there.
+[8265.2s] >> Yeah. Uh exactly and you really need I
+[8267.7s] think you need to anchor on the one use
+[8269.2s] case that is like super applicable for
+[8271.0s] it in any one use case. So like for
+[8273.0s] example like in this scenario like like
+[8275.5s] I said sometimes I find it super useful
+[8277.4s] to just uh switch over to cursor and try
+[8279.7s] out the same thing because they load my
+[8281.4s] cloud code commands anyway.
+[8283.1s] >> Yeah. But like one of the things that
+[8285.4s] curs like uh let me tell you like part
+[8287.8s] of the reason why I found that was
+[8289.2s] actually because of some of this stuff
+[8290.6s] like oh I don't have it in this one but
+[8293.0s] I think I have it in my other one
+[8295.8s] 3. Part of the reason why that's
+[8297.7s] interesting is like they do some stuff
+[8300.4s] like this where they just rename stuff
+[8304.1s] and that is just useful for me as a
+[8307.3s] developer to go think about and think
+[8310.1s] about what I really want out of this.
+[8313.1s] So I think there's small things like
+[8314.9s] that that make a huge difference.
+[8317.4s] Uh and if you can get like the workflow
+[8319.1s] really good for one or two specific use
+[8320.9s] cases, I think it becomes a really
+[8322.1s] exciting way to change habits. But like
+[8324.5s] if if I have to be perfect and prompting
+[8326.3s] every single time, that's really hard as
+[8328.8s] a developer.
+[8330.9s] On the other hand, you now have a poll
+[8332.2s] request
+[8334.9s] uh for new features.
+[8336.6s] >> Amazing. This was a blast, dude. Thank
+[8339.0s] you for uh thank you for shipping. Sick.
+[8341.6s] What' you learn?
+[8342.5s] >> My main thing that I learned is like we
+[8344.1s] code. Uh this repo is sadly not public.
+[8347.0s] >> This is our experimental testing ground
+[8349.0s] where we're we're working on some new
+[8350.5s] stuff.
+[8351.4s] >> My main thing that I really learned was
+[8353.0s] just that it's it's just uh how do I
+[8356.2s] phrase it? Uh it's interesting seeing
+[8358.5s] other people's coding styles.
+[8360.8s] Like I think that's just always
+[8361.9s] fascinating to me. Like there's small
+[8363.4s] differences in the way people develop.
+[8365.4s] And u I think the other thing to really
+[8369.1s] see is just that the way that people
+[8372.5s] communicate about code is probably very
+[8374.6s] important because there's probably some
+[8376.0s] bias that the models have that they take
+[8378.3s] advantage of in some way.
+[8380.2s] >> I like it. Um yeah, I think uh I I
+[8385.1s] enjoyed having you push back on like,
+[8387.8s] hey, maybe we don't need to do that much
+[8389.7s] context engineering. Maybe we can just
+[8391.1s] blast this through. And that reminder
+[8392.8s] that like you should always be like, you
+[8395.2s] know, we got to get our jobs done and
+[8396.7s] like do what you think will work, but
+[8398.2s] also like if you're not constantly
+[8400.0s] firing like way higher or way lower in
+[8402.9s] terms of how much work you do to do a
+[8404.6s] feature, you won't learn like how to how
+[8408.5s] to move. And it's like there's so many
+[8410.6s] dimensions of working differently in the
+[8413.1s] AI world in terms of like different
+[8415.7s] models, different CLIs, different tools,
+[8417.7s] different amounts of context
+[8418.7s] engineering, different sets of prompts.
+[8420.3s] And it's like I think the challenge is
+[8422.8s] either like people find one thing that
+[8424.2s] works and they are afraid to change
+[8426.0s] anything and they get stuck there. But I
+[8427.9s] I think it's really valuable to like
+[8430.3s] pick a dimension and explore along it
+[8432.7s] until like I don't know I rotate through
+[8435.0s] like one week I'll try different tools,
+[8437.1s] one week I'll try different levels of
+[8438.6s] context engineering, one week I'll try
+[8440.5s] different repos. Like you got to you got
+[8442.2s] to like pick a dimension and then eval
+[8444.6s] across that dimension for your own
+[8446.4s] intuition.
+[8447.4s] >> That's really Yeah, I think I do it
+[8448.8s] probably a slightly different way. It
+[8450.1s] sounds like you're much more scientific
+[8451.2s] in the way that you experiment. I
+[8453.3s] >> still it's still all vibes, but I try to
+[8455.1s] be intentional about like locking most
+[8457.7s] of the dimensions and focusing on one at
+[8459.8s] a time.
+[8460.2s] >> I think the way I always do it is I
+[8462.0s] there's so many different dimensions
+[8463.4s] that I actually try not to be I lock
+[8465.5s] anything. I just say like I just snap to
+[8467.2s] totally different workflows and my the
+[8469.0s] main thing that I actually try and do
+[8470.6s] now is especially when new models come
+[8473.3s] out, which is very recently right now.
+[8474.5s] It's very temp it's like temporal right
+[8476.5s] now that it just happened. During that
+[8479.0s] specific time period, I actually just
+[8480.5s] like reset all expectations and
+[8482.5s] completely I start like your approach of
+[8485.4s] like, hey, don't let the model do that.
+[8487.3s] I actually do the exact opposite when
+[8488.7s] new model comes out.
+[8490.0s] >> How much can the model do and what what
+[8492.2s] does it still suck at?
+[8494.0s] >> Exactly. Because my theory, like as
+[8496.2s] someone that's building BAML
+[8497.4s] specifically, is I'm always like, hey,
+[8499.4s] look, what is um
+[8503.0s] what do I think developers are going to
+[8505.0s] build in the next two or three years?
+[8507.1s] And if I ever lock that in into what I
+[8509.8s] the developers can build today, we will
+[8511.8s] build a feature into BAML that is
+[8513.2s] pointless.
+[8514.2s] >> Yeah, you have to be looking forward.
+[8516.4s] >> I always got to look forward. And that's
+[8517.8s] why like in even with coding agents or
+[8519.8s] the easiest way for me to just reset my
+[8521.8s] my brain.
+[8522.7s] >> It's like like hey, nope. Let's just
+[8524.2s] live try and reset this from scratch and
+[8526.3s] like make no assumptions and just push
+[8529.1s] the model capability as much as
+[8530.6s] possible.
+[8531.2s] >> I love it. Sick. Amazing. This has been
+[8534.5s] a blast.
+[8535.4s] >> All right, Dex. Always fun to see you.
+[8537.4s] Uh the live recording will be up in
+[8539.3s] about a week, but for anyone interested,
+[8541.8s] go sign up and you'll get notified.
+[8545.0s] >> What are we talking about next week?
+[8546.3s] >> Uh evals on images, I believe.
+[8550.3s] >> Multimotals.
+[8551.8s] >> Yes.
+[8552.3s] >> I love it.
+[8553.4s] >> All right, dude. This was super fun.
+[8555.2s] Thank you. Thanks everyone for watching.
+[8556.6s] Catch you later.

@@ -1,0 +1,1819 @@
+[0.2s] Is a prompt optimizer going to do a
+[2.2s] better job than a human [music] that
+[3.4s] really understands a problem? Probably
+[5.4s] not. It's just really, really unlikely.
+[9.0s] Just like an LM is not going to do
+[10.6s] better than an average human at most at
+[12.9s] as a skilled human at most problems. On
+[16.0s] the other hand, is an LLM going to do a
+[18.8s] better job or some algorithm going to do
+[20.8s] a better job of giving you a better
+[21.9s] prompt at a piece of code that you're
+[23.7s] never going to look at or care about?
+[25.7s] 100% yes.
+[26.7s] >> Here, I also gave it the output format.
+[28.8s] [music] Uh, just for fun, let's try not
+[31.6s] doing that. So, how could the LLM
+[34.1s] possibly know what to return? And, uh,
+[37.9s] >> do you need this sentence in there?
+[40.4s] >> We probably would, but maybe we're uh,
+[43.1s] just cranking out [ __ ] functions all day
+[44.8s] and we're a little tired and we forgot.
+[46.9s] >> So, let's having one of them.
+[49.1s] >> Okay, one or the other. Let's give it a
+[50.7s] sentence.
+[51.0s] >> Yeah, let's just give it a sentence. It
+[52.7s] will default weight everything equal and
+[56.8s] accuracy comes from the like failed
+[60.5s] versus past assertion. Yes.
+[62.6s] >> But you can add additional checks that
+[65.1s] won't show up as failures but they show
+[67.2s] up you can use them to power ancillary
+[69.5s] metrics.
+[70.2s] >> Yeah.
+[75.6s] >> All right. Welcome back AI that works.
+[78.1s] Thank you. Thank you for uh showing up
+[80.5s] as always. We've got a episode that I'm
+[83.2s] super excited about today that has I
+[85.6s] think come up many many many times. But
+[88.1s] before we get to that, let's do brief
+[89.4s] intros. Dex, sure, take it away.
+[91.3s] >> What's up y'all? I'm Dex. I am the uh
+[93.8s] co-founder and CEO of Human Layer where
+[95.6s] we help people uh get coding agents to
+[98.4s] solve hard problems and complex code
+[100.1s] bases.
+[100.8s] >> And I'm Vivof. I work on BAML where we
+[102.9s] make a new programming language for
+[104.2s] building AI pipelines. And today's topic
+[107.3s] is prompt optimization.
+[109.6s] Prompt optimization is I think a topic
+[112.4s] that has come up a lot on Twitter. I see
+[114.3s] it almost everywhere and one of the most
+[116.6s] interesting things to really think about
+[118.8s] is what happens in a world where models
+[122.1s] can write really good prompts. Are we
+[123.4s] there yet? Does it actually work? And
+[125.8s] what is this Jeepa thing like? What
+[128.3s] under [snorts] the hood? How does it
+[129.4s] work? What is it? Is it just magic
+[131.3s] sauce? Can anyone write their own Jeepa?
+[133.8s] Is there going to be new optimizers on
+[135.4s] top of Jeepa or is Jeepa a general
+[137.0s] plasma optimization?
+[139.0s] That's really the questions that we want
+[140.5s] to dive into today. So that and then
+[143.6s] >> most important Go ahead.
+[145.0s] >> No, I was gonna say it's it's it's a
+[146.5s] super interesting topic that I'm really
+[147.8s] excited about because I think we've
+[150.6s] spent a lot of time on
+[154.6s] uh prompting and the nuances of
+[156.9s] prompting and two dots versus three dots
+[160.5s] and you know we did uh the whole like
+[163.4s] RTFP like read the read the actual
+[166.2s] prompt kind of thing. Um, and so it's
+[169.5s] really interesting to I'm I'm excited to
+[171.3s] get your take because I know this is
+[172.6s] kind of like fresh in the the world of
+[175.4s] BAML and the world of of of of
+[177.5s] prompting. And I know DSP DS Pi's been
+[179.8s] around for a while, but Jeppa is this
+[181.4s] new like standalone library that does
+[183.7s] basically the same approach, but um a
+[185.9s] little more flexible. So I'm excited to
+[187.7s] I know you and Greg dug in a lot and I'm
+[189.8s] excited to see what you learned and like
+[191.2s] what your take is.
+[192.3s] >> Yeah. So, um, spoiler alert, uh, we did
+[195.4s] build a prompt optimizer while we were
+[197.6s] here, uh, last week, and I think it's
+[200.2s] live and shipped already. So, while
+[202.5s] we're out there, we should be able to
+[204.1s] see a hopefully live prompt optimization
+[207.3s] on the flow. But, I'll tell you my
+[209.6s] personal opinion, and my opinion has
+[211.0s] always been this, like, is a prompt
+[213.0s] optimizer going to do a better job than
+[215.0s] a human that really understands a
+[216.4s] problem? Probably not. It's just really,
+[219.4s] really unlikely. Just like an LLM is not
+[222.4s] going to do better than an average human
+[223.7s] at most at as a skilled human at most
+[226.9s] problems. On the other hand, is an LLM
+[230.3s] going to do a better job or some
+[232.1s] algorithm going to do a better job of
+[233.4s] giving you a better prompt at a piece of
+[235.3s] code that you're never going to look at
+[236.5s] or care about? 100% yes. There's just no
+[240.5s] doubt in my mind on that end. And
+[242.6s] there's this spectrum because like
+[244.2s] software quality is basically based on
+[245.6s] amount of time and love you give it. And
+[247.9s] if you have no love to give to a certain
+[249.9s] piece of software, it just can't get
+[251.0s] better even if you wanted to, right? So,
+[254.2s] an optimizer is great for that scenario.
+[256.6s] What's your uh what's your take, Dex?
+[259.2s] Have you used any prompt optimizer to
+[261.0s] this date?
+[262.2s] >> Um, I messed with DSpy a while back. Um,
+[266.2s] I have not played with Jeppa yet. Uh I
+[269.1s] sit next to a guy in a co-working space
+[272.0s] who is like was way into RL like a year
+[275.7s] ago and has just been like ahead of the
+[277.6s] curve on all of this and was building
+[279.4s] platforms for like hey let me take your
+[282.1s] like agents long horizon trace and then
+[284.8s] like do a jeepa-ish thing that he was
+[287.1s] basically algorithm that he had come up
+[288.5s] with that was like okay how do we
+[290.2s] optimize your tool definitions and your
+[292.0s] prompt and all these different things to
+[293.8s] like improve the trajectory of your
+[296.4s] agent. So, like I've been thinking and
+[298.2s] talking about these things a lot, but I
+[299.7s] haven't actually gotten to mess with
+[301.0s] Jeppa. But he was telling me actually
+[302.6s] like I think we talked about this
+[303.6s] episode like two weeks ago. I was like,
+[304.8s] "Oh, Josh says there's this new toolkit
+[306.6s] which is like Jeepa Pi, which is like a
+[308.7s] low it's like uh I guess lower level or
+[311.0s] more flexible or whatever it is." Um,
+[313.7s] but I mean one thing that I've been
+[315.6s] playing with is a lot that it's related
+[317.7s] is like cuz optimizers don't work unless
+[319.8s] you can give them automated feedback.
+[321.3s] And like we talk about this in code
+[322.6s] coding agents a lot is right
+[324.2s] >> the the model can't go and like sol
+[325.9s] solve its way out of a puzzle if it has
+[327.6s] no deterministic like back pressure or
+[329.8s] feedback system to tell it if what it's
+[331.4s] doing is working which is why like unit
+[333.2s] test integration tests all this kind of
+[335.4s] stuff is really useful. So, I'm I'm I'm
+[337.7s] a level before uh optimization because
+[340.6s] we're still figuring out like our flavor
+[343.0s] of evals for especially like building
+[346.0s] workflows with coding agents and
+[347.7s] breaking up coding agent workflows into
+[349.4s] different into like smaller pieces. Um,
+[351.5s] which actually might be its own uh a
+[353.1s] good episode topic to do soon. But
+[355.0s] >> I think the way I'll describe how I
+[357.1s] think about these coding optimizer
+[358.4s] problems and let me know if this makes
+[360.2s] sense to a lot of people and then we'll
+[361.7s] hopefully get into the actual jet part
+[363.7s] pretty soon. We actually have a special
+[365.2s] guest who's joining us today who should
+[366.8s] hopefully be in pretty soon. Um, so the
+[369.7s] way I've thought about coding agents,
+[371.1s] it's actually very similar to how coding
+[372.4s] like cloud code for example when it
+[373.8s] edits Jupiter files. Cloud code doesn't
+[376.6s] actually edit the Jupyter files raw
+[378.0s] because if you ever looked at a raw
+[379.3s] Jupyter file, it's just a giant JSON
+[380.9s] blob. So cloud code is a
+[382.8s] >> lot of noise in there.
+[384.1s] >> Exactly. Cloud code has a special tool
+[386.1s] in it called edit Jupyter file or read
+[388.2s] Jupyter file where you give it an
+[389.8s] instruction.
+[390.6s] >> Notebook notebook edit is the name.
+[392.8s] notebook edit, notebook read or whatever
+[394.4s] it has. Uh, and sorry, I don't know the
+[396.6s] tools as well as you do.
+[398.0s] >> Um, and the reason that they had to make
+[399.5s] that tool was because they want a
+[400.7s] constrained way of editing this file
+[402.8s] that is more specific than per se
+[407.4s] uh like than just editing a raw Python
+[409.5s] file, which is just basically a said
+[411.0s] command. Now, with prompt optimizers,
+[414.6s] you're doing something very very very
+[416.1s] similar. What are you doing? You have a
+[417.5s] file that describes your prompts
+[419.4s] behavior. And what you want to do is you
+[421.7s] want to apply some edit on top of that
+[425.0s] um on top of that file but in a
+[428.3s] constrained way that only edits a
+[430.1s] certain part of that file. And that's
+[432.7s] where I think you really just want a
+[434.0s] special tool for this. So having like
+[435.8s] why do you not want to use general edit
+[437.2s] tools is because of that reason. So like
+[438.8s] let's say you have a file that has at
+[441.0s] least for me I don't typically write
+[442.6s] like one data structure per file. I
+[444.2s] usually have tons of data structures and
+[445.6s] sometimes related, sometimes not
+[446.7s] related, more related to a concept that
+[448.7s] file exposes than just that one
+[450.2s] function. But when I run a prompt
+[452.3s] optimizer, I almost want the prompt
+[453.8s] optimizer to only pull out the most
+[455.5s] relevant parts of that system, read all
+[458.2s] of it, understand all of it, and then
+[459.7s] edit accordingly.
+[461.8s] And that's where I think comes into
+[463.5s] play. And this is kind of a thing we've
+[465.6s] talked about a lot which is like can you
+[467.6s] can you break down your problem into
+[470.5s] individually testable individually
+[472.6s] evaluable like parts of a pipeline and
+[476.1s] then also you want to test the thing end
+[477.7s] to end but you kind of those are like
+[479.6s] two almost like two different ways of
+[481.8s] thinking about the problem right
+[483.5s] >> exactly because I want to well kind of I
+[486.1s] think I that's one part of it as well
+[487.8s] the thing I was specifically talking
+[488.8s] about is just like the pure syntax like
+[490.5s] if I have if I have a function a prompt
+[493.0s] that has like a system prompt and a
+[494.8s] message a user prompt and I have like a
+[496.6s] data model that I'm returning in it that
+[498.6s] data model may have more nested data
+[500.3s] models with inside of itself. I might
+[502.0s] have a class within a class like in a
+[504.2s] receipt.
+[505.0s] >> White whiteboard this these ideas a
+[507.4s] little bit.
+[508.2s] >> We have got the guest online. Nice. Um
+[511.6s] this is uh uh this is Greg. I'll let him
+[514.5s] do a brief intro about himself and then
+[515.9s] we'll get to prompt optimization with
+[517.3s] him really quickly.
+[518.4s] >> Cool. Hey, I'm Greg. I've been working
+[520.6s] with Vibb and Aaron at Boundary for a
+[523.0s] little over a year. Uh I work on the
+[525.1s] compiler various features in the
+[527.0s] language and most recently I've been
+[528.6s] helping out with this JA implementation.
+[530.7s] What Greg is not saying is that he's
+[533.1s] actually smarter than both of us
+[534.8s] probably put together.
+[536.6s] >> Yeah, but that's uh that's okay. People
+[538.9s] people can think differently about us
+[540.1s] and I accept that [laughter] for now. Um
+[543.8s] uh so there's like different ways that I
+[545.4s] talk about this. So you might have like
+[546.2s] a class like class item class receipt
+[547.9s] and then like in the same file you might
+[549.2s] have like a class resume of some kind.
+[551.4s] When you actually give it to when you
+[553.3s] give the model a prompt optimizer, it's
+[556.2s] actually a really important question to
+[557.4s] ask yourself like what is the model?
+[559.0s] What is the optimization system actually
+[560.9s] going to see? Is it going to see
+[562.6s] everything or are we going to perhaps
+[565.7s] hide some parts of it and only send it
+[569.0s] only send it the purple parts for
+[570.6s] example and like void out the rest? And
+[573.4s] there's two different approaches here.
+[574.9s] One I think my naive solution before I
+[577.1s] actually chatted with Greg about this
+[578.4s] and I remember having this conversation
+[579.8s] is oh will you just only give the parts
+[582.0s] that she wrote obviously and then Greg
+[583.7s] brought up a really interesting point
+[584.8s] which is like yes but in a shared
+[587.3s] codebase where you're slowly discovering
+[589.0s] things you might actually want to use
+[591.1s] shared pipes across your codebase so it
+[593.0s] doesn't have to reoptimize that part of
+[594.3s] the system over and over and over again
+[596.8s] I think exactly
+[597.7s] >> because the types are part in like in
+[600.0s] BAML especially but in any structured
+[601.7s] output system the type is part of the
+[603.3s] prompt because it's the instructions
+[604.6s] that you're asking it to do the output
+[606.1s] in.
+[606.8s] >> Yeah. Or not just that, I think Greg,
+[608.6s] the specific thing you were mentioning
+[609.6s] was like you might have like a common
+[611.0s] system instruction
+[613.8s] that you're using in a bunch of other
+[615.8s] places in your codebase. And perhaps
+[618.0s] you've optimized this previously
+[620.6s] uh in the past. And let's make the
+[622.6s] opacity zero. And however, this prompt
+[626.3s] yet isn't using this. This receipt
+[628.2s] prompt isn't using this. But you might
+[630.3s] still want to let the optimizer know, by
+[632.1s] the way, we do have this common string
+[634.2s] that we know is used in a lot of other
+[636.0s] places. And why might you do that? So it
+[638.5s] doesn't have to rediscover that. The
+[639.8s] discovery process is just saying, oh, I
+[641.5s] have this available. It's a tool that I
+[643.0s] could access. How do you give the
+[645.1s] optimizer that kind of information? And
+[647.7s] I think that is a very hard thing to do
+[649.3s] in an arbitrarily big codebase because
+[651.7s] everything I at least uh am I
+[654.6s] summarizing this correctly, Greg, from
+[656.0s] the way you described it?
+[657.6s] >> Uh yeah, you are. There's um there's
+[660.1s] that aspect of it like you need to be
+[662.1s] able to optimize over everything that's
+[663.7s] an input to your prompts but also you
+[665.4s] might be optimizing not just for a
+[667.7s] single prompt. You have to
+[669.0s] simultaneously optimize for all the
+[671.2s] prompts that you're going to use in your
+[672.3s] pipeline because otherwise you run the
+[674.6s] risk of like overspecializing that
+[676.7s] system instruction for one particular
+[678.6s] prompt and then it would do less well on
+[681.1s] on the other the other prompts where
+[682.8s] it's used.
+[683.7s] >> Cool. So let's go into how does Jeepa
+[685.4s] work? Is there firstly does Jeepa come
+[687.3s] with an optimized prompt that it says
+[689.0s] you should use this or you must use
+[690.6s] this?
+[691.9s] >> Yeah. Uh uh the uh DSPI when you start
+[696.2s] using that comes with um an
+[699.1s] implementation of Jeepa that's partly in
+[701.8s] Python or the whole thing's in Python
+[703.8s] but yeah part of it is prompting. So
+[705.9s] there's there's a prompt uh there's
+[707.6s] actually three important prompts.
+[710.3s] uh one is called uh uh generate
+[713.3s] candidate or something like that and
+[714.6s] that's taking a single prompt and saying
+[716.2s] like how could we improve this prompt
+[717.7s] given its performance on the test suite
+[720.2s] and also given the other factors we want
+[722.2s] to optimize for.
+[724.4s] Um there's a second prompt called
+[727.9s] combine prompts which takes those two uh
+[731.7s] two prompts from the predo frontier and
+[733.6s] then has them make babies and see you
+[736.4s] know like how would you combine them to
+[738.1s] get the best of both worlds to make a
+[739.9s] new candidate.
+[741.2s] >> So that and just to clarify there that
+[743.0s] means like take one prompt that's really
+[744.6s] good on being like token efficient and
+[746.4s] one prompt that's really good on
+[747.4s] accuracy and try and bridge the two
+[749.3s] together. Does combined prompts give
+[752.4s] metadata about what the specific why the
+[755.0s] prompt was uh chosen from the parto
+[757.8s] frontier?
+[759.0s] >> Uh that one it's it gives like rationale
+[763.1s] on how the combination was done but the
+[765.4s] choosing is not generally done by an
+[767.8s] LLM.
+[768.5s] >> Okay.
+[769.8s] >> Okay. And the and the prader frontier is
+[771.5s] basically computed by based on the
+[773.8s] metrics that you decided like latency,
+[777.8s] accuracy, test performance, token cost,
+[780.4s] all these different things. Are those
+[782.4s] metrics prescribed or do I as a engineer
+[786.8s] have to kind of like pick and choose a
+[789.5s] set or do I have to build those from
+[791.2s] scratch? Like I I know I've worked with
+[793.0s] metrics and DSPI before, but like what's
+[795.1s] the what do you get out of the box
+[796.5s] versus what do you have to really like
+[797.9s] engineer? Yeah, it's a good question.
+[799.8s] What you get out of the box is just a
+[801.8s] single metric, which is what fraction of
+[803.8s] your tests pass.
+[806.5s] And then if you want to optimize for
+[808.1s] other things, there are ways to to ask
+[810.2s] for that.
+[811.0s] >> Um, in our system, it's command line
+[812.9s] flags.
+[813.9s] >> Cool. And then you said there's three
+[815.7s] prompts
+[816.7s] >> or is there just two? What's the third
+[817.9s] one? The third one is like uh reflect on
+[821.0s] like how the prompt performed and get
+[824.6s] like a a score like how how did they how
+[827.6s] did it um how did it perform.
+[830.2s] >> So it sounds like for me what the steps
+[834.1s] of Jet are if I were like pseudo code it
+[836.5s] step one have some initial prompt that
+[839.3s] performs poorly and define a bunch of
+[841.0s] test cases for it.
+[842.6s] >> Step two run those systems build a
+[845.5s] metric for that prompt. Step three, run
+[848.9s] generate candidates to discover n more
+[851.4s] prompts that I might want to run. Step
+[854.2s] four, run each of those end prompts with
+[857.3s] the same original metrics I had or
+[859.0s] perhaps some sampling thereof. And then
+[862.3s] step five, look, recomputee those
+[864.7s] metrics, pick define the paro frontier,
+[867.0s] which could be my original metric or the
+[869.0s] new metrics that I've computed. Step
+[871.4s] four, run combined prompts to try and
+[873.9s] explore
+[875.6s] more prompts on top of that based on
+[878.7s] some definition of what came out next.
+[881.3s] Step five, run reflect on performance.
+[883.4s] And I guess that gives me a direction of
+[884.9s] like which one I should select or
+[886.2s] something on that direction.
+[888.2s] Step five, generate candidates and do
+[891.0s] that again forever.
+[892.6s] >> Yeah.
+[893.3s] >> Is that about right?
+[894.4s] >> That's about right. Yep. Basically,
+[896.1s] you've always got some set of candidates
+[898.2s] on your prao frontier. In the beginning,
+[900.2s] that's just your single original prompt
+[902.6s] and then you generate a new candidate.
+[904.1s] It's always there's always like one
+[905.4s] candidate generated at a time. It would
+[907.3s] it seems natural to generate a whole
+[909.0s] bunch and but um the way works is
+[911.7s] usually just one.
+[912.7s] >> Okay?
+[913.3s] >> And you um you reflect on that when you
+[915.4s] run it through all the tests and then
+[916.8s] you generate new candidates. And the way
+[918.8s] you do that can be either just uh like a
+[920.9s] greedy hill climbing on the one that
+[922.3s] you've already worked on or it can be
+[923.8s] the combination of two. If you have two
+[926.3s] or more in your predo frontier, you can
+[928.5s] combine those and you there's there's
+[931.1s] various ways of deciding like at each
+[933.0s] step which one are you going to do.
+[935.2s] >> That's all down in like the the micro
+[937.9s] optimization details. Um and uh yeah
+[940.8s] different
+[941.3s] >> so I'm hearing is combine prompts is
+[943.3s] optional only if you actually have
+[944.6s] multiple prompts that are optimal.
+[946.1s] >> Yeah.
+[946.4s] >> Otherwise you typically don't run it.
+[948.2s] >> Uh yeah,
+[949.1s] >> got it. And then generate candidates
+[950.9s] otherwise typically go straight to
+[952.2s] reflect.
+[954.7s] So is is combining prompts is is part of
+[958.1s] generate candidate, right? Like I I feel
+[960.0s] like I feel like this diagram is not
+[961.9s] quite there like reflect on performance
+[964.2s] probably happens before generate
+[966.4s] candidates.
+[968.8s] >> Yes.
+[970.6s] >> And generate candidate could either be a
+[972.6s] net new prompt or combining existing
+[975.3s] prompts.
+[975.9s] >> That's right. There's a there's a really
+[978.0s] good diagram of it in the Jeepa paper if
+[980.7s] one of you wants to Google like Jeepa
+[982.4s] archive.
+[985.0s] Jeff archive
+[986.7s] >> it
+[986.9s] >> probably makes more sense than trying to
+[988.7s] reproduce the the diagram of a bunch of
+[991.4s] PhDs.
+[992.3s] >> So yeah, it is it's a bit hairy and uh
+[995.3s] some of these blocks we can ignore.
+[997.4s] They're just like optimization things.
+[999.4s] >> Which blocks?
+[1000.8s] >> The drain. I don't think really that's
+[1004.2s] not like the essential. Thank you.
+[1006.1s] >> Okay.
+[1006.6s] >> Yeah. So, initialize
+[1008.9s] um
+[1009.4s] >> then you determine if you have budget
+[1011.3s] >> and if you do, you run emails
+[1013.0s] >> on everything
+[1014.9s] and then you ask yourself, well, first
+[1017.1s] you have a candidate pool.
+[1018.3s] >> Sorry. Yeah, it's going the other way.
+[1019.4s] >> Yes.
+[1020.2s] >> And then you just pick one prompt out of
+[1022.8s] your candidate pool.
+[1024.4s] >> Mhm.
+[1025.8s] >> And then you go ahead and just determine
+[1027.8s] which prompts are actually the best
+[1029.3s] based on some metrics that you have.
+[1031.7s] >> Yep. And then you run either your
+[1033.9s] reflect you run turn you run your
+[1035.7s] reflect prompt or your system prompt.
+[1037.8s] >> Yes.
+[1038.3s] >> Got it. Um okay. Well I guess this is
+[1041.8s] all good in theory. Let's run in
+[1043.4s] practice. I know you said you've been uh
+[1045.2s] you kind of have something. Can we just
+[1047.0s] look at it and just I I know a lot of
+[1048.6s] question people in there are asking like
+[1049.8s] how complex are these prompts? How hard
+[1051.1s] does this actually do?
+[1052.2s] >> Mhm.
+[1053.1s] >> Do you just want to take over screen
+[1054.5s] share and just show how it runs?
+[1055.8s] >> Yeah, sure. I think it's going to be a
+[1057.2s] lot easier because at least for me when
+[1058.8s] I first saw Jeppa it's I think the way I
+[1061.8s] always look at it is like it's a library
+[1063.5s] that I kind of wanted to use but it also
+[1065.2s] felt kind of overwhelming at the same
+[1066.6s] time because I didn't want to learn all
+[1067.8s] of it from scratch
+[1069.8s] and then the other part was like ah I
+[1071.4s] don't actually know how well this is
+[1072.3s] going to work so I don't want to invest
+[1073.4s] time into learning it because it just
+[1075.4s] takes time to learn anything
+[1077.0s] >> well and you got to figure out like
+[1078.6s] where's the overlap with my intuition
+[1080.4s] that I already know how to do and
+[1082.4s] where's the where's the over and what
+[1084.1s] are the actual like net new things that
+[1086.1s] I'm gonna have to learn and build
+[1088.2s] intuition for and like basically put in
+[1091.3s] my 10,000 hours on to be able to get
+[1093.3s] value out of this thing.
+[1094.5s] >> Yeah. So, we we started like diagramming
+[1096.6s] and talking about the implementation. It
+[1098.2s] all sounds kind of complicated, but I
+[1099.8s] think what you'll see is like running it
+[1101.5s] is actually pretty easy and you don't
+[1103.6s] have to dive into the the weeds to to
+[1107.5s] have it do what it says on the tin that
+[1109.3s] it does.
+[1110.7s] Um, so on the right we've got a BML
+[1113.0s] function extract subject.
+[1115.8s] Uh, its job is to analyze a sentence and
+[1119.3s] extract as a person the subject of that
+[1122.1s] sentence and their age. And we have an
+[1124.5s] easy test here. The sentence is Ellie
+[1127.0s] who is four ran to Kina's house to play.
+[1129.4s] The the subject's name would be Ellie,
+[1131.0s] the age of four. And then we have a a
+[1133.1s] more difficult test. Meg gave Pam a dog
+[1136.4s] for her 30th birthday. She was 21. So
+[1138.8s] that that kind of puts the LM through
+[1141.0s] its paces in terms of tracking
+[1142.6s] references.
+[1143.2s] >> So what is the answer there? I guess you
+[1144.6s] have one. The answer is
+[1145.6s] >> Oh, don't reading.
+[1147.0s] >> You got to do it without reading the
+[1148.0s] test.
+[1148.3s] >> Oh, sorry. Yes. I'm not good at English.
+[1150.5s] Um, but it sounds like the the subject
+[1152.5s] is meg and then the age is 21
+[1156.1s] because uh someone else is 30. That
+[1158.1s] makes sense.
+[1158.7s] >> You got it.
+[1159.9s] >> I am at least as good as a bad LLM.
+[1162.6s] >> Yeah, you are better than haiku. Oh, I I
+[1165.8s] will take that as a
+[1166.5s] >> and it's it's unlikely that the dog was
+[1169.4s] 21. That would [clears throat] be a
+[1170.9s] weird a weird gift. [laughter]
+[1175.0s] >> But I can see why LLMs would be bad at
+[1176.9s] this task.
+[1177.8s] >> Yeah.
+[1178.2s] >> Um it's it's quite hard for an LM to I
+[1180.6s] think be good at this kind of thing.
+[1183.3s] >> Um so I did not give the LLM a lot of
+[1186.1s] help with my function. I just had
+[1188.8s] extract the subject and um here I also
+[1192.0s] gave it the output format. Uh, just for
+[1195.1s] fun, let's try not doing that. So, how
+[1197.8s] could the LLM possibly know what to
+[1200.7s] return? And, uh,
+[1202.5s] >> do you need this sentence in there?
+[1205.0s] >> We probably would, but maybe we're uh,
+[1207.7s] just cranking out functions all day and
+[1209.6s] we're a little tired and we forgot.
+[1211.4s] >> So, let's having one of them.
+[1213.7s] >> Okay, one or the other. Let's give it a
+[1215.4s] sentence.
+[1215.6s] >> Yeah, let's just give it a sentence.
+[1217.6s] >> And we're not even being careful to
+[1220.0s] delimmit the sentence from the prompt or
+[1221.8s] anything. I mean, okay, get rid of the
+[1223.6s] sentence, too. I guess screw it.
+[1225.2s] >> Yeah, let's see.
+[1226.0s] >> Let's just see what the model does. I
+[1227.4s] think this is the cool thing about
+[1228.2s] prompt optimizers. Like, in this case,
+[1229.8s] you we have something that's totally
+[1231.3s] invalid. We have not put the input into
+[1232.9s] the prompt. We don't even have the
+[1234.2s] output type in the prompt. The model
+[1235.9s] knows nothing. So, let's just see what
+[1237.6s] happens.
+[1239.0s] >> All right. So, here we go.
+[1240.8s] >> Can you clear the screen and run the
+[1242.0s] prompt at the top?
+[1243.6s] >> And then do me a favor. Can you zoom in,
+[1245.2s] too?
+[1245.7s] >> Yeah. Zoom it in a little bit.
+[1247.0s] >> Zoom in a lot. Zoom in a lot of bits.
+[1249.1s] There you go. There you go.
+[1250.1s] >> Oh, man. the bamagen.
+[1253.8s] >> Oh yeah, I forgot. Okay, and then I do
+[1256.0s] one more thing.
+[1257.8s] >> Oh, thank you.
+[1259.6s] >> Okay, so um you don't have to run this
+[1261.6s] in phys. This is just how we uh get our
+[1263.9s] tokens uh into the environment. So
+[1266.9s] you're calling an LLM. So when you
+[1268.4s] optimize, you're going to have to pass
+[1269.6s] some credentials uh like an anthropic
+[1271.8s] API key. We're going to run BAML CLI
+[1274.9s] optimize. You have to pass this flag
+[1277.2s] called beta because this is a beta
+[1279.0s] feature, not ready for production yet.
+[1281.2s] And then just to speed things up, we're
+[1282.6s] going to limit the number of trials to
+[1283.8s] three. Let's see
+[1286.3s] what happens. Uh, this little viewer
+[1289.8s] comes up and it's going to start
+[1292.5s] analyzing the initial prompt.
+[1294.5s] >> I didn't even realize we have a TUI. Two
+[1296.7s] are nice
+[1297.4s] >> for fun. Yeah,
+[1299.6s] >> this is a TUI. I do want people to stop
+[1301.8s] calling Tuys CLIs. Like somebody
+[1304.6s] launched this thing was like this is the
+[1305.8s] new XYZ CLI and I'm like this is not a
+[1308.2s] CLI this is a toy. A CLI is like inputs
+[1311.0s] and outputs on the command line.
+[1313.3s] >> Yeah.
+[1314.1s] >> So what's interesting here is like
+[1315.3s] you're showing me the prompt down below.
+[1317.0s] >> Yes. So this is the original prompt.
+[1318.6s] >> Yeah. And we're getting our metrics. The
+[1321.8s] only metric that we're starting with is
+[1323.6s] the accuracy. How many tests passed out
+[1325.7s] of how many we wrote? And that's zero.
+[1329.0s] Now we can scroll down to see the first
+[1331.9s] candidates that optimization wrote and
+[1335.1s] we see what it did was it uh put in a
+[1338.5s] system role
+[1341.0s] uh and then gave way more detailed
+[1343.0s] instructions.
+[1343.8s] >> Well, that's a better instruction that I
+[1345.1s] would write for sure.
+[1346.0s] >> Extract the grammatical subject. That's
+[1347.8s] a really good disambiguation.
+[1349.8s] Uh in this TUI, I have to apologize. My
+[1352.2s] scroll bars don't work. So you have to
+[1354.6s] zoom out if you want to see more.
+[1357.2s] [laughter]
+[1358.6s] Um
+[1359.3s] >> okay
+[1359.8s] >> and we also see that uh that the uh the
+[1362.6s] optimizer knew to put in context output
+[1364.6s] format. So we did not just copy paste
+[1366.5s] the stock JA prompts from DSI they
+[1369.4s] wouldn't work for BAML. Those prompts
+[1371.8s] need to know like how a BAML prompt
+[1373.6s] works. So they need to know about Ginga
+[1375.7s] and output format and that kind of
+[1377.4s] thing. Um so now they know but you don't
+[1379.8s] have to. Uh and then what uh what else
+[1383.0s] happened is uh we ran the tests and we
+[1386.0s] see that on this first candidate we
+[1388.0s] already got up to 100% accuracy.
+[1391.0s] >> So um that that is convergence. The
+[1393.8s] algorithm stops
+[1395.8s] uh as soon as you max out your uh
+[1398.4s] >> metric
+[1398.8s] >> your metric if you
+[1400.0s] >> Sure. because there's no better way to
+[1401.2s] go. It's like if if your metric is 100%
+[1403.1s] where else are you going to go?
+[1404.6s] >> Mhm.
+[1405.8s] >> Yeah. Um,
+[1408.2s] as as I'm saying that, I realize I might
+[1410.0s] be lying. If you set trials to three, it
+[1411.6s] might be like
+[1413.5s] >> it all the way out.
+[1414.6s] >> And then, um, once you have these
+[1416.4s] metrics, um, you just, uh, you pick one
+[1419.4s] and you hit return on the one you want.
+[1420.9s] And it's going to overwrite your
+[1422.2s] original prompt
+[1424.2s] >> on the way on the way. And I don't want
+[1426.5s] to do that because I I want to keep my
+[1428.2s] old crummy prompts for other
+[1430.0s] demonstrations. I'm just going to hit Q
+[1431.7s] instead.
+[1432.6s] >> Okay. So, now we have this. Can you go
+[1435.1s] back to the run information, the file
+[1437.2s] directory?
+[1439.4s] >> Oh, yeah.
+[1440.7s] >> And zoom in. Zoom in for me on the
+[1442.5s] screen as well.
+[1443.4s] >> Can I zoom I don't think I can zoom
+[1445.2s] here, but I can't zoom on the browser,
+[1446.6s] the file browser.
+[1447.6s] >> Oh, that's very weird. Uh, so the other
+[1449.8s] thing you get is a run history of so you
+[1452.0s] can actually go into here and just see
+[1453.0s] like any of your run histories down
+[1454.4s] there and just see what's going on. So
+[1456.6s] you can actually see like the past
+[1457.6s] prompts.
+[1458.6s] >> Now, this is the new BAML file. Is this
+[1460.9s] done by actually you're you're
+[1463.4s] manipulating the a itself to generate
+[1465.6s] the new code, right? So you can just
+[1467.2s] like splice in the new prompt where at
+[1469.3s] the part of the a that matters.
+[1470.9s] >> That's right. That is right. So it
+[1473.8s] >> and the the candidate generation gets
+[1476.5s] the full BAML source or does it get the
+[1479.2s] a representation?
+[1481.0s] >> Gets a subset of the a representation.
+[1483.8s] It gets like everything that's reachable
+[1485.5s] from your original prompt.
+[1487.3s] >> Yeah. So uh we talked about this earlier
+[1489.2s] in the very beginning. It's like what if
+[1490.6s] your codebase is big and every reason
+[1492.9s] every codebase where you need to
+[1494.2s] optimize your prompt is a big codebase
+[1496.3s] like otherwise you don't need to
+[1497.4s] optimize your prompt because you're
+[1498.4s] probably not doing something very
+[1499.4s] serious. So in that world how do you
+[1501.6s] give the prompt how do you give the
+[1503.6s] optimizers the minimum set of code it
+[1505.5s] needs to actually think about so we
+[1507.9s] actually go through the a say you want
+[1509.4s] to optimize this function and we pull
+[1510.7s] out everything that you might actually
+[1512.0s] need and put that into there
+[1515.1s] for you. Now there's a really
+[1517.3s] interesting thing in here which is like
+[1518.7s] but what is the Jeb prompt? I know you
+[1520.8s] told me it does BAML stuff but what is
+[1523.0s] the JA prompt and what if I want to
+[1524.8s] change it?
+[1527.5s] >> Good question. Uh yeah so that is um
+[1531.7s] that's
+[1532.1s] >> oh yeah we yeah okay these are the
+[1534.1s] prompts that it uses to generate the
+[1535.8s] candidates and reflect and things like
+[1537.2s] this right?
+[1537.8s] >> Yes. Yes. Like exactly what is that
+[1540.3s] generate prompt? What is a combined
+[1541.8s] prompt? What is the uh what is the
+[1543.7s] reflect prompt? Where do they live? How
+[1545.7s] do I edit them? How do I control them?
+[1547.2s] How do I use the model that I'm perhaps
+[1549.0s] I have a proprietary model that I
+[1550.4s] fine-tune for this?
+[1552.6s] >> Oh, sick. And of course, this is
+[1553.9s] implemented in BAML as well. Nice.
+[1555.6s] >> Yeah, as everything should be. Uh
+[1558.9s] [laughter]
+[1561.5s] >> yeah. So, um it's a it's a it's a fairly
+[1565.5s] heavy BML file.
+[1567.8s] uh we had to basically teach the LLM
+[1570.8s] reliably how to write BAML code in a
+[1573.4s] prompt in this file. It's called
+[1574.9s] jea.baml.
+[1576.6s] When you first run optimization, uh
+[1579.2s] you're going to get this.baml
+[1581.5s] optimize directory like in your project
+[1584.4s] and most of the files in there are run
+[1586.8s] history, but there's also uh this
+[1589.4s] directory called Jeepa inside which
+[1592.3s] which contains the uh the JA prompts.
+[1595.3s] You can customize those before you
+[1597.8s] finish running optimization. So like you
+[1599.6s] can run run optimization basically in
+[1601.4s] dry run mode and you'll get this ja.mmo
+[1604.2s] file.
+[1604.7s] >> I was going to turn it to light mode.
+[1606.2s] >> Oh um
+[1608.2s] >> I don't know how to do that though on
+[1609.4s] your computer.
+[1611.8s] Um,
+[1612.2s] >> yeah, the zed I love zed and it's so
+[1614.8s] fast, but I have found that the command
+[1617.8s] prompt uh pallet does not like I took I
+[1621.2s] had to go Google what what is what do
+[1622.8s] they call soft wrapping in in this one
+[1626.4s] >> in zed. It's got a different name than
+[1628.5s] in VS Code.
+[1630.6s] >> There you go.
+[1632.5s] >> I don't know that these are for people
+[1633.6s] to read or not, but it might be.
+[1636.2s] [clears throat]
+[1636.3s] >> Yeah. So, in this Jabra prompt, show me
+[1638.2s] the three prompts that you talked about
+[1639.4s] at the very beginning. Here we go.
+[1641.0s] Reflection functions
+[1643.0s] propose improvements.
+[1644.3s] >> Okay.
+[1646.0s] And that takes in a function. It takes
+[1647.5s] in failed examples. And then ah that's
+[1650.2s] interesting. Can you uh close word rap
+[1652.6s] so we can see all it?
+[1656.7s] >> It's actually uh okay.
+[1659.4s] >> Let me manually do it.
+[1668.3s] >> All right. So I'm actually really
+[1669.6s] curious about what all the things that
+[1670.6s] we send into it are.
+[1672.6s] >> Okay.
+[1673.0s] >> So you always give it success.
+[1674.1s] >> Yeah. I want to see the Can we see the
+[1675.4s] types of these too? Would be really
+[1676.8s] interesting.
+[1677.4s] >> Yeah. Optimizable function. Oops.
+[1681.1s] >> Oh, you didn't install the BAM VS code.
+[1682.9s] >> You guys You guys need an LSP for Zed
+[1685.3s] Vib.
+[1686.1s] >> I think we do have one. I think Greg
+[1687.8s] just hasn't downloaded it.
+[1689.0s] >> Yeah. Um [laughter]
+[1691.8s] I lo
+[1694.2s] Yeah. So optimizable function tracks a
+[1696.6s] function name, prompt text, reachable
+[1699.6s] classes, reachable enums, and the source
+[1703.2s] code of the function.
+[1705.8s] >> Okay, so you actually give it both the
+[1707.8s] prompt text and the function source. And
+[1709.8s] the why do you do that? Is that because
+[1711.2s] of like pulling in code from template
+[1713.2s] strings and seeing the full prompt
+[1714.5s] rendered out?
+[1716.5s] Um
+[1718.2s] it's I forget exactly where but I think
+[1720.8s] it's that uh we needed to know not just
+[1723.8s] the prompt and not just the function
+[1725.4s] name but also like the names of the
+[1727.1s] arguments and the types.
+[1728.6s] >> Oh yeah, makes sense. You need the names
+[1730.4s] of the arguments and the types and like
+[1732.2s] we could optimize this and make it even
+[1733.7s] better but this would definitely make it
+[1735.1s] possible. Makes sense. And when you say
+[1738.2s] reachable classes, is that basically
+[1740.5s] every class in the namespace that is
+[1743.3s] accessible? Basically like if I have 50
+[1745.0s] BAML files, it's going to include every
+[1746.6s] single class that's available in my BAML
+[1748.6s] source directory.
+[1749.9s] >> No, just the the classes that you
+[1752.8s] mention in the inputs and the classes
+[1755.4s] that you mention in the outputs and any
+[1757.3s] classes
+[1757.8s] >> and then traversing that tree that those
+[1760.3s] things all reference recursively,
+[1762.2s] >> right?
+[1763.0s] >> Okay, cool.
+[1763.6s] >> Yeah. Okay. So if there's other classes,
+[1765.5s] if I didn't put person in the signature,
+[1767.5s] then the optimizer wouldn't know that I
+[1769.3s] had a a person class.
+[1770.8s] >> Yeah. Correct.
+[1771.7s] >> Now, I could imagine a scenario where
+[1773.5s] you want to explicitly tell the model, I
+[1775.4s] also have these other data types, and we
+[1777.4s] include those as well. But I would say
+[1779.0s] that's like an extra thing that you do,
+[1780.4s] but the default thing should be to give
+[1782.0s] it the minimum set of code that you want
+[1783.9s] to optimize on.
+[1787.3s] >> So let's go on. So let's just read the
+[1789.0s] prompt. I'm actually really curious how
+[1790.3s] this prompt pans out because I think
+[1791.7s] it's it's one of the most fascinating
+[1793.0s] things I it makes sense that the
+[1794.6s] proposed improvements knows the failed
+[1796.1s] and successful. Uh what's optimization
+[1798.6s] objective?
+[1800.0s] >> Uh that is the list of all the metrics
+[1801.9s] that you care about and their weights.
+[1804.1s] So um that would be something like
+[1805.9s] accuracy 50%, input tokens 25%,
+[1810.9s] completion tokens 25%.
+[1813.0s] >> Got it. And you're just telling the
+[1814.0s] model, I care about this in this way.
+[1815.8s] And it can't really I guess it can't
+[1818.0s] really actually understand the weight.
+[1819.2s] You're just giving it some relative
+[1820.2s] subjectiveness. So giving an accuracy of
+[1822.3s] like 0.51 versus 0.5 doesn't actually m
+[1825.4s] make a difference since it's going into
+[1826.6s] a model input. But you're really trying
+[1828.4s] to give it relative importance. It's
+[1829.8s] like this is twice as important as this
+[1833.0s] other thing. So you don't need to be
+[1834.2s] specific. Just like orders of magnitude
+[1835.6s] is what you're trying to convey.
+[1836.7s] Exactly. Yeah. Got it.
+[1838.8s] >> Cool.
+[1839.6s] >> Uh current metrics. Uh, that's like the
+[1841.9s] result of the current prompt.
+[1843.2s] >> Yeah. How how well did that
+[1844.8s] >> against your optimization objectives?
+[1846.7s] >> Exactly.
+[1847.2s] >> Okay. Now I have another question.
+[1849.5s] >> Did you Jeepa the Jeep prompts?
+[1851.8s] >> Uh,
+[1853.3s] question. Uh, no, I did not jump for the
+[1855.3s] Jer prompts.
+[1856.2s] >> But I'm sure if we did this would work
+[1858.1s] even better.
+[1859.0s] >> Okay. Uh,
+[1859.6s] >> yeah. How would you how would you uh
+[1861.7s] compute metrics of the uh of you kind of
+[1864.7s] have to know a dumb prompt and then know
+[1866.5s] the best final prompt and then optimize
+[1868.4s] against its ability to reach that,
+[1870.0s] right? Yeah. So the the inputs would be
+[1873.7s] prompts and outputs would be um you know
+[1877.8s] per performance of the optimization
+[1879.6s] process over those prompts.
+[1881.0s] >> Yeah.
+[1881.8s] >> And uh I can tell you one like uh you
+[1884.9s] maybe get a hint of like why that
+[1886.4s] becomes kind of a pain to do here online
+[1888.6s] 104. Usually in BML your prompt starts
+[1891.4s] with a single hash and then the quote to
+[1893.9s] make a raw string. Double hash is if you
+[1897.1s] need if you need to use single hash
+[1898.8s] quote inside your prompt for some crazy
+[1900.6s] reason then you can use double hash to
+[1902.7s] like get an extra level of rawness.
+[1905.0s] >> Yeah.
+[1905.7s] >> Uh the more recursive
+[1907.1s] >> how many hashes are supportive are
+[1909.1s] supported and you have 50 50 hashes.
+[1911.7s] >> Seven
+[1912.3s] >> seven hashes of
+[1913.2s] >> seven is the max.
+[1914.8s] >> You can have seven different types
+[1917.5s] layers of hashtags within hashtags
+[1919.1s] within hashtags in your system.
+[1920.6s] >> Yeah.
+[1922.1s] >> Okay. if you want to optimize your
+[1923.6s] optimized optimized optimized optimized
+[1925.7s] optimized prompts.
+[1926.9s] >> Um, well, I want to go down and see a
+[1928.9s] couple more things. What are the most
+[1929.8s] interesting things that you discovered
+[1930.9s] when you're actually writing this?
+[1932.5s] >> Uh, I think I ended up iteratively
+[1935.0s] adding a lot of stuff that I didn't
+[1937.3s] realize at the moment I would need, but
+[1938.9s] in hindsight is extremely obvious.
+[1941.3s] >> So, one example is what you asked about
+[1943.0s] before, like the full text of the
+[1944.6s] function. um you know like the and this
+[1948.6s] is like an interesting factoid for
+[1950.6s] prompt shop limit or like prompt
+[1952.4s] engineering in general is that it's so
+[1954.6s] hard to remember your own implicit
+[1957.9s] knowledge when you're prompting and to
+[1959.9s] remember the fact that you have to be
+[1961.1s] explicit about all those things and uh
+[1964.0s] yeah this was implementing this was a
+[1966.2s] huge reminder of that because um when I
+[1969.1s] look at a prompt and I see it fail it's
+[1970.6s] fairly obvious for me to think about how
+[1972.7s] to improve it but it's not obvious for
+[1974.7s] me to like enumerate all the things that
+[1977.0s] I know when I'm doing that.
+[1979.0s] >> So yeah, just uh seeing optimization
+[1981.8s] fail over and over and realizing, oh
+[1983.4s] wait, that's because of course this
+[1984.9s] prompt has no idea what uh the failure
+[1987.7s] cases were. Like it it knows a test
+[1989.4s] fails, but it doesn't know the source
+[1990.6s] code of the test that failed. So it
+[1992.0s] doesn't know what it's trying to get the
+[1993.1s] prompt to actually do.
+[1994.8s] >> Ah because it's not actually sufficient
+[1997.0s] to say the test failed. You really want
+[1999.0s] to say the test failed because this
+[2000.3s] specific field was missing and you want
+[2001.8s] to be as rich as possible on that. And
+[2003.6s] not only do you want to do that, if you
+[2005.4s] if you do if you only show the failure
+[2007.3s] message, let's say you have five asserts
+[2009.2s] in your test case uh whatever test case
+[2011.5s] you write and the second one failed.
+[2013.8s] Well, if you gave the failure message
+[2015.2s] the second assert, the model can't look
+[2016.7s] ahead and say, I also need to look at
+[2018.6s] all these other failure scenarios as
+[2020.1s] well and optimize for all that as well.
+[2022.3s] Otherwise, what might happen is you pass
+[2023.6s] the second one, now the fourth one
+[2024.7s] failed and you're just wasting iteration
+[2027.0s] time. And because the model can reason
+[2029.3s] about source code, putting the whole
+[2030.6s] source code in there is way more optimal
+[2032.6s] than just the failure string itself.
+[2035.8s] That's really interesting. I didn't
+[2036.8s] think about that. I would have the naive
+[2038.6s] na the naive person in me would have
+[2040.5s] just put the error message a search
+[2042.1s] statement.
+[2043.0s] >> And I can see why that's just strictly
+[2044.6s] worse in a lot of scenarios.
+[2047.2s] >> Yeah.
+[2048.5s] >> Um let's go on. I want to see more of
+[2050.2s] these prompts. So we have the improve we
+[2051.8s] have the new improve function. This
+[2053.1s] seems to work. Uh I assume you do a lot
+[2055.0s] of stuff in here that you can render
+[2056.3s] different stuff in here.
+[2057.6s] >> Yeah, we're rendering the current
+[2059.7s] metrics. We're rendering the
+[2061.0s] optimization objectives and then we
+[2064.2s] include some instructions about writing
+[2065.7s] demo.
+[2066.3s] >> Got it.
+[2068.8s] >> Merge variance.
+[2071.0s] We got two optimizable functions. Oops.
+[2073.4s] Let me wrap this.
+[2074.2s] >> Okay.
+[2075.7s] >> So merge variance is the combined prompt
+[2077.9s] prompt that you have.
+[2082.9s] Ah, and that's where strengths come
+[2085.7s] from.
+[2086.6s] >> Strengths come from
+[2087.4s] >> where do those
+[2089.0s] >> what? Yeah. What generates those
+[2090.3s] strengths?
+[2091.4s] >> Uh, reflection.
+[2092.7s] >> Reflection.
+[2093.2s] >> Let's we could we could focus on this
+[2094.6s] one first, but I I also want to see how
+[2096.3s] we're generating the the strengths.
+[2097.8s] Okay, that makes sense. The reflection
+[2099.4s] step is what tells it. Okay, here's what
+[2101.1s] these good at.
+[2102.4s] >> So, this reflection model is just a an
+[2106.0s] LLM that supports thinking or something,
+[2108.6s] right?
+[2109.5s] >> Uh, we'll point to that in a second. Oh,
+[2111.3s] yeah. like a great
+[2112.4s] >> Oh, it's just Oh, these are just names
+[2113.8s] for like which which LLMs are doing
+[2115.4s] which parts of the work basically.
+[2117.4s] >> Yeah.
+[2117.8s] >> Do you want to I can show that really
+[2119.2s] quick?
+[2119.4s] >> Yeah, do it.
+[2120.6s] >> Um, in our case, reflection model like
+[2123.3s] all all of the the prompts are like
+[2125.8s] they're reflection prompts and they all
+[2127.1s] share the same model, but you could
+[2128.3s] change that if you want because you can
+[2130.3s] customize Jet without
+[2133.1s] uh yeah, right now we've got set got
+[2135.4s] that set to cloud opus 45. And as models
+[2138.6s] get better, you could choose different
+[2140.6s] models here. Or if you discover that um
+[2143.4s] for some reason the combined models
+[2145.9s] function is taking too long and you
+[2147.4s] think it's a fairly simple task, you
+[2149.0s] could you could specify different
+[2152.3s] >> uh LLM providers and you could use those
+[2154.6s] in your different uh prompts in Japa. So
+[2157.2s] you kind of pick and choose how much
+[2159.2s] power versus price you want for
+[2161.0s] different stages.
+[2162.2s] >> Yeah. And I guess Oh, that Yes, that's
+[2165.5s] interesting. You can choose not just the
+[2167.2s] model you want but actually swap to
+[2168.8s] different models for different stages.
+[2170.6s] That's very fascinating. I didn't think
+[2171.9s] about doing that. Does JPA do that by
+[2173.3s] default?
+[2174.2s] >> I don't know.
+[2175.4s] >> Okay, got it.
+[2176.4s] >> You mean our implementation?
+[2177.8s] >> Yes.
+[2178.2s] >> Uh, no. No, we just use one model for
+[2179.9s] everything.
+[2180.2s] >> Okay. What does Japa do by default? No,
+[2182.1s] no sense made.
+[2183.8s] >> You mean Well, there's different
+[2186.0s] >> the DSP implementation or the J or the
+[2188.9s] default Japa library implementation. Uh
+[2191.2s] I know you can there's a command line
+[2192.9s] argument that you can choose which
+[2194.7s] provider to use.
+[2195.9s] >> Okay.
+[2196.6s] >> But I don't know how much control you
+[2198.9s] have over like which specific model.
+[2201.1s] >> Got it. Yeah.
+[2202.5s] >> Cool. Um let's go on. Let's go back to
+[2204.2s] the second prompt. So this prompt looks
+[2205.7s] pretty straightforward. Merge two
+[2207.0s] variants. Makes sense. Uh
+[2210.8s] >> and then it kind of just looks at both
+[2212.6s] functions as this is the better ones.
+[2214.9s] >> Got it. So this is
+[2216.2s] >> you don't give any ideas about the
+[2218.2s] scoring or anything or the final
+[2219.9s] objective in this this prompt.
+[2223.0s] >> Um
+[2224.8s] >> you purely just say these are two good
+[2226.7s] systems make them better by combining
+[2229.0s] them in some way.
+[2229.7s] >> Let me remind myself what's an
+[2231.0s] optimizable function and don't Yeah, I
+[2233.4s] think you're right. Yeah, we don't
+[2235.0s] reiterate. And that might actually make
+[2236.5s] this prompt perform better if we remind
+[2238.4s] it relatively
+[2239.4s] >> cool. And then let's look at the next
+[2241.4s] thing
+[2243.0s] right there. analyze failure patterns.
+[2245.2s] That's what I've been kind of loosely
+[2247.0s] calling for reflection, but
+[2249.4s] >> um the whole algorithm kind of thinks of
+[2251.8s] these three together as reflection. So,
+[2253.8s] sorry being uh a little inaccurate, but
+[2258.2s] yeah, this is the one that's more like
+[2259.8s] introspecting on like how did the model
+[2261.4s] do and why. So, um
+[2263.8s] >> and it specifically looks at failures.
+[2265.9s] >> Yes.
+[2266.6s] >> So, I'm guessing if you have no
+[2267.8s] failures, you don't call this
+[2270.2s] >> uh you might call it with an empty list.
+[2271.9s] >> Okay. or maybe you don't call it at all.
+[2274.2s] Okay. Yeah, I think it gets called with
+[2275.5s] an empty list.
+[2277.0s] >> And what's the output type of this?
+[2279.4s] >> Let's see.
+[2281.3s] Failure analysis, which doesn't tell us
+[2284.1s] the time. Let's go look at that class.
+[2290.2s] >> Okay.
+[2291.8s] Okay. So, like in what ways did the
+[2293.9s] thing fail?
+[2296.2s] Common patterns. To be totally honest, I
+[2299.0s] could not remember what that does at the
+[2300.8s] moment.
+[2302.6s] and uh recommended focus like looking at
+[2305.4s] all the failure cases, what would be the
+[2307.4s] most fruitful thing to optimize if we
+[2310.4s] were going to make a new version and
+[2313.5s] naturally that comes from like you know
+[2315.3s] was it mostly failures in tests that
+[2318.0s] happened or was it mostly uh like there
+[2321.1s] were too many output tokens to many?
+[2324.6s] >> Got it. question like so so I understand
+[2327.5s] there's probably some been tweaks made
+[2329.4s] to the um
+[2332.2s] the how do I say it uh sorry I just uh I
+[2336.2s] saw what you had selected in the search
+[2338.3s] bar and uh it made my brain skip a beat
+[2341.7s] um
+[2345.0s] uh there's some tweaks to this
+[2348.3s] uh that you have done to make it more
+[2350.1s] BAML specific but as far as the types
+[2352.6s] and the outputs and things like this um
+[2356.6s] to what extent does this follow kind of
+[2360.1s] the core Jeepa paper? Like was common
+[2362.6s] patterns one of their things? Are they
+[2364.2s] just outputting all this in markdown
+[2365.7s] instead of structured output? like what
+[2367.9s] is what what percent has this kind of
+[2370.2s] departed from what's prescribed in the
+[2372.2s] paper versus like what you wanted to do
+[2374.6s] to make it more BAML one more BAML
+[2377.3s] fluent and understand BAML code but also
+[2379.3s] more hey I want to use the structured
+[2382.2s] output things that BAML is really really
+[2384.1s] good at to build you know a
+[2385.7s] best-in-class Jeepa implementation
+[2387.9s] >> yeah it's like 50%
+[2390.2s] uh faithful 50% departure um and you
+[2393.1s] mentioned some of for departure like we
+[2395.0s] have BML specific stuff we need to
+[2397.6s] Um, but also like DSPI has been focused
+[2400.6s] on this exact problem for a couple years
+[2403.3s] or something. Um, so they have like a
+[2405.8s] ton of different ways of customizing uh
+[2409.4s] their Jeepa implementation. Yeah, I mean
+[2411.4s] you don't have to use JPA. There's like
+[2413.0s] many different optimizers you can use in
+[2414.6s] DSPI. Um, we didn't want that to be like
+[2418.3s] our core focus. We just want to
+[2421.5s] basically take the best algorithm, give
+[2423.2s] something that's kind of like convention
+[2425.4s] over configuration for the most part and
+[2427.4s] just let you get some level of
+[2429.0s] optimization. Uh there's some
+[2431.0s] tunability, but we're not trying to go
+[2433.3s] like all the way and completely
+[2434.9s] faithfully implement uh that algorithm
+[2437.5s] that that they are sort of
+[2439.3s] >> kind of carrying the standard for and
+[2441.0s] constantly improving and and pushing
+[2442.8s] their state-of-the-art on.
+[2444.8s] >> Um and also because they're pushing the
+[2447.4s] state of the art and they're like purely
+[2448.8s] focused on this they kind of have a
+[2450.6s] different set of constraints like we're
+[2452.7s] we absolutely want to stay focused on
+[2455.2s] like the core BAML story where um you
+[2459.1s] always have like the types in hand and
+[2460.9s] the prompts in hand and you sort of want
+[2463.0s] to be although you don't have to like
+[2465.0s] nitpick the writing of the prompts it is
+[2467.3s] still part of our thesis that you should
+[2468.8s] always see the prompts and you should
+[2470.4s] see the prompts before and after it gets
+[2472.1s] rendered and that that comes through in
+[2474.2s] in our UI uh and it's like a
+[2476.6s] philosophical difference from DSPI which
+[2478.6s] sort
+[2479.5s] is uh exploring another um another sort
+[2483.0s] of developer experience that says you
+[2484.9s] shouldn't have to look at your prompts.
+[2486.1s] That's kind of an implementation detail.
+[2488.0s] And these are just like two philosophies
+[2489.6s] that push you in different directions.
+[2490.8s] And that's a reason for more of the the
+[2492.8s] departure between the two.
+[2494.2s] >> Yeah.
+[2494.5s] >> And I would
+[2495.2s] >> you define your output types and your
+[2497.4s] input types and some very high level
+[2499.4s] around like what does good look like and
+[2501.4s] you don't think about prompting.
+[2502.9s] >> Yeah. Uh and furthermore, not only you
+[2505.2s] don't, it's very very hard to actually
+[2506.7s] get the prompt out. uh if you wanted to.
+[2510.2s] Um and the I think the difference really
+[2512.6s] is like I I suspect most of these
+[2514.8s] categories and stuff uh these strcts
+[2517.0s] that we've defined philosophically pro
+[2519.5s] probably follow the exact same steps
+[2520.9s] because we followed the Jeepa paper
+[2522.5s] pretty closely. But the exact prompt
+[2524.8s] itself like I don't think Jeepa says
+[2527.1s] this thou shalt write this prompt. I
+[2529.5s] think JPA is more of a process and the
+[2531.9s] way the mechanism of doing it and I
+[2534.3s] suspect that the data models and stuff
+[2535.8s] enable things like for example building
+[2537.3s] that 2I that we showed earlier that make
+[2540.1s] it very different. If you don't have
+[2541.8s] those data structures you can't build a
+[2543.0s] TUI. You just have to look at like raw
+[2544.9s] strings right because you need strrus to
+[2547.1s] put highlight things red or green. You
+[2550.0s] need you need like arrow keys to
+[2551.8s] navigate to the right system that just
+[2553.4s] requires structure in some form factor
+[2555.8s] or another. Right? At the end of the
+[2557.4s] day, under the hood, if you want to
+[2558.5s] hide, if you're okay with hiding and
+[2559.7s] blackboxing everything, you can just
+[2561.7s] have LM passing markdown back and forth
+[2563.7s] to each other all day. But if you want
+[2565.9s] to actually be able to structure the
+[2568.3s] output and give someone visibility into
+[2570.2s] how the optimization process is going
+[2571.8s] and what's the steps and the rational,
+[2573.3s] all these different things, then you're
+[2575.0s] either you're going to have to structure
+[2576.6s] it at some point. So why not make the
+[2578.6s] plumbing be structured rather than
+[2580.6s] rather than just okay there's markdown
+[2582.6s] flowing everywhere and at certain points
+[2584.2s] we will we will generate structured
+[2586.2s] objects from those pieces is like the
+[2588.7s] only other way I could think to do that
+[2590.2s] but again it's like this yeah this makes
+[2592.8s] a ton of sense.
+[2593.5s] >> Yeah. And then the other side effect
+[2595.1s] that you get here is like because all
+[2596.8s] these prompts are now exposed they
+[2598.4s] they're no longer like an implementation
+[2600.0s] detail. You as a developer might find
+[2602.3s] that hey just like we found it
+[2604.7s] beneficial to tell the element a little
+[2606.2s] bit about BAML and like Ginga and small
+[2608.7s] things like that like how do you escape
+[2610.1s] strings and tricky things that like you
+[2612.6s] might not want to include you as a
+[2614.2s] developer might be working in a very
+[2615.5s] specific domain and you might actually
+[2617.4s] want to tell it about specific types
+[2619.0s] that you have in your codebase. You
+[2620.4s] might want to tell it about uh you might
+[2622.4s] want to tell it about like very domain
+[2624.2s] specific information that only the
+[2625.8s] optimizer needs to know about. you might
+[2627.8s] want to tell it certain certain things
+[2629.1s] about your eval set like hey like don't
+[2631.4s] overindex on this specific test
+[2634.4s] because like this test is just known to
+[2636.2s] be extremely hard and we don't really
+[2637.8s] want to care about it and typically the
+[2640.6s] way to go do that I think it would be
+[2641.8s] very hard but one of the most important
+[2643.5s] things that we were thinking about when
+[2644.5s] we were thinking about prompt
+[2645.3s] optimization was like how could I as a
+[2647.4s] developer not only have control over my
+[2650.1s] prompt and my types but also have
+[2652.1s] control over the optimizer because the
+[2654.6s] optimizer itself is a prompt and types
+[2657.2s] And I think that is like the more
+[2658.8s] interesting system here. And then soon I
+[2661.4s] think someone else asked about this is
+[2663.1s] you probably don't want to optimize pure
+[2666.6s] you probably don't want to optimize just
+[2667.9s] like LM functions. You probably want to
+[2669.4s] optimize entire workflows and that might
+[2671.8s] include optimizing LM functions. That
+[2673.4s] might include optimizing control flow
+[2674.9s] around LM code. It might kind of be a
+[2677.1s] combination of both. And you want the
+[2679.1s] model to be able to do all of that. And
+[2681.4s] I think that hopefully is a thing that
+[2682.9s] we can enable soon as well, which is
+[2685.0s] beyond just like, hey, make the prompt
+[2686.6s] better. It's make the whole system
+[2688.5s] better. What's your
+[2690.2s] >> very cool links in the chat here.
+[2692.1s] >> I know. I'm
+[2693.0s] >> guess a meta optimizer for optimizing
+[2695.5s] LLM optimizers. Someone already did
+[2698.0s] jeep.
+[2699.5s] >> Yeah, I figured it's like the most
+[2701.0s] intuitive thing to do on top of that.
+[2703.2s] Um, but um, a question I have for you is
+[2708.0s] I guess the nice thing here is how do I
+[2709.8s] one question I did not see answered that
+[2711.7s] I think someone else asked a little bit
+[2712.8s] ago is how do I write my emails?
+[2717.0s] >> Greg, how do I write my emails?
+[2718.8s] >> Yeah. Uh, we we didn't want to change
+[2721.6s] the language to let you write emails and
+[2724.7s] we wanted everything to be like in BAML
+[2727.1s] as opposed to in DSPI everything's in
+[2729.7s] Python. Um so you basically we we hadn't
+[2733.6s] we kind of shoehorned evals into our
+[2735.8s] existing test infrastructure.
+[2738.2s] Uh already in BAML you can write test
+[2740.4s] cases like this. So you choose a
+[2741.8s] function that's on the test. You give it
+[2743.9s] its arguments and then you can write
+[2745.7s] some assertions over the running of that
+[2748.5s] BAML function. Those are the evals that
+[2751.6s] we have to work with. Um, in the future,
+[2755.4s] I think we could like extend this pretty
+[2757.0s] easily through the um, uh, the CLI
+[2760.0s] arguments. Like if you wanted to pass
+[2762.2s] like a CSV file full of uh, pairs of
+[2766.3s] inputs and test cases, we could do
+[2769.0s] things like that to sort of like
+[2770.4s] streamline this again without changing
+[2772.6s] the BAML language.
+[2774.7s] >> Um, but yeah, that answer the the
+[2777.5s] question.
+[2778.2s] >> Yeah, you just write a bunch of asserts
+[2779.7s] along the way.
+[2780.5s] >> Yeah. Um and then the next question I
+[2783.0s] have is like you we I think we're
+[2784.4s] talking about like uh as a part of like
+[2785.8s] the Jeta algorithm a large part of it is
+[2787.5s] not just finding one metric or two
+[2788.8s] metrics. What metrics are there? Like
+[2792.0s] what metrics can I run? Uh what can I
+[2794.0s] not run? Where where am I shoehorned?
+[2796.6s] What uh how do I run a custom metric?
+[2799.0s] >> Yeah. Uh again because we were trying
+[2802.7s] not to change the language at all. We
+[2804.5s] had to use like existing stuff to put
+[2807.0s] custom metrics in there. And uh we have
+[2809.9s] this thing already called check which
+[2811.8s] lets you name an assertion and make the
+[2814.3s] assertion soft like checks are not hard
+[2816.7s] failures.
+[2819.0s] So um using this we can we can sort of
+[2823.3s] discriminate between different types of
+[2824.8s] failures and you could have multiple
+[2827.0s] checks that are all the same thing.
+[2830.8s] Maybe you put this one in a different
+[2832.2s] test
+[2834.4s] or I'll put this one in our test about
+[2837.4s] uh
+[2838.7s] And now that we've got a check that has
+[2841.0s] a name, we could use that as a weight
+[2844.0s] when we um run optimization.
+[2847.6s] >> Ah.
+[2850.1s] >> Oh, sick.
+[2852.7s] >> So, it will default weight everything
+[2856.6s] equal and accuracy comes from the like
+[2861.0s] failed versus past assertions.
+[2863.4s] >> Yes. But you can add additional checks
+[2866.0s] that won't show up as failures, but they
+[2868.2s] show up. You can use them to power
+[2870.1s] ancillary metrics.
+[2871.3s] >> Yeah, that's cool. That is cool. You
+[2872.9s] know who
+[2873.3s] >> that's freaking very a clever clever
+[2876.2s] like I love like, hey, what are the
+[2877.9s] boundaries of the language and what does
+[2879.4s] it afford us and then how can we use it
+[2881.2s] to to deliver this thing without, you
+[2883.4s] know, adding an entire new language
+[2884.9s] feature.
+[2885.4s] >> Yeah. Yeah, that's really cool. What
+[2886.8s] about if I wanted to optimize for like
+[2888.2s] input tokens as well?
+[2889.6s] >> Oh, yeah. That's that's a that's a
+[2891.2s] hardcoded one. That's called prompts.
+[2893.2s] >> You have a bunch of built-in ones.
+[2894.5s] >> Yeah, got it. Okay. Uh, got it. So then
+[2897.3s] you can just go to And I noticed that it
+[2898.9s] doesn't have to add up to one. So I
+[2900.1s] guess I can put in whatever I want and
+[2901.5s] the model will just figure it out.
+[2902.9s] >> We use advanced.
+[2903.8s] >> Yeah. What if you
+[2904.5s] >> arm tech?
+[2905.2s] >> What if you put in like prompt tokens
+[2907.3s] matters 100 times as much as accuracy.
+[2910.9s] [laughter]
+[2913.3s] >> Uh, you will get very short.
+[2915.2s] >> Press enter. Let's run it. [laughter]
+[2921.6s] What? H check.
+[2923.4s] >> Oh, you need you might have to write
+[2925.4s] check colon a check.
+[2927.1s] >> Check h check.
+[2928.2s] >> Yeah, it's check colon a check. Uh it's
+[2931.0s] how we name space it.
+[2933.0s] >> There you go. The error message told me
+[2934.6s] that. Sorry, it was in my breakin.
+[2937.4s] Um while while this is running uh so
+[2941.7s] funny.
+[2943.2s] >> So what is [snorts] P? Oh, it actually
+[2945.0s] shows me a promp token.
+[2947.0s] >> That's cool. So you actually show me
+[2948.5s] prompt tokens because like now it's
+[2949.8s] relevant to my metric by default. You
+[2951.5s] don't show it.
+[2952.0s] >> Oh, and this is going to be a tough one
+[2953.5s] to optimize because remember our
+[2954.9s] baseline prompts was very sparky.
+[2957.9s] >> Okay. So now it's passing but the prompt
+[2960.2s] tokens went up to 86. [laughter]
+[2963.0s] >> Yeah. So it's on the on the predo
+[2964.9s] frontier but not because of the main
+[2968.5s] [laughter] care.
+[2975.7s] It's not even making.
+[2976.6s] >> All right, try another one.
+[2977.7s] >> Not doing
+[2978.5s] >> I want a shorter.
+[2979.4s] >> It looks like the the age check isn't
+[2981.3s] isn't passing
+[2983.2s] >> for some reason. That seems like maybe a
+[2985.2s] a blip. A bug. I don't know.
+[2988.1s] >> Yeah, it's probably a bug. We haven't
+[2989.7s] released this yet.
+[2991.4s] >> Oh, we made it shorter and it still
+[2993.3s] passes.
+[2993.8s] >> Oh, that's pretty good, actually.
+[2995.5s] >> Nice. Wow. Oh, yeah. And you see how it
+[2997.7s] made it shorter? It used aliases for
+[2999.9s] these.
+[3000.5s] >> Oh, that's [laughter] cool.
+[3003.5s] That is cool.
+[3006.2s] >> All right. Hell yeah. I'm glad I asked.
+[3008.9s] >> Yeah, that was a good question. I think
+[3010.7s] if we give him more than three trials,
+[3012.2s] it would probably cut some of the fat
+[3014.0s] from this uh prompt as well. Prompt
+[3017.3s] optimizers are pretty good.
+[3019.3s] >> Um I think
+[3020.9s] >> that's sick.
+[3021.4s] >> I think the key point here is like I
+[3023.6s] think we shouldn't live in a world where
+[3025.0s] we have to write handwrite our prompts.
+[3027.0s] We should live in a world where we can
+[3028.7s] have prompts be automatically generated
+[3030.8s] because it does help us explore the
+[3032.6s] state space much much better. But I
+[3035.9s] think living in a world where you don't
+[3037.4s] ever read the prompts is also a problem.
+[3039.2s] Like for example the fact that we all
+[3041.0s] just looked at this really quickly. I
+[3042.6s] remember earlier there was a whole point
+[3045.8s] um that someone else made of like oh
+[3047.8s] isn't it overfitting? If you don't look
+[3049.5s] at the prompt you can't possibly know if
+[3051.4s] it overfit by accident or not. the
+[3053.1s] metrics are not enough because like we
+[3055.5s] said one of the benefits of JEPA is you
+[3057.4s] don't need a lot of sample points to end
+[3059.2s] up with a good solution but then it's
+[3062.2s] very very easy to accidentally have
+[3063.8s] overfit if your sample points are
+[3065.7s] actually not representative of the
+[3067.4s] actual overall problem
+[3068.9s] >> and you got to
+[3069.7s] >> and you're talking about a thing sorry
+[3071.5s] go ahead
+[3071.8s] >> no go ahead
+[3073.0s] >> no you're talking about a thing that I
+[3074.5s] think is is super super important that
+[3076.1s] we talk about a lot like we did the
+[3077.2s] evals episode you're like dude just do
+[3079.5s] the for the first pass like it's like
+[3081.5s] 8020 rule right? Like your human
+[3083.4s] intuition is incredibly powerful. And if
+[3085.8s] you can just look at something and know
+[3086.9s] if it's good or not, that's way cheaper
+[3089.1s] than designing 50 metrics or trying to
+[3091.1s] figure it out. And I think a challenge
+[3093.0s] in AI if you're going to build like AI
+[3095.4s] that works and production systems is
+[3097.6s] like you can't lead too far into this
+[3100.0s] futuristic like when the models are
+[3102.1s] amazing we won't have to think about
+[3103.5s] anything and they'll just like inception
+[3105.5s] optimize the optimizer for the optimizer
+[3107.8s] and then it's like okay but what's
+[3109.0s] actually possible today and what is a
+[3111.6s] really valuable use of my human
+[3113.5s] intuition and leverage which is like
+[3115.5s] cool use an optimizer but also look at
+[3118.0s] the prompts because you can in 5 seconds
+[3120.2s] see if something's been overoptimized.
+[3121.8s] Exactly.
+[3122.6s] >> Or whatever it is.
+[3123.3s] >> Exactly. I think like that's the world
+[3125.4s] that we want to live in is like some
+[3126.8s] blend of those two systems where it's
+[3128.6s] super easy to understand that.
+[3130.7s] >> Um
+[3132.3s] I funnily enough I have another question
+[3134.2s] that I think a lot of people are asking
+[3135.3s] is like the Jeepa thing seem super
+[3137.0s] complicated and I that was my first
+[3139.8s] opinion of it too when it first came
+[3141.3s] out. Uh it's just like man it's going to
+[3143.6s] take forever to add it to BMAL. That's
+[3144.7s] why we haven't added for a long time.
+[3146.9s] But how long did it actually take Greg?
+[3148.6s] like literally from concept to working
+[3151.3s] and I guess to merging soon.
+[3153.3s] >> Uh it was three days
+[3154.6s] >> three days of work fully with all this
+[3157.2s] tooling that you're going to see over
+[3158.6s] here. It's not that hard to understand
+[3160.6s] Jaba. It's not that hard to even build
+[3162.2s] it on your own. Most of these systems
+[3165.0s] that you're building are not that
+[3166.4s] complex. Anyone can go build them. You
+[3169.4s] can build it on your own. You don't have
+[3170.7s] to be tied to you don't even have to use
+[3172.9s] our system. You can use your own system
+[3174.3s] if you want to go build it. That's the
+[3176.2s] whole point.
+[3178.1s] So,
+[3178.4s] >> okay. So, the new to-do list app that
+[3180.2s] everybody implements, in 2025,
+[3182.0s] [laughter]
+[3182.8s] it was uh everyone should build a coding
+[3184.7s] agent from scratch. And in 2026,
+[3186.8s] everyone should build a prompt optimizer
+[3188.5s] from scratch.
+[3189.3s] >> That's right. Everybody should build a
+[3190.6s] prompt optimizer from scratch. That's
+[3192.3s] what we should title this episode.
+[3194.5s] [laughter]
+[3195.1s] >> I love it.
+[3196.6s] >> Um, we'll take some more questions from
+[3198.7s] people on here if they have anything to
+[3200.8s] share. And I see the first one over here
+[3203.0s] which is would BAML keep the original
+[3205.4s] prompt versus a suggested one before a
+[3207.3s] developer accepts the improved prompt.
+[3209.7s] So how do I actually replace the prompt
+[3211.6s] in my code? So right now if I quit it
+[3213.6s] won't update my prompt at all. How do I
+[3215.4s] actually replace my prompt?
+[3217.0s] >> Uh the CLI gives you an option. You you
+[3220.7s] select the one you want. Uh like here
+[3223.1s] I'm I'm selecting different ones. If I
+[3224.7s] hit enter, it's going to replace.
+[3227.0s] >> Okay. There's also like you can run the
+[3228.6s] thing in non-toy mode and then you'll
+[3230.0s] get like a a pop like a a question you
+[3232.6s] know where you answer by hitting 1 2 3 4
+[3235.1s] 5 like which prompt do you want to
+[3237.4s] replace your existing one or none of
+[3239.1s] them hit Q
+[3240.6s] >> that kind of thing.
+[3241.6s] >> Got it. So you just select and then we
+[3243.2s] just replace the a with all the updated
+[3245.0s] code accordingly.
+[3246.8s] >> Um okay let's ask another thing. During
+[3249.1s] optimization are input and output types
+[3251.2s] treated as hard contracts? Types can't
+[3253.0s] be changed during optimization.
+[3254.8s] >> Correct. Um that was uh that was a
+[3257.4s] decision that we had to think about
+[3259.7s] because of course you can optimize the
+[3261.4s] types themselves like the fields what
+[3263.6s] fields there are what their names are
+[3265.5s] but because users are uh generating
+[3268.9s] client code like typescript and python
+[3271.0s] code through codeg genen from the types
+[3274.0s] we didn't really want to mess with that
+[3275.8s] because then like optimization is going
+[3277.6s] to change something about the way that
+[3279.6s] you have to consume those types in your
+[3281.4s] application and that seemed like too
+[3282.8s] much of a pain for users.
+[3285.4s] Uh, so that's why we um we only let you
+[3287.6s] change the prompts and metadata on the
+[3289.9s] types like descriptions and aliases
+[3292.2s] which don't affect the generated client
+[3294.2s] code at all.
+[3295.2s] >> But we could pass in an argument that
+[3296.7s] says types can be changed if we wanted
+[3299.0s] to.
+[3299.4s] >> We could. Yeah.
+[3300.1s] >> Cool. That's interesting.
+[3302.6s] >> Guys, this was a blast. This is super
+[3304.7s] sick.
+[3305.4s] >> Are the docs live?
+[3306.8s] >> Uh, yeah. Yeah, we have docs for all
+[3308.6s] this. Um,
+[3311.4s] whoa, risky. [laughter]
+[3317.3s] Mario, just check if
+[3319.0s] >> was that a chat message you complaining
+[3321.1s] to Vibb how much you hate going on his
+[3323.2s] podcast.
+[3324.2s] >> Um, AI that works is a is a mandatory
+[3328.9s] companywide attendance policy
+[3332.0s] [laughter]
+[3333.1s] optimization.
+[3334.2s] >> Okay, so we have a docs on prompt
+[3335.6s] optimization on there that I guess does
+[3337.6s] I click on it?
+[3338.6s] >> It clicks.
+[3339.6s] >> Oh, it clicks. Nice. And it tells you
+[3341.6s] exactly how how it runs and describes
+[3343.3s] some of the behavior on here that we
+[3344.5s] showed. Exactly.
+[3345.9s] >> Oh, this is dope.
+[3347.6s] >> I'm actually, you know, it's funny. I'm
+[3349.8s] probably going to do this for most of
+[3350.9s] the prompts that I get cuz uh for
+[3353.1s] example, whenever I whenever I go and
+[3355.4s] show people different prompts and help
+[3356.7s] them migrate over, I just run this
+[3358.3s] manual prompt optimizer in my head. But
+[3360.6s] this is just so much better.
+[3363.2s] >> That's another reason didn't
+[3364.8s] [clears throat] implement that at
+[3366.2s] boundary prompt optimization because we
+[3367.9s] already have bipart
+[3370.0s] >> [laughter]
+[3370.5s] >> Yeah, Vib, the human prompt optimizer.
+[3373.2s] >> Um,
+[3374.0s] >> um, I have one last question. I know
+[3376.0s] we're gonna we're gonna probably wrap up
+[3377.8s] soon, but I'm curious. Um, I know Vibb
+[3380.9s] built a coding agent in BAML like four
+[3383.1s] or five weeks ago for one of the
+[3384.6s] episodes. Have you all thought or tried
+[3387.5s] to apply this to longer horizon
+[3391.4s] multi-turn style systems? like would you
+[3395.2s] would you build a coding agent and then
+[3396.8s] plug this into Swebench and see where
+[3398.5s] you can get with it?
+[3400.3s] You should be very excited for what
+[3402.5s] we're going to release in January. U it
+[3405.7s] hopefully I think in theory should work
+[3407.3s] with this optimizer out of the box uh
+[3409.9s] with almost no extra work and that will
+[3412.9s] be really excited.
+[3413.8s] >> And Greg is Greg is uh sad because he
+[3417.4s] feels like maybe I signed it up for more
+[3419.0s] work but it's going to be really
+[3421.1s] [laughter] fun. um specifically in the
+[3423.9s] form of like how to define custom
+[3425.3s] metrics, how to define custom evals like
+[3427.0s] check is a great solution, but I think
+[3429.1s] there's a more interesting one that we
+[3430.3s] could build that's even better. Um and
+[3433.2s] then uh most importantly, is this open
+[3435.1s] source? Is this public? Can you go see
+[3436.6s] how we actually build it? The answer is
+[3438.6s] of course. Uh like we said, this stuff
+[3442.7s] is not hard. It's pretty easy. So
+[3444.8s] there's no point in trying to close
+[3446.1s] source this. Uh can you show the code
+[3448.4s] really fast, Greg? If any of you are
+[3451.0s] interested and want to go look at these
+[3452.2s] prompts in more detail, want to go read
+[3453.4s] some of the stuff, want to read how the
+[3454.7s] harness around it works, I think that's
+[3456.2s] going to be really interesting. So, we
+[3457.8s] probably won't link this code directly
+[3459.0s] in the AI that works repo, but we'll
+[3460.5s] point to it here.
+[3462.6s] Uh,
+[3465.4s] SRC CLI probably.
+[3470.1s] Oh, even better.
+[3472.9s] And like the whole harness and
+[3474.3s] everything is in here. There's some
+[3475.6s] defaults in here that I guess probably
+[3477.4s] have the regular prompt as well. and you
+[3479.8s] can just read all of it. Uh, and you can
+[3482.0s] just like go through understand how we
+[3483.8s] optimize the prompts, how understand how
+[3485.4s] we built the harness around it because
+[3486.7s] the harness is just as interesting as
+[3488.2s] the actual prompts themselves. And I
+[3489.8s] think it's worth everyone taking a look
+[3491.4s] at it from
+[3494.4s] but uh hopefully this is going to be fun
+[3496.0s] and everyone's going to have a lot of
+[3497.1s] fun uh and hopefully use cases that come
+[3500.1s] out of this as well.
+[3502.8s] >> Uh any other question to see what people
+[3505.3s] build with this?
+[3506.2s] >> No. Uh for everyone else that's still
+[3507.7s] here uh remember this is AI that works.
+[3510.2s] We host events every Tuesday where
+[3511.9s] Dexter and I talk about various topics
+[3513.4s] in AI. We typically try and do our best
+[3515.7s] of showing real code and I know today we
+[3517.9s] didn't show real code but we did show a
+[3519.8s] system that works that you can use that
+[3521.6s] I think will be out today or tomorrow um
+[3524.7s] where you can actually run an
+[3525.9s] optimization function. Hopefully the use
+[3527.5s] case of how we described a Jeepa makes
+[3529.4s] sense to everyone. You can try and build
+[3530.8s] your own JPA if you'd like. And then uh
+[3535.1s] next last two weeks episodes I think are
+[3538.3s] going to be really fun. Uh next week
+[3540.4s] we're actually gonna we're gonna close
+[3541.6s] out this year with two of what I think
+[3543.8s] are going to be of my favorite episodes.
+[3545.9s] My favorite episode is gonna be next
+[3547.4s] week which is going to come through
+[3549.3s] Dexter where we're gonna hear Dexter's
+[3551.5s] background story and exactly how he got
+[3553.1s] to building where he's going, how he got
+[3554.5s] into YZ, how he got into the whole uh
+[3557.0s] session of being a founder, what it's
+[3558.5s] like being a founder in this age, how he
+[3560.3s] met his co-founder and the whole journey
+[3561.8s] behind code layer context engineering
+[3563.8s] and everything around that session. Um
+[3567.2s] so I'm incredibly excited for that
+[3568.9s] conversation. And then after that, we're
+[3572.1s] going to do the same thing to Vibv, and
+[3573.8s] we're going to hear his story of getting
+[3576.2s] to YC, getting told that his idea was
+[3578.7s] bad, uh, [laughter] pivoting 12 times
+[3581.4s] and landing on deciding to do the
+[3583.7s] hardest thing that anyone's ever done,
+[3585.8s] uh, in over in I think like building
+[3588.8s] software, which is like creating a brand
+[3590.6s] new programming language.
+[3591.9s] >> Operating systems might be harder, just
+[3593.8s] to be very clear and transparent.
+[3596.0s] >> Um, but
+[3598.2s] >> interesting. I I I at least I think so.
+[3600.2s] But I think it'll be a fun conversation
+[3601.3s] and I think Erin's going to be joining
+[3602.6s] me as well, so it'll be a lot more fun
+[3604.2s] because sick.
+[3605.3s] >> He's a lot more uh entertaining than I
+[3607.3s] am.
+[3609.1s] [laughter]
+[3611.0s] >> All right, y'all. Well, thank you so
+[3612.3s] much, Greg, for joining us. Thanks, BOV,
+[3614.2s] as always. This was a super dope topic,
+[3616.3s] and we will see you all next week.
+[3618.4s] >> Sounds good. Bye. Bye.

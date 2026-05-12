@@ -1,0 +1,431 @@
+have you ever wondered which parts of
+your prompts are providing the most
+value and which parts of your prompt you
+can delete there's an ocean of prompt
+engineering tips and tricks out there
+but do you know which ones actually
+matter in this video I want to share
+five essential elements of the prompt to
+help you get 80% of the results with 20%
+of the effort I don't know if this is
+cool or embarrassing to say but I've
+written thousands and maybe tens of
+thousands of prompts and I think I've
+cracked The Prompt equation on effort in
+versus value out so what are these five
+important items that make up high
+quality prompts that are very unlikely
+to change as the llm ecosystem evolves
+the five most important elements of the
+prompt are model purpose variables
+examples and the output if you're
+writing prompts and you want to get the
+most bang for your buck some of this
+will be recapped but I promise this
+Elemental breakdown will help simplify
+and speed up your work work with your
+prompts this video is all about the 8020
+of incredible prompts let's get started
+so let's look at five examples of these
+prompts showcasing each element through
+a prompt and then we'll look at two full
+concrete prompts A N View component and
+the Omni complete we've covered on the
+channel That utilize these five elements
+of great prompt so let's get started
+first things first let's say the obvious
+dumb and most important thing the model
+you use dictates the performance more
+than any other one of these elements if
+you've run a prompt on gbt 40 and then
+you run that exact same prompt on a
+smaller lower class model llama 7B 53
+you know that the quality of the output
+goes down drastically there's nothing
+more important when building your
+prompts than to pick a great model the
+model you choose will have the biggest
+impact on the performance of your prompt
+hands down full stop let's go ahead and
+move on the purpose is the entire reason
+you're writing the prompt it's your goal
+it's the target it's the task if you
+write a great clear goal for your prompt
+you will start to get those clear simple
+results after selecting the llm the
+purpose of your prompt becomes the next
+most important piece here we have a
+super simple prompt with an explicit
+purpose of generating blog posts about
+llms simple enough right this is the
+purpose now things get interesting let's
+talk about variables this prompt has
+three of the five elements right we have
+the model we have the purpose and we
+have a variable so not all variables are
+the same there are two types of
+variables static variables and dynamic
+variables we'll discuss static variables
+in a moment but this here is a dynamic
+variable Dynamic variables are variables
+that you're going to want to update when
+you're reusing your prompts in an ad hoc
+way so for instance here we can replace
+this with llms and run this and we'll
+get another result out we can update it
+again we'll say AI agents rerun and you
+know whatever typescript versus
+JavaScript right we can go on and on
+here and reuse this prompt the key value
+that variables offer you is that they
+allow you to reuse your prompts and you
+can use code to update your prompts in
+production environments the big kicker
+here is if you're building AI agents or
+agentic workflows you know that you need
+variables in order to chain together the
+outputs of prompts into the inputs of
+your next prompts we'll talk about that
+more when we get to Output let's go
+ahead and move on to our next element
+examples so the fourth most important
+part of your prompt is to include
+concrete example let's go ahead and walk
+through this and clarify what everything
+is so we have the purpose at the top we
+have our Dynamic variable here and then
+at the bottom here we have um a bunch of
+examples right so you can see here this
+is a prompt that helps us generate new
+python functions and let's just go ahead
+and generate something we'll say place
+string start end and I want to pass in a
+string and then we'll have start match
+and match and that's going to give back
+a string right so I'm doing a little bit
+of AI code prompting there by writing
+out the uh function definition right so
+go ahead and kick that off while we
+discuss this right so examples are
+really really important you can see here
+that with examples we're able to specify
+how exactly we want our output to look
+in the response of our prompt examples
+tie really closely to Output which we'll
+look at in a second but but you know if
+we go ahead and remove our examples and
+we'll remove the reference to our
+examples and we rerun this you'll see we
+get a very different output right even
+with the best model if you don't tell
+the model exactly what you're looking
+for it can't give it to you right so in
+this case it's giving us example usage
+it's giving us an entire explanation and
+you know this is great but when we're
+writing prompts that go right into the
+model in a non chat conversation
+interface we want to get our exact
+output structure and the best way to get
+that is to use examples to tell the
+model exactly what you're looking for
+right so if we throw those back in there
+we rerun this you can see once again we
+get that exact result examples are
+really important because we can come in
+here and update this right we can add a
+a function common and just specify
+exactly what we want right so detailed
+about function right we can come in here
+copy this make sure all the examples
+have the exact same
+format and this off colorize that and
+then we can rerun our prompt right and
+of course we're going to get exactly
+what we're looking for so we're going to
+get this function now with a really
+clean comment um and it actually
+improved the code a little bit because
+we forced it to explain itself a little
+bit above so really interesting stuff
+that's the power of examples and like I
+mentioned examples tie really really
+closely to Output let's talk about the
+output so let me go ahead and just label
+this we have the purpose we have a
+dynamic variable here and then we have
+an example output here right we have the
+example structure prompt output
+typically comes in two forms you can
+output text or you can output Json like
+we are here right so let me just go
+ahead and kick that off and you can see
+here we specified the exact structure
+and our awesome gp40 model created the
+output in the exact form we were looking
+for why is this important text output is
+default it's straightforward it's useful
+for simpler tasks but when you're
+starting to chain together your outputs
+and you want more reliable consistent
+outputs from your prompts Json is the
+way to go Json outputs enable structured
+and reliable outputs which is crucial
+for building the higher order systems
+like prompt chains AI agents and agentic
+workflows also if it's not clear
+function calling is essentially Json
+output with a couple additional wrappers
+on top when you make a request with a
+function tool you get back the function
+name and you get back the parameters you
+can fully replace function calling with
+Json outputs because well that's exactly
+what it is so these are the five most
+important elements of the prompt so we
+can come in here and update the topic
+let's go ahead and say you know we had
+that typescript uh versus uh JavaScript
+let's go ahe and just rerun that and you
+can see here it's going to generate a
+new blog post with all this information
+and it's got the SEO keywords in there
+we have the hook with all these five
+elements with variables with some
+example structure here by specifying the
+Json output right by using every one of
+these elements we can create concise
+high output prompts that are
+very very reusable this is why variables
+are number three right it's really
+really important to be able to swap in
+and out values of your prompt then it's
+also important to have examples to
+specify the exact format and then last
+but not least element five we have
+output right it's really important to
+have the option to use a raw text output
+versus Json output right which will give
+you really really structured outputs
+that you can use to chain together your
+prompts and we've talked about this on
+the channel before but if it's not super
+clear this is how your prompts start
+working together to build prompt chains
+your outputs of your previous prompts
+become the inputs to the variables of
+your new prompt and if you've been with
+the channel for a bit if you remember
+our agent OS video we looked at this
+very exact example you can see here that
+we can create composability between
+agent one and agent two by chaining
+together these agents right by taking
+the outputs from agent one inside the
+lpu and then using that as the input for
+agent two right so everything comes full
+circle here this is what we're building
+up to being able to control your prompt
+and build valuable prompts quickly with
+these five elements can help you get to
+that composability step faster and it
+helps you have a really dialed in way to
+create this composability between your
+prompts right it all starts with The
+Prompt which is why I created this video
+which is why I want to share this with
+you these are the five most important
+elements if you use these five elements
+you will get 80% of the value of writing
+a really really high quality prompt with
+20% of the effort you select a model you
+clearly Define the purpose make sure it
+has a single purpose then you can set up
+variables to be reused in your prompt in
+an ADH way or with code your variables
+also serve as placeholders for your
+previous prompts to insert new values we
+then have examples which allow us to
+build out specifications for what we
+want the prompt output to look like and
+then we have the specific output type
+right so this is our text versus Json it
+ties really really closely to examples
+because the examples help guide both
+your text and your Json outputs so these
+are the five most important elements
+this is how we create composability and
+chain together our prompts let's look at
+a couple concrete examples so we talked
+about the Omni complete on the channel
+before a link that video basically it's
+a prompt that takes you know somewhere
+between two and 500 lines of code and
+put puts it all into a single prompt so
+what I'll do here is just go ahead and
+label these sections so it's super clear
+at the top we have our purpose we then
+have a static variable here and then we
+have Dynamic variables down here so we
+talked about Dynamic variables before
+these are variables that will update in
+an ad hoc way like we're doing right now
+or via code and then we have static
+variables static variables are simple
+they're basically things that you'll
+update as you're perfecting your prompt
+as you're improving your prompt right
+you'll just come in here and you'll add
+additional rules they don't really
+change outside of the development phase
+right so these are static variables
+right once you set them once your prompt
+is good you just kind of leave them the
+dynamic variables will update over time
+these are things that will be populated
+by your rag system these are things that
+would be populated by um you know again
+you coming in here ad hoc or by you know
+replacing it in production systems based
+on whatever user is logged in or
+whatever information is going to swap
+these variables out right let's just go
+ahead and walk through a simple example
+here
+the topic is going to be typescript I'm
+going to leave off previous completions
+and domain knowledge since we can fall
+back on the llm here and then I'm just
+going to set something up to
+autocomplete right so I'll just say
+typescript is and then we'll ask for an
+autoc completion there and then you can
+see our system is giving us a bunch of
+different Auto completes that we could
+use in our hypothetical drop down field
+or our intellisense let's do a couple
+more R
+interfaces and and we're looking for and
+types of course interchangeable so you
+can see here we're getting some really
+nice clean autocompletes let's go ah and
+do one more um let's change the topic
+this is why this is an omni complete
+right we come in here we just change the
+topic we'll F this to SEO content
+writing and then we'll say how can I and
+just you know look for auto completions
+here so how can I improve my website
+search engine ranking so imagine you
+have like an FAQ input field now your
+users can come in here use the obni
+complete prompt and you know just by
+replacing two variables you have an
+entire system here that can help you
+drive business results here via
+autocompletion that's a full example
+with the OM complete you can see we have
+a clear defined purpose at the top we
+have static variables here and then we
+have Dynamic variables down here we are
+using the Json output and of course
+we're using the top-of-the-line gbg 40
+model for the best results and that
+gives us a clear concise consistent
+prompt so let's look at N View JS
+components as a final example let's go
+ahead and label these so we have our
+purpose at the top we have guidelines
+you can see I'm using this kind of
+guideline pattern again I find this to
+be a super useful kind of meta tip we
+then have our actual Dynamic variable
+that will replace as we reuse this
+prompt the component request and then at
+the bottom here we have a explicit
+example of what we want our VJs
+components to look like I'll come in
+here I'll make these we'll do great so
+you can see I'm just defining exactly
+what I want the component to look like
+and that's that so now all we need to do
+is make a request let's say we want to
+create a Circle progress bar and we'll
+pass in of course progress and I'll make
+that an INT let's do like gradient right
+so we'll have two color gradients I'll
+say blue red so I'm doing a little bit
+of AI coding prompting here by just
+specifying the component structure that
+I want to see completed and so we'll
+fire this prompt off and the output is
+going to be a vuejs component in the
+structure with the request completed so
+really cool stuff this prompt again is
+completely reusable thanks to the
+structure of The Prompt we have the
+clear guidelines we have the purpose we
+have an example of what we want the
+output to be in this case we're using
+just clean text output since we don't
+need this as Json and then we are using
+a dynamic variable via the component
+request and then we're clearly defining
+exactly what we're looking for here
+right and that's how we get this prompt
+generating consistent high value outputs
+okay so to recap these are the five
+essential elements of high quality
+prompts we have the model purpose
+variables examples and output by
+focusing on these elements you can
+achieve 80% of the results with just 20%
+of the effort so drop a comment down
+below if you agree with my top five list
+if you have another element that you
+think is higher priority than you know
+the variable or the examples or the
+output or whatever I'm curious
+definitely let me know what you think
+like I mentioned I've written thousands
+of prompts and these are the things that
+keep coming up that give me the most
+value and the least amount of time so I
+wanted to hop on here and share this
+with you when thinking about development
+in the age of AI and the age of
+generative AI I think it's always
+important to focus on the underlying
+technology that's giving everything its
+value and when it comes to the prompt
+the model and then you know these next
+five elements really serve as the
+groundwork for the prompt and all of its
+higher level compositions right so once
+you master The Prompt once you
+understand the prompt you can then build
+great prompt chains great AI agents all
+the way up right but it all starts here
+with the prompt on the base level
+whenever I'm creating new prompts now
+this is how I like to structure it right
+first I choose my model then I write a
+clean clear single purpose for the
+prompt I then Define my variables both
+static and dynamic I'll then add
+examples to kind of you know specify the
+exact output I'm looking for and then
+finally I'll determine if text output is
+okay or if I want some really explicit
+Json output if you're building chainable
+prompts and AI agents and agentic
+workflows you'll likely want Json output
+for the consistent and the ease of
+parsing right so that's it for this one
+drop a comment drop a like if you
+enjoyed this video definitely hit the
+sub if you're not subb we are on the
+journey to building a gentic software
+software that works for us while we
+sleep keep prompting keep building and
+I'll see you in the next one

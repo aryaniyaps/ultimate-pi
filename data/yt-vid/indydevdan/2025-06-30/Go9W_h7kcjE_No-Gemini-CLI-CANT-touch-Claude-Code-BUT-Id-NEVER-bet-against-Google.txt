@@ -1,0 +1,958 @@
+Google has dropped the Gemini CLI right
+next to OpenAI's Codec CLI. This makes
+them the second company to blatantly
+copy clawed code, the king of Agentic
+coding. The tech ecosystem is riddled
+with nasty ripoffs and lack of giving
+credit where it's due. But that's
+nothing new. We can trace this all the
+way back to the attention is all you
+need paper, which Google put out in the
+first place. The real question users
+have to ask and answer is this. Does the
+Gemini CLI contain net new capabilities
+that outperforms clawed code? I'm going
+to spoil this one for you. Absolutely
+not. But there are some surprising
+aspects within the Gemini CLI that make
+it a future contender for the top spot
+in Agentic coding. On the right we have
+the Gemini CLI. On the left we have the
+king of Agentic Coding, Clawude Code.
+And here we have a simple Aentic coding
+tool eval codebase we're going to use to
+compare these tools side by side with
+the same prompt on the same codebase.
+Let's find out why the Gemini CLI can't
+touch Cloud Code, but why I'd never bet
+against Google.
+So, inside of this codebase, we have
+five levels of user interface that we're
+going to work through. We're going to
+start with basic static components and
+work our way up to multicomponent,
+multi-prop components. First, we need to
+get these agents operating in their own
+codebase. To do this, I'm going to open
+up a brand new cloud code instance and
+run a custom slash command that sets up
+get work trees / trees cloud code and
+Gemini CLI. This is a custom slash
+command embedded right inside of the
+codebase inside of trees.md read the
+variables, process the run commands, and
+then report the results. Here's our
+variables. We're creating two git work
+trees. Cloud code is going to do this
+automatically agentically and set up
+these directories for us. You can see
+inside of trees, we now have a full
+duplicate of the codebase for cloud code
+and Gemini agents to run in their own
+separate environment. We're even copying
+in the environment variable file so they
+have everything they need to run. You
+can see the environment variable got
+copied into both code bases. And now
+cloud code, thanks to this custom slash
+command, is reporting the results back
+to us, explaining exactly what was
+accomplished. Let's hop back to our
+agents and let's get them in their own
+codebase. We're going to boot up cloud
+code in its own get work tree running in
+dangerous mode. Don't do this if you
+don't know what you're doing. And then
+fire off Gemini in YOLO mode so it has
+full access. Now we have Gemini running
+on the API key. You can see it has a
+nice environment variable message here.
+It injected the in right there. We're
+running the top-of-the-line Opus model
+for top performance and we're running
+against Gemini 2.5 Pro. These are two
+absolutely cracked state-of-the-art
+models. Let's put them to battle. Let's
+give our agents the first task. So,
+first thing we need to do here is get
+the application installed. We're running
+bun and we want to install the front-end
+dependencies and we also want to update
+the HTML title. So, let's go ahead and
+do that in a brand new file here. I'll
+type up a prompt fun install
+dependencies and update apps dot dot dot
+set the title branch name. All right, so
+we're going to copy this prompt and
+we're going to fire them off in both
+cloud code and Gemini. So let's go ahead
+and fire these off side by side and then
+after these get set up, we'll open up
+the respective front end. So there we
+go. Gemini is off to the races. That
+looks done. You can see Cloud Code
+planning out what's going to be done
+here. They're looking at their branch
+name. There we go. Gemini's run the
+update. Looks like Gemini was faster
+here. Gemini completed all of its work
+here on the right. Cloud code working
+step by step, keeping track of its
+seduce. You can see there, there's the
+HTML file update on the Cloud Code
+isolated Gitwork tree. So there you go.
+They're both finished. Let's go ahead
+and boot up both servers. Cloud code on
+the left, Gemini on the right, UI
+component evalu
+on the right. Now we have two versions.
+You can see the title is updated
+properly. On the left we have cloud code
+and on the right we have the Gemini CLI.
+So we have two versions of the
+application ready to go. Let's fire off
+some front-end prompts. Let's see how
+they create a hero banner. We'll paste
+the exact same thing on the left and on
+the right. Cloud code on the left.
+Gemini on the right. Let's see how they
+create a hero banner.
+Here we go. So Cloud Code is using its
+to-do list. It's making a plan while
+Gemini is just getting right to work. We
+see a subtask getting fired off by
+claude code while Gemini is just getting
+right to work. Gemini does not have any
+subtask support. It doesn't have any
+agents. It can't parallelize like cloud
+code can. That's okay. It's still a
+workhorse. You can see here it's getting
+to work right away. Updating the file.
+If we look at the UI here and go to the
+Gemini side, you can see it's already
+done. And so it's actually kicked off
+the server. I'm going to cancel it here.
+Cloud code on the left is still
+exploring the repository. It's
+understanding the full structure.
+Whereas we can see on the right, Gemini
+just started getting to work, right? It
+located everything it needed to and it
+just started working. I don't want
+Gemini firing up this server every
+single time. So I'll just say don't
+bundde dev when you complete tasks.
+Okay. So I'm just going to prompt it.
+I'm just kind of giving it a suggestion
+here. Let's see what it does. So very
+interestingly, Gemini CLI has saved a
+memory. It's saying, okay, I've
+remembered that do not run bun or any
+other development servers automatically
+after completing a task. This is very
+interesting, right? I like this memory
+feature. This is something that's unique
+to Gemini. It doesn't wait for you to
+write the memories like in cloud code.
+It does it automatically. This is good,
+but it also could have potential issues.
+So, you can see here on the left, we
+have cloud code doing the same thing,
+right? It's trying to run the server to
+verify, but then it stopped, right? It
+timed out. So, it's doing this to make
+sure that it works. A little bit more
+intelligence here and a little bit more
+tooling built in here, right? It
+actually ran this with a 5second
+timeout. Gemini doing a little bit
+better here. It has kind of cleared out
+our previous application. And now we
+have this. Okay. So, this is fine. I
+didn't really instruct either of them to
+replace the key component. So, I'm going
+to go ahead and do that. I'll remove the
+pre-existing content, the hero. Okay. So
+this is a prompting mistake on my
+behalf. It wasn't really cloud code
+doing that. I did want this removed. So
+there it is. We now just have the banner
+on both sides. So you can see it's
+exactly what we prompted. So far we are
+one to one bar for bar between cloud
+code and Gemini CLI. Let's go ahead and
+run another prompt. Right. Let's kick it
+up
+and let's run them side by side. Cloud
+code again kicking off with a concrete
+plan. Right? This is a big
+differentiator inside of Cloud Code. It
+keeps this to-do list, a checklist, a
+step-by-step play of what it should do
+so that it doesn't lose track. And this
+is going to be important as we scale up
+the size of the UI that we're
+generating. Already Gemini is finished.
+It looks like it went ahead and replaced
+uh the hero banner. So, let's go ahead
+and check that out. There it is. We have
+this kind of mock mobile device look.
+Users uptime support. Not really sure
+what these dots are here at the top. It
+doesn't give us any interesting
+information. Um, and check this out. So,
+this is cloud code. I like this
+approach. It placed the stats card right
+below the hero banner. I'm going to have
+uh Gemini do the same thing. So, bring
+the hero banner back, right above stats.
+By working step by step, Cloud Code has
+just placed this right below our hero.
+And there it is. So, Gemini is on the
+same page. You can see here Gemini still
+has that kind of uh background, this
+like mobile like background. That's
+fine. Not a huge deal. We're going to
+obviously give Cloud Code a couple
+additional points here because, you
+know, it actually did something with
+these these top icons here, right? Cool.
+Let's scale it up even further, right?
+So, let's get out of level one. These
+are basic static components. Let's get
+some button components, right? So, this
+is a classic front-end component. You
+want a button that can, you know, have
+many variants and different sizes.
+Loading state, disabled state, classic
+front-end stuff.
+Run these side by side there and here.
+So, something I noticed as well, Gemini
+has uh three Gemini files for some
+reason. I'm not sure where this has come
+from or maybe it's the git work trees
+that's confusing Gemini, but um that's
+not right. Per usual, on the left we
+have cloud code planning out its work,
+working step by step, much more like an
+engineer, right? Break your big task
+into small tasks. Whereas on the right,
+we have Gemini uh just kind of blasting
+through everything, right? And and it's
+already finished. It's completed all of
+its work. Uh, once again, it deleted
+everything else that was there before.
+Kind of just doing this by default. So,
+I'm going to say bring back components.
+Don't delete as we work. And I wonder if
+it's going to create another memory here
+to keep track of that. Let's see what
+it's done here. So, it's brought back
+both of those components and it should
+be done. Okay. Fantastic. So, let's see
+what Gemini looks like here. Very nice.
+Right. So we have our primary button,
+secondary danger, small, medium, large,
+loading state, and disabled state. This
+looks great. All right. And so it looks
+like cloud code has finished running on
+the cloud 4 powerful opus model. And
+same deal, right? Primary, secondary,
+danger, small, medium, large, and
+states. If you look at this side by
+side, it looks like cloud code is just a
+little clearer. It's a little ahead.
+It's a little bit more, you know,
+userfriendly. Although it's close,
+right? There's not a huge difference in
+the actual output yet. Let's go ahead
+and push both these models even further.
+Let's do some more intense things,
+right? Let's go ahead and create some
+Let's go ahead and jump to level three.
+So, I want a card carousel component.
+Paste this on both sides. Get this
+kicked off. And let's see how they
+perform here side by side. All right.
+So, on the left, Cloud Code, big plan,
+and on the right, Gemini. Pretty
+impressive. Gemini has only used 2% of
+its available context window and you can
+see it just churning through work here.
+Not only are we creating a tople
+component, we're creating subcomponents.
+So we're saying a total of four to five
+components, you know, product card,
+navigation, dotindicator, carousel
+container. And you can see in every one
+of these prompts, I'm creating a
+component like declaration syntax to
+communicate a lot of value. This is in
+fact an information dense keyword, a
+information dense phrase. Right? We're
+lining things up to look like a
+component and it makes it super easy for
+every LLM to understand what we want
+generated here, right? We have items
+with the types and we have, you know,
+the rest of our props here, boolean,
+number, so on and so forth. Looks like
+Gemini is complete. But once again, it
+deleted everything else we had created.
+Okay, so this is pretty annoying, kind
+of frustrating. It's a very smart model,
+but it isn't listening to instructions
+very well. So again, I'm just going to
+say I'm just going to hit up here so we
+can find that uh previous run. Bring
+back components. Don't delete as we
+work. Save to memory. All right. So
+let's see if we can directly just prompt
+that we want something saved to memory.
+There we go. Great. Okay. So this is
+pretty cool, right? This is a important
+aspect of memory. We're telling the
+agent that we want something done. Don't
+forget about it. Right? Every time we
+run, I want you to do this specific
+thing. Cloud code on the left is
+creating this carousel and looks like
+it's almost complete with every task
+step by step. Gemini somehow magically
+already finished. Let's go ahead and see
+what it's done here. Okay, we have a
+card component. Um, it looks decent. We
+are definitely missing like the key
+image toggle feature. Works great,
+right? That we're sliding through our
+cards. That's awesome. It's left some UI
+croft here. Not too bad though, right?
+It is a carousel component. Let's see
+how cloud code's done with the exact
+same prompt, same feature. Missing image
+links. That's fine. I'm not going to
+stress about that. But check this out.
+Look how much more clean this is, right?
+It's laid out left to right. We have our
+cards. We have smooth carousel
+capabilities. We are missing a bunch of
+stuff here though, right? We're we're
+able to overflow. And so there is, you
+know, some some losses on both sides
+here, right? Gemini got the logic a
+little bit better, but uh the
+presentation from Opus working on cloud
+code is clearly better. minus this bug
+where we can go on forever, right? Very
+interesting. Points docked from both
+agents on this one. Let's go ahead and
+push them further. Let's have them
+create a data table.
+Same deal side by side. We want to look
+for performance. We want to look for
+what the models are doing well, what the
+models are doing poorly. We have to take
+into account that the context is going
+to be a bit different. Even though we're
+prompting the same thing, the way these
+agents fill out their context is
+completely dependent on their source
+code. It isn't just, you know, the
+prompts we're writing back and forth,
+although that's the primary piece. Um,
+what I'm curious here is to see if
+Gemini is going to listen and not delete
+the previous components thanks to the
+memory feature. Let's see. So, it's
+reading app and let's see if it deletes
+or just adds the data table. Great.
+Great. So, it hasn't deleted anything.
+It's just adding that new data table,
+the new reference here. We are operating
+in Vue.js, but you know, your front-end
+framework frankly doesn't matter
+anymore. These models can do it all. And
+there it is. So, Gemini clearly wins
+here on speed, but it definitely looks
+like cloud code is going to be more
+precise. Look at how precise it is. Step
+by step, one thing at a time. This is a
+focused language model running in a
+focused agentic framework. So, if we go
+over to Gemini, we now have, check this
+out, a nice clean data table. Okay.
+Can't exactly see this text on the
+button, but that's fine. We do have
+sorting capabilities. ID, email, roll.
+Nice. Pretty solid data table component,
+right? And you know, keep in mind these
+agents are working in their own
+dedicated workspace. The code bases are
+going to look a little bit different,
+right? If we open up the explorer here,
+we look at trees, Gemini CLI, apps, you
+know, we can see here very clearly that
+it's generated all of these components
+for us, right? And the same thing is
+true inside of cloud code. If we have no
+cloud code UI source components, you can
+see it has its own unique set of
+components, right? This is the power of
+git work trees. We explored this in a
+previous video where we use cloud code
+to run parallel sub aents all in their
+own git work tree. Check out that video
+if you want to learn about parallel
+agent coding. But this is also another
+great way to use work trees. You have
+isolated environments for every one of
+your agents. Let's check out cloud codes
+data table implementation. Let's go
+ahead and look at it. Very similar
+design here. It looks like we're going
+to have to give Cloud Code a few more
+points here because the uh pageionation
+user interface looks just a little bit
+better. All right, but it's close,
+right? It's very close. Let's keep
+scaling this up. So, that was the level
+three component data table. We could do
+a modal dialogue. Let's go ahead and do
+a Let's get tricky. Multistep for
+fire this off both sides. Let's let them
+work. Okay, so check this out. Gemini is
+doing something interesting here. It
+looks like it's doing some reasoning.
+This is a complex undertaking. I'll
+build multistep by creating the
+components. Here's the plan. So, Gemini
+is planning here. It looks like it's
+deciding when to activate planning mode.
+It has an outline here. It's creating
+all these files. It's very fast. It's
+very accurate with its code generation.
+Very impressive here. Um whereas you
+know classic cloud code opus on the left
+it does you know usually always use its
+plan mode so that it can work through
+tasks one by one it doesn't forget
+anything right this is like temporary
+in-memory plans so that cloud code can
+focus on the task that you give it this
+looks great it's going to work through
+this one by one Gemini is just ripping
+through this codebase it is literally
+just tearing through this thing you know
+it's pretty easy to see that with a bit
+more direction Gemini CLI running this
+powerful Gemini 2.5 Pro model has a lot
+of potential potential here. It is
+grinding through these changes. Of
+course, there are minor tweaks here all
+over the place that we want to make, but
+um that's fine. So, you can see it's
+working on that multi-step workflow.
+We're jumping in here a little bit too
+soon uh before things are all complete
+here, but oh, it actually is complete.
+Wow. Um okay, that's interesting. Okay,
+so not quite right. Right. It looks like
+it's checking off things a little bit
+too soon. Right. It's got a bug with the
+striketh through, but not bad. So, it's
+got personal information here. You can
+hit next. street address, city, zip
+code. This looks great. We can hit next
+and we have payment details here. So,
+very cool, right? Nice summary. And then
+we have a submit button. Pretty great,
+right? This is a uh what is this?
+Multi-step form. Great work here from
+the Gemini CLI. And it's it's literally,
+you know, a bit more than twice as fast
+than Claw Code running the Opus 4 model.
+So, very interesting to see this. We can
+dial into any one of these changes. And
+let's open up the app and we can see all
+the work that it's done so far on its
+own. And there's the multi-step form. We
+can click into this and yeah, check this
+out. Very, very cool. Built out a
+validation form. It's got types. We're
+using the proper prop syntax. This all
+looks really great. Some models will
+produce, you know, just bad code, but
+this is like perfect code uh coming out
+of Gemini. So, there's a lot of value
+here. Very interesting stuff. you know,
+we can almost be sure coming out of the
+cloud repository apps source app, we're
+going to get a very, very similar, you
+know, really clean. Here's the data
+table. Let's drive into this. We can be
+very confident that cloud code, yeah,
+it's going to deliver basically the
+exact same, maybe even better syntax
+here. We can collapse everything if we
+want and just see how clean this is.
+Yeah, beautiful, beautiful view code.
+Great stuff. Let's see if we're
+finished. Almost. It's very clear that
+if you want raw speed, Gemini CLI is
+pretty great, right? If you're just
+looking for speed, you want to crank
+something out real quick. You can see
+how Cloud Code is managing every piece
+we want done step by step by step. Very
+important for real engineering work.
+Great. Nice summary of the output. Let's
+check it out. Here we go. Refresh. And
+here's our multi-step form by Cloud
+Code. Check this out. Very clean, right?
+No strikethrough issues. Here's our
+form. Oh, we do have some text issues.
+The text is coming in completely white.
+That's that's painful. Um, I'm going to
+give both of these agents a shot here to
+resolve their respective issues. Um, fix
+the strike through on the multistep
+form. It's preemptive. And then on the
+left, uh, the input text is white. We
+can't see it for the multistep.
+Couple bugs to clean up here. We're
+going to see how well they both respond
+to feedback and quickly clean up real
+issues. Gemini now taking some time to
+think. Um, looks like there's a bug here
+that we don't have 100% context. We have
+less than that. So, there we go. Opus
+very quickly figured out what the error
+was and resolved it. And let's see if
+it's fixed. There we go. Fantastic. So,
+Opus cleaned up its bug and Gemini
+thinking here. Taking quite a bit of
+time here. I'm not sure what we need
+here. Okay, there we go. So, it looks
+like it is thinking through. Maybe we
+got stuck in the API queue. Who knows?
+But it's working through its step
+indicator. It can see these
+strikethroughs, right? So, it knows that
+that's there. And let's just give it a
+couple seconds here to think. While it's
+thinking here, let's go ahead and hop
+over to the cloud code version. So, we
+need a valid email address. There we go.
+So, we have better validation here on
+the cloud code side. There we go. Next.
+Account details.
+Strong password. Business. Next.
+preference, nice newsletter, subscribe,
+bio, review. Fantastic. Check this out.
+Very clear. Adhering to the prompt. Got
+some centering things to do, but this is
+great, right? We have a full multi-step
+uh component ready to go. Bam.
+Submitted. Check the console for data.
+Great work out of cloud code there. I
+had a small UI issue and you know, the
+form looks great. Back on the Gemini CLI
+side, we still have these
+strikethroughs. That's annoying. It
+should have been able to solve that, but
+that's all right. Let's run another
+massive prompt. Let's go all the way up
+to level five, expert level components.
+Let's see what these models can really
+do. So, we have data visualization,
+advanced search, and taskboard conban.
+Let's go and have them generate this.
+There's cloud code. There's Gemini.
+Massive one, right? We're asking for 10
+to 12 unique components. There's the
+high level. Check this out. cloud code
+of course planning every one of these
+components out and if we scroll back up
+here it looks like Gemini is doing the
+same so it realizes that lots of
+scrolling issues here so it realizes
+that there's a lot going on here and
+there we go fantastic so it did create a
+plan so core components I'll start with
+the building blocks task columns next
+forms modals filtering there we go so
+this is awesome these are going to cook
+while these are cooking in the
+background let me just go over uh some
+key ideas I want to share with you when
+you're looking at agentic coding tools
+because when you're looking at these
+tools you really want to ask the
+question what are the capabilities right
+what does the tool bring you that's
+differentiated focus on reality focus on
+the reality of problem solving I
+absolutely love cloud code and I love
+cursor and I love ader more than both of
+them right but how I feel doesn't
+improve my impact okay how any of us
+feel about a tool doesn't improve your
+impact Cloud code is the best tool for
+the job of engineering. If you want the
+best results, you have to focus on the
+signal of the best tool and you need to
+compare the signal to whatever else is
+coming up. Very clearly we can see here
+that uh Gemini is a clear contender here
+much better than the codeex CLI when it
+came out. All right, but I think these
+big three gen AI companies, OpenAI,
+Google, and Enthropic will be the ones
+battling over this space. They each have
+the resources to really lead here to
+really push on Agenta coding
+capabilities. But it's super important
+to focus on these capabilities the tool
+gives you. No loyalties. Don't fall in
+love with any one of these tools, right?
+These are going to be in flux right now.
+Cloud code is still the best tool to
+use. But as you can see here, Gemini
+right out of the gate, right? This tool
+literally just came out. I am being
+harsh, right? Because this tool quite
+literally just came out. All right, here
+are some pros about the Gemini CLI. We
+have access to the powerful Gemini 2.5
+Pro. We get the Gemini models, and that
+means whatever model they put out next,
+we're going to be able to quickly tap
+into that, tap into that compute right
+inside the terminal. This is ultra
+powerful as engineers. The highest
+leverage tool we have is the terminal.
+Okay, this will always be true, right?
+You might not always need to go into the
+terminal, but it's always true that if
+you need to, the terminal is the highest
+leverage tool you can use. you get
+maximum control while trading off of
+course some initial investment to
+understand what these tools do and how
+you can really truly use the terminal.
+They also have MCP control out of the
+gate. This is fantastic. They have all
+their built-in tools of course and you
+know you can read these and see that
+they're very very very close mirrors to
+cloud code. We'll talk about that in a
+second. Oh, by the way, Gemini is done
+already. That's kind of insane. Let's
+see how well they've done and then we'll
+come back to the pros and cons. Okay.
+So, very interesting. Uh, test. All
+right. So, uh, in progress. All right.
+So, we have some styling issues here.
+CSS styling issues. Really weird that
+they can't just look and find the style
+file, but that's fine. Conbon board
+looks great. There's no drag and drop
+though, uh, which is a problem. It does
+have search and it does have that done
+pretty well. So, that looks great. Cloud
+code about half the way through. You can
+see we're coming up against the context
+window here for cloud code. This is an
+easy cell, an easy winning point. You
+know, back to the pros of Gemini. The
+context window is not comparable. Slash
+stats and see how many tokens we've
+blown through here so far. Million
+something and, you know, 600,000 input
+tokens. That seems like a lot. We have
+a,400 cached. All right. So, this is
+great. But that's another pro here,
+right? We we have access to uh powerful
+state-of-the-art models. Google and
+Gemini are clearly going to keep pushing
+on this. Uh, next we have themes. I
+think everyone just loves customization.
+We all want our own. We all want to do
+it our way. We want to set things up our
+way. Um, it's very cool that we can
+apply all of these little different
+themes. This is a minor thing, but you
+know, it adds up. Really important thing
+I want to call out here. When you type
+/doccks, hit enter. Gemini has some of
+the best documentation that's easy to
+find specifically for engineers, right?
+Bunch of markdown files inside of this
+codebase, but it's actually quite clear
+once you start looking through this,
+right? CLI, commands, configurations.
+You can see here a very important
+non-interactive mode. This is a
+essential piece of every agentic coding
+tool. If they don't have interactive
+mode, they don't have prompt what's
+called print mode. They're not true
+agent coding tools. So this is super
+super important. We're going to be
+talking about this more on the channel
+as time goes on. This is how you tap
+into the next phase of agentic coding.
+All right. Um more on that in the
+future. Comment subscribe so you don't
+miss that. The documentation is pretty
+good. So another interesting feature
+slash chat save. So here I'm saving this
+conversation window. I think this is
+interesting. We can with the slash chat
+command save or resume the conversation
+history for branching conversation
+state. So with slash chat right we can
+save and we actually need to save a
+specific um slash chat save and then
+specify the chat name right and so we
+can do this then we can do slash chat
+list right is that how that works? Yeah.
+Yeah. So, you can see we have saved
+conversations. Very interesting. Looks
+like claw code has finished. One last
+thing I want to mention about uh Gemini
+on the pro side. We have the at@ symbol
+for reads. Then we have this great
+automatic memory system that you saw
+throughout. So, there's a lot to like. I
+was pleasantly surprised with all the
+features that came, you know, literally
+on day one, right? We have to really be
+fair here and admit that, you know, this
+tool literally just came out. pretty
+clear here that this is a response
+putting this out open source is a
+response to cloud code. Same thing with
+OpenAI's codecs, but I don't doubt for a
+second that both OpenAI and Google have
+been baking on their own terminal agent
+despite and regardless of cloud code.
+This is just an obvious play for
+engineering in the generative AI age.
+The terminal is the highest leverage
+point for engineers. So, you want to put
+your agent right in the terminal. I
+think Claude Code was probably the first
+one to discover this and make it public.
+But, you know, it's not crazy to imagine
+that they had some version of this. I'm
+sure though not as great as uh Cloud
+Code. Those are the pros of Gemini. To
+me, the biggest selling point here
+obviously is that we get access to the
+Gemini models. I'm not sure if Anthropic
+will do this, but if they open up their
+models, we have less of a reason to
+switch out of using cloud code, right?
+Uh because that model capability is
+pretty big. At the same time though, I
+highly doubt they're going to open up
+their models just because it's a
+terrible business strategy, right? They
+can keep pushing on their models. They
+can fine-tune their models to run inside
+cloud code in these powerful agentic
+loops. So, let's check out cloud code
+and how it's done. The conbon board
+here. Scroll to the bottom here and
+check this out. So, UI is a lot richer
+here. Properly implemented drag and
+drop. That's incredible. Just out the
+gate, right, with that one prompt,
+right? We can go ahead and look at that
+prompt. It was very void of detail.
+These are pretty much highlevel prompts,
+maybe mid-level prompts, but um there's
+not a ton about the implementation
+details. So, Cloud Code did a much much
+better job than Gemini of inferring, you
+know, the usual functionality out of a
+component like this, right? So, let's
+click new task. Let's see what we get
+there. Okay, not bad. Some details here.
+Add task. And check that out. We have a
+brand new task. We can move it. We can
+delete other task. Nice. I don't like
+this uh activity on the side, but you
+know that doesn't really matter. Uh
+cloud code has done a really great job
+here getting all these features. We can
+search uh design. There we go. Searching
+properly. Write API docs. Great. We can
+look for specific labels. All design.
+Wonderful. Clear filters. Damn. Cloud
+code really thought about everything
+here. Really, really great to see. So,
+all in all, I think we have to give uh
+claw code the edge here. all maybe say
+cloud code is 20% ahead of Gemini CLI by
+looking at all these components right by
+kind of running this kind of UI
+sidebyside agent coding tool eval we can
+see that Gemini CLI running on Gemini
+2.5 Pro very powerful very capable it
+looks like with some more direction it
+could be even better but the same could
+be said for cloud code right we're kind
+of just being super loosey goosey here
+letting these fire off on their own
+generating these UIs inferring a lot of
+detail right these are high level
+prompts versus low-level prompts. And if
+you're writing a highle prompt, you're
+always going to miss something without
+some pretty advanced agentic techniques.
+So, there are definitely things not to
+like about Gemini. No custom slash
+commands, huge dealbreaker. Although
+they do have support for programmatic
+execution, it doesn't create a great
+trace. So, I'm going to run this here.
+This is the programmatic version, right?
+We're running Gemini in line, right?
+This is how we deploy agents in the
+cloud. A major detractor here is that we
+don't have a clear breakdown of what the
+heck is going on, right? We need a clear
+JSON-l like log so that we can track
+what's going on here in programmatic
+mode. This is a good start, but we need
+more out of the uh inline mode. Make
+sure you're subscribed. We're going to
+be talking about programmatic agent
+coding. This is where the value of agent
+coding is. By the way, if you want some
+signal, if you want something to trace
+down, it's this. It's running Gemini in
+line and more specifically it's running
+claw code in line like this. All right,
+so more on this later, but that's a
+major detractor. We need more details at
+a programmatic mode. And then you know
+the last big issue frankly with Gemini
+is that you can see cloud code all over
+this, right? I don't doubt that both
+OpenAI and Google had some type of
+terminal agent cooking, but uh they both
+converged to basically just being cloud
+code ripoffs. Clones tend to lack
+innovation in the culture of the
+product. What do I mean by that? They
+don't add anything new or innovate
+because the engineers, the team, the
+PMs, the managers were told, literally
+told to copy another tool. Once you
+build your foundation on someone else's
+work, it kind of gets imbued into the
+product, imbued into the culture and the
+and the product itself. So that's the
+biggest thing I don't like. Of course,
+they can turn that around. It's open
+source now, just like Kodak CLI. So a
+lot of things can change but so far it's
+very clear cloud code is the best agent
+coding tool but we'll see how that
+progresses. There's one thing that's
+absolutely clear though with all the
+releases do not sleep on Google and I
+would not bet against Google. Remember
+who's copied who. Right. Right. Go let's
+go back to the source. Okay. Attention
+is all you need. This is the beginning
+or a beginning of the generative AI
+revolution. Who put this out? Google
+did. All right. So, who's copying who in
+the end, right? Google made all of this
+possible. And then, you know, of course,
+it takes the entire industry to build up
+to it to what we have today. You know,
+OpenAI has done a incredible work there.
+Same with Anthropic. Remember who owns
+YouTube. You know, one of the greatest
+pieces of active data for training
+models in existence. You and I, we
+literally keep giving YouTube more and
+more and more and more. It is how
+they've been able to drop both the new
+V3, the imagen 4 model, the Gemini 2.5
+text to speech models. Right? These are
+absolutely cracked multimedia models.
+And this is Google's advantage, right?
+It's pure information. It's hard talent.
+It's the ability to just bet on things
+and lose cuz they're so rich at this
+point. And and you know, let's be fair,
+there are cracked engineers at Google.
+Very cracked engineers. Shout out if
+you're at Google. I don't know how much
+people know this or are aware, but
+engineers from all big three Gen AI
+companies watch this channel. So, hello
+if you're from one of the the big three
+companies. Big shout out for all your
+work. Keep grinding. Thank you for
+watching. Um, but you know, there's a
+lot of potential here. So, all I'm
+saying here is do not bet against
+Google. That is a mistake. It's too
+early to bet on any one of these tools.
+Right now, it's very clear Cloud Code is
+in the lead, but keep your eyes open.
+Stay sharp. Stay dynamic. Don't think
+you know how to pick the winners. If you
+want to stay plugged in to critical
+information like this on AI coding,
+agent decoding, generative AI
+engineering in the generative AI age,
+you know what to do. Google has clearly
+earned their stake, right? So, I'm
+keeping a sharp eye on the Gemini CLI.
+They can definitely innovate on this.
+And of course, it's open source now, so
+who knows what can happen. Already 67
+contributors, 119 pull requests, 500
+issues. So, people care about this,
+right? There's interest here. It's also
+important to note that, you know,
+there's potential that what they're
+doing here isn't about beating Anthropic
+at their own game here at all. It could
+just be that they're here to eat some of
+their lunch and, you know, just copy on
+this trend. And why not? They have the
+resources, they have the engineers. Just
+blast blast away, right? Why why not
+just copy the the best form factor for
+engineering and just, you know, throw
+your models at it. The three big tech
+genaic companies are the ones to keep an
+eye on. OpenAI, Google, Anthropic, Don't
+Blink. For hands-on breakdowns for AI
+coding, agenta coding, and genai
+engineering, comment and subscribe to
+let the Google algorithm, the YouTube
+algorithm know that you're interested
+one day. All the work and the ideas
+we're discussing here on the channel, on
+the Indie Dev Dan channel, we're going
+to be able to prompt through Gemini at
+some point. So anyway, this is a tool to
+keep your eye on. Don't bet against
+Google. Cloud code is still the most
+cracked tool. If you want to learn how
+to survive all these crazy tool changes
+and incredible pace of innovation, check
+out Principled AI coding link in the
+description. You know where to find me
+every single Monday. Stay focused and
+keep building.

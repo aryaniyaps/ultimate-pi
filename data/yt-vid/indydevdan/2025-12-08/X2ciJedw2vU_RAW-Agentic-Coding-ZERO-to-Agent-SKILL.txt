@@ -1,0 +1,1447 @@
+What's up engineers?
+>> [music]
+>> Andy DevDan here. So, I thought it would
+be cool to take a step back from our
+normal type of video and [music] kind of
+go back to the root of this channel
+where we just sit down and we just
+build. Let's write [music] a skill from
+scratch. I've been building software for
+over 15 years and I've been building
+with language models [music] since GPT
+3.5 was released back when we were
+running Aider, the original AI coding
+tool. I've written thousands of prompts
+by hand and even more with agents. So, I
+think it's important to always ask the
+question, why are skills becoming more
+important and more popular? Skills that
+you deploy prompts and code against any
+problem in a consistent, reusable way.
+In this video, we'll showcase exactly
+that. In this video, we'll be building a
+fork terminal tool and we'll break down
+why that's important, why that's
+valuable as we progress. This is a real,
+raw Agenty coding video. I don't have a
+flashy demo for you.
+You know, there's no spicy hook to get
+you into this video. I really want to go
+back to the roots of this channel as we
+kind of push into the end of the year
+and into 2026. So, in this video, I want
+to raise the stakes a little bit and I
+want to show you how you can build a
+skill from scratch. So, I'm not going to
+use any existing Agentics. I'm not going
+to use any existing agent orchestration
+frameworks. We're just going to use a
+raw agent and we're going to write
+prompts by hand. The only thing we're
+going to do is use a couple code
+snippets. Before I even start touching
+the computer, start touching anything,
+you know, using agents, using generative
+AI, using orchestrators, I go back to
+the fundamentals of engineering. I think
+and I plan. So, the first thing we're
+going to do here is just push the laptop
+aside, okay? We never start by just
+blasting out prompts. We start by
+thinking through the problem we're
+trying to solve. So, I have a whole
+stack of notebooks here um that I just
+fill up over and over and over and I've
+got a whole box more. Um you know, you
+can get this off Amazon. Pack of 20 for,
+I don't know, 20 bucks. This is an
+engineer's true most important tool. I'm
+definitely on the Agenty engineering
+train. I think the future is all [music]
+agent forward. I think that's all great,
+but I think none of that matters if you
+don't begin with the end in mind. If you
+don't actually fully understand what you
+want to see. So, [music] um I like to
+just start by writing.
+So,
+the first thing I do when I'm trying to
+build something new,
+>> [music]
+>> down to a skill, down to a prompt, is I
+understand what's the purpose, what's
+the problem, what's the solution. And of
+course, the solution that you're
+bringing to the table it is your
+perceived best solution. There's always
+a better solution. There's always
+something else out there that you're
+going to miss. That's okay. You have to
+start somewhere. Beginning with the end
+in mind for engineering work, that often
+means defining the concrete output
+structures, right? The the assets that
+you're going to generate. When you sit
+down, there's going to be a beginning of
+your session and then there's going to
+be an end. At the end, what will you
+have that you didn't have before? What
+is your deliverable? So, here we're
+going to have a new agent skill, okay?
+So, we can just start writing out that
+exact file structure. I'll throw exactly
+what I'm writing here on the screen.
+You'll have a nice overlay here. Um my
+writing is kind of ass, so I want to
+give you a nice, clean uh representation
+to look at. So, um we're just going to
+start by writing out the structure of
+the skill. Of course, we have the dot
+Claude
+skills.
+And then we have the meat of it. So, I
+like to call this the pivot file. So,
+what is everything kind of centered
+around? It's always centered around, as
+you know, the skill.md file. So, this is
+where we define and progressively
+disclose how the skill works to the
+operating agent. So, a couple of key
+kind of consistent directories I build
+underneath my skills, I like to have
+this tools directory. And so, your tools
+are your single file scripts, your
+command line tools, um your entire
+programs. You can put whatever you want
+under tools, but these are of course the
+commands we're going to give our agent
+to to extend its capability. Sometimes
+you don't need new tools. Other times
+you do. We're going to use one in
+particular. We're going to use a fork
+terminal Python script. And I like to
+use Astral UV. I think the industry
+agrees with me on that at this point.
+They just have the best Python tooling,
+so that's going to be our single file
+script structure. So, what else do we
+need? We're going to need prompts.
+Prompts are the most important piece of
+it all, right? Our skill, our prompts,
+even code you can truly consider as
+prompts. Remember the core four,
+context, model, prompt, tools. This is
+what we're building. Skills can
+encapsulate this structure against a
+specific use case very well, but
+remember everything always boils down to
+that. So, we're going to have a concrete
+prompts directory and what we need here
+is a fork summary and I'm going to make
+it super clear here, user prompt. So,
+this is not a system prompt. We're not
+building a custom agent. This is a
+simple user prompt. It's going to fire
+off inside of this system at some point,
+okay? So, we have a tools directory,
+prompts directory. One more directory we
+need and it is what I like to call the
+cookbook.
+And so, what is this? This is additional
+documentation on a per use case basis.
+So, this is where we're going to start
+progressively disclosing new information
+to our agents given the incoming prompt.
+So, in our fork terminal skill, what is
+this going to do? What is the purpose of
+this? It is going to start brand new
+terminal instances and we'll have our
+agent kick off either a raw CLI command,
+so an FFmpeg command or a G Cloud
+command or an AWS command or whatever
+services you're working with. You can
+run a raw CLI command or we're going to
+have it kick off a new Agenty coding
+tool. So, we're going to focus on the
+big three, Gemini, Codex, Claude Code.
+Once you have the cookbook and the
+structure in place, you can add any
+other tooling and capability that you
+want here. So, we're going to um bundle
+a ton of stuff here under CLI command.
+This is going to be a markdown file. And
+again, these are all really just
+prompts, right? But we're going to add
+some documentation here to teach our
+agent how to operate, how we want to
+fork terminal windows and immediately
+run new CLI commands inside of that fork
+terminal window, okay? So, what else do
+we have here? So, we of course have uh
+Gemini CLI.markdown.
+So, this is going to be responsible for
+kicking off brand new Gemini CLI agents
+with a forked terminal. And so, this is
+why we have that prompt here, right?
+Fork summary. So, we're going to
+summarize the existing terminal and then
+fork it, hand it off to a new agent,
+right? And so, same thing, right? Codex
+CLI.md
+and we're going to have of course Claude
+Code.md. And thinking through this, I
+think this is all we'll need for this
+skill. In terms of like system design
+and product design, uh typically you
+always want to aim for that first
+version, right? That proof of concept,
+uh that MVP. In my mind, you know, it's
+like uh proof of concept comes first and
+then you get to the MVP. Sometimes these
+are the same thing, but often times the
+proof of concept just says, okay, this
+idea can work. There's something here
+and you know, that's a yes-no node where
+you can just stop building if something
+goes wrong there. But then after that,
+you get to the minimum viable product.
+Here, we're just going for that proof of
+concept. We want to just get everything
+up and everything working. And of
+course, once we build this, I'm going to
+host this on GitHub publicly. You'll be
+able to access this. It'll be cool cuz
+you'll see the full process here
+beginning to end. So, this is our fork
+terminal tool and again, the purpose
+here is to take an existing agent that's
+executing and to have the ability to
+fork a brand new window where either
+running brand new CLI commands or we
+want to kick off brand new Agenty coding
+tools and effectively fork the existing
+conversation. This is our setup. Now
+that we have a plan, now that we have a
+full on purpose, we understand that this
+allows us to fork conversation windows,
+it allows us to offload context to new
+agents or just offload processes to new
+windows. So, that's what we're building.
+That is the purpose, problem, and
+solution. Our solution here is to build
+a reusable skill that our agents can
+deploy. So, now we have the end state,
+okay? We have begun with the end in
+mind. We know what we want our agents to
+build for us. This is the most important
+step. If you're constantly relying on
+agents, on documentation, on other
+things outside of your own mind to
+accomplish work, you will be completely
+dependent on these tools. You're seeing
+this more and more day after day.
+Engineers' brains are rotting
+>> [laughter]
+>> due to this incredible technology. And
+to be clear, uh I haven't written a
+single line of code in in over a year
+now with some small exception, probably,
+right? Agents are doing that. But the
+point here is to always understand what
+you're asking your agents to accomplish
+for you. The point here is to always
+have a plan, right? Have an end state.
+Define your end state. Those who plan
+the future tend to create it. [music]
+So, here we are. Uh we have a plan, nice
+and simple. You know, we can always add
+more documentation here. We can always
+revisit this. But let's go ahead and
+start building. Let's move this, right?
+The raw idea, let's make it a reality
+[music] inside of our tooling. So, let's
+get started here. I'm going to throw
+that over there and let's pull back our
+[music] technology and get into this.
+So, brand new code base here, right?
+Terminal projects, make dir. This is
+going to be a fork terminal skill.
+CD in. I'm going to use Cursor here. Use
+whatever IDE you like. Everything is
+converging on agents. So, the UI you
+prefer doesn't really matter and you can
+see here we have a blank directory, all
+right? Now, I'm going to close my shades
+a little bit cuz I can't really see.
+Right away, we can start handing off
+work to our agent. We're going to of
+course boot up the best Agenty coding
+tool. A lot of the actual prompt writing
+that I do is just in a blank file. So,
+you know, you can get out of the
+environment, open up a blank file here
+to write your prompt. So, I'm just going
+to rewrite that directory structure we
+had. So, dot cloth slash skills skill.md
+tools fork terminal. And as I'm working
+through this, you know, by writing the
+structure out, by thinking through and
+planning things, I'm priming myself,
+right? When your agents are building it
+out for you, you can quickly see is this
+right or is this not, right? You'll be
+able to quickly understand and and and
+execute against the end state that
+you're looking for. Um hopefully that
+makes sense. So, prompts, yeah, fork
+summary user prompt. I like to be super
+clear when I'm writing user prompts that
+are just going to be one of many or the
+system prompt, which is just one of one,
+right? And then we have our cookbook.
+And this here will have our CLI command.
+And here we'll have our Gemini CLI
+code CLI
+cloud code.
+Great. We have access to agents. Let's
+let the agent do all this for us, right?
+Build this and and we can do better than
+this. Hold on, let's back up here,
+right? So, we also have get ignore.
+We also have m.sample.
+We have readme. And this looks pretty
+good, right? Uh we'll say python
+defaults.
+And here we'll have We'll just set up
+the default variables. So, we'll say
+Gemini API key. There we go. One of my
+favorite use cases for Cursor is I do
+love their tab completion model. They
+have the best tab completion model.
+They've been working on this for years.
+Huge fan of this product still. This is
+still, you know, one of my favorite
+IDEs. I go between VS Code and Cursor.
+This looks great. So, we're just going
+to fire this off and I'll just say build
+use empty files.
+Okay.
+And so, we're going to have our agent
+just build out kind of a basic structure
+here. To be super clear, what type of
+agentic coding are we doing? We're we
+are doing in-loop agentic coding. Our
+presence is the highest. Our effort is
+the highest. Our tooling capability is
+also the highest because we're operating
+right here in the loop. You know, there
+are many ways to operate your agents
+now, uh many cloud tools. Those are
+considered out-loop agentic coding
+tools. More and more in your existing
+code bases, your production code bases,
+you want to be operating out the loop.
+There's no reason with agents for you to
+step in here and and you know, fix small
+bugs or do small chores. We talk about
+this a lot in tactical agentic coding.
+That's one of the the pillar ideas. Of
+course, our agent is doing all this
+stuff for us here. Uh let's go ahead and
+do a get a knit branch main. Great. Just
+get everything set up here in the
+foundational way. So, it's just
+generating the file structure for us
+here, right? Just as requested. Okay.
+Fantastic. So, now we're on our main
+branch. Let's go ahead and dial into the
+most important piece of this, right? The
+actual skill. We're building this fork
+terminal skill. So, what does this look
+like and what's the kind of crux of it?
+Cuz once you build your skill.md, right?
+Your primary, what I like to call pivot
+file, that's what, you know, all the
+work is is centered around. Once you
+build this, everything else starts to
+fall into place and you can really scale
+up your impact by throwing agents at the
+at the problem. But, you know, like I
+said, I'm not using any meta prompts, no
+meta skills, no agentics, no
+orchestrator agents, right? I have a ton
+of tooling where I could have
+few-shotted this entire thing. I'm going
+to walk through the whole process here
+with you. Let's build a skill from
+scratch. I highly recommend you set up
+some prompt code snippets. So, I have
+this snippet for writing skills AG SK.
+And if I activate this with control
+space, you can see we have this skill
+structure. Okay. Fork
+terminal skill.
+And we're going to describe what this
+does in one sentence and describe when
+the skill should be used in another
+sentence. Okay. Cursor has some opinion
+for us. Let's uh let it tab. Perfect.
+That looks good. And we're going to use
+this when
+user requests fork terminal or we'll
+also do create new terminal
+or new terminal.
+Something like that, right? I like to be
+super clear with how these get written.
+All right. So, the purpose here is to
+exactly fork a new terminal session to a
+new window using raw CLI command.
+Okay. So, I like to have a variable
+section here. If you've been watching
+the channel, tuning into some of the
+work that we do, uh this is a common
+agentic coding prompt minus the
+cookbook. All right. So, the cookbook is
+a new pattern I want to share with you
+here. I want to have kind of simple
+enable flags. So, enabled or say enable
+Gemini CLI. And then we'll just go down
+the line and then enable raw CLI
+commands.
+Okay. And we can just actually make
+these raw booleans. That should be fine.
+I want everything enabled. So, you can
+just come in here, enable, disable
+stuff, right? Let's start with just
+spinning up a command via the raw CLI.
+And so, the trick here is that we want
+brand new terminals. And so, when you're
+operating on Mac devices, we can do this
+with something called OAS script. And to
+kind of showcase this, I'll spin up a
+new cloud code agent here and we can
+just prompt exactly what we want to
+happen in the skill. This is a great way
+to set up for building your skill. Have
+your agent just run it in the loop,
+write the prompt, observe the result,
+and then encode it in a skill. We can do
+something like this. Use OAS script to
+open a new terminal, immediately run
+FFmpeg
+help. And so, this is going to showcase
+initial basic result that we're looking
+for. Okay. So, in the terminal here, if
+we scroll up here, we should be able to
+see or we can just search FFmpeg. And
+you can see this is the command that
+ran. And as you can see here very
+clearly, it opened a new terminal for
+us. So, this is the idea, right? And so,
+we can encode this inside of our CLI
+command cookbook. Now, we don't want to
+just throw like the lazy thing to do
+here is just to default quickly to
+throwing the agent at the problem. Let's
+work once at a time here. And I want to
+showcase how you can really use the
+progressive disclosure. In our
+instructions, I'll just start writing
+exactly what I want to do and then we
+can improve it as we go on. So, based on
+the user's request, determine which tool
+to use. And we'll say follow the
+cookbook to determine which tool to use.
+And so, the first thing we're going to
+do here is define the structure. So, you
+can see here we have if, then, and then
+examples. So, we can route this work.
+So, we can do something like this,
+right? I'll create a new section here,
+raw CLI commands. If
+the user requests a non-agentic coding
+tool
+then read
+and then we'll route right to this file.
+Copy relative path. I'll say read and
+execute
+this prompt.
+Okay.
+And so, simple if
+And then we have [snorts] some examples
+here if we need it. So, we can say
+something like this, right? Uh
+examples.
+Just a few really simple examples. So,
+we can say create a new terminal
+to XYZ with FFmpeg. And then we can
+exactly with curl and XYZ with python,
+right? So, just something like that,
+right? Some simple examples to get our
+agent started. The first thing we want
+to do is get to that proof of concept.
+Prove that this works. Let's just keep
+this as simple as possible. So, the
+workflow should in essence follow the
+instructions for the first version. So,
+we'll say something like understand the
+user's request. Follow the exactly
+execute the tool. Three-step workflow,
+super concise. We should have a almost
+operational skill here. So, one
+additional thing we want to do is we
+want to build out this fork terminal
+skill. I want this to collapse into a
+concrete python script to spin up a
+brand new terminal window. So, I'll
+actually prompt this work here to have
+our agent build this out with the
+knowledge in his context window. Update.
+We'll use the at syntax here. Fork
+astral UV single file script.
+It's important to know the cutoff date
+of your language model. I know that
+Sonic 4.5 has seen the astral UV
+documentation. So, I can reference it
+just like this. Use set up sub process
+to kick off new terminal with specific
+command. And then what I'm also going to
+do here is pass in a function
+definition. All right. So, I'll say fork
+terminal and I'll use the python
+keyword. So, now the agent knows, right?
+This is an information-dense keyword.
+We're using information-dense keywords
+all over the place. Update, right?
+Astral UV single file script that
+references existing tooling, sub
+process. It might seem simple, but when
+you call these specific keywords out, it
+has a lot of information embedded, all
+right? Command. And what else do we need
+here? Um fork terminal command. Maybe
+this is good enough to start. I feel
+like something's missing here, though.
+Let's just start with that. Always
+return some string. Couple like lagging
+instructions, concise, minimal possible
+working version. So, it's going to build
+out this python file. And again, we're
+just constantly working toward that V0,
+that that first version. And for all the
+engineers, you know,
+I'm not trying to race you here. This
+can be done very very quickly. I'm just
+kind of walking through the process,
+walking through how you should think
+about building skills because there is
+going to be a skill that you want to
+define in a very specific way for great
+reuse. And you're going to want to know
+how to walk through this step by step.
+All right. And so, here we go. This
+looks great. Again, simplest working
+version. And what I want to do here is
+add another instruction here or add
+another workflow step. So, first
+understand user's request. Second here,
+I want to say read and we want to direct
+to this file. Okay. To understand our
+And so, we always want to execute the at
+least for this first version, uh we want
+to execute this right here. And so, I'm
+going to be very very specific with what
+I want done here. I'm going to be very
+prescriptive, right? I want it to
+execute this exact command. Okay. So,
+there's no confusion here, right? A lot
+of what you're doing in your skills is
+you're eliminating When you're writing a
+great skill, you're eliminating
+confusion. One thing we missed here, we
+want to make sure that our variables
+actually work. If user request is a
+non-agent coding tool and exactly this
+is true, then do this. All right? And we
+should be super clear here in our
+purpose. So our agent knows the exact
+steps. I want to say follow the
+instructions, execute the workflow based
+on the cookbook. All right? So I I just
+really want the agent to respect every
+single section that we're operating in
+here, okay? This looks great. We
+actually should have a first working
+version after this. All right? And if
+not, we have something that our agent
+can iterate on. Let's go ahead and I
+fire this off tonight. We might need
+something a little more intricate here
+for this, but let's go ahead and see. No
+dependencies up here, that's fine. Let's
+go ahead and run this. So I'm going to
+spin up a new agent here.
+So that it is aware of this agent skill.
+We can always just see all available
+skills, right? In fact, we can throw
+this into a prompt if we wanted to. This
+is kind of a, you know, one of the
+foundational prompts that you can build
+out. We can write something like
+commands and just build out some simple
+reusable prompts to help us operate
+here. All skills. List all available
+skills from your system prompt.
+Okay? And we'll boot up a new agent, and
+then we'll type all skills. And now we
+should see our skill come in here. And I
+have no available skills. So
+>> [laughter]
+>> uh you can see here I've actually
+written the skill in the wrong format.
+You probably saw that long before I did.
+Let's fix that so we can write fork
+terminal. All right? And then we can
+move everything inside of that. There we
+go. Let's rerun that. All skills. And
+this is why we test and work
+step-by-step. There we go. We have our
+fork terminal skill. Okay? Let's go
+ahead and run this. I'll clear.
+Fork terminal. Run a ffmpeg help. And so
+all we're doing here is we're getting to
+that proof-of-concept level. All right?
+And so you can see here I have the
+directory structure wrong. I actually
+need to come back into the skill and
+update that since I was using the wrong
+reference path. So skills I'll just
+start typing typing this out. And of
+course, cursor to the rescue here. All
+good. And let's go ahead and reset and
+execute this again with the proper
+directory structure paths. There we go.
+So getting that basic working example
+going. Oh, and it looks like this is
+actually still the previous version. Uh
+this is something that I wish the Claude
+Code team would work on. The skills
+here, they're not updating live, right?
+So I I do have to actually clear out my
+entire session here and then up once and
+then run this again. The actual paths
+here were not fully updated. There we
+go. Now it has that updated skilled up
+markdown file after a full Claude Code
+and since refresh. You can imagine it's
+doing this because on boot up, it is
+actually loading the metadata and
+therefore the rest of the skill
+somewhere right to the prompt. So okay,
+so we have a new terminal window open
+and it's not popping this up
+automatically. So I'll just type
+terminal here and you can uh see this
+exactly. So again, you know, we have
+both of those windows. Let me actually
+close these to make it clear. Uh open it
+again. Run one with
+ffmpeg help and one with do Claude help.
+And this will start to push us into our
+next um cookbook file.
+Okay? It ran Claude with help and not
+{dash}{dash} help. So again, we'll just
+run that one more time. {dash}{dash}
+{dash}{dash} I just want it to be super
+super clear. I want to see that this is
+truly working, all right? And then we'll
+open the terminals, close these. There
+we go. All right? This is our Claude
+help. Looks great. So this is working.
+All right? So we have that
+proof-of-concept. We're opening up new
+terminal windows and then we're running
+a command. One thing we need to do here,
+we need to be super clear here about
+running this on Windows versus on Mac.
+So we'll let the agent handle that.
+Let's hop back to this window, update
+this, add support for Windows versus
+Mac. And so I'm actually looking for
+some uh Windows-based tooling. I need a
+Windows sandbox ideally so I can quickly
+validate on both devices without having
+to open up my Windows machines. And so
+there we go. We have our simple system.
+This looks right, right? We go in
+Darwin, Windows. Looks like the right
+Windows command. PowerShell might be the
+better route here, but that's fine. We
+can always come into this file, test,
+improve, so on and so forth. I want to
+improve this workflow a little bit. I
+want our agent to always understand the
+command we're trying to run before it
+kicks it off. So what do I mean by that?
+Every CLI, every proper CLI comes with
+uh
+{dash}{dash} help, right? So for Claude,
+we can do {dash}{dash} help and it gives
+us a bunch of information. You can do
+this for, you know, Gemini CLI. You can
+do this for any tool, or sorry, just
+Gemini. You can do this for any tool and
+get an understanding of what's going on.
+So thinking from our agent's
+perspective, wouldn't it be useful if
+before it ran something, it got a dump
+of the help and then started executing?
+And what we're doing here is we're
+trading off speed and context for better
+performance, right? Because the agent
+might not know how the Gemini CLI works.
+I think this is a especially good to do
+for new tools that are changing, right?
+The Gemini CLI, Codex, Claude Code,
+right? The CLIs, the help docs, they're
+changing, right? The agents don't have
+this in their model, right? In their
+understanding of the world. And so what
+we want to do is encode that into the
+skill. So if we open up our cookbook, go
+into CLI command, right now it's just
+operating on its best judgment. What we
+want to do is give it some more rules to
+follow. All right? So I'll use AGP. This
+is my agentic prompt and it just kicks
+off a great prompt structure. Uh a lot
+of this we don't need, so I'm going to
+drop this down. What we do need is at
+least instructions. And so here we are
+executing a raw CLI command and
+instructions are here. Let's go ahead
+and just drop down to just the
+instructions here. So before executing
+the command, run
+command {dash}{dash} help to understand
+the command and its options. This should
+just help us operate CLI commands. So
+nice and simple. Notice how I'm not
+trying to look for the most complex
+solution. I'm trying to do the opposite.
+I want the simplest working version that
+gets our agents operating properly,
+right? That that that does the job for
+agents. So now our agent is going to
+read this file before it starts. So
+let's just go ahead and see this in
+action, right? We'll go ahead and boot
+up this new terminal. Curl google.com
+and we'll just fire that off. All right?
+So this should be enough to activate the
+skill. There's the raw CLI command and
+here's the google.com, right? Okay? So
+it sees that we're not using an agentic
+coding tool that we've listed. So it
+read this documentation. There it is.
+It's first running help to understand
+how this works. And now it's actually
+just going to boot this terminal up. And
+okay, so we got access to night here.
+Let's see if this works. There we go.
+Okay, great. I need to actually open up
+permissions on that file. There we go.
+So if we hit terminal here, we can see
+that we have just curled Google. Okay?
+Things are working. It's listening to
+the instructions, working step-by-step.
+Let's go ahead and scale this up. All
+right? Let's push on to our agent files.
+So how do we want our agent files to
+work? We want to open up brand new
+terminal windows with prompts executed.
+Let's first run this in the loop inside
+of a terminal. We're going to open up a
+brand new instance here. Never be afraid
+to just start fresh. You always want
+that fresh context window. So I want
+this to kick off a brand new Claude Code
+terminal running the Haiku model and I
+want it to run in yellow mode. I'm
+starting to set up how I want this to
+run exactly in a new terminal. So let's
+run a version right here. Run Claude
+help to fire a new terminal prompt the
+Haiku model with ping. So that should be
+it. Let's see how this operates. So
+first, our agent is learning how to use
+this, right? It's learning how to use
+Claude. We're then using OS script to
+fire a new terminal and then we're going
+to prompt the Haiku model because it's
+seen the help docs. It knows it can just
+look for Haiku. It's actually starting
+to look at the skill. I don't want it to
+do this here. So I'm just going to stop
+it. Ignore the skill. Just run this
+directly. All right? So you can see it
+has the documentation, right? It ran
+that {dash} help, so it knows how to run
+this. So if I open up the terminal here,
+uh there we go. We have our Haiku model
+automatically kicked off this ping
+prompt, right? And it did this with
+{dash} p. Okay? So it is running this in
+non-interactive mode. This is a good
+start. We can encode this now. What I'll
+do here is I'll copy the CLI command cuz
+I like this as a starting place and I'll
+open up Claude Code, paste this in,
+execute a Claude Code agent. Create a
+new to execute the command. Run help
+docs. So I do want it to understand the
+documentation. And now we're going to
+add some rules here. So how do I want
+this agent to operate Claude Code? I
+want it to always use um interactive
+terminals. Leave off {dash} p. I'm going
+to add a variable sections here.
+Fast model, we'll just say Haiku. Base
+model, that's going to be Sonnet. And
+soon we're going to have our powerful
+slow model, Opus. For now we'll just
+keep rolling with this. I'll also say
+default model, Sonnet, for the {dash} m
+model argument. Use default model if not
+specified. If fast is requested, use the
+fast model. And then we can say the same
+thing, right? I'll I'll just go ahead
+and add this. We know it's coming, so
+I'll say heavy model, Opus. And then
+exactly, if heavy, use the heavy model.
+All right? This might be all we need,
+right? Because we're teaching the model
+how to use the tool with {dash}{dash}
+help and then we're giving some details
+about how we want this to operate. The
+one other thing, I pretty much always
+trust my models here, so I'll say always
+run with Claude {dash}{dash} help grep
+danger. There we go. Dangerously skip
+permissions.
+Our agent's going to see this. And then
+what we can do here is come to this
+documentation and add the other
+cookbooks for our other use cases. And
+you know, to be clear what we're doing
+here, this is like code-based structure,
+right? This is ultimately additional
+resources. This is how we're really
+pushing on the progressive disclosure
+abilities, right? But I like to call
+this cookbook because we're kind of
+showing recipes for when to use each uh
+specific set of tooling. Claude Code.
+And then shout out to Cursor that their
+auto-complete is insane. If the user
+enters a Claude Code agent and enable
+Claude Code is true, then we do this,
+right? Then we read the cloud code docs.
+Some examples are always helpful, right?
+Just three simple examples. Fork
+terminal, use cloud code to XYZ, right?
+It doesn't need to be super detailed,
+but you just want some, you know, notion
+for how things work. Fork terminal, spin
+up a new terminal, request XYZ using
+cloud code. Okay? There we go. That
+looks great. And now since we're here,
+we have established a pattern, so we can
+do this. Let's see how cursor in line
+does classic command K prompting. I'll
+say continue
+for Codex CLI and Gemini CLI mirror
+this. All right, so let's see how
+correct this is still. Looks great.
+Looks great, right? We got everything
+right. That's exactly what we were
+looking for. You can use prompts
+everywhere. You can use agents
+everywhere. It's all about accessing
+more compute to get the job done. So,
+fantastic, right? We have all of our
+docs, our cookbook properly routes and
+progressively discloses information to
+the right place when needed, and we can
+just double check this. Right? Cloud,
+Codex. Let me turn regex search on and
+we have Gemini. Fantastic. So, this
+looks great and we have everything
+enabled. Let's go ahead and try this,
+right? Let's see how we can spin up a
+brand new cloud code. And since not
+quite forked, because we don't have our
+summarization prompt yet, we're getting
+to that. Let's go ahead and spin up a
+new instance. You can see this is a very
+common pattern. I do it, you know, you
+want to start fresh. It's easy to know
+what your agent has seen when it's seen
+nothing. Okay? Let's go ahead and close
+everything else. We're trying to kick
+this off. Let's see how this skill
+works. Fork terminal, new cloud code,
+and then I'm going to place this in
+quotes. List your current working
+directory. So, we're going to invoke the
+fork skill. It's reading the
+documentation, it understands we want a
+cloud code instance, so there it is. We
+have a conditional prompt, right? That's
+what progressive disclosure is. It's
+conditionally looking at additional
+documentation. This is in fact a
+conditional prompt, and there we go. Our
+help command is running, and now we're
+going to fork, and it's running with
+those exact settings that we requested
+and the instructions. Okay? And now it's
+working on a brand new terminal window,
+right? And and we're starting to see why
+this is useful, right? I just took some
+work that I wanted to do, moved it to a
+new terminal. We have a terminal here,
+and we should see this working. There we
+go. There is another issue here. We are
+always opening up to your root
+directory. I want all my forks to open
+up against the exact same window. So,
+we're just going to prompt that. Update
+this, ensure we open the forks to the
+current working directory. And it's been
+a while since we've committed code, so
+I'm just going to run my hot key here,
+GSTC. It's just going to commit
+everything with a simple progress
+message. If you've seen any of my repos,
+you see probably tons of these. There's
+that. I just wanted to commit that, so
+that if something goes wrong, we can
+always revert with Git. So, we're at a
+good place where there's actually
+interesting work worth committing. And
+then we can do things like this. We can
+come into the terminal, get diff, see
+the work done. You can see here that we
+are first going to CD into the current
+working directory, and then we're going
+to do the work. That looks good. I'll
+leave this agent here since it has the
+context of operating this. On a micro
+scale, I could have done all this with a
+single agent, but this is just good
+practice, right? It's great agentic
+coding practice. As you're spinning up
+agent after agent after agent, working
+on problem after problem after problem,
+you want fresh context windows, you want
+them to be focused. All right? New
+window. Okay, so if I run PWD there, you
+can see we're in this fork terminal
+skill code base. Now, I'll clear, and
+then I'll hit up up a couple times, and
+we should get back to that fork command.
+List your current working directory.
+Let's fire that off. This is working
+here. It understands how the tool works
+before executing. And now it's going to
+kick it off. All right? There it goes,
+it's running it with UV. I should
+probably add some documentation around
+preferring Astral UV. But we have a
+fork. Let me go ahead and open this up
+here, and where is our new window here?
+I'm looking for this new window. I don't
+see it. And so what might be happening
+here is uh you can see we're only
+capturing STD out. We probably want to
+capture everything. Not getting any
+results. Make sure we capture and error
+and catch if something goes wrong. Keep
+it simple. All right, so something here
+is not working. Our agent can't see it.
+We're not getting any result back from
+executing this script. And so we want to
+make this code more agentic so we can
+get concrete output every time it runs.
+There we go. So, this time we got an
+error. You can see STD error. We have
+more agentic code, right? Our agents can
+understand what's happening. Now we're
+going to do some string replacing, it
+looks like, which looks a little
+complex. I don't like that. We
+definitely always prefer something
+simpler, but let's see how this looks.
+There we go. All right, so cloud code
+worked through key escaping issues for
+us. That's good. We probably will want
+to simplify this at some point, but
+let's go ahead and see if this works.
+There we go. You can see here we have a
+brand new terminal. Uh which one is it?
+Not this one. Not this one, that's our
+old one. It's this one here. And if we
+run PWD, you can see we are in our
+directory that we were looking for. So,
+this looks great, right? You can see
+current working directory with the
+files. So, this is working, right? So,
+what are we doing here? We're building
+up a skill that lets us fork terminal
+windows and add specific information,
+right? We want it to fork windows in a
+specific way. So, what I want to do is
+have our agent do this same work for
+Codex and Gemini, right? Just like how
+it wrote the cookbook instructions for
+Codex and Gemini. So, we'll have a brand
+new agent here, and I should start
+cleaning up my agents at some point.
+Understand skill. And so this is where
+our prime command starts becoming
+useful, and we can quickly, simply build
+that out here with prime.md AGP, agentic
+prompt. I'm just building a simple
+prompt to help the agent understand how
+to operate this code base, right?
+Understand this code base and report
+your understanding. Read. Or we can
+actually just do this, right? Use this
+direct syntax. Read the read me, and
+I'll say this here. I also just wanted
+it to read everything, so I'm going to
+say read the entire cookbook and tools
+continue with at syntax.
+Using some cursor here to leverage
+in-editor prompting. That should be
+good. So, now we have a new agent. Let's
+close. Let's reset. Let's run {slash}
+prime. And now we're just going to read
+everything, and our agent should be good
+to go with operating this. It should
+report its understanding now, and then
+we can start prompting against this,
+right? So, just a quick way to get your
+agent up and running with everything
+without bloating up a memory file. You
+can see here that we have the raw CLI
+and the cloud code integration Mac
+Windows support fully integrated, but we
+don't have Codex or Gemini. So, let's go
+ahead and fix that. Mirror cloud code
+and build out Codex and Gemini. All
+right, so I'm just using at reference
+here to move a little faster, and then
+I'm going to say this. Before you start,
+understand the CLI. We want the exact
+same version of Codex and Gemini like
+Claude has. And, you know, to be
+specific here, I'm saying default
+models, models help, Yolo mode. And
+yeah, that should be it. Okay? Once you
+have an existing pattern, you can scale
+it with your agent. So, kind of run
+which and then we're going to run the
+help commands. And now what we should
+see here is the equivalent versions for
+both Codex and Gemini CLI built out. And
+so it probably is having some trouble
+here figuring out which models to use.
+Exactly, yeah. So, it's not sure what
+models to use. So, I'm going to stop it
+here, and I'm just going to be really
+specific, right? I want that new Gemini
+3 Pro model. For Gemini, use Gemini 3
+Pro preview as base. For fast, use I
+think it's Gemini 2.5 flash. Um let me
+just open up the Gemini CLI here quickly
+to make sure that I'm right about that.
+If I go to models here, okay, Gemini
+2.5. So, we're going to say 2.5 flash.
+For Codex, same deal, right? We need to
+specify the exact models we want to use,
+and we want to use this model as base,
+and fast is What do we want for fast
+model? Let's go ahead and use 5.1 Codex
+mini. So, I'm just going to copy that
+and paste that. This is something that
+we could have, you know, solved in the
+planning step, but it's fine. We're
+working here in the loop anyway. It is
+important to note that, you know, a lot
+of the detail we're working through
+right now, we probably could have
+figured this all out through the
+planning phase. Just by working through
+it, thinking through it, each one would
+need. We could have started actually
+writing out each one of these prompts.
+But um we're doing great here, and our
+agents are getting the work done for us.
+You can see there is different Yolo
+syntax for Gemini versus Codex. Fast
+model, heavy model, base model. We can
+tweak our variables here for every
+prompt as we need, but uh this looks
+good. Let's go ahead and test it out.
+The advantage that we're getting to with
+this forking is starting to come alive
+here. Let me go ahead and commit
+everything here, and we're going to open
+up a new Sonnet window. Fork session.
+New we'll use Codex.
+Fast model. Let's say Codex CLI just to
+be super clear. Fast model. Uh summarize
+what all of the {dot} Claude commands
+do. We're spinning up a brand new Uh-oh.
+So, our agent is uh trying to do this
+work by itself. Okay? This happens. Uh
+let's see. Let's make sure that we're
+saying the right keywords here. Fork
+terminal. What did I say? Fork I said
+fork session. All right, so let me just
+add this to the description of the
+skill, so our agent knows fork session
+command exactly, right? Just to be a
+little bit more clear with our
+prompting. Don't assume that it's the
+model's fault. First assume it's your
+fault, and then if you really prompt
+engineer properly, then you can assume
+it's the tooling's fault. All right?
+Let's just run that again. Fork session.
+We want new Codex CLI fast. Summarize
+what all the blah blah blah do. There we
+go. So, now it's running that skill for
+us. It can be so easy to just blame the
+model, but you really have to blame
+yourself first, blame your tooling,
+blame your understanding first. All
+right? More cases than not now, you
+know, as we've talked about in previous
+videos, the limitation is not the
+models. It's not the agents. It's you
+and I, right? It's what we're doing with
+these tools. And I really got to open up
+permissions on this file. I'm just going
+to do that now. Um copy, and I have a
+command for this. I'm going to close
+this one. CX this. There we go. That
+should open up permissions. Okay? So, if
+you open up the terminal here, there we
+go. We have a brand new agent running.
+We kicked this off from our cloud code
+agent. There we go, right? Very simple
+stuff. But you can see how powerful this
+can be. I talk about scaling your
+compute to scale your
+One of the reasons I did this is for
+this reason, right? We can do We can do
+things like this. Fork new codex CLI
+fast model and we will will test with
+Gemini here, right? Gemini CLI fast
+model use one fork per file. I'm going
+to say summarize what all of the star.md
+do. Okay? So, let's be super clear about
+what's happening here. I'm saying fork a
+new Gemini CLI fast model. Okay, great.
+Use one fork per file and I can be even
+clearer here, right? Use one terminal
+fork create. Okay, so let's kick this
+off, right? Let's see if this works
+properly and here this is like prompt
+engineering, right? If this is now we're
+getting into the the space where we need
+to prompt engineer how this works
+exactly. So, um there we go. Are we
+using the skill here?
+Um we are. Fantastic. Okay, so that is
+running. Great. You can see the out and
+the return code. We're getting some good
+feedback, right? Good agentic code and
+there we go. So, we have four agents in
+new terminal windows each looking at a
+different file. Cloud code is doing too
+much. Cloud code is great for this and
+it's also not great for this and by
+Cloud code I also mean, you know, Sonic
+4.5 it went ahead and did summarize
+itself. But if we hit terminal, this is
+the actual summary. This document
+describes how to set up a Cloud code
+agent and execute commands. This file
+describes how to execute a raw CLI
+command. Okay, great. So, you can see
+these are working and again, I I really
+want to focus on scale, right? Why did I
+build this tool? Why do we need to fork
+sessions? It's so that we can once again
+on another dimension scale our compute
+to scale our impact. With this skill,
+you can now spin up and fork what we're
+we're getting to the fork portion here
+in a second, but we can effectively fork
+context [music] windows to operate in
+brand new context windows with new
+agents or just run a CLI [music]
+command. All right, so we're starting to
+see that value proposition come through
+here. The last piece we need to focus on
+here is making sure [music] that we
+actually fork. What does that mean? We
+need to create a summary just like the
+compact command does. [music] It
+summarizes all the existing messages and
+resets the context window. You always
+lose information when you run this, but
+it is, you know, a good stopgap solution
+for resetting the context window while
+maintaining the current task at hand.
+So, we effectively want to do that for
+our fork summary user prompt. We want to
+program our agent to use this when we
+say summarize, right? Or when we specify
+that we want to also summarize.
+Effectively, we need our agent to
+summarize the work it's done and then
+pass the summary into the agent and
+clearly state this is the previous
+summary and then fire the prompt. So, we
+can set up this as a prompt template for
+agent to run. I'll use AGP and this will
+make sense as we build it out. So, the
+key here is always to remember who's
+writing to who. We have an agent base
+agent
+is writing to our fork agent. To be
+super clear here, we're going to pass
+this prompt into this agent and let me
+just get rid of all this, right? And
+write it this way. And so, this is the
+relationship, all right? So, our base
+agent is going to write this prompt and
+it is going to communicate to the fork
+agent. Okay? We can do this in the
+simplest way possible. Prompt history
+summarized user prompt and we'll do this
+in YAML format, right? Just to make it
+super clear for our agent. This will be
+summarized user prompt and we want
+objects here and let's be even clearer,
+right? We have history here and then we
+have summarized user prompt and then we
+have response summary. And then we want
+to continue this pattern and let's get
+our tabs right here. Make sure that
+everything is tabbed properly. This is
+the history of the conversation between
+the user and agent. Take this and use it
+to understand the next user's request,
+okay? And then we'll write that next
+user request.
+Fill in user prompt here for the fork,
+okay? This is in fact a template meta
+prompt. Why is that? It's because we're
+having an agent, right? Our base agent
+is going to fill this out using this
+format and then it's going to write this
+message, right? Filled out to our fork
+agent as it's starting prompt, okay? And
+this is going to, you know, create a
+simple, concise history, include
+summarized versions of your conversation
+with the user. This way our fork agent
+has a history of the conversation and
+can better understand the user's
+request, okay? So, very powerful stuff
+here. Now, we have this fork user prompt
+nice and simple. You can make this a lot
+more complex. What do we need to do
+here? We need to make sure that we
+update our skill so that this is super
+super clear. We should do this in a
+dedicated instruction here. So, I'm
+going to use a H3 fork summary user
+prompts. So, we need to set up the
+condition here. So, if the user requests
+a fork terminal with a summary, then
+with the history of the conversation
+between you and the user so far and
+include the next request exactly, okay?
+Examples. And so, we need to be super
+clear here. This only works for our
+agentic coding tools, okay? And I'll
+create a variable here because I don't
+want to keep rewriting this. Agentic
+coding tools exactly. The tool must be
+enabled as well, all right? So, here
+we're specifying our agentic coding
+tools and now we'll be able to create a
+summary. This is where things get a
+little tricky and where uh the
+intelligence of the model really
+matters. So, let me be more specific
+here with the summaries. Fork terminal
+use Cloud code to XYZ summarize work so
+far. Include summary with summary.
+Now with this, we're going to run this
+as the prompt, right? And let me be
+super clear here. Then, I'm going to tab
+into this. This will be what you pass
+into the prompt parameter of the agentic
+coding tool, okay? This should be
+everything we need to have a forkable
+conversation window to boot up new
+agents. Let's test it out. Let me just
+like write a couple prompts here. What
+does FFmpeg do? I'm just setting up some
+history to be compressed and summarized.
+Are there any other tools like it? You
+can imagine you've been working with one
+agent for a while. Now, we want to fork
+it. Okay, now we want to create a new
+conversation. Fork session codex CLI.
+Let's run fast again. Summarize work
+done and, you know, you can kind of like
+list this as like attributes, right?
+Fork session codex CLI fast summarize
+work done, right? So, we're kind of
+enabling a bunch of features and let me
+spell this properly.
+Summarize work done and then here's the
+prompt. Understand this code base then
+write a 20-line summary in the readme.
+Okay, let's see if this works, right? We
+have fork activation codex CLI. It's
+going to progressively disclose the work
+we want done fast so it selects a model.
+It's going to summarize the work done,
+okay? So, there's a lot going on here,
+but it should all be handled in our
+skill, okay? So, let's see how this
+goes. Good. Fork terminal red, codex CLI
+red, fork summary user prompt red. There
+we go. Fork summary prompt with our
+conversation, okay? So, this is not
+right,
+>> [laughter]
+>> but this is what it's going to pass into
+the agent. So, you can see here it's
+actually just updating this file and let
+me go out and be clear with my
+instructions. Uh if you open up the
+terminal here, we do see that this is
+the prompt that's running and you can
+see it actually did pass the right
+prompt, but it updated the file. We
+don't want it to update the file. So,
+let's be clear here. To be clear, don't
+update the file directly. Just read it
+and use it to craft a new prompt for the
+new fork agent, okay? And I'm going to
+go ahead and use the important
+information dense keyword so that the
+agent really respects this, okay? But
+this is great, right? We did actually
+get this right and if we scroll up here,
+you know, you can see our summary,
+right? YAML summary, right? User prompt
+agent response, user prompt agent
+response, right? User asked what does
+FFmpeg do? Explained it. Is there any
+other tool like this? Lists several
+other tools, right? So, we are getting a
+good summary of the work done, right? We
+are effectively forking the context
+window, handing off context to another
+agent concisely, all right? So, we're
+almost there. Let's go ahead and see if
+this, you know, one line in our
+instructions worked. So, we're going to
+clear. Actually, let's go ahead and
+resume that session and I'm going to hit
+escape to roll this back, right? So,
+this is a cool feature inside of Cloud
+code. You can rewind history. I'm going
+to go back to this command here and now
+I'm going to hit up and now we're going
+to do that fork once again. It's reading
+all the files as expected. There we go.
+Codex help. Now, fork the context
+window. I'll include the conversation
+history. There we go. Okay, there we go.
+So, it didn't overwrite any file and I
+actually forgot to revert this file from
+the change. So, I'm going to hit control
+Z there, okay? And now check this out.
+Our agent, if we scroll up here, you can
+see we kicked off a new agent. We're
+using codex 51 mini and here's the
+prompt, all right? So, this is exactly
+what was passed in. Prompt history. We
+have a nice summarization of the
+previous conversation and the next user
+request. And right away codex kicked
+off, right? We effectively forked the
+context window with a nice summary and
+now it is understand this code base,
+write a 20-line summary in readme. And
+uh let's see what it's done here. Okay,
+so yeah. So, this is a codex high model
+so you can see it's not formatted very
+well, but uh this is the advantage of of
+the fork, right? We can now say improve
+formatting, right? Something like that.
+Whatever you want to do. Okay, there we
+go. Very nice, right? Much better. Here
+we created a skill from scratch and we
+kind of walked through all the pieces of
+it. We put together a reusable prompt
+that our agent can operate. We have a
+dedicated tools directory. We have a
+cookbook of specific use cases and a
+specific tooling and of course we have
+that central skill.markdown file, the
+most important piece with a couple of
+static variables that we can tweak and
+tune that our agent will, again, if it's
+if it's sufficiently intelligent, the
+agent and the LLM will properly manage
+it, all right? This has been creating a
+skill from scratch. Skills are important
+because they put together reusable code
+and reusable prompts. Don't let any new
+grand feature release or model confuse
+you. The only things you need to focus
+on are the primitives that make it all
+up. Context, model, prompt, and tools,
+the core four. If you understand these,
+if you master these, you'll master the
+agent, you'll master engineering in 2025
+and 2026. I'm going to clean this code
+base up a little bit, clean up the read
+me. I'll fork some more agents to
+operate in parallel in new instances.
+This will be linked in the description
+for you so you can give this a shot and
+understand what we built out here from
+scratch from the ground up. If you like
+this video format, kind of more raw
+agentic coding where I show the whole
+process and kind of go behind the
+scenes, a lot less hype.
+If you like this, drop a comment, let me
+know. You know where to find me every
+single Monday. Stay focused and keep
+building.

@@ -1,0 +1,2231 @@
+All right, welcome back everyone. Um, I
+think this week is going to be a really,
+really fun conversation between Dasher
+and I about a topic that I thought was
+going a little viral for a bit. Uh, many
+of you might have seen the Manis paper
+that came out about all their findings
+about context engineering and other such
+related things about what benefit um
+what benefits that they saw with some of
+the techniques that they did. For those
+of you that didn't, no worries. we're
+gonna go describe all of them and we'll
+talk about the trade-offs. But I think
+in general the most interesting thing
+about that whole thing that I saw was
+just how deep this stuff goes. Like it a
+lot of us take for granted or it's like
+we learned the first level. It's good.
+But a lot of the stuff goes really deep
+and it's all based out of the
+foundational stuff behind how these LLMs
+work. It's not always even obvious how
+you would predict that if you don't
+actually understand how an LM produces
+tokens. I think that's kind of what we
+should talk about today and how these
+findings cannot Go ahead, Dexter.
+>> Sorry. No, and like I I really love the
+the way you frame that which is like um
+there are things that are just
+completely beyond your understanding and
+they're not hard to understand, but if
+you don't know to learn about them and
+you don't know to go research them and
+figure out how the stuff works under the
+hood, uh because none of us is going to
+go and get a machine learning PhD in the
+next two weeks. But um if you can find
+certain things and find understanding of
+how things work under the hood um there
+are certain slices you can take of that
+knowledge that can make you a much
+better AI engineer.
+>> Yeah. And I think part of the
+conversation today is not just going to
+be about how what those learnings are
+but how you could derive them for first
+principles so that you can go on and
+perhaps find new things on your own
+because I think that's the most valuable
+insight. It's not about being able to
+copy what other people do. It's being
+able to figure out what is a thing that
+you can invent and help the rest of us
+along the way because if all of us with
+all our different backgrounds can go and
+investigate these areas, I think we can
+converge on what makes good AI pipelines
+way faster as a general community
+building this stuff out.
+>> So,
+>> with that,
+>> do you want to do quick intros and then
+I have a quick announcement and then
+let's get into it.
+>> Um, cool. So, I'm Dex. Uh, I, uh, well,
+the announcement is basically if you're
+new to the show, we post every episode
+on GitHub. Um, and so you can come here
+and see all of them. Uh, if you're
+looking for the recaps of the context
+engineering for AI agent stuff, you can
+find that here. We've done a lot of
+episodes on context engineering in the
+past. Um, and so just another reminder,
+encouragement, we put all of the links,
+all the show notes will be here in the
+Git repo, um, including links to sign up
+for the next episode and all the
+whiteboards that we publish. So, um,
+without without, uh, further ado, I'm
+Dex. I'm the founder of Human Layer. Um,
+we've been doing the show since March.
+Uh, and uh, this is this is AI that
+works, where we teach you to be a better
+AI engineer. I don't know. By, you're
+gonna have to you're gonna have to pitch
+the show for me.
+>> Um, I'm Bob. I write some code. That's
+about it. Let's talk about fun stuff.
+Let's get to the meat.
+>> Let's do it.
+>> Um, one second. Context engineering.
+ESD. Cool.
+And now I'm going to go ahead and
+screen.
+So, I want to go straight into the manus
+paper and just go talk about this uh
+from the very beginning. I Dexter, I
+don't have a second screen today, so
+you're going to have to keep be on the
+lookout for questions people ask and
+just let me know
+>> as we go.
+>> So, I think
+>> you want to make me a host.
+>> Yes. I'm surprised I did not do that
+already.
+>> All right. So, the first thing is like
+what is Manis? For those that haven't
+seen, it's a pretty pretty cool project
+that got a lot of popularity. Um, it's
+based I've not signed in. It's bas uh
+they still have the the like videos on
+the website where you can like see the
+like example use cases.
+>> Yeah, I think it's probably worth
+looking at because I think it tells you
+roughly what it is. It basically kind of
+just does stuff. It's an agent that is
+very generalized and does stuff. Um, and
+it's really impressive what it was able
+to do.
+Um, from it's going to make me sign and
+I'll show you guys. And I think part of
+what made this app so viral and
+impressive is the fact that these folks
+figured out some ways to
+stop asking just let me show you
+what to do. But you'll notice, okay, I
+don't have enough credits. Okay, I
+already used all my credits when I was
+doing this earlier. But um part of what
+made the app really impressive was just
+how broad of a task it was able to do
+and how like how high quality it was
+able to handle for the generality of
+what it did. And there's small things
+like I don't know if you guys noticed
+just like when I was even on the
+homepage
+there's small things here that get
+really fast. I do this and it
+immediately fills in these things. How
+is it so freaking fast? We're all using
+the same models. It's not like they have
+anything special under the hood. And
+these small things around how they
+design the UX, how they design the
+interfaces, how they make the models
+slightly faster are what I think made
+Madness go viral because it's one of the
+first apps to go do that. I think when
+they announced on their techniques, one
+of the most talked about techniques was
+around this idea of a KV cache, but I'll
+talk about that in a little bit later.
+Um, it talked about another concept
+called masking not removing. And there's
+this concept when we use MCPS which goes
+around this idea of like how do you deal
+with the fact that I don't want to give
+my model every single tool all the time
+and why you don't want to do that makes
+sense cuz I don't want my model to be
+dumb and like have choices between tools
+it shouldn't have. If it's going to
+choose between writing a document and I
+know the user wants a notion document,
+don't give it the Google Docs tools.
+That is literally just going to confuse
+it. That makes a lot of sense. But
+there's trade-offs in this and what
+happens. So we'll talk about that in a
+second.
+It talked about how you actually
+engineer for super large context and
+context compression. I didn't use that
+word specifically, but I think that's
+what they were hinting at, which help
+you intelligently compress context when
+you have
+>> and it's using right.
+>> Yeah,
+>> this is using basically the same tools
+that agents already know how to use a
+file system basically. And so it becomes
+a really nice way for the agent to
+organize its own memories, right?
+>> Kind of at least from what I understood.
+It might be slightly different. Um, and
+I think the other thing that I thought
+was um, when he talked about this
+concept of how it actually summarizes
+steps, this was very similar if you were
+here in last episode when Dexter was
+talking about how it he does
+summarization for his coding workflow
+where he does like a research step, a
+planning step, and then an execution
+step. And the whole idea is you're able
+to compress context in a more concise
+way simply by some of the techniques
+that they discuss here. Um, they talked
+about keeping the wrong stuff in and
+like how that hurts your system. And
+then thing that I often say which is
+fuchia prompting sucks. They talk about
+why they also found fuchia prompting
+sucks
+uh more often than not but we'll go into
+some of these now for everyone else. Um
+just to give us an idea how many of you
+have actually read through this or have
+ideas around what this thing is so we
+know what kind of conversation we're
+going to be having today.
+>> Is this the one that mentions I think I
+saw it as you scrolled up the number of
+tool uses that an agent should make.
+That's something I remember. I can't
+remember if that was talked about here
+or not.
+>> No, that's not this one. This one does
+not talk about the number of tool uses.
+>> Okay, so that was like five or something
+that I remember.
+>> Perfect. In that case, let's just start
+with the first one. Designing around the
+KV cache. I think that is the most
+interesting one out of all of them
+because it really inspires
+um for everything else around this. And
+there's no reason to actually do any
+pre-ereading. That's kind of why we have
+this conversation over here. Dexter and
+I do this stuff for fun and we just get
+share about it with you everyone.
+>> So, one second. I'm gonna go screen
+share, but I think the most important
+thing I'm gonna want is a whiteboard.
+So, let me pull that up, Dexter.
+>> Oh, yeah. Let me let me ship you a
+whiteboard.
+I'm just gonna buy you a $7 a month for
+a whiteboard account. Just Just
+>> I don't know if you just like it because
+the best part is when you do it, I can
+ask you to take the screenshots and not
+me. [laughter]
+>> Fair enough.
+Um, I sent it to you at Slack.
+>> Perfect.
+And I'm going to go back to screen
+sharing. So let's talk about what it
+means to design around the K KV cache.
+So firstly, when we're act what does it
+what what does a KV cache mean? What
+what is actually happening? So let's
+just start off with the basics of what
+an LM is. An LM is a thing that takes in
+a bunch of tokens, spits out a bunch of
+token probabilities and then you somehow
+will apply some algorithm typically like
+a soft max or something.
+um
+to then pick out what is the token that
+I should actually be selecting.
+And these are just probabilities of
+final output tokens. And once you select
+your next token, then the LLM will take
+this thing back. I don't know how to
+draw this arrow, but I suspect will fix
+it for me. It'll add this to it'll
+append this selected token to the very
+next um uh item on the array. and then
+it'll just append it and it'll go back
+in a loop over and over again. Most of
+us probably know this how alams work.
+The thing that I think a lot of people
+don't realize
+is this if you've done software probably
+looks like a dynamic programming
+problem. This looks like a thing where
+you have almost the same array going in
+over and over again but then you just
+have one new element every single time.
+It sounds like we should be able to
+repeat some of the math and not have to
+redo everything all the time.
+If you actually go look into here, what
+you'll find is the LM has some
+architecture stuff in here that allows
+it to not have to repeat all the math
+all the time, assuming that you have
+some of the stable, some stability
+guaranteed. So you can premputee some of
+this stuff as a part of the encoder
+decoder layer that the LM has inside of
+itself. The problem is that precomputed
+section is purely dependent on
+continuity. So you it's very hard for
+you to premputee
+um like random segments of it. What you
+can do is much easier to premputee
+chunks of it along the way. And I should
+be using different colors.
+So you can premp compute this part, you
+can premputee this part, and then you
+can premputee this part.
+>> I I'm sorry. I'm not quite clear what
+like the vertical access means in here.
+>> What I mean by here is like the tokens
+going in. These are all the tokens that
+are in from like index zero. So I should
+what I mean by here is like this is
+index zero this is index one
+and like these are just tokens
+>> okay zero index zero index one might be
+like
+>> the word exactly
+>> it would be like
+>> think of it like a string that I drew
+vertically because of how the model is
+laid out and that's easier for me to
+think about
+>> uh and then you have like index like
+>> I see okay so you're caching the first
+three words in the sentence and then
+once you come back with this next like
+once you come back with the the fourth
+word in the sentence here that is like
+four
+uh
+and then you ask okay what's the next
+token all of all of this part of it
+basically is is cached all the math for
+this part of it is cached and so you're
+just kind of like taking that pre-filled
+um whatever they're like matrix of the
+meaning of what's being accumulated in
+the transformer and so you're just kind
+of it's all cost and timing, right? It's
+like it's much faster to just say,
+"Okay, cool. Now here's the next token.
+Now give me the next inference bit."
+Right.
+>> Exactly. And just to be very clear, like
+I know some of you are like, "Ah, but
+technically doesn't the walking word
+impact what all the other words mean. So
+like how can you actually cache this?"
+Very
+>> great question.
+>> Turns out
+>> I would not have asked that question.
+That's a great question.
+>> Well, it turns out the transformer has
+like two different parts, encoders and
+decoders that are all laid out.
+As it turns out, you don't actually run
+all the computation all at once. You
+actually break down the input string
+into smaller subsequences of strings
+that then can each be individually
+computed and then you can go on stacking
+that along the way. So if you go on to
+like Enthropic's caching docs,
+um we just go here for example,
+you'll find that Enthropic has a minimum
+cacheable prompt. They do that because a
+problem less than 10 24 tokens probably
+doesn't fit in whatever cache alignment
+block that they have for actually doing
+the computation behind some architecture
+decisions that they have made. And it
+wouldn't make sense for them to catch
+that because it's basically throwaway
+work because every token outside of 124
+is going to cross compete cross um uh
+need to do some like cross tension stuff
+and actually layer the information
+between the words. by the 124 boundaries
+they probably have some layer of their
+network that can be done in parallel and
+have deterministic results. So that is
+why it's not just important to go read
+the docs but just to understand that
+there's some architecture decision that
+everyone implementing these models is
+going to make that dramatically changes
+how fast this works and some of you
+might be wondering why is it so much
+smaller in opus versus haiku one
+intuition I could have I don't know
+can't guarantee it is that it's possible
+that these haiku models use a different
+token vocabulary that is much smaller
+than the original models therefore
+they're able to compress it better or
+these These might be uh these might be
+using float 16 instead of float 32 or
+float 64. So they can comp double
+compress it along the way in terms of
+how much data they can stuff into the
+same amount of comput computational
+unit. But I think the point stands is
+that there's some computation in every
+uh LLM that can be cached to some degree
+of it and that the amount of degree that
+can be done is based on how much
+similarity you have and how big of an
+input space you have that is changing.
+But what that is to say is that if you
+are constantly running a chat thread and
+you're dynamically changing the system
+message all the time somewhere in here,
+you're basic basically breaking the
+entire KV cache every single time. That
+means you're having to recomputee all
+the work always and you can't take any
+benefit of the caching system. That
+means
+>> so just just to make this a little more
+concrete um can I like just draw a
+little bit more? So like let's say you
+have your your system prompt here.
+>> Yeah.
+uh system prompt and then you have your
+tools are technically like end up part
+of the system prompt but I'll just put
+them separately. The idea would be like
+if at some point you wanted to tell the
+agent like okay based on some decision
+that's happening way over way over on
+the right here uh we want to make sure
+that the tool set is like only
+browserbased tools or whatever it is.
+>> You've basically you're going to get a
+slower iteration speed on the max token
+that gets generated.
+>> Yeah. So when you change this, you
+completely if you just like even if
+you're just removing stuff, when you
+change things, you completely kill the
+cache. And so this has to be recomputed
+from scratch, which is going to be way
+slower and also like four times the
+cost.
+>> Exactly. There's another subtle thing
+that probably isn't even obvious here.
+Almost everyone I know that's doing some
+sort of chatbot will say like date
+in here in their system prompt
+>> and that
+>> that's killing the KV cache for no
+reason. You're literally just hurting
+the cash every single time.
+>> I mean, if you include the time, right?
+If you just put the date, it might be
+okay, right?
+>> Yes. If you're putting the date, sorry,
+I should you are correct on that.
+There's some time resolution that you're
+definitely killing the KB cache. But
+even if you don't include the date, if
+you have a longunning thread, like last
+time we talked about DRM that was coming
+through from that uh last time, the
+problem with DRM is it's a long process
+>> decaying resolution memory. There's like
+the context engineering for a model that
+can remember stuff that happened months
+ago.
+>> Exactly.
+>> Not a model, but an agent.
+>> But in that case, today's date is going
+to break the KV cache all the time.
+You're just going to be slower for the
+entire workload that's happening. It's
+generally always going to be good to put
+the dynamic stuff of your system as late
+as possible. That means if you have a
+giant chat thread that you're running
+on, it might actually be if you want
+like the best performance.
+Why is why can't I not draw a rectangle?
+it's probably going to be better for you
+to have system prompt or your chat
+messages and then your like dynamic
+variables at the very end because then
+as your chat message grows, you're
+actually going to have the ability to KV
+cache a chat history as well along with
+everything else. So it's better to say
+today's date at the very end of this
+rather than putting it anywhere
+beforehand even at the end of the system
+message.
+I don't know if these kinds of things I
+see
+>> align with what
+>> this is.
+>> So I imagine you're going to go to the
+point of like oh if you really want to
+dynamically change the tools and you
+don't want to think about what we're
+about to go to which is like using the
+like log probabilities and like zeroing
+things out to remove them from the from
+the tool set that you could change your
+tools and put the tools at the end of
+the context window instead of at the
+beginning.
+>> Exactly. So if you're not if same thing
+with the tool set like if you want to
+dynamically change your tools you got to
+put them at the bottom. If you put them
+at the top you are just shooting
+yourself in the foot in this system. You
+will just get slower API calls more
+expensive API calls with no real benefit
+that you're really having. There's a
+secondary benefit that you get for free
+um which is at the very very end if you
+put things down here the model is just
+likely to pay more attention to it. So
+anything that is actually relevant and
+highly dynamic, it's way easier to
+guarantee that the model won't
+accidentally forget it because it has
+recency bias in general. So question
+like application of that um and I think
+that's this is maybe also in the paper
+and like I've actually like was doing
+some more like reverse engineering of
+cloud code with a proxy the other day
+trying to figure out what the to-do tool
+does and like what I would think would
+be hey once you write to the to-dos the
+system will occasionally reingject the
+list of to-dos near the end of the
+context window and say hey by the way
+here's what you said you were going to
+be working on and so you force the
+attention to be on that stuff rather
+than like hoping that claude will
+remember it did that 15 turns ago.
+>> Exactly. And that's kind of what one of
+the steps down here talks about. Oh,
+bump dashing doesn't really matter. Uh
+in the manus paper where they release
+some of the same stuff which is
+>> where is this?
+Where's the repetition one? Oh,
+repetitation. So the whole point of this
+is saying the same thing.
+>> Oh yeah, this is it.
+>> Simply just stacking stuff all the way
+down. Eventually, your information will
+get lost. It's not a just like with a
+normal human, if you gave them a giant
+to-do list of everything to do and you
+have one single paper at the very front
+that they have to somehow remember, they
+will forget steps. We build processes in
+place to make sure that stuff gets
+duplicated and done more than once in
+like high yield scenarios. If I have a
+rocket ship that's going to launch, I
+will make sure 15 people make check
+every single thing because it's just way
+less likely that someone will slip up
+and make a mistake on all different
+things. the model kind of behaves
+similarly as well. The more steps you
+put on it and as the models get better,
+the distance between how long it can
+remember and what can remember does go
+up. That's undeniably true. But there's
+always a distance at which it will never
+work as well. So having some repetition
+in there is going to make a huge impact
+on your output quality for that same
+reason. Because what they're really
+saying here is like they found that you
+can do about 50 tool calls to actually
+produce their task, but most models will
+basically go off track somewhere in the
+middle. really really fast. What we
+found in general and like why does this
+happen? Well, if you think about how
+attention works, you'll often see the
+needle in the haststack problem as a
+giant benchmark that people go and
+evaluate for.
+>> Well,
+>> terrible benchmark.
+>> I don't know about terrible benchmark,
+but like in general in English language,
+it makes sense that words near each
+other have way more impact than words
+far away from each other. It's just the
+any sort of data set that you're going
+to go train on is always going to have
+that the sentence I said at the very
+beginning of this uh talk matters way
+less than the sentence I just said two
+minutes ago and that's the whole point
+cont
+>> well it matters way less to what you're
+about to say next
+>> yes sorry yes exactly and that's the
+same thing the model is going through
+the thing that I want to produce over
+here is way way more likely to be
+related to something that I'm linking
+over here. I don't know how to connect
+those than it is to be something I'm
+linking over here. Now, that it's true
+that system messages
+are special and I do want system message
+to be treated differently and that's why
+the model trainers are working on
+training the model to understand that
+better. That system messages do have
+impact throughout the entire span of the
+conversation. But that's a training task
+and we can wait for the models to get
+trained to do that better. But we don't
+have that guarantee. So the easiest way
+to provide the guarantee and just to get
+the best results is to again just put
+things that are most relevant to what
+the user needs to do as close to what it
+needs to happen next. So if I need to
+complete a new task and I know that the
+model just checked off. Let's say I I'm
+building clawed code and the model just
+finished task one,
+I should probably repeat the task list
+again, assuming I'm using a very dumb
+model to say this is the task, which
+task should you do next? it's just going
+to work better than just having the task
+at the top saying I completed task one
+now what do I do next because the
+distance is just further and in that
+case I happen to know exactly what needs
+to happen which is I need to make
+progress on a task list so it's easy for
+me to manually inject that but the more
+I can do that sort of behavior the more
+um consistency I'll get out of my model
+outputs
+>> and this this just feels like another
+recitation of kind of that same theme of
+Like, yeah, you could just go back and
+forth with the model forever and use the
+default like tool call tool tool call
+tool call context window, but if it lets
+you push your accuracy by 5% or your
+speed or your cache efficiency by 5%,
+then why not engineer the thing to be as
+good as possible?
+>> Exactly. Exactly.
+Um, there's two questions really fast
+and I want to make sure we talk about
+them before we go too deep. Um,
+>> oh, sorry. I know I'm supposed to be on
+question duty. If you have users using
+the same models, how will this cache be
+h how this cache will be preserved
+between the same user calls? Well, the
+way that the model providers do this,
+the caching is not something you own
+unless you're actually running it on
+inference. If you do, then you can
+control how long the cache runs. The
+model bas the model providers basically
+compute some of this work ahead of time
+and they just save it into like some
+data structure, probably a Reddit cache
+or something. I have no idea what they
+use under the hood and they just say,
+"Hey, if we get the sequence of tokens
+again, just pull this data out." It's
+almost independent
+of your user message because uh Dexter
+says this all the time. The only thing
+that impacts the model is actually like
+tokens in tokens out. So like the fact
+that it's a user doesn't really matter.
+The model doesn't know that. OpenAI
+anthropic don't need to know that as
+well. And that's how they kind of um
+manage this. Hopefully
+>> I think in general most of them will not
+preserve the same cache between like
+technically if it's content addressable
+then like the the hash of the content
+will always be the hash of the content.
+So you're not leaking you know
+precomputed attention between users but
+like I think technically people still do
+segment it out where it's like hey
+you're never going to use the cache from
+another user. Yeah, I assume that they
+did it. Um
+I assume that they did it uh because of
+uh oh Eugene I yes that is also true.
+The model also has its own cache that
+computes stuff because of the
+architecture. I'm assuming the caching
+the model providers are doing are
+slightly different. I think that also
+helps quite a lot. The actual inference
+time is also faster if you have repeated
+tokens. Maybe that is what the paper is
+talking about and I misinterpreted that.
+Um, but really quickly, I suspect the
+model providers don't do the caching
+storage per on a across user bases
+because they need to have TTLs and those
+TTLs are really based on your personal
+usage, not on anyone else's. Um, raycast
+is a fantastic way to test this out
+quickly and locally. Can you introduce
+you can introduce dynamic variables? Is
+there something else you would use for
+the similar purposes? I don't know about
+something myself, Jensen. Um,
+>> I was just thinking about like a quick
+snippet copy paste tool. I don't know if
+you store prompts in anything else or if
+you have a local thing that you guys
+use. I have my own other setup myself
+including that. So, just curious.
+>> I don't have anything, Dex.
+>> Yeah. No, I mean I think I think part of
+it is like this is this is a lot more
+about like building like this this is
+more applicable to like building
+software that interacts with models than
+for like how you prompt them.
+>> Yeah. Yeah. No, I I get that. Um, but I
+guess as I iterate, I still test things
+locally before I like would put them
+into what I'm actually going to use. I
+don't know if that makes sense in the
+way I'm thinking of it, but
+uh if I'm iterating on a prompt
+essentially or a structure or workflow
+that I'm going to be implementing
+through a series of orchestrating
+agents, I will iterate on each part of
+that separately
+through using some sort of way to
+iterate on the snippet. basically. And
+>> I mean, Vibbop's got a lot of opinions
+on how to iterate on prompt snippets.
+Maybe we'll get
+>> So that's I guess that's where I my
+mind's at right now. So sidetracked.
+>> I would say like none of this none of
+the stuff that we're talking about today
+really matters for prompt iteration
+speed. That that really doesn't matter.
+This only matters for like you have a
+prompt, it's working, but you want to
+make that thing work faster and better.
+How do you go do that?
+Cool. Um how should how do we know the
+tlet is or isn't cached? uh should there
+shouldn't this be managed as it changes?
+Yes. Uh to some degree, but really
+there's only one way to know that it's
+cached, which is if the model provider
+tells you that. If they don't actually
+give you that information, you can't
+possibly know. So, it really depends on
+the inference provider.
+>> I mean, you can kind of proxy it because
+of latency, [clears throat] but not
+really definitively.
+>> See, this is why me and Vibbove work
+well together is he's really good at
+just talking through my random questions
+and finishing his point. So, please keep
+doing that. Um question though like are
+you gonna show us today how to use a a
+LM client to actually look at the
+responses and see the like caching to
+like the caching like headers that come
+back like I I think that would be super
+super valuable to like untangle like the
+whether or whatever untangle the
+response and see like hey look let's
+change the end of it and see how many
+cache tokens we got versus changing the
+beginning and see that it blows the
+cash.
+>> Yeah that should be possible. Uh Eugene
+had a really good point actually and I
+realized I actually had totally missed
+this which is there's actually two types
+of caching that are going on here which
+is one caching done by the actual model
+providers in terms of helping with
+encoder decoder blocks and then the
+actual transformer architecture also
+allows you to do another type of cache
+in there. Um
+I think I can pull this up
+architecture. Let's see if I can put up
+there's a very famous image.
+I put up but basically
+uh let's see if I can find this.
+Basically a lot of the actual uh nodes
+in here a lot of the math can also be
+precomputed along the way at any point
+in the way. The part that I was talking
+about was actually this part which is
+the encoder node of the uh transformer
+can actually be precomputed based of the
+actual um uh input tokens that are going
+in and this whole layer can almost be
+cached because it's not really dependent
+on the output probabilities and these
+are going to be able to take some
+advantage of that. The second half of
+this that Eugene is talking about is
+also the K there's a KV cache in the
+actual model like matrix multiplication
+areas and those can also uh dramatically
+improve the amount of computation
+throughput you can get out of the actual
+transform architecture that may be
+actually what the paper is talking about
+Eugene I may have missed that
+>> yeah I think it is about the cache
+inside the model
+>> yes um so in that case it's still the
+principle is still the same
+>> everything's the same except nothing's
+going into reddice I probably is the the
+key detail.
+>> Yes. Well, no, that one's cutting down
+on the actual math that it has to go do.
+But the main difference is the the
+premise is still the same. The number of
+continuity tokens you have dramatically
+changes the amount of caching that
+you're going to get. Anytime you go
+change the continuity of the tokens, the
+more likely you are going to be to break
+the cache at any point and get a miss on
+the cache.
+Um, how do I how do I eval if my updated
+context handling uh will
+improve the quality? Um, I think we've
+had a couple talks on evals. It's
+actually very annoying to do evals and
+it's very frustrating, but I think the
+first step to do evals is just to define
+quality to some degree and what it
+means. Understand what is clearly good,
+what is clearly bad, what is mostly
+good, mostly bad, and then just like buy
+be valid in the beginning. And once you
+have a better understanding of that
+system, then you can go ahead and
+actually make these trade-offs. The only
+reason that the likely can do this work
+or any engineering team can do this work
+is because they first have to go ahead
+and say this is good and this is bad.
+The eval are useless.
+>> And I'd say like most of the stuff we
+talk about about eval here is about
+quality of the outputs in terms of like
+accuracy, hostations, using the right
+context, things like that. um the
+quality improvements that we're getting
+here because like at the end of the day
+whether you cash it or not it's the same
+tokens in which means your chance of
+getting the right tokens out is probably
+about the same. Um so this is a really
+interesting kind of category of eval
+talked as much about which is like how
+do you evaluate the performance not in
+terms of accuracy but in terms of uh
+speed and cost.
+>> Yeah. Um I think VJ asked an interesting
+question. I guess it's Rajes point out a
+different thing. If the model weights
+are the same, everything is new, how do
+you actually get caching? Um, it's
+really hard to describe how the math on
+a GPU gets cached, but you can do
+caching on there. Uh, you should take my
+word for it. There's a beautiful video
+made by um, if any of you are interested
+how this is a this is probably one of
+the best videos I've ever seen.
+>> Hey everyone, I'm by
+>> I'm sorry. I I every time I pull up the
+YouTube channel, I I hear I hear you
+introducing
+>> I'll post the video on here. There's
+like a I think uh there's like a
+90-minute video that I watched that
+actually talked about how deepseek
+actually works under the hood and talks
+about the math behind it. Um I think
+it's actually this one by
+>> this one of the best ones I've ever
+seen. It will describe it. It'll
+probably teach you more about um
+anything you could see. I wish I could
+make [laughter]
+>> John best video I ever seen pulls up
+video of self
+>> and it'll talk to you about like how
+it's possible to get way better
+throughput than anyone else can on the
+same math that everyone else is doing.
+>> Um
+context caching in our app thesis code
+is open source if anyone Okay, cool.
+There's just an example. If Duck has an
+example, then definitely share it, Doug.
+And we'd love to have people go be able
+to see it.
+>> Yeah, drop it in the chat.
+>> VJ, we've got a question. We'll take
+that and then we'll go to the next part
+of the system after that.
+>> So if I understood this correctly, uh
+for example, let's say our uh model has
+an input uh window of 256k tokens and
+we're trying to uh let's say take
+advantage of that entire context window.
+So essentially what you're saying is
+whatever we input in that 256k context
+uh as much as possible
+uh that string should be uh unchanging
+or let's say static it should be the
+same in next iteration so that you can
+get the next token quicker and the end
+of that uh input context will probably
+be varying per call. So I think the next
+step would be to understand how agents
+are iterating between different calls
+and see what is changing what is not
+changing in what we are sending the LLM
+and sort of restructure that entire
+input uh sequence. Is that is that is
+that the next step like is am I thinking
+about this correctly? I
+>> I think maybe I just maybe I didn't
+understand all the words you said
+perfectly and it's probably because I
+woke up at 4 a.m.
+>> Okay, let me simplify it. So we are
+sending tokens to the LLM.
+>> Yes.
+>> The sequence of tokens as much as it is
+unchanged the faster we get a response.
+>> Yes.
+>> Therefore our next step would obviously
+be to understand uh a couple of
+iterations of what we are sending the
+LLM see what is changing what is not
+changing and try to restructure that.
+Correct.
+>> Yes. Exactly. There's
+>> there are caveats though in terms of
+actual implementation details here that
+matter. If you own the model yourself
+and you're doing inference, it's a very
+different game than if you're actually
+using the existing inference providers.
+So for example, Enthropic lets you
+actually control cache control with this
+cache control block. And where you put
+it dramatically matters because if you
+put at the very beginning of a system,
+if you put it your system message, it
+will dramatically change the throughput
+that you are personally able to get. If
+you have a really long chat thread and
+you just put it at the beginning of a
+chat thread and you don't break apart
+your chat threads manually, you're going
+to get worse hits. There's just nothing
+you can do about that because your chat
+thread is basically you put you put a
+cache control block on the first user
+message and then you in the same chat
+control block you put another user
+message. It's just a cache miss. It's a
+guaranteed cache miss. You can't
+actually do anything about that.
+So every time you're not reconstructing
+the prompt in the same way as close to
+possible, you are basically getting a
+miss. Gemini, I think I think the way
+OpenAI does caching is opaque. So what
+that means is I I think they give you
+almost no information on how caching
+works. But I think they actually what
+they do but
+>> it's like less control, but they kind of
+just try to do it for you. This is a lot
+of them just like do a prefix and try to
+guess how to do it. I didn't need
+actually know this,
+>> but now they added like a prompt cache
+key. So, it's like
+>> prompt cache. And the reason that they
+do this, I'm certain uh replace the
+user. I don't know what this is, but I'm
+pretty certain that the reason they do
+this is people just wanted more control
+because if you're able to have access to
+this and you can control this, you can
+just get better hits all the time. Um,
+but it is important to go read this
+stuff. And the only way you can actually
+know if you're hitting this is just by
+looking at the usage. There's no other
+way to really know
+um along unless you own the inference
+and most people don't own inference as
+far as I know u and most people probably
+shouldn't own inference as well. Uh,
+Gemini is probably the most flexible
+thing I have seen for how they cache and
+Eugene is right on that, which is if you
+actually go look into how to get caches,
+like you do a you do some crap to go
+write this code, but the trade-off of
+doing this crap is you do get to go get
+complete control over what it's doing
+and you get to go tell it this and that
+helps you as a developer, but it also
+hurts you because you have to go build
+this stuff yourself.
+Um, you also have to manage the TTL and
+everything automatically. So, there's
+always a trade-off in how much
+engineering effort you want to put in
+versus what you want to do manually. Uh,
+what you want to do automatically. And
+generally, if you do something manually,
+you will always get better throughput if
+you know what you're doing than someone
+that does it automatically. But someone
+that does it automatically will always
+get better than someone that doesn't
+know what they're doing manually
+because if you blow the cache up time,
+it'll be worse.
+>> So,
+>> okay. So, if you know if you know what
+you're doing, use the cache keys. If you
+don't, hope for the prefix things. But
+don't try to mess with the cache keys if
+you don't if you're not willing to go
+learn how these systems work.
+>> Exactly. And lastly, if you're not act
+and if you don't have the time to go
+learn how they work, it's not a matter
+of like you don't want to. Sometimes you
+just don't have the time. We're all
+bouncing a lot of things at once. Um but
+what comes down to is if your cache
+isn't working, you now know why it isn't
+working. It's because your prefix key is
+not continuous and it's breaking somehow
+when whatever system you're using to
+break it, you're getting a cache miss
+for that reason.
+Um, I think the next thing I want to
+talk about
+is actually talking about this one. The
+we talked about recitation a little bit.
+So like recite your systems. Think about
+what makes sense in your workflows to
+recite this. And it can do all sorts of
+different things. So for example in the
+example that they gave over here what
+they're showing in their visual is hey
+instead of producing context one and
+doing this what I will say is before
+even producing action for I will inject
+an objective into the statement and now
+I can go and produce objective 4. So
+there's different ways to go repeat
+yourself in the prompt. There's one is
+just add it to the very end. One is take
+your existing prompt and go inject it
+somewhere else in my history. And yes,
+this is kind of contradictory to what we
+just talked about about breaking the
+cache key, but you're doing this
+deliberately because you're trying to
+get accuracy. So you're like, "Okay,
+cool. I will lose the cache on this part
+of my prompt. I will still preserve the
+cache on everything up until here, but I
+will do that in favor of getting
+slightly better accuracy and helping the
+model understand what's going on."
+And the premise here is this objective.
+It may be obvious to the model at this
+point that action three was best. But
+when it's making action four, the model
+might forget that because of this
+objective, action three was selected
+here. So I'm repeating that here's
+objectives and this is why you picked
+action three. Now pick action four. I
+can also just say
+>> go ahead.
+>> Has anyone ever implemented this like
+kind of deterministic injection of a
+to-do list into the context window as
+it's going?
+>> I would be surprised if cloud code
+doesn't do something like this. That's
+what I'm I'm messing with that idea
+right now is what I
+>> Cool.
+>> Yeah. doing.
+>> Cool.
+>> Um, so this one I think is really
+straightforward and easy to iterate on.
+So if you're finding that you have
+really really long tool call sequences
+and they're diverting from or drifting
+from the main action, just like add some
+repetition there and you might just get
+free throughput uh without having to do
+much work. And I think that's that's the
+cool thing about this trick. This is
+almost no effort.
+Um, I want to talk about this. This is
+something that we've talked about a lot,
+which is a lot of times when in an agent
+loop, it'll try and go do many things
+and then it will go ahead and go correct
+things along the way.
+And in this case, I think what they
+found is they found in their scenario
+keeping if they're running two things in
+parallel, getting all the predictions,
+actually having the incorrect stuff
+helps them. I would just go experiment
+and try this. What we have found is
+having the incorrect stuff hurts in some
+scenarios, but it's possible in their
+use case because they're running like on
+average at least 50 tool calls that
+perhaps having incorrect sequences helps
+the model correct itself and not repeat
+the same behavior in the case of very
+repetitive actions. Eugene, you
+>> funny because this is this is contrary
+to advice we give a lot, which is like
+be smart about sometimes pulling those
+out because it becomes very noisy.
+>> Yeah, Eugene, you've got a question.
+>> Yeah, I got a question. Um yeah, I think
+this one on the incorrect observations
+is quite intuitive to me. One thing
+that's also not so intuitive to me is
+the tool call. Do you just store do you
+just return to the main model, the main
+agent, the output of the tool call or do
+you also keep the tool call itself?
+So I have different opinions on this and
+I think the thing that they're saying
+here is so I found when I was reading
+this is like I think the reason that
+they're seeing this it's that often
+having a stack trace helps even a
+developer debug the problem and I think
+what they're I think the re because this
+feels very wrong to me as well but I
+think what's happening is manis has a
+very broad scope of what it's trying to
+do so many times a model will divert and
+not do the right thing and in that
+scenario assuming that it has to do that
+thing again or some it's somewhat
+related to the final goal and it might
+have to repeat that task again. it's
+more likely that the model will get it
+right the first time around. If we can
+kind of look at it stack trace and say
+what did it take to get to the final
+correct answer.
+That said, I'm not actually yet
+convinced that the best way to represent
+the tool calls are actually the tool
+calling systems that people have. I
+think there's a lot more
+>> really you think there's a better way to
+represent tool calling.
+>> Well, I don't know if that's sarcastic
+or not, but like even [laughter]
+there's like a interesting thing. I'm
+teeing you up, man.
+uh that I thought was really
+interesting. Uh wrong discord
+where sorry I'm usually on a desktop
+monitor when I'm doing this and it's a
+little bit more um showcase. I thought
+this was a fantastic thread here that
+really helped me understand uh kind of
+some of the implications of some of this
+stuff. So Pashant who is one of the
+people that been playing on both DSP and
+BAML learned something really
+interesting. uh what he did was he
+changed how DSPI represents their prompt
+format uh to be away from JSON schema
+and go more into like the BAML way of
+doing it. And what was really
+interesting is just a simple way of
+changing how you represent the tool call
+for every single model by default was
+just better than JSON schema.
+But when you add the two together, it
+got even better. And I think that goes
+into what Eugene is asking is like
+what's the best way to represent tool
+call? To be completely honest, I don't
+[ __ ] know. I have no opinions on
+this. But I think in general simplicity
+is best. So if you have a thing where
+you're generating a bunch of like Luma
+URLs, don't put UU IDs into the uh don't
+put UU IDs into the
+uh into the prompt. It's just going to
+hurt even if tool call generates one.
+Like replace that out. We have a thing
+in our chatbot uh that we made recently
+and I I thought it was kind of funny
+that and we talk about this stuff all
+the time but like if you ask it like um
+how do I do this thing like how do I
+build a super complex agent?
+What I found really funny in here is one
+of our uh someone on my team built this
+and I've tried my best not to influence
+anyone on the team in any meaningful
+way. Okay, I want them to discover their
+own agent assigned decisions, which is
+how do I get help? How do I get help?
+Sorry. Which was when they actually put
+our Discord link in here, they
+originally did this, but this thing was
+inconsistent and they had to reprompt it
+to actually go ahead and actually change
+the boundaryml.com/isord.
+In this case, this one was fine because
+it actually pulled this page as context
+info and fed that into there. So, it was
+able to do regurgitation. But when you
+left on the system prompt as the main
+way of getting help, it didn't work. So
+they actually changed
+>> I'm sorry. This is the you said the
+problem is because this is some weird
+long string token that's hard for the
+model to remember.
+>> And in this case, what they're doing,
+they're actually pruning it out and
+injecting this page in as the only
+contact information page. So it's really
+easy for it to regurgitate. It's a
+pretty beefy model.
+>> But what they found is we actually made
+a link called boundarymail.com/isord
+and putting this in the system prompt
+works almost all the time.
+All right. It's the same context. So
+it's like just thinking about how to
+make these systems work in terms of tool
+calls is I don't really know what the
+best answer is. But the better you can
+do to get towards simplicity in general,
+the way more throughput you will get.
+Yeah, exactly. Random hashes are just
+not good. Like the model is just never
+going to be good at that. And I think
+it's the same thing here. Like I think
+in their scenario kind of works, but I
+would just eval this for your own use
+case. I suspect if you have a simple
+task and it did it wrong twice,
+you'll probably get better by just
+giving it the right output. If you're
+using a smaller model, you probably
+don't want to give a smaller model the
+entire stack trace because a smaller
+model is just going to get lost in the
+sauce. If you have a bigger model, you
+can be more you're more it's more
+forgiving in general for all of this
+information. So trying to figure out
+exactly what you have to do is both a
+parameterization of the problem space
+you're working in and the model you're
+using. And it's like a fine art of
+figuring out what that is exactly.
+But the fact that this works for them,
+like to me, this slightly changed my
+perspective of being completely rigid on
+only using observation 2B in the final
+prompt. Now, what I do,
+>> Go ahead.
+>> Sorry. Go ahead. No, finish your
+thought.
+>> Well, what I was going to say is next
+time I have a really hard problem and I
+use GD5, for example, I'll probably toss
+an entire stack trace and just see how
+well it does because it's possible that
+models have changed. Last time I built
+this opinion was based off of like the
+GP40 models
+>> and perhaps the models are different
+now. And it's good for me to be aware of
+that and like be open to changing my own
+perspectives.
+>> Interesting. I mean, so this is
+interesting. It doesn't say so it's like
+error recovery, but I'm not it's not
+clear as saying like um like this
+picture says, hey, like use the
+observation to get it to get it
+correctly, right? Or use the thing to
+get it to get correctly the first time.
+But it doesn't seem to have an opinion
+on like okay if you have four errors and
+then you get it right that you should
+clear out those four errors before you
+proceed.
+>> Yeah. Yeah. It's how they I think what
+they're saying is typically many people
+never store this information.
+>> I think what they're making a case for
+is hey consider storing the information
+sometimes it might help.
+>> Yeah. This is uh factor nine of 12
+factor agents is like be thoughtful
+about it but yeah tell the model what it
+did wrong because it will probably fix
+it. Um, and the models are getting way
+better. So like the stack traces are
+likely more likely to help, especially
+as the stuff gets bigger and bigger in
+terms of context windows and how well
+models perform over long form context.
+Um, that said, same thing we talked
+about here. Proximity to the cache
+matters. Proximity to the observation.
+Oh, where did it go? Proximity to the
+observations matter. Where? I don't know
+where it went. That image, the
+repetition one. Proximity to the
+observations matter. So like if you make
+it too big, you'll probably get loss of
+performance at some point for your task.
+Um let's talk about prompting. I say
+this all the time. Don't do fot
+prompting. The reason fot prompting is
+bad is for the same reason that we say
+all the time, which is you're most
+people don't do fot prompting correctly.
+You're almost most likely going to bias
+the model away towards your fshot
+example rather than help it understand
+what it's actually meant to do. Well,
+and literally building an agent is fshot
+prompting. Like everything in your past
+context window becomes like influences
+the next step. And so if the model
+starts like starts a task and launches a
+sub agent for the rest of that
+conversation, the model will be more
+likely to launch a sub agent. And so
+like you have to really like understand
+and this is why we always say like use
+clear rather than resteer. If the model
+like starts doing something weird in
+your agentic chat, whatever system it
+is. Obviously, I care a lot about coding
+agents, but like this is true for
+everything is like the model starts
+going about it in the wrong way, you are
+much better off starting with a fresh
+context and adding two sentences of
+steering or two words of steering, by
+the way, don't do this than you are to
+be like, stop, do it a different way.
+And then because then your prompt is
+like your context window says system
+prompt, user message, model tried this,
+user resteered it. And so you're more
+likely for the model to like expect that
+the conversation continues as model
+tries a bad thing, user resteers, model
+tries a bad like you you're telling the
+model it's okay to make a mistake and
+then get corrected. When what you really
+want is the model to think, okay, cool.
+I made the right decision. I made the
+right decision. I made the right
+decision. That's how you craft like
+really good agentic context as you go.
+>> Also contextual. Just remember undo is a
+pretty complex action. The fact that we
+can do command Z is nice on a computer,
+but it's actually really hard to undo
+sequences of actions. And that's why
+many apps, ma, most SAS apps you use
+don't build command Z. It's really
+freaking hard to command Z a lot of
+actions. Uh, and the model is just going
+to have a hard time too. Uh, Photoshop,
+for example, will just eventually forget
+that you have you you're past a certain
+state. It'll just say you can't undo
+past this point. Same thing. Um, in
+terms of fot examples, there are ways to
+do it correctly. It's just that you have
+to be really thoughtful about it. In
+this case, if I have a class object
+where I want product to mean only people
+that actually actively write code, then
+someone that's listed as director of
+engine team, I can just write a small
+thing in here that says because they
+don't code themselves category product.
+And now the model can kind of this is
+perfectly evident that this is an
+example to the model. It's I'm not
+trying to trick it. I'm not trying to do
+anything. It's just like this one is an
+example very clearly. I use dot dot dot
+to simplify that. I'm showing the schema
+without showing the full schema. The
+model cannot possibly confuse Vivov
+Gupta as that person because I mean the
+really really dumb model can but modern
+models are just not going to have that
+problem. So if you're going to do
+fuchsia prompting be clever about it
+think about what you're really trying to
+have the fat example explain to the
+model and only put the minimum number of
+tokens you need to explain that concept
+itself
+>> and not just number of tokens but like
+meaning of tokens right like that dot
+dot token means placeholder to the
+model.
+>> Exactly. Yeah. And to almost anyone else
+reading it. It's same thing same with
+dynamic fshot prompting. Sometimes you
+might want to put few shots that are
+actually similar to your example.
+Sometimes you might want to pick few
+shots because they're completely the
+opposite of your example. And sometimes
+you might want to pick few shots that
+are unrelated to your example. Let's say
+you're in a healthcare setting and
+you're processing doctor patient
+conversations.
+You probably don't want to talk about
+like um I don't know like uh uh like leg
+fractures. If you're talking very
+commonly if the person currently has a
+leg fracture, that's just going to mess
+up the accuracy of the system. No matter
+what you do, you probably don't want to
+put the person's name as the same name
+as your patient in your system. You
+probably don't want the doctor's name to
+be the same. Probably don't want the
+hospital name to be the same. You
+probably don't want to confuse it with
+dates in case of continuity of any kind.
+So, finding this sort of stuff out and
+picking the right fat example can be
+good, but as you're you're probably
+figuring this out, it's a lot of work to
+be fought prompting correctly. So, most
+people are better off not doing it
+rather than doing it.
+Uh, let's go on to the next topic.
+Unless there's more, feel free to keep
+typing questions in the chat. U if you
+have any
+>> um
+>> um we might have to do a follow-up
+session and do the the coding side
+because I don't know if we're gonna have
+time.
+>> Yes,
+>> I really I really want to see an example
+of how to look at the B responses and u
+>> Okay, cool.
+>> Um I think I did want to talk about all
+these topics because I thought they were
+really really interesting. I think the
+most last one that I thought is worth
+actually we'll talk about this one first
+because it's really easy. Um this what I
+read is very much about context
+compression at least the way I
+interpreted this one which wasn't about
+like use the file system in the context
+like that's one way to do it but what I
+was hearing was instead of putting in
+the entire chunk all the time at all
+points
+see if you can break down the system and
+only put in the least amount of system
+that's uh least amount of context that's
+relevant. So for example, if every uh
+and like I think that's the whole point,
+everything is meant to be restoable. The
+idea is that if you're having a whole
+website here, instead of actually
+putting the website over here, just put
+the URL over here and replace the
+original observation action two with
+just the URL and say from this URL, I
+got this action. From this URL, I got
+this action. From this URL, I got this
+action. And then
+>> Oh, I see. So the model the model may
+even load the thing into context and
+then you choose the next action and then
+you stitch the actual content back you
+pull it out of the context window so
+that like it can be restored later it
+can be pulled back in but it's not by
+default present.
+>> Exactly. And you can even tell this is a
+restorable tool, restore data blob,
+restore with this key
+>> and the model can then if it needs to
+call the restore action. And yes, it
+increases the number of tools that you
+have to make to call your system, but it
+dramatically makes your context window
+way more efficient because most of the
+time, for example, for a coding agent,
+imagine trying to keep every single file
+the model had to edit in the context and
+all the edits are made in the context.
+It's kind of useless. like once it's
+made a file edit, I can kind of compress
+it and say, "I'm done with this file.
+The user is happy and it works. Here's a
+summary of what the file, what changes I
+made,
+but keeping the actual code that it
+generated is kind of useless for that
+kind of task." And then when I tell the
+model, hey, actually that file is wrong,
+then it can load the load action to load
+the file again, reread it, and go do the
+work. And there's a trade-off here
+between how many tool calls it takes
+versus how accurate the system is versus
+how uh versus how like u how big of a
+context window I have.
+But
+if you don't make this a possibility,
+then you kind of live in this world
+where you have to live in big context
+land. And then you're just hoping that
+GBT26 has a 20 million token window. And
+like maybe it will, but like
+I really don't want to work in a world
+where like every computer needs to have
+50 terabytes of RAM or else it's
+useless. Like that that's just a sad
+world to have to live in. And also like
+phones.
+Uh I would like stuff to work on my
+phone without needing to go uh go into
+this. Duck asked a question. How does it
+work with KV caching? Well, it really
+depends if your system I think an
+important thing to notice about KV
+caches and like people overindex on this
+sometimes and I I know I I was trying to
+explain it so perhaps that was implying
+this but look KV caches don't caching
+and latency doesn't matter for small
+stuff. If most of your chat messages in
+your app or agentic loops are like one
+or two system calls long, don't do any
+of this crap. It is not worth it. Just
+make your system work. This stuff only
+matters for stuff that is going to run
+for a while. If your tasks are taking
+like a minute to run, uh yes, then KB
+cache matters. But in that case, if your
+task is taking a minute to run because
+it's calling like 50 different tool
+calls, you'll probably get way better KV
+cache optimization simply by changing
+the observations in this way as well
+where like now I get a KV cache here and
+only if I load in a new observation do I
+break the KV cache because then I'm
+going to load observation one and then
+compress it into this format. So now
+this thing becomes compressed. But what
+I can do here is I can design an
+algorithm here that's pretty
+straightforward that goes ahead and
+says, "Hey, after about 15 observations,
+I always compress the oldest one." So
+yes, I broke my KV cache, but at any
+given time, all my previous context is
+always going to be similar and and I'll
+basically force the model to reload it
+because this once it's compressed is
+never reloaded ever again. So this
+becomes stable. This basically
+stabilizes over time. Does that answer
+the question, Doug? [clears throat]
+>> Perfect. Um,
+and then the debate of showing tool
+calls and what to output. Yeah.
+>> Yeah, I think you got it perfectly,
+Doug. Yeah, exactly. Once it once it
+gets the next step and it knows what to
+do, then it can do it. And I think this
+is also like when people do there's like
+certain like compaction strategies that
+you can do. Like anthropic talks about
+micro compaction which is like pulling
+at least like the tool calls out
+automatically but it's really hard to do
+this in a general purpose way which is
+what makes this paper so impressive is
+like they've done this for a general
+purpose agent. If you're building an
+agent for a very specific thing you can
+optimize the heck out of it for that one
+use case and you know exactly like I
+know for sure if a model reads this type
+of medical document it's and it once it
+makes the decision it never needs to do
+it again. Or you can say, okay, once the
+model reads in and picks the next thing,
+I need to pass it to another model to
+summarize the document. Put that in
+instead of the whole content and like do
+your own like deterministic compaction
+based on what types of things are being
+pulled into the context.
+>> Exactly. Now I want to talk about the
+last part that I thought was super super
+uh innovative and really changed my
+perspective a little bit on some things
+as well, which is around how to call
+work. So we talked about the KB cache,
+we talked about how like having
+continuity and not breaking continuity
+matters. So, we talked I think one easy
+way to go fix this is you can take your
+tool calls and simply put them always
+guarantee put them at the end of your
+context window and now you always have
+some amount of caching that you get for
+free. But what if you did put them at
+the top? Well, many times if you're
+building an agent, you'll want to
+invalidate and change your tools
+dynamically.
+That is 100% of the time going to break
+your KV cache and you will just get
+slower latency all the way through. This
+was what the the swarm like the original
+iteration of like the open AI swarms
+framework or whatever their way of doing
+multi-agent was to take the same context
+window patch it to a different agent
+which had a different system message and
+a different set of tools.
+>> Exactly. And like it just doesn't really
+work. But what they end up doing here
+that I thought thought was really
+fascinating is instead of actually
+giving you these tools, they actually
+leave the tools in there. And what they
+do is they modify
+uh let me change let me delete they
+modify a part of the system that I think
+most people don't think about which is
+let me open up the openi docs because I
+think that's it's going to show
+openai
+responses
+API. Okay, cool. Uh they modify the
+logits coming out of it.
+There you go. And you can basically
+invalidate certain tokens as being valid
+out of the model. So I don't actually
+know how you modify the function calling
+tokens. I can go look into that because
+it sounds like I don't know if Openack
+gives you those, but if you own the
+model, you can definitely do this. But
+the premise is
+uh there we go. The premise is like what
+the heck is function calling doing? And
+we need to go understand that briefly to
+really be able to and appreciate this
+technique. So what function calling does
+is function calling teaches a model
+about a special token called use tool
+and the model outputs a token that says
+I'm going to output a tool and once it
+decides to do that token the model
+providers then restrict the model to
+only pick tokens that match the tool
+specification that you have provided. So
+>> is this constrained is this constrained
+decoding or is this still just the base
+like JSON mode? This is
+it. So the base JSON mode does that
+which is it basically takes it basically
+forces the model to only output
+grammarss that are valid uh JSON.
+>> Yeah. Yeah. Yeah. Yeah.
+>> Constraint decoding constraint
+generation or decoding whatever you want
+to call it is basically the more general
+form of that where instead of taking the
+JSON grammar you can basically provide
+it the grammar of your choice.
+>> Any reax and that just zeros out all of
+the log probabilities for anything that
+doesn't match your reax. Right.
+>> Exactly. So if I go back to the
+whiteboard,
+what this is doing is this is basically
+saying like even though the model has a
+really high probability for it, I'll
+vote this as zero because it doesn't
+match the reax of what's allowed. So
+only the only the reax is the valid
+consideration and then I pick the best
+token from the valid reax. Now the
+problem that you will run into with this
+is sorry I have a lot of tabs open
+today.
+>> Yeah, we talked about this a lot this
+concept in cracking the prompting
+interview, right? That was the one.
+Yeah,
+>> we talked about like how to get AI to
+write better code by allowing it to
+write things that might not necessarily
+be valid JSON but are like closer to the
+way that the model has been trained to
+write code which is by like reading code
+not as snippets and JSON strings.
+>> The function calling system does
+basically this. It basically says
+instead of having the model always
+follow the grammar, it says hey you will
+emit a special token that says you want
+to take an action and then I will force
+you to follow the grammar. So at that
+point the model is basically deciding to
+some degree and can be taught when it
+should follow the grammar that it's
+given. And now open has a new thing
+which I think is really really good for
+everyone which is they've allowed you to
+do function calling without a grammar or
+with a custom grammar. So now you can
+basically let the model say I want to
+use an action and then let it free form
+output whatever it wants. But what the
+manus paper uh article talks about is
+that when it actually picks the use tool
+action at that point the model is now
+going to pick a special token. It's
+going to pick a certain uh uh
+>> the first thing that comes out is the
+name of the function. Right.
+>> Exactly. It's going to have to spit out
+the name of the function. Instead of
+actually letting the model spit out the
+name of the function at that point, you
+can
+effectively Where'd it go? You can
+effectively prevent the model from
+picking a certain tool at that point.
+and say that
+>> by just zeroing the probability that the
+name of the function matches like the
+basically like forcing only allowing the
+to the log props that actually match the
+tool set that you want to constrain to.
+>> Exactly.
+So this is actually a really really good
+technique but I'm going to show you and
+I thought it's really really clever but
+I'm going to show you how naming your
+tools in an interesting way can
+dramatically change the accuracy of this
+technique.
+cursor
+>> and I'm going to do this with an example
+I think in code because it's going to be
+a little bit better
+>> and just while you're doing that the
+question was like when talking about
+tool calls are we talking about explicit
+tool calling via model providers or are
+we also thinking about whatever
+structured output techniques we're using
+I think tool calling structured output
+and function calling um while there are
+different flavors of each of them I
+think those three words tend to refer to
+the same thing some people say like oh
+tool calling is only when you use JSON
+mode and structured output is can
+doesn't even need to use JSON mode. But
+again, like I use all three of those
+terms interchangeably. Tool calling,
+structured output, function calling.
+>> They're all the same.
+>> Is that accurate?
+>> I agree. There's technical
+implementation differences that might
+have different trade-offs, but they're
+all the same. Fundamentally, what you're
+doing is trying to constrain with the
+model output to some degree in some
+manner or form.
+>> Well, and and it's the constraint. It's
+not even about the constraining. I think
+more for me it's more so about we're
+going to create something that a
+deterministic program can consume. It's
+not for a human and it's not for a
+model. It's for Python code that I
+wrote. And so it has to have some
+expected structure that I can turn it
+into bytes in memory.
+>> Yeah. So let's say I have these three
+tools.
+Um right uh and these are the tools I
+have. Call me, call mom, call Dexter. Um
+and let's say I'm operating the mode in
+like work mode. In work mode, I want the
+tools call Dexter and call me to be
+available. In nonwork mode, so like uh I
+want the tools call mom and call me to
+be available. I'll never call Dexter not
+work mode. I don't like hanging out with
+him that much. So how [laughter]
+well what we're going to do the model
+decide I I'll say a statement like uh I
+need to talk to someone.
+I'm going to go write the statement. In
+this case, call me is clearly not a good
+tool cuz I want to talk to someone else,
+not myself. So, it should call mom or
+Dexter. If I give it all the tools as
+context, it could really pick any of
+them and it's random in work mode.
+However, maybe there's another thread in
+here that says like I'm at work. So, the
+model and there's some information I
+have in my program state that allows me
+to know that. So, I have some at work
+boolean as true as true or false.
+If it is true, I basically want to say
+like disable
+call mom
+and I want to go disable call mom at
+that point. If I'm going to go do that,
+um, sorry, I'm going to turn this off
+text.
+Uh, that was not correct.
+If I'm going to go do that,
+>> the model will start generating tokens.
+Now the problem with this is the model
+may want to generate a token that starts
+maybe the token vocabulary makes it so
+that the tokens are actually call and
+then mom. So the tokens end up being
+call and then mom. And over here the
+tokens end up being call and then
+Dexter.
+If the model generates a token call,
+even though I've invalidated this, I've
+invalidated call mom, the model may have
+actually thought it was really important
+to call mom and it may be actually
+accidentally forced to picking the call
+Dexter tool.
+>> Forced to call me. [laughter]
+>> Yeah, because it doesn't have a choice
+because it it produced the word call. Uh
+>> with the intent to call mom
+>> with the intent to call mom because I'm
+at work mode and I've accidentally
+disabled the call mom tool. And now the
+model thinks it's want to call mom
+because all my tools are in the context
+window. So even if the model know the
+model doesn't know it can't actually
+pick call mom. As far as the model knows
+it can pick call mom. So now it might
+even go do this. It might even start
+outputting call m because m was a valid
+token as well in my token vocabulary.
+And funnily enough the model might not
+even end up calling du. It might end up
+calling me because in the tok to token
+vocabulary we have call we have we
+obviously have the letter m we have the
+letter me we have the word me we have
+the letter mom we probably have the
+words mo as well
+>> oh okay so the probability for mom might
+have been 99% and the probability for m
+might have been 1% but because both of
+them are moving towards mom those are
+the ones that got picked
+>> exactly and mo might also be higher so
+I've invalided mo and mom because it
+doesn't meet the grammar of what's
+allowed based on what what tools are
+valid. But I still will call M. So I'll
+call M. And now I might call M. Well,
+what's the next best token? Well,
+there's only one valid token that's
+available here. I have to call it E. So
+now I'll end up calling the call me
+tool. And you can see how actually doing
+this can actually backfire in certain
+ways if you're not careful about how
+you're naming your tools.
+So you have if you're going to use this
+technique, it is important to be able to
+understand how these models work and
+build an intuition for this on your own.
+So then when something fails or doesn't
+fail, you can go iterate on this and
+make it better.
+>> Does that um any questions?
+>> Yeah, there questions about that. There
+was there's a lot of content in there.
+Otherwise, we can move to some of these
+questions.
+Uh, call me versus call me variable
+name. No, that's totally arbitrary, I
+think. Um,
+>> I'll show you like a um a really fun uh
+post by someone.
+Uh
+oh, that's the wrong thing. Let's not
+show my DMs.
+>> While you're doing that, Dexporty with
+the understanding of tool calling can be
+either an explicit tool call or
+structured out. pick your flavor. In the
+work that you are doing, have you
+noticed any difference in Asian
+performance when using model provider
+tool calling versus pamble structured
+output? Basically, home rule tool
+calling. Uh I have no stake in this. Uh
+but I believe there's a lot of agents
+out there that are built with native
+tool calling that would be better if
+they used the pamel structured output
+for some of the reasons we've kind of
+touched on here, but other things. Uh
+but I
+>> I don't I need viob to ship the
+benchmark again. When are we getting v2
+of your of your tool calling benchmark?
+>> Well, Sean showed a small benchmark
+already that showed
+>> that's truely better.
+>> Um but I want to show everyone a clear
+example of when this matters. So like in
+this case the user was doing some sort
+of tool calling with Kimmy K2 model and
+they asked the model to output approach
+and no matter what they did like around
+like 2% of the time Kimmy K2 would
+literally just pull out a propra
+[laughter] and this is so wild that it
+would actually do this and I started
+looking into this and eventually I was
+like okay well there's prompt
+engineering techniques that you can do
+to go do this. So they did that and
+eventually
+>> did they just add an alias to the field?
+Well, eventually what I did was I just
+wanted to go understand this. I was
+like, so what did I do? I dumped out the
+tokenizer. I literally took the
+tokenizer for the K2 model and I dumped
+it out. And lo and behold, approach is
+two tokens.
+So of course the model that's a dumber
+model is going to get this wrong because
+at this point it wants to do approach
+and then it's like it's just too dumb to
+actually do this. So the solution this
+user had was they actually found a word
+that was a single token and now it
+works.
+That's so sick.
+>> And just like but the point is like if
+your tool calling is going to use a
+similar technique, you have to
+understand that there are trade-offs to
+how your tokenizer vocabulary works. And
+the bigger the model, the shorter your
+context window, the less they matter.
+The smaller the model, the longer your
+context window, the more they matter.
+And knowing that is just key to getting
+success over here.
+>> Love it.
+>> Yeah. Um, and like remember tokenizers
+are different for every model. So you
+have to like in like this user could
+have spent forever trying to prompt
+engineer the way the heck out of this
+trying to make it work and they did. Um,
+and I think Sam and our team tried this
+too and I tried a couple techniques and
+literally I just at some point I was
+like the model is just too stupid.
+What's going on? And I had to go and dig
+deep. So don't be afraid to go do that.
+Just literally run the tokenizer code
+and just go see what's happening.
+Uh, really really easy hack to go make
+this work. any model provider that
+doesn't give you the tokenizer, it's
+kind of annoying.
+Just have the model provider spit back
+out the word to you and count the tokens
+out of the HTTP request. That's often
+what I'll do with like entropic models
+because they don't actually give me the
+tokenizer. So I'll say,
+>> oh, you say, "Hey, just say the word
+approach to me and then you look at the
+token counts in the raw JSON that comes
+back and say, how many tokens was that?"
+>> Literally what I do.
+>> Okay.
+>> Um, and it kind of works.
+Um,
+yeah, if you're curious about the
+benchmarks, uh, I can share them
+afterwards, uh, on the email that we
+send out, um, if you're interested or in
+our Discord you ask, we'll have
+Discords.
+>> Slava's question real quick. Yeah, we
+put all the streams in the GitHub repo.
+That's where you can find them. Um,
+yeah. Do you want to pull it up?
+>> Uh, what is
+>> there? It is. So, you can come here. You
+can see every every recording we've done
+since March. You can see the YouTube.
+you can see the code. Um, you can sign
+up for the next one.
+>> And if all you really
+>> about the
+>> if all you really want to do is just
+watch all the content, we have a
+playlist somewhere um that you can find.
+And I don't hear my voice again.
+>> Uh, but they'll have everything on
+there. And then I think we tried to make
+a interesting version of this
+uh where we actually do this with
+Dexter. And you can actually just scroll
+through here as well.
+>> Oh man. Wait, this is sick.
+>> Wait, I want this on human layer.dev,
+dev too.
+>> I'll send you the code. You can post it
+over.
+>> Amazing.
+>> Um uh do you mind me and then point the
+resource try this out locally. The thing
+about um we'll try and give you some
+sample code to go try this out locally.
+But honestly, for most of these
+problems, just take any of the problems
+that you have that you've already been
+working on and just like go look at the
+inspect the output elements that are
+coming out of these problems. So like
+for example,
+um let's just write a really quick uh
+agent. Let's see if I have screen if I
+don't have
+Let's see if I don't have screen
+sharing.
+Okay, cool. Uh I'm going to disable
+screen sharing really fast while I copy
+the curl with my OpenI key. Um and then
+I will bring it back.
+copy
+clear. Okay.
+Um I'm going to screen share again.
+So if I run this API key uh this
+request, I can just see that it
+literally cached nothing. And the reason
+it didn't cach anything is literally
+because I just have too small of a
+context window. So if I just increase
+this context window
+by
+make this a real resume example that is
+dense
+I'll eventually do stuff
+like all the stuff.
+Cool. Let's copy and paste this and
+let's go run this again.
+It still didn't catch anything. I have
+to make it even bigger. But the whole
+point is right over here. You need to go
+ahead and actually understand why this
+is happening or not happening. And part
+of the reason here is just I know this
+is too smaller, too uh too small of a
+text.
+>> Do you show the token count?
+>> It's right here.
+Oh,
+>> I see.
+They won't even trigger caching here
+>> like
+triple the resume.
+>> And just [clears throat] to be clear,
+you're just running the same request
+twice and seeing if it auto caches it
+based on the shared prefix.
+>> Exactly. And what I'm doing here is I'm
+just trying to have it triple the resume
+and that'll do some stuff probably.
+And like hopefully I'll make it long
+enough. But the way that I can test this
+is just I can keep making test cases
+until
+I'm satisfied with the final output and
+I'm going to see if it's actually long
+enough where
+eventually I'll put something
+um the model to get a lot slower.
+Uh I'm still not long enough, but you're
+getting the point of how I would go do
+this. I know that open is probably
+catching about 1024 tokens based on what
+they said in their docs. So in that
+case, I'm just going to make an example
+that has 1024 tokens. And I ran into
+this personally myself a few times when
+I was unit testing some of the code that
+we write because I was like, "Oh, why is
+caching not working?" Well, it turned
+out I literally just wasn't implementing
+a long enough prompt and it would just
+break all the time. But once I actually
+implemented a big enough prompt, I could
+consistently see hits on caching
+pretty well.
+Um, other questions from anyone?
+Otherwise, I think we're 20 minutes
+over.
+I answered Vijay's question. It's about
+cloud code proxying. I'm actually I'm in
+Austin this week with the uh Gauntlet AI
+squad. They have like a school here for
+learning AI engineers. And apparently
+one of the one of the students here
+built a thing called CC proxy that lets
+you just like strip all of the traces
+out of your quad code running locally.
+>> That's cool. That's cool. Um I guess
+that's it for today's conversation in
+that case. Um thank you guys for
+joining. Hopefully it was educational
+and hopefully everyone learned a few
+things. We'll have a new topic for next
+week that I think will be hopefully just
+as educational.
+>> It's going to be dope. Thank you all for
+coming. Thanks Vybob for running the
+session today. And uh thanks everyone uh
+thanks everyone here.
+Bye. Blair.

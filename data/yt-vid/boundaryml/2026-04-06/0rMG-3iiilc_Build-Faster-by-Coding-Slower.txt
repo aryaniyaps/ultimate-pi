@@ -1,0 +1,3934 @@
+[0.0s] But the point is for non-disjoint
+[1.2s] systems, there's like a lot of criteria.
+[3.6s] Criteria one, you need a way to break
+[5.4s] down stuff into groups of scenarios. You
+[7.4s] need aggregation metrics, not just like
+[9.5s] boolean assert or falses. Like there's
+[11.0s] like soft
+[12.3s] scenarios you want to go check in.
+[13.7s] Criteria three, you need to be able to
+[15.3s] load data from production databases of
+[17.5s] some kind or like data sets of some kind
+[19.5s] and dynamically define test cases. These
+[21.7s] markdown docs are basically an
+[23.0s] opportunity to have the model dump out
+[24.9s] everything that it's thinking so that
+[26.8s] you can do brain surgery on it before
+[28.7s] like, okay, here's all the patterns you
+[30.3s] want to follow, here's all the decisions
+[31.8s] that you think are the right decisions.
+[33.9s] Give me as many opportunities and give
+[35.5s] the model as many opportunities to tell
+[37.6s] you at a high level what it's thinking
+[39.7s] so you can re-steer before you like drop
+[41.8s] down a level basically. What I end up
+[43.6s] doing basically is I go through here and
+[45.2s] once the implementation is complete, I
+[46.8s] just start reading my test cases and
+[48.6s] make sure the test cases are good and
+[50.1s] that we have like what's called snapshot
+[52.1s] tests so we actually have like test
+[53.3s] cases and we print out the text files,
+[55.4s] what the output of that serialization
+[56.9s] is, what the inner representation of the
+[58.3s] data models are.
+[59.7s] And I go and read that and I'm like, oh,
+[60.9s] I keep on finding more and more bugs.
+[62.6s] And every time I find bugs, I have to go
+[64.6s] fix a bunch of stuff.
+[66.6s] Um and like you can just see me iterate
+[68.4s] through and try and fix each bug one by
+[70.0s] one.
+[71.3s] Yep.
+[72.6s] But it's very rare that I find very,
+[75.3s] very like foundational bugs at this
+[77.4s] phase because if I've done a good job
+[79.6s] earlier,
+[80.8s] then I shouldn't find foundational bugs.
+[87.3s] So in this episode was a lot of fun. We
+[89.0s] went through a ton of um how Vibhav
+[92.2s] likes to code, how he takes um working
+[94.3s] with models using long context, using
+[96.5s] short context, building design
+[97.9s] discussions, iterating on on the
+[99.9s] specification for the language. Um and
+[102.6s] the other example was, you know, the
+[103.8s] what was it? 16,000 lines that you wrote
+[105.9s] for um Closures. For the closures
+[109.2s] feature in BAML and being able to do
+[110.5s] lambdas. So super exciting time. Uh I
+[112.8s] think you'll learn a lot about um how we
+[116.2s] uh do agentic coding and like what the
+[118.0s] frontier there kind of looks like for
+[119.8s] being able to ship a lot of really high
+[121.2s] quality code without slop.
+[123.3s] Um
+[123.9s] The only other update we have for y'all
+[125.8s] before you get into it is
+[128.0s] we are doing an unconference in San
+[129.4s] Francisco on
+[131.9s] April 11th is a Saturday. If you are in
+[134.8s] SF come by the YC office in Dogpatch.
+[137.6s] We're going to have essentially
+[139.4s] what we did last time that worked really
+[140.7s] well. We might do a couple tweaks on
+[142.0s] this, but it was basically like you come
+[143.8s] in, you get your cup of coffee, you chat
+[145.7s] with people. There's a whiteboard up. If
+[147.4s] you have an idea for something you want
+[148.4s] to talk about 5 to 10 minute lightning
+[150.1s] talk. I obviously like no pitches, no
+[152.7s] selling, but if you are working on a
+[154.7s] hard problem and you think you learned
+[156.8s] something that would be interesting to a
+[158.5s] group of really smart AI engineers,
+[160.7s] write your topic on the whiteboard.
+[162.4s] We'll pick someone to go first and then
+[165.2s] when when that person is done talking,
+[166.9s] they go to the whiteboard. They pick the
+[168.3s] next most interesting talk that they
+[169.6s] want to hear and we just kind of like
+[171.1s] loop through like that for the rest of
+[172.5s] the day. We'll maybe do some breakouts
+[174.1s] and split up between like pipelines
+[175.7s] versus evals versus coding agents. We
+[177.8s] may keep it all single track. We're
+[179.0s] going to see how it goes. But if you are
+[180.6s] in San Francisco on April 11th or you
+[182.9s] can get here, we'd love to see you
+[185.0s] and just come connect with other members
+[186.9s] of the AI that works community.
+[189.0s] Yeah, we've got sadly limited head
+[190.4s] count, but I think if you guys are fans
+[192.4s] of the show, you've been here for a
+[194.0s] while, let us know. We'll make sure we
+[195.5s] try and
+[196.5s] make space for everyone there. Yeah,
+[198.0s] enjoy the enjoy the episode and we hope
+[199.9s] to see you live in SF. See you soon.
+[201.7s] This episode's going to be fun. This is
+[203.3s] AI that works. Usually we do some white
+[205.0s] boarding, we talk about AI content and
+[206.4s] how to get the most out of your AI
+[207.4s] tools. I'm Dex. I'm the founder
+[210.1s] co-founder of a company called Human
+[211.2s] Layer. We help you get better results
+[213.0s] out of coding agents. Bybop, I'll let
+[215.5s] him introduce himself and then talk
+[217.3s] about how today's show is going to be
+[218.8s] different.
+[219.4s] >> Yes, my name is Bybop and we make a
+[222.7s] programming language called BAML.
+[225.0s] Today
+[226.5s] I think we're going to talk about
+[227.4s] something fun. It's a language feature
+[228.7s] we've been wanting to do for a while.
+[231.0s] And then when we do this language
+[232.2s] feature, the thing that I really want to
+[234.9s] show is how we go and code from scratch.
+[237.0s] Like how do we go into the compiler or
+[238.7s] how do we go into the AST and how do we
+[240.2s] do this how do we do design all the way
+[243.1s] through? Yeah.
+[244.4s] All the way up till this feature works.
+[246.3s] Okay, so I think today's episode is
+[249.1s] going to be one where we talk about
+[251.2s] really new feature. It's called testing.
+[253.9s] I think if we're in the AI world, I want
+[255.7s] to show a couple of different
+[256.8s] constructs. I want to show how we design
+[258.8s] the feature. I want to show how we
+[260.1s] implement it and I want to show how we
+[261.4s] communicate with quad but all the
+[263.4s] nuances about it as well.
+[265.6s] This is going to require a little bit of
+[266.9s] background knowledge for folks in the
+[268.5s] compiler. So I'll try and go a little
+[269.8s] bit slower and make sure I educate folks
+[271.6s] along the way but how we go make these
+[273.4s] design decisions and why certain design
+[275.1s] decisions get made.
+[277.0s] And then the goal is to just show how we
+[278.4s] one shot everything.
+[279.8s] Like at the end I'm not going to touch
+[281.3s] the implementation loop. It's just going
+[282.5s] to work. We're going to do everything up
+[284.1s] until design but we're going to be
+[285.6s] really really really thorough at design.
+[287.7s] Oh, you're just going to you're going to
+[289.2s] one shot everything past the design.
+[292.0s] Exactly. It'll it will just work.
+[295.4s] It will just work. I this is the
+[296.9s] workflow that I've been adopting now for
+[298.2s] a while. I've shipped like multiple
+[300.1s] 10,000 plus line PRs without
+[302.7s] by being able to do this.
+[303.7s] >> your design and then like turn the
+[306.4s] design back into a ticket basically,
+[308.1s] right? Exactly.
+[310.3s] So I'll show you guys
+[312.1s] what it looks like.
+[313.5s] And I'll but before we do that, I'm
+[315.0s] going to show you
+[317.1s] roughly how we do this. Okay.
+[319.6s] So first let's just really quickly talk
+[321.6s] about testing.
+[323.4s] Inductor, can you send me an Excel of
+[324.6s] all the links by chance?
+[326.4s] Uh yeah, let's do it. Yeah,
+[329.1s] cuz we're going to talk about the
+[329.7s] feature at a high level and then we're
+[331.3s] going to go
+[332.6s] down into the weeds of how to build it.
+[335.3s] Let's get this going.
+[338.6s] I will drop it in the studio chat. Does
+[340.9s] that work? Perfect. Let's do it.
+[343.6s] So first I want to talk a little bit how
+[345.3s] evals work and how evals have to work in
+[347.8s] the AI agentic pipelines because I think
+[349.4s] that will help inspire how we go do
+[351.2s] this.
+[352.2s] So, I want you to
+[352.8s] >> great. Everyone's been asking for a new
+[354.6s] evals episode. Um Yeah.
+[357.5s] So, imagine I have a black box that
+[359.4s] produces that takes in some input and
+[361.4s] produces some output.
+[363.2s] The thing is this is basically what all
+[365.0s] agentic pipelines are. They're a black
+[366.4s] box that produce some input and some
+[367.7s] output.
+[368.7s] The problem is because they're black
+[370.0s] boxes, how do you build understanding of
+[372.2s] what the system where where it works and
+[373.7s] where it doesn't work?
+[374.9s] So, I'm going to use a different example
+[376.2s] cuz I'm going to use an example that I'm
+[377.9s] somewhat a little bit familiar with. Um
+[380.4s] I will not explain anything detail, but
+[382.5s] I'll describe concepts that I think
+[384.4s] would
+[385.4s] make sense. So, let's take Face ID for
+[387.4s] example. We all have Face ID. Uh Face ID
+[389.9s] happened in the year I think like 2019
+[392.4s] or something or 2018 or something is
+[394.7s] when it came out. Uh maybe 2017.
+[397.7s] Uh but it's like in that time frame.
+[400.0s] Uh classical ML. No LLMs exist.
+[403.2s] Transformer is a twinkle in some
+[405.1s] researcher's eye. Yeah, it doesn't even
+[407.7s] matter how it's implemented. Just
+[409.0s] imagine this black box that takes in
+[410.4s] some input image.
+[413.1s] Uh
+[413.8s] input image and then returns back to you
+[416.9s] uh and perhaps like some sort of like
+[419.9s] uh
+[420.8s] the person's I the person's
+[424.1s] the person's signature of some kind.
+[426.4s] Right. Cuz you're not you're not giving
+[428.2s] you're not giving every person their own
+[429.8s] AI model. The model has to be able to
+[431.6s] identify different people.
+[432.9s] >> Exactly. So, we give it an input image
+[435.1s] and a person's signature and we say
+[437.3s] unlock or don't unlock, right? That's
+[439.1s] basically the signal.
+[439.9s] >> Yeah.
+[440.6s] Boolean classifier. Yeah, exactly. Well,
+[443.1s] if you're going to go build this test
+[444.2s] suite, you're going to train this you're
+[446.1s] going to continuously build a new black
+[448.1s] box until your unlock works. That's
+[450.2s] effectively how you're going to go do
+[451.3s] this.
+[452.4s] Well, if you're going to do this, the
+[453.2s] first thing you'll want to do is build a
+[454.7s] bunch of data. Well, the naive thing to
+[456.2s] do is actually to say
+[458.2s] I'm going to build a bunch of data
+[460.8s] that's like a bunch of rows
+[463.4s] uh
+[464.2s] stacked on top of each other.
+[467.1s] Uh where each one is a test suite is
+[469.6s] like a test case.
+[472.2s] I'm going to do the
+[475.1s] I'm going to do each one of these is
+[476.6s] test cases. Using these for back prop
+[479.7s] and like loss function? No, not for just
+[482.0s] for evaluating the system working. Like
+[484.1s] and then what I'm going to say for all
+[485.1s] of them
+[485.2s] >> Each of these has an input image and a
+[488.0s] signature.
+[489.3s] And then expect the output.
+[492.6s] Well, what am I going to say for each
+[493.8s] test case?
+[495.5s] Uh for every single test case, I'm going
+[497.4s] to say the following. I'll be like, "Oh,
+[500.0s] my model is my black box is good if
+[504.2s] um if I have a like if uh 95% of my 90%
+[509.4s] pass,
+[510.6s] this is good.
+[512.7s] That's like success.
+[513.8s] >> can not recognize me 5% of the time and
+[517.1s] it's still a very useful feature.
+[519.2s] Exactly. But, now I might want to say
+[521.1s] something different. I might want to say
+[522.8s] So, I've defined some sort of success
+[524.2s] metric here. It's not to say success is
+[526.3s] like the expected output is what I want.
+[527.8s] It's like I might even say success I
+[529.0s] might define success slightly
+[530.5s] differently. I might say success is
+[533.5s] uh success is either the
+[535.8s] expected output equal equals uh
+[540.2s] uh like uh
+[543.0s] Face ID the result. So, there's two
+[545.5s] definitions of success that I that I'm
+[547.4s] willing to accept or Face ID
+[550.6s] equal equals false.
+[553.2s] Both of these can be considered success.
+[556.4s] Because I just never want to
+[557.8s] accidentally unlock the phone.
+[559.8s] All right, I'm biasing towards
+[561.1s] preferring correct unlocks.
+[564.2s] So, technically I can have a test suite
+[566.1s] that says if it never unlocks Go ahead.
+[569.4s] Yeah, if it doesn't recognize me, that's
+[572.1s] fine compared to if it thinks someone
+[574.4s] else is me.
+[575.6s] A false positive is way worse than a
+[577.6s] false negative. Exactly. So, we're
+[579.8s] already getting in some nuances where
+[581.4s] now I have a 95% pass rate. Well, now
+[583.9s] you'll notice some other nuances here.
+[586.2s] So, what I really want to say is this is
+[589.0s] a 95% pass rate and that's my target is
+[591.4s] kind of what you want.
+[593.4s] Well, if I have a target of 95% and this
+[595.8s] is what's working, well, now I run into
+[597.4s] a problem. If this black box is being
+[600.1s] optimized for this, it's very easy to
+[602.0s] just have a black box that always
+[603.2s] returns false and now you've built a
+[604.8s] system by accident. That is
+[607.0s] >> in 95% of the cases.
+[608.9s] Exactly. So, what's what's kind of
+[610.9s] interesting is I almost have like
+[613.6s] two criteria.
+[616.2s] Um I almost have like a name metric. You
+[618.9s] have two scores. You have the like did
+[621.2s] it get it correct and then like
+[623.8s] did it accidentally Yeah, okay.
+[626.9s] Right. So, and you're already seeing how
+[629.2s] nuanced testing is becoming.
+[632.1s] Can I invert this one?
+[633.8s] Since like we'd going to do like actual
+[636.0s] expected in in both cases.
+[638.5s] And these aren't real metrics. I'm just
+[640.1s] literally making them up.
+[642.2s] Right. But, this is how you're going to
+[643.7s] construct your cost function, right?
+[645.4s] Like the total loss is
+[647.8s] Yeah, go ahead.
+[648.2s] >> think about it as cost function how
+[649.4s] you're training the model. Think of it
+[650.4s] more like how am I going to produce a
+[652.0s] benchmark that says if my system is
+[654.4s] working cuz this is not a model. You can
+[656.3s] think of this like two models
+[657.4s] >> Okay, so this is
+[658.8s] this is not actually signal used to
+[660.6s] train the train the model. This is
+[663.8s] signal used to tell if we made the model
+[665.9s] better or not at like a whole system
+[667.8s] level. This is signal to that says can I
+[670.3s] ship this thing?
+[672.2s] Yep.
+[673.0s] It's like and that's why like this is
+[674.7s] like Face ID's like two models,
+[676.0s] heuristics, a bunch of stuff under the
+[677.6s] hood. Like it's it's not just like one
+[679.2s] thing. It's not about training at all.
+[681.2s] It's merely about thinking about testing
+[683.2s] for non-deterministics deterministic
+[685.3s] systems.
+[686.9s] But, you can see like
+[687.5s] >> whole point of testing is how can when
+[690.1s] automate the the the process of building
+[693.0s] confidence that something is stable
+[694.8s] enough to ship and is better than what
+[696.2s] we had before. Yeah, and in the prior
+[698.6s] world, we lived in a world where you
+[700.0s] build this metric and you build this
+[701.7s] metric of some kind and remember every
+[703.4s] metric can be gained gained. So, we have
+[705.7s] to go ahead and go fix this.
+[707.8s] But what we had to do over here was we
+[709.5s] built this metric and then a human would
+[711.0s] go and update this system and here to
+[713.3s] make it better.
+[714.7s] Uh and then they'd run the metric again
+[716.2s] and they could do this. Well, we live in
+[717.4s] a slightly nicer world now. We live in a
+[719.3s] world with LLMs. So, if you have a
+[720.8s] metric, in theory, you should be able to
+[722.3s] have an
+[723.2s] an an LLM going a coding agent going and
+[725.8s] update this system, get the metric and
+[727.7s] go and do this.
+[729.1s] But the idea is this just gives us a
+[730.3s] signal about if we can ship or not.
+[733.2s] But you can clearly see how this is good
+[734.8s] or bad.
+[735.8s] But
+[736.7s] this gets even more tricky because this
+[738.8s] is actually not how I would do this.
+[741.2s] What I would do is I would actually take
+[742.3s] this whole thing
+[743.9s] and then what I'd say is I'd actually
+[745.4s] split this into two parts.
+[747.6s] And what I'd say, for example,
+[749.8s] is something like this. You have two
+[751.5s] sets of test cases.
+[753.6s] You have scenarios. You have testing
+[755.2s] scenarios. One scenario
+[757.9s] is glasses. Mhm. So, you can see the
+[761.3s] scenario already.
+[762.9s] You can see how
+[763.8s] >> could see, hey look, our overall went
+[765.8s] up, but our glasses went down. Or you
+[769.0s] could see our glasses went up, but our
+[771.3s] non-glasses went down. You have slice
+[772.9s] and dice the kind of like test cases
+[774.9s] into a bunch of different categories.
+[776.7s] Yeah, and I might just say, hey, if
+[778.5s] glasses with glasses signature, I expect
+[780.8s] this to remain at any percent
+[782.7s] correctness rate, but when I use glasses
+[784.6s] with non-glasses signature,
+[787.0s] I expect this to drop to 60% correctness
+[789.2s] rate and I still pass that. Again, Face
+[791.6s] ID does not have these kind of
+[792.8s] scenarios. I'm merely making up numbers
+[794.8s] just to prove the point of what I'm
+[795.9s] trying to say. But the way you think
+[797.5s] about these non-deterministic systems
+[799.4s] and the way we think about our all our
+[800.6s] agentic outcomes has to be thought very
+[803.4s] scenario specific. So, there's two
+[806.0s] things to think about when you think
+[807.2s] testing.
+[808.3s] We want to make sure that people can
+[809.7s] build scenarios of some kind, and
+[811.9s] scenarios are really interesting
+[814.4s] um for a couple of reasons, but they
+[816.1s] need to be like
+[817.5s] almost product-oriented scenarios is how
+[820.0s] you have to come up with it as.
+[821.7s] And the way that we do metrics is also
+[823.5s] not done the way that we used to. We
+[825.0s] kind of want metrics that are like
+[826.9s] named metrics that all that all
+[829.1s] contribute to final like aggregation of
+[831.8s] the actual data set,
+[833.8s] if that makes sense.
+[835.2s] So, if we're going to build scenarios,
+[836.9s] we're going to build them
+[838.1s] >> this becomes basically like a fairly
+[841.2s] wide data set of like each individual
+[844.6s] test case has multiple dimensions, and
+[847.1s] you can group and shape the data along
+[850.7s] any of those five, 10, 30 dimensions,
+[854.2s] and analyze how the behavior changed
+[857.6s] across any of those.
+[859.4s] Exactly. So, you kind of need to
+[860.8s] understand all of that before you can
+[862.6s] even think about how we're going to do
+[863.6s] testing.
+[865.0s] But now there's one last Go ahead. Can I
+[867.5s] can I throw in one Did you ever have to
+[869.9s] work with OLAP cubes? Does the word OLAP
+[872.8s] cube mean anything to you?
+[874.9s] Okay, we won't go down that path. If
+[877.5s] anyone in the chat wants to hear about
+[879.0s] OLAP cubes, maybe we'll do an episode on
+[881.4s] that.
+[882.8s] So,
+[884.0s] um I have no idea what Can you give me a
+[885.1s] 1-second primer on what that is? I'm
+[886.7s] actually curious. Uh
+[888.1s] it's a like standard old-school BI
+[890.1s] tools. They would only let you have like
+[892.6s] you would basically create a cube, so
+[894.0s] it's a three-dimensional data set. So,
+[895.7s] like a sales data set would be like it
+[897.9s] would have like two dimensions and a
+[899.5s] metric. It would be like sales volume,
+[901.5s] and your dimensions would be like by
+[903.8s] region and by, you know, product. And
+[907.2s] that was every BI tool you had to like
+[909.5s] reduce the data set to three dimensions,
+[911.6s] or basically two dimensions and a value
+[913.4s] to be able to analyze it.
+[916.3s] That sounds arbitrary
+[918.6s] why they would pick three dimensions,
+[919.8s] but I I why. It's because like humans
+[921.6s] can't think in more than three
+[922.6s] dimensions, but still. All right, we
+[924.5s] gave Mark some PTSD. My job My My work
+[927.2s] here is finished. I will let you get
+[928.4s] back to the AI.
+[930.1s] Okay. Um well, okay, there's one last
+[932.7s] scenario in here that I think is very
+[934.4s] important. Which is
+[936.6s] typically when you write test cases in
+[938.5s] most languages, they're statically
+[940.1s] typed.
+[941.1s] So, you type out the test, and you type
+[942.6s] it out.
+[943.4s] The problem is the way that you actually
+[945.0s] load these is all this data as actually
+[947.0s] not in your code base. It's often loaded
+[949.1s] from a database or some other scenario
+[950.9s] and executed. So, your tests don't even
+[953.6s] >> SQLite or JSON or Postgres or where or
+[957.0s] some like SAS cloud secure
+[959.7s] PII storage system where you don't even
+[962.1s] want your engineers to have access to
+[963.4s] and you want the actual control that
+[964.8s] only runnable on like test harnesses.
+[966.9s] That's right. They send their test code
+[968.6s] to some like secure enclave, and only
+[971.2s] from that infrastructure can the test be
+[973.0s] run or something.
+[974.1s] >> And like locally pings a different
+[975.6s] database that you do have access to.
+[977.6s] So, you can run stuff locally and in a
+[979.5s] secure enclave where like the test that
+[981.0s] is hidden. The point is for
+[982.3s] non-distributed systems, there's like a
+[983.8s] lot of key criteria. Criteria one, you
+[986.3s] need a way to break down stuff into
+[987.5s] groups of scenarios. You need
+[989.3s] aggregation metrics, not just like
+[991.1s] boolean assert or falses. Like there's
+[992.6s] like soft
+[993.9s] scenarios you want to go check in.
+[995.4s] Criteria three, you need to be able to
+[996.9s] load data from production databases of
+[999.1s] some kind or like data sets of some kind
+[1001.2s] and dynamically define test cases.
+[1003.6s] Yeah. And in your word, production is
+[1005.6s] less like production as in like the SAS
+[1008.4s] environment that the customers use, but
+[1010.3s] it's more production in the sense of
+[1012.2s] like this is the very highly regulated
+[1014.7s] environment where there's a lot of rules
+[1016.4s] around where the data's allowed to go
+[1019.0s] and even if it's allowed to leave that
+[1021.5s] particular environment at all. Uh no. I
+[1024.6s] In In face of it, yes. Uh but like in In
+[1027.2s] the case of like agentic systems, the
+[1028.5s] answer is no. You actually just want to
+[1029.9s] be able to pull data from prod.
+[1031.9s] And just like get the data from prod.
+[1033.3s] Just like, "Hey, turn this like log I
+[1035.4s] have into a test case that I run." And I
+[1038.0s] might even want to say run the last five
+[1039.9s] like
+[1040.8s] it take all the logs from the last month
+[1042.7s] and run 1% of them as test cases.
+[1045.8s] Yep. Uh as what I want to go sample. So,
+[1047.8s] it's like almost like a moving target.
+[1049.2s] The test doesn't really mean anything,
+[1050.7s] but it what it really signifies is not
+[1053.2s] that the
+[1054.1s] I what I'm measuring for is are my
+[1056.3s] agents performing well for the user
+[1060.4s] for the way that my users are using my
+[1062.0s] application, which is a moving target in
+[1064.3s] some sense cuz it's capturing user
+[1065.7s] behavior and your agent at the same
+[1067.6s] time.
+[1068.9s] Yeah, that's what a lot of these like
+[1070.3s] eval platforms like claim to help you to
+[1072.5s] do.
+[1073.4s] Exactly. But, that's the kind of system
+[1074.9s] you need to build. But, in order to
+[1075.7s] build that you have to build test. So,
+[1077.0s] before I go show anything else, I want
+[1078.7s] to show you how you would do the such a
+[1080.0s] thing in Python.
+[1081.4s] Um how do I I have wisdom teeth problem.
+[1085.6s] It's very sad.
+[1087.2s] Aw. I know. I was like
+[1089.4s] >> getting them removed? Dude, I'm 32. I
+[1092.0s] thought I got I got I got lucky and I'd
+[1093.8s] be one of the few folks that never have
+[1095.3s] to get them removed, but I got very,
+[1096.8s] very um
+[1098.5s] test in one second. Uh test in Python.
+[1102.2s] Show me how do I parameterize test in
+[1103.7s] Python and in TypeScript where I have to
+[1105.9s] load data from a database where each one
+[1108.0s] of those database calls is a test case.
+[1113.0s] All right. It'll show you an example.
+[1114.0s] Yeah, it's very sad. I thought I was 32
+[1115.6s] and I I got lucky cuz you typically if
+[1117.2s] you don't have need it by 25, it you're
+[1119.4s] solved.
+[1121.0s] Um
+[1122.2s] uh but no, I'm unlucky. Buddy's asking a
+[1124.8s] really important question. Is this
+[1125.9s] testing in production? Well, you don't
+[1127.6s] want to test in production, you want to
+[1129.3s] be able to test locally, but you want to
+[1130.6s] be able to test using production data.
+[1133.6s] Testing on production. Exactly.
+[1136.4s] Uh prepositions makes uh is that is
+[1138.1s] preposition the right word in on? I
+[1139.8s] think so.
+[1140.8s] Or maybe not.
+[1142.2s] Am I getting it right?
+[1142.6s] >> Human in the loop, human on the loop, I
+[1143.9s] don't know.
+[1146.6s] Human on the loop sounds all wrong.
+[1150.1s] Um
+[1151.1s] so, this is how you do this in Python.
+[1153.2s] Um, the first thing you can notice is
+[1154.9s] you parameterize this by case. But like
+[1157.1s] and this is what it kind of looks like.
+[1159.3s] It's just not a very good way to go do
+[1161.7s] this. It doesn't feel very ergonomic.
+[1164.3s] And you're not even going to speak.
+[1166.0s] >> Why don't I like this? Like the ability
+[1167.2s] to write arbitrary code to generate your
+[1168.8s] test cases is is very powerful, I think.
+[1172.0s] Yes, so we do want that. But I just
+[1173.6s] don't think that in in Python so few
+[1176.2s] testing scenarios actually revolve
+[1177.6s] around this that this is almost like a
+[1179.0s] hack in the way that it ends up looking.
+[1181.8s] Yeah, this is we used to call it in like
+[1183.4s] go we call this like to I mean
+[1184.7s] everyone's called every language you
+[1186.0s] have like table test where you write the
+[1187.4s] test logic once and then the input to
+[1189.8s] every test case is just data. It's kind
+[1191.6s] of lispy. I know you hate functional
+[1193.0s] programming but this is a very FP style
+[1195.1s] thing.
+[1195.5s] >> Yes. Yes. So but I think what we want to
+[1197.9s] do is we want to make it a little bit
+[1199.0s] more native in the way that it works.
+[1200.8s] Um, you can you can do there's like a
+[1203.3s] few different ways to do this in Python.
+[1205.2s] I want to show you how TypeScript does
+[1206.2s] it too. Um, TypeScript does this. I
+[1208.3s] really like the TypeScript approach. It
+[1209.7s] looks much more clean in my opinion at
+[1211.4s] least. Because you don't have to use a
+[1212.4s] fancy framework and decorators. It's
+[1214.2s] very clear of like hey you call a
+[1215.8s] function to declare a test case and then
+[1217.8s] you can just loop over it and things
+[1219.1s] like that. Yep. The thing I don't like
+[1220.9s] about TypeScript um, is like where are
+[1224.0s] these magic words coming from? These are
+[1226.4s] so confusing to me like the fact that
+[1228.6s] you first describe a test case and then
+[1230.7s] you like test I think they use it in
+[1233.0s] some frameworks versus test. Those words
+[1235.2s] are kind of like confusing.
+[1237.2s] So this is BDD, right? This is the thing
+[1239.2s] of like behave I mean this exists in
+[1240.6s] every language. I don't know why it
+[1241.7s] caught on the most in TypeScript. It's
+[1243.3s] probably because you have a lot of like
+[1244.7s] testing front end applications where you
+[1246.2s] want to describe behavior rather than
+[1247.8s] like hey this DOM element has these
+[1250.0s] properties or whatever. But um, yeah I
+[1253.7s] >> I agree that it's a little bit of a
+[1255.3s] weird way to like nest your test cases
+[1257.8s] and like when all your code is indented
+[1260.0s] 30 times cuz you had a bunch of like
+[1261.8s] before all's or after all's or like
+[1264.0s] nested cases and stuff. And then the
+[1265.6s] assertion like I mean the assertion
+[1267.1s] library, the expect it to be whatever is
+[1270.1s] like actually orthogonal from the BDD
+[1272.4s] test case like words, but yes, I I agree
+[1275.0s] it's a little wonky.
+[1276.7s] >> The other thing that goes into it is
+[1278.6s] this the next part of this is once you
+[1280.0s] start actually looking at these, you
+[1281.3s] start discovering things like before
+[1282.7s] all, before each, and then you're like,
+[1284.5s] okay, well, how does how does that work?
+[1286.0s] Well, it turns out when you go into like
+[1288.4s] Google's code bases, Google has a policy
+[1290.0s] that says you should not use before all,
+[1291.6s] before each. Test should be extremely
+[1293.2s] local.
+[1294.4s] Um
+[1294.8s] >> Yeah. is like you end up over
+[1296.0s] generalizing for things that you really
+[1297.4s] shouldn't.
+[1298.5s] It's much better to make every test
+[1300.2s] individually self-contained.
+[1302.2s] When you go do this, it's just easier to
+[1303.9s] model. Go ahead.
+[1305.2s] >> Do you think that extends to like cuz
+[1307.0s] like there's there's two flavors of
+[1308.4s] that, right? There's like and and the Go
+[1309.9s] team has talked about this a lot and
+[1311.2s] actually the Mitchell Hashimoto does a
+[1312.7s] really good talk on like testing in Go
+[1314.6s] and they basically said like
+[1316.5s] uh not only do we not use like before
+[1319.0s] each, before all, which can be a little
+[1320.8s] bit of like opaque from like you're
+[1322.4s] reading the test and you actually have
+[1323.8s] the logic, you have to scroll up to the
+[1325.1s] top of the file to see what the setup
+[1326.7s] is.
+[1327.6s] Um but what do you think about like test
+[1330.0s] helpers? Like things inside the test
+[1332.6s] case where it's like you know, await,
+[1335.2s] set up set up database record for this,
+[1337.6s] set up database record for that, start
+[1339.4s] server. Like you take the logic that is
+[1341.0s] like repeated in every test case and and
+[1343.2s] build it into a helper. Okay.
+[1345.3s] >> Cuz like uh
+[1346.6s] and the reason I when I started thinking
+[1348.0s] about this problem, I started thinking
+[1349.3s] really hard about we use a lot of Rust
+[1350.8s] in our code bases.
+[1352.4s] And I realized Rust doesn't have before
+[1353.9s] each and after all. And I only realized
+[1355.6s] this when I thought about it like I've
+[1357.2s] never regretted not having that the last
+[1359.1s] 2 years of my coding experience in Rust.
+[1361.6s] Maybe three. I I'm not sure there is a
+[1363.1s] BDD testing library in Rust and I'm sure
+[1366.0s] there are Rust code bases that follow
+[1367.5s] that pattern.
+[1368.6s] >> Yeah. There's no chance because like
+[1370.1s] Rust is like macro driven. So you just
+[1372.2s] use macros and like it's just like you
+[1374.2s] just add you just write a shared
+[1375.8s] function and you just say that is what
+[1377.4s] happens a few times. And that's a lot
+[1378.8s] easier to think about.
+[1381.2s] So now that we've decided a few things,
+[1383.5s] we decided we want to enable this sort
+[1386.2s] of scenario driven testing with like
+[1388.3s] metrics and everything else. We decided
+[1390.3s] that we want to go ahead and not have
+[1393.4s] before each and after all cuz it's
+[1395.1s] complicated. Uh
+[1396.8s] there's a few things that we are that
+[1398.4s] are implicit like we want to be able to
+[1400.2s] because of semantics, we want to be able
+[1401.7s] to describe the name of the test with
+[1403.8s] strings.
+[1405.2s] Like this is a way better way to
+[1406.5s] describe scenario than like glasses
+[1408.5s] glasses like making the variable name is
+[1411.2s] arbitrary. We don't really want to do
+[1412.4s] that. We want to use strings to describe
+[1414.3s] things when possible.
+[1416.0s] Cuz it's very very scenario driven.
+[1419.0s] Um
+[1419.4s] >> Yep.
+[1420.6s] Now we can actually start beginning on
+[1422.1s] this. So, it's very important when you
+[1424.0s] do like full agentic coding at least in
+[1425.5s] my opinion to like totally understand
+[1428.2s] the surface area of everything you're
+[1429.6s] doing. And all these conclusions that
+[1431.6s] I'm sharing are actually
+[1433.6s] they're not um
+[1435.2s] I
+[1436.7s] wish I had done this from scratch. I
+[1438.5s] have not. I have done a lot of legwork.
+[1441.2s] Well, I should say my co-founder has
+[1442.8s] done a lot of legwork
+[1444.4s] in doing this.
+[1445.2s] >> is the next the next thing I'm
+[1446.8s] interested in is like yeah, can we look
+[1448.4s] at the desired syntax and like what we
+[1450.9s] think the feature should look like?
+[1453.6s] So, I think I can share it on here.
+[1455.8s] Uh so, this is like a very the first
+[1458.4s] thing that we'll look at. There's a
+[1459.2s] little bit more niceness that I'll go
+[1460.9s] and update in a second.
+[1462.9s] But this is kind of what we want but at
+[1465.0s] a very very trivial level. You want to
+[1466.7s] be able to say you have a test, a test
+[1468.4s] run this and then a test run arbitrary
+[1470.5s] code.
+[1471.8s] Yep. It's nicely sandboxed. It's you're
+[1473.7s] running very very trivial amounts of
+[1475.5s] code. And then most importantly you want
+[1479.0s] to have some sort of metrics. So, we'll
+[1480.2s] talk about these metrics in a second
+[1481.6s] really fast. And what what these are
+[1483.9s] versus like assertions.
+[1485.9s] And with the syntax is pretty
+[1486.9s] straightforward. We've done a lot of
+[1488.0s] legwork already comparing it to existing
+[1489.6s] syntax.
+[1491.0s] Uh and like existing patterns and other
+[1492.9s] things. We were deeply inspired by Zig's
+[1495.0s] ergonomic syntax. So, that was like a
+[1497.0s] bias that we have already. Uh Zig's way
+[1499.4s] of doing testing is really nice. Zig is
+[1501.2s] phenomenal the way that it does testing.
+[1503.6s] Um but I want to show
+[1505.7s] a couple of things uh as soon as they go
+[1507.4s] down here.
+[1510.4s] Um actually, I'll just show Obsidian. I
+[1511.9s] think I have a better version of
+[1513.7s] Obsidian.
+[1515.1s] And then, let me switch this to dark
+[1516.3s] mode. I apologize, amigos.
+[1518.8s] I actually like reading in light mode.
+[1520.4s] Call me a heathen, but it's phenomenal.
+[1523.1s] You can leave it. Why do you Why do you
+[1524.0s] want to change it to dark mode?
+[1525.9s] Oh, okay. Well, people don't judge me.
+[1527.6s] I'm going to leave it uh light mode in
+[1529.0s] that case. Um I mean, I was going to
+[1531.0s] judge you either way, so.
+[1533.2s] So, let's quickly look at this uh and
+[1535.2s] see what it looks like. So, this is like
+[1536.9s] the smallest possible test case that you
+[1538.5s] can have.
+[1539.8s] Um just ignore this bottom part.
+[1542.9s] Where you basically have let's say you
+[1544.4s] have a an perhaps a judge something that
+[1546.6s] is able to judge the quality of an
+[1547.9s] input. So, you give an input and an
+[1549.1s] output and it gives you a float back.
+[1551.4s] Well, then you have your actual
+[1552.8s] function. It's going to translate. It's
+[1554.5s] a function takes in language and then a
+[1556.1s] target and it produces some string back
+[1557.8s] out. All you're guaranteeing that it's
+[1559.5s] not null. That's the only hard guarantee
+[1561.5s] you make.
+[1562.4s] Then you make a lot of soft guarantees.
+[1565.6s] Soft guarantees are saying, "Oh, I want
+[1567.0s] to guarantee that I want to contain that
+[1569.0s] this contains expected thing and the
+[1570.3s] quality is more than at least 0.7."
+[1573.5s] It's very soft.
+[1575.0s] >> between assert and check sort of similar
+[1578.3s] to like the like
+[1580.3s] um
+[1581.9s] like I know a lot of languages support
+[1584.3s] like a like non-blocking failure where
+[1587.4s] it's like, "Hey, I want to know that
+[1588.6s] this failed, but I want the test to
+[1590.0s] continue executing."
+[1592.0s] Uh I wouldn't even think of it as like a
+[1593.2s] failure. Think of it as a metrics
+[1594.8s] collector. You're collecting a metric
+[1597.2s] that is named something that processes
+[1599.6s] on these two elements.
+[1601.4s] Yeah. Most most frameworks that
+[1602.8s] implement this not as metrics would just
+[1604.8s] be like, "Cool, we're going to print
+[1605.8s] that this check failed, but the test
+[1607.4s] will continue to run." And then, if
+[1609.0s] there's at least one failure, then then
+[1612.0s] the test fails, but we don't we let we
+[1613.8s] let it run all of the evaluations before
+[1616.2s] we actually exit the test.
+[1617.6s] >> this actually has nothing to do with
+[1619.3s] whether the test fails or not. This is
+[1621.0s] merely about giving you a metric.
+[1623.4s] If you go back to what this is about, I
+[1625.5s] don't care that this test failed. Like,
+[1627.2s] it's fine that we got a bad unlock some
+[1629.7s] of the time. I just the whole scenario
+[1631.7s] of my test failed.
+[1633.5s] >> Exactly. And if the percentage is less
+[1635.3s] than 0.1%, that is more than 0.1%, then
+[1638.5s] the scenario fails, but not the
+[1641.0s] individual test.
+[1641.8s] >> So, you're going to have like another
+[1643.3s] like um assertion on the entire scenario
+[1647.1s] or the entire test suite that like makes
+[1650.1s] assertions about the values of the check
+[1652.0s] metrics. Exactly. So, now let's define
+[1655.2s] scenarios. Well, scenarios are test
+[1657.2s] sets.
+[1658.5s] Test sets have a names, but they run
+[1661.1s] arbitrary code on them. And then in
+[1663.5s] every scenario, you can define more
+[1664.8s] tests.
+[1667.5s] So, it should read pretty
+[1668.6s] straightforward in terms of what's
+[1669.8s] happening so far, um and like how this
+[1672.3s] is being designed, and what you're
+[1674.0s] getting out of this. Questions so far?
+[1675.8s] >> Okay. So, this is going to emit a
+[1677.1s] separate metric for every test case
+[1679.1s] based on the the ID in the trace.
+[1681.6s] Exactly. So, now the problem is when I
+[1684.4s] run tests, I want tests to run extremely
+[1686.4s] fast. So, if we run tests extremely
+[1688.4s] fast, we first break this process down
+[1690.6s] into two processes, collection and then
+[1692.9s] execution.
+[1694.3s] That's how most good testing libraries I
+[1696.6s] I good testing libraries do it. Uh
+[1699.0s] libraries that don't do a full
+[1700.1s] collection sweep at the beginning, I
+[1701.4s] think are incorrect. Um
+[1704.1s] like I should be able to list out all my
+[1705.2s] test cases really really fast.
+[1707.9s] Um at least I think so.
+[1709.6s] >> Okay. So, you don't want the like async
+[1711.6s] iterator where you feed one case off of
+[1714.4s] the off of the collection at a time.
+[1718.8s] No. And the reason you don't want that
+[1720.2s] is because again, we go with we start
+[1721.6s] with the principle. I want tests to run
+[1723.1s] extremely fast. So, if I want a test run
+[1725.7s] extremely fast, that means test should
+[1727.0s] run maximally in parallel.
+[1729.7s] They're running tests maximally in
+[1730.9s] parallel.
+[1731.4s] >> to know what they are.
+[1733.0s] You got to know what they are.
+[1734.6s] Um, it like parallelism is impossible
+[1736.8s] without pre-collection is is the claim
+[1738.9s] that I would make.
+[1740.5s] So, we must run collection first. So,
+[1743.3s] that's like a another assumption that
+[1745.2s] we're starting with.
+[1747.2s] And again, I know that there's a lot of
+[1748.8s] background before we get into the actual
+[1750.2s] code, but it's really important that we
+[1751.4s] all deeply understand the problem before
+[1753.3s] we code. So, today's episode will be
+[1754.7s] slightly longer if you watch me code the
+[1757.0s] whole time.
+[1758.5s] But, I think once we're all caught up
+[1760.1s] with all the knowledge, then we can go
+[1761.6s] start the coding side of it.
+[1764.5s] So, now we go do this. Well, if I'm
+[1766.7s] going to run this in production, there's
+[1768.5s] another element of this that we actually
+[1770.1s] have. Which is, if we go back to the
+[1772.9s] system over here, we talked about
+[1774.7s] correctness.
+[1776.0s] Well, correctness is kind of interesting
+[1777.6s] for Face ID.
+[1779.6s] Remember, this thing is a
+[1780.9s] non-deterministic system. Same input
+[1782.9s] same same inputs might produce different
+[1784.7s] outputs.
+[1786.1s] Yep.
+[1787.4s] So, what I might really want to say is,
+[1789.2s] even though I have this, actually what's
+[1791.4s] this test case should actually run three
+[1793.2s] times.
+[1795.0s] With a little bit of jitter on every
+[1796.8s] input as I run it. Or this or this test
+[1799.6s] case should just run three times in
+[1800.6s] general. And when I run this test case
+[1802.8s] every three times, I want to guarantee
+[1804.5s] that, hey,
+[1806.2s] it none of the time should bad unlock.
+[1808.8s] At least one of the time should unlock.
+[1810.6s] And that's considered correctness.
+[1812.1s] That's considered bad unlockness.
+[1815.2s] Ah, okay. So, you're like taking the max
+[1817.9s] and min of the three cases, basically.
+[1821.6s] Exactly. And
+[1824.1s] at least one pass
+[1826.4s] guaranteed none fail. And that's
+[1828.4s] considered
+[1829.6s] a good system for this one.
+[1832.2s] Well, that gets really tricky to go
+[1834.0s] right. There's two ways that we can go
+[1835.2s] do this. The one way you can do this is
+[1837.1s] you can you can literally triple every
+[1839.4s] test case. Well, you can for every test
+[1841.8s] case, instead of being a test case,
+[1843.7s] these are all test scenarios.
+[1845.6s] What do you have a three thing and you
+[1846.6s] build an aggregation metric?
+[1848.6s] But really the tricky part is you're
+[1850.0s] kind of building some sort of
+[1851.2s] aggregation logic here is idea. So
+[1853.9s] you're no longer running the test as you
+[1856.1s] thought you were. You're kind of running
+[1857.4s] the test
+[1858.6s] in different ways and with different
+[1859.8s] principles.
+[1861.9s] So how do you go do that? Well, what you
+[1863.6s] really need is you want something where
+[1865.1s] you can actually design the thing that
+[1866.8s] is running the test at the same time.
+[1869.4s] So you want to be able to choose how you
+[1870.4s] run the test. So in this case this is a
+[1871.6s] quorum runner. A quorum runner says run
+[1874.3s] it up to five times, at least three must
+[1876.9s] pass.
+[1878.6s] And if at least three pass, this works.
+[1880.4s] Well, what is a quorum? Well, there's a
+[1882.7s] couple more things I could show you, but
+[1883.8s] I'll just show you what a quorum is.
+[1885.9s] A quorum is just a thing that returns a
+[1888.0s] lambda that takes a test.
+[1890.1s] It knows how to run that one test and
+[1891.9s] then produces a test report. So it just
+[1894.0s] tells you exactly how it's going to run
+[1895.5s] itself.
+[1896.6s] So this a quorum says you'll run this up
+[1899.6s] to N. You'll run this five times and
+[1901.4s] you'll guarantee that at least
+[1903.3s] this many of those times passed.
+[1906.0s] And you'll just produce a quorum test
+[1907.5s] for this.
+[1908.9s] So it's a really simple loop. You run
+[1910.6s] this many times and you collect the pass
+[1912.0s] rate and that tells you whether or not
+[1913.0s] this test actually passed. It's a way in
+[1915.7s] testing to like advance the testing
+[1918.2s] to change the test report to meet some
+[1920.0s] other criteria based on your execution
+[1921.8s] model.
+[1923.4s] If that makes sense. How would you How
+[1925.2s] would you consume this? Like so I'm
+[1927.8s] defining the run once as a like inline
+[1931.3s] function that is passed into the quorum
+[1933.5s] runner.
+[1934.6s] Well, run once actually just comes
+[1936.4s] directly from the test that you define.
+[1938.2s] This is run one. It's going to run this
+[1939.6s] block of code.
+[1941.4s] Okay. And every single test produces
+[1944.1s] Exactly. It's not explicit. You don't
+[1945.2s] have to think about this. Every single
+[1947.0s] test
+[1947.3s] >> once call is basically just a a internal
+[1950.6s] wiring of of the thing the user wrote in
+[1954.3s] the test case. Exactly. And then you got
+[1956.6s] to run report out of this. And then a
+[1957.9s] run report can produce another test
+[1959.4s] report out of this.
+[1960.8s] What's interesting about this
+[1962.8s] is you actually can do a lot of metrics
+[1965.7s] like this. For example, you can build a
+[1966.8s] retry runner.
+[1968.3s] Where do you have run once and you run
+[1970.0s] and as if any of them pass, you
+[1971.3s] instantly return.
+[1973.1s] If none of them pass, then you return a
+[1974.4s] failure with like the logs of every
+[1976.3s] single failure that happened.
+[1979.0s] Then you'll go ahead and there's a way
+[1981.4s] for example like you might want to say,
+[1983.0s] "Hey, run this, but I want to change
+[1984.6s] what client it operates on every single
+[1986.4s] time. Like I want to change this to like
+[1987.7s] switch models as I go."
+[1989.6s] Yeah, and that's why I go run my test
+[1990.9s] case for this. You don't really want to
+[1992.6s] change your test case for this. You kind
+[1994.0s] of want to change the runner of some
+[1995.2s] kind. It's kind of what you're really
+[1996.4s] doing and how you want to think about
+[1997.5s] this. Okay, so this is parameterizing
+[2000.3s] across a matrix, basically.
+[2001.8s] >> Exactly. But you're thinking about this
+[2003.8s] list of test cases, you're giving me the
+[2005.9s] ability to create a matrix runner.
+[2009.0s] Now, the next thing you want to go is
+[2010.6s] you want to say, "Okay, well, once you
+[2012.4s] go do this
+[2014.0s] All right, well, there's a
+[2015.0s] >> So sorry, that
+[2016.4s] that quorum 9 7 means we're going to run
+[2018.8s] it nine times and we require at least
+[2020.6s] seven of them pass. Exactly.
+[2023.5s] Right? But also what's interesting is
+[2024.9s] because it's just functions, you can
+[2026.2s] kind of define your own execution model
+[2028.4s] for any one test as you want.
+[2031.0s] You can also require this for test sets.
+[2033.2s] Test sets can also have quorums built
+[2035.0s] in.
+[2037.4s] And what's really interesting is if you
+[2039.0s] wanted to build some level of like
+[2040.3s] serialization, for example, you can also
+[2042.3s] build serialization cuz you can just say
+[2044.7s] when you implement a quorum
+[2046.7s] uh
+[2047.3s] when you implement a like a runner
+[2050.6s] one of the things that you can do is you
+[2051.7s] can just say one of the things that a
+[2053.5s] runner takes in as a parameter is a
+[2055.2s] semaphore. And before you call run once,
+[2057.8s] you require the semaphore to exist, then
+[2059.4s] you call run once.
+[2061.1s] And because it's a shared semaphore
+[2062.5s] across multiple tests, it basically
+[2064.2s] guarantees that tests are not They're
+[2065.8s] running in parallel, but they're
+[2066.9s] definitely not executing in parallel.
+[2068.6s] They're locked.
+[2070.1s] Mhm. Okay.
+[2071.2s] >> And that kind of makes sense.
+[2073.0s] So, this gives you the ability
+[2074.5s] >> would actually make my test If the slow
+[2076.6s] part is the test harness, then yes,
+[2079.1s] those things can happen in parallel, but
+[2081.0s] if my actual execution is not
+[2082.9s] parallelizable, isn't that going to be
+[2084.6s] the slow part?
+[2086.4s] But, you opt into when you want tests to
+[2088.5s] run in serial. So, the idea is as a
+[2090.4s] developer, you say that these tests have
+[2092.4s] to run sequentially.
+[2094.0s] These tests can all run in parallel. And
+[2096.0s] you you as a developer have to make that
+[2097.5s] claim. We can't provide that for you.
+[2099.9s] Yep.
+[2101.5s] Okay, cool. So, now that we've done
+[2103.4s] this, now you've seen the level of
+[2105.4s] document that we've done the level of
+[2106.7s] history that we've done off of this.
+[2108.2s] Well, this is still not enough.
+[2110.8s] We want to We have to go to the next
+[2112.4s] step, which is we'll take this ticket,
+[2114.0s] and I've done a little bit of this work.
+[2115.7s] Um so, I want to share some of this.
+[2118.0s] Where you'll want to go ahead and take
+[2119.4s] this ticket, and then
+[2121.4s] you'll run it through the standard RPI.
+[2123.2s] So, I literally copied and pasted that
+[2124.6s] file directly in there. Uh it's either
+[2126.5s] this one or a different one.
+[2128.0s] >> the BEP file that has all that Okay.
+[2130.9s] I literally just copied and pasted
+[2132.4s] everything in there, and I said, "Go do
+[2133.6s] this." And it does the RPI standard
+[2135.6s] process. Zero loop. I didn't do any
+[2137.9s] work. I just told I just gave it to
+[2140.1s] >> auto advanced it through to design. I
+[2142.3s] auto advanced it to design. I think I
+[2143.9s] did one thing in here.
+[2146.2s] Uh no, I didn't even I fully auto
+[2148.0s] advanced it to design.
+[2149.8s] Cool. And then, once I got to design, uh
+[2152.8s] this is where I started playing with
+[2153.9s] this, and I'll show you a little bit of
+[2155.0s] my chat log already. Uh we're still not
+[2157.2s] done yet. So, I'll show you a little bit
+[2159.1s] of my chat log. I told it the syntax. I
+[2162.1s] told start going with it. It may it did
+[2164.3s] the research questions. I did some more
+[2166.1s] research. It produced a design file. It
+[2168.6s] then went ahead and wrote the sign
+[2170.0s] document.
+[2172.2s] Then, I started uh looking into the
+[2174.2s] design document. I started thinking a
+[2175.6s] little bit more about implementation
+[2177.1s] detail, because the system so far is
+[2179.6s] very clearly about syntax.
+[2182.4s] Uh what is this UI? This UI is called
+[2184.3s] Riptide. It's freaking great. Dexter,
+[2185.9s] you should talk about it uh when you're
+[2187.5s] when you want to.
+[2189.6s] We'll talk about it at some point. I
+[2191.1s] mean, I'll let you talk about it.
+[2193.6s] >> All right.
+[2194.2s] It's a tool It's a tool that we're
+[2195.4s] working on for Agentic Engineering.
+[2197.8s] Yeah. So, I went through that and once I
+[2199.4s] produced this, I then have um I then it
+[2202.4s] did a bunch of research and it started
+[2203.8s] asking me questions about all these
+[2205.1s] design questions I came up.
+[2207.4s] Well, one of the things I started
+[2208.9s] answering some of the questions and I
+[2210.2s] said, "Oh, this global testing um okay,
+[2213.0s] so let me do a little bit more
+[2214.3s] background."
+[2215.8s] Well, in order to write the syntax,
+[2217.1s] there's two levels of a compiler that we
+[2218.9s] have to have. A compiler does a couple
+[2220.7s] of things.
+[2221.8s] A compiler takes some syntax and puts it
+[2223.8s] into the execution model of the actual
+[2225.4s] runtime of the language.
+[2227.1s] So, what does this syntax actually say?
+[2229.7s] Well, the syntax basically says
+[2231.0s] something like this.
+[2232.6s] This desugars directly into
+[2235.8s] Let me write this into Rust to get some
+[2238.2s] syntax highlighting.
+[2240.3s] extra
+[2244.1s] All right, there we go.
+[2245.6s] All right.
+[2246.3s] This desugars into something like this.
+[2249.2s] This code over here, this test set code,
+[2252.1s] turns into a call to a global global
+[2255.6s] testing called register test set. You
+[2258.5s] register the test set with this name.
+[2260.3s] You take all the stuff in the body of
+[2262.2s] the system and you just put it directly
+[2264.4s] into here. So, you just copy and paste
+[2266.0s] it into the body of the lambda or the
+[2267.3s] closure.
+[2268.4s] It copies in here. It takes in a
+[2270.2s] parameter called test set.
+[2272.0s] Uh every other test set that's
+[2273.8s] constructed here immediately goes test
+[2275.4s] set dot register, test set dot register
+[2277.4s] and it just registers
+[2279.3s] It's self-recursive. So, these can have
+[2281.2s] arbitrary depth. You can have a test set
+[2283.7s] that groups test sets. Exactly. And like
+[2286.6s] this then takes in another parameter
+[2288.2s] called test set. And then like if I had
+[2290.2s] like if I had like a test foo here that
+[2293.1s] does something else,
+[2295.5s] this code over here would just say test
+[2298.0s] set dot register test.
+[2302.4s] Um
+[2304.0s] And you can kind of see how this runs.
+[2308.2s] Yep. Um all the way through. And then
+[2310.2s] all the runners just get passed in as
+[2311.8s] the last parameter over here.
+[2315.7s] As like one example of how to think
+[2317.1s] about this. Yeah?
+[2319.0s] Okay. So now that we can understand how
+[2321.0s] Now we can understand roughly how this
+[2322.6s] desugars, you can tell that I put some
+[2325.0s] thinking at how to implement how this
+[2326.5s] implements, but not all of it.
+[2328.8s] So then I start once I have the design
+[2330.4s] doc, I found some other problems with
+[2333.0s] this approach. I realized, "Oh, we can't
+[2334.8s] actually register global things cuz we
+[2336.3s] don't have global variables in YAML
+[2337.6s] because uh global variables are kind of
+[2339.8s] bad and evil for various reasons, and
+[2341.7s] they make it really hard to reason about
+[2343.1s] code."
+[2345.0s] So we haven't added them in yet. So
+[2346.8s] because of that reason, we don't want to
+[2348.6s] go think about this.
+[2350.3s] So we started think I started telling
+[2351.8s] it, "Oh,
+[2352.9s] what if instead of a global variable
+[2354.8s] that just passed in this magic, we have
+[2356.6s] a variable in a package called testing
+[2358.9s] that's a registry variable?" That's
+[2360.4s] still static to allocated once by the
+[2361.8s] runtime,
+[2363.0s] but slightly different.
+[2365.0s] So it took my feedback, and it started
+[2367.0s] considering this, and it made some
+[2368.4s] suggestions to me. I'll show you what
+[2370.3s] suggestion it came up with.
+[2372.0s] And the thing you have to learn about
+[2373.2s] these models is they're extremely
+[2374.6s] sycophantic. If I suggested something,
+[2377.7s] even the best models, and they almost
+[2379.3s] always are cuz they're they're they're
+[2381.2s] taking a prior that is very reasonable,
+[2383.4s] which is if I'm telling it to consider
+[2384.7s] something,
+[2386.4s] I likely know something that the model
+[2388.2s] doesn't, and it's going to listen to me.
+[2390.5s] So yeah, like this is why I think junior
+[2392.4s] engineers sometimes struggle with these
+[2393.8s] models because when you're a junior
+[2395.1s] engineer and you tell a model something,
+[2396.6s] you tell it to it
+[2398.8s] without letting it know that's an idea
+[2400.6s] you're considering, not that it's an
+[2402.3s] absolute fact that you should do,
+[2405.1s] it's basically just going to listen to
+[2407.1s] you. So whatever mistakes you have are
+[2409.1s] going to compound really fast.
+[2411.1s] It's really important to suggest to
+[2412.7s] models very softly
+[2414.5s] what you're what you If it's an If it's
+[2416.8s] a suggestion and not a thou shalt do
+[2419.9s] this, you you need to tell the model
+[2422.3s] this.
+[2423.4s] Well, and this is the whole reason why
+[2424.9s] we started doing these design
+[2426.0s] discussions this way, right? It's like,
+[2427.7s] "Hey, don't tell me how to do the thing.
+[2429.8s] Give me a bunch of options because
+[2432.4s] either if you just tell the model to do
+[2433.8s] the thing, then it's going to just, you
+[2434.8s] know, token tumble out whatever the
+[2436.7s] first thing it starts go Whatever the
+[2438.5s] first token it spits out it takes it
+[2440.5s] down a path, it's just going to keep
+[2441.8s] following that path cuz that's the next
+[2443.4s] most likely token. If you ask it which
+[2445.8s] of these things we should do, it's going
+[2447.4s] to try to read what you actually want
+[2449.4s] and be the most helpful. And so, the
+[2451.4s] really valuable way that that that that
+[2453.6s] that these models work is really like,
+[2455.5s] "Okay, tell me all the options and I the
+[2457.2s] human will do some thinking." And, you
+[2459.4s] know, there is some value in
+[2461.0s] brainstorming. Like, the model can pull
+[2462.6s] more things from your code base, it can
+[2464.1s] pull more patterns in, but like, you
+[2467.4s] know, uh
+[2469.0s] we we uh yeah, what what do we say? It's
+[2471.3s] like, do not outsource the thinking. Um
+[2473.6s] if you let the model make decisions, uh
+[2475.7s] you're rolling the dice.
+[2477.9s] Exactly. So, let's go on and like take a
+[2481.3s] look at more of this. So, we now have
+[2482.9s] the model trying to do a global variable
+[2484.5s] that's like defined in some global thing
+[2486.3s] for some reason.
+[2487.9s] And it started thinking about this. It's
+[2489.5s] still a global variable, it's just a
+[2490.6s] global variable in a special magic
+[2492.5s] singleton in the test package.
+[2495.6s] Well, uh well, testing package. We can't
+[2497.7s] call testing We can't call it test
+[2499.4s] because um
+[2500.8s] Yeah. test is a keyword in the language
+[2502.7s] that makes it really ergonomic to read
+[2504.3s] like that. So, it has to be called
+[2505.4s] testing.
+[2507.0s] Yep. Um so, it did this. It started
+[2509.0s] going to this. It did a lot more
+[2510.3s] research. It independently did the
+[2511.6s] research. You can see my prompts there
+[2513.0s] are very, very small things. Um so, I
+[2515.4s] started having like spec out what the
+[2516.7s] testing package should look like.
+[2518.7s] Once you did this
+[2519.6s] >> saw in the design doc that that was
+[2521.7s] missing detail and you were like, "Hey,
+[2523.4s] we need to add that detail to this
+[2524.8s] design so that we have like clarity and
+[2526.8s] alignment." Exactly. I wish I could show
+[2528.5s] the history of the design doc over here.
+[2530.3s] We should You should add that in. that
+[2531.8s] right. It's coming. Okay.
+[2534.0s] Um cuz then I can show the design doc,
+[2535.6s] but at this point the design doc had no
+[2537.4s] bamma code of what the testing package
+[2539.0s] look like.
+[2539.5s] >> Purely rust code is what it spoke about
+[2541.0s] and like the spec of the language
+[2542.2s] syntax.
+[2543.7s] So I wanted to see like what does a
+[2544.8s] testing package look like? It produced
+[2546.9s] something and then I was like ah
+[2549.5s] this just still feels a little wrong.
+[2552.0s] Um and it's just intuition. I can't tell
+[2554.1s] you how I had this. I was just like I
+[2555.4s] don't I really don't like having this
+[2556.8s] magic static variable allocated
+[2558.8s] somewhere.
+[2560.6s] So it started coming up with ideas um
+[2563.1s] and once it did that I was like
+[2566.3s] just doesn't feel right. I don't know
+[2568.4s] how else to put it. It's it just felt
+[2570.1s] wrong.
+[2571.5s] So where you just you have a magic
+[2573.4s] basically it's not quite a keyword, but
+[2575.4s] it's injected into the the I mean
+[2578.1s] JavaScript had this problem too is like
+[2580.0s] if you were running your tests in a test
+[2582.0s] runner, you didn't even have to import
+[2584.2s] this describe and expect. They thought
+[2586.7s] it felt like magic and like no I agree I
+[2588.4s] hate that. I I want it to follow the
+[2590.0s] same rules as the rest of the language.
+[2591.7s] >> cuz then I can't like command click on
+[2593.3s] describe and know what it's doing and
+[2594.7s] it's like really hard to understand. So
+[2597.1s] I want I wanted to not have too much
+[2598.7s] magic.
+[2600.4s] So instead what we said is instead of
+[2602.3s] this function um the show again like
+[2604.5s] this it started doing a bunch of stuff.
+[2606.8s] Um instead of doing a function like this
+[2609.1s] one of the things I realized is
+[2611.5s] um I was like I actually agreed with it
+[2613.4s] for a while. I just I was like sloppy. I
+[2615.7s] was like okay registry is the only magic
+[2617.7s] everything else is just regular
+[2618.9s] functions.
+[2620.4s] Um but there's nothing else and then I
+[2622.2s] said um
+[2624.0s] uh yeah that's we have an existing
+[2626.2s] assert keyword we wanted to delete that
+[2627.6s] so assert becomes a package.
+[2629.8s] Um small thing
+[2630.8s] >> idea is like do you want these to be
+[2632.8s] like basically functions in the language
+[2634.8s] or do you want them to just be like
+[2636.2s] magic things that are written in rust
+[2638.2s] and have no like the quorum thing,
+[2640.9s] right? It wanted to just make that a
+[2642.1s] rust function versus Well there's like a
+[2644.6s] bamma function. Exactly. Well there's
+[2646.3s] two ways that you can do this.
+[2648.2s] You can write You have two options when
+[2649.7s] you write a cert. You can do the Python
+[2651.1s] way, which is you can write this.
+[2652.8s] Or you can do like a TypeScript-y way
+[2654.8s] and do more like this. And the main
+[2656.4s] benefit of being
+[2657.4s] >> has
+[2658.6s] operator overloading, basically.
+[2661.0s] Well, it's not about operator
+[2661.9s] overloading. The main reason that you
+[2663.3s] don't want this and you prefer this
+[2665.8s] is because now you can do really
+[2668.0s] interesting things like you can make an
+[2669.6s] automatic differ built into equals.
+[2672.8s] That shows you the diff of the two
+[2674.2s] objects by default.
+[2676.1s] If you do this, you're busy
+[2677.4s] >> have hooks around the inputs and the
+[2679.1s] outputs versus just assert true versus
+[2681.4s] assert false. And then you, the human,
+[2683.1s] have to kind of describe or put in the
+[2685.0s] logging to be like, "Oh, if it is an
+[2687.0s] error, then render the diff of the two
+[2688.5s] objects."
+[2688.7s] >> So, you have to do like the human have
+[2690.0s] to Yeah. Like this is just so weird to
+[2692.7s] me. Yeah. And then like this also
+[2694.6s] changes execution order cuz if for some
+[2696.8s] reason you append you modify the
+[2698.8s] elements in this expression,
+[2700.9s] Yeah.
+[2701.3s] >> then like this changes in some weird
+[2703.0s] way. It's like it it
+[2704.8s] You don't really want to do that. You
+[2705.6s] want to make asserts really easy to
+[2706.8s] read. It's a lot more semantic. You can
+[2708.4s] write things like contains.
+[2710.5s] And like
+[2710.9s] >> Yeah. now you can actually write a
+[2712.4s] proper string. You can make it sprint
+[2714.2s] print this out.
+[2715.9s] Yep. And also when you think about like
+[2717.4s] agentic systems,
+[2719.0s] it's not just about that. Agentic
+[2720.4s] systems can benefit a lot more from that
+[2722.2s] diff cuz the diff is much more
+[2724.5s] like agent friendly by default cuz
+[2726.7s] you're like
+[2727.7s] instead of printing out both objects,
+[2728.9s] you can literally be like, "Everything
+[2730.2s] is the same except for elements five and
+[2732.1s] six in arrays."
+[2734.0s] Go Here's the Here's the elements of
+[2735.6s] those two things. And you can literally
+[2736.9s] dump those out.
+[2738.5s] Okay.
+[2739.5s] So, anyway, that was a that was another
+[2741.6s] implicit decision that we had made.
+[2743.1s] Well, explicit decision that we made
+[2744.7s] with a lot of other background research
+[2746.2s] along the way.
+[2747.8s] Mhm. So, we did that.
+[2750.5s] We've done We've updated the Zen
+[2752.3s] decision. It goes through and recognizes
+[2754.0s] my questions. And then I think my next
+[2756.0s] question here
+[2758.4s] is
+[2761.0s] uh is this. So, I read all of this as a
+[2763.4s] cool, I agree with this. And remember,
+[2765.2s] we're still the old testing registry is
+[2767.0s] the only magic. Everything else is
+[2768.9s] regular functions, there's nothing
+[2770.5s] special except for this top-level global
+[2772.4s] variable that we have called registry.
+[2775.6s] And remember, we hate global variables,
+[2777.2s] so like that's still rubbing me wrong,
+[2778.6s] but I'm I'm accepting this
+[2780.7s] for now.
+[2781.1s] >> Okay.
+[2782.0s] And then I do the next part, which is uh
+[2783.9s] we produce a design document at this
+[2785.4s] point
+[2787.0s] that reflects all of your decisions,
+[2788.5s] right? You've basically taken everything
+[2789.8s] that's happening and like compacted it
+[2791.5s] into a single doc.
+[2793.3s] Oh, this doesn't show the ticket 2.md.
+[2795.8s] Okay. We do not have ticket in the
+[2798.2s] artifact. Uh
+[2799.8s] ticket or ticket two do not show up in
+[2802.3s] the uh in the edges of the nodes. So,
+[2805.4s] the ticket, remember, is I did a lot of
+[2807.3s] cloud code work to produce the original
+[2808.9s] spec that you saw on the Baps website uh
+[2811.3s] that we started with earlier. Well,
+[2812.8s] Aaron did all that work. I did not do
+[2814.2s] any work.
+[2814.6s] >> Yep. Um we did all of that work. Then I
+[2817.6s] we and that's a totally separate
+[2819.2s] process. Like a lot of background work,
+[2821.0s] a lot of understanding to produce a good
+[2822.8s] ticket.
+[2824.0s] Yep. Then we went through and just ran
+[2825.6s] it through RPI to produce research
+[2827.6s] questions. Research fully automated. We
+[2829.4s] produced a design discussion. Then you
+[2831.3s] saw me iterate and you can just see
+[2833.0s] timelines of how long this takes just so
+[2834.7s] we have like a little bit more clear
+[2836.2s] concept of what this
+[2839.3s] active time is more important. So, I
+[2841.2s] kicked this off at 8:07.
+[2843.5s] Yep.
+[2843.9s] >> Uh
+[2846.0s] and then
+[2849.9s] So, you were you were taking breaks to
+[2851.4s] play League of Legends in between this
+[2853.1s] as well.
+[2853.4s] >> Oh, yeah. So, the way I code now is I
+[2855.5s] pretty much just have like two agents
+[2857.8s] running in the background arbitrary
+[2858.8s] tasks and then I just play League while
+[2860.6s] I code and it's freaking great. Um SBF
+[2864.0s] has got nothing on me. Um sorry, I
+[2865.8s] shouldn't say that, but you know.
+[2867.5s] Incredible.
+[2868.1s] >> Batman thought he wanted to
+[2868.9s] >> Listen, man, if you want to be the next
+[2870.1s] SBF, you know, just just don't don't
+[2872.6s] bring it into the podcast, okay? I like
+[2874.4s] doing this show. I don't want you to go
+[2876.0s] to jail.
+[2876.7s] >> understand about certain founders? It's
+[2878.3s] like, how do you make a startup that
+[2879.7s] like just you just literally
+[2882.5s] Anyway. Uh I can't I don't want to say
+[2884.7s] this. I'm not going to comment on
+[2885.7s] anything going on in the startup scene
+[2887.1s] right now on the internet that we all
+[2888.7s] haven't heard of that. Um anyway, and
+[2890.6s] then so that was 808 when we started
+[2892.4s] that 807.
+[2893.8s] And then
+[2896.1s] So, what is this ticket two? Okay.
+[2898.8s] So, it took me about two
+[2900.8s] uh like two and a half hours to come to
+[2902.3s] this point of liking this design
+[2903.7s] decision.
+[2905.3s] Um once I found the design decision,
+[2907.7s] then I told it a very specific task,
+[2909.2s] which is take ticket two,
+[2911.4s] um and then create a ticket two. So,
+[2913.2s] that means take all the design
+[2914.7s] discussion and literally just
+[2916.4s] create a new ticket as if we had all
+[2918.1s] this learnings from day one.
+[2920.1s] And it's already read your ticket one,
+[2922.2s] so it kind of knows the shape and the
+[2923.9s] level of detail that you want in a sort
+[2926.5s] of more PRD style thing. Like the design
+[2928.9s] discussion has tons of code base context
+[2931.0s] and you kind of you're basically like
+[2932.2s] take all those decisions and and and
+[2933.9s] distill them out into another like
+[2935.4s] high-level, almost like PRD style thing.
+[2937.6s] >> Exactly. Uh so, then it does that um and
+[2940.2s] like it's actually kind of
+[2944.4s] Um and then I do that. And then when I
+[2945.8s] read this is when I finally realize some
+[2947.4s] mistakes. Um
+[2949.6s] I was like, oh uh I was like I realized,
+[2951.4s] oh well, we don't actually have like
+[2952.9s] this yet. It's not theoretical. Uh it's
+[2955.4s] coming in, but it's not there yet in the
+[2956.7s] existing language as we have it right
+[2958.0s] now.
+[2959.1s] Yeah. So, it added some notes.
+[2960.9s] Then I went ahead and read more.
+[2963.6s] And then I said, oh.
+[2965.9s] I realized something as I read the final
+[2967.8s] ticket. Cuz remember, when you're in the
+[2969.0s] design discussion mode, you're not
+[2970.8s] reading the whole concept as like a
+[2972.4s] story anymore. You're kind of reading
+[2974.4s] you're so much in the weeds, it's hard
+[2975.8s] to zoom out. So, I was so stuck in the
+[2978.4s] global variable mode, it took me another
+[2980.8s] like um it took me uh another like 30
+[2983.8s] minutes of processing uh of like
+[2985.6s] iterating on this and actually reading
+[2986.7s] the file. There's a step in here where
+[2988.3s] I'm actually reading, and you can just
+[2989.4s] see when I start reading cuz like the
+[2990.6s] time just jumps.
+[2992.0s] Yeah, like
+[2993.6s] I just start reading. Like I just Yeah.
+[2995.6s] I disappear for like 20, 30 minutes and
+[2998.0s] I just read.
+[2999.4s] The whole thing. I read basically the
+[3000.6s] entire design discussion. I read the
+[3002.0s] entire ticket.
+[3004.2s] Camille would like to see ticket two
+[3006.9s] um I will show you an example before I
+[3010.2s] get into the details because I think
+[3012.1s] it's going to be useful to have some
+[3013.4s] more context.
+[3015.0s] Okay.
+[3015.2s] >> As I go read the ticket, I catch
+[3016.5s] something. I'm like I don't know. My
+[3018.0s] brain takes off at 11 and I'm like hmm
+[3022.3s] I don't like global variables. I really
+[3023.8s] never liked them. It was like a hack
+[3025.2s] that I accepted.
+[3026.7s] Instead of it doing the global variable
+[3028.5s] thing
+[3029.5s] what if I just
+[3031.4s] pass in a registry as a parameter?
+[3034.6s] Instead of it saying
+[3036.7s] instead of this instead of this
+[3038.9s] compilation step doing this what if this
+[3042.2s] actually decompiles into the following?
+[3044.8s] I just pass in a test registry into
+[3046.6s] here. Uh who knows what this type is? Uh
+[3048.8s] yeah.
+[3051.1s] Would the gentle coder want to have a
+[3052.4s] Instead of a global test thing, you get
+[3054.7s] to use test registry. Exactly. And now
+[3058.2s] all of these have become nicely
+[3059.6s] recursively defined cuz this is also a
+[3061.4s] test registry and this is also like
+[3063.6s] whatever type this is
+[3066.2s] is the same type that this is. Yep.
+[3068.8s] And so you had just have one thing.
+[3070.8s] Basically, you have one global thing
+[3072.8s] that gets passed into all the declared
+[3074.4s] tests for every file that ends up like
+[3077.0s] basically rolling down into every single
+[3078.8s] test instance.
+[3080.3s] Exactly. And it just kind of works with
+[3082.4s] very, very, very low effort if that
+[3084.3s] makes sense. Okay. The thing you just
+[3086.1s] wrote, is that what Claude came up with?
+[3087.8s] Or like I guess I guess that's what you
+[3089.5s] that's what you passed in in your prompt
+[3091.6s] of like hey, let's keep iterating on
+[3093.2s] ticket two. Exactly. So like this was
+[3095.4s] again, this Claude did not come up with
+[3097.0s] this. I had to come up with this. Um You
+[3100.0s] designed this.
+[3100.5s] >> this
+[3101.6s] I had to come up with the design. You
+[3102.8s] can see what And you can see the level
+[3104.2s] of does it design that I gave it. A
+[3106.5s] very, very little. It was like Yep. Oh,
+[3109.2s] I suppose it had like uh instead of any
+[3111.0s] new top level lets, cuz you don't want a
+[3112.7s] global variables, you can just say every
+[3114.5s] single test set in a file gets a single
+[3117.0s] test operation that gets hoisted into a
+[3118.5s] lambda. So, I'm trying to be very
+[3120.2s] technical in the way that I speak to it,
+[3121.7s] so it's a little bit more understanding.
+[3123.9s] I don't think I was trying This is the
+[3125.1s] way I speak, actually. So, maybe I'm a
+[3126.3s] little weird. Uh
+[3128.3s] but then I just said, "Do this."
+[3131.2s] And it just did the thing, and then it's
+[3133.2s] produced a new output. Then it started
+[3134.5s] thinking.
+[3135.6s] I was like, "Oh, here's all the options
+[3137.1s] that we have for it."
+[3138.6s] Um and it produced something It produced
+[3140.4s] a bunch of options for me to consider.
+[3142.8s] And it actually suggests A and B. And
+[3144.6s] options A and B are very interesting.
+[3146.4s] Option A says a new testing in it per
+[3148.9s] file, and option B says per package. And
+[3152.5s] they're slightly different, uh but it
+[3154.5s] has different implications.
+[3156.6s] And I asked it to try and tell me which
+[3158.0s] one is better, cuz like I don't want to
+[3159.2s] think about it.
+[3162.5s] So, like I I I do offload some of the
+[3165.0s] thinking, uh but not all of it. So, it
+[3167.7s] actually said that
+[3168.3s] >> Well, you you let it you you give it a
+[3169.6s] chance, and then it gives you the
+[3170.8s] reasoning, and you're like, "Okay, yeah,
+[3172.3s] the actually this answer makes a lot of
+[3173.6s] sense." It's like, "Oh, we're already
+[3174.9s] doing a knit per package, so we might as
+[3176.8s] well do the test in the same way,
+[3178.2s] right?" Uh and then I was like, "Oh, we
+[3180.6s] can't do per package." I realized
+[3182.0s] something. There was like uh There was
+[3183.5s] like some semantics to the language that
+[3184.7s] actually make per package really hard,
+[3186.1s] and the model doesn't have the context
+[3187.8s] about how the package is some work
+[3189.1s] probably fully
+[3190.4s] to like know that off the top of its
+[3192.0s] head.
+[3193.2s] Nope. So, then I was like, "Oh, we can
+[3194.6s] do per namespace."
+[3196.3s] Uh uh and we can also do per file, so
+[3198.5s] that would make the most sense for uh
+[3199.9s] but per package basically has like
+[3201.5s] consequences. Uh what they are, just
+[3203.4s] ignore that. It's It's just what I The
+[3205.2s] point of that is it's useful to have a
+[3206.7s] strong background
+[3208.4s] in your code base to be able to navigate
+[3210.4s] these systems.
+[3211.8s] And I hope by this point you all can
+[3213.9s] very clearly tell
+[3215.8s] if I had vibe coded this in the
+[3217.4s] traditional VIBE vibe coding style, this
+[3220.6s] would not work.
+[3222.2s] Uh like there's so many assumptions that
+[3224.2s] the system got wrong already.
+[3226.8s] Mhm. So, it started to be like
+[3228.8s] >> it is like these these these markdown
+[3230.8s] docs are basically an opportunity to
+[3232.3s] have the model dump out everything that
+[3234.0s] it's thinking so that you can do brain
+[3236.1s] surgery on it before like okay, here's
+[3238.2s] all the patterns you want to follow,
+[3239.4s] here's all the decisions that you think
+[3241.0s] are the right decisions. Give me as many
+[3243.2s] opportunities and give the model as many
+[3244.8s] opportunities to tell you at a high
+[3247.1s] level what it's thinking so you can
+[3248.8s] re-steer before you like drop down a
+[3250.7s] level basically. Exactly. And at the and
+[3254.0s] you can tell that this is a pretty rapid
+[3255.6s] back and forth. I'm like fairly engaged
+[3257.6s] and the times when I disengage are when
+[3259.0s] I'm playing League or when I'm reading
+[3260.4s] documents. But it's it
+[3263.5s] it's pretty straightforward in terms of
+[3265.1s] just reading most of this. And then this
+[3267.2s] is just it's a pseudo it's a pseudo plan
+[3269.6s] mode with custom agent plans that we
+[3271.8s] have. So, there's just like custom
+[3273.2s] agents commands skills that come in here
+[3276.3s] so like
+[3277.3s] like these skills that you can find like
+[3280.0s] trade plan, edit plan, etc.
+[3282.9s] Um
+[3284.4s] and you can go to this.
+[3285.9s] So, then we have So, then we came it
+[3287.8s] came it actually realized this is like
+[3289.1s] oh it actually decided not to do per
+[3290.8s] namespace and that that's a correct
+[3292.5s] call. I can't describe why cuz there's a
+[3294.5s] lot of context I have to fill in. It's
+[3295.9s] not useful. But it it chose per file and
+[3298.4s] then it actually said per package we
+[3300.2s] actually chained them in and we call
+[3301.6s] every per file thing once in the
+[3303.4s] package.
+[3304.7s] And it generates this per package
+[3306.0s] function as well.
+[3307.8s] So, now we have a package registry of
+[3309.3s] tests and a collection registry of tests
+[3311.8s] that does this.
+[3313.0s] What's really nice about this is this
+[3314.5s] does a couple of nice consequences. This
+[3316.4s] makes it so that startup time for the
+[3317.8s] program is not delayed by test
+[3319.4s] collection
+[3320.7s] which is really nice
+[3322.3s] from a system over here.
+[3325.4s] Uh, and then I was like I still wasn't
+[3326.9s] convinced. I was like should we do per
+[3327.9s] namespace again instead? I was like I
+[3330.2s] really wanted to explore this space of
+[3332.0s] this.
+[3332.9s] Um, and the only thing I don't like
+[3334.4s] about this is a the is only using its
+[3337.3s] existing context here. It's not making
+[3339.5s] tool calls or search the code base. So,
+[3341.4s] I know there's some falsehood here.
+[3344.2s] So, it actually does It actually comes
+[3346.2s] back with a pretty existing thing. And
+[3347.6s] like actually this is a line that
+[3349.0s] convinced me.
+[3350.7s] Uh a little bit. And you'll see later, I
+[3352.7s] try and fight it really hard.
+[3354.8s] Um
+[3356.8s] All right. I try and fight it really
+[3358.2s] hard. I'm like I really wanted to do per
+[3359.5s] name space. It's cuz it's easier to ex-
+[3361.7s] to reason about.
+[3364.0s] Um so, I
+[3365.1s] >> from a user perspective or from a like
+[3367.7s] maintainer of the language perspective?
+[3369.0s] >> maintainer perspective. It's easier to
+[3371.4s] It's easier to reason about.
+[3373.4s] Um and then I think I I think I
+[3375.7s] convinced it for a little bit. Um it
+[3377.7s] does this. Uh and then I said
+[3380.6s] Okay.
+[3381.6s] Uh now this is still cloud. It's still
+[3383.7s] doing stuff. It's still doing stuff.
+[3386.6s] Okay. Um and then it made some
+[3388.5s] assumptions. I was like, "Oh, name
+[3389.7s] spaces are folders that start with NS."
+[3391.8s] That's like how we do name spaces in
+[3393.0s] BAML. Uh because uh
+[3395.4s] We'll talk about that later. So, like
+[3397.1s] for example, the model understands this.
+[3398.7s] So, like this is not in a name space.
+[3400.9s] It's just in the top uh global name
+[3403.2s] space.
+[3404.7s] Um this is in a name space. This is all
+[3407.6s] the files in this folder automatically
+[3409.0s] in the same name space. It works very
+[3410.4s] similar to go if you've seen go before.
+[3412.4s] Where like go in go files like
+[3414.6s] everything in the package is shareable
+[3415.8s] across files. Files don't mean anything.
+[3418.6s] And in an agent-friendly world, you
+[3419.9s] actually want files to mean almost
+[3421.4s] nothing.
+[3422.4s] Cuz agents just cat files all the way
+[3424.0s] around uh all the time. And like files
+[3426.2s] don't mean
+[3427.0s] >> and yeah.
+[3428.6s] Exactly.
+[3430.0s] The semantics of the Yeah, you don't
+[3431.3s] want the path to be meaningful.
+[3433.6s] Well, you want
+[3435.5s] Um
+[3436.9s] you want minimal impact from the path's
+[3439.4s] meaningfulness. You want some grouping
+[3440.9s] level from the path. But we can talk
+[3442.4s] about name spaces later.
+[3444.2s] Um and the trade-offs there.
+[3446.1s] So, it actually did all this.
+[3447.8s] And I looked at this. And I was like,
+[3448.9s] "Oh, this is not valid syntax. It made a
+[3450.5s] bug." So, again, you'll see that I like
+[3452.7s] as this is happening, while all these
+[3455.0s] changes are happening,
+[3456.6s] it's actually making a bunch of changes,
+[3457.9s] but I'm actually reading while the
+[3459.3s] changes are happening. That's why I'm
+[3460.4s] able to go and skim through this really
+[3461.8s] fast and give a response within like
+[3463.3s] less than like a minute I've been
+[3465.4s] producing the whole document because I'm
+[3467.0s] I'm reading it already as it's
+[3468.6s] happening.
+[3469.9s] Um so, then I found this bug. So, I had
+[3471.9s] this prompt queued up. Uh please ship
+[3473.6s] queuing Dexter so I can queue this and
+[3475.6s] it'd be faster for me.
+[3477.5s] It's coming. It's uh well, this is why I
+[3480.0s] like next time we do a No Vibes Allowed
+[3481.9s] with this is you know, sometimes these
+[3483.3s] episodes we would try to do them in an
+[3484.7s] hour and it's just you can't ship
+[3485.8s] anything real in an hour. So, I mean,
+[3487.6s] you can already see that
+[3489.7s] >> Yeah. We started this at 8:00 p.m. It's
+[3492.0s] now 11:22 and that doesn't include any
+[3494.6s] of the work I was doing with Claude
+[3495.7s] before 8:00 p.m. Iterating on that back
+[3498.1s] to make it slightly better. So, it's
+[3499.6s] about 3 and 1/2 hours already.
+[3501.7s] Um so, then I had it go and produce
+[3503.3s] this. I was like, "Oh, this isn't
+[3504.4s] valid." Caught this mistake. I was like,
+[3506.4s] "Oh." And then we had to go riff about
+[3507.8s] how we're going to go deal with this.
+[3509.7s] Yep. And then I was just like, "Let's do
+[3511.0s] the simple thing uh and just like dump
+[3513.2s] variables in in positional order and
+[3515.2s] it's up to the user to make sure the
+[3516.3s] positions are correct."
+[3517.8s] >> Exactly. Um we haven't decided how named
+[3520.0s] and keyword args are going to go.
+[3522.4s] Yep. Uh so, now it's all this problem. I
+[3524.4s] fixed another thing in it and I'm trying
+[3526.6s] really, really, really hard to make sure
+[3528.3s] that there's no mistakes cuz any one
+[3530.4s] mistake in this ticket is just
+[3531.7s] compounding mistakes I have to deal with
+[3533.0s] earlier. I am for full correction.
+[3535.4s] >> thousands of lines of code and a mistake
+[3537.5s] here could lead you to basically having
+[3539.4s] to throw out the whole thing cuz this is
+[3541.0s] 200 lines of spec that's going to turn
+[3542.9s] into thousands of lines of code and so
+[3544.6s] the impact of one wrong line is pretty
+[3546.7s] significant. And it creates like drift
+[3549.4s] from the model when it sees like two two
+[3551.5s] possible truths, then it's like, "Oh,
+[3553.3s] which one do I do?" And at any point
+[3554.8s] down the stream it can now drift on any
+[3556.8s] one of those directions. And like you
+[3558.8s] can't steer that because I can't keep up
+[3561.6s] with the rate at which Claude writes
+[3562.7s] code. I just pos- it's impossible for me
+[3564.7s] to read code at that speed.
+[3566.6s] At least for me. Uh some people are much
+[3568.6s] better readers than I am. Uh people that
+[3570.5s] did debate for example.
+[3573.2s] So, then we did this, it produced this,
+[3575.1s] and then I was like uh then I said I was
+[3577.3s] You can see I'm really trying to go by
+[3578.6s] the name name space thing. I'm probably
+[3580.4s] just on something. It's like 11:30, my
+[3582.2s] brain's not working correctly, and I'm
+[3583.3s] really stuck on name spaces.
+[3585.1s] Um yeah. Uh and then it does some stuff.
+[3588.1s] Uh so, then tries to do per name space.
+[3590.7s] And then I was like, oh.
+[3593.0s] Uh and then it changed it back to per
+[3594.5s] file. really fighting me really hard on
+[3596.4s] this.
+[3597.4s] Um and then at one
+[3598.4s] >> deep in the dumb zone, man. I know you I
+[3600.4s] know you're using the 1 mil context, but
+[3602.5s] like it's not able to it like
+[3605.4s] I usually try to recontinue it at over
+[3608.0s] like 100k tokens.
+[3610.4s] Um I think the model's actually correct
+[3612.2s] here. I actually should not be doing in
+[3614.2s] the I should not be using name spaces.
+[3616.8s] I'm in the dumb zone in my brain uh is
+[3619.3s] the problem.
+[3619.8s] >> Maybe maybe that's part of it, right?
+[3621.2s] Yeah, that theory that like Opus gets
+[3622.9s] dumb at 2:00 p.m. or 3:00 p.m. Pacific
+[3625.1s] time, and it's like, maybe you get dumb
+[3627.2s] at 2:00 p.m. Pacific time cuz you just
+[3629.1s] had lunch, and you don't care as much
+[3630.5s] anymore. I definitely get dumb at like
+[3632.8s] 11:30. Um
+[3634.9s] So, then I was working, and I was like,
+[3636.0s] oh. And then I was like, oh, nothing has
+[3637.6s] been rust There's like some magic thing
+[3639.5s] that we have that allows in BAML for you
+[3641.1s] to say, "Hey, this is actually data
+[3642.4s] that's in rust, not in BAML."
+[3645.2s] And that allows you to do something well
+[3647.4s] there.
+[3648.3s] Uh and then you can just you just uh say
+[3651.0s] that this can be pure BAML. It goes
+[3652.8s] ahead and makes some updates.
+[3654.7s] Uh
+[3655.5s] it recognizes my its correctness. It
+[3658.0s] cleans this up a lot.
+[3660.7s] Um and then I realized, uh shoot. I
+[3663.3s] haven't thought at all about how to
+[3664.5s] actually build the test harness, the one
+[3666.1s] that can run everything as parallelly as
+[3667.8s] possible.
+[3669.4s] Um so, then it goes and starts thinking
+[3671.0s] about this more.
+[3672.8s] And once it does this,
+[3675.2s] it comes up with a bunch of options. And
+[3677.6s] I
+[3678.3s] I can just help it rule out certain
+[3679.7s] things.
+[3681.2s] Uh it's like, I want test that can run
+[3683.4s] in parallel.
+[3684.6s] Uh, and then I was like, "Oh, we can
+[3685.6s] also introduce a semaphore construct."
+[3687.2s] And then now you can do serial. Cuz once
+[3689.5s] you make parallel the default, you now
+[3690.9s] need to give users a way to make serial
+[3692.8s] possible.
+[3693.9s] So, I think the best construct there is
+[3695.4s] a semaphore.
+[3695.9s] >> if their test case itself is in
+[3698.0s] parallelizable, they can opt out of the
+[3699.8s] auto parallelization for certain
+[3701.4s] >> Exactly. So, then we actually started
+[3703.7s] riffing on what it means to be a test
+[3705.2s] runner. And we realized that it means to
+[3707.0s] be a test runner is instead of just
+[3709.5s] telling you what a run is, it's a
+[3710.6s] function that takes in a function that
+[3712.5s] produces a new function that produces a
+[3714.1s] test report. So, it's a little bit
+[3716.2s] easier.
+[3717.4s] It's a decorator. Exactly. You can think
+[3719.3s] of it like a decorator.
+[3721.0s] Um, and then we started doing this. I
+[3722.9s] was like, "Oh, this works pretty nicely.
+[3724.7s] You can define a semaphore and then you
+[3726.1s] can say that these run locked." So,
+[3728.5s] it's not that they're running serially,
+[3729.6s] it's just that they run now in order.
+[3731.4s] So, now we need to define a serial
+[3732.7s] construct in a bit. And we'll see we'll
+[3734.2s] start coding in a second.
+[3736.4s] Um, we're almost done. We're almost
+[3737.7s] caught up to where I am right now.
+[3739.6s] So, but I
+[3740.3s] >> This is good. You did a good job of
+[3741.6s] compressing 4 hours of thinking into a
+[3744.3s] 30-minute podcast episode. Actually, I
+[3746.5s] did go to bed at some point. I don't
+[3748.0s] know when I went to bed. That's what you
+[3749.0s] see.
+[3749.3s] >> morning. Is this where your decisions
+[3751.2s] start getting a lot better?
+[3753.6s] Yeah, I think so. Yeah, I think I just
+[3755.6s] did the last thing and I just went to
+[3757.3s] bed at 11.
+[3758.6s] I was like, "I'm done. I have nothing to
+[3759.8s] do anymore." So, I woke up and I started
+[3761.4s] coding again in the morning.
+[3762.9s] >> This was this morning?
+[3764.5s] Yeah, it was this morning. I was just
+[3765.7s] coding. I I This problem was
+[3767.1s] interesting.
+[3768.2s] Um,
+[3768.6s] >> Yeah. and I was like, "I just need a new
+[3770.4s] brain power to think about this." And
+[3772.1s] that's when I was like, "Oh, parallelism
+[3773.3s] is a thing." I think there was a Slack
+[3774.9s] thread or something that caused me to
+[3775.9s] think about this.
+[3777.4s] Mhm. Um, so we started thinking about
+[3779.5s] this. We started doing parallelism. Uh,
+[3781.4s] the semaphore construct came up.
+[3783.6s] The model produced a bunch of options.
+[3786.3s] And then I actually realized
+[3788.6s] um, the runner is code that can run
+[3790.6s] during collection uh, the runner code
+[3792.9s] can actually run during collection.
+[3795.7s] Yeah, um, the problem is if the runner
+[3797.7s] code runs during collection, we can't
+[3798.9s] actually tell you what can run in
+[3800.0s] parallel. It's our information we have.
+[3801.3s] Cuz I thought would be really nice from
+[3802.7s] a CLI perspective is what if you could
+[3804.2s] show in collection what is going to run
+[3806.3s] when in parallel.
+[3808.4s] But because it's arbitrary code, you
+[3809.8s] actually can't
+[3810.3s] >> able to kind of like parse it almost
+[3812.2s] into a plan so you can present it to the
+[3814.1s] user. Exactly. I like it.
+[3816.4s] >> Right? But it turns out you can't do
+[3818.0s] that because of arbitrary code. Once you
+[3819.5s] write an arbitrary code, presenting
+[3820.8s] certain things becomes impossible. So, I
+[3822.9s] had to tell the model that.
+[3824.7s] But then I told it Basically what I was
+[3826.6s] telling you was everything is basically
+[3827.8s] a slam does, even a test set. It
+[3829.7s] initially said test sets runners are now
+[3831.5s] just aggregations as well.
+[3833.8s] The problem with test set runners being
+[3835.3s] aggregations is a couple of things. One,
+[3837.4s] this it's weird that these things take
+[3839.9s] in different types. That's the first
+[3841.6s] thing that I noted. It's like, "Oh, why
+[3842.8s] does this take in a function that is a
+[3844.1s] void
+[3845.2s] and then produce a test report?" It This
+[3847.0s] just feels off to me. It's the best way
+[3849.3s] that I would describe this.
+[3851.1s] Uh and then this takes in a type that is
+[3852.7s] not the same type.
+[3854.7s] So, that's the first thing that I noted.
+[3856.9s] And then I was like and then the model
+[3858.4s] was like,
+[3858.9s] >> okay. Then instead of void, it should
+[3860.6s] return the test report and then you can
+[3862.2s] do Yeah, that makes sense.
+[3863.3s] >> Exactly. It's makes more sense. It's not
+[3865.6s] really
+[3867.5s] That's how you should think about it.
+[3868.9s] >> you can wrap the thing without changing
+[3870.6s] the type and the code doesn't have to
+[3872.5s] know whether it's wrapped or not.
+[3875.3s] So, you nailed it. Exactly. So, now
+[3878.0s] >> Cool. we basically are running this as a
+[3882.2s] Now, it really looks like it It's like
+[3883.5s] an identity decorator is more of how you
+[3885.6s] think about it. A decorator takes in of
+[3886.9s] the self and produces self back out.
+[3889.4s] It's It's not just decorator.
+[3890.9s] >> of the the biggest issues with like
+[3893.0s] Python and like typed Python is like
+[3895.2s] once you throw a decorator on, all the
+[3896.9s] types like
+[3897.5s] >> Everything breaks. Exactly. Or you don't
+[3899.6s] you don't get any guarantees anymore
+[3901.0s] because the decorator is you're not
+[3902.2s] going to pass a bunch of type parameters
+[3903.7s] into a decorator.
+[3905.1s] Exactly. So, now you get this
+[3907.3s] system that is able to give you this.
+[3910.3s] And now you have this. So, now you can
+[3912.0s] kind of produce uh a
+[3914.3s] And you're noticing the model's doing
+[3915.6s] most of the heavy lifting because the
+[3917.0s] context is pretty good and it
+[3918.5s] understands what it's trying to do.
+[3920.4s] The model can roughly get far along.
+[3923.1s] So, then I was like, "Okay, well,
+[3924.8s] okay, this is pretty good. This all
+[3926.2s] makes a lot of sense." I was like,
+[3927.6s] "Before we go and update ticket two,
+[3929.0s] just show me the full code. I want to
+[3930.4s] see code."
+[3932.0s] Uh and there's two reasons for this. One
+[3934.8s] is by seeing code by seeing code right
+[3936.9s] here, I'm heavily buying the biasing the
+[3938.8s] model towards this code submit when it
+[3940.6s] writes the ticket.
+[3942.3s] Cuz otherwise, it's going to invent this
+[3944.0s] code submit and write the ticket. But,
+[3945.9s] also like it prevents me from writing a
+[3947.6s] ticket that's bad in the first place.
+[3950.3s] This is interesting. So, you're doing a
+[3952.0s] thing that is a little bit different
+[3953.7s] from how I I I I use this like tool in
+[3957.2s] these these workflows. When I'm doing
+[3959.0s] So, you're you're locking up a lot of
+[3960.7s] the design con not locking, but like
+[3962.6s] you're allowing a lot of the design
+[3964.0s] concept to exist in the context window.
+[3967.2s] Whereas, when I'm using this, I am every
+[3969.6s] single question I have is like update
+[3971.7s] the doc. And so, it's like I read the
+[3974.0s] doc, I write to Claude, Claude updates
+[3976.2s] the doc as like a unidirectional flow. I
+[3978.8s] I think that's for me is mostly about
+[3980.2s] like context anxiety is like I want to
+[3982.4s] know at any given point every single
+[3984.1s] thing I've said to you is tracked
+[3986.6s] somewhere outside of this context window
+[3988.6s] because I always treat the context
+[3989.9s] window as something where like it might
+[3991.8s] veer off or my session might shut down
+[3994.2s] or or whatever it is and I always want
+[3996.2s] to be able to resume from the document.
+[3998.6s] So, here's how I think about it. doesn't
+[4000.3s] why I do it this way. Um Yeah. Um when I
+[4003.2s] model context windows, like look, we all
+[4005.2s] know models clearly are like
+[4007.7s] models heavily biased towards like most
+[4010.0s] recent instructions a lot. Yep. Like we
+[4012.8s] know that the model's going to prefer
+[4014.1s] these two texts way more than it prefers
+[4016.5s] things at the top.
+[4018.0s] It just will.
+[4019.6s] So, it's not that I'm losing
+[4021.6s] information, it's just that I don't
+[4023.2s] really need perfect recall on this
+[4025.5s] section.
+[4027.0s] Yeah. I'm not worried about like the
+[4028.8s] traditional dumb zone because what I
+[4031.2s] already know
+[4033.1s] is like
+[4035.4s] what I know is like
+[4038.3s] the most recent messages are not in the
+[4040.6s] dumb zone.
+[4043.8s] Right? Like I it's they it's just like I
+[4046.6s] know the model's going to bias towards
+[4048.0s] this and like likely what the model's
+[4049.8s] actually biasing towards is like
+[4053.1s] this plus
+[4055.1s] like
+[4058.6s] like the system message.
+[4060.6s] >> Yeah. And like this is probably like
+[4062.8s] highly prioritized in some way. Um
+[4065.8s] >> This is what the models are trained to
+[4067.0s] attend to the most recent thing. This is
+[4068.6s] what we talk about is like they forget
+[4070.2s] what's in the middle. This has been This
+[4071.7s] has been like common knowledge since the
+[4073.8s] chat GPT
+[4074.6s] >> Exactly. So like because of this I'm not
+[4076.6s] too worried about this because like
+[4077.7s] look, I'm actively engaged. Everything
+[4080.2s] up here is stuff that I'm actively
+[4081.9s] participating in. You know, the last
+[4084.4s] couple all of all of the things that you
+[4086.7s] care about are in the last couple
+[4088.3s] messages and so you're not worried about
+[4089.9s] being deep into the context window.
+[4091.5s] Exactly. And then more importantly, my
+[4093.7s] brain is much better holding on to like
+[4096.8s] long-term ideas and consistency for this
+[4099.7s] entire conversation.
+[4102.0s] So I'm not worried about it like the
+[4103.5s] model making a huge mistake cuz one the
+[4105.4s] models aren't that bad. They're they
+[4106.9s] won't make huge mistakes, but details
+[4108.6s] are my responsibility.
+[4110.6s] Okay. So yeah, it might forget a detail
+[4112.9s] from 15 messages ago, but you know,
+[4115.3s] you're confident that's locked into your
+[4116.7s] head and if the model forgets it, you'll
+[4118.0s] just remind it. Or even if I it doesn't
+[4120.5s] matter if it's locked in, I'll recognize
+[4122.3s] it. I I the burden is on me to
+[4124.2s] recognize.
+[4126.0s] Yeah. Yeah. I I I would I would rather
+[4128.4s] have the the guarantee that whenever I
+[4130.2s] make a decision, it's it's it's locked
+[4131.9s] into the doc and basically the model can
+[4133.8s] just reread the doc at any point either
+[4135.6s] in this conversation or in a new
+[4137.2s] conversation and basically have all the
+[4139.2s] things that are important. And so, I'm
+[4141.4s] I'm I'm
+[4142.4s] Yeah, go ahead. The problem that I run
+[4144.1s] into with that approach is that for
+[4145.6s] really like heavy design construct, like
+[4147.8s] this
+[4148.8s] hopefully everyone can tell at this
+[4149.8s] point this is a very very heavy design
+[4151.5s] construct. This is like there's a lot of
+[4154.4s] design space here, a lot of room for
+[4155.8s] mistakes. If I were to serialize the
+[4157.6s] disk every single design decision, I
+[4159.6s] would move at half the rate.
+[4161.7s] And I I I want to move fast. Like it's
+[4163.9s] like serializing to disk is extra tool
+[4165.5s] calls, extra wait time, extra
+[4167.6s] consistency the model has to maintain.
+[4171.2s] And I'm actually wasting tokens doing
+[4173.4s] that. So, like that's why I don't do it
+[4175.0s] for like heavy heavy design tasks. Cool.
+[4177.4s] All right, let's keep going. I just
+[4178.4s] wanted to like riff about that for a
+[4179.7s] sec.
+[4180.8s] So, now we produce runners. Um
+[4183.0s] it produced some code for me. This looks
+[4184.8s] pretty good. It's like, "Okay, cool.
+[4186.0s] This is a test runner." It still doesn't
+[4188.0s] do this for test sets, but that's okay.
+[4189.6s] I'm not That's not what I'm focusing on.
+[4191.6s] I want to focus on one thing at a time
+[4193.3s] cuz if I distract the model, it'll do
+[4194.7s] things poorly. So, we're going to focus
+[4196.3s] on the test runner only.
+[4198.5s] It defines what quorum looks like. And I
+[4200.2s] read this code, I don't like does this
+[4201.2s] seem right? Do I like this? There's
+[4203.0s] things I don't like about this, like
+[4204.2s] what summary is and other things, like
+[4205.9s] it seems too much magic, but I hand wave
+[4208.6s] that for now.
+[4210.0s] I'm not thinking too hard. I am thinking
+[4211.4s] about composition.
+[4213.6s] Cuz that matters to me a little bit.
+[4215.8s] Uh and you can see the model almost
+[4217.1s] doing thinking
+[4219.1s] in its system as it's doing this.
+[4221.7s] Um so, it's it's kind of interesting
+[4223.9s] here uh what it's doing over here.
+[4226.5s] Um and it's proposing different ideas
+[4228.9s] for how we might want to do composition
+[4230.4s] to make the user's life easier. It's
+[4231.7s] like a decorator on a decorator,
+[4234.0s] but with some execution logic around it.
+[4238.4s] Okay.
+[4238.8s] >> Um so, it's proposing some ideas to me.
+[4241.2s] So, I'm at collection. I'm like, "Okay.
+[4243.3s] Well,
+[4244.2s] this looks pretty good."
+[4246.2s] And then I realize the problem, which is
+[4247.8s] you can't actually redefine test how
+[4249.4s] test sets run, only tests.
+[4251.5s] But I can redefine how collection works.
+[4252.9s] And this is just me validating the
+[4254.3s] assumption the model made.
+[4256.1s] Before I try and change something, it's
+[4257.6s] really important for me to like give the
+[4259.0s] model like context
+[4261.2s] around what it what it has baked into
+[4263.6s] its design philosophy. And I want to
+[4264.8s] really reinforce that.
+[4266.9s] And once I've reinforced it, it's like,
+[4268.9s] "Oh, yes, it's doing something like
+[4270.8s] this."
+[4271.1s] >> to match the same thing. And then I then
+[4273.6s] I really have it try and articulate this
+[4275.2s] for me.
+[4277.5s] And when it tries to go articulate this,
+[4279.7s] the model will come up with the same
+[4281.4s] hunch that it is.
+[4283.0s] And I realize, "Oh, let's just make it a
+[4284.6s] lambda
+[4285.6s] uh is the best option." Again, and it
+[4287.0s] starts proposing options and I then I
+[4288.6s] give it everything else cuz it's already
+[4289.8s] seated directionally where I'm going.
+[4293.7s] Um and then it now produces what I want,
+[4296.0s] the symmetric runner. And now it has
+[4297.9s] >> Nice. a really really nice chain, and
+[4300.3s] then it kind of just works along the way
+[4302.3s] through.
+[4303.2s] And now it's
+[4303.8s] >> annoying that Claude couldn't come up
+[4305.2s] with that the first time. That the
+[4306.5s] models are just like, "Yeah, let's
+[4307.6s] actually add more complexity." And
+[4309.0s] you're like, "Nope. Nope. Narrow it
+[4311.0s] down. Narrow it down. Make it look
+[4312.7s] pretty."
+[4314.0s] Yeah. Yeah. Um and again, I still
+[4316.0s] haven't written to the ticket yet. So, I
+[4318.0s] know I know Camille, you asked to see
+[4319.4s] the ticket, but I haven't even written
+[4320.8s] to the ticket. It's all in context of
+[4322.7s] what I'm doing so far.
+[4324.3s] And now I start going to details. Now
+[4325.8s] I'll talk about summary and metrics.
+[4327.0s] I'll talk about all this other stuff.
+[4329.2s] I define a JSON type when I go do this.
+[4332.0s] Um
+[4333.8s] Uh then it produces some more data, blah
+[4336.0s] blah blah. That's not really
+[4337.4s] interesting.
+[4338.5s] Uh it updates the mental model.
+[4341.0s] Update the test ticket. So, then it has
+[4343.3s] a really quick thing and then I guess it
+[4344.9s] updates the ticket without me telling
+[4345.9s] it, too. Um
+[4348.1s] And then I think I have to go at some
+[4349.2s] point. Uh there's some small Oh, I
+[4350.6s] started reading actually 8:13. It It
+[4352.2s] took me like 12 minutes to read the
+[4353.2s] ticket.
+[4354.6s] Uh then I told it to go read the ticket.
+[4356.2s] And when I read this, I was like, "I
+[4357.2s] don't like the dollar signs, but can you
+[4358.6s] put underscores instead?" So, it changed
+[4360.2s] the name.
+[4362.2s] Um
+[4363.8s] Uh change the name, change the name. Uh
+[4368.0s] Cool. And I think that's it. That's
+[4369.2s] where we caught up to.
+[4370.7s] Now, while we do this,
+[4372.5s] let's take a look at what the final
+[4373.4s] ticket looks like. Well, any questions
+[4375.8s] so far from folks out there?
+[4378.6s] Uh about this process. We're caught up
+[4380.2s] in the real time now. We're in live
+[4381.6s] mode.
+[4383.5s] Are you going to write the code?
+[4385.5s] Yeah, we'll do in a second.
+[4387.2s] Um I'm just going to do the next part of
+[4388.9s] the task, which is just
+[4390.6s] reread this ticket, to be completely
+[4392.0s] honest, and like make sure that this is
+[4394.2s] correct. This is super high leverage.
+[4398.4s] Um cool. Uh but this is like my
+[4400.6s] day-to-day. Like when I'm coding, this
+[4402.0s] is exactly what I'm doing. Um and like
+[4404.7s] this is what I do whether I'm being
+[4405.8s] recorded or not being recorded or I'm
+[4407.2s] talking on the screen. Like it takes
+[4409.1s] good amount of time for me to iterate.
+[4411.3s] And I give myself that time, and I do a
+[4412.8s] lot of like long context. That's why I
+[4415.0s] like longer models because I keep
+[4417.2s] everything in the context window for
+[4418.4s] most of my behavior, and then I write to
+[4419.6s] disk at some checkpoints effectively.
+[4423.2s] Yep.
+[4425.4s] Um so then I produce this ticket, and
+[4426.9s] then I go read this. I'm going to go
+[4428.2s] read this really fast.
+[4430.8s] Uh I might make more mistakes when I go
+[4432.3s] read this because I'm skimming rather
+[4434.6s] than reading in in sequence.
+[4437.4s] No, read it read it in read it read it
+[4439.4s] in real time, dude.
+[4441.1s] Oh, it's going to be too slow. It's
+[4442.3s] going to take like 15 minutes of just
+[4443.5s] silence.
+[4444.6s] And we don't want that. Uh so we'll show
+[4446.6s] you guys roughly what it is.
+[4448.4s] Um and the most important part of that
+[4449.9s] right here is like I'm not too worried
+[4450.8s] about the syntax form. All this makes
+[4452.4s] sense. Like I know it's not going to
+[4453.4s] change too much syntax. We've already
+[4454.6s] discussed all this. What I want to go
+[4456.4s] check is the execution model and what it
+[4458.1s] desugars to. And this is going to work.
+[4460.6s] Cool. So I read this file. So it
+[4462.4s] actually like now it actually gives a
+[4463.9s] file name when it does this.
+[4466.0s] It makes init test four, blah blah blah,
+[4468.3s] takes it out of registry. This function
+[4469.8s] returns void. Registry registers a test.
+[4472.7s] So it actually runs this test, which is
+[4474.4s] kind of nice.
+[4476.4s] Uh for the first one, which is translate
+[4478.0s] hello,
+[4479.3s] it does this, and then testing quorum
+[4481.0s] gets passed in.
+[4482.2s] Perfect.
+[4482.8s] >> Nice. This works.
+[4484.6s] Um
+[4486.4s] or
+[4487.2s] or might ask a question, am I actually
+[4489.5s] monitoring how much of the context
+[4491.0s] window is being used throughout this
+[4492.2s] process?
+[4493.2s] Are you also taking compactions I count?
+[4495.3s] Well, I used to
+[4496.6s] before when like the models did not have
+[4498.2s] a million context, I would actively
+[4500.2s] manually compact at certain checkpoints
+[4503.0s] because like I just
+[4504.5s] I find the value of the continuous
+[4506.2s] context chain useful. But now it's a
+[4507.4s] million context, I just
+[4508.8s] let it rip until I get pretty far. I
+[4510.6s] think the biggest I've hit is like
+[4511.7s] 800,000 tokens.
+[4514.0s] We publish a
+[4516.0s] blog post with some like early findings
+[4518.2s] and like honestly might be going back to
+[4521.1s] Opus 45 for certain things.
+[4523.9s] Um it actually might be interesting to
+[4525.0s] have, you know, Kyle's done a lot on
+[4527.6s] like long context models and like ways
+[4529.6s] to turn It's the same model. It's not
+[4531.4s] like they added more intelligence to it
+[4533.1s] or more attention. They're just using
+[4534.5s] things like yarn to allow it to take
+[4536.3s] more more input in. Yeah. We don't have
+[4539.5s] to talk about that today. That's like a
+[4540.7s] good other That's a like a good other um
+[4544.2s] other things to say. aware of this
+[4545.7s] construct of this is what a long context
+[4548.2s] is, you can use the model well. But you
+[4550.0s] have to be aware of this. And you have
+[4552.1s] to make up for the lack of knowledge
+[4553.7s] that the model has on old context
+[4555.2s] window. It is your responsibility as the
+[4556.8s] present steering to go do this.
+[4558.8s] >> Okay, but also but also if like the
+[4561.4s] middle of your context window you're
+[4562.5s] just going to pretend like it doesn't
+[4563.7s] exist or it's barely going to impact
+[4565.5s] you, why not just start a new one?
+[4567.6s] Convenience.
+[4569.3s] Yeah.
+[4570.6s] It is like convenience to be honest. And
+[4572.4s] sometimes it doesn't impact you, it just
+[4573.6s] has less influence. I think it's false
+[4575.9s] to say that it won't impact you. It just
+[4578.1s] impacts the current steering less than
+[4580.3s] the most recent messages.
+[4582.2s] Is the best way that I would use to
+[4583.5s] describe it.
+[4585.5s] So, this looks pretty good to me in
+[4587.0s] terms of what's happening.
+[4588.6s] It feels like we have registration, we
+[4590.5s] have all these other things working.
+[4593.6s] Um
+[4594.6s] I like the naming convention here. This
+[4596.3s] looks correct.
+[4598.0s] Um it has the per package shainer where
+[4600.0s] we have one global in a test function
+[4602.0s] that takes in a registration pass to the
+[4603.6s] solvent.
+[4604.8s] Now it's actually really clear what you
+[4606.0s] have to do. You have to construct a new
+[4607.5s] registry type and then you just call in
+[4609.2s] a test. Now you have all the tests being
+[4610.9s] collected.
+[4612.4s] What's really nice about this is you
+[4613.8s] only have to collect the test that you
+[4615.2s] care about. So we can pass in some
+[4616.7s] special flags into here to make sure
+[4618.1s] that collection doesn't run for a
+[4619.2s] certain things. So like this could be
+[4620.9s] state
+[4621.2s] >> Well, I'm curious is like in the CLI
+[4623.4s] when I actually execute testing, like
+[4625.7s] what sort of filtering stuff is
+[4627.4s] available to me and we haven't touched
+[4629.8s] anything on like how do I tag tests to
+[4631.6s] be able to slice and dice?
+[4633.5s] Exactly. Haven't touched on that at all.
+[4635.6s] Um But you know that this architecture
+[4637.3s] is going to make it
+[4638.9s] easy for you to add that feature later
+[4640.5s] and that's like one of the things you're
+[4641.7s] designing for, I'm I'm sure.
+[4643.7s] Um
+[4644.7s] Someone asked the question like what
+[4645.8s] made me switch out. Um honestly it's
+[4648.0s] just one of my philosophies when I go
+[4649.9s] and I code with these systems is I
+[4652.0s] one on a
+[4653.5s] I think the way
+[4656.4s] I would say humans are lazy and like
+[4658.9s] lazy coders are extremely lazy.
+[4661.8s] And I am probably one of the laziest of
+[4663.6s] all of them.
+[4664.8s] Uh so why do I not come manually come
+[4666.4s] back? It's because if I can get away
+[4667.7s] without doing it, I will.
+[4669.5s] I will not do it.
+[4671.3s] And
+[4672.4s] my way of doing that is I just limit my
+[4674.0s] test on different scenarios. So I've
+[4675.7s] implemented like three or four features
+[4677.2s] using this approach.
+[4679.0s] And like I got great outcomes and
+[4680.5s] because I got great outcomes, I have
+[4681.8s] empirical evidence that I'm not being
+[4683.4s] impacted by like manually controlling
+[4686.0s] context. There's other reasons to
+[4688.2s] manually the
+[4689.5s] the down zone and keeping the context
+[4691.2s] window small is about optimization and
+[4693.3s] it's also like it's a rule of thumb.
+[4695.8s] When I say like hey try to stay under
+[4697.3s] 100,000 tokens, that's really like if
+[4700.2s] you don't know what you're doing and you
+[4701.4s] have no intuition, like that's all you
+[4703.9s] can go off of, but obviously for certain
+[4706.2s] tasks you can go up to 800,000 tokens.
+[4708.8s] For certain tasks you can
+[4710.3s] actually only want to stay below like
+[4712.1s] 50,000 tokens because it really requires
+[4714.2s] a ton of reasoning and thought. I don't
+[4715.5s] know what that would be, but like it is
+[4717.4s] a it is a guideline, not a not a rule,
+[4719.9s] and there's like, you know, there's a
+[4721.2s] lot of nuance here of like
+[4723.4s] It's correlated with the amount of
+[4724.8s] effort that you want to put in at the
+[4726.4s] time. If you want to be highly engaged
+[4728.1s] in the process, go further. If you want
+[4730.3s] to be highly disengaged to the back
+[4731.5s] context, you probably don't want to go
+[4732.7s] as far.
+[4733.8s] Uh cuz it's just like let the model make
+[4736.4s] If you want the model to make less
+[4737.4s] mistakes, stay smaller context. If you
+[4739.4s] want the model to make more um
+[4741.4s] If you want to be lazy, use bigger
+[4743.4s] context. But then you have to make up
+[4745.0s] >> What's the laziness in some other ways?
+[4747.1s] Yeah, you have to you have to basically
+[4748.8s] it's like, okay, what every in every
+[4750.8s] message you send, you're going to make
+[4752.1s] sure that all of the all of the last
+[4753.8s] three messages continue to get kind of
+[4755.6s] like re-propagated. The things you care
+[4757.1s] about are going to get reiterated by the
+[4758.7s] model, so it stays in the recent
+[4760.1s] context. Exactly. So, at this point, I'm
+[4763.1s] very happy with what this does. It it
+[4765.3s] produced everything up to this point.
+[4766.9s] Now we have the next part um
+[4769.8s] uh that we got to look at, which is old
+[4771.3s] style migration. So, we used to have old
+[4772.8s] test and Babel that looked like this,
+[4774.0s] and we're like, how do you migrate this
+[4775.2s] well? This just desugars directly. It's
+[4777.3s] kind of nice. You don't have to think
+[4778.4s] about it. It just works.
+[4780.2s] Uh like there's nothing special here.
+[4782.3s] And then arg names just get dropped.
+[4783.9s] >> of the all of the things already that
+[4786.6s] you would need to power something like
+[4789.1s] the the VS Code extension and things
+[4791.2s] like that. Like everything's still being
+[4792.4s] emitted by the telemetry layer.
+[4794.5s] Um kind of it kind of. Uh but we again,
+[4797.4s] we're not talking about that right now.
+[4798.6s] One of the most important things that I
+[4799.9s] found to be useful when I do a
+[4801.0s] diagnostic system is work on the work on
+[4803.5s] the layer that is the most foundational
+[4805.5s] first. Get that working.
+[4807.6s] Keep that extra context of like we got
+[4809.3s] to make the CLI work. We got to make the
+[4810.9s] VS Code extension work. We got to make
+[4812.6s] all this stuff in your brain.
+[4814.2s] Be aware of it.
+[4815.2s] >> But don't let the don't don't force the
+[4816.6s] model to design all of that. This is
+[4818.9s] what we call vertical slices or like
+[4820.6s] tracer bullets. It's like get the
+[4821.8s] foundation there, make it work end to
+[4823.4s] end, and then you can add more
+[4824.7s] functionality in versus trying to
+[4827.0s] design the entire thing up front.
+[4829.1s] Exactly. And now the ticket starts
+[4830.9s] talking. So, like at this point the
+[4832.2s] ticket is
+[4833.2s] talked about desugaring. So we talked
+[4835.2s] about desugaring. Now the ticket is
+[4837.1s] talking about what key What does this
+[4838.5s] mean for the language or the language we
+[4840.2s] have to introduce new keywords we have
+[4841.3s] to introduce test set and width. We
+[4842.8s] already have test as a keyword so it's
+[4844.2s] already different. Uh so it doesn't need
+[4845.8s] to introduce that.
+[4847.5s] And then it says, "Okay, we have to
+[4848.9s] delete the assert keyword." We don't
+[4850.4s] have assert keywords anymore cuz the
+[4851.6s] assert keyword is just a package, it's
+[4853.2s] not a keyword
+[4855.0s] anymore.
+[4856.7s] And then we introduce some new standard
+[4858.7s] library packages. The standard library
+[4860.2s] package that introduces is testing
+[4861.4s] package.
+[4862.6s] And the testing package is described as
+[4864.6s] such. I'm not going to read this really
+[4865.8s] fast, I'll read it in a second.
+[4867.8s] Uh then we describe the runners and what
+[4869.9s] they actually describe. They're just
+[4871.0s] type aliases that point to that are
+[4873.3s] lambdas.
+[4874.8s] Yep.
+[4875.9s] Uh we define a JSON type in the BAML
+[4878.1s] standard library.
+[4879.8s] Uh which is just described like this.
+[4881.5s] It's helpful. Uh we should go do that.
+[4883.5s] Um
+[4884.3s] it's nice.
+[4887.0s] Um then we do report types where we
+[4889.8s] define all all the report types are.
+[4892.3s] Um and then I need to think about this.
+[4894.2s] I I haven't thought about this enough
+[4895.5s] yet. We need to think about this. I
+[4896.9s] don't like unknown here. We got to We
+[4898.8s] got to go flush this out in a second.
+[4900.8s] But that's like
+[4901.8s] as I'm skimming this, I'm reading this
+[4903.1s] in real time with everyone right here.
+[4904.3s] So like I'm just flagging for certain
+[4905.8s] things. Like I'm like I see unknowns,
+[4907.4s] don't really like that. Don't like uh uh
+[4909.1s] uh
+[4910.0s] don't like some of this stuff. We'll
+[4911.2s] have to get around this.
+[4914.2s] We have a semaphore prototype.
+[4916.2s] Now this is a pretty advanced so
+[4918.4s] probably just going to
+[4920.0s] wait on this and not think too hard
+[4921.6s] about this right now.
+[4923.2s] Uh because semaphores require release
+[4926.0s] constructs and other things that we have
+[4927.6s] to go deal with with garbage collection.
+[4931.0s] Uh we need to first semantics on
+[4933.0s] semaphores.
+[4934.4s] So I'm I'm likely going to tell the
+[4935.6s] model semaphore is like an additive
+[4937.5s] thing. So I'll just tell the model here.
+[4940.7s] Semaphore out of scope
+[4942.5s] is a feature
+[4944.5s] thing we do
+[4946.4s] because to invent it,
+[4948.9s] we need to add the first slash
+[4953.5s] destructor semantics
+[4956.2s] and those are undefined.
+[4960.5s] Cool. So, I'll I'll just let it know
+[4962.6s] that so it can kind of know that we
+[4964.2s] might want it but not that we'll
+[4965.6s] implement it right away.
+[4967.5s] And then it just tries to tell me like
+[4969.1s] lots of the force. Yeah, so we're just
+[4970.9s] not going to do like channel forces off
+[4972.3s] for now.
+[4973.3s] Um it's just too complicated cuz I don't
+[4974.7s] want to do anyone differ uh and like
+[4977.1s] that's a whole that I have to go we have
+[4978.7s] to go right like like the errands go
+[4980.2s] right. Do you want to do that as well?
+[4982.2s] >> the defer keyword in Go where you can
+[4984.0s] like basically say like before this
+[4985.5s] block exits like run this run this
+[4987.8s] function. Yeah, like Go does that really
+[4990.4s] really really well. I really like that.
+[4992.3s] It's like ah on return run defer.
+[4995.4s] Yep. Um on or or panic. Yeah, panic is
+[4998.2s] bad.
+[4999.8s] Um I have a panic button, that's
+[5001.1s] different. Uh so, then it talks about
+[5002.6s] more test set runners. I look at all of
+[5004.5s] these. Um all passes kind of
+[5006.5s] interesting. I think all passes kind of
+[5008.8s] redundant.
+[5010.5s] Uh
+[5011.9s] but
+[5012.9s] like that should be the default behavior
+[5014.4s] is the way I described it. So, there's
+[5015.7s] no reason to have an explicit all pass.
+[5018.9s] Um so, let's comment that in.
+[5021.7s] All pass seems like a default behavior
+[5023.8s] in test sets so I don't know why I would
+[5025.2s] ever create this.
+[5029.9s] Um we'll send this as soon as it's done.
+[5035.0s] Uh it's going to take a while.
+[5037.1s] So, I'll go read this uh quorum to
+[5039.3s] regular panel functions. Yep.
+[5041.5s] People can run their own. Think about
+[5043.3s] this.
+[5045.0s] Scheduling. Now, I'm going to go read
+[5047.0s] this. This is probably the most tricky
+[5048.2s] part, which is I have to read how I
+[5049.4s] execute how our execution model will
+[5051.0s] work.
+[5053.4s] Create registry. Cool. Now, we have a
+[5055.1s] collection.
+[5056.4s] Once you've done a collection, then we
+[5057.8s] need to go ahead and
+[5059.6s] um for each leaf. Cool. Yeah, that looks
+[5062.4s] pretty good.
+[5063.6s] We're going to go run this and then go
+[5065.2s] do this.
+[5066.5s] I think this will work.
+[5068.9s] And then this is very recursive. This is
+[5070.8s] kind of defined nicely.
+[5073.1s] Uh this is the only special thing that
+[5075.1s] has to be like kind of built in.
+[5077.0s] Which is fine.
+[5080.6s] Yeah, we can just do a very very simple
+[5082.3s] thing.
+[5085.0s] Uh over here
+[5088.2s] check package.
+[5089.9s] Along the way, soft asserts.
+[5096.3s] They just output metric results.
+[5100.1s] Yeah.
+[5101.2s] Uh problem is I I I don't really want to
+[5103.4s] think about how metric results are going
+[5104.9s] to be aggregated yet because if I think
+[5106.6s] about this right now, I Yeah.
+[5109.4s] Uh
+[5110.0s] it's like I have to think about how
+[5111.1s] aggregations happen and like for
+[5113.1s] example, like asserts are very obvious
+[5114.8s] that they happen. When you have an
+[5115.8s] assert, it raises an assertion error.
+[5118.4s] Yep.
+[5118.8s] >> When you run a When you run a check and
+[5120.7s] you can write this in any arbitrary code
+[5122.3s] anywhere. When you run a check, the
+[5124.5s] question I have to ask is what happens
+[5125.8s] if a user writes a check statement in a
+[5129.6s] in an arbitrary function. What does that
+[5131.3s] mean?
+[5132.4s] And what does that actually do?
+[5134.2s] So that's kind of soft. So I'm going to
+[5135.8s] do I'm What I'm going to do is
+[5138.1s] uh
+[5139.2s] assert package is in the clear.
+[5151.7s] Uh
+[5153.2s] feature work
+[5155.0s] since
+[5156.9s] asserts
+[5159.8s] can be
+[5163.0s] arbitrary function
+[5164.8s] but check I do you.
+[5168.0s] I have no idea
+[5169.4s] no idea
+[5171.0s] what that means
+[5173.2s] outside of
+[5174.9s] tests.
+[5176.6s] I don't know.
+[5178.1s] I think
+[5179.0s] about this later.
+[5181.0s] Okay, cool. So, Miles going to go do
+[5182.6s] this and then they'll just let us know
+[5185.1s] how to go do this where it's like
+[5187.2s] serialization is future work. The one
+[5189.1s] thing about this every test will run in
+[5190.4s] parallel for now.
+[5192.2s] Um and then also we need to go deal with
+[5195.7s] uh we need to go deal with like um
+[5198.1s] the assert package and check where check
+[5199.8s] is marked as future work.
+[5203.3s] Okay.
+[5204.7s] Okay. I I honestly think this ticket is
+[5207.0s] pretty good as is. Let's ship it, dude.
+[5209.7s] Let's Let's go.
+[5212.5s] There's a few other concerns I have
+[5214.8s] which are mostly around like mm
+[5217.6s] this unknown stuff feels wrong. Um I got
+[5220.2s] to think about this.
+[5220.8s] >> So, but So, how about how about you just
+[5224.3s] remove the things that you're unsure
+[5226.1s] about so they don't come into the model
+[5227.8s] as like pre-baked decisions? Just be
+[5229.4s] like, "Hey, remove that section." And
+[5231.0s] then it'll come up in the design
+[5232.2s] discussion and you can iterate more.
+[5235.8s] And this is something we do all the
+[5236.9s] time. It's like if I'd rather I'd rather
+[5239.2s] I'd rather not have a bad If I'm not
+[5240.7s] sure about how to do something, this is
+[5242.9s] also how we take a two-sentence like
+[5244.5s] thing and turn it into a big design
+[5245.9s] discussion. It's like if I'm not sure
+[5247.2s] about the implementation or how I want
+[5248.6s] it to look, it's like, "Cool, go get a
+[5250.4s] bunch of code base patterns, go get a
+[5251.7s] bunch of code base context and then I'll
+[5253.8s] have a much more grounded discussion
+[5255.3s] later with all the patterns available."
+[5257.4s] In this case, I can't really do that
+[5259.1s] because this is all novel stuff we're
+[5260.5s] adding and there's no patterns for it to
+[5261.8s] copy. Like I just have to model what
+[5263.8s] like what is a run report going to have
+[5265.5s] as an outcome.
+[5266.9s] It has like pass, fail, error, skip.
+[5269.4s] Duration milliseconds. That's
+[5270.8s] reasonable. Yep. It has metrics which
+[5273.2s] are going to be metric result we'll
+[5274.4s] we'll look at in a second.
+[5276.2s] I have no idea what output means here.
+[5278.3s] Um
+[5278.7s] >> Yep. Like so, what I'm actually going to
+[5280.6s] tell it is when I go look at all the
+[5281.7s] data structures that it added, it added
+[5284.0s] a lot of unknowns.
+[5285.7s] Help me understand the unknowns.
+[5288.3s] Yep.
+[5291.5s] Yep, that's what it is. It's yeah.
+[5293.7s] Give me lay everything out on the table
+[5295.8s] so I can remix things, take things out
+[5298.7s] before we go actually write code and
+[5300.2s] then we're kind of like down a path
+[5301.6s] that's harder to steer off of.
+[5304.9s] Okay, cool.
+[5306.4s] And I think this is the last part. And
+[5307.9s] once this works, what we can do is we
+[5309.6s] can actually take this whole ticket and
+[5311.1s] then just go
+[5312.2s] wild. And then let it go like let it go
+[5314.9s] through.
+[5316.4s] And we'll do another round of design
+[5318.3s] discussions, but often what I find is
+[5319.8s] the second design discussion is so pure
+[5321.7s] and so clean that I don't even have to
+[5323.6s] think about it.
+[5325.0s] You just take all the recommendations
+[5326.4s] and and and rip through them.
+[5328.5s] It mostly just gets me all the way
+[5330.0s] there. Um, and I'll run this in a
+[5331.9s] second. I also would do a lot of things
+[5334.1s] where I let the model just run stuff in
+[5336.2s] parallel and I just waste tokens to in
+[5339.0s] favor of speedups.
+[5341.6s] >> So like for example, I Well, it's not
+[5343.7s] it's not waste tokens. It's just like
+[5345.5s] there's a chance it might be wrong and
+[5347.9s] if the uh This is great.
+[5350.5s] Nice. This is good. Um So like for
+[5352.9s] example, like let's say I'm in the
+[5354.2s] design phase and it produced a final
+[5356.6s] document and I'm like I'm pretty sure
+[5358.0s] it's correct, but it's not a guarantee
+[5359.3s] yet.
+[5360.2s] What I will do
+[5361.7s] is I will actually kick off the next
+[5364.1s] phase of like outlining and creating a
+[5366.2s] plan right here
+[5367.8s] and I'll just let it kick off. Yeah, the
+[5369.5s] question that you had was how do I take
+[5371.1s] uh learning from these runs and then how
+[5372.4s] do I use that to measure feedback based
+[5374.4s] on what is good or bad?
+[5375.9s] Um, might want to re-
+[5378.4s] re-two back to how the communication
+[5380.8s] went and see how to improve.
+[5383.4s] I think that's just like a macro level
+[5385.1s] thing that you think about as an
+[5386.0s] engineer generally. It It's like if
+[5387.9s] you've ever worked on a team, uh it's
+[5389.5s] useful to just like read your code and
+[5391.4s] say, "Oh, as I read this code,
+[5394.1s] do I have Do I have people that are like
+[5396.7s] um
+[5398.2s] How do I describe it?
+[5399.8s] Like how often how many comments do I
+[5401.9s] get on my code reviews? How fast am I
+[5403.8s] shipping? How many bugs do I have post
+[5405.6s] shipping? It's like a macro level thing.
+[5407.7s] It's not a thing that I really do
+[5408.9s] actively where I go and like read the
+[5411.5s] where I go reread the context window. Um
+[5414.3s] I try and just be really deliberate as I
+[5416.6s] read read the context window and I just
+[5418.0s] like
+[5418.9s] have a proxy like am I shipping or not
+[5420.8s] shipping? If I am if I'm
+[5423.1s] if I'm landing things into main, I'm
+[5425.2s] likely doing okay.
+[5427.1s] And then the next thing I look at is how
+[5428.9s] big are the size of tasks I'm able to
+[5430.8s] land and how fast
+[5433.0s] am I able to land them in.
+[5434.7s] And like I just measure those two like
+[5436.6s] quality metrics that I get to be a
+[5437.8s] really good idea of what's working
+[5440.3s] along the way. Um cool. Um we have
+[5442.7s] literal types.
+[5444.4s] And then
+[5446.5s] rate is confused and then we can remove
+[5448.4s] past rate. Um perfect.
+[5451.6s] I think this is perfect and then we're
+[5453.8s] and then I think the last thing here is
+[5455.2s] we're done.
+[5456.2s] So, let's going to update this. I really
+[5457.7s] shouldn't use a model to update this. I
+[5459.0s] should have just done this by hand. But,
+[5460.4s] the only reason I use the model to say
+[5461.8s] that we have literal types instead of
+[5463.4s] having to a string but having to be like
+[5465.4s] one of these three types
+[5467.0s] is because I just don't want the model
+[5470.8s] um
+[5473.2s] to go understand this really fast. Uh I
+[5475.4s] don't I don't
+[5476.6s] In cases like three references in the
+[5478.0s] code base that I perhaps missed while
+[5479.5s] scanning this while scan uh scanning
+[5481.7s] this, I would just not want to think
+[5482.8s] about this.
+[5484.2s] Is it Yeah, is if you change it in one
+[5485.9s] place cuz you saw it but you didn't see
+[5487.6s] some other thing downstream like the
+[5489.4s] model's much more likely to actually
+[5491.1s] change it in every place that matters.
+[5492.7s] >> Yeah, and like see what it did over
+[5493.9s] here? It actually exactly It just did a
+[5495.8s] better thing than what I would have
+[5497.0s] done. Uh
+[5499.0s] and it just did that in a nicer way
+[5500.7s] instead of duplicating this.
+[5502.7s] Yep. Um Justin asked a question, "Would
+[5504.6s] you sort traces logs tied to session IDs
+[5507.0s] in the PR so you have a finer detail to
+[5508.8s] replay to analyze for their state?" Not
+[5511.1s] really. Um
+[5512.9s] the reason that I wouldn't do that is
+[5514.3s] because like
+[5515.5s] once you checked in this code,
+[5518.0s] the code has now become the source of
+[5519.5s] truth. If you have bugs, you just
+[5521.2s] iterate from that code. If this is code
+[5523.2s] is so bad that you can't recover from
+[5525.8s] it, then you would like
+[5527.3s] and then I what I would do is I'd just
+[5528.4s] roll back that code and do it from
+[5529.6s] scratch again.
+[5531.3s] Like you just got to pick one or two
+[5532.9s] things in that dimension, but I wouldn't
+[5534.4s] really start with the logs.
+[5538.0s] For this uh for this whole thing.
+[5540.4s] >> I will say during code review, I'm going
+[5541.9s] to steal the screen share for like 1
+[5543.2s] sec. Oh, I can show you the code review
+[5545.0s] really fast. It's freaking great. I know
+[5547.2s] what you're going to show. Let me show
+[5548.2s] you a real practical example of
+[5549.5s] >> to the task or whatever. Oh, it's even
+[5551.9s] better than that. I think you guys did
+[5553.6s] this phenomenal. Um
+[5556.1s] So, as a part of building testing, one
+[5558.0s] of the things we realized we needed was
+[5559.0s] closures because everything that you saw
+[5561.5s] was implemented using closures.
+[5564.2s] Um
+[5565.1s] So, when I was implementing closures, I
+[5567.6s] was actually able to just I can just
+[5568.8s] show you what closures look like.
+[5571.0s] And closures did this entire process in
+[5573.1s] the exact same way. I did the exact same
+[5575.5s] process that I showed everyone on the
+[5577.1s] call really fast.
+[5578.6s] Uh and So, you don't have the task
+[5581.3s] thing?
+[5582.9s] Um I do. I do. It's just that this one
+[5585.3s] doesn't have it. It's because it was
+[5586.8s] updated. It does put a link to the cloud
+[5589.6s] version of this You're all set. Let me
+[5591.2s] share my screen, I'll show you. So, I
+[5592.6s] can come to this pull request and we
+[5594.4s] have a couple different links that get
+[5595.8s] added to the top. So, you have the
+[5596.9s] artifacts, which is just the list of um
+[5601.8s] of the artifacts for this task, which in
+[5604.1s] this case there are a lot. Um it
+[5606.1s] includes screenshots and stuff like
+[5607.3s] that. But we also have a link to the
+[5609.0s] task. So, this is a deep link into the
+[5611.1s] Riptide app that actually opens up and
+[5614.0s] like you can come in and see, okay,
+[5615.5s] cool. Here's all the things that Kyle
+[5617.3s] did to
+[5619.5s] uh to implement this. And so, obviously
+[5621.3s] like I'm not going to come here and read
+[5622.5s] every single one of these sessions, but
+[5624.4s] um you get where I'm going with this. It
+[5626.3s] might be useful to build like an AI chat
+[5627.9s] that can like ask people questions about
+[5629.5s] the implementation without asking them
+[5631.0s] directly. Now, this is the best part.
+[5633.0s] All you do is you hit copy, you copy the
+[5634.8s] content of this file,
+[5636.4s] uh you make a new task, you paste this
+[5639.1s] into there,
+[5640.7s] and you just
+[5642.4s] don't think. It's great.
+[5644.7s] And you just auto advance everything
+[5646.8s] through.
+[5648.3s] And that's it. That's a process.
+[5650.9s] Literally the process is
+[5652.0s] >> the other auto advance Are you just auto
+[5653.7s] advancing through the design and then
+[5655.0s] you're going to pause?
+[5655.6s] >> Yeah, and actually I want to disable
+[5657.3s] this one. Uh, and you'll see why in a
+[5658.8s] second. Uh, while this happens, it's
+[5660.5s] just going to go through and produce the
+[5661.8s] code.
+[5663.1s] Yep. You uh you have an update to
+[5664.8s] install by the way.
+[5666.7s] Yeah, that's not happening right now.
+[5667.8s] This code's running.
+[5669.7s] Yeah. Um, and debug at that level.
+[5672.3s] But what I don't do is measure the
+[5673.6s] high-level metrics and iterate. Just
+[5674.8s] wondering how far we need to go down the
+[5677.2s] context window for Dex to be happy.
+[5679.7s] Oh, that's funny.
+[5681.3s] Yeah, I I think for the context windows
+[5683.0s] you just you just have to decide if what
+[5685.4s] you're okay with and what you're not
+[5686.5s] okay with. Um,
+[5688.0s] and like how much effort you want to put
+[5689.3s] in. For some tasks, I do the same thing
+[5690.6s] as Dex. I stay very far out of the dump
+[5692.4s] zone.
+[5693.4s] But for a lot of tasks, I
+[5695.2s] like the bigger tasks, I just let it rip
+[5696.8s] and it works for me, at least.
+[5698.9s] Yeah, I I think it's like um I think
+[5701.0s] Craig or no, Chris Chris on Twitter said
+[5704.4s] this really well, which is basically
+[5705.4s] like if you want to read a bunch of
+[5707.1s] documents and summarize them or write a
+[5709.5s] new document,
+[5711.2s] um it can be you're totally fine at 120
+[5714.7s] or 220 or 320k tokens. It's if you want
+[5718.6s] to do like multi-turn tool calling and
+[5721.6s] like run the test and then fix something
+[5723.8s] and then run the test again and have
+[5725.0s] that like feedback loop kind of thing, I
+[5726.7s] think that's where you see the model
+[5728.1s] starts to like basically have a like a
+[5730.3s] spinout crisis. The trick really, Dex,
+[5733.3s] is just uh make no mistakes.
+[5736.2s] No, I'm joking. Uh, but it requires
+[5738.2s] >> got to type We got to type uh make no
+[5740.2s] mistakes ultra think. Exactly. Then
+[5742.6s] you're good. That's how That's I I don't
+[5744.7s] know why all these noobs don't do that.
+[5747.4s] Um, but yeah, I think the
+[5750.2s] the real problem is just
+[5752.0s] the more
+[5753.6s] open your design doc is, the more
+[5755.8s] assumptions the model will make and then
+[5757.3s] the more assumptions it makes, the more
+[5759.7s] mistakes it will make in implementation
+[5761.2s] cuz it's inconsistent in its
+[5762.7s] implementation and your tests will break
+[5764.6s] and then you end up calling a lot of
+[5765.9s] tool calls redundantly. So like
+[5767.5s] >> I follow.
+[5768.0s] >> That's that's kind of the premise,
+[5770.2s] right? Uh there is.
+[5772.7s] Um and whereas like if we do the level
+[5775.8s] of design that we did here where like we
+[5777.3s] literally spent hours writing that first
+[5779.5s] back that we shared. Then we we spent
+[5782.2s] literal hours, like 5 hours of time
+[5784.4s] producing ticket two.
+[5786.6s] Yep.
+[5787.2s] >> and that's purely to just take that
+[5789.0s] ticket and make a better ticket.
+[5791.6s] And then you're going to ship 2 weeks
+[5792.9s] worth of like what if you were tap tap
+[5794.8s] tapping in cursor would have been a week
+[5796.3s] or two of work. Oh.
+[5797.8s] >> And yeah.
+[5798.5s] >> Well, I haven't I haven't I haven't tap
+[5800.0s] tap tapped in so long. I don't I don't
+[5801.9s] type code anymore. Um I'm too lazy for
+[5804.2s] that. Typing code is is too 2024.
+[5806.4s] >> do that for me. That's too 2024.
+[5810.3s] I can't wait to get
+[5812.1s] Codex in here, too.
+[5813.9s] Um we're really interested to see how
+[5815.3s] this workflow works with Codex and if
+[5817.0s] that can like push the frontier even
+[5818.6s] more.
+[5820.5s] Yeah, I I like maybe I think the models
+[5823.2s] roughly work in the same way. I think
+[5825.0s] it's like
+[5826.1s] the difference for me is not really how
+[5827.7s] good the models get. The difference for
+[5829.1s] me is like how big of a task I'm pushing
+[5831.5s] through to the model at any in the same
+[5833.1s] unit of time.
+[5835.0s] Like this testing thing, closures, I
+[5837.4s] would have There's no way I could have
+[5838.6s] implemented closures in less than a
+[5840.0s] >> week and a half. Anyway, one of the
+[5841.4s] things that I do when I go implement
+[5842.7s] stuff is uh I actually have a checkout
+[5845.0s] of like most programming languages uh
+[5847.4s] ripped off in my own repo.
+[5850.8s] Yep.
+[5851.2s] >> Um Oh, so you just like tell me how go
+[5853.5s] how go handles this.
+[5855.7s] Literally what I do.
+[5857.4s] So I I literally have to go research and
+[5859.1s] produce documents like how does go
+[5860.7s] handle this? How does XYZ handle this?
+[5862.4s] How does Python handle this? How does
+[5864.0s] TypeScript handle this? And I had to go
+[5865.7s] research like how uh closures in every
+[5867.5s] single language. Cuz I Yep.
+[5869.7s] >> I just couldn't have possibly made a
+[5870.8s] good design decision without that
+[5872.1s] context.
+[5873.5s] And like this is where the model speed
+[5875.0s] up comes up in. So like
+[5877.4s] a lot of times before we often would
+[5879.2s] make execution trade-offs and short cuts
+[5881.0s] cuz like it's not possible to make the
+[5882.5s] right decision.
+[5884.1s] Yep.
+[5884.4s] >> But now you can literally just make the
+[5886.2s] right decision every single time without
+[5888.4s] having to think about it. I think that's
+[5890.7s] the real value prop here of what these
+[5893.0s] models can actually enable.
+[5897.6s] Uh it just made some progress. It's so
+[5900.0s] slow. I hate waiting for this step.
+[5902.3s] But it is a very useful step, so I let
+[5904.0s] it go.
+[5905.3s] Okay.
+[5906.6s] Um
+[5907.8s] Yeah, what's new with you?
+[5909.0s] >> Why is this taking so long? Wait, what
+[5910.3s] is it doing? Is it just doing research?
+[5912.3s] We are actually building evals to make
+[5914.8s] research faster. Um Oh.
+[5917.9s] Well, I can help you with that. You see
+[5919.5s] these new tests?
+[5921.2s] Yeah.
+[5921.6s] >> You can literally just write some tests
+[5923.4s] and then make your life way easier. You
+[5924.7s] can write a metric.
+[5926.4s] Well, so we're doing evals on coding
+[5928.4s] agents.
+[5929.7s] Um
+[5930.5s] but I I
+[5933.2s] It's the same thing. You just build like
+[5935.6s] you just build a metric of how fast does
+[5937.3s] the research step take? You just build a
+[5938.6s] latency metric on top of it.
+[5940.7s] And now you have
+[5942.6s] Um now you can simply go thread ahead
+[5945.2s] and just build a test set of a bunch of
+[5946.6s] different scenarios.
+[5948.2s] Like long ticket, short tickets, code
+[5949.9s] bases of different kinds, and then just
+[5951.8s] now you have a metric and you can go
+[5953.4s] optimize whatever implementation you
+[5954.9s] want.
+[5955.9s] Oh, so you're building a like the the
+[5957.9s] the vision for this is like a toolkit
+[5959.7s] for building generic evals.
+[5962.3s] Yeah, that's exactly it cuz you can
+[5963.9s] write arbitrary code.
+[5965.5s] Can you call my TypeScript from inside a
+[5967.9s] test function? Do you have bidirectional
+[5970.1s] bindings or do I have to write it in
+[5972.6s] balance?
+[5973.0s] >> Yes, sir. Yes, sir. We have lambdas.
+[5975.7s] So uh our one of the things I'm
+[5977.7s] designing uh I have a separate plan for
+[5979.7s] this is how to bind lambda across
+[5984.0s] So, once you bind lambda across
+[5985.2s] languages, then you can call a
+[5986.4s] TypeScript function and then just run it
+[5988.7s] inside of a Babel code base.
+[5990.8s] Yes. Okay, yeah, because that TypeScript
+[5992.6s] function would be literally like taking
+[5994.4s] a coding agent SDK and like running it
+[5998.2s] on like a long horizon, like do an
+[6000.0s] entire research task, and then come back
+[6001.9s] and give me the like basically do like a
+[6004.2s] Jepa style thing where you give the
+[6005.8s] model the ability to change not just the
+[6007.7s] prompt, but also like okay, we're going
+[6009.9s] to give you like this There's going to
+[6011.4s] be like six prompts, right? Cuz there's
+[6012.9s] the each sub-agent prompt, there's each
+[6014.9s] sub-agent's model. It's almost like more
+[6017.4s] to work Have you played with auto
+[6018.6s] research yet?
+[6020.1s] I haven't yet. I think like for me like
+[6022.6s] those harnesses are kind of interesting.
+[6024.6s] But I just sadly don't have the time. I
+[6026.0s] think too much about like the substrate
+[6027.7s] layer.
+[6028.6s] Like for me the substrate layer is much
+[6030.3s] more interesting.
+[6030.6s] >> auto research Auto research doesn't work
+[6032.6s] well unless you have a good way to
+[6034.0s] collect like metrics and signal about
+[6036.2s] how things are performing. And so like I
+[6038.2s] think this would actually work really
+[6039.6s] well with auto research once it's
+[6041.8s] shipped. Yeah.
+[6044.1s] This I mean, I have really really high
+[6046.2s] confidence this will ship by end of day
+[6047.7s] today.
+[6049.4s] There's a whole another process that
+[6050.5s] happens after this is implemented, which
+[6052.0s] is then our auto reviewer code rabbit
+[6054.3s] complains about a bunch of stuff, and
+[6055.8s] then I'm like, "Ah,
+[6057.2s] I should have a I should have a phase in
+[6059.0s] our Kanban board called code rabbit.
+[6061.3s] Where it's merely just a task of where
+[6063.6s] we wait and go check it out cuz it's so
+[6066.0s] slow."
+[6066.4s] >> Wait for
+[6067.0s] code rabbit to do its thing, and then do
+[6068.9s] you actually read the code rabbit
+[6070.0s] results, or do you just pass them all
+[6071.4s] back to Claude? I actually
+[6073.5s] I have Claude go and summarize them for
+[6075.1s] me because code rabbit's not Again, it's
+[6077.4s] like
+[6080.0s] it just depends on how much of the
+[6081.1s] automatic stuff you want. Like the more
+[6083.2s] automatic stuff you If you spent so much
+[6084.9s] love and care into making your design
+[6086.9s] discussion good cuz you're shipping like
+[6088.4s] 25,000 lines of code.
+[6090.5s] Well, then
+[6091.8s] and then you just suddenly slop it all
+[6093.3s] away cuz code rabbit gave you like 50
+[6095.0s] comments. It's just, you know, I think
+[6097.4s] that's pure slop at that point.
+[6100.2s] And like you're adding slop at the final
+[6101.7s] layer. So it's like you just got to read
+[6103.2s] and decide how much slop you want. Cuz
+[6104.7s] like a model's incentive is to like
+[6108.0s] it's always going to come up with
+[6108.9s] something. Exactly. Yeah. It's always
+[6111.1s] going to come up with something.
+[6112.7s] >> I was posting about this. It was like
+[6114.4s] the idea of just like yeah, if you ask
+[6115.8s] the model if the code is good, then the
+[6118.1s] model will be like, "Oh yeah, it's
+[6119.2s] great. It's comprehensive. It's got unit
+[6121.2s] tests. Everything's working." And if you
+[6123.0s] ask the model, "Hey, is this code bad?
+[6124.4s] Like tell me what's wrong with it." It
+[6125.9s] will find a bunch of like bad patterns
+[6128.2s] or bad architecture and like it's just
+[6130.3s] going to go out of its way to tell you
+[6131.6s] what it thinks you want to hear, which
+[6133.4s] makes it completely useless for like
+[6135.3s] deterministically evaluating if
+[6136.7s] something is good or not. And so the
+[6138.1s] thing that we talked about like in the
+[6140.2s] JP Morgan emails episode that we did
+[6142.7s] like six, seven, maybe maybe nine months
+[6144.9s] ago. Might have been a year ago at this
+[6146.8s] point. But it was like you do a bunch of
+[6149.3s] boolean classifiers on the thing you're
+[6151.1s] evaluating and then you use
+[6152.6s] deterministic code to attach those to
+[6155.2s] value good or bad. The model is just
+[6157.6s] saying like, "Is it X? Does it do Y?"
+[6160.5s] And then you build those up on in in in
+[6162.8s] code world about like okay, like here's
+[6164.9s] the actual score based on all those
+[6166.5s] flags.
+[6167.7s] Exactly. So I did a lot of work here to
+[6170.1s] actually go find exactly how the code
+[6171.4s] should be represented and literally this
+[6173.2s] I had the repos and I just made it go
+[6174.6s] research through it.
+[6176.2s] And like I just I don't have to think
+[6177.7s] about this. So like if you're
+[6178.4s] implementing something and you know you
+[6179.6s] have other language like things that are
+[6181.6s] like baseline research like the standard
+[6183.6s] way that stuff is done.
+[6185.5s] In our case like we're building a
+[6186.5s] language. There's a lot of prior art
+[6188.6s] that's already discovered.
+[6190.2s] Um everyone should have one of these
+[6191.8s] downloaded because otherwise you can't
+[6193.8s] possibly go ahead and like you can't
+[6195.8s] rely on web search to find this
+[6197.1s] information.
+[6198.4s] Um when you can just find stuff in
+[6201.0s] in the code itself. And it does a really
+[6202.7s] good job of doing that.
+[6204.4s] Um I also prompted to go search for like
+[6206.2s] the web as well because sometimes the
+[6207.4s] web is like a shortcut to understanding
+[6209.4s] how code actually works.
+[6212.2s] Um and then like the other thing I do is
+[6213.7s] I actually read this and make sure it's
+[6214.8s] like sound. It's very easy for me to
+[6216.9s] like check if something is sound or not
+[6218.4s] because like you can just like
+[6220.5s] double-check uh as a software engineer
+[6222.6s] if something makes sense. You don't have
+[6224.2s] to check if it's correct, you check for
+[6226.0s] soundness because correctness requires
+[6227.8s] too much work. I don't need to be a
+[6229.2s] primary source reference for every
+[6230.5s] single thing out there. That's too much
+[6232.2s] way too much engagement.
+[6234.3s] Yeah, that makes sense.
+[6236.4s] Oh my god, that's so slow. Okay,
+[6238.3s] finally.
+[6240.3s] It's producing the research questions.
+[6242.1s] Normally when I do this I actually run
+[6243.5s] like two tasks in parallel because
+[6245.1s] that's what allows me to actually make
+[6246.4s] progress because if I only do one thing
+[6248.0s] then it's kind of boring.
+[6249.4s] Um, because of things like this. Like
+[6251.0s] this thing has been running for like 15
+[6252.2s] minutes now. Uh, it's so long. Yeah, you
+[6254.8s] have a big code base. This is why we
+[6256.0s] need to get faster research. Um, there's
+[6257.8s] a lot of people building specialized
+[6259.1s] models for fast code search now and I
+[6261.2s] actually think like
+[6262.6s] being able to like parse out the entire
+[6264.7s] call graph um
+[6266.5s] and and like iterate through there is a
+[6268.4s] really interesting problem that we're
+[6269.5s] exploring as far as like just custom
+[6272.1s] tools that integrate with the LSP.
+[6274.9s] Yeah, um this will take some time. This
+[6277.3s] will probably take another 10 minutes.
+[6278.9s] This is also why I play video games in
+[6280.3s] the middle.
+[6280.8s] >> There's kind of a There's a trade-off
+[6282.3s] here between like, okay, we're going to
+[6283.6s] spend time um doing making sure that
+[6287.2s] this context window is fully objective
+[6289.0s] and it does involve like doing multiple
+[6291.2s] passes over the same code. Um,
+[6294.0s] but the benefit is that you get research
+[6295.4s] without opinions.
+[6297.1s] To be really candid, I think it's
+[6298.2s] actually not bad that it's slow. I don't
+[6299.9s] really care. I just have a different
+[6301.2s] workflow now. Instead of like letting
+[6302.7s] things happen in serial, like this this
+[6305.1s] whole task from like ticket to like
+[6307.5s] research or like design discussion takes
+[6309.5s] like 15, 20 minutes, maybe 30. I don't
+[6311.4s] care. I just switch tasks and I go do
+[6312.8s] something else.
+[6313.9s] You go to a different one. Yeah. And
+[6315.2s] it's like this is This is what I found
+[6316.2s] is like you can parallelize two hard
+[6318.2s] tasks at a time. If it's If it's more
+[6320.6s] than two then it's like your your
+[6322.2s] attention may fall off. I mean, depends
+[6324.5s] on how how how long your your gap is,
+[6326.9s] but yeah, I I find that it's really
+[6328.6s] valuable to have one primary task and
+[6331.8s] then one or two secondary tasks. The
+[6334.3s] only thing that I think is is required
+[6335.8s] to do this well is that you need to
+[6338.1s] ensure
+[6339.7s] that
+[6341.1s] um
+[6342.5s] how do I say this?
+[6344.0s] You need to make sure that you have a
+[6345.0s] number one priority and it's not like
+[6347.0s] oh, we're going to bring these both
+[6348.1s] along and like keep them up to like keep
+[6350.3s] them like tied with each other. It's
+[6352.1s] like when the primary task is unblocked,
+[6354.3s] I go back to it even if I'm in the
+[6355.8s] middle of something on the secondary
+[6357.2s] task. This is how I think about it.
+[6359.5s] Because otherwise you end up with more
+[6360.8s] work in progress instead of just like
+[6362.9s] the thing that is the most important is
+[6364.6s] always getting the most attention
+[6366.0s] because we want to optimize for like the
+[6368.4s] lead time total for a task. I'd rather
+[6371.3s] ship one thing in three days and the
+[6374.4s] second thing in five days than ship two
+[6377.3s] things in like four days. I mean,
+[6380.3s] obviously like it ends up being about
+[6382.2s] the same and actually like you finish
+[6383.8s] them both, but it's like if you want to
+[6385.6s] optimize for like delivering shipped
+[6388.1s] code to your code base, the cycle time
+[6390.4s] on an individual task is super super
+[6392.3s] important and high leverage. And this
+[6393.8s] comes from like factory like production
+[6396.3s] line theory, not from this isn't even a
+[6398.4s] software thing. I That's actually
+[6400.5s] interesting. I haven't thought about
+[6401.6s] that way. I
+[6405.0s] I usually just
+[6406.7s] go with the flow to be honest.
+[6409.3s] Um which maybe is why I'm not sure
+[6411.5s] >> I mean, you're a super genius, so you
+[6413.5s] get to bend the rules including around
+[6415.3s] the dumb zone and things like that.
+[6417.5s] Well, the thing you framed is actually
+[6418.8s] really interesting. I actually don't
+[6420.0s] need to I think I would ship faster if I
+[6422.1s] did it that way. What if I have a
+[6423.9s] primary task? I think I'm going to try
+[6425.2s] switching to that approach. Where like
+[6427.2s] You should try that. You should also
+[6428.4s] read I'll get you a copy of the book
+[6430.0s] called Did you ever read the the goal?
+[6433.0s] No, what's it about?
+[6434.9s] Okay, so the goal was this book that was
+[6437.0s] came out in like 70s and it was
+[6439.3s] basically it was
+[6441.4s] a book about a guy who had like gone to
+[6444.2s] Japan and seen how Toyota did like lean
+[6446.6s] Kanban style stuff.
+[6448.7s] It's a fiction book. It's a little
+[6450.0s] silly. It's like a guy It's he like has
+[6452.8s] to save the factory and like there's all
+[6454.9s] this like like random drama storytelling
+[6457.1s] stuff. But the basically what they came
+[6458.9s] out with was like the the inside is it
+[6460.7s] like in the '60s, '70s like they had all
+[6463.2s] these MBAs and they would bring people
+[6465.2s] into a factory and your job was to like
+[6466.9s] optimize one station. So it's like this
+[6469.6s] machine in the whole Let's say there's
+[6471.4s] 50 stations on 50 things that have to
+[6473.3s] happen to produce a
+[6475.3s] car engine or like some physical part
+[6478.4s] and each person would come in and
+[6479.4s] optimize their one station and no one
+[6482.0s] was looking at like the end-to-end flow.
+[6484.6s] And it's actually like the more you
+[6486.2s] optimize a station that is not the
+[6487.8s] bottleneck, the less efficient the
+[6490.4s] overall system becomes because you have
+[6492.9s] like the more work in progress that is
+[6494.8s] piling up. If this system is cranking
+[6496.7s] out parts and the thing after it is
+[6498.4s] slow, it doesn't matter how efficient
+[6500.6s] this thing is because whatever the
+[6502.1s] slowest thing in the workflow is, that
+[6504.7s] is your constraint and you should always
+[6506.4s] be like optimizing for the end-to-end
+[6508.7s] flow rather than any one particular
+[6510.5s] step. Just find the step that is the
+[6512.6s] bottleneck because the more inventory
+[6515.0s] you accumulate in factory it's like
+[6517.0s] parts that cost money and in code it's
+[6519.8s] like tickets sitting in progress or
+[6522.1s] tickets sitting in review or whatever it
+[6524.0s] is. And so it's like this is like the
+[6525.7s] original like scrum agile whatever was
+[6528.2s] like start work from right to left,
+[6530.6s] right? Take the thing that is almost
+[6532.2s] done and everybody focuses on fixing
+[6534.8s] that and then you move to the left and
+[6537.2s] then you move to the left. And so it's
+[6538.6s] like you're always want to finish work
+[6540.0s] in progress and you always want to
+[6541.4s] optimize for like what is the slowest
+[6543.6s] part of this pipeline.
+[6545.3s] I agree.
+[6546.3s] Um it's very hard to do it on software.
+[6548.2s] It's hard to measure what's work in
+[6549.8s] progress, but that is the right model,
+[6551.9s] 100%.
+[6552.8s] >> Yeah. I'm Yeah, I'm going to try that. I
+[6554.8s] think having like a good primary is
+[6557.0s] really nice.
+[6558.3s] I don't think I do that actively. Maybe
+[6560.0s] it's subconsciously, but I don't do it
+[6561.3s] close. I try and basically just if I'm
+[6562.8s] working on something, I just take it to
+[6564.2s] it like a checkpoint then I do the next
+[6565.6s] thing, take it to a checkpoint. I just
+[6567.5s] keep swapping checkpoints. Yeah. And so
+[6569.6s] there's this idea of like, okay, let's
+[6570.9s] move these tickets along in parallel and
+[6572.7s] that's what people think is
+[6573.6s] parallelization, but really it's like
+[6575.7s] whatever thing is further along, that
+[6577.2s] gets your attention even if the other
+[6579.3s] one falls behind. Yeah, exactly. That's
+[6581.6s] interesting. It's going to that's going
+[6583.2s] to change my way of parallelization. I
+[6585.2s] was like I was like 2 years into my or
+[6587.0s] like a year into my software engineering
+[6588.8s] career and I was like at a one-on-one
+[6590.4s] with my boss, amazing dude, and he was I
+[6592.4s] was basically like, I'm really
+[6593.7s] frustrated because like we had this
+[6595.2s] issue where like that we had a lot of
+[6596.3s] regressions on the front end and it was
+[6597.6s] like kept slowing things down. Uh or it
+[6600.0s] was like it felt inefficient and he was
+[6601.6s] like, look, you need to understand that
+[6602.8s] there are inefficiencies that are not
+[6604.7s] bottlenecks.
+[6606.1s] And I don't care if you're at a
+[6607.2s] thousand-person enterprise or a
+[6608.6s] two-person startup, if you're optimizing
+[6611.4s] inefficiencies that are not bottlenecks,
+[6613.8s] you are wasting time and you are adding
+[6616.0s] no value. That's funny. I agree. I mean,
+[6619.9s] yeah, it makes sense.
+[6621.4s] That's that's a very very interesting
+[6622.8s] way to frame it though.
+[6624.1s] I like that. Yeah, that's good. I will
+[6626.4s] find you a copy of this silly old book
+[6628.4s] from the '70s. The craziest thing about
+[6630.4s] that book is like here we are on a
+[6631.6s] podcast like doing dot leadership or
+[6633.8s] whatever you want to [ __ ] call it.
+[6635.3s] Just riffing and vibing.
+[6637.5s] >> Yeah. The The craziest thing about that
+[6639.6s] book is it's famous, they've sold 10
+[6641.1s] million copies.
+[6642.6s] Uh I was talking to
+[6645.0s] one of the original founders of Chef and
+[6646.6s] he he said, you know, well, you know,
+[6648.1s] the book was actually written to sell
+[6649.9s] the software.
+[6651.6s] And I was like, what?
+[6653.5s] He's like, yeah. I was like, what
+[6654.8s] software? He's like, exactly.
+[6657.5s] You could you could do you could write a
+[6659.4s] book or a piece of content that changes
+[6662.2s] the way the world thinks about a problem
+[6665.2s] and nobody knows like that it was
+[6667.6s] actually like you were trying to sell
+[6668.9s] some like, you know, COBOL supply chain
+[6671.1s] optimization software. Like that part
+[6673.0s] died. The commercial thing died. The
+[6674.5s] thing that lived on was like the idea.
+[6676.3s] >> The book. Well, that's why you got to
+[6678.5s] You know why they messed up? They should
+[6679.8s] have just led the book with
+[6682.1s] Here's Here's the software that we're
+[6683.8s] selling and why. They just forgot that
+[6685.6s] hook at the beginning.
+[6687.5s] Yeah. Well, they were on the What was
+[6689.5s] it? The sell the problem kind of thing.
+[6691.6s] Exactly. That's the hard part about
+[6693.2s] selling the problem. If you sell the
+[6694.1s] problem, then it does it turns off. You
+[6695.8s] got to sell the thing at same time.
+[6699.0s] Yeah. Um that's like part of why we
+[6700.9s] invented this testing thing. I think
+[6702.2s] like most people have probably never
+[6703.6s] like We've done a lot of episodes about
+[6705.1s] evals. I've seen a lot of codebases that
+[6706.9s] have done evals, but like that's what I
+[6708.4s] find really interesting though about all
+[6710.0s] this stuff, which is like
+[6712.0s] if you don't think about evals in this
+[6713.9s] approach from the very beginning, it's
+[6715.8s] really hard to like
+[6717.9s] uh it's really hard to go and like go
+[6719.9s] ahead and come back and solve this from
+[6721.4s] like first principles.
+[6722.8s] It's kind of very similar to like once
+[6724.7s] you saw that next you're like, "Oh,
+[6725.8s] shoot. This is actually useful in my
+[6727.3s] current research task cuz it's the same
+[6729.2s] thing."
+[6730.6s] And like but once you break down evals
+[6732.0s] in this way, what you really think about
+[6733.2s] is like this is not about faith. I need
+[6734.6s] this like any
+[6735.9s] non-deterministic system, which
+[6737.6s] inherently means any system where any
+[6739.7s] point in a call stack you use
+[6741.6s] math.random or
+[6744.0s] date time
+[6745.2s] or
+[6746.6s] um
+[6748.3s] um or
+[6750.3s] or an LM or a model of some kind.
+[6753.0s] And any system that does any of those
+[6754.2s] things needs to think about testing in a
+[6756.3s] foundationally different way than like
+[6757.7s] software that just does control flow.
+[6760.6s] And in fact, it's actually not just any
+[6761.8s] of those systems. Like anytime where you
+[6763.0s] have an external dependency where you
+[6764.3s] make a network request that you don't
+[6765.7s] control.
+[6767.1s] Uh there's this really interesting
+[6769.3s] problem in like system design where
+[6771.5s] someone's like
+[6772.7s] you have a black box API that you call.
+[6775.1s] It takes a really long time solve the
+[6777.4s] problem.
+[6778.9s] And it's designed to be an ambiguous
+[6781.0s] problem by definition because like
+[6785.0s] that's just like you got to go solve
+[6786.3s] that problem. How do you deal with a
+[6787.5s] black box that you cannot control?
+[6789.8s] And that's out of scope out
+[6791.8s] of scope. You got some questions. I mean
+[6794.2s] we have mostly people just saying um
+[6797.3s] that supply chain and procurement and
+[6798.9s] operations is a uh useful place to get
+[6801.8s] ideas about software and how to build
+[6804.0s] better software teams.
+[6805.8s] And they want access.
+[6808.6s] I said DM me on Discord. We're
+[6811.2s] We're getting ready to actually do like
+[6812.6s] a proper launch of this stuff and like
+[6815.0s] put up a you know stripe page swipe a
+[6817.4s] card and and like actually get rocking
+[6819.6s] with it where like anybody can sign up.
+[6822.2s] Um we wanted that to happen in March and
+[6824.0s] we had a bunch of random infrastructure
+[6825.4s] [ __ ] that we got pulled into. Um but now
+[6827.6s] the infrastructure is super stable. I
+[6829.6s] don't know if you see at the bottom uh
+[6831.5s] it says sync degraded.
+[6834.8s] Um
+[6836.6s] that is a system that Kyle built which
+[6839.2s] is basically like we we had some issues
+[6841.4s] with our sync provider and it used to be
+[6843.7s] when the sync provider was down
+[6846.0s] uh there was zero chance that your app
+[6848.5s] was going to work. And so we built a
+[6850.5s] like background path that is like a
+[6852.4s] little bit slower and less performant
+[6854.8s] but if the like hot path is broken you
+[6857.4s] can still the app is still usable and it
+[6859.5s] just uses like a polling base sync.
+[6862.6s] Oh nice. That's kind of cool.
+[6865.8s] Uh this is so slow. I hate waiting for
+[6867.1s] this.
+[6868.7s] Well if anyone is here uh
+[6871.0s] Finish your eval system so I can make
+[6872.7s] the research faster. Well we're doing
+[6874.8s] that right now.
+[6876.2s] Yeah.
+[6878.0s] Um
+[6878.7s] >> I mean at this at this point like all
+[6880.4s] I'm really going to do is going to
+[6881.5s] produce the research. I'm going to tell
+[6883.0s] it to go answer the open questions
+[6885.1s] and then I'm going to let it hit the
+[6886.2s] design phase, read it, and then go ship
+[6888.4s] it again.
+[6889.4s] There's not really much more I'm going
+[6890.8s] to do beyond that
+[6892.3s] um over here. So like we can watch me do
+[6894.8s] it. We can let it run in the background.
+[6897.6s] I can make um
+[6899.1s] what I'll do is I'll make all these like
+[6900.6s] public links so everyone can go read all
+[6902.6s] of it and I can make the whole task
+[6903.7s] public.
+[6905.0s] Uh so if if people that are curious can
+[6906.7s] just go watch it in real time and go
+[6908.3s] record and replay.
+[6909.8s] Uh and then obviously by the time that
+[6911.4s] you see this video on YouTube, there's
+[6913.2s] going to be a GitHub link to this actual
+[6915.0s] PR that's fully made.
+[6917.0s] So we can go ahead and like include that
+[6918.6s] at the end as well.
+[6920.6s] Yeah. What do you think, Dexter? This
+[6922.4s] This is going to work. This This is a
+[6923.7s] fully automated process.
+[6925.4s] Um I did this I already did this with
+[6927.0s] closures.
+[6928.3s] Here's Here's two sessions.
+[6929.5s] >> you want
+[6930.6s] uh you want an auto advance that allows
+[6932.5s] you to skip the design discussion? No, I
+[6935.5s] actually need to read the design
+[6936.8s] discussion to make sure it's correct. I
+[6938.2s] have to know
+[6939.9s] I I have to deterministically know that
+[6941.9s] it's correct. That's your last That's
+[6943.5s] your last check.
+[6945.0s] Yeah, that's my last check. Yeah. Uh cuz
+[6946.8s] then I can
+[6947.2s] >> about making some of the more advanced
+[6949.0s] things like, "Okay, if you really know
+[6950.5s] what you're doing, you can auto advance
+[6952.0s] the design discussion, but you have to
+[6953.3s] like unlock it by doing 100 sessions or
+[6955.8s] something." Yeah, ignore how many lines
+[6957.6s] of code I deleted. Like how many lines
+[6958.8s] of code I added.
+[6960.2s] And like this is mostly just pure Rust
+[6962.1s] code.
+[6962.3s] >> in like a couple days?
+[6964.1s] Um I mean I can we can look at how many
+[6965.8s] sessions it was. It was
+[6970.6s] uh
+[6972.0s] uh
+[6973.0s] 12:08 a.m.
+[6976.6s] I Yeah, I guess you don't have the date
+[6977.8s] here, which is unfortunate.
+[6979.1s] >> That's crazy.
+[6982.6s] Uh I think it took me like 2 days to
+[6984.2s] implement all of closures. So I started
+[6986.0s] at midnight and then I finished at like
+[6987.8s] 3:54 a.m. the next day, like 2 days
+[6989.8s] after like Yeah. So like roughly like 36
+[6992.2s] hours
+[6993.5s] of time with sleep in there.
+[6996.3s] >> Um with like two sleeps actually
+[6998.5s] uh in there. So like it's pretty
+[7000.8s] straightforward to go implement.
+[7003.1s] Um but all fully vibed, fully advanced,
+[7006.2s] fully auto auto advance all the way Once
+[7008.3s] I do this part I Once I do this part, I
+[7010.2s] just auto advance all the way through.
+[7013.9s] There's not really much I do um in that
+[7016.4s] approach.
+[7018.9s] Um, it works, but I I spent a lot of
+[7021.1s] time in building that perfect ticket to
+[7023.6s] make that really, really possible.
+[7025.4s] There's There's a couple of open
+[7026.7s] questions, I think the workflow is very,
+[7028.1s] very dynamic. I wouldn't say I've
+[7029.3s] hard-coded this workflow and I know like
+[7030.9s] what to do. I have a pattern.
+[7032.9s] Like the number of times I loop, the
+[7034.4s] number of times I answer the question is
+[7035.8s] very task-specific.
+[7038.4s] So like there are building blocks that I
+[7039.8s] use, not really like things that I can
+[7042.5s] yet automate. Because I don't have a
+[7044.3s] good way to dump all my context into in
+[7047.5s] like all that context in my head into my
+[7049.8s] ticket on day zero.
+[7052.1s] So it just can't do it. It's not
+[7053.4s] possible. Oh, did I make a mistake,
+[7055.8s] actually? Oh, okay, that's good.
+[7058.4s] No real risk. It's just a very tiny
+[7060.2s] change. I don't care about this change.
+[7063.9s] It's very scary sometimes when I
+[7066.7s] when I forget to import stuff. I was
+[7068.4s] like, "Oh, did I not sync against the
+[7070.2s] latest repo?" That's actually the
+[7071.2s] hardest thing about work trees. You have
+[7072.2s] to remind yourself to sync and get
+[7073.9s] pulled
+[7074.8s] before you start a task.
+[7076.5s] I can show you a Claude MD snippet that
+[7079.1s] will
+[7080.4s] that will force the app to do it. We
+[7082.0s] didn't want to be like as opinionated on
+[7083.9s] this as we could be.
+[7085.6s] But I did I send you my latest like blog
+[7087.6s] post on like how to
+[7089.5s] how to get Claude to like deeply adhere
+[7091.7s] to your Claude MD.
+[7093.7s] No, what do you do? It's really simple.
+[7096.0s] We just use these XML blocks.
+[7098.4s] So it's like important if you are doing
+[7100.5s] X, Y, and Z.
+[7102.7s] And it just like gives Claude because
+[7104.6s] this is a message is like only follow
+[7106.3s] this instruction
+[7107.9s] if it's highly relevant.
+[7110.4s] Um, here's the here's the snippet that
+[7112.6s] it actually puts in is like, you know,
+[7115.0s] you should all not respond unless it's
+[7116.1s] highly relevant to your task. So the way
+[7117.7s] you get it to follow your Claude MD is
+[7119.6s] you should be very explicit about when
+[7121.5s] is this
+[7123.1s] you know, relevant to your task.
+[7125.6s] Um, and so
+[7127.2s] >> the thinking to the model rather than
+[7128.3s] the model inferring it. You're explicit
+[7129.9s] about when it's relevant.
+[7131.8s] Yeah, and you do it's just a little bit
+[7133.5s] more It's It's Yeah, exactly. Instead of
+[7135.3s] saying always write the tests, you say,
+[7137.7s] "So, we have this in our like we have
+[7140.5s] this template for doing multi-repo stuff
+[7142.2s] with this." Um I think we talked about
+[7143.8s] this before. But it's basically like
+[7145.6s] important if you are using the RPI
+[7147.5s] create research scale, always get pull
+[7150.8s] the branch or whatever. Actually, we
+[7152.1s] already have this in here.
+[7154.5s] Um
+[7155.0s] >> Nice.
+[7155.6s] You know, check to ensure the repos in
+[7157.0s] question is at the latest from the Git
+[7158.6s] >> good.
+[7159.8s] You know what's funny? We actually don't
+[7161.0s] have a cloud MD file that we use. I just
+[7163.1s] have not found a good use case for it.
+[7165.3s] Yes. This is the only thing we use cloud
+[7167.1s] MD. I mean, I'm not going to pull up our
+[7168.4s] exact cloud MD, but it's basically like
+[7170.6s] it's a map of the repo, and then it's
+[7173.0s] this kind of [ __ ] It's like, "Okay, if
+[7174.9s] you need to query the database, here is
+[7176.6s] the exact shell command to to run,
+[7178.4s] otherwise ignore it." What I end up
+[7180.4s] doing basically is I go through here,
+[7181.8s] and once the implementation is complete,
+[7183.5s] I just start reading my test cases and
+[7185.2s] make sure the test cases are good, and
+[7186.8s] that we have like what's called snapshot
+[7188.8s] tests. So, we actually have like test
+[7190.0s] cases, and we print out the text files,
+[7192.0s] what the output of that serialization
+[7193.7s] is, what the inner representation of the
+[7195.0s] data models are.
+[7196.4s] And I go read them. I'm like, "Oh, I
+[7197.7s] keep on finding more and more bugs." And
+[7199.9s] every time I find bugs, I have to go fix
+[7201.5s] a bunch of stuff.
+[7203.4s] Um and then you can just see me iterate
+[7205.2s] through and try and fix each bug one by
+[7206.7s] one.
+[7208.0s] Yep.
+[7209.3s] But it's very rare that I find very,
+[7212.0s] very like foundational bugs at this
+[7214.2s] phase.
+[7215.1s] Because if I've done a good job earlier,
+[7217.6s] then I shouldn't find foundational bugs.
+[7219.7s] And sometimes I do. And then I do the
+[7221.6s] most absurd stupid thing, which is
+[7223.9s] actually nuke all my work. I kill the
+[7225.8s] branch, and I start from scratch again.
+[7227.7s] I make it I make the ticket explicitly
+[7229.6s] have that call out. And I do the design
+[7231.9s] discussion, follow everything out, make
+[7233.8s] a new ticket, and start again.
+[7236.7s] Yep.
+[7236.8s] >> And then I auto roll roll back, cuz it's
+[7239.0s] faster to restart from scratch with a
+[7241.7s] good basis than it is to incrementally
+[7244.0s] fix certain things.
+[7246.1s] Yep. And And there's there's a there's
+[7247.9s] an intuition there, right? If it's only
+[7249.2s] 5% wrong, then I will just riff back and
+[7251.6s] forth with the model on it. But if it's
+[7253.4s] 30% wrong, then I know it's easy to just
+[7255.4s] start over because all I do is drop the
+[7257.0s] thing in and rip it and it goes spends a
+[7258.8s] bunch of token like the tokens are cheap
+[7260.7s] compared to the amount of effort you're
+[7262.2s] going to spend trying to re-steer the
+[7263.9s] model after it's started going down a
+[7265.3s] bad path. And you can see that I sent
+[7267.5s] like almost like 15 messages at this
+[7269.4s] point. I but like um with a lot of um
+[7273.8s] with a lot of optionality of how long
+[7275.6s] this context chain gets when it gets to
+[7277.4s] incrementality.
+[7278.9s] And then once this is done, I'm like
+[7280.9s] um
+[7281.6s] and then I ask it to describe I actually
+[7283.4s] sometimes ask the model like, "Oh, this
+[7284.7s] feels large. I want you to consider
+[7286.4s] this."
+[7287.3s] And the model's like, "Oh, oh, but
+[7288.4s] that's actually really easy." That's cuz
+[7289.8s] again, I'm not reading the code, so I
+[7291.2s] need the model to describe things back
+[7292.6s] to me.
+[7293.9s] Mhm.
+[7294.3s] >> And once it does this,
+[7296.0s] then I have it go produce a PR. And once
+[7297.7s] it produces a PR,
+[7299.5s] I actually have this fun little script
+[7300.8s] that helps me get data back from LLMs
+[7303.4s] that go and describe the feedback back
+[7305.3s] and I just run the I don't know what the
+[7307.0s] command one is. There's another thread
+[7308.8s] somewhere that has some of this
+[7309.8s] information.
+[7311.2s] That where I get the comments from the
+[7312.7s] AI coding engines and I just let it rip
+[7314.5s] and a roll.
+[7315.6s] That's basically what I'm going to do
+[7316.6s] over here is like once this is done,
+[7319.3s] now it's finally proposing a synthesized
+[7321.0s] document. I'm just going to let it rip
+[7322.8s] in the same way. Like it's a very
+[7324.4s] straightforward loop.
+[7326.4s] This is the process that I use
+[7327.9s] end-to-end for almost every complicated
+[7329.8s] task. If I think it's going to end up
+[7331.5s] being like 5,000 plus lines of code,
+[7333.8s] this is like
+[7335.1s] this is the process that works for me.

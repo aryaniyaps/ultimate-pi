@@ -1,0 +1,652 @@
+as we learned to utilize llms and AI
+tools to help us code faster interact
+with our data more efficiently and solve
+our engineering problems we quickly run
+into one major issue there's only so
+much you can do with a single prompt
+there comes a point in time when no
+matter how great your prompt engineering
+is you hit a wall you can only solve
+problems of a certain size thankfully
+for us the code Bros at Microsoft have
+been cooking up autogen in this video
+we're going to walk through exactly how
+you can utilize ize autogen by making
+our postgress data analytics AI agent
+multi-agent this is the second video in
+our postgress AI agent series feel free
+to backtrack and so first things first
+what exactly is autogen remove the fluff
+and the pseudo marketing and autogen is
+simply this a simple framework for
+building multi-agent applications that
+can help you solve your problem better
+than a single prompt can let's compress
+this idea even further autogen enables
+you to build prompts that work together
+to solve a problem okay so that sounds
+cool but what does that actually look
+like in practice I think this image
+explains it really really well so I'm
+just going to take a quick screenshot
+here so we can zoom in on this super
+simple example here right we have three
+agents we have a commander a writer and
+a safeguard your request comes in you
+want to generate some python code it
+comes into the commander and the
+commander says okay here's the code we
+want to generate it sends the request to
+the writer and the writer is solely
+responsible for generating the code
+after it generates the code it sends it
+back to the commander the commander then
+takes that code and sends it to the
+Safeguard the Safeguard double checks
+the code it looks for problems it looks
+for bugs and then it sends it back to
+the commander if there are issues it'll
+go right back to the writer for the
+writer to improve otherwise the
+commander will return the response back
+to you as you can see here there are
+many configurations of setting up
+structures of multi-agents to help you
+solve your problems right so they give
+the example of math problem solving
+multi-agent coding online decision-
+making Dynamic group chat retrieval
+agent Etc you can imagine a whole
+different set of configurations that are
+best suit to solve a certain problem the
+core of this is that the combination of
+Agents AKA individual prompts with
+different functionality vastly
+outperforms a single prompt with limited
+functionality so that's the promise of
+autogen and other multi-agent Frameworks
+so enough talk let's upgrade our current
+version of our postgress data analytics
+agent to be multi-agent let's close this
+open up the terminal open our app and
+let's just walk through at a high level
+what we've done so far we have two
+environment variables here set up our
+postgress database URL and our openai
+API key if we open up table plus you can
+see that we have two tables a users
+table and a jobs table with our current
+table and the current version of our
+application we can do the following
+poetry Run start D- prompt and now we
+can in natural language query our
+database so what I'll say is give me all
+Gmail users and as you can see here we
+have an array of all of our users that
+are Gmail users so you can see here we
+have gmail.com and if we hop over to our
+table we can see that we have those
+exact three emails Charlie Bob Alice Bob
+Alice Charlie there they are so
+fantastic right and how exactly did we
+do this we set up a postgress datab B
+module and an llm module and that
+allowed us to get the definitions for
+our tables that allows us to run prompts
+against open AI gp4 we then use a
+delimiter and some prompt engineering to
+parse our SQL query then we run that SQL
+query and then we dump the result again
+if you want to see how this was built
+check out the first video in this video
+we're going to push our agent further by
+making it multi-agent first things first
+let's install python
+autogen I'm using poetry so I'm going to
+run Petry add Pi autogen I'm going to go
+ahead and drop a bunch of imports at the
+top Here and Now what I'm going to do is
+come into our code here and I'm going to
+get rid of some of our functionalities
+so since we're buing out multi-agents we
+want to have this functionality of
+parsing out the SQL completely handled
+by our agents so I'm going to go ahead
+and get rid of this I'm going to go
+ahead and get rid of our llm prompt and
+basically everything else after our
+prompt is getting built with the tables
+so what we're going to be left with here
+is just our database connection our
+original PR prompt adding our postgress
+table definitions onto a prompt and so
+from here what I'm going to do is write
+a couple comments and then we're going
+to open up once again our favorite AI
+coding assistant AER and we're going to
+have AER run through the code and
+generate a first pass at this for us
+build the GPT configuration object build
+a function map create our terminate
+message function create a set of Agents
+then we're going to create a group chat
+and initiate the chat so now let's walk
+through how exactly you want our agents
+to interact together so admin user proxy
+agent data engineer agent this agent
+generates the SQL query senior data
+analyst this will run the SQL generate
+the response then I want to have a
+product manager validate the response
+then at the top here I'm just going to
+say our admin user proxy agent takes in
+prompt and manages group chat cool so
+this is how our application is going to
+run I want to get an example and I found
+a good one here if you hop back to the
+autogen site and you go to docs examples
+I really liked this complex task solving
+by group chat this gave me a really
+great example of something that we would
+want to use here for our postgress AI
+agent and this is a really great example
+right so we have the gpg config and then
+we have several different agents that
+then get roped up into a group chat and
+a manager so what I'm going to do here
+is use a kind of combination of
+prompting techniques and use our
+favorite AI coding tool AER to help us
+generate a first pass without writing a
+single line of code here so I'm just
+going to copy this and inside of our
+application here I'm just going to drop
+in example.txt and dump in this I'll
+actually make this a python file as many
+of you know ader is a pair programming
+tool we can go ahead and pop open their
+landing page it's pretty incredible it
+is basically your AI pair programming
+assistant directly in your terminal
+let's just go ahead and run an example
+with it so I want to use AER to read the
+these comments read the example we have
+here and then replace our comments with
+a full built out example given the
+agents that have specified here so I'm
+going to export my open AI key I'm going
+to commit existing
+code then I'm going to run
+AER awesome I'm going to go ahead and
+add the main file and the example so
+that AER has it in its active memory and
+then I'm going to go ahead and build a
+concise request AKA prompt to build out
+a first pass at our multi-agent
+postgress AI agents use
+example.py and main.py starting at line
+build agents and mock out their
+respective
+prompts okay so it applies some updates
+let's go ahead and check them out okay
+so this is pretty good it got us a
+decent chunk of the way there if we
+start from the top here you can see it
+generated a gp4 config for us this looks
+great and then it left a couple to-dos
+here it doesn't really know how to
+handle this so I'm really glad that it
+just skipped over it you know in the
+example which for whatever reason was
+just removed let's go ahead and hit
+control Z another great part about AER
+if you don't like something that just
+did just contrl Z it there's no function
+mapping here and this is something that
+we're going to want our gbg4
+configuration to to have so we'll get to
+that and it doesn't exactly have any
+context for this terminate function
+message so totally fine I'm actually
+really glad that it left a blank instead
+of just guessing and hallucinating and
+making something up right but what it
+could do it did so it created this user
+proxy it kind of you know created this
+uh highle message here created the
+engineer uh and then it left the senior
+engineer and the analyst blank but it
+did get to the group chat and it did get
+to the manager so not too bad you know
+in this case maybe we got 40 50% of the
+way there that's totally fine let's go
+ahead and knock out some of this work on
+our own so import autogen let's go ahead
+and create our function map so the
+function map allows our agents to be
+aware of outside code that it can run
+I'm just going to go ahead and say
+function map equals run SQL and then I'm
+going to pass it our database run SQL
+query function make sure that's object
+awesome I'm going to modify our gbt
+config to also have a mapping to the
+functions so functions SQL I'm going to
+skip through this so I don't burn any of
+your
+time cool so this completes our gp4
+function map here I'm going to go ahead
+and remove the seed I'm going to add a
+new flag called use cache I'm going to
+set this to false so that we don't get
+repeat situations of our agent runs I
+just want a brand new agent session
+every single time I found that autogen
+almost only runs on gp4 so we're just
+going to use GPT 4 there and that's our
+configuration object now let's go ahead
+and create a ter minate message so what
+exactly is determinate message the
+determinate message functionality tells
+our multi-agent framework when it's time
+to stop generating and to end the
+execution is
+termination cool so basically all we're
+doing here is in whatever response we
+get from one of our llms if it has the
+text approved inside of it we're going
+to return true and that marks the end of
+of our session with our multi-agent
+framework so now let's go ahead and
+separate out the individual prompts each
+one of our agent is going to have data
+engineer and this will be the data
+engineer
+prompt
+all right so we've done a couple things
+here let's go ahead and collapse the
+code so this is easier to read we have
+all of our agents set up and ready to go
+we have our primary user proxy agent
+this is essentially us communicating
+with our llms then have the data
+engineer we have the senior analyst and
+we have the product manager each has
+their own specific role our data
+engineer is going to generate SQL our
+senior analy is going to run the SQL and
+generate the response and our product
+manager is going to validate the
+response to make sure it's correct and
+meets the requirements we then put them
+all together using a group chat I'm
+going to drop the rounds down to 10 you
+can see here that we have the prompts
+for each agent and at the end they all
+have this completion prompt which AIDS
+our termination message you can see here
+it says if everything looks good respond
+with approved and in our termination
+message we're checking to see if our
+content says approved so now I'm going
+to take our is termination message and
+function map and do a little bit more
+configuration on our agents to make them
+work like we want them to work to be a
+cohesive data analyst team I'm going to
+set our human input mode to never this
+is basically when it's going to ask us
+for more input I don't want it to ask
+for any additional input throughout our
+run I want it to run all on its own so
+that we can start building up to that
+true agentic software agent system I'm
+also going to add the is termination
+message here as another parameter and
+then I'm going to take these and paste
+it
+throughoute sweet so now I'm going to
+make one tweak I'm going to give our
+senior analysts the ability to run SQL
+so I'm going to call function map and
+set it equal to our function map up here
+and what this does is it gives this
+agent superpowers it allows it to run
+arbitrary code so now our senior analyst
+can execute the SQL created by the data
+engineer so I'm going to make one more
+tweak here I'm going to to copy the code
+execution config from the user proxy
+agent to false on all of our other
+agents this is another really cool
+feature that we'll touch in another
+video but this essentially disables
+essentially disables running arbitrary
+code we only wanted to run code that's
+specified in the function map on the
+specific agent that has a function map
+which is our senior data analyst now
+that we have everything set up and good
+to go we're going to reference our user
+proxy agent and we're going to initiate
+the chat we're then going to pass in our
+manager which has has the reference to
+our group chat and all of our other
+agents we're going to run clear history
+true I don't want any history to be
+stored or saved uh between runs and then
+finally we're going to pass in our
+prompt as the message parameter and
+there should be everything we need to
+run our postgress data analytics
+multi-agent application run the exact
+same command as we had before and poetry
+start we're going to pass in the prompt
+and our prompt is going to be all Gmail
+users
+all right so we have an error here I'm
+just going to speed through some of
+this I had to update the config list to
+be wrapped in this config list from
+Models function no problem there and now
+I'm getting one more error here
+basically the name I've specified for
+one of the agents doesn't match the regx
+format so I'm going to go ahead and
+update that uh I can't use spaces so no
+problem at all I'm just going to use
+underscores here and add the underscore
+there let me just check the other agents
+make sure there's no naming issues looks
+like it was Runing there let's go ahead
+and give it one more shot
+here incredible so let's see exactly
+what happened during that run so and as
+you can see here the first thing we get
+is the input for our Command let me go
+ahe and just copy this all out so we can
+move this to a clean text file
+file cool so as you can see here top to
+bottom we ran our Command and we see
+that the admin to the chat interface so
+to the entire group broadcast this
+message right so it pass in our prompt
+and as you can see here the exact
+details of the prompt from the CLI
+argument we passed in fill this database
+query and then we use a capitalize
+reference to attach some memory to the
+top of our prompt and just like in our
+first version of the agent we want to
+put the table definitions right at the
+top there so that's what we did so that
+our llm has access to all the tables in
+future videos we'll clean this up to
+support you know 10 00 plus tables cuz
+in reality you know we're going to have
+a ton more tables than just two but for
+now this is totally fine it'll fit in
+the gb4 memory but you can see right
+after that the engineer does its job and
+it generates SQL you can see that it
+passes it right afterward to the senior
+data analyst it's going to go ahead and
+actually run our run SQL function that
+we passed in here our function map right
+so we have that function map that we
+passed into to just our senior data
+analyst right so this is really cool you
+can really divide and conquer and give
+your agent specific functionality right
+our analyst is the only one that can
+actually execute SQL so after that you
+can see that it ran that SQL it
+generated proper response thanks to our
+function and then it passed it to the
+entire group chat and got marked as
+approved now this isn't perfect I want
+it to be passed to the product manager
+but this also does the job and it also
+is actually good enough right if you
+don't need all the agents if you don't
+need you know four five agents don't use
+them let's go ahead and run a couple
+more examples so that we know that this
+is real all off users with a Premium
+plan I'm going to let that run and if we
+hop back over to table plus we can see
+here we have
+users that are off and we have them in
+this plan and so you can see here
+there's one user that's both off and
+premium okay so something interesting
+happened here we generated the SQL
+statement right but as you can see here
+I didn't specify the capitalization
+properly and you know this is just a
+limitation of the information available
+didn't give it the ability to query to
+see what's in the table so it ended up
+giving this lowercase premium and as you
+can see the plan is capital P premium so
+what I'm going to do is just basically
+rewind my prompt but I'm going to pass
+in premium with a capital P and I'm
+going to wrap it in a string so that it
+knows exactly what it should be looking
+for let's see if it can make the
+adjustment I think ideally and in future
+versions of our agent what we can do is
+add a couple of the rows that we want to
+see from our tables and feed that into
+our agents and give our agents the
+ability to uh run queries themselves to
+validate what they're running but as you
+can see here it looks like we got that
+response we're looking for and we
+actually got it in a pretty nice format
+here if we scroll up here we got the Run
+SQL and it did catch this plan equals
+capital P premium in a string and we got
+that one result Jane Smith and if we got
+back to our table that's exactly what we
+would expect here we got Jane Smith
+coming back the kind of cool part about
+this is that you save a decent amount of
+code after The Upfront cost then it's
+just about figuring out how you want to
+coordinate your agents it's that big
+idea of prompt engineering moving to
+prompt orchestration and agent
+orchestration right it's kind of like
+the evolution here you go from prompt
+engineering to now orchestrating several
+different agents with different you know
+abilities and that's what makes a really
+complex unit a system of agents that can
+work on your behalf essentially while
+you sleep so let's go ahead run run more
+example and I want to get all users with
+completed jobs now we have to do a join
+on jobs to get all users with completed
+jobs okay so we got the empty set again
+basically the same thing happened right
+we got status equals lowercase completed
+job if we hop over to our jobs we can
+see that we need that uppercase
+completed definitely a Improvement here
+that we can make go ahead and run that
+version so this is really cool and as
+you get comfortable with this you can
+basically know that it's going to run
+very reliably right so I got this result
+back uh getting more confident in the
+system let's go ahead let's move on from
+this uh this is going to return the
+results we're looking for let's talk
+about the pros and cons of a system like
+this right is autogen the right move to
+make is it the right direction why is a
+multi-agent framework important so this
+is important because it allows us to
+create a more accurate model of the
+world if you think about the systems
+that you working on a day basis you know
+maybe your engineering job or your data
+analytics job you're an engineer there
+you work with a bunch of people you work
+with a team you work with marketers you
+work with your own manager you have
+co-workers and you work together
+essentially as a multi-agent framework
+that creates a product and produces
+output right there's almost no
+difference between the agents we're
+building now and the systems that we all
+operate in on a daily basis the only
+question is what's the complexity and
+you know how many abstractions have we
+built in our system where multi- agent
+work is important it allows us to create
+a more accurate model of the world that
+we live in so another huge plus of why
+this is important it enables us to
+become orchestrators right which means
+less engineering and more product level
+work right so after we built this agent
+out after we put The Upfront cost in we
+now have a postgress data analytics
+agent at the ready right we can query we
+can we can input anything into our
+prompt right it's it's the the system is
+entirely dynamic because it has agents
+doing specific jobs in a flexible way as
+if a person was doing it right and I
+know I know it's not perfect there's
+hallucinations there are things that are
+going to go wrong it's not about where
+we are it's about where this is going
+it's about what's coming next right
+always keep that in mind when dealing
+with this AI technology it's about the
+general direction of where this is going
+and you want to be on top of this you
+want to be utilizing AG gentic
+Frameworks in your day-to-day
+engineering so that you can be on top of
+this and you can get a lot of the value
+that's going to be generated from this a
+gentic Revolution all right so let's
+talk about some of the pros of using a
+framework like this right so we can
+assign functions and prompts to specific
+agents right enabling specialization
+which yields better results as we saw
+with our postgress example here we have
+a product manager that reviews work we
+have the analyst that executes the SQL
+and we have the data engineer that
+generates the SQL right we can
+definitely give more of responsibility
+to One agent but why do it when it's
+better to have a specific prompt one per
+AG agent I think that's the right way to
+slice agentic Frameworks in general One
+agent gets one function and they do one
+thing right it's just like clean Unix
+philosophy when you're building out your
+code when you're building out your
+functions and your modules make it do
+one thing make it do one thing but make
+it do it extraordinarily well what else
+so agents can reflect on results to
+provide feedback thus improving the
+results I didn't have a super concrete
+feedback mechanism here but the product
+manager always kind of summarized the
+work that the data analyst did and then
+reported back approved or not so that's
+a really powerful framework any really
+intelligent you know system has a great
+feedback mechanism that helps them
+improve their results right lastly we
+can roleplay real organizational
+structures just like your you know
+product team your data analytics team
+your marketing team we can build systems
+to mock this Behavior right we can build
+our own email processing agent system we
+can do existing and new entire forms of
+structures that you know we haven't even
+imagined yet so let's talk about a
+couple of cons from a technical
+perspective it's kind of an art on
+trying to figure out how many agents you
+need what should they do and how do you
+know that they're working this is a
+pretty new territory some of the larer
+Fang companies everyone's trying to kind
+of figure this out it's kind of a race
+to agentic Frameworks agentic
+functionality uh because once you get it
+running just like you saw here right
+once we got our example running we now
+essentially have infinite access to this
+small domain so the domain of postgress
+AI analytics is completely unlocked to
+us now that we have this functionality
+that we have these agents is working for
+us next thing this can get pretty
+expensive and this scales linearly with
+the number of agents that you have right
+because they're having a big
+conversation they're creating Real
+Results they're you know consuming
+resources this can get expensive I
+wouldn't worry about this too much but
+it is something to take into account
+lastly these are just llms talking
+together in a pretty loose fashion so it
+can be pretty difficult to debug why
+things are going wrong it takes time to
+get right it can be hard to debug and
+you know figure out what's what's right
+what's wrong what's going on so that's
+that is a multi-agent framework better
+than rolling your own yes is autogen the
+end all be all probably not it has a
+potential to be but it's more likely to
+be a stepping stone for more accurate
+multi-agent framework this doesn't mean
+I'm not going to use it I'm going to
+continue using this I think it's got a
+pretty great taste to it a lot of great
+functionality we now can just build out
+arbitrary agents and give our agents
+some specific functionality which I
+think is really incredible in the next
+video we're going to push our postgress
+AI agent further by adding file writing
+report generation and we'll add some
+more tables to test some more advanced
+complex scenarios and requests since in
+reality you know databases have 10 50
+hundreds of tables we're going to make
+sure that our multi-agent postgress data
+analytics agent can handle the reality
+of real data engineering that's where
+we're headed you know be sure to like be
+sure to sub be sure to hit the
+notification Bell so you keep your eye
+on how you can utilize this AI these
+agents this agentic framework autogen
+and whatever's coming next I'm going to
+be here covering it for you guys
+building out real valuable software that
+you can use and you can build on your
+own as well you know the whole goal here
+is to build out our own agentic software
+that can create value for us while we
+sleep so thanks so much for watching
+I'll see you guys in the next
+one

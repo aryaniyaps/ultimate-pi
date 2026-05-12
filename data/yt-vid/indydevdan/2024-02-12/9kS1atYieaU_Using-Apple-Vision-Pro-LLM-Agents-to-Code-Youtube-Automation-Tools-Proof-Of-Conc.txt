@@ -1,0 +1,718 @@
+those who plan the future tend to create
+it but how do you know your plan is
+worthwhile at all if you want to create
+the future you need a plan to get there
+here's a simple framework we're working
+through right now in this video series
+there are five PS you want to work
+through each one of them before you
+create the future with your plan you
+need to first set up principles we
+talked about our principles in the first
+video now that you have your plan for
+creating the future you need to hit that
+third P what's the third P of course
+it's the proof of concept the POC this
+is how in the engineering world we prove
+that our plan and our principles our
+mission is worthwhile you don't just go
+around throwing a bunch of money your
+time your life into a plan that might
+not even be worthwhile right this is how
+you take your idea to concept the POC is
+the critical middle step here principles
+plan proof of concept and why do we
+create the proof of concept we create
+the proof of concept to show proof of
+value this fourth notch on the P5
+pyramid this moves us closer to the
+Future where we hit P5 we're going to
+talk about P5 in the final video of this
+three-part series but first let's talk
+about what we're doing in this video so
+in video one of this series we talked
+about key ideas key principles for
+engineering multi-agent applications
+like everything is a function this is a
+really important concept that we're
+going to dive into more today by looking
+at the proof of concept so let's look
+through our principles one more time
+before we jump to the proof of concept
+so we talked about using the right tool
+for the job right you don't want to be
+using something that's not going to be
+creating the value that you want to see
+in the first place right so it's super
+important to always use the right tool
+in this case agent for the job we talked
+about the idea that everything is a
+function we're going to look at this
+more in detail in just a moment and then
+we talked about asking great questions
+that yield great results for us your
+results are only as ever going to be as
+good as your questions are so think
+about what your AG agents need to do
+think about how you need to structure
+them and just ask questions around what
+needs to come next and then near the
+middle slend of this video we're going
+to look at one more bonus principle that
+Stacks up and will drastically multiply
+your output over time it's really the
+brother of everything is a function
+they're tightly correlated and they're
+you know really in sync so let's talk
+about the application we're building
+here right on this channel I like to
+take real examples I like to take real
+problems to show you how you can build
+your multi-agent applications we all
+have different types of problems trying
+to solve and this was a problem that I
+knew I could share with you because
+sharing it would provide a valuable
+insight into how to build multi-agent
+applications I'm obsessed with this
+stuff all I do is think about this stuff
+and I want to share my journey with you
+guys so that you can benefit from it so
+let's talk about the multi-agent
+application right so we're focused on a
+multi-agent YouTube automation metadata
+generator we're taking this huge manual
+process let's take a look at this right
+we're taking this large manual process
+of SEO research brainstorming titles
+creating thumbnails
+iterating improving the description
+selecting your hashtags and we're
+automating this entire process with our
+multi-agent YouTube automation tool so
+in the end we're going to end up with a
+tool that does all this stuff in the
+middle for us all we have is our
+rendered video and then it gets uploaded
+to YouTube all this stuff in the middle
+is going to get automated away always
+uplevel the problem you're trying to
+solve right so it's as simple as this we
+have a rendered video we need to
+generate metadata so we can quickly
+upload to Youtube that's it right so
+let's look at how exactly we're
+replacing this middle step with our
+multi-agent YouTube automation tool so
+let's go ahead and push this back and
+let's look at this in a little more
+detail this is my favorite charting
+Library this is something called mermaid
+you've seen me use it on the channel
+before it's so useful for just quickly
+diagramming things and looking through
+functionality let's go ahead and full
+screen this so we can take a deeper look
+at this awesome okay so you can see here
+we have this brand new flow right and it
+all starts from the same locations right
+we have the rendered YouTube video
+and then at the end we have the review
+and then we're going to upload to
+YouTube so we have all of this process
+right here in the middle that we're
+going to be working with in our proof of
+concept and you know what let's just
+fire this off I want to show you what
+we've been building so I'm going to go
+ahead and plop that right there so let
+me go ahead and just open up vs code
+fantastic so here we are let's go ahead
+and pull this forward and let me just
+walk through a couple things first so
+we're going to be looking at a new suite
+of tools that we're going to be building
+on this channel called the Indie Dev
+tools it's an agentic engineering
+toolbox for developers but right now
+we're focusing on on this use case of
+generating YouTube metadata so I'm going
+to take this long command we'll break
+this down in just a second don't worry
+about it and all I'm going to do here is
+Kick this off I'm going to open up the
+terminal activate poetry we're operating
+in Python and poetry and then I'm just
+going to paste this command in and let's
+look at the directory in which we're
+going to operate here so you can see we
+have this mock YouTube content and we
+have this audio file let's go ahead copy
+our script here and fire this off so
+let's go ahead and let that run and you
+can see here as as this runs you can see
+it's running the create transcription
+step as this runs this directory is
+going to slowly fill up with metadata
+that we can use to upload our YouTube
+video right right now it's doing all the
+hard work force we're going to push this
+back and just look at the architecture
+of what is actually going on here there
+you can see the transcriptions kicking
+off now that's awesome so let's go ahead
+and look at exactly what's happening
+here under the hood right so here's a
+new architecture diagram for our proof
+of concept so this is what's running
+right now in the background over there
+you know we have have this rendered
+YouTube video right just like before
+we're starting right here right so let's
+zoom in on this whatever your rendered
+asset is whatever the thing you're
+building your metadata around you're
+going to have that as the first input to
+your tool right so remember everything
+is a function you want to treat every
+step in your pipeline of code in your
+pipeline of product doesn't matter if
+you're using no code or low code tools
+it's best to think of everything as a
+function right everything is a function
+let's focus on that principle this
+principle is going to pay you dividends
+so let's go ahead and just look look at
+the application Through The Eyes of
+everything's a function we create
+YouTube metadata and then we Branch off
+in the two steps right so let's go ahead
+and just follow one of these steps let's
+let's generate the thumbnail right this
+is really important in the YouTube
+process we're going to be generating the
+thumbnail here we're going to have an
+llm agent do this and you know in the
+long term it's not going to matter what
+agent you're using you can be using open
+AI Dolly 3 you can be using some mid
+Journey API you can be using whatever
+you need to but the idea is all about
+the highle flow right don't get too lost
+in the dets of how it works right so
+we're going to be generating thumbnails
+LM agent is going to do that we then
+have a additional step here where we
+need to resize our thumbnails into the
+perfect thumbnail ratio and then finally
+we have a thumbnail ready once that's
+finalized that goes into the review step
+where we collect the other bits of our
+assets right the title the description
+and then we can finally upload to
+Youtube let's follow this upper Branch
+here generate YouTube metadata and
+that's treated as the input for our
+transcription step right we have the
+video that's getting passed to this step
+and then when we want to transcribe of
+course you need to transcribe on
+something right so we have the input of
+the video file coming in and that's
+going to create a transcript right so
+now we have a fully rendered transcript
+after this step and this is just a code
+step right we don't need an LM to do
+this LM is not the right job for this so
+we're going to focus on writing code to
+do this for us so in the POC we have
+code to do this for us right we're using
+fast whisper to generate our transcript
+so after the transcript we can now do
+other things a great way to architect
+your llm apps is to think what do I need
+to run this llm right what makes this
+prompt special what makes this agent
+Special and for the title in the
+description we're largely blocked on the
+script being ready so we have the script
+here that's going to flow into the
+description and the llm agent's going to
+look at the script and then generate
+descriptions same idea here with the
+titles we need the script we can also
+add other inputs to this right this is
+just kind of a simplified version you
+know there are other inputs like you
+know SEO keyword for the title we have
+like a rough draft title right and that
+can all be used to help get you to your
+your final step where you have all of
+your assets ready and now you're ready
+for that final manual review right that
+human input where you're kind of the
+curator of the information and the
+content that's being generated by your
+multi-agent system right so after you
+lock that in you can finally upload to
+YouTube right and the amazing part about
+this is we've now just engineered A
+multi-agent system that does all of this
+hard work for us right so all this is
+automated away so we have this running
+right now in the background let's see if
+that's completed awesome so let's look
+at the actual codee implementation here
+our metadata generation has finished
+running from our proof of concept let's
+look at how we took these core ideas of
+everything is a function and one more
+core principle we're going to talk about
+and let's look at how we took those
+ideas and really turned it into
+something solid something foundational
+blows this and let's just take a look at
+the output right so we started with just
+an audio file right and now you can see
+here let's go ahead and just pull this
+in here so now you can see here we have
+a couple different assets generated
+right we have the audio file we have the
+description we have the script in a Json
+form we have the script in a text form
+and of course we have our thumbnails
+right so this iteration created three
+thumbnails for us that's awesome and
+then we have a new set of titles
+generated for us as well right so aside
+from that initial metadata generation
+command there was no work on our end and
+that's what you want to be focused on
+with your llm agents right what are the
+inputs to your system and what are the
+outputs right start at that high level
+and then just like we did over here you
+know pull in and break down the smaller
+individual steps inputs outputs inputs
+outputs inputs outputs right it's the
+same thing everything is a function
+don't forget that right keep that in the
+top of Mind as we're walking through
+this everything is a function so let's
+dive into some of the code right it all
+starts at the main file of course we're
+using poetry we've got a couple other
+key libraries in here like typer so
+typer allows us to build a clean CLI
+like application flow so we can do
+things like this I can say poetry run
+IDT IND Dev tools and then we can say
+YouTube and now we have have a list of
+commands right so we can do help and as
+you can see here we have a whole list of
+individual commands in their own kind of
+sub command namespace where we can build
+smaller individual tools right and so
+you can see here we have these
+individual steps we've broken things
+into kind of function like elements
+right where we have the configuration
+command we have the description command
+we have generate metadata we have the
+script Command right so the script is
+going to transcribe the video thumbnail
+is going to be generating thumbnails for
+us and of course the title generates
+some titles for us right so that's how
+we're dividing the application up if we
+hop into the YouTube command you can see
+here we have this really simple
+structure we have commands modules and
+we have our main and we have our models
+right so let's go ahead and hop into
+commands and you can see here we have a
+slew of commands we're going to start at
+the top here with the YouTube command
+and so just like you saw in the output
+here right we have these list of
+commands those all correspond with these
+items here right so you know we have the
+thumbnail we have the title we have the
+script we have the description
+generation and of course we have that
+top function that we just ran earlier
+generate meta which combines all of our
+functions and runs them top to bottom in
+a single unified flow and you know I
+want to call out something here this
+really starts digging in to the second
+principle everything's a function but
+also the fourth principle build reusable
+building blocks if you want to build
+great software if you want to build
+reusable software that grows with you
+you don't want to be rewriting the same
+code the same applications the same
+workflows every every single time
+imagine if you started a new application
+and you built the same UI components
+every single time over and over right
+that's not a good use of your time we're
+Engineers we're better than that we know
+that we can take what we've done and
+reuse it in different ways and the main
+way we do that is build small composable
+pieces of software right so let's look
+at an example right let's look at the
+create title step so let's go ahead and
+open up the create title so I have that
+open here so create titles let's
+collapse this and just look at the top
+level right all this is in our modules
+directory create title that's all this
+does it helps us generate additional
+titles right we talked about breaking
+our code into smaller pieces before this
+is how we do that we have small
+individual modules that do one thing and
+they do it well right it's a small
+building block you can call create title
+anytime you want like let's go ahead and
+do it right now cuz I have that divided
+up for that reason right so so in the
+typer commands directory we can just run
+create titles right we don't need to run
+the entire flow we can just come in here
+right come into this single create title
+step right let's pull this in so the
+beauty about following this fourth
+principle and the second principle
+everything's a function and build
+reusable building blocks is this right
+if you have reusable building blocks
+your code is modular right so you can
+come in here and only run this step if
+you want to right and this is great for
+so many reasons a lot of senior
+Engineers know exactly why one of the
+big reasons this is so valuable is that
+you can test just this flow right here
+and nothing else so when you're able to
+to modularize your code like this create
+reusable small building blocks little
+functions that add up to bigger
+functions when combined your code is a
+lot more resilient it's a lot more
+maintainable and it is all those things
+because it's easier to just say just
+work on the description right just give
+me a description right and then just
+give me a title and then you know just
+generate thumbnails or just take this
+image and resize it right so we've
+engineer the entire metadata YouTube
+generator to match and utilize those
+principles right so so I can actually
+just come in here and just run this
+individual Command right so I have
+titles generated right here what I'm
+going to do is just underscore this then
+we're going to create a new batch and
+we'll look at the actual content of what
+got generated here in just a moment but
+let's go ahead and just run this so I
+just want to create you know a new set
+of titles so let's go to the titles
+command here and let's look at what that
+input is for the create command so it
+looks just like this so we're going to
+run poetry run IDT we're running the
+YouTube Suite of applications and then
+we're going to go into titles and then
+we're going to run create so let's go
+ahead and pass in this you can see that
+right there this- R flag and that's
+going to be our rough draft title and we
+can run with just that so you know let's
+say something like um you know coding
+with the Apple Vision Pro right so let's
+just say that so let's get some titles
+generated based on this rough draft we
+can also pass in the script file we can
+pass in count let's let's go ahead and
+generate uh we'll pass in the C flag as
+well let's generate four titles right
+and we'll skip the SEO keywords and
+let's just let that rip right so you can
+see right away we have our prompt and
+you know I'm going to share this code
+probably next week with the
+productionize version with you so you
+can dig into more of the details there's
+a lot going on here I just want to show
+off some of the top level key principles
+to proof of concept ideas that we're
+talking about here so that's finished
+and so we can just play this to make
+sure that our script is matching up
+nicely I can just go ahead and hit play
+so you can see here it's matched up
+pretty nicely technology is breaking the
+L limits on what you can build you can
+now create software that not only makes
+decisions for you nice right so that's
+working pretty well we can get that out
+the way let's look at the script Json so
+there's a script. txt and a script Json
+sometimes you want the individual
+segments of your script right so you
+know here's the entire script there and
+then we have segments right so this is
+just going to be the chunks right so LM
+technology is breaking not only can I
+make decisions for you so you know
+sometimes that's useful to have you want
+to just pass in some key information to
+your llm some different time stamps and
+different periods and then we have some
+descriptions so I formatted this in a
+hook first paragraph second paragraph
+and then an explanation of why the LM
+chose the first and second paragraph you
+know where it got the ideas from so this
+is cool this is ready it is you know
+automating a lot of the work for us you
+know in that final review step you're
+always going to want to take all the
+information you have and do a final
+review before you do anything with it
+right and this actually helps you
+iterate on the entire process right
+because you can say okay this part was
+good you know the title was good
+description was mid and you know maybe
+the uh thumbnails aren't as great as I
+want them to be that can all happen in
+your review process and then you kind of
+come back to the drawing board and you
+focus on what needs to be improved right
+that is what our multi-agent YouTube
+metadata generator looks like right now
+you know using these key principles that
+we talked about before right these
+principles are super helpful right using
+the right tool for the job do you need
+an agent here in our transcription
+stepped right there's just no reason to
+use an agent so if we pull that open
+here if we look in our modules here we
+have that create transcription step and
+this is using faster whisper to you know
+run the transcriptions we can you know
+create a limit sometimes you don't need
+to run through the entire transcript so
+that's all here for us to use you can
+see it's in a nice simple function it
+has an input has an output it creates a
+transcription file that is then used for
+the other steps in the process right so
+that's that so you want to be using the
+right tool for the job so sometimes it's
+code sometimes it's agents sometimes
+it's manual input right like for
+instance of course you need to render a
+full video before you can pass it in to
+your process right and then we have that
+key idea everything is a function by
+treating all of our flow as inputs and
+outputs to one another we can do things
+like this right we can have one super
+top level flow let me just go ahead and
+collapse this a little bit where we have
+you know our create transcription step
+we have our create title we have our
+description and we have our thumbnails
+right and at the top level we just
+arbitrarily want all these things to run
+top to bottom right right we can take
+these individual functions with inputs
+and outputs and tap into the fourth
+principle right build reusable building
+blocks we can now run this create title
+step on its own and really we can reuse
+that create title for any other
+application we want to build in this
+tool Suite right and really any other
+application so you want to be building
+reusable building blocks as you're
+building out your multi-agent
+applications because that tool that
+you're giving giv your agent that you
+know prompt you're probably going to
+want something like that again in a
+different version or you might want the
+exact same things so that's how we can
+you know use everything as a function
+think about everything as a function and
+of course you just want to throughout
+your process of your proof of concept
+keep asking great questions great
+questions are going to get you to your
+result even if you don't have a good
+idea just throw something at it right
+throw something at whatever you're
+building and just use that as a starting
+point right and then lastly just like we
+talked about use reusable building
+blocks everything is a function so make
+sure that your functions are isolated
+they're reusable and it allows you to
+you know take individual chunks like
+this isolate them test them modularize
+them this gives you a you know huge
+Advantage as an engineer having
+solutions to problems that you're I can
+guarantee you you're going to see
+multiple times over in different
+variants that's super important so you
+know this is the proof of concept we can
+now run a single script and like I said
+I'm going to share the code probably
+next week with you guys I want you to
+have that full view of how you can
+engineer multi-agent applications in a
+clean way but you know just looking at
+the readme here there's going to be a
+lot of cool functionality let's look at
+the cleaner version let's go Ahad in
+yeah there we go so you know there's
+going to be a lot of cool capabilities
+here all the way from generating
+metadata from top to bottom using you
+know the collection of methods and
+functions to the individual steps we can
+come in here and just you know all I
+want right now is a description and you
+know all I want is a thumbnail and you
+know it's it's a great way to just build
+software in general but specifically
+it's a great way to you know manage and
+control your multi-agent applications so
+you can take your principles turn them
+into plans create your proof of concept
+and then prove through your proof of
+concept that you know it is worth
+building at all right so you can hit
+that proof of value which gets you one
+step closer to creating the future you
+want to create right I've had so much
+fun you know building this video using
+this new technology let me know if you
+guys like this video format it's
+definitely different it's definitely new
+and uh you know I had a lot of fun doing
+it but let me know if you like this
+video format I know that some of the
+specs a little rough but but I think
+that what it offers is you know
+definitely worth it in exchange so
+what's next for a YouTube automation
+tool we're going to be hitting P5 what
+is P5 It's the final version of the
+application the first kind of you know
+push into the future of what you want to
+see what you want to build we're going
+to be productionizing the application
+and I'll be sharing this codebase with
+you if you're interested in this if you
+enjoyed this video format definitely
+drop the like drop the sub leave a
+comment let me know what you liked let
+me know what I can improve with this
+video format you know there's a decent
+amount going on here but I love being
+able to you know feel the work and walk
+through it with you in a in a you know
+much more tangible way right we can
+really dig in and and talk design we can
+talk software we can talk principles so
+I also want to mention the AI coding
+assistant tutorials are in the works
+right now I'm really excited to share
+that with you guys it's going to be a
+set of tutorials into some more premium
+paid courses for those that want all the
+gains that you can get from AI coding
+assistants there's a lot of interesting
+details to work out it's going to be one
+of the first AI coding assistant
+tutorials and AI coding assistant
+courses as you know on this channel
+we're kind of near the edge of a lot of
+what's being built what's happening
+right now so there are a lot of unknowns
+to confront there but I just wanted to
+call that out if you're interested in
+that you know hit the like hit the sub
+and yeah I just want to say you know
+thanks so much in the video we're going
+to have a full productionize version I'm
+going to share the code with you guys
+and we're going to bring our YouTube
+metadata automation multi-agent tool all
+the way there are a lot of things that I
+want to add to the final version right
+now there's no iteration step when
+you're creating thumbnails you want to
+be able to iterate on them and it's cool
+that we can generate you know five of
+them right now right like we can just
+pass in the count variable here but it
+would be cool if we could iterate on
+these and improve them over you know
+multiple iterations so some toing for
+that I also want this process to be a
+lot smoother right so I'm asking myself
+the question how can I make this the
+most seamless experience possible right
+right now everything's kicked off by
+this top level generate metadata step
+which is you know really cool this is a
+proof of concept so you you want and
+need to be doing some more hacky non ux
+UI focused things but you know I want to
+take the step I kind of want to build
+some like fully you know automated CLI
+that just walks me through the
+information that you know the
+multi-agent system needs to build the
+best metadata right and so maybe it just
+prompts me you know what's the rough
+draft title what are some keywords right
+it just prompts all this I would rather
+have that than you know walk through
+this kind of laborious step of setting
+up this command every single time you
+want to think of yourself as a user of
+your own applications you want it to be
+seamless you want clean experiences you
+want simple experiences so that you can
+focus more on producing value right and
+that's one of the big Ideas I want you
+to take away from this video we use llms
+and we use code we build software to
+solve problems and to do things that of
+course we can do it we can do it
+ourselves but we should be building
+tools to solve these problems for us
+right we want to be getting rid of all
+this manual crap here and building out
+software building out tooling to do it
+for us right building out multi-agent
+systems that can handle this all for us
+thank you so much for watching I really
+appreciate your time and that's going to
+be it for this one guys stay focused
+keep building and I'll see you in the
+next one with a fin analyzed
+version

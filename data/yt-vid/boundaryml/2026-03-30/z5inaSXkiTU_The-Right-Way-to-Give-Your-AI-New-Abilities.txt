@@ -1,0 +1,1833 @@
+[0.0s] MCP's kind of like an all or nothing
+[1.6s] game. You get the MCP or you don't get
+[3.6s] the MCP.
+[5.1s] And what that means is in systems that
+[6.9s] are extremely sensitive to bloat, so in
+[10.0s] the case of like LLM calls and context
+[12.2s] windows,
+[14.0s] you basically have a zero-sum choice.
+[16.2s] You either [music] use all the features
+[17.6s] or none of them. And that's just not how
+[18.9s] we do software. So this is this is like
+[21.1s] kind of how I model this is like you
+[22.5s] have this long tail of tools
+[24.2s] >> [music]
+[24.5s] >> that you want to let users bring in
+[26.0s] there, you know, whatever it is. But
+[27.8s] like the things that you have a high
+[29.2s] percentage of users and like over time
+[31.0s] you can add first-class things for all,
+[32.6s] right? If someone if there's some MCP
+[34.5s] that starts becoming really popular and
+[35.9s] lots of people are using it, then that's
+[37.6s] your signal to go pull Yeah, exactly.
+[39.2s] Migrate it and build a first-class
+[40.6s] integration. [music]
+[41.4s] I'm not going to call it lazy, but if
+[42.7s] you want to be like simple in your
+[44.8s] architecture and just everything happens
+[46.3s] through tool search and we don't have to
+[47.4s] think about it, that's great, but
+[49.8s] someone one of your competitors or
+[51.3s] someone else building something similar
+[53.3s] is going to push the context like window
+[55.7s] to its limits and context engineer the
+[57.7s] most important use cases, and their
+[59.8s] users are going to get 1% or 5% better
+[62.2s] performance [music] and like
+[64.6s] It Our goal here is to give you the
+[66.4s] tools to like be at the bleeding edge of
+[68.6s] like what what can the models do for a
+[70.3s] certain task giving a certain set of
+[71.8s] tools. In terms of alpha, there's only
+[74.0s] two alphas [music] in today's world.
+[75.9s] Your agent performs a little bit better
+[77.6s] than the base market. I guess three
+[79.7s] alphas. You have extremely good
+[81.3s] distribution or you have a [ __ ] ton of
+[83.8s] VC money that you're willing to burn to
+[85.4s] subsidize cost. There's only three
+[87.3s] alphas that you can have.
+[89.0s] And like two of those, you already know
+[91.2s] if you have them or not. We can't really
+[92.9s] help with that. We can just help with
+[94.1s] the last one. And that's what we're
+[95.6s] doing here. That's what we're just
+[96.9s] trying to give you that last bit of
+[97.8s] alpha cuz even if you have the other
+[99.0s] two, you can get a little bit more and
+[100.6s] you can operate in two or three
+[101.7s] dimensions now instead of just one.
+[105.5s] >> [music]
+[108.0s] >> Hey everyone. My name is Vaibhav and
+[109.5s] this is the AI That Works podcast. As
+[111.9s] you folks may know, every Tuesday Dexter
+[114.2s] and I get together and we spend an hour
+[116.5s] yapping about something
+[118.3s] with AI that is hopefully practical to
+[120.7s] everyone out there.
+[122.3s] I work on a company called Boundary
+[123.8s] where we make the programming language
+[125.1s] Panel. And I am the founder CEO of Human
+[129.2s] Layer where we help people solve hard
+[131.4s] problems in complex code bases with
+[132.8s] coding agents. Today's topic is all
+[134.9s] about MCP.
+[136.6s] MCP I think is we get an on-again,
+[139.8s] off-again kind of relationship with MCP
+[141.6s] on Twitter from what I see. Some days
+[143.1s] it's the next thing that's going to save
+[144.2s] us all, the next day it's horrible and
+[145.8s] we should all move away from it, and
+[146.9s] then it's back, and then it's gone, and
+[148.5s] then it's back.
+[150.0s] Let's talk about it. The craziest thing
+[152.0s] that I see is like there is an infinite
+[154.5s] wave of people discovering the most
+[156.9s] basic thing that we kind of talked
+[158.5s] [laughter] about last summer, which is
+[160.0s] like, "Oh, if you have a bash tool, then
+[162.8s] like maybe you should just use CLIs
+[164.8s] instead of MCPs, and it's more context
+[166.8s] efficient and things like this."
+[168.7s] Uh and we're not going to talk about I
+[171.1s] mean, we will bring that up today, and I
+[172.6s] think it's a dimension of the
+[173.7s] conversation, but I think we want to go
+[175.3s] a little bit deeper than that surface
+[177.1s] level debate.
+[178.8s] Uh
+[179.3s] And and we will We'll touch on it, but
+[180.8s] like basically all of the different
+[182.8s] types of AI applications you might
+[184.4s] build, all of the ways you might consume
+[186.1s] it AI, and uh Vaibhav's very loves
+[189.5s] saying that MCP is not useful and like
+[191.6s] there's way better things for it. Uh and
+[194.0s] I may be the uh The last MCP debate I
+[197.2s] was the anti-MCP guy, and so the today I
+[199.6s] might be the pro-MCP guy. I wouldn't
+[201.6s] really say it's uh
+[203.1s] hot or not in either direction. I think
+[204.8s] the way I would think about it is like
+[206.6s] on the internet people are really like
+[208.2s] hyper-hyperboles when you speak cuz
+[210.4s] people like axiomatic thoughts
+[212.4s] because no one wants to go ahead and
+[213.7s] discover everything from first
+[215.0s] principles every single time.
+[216.9s] So in
+[218.1s] and even for my own software design. So
+[219.7s] like for example,
+[221.2s] in Google there was a rule, "Thou shalt
+[223.3s] never use a raw pointer."
+[225.1s] That is a really, really, really good
+[226.8s] rule for like 99% of code. In Rust,
+[230.3s] there's a rule that says, "Thou shalt
+[231.5s] never write unsafe code." Again, a
+[233.2s] great, phenomenal rule for for like
+[235.8s] thinking about code as a whole, and it
+[237.4s] saves 99% of people.
+[240.4s] Um to uh it it just saves 99% of people
+[243.9s] from making a mistake that they would
+[245.6s] make if they had to think about that
+[246.8s] decision.
+[248.0s] So when I think about MCP and like I at
+[249.4s] least I personally say MCP is useless, I
+[251.5s] really just say it from that 99%
+[253.1s] perspective.
+[254.4s] More likely than not, your product is
+[256.2s] not going to benefit from using MCP
+[259.3s] rather than it will bene- rather than it
+[261.1s] will gain the benefits that MCP actually
+[262.8s] brings.
+[264.7s] What's your take, Dexter? And then we'll
+[266.7s] go into I think a better conversation
+[268.7s] that actually talks about
+[271.1s] um
+[272.9s] how do I put it?
+[274.6s] That talks about like what is MCP, and
+[276.6s] we can go define it right after that.
+[278.5s] Yeah. Okay, cool. Yeah, we can talk
+[280.3s] about and like I think um
+[282.8s] I mean, my take is basically like MCP as
+[284.2s] a protocol has a lot going on.
+[287.0s] Uh
+[287.7s] and uh actually I think my co-founder
+[289.4s] Kyle put this best, which is like MCP
+[291.8s] does not cause context rot. Uh the same
+[295.2s] tools in a CLI could also cause a bunch
+[297.5s] of context rot in terms of just using up
+[299.3s] too much of your context window with
+[301.2s] like garbage or inefficient token
+[303.0s] inefficient prompts and things like
+[304.3s] this. So it's like the way you design
+[306.6s] the tools that is most important more so
+[309.3s] than the actual
+[311.0s] uh the protocol or the transport or the
+[313.5s] standard. You can build incredibly
+[315.2s] valuable, tight, useful tools using MCP
+[318.1s] the same way you can use CLIs with the
+[319.6s] bash tool. Um and I think there's
+[322.4s] there's other nuances of like
+[324.5s] who should be embracing MCP? Because I
+[327.0s] think in the early days it was like,
+[328.3s] "Oh, this replaces tools or this
+[329.6s] replaces SDKs." And that's
+[331.9s] that's that's not what it's for, but it
+[333.8s] does give you this interesting like
+[335.4s] plug-in ecosystem and makes your
+[336.9s] software extensible in a really powerful
+[339.0s] way. And so like I think we should kind
+[342.0s] of we can run through all the ways that
+[343.2s] I think that like people use MCP wrong,
+[346.6s] uh and then we can talk through kind of
+[347.7s] like what maybe some of the right ways
+[349.0s] might be. Um Let's do it.
+[351.4s] Let's first define MCP. So um I'll tell
+[354.2s] you my story behind MCP uh and that I
+[356.8s] why I think it exists. I think we
+[358.5s] discovered a thing that said, "We want
+[360.5s] agents."
+[362.2s] Then we said, "Oh, uh
+[364.1s] we want agents to have these things
+[365.6s] called tools."
+[369.0s] And then we said, "Hey, this is really
+[370.4s] cool, but not only do we want agents and
+[372.2s] tools, we actually want agents that have
+[374.2s] tools
+[375.4s] that are actually defined
+[377.4s] uh not
+[379.2s] um not at compile time, but
+[382.5s] dynamically."
+[383.8s] So then we evolved into worlds where we
+[385.2s] had dynamic tools. Yes. Yeah, no, before
+[388.1s] before MCP you had every agent
+[390.3s] framework. You had your LangChains and
+[391.8s] your CrewAIs and all these things, and
+[393.4s] you basically had to import Python code
+[396.0s] to use a tool. And so to use a file
+[398.0s] search tool or a access search tool or
+[401.3s] whatever it is, you had to go install
+[403.0s] that like library into your package.
+[405.9s] Yeah, you had to write the function or
+[407.4s] you had to import the function. But then
+[409.6s] we realized if we import the function
+[411.2s] via tool, then we
+[413.1s] all of us have to use the exact same
+[414.6s] definition of tool
+[416.3s] if we want to import this. And then
+[417.9s] we're like, "Oh, if we all want to build
+[419.8s] agents around this,
+[421.4s] then we have to go ahead and then go
+[422.9s] ahead and actually load
+[424.8s] uh then we have to be like, "Okay, now
+[426.0s] we're going to use the same version of
+[427.2s] tool from here." So we all have to use
+[429.4s] something like
+[431.3s] LangChain.tool.
+[432.9s] And this is just like pseudocode. But
+[434.5s] then many people are like, "This is
+[435.8s] crap. I don't want to use LangChain's
+[437.2s] tool. I want to use my tool or I want to
+[438.5s] use some other tool." So then that
+[440.0s] happened. Now we live in a world where
+[442.1s] everyone really wants to use this. So
+[443.6s] once people want to do dynamic stuff, it
+[445.9s] is useful to have some protocol layer
+[448.6s] that helps define some of this uh some
+[451.6s] of this stuff. So once we want a
+[452.6s] protocol layer to go into the agent,
+[455.0s] then you need some protocol for doing
+[456.8s] this. And you want to treat this almost
+[458.9s] like a package manager,
+[460.8s] and hence MCP was born. And what MCP's
+[464.1s] job is, at least in my mind, it's a
+[466.0s] protocol that attempts to list all
+[467.4s] functions and then call all functions.
+[470.9s] And if we at least for me, this is how I
+[473.2s] define the MCP protocol, and I think I'm
+[475.3s] trying to and I would say like
+[478.1s] the main difference here isn't so much
+[480.2s] as is this a protocol? Is it not a
+[482.8s] protocol? Is this MCP? I think the main
+[485.5s] thing that we should really talk about
+[486.5s] is MCP is a specific manifestation of
+[489.6s] someone trying to do this.
+[491.7s] Yep.
+[492.6s] Uh there's many ways that we could
+[494.4s] implement the list all function and then
+[496.1s] call function protocol,
+[497.9s] but MCP is one specific implementation
+[500.1s] detail. Can we pause just to go a little
+[502.6s] bit deeper on this like dynamic function
+[504.6s] discovery thing? Like you're familiar
+[507.2s] with how the Google Cloud SDKs use
+[509.9s] discovery to build the SDKs dynamically
+[512.4s] at runtime?
+[513.8s] No, I'm not actually.
+[515.0s] >> this? Okay, so this has been a thing
+[516.6s] that people have been doing since way
+[517.8s] before MCP actually. And so if you are
+[521.7s] running Python code and you you write
+[523.5s] something like, you know, from Google
+[526.0s] Cloud SDK import like Gmail, calendar,
+[530.9s] like what is happening under the hood
+[533.0s] there is the the code that you're
+[534.8s] actually importing
+[536.8s] is actually calling a schema endpoint
+[539.0s] that is hosted on Google on Google's web
+[541.4s] >> Oh, I know what you're talking about.
+[542.2s] Yeah. and sending back the schema
+[546.0s] of like, "Here's all the endpoints you
+[547.6s] can call. Here's all their parameters,
+[549.0s] etc." And so like when you run, you
+[552.2s] know,
+[553.6s] const, you know, or sorry. I I haven't
+[556.1s] written Python in a while. My emails
+[558.9s] equals gmail.list
+[561.8s] my emails, etc. Yeah. This function does
+[566.4s] not exist in the SDK. This function is
+[570.2s] It's like a dynamically loaded
+[571.7s] attribute. At import time, the the the
+[575.5s] library is doing like, you know, Gmail,
+[578.3s] you know, for function in schema, you
+[582.0s] know, gmail. you know, set you're doing
+[584.3s] like a Python like set adder to attach a
+[586.8s] function
+[588.9s] like create,
+[590.6s] get, call schema basically. So you're
+[594.1s] creating an attribute on it dynamically
+[595.8s] at runtime. And this is like a model
+[598.0s] that's been around for a while. So, they
+[599.9s] never have to like update the code when
+[602.3s] the upstream APIs change. And the SDK is
+[604.5s] just a way to discover what can be done,
+[606.9s] and it knows how to communicate with
+[608.6s] that API. So, and then this obviously
+[611.3s] comes with the trade-off that when you
+[612.8s] go use the Google library by default in
+[614.6s] Python, it doesn't have an autocomplete
+[616.0s] and a bunch of other stuff in there. I
+[617.1s] think Boto3 suffers from the same
+[618.7s] problem with AWS.
+[621.2s] For the same exact reason. And I think
+[624.0s] this is like why you have to do download
+[626.0s] these extra packages to actually make
+[627.6s] autocomplete work for like MyPy and like
+[630.4s] type and everything.
+[632.0s] Yes.
+[633.5s] Yeah, because you can't you there are
+[635.0s] there are no types known at run at at
+[636.8s] compile time.
+[637.4s] >> Exactly. At compile time. You got to You
+[638.8s] got to like run the code to get the
+[640.2s] types. Yeah, every time you launch the
+[642.2s] program, you're rebuilding the entire
+[644.1s] tree of function calls that are
+[645.4s] available. And there's hundreds of these
+[647.1s] on here.
+[647.5s] >> I do think they do caching to make it so
+[648.6s] you don't have to download everything
+[649.3s] from scratch every time. So, this is
+[650.2s] like a good like this is kind of like
+[651.1s] the the same idea that is underneath
+[653.4s] MCP,
+[656.6s] except you're doing it as like
+[657.9s] generating schemas to pass to the agent
+[659.7s] live. And the reason Google does this is
+[661.4s] cuz like fundamentally what what is a
+[663.4s] practical reason for doing doing this?
+[665.1s] Cuz discussing that helps us discuss the
+[667.3s] MCP protocol actually.
+[669.6s] Uh which is like in Google's world,
+[672.0s] this thing
+[673.8s] the number of times that you add new
+[675.3s] top-level features here is very very
+[677.5s] sparse. You don't add these very often.
+[679.8s] So, these get supported as like
+[681.4s] first-class citizens. But the number of
+[683.3s] times that like these things change is
+[686.2s] much much more rapid. They're constantly
+[688.5s] adding new new parameters and flags and
+[691.2s] filters and all this stuff.
+[692.3s] >> Exactly. And it allows them to have
+[693.9s] people use the old SDK without worrying
+[696.7s] about versioning of their cloud SDK
+[699.7s] unless they really want a new one. And
+[701.2s] basically allows their Python SDK to be
+[703.0s] much more stable than their total ship
+[705.2s] rate. Cuz otherwise they'd have They'd
+[707.0s] be shipping a new version every single
+[709.0s] freaking day. So, you would actually
+[710.8s] like you have your MCP SDK in here, and
+[714.5s] this would call when you launch it it
+[716.0s] like lists all functions for the server
+[717.8s] for you know for end servers
+[720.2s] uh you know for end servers list all the
+[722.2s] functions and then basically rather than
+[724.8s] giving you a Python like a Python SDK,
+[727.8s] you get this big like you know tools
+[729.8s] block that is you know the JSON schema
+[732.5s] of all of the tools. Can we Can we look
+[734.3s] at one of these? Like do you have an MCP
+[735.8s] inspector running? I can I can I can I
+[737.5s] can pop this open real quick. And while
+[739.4s] Dash Dexter pulls up MCP inspector,
+[742.1s] is this for everyone watching? Is this
+[743.9s] how you've thought about MCP in the
+[745.3s] past? Is this exactly how you go model
+[747.0s] it? Uh is there a different way that
+[748.7s] you've been thinking about it? What the
+[750.5s] one other thing that I actually as you
+[752.6s] continue, I'll show another um another
+[755.5s] thing as soon as you get MCP inspector
+[757.3s] up and running. Yeah. But once you get
+[759.1s] that four end servers thing,
+[761.3s] I think this is where I see the biggest
+[764.5s] roadblock for people because this is
+[766.7s] dynamically injected. So, like take
+[768.3s] Google's
+[769.5s] Take Google's case. Google controls the
+[771.7s] SDK. Google controls the SDK. They have
+[773.6s] a CI/CD process out there. And it's
+[775.9s] basically going from Google servers to
+[777.7s] Google clients. So, it's a well-trusted
+[780.2s] relationship between both ends.
+[782.3s] And the documentation everything for it
+[783.9s] is also served on Google's uh services.
+[786.6s] So, it's basically a closed ecosystem
+[788.6s] behind where everything runs.
+[790.6s] The big difference between MCP over here
+[792.8s] is that this is not a closed ecosystem.
+[794.5s] This is actually the opposite. It's an
+[795.5s] open ecosystem. You can add whatever
+[797.7s] servers that you want to add.
+[799.5s] And those servers can effectively
+[801.1s] execute any code they want to execute
+[803.9s] with almost no auditing.
+[806.9s] And if for whatever reason you actually
+[809.4s] go ahead and have the end
+[812.5s] end servers like many times list
+[814.6s] functions can be a remote
+[816.6s] your MCP server can be a remote thing
+[818.7s] that you're running rather than a local
+[821.2s] machine.
+[822.2s] What ends up happening is you're
+[823.3s] effectively running untrusted code or
+[826.2s] unverified code
+[827.9s] on your system all the time. That has a
+[829.9s] dramatic impact on your agent's
+[831.8s] performance. We've talked about this
+[833.4s] many times before. Like Dexter says like
+[835.1s] the models get into the dumb zone
+[837.2s] once you add 20 or 30% context rot. And
+[839.8s] I think the GitHub MCP was famous for
+[841.6s] this. It had like 50,000 tokens if you
+[843.6s] just added the GitHub MCP. HubSpot does
+[846.0s] the same exact thing. Yeah, it was
+[847.6s] 60,000 tokens.
+[849.2s] The HubSpot API does the same thing. You
+[851.2s] add those two APIs, you're already at
+[852.6s] like 100,000 tokens in. Yeah. Okay. So,
+[855.1s] this is the MCP inspector. You just run
+[857.1s] it with you know NPX MCP inspector
+[861.1s] um
+[862.1s] and then you can give it any server. And
+[863.6s] basically what it lets you do is so I'm
+[865.6s] going to connect to the linear MCP.
+[867.8s] And so you can connect here. This is
+[868.9s] actually going to do like an OAuth loop
+[871.0s] which is what some well-made MCP servers
+[873.4s] will do.
+[875.0s] Um
+[876.8s] but now what this lets you do is
+[878.4s] actually like call the underlying
+[881.5s] um
+[882.3s] linear functions. But again, the real
+[884.5s] problem here isn't not so much should
+[886.1s] you use linear linear or not. Um the big
+[889.4s] difference is in how MCP operates in my
+[891.9s] opinion versus how like normal package
+[894.2s] imports operate in source code.
+[896.4s] Yeah. Uh so like for example, if you're
+[898.6s] running JavaScript code and you import a
+[901.0s] linear linear library or the linear NPM
+[904.5s] package,
+[905.6s] what ends up happening is you're not
+[906.9s] actually importing all the source code.
+[908.4s] Technically, you are. But by the time
+[910.4s] JavaScript runs, it does a lot of tree
+[911.8s] shaking. And by the time it does tree
+[913.2s] shaking, you actually don't have all the
+[914.8s] code in there. You only have the code
+[916.5s] that you're actually using.
+[918.4s] The problem and in source code we do
+[920.5s] this to minify the bundle size, make
+[922.7s] sure our codebases are small and like
+[924.6s] efficient, and we're only including
+[926.8s] source code that we actually want to
+[928.0s] run.
+[929.2s] Now, the big difference
+[930.8s] with MCP and agents in my opinion
+[933.8s] is MCP is kind of like an all or nothing
+[935.6s] game. You get the MCP or you don't get
+[937.6s] the MCP.
+[939.2s] And what that means is in systems that
+[940.9s] are extremely sensitive to bloat, so in
+[944.0s] the case of like LLM calls and context
+[946.3s] windows,
+[948.1s] you basically have a zero-sum choice.
+[950.2s] You either use all the features or not
+[951.9s] of them. And that's just not how we do
+[953.2s] software. I want to be almost very
+[955.2s] particular in how MCP works. And now if
+[957.8s] I want to go do this, I end up in this
+[959.5s] world where
+[960.6s] I have to do a bunch of filtering logic
+[962.9s] to say only give it these functions of
+[965.3s] the linear functions in order to go use
+[967.3s] them.
+[968.2s] But because I don't actually implement
+[970.4s] the MCP server myself,
+[972.6s] now I live in this really weird weird
+[975.2s] world
+[976.3s] where I can't actually exclude certain
+[978.6s] functions and tool calls because I don't
+[980.2s] know if the MCP server relies on some
+[982.4s] order of tool calls
+[984.0s] to actually work. So, I can't even
+[985.4s] whitelist or blacklist
+[987.6s] a certain functions out there
+[989.6s] out of the MCP calls. So, I effectively
+[991.2s] have to take it all or nothing unless I
+[993.4s] do an incredibly thorough code
+[994.8s] inspection. But if I don't have the
+[996.5s] implementation details, I can't even do
+[998.3s] that. Yeah, I mean there's there's all
+[1000.3s] this stuff you can do with like wrapping
+[1002.0s] MCP servers and stuff. Um did you go
+[1004.2s] back to sharing?
+[1004.8s] >> back to the Yeah, let's get the
+[1006.5s] whiteboard back.
+[1008.0s] Yeah. I I
+[1009.6s] I think I think the the the biggest
+[1011.0s] issue that we had was like people people
+[1013.3s] saw MCP and they thought like does this
+[1015.0s] replace SDKs? It's like instead of like
+[1018.0s] writing code and calling an SDK, do I
+[1019.7s] just call the MCP server instead?
+[1022.7s] And I think that is ends up being like
+[1026.3s] the the thing that bit a lot of people,
+[1028.8s] right? It's like if you are writing the
+[1030.1s] code then um
+[1036.0s] then you should just write the code and
+[1037.2s] use an SDK uh rather than doing all this
+[1039.9s] complex protocol stuff in your uh in in
+[1043.2s] your in your app. Um the thing that
+[1045.6s] makes MCP really really interesting and
+[1047.4s] you mentioned like oh I don't I don't
+[1048.5s] control the code of the server.
+[1050.8s] Um
+[1052.3s] the thing that makes this really Oh,
+[1053.4s] you're doing the wrapper thing. Yeah.
+[1055.2s] So, you can create your
+[1056.9s] Yeah. Um
+[1058.9s] I think what makes MCP really useful and
+[1061.3s] valuable is like I have my app.
+[1064.8s] Like if I want to build an agent and I
+[1066.4s] want it to have like Let's Let's say I
+[1068.0s] have my agent and I want it to have
+[1069.2s] access to like read-write file system.
+[1073.0s] And I want it to do things with GitHub,
+[1075.0s] and I do want it to do things with
+[1076.2s] linear. Like oh, I can go get that stuff
+[1078.9s] from MCP now, right?
+[1081.7s] But MCP has its own OAuth stuff. It has
+[1083.4s] its own all all kinds of things to to
+[1085.5s] access this stuff. And so, your other
+[1086.9s] option would just be to like use the
+[1089.7s] use the GitHub SDK, use the linear SDK,
+[1094.5s] etc.
+[1095.8s] Uh
+[1097.0s] and like if you already know what
+[1099.2s] functionality you want, then I would say
+[1101.6s] like just use the SDKs. But what makes
+[1103.4s] this really really interesting is if
+[1104.8s] like there's functionality that you want
+[1107.2s] to let your users bring new
+[1110.0s] functionality to your app,
+[1112.8s] um
+[1114.0s] let's say I have an agent and like the
+[1115.5s] user wants to bring a Jira MCP or
+[1118.1s] something.
+[1119.1s] And I don't want to integrate Jira into
+[1120.5s] my app. The user can bring, install, and
+[1122.6s] configure, and own the MCP. And I in my
+[1126.1s] application, if I'm building a chatbot
+[1127.9s] or something, I now suddenly have a way
+[1131.1s] to let my users extend the functionality
+[1133.6s] of my application without me having to
+[1136.4s] do anything. As long as I implement an
+[1138.4s] MCP client, I can give my users the
+[1141.2s] ability to bring whatever tools they
+[1143.1s] want. And that in my mind is what MCP is
+[1146.4s] for. MCP is not for a different way to
+[1149.8s] call APIs. It's not for like hey, I want
+[1154.1s] to give new things to the It's like from
+[1156.4s] this perspective it's like Anthropic
+[1157.8s] builds Claude code,
+[1159.7s] but they give users the ability to
+[1161.4s] extend and customize Claude codes
+[1163.3s] through MCPs. And Claude code's a a kind
+[1165.8s] of example. We'll get into the bash
+[1167.0s] thing in a minute, but um Does that make
+[1169.0s] sense?
+[1170.3s] I think I agree. I think that is the
+[1172.4s] only justifiable reason to use MCP to
+[1175.0s] let your users bring their own code to
+[1177.4s] attach to your harness.
+[1179.5s] Yes. That's it. Every other use case is
+[1182.0s] garbage. Don't do it in my opinion. Like
+[1184.8s] do not use MCP to talk to GitHub.
+[1186.7s] Literally just have Claude code, use the
+[1188.2s] GitHub CLI to add the code functions you
+[1190.1s] need. It'll work better. Have Claude
+[1192.4s] code and I'm not saying write the code,
+[1194.2s] that's dumb. Have Claude code write the
+[1195.8s] code. Like definitely don't do that, but
+[1198.0s] like be deliberate about the way that
+[1199.8s] you go do this.
+[1201.2s] Because what you're really doing and I
+[1203.2s] think this is the unpaid tax that people
+[1204.9s] don't think about, which is the minute
+[1206.6s] you add an MCP that you're not trusting
+[1208.6s] that you don't really control, you've
+[1210.6s] basically consumed a certain amount of
+[1212.4s] the model's intelligence at that point.
+[1214.9s] So your agent has just gotten
+[1216.5s] deterministically worse in all those
+[1219.2s] scenarios.
+[1220.5s] I mean, this is the thing we talk about
+[1222.0s] a lot in terms of like even making
+[1223.9s] prompts and skills better is like you
+[1225.5s] have an instruction budget for every
+[1227.5s] model and the more instructions you give
+[1229.3s] the model,
+[1230.8s] the worse it will perform at adhering to
+[1233.6s] any one of them, including the user
+[1235.7s] message you just sent it. And every
+[1238.1s] single function definition in an MCP
+[1240.6s] server is an instruction. It's an
+[1243.2s] instruction of like here's how to use
+[1245.4s] this function, here's how this field
+[1247.3s] needs to look. All of this stuff the
+[1248.8s] model is trying to attend to because it
+[1250.3s] doesn't know what's important until
+[1252.0s] Yeah.
+[1252.9s] Exactly. Like unless you have a user
+[1255.4s] that you're like, "Hey, I want to make
+[1256.6s] sure users can go do this." It's better
+[1258.7s] for you to go build and let's say you
+[1260.3s] want to support like every single
+[1261.2s] ticketing system out there.
+[1263.0s] Your users will have a better quality
+[1264.9s] guarantee using your agent harness
+[1267.3s] if you build OAuth directly into your
+[1269.1s] app with
+[1271.2s] with Linear, GitHub, Jira, whatever else
+[1273.8s] you want for issue tracking.
+[1275.9s] And then you just build a bridge from
+[1278.1s] your system that says, "When the user
+[1280.5s] wants a ticket, we just use their OAuth
+[1282.0s] system to get their ticket." In the case
+[1284.3s] of a user OAuth-ing into multiple
+[1286.2s] systems like GitHub and Linear, then we
+[1289.5s] tell the agent we have two functions,
+[1291.6s] ticket GitHub, ticket Linear, all
+[1293.6s] tickets. And we expose all three of
+[1295.2s] those functions out there.
+[1296.8s] But if the user only has one OAuth, then
+[1298.6s] we show the agent only all tickets.
+[1301.3s] And like search tickets. It doesn't even
+[1302.6s] have to know where the tickets are
+[1303.8s] coming from to solve some of these
+[1305.1s] issues.
+[1306.2s] And that's context engineering design.
+[1308.2s] An MCP, if you use it naively, and
+[1311.0s] again, this is why what I alluded to is
+[1312.8s] the 99th percentile rule. Don't use MCP
+[1316.4s] because if you by default use MCP you're
+[1318.0s] like, "Oh, I can just use this package
+[1319.3s] and go do it."
+[1320.5s] Your agent will do the wrong thing.
+[1322.5s] Cuz now you have the Linear and the
+[1323.6s] GitHub SDK when your user only OAuth-ed
+[1326.2s] into GitHub. But you're still passing
+[1328.9s] all those instructions. Exactly. And
+[1331.2s] it's not to say, "Hey, of course some of
+[1332.8s] you might say, 'Oh, we could be clever.
+[1334.2s] We could say only give the OAuth ones
+[1336.1s] that you've logged into.'" I agree.
+[1338.3s] But you're still If you go look at the
+[1339.8s] actual GitHub MCP or the Linear MCP, you
+[1342.7s] will literally just go see how much
+[1344.4s] redundant tokens it has that are purely
+[1347.4s] like useless tokens. If you look at what
+[1349.3s] the Claude code team says,
+[1351.1s] they fight for every tool that gets
+[1353.2s] added into there.
+[1355.2s] And every single ticket tool
+[1357.7s] that goes into this is um How do I put
+[1360.4s] it?
+[1361.8s] Like the Why do they fight for every
+[1363.2s] tool? Because they know adding a tool is
+[1365.6s] context bloat for 99% of users except
+[1368.4s] that 1% that needs it.
+[1370.8s] So unless you're certain all your users
+[1373.1s] need something, don't add it to the
+[1374.5s] context window.
+[1375.9s] Yep. So this is this is like kind of how
+[1377.9s] I model this is like you have this long
+[1379.6s] tail of tools that you want to let users
+[1382.0s] bring in their, you know, whatever it
+[1383.4s] is. But like the things that you have a
+[1385.5s] high percentage of users and like over
+[1387.0s] time you can add first class things for
+[1388.8s] all, right? If someone If there's some
+[1390.5s] MCP that it starts becoming really
+[1391.8s] popular and lots of people are using it,
+[1393.6s] then that's your signal to go pull Yeah,
+[1395.3s] exactly. Migrate it and build a first
+[1396.8s] class integration.
+[1398.3s] Exactly. You're basically going to tell
+[1400.0s] users, "We provide you long tail
+[1402.1s] support, but we will do but but they
+[1405.9s] will work worse." And because the user
+[1408.2s] brings the MCP, they're almost primed to
+[1410.6s] believe that it'll work worse because if
+[1412.8s] they're bringing the code, not you.
+[1415.8s] So you do all your context engineering,
+[1417.4s] you do all your prompt engineering, you
+[1418.8s] do all your like token pinching on these
+[1420.7s] things that are going to be used a lot.
+[1422.6s] And then for the long tail of you It's
+[1424.1s] the same thing we talk about with like
+[1425.5s] how do you do your prompts? How do you
+[1426.5s] do your workflows? Like use an agent
+[1428.4s] like shell out for
+[1430.3s] for for less common things,
+[1433.2s] shell out to, you know, the generic
+[1435.7s] off-the-shelf like just make it work and
+[1437.9s] it will be lower quality and then over
+[1439.8s] time understand
+[1442.2s] which things are worth investing more
+[1444.2s] time
+[1445.1s] The same thing we talked about in the
+[1446.2s] reasoning episode almost a maybe a year
+[1448.6s] ago where it was like, "Yeah, make it
+[1450.6s] work on O3" or O I think it was O1 at
+[1452.8s] the time. It's like make it work on a
+[1454.2s] really beefy reasoning model and then if
+[1456.3s] you find a use case that's being used
+[1457.6s] all the time, then go optimize the
+[1459.3s] prompt for GPT-4o mini.
+[1461.7s] Yeah. And then like also like for
+[1463.4s] example, if in your agent tool you're
+[1465.7s] detecting that hey, these MCPs haven't
+[1467.6s] been called for a while, literally tell
+[1469.6s] your users, "Do you want to temporarily
+[1470.9s] disable these MCPs because you're not
+[1472.9s] calling them at all?"
+[1474.5s] Like educate your users through your
+[1476.3s] application code to make it better for
+[1479.1s] them. Don't just let them shoot
+[1480.7s] themselves in the foot.
+[1482.4s] Like that's really the goal of our jobs
+[1484.4s] as engineers building these products for
+[1486.7s] end users.
+[1488.0s] We really want to make sure that our
+[1489.4s] users don't hurt themselves.
+[1491.5s] Uh and like don't have perceived our app
+[1493.1s] to be the problem when they use an
+[1494.3s] external MCP and they're like, "What's
+[1495.9s] going on?"
+[1497.0s] Yeah. There's a really good example of
+[1498.3s] this is um is the Claude code. They they
+[1500.8s] have the slash context command where you
+[1502.8s] can see how much how much how many
+[1504.9s] tokens are being taken up by all your
+[1506.2s] MCPs, all your skills. We talked about
+[1508.0s] this in the in the episode we did I
+[1509.6s] think 2 weeks ago on like agents and
+[1511.1s] skills and like every single one of
+[1512.9s] these adds things to your system prompt.
+[1515.3s] And so it's like give people ways to
+[1516.9s] visualize it and then over time give
+[1518.6s] them tools to to uh improve it. I want
+[1521.4s] to ask you about I think we talked about
+[1522.9s] tool search. Wait, wait, wait, wait,
+[1524.6s] wait. Wait, wait. Before that there's
+[1525.8s] one really good question in here that we
+[1527.3s] should answer.
+[1528.4s] Uh Jack asked, "Why not just use a
+[1530.9s] single function called get ticket source
+[1533.8s] Jira or Linear {comma} slug?"
+[1536.8s] And I um
+[1538.3s] I I can at least give my 2 cents and
+[1539.7s] maybe you can have 2 cents.
+[1541.8s] My one is if the if you only have a
+[1544.4s] single source that the user's OAuth-ed
+[1546.8s] into, I don't want the model to even
+[1548.6s] think about the idea of a source. I just
+[1550.5s] want it to know it has to get tickets
+[1551.9s] and operate on that. It's just remove
+[1553.2s] that
+[1553.9s] remove that like axis of dimension. Cuz
+[1556.6s] if it thinks it can choose from these
+[1558.2s] functions, then it will.
+[1560.3s] And like for example, I think that that
+[1562.6s] >> directories, right? If it's like if you
+[1564.3s] know that the agent is working in a
+[1565.6s] specific context with a directory, don't
+[1568.2s] put the directory in the system prompt
+[1569.9s] and make the agent pass that directory
+[1571.6s] to every tool. Just remove the directory
+[1573.7s] as a parameter because the deterministic
+[1575.6s] side of the system is going to inject
+[1577.2s] it.
+[1578.3s] Exactly. Exactly. And then like why not
+[1581.1s] why not do the full thing? Like I'll
+[1582.4s] I'll Let me put the code I wrote in like
+[1584.1s] I'll explain this now.
+[1585.6s] Yeah, pull it up. While you're doing
+[1586.4s] that, I like I do think Jack's idea of
+[1587.7s] like how do you like collapse tools into
+[1590.0s] as like small a thing as possible? Like
+[1592.1s] if you can make that schema dynamic
+[1594.4s] based on based on what they have
+[1595.8s] OAuth-ed in and if they only have one,
+[1598.0s] then don't show don't don't have it be a
+[1599.8s] param. I think that's great.
+[1602.9s] Um and it's Yeah. I see people doing
+[1604.9s] this. I see people doing this and this
+[1607.5s] is bad. What you really want to do is
+[1609.5s] exactly what Dexter says, which is you
+[1611.4s] basically want to say like what the
+[1613.0s] options to this thing are dependent
+[1614.7s] purely on the user. I dynamically pass
+[1617.3s] in various things
+[1619.3s] based on what's there. And in the case
+[1621.4s] of it In the case of nothing this list
+[1623.6s] being single fold, I might even remove
+[1626.2s] the option to have that
+[1628.3s] >> You just remove it from the schema
+[1629.6s] entirely. You just you just have them
+[1631.0s] all pass the slug. And then you have a
+[1633.1s] closure over that function definition
+[1636.0s] where the the known user's connected
+[1638.5s] thing is just passed in. Exactly. That's
+[1641.2s] the right way to model model this. Now
+[1642.7s] why did I say this? Again, it's the 99th
+[1644.5s] percentile rule. I know if we say go do
+[1646.8s] this, 99% of people are going to go do
+[1648.7s] this.
+[1649.6s] This is going to lead to a worse agent
+[1650.9s] experience. It's easier to write
+[1652.6s] multiple functions. That's what you
+[1654.6s] should be doing
+[1656.1s] uh for
+[1657.4s] uh for uh Linear versus uh slug.
+[1660.8s] Linear and GitHub the single.
+[1663.5s] Yeah, and most people are not going to
+[1665.2s] go and do the effort to go write this
+[1667.3s] level of code. So if they're not going
+[1668.8s] to go do it, just don't Like give 90% of
+[1671.4s] the people, don't give them chance to
+[1673.1s] make that mistake on your team.
+[1675.0s] And again, it's based on how big your
+[1676.2s] team is and how large it is. If it's a
+[1678.0s] whole bunch of cracked engineers and
+[1679.5s] it's just like a few of you, great. Go
+[1681.3s] do this go do the go do this cuz it's
+[1683.8s] easier to enforce. If all of you're
+[1685.7s] using Claude code to go write the tool,
+[1687.2s] remember Claude is just the laziest
+[1688.6s] engineer out there that just happens to
+[1689.8s] be really fast at typing code. It's
+[1691.9s] going to do the first thing. So just
+[1694.1s] make sure you audit for that sort of
+[1695.4s] behavior
+[1696.5s] under the hood.
+[1697.9s] Every parameter that goes to a model
+[1700.1s] that is And you just use this by like
+[1702.1s] Dexter's model here is actually the best
+[1703.8s] way to look at this.
+[1705.3s] Everyone I know that's building great
+[1706.6s] agent really understands deeply what
+[1708.4s] tools they're calling and at what
+[1709.5s] frequency.
+[1710.7s] And for tools that are highly frequent,
+[1712.6s] audit the heck out of them. Literally be
+[1714.8s] like, "Do I need these parameters? Do I
+[1716.1s] not need these parameters? Is the
+[1717.2s] description bad?" That's how you make
+[1719.1s] your agent quality go up
+[1721.5s] along the way. Dexter, you were saying
+[1723.3s] something before this about um talking
+[1725.7s] about what's it called? Uh just scroll
+[1727.7s] down to the code I'm writing. Like this
+[1728.8s] is kind of the idea of the closure,
+[1730.2s] right?
+[1731.3s] Exactly. Exactly. So it's like if
+[1733.3s] there's zero, then you just don't you
+[1735.0s] don't include the If they don't have
+[1736.1s] something connect connected, don't
+[1738.4s] return anything.
+[1740.1s] If the len length of the sources is one,
+[1742.8s] then you return a closure over that
+[1744.9s] source. And then if if they have
+[1748.0s] multiple, then you return the the like
+[1750.2s] full tool that has access to both
+[1752.0s] sources. But the idea here is like you
+[1754.4s] are putting some Like the idea here is
+[1756.2s] this defines the schema that like the
+[1758.1s] the the signature of this method defines
+[1760.5s] the schema that that is passed to the
+[1762.6s] model.
+[1763.8s] Yeah, so like I think one of the
+[1765.3s] questions that like we get asked is like
+[1767.0s] how do you go do this? And the thing is
+[1768.3s] like this is actually really really hard
+[1769.8s] to do in most languages. You just
+[1771.5s] fundamentally can't do this in Go very
+[1773.2s] trivially or Rust
+[1774.8s] or Java. Um Well, cuz in in Go, Rust,
+[1777.5s] and Java, you can't like it's there's
+[1779.1s] not good tools for like inspecting and
+[1780.8s] turning a method sig I mean, you can do
+[1782.6s] it, but to turn a method signature into
+[1784.3s] a JSON schema. Like in TypeScript you
+[1786.4s] wouldn't do that even in TypeScript, you
+[1788.0s] would do this with Zod. You would create
+[1789.4s] the schema and then you would create and
+[1791.0s] then you would attach the implementation
+[1792.4s] with the closure.
+[1793.4s] >> Try doing this in Zod, actually. It's
+[1794.9s] really hard to do this dynamically.
+[1796.6s] Dynamic types are hard to model in
+[1798.0s] TypeScript. The only language that makes
+[1799.2s] it moderately doable is actually Python.
+[1801.7s] Well, so in Zod, I would just do this at
+[1803.3s] runtime, right? I would just say like,
+[1804.8s] you know, tool schema equals, you know,
+[1807.6s] instead of instead of this, I would do,
+[1809.1s] you know, Yeah, you have to do like a
+[1810.3s] builder pattern along the way. Yeah.
+[1812.7s] Yes, but that still doesn't give you the
+[1814.3s] type safety you need to guarantee that
+[1816.0s] everything that's being passed in is
+[1817.4s] actually correct now.
+[1819.3s] Okay. What you really want to do is you
+[1821.3s] kind of want to omit certain fields and
+[1823.8s] certain properties and put default
+[1825.2s] values in them and you want to go
+[1826.0s] manipulate them. And I think this is
+[1827.8s] kind of why people don't end up doing
+[1829.4s] the right doing this most of the time
+[1830.9s] cuz it's actually kind of hard and
+[1832.1s] annoying to go do this. Evan makes a
+[1834.4s] really good point. It's like it seems
+[1835.4s] like it's tailored to how you want like
+[1837.2s] like it depends how tailored you want
+[1838.6s] your agent to be to the ticket retrieval
+[1840.6s] use case. And so if you're building a
+[1842.2s] chatbot for lawyers, you obviously
+[1843.9s] wouldn't do this, but you would do
+[1845.5s] something similar for pulling documents
+[1847.4s] from all the various places that like
+[1849.0s] serve case law or whatever. Exactly.
+[1851.6s] Because like if you have like 70
+[1852.9s] different case law sources, like one for
+[1855.0s] every state that works out there, you
+[1856.8s] just don't want to deal with that. You
+[1857.8s] just want to have one query from the
+[1859.6s] agent's perspective. Yeah. It's very
+[1861.4s] similar to
+[1862.0s] >> could be states, it could be area codes,
+[1865.4s] it could be yeah. Uh I don't know if you
+[1866.7s] saw this. Like Open Code does something
+[1867.9s] really cool with like grep. They call it
+[1869.8s] grep, but that under the hood, they call
+[1871.6s] rip grep.
+[1872.8s] Because they're just like
+[1873.7s] >> Claude Code does that, too. Exactly, cuz
+[1875.7s] it's incorrect to make the agent think
+[1878.0s] about grep versus rip grep. You just let
+[1880.2s] the agent think in the form of grep and
+[1881.9s] let it do what it needs to do under the
+[1883.2s] hood. It's basically the same thing.
+[1884.3s] It's closure.
+[1884.9s] >> You're RLing the model on a way smaller
+[1886.8s] set of tools and you're optimizing it
+[1888.7s] for a very deterministic set of things.
+[1891.4s] Exactly. That's I think how I think
+[1895.1s] about and this is like again, when you
+[1896.9s] go down to this world,
+[1898.7s] try doing this in MCP. It doesn't really
+[1900.5s] work. Like this is this is like
+[1902.6s] engineering that you have to know that
+[1904.0s] has context about your application. You
+[1906.1s] can't just like outsource that part of
+[1907.6s] the thinking to it.
+[1909.1s] And again, this is this is all
+[1910.3s] everything we do on this show and like
+[1911.6s] Evan's question is like, oh, I'm new to
+[1912.8s] AI that works. Are we coming from the
+[1914.3s] perspective of agent builder, MCP
+[1916.0s] server, MCP end user? This is really
+[1918.5s] about like you are building an
+[1919.7s] application to serve users, I think is
+[1921.7s] the primary thing we're talking about
+[1923.2s] here. Obviously, as an MCP server
+[1925.7s] builder, you should give people as many
+[1927.3s] levers as they can to context engineer.
+[1929.0s] Like the GitHub MCP has flags that let
+[1931.5s] you turn off sets of tools. You can say,
+[1933.2s] oh, I only want the repo tool set or I
+[1935.2s] only want this and that and that's
+[1936.8s] definitely part of it like and you
+[1938.7s] should be aware of this so that you can
+[1940.1s] like engineer your stuff in that way.
+[1942.8s] Um
+[1944.7s] But I think the yeah.
+[1946.6s] >> I would say like for example, like
+[1948.0s] there's a reason Claude Code stopped
+[1949.7s] pushing MCP as much and moved towards
+[1951.4s] skills.
+[1953.6s] Cuz when it come like Claude like in
+[1955.9s] their documentation, they had a whole
+[1957.3s] phase about MCPs.
+[1959.0s] The phase is now moved on to skills.
+[1961.2s] Why? Well, because even if you want to
+[1963.1s] make your application extremely
+[1964.5s] flexible, it turns out MCP is both too
+[1966.8s] strict
+[1968.0s] and not strict enough at the same time.
+[1970.5s] So it doesn't give Claude Code the
+[1971.8s] ability to actually let users manipulate
+[1974.3s] Claude Code as much as they want as
+[1976.3s] skills do.
+[1977.8s] Yeah. But then also at the same time,
+[1981.0s] it doesn't um
+[1983.0s] uh it it
+[1984.8s] um it provides some of the same
+[1986.2s] problems. It has it's addressing kind of
+[1988.6s] the same problem surface area over
+[1990.3s] there, if that makes sense.
+[1991.6s] >> Yeah.
+[1992.6s] Um there's a really good question about
+[1994.1s] tool search and I think it might be
+[1995.3s] interesting to actually draw out the
+[1996.7s] context windows and what the difference
+[1998.2s] is because I I think what what Claude
+[2000.7s] Code did with the with the tool
+[2002.2s] searches, they made some interesting
+[2003.6s] choices.
+[2004.9s] Um and so if this is your context
+[2006.3s] window,
+[2007.9s] um
+[2009.2s] Oh, yeah. Claude Code did some I think
+[2010.9s] they the way that they did tool searches
+[2012.4s] how most people should just copy it.
+[2013.7s] Like don't think.
+[2015.1s] Oh, so so actually I actually don't
+[2017.2s] think I I actually disagree. Oh, okay.
+[2019.5s] That's great. That's my favorite topic.
+[2021.0s] >> I think the tool search is good. I think
+[2022.5s] it's like anything else is like letting
+[2023.8s] users bring their own MCPs, you're going
+[2025.2s] to have this long tail of things where
+[2026.5s] people can customize the tool and the
+[2028.2s] performance is not as going to be as
+[2029.7s] good on those tools and overall, the
+[2032.4s] more the more MCPs you bring, you're
+[2033.8s] going to degrade the overall quality of
+[2035.4s] the agent compared to if you and your
+[2037.7s] team context engineered every single
+[2039.5s] tool in that context window. The
+[2041.3s] challenge I have with
+[2043.3s] tool search
+[2045.2s] is um
+[2046.6s] so you have your system message.
+[2048.7s] Sorry, I'm going to change the stroke
+[2050.6s] here.
+[2051.6s] Um so you have your system message and
+[2053.2s] then you have your tools and and then
+[2056.2s] you have eventually you have your user
+[2057.4s] message
+[2060.4s] uh
+[2061.2s] user and then the assistant's going to
+[2063.3s] call some tools. We're going to have to
+[2065.4s] we're going to have to swap Clonics
+[2066.7s] Excalidraw, dude. I'm sick of this.
+[2070.0s] Um and so this might be like read and
+[2072.5s] then edit, right?
+[2074.6s] Uh and then you have your like final
+[2076.1s] assistant message.
+[2079.0s] Uh assistant.
+[2081.2s] All right, let's say it's a really small
+[2082.4s] change. Um what they did with tool
+[2085.2s] search is they have like search and then
+[2087.6s] you have to do read and then you have to
+[2090.2s] search again
+[2091.9s] and then you have to do edit.
+[2095.5s] Um and my take is basically like I've
+[2097.8s] seen the agent have to search for the
+[2100.0s] right tool. Like W Sorry.
+[2103.4s] Let's say it's right just to be more
+[2105.0s] clear. Like search for the right tool
+[2107.6s] where what I would probably do is in the
+[2109.7s] tools message cuz of what they basically
+[2111.2s] did was they replaced all the tools with
+[2113.1s] Yeah, with I think they have changed
+[2114.9s] this, but I've seen recently the agent
+[2116.7s] have to search to find the right tool
+[2118.7s] where they just give you search and then
+[2122.1s] uh you can like call
+[2124.0s] I thought they they do give you the
+[2125.0s] basic things of like a read, write, and
+[2127.1s] a couple of the other basic ones.
+[2128.7s] >> Like I said, I've seen the agent have to
+[2130.3s] search to use the right tool and search
+[2132.5s] to use the skill tool. And so my take is
+[2134.4s] basically like instead of just search
+[2136.4s] and run, you should have like search and
+[2138.8s] run and then those things that you built
+[2140.8s] into your system, whether it's, you
+[2142.5s] know, write, edit, bash, whether it's,
+[2144.1s] you know, fetch ticket. Yeah. That's the
+[2146.8s] correct way to go do that.
+[2148.3s] >> the things that are super super common
+[2150.2s] should be here and you should just
+[2152.0s] offload the more complex tools. And like
+[2155.4s] if you're building a super general
+[2156.7s] purpose agent, if you're building
+[2157.7s] ChatGPT and you have no idea what tools
+[2159.5s] are going to be in there, then like
+[2160.9s] yeah, sure, put tool search in front of
+[2162.4s] everything. But like if I were building
+[2164.2s] ChatGPT, I would keep the web search
+[2166.0s] tool as part of the main context window
+[2168.8s] and only offload, you know what I mean?
+[2171.5s] I was I don't know if we can share this.
+[2173.4s] I will not talk about this. I was on the
+[2174.9s] Codex team. And like it it's the same
+[2176.9s] amount of thinking. I'm pretty That's
+[2177.9s] why I was like I was pretty sure Claude
+[2178.9s] Code adds edit and write cuz that'd be
+[2180.8s] insane to not have in there. Like why
+[2182.8s] would you make the agent search for the
+[2184.3s] edit, read, and write tool?
+[2186.3s] That would be absurdly incorrect in my
+[2188.2s] opinion. Same with grep. Like it's just
+[2190.5s] 90% of what Claude Code does.
+[2192.9s] Yep.
+[2193.9s] So that's yeah, that's that that's my
+[2195.2s] take on it. If you're going to build
+[2196.1s] tool search, like it's very nice from a
+[2198.6s] mental model perspective of just, okay,
+[2200.4s] you have this interface between the
+[2201.7s] model and the tools and it always
+[2203.0s] accesses them the same way. Yeah. And it
+[2205.7s] does introduce complexity just like
+[2207.8s] introducing complexity and like doing
+[2209.8s] all those weird closures around the
+[2211.3s] tools to make the schema better.
+[2213.4s] Um but coming back to the point is like
+[2214.6s] our goal here on this show is to teach
+[2216.5s] you how to push the boundaries of what
+[2218.1s] the models can do. Yeah. So if you want
+[2220.2s] to be I don't I'm not going to call it
+[2221.4s] lazy, but if you want to be like simple
+[2224.0s] in your architecture and just everything
+[2225.5s] happens through tool search and we don't
+[2226.6s] have to think about it, that's great,
+[2228.7s] but someone one of your competitors or
+[2230.6s] someone else building something similar
+[2232.7s] is going to push the context like window
+[2235.2s] to its limits and context engineer the
+[2237.1s] most important use cases and their users
+[2239.5s] are going to get 1% or 5% better
+[2241.6s] performance and like
+[2244.0s] It
+[2244.7s] Our goal here is to give you the tools
+[2246.2s] to like be at the bleeding edge of like
+[2248.2s] what what can the models do for a
+[2249.7s] certain task giving a certain set of
+[2251.2s] tools. In terms of alpha, there's only
+[2253.4s] two alphas in today's world. Your agent
+[2255.8s] performs a little bit better than the
+[2257.2s] base market. Uh I guess three alphas.
+[2259.6s] You have extremely good distribution or
+[2262.3s] you have a [ __ ] ton of VC money that
+[2264.0s] you're willing to burn to sell SaaS
+[2265.2s] costs. There's only three alphas that
+[2267.2s] you can have.
+[2268.5s] And like two of those, you already know
+[2270.6s] if you have them or not. We can't really
+[2272.2s] help with that. We can just help with
+[2273.5s] the last one. And that's what we're
+[2275.0s] doing here. That's what we're just
+[2276.2s] trying to give you that last bit of
+[2277.2s] alpha cuz even if you have the other
+[2278.3s] two, you can get a little bit more and
+[2280.0s] you can operate in two or three
+[2281.0s] dimensions now instead of just one.
+[2283.9s] Is the way to go.
+[2284.6s] >> Yeah.
+[2285.3s] And the way I think about I actually
+[2286.1s] drew this for the first time recently.
+[2288.8s] The way I think about this is like you
+[2290.1s] have the like jagged frontier of models,
+[2292.3s] right? They're good at certain things
+[2293.8s] and they're not good at other things.
+[2295.9s] Uh and so like you can basically say
+[2298.0s] like, okay, the
+[2299.4s] the model
+[2300.3s] let's rotate this.
+[2302.4s] There's there's some frontier of like,
+[2304.8s] okay, cool. Like the model can get this
+[2307.2s] task right, you know,
+[2308.9s] 90 90% of the time, right? And it can
+[2311.2s] get certain other tasks right, you know,
+[2313.6s] 40% of the time, Yeah. right?
+[2317.3s] I don't know why I I drew this in radial
+[2318.9s] coordinates, but it's fine. I love
+[2320.3s] radial coordinates. It's okay. Radiance
+[2322.0s] all the way, man.
+[2323.9s] Okay, [laughter] go on. Um and then if
+[2326.3s] you're willing to do this context
+[2327.6s] engineering, you're going to be able to
+[2329.7s] push the boundary on certain tasks. And
+[2331.7s] so maybe [clears throat] this one you're
+[2332.4s] getting 50% and this one you're still
+[2334.3s] 90%, but there's other tasks where
+[2335.8s] you're getting significant gains where
+[2338.0s] your version can do better than what the
+[2339.9s] status quo is. And people say like, oh,
+[2342.2s] what am I doing all this context
+[2343.3s] engineering and then the models get
+[2345.0s] smarter and I get bitter lessoned and
+[2346.8s] then like now I'm now all of my code
+[2349.0s] needs to be thrown away cuz the agent
+[2350.4s] can just do it. And the idea is like as
+[2353.1s] that frontier pushes out copy of this.
+[2356.2s] So like a new model comes out.
+[2358.6s] Exactly. A new model comes out and the
+[2360.0s] frontier extends in certain places. If
+[2363.4s] you are willing to put in the time and
+[2365.0s] do this context engineering, then your
+[2367.5s] your frontier will also extend and you
+[2369.3s] will also be able to do things that like
+[2371.4s] other people aren't able to accomplish.
+[2373.5s] Exactly. Exactly that.
+[2375.8s] Um I want to go back and add a address a
+[2378.4s] couple more points.
+[2379.9s] Well, I think we discussed a lot of what
+[2381.4s] MCP is about and where do we think it
+[2383.1s] has it's like
+[2384.7s] primary use cases. And it sounds like
+[2386.8s] the primary use case is long tail tasks.
+[2389.3s] And really like should you add an MCP
+[2391.0s] client into your application? It's just
+[2392.6s] a matter of how many long long tail
+[2394.4s] tasks do your end users actually have?
+[2396.7s] If you're a cursor, a lot of them. Sure,
+[2398.6s] add some integration there. Um if you're
+[2401.6s] cloud code, sure add some integration.
+[2403.8s] But clearly MCP isn't working enough for
+[2405.8s] even those people to go ahead and invest
+[2408.1s] a lot of energy not in going MCP but
+[2410.4s] rather in a whole new way of doing this.
+[2412.4s] They tried sub agents, they tried
+[2413.6s] skills, they tried commands.
+[2415.7s] They're trying these things cuz clearly
+[2417.2s] the old system is not working.
+[2419.7s] Now, I I I want to do something Dexter.
+[2421.3s] I don't know if you're down. Can I just
+[2422.6s] put on my like system design hat and
+[2424.0s] just like tell you why MCP's like from a
+[2426.2s] software engineering perspective
+[2427.6s] incorrect?
+[2429.2s] I love nothing more than All right,
+[2432.2s] let's do it. the system design system
+[2434.0s] design corner.
+[2435.4s] Okay.
+[2436.6s] So here's my problem with MCP. Like from
+[2438.4s] just like the theory is fine. I think
+[2439.9s] the theory is sound. I want a protocol
+[2441.6s] where I load dynamic tools coming in and
+[2443.8s] I can put them into my agent do [ __ ]
+[2445.4s] with it.
+[2446.6s] The problem is in implementation.
+[2448.7s] Um the first problem is just clearly one
+[2451.1s] of the biggest use case of MCP is to
+[2452.6s] bring external data sources in.
+[2455.4s] That doesn't work in the case of auth
+[2457.0s] and security protocols. It's MCP is just
+[2459.1s] doesn't have auth built into it and
+[2460.5s] there's no way to really make it
+[2461.8s] fundamentally good for auth.
+[2463.6s] And the reason is like once I have an
+[2465.2s] MCP and I call in a list functions and I
+[2467.3s] call a function in there, there's
+[2468.8s] nothing in here that says this thing
+[2470.4s] might not do something malicious that
+[2471.8s] also calls an MCP and does uh some weird
+[2474.8s] like chained attack effectively on my
+[2476.6s] data.
+[2477.7s] So like if I'm a if I'm a vendor, let's
+[2480.6s] say I'm a Fortune 500 company uh that
+[2482.6s] sells on Nasdaq and I need to be if
+[2484.4s] anytime I have a security leak, I need
+[2485.7s] to be able to list that to my all my uh
+[2488.2s] investors and let them know something
+[2489.4s] happened.
+[2490.7s] Well, if I'm a vendor that has to has
+[2492.2s] this happen to I have to have the full
+[2493.7s] protocol layer of every single place
+[2495.3s] that this is defined and where the leaks
+[2497.3s] can happen. You just can't or you just
+[2499.8s] can't know that with MCP. I mean
+[2501.4s] technically you can trace the code, you
+[2502.4s] can do things, but because most people
+[2504.4s] don't use MCP again, if you want to use
+[2506.4s] MCP in the in the
+[2508.0s] in the most MCP way possible, it should
+[2510.2s] be an HTTP server that you're pinging.
+[2511.6s] Like we did with linear systems.
+[2512.7s] >> say like how is how is the how is that
+[2515.4s] different from um
+[2518.4s] like a REST server? Like what is what is
+[2520.5s] REST or Protobuf or gRPC get you that
+[2523.4s] MCP doesn't or that MCP makes it really
+[2525.8s] hard to do?
+[2527.3s] What MCP makes it really hard to do is
+[2529.1s] actually just have a clearer
+[2530.3s] understanding of what you're actually
+[2531.4s] paying. When you call a REST server,
+[2533.7s] there's some entity that you've trusted
+[2535.4s] on this side and that has like for
+[2537.1s] example like two auth. Once you have
+[2538.7s] your auth token passed on to here,
+[2540.0s] you're right that that person can go do
+[2541.7s] this. But the problem here is once you
+[2544.2s] give this information to an agent, it's
+[2546.0s] a much more risky
+[2547.9s] uh pain point and it's much harder to
+[2550.0s] like how do I put it?
+[2552.4s] The way that I Okay, here's a when I
+[2554.0s] think about this person
+[2554.6s] >> you can you like just I cuz I'm not
+[2556.6s] following, can you slow down a little
+[2557.8s] bit maybe draw it from scratch? I'll
+[2559.8s] make it from scratch.
+[2562.7s] At least the way I think about auth over
+[2564.6s] here is like okay. What does MCP buy you
+[2567.6s] on top of What Why is MCP any less any
+[2570.6s] more risky than REST? I think that's
+[2572.4s] what you're asking. So this is a drawing
+[2574.4s] of MCP wrapping MCP, right? And I'm I'm
+[2577.2s] not I'm not sure how that like I'm not
+[2579.0s] sure how that plays into the point
+[2580.3s] you're trying to make. Once you have
+[2582.1s] MCP's wrapping into MCP's, effectively
+[2584.8s] the user's credentials
+[2586.7s] you somehow in order to make this
+[2588.2s] actually work correctly, the way MCP is
+[2590.4s] designed
+[2591.5s] you need some way from here from this
+[2594.4s] other function call that's actually
+[2595.9s] running
+[2597.7s] to kind of wrap back to the end user and
+[2600.5s] auth onto here.
+[2602.9s] I see. Yeah, and all of the auth stuff
+[2604.7s] that's been built for MCP is basically
+[2607.0s] like cludged in and you do it with
+[2609.2s] wrapper servers. Like the way that MCP
+[2611.0s] remote works is it fetches your auth
+[2613.3s] token and it stores it to disk. And it's
+[2615.9s] like your personal auth token.
+[2619.2s] So like once you start doing this, this
+[2621.0s] is just not architecturally sound cuz
+[2623.0s] what you're really doing is you
+[2624.2s] basically leaked out how auth works.
+[2625.9s] You've now leaked how this client up
+[2628.2s] here has to do auth.
+[2630.6s] Oops, let me make this.
+[2632.8s] You've now leaked how this client has to
+[2634.3s] do auth.
+[2635.4s] Uh send to back.
+[2638.9s] I don't like that color.
+[2640.6s] All the way over to this client. They
+[2642.5s] both have to do auth in the same way.
+[2644.6s] Oh, because you're forwarding the
+[2645.6s] credentials between systems. It's the
+[2647.4s] only way to to kind of like
+[2650.5s] just like basically transfer an identity
+[2652.6s] or a permission to do a thing. Exactly.
+[2655.2s] And if you're not doing this, then
+[2656.2s] you're doing something even worse, which
+[2657.9s] is
+[2658.3s] >> Yeah. you're taking credentials from
+[2659.8s] here and forwarding them directly to
+[2661.4s] here.
+[2662.6s] Which is definitely way worse.
+[2664.6s] Can I can I frame this in a different
+[2666.2s] way? I think I think this is going to be
+[2667.6s] a little bit like 50% overlap with what
+[2669.5s] you're saying.
+[2670.7s] Um but here I'll I'll I'll draw it down
+[2672.8s] here. So let let's take for example the
+[2674.9s] uh the idea of like a browser agent,
+[2676.6s] right?
+[2677.2s] >> Yeah. Yep.
+[2678.7s] Um and browser agents exist because
+[2680.8s] sites don't have auth. Like if I had the
+[2682.8s] option between a browser agent versus
+[2684.6s] like like an API call, I would always
+[2687.6s] always always as a software engineer
+[2689.1s] rather use the API than have a browser
+[2690.9s] agent go do the thing. Yep.
+[2692.5s] >> Um and let's use [clears throat] the
+[2693.6s] world's worst example. Let's say we're
+[2695.0s] doing a travel booking, right?
+[2697.3s] >> [laughter]
+[2698.3s] >> Um and so the agent is the browser agent
+[2700.6s] is on a page and it's has like cool like
+[2702.5s] here's your flight that you're going to
+[2703.5s] buy
+[2706.2s] and here's the form, right? It's like
+[2707.7s] okay, cool like you know, credit card
+[2709.7s] number Yep.
+[2712.6s] uh dates etc.
+[2715.3s] uh and there's like a submit button,
+[2717.0s] right?
+[2718.2s] And if you were going to build like a
+[2719.1s] naive permission thing
+[2722.3s] basically the agent is logged into the
+[2723.6s] travel booking as me. It is me. It is it
+[2726.3s] has my login. It logged in with my email
+[2728.0s] and password. It's if you wanted to
+[2730.3s] build human in the loop here, you
+[2731.7s] basically had to have to come back to
+[2733.2s] the human here and you can say like
+[2734.5s] cool, I'm ready to book this flight.
+[2737.0s] And then book
+[2738.4s] flight
+[2739.9s] for cost on dates with credit card.
+[2746.3s] Yep. And then the human says yes and
+[2749.0s] then the agent goes and clicks the
+[2750.2s] button, right?
+[2752.6s] Uh the submit button. You're relying on
+[2754.7s] a ton of things going right there.
+[2757.4s] Uh and again obviously browser agent is
+[2758.8s] like the least is much less reliable
+[2760.5s] than like output a JSON that calls an
+[2762.1s] API, but you're relying on the agent
+[2764.9s] reading the form correctly, filling out
+[2767.1s] all the fields correctly and not
+[2769.2s] accidentally hitting the submit button.
+[2772.3s] There is no deterministic way for you to
+[2774.4s] guarantee that the agent will not do a
+[2777.3s] thing that you have not approved. Um
+[2780.0s] same thing's kind of true for APIs. It's
+[2781.4s] a little more secure, but like what I
+[2783.4s] would really like to see You look at
+[2785.2s] like GitHub auth. Have you Have you seen
+[2786.8s] the GitHub auth? Have you ever created a
+[2788.0s] GitHub personal access token?
+[2789.3s] >> Yep, I have.
+[2790.5s] So
+[2790.9s] >> like the multi-scope access token.
+[2793.4s] Yes. So this is what I would call like
+[2795.4s] basically like state of the art for fine
+[2797.4s] grain auth.
+[2799.0s] Oh, Stripe is also very similar. Yeah,
+[2801.0s] Stripe is very good, too. Where you have
+[2803.0s] literally like a million checkboxes here
+[2805.4s] of like things you can give this token
+[2807.2s] for.
+[2810.6s] Uh the best case here, if I wanted to
+[2813.7s] give an agent like access to like like
+[2815.8s] let's say I wanted to give it access to
+[2816.9s] merge PRs on a repo, the most granular
+[2819.6s] state of the art full auth like
+[2823.4s] if you were being as secure as GitHub
+[2825.2s] allows you to be
+[2827.4s] is
+[2829.0s] you can give an agent access to merge
+[2830.6s] PRs on one repo. Yeah. And that is way
+[2834.0s] too broad. Like if an agent asks me for
+[2835.9s] permission to do a thing, I want to know
+[2837.1s] deterministically
+[2838.7s] that you the agent can merge this PR on
+[2842.8s] this repo for the next 30 seconds.
+[2846.0s] Otherwise you have to come back and ask
+[2847.3s] again. And we have technology for this.
+[2849.5s] It's called JWTs.
+[2851.5s] Um and there was actually a paper called
+[2853.1s] rich authorization, which is like a a
+[2854.9s] subset of the auth spec where you
+[2857.1s] actually just sign a token that is like
+[2860.3s] you know, uh so the agent could could
+[2862.3s] basically furnish token, which is all of
+[2864.0s] those parameters, right?
+[2866.3s] And it has like uh you know cost, flight
+[2870.0s] etc. And it has an expires in.
+[2873.5s] And this is unsigned. The agent sends
+[2875.7s] this to me the human.
+[2879.3s] I sign it with my like YubiKey or Face
+[2881.9s] ID.
+[2883.5s] Yep.
+[2885.4s] Face ID, whatever whatever my passkey
+[2887.0s] is. And then GitHub on the server side
+[2890.6s] validates it.
+[2892.0s] GitHub server has my public key
+[2896.2s] and they can validate it basically. And
+[2898.2s] so now I've created a system where like
+[2900.3s] when a when an agent asks for permission
+[2902.0s] to do a thing, I have deterministic like
+[2905.4s] guardrails around like it can only do
+[2908.4s] exactly the thing that I approved and
+[2911.7s] the the like enforcement of that is
+[2914.2s] rather than having a long-lived auth
+[2915.5s] token or something like that. It's a
+[2917.4s] one-time action for the most risky
+[2918.6s] stuff. It is a one-time action. Um and
+[2921.3s] maybe I can issue a token like hey,
+[2922.7s] you're allowed to browse my bank account
+[2924.6s] and use my like read all my transactions
+[2927.3s] for the next 30 minutes. Like you know,
+[2928.7s] you auth a session to go look at my
+[2930.0s] stuff.
+[2931.3s] And then but like when it wants to send
+[2933.2s] money, then I have that's like that's
+[2935.0s] like a permission escalation.
+[2936.4s] >> Bruce Bruce really asked the question
+[2937.9s] like I wish these auth services would
+[2939.4s] just go solve this. And the reason that
+[2941.6s] these auth services don't do this is
+[2943.8s] really simple. Changing your
+[2945.5s] authorization tokens is a [ __ ] ton of
+[2948.1s] work.
+[2949.0s] Building scoped API
+[2950.0s] >> incredibly risky. Exactly. Building
+[2952.5s] scoped API keys is also very
+[2954.3s] challenging. That's why like GitHub and
+[2955.6s] Stripe are the one of the two companies
+[2957.0s] that have are known for this because
+[2959.5s] they've done it really well. And most
+[2961.0s] companies just give you an dev key.
+[2963.6s] If this was easy and useful, it would it
+[2965.6s] would be so much more prominent.
+[2967.7s] I think the other analogy that I want to
+[2969.3s] bring back to this like security thing I
+[2970.8s] was talking about is very much like if
+[2971.9s] any of you have ever used Plaid to log
+[2973.6s] into a bank account, it's very similar.
+[2976.5s] Plaid does something really nice. Plaid
+[2978.6s] acts as almost like a man in the middle,
+[2980.2s] a trusted party between myself, the
+[2982.5s] bank, and the website. The bank
+[2985.7s] the website never gets my bank
+[2987.1s] credentials, ever. It's not even allowed
+[2989.4s] to access them in any meaningful way.
+[2991.3s] Only Plaid and Plaid has them, but the
+[2994.4s] website using Plaid does not.
+[2996.8s] Yeah. And that's actually a very common
+[2999.5s] like it's a very similar or exactly to
+[3001.3s] what MCP kind of aspires to want to
+[3002.9s] enable, which is like I have this server
+[3005.2s] I have this MCP, but only the top-level
+[3007.3s] server gets access to all the auth
+[3009.1s] credentials and doesn't make its way
+[3011.1s] down to every sub processor down below.
+[3014.1s] It's kind of like this primary server
+[3016.1s] has to be like Plaid. So, to really make
+[3018.0s] MCP work, you kind of need to build
+[3019.4s] Plaid for MCP before MCP can actually
+[3023.0s] work in this layered approach that was
+[3024.8s] initially imagined.
+[3026.7s] Because that's how you actually secure
+[3028.0s] everything. You have to have one central
+[3029.6s] source of trust
+[3031.2s] that does all sorts of authorization.
+[3032.8s] OAuth doesn't work here because OAuth
+[3035.0s] only works when it's in a browser
+[3036.9s] situation and directly communicating
+[3038.7s] with the website. Once you start going
+[3040.2s] to like secondary or third-degree
+[3041.4s] websites, you can't really OAuth in the
+[3043.0s] same way anymore cuz the tokens aren't
+[3045.7s] they don't they don't give you the same
+[3047.4s] level of security
+[3048.9s] that like an OAuth promise is supposed
+[3050.7s] to.
+[3052.0s] So, once you add a man in the like a man
+[3054.0s] in the middle system here that both the
+[3055.8s] end user and users trust,
+[3058.1s] then OAuth suddenly works again. And now
+[3060.1s] MCP can actually work. So, like why do I
+[3062.6s] think like MCP was not built in the
+[3065.4s] right way from a system design
+[3066.6s] perspective? Well, because like
+[3069.7s] these things should have been thought
+[3070.6s] of. And like even if it wasn't thought
+[3072.6s] of, even if it wasn't thought of, it
+[3075.0s] should have been natural to extend it
+[3077.5s] rather than having to redefine the
+[3078.9s] protocol to make all these things work
+[3080.8s] on top of itself.
+[3082.6s] And like when I look at like MCP versus
+[3084.3s] REST,
+[3086.0s] REST is so freaking good because we
+[3088.7s] haven't had to extend update it. We
+[3091.1s] started with REST and we actually had
+[3092.9s] REST with like multiple methods. And now
+[3094.4s] we just we we descope REST.
+[3097.2s] That's how good it was. We just use put
+[3099.1s] we just use get and post for 99% of
+[3101.8s] things.
+[3102.6s] We is
+[3104.0s] I actually have this argument all the
+[3105.3s] time. We can we can have another episode
+[3106.8s] about we used to call it Twitter REST
+[3108.8s] because Twitter was then 2011 was the
+[3111.2s] first API to start get rid of all the
+[3113.2s] other methods. If it changes data, it's
+[3114.7s] a post, otherwise it's a get. There's
+[3116.7s] some weird like CDN edge caching things
+[3118.9s] you get if you use all the other
+[3120.3s] methods, but yeah, I uh yeah, the the
+[3123.4s] fact that REST supports headers
+[3125.4s] made it so that we could basically we
+[3127.2s] built OAuth on top of REST. Exactly. We
+[3129.6s] didn't have to invent something new. And
+[3131.1s] that's what is a sign of a well-designed
+[3133.8s] beautiful protocol. And I think the bar
+[3136.4s] for a protocol is infinitely higher than
+[3139.4s] the bar is for a package.
+[3141.6s] So, I think MCP cannot withstand the
+[3143.5s] test of time because it tries to live up
+[3145.5s] to the bar of a protocol.
+[3147.4s] If it tries to live up to the bar of a
+[3148.6s] package, I think it can be fine.
+[3150.8s] But if it's trying to be a protocol, we
+[3152.3s] have to hold it to a higher degree. And
+[3154.7s] only the things that can work in the
+[3156.6s] protocol layer are things that are
+[3157.9s] well-designed and tested and can only
+[3160.0s] withstand the test of time.
+[3162.1s] By definition, MCP has failed that
+[3164.3s] because the Cloud Code itself has
+[3166.0s] abandoned it in favor of skills. Well,
+[3167.8s] skills are skills they're kind of just
+[3169.7s] offloading the entire auth thing to like
+[3171.6s] hey look, if you if you need auth to a
+[3173.1s] system, the skill just instructs you how
+[3175.0s] to use a CLI or use curl or whatever it
+[3177.5s] is, but they're
+[3178.7s] they're using the existing protocols
+[3180.2s] instead of the MCP protocol.
+[3181.4s] >> Exactly. Because they realized that it
+[3183.2s] doesn't solve the problem. So, by
+[3184.4s] definition, it cannot live up to the
+[3186.0s] standard of a protocol. What One thing
+[3187.8s] we haven't talked about that I think is
+[3189.5s] worth touching on is like this whole
+[3190.8s] context thing and skills and all of
+[3192.5s] this. Like skills only work if you have
+[3194.2s] a bash tool.
+[3195.5s] Unfortunately, if you don't have a bash
+[3196.8s] tool like and you can't call a CLI, then
+[3199.6s] like you're actually back to uh
+[3203.8s] you can't you can't you can't do much
+[3205.5s] with a skill. It just ends up being a
+[3206.7s] prompt module, right? It's just a prompt
+[3208.8s] that tells you how to use the existing
+[3210.3s] tools and
+[3210.8s] >> Exactly. Yeah. I think in the
+[3212.2s] enterprise, very few systems are willing
+[3215.2s] to give a model access to bash or to an
+[3217.7s] open coding environment where you have
+[3219.2s] access to stuff, and people really want
+[3221.3s] to keep it very locked down in terms of
+[3223.8s] like what exactly can this agent do.
+[3226.1s] Like it's the sacrifice
+[3228.4s] you when you use a bash tool, you
+[3229.9s] sacrifice a little bit of like security
+[3231.4s] and determinism for the sake of like
+[3233.7s] more flexibility and like better context
+[3236.5s] engineering or better context, you know,
+[3239.5s] uh
+[3240.6s] I don't know what to say.
+[3241.9s] More efficient context usage, which
+[3243.8s] gives you better results and better
+[3245.0s] performance, but the trade-off is that
+[3246.4s] you have to be willing to let that agent
+[3248.0s] kind of like flail around in this
+[3249.5s] environment and potentially do some
+[3251.5s] scary things. I mean like I said, I
+[3253.2s] think the the right model for this stuff
+[3255.4s] and here's what I think is going to play
+[3256.8s] out and like Evan, you you brought up a
+[3258.2s] good point like people do use this.
+[3260.7s] Um
+[3262.2s] where like people do use these systems.
+[3263.8s] So, like there's value in like using
+[3265.2s] them for whatever it is whatever use
+[3266.7s] case it is. And like if your customer
+[3268.0s] needs an MCP integration to make it
+[3269.7s] work, go ship the damn thing. Like
+[3271.8s] there's technical purity is not
+[3273.3s] correctness here
+[3274.7s] in my opinion. Like you ship the thing
+[3276.2s] whatever the users need to make to make
+[3277.9s] the sale.
+[3279.0s] Um assuming it's not fraud. Please don't
+[3282.0s] do fraud.
+[3282.6s] >> the difference between me and Vaibhav
+[3284.4s] and old man yelling at clouds is that
+[3286.8s] we're trying to give you all the tools
+[3288.3s] and understanding to go fix these
+[3289.8s] things. Yeah.
+[3291.4s] When I when I go to think about
+[3293.4s] what we're really trying to build here
+[3294.8s] and I think this is what's lacking,
+[3296.8s] is MCP is really a poor man's attempt of
+[3299.6s] trying to build a
+[3302.1s] app store-like ecosystem,
+[3304.2s] extensions-like ecosystem. What is VS
+[3306.8s] Code? Well, VS Code is a editor that we
+[3308.9s] all use and then built extensions. And
+[3311.1s] the extensions are what give it
+[3312.3s] user-built capabilities along the way.
+[3315.2s] And that's what makes it so powerful.
+[3316.5s] And they have to build a whole SDK and
+[3317.8s] ecosystem around it to make it secure,
+[3319.3s] safe, and etc. etc.
+[3321.5s] I would say iPhone is very similar, too.
+[3323.5s] We use all these apps that are
+[3324.7s] user-defined code that we all run that
+[3326.6s] we all like to trust and use.
+[3328.9s] I think these agent harnesses are like
+[3330.5s] lacking that
+[3332.1s] because one, they're moving so fast that
+[3333.8s] they can't actually codify what their
+[3335.1s] API is cuz they'll just break every app
+[3337.4s] effectively along the way.
+[3339.7s] And there's no real yet
+[3342.2s] like platformy definition for these
+[3344.3s] agent harnesses. They're kind of like
+[3346.0s] living this weird world of they're a
+[3347.8s] shell script, but also a platform at the
+[3350.2s] same time.
+[3351.5s] And that's why I think there's so much
+[3353.3s] debate around the right architecture
+[3354.6s] around these cuz you're trying to
+[3355.9s] platformize something that runs locally
+[3358.0s] on the user's
+[3359.4s] system
+[3360.8s] without very good
+[3362.9s] architectural boundaries that are
+[3364.3s] defined. I like it. You close on that?
+[3366.8s] Yeah, exactly. Get off my lawn. No
+[3368.8s] joking. Um I do hope we can invent
+[3370.6s] something really nice. I really do hope
+[3372.7s] that we end up in a world where people
+[3374.6s] can invent new modules and source codes
+[3377.2s] and run them securely along the way. If
+[3379.1s] you look at Vercel, Vercel shipped a
+[3380.7s] thing that's like just bash.
+[3382.6s] Go try that. It's really freaking
+[3383.9s] powerful. It's really freaking cool how
+[3385.7s] it works. It allows you to have bash in
+[3387.4s] emulated environment.
+[3389.4s] It it's just a superpower. And I think
+[3391.2s] we'll invent more things like that that
+[3393.3s] are going to make it MCP more powerful
+[3395.3s] as we go on.
+[3396.9s] Um anyway, I think that's that for
+[3398.6s] today's episode. I think next week's
+[3400.0s] episode is going to be a
+[3403.3s] vibe
+[3404.6s] uh vibes episode.
+[3406.8s] What Sorry, excuse me. The name of the
+[3409.0s] episode is no vibes allowed. No vibes
+[3411.8s] allowed. Exactly that.
+[3413.2s] >> point is here's how you use coding
+[3414.9s] agents to ship production features where
+[3417.4s] you actually care about the code and the
+[3418.7s] architecture. Exactly. We'll talk we'll
+[3420.9s] we'll ship a new feature. We'll live
+[3422.2s] code for about 2 or 3 hours. You'll get
+[3423.4s] a good feeling for how we actually
+[3424.6s] discuss
+[3426.1s] systems along the way.
+[3427.6s] Uh and then for those of you that are
+[3428.9s] interested, on April 11th, we have a
+[3432.2s] date locked in. We are going to be
+[3434.0s] holding a podcast we're going to be
+[3435.8s] holding a podcast episode, but live in
+[3438.4s] San Francisco. It's going to be called
+[3440.4s] AI that works the unconference. It's
+[3442.7s] going to be very similar to an episode
+[3444.2s] to a show that we held last quarter in
+[3446.8s] SF.
+[3448.2s] Uh it was tons of fun and it's like it's
+[3451.0s] an audience-driven episode. So, we
+[3452.7s] actually do our best we try and select
+[3454.8s] some of the most intense advanced
+[3456.6s] builders out there.
+[3458.0s] We bring you all out there and like you
+[3459.5s] guys build the agenda along the way. You
+[3460.8s] suggest what topics you want to talk
+[3461.8s] about. People get 5 to 10-minute talk
+[3463.8s] slots that they bring day of. They show
+[3466.2s] real code. We have a really in-depth
+[3468.1s] discussion about it.
+[3469.6s] If any of you are ever interested,
+[3470.7s] you'll see the link go out live on our
+[3473.1s] Twitters and on
+[3475.1s] uh the email that follows up on the
+[3476.4s] episode. Come join. Come hang. It'll be
+[3478.4s] a blast.
+[3479.6s] >> Uh yeah, I I don't know how exactly how
+[3481.3s] we're going to pick content, but last
+[3482.4s] time the thing we did that worked really
+[3483.6s] well is like you come in while you're
+[3485.2s] having your coffee in the morning.
+[3486.8s] Everybody writes a talk title on the
+[3488.3s] whiteboard or whoever wants to give a
+[3489.6s] talk and put a talk title on the
+[3490.8s] whiteboard.
+[3492.3s] We pick someone to go first. We we may
+[3494.3s] do some voting and some sorting. We may
+[3495.8s] do multiple tracks, but like last time
+[3497.4s] we had about 40 people and what worked
+[3499.2s] well was like one person goes first, and
+[3501.8s] then when you're done talking, you go to
+[3503.0s] the whiteboard and you pick the talk
+[3504.2s] that sounds most interesting to you, and
+[3505.6s] that person goes next. And we just do
+[3507.1s] that for a couple hours, and everyone
+[3508.7s] shares cool stuff that they're working
+[3510.0s] on. It it was one of my favorite days
+[3512.9s] that I've spent in a while.
+[3514.6s] Yeah. So, if you're in SF or you can
+[3516.3s] make it to SF April 11th, come through.
+[3518.3s] We'd love to see you. And thanks
+[3520.1s] everybody. We'll see you next week.
+[3521.7s] Adios. Bye-bye.

@@ -1,0 +1,763 @@
+What's up engineers? Indie Dev Dan here.
+As you go from base agents to better
+agents to more agents to custom agents
+all the way up to orchestrator agents
+and even give your agents their own
+devices to operate, you'll quickly
+approach a problem. Where did you put
+that Notion CLI skill? Where did you put
+that Cloud Code multi-agent planning
+{slash} command? If you're an engineer
+working on one to two repos, what I'm
+about to show you doesn't matter at all.
+If you install skills or plugins from
+the public internet without reviewing
+them, this video is not for you either.
+But if you're an engineer working on
+10-plus code bases with agents and
+you're building specialized private
+skills, agents, and prompts, this video
+was made for you. I have run into this
+problem as well. I've got skills
+everywhere. I've got prompts everywhere.
+I've got agents everywhere. I want to
+share a simple meta skill you can adopt
+to coordinate sharing your private
+skills, agents, and prompts across your
+code bases, teams, and agents. So, let
+me concisely define the problem. Us, the
+developer, we're deploying skills,
+agents, and commands all over the place.
+We have duplicates all over the place in
+our 10-plus code bases. The problem is
+simple. We have endless skills
+everywhere. They're out of sync. They're
+duplicated. And they're hard to
+coordinate across your engineering team.
+For example, you might have a deploy
+skill that works similarly across your
+code bases, but you've been losing
+track. You've been copying them. You've
+been just sharing them with your
+engineering co-workers and your agents,
+and they're just getting out of date.
+And this problem is exacerbated when you
+have multiple developers working across
+your team with multiple agents of their
+own. We're just copying skills. We're
+copying agents. And there's no real
+shared access. Now again, if you're
+working on a single code base, this
+isn't really a problem. All your
+prompts, all your agentics, your
+prompts, skills, and agents, they're all
+just right there. But once you start in
+many code bases, you run into a serious
+problem. How can we solve this? We can
+solve this with a meta skill, a skill
+that unlocks other skills, agents, and
+prompts. I'm calling this the library.
+Call it whatever you want. In our
+previous video, we looked at how Stripe
+handles this problem. They use a meta
+tool called the tool shed. Here, we're
+going to focus on a meta skill and
+broaden the solution a little bit to
+cover skills, agents, and prompts. So,
+we have one skill to unlock them all. I
+want a coordinated solution to
+distribute my agentics over and over and
+over across my devices, teams, and
+agents. All right, so that's the idea
+here. So, what does this give us? This
+allows us to stack our skills, our
+agents, our prompts, and then if you
+want to, like I like to, you can put a
+just file on top. And so, this is how I
+think about building with agents right
+now. This is how I think about agentic
+engineering. Everything starts with
+these four pieces and specifically these
+three pieces. Right, these are the most
+important pieces. I think of skills as
+raw capabilities. Agents allow us to
+attain scale and parallelism. And our
+prompts, just one-off single-file
+prompts, let you orchestrate these two
+levels below. A lot of people are
+overkilling skills, doing everything
+inside the skill when you really have
+several other key primitives that you
+can work with. So, this solution taps
+into that. The great part about the
+library is that we have a single
+reference point. So, you can think about
+this like a package.json file or a
+pyproject file where we basically are
+storing references. As you're going to
+see in a second here, the library file
+actually just points to existing GitHub
+repositories or local files. And that
+means staying synced between all of your
+projects is super simple. And this means
+when you have a single source of truth,
+you have yourself, you have your agents,
+and your co-workers can just sync and
+manage this one library file. So, that
+means that all you need to do is have
+this library file and the meta skill,
+and you're good to go. Because the
+library file is just going to reference
+the GitHub repository. So, this is
+exactly how this solution works. We have
+a reference to private GitHub
+repositories. Very important when you're
+building specialized solutions and
+you're getting paid for it, you're not
+putting this stuff out in public. Your
+top-notch skills, agents, and prompts
+should absolutely be private. I know a
+lot of avid coders, you think that
+everything is just out there in the
+public. Trust me, it's not. We need a
+way to distribute this privately. Of
+course, we can also touch public repos.
+And with this system that you'll see in
+a moment here, we can also just
+reference local file paths. Something
+super critical to mention here, this is
+an agent-first solution {slash} library.
+It is a skill. There is no code
+associated with this. You can see here,
+that is how it's kicked off, no matter
+who is using it. All right, and that
+gives us a lot of very powerful
+capabilities. I'm predicting we're going
+to see a lot of pure agentic solutions
+as we move through this year. Just
+another benefit to mention, with a
+system like this, you of course get
+syncing across all of your devices.
+We're going to walk through a clear
+example of this between myself here and
+my Mac mini agent that I showcased in
+our previous video. I've run into this
+problem over and over as I'm spinning up
+agents on my device and I'm spinning up
+agents on my Mac mini device. I've also
+got more devices coming in. There's a
+big trend going on right now that's been
+unlocked, or should I say revealed, by
+the whole open claw and claw movement.
+It's not having an agent run rampant on
+your device. It's having a team of
+agents that can operate very, very well
+against your specific domain problems.
+That's where all the value is. More on
+that later, but you can see how this
+solution aids that. We need a way to
+distribute all of our powerful prompts,
+agents, and skills. That's exactly what
+we're doing here. And so, here's the
+full workflow. Just a couple more slides
+here. I just really want to nail the
+point home of why this is so important.
+And again, if you're an engineer that
+just operates on a couple code bases,
+this isn't for you. Okay? You don't need
+this. Just use Cloud Code plugins. Just
+install from wherever. This is about
+private agentic distribution. So, here's
+what it looks like. And here's exactly
+what we're going to do in just a moment
+here. We're going to build first. We're
+then going to catalog with the
+library.add command. And this is going
+to update our catalog. This gives us
+pointers, references, to existing code.
+Because the big idea here is that you
+don't want to interrupt the flow of when
+you're natively building out your
+prompt, skills, and agents inside of the
+actual value-generating repository. And
+then you can of course reuse them. All
+right, so on your agent, your team, and
+on your Mac mini, or whatever your
+devices are. And this includes, you
+know, cloud sandboxes as well. So, this
+is the full workflow. Build, catalog,
+distribute, use. And here's what the API
+looks like. It's all based on this
+single YAML file. So, we can add items
+to the catalog. We can use items from
+the catalog. We can push back updates to
+the source repositories. We can list. We
+can search. And then we can sync. And
+so, sync is super important here. This
+is not just syncing your catalog. This
+is syncing the actual code bases to make
+sure that you have the latest version.
+In essence, this is very, very simple,
+but I needed to build out a concrete
+solution for this because I kept running
+into this problem and kept doing things
+the sloppy, fast way, which is to just
+copy things and then they go out of
+sync, out of date very, very quickly.
+So, let's manage our agentics the right
+way, our prompts, agents, and skills.
+Let's break down exactly how this works.
+So, here I have my Mac mini device. And
+what I want to do here is showcase how
+I'm now quickly and effortlessly syncing
+skills, prompts, and agents between my
+local device and my agent device. to use
+my Mac mini device here just because
+it's simple. It's very visual. You can
+literally see it here with screen
+sharing and my physical Mac mini device.
+But you can imagine, you can set this up
+with any cloud-based system. As long as
+your agents or your team members have
+access to your team's private Git repos,
+you should be good to go here. I'm going
+to go ahead and minimize this. And let's
+just start by understanding the skill
+ergonomics. So, if I open up Chrome
+here, you can see I have the library.
+And so, this is the root template
+repository that I have cloned and I
+created the IDD library. So, Indie Dev
+Dan library. This is my personal library
+that I'm building up now. It's in its
+early versions. This is probably going
+to be the first and last time I'm going
+to be sharing this with anyone because
+there's going to be a lot of private
+value here. The most important file here
+is this.
+of our reference file. And so, we have
+skills. We have our agents. And we have
+our prompts. And so, you can see here,
+you know, we're not actually storing
+anything except for the references to
+where these things are stored. What I
+want to do here is add some new skills
+to this. All right, I'm going to be
+adding my meta agentics, my meta prompt,
+my meta skill, and my meta agent. And I
+have these stored in a dedicated
+repository. You can see my agents have
+been doing a little bit of work in this
+repository, but I have this stored here.
+So, if we go in the .cloud, again,
+private repository, this is not a public
+code base. The library is public, or I'm
+going to make it public here. So, you
+can clone this and start setting up your
+own library if you want to. Again, I'm
+not trying to sell you on my vision of
+how to distribute your agentics. All I'm
+doing here is showcasing how you can.
+Every company with private, specialized
+agentic tooling, you're going to want to
+do it your own way. I just want to
+showcase how I've thought through this
+problem as I've worked through and I'm
+using hundreds of prompts, agents, and
+skills across many, many repositories.
+I'm going to start building this up. And
+what I want to do here is add a couple
+of skills. Specifically, my meta
+agentics, my meta agent, my meta prime
+command, my meta prompt, and my meta
+skill. So, that's what we're going to do
+right now. I'm in this repository here.
+And you can see that this is indeed a
+Git repo. If we type Git remote {dash}
+v, you can see we have the origin repo
+there. Don't try to access it. It's
+private. And then we can do something
+like this. tree.cloud
+L2. And so, you can just see exactly
+what I mentioned there. We have the
+agents. We have the commands. And we
+have our skills. And so, if I boot up a
+Cloud Code instance here and I run
+{slash} library
+and hit space, you can see our argument
+hint, command, and then name or details.
+And what I want to do here is just run
+list. So, list is just going to tell me
+all of the references that are stored
+inside the library file. It is going to
+also make sure it's pulled so that it
+has the latest version. And you can see
+that this library is a skill and a
+repository inside of my global.clod
+skills library. I have a few of these
+installed, but I don't have any meta
+agentics here. And so, that's what we're
+going to add. So, let's go ahead and
+clear. Start a new session here, and
+then I'm going to add these new items,
+right? Because again, if I do
+tree.clod/l2,
+I have a couple new skills I want to add
+to the library so that they're
+accessible to all my devices, team
+members, and agents. So, I'll do the
+following: /library add, and I want meta
+agent, meta prime, meta prompt, meta
+skill, of course. And I'll say from
+GitHub URL. And that should be all I
+need here. Now, this library skill is
+going to load, it's going to find the
+add cookbook. This is just how I like to
+separate the use cases of each command
+in the skill. Of course, before it makes
+any changes, it's going to pull, and now
+it's going to look for these actual
+items. So, it found them all locally.
+Now, it's going to actually add these to
+the library. Let me make this super
+clear here. I have the IDD library
+engineer. So, I have this, and this just
+contains reusable prompts, agents,
+skills. And then I have the IDD library,
+and this is my personal reference
+library to prompts, agents, skills.
+Really important to distinguish this
+because you're going to have multiple of
+these. You know, maybe we have support,
+maybe we have sales here. And so, these
+contain all the reusable pieces from who
+knows where, right? These can be private
+code bases, public code bases, and even
+file system references. But then we have
+the library, which is just that YAML
+file and the skill. So, you can see this
+was added here. And now we can type
+library use to actually add these. I'm
+in the library where they were set up,
+so I'm not going to do that here.
+Instead, what I'll do here is open up a
+new terminal here, and let's create a
+temp directory. So, I have an alias that
+just quickly creates, you know, a temp
+file here for us, and let's go ahead and
+fire up. Instead of Claude Code, let's
+go ahead and use the Pi Coding Agent.
+So, with IPI, I'm going to boot up my
+own customized agent. You can see I was
+running with a Claude 3.5 plus. Let's go
+ahead and use a smarter model than that.
+Let's go ahead and use that Sonic 6
+model by Anthropic, okay? And so, ping,
+this should be pretty simple. What I'm
+going to do here is access the library
+skill. I'm going to use the use command,
+and then I want to say uh meta-star
+install locally into .clod/skills.
+This is going to look at that library
+reference file, and it's going to pull
+in those specific skills. Once again,
+these are references. These aren't
+stored on my device anywhere, these are
+references to a repository. My
+customized Pi Coding Agent has damage
+control built in, so it can't run rm-rf
+commands. I'll say skip rm-rf so that it
+does not do this. But it's going to
+write the code to clone in and actually
+move these items into the right
+directory, and that means I should have
+them here locally. If I open up a new
+terminal here and I type ls ls-la, you
+can see I have .clod. If we do a tree uh
+.clod l2, we can see that we have
+skills. And if we just, you know, drop
+the level parameter there, we can see
+all the details of each one of these
+skills, right? So, you can see my meta
+prompt has some examples, my meta skill
+has some docs, so on and so forth. So, I
+just very, very quickly added references
+to my library YAML file, and you know,
+you can see this here. If we go ahead
+and go to my library file, you know,
+this was before, and if we just search
+for meta, you can see that I was testing
+this an hour ago just to make sure that
+this all worked. They're not in the
+library file, okay? But if I refresh,
+you can see that they were just added.
+So, if we search meta- you can see
+they're all there now. This is a pure
+agent application. The application is
+the skill. So, this is a very
+interesting paradigm that's emerging
+where you can encode entire applications
+into a single prompt, into a single
+skill as Anthropic likes to call it. And
+that's all through this library skill
+here. That's how this works, right? So,
+I have updated a reference file, and now
+we can add these anywhere. And if I do
+tree.clod,
+now let's do the uh l2, you know, I just
+added this to the local directory. So,
+again, if I spin up an agent, you can
+see my customized Pi Coding Agent
+automatically on boot up is going to
+show me where it's loading everything
+from. You can see in my global Claude,
+it's got 42, but here locally you can
+now see those new activated meta
+agentics by meta agent, meta prime, meta
+prompt, and meta skill. So, to be clear,
+we've covered meta agentics on the
+channel in the past. These are the
+skills that build the skills. It's the
+skill that builds the prompt, and it's
+the skill that builds the agent. All
+right, so these are super, super
+important. Let this be your reminder, if
+you don't have these agentics at the
+ready to help you build faster and
+faster, definitely, definitely build
+this out. I know Claude Code has some,
+you know, build me a skill type of
+prompt. I highly recommend you build out
+your own so that you really understand
+how to do this better than anyone. And,
+you know, really, if you're building out
+specialized solutions, you want to be
+building it your way. A big theme on the
+channel right now for the year of 2026
+is increasing the trust we have in our
+agents. The best way to increase trust
+is to know exactly what they're doing
+and know exactly what they're running,
+and that means down to the lines inside
+of your skills, your prompts, and your
+agents. But so, you can see here that
+was added. Now, what I actually want to
+do here is add this globally. And so, I
+use meta agentics all the time. So, what
+I'll do here is just to kind of showcase
+the example once again, you know, I'll
+go to a new temp directory, boot up a
+new instance, and we can go ahead and
+just use Claude Code for this. Library
+use command, meta-star add globally. And
+so, now I'm going to have this added to
+my global Claude Code directory. So,
+again, we're not adding anything to the
+library, it already exists, right? I
+already have all of my, you know, meta
+agentics here. What I want to do is now,
+on this device, place them globally. I
+want them to be in that global
+namespace, and you can see here at the
+top we have default dirs. We're going to
+default to skills, agents, and prompts.
+And actually, here's a bug, I need to
+update this to commands because Claude
+Code stores these in commands, not
+prompts. There's a default, there's a
+global, and I've built the system so
+that you can actually add whatever name
+you want to here. There could be
+default, global, and special. And
+special could route to an entirely
+different path. Here we go, we now have
+these enabled globally, and so this
+means that we have access to this in any
+directory, all right? So, I'm going to
+once again go into a new temp directory,
+and then I'll boot up my customized Pi
+Coding Agent so we can see them get
+loaded in. And you can see there we now
+have 46. And if I type /meta, you can
+see them popping up. So, we added meta
+agent, meta prime, meta prompt, and meta
+skill. Of course, the best part about
+this is that we can now deploy this
+solution on any device and just connect
+to this, right? Because the library is a
+reference file, and the reference file
+can point to any repository you want.
+So, now I'm going to be building up this
+engineering-focused library with all of
+my prompts that I'll reuse across teams,
+devices, and agents. And speaking of
+agents, we can now open up screen
+sharing and get this installed on my
+agent's device, all right? So, now I'm
+operating on my Mac mini. I'll go ahead
+and fire up the terminal, move to a temp
+directory. And so, let's go ahead and
+boot up a Claude Code instance here.
+Let's run a ping just to make sure we're
+all good on the device. Good. And
+actually, we don't even have the library
+installed on this device. So, let's go
+ahead and do that. I'll move to the
+.clod, and we need to go all the way
+into skills.
+ls-la, you can see that this agent
+device has no skills right now. So,
+let's go ahead and equip it with some
+new skills. I'll get the repo reference
+to my library. If you, you know, build
+this out, do it your way, you're going
+to have your own library. So, I'm going
+to go ahead and just copy this, clone,
+bang, and I want this inside of library.
+So, I'm going to give it a another
+parameter there, CD into library. And
+now you can see we have this here, and
+we can do a more on the library file so
+you can see what this actually looks
+like, and it is exactly what you'd
+expect. You can see there is our meta
+agent, and then we can just kind of work
+through the rest of this, okay? So,
+great. So, now it's on my system, right?
+Because now it is inside of my .clod
+user directory, also known as just the
+global skills directory. Now, we can get
+to work, right? So, now we can install
+our meta skill, or any skill that we
+have referenced in our library, right?
+So, if we come in here, you can see all
+of these, and now we can go ahead and
+add these to our agent device wherever
+we need them. So, it could be in a
+specific directory, or it could be
+global. In this case, uh my meta
+agentics are really, really important. I
+like to have these installed globally on
+the machine they're operating on. We can
+go ahead and use Claude Code here.
+Library, and I'll go ahead and add use.
+Once again, I'll just say meta-star
+install globally.
+And so, to be clear, right now, if I
+move to another temp directory and I use
+IPI, uh you can see here that all I have
+is that one global skill, right? The
+library skill. But after this runs,
+you're going to see that we're going to
+have five global skills. There we go, so
+it's cloning them in, it's installing,
+it's making sure we're getting the very,
+very latest version. This is all on my
+agent device. This could be on a cloud
+device, this could be in an agent
+sandbox, this could be one of my
+teammates, one of my team members. So,
+now we have all of them. I'm going to
+close my customized agent harness here.
+We talked about the Pi Coding Agent in a
+previous video. That one went absolutely
+viral, I'll link that in the description
+if you're interested on how you can
+customize your own personal agent
+harness. Claude Code is great, but Pi is
+the only real competitor because it lets
+you customize the agent harness. As you
+can see here, on boot up it directly
+tells me where all of my skills are
+loaded, and we got those five total
+skills up from one. This is because I
+customized my agent harness thanks to
+the Pi Coding Agent. Again, link in the
+description for that. But you can see
+here, we now have these global skills
+available on my agent device thanks to
+the /library skill. And now we can run
+it. We're in a temp directory, I'll just
+say a meta prompt. So, this is my skill
+that builds prompts. These are very very
+important. They let you move very very
+fast in a in a structured way. And I'll
+have it just build something random for
+us. So, let's see, what's useful for a
+new agent device? We can say something
+like this. Uh create a new bash profile
+bash functions based on an input arg.
+And we're going to go ahead and run the
+uh Quinn 3.5 plus model here. Let's go
+and see how this works, right? So, this
+is going to create a prompt for us. It's
+creating a custom {slash} command bash
+function. There's the argument hint. It
+knows how I like to create prompts. If
+you've been with the channel, you know
+exactly my prompt format. We have the
+purpose, we have the workflow, we have
+the instructions, we have the variables,
+so on and so forth. Looks like Quinn 3.5
+did a pretty good job. Let's actually go
+ahead, open up a new terminal. Just
+going to quickly copy this. Move so we
+can see ls. We don't want ls, we want
+tree. And we want tree.claude. It's
+hidden. There we go. Claude commands
+bash function. And so, now we can
+execute the bash function. I assume this
+is going to
+create a bash function in bash profile.
+There's the function request, output
+format, nice. Created a couple extra
+variables for us, include comments,
+include examples, instructions,
+workflow. Looks great. This was because
+I had my meta prompt written out, and my
+meta prompt is like 800 lines long,
+right? So, it's very detailed. I've
+templated my engineering into how I
+build my prompts, and I wanted to scale
+this across all my devices. A prompt
+this important needs to be the exact
+same across all my team members, all of
+my work on all my code bases, and on all
+my devices, both human operated and
+agent operated. This is why a library of
+your agentics is so important. Last
+thing I want to showcase here is
+actually updating this. Now we have 10
+devices using our meta skills. How will
+they update it and push it back to the
+source? So, one source of truth. And you
+know, that's the important part of this.
+This is very very much like a package
+system. Without versioning, I just want
+the latest version, but this is very
+much like a package system for prompt
+skills and agents, right? A library of
+them, because we're storing, once again,
+references. And what I want to do here
+is 3.1 flashlight.py
+update the skill.md colon summary make
+this return a table format instead. And
+I think it's doing like a YAML format
+right now or something. I don't know.
+There we go. So, it's reading that file
+in. There we go. So, now it's going to
+report this in a table structure instead
+of, looks like we were doing YAML
+before. Fantastic. Change has been made,
+and now we need to push it back to the
+actual repository. Because, once again,
+let's remember that the file, right, the
+actual library file is a reference,
+right? So, this references code bases,
+right? It itself is not the code base.
+It's a reference to the code base. We're
+gambling here if we use flashlight on
+this. I'm going to bump this up to
+something more stable. Nothing more
+stable than Claude Sonnet and Opus
+models. We'll we'll bump up to a Sonnet
+4.6. And I'll say library push.
+And then I'll say meta prompt. And so,
+that's all it needs here. I'm using the
+push command. And so, it's going to find
+the global version. There's no local
+version here. And then it's going to
+actually push this back up to the source
+repository. Move this to the side, and
+then open up Chrome just so I can show
+you exactly how this is going to work.
+You can see my last meta prompt update.
+This was coming in, you know, about an
+hour ago, and you can see this device
+just finished. So, now if I refresh
+this, we should get an update inside the
+source code base, right? So, 1 hour ago,
+refresh, just now. So, this was freshly
+updated right from our agent device
+right here. Very very powerful stuff.
+And it's it's a relatively simple idea.
+It's just too important to miss
+at a certain scale. That's the whole
+idea. So, now I can distribute my
+agentics. Agentics are prompts, agents,
+skills, things that make your agentic
+system run. So, now I can quickly
+distribute these across all my devices,
+across all my team members, across all
+of my agents. And the super super big
+unlock here is the following. If we
+close this out and hop back to the
+original terminal here and go to .claude
+skill library, this is a pure agent
+application. It really only runs in
+skills.md and library.yaml. It's a
+purely agentic application. And that
+means that I can do everything I just
+did very very quickly with an agent. An
+entire agent could run that entire
+workflow, or chain together pieces of
+the individual workflows. And you know,
+one of the ways I like to organize my
+skills is like this. tree. The cookbook
+is essentially individual agentic
+workflows that the skill describes when
+to use each one of them, right? And so,
+you can see here very very cleanly in
+plain English. Great for humans, great
+for agents. I have them all written out
+by their exact command name. So, this is
+the library. This is how I'm organizing
+and redistributing all of my skills,
+agents, and prompts. Now, if you want to
+get started with something like this,
+you can check out the library, and
+you'll start with a blank library file
+just like this, right? There's nothing
+in here. Update the defaults to whatever
+you want, and then you can start adding
+them. All the documentation you need to
+get started with this is going to be
+here. Again, I just want to reemphasize
+this point. I don't care if you use my
+library. I'm not trying to like sell my
+repo or anything. It's just a valuable
+idea if you're scaling to multiple
+devices, multiple team members, and
+multiple agents. All right? Remember,
+the agentic path for all of us now is
+base agent, better agent, more agents,
+custom agents, and then we start
+orchestrating things with our
+orchestrator agent. And the orchestrator
+agent is a big big trend right now.
+Calling it a trend is frankly stupid.
+It's a really really important
+conceptual idea for agentic engineering.
+Once you get to certain levels of scale,
+the only way to continue is to create a
+leader, is to create a co-worker, is to
+create an orchestrator that can operate
+entire devices for you, and entire
+systems for you, entire domains for you.
+And in order to really build that out
+and scale that and to reuse your great
+agentics across all your devices, you're
+going to want something like the library
+so that you can quickly organize all of
+your capabilities into one location. All
+right? So, that's all I've done here.
+This is the idea I wanted to sit down
+and communicate with you today. This is
+the library meta skill, the skill to
+unlock and redistribute your private
+skills, agents, and prompts to help you
+maintain your advantage in the age of
+agents. You know where to find me every
+single Monday. Stay focused and keep
+building.

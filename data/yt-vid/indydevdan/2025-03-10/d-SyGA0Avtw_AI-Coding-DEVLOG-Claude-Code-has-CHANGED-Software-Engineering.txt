@@ -1,0 +1,772 @@
+what's up Engineers Indy Dev Dan here I
+have a special video for you today this
+is a Hands-On nobs AI coding Dev log
+using CLA code and the model context
+protocol I have never adopted a tool
+faster than I've adopted Cloud code
+there is nothing more important going on
+right now for True software engineering
+and in the Gen AI age then CLA code and
+mCP in this video I'll show why that's
+true so we're going to boot up claw code
+but we're not going to prematurely jump
+in here and start firing off prompts
+iteratively that's the old 2024 way to
+do things first thing we need to do is
+gather all the context and information
+we need to run claw code in its true
+agentic form to do this we're going to
+use a tool called repo mix repo mix
+allows us to read entire code bases and
+collapse them into a single file that we
+can use as context for our AI tooling
+for CLA code AI coding tools llms they
+love patterns they love pre-existing
+information so that's what we're going
+to do here we're going to clone the
+model context protocol servers GitHub
+repository and then we're going to look
+at a specific example that we can pull
+from so we're going to look at git here
+and so we're going to CD into the git
+directory and you know we can see
+there's the structure we can run LS and
+tree to kind of understand the high Lev
+structure and then we can run repo mix
+so repo mix allows us to take this code
+base and collapse it into a single file
+you can see we have 30k tokens there and
+now we're just going to move this into
+our code base right so I'm going to get
+the
+path to our current
+codebase run that and then move this
+into the um AI doc directory you may
+have seen this throughout some of the
+code bases that I work on maybe you have
+your own pattern for this um this is
+super important for just organizing
+information that your AI tooling can
+reference all right so there's that we
+now have the uh mCP server for git and
+now we can use this is a you know key
+guiding example a key guiding structure
+for our new tool that we're building our
+new mCP server that we're going to build
+in this video called pocket pick so
+there's that now we're going to do
+something super super important we're
+going to create a spec we're going to
+create a plan so before we dive into
+what this plan is all about um I'm
+curious what you think comment down
+below let me know what you think is a
+more important release model context
+protocol or CLA code I feel like these
+are two massively game-changing tools
+let me know which tool you're using the
+most are you fully on board with CLA
+code and are you fully on board with mCP
+servers I've been holding off trying to
+wait to you know understand the
+landscape of the model context protocol
+there are of course risks associated
+with committing to a technology like
+this but I think and ropic is doing it
+in such a way that it makes sense it's
+open source it's public anyone can build
+these this is turning out to be the
+standard for building AI agents for
+building AI tools as you'll see in this
+video you can quickly build your own mCP
+servers so what are we building and what
+is the spec right what is the spec
+prompt what is this what is this plan
+that we're building so we are building
+pocket pick this is your personal
+knowledge base for reusability
+of ideas patterns and code Snippets this
+is something that we started building
+out in lesson 8 of principled AI coding
+and what we're going to do here in this
+video is use CLA code in its true
+agentic coding form to build out a full
+version of this built completely on mCP
+so this is something different I've been
+waiting to pull the trigger on this
+we're going to build this tool as an mCP
+server first so there will be no other
+way to interact with this tool other
+than mCP I think this is going to be the
+direction things will go as mCP grows
+and develops so pocket pick is all about
+quickly being able to save and then
+reference ideas patterns and code
+stimits for your engineering work we're
+setting up the project structure so
+quite literally the directory structure
+of this new tool just above you can see
+the simple pocket pick SQL light table
+structure
+um I love when I can boil down data
+structures to just the essentials we
+have ID created text and tags right this
+is all we need to create a great first
+version of our personal knowledge base
+of our pocket piics and so you know you
+might be asking why are we building out
+this plan why aren't we just starting to
+prompt right cuz I can guarantee you
+that if you're writing prompts
+iteratively you are not doing as much as
+you can and you're not scaling in your
+impact as much as you could be and in
+this video you'll see exactly what I
+mean I'm creating that classic
+implementation notes section this is
+where you just basically write ad hoc
+information it's where you work through
+things it's kind of the catchall section
+we're doing some API based design here a
+great way to communicate information to
+your AI coding tools is to create the
+interface in which you would use to
+operate with it so what we're doing here
+is creating a CLI based API design right
+and and this will very clearly
+communicate to our AI coding assistant
+what we want the API to look like you
+can see here I'm using cursor tab as
+well to help me you know quickly create
+this spec prompt I think the tech
+ecosystem has a massive problem in
+thinking that there are best tools right
+and thinking you know uh what's the best
+tool what's the best a coding tool I can
+use is it cursor is it CLA code is it
+AER Devon what's the best tool right I
+just want to use the best tool I think
+this is a very limiting mindset because
+it forces you to always think in
+competition right it forces you to think
+in Winner Takes all the world is not
+Winner Takes all at least not our world
+right we don't have to pick one we can
+pick multiple the real question we
+should ask is what combination of tools
+gives me the best results in the least
+amount of time with the fewest
+trade-offs right we're Engineers our
+work is all about tradeoffs right we're
+balancing tradeoffs
+it doesn't matter what AI technology
+you're using there will always be a
+tradeoff the best Engineers know when to
+make the right
+tradeoffs so I think in ANS not ores I
+use you know claw code I use cursor tab
+I use AER right there there's a time in
+place for all these tools and you know
+just to like you know address the
+elephant in the room that is CLA code um
+this tool does change things like I
+mentioned you know um in combination
+with mCP this tool is a must have for
+engineers uh moving
+forward specifically some powerful mCP
+host and you know your own personal set
+of mCP servers this is just going to be
+the way things are moving this this this
+information set this tool set has caught
+fire we'll talk about AER and Cloud code
+more in the future
+I'm continuing to build out the project
+structure and as you can see here we're
+using information dense keywords we're
+using the mirror keyword if you've taken
+principal AI coding you know exactly how
+powerful that is and what this means
+this is really cool so I'm basically
+treating every file inside of our
+project structure as a prompt right so
+you can communicate additional
+information um by using some simple
+nesting structure like this right so you
+can see here I'm adding a new pantic
+type in the data types file I'm
+detailing that we want that default
+database path and then here we're going
+to use one of my favorite patterns dot
+dot dot this is one of my all-time
+favorite information Den keywords dot
+dot dot tells your a coning assistant
+continue right keep going with the
+pattern right fill in the blanks feel
+free to pause the video there um this is
+something we talk about uh in principal
+a coding but just by typing that dot dot
+dot there our AI coding assistant knows
+to create the other pantic types filling
+in some more implementation notes here
+you know nothing super crazy nothing
+super new happening here and we're just
+working through everything that we want
+done here right so we're referencing our
+documentation uh we're saying that we
+want all of our tags to be
+lowercase and now we're looking at the
+mCP git server we want to see the
+dependencies it has right I want to make
+sure that I'm covering the dependencies
+we also want pie test we're going to
+need this for closed loop self
+validation and of course SQL light 3
+this is built in so I'm going to make
+sure that I mention that okay and I'm
+telling the you know I'm I'm telling
+Cloud code um how to run things right
+and so just adding some more
+implementation notes Here I definitely
+could have ADD added some of these
+inside of the uh project structure um
+but it's important to not overthink
+things too much you just want to have
+the information visible to your AI
+coding tool right keep things simple now
+we're doing something really really
+important again principal AI coding
+members know why this is so important um
+we're closing the loop here by telling
+our language model how to validate
+itself so we're working through here we
+almost have a final version we're going
+to make one tweak to our plan and and
+you know you you may be like holy crap
+you haven't done anything yet you know
+we spent 10 minutes writing this plan um
+that's right we have and you're going to
+see why and how powerful it is in just a
+moment here and so as I was working
+through this I realized that I don't
+think I had enough information to
+complete the work needed for the find
+command and now that I'm playing this
+back I'm actually I actually completely
+uh write this incorrectly so I'm using
+Pocket ad instead of pocket find so you
+know there's just a glaring mistake
+there we'll see if our AI coding
+assistant picks up on my mistake or
+automatically corrects it for me so
+there we go now we're back in CLA code
+and now it's time to fire off CLA code
+so we now have our plan now it's time to
+watch our upfront investment pay off so
+I'm going to Prime Cloud code this is a
+really important kind of new paradigm
+I'm saying read these files then
+implement the plan right so you can
+see as per request it's reading those
+files and then it's going to read you
+know there go reading the project at
+taml right it's understanding the entire
+uh project structure and now it's going
+to read the plan right so there it goes
+now it wants to start working so you
+know if you've used Cloud code you know
+what's going to happen next we're going
+to turn on YOLO mode I don't want it to
+ask for permission all the time I wanted
+to get the work done in the most agentic
+fashion possible so here we go this is
+the incredible part like subscribe
+comment if you know what's going going
+to happen next year right so we wrote
+out this comprehensive plan and look at
+what's happening look at what's
+happening on the
+left files content um code it's getting
+generated right we wrote the plan we
+outlined the directory structure we used
+idks to communicate a lot of information
+and check this out add got created F got
+created list tags got created list got
+created removed just got generated right
+this is a different way of engineering
+this is the next phase in AI coding
+we're moving from AI coding to a gentic
+coding great planning is now great
+prompting okay this is a paradigm shift
+in how code gets
+created our AI coding assistant
+understands what we want because we
+spent The Upfront investment right these
+are not oneoff ad hoc prompts right
+Claud Cod doesn't need to read write
+read right read right we gave it a big
+picture as if our product manager or
+lead engineer uh you know wrote up a
+very very powerful comprehensive you
+know ticket or plan for you to build
+something right that's the way to think
+about writing great spec prompts so you
+can see here
+dependencies right uh it's all getting
+added here and now it knows we're
+operating in UV it's asking to install
+we say yes of
+course and things are happening right
+things are just happening um I actually
+enter in the wrong command here but it
+doesn't end up uh mattering too much and
+there we go uh tests right tests are
+getting generated and you know it's all
+just
+happening you know it's it's just we set
+things up we invested and now our
+tooling is doing the work for us okay so
+Claude is suggesting the wrong command
+so I'm just going to remind it I'm
+saying UV runp test remember I'm kind of
+triggering it to run a needle in the
+Hast stack uh test against the plan
+right because I did mention that
+expensively in the implementation notes
+I said use UV runp test so something I
+noticed here it's running test that's
+great it's self validating it's awesome
+but I notied we're missing a ton of
+tests right we only have test ad and
+test test a knit we need full test
+coverage I don't want to know that part
+of the codebase works I want to know
+that all of it works I'm just running a
+follow-up prompt and you can see here in
+the functionality test uh we are just
+missing test it only has a knit and test
+ad so um I mentioned that to clog code
+and now it's going to blaze through all
+the missing tests right clog code is
+fantastic this is one of the best
+agentic coding tools uh to date a tool
+like this a tool that's powerful forces
+you to rethink how you're building it
+forces you to consider that this is a
+paradigm shift that this is a new way of
+engineering and it is it is I have
+access to three clawed you know API
+tokens across different teams and I can
+tell you I've spent hundreds of dollars
+on cloud code already that number is
+only going to go up when we talk about
+trade-offs when we talk about AER versus
+Cloud code and Cloud code versus really
+anything this tool is going to cost you
+this thing is a token gobbler I know
+some Engineers have talked about Klein
+and other agentic tools you know chune
+through tokens Cloud code is no
+different everything must come through
+the context window okay so this is
+fantastic we just ran that help command
+and you can see everything looks like it
+passed properly plug code is reporting
+success if we run/ cost you can see
+exactly what I'm talking about there
+that session
+right those three and really one prompt
+cost $2 to run okay so this is not cheap
+technology right we are talking when
+you're writing these big powerful spec
+prompts we are talking dollars per
+prompt right and this is nowhere near
+the largest spec prompt I've created
+okay so you can imagine as you scale
+this up as you hand off more of your
+work as you create these more powerful
+precise packages for your AI tooling
+those costs these numbers go up right
+right and I do want to quickly mention
+this is something we talk about in
+Lesson Four of principal AI coding you
+want to be spending money to save
+time you know as long as the costs are
+worth it I absolutely recommend using
+tool like this using other tools that
+let you scale up your computer right now
+we're doing the review process okay so
+we're reviewing we're validating we're
+making sure that um you know no matter
+how great these tools get it's always
+going to just take a pass through the
+code to make sure it looks good so
+that's what I'm doing right now we
+walking through our brand new pocket
+pick mCP server functionality so it all
+looks good and what I'm going to do now
+is just understand how much impact I
+just had so I'm going to remove the lock
+file stage these current files and then
+run uh get diff head stat so you can see
+there 1,600 lines 1,600 lines of code
+created from a I think we have a 100
+line uh prompt right about 1,000 tokens
+okay so you know just looking at it from
+a point blank perspective I just 16 xed
+my impact right I multiplied what I
+could do by 16x not considering any
+complications not considering any of the
+time it takes to actually write the code
+that's just on a
+perline basis okay really it's more like
+a 30 or 40 or 50x because it takes time
+to think through and test all this code
+right and we just packaged it we created
+a great package we created a great plan
+and what did we do we handed it off to
+our AI tooling we handed it off to our
+AI coding assistant we gave it to Claude
+code the new agentic coder on the Block
+and we said here's a great comprehensive
+plan build this for us okay so um I hope
+you can see why that's so valuable if
+you kind of get it if you understand
+where things are going hit like hit
+subscribe join the journey as we dig
+into using these tools and getting
+massive value out of these tools for
+your engineering work for your career
+and for your projects as mentioned in
+principal ad coding soon there will be
+nowhere else to go AI coding tools are
+taking over Engineers using these tools
+as you can see here they're doing more
+than ever thought possible before an
+engineer even writing iterative prompts
+over and over and over they're not
+coding like this right they're not
+generating as much as they could be okay
+so this is really important so what are
+we doing now so now we're actually
+running our mCP server right so we just
+created a brand new pocket pick codebase
+as a mCP First Tool so now we're going
+to test it all
+right now we're fing up Claud you can
+see there no tools right no mCP tools
+and now we're going to take this Command
+right Claude mCP add Pocket pick and you
+know I'm adding some documentation here
+for uh snippet
+reuse and and we're going to fire that
+off so again looks like everything's
+working well that was successfully added
+I'm going to add some more documentation
+here again just for reuse I don't like
+to constantly be looking this stuff up
+so I always add these to my readme or
+you know some type of
+documentation so Claude mCP list is
+going to show uh the mCP servers I
+noticed that uh there's a bug here
+sometimes you have to run Claude mCP
+list twice to get the true list so
+that's what I've done you can see the
+second time pocket pick actually lists
+so there it is when I run claw you can
+see pocket pick exists as an mCP server
+if we go full screen we can get this
+nice beautiful view of claw code and now
+I'm saying you know list all the tools
+and so you know there's an issue here
+Cloud code running Sonic 3 7 it's not
+perfect so I'm going to be more precise
+here with my prompt I'm going to say um
+list pocket pick
+tools and you know just trying to be a
+little bit more precise with my prompt
+and there it is so we can see all the
+capabilities we have access to Via this
+new pocket pick mCP server that we had
+Cloud code uh you know quite literally
+one shot for us I think it was one shot
+in you know maybe uh two or three small
+follow-up prompts and so now we're
+running our first Command right so
+pocket list and we have an error okay so
+this is something that's going to happen
+we're we're we're expecting our large
+scale agentic coding tools to get us 90
+95 99% of the way there so I'm literally
+just going to take that error and write
+a follow-up prompt inside of clog code
+detailing where the issue is right at
+this point in the video at this point
+Claude understands this codebase better
+than I do right I I haven't even seen
+half the files in this code base right
+speaking of tradeoffs when you use
+agentic coding tools like this you will
+naturally understand less of what is
+getting built right in more high stakes
+production products I am spending a lot
+more time on the review process so that
+change got implemented I'm now running
+um the same Command right list all
+pocket picks there it is and now we have
+the correct response no items found so
+our pocket pick database is empty as you
+saw there Claude giving us some key
+information and now what we need to do
+is add some content to our pocket pick
+database pocket pick helps us keep track
+of ideas patterns and code Snippets I'm
+sure you've run into this issue a
+million times where you have a code
+snippet you have some piece of code that
+you refer to over and over and over
+again for me I refer to you know these
+model documentation all the time right
+but there are you know many other things
+that uh you might want to refer to for
+instance you might want to save how to
+run the claw 3.7 thinking tokens right
+you might want to save specific you know
+a or startup commands you might want to
+save um you know some documentation or
+quote that you liked or an idea that you
+liked right there's tons of examples of
+things that you might want to save right
+so I'm doing something really cool here
+um this is an mCP First Tool so I'm
+saying use PB paste and add a new pocket
+pick item with these
+tags so this is really cool so
+you can see there's the paste and
+there's the Pocket ad command with the
+text with the tags the tool is alive we
+have built this thing right and in we've
+built it in fractions of the time that
+it would have taken if we did this by
+hand or even with iterative a coding
+prompts okay so I mean I mean you know
+you can you can literally go back and
+count if you want um you know we ran
+Maybe six prompts and one prompt did 90%
+of the work right uh thanks to our spec
+so just testing out functionality here
+you can see I just ran pocket git with
+that exact ID and got that you know
+correct
+item and now we're just continuing to
+look through I want to add additional
+pocket picks right I want to add
+additional items into my pocket pick
+database to work with so I'm going to
+the open AI model page just going to do
+a quick Copy and you know kind of run
+that same thing right so I'm saying PB
+paste uh ppck ad so I'm using it you
+know on the Fly uh information T keyword
+that I literally just made up out of
+nowhere ppck add and then uh some tags
+right and I actually just I should have
+prefixed that with tags but Cloud code
+is going to get it here it understands
+uh how to write this and there you go uh
+there's that new Pocket ad command you
+can see item successfully added with
+those tags so it did you know understand
+the proper tagging
+and now we're going to run clear to
+reset everything I don't want Cloud Cod
+having the context of what just happened
+I want that fresh session and there we
+go so I'm running um pocket list tags so
+now you can see all the tags that
+currently exist in the pocket pick SQL
+light database and so now we're going to
+run pocket pick find 03 mini and I'm
+going to look for it in substring mode I
+really should have chosen a different
+mode there because substring is the
+default but you can see there it found
+that pocket pick item and now we're
+going to run uh list tools again so
+we're want to see all the tools
+available so just letting claw work
+through whatever it needs to run to show
+me the available tools there it is so
+I'm going to run pocket backup so I want
+to back up the database and so you can
+see there I just ran LS through Claude
+this is a kind of cool way to run
+commands you can just type you know
+Point Blank uh bash commands shell
+commands and now I'm saying back up the
+database using absolute path so you know
+back up to this current directory and
+then I'm going to run LS again write in
+claw code and you can see there's the
+result we now have that backed up
+database so that works great and opening
+up a new terminal tab here I'm going to
+move to that directory I just want to
+just doing validation right I want to
+make sure that things are actually
+working as expected opening up a cursor
+instance here using a nice extension
+here that lets me view into SQ light
+databases and as you would expect we
+have our two rows
+so again we're just validating right a
+lot of what we're going to do now in the
+AG of generative AI with these powerful
+AI coding tools is just curate validate
+review double check triple check and
+tweak right so what we're going to do
+now is add an additional mCP tool as you
+can see Cloud code by itself is
+incredibly powerful Cloud code is even
+more powerful when you add a tool but
+when you start stacking these mCP
+servers together you get something truly
+extraordinary so that's what we're going
+to do here we're going to add fetch to
+make it easier to put together these
+pocket pick items so again I'm adding
+documentation right I highly recommend
+you you don't just copy this stuff and
+fire once like make it reusable right
+make it easy for yourself to keep
+winning make it easy for yourself to
+move fast so creating that command there
+and then I'm going to you know end this
+session move back to Cloud code kill
+this session you can see there that was
+a 13 C session not cheap for the little
+work that we did
+um but there we go right so added that
+server validated it with mCP list and
+now we can click off claw with a brand
+new mCP server connected right so now we
+have the ability to make web requests
+I'm going to the Gemini docs and you can
+guess what I'm going to do here right
+copy the URL
+fetch Gemini web page then I'm saying
+then add Pocket pick item then of course
+I'll specify tags so we're going to say
+llm models Gemini and Flash so whenever
+I want to look up this pocket pick item
+I can just search for llm models gemini
+or Flash
+right so there it is uh we need to give
+YOLO mode access to uh scrape this
+entire page over and over so that's what
+we're doing we're you know we're letting
+Cloud code operate in its highest
+efficiency mode right which is Yolo mode
+it's just agentic right um it did make a
+mistake here I want all the content it's
+doing some trimming um this is one of
+the Annoying Parts about some of these
+models they try to uh uh you know reduce
+context sometimes so you have to be
+explicit every once in a
+while and there we go so we saw that
+that new Gemini pocket pick item got
+added fantastic so now I can run lists
+again information T keyword there ppck
+tags and there we go so uh there are all
+of my tags now we're going to go ahead
+and and find
+all of my items I want to look for all
+my llm
+tags and then create a markdown file
+with all the models right so there we go
+so we're going to run that first command
+you can see that that was wrong that was
+the wrong command so immediately Cloud
+code pivoted to the pocket list command
+versus the pocket find pocket find is
+for looking up texts and pocket list is
+for searching via tags I probably could
+have improved the naming there but as
+you can see here we're working through
+it making progress there's that llm
+models file that all looks great and now
+I'm just going to do some more you know
+ad hoc testing you've seen me do this in
+a couple previous videos you know create
+the AML and Json version I'm just kind
+of playing with Cloud code here and uh
+you know validating some functionality
+so you know this tool these tools are
+incredibly powerful okay it's important
+to stay up to date it's important to
+understand what you can do with these
+tools on the channel I try to share you
+know as much as I can with the time that
+I do have I try to share with you these
+kind of key AI coding ideas and
+principles and patterns but you know in
+every video we only really scratch the
+surface of what we can do I highly
+highly recommend you check out principle
+a coding if you haven't already um this
+is my take on how to transition from the
+old ways of engineering to the new way
+where we code and build faster than ever
+with AI coding tools like AER cursor and
+now Claude code right and whatever is
+coming next in the course we focus on
+principles not tools we focus on
+principles not models we know that
+models will continue to evolve we know
+that tools will just keep changing but
+you know what matters and I'm really
+proud of this the fact that you know
+with every passing day with every
+release principled ad coding is still
+relevant in fact it's it's it's even
+more relevant than it was when it was
+launched okay so I highly recommend you
+check it out um um I'm I'm packing in
+bonuses after bonuses inside the tool
+I'm going to be releasing a state of AI
+coding a long form essay detailing tools
+I'm using the models I'm using I'm going
+to break down where the industry is at
+where the industry is going so again
+that's going to be available exclusively
+for principled ad coding members that
+have taken principal AI coding to
+completion so I highly recommend you
+check that out I put a lot of Blood
+Sweat and prompts into principal AI
+coding it's going to help you move fast
+it's going to help you remain and be
+relevant and truly Thrive with these air
+coding tools as you saw here in this
+video um it's all about adaptability
+it's all about patterns that you can
+reuse across code bases across time and
+the best best way to form these patterns
+is with concrete
+principles so definitely check that out
+Link's going to be in the description
+for you um this codebase pocket pick is
+also going to be available for you if I
+have time I will create a full um you
+know piie hosted version of this so we
+can just run uvx on this but this is
+cloud code this is um you know a a just
+a glimpse of a coding with these tools
+like I mentioned I only spent $2 here I
+spend hundreds across the week shipping
+more code than ever if you enjoyed this
+video if you want to stay up toate hit
+the like hit the Subscribe join the
+journey thank you so much for watching
+stay focused and keep building

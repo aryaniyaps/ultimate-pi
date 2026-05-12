@@ -1,0 +1,1 @@
+Indexed subset: titles matching harness / agentic coding / AI agents / Claude Code, MCP-for-coding, RAG+agents, Archon, OpenClaw, etc. Title-filter regexes lived in removed channel fetch scripts; see git history. To index any watch URL: python3 scripts/index_youtube_urls.py <url>.

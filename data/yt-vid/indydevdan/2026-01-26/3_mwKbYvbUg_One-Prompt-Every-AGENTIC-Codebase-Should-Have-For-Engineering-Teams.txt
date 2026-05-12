@@ -1,0 +1,645 @@
+Do you know the simplest way to install
+and maintain your code bases as they
+grow? Here's something I've learned over
+15 years of engineering with more than
+50 plus code bases. You can tell how
+great an engineering team is by the time
+it takes for a new engineer to run the
+project locally. This says a lot about
+the team's growth and proficiency. And
+when you're joining a new team, that
+first interaction with the codebase and
+with the team members is so important.
+It really sets the stage for the new
+hire. For great teams, it's one link to
+one doc, a list of config file updates,
+and then a few commands. For most teams
+though, it's one to two days of pair
+programming, Slack messages, rumaging
+through outdated docs, and tons of back
+and forth testing. In the age of agents,
+we can do much better than this. The
+trick is in combining scripts, docs, and
+agents because agents when combined with
+code beats either alone. Cloud code
+released a brand new setup hook for this
+very purpose. It's an interesting hook
+though because it doesn't show up in the
+life cycle diagram for cloud code hooks.
+We're going to take this hook and push
+it further because when you combine
+deterministic hooks with standardized
+agentic prompts, you get the best of
+both worlds. Predictable execution,
+intelligent oversight, and interactivity
+when you need it. Let's discuss the best
+way to install and maintain your code
+bases as they grow in size and value.
+The first thing I want to do here is
+showcase a new powerful tool I've been
+using to guide my commands, agents, and
+developer tools. Let me introduce you to
+just file. This is a simple command
+runner that serves as a launchpad for
+your engineering work. You can see I
+have several commands set up, front end
+setup, backend, reset artifacts, and
+then we have something really
+interesting. I'm kicking off many
+different cloud agents with different
+CLI flags. With just file, you, your
+team, and your agents don't need to
+remember or look up flags more than
+once. They just run this. If we open the
+terminal and type just, you can see all
+the commands ready to go. This is a very
+powerful tool for scaling and reusing
+your customizable agents. Let's go ahead
+and run our first command that activates
+this new setup hook. If we type just
+cli, we're going to kick off this claw
+code command.
+It doesn't look like anything happened
+there, but this init flag changed the
+workflow. This init flag in fact ran the
+setup hook before it booted up this full
+cloud code instance. If we look under
+the hood here, open up the settings
+file, we can see we have a brand new
+setup hook. If we collapse just to our
+setup hook, you can see we have two new
+options for this hook. We're matching a
+knit and maintenance. You can see just
+like all of our other hooks, we're
+running a setup init command. Let's
+crack that open and let's see what
+happened. We have a script that runs
+several commands when we pass in d-init
+into cloud code. It's just going to run
+a few setup commands for us. All right,
+so you can see here we have a run
+function that is actually just going to
+pass this right into a terminal instance
+and execute the command. If we search
+for run here, you can see we're running
+uvync mpm install and we're executing
+this database script. Our installation
+command is doing installation work and
+it runs anytime we pass in this dash and
+flag into clawed code. This is just a
+script. This is cool, but it's not that
+novel. Most production code bases
+already have scripts like this set up.
+This is just raw deterministic code.
+It's not that valuable. It's not that
+new or novel. We'll talk about how we
+can push this to the next level in a
+moment. First, let's run our next just
+command to kick off our maintenance
+workflow.
+Same pattern, different codebase life
+cycle stage. We're going to clear. We'll
+type just so we can see all of our
+commands that we can quickly fire off.
+And we'll type just clmm. This is our
+deterministic codebase maintenance. It's
+going to fire up cloud code and run in
+maintenance mode. Just like our d-init
+command, maintenance does something very
+similar. You can see we're running setup
+maintenance and it's another script
+that's running another workflow with
+deterministic code. You can see we have
+another log file that's going to execute
+and append. And if we just do that exact
+same thing, you know, we have our run
+command. We can collapse everything to
+see what the script looks like. Let's go
+ahead and look for where we're using
+that run command. And you can see we're
+updating our backend dependencies for
+this codebase. We're running mpm update.
+And then we're doing some additional
+scripting on our database. For this
+codebase example, we're using SQLite 3.
+Just showcasing that you could be
+running some type of maintenance
+operation, migrations, artifact cleanup,
+so on and so forth. Right? This is where
+you run that. And again, this isn't that
+interesting. Okay, it's a script that
+runs when you pass in a specific flag
+into starting up cloud code. It's nearly
+the equivalent of just running this
+yourself. So, why is this interesting?
+Why did the cloud code engineers build
+this out? Right? This is an optional
+additional hook that runs before
+sessions start. Right? And to be super
+clear, if we search for setup, you can
+see that this is a brand new script. And
+you know, the cloud code team says it
+themselves. Run this to set up and
+maintain the code base. All right, use
+this for operations you do not want to
+run on every session like installing
+dependencies, running migrations, or
+periodic maintenance tasks. So again,
+not super novel, but what we can do with
+this is novel. When we combine this with
+a great prompt, some logging, some
+documentation, we can initialize and
+then install and have an agent run to
+validate this workflow. We can run a
+command that does our installation for
+us when we have that new engineer on our
+team, that new hire. We can get them
+quickly set up or we can set up our
+codebase on other machines. Hint hint,
+agent sandboxes, and they can just
+quickly set things up right from this
+just file. So, let's go ahead and see
+what it looks like to combine scripts
+with agents
+just to see all of our options. Once
+again, just cli. And you can see exactly
+what this is going to run. The same
+command with a prompt that's going to
+immediately kick off. So, let's fire
+this. And you can see here our install
+command is running right away. The first
+thing it does is it's running that
+/prime command. You can think of this
+like our claw.md file except it's
+dynamic. You can point it to whatever
+you want and you can run it whenever you
+want. It's pulling in documentation.
+It's understanding the codebase and then
+it will run installation validation.
+It's running the usual report for our
+prime command, telling us how the
+codebase works. When we're priming,
+we're getting our agent up and running
+on the basics of the codebase. But now,
+this agent is continuing to install. So,
+you can see the initialize hook ran and
+now it's going to get the most recent
+results and report them to us. So, we're
+building an agent on top of our
+deterministic installation process. You
+know, keep note, we still ran a nit
+there. So before our /prime command ran
+and kicked off the user prompt sububmit
+hook, we ran that setup command. We can
+then thanks to our logging and
+setup.nit, our agent can read that out
+and report on it. All right, so it
+actually created documentation for us on
+installation. So we have install results
+here and you can see it's reported it to
+us. We don't even need to go that deep
+though because it just gave us that
+response right here. So if we open this
+up, you can see it wrote that doc and it
+gave us the install success. Now this is
+a simple again demo example. A lot of
+what I do here on the channel every
+single week is I try to give you the
+idea you can embed into your work into
+your codebase. But you can see here we
+have a great report. Now what if
+something went wrong? This is where we
+would add common workflow resolution
+steps so that your installation prompt
+does the job you would have to do when
+you're setting up new engineers on your
+team. when you're cloning your repo and
+setting up new agent sandboxes. This
+command is going to be very very
+important for spinning up and setting up
+your new code bases. And so this is our
+/install command. So we've combined
+terminism, some logging, and our agentic
+prompt to set up our codebase in an
+interactive way. This is a new pattern
+that I'm going to be deploying in every
+single one of my codebases moving
+forward. Why not standardize your
+installation process? And we can, of
+course, open up this install prompt. you
+know exactly where this is.cloud
+commands/install
+and we can see the following workflow.
+As always, we have our standard agentic
+prompt format with only the sections
+that we need to ship this. We'll get to
+our human in the loop mode variable here
+in a second. But you can see this is a
+very simple workflow. We're running our
+/prime. We're checking if we're in
+interactive mode, which we'll get to in
+just a second. We read the log file. We
+write the results and then report what's
+going on to the user. All right. And
+then from here you could add a lot more
+detail on how to resolve any issues that
+come up if you have common issues that
+reoccur during the installation process.
+Otherwise you can just have a
+conversation with your agent and discuss
+how to resolve the specific failures. So
+that's the install command. Now this is
+where things get interesting. We've now
+combined agents with the existing
+scripts with the logging. We can now do
+something powerful like this.
+So as normal, we'll run the just command
+so we can see the available options to
+us in this codebase. I find myself using
+this just file over and over now to
+standardize certain workflows, certain
+agents, and certain ways to launching
+into engineering inside of a specific
+codebase. I really do think about the
+just file as a launchpad for all the
+commands that you and your team will run
+and your agents will run throughout your
+developer work. We're going to run a
+very very powerful command that I think
+will represent the future of how every
+codebase will get set up. We're going to
+run So we'll type just and
+we'll kick this command off and it's
+going to do something pretty incredible
+here. Not only will we kick off the
+codebase as normal, it's going to prime
+itself, get itself set up, understand
+where everything is much faster than you
+or I could ever set up a new codebase
+and truly understand it end to end. And
+then we're going to run our human in the
+loop version of this prompt. In fact,
+it's just a branching point off from our
+existing prompt. You can see our agent
+recognizes since the mode argument is
+true, I need to run interactive
+installation. And now we're going to
+work back and forth with our agent,
+answer a few questions on how we want
+things to get set up. This is very, very
+powerful for onboarding new engineers.
+So the first question here is how should
+I handle the database? We'll say fresh
+database. What installation mode? Full,
+minimal, skip, we'll do full. Should I
+check your environment variables? Let's
+do it. How would you like to set these
+up? Let's get the guided experience. And
+then we can submit these questions. I
+think Cloud Code only supports four
+questions at a time. So that's why it's
+doing this. There we go. So we're now
+running the workflow. And you can see
+our agent is doing some preliminary
+tests. We want to see if we have Python,
+Node, UV, blah blah blah. And then it's
+just going to run the installation as it
+did before, right? But now we have this
+back and forth human in the loop process
+where we can set things up together. All
+right. So there it is initializing the
+database. Now it's going to configure
+our environment variables. So these are
+just things that you need to do all the
+time with your agents. You can see here
+uh I have the environment variable
+blocked. So this agent is not going to
+be able to touch this. So now it's just
+going to directly ask me have I set up
+the environment file? And this all might
+seem like a small thing that you could
+just set up in the readme. But why do
+this by hand anymore? you know, we're
+adding to the pile of things that our
+agents can do that we don't have to do
+anymore. Write that configuration
+prompt, write that maintenance prompt,
+and then walk through it with your
+agents, right? Make that onboarding
+process for your codebase ultra smooth.
+I'll just say that I've copied and
+configured this. There's actually
+nothing we need to configure for this
+codebase in particular. You can see we
+have some example uh files there. I'll
+just say that I have done this. And then
+our agent will just continue the
+workflow. And so we're going down the
+step, right? This process that you would
+normally run with another engineer,
+right? you would need to pair program or
+you would be the one pair programming.
+We now are running into another step. We
+need to pull in some documentation for
+our agents. And as things get more
+agentic, this is going to be important.
+What context you need to pull in from
+your services, from your third party
+applications, from your ticket
+management systems, for your database.
+This could be anything. We could be
+walking through configuration steps for
+AWS or the Google Cloud CLI. We really
+are just working through common
+developer workflows with our agents to
+get things set up more quickly and very
+importantly to standardize this process.
+Right? If we look at the install.md, you
+can see here we're running prime, but
+then we're running this second command.
+Check for interactive mode. If yes, kick
+it off and ignore the rest of this
+prompt. So what happens there, right,
+install-hill. You can see here we have a
+great classic agentic prompt, but inside
+of the workflow, we have several
+questions to ask the user. And that's
+exactly what we're working through right
+now, right? So go ahead. I'll say fetch
+all docs. It's going to pull in outside
+resources that it should have access to
+cuz it has the environment variable set
+up now. And we're going to do some
+documentation scraping based on some
+information in the prompt. So not only
+is this great for the new engineer, but
+it's great for the onboarding engineer,
+right? The lead engineer, the you know,
+your your co-worker. Setting this stuff
+up is quite annoying and it's easy to
+forget
+all the different things it takes to set
+up a new codebase. This is why it's so
+powerful to in natural language just
+prompt engineer a endto-end setup
+process for your codebase. And now when
+you have to update something, you don't
+look at the docs. You look at the
+script, the initial setup script, and
+you look at this prompt right here,
+right? Install human in the loop. You
+can set up a great interactive workflow
+like this or just an end-to-end oneshot
+workflow where your agent then reports
+everything that went right or wrong. And
+so you can see here we have a
+documentation scraping step. Our agent
+pulled that in, wrote some new
+documentation, did a little update in
+interactive mode here. Looks like I just
+ran that before. And then it's once
+again giving us a great installation
+summary. So again, you can just really
+really nail in the process of setting up
+your codebase in an interactive way with
+the human in the loop, answering
+questions, going back and forth, making
+sure that things are set up properly. A
+cool thing you can do as well is add
+some verification steps so that once a
+step completes, the agent actually goes
+off and verifies that you know that
+file, that variable, that asset is in
+the right place for the codebase to run.
+And you can run oneshot fully agentic
+installation commands that just sets
+everything up in a very opinionated way.
+In our case here, it's very simple.
+We're just running that standard init
+script that the cloud code setup hook
+kicked off for us. All right, so this is
+all fantastic. I think this is really
+going to be the future of how code bases
+are set up and managed because it is the
+agentic way that properly balances
+determinism thanks to cloud code hooks
+and thanks to great prompt engineering.
+But we can push this even further,
+right? It's not just about installing
+new code bases because oftent times
+there's going to be configuration and
+maintenance work that needs to happen on
+a day-to-day week-toeek basis. And
+that's what brings us to the maintenance
+problem.
+We now have a command runner, right? A
+minimalist command runner for
+standardizing all the different ways we
+run agents and developer tools in this
+codebase. And we can of course run just
+clmm.
+So this is a gentic codebase
+maintenance. Now this is a simple mock
+testing application that I have here. We
+have a back end and a front end. I think
+this is just going to pretend to run a
+migration on our in-memory SQL light
+database. But the idea is just that if
+there are any assets, if there's any
+maintenance, if there's any codebase
+cleanup, if you want to do security
+checks in your codebase to make sure
+that nothing has gotten leaked or to
+make sure that there's no dead code or
+dead code branches, the maintenance hook
+is a great one to run. And the hook
+itself is fine. Engineers running
+production code bases, you already have
+maintenance scripts. They're probably
+just a lot more scattered than an
+approach like this. The great part about
+this is that once that deterministic
+hook runs, we now have a prompt that
+follows it up, validates it, and if it
+wants to, it can run its own maintenance
+additions to it as well. So I think
+relying on the the maintenance scripts
+alone and the setup scripts alone I
+don't think it's actually that
+interesting novel useful at all because
+we can already do this right. What is
+powerful is when you combine it with an
+agentic prompt that you can interact
+with or with an agentic prompt that is
+intelligent enough to work through the
+kind of second and third order issues
+that might arise when you're setting up
+a new codebase. And when they do arise,
+you can recode it back into the prompt,
+right? You can add the common problems
+inside of the workflow. For instance,
+you could do something like this. You
+could say common issues. The database is
+corrupt. Clear the database and rerun.
+And just to be super clear here, right?
+You would set up this section by saying
+something like this. If you encounter
+exactly any of the following issues,
+follow the steps to resolve them. And so
+the pattern here is simpler. Database
+corruption and then solution. So you
+might organize this language here like
+this. You might say problem and then you
+could say solution. And then you can
+just kind of repeat this pattern. If you
+want, you could encode this into, you
+know, YAML block here. It doesn't really
+matter. Agents are going to be able to
+read whatever you put here. But that's a
+way that you can set up maintenance and
+installation prompts that are
+intelligent and that have embedded the
+common workflows of your code bases
+installation and maintenance. None of
+this is really rocket science,
+especially if you've been with the
+channel for a while. You know that we're
+using prompts for everything now. And
+we're setting up these reusable
+workflows that we can deploy one or more
+agents to solve problems agentically for
+us. But I really wanted to capture this
+idea in a single self-contained video
+because it combined a couple of key
+things that are going to be reoccurring
+themes on the channel throughout the
+entire year. Our theme for this year in
+2026 is to increase the trust we have in
+our agents. That means being able to
+quickly operate customized solutions
+that combine the old world of
+engineering with the new world of
+agents. We're talking about
+deterministic code and agentics, right?
+Prompts, skills, sub aents, multi- aent
+orchestration, all of it. With just
+files, we now have a simple file that we
+can use to embed repeat prompts, repeat
+agents, and repeat workflows. The just
+files really do help put together the
+install and maintain workflows, but also
+this is a powerful tool for running
+agents in many many configurations and
+workflows. Right? All you need to do now
+is come into your codebase, run just and
+just see what's available. I highly
+recommend you check out this tool. It's
+very powerful. But what this offers us
+when you combine it with prompts and
+scripts coming right from the cloud code
+brand new setup hook is a standardized
+way to install and maintain your code
+bases over time as they grow. Then you
+can push that even further. Just running
+scripts is probably not going to cut it
+once your codebase gets more complex.
+You're going to want to add intelligence
+to that. We can quickly just copy and
+paste this command and build a dedicated
+prompt to do just that. We have an
+install command. This is a pattern
+that's gaining popularity. I'm not the
+only one that's seen this and that's
+using this pattern. I think the just
+file is a new addition here, but if we
+open up this blog here by Mintfi, you
+can see they have pitched this exact
+same idea very recently, January 15th, a
+standard for LM executables. They're
+trying to build a standard for this. I
+don't think we really need a standard.
+It's just the idea that matters, right?
+Slashinstall slashs setup, whatever you
+want to call it, however you want to
+organize this. It's just a great way to
+agentically set up and install and
+operate the installation process. This
+is one of those use cases, one of those
+categories of very very clear return on
+investment. Think about the time it
+takes you to onboard a new engineer. Now
+think about how fast you want your team
+to grow. Then ask yourself, can we just
+build a prompt? Can we basically build a
+specialized agent that can run the setup
+and installation process and the
+maintenance process? And if you want to,
+you can even make it interactive to make
+every single step super clear. And the
+answer to that question is you
+absolutely can. Agents are good enough.
+You are good enough. If you've been
+watching this channel, you know, for any
+amount of time really, you've seen these
+powerful patterns that we're building
+now, these powerful agentic workflows in
+our agentics, right? In our prompts,
+custom slash commands, sub aents, our
+skills. It's all available here. There
+has never been more opportunity and
+there's never been more ways to truly
+augment and automate your developer life
+cycles in your codebase. But you have to
+standardize it. You have to make it
+consistent. And so that's why I think
+the prompt, the hooks, the just files,
+it was worth bringing together here for
+you so that you can understand how to
+repeatedly solve these problems with a
+consistent pattern. Check out this
+install maintain codebase. I built this
+to give you a quick start on this
+pattern. I'll also link of course the
+cloud code documentation and I'll link
+this just command runner. This thing is
+super awesome because it's so simple. Uh
+there are a lot more features in here we
+didn't discuss. I'll be talking about
+this tool on the channel more in the
+future because it really allows us to
+set up powerful inloop customized agents
+that do one thing and do it
+extraordinarily well. I think if you're
+an engineering lead or you're involved
+with hiring engineers on your team,
+often these tools combined solves real
+problems for you very, very well. It's
+great for onboarding. New engineers run
+one command and they get intelligent
+help when they get stuck. It's great for
+consistency. Everyone sets up the same
+way every single time. And it's great
+for maintenance. You can even boil these
+prompts and these workflows into the
+default of how your engineers run agents
+in their codebase. When you set this up,
+you get scheduled health checks. Your
+codebase is always up to date. It's
+always updating vulnerable mpm packages
+which happens every other day now. And
+really what you get here with these
+prompts that help you install and
+maintain is a living document that
+executes. This is the dream for a lot of
+engineers. We can now communicate action
+in natural language and encode that for
+the installation and maintenance of your
+code bases as they grow. These three
+ideas are very simple but very powerful.
+Don't underestimate them. Link to this
+codebase are going to be in the
+description for you. I'll also link the
+just docs and the claw hooks as well as
+this blog post here for you. You know
+where to find me every single Monday.
+Stay focused and keep building.

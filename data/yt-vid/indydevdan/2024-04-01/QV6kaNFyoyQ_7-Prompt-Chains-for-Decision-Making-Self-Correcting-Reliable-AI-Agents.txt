@@ -1,0 +1,684 @@
+the right sequence of prompts combined
+with your unique domain knowledge is an
+entire five six or seven figure product
+in itself in this video I want to dig
+into seven prompt chains with real
+examples you can use to level up your
+prompt engineering ability to build
+better products tools and applications
+the name of the game in software now is
+how can you build a gentic software that
+creates value on your behalf for you and
+your users I've got seven prompt chains
+I want to show you that can help you
+achieve that goal let's start with the
+snowball prompt chain we're using CLA 3
+Haiku Sonet and Opus models and we're
+passing one or more of our models into
+our prompt chain examples the snowball
+is a really interesting prompt that
+allows you to start with a little
+information that is slowly developed
+over each prompt let's look at the
+mermaid chart to see exactly how this
+works so you start with Base information
+then you run one to n prompts that
+gather and create information based on
+your original information with each
+prompt the context improves and then
+finally you run a summary or format
+prompt that finalizes this AI agent's
+run so let's look at a real example here
+right I have this Base information three
+unusual use cases for llms I'm passing
+it into this prompt where I want to
+generate click worthy titles about this
+topic and that's our Base information so
+from this single prompt we're having our
+model respond in Json format where it's
+going to return a click-worthy title and
+our topic and that's going to create our
+first snowball after we have that we ask
+you to generate a compelling three
+section outline given the information
+and you can see here we then repeat the
+pattern right now we have the title the
+topic and the sections that creates our
+second snowball of information you can
+see where this is going right you can
+basically just continue to do this and
+add arbitrary information over time
+while keeping each prompt specialized to
+generate one thing it's really important
+that you treat all of your llms like
+individual functions with concrete
+inputs and outputs that allows you to
+fine-tune and tailor each prompt to
+solve its problem the best it possibly
+can so let's run our snowball prompt and
+let's see what we get so you can see we
+have our first snowball second snowball
+and then finally we're getting content
+and then lastly we put it all together
+in a combined markdown blog as you can
+see at each step the llm is adding
+information it's literally enlarging the
+context of the problem that we're trying
+to solve at first we only have a topic
+we pass that in and the first no ball is
+created giving us a topic and a title
+then it creates sections then it creates
+content and then finally we put it all
+together into a final cohesive markdown
+blog and you can see here we're writing
+that all to a file we can go ahead and
+take a look at this file here and the
+best part is of course it's completely
+reusable this is a really powerful
+interesting chain that's really great
+for writing blogs building newsletters
+doing some research writing summaries
+and just a note on the terminology here
+prompt chaining prompt orchestration
+prompt graphs they're all referring to
+the same idea of generating concrete
+outputs by combining llms models and
+code together to drive outcomes so this
+is one way you can drive a specific set
+of outcomes let's move on to our next
+prompt chain this is the worker pattern
+so you've definitely seen this before
+it's a really popular pattern in
+research tools so it's likely you've
+heard of GPT researcher or something
+similar the worker pattern is one that
+is really popular when it comes to doing
+research putting together ideas making
+web requests and then doing research
+based on the response of the request you
+can see here GPT researcher is doing
+something completely similar they have a
+task they generate questions and then
+they fan out into individual prompts
+that then get combined into a final
+report this is the most popular pattern
+for research type tasks so let's go
+ahead and dive into this I like to call
+this the worker pattern where you
+basically delegate parts of your
+workload to individual prompts all this
+code by the way is going to be in a
+really simplified Guist there are a
+couple requirements I'll put it all in
+the Guist you'll be able to fire this up
+in no time link for that is going to be
+in the description here is what the
+worker pattern looks like so have your
+initial planning prompt then it creates
+end steps to be processed or nend items
+to be processed for each one of your
+workers your workers then individually
+and ideally in parallel run their
+prompts and then they all funnel their
+results into a final summary or format
+prompt this creates really really
+powerful agents that are able to gather
+information on the Fly based on your
+initial planning prompt do research
+generate content generate code generate
+whatever you're looking for and then
+pull it all together into a fin
+finalized output this is one of the most
+popular prompt chaining patterns prompt
+orchestration patterns that's getting
+used right now as the use cases are very
+obvious let's go ahead and take a look
+at an interesting example so first off
+we'll just go ahead and run this so
+while this is running let's go ahead and
+walk through the code just like you saw
+we have this code planner prompt all
+we're asking here is generate function
+stubs with detailed comments on how to
+write the code to build a couple of
+functions here we're then giving an
+example of what exactly we want and then
+we're saying respond in this Json format
+where we have a list of function
+definitions but not the full function
+right this is our planning step after we
+have that we then load out our function
+stubs from our Json response I highly
+recommend that you just default to using
+Json responses it creates a more
+simplified consistent structure for all
+of your prompt chains we then Loop
+through each one of the function stubs
+and as you can guess we're then running
+prompts for each one of those function
+stubs and then combining it into a
+single large string after we have that
+large string with all of the results
+just like as you saw in our diagram here
+all of these results from each worker
+prompt get funneled in to our last
+summary SL format prompt where we then
+clean up the code and combine it into a
+single final python file that can be
+executed we'll specify one more Json
+format and then we just dump all that to
+files. py so you can see here we're
+actually using this pattern to build out
+entire file modules so we're essentially
+using the worker pattern as a kind of
+micro AI coding assistant that can build
+out entire files for us with related
+functionality right in this example
+we're building out a file writing module
+that allows us to you know write Json
+files write yamal files and write Tomo
+files all right so let's see how our
+prompt has done all right awesome so
+it's finished here let's go ahead and
+take a look at that file that's
+generated so we now should have a files.
+py let's go ahead and look at that and
+okay so we have a little bit of extra
+here that's fine let's go ahead and just
+remove these lines and Bam so you can
+see here we have let's go ahead and
+collapse everything here here so you can
+see here we have three really clean
+functions written out with comments and
+examples of exactly how to use it this
+looks really good and I hope this shows
+off the power of using your prompts to
+do one thing and do one thing well right
+we had our planner just plan the
+function sub and then each worker
+actually wrote out each individual
+function right so you can be as detailed
+about how you want to write a function
+as possible and then you just Loop that
+over however many of those functions you
+actually want to write based on your
+plan prompt so really allows you to
+divide and conquer in the truest sense
+and really keep all of your prompts
+isolated and then of course the summary
+format we can clean that up a little bit
+if we contrl Z we had a little bit of
+extra here this can all be cleaned up as
+you know with proper management of the
+prompt and the llm let's look at a more
+unique prompt this is one that I built
+into a product that I am actively
+building right now let me show off the
+fallback prompt chain if you're enjoying
+learning about these prompt chains or
+refreshing your memory on these prompt
+chains CH definitely hit the sub hit the
+like helps out the channel I think we're
+hitting 10K Subs literally as we're
+filming this video huge thanks for
+everyone watching let's keep moving the
+fallback prompt chain is really
+interesting it allows you to run a
+prompt an llm an entire model and if
+something goes wrong with the process
+that runs after the prompt it then falls
+back onto another prompt or model let me
+show you exactly what this looks like so
+you can see here we start out with our
+initial top priority prompt or model
+this pattern allows you to do something
+like this you can run your fastest
+cheapest model first you take the
+response of the prompt and you run
+whatever code or whatever process you
+have that you wanted your prompt to
+generate for you if your process fails
+you then run your secondary or your
+fallback model you then run your process
+again if it fails again then you use
+your Last Resort final big chunky
+expensive model but if at any point
+before that your cheaper faster model
+runs and succeeds this AI agent this
+prompt flow is just complete that's the
+big Advantage here it allows you to run
+your cheapest fastest prompt and model
+first let me show you a concrete example
+so I buildt up this little function
+fallback flow functionality I'm not
+going to dig into the code too much but
+I just want to focus on the highle flow
+here for you here we're generating code
+we're saying generate the solution in
+Python given this function definition so
+we're just giving it a function
+definition so we're saying text to
+speech passing in text and then we want
+to get bytes back we're asking for the
+response in Json format and then look at
+what we're doing here we have a list of
+functions where the first parameter of
+the Tuple is going to be a function call
+to each Cloud 3 Model so you can see
+here we're starting with our ha coup
+cheap fast top priority model we then
+use our cheap moderate secondary
+fallback model and then at the very end
+if all fails then we use the Opus model
+though key with the fallback flow prompt
+chain prompt graph prompt orchestration
+flow is that you need an evaluator
+function right and your evaluator is
+basically what are you trying to run
+given the output of your llm right given
+the output of each one of your fallback
+functions and in this case to validate
+our output we can just run the code
+right and in the actuality this doesn't
+actually do anything I'm just running
+this coin flip function here that's
+going to 50/50% chance return true or
+false but you can imagine that you're
+actually running the code and then if
+it's correct you then proceed with your
+application but if it's wrong that's
+when the fallback function kicks in so
+let me go ahead and just run this and
+show you a couple examples of what this
+looks like so here's a fallback flow so
+we've Fallen back to Sonet we' Fallen
+back again and now Opus is running there
+we go so our Opus model was the final
+winner here it looks like the code that
+generated is using some okay it's using
+Google's text to speech module that's
+cool we don't really care about that
+it's all about the prompt chain so let's
+go ahead and run that again right since
+this is a 50/50 random coin flip we're
+going to be successful some of the times
+with our earlier prompt and fail in
+other cases so let's go ahead and run
+that again bam okay so you can see here
+in this example you know if your first
+top prior fast cheap model worked your
+flow is finished right there's no reason
+to fall back so this is a prompt
+chaining framework that I built into an
+application called talk to your database
+this is a text to SQL to results
+application buil to help you retrieve
+information from your SQL databases
+faster than ever but you can see that
+pattern concretely used in the agent
+customization if our caches Miss we'll
+then fall back on these customizable
+agents that generate your SQL for you
+based on your natural language query and
+you can see here we first run grock mixt
+because it's hyper hyper hyper fast but
+if this fails what we're going to do
+here is actually fall back to gpg 3.5
+right so little higher accuracy still
+got a lot of great speed still really
+cheap but if that still fails say you're
+running a really complex query it just
+gets the SQL statement wrong it'll then
+just fall back to a big beefy gbg4 SQL
+agent I've got it on the road map to add
+the CLA Opus model that's probably going
+to be an even bigger fallback than gp4
+given its benchmarks I just wanted to
+show this off because this is a
+productionize example of how you can
+utilize the fallback flow inside the
+application you can see this working in
+practice so if I just run a random
+natural language query here we'll say
+let we open up the tables we'll say
+products price less than 50 you can see
+this is going to return basically right
+away based on the Simplicity of it and
+based on all the benchmarks I've run I
+can almost guarantee you that this was
+the result of the grock mixt dral model
+right so I just wanted to show that off
+in a real productionize concrete example
+feel free to check out talk to your
+database I'll leave the link to the app
+in the description the app really only
+has one purpose and it's to help you
+retrieve information faster than ever
+from your database so that's a concrete
+example of how you can use fallback flow
+the big win here is that it allows you
+to save money and save time but you also
+increase the reliability and the
+accuracy of your AI agent as a whole
+because if something doesn't work it'll
+just fall back to the next available
+model and the next available prompt and
+the prompt is also another dimension of
+this prompt chain that you can tweet
+maybe you'll have a longer more detailed
+prompt and a more powerful model in your
+second or third execution of your
+fallback function so this is another
+really powerful pattern that you can add
+to your agentic systems let's go ahead
+and keep moving let's talk about the
+decision maker prompt chain this is a
+fairly simple one we've done videos on a
+couple of these prompt chains in the
+past we'll go ahead and kick this one
+off so the decision prompt chain works
+like this it's really simple you ask
+your llm to decide something for you and
+based on those results you run different
+prompt chains you run different code
+flows let's look at a really simple
+example of how you can use the decision
+prompt chain so it's really great for
+Creative Direction dictating flow
+control making decisions you can see
+here we have a list of statements that
+you might find in a quarterly report
+from a company things like our new
+product launch has been well received by
+customers and is contributing
+significantly to our growth and then
+other negative type things like the
+competitive landscape remains
+challenging with some competitors
+engaging in aggressive pressing
+strategies right so imagine you have a
+live feed of these statements coming in
+and you're analyzing it and and what you
+want your decision-making agent to do
+that's listening to this live feed you
+wanted to analyze positive versus
+negative sentiment this is a really
+popular use case of making decisions on
+the Fly analyzing sentiment to make
+decisions on your behalf this is a
+really powerful way a powerful technique
+a powerful prompt chain to utilize in
+your products the sentiment analysis
+then responds either positive or
+negative and then what you can do
+essentially is map the result to an
+action right so you can see here in this
+simple map we have positive mapped to a
+function and negative mapped to a
+function and then we have an unknown
+fallback method right and then you just
+call whatever your next step is right so
+This Is Us running you know the prompt
+chain one prompt chain two prompt chain
+3 whatever the next step is here that's
+what this function map represents and in
+this case we're just saying you know the
+following text has a positive sentiment
+generate a short thesis about why this
+is true really you could do anything
+inside your next step your next action
+that's really up to you and whatever
+domain or feature that you're working
+through the power in this lies in being
+able to offload decision-making into
+your AI agents so you can see here we
+analyze the sentiment here we incurred
+higher than expected costs this is of
+course is going to come through as
+negative negative sentiment thesis and
+then it's just giving a brief
+explanation the core value proposition
+here is to remember that based on the
+decision that your llm has made you can
+now run arbitrary code arbitrary
+additional prompts and this is where a
+lot of latent value of llms really
+exists so let's move on let's talk about
+plan and execute so this is one that
+you're likely to be familiar with we
+don't have to go into this in too much
+detail but this is your typical Chain of
+Thought tree of thought any type of
+planning first then execute sequence of
+prompts will essentially get you to this
+result let's look at the diagram for
+this in its Essence it's really simple
+you start you plan then you execute
+based on your plan and then you end we
+saw a more concrete example of this in
+the worker prompt chain but in its
+simplified form it really only needs two
+prompts to run first you do your
+planning then you do your execution and
+just as a simple example here we have a
+simple task we're going to be designing
+software architecture for an AI
+assistant that uses text of speech llms
+and a local sqi database we then prompt
+our agent to you know make a plan we
+have this classic activation phrase
+let's think step by step there are
+several variants of this you can find
+all over online but they all boil down
+to the same thing let your llm think
+first give it time to think and in that
+thinking it acts as a context Builder
+context formatter kind of a memory
+arranger for your next prompt where you
+actually do the thing that you would
+have prompted originally in one shot so
+let's go ahead and run
+this excellent so you can see we have
+use cases we have diagrams we have
+components we have an overview that's
+all running nice and clean and then we
+have our output at the end so the idea
+here of course is without the plan the
+final output would not be as good so
+I'll let you play with that we don't
+need to dig into that one too much
+that's a really popular prompt chain
+just as this next one is so let's talk
+about human in the loop this is a simple
+one basically it's any UI ux combination
+where you're running a prompt and then
+on some Loop or via some UI you are
+asking for user input right that's
+essentially what this pattern is and we
+can visualize this with this mermaid
+chart where we have our initial prompt
+we then ask explicitly for feedback we
+run our iterative prompt and then give
+our llm more feedback and this runs in a
+loop until we get the result we're
+looking for and then things finally end
+so I'm not going to run this it's pretty
+straightforward you run your initial
+prompt so here we're saying generate
+five ideas surrounding this topic and
+then while true iterate on this idea
+unless we type done and this just lets
+you build up context build up a
+conversation build up concrete results
+over over it allows you to go back and
+forth this brings us to a really really
+important point about prompt chaining
+and Building Products if you think about
+it this single flow prompt feedback
+iterative feedback that flow is exactly
+what the chat GPT application is right
+you're typing a message this is your
+base prompt it responds to you and then
+you're saying something else right
+you're giving it some feedback you're
+having a conversation you're going back
+and forth so it seems obvious to say it
+out loud but I just want to highlight
+that this single PR flow is an entire
+product and it's like yeah of course it
+is but but I think it really highlights
+an interesting idea that we haven't
+really seen or have have truly explored
+the full capabilities of llms by any
+stretch of the imagination right there
+have been so many products coming out
+that is just this it's just the chat
+interface this is something I mentioned
+in the 2024 predictions video um we are
+going to get so sick and tired of the
+chat interface and at some point
+someone's going to innovate on it and
+create something more interesting there
+are definitely variants of this for
+instance in talk to your database there
+is a prompt results type of format right
+so we're not having an ongoing
+conversation here in talk to database
+you're just writing a natural language
+query right you're saying you know jobs
+id5 and you have a bunch of Agents
+writing in the background that just give
+you the result you're looking for right
+so this is more like a call response
+type of prompt framework and as I
+mentioned behind the scenes we're using
+the fallback prompt chain but I just
+want to highlight that idea that there
+are so many applications being built
+with the chat interface and under the
+hood that's just one prompt chain so
+there's so much Innovation there's so
+much to build there's so much to create
+I hope that this makes sense and I hope
+that you can see you know all the
+potential value that every one of these
+prompt chains has for us right the human
+in the loop is such a popular prompt
+chaining framework and frankly it's
+beyond overused right there are so many
+more creative ways to build out user
+experiences using different UI different
+uxs but also any one of these other
+different prompt chains or any
+combination of them that's the human in
+the loop you've seen that one you use it
+every single day when you interact with
+any one of these chat interfaces let's
+look at the self-correction agent real
+quick I'm just going to talk about the
+code I'll run it quickly so the
+self-correction prompt chain looks like
+this this is an idea we've explored on
+the channel before but essentially you
+have your prompt you execute based on
+the prompt if it's correct you're done
+your agent has completed its job if it's
+not correct you run an additional
+self-correction prompt and then you end
+and of course your self-correction can
+take many forms it can run in a loop it
+can run over and over but the idea is as
+simple as this execute if not successful
+self-correct right and this is really
+good for coding for executing for
+reviewing it's really great for
+improving on what's already been done
+okay great so this finished running in
+this simple example here we're looking
+for the right bash command that lets me
+list all files in the current directory
+super simple don't focus on that focus
+on the Chain the initial response is LS
+they we saer running the command I have
+this execution code in this case we're
+just doing another coin flip and then
+we're saying you know mock error so
+we're just kind of pretending like
+there's an error the core idea here is
+if your execution on your original
+prompt causes an error you then run a
+different code flow that self-corrects
+the previous run right so you can
+imagine if you're doing something like
+generating SQL or you're generating code
+or you're generating you know something
+that is executed against a functioning
+system AKA any function you can use this
+pattern to sell self-correct mistakes we
+did an entire video on this I'm going to
+link all the videos where we've covered
+some of these topics in more depth in
+the description as well as all this code
+I'm going to throw this in a gist so
+it's really simple to look at really
+simple to consume but that concludes
+seven prompt chains prompt workflows
+prompt flows prompt graphs prompt
+orchestrations whatever you want to call
+it that concludes seven prompt chains
+that you can use to build great AI
+agents powerful htic systems and you
+know new and interesting ideas we're
+really really beating this chat
+interface over the head it's definitely
+going to be here for a long time it's
+going to be here to stay but I think
+that there are more interesting
+innovative ways that we can you know
+build up products and also just build
+out really really great powerful agents
+underneath the hood right we said it a
+long time ago one prompt is not enough I
+think the llm industry and the software
+industry is really getting into that
+place where we're finally starting to
+dig into you know prompt orchestration
+and unlocking the power of different
+combinations of llms with our code with
+our data right we've talked about a lot
+of these topics before in the past I
+felt it was really important to bring
+these prompt chains back up and really
+highlight their capabilities to help you
+build great agentic software as I've
+been digging back into working on
+probably one of the most important
+agentic applications I'm going to build
+and that is my personal assistant let me
+know if you want me to share videos on
+how I'm thinking about designing and
+building my personal AI assistant
+there's a lot of really interesting
+ideas there and a lot of really
+interesting Concepts that we've built on
+the channel and some brand new Concepts
+that I'm still working through myself
+many of these ideas include you know
+building great prompt workflows using
+several of these prompt chains
+throughout filming this video we just
+finally hit the 10K Mark that's it guys
+we got 10K Subs I just want to shout out
+again everyone that's been following
+everyone that's been getting value out
+of the channel thank you so much for
+watching I really appreciate you being
+here let's continue to transform let's
+continue to evolve let's continue to use
+the best tools for the job using great
+engineering p patterns let's keep
+thinking Planning and Building together
+let's become a gench Engineers thanks so
+much for watching I'll see you in the
+next
+one

@@ -1,0 +1,375 @@
+problem scripting filming and editing
+video content takes a ton of time even
+if it's just short form tick tocks reels
+and shorts idea what if we could use AI
+to clip our existing long-form
+horizontal videos and automatically
+generate short form vertical videos with
+little to no work solution using the
+latest technology from open AI we can
+transcribe our horizontal videos Feed
+the transcriptions into gpt4 and with
+some clean code use ffmpg to clip
+combine and crop individual sections of
+our horizontal long form video into
+vertical portrait Style videos now if
+none of that made sense but you're still
+interested in an application like this
+and you don't have something that you're
+already using to automatically generate
+vertical videos from your horizontal
+videos stick around drop a like this is
+a tool that could easily be turned into
+a full-blown product today I want to
+show you guys an application I built
+called cut it up this is a python
+application I've built to transform my
+horizontal video into more than 15
+individual shorts I ran one command with
+one video and generated 15 shorts the
+app all right so first things first
+let's show off what exactly this
+application can do so as you can see
+here I have my previous Master
+disruption YouTube video that I just
+posted this week industry disruption is
+a Tale As Old As Time one so it's about
+seven minutes of horizontal long-form
+video content so I'm going to open up my
+terminal
+I'm going to go to that project folder
+so I'm going to run python Main
+I'm going to say Dash a which means all
+basically means run all the processing
+don't worry about that I'll explain that
+in a moment Dash a
+Dash CC which is going to be the clip
+count and let's go ahead and generate
+five clips and then I'm going to pass in
+the title of the video so it's master
+disruption.mov and that's it just this
+one command I'm gonna go ahead and run
+this and this command is going to
+generate five Clips so this is going to
+take some time to run okay so fast
+forward a little bit as you can see here
+um I have five brand new clips this is
+really cool right so I just sat here I
+didn't do anything from the horizontal
+video I now have five shorts so
+let's go ahead and play one
+if you use these principles the right
+way they'll point you to what you should
+be focusing on and what you should be
+ignoring with the rise of AI generated
+content we're going to see a lot of
+noise so being principled is key we're
+on in not out
+this is a fire sale not a fire
+disruption favors flexible fast-moving
+Risk Takers Sarah took a risk in
+adopting this new technology that risk
+okay nice so you can see that it cut off
+like right at the end I must have had a
+pause right after that and gbg4 thought
+that that was a good time to clip so
+sometimes I do come in here afterward
+and just like trim a little bit off the
+end I'll just come in afterward with
+Quicktime and just shorten the video a
+little bit and ship it off after that I
+have five vertical videos from the
+single long-form video all from running
+that one script this is the value that I
+was talking about in that video honestly
+like you want to focus on being able to
+do more with less to be able to generate
+multiple shorts from a single horizontal
+video is a fantastic way to leverage AI
+so let's check out another one
+scaffolds an entire application these
+are just a few examples of scaling your
+impact and focusing on doing more with
+less this single principle can take you
+to the moon and Beyond during the noise
+of the AI boom Focus On Tools technology
+and ideas that allow you to do more
+perfect example that's literally what
+this is
+UI wrappers around Chad gbt and although
+that's fantastic and there's value in
+that it's not going to allow you to do a
+ton more with less the big Winners will
+emerge focus on this principle and
+you'll know what these winners emerge
+that was a near perfect clip and
+obviously you could send that off and it
+wouldn't matter right so that's really
+cool this is working really well I'm
+really happy with this product obviously
+you can come in here and arbitrarily
+change the number of Clips you want to
+create right so if you have a 10 20 30
+minute long horizontal video you can
+come in and just say create 15 or create
+you know 100 Clips this will definitely
+take some time but the majority of time
+taken is in transcribing the video and
+then in clipping and cropping so how is
+cut it up automatically converting our
+horizontal videos into vertical videos
+let's check out the readme for the high
+level architecture of the application so
+cut it up is all about converting one
+video with one command to 100 shorts the
+first step is taking the entire video
+and we transcribe using whisper X
+the second step we use gbt4 to generate
+a DOT sh clip generator script so what's
+happening here is I'm actually reading
+the transcribed data back from whisper X
+into gpt4 using the openai apis
+and with that information I'm asking
+gpt4 to read a tsv file which is a
+specific type of transcription and based
+on the transcription I'm asking gpg4 to
+look for frames of time that have
+interesting content that would do well
+as an individual vertical video so
+that's what step two is doing and then
+I'm actually running the script that
+gpg4 is generating based on the
+transcriptions so now we're actually
+going to run this and what this does is
+it runs an ffmpeg command per clip that
+I want to generate that gbt4 has
+selected time frames for after that I've
+run a cropped command on each video
+using ffmpg once again and after step
+four I transcribe each individual video
+we're going to go ahead and burn the
+transcriptions into the video lastly
+we're going to take our clips that were
+generated and we're going to Output them
+to whatever the environment variable is
+set up to so I have this up to my
+desktop and so you can see the general
+flow we transcribe we generate the sh
+files we clip we crop we trans describe
+each individual cropped item then we
+burn its transcriptions in AKA create
+the captions and then we dump I use a
+step-based architecture that's driven
+entirely by CLI Flags so let's hop over
+to the code and I can show you exactly
+what I mean by that so this is the
+main.py file and as you can see
+every high level step is its own
+function in the main file you don't need
+a breakdown of how all this code works
+but I want to focus on some of the juicy
+Parts here so as you can see here I have
+a bunch of command line Flags you can
+see we passed in the dot a which means
+all and the CC which is the clip count
+all the dash a flag does is if it's
+enabled we go ahead and set all the
+other possible steps to true and as you
+can see here we have a ton of other
+flags so there's some customizations
+here I can set up the burn outline color
+so what's the outline color of the
+captions we can set up the specific llm
+model so this is right now just set up
+to use open AIS gbt 3.5 turbo and gbt4
+here we have the transcribe flag so that
+turns on and off the transcribe step the
+clip crop prompt and then I have crop X
+here which basically says how far over
+to the right or to the left do you want
+your short to be in the scope of your
+entire horizontal video
+and then I have the individual
+transcription step and the final burn
+step and lastly we have dump which
+basically just takes the content from
+the directory of the application and
+puts it somewhere else usually I just
+have that pointed right at my desktop
+and so after that happens we put
+together a couple models as you can see
+here it's actually quite simple the
+step-based architecture is really
+fantastic because it allows me to enable
+and disable certain aspects of the
+script very easily very quickly so for
+instance I don't need to keep rerunning
+the whisper X transcription on the
+entire video that's the most time
+consuming part of running the cut it up
+application so conditionally I can just
+supply all the other flags and ignore
+the transcription flag which is the dash
+T flag and if I've already generated the
+prompt from openai I can just skip this
+step as well so it's a really cool way
+to opt in and opt out you should
+definitely try this architecture and
+some of your own work so let's go ahead
+and dig into the prompt because I feel
+like that's the most interesting part of
+this right right so what is what's the
+prompt I'm using so let's go ahead and
+hop into my chat gbt module and I'm
+gonna I'm gonna Place The Prompt in the
+description if you have ffmpeg on your
+local machine and a horizontal video you
+can easily set this up and run this
+yourself just by swapping out a couple
+things in the prompt but here's a prompt
+so let's create blank clips of
+interesting content from file path
+using ffmpg and this dot tsv files
+remember the tsv file is the
+transcription that's generated from
+whisper X so that gets placed here I
+literally just dump the entire tsv file
+here if you have super long running
+videos like an hour plus you're probably
+going to need to use the gpt4 with the
+32k token model so then I specify follow
+these rules and so then I just list
+several roles create n calls to ffmpg
+with interesting content based on the
+start and and text of the dot tsv file
+so just to show you guys quickly what
+the dot tsv file looks like
+so you can see here industry disruptions
+the tail as old as time so that's the
+opening line for that video and as you
+can see it has a start and an end time
+so imagine this passed in as that block
+and gbt is now looking at the entire
+transcript of the video with timestamps
+and then with this you can ask look for
+interesting content and do it within a
+specific set of rules and then I want
+you to take the timestamps for the tsv
+file and the interesting content that
+you found and create ffmpg commands to
+clip the long form video within that
+time frame that you found so kind of
+cool it's a really interesting
+intersection between a couple different
+Technologies then I say each clip should
+contain a concise idea it should make
+sense to a viewer
+clips should complete where texts end
+with a period so this is really
+important if you don't if you don't
+specify this it cuts off randomly in the
+middle of sentences which isn't ideal
+obviously the start and end columns are
+in milliseconds and so they're just a
+couple additional things you need to
+specify here so that gbt doesn't get
+confused and then I say create Clips
+with a duration between 20 and 45
+seconds don't create clips that exceed
+that I pass in the video length I was
+having trouble with overflows when I was
+testing and building this so I added
+this line to prevent that
+and then I added an example of the
+output so this is the actual ffmp G
+command you can see that gets run
+basically I point it to a input file
+path and then I point it to an output
+file path as well with the file name so
+you can see there's some string
+templating going on here to get this
+prompt to work fully and that's where
+the dynamic elements of this come in and
+which is really cool because this prompt
+is really feeling the core of the
+application if you think about it when
+you're editing your video the hard part
+is adding your judgment to the
+application that knows basically nothing
+about your video it has no context your
+video editor has no idea of context of
+what is interesting or what is cool or
+the mood you're trying to capture or the
+message you're trying to convey within
+your content so this prompt using gpt4
+allows you to hand off that judgment to
+AI to say hey find the interesting
+pieces in here and it doesn't do this
+perfectly well all it meant that for
+sure oftentimes I had to come in and
+clip some of the content afterward but
+it still gets you 80 90 and sometimes it
+got me 100 there one clip would just be
+absolutely perfect and I could just
+pluck it out and use it as a short yeah
+so that's the prompt that's the juicy
+part that's really what I wanted to show
+you guys here one of the big things I'm
+focusing on in the age of AI is how can
+we make this stuff useful how can we use
+AI to apply judgment to a problem where
+we don't need the full Judgment of a
+person right and I think converting
+horizontal videos to Vertical videos is
+a great example of that right like there
+is a right way to do this all you really
+need is something that understands what
+interesting engaging content is and for
+the most part gpt4 knows what that is in
+a weird way like an understanding of
+culture and context so that's what
+really enabled me to build this
+application and really a short amount of
+time I built this in less than a week I
+think I probably sat down for three
+sessions and was able to program the
+whole thing and now I use this
+application really to generate all my
+shorts from my long-form video content
+and I save a ton of time so what do you
+think is this cool is this useful I'm
+going to share the prompt in the
+description if you've got ffmpg running
+you can modify the prompt and run this
+yourself to see how powerful this is
+drop a comment if you could use an
+application like this I'm thinking
+something like a desktop application
+that's super simple to use where you
+just drag in your or horizontal long
+form video and then you say how many and
+it just spits out shorts for you if you
+could do something like that drop a
+comment drop a like let me know I can
+definitely turn this into a product on
+my YouTube channel you can see the
+original Master disruption horizontal
+long form video and you can also see all
+the shorts that I generated with it so
+definitely check that out this is a real
+thing I'm not just making this video
+showing like a proof of concept I built
+this I'm using it and I wanted to share
+this with you so that you can see what
+you can build and also for you to
+provide some feedback so that I can
+maybe turn this into a real product by
+the way I think that the master
+disruption video that I put out is one
+of my best on AI so far so definitely
+check that out if you're interested in
+learning how to think about and form
+good principles for thriving and
+surviving in the age of AI thanks for
+watching and I'll see you in the next
+one

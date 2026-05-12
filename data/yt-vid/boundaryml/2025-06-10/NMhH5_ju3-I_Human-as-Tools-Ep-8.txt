@@ -1,0 +1,1958 @@
+Cool.
+All right. Amazing.
+Um, so today we're going to talk about
+uh one of my favorite topics. I'll let
+I'll let Vibob te it up a little bit,
+but um we get more and more requests for
+this specific topic. And I think it's
+something we've been dancing around for
+a while. Um but especially last week, I
+think there's a lot of people asking,
+okay, but how do I do this part? How do
+I do how do I how do I do human in the
+loop? How do I do human in the loop for
+tool calls? How do I do human loop for
+these things? And how do I do it in a
+production grade way?
+Exactly. And yeah, and what Dexter and I
+are here to really talk about is
+something that you'll see that we
+mention all the time is a lot of these
+principles when building with AI agents
+are not that different than software
+engineering principles we've all had for
+the last 30 plus years. We're just here
+to show how to translate some of these
+ideas that seem new into ideas that have
+existed for a long time and how to
+relate it and then how to use all the
+tooling that we already know and love
+and not have to reinvent 50 new vocab
+words just to use AI because in the end
+it's all really just
+software. Um, and today's topic is one
+that like Dexter said is very popular. a
+lot of people started mentioning it
+because this seems to be the real
+bottleneck
+uh for a lot of systems. When AI
+hallucinates a lot, what do you do? You
+toss a human at it because a human can
+help out the process. It's kind of
+similar to what we do in regular
+processes. Whenever you have a process
+where you're like detecting uh failure
+rates, you toss a human at it. You add
+more process to your process and
+eventually you have a sequence of steps
+that makes it more rigorous.
+One way to make model sequences really
+rigorous is to put a human in the loop
+uh and then have a human go and evaluate
+the system in some ways. So some of the
+stuff that we'll talk about is really
+about software architecture design
+today. And I think one interesting thing
+that we'll note is there's very little
+AI involved in actually adding a human
+in the loop. But you can use AI to make
+that experience much much more
+ergonomic. And Dexter is one of the few
+people that I've seen do this in a way
+that I think is
+like really does introduce new design
+paradigms to the level of
+like really a human is a new surface
+area at least from my perspective. I'll
+let Dexter share his thoughts on it, but
+I've always thought about like software
+as all about surface areas. So when like
+the iPhone came out, we added a new
+surface area of touchcreens. When the
+iPad came out, we had a new service here
+of big touchcreens and those are very
+different than small touchcreens. That's
+why iPad apps are uniquely designed.
+Some games only work on the iPad and
+others only work on the iPhone just
+based on where your hands are located.
+Some games only work on a computer and a
+mouse. And these kinds of surface areas
+make a huge difference in how we view
+it. Same with like TVs. They're just
+surface areas for the same kind of
+software. When you as a human Well, and
+we ended up rearchitecting a lot of
+software. so that it could work better
+across all the platforms. And we had to
+kind of like narrow the generic
+interface and push more and more
+specialization out to the edge where the
+users were interacting with it. Yeah.
+And we didn't originally do that. Most
+software is just software. Uh and then
+eventually to get the 99th like to
+squeeze more juice and make it more
+valuable from like the 80th percentile
+to the 90th percentile, we had to go do
+that. We do localization in software.
+Why do we do that? It's purely to make
+it more ergonomic to certain
+demographics of users and that enhances
+business value. Same in the AI agent
+world. Whenever you add humans into the
+system, you're just adding more surface
+area that your software has to start
+considering when you're going to go
+build systems. And I think before we go
+do anything, I think we should just
+start with a demo today because usually
+we start with a whiteboard. But I think
+today I want to show people so their
+imagination can start up and go do this.
+And like I said, Dexter has built tons
+of these tools. Do you want to show one
+of the tools off like the demo uh you
+were working on, Dexter? Oh, you want
+you want you want to open with that? Um,
+yeah, we can do that. The best way I
+think people should just see possible.
+Okay, cool. I'm going to show you kind
+of like what we're going to work
+towards, which is um kind of a thing
+I've been like dancing around for a
+while, which is like how do you how do
+you create agent experiences that aren't
+locked into the kind of chat GPT style
+workflow? Um, and I think the most
+asynchronous, most likefi interface that
+we can work with um as um almost as an
+exercise, I don't actually expect a lot
+of you to go build agents that work this
+way, uh but is over email. I build all
+my agents to work over email. Um, but
+this is an idea of a use case that is
+like much more asynchronous. Um, you
+have software that's going to get to a
+point where it needs to get input from a
+human. Um, whether it's get permission
+for something or just kind of respond to
+a request and then that's going to go to
+a human and you might not get a response
+for hours or days. And so in that world,
+you have to think differently about how
+you design your software versus, you
+know, if I'm just talking to a chatbot
+that I built in Verselai or whatever and
+I'm going to close the window and stop
+the server and come back later, right?
+Like it's only valuable in that
+synchronous use
+case. Um,
+let's screen share. And by the way, I
+know all of you can go watch these on
+YouTube. So the benefit of actually
+being on the call is you can ask
+questions, you can hop in, you can you
+can make it interactive as you want, you
+can guide the conversation. what do you
+want to go do? So, go do that. If you
+see something, you're like, I want to
+pop in, ask a question, raise your hand,
+unmute your mic, and just ask. These
+conversations are so much more fun when
+we actually like guide it in the way
+that the audience wants to go.
+Cool. Um, so I'm guess going to
+share one window for now. Um, so this is
+just my Gmail. Um, and what we've done
+is,
+uh, oh man, let's just go ahead. You
+have an AI that works agent, right? Um,
+yeah. Yeah. Yeah, that's what it's
+called. AI. Yeah. Here we go. So, we
+made this agent called AI that works.
+Um, and we've given it its own email
+address. And I It's got access to a
+couple tools. Can you do some math for
+me? It's some basic calculator tools and
+stuff like this. Um, but we can
+basically say, you know, can you add 10
+and
+12? And what's going to happen here is
+this going to cause an event to land in
+our server. And we'll get into kind of
+how all that we're going to actually re
+Oh, sorry. I'm not sharing right now.
+Yeah, let's share the whole thing. Um,
+and remember all these are the things
+that we like to do is we like to use
+really really basic tools in the
+beginning like add and math because it
+makes it so unambiguous
+on what tool is supposed to do otherwise
+there's a lot of things that can happen.
+So if you've been to the 12actor agents
+workshop you've seen us kind of build
+out these prompts and these prompt
+templates and BAML and stuff like that.
+And we'll get under the under the weeds
+of what that looks like. Um, but we'll
+see the model kind of finished here and
+said, "Okay, now we're done for now."
+Um, if I go to my sent mail here, it's
+come back and it's responded to me. And
+I can say, you know, can you divide the
+result by 12? And one thing I'll note is
+we've, as an example of a scary tool
+that needs human approval, we use
+division because division might explode
+if you divide by zero or something.
+Obviously, it's not uh but it's again,
+we like VBO said, we like to use toy
+examples so it's very clear to you all
+what's part of what we're trying to
+demonstrate and what's kind of like you
+can go swap in your own stuff here for
+this
+later. Does that make sense so far?
+Let's see the division. Let's see the
+human in the loop. Let's see it do it.
+So when this thing outputs divide, we've
+got some special logic where we say,
+okay, that tool deterministically
+requires approval. Every time the model
+calls that tool, we need to ask for
+permission. And so that's going to call
+our deterministic code. And we'll see
+our new new new agent. And it's saying,
+"Hey, we want to run this." And I can
+give it call something out. Um I want to
+call something out here. The Can you go
+scroll up before you go do that? Oh,
+yeah. Um and so in the first one when we
+added to add, it just responded with the
+sum. It did the tool. It did the math.
+And I want to note the LM didn't
+actually do the math. We use a tool to
+do the math. and the LM created a text
+message from that to go and go return.
+Now the next thing that we did is we
+asked it to go divide that and it used
+that context
+um to go figure out how to go divide
+that and then model in this case it
+actually ahead to the same user. In this
+case it's going back to the author that
+asked them to do the command and asked
+them to validate.
+What if we wanted someone else to
+validate the tool instead?
+Yeah, we'll get into that. That's a
+great question.
+Um, so here's our new here's our new
+message. It took my feedback and it's
+trying again. So, it didn't do the math
+yet and I can say like great. Um, and
+then that that will approve the thing.
+And someone asked a really good
+question. One one more question. Someone
+asked a really good question about us.
+Can you hit the triple dot? I want to
+notice this. There's different ways and
+modalities of approval. Dexter right now
+is using email, but see that link down
+here? We could have just as easily
+clicked that instead and done approval
+as well. So when you think about
+approval or rejection, it doesn't h like
+this is why LMS enhance the human loop
+experience and don't just like make it
+possible, they make it different.
+And this is a thing I say all the time,
+which is this idea of like we've been
+sending emails to users from software
+for over a decade now. It's always been
+a part of a really important kind of
+growth loop. But the call to action in
+all those emails is always click this
+link and get pulled back into the
+software which is a thing that the only
+real option you could do to review a
+report to see an answer to see whatever
+it was. Um you would click the link and
+then you would come into the tool and
+you would like see exactly what was
+happening here and you would say okay
+cool here's the thing and I can interact
+with it here. Um, now with LLMs, I can
+just respond with natural language from
+wherever I already am. And so it's it
+gives you a way to deploy your software
+to where your users already are. And I'm
+seeing more and more apps and more and
+more founders build really successful AI
+apps where someone will log in and
+configure it once and then from then on
+they just interact with it from other
+places. And so we'll see because this
+was approved it was able to run the
+divide function. Um, and I'm going to
+answer the first question of the thread
+uh real quick, but um, anything else
+quickly before we get into kind of how
+we're tracking the state here? I want to
+call one last thing out here, which is
+Yep. So, the only difference between
+replying with human in the loop with
+over email versus clicking the button is
+clicking the button is like
+99.9999% going to be correct. It might
+still be wrong because a human might
+click the wrong button and there's
+process that happen. Right. We increase
+our error rate a little bit by giving
+the user the convenience of responding
+in natural language because the model
+can get that wrong.
+Yeah. Right. There's a prompt here
+somewhere that is classifying the
+human's message as an approval or a
+rejection. Exactly. So for more nuanced
+use cases, you may not even want to
+allow human a human in the loop. You may
+want to require that the human click the
+button manually like releasing your prod
+system to like a million users. you and
+this is actually something that
+Anthropic was talking about with the
+model context protocol stuff and I know
+we have opinions on this but um they
+have this thing that they're working on
+called the elicitation API which is you
+know we don't want to just ask a
+question to the user but we actually
+want to give them some specific like
+options to choose from and those options
+might go back to the LM but they might
+also go back to a deterministic set of
+code where it's like hey which of these
+three really expensive ML jobs do you
+want to launch And you want to be very
+deterministic that only a human can
+approve the launch of a expensive ML
+job. Exactly. Um, now we should talk
+about the session state and Yeah. Yeah.
+Yeah. And we'll we'll actually go look
+at the trace for one of these
+conversations. So we have this we have
+this thing that we're using that we're
+going to build up to, but basically we
+have this thread store interface where
+we can create new threads, we can get
+threads and we can update threads. And
+this comes back to our um concept from
+12 factor agents which is like the state
+doesn't have to be open AAI message
+chain. It can be any object that you
+want that you can serialize for the LLM.
+And so we just storing this in a file.
+We have the JSON one that like the human
+can that the that the actual program
+will use, but then we also just have the
+raw text version. So we got an email
+from me to AI that works. Can you do
+some math for me? And we have the
+inbound message. And then we called the
+ad tool and we got a response. And then
+we called done for now. And that so
+these different tools, the ad tool just
+caused us to go do the math and get the
+response. The done for now tool caused
+an email to get sent. Um that's this
+response here, the sum of 10 and 12. So
+we're we're taking each of these tool
+calls in the loop and we'll go detangle
+this and get under the hood and on the
+whiteboard in a sec. Um but then we got
+another human response. And so when I'm
+replying to this thread, the model knows
+how to route that back to the right
+conversation. Um, and so you have this
+divide call and it actually rather than
+running the call, we got a human
+response. Hey, you got this feedback.
+And so at each step along the way, we're
+passing this into the LLM and this is
+the prompt that the LLM is seeing.
+Exactly. Exactly. And I think the key
+part here is we actually built some
+debugging tools to help ourselves out
+here. Like the .txt file is just to make
+life easier. It's like here's the latest
+state of the message, but theJSON file
+is actually the source of truth. Can you
+click on that really fast?
+Um, which one? The JSON file.
+Yeah. Yeah. And I want you guys to
+notice some of the debugging work that
+we built here to make this easier. And I
+say we, this is Dexter mostly. Um, and I
+think we built the first version of this
+together. Yeah. Yeah, I know. But still,
+um, specifically, I want you guys to
+notice this. Um, this thing is a time
+stamp that Dexter put on there. Why did
+he do this? It's because if you're
+debugging and you just want to quickly
+find the most recent thread, it is
+really freaking annoying to search
+through all a bunch of UU IDs to go find
+this. This just makes life a 100,000
+times easier and faster for debugging
+processes. And that's just software. You
+could do the same if there were no LLMs
+involved. You you you and you wanted to
+dump you didn't want to write a bunch of
+observability. The idea here is you can
+drop in whatever observability tool you
+want. I think even Bam I might even be
+sending traces to the BAML web app. But
+the point is is like if you think about
+your agents as just this sort of um I'm
+actually going to pull the whiteboard
+up. Um show the JSON while you do that
+really fast and then we'll show the
+whiteboard too. One second. This thing
+right here is just a SQL table. It's a
+SQL table of a row of events. It could
+be a SQL table. In this case, we just
+did the most simplest backing store
+possible, which was a file system. In
+the file system, every single thread has
+a UUID. Every UID is associated with an
+email sender and a receiver I and a sub
+and an email ID, right? Email thread ID
+is what it's associated with. There's
+Yeah, there's some like basic basically
+like the the inbound web hook payload
+that we're working off of is this
+conversation.created object. So there's
+like the from the to the subject and the
+message. And then if you forward one one
+use case we can look at a little more
+advanced is like what if I just want to
+forward an email to the agent and be
+like hey can you do the math for these
+people of this conversation or hey can
+you create a ticket based on this this
+like debate we had on our engineering
+thread and then that's just like more
+context that you might have to because
+that other email's thread ID should be
+pulled in but I think the key part here
+is a lot
+a lot of people view all this agent
+state management as complex
+But actually instead of even thinking
+about as agent stuff, what I would do is
+I would purely think about it as it's
+just if you had to build a system that
+was going to show build stuff on top of
+email, how would you store that data in
+a database? The fact that an L happened
+to respond to it is just a user ID maybe
+with an extra metadata saying this is an
+agent or this is like this user ID, but
+like nothing else matters. It's just I
+want to save something that represents
+the state of a conversation into a
+database.
+Yeah, it's good. Um, and I'll just say
+like in production we run these agents
+and we store all this stuff in Reddus.
+You can store in SQL. You can do
+whatever you want. This is one of those
+examples of like you have this interface
+in the state thing. You can store this
+stuff however you want as long as it's,
+you know, as long as you're keeping it.
+Oh my god, VS Code started doing this
+lately. Uh, I accidentally click on the
+author thing and it's half the freaking
+page. Um, and you notice we store it in
+JSON and TXT and we do different
+serializations because they're for
+different people. But we could write
+this into a database. We could write
+this into a memcache store. It it
+doesn't matter. We could write this on
+like cold storage iceberg. It it it
+doesn't matter. So let's talk about how
+this stuff works. Um, so at the core of
+our agent is um what we call this like
+I'll call it the inner loop, the agent
+loop. Um, and this has a couple
+different components. And, uh, this
+comes straight from, um, uh, let me just
+pop into 12 factor agents. Yes. We got a
+question. No, I was going to say we can
+just pop it. We can show them the
+YouTube video as well if they want. It's
+basically, and we did all the code for
+this in like three episodes back or
+something. Four episodes back. Yeah, we
+did. We did do all the code. But we're
+not going to go too deep into it, but I
+basically like our inner loop is going
+to be this kind of like fourstep thing.
+So we have a prompt that is like tell me
+what the next step is. We have a switch
+statement which is like okay based on
+what JSON the model output for the next
+step. What was the structured output?
+Then we're going to run some code based
+on you know whatever that JSON has.
+Usually there's like an enum that is
+like the function name or the function
+type. Um we're going to store as new
+events happen we store them in the
+context window. That's that XMLA thing
+that we showed you. And then we're going
+to loop basically until we get to the
+final answer. Um, and the final answer
+is just another part of a switch
+statement that happens to not that
+happens to tell us that the best thing
+to do is break out of the switch
+statement. It's not anything special
+and it's not even actually I would say
+like this. So this is what I'm going to
+call the inner
+loop. And then there's another loop that
+I call kind of that we'll call like the
+outer loop.
+which is okay, we get to our final
+answer, we go to a
+human and then a human might respond and
+push back into this inner loop. Um, and
+so the agent might go back in and call
+lots of tools. And so the reasons why an
+agent might exit out of the loop,
+there's a couple reasons. So we're going
+to specialize this a little bit more.
+Um, and we're basically going to say we
+have a couple different kinds of things.
+We have safe tools, things like readonly
+tools or we say like add, multiply,
+divide are all safe, but divide is
+unsafe. And so if we call one of our
+safe tools, then we're just going to
+take the result. So we have like our
+initial request.
+It's a while loop for now. Just assume
+while loop. Yeah. Yeah.
+Result. And then we pass that back in
+and we say, okay, what's the next step?
+Um and so this code looks like okay we
+say determine next step we serialize our
+thread and this looks like
+this is essentially a uh oh that's why
+it didn't show up.
+Um so you know very simple prompt you
+can make this much more advanced. I've
+added some of the stuff from the 12actor
+agents workshop but you know you're a
+helpful assistant. You can give it some
+more behavior stuff. The idea is like
+when we build this stuff and we ship
+this code for y'all to use, we're trying
+to give you a canvas to paint on and
+give you direct access into the most
+important parts of the loop because I
+don't know about you, uh, but I can
+write a switch statement and I can write
+a for loop or I can maintain one that's
+already written. And what you really
+want to be doing, the thing that's going
+to determine the accuracy and the like
+value and the magic of your app is how
+well you can get the agent to pick the
+next step while it's in this loop. Uh,
+and so you want to focus most of your
+effort there and maintain control over
+everything else. Yeah, exactly.
+Um, so we're going to run this, we're
+going to run this prompt, we're going to
+get our next step, we'll put it on the
+thread and then we'll do a switch
+statement. So, um, we haven't gone
+through the customer support stuff yet,
+but, um, basically, if it's done for now
+or request more information, we return
+the thread. Also, if it's a scary tool,
+we return the thread. Um, and in this
+case, we're not returning any extra
+information about why we exited because
+we can tell based on, and I'll show you
+in the CLI here, basically.
+Um, and we'll do a multi multiplayer
+demo as well. Um, but in the CLI, we
+basically we're going to create a new
+thread. We'll run it through the agent
+loop and then we look at the last event
+and then based on what the last event
+was. If it was divide, then we're going
+to ask permission to divide and we might
+actually go run that function. If it was
+one of these other ones, then request
+more information for now. Then we're
+just going to do this message on the
+CLI. So I can come here really fast. I
+want to highlight this code a little
+more. I just want people to read this a
+little bit carefully. I want you guys to
+think about one thing that's really
+important here. What we're not doing
+here is we are not doing some voodoo
+magic with some AI framework. We're not
+doing something special. We're just
+saying that this thread is a thing that
+we can analyze because it's an object
+that we invented of our own based on the
+application logic that we need to use
+and we just said get the very last
+element of that thread. Then based on
+the type of messages we have, we know
+that there there are three special names
+of messages that we need to handle.
+One of them is we know that we're here
+because we know we know that it's one of
+those because we know we're in the outer
+loop. The agent loop exited which means
+we return we the agent output a tool
+that means okay we need to go to the
+human. So if it's a safe tool we just
+call it and loop again. Um but in here
+we're call this this. Yeah. So basically
+the idea is like one of the things you
+should take away from this is like
+creating the agent. Sorry this one.
+Yeah. Exact the Y loop. Yeah.
+Yeah, creating the agent and like its
+core logic and its set of tools is kind
+of generic and reusable, but the way
+that the agent operates in the outer
+loop is something where you can swap in
+different interfaces. And so you can
+have a CLI to interact with the agent,
+you can have a web app to interact with
+the agent, or you can do the demo we
+started with, which is like an email
+surface area. And we'll get into how the
+email outer loop looks like. Um um I'll
+show you the once we get done looking at
+this code, I'll show also the um the CLI
+and what that looks like. And I want to
+I want to highlight this thing like all
+we're doing here is when we get divide,
+we just tell the user this is what we're
+trying to go do. And if if I didn't put
+this handle this case for divide, then
+our app wouldn't work because our inner
+loop says divide needs to exit out, but
+then this one is not handling divide. So
+that's an error that I can build by
+default instead of having to go do it on
+my own. I just and then I use another LM
+to actually detect approval or feedback.
+But I don't have to. I could literally
+require a explicit checkbox here. That's
+what it is. We do like press enter to
+approve or type feedback to cancel.
+Exactly.
+Um so ask human CLI is not quite a tool
+that gets called because when you call a
+tool inside the loop basically like I
+want to this this is one really
+interest. So you could have a scary tool
+and you could say in the body of this
+function I want to say like ask human if
+approved then go do it. The problem here
+is what happens if I call this scary
+tool and then the server crashes. Then
+we're in the middle of a tool call.
+Let's say the human approves it but the
+server never like the server crashes
+before we go do it. When I relaunch
+this, my context window is just going to
+have this thing and we're gonna have to
+drop back into this loop. And so if you
+want to do asynchronous stuff, basically
+for scary tools and for human tools,
+anything basically that might take a
+long time that you want to be pursu, you
+could even do this for safe tools,
+although it's kind of feels like
+overkill. Um, you want to exit out of
+this loop so that you stash this thing
+on the context window and you store the
+state of like what was the last thing we
+were doing. Specifically what you do is
+you edit exactly you just save it to the
+database and then you do a new trigger
+and even calling it outer loop is
+probably like might be a little
+confusing. What I would say is like the
+way I think about this is I just exit to
+a database. Exactly. I just store this
+to a database somewhere or some file
+system. Then I trigger another workflow.
+If you're familiar with like AWS SQS or
+anything, I basically trigger a second
+system that says now from
+here send out an email to this human
+with this thread ID or the state ID that
+I have stored. Then that workflow will
+trigger and then that human will respond
+and say here's a response to this thread
+ID. I save that to my database and then
+I just continue onwards. It's the same
+as every other sort of process system
+that I would really be long term. And
+the fact so this is one of those
+concepts. Yeah. Go ahead. The fact that
+it's an AI is just an implementation
+detail. That's the key part. Don't think
+of AI as the core part here. It's an
+implementation detail, not the key part
+of it of how you orchestrate your
+workflows. Right? So this is another
+concept from 12 factor agents that has
+nothing to do with human in the loop.
+This is literally just a thing that all
+of your stuff should do, which is like
+you should be able to trigger your agent
+with some programmatic API like REST or
+MCP. Again, like there's some email
+processing stuff going on the in the
+background here, but eventually becomes
+an HTTP request. Then when you call a
+longunning tool, whether it's a long
+long ass workflow or it's just interrupt
+or it's human human in the loop or
+whatever it is, you're going to pause
+your thing. You're going to exit out to
+what I call the outer loop, which is
+conceptual, right? There's there's code
+there. It's just, you know, it's a
+different layer of the execution state.
+We'll take the whole context, put in the
+database, and say, "Hey, we called that
+long running tool." And then we launch
+the workflow, and when it's done, it's
+going to call back to us with uh oh,
+this shading is weird. Uh it it's going
+to post a web web hook back with the
+state ID that we saved to the database
+and the result of the workflow. And so
+we can use that state ID to pull our
+previous context out, push the result
+onto it, and send it right back into the
+LM. And this works for anything that is
+asynchronous. And again, you could do
+this for every single tool call you do
+if you want to be like really aggressive
+with your checkpointing. But if you're
+doing long running stuff, this is
+absolutely essential. And again, there
+are tools like Langraph. There are lots
+of different things that let you
+checkpoint workflows. You could look at
+things like temporal or cadence or
+whatever it is. We want to ship really
+simple examples so that you understand
+the concepts here of just literally just
+write it to sub file system. You can
+drop in your own database as as you want
+to. Exactly. Um and I'm going to I'm
+going to address some of the question
+that people have. One is this like
+local first architectures and CRDT. I
+don't know what CRDT is. This would be
+async pattern for workflows. Async isn't
+the right word because specifically this
+is not like async. This is more like
+task control flow. What I'm really doing
+here is I have a sequence of tasks that
+starts off some some way to start this
+job. I just also happen to have another
+entry point into here that doesn't start
+from zero. It's exactly it either. And
+you might even post the entire context
+window. Other people have done this
+where like they push the context window
+into the workflow system and say I store
+nothing here. It's the workflow systems
+job when you're done to send the entire
+previous context window plus the result
+back in and the cho and the and fact of
+these matters are like it's all your
+choice based on your design pattern that
+you want to go do. So for example, we
+all have clicked on mail to links and
+most time when you click a mail to link
+when you email someone it just opens up
+a blank thing but every now and then I
+click one that comes in pre-filled with
+some subject and body filled in. The
+whole point of that is there they don't
+save anything into a database. It's all
+encoded into the URL and you click on it
+and that populates all UI providers for
+what the next email that you're sending
+out. On the other hand, if you were to
+file an issue on our GitHub, then we
+have some templates that we save into a
+database that you click on that reloads
+you and let you start from that
+template. And it's the same idea. We're
+just saving stuff to a database. Nothing
+too complex. It just happens that some
+of these things require long form may
+wait five days before a human checks
+that box. And because a human is
+checking the box, not a person, not an
+agent or something else, it it may take
+five days. It may take two weeks because
+they're on vacation. Who knows? We don't
+want to have that machine running
+infinitely on a spin loop until the
+human does it. So we we changed the
+software architecture pattern to have
+two separate entry points that say save,
+serialize, and then continue. That's it.
+And I think we need to clarify a couple
+things to address some of these
+questions in the chat. Um there's a lot
+of talking about like should should we
+make the AI do an unsafe tool or like by
+like basically having a tool call to
+fetch previous history from a previous
+workflow. Um, and like I want to put
+that together with like I don't see
+where the tool is made available to the
+decision loop. And so by Bob, can we
+clear your drawings? Sorry. I love my
+drawings.
+You're a good drawer, dude. You're um
+we're going to put it in the
+Metropolitan Museum of Claude.
+Um I might uh Okay, cool. So let's talk
+about the decision loop, right? So we're
+giving this model a couple different
+sets of tools. We have the add tool,
+subtract tool, multiply, divide tool.
+And then we're giving it a couple
+different um tools that are like either
+done for now or clarification request.
+And so we're having the model like kind
+of declare its intent when it wants to
+contact a human or exit the loop. It's
+calling one of these tools, but we don't
+we don't treat it like we treat most
+tool calls, which is like the model did
+a thing, so we're going to call a
+function map to that. We are doing a
+very kind of custom switch statement
+here. We're like based on what
+structured object was output, we might
+go call a function and our handle next
+step is basically just going to switch
+over the tool type and go run it. But we
+also might just return the thread. And
+so let me show you what this looks like
+in the um in the CLI case just because I
+keep saying I'm going to show that off
+and I think it'll make a couple things
+uh a little more clear. Yes. Yeah, we
+should just run it. That's probably the
+easiest way.
+Um, so we didn't put anything in. I say,
+you know, add 12 and three, then add f,
+six to
+the
+result. I can't spell
+and you can you can see what the model
+is doing. It's literally taking this. We
+all saw what it just did there. Um,
+there we go. Gave me the output. Um, and
+I can
+say now multiply that by and then I'll
+just put in some garbage. And so this is
+going to call a different type of tool
+which is request more information. But
+these are both going to have the same
+effect which is I'm going to get another
+message printed to the console. Never
+mind divide the last result by
+12. And now we're getting our approval
+step.
+So, I can say no, use six instead of
+12. And then I can hit enter and we'll
+approve that. And then I'm going to get
+my final answer.
+Notice one thing special here. When
+Dexter did that, when he when he said
+no, swap it out, it actually came back
+for another approval because divide is
+still scary. It didn't magically just go
+and say no. And there's nothing he could
+have typed into his code to prevent it
+from actually uh doing that because what
+it would do is it would actually call
+the divide tool. It would it would
+update this thread. Then it would say
+the next best action is divide no matter
+what the the get next thing will always
+be divide. Can you go back to your agent
+loop really fast? I was trying I was
+trying to get the I was trying to get
+the thread in there. I forgot we had
+that commented out. But you can do the
+same thread store thing for observe even
+though this is like really a throwaway
+conversation. You can you can add that
+thread store in um if you want to go
+back to the agent loop really fast and
+decide. Yeah. Yeah.
+Um let's go here. Like specifically what
+happened is once the model has picked
+divide as the next tool regardless if
+it's an update or anything else Dexter
+has enforced in his code I will always
+require a human approval. There's no
+there's no prompt injection ever
+possible that does that breaks that
+right. It's it's just not possible. It's
+always deterministic. That's 100. It's
+just code. It's just software. We've
+enforced in the software that this rule
+exists. So there's no risk for divide
+happening by accident because the only
+way divide can be triggered is it goes
+through here. Step back out to the outer
+loop.
+Yeah. It goes through there. We return
+the thread. Then we ask human CLI which
+is piece of software that we wrote. Just
+named that. And then here we ask the
+human via CLI approval to go say yes for
+sure. And only if the human actually
+approves it will we run divide. So you
+could do this for example for refunding
+a customer order. It is not possible in
+an automated way to send a customer a
+refund back. So no matter what happens,
+no matter what prompt injection happens,
+it will always go to someone in your
+support team to actually hit the
+checkbox before money transfers over
+back to them. And you can enforce this
+in a guarantee.
+Yeah. Um, we could even give that a
+shot. Do you have the email thing
+working?
+Yeah, that'll work.
+Um, process refund.
+And by the way, so this one is actually
+not going to be with the user that we're
+talking to. This is going to be with the
+um with some third party. This is
+another like uh multiplayer example
+basically. So let's let's do this from
+the ground up. So we're going to add a
+tool. We're actually going to remove
+this because we had this request
+approval from manager which is again
+non-deterministic. It only happens if
+the LLM tries to do it. Um but let's add
+the refund tool here.
+Um, and we need a order ID and and
+things like that. And then we'll pop one
+step out to our agent loop and we'll
+say return it for human approval. And
+then in process refund, we're actually
+not going to we're not going to ask back
+to the person we're talking to. We're
+going to do to a different person. Um, I
+think we have task manager. Yeah, that's
+almost
+it.
+Um, yeah. So, this is going to ask the
+manager and um we can do it over email
+or we can do it over Slack. I did get
+the Slack thing working.
+Um and then what is this supposed to
+[Music]
+return? Um
+manager response and then you do some
+filter approval probably.
+Yeah. So, this needs to return an
+approval.
+We have some new type stuff in here uh
+going. But let's see what type is
+this. Okay.
+Huh? It'll make me feel better if you do
+or or false instead of exclamation mark.
+Fine. Vertical bar. Yeah, there you go.
+Yeah, there we go. Okay.
+Um, great. So, if it was approved, um,
+we'll do that. Otherwise, we will return
+that the user denied it. And in our
+handle next step, we actually need to
+handle that process refund now. So if we
+actually if it actually is approved and
+we pop back into like we use run this
+function in the inner loop um we will
+just push uh you
+know refund process successfully.
+Yes. And notice that we're just
+controlling this. We're not using an LM
+to generate the response. We didn't do
+anything. We just we're just dumping out
+that the refund uh processed
+successfully.
+Um, yeah, we're not actually doing the
+thing, but this is where you would
+actually go process the refund. And then
+I think that's it.
+And try to run this. We'll slow back.
+We'll There's another type that you have
+down below.
+Yeah. What's going on? You have to I
+think
+I don't know why. Why is that failing?
+Oh, you can't call some.
+Yeah, it's Oh, you know what it is? cuz
+we have this block twice. Yeah, exactly.
+There we go. Okay. And you want to
+delete the responsing at the top
+probably. Yeah. Yeah. And agent.ts has
+an error as well. Type systems are
+great.
+Yeah, they fix everything. Um, and I
+want everyone to notice the reason that
+we know what this
+is.
+Um, oh, you got to return the thread.
+The reason that we know what this is,
+can you go to the process refund tool
+definition uh in your uh prompt really
+fast just in the BAML? Yeah. Yeah. Yeah.
+So, we just added another cool tool
+called process refund. That's it. It's
+just another data model that the model
+now has availability to itself. And you
+can see type line
+22 and that's all we did. Now this tool
+that we have determine X accept used to
+have human tools or calculator tools but
+now has another tool called customer
+support tools to process refunds. We
+just added one more and you can actually
+you want to zoom out. You actually see
+this. Yeah,
+you can see this in the prompt now. It's
+saying you know we put in the user input
+and then um what should the next step
+be? So we can even test this with um a
+little test, right? Just write one. I
+don't have one ready. Oh, there we go.
+It actually did it for you. Nice. So, we
+can run this and we'll see. Okay, cool.
+The output was, hey, we need the reason
+for the refund and the amount to be
+refunded. And so, we can assert that we
+can write assertions of like, hey, okay,
+we expect the intent is request more
+information here. Um,
+let's make another test case. Yeah, we
+can make another test case. Yeah, sure.
+Yeah, details with all details.
+It's for the jeans.
+They're too big and baggy. What is this
+Gen Z
+nonsense? They were
+$200. And I think here now we output the
+intent process
+refund. Um, and now we can say, okay, if
+that reason is not good enough, then we
+can come back and change our prompt and
+be like, no, the reason has to have all
+of these characteristics, and we can
+write tests around that as well. Can you
+add that to description on line 17?
+Um,
+the
+description should be detailed.
+These three
+reasons. Let's see what the prompt
+does. Um, must be 10 reasons.
+Let's see what that does. Let's see.
+Depending on the model, it will just
+hallucinate a bunch of extra reasons.
+Uh, must be 10 reasons verbatim from the
+customer. And can you make it a string
+array instead of a string? I'm curious
+if that makes it I'm curious if that
+ends up. Yeah. Okay. But then we're
+going to run this thing. But this is
+like the popping around different parts
+of this. And now notice that didn't
+actually give me 10 reasons. And there
+might be nothing I can do in prompting
+world to make this better. So what I
+could do is I could in my code assert
+that reasons length is at least 10. And
+if it's not I change it to a request
+more information request
+programmatically in my
+code without actually relying on you
+would
+say you know like handle neck.
+Exactly. Exactly.
+And so this is why it's so valuable to
+have control over the internals and the
+transition and that uh as we call it the
+boundary between the LM based code and
+your deterministic code and to be able
+to take yeah now get rid of that
+nonsense and actually change it back to
+just like reason being a string because
+like I think this is the whole point
+about human loop systems like this human
+loop system is really related to a
+couple of things but it's not just about
+just like how do you go do The point is
+control everything and then you can make
+the app do whatever the heck you want
+with plain software. Yeah. And human the
+loop just becomes yet another way to
+transition control flow between this
+tight inner loop where you're calling
+tools to external systems. And because
+we own the thread the thread structure
+and how we do the events and how we
+serialize this and move this around.
+It's just
+software. All right. Should we try to
+run this? You think it's going to work
+on the first try? I think so. I think
+so. I mean, that's the beauty. Like,
+type systems usually solve most
+problems.
+All right. I need a refund for jeans.
+They're too big. What is this? Gen Z.
+That's funny. So, it said process
+refund. Um, yep. So, now it should email
+you, I believe. I
+think, let's see. I'm going to check
+also.
+Hit that refund button. It might be
+here. Here we go. There you go. So,
+agent support agent needs approval for
+call this thing and I can say like can
+you ask them for is this was this one
+from just now or is this old? Yeah,
+that's the right one.
+Okay. What color the genes were
+first? And so I can reject this and give
+it feedback. And we can go and look in
+our thread here and we can go inspect
+what's happening.
+And then it asked and then it came back
+to the user. So it's already come
+through this. It saw that we we passed
+this context window. And what also
+becomes really cool is we can just turn
+these into test cases really really
+easily. And so if I want to change the
+behavior in this
+case, make this a
+test. I can quickly just pass this in.
+And we assert that the intent is request
+more information, which by the way is
+exactly what happened here. So, it's
+asking me what color they were. Neon
+pink. And then it's going to come
+through and try
+again. And we can come through. And
+again, like we're using human layer to
+manage this Slack stuff. Um, I think
+that like most of what we do at human
+layer is open source. I think that the
+thing of like wrangling Slack web hooks
+and moving information around like this
+is not a fun or interesting part of the
+job. And so we want to solve that. Um,
+but I can pop in here and now I can
+approve this. Um, but you can send this
+via any email API, any Slack API. You
+can implement this yourself. This is
+really all meant to just be conceptual.
+Exactly. Um, cool. Refund has been
+processed. Yeah. And now notice here
+what we did. We just we literally
+triggered the message that the refund is
+done. And the LM actually made a nice
+prettier message for the user from
+refund done to a nice substantial
+message that's custom to their needs for
+the genes. And then it added a nice
+little helper text cuz like feel free to
+reach out as well. And we and we could
+have again could done all this not over
+CLI over the customer's email. And the
+whole point is the customer could have
+initiated all this over email. We would
+get our emails on our approval request
+in our system. So a manager is approving
+it and we go do that. But we all know
+how to build that as software. The fact
+that we could have built that
+independent of LLMs
+means that we could have we we are
+simply just doing the same thing where
+instead of writing the stuff on our own,
+we're just doing it with pure software
+here. And what I think Anub asked an
+interesting question, where does human
+layer come into play? The whole point is
+at some point if you want to go
+integrate with humans and like have
+humans be a part of the system, you're
+going to have to build something akin to
+pedag duty at some point. Uh, from what
+I see of what Dex has built, and I don't
+know Dex can speak for himself, but like
+that's just a lot of code you have to go
+own and maintain. And like Dex has just
+built some really nice CLIs and SDKs to
+help you integrate and manage that
+system. So like if you want to escalate
+from the support agent down to like the
+manager, you're going to have to build
+that control flow out into your
+dashboard, you're going to want to have
+built an audit trail. You'll want you'll
+want to build Slack integrations. You'll
+want to build email integrations. You'll
+want to you'll want to build text
+integrations and human layer just makes
+that easy so your code looks simple and
+you get to just can you show the HL send
+yeah there you go create function call
+that code that he has yeah so this is an
+ask manager where we basically you can
+configure your channel of like where you
+how you want to contact the person
+whether it's email or slack or whatever
+it is and then you can do this like
+fetch human approval and we also do in
+the server when we get to the done for
+how you can use human layer to kind of
+like append a message as your like final
+answer to the thread and wait for a
+response.
+It's kind of just like it's just an SDK
+to help you increase the surface area of
+ways that you can communicate with your
+app instead of having to write all that
+code yourself. You can add the surface
+area of email. You can add the surface
+area of Slack. You can add the surface
+area of text etc so on and so on. You
+can add the surface area of permission
+management of escalation flows etc.
+Does any questions today uh about how
+how this system works and like how we
+leverage humans as tools and how by I
+think I think it might be I'm looking at
+the question. I think um I I think it
+might be worth just popping back to the
+whiteboard and kind of finishing what we
+were sketching out here. I can find that
+window. You want to text me a link by
+the way? Um, and while if people have
+questions while we go do that, if people
+have questions and want to hop on and
+ask a couple, that would be uh very open
+right now.
+Yeah, AJ, come on.
+Uh, yeah. Um, I'm just wondering if the
+human loop event loop can change the
+prompt. Uh I'm just I guess just uh from
+an architectural perspective I'm just
+wondering what the relationship between
+the BAML file and the agent plus human
+in the loop plus tool call is. So uh is
+there a way
+during the human in the loop pause to
+update the prompt of yeah the family
+file. Um that's remember your prompt is
+just like variables that you pass into
+your code. So, one thing you could do is
+the the text file that Dexter made is
+just like a Can you show the text file
+of your current system that you have?
+Yeah. Oh, the um the thread. Yeah. Yeah.
+We could eas like this is a UI that
+Dexter made in some sense. This is a UI.
+It's text file UI, but it's a UI of the
+current state in our agent dashboard and
+we could build our own UI that renders
+the JSON blob or the database entry in
+the format that we want for our users.
+And then what we can do is we could let
+in the approval process instead of just
+doing a checkbox yes or no we could
+literally just let the user let our
+people edit the prompt or edit the state
+and that gets passed into the message.
+We could have them check a box on the
+state. Right? Can you go back to your
+JSON blob?
+We could add more metadata into other
+than events of like add add really
+strict prompt in the thread object. Like
+we could have more metadata into here
+that we have. We could have less
+metadata. It's like strict prompt and
+like boolean true or false. And we pass
+that into the actual like prompt to go
+modify it. The way that we serialize the
+prompt is really exact. And now we
+trigger a totally different workflow.
+Maybe exactly determine next step or
+something. Yeah. Right. Or it's like you
+know determine next step think harder.
+Yeah. Exactly. Like it could we could
+just trigger a totally separate prompt
+and maybe that or you can do something
+like uh you know a lot of people have
+like working agent right and then it's
+like you know we have our success agent
+if you want to do multi- aent systems or
+something you can have a thread and then
+each agent gets its own thread and you
+can fork these out and so you can put
+whatever state you want on here and this
+is again this is another one of the 12
+factors I'm not going to it's uh unify
+execution state and business state which
+is basically like
+This one's really short. You can watch
+the video, but it's basically the idea
+of like just the thing that manages the
+workflow and what stage we're in and
+what's next and how we're operating can
+be the same as the thing that tracks the
+data we're passing to the LM. And this
+is the thing Vibb talks about all the
+time. We talked about in the first like
+episode back in March is like you should
+build an object that you control and
+create different views into it for your
+code, for embedding models, for humans,
+and for LMS. Yeah, but this is kind of
+the core of your application and if you
+embrace this then you can do so much.
+Yeah, this is literally why in BAML we
+if you go back to the agent function
+definition why we don't abide by any of
+the structure. It's like who cares about
+chat roles? Who cares if it's a user
+message system message? Some LMs do,
+some LMS don't. All we care about is
+this is a function that happens to take
+in this thread and returns one of these
+types. How we implement it might be LM
+specific. It might be totally weird. Who
+cares? None of us really care about that
+implementation detail. Or I mean at some
+point we do because we need to increase
+our accuracy, but from a user
+standpoint, people that use these
+functions, they don't care. They just
+want to pass in a thread and get one of
+these types out. And I think what's
+beautiful about kind of like the Bamy
+way of making agent is it it actually
+forces you to write a little bit more
+code, but you own the code and you can
+do a lot more interesting fancy stuff,
+which is again like what you want when
+you're chasing performance. I think this
+comes from like the electrical
+engineering background maybe is you want
+as many little points in the workflow
+where you can change things and tweak
+things and learn about what works better
+because you're dealing with systems that
+are nondeterministic. Yeah, Derek has a
+question. More questions. Let's go.
+Thanks. Um you really got me going with
+the jean scenario and the hot pink. Um,
+so I'm imagining, okay, first it's got
+to classify maybe as jeans because they
+could have other product lines. So there
+could be access to like the product
+merchandising hierarchy. And then I
+thought of fraud detection loops like
+they might say a color and you're like,
+"Oh, we don't sell that color." You
+know, it could be flagged for human in
+the, you know, review as a follow-up or
+something. And then the other thing is
+like in any kind of customer service
+this idea of a paro chart of the
+frequency of each and then you can kind
+of assign a cost to the the units in
+each uh
+bucket that's like a dynamic feedback
+loop to improve your product what's
+causing the root issue. And so this has
+the opportunity to accelerate that. If
+all of a sudden there was a bad batch
+and something happened uh you know this
+would be an earlier alert to that. And
+then also for convenience of the user,
+if you start to see this distribution of
+these are the three or four that like
+90% of people come in, you can give
+checklists or something like that that
+become dynamic. Are these reasonable
+scenarios or am I totally like out on
+Yeah, 100% of what you said is totally
+possible. Can you go back to your outer
+loop code decks where you're handling
+the agent response?
+Yeah.
+like um where you get a message from the
+human
+the human response. Um, oh, sorry, where
+you Yeah, this one. Like right over
+here, we could run like in this case, we
+just save stuff to the state and we move
+on with our life. But we could easily
+look back into our database and say like
+what's the skew ids that match this and
+that can be another function whether
+it's an LM embedding or just regular
+code that looks for the IDs for that
+customer ID. Like maybe we do a lookup
+of the customer ID based on the email or
+the phone number that's under the
+message. We look up the details. We look
+at their last purchase and we're like,
+"Is this the purchase you're talking
+about?" And like flight companies have
+done this forever. Whenever you book a
+flight and you call them, we're like,
+"Oh, are you talking about this flight
+that's coming up?" And you just say yes
+or no. And they can do that because they
+just associate your phone number with
+your data. We could go do that same
+thing here. We could save more metadata
+and we could we could query our SQL
+database or in this case our file system
+database for all the things that were
+returned in the last 50 days. And we can
+just analyze that totally offline in a
+totally different process that we run on
+batch every day, every hour, every three
+hours, whatever we want to build some of
+the analytics that you're talking about,
+Derek.
+Um, deterministic or something here.
+Exactly.
+Did you have anything to add to that,
+Dexter? Was that
+No, I think that makes sense. I mean, I
+think I think you're getting the core of
+it. It's just like it's all just code.
+And so if you own the loop and the
+control flow, then you can shell data
+out to other systems whenever you want,
+you can pull data in. It's not that you
+can't do that if you're using kind of a
+more blackboxy framework that kind of
+like wraps up the loop for you and just
+like calls functions without kind of
+giving you hands into the guts, but um
+it definitely becomes a lot more clear
+and you can I don't know, I think we're
+in the age with LMS of like I think uh
+somebody in the Ruby community wrote
+this back in like 2014. It was like
+duplication is better than the wrong
+abstraction. Like having way more code
+that someone else has already written is
+better than having an abstraction that
+gets in your way or makes things more
+complicated. Exactly. And also like code
+you than code you don't own. Especially
+in the world of AI where everything is
+changing so fast.
+Yeah. All right, Obby, what you got?
+Yeah, my question is like in in this
+flow, how many agents do you have u or
+how can we have this uh human in the
+loop system in a in a group chat with
+what we have in AG2 or autogen or um
+like a swarm kind of chat where there
+are multiple agents communicating with
+each other and at every step you want
+the human intervention Um, and you know,
+like if it's how do you because you
+can't really terminate a chat and say
+like um maybe you can terminate the chat
+and uh do that but you can't really pose
+uh a a workflow with uh with multiple
+agents working because then each worker
+that gets paused during the uh the
+system like imagine thousand customers
+uh using multiple workers and how how
+any things that are on hold. So like how
+do you how do you uh I kind of n
+I think the confusion that you're uh the
+the place where your question is coming
+from is from this premise of how these
+systems are running. You're running all
+these systems in a black box by these
+other frameworks that basically run
+while loops under the hood. Yeah. Okay.
+Now the problem is you want to go and
+stop them and those frameworks don't
+really give you a good way to stop them.
+Exactly. Exactly. And uh the only way I
+can think of is you know uh if if it's a
+group chat have some human intervention
+but uh basically end end the group chat
+and start a new request instead of boils
+down to the same thing that you have to
+do. What you have to do is you have to
+somehow serialize your state. At any
+point you should be able to view the
+state of the system that you are
+running. The reason that most people run
+into problems with these systems is
+you're not able to view the state. Think
+about how you do parallel tasks today.
+Instead of viewing it like an agent,
+just view every single one of these
+boxes that Dexter drew on the left as a
+No, that one. The other one you were
+doing. Can you can you go back?
+Yeah. Oh, sorry. Zoom. Yeah. The the the
+one with the web the web. Yeah, that
+one. This stuff that Dexter wrote over
+here. Each of these doesn't matter if
+it's a Y loop or not, right? All that
+matters is that as long as they're
+running and I can introspect them and
+have some way to serialize the state,
+the state of my system now just becomes
+a serialized state of all of these
+together at any given time. And in a
+multiprocessing job, I'm going to I'm
+going to delete my drawings. In a
+multipprocessing job, how do I go deal
+with this? Well, I build this way to
+communicate to each of those workers to
+pause. I pause it and I do a sync step
+and I tell them to exit their loop.
+That's how you do multi-threaded code.
+So if you want to do multi-threaded
+code, you got to do multi-threaded code.
+You tell each of those workers to stop.
+You get their state, get them to write
+it into their database. And you have to
+deal with atomic variables. And you have
+to deal with locks and contentions and
+all this stuff that we have to do in
+multi-threaded code. That doesn't go
+away. You just now have introduced that.
+The point is is that if you if you if if
+the if the internals are a black box,
+then you don't even have the option to
+go write that code. Exactly.
+That's kind of why like if you're using
+Swarm, you're kind of I don't I
+know Swarm specifically, but like any
+most of these frameworks that own the Y
+loop and don't let you touch the Y loop,
+you're basically because you
+can't go and stop. You can't go in and
+stop the loop. So, you just have to wait
+until the loop is done. Yeah, that's
+what I said. you know, like have the
+human intervention agent at the end and
+end the entire group chat and maybe
+somehow store the history in a database
+or something and do another request. But
+this is what my other question is, yeah,
+go ahead. But this is what Dexter says
+so much is like if the only benefit
+you're getting from there is just
+running the Y loop just write the damn Y
+loop and now you can just like that Y
+loop whenever you want to whenever you
+want to leave and that will make your
+life a lot faster and easier.
+My other question is like why do you
+want this? I know people always talk
+about like I want multi- aent systems
+and my question is always why and I'm
+not saying that useful Dexter sassy
+way threading is useful
+right like I run multi-threaded code all
+the time it's part of I'm talking about
+multi- threading though I'm talking
+about like I guess I guess like the
+model and like message passing and stuff
+like that exactly like message passing
+and running multiple channels in your
+codebase like Go is based on this as a
+programming language go is literally
+made so we can just send data across
+channels really fast and really easily.
+Uh it's made a whole design pattern
+around this because you do write this
+kind of code all the time and agents
+might benefit from this kind of code.
+But I think what you're saying is that
+highQL agents are probably good for 95%
+of developers because 95% of developers
+don't write multi-threaded code anyway.
+So just write the code that you're used
+to writing instead of trying to blow it
+up into like a multi-threaded system
+most of the time.
+I guess makes sense.
+Um I want to come back to kind of a
+little bit like just just one more thing
+that I wanted to get across. Um is kind
+of like something we've been hacking on
+and thinking about a lot which is um
+kind of like after having designed these
+systems for a really long time. Um we're
+kind of working on a this is a preview
+but we're talking about like the agent
+to human protocol basically where agents
+can either contact humans or request
+approvals. And in this one like the
+input is a message and the output is a
+response. And then so this is like a
+basic restbased API and then you also
+have events from a human. And so your
+agent can like fire something off and
+pull for it or you can fire something
+off and forget about it and wait for an
+event. Um but we have these kind of two
+different classes and then this
+conversation created one. Um so you have
+function call which is like the you know
+request approval call this function
+call. Uh, and then you have human
+contact, which is just like string to
+string either whether it's like request
+more information or I'm done for now or
+I need clarification or whatever it is.
+Um, and those can come into your agent.
+But that's that's kind of just like to
+close the loop on that server we were
+building basically. Um, and this can be
+a million different humans. This can be
+the manager, the CS
+manager. This can be the user you're
+talking
+to. This can be a hundred different
+things. But this is this is a thing
+we're thinking about a lot and um trying
+to trying to figure out the right
+interfaces for um and this is the kind
+of stuff that like I think this should
+be open source and this should be open
+protocol and this should be like a thing
+that everyone can like use and get to
+and build together which is why we're
+building it in the open. Um and then
+this implementation of like how to get
+in touch with humans on Discord and
+Slack and Microsoft Teams like no one
+should write that code. That's
+just a pain in the ass. Yeah. And and I
+think the key part here Oh, you stopped
+screen sharing. You want me to pull it
+back up? Um Um Yeah, pull it back up.
+The key part here I think that we'd like
+to talk about is like the stuff over
+here is going to be useful regardless of
+AI. Like the way if you had to build a
+process management system where you had
+to have a human and your customer
+success bot uh talking at the same time,
+like customers and your customer success
+agent, you're going to have to go design
+this system anyway. The fact that an LM
+triggers it is just an implementation
+detail. Like that's the key part to
+think about. The LM triggering this is
+an implementation detail. And the thing
+I think that confuses people the most
+about LLMs is they treat them like a
+magic new thing. But LLMs are just
+functions. They take an an input, in
+this case a thread, and they spit out
+one of the types that we want. And we do
+things based on types. And we know how
+to deal with things that spit out
+different types like unions. We have
+built a lot of software that deals with
+unions all the time. So like once you
+think of it that way, it becomes really
+easy to see what what to do here. And
+like all the stuff on the right of that
+is useful regardless of AI. Uh VJ has a
+question.
+Yeah. Hi. Uh first of all, thanks for
+giving me this opportunity on this
+platform. Uh I'm kind of new to this so
+please uh forgive me if my question
+seems naive or basic. I just wanted to
+add a thought to what you said by that
+uh
+um it's basically a way to input
+nondeterministic
+uh feedback or inputs or variables or
+whatever into your business flow. So
+what you've even demonstrated just now
+is basically uh a business logic or a
+way of defining control flow. Uh which
+again my my question was whether how do
+we draw the line between how much
+portion of your software is going to be
+deterministic and how much of that is
+going to be agent driven. But I think
+that was not the right question to ask.
+What was the right way to ask is or the
+right perception is to actually just
+look at it as um getting a paragraph or
+a text or whatever or random input which
+is nondeterministic versus filling a
+form of or a page or a CRM or whatever
+and then just processing it as usual the
+way you do it uh in your one. Exactly. I
+think that's like one use case for an
+outl but I think like you nailed it.
+Yeah. The way that I've always thought
+about this is like LLMs are just an
+accelerant. Like we could all make Slack
+take less than 70 gigs of RAM by writing
+in Rust and making it really damn good.
+But it turns out no one cares that it's
+an Electron app that takes 70 gigs of
+RAM. So why write in Rust? And it's the
+same with an LLM world. Like, hey, if
+you you could have someone type out the
+business form and go do that manually.
+Or you can use an LM to turn like voice
+into text with some voodoo magic with a
+video in there into the form. Great.
+then go do that. Especially if it gets
+you to ship faster, even if it has a 20%
+failure rate, because it might be better
+to ship in two days and get to
+production with a 20% failure rate than
+to build it out for 9 months perfectly
+with some LMS and your own custom models
+and some control flow and then not know
+it whether it works or not. And LM are
+just another tool in our software
+engineering toolbox like a boatload of
+RAM or bigger GPUs and bigger CPUs that
+you can just use to accelerate your
+development cycle and like product
+iteration
+speed. Yeah, I think that's great. I
+think
+um and and I think this is another
+lesson I learned over a long time was
+like a lot of people say, "Oh, AI is
+here. We're going to do agents." And
+they kind of take whatever their project
+is and they start a brand new that we're
+going to do agents. We're we have our
+SAS, we have our product, we have our
+tool, whatever it is. Now, we got to
+pull it up and we got to build agents
+and we're going to start from scratch.
+We're going to make these seven agents
+and I have to jump in and be like, "No,
+like the number one concept, the thing
+that LM are really freaking good at that
+creates magic is turning unstructured
+data into JSON." And that unstructured
+data might be JSON or XML or whatever it
+is, but it's like turning anything into
+JSON because your code can do something
+with JSON. And that's where the magic
+is. And you can pick up these small
+principles like how do you bring humans
+in or how do you do your control loop or
+or how do I construct a prompt? You can
+do all this stuff in the middle of your
+existing code. And because and because
+it's already like the best LLM apps are
+mostly just code anyways. You should
+just start sprinkling in more and more
+magic as you go rather than throwing out
+the whole thing and be like the way we
+do software has changed and we're going
+to do this kind of software now. Like
+it's all still mostly the same. If you
+if you look at any of the like founders
+building AI agents that are making like
+a 100K plus in revenue, it's all mostly
+code. Yeah, AI is a small part of it. Uh
+AJ, last question and then we're going
+to close it out today. Uh yeah. Um my
+question is just I guess zooming out a
+little bit and more just on business use
+cases. I wanted to get your um thoughts,
+both of your thoughts on sort of
+uh I I don't want to call it emergent
+phenomena, but just sort of emergent
+things that you've noticed as a result
+of building these human in the loop
+agents. Specifically, the question that
+I have is whether or not building human
+in the loop agents has allowed um your
+customers or those people that you're
+servicing to better map those
+non-written understandings that exist um
+in their brains but not uh from the
+documents that they're that you and your
+agents and your tools are calling. I'm
+just trying to get a sense of what like
+emergent behaviors are happening as a
+result of having human in the loop.
+I think people are willing to give
+agents access to more risky things. I
+think people are willing to actually
+build agents that um that do interesting
+important stuff that you would never
+give an agent. I mean like we have users
+doing it sending emails on behalf of
+them to their supply chain suppliers and
+logistics. I've seen people building
+agents that manage Terraform applies and
+like there's all these use cases that if
+you went to any IT manager in the world
+and you said like hey are LM smart
+enough to like spin up and tear down AWS
+infrastructure they would say like
+absolutely not keep an LLM as far as far
+away from that stuff as possible. Don't
+even think about touching it. And now
+we're seeing people ship developer tools
+where it's like, "Oh, well, if the agent
+hits me up in Slack with a Terraform
+plan and I just review it and I can give
+feedback like, oh wait, wait, wait,
+don't upgrade EKS. I was just trying to
+add a DNS record that can go back to the
+LLM, it can change the code, it can come
+back and suddenly you've created this
+kind of like flipped workflow where
+rather than me opening the SAS app to go
+ask an agent to go do something for me,
+the agent's just always working in the
+background and coming to me and I feel
+comfortable giving an access to scary
+things because I know deterministically
+I have required that that agent is going
+to have to go to a human. A human is
+going to have to click a button. There's
+no prompt. There's no question about it.
+a human has to click a button in order
+to actually uh push that thing through.
+And I think VJ said something kind of
+interesting here. It's like I will move
+my money if a bank views an agent in its
+core loop. And like we say that now, we
+do say that now, but I want to pose a
+paradigm shift that has happened before.
+Um I used to get a text message before
+every single time a credit card swiped
+on every dollar value that it swiped on.
+And now I get a text message every time
+I swipe over 500 bucks because like it's
+just not worth me thinking about uh how
+every credit every time I buy coffee I
+need to approve it. That kind of sucks.
+And like while today we feel that way
+about agents moving stuff. It's possible
+that as we all build trust and it
+doesn't even matter about the capability
+of the models. It's all about trust
+building and how software is architected
+around these systems. Like we didn't
+used to touch trust digital banking. My
+parents never trust that a check could
+be deposited over a phone and taking a
+picture of it until like they saw it
+happen for a long time. And some people
+will build that trust sooner. Some
+people will build that trust later. But
+the way we can we as engineers can help
+build that trust for everyone is by
+building software that works. By
+leveraging AI in a way that is reliable,
+trustworthy, and engaging, we'll earn
+the right over time to get everyone else
+to use our software stacks and have
+agents do stuff with less human in the
+loop. But still, some stuff will
+probably want that. Like before I close
+my bank account and it has a million
+bucks in it, I want to know that the
+bank account is being closed and no
+matter what, no matter how many agents
+there are, uh, ever happening. Yep. Um,
+so I think it's just like a paradigm
+shift that'll happen over time slowly.
+Yeah. And it's continuous, right? You
+start with like I mean even that refund
+request workflow, we'd be like, "Hey, if
+the amount is greater than $10, then
+check with a manager otherwise just do
+it." And you've seen if you've asked for
+a refund from Amazon, you know,
+sometimes it's just like, "Cool, here's
+a refund." like too small for us to care
+about. Yeah. Um this was super dope
+everybody. Thank you so much. Vibbov,
+thank you so much for uh helping helping
+make this happen. Um Nico says hello and
+then we will What's up Nico? We will
+come back next week with another session
+that we'll announce pretty soon. Um
+excited to see you all next week. Thank
+you for joining today. Uh another fun
+time of AI that works with Dexter.
+Super dope. Thanks everybody. Bye
+everyone. See you.

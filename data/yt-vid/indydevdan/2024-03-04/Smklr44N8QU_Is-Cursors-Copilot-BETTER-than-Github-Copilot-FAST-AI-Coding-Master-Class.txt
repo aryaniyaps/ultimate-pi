@@ -1,0 +1,396 @@
+cursor is one of the best AI coding
+assistants they just launched co-pilot
+Plus+ a couple weeks ago let's play with
+it so one of the cool things that people
+don't really realize they can do with AI
+coding assistant I'm going to highlight
+this position equally below first
+element remove comments going to let
+that rip let's say you want to run
+something at the same time you can be
+running multiple prompts you can see
+this one's kicking off I'm going to go
+ahead and fire off another prompt here
+add a new and remove node button okay
+let's goad and accept this great so this
+just created nice aligned items for us
+we now have our add and remove button go
+ahead and accept that let's take a look
+at one of cursor's new features co-pilot
+Plus+ you can think of co-pilot Plus+
+just like get up co-pilot where you have
+inline Auto completion helping you out
+but it's supposed to be the next level
+it's supposed to be aware of more
+context and the big highlight for me
+here is it's Auto completing multiple
+lines without your cursor being necessar
+right in the position you need to make
+the completion like in this example
+they're firing off three completions at
+the same time we have ADD node remove
+node let's go ahead and hop back to our
+application here so you can see we got
+our add and remove button at the top
+right there we'll fix that in a second
+so we're just going to start typing
+function add node and then we're going
+to stop so let's see what it gives us
+here pretty decent so we can hit add
+node here and it'll just add a new node
+at the bottom it looks good and remove
+node let's go ahead and get remove node
+written now okay and you can see here
+remove move random nodes coming in
+picking a random node and automatically
+selecting that for us let's get our
+script back there great we'll save and
+then we'll update this to be remove
+random node refresh and there we can see
+it's removing completely random nodes we
+can add nodes back hit refresh add nodes
+back you can see we're adding some new
+nodes there let's go ahead and update
+this so that we're not just adding this
+so going to go ahead and say uh Generate
+random nodes not just file we're going
+to let that run and at the same time
+we're going to come down here and let's
+update the button let's say position at
+bottom of screen uh bottom let's say 200
+piics come back up here we'll accept
+this change save see how that looks and
+now our ad node is adding a bunch of
+random nodes but it's not updating in
+the right position so it's just placing
+it you know in the same spot so we can
+keep hitting it we're getting that node
+in the exact same spot every single time
+right there let's go ahead and fix that
+let's accept this previous change here
+hit
+save so this only repositioned our
+remove button that's fine we'll just
+copy that we'll copy the style hit enter
+here and get this fixed here so we have
+both of our buttons and I actually want
+this to be in the bottom center of the
+screen so let me go ahead and just
+update this I'll say wrap in div fixed
+bottom screen Flex horizontal we'll let
+that run while we update this to move
+nodes
+downward based on the lowest y position
+of all nodes so just going to go ahead
+and grab the new lowest position and add
+500 to that or add 800 to that that
+looks great let's make sure that um this
+like position actually exists I'm going
+to accept this change down here so this
+looks good looks like it's just setting
+up that styling for us hit save there we
+got add and remove at the bottom of the
+screen now that looks good you can see
+here our ad node is coming in and it's
+pushing down on 100 pixels that's really
+great we're moving really quickly here
+and we're not doing a whole lot so I
+want this to be in the center I'm going
+to highlight this I'm just going to say
+position elements in the center okay
+great it's got the left it's got the
+transform save and there we go so now
+our buttons our controls are centered
+right in the middle of the screen there
+at the bottom that looks great how can I
+access the Y position of our nodes here
+so I'm using this static elements list
+here we need to actually pull the nodes
+from our node list so you're using use
+view flow it's a great Library it allows
+you to create interesting graphs
+interesting charts programmatically in
+vuejs there are respective versions for
+spelt and react whatever your favorite
+flavor front end Frameworks are there's
+a version for you so let's just keep
+cooking here I'm going to go ahead and
+add nodes to this and edges great and
+then we're just going to come in here
+and say use um nodes instead and just
+hit enter see what it does there there
+we go so so it's using nodes instead of
+elements elements is kind of our static
+list and you can see here it did pick up
+on that position and it's got the node
+positioning there so should get the
+lowest position and now it's typed out
+because it's coming right out of the
+library so if we hit add node now you
+can see 100 pixels getting pushed down
+that's fantastic and let's go ahead and
+create another function I don't want to
+keep scrolling down as we add nodes I
+want it to just resize automatically
+that function is being called here fit
+to view I'm just going to highlight some
+of this and say after adding nodes call
+fit to view and what we'll actually do
+is I want to do this in r view Watcher
+so that we don't have to manually do
+this every time so basically if these
+nodes update I want us to reactively
+call fit to view so what I'm going to do
+is kind of do the same thing I'm going
+to say instead of just after adding
+nodes I'm just going to ask cursor when
+nodes change in a watcher call fit view
+just going to let that fly
+and there we go it deleted the on pane
+ready I don't want it to do that so I'm
+just going to add a followup instruction
+keep on pain ready one of the most key
+components about true AI cing assistance
+is that they're iteratively controllable
+you need to be able to correct mistakes
+that it makes correct mistakes that you
+ask it to make so this looks good I'm
+going to hit accept here and I'm not
+sure we need this nested fit to view
+call we'll see I'll refresh hit add node
+so that's not working so I need need
+this fit to view function I'm not sure
+where this comes from there we go so
+there's a fit view right here and I'm
+going to go ahead and alist this I'm
+going to say fit view from Hook and then
+whenever this gets called I'm just going
+to call this method right here so let's
+see how that works there we go so now
+whenever we're adding new nodes we're
+automatically calling that resize
+function so we can see our new nodes
+right so that looks great let's test out
+co-pilot Plus+ some more I want to see
+some more of this magical autoc
+completion in the works so so let's go
+ahead and you know do something where
+the co-pilot can pick up on what we want
+to see happen next we'll start editing
+all the labels right so we'll update
+these to you know be like little llm
+agents so we'll say you know this is a
+um llm coder number one and we just want
+to keep going down the list exactly so
+it picked up on that right away you can
+see here on the auto completion to the
+right now trying to autoc complete it
+all four so I'm going to hit Tab and
+that's done so right away picked up on
+that change alloted us to get a lot done
+really quickly let's keep going down the
+line I'm going to just highlight this
+here and Bam it's Auto completing for us
+of course we're just going to hit Tab
+and let's go ahead and add some labels
+here to our edges kind of following that
+same line so I think we can just do
+label and let's see what we want to do
+here so okay cool so it's looking at
+this relationship Source One To Source 3
+very cool let's go ahead and just keep
+that going there you go so Auto
+completes are coming in that looks
+really really great love that and so you
+can see here now we have the edges
+labeled as well so if we move these a
+little bit you can see here we have 2 3
+4 and you know our edges now have labels
+so we can see llm coder 1 going to llm
+coder 2 and then we have uh you know
+four and we have five so this looks good
+so let's go ahead and look at one of
+cursor's Keystone features in my mind
+the ability to add reference documents
+so I'm going to hit command L here open
+up the chat window and I'm going to hit
+at docs click on this you can see I've
+already added a couple view flow docs
+it's been running these prompts with
+information about nodes and examples I'm
+going to hit add new dock here and I
+want to pull in the edge documentation
+so let's look at the edges so here's the
+introduction to nodes I want to pull in
+the edges so let's look at edges and you
+can see here it has a bunch of
+information about you know composing new
+graph flows using edges so there's the
+remove edges function and Etc right so
+let's go ahead and look at how we can
+set up you know some of these step edges
+some of these smooth step edges but of
+course we're going to have our AI coding
+assistant do it for us we're going to be
+using cursor here so going to grab this
+URL and I'm going to go ahead and go
+back into docs I'm going to hit add new
+Doc paste this in I'm going to update
+the name because I want to be able to
+reference it in inline command prompts
+edges hit confirm that's going to start
+loading in they're indexing that and
+then as soon as that comes in we can
+start asking specific questions related
+to these docs so I want to say update
+our edges and our graphs make these step
+edges and also color the edges so let's
+just go ahead and ask how to do that so
+how can we update our edges and and then
+I'm going to reference the app view file
+to make them step
+edges and change the color of our edges
+so just going to ask that question let's
+see what it comes up with you can see
+it's reading both the edges um and the
+theme flow and the theming docks so
+let's go ahead and just see what it's
+saying here pull this out a little bit
+so those are all of our nodes and now
+it's got the edges so it's saying just
+use type so I'm going to highlight this
+and and start an inline instruction add
+type step to each Edge let that run
+great and how do we update the style
+this will create red edges for us let's
+accept this code change and then let's
+go ahead and just drop in this new Edge
+color see what that looks like okay nice
+that totally worked you can see here
+we're using the new Step Edge and you
+can see that our Edge colors are indeed
+red so it just kind of pulled that from
+the docks we then just shove the code in
+um it would be great if these coding
+assistants you know had clean insert
+functionality I'm not sure how well this
+would have worked if I just hit apply
+diff let's go ahead and try it so I'm
+going to go ahead and remove that and
+just hit apply diff yeah so the apply
+diff functionality looks like it's not
+exactly working that's fine we can copy
+and paste in some improvements to be
+made there but you can see here we added
+some documentation and now we can close
+the chat interface I don't really like
+the whole chat on the side you're not
+really operating on your code it's good
+when you're in explorative phases
+looking through documentation trying to
+solve a specific problem but I like like
+to keep that closed for the most part
+and just really focus on the value of
+the code so you can see this is looking
+pretty good as we add nodes we want our
+nodes to create an edge to something
+that already exists so I'm going to go
+ahead minimize all this and I'm going to
+after add nodes just say we'll say
+create random Edge and then we're going
+to go ahead and pass in the node ID that
+was just created and now we're going to
+go ahead and hit enter enter and we're
+looking for copilot Plus+ to autocreate
+this function for us so based on the
+context of the file it should be able to
+see what we're looking for here right
+we'll say function there we go create
+custom Edge and that'll grab a random
+node and generate an edge and then go ID
+to ID that looks good let's go ahead and
+see how that does so we'll hit add node
+nice that looks good we'll hit another
+add node so this looks decent but it's a
+little backward we have our source node
+ID is the new node that we just created
+so I'm going to go ahead and just say
+new node ID so I'm going to manually
+change this it's seeing these errors
+come in let's go ahead and see if
+co-pilot can update this for us there we
+go so it's seeing that we want to update
+these we go ahead and hit tab just
+highlight this next one just hit tab
+again great and then what I'll do here
+is just do a quick highlight I'll say
+swap source and Target put enter and
+it'll swap those for us really quickly
+so we'll hit save and let's go ahead and
+look and we'll hit add node add node add
+node very good so except for this last
+one here it looks like we got all of our
+new nodes getting changed to the
+previous node which is good there we go
+so got the node chain there and that's
+looking great so those edges are coming
+in so we'll do one more thing here find
+new Exposition and we'll go ahead and
+just let that auto complete I just want
+to kind of fan out and okay so it's
+going to find the lowest Exposition and
+just kind of increment that's fine we'll
+go ahead and use that so this will just
+set things off a little bit and we'll
+use that for the new Exposition down
+here and you can see there copilot Plus+
+again helping us out immediately it's
+definitely more advanced than the
+default built-in GitHub co-pilot that is
+you know just kind of making assumptions
+on the next available token it really
+does look like co-pilot Plus+ from
+cursor is going the next step and saying
+we'll make the change wherever you need
+it not just right in front of your
+cursor so if we hit add node now you can
+see we're branching down and to the
+right and that's really great so it's
+selecting a random node and it's pushing
+it into the new node and you can see we
+have that reference coming in and just
+like that nice so we have a kind of
+interesting node graph system getting
+built here we're using co-pilots we're
+getting this done really quickly if you
+were to take away any couple themes from
+how to use AI coding assistants it's
+really all about upleveling where you
+sit on the stack right it's a lot less
+about writing individual lines of code
+and it's a lot more about highlevel
+manipulation of the logic of your
+application right move yourself up the
+stack of decision making Focus Less on
+the lines of code you're writing and
+focus more on the high level
+implementation think more like a product
+manager or product developer or even
+like a UI ux engineer except you're
+still in the code you're still making
+the changes you're still in full control
+of the product the only difference is
+now you can run multiple prompts that
+write code for you automatically and
+give you results back fast if you want
+to enhance your engineering ability and
+stay relevant with all the crazy layoffs
+you need to give yourself an edge that's
+what we focus on on this channel we
+focus on how can we utilize technology
+llms a coding assistant to create
+concrete value for us in our daily lives
+as Engineers if that interests you if
+you want to see more content like this
+hit the sub hit the like I'll see you in
+the next one

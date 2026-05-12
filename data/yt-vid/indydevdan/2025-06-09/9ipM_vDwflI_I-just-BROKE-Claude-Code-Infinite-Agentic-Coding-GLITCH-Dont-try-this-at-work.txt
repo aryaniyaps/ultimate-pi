@@ -1,0 +1,498 @@
+Engineers, I think I just broke Clawude
+Code, the best agent coding tool in the
+game. Check this out and you tell me.
+The amount of value you can create in a
+single prompt is incredible. The amount
+of value you can create in two prompts
+is insanely mindblowing and not well
+understood. Let me show you exactly what
+I mean. Here I'm running a clawed code
+infinite agentic loop. Now, what does
+that mean and what does that look like?
+Inside of this five directory codebase,
+I'm generating infinite self-contained
+UIs that self-improve on each set. How
+is this possible? If I open up, go into
+commands, you can see I have this
+infinite.md prompt that's fueling this
+claw code agent that's fired off five
+sub agents. You can see them all working
+here live right now. This one just wrote
+1,000 lines. We have another thousand
+lines here. One tool use, three, one,
+two. And you can see here, this is wave
+two with five agents in parallel. And
+more are getting queued up right now.
+You can see it just finished wave two.
+How can just two prompts make Cloud Code
+run forever? You can see wave 3 is
+getting set up right now. Iterations 16
+through 20. If we scroll down here, you
+can see a new set of iterations loaded
+up. Check out this task list. Right,
+this is going to just keep running. Back
+to the question, how is this possible?
+This is enabled by an infinite agentic
+loop.
+This powerful pattern is fueled by just
+two prompts. It's fueled by the infinite
+prompt that we're going to get into in
+just a second, and of course, your spec,
+your plan, your PRD. So, if we open this
+up a little bit, you can see here I have
+just three specs where we're inventing
+some new UIs. I have three versions of
+them. Let's go ahead and kick off
+another infinite agentic loop like this.
+And while it's dedicating work to
+multiple sub agents for us, we can talk
+about how you can use this to generate a
+virtually unlimited set of solutions for
+a specific problem. I'll create a new
+terminal instance. Let's fire up cloud
+code here and let's update the model. I
+want to fire this off on Opus very
+clearly state-of-the-art model and then
+we'll use the infinite custom slash
+command here. I'll type slashinfinite
+and you can see here we have the
+infinite agentic loop command. I'll hit
+tab here and now we need to pass in a
+few variables into this. So the first
+parameter is the plan we want to fire
+off. I'm going to go ahead copy this.
+Get the path to this. Paste it in here.
+You can see we're still running in the
+background, right? Agent 16 through 20
+still running here. It takes a new
+directory. So you can see our first
+agent is operating in the source
+directory. Let's set this directory to
+source_infinite.
+And then lastly, it takes a count or the
+information dense keyword infinite.
+We're going to of course pass in
+infinite. So we're going to kick this
+off. And now we're going to have two
+agents running in parallel. And so we
+can see here our second infinite agentic
+loop is starting to fire off here. So if
+I close this and open up the second
+directory, you can see that got created
+here in our plan. You can see cloud code
+writing up this plan for infinite
+generation. We need to dive into the
+prompt. This is the most important
+thing. It's the pattern here that's so
+valuable. Let's go ahead and dive in
+here and understand how this infinite
+agentic loop works with our two prompt
+system. And then let's talk about how
+this breaks down. If you've been using
+longunning cloud code jobs, you already
+know exactly how this breaks. There's a
+natural limit here that we're starting
+to bump into over and over and over and
+it completely breaks this infinite
+agentic loop workflow. Let's start with
+the infinite prompt. So we have our
+initial command and then we have a
+really important part of this the
+variables with cloud code
+custom/comands. You can pass in
+arguments like this and they'll be
+placed in position. Our first argument
+gets replaced with spec and then we get
+infinite source and then we get
+infinite. So this gets replaced and then
+we can use these variables throughout
+this prompt. And the cloud 4 series is
+smart enough to know that it should
+replace the variables we placed in here
+with the actual variables passed in.
+Right? So you can see the spec file
+throughout this prompt and you can see
+the output directory as well. Then we
+have count which is going to be one to n
+or of course infinite. You can see here
+in this first step of the infinite
+agentic loop prompt we're reading the
+spec file. This is a really interesting
+pattern. We're treating prompts, right,
+our specs as first class citizens that
+can be passed in to other prompts. Okay,
+this is a really powerful technique.
+There's a lot of value here that's
+untapped. We explored this a little bit
+in our parallel agent decoding with git
+work trees video we put out a couple
+weeks ago. What we're doing here is a
+little different because we're running
+infinitely and we're generating a single
+file. Although to be completely clear,
+you know, we could rewrite this prompt
+to generate any set of files. So we have
+argument parsing. Our agent is going to
+first read the spec file to understand
+what's going on. Then it's going to
+understand where it's going to output
+all these files. Then it's going to fire
+off parallel agents in groups of five.
+This is going to speed up the output of
+our agent. Our first round files have
+already been created for that infinite
+loop. And then this is really important.
+We're actually specifying what each sub
+aent receives. Okay? Okay, so it's
+getting the spec, it's getting the
+directory, it's getting its iteration
+number, right? You can see they all have
+their own iteration number and it's
+getting their uniqueness directive,
+right? We want these all to be unique.
+We want each example to grow on each
+other. This is really cool. So here
+we're actually passing in a prompt for
+our sub aents. So that's what's getting
+written out here, right? This is a
+concise prompt for the sub aent. And
+then we have, you know, phase five.
+We're just kind of continuing down the
+line. Infinite cycle. And then I have
+this line in here. I'm not 100% sure if
+this works. I don't know if Claude can
+see the end of its context window, but
+it seems to work. Okay. Evaluate context
+capacity remaining. If sufficient,
+continue with next wave. If approaching
+limits, complete and finalize, right?
+So, this is where this pattern
+completely breaks clog code. You can't
+keep running this. It's going to hit the
+context window. Of course, we don't
+actually have infinite context windows.
+This will generate, you know, some 20 30
+files or sets um depending on your
+setup. All right. All right. So then
+we're going to just continue along the
+lines here. There are some details at
+the bottom here. Not all this matters.
+As you can see here, I am writing these
+prompts. Now with agents, we're entering
+this interesting zone where you want to
+be writing prompts that write the
+prompts for you. You can see here, you
+know, both of our lists here are
+continuing to expand. We now have 10
+hybrid UIs inside of Source Infinite.
+Let's go ahead and actually look at what
+the heck is getting generated here,
+right? You know, just to briefly
+describe the prompt that we're passing
+in, right? So we have our spec file that
+we're passing in to our infinite agentic
+loop prompt. We're saying invent new UI
+v3. And what we're doing here is we're
+creating uniquely themed UI components
+that combines multiple existing UIs into
+one elegant solution. Okay. And that's
+that's basically it. That's a key idea
+of what we're doing here. And I'm using
+UI as a example just like with our
+parallel agent decoding video with git
+work trees. UI is just the simplest way
+to show off a powerful pattern like
+this. you know, we're specifying that
+naming scheme here with the iteration
+and then we have a kind of rough HTML
+structure that's all self-contained into
+a single file. So, let's go and open
+this up. Let's see what this looks like,
+right? So, if we open up a terminal here
+and we get the path to one of these
+files, we can say uh Chrome and then
+open up one of these files. Check this
+out. Neural implant registry.
+Um, very interesting. This is a
+classified database access terminal.
+Very clearly it's just a table, right?
+So, this is kind of interesting. It's
+got a really cool unique theme to it.
+Let's see what we can do here. So, we
+can search nice echo
+cerebra max. Okay, great. So, we can
+search across columns. We can sort. That
+looks great. Status filters. Active risk
+level here. I'm constantly impressed
+with the caliber of code that the Cloud
+4 series is producing now. It's just
+kind of mind-blowing that not only was
+it able to launch off this, it did five
+versions at the same time, right? you
+and I, we really have access to premium
+compute that we can now scale up
+infinitely uh with this pattern, right?
+Very cool UI. Let's go on to another
+example, right? Adaptive flow UI liquid
+metal. So, obviously some UI issues
+here, but this is just a simple UI. It
+looks like nothing special. Oh,
+interesting. That just adapted. Very
+interesting. I did not expect that. So,
+it's actually creating additional UI
+here based on what we type in. Oh, I
+like this kind of error state. Look at
+this. It's errored right here, right?
+This is not a true email address. And we
+do get email autocomplete here. Very
+cool. And you can see we also have a
+progress bar here at the bottom. In
+particular, I like this like active
+state. Let's go ahead and look at
+another UI that was generated for us.
+Again, this is all happening in parallel
+in the background. You know, this
+compute is solving this problem for us
+at scale, creating many, many versions,
+right? What do we have? Some 20 um yeah
+50 versions now with two parallel
+infinite agenda coding agents. This is
+crazy, right? This it's really cool.
+Very powerful. Obviously, the real trick
+with this pattern is going to be to
+pointing it at a problem where you need
+multiple potential solutions. Okay, this
+is the real trick with this pattern. You
+know, everything we do on the channel,
+you need to take it and you need to
+point it at a problem. There's a ton of
+value here that you can get out of this
+interesting interesting twoprompt
+infinite agentic loop pattern. Right?
+We're starting to compose prompts. We
+already know that great planning is
+great prompting. And you know, maybe
+that's a important thing to really
+highlight here, right? We're generating
+all these cool UIs. Um, you know, we can
+continue to just look at look look at
+this. So interesting, right? We can look
+at UI after UI,
+right? After UI and look at this one. So
+interesting, right? Look at all these
+just interesting creative UIs. There's,
+you know, a lot of likely garbage here,
+but there's a lot of value here as well,
+right? We're literally inventing new UIs
+as we go along and new UI patterns,
+right? We can just keep going. Check
+this one out. How cool is this? Okay, so
+you know, this is the power of an
+infinite agentic loop. Multiple
+solutions. It's just going to keep
+going, keep firing. We're using a ton
+and ton and ton of compute here, right?
+You can see we're launching another wave
+of agents inside of this agent, right?
+One tool call, 30k, 30k, 30k, 2 minutes
+each. These are shorter jobs. I've run
+jobs that are 30 minutes plus and you
+can fire them all off in a subtask. It's
+so incredible what we can do with cloud
+code and with the right pattern, right?
+The right prompting patterns that lets
+us scale compute. Okay, so really
+interesting stuff there. What's
+important? What's the signal here,
+right? Couple things to call out. Um,
+you can pass prompts into prompts. You
+can specify variables at the top of your
+files. You're likely going to want
+multiple variables that control what
+happens and what gets done. Okay, we
+have this infinite information dense
+keyword. This triggers our agenda coding
+tool to run infinitely. Of course, you
+need to phrase things. You need to be
+more specific with how that works. You
+can start with this prompt and modify
+it, build it, make it your own. Couple
+more key ideas. This is a classic one,
+right? Um, we have been using plans for
+over a year now on the channel. And
+every principal AI coding member, you
+know that great planning is great
+prompting. I sound like a broken record
+bringing this up for, you know, over
+half a year now. But there's a reason
+for it. Okay, we know that tools will
+change. We know that models will
+improve. You can't fixate on these
+things, right? Cloud code is the very
+clear winner right now, but it won't
+always be that way. Okay. And we're
+going to get another model. All that
+stuff changes. What doesn't change is
+the principles of AI coding. Many of you
+know this is why I built principled AI
+coding. Sorry for existing members and
+for engineers that have already taken
+this, but the repetition is probably
+important anyway. It's so so important
+to realize that you want foundational
+skills that don't change with the next
+model, with the next tool. The plan,
+right? Great planning is great
+prompting. This is principle four or
+five. This is so relevant. It's
+increasingly important. Okay. Why is
+that? It's because we can now scale or
+compute further, right? But how we do
+that is always about communicating to
+our agents. Okay. Cloud code is the best
+top agent right now for engineering. Why
+is that? It's because it operates in the
+highest leverage environment for
+engineers, the terminal. Anything you
+can do, claw code can do. And you know,
+part of me wants to say better. You
+know, we'll debate that more in the
+channel as time goes on. It's definitely
+getting there. Uh, but you can see we're
+generating yet another batch of agents
+here. Okay, we have this ocean file
+explorer. Very interesting. But anyways,
+refocusing here, right? The spec is
+super important because this details
+what we want done inside of this
+infinite agentic loop, right? So, we
+have this really cool pattern where
+we're treating our prompts like you can
+treat functions in certain languages,
+right? You can you can pass the function
+into a function. That's what we're doing
+here, right? the same idea transferred
+to this domain of agentic coding and
+really prompt engineering. We're taking
+a prompt passing it in to a prompt. You
+know, the magic is obviously in the
+pattern of this infinite agentic loop,
+but it's really in what you ask your
+spec to do, right? It's what you ask
+your agent to do. There's a ton and ton
+of value in this pattern. I hope you can
+see how powerful this is. When do you
+want to use something like this? Look at
+all these UIs we have generating, right?
+We have two two uh agents going back to
+back here.
+Very very cool. So what when do you want
+to use something like this? You want to
+use a pattern like this. It's very
+similar again to our parallel agent
+coding with git work trees. There we
+cloned our entire codebase into the work
+tree directory so that multiple agents
+can work on their own directories. Again
+link for that video is going to be in
+the description. I highly recommend you
+check that out. But what we're doing
+here is so fascinating. It's so
+powerful. We're scaling our compute.
+We're solving a specific problem with
+many variations of how it can be solved.
+So when do you want to use the infinite
+agentic loop? You want to use it when
+there are multiple potential solutions
+that you want to explore. You want to
+use it when you're working on a hard
+problem that you don't know the answer
+to and you think that having many
+versions will help you get closer. And
+so this is all stuff you would encode in
+your lower level prompt that the
+infinite agentic loop prompt will
+execute on. Right? And you want to use
+this when this is a really really big
+idea. Uh this is like a lead researchers
+are doing this when you want to set up a
+self-improving agentic workflow that is
+trying to achieve some verifiable
+outcome that increases over time. Okay,
+we've all heard about reinforcement
+learning. You can take that idea of
+reinforcement learning. You can take
+that idea of self-verifiable domains and
+you can embed it in an infinite agentic
+loop prompt like this. Uh this is a
+really really big idea. More on this on
+the channel in the future. We don't have
+enough time to cover that here right
+now, but that's just really important to
+call out. Those are kind of the three
+big use cases for this that I can find
+right away. I'm sure if you dig into
+this, if you start using this, you'll
+find uh more, you know, use cases for
+this, right? So, pretty incredible
+stuff, right? We have two agents running
+in cloud code. You can see I am hitting
+the limit. I'm breaking cloud code right
+now. Okay, we're running just straight
+out of Opus credits. I am running in the
+cloud code max pro subscription wherever
+the top tier is. I'm going to go ahead.
+I'm going to stop these agents. I I need
+a few more credits for today to um do
+some other engineering work. I'm going
+to stop these here. You can see we're
+literally infinitely generating tons and
+tons of solutions to this problem.
+Right? That's the trick here. Right?
+That's the real value prop of the
+infinite agentic loop. You want multiple
+versions, multiple potential futures of
+an answer to a problem that you have.
+Okay? UI is obviously just the simplest
+one. That's why I've showed it here a
+couple times on the channel. Um, you
+know, we can just keep looking through
+these different user interfaces with
+different ideas and themes blended
+together. Check this one out. Very
+smooth, very cool. Um, and this is all
+happening, you know, in the background
+with compute. We're scaling up doing
+this again. We're scaling up our compute
+even further beyond. That's what we do
+on the channel every single Monday.
+Check out Principal AI coding. As many
+of you know, I am actively working on
+the second phase course. This is the
+foundation. I highly recommend you check
+this out. What comes next after AI
+coding is of course agentic coding. I'll
+have more details on the next generation
+course as we move closer to the release
+date. Looking at a Q3 launch, so stay
+tuned for that. You know, this is a
+really powerful technique. Try this.
+Don't ignore this, please. Uh for your
+own good. Um you know, it's completely
+free. A lot of the stuff I'm doing here
+obviously is all free for you guys. Link
+in the description to this codebase.
+I'll save some of these generations so
+you can kind of really see and
+understand how this works. But it's
+really about the infinite prompt. Take
+all this stuff, make it your own,
+improve on it, solve your problem better
+than ever with compute. Big theme on the
+channel to scale your impact, you scale
+your compute. Okay, tune in. Make sure
+you subscribe, like, all that good
+stuff. Compute equals success. Scale
+your compute, you win. You know where to
+find me every single Monday. Stay
+focused and keep building.

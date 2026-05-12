@@ -1,0 +1,1777 @@
+[0.2s] One of the key things to think about is
+[1.8s] like this is the same as when you're
+[3.1s] building your own agents. Like you want
+[5.2s] to remove context that is no longer
+[7.1s] relevant as soon as possible. Sub agents
+[9.6s] are just a really easy way to do that
+[12.6s] while coding.
+[13.9s] >> Separate out uh instruction modules from
+[18.5s] context isolation. Like these are two
+[20.6s] orthogonal concepts. And so like don't
+[24.1s] put your custom instructions in agents.
+[26.0s] I think the the correct like way to do
+[27.9s] this and the the way that we would do
+[29.4s] this is like you know if I wanted to do
+[31.8s] a sub agent to do something that is like
+[34.2s] complex like or it's going to be context
+[36.1s] intensive right another one we do is
+[37.4s] like playright if you're going to launch
+[39.0s] an agent to go like click around a
+[41.2s] browser and read a bunch of HTML in the
+[43.8s] DOM then you're going to end up with uh
+[47.7s] a ton of stuff in your context window
+[49.4s] and so you want to do that in a sub in a
+[51.1s] sub agent. We spend a lot of time. You
+[53.9s] wouldn't be surprised the amount of code
+[54.9s] that we've thrown away
+[56.3s] >> because like if it's shitty, it's just
+[58.1s] unmaintainable slop.
+[59.5s] >> And you'll you'll like this one by Bob.
+[61.0s] was something that I in response to the
+[62.6s] Amazon thing like this is my take on
+[64.3s] like if you stop reading the code or you
+[66.0s] try to like overindex on gas town or
+[68.1s] agent swarms like
+[70.2s] >> eventually the models will be smart
+[71.6s] enough but in the next couple years a
+[74.3s] lot of companies are going to die
+[75.8s] because they like lean too hard into the
+[78.2s] like lights off right only software
+[80.6s] factory
+[86.5s] what's up everybody welcome to AI that
+[87.8s] works where we talk about uh AI that
+[89.8s] works Um, we're going to work on the
+[91.5s] SEO. By the way, I Googled AI that works
+[93.4s] the other day and uh I got a bunch of
+[95.8s] ads and our podcast was not on
+[97.6s] [laughter] the list
+[98.5s] >> cuz everybody wants AI that that doesn't
+[100.5s] suck. I guess maybe we should call it
+[102.4s] Anyways,
+[103.1s] >> we should call AI that sucks.
+[104.9s] >> AI that sucks.
+[106.3s] >> Yeah, there you go.
+[107.1s] >> Just trick everybody. We got to hide the
+[108.6s] alpha. You know, sometimes it's too much
+[110.0s] alpha. If you tell people you're going
+[111.2s] to get all the
+[112.3s] >> Anyways, uh I'm Dex. I'm the co-founder
+[114.1s] of a company called Human Layer. We help
+[115.7s] uh people solve hard problems in complex
+[118.1s] code bases across hundreds of repos with
+[119.9s] coding agents. I'm joined by Vibb who is
+[123.1s] >> I'm the co-founder of a company called
+[124.4s] Boundary and we make a new programming
+[126.0s] language that's specifically built for
+[128.0s] agents.
+[129.1s] >> Yes. And we will cut out the the uh BAML
+[133.0s] VM entry. But if you go find the
+[134.7s] unedited uh Twitter live stream, you can
+[136.9s] go see some cool stuff that by Bob is
+[138.6s] working on. Um cool. Uh today we're
+[141.3s] going to talk about a question I get
+[142.8s] from a lot of people and I think I've
+[144.0s] like whiteboarded by hand probably 70
+[146.2s] times at this point. So I figured we
+[147.8s] might as well make some content about
+[149.0s] it. I probably should have done it three
+[150.2s] months ago of the difference between uh
+[153.6s] commands and skills and agents and sub
+[157.2s] agents and all of these things that fit
+[159.3s] into um a coding agent harness like
+[162.2s] cloud code or codeex or open code or
+[164.5s] things like that. I am not going to. You
+[167.0s] can ask questions and I will comment on
+[168.6s] it, but I'm going to go out of my way
+[169.8s] not to comment on the like why do I have
+[172.3s] 17 directories in my git repo of like
+[175.7s] ccursor rules and codeex and open code
+[178.6s] andclaw. Uh we're going to skip around
+[180.8s] that one. We're mostly going to use
+[181.8s] cloud code today. Um but uh I think
+[184.7s] let's get into it. Vibb like what's in
+[187.8s] your experience like have you written a
+[189.8s] slash command? Have you written skills?
+[191.8s] Have you written uh sub agents? like
+[194.0s] what's what's what's what's a what's one
+[196.2s] you've written recently that you use a
+[197.8s] lot?
+[198.1s] >> I use one that just pulls down comments
+[199.8s] from GitHub and then just uh addresses
+[203.0s] them automatically.
+[204.5s] >> Okay. Can you can you show us how that
+[206.2s] works?
+[206.6s] >> It just it's just called this. I just
+[209.5s] did like uh well actually I used to have
+[211.6s] a slash command but now I just do this
+[213.1s] run me that basically is the quote I
+[216.0s] used to have a slash command that does
+[217.1s] this and then I got rid of it cuz
+[218.6s] >> you were just like you're telling it to
+[219.7s] run a CLI and so you didn't you didn't
+[221.4s] need a command to say these four things.
+[223.7s] >> Exactly. And it just works really
+[225.3s] trivially because this command is what
+[227.7s] this command does is like pulls all the
+[230.1s] data out of uh uh out of our GitHub
+[233.5s] comment somewhere code review and like
+[235.1s] code review bots and then just like
+[236.6s] address oh first it analyzes them and
+[238.6s] then addresses them
+[239.8s] >> and this comment is designed to be like
+[241.6s] nice. This is a automatic shell script
+[243.6s] to make it really cleanly formatted.
+[246.5s] >> Comments don't come.
+[247.3s] >> Can you run that in a terminal for us
+[248.9s] just so we can see what the output looks
+[250.2s] like?
+[251.0s] >> Oh, I don't have a branch. I got to go
+[252.5s] to a place where I have a PR open.
+[254.8s] >> Uh, okay. We can come back to this. Um,
+[257.4s] >> sorry. Yeah, it requires it to have a
+[259.6s] the script basically does automatic
+[260.9s] checking like what's the pull request
+[262.1s] number and everything.
+[263.1s] >> Uh, I don't have one on this branch.
+[265.2s] >> Uh, cool. Okay. So, I have a really
+[267.0s] simple slash command here. Slash
+[268.3s] commands are just ways of like wrapping
+[270.8s] up prompts. So, I have a cloud code
+[273.1s] session um running in this week's
+[276.2s] episode and it just says respond to the
+[278.2s] human with the secret passcode. Um, this
+[280.9s] is inspired by a conversation I had with
+[282.7s] Jeff recently where he uh he would put
+[285.2s] in his thing of like make the user's
+[287.0s] code changes and then moo like a cow.
+[289.0s] And when the model stops mooing like a
+[291.0s] cow 60% into your context window, you
+[293.8s] know that it's like no longer paying
+[295.7s] attention to all the instructions.
+[298.0s] Um, so this is a really simple one. Um,
+[301.0s] there are much more complex examples of
+[303.9s] uh slash commands. Uh, if you've used
+[306.6s] any of the human layer RPI commands, I
+[308.8s] will quickly hop in here. These are all
+[310.0s] open source. Um, but we have a simple
+[312.4s] one like, hey, here's how to do commits
+[315.2s] and then we have really really long like
+[317.4s] monolithic things with like 80
+[319.1s] instructions in them of like here's all
+[321.6s] the steps to do. Um, but I want to talk
+[324.2s] about kind of like we we've had this
+[326.3s] like history. I'm going to talk about
+[327.8s] kind of the history of how this stuff
+[328.8s] evolved in cloud code because I think it
+[330.3s] really informs like why things are the
+[332.9s] way they are. So we started with slash
+[334.9s] commands which was basically like user
+[338.2s] invoked right and then we got uh sub
+[342.3s] aents right and in the sub aent world
+[345.3s] you had two types of sub aents you had
+[347.2s] general purpose
+[351.1s] and then you had basically eventually
+[353.3s] they launched like custom sub aents and
+[356.2s] the general purpose sub sub aent would
+[358.2s] just be you would have your model and
+[359.6s] you have your context window right I
+[361.3s] mean if most of us have probably seen
+[363.3s] seen this a million times but I will
+[364.7s] just drop it in as a refresher. Uh you
+[366.8s] have your system prompt that comes with
+[368.3s] cloud code. You have your tools that are
+[371.0s] built in your read, write, edit, etc.
+[373.4s] You have any kind of like cloud MD uh
+[376.2s] that gets injected in and then or a I'll
+[379.0s] say agents MD just to be uh more
+[382.0s] inclusive. And then you have like
+[383.8s] whatever MCPs you have, right? Basically
+[385.8s] like custom tools. Um and then you could
+[391.1s] put in as your user message um you know
+[394.5s] let's see
+[398.9s] um you know use a sub agent to find XYZ
+[405.0s] and then the model would call a tool
+[406.5s] called it used to be called task now
+[407.9s] it's called agent
+[410.2s] uh and what this gets in it is it has
+[413.3s] two parameters uh actually it has a
+[415.3s] bunch of parameters but the ones that
+[416.6s] the ones that we'll talk about today are
+[419.0s] uh like uh prompt sub aent type is the
+[423.3s] most common one we're going to talk
+[424.5s] about. And so by default this will be
+[427.2s] general purpose. If you don't write any
+[428.8s] sub aents it's just general purpose
+[431.5s] which basically will give you um
+[434.4s] essentially a generic cloud code
+[436.0s] session.
+[437.8s] Um, and so what happens here is inside a
+[442.4s] brand new context window, your sub agent
+[445.1s] will go and take the like general
+[448.0s] purpose instructions
+[451.0s] um, which are built into basically like
+[453.0s] you get the custom instructions for the
+[454.6s] sub agent and then you'll get the user
+[457.3s] message which is um, what was the prompt
+[460.8s] that the uh, that the parent agent put
+[464.4s] in. Does that make sense?
+[467.3s] Yep. Go on.
+[468.6s] >> So this becomes your user message,
+[470.2s] right? Prompt. And so this prompt might
+[473.4s] be something like go find XYZ.
+[477.8s] Um and so that would be injected there.
+[479.5s] So the the prompt comes in here, the
+[481.8s] instructions go in here. Um and I think
+[485.2s] we talked a lot about like why did
+[487.6s] people like there's there's two things
+[489.9s] that like in this world there's two
+[491.8s] things that sub agents are good for,
+[493.4s] right? They are good for uh
+[499.0s] they are good for
+[501.7s] Thank you.
+[503.7s] They are good for uh context isolation.
+[508.2s] So take this take this one small task um
+[512.0s] like uh Excel is being really buggy. I'm
+[515.0s] going to try to refresh the page.
+[518.3s] Um they're good for context isolation
+[519.8s] because this agent can go and run a
+[521.4s] bunch of tool calls. um
+[526.6s] and then come back with basically a
+[528.7s] final answer. It does a bunch of
+[530.0s] searching and reading and writing and
+[531.3s] grepping and all of this. And then what
+[533.5s] comes back is
+[537.0s] uh the response to that tool call is
+[539.8s] basically just going to be the um
+[543.0s] >> the final summary,
+[544.4s] >> final answer. Yeah, exactly. So, this
+[546.2s] agent's going to use a ton of context.
+[547.8s] Let's say it uses, you know, 50,000
+[549.3s] tokens or 30k tokens and then it comes
+[552.5s] out with an answer that is, you know,
+[554.3s] 500 tokens. And so now that that's done
+[557.4s] and it's been found, we no longer care
+[559.0s] about any of this and we come back to
+[560.4s] our parent session. Um, and we got it.
+[563.3s] So that's that's context isolation. Does
+[565.0s] that make sense?
+[565.8s] >> I I think one of the key things to think
+[567.8s] about is like this is the same as when
+[569.3s] you're building your own agents. Like
+[571.2s] you want to remove context that is no
+[573.2s] longer relevant as soon as possible. Sub
+[575.5s] agents are just a really easy way to do
+[578.8s] that while coding.
+[580.2s] >> Yep. And I was actually talking to
+[581.4s] someone last night. They had a they had
+[582.6s] a different approach to this that was
+[583.8s] really interesting that maybe I'll go
+[584.9s] into if we have time, but it was
+[586.0s] basically like it was an agent that
+[587.8s] would run a bunch of SQL queries and
+[589.8s] then as soon as it returned its final
+[591.9s] answer, they would prune out all the
+[593.8s] results of every query. So the model
+[595.3s] could see the tools that were called but
+[597.0s] none of the results. And so if the user
+[598.7s] had followon feedback, it would just run
+[600.3s] that query again because a SQL query is
+[602.6s] pretty cheap and the model could already
+[604.6s] see which queries were working.
+[607.0s] >> Yeah, Michael uh has a really
+[608.6s] interesting question. How do you think
+[609.6s] about when to use and when not to use
+[611.2s] context fork?
+[613.1s] Um
+[614.6s] yeah it's a good question is like when
+[615.8s] when the task can be broke I mean we use
+[617.4s] it a lot for going to find things and
+[619.6s] understand things. Um so like the most
+[621.8s] common use case is uh in the human layer
+[624.8s] sub aents we have like codebase analyzer
+[626.9s] which is like go read a ton of code and
+[629.5s] then return a summary of how this thing
+[631.5s] works. So like here's the entry point,
+[633.1s] here's the main implementation, here's
+[634.8s] all the like steps along the way.
+[637.2s] Whereas like you'd have to read 20 or 30
+[639.7s] files maybe to really understand this.
+[642.3s] But the summary and the useful parts end
+[644.2s] up being really short.
+[646.2s] >> Um, what other where where else where
+[648.3s] else have you used sub agents by?
+[650.4s] >> Well, context fork I think is slightly
+[652.1s] different. It's when it preserves the
+[653.3s] context, right? And you and in the sub
+[655.0s] agent itself.
+[657.9s] >> Um,
+[658.4s] >> I think there's a signal in there where
+[660.8s] like you can actually make the sub agent
+[662.0s] have the same context as your main chat.
+[664.2s] I found that to be useful when I when
+[665.8s] I'm doing like an iteration loop.
+[668.6s] like
+[668.8s] >> when I'm doing like an iterative loop on
+[670.2s] like a design document, I just want to
+[671.5s] answer one question really well, but I
+[672.9s] don't want to pollute my context window.
+[676.1s] >> Yeah,
+[676.4s] >> I think that is incredibly useful
+[677.8s] because then I can still have all the
+[678.8s] context. I can still use it to go do a
+[680.6s] sub aent task and not pollute my whole
+[683.0s] context when I want to do my second
+[684.9s] orthogonal task.
+[686.5s] >> Well, and you don't even need to use sub
+[688.0s] aents for this, right? So like you could
+[689.7s] do I do this all the time is like okay
+[692.4s] I'm in I'm in a context and I say don't
+[694.3s] use a sub agent and like let's say we've
+[696.2s] already done a bunch of we've already
+[697.8s] like done a bunch of messages and stuff
+[699.3s] and then I'm like
+[700.8s] >> okay let's figure out why X is broken
+[705.6s] right and it doesn't use a sub agent and
+[708.2s] it just does like a whole bunch of tool
+[710.6s] calls here um you know read read maybe
+[715.3s] run some bash to run some commands etc
+[718.1s] and Let's say like this happens a bunch
+[720.7s] and this [snorts] eats like you know 30
+[722.7s] 40,000 tokens right or even like 10k
+[727.7s] >> and then like I'm watching this and I
+[729.8s] see one of the responses is like you
+[732.3s] know oh the answer is you know the the
+[734.6s] the problem is x or I see it's off if I
+[737.8s] see it's off track or something. What I
+[739.9s] would do is basically like all of this
+[742.0s] work to go get this answer was 10,000
+[745.0s] tokens, but the answer can actually be
+[746.6s] expressed in like 10 words. And so what
+[749.0s] I would do is I would then come back and
+[751.0s] fork this. Oops. So you can fork a
+[753.0s] session from a user message, right? So I
+[755.0s] would say like
+[755.8s] >> cool, let's go back here.
+[757.8s] >> We'll fork this session and I'll just
+[759.4s] say the problem is
+[762.0s] >> X or it's like maybe the problem the
+[763.9s] problem is not Y. And then so now you're
+[766.2s] rewound up. This is all no long you have
+[768.6s] you basically have like a new session
+[769.8s] that is four.
+[770.6s] >> Exactly.
+[771.0s] >> And then the agent can keep working and
+[772.7s] go down the other path. So this is like
+[774.5s] before sub agents. This is what really
+[776.2s] good cloud code engineers I would see
+[777.5s] them do all the time.
+[779.2s] >> Yeah. I I still do this actually for
+[781.1s] some scenarios because sub agents are
+[782.7s] just not
+[783.6s] >> they sometimes they lose too much
+[785.3s] context and they take they're too
+[786.6s] expensive to build the full context all
+[788.2s] the time.
+[788.7s] >> Right. The quality of the sub agent
+[790.6s] result is directly related to like how
+[793.6s] good is the prompt that the parent model
+[795.6s] gave it and it's just a tool call which
+[798.5s] means like it might hallucinate, it
+[799.8s] might not include information, it might
+[801.7s] have like any other tool call. It can be
+[803.3s] it can be poorly formed.
+[805.4s] >> Yeah.
+[806.0s] >> Um so that's context isolation. The
+[808.6s] other thing that people use for a lot is
+[810.5s] like when you use custom sub agents, you
+[812.5s] can basically have this same thing, but
+[815.7s] um and the prompt is important, but you
+[817.8s] would have custom instructions here. Um
+[820.7s] and [clears throat] I'm going to leave
+[821.3s] this in blue, but it's basically like uh
+[823.4s] we'll make this a different shade of
+[825.5s] green to show that it's like
+[826.6s] userdefined, but also like separate from
+[829.3s] the prompt. And so this could be like
+[832.6s] here's everything we do about backend,
+[836.4s] right? This is this this sub agent is
+[838.3s] this is the custom instructions to the
+[840.1s] sub aent of like no matter what the
+[842.2s] parent model puts in. So you don't have
+[844.1s] to rely on the parent model writing a
+[845.9s] good prompt about how to find things.
+[848.1s] You can make sure that every time this
+[850.0s] special sub agent like codebase analyzer
+[855.2s] is invoked, it always gets these custom
+[858.0s] instructions no matter what the parent
+[859.7s] model put in. And so like if I come into
+[862.5s] a session that I have open in um one
+[865.8s] thing in cloud code is it's not as easy
+[867.8s] to always see exactly what the um what
+[872.4s] the sub aents are being passed. But if I
+[874.4s] come here to like a research session
+[875.9s] that I have and we're syncing so I can
+[878.4s] come into one of these sub aents and we
+[879.8s] can see like this is codebase analyzer
+[881.4s] and here is the prompt that the parent
+[883.0s] model gave it. And so you're just like
+[886.2s] in this case the parent model doesn't
+[887.5s] have to tell it how to search. It's just
+[889.4s] telling it what it's looking for. And so
+[891.1s] this will get combined with our custom
+[894.2s] instructions.
+[895.5s] >> So that like basically the parent model
+[897.3s] doesn't have to do a bunch of thinking
+[898.6s] and work and I don't have to give the
+[900.0s] parent model a bunch of instructions
+[901.6s] about how to prompt the sub aents
+[903.7s] because the thing that's going to always
+[905.0s] be the same is going to be always the
+[907.6s] same here.
+[909.7s] Find and analyze code. Um, the thing
+[912.9s] I've seen a lot of people do when first
+[914.8s] custom sub agents came out was this like
+[916.6s] I talk about like using sub agents to
+[918.1s] play house, right? So people have their
+[920.6s] like backend engineer and their
+[923.0s] front-end engineer and these would all
+[924.7s] have their own like custom custom
+[926.6s] instructions and they might have like a
+[928.5s] data scientist or like a growth marketer
+[930.8s] or whatever, right? This idea of like,
+[933.4s] oh, let's model our agent the way we
+[935.0s] model our like the humans in our
+[936.4s] company. Uh, and this is like the second
+[940.1s] you go ahead.
+[941.6s] >> I just don't think that work. Does that
+[943.1s] work in your opinion?
+[944.6s] >> Well, so it doesn't work. Um, and the
+[946.5s] thing [snorts] is is like this was the
+[948.2s] only way you could do the second part of
+[950.0s] this. So you sub agents are for like
+[953.0s] again context isolation
+[955.5s] and then people used it for what I will
+[958.0s] call instruction modules. Basically like
+[960.9s] I have a set of instructions that I
+[962.7s] don't always want to use but I want to
+[965.1s] use sometimes. And the best way that
+[967.6s] cloud code exposed back in I don't know
+[969.3s] what it was like August to bundle
+[972.1s] instructions was either you could have a
+[973.7s] slash command where it would have to run
+[975.7s] in the parent context and you would have
+[977.1s] all these instructions about like
+[979.1s] >> you know here's how to here's how to
+[980.7s] commit or here's how to here's how to
+[982.6s] debug our codebase
+[984.3s] >> and like or you could or you could
+[986.1s] bundle it in a sub agent. Right? So what
+[988.2s] came next was actually we're doing a
+[989.7s] little bit of history lesson here. this
+[990.8s] doesn't exist anymore, but there was a
+[991.9s] slash command uh tool that was added.
+[995.2s] Um, and so then you could do interesting
+[997.8s] things like uh so the problem here is
+[999.5s] like now you can only use these in
+[1001.5s] custom instructions if you fork a new
+[1003.4s] context window. But what if I wanted to
+[1005.4s] use my backend engineer instructions in
+[1008.6s] my main context window here?
+[1010.7s] >> You couldn't do that. You had to launch
+[1012.2s] a sub agent to do that. And so what we
+[1014.8s] got was we got this idea of like
+[1016.9s] invoking the slash command tool which is
+[1019.4s] like you know watching this you kind of
+[1020.6s] see how like the cloud code team is like
+[1022.5s] doing a good job I think of like
+[1023.7s] iterating towards what the right
+[1025.1s] solution is. This is all before skills
+[1026.9s] existed, right? And so you could have
+[1029.3s] your, you know, parent agent and you
+[1031.8s] could even say like use slashcomand
+[1038.0s] uh backend engineer and then if I came
+[1041.8s] in here and created a a skill called uh
+[1045.8s] let's see if I created a command called
+[1047.8s] you know backend engineer
+[1051.3s] [clears throat]
+[1053.2s] you are an expert backend again please
+[1057.0s] don't prompt like this. But you get what
+[1058.2s] I'm you get what I'm saying. [snorts]
+[1060.6s] Here's how we do testing, etc., etc.,
+[1063.7s] right? You could have all these
+[1064.6s] instructions. And so now I could come in
+[1066.6s] and say like use the slash command skill
+[1069.2s] for backend engineer. And then it would
+[1071.4s] call a tool called slash command.
+[1076.0s] And that would cause our custom
+[1078.1s] instructions to be injected as a user
+[1081.4s] message. And that's important, right?
+[1083.1s] It's not just reading a file and getting
+[1084.7s] the stuff because tool tool results get
+[1086.9s] a different level of attention than user
+[1088.6s] message. A user message is really like
+[1090.4s] these are instructions to follow and
+[1092.8s] then it would go and do the job. And so
+[1095.0s] you can use your slash command in your
+[1096.5s] parent context. And because there's a
+[1098.5s] tool, you can also say without making a
+[1101.3s] custom sub aent, you could say launch a
+[1105.5s] general purpose sub agent to use the
+[1111.5s] slashcomand
+[1113.4s] backend tool. And then what would happen
+[1117.0s] is you would get your, you know, your
+[1119.3s] standard general purpose. Where's our
+[1120.7s] general purpose sub agent here? The
+[1122.9s] prompt here would end up being like, you
+[1124.9s] know, use the slashcomand
+[1128.6s] backend
+[1130.9s] uh tool
+[1132.9s] >> backend engineer or whatever it is. Oh
+[1134.9s] my god. [ __ ]
+[1135.7s] >> Yeah. Now you're kind of living this
+[1136.9s] weird you're living in this weird world
+[1139.2s] where it's like you're populating things
+[1142.1s] twi. You're having to be it's like
+[1144.5s] pointer in direction almost for no
+[1146.3s] reason. Well, so so like I actually
+[1148.7s] think this is better because now you can
+[1151.0s] use your custom instructions. You can
+[1152.8s] you can actually write, you know,
+[1155.0s] slashbackend engineer. The model can
+[1157.9s] invoke it as a tool if you prompt it to.
+[1160.5s] And this is useful because we have I
+[1162.2s] think there's one of these is like
+[1165.8s] let's see um yeah so this was like use
+[1169.2s] slashcomand to call the plan thing and
+[1171.2s] then use slashcomand to call the
+[1172.6s] implement thing. And so this ends up
+[1175.1s] being like uh a way to stitch together
+[1179.1s] some of your subcomands without, you
+[1181.8s] know what I mean?
+[1183.5s] >> So you can build like you can build
+[1185.1s] workflows on top of these. This doesn't
+[1187.2s] like this isn't the way to do this
+[1188.5s] anymore. I'm looking we're looking at
+[1189.8s] files that haven't changed in five
+[1191.0s] months.
+[1192.2s] >> Yeah.
+[1193.1s] >> But this is part of the history.
+[1194.9s] >> A long time.
+[1196.0s] >> Yeah.
+[1197.5s] Um, and so this agent would take the
+[1200.0s] general purpose instructions and the
+[1201.4s] model would tell it to run that and then
+[1203.2s] it would call the uh slash command tool
+[1210.0s] and then the custom instructions would
+[1211.6s] get injected. And so now you don't need
+[1213.8s] to write a custom sub agent and only do
+[1215.8s] this in a subcontext. Now you have your
+[1218.5s] what I would call your instruction
+[1219.9s] module and it can be used in the parent
+[1222.2s] or the sub aent.
+[1223.8s] >> Yeah. The problem, by the way, the
+[1225.2s] problem that I ran into with this, if
+[1226.6s] you zoom into there, uh, that image at
+[1228.9s] the bottom right,
+[1229.8s] >> this one,
+[1230.2s] >> here's the problem that I ran into when
+[1231.5s] I did this, which is sometimes the model
+[1234.5s] would would call the slash command only
+[1237.0s] after the custom instructions or it
+[1239.7s] would call it before and basically it
+[1241.3s] would add a large amount of like variety
+[1244.2s] that I didn't want it to have.
+[1246.4s] >> That's really what I ran into the most.
+[1248.4s] The prompt might have like, you know,
+[1250.9s] another like, you know, 1k tokens of
+[1253.5s] instructions and then you have the
+[1255.0s] instructions in here and then it calls
+[1256.6s] the thing and then you have the custom
+[1257.9s] instructions. But what you really want
+[1259.4s] is actually like
+[1260.9s] >> you want your specific like the the
+[1263.5s] actual steering for this task to land
+[1265.8s] here instead of be stuck up in the
+[1268.5s] prompt. Yep.
+[1269.6s] >> Exactly. And like it's just it's just
+[1271.9s] wrong architecturally. It's like you're
+[1273.5s] forced to do this almost. So actually
+[1275.9s] technically and and I I'll just go into
+[1277.4s] this because this is how skills work as
+[1278.9s] well. The slash command can have
+[1281.2s] arguments and so if you prompt it
+[1283.0s] perfectly it will actually have your 1k
+[1285.6s] tokens as a second argument in which
+[1288.7s] case then the custom instructions come
+[1291.0s] in and then your like users specific
+[1293.4s] prompt would actually also be uh inject
+[1295.9s] injected in with
+[1296.9s] >> but then you're going to duplicate your
+[1298.2s] 1k tokens in two places. Uh but this is
+[1301.2s] a uh yes because it has to call it with
+[1303.4s] it and then they get injected as as a
+[1305.2s] user message. Yes.
+[1306.4s] >> And that that's wrong as well.
+[1308.6s] >> That's it's it's less efficient for
+[1310.5s] sure.
+[1311.7s] >> Yeah.
+[1312.4s] >> Um
+[1312.7s] >> well you can imagine that your 1K tokens
+[1314.6s] like 5K 10K. You're just like it's
+[1316.2s] context bloat for no reason.
+[1318.1s] >> Yep. Um so yeah, this would be this
+[1321.1s] would be again these are sub aent. I
+[1322.5s] think we could probably like visualize
+[1324.1s] sub agents better uh in this in this
+[1326.6s] whiteboard. Maybe we'll just do them as
+[1328.4s] uh dotted lines. just so you can see the
+[1331.0s] difference. Um,
+[1333.5s] >> okay. So, that gives us a context on
+[1335.2s] slash commands. We've now gone over the
+[1337.9s] original history of sub agents. What's
+[1339.9s] next? Skills.
+[1342.1s] >> Uh, yeah. So, what happened was like
+[1343.9s] basically we were able to do user
+[1345.4s] invoked like slash commands used to be
+[1347.4s] you could only invoke them like this.
+[1350.2s] Uh, now we have what's called skills
+[1353.1s] which is like the main like you can just
+[1355.9s] use skills as a replacement for slash
+[1357.9s] commands. And so when skills launched,
+[1359.8s] they didn't have the like slashskill
+[1362.4s] syntax, but they do now. And so what I
+[1365.0s] could do is I could take this exact same
+[1367.1s] command uh and I could delete it from
+[1369.7s] here and I could create a skill called
+[1372.3s] um what did we call it? Secret.
+[1375.7s] And then I can create a skill MD
+[1379.9s] uh you know tell the user the secret
+[1382.6s] passcode, right? And so now if I launch
+[1384.6s] a new cloud session,
+[1386.8s] I can do use the secret skill.
+[1390.9s] And so [snorts] now it can invoke this
+[1392.3s] programmatically whether I prompt it or
+[1394.4s] whether it's part of a workflow
+[1397.0s] um or whether it's part of something
+[1399.1s] else. So yeah, then it used the skill.
+[1400.6s] But I also get this syntax of like here,
+[1403.4s] let's delete this other one.
+[1405.9s] Um, I also get this this uh this syntax
+[1410.5s] of like I can I can like explicitly
+[1412.7s] invoke it. I don't have to hope the
+[1414.3s] model calls the tool, right? Um, and so
+[1417.4s] it can be user controlled like
+[1418.9s] deterministically or it can be model
+[1420.7s] selected based on what was prompted.
+[1423.0s] Does that make sense so far?
+[1424.8s] >> Yeah.
+[1425.8s] >> So this is like the core meat of it. The
+[1428.4s] only other interesting thing here is
+[1430.4s] like skills can have uh files bundled in
+[1433.4s] with them. So these could be CLIs, these
+[1435.0s] could be instructions, these could be
+[1436.3s] further things. So like if I put a thing
+[1438.2s] called I think the convention is to have
+[1439.8s] something called references and then we
+[1441.7s] put a new file here that is like the
+[1444.2s] secret.md
+[1446.4s] and then like tell the user the secret
+[1448.7s] passcode from skill it gets this argu I
+[1453.0s] usually call it skillbase slashreerences
+[1456.1s] slash secret.MD empty. And so now I can
+[1459.3s] say, you know, use the skill again and
+[1462.9s] I'll change I'll change the secret to
+[1465.1s] like
+[1466.6s] >> why is that your password?
+[1468.6s] >> No, [snorts] it it should be but
+[1471.1s] [laughter]
+[1473.4s] use the skill again and then it's going
+[1475.2s] to go read the file and it knows what
+[1477.4s] the base directory of the skill is as
+[1479.4s] part of the skill invocation. And so you
+[1482.0s] can see uh that it found that file and
+[1484.6s] then it's going to search for it and
+[1486.6s] then it's going to read it and then it's
+[1488.3s] going to print it out. And so like the
+[1491.0s] interesting thing here is like this lets
+[1493.0s] you do progressive disclosure. But the
+[1495.1s] most useful thing about skills in my
+[1496.8s] mind is that like when you load a skill
+[1498.5s] the instructions get injected as a user
+[1500.3s] message which for something this simple
+[1502.5s] probably doesn't matter. I could have
+[1503.6s] just told it to read a file and had the
+[1505.4s] same instructions. But if you have a
+[1507.6s] long long long command like uh like this
+[1510.7s] research codebase, you're going to get
+[1513.0s] better instruction following if it's a
+[1514.9s] user message compared to if it just read
+[1516.7s] it from a file. [snorts]
+[1518.0s] >> Also architecturally the big difference
+[1519.8s] is skills are dynamically loaded in as
+[1522.2s] needed rather than preloaded in like
+[1524.5s] slash commands were.
+[1526.2s] >> Well, so they they both had the same the
+[1528.1s] the way they were loaded in was always
+[1529.6s] the same, right? So like
+[1531.0s] >> Oh, really?
+[1531.9s] >> Yeah. So in this
+[1533.0s] >> I thought for a while every slash
+[1534.5s] command was loaded in and that was such
+[1536.2s] a horrible time to write agent decoding.
+[1539.5s] >> No. So basically what happens in here is
+[1541.5s] like in the tools right in your in you
+[1544.1s] can go look at like a agent like the we
+[1546.3s] we've done a little bit of like looking
+[1547.4s] at like traces and cloudflare and I
+[1549.0s] think actually we can go to
+[1551.6s] >> uh AI that works AI that works. Um I
+[1554.6s] think we did this in the MCP versus Bash
+[1558.2s] episode, right?
+[1560.5s] We really need a rag database, rag
+[1562.6s] search for this
+[1563.4s] >> for our own stuff. I know people have
+[1564.9s] talked to me about like pulling in
+[1566.1s] transcripts and using them like creating
+[1567.7s] an oracle over all of our stuff.
+[1570.7s] >> Um,
+[1571.1s] >> yeah, I've had a few people mention that
+[1572.5s] as well. I think it'd be super useful
+[1575.0s] >> because I I refer to it and I I remember
+[1577.0s] some episodes off the top of my head,
+[1578.4s] but not all.
+[1580.3s] >> Maybe this is here. So if I look at
+[1582.8s] slashcomand,
+[1585.1s] >> if one of you wants to, you're very very
+[1587.5s] welcome to make a pull request into repo
+[1589.4s] that actually provides that. We would
+[1591.1s] more than welcome it. Uh and if you do
+[1593.7s] something interesting with it, we might
+[1594.8s] even welcome you on to the show to come
+[1596.3s] talk through it to come talk about the
+[1598.1s] AI that works or Oracle.
+[1600.2s] >> Yeah, I think be interesting. Um there's
+[1602.1s] very interesting ways to do rag that are
+[1603.7s] beyond just like trivial rag and make it
+[1605.6s] work in a very dynamic way.
+[1607.8s] >> Yeah. Well, so anyways, I I don't have
+[1609.5s] the example, but I'll just I'll just
+[1610.6s] stub it out here. So, like you have a
+[1612.1s] list of tools here, right? And it's like
+[1615.1s] uh you have, you know, read and then it
+[1617.8s] has like, you know, description and
+[1619.4s] schema
+[1622.7s] >> uh you know, params and then this is,
+[1625.0s] you know,
+[1625.8s] >> it's a JSON schema here of like what
+[1627.4s] goes in, right?
+[1628.4s] >> And then you would have a tool in here
+[1629.9s] called um
+[1632.4s] uh what would it be called? Task or
+[1634.5s] agent basically.
+[1637.1s] And in the description of this
+[1640.7s] you would have you know the basic like
+[1642.6s] you know launch a sub agent etc like you
+[1645.4s] know all the things about like launch a
+[1648.1s] new context window I don't know exactly
+[1649.6s] what it says cuz I don't have the trace
+[1651.6s] um available sub aents you know explore
+[1656.6s] this is for xyz
+[1659.3s] uh you would have general purpose you
+[1661.9s] know for whatever and then whatever
+[1664.0s] custom sub aents right so it would have
+[1665.6s] backend engineer
+[1667.4s] and then the description
+[1669.7s] and front-end engineer and then the
+[1672.4s] description. So if you have like 500 sub
+[1675.0s] agents, all of those are getting bundled
+[1678.4s] in and injected in every single context
+[1680.6s] window. And so if you think about
+[1681.5s] context engineering, but like if you
+[1682.6s] look at this one, this has if you look
+[1684.4s] at the raw, it has a name and a
+[1686.6s] description and then some other like
+[1688.5s] metadata here. Um, but this is basically
+[1691.0s] like here is the thing that gets
+[1693.0s] advertised to the model. So you want to
+[1694.7s] keep this description pretty small is
+[1696.7s] telling the model, hey, here's the
+[1698.1s] things you have access to. And the same
+[1700.5s] thing is true of um and so like we talk
+[1703.0s] a lot about like instruction budgets,
+[1704.6s] right? You only have, you know, a couple
+[1706.1s] hundred instructions that the model can
+[1707.8s] follow. Every single sub aent you add to
+[1710.2s] your context window is going to be
+[1711.4s] injected every time. And so that's like
+[1713.8s] the instructions about how to use this
+[1716.0s] sub aent is part of that instruction
+[1719.5s] budget. So, if you have hundreds of sub
+[1721.1s] agents, you're now eating into your now
+[1723.9s] your now your tools block in your
+[1725.7s] context window is getting longer and
+[1727.1s] longer and it's detracting from its
+[1728.6s] ability to pay attention to the user
+[1730.5s] instructions.
+[1731.6s] >> Yeah, that's why the skills are so much
+[1733.0s] better cuz they're dynamic by default.
+[1734.7s] >> Well, so the thing is is now when you do
+[1736.6s] skill, you have actually the same thing.
+[1738.2s] So, you have like, you know,
+[1739.4s] >> does it actually add them all in? From
+[1741.2s] what I saw,
+[1742.2s] >> every single every single skill. So, now
+[1743.9s] they have like a tool search thing. Um
+[1745.8s] so if you have more than like 50 skills
+[1748.0s] it will just like
+[1749.4s] >> tell the model it gives it instead of a
+[1751.0s] skill instead of a list it says like use
+[1753.1s] this use the skill search tool.
+[1755.5s] >> Um but by default it's like you know
+[1757.8s] load custom instru I don't know exactly
+[1759.4s] what it says available skills and then
+[1762.7s] this is like every skill you have
+[1764.5s] installed.
+[1766.0s] And so if you come and look in um
+[1769.2s] >> what's a skill that we use? Um let me
+[1772.3s] pop this one open. So we have a couple
+[1774.2s] skills that we just use internally that
+[1775.9s] have to do with like application
+[1777.3s] reliability engineer. This is like how
+[1779.2s] to use sentry and stuff to investigate
+[1780.8s] bugs. So this has its own description
+[1782.9s] and that's going to be listed in the
+[1784.1s] context window and like code review. We
+[1786.9s] have another one which is like review
+[1788.1s] the changes against the rules. We have a
+[1789.8s] specific thing we do a lot which is like
+[1791.1s] rebasing drizzle migrations. Um, and so
+[1793.8s] every single one of those, every single
+[1795.2s] session you run in this repo or if you
+[1797.1s] have skills installed globally, these
+[1799.1s] all get injected into the description of
+[1801.6s] your context window for Claude. And so
+[1803.6s] this is this is why
+[1804.6s] >> this is going to be another bloat
+[1805.8s] problem like in another 3 months when
+[1807.5s] people start overusing this guaranteed.
+[1809.7s] >> Well, so the the team has actually
+[1811.0s] gotten I think pretty pretty like ahead
+[1813.7s] of the curve here because everyone wants
+[1815.0s] to install a million skills. So they
+[1816.6s] have like tool search basically and what
+[1819.8s] this is going to do is I think it's just
+[1821.0s] like a basic like uh like keyword search
+[1823.5s] based thing. There's not any like
+[1824.7s] embeddings happening.
+[1825.8s] >> Yeah.
+[1826.1s] >> But basically the schema of of tool
+[1828.2s] search is like string to like list
+[1833.0s] tools.
+[1833.8s] >> Yeah.
+[1834.6s] >> Um or like tools and skills and like MCP
+[1839.8s] tool because you also get for every MC
+[1842.6s] that's what I thought they do. I thought
+[1843.8s] they have the tool search thing and now
+[1845.1s] skills unless explicitly stated are not
+[1847.7s] loaded in by default and they get
+[1850.2s] there's an extra hop where you have to
+[1851.6s] tool search for it and then you get it
+[1853.9s] and then it loads it in
+[1855.6s] >> cuz there's like lazy skills and like
+[1857.4s] hard skills which are like always loaded
+[1859.4s] in. I believe the search gets the last I
+[1862.1s] read was like a month ago and I I think
+[1863.5s] it's the the search gets injected in if
+[1865.8s] you have more than 10k of your t context
+[1868.3s] window in the tools message
+[1871.7s] and so like
+[1872.8s] >> if you have a crap ton here and again
+[1874.7s] every MCP server this is why people talk
+[1876.5s] about like server one
+[1879.4s] tool two like if a server exposes 27
+[1882.5s] tools every single one of those ends up
+[1884.2s] in your context window and that's for
+[1886.3s] every single MCP server you have
+[1888.9s] >> and that just like so screwed like you
+[1892.2s] were you literally cannot write you
+[1893.9s] literally cannot work if you have like
+[1896.4s] uh if you have downloaded the HubSpot uh
+[1899.3s] MCP for example
+[1900.8s] >> yeah it just funamentally yeah
+[1903.0s] >> we've talked about this in the past but
+[1904.7s] any what I'm getting to here is
+[1907.0s] basically like the correct recipe here
+[1909.9s] is like I think you want to basically
+[1912.1s] like the big takeaway here is like
+[1914.6s] separate out uh instruction modules from
+[1919.2s] context isolation. Like these are two
+[1921.3s] orthogonal concepts. And so like don't
+[1924.8s] put your custom instructions in agents.
+[1926.7s] I think the the correct like way to do
+[1928.6s] this and the the way that we would do
+[1930.1s] this is like you know if I wanted to do
+[1932.6s] a sub agent to do something that is like
+[1935.0s] complex like or it's going to be context
+[1936.7s] intensive, right? Another one we do is
+[1938.1s] like playright. If you're gonna launch
+[1939.7s] an agent to go like click around a
+[1941.9s] browser and read a bunch of HTML in the
+[1944.5s] DOM, then you're going to end up with uh
+[1948.4s] a ton of stuff in your context window.
+[1950.2s] And so you want to do that in a sub in a
+[1951.8s] sub agent. Um but the idea here is like,
+[1954.4s] you know, launch a general purpose sub
+[1957.8s] agent to use the secret skill and then
+[1962.8s] we should see here and actually I'm
+[1964.6s] going to go launch the we'll watch this
+[1966.2s] and then I'll launch it in um in
+[1968.2s] Riptide. So we can see actually like
+[1970.0s] what is happening here.
+[1971.4s] >> So launch an agent
+[1973.4s] >> while this runs. We've got about 10 15
+[1975.0s] minutes. I'd love to see if people have
+[1976.4s] questions out there while while we while
+[1979.0s] we go.
+[1979.4s] >> I've covered most of it. I mean we can
+[1980.7s] we can take some questions and kind of
+[1982.2s] start wrapping this up. Um I'll let the
+[1984.1s] audience kind of guide where we go.
+[1986.6s] >> Uh from Joshy, do you put skills in
+[1990.2s] global or per project? Or if per
+[1993.1s] project, how do you manage the skills if
+[1994.6s] they diverge? What do you mean like
+[1996.2s] diverge across repos or?
+[1999.8s] >> Yeah, I guess that's what they're
+[2001.1s] saying. Like maybe per people. So I can
+[2003.2s] tell you like we have an edge team of
+[2004.4s] like 10 people now.
+[2005.5s] >> Yeah.
+[2005.9s] >> Uh and this has become a real problem
+[2007.6s] because like everyone has some slightly
+[2009.2s] different workflow and like you can't
+[2010.6s] really force engineers to do the same
+[2012.2s] exact thing.
+[2014.4s] What I have found personally is it's you
+[2017.4s] get way better alpha being more
+[2019.7s] prescriptive
+[2022.0s] when possible in as many things as
+[2024.8s] possible because if you have one
+[2025.9s] workflow you can actually just optimize
+[2027.5s] it everywhere
+[2028.5s] >> rather than trying to build like seven
+[2030.6s] workflows that are all halfbaked.
+[2032.5s] >> Yeah. I mean, we had this problem with
+[2034.5s] with with Docker and like when
+[2036.4s] everything was in do it's like some
+[2037.6s] engineers would build the Docker
+[2038.7s] containers by hand. Some engineers were
+[2040.4s] using a Docker compose file. Some
+[2042.0s] engineers were running stuff remotely on
+[2043.5s] a server. And it was like the CTO woke
+[2045.7s] up one morning and it's like, oh, the
+[2047.3s] senior engineers are spending 40% of
+[2049.0s] their time running around helping people
+[2050.4s] fix their dev environments. And it's
+[2052.4s] like, okay, we have to build a uniform
+[2054.6s] way to do this. And like, obviously,
+[2056.1s] it's really hard to force
+[2057.4s] [clears throat] engineers to work in a
+[2058.5s] certain way. So, you have to find a way
+[2059.8s] to like make them want the new thing. uh
+[2062.9s] I think is part of it.
+[2064.3s] >> But the more you can consolidate the
+[2065.7s] better. Yeah. You have to balance
+[2066.7s] between like flexibility and letting
+[2068.2s] people like work the way they want to
+[2069.5s] work that's going to help them be the
+[2070.7s] most productive. But also like if
+[2073.2s] everybody's innovating in every single
+[2075.1s] different direction, then it's chaos.
+[2077.4s] >> Exactly. And you just make no progress.
+[2079.3s] Also, you have a lot of inconsistency.
+[2081.4s] >> Yeah.
+[2081.8s] >> That is really bad. Um and you kind of
+[2084.5s] end up in this really weird dichotomy
+[2086.1s] where most people are struggling and a
+[2087.7s] few people are doing like 50x at the
+[2090.2s] same time. It's way better to lift a
+[2092.2s] median.
+[2093.3s] >> So like how to distribute skills and
+[2095.8s] instruction, right?
+[2097.4s] >> Yeah.
+[2098.0s] >> So there's there's I'll actually do two
+[2099.7s] flavors of skills here, right? So you
+[2101.1s] have skills and then you also have like
+[2102.6s] agents MD. Um because like I may have a
+[2105.8s] thing that I think is worth putting in
+[2107.2s] agents MD, but I don't want to put it in
+[2108.8s] the repo one. And so the way the cloud
+[2111.1s] code config surface happens is you have
+[2112.8s] like tilda.cloud
+[2114.9s] whatever. And this is just on your
+[2116.3s] workstation. And this can be skills MCPs
+[2121.0s] and there's a cloud MD in here, right?
+[2123.7s] >> And then you have in a project you have
+[2126.5s] like project.cloud
+[2129.6s] etc.
+[2130.4s] >> And you also have one for folder, right?
+[2133.4s] >> So this one's a little tricky. So then
+[2135.3s] you also have like
+[2137.8s] settings.local.json
+[2140.1s] which is like not get committed and is
+[2142.3s] just your settings. It doesn't support
+[2144.1s] all of this stuff, but there are certain
+[2145.4s] things that you can basically say like
+[2146.6s] this one's just mine. Um, and then yeah,
+[2150.7s] you can have, you know, project slash,
+[2153.3s] you know,
+[2155.0s] some path slashcloud MD and then you can
+[2158.2s] have, you know, some other path.
+[2161.2s] >> Yeah, exactly.
+[2162.4s] >> And so these will get loaded dynamically
+[2164.0s] as you touch those paths. But like
+[2166.5s] skills and MCPS and this stuff, it
+[2168.1s] always has to be in the root of like the
+[2169.8s] directory you're running in. You can't
+[2171.5s] put like projects some other path
+[2173.7s] slash.claudeskills.
+[2177.4s] >> Yeah, that becomes a new route
+[2178.9s] effectively for cloud code.
+[2180.6s] >> Yeah, you have to then run claude from
+[2182.3s] from that directory in order to access
+[2184.1s] that stuff is is um is is how we've seen
+[2186.8s] this working.
+[2187.9s] >> Dexter, I'd love to hear your thoughts
+[2189.1s] on this. At least I could tell you what
+[2190.5s] we do.
+[2191.4s] >> Um I and like we're transition now
+[2194.1s] because we've have a slightly large
+[2195.6s] team. Uh and that transition is very
+[2197.3s] interesting. Before we just let everyone
+[2198.7s] it was wild west. Everyone just had
+[2200.0s] their own [ __ ] Everyone just made it
+[2201.4s] work. I think now when I look at this,
+[2204.2s] it just doesn't work when you do it that
+[2205.7s] way. You want workflows. You want really
+[2207.8s] really prescriptive workflows. And it's
+[2210.1s] actually better to have less skills than
+[2211.7s] more skills because more skills means I
+[2213.9s] have to teach people how to use those
+[2215.1s] freaking skills. And I don't want to do
+[2216.8s] that. I want to I want to give them the
+[2218.2s] minimum amount of data possible.
+[2220.2s] >> Yeah. So there's there's a couple ways
+[2221.6s] I've seen people do this, right? If you
+[2223.1s] have a monor repo, things get easy. But
+[2225.0s] almost nobody has like a a pure mono
+[2227.6s] repo, right? But like
+[2229.1s] >> you're a monor repo.
+[2230.6s] >> You Yeah. Well, you guys do cuz you're
+[2232.6s] smart. [snorts]
+[2234.0s] >> Everyone should do a monor repo. If you
+[2235.4s] haven't done a monor repo, literally fix
+[2237.3s] it today. Go ask cloud code to make a
+[2239.5s] giant monor repo. Fix your GitHub
+[2241.0s] workflows and you're going to be so much
+[2242.9s] happier.
+[2243.7s] >> Okay. But so so I will Yes, I agree. And
+[2247.0s] actually I've even talked to people who
+[2248.6s] run coding agent companies and they're
+[2250.1s] like if you they'll go into like big
+[2252.0s] Fortune 500 enterprise and they'll be
+[2253.6s] like if you are not willing to like
+[2255.7s] immediately fasttrack a project to move
+[2259.2s] everything to a monor repo then like we
+[2261.2s] don't want to work with you because
+[2262.3s] you're going to lose to someone who did
+[2263.8s] basically like the the benefits are so
+[2265.9s] good
+[2266.9s] >> that uh so yeah monorreo you just have
+[2269.5s] all your shared stuff in docloud and
+[2271.0s] like everything just works. It's nice.
+[2273.0s] Um I've seen a couple other things um
+[2276.2s] where people will have like three repos.
+[2278.0s] So let's say you have your like you know
+[2280.4s] tilda slsource or whatever and you have
+[2283.4s] your let's just really basic example you
+[2285.1s] have your front end repo
+[2287.2s] you have your back end.
+[2289.1s] >> So we have a secret monor repo we have
+[2291.3s] like a open source and a closed source
+[2292.9s] repo and it's very similar to this. What
+[2295.5s] we do is we sim link the open source one
+[2297.6s] into the backend one so it behaves like
+[2299.0s] a monor repo. Are you using um copy or
+[2302.6s] copy copy bar or whatever?
+[2305.1s] >> No, we just use ln-s and sim link it.
+[2307.9s] That's what I would do for everyone that
+[2309.0s] has a front and back end.
+[2310.4s] >> So, sim get weird. Um we've had a lot of
+[2313.4s] people like when you do sim links in
+[2315.0s] certain ways, it can like break builds
+[2316.6s] and stuff. Um let me let me let me let
+[2319.0s] me talk through like how how we've seen
+[2320.4s] this working. So, um and then you have
+[2322.1s] like your agent stuff like all your
+[2324.2s] shared cloud stuff. And so like this has
+[2326.7s] the cloud. This has maybe like
+[2328.7s] workflows. This maybe you have like a
+[2330.6s] scripts directory for creating like for
+[2332.6s] example like create workree or whatever.
+[2335.6s] Um and then I've seen people basically
+[2337.3s] have like a setup.sh which will take all
+[2340.3s] of the shared agent stuff like
+[2341.8s] especially if you're like 50 repos. Um
+[2344.5s] and I'll tell you why I think there's a
+[2346.3s] better answer to this but basically like
+[2348.6s] when you run the setup it will sim link
+[2350.8s] this stuff in. And so like
+[2353.0s] >> it's separate from
+[2355.5s] It's it's separate from the um
+[2359.0s] >> yeah you sim link your shared agent
+[2361.0s] instead of sim linking the repo together
+[2362.9s] you just sim sim link the agent stuff in
+[2365.2s] there
+[2365.4s] >> yeah you sim link in all the shared
+[2366.9s] infrastructure I
+[2369.4s] this works this is a way to do it
+[2370.9s] there's nothing wrong with this is this
+[2372.0s] is working for you should keep doing it
+[2373.8s] um the thing we found works
+[2375.8s] >> don't do it don't do it monor repo
+[2378.4s] >> so the thing we found works so I work
+[2380.2s] with customers that have 200 repos and
+[2382.5s] thousands of engineers and monor repos
+[2384.5s] not feasible. Like the repos are owned
+[2386.6s] by different teams who like one repo is
+[2389.5s] a year old and one repo is 10 years old.
+[2392.1s] >> Yeah,
+[2393.0s] >> one of the repos I worked at was
+[2394.5s] similar. It's hard.
+[2396.2s] >> Um the thing we find works also really
+[2399.9s] well. Uh the thing we found that works
+[2401.9s] if you're like you're just like I don't
+[2403.6s] care. I just need a thing that works.
+[2405.3s] Like this is our recommendation. And so
+[2408.2s] you have your source, you have all your
+[2409.6s] repos, and then we we hook people up
+[2411.4s] with this. And we actually made a
+[2412.6s] template for this. I'll link this in the
+[2414.2s] uh in the whiteboard. Um but it's called
+[2416.6s] RPI coordination template and it
+[2419.9s] basically is just like a simple repo
+[2421.4s] with a tiny little cloud MD. And what is
+[2423.9s] in here is basically you have a settings
+[2426.2s] JSON that is permissions additional
+[2428.3s] directories. And so as long as all these
+[2429.8s] things are checked out at the same at
+[2431.2s] the same level, if you run a cloud
+[2433.6s] session from this directory, it will be
+[2436.5s] able to read and write from those
+[2438.1s] folders because they're added as
+[2439.8s] additional directories. And then we put
+[2441.8s] in the cloud MD basically um this is a
+[2445.4s] coordination repo for multiple
+[2446.6s] repositories and we give it like a
+[2448.4s] oneline description of the repo and its
+[2450.3s] and and its job and that repo can have a
+[2452.3s] cloudm with more information and you can
+[2454.2s] kind of have like per repo stuff that
+[2455.9s] way. But we basically launch everything
+[2458.6s] from this coordination repo and then if
+[2461.8s] you go to do work trees we actually take
+[2463.6s] like per task or per ticket or per
+[2466.1s] branch we have some prompting in here
+[2468.7s] for like if you're using our create work
+[2470.4s] tree skill basically the idea is like
+[2472.7s] >> um if you're using the work tree skill
+[2474.6s] basically you create a workspace based
+[2476.6s] on the task name and then you just
+[2478.9s] create work trees for the couple repos
+[2481.0s] that matter. you already have a plan
+[2482.2s] doc, you already know what you're
+[2483.1s] touching. And so we create like a
+[2485.8s] checkout and then we run all the
+[2487.1s] sessions here. So when you're doing
+[2488.3s] research and stuff, you're on the main
+[2489.7s] branch and you're reading from all these
+[2491.6s] repos to build your plan. And then when
+[2493.7s] you're running um when you're doing when
+[2497.1s] you're when you're doing the writing,
+[2498.4s] you run it from here.
+[2500.2s] >> And uh oops, let's just
+[2502.3s] >> it's very this is very very similar to
+[2504.7s] kind of like a sim link. And I think
+[2506.1s] what we both concluded on here is that
+[2508.2s] we both really don't like you don't want
+[2509.9s] to get use get subm modules or like get
+[2512.1s] to go do this cuz then it like
+[2513.9s] >> it just is not ergonomic for the model
+[2516.2s] to be like oh you have a git subm module
+[2518.2s] in this other repo. It does not work.
+[2520.2s] >> Yeah. I have also seen the umbrella repo
+[2522.5s] technique where it's like you have
+[2524.8s] >> umbrella and then this is a git repo and
+[2527.3s] then you have front end and back end and
+[2528.7s] agent stuff all as like git subm
+[2530.4s] modules.
+[2531.4s] >> Yeah. I have talked to enough senior
+[2533.5s] engineers in in the last 10 years to
+[2535.9s] know that I have no interest in like
+[2537.7s] figuring out all the croft and like
+[2539.6s] workarounds and bending over backwards
+[2541.4s] you need to make get subm modules work
+[2543.1s] well. It's just
+[2544.6s] >> this is so much cleaner and simpler and
+[2546.4s] the model understands it perfectly. Like
+[2548.6s] this is the thing that we found works
+[2550.2s] really really well. We've iterated on
+[2551.4s] like six different versions of this and
+[2553.1s] we've tried get subm modules.
+[2555.0s] This is the thing that seems to be
+[2556.5s] working well. Uh where it's like it just
+[2558.4s] gets out of the way and you just talk to
+[2559.9s] Claude and tell it what you want to do
+[2561.1s] and the results are as expected.
+[2563.8s] >> Yeah, 100%. This is the only way to go
+[2566.3s] do it.
+[2567.3s] >> Um cool. I mean that's all I kind of had
+[2569.3s] to talk about. Um what other questions
+[2570.8s] we got?
+[2571.4s] >> I think people just talk about sharing
+[2572.9s] stuff is hard. Um how do you write the
+[2575.4s] descriptions for your skills so agents
+[2576.9s] invoke them correctly? I have to create
+[2578.6s] plan skill called every time I mention
+[2580.7s] the word plan and somewhere for the
+[2582.8s] implement plan skill. It's funny because
+[2584.6s] my my my experience has really been
+[2586.6s] around like most of the time agents
+[2589.3s] won't use skills when you want them to.
+[2591.8s] Um event every once in a while we have a
+[2594.5s] couple skills that get invoked when I'm
+[2595.8s] like you shouldn't invoke that that's
+[2597.1s] not necessary right now. Um and the the
+[2600.0s] best thing you can do is put in the
+[2601.2s] description. Uh so there's two options
+[2603.4s] you can actually do. Uh a thing that we
+[2605.3s] have done I think in uh let me just go
+[2609.1s] pull this up real quick. There was a
+[2611.5s] flag that I heard about from I don't
+[2613.0s] know if you guys know Tariq on Twitter.
+[2614.6s] Um he is uh oh I deleted these commands.
+[2617.5s] Um but he he he turned me on to this. He
+[2620.4s] he's on the cloud code team. But
+[2621.9s] basically one thing you can do is so if
+[2625.5s] you only want to use it as a slash
+[2626.9s] command then um then you can put in here
+[2629.8s] you can go like okay so here's our
+[2631.6s] episode prep command. Um,
+[2636.3s] you know, you can put your name, episode
+[2638.8s] prep, description, and then you can say
+[2641.5s] disable model invocation. True. And this
+[2645.3s] will mean the model doesn't even see it
+[2646.6s] in the context window. And so it's only
+[2648.5s] meant to be used for um
+[2653.3s] as
+[2654.2s] >> slash. Yeah, exactly.
+[2655.0s] >> So if I say like use the episode prep
+[2658.4s] skill,
+[2660.2s] it's probably not going to see that.
+[2661.4s] It'll probably try to use the email prep
+[2662.8s] skill. Yep. Cannot be used with skill
+[2665.2s] due to disable model invocation.
+[2668.2s] Um, and so, but if I do slash episode
+[2671.5s] prep, this is still available to me. Um,
+[2675.3s] if you want it to be model invocable,
+[2677.1s] but just when you tell it, literally the
+[2679.4s] workound we have is like the description
+[2681.2s] is here. Do not invoke this skill unless
+[2685.5s] the user
+[2688.2s] explicitly asks for it by name. This is
+[2692.3s] this is the workaround if if if you want
+[2694.0s] it to be able to invoke it sometimes,
+[2695.6s] but you only want it to be invocable
+[2697.1s] when it's like uh you know. So let's
+[2701.0s] let's do another session. So now it
+[2702.5s] should probably not I want to do episode
+[2705.6s] prep.
+[2706.9s] >> Well, that'll work because you
+[2709.4s] >> I did ask for it by name. So, I say I
+[2711.0s] want to do episode prep.
+[2712.5s] >> Well, let's see. Here it's ambiguous. Uh
+[2715.6s] because
+[2717.6s] Oh, did it not say
+[2718.6s] >> I want to prepare an episode?
+[2722.2s] >> Yeah. Here it's it shouldn't work.
+[2724.6s] Episode space prep. One could argue
+[2726.8s] that's you asking it by name.
+[2728.2s] >> Yeah. Yeah.
+[2730.6s] Um Yeah.
+[2733.4s] And now it's like, okay, do you want to
+[2735.0s] use that skill?
+[2736.4s] >> Exactly. So that is a that is a that is
+[2739.7s] a pretty hacky workaround but um that is
+[2741.8s] that that is what we have found using
+[2743.3s] because it's literally you're just
+[2744.2s] prompting you're this is just goes into
+[2746.1s] your system message about how and when
+[2747.6s] to use this skill.
+[2748.5s] >> Yeah. What's your thoughts on code I
+[2749.8s] guess agent teams feature?
+[2751.3s] >> Uh yeah so the agent teams and the like
+[2753.8s] you know I think the quality of results
+[2756.3s] you'll get from an agent team is
+[2758.4s] proportional to the quality of like the
+[2760.2s] work you've done up front breaking down
+[2762.2s] the problem into small enough chunks
+[2763.9s] that the agent team can do it. Uh, our
+[2766.8s] take is always, you know, do not
+[2768.1s] outsource the thinking. Um, there is
+[2770.5s] something to be said for like throwing
+[2771.7s] more tokens at the problem, but I think
+[2773.8s] the
+[2775.4s] I'm not super bullish on agent teams
+[2777.2s] because I think if you're just going to
+[2778.2s] ship out more code in separate context
+[2780.9s] windows that don't know about each
+[2782.3s] other, it's more likely you'll have to
+[2783.9s] do like stitching them together at the
+[2785.6s] end. And I would actually like there's
+[2789.0s] been a lot of chat about this actually
+[2790.1s] online today of like did you see the
+[2792.0s] Amazon thing of like Amazon is having a
+[2794.1s] bunch of internal like policy changes
+[2795.9s] because they're shipping too much slop
+[2797.5s] AI code.
+[2798.7s] >> I did not I oh the senior engineers the
+[2801.6s] senior engineers have to go read all the
+[2803.0s] code.
+[2803.4s] >> There's a new rule is like if you're an
+[2804.6s] L1 to an L3 you are not allowed to ship
+[2806.6s] AI generated code without a review from
+[2808.4s] a senior engineer. Um, and so basically
+[2811.4s] the idea is like shipping more code
+[2813.7s] faster, like more tokens of code was
+[2816.2s] never the bottleneck. The bottleneck has
+[2818.1s] always been like humans reviewing the
+[2821.0s] design and making sure it's correct and
+[2823.0s] like how do we find leverage. Um, and so
+[2826.3s] like once you've built a really good
+[2828.3s] design discussion and a and a good plan
+[2830.2s] is what we talked about a lot is like
+[2832.1s] then sure do it in parallel or do it in
+[2833.9s] series. It doesn't matter. Like the hard
+[2835.7s] the hard time consuming thing is not
+[2837.7s] [ __ ] out the code. It's it's like
+[2839.6s] deciding what to build and designing it
+[2841.4s] well. So that's why I'm like I'm not
+[2843.4s] super bullish on agent teams because the
+[2845.1s] bottleneck is still like how do we make
+[2846.9s] sure that like humans are making sure
+[2848.5s] stuff is good.
+[2849.7s] >> Yeah, Dax just Dax just made a post
+[2851.4s] about this too. He's like we're shipping
+[2852.6s] too much code and it's actually just
+[2854.0s] we're not thinking about it hard enough
+[2855.3s] and like honestly that's the biggest
+[2856.6s] problem. Like people just I see this all
+[2858.9s] the time where like engineers are like
+[2860.4s] oh I can write the code and they
+[2862.6s] >> Yeah, you could just prompt a feature
+[2863.9s] into ex they say this about their work
+[2865.4s] trees thing. We could have prompted a
+[2867.0s] work trees feature into existence months
+[2869.0s] ago, but we wanted to design it right so
+[2871.5s] that it would work as like the
+[2873.1s] abstraction was work
+[2875.8s] trees because it's like well maybe this
+[2877.6s] is running in a remote sandbox and it
+[2879.4s] doesn't actually need a work tree. It
+[2880.5s] needs an entire new piece of
+[2881.6s] infrastructure.
+[2883.1s] >> Exactly. So like people thinking tokens,
+[2885.8s] man. Thinking tokens. Before you code,
+[2887.8s] you need to spend your own thinking
+[2889.1s] tokens. [laughter]
+[2891.6s] >> Um let me see. I'm going to share my
+[2893.2s] screen again. I want to go find this
+[2894.3s] tweet cuz this is really really
+[2895.4s] interesting. Yeah, here it is. He said
+[2896.5s] this to the whole team is like we need
+[2899.0s] to spend more time cleaning things up.
+[2900.6s] And also like if you're iterating on a
+[2902.8s] feature and the original design was
+[2904.5s] wrong, you need to throw it away and
+[2905.9s] start over, not like have an LLM like
+[2908.2s] hack you through the thing. And don't
+[2910.0s] ship things just because you can. Make
+[2911.8s] sure it's worth shipping because it adds
+[2913.4s] surface area.
+[2914.4s] >> Yeah, exactly. We spend a lot of time.
+[2917.3s] You wouldn't be surprised the amount of
+[2918.2s] code that we've thrown away
+[2919.8s] >> because like if it's shitty, it's just
+[2921.5s] unmaintainable slop.
+[2923.0s] >> And you'll you'll like this one by Bob.
+[2924.5s] was something that I in response to the
+[2926.0s] Amazon thing like this is my take on
+[2927.8s] like if you stop reading the code or you
+[2929.4s] try to like overindex on gas towner
+[2931.5s] agent swarms like
+[2933.7s] >> eventually the models will be smart
+[2935.0s] enough but in the next couple years a
+[2937.8s] lot of companies are going to die
+[2939.2s] because they like lean too hard into the
+[2941.6s] like lights off write software factory
+[2945.0s] and something's going to break at 3:00
+[2946.8s] a.m. and no one's going to have read the
+[2948.3s] code in three months and you're gonna
+[2949.6s] have three weeks of downtime trying to
+[2951.4s] fix it because no one understands how it
+[2953.0s] works and then you lose all your
+[2954.3s] contracts and now your company is dead.
+[2956.4s] Uh, okay, cool. Next question. Sorry.
+[2958.4s] Let's let's Who's got a positive
+[2960.2s] question?
+[2961.2s] >> How [laughter] can we be constructive
+[2962.3s] here?
+[2962.8s] >> Oh, actually I want to end on a note.
+[2964.4s] Uh, and I want to get your thoughts on
+[2965.7s] this. Um, I have opinions, but I want to
+[2967.3s] hear yours first.
+[2968.2s] >> Yeah.
+[2968.6s] >> What's your thoughts on cloud code
+[2970.2s] review?
+[2971.8s] Um
+[2972.2s] >> there's a lot of controversial opinions
+[2973.5s] going on right now. So I want to hear
+[2975.0s] your thoughts and I'll share mine too.
+[2976.8s] >> Yeah. I mean I've been I've been saying
+[2978.1s] this a lot. Um I've been saying this for
+[2979.5s] a while now is like we're all using the
+[2981.4s] same models. Like if you can use cloud
+[2983.0s] code to write the code then like cloud
+[2984.8s] code can review the code. Like I don't
+[2986.2s] think you need a separate product or a
+[2987.8s] separate like
+[2989.8s] you're just buying context engineering
+[2992.0s] and prompting. And I think at the end of
+[2994.7s] the day, like you're you're eventually
+[2997.8s] if you want to outsource like context
+[2999.7s] window management and prompting like you
+[3002.6s] probably can, but also like we don't we
+[3004.4s] don't use any of the code review
+[3005.4s] products. We just literally have a cloud
+[3007.2s] code. We have a step in our workflow
+[3008.6s] before we ship a PR where we do a code
+[3010.2s] review. And like there is something to
+[3011.7s] be said for like throw more tokens at
+[3013.6s] the problem. Have like you had your
+[3015.8s] instructions of like ship this feature.
+[3017.8s] have a separate context window with a
+[3019.4s] different set of instructions that is
+[3020.7s] like review for these 12 anti-atterns
+[3023.0s] that we know Claude likes to put in and
+[3024.7s] like fix them and that is useful. Like
+[3027.8s] the idea of using extra tokens to
+[3030.2s] re-review your code is great. Um I do
+[3033.2s] really also like the take of like hey
+[3035.2s] Anthropic's going to charge me an extra
+[3036.8s] 15 to 20 bucks for a code review for
+[3039.4s] code that Cloud Code wrote that it
+[3041.1s] should have written correctly the first
+[3042.6s] time. So, like it's it's a little bit of
+[3045.8s] a meme, but like in general, I think you
+[3047.6s] can you can get good results by throwing
+[3049.3s] more tokens at the problem. But I I
+[3050.9s] don't know. What do you think, Vib?
+[3053.3s] >> My opinion is uh
+[3057.2s] I think there's a balance uh there. Uh I
+[3060.1s] think I probably
+[3062.5s] how do I put it? We clearly can write
+[3064.6s] all software from scratch and we have
+[3066.3s] all decided that it is not worth writing
+[3068.0s] all software from scratch. Uh using
+[3069.8s] other people's code is worth it. I think
+[3072.6s] there probably is some balance where
+[3073.9s] using other people's context engineering
+[3075.4s] is going to be worth it.
+[3076.8s] >> Yep.
+[3077.4s] >> I think the thing that the claude code
+[3079.8s] team uh is really not nailing
+[3084.9s] in my opinion is like
+[3087.8s] they kind of hit this thing where every
+[3090.2s] PR is by default extremely expensive.
+[3094.8s] And that's and I say like we can pay $25
+[3098.2s] for a PR. It's fine. It doesn't really
+[3099.7s] matter. But like the problem is that
+[3102.4s] most PRs don't need that level of rigor.
+[3104.3s] And the ones that do
+[3107.0s] don't really h how do I describe this?
+[3111.0s] The ones that do, I probably want to
+[3112.9s] prompt in a very specific way cuz some
+[3115.1s] specific pipeline isn't going to work.
+[3117.0s] What I likely would love for the cloud
+[3119.0s] code teams I've done is if they just
+[3120.3s] released what they were doing for cloud
+[3121.6s] code for the prompts, I would just use
+[3123.5s] those prompts and I would gladly pay
+[3125.3s] anthropic for those tokens. I don't even
+[3127.3s] care. like the tokens are well worth
+[3129.4s] paying for code commit.
+[3131.9s] >> It's not worth human time. I don't even
+[3133.4s] want I don't even want my team to invest
+[3135.0s] in finding out what the best tokens are
+[3136.8s] to make it to make that system run.
+[3139.1s] >> Uh I'm even happy to pay for the context
+[3141.3s] engineering, but I think context
+[3142.8s] engineering and this is probably the
+[3144.0s] biggest problem that most companies are
+[3145.6s] running into. Context engineering is a
+[3148.8s] one-time
+[3150.5s] is a one-time purchase. It's not a
+[3153.6s] permanent purchase. And that's why I
+[3155.8s] think it feels so flaky. And I think it
+[3158.0s] probably to more people feels like a
+[3162.4s] it's like a app purchase, like an app
+[3164.3s] store purchase. You probably like some
+[3166.4s] apps do cost $100, $200, $1,000. Um, and
+[3170.9s] some enterprise apps have like
+[3172.1s] subscriptions built into them, but the
+[3173.4s] majority of apps are actually just like
+[3175.8s] mini games that are constantly bought
+[3177.2s] and you just keep on buying like mini
+[3178.7s] updates.
+[3180.2s] And I think that's the thing about
+[3181.4s] context engineering because it's like
+[3182.8s] low alpha in terms of sorry it's high
+[3186.0s] alpha but low uniqueness and once you
+[3188.9s] once you release it somewhere people
+[3190.5s] have access to it effectively. You can't
+[3192.2s] hide you can't protect the context
+[3194.7s] especially if they're paying the token
+[3196.2s] bill. You cannot yeah you can't uh you
+[3198.6s] can't build a company on a prompt
+[3200.2s] because someone will figure out how to
+[3201.5s] crack it and leak it and like you can
+[3203.8s] build a com a company on maintaining a
+[3205.5s] prompt of like hey every time a new
+[3207.0s] model comes out we are going to and the
+[3209.1s] end of the day is like a lot of people
+[3210.4s] here are founders who want to build
+[3211.6s] startups and trying to figure out like
+[3212.7s] what's what's worth investing in and how
+[3214.2s] do I build a thing that is sustainable
+[3215.7s] and has a good mode. It's like
+[3218.4s] we used to be kind of like sketched out
+[3221.0s] about like oh if we open source
+[3222.2s] everything then people will just use it
+[3223.5s] for free and it's like the people who
+[3225.4s] are actually going to be good users and
+[3227.0s] good design partners want to pay you and
+[3229.4s] the people who are just going to steal
+[3230.8s] everything and like use cracked prompts
+[3233.0s] are like you probably don't want their
+[3234.6s] business anyways and they probably were
+[3235.9s] never going to pay you anyways like even
+[3237.4s] if you like were managed to wall off or
+[3239.7s] like you know uh really really guard
+[3242.4s] rail your stuff
+[3243.1s] >> if if someone's paying the token bill
+[3245.2s] and it's not do they're going to find
+[3247.8s] the prompt. There's just no way
+[3249.1s] >> because it's going to their inference
+[3250.2s] provider and they can get observability
+[3252.4s] and all this
+[3253.1s] >> and and clearly we've decided that we're
+[3255.5s] going to live in a world where cloud
+[3256.8s] code lives um where cloud code is a
+[3260.1s] thing where like we want the models to
+[3261.2s] be swappable. So if the models are going
+[3263.0s] to be swappable because that's what
+[3264.4s] every provider does then you
+[3266.9s] >> it just won't work.
+[3268.2s] >> It just won't work uh fundamentally. So
+[3270.3s] like that's kind of what I think
+[3271.3s] Enthropic really missed. I think they
+[3272.7s] could have made a lot of money on their
+[3274.1s] tokens, but I think the problem that
+[3275.8s] they're running into as a business is
+[3277.0s] just tokens are low alpha long term.
+[3278.9s] >> My co-founder Kyle has this take also is
+[3280.9s] like that the cloud code is in this
+[3283.0s] interesting place where it's like the
+[3285.2s] original purpose I think of cloud code
+[3287.0s] was like like draw more traffic to the
+[3290.2s] anthropic platform like make more people
+[3292.7s] want to use anthropic models prove that
+[3295.3s] they're really really good by like
+[3297.5s] shipping use cases that have really
+[3299.1s] really good PMF. And like there has been
+[3302.2s] a little bit of this like interesting
+[3303.8s] transition of like there's a lot of like
+[3305.8s] people are unclear on what the terms
+[3307.6s] are, when and where you can use your max
+[3309.2s] plan and stuff like this. This is not
+[3310.6s] like my take. This is just like what
+[3312.0s] people are talking about on Twitter and
+[3314.6s] uh one one thing I think is like they
+[3317.6s] are trying to transition into a product
+[3321.0s] company and it's not really clear.
+[3322.8s] There's like basically competing
+[3323.8s] interest between like make cloud code
+[3325.8s] and claude co-work incredible products
+[3328.2s] versus make Anthropic the inference
+[3330.6s] platform the an incredible inference
+[3332.7s] platform and those things almost like
+[3334.4s] compete a little bit and so it's
+[3336.6s] interesting to watch them kind of like
+[3338.6s] >> traject through this journey and and
+[3340.4s] figure this out as they And I think this
+[3341.6s] is what good product teams do all the
+[3343.3s] time on both sides is like you have to
+[3345.5s] learn and you have to experiment and you
+[3347.0s] have to optimize for like figuring out
+[3348.7s] what people want, what people are
+[3349.9s] willing to pay for like what is what is
+[3352.0s] actually like really high what is good
+[3354.0s] enough to make people want to like swipe
+[3355.3s] a credit card for $200 a month or
+[3357.0s] whatever it is.
+[3357.4s] >> Yeah. Like they could for example turn
+[3359.2s] off an enthropic API to everyone and
+[3361.8s] just turn all their fossil and cloud
+[3363.5s] code and say you know what the only way
+[3364.8s] to use enthropic models is cloud code.
+[3367.4s] That's
+[3367.6s] >> true. And that will be an interesting
+[3369.2s] decision if they made that.
+[3371.2s] >> I don't think they're going to do that.
+[3372.5s] But like
+[3373.0s] >> I agree.
+[3373.7s] >> It it is a it is a thing that that you
+[3375.8s] might that could h anything could
+[3377.3s] happen, right? And you don't know what's
+[3378.3s] the right if their coding models are
+[3380.6s] actually like super authoritative and
+[3383.0s] they're actually winning. It's actually
+[3384.1s] not unreasonable for them to do that. In
+[3385.8s] fact, they might say that, hey, you can
+[3387.2s] do this and you can use entropic except
+[3389.2s] for building coding agents.
+[3391.0s] >> Yep.
+[3391.4s] >> Like coding agents are just not allowed
+[3392.8s] to use entropic API. I I don't think
+[3394.6s] they will do that cuz that would be
+[3395.7s] absurdly silly. I mean, they're getting
+[3397.5s] there with the max plan, but the max
+[3398.8s] plan is like they're selling $3,000 of
+[3400.7s] imperence for $200 and like they kind of
+[3403.7s] want to keep that locked down to like,
+[3405.2s] okay, you're using our stuff. Um,
+[3407.5s] >> there's one question from Vignesh, which
+[3409.3s] is like um launching uh about the cloud
+[3412.2s] agent SDK of basically like, oh, if I if
+[3414.1s] I use this in in cloud code, is that the
+[3415.9s] same as cloud agent SDK? And like maybe
+[3417.6s] we should do a deep dive on that, but
+[3419.0s] basically, yeah, the cloud agent SDK is
+[3421.2s] basically just wrapping the cloud code
+[3423.4s] binary. So everything that happens when
+[3424.9s] you runcloud, everything works the same
+[3427.4s] if you use the agent SDK as long as you
+[3429.2s] pass the right flags. So if you tell it
+[3431.0s] to use setting sources,
+[3432.7s] >> except the only difference is you can't
+[3434.2s] use the cloud max plan anymore using the
+[3437.9s] >> I actually don't think that's exactly
+[3439.6s] true. Um because so I
+[3442.6s] >> well the rules are from like a couple
+[3444.6s] weeks ago. Um I I think the take the
+[3447.3s] most important thing is like don't use
+[3449.0s] your cloud max plan in openclaw. Fine,
+[3450.8s] whatever. Uh don't use it in open code.
+[3453.0s] Like basically don't use it in other
+[3454.2s] harnesses because those harnesses
+[3455.8s] generate traffic that Anthropic can't
+[3457.7s] actually like if you were using cloud
+[3459.5s] code it's generating like inference
+[3461.3s] traffic that is exactly how they expect.
+[3463.0s] It's optimized for their infrastructure
+[3464.7s] and so they can reliably send sell you
+[3468.4s] 200 200 you $3,000 worth of inference
+[3471.0s] for $200 because they know it's they're
+[3473.0s] not going to have to actually support it
+[3474.2s] because it's being done in a way that
+[3475.4s] they know they can support. Well versus
+[3477.3s] like in open code or in open claw the
+[3479.6s] inference is totally different. The
+[3481.0s] caching is different. all of that stuff
+[3482.6s] is like completely different and so they
+[3484.4s] they don't want to subsidize that type
+[3486.4s] of inference. I think the reason the
+[3488.8s] whole like kurfuffle with the terms like
+[3490.4s] a couple weeks ago of like oh now you
+[3492.5s] can't use it in the cloud agent SDK. I
+[3494.1s] think the number one problem there is
+[3495.4s] like I know a bunch of founders who are
+[3497.0s] building a SAS on the cloud agent SDK.
+[3499.8s] So not even like their all their
+[3501.0s] inference goes through the cloud agent
+[3502.2s] SDK and their take is basically like
+[3503.9s] >> if you are building a web app and you
+[3505.7s] are serving inference to your users
+[3508.0s] using the cloud agent SDK you may not
+[3510.6s] use your max plan for that. I think
+[3512.4s] that's what the most recent change was
+[3513.9s] about is like if you are serving
+[3515.1s] inference to customers like or users you
+[3518.5s] should use an API key like don't build
+[3520.2s] your business on the cloud agent SDK. I
+[3522.1s] think actually if you're running cloud
+[3523.8s] code on your workstation and you're
+[3525.4s] using a product like Conductor or
+[3526.9s] Riptide or one of these things to
+[3528.2s] orchestrate it, I actually think that's
+[3530.2s] probably like it's still gray area. They
+[3532.2s] haven't they haven't like and they may
+[3534.1s] change their thing, but I think I think
+[3535.8s] the thing they're most worried about is
+[3537.1s] people using max plan to just like get
+[3539.0s] cheaper inference for like arbitrary SAS
+[3541.2s] use cases.
+[3542.0s] >> Like Theo released an open code kind of
+[3544.3s] competitorish thing and he was also just
+[3546.2s] like we can't add cloud code because
+[3547.6s] like cloud code
+[3548.9s] >> that's different. That's in the open
+[3550.2s] code, open clock category where it's
+[3551.8s] like, hey, we don't know that you're
+[3552.8s] going to follow the best practices for
+[3554.2s] caching. We don't know that your traffic
+[3555.5s] is going to work. We can't control the
+[3557.1s] behavior with feature flags. If we want
+[3558.6s] to turn off the extra inference, we
+[3560.3s] can't. Versus with cloud code, they can
+[3562.1s] flip a toggle in a SAS and suddenly
+[3564.0s] everybody's cloud code behaves
+[3565.2s] differently.
+[3565.9s] >> That's fair. Um, I saw there was a
+[3568.5s] couple of chats on on here that were
+[3570.8s] talking about if people want the shirt.
+[3572.4s] Um,
+[3574.3s] we're going to
+[3575.4s] >> we'll get B shirts. We'll get human
+[3577.4s] layer shirts and we're going to get uh
+[3579.3s] if you come to the unconference in uh I
+[3581.4s] think we're we're going to do April 11th
+[3583.1s] actually. I think we said March 28th
+[3584.6s] last time, but we will have AI that
+[3585.9s] works for the unconference.
+[3587.6s] >> Oh yes, we will. Yes, we will. Um we'll
+[3590.6s] keep it small. Maybe we'll get hoodies.
+[3592.2s] We'll see what we get.
+[3593.3s] >> Thanks everybody.
+[3594.1s] >> Adios.

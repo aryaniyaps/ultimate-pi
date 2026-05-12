@@ -1,0 +1,67 @@
+[0.4s] Hey VH, just wanted to let you know uh
+[3.3s] turns out we're missing some of some
+[5.4s] release automation in our Zed release
+[7.0s] pipeline. Um but that is now in place.
+[10.6s] Um so as soon as the Zed team gets back
+[13.0s] to us, we will be able to have it
+[16.1s] working for you.
+[17.4s] >> Hey everyone. Um my update this week is
+[19.9s] a lot of people have been asking for how
+[21.5s] does BAML compare to a lot of other
+[23.1s] frameworks. So, I went through and wrote
+[24.6s] a bunch of docs that show how to build
+[26.3s] different kinds of agents in different
+[28.1s] frameworks and so that you can better
+[29.8s] explain to other folks where BAML ends
+[32.1s] up helping you and how it ends up making
+[33.8s] a better scenario for building agents.
+[37.6s] Hey, Craig. So, you open this thread on
+[39.4s] Discord saying that we can't use BML
+[41.4s] with Go on Windows, which is true, but
+[43.8s] now we're just merging this PR that adds
+[46.0s] support for Windows for the Go Baml
+[48.0s] client. So, starting from the next
+[49.5s] release, uh Go will work on Windows. So
+[52.1s] when you use uh sego, you will not get
+[54.6s] this error anymore on Windows. It
+[56.9s] doesn't depend anymore on Unix. It will
+[59.0s] correctly work. So thank you for opening
+[61.3s] this issue.
+[64.9s] Are you sick and tired of making an LLM
+[67.4s] request and then just sitting and
+[68.8s] twiddling your thumbs while it spins?
+[71.2s] Well, Ben Epstein was, and we fixed it
+[73.4s] for him, and we fixed it for you. You
+[75.8s] can now specify timeouts on your
+[77.6s] requests, timeouts on the connection,
+[80.2s] timeouts on idling, and timeouts on the
+[82.4s] time to first token. If any of those
+[84.3s] fails, we'll kick that LLM out, and you
+[87.2s] can point yourself at a new one. Thanks,
+[89.5s] Ben.
+[92.4s] Hey, Andy, thanks for reporting the bug
+[94.0s] that our Python chatbot example is
+[95.5s] broken. We've since updated this, and
+[97.4s] now it's much easier to run. You can
+[99.6s] just run pnpm install
+[102.3s] once you're set up
+[105.1s] pnpmdev
+[107.6s] and now your back end and front end are
+[109.3s] both running from one simple command.
+[111.4s] Then you can go to localhost 3000 and
+[114.3s] you can actually see a full chat pod
+[115.6s] with a great debug panel of what's going
+[117.0s] on. So let's just try a really simple
+[118.6s] agent.
+[120.2s] And when you start the agent, you'll
+[121.6s] notice that right away you can actually
+[123.5s] see tool calls as they're running, as
+[125.4s] they're executing,
+[127.4s] and actually see exactly what the UI is
+[129.4s] doing. So once it completes,
+[133.2s] you'll actually go ahead and use a
+[134.6s] compute tool to go get this. Uhoh.
+[138.2s] And even messages are actually able to
+[140.1s] respond as well. So you can actually
+[141.5s] understand exactly how to calling now
+[143.0s] works in BAML. Thank you.

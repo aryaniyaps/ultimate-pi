@@ -1,0 +1,266 @@
+hey everyone today I'm going to show you
+how to set up a project with damel let's
+start from the very
+beginning I've created a python project
+and let's go ahead and open this inside
+a cursor let's go ahead and set this
+up the first thing we'll do is install
+B awesome if you haven't already make
+sure you find the vs code extension for
+bamel and install that
+once you've set that up you and
+installed baml you can run baml C in it
+this will give you a bunch of bamel code
+that you can see in this bamel code
+you'll have some bamel files you'll have
+three files a clients. baml generator.
+baml and then a res. baml for now let's
+just look at res. baml so we can
+understand what it's
+doing a function in bamel is comprised
+of just three parts the name of the
+function the parameters of the function
+and then the return type it looks like
+typescript the body of a function unlike
+code is represented by First Class A
+model itself you indicate what client
+you'll be using so in this case I'm
+calling the open ey provider with GPT 40
+as the model and then I'm using the
+prompt described over
+here the return type and C what this
+prompt looks like I hit this open
+playground button and now I'll to see my
+entire prompt fully rendered as I type
+it will update if I change this to open
+GT40 mini it will change up here as well
+to match what I expect I'll know what
+model I'm using at any given time the
+prompt will show you the tokens is if
+available for the right
+tokenizer additionally the prompt will
+show the raw web request being made here
+you can see the API key I'm using along
+with all the parameters to the model as
+well that includes chat message the
+actual text in the system and if I
+wanted to make something for
+say including entire web request so in
+this case you can see that everything
+here is going in as a system message now
+what parts are everything here you can
+actually see that this is going to
+change as I remove things now this Json
+is really hard to read so let's just
+look at the actual prompt and see what
+every part is doing
+so CTX that output format is actually
+injecting the data model into my prompt
+as I change this data
+model
+um my prompt changes as well to match it
+and I don't have to think about
+it but one last thing about baml is the
+fact that you're able to run test right
+in the UI itself along with in your flow
+so here you can see my test case is
+defined here tests are first class
+citizen so if I hit run
+test you will be able to see that the
+model outputed something and in this
+case it included some back ticks with
+Json and match my schema and what baml
+does for you it's is that it's able to
+take the raw response from the LM and
+convert it into your actual data type
+right over here so this is the resume
+data model as parsed from this response
+that means without the back there
+automatically now I want you to pay
+attention the fact that this was 72
+output tokens let's try
+something remember 72 output tokens to
+produce this
+today now you'll notice that we went
+down to 56 output tokens got pretty much
+the same output baml was able to go
+ahead and convert your data model from
+this to this this is because we no
+longer need quotes to actually parse any
+of the data so because we don't use
+quotes we're able to reduce it from 72
+to 56 what that means is you just
+save you just cut down your cost by 23%
+without modifying anything else now you
+did spend a little bit more on the input
+side fact you can see exactly how much
+more we spent 1 two 3 four five six 7 8
+nine maybe we can do better by making
+this that looks like it'd be less token
+so why don't we just go ahead and do
+this
+do n or we could just
+say no quotes around strings boom and we
+can quickly test and see if this produ
+same result it seems like it does it
+actually got a few more tokens because I
+did use quotes around some of it but
+overall we're still going to be a little
+bit cheaper and faster because of this
+now what you might find is I may not
+want experience to actually be a string
+maybe I want it to be something a little
+bit better so let's make a new
+class title company and let's go run
+this and all of a sudden it will still
+work we're able to actually get title
+and Company coming out of the
+model as we go ahead and look at the
+because instead of prompt engineering
+where I'm going to go ahead and write
+the prompt in WR instruction The Prompt
+I do all my work in the data
+model now you can do this with all sorts
+of things for example I might want
+uh and you're actually watching cursor
+go ahead and autocomplete this for me
+and once again we're able to figure out
+exactly what these are now I can have a
+standard mechanism with a more liberal
+title that the user gives for every
+single role it could be software
+engineer clearly I've not been imagine
+any of my past roles listed on this
+example resume over
+here now eventually I will want to move
+away from just prompting in baml and use
+this in real code either my python code
+typescript code Java code some other
+code that you might have in baml every
+single function that you create will
+actually be able to be used in any
+language of your choice so in this case
+I have a python project let's see what
+it feels like to call the extract resume
+function in
+Python let's set this up to use the
+right python
+environment and we'll also turn on type
+checking mode because it's going to make
+it more fun to
+use cool so how do we use this extract
+resume function that we wrote in baml
+let's take a look all you do is from B
+client import
+B and you do resume equals b. extract
+resume you're watching auto complete in
+real time resume.
+experience is going to be a list of
+experiences let's take a look again so
+we know where this is experience is a
+list of experiences that makes sense
+what if we made it a list of
+strings experience is now going to be a
+list of strings here bamel types and
+your python types will be perfectly in
+sync at all points that's because under
+the hood we actually create pantic
+models that mimic the bamel types for
+you that you can s keep in
+sync now what if you're streaming let's
+see what that looks like
+let's take a look at email email will
+always be optional or none because while
+streaming you may not yet have the email
+object available to you let's take a
+look at what happens when you get the
+final
+response the final response will have
+email be a
+stringed now you may find that you may
+also want to use something in async that
+becomes easy as well you can just import
+the async client instead and now all of
+a sudden these become a
+awaitable now you just put in a weight
+in front of B and this will become a
+rese object for the stream this needs to
+be an async for for
+async and now all these become correctly
+typed again so not only can you do this
+in syn mode you can do an async
+mode eventually you may want to use a
+slightly more sophisticated model than
+just open a for
+example you may want a model that tries
+GT40 then eventually tries GT40
+mini let's go ahead and use this openi
+fallback client and see what this does
+for
+us let's go ahead and see what this does
+for us you to see that I'm the custom
+CHT 4 model then eventually calling the
+custom CHT 40 Mini model what if I
+wanted to retry logic around CHT 40 a
+few times or I want to configure
+temperature I could set temperature to
+one over here and you'll notice in the
+web request the temperature is one but
+for this model it has no temperature
+attached to
+it and you're able to see the web
+request change automatically as we take
+a look at this now with a retry policy
+we can do something
+similar let's add a custom retri
+policy you're watching the visualization
+change immediately in real time and
+you're actually able to see that this
+retry policy is being applied if I were
+to go ahead and change this to have just
+one additional retry my visualization
+will also change through reflect that
+the whole point of daml as a language is
+we can build these tools as a first
+class citizen into the language when you
+use these same Tools in your python code
+this code doesn't even know that you
+have a retry policy attached to it
+because it's beautifully typ safe
+everywhere you use it if you were to go
+ahead and instead use typescript Ruby
+Java python go or C++ through our open
+API representation you will get the same
+level of type safety and guarantee that
+I just showed you with python if I
+change this code for example and this
+the magic folder pamel client I change
+this code to
+typescript everything in B
+client is suddenly going to be
+typescript change back to P if I change
+the Ruby
+survey everything in B CLI is going to
+be Ruby if I change it back to python
+it's all going to be
+python this is perfectly ins synct with
+your code base and you'll never lose
+touch all of the bamama code lives
+locally never makes any additional
+remote calls and any of the error
+correction that I showed you
+today is always happening locally on
+your own machine without any additional
+usage uh without any additional alms and
+it happens in under 1 to two
+milliseconds because baml is its own
+language with its own runtime
+implementation all of this is
+implemented fully in Rust
+any version of baml that you use in
+Python in typescript in Ruby or any
+other place as long as you're on the
+same version of baml will have the same
+exact performance
+points I hope this was useful and I hope
+this was fun thank you

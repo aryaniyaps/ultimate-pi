@@ -1,0 +1,431 @@
+Claude Code has been shipping features
+at a ridiculous pace recently. And even
+if you're not using Claude Code as your
+primary driver, it is still fascinating
+to see how far these tools are pushing
+the limits for AI coding. Remember, it
+was only a couple of years ago that we
+all were using these tools just for
+autocomplete. And then in the last year
+especially, we've gotten to autonomous
+agents that build out entire features
+end-to-end. And now Claude Code is
+leading the charge, turning their coding
+agent into essentially a multi-agent
+orchestration platform. It's a very
+powerful. With all their recent emphasis
+on agent teams and sub-agents and even
+coordinating your work across devices.
+So, that's what I want to cover with you
+right now. All of the biggest new
+features added to Claude Code in the
+last couple of months.
+And yes, you heard that right, only the
+last couple of months because that alone
+already gives us about a dozen features
+that I want to cover with you right now.
+Like the new 1 million token context
+window, agent teams, we have get work
+tree support, new commands built right
+into Claude Code. Of course, we have the
+new remote control. A lot of other ones
+that we'll hit on a very quickly. And
+the important thing for all of these is
+you might be using some of these
+features already. Others you might not
+have even heard of, but for all of them,
+I'm also going to give you some tips and
+tricks for when you want to pay
+attention to these features and when it
+might not be important for you. So, you
+can focus on using the parts of the tool
+that actually matter for you. So, with
+that, let's get into the first feature.
+First of all, we finally have support
+now for a 1 million token context
+window. It is now generally available
+for both Sonnet and Opus. And so, with
+this, we can now fit up to 750,000
+words into the short-term memory of
+Claude Code. So, we can theoretically
+ingest entire code bases now. The
+unfortunate thing with this though, and
+this is very repeatable with my testing,
+is once you get to about 250,000
+tokens, you will see a a
+uptick in hallucinations. And so, at any
+point in your conversation, you can run
+{slash} context to see your current
+token usage. And so, yeah, it's nice
+that we can go above 200,000 tokens now,
+but you don't want to actually push it
+that much further. Once you get to 250
+or 300,000 tokens, you generally want to
+do a memory compaction or write a
+handoff prompt and start a new session.
+So, this is a feature that's really cool
+to have, but with the limits of the LLMs
+right now, we don't want to push it too
+far yet. Next up, we have agent teams.
+This is similar to sub-agents, except
+these agents that work in parallel can
+now communicate with each other. So,
+they can knock off a task list at the
+same time, and they can make sure that
+they aren't stepping on each other's
+toes. And so, for example, I can send in
+a prompt here where I want to create an
+agent team for a code base review. So,
+one is going to do a security review,
+one a performance review, and one a test
+coverage review. And they might need to
+communicate with each other because
+potentially the test coverage review
+agent might need to understand some of
+the security concerns that the first one
+raises. And so, we need that real-time
+communication.
+And if you use tmux terminals like I am
+right here, you can see all of the
+agents working at the exact same time.
+And I can do control B and any arrow to
+switch between the different sessions,
+so I can work with them in real time.
+So, any point, I can interrupt any of
+the agents working in parallel on the
+right-hand side here, or I can talk to
+the lead agent and ask about how the
+agents are coordinating and inject more
+context at any point. It is very, very
+powerful.
+I also have a video that I'll link to
+right here where I cover agent teams in
+more detail, and especially how you can
+get the most out of using agent teams.
+Keep in mind that this is a very
+experimental feature. The agents don't
+communicate very optimally right now.
+And so, I'd say it's really powerful
+when you want to build proof of concepts
+quickly, but I wouldn't use agent teams
+yet for anything that you're going to be
+shipping to production.
+All right. So, now we've gotten to
+actually my most used new feature for
+Claude Code, and that is the native
+support for Git work trees. And this is
+a big deal cuz it allows us to very
+easily work with multiple copies of our
+code base with Claude at the exact same
+time. So, I have one work tree called
+feature one, another called feature two,
+and the important thing to see here is
+that we have a copy of our repo living
+in the .claud/worktrees folder for each
+of our work trees. And real development
+is always working with feature branches
+and different pull requests. So, if we
+want to do parallel work with Claude
+code, and we don't want our different
+feature branches to be overriding each
+other's changes, then we need local
+copies of our code base. And now we can
+do that immediately with Claude. We
+don't have to work with separate
+commands and run Claude in different
+work trees manually like we had to do
+before. It saves me a ton of time. I'm
+using this every day. Next up, we have a
+couple of commands that are now built
+directly into Claude code, and these are
+powerful. So, in Anthropic, they were
+using these internally for a while, and
+they figured like, "Hey, if this is so
+good for us, let's just share this with
+everyone and build it directly into the
+tool." So, we now have /simplify and
+/batch. And I'll give you a demo of this
+one in a bit as well. So, /simplify, you
+just run this after any implementation,
+and it guides the coding agent on
+simplifying the code base because we all
+know that large language models are way
+too prone to over-engineering, and so
+you end up doing this a lot yourself
+after anyway. So, now it's just a tool
+built in for us. And then what /batch
+does is this allows us to handle larger
+changes in parallel. So, we're
+orchestrating large-scale changes across
+our code base. Any kind of larger
+refactor is a perfect use case for
+/batch because it splits up the work and
+then dishes out different agents to
+handle it. There are a million examples
+where you need to do a larger refactors
+in a code base. But just to give you a
+quick example, let's say I have all of
+these console logs splattered throughout
+my code base, and I I to replace
+everything with a more production ready
+logging strategy. So, what I can do is
+just go into Claude and say {slash}
+batch, replace all console log calls
+with a structure logger that I have
+already set up in my utilities folder. I
+can send this off, it's going to create
+the sub-agents, handle all of the
+coordination itself, and then come back
+to me with a refactored codebase I can
+create my pull request. All right, next
+we have remote control and this is super
+cool because it is the coordinating work
+across devices that I mentioned at the
+start of the video. What I can do is at
+any point within a conversation on my
+desktop here with Claude Code, I can do
+{slash} remote control. This is going to
+create a cloud session that I can now
+use directly on my phone assuming I have
+the Claude app. So, check this out, I'm
+going to refresh on my phone, I have the
+conversation here. If I send in a
+message like hi, then right now we can
+see it pop up instantaneously on my
+computer. So, I can now work on my
+computer but from my phone anywhere.
+Super cool.
+All right, so for the next couple I'm
+going to stay pretty high-level but they
+still are very important starting with
+sub-agents. Sub-agents are becoming a
+bigger and bigger deal for all AI coding
+tools right now. There's a video that
+I'll link to you right here where I talk
+all about this. But yeah, it's just very
+cool to see Claude Code leaning into
+building more and more into sub-agents.
+A lot to cover here, you can see the
+documentation is very extensive. I'll
+just focus on a couple right now. So,
+first we have persistent memory. It is
+not just our primary Claude Code agent
+that can remember things for future
+sessions, our sub-agents can help with
+that as well. We can also define a hooks
+at the sub-agent level. Before the last
+couple of months, when you built a hook
+it had to be used by Claude Code all of
+the time but now we can do it at a
+granular level for individual sub-agents
+because different agents need different
+rules that we're adding in through
+hooks. So, just very powerful the level
+of control that we have with sub-agents
+now through these features and a lot of
+other ones.
+And then we have the new auto memory.
+So, claw.md, this is the classic rule
+file. These are all the constraints and
+conventions that we curate for our
+coding agent. But now, with auto memory,
+Claude has another way where it can
+curate memories for itself. So, it
+accumulates knowledge across sessions to
+learn from its mistakes, for example.
+Very, very powerful. It's enabled by
+default. We can disable it if we want.
+And it just builds up these memories in
+a memory folder within our global
+.clawd. And so, it's a bit more
+non-deterministic than the claw.md
+because we're not managing it. I think
+both are still very useful, but it's
+about time that our coding agent can
+finally remember things itself without
+us having to prompt across our different
+sessions. So, if you want absolutely the
+most control possible, I would recommend
+just sticking to the claw.md. But, if
+you want to give your coding agent a bit
+of autonomy to learn from its own
+mistakes, then definitely rely on both
+the claw.md and auto memory.
+So, I hope you found all this really
+helpful for you so far. Next, I want to
+cover two small but useful commands that
+were added to Claude Code very recently.
+We have /btw
+and /loop. So, starting with /by the
+way, this is for when you want to have a
+sidecar conversation with Claude Code.
+You want to ask a quick question, but
+you don't want to bloat your primary
+context window for Claude Code. So,
+imagine that this was a larger
+conversation that we're having here.
+It's just really simple for the sake of
+demo, but remember, Claude Code starts
+to hallucinate quite a bit once we get
+to about 250,000 tokens in the context
+window. So, we want to do everything in
+our power to prevent Claude Code from
+getting there, including using /btw
+when we have these side questions we
+want to ask. Like, let's say I didn't
+know what CRUD stands for. I could say,
+"What is CRUD?" Right? Like, I can have
+this very brief conversation, get the
+answer, and then I can escape out of
+this and continue with my work as if
+that never happened. So, it's for our
+own information, right? So, escape to
+dismiss, and then we're back to where we
+were before. Now, one really important
+thing to understand with /btw is Claude
+Code does not have tools when you're in
+this mode. So, it can't do any
+code-based exploration to answer your
+questions. It's only going to be able to
+answer things based on its knowledge and
+the short-term memory. So, only ask very
+basic questions with /btw. Otherwise, if
+you have a larger question that requires
+code-based analysis, have it kick off a
+sub agent to explore. Then we have the
+/loop command. We finally have a way to
+schedule a recurring prompt in Claude
+Code. They have a really good example
+here. So, let's say we just finished a
+bunch of work and we want to deploy it
+to production. So, we kick off the CI/CD
+pipeline, but we want Claude Code to
+wait for everything to be deployed to
+maybe do a validation at the end. And
+so, we can do /loop. We're going to send
+in this prompt every 5 minutes. Check if
+the deployment finished and tell me what
+happened. Give me a status update at the
+end. And honestly, the possibilities are
+pretty endless here for how we can use
+/loop. Just to give you another example
+here that I just came up with myself. I
+could do /loop. Every 30 minutes, I want
+to run all the tests to make sure
+everything is passing. So, you can have
+this sort of quality gate agent running
+at the same time working with other
+Claude Code instances. We can guarantee
+that we're constantly checking the tests
+as we're working. We could use something
+like a hook to alert us if any tests are
+failing. So, we can address that in our
+other instances. We can also use /loop
+to automatically pull web sites for
+information if we're waiting for some
+kind of update. There's a lot of things
+outside of coding that we can do with
+/loop as well.
+Also, earlier this month, Claude Code
+finally built a voice support into the
+platform. I have been using
+speech-to-text tools as my primary way
+to talk to Claude Code for over a year
+now. So, it's cool to see Claude Code
+adding native support for this. You just
+have to do a /voice to enable it for the
+first time, and And you can go ham. Now,
+one thing I will say, there are a lot of
+very powerful external speech-to-text
+tools out there. Like I use AquaVoice. A
+lot of people love using WhisperFlow or
+Epicenter Whispering, which that's a
+free and open-source one, by the way.
+And from my experience, these tools
+still are a bit better, at least, than
+the voice mode built right into Claude
+Code. So, still a reason to use these
+other tools, especially because then
+they work for every text box on your
+computer. But, if you don't have one of
+those tools already, definitely do
+/voice and start using this. It'll save
+you so much time typing, makes it
+especially easy to do those brain dumps
+that you need to do during your planning
+sessions with your coding agent. All
+right. So, the second-to-last feature I
+want to cover with you really quickly is
+our ability now to adjust the effort
+level for any models in the Claude Code.
+And this is very useful because we need
+to balance the reasoning capability of
+Claude Code with our token usage.
+Because we really want to avoid hitting
+the either the 5-hour or weekly token
+limits in the Claude Code. And so, when
+we go into Claude Code, we can see the
+effort at the top of our session when we
+just started, or we can run /effort at
+any point, just like we can run
+/context.
+And then when typically at the start of
+a conversation, when you want to change
+the model, you do /model, and then you
+can also use the left and right arrow
+keys to change the effort. So, medium is
+the default. It also just generally is
+what I recommend having as a default.
+But, if you're going into a session
+where you know you're trying to solve a
+very complex problem with Claude Code,
+or you want that extra reasoning for
+whatever reason, you can go between low,
+medium, and high. And then Opus
+specifically also has max effort, which
+is going to use a lot of tokens. But,
+often times this is worth it when you
+get really stuck on a problem.
+All right. So, for the very last new
+Claude Code feature, we have scheduled
+tasks. And so, in the same place where
+we have /loop, they talk about this, as
+well. We can set one-time reminders,
+like remind me at 3:00 p.m. to push the
+release branch. And then also outside of
+any specific Cloud Code session, we can
+also set up what are called cron jobs.
+These are tasks that we want to run at a
+recurring basis. Like every hour at the
+top of the hour, we want to run tests or
+check our CI/CD pipeline. Whatever we
+want Cloud Code to do on our behalf
+without us even prompting it. So,
+there's a few new tools built into Cloud
+Code to make this happen. They talk
+about the whole cron syntax here to
+specify how often we run things, but the
+useful part about Cloud Code is we don't
+have to know this. We can just ask Cloud
+to create these tasks for us, uh you
+know, list out our tasks, even cancel
+certain ones. So, we manage all of these
+tasks under the hood just with natural
+language. It's very, very cool. So,
+there you go. That is everything big
+added to Cloud Code recently. And let me
+know in the comments if you want me to
+make a dedicated video for any of these
+features cuz I definitely could do that.
+And I hope you can see with everything
+that we're adding here with the agent
+teams and sub-agents and coordinating
+work across devices, all this is
+pointing to Cloud Code becoming this
+multi-agent orchestration platform. Very
+cool to see. And so, if you appreciated
+this video, you're looking forward to
+more things on AI coding and Cloud Code,
+I would really appreciate a like and a
+subscribe. And with that, I will see you
+in the next video.

@@ -1,0 +1,2066 @@
+[1.2s] There you go.
+[2.8s] >> What's up, guys? How y'all doing?
+[5.0s] >> It's uh I'm going. We are um if for hold
+[9.0s] the disc live on Discord. Maybe we
+[11.2s] should do it on Discord at some point. I
+[13.4s] will
+[13.8s] >> I think you can stream it to Discord uh
+[16.1s] if you wanted to.
+[17.8s] >> If Riverside works on Discord, we'll set
+[19.6s] that up. Uh I got a special guest today.
+[21.4s] You can say hi to a popping experience.
+[23.9s] >> Oh, hey guys.
+[24.6s] >> We got Aaron over here. Uh the other
+[27.6s] >> All right. Today we have some so welcome
+[30.3s] to the AI that works show. Uh we have a
+[32.4s] very spe special guest today. In
+[34.0s] addition to Aaron, we got Kevin Gregory.
+[35.7s] Um and this is a program where uh what
+[38.2s] we do is we tell you how to take real AI
+[40.6s] engineering concepts that have been
+[42.5s] working in production in the field and
+[45.0s] apply them to your own projects to build
+[46.6s] AI that is good enough to ship to
+[48.2s] production customers. And Vob you want
+[50.6s] to give an intro to what we're talking
+[51.7s] about today?
+[52.7s] >> Yes. But before we do that, let's give
+[54.4s] quick background of uh who the heck we
+[56.4s] are, Dex.
+[57.7s] >> Okay, fine. I'm
+[59.0s] >> We're still working on the intro.
+[60.6s] >> Yeah, we we um as you can tell, this is
+[62.8s] not our official job. We write code most
+[64.3s] of the time.
+[66.1s] >> Uh my name is Vibb. I work on BAML uh
+[69.0s] which is a programming language. Dex.
+[71.4s] >> Uh I'm Dex. I work uh on human layer
+[73.9s] where we're uh helping people use AI to
+[76.5s] solve hard problems in brownfield
+[78.6s] complex code bases. And
+[80.3s] >> Kevin, give a little bit about yourself
+[81.8s] as well. Sure. So, I work at Evolution
+[84.9s] IQ, ML engineer, and at Evolution IQ, we
+[87.6s] build claims guidance systems for
+[89.5s] disability and work with self insurance
+[91.0s] carriers.
+[92.1s] >> So, you've got you've got solid AI and
+[94.7s] in AI that works live happening in your
+[97.4s] company is what I'm hearing. Um, but
+[101.0s] >> that's right.
+[101.4s] >> So, today's episode, as many of you
+[103.0s] know, was um scheduled around dynamic
+[105.4s] UIs. So, we did do a little bit of work
+[107.0s] on dynamic UIs. before we get to the
+[108.9s] really really exciting part that I that
+[110.6s] is exciting enough that has caused us to
+[113.1s] derail the topic today into something
+[114.7s] even better uh and which is why Kevin is
+[117.3s] on. So you should really really get
+[118.8s] excited for that. We're going to show
+[119.8s] you
+[120.8s] >> a snippet of dynamic UX. Why is my audio
+[123.8s] bad?
+[125.0s] Yeah, this is uh we had a we had a
+[127.2s] breaking news event. Um essentially
+[130.2s] while you're pulling that up I will just
+[131.6s] kind of tell the story a little bit
+[132.6s] which is um we did an episode actually
+[134.6s] the very first episode of AI that works
+[137.1s] um was about how to do large scale qual
+[140.6s] uh classification and how to build kind
+[143.0s] of um not necessarily the eval
+[145.8s] themselves but how to build your
+[147.8s] pipelines around being capable of
+[150.2s] leveraging incremental and kind of like
+[153.5s] very almost like unit testy style eval
+[156.5s] so that you can build these complex pip
+[158.1s] pipelines while being able to understand
+[160.0s] like how things work and where stuff
+[161.6s] went wrong. Um so I'm going to share
+[163.8s] really quickly just a couple of those
+[165.6s] and then I'll hand it back to Vibb to
+[167.2s] show you what we will be talking about
+[168.9s] in a very soon upcoming episode. But um
+[172.0s] this is the episode from March uh 31st.
+[175.8s] We talked about the simple way to do
+[177.7s] classification, how to pass a schema in,
+[180.2s] how to add probes to be able to
+[182.3s] understand and like narrow down your
+[184.4s] categories with embedding or naive rag
+[187.0s] or using an LLM. Um, and so we did this
+[190.7s] uh exercise and uh we wrote some code
+[192.9s] for it, but it was as most of the time
+[194.2s] we kind of just riffing and doing the
+[195.8s] concepts. What Kevin has done is
+[198.2s] actually taken all these concepts and
+[199.8s] built a actual production grade system
+[202.3s] with eval
+[205.0s] fancy stuff. So, we're going to dive
+[206.7s] deep on kind of his journey in building
+[208.3s] that and then also in um in kind of the
+[212.7s] code itself and and what it looks like
+[214.3s] and kind of what worked and what didn't.
+[216.0s] And uh I'm really excited to learn. I
+[217.8s] actually intentionally didn't want to
+[219.0s] know too much about this. So, I'm sure
+[220.3s] I'll have loads and loads of questions
+[221.9s] and we'll have eyes on the chat. So,
+[223.4s] please drop your questions in the chat
+[224.6s] as well. You can kind of view it like um
+[228.1s] uh you can kind of view it as almost
+[229.9s] like a level three of the concepts that
+[232.4s] we normally have done. And it is just
+[234.9s] insane what Kevin has managed to do. But
+[237.6s] I will give you a sneak preview of what
+[240.1s] um of what um
+[243.2s] we meant when we meant dynamic UIs.
+[246.7s] >> So, and I just saw real quick I I just
+[248.9s] got a comment that five ops volume is a
+[250.7s] little low. So, I'm going to turn down
+[252.3s] my dynamic volume. And so hopefully now
+[254.9s] you can turn it up and you'll get a more
+[257.1s] balanced mix.
+[257.9s] >> Wait, how do you do that? Actually, I'm
+[259.1s] need a Riverside. How do I set up my
+[260.4s] dynamic volume?
+[261.4s] >> Uh, if you click the settings in the top
+[263.4s] right, you can there's like an output
+[265.0s] volume.
+[266.7s] >> Um, I don't see
+[267.7s] >> change that slider.
+[269.0s] >> Um, is it in settings? I mean, oh, all
+[272.4s] settings. Output volume. Mine is maxed
+[276.8s] out all the way. When
+[277.7s] >> yours maxed out, I will cap mine a
+[279.5s] little bit so that people can turn it up
+[281.0s] a little bit and they hear us at the
+[282.2s] same volume.
+[283.7s] Okay. Well, uh hopefully this audio is
+[286.3s] better. Uh if there are any more issues,
+[287.8s] please let us know in the chat. So, what
+[290.1s] is dynamic UIs? Well, I think the idea
+[291.9s] of dynamic UIs is you should be able to
+[293.7s] build any sort of content. So, like in
+[295.3s] this case, I have a
+[298.2s] fun little image of like dextra and eyes
+[300.6s] thing over here or like uh let me see if
+[302.5s] I can get a different one.
+[305.4s] So, like over here, we did cloud code
+[306.9s] for non-tooding test. Yeah, that works.
+[308.5s] Number 20. It'd be really nice if I
+[310.8s] could build a UI for this element
+[313.0s] automatically. So, here's the two steps
+[315.0s] that I do under the hood. I ask ask an
+[317.7s] LLM to take the same code and describe
+[321.0s] code back to me in a way that actually
+[324.2s] Sorry.
+[325.0s] >> Yeah, you need to generate a new schema.
+[327.2s] >> Sorry. Yes,
+[329.2s] I pressed the wrong button.
+[330.2s] >> There's any socks or dogs in that image.
+[333.2s] >> Yeah. So, if I take this one, I go to
+[335.8s] this. What I can do is I can actually
+[337.0s] ask an LM to go and describe the schema
+[339.0s] that describes this model. Once I have a
+[341.6s] schema that describes this model, I can
+[344.2s] do a bunch of things and I'll just
+[345.6s] quickly describe what the schema is
+[347.4s] really fast and we can just burn through
+[349.0s] it really fast, which is we have an
+[351.0s] episode which has title, substring,
+[352.5s] series info, all this other information.
+[354.6s] Series info, stream details, schedule,
+[357.2s] um, and a bunch of other metadata over
+[359.3s] here. And then the return type is just
+[361.2s] an episode. Well, after that, I can run
+[363.7s] this code individually. And what should
+[365.6s] happen in theory is given this image and
+[368.0s] given that schema, I should be able to
+[370.6s] pull out really nice structured objects
+[373.0s] coming out of this. And you're seeing
+[374.6s] that I'm doing very dynamic stuff over
+[376.2s] here where I'm actually rendering. I
+[377.9s] could render the whole thing as JSON. I
+[379.5s] could render as YAML. I could render in
+[381.2s] like pretty format in some ways if you
+[383.4s] consider this pretty. Um, I can the last
+[386.6s] thing that we'll be showing soon is how
+[388.2s] to actually also build a React component
+[389.9s] that renders this. But if any of you
+[391.3s] have built dynamic React components
+[392.8s] before, it's actually quite simple. As
+[394.8s] long as you show the React component,
+[396.2s] this is my shape of my object. Now, just
+[398.9s] turn this into React component. I'm
+[400.4s] going to give you something of that JSON
+[401.8s] shape. It will know how to go do that.
+[404.9s] >> So, this is kind of the dynamic schema
+[406.7s] stuff we'll walk through and we'll walk
+[407.8s] through this code in much more detail
+[409.0s] and talk about how to go do this. Uh,
+[410.8s] this code is open source, so we'll send
+[412.2s] this out. Uh,
+[413.6s] >> nice. Has mustache. True.
+[416.1s] >> Say that again. Has mustache. Um, I do
+[418.6s] not have a mustache and it is not nearly
+[420.7s] as glorious as this man's, but I do have
+[423.2s] the glasses.
+[425.5s] >> Anyways, that's a preview of what's
+[426.7s] coming soon.
+[427.9s] >> Yeah. And this is what we mean by
+[429.3s] dynamic UIs. But today's episode is, I
+[432.2s] think, infinitely more fun than anything
+[434.3s] I have to talk about. Um, and then, um,
+[438.6s] there's a really fun question. It's
+[439.8s] like, um, do LMS know Baml? The answer
+[442.7s] is yes. Uh, they're quite familiar with
+[445.4s] it at this point.
+[447.4s] Um, but
+[450.2s] Kevin, why don't we take it away? Why
+[452.0s] don't we do a little primer on the
+[454.5s] classification video like Dexter was
+[456.4s] walking us through it. Uh, Kevin can
+[458.6s] guide us through a little bit of it in
+[460.1s] the beginning and then I want to talk
+[462.2s] about kind of the thought processes that
+[464.0s] he walked through and I know you have
+[465.2s] some stuff to show us,
+[466.9s] >> but let's describe the problem and then
+[468.8s] perhaps show the final result and then
+[470.6s] work backwards to how we got there.
+[472.8s] >> Yeah, that sounds good. So let me go
+[474.5s] ahead and share my screen and I can go
+[476.7s] through we can do some scalletron to
+[479.9s] help describe the problem. So the
+[482.1s] problem is you know as as Dax and Bomb
+[484.6s] said is uh large scale classification.
+[487.8s] So what that means is had we take if we
+[491.5s] have say
+[494.0s] a lot of a problem where we have a lot
+[496.9s] of classes you know in the case that I
+[498.6s] was looking at we had and I'll describe
+[500.8s] kind of in detail in a little bit um
+[503.9s] what these these categories are we have
+[506.3s] over 1400 categories and we get from
+[508.8s] these 1400 categories we have a user
+[511.4s] query
+[513.0s] so let's just call that query then so we
+[517.0s] have a user query that goes into these
+[519.4s] categories and the our system has to
+[522.6s] select ultimately the best category
+[525.6s] right
+[527.8s] from 1400 to one and we'll just call
+[529.8s] this one let's see call this selected
+[534.0s] final category
+[536.5s] >> and to be to like make this a little
+[538.8s] more real this was like a hardware store
+[540.8s] like thing right
+[542.2s] >> yeah yeah exactly so the example that I
+[544.6s] looked at it was we had Um, I can show
+[548.2s] actually show some of the categories.
+[550.4s] >> We just walk through it. I think it's
+[551.9s] looking at the data is always the most
+[553.4s] clear.
+[555.4s] >> Oh my god. Andrew.
+[557.4s] >> Yeah. So, we had
+[559.3s] >> You want to zoom in?
+[560.1s] >> This is zoom in. Sure. Is that better?
+[562.9s] >> Perfect.
+[563.4s] >> Yeah, that's good.
+[564.6s] >> All right. So, these are the categories,
+[566.2s] right? It basically uh categories that
+[569.4s] you would see at a hardware store. So if
+[571.2s] you go to like lowe's.com and homed
+[572.5s] depot.com, you'll probably see
+[574.4s] appliances, refrigerators, and then in
+[576.6s] there there's like French door
+[577.6s] refrigerators, right? And so you'll see
+[579.7s] these are the categories that you would
+[581.0s] see in an appliance store. And you can
+[582.4s] imagine this would generalize to, you
+[584.2s] know, like Amazon or any sort of retail
+[586.7s] and a lot of other uh examples as well,
+[589.0s] but specifically here we had 1,400
+[591.7s] categories, right? And so how do we go
+[594.3s] from a user query of like you know a
+[597.4s] ceiling fan and how do we figure out
+[599.6s] which is the best category to do that?
+[602.7s] And you know there are a bunch of
+[604.8s] different ways that you can do this. The
+[606.1s] most kind of naive way is you just take
+[609.0s] all 1400 categories. You dump everything
+[611.6s] into you can you just dump everything
+[613.4s] into an LLM and say give me the best
+[615.5s] category.
+[617.3s] Um, you can also just do straight
+[618.9s] embeddings where you just, you know,
+[620.9s] pick the most similar uh the most
+[623.2s] similar outcome to the category. But the
+[625.9s] problem with doing both of those is you
+[628.4s] really when you're doing that, you
+[630.0s] really only have a couple of levers that
+[631.4s] you can pull. So when you're just using
+[634.7s] an LLM, you you only have really the
+[636.9s] prompt and then the LLM that you're
+[638.3s] using. And there are a couple of keyword
+[640.2s] arguments you can use, but in general,
+[641.8s] you don't have that many. If if your
+[645.8s] system isn't performing well, there's
+[647.1s] not a lot you can do to change it. Um,
+[649.9s] with embeddings really, you know, it's
+[652.3s] similar. You can change the embedding
+[654.2s] model that you're using, but there isn't
+[655.8s] too many there aren't too many knobs you
+[658.7s] can turn. So the question that they po
+[661.9s] that Vivov and Dex posed in the first
+[664.1s] video is how do we create a system with
+[666.8s] more probes, more break points where you
+[669.2s] can kind of see the inputs and outputs
+[670.6s] and things that you can change. And so
+[673.8s] what I did is
+[675.5s] >> so this is like the naive version down
+[677.1s] here is like the basically like here's
+[679.3s] here's 1,400 calorie categories, excuse
+[682.5s] me, and like LM pick which one this this
+[685.3s] query is related to, right?
+[689.0s] So, what I did is let's see. Do you
+[691.3s] think it'd be better, Dex, to just
+[693.8s] create a new one or kind of break this
+[695.6s] one apart? I think it might best to
+[697.1s] break this one apart.
+[698.0s] >> Yeah, go for it.
+[699.4s] >> Yeah. So,
+[701.3s] so what I ended up doing was okay, so
+[703.3s] what if we take these 1400 categories
+[705.8s] and in and we used an embed
+[710.1s] and instead of having it give us the
+[712.4s] best one, we have it give us the top say
+[715.1s] 100, we have it give us the top 100
+[716.9s] categories, right?
+[719.3s] And let's see, this is see this is a
+[724.5s] vector store. And then we could dump all
+[728.0s] 100 of these categories into
+[730.7s] uh an LLM and say, you know, pick the
+[732.7s] final category. But I took it one step
+[735.6s] further and I said, okay, so now that we
+[738.0s] have these 100 categories, we can get
+[739.4s] even smaller set. We'll call it 50.
+[743.2s] Where is the text? Here we go. So 50
+[746.2s] categories.
+[748.8s] And this one is getting narrowed with an
+[751.9s] LLM. So we take the output from the
+[754.3s] embedter and we say hey LLM like here's
+[757.8s] the query here 100 categories give me
+[759.8s] the best 50
+[761.8s] and then what we do is we take those 50
+[765.9s] and then we put those into the final LLM
+[768.0s] and say now's the final category select
+[770.2s] the final category of these top 50 right
+[773.1s] and the great thing about this I can get
+[775.4s] rid of this now is there's a lot of
+[777.9s] break points or probes as they were
+[779.7s] describing them in the first video right
+[781.4s] there's
+[782.6s] Well, that's fine. So, we can see right
+[786.1s] if we have the correct answer somewhere,
+[788.6s] we can see if the correct answer drops
+[790.4s] out in this first 100, in this second 50
+[793.0s] or in this kind of final answer and we
+[796.2s] can control the different inputs and
+[797.8s] outputs into these.
+[800.2s] So, for instance, the
+[802.8s] >> when you say inputs and outputs, I I I
+[805.0s] think I think like one thing that's like
+[806.6s] kind of worth noting is like so the
+[808.1s] signature of narrow with embeddings,
+[809.5s] right, is like query
+[811.8s] Uh, and then you basically just get out
+[814.1s] a list of categories, right?
+[816.5s] >> Mhm.
+[817.4s] >> Um, or I guess it's like a a big list of
+[820.5s] categories
+[821.3s] >> to a smaller list of categories
+[823.4s] >> to a smaller list of categories, right?
+[825.1s] But there's also like hyperparameters
+[827.6s] here like you know number of number of
+[830.4s] like number of number of output
+[832.9s] categories, right? This is kind of like
+[835.0s] your you have your like top K and all
+[836.5s] these things that have like nothing to
+[837.6s] do with the query or the like content
+[839.8s] that the LLM is working with, but they
+[841.8s] kind of control the like implementation
+[844.9s] the like dimensions of your system.
+[847.3s] >> Yeah.
+[848.2s] >> Right. And there's also something that's
+[850.0s] kind of even more fun to do is you can
+[852.2s] think about this narrow with LLM, right?
+[854.0s] This kind of second narrowing
+[856.0s] >> the the signature would be you'd have
+[857.9s] the query, you'd have the array of
+[860.3s] categories. So it you would think that
+[863.0s] it's almost the exact signature as the
+[866.5s] narrow embeddings.
+[868.5s] But one of the things that you can play
+[870.6s] with is there's no guarantee or there's
+[873.2s] not guarantee there's no reason that the
+[875.8s] categories coming out of here
+[877.1s] necessarily have to be the categories
+[878.6s] that go into these 50 categories. You
+[881.0s] can have an intermediate step if you
+[883.0s] want that basically says, "Hey, beef up
+[885.5s] these categories. turn them from what we
+[888.0s] saw here of, you know, just heating,
+[890.8s] venting, and cooling, heaters, wall
+[892.2s] heaters, and create a whole sentence
+[894.9s] around them or a paragraph or make them
+[896.8s] much more descriptive. Right? So, you
+[899.0s] can by introducing these new break
+[902.0s] points, there's a lot of knobs you can
+[904.6s] turn beyond just 50 categories, 25
+[908.1s] categories, or what have you.
+[910.6s] >> I'm going to pause because I think
+[911.9s] there's a really good question. Akos
+[913.2s] asked a question. Isn't this costly?
+[915.3s] Because you're just spending a lot of
+[916.6s] question uh you're spending a lot of
+[918.3s] input tokens and output tokens. But uh I
+[921.4s] think uh what we're really focusing on
+[923.0s] here Akos is actually accuracy. There's
+[925.3s] some workflows like for example if
+[926.8s] you're a medical billing company and you
+[928.2s] need to build ICDC codes. So ICDC codes
+[930.5s] are these insurance codes that you use
+[932.8s] that have examples such as this patient
+[935.5s] had a laceration on their right pinky
+[937.4s] toe. Super specific and that's how they
+[940.2s] bill for insurance.
+[941.3s] >> And there's separate codes for each toe.
+[943.3s] Right. Basically,
+[944.2s] >> literally, yes, literally. Yes. There's
+[946.0s] like 80,000 codes or something. And if
+[948.0s] you're an insurance provider, you need
+[949.6s] if that code is wrong, you don't pay
+[951.0s] out. So, the hospital doesn't get paid.
+[953.4s] So, in some cases, like there's entire
+[956.4s] jobs whose job it is to take these
+[958.2s] categories and like go go fill them out.
+[961.0s] So, the important thing here isn't
+[962.3s] actually to consider cost. It's like
+[964.7s] first we can worry about getting it
+[966.3s] performant with 100% accuracy or solving
+[968.5s] for every solution that we have and then
+[970.5s] we can worry about reducing uh cost and
+[974.2s] it's similar with latency. There are
+[975.6s] ways to reduce latency. There are ways
+[976.9s] to make this fast. We can talk about
+[978.2s] that stuff in a bit. But I think
+[979.9s] >> we talk about that a lot on the voice
+[981.4s] agent one, right? How do you how do you
+[984.1s] use a smart model to supervise the dumb
+[986.2s] model so the dumb model can move fast?
+[988.1s] But yeah, no, I think I think what
+[989.8s] you're saying is exactly right. Like
+[990.8s] there's this spectrum. We talk about
+[991.9s] this a lot. There's a spectrum between
+[993.4s] like cheap and accurate. And what we've
+[996.2s] said in the past is like cool if you
+[997.8s] want to see if AI can solve a problem at
+[1000.9s] all.
+[1002.4s] Use the expensive like cheap in terms of
+[1005.2s] engineering time, just throw 03 or GPT5
+[1008.0s] max thinking at it and see see if AI can
+[1011.4s] even solve it in the first place. And
+[1013.5s] then once cost and latency becomes an
+[1016.3s] issue then you can engineer it down and
+[1017.8s] be like okay let's make the prompt
+[1019.0s] really good for all the use cases that
+[1020.6s] we know need to work
+[1021.8s] >> or we can take this whole pipeline like
+[1023.7s] get the final input output pairs and
+[1025.3s] train a fine tune model end to end
+[1026.9s] that's super tiny runs on the fly like
+[1028.6s] all that stuff becomes possible but only
+[1030.5s] if you have it working in the first
+[1032.1s] place but there's something about
+[1034.2s] Kevin's work that really inspired me cuz
+[1035.9s] like if you go back like this is
+[1037.1s] actually more advanced than what we did
+[1038.6s] in our video a little bit more u because
+[1041.0s] he added that extra step in there that
+[1042.5s] we didn't think about doing. But what
+[1045.3s] Kevin really shocked me on is actually
+[1046.9s] the UI that he came up with of how to
+[1048.4s] evaluate this results because it's not
+[1050.2s] actually sufficient to write this code.
+[1051.9s] The real
+[1052.5s] >> hell yeah, I haven't I actually haven't
+[1053.9s] seen this yet. I'm super stoked to see
+[1055.3s] this.
+[1055.5s] >> Okay.
+[1056.2s] >> The real part about these systems is how
+[1057.8s] do you actually think through these
+[1059.0s] systems? Um
+[1061.0s] >> Mhm.
+[1061.5s] >> So let's go. Let's go. Why don't we take
+[1063.6s] a look at the final UI that we came up
+[1065.0s] with and why don't we
+[1067.2s] start with the final because I think
+[1068.3s] that's always the best and then we'll
+[1069.4s] show how we got there.
+[1070.2s] >> Okay. Okay. We'll show the the end and
+[1073.6s] then yeah the forest from the trees
+[1075.0s] first.
+[1075.3s] >> Exactly. And then remember for everyone
+[1077.6s] listening to this problem then first
+[1079.0s] thing to remember is just like
+[1081.4s] >> the problem is we have a query that
+[1083.2s] comes in and we have a hardware store
+[1084.9s] that we want to pick the right category
+[1086.2s] based on the query the user.
+[1087.6s] >> Yeah. And I think to to you know the
+[1090.2s] point that they were saying right like
+[1091.8s] at building this pipeline that with
+[1096.2s] cursor and claw code and even cur
+[1098.6s] cursor's new CLI that they just shipped
+[1100.4s] right like this is pretty easy to build
+[1102.6s] something like this now right this is
+[1105.1s] almost free like anyone here on the call
+[1107.5s] could probably build this within a week
+[1109.9s] or two right so like building this
+[1111.5s] pipeline is not hard what's hard is
+[1113.9s] figuring out
+[1116.0s] um how to ingest the information in a
+[1119.0s] way that's helpful and tells you what to
+[1120.4s] do to make the pipeline really really
+[1121.8s] good. Like kind of where the magic comes
+[1124.5s] in. And so here's the UI. So this is a
+[1127.6s] couple of different tabs, but right off
+[1129.4s] the bat, I I came up with 68 test cases
+[1132.6s] from uh some LLM generated or reached
+[1135.2s] out to some family members to see what
+[1136.6s] they would look for. And right off the
+[1139.0s] bat, um I mean, you can see that overall
+[1142.5s] it's doing really well. So 14 it got
+[1145.7s] wrong. 54 it got correct, right? But
+[1149.3s] what's I think even more exciting is
+[1150.9s] when you scroll down here, you can see
+[1154.5s] where in those different stages the
+[1156.3s] correct, you know, the correct answer
+[1158.0s] fell out. And so it looks like I mean
+[1161.0s] embedding filtering isn't on here
+[1162.4s] because it made it through the embedding
+[1163.7s] filter every single time.
+[1165.3s] >> The LM filtering
+[1166.8s] >> and that's interesting. You took it out
+[1168.4s] of the UI because it literally didn't
+[1170.0s] matter. You're like this just isn't a
+[1171.6s] problem. So it's the embeddings are
+[1173.4s] correct.
+[1173.8s] >> Well, it's still in the UI. It's just
+[1176.1s] it's not showing up because it's not
+[1177.7s] here.
+[1178.2s] >> Okay, got it.
+[1178.9s] >> Yeah. Yeah. Yeah. It's just it's it's
+[1180.6s] it's looking for the different types of
+[1182.2s] errors and it's just graphing them.
+[1183.6s] Yeah. Um but what's interesting is you
+[1186.0s] can see here like Okay, so two of the 14
+[1189.2s] times the that that LM filtering stage
+[1191.8s] was where the mistake was, but the last
+[1193.7s] you know the other 12 times it was that
+[1195.8s] final selection was where the mistake
+[1197.4s] was. And I mean there are a couple of
+[1199.9s] things that you can do here. To me, the
+[1202.2s] most obvious thing to do is to make the
+[1205.6s] LLM filter more restrictive and see if
+[1208.7s] that final LLM selector performs better
+[1211.4s] with fewer categories.
+[1214.0s] And so you can see over here, I'm not
+[1216.2s] sure how
+[1217.5s] >> I did. Yeah. So this is just version
+[1219.2s] zero, right? With 100 embedding
+[1221.4s] candidates and 50 LLM candidates. And
+[1225.0s] when you look at version one, the
+[1227.4s] accuracy gets even better, right? We're
+[1229.1s] now at uh 13 failures versus I mean 14.
+[1233.0s] But you can see that yeah, the L1
+[1235.4s] filtered out more and the final
+[1236.8s] selection
+[1239.0s] um
+[1240.9s] is is still the main issue but is not
+[1242.9s] making as many mistakes as it was
+[1244.6s] before.
+[1246.2s] And this was with LM candidates 25. I
+[1248.8s] mean you can even kind of look even
+[1250.2s] further at this right if you look at 15
+[1252.3s] performance went down a little bit. So
+[1254.1s] maybe something closer to 25 is, you
+[1256.1s] know, it's kind of the right thing. But
+[1257.9s] >> okay, so you're you're tuning the knobs
+[1260.6s] of the I mean I don't want to use the
+[1261.8s] word hyperparameters because that's a
+[1263.3s] very specific thing, but you're tuning
+[1264.6s] the knobs of the pipeline by building
+[1268.1s] very visual, easy to evaluate um
+[1272.0s] representations of how different uh
+[1275.0s] combinations of parameters perform.
+[1277.4s] >> Exactly. And that's kind of the what's
+[1279.9s] interesting is right out of the gate is
+[1281.5s] you can see like where's the where's the
+[1285.0s] wrong answer happening like what's the
+[1286.3s] mistake in the pipeline where are the
+[1287.5s] faults and it's because we've added in
+[1289.4s] all these different break points and
+[1291.4s] created a UI that makes that just kind
+[1293.8s] of jump out at you right so
+[1296.6s] >> I have a question I'm going to jump in
+[1298.1s] really fast
+[1299.4s] >> you keep saying the right answer was the
+[1301.4s] right answer manually classified
+[1304.2s] >> yeah so that answer was um
+[1307.4s] Yeah, it's it's funny you say that,
+[1308.7s] right? Yeah. So, the right answer was
+[1310.0s] all all me and you know my family coming
+[1312.7s] up with like what they would want out of
+[1315.4s] a search query. You can you can argue
+[1318.3s] whether or not they are correct, right?
+[1321.0s] Like if if you know I don't know
+[1322.2s] hardware that way or that well you can
+[1325.1s] argue and say like well
+[1327.5s] um maybe you know maybe when I put
+[1330.7s] something in like the actual right
+[1332.2s] answer for what I'm putting in is
+[1333.2s] something different than I'm expecting.
+[1334.8s] But I think that's kind of more of a
+[1337.6s] philosophical question about like what
+[1339.0s] does right mean in this case? And I
+[1340.7s] guess that's something that like the PMs
+[1342.1s] would decide, right?
+[1343.5s] >> Well, um but yeah, like people that care
+[1346.1s] about the product could be engineers. Um
+[1348.0s] could be engineers,
+[1348.7s] >> but yeah, but maybe the PM.
+[1350.5s] >> So So what's what's interesting, one of
+[1353.6s] the interesting things is um I mean VBA
+[1355.7s] and I were looking at this yesterday, I
+[1358.0s] think. And you can go over here to test
+[1360.1s] case analysis
+[1362.1s] and you can look at let's look at one
+[1364.6s] that I got wrong. Let's stove with red
+[1366.9s] knobs. Where was that? That was one we
+[1369.3s] were looking at and I just I just passed
+[1371.5s] it.
+[1372.2s] >> Just pull any of them. It's fine.
+[1373.6s] >> Here we go. So, and you can see so you
+[1377.8s] can see what it's doing, right? These
+[1380.6s] are all the ones that made it. It's
+[1381.8s] probably too small. Let me zoom in some.
+[1384.1s] >> Yeah, that's perfect. You can see all
+[1386.2s] everything that made it through the
+[1387.0s] embedding filter and you can see the
+[1389.0s] ones that made it through the LM filter
+[1391.0s] and you can see what it finally
+[1392.4s] selected, right? It selected appliance
+[1396.0s] appliances ranges gas ranges where
+[1398.6s] >> oh this is cool as heck.
+[1400.6s] >> The quote unquote correct answer was
+[1402.6s] double oven gas ranges. And this is
+[1404.5s] where, you know, and if I have actually
+[1406.6s] brought up the point and it's like,
+[1407.7s] well, this might actually be okay
+[1410.4s] because it might be okay to give a more
+[1412.6s] general answer rather than a more
+[1414.2s] specific answer.
+[1415.8s] >> Can,
+[1416.1s] >> right? If you have more to show here.
+[1418.5s] Um, I I I like I would love to see we
+[1421.9s] can come back to this or you can keep
+[1423.0s] going here. I would love to take a peek
+[1425.3s] at some of the prompts that you're using
+[1427.5s] at each of these stages or like how the
+[1429.8s] how like how you're embedding the query.
+[1431.8s] Okay.
+[1432.7s] >> Yeah. Um, but I think Kevin's point here
+[1435.6s] about the general specific was really
+[1437.2s] interesting. We actually got into really
+[1438.5s] interesting like 20 minute sidetrack on
+[1440.3s] this u or 10-inut sidetrack on this was
+[1442.2s] really fascinating because like what is
+[1444.5s] right or wrong is actually really
+[1446.7s] subjective in a lot of use cases. So
+[1448.4s] like in this scenario for example
+[1450.7s] imagine I go into Amazon and it actually
+[1453.2s] picked double oven gas. In this case the
+[1455.7s] answer is double oven gas range but
+[1457.0s] imagine it picked that and the answer
+[1458.2s] the ground truth is that grass ranges.
+[1460.8s] Based on the UI that I have, it might be
+[1463.0s] so easy to go to gas ranges for the user
+[1464.9s] that it might actually be okay to be
+[1466.3s] more specific. On the other hand,
+[1470.1s] LM, you might argue that I actually want
+[1472.0s] to take the user to a more general page
+[1473.4s] rather than a specific page for some
+[1475.5s] other reason because of the UI of how my
+[1477.6s] product works, how the UX of it works.
+[1479.7s] Because maybe if I go to gas ranges, I
+[1481.4s] have a section that shows gas ranges,
+[1483.0s] double oven gas ranges at the top, then
+[1485.4s] um shows uh electric gas ranges and
+[1487.6s] everything else right below. And it
+[1489.6s] allows me to go see that very easily.
+[1492.7s] But I think the important part here is
+[1494.2s] like what's good or bad is really
+[1496.0s] subjective based on your use case and
+[1497.8s] even the degree of correctness that you
+[1499.4s] have for an answer in your ground truth
+[1500.7s] set. You should ask yourself like how
+[1502.6s] bad is this? Cuz technically this is a
+[1505.3s] failure for our eval set. But I might
+[1508.2s] argue that this is actually correct. Um
+[1510.6s] and I might want to reward what it means
+[1512.2s] to be a failure. Be like if I got in the
+[1514.3s] right subree and I'm too specific,
+[1516.1s] that's okay. If I'm in the right sub
+[1518.2s] tree and I'm general by one level,
+[1519.8s] that's okay. We can change the
+[1521.8s] definition of scoring
+[1523.3s] >> because you can put in your like like
+[1525.0s] like the whole point is like you work
+[1526.8s] backwards from what's a good user
+[1528.1s] experience and you can put into your UI
+[1529.8s] like the breadcrumbs of like okay here's
+[1531.8s] the narrowest category, here's the
+[1533.2s] parent category, here's and you can let
+[1534.7s] the user just navigate up themselves.
+[1536.3s] And so it's like what's the risk of
+[1537.8s] getting it wrong and how important is it
+[1539.9s] to get the final category right versus
+[1542.1s] like the 50 categories right.
+[1544.6s] >> Exactly. And then brought up a really
+[1546.6s] interesting point which is in this kind
+[1548.4s] of situation you can ask LM to
+[1550.0s] disambiguate if the confidence is low.
+[1552.3s] That's another way to build your UI
+[1553.9s] where you can actually ask this ambigu.
+[1555.4s] It's like if it's ambiguous, go ask for
+[1559.0s] follow-up questions. But you can also
+[1560.6s] build it directly into your UX and not
+[1562.2s] add an iteration loop where you just
+[1563.4s] take the user to the right page and you
+[1565.4s] make it easy for them to opt into the
+[1567.4s] right direction cuz it's unlikely
+[1570.1s] they're if they're looking for a stove,
+[1571.5s] they want to end up in like showers or
+[1574.4s] like uh buying like a rain shower. That
+[1576.2s] that seems very very unlikely or they
+[1578.5s] want to buy a hammer or something or a
+[1580.0s] safety eyeear, which I know are some of
+[1582.2s] the categories in there. So, as long as
+[1583.8s] we're really really close and our UX
+[1585.7s] makes it trivial to translate,
+[1587.9s] >> we can get that's okay. The mistake is
+[1590.3s] forgiven almost in your product.
+[1592.1s] >> Yeah. It's I think it's like a question
+[1593.8s] of as a user, am I going to be upset if
+[1596.2s] I type in stove with red knobs and I get
+[1598.9s] gas ranges?
+[1601.1s] >> No. Like, not at all. Cuz odds are
+[1603.0s] there's going to be an icon for double
+[1604.9s] oven gas ranges right there and I might
+[1606.7s] see the stove with the rep knobs in the
+[1608.4s] picture and it's like that's a perfectly
+[1610.2s] acceptable user experience. And actually
+[1613.0s] I have a a drop down over here where we
+[1614.9s] can change the correctness definition.
+[1617.2s] So if we if we allow more lenient we can
+[1620.7s] see it it it gets it right. Right. The
+[1624.0s] table doesn't update cuz I I kind of
+[1625.4s] just put this together like I just this
+[1626.7s] morning but you can see it's right. And
+[1628.3s] we go back to the error analysis. We're
+[1630.2s] at 84% correct. And I didn't even do any
+[1633.4s] additional prompting to kind of get it
+[1635.0s] up. Right. This this is very barebones
+[1637.0s] prompting.
+[1637.6s] >> Yeah. And it's like you can basically
+[1639.5s] it's it's more about defining your
+[1641.1s] problem in a way that really understands
+[1643.0s] your
+[1644.2s] >> I think like what's interesting here is
+[1645.6s] until you showed me this UI
+[1647.7s] >> I really wasn't thinking about that
+[1649.2s] problem definition page but when we were
+[1650.9s] looking at an aggregate we could
+[1651.8s] actually go and be like okay let's just
+[1653.0s] look at a failure really quickly and see
+[1654.4s] what's wrong. Yeah, because initially
+[1657.4s] you would think, okay, well this this
+[1659.3s] has all the information I need, right? I
+[1661.5s] can see in each of those break points
+[1663.4s] where the pipeline is failing, where the
+[1665.0s] mistakes are happening. So why do I need
+[1667.5s] to look it up on a case by case basis?
+[1669.0s] And this is exactly why because when you
+[1670.9s] do that, what actually happens is and I
+[1672.7s] disagreed on whether or not we should be
+[1674.7s] too general or too specific. And it's
+[1676.2s] like, okay, that's really interesting
+[1678.3s] that we're having this disagreement
+[1679.8s] because either answer could be right
+[1682.2s] just depending on the UI, depending on
+[1683.5s] the product, depending on the user
+[1684.7s] experience that you want. And so that's
+[1686.5s] why it's so useful to be able to look at
+[1688.2s] it on a case- by case basis and make it
+[1690.7s] very easy to toggle between ones that
+[1693.0s] are correct and ones that are wrong,
+[1694.4s] right? Makes it very easy. And what's
+[1697.0s] interesting and VA pointed out kind of
+[1698.4s] to the point we were discussing earlier.
+[1700.2s] I think as engineers like one of our
+[1702.3s] things that we like to do is we like to
+[1704.7s] show that we we're being good engineers.
+[1706.4s] We care about latency, right? And I I
+[1708.5s] did this like I have the latency time
+[1710.9s] here to show how long each of these
+[1712.4s] steps takes.
+[1714.2s] But for what we're looking at now, we
+[1716.7s] care about the prediction accuracy. This
+[1720.2s] data does not change. I'm I'm not going
+[1723.2s] to make any different decision with any
+[1725.4s] numbers that are here or whether or not
+[1726.9s] they're here or not. So, they shouldn't
+[1728.4s] be here at all. Right? They're not
+[1730.2s] they're kind of just fun fact, but for
+[1731.8s] when we're making a decision using a UI
+[1733.6s] like this, it's not useful at all. It's
+[1736.7s] it's just honestly it's just
+[1738.0s] distracting.
+[1739.7s] Which I when pointed that out was a
+[1742.0s] really good point because we want to
+[1743.4s] show that, hey, we're being good
+[1744.4s] engineers. We're paying attention to
+[1745.5s] latency, but for the use case of what
+[1748.2s] this UI is trying to do, it it doesn't
+[1751.0s] add anything. It just takes up space
+[1752.8s] that distracts from the actual point.
+[1756.2s] >> Um, how easy is this to rerun? Like if
+[1758.6s] you change the prompts and can we get
+[1760.1s] like a V6 out of this and like see how
+[1762.0s] it performs?
+[1762.8s] >> We can. Yeah.
+[1763.9s] >> Okay. Cuz I'd be curious uh takes some
+[1767.0s] time, but
+[1768.3s] >> Okay. Okay.
+[1769.4s] >> As you can see, uh it's not it's not
+[1771.2s] very fast, but um I mean it it depending
+[1774.3s] on kind of how many, you know,
+[1776.0s] candidates we're outputting. But if we
+[1778.1s] want to run it and then talk about
+[1779.5s] something else, like we certainly can.
+[1781.2s] one one of my favorite things to do with
+[1783.3s] Vib is roast my prompt uh because he has
+[1786.3s] incredible intuition about like how
+[1789.0s] LLM's like think and it like a per token
+[1792.5s] basis. I think it could be really
+[1793.7s] interesting to like look at the prompts
+[1796.3s] um maybe make a tweak that we think is
+[1798.2s] going to make it better and then run it
+[1799.7s] again and then we can kind of like zoom
+[1801.0s] out and maybe like do a couple questions
+[1802.6s] and things like that. Um, but I'm yeah,
+[1805.0s] I'd be really curious to kind of see see
+[1807.1s] that done end to end and just kind of
+[1808.9s] like see this thing working. Um, so that
+[1810.7s] people can pull this down and mess with
+[1812.0s] it.
+[1812.7s] >> Uh, and we'll check the code into the AI
+[1814.4s] that works for you. You've been working
+[1815.6s] there, right, Kevin?
+[1816.6s] >> Okay.
+[1818.0s] >> Um, we do this like we we can play with
+[1820.0s] the prompts a little bit. Um, and then
+[1821.8s] we can kick it off and then I can show
+[1823.8s] how we got here cuz this is the end
+[1825.3s] state. There were some intermediate
+[1826.7s] stages that were
+[1829.0s] >> kind of funny almost.
+[1831.6s] >> Um,
+[1832.6s] >> yeah. Yes, I mean we can do that. Uh
+[1834.6s] because I did very little very little
+[1837.0s] prompt engineering, right? Like none. I
+[1839.1s] just have bare bones prompts. So if we
+[1841.4s] look at the pick the best category here,
+[1844.6s] I pretty much pulled this straight from
+[1849.1s] the initial video that you all did. So
+[1851.8s] there are two prompts that it's using.
+[1854.6s] Um there's pick the best categories
+[1857.5s] which you know
+[1860.4s] seems pretty straightforward and then
+[1861.8s] there's pick the best category right so
+[1864.8s] this is the LLM filtering and then this
+[1866.6s] is the final LLM decision
+[1869.5s] so
+[1870.2s] >> you know we should try um which category
+[1873.0s] is better pick the best C that the
+[1874.7s] second one is failing more right
+[1877.3s] >> yes
+[1878.1s] >> why don't we just bump that up to GT5 um
+[1880.8s] if we can and just run that G5 mini or
+[1883.4s] something instead GT40.
+[1886.2s] >> Okay. Um I don't know if I have Let's
+[1889.0s] see.
+[1889.5s] >> I bought That is not what I That is not
+[1891.6s] what I meant by prompt expertise.
+[1894.1s] >> Dude, this is uh this is a shortcut that
+[1896.0s] I've been learning actually. You don't
+[1897.6s] actually need it there. You can just
+[1898.6s] change change it right there. You can
+[1900.1s] just use shorthand.
+[1901.9s] >> Okay.
+[1902.4s] >> So, just change that to GP5 and then G5
+[1905.6s] mini.
+[1906.1s] >> I think five good. Yeah. And then
+[1907.5s] instead of opening, do open- responses.
+[1909.7s] Let's use the new responses API because
+[1911.2s] there are slight differences.
+[1912.3s] >> All right. Just like that. Yeah. Um, and
+[1914.9s] do
+[1915.0s] >> you want to test it real quick just to
+[1916.3s] make sure that works? Yeah. Do you have
+[1918.6s] a test we can run?
+[1920.9s] Oh,
+[1921.0s] >> yeah. If you don't have access, I'll
+[1923.3s] send you an API key. Oh, it did not
+[1925.1s] work. What did that say?
+[1926.2s] >> Uh, it looks like it was already
+[1928.2s] running. Maybe you interrupted it.
+[1929.8s] >> Oh, yeah.
+[1930.3s] >> No, it just died.
+[1932.4s] >> Is that the right model?
+[1934.4s] >> Play. Can you run in BAML CLI test
+[1936.5s] really fast for me?
+[1937.8s] >> Just in terminal. We can just run in
+[1939.3s] terminal really fast. Just run BML CLI
+[1941.1s] test. Yeah,
+[1941.7s] >> just like that. Yeah, that should work.
+[1943.3s] Uh, baml CLI test. I just do d-help.
+[1947.8s] That's odd. Um, live stream fail, I
+[1949.9s] guess. Um,
+[1951.0s] >> you got an old version.
+[1953.8s] >> Do UVX spaml CLI test.
+[1956.5s] >> Yeah, you just got to
+[1959.1s] Yeah, just uvxam CLI test. There you go.
+[1962.3s] >> Oh.
+[1962.7s] >> Uh, yeah. And then just add in the dash
+[1964.8s] from um web dash from and then give it
+[1968.9s] the path
+[1969.8s] >> source. So, let's see.
+[1972.8s] Kyle says this experience
+[1974.3s] >> cares so much. I was like, "Oh my god,
+[1975.6s] what is going on?" We actually now
+[1977.4s] output the version number for that
+[1978.9s] reason. That's it. That's perfect.
+[1981.2s] >> Uh oh, and you don't have Envir set up.
+[1983.6s] >> You can't stream. You can't stream uh
+[1986.2s] five without verifying your
+[1987.5s] organization. That's what it was.
+[1990.0s] >> Oh,
+[1992.2s] >> let's just do GPT40 then instead of 40
+[1995.2s] mini.
+[1995.5s] >> Yeah, that's fine.
+[1997.4s] >> Okay, cool. Kyle says, "This experience
+[1999.4s] is making me feel much better." Hey,
+[2001.4s] we're all we're all building and
+[2002.8s] learning stuff together.
+[2004.6s] >> We do code real time on the fly. U I
+[2007.6s] mean, that is what we do over here.
+[2009.0s] We're real trying to make it work.
+[2011.6s] >> That worked. Cool.
+[2013.3s] >> Awesome.
+[2014.3s] >> Okay. So, now
+[2015.7s] >> we'll run this. We'll just see if it got
+[2017.2s] better by just doing a small thing like
+[2018.6s] a model upgrade.
+[2020.2s] >> Yeah. If we can do a model upgrade and
+[2021.8s] get it better, then that I think the
+[2023.5s] thing that a lot of people don't think
+[2024.6s] about when they ship
+[2026.1s] >> is um what the most important thing you
+[2028.3s] have to think about is actually not
+[2029.4s] finances. It's actually not latency.
+[2031.4s] It's can you make it work and you have
+[2033.3s] to find the shortest path to making it
+[2034.8s] work as soon as possible. And then you
+[2036.3s] ship it. You ship an update. You if
+[2038.3s] you're really gated on number of users
+[2039.8s] because you're a large enterprise, you
+[2041.1s] gate how much users how which of your
+[2043.4s] users can use it behind a feature flag.
+[2045.8s] But you do not prevent uh you do not
+[2048.7s] really because you need to get real data
+[2050.3s] from production to actually know if it's
+[2052.0s] working. Your sample set is a
+[2053.7s] theoretical sample set. Kevin went one
+[2055.4s] step he got synthetic data. He went one
+[2057.2s] step further. Ask his ask his friends
+[2059.0s] and family to actually give him sample
+[2060.8s] data. He actually got really
+[2062.0s] representative sample data from like a
+[2063.5s] real audience. But the best
+[2066.3s] >> Sorry, finish.
+[2067.4s] >> But the best thing he can do is actually
+[2068.6s] get real sample data from real users. So
+[2070.7s] like screw cost. spend like I don't know
+[2073.9s] spend like 5,000 bucks collecting sample
+[2076.0s] data if you're a large entity. It's it's
+[2078.2s] worth it because the representative data
+[2079.8s] set is infinitely more valuable for
+[2081.5s] helping you iterate in real time and
+[2083.6s] like decide if it actually works. Go do
+[2085.3s] that, collect the data and then once it
+[2087.4s] comes back like then you can figure out
+[2089.9s] how to go update the model and like if
+[2092.0s] you think about like from a cost
+[2093.1s] perspective like engineering time and
+[2094.8s] shipping speed is the most valuable
+[2096.2s] resource you have. If shipping some if
+[2098.4s] you're going to ship one thing like two
+[2099.8s] months later because you wanted to
+[2101.3s] collect data and train a model or like
+[2103.1s] update the prompts ahead of time, you
+[2105.5s] just lost two months of shipping on a
+[2107.4s] product. Like that's just not worth it
+[2109.8s] ever. Just just go ship the thing that
+[2112.1s] works and then let's show the UI
+[2114.3s] running.
+[2115.5s] >> Yeah. So So at first I didn't have a UI
+[2118.0s] at all, right? At first I dumped
+[2119.8s] everything into a JSON. Um and
+[2123.0s] >> you're just reading the JSON by hand. I
+[2125.4s] was just reading the JSON by hand. Um,
+[2128.5s] and obviously, you know, like you see
+[2130.9s] this and you like what what do I do?
+[2134.0s] >> How many of you have done that?
+[2134.8s] >> All the categories were here. This is
+[2136.8s] not like this this wasn't useful. All
+[2139.0s] the information was here, but it just
+[2141.0s] plain wasn't useful.
+[2142.9s] >> And so, you know, you we I needed some
+[2145.4s] sort of UI. And so, the question is,
+[2148.1s] okay, so what's a way that we can show
+[2150.0s] this information that's that shows what
+[2152.2s] happens between all the different break
+[2153.5s] points?
+[2155.1s] And my initial thought I was looking at
+[2158.1s] the categories and if we look I mean
+[2160.8s] they're they're obviously hierarchical
+[2162.9s] like we were saying before and so to me
+[2165.0s] the most natural thing to do when we're
+[2167.3s] looking at something like this is some
+[2168.5s] sort of a treebased diagram cuz this is
+[2170.4s] very naturally like this we probably
+[2173.2s] have five or six highle categories and
+[2175.1s] then there you know there are the sub
+[2176.6s] branches and so my thought was using
+[2178.5s] like a network X um you know
+[2181.4s] digitalization and uh v visualizing the
+[2185.9s] tree as all these different things are
+[2188.0s] happening. And so that's that's that's
+[2189.6s] what I did. And if we look over here,
+[2191.9s] yeah, well, I killed Streamlit, so
+[2193.9s] that'll that'll come back no problem.
+[2196.0s] So, let me zoom in. And you can see this
+[2198.4s] this is what I initially did. And this
+[2199.9s] is with just a really small category,
+[2202.2s] only I think 30 some categories just to
+[2204.1s] get it working. And I only had like 14
+[2207.1s] things come down from the embedders.
+[2209.8s] And um the LM filtering was just like
+[2212.6s] one or two or three I forget but not
+[2214.9s] many. Um and so this is you know this
+[2217.8s] this looked really good right this works
+[2219.6s] really well in this case you can see um
+[2224.5s] the things that got narrowed in the
+[2226.5s] first filter and then if you when you
+[2228.9s] would click to the next you know the LLM
+[2231.1s] filter you would see all the things that
+[2232.5s] got dropped out and what's still left
+[2234.1s] and the final answer. Um
+[2236.2s] >> what are you using to visualize these?
+[2238.2s] Is this just like a Python visualization
+[2240.2s] tool?
+[2241.8s] >> So this uh yeah this was um a network X
+[2245.4s] and it was using like I think yeah plot
+[2248.4s] live and network X.
+[2249.8s] >> But there are a couple of of problems
+[2251.4s] with this right like one is for one like
+[2253.0s] there are way too many colors right the
+[2254.5s] the the the key has 1 2 3 4 5 six six
+[2259.6s] categories. The green is very obvious.
+[2262.2s] The orange is pretty obvious. When we
+[2263.7s] start getting into like purple and blue,
+[2267.2s] that's it's not obvious immediately what
+[2270.1s] all the colors mean. As I start getting
+[2271.6s] more complex, right? Here's another
+[2272.8s] example where it's just like what is
+[2274.2s] just looking at it, you have to look
+[2275.6s] back and forth between the the key,
+[2277.4s] which is not very helpful. It's not the
+[2279.4s] worst thing, but it's not immediately
+[2280.8s] obvious. The bigger problem is that this
+[2284.5s] doesn't scale. This is with like maybe
+[2288.5s] 20 categories coming out of the embedder
+[2290.4s] and then maybe I think four or five
+[2292.2s] coming out from the LLM, right? If you
+[2294.1s] wanted to do the 100 categories then 25
+[2296.0s] categories, it it looks like this. And
+[2298.4s] this is
+[2300.3s] not at all useful,
+[2303.0s] right? And so this is like what I
+[2304.7s] initially had and I was like at first I
+[2306.0s] was like, "Oh, this looks great." Like
+[2307.2s] you can click between it. You can
+[2308.6s] literally see the orange ones become,
+[2310.5s] you know, little circles. Like that's
+[2311.9s] cool. But when you start getting into
+[2313.5s] even larger, you know, using all the
+[2316.2s] categories and with many more things cut
+[2318.6s] into the filters, it just doesn't scale.
+[2320.2s] Like this is this is useless. This is
+[2322.2s] almost as bad as the JSON file. And so
+[2325.7s] >> and in some way worse because you can't
+[2327.8s] do command F.
+[2329.8s] >> Exactly. You can't do command F. You
+[2332.0s] can't do command F and you can't like
+[2333.7s] collapse the the the the sub pieces of
+[2337.0s] it.
+[2338.6s] So, you know, there's so and so helped
+[2341.4s] me out with this. He's like, you know,
+[2342.5s] what what would be more helpful with
+[2343.8s] this? And so, how do we get all this
+[2347.2s] information into a similar amount of
+[2349.3s] real estate? And that's where the idea
+[2351.5s] of the table came from, right? You have
+[2353.4s] one column for each filter and you can
+[2356.7s] sort it. So, you can just easily put all
+[2358.6s] the ones that they the made it to the LM
+[2360.2s] filter at the top and then you can color
+[2362.1s] the actual rows themselves. So, that's
+[2364.1s] where that ultimately came from. Can you
+[2365.9s] show that UI again just so people can
+[2367.5s] cross compare? And I think it's it's
+[2369.3s] really
+[2369.8s] >> if this is done. Okay. Yeah. So, this is
+[2371.5s] done. So, let me I can let me throw up
+[2373.5s] the UI.
+[2374.2s] >> Yeah. And I I want to Kevin gave me a
+[2375.8s] little bit too much credit that I helped
+[2376.8s] him out on that. I just told Kevin this
+[2378.2s] UI is [ __ ] That's all I really said. It
+[2379.8s] doesn't look good. It doesn't fail.
+[2381.3s] Kevin did something really natural
+[2382.8s] actually for anyone. Sorry. Um what I
+[2384.6s] said politely was Kevin this UI could
+[2386.6s] use some work. Um
+[2388.4s] >> I think you said this isn't the right
+[2389.5s] view. It was
+[2390.4s] >> Yeah, this isn't the right view. I was a
+[2392.4s] little bit nicer.
+[2395.2s] Uh but Kevin did something really
+[2396.6s] natural when he first approached this
+[2398.0s] problem that I think a lot of people do
+[2399.9s] which is they took the problem of like I
+[2402.1s] was like he had 1400 categories and he
+[2404.2s] said let me just work with 20 of them.
+[2406.1s] That's actually a really really really
+[2407.8s] good approach because what Kevin could
+[2409.7s] do in that scenario is without think
+[2411.2s] about all this UI stuff he actually just
+[2413.1s] work on writing code that worked like
+[2415.4s] that pipeline that we drew out. It just
+[2418.0s] took less effort for him to iterate on
+[2419.7s] that initial pipeline in the beginning
+[2421.6s] because that's how you iterate in the
+[2423.4s] very beginning. We always talk about
+[2425.0s] like the the better your iteration loop
+[2426.9s] is, the faster you can change something
+[2428.7s] and see the result, the faster you will
+[2431.4s] get to the right solution. And we talk
+[2432.8s] about this is the same reason that like
+[2434.2s] you have like unit test and BAML, right?
+[2435.9s] Is like how do you narrow the problem to
+[2438.2s] just one specific thing and then iterate
+[2440.6s] on that until it's good and then move on
+[2442.2s] to the next small thing.
+[2443.7s] >> Exactly. So, and I thought that was
+[2446.7s] really clever. And then once he did
+[2447.9s] that, he built a UI for that because
+[2449.5s] like the JSON files were useless
+[2451.3s] effectively. Uh then once we built the U
+[2454.3s] then once we built that what we ended up
+[2456.6s] doing were actually
+[2459.4s] took that UI and said now how does this
+[2461.0s] UI scale with all the categories and the
+[2463.0s] answer is it didn't. So then Kevin just
+[2464.6s] went back thought about this problem
+[2466.2s] really hard and then he came up with
+[2467.4s] this which is really good. I actually
+[2469.8s] had no input on this. This is all Kevin.
+[2472.0s] Um so he's giving like he was giving way
+[2474.5s] too much credit to us uh on the side but
+[2476.5s] like show the downstream UI at the very
+[2479.2s] bottom the the table stuff. Not this
+[2481.2s] stuff. This was really cool personally.
+[2483.8s] >> This?
+[2484.6s] >> No, the other one where you individual
+[2487.4s] test case.
+[2488.1s] >> Yeah.
+[2488.9s] >> Yeah. We'll go to one that didn't work.
+[2490.3s] Yeah. This one.
+[2492.6s] >> You Exactly. And you can just see very
+[2494.7s] quickly what what we ended up picking
+[2496.5s] and what we should have picked.
+[2497.8s] >> It's super visually clear.
+[2500.0s] >> Yeah. And this is one of the cases,
+[2501.3s] right, where this is this is more
+[2502.9s] general. And so that's that that sparks
+[2504.7s] these conversations. I don't know if I
+[2506.0s] need to zoom in more, but it picked
+[2509.1s] >> a lot more.
+[2510.2s] >> Yeah. Yeah, it picked it picked mini
+[2513.5s] split air conditioner/minlit AC's and
+[2516.2s] the correct one was technically just
+[2517.7s] mini split air.
+[2518.6s] >> All right, the correct one was this the
+[2520.5s] red one because we missed it. So the
+[2522.4s] correct and you can see it really
+[2523.8s] clearly right up here, right? You can
+[2525.6s] see that the the ground truth was a
+[2528.6s] deeper category but it picked a higher
+[2530.3s] up category which again like you don't
+[2534.3s] think about
+[2536.9s] I might you know this might not actually
+[2538.6s] be an error until you look at the table
+[2540.7s] and you see wait a second is you know if
+[2543.8s] I were a user would I actually care if I
+[2546.1s] got a you know something more general
+[2548.2s] where I would probably just have these
+[2549.7s] four categories that I could click into
+[2551.8s] versus if I got you know something
+[2554.2s] really specific
+[2555.4s] And I was trying to get into a sister
+[2557.0s] category or a parent category.
+[2560.1s] >> Yeah, Eugene. Eugene sent something
+[2561.8s] really awesome. Eugene, we'd love to
+[2563.0s] chat with you offline and like see if we
+[2564.6s] can bring you on for an episode too for
+[2566.1s] this kind of stuff, this kind of deep
+[2567.4s] dive. Uh, but Benjamin said something
+[2569.7s] really fun, which was the parent
+[2570.7s] category and the sub subcategory of the
+[2572.7s] same thing. That is the other thing
+[2574.4s] you'll realize when you actually start
+[2575.8s] digging into the data in detail.
+[2577.9s] Sometimes the data is just bad. Like
+[2580.6s] even if you're being totally sane and
+[2582.0s] you built all these data sets, sometimes
+[2583.7s] the actual source of truth is not as
+[2586.3s] source of truth as you think it is.
+[2588.4s] >> So wait, you're you're telling me that
+[2590.2s] when claude code goes in and deletes the
+[2592.2s] test case because the can't get the test
+[2594.3s] to pass. That's sometimes the right
+[2596.7s] answer.
+[2597.8s] >> That's right. It might maybe it's always
+[2599.8s] the right answer. That's how you make
+[2601.1s] your code work. All the tests pass. Um
+[2604.2s] uh Malik asked something really really
+[2606.5s] good and I want I actually wanted to
+[2608.3s] catch your take on this before we show
+[2609.6s] the results from the new thing which is
+[2612.1s] how hard was this to build? So let's
+[2614.2s] just put a time bound I I'd love a time
+[2616.2s] estimate from you Kevin like from from
+[2619.0s] phase one of actually getting the code
+[2621.0s] work pure code working not the UIs or
+[2622.8s] anything how long did the code take to
+[2624.1s] write like the test harness and
+[2625.4s] everything else. So once I had the code
+[2627.3s] working,
+[2628.4s] >> let's Yeah, let's How long did it take
+[2629.9s] to get the code working? Like that's
+[2631.4s] just the core pipeline, the BAML
+[2632.8s] function, and then dynamic typing.
+[2634.6s] >> Yeah. Um,
+[2636.8s] couple hours.
+[2638.2s] >> Okay. And then how long did it take to
+[2640.0s] get the test harness?
+[2641.0s] >> What do you mean the test harness?
+[2642.2s] >> Like the one where you actually pass in
+[2643.6s] test cases, you dump out JSON files, you
+[2645.4s] do all that stuff.
+[2646.8s] >> Oh, yeah. That's that's what I meant.
+[2648.2s] Yeah, a couple hours. The whole thing.
+[2650.4s] >> So the actual because Yeah. I mean, I
+[2652.2s] kind of did it I did it together.
+[2654.2s] >> Okay.
+[2655.0s] >> Yeah. Yeah. So, a couple hours.
+[2656.1s] >> Hard coded most of it.
+[2658.5s] >> Hard coded most of it. Yeah.
+[2659.7s] >> No, cloud coded most of it.
+[2661.0s] >> Oh, cloud coded a lot of it. Yeah. Yeah.
+[2662.9s] Cloud coded most of it.
+[2664.7s] >> Okay.
+[2665.4s] >> Yeah.
+[2665.7s] >> Um and then once you did that, how long
+[2667.8s] did the first version of the UI take you
+[2669.4s] to build? The one with the little nodes
+[2671.9s] and everything else.
+[2673.4s] >> Mhm. Um probably
+[2676.8s] probably four to five hours maybe.
+[2679.6s] >> Okay. Four to five hours. And then how
+[2681.4s] many hours?
+[2681.8s] >> Stream's a little stream looks a little
+[2683.8s] iffy. Yeah.
+[2684.5s] >> Yeah. No, it's fine. I think it's good
+[2685.7s] to It's good to give people an estimate
+[2687.4s] of how long they should be spending on
+[2688.8s] these tasks before they should go think
+[2690.2s] about them. And what about the final
+[2691.4s] task? Like this final UI, how long did
+[2693.0s] this take you? Like you just changed the
+[2694.4s] prompt. You ran the whole thing. It was
+[2695.7s] really freaking fast. How long did this
+[2697.6s] take you to run? So,
+[2700.6s] probably what
+[2703.6s] I mean there was we there was a lot of
+[2704.9s] back and forth because I I it took me a
+[2706.7s] while to figure out the right UI, but
+[2708.3s] that whole process probably took me um
+[2712.6s] probably closer to like
+[2715.8s] 5 to 8 hours to really nail down the UI
+[2720.0s] because I think part of the part of the
+[2721.8s] challenge is like and I think this is
+[2724.5s] what the the point that we're trying to
+[2725.8s] get across is like you don't always know
+[2727.9s] the right thing to build to visualize it
+[2729.9s] until you build the wrong thing and it's
+[2731.4s] like that's not very useful. That's not
+[2733.2s] very helpful. Right? So, there was a lot
+[2735.0s] of kind of things between that and this
+[2738.4s] that um
+[2741.1s] uh that I had to like iterate through in
+[2743.3s] order to get here. But I'd say once I
+[2745.2s] had that kind of tree diagram like this
+[2748.1s] one, getting to here took probably yeah
+[2750.4s] another 5 to 8 hours. So, it sounds like
+[2753.2s] what I'm hearing is this took about
+[2754.5s] roughly two full days of work to get
+[2758.2s] from like never having heard the problem
+[2760.6s] to having heard the problem, written the
+[2762.1s] code, and having a test harness built
+[2763.4s] that you feel like you would feel
+[2764.8s] comfortable showing like your team and
+[2766.1s] having them iterate on it.
+[2767.1s] >> Yeah.
+[2768.0s] >> Cool. Um, so that's like the approximate
+[2770.2s] timeline that people should think about.
+[2771.4s] It's like it's not like cloud code and
+[2773.0s] all these other things are great at
+[2774.0s] writing code. I'm guessing like all of
+[2775.7s] us is pretty much AI codegen the whole
+[2777.8s] time.
+[2779.2s] >> Oh, yeah. A lot of it.
+[2780.6s] >> Right. And the beautiful part is because
+[2782.6s] most of this UI stuff is throwaway code,
+[2784.8s] you can kind of view it like Jupyter
+[2786.1s] notebooks where like you don't actually
+[2787.3s] have to save them forever and just like
+[2790.6s] get rid of them uh along the way uh once
+[2794.4s] you're done with it and you've shipped
+[2795.6s] the project and just make sure the core
+[2797.8s] part of your code, your actual pipeline
+[2799.5s] that you're running, that is good code.
+[2802.1s] Your test harness code doesn't have to
+[2803.6s] be good code because that can be thrown
+[2805.1s] away long term. It's not actually going
+[2806.4s] to customers. It just needs to be able
+[2808.3s] to be run really quickly and you need to
+[2810.2s] beble to adapt it with cloud code. So it
+[2811.9s] shouldn't be like that messy. But it's
+[2814.6s] um I would say like the most important
+[2816.2s] thing is just like make sure your core
+[2817.4s] code is good and like v code the rest of
+[2819.5s] it. V code the UIs, vibe code the evals,
+[2821.8s] v code the testing harness, but do vibe
+[2824.6s] code them. Don't skip those parts. Don't
+[2827.6s] only build the main app part of the
+[2829.1s] application.
+[2829.8s] >> Yeah. One of the things that viop said
+[2831.7s] to me was that um like kind of if you
+[2834.1s] can think of it, you can build it now.
+[2835.6s] It's basically free to build these
+[2837.0s] things. So
+[2839.6s] yeah, the real the real art in
+[2842.4s] engineering comes into figuring out like
+[2846.7s] what gives me the most what gives me the
+[2849.0s] information I care about in the densest
+[2851.4s] way that makes it jump right off the
+[2853.4s] page.
+[2855.0s] >> Yeah, I'm going to show another question
+[2856.7s] actually that came up while we were
+[2858.3s] discussing uh which was uh should we v
+[2862.2s] code this in React? Why do we use
+[2863.5s] streamllet? Um, and this is a mistake a
+[2865.9s] lot of people make. This UI is not
+[2868.0s] important. Kevin, I asked him a very
+[2870.2s] direct I was originally going to suggest
+[2871.5s] React. I asked Kevin a question of like,
+[2874.6s] uh, Kevin, how well do you know? He was
+[2876.2s] like, I know Python. I was like, don't
+[2878.2s] think about it. Just use Streamlight.
+[2879.6s] Like, it's just like, don't ask
+[2880.9s] questions. Don't try and be optimal in
+[2882.9s] parts of the system that don't need to
+[2884.7s] be optimized. Who cares if this UI is
+[2887.4s] perfect? It just needs to work. Dex,
+[2889.5s] what are your thoughts on this process?
+[2890.6s] I know you you're pretty much what I
+[2892.2s] would call the vibe coding expert and I
+[2893.5s] take a lot of advice from you on this.
+[2894.6s] Like how would you approach this kind of
+[2895.9s] stuff?
+[2896.3s] >> Great question. Yeah. So I mean a lot of
+[2897.7s] people talk to me and like we're even
+[2899.7s] learning this internally on like how to
+[2901.8s] vibe code things that are a lot like
+[2903.9s] have a tighter iter iteration loop and
+[2906.5s] so we're still tuning like the the
+[2908.2s] process that I'm sure everyone here has
+[2909.8s] heard about plenty at this point is this
+[2911.8s] like research plan implement. Um it
+[2915.7s] actually doesn't work. We're like
+[2918.0s] figuring out alternative flows where we
+[2920.8s] do like plan and then implement and then
+[2923.3s] go back and do the research for things
+[2925.2s] that are more visual, for things that
+[2926.9s] are harder for an AI to validate by
+[2929.8s] writing deterministic tests. Like even
+[2931.7s] with Playright, it's just kind of hard
+[2933.2s] to vibe out a UI without looking at it.
+[2936.5s] And so like one of the things we've done
+[2938.2s] been doing a lot lately is like I will
+[2940.2s] go and like not do any planning up
+[2943.4s] front. maybe do a research that is just
+[2945.5s] like show me the files where that
+[2947.0s] matters, but then I'll jump jump
+[2948.4s] straight into back and forth vibe coding
+[2950.7s] and get the thing. We're like doing a
+[2952.5s] style change, right? I want to get the
+[2954.0s] thing looking how I want and the CSS
+[2956.6s] that gets generated is usually trash.
+[2958.7s] It's like got like important like
+[2960.7s] exclamation points all over the place.
+[2962.3s] It's like not how CSS should be written,
+[2964.3s] but I get it looking how I want and then
+[2966.2s] I take pictures of that and then I share
+[2968.3s] that with the team and then one of our
+[2970.2s] expert front-end engineers will go back
+[2971.8s] and actually do research, plan,
+[2973.2s] implement to turn it into like build a
+[2975.8s] production grade implementation of it.
+[2977.4s] So that's kind of a little bit of a
+[2979.2s] detour, but the idea is like for things
+[2981.0s] where it's like the value is the human's
+[2984.6s] like ability to understand what's
+[2986.4s] happening. I think you end up doing a
+[2989.8s] lot more like tight loop iteration with
+[2991.7s] the LLM to learn what you want and then
+[2995.4s] if it's a side project like this, maybe
+[2997.0s] you keep what you got. If it's something
+[2999.8s] that needs to go into production, be
+[3001.1s] production grade code, then then maybe
+[3002.9s] you go back and build it from from
+[3004.3s] scratch. This is if you if you've read
+[3007.2s] uh there's a book called uh inspired by
+[3009.5s] a guy named Marty Kagan which is kind of
+[3011.4s] like 20 years ago developed a lot of the
+[3014.3s] like principles of good product
+[3016.2s] management and the idea of product
+[3017.9s] management that um is in a lot of
+[3020.3s] people's heads is kind of like a jur
+[3022.0s] ticket pusher or like the decider of
+[3024.2s] what gets built and Marty's take is
+[3026.5s] basically like your job as a product
+[3029.0s] manager as someone building a thing and
+[3031.4s] deciding what should be built is to
+[3033.4s] learn as quickly as possible.
+[3035.1s] And so if you can get customer feedback
+[3037.3s] based on a bunch of Figma mockups and
+[3039.1s] people will say like, "Yeah, I would pay
+[3040.4s] $100,000 for that, that's way better
+[3042.6s] than spending 3 months building it and
+[3044.5s] then showing it to people and finding
+[3045.9s] out nobody wants it." And so like that's
+[3047.9s] kind of get zooming out on like tactical
+[3050.0s] advice. Like that's kind of the core
+[3051.5s] principle is like how can you give
+[3053.4s] yourself the most leverage to be able to
+[3057.3s] understand what you want? And if you're
+[3058.8s] building for yourself, then yeah, just
+[3060.4s] prototype it, vibe code it, whatever it
+[3062.2s] is. I think I use vibe. I'm not good at
+[3064.6s] Figma, so I use I use vibe coding as a
+[3066.9s] substitute for Figma. And I think a lot
+[3068.9s] of people I think there was like a
+[3069.8s] Lenny's podcast like nine months ago
+[3071.4s] where they talk about Amjad from Replet
+[3073.7s] was like and I haven't talked to Amjad
+[3075.4s] for I haven't talked to Amjad ever. uh
+[3077.9s] but nine months ago at least what he
+[3079.6s] said was like people are using replet
+[3081.5s] agent as product managers to prototype
+[3084.2s] what they want and show it to customers
+[3086.6s] and understand what people want and then
+[3089.1s] if they decide they want it then that
+[3091.1s] becomes the specification that goes to
+[3093.0s] the engineers and they talk about okay
+[3094.4s] how do we build this in a way that's
+[3095.6s] scalable and production grade and secure
+[3097.8s] and all that stuff
+[3098.6s] >> you can almost think of this UI as
+[3100.0s] something if you were building a Jupyter
+[3101.2s] notebook this is what you would have
+[3102.6s] shown now you can show something better
+[3104.5s] than Jupyter notebook like this UI does
+[3107.4s] And I think that is like the mentality
+[3108.8s] that I found is like to go this kind of
+[3111.4s] stuff
+[3111.7s] >> and models are much better at writing
+[3113.4s] stream apps than they are at writing
+[3114.8s] Jupyter notebooks. I will tell you that
+[3116.1s] they're they're getting there and like
+[3117.3s] people have done incredible I've written
+[3118.7s] Jupyter notebooks to do BAML workshops
+[3121.8s] using cloud code but it doesn't work as
+[3124.9s] well and like you really as most people
+[3127.0s] say like you need to be able to design a
+[3128.4s] testing harness and so like the hard
+[3130.7s] part of using a coding agent to write
+[3132.8s] something like a Jupyter notebook is
+[3134.3s] like okay how do I build a separate
+[3136.1s] script that actually runs the notebook
+[3137.8s] headless with no output and runs every
+[3140.2s] single cell and make sure there's no
+[3141.8s] errors so that the AI as it's making
+[3143.8s] changes has a feed back loop to like
+[3146.2s] there's no llinter for Jupyter
+[3147.4s] notebooks. The best way to lint a
+[3148.6s] Jupyter notebook is actually run it.
+[3150.6s] >> Do you want to show the results, Kevin?
+[3152.3s] Um, from the most recent result. Let's
+[3154.6s] see what happened. I don't I have no
+[3156.0s] idea.
+[3157.0s] >> Yeah, let's go to error.
+[3159.4s] >> Oh, look at that. So, before
+[3161.2s] >> did it get worse?
+[3162.5s] >> No, it got better. So, we were at Let's
+[3165.0s] see. We were at version.
+[3167.8s] >> Yeah. So, we were here sent
+[3170.8s] >> Oh, it didn't change actually.
+[3174.4s] The distribution it didn't really
+[3176.0s] change. So it's not it's like in this
+[3177.3s] scenario using a better. Can you change
+[3178.9s] the definition?
+[3181.9s] >> So lenient. Oh, we got Okay. So we got
+[3184.0s] up to 84% which is
+[3185.5s] >> And what about if we go to other
+[3186.6s] lenient?
+[3187.8s] >> I think it's the same.
+[3189.8s] >> No, no, the other lenient. There's
+[3191.2s] another lenient.
+[3191.8s] >> The other lenient. Yeah. It looks at
+[3193.9s] like more specific is okay.
+[3196.7s] Okay. Got up to 85%.
+[3198.6s] >> Yeah. And then the other one is
+[3201.2s] >> Yeah. What is V1?
+[3203.2s] Yeah,
+[3203.9s] >> that's around the same.
+[3206.9s] >> Did you run V1 with GPT40? Is that what
+[3209.6s] happened?
+[3210.7s] >> No.
+[3212.1s] >> Well, I think what it means is like this
+[3213.8s] problem in this problem, the problem is
+[3215.8s] not
+[3217.0s] >> that the problem is clearly not the
+[3219.0s] model.
+[3220.0s] >> It's like the definition likely of the
+[3221.8s] categories is what needs to be updated
+[3223.3s] to make it work better. That's almost
+[3225.5s] definitely what I would have to do here.
+[3227.0s] It's actually not about the prompt. I
+[3228.9s] would just go and look at the actual
+[3230.2s] prompt for each category and be like,
+[3231.7s] "Okay, for these C and like if we go
+[3233.4s] look at them, can we go look at some of
+[3234.6s] the error cases in V5 and just pick some
+[3237.1s] failures?" Yeah. And just go dig into
+[3239.3s] this and I think people can get a grasp
+[3240.6s] of how like we're thinking about these
+[3241.9s] problems. Like let's pick this. So the
+[3243.6s] user said
+[3246.2s] um desk shelves.
+[3249.6s] Honestly, I'd probably be like this
+[3252.0s] passes. Like it's suboptimal, but I'm
+[3254.4s] like
+[3256.6s] >> it it it looks pretty good.
+[3259.3s] >> Yeah.
+[3259.7s] >> Uh maybe they don't want decorating
+[3261.8s] shelving, but they probably want
+[3263.0s] shelving.
+[3264.2s] >> Um
+[3264.9s] >> Mhm.
+[3265.4s] >> And that's probably what I would pick it
+[3267.0s] as. I think the ground truth is wrong.
+[3268.2s] Let's look at the next one.
+[3269.7s] >> Yeah.
+[3270.3s] >> Let's just go through and like look at
+[3271.6s] some There's only 10 cases.
+[3273.9s] >> Cool. That one passes. We're good.
+[3276.3s] >> Mhm. Oh, this is this Yeah, this was a
+[3278.8s] one of
+[3280.0s] >> door gasket seal. Actually, it's
+[3282.6s] correct. Round two is wrong, right?
+[3285.6s] >> I guess freezer parts.
+[3287.8s] >> Yeah.
+[3288.8s] >> Um either one. I actually don't know.
+[3292.2s] >> Um let's go on to the next one cuz it's
+[3294.3s] like it's very close on that one.
+[3296.6s] >> Induction stove. Oh, interesting.
+[3299.2s] Induction ranges. Like that's fine,
+[3302.3s] right?
+[3302.9s] >> So, I think I think what I really took
+[3304.4s] away from this, like we've looked at a
+[3305.7s] bunch of these errors. It honestly looks
+[3307.6s] like there's just like two categories
+[3309.0s] for each of these. there's multiple
+[3310.3s] categories that actually correct
+[3311.4s] answers.
+[3312.3s] >> So, what I would actually probably do is
+[3314.2s] I'd probably go back to my ground truth
+[3315.8s] system and make it an array.
+[3318.4s] >> Like actually before updating the
+[3319.8s] prompt, I'd say like any of these ground
+[3321.2s] truths are fine
+[3322.5s] >> uh as long as I pick one of them. And I
+[3324.6s] likely will in my UI make it a another
+[3328.7s] thing where in my UI actually say here's
+[3330.4s] the selection I made, but you might have
+[3332.1s] also meant this and show them a totally
+[3334.6s] separate category that's related. So I'd
+[3336.6s] both make a UI change and an eval change
+[3339.8s] over here. So exactly like Andrew said,
+[3342.4s] what we do is if you go back to your
+[3343.6s] code, um I would literally just take
+[3346.2s] this and the pick best category would
+[3347.8s] just become a category array.
+[3350.1s] I say pick the top three categories
+[3351.7s] here. That makes sense. Or like and then
+[3354.3s] I'd be like and just have the user go
+[3356.2s] select that and then I'm done. And I in
+[3357.9s] my UI I'd pick one as a primary and for
+[3360.9s] the secondary I would go ahead and just
+[3363.5s] pop it into my UI somewhere in the final
+[3365.3s] application that says here's the
+[3367.0s] breadcrumb layout but you might have
+[3368.6s] also meant this one instead
+[3371.2s] >> because just like sampling through these
+[3372.6s] is like I let's go on let's see if we
+[3374.2s] see any that are actually wrong.
+[3376.5s] >> Interesting. Okay.
+[3377.8s] >> Like that's okay. It's two parts for
+[3379.8s] wine coolers.
+[3381.0s] >> Yeah. Under appliance parts and beverage
+[3383.8s] coolers. We like the fluorescent bulbs
+[3385.8s] desk shelves.
+[3387.4s] And I think this is kind of what I meant
+[3389.7s] by sometimes the data is wrong. If you
+[3392.3s] just took this as a raw metric and you
+[3394.2s] didn't dig in, you'd be like, "Oh, this
+[3395.5s] system's only 80% correct." But if we
+[3397.3s] actually looked at 100% of the failure
+[3398.8s] cases, all of them are actually not
+[3400.6s] failures. It's a problem specification
+[3403.0s] problem much more so than a failure.
+[3405.2s] Like my data is just polluted uh with
+[3408.2s] bad data.
+[3410.6s] >> It's it's it was created by people who
+[3413.3s] don't really know much about hardware
+[3415.0s] stores.
+[3415.8s] >> Yeah. or like the
+[3416.9s] >> not only that, but the categories have
+[3418.2s] so much overlap.
+[3419.4s] >> Exactly. And like it's going to be wrong
+[3421.5s] in that scenario. There's nothing that
+[3422.6s] they can do about this.
+[3424.7s] >> Um but um this was really really fun.
+[3428.3s] Kevin, thank you for going into this
+[3430.1s] really deep with us. Um this code will
+[3432.5s] be checked into the repo. We'll send a
+[3433.9s] summary of the video out. I know we
+[3435.6s] missed last week's summary. You guys
+[3437.3s] will get a summary, I promise.
+[3440.2s] um for last week. We've just had a very
+[3442.2s] very um uh busy week and we'll announce
+[3445.9s] shortly why. But um questions for
+[3449.4s] anyone, feel free to pop them into the
+[3451.4s] chat um or raise your hand or something
+[3453.4s] and we can bring you on.
+[3455.0s] >> Yeah, this is cool. I'm going to share
+[3456.3s] real quick. Um Nick shared an old
+[3458.8s] article. Um
+[3461.3s] let's see. Let's get a tab.
+[3463.2s] >> Uh Kevin, you want to stop screen turn?
+[3464.7s] Yeah, there we go.
+[3465.3s] >> Yeah, here I got it. So this is this
+[3467.4s] people have been trying to figure out
+[3469.1s] research opportunities in e-commerce
+[3471.1s] search for a very long time. This is an
+[3473.6s] older paper from 2020. Um but it's just
+[3477.0s] a single you can go find a hundred other
+[3478.6s] papers on this topic. And so there's
+[3481.4s] this is uh as far as I'm concerned these
+[3484.2s] are like not toy problems. This is a
+[3486.8s] real thing that a lot of people are
+[3488.5s] trying to figure out.
+[3489.6s] >> These problems are worth millions and
+[3491.2s] millions of dollars. Um like hundreds of
+[3493.9s] millions of dollars. Um,
+[3495.5s] >> and yes, Andrew, we can apply this to
+[3497.1s] categorizing architecture for how you do
+[3499.2s] tool calling. We actually did an episode
+[3500.6s] about this of like if you have a
+[3501.9s] thousand MCP tools and like this is
+[3504.5s] coming back to the coding agents thing.
+[3505.8s] I think Jeff Huntley did a talk recently
+[3507.5s] where he I mean lots of people have
+[3508.9s] highlighted this. If you add the GitHub
+[3510.5s] MCP server to your cloud code and you
+[3513.8s] don't turn off any of the tools, it's
+[3515.4s] 60,000 tokens of just tool definitions.
+[3518.8s] And that's gonna tank your performance
+[3520.9s] compared to like and a tool call is the
+[3522.6s] same as a clar classification in and
+[3524.4s] many points you're asking the model to
+[3526.0s] output structured data about what type
+[3528.7s] of thing is this whether it's like what
+[3531.0s] type of thing is this query about or
+[3533.1s] what is the right next step in the
+[3535.0s] workflow based on what the user is
+[3536.7s] asking for. So the same concepts there
+[3539.0s] of like how do you narrow and there's
+[3540.5s] actually there's a post on the very top
+[3541.8s] of hackernews right now of a team who
+[3544.4s] built an MCP server to allow you to kind
+[3546.9s] of like inject a thousand tools or
+[3548.9s] thousands of tools into your AI and that
+[3551.7s] does the narrowing on the MCP side for
+[3554.2s] you because that's the only way to do
+[3555.7s] >> literally doing the same thing Kevin did
+[3557.0s] here where they just use some embedding
+[3558.9s] or some LM filter to like go from a
+[3561.3s] th00and to 50 to 100. This code is
+[3564.3s] really easy to go right. Um, if you guys
+[3566.6s] like this kind of content, this is AI
+[3568.0s] that works. If you want to tune in next
+[3570.2s] time, we're going to do another fun
+[3571.4s] episode. You can check out the link
+[3573.0s] here, and we'll get back to answering
+[3575.2s] questions in a bit. But like, this is
+[3576.6s] like one of our favorite things to do
+[3577.8s] every week. Um, it's very fun compared
+[3579.6s] to the regular work that we get to do
+[3581.8s] every day. Um, and it's just a nice
+[3584.4s] break for us. Um, Malik asked a really
+[3587.1s] good question of what do you think of
+[3588.5s] MLflow? Is it dead since by putting UI
+[3591.0s] is so easy?
+[3592.9s] Personally, I think I mean I've clearly
+[3595.1s] st the horse in this. I think you need a
+[3596.9s] new programming language to go solve
+[3598.0s] some of these iteration loop problems.
+[3600.1s] Um like there's just a totally different
+[3601.8s] workflow that people have now that has
+[3603.5s] never been true before. You need to
+[3605.4s] iterate and code at the same time. And
+[3608.7s] like you wouldn't use some you wouldn't
+[3610.8s] use like you wouldn't use a bunch of
+[3612.4s] HTML code to do what React can do. And
+[3615.3s] you probably shouldn't use a bunch of
+[3617.1s] random smashed together Ginga uh not
+[3619.3s] Ginga uh Jupyter notebooks to like build
+[3622.2s] a production app. And like I think like
+[3624.8s] things like ML for longterm are not just
+[3626.6s] not going to be as good. Um what do you
+[3628.7s] do eval how do you eval how do you do
+[3632.0s] evals on candidate screening chat?
+[3634.7s] Something that is conversational not
+[3636.4s] zero or one rangebased evals. Um so like
+[3639.7s] how do you do dynamic evals? We did an
+[3642.1s] episode on evals a while ago. Um,
+[3643.8s] episode five that talks about some of
+[3645.0s] this stuff, but I think we should go
+[3646.2s] deeper into this. But Dex, Kevin, how
+[3647.8s] would you guys think about this? Let's
+[3649.0s] say we have chatbot and we want to build
+[3650.1s] an eval system for it. What would be
+[3651.4s] your first gut?
+[3652.2s] >> If I wasn't going to vibe code the UI,
+[3654.6s] >> well, you might vibe code the UI, but
+[3656.2s] how would you define the problem of
+[3657.5s] eval? How do you define success, ground
+[3659.3s] truth, or something along that rain?
+[3662.0s] I mean, I'm just going to say what we
+[3663.5s] said in the we did that episode a while
+[3665.0s] ago that was like policy to prompts and
+[3667.0s] it was like how do you take, you know, a
+[3669.2s] terabyte of not not terabyte, it was
+[3671.2s] like several gigs of like raw email
+[3673.2s] content and how do you like evaluate
+[3675.6s] that against certain compliance rules to
+[3677.7s] decide if the emails were breaking
+[3679.4s] certain rules of like what is ethical
+[3681.2s] corporate behavior or whatever it is.
+[3682.8s] And it's like start as small as
+[3685.0s] possible. Pick a really narrow thing and
+[3687.5s] pick a really narrow slice of the data
+[3690.2s] and don't grow the problem or the slice.
+[3693.2s] You have two dimensions you can play
+[3694.3s] with, right? And I think you kind of
+[3695.5s] want to grow them in parallel. Like,
+[3697.0s] okay, now we're going to do two problems
+[3698.2s] and run it across the 100 emails. And
+[3700.3s] then you're like, okay, those are
+[3701.1s] working. Now, let's do a thousand emails
+[3702.6s] and let's try. And you just keep
+[3703.7s] iterating as small as possible. So that
+[3706.4s] like you want to start in a way because
+[3708.5s] the first like going from 40% accuracy
+[3710.7s] to 80 or 90% accuracy you can probably
+[3713.9s] get most of that from a really small
+[3716.2s] data set and you want to be able to go
+[3718.6s] look at the data. If you start by
+[3720.1s] dumping in 10,000 emails one your
+[3722.9s] iteration loop is going to be way slower
+[3725.0s] and two you are going to not want to go
+[3728.8s] look at the data. So frame your problem
+[3730.4s] in a way where you can vibe evalot
+[3732.3s] either by creating a UI on top of it or
+[3734.7s] just by looking what do what Kevin did
+[3736.4s] was like start by looking at the JSON
+[3737.9s] and then when you have so many cases
+[3739.8s] that you can't read the JSON anymore
+[3741.4s] then make it easier to read and easier
+[3742.8s] to debug and easier to work. Why not
+[3744.5s] just iterate and code using cursor
+[3746.4s] instead of BAML?
+[3748.1s] >> Um uh before we go to that one uh Kevin
+[3750.6s] what are your thoughts? How would you
+[3751.6s] approach the chat problem? Like if
+[3753.0s] there's a chatbot you want to build an
+[3754.1s] eval for?
+[3755.1s] >> Yeah, I mean that's a that's a really
+[3756.6s] tough one for me. Um, I think I really
+[3760.2s] like everything that Duck said. I think,
+[3763.4s] um, the first thing that I would do is
+[3765.0s] is is think about it on a kind of a a
+[3768.0s] problem bypro basis. Is like what is the
+[3770.9s] cuz it's that's a really big problem
+[3774.5s] just is like what is is is this chat
+[3777.8s] good? Is this is this what we wanted
+[3779.3s] this to look like? Right? That's that's
+[3780.6s] almost an impossible question to answer.
+[3782.2s] And so I would try to break it down into
+[3783.8s] like really individual questions. It's
+[3785.9s] like kind of like to Dex's point, right?
+[3787.8s] Like is this chat following this rule?
+[3792.1s] And then I would um you know build test
+[3794.1s] cases and kind of vibe code it and build
+[3795.5s] my like a UI and then I would keep you
+[3797.6s] know just keep adding more rules and
+[3800.2s] then uh you know adding more chats and
+[3802.7s] kind of try like Dex was saying kind of
+[3804.1s] trying doing the horizontal and vertical
+[3806.6s] um and see where that got me. One thing
+[3810.5s] I think that I have found successful in
+[3812.6s] these kinds of domains for like really
+[3813.9s] really ambiguous problems is like
+[3815.8s] instead of thinking about like AI just
+[3817.2s] screw the AI part and then let's just
+[3819.8s] think about a um let's just think about
+[3822.5s] a world where we're doing a we're
+[3824.8s] running a call center. How do call
+[3826.3s] centers run? You have people taking the
+[3827.8s] calls, you have people that randomly
+[3830.0s] spot check their calls and then you kind
+[3832.2s] of go up the chain and it just goes up
+[3833.9s] the chain forever basically until you
+[3835.8s] basically get this. But what they really
+[3837.3s] do to make all of this work is they
+[3838.6s] actually tie all of this to actually um
+[3842.5s] deal with um to deal with um end end of
+[3847.3s] line business metrics. It's like how
+[3849.0s] much how many returns are we getting?
+[3850.7s] How many orders are we getting through?
+[3851.8s] How many sales calls are we getting
+[3853.0s] through? It's really easy to tie it to
+[3854.6s] revenue at that point. And so what you
+[3855.8s] can do is you just you're just like,
+[3857.6s] "Hey, we have a median revenue number
+[3859.4s] that we're running across the whole
+[3860.7s] company. This group is performing worse.
+[3863.2s] This group is performing better." And
+[3865.0s] what you do is you just spot check and
+[3866.3s] you just say, "Is there can I see
+[3867.6s] something that makes this spot check
+[3868.7s] worse?" So before you actually build
+[3870.2s] emails, just spot check, spot check,
+[3872.9s] spot check, spot check. And but tie it
+[3874.6s] to an end business metric. Like putting
+[3876.9s] a chatbot on a page is freaking useless
+[3879.0s] unless you can tie it to an end
+[3880.1s] businessy metric of some kind because
+[3881.9s] you won't actually be able to converge
+[3883.1s] on anything meaningful. And then once
+[3885.2s] you can do that, you can spot check,
+[3887.0s] make a change, and see if the metric
+[3889.0s] goes up. And you can do it localized.
+[3891.0s] You can say, I will do this metric for
+[3892.6s] this kind of user persona. I have a
+[3894.4s] chatbot on the website and if a Python
+[3897.0s] user comes up, I expect their Python
+[3898.6s] code to be I expect the code sample that
+[3900.4s] spins up by default to be Python. If a
+[3902.2s] Rust user comes up, I expect their code
+[3903.8s] that generates to be Rust. That's an
+[3906.4s] easy thing to go build a system for in
+[3908.3s] my chatbot to make it work. And I can
+[3910.2s] build like memory or whatever I need to
+[3911.5s] go to solve this problem. But the end
+[3914.1s] business metric I might be is the number
+[3916.0s] of times people copy and paste code
+[3918.0s] directly from the site. If they copy and
+[3919.9s] paste code directly from the site, that
+[3922.6s] gives me a key metric on how good it how
+[3924.2s] good it is. If they copy and paste code
+[3926.6s] on the first generation of the site on
+[3928.7s] the first generation of code versus the
+[3930.4s] fifth generation code, that tells me how
+[3932.4s] long it takes to get to good code
+[3933.8s] snippets. So, it's almost like I can I
+[3937.0s] can I can build a pseudo metric of some
+[3940.1s] kind even for most problems. But I think
+[3942.7s] you just have to go and think about how
+[3944.1s] do you tie this to the end result that
+[3945.7s] you're trying to drive in some way. And
+[3947.0s] then like you can build any sort of UIUX
+[3949.0s] you you want around that but you should
+[3951.1s] build UIUX and you should look at chat
+[3953.5s] logs and spot check. I think uh there's
+[3956.0s] one last question. It's like why not
+[3958.2s] iterate using cursor to code code
+[3959.8s] deterministic code instead of v code the
+[3961.8s] entire solution and use like
+[3963.4s] probabilistic models uh from wden and I
+[3966.7s] think this question is really
+[3967.7s] interesting. I think um Eugene in the
+[3969.7s] chat was saying great point like hey we
+[3971.4s] use deterministic code to solve some of
+[3972.8s] this classification problem. I suspect
+[3974.6s] maybe a decision tree or something of
+[3976.0s] that kind or something else along that
+[3977.3s] road. And that's not a bad solution, but
+[3980.3s] there are certain problems that are just
+[3981.7s] hard. Like for example, in the past
+[3984.8s] world when we used to go and say if
+[3986.4s] there was an object in an image, we used
+[3988.1s] to do a lot of computer vision math to
+[3989.9s] go figure that out. Now I literally just
+[3991.9s] toss this at an LM and say what is this
+[3993.7s] and it will tell me what this is. It is
+[3996.2s] really nice that I can just go do that
+[3998.1s] and don't have to train a model to like
+[3999.4s] train it on like charger blocks.
+[4002.0s] But the trade-off is it may get this
+[4004.2s] wrong. So I'm living in this world where
+[4006.7s] I'm getting much more capable systems at
+[4009.0s] the cost of accuracy. And it's kind of
+[4012.6s] like when I use Python for the very very
+[4014.6s] first time in my uh in my life and I
+[4018.4s] trade off performance to get really fast
+[4021.8s] ways to ship code. Like I could have
+[4023.4s] written C++ code and manage the memory
+[4025.0s] myself or I can write Python and just
+[4026.2s] ship it. And the trade-off there that
+[4028.2s] you should think about is like people
+[4029.2s] used to be like, "Oh, why not just
+[4030.6s] manage the memory yourself?" Well, it
+[4032.4s] turns out as computers got better, we
+[4034.6s] didn't need to. It was okay to use for
+[4036.7s] like this app Riverside is probably
+[4038.5s] using 70 gigs of RAM or something stupid
+[4040.1s] on this on this machine while we're
+[4041.8s] running this. And that's okay. None of
+[4043.4s] us care. The internet systems are good
+[4045.4s] enough. Uh the computers are good
+[4046.8s] enough. That's not the problem of today.
+[4049.4s] So, I think it's the same with all ones
+[4052.0s] where like you should use them sometimes
+[4053.9s] uh because they're really good
+[4055.0s] calculators and they're they're a little
+[4057.3s] probabistic, but sometimes that's okay
+[4059.6s] for the kinds of problems that they
+[4060.6s] have. And like Eugene said, it's just
+[4062.2s] like they're just problems that are
+[4063.9s] better for LMS.
+[4065.9s] Um and there are problems that are bad
+[4067.1s] for LMS and you got to understand them,
+[4069.0s] but there are problems that are good for
+[4070.7s] them and you should use them.
+[4073.7s] Um I think that's it for questions
+[4075.2s] today. Um, but again, always a pleasure
+[4078.8s] having everyone on here. Thank you guys
+[4080.7s] for joining us on this Tuesday morning
+[4082.8s] as per usual. Um, if you guys want to
+[4085.8s] come check it out in the future, sign up
+[4088.0s] here and we'll put on a new episode
+[4089.5s] pretty shortly and likely we'll do
+[4091.4s] dynamic UI coming in soon um for this
+[4094.3s] one and show this off. But Kevin, huge
+[4097.0s] huge props from me and I'm
+[4100.6s] >> dude this was a blast. Thank you so much
+[4102.4s] for sharing this and for hustling on
+[4104.6s] this and like I know I know we do a lot
+[4107.0s] of coding prep for these episodes most
+[4109.2s] of the time.
+[4110.4s] >> I have I have called myself out when we
+[4112.1s] underprepared, but I know how much work
+[4113.4s] goes into stuff like this and I know
+[4115.3s] you've been having fun hacking, but I
+[4116.7s] don't want to like diminish that like
+[4118.9s] you put in a ton of work to like hack on
+[4120.8s] this and find something that works. So,
+[4122.2s] I hope you learned a lot and it was
+[4123.9s] super fun having you on and I would
+[4125.3s] encourage everybody else to get hands-on
+[4127.5s] and try some of this stuff and get in
+[4129.0s] touch and and tell us how it went. Yeah.
+[4131.3s] >> Yeah. Oh, thanks for having me. This was
+[4133.4s] a blast.
+[4134.2s] >> All right, everyone. Awesome. Thank you
+[4136.1s] guys soon. We're going to log off and
+[4138.0s] get back to work. Catch y'all. See you.

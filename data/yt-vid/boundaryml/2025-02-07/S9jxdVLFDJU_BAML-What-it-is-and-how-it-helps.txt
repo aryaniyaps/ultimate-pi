@@ -1,0 +1,242 @@
+hey everyone I'm bov and today I'll give
+you a brief background on how baml can
+help you ship agents a lot faster and
+more reliably so at a very very high
+level what we just like to start off
+with is just the premise of how API
+calls work we used to live in a world
+where API calls failing 5% of time was
+horrific your company shuts down you
+swap one word out to LMS and suddenly
+your expectations just start changing
+and we just don't believe that's the way
+software should be built you won't be to
+build reliable systems until you can
+solve this problem and in reality the
+hardest problem here is Fault
+tolerance when you think about LM agent
+systems everything now has to be fa
+tolerant and the way that we have to
+solve this problem is just change the
+way that we build these systems for
+example in a distri large distributed
+system you never make an assumption
+about a machine existing or a a micros
+service existing you always have
+different kinds of horizontal vertical
+scaling built into it we have to think
+about new paradigms with LMS that allow
+for this system as well our team's
+background is based in this but I won't
+bore you with that I want to jump back
+into how we write agents when we used to
+write websites some of you may remember
+the day when a website looked like this
+but now websites look like this and this
+is much more reactive and much easier to
+express complex ideas the reason is in
+the old version of websites we had
+strings everywhere State Management was
+impossible to go and use Dynamic
+components are virtually impossible to
+go build like an infinite uh Le
+scrollable web page reusable components
+didn't really exist and iteration Loop
+took minutes because your entire website
+had to compile from scratch and if
+something broke you wouldn't find out
+until some string got compiled
+somewhere as a very general principle we
+called it low engineering rigor react
+added engineering rigor to our systems
+the idea that set count automatically
+changing this will cause a render Loop
+and reender the right count here it's
+just a thing we take for granted and
+magically Works would react and really
+the syntax we use changes how we think
+about these problems we don't have to
+think about the nitty-gritty of exactly
+what's going on the syntax use State set
+count expresses the ideas in a way that
+we all universally agree and it's
+consistent the same thing is true for
+prompts
+if you've ever written a prompt that
+looks like this with if conditions new
+lines and really just hardcoding the
+model web requests that are coming out
+of it your code will somehow and at some
+point turn into this we just don't think
+this is good it's the same system as
+website you strings everywhere context
+management is impossible to go build if
+you change one step in a previous
+pipeline who knows what it will break
+Downstream new models come out all the
+time and swapping models is aent
+essential to success and once again our
+iteration Loops take
+minutes we classify this as low
+engineering
+rigor the way we think agents have to be
+built is you want to be able to take the
+benefit of these really expressive
+models but you want a system that is
+reliable so you need the structure of
+code and software
+engineering if you've ever seen any of
+these AI Frameworks one common problem
+that every single one of them have
+including the native sdks is this famous
+blog post called f you show me the
+prompt by H Hussein the idea that these
+Li libraries will just add magic and
+somehow the LM will work is nice at a
+first glance but fundamentally to make
+an LM really work for your use case you
+need to be able to see the prompt you're
+sending into it if a library goes ahead
+and abstracts Away the prompt you have
+no control they check in a mistake and
+you will be you will pay the
+consequences for that this primitive of
+just seeing prompt is essential to
+success building an AI Pipeline and
+that's just one of the things so why
+don't I just show you how we go do this
+over with
+baml in baml everything lives in your
+codebase and every function exists in a
+baml file and every single prompt ends
+up looking something like this every
+prompt is a function functions taken
+parameters of any kind including
+multimodality with images and audio and
+then they return a data model in this
+case the data model is also expressed in
+code and now I Define what model I want
+to use and I can use any model I want
+from open source to closed source and
+then I write my
+prompt now this is the beginning of how
+it works this is where the developer
+flow really starts to differentiate from
+every other system you click this button
+called open
+playground and now you're able to
+actually see the prompt in real time
+with your inputs rendered right away
+where is this coming from this is a test
+case described in your code if I switch
+to a different test case with an image
+you can see the image everything about
+the full prompt is always visible if you
+change it it changes in real time you
+can write if conditions or anything else
+you want over
+here be careful
+you can see this isn't rendering but if
+I reduce the if condition we start
+getting this condition popped out the
+whole point of baml is to make it very
+very easy to write programmatic prompts
+that are expressible like English but
+work with
+code now this is one aspect of it where
+you can not only see the prompt but
+you're able to see the tokens that are
+being passed into the model and lastly
+you can even see the raw web request
+under the hood that is being used and
+sent so if I change this from open AI to
+dropic you see the web request changes
+it uses Max tokens messages well with
+open a we use messages roll system so it
+is just an easy way to debug what's
+going on and lastly we have testing and
+evals built in so you can see over here
+the model is spinning out a bunch of
+noise uh because I told it before
+answering list why the person may be a
+good hire so it's doing that and then
+it's listing out all my sequences and
+what baml does is three things it
+creates a prompt based on a definition
+over here from the parameters it then
+calls the model based on the client you
+have configured and lastly it does a
+very important part which is it parses
+the data from what the model says to the
+data model that you want and Define so
+even though the model gave us all these
+reasons which can help it for techniques
+like Chain of Thought and then we also
+decided not to Output any quotation
+marks over here to and therefore I
+reduce the tokens that were being cost
+over
+here we were still able to go and get
+the structured data model that we
+expected in our code base as you can see
+over here this is not Json compatible
+but this element is and we do this
+transformation from the raw response to
+the data model of your choice in real
+time in under four milliseconds and we
+can do it while streaming as well if you
+pay attention
+slowly fills itself in and of course you
+can always see history and see how
+things are
+working now at some point you're going
+to want to go from your BMA code to your
+python typescript Java go any other code
+base you have this is another place
+where Bama makes it very very easy what
+you're able to do is you could take any
+baml function and say we made a new file
+called um
+uh demo.
+py and then in this demo. py we have
+we're going to use this extract resume
+method here's what we
+do
+from client import B resume equals B do
+and you can see it autoc completing and
+resume takes in a string or an image now
+resume. experiences experience will be a
+list of experiences let's jump back into
+my BMA code and see what happen if I
+change experience to a string array
+instead now in my python code it also
+becomes a string array so your baml code
+is always in sync with your typescript
+code or your python code or your Java
+code or anything else you want
+eventually you may start
+streaming we offer the same level of
+consistency during streaming as well
+when you're streaming email is optional
+or
+none but when you're done streaming the
+email becomes solidified because during
+streaming the LM may not yet have
+produced the email
+field in conclusion baml allows you to
+express your prompts
+programmatically have debuging tools
+that let you visualize the prompt the
+raw web request so you never have to
+inspect what's going on allow you to use
+any kind of model of your choice
+including retry policies round Robins
+fallbacks to other
+systems and lastly has an amazing parser
+that allows you to express any kind of
+idea including Chain of Thought in a
+single prompt while taking advantage of
+structured outputs with type safety in
+any language of your choice whether it
+be python typescript Ruby Java or
+anything else that we support thank you

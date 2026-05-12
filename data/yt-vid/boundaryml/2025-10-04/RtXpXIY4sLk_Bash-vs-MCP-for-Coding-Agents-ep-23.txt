@@ -1,0 +1,1522 @@
+You're super echoey.
+>> That's cuz you're also on the Zoom, but
+we should be live now at this point. Um,
+and then I'm going to leave the audio in
+the Zoom and we should be live and good
+to go. Awesome. And I'm going to post
+the link over on our Discord as well.
+And then we'll get started right away
+with AI that works this topic.
+>> Are you ready, Dex?
+>> I'm ready. We're live.
+>> All right. What's today's topic, Dex?
+Give us the rundown. Uh so today's topic
+we are going to talk about using coding
+agents using bash versus MCP for tools
+which has been a debate that's going on
+uh a lot in a lot of places and I think
+um
+I want to just dig under the hood cuz
+like most things in AI the answer is
+there is no right answer and the correct
+answer is to understand how the models
+work under the hood understand how the
+harnesses work under the hood And of
+course do a little bit of context
+engineering and really just understand
+the tokens you're putting into the model
+and taking out of the model model.
+>> I think that's one of the topics that I
+have been seeing happen more and more
+over in um just popping up more and more
+everywhere that I see right now. It's
+happening over on like Twitter threads
+all the time. I was just talking to a
+user over on the uh
+uh I was just talking to users over on
+like the Discord and they were talking
+about how UIDs cause like a huge problem
+as well.
+And it's just like all this stuff is
+really just about simplicity. I don't
+know if anyone's noticed Claude Code has
+actually renamed their bash tool to
+general purpose.
+Like the words
+>> that's the the task tool, right?
+>> The general purpose tool that they added
+recently and I think
+>> I think that's the subtask agent. Yeah,
+the word, but they renamed it. And I
+think the reason for that is it's just a
+better name. And a lot of people
+underestimate how important these names
+are.
+And I think when we talk about MCP
+versus Bash, I think that's the first
+name we should talk about. Why don't we
+why don't we start off with something
+really basic, which is when we go start
+off with this, I want to start off with
+a whiteboard that really outlines how
+MCP is actually working
+uh under the hood. Yeah, exactly. Off
+was me. I was just talking about this
+like 60k tokens right in your context
+window. I think the best analogy for
+this is
+um before we go really deep into it is
+really going to be package management
+software.
+If anyone's ever built a website, you've
+probably seen the extension that tells
+you how big an npm import is that you're
+making. And like there's some that are
+like 65 megabytes and some that are
+really small. And as of right now, I
+think no one really cares if you use a
+megabyte in your package. I mean, you
+shouldn't. Please be nice and don't do
+that. But in practicality, it doesn't
+really matter uh on today's machines.
+But like 12 months ago, uh 12 years ago,
+it did matter. And I think that's kind
+of the world we live in with MCPs versus
+bash is like MCP in theory is really
+nice. It's basically a packet man. It
+says something for prompts is kind of
+how I view it as. But the problem is if
+you don't know what prompts are
+happening under the hood, you're stuck
+in this world where you made your
+instead of making your website slower by
+having a massive package, you've
+accidentally made your um agent less
+accurate by having a massive prompt. And
+that's really the fundamental issue that
+I think people run into. And like
+slowness is kind of bad, but like you
+can get around it because at least the
+website functions the same. But accuracy
+is not is is literally a user quality
+hit. So I think that's why this
+conversation is getting a lot of upbeat
+more recently is because the accuracy
+problem is effectively unbounded in
+terms of difficulty.
+>> Um yeah and so I want to jump right in.
+Um we have a quick episode here. So, um,
+when you launch a coding agent, and
+we'll be talking about cloud today
+because that's the one that, um, we have
+the most experience with, but everything
+we're doing is true for codeex, true for
+AMP, true for open code, any CLI you
+would use. Um, your context window and
+your agents ability to do good work in
+it. Um, is completely and directly
+proportional to the size of your context
+window. Um, I think we have Jeff Huntley
+on stream today. I think the way he put
+it is very clear and succinct. I don't
+think anyone will argue with you. The
+more context you use, the worse results
+you will get across the board no matter
+what. Um,
+>> obviously having missing information or
+incomplete information is bad, but um
+the in general the more you can keep it
+concise with the right information, the
+better. Um, so when you launch a cloud
+code prop and I'll show you kind of what
+we'll look under the hood here actually.
+Um, let's see. I'm actually going to
+share my whole desktop. So um, add the
+work circle of trust. If you see
+something you shouldn't, please unsee it
+and tell us.
+>> Twitter deck, so we'll
+>> Yeah, we're live on Twitter. Yeah.
+>> Yeah, I'm not I'm not really I don't
+trust any of you anymore. Sorry. We're
+big we're big time now.
+>> Um
+so one thing that you uh that you can do
+is you can look at a um you can we we
+have this project here on AI that works.
+Um, why does
+Streamyard insist on hiding the stream
+the window when it does full screen? Um,
+so we uh all the code for this episode
+is here. One of the things we've written
+is a small reverse proxy that you can
+run in Docker um that will just proxy
+all your cloud traffic and then write it
+out as log files. Um, I don't have the
+log files here. Um,
+or directly
+and actually
+>> you might have one of them over. Uh, I
+think I saw you
+>> in the other episode. Yeah, I didn't
+push them.
+>> For those of you that have haven't seen
+the cloud code files, like when you
+actually go look while Dex pulls it up,
+some of the stuff that they add into the
+system prompt is actually quite
+interesting. For example, uh claude will
+actually tell the model to the claw that
+MD file should be followed unless it's
+not relevant, in which case don't follow
+it.
+>> Yeah, that was a fun one.
+>> Uh is this the one?
+>> Sorry. Yeah. So, this is one of the
+traces. I have to scroll over cuz I did
+a search.
+>> Just copy the line and then we can just
+JSON format it.
+>> Well, so what I wanted to show you is
+basically part of what's in your context
+window, right? So, the thing is a list
+of messages and the tools get listed in
+is you have your bash tool, you have
+your glob tool, you have your GP tool.
+So there's all these built-in tools,
+right? And then you'll also have any MCP
+tools that you add in. And so let's see
+if I have any of these in here. So yeah,
+here's the linear MCP tools. So you have
+a bunch of JSON and schemas that explain
+to the model how to use these different
+tools. And so like this doesn't get
+injected in the context window.
+>> Pause for a second there.
+>> Yeah.
+>> I want you guys to take a look at this.
+See the name? The name is MCP linear
+list cycles. Like it's not just that
+you're injecting stuff into the model,
+you're also injecting random names that
+Claude has to use to like differentiate
+stuff to pass it into the model. Like
+why does a model care that this thing is
+called MCP linear list ticket? Like if I
+only have one thing for getting
+documents and it's purely linear, I
+could just call this get document and
+it's going to work effectively very very
+similarly. In fact, they'll probably
+work better because again, it's it's not
+about these small naming differences are
+exactly why Enthropic had to rename
+their tool to general purpose away from
+a broader
+um away from a broader like subtask
+because the names really make a huge
+difference in accuracy.
+>> Well, and just just to just to like
+clear that up also like the the if we
+look for we can find the task tool here.
+Um, if my search
+>> you want to just copy this and paste it
+into a JSON prettier.
+>> Uh, no. The problem is is that this
+proxy logged things with um,
+this proxy logged things with a
+serialized JSON thing.
+>> That's okay. You can just unserialize
+the JSON if you copy and paste it. If
+you I'll send you the website.
+>> No, no, no. Um,
+just hang on. There we go. So the task
+tool has a prompt and a description
+right now, but in a newer version of
+Claude, they added like sub agents with
+names. And so general purpose is the
+default name for the task tool in newer
+versions of cloud code. And this this
+this shell this um this prompt is a
+little old. Um so I just want to clear
+that up. There's a general purpose sub
+agent that is to differentiate from any
+custom sub aents that you might have.
+But in the because in the old world
+there was just task and there was no a
+there was no name parameter in here.
+Um but I want to get back on track here.
+So we have all the built-in tools like
+bash gp glob. Um we have then the uh mcp
+tools that you might add right and I'm
+just going to go through a couple
+examples with claude. So this is like
+linear list issues. And we're going to
+do a really simple example today, which
+is essentially around um let's go find
+it. Um what's the difference between
+using a CLI to talk to linear to get an
+issue versus oh no, this is what I get
+for writing my readmemes in in Neovim
+and not setting up actually a bunch of
+good neoim plugins.
+Um, so we're going to look at um just a
+really simple cloud command here. Um,
+because you can actually without even
+doing the proxy stuff.
+You can um
+you can see the output and the tokens
+used and you can use that to count the
+tokens. Embedded in these messages is
+basically something that looks like
+this. And so what we care about the most
+is cache creation input tokens. And if
+we sum those up over a user uh over a
+session, then we can get kind of a clear
+picture of how many tokens were used in
+that session. There's a little script in
+here um that will uh actually parse this
+output and make it useful. Um so you can
+steal this and use it. It's really quite
+simple. Um, but we have our initial our
+our assistant message and we created
+6,000 tokens here and then it read that
+file and then it's going to write that
+file and so each one of these is some n
+number of tokens that is the actual like
+JSON of the tool call. Does that make
+sense? By Bob questions?
+Yeah. Okay, cool. So, um, you can also
+do something cool where if you run the
+exact same thing again, you will
+actually see that this is like this is
+not an episode about caching. We went
+really deep on caching when we went
+through the manice paper, but if you use
+the exact same user message and the same
+set of allowed tools, then you're
+actually using the cache the whole way
+through. All of these calls are exactly
+the same. And so we're not actually
+writing any new tokens to the cache,
+which is both cheaper and faster. Um,
+but if you bust the cache by changing
+the user message, you can see a slightly
+different output. So, because I changed
+it from write food to bar.txt txt to
+please write fudabar.txt.
+Everything that comes after my user
+message is recomputed. And so it didn't
+do all 6,000 because the cloud system
+message is still the same and the
+cloudmd is still the same. But somewhere
+in here, I think that what happens is
+the user message comes in before the
+tools and stuff. I don't know exactly
+the mechanics of it. We can go look at
+it. But um the idea is if you only
+change parts of it, then you get to
+reuse parts of the cache. Um cool. Does
+that make sense so far? Um, so now what
+I'm going to do is I have here um the
+MCP linear thing. Um, so this is just a
+simple MCP config to add linear to our
+app.
+Um, and so I'm going to run this one
+now, too. Oops, not that. And then I'm
+going to pop back to the whiteboard in a
+second. Um, but we'll see here is we're
+going to add way more tokens to the
+context window. Yeah. So there's 18,000.
+the difference between linear and
+nonlinear is about 12,000 extra tokens.
+And so if you think about your total
+context window, um
+what we talk about a lot is trying to
+keep it below like 40% usage. And so
+rather than like having Claude work for
+a long time back and forth, we just say
+like have Claude do one thing, have the
+agent do one thing, get it right, and
+then start over with a fresh context
+window and have it work on the next
+thing. Um, and so that means that even
+though this entire context window is,
+you know, 200k tokens minus 32k input
+tokens, which means you get a total of
+like
+168k
+um to work with. So 12,000 tokens,
+let's see, is 7% of your context window.
+It's not crazy, but if you go start
+putting
+like six different MCPs in there,
+um, you are eating up, you know, a
+fourth of and like you're already
+basically like your system prompt and
+your cloud MD is
+is what? So, we added 12 and then we
+have like 6K in the base. That's
+assuming you have like a tiny cloud MD,
+right?
+This is this is very small right now.
+Um, and this is telling it to use the
+MCP tools for linear. Um, and so when we
+I'm gonna skip the CLI part for a sec.
+We'll just do this one. Um, so I'm gonna
+ask it to fetch an issue
+um, from linear and we'll see how many
+tokens that count that takes. Actually,
+I haven't tested this part. Um,
+I'm going to check the Are there any
+questions in the chat while we're going
+through this?
+>> We've got one that I really like.
+>> Let's do it.
+>> Which is,
+>> what are these extra tokens like? where
+do these 18,000 tokens come from? And I
+think the best way to actually show that
+off is can you just pull up the JSON
+right there?
+Um, can you open the JSON really quick?
+The linear JSON, the linear um thing
+that you pass in.
+>> Yeah. And we'll actually pull it up and
+I'll show you how to use the NP MCP
+inspector. Let me just because we can
+also look here.
+>> Yeah, but I want to show just the JSON
+really fast. uh if you're able to just
+>> So if we look in
+you want to see the JSON like the actual
+request
+>> the No, no, I want to see the linear MCP
+file.
+>> Oh, okay.
+>> Yeah, cool.
+>> MCP linear.json. Exactly. Uh and then
+can you open that file, the MCP linear
+SSC on the browser?
+>> Um no, but I can do you one better. Uh
+inspector. Let's see what this does. Uh
+I assume this is going to have a nice
+little UI on top of the
+>> Exactly. Yeah. This is how you can So we
+can connect here and see.
+>> Do you just want to open the browser?
+It'll be
+just to open it really fast. Yeah.
+>> Oh, it's SSE not. There we go. So you
+can list out the tools. So there are
+names and descriptions and everything
+you see here is being passed into the
+model to tell it how to use these tools.
+So the description of every field, the
+description of every method, and the
+name of every method. And there's just a
+lot of these. And some of them have very
+complex um like yeah, list teams has all
+of these like sorting and filter params.
+So every single word in here is a token.
+Is that kind of what you're looking for?
+>> Exactly. So like when when we got asked
+this question uh about like where what
+are all these tools actually coming
+from? Like the problem is
+unlike unlike a website where like every
+single div you put in really doesn't
+make it to the user, it does make it to
+the browser. And when you render every
+div, you could have like five divs le
+nested with each other and the browser
+will render it and it'll look the same.
+If you have a really really really
+really old computer, having like 50 divs
+nested will be worse than simply having
+a single that will be much worse than
+having a single div if you don't need
+it. That said, from an end user
+perspective on today's computers, it
+doesn't matter. But today,
+when you're doing this with an LLM,
+every single word you put into that MCP
+server is literally making it to the LM.
+And unlike browsers, as of right now,
+these models are not good enough. You
+got to forget the slashes. This is why
+we use text highlighting and why we use
+a programming language.
+>> No, no, we're using a whiteboard today
+by Bob. It's going to be fine.
+>> Yeah. But like the point here is like
+from a from an end user perspective,
+this white this this thing doesn't
+matter. Like who cares that this thing
+has uh five divs? No one. But in the
+world of an MCP where you have five 50
+redundant words, it's actually hurting
+your performance because the model has
+to actually look at it and it has to do
+computation to decide what that that
+word is actually irrelevant to this
+request. It's not merely So if you go
+back,
+>> you want to go to the inspector.
+>> In this case, all I wanted to do was
+just get an edge ticket. Why do I have
+to know that I have to list teams? It's
+totally useless information.
+>> And you can you can tune this a little
+bit, right? Especially with sub agents,
+you can like disallow or allow certain
+tools. Um, and then you're going to get
+less in the context window. Um,
+>> but that's all manual. You can't
+actually do it.
+>> You can't actually disallow tools.
+>> I think in sub agents it will not be
+shown to the model if if you put it in
+disallow tools.
+>> So we can actually test this.
+>> You have to pass that in though. That's
+a
+>> Yeah, you have to you I mean you have to
+engineer it. You have to say, okay, like
+here's my context window. If I want to
+save 1% so I can get, you know, 1%
+better performance, then I'm going to
+only put in this four MCP tools from
+linear that I use and I'm going to like
+hide all the other ones. But you have to
+understand how context windows work. You
+have to end this. This is the
+engineering part.
+>> Exactly. And I think this is really
+where the MCP versus bash debate gets to
+really get started, which is that if you
+are using MCP, the problem is you don't
+get to control exactly what bits make it
+into your context window or it is at
+least very difficult to control what
+bits make it into your context window.
+>> Yeah.
+>> On the other hand, if you're using bash,
+you now live in this world where you
+have to kind of reinvent everything or
+the model has to reinvent everything. So
+like to make to make a linear request,
+it has to do a curl on the linear API
+and the model is trained on it and it
+knows what the linear URLs are, then
+great. But if it's not trained on it,
+now you live in this world where you
+have to run multiple iteration loops to
+go figure out what that is. And I think
+that's really the duality of this whole
+debate of like which side do you prefer
+on? Do you prefer on the model becoming
+less accurate because you're bloating it
+up or do you prefer on the model being
+less accurate because it doesn't know
+how to use the thing you wanted to use?
+And this is kind of the chart you kind
+of like to draw a lot, which is like do
+you want, you know, the the like curves,
+right? Is like how much engineering
+effort do you want to put into this? Um,
+it's sort of like for low effort, you
+can get something like this.
+Oh my god, I'm so bad at drawing with a
+trackpad. And then if you want to do a
+little bit more engineering effort, you
+can kind of like collapse this in and
+narrow the range of potential outputs or
+narrow the range of performance. I don't
+know if that's uh that's that's how
+you're thinking about it.
+>> Yeah. Um the only caveat is you usually
+draw it with a slightly higher peak in
+the middle because if you're narrowing
+it, you're usually doing it because you
+want a better outcome. So you're getting
+way better outcomes for the care
+>> area of the domain you care about versus
+more generalized outcome in more
+domains. And both can have pros and
+cons.
+>> Yeah. Exactly. If you take away half the
+linear tools, you can't do as much stuff
+on linear. But if you only want to do
+those things, then yeah, engineer it and
+just focus on the things you want to
+focus on.
+>> Exactly. So it's not so I would say like
+the bait and conclusion that I don't
+know about your conclusion, Dex, but
+like the main conclusion that I've had
+about MCP
+>> is I am very happy to use MCP stuff that
+I have written.
+I'm very unhappy to use stuff MCP stuff
+that other people have written because
+when I write it, I know where it is. I
+know where the code lives and I can go
+edit it myself to make it actually not
+hurt the prompt or not hurt the coding
+agent.
+>> But if I use someone else's stuff, then
+I have like can you pull up the GitHub
+MCP just to like really make or like
+Joff's uh Jeff's uh blog post on this?
+>> Yeah. What was the one? um
+>> G Huntley and I think he talks about
+like uh email if we can't find it just
+pull up the MCP for it. Just
+>> put the link in the chat.
+>> Yeah, if someone has a chat link, just
+post it in there. But like just look up
+the GitHub MCP server and
+>> drop that one in the inspector.
+>> I hate that this thing doesn't tell me
+how to use it.
+>> So, put that over into the uh inspector
+if you have it. And I just want to like
+get people an idea for like how insane
+this MCP is. And like if anyone's using
+MTP with get this GitHub uh I would be
+surprised if it worked in in any modly
+complex task MCP.
+>> Yeah, we'll try this one. This is like
+the dynamic client registration thing.
+Um we can try just doing this.
+>> Does it work? Okay.
+>> Does not support I can just look up the
+and I think it has like the it has the
+actual prompt in here really fast that
+you can go see. Um I mean if you just go
+down and just let go just go down the
+GitHub. You're going to see it right
+here. Go to the GitHub. I'll show you
+what it is and just scroll down.
+>> Just let's just look at these tool
+configurations. Let's just look at how
+many they have first.
+>> God,
+>> like look at this stuff.
+>> Yeah,
+>> we're giving it and this is just the
+docs. This isn't even like the MCP
+format. I promise you the actual MCP is
+not this short.
+>> It's going to be longer than this. And
+like well, no wonder you just spent 60k
+tokens of your context window doing
+this. And if you're using 128k to model
+by chance and you're not using one of
+the 1 million context windows, well,
+duh. it's not working. You just use half
+your context window just to describe it
+how to use the GitHub.
+>> So, and it looks like they do have flags
+for hiding and removing stuff. So, you
+wouldn't even have to wrap this. But,
+like if you if you if you care and you
+only want to work with issues, then you
+can probably trim it down quite a bit.
+>> That's if you're running the GitHub MCP
+on your own. That's only if you're
+running the GitHub MCP server on your
+own. If you're using
+>> When would you not be When would you not
+be running it on your own? or you might
+be using like an MCP remote and using
+someone else's GitHub server.
+And this also requires you to know ahead
+of time what your MCP services are. So
+like let's let's imagine we're in a
+world where
+>> I'm jump back to the whiteboard.
+>> Yeah, I'm running a bunch of GitHub
+commands. Sometimes I get commit,
+sometimes I get pull, sometimes I um
+sometimes I track issues, I do various
+things. Now I have to spin up a
+different GitHub MTP for every single
+instance that I want to go call the
+model on. It basically boils down to
+either me prescribing everything ahead
+of time or me somehow training the model
+to do this. And I think the very
+interesting point that Joff made was
+like or Jeff made was like instead of um
+instead of actually passing in the
+GitHub MCP, you can just use the GH CLI
+which the model is very very well
+trained on. You don't need an MCP in
+this scenario because if you ask like I
+don't know just ask Claude to like dump
+out the GH command for like
+>> Yep.
+>> getting a specific issue. There you go.
+>> Using GH. Yeah.
+>> I mean this is going to work. I
+guarantee you it's going to oneshot this
+on the first try and you're not going to
+have any issues.
+>> Exactly. And I don't know what model
+you're using.
+>> It's like cool. Here's this is Opus. But
+like it doesn't matter. Sonic canes
+one-shot this too. And so
+>> so so what I want to get into in the
+time we have left and then we'll make
+time for questions is basically like how
+do you get around this and how do you
+engineer around this and basically what
+we've done at human layer is we've
+written our own kind of wrapper around
+the linear CLI that lets us it's not
+only that it's not an MCP it's just a
+CLI because bash is pretty good when
+you're and if you're using a coding
+agent you don't really need more um but
+basically this lets you control every
+token that comes out and so we are using
+um
+we are using basically like markdown.
+We're pulling out the fields that we
+care about and then we're just pulling
+the markdown. And then if you want to
+get the comments, you just have another
+flag for getting the comments. And that
+all happens outside of the model versus
+if uh so yeah, here's a bunch of
+comments on this issue. This happens to
+have been open for a while, so there's a
+lot of comments on it. Um but if you
+want to expose this stuff to the model,
+I mean, this is pretty this is pretty
+dense. And so I might say like, you
+know, tell the model to fetch it into
+like a ticket.md and then it can read it
+incrementally or whatever it is. But
+this is so much more flexible because
+you're not forced to push the inputs and
+outputs through your model's context
+window. The model can just use bash and
+stream everything into a file and then
+read the file incrementally. You have it
+there. You don't have to call it again
+uh if you don't want to. Um,
+and so what this means is like if we go
+and we run this with our token counter,
+we can kind of compare the like I want
+to just see how this works, but is like
+um if we ask it to do I'm just going to
+do missions cuz I'm not convinced that
+the actual uh the white labeling of MCPS
+is working as I expect it to. But um we
+can grab this one and say fetch the
+issue and all comments and we'll see the
+the huge difference in token usage
+between using the MCPS and going back
+and forth versus um versus just uh I'll
+run another one over here which is um we
+can take there's like another claude MD
+linear CLI into cloudMD. And so instead
+of having a [ __ ] ton of MCP tools, we
+have this really tight, very small, very
+token efficient description of like
+here's how to fetch an issue, here's how
+to fetch it with comments. And instead
+of 12,000 tokens, this is probably like
+a max 100 tokens of like here's the
+tools and here's how to use them. Um,
+and so let's see. This was 24,000 tokens
+to fetch it. I think it actually
+probably used the bash tool. Um, it
+didn't even use the linear MCPS. Um,
+damn. All right, we'll have to post uh
+we'll get the prompt right and we'll
+we'll post it up afterwards. Um, but if
+we do it this way and we do the same
+thing and we just take out the linear
+MCPS and we have this new cloud MD that
+says use the CLI,
+um, we should see far less tokens get
+used in the cache creation.
+So like uh Dax, what would you say is
+like the general summary that you would
+tell people here? Like what what is like
+the general takeaway is like when should
+someone use MCP in your mind? Um it's
+again it's like if you don't if you
+don't know how to integrate the API or
+you don't want to or you don't have the
+time or you want to do an experiment
+then like yes you can totally just use
+the MCP play with it but then if you're
+using something all day in your workflow
+and like it's the same thing we tal
+about we talked about last time in this
+like hierarchy of leverage right is like
+the more something impacts your workflow
+the more you should care about it. And
+so like I put your MCP tools somewhere
+down here. If everybody on your team is
+going to be using something every day as
+part of their workflow, then it makes
+sense to engineer it because if you make
+it 1% better and use, you know, instead
+of using 2% of the context window, use
+1% or instead of using 7% of the context
+window, you use 1%. Then that's going to
+have massive campa cascading impacts
+across your whole team. If you're like,
+let me play with this and see if this
+works, then yeah, just use the MCP
+because it's off the shelf and it just
+works. It's the same thing as like if
+you were going to pull an npm package
+for, you know, a sorting algorithm and
+then you're like, okay, this is actually
+the core most important loop in our
+code. So, we need to write our own
+version of it because algorithms is a
+bad example because there's like a
+specific reference implementation, but
+something performance sensitive that's
+going to be in a really tight loop, then
+that's when you need to think about uh
+spending more time optimizing it. And
+this is what we talk about all the time,
+right? Vib, your example is like, yeah,
+use 03 to solve the problem until it's
+either too slow or too expensive and
+then go figure out whatever prompt is
+going to help you use GPT 40 mini to do
+the same work with almost as good
+results, right?
+>> Yeah, I think it's the same thing
+actually. I echo that 100%. Like, and
+for me candidly, I haven't really I
+found it more work to go dig into MCPS
+than to just like write a bash script
+because like cloud code will just turn
+out a bash script real fast for almost
+everything I want to do
+and like the MCP becomes more overhead
+because I have to go figure out how to
+go set it up and learn it really fast
+and when it doesn't work, debugging
+becomes a problem for me. Um, so at
+least whenever I have tried, I found the
+debugging loop is bad enough that I
+found it just useful to just start with
+bash by default or like custom scripts
+whenever I go do this. Um, and I
+actually don't have any MCPS installed
+on my on any agent that I use
+personally.
+>> Well, and it it depends what you're
+doing, right? If you on the runtime, if
+it's a coding assistant and you can
+dynamically expand the runtime as you
+need new things, then yes, of course,
+why would you go use something off the
+shelf if you know exactly what you want
+and you know enough to review the
+scripts and make sure that it's correct.
+I think where MCP really really shines
+is in allowing people who don't have the
+will or the time to extend existing
+software. So, if you have like your
+cursor window here,
+uh, and like I know how to use cursor,
+or maybe it's like claw desktop or
+whatever it is, um, and I want to just
+[ __ ] connect this to all my stuff,
+but I'm not, you know, a super I don't
+know why I chose to do a dark mode theme
+here.
+>> If I'm not comfortable in code, then
+it's going to be really annoying for me
+to go connect that all the way down
+through.
+>> Uh, exactly. Steve made a good point.
+Like if you're APIs that you don't know
+very well or like if you're not familiar
+if you don't feel comfortable with like
+software as much because like AI has
+enabled you to go explore software in a
+way that you couldn't then it's really
+good. Uh the browser use MCP sounds
+really interesting. I haven't personally
+tried it. Uh people have tried
+playright. um John's saying in the chat.
+Um so I do like the premise of that and
+then like I found that like
+personally it's just like
+I don't know my opinion is just like all
+this stuff while it's nice is just it
+slows you down unless you have a good
+developer loop. If the thing you're
+doing is writing code then the thing
+that matters the most is how fast can
+you know the code is working or not
+working. And if you're stuck debugging
+the thing that is generating the code
+for you, that is a much slower iteration
+loop than actually stuck debugging the
+actual code itself.
+>> Yeah, I like that. Um, cool. What other
+questions?
+>> Um, have we got questions for people
+today? Dex, what I'd love to do with
+like the remainder of the time is
+actually like let's look at the plot
+system prompt while we go while I pull
+up questions. I'm going to show this.
+>> We got a question. What are the best
+resources to build MCP or something like
+uh Zapier?
+To be honest, uh that problem is not as
+hard as you might suspect. Uh in order
+to go build that out, there's actually a
+small little piece of code that we have
+in our past examples. Let me share my
+screen. I'll show you. Um and I'll show
+you guys where that example is so you
+can take a look at it. Share screen.
+Screen. Cool. So, in one of our past uh
+episodes, we talked about this
+MCP. We talked about Oh. Oh, the like
+how to select from a thousand MCP tools.
+>> Exactly.
+One of these is this one. I don't know
+which one it is. Oh, right here.
+>> Um, and we actually talked about this
+and we actually have code samples of
+actually how to go run this. It turns
+out writing an MCP loop is actually
+pretty straightforward. You just need a
+way to turn open API specs into prompts
+and then a way to receive those prompts
+and feed it back in to the open API
+spec. So when Dex was showing the
+example where like the linear tool was
+named MCP_linear
+list uh issues that's simply because a
+clawed code CLI needs a way to remap
+like when the LM selects that tool they
+need a way to remap and pick that tool
+and actually execute it through the MCP
+agent. So like the code you end up
+writing
+actually ends up looking something like
+this. I'll just write a quick little
+pseudo code here. Um, which ends up
+being like let agent equals all
+>> I think. Do you mean to be sharing your
+editor?
+>> Oh, I'm not sharing the right screen.
+Okay, I'm sharing another screen now.
+response equals like call agent user
+message tools and tools has to be like
+generate uh load mcp file
+>> mcp you connect to the server and then
+you talk to it and you get its list of
+tools and then you pass that into your
+call and that's all that's happening
+>> it's an open API spec so all you're
+doing is parsing that turning into some
+data model and most people can read JSON
+and turn it from one JSON to another
+JSON so you go do that uh and then you
+just say like for tool in response
+um um if done if uh response
+else what you do is like you just say
+like
+tools do uh tools.lookup lookup tool
+name or something and then like run uh
+state append
+result
+and then you just put this in a while.
+That's all an MCP tool call is. You load
+your tools from an a from a file. You
+have some initial state which is a user
+message. Then you call the agent with or
+call an LM with a bunch of tools and the
+state passed in. Then you check if your
+tool indicates you're done. Return the
+message to the model somehow. Otherwise,
+you in your tools registration, you look
+up the name that the model selected and
+you pass it to the you pass in the
+parameters of the model selected and you
+run it and then you get the result pass
+to the state and keep on running this in
+a while loop until you're actually done.
+So hopefully harsh that answers your
+question of how someone would go and
+build this out along the way.
+>> Yeah, this is uh this is a good thing to
+just kind of jam into your brain is like
+>> this is how agents work. If you haven't
+written this while loop, write this
+while loop. Like literally don't use a
+framework. Just like write the while
+loop. If you're curious how to do it, we
+have a bunch of examples in our podcast
+of how to go do it. And but like this is
+like the crux of how models agents work.
+>> Okay. I have more fun context window
+stuff if you want to pop back over.
+>> Yeah, I'll stop screen sharing. Uh I'm
+going to go catch up with other
+questions while you go do that.
+>> Cool. Um, so we did someone did share uh
+Jeff's article. This is definitely worth
+a read. And he just did a talk that I
+posted on Twitter recently. Um, but it's
+basically like a tool is just a
+description of what the fields are and
+what they are. Um, and so you can figure
+out what the tool is and all the models
+have their own way of serializing tools
+into the model and especially the closed
+platforms, it's kind of like you don't
+get good visibility into it, but you can
+count the tokens and every single like
+word in your tool description or your
+argument description uh matters to the
+model. And so like when Reddit comes up
+and says like, "Hey, we must have these
+MCP servers if you're going to work."
+And then you can look and you say,
+"Okay, the GitHub MCP server 60,000
+tokens. Memory MCP 10,000 tokens." Like
+you put all these in there and this is
+literally straight from Jeff's talk. Uh
+but it's like you put all these in there
+and you're literally starting at 100,000
+context usage. You're using all of your
+like useful part of the context window
+because again remember like your context
+window. This is like the the money
+section of your context window. This is
+where you're going to get good work
+done. Everything goes downhill after
+here. And so if you're starting your
+work with your first user message at
+like 60% context window usage, you are
+never ever ever going to get good
+results from cloud code. like maybe for
+simple stuff, maybe in like really
+simple code bases or or like new like
+new projects you can get it to do stuff,
+but if you load in 50 MCP tools, like
+it's all about like yes, cloud makes it
+easy to just get going, but if you don't
+understand what's happening under the
+hood, then you are going to have bad
+results. Um, and so understanding this
+stuff and understanding like yes, the
+long context models can do needle in a
+haystack really well, but most of the
+general performance drops off pretty
+quickly as you add more tokens. Um, oh,
+cool. And Een has a spreadsheet of which
+of these and how much how many tokens
+they put in.
+>> They just take a large amount. Um, on a
+very actually Alexander asked a great
+question. It's it's related but not uh
+and I think in a way that Alexander
+probably unex did not expect which is
+>> how do you deal with thoughts on images
+in prompts or other things that are
+going on? Um, and I have a lot of
+opinions on this person. I'm sure Dex
+does too. Um,
+>> yeah. But I'm going to take over the
+screen decks.
+Uh share the screen. And funnily enough,
+we actually talked about this in not too
+long ago, which is when we talked about
+um uh multimodal stuff.
+>> Yeah.
+>> The fact is like images can sometimes
+take up more tokens to describe what you
+want and sometimes less tokens to
+describe what you want. It really
+varies, but sometimes it can be
+incredibly powerful. If you're doing web
+development, an image is likely going to
+help describe the mistake that you made
+to the model way better than a visual
+will. If it's a very small thing, uh
+words will probably just do good enough.
+But like if it's a very complex thing
+like move this thing over here, the
+image will
+>> or like
+>> if you really don't understand web
+development and you can't like if you
+know how CSS works and you're like, oh,
+we need to add padding to that node,
+then you can say that. But if you don't
+know how to explain that to a model
+because you don't know the difference
+between margin and padding, which is me,
+then yeah, give it the picture and it'll
+be like, "Oh, I need more padding."
+>> Exactly. And I think like it it's really
+uh a nuance. Uh but honestly,
+images work really well. People that
+aren't using I I have a I might have
+this thing running. It's like check this
+out. Like this is a straightup image off
+the model. It generally works off the
+bat. to like boom phone call extract and
+this is straight up live running off the
+model and models are really really good
+at image processing. All right. And
+there you go. And it just pulls stuff
+out. Um like if you're not using models
+for image processing you're you're
+hurting yourself. Go do that.
+>> Yeah.
+>> Um at least in my opinion.
+>> Yeah. Um all right. All right, I got one
+more thing on context windows um which
+is that cloud system prompt stuff and
+this is what you can figure out by
+actually like going through the traces
+itself because this won't come out in
+the claw JSON output lines um but like
+you may have stuff that always goes in
+your context window like but you should
+know that in your cloud MD it is
+injected with a very specific message so
+whatever you put in your cloud MD it
+will be added at the very end you will
+get this thing which is basically like
+do not pay attention to anything in
+clawet MD unless it's super relevant.
+And most of the time you should ignore
+what's in here, which is why I don't
+know if you found you put certain things
+in cloud MD like always run the tests
+after making a change and it kind of
+only does it like 10% of the time. This
+is why and I think this is a product
+decision from anthropic and I understand
+why they did this. It's probably because
+most people don't know how to write a
+good claude MD and in many cases over
+steering the model is actually more
+harmful than understeering it because
+the model has emergent capabilities and
+so like you'd rather deemphasize the
+inputs from an unskilled prompter than
+like risk that they basically just tank
+the performance by having a a rogue
+sentence and claw MD that ruins
+everything.
+>> Exactly. That's why they have this and
+it makes sense. But like if you're a
+skilled prompter, it's hurting you.
+>> Yeah. And so this is why actually like
+you should know what's in your context
+window. And what I do is I actually
+craft the context window. So all of my
+instructions, I don't put them in
+cloudmd. They're actually dynamic based
+on the files in the repo. Um because
+context engineering is about blending
+deterministic and non-deterministic
+code. This is what we always talk about
+like where do you use the LMS, where do
+you not? And so I actually have a slash
+command in one of our repos. I think we
+talked about this on the cloud for
+non-Cloud like usages, but there's a
+/CTX that basically says run this make
+task and then run this make task and
+then do whatever the user said. And so
+it's like if I run /ctx with some
+specific instructions, the first thing
+it's going to do is run this print
+context, which is literally just going
+to cat out the contents of a bunch of
+files that explains. We use this to like
+run the company and run our CRM and
+stuff like this. And so it's going to
+cat out a bunch of files that show,
+okay, here's what we've been talking
+about recently. here's our key metrics,
+here's the last couple investor updates,
+things like this. Um, and so this is
+crafting your context window. You're
+telling the model the first thing you do
+is you like output these things. And
+it's dynamic, right? You could put it in
+a file and just have it output it. But
+what I really want is I just want to
+take the top 200 lines of these like
+couple files. And then you can also like
+write code to generate the tree. And so
+like we have a file tree here that is
+basically just like here's every single
+file that is interesting to you that is
+like sliced and filtered based on the
+markdown. We use like markdown front
+matter a lot. So this is a file in our
+CRM. And so it's got a bunch of like
+fields at the top that you can parse for
+slicing and dicing. Um and then it's and
+then we can just like okay the things
+that match the filter print the file
+name and the summary from the file
+itself. And so like this is again like
+crafting your context window. This is
+the bigger picture and like this is the
+thing that even as the models get
+smarter, even as the coding agents
+change, like as long as we're still on
+like transformer-based LLM technology
+and we don't have any like huge
+breakthroughs, this will matter for a
+while.
+>> Yeah. That said, I'll I'll push one
+counterpoint there uh really fast
+because I do agree with everything that
+says, which is the models are changing
+at a rate that I personally did not
+predict. So it's possible that today's
+context limit is around like 40 60%
+according to Dex in terms of how good it
+is. It might be tomorrow's model is like
+good at 60% or 80%. So like what I find
+is useful is I just try and push the
+model like sometimes I'll just toss in a
+bunch of context and just see how well
+it deals and like sometimes it works,
+sometimes it doesn't. So like while it's
+good to have a general rule of thumb,
+what I find is it is definitely good to
+always texture yourself as well. And
+thanks for the feed by the way John.
+Thanks for the feedback. We'll fix the
+audio next time and get it working. Not
+sure why my audio is softer than someone
+else's, but just like keep on pushing
+the model to their limits. Push in 100k
+tokens and see if it works and does what
+you want. Push in easy tasks, push in
+hard tasks, and just see what it works.
+>> Talking about models evolving as
+rapidly, do you still use SAP in
+production instead of function calls?
+>> Um, everyone that uses BAML does. Um,
+and it works pretty well. It actually we
+tested it on GPD5. We have better
+performance on tool calling on GT5 as
+well. And I think it just go boils down
+to the same basics is like
+describing the tool to the model just
+gives you better results in general and
+not requiring JSON will generally always
+give you better results.
+>> What is SAP?
+>> Um little off topic uh but sure
+uh what is SAP for those of you that
+don't know? Well, I'll show you guys
+really fast. um screen. I will share a
+browser window or a cursor window.
+What's the next question, Dax, while I
+pull up this?
+>> Um kind of a side note. Is BAML likely
+to support hotel at any point? I can
+take this one. Uh actually, maybe I
+shouldn't.
+Uh I have hacked BAML by you could
+there's like a modular API where you can
+separate the request and response. And
+if you hang on to the Bambble Discord,
+there's a bunch of people who have
+gotten it to go to any because it's just
+key value pairs. You can send it
+anywhere.
+>> Yeah. Um what is what is SAP? Um SAP is
+this algorithm that we have that says
+when you ask a model, in this case, turn
+an image or a string into a ré data
+model which is described like this. SAP
+is this really really cool algorithm
+that we have that says no matter what
+the model does, it will work. So in this
+case, I put back JSON and we got to
+ignore it. But we can go further and say
+no quotes around keys. So like my prompt
+is literally this really really basic
+thing. Add three reasons why this resume
+is a good fit. And I just changed the
+prompt from the previous. I'm still
+using the John Doe example. But now when
+I go run it, well the model didn't
+listen. I'm using GPT4 mini. But this
+thing is not valid JSON at all. It has
+no quotation marks. It kind of has
+nothing. But we still pulled out the
+right data. So, our parser is kind of
+like a
+uh you can think of it as a um SAP on
+steroids or JSON.parse on steroids is
+kind of like how I would think about it.
+>> Oh, so many DSPI questions. We talked
+about this a couple week weeks ago um
+about people combining DSP's approach
+with BAML's schema line parser approach
+and they actually work best when you put
+them together which is exciting.
+Thanks for the abort controller. Yeah,
+that was a fun project we did. Um,
+>> as uh it started off as a bit and then
+we decided to see how much how much code
+we could ship in one day. Uh, and uh, I
+actually got to architect the Golang
+side of that. Um, because Claude was bad
+at fetching data from the internet about
+how to do idiomatic cancellation in Go.
+So thankfully I spent five years
+building that at replicated.
+>> Um,
+>> sorry, my dog went bonkers cuz uh,
+someone came into my house. You are all
+good. People are talking about how great
+the abort controller is. I think I think
+I think uh any final questions otherwise
+we will wrap it up and uh as always we
+will post the code and the recordings
+and uh the next event on Luma within uh
+about 24 hours.
+>> Um Javier's got a question. Does someone
+here know why the Gemini streaming model
+outputs sentence chunks uh but word
+chunks?
+Uh oh. Well, one thing to note about how
+to how streaming works under the hood is
+the model is always streaming, the model
+only generates one token at a time.
+There's no way to make the model
+generate two tokens or skip towards
+that. Um, what ends up happening is
+while the model is always streaming, the
+API provider that you're using chooses
+how many tokens to send you at any given
+stream time.
+>> Their prerogative.
+>> So unless you own the model, you can't
+guarantee when you get it. OpenAI may
+currently be giving you one token at a
+time. I know sometimes they give me two
+or three. It really varies. Sometimes
+they give you 10. It varies. Like I
+would not build any any amount of
+reliability ever in your application.
+That depends on getting one token at a
+time. It would be a bad bet to make.
+>> Yep.
+>> Sick.
+>> I think there's one more a couple more
+questions. Do we see any? Uh did you
+give your opinions on DS5?
+I was talking about we talked about I
+forget which episode it is. We will find
+it and put it in the show notes, but we
+did talk about someone posted a study
+where it's actually the the best the
+best way to do this is to combine BAML
+and DSPI together.
+>> Yeah, I think the idea of DSPI
+personally is really interesting. I view
+DSP as like, oh, we don't actually want
+to go write the prompts. Uh maybe we can
+have something else autogenerate the
+prompts. I think that concept is
+actually really fascinating, but I think
+we're at depth. I think you made a tweet
+about this. It's just like we're in the
+early eras of how programming LMS works
+and like the early C compilers were just
+not that good. Like they they just
+weren't that good cuz they didn't know
+what kinds of things people wanted to
+write in C. So they couldn't possibly
+optimize very well. You need some bake
+time to make these sort of optimizers
+really really good. Um, and sometimes a
+lot of this stuff is just like like for
+example, MCP is this attempt for for
+writing this optimized tech. In theory,
+linear could sit down and optimize the
+heck out of the linear API for accuracy
+and like make it really like make the
+words perfect. And in that theoretical
+world, we should all use a linear MCP
+because it is the best way to interface
+with the model because the linear team
+owns that responsibility and optimizes
+the heck out of it. In practice,
+you end up in a world where it's not
+that good and that someone just ships
+something really really fast and it like
+looks like it works but doesn't actually
+work.
+>> Well, and I don't want to talk about it
+in terms of like quality or
+craftsmanship even. I think it's the
+same as that like system message in
+Claude MD where it's like they kind of
+have to optimize for like what's what's
+80% of the value for everybody because
+they know the people who really care
+about every single token can always go
+do it themselves but I think the goal is
+like how do you give the most value to
+the broadest number of people
+>> exactly and like when I when I really
+think about this it's like I just don't
+think prompts per like personally my
+opinion is I don't think prompts are in
+a world where 80% is good enough
+>> because they're running it's like it's
+like CSS stuff like no one uses
+Bootstrap anymore because Bootstrap was
+80% CSS.
+>> It's like it gets you the website but
+like you can't ever use Bootstrap as
+your design system unless you're Twitter
+and that is your actual design system
+because it doesn't it's not customizable
+enough. It's not maintainable. So then
+you end up using Shad CN because Shaden
+lets you as a developer have a good
+starting point but you get to own
+everything and edit it yourself. I think
+the premise that you will never want to
+read and write the you will never want
+to read the prompt and edit the prompt
+manually is fundamentally flawed. I
+think at least for the at least for the
+foreseeable future the next and by that
+I mean like the next 12 to 18 months
+is the furthest I would say you will
+want to see the prompt and you might
+want to have something write the first
+version of the prompt but likely you'll
+want to hand tune it and at to some
+degree to some or at least have
+visibility into what it is in a useful
+and editable way just like we have
+wanted that with CSS and it took us
+about like 20 years to make that
+conclusion about CSS that like hey we
+don't want like a framework that lives
+somewhere in npm node modules that is
+write only uh that is
+>> yeah we don't we don't want a component
+library we want a a platform for
+building component libraries that was
+the right level of configurability
+>> exactly and I think it's the same with
+prompts personally I think like you
+don't want a you don't want a prompt
+library you want a way to write prompts
+that you can edit and modify and do
+whatever you want but have really good
+jumping off points by default
+>> and I talked to really really
+opinionated designers. Just to like
+continue this analogy a little bit more,
+I talked to really good, really
+opinionated designers who care about
+every single pixel on the page and they
+love shad CN because they can apply
+every single style they want to every
+component and be guaranteed that it's
+customized and they don't have to reach
+through some like artificial interface
+which is like like Bootstrap has an
+interface to it. There's things you can
+do with Bootstrap and there's things you
+can't do. Whereas what Shad Cian gets
+you is the entire spectrum, the entire
+solution space of every single class you
+could apply is available to you. It's
+clean and nice via Tailwind and you have
+sane defaults. But if you want to change
+something, there's no like reading the
+docs of like, okay, how do I tell
+Bootstrap to apply padding to a
+component like this? You just look at it
+and you open the box and you set the
+padding. And I think the same is true
+for prompts right now. And the same is
+true for agents. Like a good agent
+framework will absolutely
+like give you the ability to reach into
+the box and customize everything
+>> without having to read.
+>> I think that point about reading docs is
+really important. I think Ariel as a
+good question is like oh does that mean
+like DSP changed that focus? I think DSP
+does a really really good job personally
+of getting people to start thinking
+about stuff as input output pairs but
+like at least when I worked in machine
+learning it's really really hard to
+actually build a golden eval data set in
+practice. I think it's a good jumping
+off point, but again, it just goes off
+to like it's really good to make an
+initial website with cloud code or
+something else, but at some point you
+always want that flexibility along the
+way. In general, I think flexibility has
+been really powerful. Um,
+exactly. I think John made a good point
+like generally frameworks have become
+more flexible and opinionate versus
+frameworks are becoming opinionated.
+Like I I think opinions are like people
+want to go in like people are becoming
+more people want to build more things
+not less things as time is going on.
+Um Nathan you asked an interesting
+question. What about context 7? I have
+no idea what context 7 is so I can't uh
+sadly answer that. Uh but um if you have
+a tidbit on what it is and we can take a
+look for next time. Uh Des is off on a
+call. Uh I think he's running late. I
+think we're ending the show today on
+this. Uh, if someone has a um a couple
+more questions, feel free to send them
+over on the Discord. Our Discord is
+generally open.
+If you have um other things that you're
+interested in chatting about, definitely
+send us links on what we chat about.
+This has been AI that works. If you want
+to join the next episode, uh you can
+subscribe to this calendar over here.
+and we'll generally post uh new events
+every Tuesday at um uh every Tuesday at
+10 a.m. PST as per usual.
+Look forward to the email, guys, and see
+everyone

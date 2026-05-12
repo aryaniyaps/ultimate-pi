@@ -1,0 +1,800 @@
+If you're an engineer using the best
+tool for the job, you know this as fact.
+Agents are not the future. They're
+already on our desks, in our repos, in
+our workflows. It's clear that agents
+are already here. But here's what's not
+so clear. It's not obvious how to get
+the most out of them. Should you lean on
+prompts, MCP servers? How do you
+integrate them with existing APIs, CLIs,
+or even other agents? The answer to this
+question can mean the difference between
+shipping in an hour or shipping in days.
+You've seen this. You know what you can
+do with the right context, model,
+prompt, and tools in the right agent.
+That's why today we're breaking down the
+top five agent interaction patterns so
+you know exactly when to use each
+pattern and how to turn your agents into
+your unfair advantage.
+[Music]
+Here's the setup. You're a cracked Gen
+AI engineer, but as your abilities have
+grown, you've taken on more
+responsibilities. The small lean AI team
+narrative has taken hold in your
+company, and that means more
+responsibility. With responsibility, of
+course, comes opportunity. Right now,
+you're working on a big presentation.
+Everyone on your team is depending on
+you. You're almost finished, but there's
+one big missing piece. Tons of high
+quality images. you know that you're in
+the age of agents. Instead of using
+Sora, Midjourney, Gemini, or going
+through some image generation service,
+you've been watching any Dev Dan videos
+and you know that agents equal
+exponential leverage. You also know of
+course cloud code equals the best agent.
+Okay, so you start designing a system.
+You'll use cloud code to generate tons
+of images. You'll go through the
+replicate MCP server or you'll hit the
+API directly. You're not sure yet. This
+is great because you have access to any
+image model you need. You'll even use
+the brand new Quinn image edit model for
+tweaks to get your images just right.
+Then a massive problem hits you. Are you
+building a custom slash command or a
+cloud code sub agent or a custom MCP
+server that calls the replicate API?
+Can't cloud code just use the replicate
+API directly? Is this just a ad hoc
+one-off prompt? Or maybe you should
+build a custom MCP wrapper server to hit
+the API directly to hit other services
+you want to embed. Or maybe you should
+combine some of these approaches, right?
+This is the agent pattern problem. You
+realize you have no idea what the
+optimal agent interaction pattern is. We
+have all these nodes, all these
+resources. We have more compute
+available to us than ever. Agents,
+reusable prompts, sub aents, MCP
+servers, existing APIs, CLIs,
+applications, and of course, it's all
+about the outcome for you, your users,
+your company, your customers. But how do
+we put it all together? Okay, we're
+making a bet here, right? We have a big
+bet on this channel. We bet on this
+every single day over and over and over.
+We're betting that a majority of the
+economic value of AI will come from AI
+agents. If you believe this is true, we
+can start asking important questions,
+right? We can start asking the winning
+question. What's the best interaction
+pattern you can use to quickly scale
+your engineering impact with agents like
+Cloud Code, Gemini, Codeex, and the next
+big agent, right? Whatever is coming
+next. What are the best interaction
+patterns? Let's talk about the top five
+agent interaction patterns with common
+agentic tooling. But let's start from
+zero with the first pattern. This is
+what we all do every single day.
+Iterative hill iterative human in the
+loop. You have your agent that calls
+some service. Let's keep rolling with
+this image generation example. Right?
+You're working on this presentation.
+Your team's depending on you to get this
+finished. All right. You're going to
+integrate with the replicate MCP server
+and this will generate the outcome
+you're looking for. So this is the
+simplest version, right? Iterative human
+in the loop. You're prompting back and
+forth with your agent connecting to some
+service to some MCP server and this
+generates your outcomes. Okay, every
+approach has pros and cons, right? The
+pros here, you have direct oversight.
+This is simple. You can quickly review,
+high accuracy, high control. On the con
+side, you are stuck in the loop, right?
+Human in the loop. You are quite
+literally stuck in the loop. The
+scalability here is terrible. you are in
+fact the bottleneck. So this is the
+lowhanging fruit. This is a great place
+to start. This is a terrible place to
+end. All right, let's scale this up.
+What tools do we have? What interaction
+patterns do we have with our agents to
+do more with less? We of course have
+reusable prompts. This is a big pattern.
+This is the 8020 of agent interaction
+patterns. Okay, so here we have Gemini
+CLI. We have Cloud Code. Um,
+unfortunately, as far as I know, as far
+as I can tell, codec CLI does not
+support reusable prompts. Um, they need
+to build that in otherwise it is not a
+viable agentic coding tool. Full stop.
+Because this enables you to reuse your
+agentic prompts, right? In the cloud
+world, it's cloud/command/name.md.
+If you've been watching the channel,
+you're very familiar with this. In the
+Gemini world, you use these toml files
+in a very similar pattern. Okay, these
+are just reusable prompts. So this is an
+entirely separate interaction pattern,
+right? What we've done here is we've
+taken prompts and made them reusable.
+Okay, so this is fantastic. This is
+where 80% of all the value is. If you
+want to be Pareto efficient, you want
+maximum value for your time, you just
+build a reusable prompt. Okay, you write
+it once, reuse all the time. Version
+control, you can iterate and improve at
+light speed. So reusable prompts very
+powerful. You're already aware of this
+pattern. This is where you should go
+right after you're sick of running this
+prompt yourself. You want to get out of
+the loop and move to reusability ASAP.
+Three times marks a pattern. If you need
+reusability, build a reusable prompt
+next. All right. Of course, we have
+initial overhead setup. Uh you now need
+to manage these commands somewhere,
+right? You need to keep track of these.
+I'm working in 5 to 10 code bases over
+the course of a week and I lose track of
+which commands are where all the time.
+Okay? And this is an additional
+abstraction layer. It is thin but it is
+there. Let's scale it up. How can we
+interact? How can we have our agents do
+more? What's the next layer? We of
+course have the sub agent pattern with
+cloud code, right? No one else supports
+this right now, but with cloud code as
+your primary agent, you can now spin up
+sub aents. So this is a great way for
+your agent to interact with outside
+services because now you can create
+dedicated specialized agents. So in our
+image example, we can use a create image
+agent that we can scale up, right? We
+can parallelize. We can generate 20
+images in no time or more, right?
+Depending on what's in our sub agents
+system prompt. We can also spin up edit
+image agents. Okay, this is a great
+agent interaction pattern because it
+allows us to interact with these outside
+services in a more scaled specialized
+way. Okay, write once, reuse with cloud
+code, parallelize, and specialize. Okay,
+these are the big advantages of the sub
+aent interaction pattern, right? When
+you're thinking about having your agent
+interact with existing tools, services,
+endpoints, sub aents give you a massive
+edge because you can parallelize and
+specialize. Okay, but there are cons
+here. The sub aent pattern is not a free
+launch at all. You can isolate the
+context window. You can do a lot of cool
+things inside of your sub aents, but
+there are problems. Okay, right now one
+of the biggest problems I have my eye on
+this all the time. Cloud code lockin a
+lot of these other patterns right if we
+back up here right reusable prompts this
+is not super unique feature cloud code
+is definitely doing it the best but you
+know Gemini CLI has reusable prompts
+okay no one's doing sub agents right now
+cloud code is the best agent decoding
+tool full stop uh we talked about this
+on the channel over and over and over
+but there is lock in here right there's
+model lock in and there's feature lock
+in we then of course have the gray box
+problem it's not a black box but looking
+into your sub agent analyzing it,
+debugging it. It's not exactly simple.
+But most of all, and the biggest issue,
+I think with the sub agent pattern is
+that you have to be really careful about
+how these prompts are coming in to your
+sub agents from your primary agent and
+how they're coming out of your sub agent
+back to your primary agent. As you know,
+if you've been watching the channel, you
+know that your primary agent prompts
+your sub agent and then your sub agent
+responds to your primary agent. We
+created a video on this very idea. Make
+sure you check that out. That was our
+big sub aents video. That one absolutely
+exploded and for good reason. You don't
+want to make the mistakes that a lot of
+engineers are going to make when they're
+building sub agents. Okay. The flow of
+information in these multi-agent
+orchestration systems matters more than
+ever. And so this is another way you can
+scale up your compute. Notice how we're
+going from minimal to complex. We're
+going from low compute to high compute.
+All right. So what's next? You can of
+course write a prompt that fires sub
+agents. Going back to that image
+generation example, right? You need to
+generate a ton of images for your
+presentation. You want multiple versions
+so you can pick the best of n, right?
+You can pick the best images, the best
+ideas that your agents generate. So
+prompt to sub agent is another way you
+can have your agents interact with
+outside services. Here you have cloud
+code, you have your agent call a prompt
+and this prompt contains a bunch of
+details, right? This is your workflow
+definition which then calls an entire
+suite, right? An entire team of agents
+to solve a specific workflow. Very well.
+Okay. And so here we are once again
+scaling up our compute. Um I'm just
+using the replicate MCP server here as
+an example. Of course, not sponsored.
+I'm a thirdparty actor. No sponsors at
+all. This is an important example. This
+could be replicate MCP. This could be
+your internal services. It could be
+other custom MCP servers. It can be
+APIs, CLIs, anything. Okay, think of
+this as just the external layer and your
+agents are interacting with the external
+layer and then you ultimately drive some
+outcome. What are the pros here? This is
+of course great because we create
+workflow reusability as code/prompts
+really as prompts. The ability to create
+a reusable workflow that spawns
+specialized agents to do specific work
+is big. Okay, this is absolutely big.
+And our next agent interaction pattern,
+you can actually scale this even
+further. This is another huge value
+point. You can in fact pass in, you
+know, the number of agents you want to
+spin up. You could have three image
+generation images spin up and then you
+could have your edit agents review the
+image that was generated against the
+original prompt. And you can have them
+do that end times to improve the image,
+right? To make it more like you wanted
+in your original prompt. There are tons
+of ways to use the prompt to sub aent
+pattern. And the whole idea here is to
+create more reusability, right? Now you
+have an entire workflow with sub aents.
+You have more compute. Okay. And of
+course, speaking of compute, uh this is
+very token intensive. It's complex. It's
+hard to debug, right? You have agents
+doing work all over the place. Who knows
+if it's going to be right? This requires
+a lot of prompt engineering, a lot of
+context engineering, a lot of awareness
+of the problem that you're trying to
+solve and the compute that you can use
+along the way. The better and the more
+you know how your models work, the more
+successful you're going to be when
+building out these more complex
+workflows. Okay, but we can scale this
+even further, right? What's the next
+version of this? We start getting into
+the deterministic land, right? We start
+combining code with agents. How do we do
+that? We build a wrapper MCP server.
+Okay, what does that look like? Cloud
+Code, Gemini, Codeex, they're all
+calling your wrapper MCP server. It's
+not just reusable prompts or sub aents,
+right? Those are all just prompts at the
+end of the day, system prompts or user
+prompts. What we're doing here is
+building out a dedicated wrapper MCP
+server that then calls the APIs
+directly. They call your custom APIs,
+your custom services, so on and so
+forth. And this is a dead giveaway.
+We'll talk about when to use each one of
+these patterns in just a moment. But
+this is a big giveaway for when you
+should use MCPs, right? Do you need uh
+specific functionality? Do you need to
+add deterministic code? Do you have
+proprietary services that you're trying
+to build? And do you need a concrete
+agent layer? And then of course, this
+all drives our outcome. All right. And
+so tons of pros here, right? MCP servers
+are ultra powerful mostly because they
+create the interface layer. Really,
+that's what this is, right? What is the
+MCP server? It's an interface layer to
+give your agents the ability to solve
+the problem at hand with various
+services. And to be super clear, of
+course, you know, you can build out
+reusable prompts that just call multiple
+MCP servers, whatever tools you have,
+right? CLI commands, they can run bash
+commands directly. But when you want to
+start building out a encapsulated
+reusable solution that serves a domain
+set of problems very well, the rapper
+MCP server is the place to go. Why is
+that? It's because you have a single
+integration point for all agents. So,
+continuing with our image generation
+example, you know, you'll now have
+generate image and edit image as tools
+or and prompts inside of your dedicated
+wrapper MCP server. And this is great
+because you get full control. It's
+controllable and it's customizable.
+Okay. And a huge huge huge call out
+here, something that is still super
+underrated. I don't see enough
+engineers. I don't see enough MCP
+servers written out there with custom
+slash commands. Okay, everyone's so
+focused on tools. Resources are decent,
+but the real value of the MCP server is
+in the prompts that represent the
+reusable workflow of specific tool
+calls. And so this is the big advantage
+of creating a dedicated wrapper MCP
+server. you get one place to call a set
+of tools, prompts and resources that you
+define and you get to expose just those
+pieces for your agent, right? And so,
+you know, for example, right, let's hop
+back to um iterative human in the loop,
+right? Right here, you're just calling
+the replicate MCP server. Now, you have
+to call the replicate MCP server based
+on whatever tools they have defined,
+right? Whatever prompts, whatever
+resources they have defined, you have to
+do it their way or your agents have to
+do it their way. You have to understand
+their tools and their prompts. When you
+build out your MCP server, right, you
+get to do it your way. Okay. So, when
+you build your MCP server, you can
+create a generate image tool and then
+you can create a reusable prompt, right?
+A custom slash command inside your MCP
+server that is generate prompt batch or
+generate then improve or you know
+something like generate in this style,
+right? Generate in Giblly style. you can
+define exactly what things look like.
+Okay, highly customizable and
+controllable. So, of course, there are
+cons, right? You have to maintain this
+MCP server. And if you're not embedding
+an agent inside of your MCP server,
+which is another advanced pattern we'll
+talk about uh in just a moment, you have
+to build these integrations by hand,
+right? So, now you need to grock the
+replicate MCP server. And you know, by
+hand, I of course mean you have to have
+your agent do it and you have to know
+what to prompt and what to instruct your
+agent to do, right? You basically have
+to build these integrations, you know,
+by quotes hand. You have to integrate
+with the with the services APIs the
+exact way you want it. This, of course,
+is a good thing. You're being more
+specific and explicit with what you want
+done. But there is still a cost to that,
+right? Control cost time. Control cost
+effort. Control cost your engineering
+resources. Okay? This is of course built
+for agents, not humans. This is an MCP
+server. It's not a UI. It's not a CLI.
+It's not an API. It's an MCP server.
+Right? This is built for Asians. All
+right. And so that leads us to the
+highest level, the application pattern.
+If you need the big guns, this is where
+you end up, right? You end up basically
+creating a super interface layer for I
+forgot codec CLI here. Whoops. Um you
+you uh you end up with a super interface
+layer here where you have a an entire
+application layer. Okay. Where you have
+your own CLI, MCP server, UI, API, and
+just whatever you want. This is a
+full-on application, right? Of course,
+here you get full control over what this
+calls, right? You can just do anything.
+It's a full-on application. Now, the
+trick here is that in order to make this
+useful for your agents, right, in order
+for your agents to run your application
+and to do things with your application,
+you either need to expose some specific
+CLI methods. You can expose a MCP server
+for your application. This is a big big
+idea we're going to be discussing on the
+channel. Make sure you're subscribed.
+And then of course you have UI and your
+API. And your agent can operate on all
+of these dimensions to call specialized
+sub aents and application code and
+really anything under the sun. When you
+get to this level, right, you're just
+going basically full out guns blazing.
+Okay. And the pros and cons are exactly
+what you would imagine. Full control,
+infinitely extensible, multiple access
+patterns, right? Multiple access layers,
+CLI, MCP, UI, API. But of course, the
+cost is just through the roof. to go
+back to our image generation example.
+You need to build a presentation. You
+need to generate image assets. This is
+extreme overkill for that use case,
+right? So, you know, that brings us to
+our decision-making framework. How do we
+choose between all of these levels? How
+much compute do you really need to solve
+the problem at hand? I think this is a
+great place. It's a great problem to
+bring back a fundamental engineering
+principle, right? Keep it simple, scale
+when needed. Basically, solve the
+problem first. And if you can't solve it
+with that level of operation, with that
+much compute, with the simple mechanism,
+right, with the simple agent interaction
+pattern, then you scale it up, right?
+Scale when needed. So everything should
+start with ad hoc prompt. This is your
+first encounter. When do you use this?
+When you're encountering a new problem
+for image generation problem where
+you're building out this presentation,
+you need a ton of images. We're talking
+10, 50, hundreds of images generated
+very quickly. You don't want to go
+through the UI, right? And in fact, more
+and more you want to be doing things the
+agentic way. Let your agents do it. Find
+the interface and build the interface
+for your agent. Why? Because your agent
+can use more compute. And if you're
+using compute, you're doing more digital
+work. We're in the age of agents, not
+the age of LLMs, not the age of prompts,
+not the age of chats, right? This is
+it's all about the agent right now.
+Okay? But you still want to start at the
+lowest level. And this is also helpful.
+There's that saying, do things that
+don't scale. This is important so that
+you understand how to actually solve the
+problem yourself with your agent. Okay.
+Then we get to reusable prompts. You
+want to tap into this when you've
+spotted a pattern. I like the rule of
+three. Once you've done something three
+times as an engineer, automate it. Stop
+doing it. Stop wasting time. Three times
+marks a pattern. Codify it. Create a
+custom/comand aka a reusable prompt. All
+right. Um what what about sub agents?
+Now, this is a this is kind of still
+tricky, but I I've come to a concrete
+answer here for when you should use sub
+agents. Only use sub agents when you
+need specialization and parallelization.
+Okay? If you don't need to parallelize
+and you don't need to specialize, just
+create a reusable prompt, right? Keep it
+in your primary agent because as soon as
+you start messing with sub agents, you
+now have to manage multiple context
+windows. Even if you don't think you do,
+there is another context model prompt
+that you need to manage. Okay? You want
+to do the least amount to get the
+greatest value. This is all about
+finding that sweet spot. Understanding
+your agent interaction patterns is how
+you decide where that sweet spot is for
+the problem you're trying to solve.
+Right? You want to keep it simple, scale
+when needed. Again, let's go back to our
+image generation example. We definitely
+don't want to stay at ad hoc prompts,
+right? because we need to generate 10,
+50, hundreds of images and we might need
+to edit them. Okay, so already we're
+talking about repetition and we're
+talking about specialization. So we're
+talking about reusable prompts or sub
+aents. We could stop at two, we could
+stop at three. Do we need four or five?
+Okay, so what is four? Four is the MCP
+wrapper. I am combining prompt workflows
+that call sub aents. That's still all
+just the sub agent pattern. All right,
+MCP servers, right? So when do you use
+this? You need to expose your agent to
+services. You know, calling a CLI tool
+is not good enough. If hitting an API
+with curl is not good enough, right? If
+you need to be more specific, then you
+build an MCP server, right? Also, if
+you're starting to increase the number
+of services you're interacting with, you
+probably don't want to be managing all
+that in a reasonable prompt or in sub
+agents, you probably want something that
+pulls it all together and then reexposes
+it through a simple tool or prompt via
+your MCP server. Right? And I am talking
+about MCP server tools and MCP server
+prompts. Props are insanely underrated,
+insanely underused. If you're building
+an MCP server, you should build MCP
+prompts that exposes the common
+workflows you will use with the tools,
+okay? Or of course, if you have some
+unique asset, right? Some some unique
+internal service that you want your
+agents to be exposed to. Okay? So this
+is when you upgrade to an MCP server
+wrapper. Now the question is do you need
+to upgrade from a sub agent or from
+reusable prompts up to MCP servers? And
+I think the answer here is unless you
+know you need to integrate with some
+personal information for this
+presentation, right? You have some types
+of personal sales assets. Maybe for this
+client you have some information on them
+or maybe you're bring these images for
+multiple presentations each for a
+different client that you're working
+with or working for. Then you might want
+to create an MCP wrapper that puts
+together the replicate image
+functionality with your internal
+services and then you expose it through
+a single or a set of generate image tool
+calls and prompts. I think that's the
+big differentiation here. Only if you
+need to integrate with multiple
+services, multiple assets would you
+upgrade from sub agents and reusable
+prompts to the MCP server. And then of
+course we have the final level, the full
+application. Okay, complete integration.
+you have full control and you have a
+long-term vision, right? Basically,
+you're building a product. Okay? If
+you're building a image generation
+product or if you see a opportunity here
+to solve this problem for good in your
+organization for your team, then you
+would build a full application. Okay?
+And why is that really the full
+application now? It's just a way to
+expose many ways to do something, right?
+And and what do I mean by many ways? I'm
+talking about the interface layer.
+What's the difference between a
+customerf facing application and a
+developer tool? It's the interface
+layer. If we want to move fast, if we
+want to get something done, we go
+through the terminal. But if a customer
+wants to do something, it's all UI that
+hits an API. So if you need full
+control, if you need multiple interface
+layers and you have a long-term vision
+for a solution for generating tons of
+images and editing them, right, with a
+big UI, you want the full application.
+Now, it's important to note that
+throughout each level of the agent
+interaction pattern, you are increasing
+compute, you're increasing complexity,
+and you're increasing the time you need
+to spend to deliver the solution. Very
+obviously, the time it takes to create a
+reusable prompt is much less than the
+time it takes to create an MCP wrapper
+or full application. Okay? Even if you
+have complete metaprompts for these
+problems, okay, which if you've been
+watching the channel, you probably have
+metaprompts for one, two, and three.
+Stay tuned for four and five. All right.
+Um, so this is great, right? This is a
+simple pattern decision-making framework
+that we can use to figure out when we
+need what level of compute, what level
+of solution for a specific problem. You
+want to move from left to right. The big
+idea here is start simple, right? Don't
+make the classic engineering mistake.
+Don't overengineer. Let the patterns
+emerge naturally from usage. If you skip
+step one and two, there are going to be
+things that you don't know about the
+problem and therefore that you don't
+know about the solution because you
+didn't do it by hand. Okay? And you
+know, I should be really clear when I
+say by hand now because I I think that
+engineering ability is kind of all over
+the place right now. There's a huge gap.
+There's a growing gap. When I say by
+hand, I mean with your agent, okay? Uh,
+by hand should almost always mean you're
+having a high composition level agent do
+the work on your behalf. Okay, so that's
+what I mean by hand. I should probably
+stop saying that. Um, but anyway, so uh
+I really like this line, right?
+Complexity should be earned, not
+assumed. Don't assume your problem is
+hard, right? You you should never assume
+that your problem is hard. you're
+actually causing yourself pain by
+assuming that you need more compute or a
+a bigger interface layer or more
+interface layers or or you know a
+complete solution. Okay, complexity
+should be earned not assumed. And
+there's also a great idea embedded here.
+You know larger working systems are
+almost always built from simple working
+systems. So if you start here level one,
+you can generate images through the
+replicate MCP server through whatever
+server you want to right by hand with
+your agent prompting back and forth. You
+know that the solution can be done,
+right? And right after you do this a
+couple times, you can immediately throw
+it in a reusable prompt, right? Because
+you've solved the problem. You know the
+steps you need to go through, right? For
+instance, for the replicate MCP server,
+you need to get the model name. You need
+to know the model name. You need to know
+your provider. Then you actually make
+the prediction and then you uh pull you
+effectively pull back to the API to wait
+for the image to generate and then you
+download it. Okay? And then you move it,
+right? Generating an image, right? It's
+almost a workflow in itself, right? It's
+almost a reusable prompt. Okay? And then
+we can push it further. We can go for
+the sub agent pattern. Why would we do
+that? Because we need specialization and
+more specifically we need scale, right?
+We need parallel execution. Now, you can
+definitely accomplish this with a
+reusable prompt as well, right? You can
+say in your prompt, you can say generate
+n images. But you can also do this with
+the sub aent pattern. For this specific
+problem of generating images for a
+presentation, I would stop at two. If I
+didn't have a lot of time, I would go to
+three if I knew I needed to generate 100
+plus images. And I would even put the
+reusable prompt that generates in agents
+as a sub agent, right? So I would call
+five of my sub aents. I'd say generate
+10 images each. here's uh you know five
+different prompts for the images, right?
+And then you know five sub agents would
+do that work, right? And then you can
+build out specialized edit image agents
+as well. Okay. And then I would only go
+to MCP if I needed to involve other
+services, right? Or if I wanted this to
+be a repeat solution with a simple
+interface, right? I want a create image
+interface. I'll embed which model to
+use. I'll embed the aspect ratio blah
+blah blah, right? Details. Okay? And
+then you only go to a full application
+if you have some long-term vision or you
+need to expose this tool to your team.
+To your team, I mean to your
+non-engineering team. The ideas are
+simple, right? Solve the immediate
+problem. Recognize repeat pattern. Scale
+incrementally. Okay. What you don't want
+to do is premature optimization. Build
+before you validate. Complex solutions
+first. If you don't need the compute, if
+you don't need the interfaces, don't
+build them. Being an engineer is all
+about solving the problem. Okay? I feel
+like this has gotten lost somewhere.
+Being an engineer is all about solving
+the problem. Genai gives us brand new
+technology to solve the problem better
+than ever. But we're now faced with this
+really interesting problem of how do we
+have our agent interact with new and
+existing systems, CLIs, applications,
+APIs, and now the new MCP server
+prompts, sub aents, and whatever's
+coming next. Okay, I think this general
+framework, this is how I've been
+thinking about this. Keep it simple,
+scale when needed, and always go from
+left to right, never right to left.
+Right now, I'm building a ton of
+reusable prompts. I'm building fewer sub
+agents than I was before, unless I need
+specialization and parallelization. And
+then every once in a while, I do build
+out a dedicated MCP server, usually to
+pull together multiple services or
+expose repeat functionality. And then,
+of course, I have a couple applications
+that I'm building out to solve problems,
+right? These are just full-on full scale
+applications where you have a long-term
+vision for, right? So for instance, I
+have every single layer here built in to
+agentic engineer.com. This is where I
+host Principal AI coding and of course
+the next phase 2 aentic coding course.
+The countdown is on. I'm really excited
+to release that at the end of September.
+Stay tuned. Stay locked in. We are in
+the age of agents and all the winning
+engineers are mastering the agent
+architecture and agent interaction
+patterns. Comment down below. Let me
+know which agent interaction pattern
+you're using the most. No matter what,
+stay focused and keep

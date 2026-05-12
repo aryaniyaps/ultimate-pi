@@ -1,0 +1,296 @@
+are you an engineer that understands the
+value of testing your code but you don't
+want to spend the extra one two three
+four five hours it takes to write debug
+and validate your tests well I think
+testing is solved and I know that's a
+really bold statement but with this tool
+you can do five percent of the work and
+get eighty percent of your tests written
+in this video I want to show you a brand
+new way to write your tests using GPT
+powered AI coding assistant ader we're
+gonna hand off the process of writing
+our tests to an AI coding assistant if
+you haven't heard of ader definitely
+check out my previous AI coding videos
+where I walk through installing ader
+from scratch and use it to generate
+front-end components I'll link that in
+the description I'm a small Niche
+engineering Channel and those videos
+completely blew up huge shout out to
+everyone who liked sub and got value out
+of those videos enough how type talk let
+me show you this is real so here's a
+simple python application that reads and
+writes to a notion page and notion
+database there are three python files
+we're going to be operating on Main
+notion and notion test in Maine we've
+set up some notion tokens pages and
+database IDs we've imported some
+functions all we're doing here is
+writing text to a notion page reading
+texts will read from the database on the
+notion page and then we'll convert that
+database as rows into simple Json format
+here's the notion page and here's the
+notion database if we go ahead open up
+our terminal start our environment and
+run python on Main we hop back over we
+now have a Hello World block and our
+notion page if we hop over to our
+notion.ui file these are the supporting
+functions that we use in main.py the
+details of the functions we don't need
+to go into too much you can see here we
+have right text where we write text to a
+notion page we have right dick to files
+we have read text we have this safe
+nested property getter this basically
+just allows us to fetch nested content
+out of Json and then we have a
+medium-sized function where we read the
+rows from notion and then we pull out
+the properties one by one using the save
+git method here so you have your code
+you're ready to go and then you realize
+there are no tests for this module this
+file has no tests now I have to write
+another test Suite by hand well not
+anymore let's crack open the terminal
+export your openai API key and then type
+ader using the gpt4 model all right
+let's add our notion and notion test
+file
+and now let's have a natural language to
+tell aider exactly how to test our
+notion python file using pod test right
+tests test.py the cover function in mock
+the notion client variable
+use the patch function to patch methods
+on the notion client and let's go ahead
+and run so as you can see here
+ater tells you exactly what it needs to
+do it is actively writing those tests
+it's writing the patch just like I said
+it's using the mock version of the
+notion client just like I mentioned and
+there it is it's testing the save get
+method
+amazing
+okay
+first things first before we even look
+at the tests let's just run Pi test and
+see how ader has done
+okay so we have about four failed tests
+and one pass normally we would you know
+start digging in figure out what's going
+on with our tests but I'm not going to
+do any of that what I'm going to do is
+hop back over to ader I'm going to type
+slash run
+and then I'm going to type Pi test
+and what this command will do is run Pi
+tests and feed the output of Pi test
+back into ader
+all right so that's going to append the
+output directly to Ada let's go ahead
+and let that run let's see how it does
+let's run podcast again go stop for
+errors let's just go ahead and repeat
+let's see if hater can handle these
+errors
+all right let's run again
+okay awesome so this time we got one
+filled four pass so it seems like with
+the output of the error messages from PI
+test Ada was able to self-correct itself
+and now we just have one error left it
+looks like we're trying to mock Python's
+built-in open method for file writing so
+what I'm going to do here is just let
+ader fully write and read from a file to
+confirm this test so let's go ahead and
+write that update the predict to file
+write and read from disk
+don't Mark anything
+okay looks like we've got a an error
+here um this is definitely something I
+want it to happen so we could walk
+through this I got a token usage error
+all the GPT models have Windows right it
+can't hold that much information so if
+we go ahead and type slash tokens went
+over this in previous editor videos as
+you can see here our total tokens are
+over the max window so we need to go
+ahead and clear our chat history or type
+slash clear
+slash tokens and you can see we dropped
+back to 2000 tokens so we have 5 000
+remaining now let's reset and we have
+some additional context window for
+memory let's go ahead and type up a
+couple times and rerun that modification
+to our test there's the original where
+we're trying to mock the built-in open
+function and here's a new version where
+we just go ahead write read
+and call it a day awesome so looks like
+it needs a Json import I'm going to go
+ahead and just add this no big deal
+let's go ahead and run our tests
+now we have a fully passing test Suite
+that tests all the functionality in our
+module so you know a couple things to
+note here five functions it's about 100
+lines long it's not super complex we did
+run into a couple issues and we needed
+to work with ader to get those issues
+solved but in reality solving the issue
+was as simple as running Ron Pi test and
+basically just feeding the output from
+PI test back into ader so that it could
+self-correct so this is pretty
+incredible right we have five tests
+written and all we did was import Json
+you can start to see how useful this can
+be when it comes to setting up just
+getting some tests out getting some
+scaffolding done all by typing and
+natural language so these tests would be
+acceptable in some engineering orgs or
+if you're a solo Premier Dev running
+your own biz you've just generated
+probably 60 or 70 of the value a test
+can offer just by having some type of
+tests in place but let's push ader to do
+more for us here let's see if we can add
+tests parameterization to better cover
+test cases let's go ahead and open up
+ader and let's type where it makes sense
+ADD test monitorization
+existing tests increase that's coverage
+all right so let's see how it does right
+now it's describing the change it's
+gonna make it's gonna again give us the
+original and then it's going to give us
+hopefully all of our tests working with
+test parameterization and just to
+quickly say test parameterization is a
+kind of pseudo-automated way to pass in
+multiple variables into your tests as
+lists so that I can run different
+versions of your test let me know if
+you're interested in a video on Pi
+testing I can definitely dive more into
+that okay so it looks like that finished
+let's take a look at what that looks
+like if we collapse everything when it
+made sense ader added parameterization
+to some of our tests so in a right test
+function now this test will run twice
+and pass in the text and type and two
+iterations of the test we also have a
+updated test for our DOT chain git
+function as you can see here it locked
+out three versions of a Json object and
+then it tried to fetch different content
+within the Json object using the dot
+pattern and here it's looking for
+specific values so let's go ahead run Pi
+test and see what we get
+awesome we set up tests from nothing we
+had a couple errors we fed them back
+into ader it fixed them and then we made
+a tweak to one test that was failing in
+a particularly unique way using the
+built-in open function and then we added
+parameterization with zero errors now
+there's one more test that I want to
+give a little more attention you can see
+our read table into rows function is
+only asserting that it was called
+with a specific set of variables this
+doesn't actually test the underlying
+functionality at all so let's go ahead
+and look at this function and dig into
+how we could ask Eder to better test
+this method so what I'm going to do here
+is type exactly how I want to rewrite
+that test update
+to have
+client.databases.query return
+an object structure that can be used for
+the safe get methods to fully test the
+function we want Editor to mock out this
+function call with some solid results
+where we can actually test our said get
+function and have an array of these Json
+objects returned let's see how it does
+we're really putting aider to the test
+now
+here's the updated version where it's
+mocking out the full results this is
+incredible
+there's a new expected result
+okay so that's completed let's check out
+that test
+so as you can see we have that mock
+return value and now we're setting up
+client databases query return value to
+give us back our mocked value so we're
+going to have a better representation of
+what this test actually covers if we run
+Pi test
+awesome ader does it again this is
+fantastic technology I estimate this cut
+the time it took to test in half that's
+roughly a 50 gain in productivity now
+it's not all roses here it doesn't nail
+the test perfectly but gets pretty close
+and solves the you know kind of a cold
+start problem of having to set up and
+get the first iteration down the second
+possible issue is that you're going to
+have to pay more attention to your token
+usage as it can run a bill if you add
+too many files and if each file is above
+you know 300 lines or more I would
+quickly encounter the whole token usage
+pricing deal by just asking a simple
+question like how much is your time
+worth for me especially when it comes to
+writing tests I'd rather pay a little
+bit to accelerate the testing process so
+I can focus on core parts of the test
+and focus more on writing my code I
+recommend you try this on a smaller
+project you're working on or a bigger
+project but only add a couple files if
+you're interested in learning the notion
+API I created a series of tutorials on
+that where we cover authentication
+writing reading and then database
+writing and reading as well definitely
+give eight or a shot see if it's another
+tool you can add to your toolbox I also
+just want to quickly note that I use
+podcasts in this video you can use just
+you can use five tests wherever you are
+on the stack Ada is powered by GPT three
+four and whatever's coming next so it's
+fully aware of whatever was built up to
+September 2021st with blasted past 500
+subs and we're well on our way to ending
+our goal of 1K Subs by the end of the
+month huge thanks I really appreciate
+all the support I've been grinding
+sharing my unique take on ai ai power
+tools all I want to do here is help you
+become a better engineer by utilizing
+the best latest and greatest tools
+available huge thanks for watching sub
+like and I'll see you in the next video

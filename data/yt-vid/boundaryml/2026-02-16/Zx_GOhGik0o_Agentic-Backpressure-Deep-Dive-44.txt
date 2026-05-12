@@ -1,0 +1,1640 @@
+[0.1s] This is basically like the thing we all
+[2.2s] learn. The very first thing we do when
+[3.8s] we learn to code is we write the hello
+[5.4s] world is like okay let me just do this
+[7.5s] thing and now I see by example this is
+[9.7s] how it works.
+[10.5s] >> It's also why print debugging has
+[12.3s] overtaken like GDB debugging and
+[14.5s] debugger based debugging. It's because
+[16.0s] like it's just a learning test. That's
+[17.5s] what you're doing.
+[19.1s] >> So yes. So what we're going to talk
+[21.0s] about today is like how to formalize it
+[23.5s] and some ways that we've used it and we
+[25.8s] have some code examples of like how you
+[27.4s] can apply these techniques.
+[28.8s] >> Like these models have gotten better. So
+[30.7s] all of us have done less work to do
+[32.9s] learning tests for simpler problems. We
+[34.9s] just kind of assume that they work when
+[36.0s] you call an LM but for more complex
+[38.3s] problems you still want [music] learning
+[39.8s] tests.
+[40.4s] >> You can accidentally steer a model. You
+[42.7s] cannot accidentally steer a type
+[44.6s] checker. And so if you can give the
+[46.5s] model access to a tool that draws
+[49.3s] deterministic like there's no opinions,
+[51.4s] there's no non-determinism in it. It's
+[53.0s] either right or wrong and then give the
+[55.1s] model the feedback about why. It gives
+[57.4s] the model a way to check its own work
+[59.0s] without having to rely on its decisionm
+[61.4s] which is like we all know models make
+[63.4s] bad decisions sometimes. They ship slop
+[65.5s] code. They do things wrong. They
+[67.0s] >> just like humans by the way. It's not
+[68.3s] just a model problem. It's a code
+[69.8s] problem. Code humans created this for
+[71.9s] humans. We wanted back pressure.
+[73.8s] >> Exactly.
+[79.1s] All right, everyone. Welcome back. This
+[80.8s] is our weekly episode with Dexter and
+[82.6s] Bibb for AI that works. Uh, I run a
+[85.7s] company called Boundary where we make a
+[87.6s] programming language called BAML. Dexter
+[89.8s] works on an awesome tool called Riptide
+[91.8s] at a company named Human Lair. We've
+[93.6s] both been in the AI space for a couple
+[95.1s] years now. And we've been doing some
+[97.9s] stuff and the main point of this podcast
+[99.9s] is just yap about AI things that
+[102.7s] actually work. Incredible. I couldn't
+[104.9s] have done it better myself. Um, today we
+[107.4s] are talk a couple quick announcements.
+[109.4s] Um, so the other episodes we we've
+[111.0s] updated kind of the schedule. So every
+[112.3s] Monday you'll get an email with the
+[113.5s] YouTube from last week's episode. A
+[115.7s] little teaser for what's coming next.
+[117.2s] The other thing that I think is worth
+[118.6s] shouting out as well is we are uh
+[120.8s] locking down a time and place for the uh
+[124.0s] in celebration of the 50th episode of AI
+[126.5s] that works, we will be doing a little
+[128.7s] unconference uh live in San Francisco.
+[131.3s] So, in person, um, mostly off the
+[134.0s] record, um, just talks from builders.
+[136.7s] Um, everyone who comes is going to help
+[138.3s] build the agenda together. No RFP, no
+[141.0s] speakers like, uh, applications, just
+[144.2s] show up with something to talk about.
+[145.4s] So, if you're in SF or you're thinking
+[147.0s] of want to hang out with other AI that
+[148.9s] works people, uh, that will be happening
+[151.8s] >> and you'll be welcome to apply and
+[153.1s] hopefully we'll get as many people in as
+[154.8s] we can.
+[155.3s] >> I think that's it. Let's get into what
+[156.5s] we're talking about today. Um,
+[157.8s] >> let's do it.
+[158.5s] >> So, I have a question for you, Vibb. Um,
+[160.7s] we've talked a lot about your coding
+[162.3s] agent workflows and your stack. Um, and
+[165.1s] I wanted to ask you like have you ever
+[167.5s] had a situation where you got like, you
+[171.8s] know, we do our plans and then we we do
+[173.7s] our research and our planning and our
+[175.0s] design and all this discussion and like
+[176.4s] figure out what we're going to build.
+[177.8s] And at that point, we haven't really
+[179.0s] written much code yet, right? It's just
+[181.8s] working with Markdown and understanding
+[183.4s] what's there. Have [clears throat] you
+[184.9s] ever gotten to the point where you're
+[185.8s] deep in an implementation and you
+[187.3s] realize like, [snorts]
+[189.2s] oh, I was wrong about something? Like, I
+[191.0s] had some assumption much higher up about
+[192.7s] how a thing worked and it leaked all the
+[195.2s] way in and actually now I have to throw
+[196.7s] out this entire plan because there was
+[198.3s] some base assumption that was wrong.
+[200.2s] >> Last night at 2:45 a.m. So, one of the
+[203.1s] things that we do in BAML is when you
+[205.2s] write BAML code, we do some really
+[206.6s] interesting work to make streaming work
+[208.3s] really, really nicely. What we do in
+[209.9s] BAML is we say something like this,
+[213.0s] main.py py if you call a streaming
+[216.2s] function. Um, can you see? All right,
+[218.3s] Dexter.
+[219.6s] >> Uh, yeah, I can see. Maybe go one one
+[221.5s] bigger. Yeah, that's better. Cool.
+[226.9s] >> Uh, resume equals
+[230.2s] B. Extract extract resume.
+[234.6s] Uh, let's say you put in some resume
+[236.5s] over there and then you do a stream and
+[239.4s] then you do for chunk and resume. you do
+[241.0s] chunk dot like email for example, email
+[244.6s] is going to be optional automatically.
+[246.4s] But then if you went here and typed in
+[247.6s] like streamdone or stream not
+[252.0s] this becomes a string. So we actually
+[254.2s] generate two different type systems
+[255.6s] here. And this is
+[256.8s] >> where you have the partial type and then
+[258.4s] the full type. Right.
+[259.4s] >> Exactly. But it gets even more
+[261.0s] complicated. So like let's and I'll show
+[262.5s] you the example in a second. Let's say
+[264.2s] you have a foo string and you have a
+[266.6s] type bar equals string or string or int
+[271.3s] or fu or string.
+[274.7s] When you do this over here, this should
+[277.4s] still be a string type even though it's
+[280.1s] like mapped through like multiple
+[281.4s] aliases. So there's a lot of
+[282.6s] simplification and weird things that we
+[284.2s] have to do to make this work nicely.
+[286.6s] >> Collapsing the tree into the types in
+[288.9s] whatever native language that you're
+[290.2s] generating the stubs for.
+[291.7s] >> Exactly. And like we have to do like we
+[293.4s] have to do it in the in the streaming
+[294.8s] type system and the non-streaming type
+[296.7s] system to make it work perfectly. And
+[298.2s] this gets even hairier once you have
+[299.7s] classes with nested classes with nested
+[301.4s] aliases and recursive types and
+[303.0s] everything there.
+[304.2s] >> Yep.
+[304.9s] >> So I had an assumption there was baked
+[307.0s] wrong in the new work that we've been
+[308.5s] doing how to make it nicer and more
+[310.0s] ergonomic for developers to be able to
+[311.4s] modify better
+[313.8s] >> and like I just had to completely throw
+[315.6s] that out in terms of our implementation
+[317.2s] detail. I can talk about the actual
+[318.4s] implementation that's interesting but
+[319.8s] this is like the core problem because we
+[321.3s] have three types we have a type system
+[323.0s] during streaming we have a type system
+[324.6s] that the compiler reads and then we have
+[326.3s] a type system during non-streaming modes
+[328.8s] and we have to build algorithms for all
+[331.0s] three and that's architecturally wrong
+[333.0s] that we have to implement the same
+[334.6s] almost the same algorithm three times
+[337.4s] >> and the by algorithm you mean the thing
+[339.5s] that reads in raw like token
+[341.9s] [clears throat] streaming out of the
+[342.6s] model and decides how to translate that
+[344.4s] into a like full or partial structured
+[346.9s] object
+[347.6s] It takes a type that the user wrote and
+[349.6s] generates an equivalent type in any
+[351.2s] language of your choice that's perfectly
+[352.7s] matched and ergonomic based on what the
+[354.5s] code that you wrote here. The type
+[356.3s] simplification algorithm in the
+[357.8s] compiler.
+[359.4s] >> Um, cool. So, can you like would you be
+[361.7s] able to riff out kind of like code like
+[364.0s] I want to see two types of code
+[366.1s] basically? One of them is like here's my
+[368.1s] assumption. Like can you write code that
+[370.3s] like shows that your assumption is
+[371.8s] false? Basically like here's here's my
+[373.9s] assumption and here's an assert that
+[375.4s] would like you know you know what I
+[376.9s] mean?
+[377.4s] >> I don't know if I can do that for this
+[378.7s] problem because this is more of a design
+[380.2s] problem. The design problem here from
+[381.9s] like a whiteboard perspective is that I
+[384.8s] have to I I I end up having like a class
+[387.7s] called uh type then I end up having a
+[390.7s] class called non-streaming type. Then I
+[393.9s] end up having a class called streaming
+[396.3s] type. And if you know Rust code, they're
+[398.2s] not actually classes. It's like an enum.
+[400.7s] >> Okay. This is pseudo code for Rust.
+[403.3s] >> Yeah, exactly. Like I have an enum
+[405.1s] called like string that has like a
+[407.2s] string type and they have all these.
+[409.9s] And like in non-streaming, we have
+[412.4s] almost exactly the same exact thing, but
+[415.8s] there's some slight differences that
+[417.3s] exist in streaming versus non-streaming.
+[419.0s] And then stream similarly over here.
+[420.7s] There's some slight differences. and I
+[422.3s] have basically the same thing
+[423.4s] implemented three times, but they all
+[425.5s] have totally different semantics. And
+[427.2s] that's what's crazy about this.
+[429.4s] >> So, it's an certain places in certain
+[432.4s] places downstream, even though the field
+[434.2s] names are the same, they're they're
+[435.4s] different strus. And so, you have to
+[436.9s] have like a switch statement for every
+[438.2s] single one like have like tag unions for
+[440.5s] the thing. Okay.
+[441.4s] >> So, it's exactly a design philosophy
+[443.0s] that's kind of wrong in our current
+[444.2s] compiler.
+[445.0s] >> Cool. That's great. Yeah. I had a
+[447.0s] similar thing uh recently where we were
+[449.0s] building some stuff on top of the cloud
+[451.0s] agent SDK. So essentially um you know
+[454.8s] you have uh the way the cloud agent SDK
+[457.0s] works is you have this like TypeScript
+[459.0s] uh SDK
+[461.0s] and you have a method called query
+[464.3s] and this thing takes in a giant options
+[466.7s] blob for how you can configure cla
+[469.3s] >> and then what happens under the hood is
+[471.0s] it actually like invokes the claude CLI
+[474.6s] um and it translates all of these
+[476.6s] options into some types of like flags
+[479.7s] basically. So if you say like you know
+[482.5s] Like if you if you put in here, you
+[484.4s] know, uh let's do
+[485.8s] >> allow dangerous permissions and it just
+[487.7s] said it makes sense.
+[489.4s] >> So yeah, so you have like permissions
+[491.4s] mode
+[493.0s] bypass permissions.
+[495.5s] >> Yeah,
+[496.2s] >> this changes into a flag which is
+[498.3s] dangerously skip permissions.
+[501.4s] >> Exactly.
+[501.9s] >> So I've kind of just like written a
+[503.6s] wrapper on the CLI that allows you to
+[505.3s] call it from your TypeScript code.
+[506.9s] Right.
+[508.4s] Um okay this is a very simple example
+[510.9s] and there was other there so so this is
+[513.0s] like the the basic example what we
+[515.0s] wanted to do is we wanted to basically
+[516.6s] like experiment we wanted to like run
+[518.2s] something where it's like cuz this also
+[519.6s] had allowed tools
+[522.3s] and uh
+[525.5s] disallowed tools. Um, and so like you
+[528.8s] can put in a list here of like, you
+[530.5s] know, write, bash, edit, whatever it is.
+[534.2s] Or you can say, you know, we want to
+[535.9s] disable task is what the tool for sub
+[538.1s] aents is called. Or you might want to
+[539.7s] disallow like
+[541.9s] uh I don't know what's another thing uh
+[543.8s] notebook edit, which is the Jupyter
+[546.1s] notebook thing. If we're like, we know
+[547.1s] we're not touching Jupyter notebooks. Um
+[549.8s] the thing is is like the beha we had
+[551.4s] some assumptions about the behaviors of
+[553.0s] these things and we got deep into this
+[554.6s] implementation and we found out that
+[556.1s] actually like what allowed tools does
+[559.7s] is um and this is like we're talking
+[561.5s] about the cloud agent SDK that is just
+[564.1s] an example like we're going to go a
+[565.6s] little bit like zoom out a little bit
+[567.0s] more of like how you can use this for
+[568.7s] any API but the idea here is like most
+[572.2s] of the code here is a system we don't
+[574.2s] control and we can't read the code
+[577.4s] >> valid
+[577.8s] >> and so the standard workflow of like
+[580.3s] research um plan implement.
+[584.0s] >> Yeah.
+[585.7s] >> Like this relies on like we can get all
+[589.8s] of the knowledge we need to correctly
+[591.8s] build this feature by reading the code
+[597.6s] understand how the system works. The
+[601.1s] thing is is like if you have your code
+[603.0s] repo right
+[605.5s] and then you have you know you have all
+[607.3s] your modules etc but then if you're
+[610.3s] using like an SDK like this where you
+[612.5s] have like external dependencies
+[616.1s] some of these things like in if it's in
+[617.8s] node modules right you can also go rip
+[620.0s] gp through the source code of those
+[621.4s] things and you can research that um but
+[624.5s] if those things reference a external API
+[627.4s] maybe a closed source API
+[630.7s] or a uh you know closed source binary
+[634.8s] basically anything where you can't read
+[636.0s] the source of it then your research
+[639.2s] actually is just going to assume how
+[640.8s] that thing works and like the what would
+[643.8s] okay so let's assume you're doing this
+[645.3s] what's your first step that you would
+[647.0s] take to like let's say you were working
+[649.1s] on the cloud agent SDK how how would you
+[651.9s] how would you try to get better
+[653.4s] understanding of how that thing works
+[655.3s] >> I would just run it with a bunch of
+[656.7s] parameters or like d-help or other
+[658.8s] things.
+[660.3s] >> Yeah. Okay. So, you could go to the
+[662.6s] cloud docs and you could pull in the
+[664.1s] reference, right?
+[665.8s] >> Um, and these docs are pretty good.
+[667.4s] They're very comprehensive. They tell
+[668.8s] you every parameter, everything you can
+[670.5s] pass in all of these things. There's
+[673.0s] like
+[673.6s] >> Yeah, that's even better than what I was
+[675.2s] doing.
+[676.4s] >> Yeah. So, you could go read the docs,
+[678.1s] right? So, you can and I actually have
+[679.6s] done this in our in our episode folder.
+[681.9s] And so, like I grabbed the docs and I
+[684.0s] just dropped them in here. You can also
+[685.2s] use web search. You can use context 7.
+[687.1s] There's lots of different ways. So like
+[688.7s] that's step number one is like pull in
+[691.1s] the docs, but that generally in my
+[693.7s] opinion is not good enough. Um because
+[695.8s] it's easy to read the docs and misread
+[698.0s] them. They're very long. It's a lot of
+[699.4s] context. Like like subtle things can be
+[701.6s] missed.
+[702.7s] >> Um and so what we do is exactly what you
+[705.0s] said, which is we'll actually build what
+[706.6s] I call a learning test. And this is kind
+[709.1s] of the core of the episode is basically
+[710.6s] like I want to understand how these
+[712.2s] fields actually work. The best way to do
+[715.1s] that is you would create a what what we
+[717.5s] call a learning test. And this was
+[719.4s] invented I forget who mentioned this
+[721.3s] first learning test software. The
+[724.1s] problem is that this phrase has terrible
+[726.2s] SEO
+[727.7s] >> because this is just test assessing
+[729.8s] students.
+[730.6s] >> I'm sorry that I stole the thunder and I
+[732.3s] just said it up front. I was I didn't
+[733.9s] realize that's what you're getting at. I
+[735.8s] should let you build up to it.
+[738.2s] >> Yeah. Um learning tests.
+[742.2s] Um,
+[744.3s] >> yeah, but the premise is like
+[746.3s] >> Yeah, Michael Feathers. Here we go. Yes.
+[748.7s] So, it it was in this thing of like
+[750.2s] working effectively with legacy code.
+[752.9s] >> Um,
+[754.4s] he talks about this uh of just like
+[757.6s] systems that are hard to understand,
+[759.8s] maybe you just jump in and poke them
+[761.4s] from the outside.
+[762.7s] >> Yeah. Most people I know that work in
+[764.3s] like really complex like algorithm
+[765.7s] design problems like the way that you
+[767.2s] explore an algorithm space that you like
+[769.0s] when you're updating algorithm that you
+[770.4s] don't know. example, this is the only
+[771.9s] way to go do it. If you're doing like
+[773.6s] for example like a really easy analogous
+[776.6s] system to this is like performance
+[777.9s] engineering. If you're ever trying to
+[779.8s] reduce the amount of like assembly code
+[781.3s] that you generate, you don't actually
+[783.7s] you don't model the assembly. You
+[785.2s] literally write the code, you look at
+[786.3s] the assembly that gets generated, you're
+[787.7s] like cool, this is the slot I want to
+[789.4s] reduce. Then you experiment, you see if
+[791.0s] you reduced it. And that's like the way
+[792.3s] that you do this. There's different
+[794.2s] techniques beyond just like reducing the
+[795.8s] amount of assembly code and that doesn't
+[797.0s] always make your code faster. like
+[799.0s] reducing like that's an easy like
+[801.8s] performance engineering is basically a
+[803.5s] learning test all the time.
+[805.4s] >> Yeah. So you could read the compiler
+[806.7s] code or you could just write a program
+[809.8s] compile it.
+[811.1s] >> Exactly.
+[812.6s] >> Look at the output. This is basically
+[814.6s] like the thing we all learn the very
+[816.6s] first thing we do when we learn to code
+[818.2s] is we write the hello world is like okay
+[820.4s] let me just do this thing and now I see
+[822.2s] by example this is how it works. It's
+[824.4s] also why print debugging has overtaken
+[826.8s] like GDB debugging and debugger based
+[828.9s] debugging. It's because like it's just a
+[830.5s] learning test. That's what you're doing.
+[832.9s] >> So yes, so what we're going to talk
+[834.8s] about today is like how to formalize it
+[837.3s] and some ways that we've used it and we
+[839.5s] have some code examples of like how you
+[841.1s] can apply these techniques to basically
+[843.8s] in your research pipeline. Um the first
+[846.8s] thing we add of course is like read the
+[848.5s] code. The second thing we add is also uh
+[851.7s] you know read external docs, blog posts
+[854.4s] etc. Like if someone else has figured
+[855.8s] out how to glue a bunch of systems
+[857.4s] together in a way that works then we
+[859.5s] should pull that into our research doc
+[861.1s] as well and into our planning. And then
+[863.0s] the last one is actually as part of
+[864.6s] research it's write learning tests. So
+[867.9s] we're not writing code to ship a
+[869.2s] feature. We're writing code to like some
+[871.4s] people also call this like proofbased
+[873.0s] development where it's like we're
+[875.0s] proving the system works in the way that
+[876.7s] we think it does rather than like
+[879.6s] instead if we if we didn't do this we
+[881.5s] would just carry some assumptions
+[883.0s] through.
+[885.8s] So the assumption lands in the research
+[887.6s] based on either what we read in the docs
+[889.2s] or just what is baked into the model
+[890.9s] weights that makes it into the plan that
+[892.9s] makes it into our implementation and
+[894.6s] then like uh like you know we do phase
+[897.7s] one and everything's working and then we
+[899.4s] do phase two and then everything's
+[901.0s] working and then in phase three we
+[902.5s] actually hit this thing that like oh our
+[904.2s] assumption was actually wrong
+[907.6s] and then we literally have to go and
+[909.4s] redo all of the work, all of the
+[911.1s] implementation, all the planning, all
+[912.6s] the research because we learned
+[913.8s] something and our idea A with AI coding
+[916.8s] is always about like leverage, right? We
+[919.1s] have this thing that we've been posting
+[921.4s] if you go all the way back to um
+[925.9s] AI that works the like August 5th one,
+[928.6s] right? Advanced context engineering for
+[930.0s] coding agents.
+[931.4s] >> This thing of like
+[933.3s] >> focus on the highest leverage parts of
+[935.4s] your pipeline. What you don't want to do
+[938.1s] is like be, you know, hundreds of
+[940.7s] thousands of or like, you know,
+[941.9s] thousands of lines into your
+[943.3s] implementation and suddenly find
+[945.6s] yourself in a spot where like, oh,
+[947.2s] something was wrong and it invalidates
+[949.3s] everything before and we have to go
+[950.9s] back.
+[952.8s] And so when we write these learning
+[954.3s] based proof tests, it lets us vet our
+[956.2s] assumptions before we proceed into what
+[959.2s] we're going to change about the system.
+[960.6s] Does that make sense?
+[961.8s] >> I agree. I think like especially for
+[963.5s] like algorithm design stuff or like new
+[965.4s] feature stuff, this is like an easy way
+[967.0s] to do this. But I'm going to make I'm
+[969.1s] going to make one push back that I'm
+[970.4s] always curious about in these scenarios.
+[972.6s] This just sounds like it's like one of
+[973.9s] the tools because obviously if you're
+[975.1s] doing something super complex like for
+[976.9s] example the type system work that I was
+[978.4s] doing there's no learning test I can do
+[980.5s] there that just requires like design
+[982.9s] >> but it sounds like for implementations
+[984.6s] there's a lot of learning tests that you
+[986.0s] can do and before you implement you
+[988.4s] might benefit
+[990.3s] especially when you're implementing
+[991.4s] against a black box
+[993.8s] you might and I actually like you know
+[995.5s] what's funny the best learning test is
+[997.5s] actually like when you're calling an LLM
+[999.8s] >> when you call an LM the only
+[1002.0s] are a form of learning tests. Actually,
+[1004.2s] like the way the boundary playground
+[1006.6s] works is it enables you to do learn like
+[1009.4s] if I put this prompt in, how will the
+[1011.3s] LLM behave and to riff back and forth
+[1014.3s] before you actually go stitch all of
+[1015.9s] that into your code?
+[1018.6s] Is that where you're getting at?
+[1020.1s] >> Exactly. Like because you like that's
+[1021.8s] how you kind of build the learning test
+[1023.8s] around this. And as we've gotten um as
+[1026.7s] we've gotten there, one thing that we
+[1028.6s] found that's interesting I think is this
+[1031.0s] idea of how do you like these models
+[1034.2s] have gotten better. So all of us have
+[1036.2s] done less work to do learning tests for
+[1038.6s] simpler problems. We just kind of assume
+[1040.2s] that they work when you call an LLM, but
+[1042.3s] for more complex problems, you still
+[1044.0s] want learning tests.
+[1045.7s] >> I really like the framing there. That's
+[1047.2s] a that's a really nice um I I've done
+[1050.3s] this a few times. Um whenever I've uh
+[1054.9s] what's it called? I've like this is how
+[1057.6s] I've modeled most systems I've worked in
+[1059.4s] because of the algorithm work that I did
+[1061.4s] >> but yeah exactly like that's a learning
+[1062.8s] test when you go actually press play. I
+[1064.4s] don't think you have your API you might
+[1065.8s] not have your API key but
+[1067.4s] >> yeah you get the idea. I I haven't this
+[1069.7s] is a new laptop so I just had to install
+[1071.4s] BAML for the first time on my VS Code.
+[1073.6s] Uh because I haven't used VS Code or
+[1075.1s] Cursor in a while.
+[1076.4s] >> Really? You've moved on to Zed?
+[1079.2s] >> So I use Zed because I'm almost always
+[1081.4s] just using an editor to read and write
+[1084.2s] Markdown files and their markdown viewer
+[1086.6s] is pretty nice and it's really fast.
+[1089.0s] Like so I can quit this. If I open Zed,
+[1091.5s] it's open instantly. It's so fast.
+[1094.4s] >> Yeah, I know. I know. Okay. I
+[1096.2s] >> And you're going to tell me that it's
+[1097.2s] cuz it's built in Rust, right? Of
+[1098.7s] course,
+[1099.3s] >> all things [snorts] built in Rust are
+[1100.6s] fantastic.
+[1101.8s] >> Yeah,
+[1102.2s] >> I'm trying back to this. So, yeah. So, I
+[1104.0s] guess what you're saying is that the the
+[1105.0s] the the issue you hit, which was a
+[1107.6s] design kind of misconception, was not
+[1110.2s] actually a good example of what we're
+[1111.8s] going to talk about today.
+[1113.0s] >> Yeah. Exactly. Exactly. And there
+[1114.9s] there's a class of problems there, but
+[1116.2s] there's a large large large class of
+[1118.1s] problems where learning tests are the
+[1119.6s] best way to really iterate.
+[1121.4s] >> Yep.
+[1122.6s] So, I'm going to pop open to like going
+[1125.7s] a little bit deeper on this specific
+[1127.7s] example that um we were looking at. Um
+[1130.6s] here's like a very basic learning test.
+[1133.2s] It's barely even a learning test, right?
+[1134.9s] It's just a hello world script. Like
+[1136.5s] hello world is the most generic version
+[1139.2s] of uh of of a learning test, which is
+[1142.7s] like I'm going to run this code and see
+[1144.2s] how it works. And so I'm telling it like
+[1145.8s] read the meta MD and tell me what's
+[1147.4s] there and then console log all the
+[1149.3s] messages. So this is letting me see the
+[1152.0s] structure of the output and what are the
+[1153.8s] messages that come out from the cloud
+[1155.2s] SDK when I run it etc.
+[1157.4s] >> So I'm going to ask some interesting
+[1159.5s] questions here Dexter
+[1161.0s] >> um when I or at least question that I
+[1162.9s] find interesting at the very least.
+[1164.6s] >> Um so this sounds like a thing that I
+[1166.2s] think a lot of developers probably do
+[1167.5s] very naturally. How do I
+[1169.7s] >> It's especially before AI, it was a very
+[1172.7s] normal thing to be like, I'm using a
+[1174.6s] system I don't understand, whether it's
+[1176.0s] a new library or another or a new
+[1179.2s] database or whatever it is. Like we used
+[1181.3s] to do this all the time. And it was the
+[1183.8s] idea like the idea of learning to Sorry,
+[1185.7s] finish your thought. I I'm going to draw
+[1187.1s] something.
+[1187.8s] >> While you could draw that like the real
+[1189.3s] question I really have is like I think
+[1190.8s] most developers do this intuitively like
+[1192.4s] when you use the new API, you often curl
+[1194.1s] it first just to be like what the heck
+[1195.3s] does it return?
+[1196.5s] >> Um Yep. And like that's a learning test.
+[1198.6s] Um, so I I suspect that that concept is
+[1200.9s] in you. Tell me how I amplify this and
+[1203.3s] tell me why. Like I see cloud code doing
+[1205.4s] this sometimes as well.
+[1207.0s] >> Like it often will actually happen.
+[1208.4s] >> Cloud code ends up doing it like at the
+[1210.4s] in in the end where it's like, oh that
+[1212.3s] didn't work the way I think it did. I'm
+[1214.4s] sitting in a pile of git diffs. Like how
+[1216.8s] do I try to resteer out of this
+[1218.6s] situation? You could ask it like hey go
+[1221.0s] figure out how this thing works and
+[1222.4s] write a doc about it. And that's kind of
+[1224.2s] what we're going to get into is like how
+[1225.7s] do you get claude code to help you do
+[1227.6s] this stuff.
+[1228.6s] >> Okay.
+[1229.0s] >> Um but the idea with learning test is
+[1231.6s] like if you want to like the the biggest
+[1233.8s] the like really basic example is like
+[1235.6s] you you have a new logging library,
+[1237.1s] right? And you want to see like how
+[1238.5s] logger the logger works, right?
+[1240.1s] >> Sure. Yeah.
+[1240.7s] >> And so you write a little file and you
+[1242.1s] test what does logger.info do, what does
+[1244.5s] like logger set level do, etc.
+[1248.8s] >> If you just wanted to like understand
+[1250.2s] how this library works.
+[1251.5s] >> Yep. [snorts] Makes sense.
+[1252.3s] >> And like
+[1253.7s] You have your code which is like you
+[1255.4s] know public main whatever and then you
+[1258.9s] have your test which is like you know
+[1260.3s] public test ABC and this is like what
+[1264.4s] you're supposed to use test for is like
+[1265.8s] you write app code and then you write
+[1267.2s] unit tests and like as you change the
+[1269.1s] code you make sure the tests don't still
+[1271.0s] pass.
+[1272.0s] >> What you're not supposed to do is
+[1274.5s] actually test external code because like
+[1277.4s] the library maintainers are testing that
+[1279.5s] code for you. like you should not
+[1281.1s] maintain a bunch of unit tests for
+[1283.7s] external libraries.
+[1285.0s] >> Yeah, I agree.
+[1285.6s] >> But unit test frameworks are kind of
+[1287.8s] nice because you can say you know you
+[1289.4s] can attach attach something to standard
+[1291.2s] out and then you can assert like that a
+[1294.2s] thing was a thing was printed
+[1296.6s] >> okay
+[1297.8s] >> to standard out or a file or whatever.
+[1301.4s] You wouldn't run these all the time but
+[1303.4s] you have a little bit of a
+[1304.2s] demonstration. So when you want to write
+[1305.8s] code with this library, the model can go
+[1307.6s] read this really useful and you know
+[1310.0s] before it was like humans would use this
+[1311.4s] as a reference. So like okay now I know
+[1313.0s] how to apply this in my app code. Um but
+[1315.7s] it also means and we've actually hit
+[1317.2s] this before is like we had this thing of
+[1320.1s] like public and I'll show you that we
+[1321.7s] actually have this test in the code but
+[1323.0s] it's like test it was like how cloud SDK
+[1326.2s] session continuation works.
+[1329.1s] Um and it was basically like if you res
+[1331.1s] if you if you resume a session
+[1335.0s] uh there was a a behavior where like the
+[1337.2s] session would always get a new ID
+[1340.6s] not equals pre session id
+[1345.0s] um and then they change this behavior
+[1347.9s] and so what you get with this with a set
+[1350.2s] of learning tests you don't run all the
+[1351.9s] time the same with your evals like you
+[1353.4s] don't run your evals on every CI/CD loop
+[1355.7s] right but you can go run them manually
+[1357.8s] or you can run specific specific evals
+[1359.4s] if you have a feeling about what's
+[1360.6s] wrong. If you think the contract with
+[1363.3s] your external library has changed, which
+[1365.8s] is a thing from cloud SDK1 to cloud SDK
+[1368.4s] 2, um they changed the default behavior
+[1372.6s] where now you have to pass in this fork
+[1374.8s] session equals true. And so you have a
+[1377.8s] literally like a documented list. We
+[1379.8s] have probably a hundred of these now
+[1382.4s] that we have documented our contract
+[1385.0s] with the external things that we don't
+[1386.8s] control. And then when we pull in a new
+[1389.0s] version, all we have to do is rerun the
+[1391.1s] learning tests and we know if something
+[1393.1s] broke. And like it's not 100% coverage,
+[1395.6s] but every time a contract with our
+[1397.9s] external system breaks, we had another
+[1399.3s] learning test. Um, and so you wouldn't
+[1401.4s] do this for every single library use,
+[1403.0s] but if you have a library that likes to
+[1404.3s] change APIs sometimes, then this can be
+[1407.0s] a really valuable way of like let me
+[1409.0s] verify like if I think it wasn't our
+[1411.0s] code that broke as something changed
+[1412.3s] over there, you have a documented thing.
+[1414.2s] And I'll get into like some of these are
+[1416.0s] quite uh And and what's really
+[1418.6s] interesting over here is actually a
+[1420.2s] second thing. What you're really
+[1421.4s] specifically doing is it's not just a
+[1423.4s] library because it's a library. You get
+[1424.8s] types, you get everything else around
+[1426.0s] there that are kind of deterministic
+[1427.5s] that help constrain a lot of this. In
+[1429.7s] your case, you're copying you're calling
+[1431.0s] a CLI command which has no
+[1433.2s] >> CLI or or like I've I've used this with
+[1435.7s] some teams who are trying to use the
+[1437.3s] OpenAI responses API and like there's
+[1440.3s] different ways you can call it that
+[1441.9s] cause it to like preserve or remove the
+[1444.4s] thinking tokens from previous
+[1446.0s] conversations. So, it's really for like
+[1448.0s] poking black boxes that you don't
+[1449.8s] control or that it's very inconvenient
+[1451.8s] for you to go actually look at the
+[1454.0s] internals.
+[1454.9s] >> Makes sense. Yeah. It's like what you're
+[1456.6s] treating something like a proistic
+[1458.3s] system. it has some probability of
+[1460.3s] producing something and consumes some
+[1462.2s] various kinds of inputs. So you're
+[1464.0s] trying to constrain the probabilities.
+[1466.7s] >> Yeah. So we can go from this basic hello
+[1469.3s] world to like a slightly more
+[1471.4s] interesting one. This is still not in a
+[1473.0s] test harness. Um but we can improve the
+[1475.8s] like printing and writing. And so we can
+[1477.5s] do, you know, bun run ob.
+[1481.5s] And this is going to give me a little
+[1483.0s] bit nicer output of like me as an
+[1485.0s] engineer trying to see, okay, how does
+[1486.5s] this thing behave when I ask it to do
+[1488.4s] certain things, right? Okay, so this one
+[1490.7s] was just say hello. Um, and then we can
+[1494.2s] start doing like checks and like
+[1496.2s] evaluations about it, right? So we we
+[1498.4s] tell it to say hello. We're still
+[1499.7s] streaming out all the messages. And then
+[1501.8s] we're actually like outputting some like
+[1504.6s] boolean flags about like is this true?
+[1507.1s] Is that true? Like did we get a session
+[1509.0s] ID out? Um and starting to like
+[1511.6s] basically like articulate the behavior
+[1514.0s] of this system for whom for which we
+[1516.5s] cannot read the code.
+[1518.5s] >> Yeah. I think I think what to summarize
+[1520.7s] I think what I'm hearing is you're
+[1522.2s] trying to write unitest for external
+[1523.9s] fuzzy libraries.
+[1525.8s] >> External fuzzy libraries. And so like
+[1527.5s] this is where you go from like hello
+[1528.8s] world to a little bit more
+[1529.8s] sophisticated. And eventually what we
+[1531.2s] would if if you do this for a while, you
+[1533.0s] end up just putting this into the unit
+[1534.6s] test framework of your language.
+[1536.5s] >> Exactly.
+[1536.8s] >> So here's like what does query emit and
+[1538.8s] in what order. And so now we have not
+[1541.7s] just logs but we have assertions about
+[1543.9s] this. And so if they change the ordering
+[1545.8s] of messages or add a new message like
+[1548.9s] this test will then start to fail.
+[1551.1s] >> Yep.
+[1552.2s] >> Sorry. Um what's really interesting here
+[1554.4s] is I've seen tests like this before at a
+[1557.0s] at a couple places that I've worked. So
+[1558.5s] like for example, we had a large network
+[1560.8s] dependency on like some external finance
+[1562.6s] system at my previous employer.
+[1565.2s] >> And in that scenario,
+[1566.7s] >> see I worked in fintech too, dude. We
+[1568.3s] had like a SOAP API that ran like over a
+[1570.5s] tnet server. It was crazy.
+[1572.5s] >> Exactly. And when you run into this
+[1574.0s] problem, uh really it's not that like I
+[1576.4s] think the common place where people have
+[1578.3s] already done this because I think
+[1579.7s] there's a large place where people in
+[1581.1s] their code bases do this today already
+[1583.0s] is like database setup. If you're ever
+[1585.0s] trying to hit a database, you don't want
+[1586.3s] your data database tests are notoriously
+[1588.9s] flaky, especially like large scale
+[1590.4s] systems.
+[1591.7s] >> And because they're flaky, you'll often
+[1593.1s] write a pre-check that says, "Hey, if
+[1594.6s] the database setup failed, just skip all
+[1596.7s] these tests to run or fail depending on
+[1598.6s] what company you're at." Y
+[1600.7s] >> and that's basically kind of something
+[1602.4s] similar where you have an external
+[1603.5s] dependency that's kind of fuzzy and you
+[1604.7s] want to have some known constraints and
+[1606.2s] known goodness behavior before you start
+[1607.8s] running the rest of your test cases
+[1609.8s] >> because if those fail then some
+[1611.4s] assumptions that you made about the
+[1612.5s] external system are just bad.
+[1614.8s] >> There's this really funny interview
+[1616.2s] question I think that I remember
+[1618.3s] >> from a really long time ago
+[1620.3s] >> which is like you have a blackbox API
+[1622.7s] that takes like 25 minutes to run. How
+[1625.4s] do you make it faster?
+[1627.4s] >> Yeah. And like it's very similar like
+[1629.0s] you and they gave you no other
+[1630.6s] information. They'll tell you what the
+[1631.6s] API is, what it inputs, what it outputs.
+[1633.4s] You just have an API that's undefined
+[1635.0s] and you have to go explore it.
+[1637.0s] >> Um and like that's I think a very
+[1638.8s] similar kind of problem like you have to
+[1640.1s] apply like a penetration testing
+[1641.4s] approach.
+[1642.5s] >> Again security of like okay what
+[1645.4s] protocols does it support? What are the
+[1647.0s] inputs and outputs? Like how does it
+[1649.1s] behave under certain we call Yeah. We
+[1650.7s] can call this also like fuzz testing
+[1652.2s] right where you just like test the full
+[1653.8s] range of output of inputs to see what
+[1656.1s] breaks.
+[1656.8s] >> Yeah. Exactly. So, there's so many
+[1658.2s] different ways to do this. It It sounds
+[1659.7s] like a really useful technique. How Now,
+[1661.4s] the question I have for you is I think
+[1663.4s] the hardest part about the system isn't
+[1664.9s] actually implementing this because once
+[1666.2s] you come up with the design, I'm sure
+[1667.4s] you can just have cloud code rip through
+[1668.8s] test and it'll just write a bunch of
+[1670.1s] tests for you.
+[1671.5s] >> But if you scroll down,
+[1673.5s] >> yeah,
+[1674.6s] >> uh to that error to the error diagram.
+[1676.8s] The hardest part is making sure that you
+[1679.0s] somehow do it earlier rather than later.
+[1681.5s] >> But the tradeoff that I often run with
+[1683.4s] this is if I do it earlier, then I'm
+[1685.0s] wasting time. And if it could have
+[1686.1s] oneshot it, I feel like I'm I I'm like I
+[1689.5s] should have just one shot.
+[1690.7s] >> Dude, it's it's so fast. So, I'm
+[1692.7s] actually going to live demo something.
+[1694.3s] Um there's a new TypeScript SDK
+[1696.6s] interface that is like a different way
+[1698.3s] of sending and continuing messages. This
+[1701.0s] is straight from their docs um that I
+[1703.4s] just this is like pretty new. I just
+[1704.9s] noticed this for the first time last
+[1706.2s] night, but they have this new API for
+[1708.2s] sending messages with this unstable
+[1709.9s] thing. And I want to go try this in my
+[1711.8s] product. And so what I'm going to do is
+[1713.5s] I'm going to pop open Claude in this air
+[1716.4s] that works repo. Actually, we'll do it
+[1718.4s] in the episode. Uh
+[1722.4s] like read the v2 docs and the existing
+[1725.4s] learning tests and create a learning
+[1727.1s] test that demonstrates how to use the
+[1728.9s] new stream send API uh and document its
+[1732.3s] behavior in various circumstances.
+[1735.0s] And so literally I just say this to
+[1736.4s] Claude and Claude is going to read as
+[1737.9s] long as you have a couple of these for
+[1739.3s] it to read for examples and we'll push
+[1741.1s] these up so you can use the I mean these
+[1742.8s] are for the Claude agent SDK but I also
+[1744.5s] have one for like how does the node
+[1746.2s] child pro process API work because I
+[1749.1s] think that's an interesting one. Um
+[1751.1s] there was an HMAC verification one of
+[1753.3s] like how does the node crypto library
+[1755.0s] work when like the lengths don't match
+[1756.6s] and stuff like this. Um, but you
+[1758.7s] basically log out some stuff and then
+[1760.0s] you have assertions about like how this
+[1762.2s] thing behaves so that if it changes,
+[1763.8s] you'll know. Um, but yeah, so what this
+[1766.4s] is going to do is literally going to go
+[1767.5s] read these V2 docs and generate for me a
+[1769.8s] learning test and it's probably going to
+[1771.3s] make a learning test where the some of
+[1772.5s] the initial assumptions are wrong. Like
+[1775.0s] here's another one that we had a while
+[1776.6s] ago where it's like we think that
+[1778.9s] allowed tools is a white list and this
+[1780.8s] is the only tools that are allowed.
+[1783.6s] Um, and then when we run it, we actually
+[1785.9s] see that like
+[1789.7s] uh we actually are going to see that
+[1792.0s] like this assertion fails. But what's
+[1794.6s] nice is like Claude is giving this. We
+[1796.4s] talked about in the Ralph Wigum episode.
+[1797.8s] We talked about back pressure and I
+[1799.6s] think it's in the I think it's actually
+[1801.8s] there's a picture in the notes.
+[1803.4s] Actually, this is an interesting one
+[1804.6s] too. This is a post about like basically
+[1806.8s] like um if you use human feedback for
+[1809.4s] the whole thing um then like basically
+[1813.4s] you can like get feedback from the
+[1814.9s] compiler uh based on your task
+[1816.9s] complexity and you can solve parts of it
+[1818.6s] and then you can get feedback from the
+[1820.3s] type system and then you can get
+[1822.2s] feedback from like MCP servers or
+[1824.2s] playright or unit tests and then you
+[1826.5s] could get feedback from basically like
+[1828.5s] you're reducing the amount of time you
+[1830.4s] the human have to spend.
+[1831.7s] >> Oh yeah. Exactly. Yeah. Exactly. Yes.
+[1833.6s] >> Yeah. So it's like how do you how do you
+[1835.7s] automate different parts of the back
+[1837.3s] pressure and then it's like how do you
+[1838.6s] do it during the planning instead of
+[1840.2s] during implementation basically
+[1842.2s] >> but I think the hardest part still and I
+[1844.0s] think this is probably still what
+[1845.1s] distinguishes like the goats of software
+[1847.1s] engineering from like the not as goats
+[1849.8s] which is just like you just have really
+[1851.2s] good intuition for what to apply when
+[1853.5s] >> because if you apply everything
+[1854.9s] everywhere you will just be the slowest
+[1856.4s] engineer in the world
+[1858.3s] >> that's what that's the hardest part
+[1859.9s] right because like
+[1860.8s] >> yeah the and the only way you learn that
+[1862.2s] is through reps you learn Okay, I did
+[1864.1s] too much. Like I I think of this there's
+[1866.4s] this idea in like I think it was in like
+[1868.2s] a a blog post about maybe like about
+[1870.2s] executive coaching or something, but
+[1872.4s] like let's say there's some like
+[1873.8s] spectrum of behavior and like this could
+[1876.2s] be like too much planning and this is
+[1880.2s] like not enough planning. But this could
+[1882.2s] just as easily be like too extroverted,
+[1886.2s] too introverted. This is like true for
+[1887.9s] anything that you want to learn as an
+[1889.4s] engineer.
+[1890.1s] >> Exactly. It just vibes.
+[1893.1s] Um, so the idea is like let's say let's
+[1895.4s] say you're over here, right? And then
+[1896.9s] you try to get better and you end up
+[1898.1s] over here and you end you try to get
+[1899.4s] better and you end up over here and like
+[1901.4s] the ideal range is somewhere in here.
+[1905.0s] Um,
+[1906.1s] >> I don't know if there's
+[1907.2s] >> whatever it is.
+[1908.6s] >> Huh.
+[1909.4s] >> I I don't know if there's an absolute
+[1910.8s] range. I think it's very problem problem
+[1913.0s] and scenario specific.
+[1915.2s] >> Sure. Uh, let's say this is relative
+[1917.3s] ideal range relative to the problem.
+[1918.9s] like how good are you at picking the
+[1920.4s] right amount of planning to do based on
+[1921.9s] a problem.
+[1922.8s] >> Yeah.
+[1923.2s] >> And the idea is like basically if you do
+[1924.6s] this you it's it's it's like you rather
+[1926.5s] than just like trying to make
+[1927.4s] incremental progress, you'll get there
+[1929.4s] way faster if you what we call like make
+[1931.3s] the other mistake. So like go way far to
+[1933.7s] the other side and then come way back
+[1935.7s] way back over here and you basically
+[1937.7s] like binary searching around. And so the
+[1939.8s] the idea is like sometimes you should do
+[1941.7s] what feels like too much and sometimes
+[1943.9s] you should do what feels like way not
+[1945.6s] enough and you'll bounce back and forth
+[1947.7s] and you'll get to the ideal range a lot
+[1949.7s] faster than just trying to increment
+[1951.4s] toward whatever you want to be. And this
+[1953.0s] is true of lots of things in life. It's
+[1954.4s] about developing instinct, right?
+[1956.6s] >> Yeah. Exactly. And I think like most
+[1958.5s] people honestly that's why
+[1959.8s] >> there
+[1960.6s] >> well to be honest though I think that's
+[1961.8s] why most people suck at a AI coding.
+[1964.2s] >> It's because like most people like don't
+[1966.8s] it's not that they're over here. It's
+[1968.2s] actually it's it's because they don't
+[1969.8s] know how to select for the right slides
+[1971.5s] for the right problem.
+[1973.4s] >> Like they they they're they're too
+[1975.6s] constant with their technique.
+[1978.3s] >> The thing about agentic systems is you
+[1980.2s] actually have to be really variatic with
+[1981.8s] the way that you code. This problem I
+[1983.8s] use this technique. This problem I use
+[1985.1s] this technique. Whereas in software when
+[1987.0s] you're human typing you can almost
+[1989.0s] always be using the same technique and
+[1990.8s] it doesn't hurt your productivity. But
+[1993.0s] with agentic coding, you have to
+[1995.5s] constantly evaluate and be like, "Oh,
+[1997.9s] well, okay, well, would I be actually be
+[2000.1s] faster if I threw away all my work and
+[2001.7s] started from zero again because this
+[2003.2s] assumption is wrong?"
+[2004.9s] >> Yep.
+[2005.3s] >> And very very few
+[2006.6s] >> depending on the problem or even like
+[2008.6s] the day of the week, this range shifts
+[2011.2s] around based on
+[2013.5s] >> exactly
+[2014.0s] >> like what what models, new models, new
+[2017.4s] problems, new types of things. And so
+[2019.5s] you're like you're not just developing
+[2020.8s] one set of instincts. You're developing
+[2022.4s] a set of instincts that are kind of like
+[2024.9s] spread across many dimensions. It's not
+[2027.3s] it's not actually two dimensional. It's
+[2029.1s] like a 10 dimensional space.
+[2030.6s] >> This is why I think most people suck
+[2032.1s] though because it's like given a given a
+[2033.8s] problem space, you got to pick your
+[2035.0s] thing. And and what you do in that
+[2036.6s] scenario when most people suck is you
+[2039.0s] actually give guidelines. You say, "Hey,
+[2040.9s] for 80% of people, we should always do
+[2043.1s] the same process in this workflow."
+[2045.1s] That's why processes exist because when
+[2048.3s] you when you give a specific process,
+[2051.4s] you're much much happier and you end up
+[2053.8s] in the good zone way better way more
+[2056.0s] likely than if you're exploring yourself
+[2057.4s] and exploration isn't your skill set. So
+[2060.2s] like for people that are like managing
+[2061.8s] people, my advice to them is like really
+[2063.9s] and if your team is really not getting
+[2066.2s] the gro of AI,
+[2067.8s] >> that's probably because they don't have
+[2068.9s] the brain cycles because they're so
+[2070.9s] they're so stressed about finishing the
+[2072.7s] workload. They're being asked to do
+[2074.7s] their jobs and also learn a completely
+[2077.0s] new thing.
+[2077.4s] >> It's too much. It's too much. And like,
+[2079.5s] let's be real, jobs are jobs. And like,
+[2081.3s] I get why people feel that way. I love
+[2082.8s] my job and I understand why some people
+[2084.3s] don't want to like learn with like 120%
+[2087.2s] cognitive load every single day of the
+[2088.9s] week until they're max performance.
+[2091.0s] Again, on the other hand, like with the
+[2093.7s] back pressure thing that you talked
+[2094.8s] about, like that's another technique
+[2096.3s] that gives you like if it's if you're
+[2098.2s] one of those people that is down to
+[2099.4s] learn and I suspect most people
+[2100.6s] attending here are.
+[2102.3s] >> If you go back to that diagram,
+[2104.2s] >> that's that the previous diagram in the
+[2106.5s] whiteboard.
+[2107.7s] >> Yeah, this one
+[2108.6s] >> that that technique that you described
+[2110.2s] is a thing that pulls you more into too
+[2112.0s] much planning. And that's fine,
+[2114.1s] especially when you identify it's like,
+[2115.5s] hey, this is a type of problem that
+[2117.4s] needs more planning. And if I do this
+[2119.2s] planning up front, I'll actually move
+[2120.7s] faster long term.
+[2122.6s] >> Yeah. And so I I encourage people to
+[2124.6s] like if something feels like too small,
+[2127.9s] like skip all the planning and just see
+[2129.4s] if you can vibe it out. And if it works,
+[2131.1s] then like now you've developed instinct
+[2132.4s] of like, okay, for a problem that looks
+[2133.6s] like this, I can just vibe it. And then
+[2135.9s] for another one, it's like, cool, try to
+[2137.0s] vibe it again. And you're like, okay,
+[2138.2s] that was a disaster and I wasted two
+[2139.8s] hours shouting at Claude. I guess next
+[2141.7s] time I see a problem that looks like
+[2143.0s] that, I should probably like do a little
+[2144.7s] more planning, do a little more
+[2145.8s] research, and make sure we follow the
+[2147.0s] pattern. Yeah, I think this is that that
+[2149.5s] instinct though is fundamentally the
+[2152.4s] >> the what I call like the the difference
+[2155.0s] between goats and non-goats is they just
+[2157.3s] the goats just have a way better
+[2158.6s] instinct and then they what that also
+[2160.2s] means is that they're exploring
+[2161.4s] techniques like the one that you're
+[2162.7s] talking about all the time.
+[2164.5s] >> Yeah.
+[2164.9s] >> Like they're just
+[2165.4s] >> This is Jeff Huntley picture by the way
+[2167.6s] is basically like you have to generate
+[2169.1s] back pressure. you have to generate this
+[2170.6s] loop of like you have your specs and
+[2172.6s] then you and then you go and build it,
+[2174.0s] you test it and then you update the
+[2175.4s] specs as as you go. Um, and I actually
+[2178.1s] want to jump in. I know we're getting
+[2179.3s] tight on time, so I want to see kind of
+[2180.8s] what I asked it to read the docs and
+[2182.3s] write a test and it looks like it wrote
+[2184.7s] this test. What I'm curious is if it ran
+[2187.0s] the tests and then saw things failed.
+[2189.9s] Um,
+[2190.4s] >> it did run the test and all seven tests
+[2193.0s] passed on the first GP because it
+[2194.8s] obviously probably read the docs and the
+[2196.7s] docs were pretty good. Well, so it wrote
+[2198.6s] this and it actually wrote like key
+[2200.1s] findings at the top about the behavior.
+[2203.0s] Um, and then it ran them and it saw the
+[2205.1s] output and then it updated the findings
+[2207.0s] that explained how things work.
+[2208.7s] >> Oh, did you see? Okay, they all they all
+[2210.6s] passed but it's looking at the output
+[2212.2s] and it came in here and it actually
+[2213.8s] updated the
+[2215.9s] >> um Yeah. So, so yeah, I was saying like
+[2218.5s] unstable it's a different one. Event
+[2221.0s] stream shape matches v1 system init
+[2223.4s] assistant result success. Um, but it
+[2226.0s] throws before the first stream. Uh,
+[2228.2s] yeah. So, it found some things about how
+[2229.4s] the errors behave. So, it did it
+[2231.0s] basically like wrote the test, ran the
+[2232.9s] code, and then updated its findings.
+[2235.2s] >> That's cool. And now
+[2237.9s] >> say like cool, I have the docs. Sorry.
+[2239.8s] Go ahead.
+[2240.5s] >> This basically becomes like a really
+[2241.7s] shortcut for research. Like now for
+[2245.2s] research where you don't own the code
+[2247.0s] and you can't get it. You can do
+[2249.1s] something like this. You can just be
+[2250.2s] like, "Cool, here's how I think it works
+[2251.4s] or here's how you think it works. Go
+[2253.4s] prove it." And then we won't proceed to
+[2255.7s] implementation or planning or anything
+[2257.6s] until we've verified that this thing
+[2259.1s] behaves for the parts of it that we care
+[2261.1s] about, the surface area that we care
+[2262.5s] about. We're not going to proceed to
+[2263.8s] implementation until we verify that it
+[2265.3s] works the way we think it does.
+[2266.2s] >> Exactly.
+[2267.1s] >> Uh Josh's got a question. How do you
+[2269.1s] define back pressure?
+[2271.6s] >> So back pressure is exactly this is you
+[2273.9s] give the model a way to fix its own
+[2276.3s] mistakes. So whether it's unit test like
+[2278.4s] whether you have a hundred unit tests
+[2280.3s] and then the model makes changes and
+[2281.8s] then it runs the test and it's like oh I
+[2283.4s] broke something over there. You
+[2284.6s] basically want to like
+[2287.8s] >> reduce
+[2288.9s] >> it's it's a feedback loop for the AI. So
+[2291.7s] it's like rather than you having to
+[2293.0s] check and read every line of code or
+[2294.8s] click around a web app. It's like cool
+[2297.2s] if the compiler can find errors and tell
+[2299.4s] the model then the model can fix it
+[2301.4s] before you even look at it. It's going
+[2302.6s] to sit there and run the test and it'll
+[2303.9s] enter over and over again until the
+[2305.1s] compiler passes and then you just check
+[2306.9s] everything else. And then if you can
+[2308.8s] give it a type system, then it can run
+[2310.6s] the compiler and then it can run the
+[2312.0s] type check. I probably would run the
+[2313.7s] type checks first for most things. Uh
+[2315.9s] but then it's like cool, I don't have to
+[2317.2s] check that the types are wrong. The
+[2318.4s] model can get feedback that it's done
+[2319.9s] something wrong without you having to
+[2321.4s] spend time doing it. And so the more
+[2323.8s] layers of automated ways that the model
+[2325.8s] can run a CLI and get feedback or run an
+[2327.9s] MCP and look at it in a browser and take
+[2329.9s] a screenshot and look at how it looks,
+[2332.2s] the the less you have to be in the loop
+[2334.4s] and the more you can have confidence
+[2335.9s] that you're only reviewing the most
+[2337.4s] important things.
+[2338.6s] >> Exactly.
+[2339.8s] >> Good question. Um, so Vibb demoed a
+[2342.0s] diagram that the BAML team uses. It's an
+[2343.8s] it's an example of back pressure. And
+[2345.4s] actually there was another thing I was
+[2346.3s] going to talk about which I don't think
+[2347.2s] we'll have time for, but is like how do
+[2349.1s] you optimize for human back pressure? Um
+[2352.9s] because there's another thing we do and
+[2354.0s] maybe this will be its own episode but
+[2355.8s] like
+[2357.4s] one of the hard things for like planning
+[2359.0s] with a AI is like front end like AI is
+[2362.2s] not good at like I mean it can make good
+[2363.7s] front end but you have to like vibe back
+[2365.4s] and forth with it.
+[2366.6s] >> This is uh for context for everyone
+[2368.2s] asking like this is a diagram we talked
+[2369.7s] about and like what we do is we
+[2370.6s] basically have a dependency matrix of
+[2372.1s] every single part of our codebase that's
+[2374.0s] gets autogenerated from the codebase uh
+[2376.8s] that shows us exactly what's happening.
+[2379.0s] Yeah.
+[2379.2s] >> So then we can find bugs really really
+[2381.0s] easily. And like it's not just for
+[2382.6s] humans.
+[2383.0s] >> This is this is human back pressure, but
+[2385.2s] you don't have to read the code to see
+[2386.6s] that a boundary was broken. You're
+[2388.1s] creating a very a way that takes the
+[2389.8s] load off of the human in terms of trying
+[2392.1s] to figure out if the model has broken
+[2393.9s] any of our kind of expectations or rules
+[2396.2s] about how these systems should fit
+[2397.6s] together.
+[2398.3s] >> Exactly. Like for example, the bridge
+[2399.8s] CFFI takes a dependency on compiler emit
+[2403.2s] and that is bad. It should not do that.
+[2405.0s] Green arrow should not come into this
+[2406.4s] arrow. So that's a bad dependency and we
+[2408.7s] need to fix that. Uh and like we flagged
+[2410.6s] that
+[2411.0s] >> someone made some code and then you
+[2412.5s] generated this diagram and then you
+[2414.1s] looked at it.
+[2415.2s] >> Yeah. And we're just like
+[2416.2s] >> that's gonna help you prompt the model
+[2418.0s] on like how to do this.
+[2419.4s] >> Well, actually I'm what I'm really going
+[2421.0s] to do is that uh I'm going to add a
+[2424.1s] restriction here into this file that
+[2426.6s] says
+[2427.6s] >> hey bridge CFFI cannot import from like
+[2431.8s] it will ban imports from uh this. So
+[2434.2s] like for example I have where is this
+[2437.9s] um anyhow u I'll just tell cloud I'm
+[2441.3s] basically gonna tell cloud code
+[2443.6s] >> and this is really someone asked like
+[2446.1s] have you guys experimented with LLM as
+[2447.8s] judge for back pressure and I think it's
+[2449.7s] like this is a really important nuance
+[2451.6s] here is LLM as judge is useful in
+[2456.2s] certain cases but I think it's often
+[2457.9s] overapplied um where you have like the
+[2460.3s] the the builder and the manager and they
+[2462.2s] talk to each other and the manager gives
+[2463.7s] feedback. It's like they're both using
+[2465.3s] the same freaking model. Like, yeah,
+[2467.3s] maybe they're using different prompts
+[2468.5s] and stuff, but you could just put the
+[2469.8s] instructions from the manager into the
+[2471.4s] builder prompt. The idea with real good
+[2473.9s] back pressure is it's deterministic.
+[2476.2s] >> Like a model can read code and say,
+[2478.8s] "Hey, like this is good." You're like,
+[2480.6s] "Hey, is this code great?" And the model
+[2482.2s] will read the code and be like, "Yep,
+[2483.1s] it's good. It's comprehensive. Got unit
+[2484.6s] tests." You can ask the same model, same
+[2486.6s] system prompt, but you ask like, "Hey,
+[2488.5s] what's wrong with this code?" And it
+[2489.8s] will go find 10 things that are wrong
+[2491.2s] with the code. And so like you can
+[2493.9s] accidentally steer a model, you cannot
+[2496.2s] accidentally steer a type checker. And
+[2498.6s] so if you can give the model access to a
+[2500.8s] tool that draws deterministic like
+[2503.6s] there's no opinions, there's no
+[2505.0s] non-determinism in it. It's either right
+[2506.6s] or wrong and then give the model the
+[2508.7s] feedback about why. It gives the model a
+[2511.0s] way to check its own work without having
+[2512.6s] to rely on its decisionm which is like
+[2515.2s] we all know models make bad decisions
+[2517.1s] sometimes. They ship slop code. They do
+[2519.2s] things wrong. And just like humans, by
+[2520.9s] the way, it's not just a model problem.
+[2522.4s] It's a code problem. Code
+[2523.8s] >> this way. Humans created this for
+[2525.0s] humans. We wanted back pressure.
+[2526.9s] >> Exactly. Like if you're writing code,
+[2529.0s] you will sometimes make incorrect
+[2530.8s] assumptions. Like in this case, like
+[2532.5s] cloud code wrote the file and just
+[2533.9s] allowed bridge CF5 to import from BAML
+[2536.5s] compiler. It should not. This should be
+[2538.1s] a this should be this should be
+[2539.3s] >> Oh, the model changed the stoml.
+[2541.3s] >> Exactly. And like this is
+[2543.0s] >> put in a hook that makes it so that it
+[2544.8s] can't edit that file. Uh sometimes it
+[2547.4s] needs to. So it's not as tricky as that.
+[2549.8s] >> Really I should have done what we should
+[2551.4s] have done is we should have a code
+[2552.5s] review process that requires us to code
+[2554.3s] review this file specifically.
+[2556.2s] >> Yep.
+[2557.3s] >> Right. And that that was how we actually
+[2559.2s] solve this problem like or we put like a
+[2561.5s] or we put a rule in like our AI coding
+[2563.8s] checkers and our PR that say hey if this
+[2566.8s] file changes like these are the this
+[2569.0s] file should not really change unless it
+[2570.9s] really really really really has to. But
+[2573.0s] most things are probably bad changes.
+[2575.6s] Yep.
+[2577.2s] This is this is the high leverage thing,
+[2578.8s] right? It's like you don't generally
+[2580.3s] want to automate the checking of this
+[2582.4s] file. You don't generally want to
+[2584.1s] automate the the review of this file
+[2586.1s] because if something here is incorrect,
+[2588.5s] you have now opened the floodgates for
+[2590.3s] hundreds and hundreds of errors to leak
+[2592.2s] or like incorrect decisions to leak.
+[2593.9s] >> Exactly. So then what we do instead is
+[2596.2s] we have this file. This is small. We
+[2597.7s] look at this image. We we find this
+[2599.4s] assumption. Well, and then we also
+[2600.9s] realize the file is wrong. And literally
+[2602.6s] what I would tell
+[2603.9s] >> accounting, right? It's like you review
+[2605.8s] the file, but if you might have missed
+[2607.3s] this thing. I mean, I just saw you. You
+[2608.6s] spent five minutes trying to find where
+[2610.0s] this issue was, or a couple minutes
+[2611.2s] trying to find where this issue was.
+[2612.8s] >> But you also make it visual. So, you're
+[2614.6s] checking it in two different ways.
+[2616.2s] >> So, like what I would really do here is
+[2617.6s] I literally I'm just going to go tell
+[2619.4s] cursor to just say remove this
+[2621.5s] >> and that's like how I'm going to go do
+[2622.9s] this. And it will figure out whatever it
+[2624.2s] needs to do to make the dependencies not
+[2625.6s] be true here.
+[2627.5s] >> Cool.
+[2627.9s] >> And then this will just work.
+[2629.3s] >> RM wants to know how you're creating the
+[2630.7s] architecture diagrams automatically. Um
+[2633.0s] there's a tool in our codebase called
+[2635.4s] cargo sto that we built that does this.
+[2638.4s] Uh and like this is another thing about
+[2640.6s] these things like Dexter for example
+[2642.0s] just did this back pressure episode
+[2643.4s] where he built that tool to test the
+[2645.4s] cloud code CLI. His team invested time
+[2647.9s] to write unit test and a unit testing
+[2649.9s] framework like the pretty renderer for
+[2651.9s] example for cloud code. So he can just
+[2654.4s] easily see that the model doesn't have
+[2655.8s] to see the JSON. It sees like a
+[2657.0s] prettyified response. our team spent
+[2659.4s] time that says look at our codebase and
+[2660.8s] produce that diagram. So you can use our
+[2663.0s] cargo sto in our repo you can just like
+[2665.3s] um get it or like you can just copy and
+[2667.5s] paste it run your own stuff but invest
+[2670.6s] time in tooling.
+[2671.8s] >> Another question from Verun are there
+[2673.6s] certain steps we can add in agents MD
+[2675.8s] for back pressure um yes you can always
+[2678.6s] prompt the model well you can prompt the
+[2679.8s] model and tell it how to run the things
+[2682.5s] um but again you want the back pressure
+[2684.2s] to be somewhat deterministic. So it's
+[2685.8s] like if you directly tell the model,
+[2687.9s] hey, when you're done, run the type
+[2689.3s] check and here's how to run it. Great.
+[2691.3s] If you tell it, hey, when you're done,
+[2692.7s] run the type check, and your agents MD
+[2694.6s] has here's how to run the type check for
+[2696.1s] each package, great. Uh the even more
+[2699.3s] deterministic thing you could do is just
+[2701.3s] have a global like stop hook where it's
+[2703.4s] like whenever the agent thinks it's done
+[2705.2s] talking, you deterministically run the
+[2707.4s] checks and if any of them fail, then you
+[2709.7s] inject that gets injected back into the
+[2711.1s] model's context window of like, hey,
+[2712.4s] this hook failed with this error or
+[2714.4s] warning. Um, so lots of different ways
+[2716.6s] to approach this
+[2717.9s] >> or a pre-commit hook. A shout out to
+[2720.1s] PRE. If you don't use PR, PRE is
+[2722.0s] awesome, but a pre-commit hook, PRK for
+[2725.0s] those that don't know, but um, a
+[2726.6s] pre-commit hook is like another way to
+[2728.1s] add like deterministic back pressure.
+[2730.2s] The back pressure mechanism doesn't have
+[2731.7s] to be binary. It just needs to be
+[2733.5s] observable. That's the key.
+[2735.4s] >> The model has to be able to get tokens
+[2737.5s] in to tell it what was wrong.
+[2739.1s] >> Exactly. And sometimes that's a CLI
+[2740.8s] command. Sometimes that's standard
+[2741.9s] output. it really varies uh based on
+[2744.6s] what you're trying to do.
+[2745.3s] >> So if you look at some of the part of
+[2746.6s] the reason why like the RPI plans are
+[2748.7s] structured the way they are is because
+[2750.6s] we want to make sure that the model is
+[2752.6s] instructed exactly what to run for its
+[2755.5s] automated back pressure and then maybe
+[2757.8s] there's also some manual back pressure.
+[2759.7s] One of the things I often steer the
+[2761.4s] model to do when I'm re reviewing these
+[2763.6s] plan this one's already been executed.
+[2765.0s] You can see the boxes are checked, but
+[2766.5s] I'll read the manual verification steps
+[2768.2s] and I'll say like this is a UI thing,
+[2770.4s] but like I'll sometimes see it's like,
+[2772.0s] okay, cool. Then manually like run a
+[2773.6s] curl command against the running
+[2775.0s] service. It's like no, make that an
+[2777.0s] figure out a way to run a test like
+[2778.5s] write a test file that spins up the
+[2780.1s] service on its own port in its own
+[2781.8s] directory and then hit it with a web
+[2783.5s] request because that can be automated.
+[2785.6s] And so like you're in this constant
+[2786.9s] battle of like how do we help the model
+[2789.0s] give itself back pressure? And again,
+[2791.1s] I've said this before, the best AI
+[2793.0s] engineers I know and people even like
+[2795.0s] back in like May or June when Cloud Code
+[2796.9s] first was starting to come out and
+[2798.1s] become really popular, the people that I
+[2800.3s] was most impressed by were the people
+[2801.8s] who would spend 3 days designing the
+[2804.4s] back pressure system. Not even writing
+[2806.9s] the code, not building anything, just
+[2809.1s] understanding like okay, for the problem
+[2810.9s] I'm looking to solve, uh how will the
+[2814.0s] model be able to check its own work? and
+[2816.1s] like enumerating out the different test
+[2818.1s] cases in plain text like not design not
+[2820.7s] writing the code but designing the s the
+[2822.7s] harness and they wouldn't even really
+[2824.3s] talk about the implementation of the
+[2825.6s] system they would say here are the
+[2827.0s] checks we'll run to make sure it's
+[2828.5s] working and they would feed that to opus
+[2830.5s] run it in a loop for two days and they
+[2832.5s] would get back out like 20,000 lines of
+[2835.4s] working code because they had designed
+[2837.0s] the back pressure mechanism so they
+[2838.7s] didn't have to be in the loop
+[2840.2s] >> we got one more question which is I'm
+[2842.4s] not a big fan of albums as judge and
+[2844.9s] like or on the LM judge. I'm not super
+[2847.2s] interested in various levels of role
+[2848.5s] prompting. Don't think that works. But
+[2850.5s] something on like a gvel. Well, I think
+[2853.4s] the only place where that works if
+[2855.0s] you're doing LMS as judge is um if
+[2858.6s] you're actually simulating the exact
+[2860.2s] conversation in the way that you send it
+[2861.9s] out to the model in your main loop.
+[2864.5s] >> But if you're not sending out if you're
+[2866.1s] not using RO prompts in your main loop,
+[2868.4s] don't use ROS just to be like, hey, LMS
+[2870.6s] judge, do this thing. I do think the
+[2873.1s] user token does have a strong bias
+[2875.4s] compared to a system token in the model.
+[2877.4s] So like treat treating those as
+[2878.7s] different is useful. A system and user
+[2881.4s] also seems to have a slight bias but not
+[2883.5s] a not as strong as I think system and
+[2886.7s] user system and user seems to be like
+[2889.0s] super super to trained for right now
+[2891.1s] because of like prompt injection threats
+[2892.6s] that people are worried about and what
+[2894.1s] the big big models are worried about.
+[2896.2s] Um, so yes, you can you can do a
+[2899.1s] reviewer agent to like and we do this in
+[2900.8s] our PR flow of like go review the plan
+[2902.6s] and what was implemented and like
+[2904.3s] highlight the deviations. It's almost
+[2906.2s] always finding like oh here's a thing I
+[2908.1s] added in between two phases to because I
+[2910.6s] decided I wanted it and that's kind of
+[2912.0s] the idea of the plans are a little
+[2913.3s] flexible but you do want to document
+[2914.9s] that stuff and so like yes you can have
+[2916.4s] an agent kind of review the
+[2917.8s] implementation and make sure all the
+[2919.3s] things in the plan were done according
+[2920.7s] to spec. The key thing to note there is
+[2922.6s] again if you remember that diagram that
+[2923.8s] I showed earlier of like too much
+[2925.3s] planning too little planning like you're
+[2928.2s] just making trade-offs on speed and like
+[2930.1s] what you speed versus accuracy is like
+[2932.2s] fundamentally that's always the
+[2933.4s] trade-off that you're making and like I
+[2935.9s] don't think there's a perfect I
+[2937.2s] personally don't think there's a perfect
+[2938.5s] answer there between like
+[2940.2s] >> do you do you always do the perfect
+[2941.8s] planning or do you always do like
+[2943.3s] oneshot and anyone I think that tells
+[2946.5s] you that they're oneshotting everything
+[2947.6s] is lying or producing totally garbage
+[2949.6s] code. there's just no way. or they're
+[2951.8s] doing or they're doing totally
+[2953.0s] uninteresting things like they're not
+[2955.2s] writing any piece of software that is
+[2956.6s] interesting because fundamentally if
+[2959.0s] you're doing interesting things they are
+[2960.1s] hard and that probably means you made
+[2962.0s] some design decisions that are incorrect
+[2963.5s] at some point
+[2965.4s] and if you're not make if you're always
+[2967.5s] making correct design decisions you're
+[2969.0s] either a goat and we have a couple of
+[2971.2s] those in the form of Linux uh creators
+[2973.8s] git creators people that that have made
+[2976.4s] things like um Typescript and C like
+[2979.9s] Anders is a few of them. There are a few
+[2981.9s] goats in the world, but most people are
+[2983.3s] not goats and like and like you should
+[2986.8s] just keep trying and like keep assuming
+[2988.8s] you'll make mistakes and keep exploring
+[2990.4s] different ideas.
+[2991.4s] >> For most of those people weren't born
+[2992.9s] goats. They did it because they gr they
+[2994.9s] were grinding for years to develop the
+[2997.4s] instincts.
+[2998.4s] >> Yeah. So like and the best part now is
+[3000.4s] you have to spend zero time waiting for
+[3002.2s] the code to be written. You literally
+[3004.4s] just say I'm going to try this idea and
+[3006.4s] do it away. Sometimes what I do is I'll
+[3008.1s] implement something. I'll literally have
+[3010.3s] two repos open at the same time and I'll
+[3012.2s] be working on implementing the same
+[3013.5s] thing in like two different strategies
+[3016.0s] in one approach and like planning in the
+[3017.8s] other and I will just go do that and
+[3020.6s] like through the process of doing that
+[3022.2s] I'm literally exploring both state
+[3024.3s] spaces of bugs really fast
+[3026.9s] >> and that is like super interesting. No,
+[3029.2s] I mean people love codeex 5.3. It's like
+[3031.3s] it's slow, but it's like I'll kick off a
+[3033.1s] like opus based like planning design
+[3035.5s] structure session. In the meantime, I'll
+[3037.1s] be like codeex 5.3 go try to solve this
+[3039.8s] like just based on the ticket. And like
+[3042.3s] >> it's all about learning the solution
+[3044.1s] space and like what's what's possible
+[3046.0s] and like that changes every month.
+[3048.6s] And so like if you're not put I don't
+[3050.6s] know, Uncle Bob used to have this thing
+[3052.2s] of like what it means to be like a truly
+[3054.0s] like professional software engineer. I
+[3056.2s] don't know if I like that word, but his
+[3057.6s] basic recipe was like if you're working
+[3059.5s] a 9 to5, you give 45 hours a week to
+[3062.6s] your employer and you spend 20 hours a
+[3065.4s] week for you
+[3066.8s] >> honing your craft, improving your
+[3068.5s] skills.
+[3069.2s] >> I agree.
+[3069.7s] >> Um doctors and lawyers don't like clock
+[3072.6s] off and then go home and watch t like
+[3074.4s] they're reading journals, they're
+[3075.8s] reading papers. It's all part of their
+[3077.2s] profession is like there is an extra 20
+[3079.5s] hours a week where you're spending
+[3081.0s] keeping up with what's important, what
+[3082.8s] works, what new things are happening.
+[3084.6s] >> Well, yeah. if you if you want to grow
+[3086.2s] in the domain and like there's no harm
+[3087.8s] if you don't like to be fair like
+[3089.9s] trade-off in life but like if you want
+[3091.9s] to if you want to hone the craft you got
+[3093.3s] to put those hours
+[3094.0s] >> I assume you're here because you want to
+[3095.7s] hone your craft
+[3096.4s] >> that's true assumption
+[3098.5s] >> we are talking to a special kind of a
+[3100.2s] group of folks
+[3102.5s] >> but regardless this was really fun to
+[3104.6s] share thank you for sharing I love how
+[3106.1s] you put a coin to term to stuff that I
+[3109.0s] hope people are doing today and like
+[3110.9s] maybe not doing more actively
+[3112.3s] consciously next time they do it they
+[3114.3s] can hopefully telling a model or a
+[3116.2s] coding agency, do this more
+[3117.6s] deliberately.
+[3118.4s] >> Yes. Do it deliberately. Steer the
+[3120.2s] models to the things you want. You can
+[3121.8s] do anything. They can do anything. Find
+[3123.4s] the things that they're really freaking
+[3124.8s] good at that's high leverage. And uh
+[3127.4s] yeah, happy h happy hacking, folks.
+[3129.8s] Enjoy.
+[3130.6s] >> Next week, we're going to talk about how
+[3132.1s] we actually run a lot of the AI behind
+[3134.2s] the show, such as like uh all the
+[3136.5s] content generation, some of the uh like
+[3139.1s] clip selections, the highlight reel
+[3140.7s] selection, the email generation, how we
+[3142.7s] get tone perfectly right. We've got a
+[3145.0s] fun little automation workshop that I
+[3146.5s] think will be fun. And we'll have Kevin
+[3147.8s] joining us, uh, who's been doing a lot
+[3149.7s] of the stuff for us behind scenes.
+[3151.0s] >> Legendary producer Kevin, uh, has been
+[3154.6s] doing incredible things behind the
+[3156.1s] scenes. I'm really excited to see how
+[3157.4s] some of it works.
+[3158.7s] >> All right, goodbye everyone.
+[3160.6s] >> Thanks, everybody.

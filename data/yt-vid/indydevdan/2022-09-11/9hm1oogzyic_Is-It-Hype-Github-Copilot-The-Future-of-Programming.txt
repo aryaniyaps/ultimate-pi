@@ -1,0 +1,348 @@
+write a string to a file i'm going to
+start typing the definition already you
+can see based on the comment ghetto
+copilot has completed this function for
+me these aren't code snippets i'm not
+running macros this is an ai coding
+assistant that is looking at what i'm
+doing and making predictions on what i
+want this is really cool because i have
+written just three comments and hit tab
+a couple times and i have 18 lines of
+code what's up guys today i want to talk
+about github copilot i want to answer
+the question is it hype this will be the
+third video in the is it hype series a
+series where i try out new and existing
+technologies to determine if they're
+actually useful for developers like you
+and i so is github copilot hype does it
+live up to the expectations is it useful
+is ai pair programming everything that
+it's summing up to be first off let me
+go ahead and just answer the question
+yes i've been using github copilot for
+about a year now and i can tell you that
+my productivity has gone up drastically
+github copilot is so good that i think
+there'll be a gap between engineers who
+know how to use ai programming
+assistants and those who don't in this
+video i'm going to show you how github
+copilot can take your developer
+productivity to the next level let's get
+into it alright so we have an empty
+python file here i have an empty
+directory here
+and what i want to do here is just write
+to a file so i'm going to type a comment
+and i'm just going to say write a
+string to a file
+i'm going to start typing the definition
+and already you can see
+based on the comment
+ghettocopilot has completed this
+function for me these aren't code
+snippets i'm not running macros
+right like this is an ai coding
+assistant that is looking at what i'm
+doing and making predictions on what i
+want that's pretty cool so now we have a
+function that we can write to a file
+let's let's keep going right how well
+can github copilot really listen right
+so let me drop another comment right
+create a
+list of objects with three
+key value pairs
+of different types
+and interestingly you can see that
+as i'm typing i was typing different and
+it actually guessed that i wanted to say
+different types so it's already
+inferring
+what i want to see so let me just hit
+enter here
+sure we'll make it a function i'm fine
+with that
+okay
+and as you guys can see
+create lists it's so it's creating a
+list with three items in it
+and they all have uh
+they all do have different types right
+because we're gonna end up with a float
+here so that's really interesting that's
+really cool all right so let's keep
+going right so let's uh let's let's
+run some operations right so let me
+create a list
+you know let me
+generate my list here and now i want to
+um you know let's keep pushing get up
+co-pilot say i want to change the name
+right so that's something you do often
+like string modification
+so i'll write a comment here i'll say
+you know
+um
+for each item in the list
+update
+the name to uppercase
+[Applause]
+and write to
+a file
+right so kind of combining things here
+seeing if github copilot can keep up
+okay so got the for loop
+and
+it is uh
+it is doing the work for me
+right so keep in mind brett this is this
+is really cool because i have written
+just three comments and hit tab a couple
+times
+and i have 18 lines of code and this is
+just in within some four minutes
+right so you can see this you can see
+copilot really helping you out here as
+you build out you know
+large code bases as you work through
+hundreds and thousands of lines of code
+um
+you know the prediction isn't perfect i
+will say you have to you have to be
+looking at what co-pilot is generating
+for you but overall it is incredible
+at
+at get guessing what you want next based
+on the context around it all right so
+what else can we do with this let's run
+it right let's make sure that this
+actually runs so let's go ahead and run
+you know python main
+it ran fine no errors and look we got a
+a bunch of files generated and if you
+walk through the code
+you know we have this running exactly
+right so i have a right to file function
+create list and i'm getting
+a list with the name key value pair
+where the name is
+name
+plus the index getting generated i
+create this list called the function
+loop through and i upper case the name
+as you can see in the output
+it's calling my right to file function
+and if i step in to these items you can
+see that it just threw a string
+it wrapped the dictionary in the string
+call and that's going to give us this
+output
+so pretty incredible pretty incredible
+let's look at a node.js example and then
+i want to show you an example of how i
+use github copilot in my new application
+that i'm writing okay so now i have all
+right so i have express.js and you can
+probably guess what i'm going to try to
+do here i want to see if github copilot
+can generate an express.js application
+for me on the fly i'm just gonna type
+generate
+generate express
+app
+[Music]
+okay so so this is interesting right so
+it is generating an express app
+but you can kind of tell in this case
+github copilot is literally just reading
+from a
+like a
+an existing express js app and just
+guessing at all the different things
+that i want to do with it right it just
+keeps importing keeps setting up
+services you have to give github copilot
+some direction sometimes so let me be
+more specific here
+generate a small
+express app
+okay
+perfect
+so you know with a little more direction
+i literally just added the word small it
+knows what i want right i just wanted to
+spin up a tiny express js application
+now i want to show you an example of
+github copilot inside of an application
+that already has code written in it so
+i've opened up my application that i'm
+building called timeva feel free to
+check out my previous videos i'm in the
+process of launching time the v2 it's
+the second version of the application to
+help you manage your productivity so
+this is a real application the
+application is an electron vue.js
+typescript application and i'm using
+pina js as my store
+and i'm going to show you how github
+co-pilot can jump in here and help write
+mutations in my store
+with very very minimal work so let's
+jump into this so we have the store and
+check out my video on pinot stores if
+you're interested in that but long story
+short is we have state getters and
+actions actions are your mutators so
+what we're going to do is we're just
+going to kind of make up a new mutation
+based on some of the state i already
+have existing in the store
+and we're going to let github copilot do
+the work for me so
+what i'm going to do is i have this
+function that increments uh an
+occurrence of this
+object and what i'm going to do is just
+create the opposite right i'm going to
+create decrement so i'm just going to
+start typing here decrement
+tag occurrence
+and so it's starting to you know
+create and generate the code for me
+it's looking around and it's seeing that
+it's already done a version of this
+and
+there it is
+okay
+so you know this is one of those cases
+where like the code was right above and
+it's a decrement so you just minus minus
+but it can get a lot more complicated
+than that and you want github copilot to
+do these things for you
+okay so for instance let's just jazz
+this up a bit right let me create an
+arbitrary function replace activity tag
+right
+okay i want a tag and a tag to replace
+so i'm going to give github copy some
+more information here
+exactly new tag
+okay and it's going to call it looks
+like wow yeah just
+okay so it's coming here with the splice
+function
+it's just going to go ahead and find the
+index of this
+and cut one item and replace it with the
+new tag so just like that
+github copilot jumps in takes control
+and writes what i want to do
+i think the key thing you need to keep
+in mind with ghetto copilot is that you
+need to know what you're trying to
+accomplish i would never give get a
+copilot to an amateur programmer that
+doesn't know what they're trying to
+build or do when github copilot
+generates bad output it will cause bugs
+i've had cases where i'm just glossing
+over it not looking at the output of
+github copilot and i've created issues
+for myself so when you try this out
+definitely watch the code that's being
+generated github copilot is not going to
+replace engineers it's going to help
+engineers that know what they're doing
+do it faster okay i want to show you one
+more example inside the time of
+application
+let me undo all this
+and
+let's hop into all right so let's check
+out this file i've used github copilots
+to generate basically every function in
+this file previously so you can see here
+i have a bunch of converter functions
+that basically take um seconds and
+converts them into a different format so
+for instance this function here will
+take
+seconds and convert it into a minutes
+hour display with the shorthand format
+so what i'm going to do here is
+basically create a new function that
+does exactly this but in a different
+format so we're gonna see how well
+github copilot can look at my comment
+analyze what i'm looking for and then
+generate the function so all i'm gonna
+do here is come to the top and say
+converts
+converts time in seconds to
+i want this in let's see what what
+format let's do something kind of weird
+i want uh one hour
+and
+two it's really interesting it's it's
+even guessing formats for me which is
+really cool
+um
+one hour let's let's get tricky with it
+so i want 15 min
+right so this shorter format and then i
+want
+um 30s
+format right so it's very inconsistent i
+actually don't know if github copy will
+be able to pull this off so let's see
+okay let me change the name of this
+function i think this is a dupe
+um and i want to return a string here
+actually so you know sometimes it
+doesn't always generate the right output
+you have to give it some more
+information by just continuing to to
+code the thing that you're trying to see
+so seconds
+um
+long hour
+medium minute
+short second i don't know weird function
+name but whatever
+all right so it's
+first of all it's it's getting the hours
+minutes seconds
+and now it's
+now it's trying to generate some outputs
+and you can see here get up copilot
+actually fails to generate the output
+that i want to see right but
+even when github copilot fails it still
+gives you a lot of information to work
+with right like i can come in here and
+just change this
+hour
+min
+second and now it's complete right so
+even when get out co-pilot fails it's
+still giving you output and it's still
+saving you lines of code we're just
+scratching the surface of what github
+copilot can do github copilot is hype
+download it try it out it's going to
+make you a more productive engineer a
+couple things you have to watch out for
+don't over rely on it and make sure you
+know what you're trying to do before you
+ask github copilot to generate code for
+you huge thanks for watching the video
+give it a thumbs up and subscribe if you
+enjoyed it it really helps out the
+channel and i'll see you guys in the
+next one
+[Music]

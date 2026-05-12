@@ -1,0 +1,748 @@
+what's up Engineers welcome back Andy
+Deb danan here 12 days of open AI went
+out with a bang they announced 03 and
+Next Generation Benchmark breaking
+reasoning model Google's Gemini 2.0
+flash is very clearly absolutely cracked
+and it's still 100% free the sleeping
+giant has awoken I have no idea how
+Google is able to offer this at scale oh
+wait I do they're rich and they want to
+get developers like you and I on their
+side not going to lie it's working
+meanwhile we have anthropic to me they
+seem like the cool guy in the corner at
+the party having a good time like it
+knows something everyone else does not
+I'm confident we'll see something
+absolutely insane out of anthropic
+relatively soon last but not least of
+course we have Lama 4 right around the
+corner it's going to have multiple
+releases really really excited for this
+tons and tons of models released are
+fine tunes on top of the Llama series
+with these next generation models right
+around the corner the question for you
+and I as engineers and product Builders
+Remains the Same how can we use as much
+compute as possible with powerful models
+and the best AI coding assistance and AI
+tooling to build tons of software at
+higher rates than ever while maintaining
+high quality in this video I want to
+showcase a powerful promp chain built
+into my favorite AI coding assistant AER
+this promp chain is called architect
+mode architect mode is simple it's a
+prompt chain of length two where you
+have one model that drafts your code
+second model is the editor the editor
+takes the draft from the architect and
+generates real working code this
+workflow is the best way to understand
+what's coming next a topic we'll discuss
+more in this video with all the hype
+around Gemini 2.0 flash I thought it
+would be cool to pit it up against the
+reigning Undisputed Champion Claude 3.5
+son it in this video we're going to boot
+up two AI coding assistants and see if
+Gemini 2.0 flash can code like the
+champion near the end of the video I
+have a massive announcement and a new
+opportunity for you I'm insanely excited
+to finally release if you ride code with
+AI stay tuned so you don't miss
+that what are we working on to show off
+this powerful prompt chaining technique
+using AER let's open up vs code let's
+break down what's happening here so on
+the left I have an AER setup command
+that is going to start our AI coding
+assistant in architect mode where we're
+running two models the architect is
+going to be Gemini 2.0 Flash and the
+editor is going to be Gemini 2.0 Flash
+the model is effectively talking to
+itself one time it's thinking the other
+time it's editing and then on the right
+we have that exact same thing with the
+reigning Champion the best llm for AI
+coding hands down the only exception to
+this now is the brand new 01 series
+that's slowly rolling out we're going to
+be covering that on the channel in the
+future yes always this is going to
+accept the architext changes anytime
+they're suggested and then we have a
+brand new loading feature out of Aer
+that lets you save and reload sets of
+context all I'm going to do here is copy
+this paste it inside a terminal and what
+you'll see here is AER will boot up in
+architect mode and it will add every one
+of these files in this .or file to the
+context we're going to do the exact same
+thing on the left side so we're going to
+boot up Gemini and you can see we have
+the exact same context if we type SL
+tokens Gemini 2.0 flash is completely
+free with a million tokens in available
+context window if we run tokens on the
+red side claw 3.5 Sonet of course has a
+price tag to it we're running at about 1
+cent per prompt this is of course well
+within the bounds of what we're willing
+to pay to get a lot done in fraction of
+the time it used to take so here are two
+sets of models we're running two Geminis
+on the left and two Cloud 3.5 sonets on
+the right so this is great we have our
+AI coding assistant but what are we
+actually updating what is this code what
+are these files I have this project that
+I've been building up is a personal
+knowledge base for your AI agents this
+is going to become more relevant we're
+going to talk about this code base more
+on this channel in 2025 but you can see
+here you can do a couple very simple
+things you can add arbitrary content
+list all of your cont content you can
+find similar content via embeddings
+remove content and back up the database
+everything here runs on a private local
+SQL light database if we open up the
+terminal we can easily run one of these
+commands let's go ahead and run our list
+command we just have a couple of items
+so what are the changes we're going to
+make right we have this personal
+knowledge based system that we're
+building up what are we going to add to
+this so we need to add a couple new
+commands and we're going to do that by
+firing a large spec prompt so what is
+the spec prompt it is essentially a plan
+for the work you want done it's a
+specification document except this
+specification document is built for your
+AI coding assistance you can see here we
+have four sections the headline of the
+changes we want changed the objective
+context and low-l tasks so the objective
+is of course what we want changed at a
+high level you can see here I want to
+add these three new commands I want the
+ability to quickly add YouTube scripts
+so pull down YouTube videos get a
+transcript for the YouTube video and
+then save that into the knowledge base
+this will help me run arbitrary queries
+and prompts on my existing YouTube
+content we also have ADD site basically
+you scrape down a website and then you
+store that in your personal knowledge
+base and then we're adding a Syle
+command this is just something that's
+missing from the knowledge base if we
+open up main you can see all of our
+current commands if we collapse add
+remove list similar and backup this is
+going to give us the ability to grab a
+knowledge based item by ID what's
+context context is of course every file
+file you need to get the change done you
+can see how this spec document is
+starting to drill in to the changes and
+detail out more information for AI
+coding assistant if we go back to our vs
+code Windows you can see we've added all
+of those files into our AER instances on
+the left and on the right we're almost
+ready to run this prompt the last thing
+we need to look at is of course the
+lowlevel tasks what I have written here
+is a list of prompts so a whole set of
+information Rich prompts I'm not going
+to go into much detail here of how this
+works I'll add some links to how some of
+this stuff works in the description but
+effectively what we have in our low-l
+tasks is a list of prompts that our AI
+cing assistants can execute top to
+bottom to get the work done you can see
+there's more detail in here than you're
+probably used to I'm writing very
+accurate very precise AI coding prompts
+we'll talk more about these prompts in
+the future on the channel so let's close
+everything and let's execute this
+spending all this time explaining this
+let's go ahead and fire this off we'll
+open up VSCO I want to measure success
+in the most blunt forward way the only
+thing that really matters of course I'm
+being a bit reductive here but there are
+only three things that really matter as
+a software engineer first did you
+accomplish the task two how much time
+did it take you and lastly what did it
+cost we're going to judge our two AI
+coding assistants by the same metrics so
+let going go ah and pce this in both
+sides here so after this prompt runs we
+fully expect to be able to run these
+three commands on both code bases
+without flaw so here we go on the left
+we're going to run Gemini on the right
+we're going to run Sonic we want to know
+if they built the three features we
+asked for the three new commands how
+quickly they did it what it cost
+obviously Gemini wins automatically on
+the cost but let's go ahead fire these
+off and check out the
+results okay so right away you can see
+flash is Off to the Races so right now
+both aing assistant they're in architect
+mode so they're just drafting all the
+changes that need to happen here um you
+can see on the left here Gemini flash is
+quite a bit faster the architect just
+finished now the editor is going on the
+right Sonet just finished the architect
+just finished and now the editor model
+is firing off on the right side I think
+Sonet no no I think I think flash is
+coming up to the finishing line here um
+it's writing tests we have a prompt for
+writing tests in there um let's see
+where is Sonet right now Sonet is oh man
+Sonet is updating the read me okay so
+son it actually finished a little bit
+faster no so flash has finished now they
+both ran into linting errors I have yes
+always so they're going to both
+automatically fix the linting error
+let's see how they perform here so Sonet
+is Sonet is finished Sonet has finished
+first I'm actually quite surprised Here
+and Now flash is finished okay so that
+was exciting a lot of stuff happened
+there if we just analyze the results
+here this costs us a total of 12 cents
+for this session and there's no cost for
+flash so on speed surprisingly son it
+won I think it won because it received a
+much fewer tokens um I think on a token
+by token basis flash would have won but
+let's go ahead and actually see if our
+AI coding assistants accomplished the
+task right this is the most important
+thing if they haven't accomplished the
+task we asked them to complete then all
+the other side metrics like cost and
+speed don't matter at all so let's go
+ahead and see if we can run our new
+knowledgebase command so what I'll do is
+I'll open open up new terminals on both
+sides if I type get status you can see
+all the changes that are model made here
+and get status on the left side here
+same deal right just clear this let's go
+ahead and start with sonnet so if we
+open up main we should be able to see
+all of our new commands all collapse and
+you can see we do have three brand new
+typer methods let's go ahead and run our
+add YouTube script method so we also
+asked for usage docs so we have this
+exact command that we can just copy out
+and run what we expect here is a new
+knowledge based item with this YouTube
+script and if we just open this up you
+know this YouTube script is going to be
+I want to share my our AI engineering
+2025 plan max out compute super relevant
+this is the video we want to pull the
+transcript from so I'm going to copy
+nearly all this command I'm going to
+start from the python since we already
+are running in a virtual environment
+I'll paste the send so let's see if our
+Sonic 3.5 prompt chain completed our ad
+YouTube script command for us
+automatically so this is good as
+thinking we do get this bad recognized
+option so we do get an issue here all
+I'm going to do here is copy I'm going
+to copy the entire output here typer
+gives us a nice output block here I'm
+going to come back to our air coding
+assistant I'm just going to paste this
+in so I'm giving Sonic one shot to
+correctly resolve the issue so I'm going
+to hit enter there and then we're going
+to move over to the left side so let's
+see if Gemini properly wrote that
+command so if we do the same thing we go
+to main while our Claude and is running
+on the right um let's go ahead and
+collapse and let's see our commands here
+we do have git at the top add YouTube
+script and then we have ADD site so this
+looks good let's open this up we do have
+some nice usage docs from the Gemini
+flash model let's go ahead and see if
+this command will execute for us so same
+deal and let's see if Gemini created
+this command properly for us okay so we
+ran into an issue right away definitely
+disappointed here I'm going to copy all
+this and do the same thing we're going
+to give both Gemini and Sonet a chance
+I'm just going to come to the instance
+I'm going to paste this in execute let's
+hop back over to our Claude AI coding
+assistant in architect mode and let's
+just rerun to see if it resolved the
+issues it had so I'm just going to hit
+enter here and let's see if it can get
+it right okay fantastic so you can see
+we have added YouTube transcript 12
+let's go ahead and test the new git
+method right so we should have this new
+git command here let's let's open this
+up and let's go ahead and fire it off so
+you can see here we created this new
+YouTube transcript with id2 let's go
+ahead and just run git with id2 so if we
+hit enter here wonderful so we can see
+our new git command gave us back that
+exact instance if we open this up here
+you can see we have this transcript so
+this worked really really well so we
+have one more command to test here for
+our Claude AER prompt chain running in
+architect mode and that is going to be
+our site method so let's go ahead and
+see add site just copy this from python
+so you can see here python main.py add
+site and we're going to pull from the
+anthropic research building effective
+agents blog post if we click into this
+we can see exactly what this looks like
+there's a great rundown um a lot of the
+ideas discussed here we have discussed
+on the channel of course building blocks
+workflows agents we can search prompt
+chains you know this is a really popular
+idea we have and quite literally are
+discussing right now great posts it's
+weird cuz it kind of feels like you know
+on the channel we've discussed so many
+of these ideas long ago frankly but it's
+cool to see this collected by a you know
+big player in the a agent space so this
+is great so anyway so let's go ahead and
+use this URL and let's see if our Sonet
+instance was able to build up this
+command end to end right and you can see
+some of the details here right we
+download the site generate embeddings
+and then we run our ad KB row command
+which inserts it into our sqlite
+database and so let's go ahead and fire
+this off and let's see if we can add
+this new site to our personal knowledge
+base no issue so far that's a good sign
+so we're probably scraping right now
+generating embeddings and there it is so
+added website content at id13 if we just
+type our list command here U main list
+and we actually need to drop UV there
+since we're already in a virtual
+environment we can just fire this off
+and we should see both our website and
+our um new site content so that looks
+good let me actually just go ahead and
+use the git command that we were just
+using and this is going to be ID3
+fantastic so check this out so we have
+the markdown formatted version of
+anthropics agent post right so this is
+fantastic it's it's working perfectly we
+have this inside of our knowledge base
+and we can use some quick similarity
+search if I just highlight workflow
+routing and we have this similarity
+Search Command here I was using it
+earlier we just clear this out paste
+this here it's going to be the top hit
+so we're looking for the similar items
+with this text and you can see there
+that is of course our top hit so we got
+that knowledge based row returned
+immediately so this is fantastic we had
+one issue here with the Claude 3.5 Sonet
+prompt chain running in AER in architect
+mode but overall the changes went
+through you know we can see we can do a
+get diff here and if we want to we can
+even run get diff and then write the
+diff to a file so def. text and then we
+can see exactly how much was changed
+here right so you know about 2,000
+tokens worth of file change
+so this is fantastic um we should have a
+readme update as well yeah so we have
+this readme update which is really cool
+part of our spec prompt asked for
+changes to the read me so you can see
+here um we have new documentation around
+adding YouTube content adding website
+content and getting content by ID so you
+can see we have great usage documents
+here let's switch back over to our
+Gemini flash AI coding assistant and
+let's see if it was able to correct the
+mistake it had let's go ah a and just
+open this up a little bit more too the
+issue happened on the add YouTube script
+call so we'll just hit up and let's see
+if this issue was resolved so let's run
+this okay uh same deal let's give it
+even more grace we'll copy this and
+again we'll let Gemini flash attempt to
+fix its issue it runs really quickly but
+it seems to get things wrong from time
+to time um to be fair this is a three
+feature spec prompt where we're asking
+for three changes right we want three
+concrete things modified so there's room
+for confusion for a large language model
+but it's pretty clear even with this
+small AI coding sample here you know
+it's taking us an additional AI coding
+prompt uh to get Gemini flash where
+Sonic 3.5 is so let's go ahead and just
+rerun this again let's see if Gemini
+flash has resolved its issue this is
+good it's taking some time to load here
+added item 12 that's looking good so far
+let's go ahead and look for get there it
+is we have our new git command so it did
+successfully create this you can see we
+have that new git knowledge based row
+function call and if we open that up you
+can see here diving into the layers of
+this code base we also have that called
+there so that looks great let's go ahead
+and run this so we'll copy this command
+from the python and this is item 12 so
+let's see if we can get item 12 from our
+knowledge
+base fantastic you can see we have that
+entire YouTube transcript from that
+video we were able to add this to our
+knowledge base right so this looks great
+we have one more command to run here on
+the Gemini flash a coding assistant code
+base let's look at add site method here
+everything looks relatively good let's
+copy this paste let it run right now
+it's scraping the site so that's good it
+got to that point so if we run the git
+for item 13 so let's just quick search
+git update this to item 13 we should see
+that anthropic building effective agents
+blog post nice and we can go ahead run
+that again and save this to a file we
+can say um AI
+docs building F uh agents and throp and
+markdown right so we can run that again
+and now we have that loaded out of our
+knowledge base we should have this new
+AI dock here and you can see we have
+that post from open AI exactly if we
+search prompt
+chain you can see that exact
+same uh search here from the site right
+so really really cool to see these two
+models perform up against each other
+it's pretty clear that flash it's a
+great model it's free there's a lot of
+intelligence there it definitely is not
+on par with cl 3.5 Sonet but it is still
+a fantastic model so you'd be surprised
+how many times I've done this I run a
+large prompt in a code base and then
+I'll revert the code base duplicate it a
+couple times and see if another set of
+AI coding assistants with different
+models can get to that same place in the
+exact same amount of time speed cost so
+on and so forth so you know jury Zen um
+Claude ran the fastest it made fewer
+mistakes right it made two fewer
+mistakes than Gemini and it did cost so
+we're going to give Claude two points
+Gemini did not run the fastest it had
+two additional errors but it was free
+right and we did get there eventually to
+be fair so we're going to give Gemini
+one point this is just a simple
+comparison these models are both great
+we still need to see a little bit more
+juice coming out of Gemini in order for
+it to be on par with Sonet uh for the
+longest time Sonet has been on the top
+of the leaderboards it is the most
+effective model for the most use cases
+but that is definitely changing with the
+release of 01 through the API which
+we're going to be looking at in upcoming
+videos and of course 03 mini and 03 so
+it's going to be super super wild to see
+you know model combinations and models
+like this roll out in the future I
+wanted to share aer's architect mode AER
+and prompt chaining again here with you
+just because it's going to be a very
+important pattern as we get access to
+more powerful models and we start really
+building out our AI agents and agentic
+workf flows in 2025 I highly recommend
+you read through anthropics blog post
+here it's a lot of what we've talked
+about in the past but when a big company
+backs up everything we've been talking
+about on the channel and writes about it
+in detail you know that tells you a
+things uh on the channel we are on the
+right track we have been for a while and
+we're going to continue with that Trend
+but also there's a lot of really key
+ideas here one of them being prompt
+chaining that's going to be increasingly
+important as reasoning models allow us
+to plan and execute large amounts of
+work you know just to kind of call that
+out explicitly here again this spec
+prompt um detailed everything I wanted
+done in detail right that change pushed
+out uh tokens on both Gemini and Claud
+3.5 sonit in a very very kind of precise
+way across multiple files I mean you saw
+that context window right which is you
+know not something I normally suggest
+unless it's required by the change you
+have we have over 10 files here and you
+know on both sides we edited over 2 or
+3,000 tokens changed how were we able to
+do this we're able to do this by scaling
+our efforts with a larger prompt right
+this is a theme that's going to be
+really important as we move into 2025
+the amount of work you can hand off to
+your AI tooling is going to increase as
+models improve so that means we need
+better patterns like the spec prompt to
+allow us to pass off more work to our AI
+coding tools and our AI Tooling in
+general this technique and other AI
+coding techniques and the speed and Pace
+in which AI tools and models are
+improving and increasing it's all part
+of the reason why I created something
+I'm really excited to share with you
+right now this has been a long time
+coming I want to introduce you
+to principled AI coding principal AI
+coding is my take on the best way to
+learn AI coding for 2025 and Beyond the
+whole point the whole theme with this
+course is to learn principles of AI
+coding that will help you you know not
+just stay relevant but Excel with the AI
+coding tools of today and tomorrow okay
+so this is my official AI coding course
+link is going to be in the description
+for you uh the theme here is really
+simple you can read through this but
+I'll just scroll down to kind of the key
+takeaway um here right AI coding is the
+new standard so 2024 I think is the last
+year where if you are not using AI
+coding tools it's fine it's it's going
+to be okay I can no longer say that with
+confidence this is going to be the
+fastest way to fall behind and deprecate
+your career this is a course built for
+Engineers this is engineering focused
+and the entire goal of this is to really
+address the fact that we are hitting
+that threshold point where if you're not
+engineering with AI you are not
+engineering just plain and simple full
+stop so I created this course to help
+you and other Engineers not just survive
+this transition but to thrive in a
+principled based way this is not a
+course about a specific tool or a
+specific model but this is really about
+the underlying principles of AI coding
+of software engineering with language
+models and AI coding assistant that's
+the focus for this entire course and it
+centers around mastering the big three
+the context prompt and the model if
+you've written code with AI you likely
+already know this is what matters your
+context model and your prompt this is a
+theme for generative AI you want to
+collect context select the mod model and
+create prompts and then hand off all the
+hard work to your AI coding assistant
+there's a lot of value here it's
+available to you um just to quickly go
+over what's in the course we have eight
+lessons in here so we're going to start
+from beginner move to intermediate and
+then end with Advanced I can only do
+this in course form because I have
+enough time I have the flexibility and
+the control to really create a guided
+experience for you so this is all here
+um I think the price is great you know
+we all want a good deal from someone we
+trust get in here early the price will
+go up I am putting this at the end of
+the video here for you know the true
+viewers of the channel the you know the
+die hards you know I want to give you
+guys a big thanks so we just crossed 30k
+Subs last week I think and YouTube let
+me know that we hit uh 1 million views
+in total just the other day which is
+absolutely insane so again I just want
+to say thank you I want you to have this
+course at the best cheapest price before
+it goes up there are some pretty
+bleeding edge ideas here they were
+likely going to become mainstream as
+people start taking the course and
+sharing some of the key ideas here so
+anyway I don't want to preach on this
+too much a lot of YouTubers a lot of
+content creators they go the sponsorship
+route but you know that doesn't feel
+real to me and I don't want to give you
+something that I wouldn't want Myself by
+creating this course by owning you know
+the IP by owning the ideas behind this
+and being able to share it with you I've
+created content 100% relevant to the
+channel and to engineers and to you know
+you and I this is the course that I wish
+I had when I started AI coding two years
+ago now once you sign up the dashboard
+looks like this super clean super simple
+you'll be able to see all of your
+courses your course progress you'll be
+able to uh you know leave a review
+report any issues you see ask questions
+so on and so forth you'll start out with
+the first three lessons unlocked and
+then once you cross the 50% threshold
+you'll unlock the next lesson and the
+next and the next and the next all the
+way till the end um this is principal AI
+coding this is my take on teaching AI
+coding in a indepth principled way where
+we don't just focus on the tool we focus
+on the principles underneath the tool
+principles not
+tools I think if we look at the
+ecosystem at a high level what we're
+seeing is new series of models new
+reasoning capabilities we see 03
+completely smashing and just saturating
+benchmarks just d destroying benchmarks
+into ashes for us you know I want to
+Full Circle back to the beginning here
+and talk about the question that I think
+about every single day now how can I use
+as much compute as possible with
+powerful models and the best AI tooling
+AI coding assistants to build more
+software at higher qualities faster than
+ever right that's that's where my head's
+at right you want to be solving more
+problems higher scale higher rate with
+these powerful models right we have the
+old1 series we have the new Gemini 2
+Series we're going to have llama 4 soon
+that's going to shatter the open source
+ecosystem once again and kind of reset
+it and then of course we have whatever
+anthropic is cooking up so our potential
+is limited by what we can do with these
+incredible tools language models are
+superpowers now the question is how can
+we access them how can we tap into them
+and for AI coding specifically that is a
+big part of why I built principled AI
+coding toward the end toward the
+advanced lessons the question is really
+about unlocking as much compute as
+possible learning to build context the
+right way so that we can pass off as
+much work as possible to our AI coding
+assistant this is a huge theme as we say
+AI agents roll out more and more this
+theme will continue long video today I
+hope you enjoyed it I hope you
+understand where things are going and I
+hope this technique you know prompt
+chaining AER Arch Tech I hope it all
+makes sense to you in upcoming videos
+we're going to be talking about the 2025
+predictions and we're also going to be
+looking at the new o1 series that is
+getting rolled out right now we have
+some interesting things happening on
+that same theme um the creator of Aer
+has rolled out a brand new Benchmark a
+polyglot leaderboard that is a much
+harder AI coding Benchmark 01 is already
+at the top of this and you can see the
+incredible gap between claw through 5
+son it the you know current kind of or
+the previous I guess state-ofthe-art
+model and the new 01 coming out of the
+API this is really incredible we're
+going to be covering this as soon as we
+get API access I'm hoping that rolls out
+over the next week really incredible
+stuff here really excited to see some
+new harder benchmarks um I'm going to
+link this blog post in the description
+as well Paul aers Creator is one of the
+best Engineers to be following right now
+his writing and his benchmarks are
+something that I reference often in
+order to understand
+how the AI coding ecosystem is evolving
+we had to pick a tool in the principal
+AI coding course for me it was an
+absolute no-brainer to choose AER
+because it is foundational AI coding
+software thanks for watching next week
+we're going to be looking at our
+predictions for 2025 it's going to be a
+big year like comment subscribe to stay
+plugged into that stay focused and keep
+building

@@ -1,0 +1,629 @@
+in this video we continue our journey
+from prompts to prompt chains and
+definitively answer the question when
+should you use prompt chains we'll also
+dig in to why startups are ditching Lang
+chain and other llm libraries and I'll
+share my take on why you should always
+raw dog your prompts avoid libraries
+avoid rappers at least for now this is a
+really important point you don't want to
+mess up because it can wreck your
+productivity so if you're interested in
+that and you want to see how I use a
+minimalist prompt chaining method with
+zero libraries to build valuable prompt
+chains stick around and let's dive right
+into it so first let me show off this
+minimalist chainable API that I use to
+build great prompt chains in the blink
+of an eye and then let's talk about the
+for guiding questions for when to use
+prompt chains it's really important to
+know when to pull out the great llm
+tools Technologies and methodologies
+that you have available to you having a
+guiding rubric and these guiding
+questions will help you know when to
+uplevel your single prompt or your Bap
+or your context F prompt and turn it
+into several prompts chain together
+we'll then close with talking about some
+of the problems with llm libraries I'm
+not going to bash on Lang chain or
+autogen or any of these tools I just
+want to talk about abstractions at a
+high level and what it means when you
+install a library use it and when you
+trade off your control for the promise
+of the library let's start with the
+minimalist chainable API so this is a
+prompt chaining framework that you can
+use very quickly with zero libraries
+using a single function inside of a
+single class you'll be able to build out
+a minimalist sequential prompt chain
+with context and output back references
+but you can see here you can pass in
+context you then select your model all
+Hill the new king Sonet 3.5 is beating
+gpg 40 on nearly every Benchmark we're
+getting some great performances out of
+Sonet 3.5 which you'll see in just a
+second here callable which is just the
+method you'll use use to actually call
+The Prompt and then of course we have
+the list of prompts you want to fire so
+let's look at a real example and let's
+go ahead and open this up you can see
+here we are using the build model method
+and this is just putting together a
+simple class that allows us to run a
+prompt on arbitrary models shout out to
+Simon W's llm Library I'll link that in
+the description we're setting up Cloud
+3.5 and ret turning that model here and
+we're using that and this is where all
+the magic happens so we have a tupal we
+have results coming out and we have
+context fill prompts now right away um
+without me even really explaining this
+if you have two or three years of coding
+experience under your belt you can see
+exactly what's going on here this is one
+of the problems with libraries very
+quickly given all the abstractions it
+becomes very difficult to know what's
+going on you can read this chainable run
+call and have a pretty good idea what's
+happening right let's work through it
+together so I'm passing in some context
+right just some variables for the
+prompts to use I'm selecting the the
+model specifying the function that we'll
+use and this is just a method up here
+right so the prompt is going to pass in
+the model and the current prompt with
+all the context filled and then we have
+our list of prompts so inside this
+chainable prompt call we generate a blog
+post title and then we generate a hook
+for the blog post so this is like the
+you know description or the subheader
+and then based on the blog title and the
+blog hook we're going to generate the
+first paragraph of the blog post so
+we're going to go ahead and run this
+I'll say pi so there's something magical
+happening here that you can see inside
+the variables this prompt chain method
+allows you to pass in references to the
+context that you've passed in at the top
+level we're generating this and
+expecting some Json responses so you can
+see here this ends the first prompt
+right so this is prompt number one and
+then we have prompt number two here and
+then we have prompt number three right
+here the second prompt is actually
+referencing the first prompts title and
+this is something that I've needed that
+I built in to this minimal chainable
+class and method that makes it really
+really easy to refer back to previous
+results prompt chaining is incredible
+but the primary benefit of it is that it
+allows you to build on the previous
+results to build on the outputs of
+previous prompts just like we discussed
+in our five elements of great prompts
+video I'll link that in the description
+if you want to know what the five most
+important elements of individual prompts
+are prompt number three you can see here
+we have a couple of variables we're
+setting up inside the prompt and then
+once again we're looking back two
+executions so we're looking back two
+prompts so this will be you know prompt
+two and then prompt one and then we're
+going to pull the title right so we're
+pulling that title again and if we use
+dot you can see there both impr prompt
+two and impr prompt three we're
+referring back to that first prompt so
+we're using -2 to go back to prompts to
+select the title and then for the blog
+hook we're just going back a single
+prompt which're just going to go back to
+the result of prompt 2 so let's go ahead
+and look at the output of this after we
+call minimal chainable run
+all we're doing here is taking the
+result and the context filled prompts
+and just go ahead and D them to a file
+right so if we look at this POC context
+filed prompt we can see that so you can
+see that this first prompt had the topic
+filled in right so generate one blog
+post about title that turned into
+generate one blog post title about AI
+agents right and then in the second
+prompt chain we had generate hook for
+the blog post title the rise of AI
+agents and so we took the result right
+we took the result from that previous
+run and used that in our second prompt
+and then at the bottom here you can see
+we now have the title and we have the
+hook generated and now son at 3.5 is
+using both of those as their contexts to
+generate the final result and we can see
+the results by looking at the PC prompt
+results and you can see here that this
+this was the result of the first prompt
+chain right so we got that title in Json
+format we then got the prompt chain
+result number two you can see here we
+have the hook generated and the second
+prompt chain and then lastly based on
+the previous prompt information we're
+now generating a full-on description and
+so this is really really important right
+it's not to say that you couldn't do
+this with a single prompt but there's a
+couple key differences that will decide
+if you want to use a single prompt
+versus a prompt chain where you divide
+things up and separate your prompts to
+gather more information to expand the
+prompt to give your llm more tokens to
+reason on so on and so forth but this is
+a simple example of how you can use this
+minimal chainable piece of code that
+I've written if this method looks useful
+to you definitely drop the like drop the
+sub to show your thanks and you can grab
+this prompt chain link in the
+description below I'll show you an
+example of how I'm using this to build
+up a full agentic workflow near the end
+of this video so stay tuned for that
+you'll be able to see how I'm really
+using this prompt chain to drive value
+so this is a simple prompt chaining
+framework I built in Python you can
+check out the code there's a little bit
+going on here but it's not too complex
+it's a bunch of string replacing and
+string templating a little bit of Json
+parsing the key here is is that we're
+able to build something that solves you
+know 80% of sequential prompt chain use
+cases with zero libraries the only
+Library you really need is whatever
+model provider or model provider rapper
+you need to use to actually call your
+prompt so I hope that makes sense let's
+go ahead and turn our attention to when
+to use prompt chains so let's ask a
+couple of questions that can help us set
+up a rubric around when to use prompt
+chains if you've been with the channel
+for a while you know that uh everything
+I talk about everything I you know quote
+unquote preach on the channel uh I do
+myself I use my decade plus long
+engineering career and all the
+principles and knowledge I've built up
+to really try to stay on the edge of the
+stuff and to make great decisions to
+help me drive real business results with
+real real valuable software and real
+valuable decisions so these guiding
+questions I've set up I set up and
+answered a while ago really for myself
+so that I could really delineate when do
+I need a prompt and when do I need a
+prompt change so let's dive into it so
+these are the four questions you should
+ask if you're thinking about using a
+prompt chain if your tasks are too
+complex for a single prompt right so are
+you asking your llm to perform two or
+more tasks that are distantly related in
+one prompt sometimes even closely
+related if the answer is yes you should
+use a prompt chain why because prompt
+chain will help you break down your
+complex task into smaller manageable
+chunks if you're trying to you know
+generate a bunch of Json and you're
+trying to get a bunch of output from
+your prompts in a single shot it's very
+very likely that you can break things up
+right and you saw in our example here we
+could have easily asked for all of these
+things at once but it's much much better
+to have your llm solve one problem at a
+time and to be totally clear these are
+these are small toys examples right if I
+was really really trying to generate a
+clear clean concise blog post about a
+specific topic this prompt would be much
+much bigger and have a lot more details
+around how the title should come out how
+it should look what's the structure of
+it right and as your prompts grow in
+complexity you don't want to be binding
+that together with other elements
+distantly or closely related right so I
+wouldn't want to try to generate both
+the title and the hook at the same time
+I'm not saying it's not possible I'm
+just saying that if you're going to
+write a prompt chain you want to
+delineate your task and you want to
+break them apart and solve one problem
+at a time all right so that that's the
+first question you should ask when
+you're thinking about creating a prompt
+chain is this task too complex for a
+single prompt all right so question
+number two increase your prompt
+performance and reduce errors do you
+want the performance of your prompt to
+be pushed to the Max and reduce errors
+to the minimum if yes you probably want
+to build a prompt chain you've seen
+things like think step by step you've
+seen hallucinations and you've seen
+other techniques that allow you to
+expand the output of your llm to let it
+essentially think longer we're seeing a
+lot of these different techniques emerge
+techniques like beam techniques like
+sample sizes and techniques like Fusion
+these are things that we'll likely talk
+about on the channel but all these
+techniques effectively do one thing they
+let the llm have more context more
+tokens to process surrounding your
+problem and your prompt so this is
+another great reason to use prompt chain
+if you're running prompts ad hoc for
+your own personal tools or use probably
+doesn't matter if you're running a
+production level system or you need high
+high performance out of your prompts
+even with the best models a prompt chain
+will help you get there all right so
+this is a big one if you need to use the
+output of previous prompts as inputs
+you'll likely use a prompt chain right
+this is essential for when your tasks
+subsequent prompts use information from
+previous prompts right and we saw this
+in our example I think you can find
+ample evidence that this is one of the
+biggest use cases for prompts right when
+you have agents working together you
+have sequences of prompts working
+together to generate outputs that are
+then the inputs for the subsequent
+prompt right this to me is one of the
+biggest value propositions of prompt
+chains and this is how we build up
+fullon agentic workflows we touched on
+this idea in the five elements of great
+prompts our Master The Prompt video that
+we just released I'll link that in the
+description definitely check that out
+that focuses just on the prompt and WR
+in single highquality prompts if you're
+thinking about using a prompt chain you
+can ask yourself do I need an Adaptive
+workflow that changes based on the flow
+of the prompt if you need flow control
+if you need to stop your prompt at some
+point if you need to do some reporting
+if you need to you know insert a step in
+between the logic and the processing of
+a prompt you would need a prompt chain
+there's really no way to do this without
+setting up a prompt chain if you need to
+interject and change the flow change the
+logic of your agentic workflow you need
+it to be adaptive then you just kind of
+need a prompt chain right so those are
+the four questions you can ask yourself
+when determining if you need to use a
+prompt chain so we can simplify these
+four steps into the following right
+basically you find yourself solving two
+or more tasks in a single prompt if you
+need maximum error reduction you have
+subsequent
+prompts that rely on the output of
+previous prompts okay right and lastly
+but not least you need to take different
+actions steps these are the four cases
+when you probably uh are going to want
+to pull out the prompt chain if you
+think I missed a use case of prompt
+chains please comment down below I think
+I've got this list pretty filled up but
+I always appreciate your input there's a
+massive kind of gray area between
+prompts prompt chains AI agents and full
+agentic workflows and figuring that out
+is where all the magic is happening okay
+so that's four guiding questions let's
+quickly talk about some the problems
+with llm libraries why why are some of
+these companies you know no longer using
+Lang chain why have people been
+complaining and kind of harping on you
+know other types of Frameworks as well
+for quite some time right this is this
+is kind of this has been a trend I've
+seen this develop I experienced it
+firsthand when I started using autogen
+way back last year in October so so why
+is this what what are the problems with
+these LM libraries I think it comes down
+to to really just three things what you
+run into is unnecessary
+abstractions and premature abstractions
+I think this is a big issue tons and
+tons of layers of how to do certain
+things and more importantly you know
+some kind of created subjective opinions
+about how to do things as I'll talk
+about in a second the truth is we're all
+still kind of figuring out where gender
+of AI goes in the stack how to place
+things how to work with things how to
+manipulate this type of technology for
+that reason a lot of these libraries
+have just created a bunch of unnecessary
+things that
+now irrelevant or just premature
+outright so another reason um it's easy
+to start and it's hard to
+finish um so you know starting using
+these libraries and I think this is one
+of the big use cases for using one of
+these libraries Lang chain autogen C ey
+Etc is to get a good idea of how things
+work I think that's actually a major Pro
+of these these tools right they give you
+a really really clean concise kind of
+breakdown on how to do certain things
+and how to do it you know across several
+providers because they always wrap the
+providers which is really nice so I
+actually think that's a major Pro but uh
+it's hard to finish and what does that
+mean it means that uh things get complex
+really quickly right things start to
+boil up and as soon as you need to dig
+in and and you know get closer to the
+metal so to speak uh these libraries
+become really really difficult to
+control I found it to be true across
+nearly every tool that wasn't a fully
+productionize product um that just fully
+took control of everything right on the
+library level tools like autogen and
+Lang chain had too many strong opinions
+about how things should work and in the
+worst cases they were outright creating
+prompts creating entire uh workflows of
+how things should work that you know I
+had to find out the hard way by
+literally looking at at their at their
+code another one rough
+docks uh and rough debugging this has
+improved a lot as the ecosystem grows
+but it is you know still and is a
+problem again when things go wrong and
+things start getting more complicated um
+part of the reason things are hard to
+hard to finish is because the
+documentation is just kind of rough in
+order to build up libraries like this
+you know including like llama index is
+another one where they try to do so much
+in order to kind of dig into their
+library and dig into their world you
+need to read so much and you need to
+really understand what's going on under
+the hood these are the big three
+problems so there's this blog post that
+I had up here by octom mind and uh one
+of the comments really really stuck out
+to me it's here here it is so even if
+using agents it's unlikely you'll be
+doing much Beyond Simple agent to agent
+Communication in a predetermined
+sequential flow with business Logic for
+handling agent State and their responses
+you don't need a framework to implement
+this this is so so so true there are so
+many things that picking up one of these
+libraries is just complete overkill for
+and I love this idea of course you know
+I'm a big fan of this stay lean move
+fast don't build it until you need it
+use the best tool for the job and I just
+just completely agree with this
+sentiment while the agent space is
+rapidly evolving and exciting blah blah
+blah blah blah we recommend keeping
+things simple for now while agent usage
+patterns solidify I think this is super
+true I do think though you're going to
+build out these agent usage specific
+patterns by digging into your domain
+specific use Case by digging into your
+problem and by tackling your specific
+problem right and just like I have with
+the minimalist chainable right you want
+to be keeping your abstractions really
+really simple right don't try to make
+something that does it all um as you may
+have found with using some of these
+libraries tools that claim to do it all
+do nothing well right it's just the law
+of it's kind of a law of nature right
+try to do everything you'll accomplish
+nothing try to do one thing well you
+will do it extraordinarily well right
+all this does all this you know simple
+class does is allow you to sequentially
+chain prompts and reference the output
+of the previous prompt right of all
+previous prompts so this is simple it's
+powerful again Link in the description
+definitely use this tweak it make it
+your own I use this and I'm building
+upon this I'm creating simple building
+blocks like this and I can highly
+recommend you do the same I'm sure you
+have if you're one of the big hitters
+watching the channel you know I know
+that you have your own tools and prompts
+set up but this is really really
+important so I just want to you know
+kind of nail the point home I'm I'm not
+like hating on any of these libraries
+most of this this criticism is valid I
+think the author of these libraries are
+taking things really well uh the truth
+is no one really knows how to build the
+best llms yet and you know the models we
+use are constantly evolving right and
+Sonic 3.5 is a really really great
+example of that I think these libraries
+do a great job of showing what's
+possible and provide a great you know
+starting point they have a ton of great
+rappers for data retrieval and for model
+provider wrapping but outside of that I
+think um I always advocate for staying
+really really really close to the metal
+right I just think that's a really key
+point stay close to the metal you know
+as useful as these libraries can be they
+often abstract away the most crucial
+element that's the prompt itself this is
+something that I've learned several
+times and I want to help you avoid
+needing to learn this lesson The Prompt
+is all that matters it it really is the
+prompt and the simple wrappings around
+your prompts right now that's all that
+matters it's that and the the model
+underneath it the core value of
+generative AI of the Revolutionary time
+and space are with technology right now
+the core value of it is the prompt so
+don't give that away to a library or
+abstraction at least yet right it's it's
+just too soon this is what we need to
+focus on this is why I focus on it so
+much on the channel prompt this prompt
+that promp chain it's all about building
+up to that full agentic workflow that's
+solving problems for you while you sleep
+stay close to the metal focus on the
+prompt that's what it's all about so
+we're running out of time here let me
+just quickly show you a full production
+level prompt chain that I'm building out
+right now to drive an entire agentic
+workflow we'll look at this more over
+the course of the channel I'll have to
+have multiple videos on this because
+there's a lot going on here that I want
+to break down what we have is this Json
+configuration file with the big three
+open aai anthropic and Google and what
+we have is you know a link to their
+models and some specific Header
+information I should change this to be
+HTML selector or something but basically
+this is going to select specific HTML
+elements in the page and we're going to
+parse that content out and create a
+brand new table with price information
+for each model across these different
+providers right and it's in a Json file
+so that it can be completely
+customizable and configurable let me go
+ahead and just set skip to false we'll
+just run anthropic and Google here and
+we'll just kick off this workflow this
+workflow has a couple steps it has The
+Gather step where we do the scraping the
+prompt step where we are running the
+prompts to format the content to you
+know pull the specific pricing and model
+information and then it will output the
+result as you can see here we have
+anthropics models getting printed out
+here from the result of the third prompt
+chain and then this entire chain is
+going to run again for each element in
+here and there we go we got that output
+let's go ahead and just copy this and
+throw it in a
+formatter so if we paste this here you
+can see that you know with this hentic
+workflow it's all set up it's doing all
+the work for me I now have the price
+breakdown across different websites for
+these models this might seem simple but
+it's actually really really important
+when this becomes a full agentic
+workflow this will actually update the
+new website that I'm building it's going
+to update this blog post page
+automatically all by itself and keep
+this information up to date for the big
+three and for other websites and other
+model providers as well and this is all
+fueled by a promp chain I'm not going to
+go into details of it too much here but
+you can imagine you know we have
+multiple steps where we're going to
+scrape the models we're going to format
+the models into some generic format and
+then at the end we use a specific Json
+format to kind of you know tie
+everything together so I am way way over
+for this video this is going to be a
+long one I'll try to cut it and chop it
+down for you guys so it's shorter but um
+that's where things are going on the
+channel we are you know leveling up our
+abstractions we're starting to build up
+these full more complete workflows that
+have you know real business real
+production level value it's all about
+staying close to the metal you want to
+be using minimal libraries getting
+maximum results moving quickly and being
+able to adapt to the new models that are
+coming out like claw 3.5 Sonet again I
+don't have anything against these
+libraries it's just too soon to give
+away the most important part of this
+technology The Prompt grab my minimalist
+chainable class to build your Dynamic
+prompt chains Link in the description
+drop the like drop the sub drop a
+comment if you have any questions keep
+building and I'll see you in the next
+one

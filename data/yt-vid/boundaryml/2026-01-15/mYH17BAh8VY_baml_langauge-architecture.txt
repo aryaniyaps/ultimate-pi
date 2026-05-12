@@ -1,0 +1,468 @@
+[0.1s] All right. Hello. I think one of the
+[2.2s] things I wanted to do here was just give
+[3.9s] a overall architecture of at least how I
+[6.6s] understand our codebase today and our
+[8.7s] most important parts of the system today
+[11.1s] because I realized we probably haven't
+[12.9s] seen that put together yet and it's all
+[14.8s] kind of coming together on the spot. So
+[17.0s] I'll show you what I have. Some of you
+[18.2s] might have seen this macros diagram uh
+[19.9s] this uh crates diagram that shows the
+[21.8s] control flow of crates. I think that is
+[23.7s] useful but I think it's also useful to
+[25.5s] have a overall structure and if there
+[27.7s] are any inconsistencies we can just
+[29.3s] change that as we go. So first things
+[32.2s] first is we have something that's called
+[34.2s] a BAML project and there's a few certain
+[37.0s] attributes about a BML project. It is
+[38.6s] fully incremental and it is going to be
+[41.1s] built off of raw source files and other
+[43.7s] information but the most important part
+[45.2s] is it provides access to the compiler
+[47.8s] and everything else underneath. I'm
+[49.5s] going to ignore all the implementation
+[50.9s] details of how it works. We'll just
+[52.1s] assume that we have a BM project as a
+[53.7s] top level node. We have a couple points
+[56.3s] of surface area that come out of here.
+[58.2s] The points surface area as I understand
+[59.8s] them and I'll make surface areas green
+[63.4s] is going to be a WASOM interface for the
+[66.0s] playground. And then we'll also have
+[67.8s] another interface on top of this. And
+[69.8s] then we'll have what I would call
+[71.5s] language uh language clients.
+[74.9s] And language clients basically play into
+[77.5s] a couple of different things, but they
+[79.0s] have their subsections like PY. Let's
+[82.0s] make this better. PY, TS, and then CFI.
+[87.0s] If we were to at some point introduce
+[88.9s] WASM would be another peer to these
+[91.4s] rather than independent, and it would
+[93.4s] work off of this. And then on top of
+[95.8s] this, we have one more thing which is
+[97.6s] going to be what I would call BMA
+[99.4s] client. And this is language specific.
+[102.7s] So I'll put lang baml client over here
+[106.5s] that describes this over here. And I
+[108.6s] won't make this gray. I'll make this
+[110.2s] kind of different because it's not going
+[111.4s] to be pure green underneath the hood. So
+[113.7s] and then we have language clients over
+[115.2s] here. Well, what comes next? Well, the
+[118.3s] thing that happens next is we have a
+[119.7s] separate thing. We have what's called
+[120.6s] the BAML runtime in our existing
+[122.2s] codebase, but for now we're not going to
+[124.1s] be calling it BML runtime. What we'll be
+[126.6s] calling it is going to be
+[130.4s] BAML executor. And I'll describe why
+[133.0s] it's called the executor in a second.
+[134.6s] But you should assume that this is the
+[136.2s] interface that has everything called
+[138.2s] render prompt etc etc. Now the question
+[140.5s] is BAML executor is not incremental.
+[143.8s] BAML executor is not at all incremental.
+[146.2s] It is statically defined. So how does an
+[148.3s] incremental BAML project feed into a BML
+[150.6s] executor? Well, we have something called
+[152.4s] a BAML program. And a BAML program is
+[156.1s] something that can be produced from a
+[157.8s] BAML project but is not necessarily a
+[160.6s] BML project itself. Additionally, a BAML
+[163.7s] pro a BML program can be used almost as
+[167.8s] a peer to an executor and arrowhead is
+[171.2s] the wrong thing. It can be used with an
+[173.3s] executor but it's not necessarily an
+[175.5s] exeutor itself if that makes sense. So
+[177.8s] you can apply an executor on a BAML
+[179.8s] program but it's not the exeutor itself.
+[182.2s] A BAML program is kind of incremental.
+[186.4s] That's probably the best way to describe
+[187.8s] it. It's not actually incremental
+[189.0s] itself, but it is kind of incremental.
+[191.2s] Now, what does that mean?
+[193.6s] What that means is the following. It's
+[195.4s] not incremental in the way that salsa is
+[197.1s] incremental. This is incremental because
+[200.5s] salsa this is incremental because we
+[202.9s] have methods like update program or
+[206.4s] sorry update function, update class,
+[210.6s] etc.
+[212.0s] So this is incremental because of the
+[213.8s] methods it exposes. This is incremental
+[216.3s] because of salsa. So at any point you
+[218.2s] can always turn a BML project into a
+[220.3s] program. But the way that a project
+[222.4s] turns the program is by giving you diffs
+[224.8s] almost and then you apply those diffs
+[227.0s] into the BML program and say this
+[229.0s] function has changed. This up function
+[230.6s] has changed. And that is how this works.
+[232.7s] Now that works nicely because of bite
+[234.7s] code um behavior and that we don't
+[237.0s] actually have to go produce the same
+[238.2s] bite code along the way. And we're
+[239.5s] allowed to have things like render
+[240.9s] prompt still be incremental because the
+[243.4s] thing that exposes render prompt is BAML
+[246.2s] program. So BAML program ends up being
+[248.8s] the interface that has a bunch of
+[251.0s] methods on it or capabilities on it that
+[255.0s] end up being used for these two systems
+[257.7s] under the hood. Now, we might choose to
+[260.6s] put another layer on top of this if we
+[262.6s] want that's just like some sort of
+[264.3s] actual interface on top of this that
+[266.7s] actually sits over here that mudges that
+[269.6s] assembles the two of these together that
+[271.2s] takes a sorry let me move these up that
+[273.8s] kind of does the assembly of the
+[275.5s] executor and the program together and
+[279.3s] provides interfaces like render prompt
+[281.1s] render test case understand all that
+[282.9s] stuff but that's basically the whole
+[284.7s] gist of this now how does the BAML
+[286.6s] exeutor work and how do we actually
+[287.7s] mudge the VM am with LM runtime and
+[289.8s] system calls like a fetch and everything
+[291.6s] else. Well, let's talk about that really
+[293.0s] quickly. So, we have two types of
+[295.3s] things. We have what's called the BAML
+[297.0s] VM. We have what's called the LM
+[299.2s] runtime. I'll just call it LM ops for
+[301.6s] now. And then we have what's called BAML
+[304.5s] CIS. I'm going to make these all orange
+[306.3s] because they plug into the executor.
+[308.6s] This has nothing to do with the
+[310.0s] compiler. This is purely to do with how
+[312.2s] things execute itself. Well, the way
+[315.0s] that this works is the BAML executor is
+[318.4s] responsible for driving all of these
+[320.6s] things together. Oops. The BMA executor
+[323.3s] controls all this. This is actually very
+[324.9s] similar to how our current executor
+[326.6s] works. And I'll show you what things
+[328.9s] live in each one. The VM is responsible
+[331.1s] for actually doing VM instructions. So,
+[333.1s] functions defined with VM by code all
+[335.2s] execute through the VM. The LM ops is
+[338.1s] responsible for doing all things related
+[339.6s] to LMS. I don't think we have a clear
+[341.7s] understanding of what all these things
+[343.0s] are but I think over the next few week
+[344.8s] over the next few days as Sam and
+[346.1s] Antonio make more progress we should
+[347.8s] have a really clear idea what Bamma LM
+[349.5s] ops needs to do and then BMI is what you
+[352.1s] can think of as all network calls. So
+[354.1s] like uh fetch file read file write bash
+[360.5s] or like shell pwd etc all live through
+[364.2s] baml cis. Now as you we have a whole
+[368.1s] slew of things that interface with this.
+[369.9s] So we have W was interfaces and then we
+[372.1s] have BAML language client interfaces.
+[374.5s] The problem is BML cyst is actually
+[376.2s] plugged in through many different ways.
+[379.1s] In the case of Wom when we're doing the
+[381.0s] BAML playground we actually have to go
+[382.7s] all the way through VS code send some of
+[384.4s] these C requests through there and proxy
+[386.2s] everything rather than doing it in the
+[388.5s] way that we've been doing it right now
+[390.2s] we have a new way to go do this. BAML cy
+[393.1s] has a special method called register
+[396.0s] methods which basically takes in
+[397.8s] register method which takes in a name
+[400.2s] and then a callback to associate with
+[402.6s] how to actually implement each of these
+[404.6s] calls. It's not defined in BML cyst.
+[406.3s] BAML cyst is an interface.
+[408.7s] And what we do during wasam time is we
+[411.2s] actually just register methods for each
+[413.7s] of these all the way through here for
+[415.4s] how to register BML cyst and we register
+[417.4s] every single method along the way and
+[419.8s] say that fetch has to be fetch returns
+[422.4s] this uh file read returns this file
+[424.6s] write returns this and we're able to
+[426.2s] implement it. This gives us a really
+[428.2s] nice way, excuse me, this gives us a
+[430.7s] really nice way to actually go ahead and
+[432.5s] make this super modular and make this
+[434.1s] totally agnostic of whatever runtime
+[436.2s] engine we're doing this in. So if we end
+[438.2s] up supporting CloudFare Workers, for
+[439.7s] example, this will also just work
+[442.3s] because we just have to change how BAML
+[444.0s] CIS gets registered based on what
+[445.5s] language clients that we're targeting
+[446.9s] along the way. Cool. The other benefit
+[449.1s] here, uh, I'll talk about that in a
+[450.9s] second. Actually, let's talk about how
+[453.4s] these work. Now, so what happens when a
+[455.6s] BAML program executes? Well, when a BM
+[457.6s] program executes, the first thing that
+[459.4s] we do is we call function. Call function
+[461.3s] determines how we call the function. The
+[463.0s] function is either going to be an LM
+[464.3s] function or a a VM function. And it just
+[467.2s] gets it from the program's perspective,
+[469.7s] it just calls it. The executor then
+[471.8s] says, I have an instruction to run. The
+[474.0s] instruction says run VM code. So then I
+[476.3s] run VM code and eventually the VM code
+[478.5s] says I want to run a special instruction
+[480.5s] that's a BAML cis fetch instruction. So
+[483.8s] I register BLM cyst fetch and I give it
+[486.6s] back to the executor and the executor
+[488.2s] pauses the VM with that program counter
+[490.3s] at where it is today and then pauses and
+[492.5s] then hands it off to BML cyst. Bam cis
+[494.4s] completes and then completes the promise
+[496.3s] and executor and sends it back and round
+[497.9s] trips this here now and then it does the
+[500.5s] same thing. A VM says I want to do lm
+[503.8s] function. It does the same thing. It
+[505.0s] renders this all the way down sends it
+[506.5s] to BML ops and lm ops finishes the
+[509.3s] thing. It handles a promise and goes
+[510.7s] down into here. If we want to support
+[512.9s] things like streaming or everything
+[514.1s] else, well, the nice thing about the alt
+[516.4s] is it's all centralized through BMA
+[519.0s] executor. So, none of these things
+[520.4s] should have interfaces through here. And
+[521.8s] instead of having a layer of BAM exeutor
+[524.6s] calls, uh what we had before is we have
+[526.4s] BM runtime and BM VM runtime that nest
+[528.8s] in each other in weird ways. In this
+[530.6s] case, we have a very flat structure. So,
+[532.2s] it should be much easier to organize and
+[534.2s] understand.
+[535.9s] We're also going to try and do our best
+[537.7s] to make sure that tracing, which I think
+[540.4s] we have put almost little thought into
+[542.6s] so far, which is totally okay. We'll
+[545.4s] have to come up with a way for how
+[546.6s] tracing fits into here. But I think
+[548.2s] tracing can also be a thing that lives
+[549.9s] in BAM executor. And since all these
+[552.3s] things will have relationships over
+[553.6s] here, all we really have to do is just
+[556.2s] make it so that if anyone ever pings a
+[558.2s] tracing system from any of these
+[559.9s] systems, it just sends a request to
+[561.1s] Bamluer and says, "I want you to trace
+[563.0s] this through some way." And Bamma
+[564.6s] executor just sends gives it to the
+[566.2s] tracing module which can be totally
+[568.2s] responsible for communicating with the
+[569.7s] web and lives as a separate ad hoc
+[571.8s] system and then BML executor can also
+[574.1s] make this a noop in the case of tracing
+[576.0s] networking. Now on the order of tracing
+[578.9s] one of the pain points that we've had
+[580.6s] along the whole way is we have two
+[582.8s] different ways of doing fetch and that
+[584.2s] leads to different problems. For example
+[586.2s] once we have the VM code and we doing
+[588.3s] fetch in the BAML playground we
+[590.0s] currently proxy a lot of network
+[591.5s] requests because of cores errors and
+[593.0s] everything else. If everyone writes VM
+[595.4s] errors here, we're going to get tons of
+[596.8s] cores errors through any code running
+[599.1s] through the playground. Well, the
+[601.0s] problem is we're actually using two
+[602.3s] different types of fetch. We're using
+[603.5s] fetch differently in LM ops as we are in
+[605.7s] the VM because the BAML VM calls a fetch
+[608.6s] instruction which triggers BML cy. But
+[610.9s] BMA LM ops just uses that. So the way to
+[613.8s] solve for this problem
+[616.2s] is actually take a dependency directly
+[617.9s] in lm ops on bamis and if we take that
+[622.2s] dependency then every single time we
+[624.5s] make any sort of network request we can
+[626.5s] actually take it directly from bam cyst
+[628.2s] itself. So instead of instead of calling
+[630.5s] request we'll always call it through cis
+[632.6s] and what this does is any register
+[634.5s] method call that is made here will be
+[636.0s] really clean. So for example today for
+[638.6s] supporting multiple LM providers like
+[640.9s] GCP O or AWS O we use AWS CLI and such
+[645.2s] around here we do a lot of plumbing to
+[647.5s] push that through into here. Well we
+[649.2s] don't have to anymore because we have a
+[650.9s] shell command available in BML cyis
+[652.6s] which we will have to build anyway
+[654.2s] because if we want to support AWS
+[656.3s] support through here it's required.
+[659.5s] Well, we can just shell through the baml
+[662.1s] cis col shell and just call that method
+[665.2s] and return this all the way through here
+[666.8s] and it should just work because register
+[668.6s] method will have registered these. The
+[670.6s] other nice benefit is if any method is
+[672.4s] not registered, it can either have a
+[674.2s] default implementation or it can also
+[676.4s] just say that I'm going to error out and
+[678.6s] it will just plum through the error
+[680.1s] mechanisms uh we have built in for all
+[682.6s] the other tools along the way with no
+[684.5s] additional work on our end. Now, one
+[686.5s] other thing that I'd like to talk about
+[687.7s] before we go do this is actually
+[689.4s] testing. So, how does test case
+[691.2s] rendering work? So, we have our
+[693.0s] playground in our uh we have our in our
+[696.3s] VS code. We have two different things.
+[698.6s] We have the source code on the left and
+[700.6s] then source code and then we have the
+[703.2s] actual playground on the right side.
+[705.6s] Let's say I have a playground and
+[707.4s] whatever kind of function this is,
+[708.8s] whether it's an LM function or whether
+[710.6s] it's a expression function doesn't
+[713.0s] really matter. Whenever I have a
+[714.5s] playground, there's two tasks that we
+[715.7s] have to do. I I'm going to try and
+[717.4s] render the function in some way. As a
+[719.1s] part of rendering the function, whenever
+[720.6s] I click is I need to first get test case
+[723.4s] args. Once I get the test case args, I
+[725.5s] may need to evaluate them and actually
+[727.0s] execute some code. And then after I do
+[729.0s] that, then finally given the evaluation
+[731.0s] of the test case args, then I will want
+[733.0s] to in some form factor render the
+[735.0s] function. Whether that means executing
+[737.1s] it, whether it means showing the
+[738.2s] visualization graph, whether it means
+[739.4s] showing the prompt, doesn't really
+[740.6s] matter. I want to do these three things.
+[742.6s] Now this ends up being really tricky. So
+[745.1s] for example, let's say I did this and I
+[747.8s] have a math.random.
+[749.8s] So get test case args is static. No
+[752.3s] computation is happening here. It's well
+[754.2s] understood. It's all get test case says
+[756.8s] args is a thing that's called the load
+[758.4s] data function and that's getting the
+[760.2s] args. But when I actually evaluate them
+[763.3s] and I want to consolidate what the args
+[765.8s] are expressionally versus what the args
+[768.2s] are as a function as a value, I will
+[771.8s] probably need to go and actually
+[772.8s] evaluate this. In this case, imagine
+[774.4s] that this is a 30 gigabyte file and this
+[776.7s] is a 1 megabyte file. Clearly now I have
+[780.4s] huge performance implications as I move
+[782.7s] my cursor around because every time I
+[784.6s] move my cursor, if I were to evaluate
+[786.1s] this, math.random random gets
+[787.3s] reevaluated and every time I'm loading
+[789.7s] 50 gigs, I'm loading 30 gigs or a meg
+[791.8s] and I'm just my experience as a
+[794.4s] developer is atrociously going to be
+[796.6s] hampered because I really don't want
+[798.4s] this to trigger almost all time. Then I
+[800.1s] need to go render this. So imagine I'm
+[801.3s] rendering a prompt. So clearly if I I
+[803.4s] likely don't want every single time I
+[805.0s] move my mouse for this to be rerendered
+[806.9s] and recomputed every single time. I also
+[809.5s] probably don't want to accidentally read
+[811.0s] a 30 gig file and have the whole system
+[812.9s] hang. So there's a couple of things that
+[814.8s] needs to happen here.
+[816.6s] One is once test case args are evaluated
+[820.1s] they kind of need to be cached to some
+[822.0s] degree associated with this and not
+[823.9s] recomputed again and the cache needs to
+[825.7s] be somewhat dependent. So evaluation of
+[827.8s] test case args needs to be incremental
+[830.0s] to some degree. Whether it's incremental
+[832.1s] through salsa or whether it's
+[833.6s] incremental through some method that we
+[835.1s] have like BMA program doesn't really
+[837.8s] matter but it does need one of those two
+[840.2s] solutions. And then two we likely don't
+[843.3s] want to do mutable operations during
+[845.7s] test case evaluation for example
+[847.5s] file.right write without user approval
+[850.5s] because just because I move my cursor to
+[852.8s] some location doesn't mean that I
+[854.3s] suddenly want a post request to fire
+[856.2s] off. I may be okay with get but I may
+[858.7s] not be okay with post. So I may want to
+[861.4s] control that. Or you can imagine this is
+[863.0s] an LM function that runs this. I may not
+[865.0s] want to spend money just by moving my
+[866.5s] cursor every single time. So we likely
+[869.0s] need some sort of control flow that
+[870.5s] says, "Hey, I want to execute this code
+[872.9s] whenever possible. But if I do something
+[874.6s] dangerous, I want some human the loop
+[877.6s] control to let me press a button that
+[879.8s] manually approves the workflow at that
+[882.1s] point. So the good part is because all
+[884.6s] these dangerous requests are always
+[886.6s] going to go end up going through some
+[888.0s] BAML cyst module file read, file write,
+[890.5s] fetch, post kinds, etc. Bamlis can have
+[894.0s] a protection layer built into it on top
+[895.9s] of itself. Oops. That's a validate async
+[901.6s] fn allow check approvals. It can take in
+[905.4s] methods and stuff. And this can be done
+[907.5s] through a messaging system. So BAML CIS
+[910.2s] exposes through BMA executor a messaging
+[912.9s] system that goes through and gets
+[914.2s] approvals for various methods and
+[916.1s] various constraints. And we can write
+[917.4s] heristics. If it's a onemeg file, let it
+[920.2s] fly. Uh if it's a post request, require
+[923.2s] approval. You can have approvals like
+[925.0s] cloud code that are dangerously allow
+[926.6s] and just has a checkbox that just screw
+[928.3s] it just let it run whenever you want or
+[930.8s] you can say that hey for this test case
+[932.7s] we are approved and this works and the
+[934.4s] best part is this these approvals can be
+[937.2s] default false in the BAML playground for
+[940.1s] a lot of the default scenarios that are
+[941.6s] dangerous post reading large files etc
+[944.5s] but totally allowed and passed through
+[946.5s] in language clients so it basically
+[948.2s] becomes a noop in that scenario so it
+[951.0s] should effectively work in that way and
+[953.0s] then the playground ground tool or
+[954.4s] whatever was wom playground is can be
+[956.3s] responsible for actually storing the
+[958.0s] evaluated test args. So again one of the
+[960.2s] big designs here is we are mixing
+[962.2s] declarative code with imperative code.
+[964.0s] So we need to be really careful about
+[965.6s] how this interle happens and I think we
+[968.2s] have an architecture plan that will help
+[969.7s] support this and hopefully we'll get an
+[971.4s] answer pretty soon from Antonio if this
+[973.9s] is working or not. I think this video's
+[976.6s] already gotten pretty long, but I
+[978.5s] hopefully this gives everyone a pretty
+[980.0s] good idea of what happens and where
+[981.3s] incrementality lives and where static
+[983.4s] static items live and gives us an idea
+[986.4s] of exactly how we're going to start
+[987.6s] executing this code in a variety of
+[989.7s] different conditions. There's probably
+[991.4s] still a ton of open questions and it's
+[993.1s] still going to be a big discovery
+[995.2s] process to see exactly how we have to go
+[998.1s] solve some of these problems. But I
+[1000.7s] think for now we should all have an
+[1002.2s] understanding of what happens.

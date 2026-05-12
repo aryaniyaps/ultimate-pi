@@ -1,0 +1,676 @@
+the way we code is changing and so is
+the way we interact with our
+databases every product starts with a
+simple question we started this series
+by asking what if you could talk to your
+database in natural language without
+burning your precious time writing
+debugging and reading SQL statements
+this is one of many questions asked over
+our 10 video postgress data analytics
+series that ends today the quality of
+our outcomes is determined by the
+quality of our questions and in each
+video throughout the series we ask
+different questions to push our
+abilities as AI charged product Builders
+into the future what if we can't solve a
+problem in one prompt how can we control
+our multi-agent systems how can we
+reduce costs and monitor our agentic
+software can we access more memory while
+managing less State can our AI agents
+correct their own mistakes with each
+question came a new video where we
+pushed to find new answers all of our
+work has led us to this final video with
+our answer to our original question from
+video one in the form of a product I
+want to introduce you and welcome you to
+talk to your database a new way to
+interact with your data built
+exclusively for data Engineers analysts
+product Builders new products typically
+offer one or more of these three value
+propositions better faster cheaper talk
+to your database aims to be better and
+faster at helping you communicate with
+your database let's see how talk to your
+database accomplishes that talk to your
+database is launching exclusively right
+before your eyes to join the BEDA launch
+type
+[Music]
+9999 by watching this video you are
+exclusively part of the launch this
+product is our secret we'll update the
+passcode every week until 2024 to keep
+the product as as lowkey as possible we
+want to keep the product really lowkey
+as it's in beta and make improvements up
+till 2024 for the final release create
+your account here I'm going to toggle to
+log in and let's get
+started after you log in or create a new
+account we're greeted by hyper minimal
+UI with a couple components we have an
+input field a list of query results
+navbar and a sidebar tab with our table
+talk to your database automatically
+connects to a demo read only postgress
+database this allows you to test with
+zero commitment zero risk and minimal
+setup now let's look at the core of the
+product the natural language input field
+if we hit t or click the show tables tab
+we can see all the tables in our
+postgress database we can see here in
+the users table we have this off booing
+I'm going to type select all off users
+you can see here the table context
+popped right up above the input field
+and now I'm going to hit
+enter
+you can see here select all off users
+popped into our query results and is
+loaded if you've been watching the
+series you know exactly what this is
+doing in the
+background awesome our query has Auto
+updated and has presented several
+options to us now we can view the
+results we can copy the SQL or we can
+download the results let's go ahead and
+just click the row and see what we get
+we have our natural language query we
+have the status we have the table
+context which is the tables that our AI
+agents use to complete the query you can
+see here the generated SQL query and our
+final results in a nice table that we
+can sort and view the results of all
+users are offed one of my golden
+principles of engineering never trust
+new technology validate the results to
+build trust so let's go ahead and verify
+that these are actually the correct
+results if we open up table plus let's
+copy the SQL paste it in and run it as
+is we have about 51 rows and if we just
+sort by ID we can see the first 10 and
+if we look back over sort by ID here you
+can see roughly the first 10 results are
+exactly the same with talk to your
+database you can be incredibly short and
+concise let's create another natural
+language query let's ask users join job
+limit 10 let's go ahead and run that you
+can see we have a brand new query that's
+loading and I want to just highlight
+again how short and concise this natural
+language query is it would be really
+hard to express this query in fewer
+words users join job limit 10 so for
+click results here we can see we have a
+brand new SQL statement we can see our
+table context consists of the jobs and
+the users table we have the users we
+have their respective job and we have a
+limit of 10 so again you can just copy
+this out paste in these are the exact
+results we have in talk to database so
+this is awesome I want to add some more
+clarity around the column results so
+let's go ahead and just ask talk to
+database to do this for us I'm going to
+reuse this query by clicking on the
+natural language query in the row
+and then I'm going to add prefix column
+names with respective
+table let's go ahead and let that run
+this is something we can add
+automatically in the future as a
+customization setting but for now we're
+just going to type it in natural
+language and get the exact results we
+want awesome so as you can see here we
+have a new select statement with the
+prefixed results we can see exactly what
+table each column belongs to often times
+you'll have tables that both have
+updated columns or ID columns so this
+can be particularly useful then so let's
+put our SQL AI agents to work let's run
+another query open up our table cbar and
+let's look for our notification table
+here we go we have user notifications
+let's say I'm doing some data analytics
+and I want to know how many user
+notifications have not been read I'm not
+going to type SQL I'm not going to do
+any of that I'm going to open up talk to
+your database I'm going to come to the
+input field and just type that exactly
+how many user notification haven't been
+read
+yet let's view the results we can see
+here aund users have not been read yet
+again we can copy the SQL and check the
+results look good we can take this query
+push it further figure out which users
+aren't opening their notifications for
+whatever reason the beauty of a tool
+like this is that it allows us to build
+on our existing queries we can get
+results and then continue our
+exploration in natural language and at
+least gives a nice trail of history of
+everything we've been asking and all of
+our results so now that we know a 100
+user notifications haven't been read
+let's see which users aren't reading
+their notifications so which users are
+not reading their user notifications you
+can see here I'm making sure that this
+table gets in our AI agent table context
+by explicitly stating the table there
+are ways to work around this and we can
+lean on our AI agents to do this for us
+but we'll always get better results if
+we just explicitly list the
+table all right let's check the result
+awesome so you can see here we're
+getting the user ID name and email where
+they have unread notifications awesome
+at any point we can just copy the SQL
+and at any point we can just download
+the results so far so great right we're
+talking in natural language and getting
+concrete results and SQL out of our
+database even Pro database admins would
+be saving time now let's be real right
+we've all seen product launches and
+product demos where presenters are
+basically just cherry-picking the happy
+path of their application I'll be the
+first to say talk to your database isn't
+perfect and I don't want to paint it
+that way let's push the app to its
+breaking point if we open our tables
+search for products we can see here we
+have products and supplier products
+right now what I want to say here is
+something a little ambiguous right let's
+say select the most popular product okay
+so just by looking at the table
+definition here you can see that there's
+no real way to determine if a product is
+popular we still got a result back it's
+doing its best guess by saying you know
+it's ordering the stock ascending limit
+one so it's basically saying the fewer
+products you have the better the product
+is likely going to be right and this
+makes sense but as the domain expert I
+know that that's not exactly how we
+measure how great a product is we're
+actually looking for the product reviews
+table to tell us how popular it product
+is we want to know not the lowest
+quantity we don't want to know the price
+or the price and the quality what we're
+looking for is the product that has the
+best reviews let's go ahead and just
+look at some data in this table list 10
+random product
+reviews talk to database is also just a
+great way to quickly get familiar with
+different tables so you can just quickly
+ask tell me what the data looks like
+give me a couple random
+results so we can see in this data every
+product has a a rating here and what we
+want to do to find the most popular
+product is grab the product that has the
+summed highest rating so we want to grab
+the product that has allog together the
+highest rating let's go ahead and type
+that out in natural language select the
+most popular product based on the sum of
+its product reviews rating so once again
+you can see we have the products and the
+product reviews tables that are going to
+be sent to our AI agents to figure out
+what query to run by having them here
+and EXP licitly mentioning them in your
+prompt you can be 100% certain that
+they'll be a part of the
+query let's let that run and let's see
+what we
+get all right let's check our results
+and let's see what we have here so
+select product sum product rating and
+then you can see here this is being
+aliased and we're aliasing it as total
+rating and then we're sorting descending
+this is great and then we're going to do
+a limit one that's going to give us the
+top product with the rating and you can
+see here product 75 has the highest com
+bind rating this gives us our most
+popular product we got these results all
+in natural language just by thinking
+about the problem at a high level as you
+would before minus all the work effort
+and details that go into actually
+creating running debugging your SQL
+statement so every example we've looked
+at so far has been relatively simple
+let's look at a really interesting query
+that Nails the value proposition of talk
+to your database in stone let's look at
+the order table and I'm going to ask a
+deceptively complex query for talk to
+database to answer you can see we have
+this order date field here I'm going to
+ask average time between orders that's
+it four words let's let that run if
+you're a database admin data analyst or
+full stack engineer you know that
+working with time and finding distances
+between time in SQL is not simple it's
+not a simple walk in the park there's a
+lot that goes behind
+this let's open up and see the results
+of this deceptively simple query and
+yeah exactly we're building out our
+ordered orders based on date there's
+some lead and order by statements we
+have this Over clause we then have to
+determine the distance between each
+statement and then we need to make sure
+that those statements aren't null and
+then finally we get the average this is
+not a simple statement but as you can
+see we typed four words and generated a
+ton of SQL that gave us a result the
+average time between orders is 3 days
+and then it looks like 14 hours 32
+minutes Etc I just want to highlight
+this point I'm going to go ahead and
+open up the console let me just copy
+this let's get the length of this right
+so we tyed 27 characters let's copy the
+SQL let's paste this in and we generated
+390 characters of SQL if we divide this
+we can see what our multiplication rate
+was how much faster were we talk to
+database helped me write that statement
+14 times faster it's actually a lot more
+than 14 times because we're assuming
+that you and I are a datab Bas admin
+Elite Guru who can you know type this
+SQL statement in one shot at the exact
+same rate that we can type in natural
+language which is just not true even for
+the most advanced SQL admin that's a 14
+times multiplication rate you know I
+want you to close your eyes for a moment
+imagine you become an order of magnitude
+times faster than anyone you know at one
+of your engineering activities literally
+10x faster now I want you to open your
+eyes and talk to your database enables
+you to 10x your communication with your
+database so let's talk about security if
+we click connect you can see we're using
+a demo connection with a demo readon
+postgress user and a demo open AI API
+key whenever you're ready whenever you
+feel comfortable you can disconnect and
+use your own personal connection I
+highly recommend you use a readon role a
+readon user I'm going to go ahead and do
+that right now once you've entered your
+information go ahead and hit connect and
+as long as you're not behind some type
+of VPN or something like that you should
+should connect successfully so if you're
+enjoying your experience using the demo
+database connection and you want to try
+your own connection here this is the
+place to do it so we've seen data hacks
+time and time again I'm not interested
+in them you're not interested in them
+talk to your database automatically
+nukes your data big tech companies want
+your data but me and my team of AI
+agents don't want it if you click
+customize you can see here we have
+retention policy and connection timeout
+retention policy is the amount of time
+that your query results will remain on
+the talk to database servers after 1
+hour your query results will
+automatically expire connection timeout
+is the exact same thing for your
+database connection you can stretch this
+out in the setting to 5 days at the
+longest only you are the one with true
+access to your database and true access
+to the results of your database in
+additional layer security that talk
+database has we have the notion of stop
+words so anytime one of our AI agents
+generates an SQL statement that contains
+a stop word it will automatically reject
+the statement let's go ahead and look at
+that right now let's try to insert some
+data right insert a new row into the
+users table so I'm going to hit enter
+and our multi-layered multi-agent data
+analytics AI data team is going to
+notice that we have a insert statement
+here let's reject that statement
+completely so you can see here we have
+an error and it's reporting that it
+found the stop word insert so if we
+click in here there's no information
+there's nothing to find there's nothing
+to see because the query was inv
+validated we found the stop word and so
+this is what the feedback system looks
+like in talk to your database every
+error is going to show you some type of
+result it's going to tell you why didn't
+it work right this adds an additional
+layer of security again on top of your
+readon connection that's not the only
+set of settings here you can scroll and
+see all the different ways you can
+customize talk to dat datase to fit your
+exact style you can see here we're only
+showing the previous 10 rows we can hide
+and show actions we have this
+automatically copi a clipboard
+functionality and much more coming in
+the future of talk to your database so
+just another note on security I
+completely understand if you don't trust
+me if you don't trust o database this is
+where a read only connection is really
+important you know technology enables us
+to not trust each other while still
+getting along fine there's probably some
+darker societal repercussions to that
+but we'll save that for 2024 predictions
+video of course whenever you want you
+can log out and the system will
+automatically expire both your
+connection and your career results so I
+talked about expiring your results let
+me just show you exactly what that looks
+like I've got an edge pro version of
+Talk to database on my monitor here I'm
+going to go ahead and run a query that's
+going to automatically expire one of
+these queries so you can see what that
+looks
+like so you can see here our select most
+popular query has been expired it has
+this different grade look it's got the
+timeout you can see here there's nothing
+to download now we can still copy the
+SQL but if we click in here you can see
+we just have this elect statement it's
+not leaking any actual data this row has
+been expired over time you'll always see
+your queries become expired this is just
+a matter of data security again big tech
+companies want your data I don't want it
+talk to your database doesn't want it
+it's more management it's more headache
+it's more risk so we get rid of it talk
+to your database keeps your data safe by
+not having it at all so there's one
+thing we haven't talked about here talk
+to your database enables you to be a
+part of the development I want to keep
+the feedback loop between you and I
+really tight so all the product feedback
+all the development rope map bugs and
+questions will live right in the product
+you can see here I have some mock
+feedback feature requests and some
+questions right now you can create
+feedback of three different types bugs
+feature requests and questions whenever
+you leave some feedback you really help
+improve the product based on volume I
+know I won't be able to respond or get
+to every issue but this will help
+improve the product rapidly so feel free
+to drop in feature requests this is a
+Dev heavy product so your feedback is
+super important no product launches
+perfectly no product is the right
+version when it's first released when
+questions bugs or new feature requests
+start moving into motion they'll
+automatically get updated here and
+you'll be able to watch it move to
+completion and get the feedback and get
+responses to your questions and ideas
+here try not to be spammy or annoying or
+angry or anything like that the talk to
+your database AI agents will Mark your
+account as annoying and probably ignore
+your feedback on the flip side if your
+feedback questions and feature
+improvements are legit and help move the
+product forward the moderation agents
+are going to promote your feedback to
+the top of the stack we're just
+scratching the surface of everything
+talk to your database can do and
+everything talk to your database will be
+able to do with your feedback with some
+time this product has become the new way
+that I interact with postgress databases
+I'm actively using talku database to
+build out your database and it's really
+turned into this really positive
+feedback loop and I think you'll find it
+useful as well especially if you
+interact with SQL on a daily basis
+there's a lot more going on here but
+really the core value is this you now
+have the ability to talk to your
+database in natural language you know
+like I mentioned it's not perfect you
+can throw tons of things at this you
+know just random crap that will not give
+you valid results and there's still some
+work that needs to be done to fine-tune
+the product so that it's automatically
+understanding your data
+and giving you back exactly what you
+need but as a product builds we'll be
+able to tweak modify and optimize the AI
+agents acting behind the hood to
+generate the exact results you want in
+the fewest number of words the biggest
+issue I'm running into right now is
+speed this product is built on top of
+GPT technology GPT 4 specifically by
+open AI as anyone who's been following
+the channel knows the big problem with
+that technology is that it adds an
+additional API request and as product
+Engineers know every API request you add
+to your product slows it down so we'll
+be looking for ways to maximize speed
+within the application within the bounds
+of what we actually can control but that
+leads us perfectly to where we're headed
+next you know from the beginning I
+wanted this channel to be a place where
+product Builders can gather learn
+exchange ideas and really build products
+we built a functioning product in public
+we shared and developed ideas around the
+latest and greatest Tech like gp4
+assistance API autog gy and more the
+channel has really taken off and I just
+want to thank everyone who's been a part
+of the journey especially if you're an
+OG that joined before the blow up but I
+also want to appreciate everyone new
+that's joining the journey now there's
+so many channels that just Yap about the
+latest AI hype cycle news and build toy
+apps right from the documentation we're
+here really exploring truly
+experimenting and taking products from
+zero to one you saw it here with the
+postgress data analytics tool it is now
+something you can use something you can
+feel feel something you can appreciate
+something you can learn from right talk
+to your database is live and it's the
+product of all of our work over the
+previous 10 videos on this channel we
+take products from zero to one that is
+what we do if that sounds like you if
+you want to be a part of that if you
+want to do that yourself really complete
+things take things all the way create
+value hit the sub and join the journey
+2023 is just the beginning so you know
+while we're chatting let's just go ahead
+and just fire off a couple uh you know
+old queries whenever you want you can
+just hop in select some of your old
+queries fire them off this is just kind
+of cool I love seeing multiple queries
+running at the same time if you know
+several things you want to do you can
+queue them up and it's a really cool way
+to you know get a lot done in a short
+amount of time so you can see here we
+have three queries running actively and
+the results will flow in one by one we
+can see we got an error here for some
+reason it found a stop word so we can
+just go ahead and rerun that no problem
+and you can see here we have additional
+results so what's next for us the
+postgress data analytics series is over
+from it you and I have a new way to
+interact with your database as many
+product Builders subscribed to the
+channel know the launch of your product
+is just the beginning here's what you
+can expect in the future of talk to your
+database we want to build out a clean
+autocomplete we want our SQL agents to
+be able to self-improve we want to add
+voice commands we want to add favorites
+we want to improve the road map and we
+want to improve the feedback we're also
+going to have a pro version coming out
+with some pretty insane features in 2024
+recursive data generation safe insert
+update and delete functionality super
+mode and exclusive dedicated AI agents
+to speed up the process so for everyone
+supporting the channel and for all the
+product Builders who really see the
+value in 10x in your database
+interactions talk to your database as a
+50% or early sign up discount up until
+the new year so if you sign up anytime
+between you're seeing this video and up
+until 2024 you'll get 50% off the
+bleeding edge pro version that will
+launch with the New Year in 2024 so you
+know I'm going to be honest I'm having
+kind of a hard time wrapping up this
+video um I really get sad like this but
+uh you know the series is ending and uh
+as soon as I turn the camera off our
+postgress data analytic series is
+officially
+over it's been a it's been a really
+great journey and I'm glad that you've
+been here along the way you know one one
+of my biggest Inspirations is knowing
+that there's someone out there watching
+this channel that's going to take what
+we're doing here all the work we've done
+leading up to this video all the value
+that's in this product all the value
+that we're going to create in 202 for
+someone's watching this Channel and
+they're going to take all this to the
+next level and and that just really gets
+me excited you know to be able to
+contribute like that and to be able to
+help other engineers get to that next
+level not only to stay relevant in the
+age of AI but to be on the edge to be on
+the bleeding edge of what's possible
+this is just the beginning of our
+journey to become agentic engineers so
+one last thing here with the series
+ending it's probably going to be a good
+time for me to step back a little bit
+focus on talk to your database focus on
+building a great application and also
+plan out lock in 2024 we have a lot of
+exciting things coming but I have to say
+you know I have a new found respect for
+YouTubers for people creating content
+keeping up this pace every single week
+even every other week um is a pretty
+massive task and you know it might seem
+like it might seem like things are
+happening magically but there's a lot of
+effort and work that goes into creating
+developer content especially when you're
+actually building something you're
+actually you know trying to share the
+the core of ideas and different
+structures and use different tools it
+takes a lot of time to really think
+things through in a way that is
+productive for someone to you know watch
+and consume so it's probably a good time
+for me to step away for a little bit
+take some personal time reset recharge
+to blast off into a brand new year while
+focusing in on talk to your database I
+want to give that the attention it
+deserves and I want to make sure that
+what we've built matters I want to make
+sure that what we've built can really
+create value so last note on that again
+huge thanks to everyone who's joined the
+journey if you're watching if you made
+it to the end um and you're you know
+you're really excited about htic
+software you're excited about talk to
+your database whatever it might be you
+know you're looking to build your own
+product hit the like hit the sub join
+the journey if you're interested check
+out the product totally free to sign up
+there's zero risk and trying the product
+you can get out whenever you want or
+stay in as long as you want I just want
+to say thank you it's been an incredible
+series The Channel's really taken off
+and as I've said before this is just the
+beginning 2024 is going to be wild I'll
+see you in the next
+one

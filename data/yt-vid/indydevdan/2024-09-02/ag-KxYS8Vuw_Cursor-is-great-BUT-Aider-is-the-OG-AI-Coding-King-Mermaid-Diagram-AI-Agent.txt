@@ -1,0 +1,545 @@
+what's up Engineers Andy Dev Dan here
+cursor has been absolutely popping off
+in the tech ecosphere this is due to the
+new multifile editing composer feature
+we covered this in the previous video
+I'm a huge fan of cursor but the truth
+is cursor is a Clos Source commercial
+application and putting all your eggs in
+one basket this early in the generative
+AI age is a mistake on the channel we've
+been benefiting from AI coding and
+multifile editing for over a year now
+all thanks to the original llm based AI
+coding tool AER this is a coding tool
+that as you'll see in this video
+typically outperforms cursor while
+giving you more control over the AI
+coding process not to mention AER is
+completely free with tons of llm
+providers and Paul the engineer that
+built AER puts out some incredible blogs
+to keep you updated on AI coding so in
+this video I want to show you another
+option outside of cursor to help you
+diversify your AI coding tools and we're
+going to look at AER by making a change
+to a brand new mermaid AI agent that I'm
+building that can help you build
+diagrams faster than ever if you don't
+know what mermaid is it is a awesome
+textbase diagramming and charting tool
+you can basically pass in simple blocks
+of text and get out node Edge based
+diagrams let's Dive In by first showing
+off how our mermaid diagram AI agent
+works
+so the mermaid agent is really simple
+you run a command you ask for the
+diagram that you're looking for you
+specify an output image and then
+optionally you can pass in a input file
+that the mermaid AI agent then reads
+generates diagrams and then you can on a
+loop improve the diagram let me just
+show you what that looks like I'll open
+up the terminal and I'm going to run
+this command so I'm just going to go
+ahead and kick this off and then we'll
+walk through exactly what's going on
+here so you can see the diagrams getting
+generated there and now we have this
+image fully generated so let's go ahead
+and just dissect that prompt a little
+bit right so we're using typer so I have
+this function called mer iter and then
+we have this prompt right flowchart
+explaining why communication via
+diagramming is so important for
+engineering great products and then I
+say include things like time saved
+faster iteration increase trust and more
+then I specify the output file so based
+on that we got this really really cool
+diagram the cool part about this tool is
+we can continue to iterate so I'm
+running the iterate command and I can
+just say add additional nodes Group by
+benefit okay and so now with this human
+in the loop pattern we're going to Loop
+and hopefully we'll have our elements
+combined together it's kind of squished
+so let's go ahead and clean this up a
+little bit I'll say drop
+subgraphs and make diagram LR so now
+we're going to make it run left to
+right a awesome so it looks pretty good
+right we can see that our benefits of
+diagramming are grouped together by time
+saved clear communication team alignment
+and then the last thing I want to do
+here is I want every single node to go
+into engineering great products so I'm
+just going to go ahead and add that as a
+final prompt right create an edge
+between the last notes and Engineering
+grade products so we're going to ask
+that La for that last change there and
+we should get a full perfect we should
+get a diagram generated there right this
+is a killer use case for generative AI
+when you combine it with a fantastic
+text based tool like mermaid you can
+rapidly iterate on asset generation so
+if we go ahead and look at the generated
+output file you can see this is awesome
+but inside of our code base here we're
+only saving the last generated file so
+our task here today is going to be to
+take this file move it into the output
+directory you can see we have a couple
+other items generated here and we also
+want to save all of the previous
+iterations of this file getting
+generated right so let's go ahead and
+just make a couple tweaks to this code
+base let's get into the AI coding of
+this I have a couple key pieces of value
+I want to share with you
+here one of the great Parts about ader
+is that it runs right in the terminal so
+all I'm going to do is type
+AER no autoc commits we're going to run
+with-- Sonet so you can see here we're
+running Sonet with the diff edit format
+we have infinite output and in this
+codebase we have 19 files let's go ahead
+and add files to our context window to
+do that I'll type SL add and if we look
+at the code base here I want everything
+under Source mermaid agent so I'll
+literally just type Source mermaid agent
+slashstar now you can see I have every
+single file in that directory I have all
+my python files so now if I type SL
+tokens you can see exactly how much
+every single run costs and you can see
+all the files in your context window so
+this is fantastic let's go ahead and
+just ask the codebase let's ask AER
+let's ask our llm what changes we need
+to make in order to move our generated
+image into the output directory we also
+want to add the iteration number and
+save that as well so back in the
+terminal I'll clear and I'll just type
+slash ask in what function are we saving
+the mermaid diagram images and so with
+all the context of the code base claw
+3.5 running on AER has shown us exactly
+where this is there's this function
+called mm and we have this save image
+locally if we go ahead and search all
+hop to this you can see that we just
+have this simple save command it's just
+saving the file name that gets passed in
+right and the mm just builds the image
+based on the graph that gets generated
+by our llm and then we just save that
+image right so fairly simple let's go
+ahead and ask for the changes we'll need
+to move this to the output directory
+right and I'm being super verbose here
+right just cuz we're walking this
+through and I want to share how I think
+about AI coding with you but normally I
+would like I already know where this
+code is I don't need to ask I would just
+go ahead and prompt it although I do
+want to highlight something here that
+we'll talk about in a second building up
+these conversations with AER with the
+slash ask command is super super
+important and you'll see why in a second
+here so I'll go ahead and type SL ask
+can we reuse existing functionality to
+save that file to the
+uper okay so as you can see here there's
+this build file path utilities function
+and we can go ahead and just grab this
+right and search all so you can see here
+we already have this pattern set up of
+using the build file path to right to
+our output directory right so it works
+just like this right we have this
+function we have this simple constant
+that gets combined with the file name
+and make sure that the directory exists
+right so simple enough so this is really
+cool right and our AI coding assistant
+picked up on this and now we can do
+something really really cool so before I
+mentioned that you know normally you can
+just type the changes that you want I've
+been using this pattern of running the
+slash ask command to have more
+conversations with your AI coding
+assistant and then after you know the
+changes it's going to make then you say
+go ahead make the changes so that's
+literally what we're going to do here go
+ahead and make that
+change so you can see there we got the
+import and we have the update using the
+new output path so go ahead and close
+this let's open up that file we go to
+the mermaid py our save image locally is
+now going to first run the build file
+path from our utils right so really
+simple I just wanted to walk through
+that so you can see exactly how ater
+using the ask command can build this up
+for us right so that's a simple change
+that looks good before we go ahead and
+run the example let's go ahead and get
+that second change in there right so ask
+draft the change needed every iter file
+in our merer function and I'll say every
+iter mermaid chart okay and I'll run
+that sometimes when you run these
+changes and you run your AI coding
+prompts it changes too much and it makes
+mistakes and it does things wrong by
+running the ask command you can ask for
+a full-on draft you can see the
+reasoning behind your AI coding
+assistant and then you can say make
+these tweaks or go ahead and Implement
+that so overall that looks good but all
+I wanted to do is save the new output
+file name and I basically only want this
+right so we're going to iterate while
+we're running this while true and we can
+go ahead and just take a look at this
+code in the main file here so you can
+see we have we have this Loop during our
+main Eder call and all we want to do is
+update to make sure that saves a new
+file in the output directory right you
+know I'm just going to highlight this
+and only implement this portion and I'm
+just going to paste that
+in okay so let's go ahead and see how
+it's done there so now we have iteration
+count we now have the initial output
+file that's good so that's getting
+saved and then we should see our file
+getting incremented here right exactly
+like what we were looking for we have
+the iteration count and then we're
+saving this in a loop awesome so this
+looks right let's go ahead and um what
+we'll do is we'll open up a new terminal
+we'll go full screen here and now let's
+go ahead and iterate on a pie chart
+let's use a pie chart as an example
+right this is one of the cool Parts
+about mermaid there are varieties of
+charts you can build so if we look at
+our read me we'll have an example here
+here of a uh pie chart where is that pie
+chart there it is so I'm just going to
+copy this command
+here paste this and go ahead and update
+to use the mer iter
+command Okay so our merid AI agent is
+going to go ahead and create this pie
+chart for us awesome so you can see that
+looks great it's iterating right now so
+what I'm going to do is ask for a change
+I'll say you know coding testing
+documentation meetings go ahead and add
+a new activity here we're going to say
+um add new pie slice mastering AI coding
+with Indy Dev Dan go ahead and get that
+slice added there all right so this
+looks great let's go ahead and check our
+files so if we open this up you can see
+we created this under an additional
+inter session that's fine but if we look
+at these images we can see we have time
+spent on Project task and then we have
+that additional you know 5% U mastering
+a coding with any de by the way if
+you're interested in the interest
+section of AI coding and AI agents
+definitely drop a like and consider
+subscribing to the channel the way I see
+it the world of generative AI is
+extraordinarily simple you're either
+learning and using gen AI Tech like AER
+cursor and tools like our mermaid AI
+agent or you're getting left behind fast
+on the channel AI coding and agentic is
+our bread and butter here we spot Trends
+before they happen we extract value we
+learn and we move on don't fall behind
+enjoying the journey so let's keep going
+here let's go ahead and do something
+bigger we go up to the top level here
+collapse all of our code you can see
+here we have two commands we have myrr
+and then we have myr iter so we've been
+working on mer iter we you know created
+this additional session directory it
+made that change for us that's awesome I
+want to go ahead and create one more
+command here I want this bulk command
+and what this is going to do is
+basically create five versions of of a
+flowchart right so sometimes you're not
+sure what you're looking for and you
+just want you know n iterations of it so
+all we should need to do here is pass in
+an additional - c flag and that should
+do the trick for us we're going to use
+our favorite open source free AI coding
+tool AER and we're just going to ask for
+this change let's hop back to the
+terminal I'll go ahead and clear the
+chat and I'll also clear all of our
+files I'm going to go/ add I'm going to
+add the read me and then I'll say you
+know add of course we're going to need
+the main and let's go ahead and add our
+mermaid agent and let's go Ahad and add
+um our mermaid call as well and that
+should be good so with these files we
+can go ahead and type SL tokens to see
+what our context Windows like that looks
+good and now let's go ahead and request
+a change so um read read me and let's
+build out our new my bulk command
+but add another- C create inv verions of
+our diagram I also forgot to add our
+type file so I'm just going to copy this
+command and then I'll add our typings
+file here this has all the types all the
+pantic types for this code so you can
+see here we have a couple different
+types for every function I have this you
+know oneshot mermaid prams and then our
+iterate mermaid prams this is what gets
+passed in and created on the top of the
+the method right so this gets passed
+into this actual functionality so I'm
+going to say that so I'll paste this
+back in and then I'll say create a new
+pram type for this method and let's call
+it bulk mermaid
+params okay so I'm going to go ahead and
+let AER make these multifile changes for
+us automatically I'm hoping in just one
+shot without having to do anything here
+it's going to make all these changes for
+it so let's go ahead and see if AER and
+Sonic 3.5 can oneshot this new
+feature all right nice so we got a
+little
+anthropic server eror but this is
+awesome so it's going through it's
+making those changes it added the type
+it added the new command it's importing
+it it's updating the mermaid agent to
+make these changes and now it wants to
+know if we need to create this input
+file.txt I'm not sure what this is let's
+go ahead and hit yes we'll see what that
+looks like in the end so all right so
+let's go ahead and hop back to our
+editor and now we should be able
+to look through all of our commands here
+so we can see we have our new merb
+command and you know what I'm not even
+going to look at this code right uh we
+can kind of see that it looks like it's
+in the right form um all I'm going to do
+is Rerun a prompt so I'm just going to
+go ahead and copy this so you can see
+here uh we have the prompt so this is a
+flowchart of the setup instruction
+we're going to call this setup
+diagram.png we're loading our readme so
+literally this readme file right here
+right and then we're going to say- C5
+and that's the new flag that we have
+right here and this is going to be the
+count and so let's just go ahead and run
+this let's see um if AER did this all
+for us in one shot
+okay so interesting results there um it
+looks like it did generate a couple
+different versions you know we have
+install uh UV install dependencies and
+you know before we look through these
+diagrams you can see here that that's
+exactly what our setup instructions look
+like right we're using UV the brand new
+hyper fast python manager you use UV
+sync to download all the requirements
+set up the open AI key and we have a
+couple optional setups and then we have
+just running our commands right so if we
+look at the diagrams um these look
+really great right so we have install UV
+install dependencies setup key uh we run
+single run interactive and then we have
+our brand new run bulk right so this was
+one version we can go ahead and close
+this we have another version right here
+this also looks good has an additional
+done node some of the node titles are a
+little simpler looks good also um this
+one's really interesting right so this
+is the power of generating multiple
+versions right you might you might want
+something more verbose like this so we
+have start install UV install
+dependencies with UV sync nice I like
+the additional detail there and then we
+have setup open AI key as invar awesome
+then we have this optional decision
+diagram this is really cool you know we
+can also in this code base setup
+anthropic Vertex or Gro and then we have
+run a single generation and then if we
+want the interactive generation you know
+we want our my- so um we also have that
+as an option and then we have just a
+simpler version here right so just top
+to bottom optionally set the other keys
+and then we can run single run
+interactive or run bulk so it actually
+look like this this did work perfectly
+in a single shot right I won't bother
+you with going through the code but uh
+you know we can see that um AER
+generated all this in one shot if we
+look back at this run it needed to edit
+three files to make this happen right
+and we could also see which I really
+love you can see we sent 18K tokens
+received 1K that cost 7 cents total
+session total is 30 cents really really
+nice to see those metrics right at the
+top here as we discuss on the Channel
+all the time the cost of LM is going to
+zero the context window is going to
+150100 million and Beyond a really
+interesting post just came out backing
+that we have 100 million context token
+Long window with this company called the
+magic team um which they're new on my
+radar apparently they've been teaming up
+with Google Cloud to crack the 100
+million token context we'll be keeping
+an eye on this on the channel you know
+if we hop back here we can see that you
+know across three files AER and Claude
+3.5 Sonet just nailed everything that
+needed to happen to generate this change
+and we even got you know this uh the
+mermaid uh bulk progams which is exactly
+what we we asked for right if we open up
+our typings file we can see we have bulk
+mermaid prams right here and it looks
+perfect right we got the prompt output
+input count and uh this is really
+awesome to see so big shout out to ader
+this is a fantastic tool I wanted to
+share this with you because I don't want
+you to be locked in to the close Source
+tools like I mentioned I love cursor I
+use cursor but I also love AER and use
+AER this one's free it's open source
+it's a lot more customizable Paul also
+has some really really killer insights
+and some incredible benchmarks
+so you know if you check out the AER llm
+leaderboards a large portion of the AI
+coding ecosystem looks at this web page
+right here to know what is the
+performance of this new model on real
+code bases using AER right so this is
+really cool you can see claw 3.5 Sonet
+as we've been saying on the channel it
+is the best AI coding assistant large
+language model by far hands down this is
+The Benchmark to look at Paul with his
+work on AER is just the leader here in
+the AI coding space I would love to see
+cursor put out some benchmarks like this
+where they compare and use their tool
+their prompts to um you know create some
+uh concise benchmarks for us to
+understand and internalize how they see
+model performance with their tool so
+anyway tons of value here definitely
+check out AER as an alternative to
+cursor as I've mentioned in the past I
+go back and forth between these tools
+but when I'm coding deeply when I'm
+working fast uh there is just no more
+precise tool than AER you come in you
+can check your token usage you can add
+and remove files you can add directories
+huge fan of this it's a lot simpler AER
+really leans on the power of the llm and
+the Simplicity of a just a really clean
+AI coding architecture so anyway that's
+the Mermaid diagram AI agent this is
+going to be in the description for you
+feel free to check this out regardless
+of how you generate your diagrams I
+highly recommend you dig into some type
+of gen AI tool like this even if you
+just go for you know right for the
+simple claw or chat gpg interface
+generating diagrams on the Fly is so so
+important and so valuable as an engineer
+right and if you are a mid senior plus
+level engineer you know that
+communicating the value of your work is
+incredibly important and creating
+diagrams helps you do that in a faster
+more concise way so that's the power of
+a AI agent like this just being able to
+generate diagrams on the Fly iterate on
+them and having a quick iteration
+humanin the loop pattern to do that will
+help you generate these diagrams faster
+which will help you communicate your
+ideas faster for both your personal and
+career work definitely spend time
+communicate your ideas well use diagrams
+to help you do that and use gen AI to
+help you build your diagrams to help you
+drive that effort forward again I'm a
+huge fan of cursor I use it but it's
+important to diversify it's just too
+early in the AI coding game and the
+generative AI age to be committing and
+putting all your eggs into one basket
+into one tool I like to stay close to
+the prompt stay close to the metal stay
+close to the tooling and tools like AER
+allow you to do that we've been at this
+for longer than a year and a half almost
+2 years now and we are just scratching
+the surface of what's possible with
+these incredible AI coding tools and
+with generative AI if you want to stay
+up to date and catch these Trends before
+they happen join the journey drop the
+like drop the sub and I'll see you in
+the next one

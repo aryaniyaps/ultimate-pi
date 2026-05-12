@@ -1,0 +1,92 @@
+[1.9s] Hey, our user your techbud pointed out
+[4.7s] an issue with type narrowing. Here's an
+[6.8s] example that shows what's going on. If
+[9.5s] you have three different classes like I
+[11.2s] do here, and then you have a field like
+[13.1s] type which distinguishes between those
+[14.9s] classes and you want to use that type to
+[18.0s] guarantee that certain other fields are
+[20.1s] available for use in a template. Well,
+[22.3s] that just wasn't working. So, what I did
+[24.6s] this Friday was to go ahead and fix type
+[26.9s] narrowing so that you can use type
+[28.6s] fields to narrow down the number of
+[30.2s] other fields available on those types in
+[32.4s] your templates. Thank you so much your
+[34.8s] techbud for pointing this out. And for
+[37.3s] anyone else, if you're not following
+[39.0s] your techbud on YouTube, go check him
+[41.0s] out. He has some great content. Hello,
+[42.6s] Sienna Red. Thank you for reporting two
+[44.6s] go issues in our CFI layer for some two
+[46.7s] edge cases. Firstly, when we have a
+[48.7s] purely dynamic class, we clearly didn't
+[51.3s] codegen the right scenario. Thank you
+[53.0s] for your highly descriptive issue on
+[54.6s] Discord. And lastly, when you pass in
+[56.8s] images as inputs, we had an encoding
+[58.7s] error. Both of these are now fixed. We
+[60.8s] actually added not only did we add them
+[62.1s] in, we actually made test cases to make
+[63.6s] sure we actually test for the scenario
+[65.0s] longterm. Uh and the fix was simple. It
+[67.1s] was a templating fix exactly what you
+[69.0s] actually suggested in your review. And
+[71.8s] then lastly, for the images as pointers,
+[73.9s] uh that is also now fixed as input
+[75.7s] parameters. Again, we've added tests to
+[77.6s] guarantee that this is going to be good
+[79.1s] going forward. Thank you.
+[81.8s] Hey, Zuabi. So, you found some issues
+[83.8s] with our errors. One of them is that
+[85.5s] sometimes we throw BML validation errors
+[87.7s] when we should actually be throwing a
+[89.5s] BAML HTTP client error because you're
+[91.8s] getting an error from the LLM client.
+[94.0s] And then the other one is that you have
+[95.4s] to manually extract the LM client error
+[97.8s] out of the message property of the
+[99.5s] validation error. And then you also
+[101.1s] brought up some things about our error
+[102.9s] hierarchy. So, there's a PR here that
+[105.8s] fixes all of your concerns. Now on the
+[108.2s] BML client HTTP error which is now
+[110.3s] correctly thrown instead of BL
+[111.8s] validation error uh you have a raw
+[114.5s] response property where you can get the
+[116.8s] edm error without splitting the message
+[119.0s] property and this is the new hierarchy.
+[121.4s] So I hope this fixes your problems.
+[124.2s] Thank you for reporting the bug.
+[127.1s] Hello guys. Quick and easy fix for us
+[129.1s] this week. So there's quite an intuitive
+[132.4s] thing happening when you first open the
+[134.0s] playground. that is sometimes if you did
+[136.3s] open it, we wouldn't prompt you to fill
+[138.9s] out the API keys, which meant that you'
+[140.7s] probably, you know, try out running it
+[143.3s] and having an error via uh our output
+[146.7s] window. But now, when you open it for
+[148.6s] the first time, if you just seen it,
+[150.2s] you'll now receive that little modal
+[153.0s] prompting you to put in DPI keys. And
+[154.8s] this is not going to bother you again if
+[156.8s] you open it again. Uh and also this is
+[159.6s] persist across the local storage for
+[162.9s] your extension. So, and even in other
+[165.0s] projects, if you know it's not your
+[167.0s] first time using MAML, we won't uh bring
+[169.8s] this up. Hope this is useful and have a
+[172.8s] good one. Cheers. Hey, Rishop. So, you
+[175.6s] reported a bug in our discord about
+[177.7s] streaming not working correctly in our
+[179.8s] Nex.js SDK and the problem was that we
+[182.3s] did not correctly handle streaming
+[184.1s] chunks in the client side. So, I opened
+[185.8s] this PR which should fix the issue. And
+[187.8s] I have an example from our int test here
+[189.7s] in the browser that does some streaming.
+[192.3s] And streaming should now correctly work
+[194.5s] as you see uh here. So I hope this fixes
+[198.1s] your issue. Uh thank you for reporting
+[200.2s] this bug.

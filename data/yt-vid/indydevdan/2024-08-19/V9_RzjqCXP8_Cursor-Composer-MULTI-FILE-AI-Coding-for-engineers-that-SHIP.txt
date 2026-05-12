@@ -1,0 +1,597 @@
+AI coding is changing the way software
+is created and there's one team and one
+lone 20x engineer leading the way for
+you and I cursor is the team the cursor
+team has made significant strides in AI
+coding but there's one feature they've
+developed that stands far Above the Rest
+everything else PS in comparison in this
+video I'll show you what this feature is
+and why it's so important
+this feature is so new it doesn't have
+any real true documentation yet but if
+you visit the change log you can see
+exactly what this feature is this is
+none other than cursor's brand new
+composer feature the main trick here is
+that it is the new experimental multi
+file editing feature let's dive into
+it so in order to enable cursor composer
+feature you can go into to your settings
+go to the beta Flags make sure that
+composer is enabled here once you've
+done that command I will pop up a small
+composer window and command shift I will
+pop up a full screen version let's go
+ahead and write a change and let's
+convert this input and this output
+variable here you can see in this
+component let's go ahead and give this a
+true input field and a true output field
+let's open up cursor composer let's go
+ahead and try out the brand new chat GPT
+4 latest model I'll prompt convert input
+into a real input field make the input
+dark blue and white text we'll hit enter
+and you can see it's focusing one file
+at a time right now we only have liquid
+prompt. viw in our context and there you
+can see the changes getting written I'll
+go ahead accept these changes you can
+see here we have input ping how are you
+it updated this to an input field and
+now we have a label let's go ahead and
+make a similar update to our output
+field with the difference being we want
+to take this output field and convert it
+into a markdown component that we're
+using in another component somewhere
+else so what I'll do is I'll H command
+in to start a new chat add another file
+to the context so the change I'm looking
+for is also in this prompt editor all
+I'll do is reference it and then I'll
+say convert output to a DC component and
+render The Prompt output
+there cool so it picked up on this
+component here I'll go ahead and hit
+accept all so we can take a look at
+these changes and now we're rendering
+this in this MDC component this is great
+let's go ahead and test out some of the
+multifile editing features that this
+gives us right because that's the whole
+point we can already do this using
+cursor you know we could have made all
+those changes using the endline
+selection prompt the benefit and the
+value of this brand new composer editor
+is that we can write a multiple
+files so what I'll say here is move the
+input
+field into its own liquid input and I'll
+specify the directory as
+well component same with the output
+field
+you can see here we're actually going to
+generate that component we have the
+liquid input liquid output and these
+files have now been created and now
+they're getting referenced right so go
+ahead accept all now we have this error
+here I'm not going to do anything
+manually I'm just going to highlight
+this I'm going to come back over to
+composer I'm going to paste this in
+resolve this error and then I'll go
+ahead and just add those new files right
+so I'll add input I'll add output and
+let it rip so I'm still testing out the
+capabilities of chat GP 40 from what I
+can tell it seems like a very capable
+model but it's not as consistent and
+it's not as solid as a model like Sonic
+3.5 so it's going to break this model
+into both a value and an input that
+looks great I'll accept that and let's
+go ahead and refresh and that looks
+great looks like we have our rendering
+back up and writing there so there's an
+example of using cursor composer feature
+to write multiple components at the
+exact same time right so this is pretty
+cool to see let's go ahead and push this
+further I want to go ahead and improve
+the styling of both these components so
+I'm going to use cursor composers
+overlay feature for this so I'm going to
+use command shift I here so you can see
+we have this new composer button I'm
+going to go ahead and click that and
+start adding the context needed to make
+these changes so I'm going to go ahead
+I'm going to add the liquid prompt input
+and output and now we have those files
+in our context so now I can go ahead and
+just prompt whatever I'm looking for to
+make the changes and we can keep testing
+J GPT for o latest on top of composer
+I'm going to go ahead and add one more
+file here there's a reference file that
+I used before um that I want to go ahead
+and just kind of get some of the styles
+from so I'm going to go ahead and add
+prompt editor as well this is an
+existing code base uh let me just go
+ahead and show you the size here if I
+come in here and look for for regx um I
+had this before so yeah if we look at
+total so this code base has about 22,000
+lines of code and if we do what was it
+grab Dash C we can see that we have
+about 151 files specifically TTS and
+view file so you know this is a
+fullstack code base it's a nu
+application this is in production this
+is Live code with multifile editing with
+these AI coding tools we're operating on
+about 151 across typescript and VJs and
+then about 22,000 lines of code so this
+is a small production code base there
+are code bases I'm sure you've seen and
+worked with that are much larger
+especially if you're mid or senior level
+150 files this is fairly sizable and uh
+you know of course it'll continue to
+grow in size as the product grows but
+let's go ahead and hop back to our uh
+composer menu here looks like we lost
+the file references so I'm just going to
+add those back here we had the input
+output and the prompt editor and um what
+we're going to do here is say style
+the uh liquid input and liquid output to
+mirror The Prompt
+editor I'll just go ahead and leave that
+as it is right so we're asking the
+assistant to look at these four files
+pull these styles from the prompt editor
+and apply them to our liquid input and
+our liquid output so this is really cool
+you can see let me just go ahead and
+open this up a little bit so this is
+really cool right so on the right panel
+here you can see it walking through the
+changes giving an explanation and once
+we click the file it's going to show off
+the changes needed for each respective
+file right so this is really cool to see
+it's really breaking it down and showing
+exact changes it's making across
+multiple files I'll go ahead here I'll
+hit accept all and you can see here we
+have some styling so not the best
+styling it looks like you know it's not
+exactly what we were looking for but
+it's close enough uh remove the
+background from the input
+section and delete input colon delete
+the label right so just making a couple
+more tweaks here it's not exactly the
+way I want it so I'm just going to keep
+tweaking to get the results I'm looking
+for so you can see there and that
+iteration it only updated liquid input
+I'll just hit accept all and you can see
+in the UI it dropped that and it looks
+like it did drop the background on the
+button as well put the background back
+on the input HTML
+element okay so again I'll accept and
+there we go so we got the background
+back that looks good um now I want to
+Center these items it's kind of like
+clunky right there so and if you want to
+close this you just hit Escape so now
+you you know you're back in your regular
+IDE editing mode which is fantastic we
+can go over to the liquid prompt and now
+I want to give this uh something to
+reference by right prompt editor and
+then I'll just say I'll start a new chat
+here just because we don't need all the
+context I'll just go to the liquid
+prompt and I'll say Center the
+vertically and horizontally right so
+just go ahead prompt that let it get to
+work there and looks like that's good
+I'll go ahead and hit accept and now you
+can see that there it's going left to
+right so of course the fix for this is
+uh Flex call so just literally say Flex
+call let it make that change with the
+context of the previous conversation hit
+accept and now we have this right so you
+know this is just like classic styling
+classic CSS writing um make the width of
+the uh liquid input the same match the
+input
+field I'm just doing this as a test I
+actually don't know if this will work
+what I'm hoping will happen here is that
+it automatically adds the files uh the
+content inside liquid input and output
+to the context and makes this change so
+let's go ahead and just see if it it
+does that this is actually a test I'm
+not sure if this will work let's go
+ahead and try okay yeah so that's not
+working right it is only looking at the
+files that it has in its context and it
+just does that to the top level so
+that's fine what I'll do here is I'll
+hit uh reject all and then I'll add
+these files to the context right so this
+is really cool after execution I can
+just go ahead and add these and then
+I'll look for my previous message here
+I'll just throw this in here right so
+now I'm going to paste this message in
+again and see how it does with the
+context of the files so you can see now
+we're editing the input and the output
+and we also are editing the liquid
+prompt which I'm not sure if we need to
+do that let's go ahead and take a look
+here um input output width and we're
+setting that to Max with 500 pixels okay
+so that looks fine I'll go ahead and
+just accept this and now we should get
+some matching width roughly okay so
+whatever that looks fine um I'll just do
+one more I'll say Gap or okay Gap nine I
+guess I'm just doing some adding a gap
+here to these items and we'll just
+accept and there we go right so great so
+now we have
+[Music]
+that okay so that's good uh we're making
+a couple changes right this is just
+small you know frontend stuff but it's
+really nice because what we're doing
+here is we're kind of moving oursel up
+the stack we're not writing the stuff
+manually by hand anymore we're asking
+for what we want done at a higher level
+and then we're letting the llm we're
+letting our models our AI powered IDE
+cursor uh we're letting this stuff do
+the hard work for us right now we need
+to when we press the enter key I want
+whatever prompt is in here to actually
+execute we're going to keep these files
+context here on Enter key when liquid
+prompt run a new prompt up to liquid
+prompt of and run the make prompt
+function so long story short here is in
+the liquid prompt file we have this make
+prompt function here that is coming out
+of a hook and all this does is you know
+it runs prompt and it Returns the result
+right it sets it to the prompt output
+right here we want when we press the
+enter key on the input field instead of
+doing this in our mounted hook we want
+you know these components to just handle
+that for us so what we'll do is open
+this up again and we'll just let that
+fire so let's see how gpg 40 and
+composer does this for us here okay so
+it knows to update the input field here
+this is awesome it has that Enter key
+event set up and now it's writing
+that uh higher level method on the
+liquid prompt so uh this all looks good
+so I'll just hit accept all I'll say
+remove handle enter from unmounted so
+I'm just saying you know don't fire that
+event off on the unmounted hook we'll
+just do that from our mitted event so
+okay that looks good I'll accept close
+this and now we see this looking good um
+ping how are you I'll hit
+enter there it is so now it is you know
+giving us that content I don't know what
+model we're using right here so I'm just
+going to go ahead and just you know
+right a quick prompt to create an input
+field for that so I'll say I'll do this
+in a small quick composer window here so
+I'll just come in here um I'll hit
+command new and I'll just say move the
+model into a ref show it
+above the liquid input
+field cool so I'll accept that and close
+this let's go ahead and see what the
+model is good so we have gb4 mini
+running here and it's just going to show
+that right at the top that's fine um
+let's go and just take a look at what
+that looks like again okay that's
+whatever looks good and now if I hit
+enter here we're going to get the result
+results out there and type another
+prompt I'll say count to five okay 1 2 3
+4 5 very cool count to
+10 and I'll say in reverse and I'll say
+skip evens so you can tell this is a
+real llm Runing under the hood right
+skip three good skip
+n nice okay so you can tell right this
+is a model running under the hood that's
+great so let's go ahe and do a couple
+more things here I don't like this blue
+color and they the idea behind the
+liquid prompt editor here is that I want
+to show and hide this prompt editor no
+matter where I am we'll of course use
+composer for this so I'm going to switch
+to the liquid input file and start a new
+message here and the nice part about
+this is whatever file you have Focus
+it's going to automatically start the
+context with just that file there's the
+background color obviously we can tweak
+that update the background
+color and dark blue left to red right or
+no no no I'll say uh two top right so
+we'll see these changes come in here
+perfect and there's that gradient and
+okay so uh we'll allow that for now and
+then I want to come back in here uh just
+making some small tweaks just kind of
+moving fast doing whatever convert the
+model dip to a p and it should come in
+and just highlight this one line here
+great I'll accept that cool nice so now
+it has our font there that's awesome and
+now we'll we'll ask for our keyboard
+event so what I'll say here is using VI
+use slash on keystroke I think it is
+show and hide the liquid prompt editor
+div and I'll say add a ref for the show
+hide uh VAR okay so I'll just let that
+rip this is just a single file edit
+let's go ahead and see if it can do this
+I did forget to mention the exact key
+binding that I wanted so we'll add that
+up in a follow-up prompt you can see
+here we did get this uh solid import we
+got the variable we wanted and we have
+the keystroke which is good so that's
+pretty close so go ahead and accept this
+and then I'll go ahead and what do we
+get here let's go a and refresh oh so we
+have this bug here right so we have a
+full-on error so I'll say fix error bad
+comment line n okay good just going to
+go ahead and fix that for us awesome
+looks good default show prompt
+editor def false on key
+stroke command plus P to show and hide
+that VAR keep Escape as well so it
+shouldn't need to touch any of the other
+files that we have here okay nice that
+looks good I think this can accept a
+list we'll see so I'll go ahead and
+accept that and now it's show default
+false I'll hit command p and of course
+we're getting the classic print so I'll
+say I believe the Onkey stroke uh yeah
+put places the event here right so event
+and then we have the keyboard event and
+then we have to you know do that
+manually so I'll just use cursor tab
+here to do these Auto completions
+another incredible feature from the
+cursor team but so let's go ahead and
+try this now
+right all right so it looks like these
+key combinations aren't working with on
+keystroke they're just not supported
+like this it only handles the individual
+button presses that's fine what'll I'll
+do here is I'll come in and I'll just
+add show and hide this right it's
+actually faster so that's good now we're
+showing and hiding that now we have this
+small super simple prompt editor that we
+can you know ideally we can you know
+convert portion into its own component
+and then just kind of place wherever we
+want to right so let's move this content
+and the relevant scripting into its own
+components so just like we did for
+liquid input and output let's go ahead
+and just move you know all this content
+here into its own component um I'm going
+to use the larger editor for this and
+start a new
+composer and all I'll do is load the
+liquid prompt move the and what do we
+call this liquid prompt
+editor uh move the liquid prompt editor
+and all related State into its own
+component and we'll say call it liquid
+prompt editor. view okay so now we're
+going to ask for all of it to be moved
+into its own component
+it's going to do all the importing it
+needs and then it's going to also update
+the top level uh liquid prompt just as
+before it looks like it is going to miss
+the on keystroke event so I'll say don't
+forget to move the on
+keystroke into the
+component and I'll send that as a
+followup perfect and then all we're left
+with here in the previous component is
+just the top level items that we had
+before a couple unused variables couple
+hooks whatever so I'll go ahead accept
+all changes you can see we have the
+first change here this is the brand new
+liquid prompt editor file it created
+this entire file for us and then we have
+the previous liquid prompt. viw file
+which just has you know a couple
+additional uh components and the editor
+itself so I'll accept Okay so looks like
+we have an error that's totally fine
+again I'm just going to copy all this we
+have an unknown keywords open up compos
+again going to start a new window I'm
+going to add our new file here and I'll
+say resolve this
+issue okay so just got this
+unnecessary variable here I'll I'll just
+say just remove unsub okay so that looks
+good let's make sure liquid prompt
+changes are also looking good uh we
+don't need this composable here at all
+drop the use prompt editor
+import next part about no this is
+automatically imported for us so just
+going to ask it to drop that for us uh
+no need for that okay now it's trying to
+delete other code so it thinks I wanted
+to remove all of it it's kind of being
+too smart in a way so this could be
+easily solved with a system prompt where
+I say hey we're using n um in N we
+automatically have all of our Hooks and
+our components imported we also don't
+need any view Imports you can do that
+through the system prompt message in the
+cursor settings I'm just going to ask it
+to undo these changes so undo
+uh just don't
+import keep the handle enter
+functionality the
+same okay so this is fine I'm going to
+hit accept all and then I'm just going
+to drop this change back in so that it
+has that and let's go ahead and make
+sure it all still works great so this is
+pretty cool right
+so a couple bumps a couple hiccups I
+personally am still trying to figure out
+exactly uh where the capabilities of
+composer are but also you know every
+model that you use here operates
+differently if you're using AER or
+continue or any other type of AI coding
+tool you really have to see and kind of
+play with how the model performs every
+model performs different with every
+different tool remember that the
+engineers the people building out these
+tools they are writing prompts and
+prompt has a different impact and every
+prompt has a different impact with
+different models chbt 40 is super new
+super bleeding edge I'm going to say you
+know keep using claw 3.5 Sonet for
+coding with some of these modelss you
+can't really just look at the benchmarks
+and know how it will perform um I can
+tell you and I've been saying this for a
+while and if you're actually writing
+code with AI you know this as well claw
+3.5 Sonet is the king of AI coding and
+it integrates the best with coding tools
+just trying out gpg 40 here I can tell
+you that uh Sonet wouldn't have made
+some of the mistakes that cat gbt 40
+made and that has nothing to do with the
+composer feature from the cursor team so
+this is really cool right with this
+brand new composer feature we now have
+multifile editing inside of the cursor
+IDE with it we were able to fairly
+quickly build out a simple prompt
+editing tool if you want the insane
+productivity gains that are available to
+you you need to be using the incredible
+AI coding tools that unlock these
+capabilities for you right so we're
+talking about cursor and we're talking
+about AER these are the two AI coding
+tools leading the way writing code is
+cheaper and faster than ever I am just
+getting started using this composer
+feature I I discovered it this past week
+and I've been really digging in honestly
+before this feature I was moving more
+and more away from cursor uh multifile
+editing is a massive killer feature for
+AI coding it allows you to write code
+like you actually do which is across you
+know 5 10 sometimes 20 files at the same
+time so this is really powerful
+especially for the you know mid senior
+level Engineers that are making changes
+across large code bases this is a
+smaller code base only you know 150
+files but this is a tool that you can
+use on real production code bases
+cursor's new composer feature really
+allows you to unlock multifile editing
+which is like I mentioned a massive
+massive must for writing code on
+production code bases as large lingers
+models improve and we get Claude 3.5
+Opus we get GPT NEX we get strawberry we
+get Gemini 1.5 Ultra you'll be able to
+lean more and more into these multifile
+editing capabilities big shout out to
+the cursor team you guys are doing great
+work um and you know at the beginning I
+mentioned the lone 20x engineer that is
+none other than Paul working on AER I
+recommend both these tools for AI coding
+since the beginning these two tools have
+been my favorite uh Paul is building AER
+and the cursor team is building cursor
+of course these are my recommendations
+for AI coding as many AI coding tools as
+I've tried I keep coming back to these
+two and I keep sharing these two on the
+channel for good reason they're the best
+two tools you can use to multiply your
+output as an engineer these tools are
+also really important and Powerful
+because they're focusing on the
+experience of the engineer they're
+focusing on what it's actually like to
+be in a code base with hundreds and
+hundreds and thousands of files with
+hundreds of thousands of lines of code
+both AER and cursor are the products
+that understand that and they're
+building out the experience for us
+Engineers big shout out to both of them
+I'm going to be covering both these
+tools more on the channel as I have for
+the past year or so I'll link a couple
+of the previous videos if you're super
+amped on AI coding those will be in the
+description for you you can check those
+out I hope this demo of cursor new
+composer feature was helpful for you if
+it was you know what to do drop the like
+drop the sub leave a comment let me know
+how your AI coding is going let me know
+how much you're using these tools big
+thanks and I'll see you in the next one
+for

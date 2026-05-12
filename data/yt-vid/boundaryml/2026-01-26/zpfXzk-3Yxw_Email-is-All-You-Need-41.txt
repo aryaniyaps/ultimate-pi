@@ -1,0 +1,1830 @@
+[0.2s] But yeah, now I can forward emails from
+[2.1s] people and Claude will read the emails
+[4.2s] and update markdown files with the
+[6.3s] status of various things we're doing and
+[9.1s] then uh send me an update in Slack. It's
+[10.9s] sick.
+[11.3s] >> Yeah. So, uh let me just show off like
+[13.0s] what what I built to kind of showcase
+[14.5s] like how easy it is to to build stuff
+[16.2s] with email now. So, like this is email
+[17.7s] works. These are all these all work. You
+[19.4s] can email these right now. The reason I
+[21.0s] built this truly is because like it
+[23.3s] didn't exist already. I could not
+[24.7s] believe that everyone had made it this
+[26.2s] hard. [music] Um so, yeah. Like I'll
+[28.5s] show off the code for this real quick as
+[30.0s] well.
+[30.5s] >> So the general architecture of this if I
+[32.2s] were to draw this out is you have a web
+[33.6s] hook that you can register somehow that
+[35.7s] gives you a really nice clean email
+[37.1s] record. Then you have nice little APIs
+[39.2s] to go get like email bodies and content
+[41.8s] from the email for like in the form of
+[43.1s] attachments or basically for like long
+[45.2s] content that you don't want to fetch on
+[46.6s] every web request and you don't want the
+[47.8s] web hook to really give you
+[49.3s] >> because it would be like megabytes long.
+[51.0s] And then you basically pass the AI
+[52.9s] functions because AI functions are
+[54.4s] really nice transformation units for
+[56.1s] doing arbitrary transformations. And you
+[58.2s] just create an email system. That's
+[59.9s] freaking easy.
+[65.1s] Welcome back everyone. Uh we're back to
+[67.1s] our regular
+[69.4s] uh show. We're going to talk about AI
+[71.5s] that works as we usually do every single
+[73.2s] Tuesday. I'm your co-host Boff. I work
+[76.0s] on BAML which is a programming language
+[77.7s] for building AI agents. Oh, and I'm Dex.
+[81.6s] Uh, and I, uh, help people solve hard
+[83.9s] problems in complex code bases with, uh,
+[86.3s] AI coding agents, and we build an IDE
+[89.2s] that is actually coming soon. The old
+[91.5s] one was open source. The new one is
+[93.0s] coming for real. I'm super excited. And
+[95.1s] we are joined today by a very cool
+[97.7s] person who I've known for a long time.
+[99.4s] And Vibav hit me up a couple weeks ago.
+[101.5s] He's like, "We're going to do an episode
+[103.0s] with Ethan uh, about using AI over
+[106.2s] email." And I was like, "This is
+[107.5s] amazing." like before we started doing
+[109.5s] coding agent stuff, I worked on email
+[111.5s] and like how do we stitch agents into
+[113.5s] email. So, uh, super excited to have
+[115.4s] Ethan on.
+[116.0s] >> I also heard some really fun news last
+[119.0s] night that apparently Dexter started
+[121.2s] using it already because it's so
+[122.6s] freaking good and it does actually work.
+[124.9s] >> It's good. Yeah, I have the I'm
+[126.2s] deploying the Lambda today. I ran it I
+[129.0s] set it up with enrock on my local and uh
+[131.7s] yeah I got it so that I could I think we
+[133.5s] did an episode a long time ago about
+[134.8s] like using markdown as your CRM and so I
+[137.9s] mean I can talk about how we applied it
+[139.5s] at the end. Uh but yeah, now I can
+[141.5s] forward emails from people and Claude
+[143.8s] will read the emails and update markdown
+[146.2s] files with the status of various things
+[148.7s] we're doing and then uh send me an
+[150.6s] update in Slack. It's sick.
+[151.9s] >> That's cool. Before Before before we get
+[153.4s] into it, I think let's just I I want
+[155.0s] Ethan, I want to hear your perspective
+[156.2s] on something before Dexter and I share
+[158.7s] ours.
+[159.4s] >> When we talk about email, like what
+[161.9s] about email do you think makes it useful
+[164.1s] for agents? Because I think when we
+[165.6s] think about agents, I most people think
+[167.2s] about chat boxes, think about so many
+[168.6s] other mechanisms like um why in your
+[172.8s] perspective is email good?
+[174.4s] >> I think it's like it's not that email
+[176.2s] itself is that great. It's just that
+[179.4s] everyone uses it. It's already where
+[181.0s] people live. It's already where business
+[182.5s] data is. Like companies have been trying
+[185.7s] to not use email for forever. I mean,
+[188.6s] email is older than the internet itself.
+[191.4s] And it's just how like I mean, how often
+[194.1s] do you guys live in your Gmail app or
+[196.5s] whatever wherever you guys use email?
+[198.6s] >> Well, to be candid, uh, we have a no
+[200.5s] email policy on our company. We only use
+[202.5s] Slack and Discord.
+[203.8s] >> I freaking hate email, but [laughter]
+[205.8s] >> I would hate that.
+[209.8s] But I do understand that when I was at
+[211.8s] Dshaw, we used email exclusively for
+[213.6s] everything.
+[214.2s] >> No, I mean Yeah. It's just that like
+[215.7s] email is where people already want to do
+[217.9s] a lot. I mean, this is like where I book
+[219.4s] all my meetings. It's where I talk to,
+[221.4s] you know, customers. It's where I like
+[223.0s] it's just it's just where like
+[224.2s] everything. And then for larger
+[225.8s] companies, there's also like compliance
+[227.0s] stuff like they need things to happen
+[228.6s] over email because they need that paper
+[230.1s] trail, right? But it's just that like
+[232.4s] it's already that universal
+[234.0s] communication layer, that method, right?
+[236.7s] That's why it's like it's I think is
+[238.4s] where agents are going to go.
+[239.7s] >> And then when we talk about what makes
+[241.0s] email hard, what makes email hard for
+[242.8s] agents? Like when I'm building an agent
+[244.5s] system around email,
+[246.4s] >> um yeah, what's the hardest part?
+[248.4s] >> The hardest part is that right now if
+[251.0s] you need to build something with email,
+[253.0s] your only solutions are going to be
+[254.5s] things that like I mean SCS like it
+[256.4s] basically puts the email into an S3
+[258.1s] bucket and says good luck, right? Um the
+[261.0s] the other the other sol there's a lot of
+[263.4s] other incumbents. Yeah, there's a lot of
+[265.4s] other incumbents that have done a lot of
+[266.8s] cool things with email over the years,
+[268.1s] but they've kind of lost the plot,
+[269.7s] especially on developer experience. Like
+[271.4s] they became like marketing companies
+[274.0s] because they focused on outbound. Like
+[276.4s] they focused on like getting your email
+[278.0s] into inbox, not to spam. Like that's
+[279.8s] their entire business model pretty much.
+[282.5s] >> Every email company that I've ever seen,
+[284.8s] even the ones that start as
+[285.8s] transactional, they eventually become
+[288.0s] outbound. And like I don't know if
+[289.4s] you've checked your email lately, but
+[290.6s] it's like it's the founder of a SF
+[292.3s] startup. Like I get so much spam and
+[294.6s] automated stuff and it's like
+[296.6s] >> it's so lame that like the system is set
+[298.7s] up that incentivizes that but we don't
+[300.2s] have to get into pontificating the
+[301.8s] future. [laughter] It's like yes, all of
+[304.1s] these tools are designed to send emails
+[305.7s] because sending emails is also really
+[308.1s] freaking hard, right? You have to warm
+[310.6s] up IPs and domains and do all this demar
+[313.5s] and like yeah, but it makes a lot of
+[315.0s] money. So people invest a lot in that.
+[316.3s] But yeah, I mean even a year ago when we
+[317.8s] were building human layer, we did
+[318.9s] exactly what you said. We built a
+[320.6s] >> agents that can receive emails feature
+[323.6s] uh that was like super janky at the
+[325.9s] time. We had a couple customers using it
+[327.5s] and it was like yeah, it was like SCES.
+[329.3s] We didn't even put it in S3. We put it
+[331.0s] on an on an SNS message because that
+[333.4s] [clears throat] was like less
+[334.5s] infrastructure. Problem is SNS messages
+[336.9s] have a max size of like some number of
+[339.0s] megabytes and so most of the emails with
+[340.9s] attachments would just explode and it's
+[343.4s] just like all this infra stuff. So you
+[344.9s] can yeah you can glue it yourself and
+[346.2s] like claude can write terraform and it
+[347.9s] kind of works but yeah it's
+[350.6s] >> a question I what I find what I find
+[352.6s] actually the most interesting part of
+[353.8s] email as a medium for building agentic
+[355.3s] systems and we'll we'll show some code
+[356.6s] really fast everyone but what I find
+[358.6s] really fascinating is actually the
+[359.8s] asynchronous workflow that it naturally
+[361.4s] forces you to think in like when you
+[363.4s] think of email
+[364.8s] >> uh I think so many people when they
+[366.2s] build like you a server side stuff they
+[368.0s] naturally start thinking in synchronous
+[369.7s] workflows because they're like oh my
+[371.8s] back end does something then I respond I
+[373.5s] do streaming it's synchronous but in the
+[375.9s] whole process email you almost have to
+[378.0s] build async systems you have to be like
+[379.9s] oh I can get email and get a second
+[381.4s] email that's like ah you can't because
+[384.4s] you don't own the UI you have to design
+[386.8s] your system to be robust to that from
+[388.5s] day one
+[389.8s] >> I think that part of agent design is
+[391.7s] really fascinating personally and I
+[393.3s] think that's what makes agents good like
+[395.0s] what makes a chat like when I talk like
+[397.7s] stupid example when I talk to a customer
+[399.1s] support rep what makes it good I can say
+[400.6s] something and say oops I messed up I
+[402.0s] meant this
+[403.8s] And like you can't if I build my own
+[405.5s] chatbot on my own website, most agents
+[408.6s] still can't handle that. Like I don't
+[410.2s] know if you've gone to
+[411.1s] >> cancellation
+[412.6s] >> like cancellation interrupts like
+[414.3s] because like most people are like oh I
+[415.6s] own the UI and there's so much work I
+[417.2s] have to do in the UI layer to bridge
+[419.3s] those systems together. But in the email
+[421.6s] system it's actually you have to do zero
+[423.4s] work because the UI layer does that for
+[425.0s] you automatically.
+[426.0s] >> But you also have constraints.
+[427.7s] >> Yeah. Exactly. And on the back end layer
+[429.3s] you get the benefit of doing this where
+[431.0s] you just do it correctly the first time
+[432.4s] around. So, I find that kind of
+[433.8s] fascinating about emails to be honest.
+[436.0s] >> And I want I want to throw one more
+[437.5s] thing in because like this is obvious to
+[439.0s] the three of us, but I I don't think
+[440.3s] it's obvious. I talked to other smart
+[441.8s] founders and like I was pitching them an
+[443.4s] email idea that I had for agents last
+[445.1s] year. Um, and they kind of came with
+[447.4s] this take that I think probably a lot of
+[448.6s] people will feel was like, wait, email
+[449.9s] is for boomers. Like, why would I want
+[451.4s] to send an email to chat GPT and get an
+[453.4s] answer uh even for deep research or
+[455.5s] whatever? Like, I'll just go to the
+[456.6s] website. And I think the really
+[458.2s] interesting like unlock here, and we'll
+[459.7s] go over some of the use cases that you
+[460.8s] all built. The thing that I loved it for
+[463.8s] was for delegation, right? Like for me,
+[466.2s] I like Slack is great for internal, but
+[468.2s] Slack is super chaotic. And I actually
+[469.8s] like that an email inbox is like one
+[471.9s] thread where I can just like go through
+[473.5s] things one at a time versus having to
+[475.3s] jump between channels and stuff. And the
+[477.4s] idea of just like, oh, I got this note
+[479.2s] from a vendor. Okay, can I forward it to
+[481.8s] an agent that will create a task for
+[483.4s] someone to handle it? Or like I got an
+[485.1s] thing from a customer. Can I forward it
+[486.3s] to an agent that will update my CRM?
+[488.0s] Like it's it's more about delegation I
+[491.1s] think than and some of it is it's not
+[493.5s] all like fire and forget. Some of it is
+[495.6s] like hey this person hit me up go
+[497.5s] research them and tell me if they're
+[498.7s] worth my time or not. You know what I
+[500.2s] mean? Or like tell me who they are. You
+[501.4s] get a respon and then you know how to
+[502.6s] reply. There's all these things that I
+[504.5s] think when you embrace async you can
+[506.9s] there's like productivity goals that
+[509.1s] productivity things you can unlock when
+[510.6s] you can like burn down a backlog quickly
+[512.6s] without having to like actually go do
+[514.0s] every task.
+[514.8s] >> I completely agree. Well, with that,
+[516.6s] let's get to code because I think code
+[517.9s] is the most fascinating part. All right,
+[519.7s] Ethan, let's get the screen share going.
+[521.3s] Let's first let's see what you built.
+[523.4s] Uh, and I know I think you said this is
+[525.3s] going to be open source uh by end of day
+[527.0s] today.
+[527.9s] >> Yeah. So, we'll we'll we'll just go over
+[530.2s] like what the what kind of the site that
+[532.5s] I built to kind of show off. Um, let's
+[535.9s] see.
+[536.7s] >> While he does that, I got a question for
+[538.4s] you, Dexter.
+[539.4s] >> So, clearly uh you thought about working
+[542.0s] on email. Why didn't you double down on
+[543.5s] email? I found a thing that I was more
+[545.8s] excited about. But I'm still very
+[547.4s] excited about email. I just I was more
+[549.8s] excited about the other thing. Welcome
+[551.6s] to being a founder.
+[552.6s] >> Yeah, I agree. I always found that
+[554.4s] really fascinating when I thought about
+[556.3s] email. Like once I I think just UX
+[559.1s] workflow, I think that was the first
+[560.1s] thing I told you when I heard you were
+[561.2s] working on email stuff. Like email is
+[562.6s] just a new UX. Like whether it's email,
+[564.6s] SMS, there's like some inbound channel
+[566.4s] that agents need. And just like when I
+[569.0s] go on a website on my mobile phone
+[570.5s] versus my browser, I want to see it
+[572.1s] differently. I want the agent to respond
+[573.6s] differently. You basically kind of need
+[575.1s] a bunch of ingress channels for your
+[576.6s] agent. Say, I need to accept email. I
+[578.6s] need to accept Slack messages. I need to
+[580.2s] accept text messages. And you got to
+[582.7s] >> know where they are.
+[584.0s] >> You got your agents.
+[585.9s] >> You got to build the system for all of
+[587.7s] them. And if you don't build all of
+[589.4s] those inbound channels, like your agent
+[591.7s] just kind of sucks. It's like imagine
+[593.5s] having a website that only works on
+[594.7s] desktop.
+[595.7s] >> It would be crap. Imagine have a website
+[597.2s] that only works on mobile. It would also
+[598.5s] be crap.
+[599.3s] >> Yeah. I think I think also AI unlocks
+[601.4s] some really interesting new modalities
+[603.4s] of like you could build in an
+[604.6s] application that only works over email.
+[607.1s] Like I send an email to a service and
+[608.6s] that's how I sign up and I get an email
+[610.3s] back and like every time I communicate
+[612.2s] with this thing instead of having a
+[613.1s] dashboard I go to the footer of the
+[615.1s] email just contains like the like main
+[617.8s] like stats links whatever it is. I I
+[620.4s] prototyped an app that I never ended up
+[621.8s] shipping which was like a dinner
+[623.0s] scheduling app where literally like the
+[625.0s] way you do it is you send you like you
+[626.9s] send an email to a thing and then it
+[628.4s] tells you what dinners are coming up and
+[629.8s] then you tell them say the ones you want
+[631.2s] to RSVP to and it like manages all the
+[633.0s] state internally but the only UI is
+[635.4s] email.
+[636.0s] >> Yeah, for a lot of things it's great
+[637.6s] >> and like I don't know if you guys know
+[638.6s] Ailla from Bond book uh he built a
+[643.3s] travel agent that works over email. like
+[644.9s] you log in and you put in your credit
+[646.2s] card and then you never use the website
+[647.6s] again and you just say I want to go here
+[649.0s] and it comes back with flights and you
+[650.4s] can go check them out. Anyways,
+[651.9s] >> let's let's do code.
+[653.0s] >> Yeah. So, uh let me just show off like
+[654.7s] what what I built to kind of showcase
+[656.2s] like how easy it is to to build stuff
+[657.9s] with email now. So, like this is email
+[659.4s] works. These are all these all work. You
+[661.2s] can email these right now. So, like the
+[664.0s] there's a few basic ones with AI. Like
+[666.8s] of course it uses BAM under the hood
+[668.4s] because why would you use anything else?
+[670.2s] And so like you can uh you know you can
+[672.8s] forward any email or forward anything to
+[675.2s] it. You can get a TLDDR. You can parse
+[677.4s] like a PDF or something like that. Get
+[679.1s] structured JSON out of it. Like this is
+[680.7s] like something that like like receipts
+[682.2s] at Mercury uses like if you ever use
+[684.3s] that it's like actually magic like you
+[686.2s] can forward receipt and it automatically
+[688.4s] like attaches it to the expense or
+[690.2s] whatever. Uh you can build one of those
+[691.8s] very easily with this. Um and then you
+[693.6s] know uses like OCR fun stuff with BAML.
+[695.8s] Uh verify is is really cool. This is how
+[697.8s] we use like DAM and SPF and DMAR to know
+[700.6s] if that's like that. So if you've ever
+[702.5s] gotten like a fishing email and you want
+[704.4s] to see if it's legit or not, you can
+[705.8s] just forward this to verify and I will
+[707.5s] tell you
+[708.4s] >> all of this is open source.
+[710.1s] >> I will open source all this. Yes,
+[711.4s] absolutely.
+[712.9s] >> And then I I made these two fun things
+[715.2s] very quickly uh this morning. So you
+[717.6s] know, we'll see if it breaks. Uh but I
+[719.6s] made ideas. So, you can actually email
+[721.2s] ideas um to email works and I will if
+[724.6s] it's a legit idea, it will actually go
+[726.6s] to the ideas page. Like I I don't know.
+[729.3s] I just emailed like some sort of emails.
+[731.0s] So, once again, try to break this. It'll
+[732.6s] be fun. Um
+[733.7s] >> you know what I want?
+[735.0s] >> What do you want?
+[735.5s] >> I want a to-do list. Snooze is kind of
+[737.7s] like this, but every time I forwarded, I
+[739.4s] wanted to like log it and then send back
+[741.7s] to me my list of to-dos, and then I
+[743.5s] could reply and be like, "Those four
+[744.7s] things are done."
+[745.8s] >> Yeah, you could you could build that
+[747.6s] >> super easily with this. like uh yeah and
+[750.0s] no and that's like so the gist of why
+[753.5s] this is cool is that like it's it's just
+[756.1s] really easy. So if you wanted to build
+[757.4s] this today right with anything else like
+[759.2s] it it just would be very very difficult
+[761.4s] to get the email data that you need
+[763.4s] without having to like call a bunch of
+[765.2s] extra APIs and like you can't even get
+[767.3s] like the raw email from most of the
+[768.7s] incumbents. It's pretty wild. Like the
+[770.3s] reason I built this truly is because
+[771.9s] like it didn't exist already. I could
+[774.1s] not believe that everyone had made it
+[775.5s] this hard. Um, so yeah, like I'll show
+[778.2s] off the code for this real quick as
+[779.6s] well. Um, I am not using SCS under the
+[782.2s] hood from the chat. This is a this is my
+[784.2s] own mail transfer agents. The only way
+[785.7s] that I could make it um actually
+[788.6s] >> So I have an idea. Let's do something.
+[790.8s] Let's do something really quick. I'm
+[791.9s] going to screen share. I'm literally
+[793.0s] going to send these emails out to this
+[795.0s] and just see if it works.
+[796.0s] >> Let's do it. Let's do it.
+[797.4s] >> I just tried snooze. It's dope.
+[799.6s] >> Um, you guys are gonna you guys are
+[801.3s] going to see my screen and my email. Um,
+[804.3s] >> oh boy.
+[804.7s] >> So, we'll see how this [laughter] goes.
+[807.4s] >> Be careful, bro.
+[809.3s] >> So, I'm just going to send this. Uh, do
+[811.3s] I I just forward it.
+[813.1s] >> Yeah, you can forward. Um, you can
+[815.3s] forward it and then like if you want
+[816.7s] verify to work very well, you'll have to
+[818.6s] use like Gmail's like forward as
+[820.4s] attachment because that's the only one
+[821.7s] that preserves like the full like DIM
+[823.6s] header. Um, I can still get some data
+[825.5s] out of it if you're using verify, but
+[827.0s] everything else you can just do like a
+[828.2s] normal forward. It works perfectly fine.
+[830.2s] Um, I'll just do a normal forward and
+[831.8s] we'll just try verify at email.works.
+[835.4s] That's it.
+[837.6s] >> Yeah. And we'll see what what it does.
+[839.9s] >> Okay. Let's verify this email. Uh, let's
+[842.0s] do another one. I'm not going to go
+[843.3s] through docyigns. Um,
+[845.9s] >> forward like an image or like a PDF or
+[848.7s] like you can do.
+[849.8s] >> So, extract at u extract at email.works.
+[855.7s] >> Yeah. Let's see. Let's see if it breaks
+[857.5s] it. see all my changes this afternoon
+[859.1s] broke it or yesterday.
+[861.6s] >> Uh
+[865.8s] what email do I want to show?
+[867.9s] [clears throat] Uh that's a real
+[870.0s] question here. Uh I probably have some
+[871.7s] emails that have images sent.
+[875.8s] Oh yeah, my eat wasn't working. That was
+[877.6s] very sad.
+[879.1s] >> You should have the response to the uh
+[881.2s] the verify one that you said. Yeah,
+[885.4s] >> this is
+[886.2s] >> confidence 70%. [laughter]
+[888.2s] >> Yeah, because like once you get
+[889.8s] >> if you just forward it, I don't get the
+[891.1s] full headers. It's just how like Gmail
+[892.7s] works. Um but like but yeah,
+[895.3s] >> I mean this is probably a legit email. I
+[896.8s] just want to I just want they're just
+[898.2s] spam. So I want to delete that.
+[899.7s] >> So you could do like a snooze like hey
+[901.5s] remind me to uh tell this person to go
+[904.4s] away.
+[905.2s] >> Yeah, [snorts]
+[905.9s] [clears throat] absolutely. uh f
+[909.8s] snooze
+[911.4s] uh
+[913.5s] email.works
+[916.5s] >> uh until this Friday.
+[921.0s] Okay.
+[923.1s] >> Is it has the extract email come in yet?
+[927.0s] >> It has not. Let's see if it died for
+[928.9s] some reason. Who knows?
+[931.6s] >> Open source, folks. Yeah,
+[933.4s] >> it's not a real AI that works if we
+[935.3s] don't uh hack around on the code live
+[937.8s] during the episode.
+[938.7s] >> Why don't we look at the code? Let's see
+[940.0s] what it looks like because I think I
+[941.0s] want to understand how this stuff works
+[942.6s] um and actually go through it.
+[944.3s] >> Yeah, absolutely. Let's do
+[945.8s] [sighs and gasps] that.
+[947.7s] >> Best part about being open source is we
+[949.2s] can actually talk about the code and go
+[950.6s] into it and like look at it.
+[951.9s] >> Yeah. And I will uh like I said, I'm I'm
+[953.7s] open sourcing all of this. I just didn't
+[955.5s] get a chance to fully open source it
+[957.0s] yet. Um cool.
+[958.7s] >> Please no send grid. There is no send
+[960.6s] grid. I know that much for a fact. tried
+[962.5s] to sign up for Sen Grid while I was in
+[964.3s] Paris and my account got blocked because
+[966.5s] it was like you don't look like and then
+[968.6s] like you literally like can never log
+[970.2s] into Send Grid again. You have to make a
+[971.8s] new account
+[972.5s] >> perhaps. Let's um the thing that I'd
+[974.2s] love to see is like let's just go see
+[975.8s] the let's walk through the code of the
+[977.9s] extract agent.
+[979.2s] >> Yeah. So, let me just like to get there.
+[981.3s] Right. So, there there's a lot there's
+[982.7s] there a lot of stuff here just because
+[984.2s] you know I'm going to open source this
+[985.1s] and so like there's just a lot of you
+[986.7s] know logging and a bunch of extra crap
+[988.2s] but this is literally it. like this is
+[989.6s] like this is all the code that you need
+[991.5s] in order to get the like the handle the
+[993.8s] web hook event with my MX. So I spent a
+[996.2s] good bit of time making a kickass uh
+[998.6s] TypeScript SDK. And so under the hood
+[1001.3s] like this handle web hook will give you
+[1003.1s] you have you just have to pass your
+[1004.5s] secret. It's just your API key
+[1006.3s] effectively and then the headers and I
+[1008.0s] verify the header. I make sure that it's
+[1009.8s] all it's all legit and then you actually
+[1012.8s] get like this full fancy email received
+[1015.0s] event type like there's no nonsense
+[1017.0s] abstractions. There's no weird names of
+[1018.9s] anything. It's just it's exactly what
+[1020.4s] you would expect from an email event.
+[1022.2s] And then once we we you know we just
+[1024.1s] have like a gigantic switch statement um
+[1026.4s] on on that and then we have our agents.
+[1029.1s] So like for example in the extract
+[1031.5s] >> let's just go straight from the top.
+[1032.8s] Let's go to let's go to switch statement
+[1034.2s] and walk our way through just so I think
+[1036.6s] the switch statement
+[1037.6s] >> I like. So we have the headers too. So
+[1039.5s] you see exactly who we're setting the
+[1040.9s] agent to and then you basically have
+[1042.2s] like
+[1043.4s] >> a map of agents.
+[1044.8s] >> Yeah. So, um, we we determine what the
+[1047.4s] agent is and I, you know, I've been
+[1048.6s] adding a bunch of them and I'll add a
+[1050.1s] bunch of them and you can deploy your
+[1051.4s] you can deploy your own of this and add
+[1052.9s] whatever you want. Um, but like you
+[1055.2s] know, we're we're using magic strings
+[1056.9s] here. We're not afraid of those. Um, and
+[1059.9s] we uh, you know, so like for the
+[1061.8s] extract, you know, we we determine that
+[1063.7s] it's the extract. And so this is so the
+[1065.5s] easiest way to do that, right, is like
+[1067.2s] like just read the emails like I said
+[1069.0s] like you get these full like zod
+[1070.6s] validated types at runtime. So you can
+[1073.4s] understand like where like this is how
+[1075.1s] easy it is to get like the two header on
+[1076.9s] an email right with my MX like and then
+[1079.8s] with detect agent we determine that it's
+[1081.8s] the agent type from that and so we we
+[1083.8s] you know we go to this like fun little
+[1087.4s] >> uh is that you know our nested for loops
+[1090.1s] you know once again we're not afraid of
+[1091.3s] nested for loops either um and you know
+[1094.6s] your boy is a CS 101 question and then
+[1097.7s] we do the loop so we want to go to
+[1100.9s] extract And here you go. So, um,
+[1105.9s] so
+[1107.0s] >> this is probably why it failed because I
+[1108.6s] have no image attachment in the in the
+[1111.0s] in the email that I sent.
+[1112.7s] >> Oh, if you were doing
+[1114.4s] >> extract images only.
+[1116.0s] >> Yeah, parse is the one that will I mean
+[1118.0s] it should have responded and told you
+[1119.4s] that we didn't work. But we can figure
+[1121.0s] out why that didn't happen and we can
+[1122.3s] also we can change that right now. Um,
+[1124.3s] but if you want so we can talk about if
+[1126.2s] you meant to do like a parse, we can go
+[1127.6s] through parse. Um, but parse is like the
+[1130.0s] easier one, right? So this is once again
+[1131.6s] this is how easy it is to download the
+[1133.0s] attachment. Like this is like we don't
+[1135.0s] we don't do any weird nonsense. You know
+[1137.1s] we parse the attachments and we just
+[1138.4s] give you like a signed URL to go grab it
+[1140.2s] from. Uh and then we also you know have
+[1142.4s] an easier way for you to grab those. And
+[1144.7s] then in BAML if you want to. So we can
+[1148.2s] actually go to the BAML for this. Uh
+[1150.2s] where do I put my BAML folder?
+[1151.8s] Somewhere. Yeah. So
+[1156.0s] I'm showing vibaml. Let's see how this
+[1158.3s] goes. Uh I have no opinions.
+[1160.9s] >> Yeah, roast his prompts. [laughter]
+[1164.7s] >> So let's see. So we download the
+[1166.8s] attachment, format the part. So we have
+[1168.4s] to like we have we you know we formatted
+[1169.8s] a bit and then we go to beat up parse
+[1171.4s] document. Yay. Right. So that is the the
+[1175.7s] simplest one and then we'll find parse
+[1177.9s] document in here.
+[1181.6s] Par document. Right. So this is my
+[1184.8s] excellent prompt for this. And you know
+[1187.1s] with BAML you just you can you can pass
+[1189.4s] it in as like parse content or you can
+[1192.2s] you can actually pass it in right as
+[1193.4s] like a as a as a raw PDF right so we
+[1195.5s] actually do have the parse PDF as the
+[1197.0s] well because BAML has PDF types so you
+[1200.4s] can actually pass that in easily and
+[1201.8s] we're using we're using 5.2 under the
+[1203.4s] hood but I have no opinion about that.
+[1205.0s] You don't have to use that if you don't
+[1206.2s] want to.
+[1207.0s] >> Yeah you can use any model you want.
+[1208.6s] Nice.
+[1209.0s] >> Yeah.
+[1209.5s] >> So can you show me the parse document
+[1211.0s] structure? Kind of curious what you kind
+[1212.2s] of information you're pulling out of it.
+[1214.4s] >> Sure. So like well so parse document
+[1216.8s] like I let BAML decide or I let them
+[1218.6s] decide like on how to get it. like you
+[1220.9s] know it's more of like an example of
+[1223.0s] what kind of like JSON you could get
+[1224.8s] from this like so of course like with
+[1226.2s] BAML like if you had um a specific like
+[1230.0s] a receipt flow like you would make you
+[1232.2s] would obviously make your own interface
+[1233.7s] like just for like receipts like things
+[1236.5s] that you understand right but for this
+[1238.0s] like it's more this is kind of like me
+[1239.4s] showing off BAML to be honest because
+[1240.8s] it's a way of showing off how like the
+[1243.4s] the agent or the model can just
+[1245.4s] determine magically what this JSON would
+[1247.8s] look like right
+[1249.0s] >> I had I I had one of these that was like
+[1251.4s] extract a schema that would could be
+[1254.2s] used to create a linear ticket. So like
+[1256.1s] I wanted to like turn a thing into a
+[1257.6s] task in linear. It would extract you
+[1259.3s] know title, description, labels,
+[1261.6s] assigne, that kind of stuff.
+[1263.4s] >> Yeah. So
+[1265.4s] >> so then what we're doing here is okay so
+[1267.1s] we're getting the attachments super
+[1268.4s] easily. We're getting the email data
+[1270.0s] super easily. Then now it's just data
+[1272.6s] shades. It's either a PDF type or it's a
+[1275.3s] string object of some kind or an image
+[1277.2s] object. Then I pass it to an LLM through
+[1279.5s] some function and that gives me a new
+[1281.0s] TypeScript record after that again. And
+[1283.1s] then what do I do with the TypeScript
+[1284.2s] record after that? So then you create a
+[1285.9s] formatted email. It looks like you have
+[1287.3s] some way to render that.
+[1288.7s] >> Yeah. So there's a lot of um ways like I
+[1291.9s] was saying so like sending email for
+[1294.2s] honestly for a lot of it is a solved
+[1295.7s] problem. There's there's a good bit of
+[1297.0s] solutions for this. Um you know you
+[1299.4s] honestly some of them are still way
+[1300.9s] overkill. Um I actually am using resend
+[1303.4s] for this project just because it was the
+[1305.3s] easiest one for me to use right there.
+[1306.6s] They they actually done a lot of really
+[1307.9s] cool stuff uh with like React email and
+[1310.2s] they did a lot of other cool things with
+[1311.7s] like once like all that work about
+[1313.0s] making sure your emails get into inbox
+[1314.6s] and stuff like that. Um but yeah, so
+[1316.6s] like we just do some magic. So e email
+[1318.8s] HTML is just terrible. Um it's like a
+[1322.8s] whole thing but once again Claude's very
+[1324.6s] good at it so who cares. Um and yeah so
+[1327.5s] we create this email template and then
+[1329.0s] we just we send it back
+[1331.0s] >> forward back to the person.
+[1332.7s] >> So that's how this actually works and
+[1334.5s] then you just use resend to send. So you
+[1336.4s] basically so the general architecture of
+[1338.2s] this if I were to draw this out is you
+[1339.6s] have a web hook that you can register
+[1341.5s] somehow that gives you a really nice
+[1343.0s] clean email record then you have nice
+[1345.0s] little APIs to go get like email bodies
+[1347.4s] and content from the email for like in
+[1349.2s] the form of attachments for basically
+[1350.7s] for like long content that you don't
+[1352.4s] want to fetch on every web request and
+[1353.8s] you don't want the web hook to really
+[1355.0s] give you
+[1355.8s] >> because it would be like megabytes long
+[1357.5s] and then you basically pass it to AI
+[1359.4s] functions because AI functions are
+[1360.9s] really nice transformation units for
+[1362.5s] doing arbitrary transformations and you
+[1364.6s] just create an email That's freaking
+[1366.7s] easy.
+[1367.5s] >> What the heck are we doing here?
+[1369.4s] >> I don't know, man. [laughter] Like, so
+[1370.7s] like like we can walk through like some
+[1371.8s] of the crazy stuff.
+[1372.6s] >> No, what I mean by that is like that's
+[1374.8s] really freaking cool. Like the fact that
+[1376.8s] adding but I don't mean to be dismissive
+[1379.0s] any but what I mean is that now if
+[1380.6s] someone wants to go build an email
+[1381.9s] system for the agent, it should actually
+[1383.9s] be trivial for them to go do this is
+[1386.2s] what I'm really hearing. No, like I mean
+[1388.7s] and like once again like I think this is
+[1390.7s] where a lot of the best ideas came from,
+[1392.2s] but like I I wanted to make an agent
+[1394.2s] like this and I, you know, had deep
+[1395.9s] research on it. I had a bunch of other
+[1397.4s] things trying to find the better
+[1398.5s] solutions to this and there was nothing
+[1399.6s] that just made it this easy. Like I was
+[1401.3s] like, "Holy crap, I just want the
+[1403.0s] headers. I want the raw email. Like I
+[1404.6s] want the body like or I want like
+[1406.2s] forwarded information like I want to
+[1408.6s] know if it's forwarded like like how is
+[1410.2s] there nothing like this?" And there just
+[1411.6s] wasn't. And so, uh, yeah, this just
+[1413.9s] makes it trivial to to build.
+[1416.6s] >> So, I have two questions coming from the
+[1418.6s] chat.
+[1419.1s] >> Do your questions and then I think it
+[1420.6s] would be dope to just like kind of
+[1421.8s] whiteboard out at a higher level how one
+[1424.4s] or two of these works and I can also
+[1426.1s] share kind of how the thing I built on
+[1427.7s] my MX works um that I'm really excited
+[1430.4s] that really excited to deploy today.
+[1433.7s] >> Cool. Um, let's do that really fast. So,
+[1436.0s] I think there's two questions I really
+[1437.3s] liked. Um, is ingestion just everything
+[1440.1s] at once or is it a pre or is there
+[1442.0s] pre-processing? Uh, just the raw email
+[1444.9s] with images and all that.
+[1447.8s] >> So, okay. So, is the injection
+[1449.6s] everything all at once? Um,
+[1452.2s] >> like when you in I think the question
+[1453.9s] that John is trying to ask here is how
+[1456.3s] are you doing this? And I think the
+[1457.8s] whole point of this is if you go back to
+[1459.2s] your switch statement at the very top
+[1462.6s] um I think the whole point is uh at
+[1464.6s] least from what I understand correct me
+[1466.0s] if I'm wrong Ethan is that depending on
+[1468.3s] what tool you're doing each tool each
+[1471.0s] each action basically determines what
+[1473.0s] parts of the email it cares about.
+[1474.9s] >> Yeah.
+[1475.2s] >> So ingestion for example uh in the case
+[1478.2s] of uh we saw in the case of extract only
+[1480.2s] looks for images. If you don't have an
+[1482.5s] image and you pass it in it doesn't
+[1483.8s] extract anything. Pars on the other hand
+[1486.6s] pulls out all the information from
+[1488.0s] everything.
+[1489.0s] >> Yeah.
+[1490.3s] >> And I think that's kind of the point is
+[1492.1s] like you you have access to everything
+[1493.8s] but you don't have to use everything you
+[1495.8s] don't want to. It's that's just control
+[1497.2s] at that point. It's just code. You just
+[1498.7s] write whatever code you want to get the
+[1500.0s] data you want.
+[1501.1s] >> Yeah. So like there there there have
+[1503.1s] been like other tools that are like in
+[1504.6s] this space like people understand this
+[1506.2s] problem but like their solutions have
+[1507.6s] been like just more abstractions like
+[1509.4s] you know call an API to create like an
+[1511.5s] agent inbox and then link your tools
+[1513.6s] like developers know more than you like
+[1515.4s] they just want access to the data and
+[1517.1s] they'll figure out how to do it. So like
+[1518.4s] in this case like I just have a switch
+[1520.1s] statement on the two header right
+[1521.5s] because I have specific tools for
+[1524.2s] specific inboxes but there's no inbox to
+[1526.5s] it right you just you send it to verify
+[1528.6s] at and I just I know how to handle that
+[1530.3s] but I could make a new one only in code
+[1532.7s] right I don't have to create a whole new
+[1534.2s] inbox for that but like if I wanted to
+[1535.9s] make just an you know agent at
+[1538.5s] email.works works and then I wanted to
+[1540.2s] do a bunch of different parsing on the
+[1541.8s] body and then try to determine which
+[1544.3s] actual agent to call under the hood. I
+[1546.5s] could do that, right? Because like
+[1547.8s] everything is there for you to do that.
+[1549.6s] Like
+[1550.0s] >> like the the entire philosophy of my MX
+[1552.9s] is just like I I I I don't really care.
+[1555.3s] I'm not opinionated at all. Like I just
+[1556.8s] give you all the data that you need.
+[1558.3s] It's all parsed. It's in JSON ready to
+[1560.0s] go and you build whatever you want to do
+[1561.8s] with it. It's kind of
+[1563.7s] >> if you've ever seen Slack's web hook
+[1565.5s] system, it's very similar to that where
+[1567.3s] Slack's web hook system just gives you a
+[1569.0s] giant payload no matter what event they
+[1570.5s] send you.
+[1571.4s] >> Yeah.
+[1571.8s] >> And that's your job to build a system
+[1573.6s] around that to do whatever you want with
+[1575.2s] it. It's like one
+[1576.3s] >> who sent it. Figure out what channel it
+[1578.3s] was in. Figure out whether it has an
+[1579.9s] attachment, all that. It's just like you
+[1581.3s] just get the whole thing. And like I
+[1582.6s] guess, yeah, you could
+[1584.2s] >> you could riff this to just like have
+[1586.5s] the entry point be agent at and then use
+[1589.6s] another structure generation to decide
+[1591.7s] which like code path you wanted to route
+[1593.4s] it to. Basically, you could say, "Oh,
+[1594.8s] this looks like an extract request.
+[1596.3s] We're going to go do extract."
+[1597.6s] >> Yeah. Yeah. 100%. Like,
+[1599.3s] >> yeah. Like the switch statement doesn't
+[1600.4s] have to come basically based off the two
+[1602.0s] header. It could be based off of an AI.
+[1604.1s] It's like even even though I sent
+[1605.8s] extract, you could actually reroute it
+[1607.8s] to parse because you're like, "There's
+[1609.0s] no image. There's no image here."
+[1611.0s] >> Yeah. You could have done that for
+[1612.4s] example in this code even though the
+[1613.8s] user kind of messed up effectively.
+[1615.8s] >> Yeah.
+[1616.6s] >> Like yeah
+[1617.1s] >> there's some questions about like which
+[1618.7s] parts of this is SMTP and which parts
+[1620.8s] are recent. I think it would be helpful
+[1622.2s] to kind of draw the architecture of like
+[1623.9s] where does the black box of something
+[1626.1s] like my MX like whether it's myx or
+[1628.5s] anything else like what is the problem
+[1629.4s] to solve? I think we're saying a word a
+[1632.0s] lot that no one probably has ideas of
+[1633.9s] like myx. Ethan, you want to screen
+[1636.5s] share and um maybe describe that a
+[1638.4s] little bit like what part of this code
+[1639.8s] is my MX? What part of this is your code
+[1642.4s] and then kind of just to hook that up?
+[1644.4s] >> Yeah.
+[1644.7s] >> So, it looks like all of this code is
+[1646.1s] open source and none of this looks to be
+[1648.2s] my MX.
+[1649.4s] >> Yes. What is my MX?
+[1651.1s] >> Yeah. So, my MX is what is the ingress
+[1654.3s] layer for email basically. So, like can
+[1656.5s] I answer someone else's question like is
+[1658.4s] this running as SMTP server and
+[1660.0s] extension? So I use resend for only for
+[1662.1s] outbound but inbound which is the
+[1663.7s] problem that my MMX is actually solving
+[1665.9s] is is
+[1668.6s] my own server like I I have a VPS behind
+[1670.8s] an ALB and it's running postfix and it's
+[1673.4s] running the mentor like it's it's
+[1674.9s] actually you know parsing uh full SMTP
+[1678.1s] it's responding with SMTP return codes
+[1680.2s] like it's it's all SMTP under the hood
+[1682.6s] right so like I had to build my own mail
+[1684.3s] server for this because it was the only
+[1685.8s] way for me to be able to get the data
+[1687.1s] that I need from this because even SCS
+[1688.8s] is just terrible also like latency
+[1690.7s] there. There's there's no way that I
+[1692.0s] could be a wrapper around anything
+[1693.4s] besides just running my own mail server.
+[1695.5s] And so what is my MX is like when all
+[1699.0s] you have to do is you give us an MX. So
+[1701.1s] as Dex actually pointed out yesterday,
+[1703.2s] you technically need to give me a text
+[1704.7s] record too. Sorry. Uh it's not just one
+[1707.3s] MX record. Uh but you give me one MX
+[1709.7s] record on whatever domain you want and
+[1711.7s] you can do it on a subdomain and I will
+[1713.4s] support like wild cards for subdomains.
+[1715.3s] And so you can you can give me one MX
+[1717.6s] record on that domain. Tell me a text
+[1719.1s] record. The text record is just so that
+[1720.5s] MIMX knows um like which my MMX account
+[1723.8s] is linked to that specific uh MX record
+[1727.0s] and then you give me a web hook and then
+[1729.0s] bam everything is just there.
+[1730.4s] >> Show it. You're talking about DNS
+[1732.0s] records. Show us where we set up the DNS
+[1733.6s] records. Go to go to the app and show me
+[1735.5s] the page.
+[1736.0s] >> One of you guys want to go through the
+[1737.0s] onboarding for this
+[1738.2s] >> or do you want me to do it?
+[1739.0s] >> No, just do it. Just do it. Just do it.
+[1740.2s] >> Just show us the thing. Just you know
+[1742.1s] >> we like to I'm just I'm just got you're
+[1744.3s] talking a lot and we're looking at a
+[1745.6s] thing that has nothing to do what you're
+[1747.0s] talking about. So go to settings and
+[1748.5s] like show me the MX record stuff.
+[1750.2s] >> I'll just make a new Right. So if
+[1752.1s] anybody wants to sign up with this, SMTP
+[1753.8s] is the worst is the the beta code.
+[1755.4s] [laughter]
+[1756.1s] Um we'll probably be changing that in a
+[1758.2s] in a bit. Um but yeah, so like you know
+[1760.8s] we'll create an account and do all this
+[1762.8s] other stuff. Uh let's just
+[1765.7s] >> Okay, while you're doing that, uh is my
+[1768.3s] open source?
+[1769.8s] >> My is not open source. Um, parts of it
+[1772.6s] will uh be open source more than likely.
+[1777.8s] Um, but that will be in a in a bit. Um,
+[1781.8s] so
+[1782.7s] >> what I'd love to see is if you log into
+[1784.1s] email.works, I'm guessing you have an
+[1785.4s] account for email.works on here. Do you
+[1786.9s] just want to show them?
+[1787.8s] >> Yeah, I just want to see how I set it up
+[1789.4s] to make it work
+[1790.2s] >> here. I'm going to I'm going to share
+[1791.4s] and just show you what I'm what I'm
+[1792.6s] thinking here. So, I go to my app.
+[1794.9s] >> I come into settings.
+[1797.7s] Um, it's good. It doesn't show the funny
+[1800.6s] uh crude email addresses I was sending
+[1802.6s] to yesterday to test this. Um but like
+[1806.0s] yeah, you add an endpoint and then oh
+[1807.8s] sorry, not a web hook endpoint. Where is
+[1809.2s] where is the DNS setup stuff?
+[1811.1s] >> So you go into domains at the top if you
+[1813.4s] want to add a new one and then you do
+[1814.6s] add domain. Um you got to get me, you
+[1817.4s] know.
+[1818.3s] >> Yeah, exactly.
+[1819.4s] >> Um so yeah, you basically just get these
+[1821.3s] two records and you add them. And
+[1822.5s] literally what I do is I just paste this
+[1823.9s] into cloud and say use the use my like
+[1826.3s] dev environment CLI to go make these
+[1828.3s] records.
+[1829.2s] >> Nice. And then go back. I want to see I
+[1831.8s] want to see the thing that you set up.
+[1833.9s] >> Okay. This is not a Gemini 3 Pro site.
+[1837.1s] Uh I actually wrote a lot of the CSS
+[1838.7s] myself, but I I shamelessly copied a lot
+[1840.8s] of Post Hogs.
+[1841.8s] >> Okay. So you you have one for code.gg.
+[1846.2s] >> Um and so what did you set up there?
+[1847.9s] Show me how you set it up. And like
+[1849.2s] after you set it up, what did you do?
+[1850.6s] You set up a web hook.
+[1853.2s] Um yeah, I literally made a claude
+[1855.1s] session. Um
+[1857.9s] where is it? Uh
+[1861.9s] I think it's here.
+[1863.2s] >> Managing an email domain email server
+[1865.7s] for your own domain is actually stupidly
+[1867.6s] hard. It's so
+[1869.3s] >> really hard. If anyone has ever if
+[1871.5s] anyone has ever tried to build an a a
+[1873.8s] system that responds to emails in an
+[1875.4s] automated way, it is a [ __ ]
+[1877.8s] crapshoot. Like I have done it a few
+[1880.0s] times. It is not fun. One of the only
+[1883.2s] reasons I pay Gmail to have a custom
+[1885.9s] domain is because I don't want to run a
+[1887.4s] mail server. It is so shitty to run a
+[1889.6s] mail server.
+[1890.2s] >> But someone emailed me about code layer
+[1891.7s] and I responded to them and then I
+[1893.4s] forwarded the email to my MX and then
+[1895.7s] basically what I had built was a system
+[1897.9s] that was like email goes to my MX
+[1903.0s] and then in production this goes to like
+[1904.6s] an AWS Lambda. Uh testing locally I was
+[1907.4s] just running. Yeah, I was running Enro
+[1910.7s] pointed to which is a thing that lets
+[1912.2s] you just po host local servers on the
+[1914.2s] cloud to like a local TypeScript server
+[1917.7s] and then what this would do was like
+[1919.3s] launch a GitHub actions workflow which
+[1923.8s] would you know read the email,
+[1927.7s] hand it to Claude with a prompt. Claude
+[1931.4s] would make some updates.
+[1934.9s] It would like commit plus push. I think
+[1937.0s] we said like I have I have a lot of like
+[1939.0s] you know user info. We just like keep a
+[1941.0s] CRM and markdown in a repo in a private
+[1943.0s] repo and then it would like send a Slack
+[1945.4s] message
+[1946.5s] >> with like hey here's the new files I
+[1948.1s] created.
+[1948.9s] >> Um that's cool.
+[1949.7s] >> And so the lambda would basically do the
+[1951.0s] same thing but uh in Grog.
+[1954.7s] >> So um I think John asked a question.
+[1956.6s] This seems more like setting up an email
+[1958.6s] alias since email server stuff. And I
+[1961.5s] think it seems like that at first
+[1962.7s] glance, but the hard part about email is
+[1964.9s] actually not about um like writing the
+[1967.2s] code once you have a really nice
+[1968.4s] structured location. The hard part about
+[1970.5s] email is actually getting the email in a
+[1972.7s] way that's programmable programmable.
+[1975.6s] That is the hardest part. Uh like once
+[1978.4s] if you've ever used SCS or anything like
+[1979.8s] that, when you get a empty JSON, when
+[1981.6s] you get an empty blob in S3, it's
+[1984.3s] strongly untyped. It is not friendly to
+[1986.7s] work with. And also using S3 APIs to
+[1989.4s] load files like I know everyone thinks
+[1990.7s] it's like oh it's it's just a pain. It's
+[1993.4s] so much easier to deal with this as a
+[1994.8s] web hook system which is an event driven
+[1996.3s] system than it is to actually treat it
+[1998.8s] from a perspective like I have to manage
+[2001.0s] the state of the truth of emails along
+[2003.1s] the way because even if I get an SCS
+[2005.6s] notification I still have to build a web
+[2007.1s] hook of some kind that triggers on the
+[2009.4s] file being written and then I still have
+[2012.2s] to build like event chains. For example,
+[2014.0s] if I get a reply to an email, how do I
+[2016.2s] deal with the replies versus the
+[2018.2s] original email coming through? That is
+[2020.6s] that event chain is not fun to build on
+[2022.9s] your own. And that's I think the real
+[2025.2s] value problem of having like really nice
+[2026.7s] structured formats for emails that are
+[2029.0s] unopinionated and don't force you to
+[2031.7s] kind of treat it like an email alias.
+[2033.2s] The fact that the two email like we
+[2034.7s] talked about is not a unique web hook
+[2036.6s] per two email but rather a generic web
+[2039.0s] hook means like if you guys saw at the
+[2041.1s] beginning of this episode what we did is
+[2042.4s] I sent email to extract that email that
+[2044.2s] works and it turned out I didn't have an
+[2046.3s] image. Ethan could fix that code to
+[2048.5s] basically say if you don't have an image
+[2049.9s] actually send it to the parse code
+[2051.4s] instead of the email extract code which
+[2053.4s] extract requires an image parse doesn't.
+[2056.3s] that itself would be really really
+[2057.8s] helpful and that control flow of
+[2060.2s] treating email like a generic uh almost
+[2062.5s] like a
+[2064.2s] code flow is I think what the real uh
+[2066.7s] benefit here of that is.
+[2068.3s] >> Okay. So you have in your in your in
+[2070.3s] your code that receives this you have
+[2072.3s] like the myx SDK which does like sig
+[2076.3s] verification and stuff like this and
+[2079.2s] then this can go to literally whatever
+[2081.4s] you want. You can do a switch on the two
+[2084.3s] address.
+[2085.9s] You can do, you know, parse the intent
+[2091.6s] and then you can go downstream to like
+[2093.7s] some AI thing.
+[2097.8s] Um, and then basically at the end what a
+[2100.5s] lot of these Oh god. Whoops.
+[2102.9s] >> Yeah. Get get good, Dexter.
+[2105.3s] >> I suck at this. All right, we're just
+[2107.2s] going to go outside the box. And then
+[2109.3s] what what Ethan was doing I guess is
+[2111.0s] like sending to resend which actually
+[2113.8s] like sends the response back to my
+[2115.6s] inbox. And then when I reply to that I
+[2118.1s] can just send it back through the whole
+[2119.3s] pipeline and the email will have all of
+[2121.7s] the like you know my reply and then the
+[2125.4s] like
+[2126.6s] >> uh you what is this email that works
+[2128.6s] reply
+[2130.2s] >> and then it's like original email that
+[2132.3s] was sent.
+[2134.8s] Okay, now that we've talked about the
+[2136.4s] basics, I'm ready to go into level two
+[2138.7s] really fast.
+[2140.0s] >> Okay, let's go. Yeah. Are you drawing?
+[2142.0s] >> No, you're drawing or Ethan or Ethan's
+[2144.2s] drawing. We'll see. Uh, but one of you
+[2145.8s] guys is drawing. Let's say I wanted to
+[2147.4s] build uh a command uh a cancelable
+[2151.1s] structure here where I could cancel
+[2152.6s] things.
+[2152.9s] >> Oh god. Yeah.
+[2154.2s] >> Well, because a user sends a second
+[2156.1s] email that changes the operation of the
+[2158.2s] first email. How do I do that? System
+[2161.0s] design interview on the fly. Let's go.
+[2164.6s] Ethan, let's go. Kick us off. How are we
+[2166.2s] doing?
+[2166.5s] >> We got the email and then I immediately
+[2168.2s] send a second email that says actually
+[2170.0s] no, do it that do it a different way.
+[2172.3s] What do I do in my app?
+[2173.8s] >> All right, Ethan, lock in. It's time.
+[2176.1s] >> So, okay. [laughter] So, just repeat the
+[2178.2s] repeat um like the entire like
+[2180.2s] acceptance criteria.
+[2181.0s] >> So, the original email is
+[2183.3s] >> tell tell Cara I want to meet Tuesday
+[2187.8s] and then like 5 seconds later I'm like,
+[2190.4s] "Oh crap, no. I have an onsite.
+[2194.3s] No other detail, no other updates, just
+[2196.3s] oh crap, no, I have an on-site.
+[2198.2s] >> How do I build my agent to handle this?
+[2200.9s] >> Yeah. I mean, so the easiest way to do
+[2203.4s] this is, you know, is just to have a
+[2205.8s] database, you know, fun stuff. Like the
+[2208.4s] thing
+[2209.0s] >> you got you got the you got the doc
+[2210.3s] open, right? Yeah. Come come draw with
+[2211.7s] us.
+[2212.0s] >> Tell us.
+[2213.8s] >> Ethan doesn't know the Excaladraw
+[2215.3s] hotkeys, but he will. Uh yeah, if you
+[2217.0s] just scroll down a bit.
+[2218.3s] >> Yeah, there you go.
+[2219.4s] >> Hello.
+[2220.5s] >> Cool. Okay. Yeah. So, um, so if you have
+[2225.0s] like the
+[2227.8s] Okay. So, you're obviously going to need
+[2229.4s] Can I make like like Can I make a
+[2231.1s] cylinder or something because we need a
+[2232.7s] database?
+[2233.1s] >> Uh, two. Yeah. Okay. No, there's no
+[2234.9s] there's no database icons in Excal.
+[2236.8s] You're going to have to You're going to
+[2237.7s] have to hack it. [snorts]
+[2239.4s] >> It's trying to ask me to enable
+[2240.7s] dictation.
+[2241.8s] >> I got it. I got it.
+[2244.6s] >> Okay. So like the easiest way to do this
+[2246.9s] is to have like you would you would
+[2248.6s] process these events and you'd put them
+[2250.2s] into a queue as well. So I mean I would
+[2252.2s] put I would use a queue for this.
+[2253.8s] There's lots of different cues you can
+[2255.1s] use for this. Um you can if you're doing
+[2257.4s] this like on a very easy little you know
+[2259.8s] versel next project. You could add you
+[2261.6s] know readas to it. You could add upst
+[2263.5s] you could actually ask you know use SQS
+[2265.9s] if you're very brave. U but you would
+[2268.2s] add a cue for these types of events. So
+[2270.1s] myx would let you uh get the you so I
+[2273.4s] would put the full blob of the email
+[2274.9s] into the queue, the entire full blob
+[2277.1s] like just just so you can handle it. And
+[2279.3s] then you have a little handler that pops
+[2280.8s] off that queue. And in that handler
+[2283.8s] that's where you're trying to determine
+[2285.5s] what to do with this event. And so like
+[2289.1s] for a meeting um you know so for this
+[2292.0s] thing it's like a calendar app, right?
+[2293.3s] So you're you're either like making
+[2294.9s] meetings on your calendar or sending out
+[2297.0s] invites to calendars uh and then or like
+[2299.5s] cancelling things like that.
+[2300.9s] >> So in this handler is it's it's
+[2303.0s] relatively straightforward, right? You
+[2304.5s] can you could do an agent. You could
+[2305.8s] probably do this all with like just true
+[2307.5s] like text parsing, but you'd have an
+[2309.0s] agent that would determine the actions
+[2310.3s] that you're taking on this, right?
+[2311.8s] Invites, uh cancelling, whatever. And
+[2316.5s] >> just to be very clear, uh we kind of
+[2318.1s] have a two web hook system. You have one
+[2319.7s] web hook that actually receives the
+[2321.1s] email that comes in. This is web hook
+[2323.3s] one. Then you push that to a que. Then
+[2325.1s] you have a second almost like a web hook
+[2326.9s] which basically says whenever the que
+[2328.2s] has a value, I run this code.
+[2330.4s] >> Yeah. Qlistister. Exactly. So I have two
+[2333.4s] lambdas that I spin up. Go on.
+[2335.3s] >> Yeah. Exactly. Because like this is
+[2336.6s] what's kind of crazy about is like you
+[2338.1s] can just you can just treat it like any
+[2339.4s] other API. My original idea for this was
+[2341.3s] actually to make it where you could call
+[2342.6s] APIs over email. And someone mentioned
+[2344.2s] this in the chat is like that's all this
+[2346.0s] is, right? Is like you're making emails
+[2347.8s] into API. So you call this API. You just
+[2351.2s] like any other gigantic like public API
+[2353.6s] that you would have. You don't want to
+[2355.0s] just like run everything sequentially.
+[2356.9s] You want to put it to some queue so you
+[2358.6s] can have rate limiting so you can do all
+[2360.2s] that other fun stuff. You put it into
+[2361.9s] that queue. You get the full email blob.
+[2364.3s] Then you go do something on that. And so
+[2366.6s] the they would have concurrency limits
+[2368.2s] on the handler. You'd probably, you
+[2369.4s] know, once again do a bunch of other
+[2370.8s] stuff where you're checking to see like
+[2372.3s] is this
+[2372.9s] >> how would you build concurrency on this?
+[2375.5s] So
+[2376.6s] >> what is the key for concurrency?
+[2379.1s] >> Yeah,
+[2379.8s] >> I mean the so the key here so you could
+[2381.9s] get you actually get in the hilo of the
+[2383.7s] email you get the IP of who sent it. Um
+[2386.3s] that's like something that you can't get
+[2387.7s] around. You also get like the so one of
+[2389.8s] the one of the other reasons that like
+[2391.4s] my MX is so nice for stuff like this is
+[2393.5s] that I can give I my MX will give you
+[2395.9s] the like the Dam, the SPF and the DMark
+[2398.4s] in the same way that you saw in the
+[2399.7s] verify. I can tell you if this is a real
+[2401.4s] person or not. So, first of all, if you
+[2403.2s] got it from somebody who's not like you
+[2405.4s] you you don't believe that you want to
+[2406.7s] do this. So, if you got it from
+[2407.8s] something looks spoofed, like MX will
+[2409.5s] drop a lot of things there. So, you
+[2410.6s] don't have to worry about people doing
+[2411.8s] crazy stuff. But, if you get something
+[2413.5s] that's like obviously not verified, then
+[2415.2s] you just wouldn't handle it. But, if
+[2417.0s] it's something that is definitely
+[2418.2s] verified, then that's your key because
+[2419.8s] you know who that is. So, that that's
+[2421.3s] what keeps someone from even potentially
+[2423.2s] accidentally sending you like a hundred
+[2424.9s] emails a second. So, that's the key is
+[2427.3s] is where this person came from. You can
+[2429.4s] make a unique uh key for uh people who
+[2432.3s] are send. You could also do a key on the
+[2435.4s] kind of the customer, right? The the
+[2437.1s] endpoint, right? You could do it on like
+[2439.3s] if Dex is your customer and he's he's
+[2441.5s] signed up for this service, then you
+[2443.3s] would make sure that Dex himself can't
+[2445.0s] get a bunch of events uh you know
+[2447.2s] processed from there, right?
+[2449.1s] >> Got it.
+[2450.0s] >> And then of course you in a real queue,
+[2451.8s] you would also have global limits,
+[2453.0s] right? You can't you know because you
+[2454.3s] have you're you're going to hit your
+[2456.1s] open AI key too many times. So you you
+[2458.0s] only want to handle like five 10 of
+[2459.4s] these concurrently or whatever, right?
+[2461.3s] Um
+[2461.9s] >> Okay. So how do we handle the how do we
+[2463.8s] handle the cancellation?
+[2465.0s] >> Yeah.
+[2465.4s] >> Yeah. So in in in your handler, right,
+[2469.2s] you would have I mean we could we could
+[2471.3s] draw up the schema if you want, but the
+[2472.7s] gist is that you would have these event
+[2475.9s] you would create events and then you
+[2477.7s] would create actions on those events. I
+[2479.0s] would imagine probably two tables like
+[2480.4s] events and then actions and you can have
+[2482.8s] foreign keys to um from the actions to
+[2485.8s] the events themselves. you know, the the
+[2487.9s] events have gooids, the the actions have
+[2489.8s] gooids, and then when you have a
+[2492.4s] specific action that the user wanted to
+[2494.0s] take on that event, because this is how
+[2495.1s] you could also support other people
+[2497.0s] modifying those events like
+[2498.4s] unilaterally, right? Like someone like
+[2500.3s] subscribing, right? Or not subscribing,
+[2502.1s] like confirming that they're going to
+[2503.1s] come to an event or someone else
+[2504.3s] cancelling it, right? Um, and then the
+[2507.3s] Qlistister would write make sure that
+[2509.2s] the event exists if it needs to create
+[2510.9s] it or maybe the action itself would
+[2512.3s] create it so you don't have to do that
+[2513.5s] wrapper around it. And then it would
+[2515.4s] create the event and then it would
+[2517.8s] process those actions on the event and
+[2519.4s] the event would have a state either
+[2520.9s] canceled or whatever you want to do
+[2522.6s] depending on how granular you want to
+[2524.1s] get the support for the system or how
+[2525.8s] you wanted to actually show this data to
+[2527.9s] the user at the endpoint. Yeah, this was
+[2530.7s] a this was a trick question for everyone
+[2532.6s] else listening because I know Ethan has
+[2534.1s] built a very complicated Q system before
+[2535.8s] in the past for processing tons of uh AI
+[2541.0s] events that are tons of like a huge
+[2543.1s] stream of AI processing pipelines on the
+[2545.2s] scale of like how many commits did you
+[2547.0s] process in your uh [snorts]
+[2549.4s] >> oh man,
+[2550.9s] >> I actually wonder where we're at. It's
+[2552.9s] it's in the millions and millions of
+[2554.4s] commits for sure. Even rap.dev, which we
+[2557.0s] >> rap.dev, dev. How much was that?
+[2558.7s] >> That was It was It was about I think
+[2560.6s] about a million commits or something
+[2561.8s] like that. It was wild.
+[2563.3s] >> Like it was like 10 million file
+[2565.5s] changes.
+[2566.0s] >> Yeah. Yeah. Something stupid in terms of
+[2567.8s] number of file changes.
+[2569.8s] >> But I think
+[2570.3s] >> Okay. So like when the second message
+[2572.1s] comes in, I just want to like draw out
+[2573.6s] the logic. It's like get
+[2575.2s] >> Yeah. like active events
+[2579.8s] for maybe for a user or like for
+[2582.6s] conversation
+[2584.6s] >> for some key that is like you have some
+[2587.1s] grouping right based on like the event
+[2590.2s] like the new event
+[2592.4s] >> and then
+[2596.4s] >> I think the
+[2597.9s] >> go ahead
+[2598.6s] >> any events running then you would like
+[2602.5s] event.canc cancel, which would like mark
+[2604.6s] it as canled.
+[2606.6s] >> Yeah.
+[2607.7s] >> And like stop the processing somehow.
+[2610.1s] >> Yeah. Because you could also have a lock
+[2611.5s] on this, right? Like you could even
+[2613.0s] within your queue, you could actually
+[2614.4s] have a lock on each event or like each
+[2616.5s] action so that only one, you know, Q
+[2618.7s] handler can actually process this at
+[2620.3s] once so you don't get any like weird
+[2622.0s] states.
+[2623.5s] >> Yeah. But what I want is I want this
+[2625.0s] one's like halfway through processing
+[2626.9s] and then this one comes in and I want to
+[2629.3s] cancel. The AI is about to go call a
+[2631.1s] tool to make a calendar event and I want
+[2633.4s] that to not happen. You know what I
+[2635.2s] mean? I wanted I wanted to take my like
+[2637.0s] oh crap no and replace it with this one
+[2639.7s] which has probably the whole thread
+[2641.3s] since I replied to myself basically.
+[2643.3s] >> All right. Shall I draw some stuff?
+[2644.6s] Dexter,
+[2645.7s] >> you're up.
+[2646.8s] >> Okay, cool. Let's do it. So, basically
+[2648.7s] what the way I model this in my head is
+[2651.1s] you have multiple types of events. And
+[2653.7s] the first thing you do is if you think
+[2655.1s] about SCS and how the SQS and how the Q
+[2657.4s] ends up working is you basically uh
+[2660.6s] email thread every email thread gets put
+[2662.8s] into its own queue of keys of like most
+[2665.8s] most recent and most um
+[2668.0s] >> not recent. And you can build this
+[2669.6s] keying system through uh SCS. You also
+[2672.7s] have to build um a roundroin system
+[2674.9s] around like how you prioritize email
+[2676.9s] threads because you probably don't want
+[2678.0s] to be like boxed on one specific email
+[2680.9s] thread. But what you do is you guarantee
+[2683.4s] that you will never ever ever
+[2686.3s] uh process two emails from the same
+[2688.1s] email thread ever concurrently with the
+[2689.8s] queuing system. Now if you do it this
+[2693.4s] way, um what ends up happening is now
+[2695.9s] you've built a system that's going to
+[2697.3s] pop off of this email thread
+[2700.1s] um off the system. So we're going to
+[2701.6s] take this thread one and we're going to
+[2703.5s] mark this as T1 uh T0 because we're zero
+[2706.7s] index. Everything else is incorrect.
+[2711.0s] Move this down a little bit.
+[2712.4s] >> Yeah, do whatever you want. Um, you have
+[2714.4s] T1, T0. Now, we're going to start
+[2716.1s] processing T0. While we're processing
+[2718.2s] T0, we we might actually write a bunch
+[2720.8s] of arbitrary code. Get rid of these
+[2723.8s] dots.
+[2726.4s] Ah.
+[2729.3s] Okay. While we're processing D0, we
+[2731.1s] might write a bunch of arbitrary code
+[2734.2s] uh handle thread that will do a bunch of
+[2737.3s] uh that'll do a bunch of uh stuff. And
+[2739.8s] we can actually control this code
+[2741.2s] because it can do a lot of stuff. Um,
+[2744.1s] but like Ethan said, we will eventually
+[2746.0s] have and as Dexter said as well, we will
+[2748.6s] eventually have some database that
+[2750.2s] represents the state of truth for every
+[2751.8s] user that needs to be communicated with
+[2754.6s] um uh with this code like at some point
+[2758.8s] like this code will communicate with
+[2761.4s] this database. It'll read and write from
+[2763.1s] it uh whenever it wants. Now what I
+[2766.0s] would do is I I would build a system
+[2768.2s] that says read actions are always
+[2770.6s] available and read actions are never
+[2772.4s] blocked in this system. We always allow
+[2774.4s] read actions from async to here
+[2777.2s] >> at the point of at the point of write.
+[2779.5s] We actually do a verify
+[2781.0s] >> like another.
+[2783.1s] >> Well, so yeah, here's my question is
+[2784.8s] like would you actually create another
+[2787.4s] queue? Cuz like what you could do is you
+[2788.9s] could ceue up all of the right actions
+[2791.4s] as like you know planned rights
+[2794.8s] and just like only flush them at the end
+[2797.6s] if this job doesn't get interrupted.
+[2800.2s] >> Well, that's one way to do it. But the
+[2801.8s] reason that I wouldn't want to flush
+[2803.1s] immediately. So that would be for
+[2804.7s] certain use cases. That's actually a
+[2806.1s] perfect solution. By the way, just be
+[2807.7s] very clear. You cue you cue the rights
+[2809.5s] and you you treat it like a
+[2810.6s] transactional right
+[2812.4s] >> rather than you don't commit the
+[2814.0s] transaction until you've kind of like
+[2815.8s] finished the processing. And maybe you
+[2817.2s] even have a grace period of like make
+[2819.1s] sure no other email comes in in the next
+[2821.0s] 60 seconds and then we flush the rights.
+[2823.5s] >> But what I would do instead is I would
+[2825.3s] actually say that if the verify and
+[2826.7s] write what what does verify and write
+[2828.2s] do? Well, verify and write goes back to
+[2830.2s] this queue and says, "Do we have any
+[2831.6s] other elements that are on the email
+[2833.1s] thread
+[2834.7s] if we do at the point of verify and
+[2836.7s] write in addition to this?" So, we would
+[2839.4s] do this transaction thing, but we would
+[2841.0s] also have a thing that says if at any
+[2842.7s] point we detect that there's more emails
+[2844.6s] on this email thread, then we would
+[2846.6s] actually cancel this whole process and
+[2848.5s] cancel it all.
+[2849.1s] >> You just blow up the transaction and
+[2850.5s] roll it back.
+[2851.4s] >> You blow up the whole thing and you roll
+[2853.4s] it all back. And then what you
+[2854.8s] >> because the T1 is gonna contain all the
+[2856.8s] information from T0 because it's a
+[2858.9s] reply. And so then you run it again.
+[2861.4s] Okay. Okay. I got you. This is sick.
+[2863.4s] >> Then yes then [clears throat]
+[2865.0s] exactly exactly then you basically pop
+[2867.2s] the element off the queue and then you
+[2868.4s] rerun it again with T's one. You
+[2870.1s] basically treat T0 as a discarded event.
+[2871.8s] Then you treat as a whole thread and now
+[2873.7s] you have a solution. Um and you
+[2876.0s] basically have to treat this like what
+[2877.6s] these are basically called yield points
+[2879.0s] is how you think about it. It's a
+[2880.2s] yielding point. uh you have a yield
+[2881.9s] point that you're able to go crash off
+[2883.2s] this and now you pull T1 and because
+[2885.5s] hopefully if my MX does the right thing
+[2887.5s] you actually get T0 as a thread in T1.
+[2891.0s] This should in theory work. Any email
+[2892.6s] provider that doesn't do this is trash.
+[2894.7s] >> Uh so
+[2895.2s] >> I mean it's kind of actually similar to
+[2896.6s] how like LM context windows work, right?
+[2898.7s] Where like every email contains every
+[2900.6s] previous message that's happened. It's
+[2902.4s] actually works makes it work really
+[2903.8s] nicely for LLMs as they're trained to
+[2905.4s] like read conversations. It's only kind
+[2907.9s] of true because it could technically be
+[2909.4s] false that this is not the case. Uh
+[2911.5s] because like someone could edit the past
+[2913.1s] history. So what I I would really do if
+[2915.8s] I was to build a system to be super
+[2917.6s] robust, what I would really do is I
+[2919.8s] would actually take the first thing that
+[2921.4s] happens in a in in a guaranteed way is I
+[2923.7s] would actually take this blob and write
+[2925.0s] it to S3 every single time. And then
+[2927.9s] what I do is when I load T1, the first
+[2929.6s] thing I do is I'd say are there any
+[2931.0s] other blobs in my S3 bucket? And I'd
+[2933.0s] actually then load T0
+[2935.5s] from S3
+[2937.7s] and I would verify if T0 has a rewrite
+[2939.9s] or not uh in T1. And if it does, then I
+[2943.4s] would also preserve T0. If it doesn't, I
+[2945.4s] throw T0 away from S3. And now I have a
+[2948.7s] really secure email chain that is
+[2950.2s] actually linear because email can be
+[2951.7s] guaranteed to be linear. It's basically
+[2953.3s] a linear control flow that does this. Um
+[2956.1s] there's a problem with branching that
+[2957.3s] you have to deal with. So you have to
+[2958.2s] think about how you build email threads
+[2959.3s] in the case of branching. But that's a
+[2961.6s] data modeling problem on this layer, not
+[2963.4s] in the processing layer. Now there's one
+[2965.6s] last thing that you want to do, which is
+[2967.4s] just like you do a verify and write, you
+[2969.2s] also want to do this at send time. So at
+[2971.4s] the point of sending, you want to do
+[2972.6s] another verification that actually does
+[2974.8s] >> about sending the reply.
+[2976.4s] >> Exactly. Because at some point you're
+[2977.6s] going to handle the thread in the very
+[2978.8s] end. Not only are you doing database
+[2980.1s] things, you might actually want to reply
+[2981.4s] on email as well. Reply on email.
+[2983.3s] >> So this is Yeah. This is the difference.
+[2985.0s] This is why I think it should be
+[2986.0s] planned, right? Because like a
+[2987.4s] transaction can only impact your
+[2989.7s] database and you can roll back a
+[2991.1s] transaction on your database, but you
+[2992.4s] can't roll back an email send or a
+[2994.3s] calendar event created.
+[2995.8s] >> And so if you're going to be interacting
+[2997.1s] with the external world, even if it's
+[2998.6s] just sending a reply to the user, you
+[3000.1s] kind of need to like ceue up all the
+[3001.4s] changes you're going to make and then
+[3002.6s] flush them at the end.
+[3004.1s] >> Exactly. But also like users are
+[3006.0s] understanding of this. I'm assuming your
+[3007.6s] processing takes at least 30 seconds if
+[3009.7s] you're running some any sort of like
+[3011.0s] real LM workflows. If you're not and
+[3012.5s] you're just replying really quickly,
+[3013.6s] that's separate. But if your processing
+[3015.7s] ends up taking like at least 30 seconds
+[3017.1s] and they changed an email like 31
+[3019.2s] seconds later and they happen to get a
+[3020.7s] reply, that's not going to that's not
+[3023.4s] going to change anything. But what you
+[3025.0s] should do in that scenario
+[3027.0s] >> is whenever you let's say you had that
+[3029.2s] race condition. Well, now you have to
+[3030.4s] design for that. Whenever you run T1,
+[3033.0s] >> you have to check did you send an email
+[3035.6s] in that time window.
+[3037.0s] >> Did I like the the processing workflow?
+[3039.6s] >> Exactly. Did the processing workflow
+[3041.4s] send an email? So first we load t from
+[3043.4s] S3. you do all this and in between the
+[3045.6s] time that T1 kicked off, did I send
+[3048.2s] another email because of some weird race
+[3050.1s] condition in the way that it came
+[3051.2s] through? Like technically the sender
+[3053.1s] sent it, but then I sent it in between
+[3054.9s] that time window, which can happen. Uh
+[3057.5s] it's just networking. There can be all
+[3058.8s] sorts of weird race conditions. If you
+[3060.8s] did, then you have to add more context
+[3062.3s] into your LM workflow saying this is the
+[3064.0s] email that I sent and pull that down.
+[3066.4s] And now you have you have the true
+[3068.0s] upgraded chain where you probably even
+[3070.0s] want to provide that context to the
+[3071.1s] user. I already did this because let's
+[3072.6s] say you have a scheduling agent and you
+[3074.5s] scheduled a meeting. You sent the email
+[3076.7s] and literally right as you pressed send
+[3078.6s] the email came the sender also sent
+[3081.0s] send.
+[3081.8s] >> So you sent they had received and they
+[3083.9s] sent as well. So what do you do now?
+[3086.0s] >> Okay. So you need to tell the model when
+[3087.6s] it replies to the second email, it has
+[3089.7s] to know that it has already responded
+[3091.8s] and that needs to be tracked as an event
+[3094.0s] even though it's not existing and you
+[3095.7s] have to like synthetically inject. By
+[3097.3s] the way, this hasn't shown up for the
+[3098.6s] user. So it didn't come through in the
+[3100.4s] context window, but this also has
+[3102.5s] happened.
+[3103.3s] >> Exactly. So for example, I might have
+[3105.0s] said I have sent the email I've
+[3107.1s] scheduled a meeting on Friday and then
+[3109.1s] I've said actually I really I I I'm okay
+[3111.2s] with Friday, but if I prefer Saturday or
+[3113.4s] I prefer Monday. So, but you've sent the
+[3115.9s] Friday schedule already. Well, the
+[3117.4s] coding agent may actually prefer to send
+[3118.7s] an email says, "Hey, I saw you sent
+[3120.6s] this, but I've already sent the email
+[3122.0s] and the confirmation. Would you like to
+[3124.2s] still move it?" Because moving a meeting
+[3126.0s] that is sent is worse than changing the
+[3128.9s] first time you send it
+[3130.5s] >> and now canceling it or Yeah,
+[3133.2s] >> exactly. That's your agent's prerogative
+[3135.4s] and that's agent design at that point.
+[3137.2s] But context collection, that is your
+[3139.6s] problem as an as a person building an
+[3141.5s] application.
+[3142.8s] >> Hell yeah. So that's how you would have
+[3144.1s] to go build this.
+[3145.6s] >> Dude, this is putting the deeply putting
+[3147.8s] the engineering back in context.
+[3149.5s] Engineering, dude. I love it.
+[3153.0s] >> Uh hopefully this is fun. And uh
+[3154.9s] >> No, this is amazing.
+[3156.8s] >> Like and and like so just like a couple
+[3158.9s] a couple things off the top of my head
+[3160.3s] that So like first is like you know MX
+[3162.8s] does not have a threading API yet, but
+[3164.3s] it it will have it very soon. And so I
+[3166.3s] will have information about threading um
+[3168.6s] in the JSON for you because that's one
+[3170.2s] of the other big like philosophies here
+[3172.5s] is like you don't need to call API.
+[3174.7s] Yeah,
+[3175.0s] >> every email that has doesn't have that
+[3176.7s] is trash. So currently my MX is trash is
+[3180.2s] what I'm hearing. But it will be good.
+[3181.9s] >> It will be not trash very soon then. But
+[3184.2s] yeah, but like but but like um you know
+[3186.7s] like like
+[3188.5s] >> well no like like Kava was saying in the
+[3190.7s] chat like there's going to be like the
+[3193.0s] reason this is like really hard is that
+[3194.6s] like all like you were just saying like
+[3196.3s] people can modify the emails like they
+[3197.9s] can they can change it. So myx will
+[3199.5s] actually have two different versions of
+[3201.1s] this. they'll have like the the the one
+[3203.3s] that comes from the email itself, kind
+[3205.9s] of like the naive approach, but we also
+[3207.7s] like use your past email history in
+[3210.2s] order to give you the thread based on
+[3212.6s] like what we know is true based on the
+[3215.0s] emails that you've already received,
+[3216.2s] right? Which is the one you should
+[3217.2s] probably trust more, right?
+[3218.6s] >> Yeah. The tricky the other tricky part
+[3220.6s] about threading to be really honest is
+[3222.3s] actually not the part that's threading.
+[3223.5s] It just is a massive JSON payload. it
+[3225.6s] just increases the payload size of that
+[3227.2s] I need for my Lambda and that's kind of
+[3229.2s] uh that can be quite cumbersome
+[3231.0s] >> at some point
+[3232.9s] >> to go see like
+[3234.2s] >> even when you open up a Gmail email for
+[3236.1s] long threads it actually doesn't load
+[3237.5s] the full payload because it's just too
+[3239.0s] long and it's like the amount of bits
+[3240.3s] that you send across the wire are just
+[3241.4s] too high it doesn't make sense.
+[3243.0s] >> Yeah. So we we give you the full payload
+[3244.9s] of like we give you the raw email. We
+[3246.3s] also give you like the raw attachments
+[3248.2s] up to I think like I think it's like
+[3249.8s] 256k. Um it won't be it won't be inline
+[3252.9s] anymore but once again it's not an API
+[3254.2s] call. It's a signed URL that you can
+[3255.9s] download. So you don't actually have to
+[3257.0s] like you just get it. Uh but that will
+[3259.6s] be configurable that's like on my road
+[3261.4s] map so that you can if for some reason
+[3263.2s] you want your lambdas to be you know the
+[3264.8s] payloads to be wasteful because also
+[3266.2s] like for example like I know that
+[3267.8s] Versell like their their serverless
+[3270.3s] functions have like a I think it's like
+[3271.8s] six megabyte limit on the body size.
+[3274.8s] >> So you know there's there's things like
+[3277.1s] that.
+[3278.1s] >> So yeah.
+[3280.0s] >> Cool. Um well uh
+[3281.8s] >> so apparently actually the title is
+[3283.7s] email is all you need but apparently you
+[3286.2s] also need a uh 10 years experience in
+[3288.9s] systems engineering [laughter] if you
+[3290.7s] want if you want to build it as title
+[3292.4s] five
+[3294.0s] [clears throat]
+[3295.3s] >> actually subscription and the transcript
+[3297.7s] of this episode is probably
+[3299.2s] >> and then you're done realistically
+[3301.2s] [laughter] yes you're welcome uh I do
+[3303.1s] take commission and tips I do work for
+[3305.0s] tips [laughter] so please send them my
+[3307.3s] way uh over on as a lif We do not take
+[3310.7s] commissions. You cannot pay us to talk
+[3312.8s] about a [laughter] thing. We talk about
+[3314.4s] things that we are excited about. Uh you
+[3317.0s] will never be able to buy an episode of
+[3318.7s] AI that works. [laughter] I'm just going
+[3320.2s] to go on record saying that. I think
+[3321.8s] everyone can already tell that that's
+[3323.3s] the case. But uh do not send by
+[3325.5s] [laughter] Bob tips.
+[3327.4s] >> You can send me a like on YouTube
+[3329.0s] though. I will accept that.
+[3330.2s] >> There you go. Like and [laughter]
+[3331.4s] subscribe, fam.
+[3334.7s] Amazing. Uh Ethan, this has been super
+[3336.7s] fun. Um I'm going to just scroll the
+[3338.9s] chat. see if we have any other
+[3339.9s] questions. Any final words? Um,
+[3341.8s] otherwise we can wrap it up and send
+[3343.1s] these fine people on their uh, email
+[3345.4s] hacking days.
+[3346.6s] >> No, thanks for having me, guys. This was
+[3348.3s] fantastic.
+[3349.4s] >> I usually hate uh talking about
+[3351.7s] nonopensource
+[3353.4s] uh, code and I really hate bringing that
+[3355.8s] on because I think it's really important
+[3357.4s] to have uh, open source code, but um, I
+[3359.9s] genuinely thought this was really
+[3361.1s] freaking cool when I first saw it. I
+[3363.3s] I've I've firsthand seen how hard emails
+[3365.3s] to do. So with that, like if people want
+[3367.0s] to sign up for IMX, how do they do it?
+[3368.6s] How do they sign up? How do they get the
+[3370.6s] key? Can you show that one more time?
+[3372.2s] >> Yeah, I'll put in the chat as well. But
+[3374.4s] yeah, just go to myx.dev, do sign up,
+[3376.6s] and the the code is one word. It's SMTP
+[3378.9s] is the worst.
+[3380.3s] >> Um, and just sign up and, you know, we
+[3383.4s] have a very generous free tier, so don't
+[3386.3s] worry about it. Just start building.
+[3387.5s] >> And then uh the code for email works,
+[3389.9s] that's going to be completely open
+[3391.0s] source. We'll attach that to the episode
+[3392.6s] details perhaps and then show that over
+[3394.8s] on there perhaps on the network that
+[3396.1s] works repo itself.
+[3397.1s] >> Yep. Email works will be completely open
+[3399.4s] source. I'll probably keep adding a
+[3401.3s] bunch of crazy stuff to it. I'll also
+[3403.0s] accept pull requests on it. If people
+[3404.4s] want to add crazy stuff to it, like
+[3406.0s] let's do it. Let me know. Hit me up.
+[3408.2s] >> To everyone that got lost while I was
+[3410.2s] yapping, I apologize. I love yapping
+[3412.5s] about systems design and sometimes I get
+[3414.1s] lost in the sauce. Uh but hopefully the
+[3416.1s] email that we sent after this will be a
+[3417.8s] lot more uh uh uh what's it called?
+[3421.8s] Sound.
+[3422.1s] >> Bring it Claude to turn your rambling
+[3423.8s] into some nice mermaid diagrams so you
+[3425.6s] don't have to draw it.
+[3427.7s] That's right. [laughter]
+[3429.9s] Um, this was tons of fun. Uh, thank you
+[3432.5s] for joining us, Ethan, and donating some
+[3434.6s] of your time this morning. Thank you
+[3436.1s] everyone that stayed on and watched.
+[3438.0s] Next week's episode is, I think, going
+[3439.8s] to be really fun. Uh, for those of you
+[3441.6s] that want to watch the recap, recaps go
+[3443.1s] live every Monday. Uh, every following
+[3445.0s] Monday. Uh, you'll get an email as well
+[3446.6s] if you're subscribed to the either the
+[3448.1s] Luma or the email chain that we have.
+[3450.8s] Uh, next Tuesday, we're going to do live
+[3453.0s] coding vibes. Oh, this [laughter] is
+[3454.6s] going to be sick.
+[3455.4s] >> Yes. Uh we're going to show you we're
+[3457.0s] going to go back to agentic coding and
+[3458.3s] talk about exactly how we build agentic
+[3459.9s] system how how you use coding agents to
+[3461.9s] build interesting features. Uh if you
+[3464.9s] guys are interested in garbage
+[3465.8s] collectors and heaps and other stuff we
+[3468.1s] can y about that.
+[3468.9s] >> We can't do another garbage collector
+[3470.4s] dude. I was on with Vibb for two hours
+[3472.5s] on Saturday building garbage collect. We
+[3474.3s] got to pick something else. [laughter]
+[3476.3s] >> It was so fun. But okay. It was good.
+[3479.8s] But uh yeah,
+[3482.1s] >> I was thinking of the reason I was
+[3484.1s] thinking that is, you know, we can do
+[3485.1s] some nice little system design with
+[3486.6s] actual diagrams, nice and slow, while
+[3489.3s] cloud code does its thing, so we can
+[3491.5s] talk about
+[3492.1s] >> that's how it should be done. Yeah. Pop
+[3493.6s] over and here's what we're actually
+[3495.0s] doing. I love it.
+[3496.0s] >> Exactly. Um I think it'll be really fun.
+[3498.4s] Um anyway, thank you everyone for
+[3500.6s] joining. We'll see you guys soon.
+[3502.1s] >> We'll see you next week. Thanks.

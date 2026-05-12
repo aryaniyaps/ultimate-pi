@@ -1,0 +1,730 @@
+2025 is just a few clicks away AI agents
+are emerging Next Generation language
+models are right around the corner and
+Quinn 2.5 is proving that local models
+are no longer a Dream It's become
+absolutely clear to me that your success
+and My Success hinges on one thing among
+all the change over the past year one
+thing has stayed constant the foundation
+of it all the UN hero that we now take
+for granted it's the way we talk to
+information itself I'm of course talking
+about the prompt at first prompt
+engineering was a complete joke now
+prompt engineering is not just a good
+skill to have it may be the most
+valuable skill you can develop for 2025
+and Beyond before we continue this
+Channel's mission of building living
+software with Advanced Techniques like
+meta prompting let's hit pause for a
+moment right here in Q4 2024 and take
+time to review the new fundamental unit
+of knowledge work the prompt this way
+we'll set ourselves up to win in 2025
+with all the advancements right around
+the corner in this video I'll reveal my
+four level framework that turns good
+prompts into great ones and great
+prompts into reusable assets that scale
+across your tools and
+[Music]
+applications all right so I'm going to
+open up the terminal move to a temporary
+directory and crack open cursor create a
+empty file touch prompt. txt and this
+will create an empty text file you can
+see there's nothing else going on in
+this directory I'll write ping save this
+file and we're going to run prompts on
+this file using the llm library by Simon
+Willison and the olama library link will
+be in the description for this llm is a
+tool that let to run prompts right from
+your terminal the basics are everything
+let's start with the level one prompt we
+can type llm and then direct The Prompt
+file into this CLI tool and then we'll
+get a response like this pong how can I
+assist you today this is all we need to
+run our prompt on a large language model
+we can tweak this to get different
+outputs we can say count to 10 then back
+to zero and then we can hit up and just
+rerun our prompt and you can see here of
+course we're counting up to 10 and back
+to zero we can make a couple tweaks to
+the prompt to get different outputs we
+can say python colon save and then rerun
+and now we'll get that exact same output
+in Python we can tweak it again we can
+say in XML rerun and of course we'll get
+something like an XML output nice so
+we're going to get count up countd down
+so just by adding a few keywords we can
+change the prompt completely anyone
+that's still saying prompt engineering
+isn't a real skill isn't denial they
+don't know what they're talking about or
+they just don't know how to prompt
+themselves so what about the model we're
+using using this Library we can type llm
+models to get a breakdown of all of the
+models available to us I've installed a
+couple additional llm plugins you can
+see I have the Gemini models here I have
+anthropic and of course we have open AI
+models as well let's go ahead and run
+this exact same prompt using the new
+Gemini experimental I'll just copy this
+here and we can run this with- m paste
+the model and then we'll do the exact
+same thing right I'm going to direct our
+prompt into this CLI tool okay and now
+we're getting that output from Gemini
+experimental and that looks great it's
+giving us an explanation fantastic so
+let's go ahead and tweak this prompt a
+little bit let's say we want to Output a
+SQL light table user and then we'll give
+it a pseudo Json format so I'll just say
+ID email address and is member and now
+let's go ahead and rerun that and let's
+let's go ahead and use um let's use a 40
+Mini model okay so now we're running GPT
+40 mini fantastic let's tweak this
+prompt a little bit and we'll say
+exclusively so now we're tuning this ad
+hoc level one prompt a little bit and
+we'll hit up and just rerun this on for
+many and you can see we're exclusively
+getting the output for this SQL table
+that looks great we can also run with
+local model providers so we can use o
+Lama for this of course and we can just
+type o Lama run llama
+3.2 um and I have the 1B installed and
+then same thing we can direct the prompt
+into the tool okay so you can see llama
+3.2 1 billion parameter not following
+the instructions perfectly but this is a
+small model this is to be expected let's
+go ahead and run a more powerful model
+let's run AMA run Quinn
+2.5 coder 14b and we'll do the same
+thing we pass the prompt into the output
+and let's see what Quinn gives us here
+okay so also not perfect but not bad
+either right we're getting a SQL light
+database table generated from a simple
+Json like structure so the great part
+about using libraries like llm or olama
+in the terminal is that you have full
+control over rapid prototyping and
+experimenting with prompts across models
+and model providers what does that mean
+exactly you can see here we're rapidly
+protyping on several models if I hit up
+here a couple times we can come in here
+tweak this and if we wanted to we can
+run CL 3.5 IU we're on the exact same
+thing and you can see IOU giving us a
+super precise output here we can say
+postgress table instead and rerun it and
+we'll get a slightly different syntax
+because now we're requesting a postgress
+table okay so we're just playing with
+this level one prompt if we want to we
+can do something like this right I can
+say touch um many models. sh and if we
+open that up and go back to llm models
+and just list out all of our models I
+can come in here and just copy a couple
+models paste in let's go ahead and grab
+a couple of open AI models let's grab a
+couple of clawed models as well and then
+since we're here in cursor I'm just
+going to highlight this and run a quick
+prompt on this and say create lm- M for
+mini redirect prompt.
+txt place- M with each model Alias okay
+so I'm just running an ad hoc AI coding
+prompt here to automatically build a run
+command for all of these models that
+we're running using the llm library by
+Simon Willison right so I'm just going
+to write all these out and let's get rid
+of a couple here I don't really need to
+run all these models that looks good and
+now we can do this right now we can just
+say s many models and let this kick off
+right so now our prompt is going to run
+over over each one of these models and
+give us the output so you can see we're
+getting a lot of great consistent
+outputs and this is the power of really
+having control over your prompt and
+having great tools like olama and llm to
+work with you want to control your
+prompts you want to be working with them
+in a quick way you want to be
+prototyping with them and you want to be
+understanding the outputs of individual
+models right next to other models right
+whenever new models come out or whenever
+I have an idea for a prompt this is how
+I like to explore create a simple prompt
+file come in here with a couple CLI
+tools like llm or ol Lama dig in
+experiment and really understand the
+most important piece of the generative
+AI Age The Prompt all right so if you're
+enjoying this so far and you're learning
+something new hit the like smash the sub
+and let's move on to level two
+[Music]
+prompts a level two prompt is a reusable
+prompt that you can use to solve
+welldefined simple problems the big
+difference is that you specify
+additional information up front that you
+change over time as you improve your
+prompt and learn more about the problem
+you're trying to solve you do this by
+setting and creating static variables
+inside your prompt let me show you
+exactly what that means so I'll clear
+with the prompt and I'll use one of my
+code Snippets this code snippet is
+prefixed with px1 and if I hit tab here
+on this code snippet you can see we now
+have this XML prompt structure let's
+take our previous Json to SQL prompt and
+upgrade it to a level two prompt where
+it's much more reusable adding structure
+to your prompt like this generally
+increases performance a link a video
+where we discuss the best prompt format
+in the description the tldr there is XML
+gives you top performance especially as
+your prompts become more complex why is
+this it's because large language models
+were trained on the web and the web is
+full of HTML and HTML is a subset of XML
+so let's fill out this prompt and start
+with the purpose let's start by saying
+convert the typescript interface so
+we're going to expand this a little bit
+into a SQL table okay so that is the
+purpose of this prompt now we've clearly
+defined this let's go ahead and add
+instructions on exactly how to
+accomplish this goal use postgress
+dialect respond only with a table
+definition
+and we'll just keep it to two
+instructions for now right so we have a
+list of instructions here and the
+important part here is that we can
+whenever we need to come in here and
+just add uh I think I have xxi we can
+come in here and just add instructions
+as we need to right so you can come in
+here and Define as many specific rules
+and situations to solve the problem by
+adding additional instructions just like
+this right so we're going to start with
+just two instructions and then we're
+going to have one kind of primary
+variable here inter face block what
+we're going to do here is save this
+prompt right here right now this prompt
+is now reusable we are not just writing
+ad hoc natural language and handing it
+off to an llm we're defining a solution
+to a problem in a reusable way now
+whenever we need to right so you know we
+can come in here and just say CP prompt
+and this is going to be TS
+tosql
+table.xml now whenever we want to we can
+open up this file and copy copy this
+let's go ahead and replace our prompt as
+if we were you know starting up a new
+prompting session and now we can execute
+this prompt so let's come in here and
+we'll say
+interface users ID string paste that a
+couple times and then tweak it right so
+email created and then we'll say is
+member okay and this will be a bing
+we'll have a number here let's go ahead
+and run this with uh 40 so we can get
+that 40 command fired back up and you
+can see we got that output perfectly
+right only respond with table definition
+we can tweak this so say we wanted to
+name it something else um say this is uh
+Avatar right and we also have image
+right we just tweak The Prompt a little
+bit fire it back off and what do you
+know our prompt solves the same type of
+problem in many different ways thanks to
+our static variable here so why is it a
+static variable as we'll see with level
+four prompts this can be updated
+automatically with the help of code
+we'll get to that in a second and we
+need to properly spell interface perfect
+so this is great right we can run this
+with any model we want to so we can hop
+back into our o Lama and run this with
+Quinn and you can see something
+interesting here remember before Quinn
+actually bombed on our previous ad hoc
+prompt when we were just running at ad
+hoc with the exclusive you know the
+exclusive language and just the kind of
+single line but in our XML format it
+created the output we wanted perfectly
+for us right so just a kind of an
+interesting thing to note here as we
+move through the levels of the prompt
+you're going to see lower tier local
+models perform better and you're going
+to see your top higher tier models right
+your sonnets your Gemini Pros your
+reasoning models 01 you're going to see
+those perform even better than they were
+before this structure really pays off
+definitely spend some time again I'm
+going to link that video in the
+description spend some time to really
+dial in your prompts and your prompting
+structures okay so another incredible
+thing about creating more reusable
+prompts like this um we can come in here
+and add I'll say xxi
+instruction and now we can just tweak
+this for instance let's say also respond
+with create update select and delete
+statements for this table so say you
+just wanted to you know get a head start
+on I don't know creating some test data
+or mock data or writing up a bunch of
+queries that allow you to get a head
+start on working with this table right
+you could come in here add a single
+instruction and then rerun let's go
+ahead and give this to Quinn and let's
+see Quinn get to work so you can see
+here we have the create table statement
+we have the insert now we're getting the
+update and now we're getting the select
+and the delete just by adding one line
+we now have this great reusable prompt
+that we can expand and capabilities as
+we're working through the use case and
+the domain problem set that we're aiming
+to solve okay so level two prompts
+really powerful you can see where this
+is going and I hope you can see why it's
+so important to not just run random
+prompts into you know chat gbt CLA and
+Gemini that's great that's powerful it's
+not like one level is better than the
+other but as you move up these levels
+you're going to be able to do more and
+just so it's super clear you know you
+can take this prompt and fire it off
+into uh chat GPT and you can also fire
+it off into claw right and they're going
+to give you a great high quality answer
+uh just as before right we can even go
+to Gemini put this out here and you can
+see it's giving us uh you know
+legitimate responses we have that here
+we have Clause response that looks great
+and it looks like chat GPT is giving us
+two versions this looks great one is
+templated one is full out so these
+prompts work in any chat interface
+talking to any model and level one
+prompts are just as important as 2 3 and
+four you're going to want to be using
+every one of these levels but you want
+to understand what level you're at and
+when you need to bump up to the next
+level So speaking of bumping up let's go
+ahead and move on to level three
+[Music]
+prompts level three prompts continue the
+trend of reusability through prompt
+templating but as an essential element
+you've definitely heard of by now
+examples so I'm going to go aead and
+just clear this out let's create a level
+three prompt for a classic LM use case
+summarizing content we're going to add a
+spicy take to it you can use examples to
+guide the output you're looking for
+let's go ahead and write a prompt I'm
+going to run px2 so I'm going to create
+two additional blocks and let's just
+walk through this so I'll say summarize
+the given content based on the
+instructions and example output okay so
+I'm going to tab a couple times here
+there's going to be our example output
+and then we're going to have our content
+down here so we can go ahead and create
+a placeholder here output in markdown
+format so we're just walking through our
+instructions for the prompt we're
+telling the llm how we want it to act
+summarize into four
+sections um high level summary let's do
+main
+points
+sentiment three hot takes biased
+toward the author and three hot takes
+biased against the author right just so
+we can create some diversity of thought
+there and then we're going to say uh
+write the summary in the same format as
+the example output so this is super
+important you want to be using a
+consistent prompt format for another
+really important reason you can see here
+we have example output listed four times
+in total right two times as a reference
+and the last time as the actual
+reference point so this is really
+important because when you have sections
+like this your llm knows where to look
+right it creates structure for for the
+llm you can see we reference
+instructions right here and you know
+again we have this referencing
+capability our llm is now you know
+reading this top to bottom understanding
+everything we wanted to do because we're
+referencing other sections inside of the
+prompt okay so this is good let's go
+ahead and create our example output I'm
+just going to walk through the sections
+and I think we actually have uh four
+sections here right uh who cares let's
+walk through them highle summary and let
+me turn on cursor tab here for some
+autoc completion help I'll type dot dot
+dot and then it should be auto complete
+for me after this perfect perfect and
+then let's walk through the hot takes
+exactly okay and I actually want to add
+Title Here yep
+exactly and then I want double hashtags
+here and you know I'm just walking
+through creating this format there we go
+shout out to the cursor Bros for
+creating a great tabbing experience okay
+we have this great prompt we don't have
+any content yet because right now what
+we have is a prompt template let's go
+ahead and copy our template into a file
+CP prompt and we'll call this uh spicy
+summarize okay we have a couple prompts
+and actually we want this to be um an
+XML file so I'll just say CP
+spicy and I'll change that to XML okay
+great so now we have this XML file now
+whenever you need to you can come into
+your personal prompt Library copy this
+out paste it into a prompt and then
+actually fill in some content so so I'm
+going to go ahead and pull in this blog
+post from Simon Willison shout out Simon
+Willison absolutely legendary engineer
+and we're just going to copy this whole
+thing and use this as our content
+normally I would use a CLI tool for this
+but it's short enough that we can just
+copy and paste in to our content let's
+clear the output and let's run our spicy
+summarization prompt here right so we'll
+go ahead and say let's see who do we
+want to run here let's go ahead and give
+uh the new experimental a shot and let's
+fire this off so you can see here we
+have that title we have our highle
+summary and now we're getting our main
+points right just as we specified there
+are main points right there it's giving
+us a clear sentiment and now we're
+getting our hot takes biased toward and
+biased against the author okay so if we
+copy these out here open up a new file
+and if we open up the preview here we
+can walk through this in a nice
+formatted markdown document here right
+this is great right we now have this
+kind of clean write up of this blog uh
+we can look at the main points here
+sentiment Quin 2.5 coder Game Changer
+local coding powerful running locally no
+dependencies new era where AI tools more
+accessible 100% And then you know I
+think this is always great to see
+whatever information sources you're
+getting you want to have the opposite
+take as well right benchmarks are
+promising but need further validation
+OKAY model performance good lags behind
+top tier also true uh huge resource
+requirements also true right so it's
+nice to have this kind of balanced take
+and now we have a prompt that allows us
+to you know very quickly very rapidly um
+you know create summaries for us right
+and again you can always take this
+prompt and you know you don't have to
+use a tool like this right you don't
+have to use llm or AMA you can take it
+and throw it into whatever your favorite
+uh chat interface is you know always
+keep in mind I think it's really
+important to have a prompt library and
+you want to have the capabilities
+especially as an engineer to be able to
+run these prompts in a fast ad hoc way
+and we want to remember we have this
+mini models shell script that we quickly
+created um we can just fire this off
+against our new uh prompt here so we can
+run many and just have this give us uh
+multiple takes of our summary for this
+blog right kind of interesting to see
+I'll I'll let uh two fire off here I
+want to see 1.5 flash spit this out
+super quickly here there we go love to
+see that speed yep yep yep very nice and
+then it's going to hit Pro two which is
+probably going to be the same as latest
+and we'll just stop it there right we
+don't actually need to walk through
+every model so really cool stuff right
+this is our level three prompt and I
+hope you can see why this is
+gamechanging the level three prompts are
+defined by having concrete examples that
+steer the output if we remove the
+example what we have here is a great
+level two prompt we don't need a
+specific output so it's just kind of a
+you know highly defined well structured
+prompt that solves a specific problem
+well we can hop into this prompt replace
+the content and get a nice dynamic range
+of output but if we need to go that
+extra level and we're looking for
+information to be in a specific form
+which as Engineers as product Builders
+we often are right we're often tweaking
+modifying and reformatting information
+into a new package you'll often times
+want example outputs right and just a
+list of outputs that show exactly how
+you want your model to respond one more
+cool thing here I want to show you that
+you do with CLI tools like this if you
+want to you can run something like this
+we can say um lm- M and I want to run
+Gemini flash actually let me see the
+models again I forget what this model's
+called there we go yeah I want to run
+Flash 2 this is one of my new favorite
+models then we can run llmm flash2 and
+direct our prompt into the file let me
+go ahead and paste that back in then we
+can direct the output right to a file so
+we don't need this information in our
+terminal usually what we want to do is
+act on this information right so we can
+sore this directly to a file uh using
+the greater than
+when uh is awesome and I always like to
+add the model so we're going to say G
+flash2 this is going to be a markdown
+file okay so we're going to let Gemini
+flash just blast through this and now if
+we open up our files we'll see that
+right here right and of course we can
+see the preview and once again we have a
+solid breakdown right this is a
+fantastic blog post by the way um this
+is Simon Willison writing a note on
+Paul's aers Benchmark talking about you
+know AI cing benchmarks really really
+great stuff here I was super happy to
+read through this and then he goes on to
+you know talk about the mlx version
+anyway great blog post I'll link this
+below let's move on to level four
+[Music]
+prompts as a level four prompt we would
+basically just replace this with content
+and if you've built any llm based tool
+or application you already know where
+this is going right and you know why
+this is so important uh that this is it
+this is the difference between a level
+three and a level four prompt now this
+prompt is infinitely scalable right
+we're no longer ad hoc coming in and
+updating our prompts which don't get me
+wrong that's a very useful practice it's
+very quick but this lets us scale our
+prompt into code into production this
+allows us to create Dynamic variables
+and allows us to create prompts that we
+can up update on the Fly we can add as
+many variables here as we need right
+based on whatever problem we're trying
+to solve this is a real prompt that I
+use to generate YouTube video chapters
+so you can see here we have a dense
+purpose have a whole set of instructions
+here that Define how to solve this
+problem and then we walk through several
+examples let me change the uh language
+mode here our XML mode okay you can see
+we have several examples so not just one
+example but we have three examples of
+how we want the YouTube chapters to look
+like and if you you know of course click
+into a description of a YouTube video
+with chapters you'll see this exactly so
+this is just a really Hands-On example
+of using a prompt to solve a real
+problem we have examples showing the
+exact output and then down here at the
+bottom we have two Dynamic variables and
+if we search this references to this
+right and we have references to this as
+well right so we have our SEO keyword
+that we want to hit in our chapters and
+then we have the transcript with
+timestamps every single generative AI
+application that is not a chatbot is
+effectively a L4 prompt it's a level
+four prompt a prompt that has a specific
+purpose it has a set of you know static
+variables a set of static instructions
+that they update to improve the prompt
+but are not usually updated they have a
+set of examples to guide the output of
+the llm and then lastly and most
+importantly they have Dynamic variables
+making the prompt infinitely scalable if
+you're using uh AER cursor wind Surfer
+and really just any non chatbot tool
+it's effectively a level four prompt
+right that brings us full circle like
+everything that's happening right now in
+the generative AI age all these brand
+new tools and ideas and applications
+it's all just prompts right it's all
+prompts that you can execute with
+something as simple as the llm library
+right llm ping this is all it is and you
+know this is why I ditched autogen this
+is why I ditched Lang chain I ditched
+all of these kind of uh premature
+abstracting tools it's been over a year
+since I've you know ditch these tools
+and it's for this reason the prompt is
+the new fundamental unit of knowledge
+work I've said that on the channel
+before and I'm going to keep saying it
+because it is so important that you stay
+close to the metal and master the
+currency of the generative AI age right
+the the unit of intelligence right it's
+the tokens that build the prompt and the
+prompt is what gives you the
+extraordinary abilities to modify create
+update and delete information at
+incredible rates everything is about the
+prompt great you have a prompt now it's
+time to build a unique tool that allows
+you to use and tap into your prompt
+libraries and all of your prompt
+templates like this that you've built up
+right this is something that we've
+covered on the channel I have this tool
+if I type PFS it automatically opens up
+for me and this is my prompt Library if
+we search and we select a couple of
+models I like to use 01 mini here and of
+course Sonet and Flash Just For Speed
+and then if we hit submit you can see we
+have text areas for those two variables
+you can see here we have the selected
+prompt click to show you can see that
+exact prompt we were just looking at
+clean EX ml format ready to go ready to
+get their Dynamic variables replaced in
+this simple prompt Library this is using
+a tool we've covered on the channel
+called Maro I'll go ahead and Link that
+video in the description where we built
+our own personal prompt Library this is
+going to be a really important trend for
+us moving forward you want to be able to
+tap into your prompts to tap into the
+intelligence of the llms as quickly as
+you possibly can so I'm not going to run
+this go ahead and check out that video
+if you're interested to see see where
+this is going generative AI enables us
+to solve a massive array of problems
+faster than ever before the question is
+do you have the AI tooling and more
+importantly the right prompt to solve
+the problem after you build the prompt
+it's time to scale It Up by moving it
+through the levels of prompts levels 1 2
+3 and 4 so that you can scale it up and
+put it inside a tool or application that
+solves a specific problem for you
+very well after you take your prompt and
+you put it inside a piece of code that
+solves a specific problem very well
+you've built the key piece of your AI
+agent let me know in the comments what
+you think about this four-level prompt
+framework I've personally use it to
+create hundreds of prompts across
+several domains we have exciting videos
+coming up on the channel to wrap up 2024
+including meta prompting and our 2025
+predictions video I'll make predictions
+on what I think will happen in 2025 and
+how I'm going to prepare for it we
+touched on this a little bit in a video
+I did a couple weeks ago I'll link that
+as well we're also going to take the
+time to recap on my 2024 predictions so
+that's going to be an interesting one
+we're of course going to cover the
+release of 01 Opus 3.5 and the new
+Gemini model that are all set up to be
+released in the next month or so we're
+going to be building our own custom AI
+coding benchmarks and of course as I've
+mentioned the foundational AI coding
+course is coming in De December like
+subscribe drop a comment you don't want
+to miss what's coming next stay focused
+and keep building

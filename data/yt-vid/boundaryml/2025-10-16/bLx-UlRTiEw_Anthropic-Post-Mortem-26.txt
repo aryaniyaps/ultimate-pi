@@ -1,0 +1,1722 @@
+[2.3s] All right. How's it going everyone?
+[5.0s] Welcome. Today you will see a new face
+[7.4s] than what you normally see. Uh we'll
+[10.2s] give it a couple minutes and we'll kick
+[11.7s] it off right away.
+[14.3s] [Music]
+[16.4s] I'm going to do one thing. Put up some
+[18.1s] text. Boop.
+[21.2s] And Aaron, I think your audio and
+[23.5s] everything should be working just fine.
+[25.7s] >> Yeah, I think so.
+[40.6s] All right. Are we good to go, Aaron?
+[42.4s] >> Yeah. Let's start this.
+[45.5s] >> I don't know if I can hear you.
+[47.6s] >> You can't hear me?
+[49.4s] >> Um,
+[51.6s] >> hello. Hello.
+[55.1s] You can't hear me? Hello?
+[59.4s] Maybe it's my audio, but I I can't hear
+[61.4s] you.
+[63.8s] >> Do you guys Are you guys able to hear
+[65.1s] Aaron? Oh, you do. Um,
+[70.6s] let me figure something out really fast
+[72.3s] cuz I cannot hear him. Can you try
+[74.9s] again, Aaron?
+[75.6s] >> Hello.
+[77.5s] >> Let me get some headphones.
+[79.9s] Try one more thing.
+[83.4s] All right. Thank you guys for reporting
+[84.9s] the issue that it's purely on my side.
+[92.2s] All right. Uh, can you try one last
+[94.0s] time, Aaron?
+[94.6s] >> Hello. Hello. Hello.
+[96.8s] >> Oh, all right. We are good to go.
+[101.6s] >> All right. Thank you everyone for
+[103.4s] patiently waiting. Um, we've got our new
+[105.8s] episode of AI that works today. And, um,
+[109.2s] I think one of the things that we really
+[111.0s] wanted to talk about today was a couple
+[113.4s] of new things. One is Enthropic had a
+[115.6s] great article about how they went down
+[117.4s] recently and I think it's just worth
+[119.8s] diving deep into that to go understand
+[121.9s] what happened, how does it impact you
+[123.6s] and like how can we understand if that
+[125.4s] sort of stuff is going to impact us
+[126.8s] downstream in the future uh now that we
+[129.2s] have these runtime dependencies on these
+[130.7s] models
+[132.0s] >> and then there's bunch of stuff that
+[133.9s] happened on AI uh on open dev day and I
+[137.3s] think there's some interesting stuff to
+[138.3s] talk about there as well.
+[140.6s] >> So I'm Vivoth. I'm one of your co-hosts
+[142.1s] for AI that works. And normally I have
+[144.2s] Dexter with me. Dexter has some really
+[146.6s] cool things going on that I can't talk
+[147.8s] about yet. So hopefully he'll talk about
+[149.1s] it next week, but I was able to rope in
+[151.8s] my co-founder Aaron who I think is just
+[154.2s] as pleasant. Probably the show should
+[156.0s] just be him and uh Dexter on instead of
+[158.2s] me. But Aaron, you can give a brief uh
+[161.0s] intro and background if you want.
+[163.0s] >> Yeah, thank you. Um yeah, so VB and I
+[165.7s] met seven years ago. Now we're doing a
+[168.6s] company together. And before that I used
+[171.2s] to work at AWS in EC2 and then in Prime
+[175.0s] Video and I worked at Amazon for like
+[176.9s] seven years and then I was like all
+[179.1s] right I need to do a startup now and
+[181.3s] here I am now making a programming
+[183.3s] language song
+[184.8s] >> which we all know is a great startup
+[186.2s] idea.
+[186.7s] >> Yeah, exactly. So happy to be here.
+[189.4s] >> Cool. Um I guess let's get right into
+[191.6s] it. Uh let's start off with um with the
+[194.8s] entropic uh piece right away. So, I'll
+[197.1s] I'll go ahead and screen share and we'll
+[198.3s] kind of walk through it together.
+[200.8s] Uh, let me get the screen share going.
+[203.9s] Oh, yes. We'll talk about prompt
+[205.5s] optimizers, too. I think we'll have a
+[207.1s] fun time today.
+[210.1s] Screen.
+[212.5s] So, I think the first thing I want to go
+[213.9s] talk about is this one.
+[220.6s] So, many of you probably have seen this
+[223.4s] uh which is Oh, interesting.
+[226.5s] which is this article that Enthropic
+[228.3s] wrote or maybe you haven't which was
+[230.1s] Enthropic uh recently had a downtime or
+[233.8s] like I guess regress quality issues in
+[236.6s] their models and they had like three
+[238.6s] unique bugs that I thought were really
+[240.6s] fascinating and talked about how almost
+[244.0s] sensitive these models are the things
+[245.6s] that are both incredibly technical and
+[247.8s] also really hard to understand.
+[250.8s] So, we figured let's just talk about it.
+[252.6s] If someone in the audience has thoughts
+[254.2s] or questions that they want to bring up
+[255.5s] along the way, please do that as per
+[257.3s] normal. Uh, because we love having
+[260.2s] >> that kind of conversation. Yes. Let me
+[261.8s] zoom in.
+[262.9s] >> Yeah, there we go. Perfect.
+[264.9s] >> Um, and like one second, I'm going to
+[267.4s] adjust my screen. I'm on a new screen
+[269.3s] today, so it's sadly not as efficient I
+[271.7s] normally am.
+[273.6s] All right. Uh, is a co is the rule for a
+[276.2s] co-host that they must have a mustache?
+[278.6s] Um,
+[279.0s] >> I think so. Sadly, I can't grow one. So,
+[282.1s] I've got to I've got to find other
+[283.6s] people that are uh that can do it.
+[287.9s] Um, and let's just go right into the
+[289.8s] first one. So, the really the problems
+[291.7s] that these happen uh is that they happen
+[294.3s] mostly at large scale systems. If you're
+[296.6s] running a tiny model or tiny information
+[298.2s] provider, you likely will never run into
+[299.7s] these. But anytime we depend on these
+[301.3s] cloud systems, our business and our
+[303.8s] impact of quality can have a huge impact
+[307.0s] based on exactly what these model
+[309.4s] providers do. And the more that we can
+[311.0s] deeply understand them, the better we
+[312.9s] can report. Like say we see a bunch of
+[314.9s] issues on Twitter, which I thought was
+[316.8s] one of the most fascinating things about
+[318.4s] what anthropic reporter here, which is
+[320.6s] that the more issues that we see, the
+[322.1s] better we can understand is it a
+[323.3s] prompting issue, is it a model
+[324.5s] versioning issue, or is it a core infra
+[326.1s] issue under the hood? or once we know
+[328.1s] what to diagn
+[329.4s] >> the worst case it's a compiler issue.
+[332.0s] >> Yeah, the worst case a compiler issue
+[333.6s] which is like really only not only is it
+[336.3s] not found in the model company but based
+[337.5s] on the core compiler to go fix as well.
+[340.1s] But before we go into the issues, I
+[341.6s] actually want to talk about a really
+[342.7s] important segment that they talked about
+[343.9s] at the very bottom
+[346.2s] which is I think they have it somewhere
+[348.1s] down here. Um this part and I think this
+[352.2s] is going to be more and more true and
+[353.8s] really applicable to every single person
+[355.4s] being AI pipelines. Enthropic doesn't
+[358.4s] really have too many like eval
+[360.6s] fundamentally on their system. What they
+[362.3s] really do is they scan for noise across
+[364.1s] Twitter because they're so popular. they
+[365.5s] can go do that and they're like what is
+[367.8s] the general sentiment of vibes that is
+[369.6s] happening when we release a new model
+[371.7s] and if anything is going off in a really
+[373.8s] anomal way they know for sure that they
+[376.7s] have an issue and that's I think when
+[379.5s] all of us think about building AI
+[380.8s] pipelines of any kind this is one of the
+[383.0s] most useful kind of things for all of us
+[384.6s] to think about which is like how can we
+[386.4s] get a latent signal here that allows us
+[388.2s] to go track this and what's really
+[389.9s] fascinating here is that this worked for
+[392.8s] years for them this is the that work and
+[395.8s] now at this current skill that they have
+[399.1s] now it really failed because they were
+[401.9s] able they there's some sensitive issues
+[403.5s] that almost like conflated together at
+[405.9s] the wrong time
+[407.0s] >> to make it not work.
+[407.9s] >> Part of it is really just looking at um
+[411.1s] like at tweets and just general traffic
+[414.1s] on social media at Amazon for example we
+[416.4s] would just listen to like mentions of
+[418.5s] like what are people saying
+[419.5s] >> really?
+[420.2s] >> Yeah. And that was that was the way that
+[421.7s] we like measured how good the product
+[424.7s] like obviously there were other metrics
+[426.1s] like how how long people um stay and
+[428.3s] like watch movies and stuff but um a big
+[431.0s] part is just like what are the customers
+[432.4s] saying and for this specific instance
+[436.5s] only8% of traffic was impacted in some
+[439.2s] cases. So you can imagine like how
+[441.0s] difficult it must have been to find that
+[443.6s] there was an issue. Um, and yeah, we uh
+[447.9s] we can chat about the actual things that
+[449.8s] happened here.
+[451.0s] >> Cool. Let's start off with the first
+[452.3s] one. Um, and like for people that want
+[453.8s] to go read this whole thing, definitely
+[455.2s] we'll link it. Uh, let me link it. Uh,
+[456.6s] I'll link it in the email and also I
+[458.8s] think it's in the description of the
+[459.9s] event, but for anyone that doesn't have
+[461.1s] it, I'll post it in the message as well.
+[463.8s] Um, I posted in the chat thread. Um, but
+[468.1s] the first one I thought was fascinating
+[469.7s] was actually about like context window
+[471.1s] routing. And a lot of people talk about
+[472.6s] large context windows. They're like,
+[473.8s] "Oh, let's use a million token model uh
+[476.2s] at all times." But surprisingly, the
+[479.9s] fundamental issue that they had here was
+[481.4s] actually the fact that like when they
+[482.8s] used a million million context window
+[485.0s] for like uh I think what they said was
+[487.0s] like smaller context requests, it
+[488.8s] actually led to degraded performance.
+[491.8s] Now, this is very against what a lot of
+[494.0s] people tell you, which is like toss
+[495.2s] everything at the biggest model at all
+[496.9s] times.
+[499.4s] That is not always going to lead to good
+[501.9s] results. And I can tell you at least my
+[504.0s] intuition about why that is the case,
+[506.8s] but I always like to think of it in the
+[508.3s] in the form of like software engineers.
+[510.4s] Aaron is an amazing software engineer. I
+[512.0s] get the pleasure of working with. But
+[514.2s] like if I toss Aaron a bunch of nonsense
+[517.8s] information and then with along with the
+[519.8s] actual information that I want him to go
+[521.3s] do, no matter how good he is,
+[523.0s] fundamentally he has to do work to both
+[525.5s] process the information out and also
+[530.1s] deal with the issue of like figuring out
+[532.2s] exactly what has to happen. So, in that
+[534.7s] world, it would it would just be better
+[536.8s] for him to for me to tell him exactly
+[538.2s] what I want him to do, and he'll likely
+[540.0s] produce a better output that I would be
+[542.5s] super happy with at the end, no matter
+[544.1s] how good he is.
+[546.7s] >> Yeah, it's uh it's just like yeah, you
+[550.0s] just have like a bigger bigger model
+[551.8s] with a bigger context window. Um and we
+[554.7s] can talk about exactly like the
+[556.8s] mechanism by which people scale out
+[558.6s] these models.
+[560.2s] >> Oh, you want to talk about scale? Sure,
+[562.1s] we can do that. So, like, okay, let's
+[563.6s] talk about why why this ends up being
+[565.5s] true. So, scallet draw. One second. I'm
+[568.2s] going to make a little
+[571.4s] uh let's see. Can you guys see my
+[573.9s] scallet draw? All right, Aaron, I'm
+[576.2s] going to send you a link to this
+[580.1s] uh session. Copy link and I will send
+[584.3s] this to Aaron only.
+[588.7s] Cool.
+[591.1s] Cool. Aaron shoveling.
+[592.7s] >> So like why why does this kind of model
+[594.5s] run into those kind of issues? Well,
+[596.5s] >> let's talk about how one second. I got
+[598.1s] to switch the chat.
+[602.2s] >> Well, let's think about what the
+[603.3s] mechanism doing under the hood. Like
+[604.6s] this is at least my understanding of how
+[606.0s] I think uh transformers work. I might be
+[608.4s] wrong and if I am, please correct me
+[609.7s] along the way uh for anyone that's
+[611.2s] watching.
+[613.1s] Fundamentally, what you do is you write
+[614.9s] a word like the
+[619.1s] best
+[624.2s] soccer. Oops, can't spell soccer.
+[628.0s] Soccer.
+[635.8s] the bad soccer
+[638.9s] player
+[642.9s] is.
+[644.2s] >> Yeah, I mean that's pretty good. That's
+[645.7s] pretty good.
+[646.6s] >> Okay, cool. Um, but like when you go do
+[648.9s] this, what ends up happening is all the
+[651.5s] mechanism is doing is it's taking
+[653.0s] information
+[654.9s] from this word and somehow trying to
+[657.9s] bridge it all the way over into
+[660.9s] like this word and said we're going to
+[662.6s] move information about like best over
+[665.7s] into soccer. And somehow this vector now
+[669.1s] doesn't just represent soccer, it
+[670.6s] represents both the concept of best and
+[672.6s] soccer.
+[674.8s] And then it's going to say then it's
+[676.3s] going to want to translate some
+[677.4s] information from soccer and player and
+[679.6s] eventually
+[681.5s] best and player also into here. So at
+[684.3s] some point the vector represents not
+[685.9s] just player and soccer not just best but
+[688.1s] the idea is soccer best soccer players
+[690.7s] represented. And as you go down this
+[693.0s] world, the whole point is the mechanism
+[695.3s] is just moving information between these
+[697.4s] bridges into each other in various
+[700.0s] birectional ways. So that at some point
+[702.0s] the vectors represent something
+[703.1s] meaningful. And when you decide what
+[705.4s] token you want to generate next here,
+[707.2s] and anyone that disagrees with this is
+[709.3s] wrong, but um when you generate what
+[711.9s] token you want to go generate here, you
+[714.2s] basically are just moving information
+[715.5s] around. So what does long context mean?
+[718.1s] Well, this bridging is happening across
+[720.4s] many token channels along the way.
+[723.8s] And as you increase the context window,
+[726.6s] the amount of effort it takes the model
+[728.6s] to go learn how to move information
+[730.6s] across all these vectors is different.
+[734.3s] And it's not the same as learning what
+[736.1s] it means to move across 10 tokens versus
+[738.5s] moving across a million tokens. So just
+[741.0s] because a model is capable of taking a
+[743.0s] million tokens doesn't mean that you
+[744.9s] actually want to go implement the full
+[746.6s] million tokens every single time. It
+[749.4s] might mean you still actually want to
+[750.7s] tell the model it's like hey I want you
+[752.0s] to ignore these parts of a do token
+[754.0s] channel and only move information
+[755.1s] between these vectors.
+[757.1s] >> So I suspect what enthropic does under
+[759.1s] the hood and I don't know this for sure
+[761.2s] um is I suspect they have different
+[763.0s] variants of their model. Some of which
+[764.9s] that have the full million contacts some
+[766.5s] of which that have shorter contacts. And
+[768.2s] if they know what it can route to, then
+[770.0s] they'll prefer sending to the shorter
+[771.4s] context one if they can. Otherwise,
+[773.4s] they'll send to a longer context one. I
+[774.8s] suspect they have some sort of
+[775.6s] distributed system here. Does that kind
+[778.6s] of make sense with how you understand
+[780.3s] these systems?
+[781.4s] >> Basically, you um I what I'm
+[783.2s] understanding is also that like you take
+[784.9s] this initial context that you trained
+[786.9s] on. So, let's say it's like 1 2 3 4 5 6
+[789.5s] 7 8 9 10, right?
+[791.1s] >> Yeah. And then they're like, "Okay, each
+[793.5s] um vector has like each token has a
+[795.7s] position encoding essentially."
+[797.8s] >> Y
+[798.3s] >> and when you expand this into 1 million
+[801.2s] tokens, you're basically taking this
+[804.2s] expanding it all the way. And then
+[806.6s] basically um you you shortened the uh
+[811.9s] the positions here. So instead of one,
+[813.4s] you do like one 1.5, right? And then two
+[817.8s] 2.5 3.5 etc. And so like the spaces are
+[821.4s] exactly so it's rope. Um
+[824.0s] >> for those of you that know it's exactly
+[826.4s] so you can look into this and this you
+[828.2s] want to look at how rope scaling works
+[829.6s] if you're curious.
+[830.7s] >> Yeah.
+[831.0s] >> But fundamentally the point is like it's
+[833.4s] not zero cost to go and make the context
+[835.8s] window bigger. It comes at a different
+[837.8s] trade-off. It enables new things like
+[840.2s] you can recognize you can give it the
+[841.8s] whole word. You can give it like all of
+[843.8s] Charles Dickens and say what is the one
+[845.4s] word that is flipped
+[846.6s] >> and it can go build that relationship
+[848.2s] with itself.
+[849.8s] But fundamentally what it's really doing
+[852.1s] is like you're also coming at a
+[853.4s] trade-off over here. So if your context
+[855.1s] can be expressed really tursly, a
+[857.4s] smaller model or a smaller encoding
+[862.2s] space can do a better job of actually
+[865.0s] understanding what you're trying to do
+[866.4s] with less precision loss.
+[868.0s] >> So TLDDR if you get anything out of this
+[870.6s] just use less context and less context.
+[874.1s] I
+[874.2s] >> promise you your pipel pipelines will uh
+[876.8s] be more accurate. Yeah. And that's not
+[879.2s] to say
+[882.0s] that's not to say um uh specifically um
+[887.3s] like artificially reduce your context.
+[889.0s] Use the least amount of tokens you need
+[891.3s] to represent your problem. That doesn't
+[893.0s] mean it's small amount of context. It
+[895.1s] just means the least possible way to
+[897.0s] represent your problem is the best way
+[898.4s] to represent it.
+[899.4s] >> Yeah.
+[901.4s] Okay. So yeah, we had 30% of cloud code
+[904.6s] users that were impacted and that's why
+[906.6s] people were like oh this model is is you
+[909.1s] know bad now
+[911.3s] and I feel like this is happening with
+[912.7s] every coding agent. Um maybe people get
+[915.2s] used to it but in this case it was funny
+[917.8s] cuz in the past people get used to the
+[919.8s] model being good and they're like oh it
+[921.5s] can't solve these problems anymore but
+[923.4s] in this case it was literally the model
+[925.4s] being worse.
+[927.4s] So it's like no, it's actually just like
+[930.5s] spewing garbage in in some cases.
+[933.6s] >> Oh.
+[934.2s] >> Um
+[934.7s] >> Charles said something really
+[935.8s] fascinating. The big models are all now
+[937.4s] pure decoders and not encoders. I did
+[939.5s] not know that. Uh I can't verify that.
+[941.6s] If that is true, that is true. But I did
+[943.2s] not know that.
+[944.2s] >> Interesting.
+[944.9s] >> Um Josh asked an interesting question
+[947.0s] that I think we can come to in a second,
+[948.6s] which is like is this really talking
+[950.4s] about generation steps? Are we talking
+[951.8s] about uh reading context inputs as
+[953.4s] tokenizers? Uh
+[956.2s] uh the tricky part here Josh is like
+[957.9s] this stuff like every generation you
+[959.9s] basically have to go read all the
+[961.4s] previous tokens. So even if you add a
+[962.8s] new tokens
+[964.8s] um like once you generate messy you
+[966.6s] still have to go do the same thing again
+[968.2s] and then you have to generate the next
+[969.4s] token. So I don't maybe I'm
+[971.4s] misunderstanding the question but like
+[973.6s] uh like for example word here might be
+[976.8s] or might be the best word if someone
+[978.6s] really if the model is trained to
+[979.8s] believe that and now once messy
+[982.2s] generated it basically behaves like all
+[983.7s] the previous words and now you need to
+[985.0s] move mechanisms around. So I'm not
+[987.1s] understanding the question fully.
+[989.9s] Um let's talk about the second one
+[991.8s] output corruption. Um, these are just
+[994.9s] bugs like this. There's nothing fancy
+[997.0s] here. Just like at some point they just
+[998.8s] had a they just had the they had a bug
+[1001.4s] in how they were assigning high
+[1004.6s] probabilities and like a random token
+[1005.9s] would just get high probabilities.
+[1007.4s] >> I think there's an underlying thing in
+[1009.0s] this whole article about GPU scarcity
+[1012.6s] and you'll see this from the first start
+[1014.5s] in the in the document where it says we
+[1017.0s] use three or four different providers
+[1018.9s] and different ways of like serving these
+[1020.6s] models. They use like AWS tranium. Um I
+[1024.2s] don't know if you scroll up all the way
+[1026.2s] by
+[1028.1s] uh all the way all the way. It literally
+[1030.4s] it says uh it's like on the next section
+[1033.8s] how we serve cloud code scale. Yeah. So
+[1036.6s] um yeah they have like Amazon bed raw
+[1038.9s] Google cloud vertex AI. So they're
+[1040.6s] spread across all these different
+[1042.0s] providers serving like cloud models and
+[1044.7s] then they have like AWS trainium etc.
+[1046.9s] Each of them has their own sort of
+[1048.4s] architecture. So they have to like
+[1050.0s] manage these at scale which is nuts. So
+[1053.0s] they are trying to squeeze every single
+[1055.2s] performance that they can in here. So
+[1057.9s] that just leads to bugs and uh at the
+[1061.1s] end of this article they said we
+[1062.5s] actually just stopped using these
+[1063.8s] performance optimizations because
+[1066.6s] quality is better than just having these
+[1068.5s] random bugs happen. Yeah, I can at least
+[1071.0s] say like I did a lot of high performance
+[1073.6s] work in the past and like every like we
+[1075.2s] did a lot of work where we take certain
+[1076.5s] parts of the algorithm and write in pure
+[1077.7s] assembly to make it really good and like
+[1079.1s] do a lot of SIMD work and that does
+[1081.2s] basically make the code what I call uh
+[1083.3s] write once read never. Uh it's actually
+[1086.1s] worse than readonly access. You can't
+[1087.9s] read it. You can only write to the file
+[1089.4s] because you can only mutate it um
+[1091.4s] because every other variant is
+[1092.8s] pointless. And I think what they're
+[1094.6s] doing here is run into very very similar
+[1096.2s] problems where the work here is just
+[1098.0s] like and the performance optimization
+[1100.2s] bug I think is kind of related to the
+[1101.4s] next thing that we'll talk about. Uh but
+[1103.7s] like basically like if they pick the
+[1105.5s] wrong token at the output you get total
+[1107.5s] nonsense.
+[1108.6s] >> Yeah I think this one
+[1110.4s] >> easier easier to detect for sure. It's
+[1112.8s] just like oh
+[1113.9s] >> nonsensical. I mean they just added some
+[1115.7s] detection for like unexpected
+[1117.0s] characters. I believe they just have
+[1118.2s] some other model that they train to be
+[1119.7s] like or like even some uristics that are
+[1121.3s] like hey if you're producing ASI and you
+[1123.0s] suddenly stop producing ASI or produce
+[1125.0s] some really esoteric ASI tokens
+[1127.7s] >> can you detect that and that's probably
+[1129.5s] an easy thing to go get
+[1132.6s] um I thought this one was actually the
+[1134.9s] where they spent the bulk of their time
+[1136.8s] and it's fascinating because like um
+[1139.6s] very interesting like compiler layer
+[1141.8s] misconfiguration that they had and it
+[1144.9s] this I think digs into a lot of various
+[1147.6s] topics
+[1149.5s] uh that I thought are um
+[1153.3s] almost how do I describe it very very
+[1156.5s] nuance so we'll see if this is
+[1157.8s] interesting to folks um and if it's not
+[1160.2s] too interesting we'll go we'll go faster
+[1161.9s] with the agent stuff if it is
+[1163.0s] interesting we'll talk more about it but
+[1164.8s] at a very very high level I kind of want
+[1166.8s] some people to have a good understanding
+[1168.2s] of how these top p sampling works and
+[1170.0s] how the models pick these tokens because
+[1172.0s] I think that fundamentally once you
+[1174.3s] understand that then you can understand
+[1175.4s] how these bugs can appear and how
+[1177.0s] complicated these systems are to go
+[1178.5s] build. So,
+[1182.6s] okay, we've talked about this in the
+[1183.8s] past. We're like, how does a model pick?
+[1185.6s] Well, once these tokens are done, how
+[1187.1s] does it actually pick this last token?
+[1188.3s] It goes through the whole uh transformer
+[1190.2s] architecture and at some point it spits
+[1192.0s] out a giant list of probabilities. It
+[1194.0s] spits out a probability for like every
+[1195.5s] single token you have. So, if you have
+[1197.0s] like a two million two million token
+[1199.1s] vocabulary, it basically spits out 2
+[1201.4s] million probabilities.
+[1203.8s] um down here. And when it spits out two
+[1207.0s] million probabilities, it basically says
+[1208.6s] that
+[1210.9s] sorry, oh sorry, I'm seeing the wrong
+[1212.9s] thing. When it spits out 2 million
+[1215.2s] probabilities, it basically says for
+[1216.5s] every single token in the token
+[1217.8s] vocabulary, what is the probability for
+[1219.8s] it given the sentence here? So if messy
+[1221.9s] is a token in the vocabulary, it will
+[1223.3s] tell you the probability of the word
+[1224.2s] messy in the sentence. If or is a word
+[1227.6s] in the vocabulary, it tell you the
+[1228.6s] probability of or. If M is a word, a
+[1230.6s] letter in the vocabulary and these all
+[1232.3s] are I think at least for opening eye.
+[1235.6s] >> Yeah.
+[1236.6s] >> The main point is also that you have all
+[1238.4s] this giant vocabulary and you're
+[1240.1s] actually trying to speed up inference.
+[1242.6s] >> Yes.
+[1243.0s] >> So you actually calculate these
+[1244.7s] probabilities in different chips
+[1246.2s] altogether
+[1249.1s] which um I just want to give people an
+[1251.2s] idea of what that means. So like in this
+[1253.0s] world if I wanted to generate messy
+[1255.1s] >> Oh, you can't I will pro Oh, I'm the
+[1257.7s] wrong screen. Whoops.
+[1259.4s] If I wanted to generate the word messy,
+[1261.3s] what I will end up having is I literally
+[1263.0s] have token probabilities for each of
+[1264.6s] these things. I'll have a token
+[1265.6s] probability for M, a token probability
+[1267.0s] for ME, token probability for ME, token
+[1269.6s] probability for MESS, and then and then
+[1272.3s] I messy is not a single token. So I will
+[1274.2s] not get that. So the whole point is when
+[1276.6s] these models are generating actual token
+[1278.2s] probabilities, I'm getting for every
+[1279.7s] single token along the way. And what I
+[1282.2s] really need to do,
+[1283.6s] >> oh yeah, zoom in more
+[1284.6s] >> over here is when I go generate these
+[1286.2s] tokens,
+[1287.8s] Aaron, can you help me write in here and
+[1289.3s] like get the M and the and the messy all
+[1291.7s] the way down. What I really need to do
+[1293.9s] here is somehow I need to go pick what
+[1295.8s] token I need to go pick. Uh what token
+[1297.8s] is going to go next? Because once I have
+[1299.3s] all those tokens, then I can decide
+[1301.4s] which is the best to go. And there's a
+[1302.9s] lot of valid candidates. Even if I want
+[1304.4s] to produce Messi, I could produce M and
+[1306.8s] then E SSI. I could produce me and then
+[1309.9s] SSI. I could produce mess and then a
+[1312.2s] separate token for I and all these are
+[1314.8s] valid ways to produce the right answer.
+[1316.9s] So even though it's a human we just see
+[1318.2s] the word messy to the model is actually
+[1320.6s] picking some other
+[1323.2s] uh it could pick many sequences and come
+[1325.4s] to the same conclusion of messy without
+[1327.6s] there being a right one. So all we get
+[1329.6s] are token probabilities. Now the problem
+[1331.7s] is how do you pick the best token
+[1333.0s] probability? Well model providers do a
+[1335.1s] variety of different things. What
+[1336.2s] Enthropic says that they do is they
+[1338.3s] actually cut they take the sum of all
+[1340.2s] tokens
+[1341.8s] that exist and they basically chop off
+[1344.1s] everything that falls below like a sum
+[1346.6s] of
+[1348.2s] 0.99 or 99. And why do they do that?
+[1351.8s] Well, as many of you might have heard us
+[1354.6s] say before,
+[1356.5s] um, oh, let me zoom in even more. As
+[1358.8s] many of you might have heard before, uh,
+[1362.6s] floatingoint arithmetic is really,
+[1364.1s] really hard. So rather than dealing with
+[1366.2s] really really small values that are
+[1367.9s] completely nonlinear you just you just
+[1370.5s] say if I will take instead of adding up
+[1372.4s] to kilo sum of one which is what
+[1374.3s] everything should add up to after
+[1375.4s] softmax we'll take the probabilities
+[1377.6s] that add up to.99 and everything else we
+[1380.6s] just trash like nothing else matters.
+[1383.4s] So, if there's one token that adds up to
+[1386.9s] like 0.51 and another token that adds up
+[1389.9s] to 0 48, we'll take these two tokens and
+[1393.9s] nothing else. We'll just trash
+[1395.2s] everything else. Well, I guess
+[1396.4s] technically in this phase, we'll allow
+[1398.4s] we'll allow the any other tokens we take
+[1400.2s] up to take up to like 0.99.
+[1402.7s] And now we will only allow these tokens
+[1404.6s] in and every other token is ignored. And
+[1406.6s] that allows you to not get nonsense
+[1408.0s] characters by accident when you go do
+[1409.9s] this because what is temperature zero
+[1412.6s] doing? Well, temperature zero says given
+[1414.8s] all of these tokens, take the one with
+[1416.6s] the highest probability and basically
+[1417.8s] turn this into one. Oops.
+[1422.9s] And every other token probability
+[1424.3s] basically becomes
+[1426.3s] zero. You basically build a filter at
+[1428.9s] temperature zero that basically makes
+[1430.1s] everything else not matter. And all the
+[1432.6s] way at temperature one, we keep
+[1434.2s] everything to be the same probability.
+[1435.4s] And at temperature I think uh two, it
+[1438.3s] does some inverse distribution of it. So
+[1439.8s] it basically reduces the value of the
+[1441.4s] highest probability and makes it more
+[1443.1s] akin to uniform distribution.
+[1446.0s] >> Yeah. So they keep all these like
+[1447.8s] different hacks and stuff to uh account
+[1450.6s] for various um problems with like
+[1453.8s] floating point math, right? So in one
+[1456.1s] case in December 2024 in the article
+[1458.6s] they mentioned that
+[1459.8s] >> they had another bug that caused a
+[1462.1s] performance regression where the top
+[1464.0s] token was not chosen. So if we if you
+[1467.4s] were using cloud like for whatever
+[1469.6s] reason uh for whatever like task um I
+[1473.4s] would I would have expected the
+[1474.6s] performance to be like atrocious cuz
+[1476.2s] it's just not choosing that top token
+[1477.8s] ever.
+[1478.9s] >> Well sometimes it wasn't ever. I think
+[1481.0s] it was sometimes.
+[1481.7s] >> Oh I see.
+[1482.5s] >> But I want to describe one more element
+[1484.9s] of this like how does this 2 million
+[1486.2s] probability thing actually work? Cuz
+[1487.6s] like the problem is if you actually ever
+[1489.4s] toss this at a GPU and your token
+[1491.4s] vocabulary is large you can't actually
+[1492.8s] do this on a single GPU machine. So what
+[1495.5s] the further thing that makes this even
+[1497.0s] more complicated is not just that we
+[1498.2s] have to produce these token
+[1498.9s] probabilities and make it work. We have
+[1500.8s] to do this in a distributed manner. So
+[1502.6s] what you end up actually doing is you
+[1505.4s] end up saying that I don't actually know
+[1506.8s] if any token token vocabulary is
+[1509.0s] actually 2 million tokens. So just
+[1510.8s] please keep that in mind
+[1512.4s] >> but I don't actually know what the token
+[1514.0s] size is on that but I'm just using an
+[1516.6s] arbitrary number to describe the
+[1518.4s] vocabulary. I think like
+[1520.9s] what they will actually do is they will
+[1522.5s] actually run this in a batch process
+[1524.3s] where like machine one will basically
+[1526.4s] run token zero to like 32 thou,000 or
+[1529.2s] like technically like
+[1534.8s] 32k.
+[1537.0s] Oops.
+[1538.8s] And then machine 2 will take the next 32
+[1541.3s] take tokens
+[1546.3s] 64 uh and so on. And what ends up
+[1548.9s] happening now is now that you have
+[1550.3s] totally different token probabilities
+[1551.7s] being produced across different
+[1552.7s] machines, what you need to go do now is
+[1554.9s] how do you actually pick the top token?
+[1556.5s] Well, on each of these machines, you
+[1558.9s] need to go pick a relative top token. So
+[1561.5s] instead of saying instead of giving the
+[1563.3s] central machine every single token,
+[1565.0s] well, one way you could do it is you
+[1567.2s] could tell a central machine, here's all
+[1569.2s] my token probabilities and now pick the
+[1571.8s] best. Pick best from all. And that's one
+[1575.3s] way to do it. But an other mechanism
+[1577.5s] that is really useful is you ask every
+[1580.4s] machine what are your uh what candidates
+[1582.8s] do you want to propose
+[1585.0s] and if every m once and every machine
+[1586.8s] picks their provides their candidates so
+[1588.7s] not all of them but a subset of them
+[1590.1s] then you do a central uh pick max and
+[1593.4s] the bug that enthropic had in this
+[1595.3s] scenario was that they didn't actually
+[1597.7s] pick the candidate correctly from each
+[1599.5s] of these individual machines due to the
+[1602.4s] and we'll talk about what the real bug
+[1603.8s] was but what the bug led to was each of
+[1606.9s] these batches wasn't always picking the
+[1609.1s] right candidate and that led to the
+[1613.6s] right actual top global what I would
+[1615.8s] call the global top P not being
+[1618.3s] available or top token not being
+[1620.6s] available in the candidates array. So
+[1622.2s] then when you actually pick the best the
+[1623.8s] top token was just not missing. Now why
+[1626.7s] does this stuff happen? This stuff is
+[1629.0s] where it gets really really wild, at
+[1630.6s] least for me,
+[1632.2s] >> which is
+[1634.4s] >> Yeah,
+[1634.8s] >> it turns out
+[1635.8s] >> the code. Yeah, there we go.
+[1637.9s] >> It turns out Oh, this is the hack that
+[1639.6s] they did for actually like propagating
+[1641.0s] stuff down.
+[1642.2s] >> It turns out um we're back to
+[1644.6s] floatingoint precision. So what ended up
+[1647.0s] happening is they use 16 bit
+[1649.0s] floatingoint precision most of the time
+[1651.8s] but sometimes a TPU compiler optimized
+[1654.1s] using 32-bit optimization and it never
+[1656.5s] made a distinction of exactly when it
+[1658.2s] just did it sometimes.
+[1660.6s] And what that means is the way that they
+[1662.9s] were doing comparisons was really really
+[1666.8s] um
+[1668.3s] unlikely to be stable because for those
+[1671.6s] of you that have ever multiplied two
+[1672.8s] floatingoint numbers together like yeah
+[1675.3s] a time uh I have to go back here. I
+[1677.5s] can't type. Oops.
+[1679.9s] In floating point oh in floatingoint
+[1682.8s] math a * b * c
+[1686.4s] is not equal to
+[1689.1s] uh c * b * a like it it is very order
+[1693.2s] dependent. And now what ends up
+[1695.5s] happening is not only is this true, but
+[1697.7s] if you do f floating point 32 versions
+[1701.6s] of this one times
+[1704.9s] floating point a * b * c assuming
+[1708.2s] everything is a floatingoint 16 bit
+[1709.8s] integer instead of a 32-bit integer.
+[1711.8s] These are not guaranteed to be equal
+[1713.3s] even if the order is the same. And like
+[1715.7s] if you're curious about why this is
+[1717.0s] true, you can go into looking at how
+[1718.3s] floatingoint numbers are represented in
+[1719.7s] a very nonlinear way. And when you
+[1721.0s] multiply them, small numbers just don't
+[1723.7s] behave in the way that numbers,
+[1726.1s] >> we model numbers to behave in our heads.
+[1728.8s] >> So then what ends up happening
+[1729.9s] fundamentally is just you get a
+[1731.7s] comparison that said token A was uh like
+[1734.3s] token A was better than token B just
+[1736.6s] flipped because it was really close to
+[1739.0s] their boundary condition. It was like
+[1740.2s] 40. It was like 0.59 versus like 0501
+[1746.0s] or 0509. And like you flip one
+[1749.2s] floatingoint operation and then which
+[1750.9s] one is better flipped. So then the
+[1753.2s] candidate that it this one suggested was
+[1755.6s] like this one instead of this one or
+[1757.5s] this one instead of this one because of
+[1758.9s] simple floatingoint uh maths around
+[1760.8s] this.
+[1761.5s] >> Yeah, I highly recommend this paper as
+[1763.4s] well from thinking machines that AJ has
+[1767.4s] uh shared. We won't go into detail on it
+[1771.1s] but uh it also talks about other causes
+[1773.3s] for nondeterminism
+[1775.1s] and uh it talks about how sometimes it's
+[1777.3s] not the floating point arithmetic but
+[1778.9s] like the batches that you run on the GPU
+[1781.7s] and how they are processed. Um but yeah
+[1784.7s] this is gets more like nitty-gritty into
+[1786.6s] the details.
+[1787.2s] >> Yeah, this is a really really good paper
+[1789.0s] for anyone that wants to go super deep
+[1790.6s] into it. Yeah,
+[1791.7s] >> but fundamentally I think the real
+[1793.4s] takeaway here is that like we're all
+[1795.6s] building these systems on top of systems
+[1797.8s] that we have even less control over in
+[1800.1s] any previous way we've had. So it's
+[1802.5s] really important to really be able to
+[1803.9s] quickly diagnose what are the areas of
+[1806.2s] the system that we want to go build. My
+[1808.7s] personal opinion is and Aaron I'd love
+[1810.9s] to know your thoughts on this but like a
+[1812.4s] big takeaway that I had from this is
+[1814.0s] like one sometimes the model did get
+[1817.5s] worse. Sometimes it's not in your head
+[1820.0s] and it did get worse. And any sort of
+[1824.0s] system you build needs to have some sort
+[1826.4s] of vibe check for you to have you need
+[1828.0s] some signal for you to really quickly
+[1829.7s] detect that this is actually happening
+[1831.1s] and you need to decide how actionable
+[1832.5s] that this is going to be. So in our in
+[1835.2s] in throic scenario they use Twitter and
+[1837.0s] I guess Aaron used Twitter or like other
+[1839.4s] verbal mentions of AWS to know if the
+[1842.3s] systems are down for a while
+[1843.9s] >> and as you guys build products you
+[1845.6s] probably want to build some sort of
+[1846.6s] indicator like that into your product
+[1847.8s] pipeline where you have like some lossy
+[1849.8s] signal that is really noisy
+[1851.7s] >> but it alone is not enough. I think the
+[1853.9s] interesting part is that for every
+[1855.6s] engineer that is new to the AI world in
+[1857.8s] this non-determinism world, you're used
+[1860.2s] to maybe working with distributed
+[1861.5s] systems where like distributed systems
+[1863.6s] are always in a constant state of
+[1865.1s] failure, right? That's why when you call
+[1867.6s] an HT when you do an HTTP request
+[1869.8s] anywhere, you should expect it to fail
+[1871.4s] at some point. So you can just expect to
+[1873.7s] have like a try catch or whatever of
+[1875.5s] some sort. with these models the failure
+[1878.4s] is like so subtle that we need new
+[1881.9s] mechanisms to observe these failures and
+[1884.9s] so observability is even more important
+[1886.7s] than before uh you just won't get an
+[1889.5s] maybe the endpoint itself like it's down
+[1892.0s] like whatever you get a 500 from the
+[1893.7s] entropic API but there could be other
+[1895.9s] bugs just related to the actual model
+[1897.8s] outputs that um you need to be able to
+[1900.5s] catch
+[1902.3s] >> yeah I think that's really and like
+[1903.9s] what's I think like anthropic highlights
+[1905.7s] that too is They're not going to stop
+[1907.4s] doing the Twitter analysis. Like that is
+[1909.2s] really good for them to know if things
+[1910.5s] are totally busted.
+[1912.6s] But I think one of the more things like
+[1914.3s] one you just add more inspection. I
+[1915.9s] don't think most people should do that
+[1917.0s] for their pipelines. It's too much work.
+[1918.6s] Like you should definitely unit test the
+[1920.1s] most important parts of the pipeline,
+[1921.3s] not the whole pipeline. Not worth it. Um
+[1924.2s] because enthropic is so widely used in
+[1926.2s] so many different scenarios and their
+[1927.8s] use case is different. They just need to
+[1929.1s] increase their eval pipeline. I think
+[1930.6s] for anyone that's doing bespoke
+[1931.8s] workflows, they don't need like hundreds
+[1934.5s] of eval. They just need to look at their
+[1936.1s] systems a lot more carefully. Like do
+[1937.4s] the do the stuff Enthropic did before
+[1939.5s] all this stuff. But I think one stuff
+[1941.8s] that is probably definitely shared that
+[1943.6s] everyone should do is this. You want
+[1945.8s] faster debugging tool. Like what Aaron
+[1947.2s] says like you really need to be able to
+[1948.6s] introspect your system as quickly as
+[1950.3s] possible because the minute a customer
+[1952.2s] reports an issue, you want to know one
+[1954.2s] of three things. Is it a is it really a
+[1957.8s] failure from the perspective of your
+[1959.9s] infrastructure? Is it a failure on the
+[1962.3s] perspective of your prompt? or is it a
+[1964.5s] failure from the perspective of like the
+[1966.2s] model?
+[1967.0s] >> And if you don't know which of those
+[1968.6s] three things is or if it takes you like
+[1970.5s] three hours to determine which which of
+[1972.6s] those three things it is,
+[1975.0s] >> like it's going to be hard for you as a
+[1976.7s] team.
+[1977.4s] >> Oh, I'm sorry. I'll close Discord. Uh
+[1979.8s] thank you for noting that. Uh my Discord
+[1981.8s] is running at all times.
+[1984.0s] um
+[1985.5s] it's going to be really really hard for
+[1987.0s] you as a team to make your system better
+[1989.6s] because your feedback loop is
+[1990.9s] fundamentally the only thing you have to
+[1993.0s] ship a really really good product.
+[1995.2s] >> Yeah, I think um in general you just go
+[1998.9s] a when you deploy stuff you should just
+[2000.7s] deploy like slowly like this is some
+[2002.6s] stuff that it's like the golden rule at
+[2004.5s] a AWS when I was at AWS like you don't
+[2007.5s] deploy worldwide at the same time. I
+[2009.7s] know a lot of people have startups and
+[2011.1s] they just like push to prod immediately.
+[2013.0s] If you can't help it, don't do that.
+[2015.7s] >> So, can I ask you a question? When do
+[2017.2s] you think someone should deploy to prod
+[2018.7s] or like like what how do you think about
+[2020.5s] this as a startup? Like we're a startup.
+[2022.4s] >> Yeah.
+[2022.7s] >> How do you think we should think about
+[2023.8s] this? Like should we roll out our
+[2025.1s] changes all the time?
+[2026.9s] >> You should. So, if you're a startup, you
+[2028.6s] don't have the bandwidth to like set up
+[2030.2s] all these like hosts and like, oh, you
+[2032.2s] have a one box deployment and then it
+[2033.9s] goes to all this stuff. And you could
+[2035.5s] also be running stuff in serverless. I
+[2037.7s] think using feature flags is a good way
+[2039.4s] to do it. Um where you can just kind of
+[2041.8s] like roll back instantly or deploy to
+[2044.2s] services that let you roll back
+[2045.7s] instantly. So for example, I don't know
+[2047.7s] if you're using Verscell, you can like
+[2049.1s] oneclick roll back in like two seconds,
+[2051.9s] right? So that's very helpful to to do
+[2054.6s] in these situations. Um and sometimes
+[2057.2s] when you're testing whether like it's a
+[2058.6s] prompt or is it a hallucination or is it
+[2060.9s] a model issue, the first thing you
+[2062.7s] should just do is roll back. That was
+[2064.3s] actually one of the slogans at AWS. It
+[2066.8s] was literally like, "Don't be a hero.
+[2068.5s] Roll back."
+[2071.6s] Like, you don't need to find out exactly
+[2073.9s] what it is and like patch a fix or
+[2075.8s] whatever. Like, don't ask questions.
+[2077.2s] Just roll it back. Who cares if you roll
+[2079.6s] it back to like the day before, it
+[2081.4s] doesn't matter.
+[2082.6s] >> Um,
+[2083.4s] >> actually really I like that framing.
+[2085.9s] >> I think that's actually the right way
+[2087.0s] for a lot of these AI pipelines. If your
+[2088.8s] system has been working for the last 3
+[2090.4s] weeks and suddenly you see like five
+[2092.3s] pings from users that have been using
+[2094.2s] your product already and expect it to
+[2096.0s] work,
+[2097.0s] >> something probably went wrong no matter
+[2098.6s] what it is.
+[2099.4s] >> If you roll back and you still see the
+[2101.0s] issue, then like maybe it is the model,
+[2102.8s] >> maybe it is maybe it is the
+[2104.5s] infrastructure,
+[2105.4s] >> right? Exactly. So if you roll back and
+[2107.0s] it's still broken, you know, you've
+[2108.9s] already eliminated one variable. So then
+[2110.7s] you can be like, "Oh, it's a model.
+[2112.2s] Let's let's switch models now. Let's
+[2113.8s] roll forward and switch to a different
+[2115.4s] model." But uh yeah uh I think
+[2118.6s] >> I want to talk about one more question
+[2119.5s] that I thought Josh asked brought up
+[2120.8s] that was fascinating.
+[2121.7s] >> Then we workflows.
+[2124.1s] >> Yeah.
+[2124.7s] >> How do you differentiate if it's a
+[2126.2s] failure or hallucination?
+[2129.6s] >> Um
+[2130.0s] >> what are your thoughts there?
+[2131.0s] >> Yeah. So if it's a failure or
+[2132.2s] hallucination
+[2134.0s] um
+[2136.4s] you can sort it depends on what task
+[2138.8s] you're trying to do like always like
+[2140.6s] senior engineer it depends. Um so for
+[2143.6s] example if you're like extracting data
+[2145.7s] from bank statements right and uh like
+[2148.6s] all of a sudden it hallucinated that the
+[2151.4s] sum is some different number you can
+[2153.8s] actually calculate this programmatically
+[2155.4s] and you can be like hey do all these
+[2157.0s] line items add up to the sum and if they
+[2159.4s] don't you know that there's a
+[2160.4s] hallucination. So there's like systems
+[2163.0s] you can build around LLMs and around
+[2165.0s] data extraction to make sure that it's
+[2166.7s] not hallucinating. But I know a lot of
+[2168.8s] cases are literally just like plain text
+[2171.2s] like qualitative data like it just spit
+[2173.9s] a sentence and you're not sure if it's
+[2175.4s] hallucinating. I think having customer
+[2177.6s] feedback is a really good uh start on
+[2181.4s] just like tell like having users tell
+[2183.0s] you if it's actually good or bad. And
+[2185.3s] you'll see this in literally every AI
+[2187.4s] product out there. There's like a thumbs
+[2189.7s] down or thumbs up button. And even
+[2191.7s] OpenAI is asking people to do thumbs. If
+[2194.0s] you cloud code,
+[2195.8s] >> if you've been pinged by cloud code,
+[2197.2s] whether it's good or bad, it's like, is
+[2199.0s] this good? Like they're asking people
+[2201.4s] constantly, like everyone. They're
+[2203.3s] asking literally everyone constantly all
+[2205.7s] the time if it's actually working. Um,
+[2208.7s] so you should do something similar in
+[2211.1s] your app.
+[2212.3s] >> I um I have a question about this. How I
+[2216.6s] guess like most people never click
+[2218.0s] thumbs up, thumbs down.
+[2219.8s] I don't know if
+[2220.7s] >> you how many times have you clicked it?
+[2222.1s] >> You only need a small subset of users.
+[2224.6s] And also like the
+[2226.9s] you'll click for example the the the
+[2228.8s] times where I do say it's not good is
+[2230.7s] when it's not good, right? When I'm
+[2232.0s] unhappy.
+[2233.5s] So I think what the most unhappy people
+[2235.4s] will always like kind of like try and
+[2237.4s] give you some sort of feedback.
+[2239.1s] >> I also uh on the topic of like is it a
+[2241.6s] failure or hallucination, I'll tell you
+[2243.3s] like one thing that I was thinking about
+[2244.5s] is like I think people don't really have
+[2246.2s] a good definition for hallucination. I
+[2247.6s] think it's a catch-all thing for like ah
+[2249.1s] something's not working and I'll tell
+[2251.1s] you why. Technically, if you define
+[2252.9s] hallucination as things that are not des
+[2254.8s] that are not backed by context you've
+[2256.7s] given it. Every time I ask a question
+[2258.8s] it's technically hallucinating. It
+[2260.2s] happens to align with how I perceive the
+[2261.9s] world and I I believe it. So I don't
+[2263.7s] classify it as such. And I think it's
+[2266.4s] really really hard to define that word.
+[2268.8s] So I think what the first thing I would
+[2270.2s] do is I would just go back to your
+[2271.3s] product and like be more concrete of
+[2273.0s] like what is is it factually incorrect
+[2276.6s] uh things where like I have cont I have
+[2279.0s] context that it is rejecting or not
+[2281.8s] taking advantage of is it because I'm
+[2284.7s] >> every time it disagrees with me I'm sure
+[2286.5s] it's a hallucination.
+[2289.5s] >> Yeah, exactly. Um so it's really hard to
+[2292.3s] go vibe that in my opinion of describing
+[2294.8s] hallucinations. That's like I would just
+[2297.0s] define that more concretely and then you
+[2298.5s] can know if it's a failure or
+[2299.4s] hallucation more clearly because a
+[2300.7s] failure is like the model is
+[2303.4s] of let me read Josh's thing but the
+[2306.9s] anthropic failure cause
+[2311.2s] um I think Josh I see I see which
+[2313.2s] question you're trying to ask now um
+[2315.2s] which is like in the case of enthropics
+[2317.0s] failure it's like the model is
+[2318.8s] inherently just picking not the model
+[2321.8s] enthropic is picking the wrong token
+[2323.9s] with their algorithm for selecting the
+[2325.6s] right token. So like how do you know
+[2327.1s] that that is going wrong versus your
+[2328.7s] prompting strategy?
+[2330.8s] Generally what I think here is like it's
+[2332.6s] really just about testing really fast.
+[2334.3s] You just if you if you build a gut model
+[2336.8s] for like hey the model the prompt isn't
+[2338.8s] working in the way you want it to work
+[2341.2s] and you have some business metrics that
+[2342.9s] you can tie to it. So like either users
+[2344.4s] are leaving more the chat threads are uh
+[2347.0s] either increasing or decreasing in like
+[2349.5s] number of messages exchanged depending
+[2351.6s] on what kind of application you're
+[2352.8s] building. Um what I would say is you
+[2356.2s] probably can build a proxy for like
+[2357.6s] product quality went down. Once you know
+[2359.8s] product quality went down then you can
+[2362.1s] figure out what went wrong. And what I
+[2363.5s] usually do in this scenario when a model
+[2365.3s] fails is yeah like if anthropic is not
+[2367.6s] working I usually just talk to the GD5
+[2369.4s] or the equivalent GPT model and I just
+[2371.9s] see is that one working cuz well usually
+[2374.6s] I stay with the same models and I bump
+[2376.2s] up to the bigger bigger model and then
+[2378.9s] after that if that is still not working
+[2380.9s] I actually don't spend too long on the
+[2382.4s] prop. I just swap to a different model
+[2384.6s] and a different model provider and if
+[2386.6s] that doesn't work then I do a little bit
+[2388.4s] of prompt engineering to see like oh
+[2389.7s] what can I do to actually make this work
+[2391.5s] and I think you kind of have to build
+[2392.9s] the right thing and it's really hard to
+[2394.6s] know if it's an actual infrastructure
+[2395.9s] and model failure. Um, John brought up
+[2398.2s] one interesting point of like, can we
+[2399.3s] not just set up experiments?
+[2401.3s] >> In theory, I think this is the promised
+[2403.1s] land that everyone wants, which is like
+[2405.0s] the promised land is like we have some
+[2406.3s] data set and then we run the data set
+[2408.0s] with a bunch of prompts and it tells us
+[2409.9s] good or bad and then we say yay.
+[2414.2s] >> In practice, I don't think it's that
+[2415.4s] easy because I don't I think most
+[2417.0s] problems don't have a definition of good
+[2418.9s] or bad.
+[2419.5s] >> How many of you have like a hundred
+[2421.5s] samples of your problem? How many of you
+[2424.2s] have built a hundred different test
+[2426.1s] cases for whatever prompt you have? I'm
+[2428.8s] sure that some have, but most people
+[2431.1s] probably haven't.
+[2432.3s] >> The magic number is 30.
+[2433.8s] >> Entropics error rate was8%.
+[2437.8s] So, they definitely need like a ton,
+[2439.7s] right? But this is Entropic. Obviously,
+[2441.0s] they have like thousands. Um, but if you
+[2444.4s] have maybe 1% of your users being
+[2446.2s] affected by something, like you just
+[2448.1s] need way more evals. Um, and you need
+[2453.0s] >> the thing is it's not like this is
+[2454.8s] another good question like the theory is
+[2456.1s] like wouldn't good eval. The problem
+[2458.2s] here isn't just like you want good eval.
+[2460.8s] The problem is you need evals that span
+[2462.6s] the distribution of the behavior your
+[2464.5s] users have.
+[2465.6s] >> So it's not it's quantity isn't the
+[2467.6s] thing and good is such a subjective term
+[2469.7s] it's hard to define. So I worked on Face
+[2471.8s] ID at Google. We have so many ta data
+[2475.3s] sets of people, the same person with
+[2477.0s] glasses, without glasses, with a
+[2478.5s] mustache, with a different haircut,
+[2480.8s] twins, siblings. You really need to
+[2483.2s] really quickly understand every
+[2484.7s] parameter. And I'll talk to you guys
+[2486.3s] something really weird. None of you
+[2488.1s] probably expect that face ID worked
+[2489.7s] worse in Phoenix. And actually, this is
+[2492.1s] true for a lot of things. A lot of
+[2493.2s] things work worse in Phoenix.
+[2497.5s] Anyone know why? Aaron, what's your
+[2499.5s] guess? Uh, well, you've already told me,
+[2502.1s] so
+[2502.3s] >> Oh, [ __ ] I told you. Uh, this is not as
+[2504.2s] fun. But for everyone else, um, it turns
+[2506.9s] out the temperature variation affects
+[2509.5s] how cameras calibrate in Phoenix because
+[2511.6s] it's so hot. In fact, a lot of things
+[2513.1s] get messed up because of how hot Phoenix
+[2514.7s] is.
+[2515.1s] >> Yeah. The materials expand this.
+[2517.4s] >> Exactly. So, the calibration you store
+[2519.8s] that tells you how how the camera is
+[2521.9s] perceiving the world is wrong. So now
+[2525.3s] your face ID is like it your face is
+[2527.2s] basically distorted and like a like a
+[2529.3s] funky mirror house. So it doesn't work
+[2530.6s] anymore. And you would never know that
+[2532.6s] if you didn't understand Face ID has
+[2535.3s] that thing that you have to go deal with
+[2536.6s] in Phoenix, Arizona. And if you've never
+[2538.6s] dealt with Phoenix, Arizona, you
+[2539.8s] probably would know and very sely
+[2541.2s] wouldn't predict that to happen.
+[2543.1s] >> Yeah. Um what Charles says is I think is
+[2546.6s] the best thing which is
+[2549.1s] >> you use real what you do is you ship
+[2551.2s] data to prod you collect that data and
+[2553.4s] you turn that into
+[2555.0s] >> you turn a subset of that into eval data
+[2556.8s] set that is the only answer
+[2558.8s] >> and that is a rolling it's not a onetime
+[2561.0s] task that is a thing that you do forever
+[2564.0s] because you have to constantly span how
+[2565.8s] your behavior is changing over time
+[2568.2s] >> exactly
+[2569.8s] um so yeah I think this is a good
+[2572.5s] summary
+[2572.9s] >> a fun think
+[2574.9s] uh TLDDR
+[2575.8s] >> do a quick
+[2578.6s] >> let's yeah I'll give a quick TDR and
+[2580.6s] let's talk about the other stuff that I
+[2581.7s] think I'm really I we'll see if we can I
+[2583.7s] can say a little over and we can keep
+[2584.9s] talking
+[2586.3s] >> um the TLDDR here is like
+[2589.5s] basically go and try and build a product
+[2591.4s] metric to your system build a really
+[2593.5s] really good debugging loop so it's not
+[2595.3s] hard for you to actually go and like
+[2597.8s] determine where the problem is and I
+[2599.8s] guess what Aaron says is don't be a hero
+[2601.7s] and roll back like go do that if you
+[2604.5s] need to.
+[2606.9s] >> Yeah.
+[2608.2s] >> Um cool. Let's talk about the next thing
+[2610.0s] which I thought was one of the most
+[2612.0s] interesting topics. Before I do that,
+[2613.8s] for anyone that's watching and is
+[2615.0s] interested, uh we do this uh
+[2617.2s] conversation every single Tuesday at 10
+[2618.9s] a.m. PST. It's uh myself, Aaron, and I
+[2621.8s] guess now Dexter as well. Uh it's called
+[2624.3s] AI that works. The whole point is to
+[2626.4s] talk about real in production scenarios.
+[2628.3s] Generally, we try and show some live
+[2629.9s] code along the way whenever possible.
+[2632.8s] Today's episode I thought was just like
+[2634.4s] more conceptually talking about some of
+[2636.0s] the work that Anthropic did that I
+[2637.2s] thought was relevant. So, no code today,
+[2639.4s] but we'll send out email summaries and
+[2641.0s] then we have all the blog post and
+[2642.2s] podcast recorded live. So, hopefully you
+[2644.7s] keep enjoying this content. Please give
+[2646.0s] us feedback about what we can do to make
+[2647.4s] it better along the way.
+[2650.2s] Um,
+[2652.3s] let's talk about uh the next thing, the
+[2654.7s] agent builder.
+[2656.8s] So open released some stuff.
+[2658.9s] >> Viva, why do you think everyone is
+[2660.6s] building these? 11 Labs literally
+[2663.5s] released their own agent building
+[2665.1s] builder.
+[2665.7s] >> So do you want to screen share and talk
+[2667.0s] about your what we're talking about
+[2668.1s] first?
+[2669.1s] >> Just so everyone knows. And let's catch
+[2670.5s] everyone up.
+[2671.2s] >> Yeah. One sec.
+[2673.5s] >> While you pull that up, how often should
+[2675.1s] you run evals in prod? Um daily, weekly?
+[2678.9s] Honestly, depends on your use case. Uh
+[2681.4s] there's no specific um there's no global
+[2685.0s] answer for this.
+[2691.8s] One second.
+[2695.8s] >> Yeah. So, here's one agent builder. Uh,
+[2698.2s] I don't know if this will actually play
+[2699.9s] anything. Oh, yeah. This kind of stuff,
+[2702.6s] right?
+[2703.7s] >> Yeah.
+[2704.0s] >> So, you have a start, you hand off to an
+[2706.1s] agent, there's a conversation, etc. Um,
+[2710.2s] this is
+[2710.8s] >> like we've all seen this in like NAD,
+[2712.2s] but like OpenI released one too, I
+[2713.6s] think, recently, right? Yeah, there's n
+[2715.6s] there's open AI agent
+[2718.3s] builder.
+[2720.6s] >> Yeah. Agent kit or whatever they called
+[2722.2s] it.
+[2723.3s] >> Yeah. So there
+[2723.9s] >> and you want to zoom in on that image.
+[2726.0s] >> Yeah.
+[2728.0s] >> Yeah. Um many of you might have seen
+[2729.4s] this like open releases thing. They
+[2731.0s] released prompt optimizers a bunch of
+[2732.5s] other things.
+[2735.0s] >> We just had a fun conversation about it.
+[2736.5s] What are your thoughts, Aaron? Um, so
+[2739.8s] one I think I think this is just like a
+[2741.8s] push to have nontechnical users build
+[2744.4s] these agent workflows, right? Because
+[2747.0s] code is scary, right?
+[2748.7s] >> Yeah.
+[2749.6s] >> Which is also interesting because code
+[2751.8s] is easier for people to write now
+[2754.3s] because you can just write a prompt and
+[2755.7s] like it'll write a bunch of code. But I
+[2757.6s] think if you're in this kind of closed
+[2759.0s] environment where hey, you can just drag
+[2760.9s] and drop these nodes and build
+[2763.0s] something, it makes it more manageable
+[2765.4s] and less scary. Um, another big part of
+[2769.8s] this is just like integrations. So maybe
+[2771.9s] there's a node that allows you to like
+[2773.4s] integrate your Google Docs or Google
+[2775.0s] Drive and you can just create a little
+[2776.9s] workflow and like boom, everything is
+[2779.2s] kind of working. Um,
+[2782.0s] >> I think one thing that I think that
+[2783.5s] integration point is under super
+[2785.0s] undervalued because like if I'm a
+[2786.9s] non-technical user, think about how hard
+[2789.1s] it would be even if I had to use cloud
+[2790.7s] code or something and I can magically
+[2791.9s] vibe code to say that in the end I want
+[2794.2s] you to produce a Google doc as an
+[2795.5s] artifact because Google doc is a thing
+[2797.1s] I'm used to or PDF is a output that I'm
+[2799.4s] used to. And I think what's really
+[2802.2s] useful there is it's something I don't
+[2804.6s] have to think about anymore. It's like I
+[2806.5s] just draw a little line to a thing that
+[2808.6s] says write a Google Drive file and it
+[2810.6s] mostly works. Now the problem is the
+[2814.3s] minute I realize that I actually need
+[2815.6s] like very specific folder names and all
+[2817.1s] the other stuff then you're like oh
+[2818.2s] shoot I'm basically writing code in the
+[2819.6s] UI builder.
+[2821.1s] >> Yeah.
+[2821.5s] >> And I think it's like
+[2822.9s] >> are you still screen sharing?
+[2824.3s] >> Yeah, I am screen sharing this. So this
+[2827.5s] is an interesting part. So you you start
+[2829.6s] out building these agent builders but
+[2831.3s] eventually you're going to need
+[2832.2s] structure outputs, right?
+[2833.7s] >> Yeah. Because you the way to to have
+[2837.1s] unstructured data like a user's message
+[2839.0s] talk to your actual program and logic uh
+[2841.8s] to do that you need to transform
+[2843.2s] unstructured data to structured data.
+[2845.0s] You need a schema. So whenever you start
+[2848.2s] designing your schema, that's where the
+[2850.2s] problem begins with a lot of these agent
+[2852.2s] workflow UIs because like just take a
+[2854.7s] look at this. Like, oh my god. Like,
+[2856.9s] imagine someone trying to explain to you
+[2858.8s] their their schema and not having then
+[2863.7s] you use these outputs in like other
+[2865.3s] fields and like you don't have type
+[2866.7s] safety and all that kind of stuff and
+[2868.5s] it's just like oh my god it this is it's
+[2871.4s] >> I think it's really interesting though
+[2872.6s] cuz like while this part is super
+[2874.8s] horrific here if you go back to the
+[2876.2s] other one version
+[2878.1s] >> that is really beautiful
+[2880.1s] >> like I look at that and I'm like that is
+[2882.2s] high and I can see why openi did this
+[2884.2s] because they're like
+[2885.5s] Like lovable is out here making people
+[2888.0s] make a lot of money and like why does
+[2889.7s] lovable need to make that money? We can
+[2891.1s] make that money.
+[2892.2s] >> Yeah.
+[2892.9s] >> Right. And like you can imagine OpenAI
+[2894.6s] says why don't you just write a box here
+[2896.6s] on this box that says this is a prompt
+[2899.2s] and we'll generate some code that meets
+[2900.8s] that prompt under the hood and they just
+[2903.5s] do the codegen over there with GPD
+[2905.2s] codeex or something and it spits
+[2907.4s] something out. But I think the point
+[2909.2s] that you're making here is like while
+[2911.5s] this is really easy with a true and
+[2913.0s] false thing for it to go read and a
+[2915.0s] human can go figure out like roughly
+[2916.5s] what's happening here.
+[2917.7s] >> Mhm.
+[2919.2s] >> The more complex this gets like think
+[2921.4s] about what what is a function? Like a
+[2923.6s] lot of us on listen on the call are all
+[2925.0s] engineers. A function is basically a
+[2927.1s] repeatable version of a block here
+[2931.0s] um that basically you repeat two times
+[2934.8s] because like two other places use it.
+[2936.6s] merely a readability artifact because
+[2938.6s] technically you could just like
+[2939.7s] duplicate the code over and over again.
+[2942.3s] But one thing I'm always confused about
+[2943.5s] these agent builders is how do you build
+[2944.9s] a function? Like how do I build a
+[2947.4s] repeatable unit of work that I can reuse
+[2949.3s] over and over again? And that's and I
+[2951.8s] know that they have some sort of
+[2952.7s] composition stuff that you can go do but
+[2954.7s] the ergonomics of that are something I'm
+[2956.6s] always fascinated about like how do you
+[2958.2s] go do that?
+[2960.0s] >> The other interesting part about this is
+[2962.2s] uh the naming of it. So, it's agent kit.
+[2965.5s] But, uh, and then here you have like a
+[2967.8s] workflow with some agents as well
+[2969.7s] interled.
+[2970.8s] >> I thought that was cool.
+[2972.1s] >> Yeah, it's cool. Um, and in this case, I
+[2975.1s] mean, the these agents are probably
+[2976.4s] doing like a bunch of stuff or maybe
+[2978.6s] just a prompt.
+[2979.4s] >> Let me ask you as a founder.
+[2981.1s] >> Yeah.
+[2981.4s] >> Um, as a founder when you see this and
+[2983.0s] you see literally every company in the
+[2984.4s] world releasing this.
+[2985.7s] >> Yeah.
+[2986.0s] >> What's the alpha here?
+[2988.1s] >> Like what company has alpha in building
+[2989.7s] this? Cuz like I think this isn't like a
+[2991.3s] dead space. It seems somewhat useful. I
+[2993.0s] mean, OpenAI said they spent six weeks
+[2995.1s] to build this, right? Um,
+[2997.0s] >> okay. So,
+[2998.9s] >> that's literally what they said. They
+[3000.2s] they spent six weeks, they just launched
+[3002.2s] this. Uh, they use codecs to build it.
+[3005.6s] So, there's really no mode right now in
+[3008.4s] like just building these.
+[3009.6s] >> But what is the mode though?
+[3010.9s] >> These AI uh I think for for OpenAI is
+[3013.8s] just the integrations with their
+[3015.0s] existing models. Like for example, they
+[3017.2s] could have a model that's only usable in
+[3019.4s] this platform.
+[3020.9s] >> Oh,
+[3021.5s] >> that you can't use.
+[3022.3s] >> That is interesting.
+[3023.5s] >> And actually that's what they did with
+[3025.0s] Codex initially. Like Codex was not
+[3026.7s] available in cursor. You had to download
+[3029.0s] the codec CLI and then many days later
+[3032.2s] it was available in cursor. But that's
+[3034.7s] kind of how you start building some sort
+[3036.7s] of mode. The responses API is also a way
+[3040.1s] to build mode. Why? Because it's just so
+[3042.8s] different from the chat completions API.
+[3045.3s] and uh they can just own more of the
+[3047.1s] agentic loop. I think it's a better
+[3048.6s] design API to be honest. Uh but it is
+[3051.8s] another way that you start building some
+[3053.5s] modes.
+[3053.9s] >> That is true because now if someone uses
+[3055.7s] a responses API, they need to conform to
+[3057.5s] like supporting web search and all those
+[3058.8s] other stuff that OpenAI now supports
+[3060.2s] that people work.
+[3061.5s] >> Exly. It's like how will that even work?
+[3063.1s] If I switch every time you use a model
+[3065.4s] specific tool, by the way, you're
+[3068.6s] basically entrenching yourself into that
+[3070.7s] provider's mode,
+[3072.3s] >> which is not necessarily a bad it's kind
+[3073.9s] of what happened with CL with cloud,
+[3075.6s] right? It's like I think Terraform was
+[3077.4s] kind of this aspirational world in which
+[3079.4s] like hey we don't need to care about
+[3082.3s] cloud specific and like for some stuff
+[3084.1s] that is true but it turned out like at
+[3085.8s] some scale like the cost of moving
+[3088.7s] between clouds is so like the cost of
+[3091.8s] moving between clouds is so so hard.
+[3094.6s] >> Yeah.
+[3095.0s] >> That you would never actually do that.
+[3097.8s] >> Yeah. Like AWS works pretty well. Um
+[3100.5s] people use it and they're like yeah
+[3102.0s] screw this. Like I'll just I'll just be
+[3103.5s] in AWS. doesn't matter if they have a
+[3105.4s] service that's only
+[3106.2s] >> and then the value of like Terraform
+[3107.9s] goes down a little bit because it's not
+[3110.0s] as useful because you just use ads CDK.
+[3112.6s] >> Yeah.
+[3113.0s] >> And like what I wonder is in this model
+[3114.8s] world how does that pan out? My at least
+[3116.8s] my thoughts and obviously I'm biased and
+[3118.6s] I'm sure you are too and I'm everyone
+[3119.8s] knows that
+[3120.8s] >> like I feel like the model itself is
+[3123.3s] doing inference. The inference part is
+[3125.4s] probably the least interesting and
+[3127.0s] unique part now of building most
+[3129.0s] pipelines.
+[3130.2s] >> Mhm. I really think it's about how it
+[3132.2s] composes with the rest of your stack
+[3134.1s] where the value is.
+[3135.9s] >> Yeah. Yeah. I think um
+[3138.5s] >> and like this lets OpenAI kind of
+[3140.8s] explore that version of the stack.
+[3143.8s] >> Yeah. But like you're saying how does
+[3145.4s] this plug into your existing code or
+[3147.7s] >> maybe it doesn't need to cuz you're like
+[3149.0s] Zapier is like makes money and like
+[3150.6s] maybe this is just like kill Zapier. I'm
+[3152.2s] like yeah screw it.
+[3154.7s] I think it's very hard for
+[3157.5s] right now a single provider to take like
+[3159.9s] everything. It's just like the winds of
+[3162.4s] intelligence change all the time. Like
+[3165.8s] there's like yesterday it's cloud,
+[3167.6s] tomorrow it's codeex that there there's
+[3170.0s] like no um loyalty to any of these
+[3173.4s] providers and there's still a lot of
+[3175.5s] room to build something that works with
+[3177.1s] anything in my view.
+[3180.8s] >> I think so.
+[3182.2s] So yeah, I think uh it's an interesting
+[3184.3s] concept. I think it definitely helps a
+[3185.9s] lot of people that are nontechnical and
+[3188.1s] we'll see what kind of things people
+[3189.5s] build, but I have seen some complicated
+[3191.5s] pipelines and this kind of UI just does
+[3194.6s] not work if if you have more than like
+[3198.2s] maybe 10 15 notes here. You're just like
+[3200.6s] what is happening? Um so yeah, sure.
+[3204.5s] >> Well, yeah. And like maybe there's
+[3205.9s] enough workflows in the future that are
+[3207.3s] really really simple and it's okay.
+[3209.0s] >> Yeah, I agree.
+[3211.8s] Um, well, with that, we'll take a couple
+[3213.8s] more questions if people have some
+[3215.0s] questions about any topic while we're
+[3216.4s] on.
+[3217.4s] >> Um, but otherwise, we'll probably close
+[3219.6s] it out here and then talk about
+[3221.0s] interesting things.
+[3223.0s] >> Erin, what was your first thoughts? Uh,
+[3225.0s] back to your live streaming days.
+[3227.4s] >> Back to my live streaming days. Um,
+[3229.3s] dude, it's all good. All good.
+[3233.0s] Let's see. Um, see what models. What do
+[3235.6s] we have in the chat?
+[3240.2s] Cool. Um
+[3241.7s] >> yeah, I think that's it for now.
+[3243.7s] >> Uh yes, there's this interesting do we
+[3246.5s] use Dex? So Dexter should talk about a
+[3248.6s] research plan implement workflow that we
+[3250.2s] used in the past. Um I I think we can
+[3252.7s] both give our perspective on it and see
+[3254.2s] how well it works. Um my perspective is
+[3257.8s] I have found that it is useful for
+[3259.8s] really really hard tasks when I want to
+[3261.4s] go do it, but for easy tasks it
+[3263.8s] sometimes feels like more overhead. It's
+[3266.2s] like I think it's like any process that
+[3267.8s] you do as a software engineer. It's like
+[3269.9s] any amount of process I hate and I will
+[3272.0s] do the minimum amount of process I need
+[3273.4s] to to get the outcome I want. So like
+[3275.5s] when I was at Google I freaking hated
+[3277.7s] writing some design docs because I was
+[3279.2s] like why do we have to write a PRD then
+[3281.4s] a design doc and then go ship it like
+[3283.0s] when we all know what the right answer
+[3284.3s] is. We've all talked about this before.
+[3286.1s] We know the algorithm. Let's go and do
+[3287.6s] it. And sometimes it's like holy cow's a
+[3290.7s] really ambiguous problem. there's like
+[3292.2s] seven different things that this might
+[3293.4s] touch that we that many of us aren't
+[3295.0s] familiar with and the process of writing
+[3296.8s] the doc is useful. What about you Aaron?
+[3300.2s] >> Um so for me in um in the research plan
+[3304.1s] implements I I have like my own
+[3307.4s] template. I haven't used like Dex's one
+[3310.0s] specifically, but I do go through like
+[3312.4s] the approach of like, hey, create a
+[3314.6s] markdown doc, like let's review it
+[3317.0s] together, and then after it's done in a
+[3319.8s] good way, then I'll start like coding.
+[3322.1s] Um, and then go from there. And if I
+[3324.6s] don't like it, I'll just redo the whole
+[3326.1s] thing. It's funny because we were
+[3327.3s] talking about this and there was a tweet
+[3328.7s] about this where someone was like, "It's
+[3331.3s] funny that I can literally just have
+[3333.8s] like when I see a PR, if I don't like
+[3336.3s] something, I can just ask the LLM to
+[3337.9s] like redo the whole thing. Even if it's
+[3339.7s] like a thousand lines of code, it's just
+[3341.3s] like redo the whole thing. I don't like
+[3342.7s] this approach." But if it's a human's
+[3345.0s] PR, you can't really do that because
+[3347.3s] they'll get mad at you. So, you kind of
+[3350.1s] just have to push the code and like live
+[3351.8s] with that forever.
+[3354.2s] and you can push hard and like redo it,
+[3356.2s] but at some point there's like a
+[3357.4s] limitation of like the human limitation
+[3359.5s] of just like how people feel about their
+[3361.8s] code. Um, so I thought that was
+[3364.2s] interesting.
+[3364.8s] >> What stuff are you using to write code
+[3366.2s] now?
+[3367.8s] >> Um, me myself, I'm using um Claude a
+[3372.5s] bunch set for 4.5. I think I'm like
+[3375.6s] flying with that. And then sometimes for
+[3378.2s] like tricky problems, I do fall back to
+[3380.2s] like Codex Codex CLI. But I do feel
+[3382.5s] >> why not use Codex all the time?
+[3384.4s] >> Uh it just takes too long. It just takes
+[3386.7s] too long thinking through things. Um I
+[3389.3s] feel like I just go faster with Claude
+[3391.4s] and
+[3392.5s] >> I get similar
+[3394.6s] similar outputs in a way.
+[3396.9s] >> The other thing that I've noticed Aaron
+[3398.6s] does um I don't know I don't know if you
+[3400.2s] noticed this is like we have a Slack
+[3401.4s] channel where he added a bunch of uh
+[3404.2s] where we added a bunch of uh what's it
+[3406.3s] called? coding bots to it
+[3408.2s] >> and we just keep tagging cursor or like
+[3410.4s] claw in it with like random tickets
+[3412.7s] >> and we don't actually like consider it.
+[3414.2s] We just look at it. We're like, "Oh, did
+[3415.4s] this one actually work?" Cool. We'll
+[3416.7s] merge it and we'll go read that code.
+[3418.4s] It's like almost like we burn tokens for
+[3420.6s] an opportunity cost of it might solve
+[3422.4s] the issue.
+[3423.4s] >> And if it does, great. If it doesn't,
+[3424.7s] trash it.
+[3425.7s] >> Yeah, it is interesting that there is an
+[3427.5s] overhead though of doing that where like
+[3429.0s] now we have to go back into all these
+[3430.5s] PRs. If you go to our repo, there's like
+[3432.2s] a bunch of pers that are open that are
+[3433.6s] like just like stranded in there that we
+[3436.7s] need to triage um because we still need
+[3439.5s] to test them out.
+[3441.8s] >> Cool.
+[3442.2s] >> I that's an interesting question. Are
+[3444.3s] people saving BAML to databases and
+[3446.3s] allowing users to edit and update BML
+[3447.9s] code? We have a type called dynamic type
+[3450.6s] in BAML which a lot of people do use
+[3452.6s] like we have where they can control
+[3454.2s] parts of the schema. We also do have a
+[3456.5s] way to run BAML dynamically. I know one
+[3459.5s] team that does that. Most people just
+[3461.7s] use Titebuilder and the dynamic
+[3463.0s] interface around it.
+[3464.2s] >> Yeah.
+[3464.6s] >> That said, we've been thinking about
+[3465.8s] this because like I think the world of
+[3467.0s] software is really changing cuz like you
+[3468.5s] do want not like the UI builders are so
+[3470.7s] fascinating cuz like non-engineers can
+[3472.6s] actually engineer.
+[3474.0s] >> Yeah.
+[3475.4s] >> But I think what we really want to live
+[3477.0s] in is in a world where like our
+[3478.5s] engineers write kind of like the
+[3480.1s] contracts that we want to abide by and
+[3483.1s] we want our non-engineers to be able to
+[3484.6s] edit all the stuff but the contracts. In
+[3487.6s] some ways, the type system is like the
+[3489.3s] contract. So, our engineers define the
+[3490.9s] type system and what if like
+[3492.7s] non-engineers could edit everything but
+[3494.6s] the type system. I think that's a really
+[3496.5s] fascinating perspective that we've been
+[3498.2s] thinking about.
+[3499.1s] >> Yeah. Uh, all right. I think it's uh
+[3502.6s] about time.
+[3503.8s] >> Yeah, we should head out. Um, but
+[3505.6s] everyone, thank you for joining. Uh,
+[3507.0s] we're going to have a another u session
+[3510.0s] next week. I think next week is going to
+[3511.5s] be a fun one. Dex and I have been
+[3513.5s] planning. It's going to be about
+[3515.0s] actually like live coding. We're going
+[3516.6s] to vibe code a new feature from scratch
+[3518.3s] in the BAML project using Texas's
+[3520.4s] approach. So, it'll be a slightly longer
+[3522.6s] session, three to four hours, and you'll
+[3524.3s] literally watch us code on the fly and
+[3526.2s] just see how we collaborate and get
+[3527.7s] stuff done. Um, but really looking
+[3531.0s] forward to stuff is fun. Check us out.
+[3533.6s] Uh, you can sign up over here for the
+[3535.7s] next event and always join the discord
+[3538.4s] for the human boundary and all the links
+[3540.9s] should be in the email and the post
+[3542.3s] notes that we submit.
+[3544.0s] >> All right.
+[3544.3s] >> All right, everyone. Thanks for coming.
+[3546.4s] Thanks for joining.
+[3547.3s] >> Bye.

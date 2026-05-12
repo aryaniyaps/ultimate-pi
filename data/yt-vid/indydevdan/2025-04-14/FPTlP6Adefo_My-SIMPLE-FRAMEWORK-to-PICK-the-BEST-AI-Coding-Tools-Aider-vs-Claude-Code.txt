@@ -1,0 +1,449 @@
+What's up engineers? Indie Dev Dan here.
+A coding tools are everywhere. On the
+one hand, there are more options than
+ever and competition means we get to
+decide the best tool for the job. At the
+same time, there is a lot of noise and
+Llama 4 is a great example of this.
+They've launched and very, very quickly
+it turns out both their Maverick and
+Scout models are effectively dead on
+arrival. It's crazy what can change in a
+single week with all the optionality,
+with all the models, with all the tools
+we have available to us. Wouldn't it be
+nice if we had a framework to decide
+where to invest your most important
+resource, your time? The speed of your
+decision-m is the speed in which you
+advance your career. It's not 10,000
+hours. It's 10,000 informed iterations.
+And to grind out those iterations, you
+have to make informed decisions quickly.
+In this video, I want to share with you
+my simple five variable equation to
+speed up your decision-making velocity
+in the generative AI age. This is how I
+think about new tools and new models as
+soon as they're released. I ask one
+question. Is this going to increase my
+compute advantage?
+It works like this. The higher your
+compute advantage, the more value you
+can produce as an engineer using compute
+as leverage. As mentioned on the
+channel, in 2025 and beyond, to manage
+your results, you need to manage your
+compute. What does the equation look
+like? What does this framework look
+like? I've boiled down this equation to
+two simple components. You have the top
+half, your numerator, and the bottom
+half, your denominator. Don't worry, it
+stays as simple as what you're seeing
+right here. You want to increase all the
+variables on the top, and you want to
+decrease all the variables on the
+bottom. Let's break down what these
+variables are. As you can imagine, you
+have compute on top. The more compute
+you're using, the more you can do, and
+you have your various costs on the
+bottom. So, what is compute exactly?
+We're talking about compute scaling.
+It's not just the raw intelligence of
+your model. There are many ways to scale
+your compute. For instance, you can take
+a single prompt, a single large language
+model call, and you can create a prompt
+chain where you have three calls back to
+back. That's compute scaling. You can
+then create an agentic loop. This is
+what most agents run on right now. That
+also will increase your compute scaling
+even further. There are many ways to
+increase your compute scaling. Okay.
+Now, let's look at a real cost. We of
+course have time. So let's say you're
+looking at a new tool and it has great
+compute scaling. It's looking like
+you'll be able to do a lot more with
+this tool because it's making multiple
+language model calls. At the same time,
+your time variable goes up. So it's not
+always simple as just increasing your
+compute scaling or just decreasing your
+time. You have to play with these
+variables, right? Great engineering is
+all about trade-offs. So we just have
+two variables here. Let's look at
+another one of our costs. We of course
+have effort. There's time. So, how much
+time will this actually take? And then
+there's effort. So, this is cognitive
+effort. This is key strokes. This is
+your mental cycles spent using this
+tool, using the model, using the
+application, whatever it might be. The
+more effort you have to put in, the
+lower the compute advantage. The more
+time you have to put in, the lower the
+compute advantage. Simple so far, right?
+So what's the other positive variable
+that we can increase to improve our
+compute advantage? We of course have
+autonomy. So we have compute scaling and
+autonomy. Autonomy is exactly what you
+think it is. The more the tool can do
+without your intervention, the higher
+your compute advantage. Simple enough. A
+great example here is Ader versus Cloud
+Code. Claude Code can write code and
+call arbitrary tools. This makes it more
+autonomous. It's quite literally doing
+more of the work that you would do as
+the engineer. But of course, cloud code
+is a great example here because there
+are monetary costs. Our final variable
+of the compute advantage equation. Cloud
+code uh although increases our compute
+scaling and our autonomy drastically
+increases our monetary costs. Okay, so
+this is the compute advantage equation.
+This is how I think about making
+decisions in the generative AI age. I've
+been trying to boil this down into a
+framework and I finally compressed it
+down. Couple key things to mention here.
+We are multiplying compute scaling and
+autonomy. And we're only adding on the
+bottom. We're only adding on the
+denominator. Why is that? This is
+because the impact of compute scaling
+times autonomy is tremendous. While
+time, effort, and monetary costs,
+although you personally might prefer
+saving time like I do over monetary
+costs, uh these things will generally
+not be multipliers against each other.
+This is a compute advantage equation.
+This is how you can make decisions fast.
+So great, I made up some equation. Um
+what does this actually look like,
+right? What does this look like in the
+real engineering world? Let's break down
+some concrete examples of the compute
+advantage framework. So I've created
+this tool to help us analyze our compute
+advantage. This is the compute advantage
+calculator. So let's go ahead and play
+with this and just look at some concrete
+examples. Let's take a look at some real
+tools that we use on a day-to-day basis
+as engineers. Right? We have compute
+scaling, autonomy, time, effort,
+monetary costs. And when you put this
+together in this simple equation, we get
+a value of
+16.67 all things being equal. Okay.
+There is always ongoing discussions
+about what the best AI coding tool is. I
+think that there's a lot of subjectivity
+and personal preference embedded into a
+question like that. But let's go ahead
+and try to break it down a little bit
+here. Right? So let's start with the
+classic the foundational AI coding tool.
+You already know what I'm going to say.
+Let's start with ADER. Okay. So we're
+going to use Ader like our control.
+Right? This is our kind of base level
+item. Let's just walk through the
+variables and let's give Ader a compute
+advantage. Okay, so compute scaling ADER
+is very bare metal. It can use any
+single model, but it doesn't have any
+super duper insane tricks to scale up
+the compute you're using, right? You're
+basically just calling the model. You
+can use architect mode. So, I'm going to
+drop this down to 25. And you can see
+there, you know, as I decrease this, our
+compute advantage goes from 16 down to
+8. Okay, so comput scaling and autonomy
+have a massive impact on your compute
+advantage. So autonomy ader is not an
+autonomous tool at all right it's a bare
+metal um python application right it
+does have some nicities to it but in
+terms of AI running itself in terms of
+agentic loops and agentic capabilities
+ader has no true autonomy okay so we're
+going to drop that all the way down to
+five for time effort and monetary costs
+these are all the variables that we
+don't want right so we want to decrease
+these as much as possible right in the
+perfect world Um this tool takes no
+time, no effort and costs nothing. Okay.
+And so you can see there our compute
+advantage went up. So obviously no tool
+like this exists. Um there are costs
+always associated with any tool you're
+using. So let's be more realistic,
+right? Um how much time does ADER take?
+It doesn't take a ton of time. Actually,
+it is very helpful because it prevents
+you from having to write code yourself.
+So we're going to drop this down to 25.
+It's pretty good. Effort, on the other
+hand, is going to be a little bit
+higher. So we're just going to say 50.
+and monetary costs. This is where Ader
+is a big big winner, right? This is
+open- source technology. Okay? And the
+only costs you have are the costs of the
+model. So, we'll go ahead and just set
+this to 10. This is the first tool we're
+adding. So, I'm going to hit save tool
+here. And so, now you can see we have a
+personal compute advantage leaderboard
+table. This is great, right? So, now we
+can compare Ader against another tool.
+So, I'm going to go ahead and clone
+this. And let's go ahead and start with
+Cursor. Cursor is a super popular tool.
+Let's go ahead and compare Ader directly
+to cursor. So right away we have to
+increase our compute scaling and our
+autonomy. Why? Because cursor has an
+agent embedded, right? It has a concrete
+agent mode. So I'll increase compute
+scaling. Let's say let's bump this up to
+40. And autonomy goes up quite a bit
+here, right? We'll go up to 25. Cursor
+is definitely easier to use than ader.
+So I'm going to decrease effort. And on
+the time, I'm going to go ahead and
+maybe drop time down just a little bit.
+And monetary cost, uh, cursor comes with
+a, you know, monthly subscription.
+Obviously, there's a free version, but
+it doesn't do too much. So, I'm going to
+go ahead and bump this up to, we'll say
+30. That's that. That's cursor. I'm
+going to save. And already you can see
+here a massive difference in the compute
+advantage just with these two tools. You
+can see a massive difference. Now,
+something to call out right away. Does
+this mean cursor is a better tool than
+ader? Um maybe right potentially. This
+is where a lot of again you know
+subjectivity and personal preference
+comes in for AI coding for you know the
+new wave of agentic coding. I do not
+prefer cursor. Um we'll get to what I
+like to use here. Many of you already
+know what I'm what I'm using uh 24/7
+right now. But cursor is super super
+popular because of its user interface.
+So although the compute advantage is a
+lot higher, the compute advantage is
+really saying how much are you
+leveraging compute to get work done. If
+I had to point blank compare ADER to
+cursor and only these tools existed, I
+would choose cursor for the agentic
+behavior, right? We don't have Ader
+calling out CLI tools. We can't call any
+MCP server so on and so forth. But
+again, to be super super clear, we're
+primarily looking at the compute
+advantage. Ader can do things that
+cursor cannot. For example, Ader is a
+programmable AI assistant. You can take
+it and build out workflows that you
+cannot build with cursor. With Ader, you
+can of course select any single model
+you want and it's a lot more
+customizable. Okay, so the compute
+advantage isn't the entire story, but in
+the generative AI age where we're
+handing off more and more work to
+compute, this story is very important.
+Hence this video and hence this
+equation. So let's keep moving, right?
+Let's add some more tools to this. So we
+also have windsurf here. And you know,
+correct me if I'm wrong. I am pretty
+sure this tool is essentially cursor.
+Um, you know, comment down below. Let me
+know if there are big differences
+between cursor and windsurf. I've eyed
+windsurf for quite some time and I can't
+really see it differentiating away from
+cursor. Now let's get to my favorite
+tool. We just mentioned it a little bit
+earlier. Let's talk about claude code.
+Okay, so how does cloud code play in
+here? We definitely are getting more
+compute scaling. Cloud code forces us to
+use claude 3.7 sonnet, the hybrid base
+and reasoning model. So I'm going to set
+our compute scaling to 50. This tool is
+definitely more autonomous. I think it
+beats out cursor's agent mode by quite a
+bit. So I'm going to put autonomy at 40.
+It drastically reduces time taken to
+ship. I'm going to drop time all the way
+down to 10. Effort goes down quite a bit
+as well. It's just better at calling
+tools. It's more accurate. And of
+course, it has the yolo mode that you
+can tap into. And then, of course, this
+is where the trade-off happens. There
+are massive monetary costs, right? I'm
+going to go ahead and bump this up to 80
+just because this tool chews up tokens
+like crazy. So, this is the biggest
+problem with this tool right now. I'm
+going to go ahead and hit Well, I feel
+like 80 is a little bit harsh. Let's do
+70. And I'm only doing this because the
+tool I'm going to talk about next has
+even more monetary costs. Okay, so I'm
+going to save that and drag that to the
+top here because this is our new leader
+in our compute advantage. So you don't
+have to agree with my leaderboard at
+all. You can check this out yourself.
+Link is going to be in the description
+for you. This is a new resource, a new
+free resource you can just jump in and
+check out on a
+dentingengineer.com. Again, link in the
+description. I just want to give you a
+rough idea of how you can use the
+compute advantage to make decisions and
+stack rank the tools and the models
+you're using right now. One more tool I
+want to just add here just to showcase
+how you can think about your compute
+advantage. I'm going to add Devon. Okay,
+so this is a pretty big pretty powerful
+tool. Not a lot of engineers are using
+it because of the monetary cost, right?
+Um this thing is crazy expensive. This
+is why I put cloud code at 70. It's so
+that I could put Devon at, you know, I'm
+gonna go and push it all the way up to
+75. Okay. On the other hand, Devon is an
+insanely incredible tool. We've talked
+about it briefly on the channel a little
+bit, but your time cost basically goes
+to zero. Um, all you're doing is writing
+a prompt and hitting go and then doing
+some iteration. So, you know, actually,
+I should bump up the time cost of cloud
+code a little bit and put Devon at, you
+know, 10 or something, but I'm going to
+just drop it all the way all the way
+down to five. Effort goes down quite a
+bit. The main thing you need to do here
+is just iterate on the result that Devon
+is giving you. We have autonomy. Devon
+is a huge winner here. It's probably
+going to be autonomy 70. And because of
+that autonomy, it also increases our
+compute scaling a little bit, right?
+Because the model that's running, and I
+need to update this description a little
+bit, but the model that's running is
+running in a more agentic fashion,
+right? It runs over and over and over.
+The Devon engineers have mentioned that
+they are running on claw 3.7 sonnet, but
+there's definitely a lot more agentic
+architecture inside of Devon to get it
+all working right. They have planning,
+they have subtasks, they have routines,
+so on and so forth. So, you know,
+there's a lot of compute scaling coming
+out of this. You can see here they have
+a massive, massive compute advantage,
+almost double cloud code. And I think
+that's about right. So, I'm going to go
+ahead and save that. Bump it up to the
+top here. And here is my personal comput
+advantage leaderboard. Um, again, these
+are all rough estimates. It's all about
+the relativity and it's all about having
+some type of decision-making framework
+to help us understand what tools to use
+and what tradeoffs to make. Right? So,
+when we look at cloud code, maybe we're
+spending, you know, let's say uh 50
+bucks a day on cloud code. As you might
+know, Devon is $500 a month. Massive
+price tag, right? So, the cost is going
+to be way up. But in exchange, we get
+several other great factors
+specifically, right? compute and
+autonomy. This is going to be a nice
+advantage. Um, I'm still playing with
+Devon. I'm still figuring out how to
+best utilize it. I'm going into a big
+build cycle right now, so I'm going to
+be using it a lot more. But that's the
+key idea here that I wanted to share
+with you. There's more information on
+the Compute Advantage on this page. For
+anyone interested, the state of AI
+coding series is officially complete.
+Part three is now live. If you're not a
+principal AI coding member, you can gain
+access to part one and get a great idea
+of how you can understand the current
+state of AI coding so that you can
+progress to the next level so that you
+can get ahead of the curve in the state
+of AI coding. We of course talk about
+compute compute equals success and we go
+in depth into the compute advantage more
+inside this essay. For all principled AI
+coding members, you now have full access
+to part two and part three. AI coding is
+transitory and agentic coding is the
+endgame. I put a lot of work and a lot
+of prompts into creating this. I wanted
+to get my ideas out for 2025 to 2030 and
+really put it all in a comprehensive
+essay, comprehensive threepart state of
+ad coding for you. So check this out if
+you're interested. This is going to be
+linked in the description as well as the
+compute advantage equation calculator.
+Let me know if you're interested in some
+type of leaderboard. that would be kind
+of fun to set up where we can all vote
+on what tools we think have the highest
+compute advantage. I think this equation
+is, you know, 80 to 90% spoton. You
+know, we'll all have different
+preferences when it comes to what we're
+willing to give up. You know, I'm
+willing to trade monetary costs quite a
+bit in exchange for reducing my time,
+while you might be someone who wants to
+prioritize, you know, decreasing effort
+or monetary costs. There are many ways
+to slice this equation, but I think this
+is the cleanest slice. Comment down
+below and let me know what you think
+about this compute equation five
+variable setup that can help you make
+decisions in the generative AI age. If
+you made it this far, like, comment,
+subscribe, stay focused, and keep
+building.

@@ -1,0 +1,786 @@
+If you want your agents to accomplish
+loads of valuable work on your behalf,
+they must be able to validate their
+work. Why is validation so important?
+Validation increases the trust we have
+in our agents, and trust saves your most
+valuable engineering resource, time. The
+Cloudco team has recently shipped a ton
+of features, but one in particular
+stands above the rest. You can now run
+hooks inside of your skills, sub aents,
+and custom slash commands. This is a big
+release most engineers have missed
+because it means you can build
+specialized selfidating agents
+inside of this codebase. We're going to
+kick off a new claw code instance and
+we're going to run slash review finances
+February. And then I'm going to look for
+a specific February CSV file. Imagine
+you're doing your monthly finances. This
+is a system I'm building up to automate
+some financial processing. I'm going to
+copy the relative path of this and then
+paste this here. This is going to kick
+off an end toend pipeline of agents to
+review finances, do a bunch of
+formatting, generate a bunch of graphs,
+and offer insights into this month's
+finances. The important thing here isn't
+the actual tool itself. Whenever there's
+a new valuable feature, I like to build
+against it and truly understand its
+value proposition. So that's what we're
+going to do here. This entire multi-
+aent pipeline is going to run
+specialized self validation every single
+step of the way. You can see our primary
+agent getting to work there. We're going
+to let this run in the background and
+we're going to circle back to this. What
+I want to show you here is how to build
+specialized self- validating agents step
+by step. Let's start with the most
+foundational and the most important, the
+prompt.
+In cloud code, prompts come in the form
+of custom/comands.
+We're going to go ahead and create some
+new agentics. So, I'm going to open up
+the commands directory, of course, hit
+new, and we're going to build a CSVedit
+markdown file. All right, so this is
+going to be a new prompt that helps us
+edit CSV files. All right, so we're
+specializing this command to do one
+thing extraordinarily well and therefore
+we're specializing an agent to do just
+that. I have a code snippet AGP. If
+you've been following the channel, you
+know what this does. This is an agentic
+prompt template and I've made some new
+modifications to it. So you can see here
+at the top we have a huge payload of
+front matter. And the front matter is
+what's going to allow us to build our
+specialized self- validation via hooks.
+And you can see here we have support for
+pre-tool use, posttool use, and stop.
+This is what's supported in prompt, sub
+aent, and skill hooks. Whenever I'm
+creating a new prompt by hand, which I
+still do by the way, you know, I have
+meta agentics to help me quickly spin up
+new prompts, sub aents, and other
+skills. But I do like to write prompts
+by hand. You know, there are some areas
+where you just want to scale and go
+crazy with your agents. When you're
+talking about building that system that
+builds the system, when you're talking
+about working on your agents and really
+understanding agentic patterns and
+tools, you want to slow down and do it
+by hand. So, let's go ahead and write
+this prompt. I like to go just top to
+bottom here for a CSV edit. This is
+going to be a CSV editing tool. So,
+we're going to make modifications and
+report on CSV files. All right. So,
+that's how we're specializing this. And
+we will intake a CSV file and we'll also
+intake a modification. So, this is the
+user request. We'll just call this user
+request for our tools here. This is just
+CSV file writing. So, we do want to
+specialize this agent. We want the
+ability to search. We want read, write,
+edit, and I think that's it. So let's go
+and get rid of the rest of these context
+fork. We don't want this to run in a
+separate agent. We want this to run in
+the current agent we have. We want this
+to be model invocable. Keep this as
+false. And now we have the juicy part,
+the hook. So what do we want to self-
+validate here? Whenever we're operating
+on CSV files, we want our agent to be
+able to validate that that CSV is in the
+correct format. And so that means we
+want the post tool use hook because this
+will allow us to after a edit write and
+I'm going to go ahead and add read here
+as well. So after any one of these
+commands run, we're going to run a
+specific hook. We're going to run a
+specific script. So I'm going to go
+ahead and get rid of pre-tool use and
+stop here. So this will just echo uh
+post hook. Let's go ahead and update
+this to be an actual script we have
+inside of the codebase. The way I'm
+organizing my code bases now in the age
+of agents with these powerful self
+validation techniques looks like this.
+So in your classic.claude, you know,
+commands agent skills blah blah blah.
+Inside of hooks, I like to store a
+validators directory. And you can see
+here I have a whole bunch of validators.
+We're going to use one in particular
+here, CSV single validator. And so I
+want my agent to kick this off. So I'll
+type uvun. We need the path to this
+specific project directory. So we're
+going to use this claude variable here.
+And then it's going to be claude. And
+we're basically just path to this,
+right? So I can go and get the quick
+reference to this. Paste that. And now
+we have exactly what we need. All right,
+this is it. You know, you can see here
+every one of my validators outputs its
+own log file. So we're going to dig into
+this in just a second. What we have here
+now is an agent that after every post
+tool use call, it's going to run this
+script. And I have this once variable on
+here. I actually wanted to just keep
+self- validating. So I'm going to remove
+this. And then we have our actual
+prompt. I've written thousands of
+prompts by now. And one of the most
+important things you can do inside of
+your code snippets, inside of your meta
+prompts and your meta skills, your meta
+agentics, is create reusable formats so
+that you don't have to think about it
+and so that your agents don't have to
+think about your prompt format. You
+know, you can see here anytime I run
+this code snippet, I'm going to get the
+exact same structure. And again, if
+you've been with the channel, you
+understand the structure very well. I'm
+just going to go ahead and start working
+on this. All I need here is these two
+sections. So the purpose this is going
+to of course make modifications or
+report and we actually want or report on
+CSV files and then we have a three-step
+workflow here. Read the CSV file and
+this is going to be our first arg and
+then second is going to be make the
+modification or report. And then lastly
+we're going to report the results. All
+right. And I have cursor tab turned off
+here just so we can do this manually on
+our own. We don't want to get lazy with
+all these great tools. Of course you
+want to be using agents for most of this
+stuff. When you're learning something
+new, when you're setting up a new
+pattern, I think it's really good to
+just go in by hand and on your agentic
+layer, you want to be doing things by
+hand. Move a little slower. Don't move
+at the agentic speed that you probably
+normally are. You want to take your time
+with this stuff because, you know, if
+you learn how to deploy the core 4
+context model prompt tools properly, it
+will make you a very, very high impact
+engineer. So, here we go. We have a CSV
+edit prompt that is going to selfidate.
+We're using pandas here. And so we're
+just doing pd. uh read and that's
+basically it, right? So you can imagine
+whatever validation structure you want
+to run here, you run it. And you can see
+here if something goes wrong, we're
+going to return a set of issues. The key
+here is to direct your agent once
+something goes wrong. So we have this
+line here. Um when we're building out
+our response to our agent after it's
+called this validation command, we're
+saying the following. Resolve this CSV
+error in and then we're specifying the
+file path. And then we're just going to
+unload all the errors for our agent to
+resolve. So let's go ahead and test this
+in a new terminal window here. Cloud
+code instance running opus. And then we
+have a brand new / csvedit. There's our
+argument hints thanks to our hint
+parameter right here. Now we can just
+pass in a CSV file to edit. So we're
+going to use one of our mock csv files
+here in the codebase. Mach input data
+raw savings in February. And I'll just
+copy the reference to that. Paste. And
+now we're going to make a request. I'll
+just do something simple. read and
+report on the file structure. And so
+this is going to be simple, right? We're
+not actually doing a CSV edit here.
+Maybe I could have named this something
+a little different, but you get the
+idea, right? This agent can read, edit,
+and write. Let's see what it's doing
+here. It found the file location, and
+now it's just going to report on the
+data structure. As you know, the magic
+here is that after our agent runs, so
+you know, here's our great report.
+Nothing too fancy, nothing too
+interesting here, right? But our agent
+has run this self validation. The big
+idea here is this is a self- validation
+specific to this use case. I I can't
+stress that enough how important it is
+that this self- validation is hyper
+focused on this purpose of this prompt.
+The prompt extends to the sub agent
+extends to the skill whatever you know
+format whatever packaging you're putting
+your prompts in that doesn't really
+matter. Remember it all boils down to
+the core four context model prompt
+tools. In the end, every abstraction is
+that this adds a powerful deterministic
+layer that is again specialized. Let me
+show you the result. This is one of the
+reasons why it's so important to have
+observability and to really log
+everything. You can see here we have
+output for our CSV single validator. And
+you can see that everything passed fine.
+We were able to perfectly parse this CSV
+file. It is in fact a valid CSV file.
+Now, let's break it and let's see what
+our agent does when it has a specialized
+self validation tool that can run. I'm
+just going to break the CSV. I'm going
+to remove this last quote here. Let's
+see what happens now. Right? So, I'm
+going to clear out this agent. So, it
+has no information. I can just hit up
+here a couple times. Right? So, CSV edit
+same file report on the data structure.
+Now, watch what happens here. This is
+where the real magic is. It read and
+right away because it ran that red hook,
+it broke. And then our validator said,
+"Hey, resolve this error that we found."
+And the agent immediately fixed it. Now,
+it's going to rerun. It's actually doing
+that report properly. and it mentions
+that fixed issue. So what happened
+there? You know exactly what happened,
+right? We've been working up to this
+step by step. Our post tool use hook ran
+and it inserted determinism into our
+agents workflow. All right, so not only
+did it do whatever we asked it to do
+here and you know we're running a super
+simple example. I'm sure some engineers
+are thinking, "Wow, that was so simple.
+Why are you just having a single, you
+know, 20 line prompt for CSV validation
+for updating CSV? You don't need that.
+Blah blah blah blah blah. The models are
+good enough now. Stop. Full stop,
+please. You want to be building focused
+agents that do one thing extraordinarily
+well. Why is that? That is because a
+focus agent with one purpose outperforms
+an unfocused agent with many purposes,
+right? With many tasks, with many end
+states. We can now push this even
+further with specialized hooks that we
+can embed in our prompts, sub aents, and
+skills. Why is this so important? This
+is critically important because we can
+push specialization further. My CSV
+agent can now validate its work in a
+deterministic way. This is ultra
+powerful. I'm shocked that more
+engineers aren't talking about this. I
+think it really shows the kind of weird
+gap right now. There's a lot of vibe
+coding happening. Even engineers are
+starting to just vibe code and turn
+their brain off. Don't get lazy. Stay
+sharp. Keep learning. And one of the key
+ways to do that is guys, you have to
+read the documentation. Actually sit
+down and read the documentation. I'm
+seeing way way too many engineers and
+vibe coders just you come to the top of
+the page, copy, you open up your Hunter
+coding tool, you paste it in and you say
+build PC of this. Okay. When you do
+this, you learn absolutely nothing. The
+whole journey of learning is the
+journey. In the end, you gain that
+knowledge for every other time. But when
+you do stuff like this, right, and you
+don't actually read the documentation,
+you don't know what your agent is doing.
+That is vibe coding. That is, you know,
+leaning too heavy on the vibes if you
+ask me, right? Because what's the
+problem with this? The big key
+difference between real engineering and,
+you know, vibe coding or whatever you
+want to call it, vibing, vibe
+engineering, I don't really care what
+term is used. Uh, the big difference is
+that engineers know what their agents
+are doing. Okay? if you want to know
+what they're doing, you have to know and
+you have to read the documentation of
+the thing you're building against.
+There's just no way around this. Um, so
+anyway, small side rant. Um, I'm seeing
+way too many engineers uh outsource
+learning. That is how you begin the
+self-deprecation process. You stop
+learning. Highly recommend you just, you
+know, take the time, read through the
+documentation, understand what you can
+do so you can teach your agents to do
+it. Okay. Um, so anyway, so this is very
+powerful. Our agent resolved that error
+on its own. And now anytime I run this a
+CSV edit, the agent is going to validate
+it when it finishes. Okay. And that's
+it. You can, if you want, you can stop
+the video now. That's that's it. Self
+validation is now specializable. Before
+we were stuck writing global hooks in
+our settings.json file like this, you
+know, you would write out the hook here.
+And that was great, very important, very
+powerful. You'll still want to do stuff
+like that. For instance, we built out a
+cloud code damage control skill that
+protects your codebase and just like
+very quickly sets up, you know, powerful
+hooks to block commands. But what we get
+here is something really, really
+powerful, something really
+extraordinary. It is specialized self
+validation. You've heard me say it a 100
+times. That's really what's happening
+here, right? This is the one idea I
+wanted to share with you today. Now,
+this is just the prompt, right? Let's go
+ahead and see what this looks like
+inside of a sub agent and a skill. It
+looks very similar, but there are a
+couple, you know, caveats and couple
+things to mention along the way.
+If we open up the release notes here, so
+I'll just search for hooks. It's insane
+that this valuable feature was just kind
+of buried into this list of bullet
+points, but the cloud code team has been
+absolutely cooking. Anyway, so what am I
+trying to say here? There's a weird
+thing that's happening right now where
+the Cloud Code team is kind of combining
+skills and custom slash commands into
+one. I'm not really a huge fan of this.
+Uh, let me just search for skill, I
+guess. Right. Yeah, merge slash command
+and skills. Very, very interesting. I
+think the team maybe realized that they
+truly did just build out a another way
+to run slash commands, which again kind
+of validates our our foundational idea
+that we talk about on the channel all
+the time with the core 4. Everything
+just turns into a prompt that runs into
+your agent. Context model prompt tools.
+You've heard me say it a million times.
+I'm going to say it a million more times
+because a lot of information out there
+around agents is very hype fililled and
+very uh kind of void of raw information.
+Oftent times in engineering when you're
+learning a new skill when you're
+building up a portfolio of expertise
+there's really like four foundational
+facts that if you understand them and
+master them you will go uh
+extraordinarily far and you'll become
+very very capable. The core four is one
+of them and you know you can see that
+here. merge/comands and skills. They're
+the same thing. It's a prompt. So
+anyway, just wanted to mention that.
+Let's see what self validating inside of
+sub aents and skills looks like. I'm
+going to hop over to agents. You can see
+I have a few agents here. We want a
+CSVedit agent. All right, so we're going
+to build the exact same thing but as an
+agent. So what do agents give us? Agents
+give us two key things over a prompt.
+They give us parallelization, right? So
+we can parallelize our work. We can
+deploy multiple agents at one time. And
+they also give us context isolation and
+effectively delegate our context window.
+I have a snippet for this ag. This can
+be an agentic agent. And you can see
+here we have that same kind of format.
+All of our options listed out right
+away. And then we can dial into exactly
+what we want. Right? So I like to just
+give myself all the options when I'm
+working and then I can dial it down or
+of course I can have an agent dial it
+down as well. CSV edit agent. And I'm
+just going to do some copying here from
+our previous prompt here. use only when
+directly requested. And then I'll say
+CSVEit agent just to make that super
+clear. We don't need all these tools. In
+fact, we can just mirror our tools from
+our prompt. And we don't need
+disallowed. There's our model permission
+mode. We can just get rid of that
+skills. We're not going to be using a
+skill. And then we have our hooks. Same
+deal. We're going to delete pre delete
+stop. And I'm just going to go ahead and
+copy over this. And what else? I deleted
+something there. Oh, the color. Sure,
+Sam. And I'm just going to copy the
+exact same prompt too. So, you know,
+you'll notice this looks very, very
+similar, right? The structure is very
+similar, a little bit different because
+remember prompts can intake arguments
+whereas sub aents just kind of take the
+prompt that's passed into them. And so,
+we might tweak something like this. Pull
+from prompt and then pull from prompt or
+like determine from prompt is probably
+better language here. Fantastic. So, we
+can do the same thing. Let's kill this
+agent. And our agentic workflow probably
+completed. Nice. We had an 8minute
+agentic workflow that automatically
+agentically handled my finances for this
+month. And of course, I'm using mock
+data. It's not actually my finances. We
+got a great breakdown here. We'll circle
+back to this in just a moment. I want to
+show you the sub agent using specialized
+selfidation. And what we'll do is we'll
+deploy one agent per file. Again, that's
+what sub agents give you. They give you
+parallelization so that you can scale
+your agents across multiple versions.
+Use one CSV edit agent per file in mock
+input data and append three new rows two
+expenses file we properly increment the
+balance okay because in these CSV files
+you know you can see here we will have a
+balance and let me actually turn on my
+UI for this so you can see here we have
+a balance and this moves upward so when
+this moves up we add 650 here because
+this is a deposit that's why I added
+that line right make sure that the
+balance is are correct. As we move
+upward, we're going to kick off four CSV
+agents in parallel to edit each one of
+these files. There you go. You can see
+we are starting to stack these up. And
+again, the big idea here is that after
+every one of these agents run, they're
+going to validate the file they just
+operated in. Not only do we have
+individual prompts that can self-
+validate, we have sub agents that we can
+scale that self- validate. Okay, really
+think about this. Really think about
+this. This is specialized self-
+validation. You can scale specific
+commands, right? Check out my other
+commands here. Build.m MD. I have a
+llinter. I have a formatter running here
+using the brand new astral uvty and
+rough tooling. You know, this is going
+to run after my build agent runs every
+single time. Okay? So, we have two hooks
+running here on stop. So, when the agent
+finishes, it's going to look over all
+the code here only when the build agent
+runs, right? So, we're not running
+commands when we don't need them. We run
+them in specific use cases. This is just
+two simple examples of this, right? You
+can really really scale this all the way
+down to the prompt, but then you can
+push it into your own agents and your
+own skills. And so this is where this
+gets really powerful. Imagine you're
+doing a migration. Imagine you're
+updating some fields in the database.
+Imagine you're doing any type of work
+that you yourself would come in and
+validate. You can now teach your agents
+to do this. This is a big idea we talk
+about all the time. This is a closed
+loop prompt now. Okay? And we don't even
+have to prompt engineer it anymore. You
+still can if you wanted to, right? You
+could say something like this. Validate
+your work with XYZ, right? So you would
+say UV run blah blah blah blah blah CSV.
+You might need to build an additional,
+you know, in agent validation command
+because the inputs here are a little bit
+different, but you get the idea, right?
+You can still do this. There's nothing
+wrong with this. But the massive benefit
+of throwing this inside the hook is that
+you know this will always run. Okay? And
+so every time one of these tools are
+called inside of this agent, it is going
+to validate its work. Okay? This is a
+guarantee. And this is why, you know,
+the Ralph Wiggum technique, all these
+kind of prompts plus code, agents plus
+code, these techniques are starting to
+gain popularity. It's for this reason.
+You're adding trust into the system.
+You're having your agents validate their
+own work. That saves you time. You're
+not doing the validation. You're just
+making sure that you set the system up
+right. And this is a big theme we're
+going to see moving forward in the age
+of agents. You know, the engineers that
+are building the agentic system in
+tactical agentic coding. We call this
+the new ring around your codebase. You
+don't work on your application anymore.
+You work on the agents that run your
+application. Okay? And the big idea here
+is that you can now have agents that you
+quite literally trust more by just
+adding the right hooks, the right
+validation. Ralph Wiggum, all these
+techniques on the channel, we've
+discussed this. Agents plus code beats
+agents. Okay, that's it. It's that
+simple. That's what self validation is.
+That's what the closed loop prompt is.
+This is what it looks like to really
+teach your agents how to build an
+engineer like you would, right? It's
+it's by doing things like this. Every
+engineer, every good engineer at least,
+validates their work. And soon it's
+going to be the exact same thing with
+your agents. Every good specialized
+agent, great at doing one thing well,
+will validate that one thing. Okay? I'm
+I'm very against this kind of generalist
+do it all super omni agent where you
+just nuke the context window over and
+over. I I'm highly convicted that if you
+want to build an agent that outperforms
+over and over and over, you build a
+focus specialized agent. Even down to
+something like this, right? This is a
+real agent that I would build out
+CSVEdit agent. We just edit CSV files.
+That's it. It's not that you can't do
+this with a, you know, bigger agent
+doing 10 20 different things. Opus is
+very powerful. It can do that. That's
+not the point. The point is that this
+will perform better over tens, hundreds,
+thousands, and millions of runs. Okay?
+If you want to scale, you want your
+agents self validating and not just any
+validation. You want your agents
+specializing their self validation. All
+right? So, that's the value here. We
+don't need to walk through building the
+skill. You know what that looks like.
+You know, you do CSV edit skill and then
+you, you know, build out skill.md. And
+then I have a coach template for this.
+basically more or less the same thing.
+So, I'm not going to build this out. You
+get the idea here. I'm going to go and
+just delete this and I'll go ahead and
+commit the other two and you'll have
+access to this codebase if you want to
+poke around what's happening here and
+understand how you can, you know, build
+out some more self validation. But you
+can see all those four agents ran in
+parallel. They validated their work and
+we can prove it. Again, you want to have
+proof that these things ran hooks and
+CSV single validator. We can scroll to
+the bottom here and you can see every
+one of those files was validated at
+basically the same time within a second,
+right? That's because we use
+parallelism. We have edits that we know
+worked. Okay, let me just say that
+again. We have edits from our agent that
+we know worked because we gave them the
+tools to validate their own work.
+You know, you can see here we had a
+bunch of stuff run and it outputed
+something like this, right? So, all we
+did was pass in a CSV and it gave us
+this. Here was our previous version,
+January 2026. And here's our new version
+here. Sorry for the uh light glare
+changes there. But you know, just a
+simple highle view of finances. This is
+a real use case of generative UI, by the
+way. Um, some of this is static that I
+had the agent generate over and over.
+Some of it is dynamic. So, some of these
+tables that it created. I had no idea it
+was going to create. You know, you can
+see here we have a bunch of insights
+about our spending for the month, right?
+All the way down to the table level. We
+can sort this. We can see our burn. we
+can see our income balance blah blah
+blah. I know some people don't trust
+models and model providers to do stuff
+like this. I think it's totally fine.
+This is what this tool did, right? We
+had a full agent pipeline build this
+out, a team of agents. And once again, I
+can tell you I was very, very confident
+that this was going to work end to end.
+Okay? And why is that? You already know
+what I'm going to say. If we open up
+this prompt, review finances. I had a
+single prompt and we can go and collapse
+this. You can see I'm once again using
+our great agentic workflow pattern.
+Nothing new. It's the same thing over
+and over and over. Um, you'll notice
+that about this channel. We are very
+consistent and we're always focused on
+using the best tools for the job. All
+right. Hyperfocus on the signal in the
+industry, not hype, not noise, not
+anything else. And you can see here,
+right? You can see something very
+powerful. I have an HTML validator
+running here on the top level. Frankly,
+on the review finances, this is the kind
+of super workflow. So you can see here
+this workflow is actually kicking off
+multiple agents underneath it. All
+right, we have the agent chain here. So
+we are chaining together multiple
+agents, multiple steps. And you know,
+you can see here we're running a whole
+slew of different specialized agents.
+Guess what they're going to do? Yes,
+they're all going to validate their
+work. Let's hop into our categorize CSV
+agent. Check that out. Let's hop into
+our uh generative UI agent. There's that
+HTML validator. Let's hop into our merge
+accounts. There's a CSV validator. On
+and on and on. And you can see here we
+have this normalized CSV agent actually
+running two validators. And these are
+running on the stop command. So when it
+stops, I'm running some kind of global
+validators that run on all the files in
+this codebase because why not just test
+all the files. Kind of general rule of
+thumb, if you want to test a bunch of
+files at the end of your specialized
+hooks, you can use the stop hook. And if
+you want to test just one file like we
+did, you probably want to go for that,
+you know, post tool use so that inside
+of your script, you get access to the
+the path that was read, edited, or
+written to. Feel free to check out this
+codebase. I built this as a kind of
+working prototype to quickly run finance
+review to calculate, you know, expenses
+and income for the month. Make sure you
+have this in your own private codebase
+if you decide to fork this, pull ideas
+from it, whatever. The big idea here is
+you can build out specialized self
+validators inside of your prompts, your
+sub agents, and your skills. Now, and if
+you're really pushing this stuff, um,
+you can do something really, really
+cool. If we close this, we run claw--p
+uh, settings. You can inside of your
+primary agent pass in an entire settings
+file as JSON and that includes hooks.
+All right, I'm just going to leave you
+with that idea. You can take validating
+agents to another level with this.
+Comment down below. Let me know how
+you're using hooks. I'm super curious if
+you have turned on specialized hooks. If
+this is the first time you're seeing
+this, no problem. It's really not
+getting enough attention. Engineers, you
+got to be careful. You got to make sure
+you're still learning and still
+internalizing knowledge. Don't delegate
+learning to your agent. All right? It
+doesn't do you or them any good outside
+of that one shot that they run in. All
+right? So, make sure you're still
+reading the docs. Make sure you're still
+following, you know, the big releases
+coming out of these leading tools,
+technologies. Obviously, cloud code is
+the leader in agentic coding and it
+allows us therefore to tap into this new
+role of engineering we're calling
+agentic engineering. Opus 4.5 has been
+changing the game for a while and it's
+very clearly a step change forward into
+the future of engineering. But be very
+careful with this stuff. Do not overuse
+these models to the point where you're
+not learning anymore. That's kind of the
+meta idea I just want to, you know,
+leave you with here today. All the
+potential we can have with agents is
+incredible. But if you delegate the
+learning process to your agents, you
+will be stuck. You will not continue to
+grow. And the worst thing any engineer
+can do is start the self-deprecation
+process by not learning anything new.
+All right, definitely check out
+specialized self- validation in the form
+of hooks inside of your custom/comands,
+aka prompts, your sub aents, and your
+skills. You know where to find me every
+single Monday. Stay focused and keep
+building.

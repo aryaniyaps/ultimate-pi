@@ -1,0 +1,406 @@
+a go ahead and open up open ai's
+realtime API blog
+announcement I've opened the browser to
+open ai's realtime API blog announcement
+for you thanks a if you need any more
+help just let me know it's time to start
+rethinking how we interact with our
+computers now that open AI has released
+the realtime API you and I can build
+seamless Next Generation AI experiences
+as always the greatest technology and
+opportunities come to you and I first
+the engineer are you ready for speech to
+speech AI assistance powered by Advanced
+reasoning models like 01 this is what
+we've been waiting for let's play with
+[Music]
+it so no one is really using these tools
+to their full capabilities yet myself
+included let's show off early versions
+of how we can truly utilize personal AI
+assistance hey
+a hey Dan how can I assist you
+today yeah can you go ahead and open up
+chat GPT open up Claude open up Gemini
+then can you give me the current time
+then can you generate a random number
+for me and then after that go ahead and
+open up Simon W's blog and then let's go
+ahead and open up Hacker News as well
+I've opened chat GPT Claude and Gemini
+for you the current time today is 1210
+a.m. on October 5th
+2024 I also generated a random number
+for you 23 Simon W's blog and Hacker
+News have been opened as well uh okay so
+this is getting crazy right open AI
+employees are going to salivate when
+they watch this video it's a beautiful
+orchestration of all of their great work
+so we have the real-time API calling a
+chain of tools with 100% accuracy which
+contain individualized AI agents and
+let's simplify AI agents that's any
+combination of code and additional
+prompts with a single purpose built to
+solve a single problem these AI agents
+can then run their own structured output
+calls that feed back into our top level
+digital assistant I'm not going to lie I
+am high as a kite envisioning the
+capabilities and the future we can
+unlock with this tooling the distance
+between your thoughts and your actions
+on your device are fading fast with this
+combination of Technology let's push
+this further with some more interesting
+agentic functionality with prompt chains
+and 01 reasoning models powering a file
+manipulation
+[Music]
+agent so this is all running locally via
+a async python
+application hey Ada can you go ahead and
+generate a CSV file for us go ahead and
+call it uh user analytics and just add
+10 Mack rows
+I've created the CSV file user
+analytics. CSV with 10 rows of mock data
+great job this looks awesome so can you
+go ahead and delete Row 5 6 and 7even
+and then can you add a new column let's
+call it uh membership and set it all to
+premium I've updated the file user
+analytics. CSV rows 5 six and 7 have
+been deleted and a new column called
+membership has been added with all
+values set to premium is there anything
+else I can assist you with let's make
+another change here can you go ahead and
+add 70 additional rows to the user
+analytics file go ahead and use a
+reasoning model for
+this the file user analytics. CSV has
+been up updated with 70 additional rows
+of mock data using the reasoning model
+okay so pretty incredible stuff there
+right just by talking to my computer I
+am generating and modifying this user
+analytics. CSV file this is getting kind
+of out of hand right this is incredible
+this is the dream of multi-agent
+applications we've been building toward
+on the channel for over a year now since
+the very first one prompt is not enough
+video I want to share a couple
+interesting insights and useful
+engineering patterns around building
+personal AI assistant but first we have
+to highlight what's happening here so in
+a very sloppy 1,000 lines of code we
+have a real- time speech to speech
+assistant that can connect to and
+accurately call other agents that's huge
+these other agents are called through
+tools and these agents can then
+themselves run their own prompts they
+can use Advanced reasoning models like
+01 and ultimately there's really no
+limit on what you can do inside of a
+function call right this guy's the limit
+now the real trick is do you know what
+you want to build and do you know what
+you need to do to wire together your
+architecture with your personal AI
+assistant at the top at the center which
+then commands your army of AI agents
+that's what's next for us here on the
+channel we're taking Ada to the limits
+and then we're going to break those
+limits that's been a big milestone and a
+big Keystone for us living software that
+works for us while we sleep let's go if
+you're starting to build out your own
+personal AI assistant I'm super curious
+what are some patterns you're setting up
+and what are the first use cases you
+want your personal AI assistant to solve
+on your behalf so we have a couple tools
+that really lead a lot of our
+functionality here right you saw the get
+time method you saw the random number
+you saw open browser and then we have
+some kind of essential file manipulation
+calls right there's create file update
+file and delete file let's go ahead and
+showcase these a little bit more and
+really show off what these three simple
+but essential methods can do with a
+personal AI
+assistant hey aah can you go ahead and
+delete the learning rust file are you
+sure you want to delete the learning
+rest MD file if so please confirm with
+Force delete yeah go ahead and force
+delete that file we won't be needing
+that fantastic can you go ahead and
+create a new file and just explain the
+basics of list comprehension and list
+manipulation and you know what actually
+go ahead and just talk about all the
+different types of Loops that you can
+use in Python instead of a markdown file
+just go ahead and create a fullon python
+file with examples and make sure you
+comment and document it all really
+well I've created the file python loops
+and comprehensions dopy with
+explanations and examples on list
+comprehensions and various types of
+Loops in Python if you need further
+assistance or more information just just
+let me know fantastic thank you aah can
+you go ahead and update our python loops
+and comprehension file and uh just go
+ahead and move everything into a
+function and then uh place a main block
+at the bottom where we can comment in
+and out each example and kind of work
+through them at our
+Leisure the python loops and
+comprehensions Pi file has been updated
+everything is now organized into
+functions with a main block at the
+bottom for easy testing and exploration
+you can now comment in and out each
+example as needed wonderful thanks so
+much AA um there's a triple quote at the
+bottom of the file go ahead and remove
+that the triple quote at the bottom of
+the Python loops and comprehensions dopy
+file has been removed if there's
+anything else you need feel free to let
+me know nice job AA can you go ahead and
+create two more versions of our python
+loops and comprehensions file basically
+we want another version in typescript
+and let's go ahead and create another
+version of the same thing in C so create
+both those files with the you know
+appropriate file names and file
+extensions and just explain all the
+variance of Loops in both typescript and
+C the files loops and comprehensions
+dots for typescript and loops and
+comprehensions CS for Sharp have been
+created they both include explanations
+and code examples of various loops and
+comprehension methods in their
+respective languages great job thank you
+can you go ahead and delete all of our
+Loop files go ahead and force delete
+them both loops and comprehensions TTS
+and loops and comprehensions docs files
+have been successfully deleted nice job
+beta go ahead and get rid of the Python
+loops and comprehensions as well the
+python loops and comprehensions file has
+been deleted if there's anything else
+you need help with so these are really
+interesting tools I wanted to share with
+you just to give you an idea of what's
+coming next in the age of gender of AI
+now that we have these real-time speech
+to speech capabilities it's all about
+utilizing their capabilities these are
+some really important functions to keep
+your eyes on and to build out into your
+personal AI assistant because a lot of
+engineering is all about file
+manipulation file updates file creates
+file deletes and manipulation so just to
+give this idea to you a couple
+additional things I want to show you
+here in the beginning I asked Ada to
+open up a bunch of browser URLs every
+assistant is going to need some
+personalization some specific
+information that's specific to you and
+the things that you're interested in so
+you can see here we have the browser
+URLs that's what got loaded into the
+open browser AI agent and then of course
+we have some auxiliary information down
+here browser asistant name and human
+name you can see this personalization
+getting expanded very quickly and an
+interesting agentic pattern we're going
+to be digging into on the channel is
+having an agent automatically update our
+personalization file personalization
+settings is going to be really important
+and I also wanted to share this runtime
+table so I think it's super important to
+have proof of the speed of these agents
+and I got to say I'm really really
+impressed here the real-time speech to
+speech API from when I finished speaking
+to getting a response is on average
+about a second when we're running tools
+obviously this time gets blown up quite
+a bit but I think that's to be expected
+there are other ideas like moving tool
+calls to an async thread to let those
+run in the background definitely an
+improvement that can be made here but
+you can see here real-time API responses
+are really really really great um sub 1
+second for the entire flow this is
+really incredible it seems like under
+the hood what their model is doing is
+starting to generate the response as
+we're speaking since tokens run in
+sequence they can automatically start
+generating the response and then stream
+that back to us in real time right so
+this is really really cool really
+incredible stuff this technology is
+truly groundbreaking and then you can
+see some of my other calls here right so
+delete file took under a second create
+took about a second update file took 3
+seconds right so updates more involved
+because we're not just setting up the
+initial right we're having the llm
+updated and of course you can see here
+when I ran the reasing model that took
+about 18 seconds right so just wanted to
+give you some data here give you some
+insights into the actual run time of the
+real-time API I am in love with these
+numbers you know in our previous
+personal AI assistant videos it was
+taking about in the best case 5 Seconds
+to run the speech to text llm and text
+to speech workflow that you need to
+complete an AI assistant open AI is
+doing all those steps in less than a
+second here for simple conversational
+workflows right so this is truly
+incredible technology of course it comes
+with several tradeoffs and anyone
+telling you different is wrong or
+they're trying to sell you something the
+real-time API alone is incredibly
+expensive you know talk about huge costs
+I'm not surprised but the cost must come
+down for this to be viable at scale if
+we check out the pricing here you can
+see so this is 6 minutes of audio in and
+24 cents out um this is heavy pricing
+when I was testing this out uh the costs
+for me were around I think it was $10 to
+$15 for I don't know it was like an hour
+testing back and forth right so the
+costs are there that's a trade-off and
+of course I think the second largest
+trade-off here is vendor lock in if you
+work through this code base you'll see
+that everything I've built here is on
+the open AI stack all the llms the
+reasoning model the speech to speech the
+real-time API open AI wants to be the
+king of agentic they want to be the king
+of AI agents llms and the entire
+ecosystem right even the B to C side of
+it these are risks that we kind of just
+have to take in order to get and utilize
+the top generation the state-of-the-art
+application models and apis right the
+real-time API there's nothing as close
+to this they've embedded the speech to
+text the llm and the text to speech all
+in one workflow we're getting subc
+responses and we can call tools that's
+all we've needed to push through to the
+next generation of agentic Technology
+right now these are risks we have to
+take to stay on the edge of what's
+possible so we can learn and master the
+next generation of software before it
+hits the masses so I hope it's super
+clear What's Happening Here the distance
+between you and your device is slowly
+fading away can you feel it I can feel
+it we can think then just speak and it
+knows what we're looking for it's scary
+it's exciting it's real it's here this
+beautiful um hacked together prototype
+code base uh contains about a th lines
+it's it's here it's ready for you if
+you're interested um I hadn't seen a ton
+of python based on device implementation
+so I wanted to throw one together to
+test and validate this agent and to set
+up a new version of ADA that I can grow
+and expand on it's a simple proof of
+concept of what's coming I think for us
+Engineers this is a Next Level tool that
+is really important to spend time on and
+pay attention to and build into your
+development workflow there's really no
+limit to what we can do here it's all
+about what we can imagine and it's about
+staying out of open ai's way don't go
+out and build a product don't go out and
+try to sell something that is going to
+get bulldozed by the next open AI
+release steer clear just imagine the
+tech is going to improve the models will
+improve and then think about what you
+can build alongside these next
+Generation generative AI tools and API
+tooling I think a huge theme we're
+seeing here very clearly is that voice
+is a key piece of the next generation of
+user experiences a question we're going
+to be looking to answer on the channel
+is how can we utilize personal AI
+assistance in combination with
+Incredible prompts and reasoning models
+to get more work done in parallel faster
+than ever if that interest you drop a
+like drop a sub and join the journey
+really excitingly we are about to hit
+and cross the 20K Subs Mark it's been an
+incredible journey so far we've
+transformed so many times and we've
+learned leared so much over the course
+of the Channel all the way from one
+prompt is not enough to learning AER to
+exploring cursor to understanding prompt
+chains agent orchestration building out
+multi-agent systems it's all coming
+together with the release of the
+real-time API and it's building up to
+something incredible we're getting
+closer to building living software that
+works for us while we sleep with every
+single video I want to say a huge thanks
+to every Builder and engineer that's a
+part of this journey I I appreciate all
+the positive comments and all the
+feedback and I just want to remind you
+you are in control of this technology
+you can take this and together we can
+imagine a future with these tools I want
+this channel to be a place where you can
+come to understand the capabilities of
+this technology so that you can build a
+better future for yourself for your
+family for your work and for your
+passions we're not going to stop until
+we have living software working for us
+while we sleep keep building stay
+focused I'll see you in the next one

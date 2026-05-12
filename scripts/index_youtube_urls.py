@@ -3,13 +3,14 @@
 
 Writes ``<data-dir>/<channel-handle>/<YYYY-MM-DD>/<video-id>_<title-slug>.txt`` and
 ``.meta.txt``, and merges ``_index.tsv`` per channel. No channel-specific filters.
+Default ``data-dir`` is ``<repo>/data/yt-vid`` when this file lives in ``<repo>/scripts/``.
 
 Requirements: ``yt-dlp`` and ``firecrawl`` CLI on PATH (see ``firecrawl --status``).
 
 Examples:
   python3 scripts/index_youtube_urls.py 'https://www.youtube.com/watch?v=VIDEO_ID'
   python3 scripts/index_youtube_urls.py --urls-file urls.txt
-  python3 scripts/index_youtube_urls.py --data-dir ./my-corpus --firecrawl-cwd . URL
+  python3 scripts/index_youtube_urls.py --data-dir ./data/yt-vid --firecrawl-cwd . URL
 """
 
 from __future__ import annotations
@@ -216,7 +217,7 @@ def default_paths() -> tuple[Path, Path]:
     """(data_dir, firecrawl_cwd) when script lives in <repo>/scripts/."""
     here = Path(__file__).resolve()
     repo = here.parent.parent
-    return repo / "yt-vid", repo
+    return repo / "data" / "yt-vid", repo
 
 
 def main() -> int:

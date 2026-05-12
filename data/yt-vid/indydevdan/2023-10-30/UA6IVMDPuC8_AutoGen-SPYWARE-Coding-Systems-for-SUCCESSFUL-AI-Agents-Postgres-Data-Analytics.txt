@@ -1,0 +1,937 @@
+one of my favorite negative comments
+I've received so far is like like
+something along the lines of like wow
+nice job you did something that I can do
+with a couple lines of code and a single
+prompt um you know I think that's
+totally valid but it's also missing the
+point that you don't just jump to step
+10 in building agentic software you take
+Little Steps right you you do code
+things and you do build agents that you
+could do yourself very clearly very
+obviously right but where things start
+to change is when you get you know 2 3 4
+5 agents you get two three four five
+different multi-agent teams working
+alongside you now you get to this point
+where you you actually couldn't do what
+they're doing right and more importantly
+even if you could you don't want to
+right that's the whole point of agentic
+software right it it's it's there so you
+don't have to do it you stack enough of
+these up you put your validators
+together you put your orchestras
+together you put your conversation flows
+together and all of the sudden you
+couldn't do it yourself and they're
+operating on your behalf they're working
+in parallel to you you know you want to
+create assets that work for you right
+while you're in this video we resolve
+two simple questions what are my agents
+doing did they do their job when you
+have one or two agents with simple
+prompts the default autogen logging is
+sufficient but as we grow our postgress
+data analytics tool and start to add new
+conversation flows and new agent teams
+to help us manage and interact with our
+database Like We Never never could
+before we need to be able to understand
+if a team was successful or not so how
+are we going to accomplish this we're
+going to make three key improvements
+we'll keep a simple yet effective record
+of our agent conversations and then
+we'll build a simple way to spy on our
+agent conversations we'll then build a
+validator pattern in our agent
+orchestrator to gain 100% certainty that
+our agents accomplished their task this
+is really important because it enables
+our agent systems to be self- validating
+remember the endgame is full fully
+agentic systems that require zero
+intervention lastly we'll update our
+orchestrator and our agents to use a
+store like structure something like paa
+or Redux some type of store management
+system which will give us a centralized
+module for our agents so let's get
+started let's open up vs code and let's
+recap our application so far so just a
+quick highle overview as usual we're
+going to run poetry and we're going to
+run the prompt give me all unof users
+with jobs that took longer than 5
+seconds so I'm going to go ahead and run
+this what's going to happen here is our
+agent system is going to load these
+tables from our postgress database it's
+going to generate the right SQL to
+satisfy the request and it's going to
+dump the response through query and as
+you can see here it's already approved
+thanks to our work in our previous video
+we we have a good sense of how much this
+cost us looks like this one was 2 cents
+and if we open up table plus here we can
+see in our users table so we're looking
+for onoff users so you know we're going
+to get a whole slew of onoff users I
+want to show just how large this table
+is so that you you can see that we're
+actually querying all these items and
+we're not getting a you know token
+explosion our gbg4 Contex window is not
+being overloaded if we go ahead and look
+at this results. Json file you can see
+here we have all users with the duration
+greater than 5 Second we can now you
+know send this to a front end we can Now
+operate on these and we can you know
+take our data analytics pipeline from
+there so if we look at the logs here we
+can see that there's kind of a lot going
+on even just with the three agent system
+that we have here there's a lot of
+mental overhead required to read and
+consume these logs even with all the
+work we've done so far right so that's
+what we want to clean up real quick
+let's go over the code of the current
+version and let's talk about what
+changes we're going to make so right at
+the top here same deal we have the
+database URL open API key we have one
+capitalized reference here called table
+definitions that helps us build our
+prompt we're using arars to pull in a
+prompt parameter that we passed in here
+we're then prefixing with fill this
+database query we then pool tables from
+our postgress database check out the
+previous videos to get it all caught up
+but we're using some embeddings
+techniques here and then we're using a
+simple uh word base approach here
+basically just match on tables that are
+specifically specified within our query
+so users and jobs Force our application
+to pull those tables into our prompt
+we're then adding the table definitions
+we just fetched onto our prompt and then
+we're using our orchestrator to build
+our agent system and then we are running
+our agent system and we're getting back
+success and some data engineering
+messages and then of course at the end
+here we are dumping our cost so we know
+how much it costs to run that's the
+application so far if you want to go
+into detail check out the previous four
+videos the series is really stacking up
+we've done a lot of cool things and we
+have a lot of cool things ahead of us so
+let's dive in and let's improve our
+logging system I just want a quick shout
+out neon this is serverless postgress
+hosting such a breeze to set up I can't
+speak to scaling this out a ton but
+everything I've seen so far looks really
+great they've reached up to me twice
+just to see how things are going
+probably automated messages whatever but
+I'm really happy with them so far so I'm
+going to keep using them of course we
+have to shout out autogen again and
+everyone working on it I think it's a
+great kind of framework for building out
+multi-agent systems okay so first things
+first jump into the orchestrator and
+remember the orchestrator is the kind of
+central Hub of how our agents talk to
+each other so we have this sequential
+conversation which basically says agent
+a talks to Agent B Agent B to C C to d d
+to e so let's go ahead and build a
+couple simple data models that we can
+use to direct our new functionality so
+I'll create a new file called types. py
+I'm going to import data classes let's
+create a chat from name to name exactly
+message and then we're going to have
+data class and we're going to build out
+one more and this is going to be our
+conversation success we want to know if
+our agents ran successfully oh search
+out the class it's going to be a bll of
+course we're going to have messages
+costs then we want tokens perfect and
+then our let's go ahead and just add our
+last message string so this will be the
+last message in the list just for quick
+easy access okay so I'm a big fan of
+model driven development because it kind
+of tells the story right you can kind of
+already see where this is going so I'm
+going to start here with the simple chat
+what we want to do is in our
+orchestrator as our agents are having
+conversations and solving problems for
+us we want to know exactly who's saying
+something and we want to know who
+they're saying it to and of course we
+want to know exactly what they're saying
+so let's go ahead and implement this
+chat system inside of our orchestrator
+all right so our orchestrator now has a
+list of chats from start to finish that
+our agents have with each other if you
+look through the code here we can see we
+have a brand new send message function
+which essentially wraps the autogen do
+send function after the send we're going
+to append a brand new chat so you can
+see we have from agent name to agent
+name and the string pretty simple pretty
+straightforward right exactly what you
+would expect and then during the
+sequential conversations and any other
+type of conversation type we can open
+that up and we can see that inside of
+the basic chat which facilitates agent a
+talking to Agent B and the function chat
+which facilitates a function call inside
+of those functions we're now just using
+that send message function which will
+both send the message from agent A to B
+and record the chat that they're having
+so we have one more special function
+here called spy on agents this is
+exactly what you would assume we Loop
+through all of our chats and we use this
+cool data class. asdi this will convert
+our chat type to a dictionary and then
+we're outputting it to a file and so
+that's basically it we spy on our agents
+pretty much at any time during the
+conversation um I like to do it
+iteratively so that we have a log even
+if something goes wrong and something
+fails we still have a log of everything
+that happened up to that point we have
+to thank our orchestrator for having a
+clean simple structure making this
+really easy to add let's go ahead and
+test out what our new agent flow looks
+like now so now if we rerun that exact
+same prompt we can see that it's
+generating the SQL we're running the
+iteration one conversations are
+happening great and we finished so now
+we're going to have something really
+cool we have this agent conversations.
+Json file so if we hop in our file we
+can see okay so it looks like we're
+using a pend instead of uh right so let
+me just quickly update that so yeah
+we're using open file name a we want to
+use W this will overwrite the file every
+time so if we go ahead and just look at
+the final result here this is what the
+final output would look like we can see
+that we have from name and to name so
+the admin is saying to the engineer
+fulfill this database query right we can
+go multi-line mode here you know fulfill
+this database query you know basically
+pass in everything that you would expect
+there's a message and then we have the
+from 2 engineer goes to the analyst and
+then when we have a function call as we
+discussed in previous videos we have the
+analyst talking to the itself so that it
+can execute the function that it's been
+given and then finally we have the
+output of the function from the senior
+data analyst to the product manager
+let's go ahead and rerun this just so we
+can get a clean example So Okay cool so
+we just reran and this is the actual
+output of our file right so we have a
+list of objects and our objects contain
+both a from to and message for each
+conversation you can see how this can be
+really valuable right so in the current
+state of our postgress data analytics
+tool we only have one agent team right
+if we hop back up to the top level open
+the code up you can see here we're only
+operating on our data engineering team
+which as you know consists of you know
+four agents that have their specific
+functionality but you can imagine how
+useful this can be when you have
+multiple agent teams running possibly in
+parallel doing all sorts of different
+things for you right operating on your
+behalf something like this a clean
+simple chat system where you can see
+who's talking to who who's saying what
+who's making mistakes who's doing well
+you need to be able to see that you need
+insight into your system and you're
+going to want to build something out
+just like this something really simple
+of course you can just like run the
+program and and pipe it and you know do
+all cool sorts of bash functionality
+that's really great but we need to be
+able to come in debug quickly at a
+glance and see what's going on what are
+our agent systems actually doing right
+we need these to run fully on their own
+and when something does go wrong which
+trust me they will especially on the
+journey to building these agentic
+software systems we need to be able to
+come in and say hey what exactly is
+going on who's causing the issue because
+it will typically be just one agent or
+there's going to be something wrong with
+the conversation flow that you're
+building but it all will get revealed
+between the agents now we're going to
+answer another large question here right
+let's hop back to our types and look at
+this conversation result right so the
+big question is how do we know our
+agentic systems have solved the problem
+we want them to solve and it kind of
+digs into this bigger issue of when
+building agents and agentic software how
+much should you be using specific agents
+and llm M and prompts versus just
+writing the code yourself I think that
+this is a kind of a big question and the
+answer really lies in can you prompt it
+should you prompt it and how much time
+will you save by using the system versus
+how much time will it cost and I'm I'm
+still kind of in that Gray Zone really
+trying to figure that out so I don't
+have the answer there but but one thing
+that we do 100% need to build is a
+concrete validation function so what do
+I mean by that right now if we hop into
+our agents we can see here that our
+product manager is essentially
+responsible let's look at the product
+manager prompt our product manager is
+basically responsible for determining if
+the response is valid um but in reality
+there's no actual check Happening Here
+the product manager is just looking at
+the success message returned by the
+response from let's find that function
+um run SQL turn regx on so you can see
+here our run SQL function is just doing
+a lot of the work right so it's running
+the SQL query it's gener ing the
+response in Json format and then it's
+dumping into the result and this is all
+getting run if we hop back over to our
+agents this gets run by our senior data
+analyst right so this response isn't
+really doing anything right it's just
+saying we successfully delivered uh
+which is helpful as a signal to know
+that things are working but we need to
+do better than this this is not a
+sustainable way to build agentic systems
+what we can be doing though is still
+while being explicit just say and call
+the exact function that will verify that
+our agent team produced the result we
+wanted so what do I mean by that exactly
+let's go to the orchestrator and build
+out a new variable here so I'm going to
+call this uh validate results Funk and
+this is nothing special all we're doing
+here is building out a callable function
+and we're going to pass it in right it's
+going to be optional so you don't have
+to call it and at the bottom of our
+conversation instead of doing this like
+keyword check thing to see if things are
+are going well all we're going to do
+here is call this function right so
+we're just going to say validate
+whatever output our agents were supposed
+to produce they produced it right so
+then that will get returned and let's go
+ahead and add this to the broadcast
+conversation as well say success equals
+s. validate just quickly do this here
+else message
+here now at the top in our main function
+we can while we're building out our
+orchestrator make sure that we need to
+pass in a success function right so a
+function that just says hey nice job you
+did your job so if we look at the
+database file what we're really looking
+for is just some notion that this
+completed and has some results right so
+I'm literally just going to copy this
+I'm going to add a quick function here
+we're going to say validate results and
+what this is going to do is it's just
+going to look for this file right so
+this is going to return a bu and then
+we're just going to say read if content
+return true otherwise return false right
+right and we can of course just do
+something simpler like this just return
+bull content whatever the details are
+completely up to you right so we're
+going to pass this function into our
+build team orchestrator we're going to
+make sure that this accepts this
+validate callable awesome and then we're
+going to pass this in a parameter for
+our orchestrator okay what's going on
+here and make sure we call this validate
+results Funk awesome so it's passed in
+here make sure we actually set this
+awesome and then when our functions
+complete they're going to call their
+validation function right so pretty
+straightforward but Ultra important so
+now that we have this we're actually
+just going to hop into our agents and
+completely just get rid of our product
+manager right the product manager isn't
+actually doing anything helpful for us
+definitely one day we could improve the
+product manager make them you know more
+useful in our agenting system but you
+know right now this prompt isn't doing
+much for us it's actually just wasting
+money and it's wasting time for us right
+so we have the validator function to
+explicitly say if our agent team was
+successful or not and I think this is
+important you know it's kind of tricky
+in agent systems to determine what you
+should try to have your agents do versus
+just codee yourself right and I think a
+lot of Building agentic Systems is going
+to be riding that line of should I do
+this or should I make an agent do it and
+can I do this and can I make an agent do
+it and taking some of those
+opportunities to get practice Building
+agentic Systems and just have your
+agents do it but also you want to be
+practical and you want to be pragmatic
+and results oriented so that you can
+actually get whatever you're trying to
+do done right like in the end I just
+want to know that they generated the
+results for me right so just check that
+right you have four lines of code don't
+over engineer it one of my favorite
+negative comments I've received so far
+is like like something along the lines
+of like wow nice job you did something
+that I can do with a couple lines of
+code and a single prompt um you know I
+think that's totally valid but it's also
+missing the point that you don't just
+jump to step 10 in building agentic
+software you take Little Steps right you
+you do code things and you do build
+agents that you could do yourself very
+clearly very obviously right but where
+things start to change is when you get
+you know 2 3 four five agents you get
+two three four five different
+multi-agent teams working alongside you
+now you get to this point where you you
+actually couldn't do what they're doing
+right and more importantly even if you
+could you don't want to right that's the
+whole point of agentic software right
+that's like the whole beauty of
+multi-agent systems on top of llms right
+on top of gbt Technology right it it's
+it's there so you don't have to do it
+right right now I have to write these
+four lines that's okay this is going to
+help me build up this agentic software
+but you stack enough of these up you put
+your validators together you put your
+orchestras together you put your
+conversation flows together and all of a
+sudden sudden you couldn't do it
+yourself and they're operating on your
+behalf they're working in parallel to
+you right I really think that this idea
+of like parallel workers is so brilliant
+you know you want to create assets that
+work for you right while you're also
+working getting getting things done so
+anyway tangent over so let's go ahead
+and run this I'm going to use the same
+prompt who cares and let's see what we
+get so what we expect here is just to
+like get a clean validation coming out
+of that function so let's let's see
+what's going on here so validate
+functions F read uh operation not
+readable I put in the wrong flag again
+so there's me just not paying any
+attention at all so we're going to use
+the r flag this is the read flag and
+let's rerun I'm just like too hype off
+talking about agentic software I'm just
+putting the wrong flag and just coding
+like an idiot so okay so it looks like
+this failed because our senior data
+analyst has no one to return the
+function response to so what I'm going
+to do here is just come into the
+conversation flow and add a little bit
+of logic to make sure that our last
+agent you can see we're excluding
+anything happening with the last agent I
+want to make sure that our last agent
+has the opportunity to make a function
+call Okay cool so I have added this
+function called self function chat
+basically what it does is at the end of
+our agent flow so you know when we're
+running our last agent conversation here
+so agent D to agent e for example when
+this agent runs we're we're just going
+to check if Agent B has a function that
+it needs to run so agentp has functions
+uh go ahead and run of course save and
+then rerun our prompt awesome so we can
+see that that bran successfully so we
+now have one less agent that means fewer
+tokens coming in it looks like there
+wasn't a huge change cuz the product
+manager honestly wasn't really doing
+anything um you know there's probably a
+joke about product managers I can make
+there but there are some good product
+managers of course so so great so the or
+shter was successful so now we have a
+pattern for operating and dealing with
+concrete results
+right so that we know 100% that our
+agent ran it did what it's supposed to
+do and it was successful now that we
+have this validator pattern let's go
+ahead and Implement our conversation
+results to flow out of our agent
+conversation so let's collapse and
+update this return type we're going to
+do conversation result same thing here
+so now every conversation is going to
+return this conversation result turn
+conversation results and just build this
+out right so messages great costs great
+last message is string awesome so we can
+get all that get message as string let's
+see what this is doing exactly not what
+we want so what do I want here so let's
+add one more property I want to make
+sure that the last message we get out of
+there is always a string so I'm going to
+say last message always string and then
+lastly you know just return string self
+messages last message great so this is
+going to make sure that we always get a
+string here let's go ahead and place
+that there let me pull out the tokens we
+don't need to run this t twice and then
+we can just Place those here great cost
+tokens great so this is all coming out
+as a concrete response type that we can
+later in the future use to chain agent
+responses and conversations together
+right just like we did with our previous
+data visualization team so let me go
+ahead and just pull this into the
+broadcast conversation do that here now
+we're returning this concrete type so
+let's go to the top and update this to
+be conversation result and let's go and
+add the type just to be super verose
+about it great and so now we don't have
+to call this separate get cost and
+tokens function we can now just run this
+here and and just real quick I just want
+to show this off I don't know if you're
+aware but python 310 we now have this
+new match statement so we can do match
+on this we can say case and I want the
+case where exactly yeah conversation
+result success equals true just the
+costs and the tokens here so if success
+is true run cost and run token
+and then we can just bump this up and
+okay yeah so I'll update this to datae
+cost data tokens that works fine and
+then of course we want we always want
+that case default case here where we
+don't match anything so far so in this
+case I'm going to say forrator do name
+there we go so that'll be the team name
+bump this over and get rid of that
+awesome so this is pretty cool so yeah
+this is a match statement so basically
+we're looking for the case where
+conversation result matches this data
+type so we want to see success is true
+and then this is kind of magical we're
+saying give me a variable that is the
+cost out of this type right so that so
+that we can use it in this block context
+right in this block of code and we're
+doing the same thing for tokens right so
+you can see that this variable doesn't
+exist anywhere it's getting generated
+actually right here uh so kind of really
+interesting but yeah match statement
+really happy about this python 310 and
+above definitely recommend you check it
+out we can now pull our was successful
+statement up and out of these individual
+functions and just make the conversation
+flows more just about running right so
+let's go ahead and hop back here and now
+if we were successful I can go ahead and
+just print this here at the top and if
+we weren't I can move that here so I can
+say this orchestrator failed team and
+then we'll print the team and then we'll
+say that they failed so now thanks to
+the match statement and thanks to the
+new validator in our orchestrator we now
+know that our agent team successfully
+responded so let's go ahead and run this
+again just to validate that everything's
+looking good fantastic so as you can see
+here we got the new log orchestrator was
+successful team we now have the team and
+postard analytics team engineering costs
+3 422 tokens and we now have our clean
+where did that go agent conversation
+file here fantastic so lot more
+visibility right and a lot more
+confidence seems like small changes you
+know we're building out the
+infrastructure and the kind of system to
+build out more agenting system system
+right and this is really important I
+love autogen and so far it's been really
+great but what matters equally is the
+structures you build around your agents
+that allows them and allows you to build
+them out and understand if they're
+successful or not and you know quickly
+debug again keeping that feedback loop
+as tight as you can so this is great
+we're making some really solid
+improvements here so I want to make one
+more major Improvement to our system so
+right now our agents are let's go ahead
+and look at our agents the data analyst
+is kind of just running with whatever
+function that we specify here um from
+anywhere we have this database postest
+manager getting passed all the way in
+and although this works in in you know
+when we had our data visualization team
+we we have these like file writer
+functions although this works fine it's
+going to turn into a mess over time
+where you have agents calling arbitrary
+files arbitrary functions from all over
+the place and on top of that we're going
+to want our agents to be able to share
+information you know we have the
+database file here where we're
+generating this results. Json file maybe
+we want another agent to come in
+afterward and operate on this data right
+maybe we want to do some parsing do some
+random sampling Etc right there are many
+reasons and use cases you can think of
+that would really benefit from having a
+shared store for our agents to refer to
+not only a store but also place to call
+functions and a Consolidated unified
+place to set up and use explicit
+functions available to our agents so
+right now we're going to write the
+centralized class SL store that our
+agents can utilize as their Central Hub
+of operations we're going to call this
+instruments
+okay so let's look at our two new
+classes here you can see we have agent
+instruments and then we have a postgress
+agent instruments and if we dive into
+this Bas class here we can see we have a
+couple core python functions we have an
+initialize enter sync messages and we
+have this root directory the root
+directory now references a specific path
+in which our agent system can operate
+out of we now have the pointer to our
+agent file which uses the root directory
+notice that this is just a base class we
+now have the postgress agent instruments
+class which inherits from that and fills
+out more functionality so you can think
+of the agent instruments as a unified
+tool set for the specific use case of
+postgress data analytics multi-agent
+system right so couple advantages here
+all agents have access to the same state
+and functions this gives our agents
+awareness of changing context so we can
+now store you know in the init function
+here you can see we now have just
+information
+their agents can use when they're
+calling their functions right so we now
+have messages we have a session ID we
+now have any database connections that
+we want to store um but this is cool
+because it gives our Aller agents really
+clear and concise functionality now our
+run SQL function although it does call
+the underlying DB function we're now
+going to have our agents call and use
+just functionality in the instruments.
+py file right we now have that SQL
+results and this is our validator
+function on that top level we have our
+old data visualization function
+functions here and some new ones that
+we'll get to in future videos so this is
+pretty cool so if we now look at the top
+of our main function we now have two new
+things going on here we now building a
+session ID and this is just generating a
+random session ID we can now use this to
+separate our individual runs of our
+agent systems and now we're using our
+postgress agent instruments instead of
+just using our datab base we're now
+building out this kind of context system
+called the instruments that our agents
+can use so we saw have our database
+we're also pulling that out but if we go
+down here we can see that we're now
+passing this in to our build team
+orchestrators now we have agent
+instruments getting passed in and now as
+you can see that validate results is
+coming directly from our agent
+instrument so let's hop into the build
+team in order to build our agents we're
+now passing in the agent instruments
+right so now all of our agents in the
+data engineering team has access to
+everything in our postgress agent
+instruments class right you can think of
+this as like a reusable context system
+for your agent now our senior data
+analyst calls this instruments run SQL
+right and it comes right from the
+Instruments file and it's now available
+to any one of our agents might seem like
+a little bit of Overkill right now but
+this is going to be really useful when
+we're building out our systems and
+already I can show you a couple ways
+that this adds value to our system so
+let's go ahead let's just hop back to
+the top and rerun our system so let's
+run now I want to get all off users
+failed Okay so couple bugs here let's go
+ahead and fix these need to get give the
+prompt here go ahead and fix this bug so
+as usual our agents are generating the
+SQL and now we're going to run okay so
+it has no attribute closed let me go
+ahead and add this missing function to
+the database module here let's rerun
+okay great so now our agent ran
+successfully let's go ahead and look at
+how our Instruments file is helping us
+so we're going to add one more thing
+here when we build out our orchestrator
+we also want our orchestrator itself to
+have agent instruments inside of its
+scope for it to utilize so let's go
+ahead and just set that let let's make
+sure that's right we're going to call
+this agent instruments yeah we can call
+it instruments that's fine awesome so
+now the orbitor now also has access to
+the context in which all the agents have
+as well so let's go ahead and run this
+we can see that we have this new agent
+results directory and in it contains our
+agent chat and our run SQL results so in
+this case we got nothing let's see
+what's going on there so um us ID off is
+true and failed equals this so maybe
+this is a concrete result maybe there's
+really nothing to be returned here um
+let's go ahead and try um completed uh
+that have status completed so let's go
+ahead and run that but as you can see
+here we now have a kind of reusable
+system that storing our agent results
+from session to session right from run
+to run and this is going to be really
+valuable when you're comparing the
+before and after you want to see what
+went well on one run and what didn't go
+well on the other and so this system
+using the instruments building up
+specific file directory paths and I
+think specifically centralizing all the
+capabilities that your agents can run is
+going to be really important uh for you
+know again tightening that feedback loop
+understanding what your agents are doing
+being able to peer in the system so
+that's the value prop of the agents
+let's go ahead and watch this prompt
+complete and generate another you know
+session report for us all right let's
+take a look looks like it just completed
+let's take a look at our latest agent
+results session run we have the agent
+chat and we have our run SQL results if
+we look at our run SQL results you can
+see here we have looks like all of those
+users with our what was it completed
+status yeah Status completed awesome and
+if we dig into that session ID
+generation which is you know creating
+our agent result uh directory names uh
+it's pretty simple basically we're
+passing the we all prompt we are doing a
+little bit of just like number parsing
+using time to create more unique IDs
+pretty straightforward stuff in here
+we're removing spaces removing some
+quotes and then you know adding the
+these together uh and this has actually
+been updated since so this is going to
+be something like you know uh 22 33
+whatever it's hours minutes uh seconds
+there so that's how we end up with our
+top level agent names and this allows us
+to again just keep track of individual
+runs of our Asian pipeline so that's
+cool so kind of a heavy video um I just
+want to kind of dig in I really want to
+show what it's going to take so just to
+kind of recap you know the value of what
+we're building here we buil up a really
+simple way to view our agent
+conversation this allows for fast
+prototyping fast debugging fast
+monitoring and it's going to be
+critically important as we scale up our
+systems we're going to be referencing
+this file in future videos pretty
+regularly as we work through and build
+our systems and understand the
+conversation flow right right so we
+built out specific validator functions
+let's go ahead and open our instruments
+and look at these validator functions
+right so you want to know if your agent
+system is actually doing what it's
+supposed to do I think the best way to
+do this right now is to just concretely
+run a kind of self- validating function
+that you can run at the end of your
+conversation flow to just know that
+things are working and then lastly we
+centralize all the functionality from
+our agents into the instruments class
+and this allows for a single place for
+both the orchestrator and the Agents to
+pull and use functionality from right so
+we have the agent instruments here
+getting passed into the build function
+and we also have agent instruments uh
+getting used with the validator function
+we also have state that we can modify
+and use throughout the life cycle of our
+agents calling functions and operations
+happening while our agents are running
+the value of this is really going to
+show up as we keep building more complex
+systems so that's where we're at today
+guys I hope this video was helpful for
+you I hope you're starting to see where
+we can take this I hope you're like
+really kind of digging into what it's
+going to take to build out these fully
+agentic systems again just to
+reemphasize the goal of the series I
+want to give you the principles and
+patterns to help you build agentic
+software the endend state is fully
+parallel zero touch multi-agent systems
+that work on your behalf maybe you type
+in natural language you give them a
+prompt you give them something to
+research something to build something to
+analyze and they just go off they do it
+they produce the outputs and then
+they're presented to you in a really
+clean seamless way so what's next for us
+we're about halfway through the series
+so this is video five we're going to
+deliver five more videos and between now
+and our last video we're going to add
+new multi-agent systems to push our
+postgress data analytics even further I
+want to build out something where with
+our queries it's giving us new ideas and
+insights on our database that we haven't
+thought of so to do that we're going to
+need to build new agent teams we're
+going to need to build new conversation
+flows then we're going to finally get to
+putting our agent system behind an API
+and once our agent system is there we
+can build out a clean user interface to
+help us interact with our postgress
+database and our multi-agent system if
+that sounds interesting to you
+definitely like sub joined the journey
+we are on the path of becoming agentic
+Engineers we're trying to go to the next
+next level thanks for watching and I'll
+see you in the next
+one

@@ -1,0 +1,544 @@
+if you want to win any generative AI age
+you must have a vision with every
+release it's 100% clear anthropic has a
+vision so much Vision that they gave it
+to our computers with the brand new
+computer use tools by now you've already
+seen how the computer tool Works running
+on the new claw 3.5 Sonet let's go
+deeper and explore the less disgusted
+tools Engineers are sleeping on because
+it's not flashy and it's not cool at
+first glance but make no mistake the
+text editor and The Bash tool are
+critical infrastructure for asymmetric
+software engineering in the age of
+generative AI why because Engineers that
+fully control their terminal and their
+editor can ingest and synthesize
+information like no other I've wired up
+a proof of concept of these tools and
+have started putting them to work
+already let's walk through productivity
+gains you can get using these tools
+today and then we'll speculate on the
+question where is Claude 3.5 Opus I
+don't know if you've noticed but any
+mention of claw 3.5 Opus has been
+removed from anthropics Models page Why
+has anthropic completely removed any
+mention of it from their
+documentation so in this proof of
+concept you can see I have three classes
+here we have a logger we have the editor
+class and then we have the bash session
+let's go ahead and start start with
+anthropics new bash tools in the
+terminal I'm using astrals UV python
+package manager so I'll type UV run Main
+and then I'll specify my prompt so let's
+just start with something simple and
+work our way up I'll say list all files
+in current D tree form depth 2 and I'll
+use the mode bash so before we run this
+we'll open up the file explorer so you
+can just see a couple of files we have
+in this directory and now let's go ahead
+and run our tool
+so we have a bunch of information here
+let's go ahead and review the log if you
+open up sessions you can see a couple
+previous sessions here and now you can
+see our logging for this run so this is
+really interesting right we have our
+bash command logging everything that's
+happening and you can see our output for
+the tool run right so output for tree-
+L2 and remember I asked for list all
+files in the current dur tree form depth
+2 and that's exactly what we got we open
+up AI docs we have those files exactly
+and of course we have read me we have
+backup we have an app database that
+we'll look at here in a second we have
+our editor dur and then we have our
+images and of course we have these
+session dispatch tool converted our
+natural language command into the
+correct bash command let's go ahead and
+push this further let's clear and run
+another command so let's just add on to
+it right so we're on UV run main list
+all files Tre form depth 2 so just
+running that same prompt and then we'll
+say first five lines of the newest log
+file and let's make sure we get our D-
+mode bash so let's kick this off open up
+our file explorer you can
+see okay so let's check out our log
+let's see what we have now so you can
+see same as before or tree command Rand
+just as before right so we can see here
+the new claw 3.5 model is consistent
+that's good to see and now if we move
+down to our second command we can see
+here that plot is picking up on this
+command here right so it's saying here
+let's go ahead and collapse this now
+let's find the newest log file and read
+the first five lines you can see here
+there's some type of Chain of Thought
+some type of iterative process happening
+within claud's thought process it's
+thinking through what it needs to do to
+accomplish the next task we've given it
+now it's referring to the files in the
+sessions directory it's looking at our
+newest file and interestingly right the
+newest file is the file that's getting
+logged actively so it's getting a little
+meta here but what we end up with here
+is Claude properly printing out you can
+see here here's the actual run CLA is
+properly printing out its previous brand
+new messages and if we go ahead and
+search right first let's list all the
+files in tree form and scroll up you can
+see that line exactly I'm running
+commands in natural language and not
+only is Claude getting the order of the
+commands properly it's getting all the
+commands right you can see here we have
+our pricing calculations set up here so
+far no hiccups really impressed things
+are looking really good we are running
+arbitrary bash commands with a brand new
+bash tool let's just keep pushing this
+tool further so inside of this codebase
+I have this data app DB and this is a
+simple SQL light database with a single
+table inside of it so we can go ahead
+and see exactly what's in this SQL light
+database with
+3 we'll pass the path to this and then
+we'll say schema so you can see here we
+have a simple logging table so let's
+have the cloud bash computers tool
+modify this database let's go ahead and
+reuse the same command and I'll say
+using SQ light 3 update existing data/
+app. DB read schemas then insert these
+five lines in our SQL like database
+logging table okay so I'm giving it all
+the information it needs to complete
+this request without going through any
+of the Motions of actually writing these
+commands out myself so let's see how
+well this does here we'll fire this off
+and we'll load up that log file you can
+see it's running that tree command again
+let's go ah and get a refresh here you
+can see it is looking at the definitions
+right so this it's automatically looking
+at that right it ran that schema method
+and fantastic and it selected back out
+the rows here so you can see a summary
+here at the end of the log I have
+completed all the requested tasks listed
+files in tree form with depth two found
+and display the first five lines read
+the schema inserted five lines into the
+logging table and then verified the
+insertions okay you can see the pricing
+here that cost us a total of 4 cents
+mostly input costs right you can see all
+the input tokens from ingesting the
+relevant information to make the
+commands right we can search our output
+for observability is ultra important
+when you're working working with these
+tools I always like to start with a
+simple loging file and then progress
+from there we can just search these
+right you can see we have a total of
+four outputs tree- L2 let's go ahead and
+look at that next command ls-t sessions.
+log tar agent has read this content and
+now it's checking our sqlite database
+schemas right so you can see here
+executing bash command it's first
+reading in the database structure just
+like we asked and then if we scroll down
+you can see here now it's going to
+actually execute this statement this is
+not a trivial bash statement writing
+this command and then it's doing some
+wonderful said string parsing
+automatically for us grabbing those
+lines placing it inside our database
+then Claude is going back in and
+verifying that these items are in there
+right so we're saying select star from
+logging order by ID descending limit
+five and it's getting those items right
+back out and you know we can manually
+just go in and run this exact same
+command to verify because because you
+know with great logging again
+observability is really important you
+can always just backtrack and see what
+your agents and see what your prompts
+are doing so we're just going to
+literally copy paste to send and you can
+see there we're getting our new previous
+logging messages so this is really cool
+right if you want to you can also run
+this entire chain again with this-- no
+AGI flag and all this is going to do is
+it'll run and instead of actually
+executing the subprocess commands it
+will just return a mock response and
+that'll be fed back into the AI agent
+obviously it won't completely work
+because it's not running the real
+commands and it's not getting the real
+results but you know just a test you can
+pass in this flag if you want so that
+you know Claude doesn't fully take over
+your computer this is pretty incredible
+stuff we have a simple Loop giving
+Claude the space to call tools get
+feedback from the tool and then rerun
+the next command right so it's a really
+simple process of letting Claude in just
+a prompt and then it runs the llm
+decides what tool to run it passes us
+the tool we execute the tool and then we
+give the response back to Claude and it
+just repeats in that Loop and if you
+were to build a real application or a
+real agent around this what you would
+actually do is after you finish an
+execution you would simply create some
+type of human in the loop feedback the
+simplest version of this is to run a
+while loop or set up a personal AI
+assistant to control the history and to
+interact with you with voice commands
+right so that this Loop would continue
+you can also set up user interfaces to
+interact with this or any other
+[Music]
+agent so as always let's start simple
+you can see we have our editor directory
+here with this ping pong. text I'll say
+UV run Main and I'll pass in the prompt
+update pong to Ping in our ping pong.
+txt file okay and we'll run this the
+default mode is text so we can just kick
+this off you can see we're in file
+editor mode here and we should be able
+to see that value Kate update to Ping so
+that just happened in real time um you
+know we didn't do or say anything let's
+go ahead and just you know play with
+this a little bit add 30 more pings 30
+pongs ping pong. update okay so this is
+like the dumbest simplest thing we can
+do with this file but it's a good place
+to start right so we're just literally
+saying update this file in some silly
+arbitrary way okay great so now we have
+you know 30 ping 30 pong fantastic so
+let's do something more legitimate with
+this tool right we'll run UV run main
+write a detailed three use case document
+for llms to a LM use cases markdown then
+into three going into detail about each
+use case so here we have two highle
+commands that we want done right we want
+an original use case Doc and then we
+want Claud to break it up into three
+additional files so let's kick that off
+eyes on the editor directory here as
+Cloud's going to be generating these
+files for
+us okay you can see LM use case here we
+can hop into this and get a nice
+breakdown view here right content
+generation code development programming
+data analysis you can see content
+generation now has its own file very
+very nice right that is one of the goto
+use cases for llms and of course code
+development this is a big one and all
+all these documents are happening
+they're getting generated on the fly
+live and here's our data analysis that
+was really incredible let's go ahead and
+backtrack you can see the cost here that
+cost around 8 cents to fire off and a
+lot of this is the input tokens right
+after every tool call we're always
+passing back the response from the tool
+back into Claud right so that's going to
+see our our cost stack up over time
+let's go ahead and just break down the
+exact calls so if we search command you
+can see all the commands that Claud is
+running we should just have for create
+command and that's exactly what we have
+right so for create commands you can see
+all the content for every single
+creation statement you can see the exact
+path right we're always getting back
+this SL repo SL file and the SL repo is
+what you'll update or replace to be the
+true path that you're writing to so we
+update and replace that to be our editor
+dur that's configurable via an
+environment variable and you can see
+just like the bash tool the file editor
+tool is just doing all of this work for
+us right so you can imagine you're
+passing in a lot more important
+information and you're treating this
+tool like an agent I hope it's becoming
+really really clear what's happening
+with every video release we have on the
+channel every Monday we're getting
+closer to having these pieces of
+software that are operating for us and
+with this release anthropic is pushing
+us into the future with these
+opinionated domain specific set of tools
+to solve a specific set of problems now
+I hope that sounds familiar because it
+is we've been talking about on the
+channel when you canst prompts around a
+specific ific use case and you compose
+those tools that your prompt can call
+what do you get you get an AI agent this
+is where everything's going this is
+what's coming next AI agents are here in
+2025 they're going mainstream you're
+here early we're talking about this
+early get your hands on these tools and
+start utilizing these we can now craft
+arbitrary prompts pass any information
+we want to and instead of a text to text
+prompt what we're getting now is text to
+action prompt these are text to action
+prompts with bash commands and with file
+editing and with computer use our llms
+are starting to control things they're
+starting to manipulate things create
+read update delete they're modifying
+information they're running concrete
+commands that allow them to do more now
+my llm can operate on all of my files
+with and for me this is a huge huge deal
+this is why I wanted to emphasize these
+two tools because it's a great way to
+work up to where everything is going as
+an engineer the file editor and the
+terminal are critical tools for us and
+if you have agents operating in your
+terminal and your file editor for you in
+parallel to you you're going to get
+asymmetric Returns on your time so this
+is awesome let's go ahead and make a
+couple tweaks and just show off a couple
+other things you can do with this be run
+Main and we'll say read llm use cases
+right so we'll have it fire off it's
+read functionality then update
+to contain a mermaid
+diagram of the use cases and we'll say
+LR flow chart okay now we're going to
+read this file in right so this is an
+existing file it already exists and it's
+going to modify you can see there that
+modification came right in automatically
+we now have a flowchart right it
+ingested the file it reread the file and
+then it made a modification to it right
+if we go into preview mode here we can
+see our mermaid chart so now we're
+rapidly creating this documentation this
+markdown file you know this plan
+whatever you're working on you now have
+these agents to help you operate on it
+very very quickly it's so important to
+be wiring these tools up and to be
+keeping track of what's important this
+is an important tool the file editing
+tool and The Bash tool are Ultra
+important I'm going to be wiring these
+up in my CLI in Ada the personal AI
+assistant for engineering we've been
+building on the channel I'm going to be
+using and deploying these tools every
+single day so this code base is is going
+to be in the description for you to
+check out and to get yourself up and
+running with your text editor and your
+bash AI
+agents I want to hop back to the high
+level here and just discuss where things
+are going so you might have noticed
+these are just tool calls right there's
+actually nothing super sophisticated
+going on here at least not at first site
+right not at first glance what they're
+doing here is actually really
+interesting the value composition of
+these tools is that claw 3.5 Sonet has
+been fine-tuned to operate these tools
+very well what we're seeing with this is
+an interesting direction for model
+providers like open aai Google Facebook
+and anthropic to release sets of tools
+to perform specific tasks very well with
+a model fine tune to excel at their
+tools and I hope this sounds familiar
+these tool belts built to solve a
+specific set of problems s are
+effectively pre-baked AI agents we dove
+into the composability of prompts into
+AI agents in our previous video and it
+looks like we're right on track this is
+a great direction from a business
+perspective because now anthropic can
+build models and sets of tools that
+perform well on specific benchmarks and
+sell that tool belt as an AI agent so
+these companies are starting to turn all
+their work with llms into concrete value
+into concrete output they're saying
+fantastic we've built these next
+generation tools let's actually solve
+real problems with them and they're
+starting at a great place they're
+starting at the bottom level of where
+all software problems are solved the
+engineers tool belt these tools stood
+out to me right away for that reason
+text editor and Bash this is where
+Engineers live this is where great
+engineers get tons of work done quickly
+their computer tool obviously very
+flashy very cool great for RPA but the
+real world work for engineering happens
+with these two tools as a side note
+these companies are trying to create
+vendor lockin with their specific sets
+of tools and they're you know fine-tuned
+models that are built to use those tools
+well so keep your eyes on releases like
+this this is a trade-off and it's a risk
+we just kind of have to accept and the
+generative AI age because these
+companies are leading the way for what's
+possible this is fantastic I'm loving
+Claude 3.5 upgraded or clae 3.5 new
+definitely could named that a little bit
+better but that's old news what is
+interesting is the question where is
+Opus where is claw 3.5 Opus I always
+keep a close eye on the big three model
+pages and AMA to you know just kind of
+see where the models are what's going on
+and also I've referenced these documents
+a lot one thing I noticed right away
+during this upgrade and one of my
+favorite Engineers Simon Willison also o
+pointed out claw 3.5 Opus has been
+completely removed from their
+documentation what is going on why have
+they done this is Opus 3.5 off the table
+I have a couple ideas as to why
+anthropic removed it let's just walk
+through them and I want to get your
+thoughts on what you think is going on
+here so my first kind of prediction is
+that claw 3.5 Sonet is claw 3.5 Opus and
+they've just rebranded it although this
+model is a massive Improvement I don't
+think it perform forms like we would
+expect an opus 3.52 so they just
+rebranded it to claw 3.5 in a
+panic and you know this is not the most
+glamorous case you don't want a Top
+Model provider making strategic
+decisions like this but it's an
+interesting prediction I think this is a
+probably mid to low probability so you
+know maybe 10 to 30% possible the other
+prediction is that they just deleted it
+on purpose right they just got rid of it
+claw 3.5 is a great model with great
+speed great performance it follows
+instructions better than any model it
+writes the best and minus 01 preview it
+it's also the best for coding more on AI
+coding with these models and future
+videos Cloud 3.5 basically wins in every
+category this isn't really interesting
+case if they just simply delete it but
+then we have to ask the next logical
+question why did they delete it right is
+it a funding issue do they not have the
+compute or is it again is it just a
+positive strategic decision are are they
+just FOC focusing on one powerful model
+and one fast model right which is going
+to be 3.5 ha cou I don't really see
+anthropic being short on ideas and
+Innovation to push on and it seems more
+likely that it's just a decision that
+they made more than a funding or compute
+issue because they're firing on all
+cylinders right all public sources State
+anthropic performing really really well
+so the last case and this is the
+prediction that's the most grounded in
+reality is that they simply remove the
+documentation because it's just not
+ready yet I put this at like mid-tier
+probability they just need more time
+with it they're expanding it they're
+adding pieces of Chain of Thought or you
+know next level prompt chaining inside
+the model who really knows only they
+really know what's coming next on the
+Innovation side of things they're one of
+three leaders in model Innovation so
+only they really could know what's
+coming next to be fair though CLA 3.5
+Sonic is an incredible model especially
+after the upgrade so I'm not super
+worried about where 3.5 Opus is and if
+it comes out I'll be happy to see it if
+they move on from it and just go right
+to Cloud 4 that's fine too let me know
+what you think in the comments where do
+you think Claude 3.5 Opus has gone why
+is it not on their model page anymore so
+I hope you can see this theme AI agents
+are here in 2025 they're growing
+mainstream if you're here if you're
+watching this video you're here early
+it's time to capitalize as Engineers the
+question we must ask ourselves now is
+how quickly how much and how often are
+we deploying compute in our development
+workflows right now this takes the form
+of prompts AI agents and personal AI
+assistants these are the big three you
+need to be focusing your time and effort
+on if you want those asymmetric results
+follow the channel to stay locked in to
+what you can do with this incredible
+generative AI technology available to
+you stay focused and keep building

@@ -1,0 +1,1729 @@
+[0.2s] What's up?
+[1.5s] >> Hello. Hello. Hello.
+[4.1s] Um, give me a second. I'm gonna do one
+[5.9s] last thing and just post it over on
+[7.3s] general and then we'll be good. Good to
+[9.1s] go.
+[9.7s] >> Will you post it in my Discord, too? I'm
+[11.9s] lazy.
+[13.4s] >> AI that works today. Dynamic schemas.
+[17.0s] Send now. And then I'll post a create
+[19.8s] thread. Boom. I hope that is the guest
+[22.0s] invite link and not the other link. Let
+[24.6s] me delete this really fast. Delete. I
+[27.4s] think I sent the wrong link. uh people
+[29.9s] and then let me send invite.
+[33.4s] Yep, I definitely sent the wrong link.
+[35.0s] Audience copy.
+[39.1s] >> Did you invite them all to be co-hosts?
+[41.4s] >> Uh I did. I did. I went
+[45.6s] >> um you're Do you want to go post in your
+[47.4s] the human discord as well?
+[49.0s] >> Um yeah. Did you update the link?
+[50.9s] >> I did. Um you should see it. All right.
+[55.4s] Um with that, uh welcome everyone. Today
+[58.0s] we are going to do an episode that I am
+[61.3s] very very excited to go do which is all
+[64.4s] about how to do dynamic UIs and how do
+[67.8s] we build dynamic um systems where we
+[71.5s] sometimes don't know what the model is
+[73.4s] going to go do. So we'll give it a
+[75.5s] couple minutes and then we'll start in
+[77.6s] um we'll start pretty soon.
+[79.8s] >> Amazing. We need to get some like filler
+[81.8s] like uh background music for the for the
+[84.3s] lobby. Um, here. Let me put something up
+[86.5s] on up. Boom.
+[88.6s] >> Getso to do like a techno Mortal Kombat
+[91.9s] theme.
+[93.3s] >> Uh, dude, I This is music is sadly not
+[97.5s] my domain. So, we'll have to figure out
+[99.0s] how to get that going for you actually
+[100.7s] because I I have no idea how to pick the
+[103.1s] right songs or anything.
+[104.6s] >> When you just have AI generated, dude.
+[107.5s] >> Oh, maybe when we were making the
+[109.1s] YouTube videos at first um for our team,
+[112.6s] my team I started adding music
+[114.0s] everywhere. My team was just like, "No,
+[115.4s] stop."
+[116.1s] >> No, no music.
+[118.6s] >> Okay, we got some We got some MK fans.
+[121.3s] Oh, yeah. We could put on the Skyrim
+[122.6s] loading scene. That would actually be uh
+[125.6s] Someone was talking I saw on Twitter
+[127.0s] someone was posting like uh the uh
+[130.5s] Claude uh like while it's thinking or
+[132.7s] waiting or whatever it is. Just showing
+[134.6s] the Skyrim loading loading art while
+[136.6s] you're waiting for Opus to lo go take a
+[138.6s] long time to do whatever it's doing.
+[141.0s] How did I show this for like a minute?
+[143.5s] 20 seconds. There we go. Yeah. I think
+[146.3s] one also what's interesting this week is
+[148.1s] we didn't set the loom out this week. Uh
+[149.8s] because I was slammed for reasons that
+[152.1s] we'll say later, but
+[153.6s] >> Bob has some fun news coming.
+[155.7s] >> Yeah. But it it'll be interesting to see
+[158.6s] how many people actually go with Lumas.
+[160.9s] It sounds like it's a
+[163.2s] uh it sounds like it's definitely a
+[164.6s] thing they'll have to do more regularly.
+[166.9s] >> Amazing. All right. Um it's 10:05. Let's
+[170.0s] get started. This is AI that works, the
+[172.2s] show where we teach you how to take AI
+[174.2s] from demo and uh you know toy examples
+[178.8s] and build things that are actually
+[180.1s] production grade that work in the wild.
+[182.0s] I'm Dex. I'm the founder of a company
+[183.5s] called Human Layer. And we got Vibb
+[185.9s] here. I'll let him introduce himself.
+[188.1s] >> I'm the founder of a company that builds
+[189.7s] BAML.
+[190.2s] >> And today, you want to tell people what
+[192.0s] we're talking about today?
+[193.5s] >> Yeah. Um, I'm going to start off with
+[195.7s] just showing a demo that I've shown many
+[197.3s] many times that many of you may have
+[198.7s] seen before, but I I think one of the
+[202.4s] most important things that becomes
+[203.9s] possible with LLMs
+[206.2s] is something that I find uh personally
+[208.5s] very interesting, which is dynamic UIs.
+[211.8s] How do we deal with schemas that are
+[213.8s] totally dynamic, runtime defined when we
+[216.6s] don't even know the data that's coming
+[218.0s] in? So many of you have probably seen
+[221.6s] for example this uh invoice processor
+[224.2s] where we ask a model to look at this PDF
+[227.2s] and when it looks at the PDF it just
+[229.4s] looks at it comes up with a schema that
+[231.3s] models this PDF and then if we run that
+[233.8s] schema through an LM we can even get a
+[236.4s] really good response coming out of it in
+[238.6s] a way that I think is way more helpful
+[241.4s] than
+[241.7s] >> okay so this is actually generating
+[243.5s] dynamically like creating the React
+[245.4s] components based on the structure of the
+[247.1s] data
+[247.8s] >> well the react the act component is
+[249.0s] actually predefined. It's like a JSON.
+[251.0s] It's a way to render an arbitrary JSON
+[253.0s] object. And we just do a tabular view,
+[255.6s] but the steps that it's doing just to
+[257.4s] just to prove that it's not recorded. Um
+[259.8s] let's just because I think people don't
+[261.4s] always
+[263.2s] uh they're like, "Oh, maybe it's a
+[264.4s] recording." Like here's like a quick
+[266.2s] screenshot of my phone.
+[269.7s] And
+[271.7s] boom, there we have it. It should pull
+[274.0s] out the information right there. Um and
+[276.1s] it is. And if I zoom in a little bit, it
+[278.5s] should be a little bit easier to see.
+[281.7s] You can easily see exactly what the
+[283.4s] information has. It's 10:07. It's
+[285.8s] Tuesday, September 30th. There's a
+[287.4s] picture of a person standing on a beach.
+[290.3s] And there's some stuff over here about
+[292.9s] like notifications that seems to be kind
+[295.0s] of made up.
+[296.2s] >> Yeah, Joy Chef. I don't have that app,
+[299.8s] >> so I have no idea where it's coming
+[300.8s] from, but I'll have to check it out. But
+[302.0s] the point is like the model is able to
+[303.5s] go look at this and make some inferences
+[306.0s] around what's happening. And this all of
+[308.5s] this is happening through a two-step
+[310.2s] process.
+[311.9s] And we'll describe what that two-step is
+[313.6s] really fast by swapping over to the
+[316.1s] whiteboard. This step is really really
+[318.1s] simple.
+[320.2s] One second. I'm going to I'm going to go
+[322.5s] do Okay. Yeah. The step is actually
+[324.2s] quite simple. All we do is we take in
+[327.0s] some image that's defined by the model
+[331.4s] and we ask the model give this image I
+[334.1s] want you to uh model please take image
+[340.6s] and give me a schema and we ask it to
+[343.4s] model the schema back to us and this is
+[346.2s] literally a prompt that we will write
+[347.6s] that'll say hey give me this image give
+[349.0s] me a schema
+[350.7s] then what we do is we take that schema
+[353.6s] and we Okay, given the image, please
+[358.1s] take image
+[361.7s] and output
+[363.9s] schema. And I'll put this as variable so
+[366.1s] it's a little bit easier to see. And
+[367.7s] that's literally all the system is. You
+[370.2s] take the same image, you take the same
+[371.7s] schema, and then in theory, you should
+[374.6s] get out a filled out schema.
+[378.2s] >> So that's like a big JSON object
+[379.9s] basically
+[380.6s] >> of some type. Exactly. And ideally the
+[382.9s] type is defined over here. And I think
+[385.2s] this while this concept is really
+[387.7s] simple, I think it's one of the most
+[389.8s] powerful concepts that becomes possible
+[391.5s] in the world of genai in a way that very
+[394.5s] very very few things can do.
+[397.4s] Specifically um specifically when I go
+[401.1s] look at it, this sort of concept what it
+[404.6s] can do for us is it can really and give
+[408.0s] me a second. Let me just like this out
+[410.0s] here. So then we have another screenshot
+[411.5s] to have. What it can do for us is it can
+[414.4s] and I'll give you the screenshot of the
+[416.2s] schema as well that comes out of it.
+[418.7s] >> Yeah, if you can if you can pull the
+[420.5s] schema and also like can we get the JSON
+[422.7s] object that is being used to render that
+[424.7s] thing?
+[425.8s] >> Um I don't know. Let me see if that
+[427.8s] button works. No, it does not work. So I
+[429.6s] cannot give you that. Sorry.
+[430.9s] >> Can you get it from the Chrome console
+[432.3s] or something or No,
+[433.5s] >> it's fine. Keep going. Okay. But I think
+[435.5s] the whole point is if you can define the
+[437.1s] schema really well, then you can
+[439.3s] actually have the model go output this
+[440.9s] stuff for you. And I think the reason
+[442.5s] that this is such a foreign concept is
+[444.2s] most people have never done this in
+[446.2s] regular software. But if you've ever
+[448.2s] built some sort of like if you've ever
+[450.2s] built like let's say a form builder or
+[452.7s] if you've ever built a um
+[456.0s] or if you've ever built like a uh
+[458.1s] templating engine of some kind, you've
+[460.3s] done this. This is basically just meta
+[462.1s] programming. You're having the LM do
+[464.2s] some of the program. You're trying to
+[465.7s] have the LM do the programming so you
+[467.5s] can program you can run that program
+[470.2s] later.
+[472.3s] >> It's like uh list lisp reader macros all
+[475.3s] over again.
+[476.8s] >> I am actually have no have no idea about
+[479.0s] list so I can't actually uh comment on
+[481.6s] that. But I think the premise here is if
+[484.2s] you can go do something like this, you
+[486.6s] can then take this to the next level and
+[489.1s] say that what you could do is given the
+[492.1s] schema I want to build a third component
+[495.4s] here
+[497.1s] which is
+[499.0s] I can ask a different question which is
+[500.8s] which is given the schema give me a
+[504.3s] react component
+[507.1s] to render it
+[509.9s] and in this case take the thing as an
+[512.6s] input over here and actually you can
+[514.3s] make this component and now you can take
+[516.5s] this plus this and now you have a pretty
+[519.4s] render you could theoretically have a
+[521.1s] pre-rendered view of the schema as well
+[523.5s] that isn't like a hard-coded view like
+[525.2s] the one I'm showing you right over here.
+[526.7s] So I think the whole premise of meta
+[528.9s] programming here just opens the world in
+[531.0s] general to a whole new set of
+[532.7s] possibilities that were never going to
+[534.7s] be possible for most applications. We
+[537.4s] just saw Anthropic release something
+[539.0s] like this uh in their most recent
+[541.0s] application where they said, "Hey, you
+[543.3s] can just press the button and if you
+[545.4s] press the button then um it will work
+[549.0s] and you can actually go see um you can
+[551.8s] actually go see a custom UI for their
+[553.4s] new application." This is basically what
+[556.2s] they're roughly what they're doing. You
+[558.6s] take a schema, you ask the model to
+[560.9s] render the schema, and now you have a
+[562.5s] really pretty view of the schema. And if
+[565.3s] you do it this way, you can build
+[566.4s] dynamic interactions on top of it. You
+[569.4s] can build um more data like data
+[572.9s] legibility in general because rendering
+[575.2s] is just going to be prettier than this
+[577.9s] arbitrary JSON blob.
+[580.5s] But you can also do other things like
+[582.5s] you could give a person a human loop
+[585.5s] step that says
+[588.2s] when I'm doing the schema right over
+[590.0s] here before I do anything else I can
+[593.2s] just do a really quick human review
+[596.0s] where before I actually do anything with
+[597.4s] the schema I can do a quick little loop
+[600.1s] to make sure that this thing is actually
+[601.4s] good. Okay, so that would be basically
+[603.1s] taking the human feedback and like if we
+[605.7s] were to extend this out, you can just
+[607.4s] get the schema or you can take the
+[609.7s] schema, send it to a human and then
+[612.6s] basically pipe that back into the same
+[614.6s] prompt again with the human feedback
+[616.5s] until it's basically approved
+[618.6s] >> or just let the human edit it
+[620.1s] themselves.
+[621.8s] >> Okay?
+[622.6s] >> Right. So there's so much you can do
+[624.5s] here that I think makes it really just
+[626.8s] makes this whole domain of like dynamics
+[629.4s] email generation so fascinating. I mean
+[632.6s] Type form if you've ever seen Type Form
+[634.8s] uh which is like basically a form
+[636.2s] builder app makes so much money because
+[639.4s] of how pretty they made making schemas.
+[641.8s] That's all they did under the hood. They
+[643.5s] I mean they do obviously do a lot of
+[644.7s] stuff and I'm oversimplifying but one of
+[647.1s] the things that they definitely did in
+[648.4s] the very very beginning is they made it
+[650.7s] stupid easy
+[652.8s] to build a lot of um to build a lot of
+[657.0s] schemas on the fly so that what you can
+[660.0s] end up doing is you can just have really
+[662.3s] pretty forms without having to do any of
+[663.8s] the muckery around it. And I think with
+[666.3s] the world of LMS you can now do this for
+[668.0s] any problem all the time. Let's talk
+[670.6s] about it. First of all, I I'll talk
+[672.8s] about a little bit more complexity we
+[674.0s] can add in a second, but what's your
+[675.3s] first thought, Specs?
+[676.5s] >> Type T type form is a really interesting
+[678.2s] example. I'm I'm curious what you're
+[679.7s] going to use to demo this, but I I mean
+[681.3s] I I like the way this builds
+[684.5s] incrementally of like look, you can just
+[686.6s] do the schema and then you can look at
+[688.3s] that and you can do something with it.
+[689.4s] And then you can say, cool, here's the
+[690.6s] schema and the image. Give me the JSON.
+[692.5s] And then you can write your own React
+[693.8s] component to render it. Or you can say
+[695.8s] like, okay, cool. look at the thing, get
+[697.3s] the schema, build a React component for
+[699.2s] the schema, do the extraction, and then
+[701.5s] do a custom rendering. And what's nice
+[703.0s] about this is these are all kind of well
+[705.1s] modeled as individual parts of the
+[708.2s] workflow that can be tested
+[709.5s] independently. you can get the first
+[711.8s] part working and and verify that on
+[714.0s] fibes or like actually like spot
+[715.8s] checking or writing real tests and then
+[717.4s] you can slowly build up to something
+[719.4s] really really cool which I think is
+[720.9s] especially if you're newer to doing AI
+[723.2s] engineering and doing context
+[724.4s] engineering I think um is a really
+[727.0s] really valuable pattern to think about
+[729.3s] when you're building right like if you
+[730.6s] showed me that webcam demo of like hey
+[733.0s] here's here's my phone build me a
+[734.7s] dynamic table I'm like I have no idea
+[737.3s] how the heck to build that so I like I
+[739.4s] like the way this is laid out um what
+[741.5s] were you thinking about kind of like as
+[743.4s] a demo use case today because obviously
+[745.1s] we already have the the extractor thing
+[747.5s] working but like what have you have you
+[749.5s] thought about like what would be the
+[750.6s] best way to like demonstrate this live.
+[753.1s] >> Yeah, I have been. And let me just put
+[754.9s] this over here by the way just so people
+[756.2s] know what phone what photo we used. Uh
+[758.7s] >> you can put that over my shitty
+[760.2s] handdrawn image of a sun and a cloud.
+[762.8s] >> Uh let's put it over here. Maybe I think
+[765.1s] I want to I want to talk about a couple
+[766.6s] of things. I think what I'm going to do
+[768.4s] is probably walk through this actual
+[770.3s] code
+[772.2s] um and just show people what this code
+[774.1s] ends up looking like uh firstly like
+[776.7s] even the most basic part of like how do
+[778.2s] you even go from like ask the model to
+[779.8s] generate a schema what kinds of schemas
+[782.0s] work well what kinds of schemas work
+[783.5s] poorly talk about how to do actual
+[786.9s] streaming over here and like how how do
+[789.3s] I get it to stream because that's a
+[790.7s] whole different problem talk about what
+[792.7s] it takes to render the schemas and
+[794.2s] different ways of doing that and then I
+[796.1s] think if we get to it. I'd love to do
+[797.4s] the React component stuff as well and
+[799.0s] show how to go do that.
+[800.6s] >> But even in the rendered UI, there's so
+[803.8s] much capability that can go into this of
+[806.9s] how to make this possible. So, I'm going
+[809.5s] to try and take it step by step and make
+[811.3s] sure that we're really detailed in this
+[813.8s] walkthrough cuz like the fundamental
+[815.6s] building block of hey model, design me a
+[818.3s] schema and then what can I do with the
+[819.8s] schema is super powerful.
+[821.8s] >> Uh there's a question real quick. What
+[823.1s] do you mean? What do you guys mean by
+[824.2s] getting a schema from the image? It's
+[825.8s] it's a good question um that we should
+[827.7s] probably make sure is super clear before
+[829.2s] we
+[829.6s] >> emphasize this really fast. I'll use a
+[831.2s] different example that we've been using
+[833.0s] uh that I've been working on.
+[836.5s] I'll I'll use um like over here I'll
+[838.6s] just start an app. So over here let's
+[840.0s] say I have an app. I'm going to upload a
+[841.4s] file.
+[843.4s] I will upload a
+[845.9s] file that's like um me and Dex or like
+[849.3s] this one.
+[851.1s] Uh why not? Let's do some meta uh meta
+[854.2s] theming here.
+[856.7s] LM to do. Go ahead, Dex.
+[858.3s] >> Yeah. No, that's what I was going to
+[859.3s] say. So, when we say generate a schema
+[860.7s] from the image, it's not, hey AI, turn
+[863.4s] this image into data or turn this into
+[865.1s] text. It's a little more meta. It's
+[866.7s] saying, hey AI, can you tell me if you
+[870.2s] were going to extract data from this,
+[873.0s] what would the schema for that be? And
+[875.5s] this is like a really interesting flavor
+[877.2s] of of context engineering where you're
+[879.4s] using AI to generate something that goes
+[881.5s] into then a downstream prompt. People
+[883.8s] have been doing this for years. The
+[885.0s] original agent was like, "Use one LM
+[887.0s] call to make a plan and then use another
+[888.8s] LLM call to execute it, right?" This has
+[890.8s] been around since 2023 in the early days
+[892.9s] of Chat GPT. Um, this is a lot more kind
+[896.6s] of like structured and and
+[899.5s] you know, you're but how do I say it? I
+[902.6s] don't know. Help me out here.
+[903.5s] >> Um, Eugene has actually got a couple
+[905.3s] questions. I'm going to let Eugene in uh
+[907.0s] really fast. Hey Eugene, come on in.
+[910.6s] What? Uh, and while while Eugene loads
+[913.4s] in, I'll just I'll just articulate what
+[915.4s] I think Dex was saying.
+[917.0s] >> Thanks.
+[920.2s] >> Oh, sorry, Eugene. Uh, can you not
+[922.2s] screen share really fast? I'm going to
+[923.7s] turn this off.
+[924.5s] >> Of course.
+[925.0s] >> Sorry.
+[927.1s] >> Do you have a I'm going to go back to
+[929.1s] screen sharing the
+[930.2s] >> Yeah, let's let's let's let's double
+[931.6s] down on kind of like how Yeah. How do
+[933.1s] you get a schema from an image? Um. Yes.
+[935.1s] And yeah, what's what's what makes this
+[936.9s] more advanced than the, you know, make a
+[938.9s] plan and then execute it is that we're
+[940.9s] not passing something into the prompt
+[942.6s] itself.
+[943.1s] >> Of course. Um, I'll let you guys finish.
+[945.3s] Sorry.
+[945.7s] >> Okay. Seems like there's a little lag.
+[947.5s] >> In a second. Let me I think there's
+[949.4s] We're probably not very good at this.
+[951.2s] >> Um, I'll kick you out for a second. I'll
+[952.7s] invite you maybe in a bit when we're uh
+[954.8s] when we're back. Sorry, Dex. I don't
+[956.6s] know how to get someone out of here. Um,
+[958.2s] if you can do that.
+[959.4s] >> I'll autogenerate.
+[961.6s] >> Sorry about that.
+[963.4s] Let me describe the schema thing really
+[964.7s] fast.
+[965.6s] >> So in this schema thing, what we did is
+[967.2s] we asked the LM to say, hey, given this
+[969.3s] image that I have over here, define a
+[972.0s] schema. And the model said, okay, well,
+[973.7s] here's a schema that I have associated
+[975.1s] with this class dog. There's a bandana
+[977.3s] in there. So I'll model the bandana.
+[978.9s] I'll model some socks. I'll say that
+[981.3s] there's a background over here. There's
+[983.4s] an image description of some kind. And
+[985.4s] then the thing that I want to give back
+[987.4s] because defining schemas is not
+[989.0s] sufficient. Not only do I have to define
+[991.0s] a schema, I also have to tell you what
+[992.6s] about the schema do I want back. I want
+[994.2s] an image description back.
+[997.1s] So there's basically a two-party problem
+[999.3s] here when I generate schemas of any
+[1000.7s] kind. One, I have to model every single
+[1002.3s] schema. And then I also have to give me
+[1004.2s] the type of the thing I want back. So in
+[1006.9s] this case, I just ask the LM to go and
+[1008.4s] do that for me. And once it does that
+[1010.5s] what I can do is I can just say okay now
+[1013.1s] given this image run this code and ex
+[1016.2s] and return this type back to me image
+[1018.3s] description which is described down
+[1019.7s] here.
+[1020.4s] >> So instead of the model having to think
+[1022.5s] about one what data is interesting and
+[1025.3s] what shape should it have and also what
+[1027.0s] are the values for that data. You're
+[1028.6s] kind of separating the work into two
+[1030.6s] separate tasks basically.
+[1033.0s] >> Exactly. And now when I go run this,
+[1037.0s] what I can do is I can run this code
+[1038.6s] that I generated and the model should in
+[1040.8s] theory uh it's always in theory because
+[1042.8s] it's AI. Um but it should in theory
+[1046.3s] print out all the information I want
+[1049.0s] right over here. So it actually print
+[1050.6s] out all the stuff where it actually says
+[1052.9s] colors are pink, blue, and red
+[1055.7s] um for type for the dog as well. I can
+[1059.5s] print out render the JSON view. I can
+[1061.5s] render the YAML view. I can render a
+[1064.3s] view that I define as pretty. That's
+[1066.4s] just like nested objects.
+[1068.3s] >> Feel like I feel like there's a lot of
+[1069.7s] purple going on in your your your your
+[1071.9s] definition of pretty.
+[1073.2s] >> Honestly, I think you you tell any model
+[1075.3s] to generate code, it just says purple.
+[1078.5s] This actually isn't my choice.
+[1081.1s] I promise.
+[1082.6s] >> Um Javier would like to see the two I
+[1084.7s] mean this code is open source, right?
+[1086.2s] But can we quickly look at the prompts?
+[1088.2s] really fast. We'll walk through the code
+[1089.6s] in a couple seconds because this code is
+[1092.5s] fully open source. It's going to be in
+[1093.6s] the AI that works repo so you'll have
+[1095.2s] access to it as well. Um, but all this
+[1098.2s] stuff is to say that like once you have
+[1100.0s] this, there's just a couple kinks you
+[1101.7s] have to do to iron out like you have to
+[1103.9s] figure out how to do streaming. Turns
+[1105.4s] out streaming is actually kind of
+[1106.6s] annoying with these dynamic UIs. But the
+[1109.6s] next step you can do here, if you go
+[1111.4s] back to our whiteboard,
+[1113.9s] is you can really just go and I'll take
+[1116.2s] a screen. Dex, if you can take the
+[1117.8s] screenshots and put them back over here,
+[1120.1s] I'll take the screenshots in a few
+[1122.0s] seconds. But if you go back problem of
+[1124.3s] what we're doing is all we did is we
+[1126.1s] said, "Hey model, tell me the schema."
+[1128.5s] >> Um, and I guess there's technically one
+[1130.8s] more thing that we added with the
+[1131.9s] schema, which is not just the schema,
+[1134.1s] >> but schema plus return type.
+[1138.2s] And the reason the return type is
+[1139.8s] important because as you saw in the
+[1141.3s] previous example, one of the things that
+[1143.7s] we did here is we did generate quite a
+[1146.6s] few schemas. Technically, there's many
+[1148.5s] schemas here and we just have to know
+[1150.8s] which of these schemas we actually want
+[1152.4s] to return as the top level.
+[1153.9s] >> Ah, okay. So, this is like when you're
+[1156.3s] doing a swagger or open API spec, you
+[1158.8s] have all your object definitions, but
+[1160.4s] then each endpoint has to specify, okay,
+[1162.6s] which one of those does this thing
+[1164.2s] return? So you need to tell it okay
+[1165.5s] which of those things is actually the
+[1167.0s] top level
+[1168.2s] >> or you might just return an array as a
+[1170.2s] top level object too right so you might
+[1172.2s] say I want to return an array and now
+[1175.0s] the model's going to return an array as
+[1176.7s] your top level object
+[1178.1s] >> with one with one item in it but yeah
+[1180.0s] okay cool
+[1180.9s] >> yeah exactly but I think all this is
+[1182.7s] really really highly dependent based on
+[1185.1s] the actual problem that you're solving
+[1186.7s] so like that's why the return type
+[1188.2s] matters because you can't just say that
+[1190.3s] hey I want to go generate a schema you
+[1192.8s] also have to say what is a return type.
+[1194.6s] So, but once you have solved that
+[1195.9s] problem, then you have a second problem
+[1197.8s] which is now you just take that schema
+[1199.2s] and return type and you uh you ask the
+[1201.8s] model
+[1203.6s] u return type to say hey given that same
+[1206.5s] image that I took the image of that I
+[1208.3s] used to determine the schema go return
+[1209.8s] the return type. Now there's a lot of
+[1212.9s] layers of complexity that you can do
+[1215.0s] over here to make this a lot better.
+[1216.6s] Like for example, you could say that you
+[1218.3s] save your schemas in the database. So
+[1220.6s] instead of actually asking a model to
+[1222.2s] generate, you're like, hey, if an image
+[1223.9s] looks like another image from before,
+[1226.1s] return the same schema that I have saved
+[1227.8s] in my database. Don't ask a model for a
+[1229.5s] new schema. So that adds a little Go
+[1232.1s] ahead.
+[1232.9s] >> No, I was going to say, um, just
+[1234.3s] quickly, do you want to try to get
+[1235.4s] Eugene on? I know there's a little bit
+[1236.9s] of a delay,
+[1239.0s] so we might want to do
+[1240.3s] >> I'll do that in a second if that's
+[1242.0s] >> okay.
+[1242.6s] >> Uh, Eugene, do you want to type out your
+[1244.0s] question and then we'll get you in
+[1245.0s] there. Cool. Uh, thank you. Um, so what
+[1248.6s] you can do over here is you can actually
+[1250.6s] go and build a lot of like stability in
+[1252.6s] here because one of the risks with
+[1254.2s] dynamic schemas is your stuff is
+[1256.7s] constantly changing and if it's
+[1258.6s] constantly changing that is a superpower
+[1261.8s] but depending on the use case can also
+[1263.4s] be a super weakness.
+[1265.0s] >> Right? You may want to bake these,
+[1266.2s] right? If you if you go process a
+[1268.5s] hundred you know car loan applications
+[1270.9s] or whatever it is at a certain point you
+[1272.9s] want to be extracting the same thing
+[1274.2s] from every every one of those.
+[1275.4s] Otherwise, you just have a bunch of JSON
+[1277.2s] in your database rather than like
+[1278.6s] structured columns.
+[1280.2s] >> Exactly. And like I think the beautiful
+[1281.9s] part about doing this stuff in such a
+[1283.6s] nice way is technically we're using a
+[1286.2s] model to solve this problem, but there's
+[1287.7s] nothing that says that this model please
+[1289.4s] take as image and give me a schema is
+[1291.8s] actually a model problem. That could be
+[1294.2s] a thing that says hey load these schemas
+[1295.9s] from my database.
+[1298.0s] Uh and then give me the schema and then
+[1299.6s] ask the model to extract the schema from
+[1301.2s] that image. And maybe we initially seed
+[1304.8s] it with a datab with a schema generated
+[1307.0s] by a model, but really it's a human
+[1308.5s] process that goes and edits it along the
+[1310.3s] way. And all of these are really use
+[1312.3s] case specific, but the premise that we
+[1314.4s] have a schema that we save in our
+[1315.7s] database that we then load and like
+[1317.7s] rerender stuff with or extract data with
+[1321.5s] is like one of the most common use case
+[1323.4s] for LLMs. And I think most more people
+[1326.0s] should definitely be looking at it along
+[1328.2s] the way. But with this, I want to get to
+[1330.9s] some code. Eugene, if you have your
+[1332.8s] question, feel free to type it out and
+[1334.0s] then we can talk about it in a second uh
+[1335.8s] along the way. But hopefully that gets
+[1337.9s] everyone a really good concept around
+[1339.5s] what we're going to be doing today.
+[1341.0s] Cool. Let's do it. I'm going to pull up
+[1344.5s] cursor.
+[1346.3s] >> Let's write some dang code. I'm really
+[1348.6s] excited to see the uh the dynamic React
+[1350.6s] component thing.
+[1352.8s] >> I agree. I have been actually playing
+[1355.4s] around with that. So, I hope I can make
+[1356.7s] it worthwhile everyone's time. Looks
+[1359.0s] like Eugene just had something you
+[1360.6s] wanted to show off in a time boxed
+[1363.0s] window.
+[1363.8s] >> Oh, let's do that at the end then,
+[1365.4s] Eugene. Um, well, we'll we'll get you on
+[1369.0s] towards the end during the extra time
+[1370.3s] once we've actually shown off all the
+[1371.6s] code.
+[1372.6s] >> I think that's good. Sorry for the false
+[1375.0s] start, dude.
+[1376.0s] >> Yes, I apologize as well. Um, cool.
+[1380.9s] I'm just gonna screen share my code.
+[1384.4s] Share cursor. Can you folks see VS Code?
+[1388.3s] Perfect. I'll try and make it pretty
+[1389.9s] big. Um,
+[1392.4s] and I'm going to start off with just the
+[1394.7s] prompts to show what it is. There's two
+[1397.6s] prompts here. One is called generate
+[1399.9s] BAML, one is called execute BML. I'm
+[1402.2s] going to start off with generate BAML.
+[1403.6s] This is all about schema generation. So,
+[1406.1s] what I do over here is I say that I'm
+[1409.8s] first going to define the function
+[1411.1s] signature of the thing that I'm looking
+[1412.6s] for along the way. Let me just make my
+[1415.2s] chat window correct size second. Okay.
+[1419.4s] Um, cool. And this function is just a
+[1422.6s] thing that says I mean I'm this function
+[1424.6s] will either take in a string, it'll take
+[1426.6s] in an image, it'll take in an audio or a
+[1428.9s] list of images and then it'll return a
+[1432.2s] schema object out of it. A schema object
+[1435.4s] is defined as an object that has a
+[1438.3s] couple of fields. It has the interface
+[1440.5s] code. It has the return type and then
+[1443.0s] like some other code associated with
+[1444.6s] this. I'll talk about why I did other
+[1446.4s] code in a second. It was just a prompt
+[1447.9s] engineering hack.
+[1449.9s] Um, and then I just do some prompt
+[1451.8s] engineering here telling it to just not
+[1453.9s] worry about escape characters because I
+[1455.5s] found a schema is better. So I just told
+[1457.2s] it answer with back text to prevent
+[1459.8s] escape characters and that worked really
+[1462.2s] well when I was generating code for me.
+[1464.5s] >> Okay. So quickly question. Um, this is
+[1468.2s] you're having it output BAML code
+[1470.9s] specifically. I've also seen examples of
+[1473.2s] this where you just output like a JSON
+[1475.0s] schema style thing as well, right?
+[1477.1s] >> I have seen that, but I actually
+[1478.9s] specifically found that the reason that
+[1480.3s] outputting BML code works a lot better
+[1482.4s] is
+[1483.0s] >> well, there's less syntax, right? Or the
+[1485.0s] syntax is easier for models to write.
+[1487.8s] >> Yeah. So, I'll I'll just give a quick
+[1491.2s] primer over here. Um, screen share. How
+[1494.0s] do I screen? I can't switch screen share
+[1495.5s] very easily. Hide. Stop screen share
+[1499.4s] again.
+[1500.9s] Uh I'm just going to share my whole
+[1502.2s] screen. So please don't um steal any API
+[1505.0s] keys. Um
+[1507.1s] >> yeah, we're no longer on Zoom. We're no
+[1509.0s] longer on uh AI that works circle of
+[1511.6s] trust. We're on open internet. Hide your
+[1515.4s] keys. Hide your wife.
+[1516.8s] >> When we just look at JSON schema for
+[1518.3s] example, if I want them, if I want
+[1519.9s] something to be represented as string
+[1521.3s] array, this thing is 23 tokens in JSON
+[1523.3s] schema. I can just output string array.
+[1526.0s] It's just way less tokens for the model
+[1527.8s] to say that it wants a string array for
+[1529.4s] some field. If it wants like if it wants
+[1531.3s] to say something is like um like uh
+[1533.8s] what's it called? If it wants to modify
+[1535.5s] it from like a string string string in
+[1537.7s] string to like string array in array,
+[1540.1s] zero token change. If you want to say
+[1542.5s] something is required, this is just 73
+[1545.4s] tokens to say stuff is required. Like
+[1547.1s] same field, 23 tokens for the same data
+[1549.1s] model. and it even snuck in some extra
+[1551.8s] metadata about like what this is in ISO
+[1553.8s] format. So it's just that JSON schema is
+[1556.2s] just extremely verbose. So I have found
+[1559.1s] historically that I get way worse
+[1560.7s] results when I use JSON schema than when
+[1562.9s] I just like have it output something
+[1564.7s] that looks way more like code along the
+[1566.3s] way.
+[1567.8s] >> Okay, cool. What else? What let's what
+[1570.5s] else? What other what other code prompts
+[1572.0s] you want to show?
+[1573.2s] >> Um so cool. Uh and then I want to talk
+[1576.2s] about well I want to talk about the
+[1577.3s] actual prompt. So what is the prompt?
+[1578.8s] Well, I loaded it up to generate BAML
+[1580.4s] scheme. I'll give it this context. I
+[1581.7s] give it some background about BAML. I'll
+[1583.0s] show what that is in a second. And then
+[1584.8s] I just ctx that output format and then
+[1587.2s] say here's the content. That's it's a
+[1589.4s] really really simple prompt. Think I
+[1591.6s] should have some test cases here too.
+[1593.7s] Um, but I'll show what the BAML
+[1595.7s] description is. It's literally about
+[1597.1s] like how many lines of code is this?
+[1599.5s] It's like roughly around Oh, it doesn't
+[1601.9s] tell me. It's like roughly around like
+[1604.8s] 30 lines of code or 40 lines of code
+[1606.6s] that describe 50
+[1609.0s] >> 60 lines of code that describe all of
+[1612.2s] BAML syntax. And like I just described
+[1613.8s] the very basics of like here's a class,
+[1616.3s] here's how you do nesting, here's how
+[1618.0s] you do enums, here's how you do
+[1619.3s] literals, etc., etc.
+[1621.1s] >> This is your cursor rules for BAML. If
+[1623.4s] you if you wanted if you wanted cursor
+[1625.0s] rules for writing BAML, this is probably
+[1627.2s] what should get injected into every AI
+[1629.1s] prompt when you're coding, right? And
+[1631.4s] then I said I said the most important
+[1633.2s] thing. It's pretty much like TypeScript
+[1634.4s] but what one difference. There's no cool
+[1635.8s] ones. Uh that was a mistake on our end.
+[1638.3s] We'll fix that later. But um that's
+[1640.2s] about all we do. And once we tell the
+[1642.3s] model that then we just like try it out
+[1644.2s] on a bunch of prompts. And the prompt
+[1646.3s] that I tried out is just like simple
+[1647.7s] resume example. I just go run this and
+[1653.3s] it pretty much dumps out the code really
+[1655.2s] really well.
+[1655.9s] >> Sorry. The input is just this text
+[1657.9s] string of your resume. will you scroll
+[1659.5s] up scroll up and just show that one more
+[1660.9s] time or like yeah make that visible. So
+[1663.1s] it's literally just a markdown of your
+[1665.8s] resume and so it's looking at this and
+[1667.8s] it's saying cool if I was going to turn
+[1670.2s] this into a structured object what would
+[1671.8s] the fields in that object be and then
+[1673.5s] that's the schema we have at the bottom.
+[1675.6s] >> It's right here. So it's like person
+[1677.3s] full name email experience skills and
+[1680.3s] that looks pretty reasonable given this
+[1682.0s] resume.
+[1683.8s] Um, but what I and position has like
+[1686.5s] company title and is current, which is
+[1688.2s] kind of fascinating how like that it
+[1690.5s] decided to add is current in there. But
+[1693.1s] what I think what I found is like the
+[1695.7s] reason that I added other code and
+[1697.8s] you'll notice that the LM actually did a
+[1699.1s] pretty good job of back tick and like
+[1700.9s] outputting the schemas correctly and
+[1703.0s] then even over here I was like, oh,
+[1704.4s] maybe I'll add some other code is when I
+[1706.5s] didn't have the other code example, it
+[1709.1s] actually started putting like logic in
+[1711.0s] the code and started being like this is
+[1712.2s] how I want to call it. this is what I
+[1713.4s] want to do with the schema and start
+[1714.6s] doing a lot more than it needed to along
+[1716.3s] the way. But once I started restricting
+[1719.0s] it to interface code, return type, and
+[1722.3s] other code, then it anytime it did dump
+[1724.4s] out stuff like other code, it just put
+[1726.0s] in other code. I didn't care.
+[1727.8s] >> I see. So you're using the field names
+[1730.3s] to basically steer the model as to okay,
+[1734.4s] put the interface and the types in one
+[1736.1s] place. And if you find the need to say
+[1738.7s] anything else, put it over here. I'm
+[1740.4s] just going to ignore it. But you give a
+[1741.8s] model a dumping ground for like, hey, I
+[1743.6s] want to write an if if statement or a
+[1745.2s] while loop or something.
+[1746.2s] >> Exactly. Exactly. Because I found for
+[1748.8s] nothing.
+[1749.9s] >> Fascinating. That's a really cool topic
+[1751.7s] that I or like concept technique that I
+[1753.5s] don't think I've really heard about
+[1754.6s] before, which is like giving the model
+[1757.0s] other fields to dump the things that you
+[1759.0s] don't want to so that your key fields
+[1760.8s] that you're working with stay really
+[1762.2s] clean and concise.
+[1763.4s] >> Exactly. Like it worked really well for
+[1765.1s] this problem.
+[1766.2s] >> That's dope. It was like a it was one of
+[1768.9s] the key things I had to do to make this
+[1770.5s] UI to make this actually work in a very
+[1772.5s] reliable way.
+[1774.0s] >> How how did you come to that guess? Like
+[1777.4s] how many things did you try? Did you I
+[1779.1s] imagine you tried a lot of prompting
+[1780.6s] first like don't output code, don't
+[1782.2s] output code, just output types. And it
+[1784.4s] turned out this worked better.
+[1785.7s] >> Turns out the model was dumb at at that.
+[1787.8s] So then I did a couple things. One, I
+[1789.3s] renamed this to interface code. But even
+[1791.2s] when I did that, it did the dumb thing
+[1792.7s] and added more code sometimes.
+[1795.1s] >> Yeah. And then I was like, okay, well, I
+[1797.0s] need this to be really, really robust.
+[1799.0s] Well, let me just give it a dumping
+[1800.6s] ground.
+[1801.5s] >> Okay.
+[1802.1s] >> And giving it a dumping ground made a
+[1803.8s] huge difference in uh in like uptake.
+[1809.0s] >> But once I did this, um
+[1810.5s] >> yeah,
+[1811.3s] >> then like the backend code is really
+[1812.7s] simple. It's just a fast API server. Um
+[1815.6s] and all the backend code does is there's
+[1817.4s] basically two API calls. One is called
+[1820.5s] uh generate BAML stream. And I have
+[1822.9s] different hooks for stream versus
+[1824.2s] non-stream, by the way. just FYI.
+[1826.9s] Um, and then what I do is I just
+[1829.4s] generate the stream with the simple
+[1831.0s] function. This stream I just have a
+[1832.4s] handle stream function
+[1834.0s] >> and that just streams it down to the UI.
+[1836.4s] >> It literally just streams it down to the
+[1837.8s] UI. It literally just and it there's
+[1839.2s] like some some stuff that I have to do
+[1841.0s] in the UI to tell if I'm like in the
+[1842.8s] middle of streaming or if I'm done
+[1844.0s] streaming or if an error happened along
+[1845.4s] the way. So, I have to go build this out
+[1848.0s] myself and that part is kind of
+[1849.4s] annoying. I've thought about how to make
+[1850.6s] this better from a BAML's perspective,
+[1852.7s] but that's a different topic.
+[1854.7s] >> Okay, so you're using the structured
+[1856.2s] streaming from BAML, but in order to get
+[1858.2s] fast API to talk to your front end, you
+[1860.3s] still have to kind of take the like
+[1862.2s] output chunks from that so the UI knows
+[1865.0s] whether it's finished or not.
+[1866.5s] >> Exactly. And there's just no way around
+[1868.2s] that sadly at least for now. And then
+[1871.1s] what I do is I just I have a two data
+[1873.0s] function that says, hey, given this data
+[1874.3s] I get, convert it. And if you go look at
+[1877.5s] how generate stream works,
+[1881.0s] generate
+[1881.7s] >> It's funny. I think I cloned this
+[1883.0s] example like four or five months ago and
+[1885.1s] was like playing with it and I
+[1886.5s] remembered being confused by like, okay,
+[1888.1s] why do we need a bunch of custom
+[1889.1s] streaming code? But that makes sense.
+[1891.0s] >> Yeah, exactly. It ends up being very
+[1892.6s] tricky. Well, then you just threw
+[1894.2s] x.model dump. So, I literally just send
+[1895.8s] the raw JSON up as a part
+[1897.2s] >> because BAML's giving you back a
+[1898.2s] pideantic model, but you really want to
+[1900.2s] just like emit JSON over the wire.
+[1902.4s] >> Exactly. Cuz what does generate this
+[1904.3s] thing returns a if we saw earlier what
+[1906.9s] does generate stream return? Uh generate
+[1909.0s] stream returns.
+[1910.7s] >> You should put mode equals JSON there in
+[1912.7s] case you get date times in your uh in
+[1914.9s] your output dictionary.
+[1916.5s] >> Um you won't because it's generating
+[1919.4s] BAML code which are types.
+[1921.7s] >> So it's just returning a class that's a
+[1923.2s] schema way. So you have a schema type
+[1925.3s] and then you just do schema.json.
+[1928.1s] Um I should be dropping the other code
+[1929.9s] variable because I don't care about it.
+[1931.1s] So that's a separate thing but uh this
+[1933.1s] seems to work pretty well for our use
+[1934.6s] case. Um cool. So that's that's one part
+[1936.8s] of the system. So that's how we stream.
+[1938.6s] That's how we get it up and running. And
+[1939.7s] then on the front end side I'll show you
+[1942.0s] how that page works end to end as well.
+[1944.2s] I I basically have like three states
+[1945.8s] over here. It's like I would want to
+[1947.1s] know if I'm executing anything. I want
+[1949.4s] to know if I'm generating. And then
+[1950.6s] here's the generated code. Then I want
+[1951.9s] to know what the execution result is.
+[1955.2s] And if you go to is executing, let's
+[1957.3s] just look at how generate works. When
+[1958.6s] someone plays a generate thing, you
+[1960.7s] literally set is generating to true. You
+[1963.4s] say here's the current input and then
+[1964.9s] you just call you build a form model
+[1967.2s] that you have to there's a lot of boiler
+[1968.8s] plate code I have to do to send like
+[1970.2s] files from front end to back end and
+[1971.8s] stuff. So like that's just like standard
+[1973.8s] chat GPT code to go render. And then the
+[1977.4s] other thing you have to do is because if
+[1978.5s] you want to stream you have to build SC
+[1980.0s] events on your own is I have to build a
+[1982.3s] utility layer to actually handle SSE
+[1984.2s] events and like pass that back and forth
+[1986.3s] between my front end and back end. This
+[1988.4s] is Go ahead.
+[1990.5s] >> Those types are type arguments, but this
+[1993.3s] the the values into the fetch sec like
+[1995.7s] type constructor for the generics end up
+[1998.3s] being types that were generated by the
+[2000.2s] BAML TypeScript compiler, right?
+[2001.8s] >> I'll show yeah, I'll show you where
+[2002.8s] these come from. So this code is being
+[2004.6s] generated on the fly from BAML
+[2007.6s] automatically for you thanks to
+[2012.0s] our generators file. So generators file
+[2013.9s] says all my BAML code should have
+[2015.8s] generate generate Python bindings and
+[2019.0s] React bindings automatically for me
+[2021.3s] >> and you can guarantee type safety across
+[2023.3s] the client and the server because it's
+[2024.7s] all one source of truth that's
+[2026.0s] generating both sides.
+[2027.8s] >> Yeah, we've seen this a lot with like
+[2029.0s] using open API specs to generate types
+[2031.5s] but this is we just we just know for
+[2034.1s] sure that the during streaming the type
+[2036.0s] is this type and when we're done
+[2037.3s] streaming the type is this type. So it
+[2039.2s] just makes like autocomplete better.
+[2041.8s] That's like the only thing it really
+[2043.1s] does for our lives. Um, and then you can
+[2047.0s] actually set the gen and then you get
+[2048.2s] the response which is the final type. So
+[2050.1s] during streaming it says what this hook
+[2052.9s] says is whenever you're streaming you
+[2054.3s] get SSC events on every partial event
+[2056.9s] run this run this function. As soon as
+[2060.2s] the thing is done run this function and
+[2063.0s] just set the final response which is of
+[2065.2s] schema type but this thing on partial is
+[2068.4s] a partial partial type version of it. So
+[2070.7s] like the value during streaming along
+[2072.2s] the way.
+[2074.4s] Um yeah with this you basically have no
+[2077.3s] drift in your type system along the way.
+[2080.7s] And then once you have this like
+[2082.1s] rendering a string rendering this string
+[2085.4s] and this string in this um UI component
+[2089.3s] that I have rendering all of let me pull
+[2092.6s] out this onto a different window really
+[2094.4s] fast. rendering rendering onto this
+[2097.4s] window and showing the actual BAML code
+[2099.2s] versus the return type. Well, now you
+[2101.0s] guys know where that's coming from. That
+[2102.6s] is literally just this variable
+[2104.2s] generated BAML which is of schema type
+[2106.0s] which has interface code and return
+[2107.4s] type. And then I just render those two
+[2109.2s] fields.
+[2110.2s] >> I have a question. Yes, if you if you
+[2112.1s] want to do more you can. I can I can I
+[2113.7s] can hold it for a second.
+[2114.9s] >> And I'll talk about the execution logic
+[2116.6s] in a second because I think that code is
+[2117.9s] also very fascinating.
+[2119.4s] >> Cool. And there's yeah, I think the
+[2121.6s] question about SQL for UI schemas um we
+[2123.8s] should tackle at the end. Um but there's
+[2125.5s] this question of like type and workflow
+[2127.1s] drift. Obviously, BAML lets you use
+[2129.5s] static types and kind of manage your
+[2131.5s] types really well for the pieces that
+[2134.1s] you're working with, but one of the
+[2135.5s] things that I know you say all the time
+[2136.9s] is types are amazing. And like there was
+[2139.8s] a long time I think you support like
+[2141.9s] dynamic types in BAML a lot better now,
+[2144.0s] but there was a long time where it was
+[2145.3s] like an opinion of the team. It was like
+[2147.1s] you shouldn't have any types. You
+[2148.6s] shouldn't have any types in your outputs
+[2150.0s] because like any types suck and the
+[2152.0s] whole point of using this is having like
+[2153.4s] dynamic types or sorry having static
+[2155.6s] types that you can catch at compile time
+[2157.6s] and make the dev flow easier. This doing
+[2160.3s] dynamic schemas you don't actually get
+[2164.2s] any types or like you kind of have to
+[2166.2s] start working with any types because the
+[2168.6s] output of the object is some just like
+[2172.2s] nested JSON thing that you get out. The
+[2174.0s] schema itself is just code, but maybe we
+[2175.7s] can talk about that when we get to the
+[2176.6s] execute side because the thing you're
+[2178.4s] rendering in the UI ends up being an
+[2180.9s] Yeah, any object. There you go.
+[2182.6s] >> So, exactly. So, I actually have an any
+[2184.7s] object that I defined uh that talks
+[2187.5s] about this problem because you're right,
+[2189.4s] we can do anything
+[2191.7s] and it is kind of bad that you can do
+[2193.4s] anything. So, like how do you deal with
+[2194.6s] this world where any type is now
+[2196.6s] suddenly valid? Um, and this I think
+[2199.2s] becomes really relevant during
+[2200.2s] execution, but I just think you have to
+[2202.2s] know that it is that type. And once you
+[2204.1s] know that it is that type, then you can
+[2205.4s] start writing code around around that.
+[2209.8s] Um, so I'll talk about that in a second.
+[2212.0s] Let's talk about how execution works. So
+[2213.7s] we talked about streaming works. The key
+[2216.2s] part about generating code is about
+[2217.4s] having to build some sort of SSE bridge
+[2219.0s] between your front end, your back end,
+[2220.6s] and having some type safety guarantees
+[2222.3s] so that even when you're streaming
+[2223.4s] partial types that you know exactly what
+[2226.1s] it is. So again, if you look at the
+[2228.2s] fetch SC world, I actually handle like
+[2231.4s] my event data.parial versus event
+[2233.8s] data.final versus event data.
+[2237.3s] So when I actually go send it from my
+[2238.9s] back end, I do I do exactly that. Um,
+[2241.0s] and I apologize if this is a little
+[2242.8s] repetitive, but I think it this stuff is
+[2245.2s] really easy to make small mistakes on
+[2247.0s] that makes it really hard to go debug.
+[2249.2s] Same thing here. I'm just sending
+[2250.5s] partial, final, and error. And I just
+[2252.4s] catch that response up there. But the
+[2254.9s] next step is actually about executing
+[2256.8s] BAML code. So now I have a type system
+[2258.6s] that I've defined. How do I actually
+[2260.0s] execute that? Well,
+[2261.4s] >> so you're taking the schema that was
+[2262.7s] created by the first call and then using
+[2266.2s] it to do the extraction during a
+[2267.9s] follow-up call.
+[2269.0s] >> Exactly. So handle execute. Let's start
+[2271.3s] from the front end and work backwards
+[2272.6s] because we just sent our schema and our
+[2274.6s] return type to our front end. Uh and we
+[2277.5s] can see that right here. See, we have
+[2278.8s] our interface code and a return type. So
+[2280.7s] let's figure out how we do this. Well,
+[2281.8s] the first thing we do is we ask we see
+[2284.7s] if we have any code cuz maybe the person
+[2286.5s] didn't generate a schema for whatever
+[2287.9s] reason and if they do, we return an
+[2289.5s] error. But then we start executing. When
+[2292.1s] we execute, we build the form builder
+[2293.7s] however we want. We we take the code and
+[2295.6s] the return type, send it along with the
+[2297.5s] data. And now when we're expecting data,
+[2299.9s] we're expecting an any type. It's any
+[2302.2s] during streaming, it's any when it's
+[2303.6s] done. There's no rendering there. And
+[2305.4s] then we build some sort of rendering
+[2307.1s] engine to render an any type object.
+[2310.4s] So before I again show all the prompts,
+[2312.5s] I just want to we can just show really
+[2313.9s] quickly what the
+[2316.1s] what the rendering engine looks like. So
+[2317.8s] then you can have an idea of what this
+[2319.0s] is.
+[2321.5s] I have a section for rendering this and
+[2323.8s] I just have a different ways of doing
+[2325.4s] this along the way. Um execution result
+[2329.7s] if we don't have any result or return
+[2331.2s] null, we don't render anything. But then
+[2333.3s] I just have a switch that just says
+[2334.6s] based on the tab whether it's table,
+[2336.5s] JSON, pretty or YAML I just render the
+[2338.7s] specific execution result. And in this
+[2341.3s] case I have like in this case u sorry
+[2345.2s] let me show you it's very very simple
+[2347.1s] code. JSON highlighting is just a JSON
+[2349.2s] highlighter. It's nothing fancy.
+[2352.8s] Format as JAML take the JSON object
+[2355.5s] render as YAML. Nothing fancy.
+[2358.6s] pretty print make some random tailwind
+[2361.4s] CSS dives. Okay.
+[2363.1s] >> Okay. So, this is your this is your like
+[2366.3s] dynamic renderer that just is the pretty
+[2368.3s] pretty printer and you're you're
+[2369.5s] literally just recursively making little
+[2371.1s] spans with different
+[2372.6s] >> Exactly. That's all I'm doing with some
+[2374.3s] indentation along the way. Um, so this
+[2378.6s] is kind of what we've seen most people
+[2380.2s] do. And like if you're doing dynamic
+[2381.5s] schemas, no matter what you do, you will
+[2383.2s] have to build some sort of dynamic
+[2384.3s] rendering at some point if you're going
+[2386.0s] to handle arbitrary schemas. So you can
+[2388.8s] download something off the fly. You can
+[2390.5s] do whatever you want. You can make
+[2391.7s] rules, but you're going to use this type
+[2393.3s] of keyword and do different things based
+[2395.0s] on what you get. It just is the way it
+[2398.1s] is. I don't really see a shortcut around
+[2399.8s] this. If other people have different
+[2401.0s] ideas, would love to see them. But if
+[2403.5s] you have more constraint schemas, um,
+[2405.4s] then you can do other things as well.
+[2408.4s] >> You can do kind of a deterministic typed
+[2410.5s] component tree where you know exactly
+[2412.0s] what happens at every layer.
+[2413.5s] >> Exactly. Um but cool for now let's go
+[2416.4s] back to actually executing this code. So
+[2418.5s] we have this we what we have is we have
+[2420.3s] the content so the image that we are
+[2422.1s] sending back from the front end. We have
+[2424.4s] the BAML code that the front end told us
+[2426.9s] that another LM told us what the schema
+[2429.1s] should look like and the return type. So
+[2431.4s] let's go look at what the backend code
+[2433.0s] actually does. Well the backend code
+[2435.0s] actually does something really simple.
+[2436.9s] We use a concept called type builder
+[2439.7s] which is our way to do dynamic type
+[2441.8s] registration in BAML world. And
+[2445.0s] >> so this is this is how you get the you
+[2448.2s] know BAML execution function to actually
+[2451.8s] hey take this dynamic schema that was
+[2454.6s] generated ahead of time but is not in
+[2456.6s] code and is not compiled into the types
+[2459.7s] but take this schema and generate
+[2461.8s] something for me using that schema.
+[2464.5s] >> Exactly. So then what you can do here is
+[2467.3s] you can actually just add the BAML code
+[2468.7s] that was generated from the last return
+[2470.6s] type last source code. You just inject
+[2473.1s] that into here and you just say hey this
+[2475.6s] response class that I have is a dynamic
+[2477.4s] response class with a field called data
+[2480.2s] which is going to be of the return type
+[2481.9s] the previous thing generated. So in this
+[2485.6s] where let me find where this is. Uh so
+[2488.9s] in this world what this ends up looking
+[2491.0s] like is this schema gets injected right
+[2494.6s] where it says BAML code and the return
+[2498.6s] type gets injected
+[2500.9s] right where it says return type. So
+[2503.4s] image description array would go right
+[2505.1s] over here. And then once we do this we
+[2508.2s] get a couple things. The first thing we
+[2509.4s] get is an exception. If for whatever
+[2511.2s] reason the source code is bad we can
+[2512.5s] just tell the front end the source code
+[2513.6s] is bad without calling an LM. So that's
+[2516.0s] a nice benefit that you get right out of
+[2517.8s] free. And then the error message is
+[2519.3s] nice. So you can feed that error back to
+[2520.7s] the generator code and say this schema
+[2522.2s] is bad. Don't generate anything along
+[2523.9s] the way. And then the next thing you can
+[2526.0s] do is if the person is streaming, you
+[2528.3s] can just execute this code. And you just
+[2530.3s] pass in type builder along the way. So
+[2531.9s] let me show you what the execution code
+[2533.4s] looks like because I think it's
+[2534.2s] fascinating. Now the execution code is
+[2535.9s] also really simple. The execution code
+[2537.9s] is a thing that says execute BAML. So
+[2541.4s] I'm that's just my function name. I'm
+[2542.9s] going to pass in any content I want. So
+[2544.5s] it's the exact same type signature along
+[2546.2s] the way. And then you're going to return
+[2548.1s] a response type. This response type
+[2549.6s] actually has no field defined in it at
+[2552.5s] at compile time. The only field that
+[2555.1s] exists in it is the data field which is
+[2556.7s] defined at runtime with the return type
+[2559.4s] that was provided to us. So now
+[2562.2s] >> so what ends up happening in practice is
+[2564.9s] the model doesn't actually have to know
+[2566.2s] anything. It's a very very simple prompt
+[2568.2s] that says extract data with the given
+[2569.5s] content you with this format and then
+[2572.0s] you just dump the content. And because
+[2573.4s] the return type is dynamically extended
+[2575.5s] automatically, you kind of get this for
+[2578.0s] free. So let me show you what that ends
+[2579.4s] up looking like. And then the last thing
+[2581.1s] I do which I think is relevant is when I
+[2584.1s] actually handle the stream. If you
+[2585.4s] remember in in generate BAML, what I do
+[2588.1s] is X domodel dump in execute BAML. All I
+[2591.1s] say is the thing I should return to the
+[2593.2s] front end is actually my return type
+[2595.8s] data, which is this dynamic field that I
+[2597.8s] have defined. Do you have to model dump
+[2600.3s] that or is it like there's a chance it
+[2602.2s] might be a primitive? Um
+[2605.6s] I think actually the handle stream thing
+[2607.3s] does it for me. So it works but you can
+[2609.7s] also do it this way.
+[2611.6s] >> Okay. And so the the reason why you have
+[2613.4s] response within dynamic inside of it is
+[2615.7s] because you have to have something typed
+[2617.7s] in the comp compiled schema to be the
+[2619.8s] return type of this function. But then
+[2621.6s] you're basically saying okay but the
+[2623.8s] body of this object can be updated. And
+[2626.2s] then when you add the BAML code, you're
+[2627.8s] basically overriding that that dynamic
+[2630.8s] thing with just a single field called
+[2632.7s] data.
+[2634.1s] >> Exactly.
+[2635.2s] >> Okay.
+[2635.8s] >> So what ends up happening is let's just
+[2638.3s] show what this does. So let's just write
+[2639.9s] a test case. So this test case is doing
+[2642.3s] exactly this code over here. TV
+[2644.6s] tb.adbaml just doing the testing world.
+[2647.0s] So these are the schemas that I added
+[2648.4s] in. So this is part of code and then
+[2650.6s] dynamic class response result person. So
+[2652.8s] we can name this data just to be more
+[2654.8s] consistent with what this is and this is
+[2657.5s] exactly the code that's being added and
+[2659.5s] then given this test case what would end
+[2661.8s] up happening.
+[2662.5s] >> Okay. So in the test you can't
+[2664.6s] dynamically write code to call the add
+[2667.2s] types function but you can define what
+[2669.4s] goes into the type builder as part of
+[2671.4s] your test case.
+[2672.4s] >> Exactly. So it's basic so you can just
+[2674.1s] test what would have happened if the
+[2675.4s] model did generate this thing. So in
+[2677.7s] this case the model generated this and
+[2679.1s] this is basically what the LM sees. The
+[2680.7s] LM doesn't even know it's a dynamic
+[2682.2s] schema. It just thinks it is the schema.
+[2685.0s] So when the LM goes and runs this, it
+[2687.0s] dumps it out and then you get this type
+[2688.6s] and you just do data.
+[2690.6s] >> And then when you use when you use type
+[2692.6s] builder in a test like that, um does
+[2695.0s] that override all existing types or is
+[2697.4s] that additive? Does that merge in?
+[2699.1s] >> That's additive. It it doesn't merge.
+[2700.5s] Okay.
+[2700.8s] >> Uh it doesn't merge for all things named
+[2702.6s] dynamic. If you add a new type like
+[2704.2s] this, it tells you it's like this cannot
+[2706.1s] be redefined.
+[2707.4s] >> Okay, cool. So it is merging those in
+[2709.4s] >> premix with dynamic.
+[2711.0s] >> Cool.
+[2712.0s] >> So it actually gives you a really nice
+[2713.8s] way to go and test stuff out.
+[2716.9s] So now what you have is boom, you get
+[2719.7s] this out and then what you return to the
+[2721.4s] front end is data which is the inner
+[2724.1s] part of this which is exactly the return
+[2725.8s] type that we told the front end we
+[2727.3s] wanted. And what's nice here is even if
+[2728.9s] the L1 messes this up so like
+[2732.3s] um I'll do something for the sake of
+[2734.2s] doing it but it won't really matter. Um,
+[2737.3s] so I'm going to lie to the LM in this
+[2739.0s] prompt really fast.
+[2741.4s] Um, technically I still want a data
+[2743.8s] field out, but I will not tell the LM I
+[2745.8s] want a data field out. I'll do something
+[2748.2s] kind of uh I'll trick it
+[2751.7s] cuz this is this is actually part of the
+[2753.4s] reason why it ends up working so well.
+[2754.7s] So, as you can see here, the prompt has
+[2756.1s] nothing about the data field. It's just
+[2757.4s] answering the internal schema. But even
+[2759.3s] though the model did that, you still got
+[2760.6s] the data field out. Okay, so this is the
+[2763.2s] BAML parser doing some magic to figure
+[2765.7s] out how do we take this data how do we
+[2767.8s] take this object and map it into the
+[2769.9s] schema that we were supposed to be
+[2771.9s] >> which is this one which is the response
+[2773.6s] schema. So cool. A lot of times a model
+[2776.4s] actually we've seen it mess up in a lot
+[2777.9s] of dynamic schema generation especially
+[2779.4s] for like deeply nested schemas and
+[2781.2s] stuff. But the fact that you can just
+[2783.9s] not think about that and just know that
+[2786.2s] you're going to get something that
+[2787.4s] models the schema that you define even
+[2789.4s] purely dynamically
+[2791.8s] has we've seen increased accuracy a lot
+[2794.0s] for these dynamic situations. And for
+[2796.2s] context, like the rules of like how
+[2798.4s] complicated can dynamic schemas be like
+[2801.1s] honestly you can do whatever you want.
+[2802.5s] Like
+[2804.3s] if you want to do
+[2807.1s] this and like write a dumb schema that
+[2809.0s] looks like this,
+[2810.9s] you are welcome to do that. It will do
+[2814.2s] the thing for you and it'll behave as if
+[2815.9s] you randomly wrote a schema at runtime.
+[2818.6s] People are like, "What the heck is a
+[2819.6s] schema?" The schema is values that fit
+[2822.9s] into the schema are arrays of empty
+[2825.8s] arrays. Um so the type type systems are
+[2829.8s] beautiful in my opinion. These are all
+[2831.4s] valid uh values of who
+[2835.0s] >> I'm terrified to see what happens when
+[2836.6s] you run this.
+[2839.0s] >> I don't know either. You get empty.
+[2842.0s] >> Okay. Okay.
+[2844.4s] Um
+[2846.0s] >> I'm going to
+[2846.7s] >> Okay. We got about five minutes left on
+[2848.0s] the proper live stream. Do we want to
+[2850.2s] bring up Eugene to demo what he's
+[2851.8s] working on and then we can like go over
+[2853.3s] a little bit for questions?
+[2855.8s] >> I'm almost done describing this
+[2857.6s] workflow.
+[2858.9s] >> So once this thing is done now that we
+[2861.0s] can get all the code out. So there's a
+[2862.7s] couple key takeaways. Why do we not like
+[2864.8s] JSON schema? Well, because JSON schema
+[2866.6s] is going to be way more dense to go
+[2868.0s] generate. Take the same thing and like
+[2869.7s] let's just generate a JSON schema for
+[2871.3s] this really fast just to give you an
+[2873.2s] idea of what I mean. Give me a JSON
+[2875.8s] schema for this. how to generate a JSON
+[2878.2s] schema really fast and see what it does.
+[2881.8s] Like this is the thing the model will
+[2883.4s] have to generate and like we can just
+[2886.0s] >> okay
+[2886.6s] >> look at this
+[2888.9s] uh tokenizer like did it do it? Yes,
+[2891.8s] it's 333 tokens but it's also way less
+[2895.3s] legible about what's actually going on.
+[2897.1s] This is a fairly simplistic schema. If I
+[2900.5s] take the same thing and just like take
+[2902.3s] this then we can all guess that this is
+[2904.4s] less than 333 tokens. But we can just
+[2906.4s] look at how many less 69 tokens.
+[2910.0s] >> And it's more informationri, right? Like
+[2912.0s] like the all of the like quotes and
+[2914.3s] parentheses just kind of add noise.
+[2917.0s] >> Exactly. And I did I did some cheating
+[2918.6s] here. And like even now uh even when I
+[2920.8s] have extra white space here and way more
+[2922.3s] white space than I actually would have
+[2923.6s] if I were actually doing this. Like I
+[2925.0s] used two white spaces.
+[2927.2s] It doesn't even matter.
+[2928.0s] >> Third the size or a fourth the size.
+[2930.2s] >> We can just do the math. 333 divided by
+[2932.4s] 86 divided by this. it just like
+[2935.1s] literally a fourth of the size. So in
+[2938.2s] general, if you're going to do dynamic
+[2939.4s] schemas, you get way more accuracy not
+[2941.4s] having to generate something that is
+[2942.8s] four times as dense with way less
+[2944.8s] information.
+[2946.5s] This is also kind of like I think when
+[2948.0s] they leaked the GP or not leaked when
+[2949.4s] the GPT OSS models came out, we saw that
+[2951.7s] that their tool calling format wasn't
+[2953.7s] actually they take a JSON schema from
+[2955.3s] you over the API, but what they give to
+[2957.4s] the model is actually more like
+[2959.0s] something that is like a TypeScriptish
+[2961.0s] syntax which has less requirements for
+[2963.7s] like quotes and things like that because
+[2965.2s] it's more concise, right? And that's
+[2966.5s] what they RL on. I think probably for
+[2968.2s] the same reason.
+[2969.6s] >> Exactly. It's just you don't want
+[2971.1s] something that's dense. Um
+[2974.4s] so like in general the idea is like you
+[2976.2s] want to have the model go generate your
+[2977.7s] schemas. You want to then use your
+[2979.4s] schemas for dynamic extraction of data.
+[2982.7s] You might put a human review process at
+[2984.6s] the point of generating the schemas and
+[2986.0s] you might build a custom type form like
+[2987.8s] thing to render your schemas in an
+[2989.2s] interesting way. Um and you might also
+[2992.3s] do a couple more things along the way to
+[2994.1s] make your life easier as a developer.
+[2997.0s] Um, for example, you might put a cache
+[2999.3s] layer or semantic cache layer that says
+[3001.0s] for this type of image, this is a great
+[3003.0s] schema. So instead of generating a
+[3004.9s] schema, you might recommend an existing
+[3006.6s] schema to help the users minimize schema
+[3009.0s] clash. You might build more workflows
+[3010.6s] around merging schemas after a bunch
+[3013.0s] have been generated. And these are all
+[3015.3s] tools that you can build as an engineer
+[3017.6s] based on the use case of your actual end
+[3020.1s] users. And and we actually talked about
+[3022.1s] this a lot in the episode where we
+[3023.4s] talked about like taking a resume and
+[3024.9s] mapping it like doing entity resolution
+[3026.6s] and entity mapping which is like over
+[3028.8s] time you start to build up a set of
+[3030.6s] entities or a set of schemas a set of
+[3032.4s] types that matter and then when you are
+[3035.0s] doing something expected and there's a
+[3036.5s] large drift or there's a new type of
+[3038.2s] thing that's when you can say okay this
+[3039.8s] schema that we generated for an object
+[3041.4s] that we've seen a lot of before is very
+[3044.0s] different from all the other schemas
+[3045.4s] we've seen let's like put that in a
+[3047.6s] queue for human review and you start
+[3049.9s] baking
+[3050.6s] more concrete like over time it's just
+[3052.9s] like okay yes like we have seen every
+[3055.6s] single version of the word Microsoft
+[3057.7s] corporation including Xbox including
+[3060.1s] Azure including all all these map to the
+[3062.0s] same entity and I think it's the same
+[3063.8s] thing of like when we're generating
+[3065.0s] schemas after off of arbitrary images or
+[3067.3s] document scans or bank statements or
+[3069.4s] whatever it is over time you want to
+[3071.4s] start consolidating and be more
+[3072.8s] opinionated on what it is and then you
+[3074.8s] want to have ways to incorporate if the
+[3076.8s] standard changes the AI can highlight
+[3078.5s] okay here's what's different in this one
+[3080.2s] human should review that. Should we add
+[3081.5s] that to our whole schema or is that a
+[3083.1s] sign that there's a bug in this document
+[3084.7s] or a bug in the prompt or that the model
+[3086.6s] regressed?
+[3088.2s] >> Exactly that.
+[3090.2s] Exactly that. Um, and these are the
+[3092.2s] workflows and you can build them. I It
+[3094.0s] sounds like we can't get to React
+[3095.2s] workflow today, which is very
+[3096.4s] unfortunate. Uh, we will do that in a
+[3098.4s] second episode. I think it was hopefully
+[3101.2s] people didn't mind.
+[3101.9s] >> I knew you didn't get the React
+[3103.1s] component working. I knew it.
+[3105.9s] >> I was serious.
+[3107.3s] >> All right, we'll do it. We'll do we'll
+[3108.4s] do it in another episode.
+[3109.8s] >> Actually get it really close to working.
+[3111.9s] >> Okay, cool.
+[3113.4s] >> Ed has a question really fast about any
+[3115.7s] plans to add helpers to converting JSON
+[3117.5s] schema to BAML type builder. Um, we have
+[3120.6s] considered this very strongly. You
+[3122.8s] should be I would be surprised if we
+[3125.3s] ship it this week. I'd be surprised if
+[3127.1s] we don't ship it by end of year. U is
+[3129.7s] kind of the time frame that I would
+[3131.0s] give. We think that there probably is a
+[3133.2s] way to do JSON schema to BAML type build
+[3135.3s] alert more natively through like a
+[3136.8s] native function that we support. Um the
+[3139.6s] tricky part is there just many many
+[3141.2s] different ways that a schema can be
+[3142.8s] converted because JSON schema is not
+[3145.8s] very um
+[3148.1s] descriptive on schemas in terms of how
+[3150.6s] it does things. Um so we're thinking
+[3152.4s] about the best ways to do conversions
+[3154.4s] and we're also thinking about adding a
+[3156.0s] top level dynamic type. So even the
+[3158.0s] return type directly can be dynamic and
+[3159.8s] you don't need anything statically
+[3161.0s] defined.
+[3163.8s] Um any more questions in the audience
+[3165.5s] before we do any more demos? Eugene,
+[3167.5s] what do you want to show us? Do you want
+[3168.5s] to give us a quick TLDDR before you
+[3169.8s] shove it off?
+[3170.5s] >> Um first off, uh thanks to both of you
+[3173.2s] guys. Um my hub BML.
+[3177.4s] Um, I think
+[3180.1s] the thing that sucks the most about BAML
+[3182.2s] is you guys hide the magic of someone
+[3185.6s] putting in a prompt and then um it just
+[3188.4s] does everything correctly.
+[3191.0s] Um,
+[3192.6s] where like mistakes are impossible. I
+[3195.5s] think removing process in general
+[3198.8s] um where like you know often there's
+[3202.9s] like a process that's good quite good
+[3206.4s] for like 90% of people
+[3209.2s] and when you remove it people kind of
+[3211.5s] have to go for outcomes and it's that
+[3213.6s] whole like Jevans paradox people like to
+[3216.6s] talk about right where you get to try
+[3219.2s] more things and people just work
+[3220.6s] completely differently they try ideas
+[3222.7s] they would have never tried second um
+[3226.6s] decks. U I really appreciate um some of
+[3230.0s] the stuff you've described for agents
+[3233.5s] like in terms of orchestration.
+[3235.9s] I think you probably killed several like
+[3238.7s] graph theory um like mathematicians
+[3243.1s] with that stuff. um cuz it was intense
+[3247.2s] but it was necessary
+[3249.7s] um because um a lot of people um
+[3254.4s] um there are like things that work and
+[3256.5s] don't work. So, just wanted to thank you
+[3259.9s] guys um for the stuff I wanted to show
+[3263.4s] is um how we've been approaching some of
+[3266.4s] this which is
+[3268.1s] >> also we've got just FYI, we've got five
+[3269.9s] minutes and I have to go to a meeting.
+[3272.2s] So, just want to give a heads up on
+[3274.4s] timing.
+[3274.7s] >> I can hang out if you got a drop. So,
+[3277.0s] first off, um, for example, we follow,
+[3280.7s] we're big on workflows like Bezos and
+[3284.4s] his whole like, you know, intentions
+[3286.1s] don't good intentions don't work,
+[3288.1s] mechanisms do. Uh, we go harder. We're
+[3291.2s] just say like mechanize because if you
+[3294.4s] do that, you know, worst case, you'll
+[3296.2s] fail, but most things can be and you
+[3300.1s] start getting better at it and you kind
+[3302.3s] of figure out the building blocks. So
+[3304.2s] for example,
+[3305.8s] this is our spec for exposing like
+[3309.7s] nmcp of our
+[3311.0s] >> what's the here? Let me help you out.
+[3313.0s] What's the problem you're trying to
+[3314.2s] solve? Like tell me
+[3315.7s] >> the problem we're trying to solve here
+[3317.0s] is we have our own custom product that's
+[3321.3s] kind of quad codish.
+[3323.5s] >> Oh.
+[3324.0s] >> And we want to let other people use it
+[3326.6s] via MCP. So
+[3329.8s] >> what what problem are you solving?
+[3331.9s] >> Huh? Uh people suck at using cloud code.
+[3336.7s] Uh they run out of rate limits. They
+[3338.9s] also scream that uh cloud code is lying
+[3341.9s] to them.
+[3342.6s] >> Let's maybe we should talk about this on
+[3344.6s] a different concept that's not about
+[3346.1s] dynamic UIs and we can bring this back
+[3347.6s] in that scenario in that case because it
+[3349.4s] sounds not uh super related to the
+[3351.4s] current topic.
+[3352.2s] >> Um
+[3353.8s] sure. I just um that's fine. Um I just
+[3362.6s] that that's fine. Um I just want to say
+[3365.4s] that I think um generally uh people can
+[3369.6s] think and discuss more than one thing
+[3372.2s] and like this isn't um you know a one
+[3376.9s] track course but it's not my thing. So
+[3379.5s] that's fine.
+[3380.9s] >> Let's do it let's do this on an episode
+[3382.9s] we're talking about cloud code and like
+[3384.3s] general like how to rank workflows
+[3385.9s] better in that world. Um,
+[3388.9s] okay. It was going to be a short thing,
+[3390.8s] but that's fine. No worries.
+[3392.6s] >> Let's keep it on topic. Um, but let's
+[3394.5s] get you on on a different episode when
+[3395.8s] we talk about cloud code.
+[3397.7s] >> Uh, you said that last time, so um
+[3401.0s] anyway, um, it's fine. Um, I'm more
+[3404.0s] interested in like customers than
+[3408.5s] um that this helps customers. Um, so can
+[3413.3s] I, if you don't mind, I just want to
+[3415.7s] finish because this was written by my
+[3417.8s] co-founder. He doesn't write, he's not a
+[3420.9s] web developer. Um, he doesn't know
+[3423.4s] anything about this. He wrote this
+[3426.2s] keyword.
+[3426.7s] >> Let's just keep going with it. Vib, you
+[3428.2s] got to drop I'll hang out with this on
+[3429.6s] the stream.
+[3430.9s] >> Yeah. So, this is an RFC, right?
+[3435.7s] And it's better than anything most I've
+[3438.4s] written,
+[3440.0s] but it's all spec
+[3442.2s] from a YAML. We used to do YAML, then
+[3445.8s] we've switched to ZOD.
+[3448.3s] Um, and um it's nicely rendered both for
+[3452.8s] humans and machines.
+[3455.8s] Um, source tracing. And the beauty of
+[3459.0s] this is that um it lets people who you
+[3463.0s] know know how to solve problems skip the
+[3466.0s] skip the process and just get outcomes.
+[3468.6s] So that's all I wanted to say. Sorry.
+[3470.8s] >> Okay. So this is basically for people
+[3472.4s] who are a little less technical. You've
+[3474.6s] written a system where people someone
+[3476.3s] who's less technical can build out an
+[3477.8s] ADR.
+[3479.0s] >> This guy uh made the Kindle. So I think
+[3481.7s] you have to have like problem solving
+[3483.6s] kind of mindset
+[3485.6s] but it's more like you don't have to
+[3487.7s] become a language lawyer in some you
+[3489.9s] know React or Vue or MongoDB or
+[3493.8s] whatever.
+[3495.0s] >> Okay, cool. Where can people learn more
+[3496.7s] about this? Is this uh open source
+[3498.2s] anywhere?
+[3499.7s] We're trying to open source it as
+[3501.4s] quickly as possible because
+[3504.6s] um this stuff should be open source
+[3507.0s] because if it's not inference gets
+[3509.7s] wasted
+[3511.2s] where well essentially you're having
+[3513.8s] like you're asking Einstein
+[3517.1s] hey count my loose change like
+[3520.1s] >> every single day over and over and over
+[3522.2s] again
+[3522.6s] >> and it hurts me. So that's why we want
+[3525.8s] to like um make that stop uh because
+[3530.3s] there's so much better for So I guess
+[3532.8s] >> well maybe let's let's say you know when
+[3534.9s] when this actually um is open source and
+[3537.2s] you can go a little bit deeper and show
+[3538.6s] some of the code. I think it would be
+[3539.9s] really cool to do a little bit of a
+[3541.1s] deeper dive. How's that sound?
+[3542.2s] >> Yeah, I'm happy to go in the code. we
+[3544.5s] have uh customers and um whatever if you
+[3548.3s] guys anyone has feedback of what people
+[3551.3s] feel is most valuable to open source
+[3553.8s] like in what order
+[3556.3s] um we're more than open to feedback and
+[3558.5s] we're like self-funded here so we can do
+[3561.2s] whatever we want like
+[3563.6s] >> cool
+[3564.2s] >> I mean this sounds
+[3567.1s] this sounds like a great thing to drop
+[3568.7s] like maybe have a discussion in the
+[3570.6s] boundary ML discord about and like work
+[3573.0s] a little bit async and people can can
+[3575.0s] kind of like chat about and you can
+[3577.1s] maybe describe it and we can we can
+[3579.1s] start to build momentum for uh for a
+[3580.8s] future conversation. That sounds really
+[3582.1s] fun.
+[3582.9s] >> Yeah, thank you. And of course couldn't
+[3585.2s] have been possible without uh like BAML.
+[3588.5s] I think we all build kind of on the
+[3590.5s] shoulders of giants of like people who
+[3593.0s] came before us. So um
+[3595.0s] >> yeah, sorry I'm pointing to myself cuz I
+[3597.0s] also build on the shoulders of giants. I
+[3598.8s] wasn't I wasn't trying to say I was the
+[3600.6s] giant and here's
+[3603.0s] >> color
+[3604.6s] like a [ __ ] So, uh
+[3607.4s] >> yeah, we should find a I don't think
+[3608.6s] there's any photos of you and me hanging
+[3610.2s] out. Um and maybe we should keep it that
+[3612.2s] way.
+[3614.8s] >> I'm
+[3616.8s] gonna stay for one more question.
+[3620.2s] >> I was like, wait a minute. That's not
+[3621.4s] you. We don't That's not our DM. Our DM
+[3623.4s] has way more memes in it. Okay. Bye,
+[3625.4s] Bob. You're late for a call. This was
+[3626.9s] awesome. I can't hear you at all.
+[3629.0s] >> Wait, really? Thanks y'all.

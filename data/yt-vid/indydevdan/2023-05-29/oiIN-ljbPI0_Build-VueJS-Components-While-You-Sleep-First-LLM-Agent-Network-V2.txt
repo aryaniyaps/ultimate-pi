@@ -1,0 +1,332 @@
+imagine a network of chat gbts doing
+work for you while you sleep work and
+chill
+maybe they're coding a new app you don't
+have time to build or maybe they're
+building the perfect study plan for your
+next final
+whatever it might be the agent Network
+can do the work for you while you sleep
+if nothing else 2023 has shown us gpt3
+gpt4 and llms as a whole are extremely
+powerful
+but they're not powerful enough to truly
+run end to end to complete tasks for us
+in the last video we created the first
+version of this Vision a network of AI
+agents working together while we sleep
+in this video I want to show you V1 and
+V2 of the agent Network and then give
+away the view GPT component generation
+prompt I've been using to generate View
+minutes in seconds it also just happens
+to be the first agent I have up and
+running so real quick let's recap the
+one so as you can see here we have
+several agents inside
+of this kind of diagram here so you know
+zoom in we can scroll around we can
+click and move and edit them we can
+click on their edges click on the nodes
+individually not a lot going on here I'm
+using a JS Library called cytoscape
+let's reset and let's hit add agent so
+you can see here we're adding a bunch of
+Agents
+and it's pretty cool we can just keep
+adding
+and then we can randomize the
+connections so you can see here we have
+a bunch of nodes pointing to each other
+and you know you can imagine you have a
+bunch of Agents maybe this is the um you
+know python generation agent and then
+this is the python validator agent and
+then this is the python tester agent and
+you know you can imagine a slew of
+Agents working together basically to
+compose a bunch of llm props their
+responses and working together to solve
+a specific problem right
+so
+we can also animate the
+items to go to a different color that's
+kind of cool just testing out some
+functionality there
+and then let me show you the payload let
+me show you what this looks like exactly
+under the hood so we can dump and you
+can see all the agents and their nodes
+that they're pointed to so pretty simple
+structure
+one last feature I want to show off
+let's reset
+a couple agents randomize the
+connections and then we can run save so
+as you saw in the last video if you
+haven't checked that out definitely do
+so we're using nuxt and we're using
+versal KV so the new versal store that
+basically just is backed by Reddit so
+pretty cool so now if I refresh
+and load agents you can see we got all
+the agents loaded agents loaded and if I
+you know randomize connections add an
+agent add a couple agents and then save
+you can see we got the agent saved it
+lets me refresh load agents and
+there you go so
+that's pretty cool just using redis as a
+back-end store obviously not what you
+want to do long term or maybe it is but
+I just wanted to get something up and
+running and I also want to test out
+versal KB to see
+how simple it was so as you can see V1
+is pretty simple it's just the kind of
+you know UI and a simple store so let's
+go ahead and move on to
+V2
+this is V2 of the Asian Network as you
+can see we got a UI upgrade let's just
+go ahead and jump into a real example
+right so you can hit this add real agent
+and now you can see we're creating an AI
+agent so the AI agent has a name I want
+to go ahead and say uh real view agent
+let's call it the view GPT and then the
+agent URL
+have a URL set up here and then the
+parameter name which is going to be
+queries I'm going to hit add and now you
+can see we have a single agent view GPT
+which is pretty cool and now if I click
+this agent I get to agent the endpoint
+and now I have this query text field so
+this is where I'm going to you know
+specify the exact query I want to run to
+generate New View components let's do
+create
+a accepts two props and disabled if
+disabled don't allow switching let's go
+ahead and run the query
+all right so you can see it fired off so
+we now have agent queries that we can
+view
+and we can see that view GPT has a
+prompt and a response and we have an A
+here because it's still loading so we're
+just going to wait for that to fill in
+awesome so as you can see we have the
+prompt and we have the response so we
+can scroll and see all the content
+obviously it isn't super useful in this
+form but if we hit copy response
+move over to our editor and dump the
+text here you can see that it generated
+a entire vue.js component so and it
+looks like it's right we have uh you
+know the template section
+[Music]
+check box on off we got the disabled
+just like we asked for we have the
+checked and then we have that on off
+prop
+it's making them reactive and then we
+have this toggle switch here
+let's say that it has made a mistake
+right this is still done 99 of the work
+of generating a vgs component which is
+awesome you know in the background this
+endpoint is basically just a chatgpt
+wrapper but the idea is that you don't
+need to know or care what the agents are
+doing in the background right I only
+care that I can connect to some URL
+give it some prompt and then get a
+response right so I'm going to go ahead
+and hit save agent here and then I'm
+going to go ahead and refresh so just
+want to show off that we have that same
+loading functionality so I loaded the
+queries there so you can see here we
+have all of our agents there that's just
+hitting a we're at a store and saving
+the prompting response and then I'm
+going to go ahead and hit load Asian
+again right so
+just like that we have a new component
+we can add a couple mock agents so just
+like that we have a new agent that we
+can come to and run its specific
+functionality one of the big problems
+that engineers and Builders are running
+into right now and just people using
+chat GPT is how do we organize all of
+our prompts how do we visualize all the
+functionality we have I think that the
+agent network is going to be the way to
+do that so anyway
+um that is version two so you know the
+whole idea is that now I can add
+arbitrary agents at any endpoint that do
+any work it really this just pings an
+endpoint and specifies a parameter but
+it's targeted toward agents that's that
+are going to run and eventually these
+agents are going to
+and back out these agents are going to
+be communicating with each other right
+so right now I just have one you know
+view GPT component these other ones are
+just mock components you can see here
+there's nothing going on but if I click
+on this you know we get the query and
+everything but if I click on this we get
+the query and the endpoint you can
+imagine after some time we just have
+this view GPT component right now but in
+the future it's going to point to
+another agent right and this agent could
+be a composer agent it could be a tester
+agent that tests The View gbt generated
+component to make sure that it's right
+it also could just be like a memory
+store so you know imagine that this node
+isn't an agent it's you know a separate
+memory store that we want to write to
+and then we want another agent to pull
+from that memory store and do work from
+I think that the applications here are
+pretty wide the biggest problem that
+this agent network is going to solve is
+so what does this do what does this get
+you in the end right and this is going
+to help you build up a library of
+prompts agents that all are working
+together to solve a larger problem for
+you and then you can come to this single
+interface and consume you know all the
+output all your inputs and and build
+learn whatever your tasks are the agent
+network is there to help you do that so
+let me show you the prompt that I'm
+using for the view GPT component I know
+that having view in a title is
+definitely going to attract some view
+Engineers so let's go ahead and look at
+the prompt so I have this up in a guess
+I'll definitely link this in the
+description so you know view GPT
+automatically generates view three
+script setup Lang TS components like a
+boss The Prompt is here so you know
+check this out try this out works best
+with gbt4
+uh replace this section here with your
+query you can use this text as a
+standalone if you want to set up this
+python simple python application that
+basically runs this feel free to do so
+you have the main.py file and then you
+have
+viewgpt.py which contains the
+functionality to hit the openai endpoint
+with both the view Example The View
+prompt and just a couple helper methods
+here that's going to be in the
+description if you're a view engineer
+definitely check this out I use this
+very prompt to build a lot of my view
+components now it's a really great way
+to get 90 of the component done so
+that's a high level let's go ahead and
+look at the code just for a quick second
+I don't want to dive into this too much
+but I just want to give you a high level
+idea of what's going on just in case you
+want to build something for yourself or
+if you're interested in how it works so
+at the top level here I have the
+index.view file inside of a nuxt
+application so pretty standard Knox
+application
+and I have one agent's component and
+then I have a bunch of load save update
+function so we have load agent save
+agent update and then we have the same
+thing for the queries and so this
+directly maps to you know this entire
+agent Network here and all this is doing
+is basically we have some reference at
+the top level here and then we have a
+couple of load and save calls which hit
+the API agent Network which is some of
+the nux server backend methods so that's
+all that's doing so all the juicy stuff
+happens inside of Agents so let's go
+ahead and hop into agents for a moment
+and let's minimize everything here so we
+can get a high level idea
+so in the template
+we have a couple sections here so we
+have these hidden sections we have the
+add the prompt
+and then the responses and then we have
+all of our controls right the controls
+are
+you know all of our buttons here so
+nothing too crazy happening there we
+have a lot of omit calls and
+inside of the styling you can see
+classic view three component stuff
+here's an agent hook and then it's just
+a bunch of component Logic the kind of
+big core here is that we're using side
+escape so here it is so setup side
+escape so all links side escape in the
+description as well but basically you
+specify the style
+you specify what happens when you tap
+and
+you specify your container you specify
+the layout so really great way to
+visualize and handle node graph based
+visualizations
+so that's basically that I just wanted
+to drop and show the code off a little
+bit
+you know when those buttons are clicked
+when things are happening there it
+bubbles up
+to the top component which then runs
+save and load functionality that then
+hits the nux server API backend which
+you can see here
+bam so you can see agent Network git
+post let me know if you're interested in
+a separate nux video I can go into
+details on how you know this is all
+wired up I love Knox because you can get
+up and running running view very quickly
+you have to get used to the opinionated
+um
+directory structure but in reality you
+end up rebuilding this by yourself
+there's a quick walk through the code
+this is the
+agent network with the first agent view
+GPT subscribe if you want to see version
+3 version 4 and Beyond and drop a like
+if this tool looks interesting and feel
+free to comment if you have any ideas
+for new or novel features I'm building
+this in public I want to share my
+progress I want to get your input you
+know especially as a Vu engineer I'm
+going to be using lots of view things
+lots of python things so if that
+interests you like subscribe follow all
+that good stuff thank you so much for
+watching stay focused and keep building
+I'll see you in the next one
