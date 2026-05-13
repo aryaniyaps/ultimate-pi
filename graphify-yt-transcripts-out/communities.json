@@ -1,0 +1,7751 @@
+[
+  {
+    "id": 12,
+    "size": 421,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_baml",
+        "label": "BAML",
+        "degree": 216
+      },
+      {
+        "id": "boundaryml_2026_03_16_5pou9q1srow_global_boundary_company",
+        "label": "Boundary (company)",
+        "degree": 91
+      },
+      {
+        "id": "boundaryml_2026_03_16_5pou9q1srow_global_claude_code_harness",
+        "label": "Claude Code harness",
+        "degree": 29
+      },
+      {
+        "id": "indydevdan_2026_01_19_u5gkg71pkr0_skills",
+        "label": "Agent skills",
+        "degree": 27
+      },
+      {
+        "id": "chunk11_mcp",
+        "label": "MCP (Model Context Protocol)",
+        "degree": 20
+      },
+      {
+        "id": "boundaryml_2026_03_30_z5inasxkitu_bash_tool_for_skills",
+        "label": "Bash tool required for skill CLIs",
+        "degree": 8
+      }
+    ],
+    "top_node_labels": [
+      "BAML",
+      "Boundary (company)",
+      "Claude Code harness",
+      "Agent skills",
+      "MCP (Model Context Protocol)",
+      "Bash tool required for skill CLIs"
+    ],
+    "top_channels": [
+      "boundaryml",
+      "indydevdan",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 5,
+    "size": 389,
+    "top_nodes": [
+      {
+        "id": "chunk11_claude_code",
+        "label": "Claude Code",
+        "degree": 549
+      },
+      {
+        "id": "chunk11_structured_plan",
+        "label": "Structured plan document before execute",
+        "degree": 47
+      },
+      {
+        "id": "chunk11_vercel_agent_browser_cli",
+        "label": "Vercel Agent Browser CLI",
+        "degree": 30
+      },
+      {
+        "id": "boundaryml_2026_02_16_zx_claude_agent_sdk",
+        "label": "Claude Agent Sdk",
+        "degree": 26
+      },
+      {
+        "id": "chunk11_subagents",
+        "label": "Claude Code subagents",
+        "degree": 26
+      },
+      {
+        "id": "chunk11_prd_workflow",
+        "label": "PRD-first development",
+        "degree": 26
+      }
+    ],
+    "top_node_labels": [
+      "Claude Code",
+      "Structured plan document before execute",
+      "Vercel Agent Browser CLI",
+      "Claude Agent Sdk",
+      "Claude Code subagents",
+      "PRD-first development"
+    ],
+    "top_channels": [
+      "cole-medin",
+      "indydevdan",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 7,
+    "size": 270,
+    "top_nodes": [
+      {
+        "id": "chunk19_shared_principled_ai_coding",
+        "label": "Principled AI Coding",
+        "degree": 133
+      },
+      {
+        "id": "chunk19_shared_mcp",
+        "label": "Model Context Protocol",
+        "degree": 124
+      },
+      {
+        "id": "chunk19_shared_prompt_chain",
+        "label": "Prompt chain / workflow",
+        "degree": 120
+      },
+      {
+        "id": "chunk19_shared_aider",
+        "label": "Aider",
+        "degree": 92
+      },
+      {
+        "id": "chunk19_shared_spec_prompt",
+        "label": "Spec / plan prompt",
+        "degree": 41
+      },
+      {
+        "id": "chunk19_shared_context_priming",
+        "label": "Context priming",
+        "degree": 37
+      }
+    ],
+    "top_node_labels": [
+      "Principled AI Coding",
+      "Model Context Protocol",
+      "Prompt chain / workflow",
+      "Aider",
+      "Spec / plan prompt",
+      "Context priming"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "boundaryml",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 0,
+    "size": 249,
+    "top_nodes": [
+      {
+        "id": "chunk11_cursor",
+        "label": "Cursor",
+        "degree": 65
+      },
+      {
+        "id": "boundaryml_2025_04_01_aw_cursor",
+        "label": "Cursor IDE",
+        "degree": 28
+      },
+      {
+        "id": "indydevdan_2024_11_04_telgvpuargw_architect_mode",
+        "label": "Aider architect mode",
+        "degree": 26
+      },
+      {
+        "id": "indydevdan_2024_08_19_v9_claude_3_5_sonnet",
+        "label": "Claude 3.5 Sonnet",
+        "degree": 22
+      },
+      {
+        "id": "indydevdan_2022_09_11_9hm1oogzyic_github_copilot",
+        "label": "GitHub Copilot",
+        "degree": 20
+      },
+      {
+        "id": "indydevdan_2023_11_20_7ea19_d4_zo_triple_c_technique",
+        "label": "Triple C: Comment Copilot Coding",
+        "degree": 19
+      }
+    ],
+    "top_node_labels": [
+      "Cursor",
+      "Cursor IDE",
+      "Aider architect mode",
+      "Claude 3.5 Sonnet",
+      "GitHub Copilot",
+      "Triple C: Comment Copilot Coding"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "cole-medin",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 10,
+    "size": 240,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_context_engineering",
+        "label": "Context Engineering",
+        "degree": 71
+      },
+      {
+        "id": "cole_medin_2025_12_18_13hp_agent_harness",
+        "label": "Agent harness",
+        "degree": 18
+      },
+      {
+        "id": "boundaryml_2025_06_10_nmhh5_human_in_loop",
+        "label": "Human-in-the-loop",
+        "degree": 14
+      },
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_harness_eng_shared",
+        "label": "Harness Engineering",
+        "degree": 13
+      },
+      {
+        "id": "boundaryml_2025_08_20_2ivxndhjpxk_interruptible_agents",
+        "label": "Interruptible Agents",
+        "degree": 12
+      },
+      {
+        "id": "boundaryml_2025_09_06_ucqd_supervisor_agent",
+        "label": "Supervisor Agent",
+        "degree": 12
+      }
+    ],
+    "top_node_labels": [
+      "Context Engineering",
+      "Agent harness",
+      "Human-in-the-loop",
+      "Harness Engineering",
+      "Interruptible Agents",
+      "Supervisor Agent"
+    ],
+    "top_channels": [
+      "boundaryml",
+      "cole-medin",
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 45,
+    "size": 209,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_04_13_rvowj_claude_mythos",
+        "label": "Claude Mythos preview",
+        "degree": 27
+      },
+      {
+        "id": "cole_medin_2026_04_06_7hucp6rkcy4_karpathy",
+        "label": "Andrej Karpathy",
+        "degree": 21
+      },
+      {
+        "id": "boundaryml_2026_03_16_b5o6gb_ai_that_works_podcast",
+        "label": "AI That Works (podcast)",
+        "degree": 16
+      },
+      {
+        "id": "boundaryml_2025_10_17_gxckvkng6km_baml_language",
+        "label": "BAML (Boundary Markup Language)",
+        "degree": 15
+      },
+      {
+        "id": "indydevdan_2026_04_13_rvowj_agentic_engineering",
+        "label": "Agentic engineering",
+        "degree": 8
+      },
+      {
+        "id": "indydevdan_2026_04_13_rvowj_open_claw",
+        "label": "OpenClaw",
+        "degree": 7
+      }
+    ],
+    "top_node_labels": [
+      "Claude Mythos preview",
+      "Andrej Karpathy",
+      "AI That Works (podcast)",
+      "BAML (Boundary Markup Language)",
+      "Agentic engineering",
+      "OpenClaw"
+    ],
+    "top_channels": [
+      "boundaryml",
+      "indydevdan",
+      "nicksaraev"
+    ]
+  },
+  {
+    "id": 11,
+    "size": 205,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_nir896pqwoq_baml",
+        "label": "BAML (Boundary ML DSL)",
+        "degree": 14
+      },
+      {
+        "id": "boundaryml_2025_06_27_xece_w7xf48_asyncio_parallel_fanout",
+        "label": "asyncio parallel fanout",
+        "degree": 13
+      },
+      {
+        "id": "boundaryml_2025_06_27_xece_w7xf48_baml_codegen_ts_py",
+        "label": "baml codegen ts py",
+        "degree": 11
+      },
+      {
+        "id": "boundaryml_2025_06_27_xece_w7xf48_email_draft",
+        "label": "email draft",
+        "degree": 11
+      },
+      {
+        "id": "boundaryml_2025_06_27_xece_w7xf48_feedback_refine_loop",
+        "label": "feedback refine loop",
+        "degree": 11
+      },
+      {
+        "id": "boundaryml_2025_06_27_xece_w7xf48_golden_real_inputs",
+        "label": "golden real inputs",
+        "degree": 11
+      }
+    ],
+    "top_node_labels": [
+      "BAML (Boundary ML DSL)",
+      "asyncio parallel fanout",
+      "baml codegen ts py",
+      "email draft",
+      "feedback refine loop",
+      "golden real inputs"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 15,
+    "size": 193,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_16_pi_coding_agent",
+        "label": "Pi coding agent",
+        "degree": 33
+      },
+      {
+        "id": "indydevdan_2026_04_06_rairmjflusa_claude_code_leak",
+        "label": "Claude Code source leak",
+        "degree": 28
+      },
+      {
+        "id": "indydevdan_2026_04_20_00y_p62sk0s_mlx",
+        "label": "Apple MLX framework",
+        "degree": 24
+      },
+      {
+        "id": "indydevdan_2026_05_04_enxkysjnz_verifier_agent",
+        "label": "Verifier agent",
+        "degree": 19
+      },
+      {
+        "id": "indydevdan_2026_05_11_ybcmioa_vgs_bash_tool",
+        "label": "Bash / shell tool",
+        "degree": 18
+      },
+      {
+        "id": "indydevdan_2026_04_27_8idzbrrfnqu_claude_subscription",
+        "label": "Claude Pro/Max subscription",
+        "degree": 17
+      }
+    ],
+    "top_node_labels": [
+      "Pi coding agent",
+      "Claude Code source leak",
+      "Apple MLX framework",
+      "Verifier agent",
+      "Bash / shell tool",
+      "Claude Pro/Max subscription"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 22,
+    "size": 162,
+    "top_nodes": [
+      {
+        "id": "chunk19_shared_openai",
+        "label": "OpenAI",
+        "degree": 23
+      },
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_gpt4o_mini",
+        "label": "GPT-4o mini",
+        "degree": 13
+      },
+      {
+        "id": "indydevdan_2024_08_05_ikakpfuob0u_personal_ai_assistant",
+        "label": "Personal AI assistant",
+        "degree": 12
+      },
+      {
+        "id": "indydevdan_2024_05_13_28zuliyld5q_omni_complete",
+        "label": "Omni Complete (LLM autocomplete)",
+        "degree": 11
+      },
+      {
+        "id": "indydevdan_2024_06_17_4hsfcjspgow_five_prompt_elements",
+        "label": "Five essential prompt elements",
+        "degree": 11
+      },
+      {
+        "id": "indydevdan_2024_04_15_kli4sklc4hq_keyword_llm_router",
+        "label": "Keyword / LLM agent router",
+        "degree": 10
+      }
+    ],
+    "top_node_labels": [
+      "OpenAI",
+      "GPT-4o mini",
+      "Personal AI assistant",
+      "Omni Complete (LLM autocomplete)",
+      "Five essential prompt elements",
+      "Keyword / LLM agent router"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "boundaryml",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 6,
+    "size": 159,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_01_06_owum_4i22qi_typer_nl_suite",
+        "label": "NL to Typer CLI suite",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2025_01_06_owum_4i22qi_function_bench",
+        "label": "Function coder benchmark",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2025_01_06_owum_4i22qi_math_yaml",
+        "label": "simple-math YAML suite",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2023_12_04_5wrok4lboeo_talk_to_your_database",
+        "label": "Talk to Your Database",
+        "degree": 19
+      },
+      {
+        "id": "indydevdan_2023_12_18_v_promptfoo",
+        "label": "Promptfoo",
+        "degree": 18
+      },
+      {
+        "id": "indydevdan_2023_05_29_oiin_ljbpi0_llm_agent_network_v2",
+        "label": "LLM agent network V2",
+        "degree": 18
+      }
+    ],
+    "top_node_labels": [
+      "NL to Typer CLI suite",
+      "Function coder benchmark",
+      "simple-math YAML suite",
+      "Talk to Your Database",
+      "Promptfoo",
+      "LLM agent network V2"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 9,
+    "size": 159,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_11_25_ujnljru2lis_marimo",
+        "label": "Marimo prompt UI",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_11_25_ujnljru2lis_postgres_dialect",
+        "label": "Postgres dialect prompt",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_11_25_ujnljru2lis_spicy_summarize",
+        "label": "Spicy summarize template",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_11_25_ujnljru2lis_level4_chapters",
+        "label": "Level-4 YouTube chapters prompt",
+        "degree": 21
+      },
+      {
+        "id": "indydevdan_2024_08_19_v9_cursor_composer",
+        "label": "Cursor Composer",
+        "degree": 20
+      },
+      {
+        "id": "indydevdan_2024_08_12_poo7zjsvx0k_structured_outputs",
+        "label": "OpenAI structured outputs",
+        "degree": 16
+      }
+    ],
+    "top_node_labels": [
+      "Marimo prompt UI",
+      "Postgres dialect prompt",
+      "Spicy summarize template",
+      "Level-4 YouTube chapters prompt",
+      "Cursor Composer",
+      "OpenAI structured outputs"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 3,
+    "size": 156,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_10_11_dmxydpnznpy_pydantic_ai",
+        "label": "Pydantic AI",
+        "degree": 30
+      },
+      {
+        "id": "cole_medin_2026_02_23_goozsxmryq4_sub_agents",
+        "label": "Sub-agents / Context Isolation",
+        "degree": 28
+      },
+      {
+        "id": "chunk11_anthropic",
+        "label": "Anthropic",
+        "degree": 24
+      },
+      {
+        "id": "cole_medin_2026_03_19_gx_haiku_45",
+        "label": "Claude Haiku 4.5",
+        "degree": 17
+      },
+      {
+        "id": "cole_medin_2025_10_16_j2ti3ygvez0_python",
+        "label": "Python",
+        "degree": 15
+      },
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_langgraph",
+        "label": "LangGraph",
+        "degree": 13
+      }
+    ],
+    "top_node_labels": [
+      "Pydantic AI",
+      "Sub-agents / Context Isolation",
+      "Anthropic",
+      "Claude Haiku 4.5",
+      "Python",
+      "LangGraph"
+    ],
+    "top_channels": [
+      "cole-medin",
+      "indydevdan",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 38,
+    "size": 153,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_02_09_rputf_e2b",
+        "label": "E2B sandboxes",
+        "degree": 19
+      },
+      {
+        "id": "indydevdan_2025_02_03_k5xs669anqo_dense_14",
+        "label": "Multi-agent orchestration",
+        "degree": 18
+      },
+      {
+        "id": "indydevdan_2026_01_26_3_core_four",
+        "label": "core four",
+        "degree": 13
+      },
+      {
+        "id": "indydevdan_2026_03_09_loazlnqnb80_mac_mini_agent",
+        "label": "Mac Mini dedicated agent device",
+        "degree": 10
+      },
+      {
+        "id": "indydevdan_2026_01_26_3_install_command",
+        "label": "/install command",
+        "degree": 10
+      },
+      {
+        "id": "indydevdan_2025_12_22_u_sq0jsv4mi_year_of_trust",
+        "label": "2026: year of trust",
+        "degree": 9
+      }
+    ],
+    "top_node_labels": [
+      "E2B sandboxes",
+      "Multi-agent orchestration",
+      "core four",
+      "Mac Mini dedicated agent device",
+      "/install command",
+      "2026: year of trust"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 20,
+    "size": 152,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_01_20_y_episode",
+        "label": "Episode transcript anchor",
+        "degree": 154
+      },
+      {
+        "id": "indydevdan_2024_12_02_yoenwp9je6e_chain_ts",
+        "label": "chain.ts runner",
+        "degree": 24
+      },
+      {
+        "id": "indydevdan_2024_12_30_bcsuuvwvr_c_pred_infinite_ctx",
+        "label": "Infinite context window bet",
+        "degree": 24
+      },
+      {
+        "id": "indydevdan_2024_12_30_bcsuuvwvr_c_slop_prediction",
+        "label": "Exponential slop prediction",
+        "degree": 24
+      },
+      {
+        "id": "indydevdan_2024_12_30_bcsuuvwvr_c_data_moat",
+        "label": "Data > UX > benchmarks thesis",
+        "degree": 24
+      },
+      {
+        "id": "indydevdan_2025_01_13_zobwii4zita_awaken_cmd",
+        "label": "typer assistant awaken",
+        "degree": 23
+      }
+    ],
+    "top_node_labels": [
+      "Episode transcript anchor",
+      "chain.ts runner",
+      "Infinite context window bet",
+      "Exponential slop prediction",
+      "Data > UX > benchmarks thesis",
+      "typer assistant awaken"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 21,
+    "size": 145,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_05_19_y_eng_velocity_2",
+        "label": "Engineering velocity",
+        "degree": 32
+      },
+      {
+        "id": "indydevdan_2025_05_19_y_tool_observability_2",
+        "label": "Tool observability",
+        "degree": 25
+      },
+      {
+        "id": "indydevdan_2025_05_19_y_prompt_reuse_2",
+        "label": "Prompt reuse library",
+        "degree": 18
+      },
+      {
+        "id": "indydevdan_2025_05_19_y_branch_safety_2",
+        "label": "Branch safety practices",
+        "degree": 15
+      },
+      {
+        "id": "indydevdan_2023_05_29_oiin_ljbpi0_indydevdan_channel",
+        "label": "IndyDevDan YouTube channel",
+        "degree": 14
+      },
+      {
+        "id": "indydevdan_2026_01_12_wbhnfab0oe_principal_ai_coding",
+        "label": "Principal AI Coding",
+        "degree": 9
+      }
+    ],
+    "top_node_labels": [
+      "Engineering velocity",
+      "Tool observability",
+      "Prompt reuse library",
+      "Branch safety practices",
+      "IndyDevDan YouTube channel",
+      "Principal AI Coding"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 35,
+    "size": 117,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_02_v5a1iu8vvp4_stripe_minions",
+        "label": "Stripe Minions agents",
+        "degree": 17
+      },
+      {
+        "id": "indydevdan_2025_07_07_j5b9ugtunom_settings_json_hooks",
+        "label": "settings.json hooks",
+        "degree": 12
+      },
+      {
+        "id": "indydevdan_2025_10_27_kfplzcvla20_hooks",
+        "label": "Claude Code Hooks",
+        "degree": 12
+      },
+      {
+        "id": "indydevdan_2025_07_07_j5b9ugtunom_post_tool_use",
+        "label": "Post-tool use hook",
+        "degree": 11
+      },
+      {
+        "id": "indydevdan_2026_01_19_u5gkg71pkr0_hooks_in_skills",
+        "label": "Hooks in skills/subagents/commands",
+        "degree": 10
+      },
+      {
+        "id": "indydevdan_2026_01_12_wbhnfab0oe_stop_hook",
+        "label": "Stop hook",
+        "degree": 9
+      }
+    ],
+    "top_node_labels": [
+      "Stripe Minions agents",
+      "settings.json hooks",
+      "Claude Code Hooks",
+      "Post-tool use hook",
+      "Hooks in skills/subagents/commands",
+      "Stop hook"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "cole-medin",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 19,
+    "size": 102,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_10_09_jjvvydpvraq_microsoft_autogen",
+        "label": "Microsoft AutoGen framework",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2023_10_02_jmdmusirpka_postgres_analytics_agent",
+        "label": "Postgres data analytics AI agent",
+        "degree": 22
+      },
+      {
+        "id": "indydevdan_2024_04_15_kli4sklc4hq_autogen",
+        "label": "AutoGen",
+        "degree": 21
+      },
+      {
+        "id": "indydevdan_2023_08_07_aeasaspp9le_aider",
+        "label": "Aider AI pair programmer",
+        "degree": 17
+      },
+      {
+        "id": "indydevdan_2023_10_16_4o8tymmq5gm_custom_orchestrator_class",
+        "label": "Custom Orchestrator conversation controller",
+        "degree": 15
+      },
+      {
+        "id": "indydevdan_2023_10_30_ua6ivmdpuc8_agent_conversation_json_log",
+        "label": "Structured agent_conversations.json logging",
+        "degree": 14
+      }
+    ],
+    "top_node_labels": [
+      "Microsoft AutoGen framework",
+      "Postgres data analytics AI agent",
+      "AutoGen",
+      "Aider AI pair programmer",
+      "Custom Orchestrator conversation controller",
+      "Structured agent_conversations.json logging"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 14,
+    "size": 96,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_02_23_goozsxmryq4_harness",
+        "label": "Agent Harness / Orchestration",
+        "degree": 66
+      },
+      {
+        "id": "cole_medin_2026_04_09_qmnclyncamm_archon",
+        "label": "Archon harness builder",
+        "degree": 14
+      },
+      {
+        "id": "cole_medin_2026_03_12_nmwgxvm_to_minions",
+        "label": "Stripe Minions",
+        "degree": 12
+      },
+      {
+        "id": "cole_medin_2026_02_23_goozsxmryq4_piv_loop",
+        "label": "PIV Loop (Plan Implement Validate)",
+        "degree": 8
+      },
+      {
+        "id": "cole_medin_2026_03_30_haksubdsd6m_planner_agent",
+        "label": "Planner agent",
+        "degree": 8
+      },
+      {
+        "id": "cole_medin_2026_03_30_haksubdsd6m_evaluator_agent",
+        "label": "Evaluator / adversary",
+        "degree": 7
+      }
+    ],
+    "top_node_labels": [
+      "Agent Harness / Orchestration",
+      "Archon harness builder",
+      "Stripe Minions",
+      "PIV Loop (Plan Implement Validate)",
+      "Planner agent",
+      "Evaluator / adversary"
+    ],
+    "top_channels": [
+      "cole-medin",
+      "indydevdan",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 18,
+    "size": 81,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_01_05_4ytl9w_baml",
+        "label": "BAML (Boundary ML language)",
+        "degree": 22
+      },
+      {
+        "id": "boundaryml_2025_04_01_aw_human_layer",
+        "label": "Human Layer",
+        "degree": 12
+      },
+      {
+        "id": "boundaryml_2026_01_26_zpfxzk_3yxw_ethan_guest",
+        "label": "Ethan (MX / email infra guest)",
+        "degree": 8
+      },
+      {
+        "id": "boundaryml_2026_01_15_myh17bah8vy_baml_project",
+        "label": "BAML project (incremental)",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_15_myh17bah8vy_baml_executor",
+        "label": "BAML executor (static orchestration)",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_15_myh17bah8vy_baml_program",
+        "label": "BAML program (diff-applied)",
+        "degree": 7
+      }
+    ],
+    "top_node_labels": [
+      "BAML (Boundary ML language)",
+      "Human Layer",
+      "Ethan (MX / email infra guest)",
+      "BAML project (incremental)",
+      "BAML executor (static orchestration)",
+      "BAML program (diff-applied)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 4,
+    "size": 80,
+    "top_nodes": [
+      {
+        "id": "chunk11_pydantic_ai",
+        "label": "Pydantic AI framework",
+        "degree": 42
+      },
+      {
+        "id": "chunk11_generative_ui",
+        "label": "Generative UI",
+        "degree": 31
+      },
+      {
+        "id": "chunk11_skills",
+        "label": "Agent skills (progressive disclosure)",
+        "degree": 26
+      },
+      {
+        "id": "chunk11_obsidian",
+        "label": "Obsidian knowledge base",
+        "degree": 22
+      },
+      {
+        "id": "chunk11_progressive_disclosure",
+        "label": "Progressive disclosure pattern",
+        "degree": 21
+      },
+      {
+        "id": "indydevdan_2026_01_19_u5gkg71pkr0_review_finances_pipeline",
+        "label": "Review finances pipeline",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "Pydantic AI framework",
+      "Generative UI",
+      "Agent skills (progressive disclosure)",
+      "Obsidian knowledge base",
+      "Progressive disclosure pattern",
+      "Review finances pipeline"
+    ],
+    "top_channels": [
+      "cole-medin",
+      "boundaryml",
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 33,
+    "size": 62,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_nir896pqwoq_ollama_local",
+        "label": "ollama local",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_11_tcz3w8qyirq_f2_m4_hw",
+        "label": "m4 hw",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_11_tcz3w8qyirq_f2_haiku_grade",
+        "label": "haiku grade",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_11_tcz3w8qyirq_f2_readme_eval",
+        "label": "readme eval",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_11_tcz3w8qyirq_f2_constants_eval",
+        "label": "constants eval",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_11_tcz3w8qyirq_f2_provider_sw",
+        "label": "provider sw",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "ollama local",
+      "m4 hw",
+      "haiku grade",
+      "readme eval",
+      "constants eval",
+      "provider sw"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 29,
+    "size": 61,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_mcp",
+        "label": "Model Context Protocol (MCP)",
+        "degree": 20
+      },
+      {
+        "id": "mlops_2026_03_24_ywzr6tc7qyg_dexter_horthy",
+        "label": "Dexter Horthy",
+        "degree": 19
+      },
+      {
+        "id": "boundaryml_2026_01_05_4ytl9w_microsoft_google_path",
+        "label": "Microsoft then Google career path",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_05_4ytl9w_deshaw_testing_framework",
+        "label": "D. E. Shaw selective CI / test prediction",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_05_4ytl9w_git_diff_test_selection",
+        "label": "Git-diff-based test subset selection",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_05_4ytl9w_coding_bootcamp_cpp",
+        "label": "C++ focused coding bootcamp",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Model Context Protocol (MCP)",
+      "Dexter Horthy",
+      "Microsoft then Google career path",
+      "D. E. Shaw selective CI / test prediction",
+      "Git-diff-based test subset selection",
+      "C++ focused coding bootcamp"
+    ],
+    "top_channels": [
+      "boundaryml",
+      "mlops",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 28,
+    "size": 58,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_07_28_7b2hjr0y68g_sub_agents",
+        "label": "Claude Code Sub-Agents",
+        "degree": 7
+      },
+      {
+        "id": "indydevdan_2025_07_28_7b2hjr0y68g_big_three",
+        "label": "Big Three: Context Model Prompt",
+        "degree": 6
+      },
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_parallel_twelve",
+        "label": "12 Parallel Sub-Agents Example",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_29_d3rtocwnqz0_f9_compute_max",
+        "label": "compute max",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_29_d3rtocwnqz0_f9_monday_ship",
+        "label": "monday ship",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_29_d3rtocwnqz0_f9_voice_ui",
+        "label": "voice ui",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "Claude Code Sub-Agents",
+      "Big Three: Context Model Prompt",
+      "12 Parallel Sub-Agents Example",
+      "compute max",
+      "monday ship",
+      "voice ui"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 25,
+    "size": 54,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_01_12_wbhnfab0oe_fork_terminal_skill",
+        "label": "Fork terminal skill",
+        "degree": 17
+      },
+      {
+        "id": "cole_medin_2026_01_05_o8ki2paebbm_subagents",
+        "label": "Sub-agents",
+        "degree": 13
+      },
+      {
+        "id": "indydevdan_2025_11_24_v5ihshehxog_gemini_cli",
+        "label": "Gemini CLI",
+        "degree": 12
+      },
+      {
+        "id": "indydevdan_2025_11_24_v5ihshehxog_gemini_3_pro",
+        "label": "Gemini 3 Pro",
+        "degree": 9
+      },
+      {
+        "id": "cole_medin_2026_01_05_o8ki2paebbm_kiro",
+        "label": "Amazon Kiro / Q Developer coding agent (video theme)",
+        "degree": 8
+      },
+      {
+        "id": "cole_medin_2026_01_05_o8ki2paebbm_steering_docs",
+        "label": "Steering documents (global rules)",
+        "degree": 7
+      }
+    ],
+    "top_node_labels": [
+      "Fork terminal skill",
+      "Sub-agents",
+      "Gemini CLI",
+      "Gemini 3 Pro",
+      "Amazon Kiro / Q Developer coding agent (video theme)",
+      "Steering documents (global rules)"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 2,
+    "size": 53,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_vscode",
+        "label": "VS Code",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_12_23_ddbfmrdwav0_aider_load",
+        "label": "Aider /load",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_12_23_ddbfmrdwav0_kb_sqlite",
+        "label": "KB SQLite project",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_12_23_ddbfmrdwav0_youtube_kb_cmd",
+        "label": "add-youtube-script command",
+        "degree": 20
+      },
+      {
+        "id": "filter_readme_indydevdan_channel",
+        "label": "IndyDevDan channel",
+        "degree": 12
+      },
+      {
+        "id": "indydevdan_2024_12_23_ddbfmrdwav0_dense_0",
+        "label": "Principled AI Coding course",
+        "degree": 7
+      }
+    ],
+    "top_node_labels": [
+      "VS Code",
+      "Aider /load",
+      "KB SQLite project",
+      "add-youtube-script command",
+      "IndyDevDan channel",
+      "Principled AI Coding course"
+    ],
+    "top_channels": [
+      "indydevdan",
+      "cole-medin",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 32,
+    "size": 48,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_13_n6majrfqyw_llm_as_judge",
+        "label": "LLM-as-judge",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2025_12_08_jzhvo0iax_human_audit_sample",
+        "label": "Human audit sampling",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2025_12_08_jzhvo0iax_runtime_invariants",
+        "label": "Runtime invariant checks",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2025_12_08_jzhvo0iax_eval_metrics_precision",
+        "label": "Precision/recall style metrics",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2025_12_22_iksexg6f4ky_human_ranking_judge",
+        "label": "Human ranking judge",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_12_22_iksexg6f4ky_prompt_diff_view",
+        "label": "Prompt diff view",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "LLM-as-judge",
+      "Human audit sampling",
+      "Runtime invariant checks",
+      "Precision/recall style metrics",
+      "Human ranking judge",
+      "Prompt diff view"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 54,
+    "size": 44,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_08_26_vliogp8mwqi_vision_grid",
+        "label": "Vision Grid app",
+        "degree": 9
+      },
+      {
+        "id": "indydevdan_2024_08_26_vliogp8mwqi_flux_pro",
+        "label": "Flux Pro",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2024_08_26_vliogp8mwqi_replicate_api",
+        "label": "Replicate API",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_01_gyjoxc8lziw_f5_csv_extend",
+        "label": "csv extend",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_01_gyjoxc8lziw_f5_xml_sections",
+        "label": "xml sections",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_01_gyjoxc8lziw_f5_finance_viz",
+        "label": "finance viz",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "Vision Grid app",
+      "Flux Pro",
+      "Replicate API",
+      "csv extend",
+      "xml sections",
+      "finance viz"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 30,
+    "size": 41,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_16_b5o6gb_github_pr_comment_script",
+        "label": "GitHub PR comment automation script",
+        "degree": 5
+      },
+      {
+        "id": "boundaryml_2026_03_16_b5o6gb_amazon_l1_l3_ai_review",
+        "label": "Amazon L1\u2013L3 AI code review policy",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_16_b5o6gb_anthropic_max_plan_subsidy",
+        "label": "Anthropic Max plan / inference subsidy",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_16_b5o6gb_claude_agent_sdk_binary",
+        "label": "Claude Agent SDK wraps Claude Code binary",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_16_b5o6gb_claude_code_review_product",
+        "label": "Claude Code Review product debate",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_16_b5o6gb_codex_harness_mention",
+        "label": "Codex harness mention",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "GitHub PR comment automation script",
+      "Amazon L1\u2013L3 AI code review policy",
+      "Anthropic Max plan / inference subsidy",
+      "Claude Agent SDK wraps Claude Code binary",
+      "Claude Code Review product debate",
+      "Codex harness mention"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 8,
+    "size": 36,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_11_13_kwcrjp3vuy0_assistants_api",
+        "label": "OpenAI Assistants API",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2023_11_13_kwcrjp3vuy0_openai_dev_day",
+        "label": "OpenAI DevDay announcements",
+        "degree": 18
+      },
+      {
+        "id": "indydevdan_2023_11_13_kwcrjp3vuy0_turbo4_wrapper",
+        "label": "Turbo4 Python wrapper class",
+        "degree": 7
+      },
+      {
+        "id": "indydevdan_2023_11_13_kwcrjp3vuy0_building_blocks_philosophy",
+        "label": "Composable LLM building blocks philosophy",
+        "degree": 4
+      },
+      {
+        "id": "indydevdan_2023_11_27_uf7cyaxe3ei_turbo4_wrapper",
+        "label": "Turbo4 wrapper",
+        "degree": 4
+      },
+      {
+        "id": "indydevdan_2023_11_27_uf7cyaxe3ei_self_correcting_assistant",
+        "label": "Self-correcting SQL assistant",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "OpenAI Assistants API",
+      "OpenAI DevDay announcements",
+      "Turbo4 Python wrapper class",
+      "Composable LLM building blocks philosophy",
+      "Turbo4 wrapper",
+      "Self-correcting SQL assistant"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 37,
+    "size": 32,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_27_kfplzcvla20_output_styles",
+        "label": "output styles",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_18_mjhswrev_go_f3_emoji_tags",
+        "label": "emoji tags",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_18_mjhswrev_go_f3_bash_bg",
+        "label": "bash bg",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_18_mjhswrev_go_f3_hooks_state",
+        "label": "hooks state",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_18_mjhswrev_go_f3_aider_hist",
+        "label": "aider hist",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_18_mjhswrev_go_f3_pac_course",
+        "label": "pac course",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "output styles",
+      "emoji tags",
+      "bash bg",
+      "hooks state",
+      "aider hist",
+      "pac course"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 43,
+    "size": 32,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_09_15_luqknexhpfs_f7_horizon_pointer",
+        "label": "horizon pointer",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_15_luqknexhpfs_f7_delegate_sec",
+        "label": "delegate sec",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_15_luqknexhpfs_f7_parallel_sec",
+        "label": "parallel sec",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_15_luqknexhpfs_f7_meta_template",
+        "label": "meta template",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_15_luqknexhpfs_f7_tier_list",
+        "label": "tier list",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_09_15_luqknexhpfs_f7_consistency",
+        "label": "consistency",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "horizon pointer",
+      "delegate sec",
+      "parallel sec",
+      "meta template",
+      "tier list",
+      "consistency"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 1,
+    "size": 31,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_25_xojxd7hfad4_f4_wrap_mcp",
+        "label": "wrap mcp",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_25_xojxd7hfad4_f4_course_site",
+        "label": "course site",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_25_xojxd7hfad4_f4_decision_tree",
+        "label": "decision tree",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_25_xojxd7hfad4_f4_rule_of_three",
+        "label": "rule of three",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_25_xojxd7hfad4_f4_gray_box",
+        "label": "gray box",
+        "degree": 5
+      },
+      {
+        "id": "indydevdan_2025_08_25_xojxd7hfad4_f4_flow_primary",
+        "label": "flow primary",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "wrap mcp",
+      "course site",
+      "decision tree",
+      "rule of three",
+      "gray box",
+      "flow primary"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 27,
+    "size": 28,
+    "top_nodes": [
+      {
+        "id": "chunk11_ralph_wiggum",
+        "label": "Ralph Wiggum autonomous loop",
+        "degree": 32
+      },
+      {
+        "id": "chunk11_agent_harness",
+        "label": "Agent harness for long-running tasks",
+        "degree": 25
+      },
+      {
+        "id": "cole_medin_2026_01_15_5xvp9o4mslm_anthropic_marketplace",
+        "label": "Anthropic plugin marketplace",
+        "degree": 3
+      },
+      {
+        "id": "cole_medin_2026_01_15_5xvp9o4mslm_ralph_loop_plugin",
+        "label": "ralph-loop official plugin",
+        "degree": 3
+      },
+      {
+        "id": "cole_medin_2026_01_15_5xvp9o4mslm_prp_ralph_edition",
+        "label": "PRP Ralph plugin edition",
+        "degree": 3
+      },
+      {
+        "id": "chunk11_prp_framework",
+        "label": "PRP (product requirement prompt) framework",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Ralph Wiggum autonomous loop",
+      "Agent harness for long-running tasks",
+      "Anthropic plugin marketplace",
+      "ralph-loop official plugin",
+      "PRP Ralph plugin edition",
+      "PRP (product requirement prompt) framework"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 26,
+    "size": 27,
+    "top_nodes": [
+      {
+        "id": "latentspacepod_2026_04_07_ceoxx_xtyek_ryan_lopopo",
+        "label": "Ryan Lopopo",
+        "degree": 26
+      },
+      {
+        "id": "cole_medin_2025_09_29_p_0fm8ljl0i_latent_space",
+        "label": "Latent Space (podcast)",
+        "degree": 3
+      },
+      {
+        "id": "latentspacepod_2026_04_07_ceoxx_xtyek_harness_engineering_article",
+        "label": "Harness engineering blog post",
+        "degree": 3
+      },
+      {
+        "id": "latentspacepod_2026_04_07_ceoxx_xtyek_openai_frontier",
+        "label": "OpenAI Frontier enterprise platform",
+        "degree": 3
+      },
+      {
+        "id": "latentspacepod_2026_04_07_ceoxx_xtyek_codeex_cli",
+        "label": "Codex CLI harness",
+        "degree": 3
+      },
+      {
+        "id": "latentspacepod_2026_04_07_ceoxx_xtyek_symphony",
+        "label": "Symphony orchestration (Elixir/BEAM)",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Ryan Lopopo",
+      "Latent Space (podcast)",
+      "Harness engineering blog post",
+      "OpenAI Frontier enterprise platform",
+      "Codex CLI harness",
+      "Symphony orchestration (Elixir/BEAM)"
+    ],
+    "top_channels": [
+      "latentspacepod",
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 52,
+    "size": 24,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_01_19_yha68hvwhre_type_narrowing_templates",
+        "label": "Template type narrowing via discriminator",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_19_yha68hvwhre_cfi_dynamic_class_codegen",
+        "label": "CFI codegen for dynamic classes",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_yha68hvwhre_image_pointer_encoding",
+        "label": "Images-as-pointers encoding fix",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_yha68hvwhre_error_hierarchy_http",
+        "label": "BAML HTTP client error hierarchy cleanup",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_yha68hvwhre_community_contributor_credit",
+        "label": "Community contributor credit in release",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_yha68hvwhre_backpressure_browser",
+        "label": "Backpressure handling in browser streams",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Template type narrowing via discriminator",
+      "CFI codegen for dynamic classes",
+      "Images-as-pointers encoding fix",
+      "BAML HTTP client error hierarchy cleanup",
+      "Community contributor credit in release",
+      "Backpressure handling in browser streams"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 13,
+    "size": 23,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_30_z5inasxkitu_mcp_all_or_nothing_schemas",
+        "label": "MCP all-or-nothing tool schemas",
+        "degree": 5
+      },
+      {
+        "id": "boundaryml_2026_03_30_z5inasxkitu_go_rust_schema_reflection_limits",
+        "label": "Go/Rust schema reflection limits",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_30_z5inasxkitu_hubspot_mcp_example",
+        "label": "HubSpot MCP bloat example",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_30_z5inasxkitu_iphone_app_store_analogy",
+        "label": "iPhone App Store analogy for MCP",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_30_z5inasxkitu_jack_collapsed_tool_question",
+        "label": "Jack question on single get_ticket tool",
+        "degree": 4
+      },
+      {
+        "id": "boundaryml_2026_03_30_z5inasxkitu_jagged_frontier_context_eng",
+        "label": "Jagged frontier + context engineering",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "MCP all-or-nothing tool schemas",
+      "Go/Rust schema reflection limits",
+      "HubSpot MCP bloat example",
+      "iPhone App Store analogy for MCP",
+      "Jack question on single get_ticket tool",
+      "Jagged frontier + context engineering"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 36,
+    "size": 22,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_01_12_wadvikjnjqe_async_ui_patterns",
+        "label": "Async UI: DB sync engine / event streams",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_12_wadvikjnjqe_latency_bottleneck_framing",
+        "label": "Find bottleneck before optimizing",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_12_wadvikjnjqe_firebase_convex_electric",
+        "label": "Firebase, Convex, Electric SQL sync engines",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_12_wadvikjnjqe_redis_cache_view",
+        "label": "Redis cache treating agent as API",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_12_wadvikjnjqe_client_side_batching",
+        "label": "Client-side batching of tool calls",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_12_wadvikjnjqe_waterfall_charting",
+        "label": "Waterfall charting for multi-step agent traces",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Async UI: DB sync engine / event streams",
+      "Find bottleneck before optimizing",
+      "Firebase, Convex, Electric SQL sync engines",
+      "Redis cache treating agent as API",
+      "Client-side batching of tool calls",
+      "Waterfall charting for multi-step agent traces"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 48,
+    "size": 22,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_12_29_ejisrldxt08_client_registry_docs",
+        "label": "client.setPrimary documentation improvement",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2025_12_29_ejisrldxt08_github_issue_zach",
+        "label": "GitHub issue on client registry clarity",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_ejisrldxt08_discord_sax_css",
+        "label": "Discord report: CSS preload with PDF tests",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_ejisrldxt08_vscode_extension_baml",
+        "label": "VS Code BAML extension release cadence",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_ejisrldxt08_semver_policy",
+        "label": "Semantic versioning policy for clients",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_ejisrldxt08_hotfix_cherry_pick",
+        "label": "Hotfix cherry-pick workflow",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "client.setPrimary documentation improvement",
+      "GitHub issue on client registry clarity",
+      "Discord report: CSS preload with PDF tests",
+      "VS Code BAML extension release cadence",
+      "Semantic versioning policy for clients",
+      "Hotfix cherry-pick workflow"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 49,
+    "size": 22,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_01_05_ow_oig6z_l8_union_media_type_matching",
+        "label": "Union image/PDF matching heuristics",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_05_ow_oig6z_l8_file_extension_heuristic",
+        "label": "File-extension-based union disambiguation",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_05_ow_oig6z_l8_parser_speed_tradeoff",
+        "label": "Avoid reading file bytes for parser speed",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_05_ow_oig6z_l8_mime_type_sniffing",
+        "label": "MIME sniffing vs explicit type hints",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_05_ow_oig6z_l8_feature_flag_union_v2",
+        "label": "Feature flag for union v2 heuristics",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_05_ow_oig6z_l8_rollback_plan_parser",
+        "label": "Rollback plan for parser regressions",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Union image/PDF matching heuristics",
+      "File-extension-based union disambiguation",
+      "Avoid reading file bytes for parser speed",
+      "MIME sniffing vs explicit type hints",
+      "Feature flag for union v2 heuristics",
+      "Rollback plan for parser regressions"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 50,
+    "size": 22,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_01_12_wdewiaiochs_tracing_flush_workaround",
+        "label": "Manual flush for Django RQ + async tracing",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_12_wdewiaiochs_pydantic_field_descriptions",
+        "label": "@description on BAML fields \u2192 Pydantic",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_12_wdewiaiochs_cfi_image_encoding",
+        "label": "CFI image input encoding fix",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_12_wdewiaiochs_boundary_studio_video",
+        "label": "Boundary Studio video previews in traces",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_12_wdewiaiochs_performance_budget_traces",
+        "label": "Performance budget for trace payload size",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_12_wdewiaiochs_async_context_propagation",
+        "label": "Async context propagation for tracing",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Manual flush for Django RQ + async tracing",
+      "@description on BAML fields \u2192 Pydantic",
+      "CFI image input encoding fix",
+      "Boundary Studio video previews in traces",
+      "Performance budget for trace payload size",
+      "Async context propagation for tracing"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 53,
+    "size": 22,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_01_26_amut_4yrl4o_zed_windows_lsp",
+        "label": "Zed on Windows BAML CLI install fix",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_26_amut_4yrl4o_streaming_retry_chunks",
+        "label": "Streaming across retries fix",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_26_amut_4yrl4o_nextjs16_turbopack_pr",
+        "label": "Next.js 16 Turbopack community PR",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_26_amut_4yrl4o_windows_path_separator",
+        "label": "Windows path separator handling in Zed",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_26_amut_4yrl4o_regression_test_matrix",
+        "label": "Regression test matrix expansion",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_26_amut_4yrl4o_telemetry_retry_metrics",
+        "label": "Telemetry on retry counts in playground",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Zed on Windows BAML CLI install fix",
+      "Streaming across retries fix",
+      "Next.js 16 Turbopack community PR",
+      "Windows path separator handling in Zed",
+      "Regression test matrix expansion",
+      "Telemetry on retry counts in playground"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 55,
+    "size": 22,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_11_11_1obiasia8bq_autocomplete_ui",
+        "label": "Autocomplete benchmark UI",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_11_11_1obiasia8bq_cost_columns",
+        "label": "Cost and latency columns",
+        "degree": 23
+      },
+      {
+        "id": "indydevdan_2024_11_11_1obiasia8bq_debounce",
+        "label": "Debounced requests",
+        "degree": 22
+      },
+      {
+        "id": "indydevdan_2024_11_11_1obiasia8bq_mini_predictive",
+        "label": "GPT-4o mini + predicted outputs",
+        "degree": 21
+      },
+      {
+        "id": "indydevdan_2024_11_11_1obiasia8bq_extra_0",
+        "label": "Benchmark cherry-picking critique",
+        "degree": 4
+      },
+      {
+        "id": "indydevdan_2024_11_11_1obiasia8bq_extra_1",
+        "label": "Geo latency caveat",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "Autocomplete benchmark UI",
+      "Cost and latency columns",
+      "Debounced requests",
+      "GPT-4o mini + predicted outputs",
+      "Benchmark cherry-picking critique",
+      "Geo latency caveat"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 39,
+    "size": 21,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_16_meta_agentics",
+        "label": "Meta agentics",
+        "degree": 7
+      },
+      {
+        "id": "indydevdan_2026_03_16_library_meta_skill",
+        "label": "Library meta-skill",
+        "degree": 6
+      },
+      {
+        "id": "indydevdan_2026_03_16_library_yaml",
+        "label": "library.yaml reference catalog",
+        "degree": 6
+      },
+      {
+        "id": "indydevdan_2026_03_16_use_command",
+        "label": "library use",
+        "degree": 4
+      },
+      {
+        "id": "indydevdan_2026_03_16_slash_library",
+        "label": "/library command",
+        "degree": 3
+      },
+      {
+        "id": "indydevdan_2026_03_02_v5a1iu8vvp4_tool_shed",
+        "label": "Tool shed MCP meta-server",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Meta agentics",
+      "Library meta-skill",
+      "library.yaml reference catalog",
+      "library use",
+      "/library command",
+      "Tool shed MCP meta-server"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 23,
+    "size": 21,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_11_12_f69fiqkpy3m_onion_skin_ui",
+        "label": "Onion skin compiler UI",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_12_f69fiqkpy3m_ast_as_projection",
+        "label": "AST as projection of CST",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_12_f69fiqkpy3m_error_recovery_parsing",
+        "label": "Error recovery in parser",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_12_f69fiqkpy3m_green_node_immutability",
+        "label": "Green node immutability",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_12_f69fiqkpy3m_syntax_highlighting_cst",
+        "label": "Syntax highlighting from CST",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_12_f69fiqkpy3m_formatter_cst",
+        "label": "Formatter using CST",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Onion skin compiler UI",
+      "AST as projection of CST",
+      "Error recovery in parser",
+      "Green node immutability",
+      "Syntax highlighting from CST",
+      "Formatter using CST"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 44,
+    "size": 21,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_12_15_ttifkj0ncds_structured_outputs_debate",
+        "label": "Structured outputs debate",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_12_15_ttifkj0ncds_baml_lsp_update",
+        "label": "BAML LSP update",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_12_15_ttifkj0ncds_playground_reload",
+        "label": "Playground hot reload",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_12_15_ttifkj0ncds_rust_analyzer_compat",
+        "label": "rust-analyzer compat",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_12_15_ttifkj0ncds_wasm_bundle_size",
+        "label": "WASM bundle size",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_12_15_ttifkj0ncds_telemetry_crash_fix",
+        "label": "Telemetry crash fix",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Structured outputs debate",
+      "BAML LSP update",
+      "Playground hot reload",
+      "rust-analyzer compat",
+      "WASM bundle size",
+      "Telemetry crash fix"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 17,
+    "size": 20,
+    "top_nodes": [
+      {
+        "id": "jaymin_west_2026_03_02_88fc685v7ac_anti_slop",
+        "label": "Anti-slop engineering",
+        "degree": 20
+      },
+      {
+        "id": "boundaryml_2026_02_16_zx_pre_commit_hooks",
+        "label": "Pre Commit Hooks",
+        "degree": 4
+      },
+      {
+        "id": "jaymin_west_2026_03_02_88fc685v7ac_hooks",
+        "label": "Hooks as harness layer",
+        "degree": 4
+      },
+      {
+        "id": "jaymin_west_2026_03_02_88fc685v7ac_standardization",
+        "label": "Standardization of agent workflows",
+        "degree": 3
+      },
+      {
+        "id": "jaymin_west_2026_03_02_88fc685v7ac_prompt_to_prod",
+        "label": "Prompt to Prod community",
+        "degree": 3
+      },
+      {
+        "id": "jaymin_west_2026_03_02_88fc685v7ac_quality_gates",
+        "label": "Quality gates (lint/type/tests)",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Anti-slop engineering",
+      "Pre Commit Hooks",
+      "Hooks as harness layer",
+      "Standardization of agent workflows",
+      "Prompt to Prod community",
+      "Quality gates (lint/type/tests)"
+    ],
+    "top_channels": [
+      "jaymin-west",
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 34,
+    "size": 20,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_11_17_qm3_toml_yaml_json_modes",
+        "label": "TOML/YAML/JSON value modes",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_17_qm3_nested_class_render",
+        "label": "Nested class rendering",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_17_qm3_typescript_client_fix",
+        "label": "TypeScript client fix",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_17_qm3_python_client_fix",
+        "label": "Python client fix",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_17_qm3_go_client_fix",
+        "label": "Go client fix",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_11_17_qm3_ruby_client_fix",
+        "label": "Ruby client fix",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "TOML/YAML/JSON value modes",
+      "Nested class rendering",
+      "TypeScript client fix",
+      "Python client fix",
+      "Go client fix",
+      "Ruby client fix"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 51,
+    "size": 20,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_01_19_qgany0sedik_control_flow_via_prompt",
+        "label": "Anti-pattern: control flow only via prompt",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2026_01_19_qgany0sedik_makefile_agent_story",
+        "label": "Makefile agent vs 90s bash lesson",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_qgany0sedik_create_plan_prompt",
+        "label": "Human Layer create_plan prompt workflow",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_qgany0sedik_sdk_structured_workflows",
+        "label": "SDK-encoded structured workflows",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_qgany0sedik_logging_structured_events",
+        "label": "Structured event logging for agent runs",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2026_01_19_qgany0sedik_rollback_on_tool_failure",
+        "label": "Rollback strategy on tool failure",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Anti-pattern: control flow only via prompt",
+      "Makefile agent vs 90s bash lesson",
+      "Human Layer create_plan prompt workflow",
+      "SDK-encoded structured workflows",
+      "Structured event logging for agent runs",
+      "Rollback strategy on tool failure"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 16,
+    "size": 19,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_02_xq8vxngvstg_beex_engine",
+        "label": "Beex Engine",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2026_02_02_xq8vxngvstg_baml_playground_wasm",
+        "label": "Baml Playground Wasm",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2026_02_02_xq8vxngvstg_wasi_runtime",
+        "label": "Wasi Runtime",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2026_02_02_xq8vxngvstg_obsidian_ticket",
+        "label": "Obsidian Ticket",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2026_03_09_vhen4fhgon0_studio_fix_13",
+        "label": "Studio UX fix 13",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_vibov",
+        "label": "Vibov",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Beex Engine",
+      "Baml Playground Wasm",
+      "Wasi Runtime",
+      "Obsidian Ticket",
+      "Studio UX fix 13",
+      "Vibov"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 40,
+    "size": 18,
+    "top_nodes": [
+      {
+        "id": "mastra_ai_2026_05_07_5eogrvolg1q_mastra",
+        "label": "Mastra framework",
+        "degree": 17
+      },
+      {
+        "id": "mastra_ai_2026_05_07_5eogrvolg1q_claude_code",
+        "label": "Claude Code usage at Range",
+        "degree": 4
+      },
+      {
+        "id": "mastra_ai_2026_05_07_5eogrvolg1q_david_cusatis",
+        "label": "David Cusatis",
+        "degree": 3
+      },
+      {
+        "id": "mastra_ai_2026_05_07_5eogrvolg1q_sec_compliance",
+        "label": "SEC RIA compliance",
+        "degree": 3
+      },
+      {
+        "id": "mastra_ai_2026_05_07_5eogrvolg1q_audit_logging",
+        "label": "Audit logging / retention",
+        "degree": 3
+      },
+      {
+        "id": "mastra_ai_2026_05_07_5eogrvolg1q_resilient_language_model",
+        "label": "Resilient language model failover",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Mastra framework",
+      "Claude Code usage at Range",
+      "David Cusatis",
+      "SEC RIA compliance",
+      "Audit logging / retention",
+      "Resilient language model failover"
+    ],
+    "top_channels": [
+      "mastra-ai"
+    ]
+  },
+  {
+    "id": 31,
+    "size": 16,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_discord",
+        "label": "Discord community support",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_20_egz0xqhm50_boundary_blog",
+        "label": "Boundary blog",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_20_egz0xqhm50_typescript_sdk",
+        "label": "TypeScript SDK",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_20_egz0xqhm50_changelog_ship_friday",
+        "label": "Ship Friday changelog",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_20_egz0xqhm50_community_issues",
+        "label": "Community GitHub issues",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_20_egz0xqhm50_wasm_runtime",
+        "label": "WASM runtime considerations",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Discord community support",
+      "Boundary blog",
+      "TypeScript SDK",
+      "Ship Friday changelog",
+      "Community GitHub issues",
+      "WASM runtime considerations"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 41,
+    "size": 16,
+    "top_nodes": [
+      {
+        "id": "mlops_2026_03_31_vbx24v_braintrust",
+        "label": "Braintrust eval platform",
+        "degree": 15
+      },
+      {
+        "id": "mlops_2026_03_31_vbx24v_claude_code",
+        "label": "Claude Code as agentic search baseline",
+        "degree": 4
+      },
+      {
+        "id": "mlops_2026_03_31_vbx24v_evals_loop",
+        "label": "Eval dataset-task-score-experiment loop",
+        "degree": 3
+      },
+      {
+        "id": "mlops_2026_03_31_vbx24v_loop_nl_query",
+        "label": "Braintrust Loop natural language",
+        "degree": 3
+      },
+      {
+        "id": "mlops_2026_03_31_vbx24v_production_logs_to_dataset",
+        "label": "Prod logs to eval dataset",
+        "degree": 3
+      },
+      {
+        "id": "mlops_2026_03_31_vbx24v_agentic_search",
+        "label": "Agentic search (CLI tools)",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Braintrust eval platform",
+      "Claude Code as agentic search baseline",
+      "Eval dataset-task-score-experiment loop",
+      "Braintrust Loop natural language",
+      "Prod logs to eval dataset",
+      "Agentic search (CLI tools)"
+    ],
+    "top_channels": [
+      "mlops"
+    ]
+  },
+  {
+    "id": 46,
+    "size": 16,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_12_22_sauoahwur8_template_strings_tests",
+        "label": "Shared template strings for tests",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2025_12_22_sauoahwur8_d_no_tests_client",
+        "label": "BAML client gen without embedding tests",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_22_sauoahwur8_pdf_native_type",
+        "label": "Native PDF media type in BAML",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_22_sauoahwur8_openrouter_defaults",
+        "label": "OpenRouter as default BAML client target",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_22_sauoahwur8_boundary_discord",
+        "label": "Boundary Discord community",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_22_sauoahwur8_ship_it_fridays",
+        "label": "Ship it Fridays format",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Shared template strings for tests",
+      "BAML client gen without embedding tests",
+      "Native PDF media type in BAML",
+      "OpenRouter as default BAML client target",
+      "Boundary Discord community",
+      "Ship it Fridays format"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 47,
+    "size": 16,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_12_29_leoa19ss9lc_metalytics_startup",
+        "label": "Metalytics (Snowflake agent startup)",
+        "degree": 7
+      },
+      {
+        "id": "boundaryml_2025_12_29_leoa19ss9lc_human_in_the_loop_slack",
+        "label": "Human approval via Slack natural language",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_leoa19ss9lc_webhook_vs_polling",
+        "label": "Webhook callback vs polling anti-pattern",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_leoa19ss9lc_mom_test_book",
+        "label": "The Mom Test customer discovery",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_leoa19ss9lc_email_mcp_agent_experiment",
+        "label": "Email-based MCP agent prototype",
+        "degree": 6
+      },
+      {
+        "id": "boundaryml_2025_12_29_leoa19ss9lc_guided_planning_autotune",
+        "label": "Guided planning / autotune for plans",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Metalytics (Snowflake agent startup)",
+      "Human approval via Slack natural language",
+      "Webhook callback vs polling anti-pattern",
+      "The Mom Test customer discovery",
+      "Email-based MCP agent prototype",
+      "Guided planning / autotune for plans"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 42,
+    "size": 13,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_10_17_gxckvkng6km_openai_compat",
+        "label": "OpenAI-compatible providers",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_17_gxckvkng6km_anthropic_models",
+        "label": "Anthropic Claude models",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_17_gxckvkng6km_type_safety_boundary",
+        "label": "Type safety at LLM boundary",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_17_gxckvkng6km_test_driven_prompts",
+        "label": "Test-driven prompting",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_17_gxckvkng6km_serialization_json",
+        "label": "JSON serialization contracts",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2025_10_17_gxckvkng6km_enum_unions",
+        "label": "Enums and unions in BAML",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "OpenAI-compatible providers",
+      "Anthropic Claude models",
+      "Type safety at LLM boundary",
+      "Test-driven prompting",
+      "JSON serialization contracts",
+      "Enums and unions in BAML"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 24,
+    "size": 6,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_doc_link_suggestion_pipeline",
+        "label": "Docs hyperlink suggestion pipeline (Sam)",
+        "degree": 3
+      },
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_haiku_vs_sonnet_eval",
+        "label": "Claude Haiku vs Sonnet for doc link task",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_citation_substring_verify",
+        "label": "Citation Substring Verify",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_fact_class_citation_summary",
+        "label": "Fact Class Citation Summary",
+        "degree": 2
+      },
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_http_sitemap_verification",
+        "label": "HTTP + sitemap verification of suggested links",
+        "degree": 1
+      },
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_extract_facts_function",
+        "label": "Extract Facts Function",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Docs hyperlink suggestion pipeline (Sam)",
+      "Claude Haiku vs Sonnet for doc link task",
+      "Citation Substring Verify",
+      "Fact Class Citation Summary",
+      "HTTP + sitemap verification of suggested links",
+      "Extract Facts Function"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 56,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "baururazalinov_2026_03_30_9f4b3xzjjkq_eight_levels_framework",
+        "label": "Eight Levels of Agentic Engineering",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Eight Levels of Agentic Engineering"
+    ],
+    "top_channels": [
+      "baururazalinov"
+    ]
+  },
+  {
+    "id": 57,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "baururazalinov_2026_03_30_9f4b3xzjjkq_level1_tab_autocomplete",
+        "label": "Level 1: Tab Autocomplete (Copilot era)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Level 1: Tab Autocomplete (Copilot era)"
+    ],
+    "top_channels": [
+      "baururazalinov"
+    ]
+  },
+  {
+    "id": 58,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "baururazalinov_2026_03_30_9f4b3xzjjkq_autonomous_agent_teams",
+        "label": "Autonomous Agent Teams",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Autonomous Agent Teams"
+    ],
+    "top_channels": [
+      "baururazalinov"
+    ]
+  },
+  {
+    "id": 59,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "baururazalinov_2026_03_30_9f4b3xzjjkq_voice_future_interface",
+        "label": "Voice-to-Voice Engineering Interface (speculative)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Voice-to-Voice Engineering Interface (speculative)"
+    ],
+    "top_channels": [
+      "baururazalinov"
+    ]
+  },
+  {
+    "id": 60,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_baml_playground",
+        "label": "BAML VS Code Playground",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "BAML VS Code Playground"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 61,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_raw_web_request_view",
+        "label": "Raw web request inspection",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Raw web request inspection"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 62,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_02_07_s9jxdvlfdju_prompt_visibility",
+        "label": "Prompt visibility as essential primitive",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Prompt visibility as essential primitive"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 63,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_baml_client_generated",
+        "label": "Generated baml_client (Python)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Generated baml_client (Python)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 64,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_pydantic_sync",
+        "label": "Pydantic-typed generated client sync",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Pydantic-typed generated client sync"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 65,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_streaming_api",
+        "label": "BAML streaming (.stream)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "BAML streaming (.stream)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 66,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_21_xwt7mht_nested_classes_experience",
+        "label": "Nested classes for resume fields",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Nested classes for resume fields"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 67,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_19_xcpqdhx5im0_category_enums",
+        "label": "Predefined holding categories (cash, ETF, mutual fund)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Predefined holding categories (cash, ETF, mutual fund)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 68,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_19_xcpqdhx5im0_unknown_category_bucket",
+        "label": "Unknown category for junk rows",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Unknown category for junk rows"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 69,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_streaming_facts_ui",
+        "label": "Streaming structured facts to UI",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Streaming structured facts to UI"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 70,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_semantic_streaming_baml",
+        "label": "Semantic streaming (complete numbers/chunks)",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Semantic streaming (complete numbers/chunks)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 71,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_wasm_local_parse",
+        "label": "WebAssembly local parsing (<1ms)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "WebAssembly local parsing (<1ms)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 72,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_21_xwt7mht_rust_runtime",
+        "label": "BAML Rust runtime / local parsing",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "BAML Rust runtime / local parsing"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 73,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_structured_streaming_state_machine",
+        "label": "Structured Streaming State Machine",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Structured Streaming State Machine"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 74,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_02_07_s9jxdvlfdju_show_me_prompt_blog",
+        "label": "Hamel Husain 'Show me the prompt' critique",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Hamel Husain 'Show me the prompt' critique"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 75,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_09_16_mitj2ukpb_s_unit_test_first_prompts",
+        "label": "Test-first prompt iteration",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Test-first prompt iteration"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 76,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_identify_source_function",
+        "label": "Identify Source Function",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Identify Source Function"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 77,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_clarifying_questions_pattern",
+        "label": "Clarifying Questions Pattern",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Clarifying Questions Pattern"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 78,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_massive_single_prompt_antipattern",
+        "label": "Massive Single Prompt Antipattern",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Massive Single Prompt Antipattern"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 79,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_switch_statement_metaphor",
+        "label": "Switch Statement Metaphor",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Switch Statement Metaphor"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 80,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_user_action_vs_tool_action",
+        "label": "User Action Vs Tool Action",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "User Action Vs Tool Action"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 81,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_cnn_bbc_reddit_twitter_sources",
+        "label": "Cnn Bbc Reddit Twitter Sources",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Cnn Bbc Reddit Twitter Sources"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 82,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_gpt4o_mini_source_classifier",
+        "label": "Gpt4O Mini Source Classifier",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Gpt4O Mini Source Classifier"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 83,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_batch_classification_discord",
+        "label": "Batch Classification Discord",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Batch Classification Discord"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 84,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_concurrent_pipeline_summarize",
+        "label": "Concurrent Pipeline Summarize",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Concurrent Pipeline Summarize"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 85,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_semantic_issue_matching_llm",
+        "label": "Semantic Issue Matching Llm",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Semantic Issue Matching Llm"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 86,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_hallucinated_github_id_skip",
+        "label": "Hallucinated Github Id Skip",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Hallucinated Github Id Skip"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 87,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_eval_ui_vs_terminal",
+        "label": "Eval Ui Vs Terminal",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Eval Ui Vs Terminal"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 88,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_haiku_sitemap_internal_links",
+        "label": "Haiku Sitemap Internal Links",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Haiku Sitemap Internal Links"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 89,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_rag_json_dump_bad_prompt",
+        "label": "Rag Json Dump Bad Prompt",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Rag Json Dump Bad Prompt"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 90,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_native_rag_not_in_baml",
+        "label": "Native Rag Not In Baml",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Native Rag Not In Baml"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 91,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_recipe_ingredients_first_order",
+        "label": "Recipe Ingredients First Order",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Recipe Ingredients First Order"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 92,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_enum_source_type",
+        "label": "Enum Source Type",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Enum Source Type"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 93,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_image_input_identify_source",
+        "label": "Image Input Identify Source",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Image Input Identify Source"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 94,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_bbc_png_test_asset",
+        "label": "Bbc Png Test Asset",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Bbc Png Test Asset"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 95,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_fact_opinion_enum_future",
+        "label": "Fact Opinion Enum Future",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Fact Opinion Enum Future"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 96,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_sentence_level_classification_design",
+        "label": "Sentence Level Classification Design",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Sentence Level Classification Design"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 97,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_streaming_print_loop_bug",
+        "label": "Streaming Print Loop Bug",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Streaming Print Loop Bug"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 98,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_api_key_rotation_joke",
+        "label": "Api Key Rotation Joke",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Api Key Rotation Joke"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 99,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_role_system_default_injection",
+        "label": "Role System Default Injection",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Role System Default Injection"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 100,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_10_04_rnyicgiskis_image_requires_user_role_note",
+        "label": "Image Requires User Role Note",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Image Requires User Role Note"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 101,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_sam_shiny_not_gradio",
+        "label": "Sam Shiny Not Gradio",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Sam Shiny Not Gradio"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 102,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_weekly_doc_link_refresh_job",
+        "label": "Weekly Doc Link Refresh Job",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Weekly Doc Link Refresh Job"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 103,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_aaron_architecture_diagram_tool_router",
+        "label": "Aaron Architecture Diagram Tool Router",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Aaron Architecture Diagram Tool Router"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 104,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_pinecone_hybrid_discord_docs",
+        "label": "Pinecone Hybrid Discord Docs",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Pinecone Hybrid Discord Docs"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 105,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_v0_shadcn_specialization_tradeoff",
+        "label": "V0 Shadcn Specialization Tradeoff",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "V0 Shadcn Specialization Tradeoff"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 106,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_cursor_accuracy_tradeoff_mention",
+        "label": "Cursor Accuracy Tradeoff Mention",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Cursor Accuracy Tradeoff Mention"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 107,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_recipe_stream_spinner_per_field",
+        "label": "Recipe Stream Spinner Per Field",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Recipe Stream Spinner Per Field"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 108,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2024_11_08_ivbc3lwui_y_prompt_injection_structured_empty_fields",
+        "label": "Prompt Injection Structured Empty Fields",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Prompt Injection Structured Empty Fields"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 109,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_structured_outputs",
+        "label": "Structured outputs / schema-guided generation",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Structured outputs / schema-guided generation"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 110,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_02_6b7mzraqmzk_dynamic_enum_typebuilder",
+        "label": "Dynamic enum (TypeBuilder)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Dynamic enum (TypeBuilder)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 111,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_triple_backticks",
+        "label": "Triple-backtick multiline strings in prompts",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Triple-backtick multiline strings in prompts"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 112,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_13_pu2h0v_panq_diarization",
+        "label": "Speaker diarization prompting",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Speaker diarization prompting"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 113,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_evals",
+        "label": "Evals and test-driven LLM pipelines",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Evals and test-driven LLM pipelines"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 114,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_13_n6majrfqyw_golden_dataset",
+        "label": "Golden dataset from production",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Golden dataset from production"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 115,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_13_n6majrfqyw_table_tests",
+        "label": "Table tests for structured outputs",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Table tests for structured outputs"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 116,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_named_clients",
+        "label": "Named clients (BAML)",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Named clients (BAML)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 117,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_llm_router",
+        "label": "LLM router / model routing",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "LLM router / model routing"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 118,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_01_aw_client_registry",
+        "label": "Client registry (runtime swap)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Client registry (runtime swap)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 119,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_02_6b7mzraqmzk_vector_database",
+        "label": "Vector database pruning",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Vector database pruning"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 120,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_02_6b7mzraqmzk_top_k",
+        "label": "Top-K retrieval",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Top-K retrieval"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 121,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_08_d_pckdukdym_neo4j",
+        "label": "Neo4j graph database",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Neo4j graph database"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 122,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_02_6b7mzraqmzk_embedding_text",
+        "label": "Embedding text vs LLM display text split",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Embedding text vs LLM display text split"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 123,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_02_6b7mzraqmzk_llm_text_category",
+        "label": "LLM text serialization for categories",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "LLM text serialization for categories"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 124,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_02_6b7mzraqmzk_alias_pattern",
+        "label": "Alias pattern for enum labels",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Alias pattern for enum labels"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 125,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_13_pu2h0v_panq_label_indirection",
+        "label": "Label indirection / sentinel IDs",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Label indirection / sentinel IDs"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 126,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_02_6b7mzraqmzk_latency_tradeoff",
+        "label": "Latency vs multi-stage pruning tradeoffs",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Latency vs multi-stage pruning tradeoffs"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 127,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_distribution_cost_curve",
+        "label": "Cost/latency distribution shaping",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Cost/latency distribution shaping"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 128,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_08_d_pckdukdym_cypher",
+        "label": "Cypher query language",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Cypher query language"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 129,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_08_d_pckdukdym_chain_of_thought",
+        "label": "Chain-of-thought vs reasoning elasticity",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Chain-of-thought vs reasoning elasticity"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 130,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_08_d_pckdukdym_debate_prompting",
+        "label": "Debate / staged reasoning prompts",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Debate / staged reasoning prompts"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 131,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_diff_generation",
+        "label": "LLM diff generation",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "LLM diff generation"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 132,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_apply_diff",
+        "label": "Apply diff per file",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Apply diff per file"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 133,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_ast_validation",
+        "label": "AST syntax validation",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "AST syntax validation"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 134,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_while_loop_fix",
+        "label": "while validate fix loop",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "while validate fix loop"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 135,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_levenshtein_fuzzy",
+        "label": "Levenshtein / fuzzy match for patches",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Levenshtein / fuzzy match for patches"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 136,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_16_kjkvydgenay_claude_code",
+        "label": "Claude Code find-replace patch flow",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Claude Code find-replace patch flow"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 137,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_19_rqm_kx4ept8_indexing_gap",
+        "label": "YouTube transcript indexing gap",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "YouTube transcript indexing gap"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 138,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_04_19_rqm_kx4ept8_firecrawl_retry",
+        "label": "Firecrawl / re-index script",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Firecrawl / re-index script"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 139,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_13_n6majrfqyw_answer_key",
+        "label": "Answer key / rubric",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Answer key / rubric"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 140,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_21_gkekvc67ivs_enron_dataset",
+        "label": "Enron email corpus",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Enron email corpus"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 141,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_21_gkekvc67ivs_policy_to_prompt",
+        "label": "Policy-to-prompt pipeline",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Policy-to-prompt pipeline"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 142,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_28_p5wrlkf4bt8_smithery",
+        "label": "Smithery MCP registry",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Smithery MCP registry"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 143,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_05_28_p5wrlkf4bt8_list_tools_call_tool",
+        "label": "list_tools / call_tool MCP flow",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "list_tools / call_tool MCP flow"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 144,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_13_pu2h0v_panq_citations_rag",
+        "label": "RAG citations without raw URLs in context",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "RAG citations without raw URLs in context"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 145,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_13_pu2h0v_panq_streaming_partial",
+        "label": "Partial streaming structured outputs",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Partial streaming structured outputs"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 146,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_friqvdqeyna_partial_json_stream",
+        "label": "Partial JSON streaming (BAML)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Partial JSON streaming (BAML)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 147,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_friqvdqeyna_streaming_structured_limit",
+        "label": "Streaming limits for structured JSON",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Streaming limits for structured JSON"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 148,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_friqvdqeyna_trace_dashboard",
+        "label": "Agent trace dashboard debugging",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Agent trace dashboard debugging"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 149,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_nir896pqwoq_human_layer",
+        "label": "Human Layer (company)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Human Layer (company)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 150,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_nir896pqwoq_dexter",
+        "label": "Dexter (co-host)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Dexter (co-host)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 151,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_nir896pqwoq_company_aliases",
+        "label": "company aliases",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "company aliases"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 152,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_06_20_nir896pqwoq_heuristic_alias_match",
+        "label": "heuristic alias match",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "heuristic alias match"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 153,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_07_23_scscfzb4am8_ocr_medical_pipeline",
+        "label": "ocr medical pipeline",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "ocr medical pipeline"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 154,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_07_27_sqjrl09ddmi_vlm_state_of_art_ocr",
+        "label": "vlm state of art ocr",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "vlm state of art ocr"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 155,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_07_27_sqjrl09ddmi_ocr_concat",
+        "label": "ocr concat",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "ocr concat"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 156,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_07_27_sqjrl09ddmi_end_to_end_training_vs_math",
+        "label": "end to end training vs math",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "end to end training vs math"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 157,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_07_27_sqjrl09ddmi_face_id_geometry_history",
+        "label": "face id geometry history",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "face id geometry history"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 158,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_07_27_sqjrl09ddmi_wrong_tool_uuid_encoder",
+        "label": "wrong tool uuid encoder",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "wrong tool uuid encoder"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 159,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_08_06_42azkzrnhsk_gpt_oss_rust_python",
+        "label": "gpt oss rust python",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "gpt oss rust python"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 160,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2025_08_06_42azkzrnhsk_engineering_visibility_not_abstraction",
+        "label": "engineering visibility not abstraction",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "engineering visibility not abstraction"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 161,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_02_pjoqdwdpod8_hideki",
+        "label": "Hideki",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Hideki"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 162,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_02_pjoqdwdpod8_python_glass_field_order",
+        "label": "Python glass field ordering",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Python glass field ordering"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 163,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_medical_scribe_use_case",
+        "label": "Medical scribe workflow",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Medical scribe workflow"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 164,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_02_pjoqdwdpod8_modular_api_go_rust",
+        "label": "Modular API in Go and Rust",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Modular API in Go and Rust"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 165,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_02_pjoqdwdpod8_baml_request",
+        "label": "b.request function web access",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "b.request function web access"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 166,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_02_pjoqdwdpod8_discord_vs_npm",
+        "label": "Discord vs npm download visibility",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Discord vs npm download visibility"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 167,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_16_zx_uncle_bob_professionalism",
+        "label": "Uncle Bob Professionalism",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Uncle Bob Professionalism"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 168,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_salesforce_custom_objects",
+        "label": "Salesforce custom objects",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Salesforce custom objects"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 169,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_user_defined_prompting",
+        "label": "User-defined prompting surface",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "User-defined prompting surface"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 170,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_form_builder_ux",
+        "label": "Form builder UX for doctors",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Form builder UX for doctors"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 171,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_dynamic_types",
+        "label": "Dynamic BAML types",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Dynamic BAML types"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 172,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_json_schema_limits",
+        "label": "JSON schema limits for end users",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "JSON schema limits for end users"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 173,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_generate_schema_fn",
+        "label": "generate_schema ML function",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "generate_schema ML function"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 174,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_09_qdfwmyto0aw_meta_schema_from_notes",
+        "label": "Meta schema from prior notes",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Meta schema from prior notes"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 175,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_23_u5gssat8iuw_riverside_fm",
+        "label": "Riverside Fm",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Riverside Fm"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 176,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_02_23_u5gssat8iuw_browser_agent_playwrightish",
+        "label": "Browser Agent Playwrightish",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Browser Agent Playwrightish"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 177,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_02_yct7gjzj2tu_message_queue_default",
+        "label": "Message Queue Default",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Message Queue Default"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 178,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_02_yct7gjzj2tu_interrupt_vs_queue",
+        "label": "Interrupt Vs Queue",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Interrupt Vs Queue"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 179,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_02_yct7gjzj2tu_smart_context_window",
+        "label": "Smart Context Window",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Smart Context Window"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 180,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_02_yct7gjzj2tu_dumb_zone_context",
+        "label": "Dumb Zone Context",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Dumb Zone Context"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 181,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_09_ql2glhwux7m_class_one_pii",
+        "label": "Class One Pii",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Class One Pii"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 182,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_03_09_ql2glhwux7m_airgapped_intranet",
+        "label": "Airgapped Intranet",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Airgapped Intranet"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 183,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_dexter_host",
+        "label": "Dexter (host, Human Layer)",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Dexter (host, Human Layer)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 184,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_viv_guest",
+        "label": "Viv (LangChain, harness writing)",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Viv (LangChain, harness writing)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 185,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_jeff_guest",
+        "label": "Jeff (Ralph Wiggum)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Jeff (Ralph Wiggum)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 186,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_langchain_framework",
+        "label": "LangChain framework",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "LangChain framework"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 187,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_tailwind_shadcn_analogy",
+        "label": "Tailwind vs shadcn harness analogy",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Tailwind vs shadcn harness analogy"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 188,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_unix_pipes_philosophy",
+        "label": "Unix pipes composability philosophy",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Unix pipes composability philosophy"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 189,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_bitter_lesson",
+        "label": "Bitter lesson argument",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Bitter lesson argument"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 190,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_surfing_models",
+        "label": "Surfing model releases (velocity)",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Surfing model releases (velocity)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 191,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_philosophy_engineering",
+        "label": "Philosophy / eval design difficulty",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Philosophy / eval design difficulty"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 192,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_eval_golden_orb",
+        "label": "Eval as golden spec metaphor",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Eval as golden spec metaphor"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 193,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_ec2_s3_longevity",
+        "label": "EC2/S3 API stability example",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "EC2/S3 API stability example"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 194,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_video_game_engine_code",
+        "label": "Video game engine long-lived code",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Video game engine long-lived code"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 195,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_beep_export_zip",
+        "label": "Zip export for agent-editable markdown",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Zip export for agent-editable markdown"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 196,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_claude_skill_pipeline",
+        "label": "Claude skill wrapping beep pull",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Claude skill wrapping beep pull"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 197,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_beep_pull_sync",
+        "label": "beep pull local sync CLI",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "beep pull local sync CLI"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 198,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_agent_context_md_export",
+        "label": "agent_context.md bundled export",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "agent_context.md bundled export"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 199,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_slop_fighting_slop",
+        "label": "Fight AI slop with slop tooling",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Fight AI slop with slop tooling"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 200,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_threading_design",
+        "label": "BAML threading / spawn BEP",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "BAML threading / spawn BEP"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 201,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_asyncio_colored_functions",
+        "label": "asyncio colored functions pain",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "asyncio colored functions pain"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 202,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_call_site_concurrency",
+        "label": "Call-site determines concurrency",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Call-site determines concurrency"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 203,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_middleware_pattern",
+        "label": "Middleware wraps spawn (retry etc)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Middleware wraps spawn (retry etc)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 204,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_meeting_transcript_pipeline",
+        "label": "Meeting transcript \u2192 model outline",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Meeting transcript \u2192 model outline"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 205,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_v2_split_docs",
+        "label": "V2 rewrite vs destructive in-place edits",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "V2 rewrite vs destructive in-place edits"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 206,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_cancellation_implicit_python",
+        "label": "Implicit cancellation like Python asyncio",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Implicit cancellation like Python asyncio"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 207,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_05_z9nwmthuggy_baml_init",
+        "label": "baml init tooling",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "baml init tooling"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 208,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_05_z9nwmthuggy_gpt4_mini",
+        "label": "GPT-4 mini model",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "GPT-4 mini model"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 209,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_05_z9nwmthuggy_prefix_output_hint",
+        "label": "ctx.output_format / prefix hints",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "ctx.output_format / prefix hints"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 210,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_05_z9nwmthuggy_token_reduction",
+        "label": "Token count reduction demo",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Token count reduction demo"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 211,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_11_h99btztr_ryan_leapo_tweet",
+        "label": "Ryan Leapo OpenAI harness tweet",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Ryan Leapo OpenAI harness tweet"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 212,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_11_h99btztr_bitter_lessened_phrase",
+        "label": "Bitter lessened away (harness skepticism)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Bitter lessened away (harness skepticism)"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 213,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_11_h99btztr_velocity_skill",
+        "label": "Engineering velocity over static position",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Engineering velocity over static position"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 214,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_11_h99btztr_rpi_workflow_boost",
+        "label": "RPI workflow boost anecdote",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "RPI workflow boost anecdote"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 215,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_04_iv5rz_postgres_neon",
+        "label": "Postgres on Neon",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Postgres on Neon"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 216,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_04_iv5rz_vector_pgvector",
+        "label": "pgvector style storage",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "pgvector style storage"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 217,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_04_iv5rz_quadrant_pinecone_alt",
+        "label": "Quadrant or Pinecone vector DB swap",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Quadrant or Pinecone vector DB swap"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 218,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_18_bcvjgtxzk40_state_sync_demo",
+        "label": "Shared state sync demo",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Shared state sync demo"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 219,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_18_bcvjgtxzk40_human_in_loop_ui",
+        "label": "Human-in-the-loop collaborative UI",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Human-in-the-loop collaborative UI"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 220,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_25_mhbk8z7exag_obsidian_example",
+        "label": "Obsidian + local Docker agent example",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Obsidian + local Docker agent example"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 221,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_25_mhbk8z7exag_dynamis_agent",
+        "label": "Dynamis Obsidian agent",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Dynamis Obsidian agent"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 222,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_prod_trace_overfit",
+        "label": "Auto-research overfit to email set warning",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Auto-research overfit to email set warning"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 223,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_04_27_gx9wpyy61xa_facebook_google_canary",
+        "label": "Canary metrics at push time",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Canary metrics at push time"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 224,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "boundaryml_2026_05_04_kcqsoxveqii_typescript_abort_rare",
+        "label": "AbortController rarely used in TS APIs",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "AbortController rarely used in TS APIs"
+    ],
+    "top_channels": [
+      "boundaryml"
+    ]
+  },
+  {
+    "id": 225,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_29_p_0fm8ljl0i_hugging_face",
+        "label": "Hugging Face",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Hugging Face"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 226,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2025_09_29_p_0fm8ljl0i_rl_agents_workshop",
+        "label": "RL for Agents workshop",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "RL for Agents workshop"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 227,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "chunk11_cole_medin",
+        "label": "Cole Medin (channel / educator)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Cole Medin (channel / educator)"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 228,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "chunk11_dynamis",
+        "label": "Dynamis community and courses",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Dynamis community and courses"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 229,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_02_23_goozsxmryq4_lovable",
+        "label": "Lovable",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Lovable"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 230,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_02_23_goozsxmryq4_bolt_new",
+        "label": "Bolt.new",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Bolt.new"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 231,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_16_6woc6ii_zoe_governance_layer",
+        "label": "Governance layer",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Governance layer"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 232,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_16_6woc6ii_zoe_mission_md",
+        "label": "mission.md",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "mission.md"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 233,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_16_6woc6ii_zoe_factory_rules",
+        "label": "factory rules document",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "factory rules document"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 234,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_16_6woc6ii_zoe_claw_md",
+        "label": "claw.md global agent rules",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "claw.md global agent rules"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 235,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_16_6woc6ii_zoe_quality_gates_auto_merge",
+        "label": "Quality gates for auto-merge",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Quality gates for auto-merge"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 236,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_20_xsmi7oyd7im_archon_cli",
+        "label": "Archon CLI",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Archon CLI"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 237,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_20_xsmi7oyd7im_archon_skill_claude",
+        "label": "Archon skill for Claude Code",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Archon skill for Claude Code"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 238,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_23_rfglj4oilhw_missing_transcript",
+        "label": "Missing transcript placeholder",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Missing transcript placeholder"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 239,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_23_rfglj4oilhw_firecrawl_scrape_gap",
+        "label": "Firecrawl transcript scrape gap",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Firecrawl transcript scrape gap"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 240,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_30_lubkbzjo_ta_leor_weinstein",
+        "label": "Leor Weinstein",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Leor Weinstein"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 241,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_30_lubkbzjo_ta_ai_transformation_workshop",
+        "label": "AI transformation workshop",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "AI transformation workshop"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 242,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_30_lubkbzjo_ta_global_rules_layer",
+        "label": "Global rules AI layer",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Global rules AI layer"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 243,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "cole_medin_2026_04_30_lubkbzjo_ta_commands_skills_layer",
+        "label": "Commands and skills AI layer",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Commands and skills AI layer"
+    ],
+    "top_channels": [
+      "cole-medin"
+    ]
+  },
+  {
+    "id": 244,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_05_15_bgcsvi13e_m_transcript_missing",
+        "label": "Transcript missing (Firecrawl placeholder)",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Transcript missing (Firecrawl placeholder)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 245,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_05_15_bgcsvi13e_m_nuxt_agent_network_topic",
+        "label": "Nuxt AI agent network MVP (title-inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Nuxt AI agent network MVP (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 246,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_05_15_bgcsvi13e_m_vercel_kv_topic",
+        "label": "Vercel KV store (title-inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Vercel KV store (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 247,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_05_15_bgcsvi13e_m_flow_state_devlog",
+        "label": "Flow state devlog format (title-inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Flow state devlog format (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 248,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_05_15_bgcsvi13e_m_youtube_indydevdan",
+        "label": "YouTube IndyDevDan channel",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "YouTube IndyDevDan channel"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 249,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_05_15_bgcsvi13e_m_firecrawl_scrape",
+        "label": "Firecrawl transcript pipeline",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Firecrawl transcript pipeline"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 250,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_05_15_bgcsvi13e_m_agent_network_mvp_title",
+        "label": "AI agent network MVP (title metadata)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "AI agent network MVP (title metadata)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 251,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_08_21_20spucfzfyi_transcript_missing_diffbro",
+        "label": "Transcript missing: DiffBro / git AI (title-inferred)",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "Transcript missing: DiffBro / git AI (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 252,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_08_21_20spucfzfyi_aider_python_reviews_topic",
+        "label": "Aider + Python code reviews (title-inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Aider + Python code reviews (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 253,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_08_21_20spucfzfyi_gpt4_reviews_topic",
+        "label": "GPT-4 in code review flow (title-inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "GPT-4 in code review flow (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 254,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_08_21_20spucfzfyi_git_diff_ai_topic",
+        "label": "Git diff AI tooling (title-inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Git diff AI tooling (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 255,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2023_08_21_20spucfzfyi_python_code_review_llm",
+        "label": "Python LLM code review (title-inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Python LLM code review (title-inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 256,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_04_29_sb9wsweopi4_m2_64gb",
+        "label": "M2 MacBook Pro 64GB",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "M2 MacBook Pro 64GB"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 257,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_04_29_sb9wsweopi4_ram32",
+        "label": "~32GB RAM budget",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "~32GB RAM budget"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 258,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_04_29_sb9wsweopi4_tps",
+        "label": "Tokens per second",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Tokens per second"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 259,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_04_29_sb9wsweopi4_tps20",
+        "label": "~20 TPS minimum",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "~20 TPS minimum"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 260,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_04_29_sb9wsweopi4_groq_ref",
+        "label": "Groq-like speed reference",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Groq-like speed reference"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 261,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_13_28zuliyld5q_flask",
+        "label": "Flask server",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Flask server"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 262,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_13_28zuliyld5q_endpoints",
+        "label": "GET/USE autocomplete endpoints",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "GET/USE autocomplete endpoints"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 263,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_13_28zuliyld5q_uno",
+        "label": "UnoCSS",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "UnoCSS"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 264,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_13_28zuliyld5q_tw_cmp",
+        "label": "Tailwind comparison domain",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Tailwind comparison domain"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 265,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_20_gdrgfcldvra_gemini",
+        "label": "Gemini / Google GenAI",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Gemini / Google GenAI"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 266,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_20_gdrgfcldvra_astra",
+        "label": "Project Astra",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Project Astra"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 267,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_20_gdrgfcldvra_gem_flash",
+        "label": "Gemini Flash",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Gemini Flash"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 268,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_07_22_0z2bqpuuy50_gem_flash_tier",
+        "label": "Gemini Flash tier analogy",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Gemini Flash tier analogy"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 269,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_20_gdrgfcldvra_fishy_bench",
+        "label": "Incremental benchmark skepticism",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Incremental benchmark skepticism"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 270,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_20_gdrgfcldvra_iter_roll",
+        "label": "Iterative rollout narrative",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Iterative rollout narrative"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 271,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_20_gdrgfcldvra_work_rel",
+        "label": "Work-oriented AI relationship",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Work-oriented AI relationship"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 272,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_05_20_gdrgfcldvra_parasocial",
+        "label": "Parasocial risk",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Parasocial risk"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 273,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_06_03_yalpx8oon78_pct_self",
+        "label": "Aider self-authored %",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Aider self-authored %"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 274,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_06_03_yalpx8oon78_pct99",
+        "label": "99% AI code north star",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "99% AI code north star"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 275,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_07_01_f0eoyra6ggy_ntfy",
+        "label": "ntfy notifications",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "ntfy notifications"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 276,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_07_01_f0eoyra6ggy_notify_step",
+        "label": "Notify step",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Notify step"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 277,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_07_01_f0eoyra6ggy_act_step",
+        "label": "Act step",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Act step"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 278,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_07_01_f0eoyra6ggy_change_detect",
+        "label": "Change detection vs prior JSON",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Change detection vs prior JSON"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 279,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_07_01_f0eoyra6ggy_blog_auto",
+        "label": "Auto-updating blog/table",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Auto-updating blog/table"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 280,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_07_01_f0eoyra6ggy_commit_push",
+        "label": "Commit/push step (planned)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Commit/push step (planned)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 281,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_08_26_vliogp8mwqi_cosign_genie",
+        "label": "Cosign Genie fine-tune SWE-bench example",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Cosign Genie fine-tune SWE-bench example"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 282,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_08_26_vliogp8mwqi_swe_bench_verified",
+        "label": "SWE-bench verified benchmark",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "SWE-bench verified benchmark"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 283,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_09_09_qlut06xlbje_readonly_parse_doc",
+        "label": "Read-only parse content markdown",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Read-only parse content markdown"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 284,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_09_09_qlut06xlbje_notion_utils_parse",
+        "label": "notion utils parse blocks",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "notion utils parse blocks"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 285,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_09_09_qlut06xlbje_notion_block_recursion",
+        "label": "Recursive Notion block parsing",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Recursive Notion block parsing"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 286,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_09_09_qlut06xlbje_notion_embed_blocks",
+        "label": "Notion embed/math/code block parsing",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Notion embed/math/code block parsing"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 287,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_11_04_telgvpuargw_anthropic_tools",
+        "label": "Anthropic editor & bash tools",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Anthropic editor & bash tools"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 288,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_11_04_telgvpuargw_doc_scrape_workflow",
+        "label": "Doc scrape + clean workflow",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Doc scrape + clean workflow"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 289,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_11_04_telgvpuargw_tool_use_force",
+        "label": "Forced tool-call pattern",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Forced tool-call pattern"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 290,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_11_04_telgvpuargw_m4_max",
+        "label": "Apple M4 Max",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Apple M4 Max"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 291,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2024_11_04_telgvpuargw_m2_max",
+        "label": "Apple M2 Max",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Apple M2 Max"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 292,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_weak_base_strong",
+        "label": "Weak-Base-Strong Agent Stack",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "Weak-Base-Strong Agent Stack"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 293,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_model_overkill",
+        "label": "Model Overkill Problem",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Model Overkill Problem"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 294,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_model_underperform",
+        "label": "Model Underperformance Problem",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Model Underperformance Problem"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 295,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_token_time_cost",
+        "label": "Token Time Cost Tradeoffs",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Token Time Cost Tradeoffs"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 296,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_claude_max_200",
+        "label": "Claude Max $200 Plan",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Claude Max $200 Plan"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 297,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_hidden_file_mentions",
+        "label": "Hidden File @ Mentions",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Hidden File @ Mentions"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 298,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_08_04_ssbqxzrsc6s_mcp_json",
+        "label": "MCP.json Mentioned in Hidden File Flow",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "MCP.json Mentioned in Hidden File Flow"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 299,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_big3_super",
+        "label": "big3 super",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "big3 super"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 300,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_ada_orchestrator",
+        "label": "ada orchestrator",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "ada orchestrator"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 301,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_sony_agent",
+        "label": "sony agent",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "sony agent"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 302,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_faq_gate",
+        "label": "faq gate",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "faq gate"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 303,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_engineer_only",
+        "label": "engineer only",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "engineer only"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 304,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_blink_agent",
+        "label": "blink agent",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "blink agent"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 305,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_compute_causal",
+        "label": "compute causal",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "compute causal"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 306,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_realtime_orchestrator",
+        "label": "realtime orchestrator",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "realtime orchestrator"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 307,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_tool_catalog_crud",
+        "label": "tool catalog crud",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "tool catalog crud"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 308,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_cc_agents_under",
+        "label": "cc agents under",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "cc agents under"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 309,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_gemini_computer_use",
+        "label": "gemini computer use",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "gemini computer use"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 310,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_browser_validate",
+        "label": "browser validate",
+        "degree": 3
+      }
+    ],
+    "top_node_labels": [
+      "browser validate"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 311,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_multi_obs_ui",
+        "label": "multi obs ui",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "multi obs ui"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 312,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_hook_payloads",
+        "label": "hook payloads",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "hook payloads"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 313,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_cheap_summaries",
+        "label": "cheap summaries",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "cheap summaries"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 314,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_sora2_spec",
+        "label": "sora2 spec",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "sora2 spec"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 315,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_plan_slash",
+        "label": "plan slash",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "plan slash"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 316,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_build_slash",
+        "label": "build slash",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "build slash"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 317,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_fe_be_split",
+        "label": "fe be split",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "fe be split"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 318,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_color_invert_ui",
+        "label": "color invert ui",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "color invert ui"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 319,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_play_font",
+        "label": "play font",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "play font"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 320,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_fault_tolerance",
+        "label": "fault tolerance",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "fault tolerance"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 321,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_queue_logic",
+        "label": "queue logic",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "queue logic"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 322,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_crash_recovery",
+        "label": "crash recovery",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "crash recovery"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 323,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_localhost3333",
+        "label": "localhost3333",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "localhost3333"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 324,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_voice_optional_text",
+        "label": "voice optional text",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "voice optional text"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 325,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_io_loop_design",
+        "label": "io loop design",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "io loop design"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 326,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_fastapi_video",
+        "label": "fastapi video",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "fastapi video"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 327,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_closed_loop",
+        "label": "closed loop",
+        "degree": 4
+      }
+    ],
+    "top_node_labels": [
+      "closed loop"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 328,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_tac_cta",
+        "label": "tac cta",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "tac cta"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 329,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_10_13_ur3tjm0bckq_f11_early_bird_wed",
+        "label": "early bird wed",
+        "degree": 5
+      }
+    ],
+    "top_node_labels": [
+      "early bird wed"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 330,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_12_29_fop_transcript_pending",
+        "label": "Transcript pending",
+        "degree": 6
+      }
+    ],
+    "top_node_labels": [
+      "Transcript pending"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 331,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_11_03_p0mrxfwabcg_youtube_pipeline",
+        "label": "YouTube transcript pipeline gap",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "YouTube transcript pipeline gap"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 332,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_11_10_oiktsvjtvje_mcp_servers_critique_topic",
+        "label": "MCP servers critique (missing)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "MCP servers critique (missing)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 333,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_11_10_oiktsvjtvje_proven_solutions_placeholder",
+        "label": "Three proven solutions (missing)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Three proven solutions (missing)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 334,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_12_15_ztcdwqopvke_agent_experts_topic",
+        "label": "Agent experts topic unavailable",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Agent experts topic unavailable"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 335,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_12_15_ztcdwqopvke_learning_agents_placeholder",
+        "label": "Learning agents placeholder",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Learning agents placeholder"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 336,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_12_29_fop_codebase_singularity_theme",
+        "label": "Codebase singularity theme",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Codebase singularity theme"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 337,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_11_03_p0mrxfwabcg_advanced_agentic_video_placeholder",
+        "label": "Advanced agentic coding video (missing text)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Advanced agentic coding video (missing text)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 338,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_12_01_3kgx0yxcrim_agent_as_unit",
+        "label": "Agent as compositional unit",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Agent as compositional unit"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 339,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_12_01_3kgx0yxcrim_prompt_as_primitive",
+        "label": "Prompt as primitive",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Prompt as primitive"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 340,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2025_12_29_fop_agents_run_codebase_hypothesis",
+        "label": "Agents run codebase hypothesis",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Agents run codebase hypothesis"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 341,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_01_19_u5gkg71pkr0_rough_astral",
+        "label": "Ruff / Astral uv",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Ruff / Astral uv"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 342,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_01_19_u5gkg71pkr0_build_md_command",
+        "label": "build.md command",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "build.md command"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 343,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_02_02_4_missing_transcript",
+        "label": "Transcript unavailable (placeholder)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Transcript unavailable (placeholder)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 344,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_02_02_4_firecrawl_gap",
+        "label": "Firecrawl transcript gap",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Firecrawl transcript gap"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 345,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_02_02_4_anti_hype_agentic",
+        "label": "Anti-hype agentic coding",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Anti-hype agentic coding"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 346,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_02_02_4_trust_engineering",
+        "label": "Trust engineering theme",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Trust engineering theme"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 347,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_02_02_4_core_four",
+        "label": "Core four (inferred)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Core four (inferred)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 348,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_02_02_4_hooks_context",
+        "label": "Hooks context (inferred related episode)",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Hooks context (inferred related episode)"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 349,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_16_skills_raw_capabilities",
+        "label": "Skills as raw capabilities",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Skills as raw capabilities"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 350,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_16_agents_parallelism",
+        "label": "Agents for parallelism",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Agents for parallelism"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 351,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_16_prompts_orchestration",
+        "label": "Prompts orchestrate lower layers",
+        "degree": 1
+      }
+    ],
+    "top_node_labels": [
+      "Prompts orchestrate lower layers"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 352,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_30_m30gp1315y4_prompt_complexity_classifier",
+        "label": "Prompt complexity classifier",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "Prompt complexity classifier"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 353,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_30_m30gp1315y4_scikit_learn",
+        "label": "scikit-learn classifiers",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "scikit-learn classifiers"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  },
+  {
+    "id": 354,
+    "size": 1,
+    "top_nodes": [
+      {
+        "id": "indydevdan_2026_03_30_m30gp1315y4_just_commands",
+        "label": "just commands for eval",
+        "degree": 2
+      }
+    ],
+    "top_node_labels": [
+      "just commands for eval"
+    ],
+    "top_channels": [
+      "indydevdan"
+    ]
+  }
+]
