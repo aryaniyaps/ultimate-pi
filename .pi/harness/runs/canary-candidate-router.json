@@ -1,0 +1,72 @@
+{
+	"defaultProfile": "auto",
+	"debug": false,
+	"classifierModel": "opencode-go/qwen3.6-plus",
+	"phaseBias": 0.5,
+	"maxSessionBudget": 1.0,
+	"largeContextThreshold": 100000,
+	"rules": [
+		{
+			"matches": ["deploy", "production", "release"],
+			"tier": "high",
+			"reason": "Safety check for production tasks"
+		},
+		{
+			"matches": "changelog",
+			"tier": "low"
+		}
+	],
+	"profiles": {
+		"auto": {
+			"high": {
+				"model": "opencode-go/deepseek-v4-pro",
+				"thinking": "high",
+				"fallbacks": ["opencode-go/qwen3.6-plus", "opencode-go/kimi-k2.6"]
+			},
+			"medium": {
+				"model": "opencode-go/qwen3.6-plus",
+				"thinking": "medium",
+				"fallbacks": ["opencode-go/deepseek-v4-pro"]
+			},
+			"low": {
+				"model": "opencode-go/deepseek-v4-flash",
+				"thinking": "low",
+				"fallbacks": ["opencode-go/qwen3.5-plus"]
+			}
+		},
+		"cheap": {
+			"high": {
+				"model": "opencode-go/qwen3.6-plus",
+				"thinking": "low",
+				"fallbacks": ["opencode-go/qwen3.5-plus"]
+			},
+			"medium": {
+				"model": "opencode-go/qwen3.5-plus",
+				"thinking": "off",
+				"fallbacks": ["opencode-go/deepseek-v4-flash"]
+			},
+			"low": {
+				"model": "opencode-go/deepseek-v4-flash",
+				"thinking": "off",
+				"fallbacks": ["opencode-go/qwen3.5-plus"]
+			}
+		},
+		"deep": {
+			"high": {
+				"model": "opencode-go/deepseek-v4-pro",
+				"thinking": "xhigh",
+				"fallbacks": ["opencode-go/kimi-k2.6"]
+			},
+			"medium": {
+				"model": "opencode-go/kimi-k2.6",
+				"thinking": "medium",
+				"fallbacks": ["opencode-go/deepseek-v4-pro"]
+			},
+			"low": {
+				"model": "opencode-go/qwen3.6-plus",
+				"thinking": "low",
+				"fallbacks": ["opencode-go/deepseek-v4-flash"]
+			}
+		}
+	}
+}

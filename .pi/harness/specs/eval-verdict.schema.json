@@ -1,0 +1,59 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/eval-verdict.schema.json",
+	"title": "EvalVerdict",
+	"description": "Independent evaluator result consumed by policy gating.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"contract_version",
+		"run_id",
+		"status",
+		"failed_checks",
+		"regression_flags",
+		"confidence",
+		"recommended_action"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"contract_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"run_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"status": {
+			"type": "string",
+			"enum": ["pass", "conditional_pass", "fail"]
+		},
+		"failed_checks": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"regression_flags": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"confidence": {
+			"type": "number",
+			"minimum": 0,
+			"maximum": 1
+		},
+		"recommended_action": {
+			"type": "string",
+			"enum": ["proceed_to_adversary", "replan", "rollback"]
+		}
+	}
+}

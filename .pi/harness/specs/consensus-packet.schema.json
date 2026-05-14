@@ -1,0 +1,175 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/consensus-packet.schema.json",
+	"title": "ConsensusPacket",
+	"description": "Final debate consensus consumed by severity-policy-engine and strict pre-PR gate.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"contract_version",
+		"run_id",
+		"debate_id",
+		"round_count",
+		"budget_used",
+		"severity_scores",
+		"confidence_weights",
+		"evidence_refs",
+		"strict_gate_prerequisites",
+		"policy_decision",
+		"rationale"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"contract_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"run_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"debate_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"round_count": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 6
+		},
+		"budget_used": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 35000
+		},
+		"severity_scores": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["correctness", "security", "architecture", "test_integrity"],
+			"properties": {
+				"correctness": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 1
+				},
+				"security": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 1
+				},
+				"architecture": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 1
+				},
+				"test_integrity": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 1
+				}
+			}
+		},
+		"severity_thresholds": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": [
+				"correctness_block_at",
+				"security_block_at",
+				"architecture_block_at",
+				"test_integrity_block_at"
+			],
+			"properties": {
+				"correctness_block_at": {
+					"type": "number",
+					"const": 0.7
+				},
+				"security_block_at": {
+					"type": "number",
+					"const": 0.7
+				},
+				"architecture_block_at": {
+					"type": "number",
+					"const": 0.8
+				},
+				"test_integrity_block_at": {
+					"type": "number",
+					"const": 0.8
+				}
+			}
+		},
+		"confidence_weights": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["claim_quality", "reproducibility", "agreement"],
+			"properties": {
+				"claim_quality": {
+					"type": "number",
+					"const": 0.2
+				},
+				"reproducibility": {
+					"type": "number",
+					"const": 0.4
+				},
+				"agreement": {
+					"type": "number",
+					"const": 0.4
+				}
+			}
+		},
+		"evidence_refs": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"strict_gate_prerequisites": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": [
+				"plan_gate_passed",
+				"execution_completed",
+				"evaluator_passed",
+				"adversarial_debate_completed",
+				"severity_policy_ok",
+				"benchmark_delta_checks_passed",
+				"rollback_artifacts_generated"
+			],
+			"properties": {
+				"plan_gate_passed": {
+					"type": "boolean"
+				},
+				"execution_completed": {
+					"type": "boolean"
+				},
+				"evaluator_passed": {
+					"type": "boolean"
+				},
+				"adversarial_debate_completed": {
+					"type": "boolean"
+				},
+				"severity_policy_ok": {
+					"type": "boolean"
+				},
+				"benchmark_delta_checks_passed": {
+					"type": "boolean"
+				},
+				"rollback_artifacts_generated": {
+					"type": "boolean"
+				}
+			}
+		},
+		"policy_decision": {
+			"type": "string",
+			"enum": ["pass", "conditional_pass", "block", "human_required"]
+		},
+		"rationale": {
+			"type": "string",
+			"minLength": 1
+		}
+	}
+}

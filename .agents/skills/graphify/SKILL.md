@@ -5,6 +5,9 @@ description: any input (code, docs, papers, images, video) â†’ knowledge graph â
 
 # /graphify
 
+Deprecated mirror: canonical source is `.pi/skills/graphify/SKILL.md`.
+Keep this copy aligned with the canonical version until consumers migrate.
+
 Turn any folder of files into a navigable knowledge graph with community detection, an honest audit trail, and three outputs: interactive HTML, GraphRAG-ready JSON, and a plain-language GRAPH_REPORT.md.
 
 ## Usage

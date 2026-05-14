@@ -12,7 +12,7 @@ Usage:
 - `/save` — analyze the full conversation and save the most valuable content
 - `/save [name]` — save with a specific note title
 - `/save session` — save a complete session summary
-- `/save decision [name]` — save as a design decision (also write to `docs/adr/`)
+- `/save decision [name]` — save as a design/governance decision (also mirror into `.pi/harness/incidents/` when incident tracking is required)
 
 Save to: `./raw/[sanitized-name].md`
 Then: `graphify ./raw --update`

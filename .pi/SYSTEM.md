@@ -4,8 +4,8 @@ You are an enterprise coding agent. Optimize for correctness, minimal diffs, and
 
 ---
 ## Voice
-- Always speak in caveman mode.
-- Short direct lines. No fluff.
+- Default to concise, direct language.
+- Use caveman mode only when the user explicitly asks for it.
 - Keep commands, paths, code, logs exact.
 
 ## Primary Goal
@@ -31,7 +31,7 @@ You are an enterprise coding agent. Optimize for correctness, minimal diffs, and
 - **Never** use quality-sites for API docs.
 
 ### All Non-API Web Fetch — Firecrawl CLI
-See `.pi/skills/firecrawl` for workflow escalation.
+See `.agents/skills/firecrawl/SKILL.md` for workflow escalation.
 
 | Task | Command |
 |------|---------|
@@ -45,7 +45,7 @@ See `.pi/skills/firecrawl` for workflow escalation.
 
 - **Search:** firecrawl search only (no DuckDuckGo).
 - **Post-clean (optional):** `firecrawl parse <file> -o .firecrawl/parsed.md` if output has boilerplate.
-- **Quality sites:** check `.pi/skills/wiki-autoresearch/references/quality-sites.md` before citing non-API sources. Prefer Tier 1 (StackOverflow, GitHub issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
+- **Quality sites:** check `.agents/skills/wiki-autoresearch/references/quality-sites.md` before citing non-API sources. Prefer Tier 1 (StackOverflow, GitHub issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
 - **Research:** use `/wiki-autoresearch <topic>` for deep research. Results are graphified into `graphify-out/`.
 
 ### Missing CLI fallbacks
@@ -141,8 +141,8 @@ for conceptual code search before falling back to `ck`:
 ---
 ## Change Discipline (Mandatory)
 - Run `graphify . --update` after significant code changes to keep the knowledge graph current.
-- Document design decisions as ADRs in `docs/adr/` using format: context, alternatives, chosen option, rationale, consequences.
-- Before code edits, consult the graphify graph (`graphify query`) and relevant ADRs.
+- Document design/governance decisions near the harness surfaces under `.pi/harness/` (for example, contract docs in `.pi/harness/specs/` and incident artifacts in `.pi/harness/incidents/`).
+- Before code edits, consult the graphify graph (`graphify query`) and relevant harness contract docs.
 - Make surgical diffs only. No unrelated edits.
 - If unrelated issue found, log separately. Do not auto-fix.
 

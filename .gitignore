@@ -56,12 +56,11 @@ graphify-books-out/.graphify_root
 # Harness artifacts
 .pi/harness/critics/
 .pi/harness/plans/
-.pi/harness/specs/
-
-# Model router config (user-specific provider keys/models)
-.pi/model-router.json
 
 
 graphify-out/manifest.json    # mtime-based, breaks after git clone
 graphify-out/cost.json        # local only
 # graphify-out/cache/         # optional: commit for speed, skip to keep repo small
+
+
+.pi/model-router.json

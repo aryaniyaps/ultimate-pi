@@ -1,0 +1,96 @@
+{
+	"schema_version": "1.0.0",
+	"proposal_id": "router-tune-2026-05-14T15-44-44-399Z",
+	"created_at": "2026-05-14T15:44:44.399Z",
+	"router_path": ".pi/model-router.json",
+	"base_router_sha256": "2a96fba517cc5b5147f37428d7ed62961b1968c0e83c0e69f02524265449856b",
+	"candidate_router_sha256": "2a96fba517cc5b5147f37428d7ed62961b1968c0e83c0e69f02524265449856b",
+	"evidence": {
+		"sample_count": 24,
+		"min_sample_count": 12,
+		"success_rate_delta": 0.08,
+		"cost_per_task_delta": -0.04,
+		"regression_guard_passed": true,
+		"trace_refs": ["run-canary-001", "run-canary-002"],
+		"notes": "canary validation synthetic evidence"
+	},
+	"status": "proposed",
+	"approval": {
+		"required": true,
+		"approved_by": null,
+		"approved_at": null,
+		"justification": null
+	},
+	"candidate_router": {
+		"defaultProfile": "auto",
+		"debug": false,
+		"classifierModel": "opencode-go/qwen3.6-plus",
+		"phaseBias": 0.5,
+		"maxSessionBudget": 1,
+		"largeContextThreshold": 100000,
+		"rules": [
+			{
+				"matches": ["deploy", "production", "release"],
+				"tier": "high",
+				"reason": "Safety check for production tasks"
+			},
+			{
+				"matches": "changelog",
+				"tier": "low"
+			}
+		],
+		"profiles": {
+			"auto": {
+				"high": {
+					"model": "opencode-go/deepseek-v4-pro",
+					"thinking": "high",
+					"fallbacks": ["opencode-go/qwen3.6-plus", "opencode-go/kimi-k2.6"]
+				},
+				"medium": {
+					"model": "opencode-go/qwen3.6-plus",
+					"thinking": "medium",
+					"fallbacks": ["opencode-go/deepseek-v4-pro"]
+				},
+				"low": {
+					"model": "opencode-go/deepseek-v4-flash",
+					"thinking": "low",
+					"fallbacks": ["opencode-go/qwen3.5-plus"]
+				}
+			},
+			"cheap": {
+				"high": {
+					"model": "opencode-go/qwen3.6-plus",
+					"thinking": "low",
+					"fallbacks": ["opencode-go/qwen3.5-plus"]
+				},
+				"medium": {
+					"model": "opencode-go/qwen3.5-plus",
+					"thinking": "off",
+					"fallbacks": ["opencode-go/deepseek-v4-flash"]
+				},
+				"low": {
+					"model": "opencode-go/deepseek-v4-flash",
+					"thinking": "off",
+					"fallbacks": ["opencode-go/qwen3.5-plus"]
+				}
+			},
+			"deep": {
+				"high": {
+					"model": "opencode-go/deepseek-v4-pro",
+					"thinking": "xhigh",
+					"fallbacks": ["opencode-go/kimi-k2.6"]
+				},
+				"medium": {
+					"model": "opencode-go/kimi-k2.6",
+					"thinking": "medium",
+					"fallbacks": ["opencode-go/deepseek-v4-pro"]
+				},
+				"low": {
+					"model": "opencode-go/qwen3.6-plus",
+					"thinking": "low",
+					"fallbacks": ["opencode-go/deepseek-v4-flash"]
+				}
+			}
+		}
+	}
+}

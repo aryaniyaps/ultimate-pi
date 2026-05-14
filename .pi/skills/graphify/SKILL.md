@@ -5,6 +5,9 @@ description: any input (code, docs, papers, images, video) â†’ knowledge graph â
 
 # /graphify
 
+Canonical graphify skill lives here under `.pi/skills/graphify/SKILL.md`.
+If mirrored copies exist elsewhere, treat this file as source of truth.
+
 Turn any folder of files into a navigable knowledge graph with community detection, an honest audit trail, and three outputs: interactive HTML, GraphRAG-ready JSON, and a plain-language GRAPH_REPORT.md.
 
 ## Usage
