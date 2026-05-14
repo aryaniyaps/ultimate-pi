@@ -412,19 +412,120 @@ Verify each package:
 | `@tintinweb/pi-subagents` | L4 critic sub-agent spawn/control | P16 |
 | `@yeliu84/pi-model-router` | Per-turn intelligent model routing (auto high/medium/low tier selection) | F0 |
 
-## Step 3.5 — Model Router Configuration
+## Step 3.5 — Model Router Configuration (Dynamic)
 
-Verify the model router is installed and configured:
+`.pi/model-router.json` is **user-specific** (differs per user's providers).
+It is gitignored. Generate it dynamically from your `.env`.
+
+The script below:
+1. Detects available AI providers from env vars (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, and `OPENAI_API_BASE` to detect opencode gateway)
+2. Generates a full `model-router.json` with `auto`, `cheap`, and `deep` profiles
+3. Only writes if file doesn't exist yet (safe to re-run, will skip existing)
 
 ```bash
-# Verify package installed
-ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null && echo "✓ model-router package" || echo "✗ model-router package — run: cd .pi/npm && npm install"
+# Verify package installed first
+ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null \
+  && echo "✓ model-router package" \
+  || echo "✗ model-router package — run: cd .pi/npm && npm install"
 
-# Verify config exists
-ls .pi/model-router.json 2>/dev/null && echo "✓ model-router.json" || echo "✗ model-router.json — see .pi/npm/node_modules/@yeliu84/pi-model-router/model-router.example.json"
+# Generate config from detected providers (only if missing)
+if [ -f .pi/model-router.json ]; then
+  echo "✓ .pi/model-router.json already exists — preserving user config"
+else
+  node << 'GENDONE'
+const fs = require('fs');
+const path = '.pi/model-router.json';
+
+// --- Detect providers from env ---
+const hasOpenCode = process.env.OPENAI_API_BASE?.includes('opencode.ai');
+const hasOpenAI = !!process.env.OPENAI_API_KEY;
+const hasAnthropic = !!process.env.ANTHROPIC_API_KEY;
+const hasGoogle = !!process.env.GOOGLE_API_KEY;
+
+// If opencode gateway is detected, prefer opencode-go/ models
+// Otherwise use standard provider prefixes
+const P = hasOpenCode ? 'opencode-go' : 'openai';
+
+function model(prefix, name) { return `${prefix}/${name}`; }
+
+// Best available high-end model per provider
+const highModel = hasOpenCode
+  ? model('opencode-go', 'deepseek-v4-pro')
+  : hasOpenAI
+    ? model('openai', 'gpt-5.4-pro')
+    : hasAnthropic
+      ? 'anthropic/claude-3-5-sonnet-20241022'
+      : 'google/gemini-2.5-flash-001';
+
+const mediumModel = hasOpenCode
+  ? model('opencode-go', 'qwen3.6-plus')
+  : hasOpenAI
+    ? model('openai', 'gpt-5.4-nano')
+    : hasAnthropic
+      ? 'anthropic/claude-3-5-sonnet-20241022'
+      : 'google/gemini-flash-latest';
+
+const lowModel = hasOpenCode
+  ? model('opencode-go', 'deepseek-v4-flash')
+  : hasOpenAI
+    ? model('openai', 'gpt-5.4-nano')
+    : hasAnthropic
+      ? 'anthropic/claude-3-haiku-20240307'
+      : 'google/gemini-flash-lite-latest';
+
+const fallbacks = [];
+if (hasAnthropic && !highModel.startsWith('anthropic/')) fallbacks.push('anthropic/claude-3-5-sonnet-20241022');
+if (hasGoogle && !highModel.startsWith('google/')) fallbacks.push('google/gemini-flash-latest');
+
+const config = {
+  defaultProfile: 'auto',
+  debug: false,
+  classifierModel: mediumModel,
+  phaseBias: 0.5,
+  maxSessionBudget: 1.0,
+  largeContextThreshold: 100000,
+  rules: [
+    {
+      matches: ['deploy', 'production', 'release'],
+      tier: 'high',
+      reason: 'Safety check for production tasks'
+    },
+    { matches: 'changelog', tier: 'low' }
+  ],
+  profiles: {
+    auto: {
+      high: { model: highModel, thinking: 'high', fallbacks },
+      medium: { model: mediumModel, thinking: 'medium' },
+      low: { model: lowModel, thinking: 'low' }
+    },
+    cheap: {
+      high: { model: mediumModel, thinking: 'low' },
+      medium: { model: lowModel, thinking: 'off' },
+      low: { model: lowModel, thinking: 'off' }
+    },
+    deep: {
+      high: { model: highModel, thinking: 'xhigh', fallbacks },
+      medium: { model: mediumModel, thinking: 'medium' },
+      low: { model: lowModel, thinking: 'low' }
+    }
+  }
+};
+
+fs.mkdirSync('.pi', { recursive: true });
+fs.writeFileSync(path, JSON.stringify(config, null, 2) + '\n');
+console.log('✓ Generated .pi/model-router.json from detected providers:');
+if (hasOpenCode) console.log('  Provider: opencode gateway');
+if (hasOpenAI) console.log('  Detected: OPENAI_API_KEY');
+if (hasAnthropic) console.log('  Detected: ANTHROPIC_API_KEY');
+if (hasGoogle) console.log('  Detected: GOOGLE_API_KEY');
+console.log(`  High tier: ${highModel}`);
+console.log(`  Medium tier: ${mediumModel}`);
+console.log(`  Low tier: ${lowModel}`);
+GENDONE
+fi
 ```
 
-Do NOT block. If config exists, continue. If missing, warn in report and continue.
+Do NOT block. If generation fails, warn in report and continue.
 
 **Router activation happens automatically** — the agent should output the following as its next message (this activates the router in the current session):
 
@@ -444,6 +545,9 @@ Ensure `.gitignore` contains:
 .pi/harness/critics/
 .pi/harness/plans/
 .pi/harness/specs/
+
+# Model router config (user-specific — generated from env)
+.pi/model-router.json
 .sentrux/
 ```
 
