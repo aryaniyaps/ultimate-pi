@@ -15,12 +15,12 @@ const imagePath = join(process.cwd(), ".pi", "extensions", "banner.png");
 
 // Terminal footprint — keep a safety margin so we never crash on narrow terminals
 const SAFETY_MARGIN = 2;
-const TERM_WIDTH = 120;
-const TERM_HEIGHT = 24;
+const TERM_WIDTH = 100;
+const TERM_HEIGHT = 15;
 
 // Pixel grid: 1 char wide × 2 pixels tall (half-block)
 const PIXEL_WIDTH = TERM_WIDTH;
-const PIXEL_HEIGHT = TERM_HEIGHT * 2;
+const PIXEL_HEIGHT = TERM_HEIGHT;
 
 const HALF_BLOCK = "\u2584"; // lower half block: fg = bottom, bg = top
 
