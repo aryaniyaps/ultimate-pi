@@ -7,6 +7,19 @@ argument-hint: "[--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--forc
 
 Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, CLI tools, pi extension packages, configuration files, and verification. Idempotent — safe to re-run, skips what's already installed.
 
+## Parse arguments
+
+Read `$ARGUMENTS` and map flags:
+
+- `--skip-graphify`
+- `--skip-tools`
+- `--skip-firecrawl-self`
+- `--force`
+
+If a flag is unknown, stop and return:
+
+`Usage: /harness-setup [--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--force]`
+
 ## Step 0 — Pre-flight Environment Check
 
 ```bash
@@ -79,9 +92,9 @@ ls graphify-out/
 
 Read and summarize `graphify-out/GRAPH_REPORT.md` — show god nodes and surprising connections.
 
-Create project directories needed for graphify workflow:
+Create project directories needed for graphify + harness workflow:
 ```bash
-mkdir -p ./raw docs/adr
+mkdir -p ./raw .pi/harness/specs .pi/harness/runs .pi/harness/incidents .pi/harness/debates
 ```
 
 ## Step 1.5 — Optional Self-Hosted Firecrawl
@@ -589,7 +602,8 @@ Created: $(date +%Y-%m-%d)
 
 - graphify-out/ → Knowledge graph (run `graphify .` to build)
 - ./raw/ → Source documents for graphify ingestion
-- docs/adr/ → Architectural Decision Records
+- .pi/harness/specs/ → Harness contracts and schema docs
+- .pi/harness/incidents/ → Incident and override records
 - .pi/skills/ → Agent skills
 - .pi/agents/ → Specialized agents
 
@@ -598,13 +612,13 @@ Created: $(date +%Y-%m-%d)
 1. Run `graphify . --wiki` to build the knowledge graph
 2. Read `graphify-out/GRAPH_REPORT.md` for god nodes and surprising connections
 3. Query: `graphify query "question"`
-4. ADRs stored in `docs/adr/`
+4. Harness contracts and governance records in `.pi/harness/specs/` and `.pi/harness/incidents/`
 
 ## Conventions
 
 - Graph before grep — always consult the knowledge graph first
 - ./raw/ is source storage for graphify
-- ADRs in docs/adr/ with structured format
+- Decisions and incidents in `.pi/harness/` with structured artifacts
 - `graphify . --update` after significant changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code
 - Create `.sg/rules/` for project-wide code quality rules

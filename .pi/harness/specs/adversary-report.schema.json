@@ -1,0 +1,53 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/adversary-report.schema.json",
+	"title": "AdversaryReport",
+	"description": "Adversarial reviewer findings with merge-blocking authority signals.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"contract_version",
+		"run_id",
+		"severity",
+		"findings",
+		"repro_steps",
+		"block_merge"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"contract_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"run_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"severity": {
+			"type": "string",
+			"enum": ["low", "medium", "high", "critical"]
+		},
+		"findings": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"repro_steps": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"block_merge": {
+			"type": "boolean"
+		}
+	}
+}

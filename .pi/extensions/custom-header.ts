@@ -9,7 +9,7 @@
 import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { truncateToWidth } from "@mariozechner/pi-tui";
-import Jimp from "jimp";
+import * as JimpModule from "jimp";
 
 const imagePath = join(process.cwd(), ".pi", "extensions", "banner.png");
 
@@ -26,6 +26,43 @@ const HALF_BLOCK = "\u2584"; // lower half block: fg = bottom, bg = top
 
 let cachedBanner: string[] | null = null;
 let loadPromise: Promise<string[]> | null = null;
+
+function getJimpRuntime(): { read(path: string): Promise<any> } {
+	const mod = JimpModule as Record<string, unknown>;
+	const candidates = [mod.default, mod.Jimp, mod];
+	for (const candidate of candidates) {
+		if (
+			candidate &&
+			(typeof candidate === "object" || typeof candidate === "function") &&
+			typeof (candidate as { read?: unknown }).read === "function"
+		) {
+			return candidate as { read(path: string): Promise<any> };
+		}
+	}
+	throw new TypeError("Jimp runtime missing read() export");
+}
+
+function intToRgba(pixel: number): {
+	r: number;
+	g: number;
+	b: number;
+	a: number;
+} {
+	return {
+		r: (pixel >> 24) & 255,
+		g: (pixel >> 16) & 255,
+		b: (pixel >> 8) & 255,
+		a: pixel & 255,
+	};
+}
+
+function resizeImageCompat(image: any, w: number, h: number): void {
+	try {
+		image.resize({ w, h });
+	} catch {
+		image.resize(w, h);
+	}
+}
 
 function ansiCell(
 	top: { r: number; g: number; b: number; a: number },
@@ -46,15 +83,16 @@ function ansiCell(
 }
 
 async function loadBanner(): Promise<string[]> {
+	const Jimp = getJimpRuntime();
 	const image = await Jimp.read(imagePath);
-	image.resize(PIXEL_WIDTH, PIXEL_HEIGHT);
+	resizeImageCompat(image, PIXEL_WIDTH, PIXEL_HEIGHT);
 
 	const lines: string[] = [];
 	for (let row = 0; row < PIXEL_HEIGHT; row += 2) {
 		let line = "";
 		for (let col = 0; col < PIXEL_WIDTH; col++) {
-			const top = Jimp.intToRGBA(image.getPixelColor(col, row));
-			const bottom = Jimp.intToRGBA(image.getPixelColor(col, row + 1));
+			const top = intToRgba(image.getPixelColor(col, row));
+			const bottom = intToRgba(image.getPixelColor(col, row + 1));
 			line += ansiCell(top, bottom);
 		}
 		lines.push(line);

@@ -1,0 +1,90 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-packet.schema.json",
+	"title": "PlanPacket",
+	"description": "Plan-gated mutation contract emitted before execution.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"contract_version",
+		"plan_id",
+		"task_id",
+		"scope",
+		"assumptions",
+		"risk_level",
+		"acceptance_checks",
+		"rollback_plan"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"contract_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"plan_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"task_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"scope": {
+			"type": "string",
+			"minLength": 1
+		},
+		"assumptions": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"risk_level": {
+			"type": "string",
+			"enum": ["low", "med", "high"]
+		},
+		"acceptance_checks": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"rollback_plan": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["rollback_artifacts", "revert_commit_ready"],
+			"properties": {
+				"revert_commit_ready": {
+					"type": "boolean",
+					"const": true
+				},
+				"rollback_artifacts": {
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["revert_command", "revert_branch", "patch_bundle"],
+					"properties": {
+						"revert_command": {
+							"type": "string",
+							"minLength": 1
+						},
+						"revert_branch": {
+							"type": "string",
+							"minLength": 1
+						},
+						"patch_bundle": {
+							"type": "string",
+							"minLength": 1
+						}
+					}
+				}
+			}
+		}
+	}
+}

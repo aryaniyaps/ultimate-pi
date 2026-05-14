@@ -128,6 +128,18 @@ Configurable via env vars (set before launching pi):
 - Reloads on `/reload`.
 - Status command: `/env-loader-status`
 
+### Harness governance extensions
+
+These Pi extensions are loaded from `.pi/extensions/` via the root `package.json`
+`pi.extensions` manifest (no extra registration needed):
+
+- `.pi/extensions/policy-gate.ts` — plan-before-mutate + phase enforcement
+- `.pi/extensions/budget-guard.ts` — budget hard-stop and `budget_exhausted` events
+- `.pi/extensions/trace-recorder.ts` — run trace artifacts in `.pi/harness/runs/`
+- `.pi/extensions/review-integrity.ts` — evaluator/adversary session isolation checks
+- `.pi/extensions/test-diff-integrity.ts` — suspicious test diff detection/escalation
+- `.pi/extensions/debate-orchestrator.ts` — headless debate bus + consensus packets
+
 ### PostHog analytics
 
 `@posthog/pi` — wraps the upstream [posthog-pi](https://github.com/PostHog/posthog-pi) extension to capture AI generation spans, tool spans, and traces in [PostHog](https://posthog.com). Install via `pi install @posthog/pi`. See the upstream repo for configuration and env vars.

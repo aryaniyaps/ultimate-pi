@@ -1,0 +1,84 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/incident-record.schema.json",
+	"title": "IncidentRecord",
+	"description": "Incident, mitigation, rollback, and override audit record.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"contract_version",
+		"incident_id",
+		"trigger",
+		"blast_radius",
+		"mitigation",
+		"rollback_ref",
+		"postmortem_required"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"contract_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"incident_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"trigger": {
+			"type": "string",
+			"minLength": 1
+		},
+		"blast_radius": {
+			"type": "string",
+			"minLength": 1
+		},
+		"mitigation": {
+			"type": "string",
+			"minLength": 1
+		},
+		"rollback_ref": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["revert_command", "revert_branch", "patch_bundle"],
+			"properties": {
+				"revert_command": {
+					"type": "string",
+					"minLength": 1
+				},
+				"revert_branch": {
+					"type": "string",
+					"minLength": 1
+				},
+				"patch_bundle": {
+					"type": "string",
+					"minLength": 1
+				}
+			}
+		},
+		"postmortem_required": {
+			"type": "boolean"
+		},
+		"policy_override": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["human_override", "approver_count", "justification"],
+			"properties": {
+				"human_override": {
+					"type": "boolean"
+				},
+				"approver_count": {
+					"type": "integer",
+					"enum": [1]
+				},
+				"justification": {
+					"type": "string",
+					"minLength": 1
+				}
+			}
+		}
+	}
+}
