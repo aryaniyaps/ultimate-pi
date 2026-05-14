@@ -16,6 +16,9 @@ interface PolicyState {
 	phase: HarnessPhase;
 	approvedPlan: boolean;
 	planId: string | null;
+	aborted: boolean;
+	abortReason: string | null;
+	abortedAt: string | null;
 	updatedAt: string;
 }
 
@@ -58,6 +61,9 @@ function defaultState(): PolicyState {
 		phase: "plan",
 		approvedPlan: false,
 		planId: null,
+		aborted: false,
+		abortReason: null,
+		abortedAt: null,
 		updatedAt: nowIso(),
 	};
 }
@@ -85,6 +91,11 @@ function hasApprovedPlanSignal(prompt: string): boolean {
 		p.includes("approved plan") ||
 		p.includes("plan_id")
 	);
+}
+
+function hasAbortSignal(prompt: string): boolean {
+	const p = prompt.toLowerCase();
+	return p.includes("/harness-abort") || p.includes("harness-abort");
 }
 
 function isValidTransition(from: HarnessPhase, to: HarnessPhase): boolean {
@@ -120,6 +131,13 @@ function getLatestPolicyState(ctx: {
 				phase: candidate.phase as HarnessPhase,
 				approvedPlan: Boolean(candidate.approvedPlan),
 				planId: typeof candidate.planId === "string" ? candidate.planId : null,
+				aborted: Boolean(candidate.aborted),
+				abortReason:
+					typeof candidate.abortReason === "string"
+						? candidate.abortReason
+						: null,
+				abortedAt:
+					typeof candidate.abortedAt === "string" ? candidate.abortedAt : null,
 				updatedAt:
 					typeof candidate.updatedAt === "string"
 						? candidate.updatedAt
@@ -138,6 +156,30 @@ export default function policyGate(pi: ExtensionAPI) {
 	});
 
 	pi.on("before_agent_start", async (event) => {
+		const abortSignal = hasAbortSignal(event.prompt);
+		if (abortSignal) {
+			state.phase = "plan";
+			state.approvedPlan = false;
+			state.planId = null;
+			state.aborted = true;
+			state.abortReason = "harness-abort command";
+			state.abortedAt = nowIso();
+			state.updatedAt = state.abortedAt;
+			pi.appendEntry("harness-policy-state", state);
+			return {
+				message: {
+					customType: "harness-policy-aborted",
+					display: true,
+					content: [
+						"Harness run aborted safely.",
+						"Mutating tools are now blocked until a new approved plan is attached.",
+						'Next step: /harness-plan "<task>"',
+					].join("\n"),
+				},
+				systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nAbort lock active. Mutating tools must remain blocked until a new approved plan is attached.`,
+			};
+		}
+
 		const nextPhase = inferPhase(event.prompt, state.phase);
 		const planSignal = hasApprovedPlanSignal(event.prompt);
 
@@ -177,17 +219,27 @@ export default function policyGate(pi: ExtensionAPI) {
 				/plan[_-]?id["'\s:=]+([A-Za-z0-9._:-]+)/i,
 			);
 			state.planId = planMatch?.[1] ?? state.planId;
+			state.aborted = false;
+			state.abortReason = null;
+			state.abortedAt = null;
 		}
 		state.phase = nextPhase;
 		state.updatedAt = nowIso();
 		pi.appendEntry("harness-policy-state", state);
 
 		return {
-			systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nPhase=${state.phase}; ApprovedPlan=${state.approvedPlan}; PlanId=${state.planId ?? "none"}.`,
+			systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nPhase=${state.phase}; ApprovedPlan=${state.approvedPlan}; PlanId=${state.planId ?? "none"}; Aborted=${state.aborted}.`,
 		};
 	});
 
 	pi.on("tool_call", async (event) => {
+		if (state.aborted && MUTATING_TOOLS.has(event.toolName)) {
+			return {
+				block: true,
+				reason:
+					"policy-gate: mutating tool blocked because harness-abort lock is active. Attach a new approved plan first.",
+			};
+		}
 		if (MUTATING_TOOLS.has(event.toolName)) {
 			if (state.phase !== "execute") {
 				return {
@@ -207,6 +259,13 @@ export default function policyGate(pi: ExtensionAPI) {
 		if (event.toolName === "bash") {
 			const command = String(event.input.command ?? "");
 			if (!isMutatingBash(command)) return undefined;
+			if (state.aborted) {
+				return {
+					block: true,
+					reason:
+						"policy-gate: mutating bash command blocked because harness-abort lock is active. Attach a new approved plan first.",
+				};
+			}
 			if (state.phase !== "execute") {
 				return {
 					block: true,
@@ -225,6 +284,40 @@ export default function policyGate(pi: ExtensionAPI) {
 		return undefined;
 	});
 
+	pi.registerCommand("harness-abort", {
+		description: "Safely abort current harness run and reset to plan phase",
+		handler: async (args, ctx) => {
+			const reason = args.trim();
+			state.phase = "plan";
+			state.approvedPlan = false;
+			state.planId = null;
+			state.aborted = true;
+			state.abortReason = reason.length > 0 ? reason : "manual abort";
+			state.abortedAt = nowIso();
+			state.updatedAt = state.abortedAt;
+			pi.appendEntry("harness-policy-state", state);
+
+			const lines = [
+				"Harness run aborted safely.",
+				"  phase: plan",
+				"  approvedPlan: false",
+				`  abortReason: ${state.abortReason}`,
+				`  abortedAt: ${state.abortedAt}`,
+				"Mutating tools are now blocked until a new approved plan is attached.",
+				'Next command: /harness-plan "<task>"',
+			];
+			if (ctx.hasUI) {
+				ctx.ui.notify(lines.join("\n"), "warning");
+				return;
+			}
+			pi.sendMessage({
+				customType: "harness-policy-aborted",
+				content: lines.join("\n"),
+				display: true,
+			});
+		},
+	});
+
 	pi.registerCommand("harness-policy-status", {
 		description: "Show current harness policy gate state",
 		handler: async (_args, ctx) => {
@@ -234,6 +327,9 @@ export default function policyGate(pi: ExtensionAPI) {
 				`  phase: ${latest.phase}`,
 				`  approvedPlan: ${latest.approvedPlan}`,
 				`  planId: ${latest.planId ?? "(none)"}`,
+				`  aborted: ${latest.aborted}`,
+				`  abortReason: ${latest.abortReason ?? "(none)"}`,
+				`  abortedAt: ${latest.abortedAt ?? "(none)"}`,
 				`  updatedAt: ${latest.updatedAt}`,
 			];
 			if (ctx.hasUI) {

@@ -70,6 +70,7 @@ Block commit/PR if any gate fails:
 - `--quick` may reduce breadth, never safety gates.
 - `--risk` can tighten behavior, never disable adversary.
 - If risk/ambiguity is high, auto-fallback to manual `harness-plan` and wait for clarification.
+- If execution must be interrupted safely, run `/harness-abort [reason]`, then restart with `/harness-plan "<task>"`.
 - Always output trace bundle ID and incident/rollback references.
 
 ## Completion behavior
