@@ -30,7 +30,16 @@ which git && git --version
 
 Block if node < 18, npm < 9, or git missing. Report versions and continue.
 
-Read `.pi/auto-commit.json` for co-author + branch config. Read `.pi/settings.json` for extension packages list.
+Read `.pi/auto-commit.json` for co-author + branch config.
+
+Resolve the installed **ultimate-pi** package root (works in this repo and after `pi install npm:ultimate-pi`):
+
+```bash
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+echo "ultimate-pi package: $UP_PKG"
+```
+
+For extension package names, read **`$UP_PKG/.pi/settings.example.json`** (shipped template). Merge its `packages` array into the **project** `.pi/settings.json` if missing — do not copy the repo-dev `.pi/settings.json` from the package (it may contain `".."` and is not published).
 
 ## Step 0.5 — Graphify (skip if `--skip-graphify`)
 
@@ -432,12 +441,19 @@ sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate 
 
 ## Step 3 — Pi Extension Packages
 
-Install pi extension packages from `.pi/settings.json`:
+Bundled extensions load from the installed `ultimate-pi` package. Optionally install the companion lockfile used in development:
 
 ```bash
-cd .pi/npm
-npm install
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+if [ -f "$UP_PKG/.pi/npm/package.json" ]; then
+  (cd "$UP_PKG/.pi/npm" && npm install)
+  echo "✓ ultimate-pi .pi/npm dependencies"
+else
+  echo "✓ skip .pi/npm (not in package)"
+fi
 ```
+
+Merge extension entries from `$UP_PKG/.pi/settings.example.json` into this project's `.pi/settings.json` `packages` array (add any missing `npm:…` entries; keep existing user packages).
 
 Verify each package:
 
@@ -460,9 +476,10 @@ The script below:
 
 ```bash
 # Verify package installed first
-ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null \
+ls "$UP_PKG/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
+  || ls "$UP_PKG/.pi/npm/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
   && echo "✓ model-router package" \
-  || echo "✗ model-router package — run: cd .pi/npm && npm install"
+  || echo "✗ model-router package — reinstall ultimate-pi or run npm install in $UP_PKG/.pi/npm"
 
 # Generate config from detected providers (only if missing)
 if [ -f .pi/model-router.json ]; then
@@ -578,7 +595,25 @@ Do NOT block. If generation fails, warn in report and continue.
 
 > `/router profile auto`
 
-The pi TUI will intercept this and activate the `auto` profile. Then continue to Step 4.
+The pi TUI will intercept this and activate the `auto` profile. Then continue to Step 3.6.
+
+## Step 3.6 — Seed `.pi/agents` (pi-subagents)
+
+`@tintinweb/pi-subagents` reads agent definitions from **this project's** `.pi/agents/`, not from the installed npm tree. Copy packaged agents when missing (preserves user edits):
+
+```bash
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+mkdir -p .pi/agents/harness .pi/agents/pi-pi
+for dir in harness pi-pi; do
+  [ -d "$UP_PKG/.pi/agents/$dir" ] || continue
+  for f in "$UP_PKG/.pi/agents/$dir"/*.md; do
+    [ -f "$f" ] || continue
+    base="$(basename "$f")"
+    [ -f ".pi/agents/$dir/$base" ] || cp "$f" ".pi/agents/$dir/$base"
+  done
+done
+echo "✓ .pi/agents (harness + pi-pi) seeded from package"
+```
 
 ## Step 4 — Configuration Files
 
@@ -643,7 +678,7 @@ Created: $(date +%Y-%m-%d)
 - .pi/harness/specs/ → Harness contracts and schema docs
 - .pi/harness/incidents/ → Incident and override records
 - `.agents/skills/` (npm package) → Harness skills (no copy into `.pi/skills/` needed)
-- .pi/agents/ → Specialized agents
+- `.pi/agents/` → Specialized agents (seed from package — see Step 3.6)
 
 ## Graphify-First Workflow
 
@@ -674,7 +709,8 @@ Then run the remaining checks:
 
 ```bash
 # pi extensions
-cd .pi/npm && npm ls 2>/dev/null && echo "✓ pi extensions" || echo "✗ pi extensions"
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+npm ls --prefix "$UP_PKG" 2>/dev/null | head -5 && echo "✓ ultimate-pi bundled extensions" || echo "✗ check ultimate-pi install"
 
 # graphify knowledge graph (pip/pip3, uv, apt, or PATH)
 PIP_CMD=""
@@ -706,7 +742,9 @@ print(f'✓ knowledge graph built ({n} nodes)' if n else '✗ graph.json has 0 n
 graphify hook status 2>/dev/null && echo "✓ graphify git hooks installed" || echo "✗ graphify git hooks not installed"
 
 # model router
-ls .pi/npm/node_modules/@yeliu84/pi-model-router/package.json 2>/dev/null && echo "✓ model-router package" || echo "✗ model-router package"
+ls "$UP_PKG/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
+  || ls "$UP_PKG/.pi/npm/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
+  && echo "✓ model-router package" || echo "✗ model-router package"
 ls .pi/model-router.json 2>/dev/null && echo "✓ model-router config" || echo "✗ model-router config"
 
 # raw folder for graphify sources

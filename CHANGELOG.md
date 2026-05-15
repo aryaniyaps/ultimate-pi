@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.2.6] — 2026-05-15
+
+### 🔧 Chores
+
+- Align npm publish with pi package docs: explicit `files` allowlist (no dev runs, secrets, or local router config)
+- Fix `pi` manifest: drop missing `.pi/providers`, add `.pi/skills`
+- Ship `.pi/settings.example.json` instead of dev `.pi/settings.json` (removes `".."` local package from installs)
+- Document layout in `.pi/PACKAGING.md`; harness-setup seeds `.pi/agents` and resolves package root for npm installs
+
 ## [v0.2.5] — 2026-05-15
 
 ### 🔧 Chores

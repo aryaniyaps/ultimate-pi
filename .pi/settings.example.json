@@ -1,0 +1,14 @@
+{
+	"retry": {
+		"enabled": true,
+		"maxRetries": 3
+	},
+	"packages": [
+		"npm:ultimate-pi",
+		"npm:@posthog/pi",
+		"npm:context-mode",
+		"npm:@tintinweb/pi-subagents",
+		"npm:@yeliu84/pi-model-router",
+		"npm:@sting8k/pi-vcc"
+	]
+}
