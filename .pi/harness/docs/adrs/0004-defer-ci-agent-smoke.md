@@ -15,7 +15,7 @@ Running full agent smoke or A/B harness comparisons in CI has high token cost an
 2. Deterministic schema/fixture CI is green for ≥4 weeks.
 3. At least 20 manual harness runs with `harness_run_completed` in PostHog.
 
-Phase 2 ships **deterministic** eval fixtures only (`npm run harness:verify`).
+Phase 2 ships **deterministic** eval fixtures only (`node "$UP_PKG/.pi/scripts/harness-verify.mjs"`; see `.pi/scripts/README.md`).
 
 ## Consequences
 

@@ -1,0 +1,48 @@
+{
+  "name": "@yeliu84/pi-model-router",
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Intelligent per-turn model router extension for the pi coding agent",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "model-router",
+    "llm",
+    "coding-agent",
+    "extension"
+  ],
+  "license": "MIT",
+  "author": "Ye Liu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yeliu84/pi-model-router.git"
+  },
+  "homepage": "https://github.com/yeliu84/pi-model-router#readme",
+  "bugs": {
+    "url": "https://github.com/yeliu84/pi-model-router/issues"
+  },
+  "exports": {
+    ".": "./extensions/index.ts"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/index.ts"
+    ]
+  },
+  "scripts": {
+    "tsc": "tsc --noEmit",
+    "build": "tsc",
+    "prepublishOnly": "npm run tsc"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-agent-core": "*",
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*",
+    "@mariozechner/pi-tui": "*",
+    "@sinclair/typebox": "*"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1",
+    "typescript": "^6.0.2"
+  }
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * harness:verify — deterministic harness contract checks (no LLM).
+ * harness-verify — deterministic harness contract checks (no LLM).
  */
 
 import { readFile, access } from "node:fs/promises";
@@ -122,12 +122,14 @@ async function checkSentruxRules() {
 		"--check",
 	]);
 	if (checkCode !== 0) {
-		fail(checkOut.trim() || "sentrux rules.toml out of date — run harness:sentrux-sync");
+		fail(checkOut.trim() || "sentrux rules.toml out of date — run node \"$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs\" --force (see .pi/scripts/README.md for UP_PKG)");
 	}
 	ok("sentrux rules.toml in sync with manifest");
 
 	if (!(await fileExists(SENTRUX_RULES))) {
-		fail("missing .sentrux/rules.toml — run npm run harness:sentrux-sync");
+		fail(
+			"missing .sentrux/rules.toml — run node \"$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs\" --force (resolve UP_PKG via .pi/scripts/README.md)",
+		);
 	}
 	ok(".sentrux/rules.toml present");
 }

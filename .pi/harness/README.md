@@ -17,8 +17,9 @@ This scaffold is intentionally minimal and safe to adopt incrementally.
 ## Verification
 
 ```bash
-npm run harness:verify
-npm run harness:sentrux-sync   # after editing sentrux/architecture.manifest.json
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+node "$UP_PKG/.pi/scripts/harness-verify.mjs"
+node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --force   # after editing sentrux/architecture.manifest.json
 ```
 
 ## Governance Extensions

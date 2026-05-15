@@ -80,7 +80,7 @@ function renderManagedBlock(manifest) {
 function mergeRules(existing, managedBlock) {
 	const header = `# Sentrux rules — ${new Date().toISOString().slice(0, 10)}
 # Docs: https://sentrux.dev/docs/rules-engine/
-# Sync: npm run harness:sentrux-sync (or /harness-sentrux-sync in pi)
+# Sync: node $UP_PKG/.pi/scripts/sentrux-rules-sync.mjs --force (see .pi/scripts/README.md for UP_PKG) or /harness-sentrux-sync in pi
 #
 # Custom rules: add TOML below the managed block; they are preserved on sync.
 
@@ -168,7 +168,7 @@ async function main() {
 		if (checkOnly) process.exit(0);
 	} else if (checkOnly) {
 		fail(
-			"rules.toml out of date — run npm run harness:sentrux-sync",
+			"rules.toml out of date — run node \"$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs\" --force (see .pi/scripts/README.md for UP_PKG)",
 		);
 	} else {
 		await mkdir(join(ROOT, ".sentrux"), { recursive: true });

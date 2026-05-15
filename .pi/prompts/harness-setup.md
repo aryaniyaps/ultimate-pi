@@ -41,6 +41,8 @@ echo "ultimate-pi package: $UP_PKG"
 
 For extension package names, read **`$UP_PKG/.pi/settings.example.json`** (shipped template). Merge its `packages` array into the **project** `.pi/settings.json` if missing — do not copy the repo-dev `.pi/settings.json` from the package (it may contain `".."` and is not published).
 
+If `require.resolve('ultimate-pi/package.json')` fails (bare clone without resolving the package name), run from **this repository root**: `UP_PKG="$(pwd)"`.
+
 ## Step 0.5 — Graphify (skip if `--skip-graphify`)
 
 **Critical:** `graphify . --wiki` and `graphify . --update` are **invalid** CLI (error: `unknown command '.'`). Use only:
@@ -57,12 +59,12 @@ Run from the **project root** (the external repo root, not ultimate-pi unless th
 ```bash
 mkdir -p ./raw .pi/harness/specs .pi/harness/runs .pi/harness/incidents .pi/harness/debates
 
-# Bundled with ultimate-pi harness; copy path if bootstrap runs from a linked harness checkout
-bash "$(node -p "require('path').join(require('path').dirname(require.resolve('ultimate-pi/package.json')),'.pi/scripts/harness-graphify-bootstrap.sh')")"
-# In ultimate-pi checkout: npm run harness:graphify-bootstrap
+# Bundled with ultimate-pi harness; $UP_PKG is set in Step 0
+bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"
+# Developing ultimate-pi from repo root: UP_PKG="$(pwd)" then same command
 
 # Pass --force when $ARGUMENTS contains --force to rebuild an existing graph:
-# npm run harness:graphify-bootstrap -- --force
+# bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh" --force
 ```
 
 If the bootstrap script is missing, run it from the installed ultimate-pi package (`.pi/scripts/` inside the npm package), or execute equivalent steps manually:
@@ -220,9 +222,9 @@ If user chose **cloud**, skip all 1.5.x steps. Just note:
 Run the bundled verifier from the **project root**. It installs missing npm globals, fixes common **Linux system dependencies** (Chrome libs for `agent-browser`), runs smoke tests, and exits non-zero if a required tool fails.
 
 ```bash
-npm run harness:cli-verify
-# ultimate-pi checkout: npm run harness:cli-verify
-# Reinstall everything: npm run harness:cli-verify -- --force
+bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
+# ultimate-pi checkout: same (ensure Step 0 set UP_PKG="$(pwd)" or used require.resolve)
+# Reinstall everything: bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh" --force
 ```
 
 **Required (script must exit 0):** firecrawl-cli, ctx7, biome, ast-grep (`sg`), sentrux (when harness manifest present).
@@ -237,14 +239,14 @@ sudo apt-get install -y libnss3 libnspr4 libgbm1 libatk1.0-0 libatk-bridge2.0-0 
   libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
   libasound2 libpango-1.0-0 libcairo2 libx11-6 libxcb1 libxext6 fonts-liberation
 agent-browser install --with-deps
-npm run harness:cli-verify
+bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 ```
 
 **Do not continue** past Step 2 if `harness-cli-verify.sh` exits non-zero.
 
 ### Manual reference (if script missing in target repo)
 
-Use `npm run harness:cli-verify` from the installed ultimate-pi package, or install tools individually:
+Use `bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"` (see Step 0 for `UP_PKG`), or install tools individually:
 
 ### 2.1 — firecrawl-cli (Web Search + Scrape + Crawl + Interact + Download + Parse)
 
@@ -420,10 +422,7 @@ Configure MCP server in `.pi/mcp.json` (see Step 4.3).
 
 Generate architectural rules from the harness manifest (creates/updates `.sentrux/rules.toml`):
 ```bash
-# From ultimate-pi checkout:
-npm run harness:sentrux-sync
-# From an external project (after pi install npm:ultimate-pi):
-npm run harness:sentrux-sync
+node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --force
 # Or in pi: /harness-sentrux-sync
 ```
 
@@ -441,7 +440,9 @@ sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate 
 
 ## Step 3 — Pi Extension Packages
 
-Bundled extensions load from the installed `ultimate-pi` package. Optionally install the companion lockfile used in development:
+Bundled extensions load from the installed `ultimate-pi` package. **Per-turn model routing** comes from a **vendored** fork of [`yeliu84/pi-model-router`](https://github.com/yeliu84/pi-model-router) in `vendor/pi-model-router/`, wired through [`.pi/extensions/pi-model-router-harness.ts`](.pi/extensions/pi-model-router-harness.ts). The harness **gates** activation on `.pi/model-router.json` (Step **3.5** below) so `router/auto` and built-in tiers such as `openai/gpt-5.4-pro` cannot load prematurely. Attribution: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `vendor/pi-model-router/UPSTREAM_PIN.md`. Maintainer refresh: `npm run vendor:sync-router`.
+
+Optionally install the companion lockfile used in development:
 
 ```bash
 UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
@@ -453,7 +454,7 @@ else
 fi
 ```
 
-Merge extension entries from `$UP_PKG/.pi/settings.example.json` into this project's `.pi/settings.json` `packages` array (add any missing `npm:…` entries; keep existing user packages).
+Merge extension entries from `$UP_PKG/.pi/settings.example.json` into this project's `.pi/settings.json` `packages` array (add any missing `npm:…` entries; keep existing user packages). **Do not add** `npm:@yeliu84/pi-model-router` (superseded by the vendored router).
 
 Verify each package:
 
@@ -462,7 +463,8 @@ Verify each package:
 | `@posthog/pi` | Analytics event capture | F0 |
 | `pi-lean-ctx` | Context runtime (read/bash/find/grep/MCP bridge) | F0 |
 | `@tintinweb/pi-subagents` | L4 critic sub-agent spawn/control | P16 |
-| `@yeliu84/pi-model-router` | Per-turn intelligent model routing (auto high/medium/low tier selection) | F0 |
+| `@sting8k/pi-vcc` | VCC compaction / conversation memory | Shipped |
+| `pi-model-router` | Vendored (`vendor/`); activates after `.pi/model-router.json` exists | F0 |
 
 ## Step 3.5 — Model Router Configuration (Dynamic)
 
@@ -475,11 +477,12 @@ The script below:
 3. Only writes if file doesn't exist yet (safe to re-run, will skip existing)
 
 ```bash
-# Verify package installed first
-ls "$UP_PKG/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
-  || ls "$UP_PKG/.pi/npm/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
-  && echo "✓ model-router package" \
-  || echo "✗ model-router package — reinstall ultimate-pi or run npm install in $UP_PKG/.pi/npm"
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+
+# Verify vendored extension source ships with ultimate-pi
+ls "$UP_PKG/vendor/pi-model-router/extensions/index.ts" 2>/dev/null \
+  && echo "✓ vendored pi-model-router" \
+  || echo "✗ missing vendor/pi-model-router"
 
 # Generate config from detected providers (only if missing)
 if [ -f .pi/model-router.json ]; then
@@ -587,15 +590,16 @@ console.log(`  Medium tier: ${mediumModel}`);
 console.log(`  Low tier: ${lowModel}`);
 GENDONE
 fi
+
+# Merge router defaults after config exists (never adds npm packages — router is vendored)
+node "$UP_PKG/.pi/scripts/harness-sync-model-router.mjs"
 ```
 
-Do NOT block. If generation fails, warn in report and continue.
+Do NOT block. If generation fails, warn in report and continue (defaults script clears `defaultProvider` if it pointed at `router` while no config file exists).
 
-**Router is opt-in** — ultimate-pi no longer forces `defaultProvider: router` on install. After generating `model-router.json`, tell the user to enable routing when ready:
+**Router onboarding** — The vendored extension starts only after `.pi/model-router.json` appears. Running the script above prepares that file plus optional Pi defaults (**`router` / `auto`**) via `harness-sync-model-router.mjs` when `defaultProvider` was unset—then **`/reload`**.
 
-> `/router profile auto`
-
-The pi TUI will intercept this and activate the `auto` profile. Then continue to Step 3.6.
+Manual override: **`/router profile auto`** anytime after reload if they changed defaults.
 
 ## Step 3.6 — Seed `.pi/agents` (pi-subagents)
 
@@ -702,7 +706,7 @@ Created: $(date +%Y-%m-%d)
 Re-run CLI verification (must pass unless `--skip-tools`):
 
 ```bash
-npm run harness:cli-verify
+bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 ```
 
 Then run the remaining checks:
@@ -741,10 +745,9 @@ print(f'✓ knowledge graph built ({n} nodes)' if n else '✗ graph.json has 0 n
 " 2>/dev/null || echo "✗ no graph built yet"
 graphify hook status 2>/dev/null && echo "✓ graphify git hooks installed" || echo "✗ graphify git hooks not installed"
 
-# model router
-ls "$UP_PKG/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
-  || ls "$UP_PKG/.pi/npm/node_modules/@yeliu84/pi-model-router/package.json" 2>/dev/null \
-  && echo "✓ model-router package" || echo "✗ model-router package"
+# vendored model router
+ls "$UP_PKG/vendor/pi-model-router/extensions/index.ts" 2>/dev/null \
+  && echo "✓ vendored pi-model-router" || echo "✗ vendor/pi-model-router missing"
 ls .pi/model-router.json 2>/dev/null && echo "✓ model-router config" || echo "✗ model-router config"
 
 # raw folder for graphify sources
@@ -801,7 +804,7 @@ Output summary table:
 
 Next steps:
 1. If tools missing: re-run with `--force` or install individually
-2. If graph not built: run `npm run harness:graphify-bootstrap` (or `graphify update .` from project root)
+2. If graph not built: run `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"` (or `graphify update .` from project root)
 3. If hooks not installed: run `graphify hook install`
 4. If gh not authenticated: `gh auth login`
 5. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
@@ -811,9 +814,9 @@ Next steps:
 ## Guard Rails
 
 - **Internet required**: Several tools need npm registry access. Block if offline.
-- **CLI verify script**: Step 2 and Step 5 use `npm run harness:cli-verify` (`.pi/scripts/harness-cli-verify.sh`) — installs npm globals, Linux Chrome system libs for `agent-browser`, and smoke-tests each tool. Block on non-zero exit.
+- **CLI verify script**: Step 2 and Step 5 run `bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"` — installs npm globals, Linux Chrome system libs for `agent-browser`, and smoke-tests each tool. Block on non-zero exit.
 - **Graphify requires Python 3.10+**: Check `python3 --version`. Block if too old.
-- **Graphify bootstrap is mandatory** (unless `--skip-graphify`): Run `npm run harness:graphify-bootstrap`. Never use `graphify . --wiki`. Initial setup must run `graphify update .` and verify `graphify-out/graph.json` has nodes.
+- **Graphify bootstrap is mandatory** (unless `--skip-graphify`): Run `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"`. Never use `graphify . --wiki`. Initial setup must run `graphify update .` and verify `graphify-out/graph.json` has nodes.
 - **Python packages (Graphify)**: Before install, detect via PATH, `pip`/`pip3 show graphifyy`, `uv`, or apt. Prefer `uv tool install graphifyy`.
 - **Node.js >= 18 required**: Some pi packages use modern Node APIs.
 - **Docker required for self-hosted**: Step 1.5 needs Docker Engine + Compose. Block if install fails.
@@ -836,7 +839,7 @@ Next steps:
 | Graphify install fails | Show installer output. Retry `uv tool install graphifyy` or `pip3 install --user graphifyy`. Ensure `~/.local/bin` is on PATH. |
 | `graphify update .` fails | Block setup. Corpus may have no code files, or graphify not on PATH. Show stderr. |
 | Invalid `graphify .` usage | Replace with `graphify update .` — the `.` subcommand does not exist. |
-| graphify-out empty / 0 nodes | Re-run `npm run harness:graphify-bootstrap -- --force` from project root. |
+| graphify-out empty / 0 nodes | Re-run `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh" --force` from project root. |
 | graphify hook install fails | Hooks need `.git/` directory. Verify inside git repo. Manual: `git config core.hooksPath .pi/git-hooks` |
 | firecrawl auth failed | Show manual login instructions. Continue with other tools. |
 | gh not installed | Show GitHub CLI install link. Skip label creation. |

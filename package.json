@@ -1,6 +1,6 @@
 {
 	"name": "ultimate-pi",
-	"version": "0.2.7",
+	"version": "0.2.10",
 	"description": "Ultimate AI coding harness for pi.dev — extensible skills, Obsidian wiki knowledge layer, compressed context, deterministic output",
 	"keywords": [
 		"pi-package",
@@ -12,7 +12,6 @@
 		"knowledge-base",
 		"context-compression",
 		"agent-skills",
-		"cursor-sdk",
 		"firecrawl",
 		"context-mode",
 		"vcc"
@@ -68,18 +67,16 @@
 		"AGENTS.md",
 		"biome.json",
 		"CHANGELOG.md",
-		"README.md"
+		"README.md",
+		"THIRD_PARTY_NOTICES.md",
+		"vendor/pi-model-router"
 	],
 	"peerDependencies": {
 		"@mariozechner/pi-coding-agent": "*"
 	},
 	"scripts": {
-		"check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck .pi/extensions/dotenv-loader.ts .pi/extensions/lib/posthog-node.d.ts .pi/extensions/lib/harness-posthog.ts .pi/extensions/lib/harness-paths.ts .pi/extensions/model-router-bootstrap.ts .pi/extensions/harness-telemetry.ts .pi/extensions/trace-recorder.ts .pi/extensions/observation-bus.ts .pi/extensions/drift-monitor.ts .pi/extensions/sentrux-rules-sync.ts .pi/extensions/custom-header.ts",
-		"harness:graphify-bootstrap": "bash .pi/scripts/harness-graphify-bootstrap.sh",
-		"harness:cli-verify": "bash .pi/scripts/harness-cli-verify.sh",
-		"harness:verify": "node .pi/scripts/harness-verify.mjs",
-		"harness:sentrux-sync": "node .pi/scripts/sentrux-rules-sync.mjs --force",
-		"harness:meta-optimizer": "node .pi/harness/evolution/meta-optimizer.mjs",
+		"check:ts": "tsc --noEmit --target ES2023 --lib ES2023 --moduleResolution nodenext --module nodenext --skipLibCheck .pi/extensions/dotenv-loader.ts .pi/extensions/lib/posthog-node.d.ts .pi/extensions/lib/harness-posthog.ts .pi/extensions/lib/harness-paths.ts .pi/extensions/pi-model-router-harness.ts .pi/extensions/harness-telemetry.ts .pi/extensions/trace-recorder.ts .pi/extensions/observation-bus.ts .pi/extensions/drift-monitor.ts .pi/extensions/sentrux-rules-sync.ts .pi/extensions/custom-header.ts",
+		"vendor:sync-router": "bash .pi/scripts/vendor-sync-pi-model-router.sh",
 		"lint": "biome check",
 		"lint:fix": "biome check --fix",
 		"format": "biome format --write",
@@ -90,7 +87,10 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.14",
+		"@mariozechner/pi-agent-core": "0.73.0",
+		"@mariozechner/pi-ai": "0.73.0",
 		"@mariozechner/pi-coding-agent": "0.73.0",
+		"@mariozechner/pi-tui": "0.73.0",
 		"@sinclair/typebox": "^0.34.49",
 		"lefthook": "2.1.6",
 		"typescript": "^6.0.3"
@@ -99,7 +99,6 @@
 		"@posthog/pi": "latest",
 		"@sting8k/pi-vcc": "^0.3.12",
 		"@tintinweb/pi-subagents": "latest",
-		"@yeliu84/pi-model-router": "latest",
 		"asciify-image": "^0.1.10",
 		"jimp": "^1.6.1",
 		"posthog-node": "^5.30.6"

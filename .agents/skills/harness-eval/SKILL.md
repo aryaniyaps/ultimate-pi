@@ -17,7 +17,7 @@ description: Run harness evaluation phase and emit EvalVerdict artifacts. Use wi
 2. Gather evidence: tests, diff scope, policy state, debate consensus packet.
 3. Emit verdict via `pi.appendEntry('harness-eval-verdict', { ... })` pattern (session custom entry).
 4. When Sentrux enabled, ensure `harness-sentrux-signal` exists (stub or MCP) per ADR 0006.
-5. Deterministic checks: `npm run harness:verify` and project test script.
+5. Deterministic checks: `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` (see `.pi/scripts/README.md`) and project test script.
 
 ## Verdict values
 

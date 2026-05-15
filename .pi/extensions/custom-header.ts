@@ -90,23 +90,6 @@ function ansiCell(
 }
 
 async function loadBanner(): Promise<string[]> {
-	// #region agent log
-	fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"X-Debug-Session-Id": "7737a8",
-		},
-		body: JSON.stringify({
-			sessionId: "7737a8",
-			hypothesisId: "B",
-			location: "custom-header.ts:loadBanner",
-			message: "banner path",
-			data: { imagePath, cwd: process.cwd() },
-			timestamp: Date.now(),
-		}),
-	}).catch(() => {});
-	// #endregion
 	const Jimp = getJimpRuntime();
 	const image = await Jimp.read(imagePath);
 	resizeImageCompat(image, PIXEL_WIDTH, PIXEL_HEIGHT);
