@@ -32,4 +32,6 @@ We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts n
 
 ## Dependencies
 
-Runtime pi extensions are in `dependencies` + `bundledDependencies`. `@mariozechner/pi-coding-agent` is a `peerDependency` (provided by the pi CLI).
+Runtime pi extensions are regular `dependencies` (installed by `npm install` when pi installs the package). We do **not** use `bundledDependencies`: bundling pre-installs `node_modules` and breaks `npm install -g` / `pi update` for native modules such as `koffi` (empty stub dir, postinstall fails).
+
+`@mariozechner/pi-coding-agent` is a `peerDependency` (provided by the pi CLI).

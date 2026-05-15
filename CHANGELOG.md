@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.2.7] — 2026-05-15
+
+### 🐛 Fixes
+
+- Remove `bundledDependencies` so `pi update` / `npm install -g ultimate-pi` installs a complete `koffi` tree (fixes empty `node_modules/koffi` and postinstall failure)
+- Drop `context-mode` from package `dependencies` (install via `npm:context-mode` in project settings; avoids Node &lt; 22.5 postinstall failure on global update)
+
 ## [v0.2.6] — 2026-05-15
 
 ### 🔧 Chores
