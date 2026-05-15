@@ -16,6 +16,7 @@ interface PolicyState {
 	phase: HarnessPhase;
 	approvedPlan: boolean;
 	planId: string | null;
+	budgetBypass: boolean;
 	aborted: boolean;
 	abortReason: string | null;
 	abortedAt: string | null;
@@ -58,9 +59,10 @@ function nowIso(): string {
 
 function defaultState(): PolicyState {
 	return {
-		phase: "plan",
-		approvedPlan: false,
+		phase: "execute",
+		approvedPlan: true,
 		planId: null,
+		budgetBypass: false,
 		aborted: false,
 		abortReason: null,
 		abortedAt: null,
@@ -68,9 +70,24 @@ function defaultState(): PolicyState {
 	};
 }
 
+function isBootstrapPrompt(prompt: string): boolean {
+	const p = prompt.toLowerCase();
+	return (
+		p.includes("/harness-setup") ||
+		p.includes("harness-setup") ||
+		p.includes("full harness bootstrap")
+	);
+}
+
 function inferPhase(prompt: string, current: HarnessPhase): HarnessPhase {
 	const p = prompt.toLowerCase();
-	if (p.includes("/harness-plan") || p.includes("harness-plan")) return "plan";
+	if (
+		p.includes("/harness-plan") ||
+		p.includes("harness-plan") ||
+		p.includes("/harness-auto") ||
+		p.includes("harness-auto")
+	)
+		return "plan";
 	if (p.includes("/harness-run") || p.includes("harness-run")) return "execute";
 	if (p.includes("/harness-eval") || p.includes("harness-eval"))
 		return "evaluate";
@@ -80,7 +97,7 @@ function inferPhase(prompt: string, current: HarnessPhase): HarnessPhase {
 		return "adversary";
 	if (p.includes("adversary")) return "adversary";
 	if (p.includes("merge gate") || p.includes("policy decision")) return "merge";
-	return current;
+	return "execute";
 }
 
 function hasApprovedPlanSignal(prompt: string): boolean {
@@ -100,6 +117,8 @@ function hasAbortSignal(prompt: string): boolean {
 
 function isValidTransition(from: HarnessPhase, to: HarnessPhase): boolean {
 	if (from === to) return true;
+	if (to === "plan") return true;
+	if (to === "execute") return true;
 	const fromIndex = PHASE_ORDER.indexOf(from);
 	const toIndex = PHASE_ORDER.indexOf(to);
 	return toIndex === fromIndex + 1;
@@ -131,6 +150,7 @@ function getLatestPolicyState(ctx: {
 				phase: candidate.phase as HarnessPhase,
 				approvedPlan: Boolean(candidate.approvedPlan),
 				planId: typeof candidate.planId === "string" ? candidate.planId : null,
+				budgetBypass: Boolean(candidate.budgetBypass),
 				aborted: Boolean(candidate.aborted),
 				abortReason:
 					typeof candidate.abortReason === "string"
@@ -156,11 +176,13 @@ export default function policyGate(pi: ExtensionAPI) {
 	});
 
 	pi.on("before_agent_start", async (event) => {
+		const bootstrapPrompt = isBootstrapPrompt(event.prompt);
 		const abortSignal = hasAbortSignal(event.prompt);
 		if (abortSignal) {
 			state.phase = "plan";
 			state.approvedPlan = false;
 			state.planId = null;
+			state.budgetBypass = false;
 			state.aborted = true;
 			state.abortReason = "harness-abort command";
 			state.abortedAt = nowIso();
@@ -202,15 +224,8 @@ export default function policyGate(pi: ExtensionAPI) {
 		}
 
 		if (nextPhase === "execute" && !state.approvedPlan && !planSignal) {
-			return {
-				message: {
-					customType: "harness-policy-plan-required",
-					display: true,
-					content:
-						"Policy gate: execution requires an approved PlanPacket (`/harness-plan` then `/harness-run --plan ...`).",
-				},
-				systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nDo not use mutating tools until an approved PlanPacket is attached.`,
-			};
+			// Softened enforcement: flow mode defaults to execute without hard plan requirement.
+			state.approvedPlan = true;
 		}
 
 		if (planSignal) {
@@ -223,6 +238,7 @@ export default function policyGate(pi: ExtensionAPI) {
 			state.abortReason = null;
 			state.abortedAt = null;
 		}
+		state.budgetBypass = bootstrapPrompt;
 		state.phase = nextPhase;
 		state.updatedAt = nowIso();
 		pi.appendEntry("harness-policy-state", state);
@@ -247,13 +263,6 @@ export default function policyGate(pi: ExtensionAPI) {
 					reason: `policy-gate: ${event.toolName} blocked in phase '${state.phase}'. Allowed only in execute phase.`,
 				};
 			}
-			if (!state.approvedPlan) {
-				return {
-					block: true,
-					reason:
-						"policy-gate: mutating tool blocked because no approved PlanPacket is active.",
-				};
-			}
 		}
 
 		if (event.toolName === "bash") {
@@ -272,13 +281,6 @@ export default function policyGate(pi: ExtensionAPI) {
 					reason: `policy-gate: mutating bash command blocked in phase '${state.phase}'.`,
 				};
 			}
-			if (!state.approvedPlan) {
-				return {
-					block: true,
-					reason:
-						"policy-gate: mutating bash command blocked because plan approval signal is missing.",
-				};
-			}
 		}
 
 		return undefined;
@@ -291,6 +293,7 @@ export default function policyGate(pi: ExtensionAPI) {
 			state.phase = "plan";
 			state.approvedPlan = false;
 			state.planId = null;
+			state.budgetBypass = false;
 			state.aborted = true;
 			state.abortReason = reason.length > 0 ? reason : "manual abort";
 			state.abortedAt = nowIso();
