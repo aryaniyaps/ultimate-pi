@@ -1,0 +1,23 @@
+{
+	"schema_version": "1.0.0",
+	"contract_version": "1.0.0",
+	"run_id": "smoke-run-001",
+	"plan_id": "plan-smoke-001",
+	"agent_id": "session-smoke",
+	"pi_session_id": "session-smoke",
+	"phase": "execute",
+	"model": "smoke-model",
+	"thinking_level": "off",
+	"started_at": "2026-05-15T12:00:00.000Z",
+	"ended_at": "2026-05-15T12:01:00.000Z",
+	"duration_ms": 60000,
+	"tool_spans": [],
+	"tool_span_count": 0,
+	"artifact_refs": [],
+	"artifact_ref_count": 0,
+	"cost": {
+		"input_tokens": 100,
+		"output_tokens": 50,
+		"total_tokens": 150
+	}
+}

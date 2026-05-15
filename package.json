@@ -35,13 +35,15 @@
 		]
 	},
 	"scripts": {
-		"check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck .pi/extensions/dotenv-loader.ts",
+		"check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck .pi/extensions/dotenv-loader.ts .pi/extensions/lib/posthog-node.d.ts .pi/extensions/lib/harness-posthog.ts .pi/extensions/harness-telemetry.ts .pi/extensions/trace-recorder.ts .pi/extensions/observation-bus.ts .pi/extensions/drift-monitor.ts",
+		"harness:verify": "node scripts/harness-verify.mjs",
+		"harness:meta-optimizer": "node .pi/harness/evolution/meta-optimizer.mjs",
 		"lint": "biome check",
 		"lint:fix": "biome check --fix",
 		"format": "biome format --write",
 		"format:check": "biome format",
 		"prepare": "lefthook install",
-		"test": "node --experimental-strip-types --test",
+		"test": "node --test test/harness-verify.test.mjs",
 		"test:integration": "npx -y tsx --test test/cursor-sdk-provider.integration.test.ts"
 	},
 	"devDependencies": {
@@ -58,7 +60,8 @@
 		"@yeliu84/pi-model-router": "latest",
 		"asciify-image": "^0.1.10",
 		"context-mode": "latest",
-		"jimp": "^1.6.1"
+		"jimp": "^1.6.1",
+		"posthog-node": "^5.30.6"
 	},
 	"bundledDependencies": [
 		"@posthog/pi",

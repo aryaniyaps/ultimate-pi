@@ -1,0 +1,66 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/observation.schema.json",
+	"title": "HarnessObservation",
+	"description": "Normalized observation bus envelope for trust-layer extensions (Sentrux, drift, eval).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"contract_version",
+		"observation_id",
+		"run_id",
+		"source",
+		"kind",
+		"timestamp",
+		"payload"
+	],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"contract_version": { "type": "string", "const": "1.0.0" },
+		"observation_id": { "type": "string", "minLength": 1 },
+		"run_id": { "type": "string", "minLength": 1 },
+		"plan_id": { "type": "string" },
+		"phase": {
+			"type": "string",
+			"enum": ["plan", "execute", "evaluate", "adversary", "merge"]
+		},
+		"source": {
+			"type": "string",
+			"enum": [
+				"policy-gate",
+				"budget-guard",
+				"trace-recorder",
+				"review-integrity",
+				"test-diff-integrity",
+				"debate-orchestrator",
+				"drift-monitor",
+				"sentrux",
+				"evaluator",
+				"harness-telemetry"
+			]
+		},
+		"kind": {
+			"type": "string",
+			"enum": [
+				"policy",
+				"budget",
+				"integrity",
+				"debate",
+				"drift",
+				"eval",
+				"sentrux",
+				"trace"
+			]
+		},
+		"timestamp": { "type": "string", "format": "date-time" },
+		"severity": {
+			"type": "string",
+			"enum": ["info", "low", "medium", "high", "critical"]
+		},
+		"payload": {
+			"type": "object",
+			"additionalProperties": true
+		}
+	}
+}

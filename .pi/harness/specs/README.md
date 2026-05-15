@@ -14,7 +14,9 @@ This directory is the canonical contract surface for Phase 1 harness artifacts.
 These schemas define the minimum machine-readable contracts for:
 
 - planning (`PlanPacket`)
-- execution telemetry (`RunTrace`)
+- execution telemetry (`RunTrace`, `HarnessRunRecord`)
+- PostHog harness events (`HarnessPostHogEvent`)
+- observation bus (`HarnessObservation`)
 - independent evaluation (`EvalVerdict`)
 - adversarial findings (`AdversaryReport`)
 - incidents and overrides (`IncidentRecord`)

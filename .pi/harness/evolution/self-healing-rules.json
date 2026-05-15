@@ -1,0 +1,28 @@
+{
+	"schema_version": "1.0.0",
+	"rules": [
+		{
+			"id": "policy-violation-loop",
+			"match": { "customType": "harness-policy-violation", "min_count": 3 },
+			"suggestion": "Re-run /harness-plan with narrower scope; check phase transitions."
+		},
+		{
+			"id": "budget-soft-repeat",
+			"match": { "customType": "harness-budget-soft-limit", "min_count": 2 },
+			"suggestion": "Lower HARNESS_BUDGET_EXECUTE_TOKENS or enable HARNESS_BUDGET_HARD_STOP."
+		},
+		{
+			"id": "test-integrity-escalation",
+			"match": { "customType": "harness-test-integrity-flag", "min_count": 1 },
+			"suggestion": "Mandatory adversary review; do not merge until flags cleared."
+		},
+		{
+			"id": "drift-high",
+			"match": {
+				"customType": "harness-drift-report",
+				"drift_score_gte": 0.65
+			},
+			"suggestion": "User must harness-drift-replan or harness-drift-proceed with ack."
+		}
+	]
+}

@@ -1,0 +1,79 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/harness-posthog-event.schema.json",
+	"title": "HarnessPostHogEvent",
+	"description": "Custom harness_* PostHog events (dual layer with @posthog/pi $ai_* events).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["event", "distinct_id", "properties"],
+	"properties": {
+		"event": {
+			"type": "string",
+			"enum": [
+				"harness_run_started",
+				"harness_run_completed",
+				"harness_phase_transition",
+				"harness_policy_violation",
+				"harness_policy_abort",
+				"harness_budget_soft_limit",
+				"harness_budget_exhausted",
+				"harness_review_integrity_block",
+				"harness_test_integrity_flag",
+				"harness_debate_round",
+				"harness_debate_consensus",
+				"harness_drift_report",
+				"harness_eval_verdict",
+				"harness_sentrux_signal",
+				"harness_observation"
+			]
+		},
+		"distinct_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"properties": {
+			"type": "object",
+			"additionalProperties": true,
+			"required": ["harness_run_id", "schema_version"],
+			"properties": {
+				"schema_version": {
+					"type": "string",
+					"const": "1.0.0"
+				},
+				"harness_run_id": { "type": "string" },
+				"harness_plan_id": { "type": "string" },
+				"harness_phase": {
+					"type": "string",
+					"enum": ["plan", "execute", "evaluate", "adversary", "merge"]
+				},
+				"pi_session_id": { "type": "string" },
+				"posthog_project_name": { "type": "string" },
+				"model": { "type": "string" },
+				"thinking_level": { "type": "string" },
+				"from_phase": { "type": "string" },
+				"to_phase": { "type": "string" },
+				"violation_type": { "type": "string" },
+				"tool_name": { "type": "string" },
+				"reason": { "type": "string" },
+				"tokens_used": { "type": "integer", "minimum": 0 },
+				"limit": { "type": "integer", "minimum": 0 },
+				"executor_session": { "type": "string" },
+				"reviewer_session": { "type": "string" },
+				"flag_type": { "type": "string" },
+				"path_count": { "type": "integer", "minimum": 0 },
+				"round": { "type": "integer", "minimum": 0 },
+				"outcome": { "type": "string" },
+				"consensus_id": { "type": "string" },
+				"drift_score": { "type": "number" },
+				"delta_summary": { "type": "string" },
+				"verdict": { "type": "string" },
+				"signal_type": { "type": "string" },
+				"score": { "type": "number" },
+				"tool_span_count": { "type": "integer", "minimum": 0 },
+				"input_tokens": { "type": "integer", "minimum": 0 },
+				"output_tokens": { "type": "integer", "minimum": 0 },
+				"duration_ms": { "type": "integer", "minimum": 0 }
+			}
+		}
+	}
+}

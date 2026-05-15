@@ -10,6 +10,7 @@
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { captureHarnessEvent } from "./lib/harness-posthog.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
@@ -24,6 +25,7 @@ interface ActiveRun {
 	runId: string;
 	planId: string;
 	phase: HarnessPhase;
+	startedAt: string;
 	toolSpans: Map<string, ToolSpan>;
 	artifactRefs: Set<string>;
 }
@@ -179,11 +181,14 @@ export default function traceRecorder(pi: ExtensionAPI) {
 	}
 
 	pi.on("agent_start", async (_event, ctx) => {
-		const runId = makeRunId(ctx.sessionManager.getSessionId());
+		const sessionId = ctx.sessionManager.getSessionId();
+		const runId = makeRunId(sessionId);
+		const startedAt = nowIso();
 		activeRun = {
 			runId,
 			planId: parsePlanId(ctx),
 			phase: parsePhase(ctx),
+			startedAt,
 			toolSpans: new Map(),
 			artifactRefs: new Set(),
 		};
@@ -191,7 +196,16 @@ export default function traceRecorder(pi: ExtensionAPI) {
 			run_id: runId,
 			plan_id: activeRun.planId,
 			phase: activeRun.phase,
-			started_at: nowIso(),
+			started_at: startedAt,
+		});
+		captureHarnessEvent(sessionId, "harness_run_started", {
+			harness_run_id: runId,
+			harness_plan_id: activeRun.planId,
+			harness_phase: activeRun.phase,
+			pi_session_id: sessionId,
+			model: ctx.model?.id ?? "unknown",
+			thinking_level:
+				pi.getThinkingLevel() === "minimal" ? "off" : pi.getThinkingLevel(),
 		});
 		await writeEvent(runId, {
 			type: "run_start",
@@ -241,18 +255,30 @@ export default function traceRecorder(pi: ExtensionAPI) {
 		const usage = usageTotals(ctx);
 		const runDir = await ensureRunDir(activeRun.runId);
 		const toolSpans = Array.from(activeRun.toolSpans.values());
+		const endedAt = nowIso();
+		const durationMs = Math.max(
+			0,
+			Date.parse(endedAt) - Date.parse(activeRun.startedAt),
+		);
+		const sessionId = ctx.sessionManager.getSessionId();
 		const summary = {
 			schema_version: schemaVersion,
 			contract_version: "1.0.0",
 			run_id: activeRun.runId,
 			plan_id: activeRun.planId,
-			agent_id: ctx.sessionManager.getSessionId(),
+			agent_id: sessionId,
+			pi_session_id: sessionId,
 			phase: activeRun.phase,
 			model: ctx.model?.id ?? "unknown",
 			thinking_level:
 				pi.getThinkingLevel() === "minimal" ? "off" : pi.getThinkingLevel(),
+			started_at: activeRun.startedAt,
+			ended_at: endedAt,
+			duration_ms: durationMs,
 			tool_spans: toolSpans,
+			tool_span_count: toolSpans.length,
 			artifact_refs: Array.from(activeRun.artifactRefs.values()),
+			artifact_ref_count: activeRun.artifactRefs.size,
 			cost: usage,
 		};
 
@@ -274,6 +300,7 @@ export default function traceRecorder(pi: ExtensionAPI) {
 		);
 
 		pi.appendEntry("harness-run-trace", summary);
+		pi.appendEntry("harness-run-record", summary);
 		await writeEvent(activeRun.runId, {
 			type: "run_end",
 			run_id: activeRun.runId,
