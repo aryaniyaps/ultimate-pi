@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.3.1] — 2026-05-15
+
+### 🐛 Fixes
+
+- **External `/harness-setup`**: policy gate no longer forces **plan** phase because the setup doc mentions `harness-plan` (e.g. `gh label create "harness-plan"`).
+- **Harness specs in consumer repos**: copy `*.schema.json` and specs `README` from the package via `harness-seed-project-contracts.mjs` as part of setup (so `plan-packet.schema.json` exists before planning).
+- **Strict LLM gateways**: new `provider-payload-sanitize` extension removes disallowed top-level fields (`reasoning`, etc.) from `messages` before provider requests (avoids 400 “Extra inputs … reasoning” on some OpenAI-compatible APIs).
+
 ## [v0.3.0] — 2026-05-15
 
 ### 📦 Release
