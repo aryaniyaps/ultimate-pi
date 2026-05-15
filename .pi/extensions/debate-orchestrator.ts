@@ -76,6 +76,7 @@ const THRESHOLDS = {
 	architecture: 0.8,
 	test_integrity: 0.8,
 };
+const HARD_STOP_DEBATE_CAPS = process.env.HARNESS_DEBATE_HARD_STOP === "true";
 
 function nowIso(): string {
 	return new Date().toISOString();
@@ -261,21 +262,27 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 		const nextRound = state.round_count + 1;
 		if (nextRound > state.max_rounds) {
 			await emitBudgetExhausted("max_rounds_reached");
-			return { ok: false, reason: "max rounds reached" };
+			if (HARD_STOP_DEBATE_CAPS) {
+				return { ok: false, reason: "max rounds reached" };
+			}
 		}
 
 		const perAgent = envelope.payload.token_usage?.per_agent ?? {};
 		for (const [agent, tokens] of Object.entries(perAgent)) {
 			if (Number(tokens) > state.round_token_cap) {
 				await emitBudgetExhausted("round_token_cap_exceeded");
-				return { ok: false, reason: `round cap exceeded by ${agent}` };
+				if (HARD_STOP_DEBATE_CAPS) {
+					return { ok: false, reason: `round cap exceeded by ${agent}` };
+				}
 			}
 		}
 
 		const roundTotal = Number(envelope.payload.token_usage?.round_total ?? 0);
 		if (state.budget_used + roundTotal > state.debate_global_cap) {
 			await emitBudgetExhausted("debate_global_cap_exceeded");
-			return { ok: false, reason: "global cap exceeded" };
+			if (HARD_STOP_DEBATE_CAPS) {
+				return { ok: false, reason: "global cap exceeded" };
+			}
 		}
 
 		state.round_count = nextRound;

@@ -36,7 +36,7 @@ interface BudgetExhaustedEvent {
 interface SessionEntryLike {
 	type?: string;
 	customType?: string;
-	data?: { phase?: HarnessPhase };
+	data?: { phase?: HarnessPhase; budgetBypass?: boolean };
 	message?: {
 		role?: string;
 		usage?: { input?: number; output?: number };
@@ -49,6 +49,7 @@ const EVENTS_FILE = join(RUNS_DIR, "budget-events.jsonl");
 const DEFAULT_GLOBAL_CAP = Number(
 	process.env.HARNESS_BUDGET_TOTAL_TOKENS ?? "120000",
 );
+const HARD_STOP_BUDGETS = process.env.HARNESS_BUDGET_HARD_STOP === "true";
 const DEFAULT_PHASE_CAPS: Record<HarnessPhase, number> = {
 	plan: Number(process.env.HARNESS_BUDGET_PLAN_TOKENS ?? "12000"),
 	execute: Number(process.env.HARNESS_BUDGET_EXECUTE_TOKENS ?? "80000"),
@@ -74,7 +75,7 @@ function readUsageTotals(ctx: {
 	const entries = ctx.sessionManager.getEntries() as SessionEntryLike[];
 	const totals: Partial<Record<HarnessPhase, number>> = {};
 	let total = 0;
-	let currentPhase: HarnessPhase = "plan";
+	let currentPhase: HarnessPhase | null = null;
 
 	for (const entry of entries) {
 		if (
@@ -91,15 +92,20 @@ function readUsageTotals(ctx: {
 		const usage = entry.message.usage ?? {};
 		const tokens = Number(usage.input ?? 0) + Number(usage.output ?? 0);
 		total += tokens;
-		totals[currentPhase] = Number(totals[currentPhase] ?? 0) + tokens;
+		if (currentPhase) {
+			totals[currentPhase] = Number(totals[currentPhase] ?? 0) + tokens;
+		}
 	}
 
 	return { totalTokens: total, byPhase: totals };
 }
 
-function getPhase(ctx: {
+function getPolicyContext(ctx: {
 	sessionManager: { getEntries(): unknown[] };
-}): HarnessPhase {
+}): {
+	phase: HarnessPhase | null;
+	budgetBypass: boolean;
+} {
 	const entries = ctx.sessionManager.getEntries() as SessionEntryLike[];
 	for (let i = entries.length - 1; i >= 0; i--) {
 		const entry = entries[i];
@@ -108,6 +114,7 @@ function getPhase(ctx: {
 			entry.customType === "harness-policy-state"
 		) {
 			const phase = entry.data?.phase;
+			const budgetBypass = Boolean(entry.data?.budgetBypass);
 			if (
 				phase === "plan" ||
 				phase === "execute" ||
@@ -115,11 +122,11 @@ function getPhase(ctx: {
 				phase === "adversary" ||
 				phase === "merge"
 			) {
-				return phase;
+				return { phase, budgetBypass };
 			}
 		}
 	}
-	return "plan";
+	return { phase: null, budgetBypass: false };
 }
 
 function getRunId(ctx: { sessionManager: { getSessionId(): string } }): string {
@@ -178,7 +185,10 @@ async function emitBudgetEvent(
 
 export default function budgetGuard(pi: ExtensionAPI) {
 	pi.on("tool_call", async (_event, ctx) => {
-		const phase = getPhase(ctx);
+		const policy = getPolicyContext(ctx);
+		if (policy.phase === null || policy.budgetBypass) return undefined;
+
+		const phase = policy.phase;
 		const usage = readUsageTotals(ctx);
 		const phaseUsed = Number(usage.byPhase[phase] ?? 0);
 		const globalCap = DEFAULT_GLOBAL_CAP;
@@ -203,6 +213,18 @@ export default function budgetGuard(pi: ExtensionAPI) {
 		};
 
 		await emitBudgetEvent(pi, exhausted);
+		if (!HARD_STOP_BUDGETS) {
+			pi.appendEntry("harness-budget-soft-limit", {
+				run_id: exhausted.run_id,
+				phase,
+				phaseUsed,
+				phaseCap,
+				totalUsed: usage.totalTokens,
+				totalCap: globalCap,
+				timestamp: nowIso(),
+			});
+			return undefined;
+		}
 		return {
 			block: true,
 			reason: `budget-guard: hard stop in phase '${phase}' (phase=${phaseUsed}/${phaseCap}, total=${usage.totalTokens}/${globalCap}).`,
