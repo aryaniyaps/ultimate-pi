@@ -79,7 +79,7 @@ function isBootstrapPrompt(prompt: string): boolean {
 	);
 }
 
-function inferPhase(prompt: string, current: HarnessPhase): HarnessPhase {
+function inferPhase(prompt: string, _current: HarnessPhase): HarnessPhase {
 	const p = prompt.toLowerCase();
 	if (
 		p.includes("/harness-plan") ||

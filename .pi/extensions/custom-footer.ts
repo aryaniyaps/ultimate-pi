@@ -11,19 +11,12 @@ import type {
 	ThemeColor,
 } from "@mariozechner/pi-coding-agent";
 import type { TUI } from "@mariozechner/pi-tui";
-import {
-	Box,
-	Text,
-	truncateToWidth,
-	visibleWidth,
-} from "@mariozechner/pi-tui";
+import { Box, Text, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
 // ── router decision reader ──────────────────────────────────────────
 
 /** Extract last routing decision from model-router session entries. */
-function readRouterDecision(
-	ctx: ExtensionContext,
-): {
+function readRouterDecision(ctx: ExtensionContext): {
 	targetProvider: string;
 	targetModelId: string;
 	thinking: string;
@@ -333,10 +326,11 @@ export default function customFooter(pi: ExtensionAPI) {
 					// Colorize: router profile gets mode color, model gets thinking color
 					const rightStr = state.routerActive
 						? (() => {
-								const pColor = profileColor(
+								const pColor = profileColor(state.routerProfile ?? "router");
+								const profileStr = theme.fg(
+									pColor,
 									state.routerProfile ?? "router",
 								);
-								const profileStr = theme.fg(pColor, state.routerProfile ?? "router");
 								const thinkingColorFn = theme.getThinkingBorderColor(
 									(state.thinkingLevel as any) ?? "medium",
 								);
@@ -374,10 +368,11 @@ export default function customFooter(pi: ExtensionAPI) {
 						const buildRight = (mid: string) => {
 							const modelPart = tlNow ? `${mid} ${tlNow}` : mid;
 							if (state.routerActive) {
-								const pColor = profileColor(
+								const pColor = profileColor(state.routerProfile ?? "router");
+								const profileStr = theme.fg(
+									pColor,
 									state.routerProfile ?? "router",
 								);
-								const profileStr = theme.fg(pColor, state.routerProfile ?? "router");
 								const modelStr = thinkingColorFn(modelPart);
 								return `${profileStr} • ${modelStr}`;
 							}
