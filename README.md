@@ -96,7 +96,7 @@ Phase 2 adds machine-readable contracts, observability, and deterministic checks
 
 - **Contracts** in `.pi/harness/specs/` — including `HarnessRunRecord`, `HarnessPostHogEvent`, and `HarnessObservation` (see [specs README](.pi/harness/specs/README.md))
 - **Extensions** (auto-loaded from `.pi/extensions/`) — `trace-recorder`, `harness-telemetry`, `observation-bus`, `drift-monitor`, plus existing governance extensions
-- **ADRs** — team-shared decisions in [`.pi/harness/docs/adrs/`](.pi/harness/docs/adrs/README.md) (0001–0008)
+- **ADRs** — team-shared decisions in [`.pi/harness/docs/adrs/`](.pi/harness/docs/adrs/README.md) (0001–0009)
 - **Skills** — `harness-spec`, `harness-plan`, `harness-governor`, `harness-eval`, `harness-context` (context-mode only)
 - **Smoke evals** — `.pi/harness/evals/smoke/` (fixtures only; no CI LLM)
 - **Evolution** — `.pi/harness/evolution/` (self-healing rules, meta-optimizer)
@@ -109,8 +109,32 @@ Phase 2 adds machine-readable contracts, observability, and deterministic checks
 | Check schemas, fixtures, and extension wiring | `npm run harness:verify` |
 | Last run trace summary | `/harness-trace-last` |
 | Telemetry config | `/harness-telemetry-status` |
+| Sync Sentrux rules from architecture manifest | `npm run harness:sentrux-sync` or `/harness-sentrux-sync` |
 
 For extension internals, env vars, and verification details, see [`.pi/harness/README.md`](.pi/harness/README.md) and [CONTRIBUTING.md](./CONTRIBUTING.md#harness-governance-extensions).
+
+## Sentrux architectural rules
+
+[Sentrux](https://sentrux.dev/docs/rules-engine/) enforces layers and boundaries via `.sentrux/rules.toml`. The harness keeps that file in sync with the repo layout:
+
+| Artifact | Role |
+|----------|------|
+| [`.pi/harness/sentrux/architecture.manifest.json`](.pi/harness/sentrux/architecture.manifest.json) | Canonical layers, boundaries, constraints (edit when architecture changes) |
+| [`.sentrux/rules.toml`](.sentrux/rules.toml) | Generated rules for `sentrux check` and MCP `check_rules` (committed; custom TOML outside managed markers is preserved) |
+
+**When to sync**
+
+- During `/harness-setup` (Step 2.8)
+- After changing `architecture.manifest.json`
+- Automatically on harness `plan` / `merge` phases (`sentrux-rules-sync` extension)
+- Before release: `npm run harness:verify` fails if manifest and rules are out of date
+
+```bash
+npm run harness:sentrux-sync    # write/merge rules.toml
+sentrux check .                 # enforce rules (CI-friendly exit codes)
+```
+
+Details: [ADR 0009](.pi/harness/docs/adrs/0009-sentrux-rules-lifecycle.md).
 
 ## PostHog and harness telemetry
 

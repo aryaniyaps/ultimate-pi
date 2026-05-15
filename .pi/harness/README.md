@@ -10,6 +10,7 @@ Phase 1–2 scaffold for the Pi harness runtime surfaces.
 - `evals/smoke/` - deterministic fixtures (no CI LLM).
 - `evolution/` - self-healing rules + meta-optimizer (JSONL-first).
 - `corpus/` - ingest notes for graphify/raw sources.
+- `sentrux/` - `architecture.manifest.json` source for `.sentrux/rules.toml` ([ADR 0009](docs/adrs/0009-sentrux-rules-lifecycle.md)).
 
 This scaffold is intentionally minimal and safe to adopt incrementally.
 
@@ -17,6 +18,7 @@ This scaffold is intentionally minimal and safe to adopt incrementally.
 
 ```bash
 npm run harness:verify
+npm run harness:sentrux-sync   # after editing sentrux/architecture.manifest.json
 ```
 
 ## Governance Extensions
@@ -31,6 +33,7 @@ manifest (`package.json`).
 - `harness-telemetry.ts` - PostHog `harness_*` domain events (dual layer with `@posthog/pi`)
 - `observation-bus.ts` - normalized HarnessObservation envelopes
 - `drift-monitor.ts` - interactive replan/proceed on high plan drift
+- `sentrux-rules-sync.ts` - sync `.sentrux/rules.toml` from `sentrux/architecture.manifest.json`
 - `review-integrity.ts` - executor/reviewer session-isolation enforcement
 - `test-diff-integrity.ts` - suspicious test-diff detection + adversary escalation
 - `debate-orchestrator.ts` - headless debate bus + consensus packet emission
