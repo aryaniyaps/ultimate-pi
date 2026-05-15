@@ -59,6 +59,10 @@ Run from the **project root** (the external repo root, not ultimate-pi unless th
 ```bash
 mkdir -p ./raw .pi/harness/specs .pi/harness/runs .pi/harness/incidents .pi/harness/debates
 
+# Copy JSON schemas + specs README from the package so plan-packet.schema.json exists
+# in the target repo immediately (before graphify or policy-gated planning).
+node "$UP_PKG/.pi/scripts/harness-seed-project-contracts.mjs" "$(pwd)"
+
 # Bundled with ultimate-pi harness; $UP_PKG is set in Step 0
 bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"
 # Developing ultimate-pi from repo root: UP_PKG="$(pwd)" then same command
