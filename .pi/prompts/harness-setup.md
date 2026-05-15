@@ -49,15 +49,14 @@ Run from the **project root** (the external repo root, not ultimate-pi unless th
 mkdir -p ./raw .pi/harness/specs .pi/harness/runs .pi/harness/incidents .pi/harness/debates
 
 # Bundled with ultimate-pi harness; copy path if bootstrap runs from a linked harness checkout
-bash scripts/harness-graphify-bootstrap.sh
+bash "$(node -p "require('path').join(require('path').dirname(require.resolve('ultimate-pi/package.json')),'.pi/scripts/harness-graphify-bootstrap.sh')")"
 # In ultimate-pi checkout: npm run harness:graphify-bootstrap
-# Or, if scripts/ is not present in the target repo, copy/run ultimate-pi/scripts/harness-graphify-bootstrap.sh
 
 # Pass --force when $ARGUMENTS contains --force to rebuild an existing graph:
-# bash scripts/harness-graphify-bootstrap.sh --force
+# npm run harness:graphify-bootstrap -- --force
 ```
 
-If `scripts/harness-graphify-bootstrap.sh` is missing in the target repo, run it from the ultimate-pi harness package path, or execute equivalent steps manually:
+If the bootstrap script is missing, run it from the installed ultimate-pi package (`.pi/scripts/` inside the npm package), or execute equivalent steps manually:
 
 1. Install `graphifyy` (`uv tool install` preferred; else `pip`/`pip3 install --user`)
 2. `graphify install --platform pi` (and `graphify cursor install` if `.cursor/` exists)
@@ -212,9 +211,9 @@ If user chose **cloud**, skip all 1.5.x steps. Just note:
 Run the bundled verifier from the **project root**. It installs missing npm globals, fixes common **Linux system dependencies** (Chrome libs for `agent-browser`), runs smoke tests, and exits non-zero if a required tool fails.
 
 ```bash
-bash scripts/harness-cli-verify.sh
+npm run harness:cli-verify
 # ultimate-pi checkout: npm run harness:cli-verify
-# Reinstall everything: bash scripts/harness-cli-verify.sh --force
+# Reinstall everything: npm run harness:cli-verify -- --force
 ```
 
 **Required (script must exit 0):** firecrawl-cli, ctx7, biome, ast-grep (`sg`), sentrux (when harness manifest present).
@@ -229,14 +228,14 @@ sudo apt-get install -y libnss3 libnspr4 libgbm1 libatk1.0-0 libatk-bridge2.0-0 
   libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
   libasound2 libpango-1.0-0 libcairo2 libx11-6 libxcb1 libxext6 fonts-liberation
 agent-browser install --with-deps
-bash scripts/harness-cli-verify.sh
+npm run harness:cli-verify
 ```
 
 **Do not continue** past Step 2 if `harness-cli-verify.sh` exits non-zero.
 
 ### Manual reference (if script missing in target repo)
 
-Copy `scripts/harness-cli-verify.sh` from ultimate-pi, or install tools individually:
+Use `npm run harness:cli-verify` from the installed ultimate-pi package, or install tools individually:
 
 ### 2.1 — firecrawl-cli (Web Search + Scrape + Crawl + Interact + Download + Parse)
 
@@ -415,7 +414,7 @@ Generate architectural rules from the harness manifest (creates/updates `.sentru
 # From ultimate-pi checkout:
 npm run harness:sentrux-sync
 # From an external project (after pi install npm:ultimate-pi):
-node "$(node -p "require('path').join(require('path').dirname(require.resolve('ultimate-pi/package.json')),'scripts/sentrux-rules-sync.mjs')")" --force
+npm run harness:sentrux-sync
 # Or in pi: /harness-sentrux-sync
 ```
 
@@ -668,7 +667,7 @@ Created: $(date +%Y-%m-%d)
 Re-run CLI verification (must pass unless `--skip-tools`):
 
 ```bash
-bash scripts/harness-cli-verify.sh
+npm run harness:cli-verify
 ```
 
 Then run the remaining checks:
@@ -764,7 +763,7 @@ Output summary table:
 
 Next steps:
 1. If tools missing: re-run with `--force` or install individually
-2. If graph not built: run `bash scripts/harness-graphify-bootstrap.sh` (or `graphify update .` from project root)
+2. If graph not built: run `npm run harness:graphify-bootstrap` (or `graphify update .` from project root)
 3. If hooks not installed: run `graphify hook install`
 4. If gh not authenticated: `gh auth login`
 5. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
@@ -774,9 +773,9 @@ Next steps:
 ## Guard Rails
 
 - **Internet required**: Several tools need npm registry access. Block if offline.
-- **CLI verify script**: Step 2 and Step 5 use `scripts/harness-cli-verify.sh` — installs npm globals, Linux Chrome system libs for `agent-browser`, and smoke-tests each tool. Block on non-zero exit.
+- **CLI verify script**: Step 2 and Step 5 use `npm run harness:cli-verify` (`.pi/scripts/harness-cli-verify.sh`) — installs npm globals, Linux Chrome system libs for `agent-browser`, and smoke-tests each tool. Block on non-zero exit.
 - **Graphify requires Python 3.10+**: Check `python3 --version`. Block if too old.
-- **Graphify bootstrap is mandatory** (unless `--skip-graphify`): Run `scripts/harness-graphify-bootstrap.sh`. Never use `graphify . --wiki`. Initial setup must run `graphify update .` and verify `graphify-out/graph.json` has nodes.
+- **Graphify bootstrap is mandatory** (unless `--skip-graphify`): Run `npm run harness:graphify-bootstrap`. Never use `graphify . --wiki`. Initial setup must run `graphify update .` and verify `graphify-out/graph.json` has nodes.
 - **Python packages (Graphify)**: Before install, detect via PATH, `pip`/`pip3 show graphifyy`, `uv`, or apt. Prefer `uv tool install graphifyy`.
 - **Node.js >= 18 required**: Some pi packages use modern Node APIs.
 - **Docker required for self-hosted**: Step 1.5 needs Docker Engine + Compose. Block if install fails.
@@ -799,7 +798,7 @@ Next steps:
 | Graphify install fails | Show installer output. Retry `uv tool install graphifyy` or `pip3 install --user graphifyy`. Ensure `~/.local/bin` is on PATH. |
 | `graphify update .` fails | Block setup. Corpus may have no code files, or graphify not on PATH. Show stderr. |
 | Invalid `graphify .` usage | Replace with `graphify update .` — the `.` subcommand does not exist. |
-| graphify-out empty / 0 nodes | Re-run `bash scripts/harness-graphify-bootstrap.sh --force` from project root. |
+| graphify-out empty / 0 nodes | Re-run `npm run harness:graphify-bootstrap -- --force` from project root. |
 | graphify hook install fails | Hooks need `.git/` directory. Verify inside git repo. Manual: `git config core.hooksPath .pi/git-hooks` |
 | firecrawl auth failed | Show manual login instructions. Continue with other tools. |
 | gh not installed | Show GitHub CLI install link. Skip label creation. |

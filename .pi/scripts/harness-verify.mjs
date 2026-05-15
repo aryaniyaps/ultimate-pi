@@ -9,7 +9,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const SPECS = join(ROOT, ".pi", "harness", "specs");
 const SMOKE = join(ROOT, ".pi", "harness", "evals", "smoke");
 const ADRS = join(ROOT, ".pi", "harness", "docs", "adrs");
@@ -117,7 +117,7 @@ async function checkSentruxRules() {
 	}
 	ok("sentrux architecture.manifest.json");
 
-	const syncScript = join(ROOT, "scripts", "sentrux-rules-sync.mjs");
+	const syncScript = join(ROOT, ".pi", "scripts", "sentrux-rules-sync.mjs");
 	const { code: checkCode, out: checkOut } = await runNodeScript(syncScript, [
 		"--check",
 	]);
@@ -148,7 +148,7 @@ async function checkSentruxGate() {
 	ok("Sentrux stub present");
 
 	const { code, out } = await runNodeScript(
-		join(ROOT, "scripts", "sentrux-rules-sync.mjs"),
+		join(ROOT, ".pi", "scripts", "sentrux-rules-sync.mjs"),
 		["--force", "--strict"],
 	);
 	if (code === 127 || (out && out.includes("not installed"))) {

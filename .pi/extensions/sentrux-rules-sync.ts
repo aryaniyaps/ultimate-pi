@@ -4,21 +4,15 @@
 
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
-import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { resolveHarnessAsset } from "./lib/harness-paths.js";
+import { resolveHarnessScript } from "./lib/harness-paths.js";
 
 function resolveSyncScript(): string {
-	const packaged = resolveHarnessAsset(
-		// @ts-ignore pi extensions run as ESM
+	return resolveHarnessScript(
+		// @ts-expect-error pi extensions run as ESM
 		import.meta.url,
-		"scripts",
 		"sentrux-rules-sync.mjs",
 	);
-	if (existsSync(packaged)) {
-		return packaged;
-	}
-	return join(process.cwd(), "scripts", "sentrux-rules-sync.mjs");
 }
 
 function runSync(args: string[]): Promise<{ code: number; output: string }> {

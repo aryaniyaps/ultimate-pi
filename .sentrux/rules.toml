@@ -41,9 +41,9 @@ order = 3
 
 [[layers]]
 name = "tooling"
-paths = ["scripts/*", "test/*"]
+paths = [".pi/scripts/*", "test/*"]
 order = 4
-# Deterministic scripts and tests
+# Harness CLI scripts and tests
 
 [[boundaries]]
 from = ".agents/skills/*"
@@ -66,7 +66,7 @@ to = ".pi/extensions/*"
 reason = "Contracts are data-only JSON schemas; extensions implement behavior"
 
 [[boundaries]]
-from = "scripts/*"
+from = ".pi/scripts/*"
 to = ".agents/skills/*"
 reason = "CLI scripts stay independent of skill markdown"
 

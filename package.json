@@ -1,6 +1,6 @@
 {
 	"name": "ultimate-pi",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"description": "Ultimate AI coding harness for pi.dev — extensible skills, Obsidian wiki knowledge layer, compressed context, deterministic output",
 	"keywords": [
 		"pi-package",
@@ -23,23 +23,26 @@
 		"url": "https://github.com/aryaniyaps/ultimate-pi"
 	},
 	"pi": {
-		"extensions": [
-			"./.pi/extensions",
-			"./.pi/providers"
-		],
-		"skills": [
-			"./.agents/skills"
-		],
-		"prompts": [
-			"./.pi/prompts"
-		]
+		"extensions": ["./.pi/extensions", "./.pi/providers"],
+		"skills": ["./.agents/skills"],
+		"prompts": ["./.pi/prompts"]
 	},
+	"files": [
+		".agents",
+		".pi",
+		".sentrux",
+		"firecrawl",
+		"AGENTS.md",
+		"biome.json",
+		"CHANGELOG.md",
+		"README.md"
+	],
 	"scripts": {
 		"check:ts": "tsc --noEmit --target ES2022 --moduleResolution nodenext --module nodenext --skipLibCheck .pi/extensions/dotenv-loader.ts .pi/extensions/lib/posthog-node.d.ts .pi/extensions/lib/harness-posthog.ts .pi/extensions/lib/harness-paths.ts .pi/extensions/model-router-bootstrap.ts .pi/extensions/harness-telemetry.ts .pi/extensions/trace-recorder.ts .pi/extensions/observation-bus.ts .pi/extensions/drift-monitor.ts .pi/extensions/sentrux-rules-sync.ts .pi/extensions/custom-header.ts",
-		"harness:graphify-bootstrap": "bash scripts/harness-graphify-bootstrap.sh",
-		"harness:cli-verify": "bash scripts/harness-cli-verify.sh",
-		"harness:verify": "node scripts/harness-verify.mjs",
-		"harness:sentrux-sync": "node scripts/sentrux-rules-sync.mjs --force",
+		"harness:graphify-bootstrap": "bash .pi/scripts/harness-graphify-bootstrap.sh",
+		"harness:cli-verify": "bash .pi/scripts/harness-cli-verify.sh",
+		"harness:verify": "node .pi/scripts/harness-verify.mjs",
+		"harness:sentrux-sync": "node .pi/scripts/sentrux-rules-sync.mjs --force",
 		"harness:meta-optimizer": "node .pi/harness/evolution/meta-optimizer.mjs",
 		"lint": "biome check",
 		"lint:fix": "biome check --fix",

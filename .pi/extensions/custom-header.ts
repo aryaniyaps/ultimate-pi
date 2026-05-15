@@ -13,7 +13,7 @@ import { resolveHarnessAsset } from "./lib/harness-paths.js";
 
 /** Shipped next to this extension in the npm package — not the host project's .pi dir. */
 const imagePath = resolveHarnessAsset(
-	// @ts-ignore pi extensions run as ESM
+	// @ts-expect-error pi extensions run as ESM
 	import.meta.url,
 	".pi",
 	"extensions",

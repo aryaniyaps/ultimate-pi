@@ -45,3 +45,11 @@ export function resolveHarnessAsset(
 ): string {
 	return join(getHarnessPackageRoot(moduleUrl), ...segments);
 }
+
+/** Harness CLI scripts shipped under `.pi/scripts/` in the npm package. */
+export function resolveHarnessScript(
+	moduleUrl: string,
+	scriptName: string,
+): string {
+	return resolveHarnessAsset(moduleUrl, ".pi", "scripts", scriptName);
+}

@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.2.5] — 2026-05-15
+
+### 🔧 Chores
+
+- Move harness CLI scripts to `.pi/scripts/` (aligned with pi package layout; no `pi.scripts` manifest field)
+- Point `npm run harness:*` and sentrux manifest at `.pi/scripts/`
+- Exclude repo-root `scripts/` from npm publish (dev-only graphify helpers stay in checkout)
+
 ## [v0.2.4] — 2026-05-15
 
 ### 🐛 Fixes
