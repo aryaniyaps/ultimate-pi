@@ -52,8 +52,19 @@
 		"typescript": "^6.0.3"
 	},
 	"dependencies": {
+		"@posthog/pi": "latest",
 		"@sting8k/pi-vcc": "^0.3.12",
+		"@tintinweb/pi-subagents": "latest",
+		"@yeliu84/pi-model-router": "latest",
 		"asciify-image": "^0.1.10",
+		"context-mode": "latest",
 		"jimp": "^1.6.1"
-	}
+	},
+	"bundledDependencies": [
+		"@posthog/pi",
+		"@sting8k/pi-vcc",
+		"@tintinweb/pi-subagents",
+		"@yeliu84/pi-model-router",
+		"context-mode"
+	]
 }
