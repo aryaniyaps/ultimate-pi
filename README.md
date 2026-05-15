@@ -19,26 +19,20 @@ If you are new: start with the **Quick Start** section and run one task through 
 
 If you just want to get started fast:
 
-1. Install package globally:
+1. Install into your current project:
 
 ```bash
-npm install -g ultimate-pi
-```
-
-2. Install into your current project:
-
-```bash
-pi install ultimate-pi -l
+pi install npm:ultimate-pi
 /reload
 ```
 
-3. Bootstrap the harness:
+2. Bootstrap the harness:
 
 ```text
 /harness-setup
 ```
 
-4. Run your first task:
+3. Run your first task:
 
 ```text
 /harness-auto "implement feature X safely"
@@ -105,23 +99,11 @@ Optional but commonly used:
 
 ## Quick Start (new users)
 
-Install globally:
-
-```bash
-npm install -g ultimate-pi
-```
-
 From your project folder:
 
 ```bash
-pi install ultimate-pi -l
+pi install npm:ultimate-pi
 /reload
-```
-
-Optional install from GitHub Packages:
-
-```bash
-npm install -g @aryaniyaps/ultimate-pi --registry=https://npm.pkg.github.com
 ```
 
 Run the full bootstrap:
