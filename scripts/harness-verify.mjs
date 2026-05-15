@@ -7,6 +7,7 @@ import { readFile, access } from "node:fs/promises";
 import { constants } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SPECS = join(ROOT, ".pi", "harness", "specs");
@@ -30,6 +31,7 @@ const REQUIRED_ADRS = [
 	"0006-sentrux-dual-layer.md",
 	"0007-interactive-drift-monitor.md",
 	"0008-harness-posthog-telemetry.md",
+	"0009-sentrux-rules-lifecycle.md",
 ];
 
 const REQUIRED_EXTENSIONS = [
@@ -37,7 +39,17 @@ const REQUIRED_EXTENSIONS = [
 	"trace-recorder.ts",
 	"observation-bus.ts",
 	"drift-monitor.ts",
+	"sentrux-rules-sync.ts",
 ];
+
+const SENTRUX_MANIFEST = join(
+	ROOT,
+	".pi",
+	"harness",
+	"sentrux",
+	"architecture.manifest.json",
+);
+const SENTRUX_RULES = join(ROOT, ".sentrux", "rules.toml");
 
 function fail(msg) {
 	console.error(`harness:verify FAIL: ${msg}`);
@@ -82,9 +94,49 @@ function validateTestDiffGolden(data) {
 	}
 }
 
+async function runNodeScript(scriptPath, args = []) {
+	return new Promise((resolve) => {
+		const child = spawn(process.execPath, [scriptPath, ...args], {
+			cwd: ROOT,
+			stdio: ["ignore", "pipe", "pipe"],
+		});
+		let out = "";
+		child.stdout?.on("data", (d) => {
+			out += d.toString();
+		});
+		child.stderr?.on("data", (d) => {
+			out += d.toString();
+		});
+		child.on("close", (code) => resolve({ code: code ?? 1, out }));
+	});
+}
+
+async function checkSentruxRules() {
+	if (!(await fileExists(SENTRUX_MANIFEST))) {
+		fail("missing .pi/harness/sentrux/architecture.manifest.json");
+	}
+	ok("sentrux architecture.manifest.json");
+
+	const syncScript = join(ROOT, "scripts", "sentrux-rules-sync.mjs");
+	const { code: checkCode, out: checkOut } = await runNodeScript(syncScript, [
+		"--check",
+	]);
+	if (checkCode !== 0) {
+		fail(checkOut.trim() || "sentrux rules.toml out of date — run harness:sentrux-sync");
+	}
+	ok("sentrux rules.toml in sync with manifest");
+
+	if (!(await fileExists(SENTRUX_RULES))) {
+		fail("missing .sentrux/rules.toml — run npm run harness:sentrux-sync");
+	}
+	ok(".sentrux/rules.toml present");
+}
+
 async function checkSentruxGate() {
+	await checkSentruxRules();
+
 	if (process.env.HARNESS_SENTRUX_REQUIRED !== "true") {
-		ok("Sentrux gate skipped (HARNESS_SENTRUX_REQUIRED not set)");
+		ok("Sentrux MCP stub gate skipped (HARNESS_SENTRUX_REQUIRED not set)");
 		return;
 	}
 	const stubPath = join(ROOT, ".pi", "harness", "evals", "smoke", "sentrux-stub.json");
@@ -94,6 +146,19 @@ async function checkSentruxGate() {
 		);
 	}
 	ok("Sentrux stub present");
+
+	const { code, out } = await runNodeScript(
+		join(ROOT, "scripts", "sentrux-rules-sync.mjs"),
+		["--force", "--strict"],
+	);
+	if (code === 127 || (out && out.includes("not installed"))) {
+		ok("sentrux CLI check skipped (not installed)");
+		return;
+	}
+	if (code !== 0) {
+		fail(out.trim() || "sentrux check failed — fix violations or update manifest");
+	}
+	ok("sentrux check passed");
 }
 
 async function main() {

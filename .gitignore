@@ -37,8 +37,10 @@ skills-lock.json
 .firecrawl/
 .fallow-baseline.json
 
-# sentrux config and baselines
-.sentrux/
+# sentrux baselines and local meta (rules.toml is committed — sync via harness:sentrux-sync)
+.sentrux/*
+!.sentrux/
+!.sentrux/rules.toml
 
 # Graphify cache (regenerable)
 graphify-out/cache/

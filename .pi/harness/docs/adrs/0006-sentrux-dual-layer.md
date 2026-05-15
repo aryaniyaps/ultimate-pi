@@ -9,10 +9,11 @@ Evaluator trust requires both programmatic gates (policy, budget, integrity) and
 
 ## Decision
 
-1. **CLI gate:** `npm run harness:verify` fails if `HARNESS_SENTRUX_REQUIRED=true` and no `harness-sentrux-signal` stub/file exists for the run (placeholder until MCP wired).
-2. **MCP layer (Q2+):** Evaluator sessions must record at least one Sentrux observation before `harness_eval_verdict` promotion when Sentrux is enabled.
-3. Observations flow through `observation-bus.ts` as `HarnessObservation` envelopes.
-4. PostHog event: `harness_sentrux_signal` with `signal_type` and `score` only — no secrets.
+1. **Rules file:** `.sentrux/rules.toml` synced from manifest — see [ADR 0009](0009-sentrux-rules-lifecycle.md).
+2. **CLI gate:** `npm run harness:verify` fails if `HARNESS_SENTRUX_REQUIRED=true` and no `harness-sentrux-signal` stub/file exists for the run (placeholder until MCP wired).
+3. **MCP layer (Q2+):** Evaluator sessions must record at least one Sentrux observation before `harness_eval_verdict` promotion when Sentrux is enabled.
+4. Observations flow through `observation-bus.ts` as `HarnessObservation` envelopes.
+5. PostHog event: `harness_sentrux_signal` with `signal_type` and `score` only — no secrets.
 
 ## Consequences
 

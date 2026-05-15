@@ -14,9 +14,10 @@ description: Enforce harness governance phases, policy gates, budgets, and promo
 ## Workflow
 
 1. Read current phase from `/harness-policy-status` or session `harness-policy-state`.
-2. Check ADRs: constitution (0001), eval promotion (0003), Sentrux (0006), drift (0007).
+2. Check ADRs: constitution (0001), eval promotion (0003), Sentrux (0006), drift (0007), rules lifecycle (0009).
 3. For promotion: require eval pass, no abort lock, debate consensus if escalated, Sentrux when `HARNESS_SENTRUX_REQUIRED=true`.
-4. Run `npm run harness:verify` before claiming release readiness.
+4. After architecture changes: edit `.pi/harness/sentrux/architecture.manifest.json`, then `npm run harness:sentrux-sync` (or `/harness-sentrux-sync`).
+5. Run `npm run harness:verify` before claiming release readiness.
 
 ## Spec Distiller integration
 

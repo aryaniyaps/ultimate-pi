@@ -1,0 +1,73 @@
+# Sentrux rules — 2026-05-15
+# Docs: https://sentrux.dev/docs/rules-engine/
+# Sync: npm run harness:sentrux-sync (or /harness-sentrux-sync in pi)
+#
+# Custom rules: add TOML below the managed block; they are preserved on sync.
+
+# --- harness:managed:start ---
+# Generated from .pi/harness/sentrux/architecture.manifest.json
+# Project: ultimate-pi
+# Schema: 1.0.0
+
+[constraints]
+max_cycles = 0
+max_coupling = "B"
+max_cc = 35
+no_god_files = true
+
+[[layers]]
+name = "knowledge"
+paths = ["graphify-out/*", "raw/*"]
+order = 0
+# Graphify graph, wiki, and raw ingestion sources
+
+[[layers]]
+name = "contracts"
+paths = [".pi/harness/specs/*", ".pi/harness/docs/*"]
+order = 1
+# Harness schemas, ADRs, and governance docs
+
+[[layers]]
+name = "runtime"
+paths = [".pi/extensions/*"]
+order = 2
+# Pi extensions (policy-gate, telemetry, drift, etc.)
+
+[[layers]]
+name = "agents"
+paths = [".pi/agents/*", ".pi/prompts/*", ".agents/skills/*"]
+order = 3
+# Agent definitions, prompts, and skills
+
+[[layers]]
+name = "tooling"
+paths = ["scripts/*", "test/*"]
+order = 4
+# Deterministic scripts and tests
+
+[[boundaries]]
+from = ".agents/skills/*"
+to = ".pi/extensions/*"
+reason = "Skills are NL-first; pi loads extensions — skills must not depend on extension modules"
+
+[[boundaries]]
+from = ".pi/prompts/*"
+to = ".pi/extensions/*"
+reason = "Prompts configure agents; they must not import extension implementation code"
+
+[[boundaries]]
+from = "graphify-out/*"
+to = ".pi/extensions/*"
+reason = "Knowledge graph output must not depend on harness runtime extensions"
+
+[[boundaries]]
+from = ".pi/harness/specs/*"
+to = ".pi/extensions/*"
+reason = "Contracts are data-only JSON schemas; extensions implement behavior"
+
+[[boundaries]]
+from = "scripts/*"
+to = ".agents/skills/*"
+reason = "CLI scripts stay independent of skill markdown"
+
+# --- harness:managed:end ---

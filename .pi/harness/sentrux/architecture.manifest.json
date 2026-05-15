@@ -1,0 +1,69 @@
+{
+	"schema_version": "1.0.0",
+	"project": "ultimate-pi",
+	"constraints": {
+		"max_cycles": 0,
+		"max_coupling": "B",
+		"max_cc": 35,
+		"no_god_files": true
+	},
+	"layers": [
+		{
+			"name": "knowledge",
+			"paths": ["graphify-out/*", "raw/*"],
+			"order": 0,
+			"description": "Graphify graph, wiki, and raw ingestion sources"
+		},
+		{
+			"name": "contracts",
+			"paths": [".pi/harness/specs/*", ".pi/harness/docs/*"],
+			"order": 1,
+			"description": "Harness schemas, ADRs, and governance docs"
+		},
+		{
+			"name": "runtime",
+			"paths": [".pi/extensions/*"],
+			"order": 2,
+			"description": "Pi extensions (policy-gate, telemetry, drift, etc.)"
+		},
+		{
+			"name": "agents",
+			"paths": [".pi/agents/*", ".pi/prompts/*", ".agents/skills/*"],
+			"order": 3,
+			"description": "Agent definitions, prompts, and skills"
+		},
+		{
+			"name": "tooling",
+			"paths": ["scripts/*", "test/*"],
+			"order": 4,
+			"description": "Deterministic scripts and tests"
+		}
+	],
+	"boundaries": [
+		{
+			"from": ".agents/skills/*",
+			"to": ".pi/extensions/*",
+			"reason": "Skills are NL-first; pi loads extensions — skills must not depend on extension modules"
+		},
+		{
+			"from": ".pi/prompts/*",
+			"to": ".pi/extensions/*",
+			"reason": "Prompts configure agents; they must not import extension implementation code"
+		},
+		{
+			"from": "graphify-out/*",
+			"to": ".pi/extensions/*",
+			"reason": "Knowledge graph output must not depend on harness runtime extensions"
+		},
+		{
+			"from": ".pi/harness/specs/*",
+			"to": ".pi/extensions/*",
+			"reason": "Contracts are data-only JSON schemas; extensions implement behavior"
+		},
+		{
+			"from": "scripts/*",
+			"to": ".agents/skills/*",
+			"reason": "CLI scripts stay independent of skill markdown"
+		}
+	]
+}

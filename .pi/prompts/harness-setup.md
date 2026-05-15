@@ -402,7 +402,19 @@ sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or fa
 
 Configure MCP server in `.pi/mcp.json` (see Step 4.3).
 
-Set up project baseline (optional, runs on first check):
+Generate architectural rules from the harness manifest (creates/updates `.sentrux/rules.toml`):
+```bash
+npm run harness:sentrux-sync
+```
+
+Edit layers/boundaries in `.pi/harness/sentrux/architecture.manifest.json` when the repo layout changes, then re-run sync. Custom TOML below the `harness:managed` markers is preserved.
+
+Verify rules:
+```bash
+sentrux check . && echo "✓ sentrux rules pass" || echo "✗ sentrux check failed"
+```
+
+Set up structural regression baseline (optional):
 ```bash
 sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate run"
 ```
@@ -561,7 +573,11 @@ Ensure `.gitignore` contains:
 
 # Model router config (user-specific — generated from env)
 .pi/model-router.json
-.sentrux/
+
+# sentrux baselines and local meta (rules.toml is committed)
+.sentrux/*
+!.sentrux/
+!.sentrux/rules.toml
 ```
 
 ### 4.2 — MCP Server Configuration

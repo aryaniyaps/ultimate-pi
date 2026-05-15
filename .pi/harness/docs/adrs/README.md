@@ -14,7 +14,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0006](0006-sentrux-dual-layer.md) | Sentrux dual-layer trust | Accepted |
 | [0007](0007-interactive-drift-monitor.md) | Interactive drift monitor | Accepted |
 | [0008](0008-harness-posthog-telemetry.md) | Harness PostHog telemetry | Accepted |
+| [0009](0009-sentrux-rules-lifecycle.md) | Sentrux rules.toml lifecycle | Accepted |
 
 ## Template
 
-Use [template.md](template.md) for new ADRs. Number sequentially (`0009-...`).
+Use [template.md](template.md) for new ADRs. Number sequentially (`0010-...`).

@@ -1,0 +1,38 @@
+# ADR 0009: Sentrux rules.toml lifecycle
+
+- **Status:** Accepted
+- **Date:** 2026-05-15
+
+## Context
+
+Sentrux enforces architecture via [`.sentrux/rules.toml`](https://sentrux.dev/docs/rules-engine/). The harness quality gate must stay aligned when layers, boundaries, or constraints change — not only on initial setup.
+
+## Decision
+
+1. **Canonical source:** [`.pi/harness/sentrux/architecture.manifest.json`](../../sentrux/architecture.manifest.json) — layers, boundaries, global constraints.
+2. **Generated artifact:** `.sentrux/rules.toml` — committed to git; managed block between `harness:managed:start/end` markers.
+3. **Sync command:** `npm run harness:sentrux-sync` (`scripts/sentrux-rules-sync.mjs`).
+4. **Pi command:** `/harness-sentrux-sync` via `sentrux-rules-sync.ts` extension.
+5. **When to sync:**
+   - `/harness-setup` Step 2.8 (after sentrux install)
+   - After editing `architecture.manifest.json`
+   - On `agent_end` when harness phase is `plan` or `merge`
+   - `npm run harness:verify` fails if manifest hash ≠ last sync (`--check`)
+6. **Custom rules:** TOML outside the managed block is preserved on sync.
+
+## Consequences
+
+### Positive
+
+- Quality gate and MCP `check_rules` stay current with harness architecture.
+- Team shares one rules file in version control.
+
+### Negative
+
+- `max_cc` may need manifest tuning when large UI extensions land (currently 35 for this repo).
+
+## References
+
+- ADR 0006 (Sentrux dual layer)
+- `scripts/sentrux-rules-sync.mjs`
+- `.pi/extensions/sentrux-rules-sync.ts`
