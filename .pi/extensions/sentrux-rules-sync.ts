@@ -3,14 +3,45 @@
  */
 
 import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { resolveHarnessAsset } from "./lib/harness-paths.js";
 
-const SYNC_SCRIPT = join(process.cwd(), "scripts", "sentrux-rules-sync.mjs");
+function resolveSyncScript(): string {
+	const packaged = resolveHarnessAsset(
+		// @ts-ignore pi extensions run as ESM
+		import.meta.url,
+		"scripts",
+		"sentrux-rules-sync.mjs",
+	);
+	if (existsSync(packaged)) {
+		return packaged;
+	}
+	return join(process.cwd(), "scripts", "sentrux-rules-sync.mjs");
+}
 
 function runSync(args: string[]): Promise<{ code: number; output: string }> {
+	const syncScript = resolveSyncScript();
+	// #region agent log
+	fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-Debug-Session-Id": "7737a8",
+		},
+		body: JSON.stringify({
+			sessionId: "7737a8",
+			hypothesisId: "C",
+			location: "sentrux-rules-sync.ts:runSync",
+			message: "sync script path",
+			data: { syncScript, cwd: process.cwd(), exists: existsSync(syncScript) },
+			timestamp: Date.now(),
+		}),
+	}).catch(() => {});
+	// #endregion
 	return new Promise((resolve) => {
-		const child = spawn(process.execPath, [SYNC_SCRIPT, ...args], {
+		const child = spawn(process.execPath, [syncScript, ...args], {
 			cwd: process.cwd(),
 			stdio: ["ignore", "pipe", "pipe"],
 		});

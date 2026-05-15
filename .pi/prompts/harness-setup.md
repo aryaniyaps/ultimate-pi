@@ -269,9 +269,8 @@ firecrawl login --browser
 firecrawl login --api-key "<key>"
 ```
 
-Install skills and run quick smoke test:
+Quick smoke test (skills ship with `ultimate-pi` via npm — do **not** run `firecrawl setup skills`):
 ```bash
-firecrawl setup skills
 mkdir -p .firecrawl
 firecrawl scrape "https://firecrawl.dev" -o .firecrawl/install-check.md
 ```
@@ -413,7 +412,11 @@ Configure MCP server in `.pi/mcp.json` (see Step 4.3).
 
 Generate architectural rules from the harness manifest (creates/updates `.sentrux/rules.toml`):
 ```bash
+# From ultimate-pi checkout:
 npm run harness:sentrux-sync
+# From an external project (after pi install npm:ultimate-pi):
+node "$(node -p "require('path').join(require('path').dirname(require.resolve('ultimate-pi/package.json')),'scripts/sentrux-rules-sync.mjs')")" --force
+# Or in pi: /harness-sentrux-sync
 ```
 
 Edit layers/boundaries in `.pi/harness/sentrux/architecture.manifest.json` when the repo layout changes, then re-run sync. Custom TOML below the `harness:managed` markers is preserved.
@@ -485,27 +488,38 @@ function model(prefix, name) { return `${prefix}/${name}`; }
 // Best available high-end model per provider
 const highModel = hasOpenCode
   ? model('opencode-go', 'deepseek-v4-pro')
-  : hasOpenAI
-    ? model('openai', 'gpt-5.4-pro')
-    : hasAnthropic
-      ? 'anthropic/claude-3-5-sonnet-20241022'
-      : 'google/gemini-2.5-flash-001';
+  : hasAnthropic
+    ? 'anthropic/claude-sonnet-4-20250514'
+    : hasGoogle
+      ? 'google/gemini-2.5-flash-001'
+      : hasOpenAI
+        ? model('openai', 'gpt-4o')
+        : null;
 
 const mediumModel = hasOpenCode
   ? model('opencode-go', 'qwen3.6-plus')
-  : hasOpenAI
-    ? model('openai', 'gpt-5.4-nano')
-    : hasAnthropic
-      ? 'anthropic/claude-3-5-sonnet-20241022'
-      : 'google/gemini-flash-latest';
+  : hasAnthropic
+    ? 'anthropic/claude-sonnet-4-20250514'
+    : hasGoogle
+      ? 'google/gemini-flash-latest'
+      : hasOpenAI
+        ? model('openai', 'gpt-4o-mini')
+        : null;
 
 const lowModel = hasOpenCode
   ? model('opencode-go', 'deepseek-v4-flash')
-  : hasOpenAI
-    ? model('openai', 'gpt-5.4-nano')
-    : hasAnthropic
-      ? 'anthropic/claude-3-haiku-20240307'
-      : 'google/gemini-flash-lite-latest';
+  : hasAnthropic
+    ? 'anthropic/claude-3-5-haiku-20241022'
+    : hasGoogle
+      ? 'google/gemini-flash-lite-latest'
+      : hasOpenAI
+        ? model('openai', 'gpt-4o-mini')
+        : null;
+
+if (!highModel || !mediumModel || !lowModel) {
+  console.log('✗ No AI provider env detected — skip model-router.json (set OPENAI_API_BASE for opencode, or ANTHROPIC/GOOGLE/OPENAI keys)');
+  process.exit(0);
+}
 
 const fallbacks = [];
 if (hasAnthropic && !highModel.startsWith('anthropic/')) fallbacks.push('anthropic/claude-3-5-sonnet-20241022');
@@ -561,7 +575,7 @@ fi
 
 Do NOT block. If generation fails, warn in report and continue.
 
-**Router activation happens automatically** — the agent should output the following as its next message (this activates the router in the current session):
+**Router is opt-in** — ultimate-pi no longer forces `defaultProvider: router` on install. After generating `model-router.json`, tell the user to enable routing when ready:
 
 > `/router profile auto`
 
@@ -629,7 +643,7 @@ Created: $(date +%Y-%m-%d)
 - ./raw/ → Source documents for graphify ingestion
 - .pi/harness/specs/ → Harness contracts and schema docs
 - .pi/harness/incidents/ → Incident and override records
-- .pi/skills/ → Agent skills
+- `.agents/skills/` (npm package) → Harness skills (no copy into `.pi/skills/` needed)
 - .pi/agents/ → Specialized agents
 
 ## Graphify-First Workflow

@@ -66,6 +66,7 @@ Use this when you want each step separate:
 
 ## Defaults you should know
 
+- **Model routing is opt-in** — install does not force `router/auto` or `gpt-5.4-pro`. Enable with `/router profile auto` after `/harness-setup` generates `.pi/model-router.json`, or copy [`.pi/model-router.example.json`](.pi/model-router.example.json).
 - **Plan before mutate** — write/edit/shell that changes the repo is blocked until execute phase.
 - **No auto-merge** — you decide when to open or merge a PR.
 - **Structured runs** — each run writes artifacts under `.pi/harness/runs/` for replay and audit.

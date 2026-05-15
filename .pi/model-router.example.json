@@ -1,0 +1,27 @@
+{
+	"defaultProfile": "auto",
+	"debug": false,
+	"classifierModel": "opencode-go/qwen3.6-plus",
+	"phaseBias": 0.5,
+	"maxSessionBudget": 1.0,
+	"largeContextThreshold": 100000,
+	"rules": [
+		{
+			"matches": ["deploy", "production", "release"],
+			"tier": "high",
+			"reason": "Safety check for production tasks"
+		},
+		{ "matches": "changelog", "tier": "low" }
+	],
+	"profiles": {
+		"auto": {
+			"high": {
+				"model": "opencode-go/deepseek-v4-pro",
+				"thinking": "high",
+				"fallbacks": ["opencode-go/qwen3.6-plus"]
+			},
+			"medium": { "model": "opencode-go/qwen3.6-plus", "thinking": "medium" },
+			"low": { "model": "opencode-go/deepseek-v4-flash", "thinking": "low" }
+		}
+	}
+}

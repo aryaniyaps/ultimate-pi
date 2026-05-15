@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.2.4] — 2026-05-15
+
+### 🐛 Fixes
+
+- Stop forcing `router/auto` on install (avoids defaulting to `gpt-5.4-pro` when no `.pi/model-router.json`)
+- Bootstrap `model-router.json` from detected providers when missing
+- Load banner and sentrux sync script from the npm package root, not the host project's cwd
+- Remove redundant `firecrawl setup skills` from harness-setup (skills ship with the package)
+
+### 📖 Documentation
+
+- Add `.pi/model-router.example.json` and README note on opt-in model routing
+
 ## [v0.2.3] — 2026-05-15
 
 ### ✨ Features
