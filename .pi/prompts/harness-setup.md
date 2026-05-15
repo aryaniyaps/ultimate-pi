@@ -40,12 +40,39 @@ Check if Graphify is installed and set up:
 # Check Python 3.10+
 python3 --version | grep -q "3\.1[0-9]" && echo "✓ Python 3.10+" || echo "✗ Need Python 3.10+"
 
-# Check if Graphify is installed
-if pip show graphifyy &>/dev/null; then
-  echo "✓ Graphify installed"
+# Resolve pip (some systems expose only pip3)
+PIP_CMD=""
+command -v pip &>/dev/null && PIP_CMD=pip
+[ -z "$PIP_CMD" ] && command -v pip3 &>/dev/null && PIP_CMD=pip3
+
+# Check if Graphify is installed (pip/pip3, uv, apt, or on PATH)
+GRAPHIFY_INSTALLED=false
+GRAPHIFY_VIA=""
+
+if command -v graphify &>/dev/null; then
   GRAPHIFY_INSTALLED=true
+  GRAPHIFY_VIA="path ($(command -v graphify))"
+elif [ -n "$PIP_CMD" ] && $PIP_CMD show graphifyy &>/dev/null 2>&1; then
+  GRAPHIFY_INSTALLED=true
+  GRAPHIFY_VIA="$PIP_CMD"
+elif command -v uv &>/dev/null && uv pip show graphifyy &>/dev/null 2>&1; then
+  GRAPHIFY_INSTALLED=true
+  GRAPHIFY_VIA="uv (project/venv)"
+elif command -v uv &>/dev/null && uv tool list 2>/dev/null | grep -qE '(^|[[:space:]])graphifyy([[:space:]]|$)'; then
+  GRAPHIFY_INSTALLED=true
+  GRAPHIFY_VIA="uv tool"
+elif dpkg -l 2>/dev/null | grep -qE '^ii[[:space:]]+(python3-)?graphify'; then
+  GRAPHIFY_INSTALLED=true
+  GRAPHIFY_VIA="apt (dpkg)"
+elif apt list --installed 2>/dev/null | grep -qiE '(^|/)python3?-?graphify'; then
+  GRAPHIFY_INSTALLED=true
+  GRAPHIFY_VIA="apt"
+fi
+
+if [ "$GRAPHIFY_INSTALLED" = "true" ]; then
+  echo "✓ Graphify installed via ${GRAPHIFY_VIA:-unknown}"
 else
-  echo "! Graphify not installed"
+  echo "! Graphify not installed (checked: PATH, pip/pip3, uv, apt)"
   GRAPHIFY_INSTALLED=false
 fi
 
@@ -62,7 +89,12 @@ test -f graphify-out/graph.json && GRAPH_EXISTS=true || GRAPH_EXISTS=false
 > "Graphify installed but no graph built yet. Build one now?"
 
 ### Case C: Graphify not installed
-> "Graphify not found. Install: `pip install graphifyy && graphify install`. Install now?"
+> "Graphify not found (checked PATH, `pip`/`pip3 show graphifyy`, `uv pip show` / `uv tool list`, and apt). Install with one of:
+> - `uv tool install graphifyy && graphify install` (preferred if `uv` is available)
+> - `pip install graphifyy && graphify install` (or `pip3 install graphifyy` on pip3-only systems)
+> - `sudo apt install python3-graphify` (only if your distro packages `graphifyy`; name may differ)
+>
+> Install now?"
 
 ### Case D: Python too old
 > "Python 3.10+ required for Graphify. Current: `$(python3 --version)`. Install Python 3.10+ before continuing."
@@ -70,9 +102,26 @@ test -f graphify-out/graph.json && GRAPH_EXISTS=true || GRAPH_EXISTS=false
 ## Step 1 — Build Knowledge Graph
 
 ```bash
-# Install if needed
+# Install if needed (skip if already present via pip/pip3, uv, apt, or PATH)
 if [ "$GRAPHIFY_INSTALLED" != "true" ]; then
-  pip install graphifyy && graphify install
+  PIP_CMD=""
+  command -v pip &>/dev/null && PIP_CMD=pip
+  [ -z "$PIP_CMD" ] && command -v pip3 &>/dev/null && PIP_CMD=pip3
+
+  if command -v uv &>/dev/null; then
+    uv tool install graphifyy && graphify install
+  elif [ -n "$PIP_CMD" ]; then
+    $PIP_CMD install graphifyy && graphify install
+  elif command -v apt &>/dev/null; then
+    sudo apt update && sudo apt install -y python3-graphify 2>/dev/null || {
+      echo "apt package not found — use: uv tool install graphifyy OR pip/pip3 install graphifyy"
+      exit 1
+    }
+    graphify install
+  else
+    echo "No installer found (need uv, pip/pip3, or apt). Install graphifyy manually."
+    exit 1
+  fi
 fi
 
 # Build the graph (or update existing)
@@ -658,8 +707,24 @@ sentrux --version 2>/dev/null && echo "✓ sentrux" || echo "✗ sentrux"
 # pi extensions
 cd .pi/npm && npm ls 2>/dev/null && echo "✓ pi extensions" || echo "✗ pi extensions"
 
-# graphify knowledge graph
-pip show graphifyy 2>/dev/null && echo "✓ graphify installed" || echo "✗ graphify not installed"
+# graphify knowledge graph (pip/pip3, uv, apt, or PATH)
+PIP_CMD=""
+command -v pip &>/dev/null && PIP_CMD=pip
+[ -z "$PIP_CMD" ] && command -v pip3 &>/dev/null && PIP_CMD=pip3
+
+if command -v graphify &>/dev/null; then
+  echo "✓ graphify ($(command -v graphify))"
+elif [ -n "$PIP_CMD" ] && $PIP_CMD show graphifyy &>/dev/null 2>&1; then
+  echo "✓ graphify ($PIP_CMD)"
+elif command -v uv &>/dev/null && uv pip show graphifyy &>/dev/null 2>&1; then
+  echo "✓ graphify (uv pip)"
+elif command -v uv &>/dev/null && uv tool list 2>/dev/null | grep -qE '(^|[[:space:]])graphifyy([[:space:]]|$)'; then
+  echo "✓ graphify (uv tool)"
+elif dpkg -l 2>/dev/null | grep -qE '^ii[[:space:]]+(python3-)?graphify' || apt list --installed 2>/dev/null | grep -qi graphify; then
+  echo "✓ graphify (apt)"
+else
+  echo "✗ graphify not installed"
+fi
 ls graphify-out/graph.json 2>/dev/null && echo "✓ knowledge graph built" || echo "✗ no graph built yet"
 graphify hook status 2>/dev/null && echo "✓ graphify git hooks installed" || echo "✗ graphify git hooks not installed"
 
@@ -732,6 +797,7 @@ Next steps:
 
 - **Internet required**: Several tools need npm registry access. Block if offline.
 - **Graphify requires Python 3.10+**: Check `python3 --version`. Block if too old.
+- **Python packages (Graphify)**: Before install, detect existing installs via `command -v graphify`, `pip` or `pip3 show graphifyy` (resolve whichever exists), `uv pip show graphifyy`, `uv tool list`, and apt (`dpkg` / `apt list`). Prefer `uv tool install` when `uv` is available; fall back to `$PIP_CMD install` (`pip` or `pip3`), then apt only if packaged.
 - **Node.js >= 18 required**: Some pi packages use modern Node APIs.
 - **Docker required for self-hosted**: Step 1.5 needs Docker Engine + Compose. Block if install fails.
 - **Sufficient RAM for self-hosted**: Firecrawl stack needs ~8GB+ free (API: 8G, Playwright: 4G, others).
@@ -748,7 +814,7 @@ Next steps:
 | Node < 18 | Block. Report required version. |
 | npm not found | Block. Suggest install method per OS. |
 | Python < 3.10 | Block. Report required Python version for Graphify. |
-| Graphify install fails | Show pip error output. Suggest `pip install --upgrade pip` and retry. |
+| Graphify install fails | Show installer output. Retry with `uv tool install graphifyy`, `pip install graphifyy` / `pip3 install graphifyy`, or distro apt package if available. Suggest `$PIP_CMD install --upgrade pip` (or `pip3 install --upgrade pip`) when using pip. |
 | graphify hook install fails | Hooks need `.git/` directory. Verify inside git repo. Manual: `git config core.hooksPath .pi/git-hooks` |
 | firecrawl auth failed | Show manual login instructions. Continue with other tools. |
 | gh not installed | Show GitHub CLI install link. Skip label creation. |
