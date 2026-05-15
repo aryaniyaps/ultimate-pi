@@ -32,119 +32,52 @@ Block if node < 18, npm < 9, or git missing. Report versions and continue.
 
 Read `.pi/auto-commit.json` for co-author + branch config. Read `.pi/settings.json` for extension packages list.
 
-## Step 0.5 — Graphify Setup
+## Step 0.5 — Graphify (skip if `--skip-graphify`)
 
-Check if Graphify is installed and set up:
+**Critical:** `graphify . --wiki` and `graphify . --update` are **invalid** CLI (error: `unknown command '.'`). Use only:
 
-```bash
-# Check Python 3.10+
-python3 --version | grep -q "3\.1[0-9]" && echo "✓ Python 3.10+" || echo "✗ Need Python 3.10+"
+| Goal | Command |
+|------|---------|
+| Initial / refresh code graph (required, no LLM) | `GRAPHIFY_VIZ_NODE_LIMIT=200000 graphify update .` |
+| Full semantic graph (optional, needs API key) | `graphify extract .` |
 
-# Resolve pip (some systems expose only pip3)
-PIP_CMD=""
-command -v pip &>/dev/null && PIP_CMD=pip
-[ -z "$PIP_CMD" ] && command -v pip3 &>/dev/null && PIP_CMD=pip3
+On first `/harness-setup` in any project (including external repos), you **must** produce a valid `graphify-out/` with non-empty `graph.json` and `GRAPH_REPORT.md`. Do not ask the user whether to build — run the bootstrap script and **block** if it fails.
 
-# Check if Graphify is installed (pip/pip3, uv, apt, or on PATH)
-GRAPHIFY_INSTALLED=false
-GRAPHIFY_VIA=""
+Run from the **project root** (the external repo root, not ultimate-pi unless that is the target):
 
-if command -v graphify &>/dev/null; then
-  GRAPHIFY_INSTALLED=true
-  GRAPHIFY_VIA="path ($(command -v graphify))"
-elif [ -n "$PIP_CMD" ] && $PIP_CMD show graphifyy &>/dev/null 2>&1; then
-  GRAPHIFY_INSTALLED=true
-  GRAPHIFY_VIA="$PIP_CMD"
-elif command -v uv &>/dev/null && uv pip show graphifyy &>/dev/null 2>&1; then
-  GRAPHIFY_INSTALLED=true
-  GRAPHIFY_VIA="uv (project/venv)"
-elif command -v uv &>/dev/null && uv tool list 2>/dev/null | grep -qE '(^|[[:space:]])graphifyy([[:space:]]|$)'; then
-  GRAPHIFY_INSTALLED=true
-  GRAPHIFY_VIA="uv tool"
-elif dpkg -l 2>/dev/null | grep -qE '^ii[[:space:]]+(python3-)?graphify'; then
-  GRAPHIFY_INSTALLED=true
-  GRAPHIFY_VIA="apt (dpkg)"
-elif apt list --installed 2>/dev/null | grep -qiE '(^|/)python3?-?graphify'; then
-  GRAPHIFY_INSTALLED=true
-  GRAPHIFY_VIA="apt"
-fi
-
-if [ "$GRAPHIFY_INSTALLED" = "true" ]; then
-  echo "✓ Graphify installed via ${GRAPHIFY_VIA:-unknown}"
-else
-  echo "! Graphify not installed (checked: PATH, pip/pip3, uv, apt)"
-  GRAPHIFY_INSTALLED=false
-fi
-
-# Check if graph already exists
-test -f graphify-out/graph.json && GRAPH_EXISTS=true || GRAPH_EXISTS=false
-```
-
-**Present to user:**
-
-### Case A: Graphify installed + graph exists
-> "Graphify ready. Existing graph: `graphify-out/`. Run `graphify . --update` to refresh."
-
-### Case B: Graphify installed + no graph
-> "Graphify installed but no graph built yet. Build one now?"
-
-### Case C: Graphify not installed
-> "Graphify not found (checked PATH, `pip`/`pip3 show graphifyy`, `uv pip show` / `uv tool list`, and apt). Install with one of:
-> - `uv tool install graphifyy && graphify install` (preferred if `uv` is available)
-> - `pip install graphifyy && graphify install` (or `pip3 install graphifyy` on pip3-only systems)
-> - `sudo apt install python3-graphify` (only if your distro packages `graphifyy`; name may differ)
->
-> Install now?"
-
-### Case D: Python too old
-> "Python 3.10+ required for Graphify. Current: `$(python3 --version)`. Install Python 3.10+ before continuing."
-
-## Step 1 — Build Knowledge Graph
-
-```bash
-# Install if needed (skip if already present via pip/pip3, uv, apt, or PATH)
-if [ "$GRAPHIFY_INSTALLED" != "true" ]; then
-  PIP_CMD=""
-  command -v pip &>/dev/null && PIP_CMD=pip
-  [ -z "$PIP_CMD" ] && command -v pip3 &>/dev/null && PIP_CMD=pip3
-
-  if command -v uv &>/dev/null; then
-    uv tool install graphifyy && graphify install
-  elif [ -n "$PIP_CMD" ]; then
-    $PIP_CMD install graphifyy && graphify install
-  elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y python3-graphify 2>/dev/null || {
-      echo "apt package not found — use: uv tool install graphifyy OR pip/pip3 install graphifyy"
-      exit 1
-    }
-    graphify install
-  else
-    echo "No installer found (need uv, pip/pip3, or apt). Install graphifyy manually."
-    exit 1
-  fi
-fi
-
-# Build the graph (or update existing)
-if [ "$GRAPH_EXISTS" = "true" ]; then
-  graphify . --update --wiki
-else
-  graphify . --wiki
-fi
-
-# Install git hooks — auto-update graph on commit/checkout
-graphify hook install
-
-# Quick stats
-echo "Graph built. Output: graphify-out/"
-ls graphify-out/
-```
-
-Read and summarize `graphify-out/GRAPH_REPORT.md` — show god nodes and surprising connections.
-
-Create project directories needed for graphify + harness workflow:
 ```bash
 mkdir -p ./raw .pi/harness/specs .pi/harness/runs .pi/harness/incidents .pi/harness/debates
+
+# Bundled with ultimate-pi harness; copy path if bootstrap runs from a linked harness checkout
+bash scripts/harness-graphify-bootstrap.sh
+# In ultimate-pi checkout: npm run harness:graphify-bootstrap
+# Or, if scripts/ is not present in the target repo, copy/run ultimate-pi/scripts/harness-graphify-bootstrap.sh
+
+# Pass --force when $ARGUMENTS contains --force to rebuild an existing graph:
+# bash scripts/harness-graphify-bootstrap.sh --force
 ```
+
+If `scripts/harness-graphify-bootstrap.sh` is missing in the target repo, run it from the ultimate-pi harness package path, or execute equivalent steps manually:
+
+1. Install `graphifyy` (`uv tool install` preferred; else `pip`/`pip3 install --user`)
+2. `graphify install --platform pi` (and `graphify cursor install` if `.cursor/` exists)
+3. `GRAPHIFY_VIZ_NODE_LIMIT=200000 graphify update .` — **required**; exits non-zero on failure
+4. If `GEMINI_API_KEY`, `GOOGLE_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `MOONSHOT_API_KEY` is set: `graphify extract .` for full semantic graph (optional enrichment)
+5. `graphify hook install` only when `.git/` exists
+6. Validate: `graphify-out/graph.json` has ≥1 node and `graphify-out/GRAPH_REPORT.md` exists
+
+**Do not continue** to Step 2+ until validation passes. Report node/edge counts from the script output.
+
+Read and summarize `graphify-out/GRAPH_REPORT.md` — god nodes and surprising connections.
+
+### Failure modes (report clearly)
+
+| Symptom | Likely cause |
+|---------|----------------|
+| `unknown command '.'` | Wrong CLI — use `graphify update .`, never `graphify .` |
+| Empty or missing `graphify-out/` | Build step skipped or failed; re-run bootstrap |
+| `graph.json` exists but 0 nodes | Stale/partial output — re-run with `--force` |
+| `graphify extract` fails | No API key — code graph from `update` is still valid; note in report |
 
 ## Step 1.5 — Optional Self-Hosted Firecrawl
 
@@ -274,9 +207,36 @@ docker compose -f firecrawl/docker-compose.yaml ps
 If user chose **cloud**, skip all 1.5.x steps. Just note:
 > "Using cloud Firecrawl. Ensure `FIRECRAWL_API_KEY` is set. Run `firecrawl login` in Step 2.1."
 
-## Step 2 — Install Global CLI Packages
+## Step 2 — Install & Verify Global CLI Tools (skip if `--skip-tools`)
 
-Check each package first. Install only if missing unless `--force` flag.
+Run the bundled verifier from the **project root**. It installs missing npm globals, fixes common **Linux system dependencies** (Chrome libs for `agent-browser`), runs smoke tests, and exits non-zero if a required tool fails.
+
+```bash
+bash scripts/harness-cli-verify.sh
+# ultimate-pi checkout: npm run harness:cli-verify
+# Reinstall everything: bash scripts/harness-cli-verify.sh --force
+```
+
+**Required (script must exit 0):** firecrawl-cli, ctx7, biome, ast-grep (`sg`), sentrux (when harness manifest present).
+
+**Warnings allowed:** gh (if not authenticated), agent-browser (if OS libs need manual `sudo apt-get install`), ck (empty corpus on tiny repos).
+
+If the script reports **agent-browser shared library errors** on Linux/WSL, run the fix it prints, then re-verify:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libnss3 libnspr4 libgbm1 libatk1.0-0 libatk-bridge2.0-0 \
+  libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
+  libasound2 libpango-1.0-0 libcairo2 libx11-6 libxcb1 libxext6 fonts-liberation
+agent-browser install --with-deps
+bash scripts/harness-cli-verify.sh
+```
+
+**Do not continue** past Step 2 if `harness-cli-verify.sh` exits non-zero.
+
+### Manual reference (if script missing in target repo)
+
+Copy `scripts/harness-cli-verify.sh` from ultimate-pi, or install tools individually:
 
 ### 2.1 — firecrawl-cli (Web Search + Scrape + Crawl + Interact + Download + Parse)
 
@@ -665,7 +625,7 @@ Created: $(date +%Y-%m-%d)
 
 ## Structure
 
-- graphify-out/ → Knowledge graph (run `graphify .` to build)
+- graphify-out/ → Knowledge graph (run `graphify update .` to build)
 - ./raw/ → Source documents for graphify ingestion
 - .pi/harness/specs/ → Harness contracts and schema docs
 - .pi/harness/incidents/ → Incident and override records
@@ -674,7 +634,7 @@ Created: $(date +%Y-%m-%d)
 
 ## Graphify-First Workflow
 
-1. Run `graphify . --wiki` to build the knowledge graph
+1. Run `graphify update .` to build/update the knowledge graph (AST, no API cost)
 2. Read `graphify-out/GRAPH_REPORT.md` for god nodes and surprising connections
 3. Query: `graphify query "question"`
 4. Harness contracts and governance records in `.pi/harness/specs/` and `.pi/harness/incidents/`
@@ -684,26 +644,22 @@ Created: $(date +%Y-%m-%d)
 - Graph before grep — always consult the knowledge graph first
 - ./raw/ is source storage for graphify
 - Decisions and incidents in `.pi/harness/` with structured artifacts
-- `graphify . --update` after significant changes
+- `GRAPHIFY_VIZ_NODE_LIMIT=200000 graphify update .` after significant code changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code
 - Create `.sg/rules/` for project-wide code quality rules
 ```
 
 ## Step 5 — Verification
 
-Run full verification suite:
+Re-run CLI verification (must pass unless `--skip-tools`):
 
 ```bash
-# CLI tools
-firecrawl --status 2>/dev/null && echo "✓ firecrawl" || echo "✗ firecrawl"
-ctx7 --help 2>/dev/null && echo "✓ ctx7" || echo "✗ ctx7"
-agent-browser --version 2>/dev/null && echo "✓ agent-browser" || echo "✗ agent-browser"
-ck --version 2>/dev/null && echo "✓ ck-search" || echo "✗ ck-search"
-biome --version 2>/dev/null && echo "✓ biome" || echo "✗ biome"
-sg --version 2>/dev/null && echo "✓ ast-grep" || echo "✗ ast-grep"
-gh --version 2>/dev/null && echo "✓ gh" || echo "✗ gh"
-sentrux --version 2>/dev/null && echo "✓ sentrux" || echo "✗ sentrux"
+bash scripts/harness-cli-verify.sh
+```
 
+Then run the remaining checks:
+
+```bash
 # pi extensions
 cd .pi/npm && npm ls 2>/dev/null && echo "✓ pi extensions" || echo "✗ pi extensions"
 
@@ -725,7 +681,15 @@ elif dpkg -l 2>/dev/null | grep -qE '^ii[[:space:]]+(python3-)?graphify' || apt 
 else
   echo "✗ graphify not installed"
 fi
-ls graphify-out/graph.json 2>/dev/null && echo "✓ knowledge graph built" || echo "✗ no graph built yet"
+python3 -c "
+import json, sys
+from pathlib import Path
+gj, gr = Path('graphify-out/graph.json'), Path('graphify-out/GRAPH_REPORT.md')
+if not gj.is_file() or not gr.is_file():
+    print('✗ knowledge graph missing (need graph.json + GRAPH_REPORT.md)'); sys.exit(0)
+n = len(json.loads(gj.read_text()).get('nodes') or [])
+print(f'✓ knowledge graph built ({n} nodes)' if n else '✗ graph.json has 0 nodes — re-run harness-graphify-bootstrap.sh --force')
+" 2>/dev/null || echo "✗ no graph built yet"
 graphify hook status 2>/dev/null && echo "✓ graphify git hooks installed" || echo "✗ graphify git hooks not installed"
 
 # model router
@@ -786,7 +750,7 @@ Output summary table:
 
 Next steps:
 1. If tools missing: re-run with `--force` or install individually
-2. If graph not built: run `graphify . --wiki`
+2. If graph not built: run `bash scripts/harness-graphify-bootstrap.sh` (or `graphify update .` from project root)
 3. If hooks not installed: run `graphify hook install`
 4. If gh not authenticated: `gh auth login`
 5. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
@@ -796,8 +760,10 @@ Next steps:
 ## Guard Rails
 
 - **Internet required**: Several tools need npm registry access. Block if offline.
+- **CLI verify script**: Step 2 and Step 5 use `scripts/harness-cli-verify.sh` — installs npm globals, Linux Chrome system libs for `agent-browser`, and smoke-tests each tool. Block on non-zero exit.
 - **Graphify requires Python 3.10+**: Check `python3 --version`. Block if too old.
-- **Python packages (Graphify)**: Before install, detect existing installs via `command -v graphify`, `pip` or `pip3 show graphifyy` (resolve whichever exists), `uv pip show graphifyy`, `uv tool list`, and apt (`dpkg` / `apt list`). Prefer `uv tool install` when `uv` is available; fall back to `$PIP_CMD install` (`pip` or `pip3`), then apt only if packaged.
+- **Graphify bootstrap is mandatory** (unless `--skip-graphify`): Run `scripts/harness-graphify-bootstrap.sh`. Never use `graphify . --wiki`. Initial setup must run `graphify update .` and verify `graphify-out/graph.json` has nodes.
+- **Python packages (Graphify)**: Before install, detect via PATH, `pip`/`pip3 show graphifyy`, `uv`, or apt. Prefer `uv tool install graphifyy`.
 - **Node.js >= 18 required**: Some pi packages use modern Node APIs.
 - **Docker required for self-hosted**: Step 1.5 needs Docker Engine + Compose. Block if install fails.
 - **Sufficient RAM for self-hosted**: Firecrawl stack needs ~8GB+ free (API: 8G, Playwright: 4G, others).
@@ -814,12 +780,17 @@ Next steps:
 | Node < 18 | Block. Report required version. |
 | npm not found | Block. Suggest install method per OS. |
 | Python < 3.10 | Block. Report required Python version for Graphify. |
-| Graphify install fails | Show installer output. Retry with `uv tool install graphifyy`, `pip install graphifyy` / `pip3 install graphifyy`, or distro apt package if available. Suggest `$PIP_CMD install --upgrade pip` (or `pip3 install --upgrade pip`) when using pip. |
+| CLI verify script fails | Read per-tool ✗ lines. Re-run with `--force`. Fix agent-browser libs via apt (see Step 2). |
+| agent-browser libnspr4 / shared library | `sudo apt-get install -y libnss3 libnspr4 libgbm1 ...` then `agent-browser install --with-deps`. |
+| Graphify install fails | Show installer output. Retry `uv tool install graphifyy` or `pip3 install --user graphifyy`. Ensure `~/.local/bin` is on PATH. |
+| `graphify update .` fails | Block setup. Corpus may have no code files, or graphify not on PATH. Show stderr. |
+| Invalid `graphify .` usage | Replace with `graphify update .` — the `.` subcommand does not exist. |
+| graphify-out empty / 0 nodes | Re-run `bash scripts/harness-graphify-bootstrap.sh --force` from project root. |
 | graphify hook install fails | Hooks need `.git/` directory. Verify inside git repo. Manual: `git config core.hooksPath .pi/git-hooks` |
 | firecrawl auth failed | Show manual login instructions. Continue with other tools. |
 | gh not installed | Show GitHub CLI install link. Skip label creation. |
 | pi packages install fail | Show error output. Check npm permissions. |
-| graph already exists | Report state. Offer `graphify . --update` to refresh. |
+| graph already exists | Report node count. Refresh with `graphify update .` unless user passed `--force`. |
 | biome.json missing | Create minimal config. |
 | settings.json not writable | Warn. Settings won't persist across sessions. |
 | No internet | Block for tool installs. Continue for graphify-only steps if `--skip-tools`. |
@@ -833,7 +804,7 @@ Next steps:
 
 | Flag | Effect |
 |------|--------|
-| `--skip-graphify` | Skip Step 1 (graph build). Use when graph already exists. |
+| `--skip-graphify` | Skip Step 0.5 (graph build). Only when a valid `graphify-out/graph.json` already exists. |
 | `--skip-tools` | Skip Step 2 (CLI tool installs). Use when tools already set up. |
 | `--skip-firecrawl-self` | Skip Step 1.5 (self-hosted Firecrawl). Always use cloud. |
 | `--force` | Reinstall all tools even if already present. Overwrite existing files. |
