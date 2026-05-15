@@ -2,6 +2,28 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.3.0] — 2026-05-15
+
+### 📦 Release
+
+- First tag-driven npm / GitHub Packages publish since **v0.2.2**; intermediate history remains under **v0.2.3–v0.2.10** below.
+
+### ✨ Features
+
+- Vendored [**pi-model-router**](https://github.com/yeliu84/pi-model-router) with harness gate and `npm run vendor:sync-router`
+- Sentrux **`rules.toml`** sync from `architecture.manifest.json` plus Phase 2 harness telemetry / governance scaffolding (see ADRs)
+- Document **`UP_PKG`** resolution and direct **`$UP_PKG/.pi/scripts/*`** invocation for external installs (no `harness:*` entries in consumer `package.json`)
+
+### 🐛 Fixes
+
+- **`pi update`** / global installs: complete `koffi` tree; Node 22–compatible dependency graph
+- Harness-setup: Graphify bootstrap + CLI verification improvements (system deps, installers)
+
+### 🔧 Chores
+
+- Drop external **`npm:@yeliu84/pi-model-router`** dependency; add **`THIRD_PARTY_NOTICES.md`**
+- Align publish **`files`** allowlist and **graphify-out** refresh
+
 ## [v0.2.10] — 2026-05-15
 
 ### 🔧 Chores
