@@ -8,7 +8,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 function runHarnessVerify() {
 	return new Promise((resolve, reject) => {
-		const child = spawn("node", ["scripts/harness-verify.mjs"], {
+		const child = spawn("node", [".pi/scripts/harness-verify.mjs"], {
 			cwd: ROOT,
 			stdio: ["ignore", "pipe", "pipe"],
 		});

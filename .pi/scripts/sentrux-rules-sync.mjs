@@ -3,7 +3,7 @@
  * Sync .sentrux/rules.toml from .pi/harness/sentrux/architecture.manifest.json.
  * Preserves user content outside the harness managed block.
  *
- * Usage: node scripts/sentrux-rules-sync.mjs [--check] [--force]
+ * Usage: node .pi/scripts/sentrux-rules-sync.mjs [--check] [--force]
  */
 
 import { readFile, writeFile, mkdir, access } from "node:fs/promises";
@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const MANIFEST = join(
 	ROOT,
 	".pi",

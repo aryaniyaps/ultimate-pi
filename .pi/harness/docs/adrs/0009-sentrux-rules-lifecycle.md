@@ -11,7 +11,7 @@ Sentrux enforces architecture via [`.sentrux/rules.toml`](https://sentrux.dev/do
 
 1. **Canonical source:** [`.pi/harness/sentrux/architecture.manifest.json`](../../sentrux/architecture.manifest.json) — layers, boundaries, global constraints.
 2. **Generated artifact:** `.sentrux/rules.toml` — committed to git; managed block between `harness:managed:start/end` markers.
-3. **Sync command:** `npm run harness:sentrux-sync` (`scripts/sentrux-rules-sync.mjs`).
+3. **Sync command:** `npm run harness:sentrux-sync` (`.pi/scripts/sentrux-rules-sync.mjs`).
 4. **Pi command:** `/harness-sentrux-sync` via `sentrux-rules-sync.ts` extension.
 5. **When to sync:**
    - `/harness-setup` Step 2.8 (after sentrux install)
@@ -34,5 +34,5 @@ Sentrux enforces architecture via [`.sentrux/rules.toml`](https://sentrux.dev/do
 ## References
 
 - ADR 0006 (Sentrux dual layer)
-- `scripts/sentrux-rules-sync.mjs`
+- `.pi/scripts/sentrux-rules-sync.mjs`
 - `.pi/extensions/sentrux-rules-sync.ts`

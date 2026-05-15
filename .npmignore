@@ -1,6 +1,6 @@
 bench/
 jobs/
-.pi/prompts/release.md
+scripts/
 .env
 graphify-out/
 .firecrawl
@@ -8,10 +8,20 @@ graphify-out/
 .cursor
 raw/
 data/
+*.tgz
+*.log
+
+# Dev-only under .pi (explicit files allowlist is primary; these are backups)
+.pi/settings.json
+.pi/model-router.json
+.pi/prompts/release.md
 .pi/harness/runs/
 .pi/harness/debates/
 .pi/harness/incidents/
-.pi/harness/router/proposals/
+.pi/harness/router/
 .pi/harness/release-readiness-report.md
-*.tgz
-*.log
+.pi/harness/browser.json
+.pi/npm/node_modules/
+
+# Secrets / local env (ship .env.template only)
+firecrawl/.env

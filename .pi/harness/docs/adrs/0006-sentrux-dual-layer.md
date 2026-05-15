@@ -28,4 +28,4 @@ Evaluator trust requires both programmatic gates (policy, budget, integrity) and
 ## References
 
 - `.pi/harness/specs/observation.schema.json`
-- `scripts/harness-verify.mjs`
+- `.pi/scripts/harness-verify.mjs`

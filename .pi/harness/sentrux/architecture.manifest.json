@@ -34,9 +34,9 @@
 		},
 		{
 			"name": "tooling",
-			"paths": ["scripts/*", "test/*"],
+			"paths": [".pi/scripts/*", "test/*"],
 			"order": 4,
-			"description": "Deterministic scripts and tests"
+			"description": "Harness CLI scripts and tests"
 		}
 	],
 	"boundaries": [
@@ -61,7 +61,7 @@
 			"reason": "Contracts are data-only JSON schemas; extensions implement behavior"
 		},
 		{
-			"from": "scripts/*",
+			"from": ".pi/scripts/*",
 			"to": ".agents/skills/*",
 			"reason": "CLI scripts stay independent of skill markdown"
 		}
