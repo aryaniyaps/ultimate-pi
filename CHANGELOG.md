@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.2.3] — 2026-05-15
+
+### ✨ Features
+
+- Sync `.sentrux/rules.toml` from `.pi/harness/sentrux/architecture.manifest.json` on harness setup and plan/merge
+- Add `sentrux-rules-sync` pi extension and `npm run harness:sentrux-sync`
+- Extend `harness:verify` to require rules.toml in sync with the manifest
+
+### 📖 Documentation
+
+- ADR 0009 (Sentrux rules lifecycle) and README/harness-setup updates
+
 ## [v0.2.2] — 2026-05-15
 
 ### 🔧 Chores
