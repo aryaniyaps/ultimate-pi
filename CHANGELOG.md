@@ -2,6 +2,25 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.2.2] — 2026-05-15
+
+### 🔧 Chores
+
+- trim npm bundle and declare bundled deps
+- refresh generated artifacts
+
+## [v0.2.1] — 2026-05-15
+
+### 🐛 Fixes
+
+- default to flow mode and soften budget gates
+
+### 🔧 Chores
+
+- sync generated report and graph artifacts
+- refresh rebuild lock metadata
+- update install instructions and refresh graph artifacts
+
 ## [v0.2.0] — 2026-05-15
 
 ### ✨ Features
