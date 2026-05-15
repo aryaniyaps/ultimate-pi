@@ -8,7 +8,8 @@ Created: 2026-05-14
 
 - graphify-out/ → Knowledge graph (run `graphify update .` to build)
 - ./raw/ → Source documents for graphify ingestion
-- docs/adr/ → Architectural Decision Records
+- docs/adr/ → Repo-level Architectural Decision Records
+- .pi/harness/docs/adrs/ → Harness ADRs (team-shared; [index](.pi/harness/docs/adrs/README.md))
 - .pi/skills/ → Agent skills
 - .pi/agents/ → Specialized agents
 
@@ -24,7 +25,9 @@ Created: 2026-05-14
 
 - Graph before grep — always consult the knowledge graph first
 - ./raw/ is source storage for graphify
-- ADRs in docs/adr/ with structured format
+- ADRs in docs/adr/ (repo) and .pi/harness/docs/adrs/ (harness) with structured format
+- `npm run harness:verify` for deterministic harness contract checks
+- Harness context: **context-mode only** — never lean-ctx on harness paths (see harness-context skill)
 - `graphify update .` after significant code changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code
 - Self-hosted Firecrawl at http://localhost:3002 (FIRECRAWL_API_URL)

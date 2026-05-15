@@ -11,6 +11,8 @@ It gives you:
 - A phase-based workflow (`plan -> execute -> evaluate -> adversary -> merge`)
 - Enforcement that blocks unsafe behavior (for example, mutating code before planning)
 - Structured artifacts in `.pi/harness/` for auditability and replay
+- Canonical contracts (`HarnessRunRecord`, observations, harness PostHog events) and team ADRs
+- Dual PostHog analytics: LLM spans (`$ai_*`) plus harness domain events (`harness_*`)
 - A practical bootstrap command that sets up tools, graph, and runtime integrations
 
 If you are new: start with the **Quick Start** section and run one task through the full pipeline.
@@ -52,6 +54,9 @@ If it blocks, inspect with:
 
 - [5-minute quickstart](#5-minute-quickstart)
 - [How the harness works](#how-the-harness-works)
+- [Harness Phase 2 (developers)](#harness-phase-2-developers)
+- [PostHog and harness telemetry](#posthog-and-harness-telemetry)
+- [Verify your harness install](#verify-your-harness-install)
 - [Prerequisites](#prerequisites)
 - [Quick Start (new users)](#quick-start-new-users)
 - [Run your first harness task](#run-your-first-harness-task)
@@ -82,6 +87,67 @@ The harness enforces a deterministic execution lifecycle:
 - You get fewer silent mistakes.
 - Reviews are reproducible, not opinion-only.
 - Incidents and overrides are recorded in structured, machine-readable artifacts.
+
+## Harness Phase 2 (developers)
+
+Phase 2 adds machine-readable contracts, observability, and deterministic checks on top of the phase workflow above. You do not need to read every ADR to use the harness; run `/harness-auto` and `npm run harness:verify` first, then drill down when you are changing behavior.
+
+**What shipped**
+
+- **Contracts** in `.pi/harness/specs/` — including `HarnessRunRecord`, `HarnessPostHogEvent`, and `HarnessObservation` (see [specs README](.pi/harness/specs/README.md))
+- **Extensions** (auto-loaded from `.pi/extensions/`) — `trace-recorder`, `harness-telemetry`, `observation-bus`, `drift-monitor`, plus existing governance extensions
+- **ADRs** — team-shared decisions in [`.pi/harness/docs/adrs/`](.pi/harness/docs/adrs/README.md) (0001–0008)
+- **Skills** — `harness-spec`, `harness-plan`, `harness-governor`, `harness-eval`, `harness-context` (context-mode only)
+- **Smoke evals** — `.pi/harness/evals/smoke/` (fixtures only; no CI LLM)
+- **Evolution** — `.pi/harness/evolution/` (self-healing rules, meta-optimizer)
+
+**Typical flows**
+
+| Goal | Command |
+|------|---------|
+| End-to-end task (strict pipeline) | `/harness-auto "<task>"` |
+| Check schemas, fixtures, and extension wiring | `npm run harness:verify` |
+| Last run trace summary | `/harness-trace-last` |
+| Telemetry config | `/harness-telemetry-status` |
+
+For extension internals, env vars, and verification details, see [`.pi/harness/README.md`](.pi/harness/README.md) and [CONTRIBUTING.md](./CONTRIBUTING.md#harness-governance-extensions).
+
+## PostHog and harness telemetry
+
+ultimate-pi uses **two PostHog layers** on the same project key (`POSTHOG_API_KEY`, project `ultimate-pi`):
+
+| Layer | Source | Events | Purpose |
+|-------|--------|--------|---------|
+| LLM analytics | `@posthog/pi` | `$ai_generation`, `$ai_span`, `$ai_trace` | Model/tool usage and latency |
+| Harness domain | `harness-telemetry.ts` | `harness_run_started`, `harness_run_completed`, `harness_policy_violation`, … | Governance KPIs and run correlation |
+
+Copy [`.env.example`](.env.example) to `.env` and set at minimum:
+
+- `POSTHOG_API_KEY` — project API key
+- `POSTHOG_PROJECT_NAME=ultimate-pi`
+- `HARNESS_TELEMETRY_ENABLED=true` — set `false` to disable **only** `harness_*` captures (LLM layer unchanged)
+- `POSTHOG_PRIVACY_MODE` — when `true`, harness properties strip paths (counts/enums only)
+
+**Verify `harness_*` events**
+
+1. Ensure env vars above are set; run `/harness-telemetry-status` in a pi session.
+2. Run `/harness-auto "smoke task"` (or any harness run that completes).
+3. In PostHog → **Live events**, filter `event` contains `harness_`.
+4. Confirm `harness_run_started` and `harness_run_completed` share the same `harness_run_id`.
+
+Event catalog and dashboard seed queries: [ADR 0008](.pi/harness/docs/adrs/0008-harness-posthog-telemetry.md).
+
+## Verify your harness install
+
+After `/harness-setup` or when changing harness specs/extensions:
+
+```bash
+npm run harness:verify
+```
+
+This runs deterministic checks (schemas, smoke fixtures, extension registration) without calling an LLM. Fix any reported errors before relying on `/harness-auto` in production workflows.
+
+Optional: set `HARNESS_SENTRUX_REQUIRED=true` in `.env` if your environment must assert Sentrux stub wiring (see `.env.example`).
 
 ## Prerequisites
 
@@ -194,7 +260,8 @@ This runs:
 - `/harness-budget-status`
 - `/harness-review-integrity-status`
 - `/harness-test-integrity-last`
-- `/harness-trace-last`
+- `/harness-trace-last` — compact summary of the most recent run trace + `HarnessRunRecord`
+- `/harness-telemetry-status` — PostHog harness layer config and session flush count
 - `/harness-debate-open`
 - `/harness-debate-round`
 - `/harness-debate-consensus`
@@ -203,22 +270,22 @@ This runs:
 
 Primary harness directories:
 
-- `.pi/harness/specs/` - JSON schemas for core contracts
-- `.pi/harness/runs/` - per-run trace summaries + event indexes
-- `.pi/harness/incidents/` - incident and policy override records
-- `.pi/harness/debates/` - debate rounds, consensus packets, budget events
-- `.pi/harness/router/` - router tuning proposals and apply flow scripts
+- `.pi/harness/specs/` — JSON schemas for core contracts
+- `.pi/harness/runs/` — per-run trace summaries, `HarnessRunRecord`, event indexes
+- `.pi/harness/incidents/` — incident and policy override records
+- `.pi/harness/debates/` — debate rounds, consensus packets, budget events
+- `.pi/harness/router/` — router tuning proposals and apply flow scripts
+- `.pi/harness/docs/adrs/` — Architectural Decision Records ([index](.pi/harness/docs/adrs/README.md))
+- `.pi/harness/evals/smoke/` — deterministic smoke fixtures
+- `.pi/harness/evolution/` — self-healing rules and meta-optimizer (JSONL-first)
 
 Core contract schemas in `.pi/harness/specs/`:
 
-- `PlanPacket`
-- `RunTrace`
-- `EvalVerdict`
-- `AdversaryReport`
-- `RoundResult`
-- `ConsensusPacket`
-- `BudgetExhausted`
-- `IncidentRecord`
+- `PlanPacket`, `RunTrace`, `HarnessRunRecord`
+- `HarnessPostHogEvent`, `HarnessObservation`
+- `EvalVerdict`, `AdversaryReport`
+- `RoundResult`, `ConsensusPacket`
+- `BudgetExhausted`, `IncidentRecord`
 - `RouterTuningProposal`
 
 ## Safety and governance defaults
@@ -288,8 +355,20 @@ Blind writes to `.pi/model-router.json` are intentionally disallowed.
 - Use `/harness-test-integrity-last`
 - Restore or justify test changes; expect adversarial scrutiny
 
+### No `harness_*` events in PostHog
+
+- Run `/harness-telemetry-status` — confirm `POSTHOG_API_KEY` is set and `HARNESS_TELEMETRY_ENABLED` is not `false`
+- Complete a full run (`/harness-auto` or `/harness-run` through `agent_end`) so `harness-telemetry` can flush
+- Filter Live events for `harness_`, not `$ai_*` (those come from `@posthog/pi` only)
+
+### `npm run harness:verify` fails
+
+- Read the script output for the first schema or fixture mismatch
+- Compare your change against [`.pi/harness/specs/`](.pi/harness/specs/) and [ADR 0002](.pi/harness/docs/adrs/0002-harness-run-record.md) if you edited run/trace shapes
+
 ## Contributing
 
-For local dev setup, lint/test commands, Firecrawl notes, extension details, and architectural quality gate workflow, see:
+For local dev setup, lint/test commands, Firecrawl notes, harness extension details, and architectural quality gate workflow, see:
 
 - [CONTRIBUTING.md](./CONTRIBUTING.md)
+- [`.pi/harness/README.md`](.pi/harness/README.md) — scaffold layout, verification, governance extensions

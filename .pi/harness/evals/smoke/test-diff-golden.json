@@ -1,0 +1,28 @@
+{
+	"description": "Golden cases for test-diff-integrity (deterministic pattern checks)",
+	"cases": [
+		{
+			"id": "assertion-removal",
+			"file_path": "src/foo.test.ts",
+			"oldString": "expect(x).toBe(1);\nexpect(y).toEqual(2);",
+			"newString": "// removed assertions",
+			"expect_flag": true,
+			"expect_reasons_contains": ["assertion"]
+		},
+		{
+			"id": "skip-inflation",
+			"file_path": "src/bar.spec.ts",
+			"oldString": "it('works', () => {});",
+			"newString": "it.skip('works', () => {});",
+			"expect_flag": true,
+			"expect_reasons_contains": ["skip"]
+		},
+		{
+			"id": "benign-comment",
+			"file_path": "src/baz.test.ts",
+			"oldString": "expect(a).toBe(1);",
+			"newString": "expect(a).toBe(1); // clarify",
+			"expect_flag": false
+		}
+	]
+}
