@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.2.2] — 2026-05-15
+
+### 🔧 Chores
+
+- trim npm bundle and declare bundled deps
+- refresh generated artifacts
+
 ## [v0.2.1] — 2026-05-15
 
 ### 🐛 Fixes
