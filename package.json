@@ -1,6 +1,6 @@
 {
 	"name": "ultimate-pi",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "Ultimate AI coding harness for pi.dev — extensible skills, Obsidian wiki knowledge layer, compressed context, deterministic output",
 	"keywords": [
 		"pi-package",
@@ -23,9 +23,16 @@
 		"url": "https://github.com/aryaniyaps/ultimate-pi"
 	},
 	"pi": {
-		"extensions": ["./.pi/extensions"],
-		"skills": ["./.agents/skills", "./.pi/skills"],
-		"prompts": ["./.pi/prompts"]
+		"extensions": [
+			"./.pi/extensions"
+		],
+		"skills": [
+			"./.agents/skills",
+			"./.pi/skills"
+		],
+		"prompts": [
+			"./.pi/prompts"
+		]
 	},
 	"files": [
 		".agents",
@@ -94,15 +101,7 @@
 		"@tintinweb/pi-subagents": "latest",
 		"@yeliu84/pi-model-router": "latest",
 		"asciify-image": "^0.1.10",
-		"context-mode": "latest",
 		"jimp": "^1.6.1",
 		"posthog-node": "^5.30.6"
-	},
-	"bundledDependencies": [
-		"@posthog/pi",
-		"@sting8k/pi-vcc",
-		"@tintinweb/pi-subagents",
-		"@yeliu84/pi-model-router",
-		"context-mode"
-	]
+	}
 }
