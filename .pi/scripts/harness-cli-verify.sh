@@ -153,13 +153,62 @@ verify_agent_browser() {
 	fi
 }
 
-verify_firecrawl() {
-	log "[firecrawl-cli]"
-	npm_global_install "firecrawl-cli@latest" "firecrawl" || { fail "firecrawl-cli npm install"; return; }
-	if firecrawl --status &>/dev/null; then
-		pass "firecrawl $(firecrawl --status 2>/dev/null | head -1 || echo ok)"
+scrapling_installed() {
+	command -v scrapling &>/dev/null && return 0
+	command -v uv &>/dev/null && uv tool list 2>/dev/null | grep -qE '(^|[[:space:]])scrapling([[:space:]]|$)' && return 0
+	return 1
+}
+
+install_scrapling() {
+	if command -v uv &>/dev/null; then
+		log "  installing scrapling via uv tool..."
+		uv tool install "scrapling[fetchers]" || return 1
+	elif command -v pip3 &>/dev/null; then
+		log "  installing scrapling via pip3 --user..."
+		pip3 install --user "scrapling[fetchers]" || return 1
+	elif command -v pip &>/dev/null; then
+		pip install --user "scrapling[fetchers]" || return 1
 	else
-		fail "firecrawl --status failed (run: firecrawl login)"
+		fail "need uv or pip to install scrapling"
+		return 1
+	fi
+	export PATH="${HOME}/.local/bin:${PATH}"
+	return 0
+}
+
+verify_scrapling() {
+	log "[scrapling / harness-web]"
+	ensure_linux_browser_deps 2>/dev/null || true
+	if [ "$FORCE" = true ] || ! scrapling_installed; then
+		install_scrapling || { fail 'scrapling install (run: uv tool install "scrapling[fetchers]")'; return; }
+	fi
+	if ! scrapling_installed; then
+		fail "scrapling not on PATH after install"
+		return
+	fi
+	if ! scrapling --help &>/dev/null; then
+		fail "scrapling --help failed"
+		return
+	fi
+	pass "scrapling CLI"
+	if [ "$FORCE" = true ]; then
+		scrapling install 2>/dev/null || warn "scrapling install (browsers) failed — use harness-web scrape --fast for smoke"
+	fi
+	_hw="${ROOT}/.pi/scripts/harness-web.py"
+	if [ ! -f "$_hw" ]; then
+		warn "harness-web.py missing in package"
+		return
+	fi
+	mkdir -p .web
+	if python3 "$_hw" search "ultimate-pi harness" -o .web/verify-search.json --limit 2 2>/dev/null | grep -q wrote; then
+		pass "harness-web search smoke"
+	else
+		fail "harness-web search smoke failed"
+	fi
+	if python3 "$_hw" scrape "https://example.com" -o .web/verify-page.md --fast 2>/dev/null | grep -q wrote; then
+		pass "harness-web scrape --fast smoke"
+	else
+		warn "harness-web scrape smoke failed (stealth needs: scrapling install + OS browser libs)"
 	fi
 }
 
@@ -274,7 +323,7 @@ verify_sentrux() {
 log "Harness CLI verification (cwd: $ROOT)"
 log ""
 
-verify_firecrawl
+verify_scrapling
 verify_ctx7
 verify_agent_browser
 verify_ck

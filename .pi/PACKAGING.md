@@ -20,7 +20,7 @@ Pi does **not** define `scripts`, `agents`, or `providers` in the manifest.
 
 We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts never ship:
 
-- No `.pi/harness/runs/`, local `model-router.json`, or `firecrawl/.env`
+- No `.pi/harness/runs/`, local `model-router.json`, or `.web/` scrape artifacts
 - Ship `.pi/settings.example.json`, not `.pi/settings.json` (dev checkout uses `".."` local package)
 - Include **`vendor/pi-model-router/`** ([`pi-model-router`](https://github.com/yeliu84/pi-model-router), MIT) — see repo [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md); refresh with `npm run vendor:sync-router`
 

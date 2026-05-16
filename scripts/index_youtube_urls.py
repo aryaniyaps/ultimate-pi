@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Index YouTube watch URLs: yt-dlp metadata + Firecrawl transcript scrape.
+"""Index YouTube watch URLs: yt-dlp metadata + harness-web (Scrapling) transcript scrape.
 
 Writes ``<data-dir>/<channel-handle>/<YYYY-MM-DD>/<video-id>_<title-slug>.txt`` and
 ``.meta.txt``, and merges ``_index.tsv`` per channel. No channel-specific filters.
 Default ``data-dir`` is ``<repo>/data/youtube-transcripts`` when this file lives in ``<repo>/scripts/``.
 
-Requirements: ``yt-dlp`` and ``firecrawl`` CLI on PATH (see ``firecrawl --status``).
+Requirements: ``yt-dlp`` and ``harness-web.py`` (Scrapling; see harness-cli-verify).
 
 Examples:
   python3 scripts/index_youtube_urls.py 'https://www.youtube.com/watch?v=VIDEO_ID'
   python3 scripts/index_youtube_urls.py --urls-file urls.txt
-  python3 scripts/index_youtube_urls.py --data-dir ./data/youtube-transcripts --firecrawl-cwd . URL
+  python3 scripts/index_youtube_urls.py --data-dir ./data/youtube-transcripts URL
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
-import shutil
+import sys
 import subprocess
 import tempfile
 import time
@@ -69,11 +69,10 @@ def _firecrawl_transcript_sane(text: str) -> bool:
     return True
 
 
-def fetch_transcript_firecrawl(
+def fetch_transcript_harness_web(
     video_id: str,
     *,
-    firecrawl_bin: str,
-    firecrawl_cwd: Path,
+    harness_web: Path,
     wait_ms: int = 20000,
     attempts: int = 3,
     scrape_timeout: int = 300,
@@ -82,26 +81,25 @@ def fetch_transcript_firecrawl(
     for attempt in range(attempts):
         if attempt:
             time.sleep(4.0)
-        fd, out = tempfile.mkstemp(suffix=".md", prefix="ytfc-")
+        fd, out = tempfile.mkstemp(suffix=".md", prefix="ythw-")
         os.close(fd)
         out_path = Path(out)
         try:
             cmd = [
-                firecrawl_bin,
+                sys.executable,
+                str(harness_web),
                 "scrape",
                 url,
-                "--wait-for",
-                str(wait_ms),
-                "--only-main-content",
                 "-o",
                 str(out_path),
             ]
+            if wait_ms:
+                cmd.extend(["--wait-for", str(wait_ms)])
             r = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
                 timeout=scrape_timeout,
-                cwd=str(firecrawl_cwd),
             )
             if r.returncode != 0:
                 continue
@@ -214,10 +212,10 @@ def collect_urls(args: argparse.Namespace) -> list[str]:
 
 
 def default_paths() -> tuple[Path, Path]:
-    """(data_dir, firecrawl_cwd) when script lives in <repo>/scripts/."""
+    """(data_dir, harness_web.py) when script lives in <repo>/scripts/."""
     here = Path(__file__).resolve()
     repo = here.parent.parent
-    return repo / "data" / "youtube-transcripts", repo
+    return repo / "data" / "youtube-transcripts", repo / ".pi" / "scripts" / "harness-web.py"
 
 
 def main() -> int:
@@ -241,11 +239,11 @@ def main() -> int:
         help=f"Root for channel folders (default: {default_data})",
     )
     ap.add_argument(
-        "--firecrawl-cwd",
+        "--harness-web",
         type=Path,
-        metavar="DIR",
+        metavar="PATH",
         default=default_fc_cwd,
-        help="Working directory for firecrawl subprocess (default: repo root next to scripts/)",
+        help="Path to harness-web.py (default: <repo>/.pi/scripts/harness-web.py)",
     )
     ap.add_argument(
         "--yt-dlp",
@@ -254,24 +252,18 @@ def main() -> int:
         help="yt-dlp executable name or path (default: yt-dlp)",
     )
     ap.add_argument(
-        "--firecrawl",
-        metavar="BIN",
-        default="",
-        help="firecrawl executable (default: search PATH)",
-    )
-    ap.add_argument(
         "--wait-for",
         type=int,
         default=20000,
         metavar="MS",
-        help="Firecrawl scrape --wait-for milliseconds (default 20000)",
+        help="harness-web scrape --wait-for milliseconds (default 20000)",
     )
     ap.add_argument(
         "--sleep",
         type=float,
         default=SLEEP_SEC,
         metavar="SEC",
-        help=f"Seconds between Firecrawl scrapes (default {SLEEP_SEC})",
+        help=f"Seconds between transcript scrapes (default {SLEEP_SEC})",
     )
     ap.add_argument(
         "--dry-run",
@@ -288,15 +280,14 @@ def main() -> int:
     if not urls:
         ap.error("Pass at least one url, or use --urls-file")
 
-    fc_bin = args.firecrawl.strip() or shutil.which("firecrawl")
-    if not fc_bin and not args.dry_run:
+    harness_web: Path = args.harness_web
+    if not harness_web.is_file() and not args.dry_run:
         raise SystemExit(
-            "firecrawl CLI not found on PATH. Install it and run `firecrawl --status`, "
-            "or pass --firecrawl /path/to/firecrawl."
+            f"harness-web not found at {harness_web}. "
+            'Install Scrapling: uv tool install "scrapling[fetchers]" && scrapling install'
         )
 
     data_dir: Path = args.data_dir
-    fc_cwd: Path = args.firecrawl_cwd
 
     index_rows: dict[str, dict[str, tuple[str, str]]] = {}
     first_scrape = True
@@ -327,11 +318,9 @@ def main() -> int:
                 time.sleep(max(0.0, args.sleep))
             first_scrape = False
             print(f"scrape {ch_slug} {day} {vid} …", flush=True)
-            assert fc_bin is not None
-            text = fetch_transcript_firecrawl(
+            text = fetch_transcript_harness_web(
                 vid,
-                firecrawl_bin=fc_bin,
-                firecrawl_cwd=fc_cwd,
+                harness_web=harness_web,
                 wait_ms=args.wait_for,
             )
         else:
@@ -344,14 +333,14 @@ def main() -> int:
             f"upload_date: {udate}\n"
             f"title: {title}\n"
             f"url: https://www.youtube.com/watch?v={vid}\n"
-            f"transcript_source: firecrawl\n"
+            f"transcript_source: harness-web\n"
             f"channel: {ch_meta}\n"
         )
         meta_path.write_text(meta, encoding="utf-8")
         if need:
             if text is None:
                 path.write_text(
-                    "(no transcript yet: Firecrawl scrape had no ## Transcript section or empty body. "
+                    "(no transcript yet: harness-web scrape had no ## Transcript section or empty body. "
                     "Retry later or open the watch URL in a browser.)\n",
                     encoding="utf-8",
                 )

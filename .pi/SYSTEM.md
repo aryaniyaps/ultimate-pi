@@ -23,33 +23,31 @@ You are an enterprise coding agent. Optimize for correctness, minimal diffs, and
 ## Web Policy (Mandatory)
 
 > [!warning] No raw HTTP
-> Route **all** web fetches through [[context7]] (API/library docs) or [[firecrawl|Firecrawl CLI]] (all other). No `curl`, `wget`, or raw bash HTTP.
+> Route **all** web fetches through [[context7]] (API/library docs) or **harness-web** / [[scrapling-web]] (all other). No `curl`, `wget`, or raw bash HTTP.
 
 ### API / Library Docs — context7 ONLY
 - `ctx7 library <name> <query>` then `ctx7 docs <id> <query>`
 - context7 owns: function signatures, class APIs, config options, stdlib, framework specs.
 - **Never** use quality-sites for API docs.
 
-### All Non-API Web Fetch — Firecrawl CLI
-See `.agents/skills/firecrawl/SKILL.md` for workflow escalation.
+### All Non-API Web Fetch — harness-web (Scrapling)
+See `.agents/skills/scrapling-web/SKILL.md` for workflow escalation.
 
 | Task | Command |
 |------|---------|
-| Search (no URL) | `firecrawl search "query" --scrape --limit 5 -o .firecrawl/search.json --json` |
-| Scrape (have URL) | `firecrawl scrape "<url>" -o .firecrawl/page.md --only-main-content` |
-| JS-rendered page | `firecrawl scrape "<url>" --wait-for 3000 -o .firecrawl/page.md` |
-| Bulk crawl | `firecrawl crawl "<url>" -o .firecrawl/crawl/` |
-| Interact (clicks/forms) | scrape first, then `firecrawl interact <scrape-id>` |
-| Download site | `firecrawl download <url> -o .firecrawl/download/` |
-| Parse local docs | `firecrawl parse <file> -o .firecrawl/parsed.md` |
+| Search (no URL) | `python3 "$UP_PKG/.pi/scripts/harness-web.py" search "query" -o .web/search.json --limit 5` |
+| Scrape (have URL) | `python3 "$UP_PKG/.pi/scripts/harness-web.py" scrape "<url>" -o .web/page.md` |
+| Static / known-simple | add `--fast` to scrape |
+| Map same-host links | `python3 "$UP_PKG/.pi/scripts/harness-web.py" map "<url>" -o .web/map.json` |
+| Bulk search + scrape | `python3 "$UP_PKG/.pi/scripts/harness-web.py" bulk-scrape "query" -o .web/bulk/` |
 
-- **Search:** firecrawl search only (no DuckDuckGo).
-- **Post-clean (optional):** `firecrawl parse <file> -o .firecrawl/parsed.md` if output has boilerplate.
+- **Artifacts:** always write under `.web/` with `-o` (token discipline).
+- **Default scrape:** stealth browser; opt out with `--fast` or `HARNESS_WEB_FETCH_MODE=fast`.
 - **Quality sites:** check `.agents/skills/wiki-autoresearch/references/quality-sites.md` before citing non-API sources. Prefer Tier 1 (StackOverflow, GitHub issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
 - **Research:** use `/wiki-autoresearch <topic>` for deep research. Results are graphified into `graphify-out/`.
 
 ### Missing CLI fallbacks
-- Firecrawl missing: `npx firecrawl --help || npm install -g firecrawl-cli@latest`
+- harness-web / Scrapling missing: `uv tool install "scrapling[fetchers]" && scrapling install` then re-run `bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"`
 - Context7 missing: `npm install -g ctx7@latest`
 
 ---
