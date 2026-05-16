@@ -11,7 +11,8 @@
 		"includes": [
 			"**/*.{ts,tsx,js,jsx,json,jsonc,css}",
 			"!graphify-out/**/*",
-			"!graphify-books-out/**/*"
+			"!graphify-books-out/**/*",
+			"!vendor/**/*"
 		]
 	},
 	"formatter": {

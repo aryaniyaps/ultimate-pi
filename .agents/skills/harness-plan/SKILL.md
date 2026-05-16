@@ -14,9 +14,10 @@ description: Produce PlanPacket-aligned harness plans before execute phase. Use 
 ## Workflow
 
 1. Read `.pi/harness/specs/plan-packet.schema.json`.
-2. Capture scope, risks, acceptance criteria, and explicit `plan_id`.
-3. Persist plan reference in prompt (`plan_id=...`) so policy-gate sets `approvedPlan`.
-4. Do not mutate production files in plan phase unless user explicitly requests draft-only outputs.
+2. When scope, risk, or acceptance is ambiguous, call `ask_user` (see harness-decisions skill) before finalizing the packet.
+3. Capture scope, risks, acceptance criteria, and explicit `plan_id`.
+4. Persist plan reference in prompt (`plan_id=...`) so policy-gate sets `approvedPlan`.
+5. Do not mutate production files in plan phase unless user explicitly requests draft-only outputs.
 
 ## Output
 

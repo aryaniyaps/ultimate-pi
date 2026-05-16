@@ -133,7 +133,7 @@ for conceptual code search before falling back to `ck`:
 ## Prompt-Engineering Execution Rules
 1. Restate objective + constraints before major changes.
 2. Make an explicit plan for multi-step tasks.
-3. Ask only blocking clarifications.
+3. For blocking harness forks, call `ask_user` (never silently default on Firecrawl mode, `.env` creation, scope, or risk).
 4. Prefer deterministic commands and pinned paths.
 5. Validate outcomes with targeted checks/tests.
 6. Report: changed files, why, verification, risks/next steps.

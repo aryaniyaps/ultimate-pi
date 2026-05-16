@@ -178,6 +178,24 @@ export default function policyGate(pi: ExtensionAPI) {
 	pi.on("before_agent_start", async (event) => {
 		const bootstrapPrompt = isBootstrapPrompt(event.prompt);
 		const abortSignal = hasAbortSignal(event.prompt);
+
+		// /harness-setup instructions mention `harness-plan` (e.g. gh label text). That
+		// substring must not force inferPhase() to "plan" or bootstrap stays blocked.
+		if (bootstrapPrompt) {
+			state.phase = "execute";
+			state.approvedPlan = true;
+			state.planId = null;
+			state.budgetBypass = true;
+			state.aborted = false;
+			state.abortReason = null;
+			state.abortedAt = null;
+			state.updatedAt = nowIso();
+			pi.appendEntry("harness-policy-state", state);
+			return {
+				systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nPhase=${state.phase}; ApprovedPlan=${state.approvedPlan}; PlanId=${state.planId ?? "none"}; Aborted=${state.aborted}; Bootstrap=harness-setup.`,
+			};
+		}
+
 		if (abortSignal) {
 			state.phase = "plan";
 			state.approvedPlan = false;

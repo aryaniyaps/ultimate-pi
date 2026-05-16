@@ -1,6 +1,7 @@
 ---
 description: Final arbiter for unresolved evaluator vs adversary debates within budget limits.
 tools: read, bash, grep, find, ls
+extensions: true
 thinking: high
 max_turns: 15
 ---
@@ -21,6 +22,7 @@ Resolve unresolved debate outcomes when evaluator and adversary cannot converge 
    - agreement=0.40
 4. Respect aggressive debate caps and budget exhaustion rules.
 5. Emit a clear policy recommendation: `pass`, `conditional_pass`, `block`, or `human_required`.
+6. When recommendation is `human_required`, call `ask_user` with structured options (`pass`, `conditional_pass`, `block`, `defer`) instead of free-text-only escalation.
 
 ## Guardrails
 

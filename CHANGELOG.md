@@ -2,6 +2,68 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.3.1] — 2026-05-15
+
+### 🐛 Fixes
+
+- **External `/harness-setup`**: policy gate no longer forces **plan** phase because the setup doc mentions `harness-plan` (e.g. `gh label create "harness-plan"`).
+- **Harness specs in consumer repos**: copy `*.schema.json` and specs `README` from the package via `harness-seed-project-contracts.mjs` as part of setup (so `plan-packet.schema.json` exists before planning).
+- **Strict LLM gateways**: new `provider-payload-sanitize` extension removes disallowed top-level fields (`reasoning`, etc.) from `messages` before provider requests (avoids 400 “Extra inputs … reasoning” on some OpenAI-compatible APIs).
+
+## [v0.3.0] — 2026-05-15
+
+### 📦 Release
+
+- First tag-driven npm / GitHub Packages publish since **v0.2.2**; intermediate history remains under **v0.2.3–v0.2.10** below.
+
+### ✨ Features
+
+- Vendored [**pi-model-router**](https://github.com/yeliu84/pi-model-router) with harness gate and `npm run vendor:sync-router`
+- Sentrux **`rules.toml`** sync from `architecture.manifest.json` plus Phase 2 harness telemetry / governance scaffolding (see ADRs)
+- Document **`UP_PKG`** resolution and direct **`$UP_PKG/.pi/scripts/*`** invocation for external installs (no `harness:*` entries in consumer `package.json`)
+
+### 🐛 Fixes
+
+- **`pi update`** / global installs: complete `koffi` tree; Node 22–compatible dependency graph
+- Harness-setup: Graphify bootstrap + CLI verification improvements (system deps, installers)
+
+### 🔧 Chores
+
+- Drop external **`npm:@yeliu84/pi-model-router`** dependency; add **`THIRD_PARTY_NOTICES.md`**
+- Align publish **`files`** allowlist and **graphify-out** refresh
+
+## [v0.2.10] — 2026-05-15
+
+### 🔧 Chores
+
+- Harness scripts must be invoked from `.pi/scripts/` (or `$UP_PKG/.pi/scripts/` for consumers); root `npm run harness:*` scripts removed so `pi install npm:ultimate-pi` works in external repos without mirroring npm script entries
+
+
+### ✨ Features
+
+- Vendor [`yeliu84/pi-model-router`](https://github.com/yeliu84/pi-model-router) under `vendor/pi-model-router/` with a harness gate in `.pi/extensions/pi-model-router-harness.ts` (no `router/auto` until `.pi/model-router.json` exists after `/harness-setup`)
+- `npm run vendor:sync-router` to refresh upstream + apply import patches (see `vendor/pi-model-router/UPSTREAM_PIN.md`)
+
+### 🔧 Chores
+
+- Remove `npm:@yeliu84/pi-model-router` from package dependencies; add `THIRD_PARTY_NOTICES.md`
+- `harness-sync-model-router.mjs` adjusts Pi defaults only (no package toggling)
+- `check:ts` uses ES2023; devDependency on `@mariozechner/pi-ai`, `pi-tui`, `pi-agent-core` for vendored typecheck
+
+### 🐛 Fixes
+
+- Avoid npm package conflicts — router always comes from the bundled vendor tree
+
+## [v0.2.8] — 2026-05-15
+
+### ✨ Features
+
+- Gate `pi-model-router`: shipped `.pi/settings.example.json` no longer lists `npm:@yeliu84/pi-model-router` until `/harness-setup` Step 3.5 creates `.pi/model-router.json` and runs `harness-sync-model-router.mjs` (adds the package, sets `router` / `auto` when project `defaultProvider` is unset, strips stale router entries when config is missing)
+
+### 🐛 Fixes
+
+- Remove extension bootstrap that auto-wrote `.pi/model-router.json` on every start (router config is harness-owned only; avoids `router/auto` + built-in `gpt-5.4-pro` before setup)
+
 ## [v0.2.7] — 2026-05-15
 
 ### 🐛 Fixes

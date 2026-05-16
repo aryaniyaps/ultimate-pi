@@ -66,7 +66,7 @@ Use this when you want each step separate:
 
 ## Defaults you should know
 
-- **Model routing is opt-in** — install does not force `router/auto` or `gpt-5.4-pro`. Enable with `/router profile auto` after `/harness-setup` generates `.pi/model-router.json`, or copy [`.pi/model-router.example.json`](.pi/model-router.example.json).
+- **Model routing (vendored + gated)** — [`pi-model-router`](https://github.com/yeliu84/pi-model-router) ships inside this package (`vendor/pi-model-router/`). [`.pi/extensions/pi-model-router-harness.ts`](.pi/extensions/pi-model-router-harness.ts) activates it **only after** `.pi/model-router.json` exists (generation: `/harness-setup` Step 3.5), so **`router/auto` does not appear** beforehand. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). [`.pi/scripts/harness-sync-model-router.mjs`](.pi/scripts/harness-sync-model-router.mjs) may set **`defaultProvider`/`defaultModel`** to **`router`/`auto`** when the project sets no default — run **`/reload`** afterward. Do **not** add `npm:@yeliu84/pi-model-router` to `.pi/settings.json`; it duplicates the fork. Maintainer refresh: **`npm run vendor:sync-router`**.
 - **Plan before mutate** — write/edit/shell that changes the repo is blocked until execute phase.
 - **No auto-merge** — you decide when to open or merge a PR.
 - **Structured runs** — each run writes artifacts under `.pi/harness/runs/` for replay and audit.

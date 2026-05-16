@@ -1,6 +1,6 @@
 # Sentrux rules — 2026-05-15
 # Docs: https://sentrux.dev/docs/rules-engine/
-# Sync: npm run harness:sentrux-sync (or /harness-sentrux-sync in pi)
+# Sync: node $UP_PKG/.pi/scripts/sentrux-rules-sync.mjs --force (see .pi/scripts/README.md for UP_PKG) or /harness-sentrux-sync in pi
 #
 # Custom rules: add TOML below the managed block; they are preserved on sync.
 
@@ -35,7 +35,7 @@ order = 2
 
 [[layers]]
 name = "agents"
-paths = [".pi/agents/*", ".pi/prompts/*", ".agents/skills/*"]
+paths = [".pi/agents/*", ".pi/harness/agents.manifest.json", ".pi/prompts/*", ".agents/skills/*"]
 order = 3
 # Agent definitions, prompts, and skills
 

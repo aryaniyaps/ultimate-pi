@@ -58,13 +58,8 @@ install_graphify() {
 }
 
 graphify_platform_install() {
+	# Pi harness only — no codex/cursor installs (codex writes .codex/hooks.json).
 	graphify install --platform pi 2>/dev/null || graphify pi install 2>/dev/null || true
-	if [ -d .cursor ]; then
-		graphify cursor install 2>/dev/null || true
-	fi
-	if [ -f AGENTS.md ] || [ -d .pi ]; then
-		graphify codex install 2>/dev/null || true
-	fi
 }
 
 graph_is_valid() {

@@ -13,16 +13,26 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+const UP_PKG = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+/** Target project root (consumer repo). Default: process.cwd(). */
+const PROJECT_ROOT =
+	process.argv.find((a, i) => i >= 2 && !a.startsWith("-")) || process.cwd();
 const MANIFEST = join(
-	ROOT,
+	PROJECT_ROOT,
 	".pi",
 	"harness",
 	"sentrux",
 	"architecture.manifest.json",
 );
-const RULES_PATH = join(ROOT, ".sentrux", "rules.toml");
-const META_PATH = join(ROOT, ".sentrux", ".harness-rules-meta.json");
+const MANIFEST_TEMPLATE = join(
+	UP_PKG,
+	".pi",
+	"harness",
+	"sentrux",
+	"architecture.manifest.json",
+);
+const RULES_PATH = join(PROJECT_ROOT, ".sentrux", "rules.toml");
+const META_PATH = join(PROJECT_ROOT, ".sentrux", ".harness-rules-meta.json");
 
 const MANAGED_START = "# --- harness:managed:start ---";
 const MANAGED_END = "# --- harness:managed:end ---";
@@ -80,7 +90,7 @@ function renderManagedBlock(manifest) {
 function mergeRules(existing, managedBlock) {
 	const header = `# Sentrux rules — ${new Date().toISOString().slice(0, 10)}
 # Docs: https://sentrux.dev/docs/rules-engine/
-# Sync: npm run harness:sentrux-sync (or /harness-sentrux-sync in pi)
+# Sync: node $UP_PKG/.pi/scripts/sentrux-rules-sync.mjs --force (see .pi/scripts/README.md for UP_PKG) or /harness-sentrux-sync in pi
 #
 # Custom rules: add TOML below the managed block; they are preserved on sync.
 
@@ -113,7 +123,7 @@ async function fileExists(path) {
 async function runSentruxCheck() {
 	return new Promise((resolve) => {
 		const child = spawn("sentrux", ["check", "."], {
-			cwd: ROOT,
+			cwd: PROJECT_ROOT,
 			stdio: ["ignore", "pipe", "pipe"],
 		});
 		let out = "";
@@ -136,7 +146,19 @@ async function main() {
 	const strict = process.argv.includes("--strict");
 
 	if (!(await fileExists(MANIFEST))) {
-		fail(`missing manifest ${MANIFEST}`);
+		if (await fileExists(MANIFEST_TEMPLATE)) {
+			await mkdir(dirname(MANIFEST), { recursive: true });
+			await writeFile(
+				MANIFEST,
+				await readFile(MANIFEST_TEMPLATE, "utf-8"),
+				"utf-8",
+			);
+			console.log(
+				`sentrux-rules-sync: seeded manifest from package -> ${MANIFEST}`,
+			);
+		} else {
+			fail(`missing manifest ${MANIFEST} (and no template in package)`);
+		}
 	}
 
 	const manifestRaw = await readFile(MANIFEST, "utf-8");
@@ -168,10 +190,10 @@ async function main() {
 		if (checkOnly) process.exit(0);
 	} else if (checkOnly) {
 		fail(
-			"rules.toml out of date — run npm run harness:sentrux-sync",
+			"rules.toml out of date — run node \"$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs\" --force (see .pi/scripts/README.md for UP_PKG)",
 		);
 	} else {
-		await mkdir(join(ROOT, ".sentrux"), { recursive: true });
+		await mkdir(join(PROJECT_ROOT, ".sentrux"), { recursive: true });
 		const next = mergeRules(existing, managedBlock);
 		await writeFile(RULES_PATH, next, "utf-8");
 		meta = {

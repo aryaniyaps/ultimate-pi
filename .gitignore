@@ -37,7 +37,7 @@ skills-lock.json
 .firecrawl/
 .fallow-baseline.json
 
-# sentrux baselines and local meta (rules.toml is committed — sync via harness:sentrux-sync)
+# sentrux baselines and local meta (rules.toml is committed — sync via sentrux-rules-sync.mjs)
 .sentrux/*
 !.sentrux/
 !.sentrux/rules.toml

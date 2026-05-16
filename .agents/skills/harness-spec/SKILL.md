@@ -16,7 +16,7 @@ description: Draft or refine harness artifact contracts under .pi/harness/specs.
 1. Read `.pi/harness/specs/README.md` for versioning rules (`contract_version`, optional fields only for compatible changes).
 2. Edit or add schema under `.pi/harness/specs/`.
 3. Update affected extensions to emit matching custom entries.
-4. Run `npm run harness:verify`.
+4. Run `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` (see `.pi/scripts/README.md`).
 5. Add or update an ADR under `.pi/harness/docs/adrs/` for breaking changes.
 
 ## Rules

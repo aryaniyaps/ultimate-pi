@@ -259,8 +259,10 @@ verify_sentrux() {
 		return
 	fi
 	sentrux plugin add-standard 2>/dev/null || warn "sentrux plugin add-standard skipped"
-	if [ -f package.json ] && grep -q harness:sentrux-sync package.json 2>/dev/null; then
-		npm run harness:sentrux-sync 2>/dev/null || warn "npm run harness:sentrux-sync failed (needs package.json scripts)"
+	_bootstrap="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/harness-sentrux-bootstrap.mjs"
+	if [ -f "$_bootstrap" ]; then
+		node "$_bootstrap" --force 2>/dev/null ||
+			warn "sentrux rules bootstrap failed (see harness-sentrux-setup skill)"
 	fi
 	if sentrux check . &>/dev/null; then
 		pass "sentrux $(sentrux --version 2>/dev/null | head -1)"

@@ -26,7 +26,7 @@ Created: 2026-05-14
 - Graph before grep — always consult the knowledge graph first
 - ./raw/ is source storage for graphify
 - ADRs in docs/adr/ (repo) and .pi/harness/docs/adrs/ (harness) with structured format
-- `npm run harness:verify` for deterministic harness contract checks
+- `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` for deterministic harness contract checks (`UP_PKG` — see `.pi/scripts/README.md`)
 - Harness context: **context-mode only** — never lean-ctx on harness paths (see harness-context skill)
 - `graphify update .` after significant code changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code

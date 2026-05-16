@@ -12,8 +12,8 @@ Aligned with [pi packages](https://github.com/badlogic/pi-mono/blob/main/package
 
 Pi does **not** define `scripts`, `agents`, or `providers` in the manifest.
 
-- **Harness scripts** → `.pi/scripts/` (npm `harness:*` scripts; see `.pi/scripts/README.md`)
-- **Subagent agents** → `.pi/agents/**/*.md` (loaded by `@tintinweb/pi-subagents` from the **project** `.pi/agents/`; `/harness-setup` seeds them from the installed package)
+- **Harness scripts** → `.pi/scripts/` — run via `node` / `bash` and `$UP_PKG` (see `.pi/scripts/README.md`); do not require npm script aliases in consumer `package.json`
+- **Subagent agents** → `.pi/agents/**/*.md` on the installed package (`harness/planner`, `pi-pi/agent-expert`, …) via `harness-subagents.ts`; optional **project overrides** at the same relative path under `.pi/agents/`. Version drift: `.pi/harness/agents.manifest.json` (regenerate with `harness-agents-manifest.mjs --write`)
 - **Providers** → install via `bundledDependencies` + user settings, not a separate manifest directory
 
 ## npm `files` allowlist
@@ -22,6 +22,7 @@ We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts n
 
 - No `.pi/harness/runs/`, local `model-router.json`, or `firecrawl/.env`
 - Ship `.pi/settings.example.json`, not `.pi/settings.json` (dev checkout uses `".."` local package)
+- Include **`vendor/pi-model-router/`** ([`pi-model-router`](https://github.com/yeliu84/pi-model-router), MIT) — see repo [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md); refresh with `npm run vendor:sync-router`
 
 ## Settings
 
@@ -34,4 +35,4 @@ We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts n
 
 Runtime pi extensions are regular `dependencies` (installed by `npm install` when pi installs the package). We do **not** use `bundledDependencies`: bundling pre-installs `node_modules` and breaks `npm install -g` / `pi update` for native modules such as `koffi` (empty stub dir, postinstall fails).
 
-`@mariozechner/pi-coding-agent` is a `peerDependency` (provided by the pi CLI).
+`@mariozechner/pi-coding-agent` (and sibling `@mariozechner/pi-ai`, `pi-tui`, `pi-agent-core` used by the vendored router) are provided by the Pi install / hoisted from the peer; ultimate-pi lists the latter three as `devDependencies` for `npm run check:ts`.

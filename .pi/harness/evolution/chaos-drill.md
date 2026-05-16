@@ -18,7 +18,7 @@ Run quarterly or before major harness releases. **No automation in Phase 2.**
 ## Pass criteria
 
 - All five scenarios produce expected custom entries and matching `harness_*` PostHog events within 60s.
-- `npm run harness:verify` still passes after drill.
+- `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` still passes after drill (see `.pi/scripts/README.md`).
 
 ## Rollback
 
