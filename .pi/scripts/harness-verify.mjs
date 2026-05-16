@@ -40,7 +40,10 @@ const REQUIRED_EXTENSIONS = [
 	"observation-bus.ts",
 	"drift-monitor.ts",
 	"sentrux-rules-sync.ts",
+	"harness-subagents.ts",
 ];
+
+const AGENTS_MANIFEST = join(ROOT, ".pi", "harness", "agents.manifest.json");
 
 const SENTRUX_MANIFEST = join(
 	ROOT,
@@ -202,6 +205,22 @@ async function main() {
 	ok("test-diff-golden.json");
 
 	await checkSentruxGate();
+
+	if (!(await fileExists(AGENTS_MANIFEST))) {
+		fail(
+			"missing .pi/harness/agents.manifest.json — run node \"$UP_PKG/.pi/scripts/harness-agents-manifest.mjs\" --write",
+		);
+	}
+	ok("agents.manifest.json present");
+
+	const { code: manifestCode, out: manifestOut } = await runNodeScript(
+		join(ROOT, ".pi", "scripts", "harness-agents-manifest.mjs"),
+		["--check"],
+	);
+	if (manifestCode !== 0) {
+		fail(manifestOut.trim() || "agents.manifest.json drift — regenerate with --write");
+	}
+	ok("agents.manifest.json in sync");
 
 	console.log("\nharness:verify PASS");
 }

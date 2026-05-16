@@ -25,7 +25,7 @@ When refining plans from noisy requirements:
 
 1. Distill user intent into acceptance criteria and non-goals (bullet list).
 2. Map criteria to `plan-packet` fields and testable checks.
-3. Flag ambiguities as human_required in eval verdict — do not guess scope.
+3. When gates return `human_required` or promotion is blocked, the orchestrator calls `ask_user` — do not guess scope.
 4. Reference graphify wiki or `graphify query` for architecture constraints before execute.
 
 ## Rules

@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "package": "ultimate-pi",
+  "package_version": "0.3.1",
+  "generated_at": "2026-05-16T08:44:48.417Z",
+  "agents": {
+    "pi-pi/agent-expert": {
+      "path": ".pi/agents/pi-pi/agent-expert.md",
+      "sha256": "f52f7310adc28c3e51fc21f7e82eb3c0ec8abf33a1936518355c673b21b9a706"
+    },
+    "pi-pi/cli-expert": {
+      "path": ".pi/agents/pi-pi/cli-expert.md",
+      "sha256": "6ecdbc37c60f1da7c68d504187454c95197dd19bd7091d97d136c6fb9e866838"
+    },
+    "pi-pi/config-expert": {
+      "path": ".pi/agents/pi-pi/config-expert.md",
+      "sha256": "c23b9b70a4c326cca2d139f18de48f8db2e0e28fa5ceb8205600f25430822a40"
+    },
+    "pi-pi/ext-expert": {
+      "path": ".pi/agents/pi-pi/ext-expert.md",
+      "sha256": "ae71ccf598217c830ac99e3150365a075bde931778d8bc6305d0270ac959a8a9"
+    },
+    "pi-pi/keybinding-expert": {
+      "path": ".pi/agents/pi-pi/keybinding-expert.md",
+      "sha256": "d8c3d645a507b453d9b338f7a5435232a23e4a00cb7981e3b81a4ce2a0df6bba"
+    },
+    "pi-pi/pi-orchestrator": {
+      "path": ".pi/agents/pi-pi/pi-orchestrator.md",
+      "sha256": "1323fc262112030320bdd7d7866fd69e1b861377bb30fd3553a5e3a4398f9090"
+    },
+    "pi-pi/prompt-expert": {
+      "path": ".pi/agents/pi-pi/prompt-expert.md",
+      "sha256": "0d9f5e3e8ab162149cac8f08e159a7b2150a11f53ebe7021e72f8277fa004d0c"
+    },
+    "pi-pi/skill-expert": {
+      "path": ".pi/agents/pi-pi/skill-expert.md",
+      "sha256": "91732a2479097a2645b6af56171d5cdc1ed67a0896ca54bc4badba250341698f"
+    },
+    "pi-pi/theme-expert": {
+      "path": ".pi/agents/pi-pi/theme-expert.md",
+      "sha256": "3d256049203356d87c36eac2232c0ad6261fec8af02eb15d3144b18a400ed64d"
+    },
+    "pi-pi/tui-expert": {
+      "path": ".pi/agents/pi-pi/tui-expert.md",
+      "sha256": "cd6aaf6ca28e6e65a72ef1dc3c96e3315669ec0f859c148f0f15d0ee74a263d7"
+    },
+    "harness/adversary": {
+      "path": ".pi/agents/harness/adversary.md",
+      "sha256": "17c29621d99dd46cf6ea6566845b502c5e825338b61f073a28cb53f297b2f208"
+    },
+    "harness/evaluator": {
+      "path": ".pi/agents/harness/evaluator.md",
+      "sha256": "71cfb070ec3bbec9d764052ba03fee8692f2db385ad19f15c2f3a157422c1c2b"
+    },
+    "harness/executor": {
+      "path": ".pi/agents/harness/executor.md",
+      "sha256": "02cd2f438d97abb9f35ca6cdab51b3733fc6a9076427cf9c2c93fd4593052539"
+    },
+    "harness/meta-optimizer": {
+      "path": ".pi/agents/harness/meta-optimizer.md",
+      "sha256": "faf81af85d273796f059395287058d2f16fe70903c70b8c6ac9b3c5f12fca69c"
+    },
+    "harness/planner": {
+      "path": ".pi/agents/harness/planner.md",
+      "sha256": "58d9c983bddddd37070f33742409f16474bf7c54bdccb8808fca4926f4adfdad"
+    },
+    "harness/sentrux-bootstrap": {
+      "path": ".pi/agents/harness/sentrux-bootstrap.md",
+      "sha256": "3a0b43b94386a7c541b8a806a37524a5e53f1c8049270db7a420680df5799eeb"
+    },
+    "harness/tie-breaker": {
+      "path": ".pi/agents/harness/tie-breaker.md",
+      "sha256": "c8fd02b3423760d9503e20ea27d3a90aa11326fc38c98f1e7253e67676b15e42"
+    },
+    "harness/trace-librarian": {
+      "path": ".pi/agents/harness/trace-librarian.md",
+      "sha256": "f44439758317b5fbae66b760bb6a1b6df19787d344bf7038712368e8fe0594ee"
+    }
+  }
+}

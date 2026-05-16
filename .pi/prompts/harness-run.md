@@ -34,6 +34,7 @@ If `--plan` is missing, stop and return:
 - Refuse execution if no valid plan packet is provided.
 - Keep edits strictly within approved scope.
 - If scope drift appears, stop and return to `harness-plan`.
+- For **implementation forks** inside approved scope, call `ask_user` with 2–4 options. For plan-level ambiguity, stop and return to `harness-plan`.
 - Record evaluator/adversary prerequisites for downstream gates.
 - Always prepare rollback artifacts as part of execution output.
 

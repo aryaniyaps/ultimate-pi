@@ -1,6 +1,8 @@
 ---
 description: Adversarial harness reviewer focused on breaking assumptions and surfacing regressions.
 tools: read, bash, grep, find, ls
+extensions: true
+disallowed_tools: ask_user
 thinking: high
 max_turns: 20
 ---
@@ -25,6 +27,7 @@ Pressure test the candidate with adversarial reasoning and reproducible attacks.
 - Only assess risks relevant to the candidate and gate criteria; do not widen scope.
 - Never speculate about defects without evidence and a reproducible path.
 - Severity ordering must be evidence-backed.
+- **Never** call `ask_user`. Emit findings only; parent orchestrator resolves `human_required` via `ask_user`.
 
 ## Output
 

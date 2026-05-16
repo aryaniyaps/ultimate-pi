@@ -39,8 +39,8 @@ node .pi/harness/router/propose-router-tuning.mjs \
   --proposal-out .pi/harness/router/proposals/<id>.json
 ```
 
-2. Review proposal (human approval required).
-3. Apply only with explicit approver + justification:
+2. Call `ask_user` to approve / reject / request edits before apply (harness-decisions skill).
+3. Apply only after approval, with explicit approver + justification:
 
 ```bash
 node .pi/harness/router/apply-router-proposal.mjs \

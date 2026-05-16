@@ -259,10 +259,10 @@ verify_sentrux() {
 		return
 	fi
 	sentrux plugin add-standard 2>/dev/null || warn "sentrux plugin add-standard skipped"
-	_sync_script="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/sentrux-rules-sync.mjs"
-	if [ -f "$_sync_script" ]; then
-		node "$_sync_script" --force 2>/dev/null ||
-			warn "sentrux rules sync failed (see .pi/scripts/README.md)"
+	_bootstrap="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/harness-sentrux-bootstrap.mjs"
+	if [ -f "$_bootstrap" ]; then
+		node "$_bootstrap" --force 2>/dev/null ||
+			warn "sentrux rules bootstrap failed (see harness-sentrux-setup skill)"
 	fi
 	if sentrux check . &>/dev/null; then
 		pass "sentrux $(sentrux --version 2>/dev/null | head -1)"

@@ -23,7 +23,12 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | Graphify bootstrap | `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"` |
 | CLI tool install + smoke tests | `bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"` |
 | Deterministic harness checks | `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` |
-| Sentrux rules from manifest | `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --force` |
+| Sentrux rules bootstrap (harness-setup) | `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"` |
+| Sentrux rules re-sync after manifest edit | `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force` or `/harness-sentrux-sync` |
+| Sentrux rules drift check (CI) | `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --check` |
+| Resolve package root (`UP_PKG`) | `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
+| Model-router config (Pi auth) | `node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs"` |
+| Project `.env` (append-only) | `node "$UP_PKG/.pi/scripts/harness-sync-env.mjs"` (`--create-missing` after user confirms) |
 | Model-router / Pi defaults | `harness-sync-model-router.mjs` (Step 3.5 of `/harness-setup`) |
 | Vendor router sync (this repo only) | `bash .pi/scripts/vendor-sync-pi-model-router.sh` or `npm run vendor:sync-router` |
 | Meta-optimizer (JSONL proposals) | `node "$UP_PKG/.pi/harness/evolution/meta-optimizer.mjs"` |

@@ -19,7 +19,8 @@ This scaffold is intentionally minimal and safe to adopt incrementally.
 ```bash
 UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
 node "$UP_PKG/.pi/scripts/harness-verify.mjs"
-node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --force   # after editing sentrux/architecture.manifest.json
+node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"       # idempotent bootstrap (/harness-setup)
+node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force   # after editing sentrux/architecture.manifest.json
 ```
 
 ## Governance Extensions

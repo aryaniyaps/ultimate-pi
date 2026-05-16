@@ -35,7 +35,7 @@ order = 2
 
 [[layers]]
 name = "agents"
-paths = [".pi/agents/*", ".pi/prompts/*", ".agents/skills/*"]
+paths = [".pi/agents/*", ".pi/harness/agents.manifest.json", ".pi/prompts/*", ".agents/skills/*"]
 order = 3
 # Agent definitions, prompts, and skills
 

@@ -1,11 +1,29 @@
 ---
 description: Full harness bootstrap — Graphify knowledge graph setup, optional self-hosted firecrawl (Docker), CLI tools install, pi extension packages, and verification. Run once per project.
-argument-hint: "[--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--force]"
+argument-hint: "[--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--non-interactive] [--force]"
 ---
 
 # harness-setup — Full Harness Bootstrap
 
 Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, CLI tools, pi extension packages, configuration files, and verification. Idempotent — safe to re-run, skips what's already installed.
+
+## Agent execution notes (read first)
+
+**Prefer bundled scripts over re-implementing steps.** Each script is idempotent. Do not duplicate Step 2 subsections (2.1–2.8) when `harness-cli-verify.sh` already passed.
+
+| Pitfall | Correct approach |
+|---------|------------------|
+| `UP_PKG="$(pwd)"` in an **external** repo | Wrong — scripts live in the npm package. Resolve via `harness-resolve-up-pkg.mjs` (see Step 0). |
+| Provider detection from `OPENAI_*` / `ANTHROPIC_*` env only | Wrong for pi users — keys live in `~/.pi/agent/auth.json`. Use `harness-generate-model-router.mjs` (Pi `ModelRegistry.getAvailable()`). |
+| Re-running 2.1–2.8 manually after CLI verify | Wasteful — trust `harness-cli-verify.sh` output; only fix reported ✗ lines. |
+| Overwriting `AGENTS.md` after graphify | Graphify appends a section — **merge**, do not replace (Step 4.3). |
+| `sentrux-rules-sync` without project manifest | Use **`harness-sentrux-bootstrap.mjs`** (Step 4.4) — seeds manifest + idempotent rules sync. |
+| Re-running bootstrap with `--force` on unchanged manifest | Wasteful but safe — default bootstrap skips when hash unchanged; `--force` only after manifest edits. |
+| `graph.json` uses `links`, not `edges` | Step 6 stats: `g.get('edges', g.get('links', []))`. |
+| Guessing Firecrawl / `.env` defaults when `ask_user` is available | **Mandatory `ask_user`** at Step 1.5 and 4.0 unless `--non-interactive` or `--skip-firecrawl-self`. |
+| `sudo apt-get` without passwordless sudo | Skip — report manual fix; do not block the rest of setup. |
+| `graphify codex install` | **Never run** — it writes `.codex/hooks.json`. Harness targets pi only (`graphify install --platform pi`). |
+| Overwriting `.env` | Use `harness-sync-env.mjs` — never rewrite; append missing keys only. |
 
 ## Parse arguments
 
@@ -14,11 +32,12 @@ Read `$ARGUMENTS` and map flags:
 - `--skip-graphify`
 - `--skip-tools`
 - `--skip-firecrawl-self`
+- `--non-interactive`
 - `--force`
 
 If a flag is unknown, stop and return:
 
-`Usage: /harness-setup [--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--force]`
+`Usage: /harness-setup [--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--non-interactive] [--force]`
 
 ## Step 0 — Pre-flight Environment Check
 
@@ -32,16 +51,29 @@ Block if node < 18, npm < 9, or git missing. Report versions and continue.
 
 Read `.pi/auto-commit.json` for co-author + branch config.
 
-Resolve the installed **ultimate-pi** package root (works in this repo and after `pi install npm:ultimate-pi`):
+Resolve **`UP_PKG`** (ultimate-pi npm package root — **not** the target project cwd):
 
 ```bash
-UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+UP_PKG=""
+for _pkg_root in \
+  "$(node -p "try{require('path').dirname(require.resolve('ultimate-pi/package.json'))}catch{''}" 2>/dev/null)" \
+  "$(npm root -g 2>/dev/null)/ultimate-pi" \
+  "$(pwd)"; do
+  [ -n "$_pkg_root" ] || continue
+  [ -f "$_pkg_root/.pi/scripts/harness-resolve-up-pkg.mjs" ] || continue
+  UP_PKG="$(node "$_pkg_root/.pi/scripts/harness-resolve-up-pkg.mjs")"
+  break
+done
+if [ -z "$UP_PKG" ] || [ ! -f "$UP_PKG/.pi/scripts/harness-cli-verify.sh" ]; then
+  echo "✗ ultimate-pi package not found. Install: pi install npm:ultimate-pi"
+  exit 1
+fi
 echo "ultimate-pi package: $UP_PKG"
 ```
 
-For extension package names, read **`$UP_PKG/.pi/settings.example.json`** (shipped template). Merge its `packages` array into the **project** `.pi/settings.json` if missing — do not copy the repo-dev `.pi/settings.json` from the package (it may contain `".."` and is not published).
+**Developing ultimate-pi from its git clone:** `$(pwd)` is tried last; it wins only when the clone contains `.pi/scripts/harness-resolve-up-pkg.mjs`.
 
-If `require.resolve('ultimate-pi/package.json')` fails (bare clone without resolving the package name), run from **this repository root**: `UP_PKG="$(pwd)"`.
+For extension package names, read **`$UP_PKG/.pi/settings.example.json`**. **Merge** its `packages` array into the **project** `.pi/settings.json` (add missing entries; keep user packages). Do not copy the repo-dev `.pi/settings.json` from the package (it may contain `".."` and is not published).
 
 ## Step 0.5 — Graphify (skip if `--skip-graphify`)
 
@@ -74,7 +106,7 @@ bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"
 If the bootstrap script is missing, run it from the installed ultimate-pi package (`.pi/scripts/` inside the npm package), or execute equivalent steps manually:
 
 1. Install `graphifyy` (`uv tool install` preferred; else `pip`/`pip3 install --user`)
-2. `graphify install --platform pi` (and `graphify cursor install` if `.cursor/` exists)
+2. `graphify install --platform pi` only. **Do not** run `graphify codex install` or `graphify cursor install`.
 3. `GRAPHIFY_VIZ_NODE_LIMIT=200000 graphify update .` — **required**; exits non-zero on failure
 4. If `GEMINI_API_KEY`, `GOOGLE_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `MOONSHOT_API_KEY` is set: `graphify extract .` for full semantic graph (optional enrichment)
 5. `graphify hook install` only when `.git/` exists
@@ -93,12 +125,29 @@ Read and summarize `graphify-out/GRAPH_REPORT.md` — god nodes and surprising c
 | `graph.json` exists but 0 nodes | Stale/partial output — re-run with `--force` |
 | `graphify extract` fails | No API key — code graph from `update` is still valid; note in report |
 
-## Step 1.5 — Optional Self-Hosted Firecrawl
+## Step 1.5 — Firecrawl deployment mode
 
-Ask: "Use self-hosted Firecrawl (local Docker) or cloud (api.firecrawl.dev)? [cloud/self]"
-Default: **cloud**.
+Skip entirely when `$ARGUMENTS` contains `--skip-firecrawl-self` (always **cloud**).
 
-If user chooses **self**:
+Otherwise, unless `$ARGUMENTS` contains `--non-interactive`, **call `ask_user`** before any 1.5.x Docker work:
+
+```json
+{
+  "question": "Which Firecrawl deployment should this project use?",
+  "context": "Self-hosted needs Docker (~8GB RAM). Cloud uses api.firecrawl.dev.",
+  "options": [
+    { "title": "Cloud (api.firecrawl.dev)", "description": "Default; set FIRECRAWL_API_KEY / firecrawl login" },
+    { "title": "Self-hosted (Docker :3002)", "description": "Runs firecrawl/ compose locally" }
+  ],
+  "allowFreeform": false
+}
+```
+
+- **`--non-interactive` (CI only):** use **cloud** without prompting; note in report.
+- If `ask_user` is **cancelled**, stop setup with `needs_clarification`.
+- **Never** assume cloud/self without `ask_user`, `--non-interactive`, or `--skip-firecrawl-self`.
+
+If user chooses **self-hosted**:
 
 ### 1.5.1 — Docker Engine Install
 
@@ -247,6 +296,8 @@ bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 ```
 
 **Do not continue** past Step 2 if `harness-cli-verify.sh` exits non-zero.
+
+**After the script exits 0:** do **not** re-run sections 2.1–2.8 individually unless the script reported a specific ✗ failure. Record auth/warning lines from script output in the final report.
 
 ### Manual reference (if script missing in target repo)
 
@@ -412,35 +463,12 @@ if ! command -v sentrux &>/dev/null || [ "$FORCE" = "true" ]; then
 fi
 ```
 
-Verify:
-```bash
-sentrux --version && echo "✓ sentrux installed" || echo "✗ sentrux install failed"
-```
-
 Install all 52 language plugins:
 ```bash
 sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or failed"
 ```
 
-Configure MCP server in `.pi/mcp.json` (see Step 4.3).
-
-Generate architectural rules from the harness manifest (creates/updates `.sentrux/rules.toml`):
-```bash
-node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --force
-# Or in pi: /harness-sentrux-sync
-```
-
-Edit layers/boundaries in `.pi/harness/sentrux/architecture.manifest.json` when the repo layout changes, then re-run sync. Custom TOML below the `harness:managed` markers is preserved.
-
-Verify rules:
-```bash
-sentrux check . && echo "✓ sentrux rules pass" || echo "✗ sentrux check failed"
-```
-
-Set up structural regression baseline (optional):
-```bash
-sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate run"
-```
+Configure MCP server in `.pi/mcp.json` (see Step 4.2). **Rules.toml bootstrap runs in Step 4.3** (idempotent, merge-safe).
 
 ## Step 3 — Pi Extension Packages
 
@@ -466,169 +494,99 @@ Verify each package:
 |---------|---------|-------|
 | `@posthog/pi` | Analytics event capture | F0 |
 | `pi-lean-ctx` | Context runtime (read/bash/find/grep/MCP bridge) | F0 |
-| `@tintinweb/pi-subagents` | L4 critic sub-agent spawn/control | P16 |
+| `harness-subagents` (bundled extension) | L4 sub-agent spawn, blackboard, package agents | P16 |
 | `@sting8k/pi-vcc` | VCC compaction / conversation memory | Shipped |
 | `pi-model-router` | Vendored (`vendor/`); activates after `.pi/model-router.json` exists | F0 |
 
 ## Step 3.5 — Model Router Configuration (Dynamic)
 
-`.pi/model-router.json` is **user-specific** (differs per user's providers).
-It is gitignored. Generate it dynamically from your `.env`.
+`.pi/model-router.json` is **user-specific** (gitignored). Generate from **Pi authenticated providers** (`~/.pi/agent/auth.json`, OAuth, env) — **not** env-var guessing alone.
 
-The script below:
-1. Detects available AI providers from env vars (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, and `OPENAI_API_BASE` to detect opencode gateway)
-2. Generates a full `model-router.json` with `auto`, `cheap`, and `deep` profiles
-3. Only writes if file doesn't exist yet (safe to re-run, will skip existing)
+Pi API (see `packages/coding-agent` docs / SDK example `02-custom-model.ts`):
+
+- `AuthStorage.create()` → credentials store
+- `ModelRegistry.create(authStorage)` → registry
+- `await modelRegistry.getAvailable()` → models with working auth (same as interactive pi)
 
 ```bash
-UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
-
 # Verify vendored extension source ships with ultimate-pi
 ls "$UP_PKG/vendor/pi-model-router/extensions/index.ts" 2>/dev/null \
   && echo "✓ vendored pi-model-router" \
   || echo "✗ missing vendor/pi-model-router"
 
-# Generate config from detected providers (only if missing)
-if [ -f .pi/model-router.json ]; then
-  echo "✓ .pi/model-router.json already exists — preserving user config"
-else
-  node << 'GENDONE'
-const fs = require('fs');
-const path = '.pi/model-router.json';
-
-// --- Detect providers from env ---
-const hasOpenCode = process.env.OPENAI_API_BASE?.includes('opencode.ai');
-const hasOpenAI = !!process.env.OPENAI_API_KEY;
-const hasAnthropic = !!process.env.ANTHROPIC_API_KEY;
-const hasGoogle = !!process.env.GOOGLE_API_KEY;
-
-// If opencode gateway is detected, prefer opencode-go/ models
-// Otherwise use standard provider prefixes
-const P = hasOpenCode ? 'opencode-go' : 'openai';
-
-function model(prefix, name) { return `${prefix}/${name}`; }
-
-// Best available high-end model per provider
-const highModel = hasOpenCode
-  ? model('opencode-go', 'deepseek-v4-pro')
-  : hasAnthropic
-    ? 'anthropic/claude-sonnet-4-20250514'
-    : hasGoogle
-      ? 'google/gemini-2.5-flash-001'
-      : hasOpenAI
-        ? model('openai', 'gpt-4o')
-        : null;
-
-const mediumModel = hasOpenCode
-  ? model('opencode-go', 'qwen3.6-plus')
-  : hasAnthropic
-    ? 'anthropic/claude-sonnet-4-20250514'
-    : hasGoogle
-      ? 'google/gemini-flash-latest'
-      : hasOpenAI
-        ? model('openai', 'gpt-4o-mini')
-        : null;
-
-const lowModel = hasOpenCode
-  ? model('opencode-go', 'deepseek-v4-flash')
-  : hasAnthropic
-    ? 'anthropic/claude-3-5-haiku-20241022'
-    : hasGoogle
-      ? 'google/gemini-flash-lite-latest'
-      : hasOpenAI
-        ? model('openai', 'gpt-4o-mini')
-        : null;
-
-if (!highModel || !mediumModel || !lowModel) {
-  console.log('✗ No AI provider env detected — skip model-router.json (set OPENAI_API_BASE for opencode, or ANTHROPIC/GOOGLE/OPENAI keys)');
-  process.exit(0);
-}
-
-const fallbacks = [];
-if (hasAnthropic && !highModel.startsWith('anthropic/')) fallbacks.push('anthropic/claude-3-5-sonnet-20241022');
-if (hasGoogle && !highModel.startsWith('google/')) fallbacks.push('google/gemini-flash-latest');
-
-const config = {
-  defaultProfile: 'auto',
-  debug: false,
-  classifierModel: mediumModel,
-  phaseBias: 0.5,
-  maxSessionBudget: 1.0,
-  largeContextThreshold: 100000,
-  rules: [
-    {
-      matches: ['deploy', 'production', 'release'],
-      tier: 'high',
-      reason: 'Safety check for production tasks'
-    },
-    { matches: 'changelog', tier: 'low' }
-  ],
-  profiles: {
-    auto: {
-      high: { model: highModel, thinking: 'high', fallbacks },
-      medium: { model: mediumModel, thinking: 'medium' },
-      low: { model: lowModel, thinking: 'low' }
-    },
-    cheap: {
-      high: { model: mediumModel, thinking: 'low' },
-      medium: { model: lowModel, thinking: 'off' },
-      low: { model: lowModel, thinking: 'off' }
-    },
-    deep: {
-      high: { model: highModel, thinking: 'xhigh', fallbacks },
-      medium: { model: mediumModel, thinking: 'medium' },
-      low: { model: lowModel, thinking: 'low' }
-    }
-  }
-};
-
-fs.mkdirSync('.pi', { recursive: true });
-fs.writeFileSync(path, JSON.stringify(config, null, 2) + '\n');
-console.log('✓ Generated .pi/model-router.json from detected providers:');
-if (hasOpenCode) console.log('  Provider: opencode gateway');
-if (hasOpenAI) console.log('  Detected: OPENAI_API_KEY');
-if (hasAnthropic) console.log('  Detected: ANTHROPIC_API_KEY');
-if (hasGoogle) console.log('  Detected: GOOGLE_API_KEY');
-console.log(`  High tier: ${highModel}`);
-console.log(`  Medium tier: ${mediumModel}`);
-console.log(`  Low tier: ${lowModel}`);
-GENDONE
-fi
+# Generate from Pi registry (skips if .pi/model-router.json exists; --force to regenerate)
+node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs"
+# Preview only: node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs" --dry-run
 
 # Merge router defaults after config exists (never adds npm packages — router is vendored)
 node "$UP_PKG/.pi/scripts/harness-sync-model-router.mjs"
 ```
 
-Do NOT block. If generation fails, warn in report and continue (defaults script clears `defaultProvider` if it pointed at `router` while no config file exists).
+If generation prints "No authenticated Pi providers": warn in report — user should run **`/login`** in pi (or `pi login`) then re-run Step 3.5. Do **not** infer providers from `OPENAI_API_KEY` alone; pi sessions often use `opencode-go` via auth.json without those env vars.
+
+Do NOT block setup. If no config is written, `harness-sync-model-router.mjs` clears a premature `defaultProvider: "router"` in `.pi/settings.json`.
 
 **Router onboarding** — The vendored extension starts only after `.pi/model-router.json` appears. Running the script above prepares that file plus optional Pi defaults (**`router` / `auto`**) via `harness-sync-model-router.mjs` when `defaultProvider` was unset—then **`/reload`**.
 
 Manual override: **`/router profile auto`** anytime after reload if they changed defaults.
 
-## Step 3.6 — Seed `.pi/agents` (pi-subagents)
+## Step 3.6 — Harness agents (package-resolved)
 
-`@tintinweb/pi-subagents` reads agent definitions from **this project's** `.pi/agents/`, not from the installed npm tree. Copy packaged agents when missing (preserves user edits):
+`harness-subagents` loads agents from the installed **`ultimate-pi`** package (`$UP_PKG/.pi/agents/**`) with namespaced ids (`harness/planner`, `pi-pi/agent-expert`). **Do not copy** agents into the project unless you want a deliberate override.
+
+Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/planner.md` overrides the package planner).
+
+Verify manifest drift after `pi update ultimate-pi`:
 
 ```bash
-UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
-mkdir -p .pi/agents/harness .pi/agents/pi-pi
-for dir in harness pi-pi; do
-  [ -d "$UP_PKG/.pi/agents/$dir" ] || continue
-  for f in "$UP_PKG/.pi/agents/$dir"/*.md; do
-    [ -f "$f" ] || continue
-    base="$(basename "$f")"
-    [ -f ".pi/agents/$dir/$base" ] || cp "$f" ".pi/agents/$dir/$base"
-  done
-done
-echo "✓ .pi/agents (harness + pi-pi) seeded from package"
+node "$UP_PKG/.pi/scripts/harness-agents-manifest.mjs" --check
 ```
 
 ## Step 4 — Configuration Files
+
+### 4.0 — Project `.env` (non-destructive)
+
+Harness extensions read config from project-root `.env` via `dotenv-loader.ts` on session start. **Never overwrite** an existing `.env`.
+
+```bash
+# If .env exists: append only missing harness keys (preserves all current values)
+node "$UP_PKG/.pi/scripts/harness-sync-env.mjs"
+```
+
+If **no** `.env` at project root:
+
+- Unless `--non-interactive`, **call `ask_user`**:
+
+```json
+{
+  "question": "No .env at project root. Create one from the harness template?",
+  "context": "Non-destructive: only creates if missing; never overwrites existing files.",
+  "options": [
+    { "title": "Create from harness template", "description": "Runs harness-sync-env.mjs --create-missing" },
+    { "title": "Skip for now", "description": "Warn in report; user copies template manually later" }
+  ],
+  "allowFreeform": false
+}
+```
+
+- On **create**: `node "$UP_PKG/.pi/scripts/harness-sync-env.mjs" --create-missing`
+- On **skip** or `--non-interactive`: warn in report (non-interactive skips creation)
+- If `ask_user` cancelled: stop with `needs_clarification`
+
+Rules:
+
+- **Do not** `cp` over an existing `.env`.
+- **Do not** edit or remove keys the user already set.
+- Re-runs only add keys from `$UP_PKG/.pi/harness/env.harness.template` that are absent (managed block at EOF).
+- Ensure `.env` is gitignored (Step 4.1).
+
+Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`, `FIRECRAWL_API_KEY`, `PI_VCC_CONFIG_PATH`, plus commented optional PostHog / Graphify / self-hosted Firecrawl vars.
 
 ### 4.1 — .gitignore Entries
 
 Ensure `.gitignore` contains:
 ```
+.env
 .firecrawl/
 .raw/
 .vault-meta/
@@ -668,9 +626,43 @@ This gives agents real-time access to structural health metrics:
 - `check_rules` — architectural constraint enforcement
 - `health`, `rescan`, `evolution`, `dsm`, `test_gaps`
 
-### 4.3 — Project AGENTS.md
+### 4.3 — Sentrux rules bootstrap (required)
 
-Create a minimal `AGENTS.md` in the project root for agent onboarding:
+**Skill:** invoke **harness-sentrux-setup** before hand-editing rules or manifest.
+
+**Optional agent:** spawn `harness/sentrux-bootstrap` if Sentrux setup needs a dedicated pass.
+
+From **project root**, run the bundled bootstrap (seeds manifest when missing, syncs `.sentrux/rules.toml` without clobbering custom TOML):
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"
+# After editing architecture.manifest.json:
+node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force
+# In pi: /harness-sentrux-sync  (always --force sync)
+```
+
+| Command | When |
+|---------|------|
+| `harness-sentrux-bootstrap.mjs` (no flags) | `/harness-setup`, first install, re-run safe |
+| `harness-sentrux-bootstrap.mjs --force` | Manifest layers/boundaries/constraints changed |
+| `sentrux-rules-sync.mjs --check` | CI / harness-verify drift only |
+| `/harness-sentrux-sync` | Interactive re-sync from pi |
+
+`harness-seed-project-contracts.mjs` (Step 0.5) may copy `architecture.manifest.json` early; bootstrap still personalizes `project` on first seed and writes `rules.toml`.
+
+Verify rules:
+```bash
+sentrux check . && echo "✓ sentrux rules pass" || echo "✗ sentrux check failed"
+```
+
+Set up structural regression baseline (optional):
+```bash
+sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate run"
+```
+
+### 4.4 — Project AGENTS.md
+
+**Do not overwrite** an existing `AGENTS.md` — graphify bootstrap may have appended a `## Graphify` section. If missing, create minimal onboarding content; if present, only add harness subsections that are absent.
 
 ```markdown
 # ultimate-pi: Agentic Harness
@@ -686,7 +678,7 @@ Created: $(date +%Y-%m-%d)
 - .pi/harness/specs/ → Harness contracts and schema docs
 - .pi/harness/incidents/ → Incident and override records
 - `.agents/skills/` (npm package) → Harness skills (no copy into `.pi/skills/` needed)
-- `.pi/agents/` → Specialized agents (seed from package — see Step 3.6)
+- `.pi/agents/` → Optional per-repo agent overrides (package agents load automatically — see Step 3.6)
 
 ## Graphify-First Workflow
 
@@ -772,7 +764,7 @@ import json
 with open('graphify-out/graph.json') as f:
     g = json.load(f)
 nodes = g['nodes']
-edges = g['edges']
+edges = g.get('edges', g.get('links', []))
 communities = len(set(n.get('community', 0) for n in nodes))
 god_nodes = sorted(nodes, key=lambda n: n.get('degree', 0), reverse=True)[:5]
 print(f'Nodes: {len(nodes)}  |  Edges: {len(edges)}  |  Communities: {communities}')
@@ -797,11 +789,13 @@ Output summary table:
 | biome | ✓/✗ | Project config: found/default |
 | ast-grep | ✓/✗ | AST-aware code search (`sg`)
 | gh CLI | ✓/✗ | Auth: yes/no |
-| sentrux | ✓/✗ | Version + plugins: 52 languages |
+| sentrux | ✓/✗ | CLI + plugins; rules via Step 4.3 bootstrap |
+| Sentrux rules.toml | ✓/✗ | `.sentrux/rules.toml` synced from manifest |
 | pi extensions | ✓/✗ | 4 packages |
 | model router | ✓/✗ | Package + config verified, activation via `/router profile auto` |
+| `.env` | ✓/✗/ask | Created / keys appended / user declined |
 
-| .gitignore | ✓/✗ | 7 entries added |
+| .gitignore | ✓/✗ | entries added (incl. `.env`) |
 | ./raw directory | ✓/✗ | Created for graphify source ingestion |
 | Firecrawl mode | self/cloud | Self-hosted on :3002 / Cloud (api.firecrawl.dev) |
 | Docker Engine | ✓/✗/N/A | Installed / Not needed (cloud mode) |
@@ -813,7 +807,8 @@ Next steps:
 4. If gh not authenticated: `gh auth login`
 5. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
 6. If sentrux plugins missing: `sentrux plugin add-standard`
-7. First harness run: `/harness "your task description"`
+7. If rules.toml missing or out of date: `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force`
+8. First harness run: `/harness "your task description"`
 
 ## Guard Rails
 
@@ -857,6 +852,9 @@ Next steps:
 | Port 3002 already in use | Warn. User must free port or change `PORT` in `firecrawl/.env`. |
 | Self-hosted health check timeout | Show logs: `docker compose -f firecrawl/docker-compose.yaml logs`. Continue — may need more time. |
 | sentrux install fails | Show install script output. Fallback: download from https://github.com/sentrux/sentrux/releases/latest |
+| No model-router.json / "No authenticated Pi providers" | Run `/login` in pi, then `node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs" --force` |
+| UP_PKG not found | `pi install npm:ultimate-pi` or `npm i -g ultimate-pi`; verify with `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
+| No `.env` at project root | `ask_user` create vs skip; on create: `harness-sync-env.mjs --create-missing` |
 
 ## Flags
 
@@ -865,5 +863,6 @@ Next steps:
 | `--skip-graphify` | Skip Step 0.5 (graph build). Only when a valid `graphify-out/graph.json` already exists. |
 | `--skip-tools` | Skip Step 2 (CLI tool installs). Use when tools already set up. |
 | `--skip-firecrawl-self` | Skip Step 1.5 (self-hosted Firecrawl). Always use cloud. |
+| `--non-interactive` | Skip all `ask_user` prompts; Firecrawl=cloud, skip `.env` creation with warning. CI/automation only. |
 | `--force` | Reinstall all tools even if already present. Overwrite existing files. |
 

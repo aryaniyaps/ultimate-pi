@@ -13,7 +13,7 @@ Aligned with [pi packages](https://github.com/badlogic/pi-mono/blob/main/package
 Pi does **not** define `scripts`, `agents`, or `providers` in the manifest.
 
 - **Harness scripts** → `.pi/scripts/` — run via `node` / `bash` and `$UP_PKG` (see `.pi/scripts/README.md`); do not require npm script aliases in consumer `package.json`
-- **Subagent agents** → `.pi/agents/**/*.md` (loaded by `@tintinweb/pi-subagents` from the **project** `.pi/agents/`; `/harness-setup` seeds them from the installed package)
+- **Subagent agents** → `.pi/agents/**/*.md` on the installed package (`harness/planner`, `pi-pi/agent-expert`, …) via `harness-subagents.ts`; optional **project overrides** at the same relative path under `.pi/agents/`. Version drift: `.pi/harness/agents.manifest.json` (regenerate with `harness-agents-manifest.mjs --write`)
 - **Providers** → install via `bundledDependencies` + user settings, not a separate manifest directory
 
 ## npm `files` allowlist

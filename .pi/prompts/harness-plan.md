@@ -21,14 +21,14 @@ If task is missing, stop and return:
 ## Process
 
 1. Parse the requested task and extract concrete scope and constraints.
-2. If ambiguity blocks safe execution planning, request clarification and stop.
+2. If ambiguity blocks safe execution planning, call `ask_user` (harness-decisions skill). Stop with `needs_clarification` if the user cancels.
 3. Build a `PlanPacket` that is valid against `.pi/harness/specs/plan-packet.schema.json`.
 4. Include rollback artifacts in all required forms.
 
 ## Hard requirements
 
 - Do not run mutating tools in this command.
-- If task scope is ambiguous, request clarification and stop.
+- If task scope is ambiguous, call `ask_user` — do not guess or use prose-only clarification.
 - Produce a `PlanPacket` matching `.pi/harness/specs/plan-packet.schema.json`.
 - Include rollback artifacts in all three forms:
   - revert command
