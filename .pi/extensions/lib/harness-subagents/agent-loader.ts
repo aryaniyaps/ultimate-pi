@@ -3,7 +3,7 @@
  */
 
 import { createHash } from "node:crypto";
-import { existsSync, readdirSync, readFileSync, type Dirent } from "node:fs";
+import { type Dirent, existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { getAgentDir } from "@mariozechner/pi-coding-agent";
 import { parseAgentMarkdown } from "./agent-parser.js";
