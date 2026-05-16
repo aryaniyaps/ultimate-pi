@@ -63,7 +63,7 @@ export function writeInitialEntry(
 		timestamp: new Date().toISOString(),
 		cwd,
 	};
-	writeFileSync(path, JSON.stringify(entry) + "\n", "utf-8");
+	writeFileSync(path, `${JSON.stringify(entry)}\n`, "utf-8");
 }
 
 /**
@@ -96,7 +96,7 @@ export function streamToOutputFile(
 				cwd,
 			};
 			try {
-				appendFileSync(path, JSON.stringify(entry) + "\n", "utf-8");
+				appendFileSync(path, `${JSON.stringify(entry)}\n`, "utf-8");
 			} catch {
 				/* ignore write errors */
 			}

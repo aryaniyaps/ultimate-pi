@@ -207,7 +207,7 @@ function truncateLine(text: string, len = 60): string {
 			.find((l) => l.trim())
 			?.trim() ?? "";
 	if (line.length <= len) return line;
-	return line.slice(0, len) + "…";
+	return `${line.slice(0, len)}…`;
 }
 
 /** Build a human-readable activity string from currently-running tools or response text. */
@@ -232,7 +232,7 @@ export function describeActivity(
 				parts.push(action);
 			}
 		}
-		return parts.join(", ") + "…";
+		return `${parts.join(", ")}…`;
 	}
 
 	// No tools active — show truncated response text if available
@@ -400,7 +400,7 @@ export class AgentWidget {
 		for (const a of finished) {
 			finishedLines.push(
 				truncate(
-					theme.fg("dim", "├─") + " " + this.renderFinishedLine(a, theme),
+					`${theme.fg("dim", "├─")} ${this.renderFinishedLine(a, theme)}`,
 				),
 			);
 		}

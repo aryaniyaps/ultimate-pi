@@ -208,7 +208,7 @@ export class AgentManager {
 			const onParentAbort = () => this.abort(id);
 			options.signal.addEventListener("abort", onParentAbort, { once: true });
 			detachParentSignal = () =>
-				options.signal!.removeEventListener("abort", onParentAbort);
+				options.signal?.removeEventListener("abort", onParentAbort);
 		}
 		const detach = () => {
 			detachParentSignal?.();
@@ -224,7 +224,7 @@ export class AgentManager {
 			inheritContext: options.inheritContext,
 			thinkingLevel: options.thinkingLevel,
 			cwd: worktreeCwd,
-			signal: record.abortController!.signal,
+			signal: record.abortController?.signal,
 			onToolActivity: (activity) => {
 				if (activity.type === "end") record.toolUses++;
 				options.onToolActivity?.(activity);

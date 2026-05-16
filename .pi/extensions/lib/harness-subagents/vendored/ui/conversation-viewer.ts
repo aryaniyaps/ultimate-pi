@@ -279,7 +279,7 @@ export class ConversationViewer implements Component {
 			} else if (msg.role === "toolResult") {
 				const text = extractText(msg.content);
 				const truncated =
-					text.length > 500 ? text.slice(0, 500) + "... (truncated)" : text;
+					text.length > 500 ? `${text.slice(0, 500)}... (truncated)` : text;
 				if (!truncated.trim()) continue;
 				if (needsSeparator) lines.push(th.fg("dim", "───"));
 				lines.push(th.fg("dim", "[Result]"));
@@ -295,7 +295,7 @@ export class ConversationViewer implements Component {
 				if (bash.output?.trim()) {
 					const out =
 						bash.output.length > 500
-							? bash.output.slice(0, 500) + "... (truncated)"
+							? `${bash.output.slice(0, 500)}... (truncated)`
 							: bash.output;
 					for (const line of wrapTextWithAnsi(out.trim(), width)) {
 						lines.push(th.fg("dim", line));

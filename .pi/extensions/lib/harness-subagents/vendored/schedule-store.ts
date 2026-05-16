@@ -81,7 +81,7 @@ export class ScheduleStore {
 
 	constructor(filePath: string) {
 		this.filePath = filePath;
-		this.lockPath = filePath + ".lock";
+		this.lockPath = `${filePath}.lock`;
 		mkdirSync(dirname(filePath), { recursive: true });
 		this.load();
 	}
@@ -106,7 +106,7 @@ export class ScheduleStore {
 			version: 1,
 			jobs: [...this.jobs.values()],
 		};
-		const tmp = this.filePath + ".tmp";
+		const tmp = `${this.filePath}.tmp`;
 		writeFileSync(tmp, JSON.stringify(data, null, 2));
 		renameSync(tmp, this.filePath);
 	}

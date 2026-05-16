@@ -628,7 +628,7 @@ export function getAgentConversation(session: AgentSession): string {
 				parts.push(`[Tool Calls]:\n${toolCalls.join("\n")}`);
 		} else if (msg.role === "toolResult") {
 			const text = extractText(msg.content);
-			const truncated = text.length > 200 ? text.slice(0, 200) + "..." : text;
+			const truncated = text.length > 200 ? `${text.slice(0, 200)}...` : text;
 			parts.push(`[Tool Result (${msg.toolName})]: ${truncated}`);
 		}
 	}

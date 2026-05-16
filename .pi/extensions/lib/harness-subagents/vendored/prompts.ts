@@ -53,7 +53,7 @@ Platform: ${env.platform}`;
 		}
 	}
 	const extrasSuffix =
-		extraSections.length > 0 ? "\n\n" + extraSections.join("\n") : "";
+		extraSections.length > 0 ? `\n\n${extraSections.join("\n")}` : "";
 
 	if (config.promptMode === "append") {
 		const identity = parentSystemPrompt || genericBase;
@@ -93,9 +93,7 @@ You have been invoked to handle a specific task autonomously.
 
 ${envBlock}`;
 
-	return (
-		activeAgentTag + replaceHeader + "\n\n" + config.systemPrompt + extrasSuffix
-	);
+	return `${activeAgentTag + replaceHeader}\n\n${config.systemPrompt}${extrasSuffix}`;
 }
 
 /** Fallback base prompt when parent system prompt is unavailable in append mode. */
