@@ -21,6 +21,10 @@ import {
 	getLatestRunContext,
 	syncPlannerApprovalsToParent,
 } from "../../../../lib/harness-run-context.js";
+import {
+	formatPlanReviewUserHint,
+	syncPlannerPlanReviewToDisk,
+} from "../../plan-approval/plan-review.js";
 import { getDriftReport } from "../agent-manifest.js";
 import { Blackboard } from "../blackboard.js";
 import {
@@ -759,7 +763,9 @@ export function createHarnessSubagentsExtension(packageRoot: string) {
 		});
 
 		// Live widget: show running agents above editor
-		const widget = new AgentWidget(manager, agentActivity);
+		const widget = new AgentWidget(manager, agentActivity, () => {
+			pi.events.emit("subagents:agents-widget-mounted", {});
+		});
 
 		// ---- Join mode configuration ----
 		let defaultJoinMode: JoinMode = "smart";
@@ -1501,6 +1507,7 @@ Guidelines:
 
 					clearInterval(spinnerInterval);
 
+					let plannerReviewPath: string | null = null;
 					if (
 						subagentType === "harness/planner" &&
 						record.session &&
@@ -1510,11 +1517,18 @@ Guidelines:
 						const parentEntries = ctx.sessionManager.getEntries();
 						const runCtx = getLatestRunContext(parentEntries);
 						if (runCtx) {
+							const subEntries = record.session.sessionManager.getEntries();
 							syncPlannerApprovalsToParent(
 								(type, data) => pi.appendEntry(type, data),
 								parentEntries,
-								record.session.sessionManager.getEntries(),
+								subEntries,
 								runCtx,
+							);
+							plannerReviewPath = await syncPlannerPlanReviewToDisk(
+								process.cwd(),
+								runCtx,
+								subEntries,
+								{ agentStatus: record.status },
 							);
 						}
 					}
@@ -1547,9 +1561,14 @@ Guidelines:
 						(record.completedAt ?? Date.now()) - record.startedAt;
 					const statsParts = [`${record.toolUses} tool uses`];
 					if (tokenText) statsParts.push(tokenText);
+					const reviewNote =
+						plannerReviewPath && subagentType === "harness/planner"
+							? `\n\n${formatPlanReviewUserHint(plannerReviewPath)}\n`
+							: "";
 					return textResult(
 						`${fallbackNote}Agent completed in ${formatMs(durationMs)} (${statsParts.join(", ")})${getStatusNote(record.status)}.\n\n` +
-							(record.result?.trim() || "No output."),
+							(record.result?.trim() || "No output.") +
+							reviewNote,
 						details,
 					);
 				},
@@ -1611,6 +1630,29 @@ Guidelines:
 						statsParts.push(`Compactions: ${record.compactionCount}`);
 					statsParts.push(`Duration: ${duration}`);
 
+					let plannerReviewPath: string | null = null;
+					if (record.session && record.status !== "running") {
+						const parentEntries = _ctx.sessionManager.getEntries();
+						const runCtx = getLatestRunContext(parentEntries);
+						if (runCtx) {
+							const subEntries = record.session.sessionManager.getEntries();
+							syncPlannerApprovalsToParent(
+								(type, data) => pi.appendEntry(type, data),
+								parentEntries,
+								subEntries,
+								runCtx,
+							);
+							if (record.type === "harness/planner") {
+								plannerReviewPath = await syncPlannerPlanReviewToDisk(
+									process.cwd(),
+									runCtx,
+									subEntries,
+									{ agentStatus: record.status },
+								);
+							}
+						}
+					}
+
 					let output =
 						`Agent: ${record.id}\n` +
 						`Type: ${displayName} | Status: ${record.status} | ${statsParts.join(" | ")}\n` +
@@ -1623,25 +1665,15 @@ Guidelines:
 						output += `Error: ${record.error}`;
 					} else {
 						output += record.result?.trim() || "No output.";
+						if (plannerReviewPath && record.type === "harness/planner") {
+							output += `\n\n${formatPlanReviewUserHint(plannerReviewPath)}`;
+						}
 					}
 
 					// Mark result as consumed — suppresses the completion notification
 					if (record.status !== "running" && record.status !== "queued") {
 						record.resultConsumed = true;
 						cancelNudge(params.agent_id);
-					}
-
-					if (record.session && record.status !== "running") {
-						const parentEntries = _ctx.sessionManager.getEntries();
-						const runCtx = getLatestRunContext(parentEntries);
-						if (runCtx) {
-							syncPlannerApprovalsToParent(
-								(type, data) => pi.appendEntry(type, data),
-								parentEntries,
-								record.session.sessionManager.getEntries(),
-								runCtx,
-							);
-						}
 					}
 
 					// Verbose: include full conversation

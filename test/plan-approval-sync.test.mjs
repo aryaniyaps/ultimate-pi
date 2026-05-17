@@ -86,3 +86,19 @@ test("indexOfLastPlanCommand still finds harness-plan turn", () => {
 	];
 	assert.equal(indexOfLastPlanCommand(entries), 0);
 });
+
+test("hasPlanUserApproval after bridged approve_plan blocks duplicate parent approval", () => {
+	const entries = [
+		{ type: "custom", customType: "harness-turn", data: { command: "harness-plan" } },
+		{
+			type: "custom",
+			customType: "harness-plan-approval",
+			data: {
+				plan_id: "plan-001",
+				approved_at: "2026-05-17T00:00:00.000Z",
+				source: "approve_plan",
+			},
+		},
+	];
+	assert.equal(hasPlanUserApproval(entries, { sincePlanCommand: true }), true);
+});

@@ -11,7 +11,12 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import registerVcc from "../../vendor/pi-vcc/index.js";
+import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+
+// @ts-expect-error pi extensions run as ESM
+const MODULE_URL = import.meta.url;
 
 export default function ultimatePiVcc(pi: ExtensionAPI): void {
+	if (!claimExtensionLoad("ultimate-pi-vcc", MODULE_URL)) return;
 	registerVcc(pi);
 }

@@ -9,6 +9,7 @@ import {
 	saveRunContextToDisk,
 	validatePlanPacket,
 } from "../../../lib/harness-run-context.js";
+import { writePlanReviewMarkdown } from "./plan-review.js";
 
 export const CREATE_PLAN_SNIPPET =
 	"create_plan({ plan_packet: { ...approved PlanPacket } })";
@@ -115,6 +116,10 @@ export async function executeCreatePlan(
 	} catch {
 		/* disk mirror best-effort */
 	}
+
+	await writePlanReviewMarkdown(deps.projectRoot, updated, planPacket, {
+		status: "committed",
+	});
 
 	deps.onCommitted(updated, planPacket, planPath);
 

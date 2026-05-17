@@ -40,10 +40,25 @@ Otherwise use `HarnessSpawnContext` from `[HarnessRunContext]` for greenfield `m
 Agent({ subagent_type: "harness/planner", prompt: "<task + HarnessSpawnContext JSON + output schema>" })
 ```
 
-3. `get_subagent_result` — parse final JSON (`status`, `plan_packet`, `human_summary`, `clarification`) via fenced `json` block.
-4. If `status === "ready"` and parent `harness-run-context` shows `plan_ready: true` (planner called `create_plan`), confirm `plan_packet_path` exists — do **not** write the file yourself.
-5. If `needs_clarification`, tell the user the planner is waiting — do **not** re-spawn; user should answer in the subagent or re-run `/harness-plan`.
-6. Do **not** call `ask_user`, `approve_plan`, or `create_plan` in this parent session.
+3. **Always** call `get_subagent_result` with the agent id from step 2 (use `wait: true` if the agent is still running). Parse final JSON (`status`, `plan_packet`, `human_summary`, `clarification`) from a fenced `json` block when present. Treat `plan_packet` in that JSON as **read-only summary context** — not input for another approval tool call.
+4. **Show the editor review path** from `[HarnessRunContext]` `plan_review_path` (`.pi/harness/runs/<run_id>/plan-review.md`). Tell the user to open that file in VS Code to read the full plan. If the Agent result already includes an editor review path, repeat it prominently.
+5. If `status === "ready"` and `[HarnessRunContext]` shows `plan_ready: true` (planner called `create_plan`), confirm `plan_packet_path` exists — do **not** write the file yourself.
+6. If `needs_clarification`, tell the user the planner is waiting — do **not** re-spawn; user should answer in the subagent or re-run `/harness-plan`.
+7. If the planner was **stopped** or errored but `plan-review.md` exists, summarize what is in that file and how to continue (`/harness-plan` to resume). Do **not** re-spawn automatically.
+8. Do **not** call `ask_user`, `approve_plan`, or `create_plan` in this parent session.
+
+## After subagent returns (no second approval)
+
+User approval happens **once**, inside the planner subagent: `approve_plan` uses the parent TUI bridge. You are the orchestrator, **not** an approver.
+
+After `get_subagent_result`:
+
+- If `[HarnessRunContext]` shows `plan_ready: true`, or the transcript already has `harness-plan-approval` / bridged `approve_plan` with **Approve** → planning is complete. **Stop.** Summarize the plan (scope + top acceptance checks) and set `next_command: /harness-run`.
+- Do **not** call `approve_plan` to “confirm” using `plan_packet` from subagent JSON.
+- Do **not** call `ask_user` with Approve / Request changes / Cancel for the same plan.
+- Do **not** re-spawn the planner to “get approval again”.
+
+If `status === "ready"` but `plan_ready` is false → planner approved but `create_plan` may have failed; tell the user to run `/harness-plan-commit` — **not** a second `approve_plan`.
 
 ## Parent rules
 
@@ -55,4 +70,5 @@ Agent({ subagent_type: "harness/planner", prompt: "<task + HarnessSpawnContext J
 
 - `plan_status`: `ready` or `needs_clarification`
 - `risk_level` used
+- `plan_review_path` shown for editor review
 - `next_command`: `/harness-run` when `ready` (never `/harness-run --plan …`)

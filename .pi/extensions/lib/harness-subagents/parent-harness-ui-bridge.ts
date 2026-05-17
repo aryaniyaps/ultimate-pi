@@ -35,6 +35,7 @@ import {
 } from "../plan-approval/create-plan.js";
 import { runPlanApprovalDialog } from "../plan-approval/dialog.js";
 import { runPlanApprovalFallback } from "../plan-approval/fallback.js";
+import { writePlanReviewMarkdown } from "../plan-approval/plan-review.js";
 import {
 	renderApprovePlanCall,
 	renderApprovePlanResult,
@@ -198,7 +199,11 @@ export function createParentHarnessUiBridgeFactory(
 
 				let outcome: DialogResult;
 				if (parentCtx.hasUI) {
-					outcome = await runPlanApprovalDialog(parentCtx.ui, validated);
+					outcome = await runPlanApprovalDialog(parentCtx.ui, validated, {
+						onMounted: () => {
+							pi.events.emit("plan-approval:mounted", {});
+						},
+					});
 				} else {
 					outcome = await runPlanApprovalFallback(parentCtx.ui, validated);
 				}
@@ -208,6 +213,23 @@ export function createParentHarnessUiBridgeFactory(
 					outcome.cancelled,
 				);
 				notifyPlanApproval(hooks, details, "approve_plan");
+				const approved =
+					!outcome.cancelled &&
+					outcome.response?.kind === "selection" &&
+					/^approve/i.test(outcome.response.selections[0] ?? "");
+				if (approved) {
+					const projectRoot = hooks?.projectRoot ?? parentCtx.cwd;
+					const runCtx = hooks?.getParentRunContext?.() ?? null;
+					await writePlanReviewMarkdown(
+						projectRoot,
+						runCtx,
+						validated.plan_packet,
+						{
+							human_summary: validated.human_summary,
+							status: "approved",
+						},
+					);
+				}
 				const text = formatApprovePlanResultText(
 					outcome.response,
 					outcome.cancelled,

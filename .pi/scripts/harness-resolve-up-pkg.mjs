@@ -30,7 +30,20 @@ function hasHarnessScripts(root) {
 	return existsSync(join(root, ".pi", "scripts", "harness-cli-verify.sh"));
 }
 
+function isSourceCheckout(root) {
+	try {
+		const pkg = requireFromCwd.resolve("./package.json");
+		return dirname(pkg) === root;
+	} catch {
+		return false;
+	}
+}
+
 function tryResolveUltimatePi() {
+	if (hasHarnessScripts(process.cwd()) && isSourceCheckout(process.cwd())) {
+		return process.cwd();
+	}
+
 	if (process.env.ULTIMATE_PI_PKG) {
 		const envRoot = process.env.ULTIMATE_PI_PKG;
 		if (hasHarnessScripts(envRoot)) return envRoot;

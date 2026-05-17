@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.10.1] — 2026-05-17
+
+### 🐛 Fixes
+
+- **Harness plan TUI:** agents widget stacks above harness-live; full-height bottom `approve_plan` overlay above the harness band; block duplicate parent `approve_plan` / plan `ask_user` after planner subagent approval.
+
 ## [v0.10.0] — 2026-05-17
 
 ### ✨ Features

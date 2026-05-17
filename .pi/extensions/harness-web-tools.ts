@@ -4,6 +4,7 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
+import { claimExtensionLoad } from "./lib/extension-load-guard.js";
 import {
 	harnessWebContextLine,
 	readTextExcerpt,
@@ -97,6 +98,7 @@ function sessionCwd(ctx: { cwd?: string }): string {
 }
 
 export default function harnessWebTools(pi: ExtensionAPI) {
+	if (!claimExtensionLoad("harness-web-tools", MODULE_URL)) return;
 	pi.on("before_agent_start", async (event) => {
 		return {
 			systemPrompt: `${event.systemPrompt}\n\n${harnessWebContextLine()}`,
