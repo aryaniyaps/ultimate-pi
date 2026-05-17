@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.9.1] — 2026-05-17
+
+### 🐛 Fixes
+
+- **npm package:** fix `harness-subagents` vendored import of `harness-run-context` (`../../../../lib`); broken installs failed with `Cannot find module '../../../lib/harness-run-context.js'`.
+
 ## [v0.9.0] — 2026-05-17
 
 ### ✨ Features
