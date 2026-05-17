@@ -4,9 +4,17 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.4.1] — 2026-05-17
+
 ### ✨ Features
 
 - **In-house VCC compaction:** vendored [pi-vcc](https://github.com/sting8k/pi-vcc) (inspired by [lllyasviel/VCC](https://github.com/lllyasviel/VCC)); removed `@sting8k/pi-vcc` npm dependency. Configuration is **env-only** (`HARNESS_VCC_COMPACTION`, `HARNESS_VCC_DEBUG`) — no `PI_VCC_CONFIG_PATH` or JSON config files. VCC overrides `/compact` and auto-compaction by default; set `HARNESS_VCC_COMPACTION=false` for Pi LLM compaction. Refresh upstream: `npm run vendor:sync-vcc`.
+- **Harness subagents:** vendored harness-subagents extension with Sentrux bootstrap agent and related harness wiring.
+- **Harness web:** replace Firecrawl with Scrapling-based `harness-web` CLI for search and fetch.
+
+### 🔧 Chores
+
+- Format `.pi/settings.json` / `.pi/settings.example.json` and refresh `graphify-out` after VCC merge.
 
 ## [v0.3.1] — 2026-05-15
 
