@@ -9,7 +9,7 @@
  * - `HARNESS_VCC_DEBUG` — set `true` to write `/tmp/pi-vcc-debug.json` on compaction
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import registerVcc from "../../vendor/pi-vcc/index.js";
 
 export default function ultimatePiVcc(pi: ExtensionAPI): void {

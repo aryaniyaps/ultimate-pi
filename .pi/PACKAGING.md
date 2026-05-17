@@ -36,4 +36,4 @@ We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts n
 
 Runtime pi extensions are regular `dependencies` (installed by `npm install` when pi installs the package). We do **not** use `bundledDependencies`: bundling pre-installs `node_modules` and breaks `npm install -g` / `pi update` for native modules such as `koffi` (empty stub dir, postinstall fails).
 
-`@mariozechner/pi-coding-agent` (and sibling `@mariozechner/pi-ai`, `pi-tui`, `pi-agent-core` used by the vendored router) are provided by the Pi install / hoisted from the peer; ultimate-pi lists the latter three as `devDependencies` for `npm run check:ts`.
+`@earendil-works/pi-coding-agent` (and sibling `@earendil-works/pi-ai`, `pi-tui`, `pi-agent-core` used by the vendored router) are provided by the Pi install / hoisted from the peer; ultimate-pi lists the latter three as `devDependencies` for `npm run check:ts`.

@@ -385,6 +385,8 @@ Manual override: **`/router profile auto`** anytime after reload if they changed
 
 `harness-subagents` loads agents from the installed **`ultimate-pi`** package (`$UP_PKG/.pi/agents/**`) with namespaced ids (`harness/planner`, `pi-pi/agent-expert`). **Do not copy** agents into the project unless you want a deliberate override.
 
+**Slash commands are orchestrators:** `/harness-plan`, `/harness-run`, etc. spawn `harness/*` agents via the `Agent` tool — bootstrap stays **script-first**; only optionally spawn `harness/sentrux-bootstrap` for Sentrux (see Step 4.2).
+
 Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/planner.md` overrides the package planner).
 
 Verify manifest drift after `pi update ultimate-pi`:

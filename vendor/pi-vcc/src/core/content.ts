@@ -1,4 +1,4 @@
-import type { Message } from "@mariozechner/pi-ai";
+import type { Message } from "@earendil-works/pi-ai";
 
 export const clip = (text: string, max = 200): string => {
   if (text.length <= max) return text;

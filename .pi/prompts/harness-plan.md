@@ -5,75 +5,56 @@ argument-hint: "\"<task>\" [--risk low|med|high] [--budget <amount>] [--quick]"
 
 # harness-plan
 
-Create a machine-readable plan packet before execution.
+Orchestrator only — spawn `harness/planner`, present draft, run `ask_user`, write plan after Approve. Do **not** plan inline in this session.
 
 ## Step 0 — Parse arguments
 
-Read `$ARGUMENTS` and parse:
+Read `$ARGUMENTS`:
 
 - task statement (required)
-- optional flags: `--risk low|med|high`, `--budget <amount>`, `--quick`
+- optional: `--risk low|med|high`, `--budget <amount>`, `--quick`
 
-If task is missing, stop and return:
+If task is missing:
 
 `Usage: /harness-plan "<task>" [--risk low|med|high] [--budget <amount>] [--quick]`
 
-Do **not** require or accept `--plan` on this command.
+`--quick` narrows planning breadth only — it does **not** skip user approval.
 
 ## Active plan context
 
-If `[HarnessActivePlan]` is present in context:
+If `[HarnessActivePlan]` is present:
 
-- Read the current PlanPacket from the injected `plan_packet_path` first.
-- Treat the user task as **revise/amend** of that packet (not a greenfield plan), unless `/harness-new-run` was used.
-- After drift replan or post-abort, update the same canonical file.
+- Read current packet from `plan_packet_path` first.
+- Treat task as **revise/amend** unless `/harness-new-run` was used.
+- Pass `mode: revise` in spawn context.
 
-If no prior plan file exists, create PlanPacket at the canonical path from `[HarnessRunContext]`.
+Otherwise use canonical path from `[HarnessRunContext]` for greenfield `mode: create`.
 
-## Process
+## Orchestration (required)
 
-1. Parse the requested task and extract concrete scope and constraints.
-2. If ambiguity blocks safe execution planning, call `ask_user` (harness-decisions skill). Stop with `needs_clarification` if the user cancels.
-3. Build a `PlanPacket` that is valid against `.pi/harness/specs/plan-packet.schema.json`.
-4. **Write** the PlanPacket JSON to the canonical `plan_packet_path` before completing.
-5. Include rollback artifacts in all required forms.
+1. Build `HarnessSpawnContext` JSON (`.pi/harness/specs/harness-spawn-context.schema.json`) from injected run/plan context: `run_id`, `plan_packet_path`, `task_summary`, `risk_level`, `quick`, `mode`.
+2. Spawn with **`inherit_context: false`**:
 
-## Hard requirements
+```
+Agent({ subagent_type: "harness/planner", prompt: "<task + HarnessSpawnContext JSON + output schema>" })
+```
 
-- Do not run mutating tools in this command.
-- If task scope is ambiguous, call `ask_user` — do not guess or use prose-only clarification.
-- Produce a `PlanPacket` matching `.pi/harness/specs/plan-packet.schema.json`.
-- Include rollback artifacts in all three forms:
-  - revert command
-  - prepared revert branch name
-  - patch bundle path
-- Set risk level to `high` if uncertainty, broad blast radius, or policy-sensitive surfaces are involved.
-- Do **not** embed `plan_id=` in the user prompt for policy sync — the extension sets `approvedPlan` from the written file.
+3. `get_subagent_result` — parse final JSON (`status`, `plan_packet`, `human_summary`, `clarification`) via fenced `json` block.
+4. If `needs_clarification`, call `ask_user` (harness-decisions) with planner `clarification.options`, then re-spawn with answers.
+5. Present **full** human-readable plan in chat (scope, assumptions, acceptance_checks, rollback_plan, risk_level).
+6. Call `ask_user`: **Approve** / **Request changes** / **Cancel** (harness-decisions). **Do not write** until Approve.
+7. On **Request changes**, re-spawn planner with `mode: revise` and user feedback — do not write file.
+8. **Only after Approve** — write `PlanPacket` JSON to canonical `plan_packet_path`.
 
-## Guardrails
+## Parent rules
 
-- Do not overthink straightforward planning requests.
-- Only plan the requested scope; do not execute or widen implementation.
-- Never speculate about code or configuration that was not read.
+- Do not mutate project source files — only `plan-packet.json` after approval.
+- Validate draft against `.pi/harness/specs/plan-packet.schema.json` before `ask_user` Approve.
+- Do not embed `plan_id=` in prompts for policy sync.
 
-## Output contract
+## Completion
 
-Return:
-
-1. Human-readable plan summary:
-   - scope
-   - assumptions
-   - acceptance checks
-   - rollback plan
-2. Confirmation that PlanPacket was written to the canonical path.
-
-Do not proceed to execution from this command.
-
-## Completion behavior
-
-Always end with:
-
-- one-line `plan_status` (`ready` or `needs_clarification`)
-- the final `risk_level` used
-- explicit `next_command` recommendation: `/harness-run` when `ready` (never `/harness-run --plan …`)
-- if `needs_clarification`, tell the user they may reply in plain language or run `/harness-plan` again with updates
+- `plan_status`: `ready` or `needs_clarification`
+- `risk_level` used
+- `next_command`: `/harness-run` when `ready` (never `/harness-run --plan …`)
+- If `needs_clarification`, user may reply in chat or re-run `/harness-plan`

@@ -2,7 +2,7 @@
  * harness-web-guard — block bash that bypasses web_search / web_fetch tools.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 const BLOCK_REASON =
 	"harness-web-guard: use web_search (SERP) or web_fetch (page content) instead of raw curl/wget/firecrawl/scrapling fetch. " +

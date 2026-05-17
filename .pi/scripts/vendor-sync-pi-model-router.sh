@@ -11,19 +11,19 @@ rm -rf "$VEND/.git"
 
 for f in "$VEND"/extensions/*.ts; do
 	sed -i \
-		-e "s|'@earendil-works/pi-agent-core'|'@mariozechner/pi-agent-core'|g" \
-		-e "s|'@earendil-works/pi-ai'|'@mariozechner/pi-ai'|g" \
-		-e "s|'@earendil-works/pi-coding-agent'|'@mariozechner/pi-coding-agent'|g" \
-		-e "s|'@earendil-works/pi-tui'|'@mariozechner/pi-tui'|g" \
+		-e "s|'@earendil-works/pi-agent-core'|'@earendil-works/pi-agent-core'|g" \
+		-e "s|'@earendil-works/pi-ai'|'@earendil-works/pi-ai'|g" \
+		-e "s|'@earendil-works/pi-coding-agent'|'@earendil-works/pi-coding-agent'|g" \
+		-e "s|'@earendil-works/pi-tui'|'@earendil-works/pi-tui'|g" \
 		"$f"
 done
 
-# Align package.json peers with @mariozechner (upstream lists @earendil-works)
+# Align package.json peers with @earendil-works (upstream lists @earendil-works)
 sed -i \
-	-e 's|"@earendil-works/pi-agent-core"|"@mariozechner/pi-agent-core"|g' \
-	-e 's|"@earendil-works/pi-ai"|"@mariozechner/pi-ai"|g' \
-	-e 's|"@earendil-works/pi-coding-agent"|"@mariozechner/pi-coding-agent"|g' \
-	-e 's|"@earendil-works/pi-tui"|"@mariozechner/pi-tui"|g' \
+	-e 's|"@earendil-works/pi-agent-core"|"@earendil-works/pi-agent-core"|g' \
+	-e 's|"@earendil-works/pi-ai"|"@earendil-works/pi-ai"|g' \
+	-e 's|"@earendil-works/pi-coding-agent"|"@earendil-works/pi-coding-agent"|g' \
+	-e 's|"@earendil-works/pi-tui"|"@earendil-works/pi-tui"|g' \
 	"$VEND/package.json"
 
 python3 -c "
@@ -40,7 +40,7 @@ cat >"$VEND/UPSTREAM_PIN.md" <<EOF
 - **Repository:** https://github.com/yeliu84/pi-model-router
 - **License:** MIT (\`LICENSE\` in this tree)
 - **Pinned upstream commit:** \`$COMMIT\`
-- **Local changes:** \`extensions/*.ts\` imports use \`@mariozechner/*\` and relative paths end in \`.js\` for TypeScript nodenext.
+- **Local changes:** \`extensions/*.ts\` imports use \`@earendil-works/*\` and relative paths end in \`.js\` for TypeScript nodenext.
 EOF
 
 rm -f "$VEND/package-lock.json"

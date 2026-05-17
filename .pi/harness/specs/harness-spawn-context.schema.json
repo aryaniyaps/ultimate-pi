@@ -1,0 +1,65 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/harness-spawn-context.schema.json",
+	"title": "HarnessSpawnContext",
+	"description": "Structured context passed from harness slash-command orchestrators to harness/* subagents.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["schema_version", "agent", "mode"],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"agent": {
+			"type": "string",
+			"minLength": 1,
+			"description": "Target subagent id, e.g. harness/planner"
+		},
+		"mode": {
+			"type": "string",
+			"enum": [
+				"create",
+				"revise",
+				"execute",
+				"benchmark",
+				"verdict",
+				"adversary",
+				"trace",
+				"incident",
+				"tune"
+			]
+		},
+		"run_id": {
+			"type": "string"
+		},
+		"plan_packet_path": {
+			"type": "string"
+		},
+		"run_dir": {
+			"type": "string"
+		},
+		"task_summary": {
+			"type": "string"
+		},
+		"risk_level": {
+			"type": "string",
+			"enum": ["low", "med", "high"]
+		},
+		"quick": {
+			"type": "boolean"
+		},
+		"acceptance_checks": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"artifact_paths": {
+			"type": "object",
+			"additionalProperties": { "type": "string" }
+		},
+		"handoff_summary": {
+			"type": "string",
+			"description": "Prior phase bullet summary for chained spawns (harness-auto)"
+		}
+	}
+}

@@ -5,45 +5,28 @@ argument-hint: "[--run <run-id>] [--phase plan|execute|evaluate|adversary|merge]
 
 # harness-trace
 
-Retrieve and summarize trace artifacts for a run.
+Orchestrator — spawn `harness/trace-librarian`.
 
 ## Step 0 — Parse arguments
-
-Read `$ARGUMENTS` and parse:
 
 - optional: `--run <run-id>` (recovery only)
 - optional: `--phase plan|execute|evaluate|adversary|merge`
 
-On the happy path, **omit `--run`**. Phase traces live at `trace-<phase>.json` under the active run directory.
+Happy path: omit `--run`.
 
-## Process
+## Orchestration (required)
 
-1. Collect run artifacts from canonical harness locations and provided trace refs.
-2. Build phase timeline with policy and gate decision points.
-3. Report completeness gaps against strict gate artifact requirements.
+1. Build `HarnessSpawnContext` with `mode: trace`, `run_dir`, optional phase filter.
+2. Spawn:
 
-## Requirements
+```
+Agent({ subagent_type: "harness/trace-librarian", prompt: "…" })
+```
 
-- Use `.pi/harness/runs/` and external trace references as source of truth pointers.
-- Include phase timeline, artifact refs, and policy decisions.
-- Highlight missing artifacts that violate strict gate requirements.
+3. `get_subagent_result` — present timeline and artifact index to user.
 
-## Guardrails
+## Completion
 
-- Do not overthink simple trace lookups; prioritize completeness and stable references.
-- Only report artifacts for the requested run and optional phase filter.
-- Never infer artifact existence without verifying source pointers.
-
-## Output
-
-- Replay-ready timeline summary.
-- Artifact index (`plan`, `run`, `eval`, `adversary`, `consensus`, `incident`, `rollback`).
-- Any integrity or completeness gaps.
-
-## Completion behavior
-
-Always end with:
-
-- `trace_completeness` (`complete` or `incomplete`)
-- missing artifact checklist (if any)
-- most likely next command (`/harness-incident`, `/harness-review`, or `/harness-critic`)
+- `trace_completeness`: `complete` or `incomplete`
+- Missing artifact checklist
+- `next_command` hint (`/harness-incident`, `/harness-review`, or `/harness-critic`)

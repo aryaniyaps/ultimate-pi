@@ -5,8 +5,8 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { Model } from "@mariozechner/pi-ai";
-import type { ExtensionContext } from "@mariozechner/pi-coding-agent";
+import type { Model } from "@earendil-works/pi-ai";
+import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import {
 	type AgentSession,
 	type AgentSessionEvent,
@@ -16,8 +16,8 @@ import {
 	getAgentDir,
 	SessionManager,
 	SettingsManager,
-} from "@mariozechner/pi-coding-agent";
-import { evaluateSubagentToolCall } from "../spawn-policy.js";
+} from "@earendil-works/pi-coding-agent";
+import { evaluateHarnessSubagentToolCall } from "../harness-subagent-policy.js";
 import {
 	getAgentConfig,
 	getConfig,
@@ -331,7 +331,11 @@ export async function runAgent(
 	const extensionFactories: Array<(pi: ExtensionAPI) => void> = [
 		(pi) => {
 			pi.on("tool_call", (event) => {
-				const decision = evaluateSubagentToolCall(event.toolName);
+				const decision = evaluateHarnessSubagentToolCall(
+					event.toolName,
+					event.input as Record<string, unknown> | undefined,
+					type,
+				);
 				if (decision.action === "block") {
 					return { block: true, reason: decision.reason };
 				}

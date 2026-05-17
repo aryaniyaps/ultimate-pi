@@ -11,7 +11,7 @@ import { join } from "node:path";
 import type {
 	AgentSession,
 	AgentSessionEvent,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 
 /**
  * Encode a cwd path as a filesystem-safe directory name. Handles:

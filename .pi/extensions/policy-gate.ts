@@ -8,17 +8,24 @@
  * - command surface via pi.registerCommand()
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import {
+	extractWritePathFromToolInput,
 	getLatestRunContext,
 	getPolicyTransitionBlock,
 	hasApprovedPlanSignalFromUserPrompt,
 	hasHarnessAbortSignal,
 	inferHarnessPhaseFromPrompt,
+	isHarnessAutoSession,
 	isHarnessBootstrapPrompt,
+	isPlanPhaseAllowedMutation,
+	isPlanPhaseScopedWrite,
+	normalizeHarnessPath,
+	readPlanPacketFromPath,
 	saveProjectActiveRun,
 	saveRunContextToDisk,
 	userVisiblePromptSlice,
+	validatePlanPacket,
 } from "../lib/harness-run-context.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
@@ -134,6 +141,11 @@ function getLatestPolicyStateFull(ctx: {
 export default function policyGate(pi: ExtensionAPI) {
 	let state = defaultState();
 
+	const appendPolicyState = (next: PolicyState): void => {
+		state = next;
+		pi.appendEntry("harness-policy-state", state);
+	};
+
 	pi.on("session_start", async (_event, ctx) => {
 		state = getLatestPolicyStateFull(ctx);
 	});
@@ -141,6 +153,7 @@ export default function policyGate(pi: ExtensionAPI) {
 	pi.on("before_agent_start", async (event, ctx) => {
 		const userPrompt = userVisiblePromptSlice(event.prompt);
 		const entries = ctx.sessionManager.getEntries();
+		state = getLatestPolicyStateFull(ctx);
 		const bootstrapPrompt = isHarnessBootstrapPrompt(userPrompt);
 		const abortSignal = hasHarnessAbortSignal(userPrompt);
 
@@ -228,26 +241,41 @@ export default function policyGate(pi: ExtensionAPI) {
 		state.updatedAt = nowIso();
 		pi.appendEntry("harness-policy-state", state);
 
+		const planPhaseHint =
+			state.phase === "plan"
+				? "\nPlan phase: present the full PlanPacket in chat, call ask_user (Approve / Request changes / Cancel), then write only the canonical plan-packet.json after Approve."
+				: "";
+
 		return {
-			systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nPhase=${state.phase}; ApprovedPlan=${state.approvedPlan}; PlanId=${state.planId ?? "none"}; Aborted=${state.aborted}.`,
+			systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nPhase=${state.phase}; ApprovedPlan=${state.approvedPlan}; PlanId=${state.planId ?? "none"}; Aborted=${state.aborted}.${planPhaseHint}`,
 		};
 	});
 
-	pi.on("tool_call", async (event) => {
-		if (state.aborted && MUTATING_TOOLS.has(event.toolName)) {
-			return {
-				block: true,
-				reason:
-					"policy-gate: mutating tool blocked because harness-abort lock is active. Attach a new approved plan first.",
-			};
-		}
+	pi.on("tool_call", async (event, ctx) => {
+		state = getLatestPolicyStateFull(ctx);
+		const entries = ctx.sessionManager.getEntries();
+		const projectRoot = process.cwd();
+		const sessionId = ctx.sessionManager.getSessionId();
+		const runCtx = getLatestRunContext(entries);
+
 		if (MUTATING_TOOLS.has(event.toolName)) {
-			if (state.phase !== "execute") {
-				return {
-					block: true,
-					reason: `policy-gate: ${event.toolName} blocked in phase '${state.phase}'. Allowed only in execute phase.`,
-				};
+			const decision = await isPlanPhaseAllowedMutation(
+				event.toolName,
+				event.input as Record<string, unknown>,
+				state.phase,
+				runCtx,
+				projectRoot,
+				{
+					aborted: state.aborted,
+					entries,
+					ownerSessionId: runCtx?.owner_pi_session_id,
+					currentSessionId: sessionId,
+				},
+			);
+			if (!decision.allowed) {
+				return { block: true, reason: decision.reason };
 			}
+			return undefined;
 		}
 
 		if (event.toolName === "bash") {
@@ -260,7 +288,7 @@ export default function policyGate(pi: ExtensionAPI) {
 						"policy-gate: mutating bash command blocked because harness-abort lock is active. Attach a new approved plan first.",
 				};
 			}
-			if (state.phase !== "execute") {
+			if (state.phase !== "execute" && state.phase !== "merge") {
 				return {
 					block: true,
 					reason: `policy-gate: mutating bash command blocked in phase '${state.phase}'.`,
@@ -269,6 +297,48 @@ export default function policyGate(pi: ExtensionAPI) {
 		}
 
 		return undefined;
+	});
+
+	pi.on("tool_result", async (event, ctx) => {
+		if (event.isError) return;
+		if (event.toolName !== "write" && event.toolName !== "edit") return;
+
+		const entries = ctx.sessionManager.getEntries();
+		state = getLatestPolicyStateFull(ctx);
+		const projectRoot = process.cwd();
+		const runCtx = getLatestRunContext(entries);
+		if (!runCtx) return;
+
+		const target = extractWritePathFromToolInput(
+			event.input as Record<string, unknown>,
+		);
+		if (!target) return;
+		const scoped = await isPlanPhaseScopedWrite(target, runCtx, projectRoot);
+		if (!scoped) return;
+
+		const planPath = normalizeHarnessPath(target, projectRoot);
+		const packet = await readPlanPacketFromPath(planPath);
+		const validation = validatePlanPacket(packet);
+		if (!validation.valid || !packet?.plan_id) return;
+
+		if (isHarnessAutoSession(entries)) {
+			state.phase = "execute";
+			state.approvedPlan = true;
+			state.planId = packet.plan_id;
+			state.aborted = false;
+			state.abortReason = null;
+			state.abortedAt = null;
+			state.updatedAt = nowIso();
+			appendPolicyState(state);
+
+			runCtx.plan_ready = true;
+			runCtx.plan_id = packet.plan_id;
+			runCtx.phase = "execute";
+			runCtx.updated_at = nowIso();
+			pi.appendEntry("harness-run-context", runCtx);
+			void saveRunContextToDisk(runCtx);
+			void saveProjectActiveRun(runCtx);
+		}
 	});
 
 	pi.registerCommand("harness-abort", {

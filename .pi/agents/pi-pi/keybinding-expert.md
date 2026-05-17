@@ -87,7 +87,7 @@ This is CRITICAL for building extensions that work on macOS:
 - When a reserved action is remapped away from a key, that key becomes available for extensions
 - The conflict check uses EFFECTIVE keybindings (after user remaps), not defaults
 
-### Key Helper (from @mariozechner/pi-tui)
+### Key Helper (from @earendil-works/pi-tui)
 
 - `Key.ctrl("x")` → `"ctrl+x"`
 - `Key.shift("tab")` → `"shift+tab"`

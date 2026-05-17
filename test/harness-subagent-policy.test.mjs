@@ -1,0 +1,78 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { evaluateHarnessSubagentToolCall } from "../.pi/extensions/lib/harness-subagents/harness-subagent-policy.ts";
+import {
+	extractJsonBlock,
+	parseHarnessAgentJson,
+} from "../.pi/lib/harness-agent-output.ts";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+test("evaluator blocks write and mutating bash", () => {
+	const write = evaluateHarnessSubagentToolCall(
+		"write",
+		{ path: "src/a.ts", content: "x" },
+		"harness/evaluator",
+	);
+	assert.equal(write.action, "block");
+
+	const bash = evaluateHarnessSubagentToolCall(
+		"bash",
+		{ command: "git commit -m test" },
+		"harness/evaluator",
+	);
+	assert.equal(bash.action, "block");
+
+	const read = evaluateHarnessSubagentToolCall(
+		"read",
+		{ path: "src/a.ts" },
+		"harness/evaluator",
+	);
+	assert.equal(read.action, "allow");
+});
+
+test("executor allows write", () => {
+	const write = evaluateHarnessSubagentToolCall(
+		"write",
+		{ path: "src/a.ts", content: "x" },
+		"harness/executor",
+	);
+	assert.equal(write.action, "allow");
+});
+
+test("planner blocks write", () => {
+	const write = evaluateHarnessSubagentToolCall(
+		"write",
+		{ path: "plan.json", content: "{}" },
+		"harness/planner",
+	);
+	assert.equal(write.action, "block");
+});
+
+test("parseHarnessAgentJson extracts fenced block", () => {
+	const text = `Summary here.\n\`\`\`json\n{"status":"ready","plan_packet":{"plan_id":"p1"}}\n\`\`\``;
+	const parsed = parseHarnessAgentJson(text);
+	assert.equal(parsed.ok, true);
+	assert.equal(parsed.value.status, "ready");
+});
+
+test("harness-plan prompt references harness/planner", () => {
+	const planPrompt = readFileSync(
+		join(root, ".pi/prompts/harness-plan.md"),
+		"utf-8",
+	);
+	assert.match(planPrompt, /harness\/planner/);
+	assert.match(planPrompt, /HarnessSpawnContext/);
+});
+
+test("planner agent disallows ask_user", () => {
+	const planner = readFileSync(
+		join(root, ".pi/agents/harness/planner.md"),
+		"utf-8",
+	);
+	assert.match(planner, /disallowed_tools:\s*ask_user/);
+	assert.doesNotMatch(planner, /extensions:\s*true/);
+});

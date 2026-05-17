@@ -3,7 +3,7 @@
  * Design references: pi-ask-user, @pi-unipi/ask-user, rpiv-ask-user-question (not vendored).
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { runAskDialog } from "./lib/ask-user/dialog.js";
 import { runAskFallback } from "./lib/ask-user/fallback.js";
 import { renderAskCall, renderAskResult } from "./lib/ask-user/render.js";

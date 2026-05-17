@@ -4,7 +4,7 @@
  * Emits harness-drift-report custom entries for harness-telemetry + observation bus.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 

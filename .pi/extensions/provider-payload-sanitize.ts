@@ -9,7 +9,7 @@
 import type {
 	BeforeProviderRequestEvent,
 	ExtensionAPI,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 
 const CHAT_MESSAGE_EXTRA_KEYS = [
 	"reasoning",

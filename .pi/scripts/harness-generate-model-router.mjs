@@ -3,13 +3,13 @@
  * Generate `.pi/model-router.json` from Pi's authenticated providers (auth.json + env),
  * not from raw env-var heuristics alone.
  *
- * Uses @mariozechner/pi-coding-agent ModelRegistry.getAvailable() — same source as /login.
+ * Uses @earendil-works/pi-coding-agent ModelRegistry.getAvailable() — same source as /login.
  *
  * Usage: node harness-generate-model-router.mjs [--force] [--dry-run]
  *   --force    overwrite existing .pi/model-router.json
  *   --dry-run  print JSON to stdout, do not write
  *
- * Requires @mariozechner/pi-coding-agent (peer of ultimate-pi; bundled with pi).
+ * Requires @earendil-works/pi-coding-agent (peer of ultimate-pi; bundled with pi).
  */
 
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
@@ -66,26 +66,29 @@ function fail(msg) {
 }
 
 async function loadPiCodingAgent() {
-	const agentRoots = [
-		join(UP_PKG, "node_modules", "@mariozechner", "pi-coding-agent"),
-		join(UP_PKG, ".pi", "npm", "node_modules", "@mariozechner", "pi-coding-agent"),
-	];
+	const scopes = ["@earendil-works", "@mariozechner"];
+	const agentRoots = scopes.flatMap((scope) => [
+		join(UP_PKG, "node_modules", scope, "pi-coding-agent"),
+		join(UP_PKG, ".pi", "npm", "node_modules", scope, "pi-coding-agent"),
+	]);
 	for (const root of agentRoots) {
 		const entry = join(root, "dist", "index.js");
 		if (existsSync(entry)) {
 			return import(pathToFileURL(entry).href);
 		}
 	}
-	for (const base of [UP_PKG, process.cwd()]) {
-		try {
-			const req = createRequire(join(base, "package.json"));
-			return req("@mariozechner/pi-coding-agent");
-		} catch {
-			/* try next */
+	for (const spec of ["@earendil-works/pi-coding-agent", "@mariozechner/pi-coding-agent"]) {
+		for (const base of [UP_PKG, process.cwd()]) {
+			try {
+				const req = createRequire(join(base, "package.json"));
+				return req(spec);
+			} catch {
+				/* try next */
+			}
 		}
 	}
 	fail(
-		"@mariozechner/pi-coding-agent not found (install pi or npm i in ultimate-pi). Peer: @mariozechner/pi-coding-agent",
+		"@earendil-works/pi-coding-agent not found (install pi or npm i in ultimate-pi). Peer: @earendil-works/pi-coding-agent",
 	);
 }
 

@@ -5,7 +5,7 @@
 import { createHash } from "node:crypto";
 import { type Dirent, existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { getAgentDir } from "@mariozechner/pi-coding-agent";
+import { getAgentDir } from "@earendil-works/pi-coding-agent";
 import { parseAgentMarkdown } from "./agent-parser.js";
 import type { AgentConfig } from "./vendored/types.js";
 

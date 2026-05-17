@@ -13,8 +13,8 @@ import { join } from "node:path";
 import type {
 	BuildSystemPromptOptions,
 	ExtensionAPI,
-} from "@mariozechner/pi-coding-agent";
-import { formatSkillsForPrompt } from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
+import { formatSkillsForPrompt } from "@earendil-works/pi-coding-agent";
 import { resolveHarnessAsset } from "./lib/harness-paths.js";
 
 // @ts-expect-error pi extensions run as ESM

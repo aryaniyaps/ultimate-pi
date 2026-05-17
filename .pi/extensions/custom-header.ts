@@ -6,8 +6,8 @@
  * doubling vertical resolution in the same terminal footprint.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { truncateToWidth } from "@mariozechner/pi-tui";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { truncateToWidth } from "@earendil-works/pi-tui";
 import * as JimpModule from "jimp";
 import { resolveHarnessAsset } from "./lib/harness-paths.js";
 

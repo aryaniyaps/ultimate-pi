@@ -1,4 +1,4 @@
-import type { ExtensionUIContext } from "@mariozechner/pi-coding-agent";
+import type { ExtensionUIContext } from "@earendil-works/pi-coding-agent";
 import type { DialogResult, ValidatedAskParams } from "./types.js";
 
 export async function runAskFallback(

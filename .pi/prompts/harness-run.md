@@ -5,56 +5,39 @@ argument-hint: "[--budget <amount>]"
 
 # harness-run
 
-Execute implementation only after an approved plan exists in active run context.
+Orchestrator only — spawn `harness/executor`. Do **not** implement inline.
 
 ## Step 0 — Parse arguments
 
-Read `$ARGUMENTS` and parse:
-
 - optional: `--budget <amount>`
+- Do **not** use `--plan` on happy path — load from `[HarnessActivePlan]` / `plan_packet_path`.
 
-Do **not** parse `--plan` on the happy path. Load the PlanPacket from `[HarnessActivePlan]` / injected `plan_packet_path` only.
-
-If the extension reports plan not ready, stop and return:
+If plan not ready:
 
 `Run /harness-plan first — no approved plan in active run context.`
 
-Advanced recovery only: `--plan <path>` must live under the active run directory (extension validates).
+## Orchestration (required)
 
-## Process
+1. Confirm `[HarnessActivePlan]` / extension reports plan ready.
+2. Build `HarnessSpawnContext` with `mode: execute`, `plan_packet_path`, `run_dir`, `acceptance_checks` from plan file.
+3. Spawn:
 
-1. Load PlanPacket from the injected canonical path and confirm it is valid.
-2. Execute only within approved scope.
-3. Run focused validations mapped to approved acceptance checks.
-4. Produce rollback artifacts and handoff references for downstream gates.
+```
+Agent({ subagent_type: "harness/executor", prompt: "<HarnessSpawnContext + handoff>" })
+```
 
-## Gate behavior
+4. `get_subagent_result` — parse executor JSON (`execution_status`, validations, rollback refs).
+5. Parent persists trace/handoff artifacts under run dir if needed; do not self-review.
 
-- Refuse execution if active plan is not ready (extension blocks before the agent runs).
-- Keep edits strictly within approved scope.
-- If scope drift appears, stop and return to `harness-plan`.
-- For **implementation forks** inside approved scope, call `ask_user` with 2–4 options. For plan-level ambiguity, stop and return to `harness-plan`.
-- Record evaluator/adversary prerequisites for downstream gates.
-- Always prepare rollback artifacts as part of execution output.
+## Parent rules
 
-## Guardrails
+- Refuse if plan not approved.
+- On `scope_drift`, stop and recommend `/harness-plan`.
+- Do not call `ask_user` for plan-level ambiguity — return to plan command.
 
-- Do not overthink straightforward approved changes; execute the approved scope directly.
-- Only modify files and behaviors covered by the approved `PlanPacket`.
-- Never speculate about successful validation without runnable evidence.
+## Completion
 
-## Output
-
-- Implementation summary scoped to approved plan.
-- Files changed and why.
-- Targeted validations run.
-- Trace pointers and rollback references.
-
-## Completion behavior
-
-End with:
-
-1. `execution_status` (`completed`, `blocked`, or `scope_drift`).
-2. `validation_summary` (pass/fail with command evidence).
-3. `handoff_ready` booleans for evaluator/adversary prerequisites.
-4. `next_command`: **New Pi session → `/harness-eval`** when execution completed successfully.
+- `execution_status`: `completed`, `blocked`, or `scope_drift`
+- `validation_summary` with command evidence
+- `handoff_ready` for evaluator/adversary
+- `next_command`: `/harness-eval` (same session — spawn isolated review agents; no new Pi session)
