@@ -41,5 +41,14 @@ export function evaluateSubagentToolCall(
 			reason: `Tool "ask_user" is not available for ${agentType ?? "this agent"} (orchestrator-only).`,
 		};
 	}
+	if (toolName === "approve_plan" || toolName === "create_plan") {
+		if (agentType === "harness/planner") {
+			return { action: "allow" };
+		}
+		return {
+			action: "block",
+			reason: `Tool "${toolName}" is only available for harness/planner.`,
+		};
+	}
 	return { action: "allow" };
 }

@@ -36,18 +36,22 @@ description: Structured user decisions via ask_user for harness setup, planning,
 
 ## Example (plan — approval gate)
 
-After presenting the full PlanPacket in chat:
+`harness/planner` calls **`approve_plan`** with the full `plan_packet` (parent TUI: scrollable plan + Approve / Request changes / Cancel), then **`create_plan`** with the same packet after Approve. Do not use `ask_user` for final approval or `write`/`edit` for the plan file.
 
 ```json
 {
-  "question": "Approve this plan for execution?",
-  "context": "Scope, acceptance checks, and rollback are listed above. The plan file is written only after you approve.",
-  "options": [
-    { "title": "Approve", "description": "Write plan-packet.json and mark plan ready" },
-    { "title": "Request changes", "description": "Revise scope or acceptance before writing" },
-    { "title": "Cancel", "description": "Stop with needs_clarification" }
-  ],
-  "allowFreeform": false
+  "plan_packet": {
+    "schema_version": "1.0.0",
+    "contract_version": "1.0.0",
+    "plan_id": "…",
+    "task_id": "…",
+    "scope": "…",
+    "assumptions": [],
+    "risk_level": "med",
+    "acceptance_checks": ["…"],
+    "rollback_plan": { "revert_commit_ready": true, "rollback_artifacts": { "revert_command": "…", "revert_branch": "…", "patch_bundle": "…" } }
+  },
+  "human_summary": "One-line summary for the overlay header"
 }
 ```
 
@@ -64,8 +68,8 @@ After presenting the full PlanPacket in chat:
 }
 ```
 
-## Who must NOT call ask_user
+## Who calls what
 
-- `harness/planner` — returns `clarification.options` in JSON; parent runs `ask_user`.
-- `harness/evaluator`, `harness/adversary`, and `harness/tie-breaker` — emit `human_required` in structured verdicts; the **parent orchestrator** calls `ask_user`.
-- `harness/executor` — parent handles plan-level and governance forks.
+- `harness/planner` — `ask_user` for clarification; **`approve_plan`** then **`create_plan`** for the plan file (`write`/`edit` blocked).
+- `harness/evaluator`, `harness/adversary`, and `harness/tie-breaker` — emit `human_required`; the **parent orchestrator** calls `ask_user`.
+- Parent orchestrator during `/harness-plan` — must **not** call `ask_user`, `approve_plan`, or `create_plan` (planner owns the full plan lifecycle).

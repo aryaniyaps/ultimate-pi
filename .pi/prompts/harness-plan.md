@@ -5,7 +5,7 @@ argument-hint: "\"<task>\" [--risk low|med|high] [--budget <amount>] [--quick]"
 
 # harness-plan
 
-Orchestrator only — spawn `harness/planner` once; planner runs clarification and approval via `ask_user` (parent UI). Write `plan-packet.json` only after approval. Do **not** plan inline in this session.
+Orchestrator only — spawn `harness/planner` once. The planner runs clarification (`ask_user`), approval (`approve_plan`), and persists the plan (`create_plan`). Do **not** write `plan-packet.json` in this parent session.
 
 ## Step 0 — Parse arguments
 
@@ -33,7 +33,7 @@ Otherwise use `HarnessSpawnContext` from `[HarnessRunContext]` for greenfield `m
 
 ## Orchestration (required)
 
-1. Copy the `HarnessSpawnContext=…` JSON from `[HarnessRunContext]` into the spawn prompt (adjust `risk_level`, `quick`, `mode` from `$ARGUMENTS` if needed).
+1. Copy the `HarnessSpawnContext=…` JSON from `[HarnessRunContext]` into the spawn prompt (adjust `risk_level`, `quick`, `mode` from `$ARGUMENTS` if needed). Do **not** add “call ask_user for approval” in the `Agent` prompt — the planner agent instructions already define `approve_plan` / `create_plan`.
 2. Spawn **once** with **`inherit_context: false`**:
 
 ```
@@ -41,15 +41,15 @@ Agent({ subagent_type: "harness/planner", prompt: "<task + HarnessSpawnContext J
 ```
 
 3. `get_subagent_result` — parse final JSON (`status`, `plan_packet`, `human_summary`, `clarification`) via fenced `json` block.
-4. If `status === "ready"` and user approved in the subagent (`ask_user` Approve), validate `plan_packet` fields, then **write** `PlanPacket` JSON to canonical `plan_packet_path` from `[HarnessRunContext]`.
+4. If `status === "ready"` and parent `harness-run-context` shows `plan_ready: true` (planner called `create_plan`), confirm `plan_packet_path` exists — do **not** write the file yourself.
 5. If `needs_clarification`, tell the user the planner is waiting — do **not** re-spawn; user should answer in the subagent or re-run `/harness-plan`.
-6. Do **not** call `ask_user` in this parent session for planner clarification or approval.
+6. Do **not** call `ask_user`, `approve_plan`, or `create_plan` in this parent session.
 
 ## Parent rules
 
-- Do not mutate project source files — only `plan-packet.json` after subagent approval is recorded.
+- Do not mutate project source files in the plan phase.
 - Do not embed `plan_id=` in prompts for policy sync.
-- Optional: `/harness-plan-commit` if write was blocked but approval exists.
+- Optional recovery: `/harness-plan-commit` only if the planner approved but `create_plan` failed.
 
 ## Completion
 

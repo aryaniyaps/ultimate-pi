@@ -18,8 +18,8 @@ import {
 import { Text } from "@earendil-works/pi-tui";
 import { Type } from "@sinclair/typebox";
 import {
-	extractPlanApprovalsFromEntries,
 	getLatestRunContext,
+	syncPlannerApprovalsToParent,
 } from "../../../../lib/harness-run-context.js";
 import { getDriftReport } from "../agent-manifest.js";
 import { Blackboard } from "../blackboard.js";
@@ -27,6 +27,8 @@ import {
 	buildBlackboardContextInjection,
 	registerBlackboardTool,
 } from "../blackboard-tool.js";
+import type { ParentHarnessUiHooks } from "../parent-harness-ui-bridge.js";
+import { createParentHarnessUiHooks } from "../parent-harness-ui-hooks.js";
 import { AgentManager } from "./agent-manager.js";
 import {
 	getAgentConversation,
@@ -650,6 +652,7 @@ export function createHarnessSubagentsExtension(packageRoot: string) {
 
 		// --- Cross-extension RPC via pi.events ---
 		let currentCtx: ExtensionContext | undefined;
+		let parentHarnessUiHooks: ParentHarnessUiHooks | undefined;
 
 		// ---- Subagent scheduler ----
 		// Session-scoped: store is constructed inside session_start once sessionId
@@ -678,6 +681,11 @@ export function createHarnessSubagentsExtension(packageRoot: string) {
 		// Capture ctx from session_start for RPC spawn handler + start the scheduler.
 		pi.on("session_start", async (_event, ctx) => {
 			currentCtx = ctx;
+			parentHarnessUiHooks = createParentHarnessUiHooks(
+				pi,
+				() => ctx.sessionManager.getEntries(),
+				ctx.cwd,
+			);
 			manager.clearCompleted();
 			if (isSchedulingEnabled() && !scheduler.isActive()) startScheduler(ctx);
 
@@ -1338,6 +1346,7 @@ Guidelines:
 								isolation,
 								invocation: agentInvocation,
 								systemPromptAppendix,
+								parentHarnessUiHooks,
 								...bgCallbacks,
 							});
 						} catch (err) {
@@ -1481,6 +1490,7 @@ Guidelines:
 								invocation: agentInvocation,
 								systemPromptAppendix,
 								signal,
+								parentHarnessUiHooks,
 								...fgCallbacks,
 							},
 						);
@@ -1490,6 +1500,24 @@ Guidelines:
 					}
 
 					clearInterval(spinnerInterval);
+
+					if (
+						subagentType === "harness/planner" &&
+						record.session &&
+						record.status !== "running" &&
+						record.status !== "queued"
+					) {
+						const parentEntries = ctx.sessionManager.getEntries();
+						const runCtx = getLatestRunContext(parentEntries);
+						if (runCtx) {
+							syncPlannerApprovalsToParent(
+								(type, data) => pi.appendEntry(type, data),
+								parentEntries,
+								record.session.sessionManager.getEntries(),
+								runCtx,
+							);
+						}
+					}
 
 					// Clean up foreground agent from widget
 					if (fgId) {
@@ -1607,16 +1635,12 @@ Guidelines:
 						const parentEntries = _ctx.sessionManager.getEntries();
 						const runCtx = getLatestRunContext(parentEntries);
 						if (runCtx) {
-							const subEntries = record.session.sessionManager.getEntries();
-							for (const approval of extractPlanApprovalsFromEntries(
-								subEntries,
-							)) {
-								pi.appendEntry("harness-plan-approval", {
-									plan_id: approval.plan_id ?? runCtx.plan_id,
-									approved_at: approval.approved_at,
-									source: "ask_user",
-								});
-							}
+							syncPlannerApprovalsToParent(
+								(type, data) => pi.appendEntry(type, data),
+								parentEntries,
+								record.session.sessionManager.getEntries(),
+								runCtx,
+							);
 						}
 					}
 

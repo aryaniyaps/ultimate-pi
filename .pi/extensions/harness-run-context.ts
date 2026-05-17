@@ -26,14 +26,15 @@ import {
 	isAmendPlanAllowed,
 	isHarnessBootstrapPrompt,
 	isNewTaskPlanBlocked,
+	isPlanApprovalAskUser,
 	isStaleActiveRunPointer,
 	loadProjectActiveRun,
 	loadRunContextFromDisk,
 	nextStepAfterOutcome,
 	nowIso,
 	type PlanPacketSummary,
-	parseAskUserApprovalFromMessage,
 	parseHarnessSlashInput,
+	parsePlanApprovalFromMessage,
 	planPacketSummary,
 	readPlanPacketFromPath,
 	resolveArgsForCommand,
@@ -582,7 +583,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				activeCtx.last_outcome = "needs_clarification";
 				activeCtx.last_completed_step = "plan";
 				const msg =
-					"Plan file exists but user approval was not recorded. Present the full plan and call ask_user (Approve) before writing plan-packet.json.";
+					"Plan file exists but user approval was not recorded. Planner must call approve_plan (or bridged ask_user Approve) before writing plan-packet.json.";
 				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
 				else
 					pi.sendMessage({
@@ -649,9 +650,12 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	});
 
 	pi.on("tool_result", async (event, ctx) => {
-		if (event.toolName !== "ask_user" || event.isError) return;
-		const approval = parseAskUserApprovalFromMessage({
-			toolName: "ask_user",
+		if (event.isError) return;
+		if (event.toolName !== "ask_user" && event.toolName !== "approve_plan") {
+			return;
+		}
+		const approval = parsePlanApprovalFromMessage({
+			toolName: event.toolName,
 			details: event.details,
 			content: event.content,
 		});
@@ -662,11 +666,27 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		pi.appendEntry("harness-plan-approval", {
 			plan_id: approval.plan_id ?? runCtx.plan_id,
 			approved_at: approval.approved_at,
-			source: "ask_user",
+			source: approval.source,
 		});
 	});
 
-	pi.on("tool_call", async (event) => {
+	pi.on("tool_call", async (event, ctx) => {
+		if (event.toolName === "ask_user" && activeCtx?.plan_packet_path) {
+			const input = event.input as {
+				question?: string;
+				options?: unknown[];
+			};
+			if (
+				isPlanApprovalAskUser(input) &&
+				hasPlanUserApproval(getEntries(ctx), { sincePlanCommand: true })
+			) {
+				return {
+					block: true,
+					reason:
+						"harness-run-context: plan already approved via planner subagent; do not call ask_user for plan approval in the parent session.",
+				};
+			}
+		}
 		if (!activeCtx?.plan_packet_path) return undefined;
 		const phase = activeCtx.phase;
 		if (phase !== "evaluate" && phase !== "adversary") return undefined;
@@ -807,7 +827,8 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			}
 			const target = runCtx.plan_packet_path;
 			if (!target) {
-				if (ctx.hasUI) ctx.ui.notify("No plan_packet_path on active run.", "error");
+				if (ctx.hasUI)
+					ctx.ui.notify("No plan_packet_path on active run.", "error");
 				return;
 			}
 			if (pathArg && pathArg !== target) {

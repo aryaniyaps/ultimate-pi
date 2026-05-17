@@ -17,12 +17,12 @@ description: Produce PlanPacket-aligned harness plans before execute phase. Use 
 1. Use `HarnessSpawnContext` from injected `[HarnessRunContext]` — do not read spec files from disk.
 2. Spawn `harness/planner` **once** with that JSON in the prompt (`inherit_context: false`).
 3. Parse planner JSON from `get_subagent_result` (`status`, `plan_packet`, `clarification`).
-4. Do **not** parent `ask_user` or re-spawn for clarification — planner uses `ask_user` in the subagent.
-5. **Only after** subagent approval is synced — write canonical `plan_packet_path`.
+4. Do **not** parent `ask_user` / `approve_plan` / `create_plan` or re-spawn — planner uses those tools in the subagent (bridged UI + `create_plan` write).
+5. Parent checks `plan_ready` on `harness-run-context` after planner returns — **does not** write `plan-packet.json`.
 
 ## Rules
 
-- `harness/planner` owns clarification and approval `ask_user` (bridged to parent UI).
+- `harness/planner` owns clarification (`ask_user`), approval (`approve_plan`), and persistence (`create_plan` — only path to `plan-packet.json`; `write`/`edit` blocked).
 - Never plan or mutate source inline in the slash-command session.
 - context-mode only on harness paths; never lean-ctx.
 
