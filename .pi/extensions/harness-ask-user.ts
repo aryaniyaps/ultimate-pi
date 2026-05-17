@@ -18,8 +18,13 @@ import {
 	toToolDetails,
 	validateAskParams,
 } from "./lib/ask-user/validate.js";
+import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+
+// @ts-expect-error pi extensions run as ESM
+const MODULE_URL = import.meta.url;
 
 export default function harnessAskUser(pi: ExtensionAPI) {
+	if (!claimExtensionLoad("harness-ask-user", MODULE_URL)) return;
 	pi.registerTool({
 		name: "ask_user",
 		label: "Ask User",

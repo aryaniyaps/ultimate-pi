@@ -10,8 +10,10 @@ import {
 	hasPlanUserApproval,
 	parsePlanApprovalFromMessage,
 } from "../lib/harness-run-context.js";
+import { claimExtensionLoad } from "./lib/extension-load-guard.js";
 import { runPlanApprovalDialog } from "./lib/plan-approval/dialog.js";
 import { runPlanApprovalFallback } from "./lib/plan-approval/fallback.js";
+import { writePlanReviewMarkdown } from "./lib/plan-approval/plan-review.js";
 import {
 	renderApprovePlanCall,
 	renderApprovePlanResult,
@@ -32,7 +34,11 @@ import {
 	validateApprovePlanParams,
 } from "./lib/plan-approval/validate.js";
 
+// @ts-expect-error pi extensions run as ESM
+const MODULE_URL = import.meta.url;
+
 export default function harnessPlanApproval(pi: ExtensionAPI) {
+	if (!claimExtensionLoad("harness-plan-approval", MODULE_URL)) return;
 	pi.registerMessageRenderer(
 		"harness-plan-draft",
 		(message, _options, theme) => {
@@ -111,14 +117,30 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 			const summary =
 				validated.human_summary?.trim() ||
 				`Plan ${planId} — pending your approval`;
+			const runCtx = getLatestRunContext(entries);
+			const projectRoot = process.cwd();
+			const reviewPath = await writePlanReviewMarkdown(
+				projectRoot,
+				runCtx,
+				validated.plan_packet,
+				{
+					human_summary: validated.human_summary,
+					status: "draft",
+				},
+			);
+			const draftContent =
+				reviewPath != null
+					? `${summary}\nEditor review: ${reviewPath}`
+					: summary;
 			pi.sendMessage({
 				customType: "harness-plan-draft",
-				content: summary,
+				content: draftContent,
 				display: true,
 				details: {
 					schema_version: "1.0.0",
 					plan_packet: validated.plan_packet,
 					human_summary: validated.human_summary ?? null,
+					plan_review_path: reviewPath,
 					shown_at: new Date().toISOString(),
 				},
 			});
@@ -150,6 +172,22 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 					entries,
 					approval,
 					runCtx,
+				);
+			}
+
+			const approved =
+				!outcome.cancelled &&
+				outcome.response?.kind === "selection" &&
+				/^approve/i.test(outcome.response.selections[0] ?? "");
+			if (approved && runCtx) {
+				await writePlanReviewMarkdown(
+					projectRoot,
+					runCtx,
+					validated.plan_packet,
+					{
+						human_summary: validated.human_summary,
+						status: "approved",
+					},
 				);
 			}
 

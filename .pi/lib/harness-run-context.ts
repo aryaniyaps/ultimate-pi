@@ -114,6 +114,15 @@ export function canonicalPlanPath(runId: string, projectRoot: string): string {
 	return join(harnessRunsRoot(projectRoot), runId, "plan-packet.json");
 }
 
+export const PLAN_REVIEW_BASENAME = "plan-review.md";
+
+export function canonicalPlanReviewPath(
+	runId: string,
+	projectRoot: string,
+): string {
+	return join(harnessRunsRoot(projectRoot), runId, PLAN_REVIEW_BASENAME);
+}
+
 const PLAN_PACKET_BASENAME = "plan-packet.json";
 
 const MUTATING_FILE_TOOLS = new Set(["write", "edit"]);
@@ -910,6 +919,9 @@ export function formatPlanContextBlock(
 	];
 	if (ctx.plan_packet_path) {
 		lines.push(`plan_packet_path=${ctx.plan_packet_path}`);
+		lines.push(
+			`plan_review_path=${canonicalPlanReviewPath(ctx.run_id, ctx.project_root)}`,
+		);
 	}
 	if (ctx.task_summary) {
 		lines.push(`task_summary=${ctx.task_summary}`);
