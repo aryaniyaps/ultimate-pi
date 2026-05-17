@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.7.0] — 2026-05-17
+
+### ✨ Features
+
+- **Harness run context:** track active run and canonical plan path in session; short slash commands without `--run` or `--plan`; project `active-run.json` for forked eval sessions; ADR 0031.
+- **System prompt extension:** load packaged `.pi/SYSTEM.md` by default with optional workspace `.pi/system.md` override.
+
+### 📖 Documentation
+
+- **README and harness prompts:** manual workflow without run IDs; `harness-run-status`, `harness-new-run`, `harness-use-run` helpers.
+
+### 🔧 Chores
+
+- **harness-setup:** remove Sentrux skill symlink step; rules bootstrap only.
+
 ## [v0.6.1] — 2026-05-17
 
 ### 🐛 Fixes
