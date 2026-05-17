@@ -19,6 +19,21 @@ description: Structured user decisions via ask_user for harness setup, planning,
 3. If the user **cancels** (Esc), stop with `needs_clarification` / `human_required` — do not assume defaults.
 4. **CI / automation only:** pass `--non-interactive` to `/harness-setup` to skip prompts and use documented defaults.
 
+## Example (harness-setup — search engine)
+
+```json
+{
+  "question": "Which harness-web search backend should this project use?",
+  "context": "Scrapling handles scrape/map/bulk. Search: DDG HTML needs no Docker. SearXNG must be self-hosted — public instances often block JSON and rate-limit API to ~4/hour per IP.",
+  "options": [
+    { "title": "DuckDuckGo HTML (default)", "description": "HARNESS_WEB_SEARCH_ENGINE=ddg_html" },
+    { "title": "Self-host SearXNG here (Docker)", "description": "node harness-searxng-bootstrap.mjs" },
+    { "title": "Use existing SearXNG instance", "description": "Freeform base URL → HARNESS_WEB_SEARXNG_URL" }
+  ],
+  "allowFreeform": true
+}
+```
+
 ## Example (plan — scope)
 
 ```json

@@ -36,7 +36,7 @@ if str(SCRIPT_DIR) not in sys.path:
 from harness_web.config import HarnessWebConfig, load_config  # noqa: E402
 from harness_web.output import write_search_results  # noqa: E402
 from harness_web.scrape import bulk_scrape, map_url, scrape_url  # noqa: E402
-from harness_web.search_ddg import search_ddg  # noqa: E402
+from harness_web.search import search  # noqa: E402
 
 DEFAULT_WEB_DIR = ".web"
 
@@ -47,8 +47,8 @@ def _default_out(sub: str) -> Path:
 
 def cmd_search(args: argparse.Namespace, config: HarnessWebConfig) -> int:
     out = Path(args.output or _default_out("search.json"))
-    results = search_ddg(args.query, limit=args.limit, config=config)
-    write_search_results(out, results, args.query)
+    results = search(args.query, limit=args.limit, config=config)
+    write_search_results(out, results, args.query, engine=config.search_engine)
     print(f"wrote {out} ({len(results)} results)")
     return 0
 
@@ -76,6 +76,20 @@ def cmd_map(args: argparse.Namespace, config: HarnessWebConfig) -> int:
     return 0
 
 
+def cmd_status(_args: argparse.Namespace, config: HarnessWebConfig) -> int:
+    import json
+
+    payload = {
+        "search_engine": config.search_engine,
+        "searxng_url": config.searxng_url,
+        "fetch_mode": config.fetch_mode,
+        "script": str(Path(__file__).resolve()),
+        "bootstrap": "ok",
+    }
+    print(json.dumps(payload, indent=2))
+    return 0
+
+
 def cmd_bulk_scrape(args: argparse.Namespace, config: HarnessWebConfig) -> int:
     sleep_sec = args.sleep if args.sleep is not None else config.rate_limit_ms / 1000.0
     if args.urls:
@@ -86,8 +100,8 @@ def cmd_bulk_scrape(args: argparse.Namespace, config: HarnessWebConfig) -> int:
         data = json.loads(Path(args.from_search).read_text(encoding="utf-8"))
         urls = [item["url"] for item in data.get("data", {}).get("web", []) if item.get("url")]
     else:
-        urls = search_ddg(args.query, limit=args.limit, config=config)
-        urls = [r["url"] for r in urls]
+        serp = search(args.query, limit=args.limit, config=config)
+        urls = [r["url"] for r in serp]
 
     if not urls:
         print("bulk-scrape: no URLs to fetch", file=sys.stderr)
@@ -111,11 +125,11 @@ def cmd_bulk_scrape(args: argparse.Namespace, config: HarnessWebConfig) -> int:
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="harness-web",
-        description="Harness web layer: search (DDG HTML) and scrape (Scrapling).",
+        description="Harness web layer: search (DDG HTML or SearXNG) and scrape (Scrapling).",
     )
     sub = p.add_subparsers(dest="command", required=True)
 
-    ps = sub.add_parser("search", help="Search via DuckDuckGo HTML SERP")
+    ps = sub.add_parser("search", help="Search via configured SERP (HARNESS_WEB_SEARCH_ENGINE)")
     ps.add_argument("query", help="Search query")
     ps.add_argument("-o", "--output", help="JSON output path (default: .web/search.json)")
     ps.add_argument("--limit", type=int, default=5)
@@ -159,6 +173,9 @@ def build_parser() -> argparse.ArgumentParser:
     pm.add_argument("--limit", type=int, default=100)
     pm.add_argument("--fast", action="store_true")
     pm.set_defaults(func=cmd_map)
+
+    pst = sub.add_parser("status", help="Print harness-web config as JSON (setup/diagnostics)")
+    pst.set_defaults(func=cmd_status)
 
     return p
 
