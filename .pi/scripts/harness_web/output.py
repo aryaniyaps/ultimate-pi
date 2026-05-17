@@ -18,13 +18,19 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def write_search_results(path: Path, results: list[dict[str, str]], query: str) -> None:
+def write_search_results(
+    path: Path,
+    results: list[dict[str, str]],
+    query: str,
+    *,
+    engine: str,
+) -> None:
     """Firecrawl-compatible envelope: data.web[].url|title|description."""
     write_json(
         path,
         {
             "query": query,
-            "engine": "ddg_html",
+            "engine": engine,
             "data": {
                 "web": [
                     {

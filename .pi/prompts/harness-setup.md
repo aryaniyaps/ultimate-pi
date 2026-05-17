@@ -134,9 +134,12 @@ export PATH="$HOME/.local/bin:$PATH"
 uv tool install "scrapling[fetchers]"
 scrapling install   # Chromium for default stealth scrape; may need sudo for OS libs on Linux
 mkdir -p .web
+python3 "$UP_PKG/.pi/scripts/harness-web.py" status   # JSON config (setup/diagnostics only)
 python3 "$UP_PKG/.pi/scripts/harness-web.py" search "ultimate-pi harness" -o .web/smoke-search.json --limit 3
 python3 "$UP_PKG/.pi/scripts/harness-web.py" scrape "https://example.com" -o .web/smoke-page.md --fast
 ```
+
+After pi loads extensions, agents should smoke **`web_search`** once (not `UP_PKG` / `import scrapling` preflight). Example intent: query `ultimate-pi harness`, `limit` 2.
 
 - **`--skip-tools`:** skip Step 2 (includes Scrapling verify).
 - On Linux/WSL, if stealth scrape fails, install browser libs from `harness-cli-verify.sh` output or use `--fast` for static targets.
@@ -421,6 +424,47 @@ If **no** `.env` at project root:
 - On **skip** or `--non-interactive`: warn in report (non-interactive skips creation)
 - If `ask_user` cancelled: stop with `needs_clarification`
 
+### 4.0b — harness-web search engine (non-destructive)
+
+Unless `--non-interactive`, **call `ask_user`** after Step 4.0 (harness-decisions skill):
+
+```json
+{
+  "question": "Which harness-web search backend should this project use?",
+  "context": "Scrapling still handles scrape/map/bulk. Search only: DuckDuckGo HTML needs no extra services. SearXNG must be self-hosted for agents — public instances often block JSON (403) and default to ~4 API requests/hour per IP.",
+  "options": [
+    {
+      "title": "DuckDuckGo HTML (default)",
+      "description": "HARNESS_WEB_SEARCH_ENGINE=ddg_html — no Docker"
+    },
+    {
+      "title": "Self-host SearXNG here (Docker)",
+      "description": "Bootstrap .searxng/ with official compose, enable JSON API, set harness env"
+    },
+    {
+      "title": "Use existing SearXNG instance",
+      "description": "You provide base URL; harness writes HARNESS_WEB_SEARXNG_URL"
+    }
+  ],
+  "allowFreeform": true
+}
+```
+
+| User choice | Actions |
+|-------------|---------|
+| **DDG** | Ensure `.env` has `HARNESS_WEB_SEARCH_ENGINE=ddg_html` via `harness-sync-env.mjs` (append only if missing; do not overwrite user values) |
+| **Self-host** | `node "$UP_PKG/.pi/scripts/harness-searxng-bootstrap.mjs"` (requires Docker). Script sets `HARNESS_WEB_SEARCH_ENGINE=searxng` and `HARNESS_WEB_SEARXNG_URL` |
+| **Existing instance** | Parse base URL from freeform answer. Run `node "$UP_PKG/.pi/scripts/harness-searxng-bootstrap.mjs" --set-url {url}` (health check + upsert `.env`) |
+| **Cancelled** | Stop with `needs_clarification` |
+| **`--non-interactive`** | Skip prompt; leave/default `ddg_html`; do not run Docker bootstrap |
+
+Post-choice smoke (report pass/fail):
+
+```bash
+mkdir -p .web
+python3 "$UP_PKG/.pi/scripts/harness-web.py" search "ultimate-pi harness" -o .web/setup-search.json --limit 2
+```
+
 Rules:
 
 - **Do not** `cp` over an existing `.env`.
@@ -436,6 +480,7 @@ Ensure `.gitignore` contains:
 ```
 .env
 .web/
+.searxng/
 .raw/
 .vault-meta/
 .pi/harness/critics/
@@ -646,6 +691,7 @@ Output summary table:
 | .gitignore | ✓/✗ | entries added (incl. `.env`) |
 | ./raw directory | ✓/✗ | Created for graphify source ingestion |
 | harness-web (Scrapling) | ✓/✗ | search + scrape smoke |
+| harness-web search engine | ddg / searxng / — | Step 4.0b choice; SearXNG URL if applicable |
 
 Next steps:
 1. If tools missing: re-run with `--force` or install individually

@@ -23,26 +23,25 @@ You are an enterprise coding agent. Optimize for correctness, minimal diffs, and
 ## Web Policy (Mandatory)
 
 > [!warning] No raw HTTP
-> Route **all** web fetches through [[context7]] (API/library docs) or **harness-web** / [[scrapling-web]] (all other). No `curl`, `wget`, or raw bash HTTP.
+> Route **all** web through [[context7]] (API/library docs) or **`web_search` / `web_fetch`** ([[scrapling-web]]). No `curl`, `wget`, Firecrawl, or scrapling CLI preflight.
 
 ### API / Library Docs — context7 ONLY
 - `ctx7 library <name> <query>` then `ctx7 docs <id> <query>`
 - context7 owns: function signatures, class APIs, config options, stdlib, framework specs.
-- **Never** use quality-sites for API docs.
+- **Never** use quality-sites or web_fetch for API docs.
 
-### All Non-API Web Fetch — harness-web (Scrapling)
-See `.agents/skills/scrapling-web/SKILL.md` for workflow escalation.
+### All Non-API Web — web_search + web_fetch
+See `.agents/skills/scrapling-web/SKILL.md`. **No preflight:** never resolve `UP_PKG`, `ls harness-web.py`, or `python3 -c "import scrapling"` before searching.
 
-| Task | Command |
-|------|---------|
-| Search (no URL) | `python3 "$UP_PKG/.pi/scripts/harness-web.py" search "query" -o .web/search.json --limit 5` |
-| Scrape (have URL) | `python3 "$UP_PKG/.pi/scripts/harness-web.py" scrape "<url>" -o .web/page.md` |
-| Static / known-simple | add `--fast` to scrape |
-| Map same-host links | `python3 "$UP_PKG/.pi/scripts/harness-web.py" map "<url>" -o .web/map.json` |
-| Bulk search + scrape | `python3 "$UP_PKG/.pi/scripts/harness-web.py" bulk-scrape "query" -o .web/bulk/` |
+| Task | Tool |
+|------|------|
+| Search (SERP) | `web_search` (`query`, optional `limit`, `bulk`) |
+| Scrape page | `web_fetch` (`url`, optional `fast: true`) |
+| Map links | `web_fetch` (`url`, `mode: map`) |
 
-- **Artifacts:** always write under `.web/` with `-o` (token discipline).
-- **Default scrape:** stealth browser; opt out with `--fast` or `HARNESS_WEB_FETCH_MODE=fast`.
+- **Artifacts:** default under `.web/`; use `read` for full JSON/markdown.
+- **Fallback** (tools unavailable): `python3 "$UP_PKG/.pi/scripts/harness-web.py" …` per scrapling-web skill.
+- **Setup diagnostics only:** `harness-web.py status` (JSON config).
 - **Quality sites:** check `.agents/skills/wiki-autoresearch/references/quality-sites.md` before citing non-API sources. Prefer Tier 1 (StackOverflow, GitHub issues, engineering blogs, arxiv). Exclude AI content farms, mirrors, stale packages.
 - **Research:** use `/wiki-autoresearch <topic>` for deep research. Results are graphified into `graphify-out/`.
 

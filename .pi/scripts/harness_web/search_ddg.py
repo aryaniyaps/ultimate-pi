@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
 from scrapling.fetchers import Fetcher, StealthyFetcher
@@ -63,11 +64,6 @@ def search_ddg(
     config: HarnessWebConfig,
     impersonate: bool = True,
 ) -> list[dict[str, str]]:
-    if config.search_engine != "ddg_html":
-        raise SystemExit(
-            f"Unsupported HARNESS_WEB_SEARCH_ENGINE={config.search_engine!r} (only ddg_html)"
-        )
-
     kwargs: dict = {
         "params": {"q": query},
         "timeout": config.timeout_sec,

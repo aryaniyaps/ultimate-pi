@@ -200,10 +200,19 @@ verify_scrapling() {
 		return
 	fi
 	mkdir -p .web
-	if python3 "$_hw" search "ultimate-pi harness" -o .web/verify-search.json --limit 2 2>/dev/null | grep -q wrote; then
-		pass "harness-web search smoke"
+	_search_engine="${HARNESS_WEB_SEARCH_ENGINE:-ddg_html}"
+	if [ "$_search_engine" = "searxng" ]; then
+		if [ -z "${HARNESS_WEB_SEARXNG_URL:-}" ]; then
+			fail "HARNESS_WEB_SEARCH_ENGINE=searxng but HARNESS_WEB_SEARXNG_URL is unset"
+		elif python3 "$_hw" search "ultimate-pi harness" -o .web/verify-search.json --limit 2 2>/dev/null | grep -q wrote; then
+			pass "harness-web search smoke (searxng)"
+		else
+			fail "harness-web search smoke failed (searxng at ${HARNESS_WEB_SEARXNG_URL})"
+		fi
+	elif python3 "$_hw" search "ultimate-pi harness" -o .web/verify-search.json --limit 2 2>/dev/null | grep -q wrote; then
+		pass "harness-web search smoke (ddg_html)"
 	else
-		fail "harness-web search smoke failed"
+		fail "harness-web search smoke failed (ddg_html)"
 	fi
 	if python3 "$_hw" scrape "https://example.com" -o .web/verify-page.md --fast 2>/dev/null | grep -q wrote; then
 		pass "harness-web scrape --fast smoke"

@@ -8,7 +8,7 @@ description: >
   Triggers on: "/wiki-autoresearch", "/autoresearch", "wiki-autoresearch", "autoresearch",
   "research [topic]", "deep dive into [topic]", "investigate [topic]",
   "find everything about [topic]", "research and file", "go research", "build a wiki on".
-allowed-tools: Read Write Edit Glob Grep WebFetch WebSearch Bash
+allowed-tools: Read Write Edit Glob Grep web_search web_fetch Bash
 ---
 
 # wiki-autoresearch: Autonomous Research Loop with Graphify
@@ -129,8 +129,8 @@ Input: topic (from Topic Selection, above)
 
 Round 1. Broad search
 1. Decompose topic into 3-5 distinct search angles
-2. For each angle: run 2-3 WebSearch queries
-3. For top 2-3 results per angle: WebFetch the page
+2. For each angle: run 2-3 `web_search` queries
+3. For top 2-3 results per angle: `web_fetch` each URL (or `read` `.web/` artifacts)
 4. Save each fetched page to ./raw/ as a markdown file
 5. Extract from each: key claims, entities, concepts, open questions
 

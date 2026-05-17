@@ -187,9 +187,9 @@ Before answering ANY question, search the local codebase for existing agent defi
 find .pi/agents -name "*.md" -type f 2>/dev/null
 ```
 
-Fetch the latest pi-subagents docs:
-```bash
-firecrawl scrape "https://raw.githubusercontent.com/tintinweb/pi-subagents/refs/heads/master/README.md" -o .firecrawl/pi-subagents-readme.md --only-main-content
+Fetch the latest pi-subagents docs (use `web_fetch` with `fast: true` for raw GitHub):
+```
+web_fetch url="https://raw.githubusercontent.com/tintinweb/pi-subagents/refs/heads/master/README.md" fast=true output=.web/pi-subagents-readme.md
 ```
 
 ## How to Respond

@@ -93,7 +93,8 @@ Artifacts go under `.web/` (gitignored). See `.agents/skills/scrapling-web/SKILL
 | Variable | Default | Purpose |
 |----------|---------|---------|
 | `HARNESS_WEB_FETCH_MODE` | `stealth` | `stealth` \| `fast` \| `auto` |
-| `HARNESS_WEB_SEARCH_ENGINE` | `ddg_html` | SERP backend |
+| `HARNESS_WEB_SEARCH_ENGINE` | `ddg_html` | `ddg_html` \| `searxng` |
+| `HARNESS_WEB_SEARXNG_URL` | (unset) | Required when `SEARCH_ENGINE=searxng` (e.g. `http://127.0.0.1:8080`) |
 | `HARNESS_WEB_PROXY` | (unset) | Optional proxy |
 | `HARNESS_WEB_RATE_LIMIT_MS` | `2000` | Bulk scrape delay |
 | `HARNESS_WEB_TIMEOUT_MS` | `30000` | Request timeout |
