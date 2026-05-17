@@ -21,6 +21,7 @@ import {
 	readFile,
 	writeFile,
 } from "node:fs/promises";
+import { randomBytes } from "node:crypto";
 import { constants } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -50,7 +51,10 @@ const SETTINGS_PATH = join(CORE_CONFIG, "settings.yml");
 const COMPOSE_PATH = join(SEARXNG_DIR, "docker-compose.yml");
 const ENV_COMPOSE = join(SEARXNG_DIR, ".env");
 
-const HARNESS_SETTINGS = `use_default_settings: true
+const DEFAULT_SECRET = "ultrasecretkey";
+
+function buildHarnessSettings(secret) {
+	return `use_default_settings: true
 
 search:
   formats:
@@ -58,9 +62,11 @@ search:
     - json
 
 server:
+  secret_key: "${secret}"
   limiter: false
   public_instance: false
 `;
+}
 
 async function exists(path) {
 	try {
@@ -138,6 +144,69 @@ async function readComposePort() {
 	return DEFAULT_PORT;
 }
 
+function parseEnvValue(raw) {
+	return raw.trim().replace(/^["']|["']$/g, "");
+}
+
+async function readComposeSecret() {
+	if (!(await exists(ENV_COMPOSE))) return null;
+	const text = await readFile(ENV_COMPOSE, "utf8");
+	for (const line of text.split("\n")) {
+		const m = line.match(/^SEARXNG_SECRET=(.+)$/);
+		if (m) {
+			const val = parseEnvValue(m[1]);
+			if (val && val !== DEFAULT_SECRET) return val;
+		}
+	}
+	return null;
+}
+
+async function readSettingsSecret() {
+	if (!(await exists(SETTINGS_PATH))) return null;
+	const text = await readFile(SETTINGS_PATH, "utf8");
+	const m = text.match(/^\s*secret_key:\s*["']?([^"'\n#]+)["']?\s*$/m);
+	if (!m) return null;
+	const val = m[1].trim();
+	return val && val !== DEFAULT_SECRET ? val : null;
+}
+
+function generateSecret() {
+	return randomBytes(32).toString("hex");
+}
+
+async function getOrCreateSecret() {
+	return (
+		(await readComposeSecret()) ||
+		(await readSettingsSecret()) ||
+		generateSecret()
+	);
+}
+
+async function upsertComposeSecret(secret) {
+	let content = "";
+	if (await exists(ENV_COMPOSE)) {
+		content = await readFile(ENV_COMPOSE, "utf8");
+	}
+	const line = `SEARXNG_SECRET=${secret}`;
+	const re = /^SEARXNG_SECRET=.*$/m;
+	if (re.test(content)) {
+		content = content.replace(re, line);
+	} else {
+		const sep = content.endsWith("\n") || content.length === 0 ? "" : "\n";
+		content = `${content}${sep}${line}\n`;
+	}
+	await writeFile(ENV_COMPOSE, content, "utf8");
+}
+
+async function settingsNeedUpdate() {
+	if (!(await exists(SETTINGS_PATH))) return true;
+	const text = await readFile(SETTINGS_PATH, "utf8");
+	if (!text.includes("json")) return true;
+	if (text.includes(DEFAULT_SECRET)) return true;
+	if (!/^\s*secret_key:/m.test(text)) return true;
+	return false;
+}
+
 async function ensureSearxngLayout() {
 	await mkdir(CORE_CONFIG, { recursive: true });
 	if (!(await exists(COMPOSE_PATH))) {
@@ -152,12 +221,28 @@ async function ensureSearxngLayout() {
 		}
 		await copyFile(example, ENV_COMPOSE);
 	}
-	const needsSettings =
-		!(await exists(SETTINGS_PATH)) ||
-		!(await readFile(SETTINGS_PATH, "utf8")).includes("json");
-	if (needsSettings) {
-		await writeFile(SETTINGS_PATH, HARNESS_SETTINGS, "utf8");
-		console.log(`✓ Wrote ${SETTINGS_PATH} (json format, limiter off)`);
+	const secret = await getOrCreateSecret();
+	await upsertComposeSecret(secret);
+	console.log(`✓ Set SEARXNG_SECRET in ${ENV_COMPOSE}`);
+	if (await settingsNeedUpdate()) {
+		try {
+			await writeFile(SETTINGS_PATH, buildHarnessSettings(secret), "utf8");
+			console.log(
+				`✓ Wrote ${SETTINGS_PATH} (json format, limiter off, secret_key set)`,
+			);
+		} catch (err) {
+			if (err && typeof err === "object" && "code" in err && err.code === "EACCES") {
+				console.warn(
+					`⚠ Could not write ${SETTINGS_PATH} (permission denied). ` +
+						"SEARXNG_SECRET in .env is set — restart containers. " +
+						`Fix ownership: chown -R $USER:$USER ${SEARXNG_DIR}`,
+				);
+			} else {
+				throw err;
+			}
+		}
+	} else {
+		console.log(`✓ ${SETTINGS_PATH} already configured`);
 	}
 }
 
