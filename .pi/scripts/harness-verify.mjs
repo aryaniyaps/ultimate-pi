@@ -5,7 +5,7 @@
 
 import { readFile, access } from "node:fs/promises";
 import { constants } from "node:fs";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
@@ -201,6 +201,33 @@ async function main() {
 	const runCtxLib = join(ROOT, ".pi", "lib", "harness-run-context.ts");
 	if (!(await fileExists(runCtxLib))) fail("missing lib/harness-run-context.ts");
 	ok("lib/harness-run-context.ts");
+
+	const vendoredIndex = join(
+		ROOT,
+		".pi",
+		"extensions",
+		"lib",
+		"harness-subagents",
+		"vendored",
+		"index.ts",
+	);
+	const vendoredSrc = await readFile(vendoredIndex, "utf-8");
+	const runCtxImport = vendoredSrc.match(
+		/from ["']([^"']*harness-run-context\.js)["']/,
+	);
+	if (!runCtxImport) {
+		fail("vendored/index.ts must import harness-run-context.js");
+	}
+	const runCtxImportPath = resolve(
+		dirname(vendoredIndex),
+		runCtxImport[1].replace(/\.js$/, ".ts"),
+	);
+	if (runCtxImportPath !== runCtxLib) {
+		fail(
+			`vendored/index.ts harness-run-context import resolves to ${runCtxImportPath}, expected ${runCtxLib}`,
+		);
+	}
+	ok("vendored/index.ts harness-run-context import path");
 
 	const policyGateSrc = await readFile(
 		join(ROOT, ".pi", "extensions", "policy-gate.ts"),
