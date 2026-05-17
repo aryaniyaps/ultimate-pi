@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.9.0] — 2026-05-17
+
+### ✨ Features
+
+- **Harness plan UX:** Pi-native `harness-turn` routing on `input` (no expanded-prompt matching); subagent `ask_user` bridged to parent UI; plan-phase budget cap 80k with debounced exhaustion events; thin `harness-plan` orchestrator with `harness-plan-commit`; `harness-turn.schema.json` and tests.
+
 ## [v0.8.0] — 2026-05-17
 
 ### ✨ Features
