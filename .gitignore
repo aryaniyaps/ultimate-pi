@@ -56,16 +56,24 @@ graphify-books-out/cache/
 # Machine-specific path stamp written by graphify post-commit hook
 graphify-books-out/.graphify_root
 
-# Harness artifacts
-.pi/harness/critics/
-.pi/harness/plans/
-
-
-graphify-out/manifest.json    # mtime-based, breaks after git clone
-graphify-out/cost.json        # local only
-# graphify-out/cache/         # optional: commit for speed, skip to keep repo small
-
-
-.pi/model-router.json
-# Harness runtime state (local)
+# Harness runtime (per-developer; specs/, docs/adrs/, evals/smoke/ stay committed)
 .pi/harness/active-run.json
+.pi/harness/release-readiness-report.md
+.pi/harness/plans/
+.pi/harness/critics/
+.pi/harness/runs/**
+!.pi/harness/runs/README.md
+.pi/harness/incidents/*
+!.pi/harness/incidents/README.md
+.pi/harness/debates/*
+!.pi/harness/debates/README.md
+.pi/harness/router/proposals/*
+
+# Model router config (user-specific — generated from env)
+.pi/model-router.json
+
+# mtime-based, breaks after git clone
+graphify-out/manifest.json
+# local only
+graphify-out/cost.json
+# graphify-out/cache/         # optional: commit for speed, skip to keep repo small
