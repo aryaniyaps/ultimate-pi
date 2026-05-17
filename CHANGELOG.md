@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.5.0] — 2026-05-17
+
+### ✨ Features
+
+- **web_search / web_fetch pi tools:** wrap `harness-web.py` with session injection and a bash guard so agents skip `UP_PKG` and scrapling import preflights.
+- **SearXNG search backend:** pluggable `HARNESS_WEB_SEARCH_ENGINE` (`ddg_html` | `searxng`) with Docker bootstrap via `harness-searxng-bootstrap.mjs`.
+- **harness-web status:** JSON config subcommand for setup and diagnostics.
+
+### 🔧 Chores
+
+- Apply pre-commit format and refresh `graphify-out` after harness-web tools merge.
+
 ## [v0.4.1] — 2026-05-17
 
 ### ✨ Features
