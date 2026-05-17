@@ -1,0 +1,96 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-hypothesis-brief.schema.json",
+	"title": "PlanHypothesisBrief",
+	"description": "DARWIN-style hypothesis brief (harness plan phase 2).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"primary",
+		"dialectical_fork",
+		"alternatives",
+		"recommended_next_steps"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"primary": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": [
+				"claim",
+				"mechanism",
+				"prediction",
+				"experiment",
+				"tension_resolution"
+			],
+			"properties": {
+				"claim": {
+					"type": "string",
+					"minLength": 1,
+					"description": "One falsifiable sentence."
+				},
+				"mechanism": {
+					"type": "string",
+					"minLength": 1,
+					"description": "Concrete processes, algorithms, principles."
+				},
+				"prediction": {
+					"type": "string",
+					"minLength": 1,
+					"description": "Measurable outcome that confirms the hypothesis."
+				},
+				"experiment": {
+					"type": "string",
+					"minLength": 1,
+					"description": "How to test: tools, datasets, benchmarks, protocols."
+				},
+				"tension_resolution": {
+					"type": "string",
+					"minLength": 1,
+					"description": "Link back to core_tension from decomposition."
+				}
+			}
+		},
+		"dialectical_fork": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["fork", "path_a", "path_b"],
+			"properties": {
+				"fork": {
+					"type": "string",
+					"minLength": 1,
+					"description": "Key assumption that splits approaches."
+				},
+				"path_a": { "type": "string", "minLength": 1 },
+				"path_b": { "type": "string", "minLength": 1 }
+			}
+		},
+		"alternatives": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 3,
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["claim", "key_bet"],
+				"properties": {
+					"claim": { "type": "string", "minLength": 1 },
+					"key_bet": { "type": "string", "minLength": 1 }
+				}
+			}
+		},
+		"recommended_next_steps": {
+			"type": "array",
+			"minItems": 1,
+			"maxItems": 5,
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"human_summary": {
+			"type": "string"
+		}
+	}
+}

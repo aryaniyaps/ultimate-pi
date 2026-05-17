@@ -1,0 +1,108 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-decomposition-brief.schema.json",
+	"title": "PlanDecompositionBrief",
+	"description": "DeepMind-style problem decomposition (harness plan phase 1).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"problem_restatement",
+		"problem_types",
+		"scope",
+		"hard_constraints",
+		"soft_constraints",
+		"success_metrics",
+		"prior_art",
+		"tensions",
+		"core_tension"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"problem_restatement": {
+			"type": "string",
+			"minLength": 1,
+			"description": "Precise restatement; what solving this looks like."
+		},
+		"problem_types": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "string",
+				"enum": [
+					"optimization",
+					"discovery",
+					"explanation",
+					"design",
+					"selection"
+				]
+			}
+		},
+		"scope": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["narrowed_focus", "excluded"],
+			"properties": {
+				"narrowed_focus": {
+					"type": "string",
+					"minLength": 1
+				},
+				"excluded": {
+					"type": "array",
+					"items": { "type": "string", "minLength": 1 }
+				}
+			}
+		},
+		"hard_constraints": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"soft_constraints": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"success_metrics": {
+			"type": "array",
+			"minItems": 1,
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"prior_art": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["best_approach", "gap", "dead_ends"],
+			"properties": {
+				"best_approach": { "type": "string", "minLength": 1 },
+				"gap": { "type": "string", "minLength": 1 },
+				"dead_ends": {
+					"type": "array",
+					"items": { "type": "string", "minLength": 1 }
+				}
+			}
+		},
+		"tensions": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["claim_a", "claim_b", "why_matters"],
+				"properties": {
+					"claim_a": { "type": "string", "minLength": 1 },
+					"claim_b": { "type": "string", "minLength": 1 },
+					"why_matters": { "type": "string", "minLength": 1 }
+				}
+			}
+		},
+		"core_tension": {
+			"type": "string",
+			"minLength": 1,
+			"description": "One paragraph summarizing the tension that feeds hypothesis generation."
+		},
+		"human_summary": {
+			"type": "string"
+		}
+	}
+}

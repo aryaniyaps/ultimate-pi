@@ -10,11 +10,11 @@ Harness slash prompts duplicated logic already defined in `harness/*` agents. Co
 ## Decision
 
 1. **Slash commands** (prompt templates) are orchestrators: spawn `harness/*` agents once, perform policy-gated writes, emit handoff blocks. Command identity is captured on Pi **`input`** as `harness-turn` (raw `/harness-*`), not from expanded prompt markdown.
-2. **Agents** perform multi-turn reads and emit structured JSON drafts. **Planner** runs clarification and plan approval via `ask_user` (parent UI bridge); planner does not write `plan-packet.json`.
+2. **Agents** perform multi-turn reads and emit structured JSON drafts. **Planning** (`harness/planning/*`) scouts and plan-adversary are read-only; parent orchestrator runs `ask_user`, `approve_plan`, and `create_plan` (see ADR 0033).
 3. **HarnessSpawnContext** is injected in `[HarnessRunContext]`; orchestrator copies it into spawn prompts. Subagents do not receive `[HarnessActivePlan]` injection.
 4. **Review isolation** uses `Agent` spawn with `inherit_context: false`. `review-integrity` allows `Agent` / `get_subagent_result` for evaluator/adversary/tie-breaker.
-5. **Subagent policy** blocks mutating tools for read-only phase agents; `ask_user` allowed for planner/evaluator/adversary/tie-breaker only.
-6. **Parent** does not duplicate planner `ask_user` or re-spawn for clarification. `get_subagent_result` syncs `harness-plan-approval` from subagent sessions.
+5. **Subagent policy** blocks mutating tools for read-only phase agents; `ask_user` bridged for evaluator/adversary/tie-breaker only (not planning scouts).
+6. **Parent** owns plan-phase `ask_user`, `approve_plan`, and `create_plan` per ADR 0033.
 
 ## Consequences
 

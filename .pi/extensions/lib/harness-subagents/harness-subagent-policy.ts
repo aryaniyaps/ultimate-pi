@@ -20,6 +20,15 @@ export type HarnessAgentKind =
 
 const MUTATING_TOOLS = new Set(["write", "edit"]);
 
+const PLANNING_BASH_DENY_PATTERNS = [
+	/\bgraphify\s+update\b/i,
+	/\bgraphify\s+extract\b/i,
+	/\bgraphify\s+install\b/i,
+	/\bpip\s+install\b/i,
+	/\buv\s+tool\s+install\b/i,
+	/\bnpm\s+install\b/i,
+];
+
 const BASH_MUTATION_PATTERNS = [
 	/\brm\s+-/i,
 	/\bmv\s+/i,
@@ -45,8 +54,16 @@ const READ_ONLY_KINDS = new Set<HarnessAgentKind>([
 	"meta",
 ]);
 
+export function isHarnessPlanningAgent(agentType: string): boolean {
+	const id = agentType.replace(/^harness\//, "");
+	return id === "planner" || id.startsWith("planning/");
+}
+
 export function classifyHarnessAgent(agentType: string): HarnessAgentKind {
 	const id = agentType.replace(/^harness\//, "");
+	if (id.startsWith("planning/") || id === "planner") {
+		return "planner";
+	}
 	switch (id) {
 		case "planner":
 			return "planner";
@@ -96,13 +113,10 @@ export function evaluateHarnessSubagentToolCall(
 		return { action: "allow" };
 	}
 
-	if (toolName === "create_plan") {
-		if (kind === "planner") {
-			return { action: "allow" };
-		}
+	if (toolName === "create_plan" || toolName === "approve_plan") {
 		return {
 			action: "block",
-			reason: `harness-subagent-policy: create_plan is only for harness/planner.`,
+			reason: `harness-subagent-policy: ${toolName} is parent-orchestrator only (not available in subagents).`,
 		};
 	}
 
@@ -121,6 +135,17 @@ export function evaluateHarnessSubagentToolCall(
 				reason: `harness-subagent-policy: mutating bash blocked for harness/${kind}.`,
 			};
 		}
+		if (
+			command &&
+			isHarnessPlanningAgent(agentType) &&
+			PLANNING_BASH_DENY_PATTERNS.some((p) => p.test(command))
+		) {
+			return {
+				action: "block",
+				reason:
+					"harness-subagent-policy: planning scouts may use read-only graphify/sg/ck commands only.",
+			};
+		}
 	}
 
 	return { action: "allow" };
@@ -128,6 +153,9 @@ export function evaluateHarnessSubagentToolCall(
 
 /** Policy phase hint seeded into subagent system prompt appendix when extensions load policy-gate. */
 export function harnessSubagentPhaseHint(agentType: string): string | null {
+	if (isHarnessPlanningAgent(agentType)) {
+		return "plan";
+	}
 	const kind = classifyHarnessAgent(agentType);
 	switch (kind) {
 		case "planner":

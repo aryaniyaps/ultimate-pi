@@ -34,6 +34,7 @@ export function validateApprovePlanParams(
 	return {
 		plan_packet: packet as PlanPacketLike,
 		human_summary: params.human_summary?.trim() || undefined,
+		research_brief: params.research_brief ?? undefined,
 		options,
 		displayMode: params.displayMode ?? "overlay",
 	};
@@ -47,6 +48,7 @@ export function toApprovePlanToolDetails(
 	return {
 		plan_packet: validated.plan_packet,
 		human_summary: validated.human_summary,
+		research_brief: validated.research_brief ?? null,
 		options: validated.options.map((o) => o.title),
 		response,
 		cancelled,

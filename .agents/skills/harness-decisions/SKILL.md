@@ -36,7 +36,7 @@ description: Structured user decisions via ask_user for harness setup, planning,
 
 ## Example (plan — approval gate)
 
-`harness/planner` calls **`approve_plan`** with the full `plan_packet` (parent TUI: scrollable plan + Approve / Request changes / Cancel), then **`create_plan`** with the same packet after Approve. Do not use `ask_user` for final approval or `write`/`edit` for the plan file.
+Parent orchestrator calls **`approve_plan`** with the full `plan_packet` (scrollable plan + Approve / Request changes / Cancel), then **`create_plan`** with the same packet after Approve.
 
 ```json
 {
@@ -70,6 +70,6 @@ description: Structured user decisions via ask_user for harness setup, planning,
 
 ## Who calls what
 
-- `harness/planner` — `ask_user` for clarification; **`approve_plan`** then **`create_plan`** for the plan file (`write`/`edit` blocked).
+- **Parent orchestrator** during `/harness-plan` — `ask_user` for clarification; **`approve_plan`** then **`create_plan`** for the plan file.
+- `harness/planning/*` (scouts, decompose, hypothesis, plan-adversary, hypothesis-eval) — JSON only; no `ask_user` / `approve_plan` / `create_plan`.
 - `harness/evaluator`, `harness/adversary`, and `harness/tie-breaker` — emit `human_required`; the **parent orchestrator** calls `ask_user`.
-- Parent orchestrator during `/harness-plan` — must **not** call `ask_user`, `approve_plan`, or `create_plan` (planner owns the full plan lifecycle).

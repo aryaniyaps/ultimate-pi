@@ -10,7 +10,6 @@ export const SUBAGENT_BLOCKED_TOOLS = new Set([
 ]);
 
 const ASK_USER_ALLOWED_AGENT_TYPES = new Set([
-	"harness/planner",
 	"harness/evaluator",
 	"harness/adversary",
 	"harness/tie-breaker",
@@ -42,12 +41,9 @@ export function evaluateSubagentToolCall(
 		};
 	}
 	if (toolName === "approve_plan" || toolName === "create_plan") {
-		if (agentType === "harness/planner") {
-			return { action: "allow" };
-		}
 		return {
 			action: "block",
-			reason: `Tool "${toolName}" is only available for harness/planner.`,
+			reason: `Tool "${toolName}" is only available in the parent harness orchestrator session.`,
 		};
 	}
 	return { action: "allow" };

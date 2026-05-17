@@ -18,7 +18,7 @@ If task missing:
 
 ## Orchestration (required) — same session
 
-1. **Plan** — spawn `harness/planner` → parse JSON → present full plan → `ask_user` Approve/Changes/Cancel → write `plan-packet.json` only on Approve (advances phase via policy-gate).
+1. **Plan** — follow `/harness-plan` parent orchestration (parallel `harness/planning/scout-*`, `decompose`, `hypothesis`, draft PlanPacket, `ask_user` on fork, parallel `plan-adversary` + `hypothesis-eval`, parent `approve_plan` + `create_plan`). Do not spawn `harness/planner`. No second approval pass.
 2. **Execute** — spawn `harness/executor` with `HarnessSpawnContext` (`mode: execute`). Summarize handoff bullets for next spawn (do not paste full subagent log).
 3. **Eval** — spawn `harness/evaluator` (`mode: benchmark`) after parent scripts if needed.
 4. **Review** — spawn `harness/evaluator` (`mode: verdict`) OR rely on eval verdict if policy allows — prefer both when strict gates require.

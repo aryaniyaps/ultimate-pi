@@ -17,14 +17,7 @@ import {
 } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
 import { Type } from "@sinclair/typebox";
-import {
-	getLatestRunContext,
-	syncPlannerApprovalsToParent,
-} from "../../../../lib/harness-run-context.js";
-import {
-	formatPlanReviewUserHint,
-	syncPlannerPlanReviewToDisk,
-} from "../../plan-approval/plan-review.js";
+import { getLatestRunContext } from "../../../../lib/harness-run-context.js";
 import { getDriftReport } from "../agent-manifest.js";
 import { Blackboard } from "../blackboard.js";
 import {
@@ -1507,32 +1500,6 @@ Guidelines:
 
 					clearInterval(spinnerInterval);
 
-					let plannerReviewPath: string | null = null;
-					if (
-						subagentType === "harness/planner" &&
-						record.session &&
-						record.status !== "running" &&
-						record.status !== "queued"
-					) {
-						const parentEntries = ctx.sessionManager.getEntries();
-						const runCtx = getLatestRunContext(parentEntries);
-						if (runCtx) {
-							const subEntries = record.session.sessionManager.getEntries();
-							syncPlannerApprovalsToParent(
-								(type, data) => pi.appendEntry(type, data),
-								parentEntries,
-								subEntries,
-								runCtx,
-							);
-							plannerReviewPath = await syncPlannerPlanReviewToDisk(
-								process.cwd(),
-								runCtx,
-								subEntries,
-								{ agentStatus: record.status },
-							);
-						}
-					}
-
 					// Clean up foreground agent from widget
 					if (fgId) {
 						agentActivity.delete(fgId);
@@ -1561,14 +1528,9 @@ Guidelines:
 						(record.completedAt ?? Date.now()) - record.startedAt;
 					const statsParts = [`${record.toolUses} tool uses`];
 					if (tokenText) statsParts.push(tokenText);
-					const reviewNote =
-						plannerReviewPath && subagentType === "harness/planner"
-							? `\n\n${formatPlanReviewUserHint(plannerReviewPath)}\n`
-							: "";
 					return textResult(
 						`${fallbackNote}Agent completed in ${formatMs(durationMs)} (${statsParts.join(", ")})${getStatusNote(record.status)}.\n\n` +
-							(record.result?.trim() || "No output.") +
-							reviewNote,
+							(record.result?.trim() || "No output."),
 						details,
 					);
 				},
@@ -1630,29 +1592,6 @@ Guidelines:
 						statsParts.push(`Compactions: ${record.compactionCount}`);
 					statsParts.push(`Duration: ${duration}`);
 
-					let plannerReviewPath: string | null = null;
-					if (record.session && record.status !== "running") {
-						const parentEntries = _ctx.sessionManager.getEntries();
-						const runCtx = getLatestRunContext(parentEntries);
-						if (runCtx) {
-							const subEntries = record.session.sessionManager.getEntries();
-							syncPlannerApprovalsToParent(
-								(type, data) => pi.appendEntry(type, data),
-								parentEntries,
-								subEntries,
-								runCtx,
-							);
-							if (record.type === "harness/planner") {
-								plannerReviewPath = await syncPlannerPlanReviewToDisk(
-									process.cwd(),
-									runCtx,
-									subEntries,
-									{ agentStatus: record.status },
-								);
-							}
-						}
-					}
-
 					let output =
 						`Agent: ${record.id}\n` +
 						`Type: ${displayName} | Status: ${record.status} | ${statsParts.join(" | ")}\n` +
@@ -1665,9 +1604,6 @@ Guidelines:
 						output += `Error: ${record.error}`;
 					} else {
 						output += record.result?.trim() || "No output.";
-						if (plannerReviewPath && record.type === "harness/planner") {
-							output += `\n\n${formatPlanReviewUserHint(plannerReviewPath)}`;
-						}
 					}
 
 					// Mark result as consumed — suppresses the completion notification

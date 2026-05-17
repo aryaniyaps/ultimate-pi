@@ -18,6 +18,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0030](0030-inhouse-vcc-compaction.md) | In-house VCC compaction (vendored pi-vcc) | Accepted |
 | [0031](0031-harness-run-context.md) | Harness active run context | Accepted |
 | [0032](0032-harness-command-orchestration.md) | Harness commands as agent orchestrators | Accepted |
+| [0033](0033-parent-orchestrated-planning.md) | Parent-orchestrated harness planning | Accepted |
+| [0034](0034-darwin-plan-research-pipeline.md) | Darwin plan research pipeline | Accepted |
 
 ## Template
 

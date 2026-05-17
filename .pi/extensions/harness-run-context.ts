@@ -816,7 +816,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				})
 			) {
 				const msg =
-					"Plan commit blocked: no user approval recorded. Approve via ask_user in the planner subagent first.";
+					"Plan commit blocked: no user approval recorded. Approve via approve_plan in this session first.";
 				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
 				return;
 			}
