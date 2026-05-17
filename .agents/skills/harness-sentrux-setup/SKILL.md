@@ -40,7 +40,7 @@ Custom TOML **outside** `# --- harness:managed:start/end ---` is preserved on ev
    node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"
    ```
 3. Optional: `sentrux plugin add-standard` (language plugins; harness-setup Step 2.8).
-4. Merge sentrux MCP into `.pi/mcp.json` if missing (harness-setup Step 4.2).
+4. Symlink **sentrux** skill into `.pi/skills/` if missing (see harness-setup Step 4.2).
 5. `sentrux check .` — fix violations or tune manifest `max_cc` / layers.
 6. Commit `.sentrux/rules.toml` and project-specific `architecture.manifest.json`.
 
