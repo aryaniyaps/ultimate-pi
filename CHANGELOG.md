@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.4.0] — 2026-05-16
+
+### ⚠️ Breaking Changes
+
+- **Firecrawl removed**: deleted self-hosted `firecrawl/` Docker stack and all `firecrawl*` agent skills. Web fetch/search now uses **`harness-web`** (Scrapling). Artifact dir is **`.web/`** (not `.firecrawl/`). Remove `FIRECRAWL_API_KEY` / `FIRECRAWL_API_URL`; use `uv tool install "scrapling[fetchers]"` and `scrapling install` per `/harness-setup`.
+- **Harness web CLI**: `python3 "$UP_PKG/.pi/scripts/harness-web.py" search|scrape|map|bulk-scrape` — see `.agents/skills/scrapling-web/SKILL.md`.
+
+### ✨ Features
+
+- **harness-web**: Scrapling-backed search (DuckDuckGo HTML SERP) and scrape (`StealthyFetcher` default; `--fast` for static HTTP). Modules under `.pi/scripts/harness_web/`.
+- **Harness subagents**: vendored harness-subagents extension and Sentrux bootstrap (`#125`).
+
 ## [v0.3.1] — 2026-05-15
 
 ### 🐛 Fixes
