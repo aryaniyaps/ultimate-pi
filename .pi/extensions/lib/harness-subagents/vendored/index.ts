@@ -17,6 +17,10 @@ import {
 } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
 import { Type } from "@sinclair/typebox";
+import {
+	extractPlanApprovalsFromEntries,
+	getLatestRunContext,
+} from "../../../lib/harness-run-context.js";
 import { getDriftReport } from "../agent-manifest.js";
 import { Blackboard } from "../blackboard.js";
 import {
@@ -1597,6 +1601,23 @@ Guidelines:
 					if (record.status !== "running" && record.status !== "queued") {
 						record.resultConsumed = true;
 						cancelNudge(params.agent_id);
+					}
+
+					if (record.session && record.status !== "running") {
+						const parentEntries = _ctx.sessionManager.getEntries();
+						const runCtx = getLatestRunContext(parentEntries);
+						if (runCtx) {
+							const subEntries = record.session.sessionManager.getEntries();
+							for (const approval of extractPlanApprovalsFromEntries(
+								subEntries,
+							)) {
+								pi.appendEntry("harness-plan-approval", {
+									plan_id: approval.plan_id ?? runCtx.plan_id,
+									approved_at: approval.approved_at,
+									source: "ask_user",
+								});
+							}
+						}
 					}
 
 					// Verbose: include full conversation

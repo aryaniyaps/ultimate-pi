@@ -252,6 +252,7 @@ export class AgentManager {
 				options.onSessionCreated?.(session);
 			},
 			systemPromptAppendix: options.systemPromptAppendix,
+			parentExtensionContext: ctx,
 		})
 			.then(({ responseText, session, aborted, steered }) => {
 				// Don't overwrite status if externally stopped via abort()

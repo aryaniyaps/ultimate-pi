@@ -22,6 +22,7 @@ const REQUIRED_SCHEMAS = [
 	"run-trace.schema.json",
 	"eval-verdict.schema.json",
 	"harness-spawn-context.schema.json",
+	"harness-turn.schema.json",
 ];
 
 const REQUIRED_ADRS = [

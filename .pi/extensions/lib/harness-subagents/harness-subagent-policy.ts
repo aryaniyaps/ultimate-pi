@@ -82,7 +82,7 @@ export function evaluateHarnessSubagentToolCall(
 	input: Record<string, unknown> | undefined,
 	agentType: string,
 ): ToolCallDecision {
-	const base = evaluateSubagentToolCall(toolName);
+	const base = evaluateSubagentToolCall(toolName, agentType);
 	if (base.action === "block") {
 		return base;
 	}

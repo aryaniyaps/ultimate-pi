@@ -14,15 +14,15 @@ description: Produce PlanPacket-aligned harness plans before execute phase. Use 
 
 ## Workflow (orchestrator)
 
-1. Spawn `harness/planner` with `HarnessSpawnContext` JSON (see `.pi/harness/specs/harness-spawn-context.schema.json`).
-2. Parse planner JSON (`status`, `plan_packet`, `clarification`) from `get_subagent_result`.
-3. On `needs_clarification`, `ask_user` with planner options, then re-spawn.
-4. Present full plan; `ask_user` Approve / Request changes / Cancel.
-5. **Only after Approve** — write canonical `plan_packet_path`.
+1. Use `HarnessSpawnContext` from injected `[HarnessRunContext]` — do not read spec files from disk.
+2. Spawn `harness/planner` **once** with that JSON in the prompt (`inherit_context: false`).
+3. Parse planner JSON from `get_subagent_result` (`status`, `plan_packet`, `clarification`).
+4. Do **not** parent `ask_user` or re-spawn for clarification — planner uses `ask_user` in the subagent.
+5. **Only after** subagent approval is synced — write canonical `plan_packet_path`.
 
 ## Rules
 
-- Parent owns all `ask_user`; `harness/planner` has `disallowed_tools: ask_user`.
+- `harness/planner` owns clarification and approval `ask_user` (bridged to parent UI).
 - Never plan or mutate source inline in the slash-command session.
 - context-mode only on harness paths; never lean-ctx.
 

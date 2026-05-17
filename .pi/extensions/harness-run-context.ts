@@ -5,6 +5,7 @@
  * in before_agent_start so trace-recorder reuses it on agent_start.
  */
 
+import { readFile, writeFile } from "node:fs/promises";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import {
 	canonicalPlanPath,
@@ -13,15 +14,17 @@ import {
 	extractCompletionStatuses,
 	formatActivePlanBlock,
 	formatPlanContextBlock,
+	getLatestHarnessTurn,
 	getLatestPolicyPhase,
 	getLatestRunContext,
 	getPolicyTransitionBlock,
 	type HarnessRunContext,
+	type HarnessTurnEntry,
 	hasHarnessAbortSignal,
 	hasPlanUserApproval,
+	inferHarnessPhase,
 	isAmendPlanAllowed,
 	isHarnessBootstrapPrompt,
-	isHarnessSlashCommand,
 	isNewTaskPlanBlocked,
 	isStaleActiveRunPointer,
 	loadProjectActiveRun,
@@ -30,7 +33,7 @@ import {
 	nowIso,
 	type PlanPacketSummary,
 	parseAskUserApprovalFromMessage,
-	parseHarnessSlashCommand,
+	parseHarnessSlashInput,
 	planPacketSummary,
 	readPlanPacketFromPath,
 	resolveArgsForCommand,
@@ -60,12 +63,24 @@ function persistContext(pi: ExtensionAPI, ctx: HarnessRunContext): void {
 	void saveProjectActiveRun(ctx);
 }
 
-function extractTaskSummary(prompt: string): string | null {
-	const quoted = prompt.match(/"([^"]+)"/);
-	if (quoted?.[1]) return quoted[1];
-	const cmd = parseHarnessSlashCommand(prompt);
-	if (cmd?.args) return cmd.args.slice(0, 200);
+function extractTaskSummary(args: string, prompt?: string): string | null {
+	const fromArgs = args.match(/"([^"]+)"/);
+	if (fromArgs?.[1]) return fromArgs[1];
+	if (args.trim()) return args.trim().slice(0, 200);
+	if (prompt) {
+		const quoted = prompt.match(/"([^"]+)"/);
+		if (quoted?.[1]) return quoted[1];
+	}
 	return null;
+}
+
+function appendHarnessTurn(pi: ExtensionAPI, turn: HarnessTurnEntry): void {
+	pi.appendEntry("harness-turn", turn);
+	pi.appendEntry("harness-plan-attempt", {
+		run_id: null,
+		command: turn.command,
+		started_at: turn.invoked_at,
+	});
 }
 
 function syncPolicyFromPlan(
@@ -148,15 +163,35 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		activeCtx = await hydrateFromDisk(sessionId, projectRoot, entries);
 	});
 
+	pi.on("input", async (event) => {
+		if (event.source === "extension") {
+			return { action: "continue" as const };
+		}
+		const parsed = parseHarnessSlashInput(event.text);
+		if (!parsed) {
+			return { action: "continue" as const };
+		}
+		appendHarnessTurn(pi, {
+			schema_version: "1.0.0",
+			command: parsed.command,
+			args: parsed.args,
+			source: "slash",
+			invoked_at: nowIso(),
+		});
+		return { action: "continue" as const };
+	});
+
 	pi.on("before_agent_start", async (event, ctx) => {
 		const sessionId = ctx.sessionManager.getSessionId();
 		const projectRoot = process.cwd();
 		const entries = getEntries(ctx);
 		const userPrompt = userVisiblePromptSlice(event.prompt);
-		const parsed = parseHarnessSlashCommand(userPrompt);
+		const turn = getLatestHarnessTurn(entries);
+		const parsed = turn
+			? { command: turn.command, args: turn.args }
+			: parseHarnessSlashInput(userPrompt);
 		const harnessTurn =
-			isHarnessSlashCommand(userPrompt) ||
-			needsClarificationFollowUp(activeCtx);
+			Boolean(turn) || Boolean(parsed) || needsClarificationFollowUp(activeCtx);
 
 		if (
 			userPrompt.toLowerCase().includes("/harness-abort") ||
@@ -186,7 +221,10 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		}
 
 		const policyPhase =
-			getLatestPolicyPhase(entries) ?? activeCtx?.phase ?? "plan";
+			inferHarnessPhase(entries, userPrompt) ??
+			getLatestPolicyPhase(entries) ??
+			activeCtx?.phase ??
+			"plan";
 		const driftActive = driftGateActive(entries);
 
 		// Plain-language follow-up after needs_clarification
@@ -196,13 +234,11 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			const packet = activeCtx.plan_packet_path
 				? await readPlanPacketFromPath(activeCtx.plan_packet_path)
 				: null;
-			const summary = packet
-				? planPacketSummary(
-						packet,
-						activeCtx.plan_packet_path!,
-						"needs_clarification",
-					)
-				: null;
+			const planPath = activeCtx.plan_packet_path;
+			const summary =
+				packet && planPath
+					? planPacketSummary(packet, planPath, "needs_clarification")
+					: null;
 			syncPolicyFromPlan(
 				pi,
 				entries,
@@ -244,7 +280,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				activeCtx.last_outcome = "abandoned";
 				persistContext(pi, activeCtx);
 			}
-			const task = extractTaskSummary(userPrompt);
+			const task = extractTaskSummary(args, userPrompt);
 			activeCtx = createFreshRunContext(sessionId, projectRoot, task);
 			persistContext(pi, activeCtx);
 			return {
@@ -323,21 +359,29 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				!activeCtx ||
 				!shouldReuseHarnessRunId(userPrompt, activeCtx, command)
 			) {
-				const task = extractTaskSummary(userPrompt);
+				const task = extractTaskSummary(args, userPrompt);
 				activeCtx = createFreshRunContext(sessionId, projectRoot, task);
 			}
 			activeCtx.plan_ready = false;
 			activeCtx.phase = "plan";
 			activeCtx.status = "active";
 			if (command === "harness-plan") {
-				const task = extractTaskSummary(userPrompt);
+				const task = extractTaskSummary(args, userPrompt);
 				if (task) activeCtx.task_summary = task;
 			}
-			pi.appendEntry("harness-plan-attempt", {
-				run_id: activeCtx.run_id,
-				command,
-				started_at: nowIso(),
-			});
+			if (turn) {
+				pi.appendEntry("harness-plan-attempt", {
+					run_id: activeCtx.run_id,
+					command,
+					started_at: turn.invoked_at,
+				});
+			} else {
+				pi.appendEntry("harness-plan-attempt", {
+					run_id: activeCtx.run_id,
+					command,
+					started_at: nowIso(),
+				});
+			}
 		} else if (
 			activeCtx &&
 			shouldReuseHarnessRunId(userPrompt, activeCtx, command)
@@ -473,7 +517,6 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 
 	pi.on("agent_end", async (_event, ctx) => {
 		const entries = getEntries(ctx);
-		const sessionId = ctx.sessionManager.getSessionId();
 		if (!activeCtx) {
 			activeCtx = getLatestRunContext(entries);
 		}
@@ -493,7 +536,10 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 					? lastUser.message.content
 					: "";
 		}
-		const parsed = parseHarnessSlashCommand(userVisiblePromptSlice(lastPrompt));
+		const lastTurn = getLatestHarnessTurn(entries);
+		const parsed = lastTurn
+			? { command: lastTurn.command, args: lastTurn.args }
+			: parseHarnessSlashInput(userVisiblePromptSlice(lastPrompt));
 		if (!parsed && !needsClarificationFollowUp(activeCtx)) return;
 
 		const policyPhase = getLatestPolicyPhase(entries) ?? activeCtx.phase;
@@ -711,6 +757,82 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			persistContext(pi, activeCtx);
 			const msg =
 				'New harness run allocated. Next: /harness-plan "<your task>"';
+			if (ctx.hasUI) ctx.ui.notify(msg, "info");
+		},
+	});
+
+	pi.registerCommand("harness-plan-commit", {
+		description:
+			"Write approved plan-packet.json to the active run (requires harness-plan-approval)",
+		handler: async (args, ctx) => {
+			const projectRoot = process.cwd();
+			const entries = getEntries(ctx);
+			let runCtx = getLatestRunContext(entries) ?? activeCtx;
+			if (!runCtx) {
+				runCtx = await hydrateFromDisk(
+					ctx.sessionManager.getSessionId(),
+					projectRoot,
+					entries,
+				);
+			}
+			if (!runCtx?.plan_packet_path) {
+				const msg = "No active harness run. Run /harness-plan first.";
+				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
+				return;
+			}
+			if (
+				!hasPlanUserApproval(entries, {
+					sincePlanCommand: true,
+					planId: runCtx.plan_id,
+				})
+			) {
+				const msg =
+					"Plan commit blocked: no user approval recorded. Approve via ask_user in the planner subagent first.";
+				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
+				return;
+			}
+			const pathArg = args.trim();
+			let packetPath = runCtx.plan_packet_path;
+			if (pathArg) {
+				packetPath = pathArg;
+			}
+			const packet = await readPlanPacketFromPath(packetPath);
+			const validation = validatePlanPacket(packet);
+			if (!validation.valid || !packet) {
+				const msg = !packet
+					? "Plan packet file missing or unreadable."
+					: `Invalid plan packet: ${validation.errors.join("; ")}`;
+				if (ctx.hasUI) ctx.ui.notify(msg, "error");
+				return;
+			}
+			const target = runCtx.plan_packet_path;
+			if (!target) {
+				if (ctx.hasUI) ctx.ui.notify("No plan_packet_path on active run.", "error");
+				return;
+			}
+			if (pathArg && pathArg !== target) {
+				const raw = await readFile(pathArg, "utf-8");
+				await writeFile(target, raw, "utf-8");
+			}
+			runCtx.plan_id = packet.plan_id ?? runCtx.plan_id;
+			runCtx.plan_ready = true;
+			runCtx.phase = "plan";
+			runCtx.last_completed_step = "plan";
+			runCtx.last_outcome = "ready";
+			runCtx.next_recommended_command = "/harness-run";
+			runCtx.updated_at = nowIso();
+			activeCtx = runCtx;
+			persistContext(pi, runCtx);
+			syncPolicyFromPlan(
+				pi,
+				entries,
+				runCtx.plan_id ?? packet.plan_id ?? "plan-pending",
+				"plan",
+				true,
+			);
+			const summary = planPacketSummary(packet, target, "ready");
+			pi.appendEntry("harness-plan-packet", summary);
+			const msg = `Plan committed: ${target}`;
 			if (ctx.hasUI) ctx.ui.notify(msg, "info");
 		},
 	});

@@ -9,12 +9,12 @@ Harness slash prompts duplicated logic already defined in `harness/*` agents. Co
 
 ## Decision
 
-1. **Slash commands** parse args, spawn the matching `harness/*` agent, run all `ask_user` gates, perform policy-gated writes, and emit handoff blocks.
-2. **Agents** perform multi-turn reads and emit structured JSON drafts; they do not approve plans or write canonical run artifacts (except executor mutations in scope).
-3. **HarnessSpawnContext** JSON (`.pi/harness/specs/harness-spawn-context.schema.json`) is required in every spawn prompt because subagents do not receive `[HarnessActivePlan]` injection.
-4. **Review isolation** uses `Agent` spawn with `inherit_context: false`, not session fork. `review-integrity` allows `Agent` / `get_subagent_result` for `harness/evaluator`, `harness/adversary`, and `harness/tie-breaker`.
-5. **Subagent policy** (`harness-subagent-policy.ts`) blocks mutating tools for planner/evaluator/adversary and related read-only agents; executor keeps write tools and `extensions: true`.
-6. **Planner** has `disallowed_tools: ask_user`; clarification options return in JSON for the parent orchestrator.
+1. **Slash commands** (prompt templates) are orchestrators: spawn `harness/*` agents once, perform policy-gated writes, emit handoff blocks. Command identity is captured on Pi **`input`** as `harness-turn` (raw `/harness-*`), not from expanded prompt markdown.
+2. **Agents** perform multi-turn reads and emit structured JSON drafts. **Planner** runs clarification and plan approval via `ask_user` (parent UI bridge); planner does not write `plan-packet.json`.
+3. **HarnessSpawnContext** is injected in `[HarnessRunContext]`; orchestrator copies it into spawn prompts. Subagents do not receive `[HarnessActivePlan]` injection.
+4. **Review isolation** uses `Agent` spawn with `inherit_context: false`. `review-integrity` allows `Agent` / `get_subagent_result` for evaluator/adversary/tie-breaker.
+5. **Subagent policy** blocks mutating tools for read-only phase agents; `ask_user` allowed for planner/evaluator/adversary/tie-breaker only.
+6. **Parent** does not duplicate planner `ask_user` or re-spawn for clarification. `get_subagent_result` syncs `harness-plan-approval` from subagent sessions.
 
 ## Consequences
 

@@ -23,7 +23,9 @@ interface BudgetExhaustedEvent {
 	exhaustion_reason:
 		| "max_rounds_reached"
 		| "round_token_cap_exceeded"
-		| "debate_global_cap_exceeded";
+		| "debate_global_cap_exceeded"
+		| "phase_cap_exceeded"
+		| "global_cap_exceeded";
 	caps: {
 		max_rounds: number;
 		round_token_cap: number;
@@ -52,7 +54,7 @@ const DEFAULT_GLOBAL_CAP = Number(
 );
 const HARD_STOP_BUDGETS = process.env.HARNESS_BUDGET_HARD_STOP === "true";
 const DEFAULT_PHASE_CAPS: Record<HarnessPhase, number> = {
-	plan: Number(process.env.HARNESS_BUDGET_PLAN_TOKENS ?? "12000"),
+	plan: Number(process.env.HARNESS_BUDGET_PLAN_TOKENS ?? "80000"),
 	execute: Number(process.env.HARNESS_BUDGET_EXECUTE_TOKENS ?? "80000"),
 	evaluate: Number(process.env.HARNESS_BUDGET_EVALUATE_TOKENS ?? "25000"),
 	adversary: Number(process.env.HARNESS_BUDGET_ADVERSARY_TOKENS ?? "35000"),
@@ -191,6 +193,8 @@ async function emitBudgetEvent(
 	pi.appendEntry("harness-budget-exhausted", event);
 }
 
+const debouncedSoftLimit = new Map<string, boolean>();
+
 export default function budgetGuard(pi: ExtensionAPI) {
 	pi.on("tool_call", async (_event, ctx) => {
 		const policy = getPolicyContext(ctx);
@@ -202,35 +206,60 @@ export default function budgetGuard(pi: ExtensionAPI) {
 		const globalCap = DEFAULT_GLOBAL_CAP;
 		const phaseCap = DEFAULT_PHASE_CAPS[phase];
 		const caps = await readDebateCapsFromSchema();
+		const runId = getRunId(ctx);
 
-		if (usage.totalTokens < globalCap && phaseUsed < phaseCap) return undefined;
+		const phaseExceeded = phaseUsed >= phaseCap;
+		const globalExceeded = usage.totalTokens >= globalCap;
+		if (!phaseExceeded && !globalExceeded) return undefined;
+
+		const exhaustionReason = phaseExceeded
+			? "phase_cap_exceeded"
+			: "global_cap_exceeded";
+		const debateCaps =
+			phase === "adversary" || phase === "evaluate"
+				? caps
+				: {
+						max_rounds: 0,
+						round_token_cap: phaseCap,
+						debate_global_cap: globalCap,
+					};
 
 		const exhausted: BudgetExhaustedEvent = {
 			schema_version: "1.0.0",
 			contract_version: "1.0.0",
 			event_type: "budget_exhausted",
-			run_id: getRunId(ctx),
+			run_id: runId,
 			debate_id: `${phase}-budget-guard`,
 			round_count: 1,
-			budget_used: Math.max(usage.totalTokens, phaseUsed),
-			exhaustion_reason: "debate_global_cap_exceeded",
-			caps,
+			budget_used: phaseExceeded ? phaseUsed : usage.totalTokens,
+			exhaustion_reason: exhaustionReason,
+			caps: debateCaps,
 			minimum_evidence_confidence: 0.6,
 			default_policy_outcome: "block",
 			human_override_allowed: true,
 		};
 
-		await emitBudgetEvent(pi, exhausted);
+		const debounceKey = `${runId}:${phase}:${exhaustionReason}`;
+		if (!debouncedSoftLimit.has(debounceKey)) {
+			debouncedSoftLimit.set(debounceKey, true);
+			await emitBudgetEvent(pi, exhausted);
+		}
+
 		if (!HARD_STOP_BUDGETS) {
-			pi.appendEntry("harness-budget-soft-limit", {
-				run_id: exhausted.run_id,
-				phase,
-				phaseUsed,
-				phaseCap,
-				totalUsed: usage.totalTokens,
-				totalCap: globalCap,
-				timestamp: nowIso(),
-			});
+			const softKey = `${debounceKey}:soft`;
+			if (!debouncedSoftLimit.has(softKey)) {
+				debouncedSoftLimit.set(softKey, true);
+				pi.appendEntry("harness-budget-soft-limit", {
+					run_id: exhausted.run_id,
+					phase,
+					phaseUsed,
+					phaseCap,
+					totalUsed: usage.totalTokens,
+					totalCap: globalCap,
+					exhaustion_reason: exhaustionReason,
+					timestamp: nowIso(),
+				});
+			}
 			return undefined;
 		}
 		return {

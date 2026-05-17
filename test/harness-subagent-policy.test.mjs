@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { evaluateHarnessSubagentToolCall } from "../.pi/extensions/lib/harness-subagents/harness-subagent-policy.ts";
+import { evaluateSubagentToolCall } from "../.pi/extensions/lib/harness-subagents/spawn-policy.ts";
 import {
 	extractJsonBlock,
 	parseHarnessAgentJson,
@@ -66,13 +67,21 @@ test("harness-plan prompt references harness/planner", () => {
 	);
 	assert.match(planPrompt, /harness\/planner/);
 	assert.match(planPrompt, /HarnessSpawnContext/);
+	assert.doesNotMatch(planPrompt, /harness-spawn-context\.schema\.json/);
 });
 
-test("planner agent disallows ask_user", () => {
+test("planner allows ask_user via spawn policy", () => {
+	const ask = evaluateSubagentToolCall("ask_user", "harness/planner");
+	assert.equal(ask.action, "allow");
+	const execAsk = evaluateSubagentToolCall("ask_user", "harness/executor");
+	assert.equal(execAsk.action, "block");
+});
+
+test("planner agent includes ask_user tool", () => {
 	const planner = readFileSync(
 		join(root, ".pi/agents/harness/planner.md"),
 		"utf-8",
 	);
-	assert.match(planner, /disallowed_tools:\s*ask_user/);
-	assert.doesNotMatch(planner, /extensions:\s*true/);
+	assert.match(planner, /\bask_user\b/);
+	assert.doesNotMatch(planner, /disallowed_tools:\s*ask_user/);
 });

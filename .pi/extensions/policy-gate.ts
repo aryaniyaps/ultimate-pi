@@ -15,7 +15,7 @@ import {
 	getPolicyTransitionBlock,
 	hasApprovedPlanSignalFromUserPrompt,
 	hasHarnessAbortSignal,
-	inferHarnessPhaseFromPrompt,
+	inferHarnessPhase,
 	isHarnessAutoSession,
 	isHarnessBootstrapPrompt,
 	isPlanPhaseAllowedMutation,
@@ -77,8 +77,8 @@ function nowIso(): string {
 
 function defaultState(): PolicyState {
 	return {
-		phase: "execute",
-		approvedPlan: true,
+		phase: "plan",
+		approvedPlan: false,
 		planId: null,
 		budgetBypass: false,
 		aborted: false,
@@ -198,7 +198,7 @@ export default function policyGate(pi: ExtensionAPI) {
 			};
 		}
 
-		const nextPhase = inferHarnessPhaseFromPrompt(userPrompt);
+		const nextPhase = inferHarnessPhase(entries, userPrompt);
 		const planSignal = hasApprovedPlanSignal(userPrompt, entries);
 
 		const transitionBlock = getPolicyTransitionBlock(userPrompt, entries);

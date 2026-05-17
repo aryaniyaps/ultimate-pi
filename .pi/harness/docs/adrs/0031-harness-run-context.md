@@ -9,7 +9,7 @@ Manual harness steps required copying `run_id` and `plan-packet.json` paths betw
 
 ## Decision
 
-1. Add `.pi/lib/harness-run-context.ts` and `harness-run-context.ts` extension as the single source of truth for active runs.
+1. Add `.pi/lib/harness-run-context.ts` and `harness-run-context.ts` extension as the single source of truth for active runs. **Harness command routing:** `pi.on("input")` appends `harness-turn` for raw `/harness-*` (before template expansion); `before_agent_start` bootstraps from that entry, not expanded prompt headers.
 2. Persist mirrors:
    - `.pi/harness/runs/<run_id>/run-context.json`
    - `.pi/harness/active-run.json` (cross-session pointer for forked eval)
