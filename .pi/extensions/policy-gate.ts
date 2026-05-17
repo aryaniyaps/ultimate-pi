@@ -9,6 +9,17 @@
  */
 
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import {
+	getLatestRunContext,
+	getPolicyTransitionBlock,
+	hasApprovedPlanSignalFromUserPrompt,
+	hasHarnessAbortSignal,
+	inferHarnessPhaseFromPrompt,
+	isHarnessBootstrapPrompt,
+	saveProjectActiveRun,
+	saveRunContextToDisk,
+	userVisiblePromptSlice,
+} from "../lib/harness-run-context.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
@@ -70,65 +81,17 @@ function defaultState(): PolicyState {
 	};
 }
 
-function isBootstrapPrompt(prompt: string): boolean {
-	const p = prompt.toLowerCase();
-	return (
-		p.includes("/harness-setup") ||
-		p.includes("harness-setup") ||
-		p.includes("full harness bootstrap")
-	);
-}
-
-function inferPhase(prompt: string, _current: HarnessPhase): HarnessPhase {
-	const p = prompt.toLowerCase();
-	if (
-		p.includes("/harness-plan") ||
-		p.includes("harness-plan") ||
-		p.includes("/harness-auto") ||
-		p.includes("harness-auto")
-	)
-		return "plan";
-	if (p.includes("/harness-run") || p.includes("harness-run")) return "execute";
-	if (p.includes("/harness-eval") || p.includes("harness-eval"))
-		return "evaluate";
-	if (p.includes("/harness-review") || p.includes("harness-review"))
-		return "evaluate";
-	if (p.includes("/harness-critic") || p.includes("harness-critic"))
-		return "adversary";
-	if (p.includes("adversary")) return "adversary";
-	if (p.includes("merge gate") || p.includes("policy decision")) return "merge";
-	return "execute";
-}
-
-function hasApprovedPlanSignal(prompt: string): boolean {
-	const p = prompt.toLowerCase();
-	return (
-		p.includes("planpacket") ||
-		p.includes("--plan") ||
-		p.includes("approved plan") ||
-		p.includes("plan_id")
-	);
-}
-
-function hasAbortSignal(prompt: string): boolean {
-	const p = prompt.toLowerCase();
-	return p.includes("/harness-abort") || p.includes("harness-abort");
-}
-
-function isValidTransition(from: HarnessPhase, to: HarnessPhase): boolean {
-	if (from === to) return true;
-	if (to === "plan") return true;
-	if (to === "execute") return true;
-	const fromIndex = PHASE_ORDER.indexOf(from);
-	const toIndex = PHASE_ORDER.indexOf(to);
-	return toIndex === fromIndex + 1;
+function hasApprovedPlanSignal(prompt: string, entries: unknown[]): boolean {
+	const runCtx = getLatestRunContext(entries);
+	if (runCtx?.plan_ready) return true;
+	return hasApprovedPlanSignalFromUserPrompt(prompt);
 }
 
 function isMutatingBash(command: string): boolean {
 	return BASH_MUTATION_PATTERNS.some((pattern) => pattern.test(command));
 }
 
-function getLatestPolicyState(ctx: {
+function getLatestPolicyStateFull(ctx: {
 	sessionManager: { getEntries(): unknown[] };
 }): PolicyState {
 	const entries = ctx.sessionManager.getEntries() as SessionEntryLike[];
@@ -172,12 +135,14 @@ export default function policyGate(pi: ExtensionAPI) {
 	let state = defaultState();
 
 	pi.on("session_start", async (_event, ctx) => {
-		state = getLatestPolicyState(ctx);
+		state = getLatestPolicyStateFull(ctx);
 	});
 
-	pi.on("before_agent_start", async (event) => {
-		const bootstrapPrompt = isBootstrapPrompt(event.prompt);
-		const abortSignal = hasAbortSignal(event.prompt);
+	pi.on("before_agent_start", async (event, ctx) => {
+		const userPrompt = userVisiblePromptSlice(event.prompt);
+		const entries = ctx.sessionManager.getEntries();
+		const bootstrapPrompt = isHarnessBootstrapPrompt(userPrompt);
+		const abortSignal = hasHarnessAbortSignal(userPrompt);
 
 		// /harness-setup instructions mention `harness-plan` (e.g. gh label text). That
 		// substring must not force inferPhase() to "plan" or bootstrap stays blocked.
@@ -220,18 +185,17 @@ export default function policyGate(pi: ExtensionAPI) {
 			};
 		}
 
-		const nextPhase = inferPhase(event.prompt, state.phase);
-		const planSignal = hasApprovedPlanSignal(event.prompt);
+		const nextPhase = inferHarnessPhaseFromPrompt(userPrompt);
+		const planSignal = hasApprovedPlanSignal(userPrompt, entries);
 
-		if (!isValidTransition(state.phase, nextPhase)) {
+		const transitionBlock = getPolicyTransitionBlock(userPrompt, entries);
+		if (transitionBlock.blocked) {
 			return {
 				message: {
 					customType: "harness-policy-violation",
 					display: true,
-					content: [
-						`Policy gate blocked invalid phase transition: ${state.phase} -> ${nextPhase}.`,
-						"Run /harness-plan first or continue in the current phase.",
-					].join("\n"),
+					content:
+						transitionBlock.message ?? "Policy gate blocked this command.",
 				},
 			};
 		}
@@ -242,13 +206,16 @@ export default function policyGate(pi: ExtensionAPI) {
 		}
 
 		if (nextPhase === "execute" && !state.approvedPlan && !planSignal) {
-			// Softened enforcement: flow mode defaults to execute without hard plan requirement.
-			state.approvedPlan = true;
+			const runCtx = getLatestRunContext(entries);
+			if (runCtx?.plan_ready) {
+				state.approvedPlan = true;
+				state.planId = runCtx.plan_id ?? state.planId;
+			}
 		}
 
 		if (planSignal) {
 			state.approvedPlan = true;
-			const planMatch = event.prompt.match(
+			const planMatch = userPrompt.match(
 				/plan[_-]?id["'\s:=]+([A-Za-z0-9._:-]+)/i,
 			);
 			state.planId = planMatch?.[1] ?? state.planId;
@@ -318,6 +285,21 @@ export default function policyGate(pi: ExtensionAPI) {
 			state.updatedAt = state.abortedAt;
 			pi.appendEntry("harness-policy-state", state);
 
+			const runCtx = getLatestRunContext(ctx.sessionManager.getEntries());
+			if (runCtx) {
+				runCtx.status = "aborted";
+				runCtx.plan_ready = false;
+				runCtx.last_outcome = "aborted";
+				runCtx.last_completed_step = "abort";
+				runCtx.next_recommended_command = runCtx.task_summary
+					? `/harness-plan "${runCtx.task_summary}"`
+					: '/harness-plan "<task>"';
+				runCtx.updated_at = state.abortedAt ?? nowIso();
+				pi.appendEntry("harness-run-context", runCtx);
+				void saveRunContextToDisk(runCtx);
+				void saveProjectActiveRun(runCtx);
+			}
+
 			const lines = [
 				"Harness run aborted safely.",
 				"  phase: plan",
@@ -342,7 +324,7 @@ export default function policyGate(pi: ExtensionAPI) {
 	pi.registerCommand("harness-policy-status", {
 		description: "Show current harness policy gate state",
 		handler: async (_args, ctx) => {
-			const latest = getLatestPolicyState(ctx);
+			const latest = getLatestPolicyStateFull(ctx);
 			const lines = [
 				"Harness policy gate:",
 				`  phase: ${latest.phase}`,

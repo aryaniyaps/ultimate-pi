@@ -10,9 +10,16 @@
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import {
+	getLatestRunContext,
+	getRunIdFromSession,
+	type HarnessPhase,
+	isHarnessSlashCommand,
+	loadRunContextFromDisk,
+	phaseTraceFileName,
+	saveRunContextToDisk,
+} from "../lib/harness-run-context.js";
 import { captureHarnessEvent } from "./lib/harness-posthog.js";
-
-type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
 interface ToolSpan {
 	tool_call_id: string;
@@ -50,10 +57,6 @@ const INDEX_PATH = join(RUNS_ROOT, "index.jsonl");
 
 function nowIso(): string {
 	return new Date().toISOString();
-}
-
-function makeRunId(sessionId: string): string {
-	return `${sessionId}-${Date.now()}`;
 }
 
 function parsePhase(ctx: {
@@ -165,8 +168,22 @@ async function readRunTraceSchemaVersion(): Promise<string> {
 	}
 }
 
+function resolveRunIdForAgentStart(
+	ctx: { sessionManager: { getEntries(): unknown[]; getSessionId(): string } },
+	prompt: string,
+): string {
+	const entries = ctx.sessionManager.getEntries();
+	const sessionId = ctx.sessionManager.getSessionId();
+	const fromSession = getRunIdFromSession(entries, sessionId);
+	if (fromSession && isHarnessSlashCommand(prompt)) return fromSession;
+	const runCtx = getLatestRunContext(entries);
+	if (runCtx && isHarnessSlashCommand(prompt)) return runCtx.run_id;
+	return `${sessionId}-${Date.now()}`;
+}
+
 export default function traceRecorder(pi: ExtensionAPI) {
 	let activeRun: ActiveRun | null = null;
+	let lastUserPrompt = "";
 
 	async function writeEvent(
 		runId: string,
@@ -180,14 +197,25 @@ export default function traceRecorder(pi: ExtensionAPI) {
 		);
 	}
 
+	pi.on("before_agent_start", async (event) => {
+		lastUserPrompt = event.prompt;
+	});
+
 	pi.on("agent_start", async (_event, ctx) => {
+		if (!isHarnessSlashCommand(lastUserPrompt)) {
+			activeRun = null;
+			return;
+		}
+
 		const sessionId = ctx.sessionManager.getSessionId();
-		const runId = makeRunId(sessionId);
+		const entries = ctx.sessionManager.getEntries();
+		const runId = resolveRunIdForAgentStart(ctx, lastUserPrompt);
 		const startedAt = nowIso();
+		const phase = parsePhase(ctx);
 		activeRun = {
 			runId,
 			planId: parsePlanId(ctx),
-			phase: parsePhase(ctx),
+			phase,
 			startedAt,
 			toolSpans: new Map(),
 			artifactRefs: new Set(),
@@ -198,15 +226,29 @@ export default function traceRecorder(pi: ExtensionAPI) {
 			phase: activeRun.phase,
 			started_at: startedAt,
 		});
-		captureHarnessEvent(sessionId, "harness_run_started", {
-			harness_run_id: runId,
-			harness_plan_id: activeRun.planId,
-			harness_phase: activeRun.phase,
-			pi_session_id: sessionId,
-			model: ctx.model?.id ?? "unknown",
-			thinking_level:
-				pi.getThinkingLevel() === "minimal" ? "off" : pi.getThinkingLevel(),
-		});
+
+		const runCtx = getLatestRunContext(entries);
+		const projectRoot = process.cwd();
+		const diskCtx =
+			runCtx ?? (await loadRunContextFromDisk(runId, projectRoot));
+		const shouldEmitStarted = !diskCtx?.harness_run_started_emitted;
+		if (shouldEmitStarted) {
+			captureHarnessEvent(sessionId, "harness_run_started", {
+				harness_run_id: runId,
+				harness_plan_id: activeRun.planId,
+				harness_phase: activeRun.phase,
+				pi_session_id: sessionId,
+				model: ctx.model?.id ?? "unknown",
+				thinking_level:
+					pi.getThinkingLevel() === "minimal" ? "off" : pi.getThinkingLevel(),
+			});
+			if (diskCtx) {
+				diskCtx.harness_run_started_emitted = true;
+				await saveRunContextToDisk(diskCtx);
+				pi.appendEntry("harness-run-context", diskCtx);
+			}
+		}
+
 		await writeEvent(runId, {
 			type: "run_start",
 			run_id: runId,
@@ -282,6 +324,12 @@ export default function traceRecorder(pi: ExtensionAPI) {
 			cost: usage,
 		};
 
+		const phaseFile = phaseTraceFileName(activeRun.phase);
+		await writeFile(
+			join(runDir, phaseFile),
+			`${JSON.stringify(summary, null, 2)}\n`,
+			"utf-8",
+		);
 		await writeFile(
 			join(runDir, "trace.json"),
 			`${JSON.stringify(summary, null, 2)}\n`,
@@ -313,7 +361,7 @@ export default function traceRecorder(pi: ExtensionAPI) {
 	});
 
 	pi.registerCommand("harness-trace-last", {
-		description: "Show last recorded run trace id",
+		description: "Show last harness trace phase summary (no run id)",
 		handler: async (_args, ctx) => {
 			const entries = ctx.sessionManager.getEntries();
 			for (let i = entries.length - 1; i >= 0; i--) {
@@ -322,8 +370,20 @@ export default function traceRecorder(pi: ExtensionAPI) {
 					entry.type === "custom" &&
 					entry.customType === "harness-run-trace"
 				) {
-					const data = entry.data as { run_id?: string } | undefined;
-					const msg = `Last run trace: ${data?.run_id ?? "(unknown)"}`;
+					const data = entry.data as
+						| {
+								phase?: string;
+								tool_span_count?: number;
+						  }
+						| undefined;
+					const handoff = getLatestRunContext(entries);
+					const next =
+						handoff?.next_recommended_command ?? "/harness-run-status";
+					const msg = [
+						`Last harness trace: phase ${data?.phase ?? "unknown"}`,
+						`tool spans: ${data?.tool_span_count ?? 0}`,
+						`Next: ${next}`,
+					].join("\n");
 					if (ctx.hasUI) {
 						ctx.ui.notify(msg, "info");
 					} else {

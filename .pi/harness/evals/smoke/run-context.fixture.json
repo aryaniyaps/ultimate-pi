@@ -1,0 +1,17 @@
+{
+	"schema_version": "1.0.0",
+	"run_id": "smoke-session-1",
+	"pi_session_id": "smoke-session",
+	"project_root": "/tmp/ultimate-pi-smoke",
+	"phase": "plan",
+	"plan_id": null,
+	"plan_packet_path": "/tmp/ultimate-pi-smoke/.pi/harness/runs/smoke-session-1/plan-packet.json",
+	"plan_ready": false,
+	"task_summary": "smoke task",
+	"status": "active",
+	"last_completed_step": null,
+	"last_outcome": null,
+	"next_recommended_command": "/harness-plan \"smoke task\"",
+	"owner_pi_session_id": "smoke-session",
+	"updated_at": "2026-05-17T00:00:00.000Z"
+}

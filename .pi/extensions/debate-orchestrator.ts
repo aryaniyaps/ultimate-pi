@@ -17,6 +17,7 @@
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { getRunIdFromSession } from "../lib/harness-run-context.js";
 
 type DebateParticipant =
 	| "EvaluatorAgent"
@@ -92,8 +93,15 @@ async function ensureDebatesDir(): Promise<void> {
 	await mkdir(DEBATES_DIR, { recursive: true });
 }
 
-function getRunId(ctx: { sessionManager: { getSessionId(): string } }): string {
-	return ctx.sessionManager.getSessionId();
+function getRunId(ctx: {
+	sessionManager: { getEntries(): unknown[]; getSessionId(): string };
+}): string {
+	return (
+		getRunIdFromSession(
+			ctx.sessionManager.getEntries(),
+			ctx.sessionManager.getSessionId(),
+		) ?? ctx.sessionManager.getSessionId()
+	);
 }
 
 async function readRoundCapsFromSchema(): Promise<{

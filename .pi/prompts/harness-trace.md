@@ -1,6 +1,6 @@
 ---
 description: Query and summarize harness run traces for replay and forensics.
-argument-hint: "--run <run-id> [--phase plan|execute|evaluate|adversary|merge]"
+argument-hint: "[--run <run-id>] [--phase plan|execute|evaluate|adversary|merge]"
 ---
 
 # harness-trace
@@ -11,12 +11,10 @@ Retrieve and summarize trace artifacts for a run.
 
 Read `$ARGUMENTS` and parse:
 
-- required: `--run <run-id>`
+- optional: `--run <run-id>` (recovery only)
 - optional: `--phase plan|execute|evaluate|adversary|merge`
 
-If `--run` is missing, stop and return:
-
-`Usage: /harness-trace --run <run-id> [--phase plan|execute|evaluate|adversary|merge]`
+On the happy path, **omit `--run`**. Phase traces live at `trace-<phase>.json` under the active run directory.
 
 ## Process
 

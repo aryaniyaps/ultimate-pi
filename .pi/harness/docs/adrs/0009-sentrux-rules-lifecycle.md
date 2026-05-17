@@ -15,7 +15,7 @@ Sentrux enforces architecture via [`.sentrux/rules.toml`](https://sentrux.dev/do
 4. **Re-sync command:** `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --force` or `harness-sentrux-bootstrap.mjs --force` (resolve `$UP_PKG` via [.pi/scripts/README.md](../../../scripts/README.md)).
 5. **Pi command:** `/harness-sentrux-sync` via `sentrux-rules-sync.ts` extension.
 6. **When to sync:**
-   - `/harness-setup` Step 4.3 (after sentrux CLI install in Step 2.8)
+   - `/harness-setup` Step 4.2 (after sentrux CLI install in Step 2.8)
    - After editing `architecture.manifest.json`
    - On `agent_end` when harness phase is `plan` or `merge`
    - `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` fails if manifest hash ≠ last sync (`--check`)

@@ -8,6 +8,7 @@
 import { appendFile, mkdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { getRunIdFromSession } from "../lib/harness-run-context.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
@@ -129,8 +130,15 @@ function getPolicyContext(ctx: {
 	return { phase: null, budgetBypass: false };
 }
 
-function getRunId(ctx: { sessionManager: { getSessionId(): string } }): string {
-	return ctx.sessionManager.getSessionId();
+function getRunId(ctx: {
+	sessionManager: { getEntries(): unknown[]; getSessionId(): string };
+}): string {
+	return (
+		getRunIdFromSession(
+			ctx.sessionManager.getEntries(),
+			ctx.sessionManager.getSessionId(),
+		) ?? ctx.sessionManager.getSessionId()
+	);
 }
 
 async function readDebateCapsFromSchema(): Promise<{

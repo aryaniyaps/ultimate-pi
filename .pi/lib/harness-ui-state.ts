@@ -97,6 +97,7 @@ export interface HarnessUiState {
 		testIntegrity: number | null;
 	};
 	traceRunId: string | null;
+	nextRecommendedCommand: string | null;
 }
 
 const DEFAULT_STATE: HarnessUiState = {
@@ -123,6 +124,7 @@ const DEFAULT_STATE: HarnessUiState = {
 		testIntegrity: null,
 	},
 	traceRunId: null,
+	nextRecommendedCommand: null,
 };
 
 const RELEVANT_CUSTOM_TYPES = new Set([
@@ -135,6 +137,7 @@ const RELEVANT_CUSTOM_TYPES = new Set([
 	"harness-test-integrity-flag",
 	"harness-run-trace",
 	"harness-trace-state",
+	"harness-run-context",
 ]);
 
 function asNumber(value: unknown): number | null {
@@ -283,6 +286,14 @@ function createStateFromEntries(entries: unknown[]): HarnessUiState {
 			: typeof traceState?.run_id === "string"
 				? traceState.run_id
 				: null;
+
+	const runCtx = latest.get("harness-run-context") as
+		| { next_recommended_command?: string }
+		| undefined;
+	state.nextRecommendedCommand =
+		typeof runCtx?.next_recommended_command === "string"
+			? runCtx.next_recommended_command
+			: null;
 
 	state.flowSubstate = deriveFlowSubstate(state);
 	return state;

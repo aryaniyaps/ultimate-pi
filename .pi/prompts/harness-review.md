@@ -1,6 +1,6 @@
 ---
 description: Independent evaluator pass/fail verdict in session isolation mode.
-argument-hint: "--run <run-id> [--trace <trace-ref>]"
+argument-hint: "[--run <run-id>] [--trace <trace-ref>]"
 ---
 
 # harness-review
@@ -11,12 +11,11 @@ Produce an independent evaluator verdict.
 
 Read `$ARGUMENTS` and parse:
 
-- required: `--run <run-id>`
+- optional: `--run <run-id>` (recovery only)
 - optional: `--trace <trace-ref>`
 
-If `--run` is missing, stop and return:
-
-`Usage: /harness-review --run <run-id> [--trace <trace-ref>]`
+On the happy path, **omit `--run`**. Use active run context from `[HarnessRunContext]`.
+Run in a **new Pi session** after execute when possible.
 
 ## Process
 

@@ -29,6 +29,8 @@ Governance/runtime enforcement for this harness is implemented as Pi extensions
 under `.pi/extensions/` and auto-loaded through the package `pi.extensions`
 manifest (`package.json`).
 
+- `harness-run-context.ts` - active run + plan injection; short commands without run/plan args
+- `harness-live-widget.ts` - footer status (phase, plan ready, next command; no run id in UI)
 - `policy-gate.ts` - phase state machine + plan-before-mutate enforcement
 - `budget-guard.ts` - hard-stop token budget checks + budget exhausted artifacts
 - `trace-recorder.ts` - append-only run traces + HarnessRunRecord + compact index

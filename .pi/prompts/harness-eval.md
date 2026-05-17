@@ -1,28 +1,33 @@
 ---
 description: Run focused benchmark/eval checks and emit structured harness verdict artifacts.
-argument-hint: "--run <run-id> [--baseline <ref>] [--suite <name>]"
+argument-hint: "[--run <run-id>] [--baseline <ref>] [--suite <name>]"
 ---
 
 # harness-eval
 
-Run focused evaluations for the run and produce structured artifacts.
+Run focused evaluations for the active harness run and produce structured artifacts.
 
 ## Step 0 — Parse arguments
 
 Read `$ARGUMENTS` and parse:
 
-- required: `--run <run-id>`
+- optional: `--run <run-id>` (recovery only — active run is used when omitted)
 - optional: `--baseline <ref>`, `--suite <name>`
 
-If `--run` is missing, stop and return:
+On the happy path, **omit `--run`**. The extension injects the active run from session + project `active-run.json`.
 
-`Usage: /harness-eval --run <run-id> [--baseline <ref>] [--suite <name>]`
+If no active run exists, stop and return:
+
+`No active run. Finish /harness-plan and /harness-run first, or use /harness-run-status.`
+
+Run in a **new Pi session** after execute (review-integrity isolation).
 
 ## Process
 
-1. Run plan-aligned acceptance checks plus focused regressions.
-2. Collect evaluator-compatible metrics and guard outcomes.
-3. Emit structured artifacts keyed by run ID.
+1. Load plan scope from `[HarnessActivePlan]` (read-only).
+2. Run plan-aligned acceptance checks plus focused regressions.
+3. Collect evaluator-compatible metrics and guard outcomes.
+4. Emit structured artifacts under the active run directory.
 
 ## Requirements
 
@@ -35,17 +40,12 @@ If `--run` is missing, stop and return:
 - Do not overthink simple benchmark outcomes; report measured results directly.
 - Only evaluate the requested run/suite/baseline scope.
 - Never report synthetic metrics; include only measured values.
+- Do not edit `plan-packet.json` in this phase.
 
 ## Output
 
-- Benchmark/eval summary table.
-- Structured verdict artifacts referenced by run ID.
-- Pass/fail recommendation for policy gate consumption.
+Structured eval verdict and summary metrics.
 
 ## Completion behavior
 
-End with a compact evaluator handoff:
-
-- measured metrics (`success_rate`, `cost_per_task`, regression guard status)
-- verdict (`pass`/`fail`)
-- artifact paths keyed by run ID
+End with `eval_status` (`pass` or `fail`) and `next_command` (`/harness-review` on pass; `/harness-plan` or `/harness-incident` on fail).
