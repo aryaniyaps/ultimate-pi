@@ -12,7 +12,10 @@
 			"**/*.{ts,tsx,js,jsx,json,jsonc,css}",
 			"!graphify-out/**/*",
 			"!graphify-books-out/**/*",
-			"!vendor/**/*"
+			"!vendor/**/*",
+			"!.pi/harness/active-run.json",
+			"!.pi/harness/runs/**/run-context.json",
+			"!.pi/harness/runs/**/plan-packet.json"
 		]
 	},
 	"formatter": {
