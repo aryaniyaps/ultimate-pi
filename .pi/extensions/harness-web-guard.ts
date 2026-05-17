@@ -83,9 +83,7 @@ export default function harnessWebGuard(pi: ExtensionAPI) {
 		const prompt = latestUserPrompt(ctx);
 		if (isBootstrapPrompt(prompt)) return undefined;
 
-		const command = String(
-			(event.input as { command?: string }).command ?? "",
-		);
+		const command = String((event.input as { command?: string }).command ?? "");
 		const hit = blockedWebBash(command);
 		if (!hit) return undefined;
 

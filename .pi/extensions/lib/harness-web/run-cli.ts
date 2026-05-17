@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { resolveHarnessScript } from "../harness-paths.js";
 
@@ -82,8 +82,7 @@ export function summarizeSearchJson(filePath: string, cwd: string): string {
 }
 
 export function harnessWebContextLine(): string {
-	const engine =
-		process.env.HARNESS_WEB_SEARCH_ENGINE?.trim() || "ddg_html";
+	const engine = process.env.HARNESS_WEB_SEARCH_ENGINE?.trim() || "ddg_html";
 	const searx = process.env.HARNESS_WEB_SEARXNG_URL?.trim();
 	const searxPart = searx ? ` searxng_url=${searx}` : "";
 	return (

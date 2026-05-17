@@ -31,11 +31,16 @@ const WEB_FETCH_GUIDELINES = [
 const WebSearchSchema = Type.Object({
 	query: Type.String({ description: "Search query" }),
 	limit: Type.Optional(
-		Type.Number({ description: "Max results (default 5)", minimum: 1, maximum: 20 }),
+		Type.Number({
+			description: "Max results (default 5)",
+			minimum: 1,
+			maximum: 20,
+		}),
 	),
 	output: Type.Optional(
 		Type.String({
-			description: "Output path (default .web/search.json or .web/bulk for bulk)",
+			description:
+				"Output path (default .web/search.json or .web/bulk for bulk)",
 		}),
 	),
 	bulk: Type.Optional(
@@ -55,7 +60,9 @@ const WebFetchSchema = Type.Object({
 			default: "scrape",
 		}),
 	),
-	output: Type.Optional(Type.String({ description: "Output file path under .web/" })),
+	output: Type.Optional(
+		Type.String({ description: "Output file path under .web/" }),
+	),
 	fast: Type.Optional(
 		Type.Boolean({
 			description: "Use fast HTTP scrape (static/simple pages)",
@@ -140,7 +147,12 @@ export default function harnessWebTools(pi: ExtensionAPI) {
 			parts.push("", `output: ${output}`);
 			parts.push("Use read tool for full JSON, or web_fetch on result URLs.");
 
-			return okResult(parts.join("\n"), { output, query, bulk, engine: process.env.HARNESS_WEB_SEARCH_ENGINE });
+			return okResult(parts.join("\n"), {
+				output,
+				query,
+				bulk,
+				engine: process.env.HARNESS_WEB_SEARCH_ENGINE,
+			});
 		},
 	});
 
@@ -166,7 +178,15 @@ export default function harnessWebTools(pi: ExtensionAPI) {
 
 			const argv =
 				mode === "map"
-					? ["map", url, "-o", output, "--limit", String(limit), ...(fast ? ["--fast"] : [])]
+					? [
+							"map",
+							url,
+							"-o",
+							output,
+							"--limit",
+							String(limit),
+							...(fast ? ["--fast"] : []),
+						]
 					: ["scrape", url, "-o", output, ...(fast ? ["--fast"] : [])];
 
 			const run = runHarnessWeb(MODULE_URL, argv, cwd);
