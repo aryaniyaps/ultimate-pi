@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.6.1] — 2026-05-17
+
+### 🐛 Fixes
+
+- **SearXNG bootstrap:** generate `SEARXNG_SECRET` and set `server.secret_key` so containers no longer crash on the default `ultrasecretkey` (SearXNG 2026.4+).
+- **Harness env template:** remove obsolete `PI_VCC_CONFIG_PATH`; add env-only VCC, PostHog MCP, Sentrux, and default `VAULT_WIKI_PATH` keys aligned with `/harness-setup`.
+
 ## [v0.6.0] — 2026-05-17
 
 ### ✨ Features
