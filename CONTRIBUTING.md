@@ -36,7 +36,7 @@ Pre-commit hooks run `biome check` and `tsc` on staged files automatically.
 
 ## Sentrux (architectural quality gate)
 
-[Sentrux](https://github.com/sentrux/sentrux) provides real-time structural quality metrics for AI-agent-written code. It acts as a feedback loop sensor — scanning codebase architecture, detecting degradation, and enforcing rules via MCP.
+[Sentrux](https://github.com/sentrux/sentrux) provides real-time structural quality metrics for AI-agent-written code. It acts as a feedback loop sensor — scanning codebase architecture, detecting degradation, and enforcing rules via the CLI.
 
 ### Quick start
 
@@ -57,9 +57,9 @@ sentrux gate --save .
 sentrux gate .
 ```
 
-### MCP Integration
+### Pi skill
 
-The sentrux MCP server is configured in `.pi/mcp.json`. Agents can use tools like `scan`, `session_start`, `session_end`, `check_rules`, `health`, and `evolution` to monitor code quality during development.
+In Pi sessions, use the **`sentrux`** skill (`/skill:sentrux`) — CLI workflows (`check`, `gate`, GUI), not MCP. Pi does not load `.pi/mcp.json`. For rules bootstrap from the harness manifest, use **harness-sentrux-setup**.
 
 ### Rules Engine
 

@@ -306,7 +306,7 @@ if gh auth status &>/dev/null; then
 fi
 ```
 
-### 2.8 — sentrux (Architectural Quality Gate + MCP Sensor)
+### 2.8 — sentrux (Architectural Quality Gate)
 
 ```bash
 if ! command -v sentrux &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -319,7 +319,7 @@ Install all 52 language plugins:
 sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or failed"
 ```
 
-Configure MCP server in `.pi/mcp.json` (see Step 4.2). **Rules.toml bootstrap runs in Step 4.3** (idempotent, merge-safe).
+Ensure the **sentrux** Pi skill is linked (see Step 4.2). **Rules.toml bootstrap runs in Step 4.3** (idempotent, merge-safe).
 
 ## Step 3 — Pi Extension Packages
 
@@ -496,28 +496,27 @@ Ensure `.gitignore` contains:
 !.sentrux/rules.toml
 ```
 
-### 4.2 — MCP Server Configuration
+### 4.2 — Sentrux Pi skill
 
-Add sentrux MCP server to `.pi/mcp.json`:
-```json
-{
-  "mcpServers": {
-    "context-mode": {
-      "command": "context-mode"
-    },
-    "sentrux": {
-      "command": "sentrux",
-      "args": ["--mcp"]
-    }
-  }
-}
+Pi does **not** load `.pi/mcp.json`. Agents use Sentrux via the **CLI** and the **`sentrux`** skill.
+
+From **project root**, ensure the skill is discoverable (idempotent):
+
+```bash
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
+SKILL_SRC="$UP_PKG/.agents/skills/sentrux"
+SKILL_DST=".pi/skills/sentrux"
+if [ -d "$SKILL_SRC" ] && [ ! -e "$SKILL_DST" ]; then
+  ln -s "../../.agents/skills/sentrux" "$SKILL_DST"
+  echo "✓ linked $SKILL_DST → sentrux skill"
+elif [ -e "$SKILL_DST" ]; then
+  echo "✓ sentrux skill already present at $SKILL_DST"
+else
+  echo "✗ missing $SKILL_SRC — reinstall ultimate-pi"
+fi
 ```
 
-This gives agents real-time access to structural health metrics:
-- `scan` — quality signal, file count, bottleneck detection
-- `session_start` / `session_end` — baseline comparison, degradation detection
-- `check_rules` — architectural constraint enforcement
-- `health`, `rescan`, `evolution`, `dsm`, `test_gaps`
+After `/reload`, agents can invoke **`/skill:sentrux`** for install paths, `sentrux check`, `sentrux gate --save` / `sentrux gate`, and harness integration. **context-mode** remains a separate `npm:context-mode` package in `.pi/settings.json` (its own MCP bridge inside that extension).
 
 ### 4.3 — Sentrux rules bootstrap (required)
 
