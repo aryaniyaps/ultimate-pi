@@ -7,6 +7,7 @@
 
 import { randomUUID } from "node:crypto";
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { getRunIdFromSession } from "../lib/harness-run-context.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 type ObservationKind =
@@ -77,15 +78,12 @@ function nowIso(): string {
 function getRunId(ctx: {
 	sessionManager: { getEntries(): unknown[]; getSessionId(): string };
 }): string {
-	const entries = ctx.sessionManager.getEntries() as SessionEntryLike[];
-	for (let i = entries.length - 1; i >= 0; i--) {
-		const entry = entries[i];
-		if (entry.type !== "custom" || entry.customType !== "harness-trace-state")
-			continue;
-		const runId = entry.data?.run_id;
-		if (typeof runId === "string" && runId.length > 0) return runId;
-	}
-	return ctx.sessionManager.getSessionId();
+	return (
+		getRunIdFromSession(
+			ctx.sessionManager.getEntries(),
+			ctx.sessionManager.getSessionId(),
+		) ?? ctx.sessionManager.getSessionId()
+	);
 }
 
 export default function observationBus(pi: ExtensionAPI) {

@@ -1,6 +1,6 @@
 ---
 description: Create incident record with rollback and override trail for harness failures.
-argument-hint: "--run <run-id> --trigger <reason> [--severity low|med|high|critical]"
+argument-hint: "--trigger <reason> [--run <run-id>] [--severity low|med|high|critical]"
 ---
 
 # harness-incident
@@ -11,12 +11,14 @@ Create a structured incident record for blocked or failed harness runs.
 
 Read `$ARGUMENTS` and parse:
 
-- required: `--run <run-id>`, `--trigger <reason>`
-- optional: `--severity low|med|high|critical`
+- required: `--trigger <reason>`
+- optional: `--run <run-id>` (recovery only), `--severity low|med|high|critical`
 
-If required flags are missing, stop and return:
+If `--trigger` is missing, stop and return:
 
-`Usage: /harness-incident --run <run-id> --trigger <reason> [--severity low|med|high|critical]`
+`Usage: /harness-incident --trigger <reason> [--run <run-id>] [--severity low|med|high|critical]`
+
+Use active run when `--run` is omitted.
 
 ## Process
 

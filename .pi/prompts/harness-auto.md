@@ -22,7 +22,7 @@ If task is missing, stop and return:
 
 ## Process contract
 
-1. Build and approve plan packet before any mutation.
+1. Build and approve plan packet at the canonical active-run path before any mutation (extension allocates one `run_id` for the auto pipeline).
 2. Execute only approved scope with rollback artifacts.
 3. Run independent evaluator then adversarial reviewer.
 4. Apply severity policy + strict pre-PR gates.
@@ -71,13 +71,13 @@ Block commit/PR if any gate fails:
 - `--risk` can tighten behavior, never disable adversary.
 - If risk/ambiguity is high, auto-fallback to manual `harness-plan` and use `ask_user` for blocking forks.
 - If execution must be interrupted safely, run `/harness-abort [reason]`, then restart with `/harness-plan "<task>"`.
-- Always output trace bundle ID and incident/rollback references.
+- Always output artifact references (`plan`, `eval`, `adversary`, `consensus`, `rollback`) and incident paths when applicable — do not ask the user to copy a run id; point to `/harness-run-status` or `/harness-trace-last` for phase handoff.
 
 ## Completion behavior
 
 End with a deterministic handoff block:
 
 1. `Pipeline status` (pass/fail per strict gate).
-2. `Trace bundle` and artifact references (`plan`, `eval`, `adversary`, `consensus`, `rollback`).
+2. Phase trace summary and artifact references (`plan`, `eval`, `adversary`, `consensus`, `rollback`) under the active run directory.
 3. `Policy outcome` (`pass`, `conditional_pass`, `block`, or `human_required`) with one-line rationale.
 4. `Next action` (open PR, replan, rollback, or human override path).

@@ -16,6 +16,7 @@ const ADRS = join(ROOT, ".pi", "harness", "docs", "adrs");
 
 const REQUIRED_SCHEMAS = [
 	"harness-run-record.schema.json",
+	"harness-run-context.schema.json",
 	"harness-posthog-event.schema.json",
 	"observation.schema.json",
 	"run-trace.schema.json",
@@ -32,10 +33,12 @@ const REQUIRED_ADRS = [
 	"0007-interactive-drift-monitor.md",
 	"0008-harness-posthog-telemetry.md",
 	"0009-sentrux-rules-lifecycle.md",
+	"0031-harness-run-context.md",
 ];
 
 const REQUIRED_EXTENSIONS = [
 	"harness-telemetry.ts",
+	"harness-run-context.ts",
 	"trace-recorder.ts",
 	"observation-bus.ts",
 	"drift-monitor.ts",
@@ -191,6 +194,21 @@ async function main() {
 	const libPath = join(ROOT, ".pi", "extensions", "lib", "harness-posthog.ts");
 	if (!(await fileExists(libPath))) fail("missing lib/harness-posthog.ts");
 	ok("lib/harness-posthog.ts");
+
+	const runCtxLib = join(ROOT, ".pi", "lib", "harness-run-context.ts");
+	if (!(await fileExists(runCtxLib))) fail("missing lib/harness-run-context.ts");
+	ok("lib/harness-run-context.ts");
+
+	const runCtxFixture = join(SMOKE, "run-context.fixture.json");
+	if (!(await fileExists(runCtxFixture))) {
+		fail("missing run-context.fixture.json");
+	}
+	const runCtxData = JSON.parse(await readFile(runCtxFixture, "utf-8"));
+	if (runCtxData.schema_version !== "1.0.0") {
+		fail("run-context fixture schema_version must be 1.0.0");
+	}
+	if (!runCtxData.run_id) fail("run-context fixture missing run_id");
+	ok("run-context.fixture.json");
 
 	const fixture = JSON.parse(
 		await readFile(join(SMOKE, "run-record.fixture.json"), "utf-8"),

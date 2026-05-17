@@ -17,7 +17,7 @@ Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, C
 | Provider detection from `OPENAI_*` / `ANTHROPIC_*` env only | Wrong for pi users — keys live in `~/.pi/agent/auth.json`. Use `harness-generate-model-router.mjs` (Pi `ModelRegistry.getAvailable()`). |
 | Re-running 2.1–2.8 manually after CLI verify | Wasteful — trust `harness-cli-verify.sh` output; only fix reported ✗ lines. |
 | Overwriting `AGENTS.md` after graphify | Graphify appends a section — **merge**, do not replace (Step 4.3). |
-| `sentrux-rules-sync` without project manifest | Use **`harness-sentrux-bootstrap.mjs`** (Step 4.4) — seeds manifest + idempotent rules sync. |
+| `sentrux-rules-sync` without project manifest | Use **`harness-sentrux-bootstrap.mjs`** (Step 4.2) — seeds manifest + idempotent rules sync. |
 | Re-running bootstrap with `--force` on unchanged manifest | Wasteful but safe — default bootstrap skips when hash unchanged; `--force` only after manifest edits. |
 | `graph.json` uses `links`, not `edges` | Step 6 stats: `g.get('edges', g.get('links', []))`. |
 | Guessing harness-web / `.env` defaults when `ask_user` is available | **Mandatory `ask_user`** at Step 4.0 unless `--non-interactive`. |
@@ -319,7 +319,7 @@ Install all 52 language plugins:
 sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or failed"
 ```
 
-Ensure the **sentrux** Pi skill is linked (see Step 4.2). **Rules.toml bootstrap runs in Step 4.3** (idempotent, merge-safe).
+**Rules.toml bootstrap runs in Step 4.2** (idempotent, merge-safe). Sentrux CLI workflows use the package **`sentrux`** skill (`.agents/skills/sentrux`); no symlink into `.pi/skills/` required.
 
 ## Step 3 — Pi Extension Packages
 
@@ -496,29 +496,7 @@ Ensure `.gitignore` contains:
 !.sentrux/rules.toml
 ```
 
-### 4.2 — Sentrux Pi skill
-
-Pi does **not** load `.pi/mcp.json`. Agents use Sentrux via the **CLI** and the **`sentrux`** skill.
-
-From **project root**, ensure the skill is discoverable (idempotent):
-
-```bash
-UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))")"
-SKILL_SRC="$UP_PKG/.agents/skills/sentrux"
-SKILL_DST=".pi/skills/sentrux"
-if [ -d "$SKILL_SRC" ] && [ ! -e "$SKILL_DST" ]; then
-  ln -s "../../.agents/skills/sentrux" "$SKILL_DST"
-  echo "✓ linked $SKILL_DST → sentrux skill"
-elif [ -e "$SKILL_DST" ]; then
-  echo "✓ sentrux skill already present at $SKILL_DST"
-else
-  echo "✗ missing $SKILL_SRC — reinstall ultimate-pi"
-fi
-```
-
-After `/reload`, agents can invoke **`/skill:sentrux`** for install paths, `sentrux check`, `sentrux gate --save` / `sentrux gate`, and harness integration. **context-mode** remains a separate `npm:context-mode` package in `.pi/settings.json` (its own MCP bridge inside that extension).
-
-### 4.3 — Sentrux rules bootstrap (required)
+### 4.2 — Sentrux rules bootstrap (required)
 
 **Skill:** invoke **harness-sentrux-setup** before hand-editing rules or manifest.
 
@@ -552,7 +530,7 @@ Set up structural regression baseline (optional):
 sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate run"
 ```
 
-### 4.4 — Project AGENTS.md
+### 4.3 — Project AGENTS.md
 
 **Do not overwrite** an existing `AGENTS.md` — graphify bootstrap may have appended a `## Graphify` section. If missing, create minimal onboarding content; if present, only add harness subsections that are absent.
 
@@ -681,7 +659,7 @@ Output summary table:
 | biome | ✓/✗ | Project config: found/default |
 | ast-grep | ✓/✗ | AST-aware code search (`sg`)
 | gh CLI | ✓/✗ | Auth: yes/no |
-| sentrux | ✓/✗ | CLI + plugins; rules via Step 4.3 bootstrap |
+| sentrux | ✓/✗ | CLI + plugins; rules via Step 4.2 bootstrap |
 | Sentrux rules.toml | ✓/✗ | `.sentrux/rules.toml` synced from manifest |
 | pi extensions | ✓/✗ | 4 packages |
 | model router | ✓/✗ | Package + config verified, activation via `/router profile auto` |

@@ -20,7 +20,7 @@ If required args are missing, stop and return:
 
 ## Process
 
-1. Validate evidence completeness and guard status.
+1. Validate evidence completeness and guard status. Evidence may live under `.pi/harness/runs/<run_id>/` for the active harness run when produced by `/harness-eval` (resolve via active run context or explicit paths — no run id required on the happy path).
 2. Generate a proposal artifact only (no live router mutation).
 3. Require explicit human approval metadata before any apply step.
 

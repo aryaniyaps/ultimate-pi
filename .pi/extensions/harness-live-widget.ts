@@ -285,9 +285,16 @@ class HarnessWidgetComponent {
 		const toolDisplay = this.inFlight.lastToolName
 			? `${this.inFlight.toolCount}:${this.inFlight.lastToolName}`
 			: String(this.inFlight.toolCount);
-		const traceDisplay = this.state.traceRunId ?? "n/a";
+		const nextDisplay =
+			this.state.nextRecommendedCommand != null
+				? this.state.nextRecommendedCommand.length > 36
+					? `${this.state.nextRecommendedCommand.slice(0, 33)}...`
+					: this.state.nextRecommendedCommand
+				: null;
 		const row3Left = `${planFlag} ${reviewFlag} ${budgetFlag} ${testsFlag}`;
-		const row3Right = `${theme.fg("dim", "inFlight:")}${theme.fg("accent", toolDisplay)} ${theme.fg("dim", "trace:")}${theme.fg("muted", traceDisplay)}`;
+		const row3Right = nextDisplay
+			? `${theme.fg("dim", "inFlight:")}${theme.fg("accent", toolDisplay)} ${theme.fg("dim", "next:")}${theme.fg("accent", nextDisplay)}`
+			: `${theme.fg("dim", "inFlight:")}${theme.fg("accent", toolDisplay)}`;
 		const row3 = composeZones(row3Left, row3Right, rowWidth);
 
 		const lines: string[] = [truncateToWidth(row1, rowWidth)];
@@ -353,7 +360,7 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 			policyDecision: state.policyDecision,
 			consensusDelta: state.consensusDelta,
 			severity: state.severity,
-			traceRunId: state.traceRunId,
+			nextRecommendedCommand: state.nextRecommendedCommand,
 			inFlight,
 		});
 	}

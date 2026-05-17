@@ -1,0 +1,80 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/harness-run-context.schema.json",
+	"title": "HarnessRunContext",
+	"description": "Session- and disk-backed active harness run pointer.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"run_id",
+		"pi_session_id",
+		"project_root",
+		"phase",
+		"plan_ready",
+		"status",
+		"owner_pi_session_id",
+		"updated_at"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"run_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"pi_session_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"project_root": {
+			"type": "string",
+			"minLength": 1
+		},
+		"phase": {
+			"type": "string",
+			"enum": ["plan", "execute", "evaluate", "adversary", "merge"]
+		},
+		"plan_id": {
+			"type": ["string", "null"]
+		},
+		"plan_packet_path": {
+			"type": ["string", "null"]
+		},
+		"plan_ready": {
+			"type": "boolean"
+		},
+		"task_summary": {
+			"type": ["string", "null"]
+		},
+		"status": {
+			"type": "string",
+			"enum": ["active", "aborted", "completed"]
+		},
+		"last_completed_step": {
+			"type": ["string", "null"]
+		},
+		"last_outcome": {
+			"type": ["string", "null"]
+		},
+		"next_recommended_command": {
+			"type": ["string", "null"]
+		},
+		"owner_pi_session_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"updated_at": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"harness_run_started_emitted": {
+			"type": "boolean"
+		},
+		"turn_override_run_id": {
+			"type": ["string", "null"]
+		}
+	}
+}

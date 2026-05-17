@@ -1,37 +1,36 @@
 ---
 description: Execute only against an approved PlanPacket with strict phase gates.
-argument-hint: "--plan <path-to-plan-packet.json> [--budget <amount>]"
+argument-hint: "[--budget <amount>]"
 ---
 
 # harness-run
 
-Execute implementation only after an approved plan exists.
+Execute implementation only after an approved plan exists in active run context.
 
 ## Step 0 — Parse arguments
 
 Read `$ARGUMENTS` and parse:
 
-- required: `--plan <path-to-plan-packet.json>`
 - optional: `--budget <amount>`
 
-If `--plan` is missing, stop and return:
+Do **not** parse `--plan` on the happy path. Load the PlanPacket from `[HarnessActivePlan]` / injected `plan_packet_path` only.
 
-`Usage: /harness-run --plan <path-to-plan-packet.json> [--budget <amount>]`
+If the extension reports plan not ready, stop and return:
+
+`Run /harness-plan first — no approved plan in active run context.`
+
+Advanced recovery only: `--plan <path>` must live under the active run directory (extension validates).
 
 ## Process
 
-1. Validate `--plan` input and confirm it is a valid approved `PlanPacket`.
+1. Load PlanPacket from the injected canonical path and confirm it is valid.
 2. Execute only within approved scope.
 3. Run focused validations mapped to approved acceptance checks.
 4. Produce rollback artifacts and handoff references for downstream gates.
 
-## Required input
-
-- `--plan` must point to a valid `PlanPacket`.
-
 ## Gate behavior
 
-- Refuse execution if no valid plan packet is provided.
+- Refuse execution if active plan is not ready (extension blocks before the agent runs).
 - Keep edits strictly within approved scope.
 - If scope drift appears, stop and return to `harness-plan`.
 - For **implementation forks** inside approved scope, call `ask_user` with 2–4 options. For plan-level ambiguity, stop and return to `harness-plan`.
@@ -58,3 +57,4 @@ End with:
 1. `execution_status` (`completed`, `blocked`, or `scope_drift`).
 2. `validation_summary` (pass/fail with command evidence).
 3. `handoff_ready` booleans for evaluator/adversary prerequisites.
+4. `next_command`: **New Pi session → `/harness-eval`** when execution completed successfully.

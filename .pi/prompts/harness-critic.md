@@ -1,6 +1,6 @@
 ---
 description: Adversarial reviewer command with reproducible, merge-blocking findings.
-argument-hint: "--run <run-id> [--trace <trace-ref>] [--risk low|med|high]"
+argument-hint: "[--run <run-id>] [--trace <trace-ref>] [--risk low|med|high]"
 ---
 
 # harness-critic
@@ -11,12 +11,10 @@ Run adversarial review against the candidate result.
 
 Read `$ARGUMENTS` and parse:
 
-- required: `--run <run-id>`
+- optional: `--run <run-id>` (recovery only)
 - optional: `--trace <trace-ref>`, `--risk low|med|high`
 
-If `--run` is missing, stop and return:
-
-`Usage: /harness-critic --run <run-id> [--trace <trace-ref>] [--risk low|med|high]`
+On the happy path, **omit `--run`**. Use active run context. Prefer a session isolated from execute.
 
 ## Process
 
