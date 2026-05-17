@@ -45,7 +45,7 @@ If something blocks, inspect status (no run id needed):
 | `/harness-auto "<task>"` | End-to-end pipeline (recommended) |
 | `/harness-plan "<task>"` | Create or **revise** the active plan in context (no plan path to copy) |
 | `/harness-run` | Execute the active plan from context (**no `--plan`** on happy path) |
-| `/harness-eval` | Eval for active run (optional `--run`; **new session** after execute) |
+| `/harness-eval` | Eval for active run (optional `--run`; spawns isolated `harness/evaluator`) |
 | `/harness-review` | Independent review (optional `--run`) |
 | `/harness-critic` | Adversarial review (optional `--run`) |
 | `/harness-trace` | Trace summary (optional `--run`) |
@@ -63,7 +63,6 @@ Use this when you want each step separate:
 ```text
 /harness-plan "your task"
 /harness-run
-# New Pi session (review isolation):
 /harness-eval
 /harness-review
 /harness-critic
@@ -78,7 +77,7 @@ Recovery: `--run` and `--plan` remain for scripts; `/harness-use-run` and `/harn
 - **System prompt** — [`.pi/extensions/00-ultimate-pi-system-prompt.ts`](.pi/extensions/00-ultimate-pi-system-prompt.ts) sets the base prompt from packaged [`.pi/SYSTEM.md`](.pi/SYSTEM.md), or from your workspace override **`.pi/system.md`** (lowercase) if you create one. Nothing is copied into your project by default. After upgrading the package or editing either file, run **`/reload`**.
 - **Model routing (vendored + gated)** — [`pi-model-router`](https://github.com/yeliu84/pi-model-router) ships inside this package (`vendor/pi-model-router/`). [`.pi/extensions/pi-model-router-harness.ts`](.pi/extensions/pi-model-router-harness.ts) activates it **only after** `.pi/model-router.json` exists (generation: `/harness-setup` Step 3.5), so **`router/auto` does not appear** beforehand. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). [`.pi/scripts/harness-sync-model-router.mjs`](.pi/scripts/harness-sync-model-router.mjs) may set **`defaultProvider`/`defaultModel`** to **`router`/`auto`** when the project sets no default — run **`/reload`** afterward. Do **not** add `npm:@yeliu84/pi-model-router` to `.pi/settings.json`; it duplicates the fork. Maintainer refresh: **`npm run vendor:sync-router`**.
 - **Active run + plan context** — PlanPacket lives at a fixed path per run; the extension injects it for `/harness-plan` (revise) and `/harness-run` (execute). Session state plus `.pi/harness/active-run.json`; no run ids or plan paths to copy.
-- **Review isolation** — run evaluate/review/critic in a **new session** after execute (see troubleshooting).
+- **Review isolation** — `/harness-eval`, `/harness-review`, and `/harness-critic` spawn isolated subagents (`inherit_context: false`); stay in the same session (see ADR 0032).
 - **Concurrent plans** — a second `/harness-plan` while a run is active is blocked until `/harness-abort` or `/harness-new-run` (except drift replan / amend after `needs_clarification`).
 - **Plan before mutate** — write/edit/shell that changes the repo is blocked until execute phase.
 - **No auto-merge** — you decide when to open or merge a PR.
@@ -91,10 +90,10 @@ Optional: copy [`.env.example`](.env.example) to `.env` if you use PostHog or ot
 | Problem | Try |
 |---------|-----|
 | Setup fails | `node --version` (need 18+), rerun `/harness-setup` |
-| "No active run" on eval | Finish plan+run first, or `/harness-run-status`; open a new session for eval |
+| "No active run" on eval | Finish plan+run first, or `/harness-run-status` |
 | Forgot where you left off | `/harness-run-status` |
 | Second plan rejected | `/harness-abort` or `/harness-new-run` |
-| Blocked in evaluate/review | Run review in a fresh session (isolation from execute) |
+| Blocked in evaluate/review | Spawn review via Agent (`harness/evaluator` / `harness/adversary`); do not run review tools inline in execute phase |
 | High plan drift | `harness-drift-replan` or abort then replan (ADR 0007) |
 | Budget / scope stop | `/harness-budget-status`, narrow the task or split the plan |
 | Test integrity warning | `/harness-test-integrity-last`, fix or justify test changes |

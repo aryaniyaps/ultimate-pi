@@ -2,7 +2,7 @@
  * harness-web-tools — web_search + web_fetch pi tools wrapping harness-web.py.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 import {
 	harnessWebContextLine,

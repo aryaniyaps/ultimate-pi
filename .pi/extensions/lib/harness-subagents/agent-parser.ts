@@ -2,7 +2,7 @@
  * Parse harness agent .md files into AgentConfig (path id = posix relative path).
  */
 
-import { parseFrontmatter } from "@mariozechner/pi-coding-agent";
+import { parseFrontmatter } from "@earendil-works/pi-coding-agent";
 import { BUILTIN_TOOL_NAMES } from "./vendored/agent-types.js";
 import type {
 	AgentConfig,

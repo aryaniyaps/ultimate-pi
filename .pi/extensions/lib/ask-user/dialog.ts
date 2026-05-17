@@ -1,11 +1,11 @@
-import type { ExtensionUIContext } from "@mariozechner/pi-coding-agent";
+import type { ExtensionUIContext } from "@earendil-works/pi-coding-agent";
 import {
 	Editor,
 	type EditorTheme,
 	Key,
 	matchesKey,
 	truncateToWidth,
-} from "@mariozechner/pi-tui";
+} from "@earendil-works/pi-tui";
 import type { AskResponse, DialogResult, ValidatedAskParams } from "./types.js";
 
 type DisplayOption = {

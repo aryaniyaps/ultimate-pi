@@ -1,5 +1,5 @@
-import { buildSessionContext, loadEntriesFromFile } from "../../node_modules/@mariozechner/pi-coding-agent/dist/core/session-manager.js";
-import type { Message } from "@mariozechner/pi-ai";
+import { buildSessionContext, loadEntriesFromFile } from "../../node_modules/@earendil-works/pi-coding-agent/dist/core/session-manager.js";
+import type { Message } from "@earendil-works/pi-ai";
 
 export interface LoadedSession {
   messageCount: number;

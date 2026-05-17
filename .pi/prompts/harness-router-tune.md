@@ -5,32 +5,27 @@ argument-hint: "--evidence <evidence.json> --candidate <candidate-router.json> [
 
 # harness-router-tune
 
-Router tuning is **propose-and-approve only**.
+Orchestrator — scripts + `harness/meta-optimizer` spawn. **Never** write `.pi/model-router.json` directly.
 
 ## Step 0 — Parse arguments
-
-Read `$ARGUMENTS` and parse:
 
 - required: `--evidence <evidence.json>`, `--candidate <candidate-router.json>`
 - optional: `--proposal <out.json>`
 
-If required args are missing, stop and return:
+If missing required args:
 
-`Usage: /harness-router-tune --evidence <evidence.json> --candidate <candidate-router.json> [--proposal <out.json>]`
+`Usage: /harness-router-tune --evidence <path> --candidate <path> [--proposal <out.json>]`
 
-## Process
+## Orchestration (required)
 
-1. Validate evidence completeness and guard status. Evidence may live under `.pi/harness/runs/<run_id>/` for the active harness run when produced by `/harness-eval` (resolve via active run context or explicit paths — no run id required on the happy path).
-2. Generate a proposal artifact only (no live router mutation).
-3. Require explicit human approval metadata before any apply step.
+1. Parent validates evidence paths exist.
+2. Optionally spawn:
 
-## Never-do rule
+```
+Agent({ subagent_type: "harness/meta-optimizer", prompt: "mode: tune, evidence paths…" })
+```
 
-- Never write `.pi/model-router.json` directly from this command.
-
-## Proposal flow
-
-1. Build proposal:
+3. Parent runs proposal script:
 
 ```bash
 node .pi/harness/router/propose-router-tuning.mjs \
@@ -39,8 +34,8 @@ node .pi/harness/router/propose-router-tuning.mjs \
   --proposal-out .pi/harness/router/proposals/<id>.json
 ```
 
-2. Call `ask_user` to approve / reject / request edits before apply (harness-decisions skill).
-3. Apply only after approval, with explicit approver + justification:
+4. `ask_user` approve / reject / edit (harness-decisions).
+5. Apply only after approval:
 
 ```bash
 node .pi/harness/router/apply-router-proposal.mjs \
@@ -50,25 +45,8 @@ node .pi/harness/router/apply-router-proposal.mjs \
   --write
 ```
 
-## Evidence requirements
+## Completion
 
-- Minimum sample count threshold met.
-- Pre/post success-rate delta included.
-- Cost-per-task delta included.
-- Regression guard status present and passing.
-
-If any requirement is missing, stop with `human_required`.
-
-## Guardrails
-
-- Do not overthink weak evidence; reject incomplete proposals quickly.
-- Only produce proposal/apply instructions within this contract.
-- Never apply tuning without explicit human approver identity and justification.
-
-## Completion behavior
-
-End with:
-
-- `tuning_status` (`proposed`, `human_required`, or `rejected`)
-- evidence gate summary (sample count, success delta, cost delta, regression guard)
-- explicit non-mutation confirmation for `.pi/model-router.json`
+- `tuning_status`: `proposed`, `human_required`, or `rejected`
+- Evidence gate summary
+- Confirm `.pi/model-router.json` was not mutated without apply script

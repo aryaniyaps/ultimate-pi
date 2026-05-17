@@ -7,23 +7,21 @@ description: Run harness evaluation phase and emit EvalVerdict artifacts. Use wi
 
 ## When to use
 
-- `/harness-eval` or evaluate phase after execute
+- `/harness-eval` after execute
 - Before merge / release readiness
-- After adversary debate when consensus required
 
-## Workflow
+## Workflow (orchestrator)
 
-1. Read `.pi/harness/specs/eval-verdict.schema.json`.
-2. Gather evidence: tests, diff scope, policy state, debate consensus packet.
-3. Emit verdict via `pi.appendEntry('harness-eval-verdict', { ... })` pattern (session custom entry).
-4. When Sentrux enabled, ensure `harness-sentrux-signal` exists (stub or MCP) per ADR 0006.
-5. Deterministic checks: `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` (see `.pi/scripts/README.md`) and project test script.
-
-## Verdict values
-
-Align with schema: `pass`, `conditional_pass`, `block`, `human_required`.
+1. Parent may run deterministic scripts (`harness-verify`, project tests).
+2. Spawn `harness/evaluator` with `mode: benchmark` and artifact paths in `HarnessSpawnContext`.
+3. Parse JSON from `get_subagent_result`; parent writes run artifacts.
 
 ## Rules
 
-- Eval phase must use isolated session when review-integrity is active.
-- PostHog: `harness_eval_verdict` is emitted by harness-telemetry on flush — no analyst skill runs in Phase 2.
+- No new Pi session — subagent isolation via `Agent` spawn (ADR 0032).
+- Do not edit `plan-packet.json` in eval phase.
+- `/harness-review` uses same agent with `mode: verdict` for policy EvalVerdict.
+
+## Verdict values
+
+`pass`, `conditional_pass`, `fail`, `human_required` (parent handles `ask_user`).

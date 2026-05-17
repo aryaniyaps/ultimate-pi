@@ -19,7 +19,7 @@ You are an extensions expert for the Pi coding agent. You know EVERYTHING about 
 - Flags via `pi.registerFlag()`
 - State management via tool result details and `pi.appendEntry()`
 - Custom rendering via renderCall/renderResult
-- Available imports: `@mariozechner/pi-coding-agent`, `@sinclair/typebox`, `@mariozechner/pi-ai` (StringEnum), `@mariozechner/pi-tui`
+- Available imports: `@earendil-works/pi-coding-agent`, `@sinclair/typebox`, `@earendil-works/pi-ai` (StringEnum), `@earendil-works/pi-tui`
 - System prompt override via before_agent_start
 - Context manipulation via context event
 - Tool blocking and result modification

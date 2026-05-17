@@ -1,18 +1,33 @@
 /**
  * review-integrity — enforce evaluator/adversary isolation from executor session.
  *
- * If review phases (`evaluate`/`adversary`) run in the same session as execution,
- * tool calls are blocked until the review is isolated (fork/switch session).
+ * Parent orchestrators spawn review agents in isolated subagent sessions.
+ * Direct review tools in the executor session are blocked; Agent/get_subagent_result
+ * for harness review agents remain allowed.
  */
 
 import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
 const INCIDENTS_DIR = join(process.cwd(), ".pi", "harness", "incidents");
 const INCIDENT_FILE = join(INCIDENTS_DIR, "review-integrity.jsonl");
+
+const ORCHESTRATION_TOOLS = new Set([
+	"Agent",
+	"get_subagent_result",
+	"steer_subagent",
+]);
+
+const REVIEW_SUBAGENT_TYPES = new Set([
+	"harness/evaluator",
+	"harness/adversary",
+	"harness/tie-breaker",
+]);
+
+const EXECUTOR_SUBAGENT_TYPE = "harness/executor";
 
 interface IsolationState {
 	executorSessionId: string | null;
@@ -89,6 +104,17 @@ function restoreState(ctx: {
 	};
 }
 
+function subagentTypeFromInput(
+	input: Record<string, unknown> | undefined,
+): string {
+	if (!input) return "";
+	const direct = input.subagent_type;
+	if (typeof direct === "string") return direct;
+	const nested = input as { subagentType?: string };
+	if (typeof nested.subagentType === "string") return nested.subagentType;
+	return "";
+}
+
 async function appendIncident(payload: Record<string, unknown>): Promise<void> {
 	await mkdir(INCIDENTS_DIR, { recursive: true });
 	await appendFile(
@@ -105,6 +131,10 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 		updatedAt: nowIso(),
 	};
 
+	const persist = (): void => {
+		pi.appendEntry("harness-review-integrity", state);
+	};
+
 	pi.on("session_start", async (_event, ctx) => {
 		state = restoreState(ctx);
 	});
@@ -115,7 +145,7 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 		state.executorSessionId = ctx.sessionManager.getSessionId();
 		state.violationActive = false;
 		state.updatedAt = nowIso();
-		pi.appendEntry("harness-review-integrity", state);
+		persist();
 	});
 
 	pi.on("before_agent_start", async (_event, ctx) => {
@@ -125,7 +155,7 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 		if (!inReview) {
 			state.violationActive = false;
 			state.updatedAt = nowIso();
-			pi.appendEntry("harness-review-integrity", state);
+			persist();
 			return undefined;
 		}
 
@@ -135,42 +165,66 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 		) {
 			state.violationActive = false;
 			state.updatedAt = nowIso();
-			pi.appendEntry("harness-review-integrity", state);
+			persist();
 			return undefined;
 		}
 
 		state.violationActive = true;
 		state.updatedAt = nowIso();
-		pi.appendEntry("harness-review-integrity", state);
-
-		await appendIncident({
-			type: "review_integrity_violation",
-			session_id: currentSessionId,
-			phase,
-			reason:
-				"evaluator/adversary session is not isolated from executor session",
-			mitigation:
-				"fork or switch to a clean review session before running review tools",
-		});
+		persist();
 
 		return {
 			message: {
-				customType: "harness-review-integrity-block",
+				customType: "harness-review-integrity-hint",
 				display: true,
 				content: [
-					"Review integrity violation: evaluator/adversary is sharing executor session context.",
-					"Fork/switch session, then rerun review to maintain independent evaluation guarantees.",
+					"Review phase in executor session: spawn harness/evaluator or harness/adversary via Agent (isolated subagent context).",
+					"Do not run review checks directly in this session — use get_subagent_result after spawn.",
 				].join("\n"),
 			},
 		};
 	});
 
-	pi.on("tool_call", async (_event) => {
+	pi.on("tool_call", async (event, ctx) => {
+		if (event.toolName === "Agent") {
+			const subagentType = subagentTypeFromInput(
+				event.input as Record<string, unknown> | undefined,
+			);
+			if (subagentType === EXECUTOR_SUBAGENT_TYPE) {
+				state.executorSessionId = ctx.sessionManager.getSessionId();
+				state.violationActive = false;
+				state.updatedAt = nowIso();
+				persist();
+				return undefined;
+			}
+			if (REVIEW_SUBAGENT_TYPES.has(subagentType)) {
+				state.violationActive = false;
+				state.updatedAt = nowIso();
+				persist();
+				return undefined;
+			}
+		}
+
 		if (!state.violationActive) return undefined;
+
+		if (ORCHESTRATION_TOOLS.has(event.toolName)) {
+			return undefined;
+		}
+
+		await appendIncident({
+			type: "review_integrity_violation",
+			session_id: ctx.sessionManager.getSessionId(),
+			tool: event.toolName,
+			reason:
+				"direct tool use in review phase while sharing executor session context",
+			mitigation:
+				"spawn harness/evaluator or harness/adversary via Agent instead",
+		});
+
 		return {
 			block: true,
 			reason:
-				"review-integrity: tool call blocked because review session is not isolated from executor context.",
+				"review-integrity: tool blocked in review phase — spawn an isolated review subagent via Agent.",
 		};
 	});
 

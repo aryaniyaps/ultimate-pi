@@ -10,27 +10,22 @@ description: Produce PlanPacket-aligned harness plans before execute phase. Use 
 - User invokes `/harness-plan` or harness-auto planning phase
 - Policy gate blocks mutate tools without approved plan
 - Drift monitor requests replan (`harness-drift-replan`)
-- User replies with clarification after `needs_clarification` (extension injects amend context)
+- User replies with clarification after `needs_clarification`
 
-## Workflow
+## Workflow (orchestrator)
 
-1. Read `.pi/harness/specs/plan-packet.schema.json`.
-2. If `[HarnessActivePlan]` is present, read the current packet from `plan_packet_path` and revise — do not start greenfield unless `/harness-new-run`.
-3. When scope, risk, or acceptance is ambiguous, call `ask_user` (see harness-decisions skill) before finalizing the packet.
-4. Capture scope, risks, acceptance criteria, and explicit `plan_id` in the PlanPacket body.
-5. **Write** JSON to the canonical path from `[HarnessRunContext]` / `[HarnessActivePlan]` before completing.
-6. Do not mutate production files in plan phase unless user explicitly requests draft-only outputs.
-7. Extension sets `approvedPlan` / policy `planId` after disk validation — do **not** use `plan_id=...` prompt hacks.
-
-## Output
-
-Structured plan summary with:
-
-- `plan_id` (stable string in the written file)
-- Phases to run: plan → execute → evaluate → (adversary if needed) → merge
-- Budget hints from env caps (`HARNESS_BUDGET_*`)
-- `next_command`: `/harness-run` when ready
+1. Spawn `harness/planner` with `HarnessSpawnContext` JSON (see `.pi/harness/specs/harness-spawn-context.schema.json`).
+2. Parse planner JSON (`status`, `plan_packet`, `clarification`) from `get_subagent_result`.
+3. On `needs_clarification`, `ask_user` with planner options, then re-spawn.
+4. Present full plan; `ask_user` Approve / Request changes / Cancel.
+5. **Only after Approve** — write canonical `plan_packet_path`.
 
 ## Rules
 
-- context-mode only if compiling large context; never lean-ctx on harness paths.
+- Parent owns all `ask_user`; `harness/planner` has `disallowed_tools: ask_user`.
+- Never plan or mutate source inline in the slash-command session.
+- context-mode only on harness paths; never lean-ctx.
+
+## Output
+
+- `plan_status`, `risk_level`, `next_command`: `/harness-run` when ready

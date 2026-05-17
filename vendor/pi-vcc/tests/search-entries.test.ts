@@ -1,7 +1,7 @@
 import { describe, it, expect } from "bun:test";
 import { searchEntries } from "../src/core/search-entries";
 import type { RenderedEntry } from "../src/core/render-entries";
-import type { Message } from "@mariozechner/pi-ai";
+import type { Message } from "@earendil-works/pi-ai";
 
 const entries: RenderedEntry[] = [
   { index: 0, role: "user", summary: "Fix login bug" },

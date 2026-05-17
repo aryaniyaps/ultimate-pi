@@ -34,6 +34,23 @@ description: Structured user decisions via ask_user for harness setup, planning,
 }
 ```
 
+## Example (plan — approval gate)
+
+After presenting the full PlanPacket in chat:
+
+```json
+{
+  "question": "Approve this plan for execution?",
+  "context": "Scope, acceptance checks, and rollback are listed above. The plan file is written only after you approve.",
+  "options": [
+    { "title": "Approve", "description": "Write plan-packet.json and mark plan ready" },
+    { "title": "Request changes", "description": "Revise scope or acceptance before writing" },
+    { "title": "Cancel", "description": "Stop with needs_clarification" }
+  ],
+  "allowFreeform": false
+}
+```
+
 ## Example (plan — scope)
 
 ```json
@@ -49,4 +66,6 @@ description: Structured user decisions via ask_user for harness setup, planning,
 
 ## Who must NOT call ask_user
 
-- `harness/evaluator` and `harness/adversary` — emit `human_required` in structured verdicts; the **parent orchestrator** calls `ask_user`.
+- `harness/planner` — returns `clarification.options` in JSON; parent runs `ask_user`.
+- `harness/evaluator`, `harness/adversary`, and `harness/tie-breaker` — emit `human_required` in structured verdicts; the **parent orchestrator** calls `ask_user`.
+- `harness/executor` — parent handles plan-level and governance forks.

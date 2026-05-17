@@ -2,7 +2,7 @@
  * Orchestrator blackboard tool (list/read/query/wait/delete).
  */
 
-import { defineTool, type ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { defineTool, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 import type { Blackboard } from "./blackboard.js";
 import type { BlackboardQuery } from "./types-blackboard.js";

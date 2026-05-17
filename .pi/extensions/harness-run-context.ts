@@ -5,7 +5,7 @@
  * in before_agent_start so trace-recorder reuses it on agent_start.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import {
 	canonicalPlanPath,
 	createFreshRunContext,
@@ -18,6 +18,7 @@ import {
 	getPolicyTransitionBlock,
 	type HarnessRunContext,
 	hasHarnessAbortSignal,
+	hasPlanUserApproval,
 	isAmendPlanAllowed,
 	isHarnessBootstrapPrompt,
 	isHarnessSlashCommand,
@@ -26,7 +27,9 @@ import {
 	loadProjectActiveRun,
 	loadRunContextFromDisk,
 	nextStepAfterOutcome,
+	nowIso,
 	type PlanPacketSummary,
+	parseAskUserApprovalFromMessage,
 	parseHarnessSlashCommand,
 	planPacketSummary,
 	readPlanPacketFromPath,
@@ -70,16 +73,17 @@ function syncPolicyFromPlan(
 	entries: unknown[],
 	planId: string,
 	phase: HarnessRunContext["phase"],
+	approvedPlan: boolean,
 ): void {
 	let prior: Record<string, unknown> = {
 		phase,
-		approvedPlan: true,
+		approvedPlan,
 		planId,
 		budgetBypass: false,
 		aborted: false,
 		abortReason: null,
 		abortedAt: null,
-		updatedAt: new Date().toISOString(),
+		updatedAt: nowIso(),
 	};
 	for (let i = entries.length - 1; i >= 0; i--) {
 		const entry = entries[i] as SessionEntryLike;
@@ -204,6 +208,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				entries,
 				activeCtx.plan_id ?? "plan-pending",
 				"plan",
+				false,
 			);
 			persistContext(pi, activeCtx);
 			return {
@@ -321,15 +326,18 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				const task = extractTaskSummary(userPrompt);
 				activeCtx = createFreshRunContext(sessionId, projectRoot, task);
 			}
-			if (activeCtx.status === "aborted") {
-				activeCtx.plan_ready = false;
-			}
+			activeCtx.plan_ready = false;
 			activeCtx.phase = "plan";
 			activeCtx.status = "active";
 			if (command === "harness-plan") {
 				const task = extractTaskSummary(userPrompt);
 				if (task) activeCtx.task_summary = task;
 			}
+			pi.appendEntry("harness-plan-attempt", {
+				run_id: activeCtx.run_id,
+				command,
+				started_at: nowIso(),
+			});
 		} else if (
 			activeCtx &&
 			shouldReuseHarnessRunId(userPrompt, activeCtx, command)
@@ -519,15 +527,31 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		) {
 			const packet = await readPlanPacketFromPath(activeCtx.plan_packet_path);
 			const validation = validatePlanPacket(packet);
-			planReady = validation.valid;
-			if (planReady && packet?.plan_id) {
+			const approved = hasPlanUserApproval(entries, {
+				sincePlanCommand: true,
+				planId: packet?.plan_id ?? null,
+			});
+			planReady = validation.valid && approved;
+			if (validation.valid && !approved) {
+				activeCtx.last_outcome = "needs_clarification";
+				activeCtx.last_completed_step = "plan";
+				const msg =
+					"Plan file exists but user approval was not recorded. Present the full plan and call ask_user (Approve) before writing plan-packet.json.";
+				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
+				else
+					pi.sendMessage({
+						customType: "harness-plan-packet",
+						content: msg,
+						display: true,
+					});
+			} else if (planReady && packet?.plan_id) {
 				activeCtx.plan_id = packet.plan_id;
-				syncPolicyFromPlan(pi, entries, packet.plan_id, "plan");
+				syncPolicyFromPlan(pi, entries, packet.plan_id, "plan", true);
 				const summary = planPacketSummary(packet, activeCtx.plan_packet_path);
 				pi.appendEntry("harness-plan-packet", summary);
 				activeCtx.last_completed_step = "plan";
 				activeCtx.last_outcome = summary.plan_status;
-			} else {
+			} else if (!validation.valid) {
 				activeCtx.last_outcome = "needs_clarification";
 				activeCtx.last_completed_step = "plan";
 			}
@@ -576,6 +600,24 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 					display: true,
 				});
 		}
+	});
+
+	pi.on("tool_result", async (event, ctx) => {
+		if (event.toolName !== "ask_user" || event.isError) return;
+		const approval = parseAskUserApprovalFromMessage({
+			toolName: "ask_user",
+			details: event.details,
+			content: event.content,
+		});
+		if (!approval) return;
+		const entries = getEntries(ctx);
+		const runCtx = getLatestRunContext(entries) ?? activeCtx;
+		if (!runCtx) return;
+		pi.appendEntry("harness-plan-approval", {
+			plan_id: approval.plan_id ?? runCtx.plan_id,
+			approved_at: approval.approved_at,
+			source: "ask_user",
+		});
 	});
 
 	pi.on("tool_call", async (event) => {

@@ -21,6 +21,7 @@ const REQUIRED_SCHEMAS = [
 	"observation.schema.json",
 	"run-trace.schema.json",
 	"eval-verdict.schema.json",
+	"harness-spawn-context.schema.json",
 ];
 
 const REQUIRED_ADRS = [
@@ -34,6 +35,7 @@ const REQUIRED_ADRS = [
 	"0008-harness-posthog-telemetry.md",
 	"0009-sentrux-rules-lifecycle.md",
 	"0031-harness-run-context.md",
+	"0032-harness-command-orchestration.md",
 ];
 
 const REQUIRED_EXTENSIONS = [
@@ -198,6 +200,20 @@ async function main() {
 	const runCtxLib = join(ROOT, ".pi", "lib", "harness-run-context.ts");
 	if (!(await fileExists(runCtxLib))) fail("missing lib/harness-run-context.ts");
 	ok("lib/harness-run-context.ts");
+
+	const policyGateSrc = await readFile(
+		join(ROOT, ".pi", "extensions", "policy-gate.ts"),
+		"utf-8",
+	);
+	if (!policyGateSrc.includes("isPlanPhaseAllowedMutation")) {
+		fail(
+			"policy-gate.ts must use isPlanPhaseAllowedMutation (plan-phase scoped writes)",
+		);
+	}
+	if (!policyGateSrc.includes('pi.on("tool_call", async (event, ctx)')) {
+		fail("policy-gate tool_call must receive ctx for run context");
+	}
+	ok("policy-gate plan-phase writes");
 
 	const runCtxFixture = join(SMOKE, "run-context.fixture.json");
 	if (!(await fileExists(runCtxFixture))) {

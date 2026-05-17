@@ -6,7 +6,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import vendorModelRouter from "../../vendor/pi-model-router/extensions/index.js";
 
 function isHarnessRouterReady(cwd: string): boolean {

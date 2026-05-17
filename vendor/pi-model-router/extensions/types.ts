@@ -1,4 +1,4 @@
-import type { ThinkingLevel } from '@mariozechner/pi-agent-core';
+import type { ThinkingLevel } from '@earendil-works/pi-agent-core';
 
 export type RouterTier = 'high' | 'medium' | 'low';
 export type RouterPin = RouterTier | 'auto';

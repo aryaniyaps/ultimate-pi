@@ -5,79 +5,54 @@ argument-hint: "\"<task>\" [--quick] [--risk low|med|high] [--budget <amount>]"
 
 # harness-auto
 
-Run full harness flow in one command:
-
-`plan -> execute -> evaluate -> adversary -> severity-policy decision -> commit+PR (no auto-merge)`
+Pipeline orchestrator — one session, sequential `Agent` spawns. Invoke **harness-orchestration** skill for agent IDs. Do **not** implement or review inline.
 
 ## Step 0 — Parse arguments
 
-Read `$ARGUMENTS` and normalize:
+- required task (quoted or first token)
+- optional: `--quick`, `--risk`, `--budget`
 
-- required task: quoted or unquoted first value
-- optional flags: `--quick`, `--risk low|med|high`, `--budget <amount>`
-
-If task is missing, stop and return:
+If task missing:
 
 `Usage: /harness-auto "<task>" [--quick] [--risk low|med|high] [--budget <amount>]`
 
-## Process contract
+## Orchestration (required) — same session
 
-1. Build and approve plan packet at the canonical active-run path before any mutation (extension allocates one `run_id` for the auto pipeline).
-2. Execute only approved scope with rollback artifacts.
-3. Run independent evaluator then adversarial reviewer.
-4. Apply severity policy + strict pre-PR gates.
-5. If gates pass, auto-commit and open PR; never auto-merge.
+1. **Plan** — spawn `harness/planner` → parse JSON → present full plan → `ask_user` Approve/Changes/Cancel → write `plan-packet.json` only on Approve (advances phase via policy-gate).
+2. **Execute** — spawn `harness/executor` with `HarnessSpawnContext` (`mode: execute`). Summarize handoff bullets for next spawn (do not paste full subagent log).
+3. **Eval** — spawn `harness/evaluator` (`mode: benchmark`) after parent scripts if needed.
+4. **Review** — spawn `harness/evaluator` (`mode: verdict`) OR rely on eval verdict if policy allows — prefer both when strict gates require.
+5. **Adversary** — spawn `harness/adversary` with artifact paths.
+6. **Tie-breaker** — spawn `harness/tie-breaker` only if debate unresolved.
+7. **Parent** — apply locked strict gates below; commit/PR only if all pass.
 
-## Locked decisions (must not be changed)
+No new Pi session for review — subagents use isolated context (`inherit_context: false`).
 
-- Always produce a plan packet before mutation.
-- Adversarial review is always required.
-- Merge blocking authority is severity-policy-engine.
-- Router tuning is propose-and-approve only.
-- Plan ambiguity must use `ask_user` (harness-decisions skill) — no silent guessing.
-- Rollback artifact must be revert-commit-ready and include:
-  - revert command
-  - prepared revert branch
-  - patch bundle
-- Debate profile is aggressive with locked confidence weights:
-  - claim_quality=0.20
-  - reproducibility=0.40
-  - agreement=0.40
-- Strict pre-PR gate is mandatory.
-- Post-pass behavior is auto-commit and auto-open-PR.
-- Never auto-merge PR.
+## Locked decisions (do not change)
 
-## Guardrails
-
-- Do not overthink straightforward gate outcomes; enforce gates deterministically.
-- Only follow the locked pipeline and governance decisions listed here.
-- Never bypass mandatory safety gates, even in `--quick` mode.
+- Always produce and approve plan before mutation.
+- Adversarial review always required.
+- Severity-policy-engine blocks merge.
+- Router tuning propose-and-approve only.
+- Plan ambiguity → parent `ask_user` (harness-decisions).
+- Rollback artifacts: revert command, revert branch, patch bundle.
+- Debate weights: claim_quality=0.20, reproducibility=0.40, agreement=0.40.
+- Strict pre-PR gate mandatory; auto-commit + open PR; never auto-merge.
 
 ## Strict gates
 
-Block commit/PR if any gate fails:
-
-1. Plan gate passed.
-2. Execution completed within approved scope.
-3. Independent evaluator passed.
-4. Adversarial review completed with consensus packet.
-5. Severity-policy-engine output is `pass` or `conditional_pass`.
-6. Benchmark delta checks passed.
-7. Rollback artifacts generated.
+Block commit/PR if any fails: plan gate, execution in scope, evaluator pass, adversary complete, severity-policy pass/conditional_pass, benchmark deltas, rollback artifacts.
 
 ## Notes
 
-- `--quick` may reduce breadth, never safety gates.
-- `--risk` can tighten behavior, never disable adversary.
-- If risk/ambiguity is high, auto-fallback to manual `harness-plan` and use `ask_user` for blocking forks.
-- If execution must be interrupted safely, run `/harness-abort [reason]`, then restart with `/harness-plan "<task>"`.
-- Always output artifact references (`plan`, `eval`, `adversary`, `consensus`, `rollback`) and incident paths when applicable — do not ask the user to copy a run id; point to `/harness-run-status` or `/harness-trace-last` for phase handoff.
+- `--quick` reduces breadth, never safety gates.
+- High risk/ambiguity → stop and recommend manual `/harness-plan` with `ask_user`.
+- Interrupt: `/harness-abort [reason]` then `/harness-plan`.
+- Artifact refs under active run dir; `/harness-run-status` or `/harness-trace-last` for handoff.
 
-## Completion behavior
+## Completion
 
-End with a deterministic handoff block:
-
-1. `Pipeline status` (pass/fail per strict gate).
-2. Phase trace summary and artifact references (`plan`, `eval`, `adversary`, `consensus`, `rollback`) under the active run directory.
-3. `Policy outcome` (`pass`, `conditional_pass`, `block`, or `human_required`) with one-line rationale.
-4. `Next action` (open PR, replan, rollback, or human override path).
+1. Pipeline status per gate
+2. Artifact references
+3. Policy outcome: `pass`, `conditional_pass`, `block`, or `human_required`
+4. Next action (PR, replan, rollback, override)

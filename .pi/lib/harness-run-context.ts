@@ -6,7 +6,7 @@
  * - `.pi/harness/active-run.json` (cross-session pointer)
  */
 
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, realpath, writeFile } from "node:fs/promises";
 import { isAbsolute, join, relative, resolve } from "node:path";
 
 export type HarnessPhase =
@@ -112,6 +112,353 @@ export function runContextDiskPath(runId: string, projectRoot: string): string {
 
 export function canonicalPlanPath(runId: string, projectRoot: string): string {
 	return join(harnessRunsRoot(projectRoot), runId, "plan-packet.json");
+}
+
+const PLAN_PACKET_BASENAME = "plan-packet.json";
+
+const MUTATING_FILE_TOOLS = new Set(["write", "edit"]);
+
+const PLAN_APPROVE_OPTION =
+	/^(approve(d)?(\s+plan)?|yes,?\s+proceed|looks\s+good)$/i;
+const PLAN_CANCEL_OPTION =
+	/^(cancel(led)?|revise|request\s+changes|needs?\s+clarification)$/i;
+
+export interface PlanUserApproval {
+	plan_id: string | null;
+	approved_at: string;
+	source: "ask_user" | "harness-plan-approval" | "noninteractive";
+}
+
+export interface PlanPhaseMutationDecision {
+	allowed: boolean;
+	reason?: string;
+	isScopedPlanWrite?: boolean;
+}
+
+/** Resolve path relative to project root when not absolute. */
+export function normalizeHarnessPath(
+	path: string,
+	projectRoot: string,
+): string {
+	const trimmed = path.trim();
+	if (!trimmed) return resolve(projectRoot);
+	if (isAbsolute(trimmed)) return resolve(trimmed);
+	return resolve(projectRoot, trimmed);
+}
+
+export function isCanonicalPlanPacketPath(
+	absPath: string,
+	projectRoot: string,
+	runId: string,
+): boolean {
+	const expected = resolve(canonicalPlanPath(runId, projectRoot));
+	return resolve(absPath) === expected;
+}
+
+export function extractWritePathFromToolInput(
+	input: Record<string, unknown>,
+): string {
+	const raw =
+		(typeof input.path === "string" && input.path) ||
+		(typeof input.filePath === "string" && input.filePath) ||
+		"";
+	return raw.trim();
+}
+
+/** True when absPath is the canonical plan-packet.json for the active run. */
+export async function isPlanPhaseScopedWrite(
+	absPath: string,
+	runCtx: HarnessRunContext | null,
+	projectRoot: string,
+): Promise<boolean> {
+	if (!runCtx?.run_id) return false;
+	let resolved: string;
+	try {
+		resolved = await realpath(normalizeHarnessPath(absPath, projectRoot));
+	} catch {
+		resolved = normalizeHarnessPath(absPath, projectRoot);
+	}
+	const runsRoot = resolve(harnessRunsRoot(projectRoot));
+	let runsReal: string;
+	try {
+		runsReal = await realpath(runsRoot);
+	} catch {
+		runsReal = runsRoot;
+	}
+	const rel = relative(runsReal, resolved);
+	if (rel.startsWith("..") || isAbsolute(rel)) return false;
+	const parts = rel.split(/[/\\]/);
+	if (parts.length !== 2 || parts[1] !== PLAN_PACKET_BASENAME) return false;
+	if (parts[0] !== runCtx.run_id) return false;
+	return isCanonicalPlanPacketPath(resolved, projectRoot, runCtx.run_id);
+}
+
+export function indexOfLastPlanCommand(entries: unknown[]): number {
+	for (let i = entries.length - 1; i >= 0; i--) {
+		const entry = entries[i] as SessionEntryLike & {
+			message?: { role?: string; content?: string | unknown[] };
+		};
+		if (
+			entry.type === "custom" &&
+			entry.customType === "harness-plan-attempt"
+		) {
+			return i;
+		}
+		if (entry.type !== "message" || entry.message?.role !== "user") continue;
+		const content = entry.message.content;
+		const text =
+			typeof content === "string"
+				? content
+				: Array.isArray(content)
+					? content
+							.filter(
+								(c): c is { type: string; text?: string } =>
+									typeof c === "object" &&
+									c !== null &&
+									(c as { type?: string }).type === "text",
+							)
+							.map((c) => c.text ?? "")
+							.join("\n")
+					: "";
+		const visible = userVisiblePromptSlice(text);
+		const parsed = parseHarnessSlashCommand(visible);
+		if (
+			parsed?.command === "harness-plan" ||
+			parsed?.command === "harness-auto"
+		) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+export function parseAskUserApprovalFromMessage(msg: {
+	toolName?: string;
+	details?: unknown;
+	content?: { type?: string; text?: string }[];
+}): PlanUserApproval | null {
+	if (msg.toolName !== "ask_user") return null;
+	const details = msg.details as
+		| {
+				cancelled?: boolean;
+				response?: {
+					kind?: string;
+					text?: string;
+					selections?: string[];
+				};
+		  }
+		| undefined;
+	if (details?.cancelled) return null;
+	const response = details?.response;
+	if (!response) return null;
+	if (response.kind === "freeform") {
+		const text = (response.text ?? "").trim();
+		if (/^approve(d)?\b/i.test(text)) {
+			return {
+				plan_id: null,
+				approved_at: nowIso(),
+				source: "ask_user",
+			};
+		}
+		return null;
+	}
+	const selection = (response.selections?.[0] ?? "").trim();
+	if (!selection || PLAN_CANCEL_OPTION.test(selection)) return null;
+	if (PLAN_APPROVE_OPTION.test(selection)) {
+		return {
+			plan_id: null,
+			approved_at: nowIso(),
+			source: "ask_user",
+		};
+	}
+	return null;
+}
+
+export function getLatestPlanUserApproval(
+	entries: unknown[],
+	sinceIndex = 0,
+): PlanUserApproval | null {
+	for (let i = entries.length - 1; i >= sinceIndex; i--) {
+		const entry = entries[i] as SessionEntryLike & {
+			message?: {
+				role?: string;
+				toolName?: string;
+				details?: unknown;
+				content?: { type?: string; text?: string }[];
+			};
+		};
+		if (
+			entry.type === "custom" &&
+			entry.customType === "harness-plan-approval"
+		) {
+			const data = entry.data as Partial<PlanUserApproval> | undefined;
+			if (data?.approved_at) {
+				return {
+					plan_id: typeof data.plan_id === "string" ? data.plan_id : null,
+					approved_at: data.approved_at,
+					source:
+						data.source === "noninteractive"
+							? "noninteractive"
+							: "harness-plan-approval",
+				};
+			}
+		}
+		if (entry.type !== "message" || entry.message?.role !== "toolResult") {
+			continue;
+		}
+		const fromAsk = parseAskUserApprovalFromMessage(entry.message);
+		if (fromAsk) return fromAsk;
+	}
+	return null;
+}
+
+export function hasPlanUserApproval(
+	entries: unknown[],
+	opts?: { planId?: string | null; sincePlanCommand?: boolean },
+): boolean {
+	if (process.env.HARNESS_PLAN_NONINTERACTIVE === "1") {
+		return true;
+	}
+	const since = opts?.sincePlanCommand
+		? Math.max(0, indexOfLastPlanCommand(entries))
+		: 0;
+	const approval = getLatestPlanUserApproval(entries, since);
+	if (!approval) return false;
+	if (opts?.planId && approval.plan_id && approval.plan_id !== opts.planId) {
+		return false;
+	}
+	return true;
+}
+
+export function isHarnessAutoSession(entries: unknown[]): boolean {
+	const since = indexOfLastPlanCommand(entries);
+	if (since < 0) return false;
+	for (let i = since; i < entries.length; i++) {
+		const entry = entries[i] as SessionEntryLike & {
+			message?: { role?: string; content?: string };
+		};
+		if (entry.type !== "message" || entry.message?.role !== "user") continue;
+		const text =
+			typeof entry.message.content === "string"
+				? userVisiblePromptSlice(entry.message.content)
+				: "";
+		const parsed = parseHarnessSlashCommand(text);
+		if (parsed?.command === "harness-auto") return true;
+	}
+	return false;
+}
+
+export async function isPlanPhaseAllowedMutation(
+	toolName: string,
+	input: Record<string, unknown>,
+	phase: HarnessPhase,
+	runCtx: HarnessRunContext | null,
+	projectRoot: string,
+	opts: {
+		aborted: boolean;
+		entries: unknown[];
+		ownerSessionId?: string;
+		currentSessionId?: string;
+	},
+): Promise<PlanPhaseMutationDecision> {
+	if (!MUTATING_FILE_TOOLS.has(toolName)) {
+		if (phase === "execute" || phase === "merge") {
+			return { allowed: true };
+		}
+		return {
+			allowed: false,
+			reason: `policy-gate: ${toolName} blocked in phase '${phase}'.`,
+		};
+	}
+
+	if (
+		runCtx?.owner_pi_session_id &&
+		opts.currentSessionId &&
+		runCtx.owner_pi_session_id !== opts.currentSessionId
+	) {
+		return {
+			allowed: false,
+			reason:
+				"harness-run-context: this session does not own the active run; plan writes are read-only here.",
+		};
+	}
+
+	const target = extractWritePathFromToolInput(input);
+	if (!target) {
+		return {
+			allowed: false,
+			reason: "policy-gate: write/edit requires a path.",
+		};
+	}
+
+	const scoped = runCtx
+		? await isPlanPhaseScopedWrite(target, runCtx, projectRoot)
+		: false;
+
+	if (scoped) {
+		if (!runCtx) {
+			return {
+				allowed: false,
+				reason:
+					'policy-gate: no active harness run. Run /harness-plan "<task>" first.',
+			};
+		}
+		if (
+			!hasPlanUserApproval(opts.entries, {
+				sincePlanCommand: true,
+				planId: runCtx.plan_id,
+			})
+		) {
+			return {
+				allowed: false,
+				isScopedPlanWrite: true,
+				reason:
+					"policy-gate: plan-packet.json write blocked until the user approves via ask_user (present the full plan, then Approve).",
+			};
+		}
+		if (opts.aborted) {
+			return { allowed: true, isScopedPlanWrite: true };
+		}
+		if (phase === "plan") {
+			return { allowed: true, isScopedPlanWrite: true };
+		}
+		if (phase === "execute" || phase === "merge") {
+			return { allowed: true, isScopedPlanWrite: true };
+		}
+		return {
+			allowed: false,
+			isScopedPlanWrite: true,
+			reason: `harness-run-context: plan-packet.json is read-only in phase '${phase}'.`,
+		};
+	}
+
+	if (opts.aborted) {
+		return {
+			allowed: false,
+			reason:
+				"policy-gate: mutating tool blocked because harness-abort lock is active. Attach a new approved plan via plan-packet.json first.",
+		};
+	}
+
+	if (phase === "execute" || phase === "merge") {
+		return { allowed: true };
+	}
+
+	if (phase === "plan" && !runCtx) {
+		return {
+			allowed: false,
+			reason:
+				'policy-gate: no active harness run. Run /harness-plan "<task>" first.',
+		};
+	}
+
+	const allowedPath = runCtx?.run_id
+		? canonicalPlanPath(runCtx.run_id, projectRoot)
+		: ".pi/harness/runs/<run_id>/plan-packet.json";
+	return {
+		allowed: false,
+		reason: `policy-gate: ${toolName} blocked in phase '${phase}'. In plan phase only ${allowedPath} is writable after ask_user approval.`,
+	};
 }
 
 export function allocateRunId(sessionId: string): string {
@@ -471,13 +818,11 @@ export function validatePlanOverridePath(
 	runId: string,
 	projectRoot: string,
 ): { ok: boolean; reason?: string } {
-	const absPlan = resolve(planPath);
-	const runsDir = resolve(harnessRunsRoot(projectRoot), runId);
-	const rel = relative(runsDir, absPlan);
-	if (rel.startsWith("..") || isAbsolute(rel)) {
+	const absPlan = normalizeHarnessPath(planPath, projectRoot);
+	if (!isCanonicalPlanPacketPath(absPlan, projectRoot, runId)) {
 		return {
 			ok: false,
-			reason: `--plan must be under runs/${runId}/ or use /harness-use-run to switch runs`,
+			reason: `--plan must be runs/${runId}/plan-packet.json (canonical plan packet only)`,
 		};
 	}
 	return { ok: true };
@@ -701,7 +1046,7 @@ export function nextStepAfterOutcome(input: {
 			return "/harness-plan or /harness-abort";
 		}
 		if (exec === "completed") {
-			return "New Pi session → /harness-eval";
+			return "/harness-eval";
 		}
 	}
 	if (input.phase === "evaluate") {

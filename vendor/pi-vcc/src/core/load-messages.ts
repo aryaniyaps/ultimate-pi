@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import type { Message } from "@mariozechner/pi-ai";
+import type { Message } from "@earendil-works/pi-ai";
 import { renderMessage, type RenderedEntry } from "./render-entries";
 
 export interface LoadedMessages {

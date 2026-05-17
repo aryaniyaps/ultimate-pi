@@ -4,6 +4,14 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### 🐛 Fixes
+
+- **Policy gate / harness-plan:** allow scoped writes to `plan-packet.json` in plan phase after `ask_user` approval; block project source edits until execute; promote `/harness-auto` to execute phase mid-turn after approved plan write.
+
+### 📖 Documentation
+
+- **Harness plan workflow:** present full plan → Approve via `ask_user` → persist packet; `--quick` does not skip approval (ADR 0031).
+
 ## [v0.7.0] — 2026-05-17
 
 ### ✨ Features
@@ -110,7 +118,7 @@ All notable changes to this project are documented in this file.
 
 - Remove `npm:@yeliu84/pi-model-router` from package dependencies; add `THIRD_PARTY_NOTICES.md`
 - `harness-sync-model-router.mjs` adjusts Pi defaults only (no package toggling)
-- `check:ts` uses ES2023; devDependency on `@mariozechner/pi-ai`, `pi-tui`, `pi-agent-core` for vendored typecheck
+- `check:ts` uses ES2023; devDependency on `@earendil-works/pi-ai`, `pi-tui`, `pi-agent-core` for vendored typecheck
 
 ### 🐛 Fixes
 
