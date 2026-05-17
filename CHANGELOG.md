@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.10.0] — 2026-05-17
+
+### ✨ Features
+
+- **Harness plan UX:** scrollable `approve_plan` overlay with `harness-plan-draft` parent transcript; planner-only `create_plan` persists canonical `plan-packet.json` after approval; blocks planner `write`/`edit` for plan files; syncs subagent approvals and dedupes duplicate plan-approval gates.
+
 ## [v0.9.1] — 2026-05-17
 
 ### 🐛 Fixes
