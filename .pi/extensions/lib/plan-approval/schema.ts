@@ -16,7 +16,9 @@ export const ApprovePlanParamsSchema = Type.Object({
 	research_brief: Type.Optional(
 		Type.Object(
 			{
-				decomposition: Type.Optional(Type.Union([Type.Object({}), Type.Null()])),
+				decomposition: Type.Optional(
+					Type.Union([Type.Object({}), Type.Null()]),
+				),
 				hypothesis: Type.Optional(Type.Union([Type.Object({}), Type.Null()])),
 				eval: Type.Optional(Type.Union([Type.Object({}), Type.Null()])),
 			},

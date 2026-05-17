@@ -5,12 +5,7 @@
 	"description": "Blind self-evaluation of a PlanHypothesisBrief (harness plan phase).",
 	"type": "object",
 	"additionalProperties": false,
-	"required": [
-		"schema_version",
-		"dimensions",
-		"relevance",
-		"human_summary"
-	],
+	"required": ["schema_version", "dimensions", "relevance", "human_summary"],
 	"properties": {
 		"schema_version": {
 			"type": "string",
@@ -19,12 +14,7 @@
 		"dimensions": {
 			"type": "object",
 			"additionalProperties": false,
-			"required": [
-				"novelty",
-				"coherence",
-				"testability",
-				"impact"
-			],
+			"required": ["novelty", "coherence", "testability", "impact"],
 			"properties": {
 				"novelty": { "$ref": "#/$defs/scoredDimension" },
 				"coherence": { "$ref": "#/$defs/scoredDimension" },

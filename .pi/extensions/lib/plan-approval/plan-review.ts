@@ -175,8 +175,7 @@ export function formatResearchBriefMarkdown(
 			] as const) {
 				const dim = asRecord(dims[name]);
 				if (!dim) continue;
-				const score =
-					typeof dim.score === "number" ? String(dim.score) : "?";
+				const score = typeof dim.score === "number" ? String(dim.score) : "?";
 				const rationale = str(dim.rationale) ?? "";
 				lines.push(`| ${name} | ${score}/100 | ${rationale} |`);
 			}

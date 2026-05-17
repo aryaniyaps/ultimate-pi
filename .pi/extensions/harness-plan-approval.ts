@@ -4,6 +4,8 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
+import { Type } from "@sinclair/typebox";
+import type { PlanPacketLike } from "../lib/harness-run-context.js";
 import {
 	appendPlanApprovalIfNew,
 	getLatestRunContext,
@@ -12,6 +14,12 @@ import {
 	planPacketSummary,
 } from "../lib/harness-run-context.js";
 import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import {
+	CREATE_PLAN_GUIDELINES,
+	CREATE_PLAN_SNIPPET,
+	executeCreatePlan,
+	formatCreatePlanResultText,
+} from "./lib/plan-approval/create-plan.js";
 import { runPlanApprovalDialog } from "./lib/plan-approval/dialog.js";
 import { runPlanApprovalFallback } from "./lib/plan-approval/fallback.js";
 import { writePlanReviewMarkdown } from "./lib/plan-approval/plan-review.js";
@@ -30,18 +38,10 @@ import type {
 	PlanApprovalDialogResult,
 } from "./lib/plan-approval/types.js";
 import {
-	CREATE_PLAN_GUIDELINES,
-	CREATE_PLAN_SNIPPET,
-	executeCreatePlan,
-	formatCreatePlanResultText,
-} from "./lib/plan-approval/create-plan.js";
-import type { PlanPacketLike } from "../lib/harness-run-context.js";
-import {
 	formatApprovePlanResultText,
 	toApprovePlanToolDetails,
 	validateApprovePlanParams,
 } from "./lib/plan-approval/validate.js";
-import { Type } from "@sinclair/typebox";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
