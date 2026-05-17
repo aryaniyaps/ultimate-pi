@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.11.0] — 2026-05-17
+
+### ✨ Features
+
+- **Harness Darwin plan pipeline:** decomposition and hypothesis agents with plan-adversary, scouts, and structured plan brief schemas (ADR 0034).
+- **Harness plan review:** `plan-review.md` for editor review; extension load guard.
+- **Cursor Pi experts:** cursor-pi domain expert agents.
+
+### 🔄 CI/CD
+
+- **Biome:** ignore harness runtime JSON; format committed harness plan pipeline sources.
+
 ## [v0.10.1] — 2026-05-17
 
 ### 🐛 Fixes
