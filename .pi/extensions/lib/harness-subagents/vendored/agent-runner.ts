@@ -420,13 +420,6 @@ export async function runAgent(
 		names.filter((t) => {
 			if (EXCLUDED_TOOL_NAMES.includes(t)) return false;
 			if (t === "ask_user" && harnessUiBridge) return true;
-			if (
-				(t === "approve_plan" || t === "create_plan") &&
-				harnessUiBridge &&
-				type === "harness/planner"
-			) {
-				return true;
-			}
 			if (disallowedSet?.has(t)) return false;
 			if (builtinToolNameSet.has(t)) return true;
 			if (extensions === false) return false;
@@ -442,13 +435,6 @@ export async function runAgent(
 	} else {
 		const fallback = toolNames.filter((t) => {
 			if (t === "ask_user" && harnessUiBridge) return true;
-			if (
-				(t === "approve_plan" || t === "create_plan") &&
-				harnessUiBridge &&
-				type === "harness/planner"
-			) {
-				return true;
-			}
 			return !disallowedSet?.has(t);
 		});
 		session.setActiveToolsByName(fallback);
@@ -470,10 +456,6 @@ export async function runAgent(
 	if (harnessUiBridge) {
 		const withHarnessUi = new Set(session.getActiveToolNames());
 		withHarnessUi.add("ask_user");
-		if (type === "harness/planner") {
-			withHarnessUi.add("approve_plan");
-			withHarnessUi.add("create_plan");
-		}
 		session.setActiveToolsByName([...withHarnessUi]);
 	}
 

@@ -2,7 +2,7 @@
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
 	"package_version": "0.10.1",
-	"generated_at": "2026-05-17T16:12:05.931Z",
+	"generated_at": "2026-05-17T17:48:22.826Z",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -66,7 +66,7 @@
 		},
 		"harness/planner": {
 			"path": ".pi/agents/harness/planner.md",
-			"sha256": "efb60b509088d4b1df4ef61596411c12b43a7640d740b2e6f6305297af6afce4"
+			"sha256": "648b9e4c56a6c0f983ae990238952579bb4745af81eb6c79add5325ea4929c91"
 		},
 		"harness/sentrux-bootstrap": {
 			"path": ".pi/agents/harness/sentrux-bootstrap.md",
@@ -79,6 +79,38 @@
 		"harness/trace-librarian": {
 			"path": ".pi/agents/harness/trace-librarian.md",
 			"sha256": "d63fe08a2ea0466c0fd89fff4da03ac1d9d3580c306381cee251c89d4e8fdb97"
+		},
+		"harness/planning/decompose": {
+			"path": ".pi/agents/harness/planning/decompose.md",
+			"sha256": "a4f33869759ebdc049e77b344ae050be5ede08ea9a92216b8599cc7d2f14c052"
+		},
+		"harness/planning/hypothesis-eval": {
+			"path": ".pi/agents/harness/planning/hypothesis-eval.md",
+			"sha256": "7a05e2f746bf79f20096cbfb12aaee31a0717e660680b44cb285ea967b3141e5"
+		},
+		"harness/planning/hypothesis": {
+			"path": ".pi/agents/harness/planning/hypothesis.md",
+			"sha256": "7f2af6dda328d6cc1279dbff20a46b1d93aacfda9d57857cc6117685f8a585dd"
+		},
+		"harness/planning/plan-adversary": {
+			"path": ".pi/agents/harness/planning/plan-adversary.md",
+			"sha256": "4beceb8c4181f82b7eb006d87392c0adb4c7ce41992193790888e7298c1b7594"
+		},
+		"harness/planning/planner": {
+			"path": ".pi/agents/harness/planning/planner.md",
+			"sha256": "570c501c976e26d79a36814787eb03fab6aa97f79cc895af319dc717648a2a65"
+		},
+		"harness/planning/scout-graphify": {
+			"path": ".pi/agents/harness/planning/scout-graphify.md",
+			"sha256": "76a66a3dc8bce60a91ed30ffdc683fb1eab0692006b0ee80fbdc67b11b374b61"
+		},
+		"harness/planning/scout-semantic": {
+			"path": ".pi/agents/harness/planning/scout-semantic.md",
+			"sha256": "99aedca25fd81000d3bb532e0191ce9e1a87b84ab4039f089734f3a0d24ba44b"
+		},
+		"harness/planning/scout-structure": {
+			"path": ".pi/agents/harness/planning/scout-structure.md",
+			"sha256": "83fd09e5eccd77b27d9de464d7e32536d9a762469e021b86b0ca665942bb40af"
 		}
 	}
 }

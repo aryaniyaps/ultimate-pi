@@ -1,0 +1,61 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-hypothesis-eval.schema.json",
+	"title": "PlanHypothesisEval",
+	"description": "Blind self-evaluation of a PlanHypothesisBrief (harness plan phase).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["schema_version", "dimensions", "relevance", "human_summary"],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"dimensions": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["novelty", "coherence", "testability", "impact"],
+			"properties": {
+				"novelty": { "$ref": "#/$defs/scoredDimension" },
+				"coherence": { "$ref": "#/$defs/scoredDimension" },
+				"testability": { "$ref": "#/$defs/scoredDimension" },
+				"impact": { "$ref": "#/$defs/scoredDimension" }
+			}
+		},
+		"relevance": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["passes", "rationale"],
+			"properties": {
+				"passes": { "type": "boolean" },
+				"rationale": { "type": "string", "minLength": 1 }
+			}
+		},
+		"revision_recommended": {
+			"type": "boolean",
+			"description": "True when testability < 70 or relevance fails."
+		},
+		"human_summary": {
+			"type": "string",
+			"minLength": 1
+		}
+	},
+	"$defs": {
+		"scoredDimension": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["score", "rationale"],
+			"properties": {
+				"score": {
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 100
+				},
+				"rationale": {
+					"type": "string",
+					"minLength": 1
+				}
+			}
+		}
+	}
+}

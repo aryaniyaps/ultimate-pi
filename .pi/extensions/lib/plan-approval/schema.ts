@@ -13,6 +13,21 @@ export const ApprovePlanParamsSchema = Type.Object({
 			description: "Short summary shown above the plan body.",
 		}),
 	),
+	research_brief: Type.Optional(
+		Type.Object(
+			{
+				decomposition: Type.Optional(
+					Type.Union([Type.Object({}), Type.Null()]),
+				),
+				hypothesis: Type.Optional(Type.Union([Type.Object({}), Type.Null()])),
+				eval: Type.Optional(Type.Union([Type.Object({}), Type.Null()])),
+			},
+			{
+				description:
+					"Optional Darwin research: decomposition, hypothesis, eval (plan-review.md only).",
+			},
+		),
+	),
 	options: Type.Optional(
 		Type.Array(
 			Type.Union([
@@ -30,7 +45,7 @@ export const ApprovePlanParamsSchema = Type.Object({
 });
 
 export const PROMPT_SNIPPET =
-	"approve_plan({ plan_packet: { ...PlanPacket fields... }, human_summary?: string })";
+	"approve_plan({ plan_packet: { ...PlanPacket fields... }, human_summary?: string, research_brief?: { decomposition, hypothesis, eval } })";
 
 export const PROMPT_GUIDELINES = [
 	"Call approve_plan once with the complete plan_packet when ready for user approval.",

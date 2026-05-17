@@ -243,7 +243,7 @@ export default function policyGate(pi: ExtensionAPI) {
 
 		const planPhaseHint =
 			state.phase === "plan"
-				? "\nPlan phase: present the full PlanPacket in chat, call ask_user (Approve / Request changes / Cancel), then write only the canonical plan-packet.json after Approve."
+				? "\nPlan phase: scouts → decompose → hypothesis via harness/planning/*; parent builds PlanPacket, ask_user on fork, parallel plan-adversary + hypothesis-eval, approve_plan (optional research_brief), then create_plan (never write plan-packet.json directly)."
 				: "";
 
 		return {

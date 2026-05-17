@@ -7,6 +7,7 @@ import {
 	type PlanPacketLike,
 } from "../../../lib/harness-run-context.js";
 import { formatPlanPacketLines } from "./format-plan.js";
+import type { PlanResearchBrief } from "./types.js";
 
 export {
 	canonicalPlanReviewPath,
@@ -15,12 +16,194 @@ export {
 
 export type PlanReviewStatus = "draft" | "approved" | "committed";
 
+function asRecord(value: unknown): Record<string, unknown> | null {
+	return value && typeof value === "object" && !Array.isArray(value)
+		? (value as Record<string, unknown>)
+		: null;
+}
+
+function str(value: unknown): string | null {
+	return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function strList(value: unknown): string[] {
+	if (!Array.isArray(value)) return [];
+	return value
+		.map((item) => (typeof item === "string" ? item.trim() : null))
+		.filter((item): item is string => Boolean(item));
+}
+
+/** Render Darwin research sections for plan-review.md. */
+export function formatResearchBriefMarkdown(
+	research: PlanResearchBrief | null | undefined,
+): string {
+	if (!research) return "";
+	const lines: string[] = [];
+	const decomp = asRecord(research.decomposition);
+	const hyp = asRecord(research.hypothesis);
+	const evalBrief = asRecord(research.eval);
+
+	if (decomp) {
+		lines.push("## Phase 1 — Problem decomposition");
+		lines.push("");
+		const restate = str(decomp.problem_restatement);
+		if (restate) {
+			lines.push("**What is being asked?**");
+			lines.push("");
+			lines.push(restate);
+			lines.push("");
+		}
+		const types = strList(decomp.problem_types);
+		if (types.length) {
+			lines.push(`**Problem type(s):** ${types.join(", ")}`);
+			lines.push("");
+		}
+		const scope = asRecord(decomp.scope);
+		if (scope) {
+			const focus = str(scope.narrowed_focus);
+			if (focus) {
+				lines.push("**Scope:**");
+				lines.push("");
+				lines.push(focus);
+				lines.push("");
+			}
+			const excluded = strList(scope.excluded);
+			if (excluded.length) {
+				lines.push("**Excluded:**");
+				for (const item of excluded) lines.push(`- ${item}`);
+				lines.push("");
+			}
+		}
+		for (const [label, key] of [
+			["Hard constraints", "hard_constraints"],
+			["Soft constraints", "soft_constraints"],
+			["Success metrics", "success_metrics"],
+		] as const) {
+			const items = strList(decomp[key]);
+			if (items.length) {
+				lines.push(`**${label}:**`);
+				for (const item of items) lines.push(`- ${item}`);
+				lines.push("");
+			}
+		}
+		const prior = asRecord(decomp.prior_art);
+		if (prior) {
+			lines.push("**Prior art:**");
+			lines.push("");
+			const best = str(prior.best_approach);
+			const gap = str(prior.gap);
+			if (best) lines.push(`- Best approach: ${best}`);
+			if (gap) lines.push(`- Gap: ${gap}`);
+			for (const dead of strList(prior.dead_ends)) {
+				lines.push(`- Dead end: ${dead}`);
+			}
+			lines.push("");
+		}
+		const core = str(decomp.core_tension);
+		if (core) {
+			lines.push("**Core tension:**");
+			lines.push("");
+			lines.push(core);
+			lines.push("");
+		}
+	}
+
+	if (hyp) {
+		lines.push("## Phase 2 — DARWIN hypothesis");
+		lines.push("");
+		const primary = asRecord(hyp.primary);
+		if (primary) {
+			for (const [label, key] of [
+				["Claim", "claim"],
+				["Mechanism", "mechanism"],
+				["Prediction", "prediction"],
+				["Experiment", "experiment"],
+				["Resolves tension", "tension_resolution"],
+			] as const) {
+				const text = str(primary[key]);
+				if (text) {
+					lines.push(`**${label}:** ${text}`);
+					lines.push("");
+				}
+			}
+		}
+		const fork = asRecord(hyp.dialectical_fork);
+		if (fork) {
+			const forkText = str(fork.fork);
+			if (forkText) {
+				lines.push(`**Dialectical fork:** ${forkText}`);
+				lines.push("");
+			}
+			const pathA = str(fork.path_a);
+			const pathB = str(fork.path_b);
+			if (pathA) lines.push(`- **Path A:** ${pathA}`);
+			if (pathB) lines.push(`- **Path B:** ${pathB}`);
+			lines.push("");
+		}
+		const alts = Array.isArray(hyp.alternatives) ? hyp.alternatives : [];
+		if (alts.length) {
+			lines.push("**Alternatives:**");
+			for (const alt of alts) {
+				const rec = asRecord(alt);
+				if (!rec) continue;
+				const claim = str(rec.claim);
+				const bet = str(rec.key_bet);
+				if (claim) lines.push(`- ${claim}${bet ? ` (bet: ${bet})` : ""}`);
+			}
+			lines.push("");
+		}
+		const steps = strList(hyp.recommended_next_steps);
+		if (steps.length) {
+			lines.push("**Recommended next steps:**");
+			for (const step of steps) lines.push(`1. ${step}`);
+			lines.push("");
+		}
+	}
+
+	if (evalBrief) {
+		lines.push("## Self-evaluation");
+		lines.push("");
+		lines.push("| Dimension | Score | Rationale |");
+		lines.push("|-----------|-------|-----------|");
+		const dims = asRecord(evalBrief.dimensions);
+		if (dims) {
+			for (const name of [
+				"novelty",
+				"coherence",
+				"testability",
+				"impact",
+			] as const) {
+				const dim = asRecord(dims[name]);
+				if (!dim) continue;
+				const score = typeof dim.score === "number" ? String(dim.score) : "?";
+				const rationale = str(dim.rationale) ?? "";
+				lines.push(`| ${name} | ${score}/100 | ${rationale} |`);
+			}
+		}
+		const rel = asRecord(evalBrief.relevance);
+		if (rel) {
+			const passes = rel.passes === true ? "✓" : "✗";
+			const rationale = str(rel.rationale) ?? "";
+			lines.push(`| Relevance | ${passes} | ${rationale} |`);
+		}
+		lines.push("");
+		const summary = str(evalBrief.human_summary);
+		if (summary) {
+			lines.push(summary);
+			lines.push("");
+		}
+	}
+
+	return lines.length ? `${lines.join("\n")}\n` : "";
+}
+
 export function formatPlanPacketMarkdown(
 	packet: PlanPacketLike,
 	opts?: {
 		human_summary?: string | null;
 		status?: PlanReviewStatus;
 		plan_packet_path?: string | null;
+		research_brief?: PlanResearchBrief | null;
 	},
 ): string {
 	const lines: string[] = [];
@@ -41,6 +224,11 @@ export function formatPlanPacketMarkdown(
 		lines.push("## Summary");
 		lines.push("");
 		lines.push(opts.human_summary.trim());
+		lines.push("");
+	}
+	const researchMd = formatResearchBriefMarkdown(opts?.research_brief);
+	if (researchMd) {
+		lines.push(researchMd.trimEnd());
 		lines.push("");
 	}
 	lines.push("## Plan packet");
@@ -75,6 +263,7 @@ export async function writePlanReviewMarkdown(
 	opts?: {
 		human_summary?: string | null;
 		status?: PlanReviewStatus;
+		research_brief?: PlanResearchBrief | null;
 	},
 ): Promise<string | null> {
 	const runId = runCtx?.run_id;
@@ -86,6 +275,7 @@ export async function writePlanReviewMarkdown(
 		human_summary: opts?.human_summary,
 		status: opts?.status ?? "draft",
 		plan_packet_path: planPacketPath,
+		research_brief: opts?.research_brief,
 	});
 	try {
 		await mkdir(dirname(reviewPath), { recursive: true });

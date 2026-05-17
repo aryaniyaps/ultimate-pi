@@ -1,0 +1,45 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-adversary-brief.schema.json",
+	"title": "PlanAdversaryBrief",
+	"description": "Pre-approval adversarial review of a draft PlanPacket (plan phase only).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"edge_cases",
+		"failure_modes",
+		"acceptance_gaps",
+		"mitigations",
+		"recommendation"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"edge_cases": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"failure_modes": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"acceptance_gaps": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"mitigations": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"recommendation": {
+			"type": "string",
+			"enum": ["proceed", "revise"]
+		},
+		"human_summary": {
+			"type": "string"
+		}
+	}
+}

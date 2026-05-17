@@ -387,7 +387,7 @@ Manual override: **`/router profile auto`** anytime after reload if they changed
 
 **Slash commands are orchestrators:** `/harness-plan`, `/harness-run`, etc. spawn `harness/*` agents via the `Agent` tool — bootstrap stays **script-first**; only optionally spawn `harness/sentrux-bootstrap` for Sentrux (see Step 4.2).
 
-Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/planner.md` overrides the package planner).
+Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/planning/scout-graphify.md` overrides the package scout). Deprecated: `harness/planner.md` — use `harness/planning/` agents instead.
 
 Verify manifest drift after `pi update ultimate-pi`:
 

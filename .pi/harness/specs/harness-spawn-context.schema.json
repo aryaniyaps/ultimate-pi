@@ -14,13 +14,14 @@
 		"agent": {
 			"type": "string",
 			"minLength": 1,
-			"description": "Target subagent id, e.g. harness/planner"
+			"description": "Target subagent id, e.g. harness/planning/scout-graphify"
 		},
 		"mode": {
 			"type": "string",
 			"enum": [
 				"create",
 				"revise",
+				"plan_review",
 				"execute",
 				"benchmark",
 				"verdict",
