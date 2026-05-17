@@ -20,7 +20,7 @@ import { Type } from "@sinclair/typebox";
 import {
 	extractPlanApprovalsFromEntries,
 	getLatestRunContext,
-} from "../../../lib/harness-run-context.js";
+} from "../../../../lib/harness-run-context.js";
 import { getDriftReport } from "../agent-manifest.js";
 import { Blackboard } from "../blackboard.js";
 import {
