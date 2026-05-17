@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.8.0] — 2026-05-17
+
+### ✨ Features
+
+- **Harness command orchestration:** slash prompts spawn `harness/*` agents with required `HarnessSpawnContext`; subagent tool policy; L4 review via isolated subagents (not session fork); ADR 0032.
+
 ### 🐛 Fixes
 
 - **Policy gate / harness-plan:** allow scoped writes to `plan-packet.json` in plan phase after `ask_user` approval; block project source edits until execute; promote `/harness-auto` to execute phase mid-turn after approved plan write.
@@ -11,6 +17,10 @@ All notable changes to this project are documented in this file.
 ### 📖 Documentation
 
 - **Harness plan workflow:** present full plan → Approve via `ask_user` → persist packet; `--quick` does not skip approval (ADR 0031).
+
+### 🔧 Chores
+
+- **pi-coding-agent:** migrate peer/dev deps to `@earendil-works/pi-coding-agent` 0.74.1.
 
 ## [v0.7.0] — 2026-05-17
 
