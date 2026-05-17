@@ -759,7 +759,9 @@ export function createHarnessSubagentsExtension(packageRoot: string) {
 		});
 
 		// Live widget: show running agents above editor
-		const widget = new AgentWidget(manager, agentActivity);
+		const widget = new AgentWidget(manager, agentActivity, () => {
+			pi.events.emit("subagents:agents-widget-mounted", {});
+		});
 
 		// ---- Join mode configuration ----
 		let defaultJoinMode: JoinMode = "smart";

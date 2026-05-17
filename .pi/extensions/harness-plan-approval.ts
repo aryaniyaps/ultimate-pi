@@ -7,6 +7,7 @@ import { Text } from "@earendil-works/pi-tui";
 import {
 	appendPlanApprovalIfNew,
 	getLatestRunContext,
+	hasPlanUserApproval,
 	parsePlanApprovalFromMessage,
 } from "../lib/harness-run-context.js";
 import { runPlanApprovalDialog } from "./lib/plan-approval/dialog.js";
@@ -32,26 +33,29 @@ import {
 } from "./lib/plan-approval/validate.js";
 
 export default function harnessPlanApproval(pi: ExtensionAPI) {
-	pi.registerMessageRenderer("harness-plan-draft", (message, _options, theme) => {
-		const data = message.details as
-			| {
-					plan_packet?: unknown;
-					human_summary?: string | null;
-			  }
-			| undefined;
-		if (!data?.plan_packet) return undefined;
-		const lines = renderHarnessPlanDraft(
-			{
-				plan_packet: data.plan_packet as Parameters<
-					typeof renderHarnessPlanDraft
-				>[0]["plan_packet"],
-				human_summary: data.human_summary,
-			},
-			80,
-			theme,
-		);
-		return new Text(lines.join("\n"), 0, 0);
-	});
+	pi.registerMessageRenderer(
+		"harness-plan-draft",
+		(message, _options, theme) => {
+			const data = message.details as
+				| {
+						plan_packet?: unknown;
+						human_summary?: string | null;
+				  }
+				| undefined;
+			if (!data?.plan_packet) return undefined;
+			const lines = renderHarnessPlanDraft(
+				{
+					plan_packet: data.plan_packet as Parameters<
+						typeof renderHarnessPlanDraft
+					>[0]["plan_packet"],
+					human_summary: data.human_summary,
+				},
+				80,
+				theme,
+			);
+			return new Text(lines.join("\n"), 0, 0);
+		},
+	);
 
 	pi.registerTool({
 		name: "approve_plan",
@@ -76,6 +80,33 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				};
 			}
 
+			const entries = ctx.sessionManager.getEntries();
+			if (
+				hasPlanUserApproval(entries, {
+					sincePlanCommand: true,
+					planId: validated.plan_packet.plan_id ?? null,
+				})
+			) {
+				const planId = String(validated.plan_packet.plan_id ?? "plan");
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Plan ${planId} already approved in this harness run (planner subagent). Proceed with /harness-run.`,
+						},
+					],
+					details: {
+						plan_packet: validated.plan_packet,
+						options: validated.options,
+						response: {
+							kind: "selection",
+							selections: ["Approve"],
+						},
+						cancelled: false,
+					},
+				};
+			}
+
 			const planId = String(validated.plan_packet.plan_id ?? "plan");
 			const summary =
 				validated.human_summary?.trim() ||
@@ -94,7 +125,11 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 
 			let outcome: PlanApprovalDialogResult;
 			if (ctx.hasUI) {
-				outcome = await runPlanApprovalDialog(ctx.ui, validated);
+				outcome = await runPlanApprovalDialog(ctx.ui, validated, {
+					onMounted: () => {
+						pi.events.emit("plan-approval:mounted", {});
+					},
+				});
 			} else {
 				outcome = await runPlanApprovalFallback(ctx.ui, validated);
 			}
@@ -109,7 +144,6 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				details,
 			});
 			if (approval) {
-				const entries = ctx.sessionManager.getEntries();
 				const runCtx = getLatestRunContext(entries);
 				appendPlanApprovalIfNew(
 					(type, data) => pi.appendEntry(type, data),

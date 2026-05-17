@@ -671,20 +671,29 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	});
 
 	pi.on("tool_call", async (event, ctx) => {
-		if (event.toolName === "ask_user" && activeCtx?.plan_packet_path) {
-			const input = event.input as {
-				question?: string;
-				options?: unknown[];
-			};
-			if (
-				isPlanApprovalAskUser(input) &&
-				hasPlanUserApproval(getEntries(ctx), { sincePlanCommand: true })
-			) {
-				return {
-					block: true,
-					reason:
-						"harness-run-context: plan already approved via planner subagent; do not call ask_user for plan approval in the parent session.",
-				};
+		if (activeCtx?.plan_packet_path) {
+			const entries = getEntries(ctx);
+			if (hasPlanUserApproval(entries, { sincePlanCommand: true })) {
+				if (event.toolName === "approve_plan") {
+					return {
+						block: true,
+						reason:
+							"harness-run-context: plan already approved via planner subagent; do not call approve_plan again in the parent session.",
+					};
+				}
+				if (event.toolName === "ask_user") {
+					const input = event.input as {
+						question?: string;
+						options?: unknown[];
+					};
+					if (isPlanApprovalAskUser(input)) {
+						return {
+							block: true,
+							reason:
+								"harness-run-context: plan already approved via planner subagent; do not call ask_user for plan approval in the parent session.",
+						};
+					}
+				}
 			}
 		}
 		if (!activeCtx?.plan_packet_path) return undefined;

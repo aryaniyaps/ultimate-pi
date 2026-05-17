@@ -198,7 +198,11 @@ export function createParentHarnessUiBridgeFactory(
 
 				let outcome: DialogResult;
 				if (parentCtx.hasUI) {
-					outcome = await runPlanApprovalDialog(parentCtx.ui, validated);
+					outcome = await runPlanApprovalDialog(parentCtx.ui, validated, {
+						onMounted: () => {
+							pi.events.emit("plan-approval:mounted", {});
+						},
+					});
 				} else {
 					outcome = await runPlanApprovalFallback(parentCtx.ui, validated);
 				}

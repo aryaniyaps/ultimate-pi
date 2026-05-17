@@ -329,6 +329,52 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 	let component: HarnessWidgetComponent | null = null;
 	let refreshQueued = false;
 	let lastRenderHash = "";
+	let mountCtx: ExtensionContext | null = null;
+
+	function mountHarnessWidget(ctx: ExtensionContext): void {
+		if (!ctx.hasUI) return;
+		const state = stateStore.refresh(ctx);
+		const inFlight: InFlightState = { toolCount: 0, lastToolName: null };
+		lastRenderHash = computeRenderHash(state, inFlight);
+
+		ctx.ui.setWidget(
+			"harness-live",
+			(tui, theme) => {
+				widgetMounted = true;
+				tuiHandle = tui;
+				component = new HarnessWidgetComponent(
+					stateStore.snapshot(),
+					inFlight,
+					theme,
+				);
+				return {
+					render(width: number): string[] {
+						component?.setTheme(theme);
+						return component?.render(width) ?? [];
+					},
+					invalidate(): void {
+						component?.invalidate();
+					},
+				};
+			},
+			{ placement: "aboveEditor" },
+		);
+		updateStatusFallback(ctx, state);
+	}
+
+	function remountHarnessLiveWidget(ctx: ExtensionContext): void {
+		if (!ctx.hasUI || !widgetMounted) return;
+		ctx.ui.setWidget("harness-live", undefined);
+		mountHarnessWidget(ctx);
+	}
+
+	pi.events.on("subagents:agents-widget-mounted", () => {
+		if (mountCtx) remountHarnessLiveWidget(mountCtx);
+	});
+
+	pi.events.on("plan-approval:mounted", () => {
+		if (mountCtx) remountHarnessLiveWidget(mountCtx);
+	});
 
 	function updateStatusFallback(
 		ctx: ExtensionContext,
@@ -385,34 +431,8 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 	}
 
 	pi.on("session_start", (_event, ctx) => {
-		if (!ctx.hasUI) return;
-		const state = stateStore.refresh(ctx);
-		const inFlight: InFlightState = { toolCount: 0, lastToolName: null };
-		lastRenderHash = computeRenderHash(state, inFlight);
-
-		ctx.ui.setWidget(
-			"harness-live",
-			(tui, theme) => {
-				widgetMounted = true;
-				tuiHandle = tui;
-				component = new HarnessWidgetComponent(
-					stateStore.snapshot(),
-					inFlight,
-					theme,
-				);
-				return {
-					render(width: number): string[] {
-						component?.setTheme(theme);
-						return component?.render(width) ?? [];
-					},
-					invalidate(): void {
-						component?.invalidate();
-					},
-				};
-			},
-			{ placement: "aboveEditor" },
-		);
-		updateStatusFallback(ctx, state);
+		mountCtx = ctx;
+		mountHarnessWidget(ctx);
 	});
 
 	pi.on("context", (_event, ctx) => {

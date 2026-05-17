@@ -264,6 +264,7 @@ export class AgentWidget {
 	constructor(
 		private manager: AgentManager,
 		private agentActivity: Map<string, AgentActivity>,
+		private onWidgetRegistered?: () => void,
 	) {}
 
 	/** Set the UI context (grabbed from first tool execution). */
@@ -615,6 +616,7 @@ export class AgentWidget {
 				{ placement: "aboveEditor" },
 			);
 			this.widgetRegistered = true;
+			this.onWidgetRegistered?.();
 		} else {
 			// Widget already registered — just request a re-render of existing components.
 			this.tui?.requestRender();
