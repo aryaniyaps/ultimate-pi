@@ -73,41 +73,32 @@ max_cc = 25
 no_god_files = true
 ```
 
-## Firecrawl (self-hosted web scraping)
+## harness-web (Scrapling)
 
-The Firecrawl skill depends on a Firecrawl instance. This repo includes a self-hosted setup powered by Docker.
+Harness agents fetch the web through `python3 "$UP_PKG/.pi/scripts/harness-web.py"` (Scrapling). No Docker compose stack or paid API keys.
 
 ### Quick start
 
 ```bash
-cd firecrawl
-cp .env.template .env   # first time only — edit if needed
-docker compose up -d     # pulls pre-built GHCR images automatically
+command -v uv &>/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh
+uv tool install "scrapling[fetchers]"
+scrapling install
+bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 ```
 
-Firecrawl API is now at `http://localhost:3002`. Admin UI at `http://localhost:3002/admin/<BULL_AUTH_KEY>/queues`.
+Artifacts go under `.web/` (gitignored). See `.agents/skills/scrapling-web/SKILL.md`.
 
-### Services
+### Environment
 
-| Service | Image | Port |
-|---------|-------|------|
-| `api` | `ghcr.io/firecrawl/firecrawl` | 3002 |
-| `playwright-service` | `ghcr.io/firecrawl/playwright-service:latest` | 3000 (internal) |
-| `nuq-postgres` | `ghcr.io/firecrawl/nuq-postgres:latest` | 5432 (internal) |
-| `redis` | `redis:alpine` | 6379 (internal) |
-| `rabbitmq` | `rabbitmq:3-management` | 5672 (internal) |
-| `searxng` | `searxng/searxng:latest` | 8080 |
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `HARNESS_WEB_FETCH_MODE` | `stealth` | `stealth` \| `fast` \| `auto` |
+| `HARNESS_WEB_SEARCH_ENGINE` | `ddg_html` | SERP backend |
+| `HARNESS_WEB_PROXY` | (unset) | Optional proxy |
+| `HARNESS_WEB_RATE_LIMIT_MS` | `2000` | Bulk scrape delay |
+| `HARNESS_WEB_TIMEOUT_MS` | `30000` | Request timeout |
 
-### Configuration
-
-All options live in `firecrawl/.env`. See `firecrawl/.env.template` for the full reference. Key env vars:
-
-- `PORT` — API port (default: `3002`)
-- `SEARXNG_ENDPOINT` — enables `/search` API (default: `http://searxng:8080`)
-- `OPENAI_API_KEY` — enables AI features (JSON formatting, `/extract` API)
-- `BULL_AUTH_KEY` — admin UI access key (default: `CHANGEME` — change in production)
-
-See `firecrawl/README.md` for detailed docs and SDK usage examples.
+Cursor’s optional Firecrawl editor plugin is separate — harness agents must use harness-web to avoid split brain.
 
 ## Extensions
 
@@ -151,13 +142,9 @@ These Pi extensions are loaded from `.pi/extensions/` via the root `package.json
 | caveman | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) |
 | context7-cli | [upstash/context7](https://github.com/upstash/context7) |
 | find-skills | bundled (context7-compatible discovery) |
-| firecrawl (13 skills) | [firecrawl](https://firecrawl.dev) |
+| scrapling-web | bundled (harness-web CLI + Scrapling) |
 | obsidian/wiki skills (11 skills) | [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) |
 | posthog-analyst | bundled (PostHog MCP integration) |
-
-### Firecrawl sub-skills
-
-`firecrawl-search`, `firecrawl-scrape`, `firecrawl-crawl`, `firecrawl-map`, `firecrawl-download`, `firecrawl-parse`, `firecrawl-interact`, `firecrawl-agent`, `firecrawl-build-scrape`, `firecrawl-build-search`, `firecrawl-build-onboarding`, `firecrawl-build-interact`
 
 ### Wiki sub-skills
 

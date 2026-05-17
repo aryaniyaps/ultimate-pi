@@ -7,7 +7,7 @@ description: Structured user decisions via ask_user for harness setup, planning,
 
 ## When to use
 
-- `/harness-setup` — Firecrawl mode, missing project `.env`, other bootstrap forks
+- `/harness-setup` — missing project `.env`, other bootstrap forks
 - `/harness-plan` or harness-auto **plan** phase — scope, risk, acceptance ambiguity
 - Orchestrator receives `human_required` from evaluator, adversary, tie-breaker, or meta-optimizer
 - `/harness-router-tune` — approve / reject / edit a router proposal before apply
@@ -15,23 +15,9 @@ description: Structured user decisions via ask_user for harness setup, planning,
 ## Decision handshake
 
 1. **One focused `ask_user` call** per blocking fork (2–4 options with short descriptions).
-2. **Never guess** on Firecrawl mode, `.env` creation, risk level, scope boundaries, or merge policy.
+2. **Never guess** on `.env` creation, risk level, scope boundaries, or merge policy.
 3. If the user **cancels** (Esc), stop with `needs_clarification` / `human_required` — do not assume defaults.
 4. **CI / automation only:** pass `--non-interactive` to `/harness-setup` to skip prompts and use documented defaults.
-
-## Example (setup — Firecrawl)
-
-```json
-{
-  "question": "Which Firecrawl deployment should this project use?",
-  "context": "Self-hosted requires Docker (~8GB RAM). Cloud uses api.firecrawl.dev and FIRECRAWL_API_KEY.",
-  "options": [
-    { "title": "Cloud (api.firecrawl.dev)", "description": "Recommended default; run firecrawl login in setup" },
-    { "title": "Self-hosted (Docker on :3002)", "description": "Runs firecrawl/ compose stack locally" }
-  ],
-  "allowFreeform": false
-}
-```
 
 ## Example (plan — scope)
 

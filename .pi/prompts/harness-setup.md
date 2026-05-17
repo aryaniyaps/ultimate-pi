@@ -1,6 +1,6 @@
 ---
-description: Full harness bootstrap — Graphify knowledge graph setup, optional self-hosted firecrawl (Docker), CLI tools install, pi extension packages, and verification. Run once per project.
-argument-hint: "[--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--non-interactive] [--force]"
+description: Full harness bootstrap — Graphify knowledge graph setup, Scrapling/harness-web install, CLI tools, pi extension packages, and verification. Run once per project.
+argument-hint: "[--skip-graphify] [--skip-tools] [--non-interactive] [--force]"
 ---
 
 # harness-setup — Full Harness Bootstrap
@@ -20,7 +20,7 @@ Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, C
 | `sentrux-rules-sync` without project manifest | Use **`harness-sentrux-bootstrap.mjs`** (Step 4.4) — seeds manifest + idempotent rules sync. |
 | Re-running bootstrap with `--force` on unchanged manifest | Wasteful but safe — default bootstrap skips when hash unchanged; `--force` only after manifest edits. |
 | `graph.json` uses `links`, not `edges` | Step 6 stats: `g.get('edges', g.get('links', []))`. |
-| Guessing Firecrawl / `.env` defaults when `ask_user` is available | **Mandatory `ask_user`** at Step 1.5 and 4.0 unless `--non-interactive` or `--skip-firecrawl-self`. |
+| Guessing harness-web / `.env` defaults when `ask_user` is available | **Mandatory `ask_user`** at Step 4.0 unless `--non-interactive`. |
 | `sudo apt-get` without passwordless sudo | Skip — report manual fix; do not block the rest of setup. |
 | `graphify codex install` | **Never run** — it writes `.codex/hooks.json`. Harness targets pi only (`graphify install --platform pi`). |
 | Overwriting `.env` | Use `harness-sync-env.mjs` — never rewrite; append missing keys only. |
@@ -31,13 +31,12 @@ Read `$ARGUMENTS` and map flags:
 
 - `--skip-graphify`
 - `--skip-tools`
-- `--skip-firecrawl-self`
 - `--non-interactive`
 - `--force`
 
 If a flag is unknown, stop and return:
 
-`Usage: /harness-setup [--skip-graphify] [--skip-tools] [--skip-firecrawl-self] [--non-interactive] [--force]`
+`Usage: /harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]`
 
 ## Step 0 — Pre-flight Environment Check
 
@@ -125,150 +124,22 @@ Read and summarize `graphify-out/GRAPH_REPORT.md` — god nodes and surprising c
 | `graph.json` exists but 0 nodes | Stale/partial output — re-run with `--force` |
 | `graphify extract` fails | No API key — code graph from `update` is still valid; note in report |
 
-## Step 1.5 — Firecrawl deployment mode
+## Step 1.5 — Scrapling / harness-web (web layer)
 
-Skip entirely when `$ARGUMENTS` contains `--skip-firecrawl-self` (always **cloud**).
-
-Otherwise, unless `$ARGUMENTS` contains `--non-interactive`, **call `ask_user`** before any 1.5.x Docker work:
-
-```json
-{
-  "question": "Which Firecrawl deployment should this project use?",
-  "context": "Self-hosted needs Docker (~8GB RAM). Cloud uses api.firecrawl.dev.",
-  "options": [
-    { "title": "Cloud (api.firecrawl.dev)", "description": "Default; set FIRECRAWL_API_KEY / firecrawl login" },
-    { "title": "Self-hosted (Docker :3002)", "description": "Runs firecrawl/ compose locally" }
-  ],
-  "allowFreeform": false
-}
-```
-
-- **`--non-interactive` (CI only):** use **cloud** without prompting; note in report.
-- If `ask_user` is **cancelled**, stop setup with `needs_clarification`.
-- **Never** assume cloud/self without `ask_user`, `--non-interactive`, or `--skip-firecrawl-self`.
-
-If user chooses **self-hosted**:
-
-### 1.5.1 — Docker Engine Install
-
-Check if Docker is already available:
-```bash
-if ! command -v docker &>/dev/null; then
-	# Detect OS and install Docker Engine
-	if [ -f /etc/os-release ]; then
-		. /etc/os-release
-		case "$ID" in
-			ubuntu|debian)
-				curl -fsSL https://get.docker.com | sh
-				;;
-				fedora|rhel|centos)
-				curl -fsSL https://get.docker.com | sh
-				;;
-				arch)
-				pacman -S --noconfirm docker
-				;;
-			*)
-				echo "Unsupported distro: $ID. Install Docker manually: https://docs.docker.com/engine/install/"
-				;;
-		esac
-	elif command -v brew &>/dev/null; then
-		# macOS — install Docker Desktop via brew
-		brew install --cask docker
-	else
-		echo "Cannot detect OS. Install Docker manually: https://docs.docker.com/engine/install/"
-	fi
-
-	# Enable and start Docker
-	sudo systemctl enable --now docker 2>/dev/null || true
-
-	# Add current user to docker group (no sudo needed)
-	sudo usermod -aG docker $USER 2>/dev/null || true
-	newgrp docker 2>/dev/null || echo "Docker group added. Restart terminal or run: newgrp docker"
-fi
-```
-
-Verify:
-```bash
-docker --version
-docker compose version
-```
-
-Block if Docker install fails. Show manual install link.
-
-### 1.5.2 — Set Up Self-Hosted Firecrawl Files
-
-The `firecrawl/` directory in the project root contains all self-hosted config:
-
-```
-firecrawl/
-├── docker-compose.yaml   # Multi-service compose (API, Playwright, Redis, RabbitMQ, Postgres, SearXNG)
-├── README.md             # Self-hosted usage docs
-├── .env.template         # Environment variables template
-└── searxng/
-    ├── searxng.env       # SearXNG-specific env
-    └── settings.yml      # SearXNG engine config
-```
-
-Create `.env` from template if missing:
-```bash
-if [ ! -f firecrawl/.env ]; then
-	if [ -f firecrawl/.env.template ]; then
-		cp firecrawl/.env.template firecrawl/.env
-		echo "Created firecrawl/.env from template."
-	else
-		cat > firecrawl/.env << 'EOF'
-# Firecrawl Self-Hosted Configuration
-PORT=3002
-INTERNAL_PORT=3002
-REDIS_URL=redis://redis:6379
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=postgres
-USE_DB_AUTHENTICATION=false
-NUM_WORKERS_PER_QUEUE=8
-CRAWL_CONCURRENT_REQUESTS=10
-MAX_CONCURRENT_JOBS=5
-BROWSER_POOL_SIZE=5
-BULL_AUTH_KEY=changeme
-SEARXNG_EXTERNAL_PORT=8080
-# Optional AI: uncomment and set
-# OPENAI_API_KEY=
-# OPENAI_BASE_URL=
-# MODEL_NAME=
-# OLLAMA_BASE_URL=
-EOF
-		echo "Created firecrawl/.env with defaults."
-	fi
-fi
-```
-
-### 1.5.3 — Start Services
+No Docker stack or API keys. Installed by `harness-cli-verify.sh` in Step 2; optional early install:
 
 ```bash
-docker compose -f firecrawl/docker-compose.yaml up -d
+command -v uv &>/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
+uv tool install "scrapling[fetchers]"
+scrapling install   # Chromium for default stealth scrape; may need sudo for OS libs on Linux
+mkdir -p .web
+python3 "$UP_PKG/.pi/scripts/harness-web.py" search "ultimate-pi harness" -o .web/smoke-search.json --limit 3
+python3 "$UP_PKG/.pi/scripts/harness-web.py" scrape "https://example.com" -o .web/smoke-page.md --fast
 ```
 
-Wait for health:
-```bash
-echo "Waiting for services to be healthy..."
-for i in $(seq 1 30); do
-	if curl -sf http://localhost:3002/v1/health &>/dev/null; then
-		echo "✓ Firecrawl API is healthy"
-		break
-	fi
-	sleep 2
-done
-```
-
-### 1.5.4 — Verify Self-Hosted Instance
-
-```bash
-curl -sf http://localhost:3002/v1/health && echo "✓ Self-hosted Firecrawl running on :3002" || echo "✗ Firecrawl not healthy yet — check: docker compose -f firecrawl/docker-compose.yaml logs"
-docker compose -f firecrawl/docker-compose.yaml ps
-```
-
-If user chose **cloud**, skip all 1.5.x steps. Just note:
-> "Using cloud Firecrawl. Ensure `FIRECRAWL_API_KEY` is set. Run `firecrawl login` in Step 2.1."
+- **`--skip-tools`:** skip Step 2 (includes Scrapling verify).
+- On Linux/WSL, if stealth scrape fails, install browser libs from `harness-cli-verify.sh` output or use `--fast` for static targets.
 
 ## Step 2 — Install & Verify Global CLI Tools (skip if `--skip-tools`)
 
@@ -280,7 +151,7 @@ bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 # Reinstall everything: bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh" --force
 ```
 
-**Required (script must exit 0):** firecrawl-cli, ctx7, biome, ast-grep (`sg`), sentrux (when harness manifest present).
+**Required (script must exit 0):** scrapling + harness-web smoke, ctx7, biome, ast-grep (`sg`), sentrux (when harness manifest present).
 
 **Warnings allowed:** gh (if not authenticated), agent-browser (if OS libs need manual `sudo apt-get install`), ck (empty corpus on tiny repos).
 
@@ -303,42 +174,19 @@ bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 
 Use `bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"` (see Step 0 for `UP_PKG`), or install tools individually:
 
-### 2.1 — firecrawl-cli (Web Search + Scrape + Crawl + Interact + Download + Parse)
+### 2.1 — scrapling + harness-web (Web Search + Scrape)
+
+Handled by `harness-cli-verify.sh` (`verify_scrapling`). Manual fallback:
 
 ```bash
-if ! command -v firecrawl &>/dev/null || [ "$FORCE" = "true" ]; then
-	npm install -g firecrawl-cli@latest
-fi
+uv tool install "scrapling[fetchers]"
+scrapling install
+mkdir -p .web
+python3 "$UP_PKG/.pi/scripts/harness-web.py" search "query" -o .web/search.json --limit 5
+python3 "$UP_PKG/.pi/scripts/harness-web.py" scrape "https://example.com" -o .web/page.md --fast
 ```
 
-Verify:
-```bash
-firecrawl --status
-```
-
-**If self-hosted mode (Step 1.5 was chosen):** skip cloud auth. Point CLI at local instance:
-```bash
-export FIRECRAWL_API_URL=http://localhost:3002
-export FIRECRAWL_API_KEY=""
-```
-Add to shell profile for persistence:
-```bash
-echo 'export FIRECRAWL_API_URL=http://localhost:3002' >> ~/.bashrc 2>/dev/null
-echo 'export FIRECRAWL_API_KEY=""' >> ~/.bashrc 2>/dev/null
-```
-
-**If cloud mode:** authenticate if not already:
-```bash
-firecrawl login --browser
-# OR
-firecrawl login --api-key "<key>"
-```
-
-Quick smoke test (skills ship with `ultimate-pi` via npm — do **not** run `firecrawl setup skills`):
-```bash
-mkdir -p .firecrawl
-firecrawl scrape "https://firecrawl.dev" -o .firecrawl/install-check.md
-```
+See `.agents/skills/scrapling-web/SKILL.md`.
 
 ### 2.2 — ctx7 (Context7 Library Docs + Skills Management)
 
@@ -580,14 +428,14 @@ Rules:
 - Re-runs only add keys from `$UP_PKG/.pi/harness/env.harness.template` that are absent (managed block at EOF).
 - Ensure `.env` is gitignored (Step 4.1).
 
-Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`, `FIRECRAWL_API_KEY`, `PI_VCC_CONFIG_PATH`, plus commented optional PostHog / Graphify / self-hosted Firecrawl vars.
+Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`, `HARNESS_WEB_*`, `PI_VCC_CONFIG_PATH`, plus commented optional PostHog / Graphify vars.
 
 ### 4.1 — .gitignore Entries
 
 Ensure `.gitignore` contains:
 ```
 .env
-.firecrawl/
+.web/
 .raw/
 .vault-meta/
 .pi/harness/critics/
@@ -750,7 +598,7 @@ ls .pi/model-router.json 2>/dev/null && echo "✓ model-router config" || echo "
 ls -d ./raw 2>/dev/null && echo "✓ ./raw directory exists" || echo "! ./raw directory missing"
 
 # gitignore entries
-grep -q '.firecrawl/' .gitignore 2>/dev/null && echo "✓ .gitignore" || echo "! .gitignore missing entries"
+grep -q '.web/' .gitignore 2>/dev/null && echo "✓ .gitignore" || echo "! .gitignore missing entries"
 ```
 
 ## Step 6 — Graph Knowledge Report Bootstrap
@@ -782,7 +630,7 @@ Output summary table:
 |-----------|--------|--------|
 | Knowledge Graph | ✓/✗ | `graphify-out/graph.json` — graph status |
 | Graphify Hooks | ✓/✗ | git post-commit/post-checkout hooks |
-| firecrawl-cli | ✓/✗ | Auth: yes/no |
+| scrapling / harness-web | ✓/✗ | Auth: yes/no |
 | ctx7 | ✓/✗ | Login: yes/no |
 | agent-browser | ✓/✗ | Config: .pi/harness/browser.json |
 | ck-search | ✓/✗ | MCP: registered/CLI-only |
@@ -797,16 +645,14 @@ Output summary table:
 
 | .gitignore | ✓/✗ | entries added (incl. `.env`) |
 | ./raw directory | ✓/✗ | Created for graphify source ingestion |
-| Firecrawl mode | self/cloud | Self-hosted on :3002 / Cloud (api.firecrawl.dev) |
-| Docker Engine | ✓/✗/N/A | Installed / Not needed (cloud mode) |
+| harness-web (Scrapling) | ✓/✗ | search + scrape smoke |
 
 Next steps:
 1. If tools missing: re-run with `--force` or install individually
 2. If graph not built: run `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"` (or `graphify update .` from project root)
 3. If hooks not installed: run `graphify hook install`
 4. If gh not authenticated: `gh auth login`
-5. If self-hosted Firecrawl unhealthy: `docker compose -f firecrawl/docker-compose.yaml logs`
-6. If sentrux plugins missing: `sentrux plugin add-standard`
+5. If sentrux plugins missing: `sentrux plugin add-standard`
 7. If rules.toml missing or out of date: `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force`
 8. First harness run: `/harness "your task description"`
 
@@ -818,12 +664,11 @@ Next steps:
 - **Graphify bootstrap is mandatory** (unless `--skip-graphify`): Run `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"`. Never use `graphify . --wiki`. Initial setup must run `graphify update .` and verify `graphify-out/graph.json` has nodes.
 - **Python packages (Graphify)**: Before install, detect via PATH, `pip`/`pip3 show graphifyy`, `uv`, or apt. Prefer `uv tool install graphifyy`.
 - **Node.js >= 18 required**: Some pi packages use modern Node APIs.
-- **Docker required for self-hosted**: Step 1.5 needs Docker Engine + Compose. Block if install fails.
-- **Sufficient RAM for self-hosted**: Firecrawl stack needs ~8GB+ free (API: 8G, Playwright: 4G, others).
+- **Scrapling browsers**: `scrapling install` downloads Chromium (~hundreds of MB). Stealth scrape needs OS libs on Linux (see harness-cli-verify).
 - **Idempotent**: All checks skip if already installed. `--force` overrides.
 - **No destructive actions**: Creates files only if missing. Never overwrites existing content.
 - **Partial success**: If some tools fail, report which and continue. User can fix individually.
-- **Rate limits**: ctx7 login is optional. firecrawl auth is required for cloud; none needed for self-hosted.
+- **Rate limits**: ctx7 login is optional. harness-web has no API key; respect SERP/site rate limits.
 
 
 ## Error Handling
@@ -840,17 +685,13 @@ Next steps:
 | Invalid `graphify .` usage | Replace with `graphify update .` — the `.` subcommand does not exist. |
 | graphify-out empty / 0 nodes | Re-run `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh" --force` from project root. |
 | graphify hook install fails | Hooks need `.git/` directory. Verify inside git repo. Manual: `git config core.hooksPath .pi/git-hooks` |
-| firecrawl auth failed | Show manual login instructions. Continue with other tools. |
+| harness-web / scrapling failed | `uv tool install "scrapling[fetchers]" && scrapling install`; re-run harness-cli-verify. |
 | gh not installed | Show GitHub CLI install link. Skip label creation. |
 | pi packages install fail | Show error output. Check npm permissions. |
 | graph already exists | Report node count. Refresh with `graphify update .` unless user passed `--force`. |
 | biome.json missing | Create minimal config. |
 | settings.json not writable | Warn. Settings won't persist across sessions. |
 | No internet | Block for tool installs. Continue for graphify-only steps if `--skip-tools`. |
-| Docker not running | Start: `sudo systemctl start docker`. Block if cannot start. |
-| Docker install fails | Show manual link: https://docs.docker.com/engine/install/. Block Step 1.5, continue rest. |
-| Port 3002 already in use | Warn. User must free port or change `PORT` in `firecrawl/.env`. |
-| Self-hosted health check timeout | Show logs: `docker compose -f firecrawl/docker-compose.yaml logs`. Continue — may need more time. |
 | sentrux install fails | Show install script output. Fallback: download from https://github.com/sentrux/sentrux/releases/latest |
 | No model-router.json / "No authenticated Pi providers" | Run `/login` in pi, then `node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs" --force` |
 | UP_PKG not found | `pi install npm:ultimate-pi` or `npm i -g ultimate-pi`; verify with `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
@@ -862,7 +703,6 @@ Next steps:
 |------|--------|
 | `--skip-graphify` | Skip Step 0.5 (graph build). Only when a valid `graphify-out/graph.json` already exists. |
 | `--skip-tools` | Skip Step 2 (CLI tool installs). Use when tools already set up. |
-| `--skip-firecrawl-self` | Skip Step 1.5 (self-hosted Firecrawl). Always use cloud. |
-| `--non-interactive` | Skip all `ask_user` prompts; Firecrawl=cloud, skip `.env` creation with warning. CI/automation only. |
+| `--non-interactive` | Skip all `ask_user` prompts; skip `.env` creation with warning. CI/automation only. |
 | `--force` | Reinstall all tools even if already present. Overwrite existing files. |
 

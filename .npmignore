@@ -3,7 +3,7 @@ jobs/
 scripts/
 .env
 graphify-out/
-.firecrawl
+.web
 .ck
 .cursor
 raw/
@@ -24,4 +24,3 @@ data/
 .pi/npm/node_modules/
 
 # Secrets / local env (ship .env.template only)
-firecrawl/.env

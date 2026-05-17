@@ -30,7 +30,7 @@ Created: 2026-05-14
 - Harness context: **context-mode only** — never lean-ctx on harness paths (see harness-context skill)
 - `graphify update .` after significant code changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code
-- Self-hosted Firecrawl at http://localhost:3002 (FIRECRAWL_API_URL)
+- Web fetch/search via `python3 "$UP_PKG/.pi/scripts/harness-web.py"` (Scrapling; see scrapling-web skill)
 
 ## graphify
 
