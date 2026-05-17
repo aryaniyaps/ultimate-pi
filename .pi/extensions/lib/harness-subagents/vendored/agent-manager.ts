@@ -13,6 +13,7 @@ import type {
 	ExtensionAPI,
 	ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
+import type { ParentHarnessUiHooks } from "../parent-harness-ui-bridge.js";
 import { resumeAgent, runAgent, type ToolActivity } from "./agent-runner.js";
 import type {
 	AgentInvocation,
@@ -84,6 +85,8 @@ interface SpawnOptions {
 	onCompaction?: (info: CompactionInfo) => void;
 	/** Spawn context (blackboard injection) for subagent system prompt. */
 	systemPromptAppendix?: string;
+	/** Parent UI hooks for plan approval sync and draft transcript. */
+	parentHarnessUiHooks?: ParentHarnessUiHooks;
 }
 
 export class AgentManager {
@@ -253,6 +256,7 @@ export class AgentManager {
 			},
 			systemPromptAppendix: options.systemPromptAppendix,
 			parentExtensionContext: ctx,
+			parentHarnessUiHooks: options.parentHarnessUiHooks,
 		})
 			.then(({ responseText, session, aborted, steered }) => {
 				// Don't overwrite status if externally stopped via abort()

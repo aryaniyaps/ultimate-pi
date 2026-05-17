@@ -126,7 +126,11 @@ const PLAN_CANCEL_OPTION =
 export interface PlanUserApproval {
 	plan_id: string | null;
 	approved_at: string;
-	source: "ask_user" | "harness-plan-approval" | "noninteractive";
+	source:
+		| "ask_user"
+		| "approve_plan"
+		| "harness-plan-approval"
+		| "noninteractive";
 }
 
 /** Persisted on `input` when user invokes a raw `/harness-*` prompt template. */
@@ -291,32 +295,45 @@ export function indexOfLastPlanCommand(entries: unknown[]): number {
 	return -1;
 }
 
-export function parseAskUserApprovalFromMessage(msg: {
+type PlanApprovalToolDetails = {
+	cancelled?: boolean;
+	plan_packet?: PlanPacketLike;
+	response?: {
+		kind?: string;
+		text?: string;
+		selections?: string[];
+	};
+};
+
+function planIdFromApprovalDetails(
+	details: PlanApprovalToolDetails | undefined,
+): string | null {
+	const fromPacket = details?.plan_packet?.plan_id;
+	return typeof fromPacket === "string" && fromPacket.length > 0
+		? fromPacket
+		: null;
+}
+
+export function parsePlanApprovalFromMessage(msg: {
 	toolName?: string;
 	details?: unknown;
 	content?: { type?: string; text?: string }[];
 }): PlanUserApproval | null {
-	if (msg.toolName !== "ask_user") return null;
-	const details = msg.details as
-		| {
-				cancelled?: boolean;
-				response?: {
-					kind?: string;
-					text?: string;
-					selections?: string[];
-				};
-		  }
-		| undefined;
+	const toolName = msg.toolName;
+	if (toolName !== "ask_user" && toolName !== "approve_plan") return null;
+	const source = toolName === "approve_plan" ? "approve_plan" : "ask_user";
+	const details = msg.details as PlanApprovalToolDetails | undefined;
 	if (details?.cancelled) return null;
 	const response = details?.response;
 	if (!response) return null;
+	const plan_id = planIdFromApprovalDetails(details);
 	if (response.kind === "freeform") {
 		const text = (response.text ?? "").trim();
 		if (/^approve(d)?\b/i.test(text)) {
 			return {
-				plan_id: null,
+				plan_id,
 				approved_at: nowIso(),
-				source: "ask_user",
+				source,
 			};
 		}
 		return null;
@@ -325,12 +342,21 @@ export function parseAskUserApprovalFromMessage(msg: {
 	if (!selection || PLAN_CANCEL_OPTION.test(selection)) return null;
 	if (PLAN_APPROVE_OPTION.test(selection)) {
 		return {
-			plan_id: null,
+			plan_id,
 			approved_at: nowIso(),
-			source: "ask_user",
+			source,
 		};
 	}
 	return null;
+}
+
+/** @deprecated Use parsePlanApprovalFromMessage */
+export function parseAskUserApprovalFromMessage(msg: {
+	toolName?: string;
+	details?: unknown;
+	content?: { type?: string; text?: string }[];
+}): PlanUserApproval | null {
+	return parsePlanApprovalFromMessage(msg);
 }
 
 export function getLatestPlanUserApproval(
@@ -365,8 +391,8 @@ export function getLatestPlanUserApproval(
 		if (entry.type !== "message" || entry.message?.role !== "toolResult") {
 			continue;
 		}
-		const fromAsk = parseAskUserApprovalFromMessage(entry.message);
-		if (fromAsk) return fromAsk;
+		const fromTool = parsePlanApprovalFromMessage(entry.message);
+		if (fromTool) return fromTool;
 	}
 	return null;
 }
@@ -472,7 +498,7 @@ export async function isPlanPhaseAllowedMutation(
 				allowed: false,
 				isScopedPlanWrite: true,
 				reason:
-					"policy-gate: plan-packet.json write blocked until the user approves via ask_user (present the full plan, then Approve).",
+					"policy-gate: plan-packet.json write blocked until the user approves via approve_plan or ask_user (present the full plan, then Approve).",
 			};
 		}
 		if (opts.aborted) {
@@ -569,11 +595,72 @@ export function userVisiblePromptSlice(prompt: string): string {
 
 export function hasApprovedPlanSignalFromUserPrompt(prompt: string): boolean {
 	const p = userVisiblePromptSlice(prompt).toLowerCase();
-	return (
-		p.includes("planpacket") ||
-		p.includes("approved plan") ||
-		/\bplan_id\s*[=:]/i.test(p)
-	);
+	if (p.includes("user approved") || p.includes("already approved")) {
+		return true;
+	}
+	if (/\bapprove(d)?\s+(this\s+)?plan\b/.test(p)) return true;
+	if (p.includes("harness-plan-approval")) return true;
+	return false;
+}
+
+/** Detect parent-session ask_user calls that duplicate planner plan approval. */
+export function isPlanApprovalAskUser(input: {
+	question?: string;
+	options?: unknown[];
+}): boolean {
+	const q = String(input.question ?? "").trim();
+	const opts = Array.isArray(input.options) ? input.options : [];
+	const titles = opts.map((o) => {
+		if (typeof o === "string") return o.trim();
+		if (o && typeof o === "object" && "title" in o) {
+			return String((o as { title?: string }).title ?? "").trim();
+		}
+		return "";
+	});
+	const hasPlanOptions =
+		titles.some(
+			(t) => PLAN_APPROVE_OPTION.test(t) || PLAN_CANCEL_OPTION.test(t),
+		) || PLAN_APPROVE_OPTION.test(q);
+	if (!hasPlanOptions) return false;
+	return /plan|approve/i.test(q);
+}
+
+export function appendPlanApprovalIfNew(
+	appendEntry: (customType: string, data: unknown) => void,
+	parentEntries: unknown[],
+	approval: PlanUserApproval,
+	runCtx: HarnessRunContext | null,
+	opts?: { sincePlanCommand?: boolean },
+): boolean {
+	const since =
+		opts?.sincePlanCommand !== false
+			? Math.max(0, indexOfLastPlanCommand(parentEntries))
+			: 0;
+	if (getLatestPlanUserApproval(parentEntries, since)) {
+		return false;
+	}
+	appendEntry("harness-plan-approval", {
+		plan_id: approval.plan_id ?? runCtx?.plan_id ?? null,
+		approved_at: approval.approved_at,
+		source: approval.source,
+	});
+	return true;
+}
+
+/** Sync planner subagent approvals into the parent session (deduped). */
+export function syncPlannerApprovalsToParent(
+	appendEntry: (customType: string, data: unknown) => void,
+	parentEntries: unknown[],
+	subEntries: unknown[],
+	runCtx: HarnessRunContext | null,
+): number {
+	let synced = 0;
+	for (const approval of extractPlanApprovalsFromEntries(subEntries)) {
+		if (appendPlanApprovalIfNew(appendEntry, parentEntries, approval, runCtx)) {
+			synced++;
+		}
+	}
+	return synced;
 }
 
 export function isDriftReplanPrompt(prompt: string): boolean {
@@ -970,7 +1057,9 @@ export interface HarnessPolicyState {
 	aborted: boolean;
 }
 
-export function inferHarnessPhaseFromTurn(entries: unknown[]): HarnessPhase | null {
+export function inferHarnessPhaseFromTurn(
+	entries: unknown[],
+): HarnessPhase | null {
 	const turn = getLatestHarnessTurn(entries);
 	if (!turn) return null;
 	return HARNESS_COMMAND_PHASE[turn.command] ?? null;
@@ -1266,8 +1355,8 @@ export function extractPlanApprovalsFromEntries(
 		if (entry.type !== "message" || entry.message?.role !== "toolResult") {
 			continue;
 		}
-		const fromAsk = parseAskUserApprovalFromMessage(entry.message);
-		if (fromAsk) out.push(fromAsk);
+		const fromTool = parsePlanApprovalFromMessage(entry.message);
+		if (fromTool) out.push(fromTool);
 	}
 	return out;
 }

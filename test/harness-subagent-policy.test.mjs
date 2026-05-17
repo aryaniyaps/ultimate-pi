@@ -77,11 +77,37 @@ test("planner allows ask_user via spawn policy", () => {
 	assert.equal(execAsk.action, "block");
 });
 
+test("planner allows approve_plan and create_plan via spawn policy", () => {
+	const approve = evaluateSubagentToolCall("approve_plan", "harness/planner");
+	assert.equal(approve.action, "allow");
+	const create = evaluateSubagentToolCall("create_plan", "harness/planner");
+	assert.equal(create.action, "allow");
+	const execCreate = evaluateSubagentToolCall(
+		"create_plan",
+		"harness/executor",
+	);
+	assert.equal(execCreate.action, "block");
+});
+
+test("planner blocks write and edit via harness-subagent-policy", () => {
+	const write = evaluateHarnessSubagentToolCall("write", {}, "harness/planner");
+	assert.equal(write.action, "block");
+	const create = evaluateHarnessSubagentToolCall(
+		"create_plan",
+		{},
+		"harness/planner",
+	);
+	assert.equal(create.action, "allow");
+});
+
 test("planner agent includes ask_user tool", () => {
 	const planner = readFileSync(
 		join(root, ".pi/agents/harness/planner.md"),
 		"utf-8",
 	);
 	assert.match(planner, /\bask_user\b/);
+	assert.match(planner, /\bapprove_plan\b/);
+	assert.match(planner, /\bcreate_plan\b/);
+	assert.match(planner, /disallowed_tools:\s*write/);
 	assert.doesNotMatch(planner, /disallowed_tools:\s*ask_user/);
 });

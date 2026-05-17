@@ -96,10 +96,20 @@ export function evaluateHarnessSubagentToolCall(
 		return { action: "allow" };
 	}
 
+	if (toolName === "create_plan") {
+		if (kind === "planner") {
+			return { action: "allow" };
+		}
+		return {
+			action: "block",
+			reason: `harness-subagent-policy: create_plan is only for harness/planner.`,
+		};
+	}
+
 	if (MUTATING_TOOLS.has(toolName)) {
 		return {
 			action: "block",
-			reason: `harness-subagent-policy: ${toolName} blocked for harness/${kind} (read-only phase agent).`,
+			reason: `harness-subagent-policy: ${toolName} blocked for harness/${kind} (read-only phase agent). Use create_plan after approve_plan instead of write/edit.`,
 		};
 	}
 

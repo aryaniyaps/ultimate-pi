@@ -1,0 +1,61 @@
+import {
+	type PlanPacketLike,
+	validatePlanPacket,
+} from "../../../lib/harness-run-context.js";
+import type { AskResponse } from "../ask-user/types.js";
+import { formatResultText } from "../ask-user/validate.js";
+import type {
+	ApprovePlanParams,
+	ApprovePlanToolDetails,
+	ValidatedApprovePlanParams,
+} from "./types.js";
+import { DEFAULT_PLAN_APPROVAL_OPTIONS } from "./types.js";
+
+export function validateApprovePlanParams(
+	params: ApprovePlanParams,
+): ValidatedApprovePlanParams | string {
+	const packet = params.plan_packet;
+	if (!packet || typeof packet !== "object") {
+		return "approve_plan: plan_packet object is required.";
+	}
+	const validation = validatePlanPacket(packet as PlanPacketLike);
+	if (!validation.valid) {
+		return `approve_plan: invalid plan_packet — ${validation.errors.join("; ")}`;
+	}
+	const rawOptions = params.options;
+	const options =
+		rawOptions && rawOptions.length > 0
+			? rawOptions.map((o) =>
+					typeof o === "string"
+						? { title: o }
+						: { title: o.title, description: o.description },
+				)
+			: DEFAULT_PLAN_APPROVAL_OPTIONS.map((title) => ({ title }));
+	return {
+		plan_packet: packet as PlanPacketLike,
+		human_summary: params.human_summary?.trim() || undefined,
+		options,
+		displayMode: params.displayMode ?? "overlay",
+	};
+}
+
+export function toApprovePlanToolDetails(
+	validated: ValidatedApprovePlanParams,
+	response: AskResponse | null,
+	cancelled: boolean,
+): ApprovePlanToolDetails {
+	return {
+		plan_packet: validated.plan_packet,
+		human_summary: validated.human_summary,
+		options: validated.options.map((o) => o.title),
+		response,
+		cancelled,
+	};
+}
+
+export function formatApprovePlanResultText(
+	response: AskResponse | null,
+	cancelled: boolean,
+): string {
+	return formatResultText(response, cancelled);
+}

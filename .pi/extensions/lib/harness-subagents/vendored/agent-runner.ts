@@ -18,7 +18,10 @@ import {
 	SettingsManager,
 } from "@earendil-works/pi-coding-agent";
 import { evaluateHarnessSubagentToolCall } from "../harness-subagent-policy.js";
-import { createParentAskUserBridgeFactory } from "../parent-ask-user-bridge.js";
+import {
+	createParentHarnessUiBridgeFactory,
+	type ParentHarnessUiHooks,
+} from "../parent-harness-ui-bridge.js";
 import {
 	getAgentConfig,
 	getConfig,
@@ -152,8 +155,10 @@ export interface RunOptions {
 	}) => void;
 	/** Blackboard or other spawn context appended to the subagent system prompt. */
 	systemPromptAppendix?: string;
-	/** Parent session context — used to bridge ask_user UI into subagents. */
+	/** Parent session context — used to bridge ask_user / approve_plan UI into subagents. */
 	parentExtensionContext?: ExtensionContext;
+	/** Parent-session hooks (plan draft transcript, approval sync). */
+	parentHarnessUiHooks?: ParentHarnessUiHooks;
 }
 
 export interface RunResult {
@@ -331,11 +336,15 @@ export async function runAgent(
 			: systemPrompt;
 
 	const extensionFactories: Array<(pi: ExtensionAPI) => void> = [];
-	const askUserBridge = options.parentExtensionContext
-		? createParentAskUserBridgeFactory(options.parentExtensionContext, type)
+	const harnessUiBridge = options.parentExtensionContext
+		? createParentHarnessUiBridgeFactory(
+				options.parentExtensionContext,
+				type,
+				options.parentHarnessUiHooks,
+			)
 		: null;
-	if (askUserBridge) {
-		extensionFactories.push(askUserBridge);
+	if (harnessUiBridge) {
+		extensionFactories.push(harnessUiBridge);
 	}
 	extensionFactories.push((pi) => {
 		pi.on("tool_call", (event) => {
@@ -410,7 +419,14 @@ export async function runAgent(
 	const filterTools = (names: string[]) =>
 		names.filter((t) => {
 			if (EXCLUDED_TOOL_NAMES.includes(t)) return false;
-			if (t === "ask_user" && askUserBridge) return true;
+			if (t === "ask_user" && harnessUiBridge) return true;
+			if (
+				(t === "approve_plan" || t === "create_plan") &&
+				harnessUiBridge &&
+				type === "harness/planner"
+			) {
+				return true;
+			}
 			if (disallowedSet?.has(t)) return false;
 			if (builtinToolNameSet.has(t)) return true;
 			if (extensions === false) return false;
@@ -425,7 +441,14 @@ export async function runAgent(
 		session.setActiveToolsByName(activeTools);
 	} else {
 		const fallback = toolNames.filter((t) => {
-			if (t === "ask_user" && askUserBridge) return true;
+			if (t === "ask_user" && harnessUiBridge) return true;
+			if (
+				(t === "approve_plan" || t === "create_plan") &&
+				harnessUiBridge &&
+				type === "harness/planner"
+			) {
+				return true;
+			}
 			return !disallowedSet?.has(t);
 		});
 		session.setActiveToolsByName(fallback);
@@ -444,10 +467,14 @@ export async function runAgent(
 		},
 	});
 
-	if (askUserBridge) {
-		const withAsk = new Set(session.getActiveToolNames());
-		withAsk.add("ask_user");
-		session.setActiveToolsByName([...withAsk]);
+	if (harnessUiBridge) {
+		const withHarnessUi = new Set(session.getActiveToolNames());
+		withHarnessUi.add("ask_user");
+		if (type === "harness/planner") {
+			withHarnessUi.add("approve_plan");
+			withHarnessUi.add("create_plan");
+		}
+		session.setActiveToolsByName([...withHarnessUi]);
 	}
 
 	options.onSessionCreated?.(session);
