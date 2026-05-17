@@ -15,6 +15,7 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0007](0007-interactive-drift-monitor.md) | Interactive drift monitor | Accepted |
 | [0008](0008-harness-posthog-telemetry.md) | Harness PostHog telemetry | Accepted |
 | [0009](0009-sentrux-rules-lifecycle.md) | Sentrux rules.toml lifecycle | Accepted |
+| [0030](0030-inhouse-vcc-compaction.md) | In-house VCC compaction (vendored pi-vcc) | Accepted |
 
 ## Template
 

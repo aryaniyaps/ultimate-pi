@@ -343,7 +343,7 @@ Verify each package:
 | `@posthog/pi` | Analytics event capture | F0 |
 | `pi-lean-ctx` | Context runtime (read/bash/find/grep/MCP bridge) | F0 |
 | `harness-subagents` (bundled extension) | L4 sub-agent spawn, blackboard, package agents | P16 |
-| `@sting8k/pi-vcc` | VCC compaction / conversation memory | Shipped |
+| Vendored `pi-vcc` (`vendor/pi-vcc`, `.pi/extensions/ultimate-pi-vcc.ts`) | VCC compaction / `vcc_recall` — env-only: `HARNESS_VCC_COMPACTION` (default on), `HARNESS_VCC_DEBUG` | Shipped |
 | `pi-model-router` | Vendored (`vendor/`); activates after `.pi/model-router.json` exists | F0 |
 
 ## Step 3.5 — Model Router Configuration (Dynamic)
@@ -428,7 +428,7 @@ Rules:
 - Re-runs only add keys from `$UP_PKG/.pi/harness/env.harness.template` that are absent (managed block at EOF).
 - Ensure `.env` is gitignored (Step 4.1).
 
-Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`, `HARNESS_WEB_*`, `PI_VCC_CONFIG_PATH`, plus commented optional PostHog / Graphify vars.
+Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`, `HARNESS_WEB_*`, `HARNESS_VCC_COMPACTION`, `HARNESS_VCC_DEBUG`, plus commented optional PostHog / Graphify vars.
 
 ### 4.1 — .gitignore Entries
 

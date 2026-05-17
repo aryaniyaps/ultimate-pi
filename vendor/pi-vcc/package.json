@@ -1,0 +1,26 @@
+{
+  "name": "@sting8k/pi-vcc",
+  "version": "0.3.13",
+  "description": "Algorithmic conversation compactor for pi - transcript-preserving structured summaries, no LLM calls",
+  "main": "index.ts",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "vcc",
+    "compact",
+    "compaction"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sting8k/pi-vcc.git"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "@sinclair/typebox": "*"
+  },
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}
