@@ -4,6 +4,20 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.6.0] — 2026-05-17
+
+### ✨ Features
+
+- **sentrux Pi skill:** CLI-first architectural quality workflows (`check`, `gate`, GUI) via `/skill:sentrux`; symlinked in `.pi/skills`. Pi does not load `.pi/mcp.json`.
+
+### 📖 Documentation
+
+- **harness-setup / CONTRIBUTING:** document Sentrux skill instead of MCP config; update `harness-sentrux-setup` workflow.
+
+### 🔧 Chores
+
+- Remove shipped `.pi/mcp.json` from package `files` list; refresh `graphify-out`.
+
 ## [v0.5.0] — 2026-05-17
 
 ### ✨ Features
