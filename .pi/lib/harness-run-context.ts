@@ -129,6 +129,36 @@ export interface PlanUserApproval {
 	source: "ask_user" | "harness-plan-approval" | "noninteractive";
 }
 
+/** Persisted on `input` when user invokes a raw `/harness-*` prompt template. */
+export interface HarnessTurnEntry {
+	schema_version: "1.0.0";
+	command: string;
+	args: string;
+	source: "slash";
+	invoked_at: string;
+}
+
+export const HARNESS_COMMAND_PHASE: Record<string, HarnessPhase> = {
+	"harness-plan": "plan",
+	"harness-auto": "plan",
+	"harness-run": "execute",
+	"harness-eval": "evaluate",
+	"harness-review": "evaluate",
+	"harness-critic": "adversary",
+	"harness-trace": "evaluate",
+	"harness-incident": "evaluate",
+	"harness-drift-replan": "plan",
+	"harness-drift-proceed": "execute",
+	"harness-abort": "plan",
+	"harness-new-run": "plan",
+	"harness-run-status": "plan",
+	"harness-use-run": "plan",
+	"harness-policy-status": "merge",
+	"harness-router-tune": "plan",
+	"harness-budget-status": "plan",
+	"harness-setup": "execute",
+};
+
 export interface PlanPhaseMutationDecision {
 	allowed: boolean;
 	reason?: string;
@@ -193,11 +223,40 @@ export async function isPlanPhaseScopedWrite(
 	return isCanonicalPlanPacketPath(resolved, projectRoot, runCtx.run_id);
 }
 
+export function getLatestHarnessTurn(
+	entries: unknown[],
+): HarnessTurnEntry | null {
+	for (let i = entries.length - 1; i >= 0; i--) {
+		const entry = entries[i] as SessionEntryLike;
+		if (entry.type !== "custom" || entry.customType !== "harness-turn") {
+			continue;
+		}
+		const data = entry.data as Partial<HarnessTurnEntry> | undefined;
+		if (data?.command && typeof data.command === "string") {
+			return {
+				schema_version: "1.0.0",
+				command: data.command,
+				args: typeof data.args === "string" ? data.args : "",
+				source: "slash",
+				invoked_at:
+					typeof data.invoked_at === "string" ? data.invoked_at : nowIso(),
+			};
+		}
+	}
+	return null;
+}
+
 export function indexOfLastPlanCommand(entries: unknown[]): number {
 	for (let i = entries.length - 1; i >= 0; i--) {
 		const entry = entries[i] as SessionEntryLike & {
 			message?: { role?: string; content?: string | unknown[] };
 		};
+		if (entry.type === "custom" && entry.customType === "harness-turn") {
+			const cmd = (entry.data as { command?: string })?.command;
+			if (cmd === "harness-plan" || cmd === "harness-auto") {
+				return i;
+			}
+		}
 		if (
 			entry.type === "custom" &&
 			entry.customType === "harness-plan-attempt"
@@ -221,7 +280,7 @@ export function indexOfLastPlanCommand(entries: unknown[]): number {
 							.join("\n")
 					: "";
 		const visible = userVisiblePromptSlice(text);
-		const parsed = parseHarnessSlashCommand(visible);
+		const parsed = parseHarnessSlashInput(visible);
 		if (
 			parsed?.command === "harness-plan" ||
 			parsed?.command === "harness-auto"
@@ -342,7 +401,7 @@ export function isHarnessAutoSession(entries: unknown[]): boolean {
 			typeof entry.message.content === "string"
 				? userVisiblePromptSlice(entry.message.content)
 				: "";
-		const parsed = parseHarnessSlashCommand(text);
+		const parsed = parseHarnessSlashInput(text);
 		if (parsed?.command === "harness-auto") return true;
 	}
 	return false;
@@ -469,23 +528,28 @@ export function nowIso(): string {
 	return new Date().toISOString();
 }
 
+/** @deprecated Use parseHarnessSlashInput on raw `input` event text only. */
 export function isHarnessSlashCommand(prompt: string): boolean {
-	const trimmed = prompt.trim();
-	if (!trimmed.startsWith("/harness-")) return false;
-	const match = trimmed.match(/^\/(harness-[a-z0-9-]+)/);
-	if (!match) return false;
-	return HARNESS_COMMANDS.has(match[1]);
+	return parseHarnessSlashInput(prompt) !== null;
 }
 
-export function parseHarnessSlashCommand(
-	prompt: string,
+/** Parse raw user input before prompt-template expansion (`input` hook only). */
+export function parseHarnessSlashInput(
+	text: string,
 ): { command: string; args: string } | null {
-	const trimmed = prompt.trim();
+	const trimmed = text.trim();
 	const match = trimmed.match(/^\/(harness-[a-z0-9-]+)(?:\s+([\s\S]*))?$/);
 	if (!match) return null;
 	const command = match[1];
 	if (!HARNESS_COMMANDS.has(command)) return null;
 	return { command, args: (match[2] ?? "").trim() };
+}
+
+/** @deprecated Prefer parseHarnessSlashInput on raw input; kept for expanded-prompt fallbacks. */
+export function parseHarnessSlashCommand(
+	prompt: string,
+): { command: string; args: string } | null {
+	return parseHarnessSlashInput(userVisiblePromptSlice(prompt));
 }
 
 /** User-visible prompt slice for policy signals (exclude injected blocks). */
@@ -720,7 +784,32 @@ export function planPacketSummary(
 	};
 }
 
-export function formatPlanContextBlock(ctx: HarnessRunContext): string {
+export function buildHarnessSpawnContextSnippet(
+	ctx: HarnessRunContext,
+	opts?: { mode?: "create" | "revise"; risk_level?: string; quick?: boolean },
+): string {
+	const mode =
+		opts?.mode ??
+		(ctx.plan_ready || ctx.status === "aborted" ? "revise" : "create");
+	return JSON.stringify(
+		{
+			schema_version: "1.0.0",
+			run_id: ctx.run_id,
+			plan_packet_path: ctx.plan_packet_path,
+			task_summary: ctx.task_summary,
+			mode,
+			risk_level: opts?.risk_level ?? "med",
+			quick: opts?.quick ?? false,
+		},
+		null,
+		2,
+	);
+}
+
+export function formatPlanContextBlock(
+	ctx: HarnessRunContext,
+	opts?: { mode?: "create" | "revise"; risk_level?: string; quick?: boolean },
+): string {
 	const lines = [
 		"[HarnessRunContext]",
 		`run_id=${ctx.run_id}`,
@@ -735,6 +824,12 @@ export function formatPlanContextBlock(ctx: HarnessRunContext): string {
 	if (ctx.plan_packet_path) {
 		lines.push(`plan_packet_path=${ctx.plan_packet_path}`);
 	}
+	if (ctx.task_summary) {
+		lines.push(`task_summary=${ctx.task_summary}`);
+	}
+	lines.push(
+		`HarnessSpawnContext=${buildHarnessSpawnContextSnippet(ctx, opts)}`,
+	);
 	return lines.join("\n");
 }
 
@@ -850,7 +945,7 @@ export function shouldReuseHarnessRunId(
 	ctx: HarnessRunContext | null,
 	command: string | null,
 ): boolean {
-	if (!command || !isHarnessSlashCommand(prompt)) return false;
+	if (!command) return false;
 	if (command === "harness-new-run") return false;
 	if (!ctx) return false;
 	if (command === "harness-plan" || command === "harness-auto") {
@@ -875,27 +970,43 @@ export interface HarnessPolicyState {
 	aborted: boolean;
 }
 
+export function inferHarnessPhaseFromTurn(entries: unknown[]): HarnessPhase | null {
+	const turn = getLatestHarnessTurn(entries);
+	if (!turn) return null;
+	return HARNESS_COMMAND_PHASE[turn.command] ?? null;
+}
+
+/** Prefer session `harness-turn`; fall back to raw slash in visible prompt only. */
+export function inferHarnessPhase(
+	entries: unknown[],
+	userPrompt?: string,
+): HarnessPhase {
+	const fromTurn = inferHarnessPhaseFromTurn(entries);
+	if (fromTurn) return fromTurn;
+	if (userPrompt) {
+		const parsed = parseHarnessSlashInput(userVisiblePromptSlice(userPrompt));
+		if (parsed && HARNESS_COMMAND_PHASE[parsed.command]) {
+			return HARNESS_COMMAND_PHASE[parsed.command];
+		}
+	}
+	return "execute";
+}
+
+/** @deprecated Use inferHarnessPhase(entries, prompt) — substring matching causes false plan phase. */
 export function inferHarnessPhaseFromPrompt(prompt: string): HarnessPhase {
-	const p = prompt.toLowerCase();
-	if (
-		p.includes("/harness-plan") ||
-		p.includes("harness-plan") ||
-		p.includes("/harness-auto") ||
-		p.includes("harness-auto")
-	) {
+	const p = userVisiblePromptSlice(prompt).toLowerCase();
+	const parsed = parseHarnessSlashInput(userVisiblePromptSlice(prompt));
+	if (parsed && HARNESS_COMMAND_PHASE[parsed.command]) {
+		return HARNESS_COMMAND_PHASE[parsed.command];
+	}
+	if (p.startsWith("/harness-plan") || p.startsWith("/harness-auto")) {
 		return "plan";
 	}
-	if (p.includes("/harness-run") || p.includes("harness-run")) return "execute";
-	if (p.includes("/harness-eval") || p.includes("harness-eval")) {
+	if (p.startsWith("/harness-run")) return "execute";
+	if (p.startsWith("/harness-eval") || p.startsWith("/harness-review")) {
 		return "evaluate";
 	}
-	if (p.includes("/harness-review") || p.includes("harness-review")) {
-		return "evaluate";
-	}
-	if (p.includes("/harness-critic") || p.includes("harness-critic")) {
-		return "adversary";
-	}
-	if (p.includes("adversary")) return "adversary";
+	if (p.startsWith("/harness-critic")) return "adversary";
 	if (p.includes("merge gate") || p.includes("policy decision")) return "merge";
 	return "execute";
 }
@@ -914,8 +1025,8 @@ export function isValidHarnessPhaseTransition(
 
 export function getLatestPolicyState(entries: unknown[]): HarnessPolicyState {
 	const fallback: HarnessPolicyState = {
-		phase: "execute",
-		approvedPlan: true,
+		phase: "plan",
+		approvedPlan: false,
 		planId: null,
 		aborted: false,
 	};
@@ -970,7 +1081,7 @@ export function getPolicyTransitionBlock(
 		return { blocked: false };
 	}
 	const state = getLatestPolicyState(entries);
-	const nextPhase = inferHarnessPhaseFromPrompt(userPrompt);
+	const nextPhase = inferHarnessPhase(entries, userPrompt);
 	if (!isValidHarnessPhaseTransition(state.phase, nextPhase)) {
 		return {
 			blocked: true,
@@ -1014,7 +1125,7 @@ export function isNewTaskPlanBlocked(
 ): boolean {
 	if (ctx.status !== "active") return false;
 	if (isAmendPlanAllowed(ctx, prompt, false)) return false;
-	const cmd = parseHarnessSlashCommand(prompt);
+	const cmd = parseHarnessSlashInput(userVisiblePromptSlice(prompt));
 	if (cmd?.command !== "harness-plan") return false;
 	const taskMatch = prompt.match(/"([^"]+)"/);
 	if (!taskMatch || !ctx.task_summary) return true;
@@ -1136,4 +1247,27 @@ export function driftGateActive(entries: unknown[]): boolean {
 
 export function phaseTraceFileName(phase: HarnessPhase): string {
 	return `trace-${phase}.json`;
+}
+
+/** Collect plan approvals from a session entry list (e.g. subagent in-memory session). */
+export function extractPlanApprovalsFromEntries(
+	entries: unknown[],
+): PlanUserApproval[] {
+	const out: PlanUserApproval[] = [];
+	for (let i = 0; i < entries.length; i++) {
+		const entry = entries[i] as SessionEntryLike & {
+			message?: {
+				role?: string;
+				toolName?: string;
+				details?: unknown;
+				content?: { type?: string; text?: string }[];
+			};
+		};
+		if (entry.type !== "message" || entry.message?.role !== "toolResult") {
+			continue;
+		}
+		const fromAsk = parseAskUserApprovalFromMessage(entry.message);
+		if (fromAsk) out.push(fromAsk);
+	}
+	return out;
 }

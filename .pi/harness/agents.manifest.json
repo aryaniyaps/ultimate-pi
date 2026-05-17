@@ -1,84 +1,84 @@
 {
-	"schema_version": "1.0.0",
-	"package": "ultimate-pi",
-	"package_version": "0.7.0",
-	"generated_at": "2026-05-17T08:24:57.263Z",
-	"agents": {
-		"pi-pi/agent-expert": {
-			"path": ".pi/agents/pi-pi/agent-expert.md",
-			"sha256": "86561eb092b92fa43f221bfc6305de8d5afe10d43c5f577b9bf15a71bda051c6"
-		},
-		"pi-pi/cli-expert": {
-			"path": ".pi/agents/pi-pi/cli-expert.md",
-			"sha256": "6ecdbc37c60f1da7c68d504187454c95197dd19bd7091d97d136c6fb9e866838"
-		},
-		"pi-pi/config-expert": {
-			"path": ".pi/agents/pi-pi/config-expert.md",
-			"sha256": "c23b9b70a4c326cca2d139f18de48f8db2e0e28fa5ceb8205600f25430822a40"
-		},
-		"pi-pi/ext-expert": {
-			"path": ".pi/agents/pi-pi/ext-expert.md",
-			"sha256": "47c64a9e2cffe00a50cac5541b0edc89fe8bcbd66ec3bb302eecc10d405a977f"
-		},
-		"pi-pi/keybinding-expert": {
-			"path": ".pi/agents/pi-pi/keybinding-expert.md",
-			"sha256": "bb83f5fd2178075c8374ef28c360339f7de9faeedf811670b43a536c5f65c58e"
-		},
-		"pi-pi/pi-orchestrator": {
-			"path": ".pi/agents/pi-pi/pi-orchestrator.md",
-			"sha256": "1323fc262112030320bdd7d7866fd69e1b861377bb30fd3553a5e3a4398f9090"
-		},
-		"pi-pi/prompt-expert": {
-			"path": ".pi/agents/pi-pi/prompt-expert.md",
-			"sha256": "0d9f5e3e8ab162149cac8f08e159a7b2150a11f53ebe7021e72f8277fa004d0c"
-		},
-		"pi-pi/skill-expert": {
-			"path": ".pi/agents/pi-pi/skill-expert.md",
-			"sha256": "91732a2479097a2645b6af56171d5cdc1ed67a0896ca54bc4badba250341698f"
-		},
-		"pi-pi/theme-expert": {
-			"path": ".pi/agents/pi-pi/theme-expert.md",
-			"sha256": "3d256049203356d87c36eac2232c0ad6261fec8af02eb15d3144b18a400ed64d"
-		},
-		"pi-pi/tui-expert": {
-			"path": ".pi/agents/pi-pi/tui-expert.md",
-			"sha256": "a619b2ee3d3d94fe599abb61db0904f90d30335ec426851c3f1efdf2e5ce5390"
-		},
-		"harness/adversary": {
-			"path": ".pi/agents/harness/adversary.md",
-			"sha256": "b965f90610ca942d08b656f1aee839266d08a92beb174b8761dd5e840694a899"
-		},
-		"harness/evaluator": {
-			"path": ".pi/agents/harness/evaluator.md",
-			"sha256": "6c0de777a10de26dba4a6feb5641495fa5c2d31072a8b0e597a5ecc9921f129f"
-		},
-		"harness/executor": {
-			"path": ".pi/agents/harness/executor.md",
-			"sha256": "5af3ec2be4d64a738834e36d480a36c2bee4359e8cd5a2e1aac49be4cff79589"
-		},
-		"harness/incident-recorder": {
-			"path": ".pi/agents/harness/incident-recorder.md",
-			"sha256": "2de405f77b62dde38f331665bff220a3ef131c3c1cd42eebee364000fc83352b"
-		},
-		"harness/meta-optimizer": {
-			"path": ".pi/agents/harness/meta-optimizer.md",
-			"sha256": "ef2fb950e18e3a6439e91a68f764fc7ec922cd2d6b35de8f656f376854974d04"
-		},
-		"harness/planner": {
-			"path": ".pi/agents/harness/planner.md",
-			"sha256": "3052e0b4ca504c7aa025b1926228e34adfe7f1c42d66a24db43fc6a1abb9968d"
-		},
-		"harness/sentrux-bootstrap": {
-			"path": ".pi/agents/harness/sentrux-bootstrap.md",
-			"sha256": "3a0b43b94386a7c541b8a806a37524a5e53f1c8049270db7a420680df5799eeb"
-		},
-		"harness/tie-breaker": {
-			"path": ".pi/agents/harness/tie-breaker.md",
-			"sha256": "651f50b9e2c7903c542700e94908b1fcd026ebed12aa1f1d6ec481df3567e34f"
-		},
-		"harness/trace-librarian": {
-			"path": ".pi/agents/harness/trace-librarian.md",
-			"sha256": "d63fe08a2ea0466c0fd89fff4da03ac1d9d3580c306381cee251c89d4e8fdb97"
-		}
-	}
+  "schema_version": "1.0.0",
+  "package": "ultimate-pi",
+  "package_version": "0.8.0",
+  "generated_at": "2026-05-17T09:55:45.240Z",
+  "agents": {
+    "pi-pi/agent-expert": {
+      "path": ".pi/agents/pi-pi/agent-expert.md",
+      "sha256": "86561eb092b92fa43f221bfc6305de8d5afe10d43c5f577b9bf15a71bda051c6"
+    },
+    "pi-pi/cli-expert": {
+      "path": ".pi/agents/pi-pi/cli-expert.md",
+      "sha256": "6ecdbc37c60f1da7c68d504187454c95197dd19bd7091d97d136c6fb9e866838"
+    },
+    "pi-pi/config-expert": {
+      "path": ".pi/agents/pi-pi/config-expert.md",
+      "sha256": "c23b9b70a4c326cca2d139f18de48f8db2e0e28fa5ceb8205600f25430822a40"
+    },
+    "pi-pi/ext-expert": {
+      "path": ".pi/agents/pi-pi/ext-expert.md",
+      "sha256": "47c64a9e2cffe00a50cac5541b0edc89fe8bcbd66ec3bb302eecc10d405a977f"
+    },
+    "pi-pi/keybinding-expert": {
+      "path": ".pi/agents/pi-pi/keybinding-expert.md",
+      "sha256": "bb83f5fd2178075c8374ef28c360339f7de9faeedf811670b43a536c5f65c58e"
+    },
+    "pi-pi/pi-orchestrator": {
+      "path": ".pi/agents/pi-pi/pi-orchestrator.md",
+      "sha256": "1323fc262112030320bdd7d7866fd69e1b861377bb30fd3553a5e3a4398f9090"
+    },
+    "pi-pi/prompt-expert": {
+      "path": ".pi/agents/pi-pi/prompt-expert.md",
+      "sha256": "0d9f5e3e8ab162149cac8f08e159a7b2150a11f53ebe7021e72f8277fa004d0c"
+    },
+    "pi-pi/skill-expert": {
+      "path": ".pi/agents/pi-pi/skill-expert.md",
+      "sha256": "91732a2479097a2645b6af56171d5cdc1ed67a0896ca54bc4badba250341698f"
+    },
+    "pi-pi/theme-expert": {
+      "path": ".pi/agents/pi-pi/theme-expert.md",
+      "sha256": "3d256049203356d87c36eac2232c0ad6261fec8af02eb15d3144b18a400ed64d"
+    },
+    "pi-pi/tui-expert": {
+      "path": ".pi/agents/pi-pi/tui-expert.md",
+      "sha256": "a619b2ee3d3d94fe599abb61db0904f90d30335ec426851c3f1efdf2e5ce5390"
+    },
+    "harness/adversary": {
+      "path": ".pi/agents/harness/adversary.md",
+      "sha256": "b965f90610ca942d08b656f1aee839266d08a92beb174b8761dd5e840694a899"
+    },
+    "harness/evaluator": {
+      "path": ".pi/agents/harness/evaluator.md",
+      "sha256": "6c0de777a10de26dba4a6feb5641495fa5c2d31072a8b0e597a5ecc9921f129f"
+    },
+    "harness/executor": {
+      "path": ".pi/agents/harness/executor.md",
+      "sha256": "5af3ec2be4d64a738834e36d480a36c2bee4359e8cd5a2e1aac49be4cff79589"
+    },
+    "harness/incident-recorder": {
+      "path": ".pi/agents/harness/incident-recorder.md",
+      "sha256": "2de405f77b62dde38f331665bff220a3ef131c3c1cd42eebee364000fc83352b"
+    },
+    "harness/meta-optimizer": {
+      "path": ".pi/agents/harness/meta-optimizer.md",
+      "sha256": "ef2fb950e18e3a6439e91a68f764fc7ec922cd2d6b35de8f656f376854974d04"
+    },
+    "harness/planner": {
+      "path": ".pi/agents/harness/planner.md",
+      "sha256": "eb0459a1fcb018e4ca8d4339141e294828fa7014879d9a64258ae01abc13d3ad"
+    },
+    "harness/sentrux-bootstrap": {
+      "path": ".pi/agents/harness/sentrux-bootstrap.md",
+      "sha256": "3a0b43b94386a7c541b8a806a37524a5e53f1c8049270db7a420680df5799eeb"
+    },
+    "harness/tie-breaker": {
+      "path": ".pi/agents/harness/tie-breaker.md",
+      "sha256": "651f50b9e2c7903c542700e94908b1fcd026ebed12aa1f1d6ec481df3567e34f"
+    },
+    "harness/trace-librarian": {
+      "path": ".pi/agents/harness/trace-librarian.md",
+      "sha256": "d63fe08a2ea0466c0fd89fff4da03ac1d9d3580c306381cee251c89d4e8fdb97"
+    }
+  }
 }

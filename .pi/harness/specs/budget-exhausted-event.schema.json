@@ -54,7 +54,9 @@
 			"enum": [
 				"max_rounds_reached",
 				"round_token_cap_exceeded",
-				"debate_global_cap_exceeded"
+				"debate_global_cap_exceeded",
+				"phase_cap_exceeded",
+				"global_cap_exceeded"
 			]
 		},
 		"caps": {

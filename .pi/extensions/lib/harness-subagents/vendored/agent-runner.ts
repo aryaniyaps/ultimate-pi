@@ -18,6 +18,7 @@ import {
 	SettingsManager,
 } from "@earendil-works/pi-coding-agent";
 import { evaluateHarnessSubagentToolCall } from "../harness-subagent-policy.js";
+import { createParentAskUserBridgeFactory } from "../parent-ask-user-bridge.js";
 import {
 	getAgentConfig,
 	getConfig,
@@ -39,7 +40,6 @@ const EXCLUDED_TOOL_NAMES = [
 	"get_subagent_result",
 	"steer_subagent",
 	"blackboard",
-	"ask_user",
 ];
 
 /** Default max turns. undefined = unlimited (no turn limit). */
@@ -152,6 +152,8 @@ export interface RunOptions {
 	}) => void;
 	/** Blackboard or other spawn context appended to the subagent system prompt. */
 	systemPromptAppendix?: string;
+	/** Parent session context — used to bridge ask_user UI into subagents. */
+	parentExtensionContext?: ExtensionContext;
 }
 
 export interface RunResult {
@@ -328,26 +330,31 @@ export async function runAgent(
 			? `${systemPrompt}\n\n---\n\n## Spawn context\n\n${appendix}`
 			: systemPrompt;
 
-	const extensionFactories: Array<(pi: ExtensionAPI) => void> = [
-		(pi) => {
-			pi.on("tool_call", (event) => {
-				const decision = evaluateHarnessSubagentToolCall(
-					event.toolName,
-					event.input as Record<string, unknown> | undefined,
-					type,
-				);
-				if (decision.action === "block") {
-					return { block: true, reason: decision.reason };
-				}
-				return undefined;
-			});
-			pi.on("before_agent_start", (event: { systemPrompt?: string }) => {
-				const base =
-					typeof event.systemPrompt === "string" ? event.systemPrompt : "";
-				return { systemPrompt: base };
-			});
-		},
-	];
+	const extensionFactories: Array<(pi: ExtensionAPI) => void> = [];
+	const askUserBridge = options.parentExtensionContext
+		? createParentAskUserBridgeFactory(options.parentExtensionContext, type)
+		: null;
+	if (askUserBridge) {
+		extensionFactories.push(askUserBridge);
+	}
+	extensionFactories.push((pi) => {
+		pi.on("tool_call", (event) => {
+			const decision = evaluateHarnessSubagentToolCall(
+				event.toolName,
+				event.input as Record<string, unknown> | undefined,
+				type,
+			);
+			if (decision.action === "block") {
+				return { block: true, reason: decision.reason };
+			}
+			return undefined;
+		});
+		pi.on("before_agent_start", (event: { systemPrompt?: string }) => {
+			const base =
+				typeof event.systemPrompt === "string" ? event.systemPrompt : "";
+			return { systemPrompt: base };
+		});
+	});
 
 	const loader = new DefaultResourceLoader({
 		cwd: effectiveCwd,
@@ -403,6 +410,7 @@ export async function runAgent(
 	const filterTools = (names: string[]) =>
 		names.filter((t) => {
 			if (EXCLUDED_TOOL_NAMES.includes(t)) return false;
+			if (t === "ask_user" && askUserBridge) return true;
 			if (disallowedSet?.has(t)) return false;
 			if (builtinToolNameSet.has(t)) return true;
 			if (extensions === false) return false;
@@ -416,9 +424,11 @@ export async function runAgent(
 	if (activeTools.length > 0) {
 		session.setActiveToolsByName(activeTools);
 	} else {
-		session.setActiveToolsByName(
-			toolNames.filter((t) => !disallowedSet?.has(t)),
-		);
+		const fallback = toolNames.filter((t) => {
+			if (t === "ask_user" && askUserBridge) return true;
+			return !disallowedSet?.has(t);
+		});
+		session.setActiveToolsByName(fallback);
 	}
 
 	// Bind extensions so that session_start fires and extensions can initialize
@@ -433,6 +443,12 @@ export async function runAgent(
 			});
 		},
 	});
+
+	if (askUserBridge) {
+		const withAsk = new Set(session.getActiveToolNames());
+		withAsk.add("ask_user");
+		session.setActiveToolsByName([...withAsk]);
+	}
 
 	options.onSessionCreated?.(session);
 

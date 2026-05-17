@@ -82,7 +82,7 @@
 		"format": "biome format --write",
 		"format:check": "biome format",
 		"prepare": "lefthook install",
-		"test": "node --test test/harness-verify.test.mjs test/harness-ask-user.test.mjs test/harness-subagents-loader.test.mjs test/sentrux-rules-sync.test.mjs && npx -y tsx --test test/harness-vcc-settings.test.ts test/harness-plan-phase-policy.test.mjs test/harness-subagent-policy.test.mjs",
+		"test": "node --test test/harness-verify.test.mjs test/harness-ask-user.test.mjs test/harness-subagents-loader.test.mjs test/sentrux-rules-sync.test.mjs test/harness-budget-guard.test.mjs && npx -y tsx --test test/harness-vcc-settings.test.ts test/harness-plan-phase-policy.test.mjs test/harness-subagent-policy.test.mjs test/harness-turn-routing.test.mjs",
 		"test:vcc": "npx -y tsx --test vendor/pi-vcc/tests/*.test.ts",
 		"harness:sentrux-bootstrap": "node .pi/scripts/harness-sentrux-bootstrap.mjs",
 		"harness:sentrux-sync": "node .pi/scripts/sentrux-rules-sync.mjs --force",
