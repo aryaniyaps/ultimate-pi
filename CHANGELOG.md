@@ -4,6 +4,16 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.13.0] — 2026-05-18
+
+### ✨ Features
+
+- **CocoIndex Code:** replace `@beaconbay/ck-search` with offline `ccc` semantic search; `harness-cocoindex-bootstrap.sh`, pre-scout incremental index in `harness-subagents-bridge`, vendored `/skill:ccc`, `cocoindex-search` skill, and `ck-search` deprecation stub.
+
+### 🔧 Chores
+
+- Harness excludes for `graphify-out/`, `vendor/`, `raw/`, etc. in `.cocoindex_code/settings.yml`; `.gitignore` tracks `.cocoindex_code/`.
+
 ## [v0.12.0] — 2026-05-18
 
 ### ✨ Features
