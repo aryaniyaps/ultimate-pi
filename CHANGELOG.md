@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.13.1] — 2026-05-18
+
+### 🔧 Chores
+
+- Consolidate vendored `ccc` skill under `.agents/skills/ccc`; remove redundant `cocoindex-search`, `ck-search`, and duplicate Obsidian skills from the package.
+
 ## [v0.13.0] — 2026-05-18
 
 ### ✨ Features
