@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.14.0] — 2026-05-18
+
+### ✨ Features
+
+- **Plan debate (pi-messenger):** `harness_debate_open`, `harness_messenger_post`, lane auto-apply after subagent returns, consensus gates on `approve_plan`, and blocks on parent `review-round-r*.yaml` writes.
+- **Spawn budget:** remove harness subagent spawn cap (spawns always allowed).
+- **Skills:** symlink `.pi/skills/*` to `.agents/skills` (harness, ccc, scrapling-web, wiki-save).
+
+### 🔧 Chores
+
+- Refresh planning agent prompts and `agents.manifest.json`; biome unused-import cleanup.
+
 ## [v0.13.1] — 2026-05-18
 
 ### 🔧 Chores
