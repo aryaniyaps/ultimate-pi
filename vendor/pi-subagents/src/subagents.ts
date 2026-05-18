@@ -64,41 +64,11 @@ export interface HarnessSubagentsOptions {
 	truncateDetails?: boolean;
 }
 
-function maskApiKey(key: string | undefined): string | undefined {
-	if (!key) return undefined;
-	if (key.length <= 12) return "***";
-	return `${key.slice(0, 7)}…${key.slice(-4)}`;
-}
-
-// #region agent log
-function agentDebugLog(
-	hypothesisId: string,
-	location: string,
-	message: string,
-	data: Record<string, unknown>,
-): void {
-	fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"X-Debug-Session-Id": "e762d5",
-		},
-		body: JSON.stringify({
-			sessionId: "e762d5",
-			hypothesisId,
-			location,
-			message,
-			data,
-			timestamp: Date.now(),
-		}),
-	}).catch(() => {});
-}
-// #endregion
-
 const MAX_PARALLEL_TASKS = 8;
 const MAX_CONCURRENCY = 4;
 const COLLAPSED_ITEM_COUNT = 10;
-const DEFAULT_TIMEOUT_MS = parsePositiveInteger(process.env.PI_SUBAGENT_TIMEOUT_MS) ?? 10 * 60 * 1000;
+/** Optional backstop from env only; omit PI_SUBAGENT_TIMEOUT_MS to wait for natural subprocess exit. */
+const ENV_TIMEOUT_MS = parsePositiveInteger(process.env.PI_SUBAGENT_TIMEOUT_MS);
 const KILL_GRACE_MS = 5000;
 const STATUS_KEY = "subagents";
 const activeStatuses = new Map<string, string>();
@@ -425,14 +395,6 @@ function buildSpawnEnv(packageRoot?: string): NodeJS.ProcessEnv {
 		env.UP_PKG = packageRoot;
 		env.HARNESS_PKG_ROOT = packageRoot;
 	}
-	// #region agent log
-	agentDebugLog("A", "subagents.ts:buildSpawnEnv", "subprocess env api key hints", {
-		openaiEnv: maskApiKey(env.OPENAI_API_KEY),
-		opencodeEnv: maskApiKey(env.OPENCODE_API_KEY),
-		anthropicEnv: maskApiKey(env.ANTHROPIC_API_KEY),
-		hasPiHarnessSubprocess: env.PI_HARNESS_SUBPROCESS === "1",
-	});
-	// #endregion
 	return env;
 }
 
@@ -444,7 +406,7 @@ async function runSingleAgent(
 	cwd: string | undefined,
 	step: number | undefined,
 	signal: AbortSignal | undefined,
-	timeoutMs: number,
+	timeoutMs: number | undefined,
 	onUpdate: OnUpdateCallback | undefined,
 	makeDetails: (results: SingleResult[]) => SubagentDetails,
 	packageRoot?: string,
@@ -521,24 +483,14 @@ async function runSingleAgent(
 		let wasAborted = false;
 		let timedOut = false;
 
-		// #region agent log
-		agentDebugLog("B", "subagents.ts:runSingleAgent", "spawning subprocess", {
-			agent: agentName,
-			agentModel: agent.model,
-			forwardedModel: spawnAuth?.modelRef,
-			forwardedProvider: spawnAuth?.provider,
-			forwardedKey: maskApiKey(spawnAuth?.apiKey),
-			usesApiKeyFlag: Boolean(spawnAuth?.apiKey),
-		});
-		// #endregion
-
 		const exitCode = await new Promise<number>((resolve) => {
 			const invocation = getPiInvocation(args);
 			let settled = false;
+			let timeout: ReturnType<typeof setTimeout> | undefined;
 			const finish = (code: number) => {
 				if (settled) return;
 				settled = true;
-				clearTimeout(timeout);
+				if (timeout) clearTimeout(timeout);
 				resolve(code);
 			};
 			const proc = spawn(invocation.command, invocation.args, {
@@ -549,16 +501,18 @@ async function runSingleAgent(
 				stdio: ["ignore", "pipe", "pipe"],
 			});
 			let buffer = "";
-			const timeout = setTimeout(() => {
-				timedOut = true;
-				currentResult.timedOut = true;
-				currentResult.stopReason = "timeout";
-				currentResult.errorMessage = `Subagent timed out after ${timeoutMs}ms`;
-				currentResult.stderr += `${currentResult.stderr ? "\n" : ""}Subagent timed out after ${timeoutMs}ms.`;
-				emitUpdate();
-				terminateProcess(proc);
-			}, timeoutMs);
-			timeout.unref();
+			if (timeoutMs != null) {
+				timeout = setTimeout(() => {
+					timedOut = true;
+					currentResult.timedOut = true;
+					currentResult.stopReason = "timeout";
+					currentResult.errorMessage = `Subagent timed out after ${timeoutMs}ms`;
+					currentResult.stderr += `${currentResult.stderr ? "\n" : ""}Subagent timed out after ${timeoutMs}ms.`;
+					emitUpdate();
+					terminateProcess(proc);
+				}, timeoutMs);
+				timeout.unref();
+			}
 
 			const processLine = (line: string) => {
 				if (!line.trim()) return;
@@ -653,7 +607,7 @@ async function runSingleAgent(
 
 const TimeoutMs = Type.Number({
 	description:
-		"Hard timeout in milliseconds for each subagent subprocess. Defaults to PI_SUBAGENT_TIMEOUT_MS or 600000.",
+		"Optional hard timeout in milliseconds for each subagent subprocess. When omitted, waits until the subprocess exits naturally. Set PI_SUBAGENT_TIMEOUT_MS for a session-wide backstop.",
 	minimum: 1,
 });
 
@@ -757,23 +711,13 @@ export function createSubagentsExtension(
 			const agents = discovery.agents;
 			const confirmProjectAgents =
 				params.confirmProjectAgents ?? defaultConfirm;
-			const defaultTimeoutMs = params.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+			const defaultTimeoutMs = params.timeoutMs ?? ENV_TIMEOUT_MS;
 
 			const resolveSpawnAuth = async (agentName: string): Promise<SpawnAuthForward | undefined> => {
 				if (!options.resolveSpawnAuth) return undefined;
 				const agent = agents.find((a) => a.name === agentName);
 				if (!agent) return undefined;
 				const forward = await options.resolveSpawnAuth(ctx, agent);
-				// #region agent log
-				agentDebugLog("C", "subagents.ts:resolveSpawnAuth", "parent auth resolution", {
-					agent: agentName,
-					forwarded: Boolean(forward),
-					provider: forward?.provider,
-					modelRef: forward?.modelRef,
-					key: maskApiKey(forward?.apiKey),
-					parentModel: ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : undefined,
-				});
-				// #endregion
 				return forward;
 			};
 

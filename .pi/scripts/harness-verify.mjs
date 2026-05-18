@@ -202,6 +202,16 @@ async function main() {
 	if (!(await fileExists(runCtxLib))) fail("missing lib/harness-run-context.ts");
 	ok("lib/harness-run-context.ts");
 
+	const pkgJson = JSON.parse(
+		await readFile(join(ROOT, "package.json"), "utf-8"),
+	);
+	if (!pkgJson.files?.includes("vendor/pi-subagents")) {
+		fail(
+			'package.json "files" must include vendor/pi-subagents (npm publish ships subagents vendor)',
+		);
+	}
+	ok('package.json files includes vendor/pi-subagents');
+
 	const subagentsVendor = join(
 		ROOT,
 		"vendor",

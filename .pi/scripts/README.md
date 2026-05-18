@@ -21,6 +21,7 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | Action | Command |
 |--------|---------|
 | Graphify bootstrap | `bash "$UP_PKG/.pi/scripts/harness-graphify-bootstrap.sh"` |
+| CocoIndex Code bootstrap | `bash "$UP_PKG/.pi/scripts/harness-cocoindex-bootstrap.sh"` |
 | CLI tool install + smoke tests | `bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"` |
 | Deterministic harness checks | `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` |
 | Sentrux rules bootstrap (harness-setup) | `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"` |

@@ -23,7 +23,7 @@ Verifies with `sg --version`.
 | Task | Tool | Why |
 |------|------|-----|
 | Find code by structure/pattern | **ast-grep** (`sg`) | AST-aware — knows what is a function call vs a string |
-| Find code by concept/meaning | graphify / ck | Semantic search, knowledge graph |
+| Find code by concept/meaning | graphify / `ccc search` | Architecture (graphify) vs implementation chunks (`ccc`) |
 | Find exact literal string | `grep` | Only tool for non-code files or exact byte match |
 | Explore architecture | graphify | Call graph, community detection |
 
@@ -319,7 +319,7 @@ Need to find code
   ├─ Structural pattern (function calls, imports, classes)? → sg -p 'pattern'
   ├─ Rewrite/codemod needed? → sg -p 'old' --rewrite 'new'
   ├─ Project-wide lint rule? → sg scan (with sgconfig.yml)
-  ├─ Conceptual/semantic search? → graphify query or ck --hybrid
+  ├─ Conceptual/semantic search? → graphify query (architecture) or ccc search (implementation)
   ├─ Explore architecture? → graphify
   └─ Exact literal string in non-code? → grep
 ```

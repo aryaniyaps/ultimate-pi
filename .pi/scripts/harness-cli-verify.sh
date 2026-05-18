@@ -231,22 +231,32 @@ verify_ctx7() {
 	fi
 }
 
-verify_ck() {
-	log "[ck-search]"
-	npm_global_install "@beaconbay/ck-search" "ck" || { fail "ck-search npm install"; return; }
-	if ! ck --version &>/dev/null; then
-		fail "ck --version failed"
+verify_cocoindex() {
+	log "[cocoindex-code]"
+	local _bootstrap
+	_bootstrap="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/harness-cocoindex-bootstrap.sh"
+	if [ ! -f "$_bootstrap" ]; then
+		fail "harness-cocoindex-bootstrap.sh missing"
 		return
 	fi
-	# Fast grep-mode smoke (no embedding model download)
-	local ck_target="."
-	[ -d .pi ] && ck_target=".pi"
-	if ck -l 1 "export" "$ck_target" 2>/dev/null | head -1 | grep -q .; then
-		pass "ck $(ck --version 2>/dev/null | head -1)"
-	elif ck --status "$ck_target" 2>/dev/null | head -1 | grep -q .; then
-		pass "ck $(ck --version 2>/dev/null | head -1) (index status ok)"
+	if [ "$FORCE" = true ]; then
+		bash "$_bootstrap" --force || { fail "cocoindex bootstrap --force"; return; }
 	else
-		warn "ck installed but smoke search empty"
+		bash "$_bootstrap" || { fail "cocoindex bootstrap"; return; }
+	fi
+	if ! command -v ccc &>/dev/null; then
+		fail "ccc not on PATH after bootstrap"
+		return
+	fi
+	if ! ccc doctor &>/dev/null; then
+		warn "ccc doctor reported issues (daemon/model/SQLite)"
+	fi
+	if ccc search --limit 3 "export function" 2>/dev/null | head -1 | grep -qE '\.(ts|js|py|md)|\[|score|path'; then
+		pass "cocoindex-code (ccc search smoke)"
+	elif ccc status 2>/dev/null | head -1 | grep -q .; then
+		pass "cocoindex-code (index present; search empty on tiny corpus)"
+	else
+		warn "cocoindex installed but smoke search empty — first [full] install downloads local embedding model"
 	fi
 }
 
@@ -335,7 +345,7 @@ log ""
 verify_scrapling
 verify_ctx7
 verify_agent_browser
-verify_ck
+verify_cocoindex
 verify_biome
 verify_sg
 verify_gh

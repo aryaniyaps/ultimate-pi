@@ -12,6 +12,7 @@ import {
 	type HarnessSubagentsOptions,
 	type SpawnAuthForward,
 } from "../../../vendor/pi-subagents/src/subagents.js";
+import { refreshHarnessCocoindexIndex } from "./harness-cocoindex-refresh.js";
 import { captureHarnessEvent } from "./harness-posthog.js";
 import {
 	checkHarnessSpawnBudget,
@@ -32,37 +33,6 @@ import {
 const spawnBudget = createSpawnBudgetState();
 let lastSessionId = "harness";
 
-function maskApiKey(key: string | undefined): string | undefined {
-	if (!key) return undefined;
-	if (key.length <= 12) return "***";
-	return `${key.slice(0, 7)}…${key.slice(-4)}`;
-}
-
-// #region agent log
-function agentDebugLog(
-	hypothesisId: string,
-	location: string,
-	message: string,
-	data: Record<string, unknown>,
-): void {
-	fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"X-Debug-Session-Id": "e762d5",
-		},
-		body: JSON.stringify({
-			sessionId: "e762d5",
-			hypothesisId,
-			location,
-			message,
-			data,
-			timestamp: Date.now(),
-		}),
-	}).catch(() => {});
-}
-// #endregion
-
 async function resolveHarnessSpawnAuth(
 	ctx: ExtensionContext,
 	agent: AgentConfig,
@@ -72,43 +42,11 @@ async function resolveHarnessSpawnAuth(
 		: undefined;
 	const concrete = resolveConcreteSubagentModel(ctx.cwd, parentModel, agent);
 	if (!concrete) {
-		// #region agent log
-		agentDebugLog(
-			"D",
-			"harness-subagents-bridge.ts:resolveHarnessSpawnAuth",
-			"no concrete model",
-			{
-				agent: agent.name,
-				agentModel: agent.model,
-				parentModel: parentModel
-					? `${parentModel.provider}/${parentModel.id}`
-					: undefined,
-			},
-		);
-		// #endregion
 		return undefined;
 	}
 	const apiKey = await ctx.modelRegistry.getApiKeyForProvider(
 		concrete.provider,
 	);
-	// #region agent log
-	agentDebugLog(
-		"F",
-		"harness-subagents-bridge.ts:resolveHarnessSpawnAuth",
-		"concrete subprocess auth",
-		{
-			agent: agent.name,
-			parentModel: parentModel
-				? `${parentModel.provider}/${parentModel.id}`
-				: undefined,
-			concreteModel: concrete.modelRef,
-			routerProfile: concrete.routerProfile,
-			routerTier: concrete.routerTier,
-			apiKey: maskApiKey(apiKey),
-			usable: isUsableApiKey(apiKey),
-		},
-	);
-	// #endregion
 	if (!isUsableApiKey(apiKey)) return undefined;
 	return {
 		provider: concrete.provider,
@@ -144,6 +82,14 @@ export function createHarnessSubagentsExtension(
 				);
 				if (!pre.ok) {
 					return { ok: false, message: pre.message };
+				}
+				if (phase === "plan" || phase === "execute") {
+					const refreshMsg = refreshHarnessCocoindexIndex(ctx.cwd);
+					if (refreshMsg?.includes("continuing")) {
+						// warn-only path; do not block spawn
+					} else if (refreshMsg) {
+						return { ok: false, message: refreshMsg };
+					}
 				}
 			}
 			return { ok: true };

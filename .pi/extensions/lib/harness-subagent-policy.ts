@@ -24,9 +24,13 @@ const PLANNING_BASH_DENY_PATTERNS = [
 	/\bgraphify\s+update\b/i,
 	/\bgraphify\s+extract\b/i,
 	/\bgraphify\s+install\b/i,
+	/\bccc\s+(index|init|reset|daemon)\b/i,
+	/\bccc\s+search\b.*--refresh/i,
 	/\bpip\s+install\b/i,
 	/\buv\s+tool\s+install\b/i,
 	/\bnpm\s+install\b/i,
+	/\bnpm\s+install\b.*cocoindex/i,
+	/\buv\s+tool\s+install\b.*cocoindex/i,
 ];
 
 const BASH_MUTATION_PATTERNS = [
@@ -141,7 +145,7 @@ export function evaluateHarnessSubagentToolCall(
 			return {
 				action: "block",
 				reason:
-					"harness-subagent-policy: planning scouts may use read-only graphify/sg/ck commands only.",
+					"harness-subagent-policy: planning scouts may use read-only graphify/sg/ccc commands only.",
 			};
 		}
 	}

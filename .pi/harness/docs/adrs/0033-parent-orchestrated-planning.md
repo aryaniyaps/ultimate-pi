@@ -19,7 +19,7 @@
 ### Positive
 
 - Full plan visible in parent session; editor `plan-review.md` path surfaced from parent.
-- Specialized scouts (graphify, ast-grep, ck) run in parallel with clear JSON contracts.
+- Specialized scouts (graphify, ast-grep, cocoindex `ccc`) run in parallel with clear JSON contracts.
 - Pre-approval adversary separate from post-run `harness/adversary`.
 
 ### Negative

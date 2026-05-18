@@ -1,14 +1,25 @@
 /**
  * harness-subagents — vendored pi-subagents with ultimate-pi discovery and policy gates.
+ *
+ * Dynamic-imports the bridge only after claimExtensionLoad so a stale global npm
+ * install (missing vendor/pi-subagents) does not crash local development in this repo.
  */
 
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { claimExtensionLoad } from "./lib/extension-load-guard.js";
-import { getHarnessPackageRoot } from "./lib/harness-paths.js";
-import { createHarnessSubagentsExtension } from "./lib/harness-subagents-bridge.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
-export default claimExtensionLoad("harness-subagents", MODULE_URL)
-	? createHarnessSubagentsExtension(getHarnessPackageRoot(MODULE_URL))
-	: () => {};
+async function loadHarnessSubagents(): Promise<(pi: ExtensionAPI) => void> {
+	if (!claimExtensionLoad("harness-subagents", MODULE_URL)) {
+		return () => {};
+	}
+	const { getHarnessPackageRoot } = await import("./lib/harness-paths.js");
+	const { createHarnessSubagentsExtension } = await import(
+		"./lib/harness-subagents-bridge.js"
+	);
+	return createHarnessSubagentsExtension(getHarnessPackageRoot(MODULE_URL));
+}
+
+export default await loadHarnessSubagents();
