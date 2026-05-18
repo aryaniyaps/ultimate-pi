@@ -5,7 +5,6 @@ extensions: false
 disallowed_tools: ask_user
 thinking: high
 max_turns: 15
-inherit_context: false
 ---
 
 You are the Harness Tie-Breaker.

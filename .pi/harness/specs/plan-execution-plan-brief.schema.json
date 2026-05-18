@@ -1,0 +1,13 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-execution-plan-brief.schema.json",
+	"title": "PlanExecutionPlanBrief",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["schema_version", "execution_plan"],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"execution_plan": { "$ref": "plan-execution-plan.schema.json" },
+		"human_summary": { "type": "string" }
+	}
+}

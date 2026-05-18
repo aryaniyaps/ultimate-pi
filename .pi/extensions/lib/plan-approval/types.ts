@@ -7,11 +7,17 @@ export const DEFAULT_PLAN_APPROVAL_OPTIONS = [
 	"Cancel",
 ] as const;
 
-/** Optional Darwin research artifacts from /harness-plan (not persisted in plan-packet.json). */
+/** Optional Darwin research artifacts from /harness-plan (research-brief.yaml, not in plan-packet). */
 export interface PlanResearchBrief {
 	decomposition?: Record<string, unknown> | null;
 	hypothesis?: Record<string, unknown> | null;
 	eval?: Record<string, unknown> | null;
+	stack?: Record<string, unknown> | null;
+	debate?: {
+		rounds?: Record<string, unknown>[];
+		hypothesis_validations?: Record<string, unknown>[];
+	} | null;
+	dag_validation?: Record<string, unknown> | null;
 }
 
 export interface ApprovePlanParams {

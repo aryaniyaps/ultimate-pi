@@ -1,0 +1,65 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-stack-brief.schema.json",
+	"title": "PlanStackBrief",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"problem_framing",
+		"constraints",
+		"options",
+		"recommended_primary",
+		"rationale"
+	],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"problem_framing": { "type": "string", "minLength": 1 },
+		"constraints": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"options": {
+			"type": "array",
+			"minItems": 1,
+			"items": { "$ref": "#/$defs/stack_option" }
+		},
+		"recommended_primary": { "type": "string", "minLength": 1 },
+		"rationale": { "type": "string", "minLength": 1 },
+		"open_questions": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		}
+	},
+	"$defs": {
+		"stack_option": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": [
+				"name",
+				"category",
+				"fit_summary",
+				"tradeoffs",
+				"risks",
+				"evidence_refs",
+				"recommendation_rank"
+			],
+			"properties": {
+				"name": { "type": "string" },
+				"category": { "type": "string" },
+				"fit_summary": { "type": "string" },
+				"tradeoffs": {
+					"type": "object",
+					"required": ["pros", "cons"],
+					"properties": {
+						"pros": { "type": "array", "items": { "type": "string" } },
+						"cons": { "type": "array", "items": { "type": "string" } }
+					}
+				},
+				"risks": { "type": "array", "items": { "type": "string" } },
+				"evidence_refs": { "type": "array", "items": { "type": "string" } },
+				"recommendation_rank": { "type": "integer", "minimum": 1 }
+			}
+		}
+	}
+}

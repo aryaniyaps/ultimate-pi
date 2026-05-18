@@ -243,7 +243,7 @@ export default function policyGate(pi: ExtensionAPI) {
 
 		const planPhaseHint =
 			state.phase === "plan"
-				? "\nPlan phase: scouts → decompose → hypothesis via harness/planning/*; parent builds PlanPacket, ask_user on fork, parallel plan-adversary + hypothesis-eval, approve_plan (optional research_brief), then create_plan (never write plan-packet.json directly)."
+				? "\nPlan phase: scouts → decompose → hypothesis → stack-researcher → execution-plan-author → validate-plan-dag → 4-round plan debate → approve_plan → create_plan (YAML plan-packet.yaml). Post-execute: /harness-critic."
 				: "";
 
 		return {

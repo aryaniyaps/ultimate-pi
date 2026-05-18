@@ -14,7 +14,7 @@ import {
 	isSafeAgentId,
 	sha256Content,
 	walkAgentsDir,
-} from "../../test/harness-subagents-loader.core.mjs";
+} from "../lib/harness-agent-discovery.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const MANIFEST_PATH = join(ROOT, ".pi", "harness", "agents.manifest.json");

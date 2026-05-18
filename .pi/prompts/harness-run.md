@@ -23,10 +23,10 @@ If plan not ready:
 3. Spawn:
 
 ```
-Agent({ subagent_type: "harness/executor", prompt: "<HarnessSpawnContext + handoff>" })
+subagent({ agentScope: "both", agent: "harness/executor", task: "<HarnessSpawnContext + handoff>" })
 ```
 
-4. `get_subagent_result` — parse executor JSON (`execution_status`, validations, rollback refs).
+4. Parse subprocess output JSON (`execution_status`, validations, rollback refs) from tool result text.
 5. Parent persists trace/handoff artifacts under run dir if needed; do not self-review.
 
 ## Parent rules

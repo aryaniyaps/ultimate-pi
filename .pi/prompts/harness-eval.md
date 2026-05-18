@@ -26,11 +26,11 @@ If no active run:
 4. Spawn:
 
 ```
-Agent({ subagent_type: "harness/evaluator", prompt: "…" })
+subagent({ agentScope: "both", agent: "harness/evaluator", task: "<HarnessSpawnContext + eval brief>" })
 ```
 
-5. `get_subagent_result` — parse eval JSON; parent writes structured artifacts under run dir.
-6. Do not edit `plan-packet.json`.
+5. Parse eval JSON from tool result; parent writes structured artifacts under run dir.
+6. Do not edit `plan-packet.yaml`.
 
 ## Parent rules
 

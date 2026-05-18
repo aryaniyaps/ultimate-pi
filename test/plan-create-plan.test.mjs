@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtemp, readFile } from "node:fs/promises";
+import { parse as parseYaml } from "yaml";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { canonicalPlanPath } from "../.pi/lib/harness-run-context.ts";
@@ -25,10 +26,10 @@ const samplePacket = {
 	},
 };
 
-test("executeCreatePlan writes canonical plan-packet.json after approval", async () => {
+test("executeCreatePlan writes canonical plan-packet.yaml after approval", async () => {
 	const root = await mkdtemp(join(tmpdir(), "harness-create-plan-"));
 	const runId = "run-create-001";
-	const planPath = `.pi/harness/runs/${runId}/plan-packet.json`;
+	const planPath = `.pi/harness/runs/${runId}/plan-packet.yaml`;
 	const planAbs = canonicalPlanPath(runId, root);
 	const parentEntries = [
 		{
@@ -71,14 +72,14 @@ test("executeCreatePlan writes canonical plan-packet.json after approval", async
 	assert.equal(result.ok, true);
 	assert.equal(committed, true);
 	const raw = await readFile(planAbs, "utf-8");
-	const parsed = JSON.parse(raw);
+	const parsed = parseYaml(raw);
 	assert.equal(parsed.plan_id, "plan-create-001");
 });
 
 test("executeCreatePlan rejects without approval", async () => {
 	const root = await mkdtemp(join(tmpdir(), "harness-create-plan-"));
 	const runId = "run-create-002";
-	const planPath = `.pi/harness/runs/${runId}/plan-packet.json`;
+	const planPath = `.pi/harness/runs/${runId}/plan-packet.yaml`;
 	const runCtx = {
 		schema_version: "1.0.0",
 		run_id: runId,

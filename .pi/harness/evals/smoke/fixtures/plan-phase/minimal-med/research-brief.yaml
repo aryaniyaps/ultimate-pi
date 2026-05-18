@@ -1,0 +1,32 @@
+decomposition:
+  schema_version: "1.0.0"
+  problem_restatement: Validate plan-phase YAML and debate pipeline
+hypothesis:
+  schema_version: "1.0.0"
+  primary:
+    claim: Fixture-driven smoke covers DAG and debate
+    mechanism: Static artifacts plus validate-plan-dag.mjs
+    prediction: CI passes without live agents
+    experiment: Run smoke-harness-plan.mjs --fixture
+stack:
+  schema_version: "1.0.0"
+  problem_framing: Node harness tooling
+  constraints: []
+  options:
+    - name: extend current stack
+      category: brownfield
+      fit_summary: Use existing ultimate-pi harness
+      tradeoffs:
+        pros: [No new deps]
+        cons: []
+      risks: []
+      evidence_refs: []
+      recommendation_rank: 1
+  recommended_primary: extend current stack
+  rationale: Fixture validates in-repo harness
+eval:
+  schema_version: "1.0.0"
+  revision_recommended: false
+  relevance:
+    passes: true
+    rationale: Hypothesis matches smoke task

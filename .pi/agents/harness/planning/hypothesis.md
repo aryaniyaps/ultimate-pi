@@ -1,11 +1,10 @@
 ---
 description: Plan-phase DARWIN hypothesis generation (read-only).
 tools: read, grep, find, ls, bash
-disallowed_tools: write, edit, ask_user, approve_plan, create_plan, Agent
+disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent
 extensions: false
-thinking: high
-max_turns: 20
-inherit_context: false
+thinking: medium
+max_turns: 14
 ---
 
 You are the **Harness planning hypothesis generator (Phase 2 — DARWIN)**.

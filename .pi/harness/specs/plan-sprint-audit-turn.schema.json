@@ -1,0 +1,29 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-sprint-audit-turn.schema.json",
+	"title": "PlanSprintAuditTurn",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["schema_version", "round_index", "gaps", "recommendation"],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"round_index": { "type": "integer", "minimum": 1, "maximum": 4 },
+		"gaps": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"checkpoint_issues": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"done_criteria_issues": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"recommendation": {
+			"type": "string",
+			"enum": ["proceed", "revise"]
+		},
+		"human_summary": { "type": "string" }
+	}
+}

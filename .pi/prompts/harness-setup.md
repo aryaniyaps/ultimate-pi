@@ -345,7 +345,7 @@ Verify each package:
 |---------|---------|-------|
 | `@posthog/pi` | Analytics event capture | F0 |
 | `pi-lean-ctx` | Context runtime (read/bash/find/grep/MCP bridge) | F0 |
-| `harness-subagents` (bundled extension) | L4 sub-agent spawn, blackboard, package agents | P16 |
+| `harness-subagents` (bundled extension) | L4 `subagent` tool, subprocess spawns, package agents | P16 |
 | Vendored `pi-vcc` (`vendor/pi-vcc`, `.pi/extensions/ultimate-pi-vcc.ts`) | VCC compaction / `vcc_recall` — env-only: `HARNESS_VCC_COMPACTION` (default on), `HARNESS_VCC_DEBUG` | Shipped |
 | `pi-model-router` | Vendored (`vendor/`); activates after `.pi/model-router.json` exists | F0 |
 
@@ -383,11 +383,11 @@ Manual override: **`/router profile auto`** anytime after reload if they changed
 
 ## Step 3.6 — Harness agents (package-resolved)
 
-`harness-subagents` loads agents from the installed **`ultimate-pi`** package (`$UP_PKG/.pi/agents/**`) with namespaced ids (`harness/planner`, `pi-pi/agent-expert`). **Do not copy** agents into the project unless you want a deliberate override.
+`harness-subagents` loads agents from the installed **`ultimate-pi`** package (`$UP_PKG/.pi/agents/**`) with namespaced ids (`harness/executor`, `harness/planning/scout-graphify`, `pi-pi/agent-expert`). **Do not copy** agents into the project unless you want a deliberate override.
 
 **Slash commands are orchestrators:** `/harness-plan`, `/harness-run`, etc. spawn `harness/*` agents via the `Agent` tool — bootstrap stays **script-first**; only optionally spawn `harness/sentrux-bootstrap` for Sentrux (see Step 4.2).
 
-Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/planning/scout-graphify.md` overrides the package scout). Deprecated: `harness/planner.md` — use `harness/planning/` agents instead.
+Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/planning/scout-graphify.md` overrides the package scout).
 
 Verify manifest drift after `pi update ultimate-pi`:
 
@@ -478,16 +478,25 @@ Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`
 
 ### 4.1 — .gitignore Entries
 
-Ensure `.gitignore` contains:
+Ensure `.gitignore` contains harness runtime entries (see repo root `.gitignore` — **do not** ignore `.pi/harness/specs/`; JSON schemas are shared contracts):
+
 ```
 .env
 .web/
 .searxng/
 .raw/
 .vault-meta/
-.pi/harness/critics/
+.pi/harness/active-run.json
+.pi/harness/release-readiness-report.md
 .pi/harness/plans/
-.pi/harness/specs/
+.pi/harness/critics/
+.pi/harness/runs/**
+!.pi/harness/runs/README.md
+.pi/harness/incidents/*
+!.pi/harness/incidents/README.md
+.pi/harness/debates/*
+!.pi/harness/debates/README.md
+.pi/harness/router/proposals/*
 
 # Model router config (user-specific — generated from env)
 .pi/model-router.json

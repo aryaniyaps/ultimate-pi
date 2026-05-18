@@ -14,8 +14,8 @@
 			"!graphify-books-out/**/*",
 			"!vendor/**/*",
 			"!.pi/harness/active-run.json",
-			"!.pi/harness/runs/**/run-context.json",
-			"!.pi/harness/runs/**/plan-packet.json"
+			"!.pi/harness/runs/**/run-context.yaml",
+			"!.pi/harness/runs/**/plan-packet.yaml"
 		]
 	},
 	"formatter": {

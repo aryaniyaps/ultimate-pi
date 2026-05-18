@@ -1,0 +1,26 @@
+schema_version: "1.0.0"
+round_index: 4
+debate_round_focus: quality
+round_summary: Quality and sprint contract round passed
+validation_summary: Sprint contract complete
+adversary_summary: No gaps
+disputes: []
+recommended_packet_patches: []
+review_gate_ready: true
+participants:
+  - PlanEvaluatorAgent
+  - PlanAdversaryAgent
+  - SprintContractAuditorAgent
+  - ReviewIntegratorAgent
+claims:
+  - review gate ready
+rebuttals: []
+evidence_refs: []
+token_usage:
+  per_agent:
+    PlanEvaluatorAgent: 120
+    PlanAdversaryAgent: 110
+    SprintContractAuditorAgent: 90
+    ReviewIntegratorAgent: 60
+  round_total: 380
+consensus_delta: 0.15

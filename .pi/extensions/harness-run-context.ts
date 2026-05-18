@@ -5,13 +5,16 @@
  * in before_agent_start so trace-recorder reuses it on agent_start.
  */
 
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Type } from "@sinclair/typebox";
 import {
 	canonicalPlanPath,
 	createFreshRunContext,
 	driftGateActive,
 	extractCompletionStatuses,
+	extractWritePathFromToolInput,
 	formatActivePlanBlock,
 	formatPlanContextBlock,
 	getLatestHarnessTurn,
@@ -27,10 +30,12 @@ import {
 	isHarnessBootstrapPrompt,
 	isNewTaskPlanBlocked,
 	isPlanApprovalAskUser,
+	isPlanPhaseScopedWrite,
 	isStaleActiveRunPointer,
 	loadProjectActiveRun,
 	loadRunContextFromDisk,
 	nextStepAfterOutcome,
+	normalizeHarnessPath,
 	nowIso,
 	type PlanPacketSummary,
 	parseHarnessSlashInput,
@@ -45,6 +50,11 @@ import {
 	validatePlanOverridePath,
 	validatePlanPacket,
 } from "../lib/harness-run-context.js";
+import {
+	normalizeHarnessYamlContent,
+	parseStructuredDocument,
+	writeYamlFile,
+} from "../lib/harness-yaml.js";
 
 interface SessionEntryLike {
 	type?: string;
@@ -82,6 +92,32 @@ function appendHarnessTurn(pi: ExtensionAPI, turn: HarnessTurnEntry): void {
 		command: turn.command,
 		started_at: turn.invoked_at,
 	});
+}
+
+async function coerceScopedHarnessYamlWrite(
+	event: { toolName: string; input: Record<string, unknown> },
+	runCtx: HarnessRunContext,
+	projectRoot: string,
+): Promise<{ block: true; reason: string } | undefined> {
+	if (event.toolName !== "write") return undefined;
+	const target = extractWritePathFromToolInput(event.input);
+	if (!target.endsWith(".yaml") && !target.endsWith(".yml")) return undefined;
+	const scoped = await isPlanPhaseScopedWrite(target, runCtx, projectRoot);
+	if (!scoped) return undefined;
+	const content = event.input.content;
+	if (typeof content !== "string") return undefined;
+	try {
+		event.input.content = normalizeHarnessYamlContent(content, target);
+	} catch (err) {
+		const msg = err instanceof Error ? err.message : String(err);
+		return {
+			block: true,
+			reason:
+				`harness-run-context: ${target} must be canonical YAML, not embedded JSON. ` +
+				`Use write_harness_yaml with the subagent JSON/YAML block, or paste valid YAML. (${msg})`,
+		};
+	}
+	return undefined;
 }
 
 function syncPolicyFromPlan(
@@ -583,7 +619,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				activeCtx.last_outcome = "needs_clarification";
 				activeCtx.last_completed_step = "plan";
 				const msg =
-					"Plan file exists but user approval was not recorded. Planner must call approve_plan (or bridged ask_user Approve) before writing plan-packet.json.";
+					"Plan file exists but user approval was not recorded. Planner must call approve_plan (or bridged ask_user Approve) before writing plan-packet.yaml.";
 				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
 				else
 					pi.sendMessage({
@@ -671,6 +707,18 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	});
 
 	pi.on("tool_call", async (event, ctx) => {
+		if (event.toolName === "write") {
+			const entries = getEntries(ctx);
+			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			if (runCtx) {
+				const blocked = await coerceScopedHarnessYamlWrite(
+					event,
+					runCtx,
+					process.cwd(),
+				);
+				if (blocked) return blocked;
+			}
+		}
 		if (activeCtx?.plan_packet_path) {
 			const entries = getEntries(ctx);
 			if (hasPlanUserApproval(entries, { sincePlanCommand: true })) {
@@ -707,11 +755,11 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				(event.input as { filePath?: string }).filePath ??
 				"",
 		);
-		if (target.includes("plan-packet.json")) {
+		if (target.includes("plan-packet.yaml")) {
 			return {
 				block: true,
 				reason:
-					"harness-run-context: plan-packet.json is read-only in evaluate/adversary phases.",
+					"harness-run-context: plan-packet.yaml is read-only in evaluate/adversary phases.",
 			};
 		}
 		return undefined;
@@ -792,7 +840,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 
 	pi.registerCommand("harness-plan-commit", {
 		description:
-			"Write approved plan-packet.json to the active run (requires harness-plan-approval)",
+			"Write approved plan-packet.yaml to the active run (requires harness-plan-approval)",
 		handler: async (args, ctx) => {
 			const projectRoot = process.cwd();
 			const entries = getEntries(ctx);
@@ -864,6 +912,98 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			pi.appendEntry("harness-plan-packet", summary);
 			const msg = `Plan committed: ${target}`;
 			if (ctx.hasUI) ctx.ui.notify(msg, "info");
+		},
+	});
+
+	pi.registerTool({
+		name: "write_harness_yaml",
+		label: "Write Harness YAML",
+		description:
+			"Write a plan-phase harness artifact as canonical YAML (parses subagent JSON or YAML, never embeds JSON in .yaml files).",
+		promptSnippet:
+			"Persist plan artifacts (decomposition, hypothesis, stack, review rounds) as real YAML.",
+		promptGuidelines: [
+			"Use write_harness_yaml for all artifacts/*.yaml and research-brief.yaml updates during /harness-plan.",
+			"Pass the subagent fenced json or yaml block as content; the tool converts to YAML on disk.",
+			"Do not use write with stringified JSON for .yaml paths.",
+			"plan-packet.yaml after approval: prefer create_plan; write_harness_yaml is for drafts and side artifacts only.",
+		],
+		parameters: Type.Object({
+			path: Type.String({
+				description:
+					"Path under the active run, e.g. artifacts/decomposition.yaml or research-brief.yaml",
+			}),
+			content: Type.String({
+				description:
+					"YAML or JSON document (fenced or raw) matching the artifact schema",
+			}),
+		}),
+		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
+			const entries = getEntries(ctx);
+			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			if (!runCtx?.run_id) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: 'No active harness run. Run /harness-plan "<task>" first.',
+						},
+					],
+					details: {},
+					isError: true,
+				};
+			}
+			const pathArg = String((params as { path?: string }).path ?? "").trim();
+			const content = String((params as { content?: string }).content ?? "");
+			if (!pathArg || !content.trim()) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: "write_harness_yaml requires path and content.",
+						},
+					],
+					details: {},
+					isError: true,
+				};
+			}
+			const projectRoot = process.cwd();
+			const absPath = normalizeHarnessPath(pathArg, projectRoot);
+			const scoped = await isPlanPhaseScopedWrite(absPath, runCtx, projectRoot);
+			if (!scoped) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Path not allowed: ${pathArg}. Must be under .pi/harness/runs/${runCtx.run_id}/ (artifacts/*.yaml, research-brief.yaml, etc.).`,
+						},
+					],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
+			let doc: unknown;
+			try {
+				doc = parseStructuredDocument(content, pathArg);
+			} catch (err) {
+				const msg = err instanceof Error ? err.message : String(err);
+				return {
+					content: [{ type: "text", text: msg }],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
+			await mkdir(dirname(absPath), { recursive: true });
+			await writeYamlFile(absPath, doc);
+			return {
+				content: [
+					{
+						type: "text",
+						text: `Wrote ${pathArg} as canonical YAML.`,
+					},
+				],
+				details: { path: absPath },
+			};
 		},
 	});
 

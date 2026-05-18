@@ -5,7 +5,7 @@
 
 ## Context
 
-`/harness-plan` delegated the full plan lifecycle to a single `harness/planner` subagent. Plans and approval UI were largely invisible in the parent transcript until `get_subagent_result`, and the orchestrator could not call `ask_user` / `approve_plan` / `create_plan` directly.
+`/harness-plan` previously delegated the full plan lifecycle to a single `harness/planner` subagent. Plans and approval UI were largely invisible in the parent transcript until subprocess completion, and the orchestrator could not call `ask_user` / `approve_plan` / `create_plan` directly.
 
 ## Decision
 

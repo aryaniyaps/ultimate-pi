@@ -2,12 +2,13 @@
  * harness-run-context — shared types and helpers for active harness runs.
  *
  * Session entry `harness-run-context` is the live source of truth; disk mirrors:
- * - `.pi/harness/runs/<run_id>/run-context.json`
+ * - `.pi/harness/runs/<run_id>/run-context.yaml`
  * - `.pi/harness/active-run.json` (cross-session pointer)
  */
 
 import { mkdir, readFile, realpath, writeFile } from "node:fs/promises";
 import { isAbsolute, join, relative, resolve } from "node:path";
+import { readYamlFile, writeYamlFile } from "./harness-yaml.js";
 
 export type HarnessPhase =
 	| "plan"
@@ -67,6 +68,7 @@ export interface PlanPacketLike {
 	risk_level?: string;
 	assumptions?: unknown[];
 	rollback_plan?: unknown;
+	execution_plan?: unknown;
 }
 
 interface SessionEntryLike {
@@ -107,11 +109,22 @@ export function activeRunPointerPath(projectRoot: string): string {
 }
 
 export function runContextDiskPath(runId: string, projectRoot: string): string {
-	return join(harnessRunsRoot(projectRoot), runId, "run-context.json");
+	return join(harnessRunsRoot(projectRoot), runId, RUN_CONTEXT_BASENAME);
 }
 
 export function canonicalPlanPath(runId: string, projectRoot: string): string {
-	return join(harnessRunsRoot(projectRoot), runId, "plan-packet.json");
+	return join(harnessRunsRoot(projectRoot), runId, PLAN_PACKET_BASENAME);
+}
+
+export function canonicalResearchBriefPath(
+	runId: string,
+	projectRoot: string,
+): string {
+	return join(harnessRunsRoot(projectRoot), runId, RESEARCH_BRIEF_BASENAME);
+}
+
+export function runArtifactsDir(runId: string, projectRoot: string): string {
+	return join(harnessRunsRoot(projectRoot), runId, "artifacts");
 }
 
 export const PLAN_REVIEW_BASENAME = "plan-review.md";
@@ -123,7 +136,16 @@ export function canonicalPlanReviewPath(
 	return join(harnessRunsRoot(projectRoot), runId, PLAN_REVIEW_BASENAME);
 }
 
-const PLAN_PACKET_BASENAME = "plan-packet.json";
+export const PLAN_PACKET_BASENAME = "plan-packet.yaml";
+export const RUN_CONTEXT_BASENAME = "run-context.yaml";
+export const RESEARCH_BRIEF_BASENAME = "research-brief.yaml";
+
+const PLAN_RUN_SCOPED_ROOT_FILES = new Set([
+	PLAN_PACKET_BASENAME,
+	RESEARCH_BRIEF_BASENAME,
+	"plan-dag-validation.yaml",
+	PLAN_REVIEW_BASENAME,
+]);
 
 const MUTATING_FILE_TOOLS = new Set(["write", "edit"]);
 
@@ -208,7 +230,21 @@ export function extractWritePathFromToolInput(
 	return raw.trim();
 }
 
-/** True when absPath is the canonical plan-packet.json for the active run. */
+/** True when absPath is a plan-phase artifact under the active run directory. */
+export function isPlanRunScopedRelativePath(rel: string): boolean {
+	if (rel.startsWith("..") || isAbsolute(rel)) return false;
+	const parts = rel.split(/[/\\]/);
+	if (parts.length === 2 && PLAN_RUN_SCOPED_ROOT_FILES.has(parts[1])) {
+		return true;
+	}
+	if (parts.length === 3 && parts[1] === "artifacts") {
+		const file = parts[2];
+		return file.endsWith(".yaml") || file.endsWith(".yml");
+	}
+	return false;
+}
+
+/** True when absPath is a writable plan-run artifact for the active run. */
 export async function isPlanPhaseScopedWrite(
 	absPath: string,
 	runCtx: HarnessRunContext | null,
@@ -229,11 +265,9 @@ export async function isPlanPhaseScopedWrite(
 		runsReal = runsRoot;
 	}
 	const rel = relative(runsReal, resolved);
-	if (rel.startsWith("..") || isAbsolute(rel)) return false;
+	if (!isPlanRunScopedRelativePath(rel)) return false;
 	const parts = rel.split(/[/\\]/);
-	if (parts.length !== 2 || parts[1] !== PLAN_PACKET_BASENAME) return false;
-	if (parts[0] !== runCtx.run_id) return false;
-	return isCanonicalPlanPacketPath(resolved, projectRoot, runCtx.run_id);
+	return parts[0] === runCtx.run_id;
 }
 
 export function getLatestHarnessTurn(
@@ -497,19 +531,6 @@ export async function isPlanPhaseAllowedMutation(
 					'policy-gate: no active harness run. Run /harness-plan "<task>" first.',
 			};
 		}
-		if (
-			!hasPlanUserApproval(opts.entries, {
-				sincePlanCommand: true,
-				planId: runCtx.plan_id,
-			})
-		) {
-			return {
-				allowed: false,
-				isScopedPlanWrite: true,
-				reason:
-					"policy-gate: plan-packet.json write blocked until the user approves via approve_plan or ask_user (present the full plan, then Approve).",
-			};
-		}
 		if (opts.aborted) {
 			return { allowed: true, isScopedPlanWrite: true };
 		}
@@ -522,7 +543,7 @@ export async function isPlanPhaseAllowedMutation(
 		return {
 			allowed: false,
 			isScopedPlanWrite: true,
-			reason: `harness-run-context: plan-packet.json is read-only in phase '${phase}'.`,
+			reason: `harness-run-context: plan-packet.yaml is read-only in phase '${phase}'.`,
 		};
 	}
 
@@ -530,7 +551,7 @@ export async function isPlanPhaseAllowedMutation(
 		return {
 			allowed: false,
 			reason:
-				"policy-gate: mutating tool blocked because harness-abort lock is active. Attach a new approved plan via plan-packet.json first.",
+				"policy-gate: mutating tool blocked because harness-abort lock is active. Attach a new approved plan via plan-packet.yaml first.",
 		};
 	}
 
@@ -548,7 +569,7 @@ export async function isPlanPhaseAllowedMutation(
 
 	const allowedPath = runCtx?.run_id
 		? canonicalPlanPath(runCtx.run_id, projectRoot)
-		: ".pi/harness/runs/<run_id>/plan-packet.json";
+		: `.pi/harness/runs/<run_id>/${PLAN_PACKET_BASENAME}`;
 	return {
 		allowed: false,
 		reason: `policy-gate: ${toolName} blocked in phase '${phase}'. In plan phase only ${allowedPath} is writable after ask_user approval.`,
@@ -754,8 +775,11 @@ export async function loadRunContextFromDisk(
 	projectRoot: string,
 ): Promise<HarnessRunContext | null> {
 	try {
-		const raw = await readFile(runContextDiskPath(runId, projectRoot), "utf-8");
-		return normalizeRunContext(JSON.parse(raw) as Partial<HarnessRunContext>);
+		const doc = await readYamlFile(
+			runContextDiskPath(runId, projectRoot),
+			"run-context",
+		);
+		return normalizeRunContext(doc as Partial<HarnessRunContext>);
 	} catch {
 		return null;
 	}
@@ -766,11 +790,7 @@ export async function saveRunContextToDisk(
 ): Promise<void> {
 	const dir = join(harnessRunsRoot(ctx.project_root), ctx.run_id);
 	await mkdir(dir, { recursive: true });
-	await writeFile(
-		runContextDiskPath(ctx.run_id, ctx.project_root),
-		`${JSON.stringify(ctx, null, 2)}\n`,
-		"utf-8",
-	);
+	await writeYamlFile(runContextDiskPath(ctx.run_id, ctx.project_root), ctx);
 }
 
 export async function loadProjectActiveRun(
@@ -828,8 +848,8 @@ export async function readPlanPacketFromPath(
 	planPath: string,
 ): Promise<PlanPacketLike | null> {
 	try {
-		const raw = await readFile(planPath, "utf-8");
-		return JSON.parse(raw) as PlanPacketLike;
+		const doc = await readYamlFile(planPath, planPath);
+		return doc as PlanPacketLike;
 	} catch {
 		return null;
 	}
@@ -844,8 +864,11 @@ export function validatePlanPacket(packet: PlanPacketLike | null): {
 	const errors: string[] = [];
 	if (packet.schema_version !== "1.0.0")
 		errors.push("schema_version must be 1.0.0");
-	if (packet.contract_version !== "1.0.0")
-		errors.push("contract_version must be 1.0.0");
+	if (
+		packet.contract_version !== "1.0.0" &&
+		packet.contract_version !== "1.1.0"
+	)
+		errors.push("contract_version must be 1.0.0 or 1.1.0");
 	if (!packet.plan_id || typeof packet.plan_id !== "string")
 		errors.push("plan_id required");
 	if (!packet.task_id || typeof packet.task_id !== "string")
@@ -859,6 +882,9 @@ export function validatePlanPacket(packet: PlanPacketLike | null): {
 		errors.push("acceptance_checks required");
 	if (!packet.risk_level) errors.push("risk_level required");
 	if (!packet.rollback_plan) errors.push("rollback_plan required");
+	if (packet.contract_version === "1.1.0" && !packet.execution_plan) {
+		errors.push("execution_plan required for contract_version 1.1.0");
+	}
 	return { valid: errors.length === 0, errors };
 }
 
@@ -957,7 +983,7 @@ export function formatActivePlanBlock(
 		);
 	} else {
 		lines.push(
-			"Plan is read-only in this phase. Do not edit plan-packet.json.",
+			"Plan is read-only in this phase. Do not edit plan-packet.yaml.",
 		);
 	}
 	if (ctx.plan_packet_path) {
@@ -1016,7 +1042,7 @@ export function validatePlanOverridePath(
 	if (!isCanonicalPlanPacketPath(absPlan, projectRoot, runId)) {
 		return {
 			ok: false,
-			reason: `--plan must be runs/${runId}/plan-packet.json (canonical plan packet only)`,
+			reason: `--plan must be runs/${runId}/${PLAN_PACKET_BASENAME} (canonical plan packet only)`,
 		};
 	}
 	return { ok: true };

@@ -236,7 +236,7 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 		name: "create_plan",
 		label: "Create Plan",
 		description:
-			"Write the approved PlanPacket to plan-packet.json for this harness run. Call only after approve_plan (Approve). Do not use write/edit.",
+			"Write the approved PlanPacket to plan-packet.yaml for this harness run. Call only after approve_plan (Approve). Do not use write/edit.",
 		promptSnippet: CREATE_PLAN_SNIPPET,
 		promptGuidelines: CREATE_PLAN_GUIDELINES,
 		parameters: CreatePlanParamsSchema,
@@ -298,7 +298,7 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 			return new Text(
 				theme.fg(
 					"success",
-					`Wrote ${details?.plan_path ?? "plan-packet.json"}`,
+					`Wrote ${details?.plan_path ?? "plan-packet.yaml"}`,
 				),
 				0,
 				0,

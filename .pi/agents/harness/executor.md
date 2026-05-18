@@ -4,8 +4,7 @@ tools: read, write, edit, bash, grep, find, ls
 extensions: true
 disallowed_tools: ask_user
 thinking: medium
-max_turns: 30
-inherit_context: false
+max_turns: 20
 ---
 
 You are the Harness Executor.

@@ -14,16 +14,20 @@
  * }
  */
 
-import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import {
+	type DebateParticipant,
+	debatePhaseFromId,
+	isPlanDebateId,
+	PLAN_DEBATE_PARTICIPANTS,
+	POST_EXECUTE_DEBATE_PARTICIPANTS,
+} from "../lib/debate-orchestrator-types.js";
 import { getRunIdFromSession } from "../lib/harness-run-context.js";
 
-type DebateParticipant =
-	| "EvaluatorAgent"
-	| "AdversaryAgent"
-	| "TieBreakerAgent";
 type PolicyDecision = "pass" | "conditional_pass" | "block" | "human_required";
+type DebatePhase = "plan" | "post_execute";
 
 interface RoundPayload {
 	participants: DebateParticipant[];
@@ -46,11 +50,13 @@ interface RoundPayload {
 interface DebateState {
 	run_id: string;
 	debate_id: string;
+	debate_phase: DebatePhase;
 	round_count: number;
 	budget_used: number;
 	max_rounds: number;
 	round_token_cap: number;
 	debate_global_cap: number;
+	last_review_gate_ready?: boolean;
 }
 
 interface BusEnvelope<T = unknown> {
@@ -104,46 +110,39 @@ function getRunId(ctx: {
 	);
 }
 
-async function readRoundCapsFromSchema(): Promise<{
+const PLAN_BUDGET = {
+	max_rounds: 4,
+	round_token_cap: 2000,
+	debate_global_cap: 12000,
+} as const;
+
+const AGGRESSIVE_BUDGET = {
+	max_rounds: 6,
+	round_token_cap: 2500,
+	debate_global_cap: 35000,
+} as const;
+
+function capsForDebate(debateId: string): {
+	name: "plan" | "aggressive";
 	max_rounds: number;
 	round_token_cap: number;
 	debate_global_cap: number;
-}> {
-	try {
-		const roundSchemaPath = join(
-			process.cwd(),
-			".pi",
-			"harness",
-			"specs",
-			"round-result.schema.json",
-		);
-		const parsed = JSON.parse(await readFile(roundSchemaPath, "utf-8")) as {
-			properties?: {
-				budget_profile?: {
-					properties?: {
-						max_rounds?: { const?: number };
-						round_token_cap?: { const?: number };
-						debate_global_cap?: { const?: number };
-					};
-				};
-			};
-		};
-		return {
-			max_rounds: Number(
-				parsed?.properties?.budget_profile?.properties?.max_rounds?.const ?? 6,
-			),
-			round_token_cap: Number(
-				parsed?.properties?.budget_profile?.properties?.round_token_cap
-					?.const ?? 2500,
-			),
-			debate_global_cap: Number(
-				parsed?.properties?.budget_profile?.properties?.debate_global_cap
-					?.const ?? 35000,
-			),
-		};
-	} catch {
-		return { max_rounds: 6, round_token_cap: 2500, debate_global_cap: 35000 };
+} {
+	if (isPlanDebateId(debateId)) {
+		return { name: "plan", ...PLAN_BUDGET };
 	}
+	return { name: "aggressive", ...AGGRESSIVE_BUDGET };
+}
+
+function participantAllowed(participant: string, phase: DebatePhase): boolean {
+	if (phase === "plan") {
+		return (PLAN_DEBATE_PARTICIPANTS as readonly string[]).includes(
+			participant,
+		);
+	}
+	return (POST_EXECUTE_DEBATE_PARTICIPANTS as readonly string[]).includes(
+		participant,
+	);
 }
 
 async function writeDebateEvent(
@@ -197,13 +196,18 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 	let lastSeverity = defaultSeverity();
 
 	async function openDebate(runId: string, debateId: string): Promise<void> {
-		const caps = await readRoundCapsFromSchema();
+		const caps = capsForDebate(debateId);
+		const debate_phase = debatePhaseFromId(debateId);
 		state = {
 			run_id: runId,
 			debate_id: debateId,
+			debate_phase,
 			round_count: 0,
 			budget_used: 0,
-			...caps,
+			max_rounds: caps.max_rounds,
+			round_token_cap: caps.round_token_cap,
+			debate_global_cap: caps.debate_global_cap,
+			last_review_gate_ready: false,
 		};
 		pi.appendEntry("harness-debate-state", state);
 		const envelope: BusEnvelope = {
@@ -216,7 +220,8 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 			},
 			payload: {
 				opened_at: nowIso(),
-				budget_profile: "aggressive",
+				debate_phase,
+				budget_profile: caps.name,
 			},
 		};
 		pi.appendEntry("harness-debate-envelope", envelope);
@@ -267,6 +272,15 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 			return { ok: false, reason: "debate id mismatch" };
 		}
 
+		for (const p of envelope.payload.participants ?? []) {
+			if (!participantAllowed(p, state.debate_phase)) {
+				return {
+					ok: false,
+					reason: `participant ${p} invalid for debate_phase=${state.debate_phase}`,
+				};
+			}
+		}
+
 		const nextRound = state.round_count + 1;
 		if (nextRound > state.max_rounds) {
 			await emitBudgetExhausted("max_rounds_reached");
@@ -310,6 +324,11 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 			};
 		}
 
+		const profileName =
+			state.debate_phase === "plan"
+				? ("plan" as const)
+				: ("aggressive" as const);
+
 		const roundRecord = {
 			schema_version: "1.0.0",
 			contract_version: "1.0.0",
@@ -322,7 +341,7 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 			evidence_refs: envelope.payload.evidence_refs,
 			token_usage: envelope.payload.token_usage,
 			budget_profile: {
-				name: "aggressive",
+				name: profileName,
 				max_rounds: state.max_rounds,
 				round_token_cap: state.round_token_cap,
 				debate_global_cap: state.debate_global_cap,
@@ -354,12 +373,20 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 			),
 		);
 		const decision = decidePolicy(lastSeverity, evidenceScore);
+		const planPhase = state.debate_phase === "plan";
+		const evaluatorPassed = planPhase
+			? Boolean(state.last_review_gate_ready)
+			: true;
+		const debateComplete = planPhase
+			? state.round_count >= state.max_rounds
+			: state.round_count > 0;
 
 		const consensus = {
 			schema_version: "1.0.0",
 			contract_version: "1.0.0",
 			run_id: state.run_id,
 			debate_id: state.debate_id,
+			debate_phase: state.debate_phase,
 			round_count: state.round_count,
 			budget_used: state.budget_used,
 			severity_scores: lastSeverity,
@@ -371,15 +398,25 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 			},
 			confidence_weights: WEIGHTS,
 			evidence_refs: [],
-			strict_gate_prerequisites: {
-				plan_gate_passed: true,
-				execution_completed: true,
-				evaluator_passed: true,
-				adversarial_debate_completed: state.round_count > 0,
-				severity_policy_ok: decision !== "block",
-				benchmark_delta_checks_passed: false,
-				rollback_artifacts_generated: false,
-			},
+			strict_gate_prerequisites: planPhase
+				? {
+						plan_gate_passed: false,
+						execution_completed: false,
+						evaluator_passed: evaluatorPassed,
+						adversarial_debate_completed: debateComplete,
+						severity_policy_ok: decision !== "block",
+						benchmark_delta_checks_passed: false,
+						rollback_artifacts_generated: false,
+					}
+				: {
+						plan_gate_passed: true,
+						execution_completed: true,
+						evaluator_passed: true,
+						adversarial_debate_completed: debateComplete,
+						severity_policy_ok: decision !== "block",
+						benchmark_delta_checks_passed: false,
+						rollback_artifacts_generated: false,
+					},
 			policy_decision: decision,
 			rationale,
 		};

@@ -5,14 +5,14 @@
 
 ## Context
 
-Harness slash prompts duplicated logic already defined in `harness/*` agents. Commands did not invoke the `Agent` tool. Review docs told users to fork a new Pi session even though subagents already provide isolated context.
+Harness slash prompts duplicated logic already defined in `harness/*` agents. The in-process `Agent` / `createAgentSession` stack was heavy and unstable. Review docs told users to fork a new Pi session even though subprocess subagents already provide isolation.
 
 ## Decision
 
 1. **Slash commands** (prompt templates) are orchestrators: spawn `harness/*` agents once, perform policy-gated writes, emit handoff blocks. Command identity is captured on Pi **`input`** as `harness-turn` (raw `/harness-*`), not from expanded prompt markdown.
 2. **Agents** perform multi-turn reads and emit structured JSON drafts. **Planning** (`harness/planning/*`) scouts and plan-adversary are read-only; parent orchestrator runs `ask_user`, `approve_plan`, and `create_plan` (see ADR 0033).
 3. **HarnessSpawnContext** is injected in `[HarnessRunContext]`; orchestrator copies it into spawn prompts. Subagents do not receive `[HarnessActivePlan]` injection.
-4. **Review isolation** uses `Agent` spawn with `inherit_context: false`. `review-integrity` allows `Agent` / `get_subagent_result` for evaluator/adversary/tie-breaker.
+4. **Review isolation** uses native `subagent` (vendored pi-subagents: isolated `pi --mode json` subprocess). `review-integrity` allows `subagent` when `agent` is evaluator/adversary/tie-breaker; bridge blocks plan-phase mutating spawns and nested `subagent` in children.
 5. **Subagent policy** blocks mutating tools for read-only phase agents; `ask_user` bridged for evaluator/adversary/tie-breaker only (not planning scouts).
 6. **Parent** owns plan-phase `ask_user`, `approve_plan`, and `create_plan` per ADR 0033.
 
@@ -32,6 +32,7 @@ Harness slash prompts duplicated logic already defined in `harness/*` agents. Co
 
 - `.pi/prompts/harness-*.md`
 - `.pi/agents/harness/*.md`
-- `.pi/extensions/lib/harness-subagents/harness-subagent-policy.ts`
+- `vendor/pi-subagents/src/subagents.ts`, `.pi/extensions/lib/harness-subagents-bridge.ts`
+- `.pi/extensions/lib/harness-subagent-policy.ts`
 - `.pi/extensions/review-integrity.ts`
 - `.pi/lib/harness-agent-output.ts`

@@ -1,0 +1,196 @@
+schema_version: "1.0.0"
+contract_version: "1.1.0"
+plan_id: plan-smoke-fixture-001
+task_id: task-smoke-001
+scope: Smoke fixture for plan-phase harness validation with execution_plan and debate artifacts.
+assumptions:
+  - Fixture only; no live agent run
+risk_level: med
+acceptance_checks:
+  - id: AC-1
+    description: DAG validation passes
+  - id: AC-2
+    description: Four debate rounds recorded
+  - id: AC-3
+    description: Stack brief present in research-brief
+  - id: AC-4
+    description: Sprint contract complete
+  - id: AC-5
+    description: plan-review.md renders
+rollback_plan:
+  revert_commit_ready: true
+  rollback_artifacts:
+    revert_command: git revert HEAD
+    revert_branch: main
+    patch_bundle: .pi/harness/runs/smoke-fixture/patch.bundle
+execution_plan:
+  schema_version: "1.0.0"
+  phases:
+    - phase_id: P1
+      name: Foundation
+      objective: Establish baseline and verify harness wiring
+      entry_criteria:
+        - Fixture loaded
+      exit_criteria:
+        - AC-1 satisfied
+      milestone: M1-baseline
+      work_item_ids: [WI-1, WI-2, WI-3]
+    - phase_id: P2
+      name: Build
+      objective: Implement core changes
+      entry_criteria:
+        - M1-baseline complete
+      exit_criteria:
+        - AC-2 satisfied
+      milestone: M2-build
+      work_item_ids: [WI-4, WI-5, WI-6]
+    - phase_id: P3
+      name: Verify
+      objective: Quality gate and documentation
+      entry_criteria:
+        - M2-build complete
+      exit_criteria:
+        - AC-5 satisfied
+      milestone: M3-ship
+      work_item_ids: [WI-7, WI-8]
+  work_items:
+    - work_item_id: WI-1
+      phase_id: P1
+      title: Load fixture packet
+      description: Read plan-packet.yaml from fixture directory
+      depends_on: []
+      files:
+        - .pi/harness/evals/smoke/fixtures/plan-phase/minimal-med/plan-packet.yaml
+      parallel_safe: true
+      done_criteria:
+        type: manual
+        spec: Fixture packet readable
+      acceptance_check_ids: [AC-1]
+    - work_item_id: WI-2
+      phase_id: P1
+      title: Run DAG validator
+      description: Execute validate-plan-dag.mjs
+      depends_on: [WI-1]
+      files:
+        - .pi/scripts/validate-plan-dag.mjs
+      parallel_safe: false
+      done_criteria:
+        type: command
+        spec: node .pi/scripts/validate-plan-dag.mjs --packet plan-packet.yaml
+      acceptance_check_ids: [AC-1]
+    - work_item_id: WI-3
+      phase_id: P1
+      title: Lint harness-yaml
+      description: Ensure YAML helpers parse fixture
+      depends_on: [WI-1]
+      files:
+        - .pi/lib/harness-yaml.ts
+      parallel_safe: true
+      done_criteria:
+        type: lint
+        spec: npm test
+      acceptance_check_ids: [AC-1]
+    - work_item_id: WI-4
+      phase_id: P2
+      title: Debate round 1-2 artifacts
+      description: Validate review-round YAML
+      depends_on: [WI-2]
+      files:
+        - .pi/harness/evals/smoke/fixtures/plan-phase/minimal-med/artifacts/review-round-r1.yaml
+      parallel_safe: false
+      done_criteria:
+        type: artifact
+        spec: artifacts/review-round-r1.yaml exists
+      acceptance_check_ids: [AC-2]
+    - work_item_id: WI-5
+      phase_id: P2
+      title: Debate round 3-4 artifacts
+      description: Validate final review round
+      depends_on: [WI-4]
+      files:
+        - .pi/harness/evals/smoke/fixtures/plan-phase/minimal-med/artifacts/review-round-r4.yaml
+      parallel_safe: false
+      done_criteria:
+        type: artifact
+        spec: artifacts/review-round-r4.yaml exists
+      acceptance_check_ids: [AC-2]
+    - work_item_id: WI-6
+      phase_id: P2
+      title: Stack research merge
+      description: research-brief includes stack section
+      depends_on: [WI-2]
+      files: []
+      non_code: true
+      parallel_safe: true
+      done_criteria:
+        type: manual
+        spec: research-brief.yaml contains stack key
+      acceptance_check_ids: [AC-3]
+    - work_item_id: WI-7
+      phase_id: P3
+      title: Sprint contract audit
+      description: R4 sprint audit artifact
+      depends_on: [WI-5]
+      files:
+        - .pi/harness/evals/smoke/fixtures/plan-phase/minimal-med/artifacts/sprint-audit-r4.yaml
+      parallel_safe: false
+      done_criteria:
+        type: artifact
+        spec: sprint-audit-r4.yaml present
+      acceptance_check_ids: [AC-4]
+    - work_item_id: WI-8
+      phase_id: P3
+      title: Render plan-review
+      description: Human-readable plan review markdown
+      depends_on: [WI-7]
+      files:
+        - .pi/harness/evals/smoke/fixtures/plan-phase/minimal-med/plan-review.md
+      parallel_safe: false
+      done_criteria:
+        type: manual
+        spec: plan-review.md non-empty
+      acceptance_check_ids: [AC-5]
+  sprint_contract:
+    in_scope:
+      - Fixture validation only
+    out_of_scope:
+      - Production deploy
+    definition_of_done: All smoke checks green
+    assumptions:
+      - CI environment has node
+    external_dependencies: []
+  wbs_dictionary:
+    - work_item_id: WI-1
+      deliverable: Fixture packet loaded
+      owner_role: executor
+      inputs: []
+      outputs: [parsed packet]
+  risk_register:
+    - risk_id: R1
+      description: DAG validator false negative
+      likelihood: low
+      impact: high
+      mitigation: Unit tests on validate-plan-dag.mjs
+      linked_work_item_ids: [WI-2]
+    - risk_id: R2
+      description: Debate cap misconfiguration
+      likelihood: med
+      impact: med
+      mitigation: debate-orchestrator plan profile tests
+      linked_work_item_ids: [WI-4]
+    - risk_id: R3
+      description: YAML parse drift
+      likelihood: low
+      impact: med
+      mitigation: harness-yaml strict parse
+      linked_work_item_ids: [WI-3]
+  schedule_metadata:
+    critical_path_work_item_ids: [WI-1, WI-2, WI-4, WI-5, WI-7, WI-8]
+    parallel_groups:
+      - [WI-1, WI-3]
+    schedule_baseline_note: Fixture topological order; no calendar dates
+  dag_validation:
+    status: pass
+    topological_order: [WI-1, WI-2, WI-3, WI-4, WI-5, WI-6, WI-7, WI-8]
+    cycles: []
+    conflicts: []
