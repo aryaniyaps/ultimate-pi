@@ -17,7 +17,10 @@ pnpm-debug.log*
 # Wiki search index (regenerable)
 .pi/wiki-search/
 
-# ck semantic search index (regenerable)
+# CocoIndex Code semantic index (regenerable)
+.cocoindex_code/
+
+# Legacy ck index (removed — safe to delete)
 .ck/
 
 # Raw source files (immutable, not committed)
@@ -77,3 +80,5 @@ graphify-out/manifest.json
 # local only
 graphify-out/cost.json
 # graphify-out/cache/         # optional: commit for speed, skip to keep repo small
+# CocoIndex Code (ccc)
+/.cocoindex_code/

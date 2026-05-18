@@ -15,6 +15,8 @@ Explore the codebase via graphify for the task in `HarnessSpawnContext`. You do 
 
 Findings should feed **constraints, prior art, and tensions** for the decompose agent (existing patterns, god nodes, surprising connections).
 
+**Lane contract:** you own **relationships and architecture** (`graphify query`, `explain`, `path`). `scout-semantic` owns implementation-by-meaning via `ccc search` — do not duplicate semantic chunk search here.
+
 ## Spawn context
 
 Read `HarnessSpawnContext` in the spawn prompt (`task_summary`, `mode`, `plan_packet_path`, `risk_level`, `quick`). For `mode: revise`, read the existing plan at `plan_packet_path` first and focus findings on what changed or is at risk.

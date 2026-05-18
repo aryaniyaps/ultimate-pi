@@ -156,7 +156,7 @@ bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 
 **Required (script must exit 0):** scrapling + harness-web smoke, ctx7, biome, ast-grep (`sg`), sentrux (when harness manifest present).
 
-**Warnings allowed:** gh (if not authenticated), agent-browser (if OS libs need manual `sudo apt-get install`), ck (empty corpus on tiny repos).
+**Warnings allowed:** gh (if not authenticated), agent-browser (if OS libs need manual `sudo apt-get install`), cocoindex-code (empty corpus on tiny repos; first `[full]` install downloads local embedding model).
 
 If the script reports **agent-browser shared library errors** on Linux/WSL, run the fix it prints, then re-verify:
 
@@ -232,20 +232,24 @@ if [ ! -f .pi/harness/browser.json ]; then
 fi
 ```
 
-### 2.4 — ck-search (Semantic Code Search)
+### 2.4 — CocoIndex Code (semantic code search)
+
+Offline semantic search via [CocoIndex Code](https://cocoindex.io/cocoindex-code/) (`ccc`). **CLI only** — do not register `ccc mcp` in harness setup (MCP defaults to refresh-before-search and is slower).
 
 ```bash
-if ! command -v ck &>/dev/null || [ "$FORCE" = "true" ]; then
-	npm install -g @beaconbay/ck-search
-fi
+command -v uv &>/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
+uv tool install 'cocoindex-code[full]'   # or: pipx install 'cocoindex-code[full]'
+bash "$UP_PKG/.pi/scripts/harness-cocoindex-bootstrap.sh"
+# Rebuild index: bash "$UP_PKG/.pi/scripts/harness-cocoindex-bootstrap.sh" --force
+ccc status
 ```
 
-Verify: `ck --version`
+**Indexing before scouts is automatic:** `harness-subagents` runs incremental `ccc index` before plan/execute subagent batches. Agents use `ccc search` only.
 
-Register as MCP server (if Claude MCP available):
-```bash
-claude mcp list 2>/dev/null && claude mcp add ck-search -s user -- ck --serve || echo "MCP not available — ck will be used as CLI only"
-```
+**First install:** `[full]` pulls sentence-transformers + torch (~hundreds of MB–1GB+). Run bootstrap once; do not run `ccc index` inside scouts.
+
+Verify: `ccc doctor` and `ccc search --limit 3 "export function"` (no `--refresh`).
 
 ### 2.5 — biome (Lint + Format Gate)
 
@@ -666,7 +670,7 @@ Output summary table:
 | scrapling / harness-web | ✓/✗ | Auth: yes/no |
 | ctx7 | ✓/✗ | Login: yes/no |
 | agent-browser | ✓/✗ | Config: .pi/harness/browser.json |
-| ck-search | ✓/✗ | MCP: registered/CLI-only |
+| cocoindex-code | ✓/✗ | `ccc status`; index auto-refreshed before harness scouts |
 | biome | ✓/✗ | Project config: found/default |
 | ast-grep | ✓/✗ | AST-aware code search (`sg`)
 | gh CLI | ✓/✗ | Auth: yes/no |

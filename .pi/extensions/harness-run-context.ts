@@ -55,6 +55,10 @@ import {
 	parseStructuredDocument,
 	writeYamlFile,
 } from "../lib/harness-yaml.js";
+import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+
+// @ts-expect-error pi extensions run as ESM
+const MODULE_URL = import.meta.url;
 
 interface SessionEntryLike {
 	type?: string;
@@ -191,6 +195,7 @@ function needsClarificationFollowUp(ctx: HarnessRunContext | null): boolean {
 }
 
 export default function harnessRunContext(pi: ExtensionAPI) {
+	if (!claimExtensionLoad("harness-run-context", MODULE_URL)) return;
 	let activeCtx: HarnessRunContext | null = null;
 
 	pi.on("session_start", async (_event, ctx) => {

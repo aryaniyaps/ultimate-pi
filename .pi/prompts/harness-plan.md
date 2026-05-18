@@ -30,8 +30,9 @@ Read **harness-debate-plan** skill before Review Gate rounds.
 
 1. Use `subagent` with `agentScope: "both"` and parallel `tasks` where lanes are independent.
 2. Each `subagent` call blocks until subprocesses finish — batch parallel scouts in one `tasks` array.
-3. Cap: **12** harness subagent invocations per parent session (extension-enforced).
-4. Compact task text: embed `HarnessSpawnContext` JSON + lane-specific instructions only.
+3. Do **not** set `timeoutMs` unless the user explicitly requests a cap — subagents run until natural completion (optional backstop: `PI_SUBAGENT_TIMEOUT_MS`).
+4. Cap: **12** harness subagent invocations per parent session (extension-enforced).
+5. Compact task text: embed `HarnessSpawnContext` JSON + lane-specific instructions only.
 
 ## Step 0 — Parse `$ARGUMENTS`
 
@@ -44,19 +45,23 @@ Read **harness-debate-plan** skill before Review Gate rounds.
 
 Use `[HarnessActivePlan]` / `[HarnessRunContext]` only. On revise: preserve `plan_id` / `task_id`. Canonical paths: `plan-packet.yaml`, `research-brief.yaml`, `artifacts/*.yaml`.
 
+## Phase 0 — Semantic index (automatic)
+
+Do **not** run `ccc index` or `ccc search --refresh`. The harness runs incremental `ccc index` before subagent spawns. Proceed directly to Phase 1 scouts.
+
 ## Phase 1 — Parallel scouts
 
 ```json
 {
   "agentScope": "both",
   "tasks": [
-    { "agent": "harness/planning/scout-graphify", "task": "<HarnessSpawnContext + graphify lane>", "timeoutMs": 90000 },
-    { "agent": "harness/planning/scout-structure", "task": "<HarnessSpawnContext + structure lane>", "timeoutMs": 90000 }
+    { "agent": "harness/planning/scout-graphify", "task": "<HarnessSpawnContext + graphify lane>" },
+    { "agent": "harness/planning/scout-structure", "task": "<HarnessSpawnContext + structure lane>" }
   ]
 }
 ```
 
-Add `harness/planning/scout-semantic` to `tasks` unless `--quick`. Require graphify + structure success.
+Add `harness/planning/scout-semantic` to `tasks` unless `--quick`. Require graphify + structure success. Semantic lane uses `ccc search` only (see `scout-semantic` agent).
 
 ## Phase 2 & 3 — Decompose + hypothesis (parallel)
 

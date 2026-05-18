@@ -22,3 +22,10 @@
 - **License:** MIT ([vendor/pi-subagents/LICENSE](vendor/pi-subagents/LICENSE))  
 - **Pinned revision:** See [vendor/pi-subagents/UPSTREAM_PIN.md](vendor/pi-subagents/UPSTREAM_PIN.md)  
 - ultimate-pi loads it from [`vendor/pi-subagents`](vendor/pi-subagents) via [`.pi/extensions/harness-subagents.ts`](.pi/extensions/harness-subagents.ts) with harness discovery, spawn gates, and subprocess env. Maintainer refresh: `npm run vendor:sync-subagents`.
+
+## CocoIndex Code (CLI + skill)
+
+- **Project:** https://github.com/cocoindex-io/cocoindex-code  
+- **License:** Apache-2.0  
+- **Install:** `uv tool install 'cocoindex-code[full]'` (see `/harness-setup` §2.4)  
+- ultimate-pi vendors the upstream agent skill at [`.agents/skills/ccc/`](.agents/skills/ccc/) and bootstraps indexes via [`.pi/scripts/harness-cocoindex-bootstrap.sh`](.pi/scripts/harness-cocoindex-bootstrap.sh). Replaces deprecated `@beaconbay/ck-search`.

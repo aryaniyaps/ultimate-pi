@@ -81,41 +81,42 @@ edges at build time. Use these to answer call-graph questions without external t
 - **How does `Auth` reach `Database`?** → `graphify path "Auth" "Database"` (shortest call chain)
 - **Trace a dependency chain deep** → `graphify query "how does X depend on Y" --dfs`
 
-**Semantic code search via graphify:**
-Graphify already indexes the entire codebase as a knowledge graph. Use graphify
-for conceptual code search before falling back to `ck`:
-- **Find code by meaning** → `graphify query "where is authentication logic"`
-- **Find related concepts** → `graphify query "what connects to error handling"`
+**Semantic code search (two lanes):**
+- **Architecture / relationships** → graphify (`query`, `explain`, `path`, `GRAPH_REPORT.md`)
+- **Implementation by meaning** → CocoIndex Code (`ccc search --limit N "concept"`)
+
+Examples:
+- **Find code by meaning** → `ccc search --limit 10 "authentication session validation"`
+- **Who calls X / cross-module path** → `graphify explain "X"` or `graphify path "A" "B"`
 - **Cross-file surprises** → `graphify query "what unexpected connections exist"`
 
 **Order of operations for codebase exploration:**
 1. Read `graphify-out/GRAPH_REPORT.md` (god nodes, surprises, suggested questions)
-2. Run `graphify query` for domain-specific questions, call traces, and semantic search
-3. Use `graphify explain "Concept"` for caller/callee/dependency deep dives
-4. Use `sg -p 'pattern'` for structural code search, then `ck --hybrid` only if graph and ast-grep don't surface it
-5. Read individual files last — the graph already told you what matters
+2. Run `graphify query` / `explain` / `path` for architecture and call graphs
+3. Use `sg -p 'pattern'` for structural code search
+4. Use `ccc search --limit N` for conceptual implementation chunks when graphify/sg are insufficient
+5. Read individual files last — scouts and graph already narrowed the set
+
+**Indexing:** Harness runs incremental `ccc index` before subagent spawns. Use `ccc search` only in agents; run `ccc index` at session start or after large edits on parent turns. Never use `ccc search --refresh` in scouts. `/skill:ccc` for full CLI reference.
 
 ### Fallback Search (when graph doesn't cover it)
 
-> [!note] Graphify handles semantic search and call graphs
-> Graphify already provides semantic code search and call-graph tracing. Use
-> `graphify query`, `graphify explain`, and `graphify path` as your primary
-> code exploration tools. Only fall back to `sg`/`ck`/`find` when the graph
-> doesn't have the answer (e.g., not yet indexed, or you need exact raw text).
+> [!note] Graphify + ccc split responsibilities
+> Graphify owns call graphs and cross-module relationships. `ccc` owns AST-aware
+> semantic chunks. Only fall back to `find`/`grep` for exact literals or non-code files.
 
 | Tool | When | Command |
 |------|------|---------|
-| `sg -p` | **Primary code search** — AST-aware structural pattern matching | `sg -p 'pattern' --lang typescript` |
+| `sg -p` | **Structural code search** — AST pattern matching | `sg -p 'pattern' --lang typescript` |
 | `sg scan` | Rule-based code scanning (use project rules in `sgconfig.yml`) | `sg scan` |
-| `ck --hybrid` | Lexical + semantic fusion search (fallback after ast-grep) | `ck --hybrid "query" .` |
-| `ck --sem` | Purely conceptual searches (fallback after ast-grep) | `ck --sem "concept" src/` |
+| `ccc search` | **Semantic chunks** — implementation by meaning | `ccc search --limit 10 "query"` |
 | `find` | File discovery by name/glob only | `find . -name "*.ts"` |
 | `grep` | **Last resort** — exact literal string matching in non-code files only | `grep -F "exact string"` |
 
-- **Always prefer ast-grep (`sg`) over grep for code search.** ast-grep understands code structure via tree-sitter — it matches patterns, not strings. Use it for: finding function calls, class definitions, import statements, variable usage, and any structural code query.
+- **Always prefer ast-grep (`sg`) over grep for code search.** ast-grep understands code structure via tree-sitter — it matches patterns, not strings.
 - Never use grep for code search. grep is only for: log files, non-code text files, exact byte-level matching when AST patterns can't work.
-- Always use `--limit N` on ck to cap output and save context.
-- Graphify is primary. ast-grep is secondary. ck/find are fallbacks. grep is last resort.
+- Always use `--limit N` on `ccc search` to cap output and save context.
+- Graphify is primary for architecture. ast-grep is secondary for structure. ccc is semantic implementation search. grep is last resort.
 - Do NOT install or use grepai/seagoat/mgrep for call-graph traces or semantic
   search — graphify already handles both.
 
