@@ -1,8 +1,8 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.11.0",
-	"generated_at": "2026-05-18T09:43:44.563Z",
+	"package_version": "0.13.1",
+	"generated_at": "2026-05-18T17:22:10.311Z",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -94,23 +94,23 @@
 		},
 		"harness/planning/plan-adversary": {
 			"path": ".pi/agents/harness/planning/plan-adversary.md",
-			"sha256": "685926c638ae1377361d7cafda5e400be19cb3880510d8f6d389a5876647575f"
+			"sha256": "84c7fa63d38c39e32000c90093688a45bc2b96a2c6209037342222eae0c854f9"
 		},
 		"harness/planning/plan-evaluator": {
 			"path": ".pi/agents/harness/planning/plan-evaluator.md",
-			"sha256": "44fd52389d7e43dd5093653cba9694900561318ee5f00e3bc05c3ecef5d43621"
+			"sha256": "580d8c7a31f7a6ecd9e627460459d600650580b5df63d129278beefd3f3e347c"
 		},
 		"harness/planning/review-integrator": {
 			"path": ".pi/agents/harness/planning/review-integrator.md",
-			"sha256": "d0e8214539d0a78b9e5add70e61dd4e4de36def64172cda18d9b70727e7600ca"
+			"sha256": "cd1e5d10f0cb8b7a4197d2e92489023c285e90e250f1badc371470165aeb8cfd"
 		},
 		"harness/planning/scout-graphify": {
 			"path": ".pi/agents/harness/planning/scout-graphify.md",
-			"sha256": "b59916a26afccfe105e29c0bd8637ac54275e8afef1c6cc88a58bd05b0325473"
+			"sha256": "8a5ff68306a5eedf1a62067ac8812eac4ac1fe2016cba63337ef4e90b5136e00"
 		},
 		"harness/planning/scout-semantic": {
 			"path": ".pi/agents/harness/planning/scout-semantic.md",
-			"sha256": "47b7ea3e65b20a65e6d0ff11b6d5daff59b47a9ed618b8a3b6282f2eb0460572"
+			"sha256": "36bd424ebd422bda82bd447b22f591f99f32ec897ea43f385586119da5c26caa"
 		},
 		"harness/planning/scout-structure": {
 			"path": ".pi/agents/harness/planning/scout-structure.md",

@@ -6,7 +6,7 @@ import {
 	type HarnessRunContext,
 	type PlanPacketLike,
 } from "../../../lib/harness-run-context.js";
-import { formatPlanPacketLines } from "./format-plan.js";
+import { formatPlanPacketYaml } from "./format-plan.js";
 import type { PlanResearchBrief } from "./types.js";
 
 export {
@@ -217,7 +217,7 @@ export function formatPlanPacketMarkdown(
 		`- **risk_level:** ${typeof packet.risk_level === "string" ? packet.risk_level : "med"}`,
 	);
 	if (opts?.plan_packet_path) {
-		lines.push(`- **canonical JSON:** \`${opts.plan_packet_path}\``);
+		lines.push(`- **canonical YAML:** \`${opts.plan_packet_path}\``);
 	}
 	lines.push("");
 	if (opts?.human_summary?.trim()) {
@@ -233,15 +233,15 @@ export function formatPlanPacketMarkdown(
 	}
 	lines.push("## Plan packet");
 	lines.push("");
-	lines.push("```text");
-	for (const line of formatPlanPacketLines(packet, 100)) {
+	lines.push("```yaml");
+	for (const line of formatPlanPacketYaml(packet).split("\n")) {
 		lines.push(line);
 	}
 	lines.push("```");
 	lines.push("");
 	if (status === "draft") {
 		lines.push(
-			"Review this file in your editor, then return to the harness TUI to **Approve**, **Request changes**, or **Cancel**.",
+			"Review this plan, then choose **Approve**, **Request changes**, or **Cancel** in the prompt below (same flow as `ask_user`).",
 		);
 	} else if (status === "approved") {
 		lines.push(
@@ -388,6 +388,6 @@ export function formatPlanReviewUserHint(reviewPath: string | null): string {
 	const abs = resolve(reviewPath);
 	return (
 		`Full plan for editor review: ${abs}\n` +
-		`Open this markdown file in VS Code (or your editor), read the scope and acceptance checks, then return to the harness TUI to Approve / Request changes / Cancel.`
+		`Open this markdown file in your editor if you prefer; approval options appear in the harness prompt below.`
 	);
 }

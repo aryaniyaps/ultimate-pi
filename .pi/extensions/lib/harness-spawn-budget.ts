@@ -1,9 +1,7 @@
 /**
- * Harness subagent spawn caps (subprocess model).
+ * Harness subagent spawn accounting (subprocess model).
+ * No session caps — parallel batches are limited only by host resources.
  */
-
-export const HARNESS_MAX_ACTIVE_SUBAGENTS = 8;
-export const HARNESS_MAX_SUBAGENT_SPAWNS_PER_SESSION = 12;
 
 export function isHarnessAgentType(type: string): boolean {
 	return type.startsWith("harness/");
@@ -33,29 +31,11 @@ export function countHarnessAgentsInRequest(params: {
 	return { harnessCount: harness.length, agents: harness };
 }
 
+/** Always allows spawn; state is tracked for telemetry only. */
 export function checkHarnessSpawnBudget(
-	state: SpawnBudgetState,
-	incomingHarnessTasks: number,
+	_state: SpawnBudgetState,
+	_incomingHarnessTasks: number,
 ): { ok: boolean; message?: string } {
-	if (state.active + incomingHarnessTasks > HARNESS_MAX_ACTIVE_SUBAGENTS) {
-		return {
-			ok: false,
-			message:
-				`Harness subagent limit reached (${state.active} active + ${incomingHarnessTasks} requested > ${HARNESS_MAX_ACTIVE_SUBAGENTS}). ` +
-				`Wait for in-flight subagent calls to finish before spawning more.`,
-		};
-	}
-	if (
-		state.totalHarnessSpawns + incomingHarnessTasks >
-		HARNESS_MAX_SUBAGENT_SPAWNS_PER_SESSION
-	) {
-		return {
-			ok: false,
-			message:
-				`Harness subagent spawn cap reached (${state.totalHarnessSpawns + incomingHarnessTasks}/${HARNESS_MAX_SUBAGENT_SPAWNS_PER_SESSION} this session). ` +
-				`Finish the current harness phase or start a new session.`,
-		};
-	}
 	return { ok: true };
 }
 

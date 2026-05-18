@@ -15,4 +15,6 @@ Parent passes `debate_round_focus`: `spec` | `wbs` | `schedule` | `quality`.
 
 Valid **YAML only** — `PlanValidationTurn` (`.pi/harness/specs/plan-validation-turn.schema.json`). Fail if `dag_validation.status === "fail"`.
 
-Bus label: `PlanEvaluatorsubagent`.
+Include `claim_ids[]` in your summary for parent to post as messenger **claims** before spawning adversary.
+
+Bus label: `PlanEvaluatorAgent`.

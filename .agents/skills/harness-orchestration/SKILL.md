@@ -36,7 +36,7 @@ LIMIT 30
 1. **Parallel `tasks`** — one `subagent({ tasks: [...] })` for scouts, decompose+hypothesis, or review fan-in; subprocesses run in parallel upstream.
 2. **Blocking calls** — each `subagent` returns when the subprocess exits; no `get_subagent_result` polling.
 3. **Compact handoffs** — pass scout/decompose JSON only; never paste full subprocess message logs into the next spawn.
-4. **Spawn caps** — bridge enforces **8** active + **12** total harness spawns per session. Do **not** pass `timeoutMs` unless the user wants a cap — subprocesses wait for natural exit (`PI_SUBAGENT_TIMEOUT_MS` optional env backstop only).
+4. **No spawn cap** — harness subagent spawns are unlimited per session (active count is telemetry only). Do **not** pass `timeoutMs` unless the user wants a cap — subprocesses wait for natural exit (`PI_SUBAGENT_TIMEOUT_MS` optional env backstop only).
 
 ## Command → agent
 

@@ -95,8 +95,9 @@ test("formatPlanPacketMarkdown includes scope and acceptance checks", () => {
 	});
 	assert.match(md, /# Harness plan/);
 	assert.match(md, /Product OS MVP/);
-	assert.match(md, /acceptance_checks/);
-	assert.match(md, /Review this file in your editor/);
+	assert.match(md, /```yaml/);
+	assert.match(md, /acceptance_checks:/);
+	assert.match(md, /Approve.*Request changes/);
 });
 
 test("writePlanReviewMarkdown writes plan-review.md under run dir", async () => {

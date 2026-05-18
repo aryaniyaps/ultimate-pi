@@ -51,6 +51,7 @@ export function buildPlanReviewRoundEnvelope(
 		token_usage: { per_agent: Record<string, number>; round_total: number };
 		consensus_delta: number;
 		severity_scores?: PlanReviewRoundDraft["severity_scores"];
+		review_gate_ready?: boolean;
 	};
 } {
 	const participants = (draft.participants ?? [
@@ -79,6 +80,7 @@ export function buildPlanReviewRoundEnvelope(
 			},
 			consensus_delta: draft.consensus_delta ?? 0,
 			severity_scores: draft.severity_scores,
+			review_gate_ready: draft.review_gate_ready,
 		},
 	};
 }

@@ -31,7 +31,7 @@ Read **harness-debate-plan** skill before Review Gate rounds.
 1. Use `subagent` with `agentScope: "both"` and parallel `tasks` where lanes are independent.
 2. Each `subagent` call blocks until subprocesses finish — batch parallel scouts in one `tasks` array.
 3. Do **not** set `timeoutMs` unless the user explicitly requests a cap — subagents run until natural completion (optional backstop: `PI_SUBAGENT_TIMEOUT_MS`).
-4. Cap: **12** harness subagent invocations per parent session (extension-enforced).
+4. No harness subagent spawn cap — run the full scout + debate pipeline without skipping lanes for budget.
 5. Compact task text: embed `HarnessSpawnContext` JSON + lane-specific instructions only.
 
 ## Step 0 — Parse `$ARGUMENTS`
@@ -102,21 +102,31 @@ node .pi/scripts/validate-plan-dag.mjs --packet .pi/harness/runs/<run_id>/plan-p
 
 Must **pass** before debate. On fail: fix via author or parent patches, re-run.
 
-## Phase 5 — Review Gate debate (4 rounds, even with `--quick`)
+## Phase 5 — Review Gate debate (4 rounds, pi-messenger, even with `--quick`)
 
-1. `/harness-debate-open plan-<run_id>`
-2. For rounds 1–4 (`debate_round_focus`: spec, wbs, schedule, quality):
+1. `harness_debate_open` (debate id normalized to `plan-<run_id>`; creates `debate-messenger/` inboxes + threads).
+2. Optional: `harness_plan_scope_check` after decomposition — if `material_drift`, `ask_user` before continuing.
+3. For rounds 1–4 (`debate_round_focus`: spec, wbs, schedule, quality):
 
-| Round | Extra spawns (before integrator) |
-|-------|----------------------------------|
-| 1 | `hypothesis-validator` (blind: task + hypothesis only) → `plan-evaluator` → `plan-adversary` |
-| 2 | `plan-evaluator` → `plan-adversary` (optional `sprint-contract-auditor` if done_criteria thin) |
-| 3 | `plan-evaluator` → `plan-adversary` |
-| 4 | `plan-evaluator` → `plan-adversary` → **`sprint-contract-auditor` (required)** |
+| Round | Lane spawns (sequential) | Messenger |
+|-------|--------------------------|-----------|
+| 1 | `hypothesis-validator` (blind) → `plan-evaluator` → `plan-adversary` | evaluator `claim` → adversary `rebuttal` (`in_reply_to` claim ids) |
+| 2 | `plan-evaluator` → `plan-adversary` | same |
+| 3 | `plan-evaluator` → `plan-adversary` | same |
+| 4 | `plan-evaluator` → `plan-adversary` → **`sprint-contract-auditor`** | same + audit message optional |
 
-Then `review-integrator` → `write_harness_yaml` → `artifacts/review-round-r{N}.yaml` → build bus envelope → `/harness-debate-round '<json>'`.
+Lane YAML + messenger claims/rebuttals are **auto-applied** when each debate subagent completes (`harness-debate-lane-applied` entry). You may also call `harness_debate_apply_lane` if fenced YAML was truncated.
 
-3. `/harness-debate-consensus` after round 4.
+Per round (no prose-only turns — **always call a tool**):
+
+1. Spawn lane agents (evaluator → adversary → integrator; R1/R4 extras per table).
+2. After each subagent: verify `harness-debate-next-step` message or run `harness_debate_round_status({ round_index: N })`.
+3. Before adversary: `harness_messenger_read_round` → include transcript in adversary task.
+4. After integrator: `harness_debate_submit_round({ round_index, integrator_draft })` (writes review-round + bus round + integrate message — **do not** `write_harness_yaml` review-round paths).
+
+5. `harness_debate_consensus` after round 4.
+
+**Never** echo `/harness-debate-*` in bash. **Never** end a turn during Phase 5 with only narration (e.g. "Let me post claims") — the next tool call must be in the **same** assistant message or immediately after `harness-debate-next-step`.
 
 **R1 blind rule:** hypothesis-validator prompt must exclude decomposition, scouts, PlanPacket, prior debate.
 

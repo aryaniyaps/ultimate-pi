@@ -56,6 +56,8 @@ import {
 	writeYamlFile,
 } from "../lib/harness-yaml.js";
 import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import { isReviewRoundArtifactPath } from "./lib/plan-debate-gate.js";
+import { isReviewRoundYamlWriteAllowed } from "./lib/plan-debate-write-guard.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
@@ -981,6 +983,22 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 						{
 							type: "text",
 							text: `Path not allowed: ${pathArg}. Must be under .pi/harness/runs/${runCtx.run_id}/ (artifacts/*.yaml, research-brief.yaml, etc.).`,
+						},
+					],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
+			const relForGate = pathArg.replace(/\\/g, "/");
+			if (
+				isReviewRoundArtifactPath(relForGate) &&
+				!isReviewRoundYamlWriteAllowed()
+			) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Blocked: ${pathArg} must be written via harness_debate_submit_round after lane YAML + messenger thread are complete. Parent sessions cannot author review-round files directly.`,
 						},
 					],
 					details: { path: pathArg },

@@ -20,8 +20,10 @@ import {
 	executeCreatePlan,
 	formatCreatePlanResultText,
 } from "./lib/plan-approval/create-plan.js";
-import { runPlanApprovalDialog } from "./lib/plan-approval/dialog.js";
-import { runPlanApprovalFallback } from "./lib/plan-approval/fallback.js";
+import {
+	buildPlanApprovalMarkdown,
+	runPlanApprovalDialog,
+} from "./lib/plan-approval/dialog.js";
 import { writePlanReviewMarkdown } from "./lib/plan-approval/plan-review.js";
 import {
 	renderApprovePlanCall,
@@ -42,6 +44,7 @@ import {
 	toApprovePlanToolDetails,
 	validateApprovePlanParams,
 } from "./lib/plan-approval/validate.js";
+import { validatePlanDebateGate } from "./lib/plan-debate-gate.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
@@ -65,18 +68,23 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				| {
 						plan_packet?: unknown;
 						human_summary?: string | null;
+						plan_markdown?: string | null;
 				  }
 				| undefined;
 			if (!data?.plan_packet) return undefined;
+			const contentText =
+				typeof message.content === "string" ? message.content : null;
 			const lines = renderHarnessPlanDraft(
 				{
 					plan_packet: data.plan_packet as Parameters<
 						typeof renderHarnessPlanDraft
 					>[0]["plan_packet"],
 					human_summary: data.human_summary,
+					plan_markdown: data.plan_markdown,
 				},
-				80,
+				120,
 				theme,
+				contentText,
 			);
 			return new Text(lines.join("\n"), 0, 0);
 		},
@@ -86,7 +94,7 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 		name: "approve_plan",
 		label: "Approve Plan",
 		description:
-			"Present a PlanPacket for user approval with a scrollable plan view. Parent /harness-plan orchestrator calls this after decomposition, hypothesis, and parallel reviews.",
+			"Present a PlanPacket for user approval: full plan markdown in the transcript, then Approve / Request changes / Cancel via the same prompt as ask_user. Parent /harness-plan orchestrator calls this after decomposition, hypothesis, and parallel reviews.",
 		promptSnippet: PROMPT_SNIPPET,
 		promptGuidelines: PROMPT_GUIDELINES,
 		parameters: ApprovePlanParamsSchema,
@@ -138,6 +146,25 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				`Plan ${planId} — pending your approval`;
 			const runCtx = getLatestRunContext(entries);
 			const projectRoot = process.cwd();
+			if (runCtx?.run_id) {
+				const gate = await validatePlanDebateGate(projectRoot, runCtx.run_id);
+				if (!gate.ok) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: `approve_plan blocked — plan debate gate incomplete:\n- ${gate.errors.join("\n- ")}`,
+							},
+						],
+						details: {
+							plan_packet: validated.plan_packet,
+							debate_gate: gate,
+							cancelled: true,
+						},
+						isError: true,
+					};
+				}
+			}
 			const reviewPath = await writePlanReviewMarkdown(
 				projectRoot,
 				runCtx,
@@ -148,10 +175,11 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 					status: "draft",
 				},
 			);
+			const planMarkdown = buildPlanApprovalMarkdown(validated);
 			const draftContent =
 				reviewPath != null
-					? `${summary}\nEditor review: ${reviewPath}`
-					: summary;
+					? `${planMarkdown}\n\n---\n\nEditor copy: \`${reviewPath}\``
+					: planMarkdown;
 			pi.sendMessage({
 				customType: "harness-plan-draft",
 				content: draftContent,
@@ -162,20 +190,16 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 					human_summary: validated.human_summary ?? null,
 					research_brief: validated.research_brief ?? null,
 					plan_review_path: reviewPath,
+					plan_markdown: planMarkdown,
 					shown_at: new Date().toISOString(),
 				},
 			});
 
-			let outcome: PlanApprovalDialogResult;
-			if (ctx.hasUI) {
-				outcome = await runPlanApprovalDialog(ctx.ui, validated, {
-					onMounted: () => {
-						pi.events.emit("plan-approval:mounted", {});
-					},
-				});
-			} else {
-				outcome = await runPlanApprovalFallback(ctx.ui, validated);
-			}
+			const outcome: PlanApprovalDialogResult = await runPlanApprovalDialog(
+				ctx.ui,
+				validated,
+				{ hasUI: ctx.hasUI },
+			);
 
 			const details = toApprovePlanToolDetails(
 				validated,
