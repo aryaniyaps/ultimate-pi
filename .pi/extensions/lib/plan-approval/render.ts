@@ -61,10 +61,16 @@ export function renderHarnessPlanDraft(
 	details: {
 		plan_packet?: PlanPacketLike;
 		human_summary?: string | null;
+		plan_markdown?: string | null;
 	},
 	width: number,
 	theme: Theme,
+	content?: string | null,
 ): string[] {
+	const markdown = content?.trim() || details.plan_markdown?.trim();
+	if (markdown) {
+		return markdown.split("\n").map((line) => truncateToWidth(line, width));
+	}
 	const lines: string[] = [];
 	lines.push(theme.fg("accent", "Harness plan (pending approval)"));
 	if (details.human_summary) {

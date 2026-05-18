@@ -1,21 +1,40 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import {
-	computePlanOverlayMaxHeight,
-	computePlanViewport,
-	PLAN_APPROVAL_BOTTOM_RESERVE_LINES,
-	PLAN_APPROVAL_AGENTS_TOP_RESERVE_LINES,
-} from "../.pi/extensions/lib/plan-approval/dialog.ts";
+import { buildPlanApprovalMarkdown } from "../.pi/extensions/lib/plan-approval/dialog.ts";
 
-test("computePlanViewport uses full available height minus chrome", () => {
-	const viewport = computePlanViewport(40, 12);
-	assert.equal(viewport, 28);
-	assert.ok(viewport > 10, "should exceed old 55% cap (~10 lines on 40-row terminal)");
-});
+const samplePacket = {
+	schema_version: "1.0.0",
+	contract_version: "1.0.0",
+	plan_id: "plan-001",
+	task_id: "task-001",
+	scope: "Implement plan approval as markdown plus ask_user-style prompt.",
+	assumptions: ["Pi UI available"],
+	risk_level: "med",
+	acceptance_checks: ["Full plan visible", "Inline approval options"],
+	rollback_plan: {
+		revert_commit_ready: true,
+		rollback_artifacts: {
+			revert_command: "git revert HEAD",
+			revert_branch: "main",
+			patch_bundle: "/tmp/plan.patch",
+		},
+	},
+};
 
-test("computePlanOverlayMaxHeight reserves bottom and agents bands", () => {
-	const maxH = computePlanOverlayMaxHeight(40);
-	const expected =
-		40 - PLAN_APPROVAL_BOTTOM_RESERVE_LINES - PLAN_APPROVAL_AGENTS_TOP_RESERVE_LINES;
-	assert.equal(maxH, expected);
+test("buildPlanApprovalMarkdown includes scope and acceptance checks", () => {
+	const md = buildPlanApprovalMarkdown({
+		plan_packet: samplePacket,
+		human_summary: "Live graph update system",
+		options: [
+			{ title: "Approve" },
+			{ title: "Request changes" },
+			{ title: "Cancel" },
+		],
+		displayMode: "inline",
+	});
+	assert.match(md, /^# Harness plan/m);
+	assert.match(md, /Live graph update system/);
+	assert.match(md, /Implement plan approval/);
+	assert.match(md, /Full plan visible/);
+	assert.match(md, /ask_user/);
 });

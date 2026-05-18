@@ -36,7 +36,7 @@ export function validateApprovePlanParams(
 		human_summary: params.human_summary?.trim() || undefined,
 		research_brief: params.research_brief ?? undefined,
 		options,
-		displayMode: params.displayMode ?? "overlay",
+		displayMode: params.displayMode ?? "inline",
 	};
 }
 
