@@ -28,4 +28,4 @@
 - **Project:** https://github.com/cocoindex-io/cocoindex-code  
 - **License:** Apache-2.0  
 - **Install:** `uv tool install 'cocoindex-code[full]'` (see `/harness-setup` §2.4)  
-- ultimate-pi vendors the upstream agent skill at [`.pi/skills/ccc/`](.pi/skills/ccc/) and bootstraps indexes via [`.pi/scripts/harness-cocoindex-bootstrap.sh`](.pi/scripts/harness-cocoindex-bootstrap.sh). Replaces deprecated `@beaconbay/ck-search`.
+- ultimate-pi vendors the upstream agent skill at [`.agents/skills/ccc/`](.agents/skills/ccc/) and bootstraps indexes via [`.pi/scripts/harness-cocoindex-bootstrap.sh`](.pi/scripts/harness-cocoindex-bootstrap.sh). Replaces deprecated `@beaconbay/ck-search`.

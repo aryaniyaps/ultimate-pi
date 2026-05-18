@@ -11,15 +11,9 @@ description: "This skill should be used when code search, file/directory summary
 
 The agent owns the `ccc` lifecycle for the current project — initialization, indexing, and searching. Do not ask the user to perform these steps; handle them automatically.
 
-- **Initialization**: If `ccc search` or `ccc index` fails with an initialization error (e.g., "Not in an initialized project directory"), run `bash "$UP_PKG/.pi/scripts/harness-cocoindex-bootstrap.sh"` from the project root (or `ccc init` + `ccc index` when not in ultimate-pi harness), then retry the original command.
+- **Initialization**: If `ccc search` or `ccc index` fails with an initialization error (e.g., "Not in an initialized project directory"), run `ccc init` from the project root directory, then `ccc index` to build the index, then retry the original command.
 - **Index freshness**: Keep the index up to date by running `ccc index` (or `ccc search --refresh`) when the index may be stale — e.g., at the start of a session, or after making significant code changes (new files, refactors, renamed modules). There is no need to re-index between consecutive searches if no code was changed in between.
 - **Installation**: If `ccc` itself is not found (command not found), refer to [management.md](references/management.md) for installation instructions and inform the user.
-
-### ultimate-pi harness
-
-- **Parent / main agents:** follow ownership above (`ccc index` when stale after large edits).
-- **`harness/planning/scout-semantic`:** use **`ccc search` only** — the harness runs incremental `ccc index` before subagent spawns. Never run `ccc index`, `ccc init`, or `ccc search --refresh` in scouts.
-- **Lane contract:** graphify = callers/communities/architecture; `ccc` = implementation-by-meaning (chunks). Do not use `ccc` for “who calls X” — use `graphify explain` / `graphify path`.
 
 ## Searching the Codebase
 
