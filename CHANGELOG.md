@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.12.0] — 2026-05-18
+
+### ✨ Features
+
+- **Harness subagents:** vendor `pi-subagents`; spawn budget, precheck, and policy bridge.
+- **Router spawn auth:** forward concrete provider/model + API key to subprocesses using `--no-extensions` (fixes planning scout 401 with `router/auto`).
+- **Plan review gate:** debate orchestration, execution-plan schemas, `write_harness_yaml`, plan-phase smoke fixture (ADR 0035).
+
+### 🔧 Chores
+
+- Stop tracking harness runtime and local graphify artifacts in git.
+
 ## [v0.11.0] — 2026-05-17
 
 ### ✨ Features
