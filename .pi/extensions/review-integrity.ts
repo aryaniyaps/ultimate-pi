@@ -1,9 +1,8 @@
 /**
  * review-integrity — enforce evaluator/adversary isolation from executor session.
  *
- * Parent orchestrators spawn review agents in isolated subagent sessions.
- * Direct review tools in the executor session are blocked; Agent/get_subagent_result
- * for harness review agents remain allowed.
+ * Parent orchestrators spawn review agents in isolated subprocesses via `subagent`.
+ * Direct review tools in the executor session are blocked.
  */
 
 import { appendFile, mkdir } from "node:fs/promises";
@@ -14,12 +13,6 @@ type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
 const INCIDENTS_DIR = join(process.cwd(), ".pi", "harness", "incidents");
 const INCIDENT_FILE = join(INCIDENTS_DIR, "review-integrity.jsonl");
-
-const ORCHESTRATION_TOOLS = new Set([
-	"Agent",
-	"get_subagent_result",
-	"steer_subagent",
-]);
 
 const REVIEW_SUBAGENT_TYPES = new Set([
 	"harness/evaluator",
@@ -104,15 +97,45 @@ function restoreState(ctx: {
 	};
 }
 
-function subagentTypeFromInput(
+function agentsFromSubagentInput(
 	input: Record<string, unknown> | undefined,
-): string {
-	if (!input) return "";
-	const direct = input.subagent_type;
-	if (typeof direct === "string") return direct;
-	const nested = input as { subagentType?: string };
-	if (typeof nested.subagentType === "string") return nested.subagentType;
-	return "";
+): string[] {
+	if (!input) return [];
+	const names: string[] = [];
+	if (typeof input.agent === "string") names.push(input.agent);
+	const tasks = input.tasks;
+	if (Array.isArray(tasks)) {
+		for (const t of tasks) {
+			if (
+				t &&
+				typeof t === "object" &&
+				typeof (t as { agent?: string }).agent === "string"
+			) {
+				names.push((t as { agent: string }).agent);
+			}
+		}
+	}
+	const chain = input.chain;
+	if (Array.isArray(chain)) {
+		for (const c of chain) {
+			if (
+				c &&
+				typeof c === "object" &&
+				typeof (c as { agent?: string }).agent === "string"
+			) {
+				names.push((c as { agent: string }).agent);
+			}
+		}
+	}
+	const agg = input.aggregator;
+	if (
+		agg &&
+		typeof agg === "object" &&
+		typeof (agg as { agent?: string }).agent === "string"
+	) {
+		names.push((agg as { agent: string }).agent);
+	}
+	return names;
 }
 
 async function appendIncident(payload: Record<string, unknown>): Promise<void> {
@@ -178,26 +201,26 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 				customType: "harness-review-integrity-hint",
 				display: true,
 				content: [
-					"Review phase in executor session: spawn harness/evaluator or harness/adversary via Agent (isolated subagent context).",
-					"Do not run review checks directly in this session — use get_subagent_result after spawn.",
+					"Review phase in executor session: spawn harness/evaluator or harness/adversary via subagent (isolated subprocess).",
+					"Do not run review checks directly in this session.",
 				].join("\n"),
 			},
 		};
 	});
 
 	pi.on("tool_call", async (event, ctx) => {
-		if (event.toolName === "Agent") {
-			const subagentType = subagentTypeFromInput(
+		if (event.toolName === "subagent") {
+			const agents = agentsFromSubagentInput(
 				event.input as Record<string, unknown> | undefined,
 			);
-			if (subagentType === EXECUTOR_SUBAGENT_TYPE) {
+			if (agents.includes(EXECUTOR_SUBAGENT_TYPE)) {
 				state.executorSessionId = ctx.sessionManager.getSessionId();
 				state.violationActive = false;
 				state.updatedAt = nowIso();
 				persist();
 				return undefined;
 			}
-			if (REVIEW_SUBAGENT_TYPES.has(subagentType)) {
+			if (agents.some((a) => REVIEW_SUBAGENT_TYPES.has(a))) {
 				state.violationActive = false;
 				state.updatedAt = nowIso();
 				persist();
@@ -207,10 +230,6 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 
 		if (!state.violationActive) return undefined;
 
-		if (ORCHESTRATION_TOOLS.has(event.toolName)) {
-			return undefined;
-		}
-
 		await appendIncident({
 			type: "review_integrity_violation",
 			session_id: ctx.sessionManager.getSessionId(),
@@ -218,13 +237,13 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 			reason:
 				"direct tool use in review phase while sharing executor session context",
 			mitigation:
-				"spawn harness/evaluator or harness/adversary via Agent instead",
+				"spawn harness/evaluator or harness/adversary via subagent instead",
 		});
 
 		return {
 			block: true,
 			reason:
-				"review-integrity: tool blocked in review phase — spawn an isolated review subagent via Agent.",
+				"review-integrity: tool blocked in review phase — spawn an isolated review subagent via subagent.",
 		};
 	});
 

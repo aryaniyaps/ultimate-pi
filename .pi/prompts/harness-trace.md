@@ -20,10 +20,10 @@ Happy path: omit `--run`.
 2. Spawn:
 
 ```
-Agent({ subagent_type: "harness/trace-librarian", prompt: "…" })
+subagent({ agentScope: "both", agent: "harness/trace-librarian", task: "…" })
 ```
 
-3. `get_subagent_result` — present timeline and artifact index to user.
+3. Present timeline and artifact index from tool result to user.
 
 ## Completion
 

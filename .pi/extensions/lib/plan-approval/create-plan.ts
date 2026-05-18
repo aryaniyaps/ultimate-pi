@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import {
 	canonicalPlanPath,
@@ -9,6 +9,7 @@ import {
 	saveRunContextToDisk,
 	validatePlanPacket,
 } from "../../../lib/harness-run-context.js";
+import { writeYamlFile } from "../../../lib/harness-yaml.js";
 import { writePlanReviewMarkdown } from "./plan-review.js";
 
 export const CREATE_PLAN_SNIPPET =
@@ -17,7 +18,7 @@ export const CREATE_PLAN_SNIPPET =
 export const CREATE_PLAN_GUIDELINES = [
 	"Call create_plan only after the user approves via approve_plan (Approve selection).",
 	"Pass the same plan_packet you showed in approve_plan — path is resolved automatically.",
-	"Never use write or edit for plan-packet.json; create_plan is the only allowed plan write.",
+	"Never use write or edit for plan-packet.yaml; create_plan is the only allowed plan write.",
 ];
 
 export interface CreatePlanDeps {
@@ -89,11 +90,7 @@ export async function executeCreatePlan(
 
 	try {
 		await mkdir(dirname(planPath), { recursive: true });
-		await writeFile(
-			planPath,
-			`${JSON.stringify(planPacket, null, 2)}\n`,
-			"utf-8",
-		);
+		await writeYamlFile(planPath, planPacket);
 	} catch (err) {
 		const msg = err instanceof Error ? err.message : String(err);
 		return { ok: false, error: `create_plan: write failed — ${msg}` };

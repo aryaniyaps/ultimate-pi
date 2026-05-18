@@ -7,8 +7,8 @@ import {
 	classifyHarnessAgent,
 	evaluateHarnessSubagentToolCall,
 	isHarnessPlanningAgent,
-} from "../.pi/extensions/lib/harness-subagents/harness-subagent-policy.ts";
-import { evaluateSubagentToolCall } from "../.pi/extensions/lib/harness-subagents/spawn-policy.ts";
+} from "../.pi/extensions/lib/harness-subagent-policy.ts";
+import { evaluateSubagentToolCall } from "../.pi/extensions/lib/spawn-policy.ts";
 import { parseHarnessAgentJson } from "../.pi/lib/harness-agent-output.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -45,20 +45,20 @@ test("executor allows write", () => {
 	assert.equal(write.action, "allow");
 });
 
-test("planning decompose and hypothesis-eval classified as planner read-only", () => {
+test("planning decompose and hypothesis-validator classified as planner read-only", () => {
 	assert.equal(classifyHarnessAgent("harness/planning/decompose"), "planner");
 	assert.equal(
 		classifyHarnessAgent("harness/planning/hypothesis"),
 		"planner",
 	);
 	assert.equal(
-		classifyHarnessAgent("harness/planning/hypothesis-eval"),
+		classifyHarnessAgent("harness/planning/hypothesis-validator"),
 		"planner",
 	);
 	const evalWrite = evaluateHarnessSubagentToolCall(
 		"write",
 		{ path: "src/a.ts", content: "x" },
-		"harness/planning/hypothesis-eval",
+		"harness/planning/hypothesis-validator",
 	);
 	assert.equal(evalWrite.action, "block");
 });
@@ -107,12 +107,14 @@ test("harness-plan prompt references Darwin pipeline agents not planner spawn", 
 	assert.match(planPrompt, /harness\/planning\/scout-graphify/);
 	assert.match(planPrompt, /harness\/planning\/decompose/);
 	assert.match(planPrompt, /harness\/planning\/hypothesis/);
-	assert.match(planPrompt, /harness\/planning\/hypothesis-eval/);
+	assert.match(planPrompt, /harness\/planning\/hypothesis-validator/);
+	assert.match(planPrompt, /harness\/planning\/stack-researcher/);
+	assert.match(planPrompt, /validate-plan-dag/);
 	assert.match(planPrompt, /research_brief/);
 	assert.match(planPrompt, /approve_plan/);
 	assert.match(planPrompt, /create_plan/);
-	assert.match(planPrompt, /Do \*\*not\*\* spawn.*harness\/planner/);
-	assert.doesNotMatch(planPrompt, /spawn.*harness\/planner.*once/i);
+	assert.doesNotMatch(planPrompt, /harness\/planner/);
+	assert.doesNotMatch(planPrompt, /harness\/planning\/planner/);
 });
 
 test("planning scouts block ask_user via spawn policy", () => {
@@ -126,12 +128,12 @@ test("planning scouts block ask_user via spawn policy", () => {
 test("approve_plan and create_plan blocked in all subagents", () => {
 	const approve = evaluateSubagentToolCall(
 		"approve_plan",
-		"harness/planning/plan-adversary",
+		"harness/planning/hypothesis-validator",
 	);
 	assert.equal(approve.action, "block");
 	const create = evaluateSubagentToolCall(
 		"create_plan",
-		"harness/planner",
+		"harness/planning/decompose",
 	);
 	assert.equal(create.action, "block");
 });
@@ -143,13 +145,4 @@ test("planning scout agent disallows approve_plan in frontmatter", () => {
 	);
 	assert.match(scout, /disallowed_tools:.*approve_plan/);
 	assert.match(scout, /lane.*graphify/);
-});
-
-test("deprecated harness planner shim says do not spawn", () => {
-	const shim = readFileSync(
-		join(root, ".pi/agents/harness/planner.md"),
-		"utf-8",
-	);
-	assert.match(shim, /DEPRECATED/i);
-	assert.match(shim, /Do not spawn/i);
 });

@@ -46,7 +46,17 @@
 			"minItems": 2,
 			"items": {
 				"type": "string",
-				"enum": ["EvaluatorAgent", "AdversaryAgent", "TieBreakerAgent"]
+				"enum": [
+					"EvaluatorAgent",
+					"AdversaryAgent",
+					"TieBreakerAgent",
+					"PlanEvaluatorAgent",
+					"PlanAdversaryAgent",
+					"HypothesisValidatorAgent",
+					"SprintContractAuditorAgent",
+					"ReviewIntegratorAgent",
+					"StackResearchAgent"
+				]
 			}
 		},
 		"claims": {
@@ -80,7 +90,7 @@
 					"additionalProperties": {
 						"type": "integer",
 						"minimum": 0,
-						"maximum": 2500
+						"maximum": 35000
 					}
 				},
 				"round_total": {
@@ -101,19 +111,16 @@
 			"properties": {
 				"name": {
 					"type": "string",
-					"const": "aggressive"
+					"enum": ["aggressive", "plan"]
 				},
 				"max_rounds": {
-					"type": "integer",
-					"const": 6
+					"type": "integer"
 				},
 				"round_token_cap": {
-					"type": "integer",
-					"const": 2500
+					"type": "integer"
 				},
 				"debate_global_cap": {
-					"type": "integer",
-					"const": 35000
+					"type": "integer"
 				}
 			}
 		},

@@ -245,7 +245,7 @@ export function formatPlanPacketMarkdown(
 		);
 	} else if (status === "approved") {
 		lines.push(
-			"Approved in the harness TUI. Waiting for `create_plan` to write `plan-packet.json`, or run `/harness-plan-commit` if that step failed.",
+			"Approved in the harness TUI. Waiting for `create_plan` to write `plan-packet.yaml`, or run `/harness-plan-commit` if that step failed.",
 		);
 	} else {
 		lines.push(

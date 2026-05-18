@@ -345,7 +345,7 @@ Verify each package:
 |---------|---------|-------|
 | `@posthog/pi` | Analytics event capture | F0 |
 | `pi-lean-ctx` | Context runtime (read/bash/find/grep/MCP bridge) | F0 |
-| `harness-subagents` (bundled extension) | L4 sub-agent spawn, blackboard, package agents | P16 |
+| `harness-subagents` (bundled extension) | L4 `subagent` tool, subprocess spawns, package agents | P16 |
 | Vendored `pi-vcc` (`vendor/pi-vcc`, `.pi/extensions/ultimate-pi-vcc.ts`) | VCC compaction / `vcc_recall` — env-only: `HARNESS_VCC_COMPACTION` (default on), `HARNESS_VCC_DEBUG` | Shipped |
 | `pi-model-router` | Vendored (`vendor/`); activates after `.pi/model-router.json` exists | F0 |
 

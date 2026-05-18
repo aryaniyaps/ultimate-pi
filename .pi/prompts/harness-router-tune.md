@@ -22,7 +22,7 @@ If missing required args:
 2. Optionally spawn:
 
 ```
-Agent({ subagent_type: "harness/meta-optimizer", prompt: "mode: tune, evidence paths…" })
+subagent({ agentScope: "both", agent: "harness/meta-optimizer", task: "mode: tune, evidence paths…" })
 ```
 
 3. Parent runs proposal script:

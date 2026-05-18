@@ -35,7 +35,7 @@ function runCtx(runId, projectRoot) {
 	};
 }
 
-test("isCanonicalPlanPacketPath accepts only plan-packet.json", () => {
+test("isCanonicalPlanPacketPath accepts only plan-packet.yaml", () => {
 	const root = "/proj";
 	const runId = "run-abc";
 	const ok = canonicalPlanPath(runId, root);
@@ -69,7 +69,7 @@ test("isPlanPhaseScopedWrite allows canonical plan path only", async () => {
 	);
 });
 
-test("isPlanPhaseAllowedMutation blocks plan write without approval", async () => {
+test("isPlanPhaseAllowedMutation allows draft plan yaml without approval", async () => {
 	const root = await mkdtemp(join(tmpdir(), "harness-plan-"));
 	const runId = "run-002";
 	const ctx = runCtx(runId, root);
@@ -82,7 +82,7 @@ test("isPlanPhaseAllowedMutation blocks plan write without approval", async () =
 			data: { run_id: runId, command: "harness-plan" },
 		},
 	];
-	const blocked = await isPlanPhaseAllowedMutation(
+	const draft = await isPlanPhaseAllowedMutation(
 		"write",
 		{ path: planPath },
 		"plan",
@@ -90,8 +90,8 @@ test("isPlanPhaseAllowedMutation blocks plan write without approval", async () =
 		root,
 		{ aborted: false, entries, currentSessionId: "sess-1" },
 	);
-	assert.equal(blocked.allowed, false);
-	assert.match(blocked.reason ?? "", /ask_user/i);
+	assert.equal(draft.allowed, true);
+	assert.equal(draft.isScopedPlanWrite, true);
 });
 
 test("isPlanPhaseAllowedMutation allows plan write after ask_user Approve", async () => {
@@ -190,7 +190,7 @@ test("isPlanPhaseScopedWrite rejects symlink escape", async () => {
 	await mkdir(runDir, { recursive: true });
 	const outside = join(root, "outside.txt");
 	await writeFile(outside, "secret", "utf-8");
-	const linkPath = join(runDir, "plan-packet.json");
+	const linkPath = join(runDir, "plan-packet.yaml");
 	try {
 		await symlink(outside, linkPath);
 	} catch {

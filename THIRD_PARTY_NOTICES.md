@@ -14,3 +14,11 @@
 - **License:** MIT (see upstream repository)  
 - **Pinned revision:** See [vendor/pi-vcc/UPSTREAM_PIN.md](vendor/pi-vcc/UPSTREAM_PIN.md)  
 - ultimate-pi loads it from [`vendor/pi-vcc`](vendor/pi-vcc) via [`.pi/extensions/ultimate-pi-vcc.ts`](.pi/extensions/ultimate-pi-vcc.ts). Harness configuration is env-only: `HARNESS_VCC_COMPACTION`, `HARNESS_VCC_DEBUG` ([`.pi/extensions/lib/harness-vcc-settings.ts`](.pi/extensions/lib/harness-vcc-settings.ts)). Maintainer refresh: `npm run vendor:sync-vcc`.
+
+## pi-subagents (vendored)
+
+- **Project:** https://github.com/narumiruna/pi-extensions (`extensions/pi-subagents`)  
+- **npm:** `@narumitw/pi-subagents@0.1.26`  
+- **License:** MIT ([vendor/pi-subagents/LICENSE](vendor/pi-subagents/LICENSE))  
+- **Pinned revision:** See [vendor/pi-subagents/UPSTREAM_PIN.md](vendor/pi-subagents/UPSTREAM_PIN.md)  
+- ultimate-pi loads it from [`vendor/pi-subagents`](vendor/pi-subagents) via [`.pi/extensions/harness-subagents.ts`](.pi/extensions/harness-subagents.ts) with harness discovery, spawn gates, and subprocess env. Maintainer refresh: `npm run vendor:sync-subagents`.

@@ -202,32 +202,41 @@ async function main() {
 	if (!(await fileExists(runCtxLib))) fail("missing lib/harness-run-context.ts");
 	ok("lib/harness-run-context.ts");
 
-	const vendoredIndex = join(
+	const subagentsVendor = join(
+		ROOT,
+		"vendor",
+		"pi-subagents",
+		"src",
+		"subagents.ts",
+	);
+	if (!(await fileExists(subagentsVendor))) {
+		fail("missing vendor/pi-subagents/src/subagents.ts");
+	}
+	const bridgePath = join(
 		ROOT,
 		".pi",
 		"extensions",
 		"lib",
-		"harness-subagents",
-		"vendored",
-		"index.ts",
+		"harness-subagents-bridge.ts",
 	);
-	const vendoredSrc = await readFile(vendoredIndex, "utf-8");
-	const runCtxImport = vendoredSrc.match(
-		/from ["']([^"']*harness-run-context\.js)["']/,
-	);
-	if (!runCtxImport) {
-		fail("vendored/index.ts must import harness-run-context.js");
+	if (!(await fileExists(bridgePath))) {
+		fail("missing harness-subagents-bridge.ts");
 	}
-	const runCtxImportPath = resolve(
-		dirname(vendoredIndex),
-		runCtxImport[1].replace(/\.js$/, ".ts"),
-	);
-	if (runCtxImportPath !== runCtxLib) {
-		fail(
-			`vendored/index.ts harness-run-context import resolves to ${runCtxImportPath}, expected ${runCtxLib}`,
-		);
+	const bridgeSrc = await readFile(bridgePath, "utf-8");
+	if (!bridgeSrc.includes("precheckHarnessSubagentSpawn")) {
+		fail("harness-subagents-bridge must run precheckHarnessSubagentSpawn");
 	}
-	ok("vendored/index.ts harness-run-context import path");
+	if (!bridgeSrc.includes("packageRoot")) {
+		fail("harness-subagents-bridge must pass packageRoot for agent discovery");
+	}
+	const subagentsSrc = await readFile(subagentsVendor, "utf-8");
+	if (!subagentsSrc.includes("discoverAgents")) {
+		fail("vendor subagents.ts must implement discoverAgents");
+	}
+	if (!subagentsSrc.includes("packageRoot")) {
+		fail("vendor subagents.ts must pass packageRoot into discovery");
+	}
+	ok("vendor pi-subagents + harness bridge");
 
 	const policyGateSrc = await readFile(
 		join(ROOT, ".pi", "extensions", "policy-gate.ts"),

@@ -71,5 +71,5 @@ Parent orchestrator calls **`approve_plan`** with the full `plan_packet` (scroll
 ## Who calls what
 
 - **Parent orchestrator** during `/harness-plan` — `ask_user` for clarification; **`approve_plan`** then **`create_plan`** for the plan file.
-- `harness/planning/*` (scouts, decompose, hypothesis, plan-adversary, hypothesis-eval) — JSON only; no `ask_user` / `approve_plan` / `create_plan`.
+- `harness/planning/*` (scouts, decompose, hypothesis, hypothesis-eval) — JSON only; no `ask_user` / `approve_plan` / `create_plan`.
 - `harness/evaluator`, `harness/adversary`, and `harness/tie-breaker` — emit `human_required`; the **parent orchestrator** calls `ask_user`.

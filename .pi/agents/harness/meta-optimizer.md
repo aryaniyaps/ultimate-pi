@@ -5,7 +5,6 @@ extensions: false
 disallowed_tools: ask_user
 thinking: high
 max_turns: 25
-inherit_context: false
 ---
 
 You are the Harness Meta Optimizer.

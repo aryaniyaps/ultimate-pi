@@ -1,0 +1,68 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-review-round-draft.schema.json",
+	"title": "PlanReviewRoundDraft",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"round_index",
+		"round_summary",
+		"review_gate_ready",
+		"recommended_packet_patches"
+	],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"round_index": { "type": "integer", "minimum": 1, "maximum": 4 },
+		"debate_round_focus": {
+			"type": "string",
+			"enum": ["spec", "wbs", "schedule", "quality"]
+		},
+		"round_summary": { "type": "string", "minLength": 1 },
+		"validation_summary": { "type": "string" },
+		"adversary_summary": { "type": "string" },
+		"disputes": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"recommended_packet_patches": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": ["path", "value"],
+				"properties": {
+					"path": { "type": "string", "minLength": 1 },
+					"value": {}
+				}
+			}
+		},
+		"review_gate_ready": { "type": "boolean" },
+		"participants": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"claims": { "type": "array", "items": { "type": "string" } },
+		"rebuttals": { "type": "array", "items": { "type": "string" } },
+		"evidence_refs": { "type": "array", "items": { "type": "string" } },
+		"token_usage": {
+			"type": "object",
+			"properties": {
+				"per_agent": {
+					"type": "object",
+					"additionalProperties": { "type": "number" }
+				},
+				"round_total": { "type": "number" }
+			}
+		},
+		"consensus_delta": { "type": "number" },
+		"severity_scores": {
+			"type": "object",
+			"properties": {
+				"correctness": { "type": "number" },
+				"security": { "type": "number" },
+				"architecture": { "type": "number" },
+				"test_integrity": { "type": "number" }
+			}
+		}
+	}
+}

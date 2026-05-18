@@ -5,7 +5,7 @@ argument-hint: "\"<task>\" [--quick] [--risk low|med|high] [--budget <amount>]"
 
 # harness-auto
 
-Pipeline orchestrator — one session, sequential `Agent` spawns. Invoke **harness-orchestration** skill for agent IDs. Do **not** implement or review inline.
+Pipeline orchestrator — one session, sequential phase handoffs. Invoke **harness-orchestration** skill for agent IDs. Do **not** implement or review inline.
 
 ## Step 0 — Parse arguments
 
@@ -18,20 +18,22 @@ If task missing:
 
 ## Orchestration (required) — same session
 
-1. **Plan** — follow `/harness-plan` parent orchestration (parallel `harness/planning/scout-*`, `decompose`, `hypothesis`, draft PlanPacket, `ask_user` on fork, parallel `plan-adversary` + `hypothesis-eval`, parent `approve_plan` + `create_plan`). Do not spawn `harness/planner`. No second approval pass.
-2. **Execute** — spawn `harness/executor` with `HarnessSpawnContext` (`mode: execute`). Summarize handoff bullets for next spawn (do not paste full subagent log).
-3. **Eval** — spawn `harness/evaluator` (`mode: benchmark`) after parent scripts if needed.
-4. **Review** — spawn `harness/evaluator` (`mode: verdict`) OR rely on eval verdict if policy allows — prefer both when strict gates require.
-5. **Adversary** — spawn `harness/adversary` with artifact paths.
-6. **Tie-breaker** — spawn `harness/tie-breaker` only if debate unresolved.
+Follow **harness-plan** performance rules (`subagent` with parallel `tasks`, `agentScope: "both"`).
+
+1. **Plan** — follow `/harness-plan` (parallel scouts → parallel decompose/hypothesis → draft PlanPacket → debate rounds → parent `approve_plan` + `create_plan`). No second approval pass.
+2. **Execute** — `subagent({ agent: "harness/executor", task: "<HarnessSpawnContext mode execute>" })`; summarize handoff bullets only (do not paste full subprocess log).
+3. **Eval** — `subagent({ agent: "harness/evaluator", task: "<mode benchmark>" })` after parent scripts if needed.
+4. **Review** — `subagent({ agent: "harness/evaluator", task: "<mode verdict>" })` when strict gates require.
+5. **Adversary** — `subagent({ agent: "harness/adversary", ... })`. **Skip when `--quick`**.
+6. **Tie-breaker** — `subagent({ agent: "harness/tie-breaker", ... })` only if debate unresolved and **not** `--quick`.
 7. **Parent** — apply locked strict gates below; commit/PR only if all pass.
 
-No new Pi session for review — subagents use isolated context (`inherit_context: false`).
+Review agents run in isolated subprocesses via `subagent` (same parent session).
 
 ## Locked decisions (do not change)
 
 - Always produce and approve plan before mutation.
-- Adversarial review always required.
+- Adversarial review always required **except** `--quick` (evaluator-only gate).
 - Severity-policy-engine blocks merge.
 - Router tuning propose-and-approve only.
 - Plan ambiguity → parent `ask_user` (harness-decisions).
@@ -41,11 +43,11 @@ No new Pi session for review — subagents use isolated context (`inherit_contex
 
 ## Strict gates
 
-Block commit/PR if any fails: plan gate, execution in scope, evaluator pass, adversary complete, severity-policy pass/conditional_pass, benchmark deltas, rollback artifacts.
+Block commit/PR if any fails: plan gate, execution in scope, evaluator pass, adversary complete (unless `--quick`), severity-policy pass/conditional_pass, benchmark deltas, rollback artifacts.
 
 ## Notes
 
-- `--quick` reduces breadth, never safety gates.
+- `--quick` reduces breadth (skips semantic scout, post-run adversary, tie-breaker), never core safety gates on plan approval or evaluator.
 - High risk/ambiguity → stop and recommend manual `/harness-plan` with `ask_user`.
 - Interrupt: `/harness-abort [reason]` then `/harness-plan`.
 - Artifact refs under active run dir; `/harness-run-status` or `/harness-trace-last` for handoff.

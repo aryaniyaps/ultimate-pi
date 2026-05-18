@@ -22,7 +22,12 @@ export type HarnessPostHogEventName =
 	| "harness_drift_report"
 	| "harness_eval_verdict"
 	| "harness_sentrux_signal"
-	| "harness_observation";
+	| "harness_observation"
+	| "harness_subagent_spawned"
+	| "harness_subagent_completed"
+	| "harness_subagent_result_wait"
+	| "harness_subagent_setup"
+	| "harness_blackboard_op";
 
 const SCHEMA_VERSION = "1.0.0";
 

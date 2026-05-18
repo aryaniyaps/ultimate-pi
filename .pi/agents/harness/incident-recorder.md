@@ -4,7 +4,6 @@ tools: read, grep, find, ls
 extensions: false
 thinking: medium
 max_turns: 15
-inherit_context: false
 ---
 
 You are the Harness Incident Recorder.

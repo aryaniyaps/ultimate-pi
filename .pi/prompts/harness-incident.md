@@ -22,10 +22,10 @@ If `--trigger` missing:
 2. Spawn:
 
 ```
-Agent({ subagent_type: "harness/incident-recorder", prompt: "…" })
+subagent({ agentScope: "both", agent: "harness/incident-recorder", task: "…" })
 ```
 
-3. `get_subagent_result` — validate `IncidentRecord` draft; parent writes under `.pi/harness/incidents/`.
+3. Parse `IncidentRecord` JSON from tool result; parent writes under `.pi/harness/incidents/`.
 
 ## Completion
 

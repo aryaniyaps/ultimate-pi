@@ -2,7 +2,7 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-packet.schema.json",
 	"title": "PlanPacket",
-	"description": "Plan-gated mutation contract emitted before execution.",
+	"description": "Plan-gated mutation contract emitted before execution (instance files: plan-packet.yaml).",
 	"type": "object",
 	"additionalProperties": false,
 	"required": [
@@ -14,7 +14,8 @@
 		"assumptions",
 		"risk_level",
 		"acceptance_checks",
-		"rollback_plan"
+		"rollback_plan",
+		"execution_plan"
 	],
 	"properties": {
 		"schema_version": {
@@ -23,7 +24,7 @@
 		},
 		"contract_version": {
 			"type": "string",
-			"const": "1.0.0"
+			"enum": ["1.0.0", "1.1.0"]
 		},
 		"plan_id": {
 			"type": "string",
@@ -52,8 +53,13 @@
 			"type": "array",
 			"minItems": 1,
 			"items": {
-				"type": "string",
-				"minLength": 1
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["id", "description"],
+				"properties": {
+					"id": { "type": "string", "pattern": "^AC-[0-9]+$" },
+					"description": { "type": "string", "minLength": 1 }
+				}
 			}
 		},
 		"rollback_plan": {
@@ -85,6 +91,9 @@
 					}
 				}
 			}
+		},
+		"execution_plan": {
+			"$ref": "plan-execution-plan.schema.json"
 		}
 	}
 }

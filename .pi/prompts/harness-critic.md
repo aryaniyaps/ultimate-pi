@@ -20,10 +20,10 @@ Happy path: omit `--run`.
 2. Spawn:
 
 ```
-Agent({ subagent_type: "harness/adversary", prompt: "…" })
+subagent({ agentScope: "both", agent: "harness/adversary", task: "…" })
 ```
 
-3. `get_subagent_result` — parse `AdversaryReport` JSON; parent persists for severity policy.
+3. Parse `AdversaryReport` JSON from tool result; parent persists for severity policy.
 
 ## Parent rules
 
