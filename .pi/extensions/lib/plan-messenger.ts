@@ -238,7 +238,7 @@ export async function getMessengerRoundState(
 
 export function messengerRoundDebateReady(
 	round: MessengerRoundState | null,
-	requireSprintAudit: boolean,
+	_requireSprintAudit: boolean,
 ): { ok: boolean; errors: string[] } {
 	const errors: string[] = [];
 	if (!round) {

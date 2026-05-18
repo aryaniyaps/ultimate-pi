@@ -60,7 +60,7 @@ export function assessPlanScopeDrift(
 
 	const taskProduct = markerHits(taskSummary, PRODUCT_OS_MARKERS);
 	const decompProduct = markerHits(decompositionText, PRODUCT_OS_MARKERS);
-	const taskInfra = markerHits(taskSummary, INFRA_MARKERS);
+	const _taskInfra = markerHits(taskSummary, INFRA_MARKERS);
 	const decompInfra = markerHits(decompositionText, INFRA_MARKERS);
 
 	const productIntent = taskProduct >= 2;

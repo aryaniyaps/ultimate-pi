@@ -141,7 +141,7 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 			}
 
 			const planId = String(validated.plan_packet.plan_id ?? "plan");
-			const summary =
+			const _summary =
 				validated.human_summary?.trim() ||
 				`Plan ${planId} — pending your approval`;
 			const runCtx = getLatestRunContext(entries);

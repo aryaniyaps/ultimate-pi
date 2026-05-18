@@ -5,7 +5,6 @@
 import { constants } from "node:fs";
 import { access, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import type { DebateParticipant } from "../../lib/debate-orchestrator-types.js";
 import {
 	parseStructuredDocument,
 	writeYamlFile,
