@@ -4,6 +4,17 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.15.0] — 2026-05-19
+
+### ✨ Features
+
+- **Live widget:** Single-row footer with current/next pipeline phase and plain-language status hints; removes inFlight, policy jargon, and flag rows.
+- **Plan phase:** Implementation researcher, selective debate lanes/eligibility, planning rubrics, ADR 0036, and smoke fixture updates.
+
+### ✅ Tests
+
+- Add `harness-live-widget-status` and `plan-debate-eligibility` tests.
+
 ## [v0.14.0] — 2026-05-18
 
 ### ✨ Features
