@@ -42,7 +42,7 @@ LIMIT 30
 
 | Command | `agent` |
 |---------|---------|
-| `/harness-plan` | Parent: parallel `harness/planning/scout-*` → parallel `decompose`+`hypothesis` → PlanPacket → reviews; `approve_plan` + `create_plan` |
+| `/harness-plan` | Parent: scouts → `decompose`+`hypothesis` → Phase 3.5 `implementation-researcher`+`stack-researcher` → PlanPacket → eligibility + Review Gate → `approve_plan` + `create_plan` |
 | `/harness-run` | `harness/executor` |
 | `/harness-eval` | `harness/evaluator` (`mode: benchmark`) |
 | `/harness-review` | `harness/evaluator` (`mode: verdict`) |
@@ -78,7 +78,7 @@ Spawn `harness/evaluator` / `harness/adversary` via `subagent` in the **same** p
 }
 ```
 
-Then parallel decompose + hypothesis, parent PlanPacket + `ask_user`, debate rounds via `subagent` or `debate-orchestrator`, then `approve_plan` + `create_plan`.
+Then parallel decompose + hypothesis, Phase 3.5 implementation + stack research, parent PlanPacket + `ask_user` (after 3.5), execution-plan-author, DAG gate, `harness_plan_debate_eligibility` + debate rounds, then `approve_plan` + `create_plan`.
 
 Scouts use **Haiku**, `thinking: low`, **8** max turns (see agent frontmatter). Effective `--tools` omits `grep`/`find`/`subagent` per `disallowed_tools`.
 

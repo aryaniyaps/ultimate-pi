@@ -1,7 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { planDebateIdForRun, normalizePlanDebateId } from "../.pi/extensions/lib/plan-debate-id.ts";
-import { messengerRoundDebateReady } from "../.pi/extensions/lib/plan-messenger.ts";
+import {
+	messengerRoundDebateReady,
+	messengerRoundDialogueReady,
+} from "../.pi/extensions/lib/plan-messenger.ts";
 import { validateIntegratorDraft } from "../.pi/extensions/lib/plan-review-integrator-rules.ts";
 import { assessPlanScopeDrift } from "../.pi/extensions/lib/plan-scope-guard.ts";
 import { isReviewRoundArtifactPath } from "../.pi/extensions/lib/plan-debate-gate.ts";
@@ -20,7 +23,26 @@ test("normalizePlanDebateId rewrites plan-<plan_id>", () => {
 	assert.equal(r.corrected, true);
 });
 
-test("messengerRoundDebateReady requires claims and rebuttals", () => {
+test("messengerRoundDialogueReady requires settled claims", () => {
+	const ok = messengerRoundDialogueReady(
+		{
+			round_index: 1,
+			evaluator_posted: true,
+			adversary_posted: true,
+			integrator_posted: false,
+			claim_count: 2,
+			rebuttal_count: 1,
+			exchange_count: 2,
+			unresolved_claim_ids: [],
+		},
+		{ max_exchanges_per_round: 3 },
+	);
+	assert.equal(ok.ok, true);
+	const bad = messengerRoundDialogueReady(null, { max_exchanges_per_round: 3 });
+	assert.equal(bad.ok, false);
+});
+
+test("messengerRoundDebateReady requires integrator after dialogue", () => {
 	const ok = messengerRoundDebateReady(
 		{
 			round_index: 1,
@@ -29,12 +51,13 @@ test("messengerRoundDebateReady requires claims and rebuttals", () => {
 			integrator_posted: true,
 			claim_count: 2,
 			rebuttal_count: 1,
+			exchange_count: 1,
+			unresolved_claim_ids: [],
 		},
 		false,
+		{ max_exchanges_per_round: 3 },
 	);
 	assert.equal(ok.ok, true);
-	const bad = messengerRoundDebateReady(null, false);
-	assert.equal(bad.ok, false);
 });
 
 test("integrator requires disputes when checks fail", () => {

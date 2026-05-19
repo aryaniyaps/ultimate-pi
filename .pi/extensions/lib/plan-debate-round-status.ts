@@ -5,10 +5,18 @@
 import { constants } from "node:fs";
 import { access } from "node:fs/promises";
 import { join } from "node:path";
-import { type DebateLaneKind, laneArtifactPath } from "./plan-debate-lane.js";
+import { capsForDebate } from "./debate-bus-core.js";
+import {
+	type PlanDebateFocus,
+	readDebateRoundFocus,
+} from "./plan-debate-focus.js";
+import { planDebateIdForRun } from "./plan-debate-id.js";
+import { laneArtifactPath } from "./plan-debate-lane.js";
+import { lanesForRound } from "./plan-debate-lanes.js";
 import {
 	getMessengerRoundState,
-	messengerRoundDebateReady,
+	loadMessengerState,
+	messengerRoundDialogueReady,
 } from "./plan-messenger.js";
 
 async function exists(path: string): Promise<boolean> {
@@ -20,39 +28,50 @@ async function exists(path: string): Promise<boolean> {
 	}
 }
 
-function lanesForRound(roundIndex: number): DebateLaneKind[] {
-	const lanes: DebateLaneKind[] = ["validation-turn", "adversary-brief"];
-	if (roundIndex === 1) lanes.unshift("hypothesis-validation");
-	if (roundIndex === 4) lanes.push("sprint-audit");
-	return lanes;
-}
-
 export interface RoundStatusResult {
 	round_index: number;
-	/** Lane YAML + messenger thread complete; spawn integrator next. */
+	/** Lane YAML + messenger dialogue complete; spawn integrator next. */
 	ready_for_integrator: boolean;
 	/** review-round-rN.yaml on disk (call harness_debate_submit_round if bus not updated). */
 	review_round_on_disk: boolean;
 	missing: string[];
 	next_tool?: string;
 	messenger: { ok: boolean; errors: string[] };
+	dialogue: { ok: boolean; errors: string[] };
+	unresolved_claim_ids: string[];
+	exchange_count: number;
+	debate_round_focus?: PlanDebateFocus | null;
 }
 
 export async function getPlanDebateRoundStatus(
 	runDir: string,
 	roundIndex: number,
+	runId?: string,
+	opts?: { debate_round_focus?: PlanDebateFocus },
 ): Promise<RoundStatusResult> {
+	const focus =
+		opts?.debate_round_focus ??
+		(await readDebateRoundFocus(runDir, roundIndex));
 	const missing: string[] = [];
-	for (const lane of lanesForRound(roundIndex)) {
+	for (const lane of lanesForRound(roundIndex, focus)) {
 		const rel = laneArtifactPath(lane, roundIndex);
 		if (!(await exists(join(runDir, rel)))) {
 			missing.push(rel);
 		}
 	}
+	const messengerState = await loadMessengerState(runDir);
+	const profile = messengerState?.debate_profile;
+	const caps = capsForDebate(
+		runId ? planDebateIdForRun(runId) : `plan-${runId ?? "unknown"}`,
+		profile,
+	);
 	const roundState = await getMessengerRoundState(runDir, roundIndex);
-	const messenger = messengerRoundDebateReady(roundState, roundIndex === 4);
-	if (!messenger.ok) {
-		missing.push(...messenger.errors.map((e) => `messenger: ${e}`));
+	const dialogueOpts = {
+		max_exchanges_per_round: caps.max_exchanges_per_round,
+	};
+	const dialogue = messengerRoundDialogueReady(roundState, dialogueOpts);
+	if (!dialogue.ok) {
+		missing.push(...dialogue.errors.map((e) => `messenger: ${e}`));
 	}
 	const reviewRound = `artifacts/review-round-r${roundIndex}.yaml`;
 	const reviewRoundOnDisk = await exists(join(runDir, reviewRound));
@@ -62,14 +81,35 @@ export async function getPlanDebateRoundStatus(
 		next_tool = "subagent harness/planning/hypothesis-validator";
 	} else if (missing.some((m) => m.includes("validation-turn"))) {
 		next_tool = "subagent harness/planning/plan-evaluator";
+	} else if (
+		missing.some((m) => m.includes("adversary-brief")) &&
+		!roundState?.evaluator_posted
+	) {
+		next_tool = "subagent harness/planning/plan-evaluator";
 	} else if (missing.some((m) => m.includes("adversary-brief"))) {
 		next_tool =
 			"harness_messenger_read_round then subagent harness/planning/plan-adversary";
 	} else if (missing.some((m) => m.includes("sprint-audit"))) {
 		next_tool = "subagent harness/planning/sprint-contract-auditor";
-	} else if (!messenger.ok) {
+	} else if (
+		roundState &&
+		roundState.evaluator_posted &&
+		!roundState.adversary_posted
+	) {
 		next_tool =
-			"harness_debate_apply_lane (evaluator/adversary) or re-spawn lane agent";
+			"harness_messenger_read_round then subagent harness/planning/plan-adversary";
+	} else if (
+		roundState &&
+		roundState.unresolved_claim_ids.length > 0 &&
+		roundState.exchange_count < caps.max_exchanges_per_round
+	) {
+		const spawnEvaluator = roundState.exchange_count % 2 === 1;
+		next_tool = spawnEvaluator
+			? "harness_debate_advance_thread → harness_messenger_read_round → subagent harness/planning/plan-evaluator (clarification; address unresolved claim_ids)"
+			: "harness_debate_advance_thread → harness_messenger_read_round → subagent harness/planning/plan-adversary (counter or concede)";
+	} else if (!dialogue.ok) {
+		next_tool =
+			"harness_debate_advance_thread or harness_debate_apply_lane (evaluator/adversary)";
 	} else if (!reviewRoundOnDisk) {
 		next_tool =
 			"subagent harness/planning/review-integrator then harness_debate_submit_round";
@@ -78,10 +118,9 @@ export async function getPlanDebateRoundStatus(
 			"harness_debate_submit_round with integrator draft from review-round file";
 	}
 
+	const laneMissing = missing.filter((m) => !m.startsWith("messenger"));
 	const readyForIntegrator =
-		messenger.ok &&
-		missing.filter((m) => !m.startsWith("messenger")).length === 0 &&
-		!reviewRoundOnDisk;
+		dialogue.ok && laneMissing.length === 0 && !reviewRoundOnDisk;
 
 	return {
 		round_index: roundIndex,
@@ -89,6 +128,10 @@ export async function getPlanDebateRoundStatus(
 		review_round_on_disk: reviewRoundOnDisk,
 		missing,
 		next_tool,
-		messenger,
+		messenger: dialogue,
+		dialogue,
+		unresolved_claim_ids: roundState?.unresolved_claim_ids ?? [],
+		exchange_count: roundState?.exchange_count ?? 0,
+		debate_round_focus: focus,
 	};
 }

@@ -13,7 +13,7 @@
 	],
 	"properties": {
 		"schema_version": { "type": "string", "const": "1.0.0" },
-		"round_index": { "type": "integer", "minimum": 1, "maximum": 4 },
+		"round_index": { "type": "integer", "minimum": 1, "maximum": 12 },
 		"debate_round_focus": {
 			"type": "string",
 			"enum": ["spec", "wbs", "schedule", "quality"]

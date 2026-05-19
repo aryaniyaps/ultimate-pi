@@ -1,0 +1,24 @@
+schema_version: "1.0.0"
+round_index: 2
+debate_round_focus: wbs
+round_summary: WBS round passed for fixture
+validation_summary: Work breakdown structure validated
+adversary_summary: No blocking findings
+disputes: []
+recommended_packet_patches: []
+review_gate_ready: true
+participants:
+  - PlanEvaluatorAgent
+  - PlanAdversaryAgent
+  - ReviewIntegratorAgent
+claims:
+  - wbs validation complete
+rebuttals: []
+evidence_refs: []
+token_usage:
+  per_agent:
+    PlanEvaluatorAgent: 100
+    PlanAdversaryAgent: 100
+    ReviewIntegratorAgent: 50
+  round_total: 250
+consensus_delta: 0.1

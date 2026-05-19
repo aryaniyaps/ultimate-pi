@@ -17,11 +17,15 @@ import {
 } from "node:fs/promises";
 import { join } from "node:path";
 import type { DebateParticipant } from "../../lib/debate-orchestrator-types.js";
+import type { DebateProfile } from "./plan-debate-eligibility.js";
+import type { PlanDebateFocus } from "./plan-debate-focus.js";
 
 export type MessengerMessageKind =
 	| "system"
 	| "claim"
 	| "rebuttal"
+	| "clarification"
+	| "counter"
 	| "integrate"
 	| "audit";
 
@@ -47,6 +51,8 @@ export interface MessengerRoundState {
 	integrator_posted: boolean;
 	claim_count: number;
 	rebuttal_count: number;
+	exchange_count: number;
+	unresolved_claim_ids: string[];
 }
 
 export interface MessengerState {
@@ -55,6 +61,8 @@ export interface MessengerState {
 	debate_id: string;
 	opened_at: string;
 	rounds: Record<string, MessengerRoundState>;
+	debate_profile?: DebateProfile;
+	required_focuses?: PlanDebateFocus[];
 }
 
 function messengerRoot(runDir: string): string {
@@ -71,7 +79,12 @@ function roundKey(roundIndex: number): string {
 
 export async function initPlanMessenger(
 	runDir: string,
-	opts: { runId: string; debateId: string },
+	opts: {
+		runId: string;
+		debateId: string;
+		debate_profile?: DebateProfile;
+		required_focuses?: PlanDebateFocus[];
+	},
 ): Promise<string> {
 	const root = messengerRoot(runDir);
 	await mkdir(join(root, "inbox"), { recursive: true });
@@ -82,6 +95,8 @@ export async function initPlanMessenger(
 		debate_id: opts.debateId,
 		opened_at: nowIso(),
 		rounds: {},
+		debate_profile: opts.debate_profile,
+		required_focuses: opts.required_focuses,
 	};
 	await writeFile(
 		join(root, "state.json"),
@@ -122,7 +137,49 @@ function defaultRoundState(roundIndex: number): MessengerRoundState {
 		integrator_posted: false,
 		claim_count: 0,
 		rebuttal_count: 0,
+		exchange_count: 0,
+		unresolved_claim_ids: [],
 	};
+}
+
+/** Recompute exchange + unresolved claim ids from a round transcript. */
+export function syncRoundStateFromTranscript(
+	round: MessengerRoundState,
+	messages: MessengerMessage[],
+): MessengerRoundState {
+	const claimed = new Set<string>();
+	const resolved = new Set<string>();
+	let exchange_count = 0;
+
+	for (const m of messages) {
+		if (m.from === "PlanEvaluatorAgent" && m.kind === "claim") {
+			round.evaluator_posted = true;
+			round.claim_count += m.claim_ids.length || 1;
+			for (const id of m.claim_ids) claimed.add(id);
+		}
+		if (m.from === "PlanAdversaryAgent" && m.kind === "rebuttal") {
+			round.adversary_posted = true;
+			round.rebuttal_count += m.in_reply_to.length || 1;
+			exchange_count += 1;
+		}
+		if (m.from === "PlanEvaluatorAgent" && m.kind === "clarification") {
+			exchange_count += 1;
+			for (const id of m.claim_ids) resolved.add(id);
+			for (const id of m.in_reply_to) resolved.add(id);
+		}
+		if (m.from === "PlanAdversaryAgent" && m.kind === "counter") {
+			exchange_count += 1;
+			for (const id of m.claim_ids) resolved.add(id);
+			for (const id of m.in_reply_to) resolved.add(id);
+		}
+		if (m.from === "ReviewIntegratorAgent" && m.kind === "integrate") {
+			round.integrator_posted = true;
+		}
+	}
+
+	round.exchange_count = exchange_count;
+	round.unresolved_claim_ids = [...claimed].filter((id) => !resolved.has(id));
+	return round;
 }
 
 export async function postMessengerMessage(
@@ -172,19 +229,10 @@ export async function postMessengerMessage(
 		rounds: {},
 	};
 	const key = roundKey(full.round_index);
+	const messages = await readRoundTranscript(runDir, full.round_index);
+	messages.push(full);
 	const round = state.rounds[key] ?? defaultRoundState(full.round_index);
-	if (full.from === "PlanEvaluatorAgent" && full.kind === "claim") {
-		round.evaluator_posted = true;
-		round.claim_count += full.claim_ids.length || 1;
-	}
-	if (full.from === "PlanAdversaryAgent" && full.kind === "rebuttal") {
-		round.adversary_posted = true;
-		round.rebuttal_count += full.in_reply_to.length || 1;
-	}
-	if (full.from === "ReviewIntegratorAgent" && full.kind === "integrate") {
-		round.integrator_posted = true;
-	}
-	state.rounds[key] = round;
+	state.rounds[key] = syncRoundStateFromTranscript(round, messages);
 	await saveMessengerState(runDir, state);
 	return full;
 }
@@ -233,13 +281,22 @@ export async function getMessengerRoundState(
 ): Promise<MessengerRoundState | null> {
 	const state = await loadMessengerState(runDir);
 	if (!state) return null;
-	return state.rounds[roundKey(roundIndex)] ?? null;
+	const round = state.rounds[roundKey(roundIndex)];
+	if (!round) return null;
+	const transcript = await readRoundTranscript(runDir, roundIndex);
+	return syncRoundStateFromTranscript({ ...round }, transcript);
 }
 
-export function messengerRoundDebateReady(
+export interface MessengerDialogueOptions {
+	max_exchanges_per_round?: number;
+}
+
+/** Evaluator + adversary dialogue settled; safe to spawn integrator. */
+export function messengerRoundDialogueReady(
 	round: MessengerRoundState | null,
-	_requireSprintAudit: boolean,
+	opts: MessengerDialogueOptions = {},
 ): { ok: boolean; errors: string[] } {
+	const maxExchanges = opts.max_exchanges_per_round ?? 3;
 	const errors: string[] = [];
 	if (!round) {
 		errors.push("no messenger activity for this round");
@@ -257,7 +314,26 @@ export function messengerRoundDebateReady(
 	if (round.rebuttal_count < 1) {
 		errors.push("adversary must rebut at least one claim (in_reply_to)");
 	}
-	if (!round.integrator_posted) {
+	const dialogueSettled =
+		round.unresolved_claim_ids.length === 0 ||
+		round.exchange_count >= maxExchanges;
+	if (!dialogueSettled) {
+		errors.push(
+			`unresolved claims remain (${round.unresolved_claim_ids.join(", ")}) and exchange_count ${round.exchange_count} < ${maxExchanges}`,
+		);
+	}
+	return { ok: errors.length === 0, errors };
+}
+
+/** Full round ready for harness_debate_submit_round (includes integrator). */
+export function messengerRoundDebateReady(
+	round: MessengerRoundState | null,
+	_requireSprintAudit: boolean,
+	opts: MessengerDialogueOptions = {},
+): { ok: boolean; errors: string[] } {
+	const dialogue = messengerRoundDialogueReady(round, opts);
+	const errors = [...dialogue.errors];
+	if (!round?.integrator_posted) {
 		errors.push(
 			"ReviewIntegratorAgent must post integrate message before bus submit",
 		);

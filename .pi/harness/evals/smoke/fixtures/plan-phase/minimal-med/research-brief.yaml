@@ -8,6 +8,35 @@ hypothesis:
     mechanism: Static artifacts plus validate-plan-dag.mjs
     prediction: CI passes without live agents
     experiment: Run smoke-harness-plan.mjs --fixture
+implementation:
+  schema_version: "1.0.0"
+  problem_framing: Validate harness plan-phase with fixture-driven smoke
+  sub_problems:
+    - DAG validation
+    - Debate gate coverage
+  internal_references:
+    - path: .pi/harness/evals/smoke/smoke-harness-plan.mjs
+      relevance: Existing smoke pattern
+      reuse_signal: high
+  external_references: []
+  solution_patterns:
+    - name: fixture-driven gate
+      provenance: in-repo smoke
+      fit: Validates plan pipeline without live agents
+      tradeoffs:
+        pros: [Deterministic CI]
+        cons: []
+      risks: []
+  similar_implementations: []
+  recommended_approach:
+    summary: Extend minimal-med fixture with implementation artifact
+    recommended_approach_confidence: high
+    confidence_rationale: Reuses established smoke-harness-plan pattern
+    evidence_refs:
+      - .pi/harness/evals/smoke/smoke-harness-plan.mjs
+      - .pi/scripts/validate-plan-dag.mjs
+  anti_patterns: []
+  open_questions: []
 stack:
   schema_version: "1.0.0"
   problem_framing: Node harness tooling

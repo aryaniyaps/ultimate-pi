@@ -20,6 +20,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0032](0032-harness-command-orchestration.md) | Harness commands as agent orchestrators | Accepted |
 | [0033](0033-parent-orchestrated-planning.md) | Parent-orchestrated harness planning | Accepted |
 | [0034](0034-darwin-plan-research-pipeline.md) | Darwin plan research pipeline | Accepted |
+| [0035](0035-plan-phase-review-gate.md) | Plan-phase Review Gate | Accepted |
+| [0036](0036-implementation-research-and-selective-debate.md) | Implementation research and selective debate | Accepted |
 
 ## Template
 

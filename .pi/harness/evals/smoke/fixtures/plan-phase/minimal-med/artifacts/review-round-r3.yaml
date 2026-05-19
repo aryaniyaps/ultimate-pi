@@ -1,0 +1,24 @@
+schema_version: "1.0.0"
+round_index: 3
+debate_round_focus: schedule
+round_summary: Schedule round passed for fixture
+validation_summary: Critical path and dependencies validated
+adversary_summary: No schedule risks unmitigated
+disputes: []
+recommended_packet_patches: []
+review_gate_ready: true
+participants:
+  - PlanEvaluatorAgent
+  - PlanAdversaryAgent
+  - ReviewIntegratorAgent
+claims:
+  - schedule validation complete
+rebuttals: []
+evidence_refs: []
+token_usage:
+  per_agent:
+    PlanEvaluatorAgent: 100
+    PlanAdversaryAgent: 100
+    ReviewIntegratorAgent: 50
+  round_total: 250
+consensus_delta: 0.1

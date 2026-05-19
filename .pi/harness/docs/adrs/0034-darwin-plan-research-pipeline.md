@@ -13,9 +13,7 @@
    - `harness/planning/decompose` — DeepMind-style problem decomposition (`PlanDecompositionBrief`)
    - `harness/planning/hypothesis` — DARWIN hypothesis generation (`PlanHypothesisBrief`)
 2. **Parent maps hypothesis → PlanPacket** — `plan-packet.schema.json` unchanged; execution gating stable.
-3. **Parallel pre-approval reviews:**
-   - `harness/planning/plan-adversary` — execution risk on PlanPacket
-   - `harness/planning/hypothesis-eval` — blind self-eval (task + hypothesis only)
+3. **Review Gate (ADR 0035):** outcome-based debate with `hypothesis-validator` on R1 (blind — task + hypothesis only). Retired `hypothesis-eval` as a separate pre-approval agent.
 4. **`approve_plan` optional `research_brief`** — rendered in `plan-review.md`; not written to `plan-packet.json`.
 5. **`--quick`** still skips semantic scout only; never skips decompose/hypothesis.
 

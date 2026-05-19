@@ -13,6 +13,7 @@ export interface PlanResearchBrief {
 	hypothesis?: Record<string, unknown> | null;
 	eval?: Record<string, unknown> | null;
 	stack?: Record<string, unknown> | null;
+	implementation?: Record<string, unknown> | null;
 	debate?: {
 		rounds?: Record<string, unknown>[];
 		hypothesis_validations?: Record<string, unknown>[];

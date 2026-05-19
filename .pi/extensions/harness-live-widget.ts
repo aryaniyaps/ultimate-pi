@@ -3,11 +3,13 @@ import type {
 	ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
 import {
+	deriveHarnessStatusHint,
+	formatHarnessPhaseLabel,
+	type HarnessStatusSeverity,
 	type HarnessUiState,
 	HarnessUiStateStore,
+	nextHarnessPhase,
 } from "../lib/harness-ui-state";
-
-type Severity = "accent" | "warning" | "error";
 
 type TuiLike = { requestRender(): void };
 type ThemeLike = {
@@ -164,31 +166,25 @@ function composeZones(left: string, right: string, width: number): string {
 	return fitToWidth(`${leftFit}${" ".repeat(minGap)}${rightFit}`, width);
 }
 
-type InFlightState = {
-	toolCount: number;
-	lastToolName: string | null;
-};
+function themeSeverityColor(
+	severity: HarnessStatusSeverity,
+): "accent" | "warning" | "error" | "success" | "muted" {
+	return severity;
+}
 
 class HarnessWidgetComponent {
 	private widthCache?: number;
 	private linesCache?: string[];
 	private state: HarnessUiState;
-	private inFlight: InFlightState;
 	private themeRef: ThemeLike;
 
-	constructor(
-		state: HarnessUiState,
-		inFlight: InFlightState,
-		theme: ThemeLike,
-	) {
+	constructor(state: HarnessUiState, theme: ThemeLike) {
 		this.state = state;
-		this.inFlight = inFlight;
 		this.themeRef = theme;
 	}
 
-	public setData(state: HarnessUiState, inFlight: InFlightState): void {
+	public setData(state: HarnessUiState): void {
 		this.state = state;
-		this.inFlight = inFlight;
 		this.invalidate();
 	}
 
@@ -201,109 +197,23 @@ class HarnessWidgetComponent {
 		if (this.linesCache && this.widthCache === width) return this.linesCache;
 		const theme = this.themeRef;
 		const rowWidth = Math.max(1, width - TERMINAL_WIDTH_SAFETY_MARGIN);
-		const showDebateRow =
-			this.state.phase === "adversary" || this.state.phase === "merge";
 
-		const substateColor: Severity =
-			this.state.flowSubstate === "blocked"
-				? "error"
-				: this.state.flowSubstate === "severity-policy" ||
-						this.state.flowSubstate === "human-required"
-					? "warning"
-					: "accent";
-		const policyColor =
-			this.state.policyDecision === "pass"
-				? "success"
-				: this.state.policyDecision === "conditional_pass"
-					? "warning"
-					: this.state.policyDecision === "block" ||
-							this.state.policyDecision === "human_required"
-						? "error"
-						: "muted";
+		const currentLabel = formatHarnessPhaseLabel(this.state.phase);
+		const nextPhase = nextHarnessPhase(this.state.phase);
+		const nowToken = `${theme.fg("dim", "now:")}${theme.fg("accent", currentLabel)}`;
+		const phaseToken =
+			nextPhase != null
+				? `${nowToken} ${theme.fg("dim", "→")} ${theme.fg("accent", formatHarnessPhaseLabel(nextPhase))}`
+				: nowToken;
 
-		const policyDisplay = this.state.policyDecision ?? "pending";
+		const status = deriveHarnessStatusHint(this.state);
+		const statusColor = themeSeverityColor(status.severity);
+		const statusToken = theme.fg(statusColor, status.text);
 
-		const phaseToken = `${theme.fg("dim", "phase:")}${theme.fg("accent", this.state.phase)}`;
-		const flowToken = `${theme.fg("dim", "flow:")}${theme.fg(substateColor, this.state.flowSubstate)}`;
-		const policyToken = `${theme.fg("dim", "policy:")}${theme.fg(policyColor, policyDisplay)}`;
-		const row1 = composeZones(
-			`${theme.bold("Harness")} ${phaseToken} ${flowToken}`,
-			policyToken,
-			rowWidth,
-		);
+		const left = `${theme.bold("Harness")} ${phaseToken}`;
+		const row = composeZones(left, statusToken, rowWidth);
 
-		const debateProgress =
-			this.state.debateMaxRounds != null
-				? `${this.state.debateRound}/${this.state.debateMaxRounds}`
-				: String(this.state.debateRound);
-		const budgetDisplay =
-			this.state.debateBudgetUsed != null && this.state.debateBudgetCap != null
-				? `${this.state.debateBudgetUsed}/${this.state.debateBudgetCap}`
-				: this.state.debateBudgetUsed != null
-					? String(this.state.debateBudgetUsed)
-					: "n/a";
-		const consensusTrend =
-			this.state.consensusDelta == null
-				? "flat"
-				: this.state.consensusDelta > 0
-					? "up"
-					: this.state.consensusDelta < 0
-						? "down"
-						: "flat";
-		const trendColor =
-			consensusTrend === "up"
-				? "success"
-				: consensusTrend === "down"
-					? "warning"
-					: "muted";
-
-		const sev = this.state.severity;
-		const severityCompact =
-			sev.correctness == null &&
-			sev.security == null &&
-			sev.architecture == null &&
-			sev.testIntegrity == null
-				? theme.fg("muted", "sev:n/a")
-				: `${theme.fg("dim", "sev")} ${theme.fg("accent", `c:${sev.correctness ?? "-"}`)} ${theme.fg("accent", `s:${sev.security ?? "-"}`)} ${theme.fg("accent", `a:${sev.architecture ?? "-"}`)} ${theme.fg("accent", `t:${sev.testIntegrity ?? "-"}`)}`;
-
-		const planFlag = this.state.planApproved
-			? `${theme.fg("dim", "📋 Plan:")}${theme.fg("success", "OK")}`
-			: `${theme.fg("dim", "📋 Plan:")}${theme.fg("error", "NO")}`;
-		const reviewFlag = this.state.reviewIsolationOk
-			? `${theme.fg("dim", "🧪 Review:")}${theme.fg("success", "OK")}`
-			: `${theme.fg("dim", "🧪 Review:")}${theme.fg("warning", "ISO")}`;
-		const budgetFlag = this.state.budgetExhausted
-			? `${theme.fg("dim", "💰 Budget:")}${theme.fg("error", "HIT")}`
-			: `${theme.fg("dim", "💰 Budget:")}${theme.fg("success", "OK")}`;
-		const testsFlag =
-			this.state.testIntegritySeverity === "high"
-				? `${theme.fg("dim", "🛡 Tests:")}${theme.fg("error", "HIGH")}`
-				: this.state.testIntegritySeverity === "medium"
-					? `${theme.fg("dim", "🛡 Tests:")}${theme.fg("warning", "MED")}`
-					: `${theme.fg("dim", "🛡 Tests:")}${theme.fg("success", "OK")}`;
-
-		const toolDisplay = this.inFlight.lastToolName
-			? `${this.inFlight.toolCount}:${this.inFlight.lastToolName}`
-			: String(this.inFlight.toolCount);
-		const nextDisplay =
-			this.state.nextRecommendedCommand != null
-				? this.state.nextRecommendedCommand.length > 36
-					? `${this.state.nextRecommendedCommand.slice(0, 33)}...`
-					: this.state.nextRecommendedCommand
-				: null;
-		const row3Left = `${planFlag} ${reviewFlag} ${budgetFlag} ${testsFlag}`;
-		const row3Right = nextDisplay
-			? `${theme.fg("dim", "inFlight:")}${theme.fg("accent", toolDisplay)} ${theme.fg("dim", "next:")}${theme.fg("accent", nextDisplay)}`
-			: `${theme.fg("dim", "inFlight:")}${theme.fg("accent", toolDisplay)}`;
-		const row3 = composeZones(row3Left, row3Right, rowWidth);
-
-		const lines: string[] = [truncateToWidth(row1, rowWidth)];
-		if (showDebateRow) {
-			const debateLeft = `${theme.fg("dim", "Debate")} ${theme.fg("accent", `rounds:${debateProgress}`)} ${theme.fg("dim", "trend:")}${theme.fg(trendColor, consensusTrend)} ${theme.fg("dim", "budget:")}${theme.fg("accent", budgetDisplay)}`;
-			const row2 = composeZones(debateLeft, severityCompact, rowWidth);
-			lines.push(truncateToWidth(row2, rowWidth));
-		}
-		lines.push(truncateToWidth(row3, rowWidth));
+		const lines = [truncateToWidth(row, rowWidth)];
 		this.widthCache = width;
 		this.linesCache = lines;
 		return lines;
@@ -316,14 +226,16 @@ class HarnessWidgetComponent {
 }
 
 function statusToken(state: HarnessUiState): string {
-	const decision = state.policyDecision ?? "pending";
-	return `h:${state.phase}/${state.flowSubstate}/${decision}`;
+	const current = formatHarnessPhaseLabel(state.phase);
+	const next = nextHarnessPhase(state.phase);
+	const phasePart =
+		next != null ? `${current}→${formatHarnessPhaseLabel(next)}` : current;
+	const hint = deriveHarnessStatusHint(state).text;
+	return `h:${phasePart}|${hint}`;
 }
 
 export default function harnessLiveWidget(pi: ExtensionAPI) {
 	const stateStore = new HarnessUiStateStore();
-	const inFlightCalls = new Set<string>();
-	let lastToolName: string | null = null;
 	let widgetMounted = false;
 	let tuiHandle: TuiLike | null = null;
 	let component: HarnessWidgetComponent | null = null;
@@ -334,19 +246,14 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 	function mountHarnessWidget(ctx: ExtensionContext): void {
 		if (!ctx.hasUI) return;
 		const state = stateStore.refresh(ctx);
-		const inFlight: InFlightState = { toolCount: 0, lastToolName: null };
-		lastRenderHash = computeRenderHash(state, inFlight);
+		lastRenderHash = computeRenderHash(state);
 
 		ctx.ui.setWidget(
 			"harness-live",
 			(tui, theme) => {
 				widgetMounted = true;
 				tuiHandle = tui;
-				component = new HarnessWidgetComponent(
-					stateStore.snapshot(),
-					inFlight,
-					theme,
-				);
+				component = new HarnessWidgetComponent(stateStore.snapshot(), theme);
 				return {
 					render(width: number): string[] {
 						component?.setTheme(theme);
@@ -388,26 +295,15 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 		ctx.ui.setStatus("harness-mode", undefined);
 	}
 
-	function computeRenderHash(
-		state: HarnessUiState,
-		inFlight: InFlightState,
-	): string {
+	function computeRenderHash(state: HarnessUiState): string {
 		return JSON.stringify({
 			phase: state.phase,
-			flowSubstate: state.flowSubstate,
 			planApproved: state.planApproved,
-			reviewIsolationOk: state.reviewIsolationOk,
 			budgetExhausted: state.budgetExhausted,
 			testIntegritySeverity: state.testIntegritySeverity,
-			debateRound: state.debateRound,
-			debateMaxRounds: state.debateMaxRounds,
-			debateBudgetUsed: state.debateBudgetUsed,
-			debateBudgetCap: state.debateBudgetCap,
 			policyDecision: state.policyDecision,
-			consensusDelta: state.consensusDelta,
-			severity: state.severity,
+			flowSubstate: state.flowSubstate,
 			nextRecommendedCommand: state.nextRecommendedCommand,
-			inFlight,
 		});
 	}
 
@@ -417,15 +313,11 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 		queueMicrotask(() => {
 			refreshQueued = false;
 			const state = stateStore.refresh(ctx);
-			const inFlight: InFlightState = {
-				toolCount: inFlightCalls.size,
-				lastToolName,
-			};
-			const hash = computeRenderHash(state, inFlight);
+			const hash = computeRenderHash(state);
 			updateStatusFallback(ctx, state);
 			if (hash === lastRenderHash) return;
 			lastRenderHash = hash;
-			if (component) component.setData(state, inFlight);
+			if (component) component.setData(state);
 			tuiHandle?.requestRender();
 		});
 	}
@@ -448,18 +340,6 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 	});
 
 	pi.on("agent_end", (_event, ctx) => {
-		scheduleRefresh(ctx);
-	});
-
-	pi.on("tool_execution_start", (event, ctx) => {
-		inFlightCalls.add(event.toolCallId);
-		lastToolName = event.toolName;
-		scheduleRefresh(ctx);
-	});
-
-	pi.on("tool_result", (event, ctx) => {
-		inFlightCalls.delete(event.toolCallId);
-		if (inFlightCalls.size === 0) lastToolName = null;
 		scheduleRefresh(ctx);
 	});
 }

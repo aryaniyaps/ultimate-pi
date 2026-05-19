@@ -1,0 +1,128 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-implementation-research-brief.schema.json",
+	"title": "PlanImplementationResearchBrief",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"problem_framing",
+		"sub_problems",
+		"internal_references",
+		"external_references",
+		"solution_patterns",
+		"similar_implementations",
+		"recommended_approach",
+		"anti_patterns",
+		"open_questions"
+	],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"problem_framing": { "type": "string", "minLength": 1 },
+		"sub_problems": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"internal_references": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/internal_reference" }
+		},
+		"external_references": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/external_reference" }
+		},
+		"solution_patterns": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/solution_pattern" }
+		},
+		"similar_implementations": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/similar_implementation" }
+		},
+		"recommended_approach": { "$ref": "#/$defs/recommended_approach" },
+		"anti_patterns": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"open_questions": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"deep_research_recommended": { "type": "boolean" }
+	},
+	"$defs": {
+		"internal_reference": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["path", "relevance", "reuse_signal"],
+			"properties": {
+				"path": { "type": "string" },
+				"relevance": { "type": "string" },
+				"reuse_signal": {
+					"type": "string",
+					"enum": ["high", "med", "low", "none"]
+				}
+			}
+		},
+		"external_reference": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["url", "source_type", "summary", "evidence_grade"],
+			"properties": {
+				"url": { "type": "string" },
+				"source_type": { "type": "string" },
+				"summary": { "type": "string" },
+				"evidence_grade": {
+					"type": "string",
+					"enum": ["primary", "secondary", "anecdotal"]
+				}
+			}
+		},
+		"solution_pattern": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["name", "provenance", "fit", "tradeoffs", "risks"],
+			"properties": {
+				"name": { "type": "string" },
+				"provenance": { "type": "string" },
+				"fit": { "type": "string" },
+				"tradeoffs": {
+					"type": "object",
+					"required": ["pros", "cons"],
+					"properties": {
+						"pros": { "type": "array", "items": { "type": "string" } },
+						"cons": { "type": "array", "items": { "type": "string" } }
+					}
+				},
+				"risks": { "type": "array", "items": { "type": "string" } }
+			}
+		},
+		"similar_implementation": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["name", "what_it_solves", "gap_vs_us"],
+			"properties": {
+				"name": { "type": "string" },
+				"what_it_solves": { "type": "string" },
+				"gap_vs_us": { "type": "string" }
+			}
+		},
+		"recommended_approach": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["summary", "recommended_approach_confidence"],
+			"properties": {
+				"summary": { "type": "string", "minLength": 1 },
+				"recommended_approach_confidence": {
+					"type": "string",
+					"enum": ["low", "med", "high"]
+				},
+				"confidence_rationale": { "type": "string" },
+				"evidence_refs": {
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			}
+		}
+	}
+}

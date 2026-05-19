@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, writeFile, symlink } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import {
@@ -14,6 +14,8 @@ import {
 	parseAskUserApprovalFromMessage,
 	validatePlanOverridePath,
 } from "../.pi/lib/harness-run-context.ts";
+import { capsForDebate } from "../.pi/extensions/lib/debate-bus-core.ts";
+import { planDebateIdForRun } from "../.pi/extensions/lib/plan-debate-id.ts";
 
 function runCtx(runId, projectRoot) {
 	return {
@@ -34,6 +36,13 @@ function runCtx(runId, projectRoot) {
 		updated_at: new Date().toISOString(),
 	};
 }
+
+test("plan debate id is plan-<run_id>", () => {
+	assert.equal(planDebateIdForRun("run-abc"), "plan-run-abc");
+	const caps = capsForDebate("plan-run-abc");
+	assert.equal(caps.min_focus_rounds, 4);
+	assert.equal(caps.max_exchanges_per_round, 3);
+});
 
 test("isCanonicalPlanPacketPath accepts only plan-packet.yaml", () => {
 	const root = "/proj";
@@ -192,9 +201,9 @@ test("isPlanPhaseScopedWrite rejects symlink escape", async () => {
 	await writeFile(outside, "secret", "utf-8");
 	const linkPath = join(runDir, "plan-packet.yaml");
 	try {
+		const { symlink } = await import("node:fs/promises");
 		await symlink(outside, linkPath);
 	} catch {
-		// symlinks may be unsupported; skip
 		return;
 	}
 	assert.equal(await isPlanPhaseScopedWrite(linkPath, ctx, root), false);

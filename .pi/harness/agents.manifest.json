@@ -1,8 +1,8 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.13.1",
-	"generated_at": "2026-05-18T17:22:10.311Z",
+	"package_version": "0.14.0",
+	"generated_at": "2026-05-19T10:53:28.359Z",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -78,35 +78,39 @@
 		},
 		"harness/planning/decompose": {
 			"path": ".pi/agents/harness/planning/decompose.md",
-			"sha256": "1b3f85d956d2e203ec87045a731c47f8b40f75b63fce8916fda91cefc39244a8"
+			"sha256": "5c3b983772d013741d50f39945bc77f178aa338aecab56b93c09216d72192c69"
 		},
 		"harness/planning/execution-plan-author": {
 			"path": ".pi/agents/harness/planning/execution-plan-author.md",
-			"sha256": "a69fb2e8bda9336e71ce9536071f9c8a2f4abd9d9d88930c6a8be29bdc9c5f62"
+			"sha256": "16f8800c50bcaf1b82ed9138889c8a0e538ee6a139aeae129ccd20cec2ec25f7"
 		},
 		"harness/planning/hypothesis-validator": {
 			"path": ".pi/agents/harness/planning/hypothesis-validator.md",
-			"sha256": "f75312439c441ccee72692d41f44b6e733df08e06c89e930740fc256bed3ba02"
+			"sha256": "9e68ec5d6aef96a3666c30227c3cbddf1aaed1182fdc94dbbd21ad3d48315ff2"
 		},
 		"harness/planning/hypothesis": {
 			"path": ".pi/agents/harness/planning/hypothesis.md",
 			"sha256": "b20c527d15c2243cd5d3a8f16cea6d44bdfd16e01915d42f3b830bf9938e5f8b"
 		},
+		"harness/planning/implementation-researcher": {
+			"path": ".pi/agents/harness/planning/implementation-researcher.md",
+			"sha256": "dbd1c4fc74d538b110d406febfd4603eebea77d82e8b367df4596ac7ff6e54cc"
+		},
 		"harness/planning/plan-adversary": {
 			"path": ".pi/agents/harness/planning/plan-adversary.md",
-			"sha256": "84c7fa63d38c39e32000c90093688a45bc2b96a2c6209037342222eae0c854f9"
+			"sha256": "7c14eaab65f356003ee2ff380f5d4e620170b5126daa67c3d226b12342f47bd2"
 		},
 		"harness/planning/plan-evaluator": {
 			"path": ".pi/agents/harness/planning/plan-evaluator.md",
-			"sha256": "580d8c7a31f7a6ecd9e627460459d600650580b5df63d129278beefd3f3e347c"
+			"sha256": "846575abe9df3e7e5be812c0c474989c1a9de8074a7884d77b9d3dd423643480"
 		},
 		"harness/planning/review-integrator": {
 			"path": ".pi/agents/harness/planning/review-integrator.md",
-			"sha256": "cd1e5d10f0cb8b7a4197d2e92489023c285e90e250f1badc371470165aeb8cfd"
+			"sha256": "bed43f3f049c279ac50a24bcffac1bbe46a8605d89c9cc6d0c3c6a87d488b1b8"
 		},
 		"harness/planning/scout-graphify": {
 			"path": ".pi/agents/harness/planning/scout-graphify.md",
-			"sha256": "8a5ff68306a5eedf1a62067ac8812eac4ac1fe2016cba63337ef4e90b5136e00"
+			"sha256": "7f385d5bda2fe04b9da52cb4cb9247324efd345579b483d3ad55a6abefad50d5"
 		},
 		"harness/planning/scout-semantic": {
 			"path": ".pi/agents/harness/planning/scout-semantic.md",
@@ -118,11 +122,11 @@
 		},
 		"harness/planning/sprint-contract-auditor": {
 			"path": ".pi/agents/harness/planning/sprint-contract-auditor.md",
-			"sha256": "f613a4fa937d76936fa01155d4e7956a81878f300100f99f6a78915b0af6f7c7"
+			"sha256": "d915274dc9b5addae5499bc2390b348eddeb8f133b526a816e23d0d19a2618bf"
 		},
 		"harness/planning/stack-researcher": {
 			"path": ".pi/agents/harness/planning/stack-researcher.md",
-			"sha256": "90e2ff1348f54bebc8c0392407bf1bb4d794c942fd8d6f342d80b191c945b34e"
+			"sha256": "fa228920abe2b66d4d8921c4a5d85593e3019a24bbe9ae512ed9149f235e3536"
 		}
 	}
 }
