@@ -1,6 +1,6 @@
 {
 	"name": "ultimate-pi",
-	"version": "0.15.0",
+	"version": "0.16.0",
 	"description": "Ultimate AI coding harness for pi.dev — extensible skills, Obsidian wiki knowledge layer, compressed context, deterministic output",
 	"keywords": [
 		"pi-package",
@@ -102,9 +102,9 @@
 		"yaml": "^2.8.0"
 	},
 	"dependencies": {
+		"@posthog/pi": "latest",
 		"ajv": "^8.17.1",
 		"ajv-formats": "^3.0.1",
-		"@posthog/pi": "latest",
 		"croner": "^9.0.0",
 		"jimp": "^1.6.1",
 		"nanoid": "^5.1.5",

@@ -4,6 +4,16 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.16.0] — 2026-05-19
+
+### ✨ Features
+
+- add submit pipeline and planning/debate updates
+
+### 🔧 Chores
+
+- refresh graph artifacts after harness updates
+
 ## [v0.15.0] — 2026-05-19
 
 ### ✨ Features
