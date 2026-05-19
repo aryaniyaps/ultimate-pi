@@ -12,6 +12,10 @@ import {
 	POST_EXECUTE_DEBATE_PARTICIPANTS,
 } from "../../lib/debate-orchestrator-types.js";
 import {
+	isHarnessBudgetEnforceOn,
+	shouldEmitBlockingBudgetExhausted,
+} from "../../lib/harness-budget-enforce.js";
+import {
 	type DebateState,
 	getDebateState,
 	getLastSeverity,
@@ -75,7 +79,8 @@ const THRESHOLDS = {
 	architecture: 0.8,
 	test_integrity: 0.8,
 };
-const HARD_STOP_DEBATE_CAPS = process.env.HARNESS_DEBATE_HARD_STOP === "true";
+const HARD_STOP_DEBATE_CAPS =
+	process.env.HARNESS_DEBATE_HARD_STOP === "true" && isHarnessBudgetEnforceOn();
 
 const PLAN_BUDGET = PLAN_BUDGET_STANDARD;
 
@@ -109,14 +114,34 @@ export function capsForDebate(
 	if (isPlanDebateId(debateId)) {
 		const active = profile ?? getDebateState()?.debate_profile ?? "standard";
 		const budget = active === "light" ? PLAN_BUDGET_LIGHT : PLAN_BUDGET;
-		return { name: "plan", ...budget };
+		const caps = { name: "plan" as const, ...budget };
+		if (!isHarnessBudgetEnforceOn()) {
+			return {
+				...caps,
+				max_rounds: 999,
+				max_exchanges_per_round: 99,
+				round_token_cap: caps.round_token_cap * 100,
+				debate_global_cap: caps.debate_global_cap * 100,
+			};
+		}
+		return caps;
 	}
-	return {
-		name: "aggressive",
+	const caps = {
+		name: "aggressive" as const,
 		min_focus_rounds: 1,
 		max_exchanges_per_round: 1,
 		...AGGRESSIVE_BUDGET,
 	};
+	if (!isHarnessBudgetEnforceOn()) {
+		return {
+			...caps,
+			max_rounds: 999,
+			max_exchanges_per_round: 99,
+			round_token_cap: caps.round_token_cap * 100,
+			debate_global_cap: caps.debate_global_cap * 100,
+		};
+	}
+	return caps;
 }
 
 function participantAllowed(
@@ -280,7 +305,19 @@ async function emitBudgetExhausted(
 		},
 	};
 	hooks.appendEntry("harness-debate-envelope", envelope);
-	hooks.appendEntry("harness-budget-exhausted", envelope.payload);
+	if (shouldEmitBlockingBudgetExhausted()) {
+		hooks.appendEntry("harness-budget-exhausted", envelope.payload);
+	} else {
+		const telemetryPayload = {
+			...(envelope.payload as Record<string, unknown>),
+			telemetry_only: true,
+		};
+		hooks.appendEntry("harness-debate-budget-telemetry", telemetryPayload);
+		hooks.appendEntry("harness-budget-telemetry", {
+			...telemetryPayload,
+			source: "debate-bus",
+		});
+	}
 	await writeDebateEvent(state.debate_id, envelope);
 }
 

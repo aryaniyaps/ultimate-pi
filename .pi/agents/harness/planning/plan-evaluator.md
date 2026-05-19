@@ -1,6 +1,6 @@
 ---
 description: Plan-phase Validation Checks evaluator (neutral pass/fail).
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_validation_turn
 disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -30,7 +30,8 @@ Parent passes `debate_round_focus`: `spec` | `wbs` | `schedule` | `quality`. Use
 
 ## Output
 
-Valid **YAML only** — `PlanValidationTurn` (`.pi/harness/specs/plan-validation-turn.schema.json`). Fail the round in output if `dag_validation.status === "fail"` when visible in packet.
+Before ending, call `submit_validation_turn` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
+
 
 ## Guardrails
 

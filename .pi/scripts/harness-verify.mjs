@@ -37,6 +37,8 @@ const REQUIRED_ADRS = [
 	"0009-sentrux-rules-lifecycle.md",
 	"0031-harness-run-context.md",
 	"0032-harness-command-orchestration.md",
+	"0037-subagent-submit-tools.md",
+	"0038-budget-telemetry-only.md",
 ];
 
 const REQUIRED_EXTENSIONS = [

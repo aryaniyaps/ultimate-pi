@@ -1,6 +1,6 @@
 ---
 description: Full strict harness pipeline with locked governance decisions.
-argument-hint: "\"<task>\" [--quick] [--risk low|med|high] [--budget <amount>]"
+argument-hint: "\"<task>\" [--quick] [--risk low|med|high]"
 ---
 
 # harness-auto
@@ -10,7 +10,7 @@ Pipeline orchestrator — one session, sequential phase handoffs. Invoke **harne
 ## Step 0 — Parse arguments
 
 - required task (quoted or first token)
-- optional: `--quick`, `--risk`, `--budget`
+- optional: `--quick`, `--risk` (`--budget` reserved/no-op)
 
 If task missing:
 

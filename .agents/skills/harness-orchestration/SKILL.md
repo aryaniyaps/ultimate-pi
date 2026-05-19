@@ -14,6 +14,8 @@ description: >-
 
 Every spawn includes **HarnessSpawnContext** JSON in the task text (subprocess agents do not get `[HarnessActivePlan]` injection). Use `agentScope: "both"` so package agents under `$UP_PKG/.pi/agents/**` resolve.
 
+Harness subprocesses load **`harness-subagent-submit`** (`PI_HARNESS_SUBPROCESS=1`, `HARNESS_RUN_ID`, `HARNESS_RUN_DIR`). Agents must call their scoped **`submit_*`** tool before exit; parent gates use **`harness_artifact_ready`** and debate reads submit from `tool_result` (set `HARNESS_SUBMIT_TOOLS=0` only to fall back to `finalOutput` parsing).
+
 ## Subprocess telemetry
 
 Harness bridge emits `harness_subagent_spawned` / `harness_subagent_completed` (replaces in-process setup/blackboard events).
@@ -35,7 +37,7 @@ LIMIT 30
 
 1. **Parallel `tasks`** — one `subagent({ tasks: [...] })` for scouts, decompose+hypothesis, or review fan-in; subprocesses run in parallel upstream.
 2. **Blocking calls** — each `subagent` returns when the subprocess exits; no `get_subagent_result` polling.
-3. **Compact handoffs** — pass scout/decompose JSON only; never paste full subprocess message logs into the next spawn.
+3. **Compact handoffs** — read artifacts written by submit tools (or `harness_artifact_ready`); never paste full subprocess message logs into the next spawn.
 4. **No spawn cap** — harness subagent spawns are unlimited per session (active count is telemetry only). Do **not** pass `timeoutMs` unless the user wants a cap — subprocesses wait for natural exit (`PI_SUBAGENT_TIMEOUT_MS` optional env backstop only).
 
 ## Command → agent

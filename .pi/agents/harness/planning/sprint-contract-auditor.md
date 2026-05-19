@@ -1,6 +1,6 @@
 ---
 description: Plan-phase ADR-020 sprint contract auditor.
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_sprint_audit
 disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -23,7 +23,8 @@ Required when `debate_round_focus` is `quality` or round_index ≥ 4. Optional s
 
 ## Output
 
-Valid **YAML only** — `PlanSprintAuditTurn` (`.pi/harness/specs/plan-sprint-audit-turn.schema.json`).
+Before ending, call `submit_sprint_audit` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
+
 
 ## Guardrails
 

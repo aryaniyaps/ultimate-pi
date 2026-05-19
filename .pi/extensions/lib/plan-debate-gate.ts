@@ -5,6 +5,7 @@
 import { constants } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { isHarnessBudgetEnforceOn } from "../../lib/harness-budget-enforce.js";
 import { capsForDebate } from "./debate-bus-core.js";
 import {
 	getPlanFocusCoverage,
@@ -117,9 +118,19 @@ export async function validatePlanDebateGate(
 		}
 	}
 
-	if (coverage.last_round_index > caps.max_rounds) {
+	if (
+		isHarnessBudgetEnforceOn() &&
+		coverage.last_round_index > caps.max_rounds
+	) {
 		errors.push(
 			`round_count ${coverage.last_round_index} exceeds max_rounds ${caps.max_rounds}`,
+		);
+	} else if (
+		!isHarnessBudgetEnforceOn() &&
+		coverage.last_round_index > caps.max_rounds
+	) {
+		warnings.push(
+			`round_count ${coverage.last_round_index} exceeds advisory max_rounds ${caps.max_rounds} (budget enforce off)`,
 		);
 	}
 

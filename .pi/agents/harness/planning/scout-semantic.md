@@ -1,6 +1,6 @@
 ---
 description: Plan-phase scout — CocoIndex semantic code search (read-only).
-tools: read, bash, ls
+tools: read, bash, ls, submit_scout_findings
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent, grep, find
 extensions: false
 thinking: low
@@ -34,21 +34,6 @@ Read-only only: no installs, indexing, daemon control, or redirects.
 
 **Forbidden:** `ccc index`, `ccc init`, `ccc reset`, `ccc daemon`, `ccc search --refresh`, package installs.
 
-## Output limits
+## Output
 
-- `findings`: at most **6** bullets
-- `key_paths`: at most **8** absolute paths
-- `open_questions`: at most **4** items
-
-## Output (required JSON block)
-
-```json
-{
-  "schema_version": "1.0.0",
-  "lane": "semantic",
-  "status": "ok",
-  "findings": ["…"],
-  "key_paths": ["/absolute/path"],
-  "open_questions": ["…"]
-}
-```
+Before ending, call `submit_scout_findings` exactly once with the full document (`schema_version`, `lane`, `status`, `findings`, `key_paths`, `open_questions`). Do not paste the artifact as prose — the tool write is the deliverable.

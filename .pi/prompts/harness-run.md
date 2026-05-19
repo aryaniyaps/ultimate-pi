@@ -1,6 +1,6 @@
 ---
 description: Execute only against an approved PlanPacket with strict phase gates.
-argument-hint: "[--budget <amount>]"
+argument-hint: ""
 ---
 
 # harness-run
@@ -9,7 +9,7 @@ Orchestrator only — spawn `harness/executor`. Do **not** implement inline.
 
 ## Step 0 — Parse arguments
 
-- optional: `--budget <amount>`
+- `--budget` is reserved/no-op (telemetry-only budgets by default)
 - Do **not** use `--plan` on happy path — load from `[HarnessActivePlan]` / `plan_packet_path`.
 
 If plan not ready:

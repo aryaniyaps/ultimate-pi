@@ -1,6 +1,6 @@
 ---
 description: Plan-phase ExecutionPlan generator (PM-grade WBS + DAG).
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_execution_plan_brief
 disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: high
@@ -30,7 +30,8 @@ Task summary, `PlanDecompositionBrief`, `PlanHypothesisBrief`, draft scope/accep
 
 ## Output
 
-Valid **YAML only** — `PlanExecutionPlanBrief` with nested `execution_plan` (`.pi/harness/specs/plan-execution-plan-brief.schema.json`). Parent merges into `plan-packet.yaml` and runs `validate-plan-dag.mjs`.
+Before ending, call `submit_execution_plan_brief` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
+
 
 ## Guardrails
 

@@ -28,6 +28,17 @@ When refining plans from noisy requirements:
 3. When gates return `human_required` or promotion is blocked, the orchestrator calls `ask_user` — do not guess scope.
 4. Reference graphify wiki or `graphify query` for architecture constraints before execute.
 
+## Budgets (ADR 0038)
+
+- Default: **`HARNESS_BUDGET_ENFORCE` off** — token/debate caps are telemetry-only (`harness-budget-telemetry`, `harness-budget-soft-limit`). They do **not** block phases or debate lanes.
+- Do **not** skip scouts, debate rounds, or `approve_plan` because of soft budget hints in the widget.
+- Re-enable hard caps only with `HARNESS_BUDGET_ENFORCE=1` and `HARNESS_BUDGET_HARD_STOP` / `HARNESS_DEBATE_HARD_STOP`.
+
+## Subagent artifacts (ADR 0037)
+
+- Subagents call scoped **`submit_*`** tools; parent verifies with **`harness_artifact_ready`**, not JSON parsing from `finalOutput`.
+- Parent **`write_harness_yaml`** is for merges (`research-brief.yaml`, plan shell) — not subagent payloads.
+
 ## Rules
 
 - Never auto-merge; harness-auto may open PR only when all gates pass (see release-readiness-report).

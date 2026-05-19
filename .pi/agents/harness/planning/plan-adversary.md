@@ -1,6 +1,6 @@
 ---
 description: Plan-phase adversarial verification on ExecutionPlan.
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_adversary_brief
 disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -21,9 +21,8 @@ Stress-test the ExecutionPlan with reproducible counterexamples. Map every findi
 
 ## Output
 
-Valid **YAML only** — `PlanAdversaryBrief` (`.pi/harness/specs/plan-adversary-brief.schema.json`).
+Before ending, call `submit_adversary_brief` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
 
-Include `open_claim_ids: string[]` for claims still disputed after your message (parent tracks ping-pong).
 
 ## Guardrails
 

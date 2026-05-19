@@ -1,6 +1,6 @@
 ---
 description: Harness incident recorder compiling structured IncidentRecord drafts from run context.
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_human_required
 extensions: false
 thinking: medium
 max_turns: 15

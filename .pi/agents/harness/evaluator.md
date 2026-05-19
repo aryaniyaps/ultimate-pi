@@ -1,6 +1,6 @@
 ---
 description: Independent harness evaluator producing structured pass/fail verdicts.
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_eval_verdict
 extensions: false
 disallowed_tools: ask_user
 thinking: high

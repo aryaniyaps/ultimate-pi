@@ -42,6 +42,13 @@ export interface SpawnAuthForward {
 
 export interface HarnessSubagentsOptions {
 	packageRoot?: string;
+	/** Absolute path to harness-subagent-submit.ts for subprocess-only extension loading (Option A). */
+	harnessSubprocessExtensionPath?: string;
+	/** Extra env vars per subprocess (e.g. HARNESS_RUN_ID, HARNESS_RUN_DIR). */
+	resolveSubprocessEnv?: (
+		task: string,
+		agent: AgentConfig,
+	) => Record<string, string> | undefined;
 	defaultAgentScope?: AgentScope;
 	defaultConfirmProjectAgents?: boolean;
 	beforeExecute?: (
@@ -388,8 +395,11 @@ function terminateProcess(proc: ReturnType<typeof spawn>) {
 
 type OnUpdateCallback = (partial: AgentToolResult<SubagentDetails>) => void;
 
-function buildSpawnEnv(packageRoot?: string): NodeJS.ProcessEnv {
-	const env = { ...process.env };
+function buildSpawnEnv(
+	packageRoot?: string,
+	extra?: Record<string, string>,
+): NodeJS.ProcessEnv {
+	const env = { ...process.env, ...extra };
 	env.PI_HARNESS_SUBPROCESS = "1";
 	if (packageRoot) {
 		env.UP_PKG = packageRoot;
@@ -411,6 +421,7 @@ async function runSingleAgent(
 	makeDetails: (results: SingleResult[]) => SubagentDetails,
 	packageRoot?: string,
 	spawnAuth?: SpawnAuthForward,
+	subagentsOptions?: HarnessSubagentsOptions,
 ): Promise<SingleResult> {
 	const agent = agents.find((a) => a.name === agentName);
 
@@ -434,8 +445,15 @@ async function runSingleAgent(
 	else if (spawnAuth) args.push("--model", spawnAuth.modelRef);
 	if (spawnAuth?.apiKey) args.push("--api-key", spawnAuth.apiKey);
 	if (agent.thinking) args.push("--thinking", agent.thinking);
+	const harnessExt =
+		agent.extensionsOff &&
+		agent.name.startsWith("harness/") &&
+		subagentsOptions?.harnessSubprocessExtensionPath;
 	if (agent.extensionsOff) {
 		args.push("--no-extensions");
+		if (harnessExt) {
+			args.push("-e", harnessExt);
+		}
 		if (agent.skillsOff) args.push("--no-skills");
 	}
 	if (agent.tools && agent.tools.length > 0) {
@@ -443,7 +461,11 @@ async function runSingleAgent(
 	} else if (agent.extensionsOff) {
 		args.push("--no-tools");
 	}
-	const spawnEnv = buildSpawnEnv(packageRoot);
+	const extraEnv = subagentsOptions?.resolveSubprocessEnv?.(task, agent);
+	const spawnEnv = buildSpawnEnv(packageRoot, {
+		...extraEnv,
+		HARNESS_AGENT_ID: agent.name,
+	});
 
 	let tmpPromptDir: string | null = null;
 	let tmpPromptPath: string | null = null;
@@ -856,6 +878,7 @@ export function createSubagentsExtension(
 							makeDetails("chain"),
 							packageRoot,
 							await resolveSpawnAuth(step.agent),
+							options,
 						);
 						results.push(result);
 
@@ -950,6 +973,7 @@ export function createSubagentsExtension(
 							makeDetails("parallel"),
 							packageRoot,
 							await resolveSpawnAuth(t.agent),
+							options,
 						);
 						allResults[index] = result;
 						doneCount += 1;
@@ -987,6 +1011,7 @@ export function createSubagentsExtension(
 							makeDetails("parallel"),
 							packageRoot,
 							await resolveSpawnAuth(aggregator.agent),
+							options,
 						);
 					}
 
@@ -1038,6 +1063,7 @@ export function createSubagentsExtension(
 						makeDetails("single"),
 						packageRoot,
 						await resolveSpawnAuth(params.agent),
+						options,
 					);
 					const isError = result.exitCode !== 0 || result.stopReason === "error" || result.stopReason === "aborted";
 					if (isError) {

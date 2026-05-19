@@ -1,6 +1,6 @@
 ---
 description: Plan-phase stack research (ctx7 + web, read-only file writes via parent).
-tools: read, grep, find, ls, bash, web_search, web_fetch
+tools: read, grep, find, ls, bash, web_search, web_fetch, submit_stack_brief
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -22,7 +22,8 @@ Produce evidence-backed stack recommendations before ExecutionPlan authoring. Ra
 
 ## Output
 
-Valid **YAML only** (no markdown fences) — `PlanStackBrief` (`.pi/harness/specs/plan-stack-brief.schema.json`). Parent writes `artifacts/stack.yaml`.
+Before ending, call `submit_stack_brief` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
+
 
 ## Guardrails
 

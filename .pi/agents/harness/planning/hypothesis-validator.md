@@ -1,6 +1,6 @@
 ---
 description: Plan-phase blind hypothesis validation (debate R1 only).
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_hypothesis_validation
 disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -29,7 +29,8 @@ Ignore decomposition, scouts, PlanPacket, adversary output, prior debate rounds.
 
 ## Output
 
-Valid **YAML only** — `PlanHypothesisEval` (`.pi/harness/specs/plan-hypothesis-eval.schema.json`).
+Before ending, call `submit_hypothesis_validation` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
+
 
 ## Guardrails
 

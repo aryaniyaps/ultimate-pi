@@ -1,6 +1,6 @@
 ---
 description: Plan-phase DeepMind-style problem decomposition (read-only).
-tools: read, grep, find, ls, bash
+tools: read, grep, find, ls, bash, submit_decomposition_brief
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -51,35 +51,6 @@ External / OSS prior art is **not** your job — `implementation-researcher` (Ph
 
 Identify contradictions, tradeoffs, or competing beliefs. Pick the **core tension** — one paragraph that feeds Phase 2 hypothesis generation.
 
-## Output (required JSON block)
+## Output
 
-End with one fenced `json` block matching `PlanDecompositionBrief` (`.pi/harness/specs/plan-decomposition-brief.schema.json`):
-
-```json
-{
-  "schema_version": "1.0.0",
-  "problem_restatement": "…",
-  "problem_types": ["design"],
-  "scope": {
-    "narrowed_focus": "…",
-    "excluded": ["…"]
-  },
-  "hard_constraints": ["…"],
-  "soft_constraints": ["…"],
-  "success_metrics": ["…"],
-  "prior_art": {
-    "best_approach": "…",
-    "gap": "…",
-    "dead_ends": ["…"]
-  },
-  "tensions": [
-    {
-      "claim_a": "…",
-      "claim_b": "…",
-      "why_matters": "…"
-    }
-  ],
-  "core_tension": "…",
-  "human_summary": "…"
-}
-```
+Before ending, call `submit_decomposition_brief` exactly once with the full `PlanDecompositionBrief` document. Do not paste the artifact as prose or a fenced JSON block — the tool write is the deliverable.

@@ -7,11 +7,18 @@ import {
 	classifyHarnessAgent,
 	evaluateHarnessSubagentToolCall,
 	isHarnessPlanningAgent,
+	isSubmitToolName,
 } from "../.pi/extensions/lib/harness-subagent-policy.ts";
 import { evaluateSubagentToolCall } from "../.pi/extensions/lib/spawn-policy.ts";
 import { parseHarnessAgentJson } from "../.pi/lib/harness-agent-output.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+test("isSubmitToolName is exported from harness-subagent-policy", () => {
+	assert.equal(typeof isSubmitToolName, "function");
+	assert.equal(isSubmitToolName("submit_decomposition_brief"), true);
+	assert.equal(isSubmitToolName("read"), false);
+});
 
 test("evaluator blocks write and mutating bash", () => {
 	const write = evaluateHarnessSubagentToolCall(
@@ -138,7 +145,19 @@ test("approve_plan and create_plan blocked in all subagents", () => {
 	assert.equal(create.action, "block");
 });
 
-test("planning scout agent disallows approve_plan in frontmatter", () => {
+	test("submit tools blocked outside subprocess", () => {
+		const prev = process.env.PI_HARNESS_SUBPROCESS;
+		delete process.env.PI_HARNESS_SUBPROCESS;
+		const block = evaluateHarnessSubagentToolCall(
+			"submit_scout_findings",
+			{ document: { schema_version: "1.0.0", lane: "graphify", summary: "x" } },
+			"harness/planning/scout-graphify",
+		);
+		assert.equal(block.action, "block");
+		if (prev !== undefined) process.env.PI_HARNESS_SUBPROCESS = prev;
+	});
+
+	test("planning scout agent disallows approve_plan in frontmatter", () => {
 	const scout = readFileSync(
 		join(root, ".pi/agents/harness/planning/scout-graphify.md"),
 		"utf-8",
