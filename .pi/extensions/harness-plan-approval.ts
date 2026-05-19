@@ -2,6 +2,9 @@
  * harness-plan-approval — PlanPacket approval UI and transcript renderer for parent sessions.
  */
 
+import { constants } from "node:fs";
+import { access } from "node:fs/promises";
+import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
 import { Type } from "@sinclair/typebox";
@@ -146,6 +149,43 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				`Plan ${planId} — pending your approval`;
 			const runCtx = getLatestRunContext(entries);
 			const projectRoot = process.cwd();
+			const implWarnings: string[] = [];
+			if (runCtx?.run_id) {
+				const implPath = join(
+					projectRoot,
+					".pi",
+					"harness",
+					"runs",
+					runCtx.run_id,
+					"artifacts",
+					"implementation-research.yaml",
+				);
+				let implExists = false;
+				try {
+					await access(implPath, constants.R_OK);
+					implExists = true;
+				} catch {
+					implExists = false;
+				}
+				const risk = String(
+					validated.plan_packet.risk_level ?? "med",
+				).toLowerCase();
+				if (!implExists) {
+					const msg =
+						"approve_plan: missing artifacts/implementation-research.yaml (Phase 3.5 required)";
+					if (risk === "high") {
+						return {
+							content: [{ type: "text", text: msg }],
+							details: {
+								plan_packet: validated.plan_packet,
+								cancelled: true,
+							},
+							isError: true,
+						};
+					}
+					implWarnings.push(msg);
+				}
+			}
 			if (runCtx?.run_id) {
 				const gate = await validatePlanDebateGate(projectRoot, runCtx.run_id);
 				if (!gate.ok) {
@@ -237,13 +277,15 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				);
 			}
 
-			const text = formatApprovePlanResultText(
-				outcome.response,
-				outcome.cancelled,
-			);
+			const text = [
+				formatApprovePlanResultText(outcome.response, outcome.cancelled),
+				...implWarnings,
+			]
+				.filter(Boolean)
+				.join("\n\n");
 			return {
 				content: [{ type: "text", text }],
-				details,
+				details: { ...details, implementation_warnings: implWarnings },
 			};
 		},
 

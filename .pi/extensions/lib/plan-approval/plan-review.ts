@@ -160,6 +160,62 @@ export function formatResearchBriefMarkdown(
 		}
 	}
 
+	const impl = asRecord(research.implementation);
+	if (impl) {
+		lines.push("## Phase 3.5 — Implementation research");
+		lines.push("");
+		const framing = str(impl.problem_framing);
+		if (framing) {
+			lines.push("**Problem framing:**");
+			lines.push("");
+			lines.push(framing);
+			lines.push("");
+		}
+		const rec = asRecord(impl.recommended_approach);
+		if (rec) {
+			const summary = str(rec.summary);
+			const conf = str(rec.recommended_approach_confidence);
+			if (summary) {
+				lines.push(
+					`**Recommended approach**${conf ? ` (${conf} confidence)` : ""}:`,
+				);
+				lines.push("");
+				lines.push(summary);
+				lines.push("");
+			}
+			const rationale = str(rec.confidence_rationale);
+			if (rationale) {
+				lines.push(`*Rationale:* ${rationale}`);
+				lines.push("");
+			}
+		}
+		const patterns = Array.isArray(impl.solution_patterns)
+			? impl.solution_patterns
+			: [];
+		if (patterns.length) {
+			lines.push("**Solution patterns:**");
+			for (const p of patterns) {
+				const pat = asRecord(p);
+				const name = pat ? str(pat.name) : null;
+				const fit = pat ? str(pat.fit) : null;
+				if (name) lines.push(`- **${name}**${fit ? `: ${fit}` : ""}`);
+			}
+			lines.push("");
+		}
+		const openQs = strList(impl.open_questions);
+		if (openQs.length) {
+			lines.push("**Open questions:**");
+			for (const q of openQs) lines.push(`- ${q}`);
+			lines.push("");
+		}
+		const anti = strList(impl.anti_patterns);
+		if (anti.length) {
+			lines.push("**Anti-patterns:**");
+			for (const a of anti) lines.push(`- ${a}`);
+			lines.push("");
+		}
+	}
+
 	if (evalBrief) {
 		lines.push("## Self-evaluation");
 		lines.push("");

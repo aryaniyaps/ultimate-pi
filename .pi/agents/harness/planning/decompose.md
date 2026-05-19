@@ -39,11 +39,13 @@ Work through these sections in your reasoning, then compress into JSON:
 - Soft constraints (trade-offs allowed)
 - Success metrics (how to measure progress)
 
-### 1.3 Prior art and known approaches
+### 1.3 Internal prior art (scouts only)
 
-- Current best approach (methods, systems, paths in repo)
+- Current best approach **in this repo** (methods, systems, paths from scout lanes)
 - Why it is not good enough (gap)
 - What has been tried and failed (dead ends)
+
+External / OSS prior art is **not** your job — `implementation-researcher` (Phase 3.5) owns web and reference implementations.
 
 ### 1.4 Surface the tensions
 

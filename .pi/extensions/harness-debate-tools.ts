@@ -2,10 +2,11 @@
  * P0–P3 plan debate tools — bus + pi-messenger transport.
  */
 
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
+import { parse as parseYaml } from "yaml";
 import type { DebateParticipant } from "../lib/debate-orchestrator-types.js";
 import {
 	getLatestRunContext,
@@ -14,6 +15,7 @@ import {
 import { writeYamlFile } from "../lib/harness-yaml.js";
 import {
 	acceptDebateRound,
+	capsForDebate,
 	finalizeDebateConsensus,
 	openDebateBus,
 } from "./lib/debate-bus-core.js";
@@ -21,9 +23,17 @@ import { getDebateState } from "./lib/debate-bus-state.js";
 import { claimExtensionLoad } from "./lib/extension-load-guard.js";
 import { captureHarnessEvent } from "./lib/harness-posthog.js";
 import {
+	type DebateEligibilityInput,
+	harnessPlanDebateEligibility,
+} from "./lib/plan-debate-eligibility.js";
+import {
 	buildPlanReviewRoundEnvelope,
 	type PlanReviewRoundDraft,
 } from "./lib/plan-debate-envelope.js";
+import {
+	getPlanFocusCoverage,
+	planDebateOutcomeComplete,
+} from "./lib/plan-debate-focus.js";
 import {
 	normalizePlanDebateId,
 	planDebateIdForRun,
@@ -40,6 +50,7 @@ import {
 	formatTranscriptForSpawn,
 	getMessengerRoundState,
 	initPlanMessenger,
+	loadMessengerState,
 	messengerRoundDebateReady,
 	postMessengerMessage,
 	readRoundTranscript,
@@ -122,7 +133,7 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 		}
 		if (applied.length === 0) return;
 
-		const status = await getPlanDebateRoundStatus(rd, lastRound);
+		const status = await getPlanDebateRoundStatus(rd, lastRound, runId);
 		pi.sendMessage({
 			customType: "harness-debate-next-step",
 			content: [
@@ -139,27 +150,130 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 	});
 
 	pi.registerTool({
+		name: "harness_plan_debate_eligibility",
+		label: "Plan Debate Eligibility",
+		description:
+			"Pre-debate profile selection (full|standard|light). Call after DAG pass, before harness_debate_open. Uses risk, fork, implementation/stack briefs — not R1 hypothesis output.",
+		parameters: Type.Object({
+			risk_level: Type.Optional(
+				Type.String({ description: "low | med | high" }),
+			),
+			material_fork: Type.Optional(Type.Boolean()),
+			dag_pass: Type.Optional(Type.Boolean()),
+			dag_manually_patched: Type.Optional(Type.Boolean()),
+			implementation_brief_path: Type.Optional(
+				Type.String({
+					description:
+						"Default: artifacts/implementation-research.yaml under run dir",
+				}),
+			),
+			stack_brief_path: Type.Optional(Type.String()),
+			decomposition_path: Type.Optional(Type.String()),
+		}),
+		async execute(_id, params, _signal, _onUpdate, ctx) {
+			const runId = getRunId(ctx);
+			const rd = runDir(process.cwd(), runId);
+			const p = params as {
+				risk_level?: string;
+				material_fork?: boolean;
+				dag_pass?: boolean;
+				dag_manually_patched?: boolean;
+				implementation_brief_path?: string;
+				stack_brief_path?: string;
+				decomposition_path?: string;
+			};
+			async function loadYaml(
+				rel: string,
+			): Promise<Record<string, unknown> | null> {
+				try {
+					const raw = await readFile(join(rd, rel), "utf-8");
+					return parseYaml(raw) as Record<string, unknown>;
+				} catch {
+					return null;
+				}
+			}
+			const input: DebateEligibilityInput = {
+				risk_level: p.risk_level,
+				material_fork: p.material_fork,
+				dag_pass: p.dag_pass,
+				dag_manually_patched: p.dag_manually_patched,
+				implementation_brief: await loadYaml(
+					p.implementation_brief_path ??
+						"artifacts/implementation-research.yaml",
+				),
+				stack_brief: await loadYaml(
+					p.stack_brief_path ?? "artifacts/stack.yaml",
+				),
+				decomposition: await loadYaml(
+					p.decomposition_path ?? "artifacts/decomposition.yaml",
+				),
+			};
+			const result = harnessPlanDebateEligibility(input);
+			const lines = [
+				`profile: ${result.profile}`,
+				`required_focuses: ${result.required_focuses.join(", ")}`,
+				`min_focus_rounds: ${result.min_focus_rounds}`,
+				`debate_global_cap: ${result.debate_global_cap}`,
+				`human_required: ${result.human_required}`,
+				...result.rationale.map((r) => `- ${r}`),
+			];
+			return {
+				content: [{ type: "text", text: lines.join("\n") }],
+				details: result,
+			};
+		},
+	});
+
+	pi.registerTool({
 		name: "harness_debate_open",
 		label: "Open Plan Debate",
 		description:
-			"Open plan-phase debate bus (plan-<run_id>) and initialize pi-messenger inboxes/threads. Call once before Review Gate rounds.",
+			"Open plan-phase debate bus (plan-<run_id>) and initialize pi-messenger inboxes/threads. Call once after harness_plan_debate_eligibility.",
 		parameters: Type.Object({
 			debate_id: Type.Optional(
 				Type.String({ description: "Optional; normalized to plan-<run_id>" }),
+			),
+			debate_profile: Type.Optional(
+				Type.String({ description: "full | standard | light" }),
+			),
+			required_focuses: Type.Optional(
+				Type.Array(
+					Type.String({ description: "spec | wbs | schedule | quality" }),
+				),
 			),
 		}),
 		async execute(_id, params, _signal, _onUpdate, ctx) {
 			const runId = getRunId(ctx);
 			const projectRoot = process.cwd();
-			const raw = String((params as { debate_id?: string }).debate_id ?? "");
+			const p = params as {
+				debate_id?: string;
+				debate_profile?: string;
+				required_focuses?: string[];
+			};
+			const raw = String(p.debate_id ?? "");
 			const { debateId, corrected, warning } = normalizePlanDebateId(
 				raw,
 				runId,
 			);
-			const opened = await openDebateBus(runId, debateId, debateHooks(pi));
+			const profile =
+				p.debate_profile === "full" ||
+				p.debate_profile === "standard" ||
+				p.debate_profile === "light"
+					? p.debate_profile
+					: "standard";
+			const required_focuses = (p.required_focuses ?? []).filter((f) =>
+				["spec", "wbs", "schedule", "quality"].includes(f),
+			) as Array<"spec" | "wbs" | "schedule" | "quality">;
+			const opened = await openDebateBus(runId, debateId, debateHooks(pi), {
+				debate_profile: profile,
+				required_focuses:
+					required_focuses.length > 0 ? required_focuses : undefined,
+			});
 			await initPlanMessenger(runDir(projectRoot, runId), {
 				runId,
 				debateId,
+				debate_profile: profile,
+				required_focuses: opened.required_focuses,
 			});
 			const sessionId = ctx.sessionManager.getSessionId();
 			captureHarnessEvent(sessionId, "harness_debate_round", {
@@ -171,6 +285,12 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			});
 			const lines = [
 				`Plan debate opened: ${debateId}`,
+				`Profile: ${profile}`,
+				required_focuses.length
+					? `Required focuses: ${required_focuses.join(", ")}`
+					: opened.required_focuses?.length
+						? `Required focuses: ${opened.required_focuses.join(", ")}`
+						: "Required focuses: (default all four)",
 				`Messenger: debate-messenger/ (inbox + threads/round-N/transcript.jsonl)`,
 			];
 			if (warning) lines.push(`Note: ${warning}`);
@@ -187,13 +307,14 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 		description:
 			"Post a claim/rebuttal/integrate message to the round thread and agent inbox (pi-messenger style). Evaluator posts claims first; adversary rebuts with in_reply_to claim ids.",
 		parameters: Type.Object({
-			round_index: Type.Number({ description: "1–4" }),
+			round_index: Type.Number({ description: "1–12 (monotonic per run)" }),
 			from: Type.String({
 				description:
 					"PlanEvaluatorAgent | PlanAdversaryAgent | ReviewIntegratorAgent | HypothesisValidatorAgent | SprintContractAuditorAgent",
 			}),
 			kind: Type.String({
-				description: "claim | rebuttal | integrate | audit | system",
+				description:
+					"claim | rebuttal | clarification | counter | integrate | audit | system",
 			}),
 			body: Type.String(),
 			to: Type.Optional(Type.Array(Type.String())),
@@ -207,7 +328,14 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			const p = params as {
 				round_index: number;
 				from: DebateParticipant;
-				kind: "claim" | "rebuttal" | "integrate" | "audit" | "system";
+				kind:
+					| "claim"
+					| "rebuttal"
+					| "clarification"
+					| "counter"
+					| "integrate"
+					| "audit"
+					| "system";
 				body: string;
 				to?: Array<DebateParticipant | "broadcast">;
 				in_reply_to?: string[];
@@ -269,7 +397,7 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 		description:
 			"Validate lane YAML + messenger thread, write review-round-rN.yaml, emit bus round envelope. Parent must not write review-round files directly.",
 		parameters: Type.Object({
-			round_index: Type.Number({ description: "1–4" }),
+			round_index: Type.Number({ description: "1–12 (monotonic per run)" }),
 			integrator_draft: Type.Record(Type.String(), Type.Unknown(), {
 				description: "ReviewIntegrator YAML object (review-round-rN fields)",
 			}),
@@ -300,8 +428,11 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 				evidence_refs: [`artifacts/review-round-r${roundIndex}.yaml`],
 			});
 
+			const caps = capsForDebate(debateId);
 			const roundState = await getMessengerRoundState(rd, roundIndex);
-			const mCheck = messengerRoundDebateReady(roundState, roundIndex === 4);
+			const mCheck = messengerRoundDebateReady(roundState, roundIndex >= 4, {
+				max_exchanges_per_round: caps.max_exchanges_per_round,
+			});
 			if (!mCheck.ok) {
 				return {
 					content: [
@@ -393,7 +524,7 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 		name: "harness_debate_consensus",
 		label: "Finalize Plan Debate Consensus",
 		description:
-			"After 4 bus rounds, emit consensus packet to .pi/harness/debates/plan-<run_id>.consensus.json",
+			"After all focus areas covered (spec|wbs|schedule|quality) and last review_gate_ready true, emit consensus packet to .pi/harness/debates/plan-<run_id>.consensus.json",
 		parameters: Type.Object({
 			rationale: Type.Optional(Type.String()),
 		}),
@@ -401,7 +532,7 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			const runId = getRunId(ctx);
 			const rationale =
 				String((params as { rationale?: string }).rationale ?? "").trim() ||
-				"Plan Review Gate consensus after 4 messenger-backed rounds.";
+				"Plan Review Gate consensus after focus coverage and messenger-backed rounds.";
 			const decision = await finalizeDebateConsensus(
 				rationale,
 				debateHooks(pi),
@@ -468,16 +599,30 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 		description:
 			"List missing lane artifacts and messenger steps for a Review Gate round. Call when resuming after a stop.",
 		parameters: Type.Object({
-			round_index: Type.Number({ description: "1–4" }),
+			round_index: Type.Number({ description: "1–12 (monotonic per run)" }),
+			debate_round_focus: Type.Optional(
+				Type.String({ description: "spec | wbs | schedule | quality" }),
+			),
 		}),
 		async execute(_id, params, _signal, _onUpdate, ctx) {
 			const runId = getRunId(ctx);
-			const roundIndex = Number(
-				(params as { round_index: number }).round_index,
-			);
+			const p = params as {
+				round_index: number;
+				debate_round_focus?: string;
+			};
+			const roundIndex = Number(p.round_index);
+			const focus =
+				p.debate_round_focus === "spec" ||
+				p.debate_round_focus === "wbs" ||
+				p.debate_round_focus === "schedule" ||
+				p.debate_round_focus === "quality"
+					? p.debate_round_focus
+					: undefined;
 			const status = await getPlanDebateRoundStatus(
 				runDir(process.cwd(), runId),
 				roundIndex,
+				runId,
+				focus ? { debate_round_focus: focus } : undefined,
 			);
 			const lines = [
 				`Round ${roundIndex}: ready_for_integrator=${status.ready_for_integrator}`,
@@ -488,6 +633,83 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			].filter(Boolean);
 			return {
 				content: [{ type: "text", text: lines.join("\n\n") }],
+				details: status,
+			};
+		},
+	});
+
+	pi.registerTool({
+		name: "harness_debate_focus_coverage",
+		label: "Plan Debate Focus Coverage",
+		description:
+			"Return which Review Gate focuses (spec|wbs|schedule|quality) are covered by submitted review-round artifacts and whether debate outcome is complete.",
+		parameters: Type.Object({}),
+		async execute(_id, _params, _signal, _onUpdate, ctx) {
+			const runId = getRunId(ctx);
+			const rd = runDir(process.cwd(), runId);
+			const messenger = await loadMessengerState(rd);
+			const requiredFocuses = messenger?.required_focuses;
+			const coverage = await getPlanFocusCoverage(rd, { requiredFocuses });
+			const caps = capsForDebate(
+				planDebateIdForRun(runId),
+				messenger?.debate_profile,
+			);
+			const complete = planDebateOutcomeComplete(coverage, {
+				requiredFocuses,
+				minRoundIndex: caps.min_focus_rounds,
+			});
+			const lines = [
+				`Profile: ${messenger?.debate_profile ?? "standard"}`,
+				`Required: ${(requiredFocuses ?? ["spec", "wbs", "schedule", "quality"]).join(", ")}`,
+				`Covered: ${coverage.covered.join(", ") || "(none)"}`,
+				coverage.missing.length
+					? `Missing: ${coverage.missing.join(", ")}`
+					: "All required focuses covered.",
+				`Last round: ${coverage.last_round_index}, review_gate_ready=${coverage.last_review_gate_ready}`,
+				`Outcome complete: ${complete}`,
+				`Budget: min_focus_rounds=${caps.min_focus_rounds}, max_rounds=${caps.max_rounds}, max_exchanges_per_round=${caps.max_exchanges_per_round}`,
+			];
+			return {
+				content: [{ type: "text", text: lines.join("\n") }],
+				details: {
+					coverage,
+					caps,
+					complete,
+					profile: messenger?.debate_profile,
+				},
+			};
+		},
+	});
+
+	pi.registerTool({
+		name: "harness_debate_advance_thread",
+		label: "Advance Plan Debate Thread",
+		description:
+			"Ping-pong helper: read round transcript and return next spawn (evaluator clarification vs adversary counter) based on unresolved claim_ids and exchange_count.",
+		parameters: Type.Object({
+			round_index: Type.Number(),
+		}),
+		async execute(_id, params, _signal, _onUpdate, ctx) {
+			const runId = getRunId(ctx);
+			const roundIndex = Number(
+				(params as { round_index: number }).round_index,
+			);
+			const status = await getPlanDebateRoundStatus(
+				runDir(process.cwd(), runId),
+				roundIndex,
+				runId,
+			);
+			const text = [
+				`Round ${roundIndex}: exchange_count=${status.exchange_count}`,
+				status.unresolved_claim_ids.length
+					? `Unresolved claims: ${status.unresolved_claim_ids.join(", ")}`
+					: "No unresolved claims.",
+				status.next_tool
+					? `Next: ${status.next_tool}`
+					: "Dialogue complete — spawn review-integrator.",
+			].join("\n");
+			return {
+				content: [{ type: "text", text }],
 				details: status,
 			};
 		},

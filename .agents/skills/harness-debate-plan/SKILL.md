@@ -5,7 +5,7 @@ description: Plan-phase Review Gate debate — pi-messenger threads, lane YAML, 
 
 # harness-debate-plan
 
-Use when running **Phase 5** of `/harness-plan` — four Review Gate rounds with **pi-messenger-style** turn-taking (claims → rebuttals → integrate), then bus submission.
+Use when running **Phase 5** of `/harness-plan` — outcome-based Review Gate with **within-round dialogue** (claims → rebuttals → clarifications → counters → integrate), then bus submission.
 
 ## Open
 
@@ -14,71 +14,51 @@ harness_debate_open({})
 ```
 
 - Debate id is always `plan-<run_id>` (tool normalizes wrong ids).
-- Creates `.pi/harness/runs/<run_id>/debate-messenger/` (`inbox/<Agent>/`, `threads/round-N/transcript.jsonl`).
+- Creates `.pi/harness/runs/<run_id>/debate-messenger/`.
 
-Budget profile **plan**: `max_rounds=4`, `round_token_cap=2000`, `debate_global_cap=12000`.
+Budget profile **plan**:
 
-## Per-round spawn order (P1 sequential lanes)
+| Field | Value |
+|-------|-------|
+| min_focus_rounds | 4 |
+| max_rounds | 12 |
+| max_exchanges_per_round | 3 |
+| round_token_cap | 8000 |
+| debate_global_cap | 80000 |
 
-1. Round-specific lane spawns (write lane YAML with `write_harness_yaml`)
-2. `plan-evaluator` → lane artifact + `harness_messenger_post` (claims)
-3. `harness_messenger_read_round` → spawn `plan-adversary` with transcript
-4. `plan-adversary` → lane artifact + `harness_messenger_post` (rebuttals with `in_reply_to`)
-5. R1: `hypothesis-validator` first (blind — no decomposition/PlanPacket in prompt)
-6. R4: `sprint-contract-auditor` required before integrator
-7. `review-integrator` → integrator draft + `harness_messenger_post` (`integrate`)
-8. `harness_debate_submit_round({ round_index, integrator_draft })` — **only** path for `review-round-r{N}.yaml`
+## Focus coverage (not “exactly 4 rounds”)
 
-| Round | Extra lane artifacts |
-|-------|----------------------|
-| 1 | `hypothesis-validation-r1.yaml` |
-| 4 | `sprint-audit-r4.yaml` (required) |
+Call `harness_debate_focus_coverage` until all of `spec | wbs | schedule | quality` appear in submitted `review-round-r*.yaml` and last `review_gate_ready: true`.
 
-## Lane artifacts (auto-applied on subagent complete)
+## Per-round spawn order (sequential only — no parallel debate subagents)
 
-When a debate lane subagent finishes, the harness **automatically** writes lane YAML and posts messenger messages (evaluator claims, adversary rebuttals). Look for `harness-debate-next-step` in the transcript.
+1. R1: `hypothesis-validator` (blind) before evaluator.
+2. `plan-evaluator` → lane + messenger `claim`.
+3. `harness_messenger_read_round` → `plan-adversary` → `rebuttal`.
+4. Ping-pong while `unresolved_claim_ids` and `exchange_count < 3`:
+   - `harness_debate_advance_thread({ round_index })` for next spawn hint.
+   - Evaluator `clarification` / adversary `counter`.
+5. `sprint-contract-auditor` when focus is `quality` or round ≥ 4.
+6. `review-integrator` → `harness_debate_submit_round`.
 
-| Agent | Output path | Messenger |
-|-------|-------------|-----------|
-| hypothesis-validator | `artifacts/hypothesis-validation-r{N}.yaml` | — |
-| plan-evaluator | `artifacts/validation-turn-r{N}.yaml` | `claim` |
-| plan-adversary | `artifacts/adversary-brief-r{N}.yaml` | `rebuttal` |
-| sprint-contract-auditor | `artifacts/sprint-audit-r{N}.yaml` (R4) | optional |
-| review-integrator | *(integrator draft → `harness_debate_submit_round` only)* | `integrate` (on submit) |
+Lane YAML + messenger messages **auto-apply** on subagent complete (`harness-debate-next-step`). Fallback: `harness_debate_apply_lane`.
 
-Fallback: `harness_debate_apply_lane({ lane, content, round_index? })` if auto-apply missed fenced YAML.
+Resume: `harness_debate_round_status({ round_index: N })` → run listed `next_tool`.
 
-Resume after stop: `harness_debate_round_status({ round_index: N })` then run the listed `next_tool`.
+## Messenger kinds
 
-## Messenger tools
-
-```typescript
-harness_messenger_post({
-  round_index: 1,
-  from: "PlanEvaluatorAgent",
-  kind: "claim",
-  body: "...",
-  claim_ids: ["c1", "c2"],
-  to: ["broadcast"],
-})
-harness_messenger_post({
-  round_index: 1,
-  from: "PlanAdversaryAgent",
-  kind: "rebuttal",
-  in_reply_to: ["c1"],
-  body: "...",
-})
-harness_messenger_read_round({ round_index: 1 }) // for next spawn prompt
-```
-
-## Integrator + bus
-
-`harness_debate_submit_round` validates messenger thread + integrator rules (`review_gate_ready` false when checks fail without `disputes[]`), writes `review-round-r{N}.yaml`, emits bus `kind: round`.
-
-`StackResearchAgent` uses `artifacts/stack.yaml` claims — no spawn.
+| kind | from | when |
+|------|------|------|
+| claim | PlanEvaluatorAgent | after evaluator lane |
+| rebuttal | PlanAdversaryAgent | in_reply_to claim ids |
+| clarification | PlanEvaluatorAgent | addresses open claims |
+| counter | PlanAdversaryAgent | final pass; concede or dispute |
+| integrate | ReviewIntegratorAgent | on submit_round |
 
 ## Close
 
-After round 4: `harness_debate_consensus`. `approve_plan` is **hard-gated** on lane files, messenger, 4 bus rounds, and consensus not `block`.
+`harness_debate_consensus` when focus coverage complete. `approve_plan` is **hard-gated** on lanes, messenger dialogue completeness, bus rounds, consensus not `block`.
 
 Do not `approve_plan` on `policy_decision: block`. On `human_required` → `ask_user` first.
+
+Rubrics: `.pi/prompts/planning-rubrics.md`.

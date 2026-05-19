@@ -39,7 +39,7 @@
 		"round_index": {
 			"type": "integer",
 			"minimum": 1,
-			"maximum": 6
+			"maximum": 12
 		},
 		"participants": {
 			"type": "array",
@@ -104,7 +104,9 @@
 			"additionalProperties": false,
 			"required": [
 				"name",
+				"min_focus_rounds",
 				"max_rounds",
+				"max_exchanges_per_round",
 				"round_token_cap",
 				"debate_global_cap"
 			],
@@ -113,8 +115,19 @@
 					"type": "string",
 					"enum": ["aggressive", "plan"]
 				},
+				"min_focus_rounds": {
+					"type": "integer",
+					"minimum": 1
+				},
 				"max_rounds": {
-					"type": "integer"
+					"type": "integer",
+					"minimum": 1,
+					"maximum": 12
+				},
+				"max_exchanges_per_round": {
+					"type": "integer",
+					"minimum": 1,
+					"maximum": 6
 				},
 				"round_token_cap": {
 					"type": "integer"

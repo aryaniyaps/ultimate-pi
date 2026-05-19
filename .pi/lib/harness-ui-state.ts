@@ -299,6 +299,98 @@ function createStateFromEntries(entries: unknown[]): HarnessUiState {
 	return state;
 }
 
+export type HarnessStatusSeverity =
+	| "accent"
+	| "warning"
+	| "error"
+	| "success"
+	| "muted";
+
+export const HARNESS_PHASE_ORDER: readonly HarnessPhase[] = [
+	"plan",
+	"execute",
+	"evaluate",
+	"adversary",
+	"merge",
+] as const;
+
+export function formatHarnessPhaseLabel(phase: HarnessPhase): string {
+	switch (phase) {
+		case "plan":
+			return "plan";
+		case "execute":
+			return "build";
+		case "evaluate":
+			return "eval";
+		case "adversary":
+			return "review";
+		case "merge":
+			return "merge";
+	}
+}
+
+export function nextHarnessPhase(phase: HarnessPhase): HarnessPhase | null {
+	const index = HARNESS_PHASE_ORDER.indexOf(phase);
+	if (index < 0 || index >= HARNESS_PHASE_ORDER.length - 1) return null;
+	return HARNESS_PHASE_ORDER[index + 1] ?? null;
+}
+
+function truncateStatusCommand(command: string, maxLen = 40): string {
+	if (command.length <= maxLen) return command;
+	return `${command.slice(0, maxLen - 3)}...`;
+}
+
+export function deriveHarnessStatusHint(state: HarnessUiState): {
+	text: string;
+	severity: HarnessStatusSeverity;
+} {
+	if (state.budgetExhausted) {
+		return { text: "Budget limit reached", severity: "error" };
+	}
+	if (state.testIntegritySeverity === "high") {
+		return { text: "Test integrity issue", severity: "error" };
+	}
+	if (state.policyDecision === "block") {
+		return { text: "Blocked — fix issues first", severity: "error" };
+	}
+	if (
+		state.policyDecision === "human_required" ||
+		state.flowSubstate === "human-required"
+	) {
+		return { text: "Waiting for your input", severity: "warning" };
+	}
+	if (state.nextRecommendedCommand) {
+		return {
+			text: `Next: ${truncateStatusCommand(state.nextRecommendedCommand)}`,
+			severity: "accent",
+		};
+	}
+	if (state.phase === "plan") {
+		if (!state.planApproved) {
+			return { text: "Approve plan to continue", severity: "warning" };
+		}
+		return { text: "Plan approved", severity: "success" };
+	}
+	if (state.policyDecision === "pass") {
+		return { text: "Checks passed", severity: "success" };
+	}
+	if (state.policyDecision === "conditional_pass") {
+		return { text: "Passed with notes", severity: "warning" };
+	}
+	switch (state.phase) {
+		case "execute":
+			return { text: "Implementing changes", severity: "accent" };
+		case "evaluate":
+			return { text: "Running checks", severity: "accent" };
+		case "adversary":
+			return { text: "Review gate", severity: "accent" };
+		case "merge":
+			return { text: "Ready to finish", severity: "accent" };
+		default:
+			return { text: "Planning", severity: "muted" };
+	}
+}
+
 export class HarnessUiStateStore {
 	private lastEntriesLen = -1;
 	private cachedState: HarnessUiState = {

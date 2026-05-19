@@ -19,6 +19,17 @@ import {
 	setDebateState,
 	setLastSeverity,
 } from "./debate-bus-state.js";
+import {
+	type DebateProfile,
+	PLAN_BUDGET_LIGHT,
+	PLAN_BUDGET_STANDARD,
+} from "./plan-debate-eligibility.js";
+import {
+	getPlanFocusCoverage,
+	PLAN_FOCUS_AREAS,
+	type PlanDebateFocus,
+	planDebateOutcomeComplete,
+} from "./plan-debate-focus.js";
 
 export type PolicyDecision =
 	| "pass"
@@ -66,11 +77,7 @@ const THRESHOLDS = {
 };
 const HARD_STOP_DEBATE_CAPS = process.env.HARNESS_DEBATE_HARD_STOP === "true";
 
-const PLAN_BUDGET = {
-	max_rounds: 4,
-	round_token_cap: 2000,
-	debate_global_cap: 12000,
-} as const;
+const PLAN_BUDGET = PLAN_BUDGET_STANDARD;
 
 const AGGRESSIVE_BUDGET = {
 	max_rounds: 6,
@@ -88,16 +95,28 @@ function toSafeFloat(value: unknown): number {
 	return Math.max(0, Math.min(1, n));
 }
 
-export function capsForDebate(debateId: string): {
+export function capsForDebate(
+	debateId: string,
+	profile?: DebateProfile,
+): {
 	name: "plan" | "aggressive";
+	min_focus_rounds: number;
 	max_rounds: number;
+	max_exchanges_per_round: number;
 	round_token_cap: number;
 	debate_global_cap: number;
 } {
 	if (isPlanDebateId(debateId)) {
-		return { name: "plan", ...PLAN_BUDGET };
+		const active = profile ?? getDebateState()?.debate_profile ?? "standard";
+		const budget = active === "light" ? PLAN_BUDGET_LIGHT : PLAN_BUDGET;
+		return { name: "plan", ...budget };
 	}
-	return { name: "aggressive", ...AGGRESSIVE_BUDGET };
+	return {
+		name: "aggressive",
+		min_focus_rounds: 1,
+		max_exchanges_per_round: 1,
+		...AGGRESSIVE_BUDGET,
+	};
 }
 
 function participantAllowed(
@@ -161,23 +180,40 @@ export interface DebateBusHooks {
 	appendEntry: (customType: string, data: unknown) => void;
 }
 
+export interface OpenDebateBusOptions {
+	debate_profile?: DebateProfile;
+	required_focuses?: DebateState["required_focuses"];
+}
+
 export async function openDebateBus(
 	runId: string,
 	debateId: string,
 	hooks: DebateBusHooks,
+	opts?: OpenDebateBusOptions,
 ): Promise<DebateState> {
-	const caps = capsForDebate(debateId);
+	const profile = opts?.debate_profile ?? "standard";
+	const caps = capsForDebate(debateId, profile);
 	const debate_phase = debatePhaseFromId(debateId);
+	const defaultFocuses: PlanDebateFocus[] =
+		profile === "light" ? ["spec", "quality"] : [...PLAN_FOCUS_AREAS];
+	const required_focuses =
+		opts?.required_focuses && opts.required_focuses.length > 0
+			? opts.required_focuses
+			: defaultFocuses;
 	const next: DebateState = {
 		run_id: runId,
 		debate_id: debateId,
 		debate_phase,
 		round_count: 0,
 		budget_used: 0,
+		min_focus_rounds: caps.min_focus_rounds,
 		max_rounds: caps.max_rounds,
+		max_exchanges_per_round: caps.max_exchanges_per_round,
 		round_token_cap: caps.round_token_cap,
 		debate_global_cap: caps.debate_global_cap,
 		last_review_gate_ready: false,
+		debate_profile: profile,
+		required_focuses,
 	};
 	setDebateState(next);
 	setLastSeverity({
@@ -199,6 +235,8 @@ export async function openDebateBus(
 			opened_at: nowIso(),
 			debate_phase,
 			budget_profile: caps.name,
+			debate_profile: profile,
+			required_focuses,
 		},
 	};
 	hooks.appendEntry("harness-debate-envelope", envelope);
@@ -230,7 +268,9 @@ async function emitBudgetExhausted(
 			budget_used: state.budget_used,
 			exhaustion_reason: reason,
 			caps: {
+				min_focus_rounds: state.min_focus_rounds,
 				max_rounds: state.max_rounds,
+				max_exchanges_per_round: state.max_exchanges_per_round,
 				round_token_cap: state.round_token_cap,
 				debate_global_cap: state.debate_global_cap,
 			},
@@ -327,7 +367,9 @@ export async function acceptDebateRound(
 		token_usage: envelope.payload.token_usage,
 		budget_profile: {
 			name: profileName,
+			min_focus_rounds: state.min_focus_rounds,
 			max_rounds: state.max_rounds,
+			max_exchanges_per_round: state.max_exchanges_per_round,
 			round_token_cap: state.round_token_cap,
 			debate_global_cap: state.debate_global_cap,
 		},
@@ -363,12 +405,24 @@ export async function finalizeDebateConsensus(
 	);
 	const decision = decidePolicy(lastSeverity, evidenceScore);
 	const planPhase = state.debate_phase === "plan";
-	const evaluatorPassed = planPhase
-		? Boolean(state.last_review_gate_ready)
-		: true;
-	const debateComplete = planPhase
-		? state.round_count >= state.max_rounds
-		: state.round_count > 0;
+	let evaluatorPassed = true;
+	let debateComplete = state.round_count > 0;
+	if (planPhase) {
+		const runDir = join(process.cwd(), ".pi", "harness", "runs", state.run_id);
+		const requiredFocuses =
+			state.required_focuses && state.required_focuses.length > 0
+				? state.required_focuses
+				: undefined;
+		const coverage = await getPlanFocusCoverage(runDir, {
+			requiredFocuses,
+		});
+		evaluatorPassed =
+			coverage.last_review_gate_ready || Boolean(state.last_review_gate_ready);
+		debateComplete = planDebateOutcomeComplete(coverage, {
+			requiredFocuses,
+			minRoundIndex: state.min_focus_rounds,
+		});
+	}
 
 	const consensus = {
 		schema_version: "1.0.0",

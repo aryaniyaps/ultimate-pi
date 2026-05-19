@@ -1,0 +1,24 @@
+schema_version: "1.0.0"
+round_index: 1
+debate_round_focus: spec
+round_summary: Spec round for light profile fixture
+validation_summary: Spec checks pass
+adversary_summary: No blocking findings
+disputes: []
+recommended_packet_patches: []
+review_gate_ready: false
+participants:
+  - PlanEvaluatorAgent
+  - PlanAdversaryAgent
+  - HypothesisValidatorAgent
+  - ReviewIntegratorAgent
+claims:
+  - spec validation complete
+rebuttals: []
+evidence_refs: []
+token_usage:
+  per_agent:
+    PlanEvaluatorAgent: 80
+    PlanAdversaryAgent: 80
+  round_total: 160
+consensus_delta: 0.1

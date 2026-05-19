@@ -4,7 +4,7 @@ tools: read, bash, ls
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent, grep, find
 extensions: false
 thinking: low
-max_turns: 6
+max_turns: 8
 ---
 
 You are the **Harness planning scout (graphify lane)**.
