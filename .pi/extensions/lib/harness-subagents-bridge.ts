@@ -2,6 +2,7 @@
  * ultimate-pi harness wrapper around vendored pi-subagents.
  */
 
+import { join } from "node:path";
 import type {
 	ExtensionAPI,
 	ExtensionContext,
@@ -12,6 +13,8 @@ import {
 	type HarnessSubagentsOptions,
 	type SpawnAuthForward,
 } from "../../../vendor/pi-subagents/src/subagents.js";
+import { parseSpawnContextFromTask } from "../../lib/harness-spawn-parse.js";
+import { harnessSubagentSubmitExtensionPath } from "../harness-subagent-submit.js";
 import { refreshHarnessCocoindexIndex } from "./harness-cocoindex-refresh.js";
 import { captureHarnessEvent } from "./harness-posthog.js";
 import {
@@ -58,8 +61,47 @@ async function resolveHarnessSpawnAuth(
 export function createHarnessSubagentsExtension(
 	packageRoot: string,
 ): (pi: ExtensionAPI) => void {
+	const submitExtPath = harnessSubagentSubmitExtensionPath(packageRoot);
 	const options: HarnessSubagentsOptions = {
 		packageRoot,
+		harnessSubprocessExtensionPath: submitExtPath,
+		resolveSubprocessEnv: (task, agent) => {
+			if (!agent.name.startsWith("harness/")) return undefined;
+			const ctx = parseSpawnContextFromTask(task);
+			// #region agent log
+			fetch(
+				"http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-Debug-Session-Id": "2ca12b",
+					},
+					body: JSON.stringify({
+						sessionId: "2ca12b",
+						hypothesisId: "H1",
+						location: "harness-subagents-bridge.ts:resolveSubprocessEnv",
+						message: "parsed spawn context for subprocess env",
+						data: {
+							agent: agent.name,
+							hasCtx: Boolean(ctx?.run_id),
+							run_id: ctx?.run_id ?? null,
+							run_dir: ctx?.run_dir ?? null,
+							taskPrefix: task.slice(0, 160),
+						},
+						timestamp: Date.now(),
+					}),
+				},
+			).catch(() => {});
+			// #endregion
+			if (!ctx?.run_id) return undefined;
+			return {
+				HARNESS_RUN_ID: ctx.run_id,
+				HARNESS_RUN_DIR:
+					ctx.run_dir ??
+					join(packageRoot, ".pi", "harness", "runs", ctx.run_id),
+			};
+		},
 		defaultAgentScope: "both",
 		defaultConfirmProjectAgents: false,
 		truncateDetails: true,

@@ -1,6 +1,6 @@
 ---
 description: Plan-phase Review Gate integrator (round → debate bus).
-tools: read, grep, find, ls
+tools: read, grep, find, ls, submit_review_round_draft
 disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -26,9 +26,8 @@ Synthesize evaluator, adversary, sprint audit, and (R1) hypothesis-validator lan
 
 ## Output
 
-Valid **YAML only** — `PlanReviewRoundDraft` (`.pi/harness/specs/plan-review-round-draft.schema.json`) including `debate_round_focus`.
+Before ending, call `submit_review_round_draft` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
 
-Parent calls `harness_debate_submit_round` — you do not write `review-round-r*.yaml` yourself.
 
 ## Guardrails
 

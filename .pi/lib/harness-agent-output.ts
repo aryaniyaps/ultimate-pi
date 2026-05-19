@@ -21,6 +21,51 @@ export function extractJsonBlock(text: string): string | null {
 	return null;
 }
 
+export interface ToolCallPartLike {
+	type?: string;
+	name?: string;
+	arguments?: Record<string, unknown>;
+}
+
+export interface MessageLike {
+	role?: string;
+	content?: ToolCallPartLike[] | unknown;
+}
+
+/** Last matching submit_* tool call in subprocess messages (chain-safe). */
+export function extractLastSubmitCall(
+	messages: MessageLike[],
+	toolNames: string | string[],
+): { toolName: string; document: Record<string, unknown> } | null {
+	const allowed = new Set(
+		(Array.isArray(toolNames) ? toolNames : [toolNames]).map((n) => n.trim()),
+	);
+	let last: { toolName: string; document: Record<string, unknown> } | null =
+		null;
+	for (const msg of messages) {
+		if (msg.role !== "assistant" || !Array.isArray(msg.content)) continue;
+		for (const part of msg.content) {
+			if (part.type !== "toolCall" || !part.name) continue;
+			if (!allowed.has(part.name)) continue;
+			const doc = part.arguments?.document;
+			if (doc && typeof doc === "object" && !Array.isArray(doc)) {
+				last = {
+					toolName: part.name,
+					document: doc as Record<string, unknown>,
+				};
+			}
+		}
+	}
+	return last;
+}
+
+export function extractLastSubmitCallForAgent(
+	messages: MessageLike[],
+	agentToolNames: readonly string[],
+): { toolName: string; document: Record<string, unknown> } | null {
+	return extractLastSubmitCall(messages, [...agentToolNames]);
+}
+
 export function parseHarnessAgentJson<T extends Record<string, unknown>>(
 	text: string,
 ): { ok: true; value: T } | { ok: false; error: string } {

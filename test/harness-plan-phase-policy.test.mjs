@@ -39,9 +39,16 @@ function runCtx(runId, projectRoot) {
 
 test("plan debate id is plan-<run_id>", () => {
 	assert.equal(planDebateIdForRun("run-abc"), "plan-run-abc");
-	const caps = capsForDebate("plan-run-abc");
-	assert.equal(caps.min_focus_rounds, 4);
-	assert.equal(caps.max_exchanges_per_round, 3);
+	const prev = process.env.HARNESS_BUDGET_ENFORCE;
+	process.env.HARNESS_BUDGET_ENFORCE = "1";
+	try {
+		const caps = capsForDebate("plan-run-abc");
+		assert.equal(caps.min_focus_rounds, 4);
+		assert.equal(caps.max_exchanges_per_round, 3);
+	} finally {
+		if (prev === undefined) delete process.env.HARNESS_BUDGET_ENFORCE;
+		else process.env.HARNESS_BUDGET_ENFORCE = prev;
+	}
 });
 
 test("isCanonicalPlanPacketPath accepts only plan-packet.yaml", () => {

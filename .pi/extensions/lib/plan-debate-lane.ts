@@ -45,6 +45,21 @@ export function laneArtifactPath(
 	}
 }
 
+/** Apply messenger side effects when artifact YAML was already written via submit tool. */
+export async function applyDebateLaneFromDoc(opts: {
+	runDir: string;
+	lane: DebateLaneKind;
+	doc: Record<string, unknown>;
+	roundIndex?: number;
+}): Promise<ApplyDebateLaneResult> {
+	return applyDebateLane({
+		runDir: opts.runDir,
+		lane: opts.lane,
+		content: JSON.stringify(opts.doc),
+		roundIndex: opts.roundIndex,
+	});
+}
+
 export function extractClaimIds(doc: Record<string, unknown>): string[] {
 	const explicit = doc.messenger_claim_ids;
 	if (Array.isArray(explicit)) {

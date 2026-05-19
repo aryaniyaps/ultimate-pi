@@ -8,6 +8,10 @@
 import { appendFile, mkdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import {
+	isHarnessBudgetEnforceOn,
+	shouldEmitBlockingBudgetExhausted,
+} from "../lib/harness-budget-enforce.js";
 import { getRunIdFromSession } from "../lib/harness-run-context.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
@@ -52,7 +56,8 @@ const EVENTS_FILE = join(RUNS_DIR, "budget-events.jsonl");
 const DEFAULT_GLOBAL_CAP = Number(
 	process.env.HARNESS_BUDGET_TOTAL_TOKENS ?? "120000",
 );
-const HARD_STOP_BUDGETS = process.env.HARNESS_BUDGET_HARD_STOP === "true";
+const HARD_STOP_BUDGETS =
+	process.env.HARNESS_BUDGET_HARD_STOP === "true" && isHarnessBudgetEnforceOn();
 const DEFAULT_PHASE_CAPS: Record<HarnessPhase, number> = {
 	plan: Number(process.env.HARNESS_BUDGET_PLAN_TOKENS ?? "80000"),
 	execute: Number(process.env.HARNESS_BUDGET_EXECUTE_TOKENS ?? "80000"),
@@ -190,7 +195,9 @@ async function emitBudgetEvent(
 	await ensureRunsDir();
 	const line = `${JSON.stringify({ timestamp: nowIso(), ...event })}\n`;
 	await appendFile(EVENTS_FILE, line, "utf-8");
-	pi.appendEntry("harness-budget-exhausted", event);
+	if (shouldEmitBlockingBudgetExhausted()) {
+		pi.appendEntry("harness-budget-exhausted", event);
+	}
 }
 
 const debouncedSoftLimit = new Map<string, boolean>();
@@ -240,26 +247,33 @@ export default function budgetGuard(pi: ExtensionAPI) {
 		};
 
 		const debounceKey = `${runId}:${phase}:${exhaustionReason}`;
-		if (!debouncedSoftLimit.has(debounceKey)) {
-			debouncedSoftLimit.set(debounceKey, true);
-			await emitBudgetEvent(pi, exhausted);
+		const softKey = `${debounceKey}:soft`;
+		if (!debouncedSoftLimit.has(softKey)) {
+			debouncedSoftLimit.set(softKey, true);
+			pi.appendEntry("harness-budget-soft-limit", {
+				run_id: exhausted.run_id,
+				phase,
+				phaseUsed,
+				phaseCap,
+				totalUsed: usage.totalTokens,
+				totalCap: globalCap,
+				exhaustion_reason: exhaustionReason,
+				timestamp: nowIso(),
+			});
+			pi.appendEntry("harness-budget-telemetry", {
+				...exhausted,
+				telemetry_only: !isHarnessBudgetEnforceOn(),
+			});
+		}
+
+		if (isHarnessBudgetEnforceOn()) {
+			if (!debouncedSoftLimit.has(debounceKey)) {
+				debouncedSoftLimit.set(debounceKey, true);
+				await emitBudgetEvent(pi, exhausted);
+			}
 		}
 
 		if (!HARD_STOP_BUDGETS) {
-			const softKey = `${debounceKey}:soft`;
-			if (!debouncedSoftLimit.has(softKey)) {
-				debouncedSoftLimit.set(softKey, true);
-				pi.appendEntry("harness-budget-soft-limit", {
-					run_id: exhausted.run_id,
-					phase,
-					phaseUsed,
-					phaseCap,
-					totalUsed: usage.totalTokens,
-					totalCap: globalCap,
-					exhaustion_reason: exhaustionReason,
-					timestamp: nowIso(),
-				});
-			}
 			return undefined;
 		}
 		return {

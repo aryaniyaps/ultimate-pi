@@ -22,6 +22,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0034](0034-darwin-plan-research-pipeline.md) | Darwin plan research pipeline | Accepted |
 | [0035](0035-plan-phase-review-gate.md) | Plan-phase Review Gate | Accepted |
 | [0036](0036-implementation-research-and-selective-debate.md) | Implementation research and selective debate | Accepted |
+| [0037](0037-subagent-submit-tools.md) | Subagent submit tools (subprocess extension) | Accepted |
+| [0038](0038-budget-telemetry-only.md) | Budget caps telemetry-only by default | Accepted |
 
 ## Template
 

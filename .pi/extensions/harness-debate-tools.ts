@@ -9,6 +9,10 @@ import { Type } from "@sinclair/typebox";
 import { parse as parseYaml } from "yaml";
 import type { DebateParticipant } from "../lib/debate-orchestrator-types.js";
 import {
+	extractLastSubmitCall,
+	type MessageLike,
+} from "../lib/harness-agent-output.js";
+import {
 	getLatestRunContext,
 	getRunIdFromSession,
 } from "../lib/harness-run-context.js";
@@ -22,6 +26,7 @@ import {
 import { getDebateState } from "./lib/debate-bus-state.js";
 import { claimExtensionLoad } from "./lib/extension-load-guard.js";
 import { captureHarnessEvent } from "./lib/harness-posthog.js";
+import { DEBATE_AGENT_SUBMIT_TOOL } from "./lib/harness-subagent-submit-registry.js";
 import {
 	type DebateEligibilityInput,
 	harnessPlanDebateEligibility,
@@ -40,6 +45,7 @@ import {
 } from "./lib/plan-debate-id.js";
 import {
 	applyDebateLane,
+	applyDebateLaneFromDoc,
 	type DebateLaneKind,
 	debateLaneForAgent,
 	formatApplyLaneMessage,
@@ -95,12 +101,18 @@ function telemetryRound(
 
 function subagentResults(
 	details: unknown,
-): Array<{ agent: string; finalOutput?: string }> {
+): Array<{ agent: string; finalOutput?: string; messages?: MessageLike[] }> {
 	const d = details as {
-		results?: Array<{ agent: string; finalOutput?: string }>;
+		results?: Array<{
+			agent: string;
+			finalOutput?: string;
+			messages?: MessageLike[];
+		}>;
 	};
 	return d?.results ?? [];
 }
+
+const USE_SUBMIT_TOOLS = process.env.HARNESS_SUBMIT_TOOLS !== "0";
 
 export default function harnessDebateTools(pi: ExtensionAPI) {
 	if (!claimExtensionLoad("harness-debate-tools", MODULE_URL)) return;
@@ -118,7 +130,34 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 		let lastRound = 1;
 		for (const result of subagentResults(event.details)) {
 			const lane = debateLaneForAgent(result.agent ?? "");
-			if (!lane || !result.finalOutput?.trim()) continue;
+			if (!lane) continue;
+
+			const submitTool = DEBATE_AGENT_SUBMIT_TOOL[result.agent ?? ""];
+			const submitCall =
+				USE_SUBMIT_TOOLS && submitTool && result.messages
+					? extractLastSubmitCall(result.messages, submitTool)
+					: null;
+
+			if (submitCall) {
+				const out = await applyDebateLaneFromDoc({
+					runDir: rd,
+					lane,
+					doc: submitCall.document,
+				});
+				if (out.round_index) lastRound = out.round_index;
+				pi.appendEntry("harness-debate-lane-applied", {
+					agent: result.agent,
+					source: "submit_tool",
+					tool: submitCall.toolName,
+					...out,
+				});
+				applied.push(formatApplyLaneMessage(out));
+				continue;
+			}
+
+			if (!result.finalOutput?.trim()) continue;
+			if (USE_SUBMIT_TOOLS && submitTool) continue;
+
 			const out = await applyDebateLane({
 				runDir: rd,
 				lane,

@@ -1,6 +1,6 @@
 ---
 description: Plan-phase scout — ast-grep structural code search (read-only).
-tools: read, bash, ls
+tools: read, bash, ls, submit_scout_findings
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent, grep, find
 extensions: false
 thinking: low
@@ -30,21 +30,6 @@ Read `HarnessSpawnContext` in the spawn prompt. For `mode: revise`, read the exi
 
 Read-only only: no installs, redirects, or mutating git/npm commands.
 
-## Output limits
+## Output
 
-- `findings`: at most **8** bullets
-- `key_paths`: at most **10** absolute paths
-- `open_questions`: at most **5** items
-
-## Output (required JSON block)
-
-```json
-{
-  "schema_version": "1.0.0",
-  "lane": "structure",
-  "status": "ok",
-  "findings": ["…"],
-  "key_paths": ["/absolute/path"],
-  "open_questions": ["…"]
-}
-```
+Before ending, call `submit_scout_findings` exactly once with the full document (`schema_version`, `lane`, `status`, `findings`, `key_paths`, `open_questions`). Do not paste the artifact as prose — the tool write is the deliverable.

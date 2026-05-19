@@ -5,8 +5,9 @@
  * in before_agent_start so trace-recorder reuses it on agent_start.
  */
 
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { constants } from "node:fs";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 import {
@@ -56,6 +57,10 @@ import {
 	writeYamlFile,
 } from "../lib/harness-yaml.js";
 import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import {
+	evaluateHarnessSubagentToolCall,
+	isSubmitToolName,
+} from "./lib/harness-subagent-policy.js";
 import { isReviewRoundArtifactPath } from "./lib/plan-debate-gate.js";
 import { isReviewRoundYamlWriteAllowed } from "./lib/plan-debate-write-guard.js";
 
@@ -714,6 +719,36 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	});
 
 	pi.on("tool_call", async (event, ctx) => {
+		// #region agent log
+		fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"X-Debug-Session-Id": "2ca12b",
+			},
+			body: JSON.stringify({
+				sessionId: "2ca12b",
+				location: "harness-run-context.ts:tool_call",
+				message: "submit policy hook",
+				data: {
+					toolName: event.toolName,
+					typeofIsSubmitToolName: typeof isSubmitToolName,
+				},
+				timestamp: Date.now(),
+				hypothesisId: "H1",
+			}),
+		}).catch(() => {});
+		// #endregion
+		if (isSubmitToolName(event.toolName)) {
+			const decision = evaluateHarnessSubagentToolCall(
+				event.toolName,
+				event.input as Record<string, unknown>,
+				"parent-orchestrator",
+			);
+			if (decision.action === "block") {
+				return { block: true, reason: decision.reason };
+			}
+		}
 		if (event.toolName === "write") {
 			const entries = getEntries(ctx);
 			const runCtx = getLatestRunContext(entries) ?? activeCtx;
@@ -1026,6 +1061,65 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 					},
 				],
 				details: { path: absPath },
+			};
+		},
+	});
+
+	pi.registerTool({
+		name: "harness_artifact_ready",
+		label: "Harness Artifact Ready",
+		description:
+			"Check that harness artifact paths exist under the active run (no JSON parsing).",
+		parameters: Type.Object({
+			paths: Type.Array(Type.String(), {
+				minItems: 1,
+				description:
+					"Relative paths under the run dir, e.g. artifacts/decomposition.yaml",
+			}),
+		}),
+		async execute(_id, params, _signal, _onUpdate, ctx) {
+			const entries = getEntries(ctx);
+			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			if (!runCtx?.run_id) {
+				return {
+					content: [{ type: "text", text: "No active harness run." }],
+					details: {},
+					isError: true,
+				};
+			}
+			const paths = (params as { paths?: string[] }).paths ?? [];
+			const projectRoot = process.cwd();
+			const runRoot = join(
+				projectRoot,
+				".pi",
+				"harness",
+				"runs",
+				runCtx.run_id,
+			);
+			const missing: string[] = [];
+			const present: string[] = [];
+			for (const rel of paths) {
+				const normalized = rel.replace(/\\/g, "/");
+				const abs = join(runRoot, normalized);
+				try {
+					await access(abs, constants.R_OK);
+					present.push(normalized);
+				} catch {
+					missing.push(normalized);
+				}
+			}
+			const ok = missing.length === 0;
+			return {
+				content: [
+					{
+						type: "text",
+						text: ok
+							? `All ${present.length} artifact(s) present.`
+							: `Missing: ${missing.join(", ")}`,
+					},
+				],
+				details: { ok, present, missing, run_id: runCtx.run_id },
+				isError: !ok,
 			};
 		},
 	});

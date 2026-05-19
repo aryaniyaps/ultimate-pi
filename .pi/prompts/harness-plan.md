@@ -1,13 +1,13 @@
 ---
 description: PM-grade harness plan — scouts, implementation research, ExecutionPlan, DAG validation, selective Review Gate debate, approval.
-argument-hint: "\"<task>\" [--risk low|med|high] [--budget <amount>] [--quick]"
+argument-hint: "\"<task>\" [--risk low|med|high] [--quick]"
 ---
 
 # harness-plan
 
 You are the **planning PM** for this harness run. Produce an execution baseline (`plan-packet.yaml` + `plan-review.md`), not strategy theater. Parent owns `ask_user`, `approve_plan`, `create_plan`, debate bus commands, and YAML writes under `.pi/harness/runs/<run_id>/`.
 
-Never `write`/`edit` the final canonical packet except via **`write_harness_yaml`** for run artifacts and **`create_plan`** after approval. Do not paste JSON into `.yaml` files — subagents emit JSON; you convert via `write_harness_yaml`.
+Subagents persist artifacts via scoped **`submit_*`** tools (deterministic YAML under the run dir). Parent uses **`harness_artifact_ready`** to gate phases (no JSON parsing). Parent merges still use **`write_harness_yaml`** for `research-brief.yaml`, `plan-packet.yaml` shell, and integrator patches only.
 
 ## Allowed subagents
 
@@ -33,12 +33,12 @@ Read **harness-debate-plan** skill before Review Gate rounds.
 2. Each `subagent` call blocks until subprocesses finish — batch parallel scouts in one `tasks` array.
 3. Do **not** set `timeoutMs` unless the user explicitly requests a cap — subagents run until natural completion (optional backstop: `PI_SUBAGENT_TIMEOUT_MS`).
 4. No harness subagent spawn cap — run the full scout + research + debate pipeline without skipping lanes for budget.
-5. Compact task text: embed `HarnessSpawnContext` JSON + lane-specific instructions only.
+5. Compact task text: embed spawn context + lane instructions. Prefer `HarnessSpawnContext={"run_id":"…","plan_packet_path":"…",…}` or a JSON object with `"HarnessSpawnContext":{…}` — both parse; `run_id` is required so subprocess submit tools get `HARNESS_RUN_ID`.
 
 ## Step 0 — Parse `$ARGUMENTS`
 
 - task (required)
-- `--risk low|med|high`, `--budget`, `--quick`
+- `--risk low|med|high`, `--quick` (`--budget` is reserved/no-op; token budgets are telemetry-only unless `HARNESS_BUDGET_ENFORCE=1`)
 
 `--quick` skips **scout-semantic** and post-run adversary only — **never** skip graphify, structure, decompose, hypothesis, **Phase 3.5 implementation research**, stack research, execution plan, DAG validation, or **Review Gate debate**.
 
@@ -64,9 +64,11 @@ Do **not** run `ccc index` or `ccc search --refresh`. The harness runs increment
 
 Add `harness/planning/scout-semantic` to `tasks` unless `--quick`. Require graphify + structure success. Semantic lane uses `ccc search` only (see `scout-semantic` agent).
 
+After scouts: `harness_artifact_ready({ paths: ["artifacts/scout-graphify.yaml", "artifacts/scout-structure.yaml", ...] })`.
+
 ## Phase 2 & 3 — Decompose + hypothesis (parallel)
 
-One `subagent` call with `tasks` for `harness/planning/decompose` and `harness/planning/hypothesis`. Parse `PlanDecompositionBrief` and `PlanHypothesisBrief` from outputs. Persist with `write_harness_yaml` → `artifacts/decomposition.yaml` and `artifacts/hypothesis.yaml`.
+One `subagent` call with `tasks` for `harness/planning/decompose` and `harness/planning/hypothesis` (include scout YAML paths in task text). Gate with `harness_artifact_ready` on `artifacts/decomposition.yaml` and `artifacts/hypothesis.yaml`.
 
 Decompose **prior_art** is **internal only** (from scouts). External prior art arrives in Phase 3.5.
 
@@ -84,8 +86,8 @@ Decompose **prior_art** is **internal only** (from scouts). External prior art a
 }
 ```
 
-- `write_harness_yaml` → `artifacts/implementation-research.yaml` and `artifacts/stack.yaml`.
-- Merge both into `research-brief.yaml` (`implementation:` + `stack:`).
+- Subagents write via `submit_implementation_research` / `submit_stack_brief`; gate with `harness_artifact_ready` on both paths.
+- Merge both into `research-brief.yaml` (`implementation:` + `stack:`) via parent `write_harness_yaml`.
 - **Partial failure:** if one lane fails, re-spawn that lane once; if still failing set `plan_status: partial` and `human_required` via `ask_user`. Do not proceed to Phase 4b without both artifacts or explicit human waiver.
 - **Web dedup:** implementation owns patterns/repos; stack owns libraries/versions — no overlapping queries.
 

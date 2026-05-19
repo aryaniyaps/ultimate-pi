@@ -28,23 +28,50 @@ test("isPlanDebateId detects plan- prefix", () => {
 	assert.equal(debatePhaseFromId("debate-x"), "post_execute");
 });
 
+function withBudgetEnforce(fn) {
+	const prev = process.env.HARNESS_BUDGET_ENFORCE;
+	process.env.HARNESS_BUDGET_ENFORCE = "1";
+	try {
+		fn();
+	} finally {
+		if (prev === undefined) delete process.env.HARNESS_BUDGET_ENFORCE;
+		else process.env.HARNESS_BUDGET_ENFORCE = prev;
+	}
+}
+
 test("plan debate caps respect light profile", () => {
-	const light = capsForDebate("plan-smoke", "light");
-	assert.equal(light.min_focus_rounds, 2);
-	assert.equal(light.debate_global_cap, 40000);
+	withBudgetEnforce(() => {
+		const light = capsForDebate("plan-smoke", "light");
+		assert.equal(light.min_focus_rounds, 2);
+		assert.equal(light.debate_global_cap, 40000);
+	});
 });
 
 test("plan debate caps use outcome-based budget profile", () => {
-	const plan = capsForDebate("plan-smoke");
-	const post = capsForDebate("debate-smoke");
-	assert.equal(plan.name, "plan");
-	assert.equal(plan.min_focus_rounds, 4);
-	assert.equal(plan.max_rounds, 12);
-	assert.equal(plan.max_exchanges_per_round, 3);
-	assert.equal(plan.round_token_cap, 8000);
-	assert.equal(plan.debate_global_cap, 80000);
-	assert.equal(post.max_rounds, 6);
-	assert.ok(plan.debate_global_cap > post.debate_global_cap);
+	withBudgetEnforce(() => {
+		const plan = capsForDebate("plan-smoke");
+		const post = capsForDebate("debate-smoke");
+		assert.equal(plan.name, "plan");
+		assert.equal(plan.min_focus_rounds, 4);
+		assert.equal(plan.max_rounds, 12);
+		assert.equal(plan.max_exchanges_per_round, 3);
+		assert.equal(plan.round_token_cap, 8000);
+		assert.equal(plan.debate_global_cap, 80000);
+		assert.equal(post.max_rounds, 6);
+		assert.ok(plan.debate_global_cap > post.debate_global_cap);
+	});
+});
+
+test("plan debate caps are relaxed when budget enforce is off", () => {
+	const prev = process.env.HARNESS_BUDGET_ENFORCE;
+	delete process.env.HARNESS_BUDGET_ENFORCE;
+	try {
+		const plan = capsForDebate("plan-smoke");
+		assert.equal(plan.max_rounds, 999);
+		assert.equal(plan.max_exchanges_per_round, 99);
+	} finally {
+		if (prev !== undefined) process.env.HARNESS_BUDGET_ENFORCE = prev;
+	}
 });
 
 test("buildPlanReviewRoundEnvelope produces bus round", () => {

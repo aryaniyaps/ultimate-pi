@@ -1,6 +1,6 @@
 ---
 description: Plan-phase scout — graphify graph and wiki navigation (read-only).
-tools: read, bash, ls
+tools: read, bash, ls, submit_scout_findings
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent, grep, find
 extensions: false
 thinking: low
@@ -32,25 +32,6 @@ Read `HarnessSpawnContext` in the spawn prompt (`task_summary`, `mode`, `plan_pa
 
 Read-only only: no `graphify update`, `graphify extract`, `pip install`, redirects (`>`, `>>`), or file creation. Allowed: `graphify query`, `graphify path`, `graphify explain`, `ls`, `cat`, `head`.
 
-## Output limits
+## Output
 
-- `findings`: at most **8** bullets, each ≤2 sentences
-- `key_paths`: at most **10** absolute paths
-- `open_questions`: at most **5** items
-
-## Output (required JSON block)
-
-End with one fenced `json` block:
-
-```json
-{
-  "schema_version": "1.0.0",
-  "lane": "graphify",
-  "status": "ok",
-  "findings": ["…"],
-  "key_paths": ["/absolute/path"],
-  "open_questions": ["…"]
-}
-```
-
-Use `"status": "partial"` if the graph is missing or queries failed; still return best-effort findings.
+Before ending, call `submit_scout_findings` exactly once with the full document (`schema_version`, `lane`, `status`, `findings`, `key_paths`, `open_questions`). Use `"status": "partial"` if the graph is missing or queries failed. Do not paste the artifact as prose — the tool write is the deliverable.

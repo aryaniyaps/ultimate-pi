@@ -1,6 +1,6 @@
 ---
 description: Plan-phase external solution / prior-art research (web + in-repo, read-only writes via parent).
-tools: read, grep, find, ls, bash, web_search, web_fetch
+tools: read, grep, find, ls, bash, web_search, web_fetch, submit_implementation_research
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -31,7 +31,8 @@ Read `HarnessSpawnContext` plus paths to `artifacts/decomposition.yaml`, `artifa
 
 ## Output
 
-Valid **YAML only** (no markdown fences) — `PlanImplementationResearchBrief` (`.pi/harness/specs/plan-implementation-research-brief.schema.json`). Parent writes `artifacts/implementation-research.yaml`.
+Before ending, call `submit_implementation_research` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
+
 
 ## Guardrails
 

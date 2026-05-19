@@ -1,0 +1,19 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-scout-findings.schema.json",
+	"title": "PlanScoutFindings",
+	"type": "object",
+	"additionalProperties": true,
+	"required": ["schema_version", "lane", "summary"],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"lane": {
+			"type": "string",
+			"enum": ["graphify", "structure", "semantic"]
+		},
+		"scout_lane": { "type": "string" },
+		"summary": { "type": "string", "minLength": 1 },
+		"key_paths": { "type": "array", "items": { "type": "string" } },
+		"findings": { "type": "array" }
+	}
+}

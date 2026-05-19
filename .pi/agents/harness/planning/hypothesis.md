@@ -1,6 +1,6 @@
 ---
 description: Plan-phase DARWIN hypothesis generation (read-only).
-tools: read, grep, find, ls, bash
+tools: read, grep, find, ls, bash, submit_hypothesis_brief
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
@@ -61,29 +61,6 @@ Up to two alternatives with a different approach and **key_bet** (what it assume
 
 Do **not** include self-evaluation scores — a separate agent handles that.
 
-## Output (required JSON block)
+## Output
 
-```json
-{
-  "schema_version": "1.0.0",
-  "primary": {
-    "claim": "…",
-    "mechanism": "…",
-    "prediction": "…",
-    "experiment": "…",
-    "tension_resolution": "…"
-  },
-  "dialectical_fork": {
-    "fork": "…",
-    "path_a": "…",
-    "path_b": "…"
-  },
-  "alternatives": [
-    { "claim": "…", "key_bet": "…" }
-  ],
-  "recommended_next_steps": ["…"],
-  "human_summary": "…"
-}
-```
-
-Match `PlanHypothesisBrief` (`.pi/harness/specs/plan-hypothesis-brief.schema.json`).
+Before ending, call `submit_hypothesis_brief` exactly once with the full `PlanHypothesisBrief` document. Do not paste the artifact as prose or a fenced JSON block — the tool write is the deliverable.

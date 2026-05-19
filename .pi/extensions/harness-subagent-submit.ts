@@ -1,0 +1,195 @@
+/**
+ * Subprocess-only harness submit tools — validate + write artifacts under run_dir.
+ * Loaded via `pi --no-extensions -e harness-subagent-submit.ts` for harness agents.
+ */
+
+import { join } from "node:path";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Type } from "@sinclair/typebox";
+import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import { getHarnessPackageRoot } from "./lib/harness-paths.js";
+import { evaluateHarnessSubagentToolCall } from "./lib/harness-subagent-policy.js";
+import { executeSubmitPipeline } from "./lib/harness-subagent-submit-pipeline.js";
+import { SUBMIT_TOOL_SPECS } from "./lib/harness-subagent-submit-registry.js";
+
+// @ts-expect-error pi extensions run as ESM
+const MODULE_URL = import.meta.url;
+
+const DocumentSchema = Type.Object(
+	{
+		document: Type.Record(Type.String(), Type.Unknown(), {
+			description: "Full artifact document matching the harness JSON schema",
+		}),
+	},
+	{ additionalProperties: false },
+);
+
+function resolveRunContext(): {
+	projectRoot: string;
+	specsDir: string;
+	runId: string;
+	runDirEnv?: string;
+	agentId: string;
+} {
+	const projectRoot = process.env.HARNESS_PKG_ROOT ?? process.cwd();
+	const specsDir = join(projectRoot, ".pi", "harness", "specs");
+	const runId = process.env.HARNESS_RUN_ID?.trim() ?? "";
+	const runDirEnv = process.env.HARNESS_RUN_DIR?.trim();
+	const agentId = process.env.HARNESS_AGENT_ID?.trim() ?? "";
+	return { projectRoot, specsDir, runId, runDirEnv, agentId };
+}
+
+function isSubprocessHarness(): boolean {
+	return (
+		process.env.PI_HARNESS_SUBPROCESS === "1" &&
+		Boolean(process.env.HARNESS_RUN_ID?.trim())
+	);
+}
+
+export default function harnessSubagentSubmit(pi: ExtensionAPI) {
+	if (!claimExtensionLoad("harness-subagent-submit", MODULE_URL)) return;
+	// Option A: only load submit tools in subprocess (`-e` bundle), not parent discovery.
+	if (process.env.PI_HARNESS_SUBPROCESS !== "1") {
+		return;
+	}
+
+	const _packageRoot = getHarnessPackageRoot(MODULE_URL);
+
+	pi.on("tool_call", async (event) => {
+		if (!event.toolName.startsWith("submit_")) return undefined;
+		const subprocessOk = isSubprocessHarness();
+		// #region agent log
+		fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"X-Debug-Session-Id": "2ca12b",
+			},
+			body: JSON.stringify({
+				sessionId: "2ca12b",
+				hypothesisId: "H2",
+				location: "harness-subagent-submit.ts:tool_call",
+				message: "submit tool_call gate",
+				data: {
+					toolName: event.toolName,
+					PI_HARNESS_SUBPROCESS: process.env.PI_HARNESS_SUBPROCESS,
+					HARNESS_RUN_ID: process.env.HARNESS_RUN_ID ?? null,
+					HARNESS_RUN_DIR: process.env.HARNESS_RUN_DIR ?? null,
+					HARNESS_AGENT_ID: process.env.HARNESS_AGENT_ID ?? null,
+					subprocessOk,
+				},
+				timestamp: Date.now(),
+			}),
+		}).catch(() => {});
+		// #endregion
+		if (!subprocessOk) {
+			return {
+				block: true,
+				reason:
+					"harness-subagent-submit: submit_* tools are only available in harness subagent subprocesses.",
+			};
+		}
+		const { agentId } = resolveRunContext();
+		if (!agentId) {
+			return {
+				block: true,
+				reason:
+					"harness-subagent-submit: HARNESS_AGENT_ID is required for submit tools.",
+			};
+		}
+		const decision = evaluateHarnessSubagentToolCall(
+			event.toolName,
+			event.input as Record<string, unknown>,
+			agentId,
+		);
+		if (decision.action === "block") {
+			return { block: true, reason: decision.reason };
+		}
+		return undefined;
+	});
+
+	for (const spec of SUBMIT_TOOL_SPECS) {
+		pi.registerTool({
+			name: spec.toolName,
+			label: spec.toolName.replace(/^submit_/, "Submit "),
+			description: `Terminal harness artifact submit for ${spec.agents.join(", ")}. Call once with the full schema document before ending the turn.`,
+			parameters: DocumentSchema,
+			async execute(_id, params, _signal, _onUpdate, _ctx) {
+				if (!isSubprocessHarness()) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: "submit tools require PI_HARNESS_SUBPROCESS and HARNESS_RUN_ID",
+							},
+						],
+						details: {},
+						isError: true,
+					};
+				}
+				const { projectRoot, specsDir, runId, runDirEnv, agentId } =
+					resolveRunContext();
+				if (!spec.agents.includes(agentId)) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: `${spec.toolName} is not allowed for agent ${agentId}`,
+							},
+						],
+						details: { agentId, tool: spec.toolName },
+						isError: true,
+					};
+				}
+				const document = (params as { document?: Record<string, unknown> })
+					.document;
+				if (!document || typeof document !== "object") {
+					return {
+						content: [{ type: "text", text: "document object is required" }],
+						details: {},
+						isError: true,
+					};
+				}
+				const result = await executeSubmitPipeline({
+					projectRoot,
+					specsDir,
+					spec,
+					agentId,
+					document,
+					runId,
+					runDirEnv,
+				});
+				if (!result.ok) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: `Validation failed:\n${(result.validation_errors ?? []).join("\n")}`,
+							},
+						],
+						isError: true,
+						details: result,
+					};
+				}
+				const lines = [`ok: wrote ${result.artifact_path}`];
+				if (result.lane_result?.messenger_posted) {
+					lines.push("messenger updated");
+				}
+				if (result.human_required) {
+					lines.push("human_required: parent must call ask_user");
+				}
+				return {
+					content: [{ type: "text", text: lines.join("\n") }],
+					details: result as unknown,
+				};
+			},
+		});
+	}
+}
+
+/** Absolute path to the subprocess submit extension (Option A). */
+export function harnessSubagentSubmitExtensionPath(
+	packageRoot: string,
+): string {
+	return join(packageRoot, ".pi", "extensions", "harness-subagent-submit.ts");
+}

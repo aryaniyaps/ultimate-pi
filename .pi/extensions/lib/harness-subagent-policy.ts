@@ -3,6 +3,10 @@
  */
 
 import {
+	isSubmitToolName,
+	SUBMIT_TOOLS_BY_AGENT,
+} from "./harness-subagent-submit-registry.js";
+import {
 	evaluateSubagentToolCall,
 	type ToolCallDecision,
 } from "./spawn-policy.js";
@@ -107,6 +111,45 @@ export function evaluateHarnessSubagentToolCall(
 	}
 
 	if (!isHarnessPackageAgent(agentType)) {
+		if (
+			isSubmitToolName(toolName) &&
+			process.env.PI_HARNESS_SUBPROCESS !== "1"
+		) {
+			return {
+				action: "block",
+				reason:
+					"harness-subagent-policy: submit_* tools are subprocess-only; parent orchestrator must use harness_artifact_ready and write_harness_yaml for merges.",
+			};
+		}
+		return { action: "allow" };
+	}
+
+	if (isSubmitToolName(toolName)) {
+		if (process.env.PI_HARNESS_SUBPROCESS !== "1") {
+			return {
+				action: "block",
+				reason:
+					"harness-subagent-policy: submit_* tools are not available in the parent harness session.",
+			};
+		}
+		if (toolName === "submit_human_required") {
+			const kind = classifyHarnessAgent(agentType);
+			if (kind === "executor") {
+				return {
+					action: "block",
+					reason:
+						"submit_human_required is not available for harness/executor.",
+				};
+			}
+			return { action: "allow" };
+		}
+		const allowed = SUBMIT_TOOLS_BY_AGENT[agentType];
+		if (!allowed?.has(toolName)) {
+			return {
+				action: "block",
+				reason: `harness-subagent-policy: ${toolName} is not allowed for ${agentType}.`,
+			};
+		}
 		return { action: "allow" };
 	}
 
@@ -152,6 +195,8 @@ export function evaluateHarnessSubagentToolCall(
 
 	return { action: "allow" };
 }
+
+export { isSubmitToolName } from "./harness-subagent-submit-registry.js";
 
 export function harnessSubagentPhaseHint(agentType: string): string | null {
 	if (isHarnessPlanningAgent(agentType)) {

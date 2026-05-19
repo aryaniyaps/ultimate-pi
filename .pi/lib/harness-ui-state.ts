@@ -1,4 +1,5 @@
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
+import { shouldEmitBlockingBudgetExhausted } from "./harness-budget-enforce.js";
 
 export type HarnessPhase =
 	| "plan"
@@ -133,6 +134,9 @@ const RELEVANT_CUSTOM_TYPES = new Set([
 	"harness-consensus-packet",
 	"harness-round-result",
 	"harness-budget-exhausted",
+	"harness-budget-soft-limit",
+	"harness-budget-telemetry",
+	"harness-debate-budget-telemetry",
 	"harness-review-integrity",
 	"harness-test-integrity-flag",
 	"harness-run-trace",
@@ -189,7 +193,7 @@ function deriveFlowSubstate(state: HarnessUiState): HarnessFlowSubstate {
 	return "idle";
 }
 
-function createStateFromEntries(entries: unknown[]): HarnessUiState {
+export function createStateFromEntries(entries: unknown[]): HarnessUiState {
 	const latest = pickLatestCustomEntries(entries);
 	const state: HarnessUiState = {
 		...DEFAULT_STATE,
@@ -212,7 +216,7 @@ function createStateFromEntries(entries: unknown[]): HarnessUiState {
 	const budget = latest.get("harness-budget-exhausted") as
 		| BudgetExhaustedLike
 		| undefined;
-	if (budget) {
+	if (budget && shouldEmitBlockingBudgetExhausted()) {
 		state.budgetExhausted = true;
 		state.budgetReason =
 			typeof budget.exhaustion_reason === "string"
@@ -221,6 +225,15 @@ function createStateFromEntries(entries: unknown[]): HarnessUiState {
 		const budgetUsed = asNumber(budget.budget_used);
 		if (budgetUsed != null) state.debateBudgetUsed = budgetUsed;
 		const cap = asNumber(budget.caps?.debate_global_cap);
+		if (cap != null) state.debateBudgetCap = cap;
+	}
+	const telemetry = latest.get("harness-budget-telemetry") as
+		| BudgetExhaustedLike
+		| undefined;
+	if (telemetry && !state.budgetExhausted) {
+		const budgetUsed = asNumber(telemetry.budget_used);
+		if (budgetUsed != null) state.debateBudgetUsed = budgetUsed;
+		const cap = asNumber(telemetry.caps?.debate_global_cap);
 		if (cap != null) state.debateBudgetCap = cap;
 	}
 
