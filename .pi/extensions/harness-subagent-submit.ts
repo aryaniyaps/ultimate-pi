@@ -18,7 +18,8 @@ const MODULE_URL = import.meta.url;
 const DocumentSchema = Type.Object(
 	{
 		document: Type.Record(Type.String(), Type.Unknown(), {
-			description: "Full artifact document matching the harness JSON schema",
+			description:
+				"Plan artifact fields (validated via plan-*.schema.json, persisted as canonical YAML on disk)",
 		}),
 	},
 	{ additionalProperties: false },
@@ -58,30 +59,6 @@ export default function harnessSubagentSubmit(pi: ExtensionAPI) {
 	pi.on("tool_call", async (event) => {
 		if (!event.toolName.startsWith("submit_")) return undefined;
 		const subprocessOk = isSubprocessHarness();
-		// #region agent log
-		fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				"X-Debug-Session-Id": "2ca12b",
-			},
-			body: JSON.stringify({
-				sessionId: "2ca12b",
-				hypothesisId: "H2",
-				location: "harness-subagent-submit.ts:tool_call",
-				message: "submit tool_call gate",
-				data: {
-					toolName: event.toolName,
-					PI_HARNESS_SUBPROCESS: process.env.PI_HARNESS_SUBPROCESS,
-					HARNESS_RUN_ID: process.env.HARNESS_RUN_ID ?? null,
-					HARNESS_RUN_DIR: process.env.HARNESS_RUN_DIR ?? null,
-					HARNESS_AGENT_ID: process.env.HARNESS_AGENT_ID ?? null,
-					subprocessOk,
-				},
-				timestamp: Date.now(),
-			}),
-		}).catch(() => {});
-		// #endregion
 		if (!subprocessOk) {
 			return {
 				block: true,

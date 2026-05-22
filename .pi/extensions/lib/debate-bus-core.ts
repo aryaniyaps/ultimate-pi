@@ -25,6 +25,7 @@ import {
 } from "./debate-bus-state.js";
 import {
 	type DebateProfile,
+	PLAN_BUDGET_FAST,
 	PLAN_BUDGET_LIGHT,
 	PLAN_BUDGET_STANDARD,
 } from "./plan-debate-eligibility.js";
@@ -113,15 +114,20 @@ export function capsForDebate(
 } {
 	if (isPlanDebateId(debateId)) {
 		const active = profile ?? getDebateState()?.debate_profile ?? "standard";
-		const budget = active === "light" ? PLAN_BUDGET_LIGHT : PLAN_BUDGET;
+		const budget =
+			active === "light"
+				? PLAN_BUDGET_LIGHT
+				: active === "fast"
+					? PLAN_BUDGET_FAST
+					: PLAN_BUDGET;
 		const caps = { name: "plan" as const, ...budget };
 		if (!isHarnessBudgetEnforceOn()) {
 			return {
 				...caps,
-				max_rounds: 999,
-				max_exchanges_per_round: 99,
-				round_token_cap: caps.round_token_cap * 100,
-				debate_global_cap: caps.debate_global_cap * 100,
+				max_rounds: caps.max_rounds,
+				max_exchanges_per_round: Math.max(caps.max_exchanges_per_round, 2),
+				round_token_cap: caps.round_token_cap * 2,
+				debate_global_cap: caps.debate_global_cap * 2,
 			};
 		}
 		return caps;
@@ -135,10 +141,10 @@ export function capsForDebate(
 	if (!isHarnessBudgetEnforceOn()) {
 		return {
 			...caps,
-			max_rounds: 999,
-			max_exchanges_per_round: 99,
-			round_token_cap: caps.round_token_cap * 100,
-			debate_global_cap: caps.debate_global_cap * 100,
+			max_rounds: caps.max_rounds,
+			max_exchanges_per_round: Math.max(caps.max_exchanges_per_round, 2),
+			round_token_cap: caps.round_token_cap * 2,
+			debate_global_cap: caps.debate_global_cap * 2,
 		};
 	}
 	return caps;

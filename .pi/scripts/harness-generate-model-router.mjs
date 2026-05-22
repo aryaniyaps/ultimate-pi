@@ -22,9 +22,9 @@ const UP_PKG = join(SCRIPT_DIR, "..", "..");
 const OUT_PATH = join(process.cwd(), ".pi", "model-router.json");
 
 const PROVIDER_PRIORITY = [
+	"openai",
 	"opencode-go",
 	"anthropic",
-	"openai",
 	"google",
 	"openrouter",
 	"groq",
@@ -35,6 +35,7 @@ const PROVIDER_PRIORITY = [
 /** Substring hints per tier (first match in available ids wins). */
 const TIER_HINTS = {
 	high: [
+		"gpt-5.5-pro",
 		"deepseek-v4-pro",
 		"gpt-5.4-pro",
 		"claude-opus",
@@ -43,6 +44,7 @@ const TIER_HINTS = {
 		"pro",
 	],
 	medium: [
+		"gpt-5.5",
 		"qwen3.6-plus",
 		"kimi-k2.6",
 		"gpt-5.4",
@@ -98,7 +100,10 @@ function canonicalRef(provider, modelId) {
 
 function pickTierModel(models, tier) {
 	const hints = TIER_HINTS[tier];
-	const ids = models.map((m) => m.id);
+	for (const hint of hints) {
+		const exact = models.find((m) => m.id === hint);
+		if (exact) return canonicalRef(exact.provider, exact.id);
+	}
 	for (const hint of hints) {
 		const match = models.find((m) => m.id.includes(hint));
 		if (match) return canonicalRef(match.provider, match.id);
@@ -112,6 +117,10 @@ function pickTierModel(models, tier) {
 		return canonicalRef(models[models.length - 1].provider, models[models.length - 1].id);
 	}
 	return canonicalRef(models[0].provider, models[0].id);
+}
+
+function modelsForProvider(available, provider) {
+	return available.filter((m) => m.provider === provider);
 }
 
 function choosePrimaryProvider(available) {
@@ -129,7 +138,7 @@ function choosePrimaryProvider(available) {
 
 function buildFallbacks(available, primaryProvider, highModel) {
 	const fallbacks = [];
-	for (const p of ["anthropic", "google", "openai"]) {
+	for (const p of ["anthropic", "google", "openai", "opencode-go"]) {
 		if (p === primaryProvider) continue;
 		const alt = available.filter((m) => m.provider === p);
 		if (alt.length === 0) continue;
@@ -137,6 +146,76 @@ function buildFallbacks(available, primaryProvider, highModel) {
 		if (ref && ref !== highModel) fallbacks.push(ref);
 	}
 	return fallbacks.slice(0, 3);
+}
+
+/** Session-locked router: one model SKU per profile; tiers vary thinking only. */
+function buildRoutedProfile(available, provider) {
+	const models = modelsForProvider(available, provider);
+	if (models.length === 0) return null;
+	const sku =
+		pickTierModel(models, "medium") ??
+		pickTierModel(models, "high") ??
+		pickTierModel(models, "low");
+	if (!sku) return null;
+	const fallbacks = buildFallbacks(available, provider, sku);
+	const high = { model: sku, thinking: "high" };
+	if (fallbacks.length) high.fallbacks = fallbacks;
+	return {
+		high,
+		medium: { model: sku, thinking: "medium" },
+		low: { model: sku, thinking: "low" },
+	};
+}
+
+function addCheapDeepProfiles(profiles, available, provider) {
+	const models = modelsForProvider(available, provider);
+	if (models.length === 0) return;
+	const sku =
+		pickTierModel(models, "medium") ??
+		pickTierModel(models, "high") ??
+		pickTierModel(models, "low");
+	if (!sku) return;
+	const fallbacks = buildFallbacks(available, provider, sku);
+	const deepHigh = { model: sku, thinking: "xhigh" };
+	if (fallbacks.length) deepHigh.fallbacks = fallbacks;
+	profiles.cheap = {
+		high: { model: sku, thinking: "low" },
+		medium: { model: sku, thinking: "off" },
+		low: { model: sku, thinking: "off" },
+	};
+	profiles.deep = {
+		high: deepHigh,
+		medium: { model: sku, thinking: "medium" },
+		low: { model: sku, thinking: "low" },
+	};
+}
+
+function resolveClassifierModel(available) {
+	const openaiModels = modelsForProvider(available, "openai");
+	if (openaiModels.length > 0) {
+		return (
+			pickTierModel(openaiModels, "low") ??
+			canonicalRef(openaiModels[openaiModels.length - 1].provider, openaiModels[openaiModels.length - 1].id)
+		);
+	}
+	const { models } = choosePrimaryProvider(available);
+	return pickTierModel(models, "medium");
+}
+
+/** OpenAI-backed default profile name exposed as `router/auto`. */
+const OPENAI_PROFILE_NAME = "auto";
+
+function routerProfileName(provider) {
+	return provider === "openai" ? OPENAI_PROFILE_NAME : provider;
+}
+
+function resolveDefaultProfile(profiles) {
+	if (profiles[OPENAI_PROFILE_NAME]) return OPENAI_PROFILE_NAME;
+	if (profiles["opencode-go"]) return "opencode-go";
+	return (
+		Object.keys(profiles).find((name) => name !== "cheap" && name !== "deep") ??
+		OPENAI_PROFILE_NAME
+	);
 }
 
 async function main() {
@@ -171,23 +250,37 @@ async function main() {
 		process.exit(0);
 	}
 
-	const { provider: primaryProvider, models: primaryModels } =
-		choosePrimaryProvider(available);
-
-	const highModel = pickTierModel(primaryModels, "high");
-	const mediumModel = pickTierModel(primaryModels, "medium");
-	const lowModel = pickTierModel(primaryModels, "low");
-
-	if (!highModel || !mediumModel || !lowModel) {
-		fail("could not assign tier models from available registry");
+	const profiles = {};
+	for (const provider of ["openai", "opencode-go"]) {
+		const profile = buildRoutedProfile(available, provider);
+		if (profile) profiles[routerProfileName(provider)] = profile;
 	}
 
-	const fallbacks = buildFallbacks(available, primaryProvider, highModel);
+	if (Object.keys(profiles).length === 0) {
+		const { provider: primaryProvider, models: primaryModels } =
+			choosePrimaryProvider(available);
+		const profile = buildRoutedProfile(available, primaryProvider);
+		if (!profile) {
+			fail("could not assign tier models from available registry");
+		}
+		profiles[primaryProvider] = profile;
+	}
+
+	const cheapDeepSource = profiles["opencode-go"]
+		? "opencode-go"
+		: resolveDefaultProfile(profiles);
+	addCheapDeepProfiles(profiles, available, cheapDeepSource);
+
+	const defaultProfile = resolveDefaultProfile(profiles);
+	const classifierModel = resolveClassifierModel(available);
+	if (!classifierModel) {
+		fail("could not assign classifier model from available registry");
+	}
 
 	const config = {
-		defaultProfile: "auto",
+		defaultProfile,
 		debug: false,
-		classifierModel: mediumModel,
+		classifierModel,
 		phaseBias: 0.5,
 		maxSessionBudget: 1.0,
 		largeContextThreshold: 100000,
@@ -199,27 +292,13 @@ async function main() {
 			},
 			{ matches: "changelog", tier: "low" },
 		],
-		profiles: {
-			auto: {
-				high: { model: highModel, thinking: "high", fallbacks },
-				medium: { model: mediumModel, thinking: "medium" },
-				low: { model: lowModel, thinking: "low" },
-			},
-			cheap: {
-				high: { model: mediumModel, thinking: "low" },
-				medium: { model: lowModel, thinking: "off" },
-				low: { model: lowModel, thinking: "off" },
-			},
-			deep: {
-				high: { model: highModel, thinking: "xhigh", fallbacks },
-				medium: { model: mediumModel, thinking: "medium" },
-				low: { model: lowModel, thinking: "low" },
-			},
-		},
+		profiles,
 	};
 
 	const json = `${JSON.stringify(config, null, 2)}\n`;
 	const providerSet = [...new Set(available.map((m) => m.provider))].sort();
+	const autoProfile = profiles[OPENAI_PROFILE_NAME];
+	const opencodeProfile = profiles["opencode-go"];
 
 	if (dryRun) {
 		process.stdout.write(json);
@@ -230,13 +309,16 @@ async function main() {
 	writeFileSync(OUT_PATH, json, "utf8");
 
 	console.log("✓ Generated .pi/model-router.json from Pi authenticated providers:");
-	console.log(`  Primary provider: ${primaryProvider}`);
+	console.log(`  Default profile: ${defaultProfile}`);
+	console.log(`  Classifier: ${classifierModel}`);
 	console.log(`  Authenticated providers: ${providerSet.join(", ")}`);
 	console.log(`  Available models: ${available.length}`);
-	console.log(`  High tier: ${highModel}`);
-	console.log(`  Medium tier: ${mediumModel}`);
-	console.log(`  Low tier: ${lowModel}`);
-	if (fallbacks.length) console.log(`  Fallbacks: ${fallbacks.join(", ")}`);
+	if (autoProfile) {
+		console.log(`  auto (openai) high: ${autoProfile.high.model}`);
+	}
+	if (opencodeProfile) {
+		console.log(`  opencode-go high: ${opencodeProfile.high.model}`);
+	}
 }
 
 main().catch((err) => {

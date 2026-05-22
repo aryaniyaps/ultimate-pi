@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * smoke-harness-plan — fixture validation for plan-phase pipeline (CI).
- * Usage: node .pi/harness/evals/smoke/smoke-harness-plan.mjs --fixture [minimal-med|minimal-low-light]
+ * Usage: node .pi/harness/evals/smoke/smoke-harness-plan.mjs --fixture [minimal-med|minimal-low-light|minimal-med-fast]
  */
 
 import { access, readFile } from "node:fs/promises";
@@ -26,16 +26,23 @@ async function scanFocusCoverage(fixtureRoot, requiredFocus) {
 	let last_round_index = 0;
 	const { readdir } = await import("node:fs/promises");
 	const files = (await readdir(art)).filter((f) =>
-		/^review-round-r\d+\.yaml$/i.test(f),
+		/^review-round(?:-r\d+|-consolidated)\.yaml$/i.test(f),
 	);
 	for (const name of files.sort()) {
-		const m = /^review-round-r(\d+)\.yaml$/i.exec(name);
+		const consolidated = /^review-round-consolidated\.yaml$/i.test(name);
+		const m = consolidated
+			? ["review-round-consolidated.yaml", "1"]
+			: /^review-round-r(\d+)\.yaml$/i.exec(name);
 		if (!m) continue;
-		const roundIndex = Number(m[1]);
+		const roundIndex = consolidated ? 1 : Number(m[1]);
 		if (roundIndex > last_round_index) last_round_index = roundIndex;
 		const draft = parseYaml(await readFile(join(art, name), "utf-8"));
 		const focus = String(draft.debate_round_focus ?? "").trim();
-		if (requiredFocus.includes(focus)) covered.add(focus);
+		if (focus === "all") {
+			for (const f of requiredFocus) covered.add(f);
+		} else if (requiredFocus.includes(focus)) {
+			covered.add(focus);
+		}
 		if (roundIndex === last_round_index) {
 			last_review_gate_ready = draft.review_gate_ready === true;
 		}
@@ -110,22 +117,33 @@ async function runFixture(name) {
 	ok("research-brief.yaml structure");
 
 	const isLight = name === "minimal-low-light";
-	const requiredFocus = isLight ? ["spec", "quality"] : ["spec", "wbs", "schedule", "quality"];
-	const debateRounds = isLight
-		? ["review-round-r1.yaml", "review-round-r2.yaml"]
-		: [
-				"review-round-r1.yaml",
-				"review-round-r2.yaml",
-				"review-round-r3.yaml",
-				"review-round-r4.yaml",
-			];
+	const isFast = name === "minimal-med-fast";
+	const requiredFocus =
+		isLight || isFast
+			? ["spec", "quality"]
+			: ["spec", "wbs", "schedule", "quality"];
+	const debateRounds = isFast
+		? ["review-round-consolidated.yaml"]
+		: isLight
+			? ["review-round-r1.yaml", "review-round-r2.yaml"]
+			: [
+					"review-round-r1.yaml",
+					"review-round-r2.yaml",
+					"review-round-r3.yaml",
+					"review-round-r4.yaml",
+				];
 	const seenFocus = new Set();
 	for (const fileName of debateRounds) {
 		const p = join(fixtureRoot, "artifacts", fileName);
 		await access(p, constants.R_OK);
 		const draft = parseYaml(await readFile(p, "utf-8"));
 		if (!draft.schema_version) fail(`${fileName} missing schema_version`);
-		if (draft.debate_round_focus) seenFocus.add(draft.debate_round_focus);
+		const f = String(draft.debate_round_focus ?? "").trim();
+		if (f === "all") {
+			for (const req of requiredFocus) seenFocus.add(req);
+		} else if (f) {
+			seenFocus.add(f);
+		}
 	}
 	for (const focus of requiredFocus) {
 		if (!seenFocus.has(focus)) {
@@ -135,7 +153,7 @@ async function runFixture(name) {
 	ok(`debate round YAML artifacts (${requiredFocus.length} focuses)`);
 
 	const coverage = await scanFocusCoverage(fixtureRoot, requiredFocus);
-	const minRounds = isLight ? 2 : 4;
+	const minRounds = isFast ? 1 : isLight ? 2 : 4;
 	if (!planOutcomeComplete(coverage, requiredFocus, minRounds)) {
 		fail("debate outcome incomplete for fixture coverage");
 	}
@@ -143,6 +161,9 @@ async function runFixture(name) {
 
 	if (isLight && packet.risk_level !== "low") {
 		fail("minimal-low-light fixture must use risk_level low");
+	}
+	if (isFast && packet.risk_level !== "med") {
+		fail("minimal-med-fast fixture must use risk_level med");
 	}
 
 	console.log(`smoke-harness-plan: all ${name} fixture checks passed`);
@@ -161,7 +182,9 @@ async function main() {
 		);
 		return;
 	}
-	fail("Usage: smoke-harness-plan.mjs --fixture [minimal-med|minimal-low-light] | --live");
+	fail(
+		"Usage: smoke-harness-plan.mjs --fixture [minimal-med|minimal-low-light|minimal-med-fast] | --live",
+	);
 }
 
 main().catch((err) => {

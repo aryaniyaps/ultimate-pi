@@ -1,0 +1,25 @@
+schema_version: "1.0.0"
+round_index: 1
+debate_round_focus: all
+round_summary: Consolidated review gate for fast profile fixture
+validation_summary: Spec and quality checks pass in one round
+adversary_summary: No blockers
+disputes: []
+recommended_packet_patches: []
+review_gate_ready: true
+participants:
+  - PlanEvaluatorAgent
+  - PlanAdversaryAgent
+  - SprintContractAuditorAgent
+  - ReviewIntegratorAgent
+claims:
+  - consolidated review gate ready
+rebuttals: []
+evidence_refs: []
+token_usage:
+  per_agent:
+    PlanEvaluatorAgent: 120
+    PlanAdversaryAgent: 100
+    SprintContractAuditorAgent: 80
+  round_total: 300
+consensus_delta: 0.1

@@ -7,12 +7,15 @@ import { access } from "node:fs/promises";
 import { join } from "node:path";
 import { capsForDebate } from "./debate-bus-core.js";
 import {
-	type PlanDebateFocus,
+	type PlanDebateRoundFocus,
 	readDebateRoundFocus,
 } from "./plan-debate-focus.js";
 import { planDebateIdForRun } from "./plan-debate-id.js";
 import { laneArtifactPath } from "./plan-debate-lane.js";
-import { lanesForRound } from "./plan-debate-lanes.js";
+import {
+	lanesForConsolidatedRound,
+	lanesForRound,
+} from "./plan-debate-lanes.js";
 import {
 	getMessengerRoundState,
 	loadMessengerState,
@@ -40,26 +43,32 @@ export interface RoundStatusResult {
 	dialogue: { ok: boolean; errors: string[] };
 	unresolved_claim_ids: string[];
 	exchange_count: number;
-	debate_round_focus?: PlanDebateFocus | null;
+	debate_round_focus?: PlanDebateRoundFocus | null;
 }
 
 export async function getPlanDebateRoundStatus(
 	runDir: string,
 	roundIndex: number,
 	runId?: string,
-	opts?: { debate_round_focus?: PlanDebateFocus },
+	opts?: { debate_round_focus?: PlanDebateRoundFocus },
 ): Promise<RoundStatusResult> {
+	const messengerState = await loadMessengerState(runDir);
+	const consolidated =
+		messengerState?.review_gate_mode === "consolidated" && roundIndex === 1;
 	const focus =
 		opts?.debate_round_focus ??
+		(consolidated ? ("all" as PlanDebateRoundFocus) : null) ??
 		(await readDebateRoundFocus(runDir, roundIndex));
 	const missing: string[] = [];
-	for (const lane of lanesForRound(roundIndex, focus)) {
+	const laneList = consolidated
+		? lanesForConsolidatedRound()
+		: lanesForRound(roundIndex, focus);
+	for (const lane of laneList) {
 		const rel = laneArtifactPath(lane, roundIndex);
 		if (!(await exists(join(runDir, rel)))) {
 			missing.push(rel);
 		}
 	}
-	const messengerState = await loadMessengerState(runDir);
 	const profile = messengerState?.debate_profile;
 	const caps = capsForDebate(
 		runId ? planDebateIdForRun(runId) : `plan-${runId ?? "unknown"}`,
@@ -73,7 +82,9 @@ export async function getPlanDebateRoundStatus(
 	if (!dialogue.ok) {
 		missing.push(...dialogue.errors.map((e) => `messenger: ${e}`));
 	}
-	const reviewRound = `artifacts/review-round-r${roundIndex}.yaml`;
+	const reviewRound = consolidated
+		? "artifacts/review-round-consolidated.yaml"
+		: `artifacts/review-round-r${roundIndex}.yaml`;
 	const reviewRoundOnDisk = await exists(join(runDir, reviewRound));
 
 	let next_tool: string | undefined;

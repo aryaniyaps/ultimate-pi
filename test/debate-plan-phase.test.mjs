@@ -62,13 +62,27 @@ test("plan debate caps use outcome-based budget profile", () => {
 	});
 });
 
-test("plan debate caps are relaxed when budget enforce is off", () => {
+test("plan debate caps use advisory profile limits when budget enforce is off", () => {
 	const prev = process.env.HARNESS_BUDGET_ENFORCE;
 	delete process.env.HARNESS_BUDGET_ENFORCE;
 	try {
 		const plan = capsForDebate("plan-smoke");
-		assert.equal(plan.max_rounds, 999);
-		assert.equal(plan.max_exchanges_per_round, 99);
+		assert.equal(plan.max_rounds, 12);
+		assert.equal(plan.max_exchanges_per_round, 3);
+		assert.equal(plan.debate_global_cap, 160000);
+	} finally {
+		if (prev !== undefined) process.env.HARNESS_BUDGET_ENFORCE = prev;
+	}
+});
+
+test("plan debate fast profile caps when budget enforce is off", () => {
+	const prev = process.env.HARNESS_BUDGET_ENFORCE;
+	delete process.env.HARNESS_BUDGET_ENFORCE;
+	try {
+		const plan = capsForDebate("plan-smoke", "fast");
+		assert.equal(plan.min_focus_rounds, 1);
+		assert.equal(plan.max_rounds, 2);
+		assert.equal(plan.max_exchanges_per_round, 1);
 	} finally {
 		if (prev !== undefined) process.env.HARNESS_BUDGET_ENFORCE = prev;
 	}

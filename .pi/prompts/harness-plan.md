@@ -138,11 +138,16 @@ harness_debate_open({ debate_profile, required_focuses })
 
 Profiles:
 
-| Profile | Focuses required | min_focus_rounds |
-|---------|------------------|------------------|
-| full | spec, wbs, schedule, quality | 4 |
-| standard | all four | 4 |
-| light | spec, quality only | 2 |
+| Profile | Review gate | Focuses required | min_focus_rounds |
+|---------|-------------|------------------|------------------|
+| full | threaded (4 rounds) | spec, wbs, schedule, quality | 4 |
+| standard | threaded (4 rounds) | all four | 4 |
+| light | threaded (2 rounds) | spec, quality only | 2 |
+| fast | **consolidated** (1 round) | spec, quality | 1 |
+
+Med/low non-fork plans with clear stack and no implementation `open_questions` default to **fast** (consolidated). Escalate to threaded rounds only when integrator sets `review_gate_ready: false` or records blockers.
+
+`--quick`: skip scout-semantic; cap web research (≤2 searches, ≤3 fetches); prefer **fast** eligibility when DAG passes; use consolidated Review Gate when profile is fast.
 
 ## Phase 5 — Review Gate debate (profile-aware, pi-messenger, even with `--quick`)
 
@@ -153,13 +158,26 @@ Profiles:
 
 ### Focus coverage (required before consensus)
 
-Each required focus must appear in a submitted `review-round-rN.yaml` (`debate_round_focus`). Monotonic `round_index` (cap from profile). Consensus only when:
+Each required focus must appear in submitted review artifacts (`review-round-rN.yaml` or `review-round-consolidated.yaml` with `debate_round_focus: all`). Monotonic `round_index` (cap from profile). Consensus only when:
 
 - all **required** focuses covered, **and**
 - last round `review_gate_ready: true`, **and**
 - `validate-plan-dag.mjs` still passes (re-run after patches).
 
-### Per-round state machine
+### Consolidated state machine (`review_gate_mode: consolidated`, profile fast)
+
+```
+round_index := 1
+debate_round_focus := all
+spawn hypothesis-validator (blind)
+WHILE NOT ready_for_integrator (harness_debate_round_status round_index=1):
+  follow next_tool (validation-turn, adversary-brief, sprint-audit in parallel-friendly order; one subagent per batch)
+spawn review-integrator → write artifacts/review-round-consolidated.yaml → harness_debate_submit_round
+IF review_gate_ready false OR blockers: escalate — threaded round per missing focus (spec/wbs/schedule/quality)
+harness_debate_focus_coverage → harness_debate_consensus
+```
+
+### Threaded state machine (standard/full/light)
 
 ```
 round_index := next uncovered required focus

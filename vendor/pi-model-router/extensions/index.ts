@@ -10,6 +10,7 @@ import {
   type RouterThinkingByProfile,
   type RouterTier,
   type CustomSessionEntry,
+  type SessionLock,
 } from './types.js';
 import {
   FALLBACK_CONFIG,
@@ -47,6 +48,7 @@ const routerExtension = (pi: ExtensionAPI) => {
   let lastPersistedSnapshot: string | undefined;
   let isInitialized = false;
   let isInternalModelSwitch = false;
+  let sessionLock: SessionLock | undefined;
 
   const setModelInternally = async (
     model: NonNullable<ExtensionContext['model']>,
@@ -94,6 +96,7 @@ const routerExtension = (pi: ExtensionAPI) => {
       lastDecision,
       lastNonRouterModel,
       accumulatedCost,
+      sessionLock,
     );
     const snapshot = JSON.stringify({
       ...state,
@@ -127,6 +130,7 @@ const routerExtension = (pi: ExtensionAPI) => {
         accumulatedCost,
         widgetEnabled,
         currentConfig,
+        sessionLock,
       ),
     reloadConfig: (
       ctx?: ExtensionContext,
@@ -204,6 +208,7 @@ const routerExtension = (pi: ExtensionAPI) => {
       }
       selectedProfile = resolvedProfile;
       routerEnabled = true;
+      sessionLock = undefined;
       persistState();
       actions.updateStatus(ctx);
       return true;
@@ -253,6 +258,12 @@ const routerExtension = (pi: ExtensionAPI) => {
           set accumulatedCost(v) {
             accumulatedCost = v;
           },
+          get sessionLock() {
+            return sessionLock;
+          },
+          set sessionLock(v) {
+            sessionLock = v;
+          },
         },
         {
           persistState,
@@ -290,6 +301,7 @@ const routerExtension = (pi: ExtensionAPI) => {
         ? `${ctx.model.provider}/${ctx.model.id}`
         : lastNonRouterModel;
     lastDecision = undefined;
+    sessionLock = undefined;
 
     const entries = ctx.sessionManager.getBranch() as CustomSessionEntry[];
     const savedState = entries
@@ -322,6 +334,12 @@ const routerExtension = (pi: ExtensionAPI) => {
         : [];
       lastNonRouterModel = savedState.lastNonRouterModel ?? lastNonRouterModel;
       accumulatedCost = savedState.accumulatedCost ?? 0;
+      if (
+        savedState.sessionLock &&
+        savedState.sessionLock.profile === selectedProfile
+      ) {
+        sessionLock = { ...savedState.sessionLock };
+      }
     }
 
     await actions.ensureValidActiveRouterProfile(ctx);
@@ -432,6 +450,9 @@ const routerExtension = (pi: ExtensionAPI) => {
       }
 
       routerEnabled = true;
+      if (selectedProfile !== profileName) {
+        sessionLock = undefined;
+      }
       selectedProfile = profileName;
     } else {
       routerEnabled = false;

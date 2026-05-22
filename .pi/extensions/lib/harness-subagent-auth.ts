@@ -1,23 +1,32 @@
 /**
  * Resolve concrete LLM credentials for harness subagent subprocesses.
  *
- * Parent sessions often use `router/auto` (pi-model-router). Subagents run with
+ * Parent sessions often use `router/<profile>` (pi-model-router). Subagents run with
  * `--no-extensions`, so they cannot use the logical router provider — they need
  * a real provider/model plus that provider's API key.
+ *
+ * Session-locked routing: subprocess model is chosen once from agent system prompt
+ * complexity (same analysis as parent session lock), not from per-turn parent tier.
  */
 
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { resolveTierFromPrompt } from "../../../vendor/pi-model-router/extensions/routing.js";
+import type {
+	RouterProfile,
+	RouterTier,
+	RoutingRule,
+} from "../../../vendor/pi-model-router/extensions/types.js";
 import type { AgentConfig } from "../../../vendor/pi-subagents/src/agents.js";
 
 const ROUTER_SENTINEL_KEY = "pi-model-router";
 const SENTINEL_API_KEYS = new Set([ROUTER_SENTINEL_KEY, "<authenticated>"]);
 
-type RouterTier = "high" | "medium" | "low";
-
 interface ModelRouterJson {
 	defaultProfile?: string;
-	profiles?: Record<string, Partial<Record<RouterTier, { model?: string }>>>;
+	phaseBias?: number;
+	rules?: RoutingRule[];
+	profiles?: Record<string, RouterProfile>;
 }
 
 export function isUsableApiKey(key: string | undefined): key is string {
@@ -35,12 +44,96 @@ export function parseModelRef(
 	return { provider, modelId };
 }
 
-export function thinkingToRouterTier(thinking?: string): RouterTier {
+/** Planning subagents that should prefer low/medium router tier for latency. */
+const ROUTINE_PLANNING_AGENT_PATHS = new Set([
+	"harness/planning/plan-evaluator",
+	"harness/planning/plan-adversary",
+	"harness/planning/review-integrator",
+	"harness/planning/hypothesis-validator",
+	"harness/planning/sprint-contract-auditor",
+	"harness/planning/scout-structure",
+	"harness/planning/scout-semantic",
+	"harness/planning/decompose",
+	"harness/planning/hypothesis",
+	"harness/planning/stack-research",
+	"harness/planning/plan-validator",
+]);
+
+export function isRoutinePlanningAgent(agentName: string): boolean {
+	return ROUTINE_PLANNING_AGENT_PATHS.has(agentName);
+}
+
+export function thinkingToRouterTier(
+	thinking?: string,
+	agentName?: string,
+): RouterTier {
+	if (agentName && isRoutinePlanningAgent(agentName)) {
+		if (thinking === "high" || thinking === "xhigh") return "medium";
+		return "low";
+	}
 	if (thinking === "high" || thinking === "xhigh") return "high";
 	if (thinking === "off" || thinking === "minimal" || thinking === "low") {
 		return "low";
 	}
 	return "medium";
+}
+
+function loadModelRouterConfig(cwd: string): ModelRouterJson | undefined {
+	const path = join(cwd, ".pi", "model-router.json");
+	if (!existsSync(path)) return undefined;
+	try {
+		return JSON.parse(readFileSync(path, "utf8")) as ModelRouterJson;
+	} catch {
+		return undefined;
+	}
+}
+
+function resolveRouterProfileEntry(
+	config: ModelRouterJson,
+	profileId: string,
+): { profileId: string; profile: RouterProfile } | undefined {
+	const profiles = config.profiles;
+	if (!profiles) return undefined;
+	const candidates = [
+		profileId,
+		config.defaultProfile ?? "auto",
+		"auto",
+		"opencode-go",
+	];
+	const seen = new Set<string>();
+	for (const id of candidates) {
+		if (!id || seen.has(id)) continue;
+		seen.add(id);
+		const profile = profiles[id];
+		if (profile?.high?.model && profile.medium?.model && profile.low?.model) {
+			return { profileId: id, profile };
+		}
+	}
+	return undefined;
+}
+
+/** Tier from agent system prompt (+ optional task line) for session model lock. */
+export function resolveSubagentRouterTier(
+	cwd: string,
+	profileId: string,
+	agent: AgentConfig,
+	taskSnippet?: string,
+): RouterTier {
+	const config = loadModelRouterConfig(cwd);
+	if (config) {
+		const entry = resolveRouterProfileEntry(config, profileId);
+		if (entry) {
+			return resolveTierFromPrompt(
+				agent.systemPrompt ?? "",
+				taskSnippet?.trim() ?? "",
+				entry.profileId,
+				entry.profile,
+				config.rules,
+				config.phaseBias ?? 0.5,
+			);
+		}
+	}
+	return thinkingToRouterTier(agent.thinking, agent.name);
 }
 
 /** Map router profile tier → concrete `provider/model` from `.pi/model-router.json`. */
@@ -51,19 +144,10 @@ export function resolveRouterConcreteModelRef(
 ): string | undefined {
 	const path = join(cwd, ".pi", "model-router.json");
 	if (!existsSync(path)) return undefined;
-	let raw: ModelRouterJson;
-	try {
-		raw = JSON.parse(readFileSync(path, "utf8")) as ModelRouterJson;
-	} catch {
-		return undefined;
-	}
-	const profiles = raw.profiles;
-	if (!profiles) return undefined;
-	const profile =
-		profiles[profileId] ??
-		profiles[raw.defaultProfile ?? "auto"] ??
-		profiles.auto;
-	const model = profile?.[tier]?.model;
+	const raw = loadModelRouterConfig(cwd);
+	if (!raw) return undefined;
+	const entry = resolveRouterProfileEntry(raw, profileId);
+	const model = entry?.profile[tier]?.model;
 	return typeof model === "string" && model.includes("/") ? model : undefined;
 }
 
@@ -83,6 +167,7 @@ export function resolveConcreteSubagentModel(
 	cwd: string,
 	parentModel: { provider: string; id: string } | undefined,
 	agent: AgentConfig,
+	taskSnippet?: string,
 ): ConcreteSubagentModel | undefined {
 	if (agent.model && !agent.model.startsWith("router/")) {
 		const parsed = parseModelRef(agent.model);
@@ -109,7 +194,7 @@ export function resolveConcreteSubagentModel(
 		agentIsRouter && agent.model
 			? agent.model.slice("router/".length)
 			: (parentModel?.id ?? "auto");
-	const tier = thinkingToRouterTier(agent.thinking);
+	const tier = resolveSubagentRouterTier(cwd, profileId, agent, taskSnippet);
 	const concrete = resolveRouterConcreteModelRef(cwd, profileId, tier);
 	if (!concrete) return undefined;
 	const parsed = parseModelRef(concrete);

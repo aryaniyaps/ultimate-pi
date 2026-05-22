@@ -327,7 +327,7 @@ sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or fa
 
 ## Step 3 — Pi Extension Packages
 
-Bundled extensions load from the installed `ultimate-pi` package. **Per-turn model routing** comes from a **vendored** fork of [`yeliu84/pi-model-router`](https://github.com/yeliu84/pi-model-router) in `vendor/pi-model-router/`, wired through [`.pi/extensions/pi-model-router-harness.ts`](.pi/extensions/pi-model-router-harness.ts). The harness **gates** activation on `.pi/model-router.json` (Step **3.5** below) so `router/auto` and built-in tiers such as `openai/gpt-5.4-pro` cannot load prematurely. Attribution: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `vendor/pi-model-router/UPSTREAM_PIN.md`. Maintainer refresh: `npm run vendor:sync-router`.
+Bundled extensions load from the installed `ultimate-pi` package. **Session-locked model routing** comes from a **vendored** fork of [`yeliu84/pi-model-router`](https://github.com/yeliu84/pi-model-router) in `vendor/pi-model-router/`, wired through [`.pi/extensions/pi-model-router-harness.ts`](.pi/extensions/pi-model-router-harness.ts). The router picks **one concrete model** when the session starts (from the first user prompt + system prompt complexity), then changes **thinking level only** each turn. The harness **gates** activation on `.pi/model-router.json` (Step **3.5** below) so `router/auto` cannot load prematurely. Attribution: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `vendor/pi-model-router/UPSTREAM_PIN.md`. Maintainer refresh: `npm run vendor:sync-router`.
 
 Optionally install the companion lockfile used in development:
 
@@ -381,9 +381,9 @@ If generation prints "No authenticated Pi providers": warn in report — user sh
 
 Do NOT block setup. If no config is written, `harness-sync-model-router.mjs` clears a premature `defaultProvider: "router"` in `.pi/settings.json`.
 
-**Router onboarding** — The vendored extension starts only after `.pi/model-router.json` appears. Running the script above prepares that file plus optional Pi defaults (**`router` / `auto`**) via `harness-sync-model-router.mjs` when `defaultProvider` was unset—then **`/reload`**.
+**Router onboarding** — The vendored extension starts only after `.pi/model-router.json` appears. Running the script above prepares that file plus optional Pi defaults (**`router` / `auto`**, or whatever `defaultProfile` is) via `harness-sync-model-router.mjs` when `defaultProvider` was unset—then **`/reload`**. Generated profiles use **one model SKU per profile**; high/medium/low tiers differ in **thinking** only. Subagents resolve their subprocess model from the **agent system prompt** complexity (same lock rules).
 
-Manual override: **`/router profile auto`** anytime after reload if they changed defaults.
+Manual override: **`/router profile auto`** or **`/router profile opencode-go`** anytime after reload if they changed defaults.
 
 ## Step 3.6 — Harness agents (package-resolved)
 
@@ -677,7 +677,7 @@ Output summary table:
 | sentrux | ✓/✗ | CLI + plugins; rules via Step 4.2 bootstrap |
 | Sentrux rules.toml | ✓/✗ | `.sentrux/rules.toml` synced from manifest |
 | pi extensions | ✓/✗ | 4 packages |
-| model router | ✓/✗ | Package + config verified, activation via `/router profile auto` |
+| model router | ✓/✗ | Package + config verified, activation via `/router profile auto` (or `opencode-go`) |
 | `.env` | ✓/✗/ask | Created / keys appended / user declined |
 
 | .gitignore | ✓/✗ | entries added (incl. `.env`) |

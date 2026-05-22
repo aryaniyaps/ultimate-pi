@@ -13,6 +13,11 @@ import {
 	type HarnessSubagentsOptions,
 	type SpawnAuthForward,
 } from "../../../vendor/pi-subagents/src/subagents.js";
+import {
+	getLatestRunContext,
+	getRunIdFromSession,
+	type HarnessPhase,
+} from "../../lib/harness-run-context.js";
 import { parseSpawnContextFromTask } from "../../lib/harness-spawn-parse.js";
 import { harnessSubagentSubmitExtensionPath } from "../harness-subagent-submit.js";
 import { refreshHarnessCocoindexIndex } from "./harness-cocoindex-refresh.js";
@@ -35,6 +40,51 @@ import {
 
 const spawnBudget = createSpawnBudgetState();
 let lastSessionId = "harness";
+let spawnGroupCounter = 0;
+type PendingSpawnTelemetry = {
+	harness_run_id: string;
+	run_id: string;
+	harness_plan_id: string;
+	harness_phase: HarnessPhase;
+	agent_ids: string[];
+	spawn_group_id: string;
+};
+let pendingSpawnTelemetry: PendingSpawnTelemetry | null = null;
+
+function collectHarnessAgentIds(params: Record<string, unknown>): string[] {
+	const out = new Set<string>();
+	const maybe = params as {
+		agent?: string;
+		chain?: Array<{ agent?: string }>;
+		tasks?: Array<{ agent?: string }>;
+		aggregator?: { agent?: string };
+	};
+	if (typeof maybe.agent === "string" && maybe.agent.startsWith("harness/")) {
+		out.add(maybe.agent);
+	}
+	for (const item of maybe.chain ?? []) {
+		if (typeof item?.agent === "string" && item.agent.startsWith("harness/")) {
+			out.add(item.agent);
+		}
+	}
+	for (const item of maybe.tasks ?? []) {
+		if (typeof item?.agent === "string" && item.agent.startsWith("harness/")) {
+			out.add(item.agent);
+		}
+	}
+	if (
+		typeof maybe.aggregator?.agent === "string" &&
+		maybe.aggregator.agent.startsWith("harness/")
+	) {
+		out.add(maybe.aggregator.agent);
+	}
+	return Array.from(out.values()).sort();
+}
+
+function nextSpawnGroupId(sessionId: string): string {
+	spawnGroupCounter += 1;
+	return `${sessionId}-${Date.now()}-${spawnGroupCounter}`;
+}
 
 async function resolveHarnessSpawnAuth(
 	ctx: ExtensionContext,
@@ -111,11 +161,13 @@ export function createHarnessSubagentsExtension(
 			const { harnessCount } = countHarnessAgentsInRequest(
 				params as Parameters<typeof countHarnessAgentsInRequest>[0],
 			);
+			pendingSpawnTelemetry = null;
 			if (harnessCount > 0) {
 				const budget = checkHarnessSpawnBudget(spawnBudget, harnessCount);
 				if (!budget.ok) {
 					return { ok: false, message: budget.message };
 				}
+				const entries = ctx.sessionManager.getEntries();
 				const phase = inferPhaseForPrecheck(ctx.sessionManager.getEntries());
 				const pre = precheckHarnessSubagentSpawn(
 					params as Parameters<typeof precheckHarnessSubagentSpawn>[0],
@@ -133,6 +185,19 @@ export function createHarnessSubagentsExtension(
 						return { ok: false, message: refreshMsg };
 					}
 				}
+				const runCtx = getLatestRunContext(entries);
+				const runId =
+					runCtx?.run_id ??
+					getRunIdFromSession(entries, lastSessionId) ??
+					lastSessionId;
+				pendingSpawnTelemetry = {
+					harness_run_id: runId,
+					run_id: runId,
+					harness_plan_id: runCtx?.plan_id ?? "plan-unknown",
+					harness_phase: phase,
+					agent_ids: collectHarnessAgentIds(params as Record<string, unknown>),
+					spawn_group_id: nextSpawnGroupId(lastSessionId),
+				};
 			}
 			return { ok: true };
 		},
@@ -142,6 +207,16 @@ export function createHarnessSubagentsExtension(
 			captureHarnessEvent(lastSessionId, "harness_subagent_spawned", {
 				active_after: spawnBudget.active,
 				spawn_count: harnessCount,
+				harness_run_id: pendingSpawnTelemetry?.harness_run_id ?? lastSessionId,
+				run_id: pendingSpawnTelemetry?.run_id ?? lastSessionId,
+				harness_plan_id:
+					pendingSpawnTelemetry?.harness_plan_id ?? "plan-unknown",
+				harness_phase: pendingSpawnTelemetry?.harness_phase ?? "plan",
+				agent_ids: pendingSpawnTelemetry?.agent_ids ?? [],
+				agent_count: pendingSpawnTelemetry?.agent_ids.length ?? harnessCount,
+				spawn_group_id:
+					pendingSpawnTelemetry?.spawn_group_id ??
+					nextSpawnGroupId(lastSessionId),
 			});
 		},
 		onSpawnEnd: (harnessCount) => {
@@ -154,7 +229,17 @@ export function createHarnessSubagentsExtension(
 				mode,
 				duration_ms: durationMs,
 				agent_count: agents.length,
+				agent_ids: agents,
+				harness_run_id: pendingSpawnTelemetry?.harness_run_id ?? lastSessionId,
+				run_id: pendingSpawnTelemetry?.run_id ?? lastSessionId,
+				harness_plan_id:
+					pendingSpawnTelemetry?.harness_plan_id ?? "plan-unknown",
+				harness_phase: pendingSpawnTelemetry?.harness_phase ?? "plan",
+				spawn_group_id:
+					pendingSpawnTelemetry?.spawn_group_id ??
+					nextSpawnGroupId(lastSessionId),
 			});
+			pendingSpawnTelemetry = null;
 		},
 	};
 

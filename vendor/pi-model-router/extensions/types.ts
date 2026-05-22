@@ -53,12 +53,21 @@ export interface RoutingDecision {
   isRuleMatched?: boolean;
 }
 
+/** Fixed model for a router profile for the lifetime of a session (or until profile switch). */
+export interface SessionLock {
+  profile: string;
+  tier: RouterTier;
+  modelRef: string;
+  reasoning: string;
+}
+
 export interface RouterPersistedState {
   enabled: boolean;
   selectedProfile: string;
   pinTier?: RouterTier;
   pinByProfile?: RouterPinByProfile;
   thinkingByProfile?: RouterThinkingByProfile;
+  sessionLock?: SessionLock;
   debugEnabled?: boolean;
   widgetEnabled?: boolean;
   debugHistory?: RoutingDecision[];

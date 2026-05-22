@@ -3,5 +3,7 @@
 		"enabled": true,
 		"maxRetries": 3
 	},
-	"packages": ["..", "npm:@posthog/pi", "npm:context-mode"]
+	"packages": ["..", "npm:@posthog/pi", "npm:context-mode"],
+	"defaultProvider": "router",
+	"defaultModel": "auto"
 }

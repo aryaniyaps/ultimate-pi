@@ -19,15 +19,21 @@ import type {
   RouterTier,
   RouterPinByProfile,
   RouterThinkingByProfile,
+  SessionLock,
 } from './types.js';
 import { profileNames, parseCanonicalModelRef, ROUTER_TIERS } from './config.js';
 import {
   phaseForTier,
   buildRoutingDecision,
   decideRouting,
+  decideSessionLock,
   runClassifier,
   extractTextFromContent,
   hasImageAttachment,
+  buildSessionLockContext,
+  sessionLockToRoutingDecision,
+  routingDecisionToSessionLock,
+  applyThinkingToDecision,
 } from './routing.js';
 
 export const createErrorMessage = (
@@ -138,6 +144,8 @@ export const registerRouterProvider = (
     readonly thinkingByProfile: RouterThinkingByProfile;
     readonly pinnedTierByProfile: RouterPinByProfile;
     accumulatedCost: number;
+    get sessionLock(): SessionLock | undefined;
+    set sessionLock(v: SessionLock | undefined);
   },
   actions: {
     persistState: () => void;
@@ -217,26 +225,111 @@ export const registerRouterProvider = (
           state.routerEnabled = true;
 
           const pinnedTier = state.pinnedTierByProfile[model.id];
+          const thinkingOverrides = state.thinkingByProfile[model.id];
           const isBudgetExceeded =
             state.currentConfig.maxSessionBudget !== undefined &&
             state.accumulatedCost >= state.currentConfig.maxSessionBudget;
 
-          let decision: RoutingDecision = decideRouting(
+          const checkModelSupportsImage = (modelRef: string) => {
+            try {
+              const { provider, modelId } = parseCanonicalModelRef(modelRef);
+              const m = state.currentModelRegistry?.find(provider, modelId);
+              return m?.input?.includes('image') ?? false;
+            } catch {
+              return false;
+            }
+          };
+
+          const pickVisionCapableLock = (
+            lockDecision: RoutingDecision,
+          ): RoutingDecision => {
+            if (!hasImageAttachment(context)) return lockDecision;
+            const candidates = [
+              lockDecision.targetLabel,
+              ...(profile[lockDecision.tier].fallbacks ?? []),
+            ];
+            if (candidates.some(checkModelSupportsImage)) return lockDecision;
+            for (const tier of ROUTER_TIERS) {
+              const refs = [profile[tier].model, ...(profile[tier].fallbacks ?? [])];
+              const visionRef = refs.find(checkModelSupportsImage);
+              if (visionRef) {
+                const { provider, modelId } = parseCanonicalModelRef(visionRef);
+                return {
+                  ...lockDecision,
+                  tier,
+                  targetLabel: visionRef,
+                  targetProvider: provider,
+                  targetModelId: modelId,
+                  reasoning: `${lockDecision.reasoning} | Vision-capable model for image input.`,
+                };
+              }
+            }
+            return lockDecision;
+          };
+
+          let lock = state.sessionLock;
+          if (!lock || lock.profile !== model.id) {
+            const lockContext = buildSessionLockContext(context);
+            let lockDecision = decideSessionLock(
+              lockContext,
+              model.id,
+              profile,
+              pinnedTier,
+              thinkingOverrides,
+              state.currentConfig.phaseBias,
+              state.currentConfig.rules,
+            );
+
+            if (
+              state.currentConfig.classifierModel &&
+              !pinnedTier &&
+              !lockDecision.isRuleMatched
+            ) {
+              const classifierResult = await runClassifier(
+                state.currentConfig.classifierModel,
+                state.currentModelRegistry,
+                lockContext,
+                undefined,
+              );
+              if (classifierResult) {
+                lockDecision = buildRoutingDecision(
+                  model.id,
+                  profile,
+                  classifierResult.tier,
+                  phaseForTier(classifierResult.tier),
+                  `Session lock classifier: ${classifierResult.reasoning}`,
+                  thinkingOverrides,
+                  true,
+                );
+              }
+            }
+
+            lockDecision = pickVisionCapableLock(lockDecision);
+            lock = routingDecisionToSessionLock(lockDecision);
+            state.sessionLock = lock;
+          }
+
+          const lockedBase = sessionLockToRoutingDecision(
+            lock,
+            profile,
+            thinkingOverrides,
+          );
+
+          let thinkingDecision: RoutingDecision = decideRouting(
             context,
             model.id,
             profile,
             state.lastDecision,
             pinnedTier,
-            state.thinkingByProfile[model.id],
+            thinkingOverrides,
             state.currentConfig.phaseBias,
             state.currentConfig.rules,
             isBudgetExceeded,
           );
 
-          // Optional Context Trigger Upgrade
           if (
             state.currentConfig.largeContextThreshold &&
-            decision.tier !== 'high' &&
+            thinkingDecision.tier !== 'high' &&
             state.lastExtensionContext
           ) {
             try {
@@ -245,28 +338,24 @@ export const registerRouterProvider = (
                 usage?.tokens &&
                 usage.tokens > state.currentConfig.largeContextThreshold
               ) {
-                decision = buildRoutingDecision(
-                  model.id,
-                  profile,
-                  'high',
-                  'planning',
-                  `Context usage (${usage.tokens}) exceeds threshold (${state.currentConfig.largeContextThreshold}). Forced high tier.`,
-                  state.thinkingByProfile[model.id],
-                  false,
-                );
-                decision.isContextTriggered = true;
+                thinkingDecision = {
+                  ...thinkingDecision,
+                  tier: 'high',
+                  phase: 'planning',
+                  reasoning: `Context usage (${usage.tokens}) exceeds threshold (${state.currentConfig.largeContextThreshold}). Forced high thinking.`,
+                  isContextTriggered: true,
+                };
               }
-            } catch (e) {
+            } catch (_e) {
               // ignore
             }
           }
 
-          // Classifier Override
           if (
             state.currentConfig.classifierModel &&
             !pinnedTier &&
-            !decision.isContextTriggered &&
-            !decision.isRuleMatched
+            !thinkingDecision.isContextTriggered &&
+            !thinkingDecision.isRuleMatched
           ) {
             const classifierResult = await runClassifier(
               state.currentConfig.classifierModel,
@@ -275,23 +364,33 @@ export const registerRouterProvider = (
               state.lastDecision?.phase,
             );
             if (classifierResult) {
-              decision = buildRoutingDecision(
+              thinkingDecision = buildRoutingDecision(
                 model.id,
                 profile,
                 classifierResult.tier,
                 phaseForTier(classifierResult.tier),
-                `Classifier: ${classifierResult.reasoning}`,
-                state.thinkingByProfile[model.id],
+                `Thinking classifier: ${classifierResult.reasoning}`,
+                thinkingOverrides,
                 true,
               );
-              if (isBudgetExceeded && decision.tier === 'high') {
-                decision.tier = 'medium';
-                decision.phase = 'implementation';
-                decision.reasoning = `Budget exceeded. Downgraded classifier decision to medium. (Original: ${decision.reasoning})`;
-                decision.isBudgetForced = true;
+              if (isBudgetExceeded && thinkingDecision.tier === 'high') {
+                thinkingDecision = {
+                  ...thinkingDecision,
+                  tier: 'medium',
+                  phase: 'implementation',
+                  reasoning: `Budget exceeded. Downgraded thinking to medium. (Original: ${thinkingDecision.reasoning})`,
+                  isBudgetForced: true,
+                };
               }
             }
           }
+
+          let decision = applyThinkingToDecision(
+            lockedBase,
+            thinkingDecision,
+            profile,
+            thinkingOverrides,
+          );
 
           const lastMessage = context.messages[context.messages.length - 1];
           const previousDecision = state.lastDecision;
@@ -302,7 +401,7 @@ export const registerRouterProvider = (
             previousDecision.thinking !== 'off' &&
             decision.targetProvider === 'google' &&
             decision.thinking !== 'off' &&
-            previousDecision.targetLabel !== decision.targetLabel;
+            previousDecision.targetLabel === decision.targetLabel;
 
           if (isGoogleThinkingToolContinuation) {
             decision = {
@@ -319,56 +418,6 @@ export const registerRouterProvider = (
             };
           }
 
-          const imageAttached = hasImageAttachment(context);
-          if (imageAttached) {
-            const checkModelSupportsImage = (modelRef: string) => {
-              try {
-                const { provider, modelId } = parseCanonicalModelRef(modelRef);
-                const m = state.currentModelRegistry?.find(provider, modelId);
-                return m?.input?.includes('image') ?? false;
-              } catch {
-                return false;
-              }
-            };
-
-            const tierModels = [
-              decision.targetLabel,
-              ...(profile[decision.tier].fallbacks ?? []),
-            ];
-            if (!tierModels.some(checkModelSupportsImage)) {
-              const tiersToTry: RouterTier[] =
-                decision.tier === 'low'
-                  ? ['medium', 'high']
-                  : decision.tier === 'medium'
-                    ? ['high']
-                    : [];
-
-              let foundTier: RouterTier | undefined;
-              for (const t of tiersToTry) {
-                const tModels = [
-                  profile[t].model,
-                  ...(profile[t].fallbacks ?? []),
-                ];
-                if (tModels.some(checkModelSupportsImage)) {
-                  foundTier = t;
-                  break;
-                }
-              }
-
-              if (foundTier) {
-                decision = buildRoutingDecision(
-                  model.id,
-                  profile,
-                  foundTier,
-                  phaseForTier(foundTier),
-                  `Forced ${foundTier} tier because the originally routed ${decision.tier} tier does not support image attachments.`,
-                  state.thinkingByProfile[model.id],
-                  false,
-                );
-              }
-            }
-          }
-
           state.lastDecision = decision;
           actions.recordDebugDecision(decision);
 
@@ -376,10 +425,12 @@ export const registerRouterProvider = (
             actions.updateStatus(state.lastExtensionContext);
           }
 
+          const lockTier = lock.tier;
           let modelsToTry = [
-            decision.targetLabel,
-            ...(profile[decision.tier].fallbacks ?? []),
+            lock.modelRef,
+            ...(profile[lockTier].fallbacks ?? []),
           ];
+          const imageAttached = hasImageAttachment(context);
           if (imageAttached) {
             modelsToTry = modelsToTry.filter((modelRef) => {
               try {

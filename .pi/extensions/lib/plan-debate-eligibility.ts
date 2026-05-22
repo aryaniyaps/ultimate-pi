@@ -4,7 +4,7 @@
 
 import { PLAN_FOCUS_AREAS, type PlanDebateFocus } from "./plan-debate-focus.js";
 
-export type DebateProfile = "full" | "standard" | "light";
+export type DebateProfile = "full" | "standard" | "light" | "fast";
 
 export interface DebateEligibilityInput {
 	risk_level?: string;
@@ -26,6 +26,7 @@ export interface DebateEligibilityResult {
 	debate_global_cap: number;
 	human_required: boolean;
 	rationale: string[];
+	review_gate_strategy: PlanReviewGateStrategy;
 }
 
 const LIGHT_FOCUS: PlanDebateFocus[] = ["spec", "quality"];
@@ -75,7 +76,7 @@ function confidenceAllowsLight(brief: Record<string, unknown> | null): boolean {
 	if (!rationale || refs.length < 2) return false;
 	if (implementationOpenQuestions(brief).length > 0) return false;
 	const patterns = Array.isArray(brief?.solution_patterns)
-		? (brief!.solution_patterns as unknown[])
+		? (brief?.solution_patterns as unknown[])
 		: [];
 	for (const p of patterns) {
 		const pat = asRecord(p);
@@ -85,7 +86,7 @@ function confidenceAllowsLight(brief: Record<string, unknown> | null): boolean {
 		}
 	}
 	const similar = Array.isArray(brief?.similar_implementations)
-		? (brief!.similar_implementations as unknown[])
+		? (brief?.similar_implementations as unknown[])
 		: [];
 	if (similar.length === 0) return false;
 	return true;
@@ -116,15 +117,44 @@ export const PLAN_BUDGET_LIGHT = {
 	debate_global_cap: 40000,
 } as const;
 
+export const PLAN_BUDGET_FAST = {
+	min_focus_rounds: 1,
+	max_rounds: 2,
+	max_exchanges_per_round: 1,
+	round_token_cap: 3500,
+	debate_global_cap: 20000,
+} as const;
+
+export interface PlanReviewGateStrategy {
+	mode: "consolidated" | "threaded";
+	profile: DebateProfile;
+	required_focuses: PlanDebateFocus[];
+	min_focus_rounds: number;
+	max_rounds: number;
+	max_exchanges_per_round: number;
+	round_token_cap: number;
+	debate_global_cap: number;
+	rationale: string[];
+}
+
 function capsForProfile(
 	profile: DebateProfile,
 ): Omit<
 	DebateEligibilityResult,
-	"profile" | "required_focuses" | "human_required" | "rationale"
+	| "profile"
+	| "required_focuses"
+	| "human_required"
+	| "rationale"
+	| "review_gate_strategy"
 > {
 	if (profile === "light") {
 		return {
 			...PLAN_BUDGET_LIGHT,
+		};
+	}
+	if (profile === "fast") {
+		return {
+			...PLAN_BUDGET_FAST,
 		};
 	}
 	return {
@@ -161,7 +191,7 @@ export function harnessPlanDebateEligibility(
 
 	const conflictingPatterns =
 		Array.isArray(impl?.solution_patterns) &&
-		(impl!.solution_patterns as unknown[]).length >= 2 &&
+		(impl?.solution_patterns as unknown[]).length >= 2 &&
 		openQs.length > 0;
 	if (conflictingPatterns) {
 		human_required = true;
@@ -183,6 +213,18 @@ export function harnessPlanDebateEligibility(
 			"full: high risk, material fork, open questions, DAG patch, or tensions",
 		);
 	} else if (
+		risk === "med" &&
+		!materialFork &&
+		!dagPatched &&
+		input.dag_pass !== false &&
+		openQs.length === 0 &&
+		stackHasClearPrimary(stack)
+	) {
+		profile = "fast";
+		rationale.push(
+			"fast: medium risk with clear stack and no open questions; use consolidated review with escalation on blockers",
+		);
+	} else if (
 		risk === "low" &&
 		!materialFork &&
 		!dagPatched &&
@@ -190,9 +232,9 @@ export function harnessPlanDebateEligibility(
 		confidenceAllowsLight(impl) &&
 		stackHasClearPrimary(stack)
 	) {
-		profile = "light";
+		profile = "fast";
 		rationale.push(
-			"light: low risk, clear stack, high-confidence implementation approach",
+			"fast: low risk, clear stack, high-confidence implementation approach",
 		);
 	} else if (risk === "med") {
 		profile = "standard";
@@ -200,7 +242,7 @@ export function harnessPlanDebateEligibility(
 	}
 
 	const required_focuses: PlanDebateFocus[] =
-		profile === "light" ? [...LIGHT_FOCUS] : [...PLAN_FOCUS_AREAS];
+		profile === "fast" ? [...LIGHT_FOCUS] : [...PLAN_FOCUS_AREAS];
 
 	const caps = capsForProfile(profile);
 
@@ -210,5 +252,16 @@ export function harnessPlanDebateEligibility(
 		...caps,
 		human_required,
 		rationale,
+		review_gate_strategy: {
+			mode: profile === "fast" ? "consolidated" : "threaded",
+			profile,
+			required_focuses: [...required_focuses],
+			min_focus_rounds: caps.min_focus_rounds,
+			max_rounds: caps.max_rounds,
+			max_exchanges_per_round: caps.max_exchanges_per_round,
+			round_token_cap: caps.round_token_cap,
+			debate_global_cap: caps.debate_global_cap,
+			rationale: [...rationale],
+		},
 	};
 }

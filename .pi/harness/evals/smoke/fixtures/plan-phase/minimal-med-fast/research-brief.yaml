@@ -1,0 +1,62 @@
+decomposition:
+  schema_version: "1.0.0"
+  problem_restatement: Light-profile smoke for two-focus debate
+hypothesis:
+  schema_version: "1.0.0"
+  primary:
+    claim: Light debate covers spec and quality only
+    mechanism: Eligibility profile light with min_focus_rounds 2
+    prediction: planDebateOutcomeComplete passes with two rounds
+    experiment: Run smoke-harness-plan.mjs --fixture minimal-low-light
+implementation:
+  schema_version: "1.0.0"
+  problem_framing: Low-risk fixture for selective debate
+  sub_problems: [spec coverage, quality coverage]
+  internal_references:
+    - path: test/plan-debate-eligibility.test.mjs
+      relevance: Eligibility unit tests
+      reuse_signal: high
+  external_references: []
+  solution_patterns:
+    - name: light profile gate
+      provenance: ADR-0036
+      fit: Reduces debate cost on trivial tasks
+      tradeoffs:
+        pros: [Fewer rounds]
+        cons: []
+      risks: []
+  similar_implementations:
+    - name: minimal-med four-focus fixture
+      what_it_solves: Full debate coverage
+      gap_vs_us: Light uses two focuses only
+  recommended_approach:
+    summary: Two review rounds with spec then quality
+    recommended_approach_confidence: high
+    confidence_rationale: Deterministic fixture aligned with eligibility rules
+    evidence_refs:
+      - .pi/extensions/lib/plan-debate-eligibility.ts
+      - test/plan-debate-eligibility.test.mjs
+  anti_patterns: []
+  open_questions: []
+stack:
+  schema_version: "1.0.0"
+  problem_framing: Node harness tooling
+  constraints: []
+  options:
+    - name: extend current stack
+      category: brownfield
+      fit_summary: Use existing ultimate-pi harness
+      tradeoffs:
+        pros: [No new deps]
+        cons: []
+      risks: []
+      evidence_refs: []
+      recommendation_rank: 1
+  recommended_primary: extend current stack
+  rationale: Fixture validates in-repo harness
+eval:
+  schema_version: "1.0.0"
+  revision_recommended: false
+  relevance:
+    passes: true
+    rationale: Hypothesis matches light smoke task
