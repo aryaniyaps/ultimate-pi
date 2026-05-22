@@ -24,6 +24,9 @@ export type HarnessAgentKind =
 
 const MUTATING_TOOLS = new Set(["write", "edit"]);
 
+/** Planning agents must use submit_* → canonical artifacts/*.yaml, not JSON dumps. */
+const PLANNING_ARTIFACT_JSON_WRITE = /artifacts\/[^\s'"`;]+\.json\b/i;
+
 const PLANNING_BASH_DENY_PATTERNS = [
 	/\bgraphify\s+update\b/i,
 	/\bgraphify\s+extract\b/i,
@@ -174,6 +177,17 @@ export function evaluateHarnessSubagentToolCall(
 
 	if (toolName === "bash") {
 		const command = String(input?.command ?? "");
+		if (
+			kind === "planner" &&
+			command &&
+			PLANNING_ARTIFACT_JSON_WRITE.test(command)
+		) {
+			return {
+				action: "block",
+				reason:
+					"harness-subagent-policy: artifacts must be YAML only — use submit_* (e.g. submit_hypothesis_brief → artifacts/hypothesis.yaml), not bash writes to .json.",
+			};
+		}
 		if (command && isMutatingBash(command)) {
 			return {
 				action: "block",

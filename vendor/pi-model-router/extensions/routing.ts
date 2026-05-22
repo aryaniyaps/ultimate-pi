@@ -7,6 +7,7 @@ import type {
   RoutingDecision,
   RoutingRule,
   RouterThinkingByTier,
+  SessionLock,
 } from './types.js';
 import { parseCanonicalModelRef, isRouterTier } from './config.js';
 
@@ -36,6 +37,153 @@ export const getLastUserText = (context: Context): string => {
     }
   }
   return '';
+};
+
+export const getFirstUserText = (context: Context): string => {
+  for (const message of context.messages) {
+    if (message.role === 'user') {
+      return extractTextFromContent(message.content).trim();
+    }
+  }
+  return '';
+};
+
+/** Context for one-shot session model lock: system prompt + first user message only. */
+export const buildSessionLockContext = (context: Context): Context => {
+  const firstUser = context.messages.find((message) => message.role === 'user');
+  const messages = firstUser ? [firstUser] : context.messages.slice(0, 1);
+  return { ...context, messages };
+};
+
+export const sessionLockToRoutingDecision = (
+  lock: SessionLock,
+  profile: RouterProfile,
+  thinkingOverrides?: RouterThinkingByTier,
+): RoutingDecision => {
+  const routed = profile[lock.tier];
+  const { provider, modelId } = parseCanonicalModelRef(lock.modelRef);
+  const baseThinking =
+    routed.thinking ??
+    (lock.tier === 'high' ? 'high' : lock.tier === 'low' ? 'low' : 'medium');
+  const effectiveThinking = thinkingOverrides?.[lock.tier] ?? baseThinking;
+  return {
+    profile: lock.profile,
+    tier: lock.tier,
+    phase: phaseForTier(lock.tier),
+    targetProvider: provider,
+    targetModelId: modelId,
+    targetLabel: lock.modelRef,
+    reasoning: lock.reasoning,
+    thinking: effectiveThinking,
+    timestamp: Date.now(),
+  };
+};
+
+export const routingDecisionToSessionLock = (
+  decision: RoutingDecision,
+): SessionLock => ({
+  profile: decision.profile,
+  tier: decision.tier,
+  modelRef: decision.targetLabel,
+  reasoning: decision.reasoning,
+});
+
+/** Text used to score initial session complexity (system prompt + first user message). */
+export const getSessionLockAnalysisText = (context: Context): string => {
+  const lockContext = buildSessionLockContext(context);
+  const system = (context.systemPrompt ?? '').trim();
+  const firstUser = getFirstUserText(lockContext);
+  if (system && firstUser) return `${system}\n\n${firstUser}`;
+  return system || firstUser || '';
+};
+
+/**
+ * One-shot tier pick for session model lock (no prior-turn stickiness).
+ */
+export const decideSessionLock = (
+  context: Context,
+  profileName: string,
+  profile: RouterProfile,
+  pinnedTier?: RouterTier,
+  thinkingOverrides?: RouterThinkingByTier,
+  phaseBias = 0.5,
+  rules?: RoutingRule[],
+): RoutingDecision => {
+  const analysisText = getSessionLockAnalysisText(context);
+  const synthetic: Context = {
+    systemPrompt: context.systemPrompt,
+    messages: analysisText
+      ? [{ role: 'user', content: analysisText, timestamp: Date.now() }]
+      : [],
+  };
+  return decideRouting(
+    synthetic,
+    profileName,
+    profile,
+    undefined,
+    pinnedTier,
+    thinkingOverrides,
+    phaseBias,
+    rules,
+    false,
+  );
+};
+
+/** Per-turn thinking tier merged onto a session-locked model decision. */
+export const applyThinkingToDecision = (
+  locked: RoutingDecision,
+  thinkingDecision: RoutingDecision,
+  profile: RouterProfile,
+  thinkingOverrides?: RouterThinkingByTier,
+): RoutingDecision => {
+  const tier = thinkingDecision.tier;
+  const routed = profile[tier];
+  const baseThinking =
+    routed.thinking ??
+    (tier === 'high' ? 'high' : tier === 'low' ? 'low' : 'medium');
+  const effectiveThinking = thinkingOverrides?.[tier] ?? baseThinking;
+
+  return {
+    profile: locked.profile,
+    tier,
+    phase: thinkingDecision.phase,
+    targetProvider: locked.targetProvider,
+    targetModelId: locked.targetModelId,
+    targetLabel: locked.targetLabel,
+    reasoning: `${locked.reasoning} | Thinking: ${thinkingDecision.reasoning}`,
+    thinking: effectiveThinking,
+    timestamp: Date.now(),
+    isClassifier: thinkingDecision.isClassifier,
+    isRuleMatched: thinkingDecision.isRuleMatched,
+    isBudgetForced: thinkingDecision.isBudgetForced,
+    isContextTriggered: thinkingDecision.isContextTriggered,
+  };
+};
+
+/** Harness subagents: tier from system prompt + optional first user line. */
+export const resolveTierFromPrompt = (
+  systemPrompt: string,
+  userText: string,
+  profileName: string,
+  profile: RouterProfile,
+  rules?: RoutingRule[],
+  phaseBias = 0.5,
+): RouterTier => {
+  const context: Context = {
+    systemPrompt,
+    messages: userText
+      ? [{ role: 'user', content: userText, timestamp: Date.now() }]
+      : [],
+  };
+  return decideSessionLock(
+    context,
+    profileName,
+    profile,
+    undefined,
+    undefined,
+    phaseBias,
+    rules,
+  ).tier;
 };
 
 export const getRecentConversationText = (

@@ -29,11 +29,24 @@ function saveSettings(settingsPath, data) {
 	);
 }
 
+function readDefaultRouterProfile(configPath) {
+	if (!existsSync(configPath)) return "auto";
+	try {
+		const data = JSON.parse(readFileSync(configPath, "utf8"));
+		const profile =
+			typeof data.defaultProfile === "string" ? data.defaultProfile.trim() : "";
+		return profile || "auto";
+	} catch {
+		return "auto";
+	}
+}
+
 function main() {
 	const root = process.cwd();
 	const configPath = join(root, ".pi", "model-router.json");
 	const settingsPath = join(root, ".pi", "settings.json");
 	const hasConfig = existsSync(configPath);
+	const defaultRouterProfile = readDefaultRouterProfile(configPath);
 
 	const settings = loadSettings(settingsPath);
 	if (!settings) {
@@ -67,14 +80,14 @@ function main() {
 
 	if (noProjectDefault) {
 		settings.defaultProvider = "router";
-		settings.defaultModel = "auto";
+		settings.defaultModel = defaultRouterProfile;
 		changed = true;
 	}
 
 	if (changed) {
 		saveSettings(settingsPath, settings);
 		console.log(
-			"✓ Router defaults set (`router` / `auto`) — run /reload in pi when ready",
+			`✓ Router defaults set (\`router\` / \`${defaultRouterProfile}\`) — run /reload in pi when ready`,
 		);
 	} else {
 		console.log("[harness-model-router] Defaults unchanged (user set defaultProvider)");

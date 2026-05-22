@@ -9,12 +9,13 @@ import { parse as parseYaml } from "yaml";
 
 export const PLAN_FOCUS_AREAS = ["spec", "wbs", "schedule", "quality"] as const;
 export type PlanDebateFocus = (typeof PLAN_FOCUS_AREAS)[number];
+export type PlanDebateRoundFocus = PlanDebateFocus | "all";
 
 export interface PlanFocusCoverage {
 	covered: PlanDebateFocus[];
 	missing: PlanDebateFocus[];
 	rounds_by_focus: Partial<Record<PlanDebateFocus, number>>;
-	focus_by_round: Partial<Record<number, PlanDebateFocus>>;
+	focus_by_round: Partial<Record<number, PlanDebateRoundFocus>>;
 	last_review_gate_ready: boolean;
 	last_round_index: number;
 }
@@ -34,8 +35,9 @@ async function fileExists(path: string): Promise<boolean> {
 
 function focusFromDraft(
 	draft: Record<string, unknown>,
-): PlanDebateFocus | null {
+): PlanDebateRoundFocus | null {
 	const focus = String(draft.debate_round_focus ?? "").trim();
+	if (focus === "all") return "all";
 	if ((PLAN_FOCUS_AREAS as readonly string[]).includes(focus)) {
 		return focus as PlanDebateFocus;
 	}
@@ -56,14 +58,14 @@ export async function getPlanFocusCoverage(
 	const artifactsDir = join(runDir, "artifacts");
 	const covered = new Set<PlanDebateFocus>();
 	const rounds_by_focus: Partial<Record<PlanDebateFocus, number>> = {};
-	const focus_by_round: Partial<Record<number, PlanDebateFocus>> = {};
+	const focus_by_round: Partial<Record<number, PlanDebateRoundFocus>> = {};
 	let last_review_gate_ready = false;
 	let last_round_index = 0;
 
 	let files: string[] = [];
 	try {
 		files = (await readdir(artifactsDir)).filter((f) =>
-			/^review-round-r\d+\.yaml$/i.test(f),
+			/^review-round(?:-r\d+|-consolidated)\.yaml$/i.test(f),
 		);
 	} catch {
 		return {
@@ -77,9 +79,12 @@ export async function getPlanFocusCoverage(
 	}
 
 	for (const name of files.sort()) {
-		const m = /^review-round-r(\d+)\.yaml$/i.exec(name);
+		const consolidated = /^review-round-consolidated\.yaml$/i.test(name);
+		const m = consolidated
+			? ["review-round-consolidated.yaml", "1"]
+			: /^review-round-r(\d+)\.yaml$/i.exec(name);
 		if (!m) continue;
-		const roundIndex = Number(m[1]);
+		const roundIndex = consolidated ? 1 : Number(m[1]);
 		if (roundIndex > last_round_index) last_round_index = roundIndex;
 		const raw = await readFile(join(artifactsDir, name), "utf-8");
 		let draft: Record<string, unknown>;
@@ -90,8 +95,15 @@ export async function getPlanFocusCoverage(
 		}
 		const focus = focusFromDraft(draft);
 		if (focus) {
-			covered.add(focus);
-			rounds_by_focus[focus] = roundIndex;
+			if (focus === "all") {
+				for (const requiredFocus of required) {
+					covered.add(requiredFocus);
+					rounds_by_focus[requiredFocus] = roundIndex;
+				}
+			} else {
+				covered.add(focus);
+				rounds_by_focus[focus] = roundIndex;
+			}
 			focus_by_round[roundIndex] = focus;
 		}
 		if (roundIndex === last_round_index) {
@@ -138,7 +150,7 @@ export function planDebateOutcomeComplete(
 export async function readDebateRoundFocus(
 	runDir: string,
 	roundIndex: number,
-): Promise<PlanDebateFocus | null> {
+): Promise<PlanDebateRoundFocus | null> {
 	const path = join(runDir, "artifacts", `review-round-r${roundIndex}.yaml`);
 	if (!(await fileExists(path))) return null;
 	try {

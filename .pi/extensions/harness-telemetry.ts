@@ -127,11 +127,34 @@ function propsFromRun(
 ): Record<string, unknown> {
 	return {
 		harness_run_id: runId,
+		run_id: runId,
 		harness_plan_id: planId,
 		harness_phase: phase,
 		pi_session_id: distinctId,
 		...extra,
 	};
+}
+
+function normalizedRunId(
+	data: Record<string, unknown>,
+	trace: TraceState | null,
+	distinctId: string,
+): string {
+	const fromData = [
+		data.harness_run_id,
+		data.run_id,
+		data.runId,
+		data.debate_id,
+	];
+	for (const candidate of fromData) {
+		if (typeof candidate === "string" && candidate.trim().length > 0) {
+			return candidate;
+		}
+	}
+	if (typeof trace?.run_id === "string" && trace.run_id.length > 0) {
+		return trace.run_id;
+	}
+	return distinctId;
 }
 
 function mapCustomEntry(
@@ -144,11 +167,9 @@ function mapCustomEntry(
 	event: HarnessPostHogEventName;
 	properties: Record<string, unknown>;
 } | null {
-	const runId =
-		(typeof data.run_id === "string" && data.run_id) ||
-		trace?.run_id ||
-		distinctId;
+	const runId = normalizedRunId(data, trace, distinctId);
 	const planId =
+		(typeof data.harness_plan_id === "string" && data.harness_plan_id) ||
 		(typeof data.plan_id === "string" && data.plan_id) ||
 		policy?.planId ||
 		trace?.plan_id ||
@@ -185,6 +206,7 @@ function mapCustomEntry(
 				event: "harness_debate_consensus",
 				properties: {
 					...base,
+					debate_id: String(data.debate_id ?? runId),
 					consensus_id:
 						typeof data.debate_id === "string" ? data.debate_id : runId,
 					outcome: String(kind),
@@ -195,6 +217,8 @@ function mapCustomEntry(
 			event: "harness_debate_round",
 			properties: {
 				...base,
+				debate_id: String(data.debate_id ?? runId),
+				round_index: Number(data.round_index ?? data.round ?? 0),
 				round: Number(data.round_index ?? data.round ?? 0),
 				outcome: String(kind ?? "round"),
 			},
@@ -206,6 +230,7 @@ function mapCustomEntry(
 			event: "harness_debate_consensus",
 			properties: {
 				...base,
+				debate_id: String(data.debate_id ?? runId),
 				consensus_id:
 					typeof data.consensus_id === "string"
 						? data.consensus_id

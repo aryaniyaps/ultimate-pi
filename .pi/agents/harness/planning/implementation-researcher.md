@@ -31,7 +31,7 @@ Read `HarnessSpawnContext` plus paths to `artifacts/decomposition.yaml`, `artifa
 
 ## Output
 
-Before ending, call `submit_implementation_research` exactly once with the full document. Prose summary is optional; the artifact is the tool call.
+Before ending, call `submit_implementation_research` exactly once with the full document. The harness writes **`artifacts/implementation-research.yaml`** (YAML on disk). Do not use bash or `implementation-research.json`; prose summary is optional — the submit tool is the deliverable.
 
 
 ## Guardrails

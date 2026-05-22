@@ -1025,6 +1025,18 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				};
 			}
 			const relForGate = pathArg.replace(/\\/g, "/");
+			if (/\.json$/i.test(relForGate) && relForGate.startsWith("artifacts/")) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Path not allowed: ${pathArg}. Plan artifacts under artifacts/ must be .yaml (use submit_* from subagents or write_harness_yaml with YAML content).`,
+						},
+					],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
 			if (
 				isReviewRoundArtifactPath(relForGate) &&
 				!isReviewRoundYamlWriteAllowed()

@@ -16,6 +16,30 @@ test("eligibility defaults to standard when ambiguous", () => {
 	assert.deepEqual(r.required_focuses, ["spec", "wbs", "schedule", "quality"]);
 });
 
+test("eligibility fast for med with clear stack and no open questions", () => {
+	const r = harnessPlanDebateEligibility({
+		risk_level: "med",
+		material_fork: false,
+		dag_pass: true,
+		implementation_brief: {
+			open_questions: [],
+			solution_patterns: [{ risks: [] }],
+			similar_implementations: [{ name: "x" }],
+			recommended_approach: {
+				summary: "ok",
+				recommended_approach_confidence: "high",
+				confidence_rationale: "refs",
+				evidence_refs: ["a", "b"],
+			},
+		},
+		stack_brief: { recommended_primary: "node" },
+	});
+	assert.equal(r.profile, "fast");
+	assert.equal(r.review_gate_strategy.mode, "consolidated");
+	assert.deepEqual(r.required_focuses, ["spec", "quality"]);
+	assert.equal(r.min_focus_rounds, 1);
+});
+
 test("eligibility light for low risk with confident implementation", () => {
 	const r = harnessPlanDebateEligibility({
 		risk_level: "low",

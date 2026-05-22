@@ -7,18 +7,27 @@ import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { isHarnessBudgetEnforceOn } from "../../lib/harness-budget-enforce.js";
 import { capsForDebate } from "./debate-bus-core.js";
+import type { DebateEligibilityResult } from "./plan-debate-eligibility.js";
 import {
 	getPlanFocusCoverage,
 	type PlanDebateFocus,
 	planDebateOutcomeComplete,
 } from "./plan-debate-focus.js";
 import { planDebateIdForRun } from "./plan-debate-id.js";
-import { laneArtifactPathsForRound } from "./plan-debate-lanes.js";
+import {
+	laneArtifactPathsForConsolidatedRound,
+	laneArtifactPathsForRound,
+} from "./plan-debate-lanes.js";
 import {
 	getMessengerRoundState,
 	loadMessengerState,
 	messengerRoundDebateReady,
 } from "./plan-messenger.js";
+import {
+	CONSOLIDATED_REVIEW_ARTIFACT,
+	isConsolidatedReviewStrategy,
+	planReviewGateStrategyFromEligibility,
+} from "./plan-review-gate.js";
 
 async function fileExists(path: string): Promise<boolean> {
 	try {
@@ -64,6 +73,7 @@ export interface PlanDebateGateResult {
 export async function validatePlanDebateGate(
 	projectRoot: string,
 	runId: string,
+	eligibility?: DebateEligibilityResult,
 ): Promise<PlanDebateGateResult> {
 	const errors: string[] = [];
 	const warnings: string[] = [];
@@ -77,6 +87,33 @@ export async function validatePlanDebateGate(
 			? messenger.required_focuses
 			: (["spec", "wbs", "schedule", "quality"] as const);
 	const caps = capsForDebate(debateId, debateProfile);
+	const reviewStrategy =
+		eligibility != null
+			? planReviewGateStrategyFromEligibility(eligibility)
+			: messenger?.review_gate_mode === "consolidated"
+				? {
+						mode: "consolidated" as const,
+						profile: debateProfile as DebateEligibilityResult["profile"],
+						required_focuses: [...requiredFocuses],
+						min_focus_rounds: caps.min_focus_rounds,
+						max_rounds: caps.max_rounds,
+						max_exchanges_per_round: caps.max_exchanges_per_round,
+						round_token_cap: caps.round_token_cap,
+						debate_global_cap: caps.debate_global_cap,
+						rationale: ["messenger review_gate_mode=consolidated"],
+					}
+				: {
+						mode: "threaded" as const,
+						profile: debateProfile as DebateEligibilityResult["profile"],
+						required_focuses: [...requiredFocuses],
+						min_focus_rounds: caps.min_focus_rounds,
+						max_rounds: caps.max_rounds,
+						max_exchanges_per_round: caps.max_exchanges_per_round,
+						round_token_cap: caps.round_token_cap,
+						debate_global_cap: caps.debate_global_cap,
+						rationale: [],
+					};
+	const consolidated = isConsolidatedReviewStrategy(reviewStrategy);
 	const coverage = await getPlanFocusCoverage(runDir, { requiredFocuses });
 	const dialogueOpts = {
 		max_exchanges_per_round: caps.max_exchanges_per_round,
@@ -89,31 +126,55 @@ export async function validatePlanDebateGate(
 		errors.push("last submitted review round has review_gate_ready !== true");
 	}
 
-	const roundIndices = [
-		...new Set(
-			Object.values(coverage.rounds_by_focus).filter(
-				(v): v is number => typeof v === "number",
-			),
-		),
-	];
-	for (const r of roundIndices) {
-		const focus = coverage.focus_by_round[r] ?? null;
-		for (const rel of laneArtifactPathsForRound(r, focus)) {
+	if (consolidated) {
+		const absConsolidated = join(runDir, CONSOLIDATED_REVIEW_ARTIFACT);
+		if (!(await fileExists(absConsolidated))) {
+			errors.push(`missing ${CONSOLIDATED_REVIEW_ARTIFACT}`);
+		}
+		for (const rel of laneArtifactPathsForConsolidatedRound()) {
 			const abs = join(runDir, rel);
 			if (!(await fileExists(abs))) {
 				errors.push(`missing ${rel}`);
 			}
 		}
-		const roundState = await getMessengerRoundState(runDir, r);
-		const requireSprint = focus === "quality" || r >= 4;
+		const roundState = await getMessengerRoundState(runDir, 1);
 		const messengerCheck = messengerRoundDebateReady(
 			roundState,
-			requireSprint,
+			true,
 			dialogueOpts,
 		);
 		if (!messengerCheck.ok) {
 			for (const e of messengerCheck.errors) {
-				errors.push(`round ${r} messenger: ${e}`);
+				errors.push(`consolidated round messenger: ${e}`);
+			}
+		}
+	} else {
+		const roundIndices = [
+			...new Set(
+				Object.values(coverage.rounds_by_focus).filter(
+					(v): v is number => typeof v === "number",
+				),
+			),
+		];
+		for (const r of roundIndices) {
+			const focus = coverage.focus_by_round[r] ?? null;
+			for (const rel of laneArtifactPathsForRound(r, focus)) {
+				const abs = join(runDir, rel);
+				if (!(await fileExists(abs))) {
+					errors.push(`missing ${rel}`);
+				}
+			}
+			const roundState = await getMessengerRoundState(runDir, r);
+			const requireSprint = focus === "quality" || r >= 4;
+			const messengerCheck = messengerRoundDebateReady(
+				roundState,
+				requireSprint,
+				dialogueOpts,
+			);
+			if (!messengerCheck.ok) {
+				for (const e of messengerCheck.errors) {
+					errors.push(`round ${r} messenger: ${e}`);
+				}
 			}
 		}
 	}
@@ -203,7 +264,9 @@ export async function validatePlanDebateGate(
 }
 
 export function isReviewRoundArtifactPath(relPath: string): boolean {
-	return /^artifacts\/review-round-r\d+\.yaml$/i.test(
-		relPath.replace(/\\/g, "/"),
+	const norm = relPath.replace(/\\/g, "/");
+	return (
+		/^artifacts\/review-round-r\d+\.yaml$/i.test(norm) ||
+		norm === CONSOLIDATED_REVIEW_ARTIFACT
 	);
 }

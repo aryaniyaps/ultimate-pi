@@ -4,6 +4,7 @@ import type {
   RouterConfig,
   RouterPinByProfile,
   RouterThinkingByProfile,
+  SessionLock,
 } from './types.js';
 
 const getEffectiveThinking = (
@@ -63,6 +64,7 @@ export const updateStatus = (
   accumulatedCost: number,
   widgetEnabled: boolean,
   currentConfig: RouterConfig,
+  sessionLock: SessionLock | undefined,
 ) => {
   const activeRouterProfile = routerEnabled ? selectedProfile : undefined;
   const statusProfile = selectedProfile;
@@ -81,7 +83,13 @@ export const updateStatus = (
         activeRouterProfile,
         lastDecision,
       );
-      statusText = `router:${activeRouterProfile}${pinLabel} -> ${lastDecision.tier} -> ${lastDecision.targetProvider}/${lastDecision.targetModelId} (${effectiveThinking})`;
+      const locked =
+        sessionLock?.profile === activeRouterProfile
+          ? sessionLock.modelRef
+          : lastDecision.targetLabel;
+      statusText = `router:${activeRouterProfile}${pinLabel} locked:${locked} thinking:${lastDecision.tier} (${effectiveThinking})`;
+    } else if (sessionLock?.profile === activeRouterProfile) {
+      statusText = `router:${activeRouterProfile}${pinLabel} locked:${sessionLock.modelRef} -> waiting`;
     } else {
       statusText = `router:${activeRouterProfile}${pinLabel} -> waiting`;
     }
@@ -104,6 +112,11 @@ export const updateStatus = (
         ? ` / $${currentConfig.maxSessionBudget.toFixed(2)}`
         : ''),
   ];
+  if (sessionLock && sessionLock.profile === statusProfile) {
+    widgetLines.push(
+      `Locked model: ${sessionLock.modelRef} (lock tier ${sessionLock.tier})`,
+    );
+  }
   if (lastDecision && lastDecision.profile === statusProfile) {
     const effectiveThinking = getEffectiveThinking(
       thinkingByProfile,
@@ -114,8 +127,9 @@ export const updateStatus = (
     const flagsStr = flags.length > 0 ? ` [${flags.join(',')}]` : '';
 
     widgetLines.push(
-      `Route: ${lastDecision.tier}${flagsStr} -> ${lastDecision.targetProvider}/${lastDecision.targetModelId} (${effectiveThinking})`,
+      `Thinking: ${lastDecision.tier}${flagsStr} (${effectiveThinking})`,
       `Phase: ${lastDecision.phase}`,
+      `Delegate: ${lastDecision.targetProvider}/${lastDecision.targetModelId}`,
     );
   } else if (!routerEnabled && lastNonRouterModel) {
     widgetLines.push(`Fallback: ${lastNonRouterModel}`);

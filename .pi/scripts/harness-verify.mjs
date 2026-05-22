@@ -145,6 +145,34 @@ async function checkSentruxRules() {
 	ok(".sentrux/rules.toml present");
 }
 
+async function checkModelRouterThinkingOnly() {
+	const path = join(ROOT, ".pi", "model-router.json");
+	if (!(await fileExists(path))) {
+		ok("model-router.json absent (skip thinking-only tier check)");
+		return;
+	}
+	let raw;
+	try {
+		raw = JSON.parse(await readFile(path, "utf-8"));
+	} catch {
+		fail("invalid .pi/model-router.json");
+	}
+	const profiles = raw.profiles ?? {};
+	for (const [name, profile] of Object.entries(profiles)) {
+		const high = profile?.high?.model;
+		const medium = profile?.medium?.model;
+		const low = profile?.low?.model;
+		if (
+			!(high && medium && low && high === medium && medium === low)
+		) {
+			fail(
+				`model-router profile "${name}" must use the same model on high/medium/low (thinking-only tiers)`,
+			);
+		}
+	}
+	ok("model-router.json thinking-only (same model per profile)");
+}
+
 async function checkSentruxGate() {
 	await checkSentruxRules();
 
@@ -288,6 +316,7 @@ async function main() {
 	ok("test-diff-golden.json");
 
 	await checkSentruxGate();
+	await checkModelRouterThinkingOnly();
 
 	if (!(await fileExists(AGENTS_MANIFEST))) {
 		fail(

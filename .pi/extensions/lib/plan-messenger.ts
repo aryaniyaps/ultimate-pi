@@ -63,6 +63,8 @@ export interface MessengerState {
 	rounds: Record<string, MessengerRoundState>;
 	debate_profile?: DebateProfile;
 	required_focuses?: PlanDebateFocus[];
+	/** consolidated = single Review Gate round; threaded = per-focus rounds */
+	review_gate_mode?: "consolidated" | "threaded";
 }
 
 function messengerRoot(runDir: string): string {
@@ -84,6 +86,7 @@ export async function initPlanMessenger(
 		debateId: string;
 		debate_profile?: DebateProfile;
 		required_focuses?: PlanDebateFocus[];
+		review_gate_mode?: "consolidated" | "threaded";
 	},
 ): Promise<string> {
 	const root = messengerRoot(runDir);
@@ -97,6 +100,7 @@ export async function initPlanMessenger(
 		rounds: {},
 		debate_profile: opts.debate_profile,
 		required_focuses: opts.required_focuses,
+		review_gate_mode: opts.review_gate_mode,
 	};
 	await writeFile(
 		join(root, "state.json"),

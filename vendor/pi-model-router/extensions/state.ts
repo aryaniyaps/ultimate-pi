@@ -3,6 +3,7 @@ import type {
   RouterThinkingByProfile,
   RoutingDecision,
   RouterPersistedState,
+  SessionLock,
 } from './types.js';
 
 export const isRouterPersistedState = (
@@ -30,6 +31,7 @@ export const buildPersistedState = (
   lastDecision: RoutingDecision | undefined,
   lastNonRouterModel: string | undefined,
   accumulatedCost: number,
+  sessionLock: SessionLock | undefined,
 ): RouterPersistedState => {
   return {
     enabled: routerEnabled,
@@ -37,6 +39,7 @@ export const buildPersistedState = (
     pinTier: pinnedTierByProfile[selectedProfile],
     pinByProfile: { ...pinnedTierByProfile },
     thinkingByProfile: { ...thinkingByProfile },
+    sessionLock,
     debugEnabled,
     widgetEnabled,
     debugHistory,

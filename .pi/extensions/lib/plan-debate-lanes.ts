@@ -2,13 +2,13 @@
  * Shared Review Gate lane list for a round (gate + round-status).
  */
 
-import type { PlanDebateFocus } from "./plan-debate-focus.js";
+import type { PlanDebateRoundFocus } from "./plan-debate-focus.js";
 import type { DebateLaneKind } from "./plan-debate-lane.js";
 
 /** Lanes required before review-integrator for this round. */
 export function lanesForRound(
 	roundIndex: number,
-	debateRoundFocus?: PlanDebateFocus | null,
+	debateRoundFocus?: PlanDebateRoundFocus | null,
 ): DebateLaneKind[] {
 	const lanes: DebateLaneKind[] = ["validation-turn", "adversary-brief"];
 	if (roundIndex === 1) {
@@ -23,7 +23,7 @@ export function lanesForRound(
 /** Relative artifact paths for lane YAML + review-round. */
 export function laneArtifactPathsForRound(
 	roundIndex: number,
-	debateRoundFocus?: PlanDebateFocus | null,
+	debateRoundFocus?: PlanDebateRoundFocus | null,
 ): string[] {
 	const paths = lanesForRound(roundIndex, debateRoundFocus).map((lane) => {
 		switch (lane) {
@@ -41,4 +41,28 @@ export function laneArtifactPathsForRound(
 	});
 	paths.push(`artifacts/review-round-r${roundIndex}.yaml`);
 	return paths;
+}
+
+/** Lanes for consolidated Review Gate (single round, parallel-friendly). */
+export function lanesForConsolidatedRound(): DebateLaneKind[] {
+	return ["validation-turn", "adversary-brief", "sprint-audit"];
+}
+
+export function laneArtifactPathsForConsolidatedRound(): string[] {
+	const roundIndex = 1;
+	return [
+		...lanesForConsolidatedRound().map((lane) => {
+			switch (lane) {
+				case "validation-turn":
+					return `artifacts/validation-turn-r${roundIndex}.yaml`;
+				case "adversary-brief":
+					return `artifacts/adversary-brief-r${roundIndex}.yaml`;
+				case "sprint-audit":
+					return `artifacts/sprint-audit-r${roundIndex}.yaml`;
+				default:
+					return `artifacts/${lane}-r${roundIndex}.yaml`;
+			}
+		}),
+		"artifacts/review-round-consolidated.yaml",
+	];
 }

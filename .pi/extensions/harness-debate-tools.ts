@@ -192,7 +192,7 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 		name: "harness_plan_debate_eligibility",
 		label: "Plan Debate Eligibility",
 		description:
-			"Pre-debate profile selection (full|standard|light). Call after DAG pass, before harness_debate_open. Uses risk, fork, implementation/stack briefs — not R1 hypothesis output.",
+			"Pre-debate profile selection (full|standard|light|fast). Call after DAG pass, before harness_debate_open. Uses risk, fork, implementation/stack briefs — not R1 hypothesis output.",
 		parameters: Type.Object({
 			risk_level: Type.Optional(
 				Type.String({ description: "low | med | high" }),
@@ -250,6 +250,7 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			const result = harnessPlanDebateEligibility(input);
 			const lines = [
 				`profile: ${result.profile}`,
+				`review_gate_mode: ${result.review_gate_strategy.mode}`,
 				`required_focuses: ${result.required_focuses.join(", ")}`,
 				`min_focus_rounds: ${result.min_focus_rounds}`,
 				`debate_global_cap: ${result.debate_global_cap}`,
@@ -273,7 +274,7 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 				Type.String({ description: "Optional; normalized to plan-<run_id>" }),
 			),
 			debate_profile: Type.Optional(
-				Type.String({ description: "full | standard | light" }),
+				Type.String({ description: "full | standard | light | fast" }),
 			),
 			required_focuses: Type.Optional(
 				Type.Array(
@@ -297,7 +298,8 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			const profile =
 				p.debate_profile === "full" ||
 				p.debate_profile === "standard" ||
-				p.debate_profile === "light"
+				p.debate_profile === "light" ||
+				p.debate_profile === "fast"
 					? p.debate_profile
 					: "standard";
 			const required_focuses = (p.required_focuses ?? []).filter((f) =>
@@ -308,11 +310,14 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 				required_focuses:
 					required_focuses.length > 0 ? required_focuses : undefined,
 			});
+			const review_gate_mode =
+				profile === "fast" ? ("consolidated" as const) : ("threaded" as const);
 			await initPlanMessenger(runDir(projectRoot, runId), {
 				runId,
 				debateId,
 				debate_profile: profile,
 				required_focuses: opened.required_focuses,
+				review_gate_mode,
 			});
 			const sessionId = ctx.sessionManager.getSessionId();
 			captureHarnessEvent(sessionId, "harness_debate_round", {
@@ -325,11 +330,15 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			const lines = [
 				`Plan debate opened: ${debateId}`,
 				`Profile: ${profile}`,
+				`Review gate mode: ${review_gate_mode}`,
 				required_focuses.length
 					? `Required focuses: ${required_focuses.join(", ")}`
 					: opened.required_focuses?.length
 						? `Required focuses: ${opened.required_focuses.join(", ")}`
 						: "Required focuses: (default all four)",
+				review_gate_mode === "consolidated"
+					? "Consolidated path: one review round (artifacts/review-round-consolidated.yaml); escalate to threaded rounds only on blockers."
+					: "Threaded path: one review round per focus (spec → wbs → schedule → quality).",
 				`Messenger: debate-messenger/ (inbox + threads/round-N/transcript.jsonl)`,
 			];
 			if (warning) lines.push(`Note: ${warning}`);

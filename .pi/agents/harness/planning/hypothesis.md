@@ -63,4 +63,4 @@ Do **not** include self-evaluation scores — a separate agent handles that.
 
 ## Output
 
-Before ending, call `submit_hypothesis_brief` exactly once with the full `PlanHypothesisBrief` document. Do not paste the artifact as prose or a fenced JSON block — the tool write is the deliverable.
+Before ending, call `submit_hypothesis_brief` exactly once with the full `PlanHypothesisBrief` document. The harness writes **`artifacts/hypothesis.yaml`** (YAML on disk). Do not use bash or any `*.json` path under `artifacts/`; do not paste the artifact as prose or a fenced JSON block — the submit tool is the deliverable.

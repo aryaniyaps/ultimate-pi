@@ -235,6 +235,7 @@ export default function traceRecorder(pi: ExtensionAPI) {
 		if (shouldEmitStarted) {
 			captureHarnessEvent(sessionId, "harness_run_started", {
 				harness_run_id: runId,
+				run_id: runId,
 				harness_plan_id: activeRun.planId,
 				harness_phase: activeRun.phase,
 				pi_session_id: sessionId,
