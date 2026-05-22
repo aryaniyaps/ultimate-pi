@@ -4,6 +4,17 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.17.0] — 2026-05-22
+
+### ✨ Features
+
+- **Model router:** Session-locked model SKU at start (initial prompt + system prompt); per-turn routing adjusts thinking tier only; subagents lock from agent `systemPrompt` complexity.
+- **Harness:** Thinking-only profile shape in generator/verify; plan review gate, debate eligibility, and smoke fixture updates.
+
+### ✅ Tests
+
+- Add `harness-model-router-routing` and plan-debate eligibility coverage.
+
 ## [v0.16.0] — 2026-05-19
 
 ### ✨ Features
