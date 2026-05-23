@@ -4,6 +4,17 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [v0.18.0] — 2026-05-23
+
+### ✨ Features
+
+- **Harness:** Agent-native plan/review workflows (ADR 0042–0044) — path-first `approve_plan` / `create_plan` / `submit_*`, lakes on execution plans, `parallel_probes` debate, `review-outcome.yaml` routing, `/harness-steer` repair loop, `merge_harness_yaml`, and `harness_synthesize_repair_brief`.
+- **Harness:** Practice map, planning-context and plan-synthesizer agents, PostHog bootstrap, graphify KB updater corpus, and Sentrux steward prompt.
+
+### ✅ Tests
+
+- Add harness tool-payload, post-run routing, subprocess bootstrap, artifact gate, and topology tests; extend smoke plan fixture for parallel probes.
+
 ## [v0.17.0] — 2026-05-22
 
 ### ✨ Features
