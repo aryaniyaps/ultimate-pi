@@ -43,6 +43,25 @@ test("evaluator blocks write and mutating bash", () => {
 	assert.equal(read.action, "allow");
 });
 
+test("evaluator blocks mutating ctx_batch_execute", () => {
+	const batch = evaluateHarnessSubagentToolCall(
+		"ctx_batch_execute",
+		{
+			commands: [{ label: "commit", command: "git commit -m test" }],
+			queries: ["what changed"],
+		},
+		"harness/evaluator",
+	);
+	assert.equal(batch.action, "block");
+
+	const readOnly = evaluateHarnessSubagentToolCall(
+		"ctx_execute",
+		{ language: "shell", code: "ls -la" },
+		"harness/evaluator",
+	);
+	assert.equal(readOnly.action, "allow");
+});
+
 test("executor allows write", () => {
 	const write = evaluateHarnessSubagentToolCall(
 		"write",
@@ -106,12 +125,15 @@ test("parseHarnessAgentJson extracts fenced block", () => {
 	assert.equal(parsed.value.status, "ready");
 });
 
-test("harness-plan prompt references Darwin pipeline agents not planner spawn", () => {
+test("harness-plan prompt references planning context and Darwin pipeline agents", () => {
 	const planPrompt = readFileSync(
 		join(root, ".pi/prompts/harness-plan.md"),
 		"utf-8",
 	);
-	assert.match(planPrompt, /harness\/planning\/scout-graphify/);
+	assert.match(planPrompt, /planning-context\.yaml/);
+	assert.match(planPrompt, /harness\/planning\/planning-context/);
+	assert.match(planPrompt, /spawn legacy `scout-\*` agents in parallel by default/i);
+	assert.match(planPrompt, /not.*spawn legacy/i);
 	assert.match(planPrompt, /harness\/planning\/decompose/);
 	assert.match(planPrompt, /harness\/planning\/hypothesis/);
 	assert.match(planPrompt, /harness\/planning\/hypothesis-validator/);
@@ -157,11 +179,11 @@ test("approve_plan and create_plan blocked in all subagents", () => {
 		if (prev !== undefined) process.env.PI_HARNESS_SUBPROCESS = prev;
 	});
 
-	test("planning scout agent disallows approve_plan in frontmatter", () => {
-	const scout = readFileSync(
-		join(root, ".pi/agents/harness/planning/scout-graphify.md"),
+test("planning-context agent disallows approve_plan in frontmatter", () => {
+	const agent = readFileSync(
+		join(root, ".pi/agents/harness/planning/planning-context.md"),
 		"utf-8",
 	);
-	assert.match(scout, /disallowed_tools:.*approve_plan/);
-	assert.match(scout, /lane.*graphify/);
+	assert.match(agent, /disallowed_tools:.*approve_plan/);
+	assert.match(agent, /submit_planning_context/);
 });

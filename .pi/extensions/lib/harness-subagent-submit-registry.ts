@@ -23,6 +23,12 @@ function roundPath(prefix: string, doc: Record<string, unknown>): string {
 
 export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 	{
+		toolName: "submit_planning_context",
+		agents: ["harness/planning/planning-context"],
+		schemaFile: "plan-planning-context.schema.json",
+		artifactPath: "artifacts/planning-context.yaml",
+	},
+	{
 		toolName: "submit_scout_findings",
 		agents: [
 			"harness/planning/scout-graphify",
@@ -42,13 +48,16 @@ export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 	},
 	{
 		toolName: "submit_decomposition_brief",
-		agents: ["harness/planning/decompose"],
+		agents: ["harness/planning/decompose", "harness/planning/plan-synthesizer"],
 		schemaFile: "plan-decomposition-brief.schema.json",
 		artifactPath: "artifacts/decomposition.yaml",
 	},
 	{
 		toolName: "submit_hypothesis_brief",
-		agents: ["harness/planning/hypothesis"],
+		agents: [
+			"harness/planning/hypothesis",
+			"harness/planning/plan-synthesizer",
+		],
 		schemaFile: "plan-hypothesis-brief.schema.json",
 		artifactPath: "artifacts/hypothesis.yaml",
 	},
@@ -66,7 +75,10 @@ export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 	},
 	{
 		toolName: "submit_execution_plan_brief",
-		agents: ["harness/planning/execution-plan-author"],
+		agents: [
+			"harness/planning/execution-plan-author",
+			"harness/planning/plan-synthesizer",
+		],
 		schemaFile: "plan-execution-plan-brief.schema.json",
 		artifactPath: "artifacts/execution-plan-draft.yaml",
 	},
@@ -128,6 +140,12 @@ export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 		schemaFile: "harness-human-required.schema.json",
 		artifactPath: "artifacts/human-required.yaml",
 		humanRequired: true,
+	},
+	{
+		toolName: "submit_sentrux_manifest_proposal",
+		agents: ["harness/sentrux-steward"],
+		schemaFile: "sentrux-manifest-proposal.schema.json",
+		artifactPath: "artifacts/sentrux-manifest-proposal.yaml",
 	},
 ] as const;
 

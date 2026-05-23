@@ -15,8 +15,9 @@ description: Enforce harness governance phases, policy gates, budgets, and promo
 
 1. Read current phase from `/harness-policy-status` or session `harness-policy-state`.
 2. Check ADRs: constitution (0001), eval promotion (0003), Sentrux (0006), drift (0007), rules lifecycle (0009).
-3. For promotion: require eval pass, no abort lock, debate consensus if escalated, Sentrux when `HARNESS_SENTRUX_REQUIRED=true`.
-4. After architecture changes: edit `.pi/harness/sentrux/architecture.manifest.json`, then `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --force` (see `.pi/scripts/README.md` for `UP_PKG`) or `/harness-sentrux-sync`.
+3. For promotion: require eval pass, no abort lock, debate consensus if escalated, Sentrux when `HARNESS_SENTRUX_REQUIRED=true` (`artifacts/sentrux-signal.yaml` from `/harness-run`, not executor self-report).
+4. **Intent vs observation:** Manifest/layer/boundary changes → `/harness-sentrux-steward` proposal + chair approval + ADR when material, then `sentrux-rules-sync --force`. `sentrux check`/`gate` degradation after execute → replan or fix code — do not tune manifest on a single noisy gate.
+5. After approved manifest edits: `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force` or `/harness-sentrux-sync`; emit `harness-architecture-changed` for the extension.
 5. Run `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` before claiming release readiness.
 
 ## Spec Distiller integration
@@ -31,7 +32,7 @@ When refining plans from noisy requirements:
 ## Budgets (ADR 0038)
 
 - Default: **`HARNESS_BUDGET_ENFORCE` off** — token/debate caps are telemetry-only (`harness-budget-telemetry`, `harness-budget-soft-limit`). They do **not** block phases or debate lanes.
-- Do **not** skip scouts, debate rounds, or `approve_plan` because of soft budget hints in the widget.
+- Do **not** skip reconnaissance artifacts (`planning-context.yaml`), debate rounds, or `approve_plan` because of soft budget hints in the widget.
 - Re-enable hard caps only with `HARNESS_BUDGET_ENFORCE=1` and `HARNESS_BUDGET_HARD_STOP` / `HARNESS_DEBATE_HARD_STOP`.
 
 ## Subagent artifacts (ADR 0037)

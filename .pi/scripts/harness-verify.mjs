@@ -23,6 +23,8 @@ const REQUIRED_SCHEMAS = [
 	"eval-verdict.schema.json",
 	"harness-spawn-context.schema.json",
 	"harness-turn.schema.json",
+	"sentrux-manifest-proposal.schema.json",
+	"sentrux-signal.schema.json",
 ];
 
 const REQUIRED_ADRS = [
@@ -39,6 +41,7 @@ const REQUIRED_ADRS = [
 	"0032-harness-command-orchestration.md",
 	"0037-subagent-submit-tools.md",
 	"0038-budget-telemetry-only.md",
+	"0040-practice-grounded-orchestration.md",
 ];
 
 const REQUIRED_EXTENSIONS = [
@@ -180,13 +183,21 @@ async function checkSentruxGate() {
 		ok("Sentrux MCP stub gate skipped (HARNESS_SENTRUX_REQUIRED not set)");
 		return;
 	}
-	const stubPath = join(ROOT, ".pi", "harness", "evals", "smoke", "sentrux-stub.json");
-	if (!(await fileExists(stubPath))) {
-		fail(
-			"HARNESS_SENTRUX_REQUIRED=true but .pi/harness/evals/smoke/sentrux-stub.json missing",
-		);
+	const runDir = process.env.HARNESS_RUN_DIR?.trim();
+	const runSignalPath = runDir
+		? join(runDir, "artifacts", "sentrux-signal.yaml")
+		: null;
+	if (runSignalPath && (await fileExists(runSignalPath))) {
+		ok(`Sentrux run signal present (${runSignalPath})`);
+	} else {
+		const stubPath = join(ROOT, ".pi", "harness", "evals", "smoke", "sentrux-stub.json");
+		if (!(await fileExists(stubPath))) {
+			fail(
+				"HARNESS_SENTRUX_REQUIRED=true but no artifacts/sentrux-signal.yaml (set HARNESS_RUN_DIR) and .pi/harness/evals/smoke/sentrux-stub.json missing",
+			);
+		}
+		ok("Sentrux stub present (run signal absent — prefer artifacts/sentrux-signal.yaml from /harness-run)");
 	}
-	ok("Sentrux stub present");
 
 	const { code, out } = await runNodeScript(
 		join(ROOT, ".pi", "scripts", "sentrux-rules-sync.mjs"),
@@ -289,6 +300,11 @@ async function main() {
 	}
 	if (!policyGateSrc.includes('pi.on("tool_call", async (event, ctx)')) {
 		fail("policy-gate tool_call must receive ctx for run context");
+	}
+	if (!policyGateSrc.includes("evaluateContextModeMutation")) {
+		fail(
+			"policy-gate.ts must evaluate context-mode execute tools via evaluateContextModeMutation",
+		);
 	}
 	ok("policy-gate plan-phase writes");
 

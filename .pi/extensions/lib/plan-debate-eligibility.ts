@@ -126,7 +126,7 @@ export const PLAN_BUDGET_FAST = {
 } as const;
 
 export interface PlanReviewGateStrategy {
-	mode: "consolidated" | "threaded";
+	mode: "consolidated" | "threaded" | "parallel_probes";
 	profile: DebateProfile;
 	required_focuses: PlanDebateFocus[];
 	min_focus_rounds: number;
@@ -232,9 +232,9 @@ export function harnessPlanDebateEligibility(
 		confidenceAllowsLight(impl) &&
 		stackHasClearPrimary(stack)
 	) {
-		profile = "fast";
+		profile = "light";
 		rationale.push(
-			"fast: low risk, clear stack, high-confidence implementation approach",
+			"light: low risk, clear stack, high-confidence implementation (threaded spec+quality)",
 		);
 	} else if (risk === "med") {
 		profile = "standard";
@@ -242,7 +242,9 @@ export function harnessPlanDebateEligibility(
 	}
 
 	const required_focuses: PlanDebateFocus[] =
-		profile === "fast" ? [...LIGHT_FOCUS] : [...PLAN_FOCUS_AREAS];
+		profile === "fast" || profile === "light"
+			? [...LIGHT_FOCUS]
+			: [...PLAN_FOCUS_AREAS];
 
 	const caps = capsForProfile(profile);
 
@@ -253,7 +255,12 @@ export function harnessPlanDebateEligibility(
 		human_required,
 		rationale,
 		review_gate_strategy: {
-			mode: profile === "fast" ? "consolidated" : "threaded",
+			mode:
+				profile === "fast"
+					? "consolidated"
+					: profile === "standard"
+						? "parallel_probes"
+						: "threaded",
 			profile,
 			required_focuses: [...required_focuses],
 			min_focus_rounds: caps.min_focus_rounds,

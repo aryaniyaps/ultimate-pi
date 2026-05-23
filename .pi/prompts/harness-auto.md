@@ -18,15 +18,15 @@ If task missing:
 
 ## Orchestration (required) — same session
 
-Follow **harness-plan** performance rules (`subagent` with parallel `tasks`, `agentScope: "both"`).
+Follow **harness-plan** performance rules (`subagent` with `agentScope: "both"`). Use parallel `tasks` only for Phase 3.5 research (≤2 lanes) when subprocesses are needed. Never parallelize decompose∥hypothesis or debate lanes — precheck enforces this.
 
-1. **Plan** — follow `/harness-plan` (parallel scouts → parallel decompose/hypothesis → draft PlanPacket → debate rounds → parent `approve_plan` + `create_plan`). No second approval pass.
-2. **Execute** — `subagent({ agent: "harness/executor", task: "<HarnessSpawnContext mode execute>" })`; summarize handoff bullets only (do not paste full subprocess log).
-3. **Eval** — `subagent({ agent: "harness/evaluator", task: "<mode benchmark>" })` after parent scripts if needed.
-4. **Review** — `subagent({ agent: "harness/evaluator", task: "<mode verdict>" })` when strict gates require.
-5. **Adversary** — `subagent({ agent: "harness/adversary", ... })`. **Skip when `--quick`**.
-6. **Tie-breaker** — `subagent({ agent: "harness/tie-breaker", ... })` only if debate unresolved and **not** `--quick`.
-7. **Parent** — apply locked strict gates below; commit/PR only if all pass.
+1. **Plan** — follow `/harness-plan` (context → lakes/synthesis or sequential framing → research → plan-verify → `approve_plan()` + `create_plan()`). One approval.
+2. **Execute** — `harness/executor` with `executor_strategy` from packet (default `single_pass` for low/med).
+3. **Review** — always **`/harness-review`** after execute (no benchmark fail-fast).
+4. **Steer loop** — while `review-outcome.remediation_class === implementation_gap` and `steer_attempt < HARNESS_STEER_MAX_ATTEMPTS`: `/harness-steer` → `/harness-review` (tiered adversary on attempts 2+).
+5. **Parent** — apply locked strict gates; commit/PR only when `remediation_class: pass`.
+
+Do **not** call separate `/harness-eval` or `/harness-critic` (deprecated aliases of `/harness-review`).
 
 Review agents run in isolated subprocesses via `subagent` (same parent session).
 
@@ -47,7 +47,7 @@ Block commit/PR if any fails: plan gate, execution in scope, evaluator pass, adv
 
 ## Notes
 
-- `--quick` reduces breadth (skips semantic scout, post-run adversary, tie-breaker), never core safety gates on plan approval or evaluator.
+- `--quick` reduces breadth (skips semantic coverage in planning context, post-run adversary, tie-breaker), never core safety gates on plan approval or evaluator.
 - High risk/ambiguity → stop and recommend manual `/harness-plan` with `ask_user`.
 - Interrupt: `/harness-abort [reason]` then `/harness-plan`.
 - Artifact refs under active run dir; `/harness-run-status` or `/harness-trace-last` for handoff.

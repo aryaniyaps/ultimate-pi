@@ -7,6 +7,8 @@ thinking: medium
 max_turns: 12
 ---
 
+**Inspection role:** Definition of Done auditor (sprint contract). See `.pi/harness/docs/practice-map.md`.
+
 ## Your task
 
 Audit `execution_plan.sprint_contract` and work_item `done_criteria` against ADR-020 (Sprint Contract, Done Criteria Types, Keep Quality Left).

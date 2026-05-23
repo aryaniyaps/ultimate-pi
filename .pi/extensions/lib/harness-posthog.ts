@@ -6,6 +6,7 @@
  */
 
 import { PostHog } from "posthog-node";
+import { getPostHogClientOptions } from "./posthog-client.js";
 
 export type HarnessPostHogEventName =
 	| "harness_run_started"
@@ -48,9 +49,7 @@ function getClient(): PostHog | null {
 	if (client) return client;
 	const apiKey = process.env.POSTHOG_API_KEY?.trim();
 	if (!apiKey) return null;
-	client = new PostHog(apiKey, {
-		host: process.env.POSTHOG_HOST?.trim() || "https://us.i.posthog.com",
-	});
+	client = new PostHog(apiKey, getPostHogClientOptions());
 	return client;
 }
 
@@ -109,6 +108,11 @@ export function captureHarnessEvent(
 
 export async function shutdownHarnessPostHog(): Promise<void> {
 	if (!client) return;
-	await client.shutdown();
-	client = null;
+	try {
+		await client.shutdown();
+	} catch {
+		// Best-effort telemetry — avoid noisy flush errors when offline / WSL DNS broken.
+	} finally {
+		client = null;
+	}
 }

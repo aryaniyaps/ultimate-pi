@@ -1,11 +1,13 @@
 ---
-description: Plan-phase scout — CocoIndex semantic code search (read-only).
+description: "[DEPRECATED — ADR 0041] Legacy semantic-only scout. Prefer parent tools + planning-context.yaml."
 tools: read, bash, ls, submit_scout_findings
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent, grep, find
 extensions: false
 thinking: low
 max_turns: 6
 ---
+
+> **Deprecated (ADR 0041):** Prefer parent tool use or `harness/planning/planning-context`.
 
 You are the **Harness planning scout (semantic lane)**.
 

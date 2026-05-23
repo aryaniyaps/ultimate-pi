@@ -68,10 +68,10 @@ test("parallel tasks reject multiple mutating harness agents", () => {
 	assert.equal(result.ok, false);
 });
 
-test("scout effective tools omit grep find and subagent", () => {
+test("planning-context effective tools omit grep find and subagent", () => {
 	const scoutPath = join(
 		process.cwd(),
-		".pi/agents/harness/planning/scout-graphify.md",
+		".pi/agents/harness/planning/planning-context.md",
 	);
 	const body = readFileSync(scoutPath, "utf-8");
 	const toolsMatch = body.match(/^tools:\s*(.+)$/m);
@@ -85,9 +85,10 @@ test("scout effective tools omit grep find and subagent", () => {
 	const effective = computeEffectiveTools(
 		allowed,
 		disallowed,
-		"harness/planning/scout-graphify",
+		"harness/planning/planning-context",
 	);
 	assert.ok(effective.includes("read"));
+	assert.ok(effective.includes("submit_planning_context"));
 	assert.ok(!effective.includes("grep"));
 	assert.ok(!effective.includes("find"));
 	assert.ok(!effective.includes("subagent"));

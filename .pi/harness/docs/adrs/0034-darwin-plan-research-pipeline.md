@@ -9,13 +9,13 @@
 
 ## Decision
 
-1. **Always-on research chain** after parallel scouts:
+1. **Always-on research chain** after planning context (ADR 0041; **sequential** — WBS before approach):
    - `harness/planning/decompose` — DeepMind-style problem decomposition (`PlanDecompositionBrief`)
-   - `harness/planning/hypothesis` — DARWIN hypothesis generation (`PlanHypothesisBrief`)
+   - `harness/planning/hypothesis` — DARWIN hypothesis generation (`PlanHypothesisBrief`); spawned only after `artifacts/decomposition.yaml` exists
 2. **Parent maps hypothesis → PlanPacket** — `plan-packet.schema.json` unchanged; execution gating stable.
 3. **Review Gate (ADR 0035):** outcome-based debate with `hypothesis-validator` on R1 (blind — task + hypothesis only). Retired `hypothesis-eval` as a separate pre-approval agent.
 4. **`approve_plan` optional `research_brief`** — rendered in `plan-review.md`; not written to `plan-packet.json`.
-5. **`--quick`** still skips semantic scout only; never skips decompose/hypothesis.
+5. **`--quick`** still skips semantic coverage in planning context only; never skips decompose/hypothesis.
 
 ## Consequences
 

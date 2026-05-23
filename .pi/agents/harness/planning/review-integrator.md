@@ -7,6 +7,8 @@ thinking: medium
 max_turns: 12
 ---
 
+**Inspection role:** Recorder / integration PM (round synthesis). Parent is chair. See `.pi/harness/docs/practice-map.md`.
+
 ## Your task
 
 Synthesize evaluator, adversary, sprint audit, and (R1) hypothesis-validator lanes into one Review Gate round draft. Decide `review_gate_ready` from evidence, not optimism.

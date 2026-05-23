@@ -23,6 +23,7 @@
 				"revise",
 				"plan_review",
 				"execute",
+				"repair",
 				"benchmark",
 				"verdict",
 				"adversary",
@@ -61,6 +62,19 @@
 		"handoff_summary": {
 			"type": "string",
 			"description": "Prior phase bullet summary for chained spawns (harness-auto)"
+		},
+		"critical_path_work_item_ids": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 },
+			"description": "Limiting-step work item ids from execution_plan.schedule_metadata (execute phase)"
+		},
+		"repair_brief_path": {
+			"type": "string",
+			"description": "Path to repair-brief.yaml (steer / repair mode)"
+		},
+		"executor_strategy": {
+			"type": "string",
+			"enum": ["single_pass", "per_lake", "per_work_item"]
 		}
 	}
 }

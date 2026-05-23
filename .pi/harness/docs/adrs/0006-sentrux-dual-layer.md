@@ -5,15 +5,16 @@
 
 ## Context
 
-Evaluator trust requires both programmatic gates (policy, budget, integrity) and external observation signals (Sentrux MCP).
+Evaluator trust requires both programmatic gates (policy, budget, integrity) and **measured structural actuals** from the Sentrux CLI (Pi sessions use CLI only — no Sentrux MCP in harness).
 
 ## Decision
 
 1. **Rules file:** `.sentrux/rules.toml` synced from manifest — see [ADR 0009](0009-sentrux-rules-lifecycle.md).
-2. **CLI gate:** `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` fails if `HARNESS_SENTRUX_REQUIRED=true` and no `harness-sentrux-signal` stub/file exists for the run (placeholder until MCP wired). Resolve `$UP_PKG` via [.pi/scripts/README.md](../../../scripts/README.md).
-3. **MCP layer (Q2+):** Evaluator sessions must record at least one Sentrux observation before `harness_eval_verdict` promotion when Sentrux is enabled.
-4. Observations flow through `observation-bus.ts` as `HarnessObservation` envelopes.
-5. PostHog event: `harness_sentrux_signal` with `signal_type` and `score` only — no secrets.
+2. **Run observation:** `/harness-run` writes `artifacts/sentrux-signal.yaml` and appends session custom entry `harness-sentrux-signal` after `sentrux check` + `sentrux gate` (baseline from `sentrux gate --save` before execute).
+3. **Verify gate:** `harness-verify.mjs` with `HARNESS_SENTRUX_REQUIRED=true` prefers `$HARNESS_RUN_DIR/artifacts/sentrux-signal.yaml`; falls back to `.pi/harness/evals/smoke/sentrux-stub.json` only when no run signal exists (CI smoke / pre-run verify).
+4. **Evaluator:** `harness/evaluator` in `benchmark` mode reads `sentrux-signal.yaml` and `benchmark-log.yaml` — metrics are inputs, not executor optimization targets.
+5. Observations flow through `observation-bus.ts` as `HarnessObservation` envelopes when wired.
+6. PostHog event: `harness_sentrux_signal` with `signal_type` and `score` only — no secrets.
 
 ## Consequences
 
@@ -23,7 +24,7 @@ Evaluator trust requires both programmatic gates (policy, budget, integrity) and
 
 ### Negative
 
-- Full MCP integration remains follow-up when Sentrux server is available.
+- Teams must run `/harness-run` (or write `sentrux-signal.yaml`) before promotion verify when stub fallback is insufficient.
 
 ## References
 

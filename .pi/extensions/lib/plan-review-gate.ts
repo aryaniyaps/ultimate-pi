@@ -38,6 +38,14 @@ export function isConsolidatedReviewStrategy(
 	return strategy.mode === "consolidated";
 }
 
+export { PARALLEL_PROBES_REVIEW_ARTIFACT } from "./plan-debate-lanes.js";
+
+export function isParallelProbesReviewStrategy(
+	strategy: PlanReviewGateStrategy,
+): boolean {
+	return strategy.mode === "parallel_probes";
+}
+
 /** Focus areas covered in a single consolidated review round (spec + quality gate). */
 export const CONSOLIDATED_REVIEW_FOCUS_AREAS: readonly PlanDebateFocus[] = [
 	"spec",

@@ -43,9 +43,39 @@ export function laneArtifactPathsForRound(
 	return paths;
 }
 
-/** Lanes for consolidated Review Gate (single round, parallel-friendly). */
+/** Lanes for consolidated Review Gate (single round; blind verifier first). */
 export function lanesForConsolidatedRound(): DebateLaneKind[] {
-	return ["validation-turn", "adversary-brief", "sprint-audit"];
+	return [
+		"hypothesis-validation",
+		"validation-turn",
+		"adversary-brief",
+		"sprint-audit",
+	];
+}
+
+export const PARALLEL_PROBES_REVIEW_ARTIFACT =
+	"artifacts/review-round-parallel-probes.yaml";
+
+/** Parallel plan-verify: inspector ∥ adversary (round 1), then integrator. */
+export function lanesForParallelProbesRound(): DebateLaneKind[] {
+	return ["hypothesis-validation", "validation-turn", "adversary-brief"];
+}
+
+export function laneArtifactPathsForParallelProbesRound(): string[] {
+	const roundIndex = 1;
+	return [
+		...lanesForParallelProbesRound().map((lane) => {
+			switch (lane) {
+				case "validation-turn":
+					return `artifacts/validation-turn-r${roundIndex}.yaml`;
+				case "adversary-brief":
+					return `artifacts/adversary-brief-r${roundIndex}.yaml`;
+				default:
+					return `artifacts/${lane}-r${roundIndex}.yaml`;
+			}
+		}),
+		PARALLEL_PROBES_REVIEW_ARTIFACT,
+	];
 }
 
 export function laneArtifactPathsForConsolidatedRound(): string[] {

@@ -11,6 +11,17 @@ description: Bootstrap Sentrux architectural rules for harness projects — seed
 - Target repo has no `.sentrux/rules.toml` or `harness-verify` reports rules out of date
 - User edited `.pi/harness/sentrux/architecture.manifest.json` (layers, boundaries, constraints)
 
+## Roles (do not conflate)
+
+| Role | Agent / command | Layer |
+|------|-----------------|-------|
+| **Bootstrap** | `harness/sentrux-bootstrap`, `harness-sentrux-bootstrap.mjs` | Greenfield seed + first sync |
+| **Steward** | `harness/sentrux-steward`, `/harness-sentrux-steward` | Proposes manifest changes (`artifacts/sentrux-manifest-proposal.yaml`); chair applies |
+| **Sync** | `sentrux-rules-sync.mjs`, `/harness-sentrux-sync` | Regenerates `rules.toml` from manifest after intent change |
+| **Observation** | `/harness-run`, `/harness-review` | `sentrux gate --save` / `check` / `gate` → `artifacts/sentrux-signal.yaml` |
+
+Never auto-sync manifest from directory trees. Material manifest edits need steward evidence + chair approval (ADR 0009).
+
 ## Canonical layout
 
 | Path | Role |
@@ -53,4 +64,5 @@ Do **not** copy ultimate-pi's layer paths blindly into unrelated layouts — edi
 
 - ADR 0009 — `.pi/harness/docs/adrs/0009-sentrux-rules-lifecycle.md`
 - Scripts — `.pi/scripts/sentrux-rules-sync.mjs`, `harness-sentrux-bootstrap.mjs`
-- Agent — `harness/sentrux-bootstrap` (optional delegate for setup-only runs)
+- Agents — `harness/sentrux-bootstrap` (setup), `harness/sentrux-steward` (intent proposals)
+- Specs — `sentrux-manifest-proposal.schema.json`, `sentrux-signal.schema.json`

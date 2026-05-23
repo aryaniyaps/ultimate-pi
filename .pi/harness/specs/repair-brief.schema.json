@@ -1,0 +1,45 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/repair-brief.schema.json",
+	"title": "RepairBrief",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"run_id",
+		"steer_attempt",
+		"remediation_class",
+		"source_artifacts",
+		"fix_directives"
+	],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"run_id": { "type": "string", "minLength": 1 },
+		"steer_attempt": { "type": "integer", "minimum": 1 },
+		"remediation_class": {
+			"type": "string",
+			"enum": ["implementation_gap", "plan_gap", "rollback", "inconclusive"]
+		},
+		"source_artifacts": {
+			"type": "object",
+			"additionalProperties": { "type": "string" }
+		},
+		"failed_acceptance_check_ids": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"priority_lake_ids": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"fix_directives": {
+			"type": "array",
+			"minItems": 1,
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"constraints": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		}
+	}
+}

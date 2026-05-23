@@ -82,7 +82,8 @@ test("plan debate fast profile caps when budget enforce is off", () => {
 		const plan = capsForDebate("plan-smoke", "fast");
 		assert.equal(plan.min_focus_rounds, 1);
 		assert.equal(plan.max_rounds, 2);
-		assert.equal(plan.max_exchanges_per_round, 1);
+		// Advisory mode (enforce off) floors exchanges at 2 for plan debates
+		assert.equal(plan.max_exchanges_per_round, 2);
 	} finally {
 		if (prev !== undefined) process.env.HARNESS_BUDGET_ENFORCE = prev;
 	}

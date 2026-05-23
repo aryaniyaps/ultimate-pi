@@ -1,0 +1,159 @@
+{
+	"schema_version": "1.1.0",
+	"policy": "hybrid-allowlist-auto-promotion-with-conservative-staging",
+	"auto_promote_allowlist": true,
+	"source_taxonomy": {
+		"article": {
+			"category": "public_article_or_engineering_blog",
+			"risk_class": "low_to_medium",
+			"default_policy": "allowlist_auto_promote_when_approved"
+		},
+		"paper": {
+			"category": "research_paper_or_abstract_feed",
+			"risk_class": "medium",
+			"default_policy": "stage_until_rights_review"
+		},
+		"book": {
+			"category": "book_or_longform_local_file",
+			"risk_class": "high",
+			"default_policy": "manual_approval_required"
+		},
+		"transcript": {
+			"category": "youtube_or_audio_transcript",
+			"risk_class": "high",
+			"default_policy": "manual_approval_required"
+		},
+		"youtube": {
+			"category": "youtube_candidate_or_video_reference",
+			"risk_class": "high",
+			"default_policy": "stage_metadata_only_until_approved"
+		}
+	},
+	"competitor_taxonomy": {
+		"ai_coding_agents": {
+			"description": "Coding-agent products, CLIs, IDE agents, and model-native coding surfaces.",
+			"keywords": [
+				"claude code",
+				"cursor",
+				"codex",
+				"aider",
+				"copilot",
+				"windsurf",
+				"zed",
+				"replit",
+				"devin"
+			]
+		},
+		"agentic_harnesses": {
+			"description": "Harnesses, orchestration frameworks, eval loops, task runners, and review gates.",
+			"keywords": [
+				"harness",
+				"orchestration",
+				"agent bus",
+				"eval",
+				"review gate",
+				"multi-agent",
+				"workflow"
+			]
+		},
+		"context_engineering": {
+			"description": "Context retrieval, compaction, memory, skills, MCP, and codebase indexing.",
+			"keywords": [
+				"context engineering",
+				"mcp",
+				"memory",
+				"retrieval",
+				"compaction",
+				"skills",
+				"knowledge graph"
+			]
+		}
+	},
+	"allowlist": [
+		{
+			"domain": "openai.com",
+			"approved": true,
+			"approved_by": "repo-policy",
+			"approved_at": "2026-05-23",
+			"allowed_source_classes": ["article"]
+		},
+		{
+			"domain": "anthropic.com",
+			"approved": true,
+			"approved_by": "repo-policy",
+			"approved_at": "2026-05-23",
+			"allowed_source_classes": ["article"]
+		},
+		{
+			"domain": "github.blog",
+			"approved": true,
+			"approved_by": "repo-policy",
+			"approved_at": "2026-05-23",
+			"allowed_source_classes": ["article"]
+		},
+		{
+			"domain": "martinfowler.com",
+			"approved": true,
+			"approved_by": "repo-policy",
+			"approved_at": "2026-05-23",
+			"allowed_source_classes": ["article"]
+		},
+		{
+			"domain": "addyosmani.com",
+			"approved": true,
+			"approved_by": "repo-policy",
+			"approved_at": "2026-05-23",
+			"allowed_source_classes": ["article"]
+		},
+		{
+			"domain": "arxiv.org",
+			"approved": false,
+			"approved_by": "manual-review-required",
+			"approved_at": "manual-review-required",
+			"allowed_source_classes": ["paper"]
+		}
+	],
+	"article_queries": [
+		"agentic engineering harness engineering AI coding agents",
+		"AI coding harness evaluation orchestration context engineering"
+	],
+	"paper_feeds": [
+		{
+			"title": "arXiv software engineering agents search feed",
+			"url": "https://arxiv.org/search/cs?query=agentic+software+engineering&searchtype=all",
+			"rights_access": {
+				"license": "source-specific",
+				"access": "public abstract/feed only; paper text requires review",
+				"approved_by": "manual-review-required",
+				"approved_at": "manual-review-required"
+			},
+			"provenance": {
+				"origin": "curated_search_feed",
+				"locator": "https://arxiv.org/search/cs?query=agentic+software+engineering&searchtype=all",
+				"notes": "Feed metadata only; paper body requires approval."
+			}
+		}
+	],
+	"local_books": [
+		{
+			"path": "data/books",
+			"max_files": 75
+		}
+	],
+	"local_transcripts": [
+		{
+			"path": "data/youtube-transcripts",
+			"max_files": 100
+		}
+	],
+	"youtube_candidates": [
+		{
+			"title": "Review queue placeholder for agentic engineering YouTube talks",
+			"url": "https://www.youtube.com/results?search_query=agentic+engineering+harness+engineering",
+			"rights_access": null,
+			"approved": false,
+			"competitor_labels": ["agentic_harnesses"]
+		}
+	],
+	"review_queue": []
+}

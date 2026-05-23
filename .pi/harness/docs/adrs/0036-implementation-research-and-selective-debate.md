@@ -13,14 +13,14 @@ ADR 0034–0035 established Darwin research and outcome-based Review Gate debate
 
 ## Decision
 
-1. **Phase 3.5** — After decompose/hypothesis, parent spawns in parallel:
-   - `harness/planning/implementation-researcher` → `PlanImplementationResearchBrief` → `artifacts/implementation-research.yaml`
-   - `harness/planning/stack-researcher` → `PlanStackBrief` → `artifacts/stack.yaml`
+1. **Phase 3.5** — After decompose/hypothesis, parent produces (subprocess optional):
+   - `artifacts/implementation-research.yaml` (`PlanImplementationResearchBrief`) — inline and/or `implementation-researcher`
+   - `artifacts/stack.yaml` (`PlanStackBrief`) — inline and/or `stack-researcher`
 2. Research stays **outside** debate; debate agents cite artifacts, no web tools.
-3. **Phase 4d** — `harness_plan_debate_eligibility` (pre-debate only) selects `full | standard | light` and `required_focuses`; persisted on messenger + bus at `harness_debate_open`.
+3. **Phase 4d** — `harness_plan_debate_eligibility` (pre-debate only) selects `full | standard | light | fast` and `required_focuses`; persisted on messenger + bus at `harness_debate_open`.
 4. **Light profile** — `spec` + `quality` only, `min_focus_rounds=2`, reduced global cap; gate uses stored `required_focuses` (not hardcoded four).
 5. **Sprint auditor** — shared `lanesForRound(roundIndex, focus)` spawns sprint lane when `focus === quality` OR `roundIndex >= 4`.
-6. **`--quick`** still skips semantic scout only; never skips Phase 3.5 or debate.
+6. **`--quick`** still skips semantic coverage in planning context only; never skips Phase 3.5 artifacts (med/high risk) or debate.
 
 ## Profiles
 
@@ -29,6 +29,9 @@ ADR 0034–0035 established Darwin research and outcome-based Review Gate debate
 | full | high risk, material fork, open implementation questions, DAG manual patch, many tensions | all four | 4 |
 | standard | default (ambiguous → standard) | all four | 4 |
 | light | low risk, no fork, high-confidence implementation + clear stack primary | spec, quality | 2 |
+| fast | med/low, clear stack, no open questions | spec, quality | 1 (consolidated `review_gate_mode`) |
+
+See [practice-map.md](../practice-map.md) and [ADR 0040](0040-practice-grounded-orchestration.md).
 
 ## Consequences
 

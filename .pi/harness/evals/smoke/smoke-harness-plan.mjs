@@ -26,13 +26,16 @@ async function scanFocusCoverage(fixtureRoot, requiredFocus) {
 	let last_round_index = 0;
 	const { readdir } = await import("node:fs/promises");
 	const files = (await readdir(art)).filter((f) =>
-		/^review-round(?:-r\d+|-consolidated)\.yaml$/i.test(f),
+		/^review-round(?:-r\d+|-consolidated|-parallel-probes)\.yaml$/i.test(f),
 	);
 	for (const name of files.sort()) {
 		const consolidated = /^review-round-consolidated\.yaml$/i.test(name);
+		const parallelProbes = /^review-round-parallel-probes\.yaml$/i.test(name);
 		const m = consolidated
 			? ["review-round-consolidated.yaml", "1"]
-			: /^review-round-r(\d+)\.yaml$/i.exec(name);
+			: parallelProbes
+				? ["review-round-parallel-probes.yaml", "1"]
+				: /^review-round-r(\d+)\.yaml$/i.exec(name);
 		if (!m) continue;
 		const roundIndex = consolidated ? 1 : Number(m[1]);
 		if (roundIndex > last_round_index) last_round_index = roundIndex;

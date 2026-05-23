@@ -3,10 +3,22 @@ name: harness-orchestration
 description: >-
   Orchestrate ultimate-pi harness phases with the native `subagent` tool
   (isolated `pi --mode json` subprocesses). Use for plan/execute/evaluate
-  pipelines, L4 verification, parallel scouts, and debate prep.
+  pipelines, L4 verification, optional planning-context, and debate prep.
 ---
 
 # Harness orchestration
+
+**Practice map:** `.pi/harness/docs/practice-map.md` · **ADR 0040** · **ADR 0041**.
+
+## Team management rules
+
+1. **Parallelism law** — Parallel `tasks` only when outputs are independent inputs to a later merge (implementation ∥ stack). Never parallelize debate lanes or decompose ∥ hypothesis.
+2. **Two-pizza cap per batch** — Max 2 research lanes, 1 optional `planning-context` subagent, 1 executor, 1 debate agent per `subagent` call.
+3. **No redundant thinkers** — Downstream agents read artifacts; do not re-derive.
+4. **Sequential dependency chain** — planning context → decompose → hypothesis → research → author → DAG → debate → approve → execute → **/harness-review** → optional **/harness-steer** loop (ADR 0044).
+5. **Path-first parent tools** — `approve_plan`, `create_plan`, `submit_*` via `source_path`, `merge_harness_yaml`, `harness_synthesize_repair_brief`.
+6. **Debate = meeting** — Parent is chair; parallel_probes allows evaluator ∥ adversary per batch.
+7. **Tool intelligence** — Parent uses graphify, sg, ccc, and reads by task need; subprocesses optional.
 
 ## Slash commands = orchestrators
 
@@ -14,83 +26,59 @@ description: >-
 
 Every spawn includes **HarnessSpawnContext** JSON in the task text (subprocess agents do not get `[HarnessActivePlan]` injection). Use `agentScope: "both"` so package agents under `$UP_PKG/.pi/agents/**` resolve.
 
-Harness subprocesses load **`harness-subagent-submit`** (`PI_HARNESS_SUBPROCESS=1`, `HARNESS_RUN_ID`, `HARNESS_RUN_DIR`). Agents must call their scoped **`submit_*`** tool before exit; parent gates use **`harness_artifact_ready`** and debate reads submit from `tool_result` (set `HARNESS_SUBMIT_TOOLS=0` only to fall back to `finalOutput` parsing).
-
-## Subprocess telemetry
-
-Harness bridge emits `harness_subagent_spawned` / `harness_subagent_completed` (replaces in-process setup/blackboard events).
-
-```sql
-SELECT
-  properties.agent as agent,
-  count() as n,
-  round(avg(toFloat(properties.duration_ms)), 0) as avg_ms
-FROM events
-WHERE event = 'harness_subagent_completed'
-  AND timestamp >= now() - INTERVAL 7 DAY
-GROUP BY agent
-ORDER BY avg_ms DESC
-LIMIT 30
-```
+Harness subprocesses load **`harness-subagent-submit`** (`PI_HARNESS_SUBPROCESS=1`, `HARNESS_RUN_ID`, `HARNESS_RUN_DIR`). Agents must call their scoped **`submit_*`** tool before exit; parent gates use **`harness_artifact_ready`**.
 
 ## Latency rules
 
-1. **Parallel `tasks`** — one `subagent({ tasks: [...] })` for scouts, decompose+hypothesis, or review fan-in; subprocesses run in parallel upstream.
-2. **Blocking calls** — each `subagent` returns when the subprocess exits; no `get_subagent_result` polling.
-3. **Compact handoffs** — read artifacts written by submit tools (or `harness_artifact_ready`); never paste full subprocess message logs into the next spawn.
-4. **No spawn cap** — harness subagent spawns are unlimited per session (active count is telemetry only). Do **not** pass `timeoutMs` unless the user wants a cap — subprocesses wait for natural exit (`PI_SUBAGENT_TIMEOUT_MS` optional env backstop only).
+1. **Parallel `tasks`** — Phase 3.5 research only (when using subprocesses).
+2. **Sequential** — decompose, hypothesis, debate lanes, review evaluator passes.
+3. **Compact handoffs** — read artifact paths; never paste full subprocess logs into next spawn.
+4. **No spawn cap** — do not pass `timeoutMs` unless the user requests a cap.
 
 ## Command → agent
 
 | Command | `agent` |
 |---------|---------|
-| `/harness-plan` | Parent: scouts → `decompose`+`hypothesis` → Phase 3.5 `implementation-researcher`+`stack-researcher` → PlanPacket → eligibility + Review Gate → `approve_plan` + `create_plan` |
-| `/harness-run` | `harness/executor` |
-| `/harness-eval` | `harness/evaluator` (`mode: benchmark`) |
-| `/harness-review` | `harness/evaluator` (`mode: verdict`) |
-| `/harness-critic` | `harness/adversary` (post-run) |
-| `/harness-trace` | `harness/trace-librarian` |
-| `/harness-incident` | `harness/incident-recorder` |
-| `/harness-router-tune` | `harness/meta-optimizer` (optional) |
-| `/harness-auto` | plan per `/harness-plan`; `--quick` skips adversary + tie-breaker |
+| `/harness-plan` | Parent: planning context (tools) → decompose → hypothesis → Phase 3.5 artifacts → PlanPacket → eligibility + Review Gate → `approve_plan` + `create_plan` |
+| `/harness-run` | `harness/executor` (single worker) |
+| `/harness-review` | Parent verify → `evaluator` benchmark → `evaluator` verdict → `adversary` → optional `tie-breaker` (ADR 0039) |
+| `/harness-eval` | **Deprecated** → `/harness-review` |
+| `/harness-critic` | **Deprecated** → `/harness-review` |
+| `/harness-auto` | plan per `/harness-plan`; `--quick` skips adversary + tie-breaker in review |
 
 ## Review isolation
 
-Spawn `harness/evaluator` / `harness/adversary` via `subagent` in the **same** parent session. `review-integrity` allows `subagent` when `agent` is in the review set; blocks executor from spawning review agents during evaluate.
+Spawn `harness/evaluator` / `harness/adversary` via `subagent` in the **same** parent session. `review-integrity` allows `subagent` when `agent` is in the review set.
 
 ## ask_user policy
 
 | Role | `ask_user` |
 |------|------------|
 | Parent orchestrator | Yes (plan clarification, `approve_plan`, router tune) |
-| `harness/planning/*` | No — JSON only (`human_required` in output if stuck) |
+| `harness/planning/*` | No — `human_required` in output if stuck |
 | `harness/evaluator`, `harness/adversary`, `harness/tie-breaker` | `human_required` in subprocess JSON |
 | `harness/executor` | No — parent handles governance |
 
 ## Spawn pattern (`/harness-plan`)
 
-```json
-{
-  "agentScope": "both",
-  "tasks": [
-    { "agent": "harness/planning/scout-graphify", "task": "…" },
-    { "agent": "harness/planning/scout-structure", "task": "…" },
-    { "agent": "harness/planning/scout-semantic", "task": "…" }
-  ]
-}
+**Phase 1 — planning context (parent default):**
+
+- Use `graphify query`, `sg -p`, `ccc search`, and reads as needed.
+- Write `artifacts/planning-context.yaml` via `write_harness_yaml`.
+- Optional: single `planning-context` subagent when isolation helps.
+
+**Phase 2 — sequential:**
+
+```
+subagent decompose → gate decomposition.yaml
+subagent hypothesis → gate hypothesis.yaml
 ```
 
-Then parallel decompose + hypothesis, Phase 3.5 implementation + stack research, parent PlanPacket + `ask_user` (after 3.5), execution-plan-author, DAG gate, `harness_plan_debate_eligibility` + debate rounds, then `approve_plan` + `create_plan`.
+**Phase 3.5 — research artifacts required:** parent inline and/or parallel `implementation-researcher` + `stack-researcher` (≤2).
 
-Scouts use **Haiku**, `thinking: low`, **8** max turns (see agent frontmatter). Effective `--tools` omits `grep`/`find`/`subagent` per `disallowed_tools`.
-
-## Tools
-
-- `subagent` — harness subprocess spawns (modes: `single`, `tasks`, `chain`, `aggregator`)
-- `approve_plan`, `create_plan` — parent orchestrator only
-- Subprocess agents cannot nest `subagent` (`subagent` stripped from child `--tools`)
+Then execution-plan-author, DAG gate, debate eligibility, sequential debate rounds, `approve_plan` + `create_plan`.
 
 ## References
 
-- ADR 0032, ADR 0033, `.pi/harness/specs/harness-spawn-context.schema.json`
+- ADR 0032, ADR 0033, ADR 0040, ADR 0041, `.pi/harness/specs/harness-spawn-context.schema.json`
 - `node "$UP_PKG/.pi/scripts/harness-agents-manifest.mjs" --check`

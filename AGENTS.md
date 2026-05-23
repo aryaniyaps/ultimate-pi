@@ -10,6 +10,7 @@ Created: 2026-05-14
 - ./raw/ → Source documents for graphify ingestion
 - docs/adr/ → Repo-level Architectural Decision Records
 - .pi/harness/docs/adrs/ → Harness ADRs (team-shared; [index](.pi/harness/docs/adrs/README.md))
+- .pi/harness/docs/practice-map.md → Phase → practice → agent spawn topology for `/harness-plan`, `/harness-run`, `/harness-review`
 - .pi/skills/ → Agent skills
 - .pi/agents/ → Specialized agents
 

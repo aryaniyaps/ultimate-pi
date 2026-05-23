@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Ultimate Pi Graphify knowledge-base updater daily on a bounded schedule
+
+[Timer]
+OnCalendar=*-*-* 08:30:00
+RandomizedDelaySec=30m
+Persistent=true
+Unit=graphify-kb-updater.service
+
+[Install]
+WantedBy=timers.target

@@ -36,9 +36,41 @@
 			"items": { "$ref": "#/$defs/risk" }
 		},
 		"schedule_metadata": { "$ref": "#/$defs/schedule_metadata" },
-		"dag_validation": { "$ref": "#/$defs/dag_validation" }
+		"dag_validation": { "$ref": "#/$defs/dag_validation" },
+		"lakes": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/lake" }
+		},
+		"executor_strategy": {
+			"type": "string",
+			"enum": ["single_pass", "per_lake", "per_work_item"]
+		},
+		"critical_path_lake_ids": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		}
 	},
 	"$defs": {
+		"lake": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["lake_id", "title", "outcome", "done_criteria"],
+			"properties": {
+				"lake_id": { "type": "string", "minLength": 1 },
+				"title": { "type": "string", "minLength": 1 },
+				"outcome": { "type": "string", "minLength": 1 },
+				"done_criteria": { "type": "string", "minLength": 1 },
+				"context_bundle_path": { "type": "string", "minLength": 1 },
+				"files": {
+					"type": "array",
+					"items": { "type": "string", "minLength": 1 }
+				},
+				"out_of_scope": {
+					"type": "array",
+					"items": { "type": "string", "minLength": 1 }
+				}
+			}
+		},
 		"phase": {
 			"type": "object",
 			"additionalProperties": false,
@@ -106,6 +138,12 @@
 				"acceptance_check_ids": {
 					"type": "array",
 					"minItems": 1,
+					"items": { "type": "string", "minLength": 1 }
+				},
+				"lake_id": { "type": "string", "minLength": 1 },
+				"context_bundle_path": { "type": "string", "minLength": 1 },
+				"context_refs": {
+					"type": "array",
 					"items": { "type": "string", "minLength": 1 }
 				}
 			}

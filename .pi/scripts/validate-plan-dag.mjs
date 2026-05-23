@@ -12,9 +12,9 @@ import { readYamlFile, writeYamlFile } from "../lib/harness-yaml.mjs";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 const MINIMUMS = {
-	low: { phases: 2, work_items: 5, acceptance_checks: 3, risks: 0 },
-	med: { phases: 3, work_items: 8, acceptance_checks: 5, risks: 3 },
-	high: { phases: 4, work_items: 12, acceptance_checks: 8, risks: 3 },
+	low: { phases: 2, work_items: 2, acceptance_checks: 3, risks: 0 },
+	med: { phases: 3, work_items: 4, acceptance_checks: 5, risks: 3 },
+	high: { phases: 4, work_items: 6, acceptance_checks: 8, risks: 3 },
 };
 
 function fail(msg) {

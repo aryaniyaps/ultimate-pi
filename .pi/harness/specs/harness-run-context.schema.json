@@ -75,6 +75,17 @@
 		},
 		"turn_override_run_id": {
 			"type": ["string", "null"]
+		},
+		"steer_approved": {
+			"type": "boolean"
+		},
+		"steer_attempt": {
+			"type": "integer",
+			"minimum": 0
+		},
+		"steer_max_attempts": {
+			"type": "integer",
+			"minimum": 1
 		}
 	}
 }

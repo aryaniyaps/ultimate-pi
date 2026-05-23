@@ -3,6 +3,11 @@
  */
 
 import {
+	evaluateContextModeMutation,
+	isMutatingBash,
+} from "../../lib/harness-context-mode-policy.js";
+import type { HarnessPhase } from "../../lib/harness-run-context.js";
+import {
 	isSubmitToolName,
 	SUBMIT_TOOLS_BY_AGENT,
 } from "./harness-subagent-submit-registry.js";
@@ -38,21 +43,6 @@ const PLANNING_BASH_DENY_PATTERNS = [
 	/\bnpm\s+install\b/i,
 	/\bnpm\s+install\b.*cocoindex/i,
 	/\buv\s+tool\s+install\b.*cocoindex/i,
-];
-
-const BASH_MUTATION_PATTERNS = [
-	/\brm\s+-/i,
-	/\bmv\s+/i,
-	/\bcp\s+/i,
-	/\btouch\s+/i,
-	/\bmkdir\s+/i,
-	/\btee\s+/i,
-	/\bgit\s+(add|commit|push|reset|checkout|merge|rebase|cherry-pick|apply)\b/i,
-	/\bnpm\s+(install|uninstall|ci)\b/i,
-	/\bpnpm\s+(add|install|remove)\b/i,
-	/\byarn\s+(add|install|remove)\b/i,
-	/\bsed\s+-i\b/i,
-	/\bperl\s+-i\b/i,
 ];
 
 const READ_ONLY_KINDS = new Set<HarnessAgentKind>([
@@ -93,10 +83,6 @@ export function classifyHarnessAgent(agentType: string): HarnessAgentKind {
 		default:
 			return agentType.startsWith("harness/") ? "other" : "other";
 	}
-}
-
-function isMutatingBash(command: string): boolean {
-	return BASH_MUTATION_PATTERNS.some((pattern) => pattern.test(command));
 }
 
 export function isHarnessPackageAgent(agentType: string): boolean {
@@ -205,6 +191,24 @@ export function evaluateHarnessSubagentToolCall(
 					"harness-subagent-policy: planning scouts may use read-only graphify/sg/ccc commands only.",
 			};
 		}
+	}
+
+	const ctxPhase =
+		(harnessSubagentPhaseHint(agentType) as HarnessPhase | null) ?? "plan";
+	const ctxDecision = evaluateContextModeMutation(
+		toolName,
+		input ?? {},
+		ctxPhase,
+		{ aborted: false, readOnlyAgent: true },
+	);
+	if (ctxDecision.blocked) {
+		return {
+			action: "block",
+			reason: ctxDecision.reason.replace(
+				/^policy-gate:/,
+				"harness-subagent-policy:",
+			),
+		};
 	}
 
 	return { action: "allow" };

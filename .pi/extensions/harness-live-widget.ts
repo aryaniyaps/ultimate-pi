@@ -2,6 +2,7 @@ import type {
 	ExtensionAPI,
 	ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
+import { evaluateCrossSessionResume } from "../lib/harness-run-context.js";
 import {
 	deriveHarnessStatusHint,
 	formatHarnessPhaseLabel,
@@ -283,6 +284,22 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 		if (mountCtx) remountHarnessLiveWidget(mountCtx);
 	});
 
+	pi.events.on("harness-run-context:updated", () => {
+		stateStore.setCrossSessionResumeCommand(null);
+		if (mountCtx) scheduleRefresh(mountCtx);
+	});
+
+	pi.events.on("harness-cross-session-resume", (payload: unknown) => {
+		const data =
+			payload && typeof payload === "object"
+				? (payload as { resume_command?: string })
+				: null;
+		const cmd =
+			typeof data?.resume_command === "string" ? data.resume_command : null;
+		stateStore.setCrossSessionResumeCommand(cmd);
+		if (mountCtx) scheduleRefresh(mountCtx);
+	});
+
 	function updateStatusFallback(
 		ctx: ExtensionContext,
 		state: HarnessUiState,
@@ -304,6 +321,7 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 			policyDecision: state.policyDecision,
 			flowSubstate: state.flowSubstate,
 			nextRecommendedCommand: state.nextRecommendedCommand,
+			crossSessionResumeCommand: state.crossSessionResumeCommand,
 		});
 	}
 
@@ -322,9 +340,17 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 		});
 	}
 
-	pi.on("session_start", (_event, ctx) => {
+	pi.on("session_start", async (_event, ctx) => {
 		mountCtx = ctx;
 		mountHarnessWidget(ctx);
+		const info = await evaluateCrossSessionResume(
+			process.cwd(),
+			ctx.sessionManager.getEntries(),
+		);
+		if (info) {
+			stateStore.setCrossSessionResumeCommand(info.resumeCommand);
+			scheduleRefresh(ctx);
+		}
 	});
 
 	pi.on("context", (_event, ctx) => {

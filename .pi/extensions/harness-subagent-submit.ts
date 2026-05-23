@@ -6,10 +6,14 @@
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
+import { resolveGuardedRunDir } from "../lib/harness-subagent-submit-path.js";
 import { claimExtensionLoad } from "./lib/extension-load-guard.js";
 import { getHarnessPackageRoot } from "./lib/harness-paths.js";
 import { evaluateHarnessSubagentToolCall } from "./lib/harness-subagent-policy.js";
-import { executeSubmitPipeline } from "./lib/harness-subagent-submit-pipeline.js";
+import {
+	executeSubmitPipeline,
+	loadSubmitDocument,
+} from "./lib/harness-subagent-submit-pipeline.js";
 import { SUBMIT_TOOL_SPECS } from "./lib/harness-subagent-submit-registry.js";
 
 // @ts-expect-error pi extensions run as ESM
@@ -17,10 +21,18 @@ const MODULE_URL = import.meta.url;
 
 const DocumentSchema = Type.Object(
 	{
-		document: Type.Record(Type.String(), Type.Unknown(), {
-			description:
-				"Plan artifact fields (validated via plan-*.schema.json, persisted as canonical YAML on disk)",
-		}),
+		document: Type.Optional(
+			Type.Record(Type.String(), Type.Unknown(), {
+				description:
+					"Artifact fields (deprecated when source_path is set; ADR 0043)",
+			}),
+		),
+		source_path: Type.Optional(
+			Type.String({
+				description:
+					"Relative path under run dir, e.g. artifacts/.draft/decomposition.yaml",
+			}),
+		),
 	},
 	{ additionalProperties: false },
 );
@@ -118,13 +130,34 @@ export default function harnessSubagentSubmit(pi: ExtensionAPI) {
 						isError: true,
 					};
 				}
-				const document = (params as { document?: Record<string, unknown> })
-					.document;
-				if (!document || typeof document !== "object") {
+				const runResolved = await resolveGuardedRunDir({
+					projectRoot,
+					runId,
+					runDirEnv,
+				});
+				if (!runResolved.ok) {
 					return {
-						content: [{ type: "text", text: "document object is required" }],
+						content: [{ type: "text", text: runResolved.error }],
 						details: {},
 						isError: true,
+					};
+				}
+				const loaded = await loadSubmitDocument({
+					projectRoot,
+					runDir: runResolved.runDir,
+					document: (params as { document?: Record<string, unknown> }).document,
+					source_path: (params as { source_path?: string }).source_path,
+				});
+				if (!loaded.ok) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: `Validation failed:\n${loaded.validation_errors.join("\n")}`,
+							},
+						],
+						isError: true,
+						details: loaded,
 					};
 				}
 				const result = await executeSubmitPipeline({
@@ -132,7 +165,7 @@ export default function harnessSubagentSubmit(pi: ExtensionAPI) {
 					specsDir,
 					spec,
 					agentId,
-					document,
+					document: loaded.document,
 					runId,
 					runDirEnv,
 				});

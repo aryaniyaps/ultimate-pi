@@ -1,0 +1,8 @@
+# Cron alternative (systemd timer is the tested path). Bounded, locked, explicit env, no overlap.
+# Edit UP_ROOT before installing with `crontab -e`.
+SHELL=/bin/sh
+PATH=/usr/local/bin:/usr/bin:/bin
+UP_ROOT=/home/USER/ai-projects/ultimate-pi
+HARNESS_GRAPHIFY_KB_LOG=/home/USER/.local/state/ultimate-pi/graphify-kb-updater.log
+
+30 8 * * * cd "$UP_ROOT" && /usr/bin/flock -n /tmp/graphify-kb-updater.lock /usr/bin/timeout 45m /usr/bin/env node .pi/scripts/graphify-kb-updater.mjs --apply --refresh-graph --pilot-report --max-promotions 25 >> "$HARNESS_GRAPHIFY_KB_LOG" 2>&1

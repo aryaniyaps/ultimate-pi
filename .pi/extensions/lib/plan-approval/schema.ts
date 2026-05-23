@@ -1,12 +1,14 @@
 import { Type } from "@sinclair/typebox";
 
 export const ApprovePlanParamsSchema = Type.Object({
-	plan_packet: Type.Object(
-		{},
-		{
-			description:
-				"Full PlanPacket object (schema_version, plan_id, task_id, scope, assumptions, risk_level, acceptance_checks, rollback_plan).",
-		},
+	plan_packet: Type.Optional(
+		Type.Object(
+			{},
+			{
+				description:
+					"Optional inline PlanPacket (deprecated). Default: read plan-packet.yaml from active run (ADR 0043).",
+			},
+		),
 	),
 	human_summary: Type.Optional(
 		Type.String({
@@ -45,10 +47,22 @@ export const ApprovePlanParamsSchema = Type.Object({
 });
 
 export const PROMPT_SNIPPET =
-	"approve_plan({ plan_packet: { ...PlanPacket fields... }, human_summary?: string, research_brief?: { decomposition, hypothesis, eval } })";
+	"approve_plan({ human_summary?: string }) — loads plan-packet.yaml from active run";
 
 export const PROMPT_GUIDELINES = [
-	"Call approve_plan once with the complete plan_packet when ready for user approval.",
+	"Call approve_plan once when plan-packet.yaml is on disk (path-first; do not embed full packet in tool args).",
 	"Use ask_user only for clarification — not for final plan approval.",
 	"On Request changes, revise the plan and call approve_plan again.",
 ];
+
+export const CreatePlanParamsSchema = Type.Object({
+	plan_packet: Type.Optional(
+		Type.Object(
+			{},
+			{
+				description:
+					"Optional inline packet (deprecated). Default: read approved plan from plan_packet_path.",
+			},
+		),
+	),
+});
