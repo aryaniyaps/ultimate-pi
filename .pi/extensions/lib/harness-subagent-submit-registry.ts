@@ -29,24 +29,6 @@ export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 		artifactPath: "artifacts/planning-context.yaml",
 	},
 	{
-		toolName: "submit_scout_findings",
-		agents: [
-			"harness/planning/scout-graphify",
-			"harness/planning/scout-structure",
-			"harness/planning/scout-semantic",
-		],
-		schemaFile: "plan-scout-findings.schema.json",
-		artifactPath: (doc) => {
-			const lane =
-				typeof doc.lane === "string"
-					? doc.lane
-					: typeof doc.scout_lane === "string"
-						? doc.scout_lane
-						: "graphify";
-			return `artifacts/scout-${lane}.yaml`;
-		},
-	},
-	{
 		toolName: "submit_decomposition_brief",
 		agents: ["harness/planning/decompose", "harness/planning/plan-synthesizer"],
 		schemaFile: "plan-decomposition-brief.schema.json",
@@ -118,19 +100,19 @@ export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 	},
 	{
 		toolName: "submit_executor_handoff",
-		agents: ["harness/executor"],
+		agents: ["harness/running/executor"],
 		schemaFile: "harness-executor-handoff.schema.json",
 		artifactPath: "handoff/executor-summary.yaml",
 	},
 	{
 		toolName: "submit_eval_verdict",
-		agents: ["harness/evaluator"],
+		agents: ["harness/reviewing/evaluator"],
 		schemaFile: "eval-verdict.schema.json",
 		artifactPath: "artifacts/eval-verdict.yaml",
 	},
 	{
 		toolName: "submit_adversary_report",
-		agents: ["harness/adversary"],
+		agents: ["harness/reviewing/adversary"],
 		schemaFile: "adversary-report.schema.json",
 		artifactPath: "artifacts/adversary-report.yaml",
 	},

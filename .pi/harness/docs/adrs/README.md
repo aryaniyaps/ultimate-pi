@@ -30,6 +30,7 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0042](0042-agent-native-orchestration.md) | Agent-native orchestration (lakes, plan-verify probes, synthesizer) | Accepted |
 | [0043](0043-path-first-harness-tools.md) | Path-first harness tool contracts | Accepted |
 | [0044](0044-harness-steer-loop.md) | Post-run steer loop (repair vs plan revise) | Accepted |
+| [0045](0045-phase-scoped-agent-directories.md) | Phase-scoped harness agent directories | Accepted |
 
 ## Practice map
 

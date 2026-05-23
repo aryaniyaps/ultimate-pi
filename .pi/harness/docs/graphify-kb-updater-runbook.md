@@ -6,7 +6,8 @@
 
 The approved operating model is **hybrid allowlist auto-promotion with conservative staging**:
 
-- Daily local automation may auto-promote only explicitly approved allowlisted public sources with complete provenance and rights/access metadata.
+- Daily local automation may auto-promote only explicitly approved allowlisted public sources (`article`, `repo`, or `release`) with complete provenance and rights/access metadata.
+- Repository and release candidates are metadata-specific source classes; they do not inherit generic article behavior and must be authorized by `allowed_source_classes` on the allowlist entry.
 - Books, transcripts, YouTube/video material, paid/copyrighted/mirrored material, unclear-license content, and unknown open-web sources remain staged until manually approved.
 - Competitor monitoring is a curated taxonomy/watchlist/reporting signal, not an exhaustive crawler.
 - Pi-agent-open integration is intentionally limited/deferred: opening Pi should do at most a low-latency, no-network stale check. It must not perform synchronous web discovery, promotion, or Graphify mutation.
@@ -24,9 +25,11 @@ Allowlist auto-promotion requires all of the following:
 
 1. `.pi/harness/corpus/graphify-kb-updater.config.json` has `auto_promote_allowlist: true`.
 2. The candidate domain is present in `allowlist` with `approved: true`.
-3. The candidate itself has `approved: true`.
-4. `rights_access` is complete.
-5. The candidate is not a risky source class that requires manual review.
+3. If the allowlist entry has `allowed_source_classes`, it includes the candidate `kind` (`article`, `repo`, or `release`).
+4. The candidate itself has `approved: true`.
+5. `provenance.origin` and `provenance.locator` are complete.
+6. `rights_access` is complete.
+7. The candidate is not a risky source class that requires manual review.
 
 Risky source classes (`book`, `transcript`, `youtube`) always require explicit approval and complete rights/access metadata. Raw HTTP shell paths are forbidden; keep discovery/fetch through approved harness web/API abstractions and verify with `.pi/scripts/harness-web-policy-guard.mjs`.
 
@@ -66,12 +69,13 @@ node .pi/scripts/harness-web-policy-guard.mjs
 
 1. Review dry-run JSON: candidate count, source counts, competitor labels, duplicate/skipped/blocked counts, stale warnings, planned promotions, and graph action.
 2. For a candidate, add it to `.pi/harness/corpus/graphify-kb-updater.config.json` `review_queue` with:
-   - `kind` (`article`, `paper`, `book`, `transcript`, or `youtube`)
+   - `kind` (`article`, `repo`, `release`, `paper`, `book`, `transcript`, or `youtube`)
    - `title`
    - `url` or `path`
    - `approved: true`
    - `rights_access` object with all required fields
    - optional `competitor_labels` or provenance notes.
+   - for repo/release auto-promotion, an allowlist entry whose `allowed_source_classes` includes `repo` or `release`.
 3. For local files, you may place `<file>.rights.json` beside the source, but risky classes still require explicit approval before promotion.
 4. Run `--apply --refresh-graph`.
 5. Promoted sources land under `raw/graphify-kb-updates/<kind>/` with `.provenance.json` sidecars.
@@ -108,6 +112,7 @@ Each run reports:
 - `last_run_at`
 - `candidate_count`, `promoted_count`, `blocked_count`, `skipped_count`, `duplicate_skips`, `failure_count`
 - `counts.by_kind`, `counts.by_source_type`, `counts.by_competitor_label`, `counts.allowlisted`
+- `staged_count`, `review_queue_count`, and `review_queue` items with reason codes and next actions
 - `stale_warnings`
 - `changed_existing_count` for same URL/path content changes
 - `graph.action`, `graph.exit_status`, and Graphify report path when refreshed
@@ -117,6 +122,7 @@ Review these fields before enabling unattended mode and after every config chang
 
 ## Troubleshooting
 
+- `missing_complete_provenance`: add `provenance.origin` and `provenance.locator`.
 - `missing_rights_access_approval`: add complete rights/access metadata.
 - `manual_approval_required`: set `approved: true` after source and rights review.
 - `duplicate_unchanged`: candidate was already promoted and content hash is unchanged.

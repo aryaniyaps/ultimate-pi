@@ -7,7 +7,7 @@ argument-hint: ""
 
 **Practice map:** `.pi/harness/docs/practice-map.md`
 
-You orchestrate the **Executing Process Group** — spawn `harness/executor` only. Do **not** implement inline.
+You orchestrate the **Executing Process Group** — spawn `harness/running/executor` only. Do **not** implement inline.
 
 ## Step 0 — Parse arguments
 
@@ -28,13 +28,13 @@ Refuse if `plan_ready` is false.
 
 **Practice:** Fitness functions (architecture governance) — save structural baseline before the executor mutates the tree.
 
-When `HARNESS_SENTRUX_REQUIRED=true` (see `.env.example`), from **project root**:
+When `HARNESS_SENTRUX_REQUIRED=true` (see `.env.example`), run the bundled root-resolving wrapper:
 
 ```bash
-sentrux gate --save .
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save
 ```
 
-If `sentrux` is not installed, note `gate_baseline: skipped` in run notes and continue (harness-verify may still pass rules-sync checks).
+The wrapper passes the resolved project root explicitly so Sentrux can find `.sentrux/rules.toml` even if the active shell is under `.pi/harness/runs/*`. If `sentrux` is not installed, note `gate_baseline: skipped` in run notes and continue (harness-verify may still pass rules-sync checks).
 
 Do **not** ask the executor to optimize Sentrux metrics — observation is for `/harness-review` only.
 
@@ -48,7 +48,7 @@ Do **not** ask the executor to optimize Sentrux metrics — observation is for `
 4. Spawn (max **1** agent per call):
 
 ```
-subagent({ agentScope: "both", agent: "harness/executor", task: "<HarnessSpawnContext + handoff + critical path hint>" })
+subagent({ agentScope: "both", agent: "harness/running/executor", task: "<HarnessSpawnContext + handoff + critical path hint>" })
 ```
 
 5. Parse subprocess output JSON (`execution_status`, validations, rollback refs) from tool result text.
@@ -61,8 +61,8 @@ subagent({ agentScope: "both", agent: "harness/executor", task: "<HarnessSpawnCo
 After executor subprocess completes:
 
 ```bash
-sentrux check .
-sentrux gate .
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate
 ```
 
 - If `sentrux check` exits non-zero or `gate` reports degradation → set `execution_status: scope_drift` (or `blocked` if unrecoverable); parent runs **`/harness-review`** next (not immediate replan).

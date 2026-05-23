@@ -69,7 +69,7 @@ test("accepts planning-context.yaml with architecture and structure coverage", a
 	assert.equal(result.ok, true, result.errors.join("; "));
 });
 
-test("rejects missing reconnaissance when no planning-context or legacy scouts", async () => {
+test("rejects missing reconnaissance when no planning-context", async () => {
 	const projectRoot = join(tmpdir(), `readiness-${randomUUID()}`);
 	const runId = "run-2";
 	const art = join(projectRoot, ".pi", "harness", "runs", runId, "artifacts");
@@ -81,25 +81,12 @@ test("rejects missing reconnaissance when no planning-context or legacy scouts",
 	assert.ok(result.errors.some((e) => e.includes("planning-context")));
 });
 
-test("legacy scout trio satisfies readiness with deprecation warning", async () => {
+test("scout artifacts no longer satisfy readiness without planning-context", async () => {
 	const projectRoot = join(tmpdir(), `readiness-${randomUUID()}`);
 	const runId = "run-3";
 	const art = join(projectRoot, ".pi", "harness", "runs", runId, "artifacts");
 	await mkdir(art, { recursive: true });
-	const scout = `schema_version: "1.0.0"
-lane: graphify
-status: ok
-summary: ok
-`;
-	await writeFile(join(art, "scout-graphify.yaml"), scout.replace("graphify", "graphify"));
-	await writeFile(
-		join(art, "scout-structure.yaml"),
-		scout.replace("graphify", "structure"),
-	);
-	await writeFile(
-		join(art, "scout-semantic.yaml"),
-		scout.replace("graphify", "semantic"),
-	);
+	await writeFile(join(art, "scout-graphify.yaml"), 'schema_version: "1.0.0"\nstatus: ok\nsummary: old\n');
 	await writeFile(join(art, "decomposition.yaml"), DECOMP);
 	await writeFile(join(art, "hypothesis.yaml"), HYP);
 	await writeFile(join(art, "implementation-research.yaml"), 'schema_version: "1.0.0"\nsummary: i\n');
@@ -107,6 +94,6 @@ summary: ok
 	const result = await validatePlanApprovalReadiness(projectRoot, runId, {
 		risk_level: "med",
 	});
-	assert.equal(result.ok, true);
-	assert.ok(result.warnings.some((w) => w.includes("legacy scout")));
+	assert.equal(result.ok, false);
+	assert.ok(result.errors.some((e) => e.includes("planning-context")));
 });

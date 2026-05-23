@@ -5,8 +5,15 @@
  * in before_agent_start so trace-recorder reuses it on agent_start.
  */
 
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import {
+	mkdir,
+	readdir,
+	readFile,
+	rename,
+	stat,
+	writeFile,
+} from "node:fs/promises";
+import { basename, dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 import {
@@ -94,6 +101,136 @@ function persistContext(pi: ExtensionAPI, ctx: HarnessRunContext): void {
 	void saveRunContextToDisk(ctx);
 	void saveProjectActiveRun(ctx);
 	pi.events.emit("harness-run-context:updated", { run_id: ctx.run_id });
+}
+
+const PLAN_REVISION_ARTIFACT_FILES = new Set([
+	"planning-context.yaml",
+	"decomposition.yaml",
+	"hypothesis.yaml",
+	"implementation-research.yaml",
+	"stack.yaml",
+	"execution-plan-draft.yaml",
+	"plan-phase-status.yaml",
+	"plan-phase-waiver.yaml",
+	"sentrux-manifest-proposal.yaml",
+]);
+
+const PLAN_REVISION_ARTIFACT_PREFIXES = [
+	"hypothesis-validation-r",
+	"review-round-r",
+	"plan-evaluator-r",
+	"plan-adversary-r",
+	"sprint-contract-audit-r",
+	"adversary-brief-r",
+] as const;
+
+async function moveIfExists(from: string, to: string): Promise<boolean> {
+	try {
+		await stat(from);
+	} catch {
+		return false;
+	}
+	await mkdir(dirname(to), { recursive: true });
+	await rename(from, to);
+	return true;
+}
+
+function isPlanRevisionArtifactFile(name: string): boolean {
+	if (PLAN_REVISION_ARTIFACT_FILES.has(name)) return true;
+	if (name === "review-round-consolidated.yaml") return true;
+	return PLAN_REVISION_ARTIFACT_PREFIXES.some((prefix) =>
+		name.startsWith(prefix),
+	);
+}
+
+export async function archivePlanRevisionArtifacts(input: {
+	projectRoot: string;
+	runId: string;
+	reason: string;
+	recordedAt?: string;
+}): Promise<{ archiveDir: string; moved: string[] }> {
+	const recordedAt = input.recordedAt ?? nowIso();
+	const revisionId = recordedAt.replace(/[:.]/g, "-");
+	const runDir = join(input.projectRoot, ".pi", "harness", "runs", input.runId);
+	const artifactsDir = join(runDir, "artifacts");
+	const archiveDir = join(artifactsDir, "revisions", revisionId);
+	const moved: string[] = [];
+
+	async function archiveRel(rel: string): Promise<void> {
+		const ok = await moveIfExists(join(runDir, rel), join(archiveDir, rel));
+		if (ok) moved.push(rel);
+	}
+
+	await archiveRel("plan-packet.yaml");
+	await archiveRel("plan-review.md");
+	await archiveRel("research-brief.yaml");
+	await archiveRel("debate-messenger");
+
+	try {
+		const names = await readdir(artifactsDir);
+		for (const name of names) {
+			if (!isPlanRevisionArtifactFile(name)) continue;
+			await archiveRel(join("artifacts", name));
+		}
+	} catch {
+		// No artifacts yet.
+	}
+
+	const debateRel = join(
+		".pi",
+		"harness",
+		"debates",
+		`plan-${input.runId}.jsonl`,
+	);
+	const debateArchived = await moveIfExists(
+		join(input.projectRoot, debateRel),
+		join(archiveDir, "debates", basename(debateRel)),
+	);
+	if (debateArchived) moved.push(debateRel);
+
+	if (moved.length > 0) {
+		await mkdir(archiveDir, { recursive: true });
+		await writeFile(
+			join(archiveDir, "revision-reset.json"),
+			`${JSON.stringify(
+				{
+					schema_version: "1.0.0",
+					run_id: input.runId,
+					reason: input.reason,
+					recorded_at: recordedAt,
+					moved,
+				},
+				null,
+				2,
+			)}\n`,
+			"utf-8",
+		);
+	}
+
+	return { archiveDir, moved };
+}
+
+function shouldArchiveForPlanRevise(input: {
+	command: string;
+	mode: "create" | "revise" | null;
+	runCtx: HarnessRunContext;
+	reviewOutcome: Awaited<ReturnType<typeof readReviewOutcomeFromRun>>;
+	userPrompt: string;
+}): boolean {
+	if (input.command !== "harness-plan" && input.command !== "harness-auto") {
+		return false;
+	}
+	if (input.mode !== "revise") return false;
+	const next = (input.runCtx.next_recommended_command ?? "").toLowerCase();
+	const prompt = input.userPrompt.toLowerCase();
+	return (
+		input.reviewOutcome?.remediation_class === "plan_gap" ||
+		next.includes("/harness-plan") ||
+		next.includes("revise") ||
+		prompt.includes("--mode revise") ||
+		prompt.includes("--mode=revise") ||
+		prompt.includes("mode: revise")
+	);
 }
 
 function syncPolicyFromRunContext(
@@ -655,12 +792,15 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		}
 
 		let activePlanBlock = "";
+		let planMode: "create" | "revise" | null = null;
 		if (command === "harness-plan" || command === "harness-auto") {
-			const mode =
-				activeCtx.plan_ready || activeCtx.status === "aborted"
+			planMode =
+				activeCtx.plan_id ||
+				activeCtx.plan_packet_path ||
+				activeCtx.status === "aborted"
 					? "revise"
 					: "create";
-			activePlanBlock = formatActivePlanBlock(activeCtx, mode, planSummary);
+			activePlanBlock = formatActivePlanBlock(activeCtx, planMode, planSummary);
 		} else if (command === "harness-run") {
 			activePlanBlock = formatActivePlanBlock(
 				activeCtx,
@@ -683,6 +823,37 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			command === "harness-critic"
 		) {
 			activePlanBlock = formatActivePlanBlock(activeCtx, "read", planSummary);
+		}
+
+		if (command === "harness-plan" || command === "harness-auto") {
+			const reviewOutcome = await readReviewOutcomeFromRun(
+				activeCtx.run_id,
+				projectRoot,
+			);
+			if (
+				shouldArchiveForPlanRevise({
+					command,
+					mode: planMode,
+					runCtx: activeCtx,
+					reviewOutcome,
+					userPrompt,
+				})
+			) {
+				const reset = await archivePlanRevisionArtifacts({
+					projectRoot,
+					runId: activeCtx.run_id,
+					reason: "review_plan_gap_revise",
+				});
+				if (reset.moved.length > 0) {
+					pi.appendEntry("harness-plan-revision-reset", {
+						run_id: activeCtx.run_id,
+						archive_dir: reset.archiveDir,
+						moved: reset.moved,
+						reason: "review_plan_gap_revise",
+						recorded_at: nowIso(),
+					});
+				}
+			}
 		}
 
 		persistContext(pi, activeCtx);
@@ -1208,7 +1379,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 					content: [
 						{
 							type: "text",
-							text: `Path not allowed: ${pathArg}. Post-run verdicts must be written via submit_* in harness/evaluator or harness/adversary subagents; parent gates with harness_artifact_ready only.`,
+							text: `Path not allowed: ${pathArg}. Post-run verdicts must be written via submit_* in harness/reviewing/evaluator or harness/reviewing/adversary subagents; parent gates with harness_artifact_ready only.`,
 						},
 					],
 					details: { path: pathArg },

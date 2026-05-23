@@ -20,6 +20,7 @@ const DEFAULT_RAW_DIR = "raw/graphify-kb-updates";
 const DEFAULT_DATA_DIR = "data";
 const DEFAULT_GRAPH_DIR = "graphify-out";
 const REQUIRED_RIGHTS = ["license", "access", "approved_by", "approved_at"];
+const REQUIRED_PROVENANCE = ["origin", "locator"];
 const RISKY_KINDS = new Set(["book", "transcript", "youtube"]);
 
 function parseArgs(argv) {
@@ -92,6 +93,8 @@ function loadConfig(args) {
 		allowlist: (cfg.allowlist ?? []).map((entry) => typeof entry === "string" ? { domain: entry, approved: true } : entry),
 		reviewQueue: cfg.review_queue ?? [],
 		articleQueries: cfg.article_queries ?? [],
+		repoSources: cfg.repo_sources ?? [],
+		releaseFeeds: cfg.release_feeds ?? [],
 		paperFeeds: cfg.paper_feeds ?? [],
 		localBooks: cfg.local_books ?? [{ path: "data/books" }],
 		localTranscripts: cfg.local_transcripts ?? [{ path: "data/youtube-transcripts" }],
@@ -130,12 +133,25 @@ function hasRightsApproval(candidate) {
 	return Boolean(r && REQUIRED_RIGHTS.every((k) => typeof r[k] === "string" && r[k].trim()));
 }
 
+function hasCompleteProvenance(candidate) {
+	const p = candidate.provenance;
+	return Boolean(p && REQUIRED_PROVENANCE.every((k) => typeof p[k] === "string" && p[k].trim()));
+}
+
 function urlDomain(url) {
 	try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return ""; }
 }
 
 function allowlistEntry(cfg, domain) {
 	return cfg.allowlist.find((entry) => entry.domain === domain || domain.endsWith(`.${entry.domain}`));
+}
+
+function allowlistEntryAllows(entry, kind) {
+	return Boolean(entry?.approved === true && (!Array.isArray(entry.allowed_source_classes) || entry.allowed_source_classes.includes(kind)));
+}
+
+function allowlistAllows(candidate) {
+	return Boolean(candidate.allowlist_state.allowed && candidate.allowlist_state.approved && (!Array.isArray(candidate.allowlist_state.allowed_source_classes) || candidate.allowlist_state.allowed_source_classes.includes(candidate.kind)));
 }
 
 function competitorLabels(cfg, candidate) {
@@ -163,7 +179,7 @@ function normalizeCandidate(cfg, raw) {
 		risk_class: raw.risk_class ?? taxonomy.risk_class ?? (RISKY_KINDS.has(raw.kind) ? "high" : "medium"),
 		provenance: raw.provenance ?? { origin: raw.source_type, discovered_by: "graphify-kb-updater", locator: raw.url ?? raw.path ?? raw.query ?? null },
 		rights_access: raw.rights_access ?? null,
-		allowlist_state: allow ? { allowed: true, domain: allow.domain, approved: allow.approved === true, approved_by: allow.approved_by ?? null, approved_at: allow.approved_at ?? null } : { allowed: false },
+		allowlist_state: allow ? { allowed: true, domain: allow.domain, approved: allow.approved === true, approved_by: allow.approved_by ?? null, approved_at: allow.approved_at ?? null, allowed_source_classes: allow.allowed_source_classes ?? null } : { allowed: false },
 		approval_state: raw.approved === true ? "approved" : "not_approved",
 	};
 	candidate.competitor_labels = raw.competitor_labels ?? competitorLabels(cfg, candidate);
@@ -175,12 +191,27 @@ function normalizeCandidate(cfg, raw) {
 function discoverCandidates(cfg, args) {
 	const candidates = [];
 	for (const query of cfg.articleQueries) candidates.push({ kind: "article", source_type: "web_search_query", title: query, query, review_required: true, promotion_policy: "stage_only" });
+	for (const repo of cfg.repoSources) {
+		const kind = "repo";
+		const domain = urlDomain(repo.url);
+		const allow = allowlistEntry(cfg, domain);
+		const explicit = cfg.autoPromoteAllowlist && allowlistEntryAllows(allow, kind) && repo.approved === true;
+		candidates.push({ ...repo, kind, source_type: "repo_metadata", domain, review_required: !explicit, promotion_policy: explicit ? "allowlist_auto_promote" : "manual_review", rights_access: repo.rights_access ?? null, provenance: repo.provenance });
+	}
+	for (const release of cfg.releaseFeeds) {
+		const kind = "release";
+		const domain = urlDomain(release.url);
+		const allow = allowlistEntry(cfg, domain);
+		const explicit = cfg.autoPromoteAllowlist && allowlistEntryAllows(allow, kind) && release.approved === true;
+		candidates.push({ ...release, kind, source_type: "release_metadata", domain, review_required: !explicit, promotion_policy: explicit ? "allowlist_auto_promote" : "manual_review", rights_access: release.rights_access ?? null, provenance: release.provenance });
+	}
 	for (const feed of cfg.paperFeeds) candidates.push({ kind: "paper", source_type: "feed", title: feed.title ?? feed.url, url: feed.url, rights_access: feed.rights_access ?? null, review_required: true, promotion_policy: "stage_only", provenance: feed.provenance });
 	for (const entry of cfg.reviewQueue) {
+		const kind = entry.kind ?? "article";
 		const domain = urlDomain(entry.url);
 		const allow = allowlistEntry(cfg, domain);
-		const explicit = cfg.autoPromoteAllowlist && allow?.approved === true && entry.approved === true;
-		candidates.push({ ...entry, kind: entry.kind ?? "article", source_type: "review_queue", domain, review_required: !explicit, promotion_policy: explicit ? "allowlist_auto_promote" : "manual_review", rights_access: entry.rights_access ?? null });
+		const explicit = cfg.autoPromoteAllowlist && allowlistEntryAllows(allow, kind) && entry.approved === true;
+		candidates.push({ ...entry, kind, source_type: "review_queue", domain, review_required: !explicit, promotion_policy: explicit ? "allowlist_auto_promote" : "manual_review", rights_access: entry.rights_access ?? null });
 	}
 	for (const spec of cfg.localBooks) for (const file of walkFiles(resolve(ROOT, spec.path), [".md", ".txt", ".pdf"], spec.max_files ?? 50)) candidates.push({ kind: "book", source_type: "local_file", title: basename(file), path: rel(file), rights_access: rightsFromSidecar(file), review_required: true, promotion_policy: "manual_review" });
 	for (const spec of cfg.localTranscripts) for (const file of walkFiles(resolve(ROOT, spec.path), [".md", ".txt", ".vtt"], spec.max_files ?? 80)) candidates.push({ kind: "transcript", source_type: "local_file", title: basename(file), path: rel(file), rights_access: rightsFromSidecar(file), review_required: true, promotion_policy: "manual_review" });
@@ -208,10 +239,11 @@ function sourceBody(candidate) {
 }
 
 function promotionAllowed(candidate) {
+	if (!hasCompleteProvenance(candidate)) return { ok: false, reason: "missing_complete_provenance" };
 	if (!hasRightsApproval(candidate)) return { ok: false, reason: "missing_rights_access_approval" };
 	if (RISKY_KINDS.has(candidate.kind) && candidate.approved !== true) return { ok: false, reason: "manual_approval_required" };
-	if (candidate.source_type === "review_queue" && candidate.promotion_policy === "allowlist_auto_promote" && candidate.allowlist_state.allowed && candidate.allowlist_state.approved) return { ok: true };
-	return candidate.approved === true ? { ok: true } : { ok: false, reason: "manual_approval_required" };
+	if (candidate.promotion_policy === "allowlist_auto_promote" && candidate.approved === true && allowlistAllows(candidate)) return { ok: true, reason: "allowlist_auto_promote" };
+	return candidate.approved === true ? { ok: true, reason: "manual_approved" } : { ok: false, reason: "manual_approval_required" };
 }
 
 function promote(candidate, args) {
@@ -267,15 +299,19 @@ function pilotMetrics(summary) {
 function schedulerSmoke() {
 	const service = readFileSync(resolve(ROOT, ".pi/harness/corpus/systemd/graphify-kb-updater.service"), "utf8");
 	const timer = readFileSync(resolve(ROOT, ".pi/harness/corpus/systemd/graphify-kb-updater.timer"), "utf8");
+	const envTemplate = readFileSync(resolve(ROOT, ".pi/harness/corpus/systemd/graphify-kb-updater.env.template"), "utf8");
 	const cron = readFileSync(resolve(ROOT, ".pi/harness/corpus/cron.example"), "utf8");
+	const graphifyArgs = envTemplate.match(/^GRAPHIFY_KB_ARGS=(.+)$/m)?.[1] ?? "";
 	const checks = {
 		systemd_daily: /OnCalendar=\*-\*-\*\s+08:30:00|OnCalendar=daily/i.test(timer),
 		cron_daily: /^30\s+8\s+\*\s+\*\s+\*/m.test(cron),
 		bounded_timeout: /timeout 45m/.test(service) && /timeout 45m/.test(cron),
 		locked_no_overlap: /flock -n/.test(service) && /flock -n/.test(cron),
 		explicit_env: /EnvironmentFile/.test(service) && /UP_ROOT/.test(cron),
+		working_directory: /WorkingDirectory=\$\{UP_ROOT\}/.test(service),
 		logged: /StandardOutput=append/.test(service) && /HARNESS_GRAPHIFY_KB_LOG/.test(cron),
-		refresh_intent: /--refresh-graph/.test(cron),
+		refresh_intent: /--refresh-graph/.test(cron) && /--refresh-graph/.test(graphifyArgs),
+		graphify_kb_args_template: /--apply/.test(graphifyArgs) && /--pilot-report/.test(graphifyArgs) && !/[;&|`$<>]/.test(graphifyArgs),
 	};
 	const ok = Object.values(checks).every(Boolean);
 	console.log(JSON.stringify({ ok, checks }, null, 2));
@@ -305,8 +341,8 @@ function main() {
 		}
 		if (contentChanged) changedExisting++;
 		const gate = promotionAllowed(c);
-		registry.candidates[c.id] = { ...(prior ?? {}), ...c, first_seen_at: prior?.first_seen_at ?? runAt, last_seen_at: runAt, status: gate.ok ? "promotable" : "review_required", block_reason: gate.reason ?? null, content_state: contentChanged ? "changed" : "new" };
-		if (!gate.ok) { blocked.push({ id: c.id, title: c.title, reason: gate.reason, allowlist_state: c.allowlist_state, category: c.category, competitor_labels: c.competitor_labels }); continue; }
+		registry.candidates[c.id] = { ...(prior ?? {}), ...c, first_seen_at: prior?.first_seen_at ?? runAt, last_seen_at: runAt, status: gate.ok ? "promotable" : "review_required", decision: gate.ok ? gate.reason : "stage_for_review", block_reason: gate.ok ? null : gate.reason, next_action: gate.ok ? "promote_on_apply" : "manual_review_required", content_state: contentChanged ? "changed" : "new" };
+		if (!gate.ok) { blocked.push({ id: c.id, title: c.title, kind: c.kind, source_type: c.source_type, reason: gate.reason, next_action: "manual_review_required", allowlist_state: c.allowlist_state, category: c.category, competitor_labels: c.competitor_labels }); continue; }
 		planned.push(c);
 	}
 
@@ -326,6 +362,7 @@ function main() {
 
 	const graph = refreshGraph(args, promoted);
 	const stale = registry.runs.at?.(-1)?.run_id ? [] : ["no_prior_apply_run_recorded"];
+	const reviewQueue = blocked.map((b) => ({ id: b.id, title: b.title, kind: b.kind, reason: b.reason, next_action: b.next_action })).slice(0, 50);
 	const summary = {
 		run_id: `kb-${Date.now()}`,
 		last_run_at: runAt,
@@ -335,6 +372,7 @@ function main() {
 		promoted_count: promoted,
 		duplicate_skips: duplicates,
 		blocked_count: blocked.length,
+		staged_count: blocked.length,
 		skipped_count: skipped.length,
 		failure_count: failed,
 		changed_existing_count: changedExisting,
@@ -344,6 +382,8 @@ function main() {
 		graph,
 		exit_status: failed || graph.ok === false ? 1 : 0,
 		promoted: promotedRefs,
+		review_queue_count: reviewQueue.length,
+		review_queue: reviewQueue,
 		blocked: blocked.slice(0, 50),
 		skipped: skipped.slice(0, 50),
 		config: rel(cfg.path),

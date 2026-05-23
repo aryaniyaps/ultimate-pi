@@ -35,22 +35,22 @@ sentrux plugin add-standard
 
 ## Core workflows (project root)
 
-Run from the **target repo root** (where `.sentrux/rules.toml` lives).
+Run from the **target repo root** (where `.sentrux/rules.toml` lives), or prefer the bundled wrapper when invoked by harness commands from run directories.
 
 | When | Command | Notes |
 |------|---------|-------|
-| CI / pre-commit | `sentrux check .` | Exit 0 = pass, 1 = violations |
-| Before agent work | `sentrux gate --save .` | Save session baseline |
-| After agent work | `sentrux gate .` | Detect degradation vs baseline |
+| CI / pre-commit | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` | Exit 0 = pass, 1 = violations |
+| Before agent work | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save` | Save session baseline |
+| After agent work | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate` | Detect degradation vs baseline |
 | Explore structure | `sentrux` or `sentrux .` | GUI treemap (optional) |
 
 Typical agent loop:
 
 ```bash
-sentrux gate --save .
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save
 # … agent edits …
-sentrux check .          # rules still pass?
-sentrux gate .           # structural regression?
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check  # rules still pass?
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate   # structural regression?
 ```
 
 If `check` fails, fix violations or tune manifest constraints (see **Rules** below). If `gate` reports degradation, inspect changed modules before merging.
@@ -73,7 +73,7 @@ Custom TOML outside `# --- harness:managed:start/end ---` is preserved on sync. 
 |-------|------|
 | `sentrux-rules-sync` extension | Session start: warns if `rules.toml` drifts; auto-sync after plan/merge phases |
 | `/harness-sentrux-sync` | Force-regenerate rules from manifest (pi command) |
-| `harness-verify.mjs` | Runs `sentrux check .` when rules present |
+| `harness-verify.mjs` | Runs rules sync and Sentrux checks when rules are present |
 | **observation-bus** | Maps `harness-sentrux-signal` custom entries → evaluator observations |
 | **harness-eval** | Evaluate phase may require a Sentrux quality signal (stub or future MCP) per ADR 0006 |
 
@@ -90,7 +90,7 @@ High level: **execute** uses CLI gate/check around edits; **evaluate** consumes 
 - Assume Sentrux **MCP** tools (`scan`, `session_start`, `health`, etc.) exist in **Pi** — they do not; use CLI only
 - Edit or rely on `.pi/mcp.json` for Pi sessions
 - Duplicate bootstrap/sync steps from **harness-sentrux-setup**
-- Skip `sentrux check .` after large refactors when `.sentrux/rules.toml` exists
+- Skip the root-resolving Sentrux check after large refactors when `.sentrux/rules.toml` exists
 
 ## References
 

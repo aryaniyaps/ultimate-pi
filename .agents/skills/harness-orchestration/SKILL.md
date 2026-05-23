@@ -40,7 +40,7 @@ Harness subprocesses load **`harness-subagent-submit`** (`PI_HARNESS_SUBPROCESS=
 | Command | `agent` |
 |---------|---------|
 | `/harness-plan` | Parent: planning context (tools) → decompose → hypothesis → Phase 3.5 artifacts → PlanPacket → eligibility + Review Gate → `approve_plan` + `create_plan` |
-| `/harness-run` | `harness/executor` (single worker) |
+| `/harness-run` | `harness/running/executor` (single worker) |
 | `/harness-review` | Parent verify → `evaluator` benchmark → `evaluator` verdict → `adversary` → optional `tie-breaker` (ADR 0039) |
 | `/harness-eval` | **Deprecated** → `/harness-review` |
 | `/harness-critic` | **Deprecated** → `/harness-review` |
@@ -48,7 +48,7 @@ Harness subprocesses load **`harness-subagent-submit`** (`PI_HARNESS_SUBPROCESS=
 
 ## Review isolation
 
-Spawn `harness/evaluator` / `harness/adversary` via `subagent` in the **same** parent session. `review-integrity` allows `subagent` when `agent` is in the review set.
+Spawn `harness/reviewing/evaluator` / `harness/reviewing/adversary` via `subagent` in the **same** parent session. `review-integrity` allows `subagent` when `agent` is in the review set.
 
 ## ask_user policy
 
@@ -56,8 +56,8 @@ Spawn `harness/evaluator` / `harness/adversary` via `subagent` in the **same** p
 |------|------------|
 | Parent orchestrator | Yes (plan clarification, `approve_plan`, router tune) |
 | `harness/planning/*` | No — `human_required` in output if stuck |
-| `harness/evaluator`, `harness/adversary`, `harness/tie-breaker` | `human_required` in subprocess JSON |
-| `harness/executor` | No — parent handles governance |
+| `harness/reviewing/evaluator`, `harness/reviewing/adversary`, `harness/reviewing/tie-breaker` | `human_required` in subprocess JSON |
+| `harness/running/executor` | No — parent handles governance |
 
 ## Spawn pattern (`/harness-plan`)
 

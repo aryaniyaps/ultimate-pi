@@ -11,9 +11,9 @@ export const SUBAGENT_BLOCKED_TOOLS = new Set([
 ]);
 
 const ASK_USER_ALLOWED_AGENT_TYPES = new Set([
-	"harness/evaluator",
-	"harness/adversary",
-	"harness/tie-breaker",
+	"harness/reviewing/evaluator",
+	"harness/reviewing/adversary",
+	"harness/reviewing/tie-breaker",
 ]);
 
 export interface ToolCallDecision {

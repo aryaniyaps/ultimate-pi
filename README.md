@@ -2,102 +2,138 @@
 
 > The **ultimate AI coding harness** on top of [**pi.dev**](https://pi.dev).
 
-`ultimate-pi` is a pi package that adds a governed coding workflow: plan first, then implement, then independent review—so agents cannot silently skip planning or merge unsafe changes.
+`ultimate-pi` adds a governed coding workflow to Pi: bootstrap the repo, plan with evidence, execute only against an approved PlanPacket, then run an independent review gate before merge.
 
 ## Quick start
 
-**Requirements:** Node 18+, npm 9+, git.
+**Requirements:** Node 18+, npm 9+, git, and Pi.
 
-1. **Install** (from your project directory):
+1. Install the package in your project:
 
 ```bash
 pi install npm:ultimate-pi
 /reload
 ```
 
-2. **Bootstrap** (once per project):
+2. Bootstrap the harness once per project:
 
 ```text
 /harness-setup
 ```
 
-3. **Run a task** (full pipeline in one command):
+3. Run the strict end-to-end pipeline:
 
 ```text
 /harness-auto "implement feature X safely"
 ```
 
-That runs: plan → execute → evaluate → adversary → policy decision. It does **not** auto-merge.
+`/harness-auto` runs plan → execute → review → optional steer loop. It may prepare commit/PR work when gates pass, but it never auto-merges.
 
-If something blocks, inspect status (no run id needed):
+## Core workflow
+
+### Recommended: one command
 
 ```text
-/harness-run-status
-/harness-policy-status
-/harness-trace-last
+/harness-auto "your task" [--quick] [--risk low|med|high]
 ```
 
-## Commands
+Use this for most feature, fix, and refactor work. The parent orchestrator handles the phase handoffs and keeps active run context in `.pi/harness/active-run.json` plus run artifacts under `.pi/harness/runs/`.
 
-| Command | What it does |
-|---------|----------------|
-| `/harness-setup` | One-time project bootstrap (tools, harness dirs, extensions) |
-| `/harness-auto "<task>"` | End-to-end pipeline (recommended) |
-| `/harness-plan "<task>"` | Create or **revise** the active plan in context (no plan path to copy) |
-| `/harness-run` | Execute the active plan from context (**no `--plan`** on happy path) |
-| `/harness-eval` | Eval for active run (optional `--run`; spawns isolated `harness/evaluator`) |
-| `/harness-review` | Independent review (optional `--run`) |
-| `/harness-critic` | Adversarial review (optional `--run`) |
-| `/harness-trace` | Trace summary (optional `--run`) |
-| `/harness-run-status` | Where you are + what to run next (no run id shown) |
-| `/harness-new-run` | Abandon current run and start fresh |
-| `/harness-use-run <id>` | Advanced recovery only |
-| `/harness-trace-last` | Last phase / handoff (no run id) |
-| `/harness-policy-status` | Current policy / block reasons |
-| `/harness-abort [reason]` | Stop and replan path |
-
-## Manual workflow
-
-Use this when you want each step separate:
+### Manual: phase by phase
 
 ```text
-/harness-plan "your task"
+/harness-plan "your task" [--risk low|med|high] [--quick]
 /harness-run
-/harness-eval
-/harness-review
-/harness-critic
+/harness-review [--quick]
 ```
 
-The harness **remembers the active run and plan** per project — you do not pass `plan-packet.json` paths or run ids between steps. The live widget shows phase/policy; after each step the agent (and UI notify) suggests the next command.
+Manual mode is useful when you want to inspect or approve each handoff. On the happy path you do **not** pass `--plan` or a run id; the harness restores the active PlanPacket and run context.
 
-Recovery: `--run` and `--plan` remain for scripts; `/harness-use-run` and `/harness-run-status` for operators.
+### Repair loop
 
-## Defaults you should know
+If `/harness-review` returns `implementation_gap`, run:
 
-- **System prompt** — [`.pi/extensions/00-ultimate-pi-system-prompt.ts`](.pi/extensions/00-ultimate-pi-system-prompt.ts) sets the base prompt from packaged [`.pi/SYSTEM.md`](.pi/SYSTEM.md), or from your workspace override **`.pi/system.md`** (lowercase) if you create one. Nothing is copied into your project by default. After upgrading the package or editing either file, run **`/reload`**.
-- **Model routing (vendored + gated)** — [`pi-model-router`](https://github.com/yeliu84/pi-model-router) ships inside this package (`vendor/pi-model-router/`). [`.pi/extensions/pi-model-router-harness.ts`](.pi/extensions/pi-model-router-harness.ts) activates it **only after** `.pi/model-router.json` exists (generation: `/harness-setup` Step 3.5), so **`router/auto` does not appear** beforehand. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). [`.pi/scripts/harness-sync-model-router.mjs`](.pi/scripts/harness-sync-model-router.mjs) may set **`defaultProvider`/`defaultModel`** to **`router`/`auto`** when the project sets no default — run **`/reload`** afterward. Do **not** add `npm:@yeliu84/pi-model-router` to `.pi/settings.json`; it duplicates the fork. Maintainer refresh: **`npm run vendor:sync-router`**.
-- **Active run + plan context** — PlanPacket lives at a fixed path per run; the extension injects it for `/harness-plan` (revise) and `/harness-run` (execute). Session state plus `.pi/harness/active-run.json`; no run ids or plan paths to copy.
-- **Review isolation** — `/harness-eval`, `/harness-review`, and `/harness-critic` spawn isolated subagents (`inherit_context: false`); stay in the same session (see ADR 0032).
-- **Concurrent plans** — a second `/harness-plan` while a run is active is blocked until `/harness-abort` or `/harness-new-run` (except drift replan / amend after `needs_clarification`).
-- **Plan before mutate** — write/edit/shell that changes the repo is blocked until execute phase.
-- **No auto-merge** — you decide when to open or merge a PR.
-- **Structured runs** — each run writes artifacts under `.pi/harness/runs/` for replay and audit.
+```text
+/harness-steer
+/harness-review
+```
 
-Optional: copy [`.env.example`](.env.example) to `.env` if you use PostHog or other integrations wired by `/harness-setup`.
+`/harness-steer` uses `artifacts/repair-brief.yaml` and respawns the executor in repair mode without widening the approved plan scope.
+
+## Command reference
+
+| Command | Purpose |
+|---|---|
+| `/harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]` | Idempotent project bootstrap: Graphify, harness-web/Scrapling, CLI tools, settings, contracts, Sentrux, model router, and verification. |
+| `/harness-auto "<task>" [--quick] [--risk low\|med\|high]` | Strict full pipeline: plan, execute, review, steer when appropriate. |
+| `/harness-plan "<task>" [--risk low\|med\|high] [--quick]` | PM-grade planning: reconnaissance, decomposition, hypothesis, external research, ExecutionPlan, DAG validation, Review Gate debate, `approve_plan`, `create_plan`. |
+| `/harness-run` | Executes the approved active PlanPacket by spawning `harness/running/executor`; no inline implementation. |
+| `/harness-review [--run <id>] [--quick] [--readonly] [--trace <ref>]` | Post-run verification gate: deterministic checks, benchmark evaluator, policy verdict, adversary, optional tie-breaker. |
+| `/harness-steer [--attempt N]` | Post-review repair pass for `implementation_gap`; executor reads `repair-brief.yaml`, then you re-run `/harness-review`. |
+| `/harness-abort [reason]` | Safely aborts the active run, clears plan readiness, and re-locks mutation until a fresh plan is approved. |
+| `/harness-trace [--run <id>] [--phase plan\|execute\|evaluate\|adversary\|merge]` | Summarizes run traces and artifact handoffs for replay/forensics. |
+| `/harness-incident --trigger <reason> [--run <id>] [--severity low\|med\|high\|critical]` | Records incident, rollback, and override trail for harness failures. |
+| `/harness-sentrux-steward [--run <id>]` | Ad-hoc architectural intent review for Sentrux manifest/rule alignment. |
+| `/harness-router-tune --evidence <evidence.json> --candidate <candidate-router.json> [--proposal <out.json>]` | Proposes model-router updates from evidence; applies only after explicit approval. |
+| `/graphify [directory]` | Bootstraps or updates the Graphify knowledge graph. |
+| `/wiki-autoresearch [topic]` | Runs autonomous web research and builds a Graphify-backed research wiki. |
+| `/wiki-save` | Saves the current conversation or insight as a structured wiki note. |
+| `/release [patch\|minor\|major] [--dry-run]` | Maintainer release helper. |
+
+Deprecated compatibility aliases:
+
+| Alias | Use instead |
+|---|---|
+| `/harness-eval` | `/harness-review` |
+| `/harness-critic` | `/harness-review` |
+
+## Harness phases and agents
+
+- **Planning** uses agents under `.pi/agents/harness/planning/` plus parent-led Graphify → `sg` → `ccc` reconnaissance. Legacy tool-tied `planning/scout-*` agents have been removed; planning context is captured in `artifacts/planning-context.yaml`.
+- **Running** uses `.pi/agents/harness/running/executor.md` via agent id `harness/running/executor`.
+- **Reviewing** uses `.pi/agents/harness/reviewing/` via `harness/reviewing/evaluator`, `harness/reviewing/adversary`, and `harness/reviewing/tie-breaker`.
+- **Support agents** such as `harness/incident-recorder`, `harness/sentrux-steward`, and `harness/trace-librarian` remain under `.pi/agents/harness/`.
+
+Subagents run isolated from the parent session. They persist canonical YAML through `submit_*` tools; the parent gates with `harness_artifact_ready` and writes only orchestrator-owned merge artifacts.
+
+## Artifacts and layout
+
+| Path | Description |
+|---|---|
+| `.pi/harness/active-run.json` | Active run pointer for happy-path commands. |
+| `.pi/harness/runs/<run_id>/plan-packet.yaml` | Approved execution baseline. |
+| `.pi/harness/runs/<run_id>/research-brief.yaml` | Planning evidence and research merge. |
+| `.pi/harness/runs/<run_id>/artifacts/` | Planning context, decomposition, research, benchmark, verdict, adversary, repair, and Sentrux artifacts. |
+| `.pi/harness/runs/<run_id>/handoff/executor-summary.yaml` | Executor handoff written by `submit_executor_handoff`. |
+| `.pi/harness/incidents/` | Incident records and rollback/override trail. |
+| `.pi/harness/docs/adrs/` | Harness architectural decisions. |
+| `.pi/harness/specs/` | Artifact contracts and schemas seeded into projects. |
+
+## Safety defaults
+
+- **Graph before grep:** planning consults `graphify-out/GRAPH_REPORT.md` and Graphify queries before raw file reads.
+- **Plan before mutate:** mutating tools are blocked until `/harness-plan` approves and creates a plan.
+- **No inline execution:** `/harness-run` delegates to `harness/running/executor` only.
+- **No inline review:** `/harness-review` delegates verdicts to isolated reviewing agents.
+- **No auto-merge:** final merge remains a human/operator decision.
+- **Sentrux is observational:** structural baselines and gates inform review; executor does not optimize metrics as a goal.
+- **Router is gated:** `pi-model-router` activates after `/harness-setup` creates `.pi/model-router.json`; run `/reload` after setup or router changes.
 
 ## Troubleshooting
 
 | Problem | Try |
-|---------|-----|
-| Setup fails | `node --version` (need 18+), rerun `/harness-setup` |
-| "No active run" on eval | Finish plan+run first, or `/harness-run-status` |
-| Forgot where you left off | `/harness-run-status` |
-| Second plan rejected | `/harness-abort` or `/harness-new-run` |
-| Blocked in evaluate/review | Spawn review via Agent (`harness/evaluator` / `harness/adversary`); do not run review tools inline in execute phase |
-| High plan drift | `harness-drift-replan` or abort then replan (ADR 0007) |
-| Budget / scope stop | `/harness-budget-status`, narrow the task or split the plan |
-| Test integrity warning | `/harness-test-integrity-last`, fix or justify test changes |
+|---|---|
+| Setup fails | Confirm `node --version` is 18+, `npm --version` is 9+, then rerun `/harness-setup`. |
+| No approved plan | Run `/harness-plan "<task>"`, then `/harness-run`. |
+| Need to inspect handoff | Run `/harness-trace` or inspect `.pi/harness/runs/<run_id>/`. |
+| Need to restart safely | Run `/harness-abort [reason]`, then create a fresh plan. |
+| Review says `implementation_gap` | Run `/harness-steer`, then `/harness-review`. |
+| Review says `plan_gap` | Revise with `/harness-plan "<updated task>"`. |
+| Router profile missing | Complete `/harness-setup`, run `/reload`, then check `.pi/model-router.json`. |
+| Sentrux missing | Install/configure Sentrux or keep it skipped; harness verification still reports the status. |
+
+Optional integrations can be configured by copying `.env.example` to `.env`; `/harness-setup` appends missing keys without overwriting existing values.
 
 ## Contributing
 
-Local development, harness internals, and quality gates: [CONTRIBUTING.md](./CONTRIBUTING.md) and [`.pi/harness/README.md`](.pi/harness/README.md).
+Local development, harness internals, and quality gates: [CONTRIBUTING.md](./CONTRIBUTING.md), [`.pi/scripts/README.md`](.pi/scripts/README.md), and [`.pi/harness/docs/adrs/`](.pi/harness/docs/adrs/).

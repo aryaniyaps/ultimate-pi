@@ -70,7 +70,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 |------|----------|-------------------|-------|
 | Gate | Change control | `plan_ready` required | Parent |
 | Pre-work | Fitness baseline | `sentrux gate --save` | Parent |
-| Work | Single implementer | `executor_strategy` | `harness/executor` |
+| Work | Single implementer | `executor_strategy` | `harness/running/executor` |
 | Post-work | Observation | `sentrux check` / signal artifact | Parent |
 | Handoff | Generator–evaluator | `submit_executor_handoff` | Executor |
 | Next | Always verify | **`/harness-review`** (not replan on blocked) | Parent routing |
@@ -95,7 +95,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 |------|----------|-------|
 | 0 | Read review + repair briefs | Parent |
 | 1 | Policy phase → `execute` | Parent |
-| 2 | Repair scope | `harness/executor` `mode: repair` |
+| 2 | Repair scope | `harness/running/executor` `mode: repair` |
 | 3 | Re-verify | `/harness-review` |
 
 ## Anti-patterns

@@ -18,7 +18,7 @@ description: Bootstrap Sentrux architectural rules for harness projects — seed
 | **Bootstrap** | `harness/sentrux-bootstrap`, `harness-sentrux-bootstrap.mjs` | Greenfield seed + first sync |
 | **Steward** | `harness/sentrux-steward`, `/harness-sentrux-steward` | Proposes manifest changes (`artifacts/sentrux-manifest-proposal.yaml`); chair applies |
 | **Sync** | `sentrux-rules-sync.mjs`, `/harness-sentrux-sync` | Regenerates `rules.toml` from manifest after intent change |
-| **Observation** | `/harness-run`, `/harness-review` | `sentrux gate --save` / `check` / `gate` → `artifacts/sentrux-signal.yaml` |
+| **Observation** | `/harness-run`, `/harness-review` | `harness-sentrux-cli.mjs gate --save` / `check` / `gate` → `artifacts/sentrux-signal.yaml` |
 
 Never auto-sync manifest from directory trees. Material manifest edits need steward evidence + chair approval (ADR 0009).
 
@@ -39,6 +39,7 @@ Custom TOML **outside** `# --- harness:managed:start/end ---` is preserved on ev
 | First-time / harness-setup (idempotent) | `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"` |
 | After manifest edits | `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force` |
 | CI / verify only | `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --check` |
+| Run/review Sentrux observation | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` / `gate [--save]` |
 | In pi session | `/harness-sentrux-sync` (extension; uses `--force`) |
 
 **Bootstrap vs `--force`:** Default bootstrap/sync skips rewriting `rules.toml` when the manifest hash is unchanged. Use `--force` (or `/harness-sentrux-sync`) after changing `architecture.manifest.json` or when verify reports drift.
@@ -51,7 +52,7 @@ Custom TOML **outside** `# --- harness:managed:start/end ---` is preserved on ev
    node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"
    ```
 3. Optional: `sentrux plugin add-standard` (language plugins; harness-setup Step 2.8).
-4. `sentrux check .` — fix violations or tune manifest `max_cc` / layers.
+4. `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` — fix violations or tune manifest `max_cc` / layers.
 5. Commit `.sentrux/rules.toml` and project-specific `architecture.manifest.json`.
 
 ## External repos
@@ -63,6 +64,6 @@ Do **not** copy ultimate-pi's layer paths blindly into unrelated layouts — edi
 ## References
 
 - ADR 0009 — `.pi/harness/docs/adrs/0009-sentrux-rules-lifecycle.md`
-- Scripts — `.pi/scripts/sentrux-rules-sync.mjs`, `harness-sentrux-bootstrap.mjs`
+- Scripts — `.pi/scripts/sentrux-rules-sync.mjs`, `harness-sentrux-bootstrap.mjs`, `harness-sentrux-cli.mjs`
 - Agents — `harness/sentrux-bootstrap` (setup), `harness/sentrux-steward` (intent proposals)
 - Specs — `sentrux-manifest-proposal.schema.json`, `sentrux-signal.schema.json`

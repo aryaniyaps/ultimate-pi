@@ -16,12 +16,13 @@ const INCIDENTS_DIR = join(process.cwd(), ".pi", "harness", "incidents");
 const INCIDENT_FILE = join(INCIDENTS_DIR, "review-integrity.jsonl");
 
 const REVIEW_SUBAGENT_TYPES = new Set([
-	"harness/evaluator",
-	"harness/adversary",
-	"harness/tie-breaker",
+	"harness/reviewing/evaluator",
+	"harness/reviewing/adversary",
+	"harness/reviewing/tie-breaker",
 ]);
 
-const EXECUTOR_SUBAGENT_TYPE = "harness/executor";
+const EXECUTOR_SUBAGENT_TYPE = "harness/running/executor";
+const PLANNING_SUBAGENT_PREFIX = "harness/planning/";
 
 interface IsolationState {
 	executorSessionId: string | null;
@@ -139,6 +140,70 @@ function agentsFromSubagentInput(
 	return names;
 }
 
+function latestCustomData(
+	entries: SessionEntryLike[],
+	customType: string,
+): Record<string, unknown> | null {
+	for (let i = entries.length - 1; i >= 0; i--) {
+		const entry = entries[i];
+		if (entry.type !== "custom" || entry.customType !== customType) continue;
+		return entry.data && typeof entry.data === "object" ? entry.data : null;
+	}
+	return null;
+}
+
+function collectStrings(value: unknown, depth = 0): string[] {
+	if (depth > 5 || value == null) return [];
+	if (typeof value === "string") return [value];
+	if (Array.isArray(value)) {
+		return value.flatMap((item) => collectStrings(item, depth + 1));
+	}
+	if (typeof value === "object") {
+		return Object.values(value).flatMap((item) =>
+			collectStrings(item, depth + 1),
+		);
+	}
+	return [];
+}
+
+export function hasPlanReviseRecommendation(entries: unknown[]): boolean {
+	const typedEntries = entries as SessionEntryLike[];
+	const runContext = latestCustomData(typedEntries, "harness-run-context");
+	const text = collectStrings({
+		next_recommended_command: runContext?.next_recommended_command,
+		last_completed_step: runContext?.last_completed_step,
+		last_outcome: runContext?.last_outcome,
+		phase: runContext?.phase,
+	})
+		.join("\n")
+		.toLowerCase();
+
+	return text.includes("/harness-plan") && text.includes("revise");
+}
+
+export function isPlanRevisePlanningSubagent(input: {
+	agents: string[];
+	entries: unknown[];
+	toolInput?: Record<string, unknown>;
+}): boolean {
+	if (input.agents.length === 0) return false;
+	if (
+		!input.agents.every((agent) => agent.startsWith(PLANNING_SUBAGENT_PREFIX))
+	) {
+		return false;
+	}
+	if (hasPlanReviseRecommendation(input.entries)) return true;
+
+	const toolText = collectStrings(input.toolInput).join("\n").toLowerCase();
+	return (
+		toolText.includes("harness-plan") &&
+		(toolText.includes("mode: revise") ||
+			toolText.includes("mode=revise") ||
+			toolText.includes("--mode revise") ||
+			toolText.includes("--mode=revise"))
+	);
+}
+
 async function appendIncident(payload: Record<string, unknown>): Promise<void> {
 	await mkdir(INCIDENTS_DIR, { recursive: true });
 	await appendFile(
@@ -177,7 +242,10 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 		const phase = getPhase(ctx);
 		const currentSessionId = ctx.sessionManager.getSessionId();
 		const inReview = phase === "evaluate" || phase === "adversary";
-		if (!inReview) {
+		if (
+			!inReview ||
+			hasPlanReviseRecommendation(ctx.sessionManager.getEntries())
+		) {
 			state.violationActive = false;
 			state.updatedAt = nowIso();
 			persist();
@@ -203,7 +271,7 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 				customType: "harness-review-integrity-hint",
 				display: true,
 				content: [
-					"Review phase in executor session: spawn harness/evaluator or harness/adversary via subagent (isolated subprocess).",
+					"Review phase in executor session: spawn harness/reviewing/evaluator or harness/reviewing/adversary via subagent (isolated subprocess).",
 					"Do not run review checks directly in this session.",
 				].join("\n"),
 			},
@@ -212,9 +280,8 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 
 	pi.on("tool_call", async (event, ctx) => {
 		if (event.toolName === "subagent") {
-			const agents = agentsFromSubagentInput(
-				event.input as Record<string, unknown> | undefined,
-			);
+			const toolInput = event.input as Record<string, unknown> | undefined;
+			const agents = agentsFromSubagentInput(toolInput);
 			if (agents.includes(EXECUTOR_SUBAGENT_TYPE)) {
 				state.executorSessionId = ctx.sessionManager.getSessionId();
 				state.violationActive = false;
@@ -223,6 +290,18 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 				return undefined;
 			}
 			if (agents.some((a) => REVIEW_SUBAGENT_TYPES.has(a))) {
+				state.violationActive = false;
+				state.updatedAt = nowIso();
+				persist();
+				return undefined;
+			}
+			if (
+				isPlanRevisePlanningSubagent({
+					agents,
+					entries: ctx.sessionManager.getEntries(),
+					toolInput,
+				})
+			) {
 				state.violationActive = false;
 				state.updatedAt = nowIso();
 				persist();
@@ -239,7 +318,7 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 			reason:
 				"direct tool use in review phase while sharing executor session context",
 			mitigation:
-				"spawn harness/evaluator or harness/adversary via subagent instead",
+				"spawn harness/reviewing/evaluator or harness/reviewing/adversary via subagent instead",
 		});
 
 		return {

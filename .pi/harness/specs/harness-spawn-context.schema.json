@@ -14,7 +14,7 @@
 		"agent": {
 			"type": "string",
 			"minLength": 1,
-			"description": "Target subagent id, e.g. harness/planning/scout-graphify"
+			"description": "Target subagent id, e.g. harness/running/executor"
 		},
 		"mode": {
 			"type": "string",

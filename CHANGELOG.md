@@ -4,6 +4,10 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### ✨ Features
+
+- **Graphify KB updater:** Productize conservative daily discovery/promotion with explicit repo/release taxonomy, allowlist source-class gates, operator review queue reporting, scheduler smoke validation, and safe Graphify refresh controls.
+
 ## [v0.18.0] — 2026-05-23
 
 ### ✨ Features

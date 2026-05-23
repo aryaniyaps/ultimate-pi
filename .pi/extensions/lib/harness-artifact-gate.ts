@@ -20,9 +20,6 @@ const ARTIFACT_SCHEMA: Record<string, string> = {
 		"plan-implementation-research-brief.schema.json",
 	"artifacts/stack.yaml": "plan-stack-brief.schema.json",
 	"artifacts/planning-context.yaml": "plan-planning-context.schema.json",
-	"artifacts/scout-graphify.yaml": "plan-scout-findings.schema.json",
-	"artifacts/scout-structure.yaml": "plan-scout-findings.schema.json",
-	"artifacts/scout-semantic.yaml": "plan-scout-findings.schema.json",
 	"artifacts/eval-verdict.yaml": "eval-verdict.schema.json",
 	"artifacts/adversary-report.yaml": "adversary-report.schema.json",
 };
@@ -48,10 +45,10 @@ async function fileExists(path: string): Promise<boolean> {
 	}
 }
 
-function scoutStatusBad(doc: Record<string, unknown>): string | null {
+function artifactStatusBad(doc: Record<string, unknown>): string | null {
 	const status = String(doc.status ?? "ok").toLowerCase();
 	if (status === "partial" || status === "failed" || status === "error") {
-		return `scout status is "${status}"`;
+		return `artifact status is "${status}"`;
 	}
 	return null;
 }
@@ -105,17 +102,10 @@ export async function validateHarnessArtifactFile(
 		}
 	}
 
-	if (doc && normalized.startsWith("artifacts/scout-")) {
-		const scoutErr = scoutStatusBad(doc);
-		if (scoutErr) {
-			errors.push(`${normalized}: ${scoutErr}`);
-		}
-	}
-
 	if (doc && normalized === "artifacts/planning-context.yaml") {
-		const scoutErr = scoutStatusBad(doc);
-		if (scoutErr) {
-			errors.push(`${normalized}: ${scoutErr}`);
+		const statusErr = artifactStatusBad(doc);
+		if (statusErr) {
+			errors.push(`${normalized}: ${statusErr}`);
 		}
 		const coverage = doc.coverage as Record<string, unknown> | undefined;
 		if (coverage && typeof coverage === "object") {

@@ -26,8 +26,6 @@ Subagents persist artifacts via scoped **`submit_*`** tools (deterministic YAML 
 - `harness/planning/sprint-contract-auditor` (DoD auditor)
 - `harness/planning/review-integrator` (recorder / integration PM)
 
-Legacy (deprecated, ADR 0041): `scout-graphify`, `scout-structure`, `scout-semantic` — do not spawn by default.
-
 Read **harness-debate-plan** skill before Review Gate rounds.
 
 ## Team topology (spawn laws)
@@ -72,16 +70,16 @@ Do **not** run `ccc index` or `ccc search --refresh`. The harness runs increment
 3. Use `ccc search` for semantic implementation matches (unless `--quick` — set `coverage.semantic.status: skipped`).
 4. Write `artifacts/planning-context.yaml` via `write_harness_yaml` with `schema_version: "1.0.0"`, `status`, `summary`, `coverage` (architecture + structure required; semantic per risk/quick), `findings`, `evidence_refs`, `open_questions`.
 
-**Optional subprocess:** Spawn **at most one** `harness/planning/planning-context` when the brief is large or you need context isolation. Do **not** spawn legacy `scout-*` agents in parallel by default.
+**Optional subprocess:** Spawn **at most one** `harness/planning/planning-context` when the brief is large or you need context isolation.
 
-Gate: `harness_artifact_ready({ paths: ["artifacts/planning-context.yaml"] })` (legacy trio of `scout-*.yaml` still accepted for one release — see ADR 0041).
+Gate: `harness_artifact_ready({ paths: ["artifacts/planning-context.yaml"] })`.
 
 ## Phase 2a — WBS / scope decomposition (sequential)
 
 **Practice:** PMBOK scope / WBS; Berkun — how the team divides work.
 
 ```
-subagent({ agentScope: "both", agent: "harness/planning/decompose", task: "<HarnessSpawnContext + path to planning-context.yaml or legacy scout artifacts>" })
+subagent({ agentScope: "both", agent: "harness/planning/decompose", task: "<HarnessSpawnContext + path to planning-context.yaml>" })
 ```
 
 Gate: `harness_artifact_ready({ paths: ["artifacts/decomposition.yaml"] })`.

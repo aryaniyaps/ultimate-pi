@@ -13,6 +13,16 @@
 			"risk_class": "medium",
 			"default_policy": "stage_until_rights_review"
 		},
+		"repo": {
+			"category": "public_repository_metadata",
+			"risk_class": "low_to_medium",
+			"default_policy": "allowlist_auto_promote_when_approved"
+		},
+		"release": {
+			"category": "public_repository_release_metadata",
+			"risk_class": "low_to_medium",
+			"default_policy": "allowlist_auto_promote_when_approved"
+		},
 		"book": {
 			"category": "book_or_longform_local_file",
 			"risk_class": "high",
@@ -111,11 +121,56 @@
 			"approved_by": "manual-review-required",
 			"approved_at": "manual-review-required",
 			"allowed_source_classes": ["paper"]
+		},
+		{
+			"domain": "github.com",
+			"approved": true,
+			"approved_by": "repo-policy",
+			"approved_at": "2026-05-23",
+			"allowed_source_classes": ["repo", "release"]
 		}
 	],
 	"article_queries": [
 		"agentic engineering harness engineering AI coding agents",
 		"AI coding harness evaluation orchestration context engineering"
+	],
+	"repo_sources": [
+		{
+			"title": "Graphify project repository metadata watch",
+			"url": "https://github.com/AI-App/Graphify",
+			"approved": false,
+			"rights_access": {
+				"license": "repository metadata only; source license requires review",
+				"access": "public repository metadata",
+				"approved_by": "manual-review-required",
+				"approved_at": "manual-review-required"
+			},
+			"provenance": {
+				"origin": "curated_repo_watchlist",
+				"locator": "https://github.com/AI-App/Graphify",
+				"notes": "Metadata candidate only until manually approved."
+			},
+			"competitor_labels": ["context_engineering"]
+		}
+	],
+	"release_feeds": [
+		{
+			"title": "OpenAI agents SDK release metadata watch",
+			"url": "https://github.com/openai/openai-agents-python/releases",
+			"approved": false,
+			"rights_access": {
+				"license": "release metadata only; linked artifacts require review",
+				"access": "public release metadata",
+				"approved_by": "manual-review-required",
+				"approved_at": "manual-review-required"
+			},
+			"provenance": {
+				"origin": "curated_release_watchlist",
+				"locator": "https://github.com/openai/openai-agents-python/releases",
+				"notes": "Release metadata candidate only until manually approved."
+			},
+			"competitor_labels": ["agentic_harnesses"]
+		}
 	],
 	"paper_feeds": [
 		{

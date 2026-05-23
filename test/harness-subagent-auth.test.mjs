@@ -34,7 +34,7 @@ describe("harness-subagent-auth", () => {
 			root,
 			{ provider: "router", id: "auto" },
 			{
-				name: "harness/planning/scout-graphify",
+				name: "harness/planning/planning-context",
 				thinking: "low",
 				description: "",
 				systemPrompt: "",

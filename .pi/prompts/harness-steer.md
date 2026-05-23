@@ -19,8 +19,8 @@ Thin orchestrator for the **steer loop** (ADR 0044). Run only after `/harness-re
 2. Update `artifacts/steer-state.yaml` (`attempt`, `max_attempts`, `active: true`).
 3. Set policy phase to **execute** before spawning executor (required for mutating tools).
 4. One `ask_user` steer gate unless `run-context.steer_approved` is already true.
-5. Spawn **`harness/executor`** with `HarnessSpawnContext.mode: repair` and `repair_brief_path: artifacts/repair-brief.yaml`.
-6. Optional: `sentrux gate --save .` after repair to refresh baseline (ADR 0044).
+5. Spawn **`harness/running/executor`** with `HarnessSpawnContext.mode: repair` and `repair_brief_path: artifacts/repair-brief.yaml`.
+6. Optional: `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save` after repair to refresh baseline (ADR 0044).
 7. `next_command`: **`/harness-review`** (always re-verify; tiered adversary on attempts 2+ per practice-map).
 
 ## Forbidden

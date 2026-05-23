@@ -84,7 +84,7 @@ async function main() {
 	const built = buildManifest(packageFiles, name, version);
 
 	if (mode === "write") {
-		await writeFile(MANIFEST_PATH, `${JSON.stringify(built, null, 2)}\n`, "utf-8");
+		await writeFile(MANIFEST_PATH, `${JSON.stringify(built, null, "\t")}\n`, "utf-8");
 		console.log(
 			`Wrote ${MANIFEST_PATH} (${Object.keys(built.agents).length} agents)`,
 		);
