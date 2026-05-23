@@ -97,17 +97,17 @@ core_tension: "Core tension paragraph."
 	assert.equal(ok.ok, true);
 });
 
-test("rejects mixing planning-context with legacy scouts in one batch", async () => {
+test("rejects multiple planning-context agents in one batch", async () => {
 	const result = await validateHarnessSpawnTopology(
 		[
 			"harness/planning/planning-context",
-			"harness/planning/scout-graphify",
+			"harness/planning/planning-context",
 		],
 		"plan",
 		{ parallelTaskCount: 2 },
 	);
 	assert.equal(result.ok, false);
-	assert.match(result.message ?? "", /mix legacy scout/i);
+	assert.match(result.message ?? "", /At most one planning-context/i);
 });
 
 test("allows single planning-context subagent", async () => {

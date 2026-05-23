@@ -375,8 +375,6 @@ export const HARNESS_PHASE_ORDER: readonly HarnessPhase[] = [
 	"plan",
 	"execute",
 	"evaluate",
-	"adversary",
-	"merge",
 ] as const;
 
 export function formatHarnessPhaseLabel(phase: HarnessPhase): string {
@@ -384,13 +382,11 @@ export function formatHarnessPhaseLabel(phase: HarnessPhase): string {
 		case "plan":
 			return "plan";
 		case "execute":
-			return "build";
+			return "run";
 		case "evaluate":
-			return "eval";
 		case "adversary":
-			return "review";
 		case "merge":
-			return "merge";
+			return "review";
 	}
 }
 
@@ -398,6 +394,25 @@ export function nextHarnessPhase(phase: HarnessPhase): HarnessPhase | null {
 	const index = HARNESS_PHASE_ORDER.indexOf(phase);
 	if (index < 0 || index >= HARNESS_PHASE_ORDER.length - 1) return null;
 	return HARNESS_PHASE_ORDER[index + 1] ?? null;
+}
+
+function mainPhaseCommandForStatus(state: HarnessUiState): string | null {
+	const command = state.nextRecommendedCommand;
+	if (!command) return null;
+	const normalized = command.toLowerCase();
+
+	if (normalized.includes("/harness-plan")) {
+		return normalized.includes("revise")
+			? "/harness-plan (mode: revise)"
+			: "/harness-plan";
+	}
+	if (normalized.includes("/harness-review")) return "/harness-review";
+	if (normalized.includes("/harness-run-status")) {
+		return state.phase === "execute" ? "/harness-review" : null;
+	}
+	if (normalized.includes("/harness-run")) return "/harness-run";
+	if (normalized.includes("/harness-steer")) return "/harness-run";
+	return null;
 }
 
 function truncateStatusCommand(command: string, maxLen = 40): string {
@@ -430,9 +445,10 @@ export function deriveHarnessStatusHint(state: HarnessUiState): {
 	) {
 		return { text: "Waiting for your input", severity: "warning" };
 	}
-	if (state.nextRecommendedCommand) {
+	const mainPhaseCommand = mainPhaseCommandForStatus(state);
+	if (mainPhaseCommand) {
 		return {
-			text: `Next: ${truncateStatusCommand(state.nextRecommendedCommand)}`,
+			text: `Next: ${truncateStatusCommand(mainPhaseCommand)}`,
 			severity: "accent",
 		};
 	}
@@ -450,13 +466,12 @@ export function deriveHarnessStatusHint(state: HarnessUiState): {
 	}
 	switch (state.phase) {
 		case "execute":
-			return { text: "Implementing changes", severity: "accent" };
+			return { text: "Running changes", severity: "accent" };
 		case "evaluate":
-			return { text: "Running checks", severity: "accent" };
 		case "adversary":
-			return { text: "Review gate", severity: "accent" };
+			return { text: "Reviewing changes", severity: "accent" };
 		case "merge":
-			return { text: "Ready to finish", severity: "accent" };
+			return { text: "Review complete", severity: "accent" };
 		default:
 			return { text: "Planning", severity: "muted" };
 	}

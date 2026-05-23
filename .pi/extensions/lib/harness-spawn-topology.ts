@@ -23,13 +23,6 @@ const DEBATE_LANE_AGENTS = new Set([
 	"harness/planning/review-integrator",
 ]);
 
-/** @deprecated Legacy tool-tied scouts — prefer parent tools + planning-context.yaml (ADR 0041). */
-const LEGACY_SCOUT_AGENTS = new Set([
-	"harness/planning/scout-graphify",
-	"harness/planning/scout-structure",
-	"harness/planning/scout-semantic",
-]);
-
 const PLANNING_CONTEXT_AGENT = "harness/planning/planning-context";
 
 const PARALLEL_RESEARCH_AGENTS = new Set([
@@ -42,7 +35,7 @@ function countInSet(names: string[], allowed: Set<string>): number {
 }
 
 function isReconnaissanceAgent(name: string): boolean {
-	return LEGACY_SCOUT_AGENTS.has(name) || name === PLANNING_CONTEXT_AGENT;
+	return name === PLANNING_CONTEXT_AGENT;
 }
 
 async function decompositionReady(
@@ -103,28 +96,12 @@ export async function validateHarnessSpawnTopology(
 			};
 		}
 
-		const legacyScouts = countInSet(names, LEGACY_SCOUT_AGENTS);
 		const planningContext = names.filter(
 			(n) => n === PLANNING_CONTEXT_AGENT,
 		).length;
 		const research = countInSet(names, PARALLEL_RESEARCH_AGENTS);
-		const recon = legacyScouts + planningContext;
+		const recon = planningContext;
 
-		if (legacyScouts > 0 && planningContext > 0) {
-			return {
-				ok: false,
-				message:
-					"Do not mix legacy scout-* subagents with planning-context in one batch. " +
-					"Prefer parent tool use + planning-context.yaml, or a single planning-context subagent.",
-			};
-		}
-		if (legacyScouts > 3) {
-			return {
-				ok: false,
-				message:
-					"At most 3 legacy planning scouts per parallel batch (deprecated — use planning-context).",
-			};
-		}
 		if (planningContext > 1) {
 			return {
 				ok: false,
@@ -149,7 +126,7 @@ export async function validateHarnessSpawnTopology(
 				ok: false,
 				message:
 					"Parallel batches may include only one independent group: " +
-					"research (≤2 lanes), optional legacy scouts (≤3), optional single planning-context, " +
+					"research (≤2 lanes), optional single planning-context, " +
 					"or a single sequential lane agent.",
 			};
 		}
@@ -175,7 +152,7 @@ export async function validateHarnessSpawnTopology(
 	}
 
 	if (phase === "plan") {
-		const mutating = names.filter((n) => n.startsWith("harness/executor"));
+		const mutating = names.filter((n) => n.startsWith("harness/running/"));
 		if (mutating.length > 0) {
 			return {
 				ok: false,

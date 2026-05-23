@@ -44,7 +44,7 @@ function approvedRights() {
 	return { license: "public page", access: "public", approved_by: "tester", approved_at: "2026-05-23" };
 }
 
-test("dry-run reports candidates and graph skip without corpus or state mutation", () => {
+test("dry-run reports candidates and no-refresh graph skip without corpus or state mutation", () => {
 	const dir = tmpRepo();
 	const cfg = writeConfig(dir, {
 		article_queries: ["agent harness news"],
@@ -100,7 +100,7 @@ test("approved allowlisted source promotion refreshes graph exactly once and wri
 	assert.match(md, /rights_license: public page/);
 });
 
-test("apply runs are idempotent and changed same-path content is detected", () => {
+test("apply runs are duplicate-safe idempotent and changed same-path content is detected", () => {
 	const dir = tmpRepo();
 	const file = join(dir, "data", "books", "approved.txt");
 	writeFileSync(file, "v1");
@@ -115,13 +115,40 @@ test("apply runs are idempotent and changed same-path content is detected", () =
 	assert.equal(third.changed_existing_count, 1);
 });
 
-test("scheduler smoke and templates enforce daily bounded locked explicit-env logging", () => {
+test("scheduler smoke and GRAPHIFY_KB_ARGS env template enforce daily bounded locked explicit-env logging", () => {
 	const out = run(["--scheduler-smoke"], ROOT);
 	assert.equal(out.ok, true);
+	assert.equal(out.checks.working_directory, true);
+	assert.equal(out.checks.graphify_kb_args_template, true);
 	const timer = readFileSync(join(ROOT, ".pi/harness/corpus/systemd/graphify-kb-updater.timer"), "utf8");
 	const cron = readFileSync(join(ROOT, ".pi/harness/corpus/cron.example"), "utf8");
+	const envTemplate = readFileSync(join(ROOT, ".pi/harness/corpus/systemd/graphify-kb-updater.env.template"), "utf8");
 	assert.match(timer, /OnCalendar=\*-\*-\* 08:30:00/);
 	assert.match(cron, /^30 8 \* \* \*/m);
+	assert.match(envTemplate, /^GRAPHIFY_KB_ARGS=--apply --refresh-graph --pilot-report --max-promotions 25$/m);
+});
+
+test("repo release policy gate uses explicit taxonomy and allowlist source classes", () => {
+	const dir = tmpRepo();
+	const cfg = writeConfig(dir, {
+		source_taxonomy: {
+			repo: { category: "public_repo_metadata", risk_class: "low" },
+			release: { category: "public_release_metadata", risk_class: "low" }
+		},
+		auto_promote_allowlist: true,
+		allowlist: [{ domain: "github.com", approved: true, approved_by: "tester", approved_at: "2026-05-23", allowed_source_classes: ["release"] }],
+		local_books: [], local_transcripts: [], article_queries: [], paper_feeds: [], youtube_candidates: [],
+		repo_sources: [{ title: "Repo metadata", url: "https://github.com/example/repo", approved: false, rights_access: approvedRights() }],
+		release_feeds: [{ title: "Release metadata", url: "https://github.com/example/repo/releases", approved: true, rights_access: approvedRights() }],
+		review_queue: []
+	});
+	const out = run(["--dry-run", "--config", cfg, "--state-dir", "state", "--raw-dir", "raw/kb", "--graph-dir", "graphify-out"], dir);
+	assert.equal(out.counts.by_kind.repo, 1);
+	assert.equal(out.counts.by_kind.release, 1);
+	assert.equal(out.planned_promotions, 1, "release is allowlisted for auto-promotion");
+	assert.equal(out.staged_count, 1, "repo stages because allowlist does not authorize repo class");
+	assert.equal(out.review_queue[0].kind, "repo");
+	assert.equal(out.review_queue[0].reason, "manual_approval_required");
 });
 
 test("reports include taxonomy, provenance, allowlist, competitor, stale, graph, and failure fields", () => {
@@ -140,10 +167,12 @@ test("reports include taxonomy, provenance, allowlist, competitor, stale, graph,
 	assert.equal(out.counts.allowlisted, 1);
 	assert.ok(Array.isArray(out.stale_warnings));
 	assert.equal(out.failure_count, 0);
+	assert.equal(out.staged_count, 0);
+	assert.equal(out.review_queue_count, 0);
 	assert.equal(out.graph.action, "skipped_noop");
 });
 
-test("package web-policy guard rejects raw HTTP paths outside approved harness abstraction", () => {
+test("runbook web policy guard rejects raw HTTP paths outside approved harness abstraction", () => {
 	const res = spawnSync("node", [".pi/scripts/harness-web-policy-guard.mjs"], { cwd: ROOT, encoding: "utf8" });
 	assert.equal(res.status, 0, res.stderr || res.stdout);
 	const out = JSON.parse(res.stdout);

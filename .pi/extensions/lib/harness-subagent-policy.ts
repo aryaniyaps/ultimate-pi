@@ -66,13 +66,13 @@ export function classifyHarnessAgent(agentType: string): HarnessAgentKind {
 		return "planner";
 	}
 	switch (id) {
-		case "executor":
+		case "running/executor":
 			return "executor";
-		case "evaluator":
+		case "reviewing/evaluator":
 			return "evaluator";
-		case "adversary":
+		case "reviewing/adversary":
 			return "adversary";
-		case "tie-breaker":
+		case "reviewing/tie-breaker":
 			return "tie_breaker";
 		case "meta-optimizer":
 			return "meta";
@@ -127,7 +127,7 @@ export function evaluateHarnessSubagentToolCall(
 				return {
 					action: "block",
 					reason:
-						"submit_human_required is not available for harness/executor.",
+						"submit_human_required is not available for harness/running/executor.",
 				};
 			}
 			return { action: "allow" };

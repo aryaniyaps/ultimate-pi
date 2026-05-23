@@ -1,5 +1,5 @@
 /**
- * Pre-approve_plan readiness checks (artifacts, scouts, phase status).
+ * Pre-approve_plan readiness checks (planning context, research, phase status).
  */
 
 import { constants } from "node:fs";
@@ -12,12 +12,6 @@ export interface PlanApprovalReadiness {
 	errors: string[];
 	warnings: string[];
 }
-
-const LEGACY_SCOUT_ARTIFACTS = [
-	"artifacts/scout-graphify.yaml",
-	"artifacts/scout-structure.yaml",
-	"artifacts/scout-semantic.yaml",
-] as const;
 
 const PLANNING_CONTEXT_ARTIFACT = "artifacts/planning-context.yaml";
 
@@ -84,44 +78,6 @@ function coverageLaneStatus(
 	if (!coverage || typeof coverage !== "object") return "";
 	const laneDoc = coverage[lane] as Record<string, unknown> | undefined;
 	return String(laneDoc?.status ?? "").toLowerCase();
-}
-
-async function validateLegacyScouts(
-	runDir: string,
-	quick: boolean,
-	errors: string[],
-	warnings: string[],
-): Promise<boolean> {
-	let anyPresent = false;
-	for (const rel of LEGACY_SCOUT_ARTIFACTS) {
-		if (rel === "artifacts/scout-semantic.yaml" && quick) continue;
-		const abs = join(runDir, rel);
-		if (!(await fileExists(abs))) {
-			const waived = await hasPhaseWaiver(runDir, `missing:${rel}`);
-			if (!waived) {
-				errors.push(`missing ${rel}`);
-			}
-			continue;
-		}
-		anyPresent = true;
-		const doc = await readYamlObject(abs);
-		const bad = artifactStatusBad(doc, rel);
-		if (bad) {
-			const waived = await hasPhaseWaiver(
-				runDir,
-				`scout:${rel}:${String(doc?.status ?? "")}`,
-			);
-			if (!waived) {
-				errors.push(bad);
-			}
-		}
-	}
-	if (anyPresent) {
-		warnings.push(
-			"legacy scout YAML artifacts detected — prefer artifacts/planning-context.yaml (see ADR 0041)",
-		);
-	}
-	return anyPresent;
 }
 
 async function validatePlanningContext(
@@ -203,19 +159,14 @@ export async function validatePlanApprovalReadiness(
 		quick,
 		errors,
 	);
-	const hasLegacyScouts = hasPlanningContext
-		? false
-		: await validateLegacyScouts(runDir, quick, errors, warnings);
 
-	if (!hasPlanningContext && !hasLegacyScouts) {
+	if (!hasPlanningContext) {
 		const waived = await hasPhaseWaiver(
 			runDir,
 			"missing:planning-reconnaissance",
 		);
 		if (!waived) {
-			errors.push(
-				`missing ${PLANNING_CONTEXT_ARTIFACT} (or legacy scout-graphify/structure/semantic trio)`,
-			);
+			errors.push(`missing ${PLANNING_CONTEXT_ARTIFACT}`);
 		}
 	}
 

@@ -9,8 +9,8 @@ import {
 } from "../.pi/extensions/lib/harness-spawn-budget.ts";
 
 test("isHarnessAgentType matches harness paths", () => {
-	assert.equal(isHarnessAgentType("harness/executor"), true);
-	assert.equal(isHarnessAgentType("harness/planning/scout-graphify"), true);
+	assert.equal(isHarnessAgentType("harness/running/executor"), true);
+	assert.equal(isHarnessAgentType("harness/planning/planning-context"), true);
 	assert.equal(isHarnessAgentType("general-purpose"), false);
 });
 

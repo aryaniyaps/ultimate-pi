@@ -7,6 +7,7 @@ import {
 import {
 	createStateFromEntries,
 	deriveHarnessStatusHint,
+	formatHarnessPhaseLabel,
 	type HarnessUiState,
 	nextHarnessPhase,
 } from "../.pi/lib/harness-ui-state.ts";
@@ -43,14 +44,19 @@ function baseState(overrides: Partial<HarnessUiState> = {}): HarnessUiState {
 }
 
 describe("nextHarnessPhase", () => {
-	test("advances through the pipeline", () => {
+	test("advances through the user-facing plan/run/review pipeline", () => {
+		assert.equal(formatHarnessPhaseLabel("plan"), "plan");
+		assert.equal(formatHarnessPhaseLabel("execute"), "run");
+		assert.equal(formatHarnessPhaseLabel("evaluate"), "review");
+		assert.equal(formatHarnessPhaseLabel("adversary"), "review");
+		assert.equal(formatHarnessPhaseLabel("merge"), "review");
 		assert.equal(nextHarnessPhase("plan"), "execute");
 		assert.equal(nextHarnessPhase("execute"), "evaluate");
-		assert.equal(nextHarnessPhase("evaluate"), "adversary");
-		assert.equal(nextHarnessPhase("adversary"), "merge");
 	});
 
-	test("merge has no next phase", () => {
+	test("review-side internal phases have no next widget phase", () => {
+		assert.equal(nextHarnessPhase("evaluate"), null);
+		assert.equal(nextHarnessPhase("adversary"), null);
 		assert.equal(nextHarnessPhase("merge"), null);
 	});
 });
@@ -76,6 +82,39 @@ describe("deriveHarnessStatusHint", () => {
 			}),
 		);
 		assert.equal(hint.text, "Next: /harness-run");
+		assert.equal(hint.severity, "accent");
+	});
+
+	test("run-status auxiliary command displays review as next main phase", () => {
+		const hint = deriveHarnessStatusHint(
+			baseState({
+				phase: "execute",
+				nextRecommendedCommand: "/harness-run-status",
+			}),
+		);
+		assert.equal(hint.text, "Next: /harness-review");
+		assert.equal(hint.severity, "accent");
+	});
+
+	test("implementation repair auxiliary command displays run as main phase", () => {
+		const hint = deriveHarnessStatusHint(
+			baseState({
+				phase: "evaluate",
+				nextRecommendedCommand: "/harness-steer",
+			}),
+		);
+		assert.equal(hint.text, "Next: /harness-run");
+		assert.equal(hint.severity, "accent");
+	});
+
+	test("plan revise recommendation keeps the main plan command", () => {
+		const hint = deriveHarnessStatusHint(
+			baseState({
+				phase: "evaluate",
+				nextRecommendedCommand: "/harness-plan or /harness-incident",
+			}),
+		);
+		assert.equal(hint.text, "Next: /harness-plan");
 		assert.equal(hint.severity, "accent");
 	});
 

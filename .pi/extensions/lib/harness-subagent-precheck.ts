@@ -64,7 +64,7 @@ export async function precheckHarnessSubagentSpawn(
 		const cfg = resolveAgent(agents, n);
 		return cfg
 			? agentAllowsMutatingTools(cfg)
-			: n.startsWith("harness/executor");
+			: n.startsWith("harness/running/");
 	});
 
 	if (phase === "plan" && mutating.length > 0) {
@@ -78,8 +78,8 @@ export async function precheckHarnessSubagentSpawn(
 
 	const parallelEvalAdversary =
 		(params.tasks?.length ?? 0) === 2 &&
-		params.tasks?.some((t) => t.agent === "harness/evaluator") &&
-		params.tasks?.some((t) => t.agent === "harness/adversary") &&
+		params.tasks?.some((t) => t.agent === "harness/reviewing/evaluator") &&
+		params.tasks?.some((t) => t.agent === "harness/reviewing/adversary") &&
 		phase === "evaluate";
 
 	if (

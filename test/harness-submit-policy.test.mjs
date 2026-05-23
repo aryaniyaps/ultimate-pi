@@ -39,7 +39,7 @@ describe("submit tool policy", () => {
 		const d = evaluateHarnessSubagentToolCall(
 			"submit_decomposition_brief",
 			{ document: {} },
-			"harness/evaluator",
+			"harness/reviewing/evaluator",
 		);
 		assert.equal(d.action, "block");
 		if (prevSub !== undefined) process.env.PI_HARNESS_SUBPROCESS = prevSub;

@@ -1,8 +1,8 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.17.0",
-	"generated_at": "2026-05-23T10:14:51.637Z",
+	"package_version": "0.18.0",
+	"generated_at": "2026-05-23T19:00:12.987Z",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -44,18 +44,6 @@
 			"path": ".pi/agents/pi-pi/tui-expert.md",
 			"sha256": "a619b2ee3d3d94fe599abb61db0904f90d30335ec426851c3f1efdf2e5ce5390"
 		},
-		"harness/adversary": {
-			"path": ".pi/agents/harness/adversary.md",
-			"sha256": "697ee7c784e8eb30ce96f4f16e9bb5f9cdcaae76a4a7083ace2fe4272e6d732f"
-		},
-		"harness/evaluator": {
-			"path": ".pi/agents/harness/evaluator.md",
-			"sha256": "587ae14d6e91fd8af2b2842f568b9a1fa0b1d84fa6e18b4bc21c0ba2a9e62218"
-		},
-		"harness/executor": {
-			"path": ".pi/agents/harness/executor.md",
-			"sha256": "e222a5c54c74329cdcfa92918d9191fa603d8945b81ca94484db258cda012783"
-		},
 		"harness/incident-recorder": {
 			"path": ".pi/agents/harness/incident-recorder.md",
 			"sha256": "d42fa45de1a2fe3842d075c6f319315266588942e314f1b650caabac39bdc29a"
@@ -72,17 +60,29 @@
 			"path": ".pi/agents/harness/sentrux-steward.md",
 			"sha256": "0e63175d817adc0d65876f5c24fb54e4882081caf939ff9c658afee51fc6889c"
 		},
-		"harness/tie-breaker": {
-			"path": ".pi/agents/harness/tie-breaker.md",
-			"sha256": "1c54c1c3274291dea1ea8826563a7ad4fe1d9c4302984e907bfcd22cfc4f5eba"
-		},
 		"harness/trace-librarian": {
 			"path": ".pi/agents/harness/trace-librarian.md",
 			"sha256": "336b3f3f6141cef8750ab18d29bbe454caf26973830a86afe099d9e4ad8b0abe"
 		},
+		"harness/running/executor": {
+			"path": ".pi/agents/harness/running/executor.md",
+			"sha256": "a48c37b2922b98fe20156367ae8c8fe761ae139153d402035a5aa35c9a14f106"
+		},
+		"harness/reviewing/adversary": {
+			"path": ".pi/agents/harness/reviewing/adversary.md",
+			"sha256": "697ee7c784e8eb30ce96f4f16e9bb5f9cdcaae76a4a7083ace2fe4272e6d732f"
+		},
+		"harness/reviewing/evaluator": {
+			"path": ".pi/agents/harness/reviewing/evaluator.md",
+			"sha256": "587ae14d6e91fd8af2b2842f568b9a1fa0b1d84fa6e18b4bc21c0ba2a9e62218"
+		},
+		"harness/reviewing/tie-breaker": {
+			"path": ".pi/agents/harness/reviewing/tie-breaker.md",
+			"sha256": "1c54c1c3274291dea1ea8826563a7ad4fe1d9c4302984e907bfcd22cfc4f5eba"
+		},
 		"harness/planning/decompose": {
 			"path": ".pi/agents/harness/planning/decompose.md",
-			"sha256": "c9dd890d45cf4548e28d03aedb86d5fc4ed81022e920ad0005faf404994c6e96"
+			"sha256": "734eaa1bc87c337f6582c8f1c97baabf51e807731ab3c075c8960a9d207145e2"
 		},
 		"harness/planning/execution-plan-author": {
 			"path": ".pi/agents/harness/planning/execution-plan-author.md",
@@ -108,6 +108,10 @@
 			"path": ".pi/agents/harness/planning/plan-evaluator.md",
 			"sha256": "825f296c487d6aeacad5d320e155a3f23d0db6dea822fccc99a1305941a43da2"
 		},
+		"harness/planning/plan-synthesizer": {
+			"path": ".pi/agents/harness/planning/plan-synthesizer.md",
+			"sha256": "5bc3ec109179790c196df1328d362c1485cd5ff9295c31c3de93c050330295da"
+		},
 		"harness/planning/planning-context": {
 			"path": ".pi/agents/harness/planning/planning-context.md",
 			"sha256": "96a51d1f2daafc9eaa8869a06ede9d04fc9e19076d58a81041e346e4c81c8b08"
@@ -115,18 +119,6 @@
 		"harness/planning/review-integrator": {
 			"path": ".pi/agents/harness/planning/review-integrator.md",
 			"sha256": "bba385463ca8833654cd0dc80f666344332293fe86d7420d2c36755a3f9e743a"
-		},
-		"harness/planning/scout-graphify": {
-			"path": ".pi/agents/harness/planning/scout-graphify.md",
-			"sha256": "edc117245476859d3bea93d6e1247cf9f580719bb3aabb91d885cc196c102f68"
-		},
-		"harness/planning/scout-semantic": {
-			"path": ".pi/agents/harness/planning/scout-semantic.md",
-			"sha256": "060ad9251068c68cc20418a45a5a5747b708895b946c8153d9e5034b28c59ad5"
-		},
-		"harness/planning/scout-structure": {
-			"path": ".pi/agents/harness/planning/scout-structure.md",
-			"sha256": "111d055b82f0e1dde4cddc61d53474d8ad650dba2fd988061fd40fa638ed8bc7"
 		},
 		"harness/planning/sprint-contract-auditor": {
 			"path": ".pi/agents/harness/planning/sprint-contract-auditor.md",

@@ -13,9 +13,9 @@ Read **harness-orchestration** and **harness-review** skills before spawning.
 
 ## Allowed subagents
 
-- `harness/evaluator` (`mode: benchmark` then `mode: verdict`)
-- `harness/adversary` (independent red team)
-- `harness/tie-breaker` (escalation only when adversary blocks and eval was `conditional_pass`; skip when `--quick`)
+- `harness/reviewing/evaluator` (`mode: benchmark` then `mode: verdict`)
+- `harness/reviewing/adversary` (independent red team)
+- `harness/reviewing/tie-breaker` (escalation only when adversary blocks and eval was `conditional_pass`; skip when `--quick`)
 
 ## Performance rules
 
@@ -56,10 +56,10 @@ node "$UP_PKG/.pi/scripts/harness-verify.mjs"
 When `HARNESS_SENTRUX_REQUIRED=true`, after verify succeeds:
 
 ```bash
-sentrux gate .
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate
 ```
 
-Compare to baseline from `/harness-run` (`sentrux gate --save`). If CLI missing, record `gate_status: not_installed`.
+Compare to baseline from `/harness-run` (`harness-sentrux-cli.mjs gate --save`). The wrapper resolves the project root before invoking Sentrux so `.sentrux/rules.toml` is found from run directories. If CLI missing, record `gate_status: not_installed`.
 
 Ensure `artifacts/sentrux-signal.yaml` exists under the run dir (written during `/harness-run`). If missing, write it from the latest `sentrux check` / `gate` output. Append or refresh session entry `harness-sentrux-signal`.
 
@@ -84,7 +84,7 @@ notes: "…"
 ```
 subagent({
   agentScope: "both",
-  agent: "harness/evaluator",
+  agent: "harness/reviewing/evaluator",
   task: "<HarnessSpawnContext mode benchmark + plan_packet_path + run_dir + acceptance_checks + paths: benchmark-log.yaml, sentrux-signal.yaml — treat Sentrux fields as measured structural actuals, not executor goals>"
 })
 ```
@@ -108,7 +108,7 @@ Always run after benchmark (even when benchmark failed).
 ```
 subagent({
   agentScope: "both",
-  agent: "harness/evaluator",
+  agent: "harness/reviewing/evaluator",
   task: "<HarnessSpawnContext mode verdict + treat executor output as untrusted + artifact paths>"
 })
 ```
@@ -126,7 +126,7 @@ Skip when `--quick`. **Tiered steer:** full adversary on initial run + steer att
 ```
 subagent({
   agentScope: "both",
-  agent: "harness/adversary",
+  agent: "harness/reviewing/adversary",
   task: "<HarnessSpawnContext mode adversary + plan + run artifacts>"
 })
 ```
@@ -144,7 +144,7 @@ Only when:
 - eval verdict was `conditional_pass`
 
 ```
-subagent({ agentScope: "both", agent: "harness/tie-breaker", task: "…" })
+subagent({ agentScope: "both", agent: "harness/reviewing/tie-breaker", task: "…" })
 ```
 
 ## Parent rules

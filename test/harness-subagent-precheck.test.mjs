@@ -28,7 +28,7 @@ function precheckHarnessSubagentSpawn(params, agents, phase) {
 		const cfg = byName.get(n);
 		return cfg
 			? agentAllowsMutatingTools(cfg)
-			: n.startsWith("harness/executor");
+			: n.startsWith("harness/running/");
 	});
 	if (phase === "plan" && mutating.length > 0) {
 		return { ok: false, message: "Plan phase: cannot spawn mutating subagents" };
@@ -39,12 +39,12 @@ function precheckHarnessSubagentSpawn(params, agents, phase) {
 	return { ok: true };
 }
 
-test("plan phase rejects harness/executor spawn", () => {
+test("plan phase rejects harness/running/executor spawn", () => {
 	const agents = [
-		{ name: "harness/executor", tools: ["read", "write", "edit", "bash"] },
+		{ name: "harness/running/executor", tools: ["read", "write", "edit", "bash"] },
 	];
 	const result = precheckHarnessSubagentSpawn(
-		{ agent: "harness/executor" },
+		{ agent: "harness/running/executor" },
 		agents,
 		"plan",
 	);
@@ -53,13 +53,13 @@ test("plan phase rejects harness/executor spawn", () => {
 
 test("parallel tasks reject multiple mutating harness agents", () => {
 	const agents = [
-		{ name: "harness/executor", tools: ["read", "write", "edit", "bash"] },
+		{ name: "harness/running/executor", tools: ["read", "write", "edit", "bash"] },
 	];
 	const result = precheckHarnessSubagentSpawn(
 		{
 			tasks: [
-				{ agent: "harness/executor" },
-				{ agent: "harness/executor" },
+				{ agent: "harness/running/executor" },
+				{ agent: "harness/running/executor" },
 			],
 		},
 		agents,

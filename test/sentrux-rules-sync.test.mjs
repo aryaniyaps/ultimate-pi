@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SYNC_SCRIPT = join(ROOT, ".pi", "scripts", "sentrux-rules-sync.mjs");
 const BOOTSTRAP_SCRIPT = join(ROOT, ".pi", "scripts", "harness-sentrux-bootstrap.mjs");
+const SENTRUX_CLI_SCRIPT = join(ROOT, ".pi", "scripts", "harness-sentrux-cli.mjs");
 const TEMPLATE_MANIFEST = join(
 	ROOT,
 	".pi",
@@ -84,6 +85,27 @@ test("sentrux-rules-sync preserves custom TOML outside managed block", async () 
 		const merged = await readFile(rulesPath, "utf-8");
 		assert.match(merged, /keep-me/);
 		assert.match(merged, /harness:managed:start/);
+	} finally {
+		await rm(tmp, { recursive: true, force: true });
+	}
+});
+
+test("harness-sentrux-cli resolves project root from harness run subdirectories", async () => {
+	const tmp = await mkdtemp(join(tmpdir(), "sentrux-cli-root-"));
+	try {
+		await mkdir(join(tmp, ".sentrux"), { recursive: true });
+		await mkdir(join(tmp, ".pi", "harness", "runs", "run-1"), {
+			recursive: true,
+		});
+		await writeFile(join(tmp, ".sentrux", "rules.toml"), "[constraints]\n");
+
+		const { code, stdout, stderr } = await runNode(
+			SENTRUX_CLI_SCRIPT,
+			["--print-root"],
+			join(tmp, ".pi", "harness", "runs", "run-1"),
+		);
+		assert.equal(code, 0, stderr || stdout);
+		assert.equal(stdout.trim(), tmp);
 	} finally {
 		await rm(tmp, { recursive: true, force: true });
 	}

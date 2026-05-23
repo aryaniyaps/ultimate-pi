@@ -1763,7 +1763,7 @@ export function nextStepAfterOutcome(input: {
 	return "/harness-run-status";
 }
 
-/** Read executor handoff artifact written by harness/executor submit pipeline. */
+/** Read executor handoff artifact written by harness/running/executor submit pipeline. */
 export async function readExecutorHandoffFromRun(
 	runId: string,
 	projectRoot: string,

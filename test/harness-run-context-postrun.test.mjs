@@ -118,7 +118,7 @@ describe("resolveCompletionStatuses", () => {
 describe("policyBootstrapFromRunContext", () => {
 	test("executor subprocess gets approved plan from disk context", () => {
 		const prev = process.env.HARNESS_AGENT_ID;
-		process.env.HARNESS_AGENT_ID = "harness/executor";
+		process.env.HARNESS_AGENT_ID = "harness/running/executor";
 		const boot = policyBootstrapFromRunContext({
 			schema_version: "1.0.0",
 			run_id: "run-x",

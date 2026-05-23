@@ -21,7 +21,7 @@ If task missing:
 Follow **harness-plan** performance rules (`subagent` with `agentScope: "both"`). Use parallel `tasks` only for Phase 3.5 research (≤2 lanes) when subprocesses are needed. Never parallelize decompose∥hypothesis or debate lanes — precheck enforces this.
 
 1. **Plan** — follow `/harness-plan` (context → lakes/synthesis or sequential framing → research → plan-verify → `approve_plan()` + `create_plan()`). One approval.
-2. **Execute** — `harness/executor` with `executor_strategy` from packet (default `single_pass` for low/med).
+2. **Execute** — `harness/running/executor` with `executor_strategy` from packet (default `single_pass` for low/med).
 3. **Review** — always **`/harness-review`** after execute (no benchmark fail-fast).
 4. **Steer loop** — while `review-outcome.remediation_class === implementation_gap` and `steer_attempt < HARNESS_STEER_MAX_ATTEMPTS`: `/harness-steer` → `/harness-review` (tiered adversary on attempts 2+).
 5. **Parent** — apply locked strict gates; commit/PR only when `remediation_class: pass`.
@@ -50,7 +50,7 @@ Block commit/PR if any fails: plan gate, execution in scope, evaluator pass, adv
 - `--quick` reduces breadth (skips semantic coverage in planning context, post-run adversary, tie-breaker), never core safety gates on plan approval or evaluator.
 - High risk/ambiguity → stop and recommend manual `/harness-plan` with `ask_user`.
 - Interrupt: `/harness-abort [reason]` then `/harness-plan`.
-- Artifact refs under active run dir; `/harness-run-status` or `/harness-trace-last` for handoff.
+- Artifact refs under active run dir; use `/harness-trace` for handoff and forensics.
 
 ## Completion
 

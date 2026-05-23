@@ -387,11 +387,11 @@ Manual override: **`/router profile auto`** or **`/router profile opencode-go`**
 
 ## Step 3.6 — Harness agents (package-resolved)
 
-`harness-subagents` loads agents from the installed **`ultimate-pi`** package (`$UP_PKG/.pi/agents/**`) with namespaced ids (`harness/executor`, `harness/planning/scout-graphify`, `pi-pi/agent-expert`). **Do not copy** agents into the project unless you want a deliberate override.
+`harness-subagents` loads agents from the installed **`ultimate-pi`** package (`$UP_PKG/.pi/agents/**`) with namespaced ids (`harness/running/executor`, `harness/reviewing/evaluator`, `pi-pi/agent-expert`). **Do not copy** agents into the project unless you want a deliberate override.
 
 **Slash commands are orchestrators:** `/harness-plan`, `/harness-run`, etc. spawn `harness/*` agents via the `Agent` tool — bootstrap stays **script-first**; only optionally spawn `harness/sentrux-bootstrap` for Sentrux (see Step 4.2).
 
-Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/planning/scout-graphify.md` overrides the package scout).
+Optional per-repo overrides: place `.md` files at the **same relative path** (e.g. `.pi/agents/harness/running/executor.md` overrides the package executor).
 
 Verify manifest drift after `pi update ultimate-pi`:
 
@@ -531,18 +531,19 @@ node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force
 | `harness-sentrux-bootstrap.mjs` (no flags) | `/harness-setup`, first install, re-run safe |
 | `harness-sentrux-bootstrap.mjs --force` | Manifest layers/boundaries/constraints changed |
 | `sentrux-rules-sync.mjs --check` | CI / harness-verify drift only |
+| `harness-sentrux-cli.mjs check` / `gate` | Root-resolving Sentrux checks from harness run dirs |
 | `/harness-sentrux-sync` | Interactive re-sync from pi |
 
 `harness-seed-project-contracts.mjs` (Step 0.5) may copy `architecture.manifest.json` early; bootstrap still personalizes `project` on first seed and writes `rules.toml`.
 
 Verify rules:
 ```bash
-sentrux check . && echo "✓ sentrux rules pass" || echo "✗ sentrux check failed"
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check && echo "✓ sentrux rules pass" || echo "✗ sentrux check failed"
 ```
 
 Set up structural regression baseline (optional):
 ```bash
-sentrux gate --save . 2>/dev/null || echo "Baseline will be saved on first gate run"
+node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save 2>/dev/null || echo "Baseline will be saved on first gate run"
 ```
 
 ### 4.3 — Project AGENTS.md

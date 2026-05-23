@@ -15,7 +15,7 @@ const PKG_AGENTS = join(process.cwd(), ".pi", "agents");
 describe("harness-subagents loader", () => {
 	it("rejects unsafe agent ids", () => {
 		assert.equal(isSafeAgentId("../evil"), false);
-		assert.equal(isSafeAgentId("harness/executor"), true);
+		assert.equal(isSafeAgentId("harness/running/executor"), true);
 	});
 
 	it("discovers namespaced package agents", () => {
@@ -23,7 +23,7 @@ describe("harness-subagents loader", () => {
 			PKG_AGENTS,
 			join(process.cwd(), ".pi", "agents", "__none__"),
 		);
-		assert.ok(files.has("harness/executor"));
+		assert.ok(files.has("harness/running/executor"));
 		assert.ok(files.has("pi-pi/agent-expert"));
 	});
 
@@ -31,28 +31,28 @@ describe("harness-subagents loader", () => {
 		const root = mkdtempSync(join(tmpdir(), "harness-agents-"));
 		const pkgDir = join(root, "pkg", ".pi", "agents");
 		const projDir = join(root, "proj", ".pi", "agents");
-		mkdirSync(join(pkgDir, "harness"), { recursive: true });
-		mkdirSync(join(projDir, "harness"), { recursive: true });
+		mkdirSync(join(pkgDir, "harness", "running"), { recursive: true });
+		mkdirSync(join(projDir, "harness", "running"), { recursive: true });
 		writeFileSync(
-			join(pkgDir, "harness", "executor.md"),
+			join(pkgDir, "harness", "running", "executor.md"),
 			"---\ndescription: pkg\n---\n",
 		);
 		writeFileSync(
-			join(projDir, "harness", "executor.md"),
+			join(projDir, "harness", "running", "executor.md"),
 			"---\ndescription: proj\n---\n",
 		);
 		const merged = discoverFromRoots(pkgDir, projDir);
-		assert.match(merged.get("harness/executor").content, /description: proj/);
+		assert.match(merged.get("harness/running/executor").content, /description: proj/);
 	});
 
-	it("flat project agent does not shadow harness/executor", () => {
+	it("flat project agent does not shadow harness/running/executor", () => {
 		const root = mkdtempSync(join(tmpdir(), "harness-agents-flat-"));
 		const pkgDir = join(root, "pkg", ".pi", "agents");
 		const projDir = join(root, "proj", ".pi", "agents");
-		mkdirSync(join(pkgDir, "harness"), { recursive: true });
+		mkdirSync(join(pkgDir, "harness", "running"), { recursive: true });
 		mkdirSync(projDir, { recursive: true });
 		writeFileSync(
-			join(pkgDir, "harness", "executor.md"),
+			join(pkgDir, "harness", "running", "executor.md"),
 			"---\ndescription: harness executor\n---\n",
 		);
 		writeFileSync(
@@ -60,10 +60,10 @@ describe("harness-subagents loader", () => {
 			"---\ndescription: flat\n---\n",
 		);
 		const merged = discoverFromRoots(pkgDir, projDir);
-		assert.ok(merged.has("harness/executor"));
+		assert.ok(merged.has("harness/running/executor"));
 		assert.ok(merged.has("executor"));
 		assert.notEqual(
-			merged.get("harness/executor").path,
+			merged.get("harness/running/executor").path,
 			merged.get("executor").path,
 		);
 	});
@@ -73,13 +73,13 @@ describe("harness-subagents loader", () => {
 		const hash = sha256Content(content);
 		const manifest = {
 			agents: {
-				"harness/executor": {
-					path: ".pi/agents/harness/executor.md",
+				"harness/running/executor": {
+					path: ".pi/agents/harness/running/executor.md",
 					sha256: hash,
 				},
 			},
 		};
-		const onDisk = new Map([["harness/executor", { sha256: "deadbeef" }]]);
+		const onDisk = new Map([["harness/running/executor", { sha256: "deadbeef" }]]);
 		const drift = getDriftReport(manifest, onDisk);
 		assert.equal(drift.ok, false);
 		assert.equal(drift.items[0].kind, "hash_mismatch");

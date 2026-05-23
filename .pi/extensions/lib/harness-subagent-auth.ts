@@ -52,8 +52,6 @@ const ROUTINE_PLANNING_AGENT_PATHS = new Set([
 	"harness/planning/hypothesis-validator",
 	"harness/planning/sprint-contract-auditor",
 	"harness/planning/planning-context",
-	"harness/planning/scout-structure",
-	"harness/planning/scout-semantic",
 	"harness/planning/decompose",
 	"harness/planning/hypothesis",
 	"harness/planning/stack-research",

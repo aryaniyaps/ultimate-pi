@@ -42,7 +42,7 @@ test("loadRunContextForSubprocess reads run-context.yaml when env set", async ()
 	const prevAgent = process.env.HARNESS_AGENT_ID;
 	process.env.PI_HARNESS_SUBPROCESS = "1";
 	process.env.HARNESS_RUN_ID = runId;
-	process.env.HARNESS_AGENT_ID = "harness/executor";
+	process.env.HARNESS_AGENT_ID = "harness/running/executor";
 	try {
 		assert.equal(isHarnessSubprocess(), true);
 		const loaded = await loadRunContextForSubprocess(root);
