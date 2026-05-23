@@ -8,6 +8,7 @@
 import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
@@ -148,6 +149,7 @@ async function appendIncident(payload: Record<string, unknown>): Promise<void> {
 }
 
 export default function reviewIntegrity(pi: ExtensionAPI) {
+	if (!isHarnessProjectEnabled()) return;
 	let state: IsolationState = {
 		executorSessionId: null,
 		violationActive: false,

@@ -12,6 +12,7 @@ import {
 	isHarnessBudgetEnforceOn,
 	shouldEmitBlockingBudgetExhausted,
 } from "../lib/harness-budget-enforce.js";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import { getRunIdFromSession } from "../lib/harness-run-context.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
@@ -203,6 +204,7 @@ async function emitBudgetEvent(
 const debouncedSoftLimit = new Map<string, boolean>();
 
 export default function budgetGuard(pi: ExtensionAPI) {
+	if (!isHarnessProjectEnabled()) return;
 	pi.on("tool_call", async (_event, ctx) => {
 		const policy = getPolicyContext(ctx);
 		if (policy.phase === null || policy.budgetBypass) return undefined;

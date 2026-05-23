@@ -13,6 +13,7 @@ import {
 	evaluateContextModeMutation,
 	isMutatingBash,
 } from "../lib/harness-context-mode-policy.js";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import {
 	extractWritePathFromToolInput,
 	getLatestRunContext,
@@ -126,6 +127,7 @@ function getLatestPolicyStateFull(ctx: {
 }
 
 export default function policyGate(pi: ExtensionAPI) {
+	if (!isHarnessProjectEnabled()) return;
 	let state = defaultState();
 
 	const appendPolicyState = (next: PolicyState): void => {

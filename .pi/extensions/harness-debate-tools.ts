@@ -24,7 +24,7 @@ import {
 	openDebateBus,
 } from "./lib/debate-bus-core.js";
 import { getDebateState } from "./lib/debate-bus-state.js";
-import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
 import { captureHarnessEvent } from "./lib/harness-posthog.js";
 import { DEBATE_AGENT_SUBMIT_TOOL } from "./lib/harness-subagent-submit-registry.js";
 import {
@@ -115,7 +115,7 @@ function subagentResults(
 const USE_SUBMIT_TOOLS = process.env.HARNESS_SUBMIT_TOOLS !== "0";
 
 export default function harnessDebateTools(pi: ExtensionAPI) {
-	if (!claimExtensionLoad("harness-debate-tools", MODULE_URL)) return;
+	if (!claimHarnessGovernanceLoad("harness-debate-tools", MODULE_URL)) return;
 
 	pi.on("tool_result", async (event, ctx) => {
 		if (event.isError || event.toolName !== "subagent") return;

@@ -6,6 +6,7 @@
 
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import { getRunIdFromSession } from "../lib/harness-run-context.js";
 import {
 	acceptDebateRound,
@@ -32,6 +33,7 @@ function getRunId(ctx: {
 }
 
 export default function debateOrchestrator(pi: ExtensionAPI) {
+	if (!isHarnessProjectEnabled()) return;
 	const hooks = {
 		appendEntry: (customType: string, data: unknown) =>
 			pi.appendEntry(customType, data),

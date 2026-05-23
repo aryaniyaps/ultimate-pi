@@ -13,6 +13,7 @@
 import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 
 const INCIDENTS_DIR = join(process.cwd(), ".pi", "harness", "incidents");
 const INCIDENT_FILE = join(INCIDENTS_DIR, "test-diff-integrity.jsonl");

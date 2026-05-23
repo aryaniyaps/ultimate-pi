@@ -2,6 +2,7 @@ import type {
 	ExtensionAPI,
 	ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import { evaluateCrossSessionResume } from "../lib/harness-run-context.js";
 import {
 	deriveHarnessStatusHint,
@@ -245,7 +246,7 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 	let mountCtx: ExtensionContext | null = null;
 
 	function mountHarnessWidget(ctx: ExtensionContext): void {
-		if (!ctx.hasUI) return;
+		if (!ctx.hasUI || !isHarnessProjectEnabled()) return;
 		const state = stateStore.refresh(ctx);
 		lastRenderHash = computeRenderHash(state);
 
@@ -270,9 +271,21 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 		updateStatusFallback(ctx, state);
 	}
 
+	function clearHarnessWidget(ctx: ExtensionContext): void {
+		if (!ctx.hasUI) return;
+		const tui = tuiHandle;
+		ctx.ui.setWidget("harness-live", undefined);
+		ctx.ui.setStatus("harness-mode", undefined);
+		widgetMounted = false;
+		tuiHandle = null;
+		component = null;
+		lastRenderHash = "";
+		tui?.requestRender();
+	}
+
 	function remountHarnessLiveWidget(ctx: ExtensionContext): void {
 		if (!ctx.hasUI || !widgetMounted) return;
-		ctx.ui.setWidget("harness-live", undefined);
+		clearHarnessWidget(ctx);
 		mountHarnessWidget(ctx);
 	}
 
@@ -298,6 +311,20 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 			typeof data?.resume_command === "string" ? data.resume_command : null;
 		stateStore.setCrossSessionResumeCommand(cmd);
 		if (mountCtx) scheduleRefresh(mountCtx);
+	});
+
+	pi.events.on("harness-project-enabled:changed", (payload: unknown) => {
+		const data =
+			payload && typeof payload === "object"
+				? (payload as { enabled?: boolean })
+				: null;
+		if (!mountCtx || typeof data?.enabled !== "boolean") return;
+		if (data.enabled) {
+			mountHarnessWidget(mountCtx);
+			tuiHandle?.requestRender();
+			return;
+		}
+		clearHarnessWidget(mountCtx);
 	});
 
 	function updateStatusFallback(
@@ -330,6 +357,10 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 		refreshQueued = true;
 		queueMicrotask(() => {
 			refreshQueued = false;
+			if (!isHarnessProjectEnabled()) {
+				clearHarnessWidget(ctx);
+				return;
+			}
 			const state = stateStore.refresh(ctx);
 			const hash = computeRenderHash(state);
 			updateStatusFallback(ctx, state);

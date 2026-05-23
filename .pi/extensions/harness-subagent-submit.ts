@@ -7,7 +7,7 @@ import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 import { resolveGuardedRunDir } from "../lib/harness-subagent-submit-path.js";
-import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
 import { getHarnessPackageRoot } from "./lib/harness-paths.js";
 import { evaluateHarnessSubagentToolCall } from "./lib/harness-subagent-policy.js";
 import {
@@ -60,7 +60,8 @@ function isSubprocessHarness(): boolean {
 }
 
 export default function harnessSubagentSubmit(pi: ExtensionAPI) {
-	if (!claimExtensionLoad("harness-subagent-submit", MODULE_URL)) return;
+	if (!claimHarnessGovernanceLoad("harness-subagent-submit", MODULE_URL))
+		return;
 	// Option A: only load submit tools in subprocess (`-e` bundle), not parent discovery.
 	if (process.env.PI_HARNESS_SUBPROCESS !== "1") {
 		return;

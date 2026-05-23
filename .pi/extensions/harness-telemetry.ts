@@ -9,6 +9,7 @@
 
 import { createHash } from "node:crypto";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import {
 	captureHarnessEvent,
 	type HarnessPostHogEventName,
@@ -338,6 +339,7 @@ function mapCustomEntry(
 }
 
 export default function harnessTelemetry(pi: ExtensionAPI) {
+	if (!isHarnessProjectEnabled()) return;
 	const flushedHashes = new Set<string>();
 	let lastPolicyPhase: HarnessPhase | null = null;
 
