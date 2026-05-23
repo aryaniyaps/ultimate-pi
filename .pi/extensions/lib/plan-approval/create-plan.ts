@@ -12,12 +12,11 @@ import {
 import { writeYamlFile } from "../../../lib/harness-yaml.js";
 import { writePlanReviewMarkdown } from "./plan-review.js";
 
-export const CREATE_PLAN_SNIPPET =
-	"create_plan({ plan_packet: { ...approved PlanPacket } })";
+export const CREATE_PLAN_SNIPPET = "create_plan()";
 
 export const CREATE_PLAN_GUIDELINES = [
 	"Call create_plan only after the user approves via approve_plan (Approve selection).",
-	"Pass the same plan_packet you showed in approve_plan — path is resolved automatically.",
+	"Uses plan-packet.yaml on disk at plan_packet_path (path-first; no inline packet).",
 	"Never use write or edit for plan-packet.yaml; create_plan is the only allowed plan write.",
 ];
 

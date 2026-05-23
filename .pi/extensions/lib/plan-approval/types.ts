@@ -22,7 +22,7 @@ export interface PlanResearchBrief {
 }
 
 export interface ApprovePlanParams {
-	plan_packet: PlanPacketLike;
+	plan_packet?: PlanPacketLike;
 	human_summary?: string;
 	research_brief?: PlanResearchBrief | null;
 	options?: Array<string | { title: string; description?: string }>;

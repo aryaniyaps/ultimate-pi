@@ -26,6 +26,46 @@ test("validateAgainstHarnessSchema compiles plan-hypothesis-brief without remote
 	assert.equal(result.ok, true);
 });
 
+test("validateAgainstHarnessSchema compiles sentrux-manifest-proposal", async () => {
+	const result = await validateAgainstHarnessSchema(
+		SPECS,
+		"sentrux-manifest-proposal.schema.json",
+		{
+			schema_version: "1.0.0",
+			change_class: "none",
+			summary: "Existing layer globs cover scope",
+			evidence: [
+				{
+					source: "graphify",
+					ref: "graphify-out/GRAPH_REPORT.md",
+					summary: "No new god-node community for added paths",
+				},
+			],
+			manifest_patch: {},
+			adr_required: false,
+			human_required: false,
+		},
+	);
+	assert.equal(result.ok, true);
+});
+
+test("validateAgainstHarnessSchema compiles sentrux-signal", async () => {
+	const result = await validateAgainstHarnessSchema(
+		SPECS,
+		"sentrux-signal.schema.json",
+		{
+			schema_version: "1.0.0",
+			run_id: "run-test",
+			check_pass: true,
+			gate_status: "pass",
+			quality_signal_summary: "baseline held",
+			recorded_at: "2026-05-23T00:00:00.000Z",
+			phase: "execute",
+		},
+	);
+	assert.equal(result.ok, true);
+});
+
 test("validateAgainstHarnessSchema compiles plan-decomposition-brief schema", async () => {
 	const result = await validateAgainstHarnessSchema(
 		SPECS,

@@ -7,6 +7,8 @@ thinking: medium
 max_turns: 14
 ---
 
+**Inspection role:** Red team (adversarial review). See `.pi/harness/docs/practice-map.md`.
+
 ## Your task
 
 Stress-test the ExecutionPlan with reproducible counterexamples. Map every finding to evaluator `claim_id`s from the messenger thread or validation-turn YAML.

@@ -1,11 +1,13 @@
 ---
-description: Plan-phase scout — graphify graph and wiki navigation (read-only).
+description: "[DEPRECATED — ADR 0041] Legacy graphify-only scout. Prefer parent tools + planning-context.yaml."
 tools: read, bash, ls, submit_scout_findings
 disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent, grep, find
 extensions: false
 thinking: low
 max_turns: 8
 ---
+
+> **Deprecated (ADR 0041):** The parent orchestrator should compile `artifacts/planning-context.yaml` using tools directly, or spawn `harness/planning/planning-context` once. This agent remains for backward compatibility only.
 
 You are the **Harness planning scout (graphify lane)**.
 

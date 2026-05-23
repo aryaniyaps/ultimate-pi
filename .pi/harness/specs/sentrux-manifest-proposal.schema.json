@@ -1,0 +1,80 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/sentrux-manifest-proposal.schema.json",
+	"title": "SentruxManifestProposal",
+	"description": "Graphify-grounded proposal to evolve architecture.manifest.json (intent layer). Chair applies after approval.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"change_class",
+		"summary",
+		"evidence",
+		"manifest_patch",
+		"adr_required",
+		"human_required"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"change_class": {
+			"type": "string",
+			"enum": [
+				"none",
+				"tune_constraint",
+				"add_boundary",
+				"add_layer",
+				"split_layer"
+			]
+		},
+		"summary": {
+			"type": "string",
+			"minLength": 1
+		},
+		"evidence": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["source", "ref", "summary"],
+				"properties": {
+					"source": {
+						"type": "string",
+						"enum": ["graphify", "sg", "sentrux", "plan", "manifest"]
+					},
+					"ref": {
+						"type": "string",
+						"minLength": 1
+					},
+					"summary": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			}
+		},
+		"manifest_patch": {
+			"type": "object",
+			"description": "JSON Merge Patch (RFC 7396) ops against architecture.manifest.json",
+			"additionalProperties": true
+		},
+		"adr_required": {
+			"type": "boolean"
+		},
+		"adr_draft": {
+			"type": "string"
+		},
+		"human_required": {
+			"type": "boolean"
+		},
+		"open_questions": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		}
+	}
+}

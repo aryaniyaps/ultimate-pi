@@ -10,6 +10,10 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import {
+	evaluateContextModeMutation,
+	isMutatingBash,
+} from "../lib/harness-context-mode-policy.js";
+import {
 	extractWritePathFromToolInput,
 	getLatestRunContext,
 	getPolicyTransitionBlock,
@@ -27,6 +31,7 @@ import {
 	userVisiblePromptSlice,
 	validatePlanPacket,
 } from "../lib/harness-run-context.js";
+import { bootstrapHarnessSubprocessFromEnv } from "./lib/harness-subprocess-bootstrap.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 
@@ -56,20 +61,6 @@ const PHASE_ORDER: HarnessPhase[] = [
 ];
 
 const MUTATING_TOOLS = new Set(["write", "edit"]);
-const BASH_MUTATION_PATTERNS = [
-	/\bgit\s+commit\b/i,
-	/\bgit\s+push\b/i,
-	/\bgit\s+merge\b/i,
-	/\bgit\s+rebase\b/i,
-	/\brm\s+(-rf?|--recursive)\b/i,
-	/\bmv\b/i,
-	/\bcp\b/i,
-	/\bmkdir\b/i,
-	/\bchmod\b/i,
-	/\bchown\b/i,
-	/\bsed\s+-i\b/i,
-	/\bperl\s+-i\b/i,
-];
 
 function nowIso(): string {
 	return new Date().toISOString();
@@ -92,10 +83,6 @@ function hasApprovedPlanSignal(prompt: string, entries: unknown[]): boolean {
 	const runCtx = getLatestRunContext(entries);
 	if (runCtx?.plan_ready) return true;
 	return hasApprovedPlanSignalFromUserPrompt(prompt);
-}
-
-function isMutatingBash(command: string): boolean {
-	return BASH_MUTATION_PATTERNS.some((pattern) => pattern.test(command));
 }
 
 function getLatestPolicyStateFull(ctx: {
@@ -148,10 +135,15 @@ export default function policyGate(pi: ExtensionAPI) {
 
 	pi.on("session_start", async (_event, ctx) => {
 		state = getLatestPolicyStateFull(ctx);
+		const booted = await bootstrapHarnessSubprocessFromEnv(pi, ctx);
+		if (booted) {
+			state = getLatestPolicyStateFull(ctx);
+		}
 	});
 
 	pi.on("before_agent_start", async (event, ctx) => {
 		const userPrompt = userVisiblePromptSlice(event.prompt);
+		await bootstrapHarnessSubprocessFromEnv(pi, ctx);
 		const entries = ctx.sessionManager.getEntries();
 		state = getLatestPolicyStateFull(ctx);
 		const bootstrapPrompt = isHarnessBootstrapPrompt(userPrompt);
@@ -243,7 +235,7 @@ export default function policyGate(pi: ExtensionAPI) {
 
 		const planPhaseHint =
 			state.phase === "plan"
-				? "\nPlan phase: scouts → decompose → hypothesis → implementation-researcher + stack-researcher → execution-plan-author → validate-plan-dag → debate eligibility + Review Gate → approve_plan → create_plan (YAML plan-packet.yaml). Post-execute: /harness-critic."
+				? "\nPlan phase: scouts (parallel) → decompose → hypothesis (sequential) → implementation-researcher + stack-researcher (parallel) → execution-plan-author → validate-plan-dag → debate eligibility + Review Gate → approve_plan → create_plan (YAML plan-packet.yaml). Post-execute: /harness-review."
 				: "";
 
 		return {
@@ -294,6 +286,19 @@ export default function policyGate(pi: ExtensionAPI) {
 					reason: `policy-gate: mutating bash command blocked in phase '${state.phase}'.`,
 				};
 			}
+		}
+
+		const ctxDecision = evaluateContextModeMutation(
+			event.toolName,
+			event.input as Record<string, unknown>,
+			state.phase,
+			{
+				aborted: state.aborted,
+				budgetBypass: state.budgetBypass,
+			},
+		);
+		if (ctxDecision.blocked) {
+			return { block: true, reason: ctxDecision.reason };
 		}
 
 		return undefined;

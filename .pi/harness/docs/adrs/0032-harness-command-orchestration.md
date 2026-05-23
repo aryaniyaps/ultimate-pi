@@ -28,9 +28,16 @@ Harness slash prompts duplicated logic already defined in `harness/*` agents. Th
 - Orchestrator must parse subagent JSON reliably and pass complete spawn context.
 - Scope enforcement remains prompt-driven for executor until optional path allowlist.
 
+## Amendment (2026-05-23)
+
+- **`/harness-review`** is the master **post-run** orchestrator (benchmark + verdict + adversary). See ADR 0039.
+- **`/harness-eval`** and **`/harness-critic`** are thin deprecated aliases; do not implement separate pipelines.
+- Post-run artifacts use **`submit_*`** + **`harness_artifact_ready`** per ADR 0037; parent does not parse subprocess JSON into `artifacts/eval-verdict.yaml`.
+
 ## References
 
 - `.pi/prompts/harness-*.md`
+- ADR 0039 — post-run review gate
 - `.pi/agents/harness/*.md`
 - `vendor/pi-subagents/src/subagents.ts`, `.pi/extensions/lib/harness-subagents-bridge.ts`
 - `.pi/extensions/lib/harness-subagent-policy.ts`

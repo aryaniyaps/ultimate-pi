@@ -17,7 +17,7 @@ Independently validate execution outcomes and emit structured verdicts. Spawn co
 
 1. Read `HarnessSpawnContext` and artifact paths (`plan_packet_path`, `run_dir`, trace refs).
 2. Reconstruct validation scope from the plan and on-disk run artifacts.
-3. For `benchmark` mode: run or summarize deterministic checks (project tests, harness-verify if instructed in spawn prompt); collect metrics only you measured.
+3. For `benchmark` mode: run or summarize deterministic checks (project tests, harness-verify if instructed in spawn prompt); read `artifacts/sentrux-signal.yaml` and `artifacts/benchmark-log.yaml` when present — cite `check_pass`, `gate_status`, and `quality_signal_summary` as measured structural actuals (do not treat as optimization targets for the executor).
 4. For `verdict` mode: emit `EvalVerdict` matching `.pi/harness/specs/eval-verdict.schema.json`.
 5. Recommend only: `proceed_to_adversary`, `replan`, or `rollback`.
 6. Set `human_required` in structured output when blocked; never call `ask_user`.
@@ -31,15 +31,6 @@ Independently validate execution outcomes and emit structured verdicts. Spawn co
 
 ## Output
 
-End with a fenced `json` block:
+Call **`submit_eval_verdict`** before exit with a document matching `eval-verdict.schema.json` (writes `artifacts/eval-verdict.yaml` under the run dir). Do not ask the parent to parse JSON or write verdict files.
 
-```json
-{
-  "eval_status": "pass",
-  "eval_verdict": { },
-  "human_summary": "…",
-  "recommended_action": "proceed_to_adversary"
-}
-```
-
-Use `eval_status`: `pass`, `conditional_pass`, or `fail`.
+Use `status`: `pass`, `conditional_pass`, or `fail`. `recommended_action`: `proceed_to_adversary`, `replan`, or `rollback`.

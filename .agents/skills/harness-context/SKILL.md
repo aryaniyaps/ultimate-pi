@@ -15,13 +15,19 @@ description: Compile task-specific harness context using context-mode and graphi
 - Use the **context-mode** npm package / pi integration for compression.
 - **Do not** use lean-ctx (`ctx_read`, `ctx_search`, etc.) on harness paths — locked by Phase 2 plan.
 
-## Workflow
+## Tool menu (pick what the task needs)
 
-1. Read `graphify-out/GRAPH_REPORT.md` or `graphify-out/wiki/index.md` when available.
-2. Run `graphify query "<task>"` for god nodes and communities.
-3. Use `sg` (ast-grep) for structural code search in `.pi/extensions/` and harness specs.
-4. Use context-mode to load maps/signatures for files not being edited.
-5. Read ADR index: `.pi/harness/docs/adrs/README.md`.
+Use these in rough priority order — not every tool on every task:
+
+| Need | Tool |
+|------|------|
+| Architecture, god nodes, cross-file relationships | `graphify-out/GRAPH_REPORT.md`, `graphify query`, `graphify explain`, `graphify path` |
+| Structural code patterns | `sg -p '…'` (ast-grep) |
+| Semantic implementation search | `ccc search` (harness pre-indexes before subprocess spawns) |
+| File detail | context-mode maps/signatures, then targeted reads |
+| Harness governance | `.pi/harness/docs/adrs/README.md` |
+
+For `/harness-plan` Phase 1, parent compiles findings into `artifacts/planning-context.yaml` — see **harness-plan** skill.
 
 ## Outputs
 
@@ -34,3 +40,4 @@ Compact context block:
 ## Rules
 
 - `./raw/` is graphify source storage; run `graphify update .` after significant harness code changes.
+- Subprocesses are optional; prefer parent tool use when reconnaissance fits the parent context window.

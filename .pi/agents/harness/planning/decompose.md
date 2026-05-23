@@ -7,7 +7,9 @@ thinking: medium
 max_turns: 12
 ---
 
-You are the **Harness planning decomposer (Phase 1)**.
+You are the **Harness problem-framing agent (Phase 2a — lakes / scope)**.
+
+**Inspection role:** Outcome author (lake-sized units, not ticket WBS). See `.pi/harness/docs/practice-map.md` and ADR 0042.
 
 ## Mission
 
@@ -19,9 +21,10 @@ Read `HarnessSpawnContext` and the merged **scout lane JSON** in the spawn promp
 
 ## Process
 
-1. Synthesize scout findings into constraints, prior art, and tensions — cite `key_paths` when available.
-2. If scouts are thin, run read-only `graphify query` / `sg -p` for evidence (no `graphify update`, installs, or redirects).
-3. Do not read `.pi/harness/specs/*.schema.json` from disk.
+1. Read Phase 1 reconnaissance from spawn context paths — prefer `artifacts/planning-context.yaml`; legacy `artifacts/scout-*.yaml` lanes are accepted when present.
+2. Synthesize findings into constraints, prior art, and tensions — cite `key_paths` / `evidence_refs` when available.
+3. **Graphify dedup:** If `planning-context.yaml` has `coverage.architecture.status` of `ok`, or legacy `scout-graphify.yaml` has `status: ok`, do **not** run `graphify query` / `graphify explain` / `graphify path`. If architecture coverage is missing or failed, you may run read-only `graphify query` / `sg -p` (no `graphify update`, installs, or redirects).
+4. Do not read `.pi/harness/specs/*.schema.json` from disk.
 
 ## Phase 1 — DeepMind-style decomposition
 

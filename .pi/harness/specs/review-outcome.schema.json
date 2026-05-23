@@ -1,0 +1,46 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/review-outcome.schema.json",
+	"title": "ReviewOutcome",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"run_id",
+		"status",
+		"remediation_class",
+		"recommended_next"
+	],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"run_id": { "type": "string", "minLength": 1 },
+		"status": {
+			"type": "string",
+			"enum": ["pass", "fail", "inconclusive"]
+		},
+		"remediation_class": {
+			"type": "string",
+			"enum": [
+				"pass",
+				"implementation_gap",
+				"plan_gap",
+				"rollback",
+				"inconclusive"
+			]
+		},
+		"recommended_next": { "type": "string", "minLength": 1 },
+		"failed_acceptance_check_ids": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"steer_attempt": { "type": "integer", "minimum": 0 },
+		"review_tier": {
+			"type": "string",
+			"enum": ["full", "lite"]
+		},
+		"source_artifacts": {
+			"type": "object",
+			"additionalProperties": { "type": "string" }
+		}
+	}
+}

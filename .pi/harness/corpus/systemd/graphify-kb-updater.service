@@ -1,0 +1,17 @@
+[Unit]
+Description=Ultimate Pi Graphify knowledge-base updater
+Documentation=file:%h/ai-projects/ultimate-pi/.pi/harness/docs/graphify-kb-updater-runbook.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=%h/.config/ultimate-pi/graphify-kb-updater.env
+WorkingDirectory=${UP_ROOT}
+ExecStart=/usr/bin/flock -n %t/graphify-kb-updater.lock /usr/bin/timeout 45m /usr/bin/env node .pi/scripts/graphify-kb-updater.mjs ${GRAPHIFY_KB_ARGS}
+StandardOutput=append:%h/.local/state/ultimate-pi/graphify-kb-updater.log
+StandardError=append:%h/.local/state/ultimate-pi/graphify-kb-updater.err
+TimeoutStartSec=50m
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7

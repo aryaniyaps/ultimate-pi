@@ -1,0 +1,72 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { mkdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { randomUUID } from "node:crypto";
+import {
+	validateHarnessArtifactFile,
+	validateHarnessArtifactPaths,
+} from "../.pi/extensions/lib/harness-artifact-gate.ts";
+
+const specsDir = join(process.cwd(), ".pi/harness/specs");
+
+test("validateHarnessArtifactFile rejects empty decomposition", async () => {
+	const root = join(tmpdir(), `harness-artifact-gate-${randomUUID()}`);
+	await mkdir(join(root, "artifacts"), { recursive: true });
+	await writeFile(join(root, "artifacts/decomposition.yaml"), "\n", "utf-8");
+	const gate = await validateHarnessArtifactFile(
+		root,
+		"artifacts/decomposition.yaml",
+		specsDir,
+	);
+	assert.equal(gate.ok, false);
+	assert.ok(gate.errors.some((e) => e.includes("empty")));
+});
+
+test("hypothesis gate requires decomposition prerequisite on disk", async () => {
+	const root = join(tmpdir(), `harness-artifact-gate-${randomUUID()}`);
+	await mkdir(join(root, "artifacts"), { recursive: true });
+	const decomp = `schema_version: "1.0.0"
+problem_restatement: "Test problem"
+problem_types: [design]
+scope:
+  narrowed_focus: "Test focus"
+  excluded: ["out"]
+hard_constraints: ["none"]
+soft_constraints: ["prefer simple"]
+success_metrics: ["done"]
+prior_art:
+  best_approach: "prior"
+  gap: "gap"
+  dead_ends: ["dead"]
+tensions:
+  - claim_a: "a"
+    claim_b: "b"
+    why_matters: "matters"
+core_tension: "Core tension paragraph."
+`;
+	await writeFile(join(root, "artifacts/decomposition.yaml"), decomp, "utf-8");
+	const withoutDecomp = join(tmpdir(), `harness-artifact-gate-${randomUUID()}`);
+	await mkdir(join(withoutDecomp, "artifacts"), { recursive: true });
+	await writeFile(
+		join(withoutDecomp, "artifacts/hypothesis.yaml"),
+		"schema_version: '1.0.0'\n",
+		"utf-8",
+	);
+	const blocked = await validateHarnessArtifactPaths(
+		withoutDecomp,
+		["artifacts/hypothesis.yaml"],
+		specsDir,
+	);
+	assert.equal(blocked.ok, false);
+	assert.ok(
+		blocked.errors.some((e) => e.includes("prerequisite missing")),
+	);
+	const decompOnly = await validateHarnessArtifactPaths(
+		root,
+		["artifacts/decomposition.yaml"],
+		specsDir,
+	);
+	assert.equal(decompOnly.ok, true);
+});

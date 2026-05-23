@@ -24,6 +24,16 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0036](0036-implementation-research-and-selective-debate.md) | Implementation research and selective debate | Accepted |
 | [0037](0037-subagent-submit-tools.md) | Subagent submit tools (subprocess extension) | Accepted |
 | [0038](0038-budget-telemetry-only.md) | Budget caps telemetry-only by default | Accepted |
+| [0039](0039-harness-post-run-review-gate.md) | `/harness-review` master post-run gate | Accepted |
+| [0040](0040-practice-grounded-orchestration.md) | Practice-grounded orchestration & team topology | Accepted |
+| [0041](0041-intelligent-planning-reconnaissance.md) | Intelligent planning reconnaissance (tools over tool-scouts) | Accepted |
+| [0042](0042-agent-native-orchestration.md) | Agent-native orchestration (lakes, plan-verify probes, synthesizer) | Accepted |
+| [0043](0043-path-first-harness-tools.md) | Path-first harness tool contracts | Accepted |
+| [0044](0044-harness-steer-loop.md) | Post-run steer loop (repair vs plan revise) | Accepted |
+
+## Practice map
+
+Phase-to-practice mapping for slash commands: [practice-map.md](../practice-map.md).
 
 ## Template
 

@@ -20,7 +20,10 @@ Sentrux enforces architecture via [`.sentrux/rules.toml`](https://sentrux.dev/do
    - On `agent_end` when harness phase is `plan` or `merge`
    - `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` fails if manifest hash ≠ last sync (`--check`)
 7. **Custom rules:** TOML outside the managed block is preserved on sync.
-8. **Skill:** `harness-sentrux-setup` documents bootstrap vs `--force`.
+8. **Skill:** `harness-sentrux-setup` documents bootstrap vs steward vs sync vs observation.
+9. **Intent evolution:** `harness/sentrux-steward` proposes JSON Merge Patches via `submit_sentrux_manifest_proposal` → `artifacts/sentrux-manifest-proposal.yaml`, with graphify-first evidence (`graphify-out/GRAPH_REPORT.md`, `graphify query` / `path` / `explain`). Chair applies manifest edits; never silent auto-merge.
+10. **Material changes:** `add_layer`, `add_boundary`, `split_layer` require `adr_required` + `ask_user` when `human_required`. `tune_constraint` may proceed with sentrux/graphify evidence only when chair agrees.
+11. **Observation vs intent:** `/harness-run` + `/harness-review` run CLI fitness functions; observation failures → replan/fix. Manifest changes → steward + ADR, not directory-tree guessing.
 
 ## Consequences
 
@@ -36,6 +39,8 @@ Sentrux enforces architecture via [`.sentrux/rules.toml`](https://sentrux.dev/do
 ## References
 
 - ADR 0006 (Sentrux dual layer)
+- `.pi/agents/harness/sentrux-steward.md`, `.pi/prompts/harness-sentrux-steward.md`
+- `.pi/harness/specs/sentrux-manifest-proposal.schema.json`, `sentrux-signal.schema.json`
 - `.pi/scripts/harness-sentrux-bootstrap.mjs`
 - `.pi/scripts/sentrux-rules-sync.mjs`
 - `.agents/skills/harness-sentrux-setup/SKILL.md`

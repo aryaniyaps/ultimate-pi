@@ -1,0 +1,25 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-phase-waiver.schema.json",
+	"title": "PlanPhaseWaiver",
+	"description": "Explicit human waiver for partial scouts or plan-phase blockers before approve_plan.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["schema_version", "waived"],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"waived": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["reason", "rationale"],
+				"properties": {
+					"reason": { "type": "string", "minLength": 1 },
+					"rationale": { "type": "string", "minLength": 1 }
+				}
+			}
+		}
+	}
+}

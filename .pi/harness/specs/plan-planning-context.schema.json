@@ -1,0 +1,50 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-planning-context.schema.json",
+	"title": "PlanPlanningContext",
+	"type": "object",
+	"additionalProperties": true,
+	"required": ["schema_version", "status", "summary", "coverage"],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"status": {
+			"type": "string",
+			"enum": ["ok", "partial", "failed", "error"]
+		},
+		"task_ref": { "type": "string" },
+		"summary": { "type": "string", "minLength": 1 },
+		"coverage": {
+			"type": "object",
+			"required": ["architecture", "structure"],
+			"properties": {
+				"architecture": { "$ref": "#/$defs/coverageLane" },
+				"structure": { "$ref": "#/$defs/coverageLane" },
+				"semantic": { "$ref": "#/$defs/coverageLane" }
+			},
+			"additionalProperties": true
+		},
+		"findings": { "type": "array" },
+		"key_paths": { "type": "array", "items": { "type": "string" } },
+		"evidence_refs": { "type": "array" },
+		"open_questions": { "type": "array" }
+	},
+	"$defs": {
+		"coverageLane": {
+			"type": "object",
+			"required": ["status"],
+			"properties": {
+				"status": {
+					"type": "string",
+					"enum": ["ok", "partial", "skipped", "failed", "error"]
+				},
+				"tools_used": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"summary": { "type": "string" },
+				"key_paths": { "type": "array", "items": { "type": "string" } }
+			},
+			"additionalProperties": true
+		}
+	}
+}

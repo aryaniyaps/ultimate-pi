@@ -16,6 +16,7 @@ import {
 import { planDebateIdForRun } from "./plan-debate-id.js";
 import {
 	laneArtifactPathsForConsolidatedRound,
+	laneArtifactPathsForParallelProbesRound,
 	laneArtifactPathsForRound,
 } from "./plan-debate-lanes.js";
 import {
@@ -26,6 +27,7 @@ import {
 import {
 	CONSOLIDATED_REVIEW_ARTIFACT,
 	isConsolidatedReviewStrategy,
+	isParallelProbesReviewStrategy,
 	planReviewGateStrategyFromEligibility,
 } from "./plan-review-gate.js";
 
@@ -114,6 +116,7 @@ export async function validatePlanDebateGate(
 						rationale: [],
 					};
 	const consolidated = isConsolidatedReviewStrategy(reviewStrategy);
+	const parallelProbes = isParallelProbesReviewStrategy(reviewStrategy);
 	const coverage = await getPlanFocusCoverage(runDir, { requiredFocuses });
 	const dialogueOpts = {
 		max_exchanges_per_round: caps.max_exchanges_per_round,
@@ -126,7 +129,25 @@ export async function validatePlanDebateGate(
 		errors.push("last submitted review round has review_gate_ready !== true");
 	}
 
-	if (consolidated) {
+	if (parallelProbes) {
+		for (const rel of laneArtifactPathsForParallelProbesRound()) {
+			const abs = join(runDir, rel);
+			if (!(await fileExists(abs))) {
+				errors.push(`missing ${rel}`);
+			}
+		}
+		const roundState = await getMessengerRoundState(runDir, 1);
+		const messengerCheck = messengerRoundDebateReady(
+			roundState,
+			false,
+			dialogueOpts,
+		);
+		if (!messengerCheck.ok) {
+			for (const e of messengerCheck.errors) {
+				errors.push(`parallel_probes round messenger: ${e}`);
+			}
+		}
+	} else if (consolidated) {
 		const absConsolidated = join(runDir, CONSOLIDATED_REVIEW_ARTIFACT);
 		if (!(await fileExists(absConsolidated))) {
 			errors.push(`missing ${CONSOLIDATED_REVIEW_ARTIFACT}`);

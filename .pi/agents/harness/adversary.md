@@ -30,13 +30,6 @@ Pressure-test the candidate with adversarial reasoning and reproducible attacks.
 
 ## Output
 
-```json
-{
-  "block_merge": false,
-  "adversary_report": { },
-  "human_summary": "…",
-  "recommendation": "proceed"
-}
-```
+Call **`submit_adversary_report`** before exit (writes `artifacts/adversary-report.yaml`). Do not emit prose-only JSON for the parent to copy onto disk.
 
-Use `recommendation`: `proceed`, `conditional_pass`, or `block`.
+Use `recommendation`: `proceed`, `conditional_pass`, or `block`. Set `block_merge: true` when merge must halt.

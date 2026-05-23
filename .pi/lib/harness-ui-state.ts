@@ -1,5 +1,10 @@
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { shouldEmitBlockingBudgetExhausted } from "./harness-budget-enforce.js";
+import {
+	extractCompletionStatuses,
+	getLatestRunContext,
+	nextStepAfterOutcome,
+} from "./harness-run-context.js";
 
 export type HarnessPhase =
 	| "plan"
@@ -99,6 +104,8 @@ export interface HarnessUiState {
 	};
 	traceRunId: string | null;
 	nextRecommendedCommand: string | null;
+	/** Set when active-run.json exists but this session has not run /harness-use-run yet. */
+	crossSessionResumeCommand: string | null;
 }
 
 const DEFAULT_STATE: HarnessUiState = {
@@ -126,6 +133,7 @@ const DEFAULT_STATE: HarnessUiState = {
 	},
 	traceRunId: null,
 	nextRecommendedCommand: null,
+	crossSessionResumeCommand: null,
 };
 
 const RELEVANT_CUSTOM_TYPES = new Set([
@@ -301,15 +309,59 @@ export function createStateFromEntries(entries: unknown[]): HarnessUiState {
 				: null;
 
 	const runCtx = latest.get("harness-run-context") as
-		| { next_recommended_command?: string }
+		| {
+				phase?: HarnessPhase;
+				plan_ready?: boolean;
+				plan_id?: string | null;
+				run_id?: string;
+				next_recommended_command?: string | null;
+				last_completed_step?: string | null;
+				last_outcome?: string | null;
+				status?: string;
+		  }
 		| undefined;
-	state.nextRecommendedCommand =
-		typeof runCtx?.next_recommended_command === "string"
-			? runCtx.next_recommended_command
-			: null;
+	if (runCtx?.plan_ready) {
+		state.planApproved = true;
+		if (typeof runCtx.plan_id === "string") state.planId = runCtx.plan_id;
+	}
+	if (runCtx?.phase) {
+		state.phase = runCtx.phase;
+	}
+	if (typeof runCtx?.run_id === "string") {
+		state.traceRunId = runCtx.run_id;
+	}
+	if (runCtx) {
+		const persisted = runCtx.next_recommended_command;
+		if (typeof persisted === "string" && persisted.startsWith("/")) {
+			state.nextRecommendedCommand = persisted;
+		} else {
+			const statuses = extractCompletionStatuses(entries);
+			state.nextRecommendedCommand = nextStepAfterOutcome({
+				phase: state.phase,
+				planStatus: runCtx.plan_ready ? "ready" : null,
+				lastCompletedStep: runCtx.last_completed_step,
+				lastOutcome: runCtx.last_outcome,
+				executionStatus: statuses.executionStatus,
+				evalStatus: statuses.evalStatus,
+				aborted: runCtx.status === "aborted",
+			});
+		}
+	} else {
+		state.nextRecommendedCommand = null;
+	}
 
 	state.flowSubstate = deriveFlowSubstate(state);
 	return state;
+}
+
+/** Fingerprint for widget refresh — not just session entry count. */
+export function harnessUiEntriesFingerprint(entries: unknown[]): string {
+	const latest = pickLatestCustomEntries(entries);
+	return JSON.stringify({
+		len: entries.length,
+		policy: latest.get("harness-policy-state") ?? null,
+		run: latest.get("harness-run-context") ?? null,
+	});
 }
 
 export type HarnessStatusSeverity =
@@ -357,6 +409,12 @@ export function deriveHarnessStatusHint(state: HarnessUiState): {
 	text: string;
 	severity: HarnessStatusSeverity;
 } {
+	if (state.crossSessionResumeCommand) {
+		return {
+			text: `Resume: ${truncateStatusCommand(state.crossSessionResumeCommand)}`,
+			severity: "warning",
+		};
+	}
 	if (state.budgetExhausted) {
 		return { text: "Budget limit reached", severity: "error" };
 	}
@@ -405,19 +463,39 @@ export function deriveHarnessStatusHint(state: HarnessUiState): {
 }
 
 export class HarnessUiStateStore {
-	private lastEntriesLen = -1;
+	private lastFingerprint = "";
+	private crossSessionResumeCommand: string | null = null;
 	private cachedState: HarnessUiState = {
 		...DEFAULT_STATE,
 		severity: { ...DEFAULT_STATE.severity },
 	};
 
-	/** Refresh from session entries with a lightweight length-based memoization. */
+	public setCrossSessionResumeCommand(command: string | null): void {
+		this.crossSessionResumeCommand = command;
+	}
+
+	private applyCrossSessionOverlay(state: HarnessUiState): HarnessUiState {
+		if (!this.crossSessionResumeCommand) {
+			return { ...state, crossSessionResumeCommand: null };
+		}
+		return {
+			...state,
+			crossSessionResumeCommand: this.crossSessionResumeCommand,
+		};
+	}
+
+	/** Refresh from session entries; recompute when harness policy/run context changes. */
 	public refresh(ctx: ExtensionContext): HarnessUiState {
 		const entries = ctx.sessionManager.getEntries();
-		if (entries.length !== this.lastEntriesLen) {
+		const fingerprint = harnessUiEntriesFingerprint(entries);
+		if (fingerprint !== this.lastFingerprint) {
 			this.cachedState = createStateFromEntries(entries);
-			this.lastEntriesLen = entries.length;
+			this.lastFingerprint = fingerprint;
+			if (getLatestRunContext(entries)) {
+				this.crossSessionResumeCommand = null;
+			}
 		}
+		this.cachedState = this.applyCrossSessionOverlay(this.cachedState);
 		return this.cachedState;
 	}
 

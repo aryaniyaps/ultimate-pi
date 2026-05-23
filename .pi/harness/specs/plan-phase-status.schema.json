@@ -1,0 +1,17 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/plan-phase-status.schema.json",
+	"title": "PlanPhaseStatus",
+	"description": "Orchestrator-recorded plan phase outcome before baseline approval.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["schema_version", "plan_status"],
+	"properties": {
+		"schema_version": { "type": "string", "const": "1.0.0" },
+		"plan_status": {
+			"type": "string",
+			"enum": ["ready", "partial", "needs_clarification"]
+		},
+		"notes": { "type": "string" }
+	}
+}

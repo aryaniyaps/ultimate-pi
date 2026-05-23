@@ -15,8 +15,8 @@ export function validateApprovePlanParams(
 	params: ApprovePlanParams,
 ): ValidatedApprovePlanParams | string {
 	const packet = params.plan_packet;
-	if (!packet || typeof packet !== "object") {
-		return "approve_plan: plan_packet object is required.";
+	if (!packet || typeof packet !== "object" || !packet.plan_id) {
+		return "approve_plan: plan_packet must be resolved from disk before validate (use resolveApprovePlanParamsFromDisk).";
 	}
 	const validation = validatePlanPacket(packet as PlanPacketLike);
 	if (!validation.valid) {

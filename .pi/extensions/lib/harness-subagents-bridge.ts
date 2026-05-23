@@ -118,32 +118,6 @@ export function createHarnessSubagentsExtension(
 		resolveSubprocessEnv: (task, agent) => {
 			if (!agent.name.startsWith("harness/")) return undefined;
 			const ctx = parseSpawnContextFromTask(task);
-			// #region agent log
-			fetch(
-				"http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"X-Debug-Session-Id": "2ca12b",
-					},
-					body: JSON.stringify({
-						sessionId: "2ca12b",
-						hypothesisId: "H1",
-						location: "harness-subagents-bridge.ts:resolveSubprocessEnv",
-						message: "parsed spawn context for subprocess env",
-						data: {
-							agent: agent.name,
-							hasCtx: Boolean(ctx?.run_id),
-							run_id: ctx?.run_id ?? null,
-							run_dir: ctx?.run_dir ?? null,
-							taskPrefix: task.slice(0, 160),
-						},
-						timestamp: Date.now(),
-					}),
-				},
-			).catch(() => {});
-			// #endregion
 			if (!ctx?.run_id) return undefined;
 			return {
 				HARNESS_RUN_ID: ctx.run_id,
@@ -168,11 +142,16 @@ export function createHarnessSubagentsExtension(
 					return { ok: false, message: budget.message };
 				}
 				const entries = ctx.sessionManager.getEntries();
-				const phase = inferPhaseForPrecheck(ctx.sessionManager.getEntries());
-				const pre = precheckHarnessSubagentSpawn(
+				const runCtx = getLatestRunContext(entries);
+				const phase = inferPhaseForPrecheck(entries);
+				const pre = await precheckHarnessSubagentSpawn(
 					params as Parameters<typeof precheckHarnessSubagentSpawn>[0],
 					agents,
 					phase,
+					{
+						projectRoot: ctx.cwd,
+						runId: runCtx?.run_id ?? null,
+					},
 				);
 				if (!pre.ok) {
 					return { ok: false, message: pre.message };
@@ -185,7 +164,6 @@ export function createHarnessSubagentsExtension(
 						return { ok: false, message: refreshMsg };
 					}
 				}
-				const runCtx = getLatestRunContext(entries);
 				const runId =
 					runCtx?.run_id ??
 					getRunIdFromSession(entries, lastSessionId) ??

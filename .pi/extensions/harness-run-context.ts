@@ -5,18 +5,20 @@
  * in before_agent_start so trace-recorder reuses it on agent_start.
  */
 
-import { constants } from "node:fs";
-import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 import {
 	canonicalPlanPath,
+	claimRunOwnership,
 	createFreshRunContext,
+	criticalPathWorkItemIdsFromPlanPacket,
 	driftGateActive,
-	extractCompletionStatuses,
+	evaluateCrossSessionResume,
 	extractWritePathFromToolInput,
 	formatActivePlanBlock,
+	formatCrossSessionResumeMessage,
 	formatPlanContextBlock,
 	getLatestHarnessTurn,
 	getLatestPolicyPhase,
@@ -40,13 +42,20 @@ import {
 	nowIso,
 	type PlanPacketSummary,
 	parseHarnessSlashInput,
+	parseHarnessUseRunArgs,
 	parsePlanApprovalFromMessage,
 	planPacketSummary,
+	readExecutorHandoffFromRun,
 	readPlanPacketFromPath,
+	readReviewOutcomeFromRun,
 	resolveArgsForCommand,
+	resolveCompletionStatuses,
 	saveProjectActiveRun,
 	saveRunContextToDisk,
+	sessionHasResumePromptForRun,
+	shouldAutoClaimHarnessRun,
 	shouldReuseHarnessRunId,
+	steerMaxAttemptsFromEnv,
 	userVisiblePromptSlice,
 	validatePlanOverridePath,
 	validatePlanPacket,
@@ -61,6 +70,7 @@ import {
 	evaluateHarnessSubagentToolCall,
 	isSubmitToolName,
 } from "./lib/harness-subagent-policy.js";
+import { bootstrapHarnessSubprocessFromEnv } from "./lib/harness-subprocess-bootstrap.js";
 import { isReviewRoundArtifactPath } from "./lib/plan-debate-gate.js";
 import { isReviewRoundYamlWriteAllowed } from "./lib/plan-debate-write-guard.js";
 
@@ -83,6 +93,21 @@ function persistContext(pi: ExtensionAPI, ctx: HarnessRunContext): void {
 	pi.appendEntry("harness-run-context", ctx);
 	void saveRunContextToDisk(ctx);
 	void saveProjectActiveRun(ctx);
+	pi.events.emit("harness-run-context:updated", { run_id: ctx.run_id });
+}
+
+function syncPolicyFromRunContext(
+	pi: ExtensionAPI,
+	entries: unknown[],
+	runCtx: HarnessRunContext,
+): void {
+	syncPolicyFromPlan(
+		pi,
+		entries,
+		runCtx.plan_id ?? "plan-unknown",
+		runCtx.phase,
+		runCtx.plan_ready,
+	);
 }
 
 function extractTaskSummary(args: string, prompt?: string): string | null {
@@ -164,6 +189,10 @@ function syncPolicyFromPlan(
 	});
 }
 
+function hydrateFromSession(entries: unknown[]): HarnessRunContext | null {
+	return getLatestRunContext(entries);
+}
+
 async function hydrateFromDisk(
 	sessionId: string,
 	projectRoot: string,
@@ -201,15 +230,57 @@ function needsClarificationFollowUp(ctx: HarnessRunContext | null): boolean {
 	return ctx?.status === "active" && ctx.last_outcome === "needs_clarification";
 }
 
+async function offerCrossSessionResume(
+	pi: ExtensionAPI,
+	ctx: {
+		hasUI: boolean;
+		sessionManager: { getEntries(): unknown[] };
+		ui: {
+			notify(
+				message: string,
+				type?: "info" | "warning" | "error",
+			): void;
+		};
+	},
+): Promise<void> {
+	const projectRoot = process.cwd();
+	const entries = getEntries(ctx);
+	const info = await evaluateCrossSessionResume(projectRoot, entries);
+	if (!info || sessionHasResumePromptForRun(entries, info.runId)) return;
+
+	const content = formatCrossSessionResumeMessage(info);
+	pi.appendEntry("harness-session-resume-prompt", {
+		run_id: info.runId,
+		resume_command: info.resumeCommand,
+		shown_at: nowIso(),
+	});
+	pi.sendMessage({
+		customType: "harness-session-resume-prompt",
+		content,
+		display: true,
+	});
+	if (ctx.hasUI) {
+		ctx.ui.notify(
+			`Harness run on disk. Resume with ${info.resumeCommand}`,
+			"info",
+		);
+	}
+	pi.events.emit("harness-cross-session-resume", {
+		run_id: info.runId,
+		resume_command: info.resumeCommand,
+	});
+}
+
 export default function harnessRunContext(pi: ExtensionAPI) {
 	if (!claimExtensionLoad("harness-run-context", MODULE_URL)) return;
 	let activeCtx: HarnessRunContext | null = null;
 
 	pi.on("session_start", async (_event, ctx) => {
-		const sessionId = ctx.sessionManager.getSessionId();
-		const projectRoot = process.cwd();
 		const entries = getEntries(ctx);
-		activeCtx = await hydrateFromDisk(sessionId, projectRoot, entries);
+		activeCtx = hydrateFromSession(entries);
+		const booted = await bootstrapHarnessSubprocessFromEnv(pi, ctx);
+		if (booted) activeCtx = booted;
+		if (!booted) await offerCrossSessionResume(pi, ctx);
 	});
 
 	pi.on("input", async (event) => {
@@ -338,36 +409,57 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		}
 
 		if (command === "harness-use-run") {
-			const runId = args.trim().split(/\s+/)[0];
-			if (!runId) {
+			const parsed = parseHarnessUseRunArgs(args);
+			if (!parsed.runId) {
 				return {
 					message: {
 						customType: "harness-run-context-block",
 						display: true,
-						content: "Usage: /harness-use-run <run-id>",
+						content: "Usage: /harness-use-run <run-id> [--claim] [--readonly]",
 					},
 				};
 			}
-			const disk = await loadRunContextFromDisk(runId, projectRoot);
+			const disk = await loadRunContextFromDisk(parsed.runId, projectRoot);
 			if (!disk) {
 				return {
 					message: {
 						customType: "harness-run-context-block",
 						display: true,
-						content: `No run directory for ${runId}. Check .pi/harness/runs/.`,
+						content: `No run directory for ${parsed.runId}. Check .pi/harness/runs/.`,
 					},
 				};
 			}
 			activeCtx = {
 				...disk,
 				pi_session_id: sessionId,
-				turn_override_run_id: runId,
+				turn_override_run_id: parsed.runId,
 			};
-			if (activeCtx.owner_pi_session_id !== sessionId) {
-				activeCtx.next_recommended_command =
-					"Read-only: owner session holds this run. Use /harness-new-run to take over.";
+			if (parsed.claim) {
+				activeCtx = claimRunOwnership(activeCtx, sessionId);
 			}
+			const statuses = await resolveCompletionStatuses(
+				getEntries(ctx),
+				activeCtx.run_id,
+				projectRoot,
+			);
+			if (activeCtx.owner_pi_session_id !== sessionId && !parsed.claim) {
+				activeCtx.next_recommended_command =
+					"Read-only: use /harness-use-run <run-id> --claim to take ownership, or /harness-new-run.";
+			} else {
+				activeCtx.next_recommended_command = nextStepAfterOutcome({
+					phase: activeCtx.phase,
+					planStatus: activeCtx.plan_ready ? "ready" : null,
+					lastCompletedStep: activeCtx.last_completed_step,
+					lastOutcome: activeCtx.last_outcome,
+					executionStatus: statuses.executionStatus,
+					evalStatus: statuses.evalStatus,
+					adversaryComplete: statuses.adversaryComplete,
+					aborted: activeCtx.status === "aborted",
+				});
+			}
+			activeCtx.updated_at = nowIso();
 			persistContext(pi, activeCtx);
+			syncPolicyFromRunContext(pi, getEntries(ctx), activeCtx);
 			return {
 				systemPrompt: `${event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx)}`,
 			};
@@ -445,6 +537,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 					const crossSessionCmd = new Set([
 						"harness-eval",
 						"harness-review",
+						"harness-steer",
 						"harness-critic",
 						"harness-trace",
 						"harness-incident",
@@ -484,6 +577,13 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		activeCtx.updated_at = new Date().toISOString();
 		activeCtx.pi_session_id = sessionId;
 
+		if (
+			shouldAutoClaimHarnessRun(command, args) &&
+			activeCtx.owner_pi_session_id !== sessionId
+		) {
+			activeCtx = claimRunOwnership(activeCtx, sessionId);
+		}
+
 		if (resolved.planPath && resolved.runId) {
 			const check = validatePlanOverridePath(
 				resolved.planPath,
@@ -518,22 +618,43 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			activeCtx.last_completed_step === "execute" &&
 			activeCtx.last_outcome === "completed"
 		) {
-			const warn =
-				"Plan already executed in this run. Prefer a new Pi session → /harness-eval, or /harness-abort to replan.";
-			if (ctx.hasUI) ctx.ui.notify(warn, "warning");
+			return {
+				message: {
+					customType: "harness-run-context-block",
+					display: true,
+					content:
+						"Execute already completed for this run. Next: /harness-review (same session), or /harness-abort to replan.",
+				},
+			};
 		}
 
 		let planSummary: PlanPacketSummary | null = null;
+		let planPacketForSpawn: Awaited<ReturnType<typeof readPlanPacketFromPath>> =
+			null;
 		if (activeCtx.plan_packet_path) {
-			const packet = await readPlanPacketFromPath(activeCtx.plan_packet_path);
-			if (packet) {
+			planPacketForSpawn = await readPlanPacketFromPath(
+				activeCtx.plan_packet_path,
+			);
+			if (planPacketForSpawn) {
 				planSummary = planPacketSummary(
-					packet,
+					planPacketForSpawn,
 					activeCtx.plan_packet_path,
 					activeCtx.plan_ready ? "ready" : "draft",
 				);
-				activeCtx.plan_id = packet.plan_id ?? activeCtx.plan_id;
+				activeCtx.plan_id = planPacketForSpawn.plan_id ?? activeCtx.plan_id;
 			}
+		}
+
+		let contextSpawnOpts:
+			| Parameters<typeof formatPlanContextBlock>[1]
+			| undefined;
+		if (command === "harness-run" && planPacketForSpawn) {
+			const criticalIds =
+				criticalPathWorkItemIdsFromPlanPacket(planPacketForSpawn);
+			contextSpawnOpts = {
+				mode: "execute",
+				critical_path_work_item_ids: criticalIds,
+			};
 		}
 
 		let activePlanBlock = "";
@@ -549,6 +670,16 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				"execute",
 				planSummary,
 			);
+		} else if (command === "harness-steer") {
+			activePlanBlock = formatActivePlanBlock(
+				activeCtx,
+				"execute",
+				planSummary,
+			);
+			contextSpawnOpts = {
+				mode: "repair",
+				repair_brief_path: "artifacts/repair-brief.yaml",
+			};
 		} else if (
 			command === "harness-eval" ||
 			command === "harness-review" ||
@@ -560,11 +691,12 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		persistContext(pi, activeCtx);
 
 		return {
-			systemPrompt: `${event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx)}${activePlanBlock ? `\n\n${activePlanBlock}` : ""}`,
+			systemPrompt: `${event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx, contextSpawnOpts)}${activePlanBlock ? `\n\n${activePlanBlock}` : ""}`,
 		};
 	});
 
 	pi.on("agent_end", async (_event, ctx) => {
+		const projectRoot = process.cwd();
 		const entries = getEntries(ctx);
 		if (!activeCtx) {
 			activeCtx = getLatestRunContext(entries);
@@ -590,9 +722,6 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			? { command: lastTurn.command, args: lastTurn.args }
 			: parseHarnessSlashInput(userVisiblePromptSlice(lastPrompt));
 		if (!parsed && !needsClarificationFollowUp(activeCtx)) return;
-
-		const policyPhase = getLatestPolicyPhase(entries) ?? activeCtx.phase;
-		activeCtx.phase = policyPhase;
 
 		if (parsed?.command === "harness-abort") {
 			activeCtx.status = "aborted";
@@ -654,26 +783,81 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 
 		activeCtx.plan_ready = planReady;
 
-		const statuses = extractCompletionStatuses(entries);
+		const statuses = await resolveCompletionStatuses(
+			entries,
+			activeCtx.run_id,
+			projectRoot,
+		);
 		if (parsed?.command === "harness-run") {
 			activeCtx.last_completed_step = "execute";
-			activeCtx.last_outcome =
-				statuses.executionStatus ?? activeCtx.last_outcome ?? "completed";
+			let execStatus = statuses.executionStatus;
+			if (!execStatus) {
+				const handoff = await readExecutorHandoffFromRun(
+					activeCtx.run_id,
+					projectRoot,
+				);
+				execStatus = handoff?.execution_status ?? null;
+			}
+			activeCtx.last_outcome = execStatus ?? "completed";
+			activeCtx.phase = "evaluate";
 		}
-		if (parsed?.command === "harness-eval") {
-			activeCtx.last_completed_step = "evaluate";
-			activeCtx.last_outcome = statuses.evalStatus ?? activeCtx.last_outcome;
+		if (parsed?.command === "harness-steer") {
+			activeCtx.last_completed_step = "steer";
+			activeCtx.steer_attempt = (activeCtx.steer_attempt ?? 0) + 1;
+			activeCtx.steer_max_attempts =
+				activeCtx.steer_max_attempts ?? steerMaxAttemptsFromEnv();
+			activeCtx.phase = "execute";
+			syncPolicyFromRunContext(pi, getEntries(ctx), activeCtx);
+		}
+		if (
+			parsed?.command === "harness-eval" ||
+			parsed?.command === "harness-review" ||
+			parsed?.command === "harness-critic"
+		) {
+			activeCtx.last_completed_step =
+				parsed.command === "harness-critic" ? "adversary" : "review";
+			if (statuses.evalStatus) {
+				activeCtx.last_outcome = statuses.evalStatus;
+			}
+			if (statuses.adversaryComplete) {
+				activeCtx.phase = "adversary";
+				activeCtx.last_completed_step = "adversary";
+			} else if (statuses.evalStatus) {
+				activeCtx.phase = "evaluate";
+			}
 		}
 
+		const reviewOutcome = await readReviewOutcomeFromRun(
+			activeCtx.run_id,
+			projectRoot,
+		);
+		const reviewComplete =
+			activeCtx.last_completed_step === "review" ||
+			activeCtx.last_completed_step === "adversary";
 		const next = nextStepAfterOutcome({
 			phase: activeCtx.phase,
-			planStatus: statuses.planStatus ?? activeCtx.last_outcome,
+			planStatus: statuses.planStatus,
+			lastCompletedStep: activeCtx.last_completed_step,
+			lastOutcome: activeCtx.last_outcome,
 			executionStatus: statuses.executionStatus,
 			evalStatus: statuses.evalStatus,
+			adversaryComplete: statuses.adversaryComplete,
 			aborted: activeCtx.status === "aborted",
+			remediationClass: reviewOutcome?.remediation_class ?? null,
+			steerAttempt: activeCtx.steer_attempt ?? 0,
+			steerMaxAttempts:
+				activeCtx.steer_max_attempts ?? steerMaxAttemptsFromEnv(),
+			reviewComplete,
 		});
 		activeCtx.next_recommended_command = next;
 		activeCtx.updated_at = new Date().toISOString();
+
+		if (
+			parsed?.command === "harness-run" &&
+			activeCtx.last_outcome === "completed"
+		) {
+			syncPolicyFromRunContext(pi, getEntries(ctx), activeCtx);
+		}
 
 		persistContext(pi, activeCtx);
 
@@ -719,26 +903,6 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	});
 
 	pi.on("tool_call", async (event, ctx) => {
-		// #region agent log
-		fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				"X-Debug-Session-Id": "2ca12b",
-			},
-			body: JSON.stringify({
-				sessionId: "2ca12b",
-				location: "harness-run-context.ts:tool_call",
-				message: "submit policy hook",
-				data: {
-					toolName: event.toolName,
-					typeofIsSubmitToolName: typeof isSubmitToolName,
-				},
-				timestamp: Date.now(),
-				hypothesisId: "H1",
-			}),
-		}).catch(() => {});
-		// #endregion
 		if (isSubmitToolName(event.toolName)) {
 			const decision = evaluateHarnessSubagentToolCall(
 				event.toolName,
@@ -997,6 +1161,19 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			}
 			const pathArg = String((params as { path?: string }).path ?? "").trim();
 			const content = String((params as { content?: string }).content ?? "");
+			const HARNESS_YAML_INLINE_MAX = 32 * 1024;
+			if (content.length > HARNESS_YAML_INLINE_MAX) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Content exceeds ${HARNESS_YAML_INLINE_MAX} bytes. Subagent must submit_* to disk, then use merge_harness_yaml with source_path or a small patch.`,
+						},
+					],
+					details: { path: pathArg, bytes: content.length },
+					isError: true,
+				};
+			}
 			if (!pathArg || !content.trim()) {
 				return {
 					content: [
@@ -1025,6 +1202,22 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				};
 			}
 			const relForGate = pathArg.replace(/\\/g, "/");
+			const subagentOnly = new Set([
+				"artifacts/eval-verdict.yaml",
+				"artifacts/adversary-report.yaml",
+			]);
+			if (subagentOnly.has(relForGate)) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Path not allowed: ${pathArg}. Post-run verdicts must be written via submit_* in harness/evaluator or harness/adversary subagents; parent gates with harness_artifact_ready only.`,
+						},
+					],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
 			if (/\.json$/i.test(relForGate) && relForGate.startsWith("artifacts/")) {
 				return {
 					content: [
@@ -1078,10 +1271,241 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	});
 
 	pi.registerTool({
+		name: "merge_harness_yaml",
+		label: "Merge Harness YAML",
+		description:
+			"Shallow-merge a patch or another run artifact into an existing harness YAML file (path-first).",
+		promptSnippet:
+			"Merge artifact paths without pasting large bodies into tool args.",
+		promptGuidelines: [
+			"Prefer source_path pointing at artifacts/*.yaml from subagent submit_*.",
+			"Use patch for small top-level keys only.",
+		],
+		parameters: Type.Object({
+			path: Type.String({
+				description:
+					"Target path under the active run, e.g. research-brief.yaml",
+			}),
+			patch: Type.Optional(
+				Type.String({
+					description: "Small YAML/JSON object merged into the target",
+				}),
+			),
+			source_path: Type.Optional(
+				Type.String({
+					description:
+						"Relative path under the run to merge into target (e.g. artifacts/implementation-research.yaml)",
+				}),
+			),
+		}),
+		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
+			const entries = getEntries(ctx);
+			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			if (!runCtx?.run_id) {
+				return {
+					content: [{ type: "text", text: "No active harness run." }],
+					details: {},
+					isError: true,
+				};
+			}
+			const pathArg = String((params as { path?: string }).path ?? "").trim();
+			const patchRaw = String((params as { patch?: string }).patch ?? "");
+			const sourcePath = String(
+				(params as { source_path?: string }).source_path ?? "",
+			).trim();
+			if (!pathArg || (!patchRaw.trim() && !sourcePath)) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: "merge_harness_yaml requires path and patch or source_path.",
+						},
+					],
+					details: {},
+					isError: true,
+				};
+			}
+			const projectRoot = process.cwd();
+			const absPath = normalizeHarnessPath(pathArg, projectRoot);
+			const scoped = await isPlanPhaseScopedWrite(absPath, runCtx, projectRoot);
+			if (!scoped) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Path not allowed: ${pathArg}.`,
+						},
+					],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
+			const runRoot = join(
+				projectRoot,
+				".pi",
+				"harness",
+				"runs",
+				runCtx.run_id,
+			);
+			let existing: Record<string, unknown> = {};
+			try {
+				const { readYamlFile } = await import("../lib/harness-yaml.js");
+				const cur = await readYamlFile(absPath, pathArg);
+				if (cur && typeof cur === "object" && !Array.isArray(cur)) {
+					existing = cur as Record<string, unknown>;
+				}
+			} catch {
+				existing = {};
+			}
+			let patchDoc: Record<string, unknown>;
+			if (sourcePath) {
+				const srcRel = sourcePath.replace(/\\/g, "/").replace(/^\.\//, "");
+				const srcAbs = srcRel.startsWith(".pi/")
+					? normalizeHarnessPath(srcRel, projectRoot)
+					: join(runRoot, srcRel);
+				try {
+					patchDoc = parseStructuredDocument(
+						await readFile(srcAbs, "utf-8"),
+						sourcePath,
+					) as Record<string, unknown>;
+				} catch (err) {
+					const msg = err instanceof Error ? err.message : String(err);
+					return {
+						content: [{ type: "text", text: msg }],
+						details: { source_path: sourcePath },
+						isError: true,
+					};
+				}
+			} else {
+				try {
+					patchDoc = parseStructuredDocument(patchRaw, pathArg) as Record<
+						string,
+						unknown
+					>;
+				} catch (err) {
+					const msg = err instanceof Error ? err.message : String(err);
+					return {
+						content: [{ type: "text", text: msg }],
+						details: { path: pathArg },
+						isError: true,
+					};
+				}
+			}
+			const merged = { ...existing, ...patchDoc };
+			await mkdir(dirname(absPath), { recursive: true });
+			await writeYamlFile(absPath, merged);
+			return {
+				content: [
+					{
+						type: "text",
+						text: `Merged into ${pathArg} as canonical YAML.`,
+					},
+				],
+				details: { path: absPath },
+			};
+		},
+	});
+
+	pi.registerTool({
+		name: "harness_synthesize_repair_brief",
+		label: "Synthesize Repair Brief",
+		description:
+			"Build artifacts/repair-brief.yaml from review-outcome, eval-verdict, and adversary paths (no large inline bodies).",
+		promptSnippet:
+			"After /harness-review when remediation_class is implementation_gap.",
+		promptGuidelines: [
+			"Pass artifact paths only; tool reads YAML from disk.",
+			"Default output: artifacts/repair-brief.yaml with steer_attempt from run context + 1.",
+		],
+		parameters: Type.Object({
+			review_outcome_path: Type.Optional(Type.String()),
+			eval_verdict_path: Type.Optional(Type.String()),
+			adversary_report_path: Type.Optional(Type.String()),
+			plan_packet_path: Type.Optional(Type.String()),
+			output_path: Type.Optional(
+				Type.String({
+					description: "Default artifacts/repair-brief.yaml",
+				}),
+			),
+		}),
+		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
+			const entries = getEntries(ctx);
+			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			if (!runCtx?.run_id) {
+				return {
+					content: [{ type: "text", text: "No active harness run." }],
+					details: {},
+					isError: true,
+				};
+			}
+			const projectRoot = process.cwd();
+			const steerAttempt = (runCtx.steer_attempt ?? 0) + 1;
+			const { synthesizeRepairBrief } = await import(
+				"../lib/harness-repair-brief.js"
+			);
+			const brief = await synthesizeRepairBrief({
+				runId: runCtx.run_id,
+				projectRoot,
+				steerAttempt,
+				reviewOutcomePath: (params as { review_outcome_path?: string })
+					.review_outcome_path,
+				evalVerdictPath: (params as { eval_verdict_path?: string })
+					.eval_verdict_path,
+				adversaryReportPath: (params as { adversary_report_path?: string })
+					.adversary_report_path,
+				planPacketPath:
+					(params as { plan_packet_path?: string }).plan_packet_path ??
+					runCtx.plan_packet_path ??
+					"plan-packet.yaml",
+			});
+			const outputPath =
+				String((params as { output_path?: string }).output_path ?? "").trim() ||
+				"artifacts/repair-brief.yaml";
+			const absOut = normalizeHarnessPath(
+				outputPath.startsWith(runCtx.run_id)
+					? outputPath
+					: join(
+							projectRoot,
+							".pi",
+							"harness",
+							"runs",
+							runCtx.run_id,
+							outputPath,
+						),
+				projectRoot,
+			);
+			const scoped = await isPlanPhaseScopedWrite(absOut, runCtx, projectRoot);
+			if (!scoped) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: `Output path not allowed: ${outputPath}`,
+						},
+					],
+					details: {},
+					isError: true,
+				};
+			}
+			await mkdir(dirname(absOut), { recursive: true });
+			await writeYamlFile(absOut, brief);
+			return {
+				content: [
+					{
+						type: "text",
+						text: `Wrote ${outputPath} (steer_attempt=${steerAttempt}).`,
+					},
+				],
+				details: { path: absOut, steer_attempt: steerAttempt },
+			};
+		},
+	});
+
+	pi.registerTool({
 		name: "harness_artifact_ready",
 		label: "Harness Artifact Ready",
 		description:
-			"Check that harness artifact paths exist under the active run (no JSON parsing).",
+			"Check harness artifact paths exist and pass minimal schema/content gates under the active run.",
 		parameters: Type.Object({
 			paths: Type.Array(Type.String(), {
 				minItems: 1,
@@ -1108,59 +1532,92 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				"runs",
 				runCtx.run_id,
 			);
-			const missing: string[] = [];
-			const present: string[] = [];
-			for (const rel of paths) {
-				const normalized = rel.replace(/\\/g, "/");
-				const abs = join(runRoot, normalized);
-				try {
-					await access(abs, constants.R_OK);
-					present.push(normalized);
-				} catch {
-					missing.push(normalized);
-				}
-			}
-			const ok = missing.length === 0;
+			const specsDir = join(projectRoot, ".pi", "harness", "specs");
+			const { validateHarnessArtifactPaths } = await import(
+				"./lib/harness-artifact-gate.js"
+			);
+			const gate = await validateHarnessArtifactPaths(runRoot, paths, specsDir);
+			const text = gate.ok
+				? `All ${gate.present.length} artifact(s) present and valid.`
+				: [
+						gate.missing.length > 0
+							? `Missing: ${gate.missing.join(", ")}`
+							: null,
+						gate.errors.length > 0 ? gate.errors.join("\n") : null,
+					]
+						.filter(Boolean)
+						.join("\n");
 			return {
-				content: [
-					{
-						type: "text",
-						text: ok
-							? `All ${present.length} artifact(s) present.`
-							: `Missing: ${missing.join(", ")}`,
-					},
-				],
-				details: { ok, present, missing, run_id: runCtx.run_id },
-				isError: !ok,
+				content: [{ type: "text", text }],
+				details: {
+					ok: gate.ok,
+					present: gate.present,
+					missing: gate.missing,
+					errors: gate.errors,
+					run_id: runCtx.run_id,
+				},
+				isError: !gate.ok,
 			};
 		},
 	});
 
 	pi.registerCommand("harness-use-run", {
-		description: "Point this session at an existing run directory (recovery)",
+		description:
+			"Point this session at an existing run directory (recovery; --claim for write ownership)",
 		handler: async (args, ctx) => {
-			const runId = args.trim().split(/\s+/)[0];
-			if (!runId) {
+			const parsed = parseHarnessUseRunArgs(args);
+			if (!parsed.runId) {
 				if (ctx.hasUI)
-					ctx.ui.notify("Usage: /harness-use-run <run-id>", "warning");
+					ctx.ui.notify(
+						"Usage: /harness-use-run <run-id> [--claim] [--readonly]",
+						"warning",
+					);
 				return;
 			}
 			const projectRoot = process.cwd();
-			const disk = await loadRunContextFromDisk(runId, projectRoot);
+			const sessionId = ctx.sessionManager.getSessionId();
+			const disk = await loadRunContextFromDisk(parsed.runId, projectRoot);
 			if (!disk) {
-				if (ctx.hasUI) ctx.ui.notify(`Run not found: ${runId}`, "error");
+				if (ctx.hasUI) ctx.ui.notify(`Run not found: ${parsed.runId}`, "error");
 				return;
 			}
 			activeCtx = {
 				...disk,
-				pi_session_id: ctx.sessionManager.getSessionId(),
+				pi_session_id: sessionId,
 			};
+			if (parsed.claim) {
+				activeCtx = claimRunOwnership(activeCtx, sessionId);
+			}
+			const statuses = await resolveCompletionStatuses(
+				getEntries(ctx),
+				activeCtx.run_id,
+				projectRoot,
+			);
+			if (activeCtx.owner_pi_session_id !== sessionId && !parsed.claim) {
+				activeCtx.next_recommended_command =
+					"Read-only: use /harness-use-run <run-id> --claim to take ownership.";
+			} else {
+				activeCtx.next_recommended_command = nextStepAfterOutcome({
+					phase: activeCtx.phase,
+					planStatus: activeCtx.plan_ready ? "ready" : null,
+					lastCompletedStep: activeCtx.last_completed_step,
+					lastOutcome: activeCtx.last_outcome,
+					executionStatus: statuses.executionStatus,
+					evalStatus: statuses.evalStatus,
+					adversaryComplete: statuses.adversaryComplete,
+					aborted: activeCtx.status === "aborted",
+				});
+			}
+			activeCtx.updated_at = nowIso();
 			persistContext(pi, activeCtx);
-			if (ctx.hasUI)
+			syncPolicyFromRunContext(pi, getEntries(ctx), activeCtx);
+			if (ctx.hasUI) {
+				const mode = parsed.claim ? "claimed" : "bound (read-only)";
 				ctx.ui.notify(
-					`Session bound to run ${runId}. See /harness-run-status.`,
+					`Session ${mode} to run ${parsed.runId}. See /harness-run-status.`,
 					"info",
 				);
+			}
 		},
 	});
 }

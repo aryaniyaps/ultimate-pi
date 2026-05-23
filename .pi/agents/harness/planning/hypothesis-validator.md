@@ -7,6 +7,8 @@ thinking: medium
 max_turns: 10
 ---
 
+**Inspection role:** Blind verifier (independent verification; debate R1 only). See `.pi/harness/docs/practice-map.md`.
+
 ## Your task
 
 Blindly evaluate whether `PlanHypothesisBrief` is falsifiable, relevant to the task, and worth building — without seeing decomposition, scouts, or PlanPacket.

@@ -5,7 +5,32 @@ description: Plan-phase Review Gate debate — pi-messenger threads, lane YAML, 
 
 # harness-debate-plan
 
-Use when running **Phase 5** of `/harness-plan` — outcome-based Review Gate with **within-round dialogue** (claims → rebuttals → clarifications → counters → integrate), then bus submission.
+**Practice map:** `.pi/harness/docs/practice-map.md` (Review Gate RACI).
+
+Use when running **Phase 5** of `/harness-plan` — **Fagan-style structured inspection** per focus (`spec` | `wbs` | `schedule` | `quality`). Parent is **chair**; within-round dialogue (claims → rebuttals → clarifications → counters → integrate).
+
+## Inspection roles
+
+| Agent | Role |
+|-------|------|
+| `hypothesis-validator` | Blind verifier (R1 only) |
+| `plan-evaluator` | Inspector (checklist) |
+| `plan-adversary` | Red team |
+| `sprint-contract-auditor` | DoD auditor (`quality` or round ≥4) |
+| `review-integrator` | Recorder / integration PM |
+
+Do **not** add agents for `fast` profile — reduce focuses/rounds only.
+
+## Debate profiles (team size)
+
+| Profile | Mode | Focuses | When |
+|---------|------|---------|------|
+| `full` | threaded | all four | High risk, fork, open questions |
+| `standard` | threaded | all four | Default med risk |
+| `light` | threaded | spec, quality | Low risk, high-confidence research |
+| `fast` | **consolidated** | spec, quality (one round) | Clear stack, no open questions; escalate to threaded on blockers |
+
+Eligibility: `harness_plan_debate_eligibility` then `harness_debate_open({ debate_profile, required_focuses })`.
 
 ## Open
 
@@ -16,30 +41,22 @@ harness_debate_open({})
 - Debate id is always `plan-<run_id>` (tool normalizes wrong ids).
 - Creates `.pi/harness/runs/<run_id>/debate-messenger/`.
 
-Budget profile **plan**:
+Budget caps vary by profile (see `plan-debate-eligibility.ts`); standard plan profile uses `min_focus_rounds=4`, `debate_global_cap=80000`.
 
-| Field | Value |
-|-------|-------|
-| min_focus_rounds | 4 |
-| max_rounds | 12 |
-| max_exchanges_per_round | 3 |
-| round_token_cap | 8000 |
-| debate_global_cap | 80000 |
+## Focus coverage
 
-## Focus coverage (not “exactly 4 rounds”)
-
-Call `harness_debate_focus_coverage` until all of `spec | wbs | schedule | quality` appear in submitted `review-round-r*.yaml` and last `review_gate_ready: true`.
+Call `harness_debate_focus_coverage` until all **required** focuses (from eligibility) appear in submitted review rounds and last `review_gate_ready: true`.
 
 ## Per-round spawn order (sequential only — no parallel debate subagents)
 
-1. R1: `hypothesis-validator` (blind) before evaluator.
-2. `plan-evaluator` → lane + messenger `claim`.
-3. `harness_messenger_read_round` → `plan-adversary` → `rebuttal`.
-4. Ping-pong while `unresolved_claim_ids` and `exchange_count < 3`:
-   - `harness_debate_advance_thread({ round_index })` for next spawn hint.
-   - Evaluator `clarification` / adversary `counter`.
-5. `sprint-contract-auditor` when focus is `quality` or round ≥ 4.
-6. `review-integrator` → `harness_debate_submit_round`.
+1. R1: `hypothesis-validator` (blind verifier) before inspector.
+2. `plan-evaluator` (inspector) → lane + messenger `claim`.
+3. `harness_messenger_read_round` → `plan-adversary` (red team) → `rebuttal`.
+4. Ping-pong while `unresolved_claim_ids` and `exchange_count < max` for profile.
+5. `sprint-contract-auditor` (DoD) when focus is `quality` or round ≥ 4.
+6. `review-integrator` (recorder) → `harness_debate_submit_round`.
+
+**One subagent per `subagent` call** — never batch debate lanes.
 
 Lane YAML + messenger messages **auto-apply** on subagent complete (`harness-debate-next-step`). Fallback: `harness_debate_apply_lane`.
 

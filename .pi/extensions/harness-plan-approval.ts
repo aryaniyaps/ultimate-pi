@@ -2,12 +2,8 @@
  * harness-plan-approval — PlanPacket approval UI and transcript renderer for parent sessions.
  */
 
-import { constants } from "node:fs";
-import { access } from "node:fs/promises";
-import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
-import { Type } from "@sinclair/typebox";
 import type { PlanPacketLike } from "../lib/harness-run-context.js";
 import {
 	appendPlanApprovalIfNew,
@@ -33,8 +29,10 @@ import {
 	renderApprovePlanResult,
 	renderHarnessPlanDraft,
 } from "./lib/plan-approval/render.js";
+import { resolveApprovePlanParamsFromDisk } from "./lib/plan-approval/resolve-disk.js";
 import {
 	ApprovePlanParamsSchema,
+	CreatePlanParamsSchema,
 	PROMPT_GUIDELINES,
 	PROMPT_SNIPPET,
 } from "./lib/plan-approval/schema.js";
@@ -47,20 +45,11 @@ import {
 	toApprovePlanToolDetails,
 	validateApprovePlanParams,
 } from "./lib/plan-approval/validate.js";
+import { validatePlanApprovalReadiness } from "./lib/plan-approval-readiness.js";
 import { validatePlanDebateGate } from "./lib/plan-debate-gate.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
-
-const CreatePlanParamsSchema = Type.Object({
-	plan_packet: Type.Object(
-		{},
-		{
-			description:
-				"Approved PlanPacket to persist (same object as approve_plan).",
-		},
-	),
-});
 
 export default function harnessPlanApproval(pi: ExtensionAPI) {
 	if (!claimExtensionLoad("harness-plan-approval", MODULE_URL)) return;
@@ -103,12 +92,37 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 		parameters: ApprovePlanParamsSchema,
 
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
-			const validated = validateApprovePlanParams(params as ApprovePlanParams);
+			const entries = ctx.sessionManager.getEntries();
+			const projectRoot = process.cwd();
+			const resolved = await resolveApprovePlanParamsFromDisk(
+				params as ApprovePlanParams,
+				entries,
+				projectRoot,
+			);
+			if (!resolved.ok) {
+				return {
+					content: [{ type: "text", text: resolved.error }],
+					details: {
+						plan_packet: (params as ApprovePlanParams).plan_packet ?? {},
+						options: [],
+						response: null,
+						cancelled: true,
+					},
+					isError: true,
+				};
+			}
+			const validated = validateApprovePlanParams({
+				...(params as ApprovePlanParams),
+				plan_packet: resolved.plan_packet,
+				research_brief:
+					resolved.research_brief ??
+					(params as ApprovePlanParams).research_brief,
+			});
 			if (typeof validated === "string") {
 				return {
 					content: [{ type: "text", text: validated }],
 					details: {
-						plan_packet: (params as ApprovePlanParams).plan_packet ?? {},
+						plan_packet: resolved.plan_packet,
 						options: [],
 						response: null,
 						cancelled: true,
@@ -116,7 +130,6 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				};
 			}
 
-			const entries = ctx.sessionManager.getEntries();
 			if (
 				hasPlanUserApproval(entries, {
 					sincePlanCommand: true,
@@ -148,43 +161,33 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				validated.human_summary?.trim() ||
 				`Plan ${planId} — pending your approval`;
 			const runCtx = getLatestRunContext(entries);
-			const projectRoot = process.cwd();
 			const implWarnings: string[] = [];
+			const risk = String(
+				validated.plan_packet.risk_level ?? "med",
+			).toLowerCase();
 			if (runCtx?.run_id) {
-				const implPath = join(
+				const readiness = await validatePlanApprovalReadiness(
 					projectRoot,
-					".pi",
-					"harness",
-					"runs",
 					runCtx.run_id,
-					"artifacts",
-					"implementation-research.yaml",
+					{ risk_level: risk },
 				);
-				let implExists = false;
-				try {
-					await access(implPath, constants.R_OK);
-					implExists = true;
-				} catch {
-					implExists = false;
-				}
-				const risk = String(
-					validated.plan_packet.risk_level ?? "med",
-				).toLowerCase();
-				if (!implExists) {
-					const msg =
-						"approve_plan: missing artifacts/implementation-research.yaml (Phase 3.5 required)";
-					if (risk === "high") {
-						return {
-							content: [{ type: "text", text: msg }],
-							details: {
-								plan_packet: validated.plan_packet,
-								cancelled: true,
+				if (!readiness.ok) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: `approve_plan blocked — plan phase not ready:\n- ${readiness.errors.join("\n- ")}`,
 							},
-							isError: true,
-						};
-					}
-					implWarnings.push(msg);
+						],
+						details: {
+							plan_packet: validated.plan_packet,
+							readiness,
+							cancelled: true,
+						},
+						isError: true,
+					};
 				}
+				implWarnings.push(...readiness.warnings);
 			}
 			if (runCtx?.run_id) {
 				const gate = await validatePlanDebateGate(projectRoot, runCtx.run_id);
@@ -308,19 +311,22 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 		parameters: CreatePlanParamsSchema,
 
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
-			const validated = validateApprovePlanParams(params as ApprovePlanParams);
-			if (typeof validated === "string") {
-				return {
-					content: [{ type: "text", text: validated }],
-					details: { error: validated },
-					isError: true,
-				};
-			}
-
 			const entries = ctx.sessionManager.getEntries();
 			const runCtx = getLatestRunContext(entries);
 			const projectRoot = process.cwd();
-			const result = await executeCreatePlan(validated.plan_packet, {
+			const resolved = await resolveApprovePlanParamsFromDisk(
+				params as ApprovePlanParams,
+				entries,
+				projectRoot,
+			);
+			if (!resolved.ok) {
+				return {
+					content: [{ type: "text", text: resolved.error }],
+					details: { error: resolved.error },
+					isError: true,
+				};
+			}
+			const result = await executeCreatePlan(resolved.plan_packet, {
 				projectRoot,
 				getParentEntries: () => entries,
 				getSubagentEntries: () => entries,

@@ -94,6 +94,10 @@
 		},
 		"execution_plan": {
 			"$ref": "plan-execution-plan.schema.json"
+		},
+		"executor_strategy": {
+			"type": "string",
+			"enum": ["single_pass", "per_lake", "per_work_item"]
 		}
 	}
 }

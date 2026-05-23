@@ -13,7 +13,7 @@ This directory is the canonical contract surface for Phase 1 harness artifacts.
 
 These schemas define the minimum machine-readable contracts for:
 
-- planning (`PlanPacket`, `PlanDecompositionBrief`, `PlanHypothesisBrief`, `PlanHypothesisEval`, `PlanAdversaryBrief`)
+- planning (`PlanPacket`, `PlanPlanningContext`, `PlanDecompositionBrief`, `PlanHypothesisBrief`, `PlanHypothesisEval`, `PlanAdversaryBrief`, legacy `PlanScoutFindings`)
 - execution telemetry (`RunTrace`, `HarnessRunRecord`)
 - PostHog harness events (`HarnessPostHogEvent`)
 - observation bus (`HarnessObservation`)

@@ -13,7 +13,8 @@ ultimate-pi needs a stable governance model for agentic runs: plan-before-mutate
 2. Phases are `plan → execute → evaluate → adversary → merge` with policy-gate as the source of truth.
 3. Local JSONL under `.pi/harness/runs/` is the **source of truth** for run history; PostHog is for team dashboards.
 4. Context for harness paths uses **context-mode only** — never lean-ctx in harness skills or extensions.
-5. `@posthog/pi` remains the LLM analytics layer; harness domain events use `harness-telemetry.ts`.
+5. Context-mode execute tools (`ctx_execute`, `ctx_batch_execute`, `ctx_execute_file`) are subject to the same phase matrix as `bash`/`write` via policy-gate.
+6. `@posthog/pi` remains the LLM analytics layer; harness domain events use `harness-telemetry.ts`.
 
 ## Consequences
 
