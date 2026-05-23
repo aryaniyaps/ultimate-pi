@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { isHarnessProjectEnabled } from "../../lib/harness-project-config.js";
 
 const LOAD_GUARD_KEY = Symbol.for("ultimate-pi.extension-load-guard");
 
@@ -36,4 +37,13 @@ export function claimExtensionLoad(key: string, moduleUrl: string): boolean {
 	if (registry.has(key)) return false;
 	registry.add(key);
 	return true;
+}
+
+/** Skip duplicate loads and skip all governance extensions when harness is disabled. */
+export function claimHarnessGovernanceLoad(
+	key: string,
+	moduleUrl: string,
+): boolean {
+	if (!isHarnessProjectEnabled()) return false;
+	return claimExtensionLoad(key, moduleUrl);
 }

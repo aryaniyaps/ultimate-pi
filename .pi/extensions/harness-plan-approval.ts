@@ -12,7 +12,7 @@ import {
 	parsePlanApprovalFromMessage,
 	planPacketSummary,
 } from "../lib/harness-run-context.js";
-import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
 import {
 	CREATE_PLAN_GUIDELINES,
 	CREATE_PLAN_SNIPPET,
@@ -52,7 +52,7 @@ import { validatePlanDebateGate } from "./lib/plan-debate-gate.js";
 const MODULE_URL = import.meta.url;
 
 export default function harnessPlanApproval(pi: ExtensionAPI) {
-	if (!claimExtensionLoad("harness-plan-approval", MODULE_URL)) return;
+	if (!claimHarnessGovernanceLoad("harness-plan-approval", MODULE_URL)) return;
 	pi.registerMessageRenderer(
 		"harness-plan-draft",
 		(message, _options, theme) => {

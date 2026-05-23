@@ -10,6 +10,7 @@
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import {
 	getLatestRunContext,
 	getRunIdFromSession,
@@ -182,6 +183,7 @@ function resolveRunIdForAgentStart(
 }
 
 export default function traceRecorder(pi: ExtensionAPI) {
+	if (!isHarnessProjectEnabled()) return;
 	let activeRun: ActiveRun | null = null;
 	let lastUserPrompt = "";
 

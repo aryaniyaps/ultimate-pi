@@ -65,7 +65,7 @@ import {
 	parseStructuredDocument,
 	writeYamlFile,
 } from "../lib/harness-yaml.js";
-import { claimExtensionLoad } from "./lib/extension-load-guard.js";
+import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
 import {
 	evaluateHarnessSubagentToolCall,
 	isSubmitToolName,
@@ -236,10 +236,7 @@ async function offerCrossSessionResume(
 		hasUI: boolean;
 		sessionManager: { getEntries(): unknown[] };
 		ui: {
-			notify(
-				message: string,
-				type?: "info" | "warning" | "error",
-			): void;
+			notify(message: string, type?: "info" | "warning" | "error"): void;
 		};
 	},
 ): Promise<void> {
@@ -272,7 +269,7 @@ async function offerCrossSessionResume(
 }
 
 export default function harnessRunContext(pi: ExtensionAPI) {
-	if (!claimExtensionLoad("harness-run-context", MODULE_URL)) return;
+	if (!claimHarnessGovernanceLoad("harness-run-context", MODULE_URL)) return;
 	let activeCtx: HarnessRunContext | null = null;
 
 	pi.on("session_start", async (_event, ctx) => {
