@@ -18,6 +18,12 @@ interface CustomAnswer {
 	response: AskResponse;
 }
 
+type ThemeLike = { fg(color: string, text: string): string };
+type TuiLike = ConstructorParameters<typeof Editor>[0] & {
+	requestRender(): void;
+};
+type Done = (answer: CustomAnswer | null) => void;
+
 function withTimeout<T>(
 	promise: Promise<T | null>,
 	ms: number | undefined,
@@ -31,230 +37,278 @@ function withTimeout<T>(
 	]);
 }
 
-export async function runAskDialog(
+function displayOptionsFor(validated: ValidatedAskParams): DisplayOption[] {
+	const displayOptions: DisplayOption[] = [...validated.options];
+	if (validated.allowFreeform) {
+		displayOptions.push({ title: "Type something…", isFreeform: true });
+	}
+	return displayOptions;
+}
+
+async function runFreeformOnly(
+	ui: ExtensionUIContext,
+	question: string,
+): Promise<DialogResult> {
+	const text = await ui.input(question, "");
+	if (!text?.trim()) return { response: null, cancelled: true };
+	return {
+		response: { kind: "freeform", text: text.trim() },
+		cancelled: false,
+	};
+}
+
+function editorThemeFor(theme: ThemeLike): EditorTheme {
+	return {
+		borderColor: (s) => theme.fg("accent", s),
+		selectList: {
+			selectedPrefix: (t) => theme.fg("accent", t),
+			selectedText: (t) => theme.fg("accent", t),
+			description: (t) => theme.fg("muted", t),
+			scrollInfo: (t) => theme.fg("dim", t),
+			noMatch: (t) => theme.fg("warning", t),
+		},
+	};
+}
+
+class AskDialogController {
+	private optionIndex = 0;
+	private editMode = false;
+	private readonly selected = new Set<number>();
+	private cachedLines: string[] | undefined;
+	private readonly editor: Editor;
+
+	constructor(
+		private readonly validated: ValidatedAskParams,
+		private readonly displayOptions: DisplayOption[],
+		private readonly tui: TuiLike,
+		private readonly theme: ThemeLike,
+		private readonly done: Done,
+	) {
+		this.editor = new Editor(tui, editorThemeFor(theme));
+		this.editor.onSubmit = (value) => this.submitFreeform(value);
+	}
+
+	invalidate(): void {
+		this.cachedLines = undefined;
+	}
+
+	handleInput(data: string): void {
+		if (this.editMode) {
+			this.handleEditInput(data);
+			return;
+		}
+		if (this.handleNavigationInput(data)) return;
+		if (this.validated.allowMultiple && matchesKey(data, Key.space)) {
+			this.toggleMultiSelect();
+			return;
+		}
+		if (matchesKey(data, Key.enter)) this.submitSelection();
+		if (matchesKey(data, Key.escape)) this.done(null);
+	}
+
+	render(width: number): string[] {
+		if (this.cachedLines) return this.cachedLines;
+		const lines: string[] = [];
+		const add = (s: string) => lines.push(truncateToWidth(s, width));
+		const useOverlay = this.validated.displayMode !== "inline";
+		this.renderHeader(lines, add, width, useOverlay);
+		this.renderOptions(add);
+		this.renderEditor(lines, add, width);
+		this.renderFooter(add, width, useOverlay);
+		this.cachedLines = lines;
+		return lines;
+	}
+
+	private refresh(): void {
+		this.invalidate();
+		this.tui.requestRender();
+	}
+
+	private submitFreeform(value: string): void {
+		const trimmed = value.trim();
+		if (trimmed) {
+			this.done({ response: { kind: "freeform", text: trimmed } });
+			return;
+		}
+		this.editMode = false;
+		this.editor.setText("");
+		this.refresh();
+	}
+
+	private submitSelection(): void {
+		if (this.validated.allowMultiple) {
+			const titles = [...this.selected]
+				.sort((a, b) => a - b)
+				.map((i) => this.displayOptions[i].title)
+				.filter((t) => t !== "Type something…");
+			if (titles.length) {
+				this.done({ response: { kind: "selection", selections: titles } });
+			}
+			return;
+		}
+		const opt = this.displayOptions[this.optionIndex];
+		if (opt.isFreeform) {
+			this.editMode = true;
+			this.refresh();
+			return;
+		}
+		this.done({ response: { kind: "selection", selections: [opt.title] } });
+	}
+
+	private handleEditInput(data: string): void {
+		if (matchesKey(data, Key.escape)) {
+			this.editMode = false;
+			this.editor.setText("");
+		} else {
+			this.editor.handleInput(data);
+		}
+		this.refresh();
+	}
+
+	private handleNavigationInput(data: string): boolean {
+		if (matchesKey(data, Key.up)) {
+			this.optionIndex = Math.max(0, this.optionIndex - 1);
+			this.refresh();
+			return true;
+		}
+		if (matchesKey(data, Key.down)) {
+			this.optionIndex = Math.min(
+				this.displayOptions.length - 1,
+				this.optionIndex + 1,
+			);
+			this.refresh();
+			return true;
+		}
+		return false;
+	}
+
+	private toggleMultiSelect(): void {
+		const opt = this.displayOptions[this.optionIndex];
+		if (opt.isFreeform) return;
+		if (this.selected.has(this.optionIndex)) {
+			this.selected.delete(this.optionIndex);
+		} else {
+			this.selected.add(this.optionIndex);
+		}
+		this.refresh();
+	}
+
+	private renderHeader(
+		lines: string[],
+		add: (s: string) => void,
+		width: number,
+		useOverlay: boolean,
+	): void {
+		if (useOverlay) add(this.theme.fg("accent", "─".repeat(width)));
+		if (this.validated.context) {
+			for (const line of this.validated.context.split("\n")) {
+				add(this.theme.fg("muted", ` ${line}`));
+			}
+			lines.push("");
+		}
+		add(this.theme.fg("text", ` ${this.validated.question}`));
+		lines.push("");
+	}
+
+	private renderOptions(add: (s: string) => void): void {
+		for (let i = 0; i < this.displayOptions.length; i++) {
+			const opt = this.displayOptions[i];
+			const prefix = this.optionPrefix(i, opt.isFreeform === true);
+			const label = this.optionLabel(i, opt);
+			add(`${prefix}${label}`);
+			if (opt.description)
+				add(`     ${this.theme.fg("muted", opt.description)}`);
+		}
+	}
+
+	private optionPrefix(index: number, isFreeform: boolean): string {
+		if (!this.validated.allowMultiple) {
+			return index === this.optionIndex ? this.theme.fg("accent", "> ") : "  ";
+		}
+		if (isFreeform) return "  ";
+		return this.selected.has(index) ? this.theme.fg("accent", "[x] ") : "[ ] ";
+	}
+
+	private optionLabel(index: number, opt: DisplayOption): string {
+		const raw = `${index + 1}. ${opt.title}`;
+		const focused = index === this.optionIndex;
+		if (opt.isFreeform && this.editMode && focused) {
+			return this.theme.fg("accent", `${raw} ✎`);
+		}
+		if (focused && !this.validated.allowMultiple) {
+			return this.theme.fg("accent", raw);
+		}
+		return this.theme.fg("text", raw);
+	}
+
+	private renderEditor(
+		lines: string[],
+		add: (s: string) => void,
+		width: number,
+	): void {
+		if (!this.editMode) return;
+		lines.push("");
+		add(this.theme.fg("muted", " Your answer:"));
+		for (const line of this.editor.render(width - 2)) add(` ${line}`);
+	}
+
+	private renderFooter(
+		add: (s: string) => void,
+		width: number,
+		useOverlay: boolean,
+	): void {
+		add("");
+		if (this.editMode) {
+			add(this.theme.fg("dim", " Enter to submit • Esc to go back"));
+		} else if (this.validated.allowMultiple) {
+			add(
+				this.theme.fg(
+					"dim",
+					" ↑↓ navigate • Space toggle • Enter confirm • Esc cancel",
+				),
+			);
+		} else {
+			add(
+				this.theme.fg("dim", " ↑↓ navigate • Enter to select • Esc to cancel"),
+			);
+		}
+		if (useOverlay) add(this.theme.fg("accent", "─".repeat(width)));
+	}
+}
+
+async function runOptionDialog(
 	ui: ExtensionUIContext,
 	validated: ValidatedAskParams,
-): Promise<DialogResult> {
-	const { question, context, options, allowMultiple, allowFreeform } =
-		validated;
-
-	const displayOptions: DisplayOption[] = [...options];
-	if (allowFreeform) {
-		displayOptions.push({
-			title: "Type something…",
-			isFreeform: true,
-		});
-	}
-
-	// Freeform-only: no listed options
-	if (displayOptions.length === 0) {
-		const text = await ui.input(question, "");
-		if (!text?.trim()) {
-			return { response: null, cancelled: true };
-		}
-		return {
-			response: { kind: "freeform", text: text.trim() },
-			cancelled: false,
-		};
-	}
-
-	const result = await withTimeout(
+	displayOptions: DisplayOption[],
+): Promise<CustomAnswer | null> {
+	return withTimeout(
 		ui.custom<CustomAnswer | null>((tui, theme, _kb, done) => {
-			let optionIndex = 0;
-			let editMode = false;
-			const selected = new Set<number>();
-			let cachedLines: string[] | undefined;
-
-			const editorTheme: EditorTheme = {
-				borderColor: (s) => theme.fg("accent", s),
-				selectList: {
-					selectedPrefix: (t) => theme.fg("accent", t),
-					selectedText: (t) => theme.fg("accent", t),
-					description: (t) => theme.fg("muted", t),
-					scrollInfo: (t) => theme.fg("dim", t),
-					noMatch: (t) => theme.fg("warning", t),
-				},
-			};
-			const editor = new Editor(tui, editorTheme);
-
-			editor.onSubmit = (value) => {
-				const trimmed = value.trim();
-				if (trimmed) {
-					done({ response: { kind: "freeform", text: trimmed } });
-				} else {
-					editMode = false;
-					editor.setText("");
-					refresh();
-				}
-			};
-
-			function refresh() {
-				cachedLines = undefined;
-				tui.requestRender();
-			}
-
-			function submitSelection() {
-				if (allowMultiple) {
-					const titles = [...selected]
-						.sort((a, b) => a - b)
-						.map((i) => displayOptions[i].title)
-						.filter((t) => t !== "Type something…");
-					if (titles.length === 0) return;
-					done({ response: { kind: "selection", selections: titles } });
-					return;
-				}
-				const opt = displayOptions[optionIndex];
-				if (opt.isFreeform) {
-					editMode = true;
-					refresh();
-					return;
-				}
-				done({
-					response: { kind: "selection", selections: [opt.title] },
-				});
-			}
-
-			function handleInput(data: string) {
-				if (editMode) {
-					if (matchesKey(data, Key.escape)) {
-						editMode = false;
-						editor.setText("");
-						refresh();
-						return;
-					}
-					editor.handleInput(data);
-					refresh();
-					return;
-				}
-
-				if (matchesKey(data, Key.up)) {
-					optionIndex = Math.max(0, optionIndex - 1);
-					refresh();
-					return;
-				}
-				if (matchesKey(data, Key.down)) {
-					optionIndex = Math.min(displayOptions.length - 1, optionIndex + 1);
-					refresh();
-					return;
-				}
-
-				if (allowMultiple && matchesKey(data, Key.space)) {
-					const opt = displayOptions[optionIndex];
-					if (!opt.isFreeform) {
-						if (selected.has(optionIndex)) {
-							selected.delete(optionIndex);
-						} else {
-							selected.add(optionIndex);
-						}
-						refresh();
-					}
-					return;
-				}
-
-				if (matchesKey(data, Key.enter)) {
-					submitSelection();
-					return;
-				}
-
-				if (matchesKey(data, Key.escape)) {
-					done(null);
-				}
-			}
-
-			function render(width: number): string[] {
-				if (cachedLines) return cachedLines;
-
-				const lines: string[] = [];
-				const add = (s: string) => lines.push(truncateToWidth(s, width));
-				const useOverlay = validated.displayMode !== "inline";
-
-				if (useOverlay) {
-					add(theme.fg("accent", "─".repeat(width)));
-				}
-
-				if (context) {
-					for (const line of context.split("\n")) {
-						add(theme.fg("muted", ` ${line}`));
-					}
-					lines.push("");
-				}
-
-				add(theme.fg("text", ` ${question}`));
-				lines.push("");
-
-				for (let i = 0; i < displayOptions.length; i++) {
-					const opt = displayOptions[i];
-					const isFreeform = opt.isFreeform === true;
-					const focused = i === optionIndex;
-					const checked = selected.has(i);
-					let prefix = "  ";
-					if (allowMultiple && !isFreeform) {
-						prefix = checked ? theme.fg("accent", "[x] ") : "[ ] ";
-					} else if (focused) {
-						prefix = theme.fg("accent", "> ");
-					}
-
-					const num = `${i + 1}. `;
-					const label = opt.title;
-					if (isFreeform && editMode && focused) {
-						add(prefix + theme.fg("accent", `${num}${label} ✎`));
-					} else if (focused && !allowMultiple) {
-						add(prefix + theme.fg("accent", `${num}${label}`));
-					} else {
-						add(`${prefix}${theme.fg("text", `${num}${label}`)}`);
-					}
-
-					if (opt.description) {
-						add(`     ${theme.fg("muted", opt.description)}`);
-					}
-				}
-
-				if (editMode) {
-					lines.push("");
-					add(theme.fg("muted", " Your answer:"));
-					for (const line of editor.render(width - 2)) {
-						add(` ${line}`);
-					}
-				}
-
-				lines.push("");
-				if (editMode) {
-					add(theme.fg("dim", " Enter to submit • Esc to go back"));
-				} else if (allowMultiple) {
-					add(
-						theme.fg(
-							"dim",
-							" ↑↓ navigate • Space toggle • Enter confirm • Esc cancel",
-						),
-					);
-				} else {
-					add(
-						theme.fg("dim", " ↑↓ navigate • Enter to select • Esc to cancel"),
-					);
-				}
-
-				if (useOverlay) {
-					add(theme.fg("accent", "─".repeat(width)));
-				}
-
-				cachedLines = lines;
-				return lines;
-			}
-
+			const controller = new AskDialogController(
+				validated,
+				displayOptions,
+				tui as TuiLike,
+				theme,
+				done,
+			);
 			return {
-				render,
-				invalidate: () => {
-					cachedLines = undefined;
-				},
-				handleInput,
+				render: (width: number) => controller.render(width),
+				invalidate: () => controller.invalidate(),
+				handleInput: (data: string) => controller.handleInput(data),
 			};
 		}),
 		validated.timeout,
 	);
+}
 
-	if (!result) {
-		return { response: null, cancelled: true };
+export async function runAskDialog(
+	ui: ExtensionUIContext,
+	validated: ValidatedAskParams,
+): Promise<DialogResult> {
+	const displayOptions = displayOptionsFor(validated);
+	if (displayOptions.length === 0) {
+		return runFreeformOnly(ui, validated.question);
 	}
-
+	const result = await runOptionDialog(ui, validated, displayOptions);
+	if (!result) return { response: null, cancelled: true };
 	return { response: result.response, cancelled: false };
 }

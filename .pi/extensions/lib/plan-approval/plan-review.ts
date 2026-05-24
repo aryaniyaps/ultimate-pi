@@ -33,223 +33,184 @@ function strList(value: unknown): string[] {
 		.filter((item): item is string => Boolean(item));
 }
 
+function pushListSection(
+	lines: string[],
+	title: string,
+	items: string[],
+): void {
+	if (!items.length) return;
+	lines.push(`**${title}:**`);
+	for (const item of items) lines.push(`- ${item}`);
+	lines.push("");
+}
+
+function appendDecompositionMarkdown(
+	lines: string[],
+	decomp: Record<string, unknown>,
+): void {
+	lines.push("## Phase 1 — Problem decomposition", "");
+	const restate = str(decomp.problem_restatement);
+	if (restate) lines.push("**What is being asked?**", "", restate, "");
+	const types = strList(decomp.problem_types);
+	if (types.length) lines.push(`**Problem type(s):** ${types.join(", ")}`, "");
+	const scope = asRecord(decomp.scope);
+	if (scope) {
+		const focus = str(scope.narrowed_focus);
+		if (focus) lines.push("**Scope:**", "", focus, "");
+		pushListSection(lines, "Excluded", strList(scope.excluded));
+	}
+	for (const [label, key] of [
+		["Hard constraints", "hard_constraints"],
+		["Soft constraints", "soft_constraints"],
+		["Success metrics", "success_metrics"],
+	] as const) {
+		pushListSection(lines, label, strList(decomp[key]));
+	}
+	const prior = asRecord(decomp.prior_art);
+	if (prior) {
+		lines.push("**Prior art:**", "");
+		const best = str(prior.best_approach);
+		const gap = str(prior.gap);
+		if (best) lines.push(`- Best approach: ${best}`);
+		if (gap) lines.push(`- Gap: ${gap}`);
+		for (const dead of strList(prior.dead_ends))
+			lines.push(`- Dead end: ${dead}`);
+		lines.push("");
+	}
+	const core = str(decomp.core_tension);
+	if (core) lines.push("**Core tension:**", "", core, "");
+}
+
+function appendHypothesisMarkdown(
+	lines: string[],
+	hyp: Record<string, unknown>,
+): void {
+	lines.push("## Phase 2 — DARWIN hypothesis", "");
+	const primary = asRecord(hyp.primary);
+	if (primary) {
+		for (const [label, key] of [
+			["Claim", "claim"],
+			["Mechanism", "mechanism"],
+			["Prediction", "prediction"],
+			["Experiment", "experiment"],
+			["Resolves tension", "tension_resolution"],
+		] as const) {
+			const text = str(primary[key]);
+			if (text) lines.push(`**${label}:** ${text}`, "");
+		}
+	}
+	const fork = asRecord(hyp.dialectical_fork);
+	if (fork) {
+		const forkText = str(fork.fork);
+		if (forkText) lines.push(`**Dialectical fork:** ${forkText}`, "");
+		const pathA = str(fork.path_a);
+		const pathB = str(fork.path_b);
+		if (pathA) lines.push(`- **Path A:** ${pathA}`);
+		if (pathB) lines.push(`- **Path B:** ${pathB}`);
+		lines.push("");
+	}
+	const alts = Array.isArray(hyp.alternatives) ? hyp.alternatives : [];
+	if (alts.length) {
+		lines.push("**Alternatives:**");
+		for (const alt of alts) {
+			const rec = asRecord(alt);
+			const claim = rec ? str(rec.claim) : null;
+			const bet = rec ? str(rec.key_bet) : null;
+			if (claim) lines.push(`- ${claim}${bet ? ` (bet: ${bet})` : ""}`);
+		}
+		lines.push("");
+	}
+	const steps = strList(hyp.recommended_next_steps);
+	if (steps.length) {
+		lines.push("**Recommended next steps:**");
+		for (const step of steps) lines.push(`1. ${step}`);
+		lines.push("");
+	}
+}
+
+function appendImplementationMarkdown(
+	lines: string[],
+	impl: Record<string, unknown>,
+): void {
+	lines.push("## Phase 3.5 — Implementation research", "");
+	const framing = str(impl.problem_framing);
+	if (framing) lines.push("**Problem framing:**", "", framing, "");
+	const rec = asRecord(impl.recommended_approach);
+	if (rec) {
+		const summary = str(rec.summary);
+		const conf = str(rec.recommended_approach_confidence);
+		if (summary) {
+			lines.push(
+				`**Recommended approach**${conf ? ` (${conf} confidence)` : ""}:`,
+			);
+			lines.push("", summary, "");
+		}
+		const rationale = str(rec.confidence_rationale);
+		if (rationale) lines.push(`*Rationale:* ${rationale}`, "");
+	}
+	const patterns = Array.isArray(impl.solution_patterns)
+		? impl.solution_patterns
+		: [];
+	if (patterns.length) {
+		lines.push("**Solution patterns:**");
+		for (const p of patterns) {
+			const pat = asRecord(p);
+			const name = pat ? str(pat.name) : null;
+			const fit = pat ? str(pat.fit) : null;
+			if (name) lines.push(`- **${name}**${fit ? `: ${fit}` : ""}`);
+		}
+		lines.push("");
+	}
+	pushListSection(lines, "Open questions", strList(impl.open_questions));
+	pushListSection(lines, "Anti-patterns", strList(impl.anti_patterns));
+}
+
+function appendEvaluationMarkdown(
+	lines: string[],
+	evalBrief: Record<string, unknown>,
+): void {
+	lines.push("## Self-evaluation", "");
+	lines.push("| Dimension | Score | Rationale |");
+	lines.push("|-----------|-------|-----------|");
+	const dims = asRecord(evalBrief.dimensions);
+	if (dims) {
+		for (const name of [
+			"novelty",
+			"coherence",
+			"testability",
+			"impact",
+		] as const) {
+			const dim = asRecord(dims[name]);
+			if (!dim) continue;
+			const score = typeof dim.score === "number" ? String(dim.score) : "?";
+			lines.push(`| ${name} | ${score}/100 | ${str(dim.rationale) ?? ""} |`);
+		}
+	}
+	const rel = asRecord(evalBrief.relevance);
+	if (rel) {
+		const passes = rel.passes === true ? "✓" : "✗";
+		lines.push(`| Relevance | ${passes} | ${str(rel.rationale) ?? ""} |`);
+	}
+	lines.push("");
+	const summary = str(evalBrief.human_summary);
+	if (summary) lines.push(summary, "");
+}
+
 /** Render Darwin research sections for plan-review.md. */
 export function formatResearchBriefMarkdown(
 	research: PlanResearchBrief | null | undefined,
 ): string {
 	if (!research) return "";
 	const lines: string[] = [];
-	const decomp = asRecord(research.decomposition);
-	const hyp = asRecord(research.hypothesis);
-	const evalBrief = asRecord(research.eval);
-
-	if (decomp) {
-		lines.push("## Phase 1 — Problem decomposition");
-		lines.push("");
-		const restate = str(decomp.problem_restatement);
-		if (restate) {
-			lines.push("**What is being asked?**");
-			lines.push("");
-			lines.push(restate);
-			lines.push("");
-		}
-		const types = strList(decomp.problem_types);
-		if (types.length) {
-			lines.push(`**Problem type(s):** ${types.join(", ")}`);
-			lines.push("");
-		}
-		const scope = asRecord(decomp.scope);
-		if (scope) {
-			const focus = str(scope.narrowed_focus);
-			if (focus) {
-				lines.push("**Scope:**");
-				lines.push("");
-				lines.push(focus);
-				lines.push("");
-			}
-			const excluded = strList(scope.excluded);
-			if (excluded.length) {
-				lines.push("**Excluded:**");
-				for (const item of excluded) lines.push(`- ${item}`);
-				lines.push("");
-			}
-		}
-		for (const [label, key] of [
-			["Hard constraints", "hard_constraints"],
-			["Soft constraints", "soft_constraints"],
-			["Success metrics", "success_metrics"],
-		] as const) {
-			const items = strList(decomp[key]);
-			if (items.length) {
-				lines.push(`**${label}:**`);
-				for (const item of items) lines.push(`- ${item}`);
-				lines.push("");
-			}
-		}
-		const prior = asRecord(decomp.prior_art);
-		if (prior) {
-			lines.push("**Prior art:**");
-			lines.push("");
-			const best = str(prior.best_approach);
-			const gap = str(prior.gap);
-			if (best) lines.push(`- Best approach: ${best}`);
-			if (gap) lines.push(`- Gap: ${gap}`);
-			for (const dead of strList(prior.dead_ends)) {
-				lines.push(`- Dead end: ${dead}`);
-			}
-			lines.push("");
-		}
-		const core = str(decomp.core_tension);
-		if (core) {
-			lines.push("**Core tension:**");
-			lines.push("");
-			lines.push(core);
-			lines.push("");
-		}
+	const sections = [
+		[asRecord(research.decomposition), appendDecompositionMarkdown],
+		[asRecord(research.hypothesis), appendHypothesisMarkdown],
+		[asRecord(research.implementation), appendImplementationMarkdown],
+		[asRecord(research.eval), appendEvaluationMarkdown],
+	] as const;
+	for (const [section, append] of sections) {
+		if (section) append(lines, section);
 	}
-
-	if (hyp) {
-		lines.push("## Phase 2 — DARWIN hypothesis");
-		lines.push("");
-		const primary = asRecord(hyp.primary);
-		if (primary) {
-			for (const [label, key] of [
-				["Claim", "claim"],
-				["Mechanism", "mechanism"],
-				["Prediction", "prediction"],
-				["Experiment", "experiment"],
-				["Resolves tension", "tension_resolution"],
-			] as const) {
-				const text = str(primary[key]);
-				if (text) {
-					lines.push(`**${label}:** ${text}`);
-					lines.push("");
-				}
-			}
-		}
-		const fork = asRecord(hyp.dialectical_fork);
-		if (fork) {
-			const forkText = str(fork.fork);
-			if (forkText) {
-				lines.push(`**Dialectical fork:** ${forkText}`);
-				lines.push("");
-			}
-			const pathA = str(fork.path_a);
-			const pathB = str(fork.path_b);
-			if (pathA) lines.push(`- **Path A:** ${pathA}`);
-			if (pathB) lines.push(`- **Path B:** ${pathB}`);
-			lines.push("");
-		}
-		const alts = Array.isArray(hyp.alternatives) ? hyp.alternatives : [];
-		if (alts.length) {
-			lines.push("**Alternatives:**");
-			for (const alt of alts) {
-				const rec = asRecord(alt);
-				if (!rec) continue;
-				const claim = str(rec.claim);
-				const bet = str(rec.key_bet);
-				if (claim) lines.push(`- ${claim}${bet ? ` (bet: ${bet})` : ""}`);
-			}
-			lines.push("");
-		}
-		const steps = strList(hyp.recommended_next_steps);
-		if (steps.length) {
-			lines.push("**Recommended next steps:**");
-			for (const step of steps) lines.push(`1. ${step}`);
-			lines.push("");
-		}
-	}
-
-	const impl = asRecord(research.implementation);
-	if (impl) {
-		lines.push("## Phase 3.5 — Implementation research");
-		lines.push("");
-		const framing = str(impl.problem_framing);
-		if (framing) {
-			lines.push("**Problem framing:**");
-			lines.push("");
-			lines.push(framing);
-			lines.push("");
-		}
-		const rec = asRecord(impl.recommended_approach);
-		if (rec) {
-			const summary = str(rec.summary);
-			const conf = str(rec.recommended_approach_confidence);
-			if (summary) {
-				lines.push(
-					`**Recommended approach**${conf ? ` (${conf} confidence)` : ""}:`,
-				);
-				lines.push("");
-				lines.push(summary);
-				lines.push("");
-			}
-			const rationale = str(rec.confidence_rationale);
-			if (rationale) {
-				lines.push(`*Rationale:* ${rationale}`);
-				lines.push("");
-			}
-		}
-		const patterns = Array.isArray(impl.solution_patterns)
-			? impl.solution_patterns
-			: [];
-		if (patterns.length) {
-			lines.push("**Solution patterns:**");
-			for (const p of patterns) {
-				const pat = asRecord(p);
-				const name = pat ? str(pat.name) : null;
-				const fit = pat ? str(pat.fit) : null;
-				if (name) lines.push(`- **${name}**${fit ? `: ${fit}` : ""}`);
-			}
-			lines.push("");
-		}
-		const openQs = strList(impl.open_questions);
-		if (openQs.length) {
-			lines.push("**Open questions:**");
-			for (const q of openQs) lines.push(`- ${q}`);
-			lines.push("");
-		}
-		const anti = strList(impl.anti_patterns);
-		if (anti.length) {
-			lines.push("**Anti-patterns:**");
-			for (const a of anti) lines.push(`- ${a}`);
-			lines.push("");
-		}
-	}
-
-	if (evalBrief) {
-		lines.push("## Self-evaluation");
-		lines.push("");
-		lines.push("| Dimension | Score | Rationale |");
-		lines.push("|-----------|-------|-----------|");
-		const dims = asRecord(evalBrief.dimensions);
-		if (dims) {
-			for (const name of [
-				"novelty",
-				"coherence",
-				"testability",
-				"impact",
-			] as const) {
-				const dim = asRecord(dims[name]);
-				if (!dim) continue;
-				const score = typeof dim.score === "number" ? String(dim.score) : "?";
-				const rationale = str(dim.rationale) ?? "";
-				lines.push(`| ${name} | ${score}/100 | ${rationale} |`);
-			}
-		}
-		const rel = asRecord(evalBrief.relevance);
-		if (rel) {
-			const passes = rel.passes === true ? "✓" : "✗";
-			const rationale = str(rel.rationale) ?? "";
-			lines.push(`| Relevance | ${passes} | ${rationale} |`);
-		}
-		lines.push("");
-		const summary = str(evalBrief.human_summary);
-		if (summary) {
-			lines.push(summary);
-			lines.push("");
-		}
-	}
-
 	return lines.length ? `${lines.join("\n")}\n` : "";
 }
 

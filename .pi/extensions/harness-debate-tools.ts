@@ -5,67 +5,51 @@
 import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { Type } from "@sinclair/typebox";
-import { parse as parseYaml } from "yaml";
-import type { DebateParticipant } from "../lib/debate-orchestrator-types.js";
+import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
 import {
+	captureHarnessEvent,
+	DEBATE_AGENT_SUBMIT_TOOL,
+	type DebateParticipant,
 	extractLastSubmitCall,
-	type MessageLike,
-} from "../lib/harness-agent-output.js";
-import {
 	getLatestRunContext,
 	getRunIdFromSession,
-} from "../lib/harness-run-context.js";
-import { writeYamlFile } from "../lib/harness-yaml.js";
+	type MessageLike,
+	parseYaml,
+	Type,
+	writeYamlFile,
+} from "./lib/harness-debate-core-deps.js";
 import {
 	acceptDebateRound,
-	capsForDebate,
-	finalizeDebateConsensus,
-	openDebateBus,
-} from "./lib/debate-bus-core.js";
-import { getDebateState } from "./lib/debate-bus-state.js";
-import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
-import { captureHarnessEvent } from "./lib/harness-posthog.js";
-import { DEBATE_AGENT_SUBMIT_TOOL } from "./lib/harness-subagent-submit-registry.js";
-import {
-	type DebateEligibilityInput,
-	harnessPlanDebateEligibility,
-} from "./lib/plan-debate-eligibility.js";
-import {
-	buildPlanReviewRoundEnvelope,
-	type PlanReviewRoundDraft,
-} from "./lib/plan-debate-envelope.js";
-import {
-	getPlanFocusCoverage,
-	planDebateOutcomeComplete,
-} from "./lib/plan-debate-focus.js";
-import {
-	normalizePlanDebateId,
-	planDebateIdForRun,
-} from "./lib/plan-debate-id.js";
-import {
 	applyDebateLane,
 	applyDebateLaneFromDoc,
+	assessPlanScopeDrift,
+	buildPlanReviewRoundEnvelope,
+	capsForDebate,
+	type DebateEligibilityInput,
 	type DebateLaneKind,
 	debateLaneForAgent,
+	finalizeDebateConsensus,
 	formatApplyLaneMessage,
-} from "./lib/plan-debate-lane.js";
-import { getPlanDebateRoundStatus } from "./lib/plan-debate-round-status.js";
-import { withReviewRoundYamlWrite } from "./lib/plan-debate-write-guard.js";
-import {
 	formatTranscriptForSpawn,
+	getDebateState,
 	getMessengerRoundState,
+	getPlanDebateRoundStatus,
+	getPlanFocusCoverage,
+	harnessPlanDebateEligibility,
 	initPlanMessenger,
 	loadMessengerState,
+	loadValidationTurnYaml,
 	messengerRoundDebateReady,
+	normalizePlanDebateId,
+	openDebateBus,
+	type PlanReviewRoundDraft,
+	planDebateIdForRun,
+	planDebateOutcomeComplete,
 	postMessengerMessage,
 	readRoundTranscript,
-} from "./lib/plan-messenger.js";
-import {
-	loadValidationTurnYaml,
 	validateIntegratorDraft,
-} from "./lib/plan-review-integrator-rules.js";
-import { assessPlanScopeDrift } from "./lib/plan-scope-guard.js";
+	withReviewRoundYamlWrite,
+} from "./lib/harness-debate-workflow-deps.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
