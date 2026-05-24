@@ -32,6 +32,9 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0043](0043-path-first-harness-tools.md) | Path-first harness tool contracts | Accepted |
 | [0044](0044-harness-steer-loop.md) | Post-run steer loop (repair vs plan revise) | Accepted |
 | [0045](0045-phase-scoped-agent-directories.md) | Phase-scoped harness agent directories | Accepted |
+| [0046](0046-agt-policy-engine.md) | AGT policy engine + subagent identity | Accepted |
+| [0047](0047-agt-layered-security.md) | AGT layered security (rings, prompt defense, CI) | Accepted |
+| [0048](0048-tool-call-hook-order.md) | tool_call hook interaction matrix | Accepted |
 
 ## Practice map
 

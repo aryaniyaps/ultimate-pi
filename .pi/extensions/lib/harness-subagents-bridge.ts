@@ -14,12 +14,17 @@ import {
 	type SpawnAuthForward,
 } from "../../../vendor/pi-subagents/src/subagents.js";
 import {
+	delegationEnvFromBundle,
+	mintSubagentDelegation,
+} from "../../lib/agt/delegation.js";
+import { spawnCircuitOpen } from "../../lib/agt/sre-hooks.js";
+import {
 	getLatestRunContext,
 	getRunIdFromSession,
 	type HarnessPhase,
 } from "../../lib/harness-run-context.js";
 import { parseSpawnContextFromTask } from "../../lib/harness-spawn-parse.js";
-import { harnessSubagentSubmitExtensionPath } from "../harness-subagent-submit.js";
+import { harnessSubagentGovernanceExtensionPath } from "../harness-subagent-governance.js";
 import { refreshHarnessCocoindexIndex } from "./harness-cocoindex-refresh.js";
 import { captureHarnessEvent } from "./harness-posthog.js";
 import {
@@ -33,6 +38,7 @@ import {
 	isUsableApiKey,
 	resolveConcreteSubagentModel,
 } from "./harness-subagent-auth.js";
+import { classifyHarnessAgent } from "./harness-subagent-policy.js";
 import {
 	inferPhaseForPrecheck,
 	precheckHarnessSubagentSpawn,
@@ -111,19 +117,47 @@ async function resolveHarnessSpawnAuth(
 export function createHarnessSubagentsExtension(
 	packageRoot: string,
 ): (pi: ExtensionAPI) => void {
-	const submitExtPath = harnessSubagentSubmitExtensionPath(packageRoot);
+	const governanceExtPath = harnessSubagentGovernanceExtensionPath(packageRoot);
 	const options: HarnessSubagentsOptions = {
 		packageRoot,
-		harnessSubprocessExtensionPath: submitExtPath,
+		harnessSubprocessExtensionPath: governanceExtPath,
 		resolveSubprocessEnv: (task, agent) => {
 			if (!agent.name.startsWith("harness/")) return undefined;
 			const ctx = parseSpawnContextFromTask(task);
 			if (!ctx?.run_id) return undefined;
+			if (spawnCircuitOpen(ctx.run_id)) {
+				return undefined;
+			}
+			const runDir =
+				ctx.run_dir ?? join(packageRoot, ".pi", "harness", "runs", ctx.run_id);
+			const kind = classifyHarnessAgent(agent.name);
+			let delegationEnv: Record<string, string> = {};
+			try {
+				const bundle = mintSubagentDelegation({
+					runId: ctx.run_id,
+					runDir,
+					agentId: agent.name,
+					agentKind: kind,
+				});
+				delegationEnv = delegationEnvFromBundle(bundle);
+			} catch {
+				/* identity mint best-effort */
+			}
 			return {
 				HARNESS_RUN_ID: ctx.run_id,
-				HARNESS_RUN_DIR:
-					ctx.run_dir ??
-					join(packageRoot, ".pi", "harness", "runs", ctx.run_id),
+				HARNESS_RUN_DIR: runDir,
+				HARNESS_AGENT_ID: agent.name,
+				HARNESS_SUBAGENT_PHASE_HINT:
+					kind === "executor"
+						? "execute"
+						: kind === "evaluator"
+							? "evaluate"
+							: kind === "adversary"
+								? "adversary"
+								: "plan",
+				PI_HARNESS_SUBPROCESS: "1",
+				HARNESS_PKG_ROOT: packageRoot,
+				...delegationEnv,
 			};
 		},
 		defaultAgentScope: "both",

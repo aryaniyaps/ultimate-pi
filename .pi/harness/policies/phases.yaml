@@ -1,0 +1,10 @@
+apiVersion: governance.toolkit/v1
+name: harness-phases
+description: Phase hints for workflow (enforced via precomputed flags in defaults).
+default_action: allow
+rules:
+  - name: phase-metadata-plan
+    priority: 1
+    ruleAction: log
+    condition: harness_phase == 'plan'
+    description: informational only

@@ -1041,14 +1041,17 @@ async function guardToolCall(input: {
 	ctx: { sessionManager: { getEntries(): unknown[] } };
 	activeCtx: HarnessRunContext | null;
 }) {
-	if (isSubmitToolName(input.event.toolName)) {
-		const decision = evaluateHarnessSubagentToolCall(
-			input.event.toolName,
-			input.event.input as Record<string, unknown>,
-			"parent-orchestrator",
-		);
-		if (decision.action === "block")
-			return { block: true, reason: decision.reason };
+	const { isHarnessAgtPolicyEnabled } = await import("../lib/agt/config.js");
+	if (!isHarnessAgtPolicyEnabled()) {
+		if (isSubmitToolName(input.event.toolName)) {
+			const decision = evaluateHarnessSubagentToolCall(
+				input.event.toolName,
+				input.event.input as Record<string, unknown>,
+				"parent-orchestrator",
+			);
+			if (decision.action === "block")
+				return { block: true, reason: decision.reason };
+		}
 	}
 	if (input.event.toolName === "write") {
 		const entries = getEntries(input.ctx);
@@ -1088,22 +1091,24 @@ async function guardToolCall(input: {
 			}
 		}
 	}
-	if (!activeCtx?.plan_packet_path) return undefined;
-	const phase = activeCtx.phase;
-	if (phase !== "evaluate" && phase !== "adversary") return undefined;
-	if (input.event.toolName !== "write" && input.event.toolName !== "edit")
-		return undefined;
-	const target = String(
-		(input.event.input as { path?: string; filePath?: string }).path ??
-			(input.event.input as { filePath?: string }).filePath ??
-			"",
-	);
-	if (target.includes("plan-packet.yaml")) {
-		return {
-			block: true,
-			reason:
-				"harness-run-context: plan-packet.yaml is read-only in evaluate/adversary phases.",
-		};
+	if (!isHarnessAgtPolicyEnabled()) {
+		if (!activeCtx?.plan_packet_path) return undefined;
+		const phase = activeCtx.phase;
+		if (phase !== "evaluate" && phase !== "adversary") return undefined;
+		if (input.event.toolName !== "write" && input.event.toolName !== "edit")
+			return undefined;
+		const target = String(
+			(input.event.input as { path?: string; filePath?: string }).path ??
+				(input.event.input as { filePath?: string }).filePath ??
+				"",
+		);
+		if (target.includes("plan-packet.yaml")) {
+			return {
+				block: true,
+				reason:
+					"harness-run-context: plan-packet.yaml is read-only in evaluate/adversary phases.",
+			};
+		}
 	}
 	return undefined;
 }

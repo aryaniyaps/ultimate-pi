@@ -31,7 +31,9 @@ manifest (`package.json`).
 
 - `harness-run-context.ts` - active run + plan injection; short commands without run/plan args
 - `harness-live-widget.ts` - footer status (current/next phase + plain-language status hint; no run id in UI)
-- `policy-gate.ts` - phase state machine + plan-before-mutate enforcement
+- `policy-gate.ts` - phase state machine; tool allow/deny via AGT `PolicyEngine` (YAML under `.pi/harness/policies/`, see [ADR 0046](docs/adrs/0046-agt-policy-engine.md))
+- `harness-subagent-governance.ts` - subprocess bundle (AGT + `submit_*` tools)
+- `agt-prompt-guard.ts` / `agt-kill-switch.ts` - PromptDefense + kill switch ([ADR 0047](docs/adrs/0047-agt-layered-security.md))
 - `budget-guard.ts` - hard-stop token budget checks + budget exhausted artifacts
 - `trace-recorder.ts` - append-only run traces + HarnessRunRecord + compact index
 - `harness-telemetry.ts` - PostHog `harness_*` domain events (dual layer with `@posthog/pi`)
