@@ -64,7 +64,7 @@ If `/harness-review` returns `implementation_gap`, run:
 
 | Command | Purpose |
 |---|---|
-| `/harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]` | Idempotent project bootstrap: Graphify, harness-web/Scrapling, CLI tools, settings, contracts, Sentrux, pi-lens diagnostics, and verification. |
+| `/harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]` | Idempotent project bootstrap: Graphify, harness-web/Scrapling, CLI tools, settings, contracts, Sentrux, harness lens, and verification. |
 | `/harness-auto "<task>" [--quick] [--risk low\|med\|high]` | Strict full pipeline: plan, execute, review, steer when appropriate. |
 | `/harness-plan "<task>" [--risk low\|med\|high] [--quick]` | PM-grade planning: reconnaissance, decomposition, hypothesis, external research, ExecutionPlan, DAG validation, Review Gate debate, `approve_plan`, `create_plan`. |
 | `/harness-run` | Executes the approved active PlanPacket by spawning `harness/running/executor`; no inline implementation. |

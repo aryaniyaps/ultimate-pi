@@ -326,14 +326,14 @@ sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or fa
 
 ## Step 3 — Pi Extension Packages
 
-Bundled extensions load from the installed `ultimate-pi` package. `ultimate-pi` also vendors [`apmantza/pi-lens`](https://github.com/apmantza/pi-lens) at `vendor/pi-lens/` and loads it directly from `vendor/pi-lens/index.ts` for edit-time diagnostics, LSP/navigation helpers, formatting/lint feedback, and read-before-edit guardrails. Attribution and the pinned revision are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `vendor/pi-lens/UPSTREAM_PIN.md`.
+Bundled extensions load from the installed `ultimate-pi` package. The harness lens wrapper at `.pi/extensions/harness-lens.ts` loads `.pi/extensions/lib/harness-lens/` for edit autopatch, secrets blocking, deferred format, and LSP tools. Structural search uses shell `sg` (installed globally by setup); architecture gates use Sentrux. See [ADR 0045](.pi/harness/docs/adrs/0045-harness-lens-minimal-contract.md).
 
-pi-lens diagnostics are **complementary** to Sentrux:
+Harness lens findings are **complementary** to Sentrux:
 
-- **pi-lens:** fast edit-time and turn-time code diagnostics (LSP, formatter/linter, ast-grep/tree-sitter, optional Semgrep when configured).
+- **Harness lens:** fast edit-time and turn-time code feedback; standalone lens widgets/health telemetry are disabled, and findings flow through the harness PostHog telemetry layer.
 - **Sentrux:** architecture-quality signal and gate (`.sentrux/rules.toml`, `sentrux-signal.yaml`, harness review/evaluate inputs).
 
-Do not treat pi-lens as a replacement for Sentrux. If a future pi-lens release adds architecture-boundary gating that duplicates Sentrux, keep Sentrux authoritative and disable/remove the overlapping pi-lens path.
+Do not treat harness lens as a replacement for Sentrux. If a future lens change adds architecture-boundary gating that duplicates Sentrux, keep Sentrux authoritative and disable/remove the overlapping lens path.
 
 Optionally install the companion lockfile used in development:
 
@@ -357,7 +357,7 @@ Verify each package:
 | `context-mode` | Context runtime and MCP context-saving tools | F0 |
 | `harness-subagents` (bundled extension) | L4 `subagent` tool, subprocess spawns, package agents | P16 |
 | Vendored `pi-vcc` (`vendor/pi-vcc`, `.pi/extensions/ultimate-pi-vcc.ts`) | VCC compaction / `vcc_recall` — env-only: `HARNESS_VCC_COMPACTION` (default on), `HARNESS_VCC_DEBUG` | Shipped |
-| Vendored `pi-lens` (`vendor/pi-lens/index.ts`) | Edit-time diagnostics + LSP/navigation/read guardrails; Sentrux remains architecture gate | F0 |
+| Harness lens (`.pi/extensions/harness-lens.ts` → `.pi/extensions/lib/harness-lens/index.ts`) | Edit autopatch, secrets block, deferred format, LSP tools; PostHog lens telemetry; Sentrux remains architecture gate; `sg` is shell-only | F0 |
 
 ## Step 3.5 — Harness agents (package-resolved)
 
@@ -475,8 +475,8 @@ Ensure `.gitignore` contains harness runtime entries (see repo root `.gitignore`
 .pi/harness/debates/*
 !.pi/harness/debates/README.md
 
-# pi-lens runtime cache and local diagnostics state
-.pi-lens/
+# Harness lens runtime config/cache and local diagnostics state
+.pi/harness/.lens/
 
 # sentrux baselines and local meta (rules.toml is committed)
 .sentrux/*
@@ -553,7 +553,7 @@ Created: $(date +%Y-%m-%d)
 - Decisions and incidents in `.pi/harness/` with structured artifacts
 - `GRAPHIFY_VIZ_NODE_LIMIT=200000 graphify update .` after significant code changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code
-- Create `.sg/rules/` for project-wide code quality rules
+- Use shell `sg` for structural search; project-specific ast-grep rule dirs are optional in the **target repo**, not a harness template default
 ```
 
 ## Step 5 — Verification
@@ -600,11 +600,11 @@ print(f'✓ knowledge graph built ({n} nodes)' if n else '✗ graph.json has 0 n
 " 2>/dev/null || echo "✗ no graph built yet"
 graphify hook status 2>/dev/null && echo "✓ graphify git hooks installed" || echo "✗ graphify git hooks not installed"
 
-# vendored pi-lens diagnostics extension
-ls "$UP_PKG/vendor/pi-lens/index.ts" 2>/dev/null \
-  && echo "✓ vendored pi-lens" || echo "✗ vendor/pi-lens missing"
-ls "$UP_PKG/vendor/pi-lens/UPSTREAM_PIN.md" 2>/dev/null \
-  && echo "✓ pi-lens upstream pin" || echo "✗ pi-lens upstream pin missing"
+# harness lens extension
+ls "$UP_PKG/.pi/extensions/harness-lens.ts" 2>/dev/null \
+  && echo "✓ harness lens wrapper" || echo "✗ harness lens wrapper missing"
+ls "$UP_PKG/.pi/extensions/lib/harness-lens/index.ts" 2>/dev/null \
+  && echo "✓ harness lens upstream pin" || echo "✗ harness lens upstream pin missing"
 
 # raw folder for graphify sources
 ls -d ./raw 2>/dev/null && echo "✓ ./raw directory exists" || echo "! ./raw directory missing"
@@ -651,8 +651,8 @@ Output summary table:
 | gh CLI | ✓/✗ | Auth: yes/no |
 | sentrux | ✓/✗ | CLI + plugins; rules via Step 4.2 bootstrap |
 | Sentrux rules.toml | ✓/✗ | `.sentrux/rules.toml` synced from manifest |
-| pi extensions | ✓/✗ | bundled extensions + vendored pi-lens |
-| pi-lens diagnostics | ✓/✗ | `vendor/pi-lens/index.ts`; complements Sentrux architecture signal |
+| pi extensions | ✓/✗ | bundled extensions + harness lens wrapper |
+| harness lens | ✓/✗ | `.pi/extensions/harness-lens.ts`; PostHog owns lens telemetry; complements Sentrux architecture signal |
 | `.env` | ✓/✗/ask | Created / keys appended / user declined |
 
 | .gitignore | ✓/✗ | entries added (incl. `.env`) |

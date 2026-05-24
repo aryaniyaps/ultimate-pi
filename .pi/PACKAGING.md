@@ -6,8 +6,8 @@ Aligned with [pi packages](https://github.com/badlogic/pi-mono/blob/main/package
 
 | Key | Paths | Notes |
 |-----|-------|--------|
-| `extensions` | `.pi/extensions`, `vendor/pi-lens/index.ts` | TypeScript extensions (loaded by pi) |
-| `skills` | `.agents/skills`, `.pi/skills`, `vendor/pi-lens/skills` | Agent Skills + pi-local skills |
+| `extensions` | `.pi/extensions` | TypeScript extensions loaded by pi, including the harness lens wrapper |
+| `skills` | `.agents/skills`, `.pi/skills` | Agent Skills + pi-local skills |
 | `prompts` | `.pi/prompts` | Slash-command prompt templates |
 
 Pi does **not** define `scripts`, `agents`, or `providers` in the manifest.
@@ -20,9 +20,9 @@ Pi does **not** define `scripts`, `agents`, or `providers` in the manifest.
 
 We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts never ship:
 
-- No `.pi/harness/runs/`, `.pi-lens/` runtime cache, or `firecrawl/.env`
+- No `.pi/harness/runs/`, `.pi/harness/.lens/` runtime config/cache, or `firecrawl/.env`
 - Ship `.pi/settings.example.json`, not `.pi/settings.json` (dev checkout uses `".."` local package)
-- Include **`vendor/pi-lens/`** ([`pi-lens`](https://github.com/apmantza/pi-lens), MIT) — loaded directly from `vendor/pi-lens/index.ts`; Sentrux remains the architecture-quality signal
+- Include **`.pi/extensions/lib/harness-lens/`** (harness-native lens: edit autopatch, secrets, deferred format, LSP) — loaded through `.pi/extensions/harness-lens.ts`; findings flow to harness PostHog telemetry
 - Include **`vendor/pi-vcc/`** ([`pi-vcc`](https://github.com/sting8k/pi-vcc), MIT; inspired by [lllyasviel/VCC](https://github.com/lllyasviel/VCC)) — loaded via `.pi/extensions/ultimate-pi-vcc.ts`; refresh with `npm run vendor:sync-vcc`
 - Include **`vendor/pi-subagents/`** (vendored from [narumiruna/pi-extensions](https://github.com/narumiruna/pi-extensions) `pi-subagents`) — loaded via `.pi/extensions/harness-subagents.ts`; refresh with `npm run vendor:sync-subagents`
 

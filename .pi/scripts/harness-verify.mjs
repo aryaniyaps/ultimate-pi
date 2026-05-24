@@ -5,7 +5,7 @@
 
 import { readFile, access } from "node:fs/promises";
 import { constants } from "node:fs";
-import { join, dirname, resolve } from "node:path";
+import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
@@ -42,6 +42,7 @@ const REQUIRED_ADRS = [
 	"0037-subagent-submit-tools.md",
 	"0038-budget-telemetry-only.md",
 	"0040-practice-grounded-orchestration.md",
+	"0045-harness-lens-minimal-contract.md",
 ];
 
 const REQUIRED_EXTENSIONS = [
@@ -148,25 +149,73 @@ async function checkSentruxRules() {
 	ok(".sentrux/rules.toml present");
 }
 
-async function checkPiLensVendor(pkgJson) {
-	if (!pkgJson.files?.includes("vendor/pi-lens")) {
-		fail('package.json "files" must include vendor/pi-lens (npm publish ships pi-lens vendor)');
+async function checkHarnessLens(pkgJson) {
+	if (!pkgJson.files?.includes(".pi/extensions/lib/harness-lens")) {
+		fail(
+			'package.json "files" must include .pi/extensions/lib/harness-lens (npm publish ships harness lens extension)',
+		);
 	}
-	ok('package.json files includes vendor/pi-lens');
+	ok('package.json files includes .pi/extensions/lib/harness-lens');
 
 	const piExtensions = pkgJson.pi?.extensions ?? [];
-	if (!piExtensions.includes("./vendor/pi-lens/index.ts")) {
-		fail('package.json pi.extensions must include ./vendor/pi-lens/index.ts');
+	if (!piExtensions.includes("./.pi/extensions")) {
+		fail('package.json pi.extensions must include ./.pi/extensions');
 	}
-	ok("package.json loads vendored pi-lens extension");
+	if (piExtensions.includes("./vendor/pi-lens/index.ts")) {
+		fail('package.json pi.extensions must not load vendor/pi-lens directly');
+	}
+	ok("package.json loads harness extension directory");
 
-	const lensIndex = join(ROOT, "vendor", "pi-lens", "index.ts");
-	if (!(await fileExists(lensIndex))) fail("missing vendor/pi-lens/index.ts");
-	ok("vendor/pi-lens/index.ts");
+	const harnessLens = join(ROOT, ".pi", "extensions", "harness-lens.ts");
+	if (!(await fileExists(harnessLens))) fail("missing .pi/extensions/harness-lens.ts");
+	ok("harness lens extension wrapper");
 
-	const lensPin = join(ROOT, "vendor", "pi-lens", "UPSTREAM_PIN.md");
-	if (!(await fileExists(lensPin))) fail("missing vendor/pi-lens/UPSTREAM_PIN.md");
-	ok("vendor/pi-lens upstream pin");
+	const lensIndex = join(
+		ROOT,
+		".pi",
+		"extensions",
+		"lib",
+		"harness-lens",
+		"index.ts",
+	);
+	if (!(await fileExists(lensIndex))) {
+		fail("missing .pi/extensions/lib/harness-lens/index.ts");
+	}
+	ok(".pi/extensions/lib/harness-lens/index.ts");
+
+	const legacyLens = join(ROOT, ".pi", "extensions", "lib", "lens");
+	if (await fileExists(legacyLens)) {
+		fail("legacy .pi/extensions/lib/lens must not exist (use lib/harness-lens)");
+	}
+	ok("no legacy lib/lens directory");
+
+	const lensIndexSource = await readFile(lensIndex, "utf8");
+	if (lensIndexSource.includes("ast_grep_search")) {
+		fail("harness-lens index must not register ast_grep_search");
+	}
+	if (lensIndexSource.includes("lib/lens")) {
+		fail("harness-lens index must not import lib/lens");
+	}
+	ok("harness-lens index contract (no ast_grep, no lib/lens imports)");
+
+	const rulesDir = join(ROOT, ".pi", "extensions", "lib", "harness-lens", "rules");
+	if (await fileExists(rulesDir)) {
+		fail("harness-lens bundled rules/ directory must not exist");
+	}
+	ok("no bundled harness-lens rules/ directory");
+
+	const upstreamPin = join(
+		ROOT,
+		".pi",
+		"extensions",
+		"lib",
+		"harness-lens",
+		"UPSTREAM_PIN.md",
+	);
+	if (await fileExists(upstreamPin)) {
+		fail("harness-lens UPSTREAM_PIN.md must not exist (harness-native, no upstream sync)");
+	}
+	ok("no harness-lens UPSTREAM_PIN.md");
 }
 
 async function checkSentruxGate() {
@@ -239,7 +288,7 @@ async function main() {
 	const pkgJson = JSON.parse(
 		await readFile(join(ROOT, "package.json"), "utf-8"),
 	);
-	await checkPiLensVendor(pkgJson);
+	await checkHarnessLens(pkgJson);
 
 	if (!pkgJson.files?.includes("vendor/pi-subagents")) {
 		fail(

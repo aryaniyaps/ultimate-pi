@@ -72,8 +72,8 @@ graphify-books-out/.graphify_root
 .pi/harness/debates/*
 !.pi/harness/debates/README.md
 
-# pi-lens runtime cache and local diagnostics state
-.pi-lens/
+# Harness lens runtime config/cache and local diagnostics state
+.pi/harness/.lens/
 
 # mtime-based, breaks after git clone
 graphify-out/manifest.json

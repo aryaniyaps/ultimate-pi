@@ -88,7 +88,7 @@ flowchart TD
 ### Change (explicit)
 
 - **System policy normalization** in `[/home/aryaniyaps/ai-projects/ultimate-pi/.pi/SYSTEM.md](/home/aryaniyaps/ai-projects/ultimate-pi/.pi/SYSTEM.md)`:
-  - remove hard global “always caveman mode” as default behavior policy,
+  - remove hard global default behavior policy,
   - separate voice/tone from harness safety policy,
   - replace stale pointers (`.pi/skills/firecrawl`, `docs/adr/`) with actual repo locations.
 - **Bootstrap slimming** in `[/home/aryaniyaps/ai-projects/ultimate-pi/.pi/prompts/harness-setup.md](/home/aryaniyaps/ai-projects/ultimate-pi/.pi/prompts/harness-setup.md)`:

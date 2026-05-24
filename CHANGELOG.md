@@ -6,7 +6,7 @@ All notable changes to this project are documented in this file.
 
 ### ✨ Features
 
-- **pi-lens:** Replace vendored pi-model-router with vendored pi-lens diagnostics, loaded as a bundled extension alongside the existing Sentrux architecture signal.
+- **Harness lens:** Integrate selected pi-lens capabilities through a harness-owned extension, store lens state under `.pi/harness/.lens`, and route lens findings through harness PostHog telemetry instead of standalone lens health/telemetry surfaces.
 - **Graphify KB updater:** Productize conservative daily discovery/promotion with explicit repo/release taxonomy, allowlist source-class gates, operator review queue reporting, scheduler smoke validation, and safe Graphify refresh controls.
 
 ## [v0.18.1] — 2026-05-24

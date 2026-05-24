@@ -24,13 +24,11 @@
 	},
 	"pi": {
 		"extensions": [
-			"./.pi/extensions",
-			"./vendor/pi-lens/index.ts"
+			"./.pi/extensions"
 		],
 		"skills": [
 			"./.agents/skills",
-			"./.pi/skills",
-			"./vendor/pi-lens/skills"
+			"./.pi/skills"
 		],
 		"prompts": [
 			"./.pi/prompts"
@@ -55,6 +53,7 @@
 		".pi/harness/evolution",
 		".pi/harness/corpus",
 		".pi/harness/agents.manifest.json",
+		".pi/extensions/lib/harness-lens",
 		".pi/harness/README.md",
 		".pi/npm/package.json",
 		".pi/npm/.gitignore",
@@ -67,7 +66,6 @@
 		"CHANGELOG.md",
 		"README.md",
 		"THIRD_PARTY_NOTICES.md",
-		"vendor/pi-lens",
 		"vendor/pi-subagents",
 		"vendor/pi-vcc"
 	],
