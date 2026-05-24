@@ -30,7 +30,7 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | Sentrux run/review check or gate (root-resolving) | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` / `gate [--save]` |
 | Resolve package root (`UP_PKG`) | `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
 | Project `.env` (append-only) | `node "$UP_PKG/.pi/scripts/harness-sync-env.mjs"` (`--create-missing` after user confirms) |
-| Vendored pi-lens diagnostics | `vendor/pi-lens/index.ts` (loaded by `package.json` → `pi.extensions`; Sentrux remains architecture signal) |
+| Harness lens extension | `.pi/extensions/harness-lens.ts` → `.pi/extensions/lib/harness-lens/index.ts` (loaded by `.pi/extensions`; PostHog owns lens telemetry) |
 
 Pass `--force` to shell scripts that support it (e.g. `harness-graphify-bootstrap.sh --force`, `harness-cli-verify.sh --force`).
 

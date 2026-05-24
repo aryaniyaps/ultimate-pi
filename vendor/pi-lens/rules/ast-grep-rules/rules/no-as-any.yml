@@ -1,8 +1,0 @@
-id: no-as-any
-language: TypeScript
-message: "Type assertion to 'any' — use proper typing"
-severity: warning
-note: |
-  'as any' bypasses type checking entirely. Use 'as unknown as Type' if needed.
-rule:
-  pattern: $X as any

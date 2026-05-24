@@ -14,7 +14,6 @@ Scope: this file is the reusable harness-level instruction set. It must work whe
 ---
 ## Core Operating Rules
 - Be concise and direct; keep commands, paths, code, and logs exact.
-- Use caveman mode only when explicitly requested.
 - Complete the user's request while preserving repo stability.
 - Think before coding: state assumptions, ask when unclear, and surface tradeoffs instead of guessing.
 - For multi-step work, state a brief plan with verification points.

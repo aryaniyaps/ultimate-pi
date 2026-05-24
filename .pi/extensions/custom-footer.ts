@@ -16,6 +16,7 @@ import {
 	truncateToWidth,
 	visibleWidth,
 } from "@earendil-works/pi-tui";
+import { getLSPService } from "./lib/harness-lens/clients/lsp/index.js";
 
 // ── token formatting ──────────────────────────────────────────────
 
@@ -125,8 +126,17 @@ function pathLabel(
 
 // ── extension ─────────────────────────────────────────────────────
 
+function lspAlive(): boolean {
+	try {
+		return getLSPService().getAliveClientCount() > 0;
+	} catch {
+		return false;
+	}
+}
+
 export default function customFooter(pi: ExtensionAPI) {
 	let unsubBranch: (() => void) | null = null;
+	let lspInvalidateTimer: ReturnType<typeof setInterval> | null = null;
 
 	const state: {
 		tui: TUI | null;
@@ -179,6 +189,10 @@ export default function customFooter(pi: ExtensionAPI) {
 				unsubBranch();
 				unsubBranch = null;
 			}
+			if (lspInvalidateTimer) {
+				clearInterval(lspInvalidateTimer);
+				lspInvalidateTimer = null;
+			}
 
 			state.tui = tui;
 			state.branch = footerData.getGitBranch();
@@ -195,11 +209,18 @@ export default function customFooter(pi: ExtensionAPI) {
 			state.box = box;
 			state.textLine = textLine;
 
+			lspInvalidateTimer = setInterval(invalidate, 2000);
+			lspInvalidateTimer.unref?.();
+
 			return {
 				dispose() {
 					if (unsubBranch) {
 						unsubBranch();
 						unsubBranch = null;
+					}
+					if (lspInvalidateTimer) {
+						clearInterval(lspInvalidateTimer);
+						lspInvalidateTimer = null;
 					}
 					state.tui = null;
 					state.box = null;
@@ -249,27 +270,33 @@ export default function customFooter(pi: ExtensionAPI) {
 					const tl = thinkingLabel(state.thinkingLevel, state.modelReasoning);
 					const modelDisplay = tl ? `${state.modelId} ${tl}` : state.modelId;
 
+					const lspActive = lspAlive();
+					const lspIndicator = theme.fg(
+						lspActive ? "success" : "error",
+						lspActive ? "LSP✓" : "LSP×",
+					);
 					const rightStr = `${state.modelProvider} • ${modelDisplay}`;
 
 					// ── compose single line ──
 					const colLeft = leftStr;
+					const contextDisplay = `${lspIndicator} ${barFull}`;
 					const finalRight = dim(rightStr);
 					const lw = visibleWidth(colLeft);
 					const rw = visibleWidth(finalRight);
-					const bw = visibleWidth(barFull);
+					const cw = visibleWidth(contextDisplay);
 					const gap = 2;
 
-					if (lw + gap + bw + gap + rw <= innerW) {
-						const pad = innerW - lw - gap - bw - gap - rw;
+					if (lw + gap + cw + gap + rw <= innerW) {
+						const pad = innerW - lw - gap - cw - gap - rw;
 						const line =
 							colLeft +
 							" ".repeat(gap + pad) +
-							barFull +
+							contextDisplay +
 							" ".repeat(gap) +
 							finalRight;
 						textLine.setText(truncateToWidth(line, innerW));
 					} else {
-						// Priority: keep bar visible, keep left (cwd) intact, truncate modelId first
+						// Priority: keep LSP + context bar visible, keep left (cwd) intact, truncate modelId first
 						const tlNow = thinkingLabel(
 							state.thinkingLevel,
 							state.modelReasoning,
@@ -287,25 +314,25 @@ export default function customFooter(pi: ExtensionAPI) {
 
 						while (
 							truncMid.length > 0 &&
-							lw + gap + bw + gap + rwNow > innerW
+							lw + gap + cw + gap + rwNow > innerW
 						) {
 							truncMid = truncMid.slice(0, -1);
 							dimR = buildRight(truncMid);
 							rwNow = visibleWidth(dimR);
 						}
 
-						if (lw + gap + bw + gap + rwNow <= innerW) {
-							const pad = innerW - lw - gap - bw - gap - rwNow;
+						if (lw + gap + cw + gap + rwNow <= innerW) {
+							const pad = innerW - lw - gap - cw - gap - rwNow;
 							const line =
 								colLeft +
 								" ".repeat(gap + pad) +
-								barFull +
+								contextDisplay +
 								" ".repeat(gap) +
 								dimR;
 							textLine.setText(truncateToWidth(line, innerW));
 						} else {
 							// ModelId gone, still overflows: truncate leftStr
-							const avail = innerW - bw - rwNow - gap - gap;
+							const avail = innerW - cw - rwNow - gap - gap;
 							if (avail < 1) {
 								textLine.setText(truncateToWidth(dimR, innerW));
 							} else {
@@ -313,7 +340,7 @@ export default function customFooter(pi: ExtensionAPI) {
 								const line =
 									truncLeft +
 									" ".repeat(gap) +
-									barFull +
+									contextDisplay +
 									" ".repeat(gap) +
 									dimR;
 								textLine.setText(truncateToWidth(line, innerW));

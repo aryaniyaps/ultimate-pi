@@ -140,7 +140,6 @@ These Pi extensions are loaded from `.pi/extensions/` via the root `package.json
 
 | Skill | Upstream |
 |---|---|
-| caveman | [juliusbrussee/caveman](https://github.com/juliusbrussee/caveman) |
 | context7-cli | [upstash/context7](https://github.com/upstash/context7) |
 | find-skills | bundled (context7-compatible discovery) |
 | scrapling-web | bundled (harness-web CLI + Scrapling) |

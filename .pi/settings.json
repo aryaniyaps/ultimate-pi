@@ -1,9 +1,7 @@
 {
 	"retry": {
 		"enabled": true,
-		"maxRetries": 3
+		"maxRetries": 5
 	},
-	"packages": ["..", "npm:@posthog/pi", "npm:context-mode"],
-	"defaultProvider": "router",
-	"defaultModel": "auto"
+	"packages": ["..", "npm:@posthog/pi", "npm:context-mode"]
 }
