@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { resolveApprovePlanParamsFromDisk } from "../.pi/extensions/lib/plan-approval/resolve-disk.ts";
+import { resolveApprovePlanParamsFromDisk } from "../.pi/lib/plan-approval/resolve-disk.ts";
 import { synthesizeRepairBrief } from "../.pi/lib/harness-repair-brief.ts";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";

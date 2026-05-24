@@ -3,7 +3,7 @@ import type { BuildEvaluationContextInput } from "./build-evaluation-context.js"
 import { buildHarnessAgtEvaluationContext } from "./build-evaluation-context.js";
 import { isHarnessAgtPolicyEnabled } from "./config.js";
 import { evaluateLegacyHarnessToolPolicy } from "./legacy-evaluate.js";
-import { getHarnessPolicyEngine } from "./policy-engine.js";
+import { getAgtPolicyEngine } from "./policy-engine.js";
 
 export interface HarnessPolicyEvaluation {
 	allowed: boolean;
@@ -27,7 +27,7 @@ export async function evaluateHarnessToolPolicy(
 
 	try {
 		const context = await buildHarnessAgtEvaluationContext(input);
-		const engine = getHarnessPolicyEngine(packageRoot);
+		const engine = getAgtPolicyEngine(packageRoot, input.projectRoot);
 		const agentDid = String(context.agent_did ?? context.harness_agent_id);
 		const result = engine.evaluatePolicy(agentDid, context);
 		if (!result.allowed) {

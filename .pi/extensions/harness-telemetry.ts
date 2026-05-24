@@ -14,7 +14,7 @@ import {
 	captureHarnessEvent,
 	type HarnessPostHogEventName,
 	shutdownHarnessPostHog,
-} from "./lib/harness-posthog.js";
+} from "../lib/harness-posthog.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 

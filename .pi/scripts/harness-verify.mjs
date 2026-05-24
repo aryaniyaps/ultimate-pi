@@ -153,12 +153,12 @@ async function checkSentruxRules() {
 }
 
 async function checkHarnessLens(pkgJson) {
-	if (!pkgJson.files?.includes(".pi/extensions/lib/harness-lens")) {
+	if (!pkgJson.files?.includes(".pi/lib/harness-lens")) {
 		fail(
-			'package.json "files" must include .pi/extensions/lib/harness-lens (npm publish ships harness lens extension)',
+			'package.json "files" must include .pi/lib/harness-lens (npm publish ships harness lens extension)',
 		);
 	}
-	ok('package.json files includes .pi/extensions/lib/harness-lens');
+	ok('package.json files includes .pi/lib/harness-lens');
 
 	const piExtensions = pkgJson.pi?.extensions ?? [];
 	if (!piExtensions.includes("./.pi/extensions")) {
@@ -173,24 +173,17 @@ async function checkHarnessLens(pkgJson) {
 	if (!(await fileExists(harnessLens))) fail("missing .pi/extensions/harness-lens.ts");
 	ok("harness lens extension wrapper");
 
-	const lensIndex = join(
-		ROOT,
-		".pi",
-		"extensions",
-		"lib",
-		"harness-lens",
-		"index.ts",
-	);
+	const lensIndex = join(ROOT, ".pi", "lib", "harness-lens", "index.ts");
 	if (!(await fileExists(lensIndex))) {
-		fail("missing .pi/extensions/lib/harness-lens/index.ts");
+		fail("missing .pi/lib/harness-lens/index.ts");
 	}
-	ok(".pi/extensions/lib/harness-lens/index.ts");
+	ok(".pi/lib/harness-lens/index.ts");
 
-	const legacyLens = join(ROOT, ".pi", "extensions", "lib", "lens");
-	if (await fileExists(legacyLens)) {
-		fail("legacy .pi/extensions/lib/lens must not exist (use lib/harness-lens)");
+	const legacyExtLib = join(ROOT, ".pi", "extensions", "lib");
+	if (await fileExists(legacyExtLib)) {
+		fail(".pi/extensions/lib must not exist (shared code lives in .pi/lib/)");
 	}
-	ok("no legacy lib/lens directory");
+	ok("no legacy .pi/extensions/lib directory");
 
 	const lensIndexSource = await readFile(lensIndex, "utf8");
 	if (lensIndexSource.includes("ast_grep_search")) {
@@ -201,20 +194,13 @@ async function checkHarnessLens(pkgJson) {
 	}
 	ok("harness-lens index contract (no ast_grep, no lib/lens imports)");
 
-	const rulesDir = join(ROOT, ".pi", "extensions", "lib", "harness-lens", "rules");
+	const rulesDir = join(ROOT, ".pi", "lib", "harness-lens", "rules");
 	if (await fileExists(rulesDir)) {
 		fail("harness-lens bundled rules/ directory must not exist");
 	}
 	ok("no bundled harness-lens rules/ directory");
 
-	const upstreamPin = join(
-		ROOT,
-		".pi",
-		"extensions",
-		"lib",
-		"harness-lens",
-		"UPSTREAM_PIN.md",
-	);
+	const upstreamPin = join(ROOT, ".pi", "lib", "harness-lens", "UPSTREAM_PIN.md");
 	if (await fileExists(upstreamPin)) {
 		fail("harness-lens UPSTREAM_PIN.md must not exist (harness-native, no upstream sync)");
 	}
@@ -280,7 +266,7 @@ async function main() {
 		ok(`extension ${name}`);
 	}
 
-	const libPath = join(ROOT, ".pi", "extensions", "lib", "harness-posthog.ts");
+	const libPath = join(ROOT, ".pi", "lib", "harness-posthog.ts");
 	if (!(await fileExists(libPath))) fail("missing lib/harness-posthog.ts");
 	ok("lib/harness-posthog.ts");
 
@@ -310,13 +296,7 @@ async function main() {
 	if (!(await fileExists(subagentsVendor))) {
 		fail("missing vendor/pi-subagents/src/subagents.ts");
 	}
-	const bridgePath = join(
-		ROOT,
-		".pi",
-		"extensions",
-		"lib",
-		"harness-subagents-bridge.ts",
-	);
+	const bridgePath = join(ROOT, ".pi", "lib", "harness-subagents-bridge.ts");
 	if (!(await fileExists(bridgePath))) {
 		fail("missing harness-subagents-bridge.ts");
 	}
@@ -327,9 +307,12 @@ async function main() {
 	if (!bridgeSrc.includes("packageRoot")) {
 		fail("harness-subagents-bridge must pass packageRoot for agent discovery");
 	}
-	if (!bridgeSrc.includes("harnessSubagentGovernanceExtensionPath")) {
+	if (
+		!bridgeSrc.includes("subprocessGovernanceExtensionPath") &&
+		!bridgeSrc.includes("subagentGovernanceExtensionPath")
+	) {
 		fail(
-			"harness-subagents-bridge must use harness-subagent-governance subprocess bundle",
+			"harness-subagents-bridge must set subprocessGovernanceExtensionPath for all subagents",
 		);
 	}
 	const subagentsSrc = await readFile(subagentsVendor, "utf-8");
@@ -356,14 +339,18 @@ async function main() {
 	if (!policyGateSrc.includes("evaluateAgtHarnessToolCall")) {
 		fail("policy-gate.ts must delegate tool_call to AGT evaluateAgtHarnessToolCall");
 	}
-	const govPath = join(
+	const govPath = join(ROOT, ".pi", "extensions", "subagent-governance.ts");
+	const govAlias = join(
 		ROOT,
 		".pi",
 		"extensions",
 		"harness-subagent-governance.ts",
 	);
 	if (!(await fileExists(govPath))) {
-		fail("missing harness-subagent-governance.ts subprocess bundle");
+		fail("missing subagent-governance.ts subprocess bundle");
+	}
+	if (!(await fileExists(govAlias))) {
+		fail("missing harness-subagent-governance.ts re-export alias");
 	}
 	ok("policy-gate + subprocess governance");
 
@@ -414,6 +401,12 @@ async function main() {
 	ok("test-diff-golden.json");
 
 	await checkSentruxGate();
+
+	const AGENTS_POLICY = join(ROOT, ".pi", "harness", "agents.policy.yaml");
+	if (!(await fileExists(AGENTS_POLICY))) {
+		fail("missing .pi/harness/agents.policy.yaml");
+	}
+	ok("agents.policy.yaml present");
 
 	if (!(await fileExists(AGENTS_MANIFEST))) {
 		fail(

@@ -1,7 +1,5 @@
 ---
 description: Plan-phase stack research (ctx7 + web, read-only file writes via parent).
-tools: read, grep, find, ls, bash, web_search, web_fetch, submit_stack_brief
-disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
 max_turns: 16

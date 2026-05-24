@@ -1,0 +1,275 @@
+# Generated/maintained SSOT for harness agent tools (see ADR 0049).
+# Regenerate hints: node .pi/scripts/generate-agents-policy-yaml.mjs
+
+apiVersion: harness.toolkit/v1
+kinds:
+  planner:
+    tools:
+      - read
+      - grep
+      - find
+      - ls
+      - ctx_read
+      - ctx_search
+      - ctx_execute
+      - ctx_batch_execute
+      - ctx_tree
+    extensions: false
+    read_only: true
+  executor:
+    tools:
+      - read
+      - write
+      - edit
+      - bash
+      - grep
+      - find
+      - ls
+    extensions: true
+    read_only: false
+  evaluator:
+    tools:
+      - read
+      - grep
+      - find
+      - ls
+      - ctx_read
+      - ctx_search
+      - ctx_execute
+      - ctx_batch_execute
+      - ctx_tree
+    extensions: false
+    read_only: true
+  adversary:
+    tools:
+      - read
+      - grep
+      - find
+      - ls
+      - ctx_read
+      - ctx_search
+      - ctx_execute
+      - ctx_batch_execute
+      - ctx_tree
+    extensions: false
+    read_only: true
+  tie_breaker:
+    tools:
+      - read
+      - grep
+      - find
+      - ls
+      - ctx_read
+      - ctx_search
+      - ctx_execute
+      - ctx_batch_execute
+      - ctx_tree
+    extensions: false
+    read_only: true
+  trace:
+    tools:
+      - read
+      - grep
+      - find
+      - ls
+      - ctx_read
+      - ctx_search
+      - ctx_execute
+      - ctx_batch_execute
+      - ctx_tree
+    extensions: false
+    read_only: true
+  incident:
+    tools:
+      - read
+      - grep
+      - find
+      - ls
+      - ctx_read
+      - ctx_search
+      - ctx_execute
+      - ctx_batch_execute
+      - ctx_tree
+    extensions: false
+    read_only: true
+  other:
+    tools:
+      - read
+      - grep
+      - find
+      - ls
+      - ctx_read
+      - ctx_search
+      - ctx_execute
+      - ctx_tree
+    extensions: false
+    read_only: true
+agents:
+  harness/incident-recorder:
+    kind: incident
+    tools_add:
+      - submit_human_required
+    extensions: false
+    max_turns: 15
+    thinking: medium
+    submit_tool: submit_human_required
+  harness/sentrux-bootstrap:
+    kind: planner
+    tools_add:
+      - bash
+    extensions: true
+    max_turns: 12
+    thinking: low
+  harness/sentrux-steward:
+    kind: planner
+    tools_add:
+      - bash
+      - submit_sentrux_manifest_proposal
+    extensions: false
+    max_turns: 16
+    thinking: high
+    submit_tool: submit_sentrux_manifest_proposal
+  harness/trace-librarian:
+    kind: trace
+    tools_add:
+      - submit_human_required
+    extensions: false
+    max_turns: 20
+    thinking: medium
+    submit_tool: submit_human_required
+  harness/running/executor:
+    kind: executor
+    tools_add:
+      - submit_executor_handoff
+    extensions: true
+    max_turns: 20
+    thinking: medium
+    submit_tool: submit_executor_handoff
+  harness/reviewing/adversary:
+    kind: adversary
+    tools_add:
+      - submit_adversary_report
+    extensions: false
+    max_turns: 20
+    thinking: high
+    submit_tool: submit_adversary_report
+  harness/reviewing/evaluator:
+    kind: evaluator
+    tools_add:
+      - submit_eval_verdict
+    extensions: false
+    max_turns: 20
+    thinking: high
+    submit_tool: submit_eval_verdict
+  harness/reviewing/tie-breaker:
+    kind: tie_breaker
+    tools_add:
+      - submit_human_required
+    extensions: false
+    max_turns: 15
+    thinking: high
+    submit_tool: submit_human_required
+  harness/planning/decompose:
+    kind: planner
+    tools_add:
+      - bash
+      - submit_decomposition_brief
+      - submit_human_required
+    extensions: false
+    max_turns: 12
+    thinking: medium
+  harness/planning/execution-plan-author:
+    kind: planner
+    tools_add:
+      - submit_execution_plan_brief
+    extensions: false
+    max_turns: 18
+    thinking: high
+    submit_tool: submit_execution_plan_brief
+  harness/planning/hypothesis-validator:
+    kind: planner
+    tools_add:
+      - submit_hypothesis_validation
+    extensions: false
+    max_turns: 10
+    thinking: medium
+    submit_tool: submit_hypothesis_validation
+  harness/planning/hypothesis:
+    kind: planner
+    tools_add:
+      - bash
+      - submit_hypothesis_brief
+    extensions: false
+    max_turns: 14
+    thinking: medium
+    submit_tool: submit_hypothesis_brief
+  harness/planning/implementation-researcher:
+    kind: planner
+    tools_add:
+      - bash
+      - web_search
+      - web_fetch
+      - submit_implementation_research
+    extensions: false
+    max_turns: 14
+    thinking: medium
+    submit_tool: submit_implementation_research
+  harness/planning/plan-adversary:
+    kind: planner
+    tools_add:
+      - submit_adversary_brief
+    extensions: false
+    max_turns: 14
+    thinking: medium
+    submit_tool: submit_adversary_brief
+  harness/planning/plan-evaluator:
+    kind: planner
+    tools_add:
+      - submit_validation_turn
+    extensions: false
+    max_turns: 14
+    thinking: medium
+    submit_tool: submit_validation_turn
+  harness/planning/plan-synthesizer:
+    kind: planner
+    tools_add:
+      - submit_decomposition_brief
+      - submit_hypothesis_brief
+      - submit_execution_plan_brief
+    extensions: false
+  harness/planning/planning-context:
+    kind: planner
+    tools_add:
+      - bash
+      - submit_planning_context
+    extensions: false
+    max_turns: 12
+    thinking: low
+    submit_tool: submit_planning_context
+  harness/planning/review-integrator:
+    kind: planner
+    tools_add:
+      - submit_review_round_draft
+    extensions: false
+    max_turns: 12
+    thinking: medium
+    submit_tool: submit_review_round_draft
+  harness/planning/sprint-contract-auditor:
+    kind: planner
+    tools_add:
+      - submit_sprint_audit
+    extensions: false
+    max_turns: 12
+    thinking: medium
+    submit_tool: submit_sprint_audit
+  harness/planning/stack-researcher:
+    kind: planner
+    tools_add:
+      - bash
+      - web_search
+      - web_fetch
+      - submit_stack_brief
+    extensions: false
+    max_turns: 16
+    thinking: medium
+    submit_tool: submit_stack_brief

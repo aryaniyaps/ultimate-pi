@@ -79,13 +79,6 @@ If `/harness-review` returns `implementation_gap`, run:
 | `/wiki-save` | Saves the current conversation or insight as a structured wiki note. |
 | `/release [patch\|minor\|major] [--dry-run]` | Maintainer release helper. |
 
-Deprecated compatibility aliases:
-
-| Alias | Use instead |
-|---|---|
-| `/harness-eval` | `/harness-review` |
-| `/harness-critic` | `/harness-review` |
-
 ## Harness phases and agents
 
 - **Planning** uses agents under `.pi/agents/harness/planning/` plus parent-led Graphify → `sg` → `ccc` reconnaissance. Legacy tool-tied `planning/scout-*` agents have been removed; planning context is captured in `artifacts/planning-context.yaml`.

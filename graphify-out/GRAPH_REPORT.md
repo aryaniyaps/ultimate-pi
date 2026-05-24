@@ -1,16 +1,16 @@
-# Graph Report - ultimate-pi  (2026-05-24)
+# Graph Report - ultimate-pi  (2026-05-25)
 
 ## Corpus Check
-- 183 files · ~2,441,334 words
+- 184 files · ~2,442,242 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 17405 nodes · 29653 edges · 1360 communities (855 shown, 505 thin omitted)
-- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 5211 edges (avg confidence: 0.75)
+- 17441 nodes · 29737 edges · 1348 communities (834 shown, 514 thin omitted)
+- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 5214 edges (avg confidence: 0.75)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `97197ad2`
+- Built from commit: `efeb8d69`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -731,7 +731,6 @@
 - [[_COMMUNITY_How to Build Agent Chat Rooms Multi-Ag… · www_mindstudio_ai_blog_agent-chat-rooms…|How to Build Agent Chat Rooms: Multi-Ag… · www_mindstudio_ai_blog_agent-chat-rooms…]]
 - [[_COMMUNITY_GitHub - alibabaOpenSandbox Secure, F… · github_com_alibaba_OpenSandbox|GitHub - alibaba/OpenSandbox: Secure, F… · github_com_alibaba_OpenSandbox.md]]
 - [[_COMMUNITY_GitHub - mattpococksandcastle Orchest… · github_com_mattpocock_sandcastle|GitHub - mattpocock/sandcastle: Orchest… · github_com_mattpocock_sandcastle.md]]
-- [[_COMMUNITY_Goal Buddy - Open source Codex goal co… · goalbuddy_dev|Goal Buddy - Open source Codex /goal co… · goalbuddy_dev.md]]
 - [[_COMMUNITY_Data corpus · README|Data corpus · README.md]]
 - [[_COMMUNITY_run_deep_extract.py · Deep-mode driver for graphify's headles…|run_deep_extract.py · Deep-mode driver for graphify's headles…]]
 - [[_COMMUNITY_Cross-paper links (research corpus) · CROSS_PAPER_LINKS|Cross-paper links (research corpus) · CROSS_PAPER_LINKS.md]]
@@ -744,6 +743,7 @@
 - [[_COMMUNITY_swe-pruner-context-pruning.md · SWE-Pruner Context Pruning|swe-pruner-context-pruning.md · SWE-Pruner Context Pruning]]
 - [[_COMMUNITY_opencode-dcp.md · OpenCode DCP|opencode-dcp.md · OpenCode DCP]]
 - [[_COMMUNITY_MCP Architecture Docs · mcp-architecture-docs|MCP Architecture Docs · mcp-architecture-docs.md]]
+- [[_COMMUNITY_openclaw-session-pruning.md · OpenClaw Session Pruning|openclaw-session-pruning.md · OpenClaw Session Pruning]]
 - [[_COMMUNITY_ops-codegraph-tool.md · ops-codegraph-tool|ops-codegraph-tool.md · ops-codegraph-tool]]
 - [[_COMMUNITY_codesearch · codesearch|codesearch · codesearch.md]]
 - [[_COMMUNITY_autodev-codebase · autodev-codebase|autodev-codebase · autodev-codebase.md]]
@@ -878,7 +878,6 @@
 - [[_COMMUNITY_Greg Spatial Eval Pentagon|Greg Spatial Eval Pentagon]]
 - [[_COMMUNITY_Token History Screenshots Cost|Token History Screenshots Cost]]
 - [[_COMMUNITY_Sonnet External Links Weak|Sonnet External Links Weak]]
-- [[_COMMUNITY_Markdown Fence Syntax Highlight Bug|Markdown Fence Syntax Highlight Bug]]
 - [[_COMMUNITY_Discord Thread Tag Takeover|Discord Thread Tag Takeover]]
 - [[_COMMUNITY_Dspy Verbose Optimizer Warning|Dspy Verbose Optimizer Warning]]
 - [[_COMMUNITY_Vector Db Simple Api Call Pattern|Vector Db Simple Api Call Pattern]]
@@ -898,6 +897,7 @@
 - [[_COMMUNITY_NumPy cosine similarity|NumPy cosine similarity]]
 - [[_COMMUNITY_pick_category as composable function|pick_category as composable function]]
 - [[_COMMUNITY_Unit-testable prune layer|Unit-testable prune layer]]
+- [[_COMMUNITY_Excalidraw whiteboarding|Excalidraw whiteboarding]]
 - [[_COMMUNITY_LinkedIn engagement CTA|LinkedIn engagement CTA]]
 - [[_COMMUNITY_Boolean classifier prune alternative|Boolean classifier prune alternative]]
 - [[_COMMUNITY_LangChain early function-calling though…|LangChain early function-calling though…]]
@@ -923,8 +923,6 @@
 - [[_COMMUNITY_Categorical scores vs 1-10|Categorical scores vs 1-10]]
 - [[_COMMUNITY_Runtime deterministic asserts|Runtime deterministic asserts]]
 - [[_COMMUNITY_v0 mention|v0 mention]]
-- [[_COMMUNITY_Pytest-style LLM tests|Pytest-style LLM tests]]
-- [[_COMMUNITY_Observability product timeline mention|Observability product timeline mention]]
 - [[_COMMUNITY_Sarbanes-Oxley|Sarbanes-Oxley]]
 - [[_COMMUNITY_Regexgrep prefilter|Regex/grep prefilter]]
 - [[_COMMUNITY_asyncio parallel scanning|asyncio parallel scanning]]
@@ -942,6 +940,8 @@
 - [[_COMMUNITY_XML tags vs JSON-in-JSON pitfalls|XML tags vs JSON-in-JSON pitfalls]]
 - [[_COMMUNITY_Vercel AI SDK integration|Vercel AI SDK integration]]
 - [[_COMMUNITY_Handoffs  guardrails  tracing in Agen…|Handoffs / guardrails / tracing in Agen…]]
+- [[_COMMUNITY_JSON keyword requirement in Agent SDK p…|JSON keyword requirement in Agent SDK p…]]
+- [[_COMMUNITY_Bolt  v0-style prototype tools comparison|Bolt / v0-style prototype tools comparison]]
 - [[_COMMUNITY_Boundary ML product|Boundary ML product]]
 - [[_COMMUNITY_ship friday culture|ship friday culture]]
 - [[_COMMUNITY_AI That Works (YouTube series)|AI That Works (YouTube series)]]
@@ -1007,18 +1007,18 @@
 - [[_COMMUNITY_Backpressure note 29|Backpressure note 29]]
 - [[_COMMUNITY_Luma Events|Luma Events]]
 - [[_COMMUNITY_Nano Banana|Nano Banana]]
-- [[_COMMUNITY_Claude Commands|Claude Commands]]
-- [[_COMMUNITY_Complete Episode|Complete Episode]]
-- [[_COMMUNITY_Rss Meta Md|Rss Meta Md]]
-- [[_COMMUNITY_Human In Loop Linkedin|Human In Loop Linkedin]]
-- [[_COMMUNITY_Sonnet Tool Calling|Sonnet Tool Calling]]
-- [[_COMMUNITY_Email Structure Pipeline|Email Structure Pipeline]]
-- [[_COMMUNITY_Slack Mario Editor|Slack Mario Editor]]
-- [[_COMMUNITY_Yaml Frontmatter|Yaml Frontmatter]]
-- [[_COMMUNITY_Slug Collision Check|Slug Collision Check]]
-- [[_COMMUNITY_Automation facet 0|Automation facet 0]]
 - [[_COMMUNITY_Automation facet 1|Automation facet 1]]
 - [[_COMMUNITY_Automation facet 3|Automation facet 3]]
+- [[_COMMUNITY_Automation facet 4|Automation facet 4]]
+- [[_COMMUNITY_Automation facet 5|Automation facet 5]]
+- [[_COMMUNITY_Automation facet 7|Automation facet 7]]
+- [[_COMMUNITY_Automation facet 8|Automation facet 8]]
+- [[_COMMUNITY_Automation facet 9|Automation facet 9]]
+- [[_COMMUNITY_Automation facet 10|Automation facet 10]]
+- [[_COMMUNITY_Automation facet 11|Automation facet 11]]
+- [[_COMMUNITY_Automation facet 12|Automation facet 12]]
+- [[_COMMUNITY_Automation facet 13|Automation facet 13]]
+- [[_COMMUNITY_Automation facet 14|Automation facet 14]]
 - [[_COMMUNITY_Automation facet 15|Automation facet 15]]
 - [[_COMMUNITY_Automation facet 16|Automation facet 16]]
 - [[_COMMUNITY_Automation facet 17|Automation facet 17]]
@@ -1349,18 +1349,6 @@
 - [[_COMMUNITY_Community 1345|Community 1345]]
 - [[_COMMUNITY_Community 1346|Community 1346]]
 - [[_COMMUNITY_Community 1347|Community 1347]]
-- [[_COMMUNITY_Community 1348|Community 1348]]
-- [[_COMMUNITY_Community 1349|Community 1349]]
-- [[_COMMUNITY_Community 1350|Community 1350]]
-- [[_COMMUNITY_Community 1351|Community 1351]]
-- [[_COMMUNITY_Community 1352|Community 1352]]
-- [[_COMMUNITY_Community 1353|Community 1353]]
-- [[_COMMUNITY_Community 1354|Community 1354]]
-- [[_COMMUNITY_Community 1355|Community 1355]]
-- [[_COMMUNITY_Community 1356|Community 1356]]
-- [[_COMMUNITY_Community 1357|Community 1357]]
-- [[_COMMUNITY_Community 1358|Community 1358]]
-- [[_COMMUNITY_Community 1359|Community 1359]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Communities (160 total, 35 thin omitted)` - 128 edges
@@ -1377,217 +1365,269 @@
 ## Surprising Connections (you probably didn't know these)
 - `Community 24 - "PM Tradeoffs & Decision-Making"` --semantically_similar_to--> `The Making of Community`  [INFERRED] [semantically similar]
   graphify-books-out/GRAPH_REPORT.md → data/books/project-management/[Fahad Batla's Library] Safari, an O'Reilly Media Company._DeMarco, Tom_Lister, Timothy - Peopleware_ Productive Projects and Teams (2013, Addison-Wesley Professional) - libgen.li.pdf
-- `Workflow & Project Management` --semantically_similar_to--> `Section I — Project Management Framework`  [INFERRED] [semantically similar]
-  raw/github.com_numtide_llm-agents.nix.md → data/books/project-management/[Pmbok Guide] Project Management Institute - A Guide to the Project Management Body of Knowledge_ (2008, Project Management Institute) - libgen.li.pdf
+- `Recommended Operating Model` --semantically_similar_to--> `Next-generation digital operating model`  [INFERRED] [semantically similar]
+  questions/Research: claude-mem over obsidian wiki as the knowledge base for our agentic harness pipeline. think from first principles. does this replace or complement our current setup? no hard feelings about previous decisions. gimme accurate points.md → data/books/team-management/Matthew Skelton_ Manuel Pais - Team Topologies_ Organizing Business and Technology Teams for Fast Flow (2019, It Revolution Press) - libgen.li.pdf
 - `Key Product Decisions` --semantically_similar_to--> `Chapter 4 — Key Construction Decisions`  [INFERRED] [semantically similar]
   sources/Source: Bolt.new Architecture & Case Study.md → data/books/software-engineering/Steve McConnell - Code Complete_ A Practical Handbook of Software Construction 2 ed. (Microsoft Press) - libgen.li.pdf
 - `Event-Driven System Reminders` --semantically_similar_to--> `Event-driven architecture style`  [INFERRED] [semantically similar]
   sources/Source: OpenDev — Building AI Coding Agents for the Terminal.md → data/books/software-engineering/Fundamentals of Software Architecture_ A Modern Engineering Approach{Mark Richards_ Neal Ford}(2025 March 25, O&_039_Reilly Media){111205155} libgen.li.pdf
-- `Key Design Decisions` --semantically_similar_to--> `Chapter 4 — Key Construction Decisions`  [INFERRED] [semantically similar]
-  sources/gsd-github-repo.md → data/books/software-engineering/Steve McConnell - Code Complete_ A Practical Handbook of Software Construction 2 ed. (Microsoft Press) - libgen.li.pdf
+- `Why It Matters` --semantically_similar_to--> `Brief history of project management (why history matters)`  [INFERRED] [semantically similar]
+  concepts/progressive-disclosure-agents.md → data/books/project-management/Scott Berkun - Making Things Happen_ Mastering Project Management (Theory in Practice) (2008, O'Reilly Media) - libgen.li.pdf
 
 ## Hyperedges (group relationships)
 - **NEA × Namespace panel on agentic CI/CD** — yt_VktrqzQgytY_talk, yt_VktrqzQgytY_madison_faulkner, yt_VktrqzQgytY_hugo_santos [EXTRACTED 1.00]
 
-## Communities (1360 total, 505 thin omitted)
+## Communities (1348 total, 514 thin omitted)
 
 ### Community 0 - "Claude Code · Structured plan document before execute · Vercel Agent Browser CLI"
 Cohesion: 0.02
-Nodes (182): BiomeDiagnostic, findCommandAsync(), isCommandAvailableAsync(), safeSpawnAsync(), SafeSpawnOptions, SpawnResult, canToolAutoFix(), getAutofixCapability() (+174 more)
+Nodes (201): findCommandAsync(), isCommandAvailableAsync(), safeSpawnAsync(), SafeSpawnOptions, SpawnResult, canToolAutoFix(), getAutofixCapability(), getToolCommandSpec() (+193 more)
 
 ### Community 1 - "BAML · Prompt Fiddle · Ship item 14"
 Cohesion: 0.01
-Nodes (271): 10. Automations (Scheduled Agent Tasks), 9. Memory System (v0.39+), After-Fix State, Fixes applied, Type/Status convention, Layer 3 (Optional) — Pre-exec hook, MVP Scope, API Layer (+263 more)
+Nodes (270): 10. Automations (Scheduled Agent Tasks), 9. Memory System (v0.39+), After-Fix State, Fixes applied, Type/Status convention, Layer 3 (Optional) — Pre-exec hook, MVP Scope, Reference harnesses (patterns to mine) (+262 more)
 
 ### Community 2 - "Principled AI Coding · Model Context Protocol · Prompt chain / workflow"
-Cohesion: 0.01
-Nodes (187): Google APIs (env configuration), baml_src folder, BAML inline tests, Discord Onboarding Support, Google Api Env, Partial Stream Resume Optional Fields, Sync Vs Async Generator Choice, Financial statement PDF extraction (+179 more)
+Cohesion: 0.02
+Nodes (104): formatCascadeNeighborDiagnostics(), CascadeNeighborResult, CascadeResult, createDiagnosticTracker(), Diagnostic, DiagnosticTracker, getDiagnosticTracker(), SessionStats (+96 more)
 
 ### Community 3 - "Book community index nodes (metadata)"
-Cohesion: 0.02
-Nodes (170): Token Budget, Token Budget, Prompt Structure, Prompt Structure, Dynamic System Prompt Construction, Token Budget, Image Prompts, Token Budget Discipline (+162 more)
+Cohesion: 0.03
+Nodes (155): Prompt Structure, Prompt Structure, Dynamic System Prompt Construction, code:block2 ([System prompt — stable across all requests]         ← CACHE), Prompt Structure IS Cache Architecture, Model Context Protocol, Principled AI Coding, Prompt chain / workflow (+147 more)
 
 ### Community 4 - "Spec / plan prompt · Context priming · Single-file agent pattern"
-Cohesion: 0.04
-Nodes (167): Cursor for demos, Zoom Live Coding Session, Cursor IDE for BAML project, Dalle Midjourney Comparison, Dockerized computer-use client, Greg Drawing Horse Failure, Spatial reasoning limits in computer use, v0 by Vercel (UI codegen) (+159 more)
+Cohesion: 0.01
+Nodes (149): baml_src folder, BAML inline tests, Discord Onboarding Support, Partial Stream Resume Optional Fields, Sync Vs Async Generator Choice, Financial statement PDF extraction, Transcript unavailable (indexing/API failure), Prompt Static Analysis Errors (+141 more)
 
 ### Community 5 - "BAML (Boundary ML language) · SeaGOAT - GitHub Pages · Watch mode driven by filesystem …"
 Cohesion: 0.02
-Nodes (110): formatCascadeNeighborDiagnostics(), CascadeNeighborResult, CascadeResult, createDiagnosticTracker(), Diagnostic, DiagnosticTracker, getDiagnosticTracker(), SessionStats (+102 more)
+Nodes (123): Communities (158 total, 35 thin omitted), Community 100 - "Success & Complacency", Community 102 - "CLRS: FFT & String Matching", Community 103 - "Architectural Quanta & Modularity", Community 106 - "Cialdini: Jigsaw & Contact Theory", Community 109 - "CSAPP: Assembly Arithmetic", Community 115 - "PM History & Myths", Community 116 - "Acqui-Hires" (+115 more)
 
 ### Community 6 - "core four · 2026: year of trust · bg agent"
-Cohesion: 0.02
-Nodes (130): clearFormatServiceAndFileState(), FormatOptions, FormatService, FormatSummary, resetFormatService(), ALL_FORMATTERS, biomeFormatter, blackFormatter (+122 more)
+Cohesion: 0.03
+Nodes (118): ALL_FORMATTERS, biomeFormatter, blackFormatter, canUseBundleExec(), clangFormatFormatter, cljfmtFormatter, cmakeFormatFormatter, csharpierFormatter (+110 more)
 
 ### Community 7 - "Aider · Cursor · Aider architect mode"
 Cohesion: 0.03
-Nodes (94): ActionableWarningAction, ActionableWarningRecord, ActionableWarningsAutofixSummary, ActionableWarningsReport, actionSafety(), applyConservativeActionableWarningFixes(), buildActionableWarningsReport(), createActionableWarningId() (+86 more)
+Nodes (95): applyConservativeActionableWarningFixes(), createDiagnosticLogger(), Diagnostic, DiagnosticEntry, DiagnosticLogger, getDiagnosticLogger(), getLogDir(), getLogFile() (+87 more)
 
 ### Community 8 - "Harness Engineering · Legendary Engineering Patterns for AI C… · Harness engineering bl…"
-Cohesion: 0.03
-Nodes (84): detectFileRole(), FileRole, isReExportBarrel(), isTypeStub(), buildProjectIgnoreMatcher(), collapseSlashes(), createProjectIgnoreMatcher(), EXCLUDED_DIRS (+76 more)
+Cohesion: 0.04
+Nodes (97): FeatureHintKind, featureHintMetadata(), inferFeatureKind(), inferTrustBoundaries(), normalizeHintInput(), TrustBoundary, detectFileKind(), normalizeMapKey() (+89 more)
 
 ### Community 9 - "Claude Code skills · Claude Code Skills & Commands · Claude API — Agent Skills Overview"
-Cohesion: 0.04
-Nodes (96): FeatureHintKind, featureHintMetadata(), inferFeatureKind(), inferTrustBoundaries(), normalizeHintInput(), TrustBoundary, detectFileKind(), normalizeMapKey() (+88 more)
+Cohesion: 0.07
+Nodes (114): Dalle Midjourney Comparison, Dockerized computer-use client, Greg Drawing Horse Failure, Spatial reasoning limits in computer use, CLAUDE.md Behavior, OpenRouter, Anthropic, AI agent tool loop (+106 more)
 
 ### Community 10 - "VS Code · Aider /load · KB SQLite project"
 Cohesion: 0.03
-Nodes (44): AgentBehaviorClient, BehaviorWarning, READ_OPS, ToolCallRecord, WRITE_OPS, BiomeClient, BootstrapClients, loadBootstrapClients() (+36 more)
+Nodes (40): AgentBehaviorClient, BehaviorWarning, READ_OPS, ToolCallRecord, WRITE_OPS, BiomeClient, BiomeDiagnostic, BootstrapClients (+32 more)
 
 ### Community 11 - "index_youtube_urls.py · main() · fetch_transcript_firecrawl()"
-Cohesion: 0.03
-Nodes (104): Comparison With Other Agents, Five Safety Layers, Layer 2: Schema-Level Tool Restrictions, Layer 3: Runtime Approval System, Layer 5: Lifecycle Hooks, Contradictions, Key Concepts, Key Entities (+96 more)
-
-### Community 12 - "Agent Harness / Orchestration · Archon harness builder · Stripe Minions"
 Cohesion: 0.02
 Nodes (90): retargetReplacementIndentation(), consumeSessionStartGuidance(), consumeTestFindings(), consumeTurnEndFindings(), setRenderCallback(), astGrepClient, baseline, bySource (+82 more)
 
+### Community 12 - "Agent Harness / Orchestration · Archon harness builder · Stripe Minions"
+Cohesion: 0.05
+Nodes (100): Does SeaGOAT create AI-derived work? Is SeaGOAT ethical?, Hardware, How does SeaGOAT work? Does it send my data to ChatGPT?, Install dependencies, Install SeaGOAT, Manual testing, Oporating system, Running tests (+92 more)
+
 ### Community 13 - "Modularity · Coupling · Team cognitive load"
+Cohesion: 0.04
+Nodes (97): GitHub - openai/symphony: Symphony turns project work into isolated, autonomous implementation runs, allowing teams to manage work instead of supervising coding agents. · GitHub, Cursor for demos, Zoom Live Coding Session, Cursor IDE for BAML project, v0 by Vercel (UI codegen), GPT-4o, GitHub Actions, Agents Md (+89 more)
+
+### Community 14 - "Decision-making and delegation · Managing managers · Tech lead role (responsibilities, …"
 Cohesion: 0.03
 Nodes (67): BashServer, canInstall(), ClojureServer, CppServer, createInteractiveServer(), CSharpServer, CssServer, DartServer (+59 more)
 
-### Community 14 - "Decision-making and delegation · Managing managers · Tech lead role (responsibilities, …"
-Cohesion: 0.02
-Nodes (85): [1.1.2] - Previous, [1.2.0] - 2026-03-23, [1.3.10] - 2026-03-25, [1.3.14] - 2026-03-25, [1.3.6] - 2026-03-25, [1.3.7] - 2026-03-25, [1.3.9] - 2026-03-25, [2.0.10] - 2026-03-26 (+77 more)
-
 ### Community 15 - "Chapter 4 — Key Construction Decisions · Measurement, metrics, and effect of pro… · Arc…"
-Cohesion: 0.04
-Nodes (54): EXT_TO_KIND, FileKind, isCodeKind(), isConfigKind(), isScannableFile(), KIND_EXTENSIONS, SPECIAL_FILENAMES, EMPTY_RESULT (+46 more)
+Cohesion: 0.02
+Nodes (86): [1.1.2] - Previous, [1.3.10] - 2026-03-25, [1.3.14] - 2026-03-25, [1.3.5] - 2026-03-25, [1.3.7] - 2026-03-25, [1.3.9] - 2026-03-25, [1.4.0] - 2026-03-23, [2.0.10] - 2026-03-26 (+78 more)
 
 ### Community 16 - "B-trees · LSM-trees · Architecture governance"
-Cohesion: 0.03
-Nodes (77): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+69 more)
+Cohesion: 0.04
+Nodes (67): detectFileRole(), FileRole, isReExportBarrel(), isTypeStub(), buildProjectIgnoreMatcher(), collapseSlashes(), createProjectIgnoreMatcher(), EXCLUDED_DIRS (+59 more)
 
 ### Community 17 - "The truth about schedules · Tailoring project management processes · Agile / adaptive f…"
-Cohesion: 0.07
-Nodes (65): registerCommands(), FALLBACK_CONFIG, isObjectRecord(), isRouterTier(), isThinkingLevel(), loadRouterConfig(), mergeConfig(), normalizeConfig() (+57 more)
+Cohesion: 0.03
+Nodes (83): 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation (+75 more)
 
 ### Community 18 - "Takt Time · Pull Production · Kanban"
 Cohesion: 0.04
-Nodes (67): Boris Cherny, Harness engineering for coding agent users, Claude API — Agent Skills Overview, Summary, What We Adopt, What We Note, Claude Desktop, Claude Agent Sdk (+59 more)
+Nodes (49): getStateIndex(), isSyntaxNode(), SYNTAX_TYPES, TOKEN_TYPES, KnipClient, buildFunctionMatrixFromNode(), buildProjectIndex(), extractArrowFunctions() (+41 more)
 
 ### Community 19 - "Pydantic AI framework · Generative UI · Progressive disclosure pattern"
-Cohesion: 0.03
-Nodes (69): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+61 more)
+Cohesion: 0.04
+Nodes (53): EXT_TO_KIND, FileKind, isCodeKind(), isConfigKind(), isScannableFile(), KIND_EXTENSIONS, SPECIAL_FILENAMES, canRunStartupHeavyScans() (+45 more)
 
 ### Community 20 - "Key SOTA Harness Components · agent-browser — Browser Automation CLI … · 11. Browser Ag…"
 Cohesion: 0.03
-Nodes (65): Community 100 - "Success & Complacency", Community 102 - "CLRS: FFT & String Matching", Community 109 - "CSAPP: Assembly Arithmetic", Community 115 - "PM History & Myths", Community 116 - "Acqui-Hires", Community 117 - "CV Screening Heuristics", Community 118 - "Recruiting & Branding", Community 121 - "Hiring Rigor" (+57 more)
+Nodes (77): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+69 more)
 
 ### Community 21 - "7 Best Vector Databases in 2025 - Truef… · Vector database pruning · Do you really need…"
-Cohesion: 0.05
-Nodes (46): AgentConfig, AgentDiscoveryResult, AgentScope, AgentSource, BUILT_IN_AGENTS, BUILTIN_TOOL_NAMES, computeEffectiveTools(), csvList() (+38 more)
+Cohesion: 0.07
+Nodes (65): registerCommands(), FALLBACK_CONFIG, isObjectRecord(), isRouterTier(), isThinkingLevel(), loadRouterConfig(), mergeConfig(), normalizeConfig() (+57 more)
 
 ### Community 22 - "Function coder benchmark · simple-math YAML suite · NL to Typer CLI suite"
 Cohesion: 0.05
-Nodes (58): agent-browser — Rust-Native Browser Automation for AI Agents, Architecture, Core Design, Integration with P30, Architecture, Core Idea, Key Properties, 11. Browser Agent (v0.31+) (+50 more)
+Nodes (64): ActionableWarningAction, ActionableWarningRecord, ActionableWarningsAutofixSummary, ActionableWarningsReport, actionSafety(), buildActionableWarningsReport(), createActionableWarningId(), formatActionableWarningsAdvisory() (+56 more)
 
 ### Community 23 - "Anti-slop engineering · Key Innovations for AI Agents · SASE SE-for-humans vs SE-for-ag…"
-Cohesion: 0.06
-Nodes (58): createDiagnosticLogger(), Diagnostic, DiagnosticEntry, DiagnosticLogger, getDiagnosticLogger(), getLogDir(), getLogFile(), LogContext (+50 more)
+Cohesion: 0.04
+Nodes (65): Gemini CLI Implementation (v0.23+), Integration Path (P-F2), Key Design Decisions, Relationship to Other Harness Primitives, Ultimate-PI Current State, What It Is, code:block1 (User Input → packages/cli (frontend) → packages/core (backen), Core Architecture (+57 more)
 
 ### Community 24 - "GitHub - BeaconBay/ck: Local first sema… · 🎯 **Hybrid Search** · 🔍 **Semantic Search**"
-Cohesion: 0.05
-Nodes (61): Natural-Language Agent Harnesses (NLAH), Intelligent Harness Runtime (IHR), Natural-Language Agent Harnesses, Harness design-pattern layer, ACE evolving context playbooks, AppWorld evaluation for agents, Context collapse phenomenon, Agentic Context Engineering (ACE playbook) (+53 more)
+Cohesion: 0.04
+Nodes (70): c6 (159 nodes, channels: indydevdan, cole-medin), code:shell (# Git hooks), Integration Examples, Claude Code, Claude Code, Benchmarked Results, Blind Study on Elasticsearch Repository (3.6M Java LOC, 2,187 contributors), Sub-scores (Augment vs Cursor vs Claude Code): (+62 more)
 
 ### Community 25 - "Organizational structure and scaling · Centralized decision-making groups · Bootstrappi…"
-Cohesion: 0.04
-Nodes (60): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+52 more)
+Cohesion: 0.05
+Nodes (58): ASYNC_HINTS, classifyDefect(), classifyDiagnostic(), hasAny(), INJECTION_HINTS, SECRET_HINTS, SILENT_ERROR_HINTS, applyInlineSuppressions() (+50 more)
 
 ### Community 26 - "Pi coding agent harness · Multi-team orchestration · meng2026-agent-harness-survey.md"
-Cohesion: 0.04
-Nodes (51): Martin Fowler, Martin Fowler (quoted endorser), Core Definition, How Ultimate-PI Maps, Three Regulation Dimensions, 10. Shared Context and Community (Thompson, Ritchie, Kernighan), 1. Fast Feedback Loops (Hejlsberg, Torvalds), 2. Composability over Monoliths (Thompson, Ritchie, McIlroy) (+43 more)
+Cohesion: 0.06
+Nodes (56): activeStatuses, agentDebugLog(), AgentScopeSchema, aggregateUsage(), AggregatorItem, appendSubagentEvent(), buildAgentArgs(), buildFanInContext() (+48 more)
 
 ### Community 27 - "Growth mindset: abilities can be develo… · Fixed mindset: qualities seen as fixed;… · O…"
 Cohesion: 0.04
-Nodes (58): Communities (158 total, 35 thin omitted), Community 103 - "Architectural Quanta & Modularity", Community 106 - "Cialdini: Jigsaw & Contact Theory", Community 113 - "Cache Locality & Tiling", Community 119 - "Hiring Decision Models", Community 120 - "Greene: Character & Compulsion", Community 12 - "Conversation Skills (AMPP/STATE)", Community 19 - "Defiant Power: Mindset Meets Meaning" (+50 more)
+Nodes (53): Agentic Harness Engineering (AHE), Frozen harness transfer across models, Martin Fowler, Martin Fowler (quoted endorser), Core Definition, How Ultimate-PI Maps, Three Regulation Dimensions, 10. Shared Context and Community (Thompson, Ritchie, Kernighan) (+45 more)
 
 ### Community 28 - "Context Engineering · Context Engineering (shared) · context-engineering.md"
-Cohesion: 0.05
-Nodes (56): Changelog, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+48 more)
+Cohesion: 0.04
+Nodes (60): Anthropic Context Engineering, Adaptive Context Compaction (ACC), Calibration, Context Engineering, Core Principles, Dual-Memory Architecture, Event-Driven System Reminders, Key Techniques (+52 more)
 
 ### Community 29 - "AI That Works (podcast) · BAML (Boundary Markup Language) · Tool iteration vs assistant…"
-Cohesion: 0.08
-Nodes (57): Uv Run, Planner agent, agent agnostic, archive moves, cat batch, drop zones, drops yaml, echo zone (+49 more)
+Cohesion: 0.05
+Nodes (61): Analyzing algorithms and running time, Random-access machine (RAM) model, Arithmetic and logical operations, Array indexing and struct layout, Bits and bytes, Branch prediction, C integer promotions and conversions, Code motion and strength reduction (+53 more)
 
 ### Community 30 - "Cohesion, abstraction, and routine leng… · Part II — Creating High-Quality Code · Chapt…"
-Cohesion: 0.05
-Nodes (57): The Steering Loop, P10: The Steering Loop, The Steering Loop, The Steering Loop, Human-in-the-loop collaborative UI, Shared state sync demo, Dan Shapiro, Dark factory (autonomous code shipping) (+49 more)
+Cohesion: 0.09
+Nodes (59): Boundary Studio, Boundary Studio evals, Alson (customer feedback), Azure OpenAI with BAML, BAML CLI optimize command, Batman (Entra ID request), curl authorization redaction, Entra ID for Azure (+51 more)
 
 ### Community 31 - "Virtual Memory · Exceptional Control Flow · The Memory Hierarchy"
 Cohesion: 0.05
-Nodes (55): Artifacts and layout, Bootstrap, Budget hard-stop triggers, code:text (/harness-plan "implement feature X safely"), code:text (/harness-run --plan <path-to-plan-packet.json>), code:text (/harness-eval --run <run-id>), code:text (/harness-critic --run <run-id>), code:text (/harness-incident --run <run-id> --trigger "<reason>") (+47 more)
+Nodes (56): channel_dir_from_handle(), collect_urls(), default_paths(), fetch_transcript_firecrawl(), fetch_transcript_harness_web(), _firecrawl_transcript_sane(), main(), merge_index() (+48 more)
 
 ### Community 32 - "Managing people (first-line manager) · Brilliant jerk / toxic high performer · Scaling …"
+Cohesion: 0.08
+Nodes (47): PostHandler, { agents }, buildWidgetLines(), cost, entry, lines, pct, refreshWidget() (+39 more)
+
+### Community 33 - "Pool of Shared Meaning · Meeting as the medium of managerial work · Cycle Time"
+Cohesion: 0.06
+Nodes (53): Bootstrap, code:block5 (/harness-setup), Contributing, Goal, code:block1 (src/harness/), code:block3 (/harness-setup), harness-setup Command, code:block1 (/ harness "task") (+45 more)
+
+### Community 34 - "Rubrics for hiring, promos, designations · Opportunity: success and development ac… · C…"
 Cohesion: 0.07
 Nodes (51): checkAllTools(), checkProbeCache(), debugLog(), deriveHashiCorpReleaseAsset(), DownloadAsset, ensureInFlight, findFirstFileRecursive(), findGitHubToolPath() (+43 more)
 
-### Community 33 - "Pool of Shared Meaning · Meeting as the medium of managerial work · Cycle Time"
-Cohesion: 0.07
-Nodes (15): TreeSitterSymbolExtractor, CompletionItem, Diagnostic, DiagnosticSeverity, FoldingRange, HoverInfo, Location, Position (+7 more)
-
-### Community 34 - "Rubrics for hiring, promos, designations · Opportunity: success and development ac… · C…"
-Cohesion: 0.05
-Nodes (54): Learning adjacent disciplines (Sinofsky), Compounding returns of learning, Growth mindset (Dweck), Optimize for learning, BloomReach, Box, Google, Microsoft (+46 more)
-
 ### Community 35 - "Agent harness · Human-in-the-loop · LangChain: The Anatomy of an Agent Harness"
-Cohesion: 0.07
-Nodes (51): code:block1 (L2.5 Runtime Drift Monitor:), Confidence, Cost Analysis, Evidence, Harness Implementation, LLM-Based Detection = Small Model Feasible, Q1: Can Haiku/Flash serve as meta-agent detector?, Q2: Can Haiku subagents apply to code review / adversarial verification (L4)? (+43 more)
+Cohesion: 0.06
+Nodes (53): Alternatives to MCP Routing, code:block1 (┌─────────────────┐     MCP Protocol      ┌─────────────────), code:block3 ("ck_search: Semantic code search using embeddings. Use for c), Limitations, MCP Architecture for Code Search, Registration, Routing Logic, Key Argument (+45 more)
 
 ### Community 36 - "Boundary (company) · Boundary Studio · Figma vs Storybook for agents"
-Cohesion: 0.04
-Nodes (52): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+44 more)
+Cohesion: 0.05
+Nodes (55): Artifacts and layout, Bootstrap, Budget hard-stop triggers, code:text (/harness-plan "implement feature X safely"), code:text (/harness-run --plan <path-to-plan-packet.json>), code:text (/harness-eval --run <run-id>), code:text (/harness-critic --run <run-id>), code:text (/harness-incident --run <run-id> --trigger "<reason>") (+47 more)
 
 ### Community 37 - "Manual flush for Django RQ + async tracing · TypeScript strict mode for generated cl… ·…"
-Cohesion: 0.06
-Nodes (52): Blocking/tiling for cache locality, Compiler driver (cpp, cc1, as, ld), Library interpositioning, Linking, Principle of locality (temporal and spatial), Matrix multiply and locality, PLT and GOT for dynamic linking, Position-independent code (PIC) (+44 more)
+Cohesion: 0.04
+Nodes (55): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+47 more)
 
 ### Community 38 - "wiki/ compiled knowledge · AI Layer (PRD, rules, commands) · agents.md / Global Rules"
-Cohesion: 0.1
-Nodes (52): Boundary Studio, Boundary Studio evals, Alson (customer feedback), Azure OpenAI with BAML, BAML CLI optimize command, Batman (Entra ID request), curl authorization redaction, Entra ID for Azure (+44 more)
+Cohesion: 0.04
+Nodes (55): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, ✨ Features, ✨ Features (+47 more)
 
 ### Community 39 - "GitHub - kantord/SeaGOAT: local-first s… · Search your repository · code:shell (pipx in…"
-Cohesion: 0.06
-Nodes (48): Harness Evolution Loop, Agent optimization as coding task, VeRO harness for agent optimization, VERO versioning and structured traces, Merge-Readiness and Consultation Request Packs, 7. Long-Running Agent Hooks, Requirements for Agent-Friendly Execution, AutoHarness (Lou et al., 2026) (+40 more)
+Cohesion: 0.05
+Nodes (54): 20% time for sustaining engineering / cleanup, Coordination via peer groups, Decision-making (managerial activity), Decisions, Decisions (decision process), Information gathering (managerial activity), Meeting as the medium of managerial work, Meeting minutes and action closure, Supervisor as moderator and facilitator (+46 more)
 
 ### Community 40 - "First-Principles Architecture · service mesh · tool surface"
 Cohesion: 0.05
-Nodes (48): Anthropic Context Engineering, Calibration, Context Engineering, Core Principles, Relevance to Our Harness, 2. Environment Control Is the Moat, 4. Context Engineering Is the Central Constraint, 5. Repository Knowledge as System of Record (+40 more)
+Nodes (51): Changelog, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+43 more)
 
 ### Community 41 - "Firecrawl Self-Hosted · Firecrawl (self-hosted web scraping) · Quick start"
-Cohesion: 0.07
-Nodes (36): addSmell(), analyzeCascade(), analyzeDiagnosticLogs(), analyzeLatency(), analyzeReadGuard(), analyzeSessionStart(), analyzeTreeSitter(), args (+28 more)
+Cohesion: 0.04
+Nodes (52): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+44 more)
 
 ### Community 42 - "Executing Process Group · Leadership is based on trust · Jelled teams"
-Cohesion: 0.06
-Nodes (49): Alfred Binet: IQ test to identify children needing support; believed education/practice can change intelligence, Mindset: The New Psychology of Success (updated ed., 2019), Brainology-style content: brain changes with learning; workshop parallels manager workshop, Enron collapse tied to arrogance/blame (Skilling: not my fault; world didn’t appreciate), Jack Welch contrast: constructive response to GE/Kidder, Peabody failures, Complacency/sloppiness after success — ‘infected with success,’ disease of me, In fixed mindset, effort implies low ability (“If you were smart you wouldn’t need effort”), In growth mindset, effort is what builds strength and skill (+41 more)
+Cohesion: 0.04
+Nodes (52): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+44 more)
 
 ### Community 43 - "Complexity in software systems · Managing complexity as primary technica… · Procrastina…"
-Cohesion: 0.07
-Nodes (49): People are mixtures of fixed and growth mindsets across contexts, Franklin: reason holds reins if passion drives, Buddha's wild elephant metaphor, Chapter 1: The Divided Self, Chapter 2: Changing Your Mind, Dual-process view of cognition and emotion, Freud's divided mind (id/ego/superego), Gazzaniga's interpreter module (confabulating rider) (+41 more)
+Cohesion: 0.05
+Nodes (52): Compiler driver (cpp, cc1, as, ld), Library interpositioning, Linking, PLT and GOT for dynamic linking, Position-independent code (PIC), Shared libraries (.so), Partition key, Partitioning (sharding) (+44 more)
 
 ### Community 44 - "Event-driven architecture style · Stream processing · Pipeline architecture style"
-Cohesion: 0.05
-Nodes (49): Priority 5: Git Worktree Sessions (P-F5), BAML (Boundary Markup Language), Editor / playground test loop, Structured output guarantees, Typed prompt functions, Raw SDK string templating anti-pattern, Agent framework comparison docs, Go client Windows support (+41 more)
+Cohesion: 0.07
+Nodes (52): Cursor IDE, Cursor / Claude style planning loops, Cursor for eval iteration, Cursor in Enron workflow, OpenAI Responses API, Alignment agent as engineering practice, Background supervisor on token stream, BAML TUI (Rust) (+44 more)
 
 ### Community 45 - "Value-Stream Mapping (VSM) · Three-minute egg breakfast scenario · Black box model of o…"
 Cohesion: 0.08
-Nodes (49): Agent Workflow, code:block1 (scan("/project")       → quality_signal: 7342, files: 139, b), 7. Generator-Evaluator Loop (GAN-Inspired), Agent Harness / Orchestration, Anthropic Stripe blog reference, Blueprints workflows, Cattle not pets instances, CLI entry to Minions (+41 more)
+Nodes (50): Getting started with insertion sort, INSERTION-SORT, code:bash (pi install . -l), code:bash (cd firecrawl), code:bash (npm install -g ultimate-pi), code:bash (pi install ultimate-pi -l), code:bash (/reload), code:bash (npm install -g @aryaniyaps/ultimate-pi --registry=https://np) (+42 more)
 
 ### Community 46 - "MVP Implementation Blueprint: Skill-Fir… · @ file reference in Cursor · 4. L2: Structur…"
-Cohesion: 0.07
-Nodes (42): clearDiagnosticsForPath(), clientRequestPullDiagnostics(), clientShutdown(), clientWaitForDiagnostics(), createLSPClient(), detectOperationSupport(), detectWorkspaceDiagnosticsSupport(), DIAGNOSTICS_WAIT_TIMEOUT_MS (+34 more)
+Cohesion: 0.05
+Nodes (49): agent-browser — Rust-Native Browser Automation for AI Agents, Architecture, Core Design, Integration with P30, 11. Browser Agent (v0.31+), L4: Adversarial Verification — SKILL + AGENT, Priority 7: Browser Agent for Visual Verification (P-F7), Agentic browser (CDP) (+41 more)
 
 ### Community 47 - "Microservices architecture style · Trade-off analysis in architecture · Four fundamenta…"
-Cohesion: 0.08
-Nodes (47): Context Degradation Research, ChatGPT, Google A2UI protocol, AGUI protocol, Generative UI, Logfire observability, Progressive disclosure pattern, Pydantic AI framework (+39 more)
+Cohesion: 0.07
+Nodes (51): code:block1 (System prompt (~500 tokens)), The Problem: Tool Context Bloat, code:block1 (TASK PLAN → .pi/harness/plans/<hash>.yaml), Summary Format (in system prompt), ChatGPT, Google A2UI protocol, Generative UI, Logfire observability (+43 more)
 
 ### Community 48 - "Team Topologies (book) · Accelerate (Forsgren, Humble, Kim) · Research: Codex State-of-…"
 Cohesion: 0.05
-Nodes (46): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 📖 Documentation, 📖 Documentation (+38 more)
+Nodes (51): Three observability pillars (AHE), Intelligent Harness Runtime (IHR), ACE evolving context playbooks, AppWorld evaluation for agents, Agentic Context Engineering (ACE playbook), Agentic programming taxonomy, AI Agentic Programming Survey, Human-centric toolchain gaps for agents (+43 more)
+
+### Community 49 - "Pydantic AI · Hybrid + semantic search · Snyk MCP server"
+Cohesion: 0.07
+Nodes (36): addSmell(), analyzeCascade(), analyzeDiagnosticLogs(), analyzeLatency(), analyzeReadGuard(), analyzeSessionStart(), analyzeTreeSitter(), args (+28 more)
 
 ### Community 50 - "Pi Coding Agent (pi-mono) · pi-coding-agent.md · VCC Conversation Compaction for Pi"
+Cohesion: 0.07
+Nodes (44): clearDiagnosticsForPath(), clientRequestPullDiagnostics(), clientShutdown(), clientWaitForDiagnostics(), createLSPClient(), detectOperationSupport(), detectWorkspaceDiagnosticsSupport(), DIAGNOSTICS_WAIT_TIMEOUT_MS (+36 more)
+
+### Community 51 - "Model Context Protocol (MCP) · Bash vs MCP · OpenAI Pattern: Agent-to-Agent Review L…"
+Cohesion: 0.06
+Nodes (48): Concurrent Programming, Condition variables, Mutexes (Pthreads mutex), Network Programming, Parallelism and speedup (Amdahl), Race conditions, Semaphores, Signal handlers and async-signal-safety (+40 more)
+
+### Community 52 - "Subconscious (irrational) creative mind · Rider and elephant (conscious vs automa… · Ch…"
+Cohesion: 0.05
+Nodes (49): Priority 5: Git Worktree Sessions (P-F5), BAML (Boundary Markup Language), Editor / playground test loop, Structured output guarantees, Typed prompt functions, Raw SDK string templating anti-pattern, Agent framework comparison docs, Go client Windows support (+41 more)
+
+### Community 53 - "Autosuggestion (self-given suggestions) · Chapter 2: Changing Your Mind · AMPP: Ask, Mi…"
+Cohesion: 0.07
+Nodes (49): People are mixtures of fixed and growth mindsets across contexts, Fixed mindset preference for effortless success as proof of talent, Franklin: reason holds reins if passion drives, Buddha's wild elephant metaphor, Chapter 1: The Divided Self, Dual-process view of cognition and emotion, Freud's divided mind (id/ego/superego), Gazzaniga's interpreter module (confabulating rider) (+41 more)
+
+### Community 54 - "Ada assistant persona · OpenAI Realtime API · AI assistant orchestration layer"
+Cohesion: 0.06
+Nodes (48): Address spaces, Address translation, Buffer overflows and stack corruption, Cache hits, misses, evictions, Cache organization (S, E, B), Context switching, Demand paging, Dynamic memory allocators (+40 more)
+
+### Community 55 - "CAP-style distributed trade-offs (consi… · Synchronous communication · Three core team …"
+Cohesion: 0.06
+Nodes (48): LangChain, Claude Desktop, Ship item 17, Claude Agent Sdk, Playwright Mcp, Cole Medin (channel), LiveKit, Transcript unavailable (scraping) (+40 more)
+
+### Community 56 - "Key Architectural Decisions · Schema evolution · Architecture Decision Records (ADRs)"
+Cohesion: 0.05
+Nodes (43): code:block2 (.pi/skills/), Skill Directory Structure, Claude Code, Relevance to Harness, 1. File Structure (Code Layer), code:block2 (.pi/skills/), code:block3 (.pi/), Extension Wiring (+35 more)
+
+### Community 57 - "Eventual consistency · Replication · Replication lag"
+Cohesion: 0.06
+Nodes (29): isExternalOrVendorFile(), isUnderDir(), isWindowsPath(), normalizeFilePath(), pathsEqual(), resolveNonExisting(), uriToPath(), VENDOR_DIR_NAMES (+21 more)
+
+### Community 58 - "Prompt cache pricing · Git revert A/B methodology · ISO speed bench awards"
+Cohesion: 0.04
+Nodes (41): Brief history of project management (why history matters), Lessons drawn from software plus general business and design, Making things happen: myths and realities of the PM role, Author background: Microsoft IE/Windows/MSN and engineering excellence training, Many leaders manage outcomes without the words project manager on their card, Why It Matters, Algorithm (cAST / code-chunk), Definition (+33 more)
+
+### Community 59 - "Meaning in suffering · Meaning and purpose in life · Tragic optimism"
+Cohesion: 0.08
+Nodes (47): Agent Workflow, code:block1 (scan("/project")       → quality_signal: 7342, files: 139, b), Agent Harness / Orchestration, Anthropic Stripe blog reference, Blueprints workflows, Cattle not pets instances, CLI entry to Minions, EC2 isolated dev boxes (+39 more)
+
+### Community 60 - "Pi coding agent · Research: vcc extension for pi coding a… · Research Agent"
+Cohesion: 0.05
+Nodes (47): Career ladder and promotion process, Senior engineer path and growth, Stretch projects for growth, Announce via Slack/email/all-hands, Career ladders, The Goal — Eliyahu M. Goldratt, Culture as accumulated actions, Explicit budgets for fairness (+39 more)
+
+### Community 61 - "Indie Dev Tools · Everything is a function · Prompt as fundamental unit"
+Cohesion: 0.08
+Nodes (34): formatRecallOutput(), getActiveLineageEntryIds(), LineageEntryLike, LineageSessionManagerLike, loadAllMessages(), LoadedMessages, normalizeRecallScope(), parseRecallScope() (+26 more)
+
+### Community 62 - "Bash streaming: Cursor vs Claude Code · code:bash (pi install . -l) · code:bash (/reload)"
 Cohesion: 0.04
 Nodes (35): activeToolCalls, {
 	caseDir,
@@ -1595,2013 +1635,1945 @@ Nodes (35): activeToolCalls, {
 	piBin: piBinOverride,
 }, caseFile, compactSummary, __dirname, events, execution, failure (+27 more)
 
-### Community 51 - "Model Context Protocol (MCP) · Bash vs MCP · OpenAI Pattern: Agent-to-Agent Review L…"
-Cohesion: 0.07
-Nodes (24): FileMetrics, MetricsClient, SessionMetrics, isExternalOrVendorFile(), isUnderDir(), isWindowsPath(), normalizeFilePath(), pathsEqual() (+16 more)
-
-### Community 52 - "Subconscious (irrational) creative mind · Rider and elephant (conscious vs automa… · Ch…"
+### Community 64 - "Ralph Wiggum autonomous loop · Agent harness for long-running tasks · Model T vs Tesla …"
 Cohesion: 0.06
-Nodes (46): Logical components (definitional dimension), Architecture style (definitional dimension), Architecture governance, Identifying architectural characteristics, Architecture katas, Layered architecture style, Layers of isolation, Software architecture (+38 more)
+Nodes (46): Split brain, Architectural decision antipatterns, Architecture governance, Identifying architectural characteristics, Architecture katas, Strategic versus tactical decisions, 11. "What hidden constraints am I not questioning?", System archetypes (recurring trap structures) (+38 more)
 
-### Community 53 - "Autosuggestion (self-given suggestions) · Chapter 2: Changing Your Mind · AMPP: Ask, Mi…"
+### Community 65 - "The Steering Loop · Human-in-the-loop checkpoints · Core Framework"
 Cohesion: 0.06
-Nodes (46): Career ladder and promotion process, Meeting minutes and action closure, Announce via Slack/email/all-hands, Career ladders, Explicit budgets for fairness, Inclusion = opportunity + membership, Membership metrics: referrals, attendance, Membership: comfortable authentic self (+38 more)
+Nodes (46): Advanced project management for engineering managers, Manager as ally: advocating for the team, Navigating ambiguity in delivery, Cate Huston: team needs a manager not an engineer (quote), Decision-making and delegation, Doubling rule for quick estimates, Engineering director role (multi-team, low daily coding), Influencing without authority (+38 more)
 
-### Community 54 - "Ada assistant persona · OpenAI Realtime API · AI assistant orchestration layer"
-Cohesion: 0.09
-Nodes (33): stringifyBrief(), buildSections(), BuildSectionsInput, extractOutstandingContext(), formatFileActivity(), clipSentence(), nonEmptyLines(), collapseSkillLines() (+25 more)
-
-### Community 55 - "CAP-style distributed trade-offs (consi… · Synchronous communication · Three core team …"
-Cohesion: 0.04
-Nodes (44): ⚙️ **Automatic Delta Indexing with Chunk-Level Caching**, CI Requirements, code:shell (# Install from crates.io), code:shell (# Threshold filtering), code:shell (# Check index status), code:shell (cargo install ck-search), code:shell (# Currently available:), code:shell (# Find authentication/authorization code) (+36 more)
-
-### Community 56 - "Key Architectural Decisions · Schema evolution · Architecture Decision Records (ADRs)"
+### Community 66 - "mixedbread-ai/mgrep: A calm, CLI-native… · More Agents Coming Soon · Sync Options"
 Cohesion: 0.04
 Nodes (45): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+37 more)
 
-### Community 57 - "Eventual consistency · Replication · Replication lag"
+### Community 67 - "Human nature · Social comparison, envy, salary relativity · Law of Narcissism"
 Cohesion: 0.05
 Nodes (44): **1\. Pinecone**, **2\. Weaviate**, **3\. Milvus**, **4\. Chroma**, **5\. Qdrant**, **6\. Vespa**, 7 Best Vector Databases in 2025 - Truefoundry, **7\. Elasticsearch + k-NN Plugin** (+36 more)
 
-### Community 58 - "Prompt cache pricing · Git revert A/B methodology · ISO speed bench awards"
-Cohesion: 0.05
-Nodes (43): The breakfast factory (production metaphor), Cross-help between workers (pairing), Interruptions as plague of managerial work, Managerial work as factory not job shop, Production charter: schedule, quality, cost, Specialization and overhead tradeoff, Three-minute egg breakfast scenario, Designing roles and facilitating success (+35 more)
-
-### Community 59 - "Meaning in suffering · Meaning and purpose in life · Tragic optimism"
-Cohesion: 0.05
-Nodes (41): Agent Skills Ecosystem, Definition, Ecosystem Trajectory, Installation, Marketplaces, Relevance to Harness, Security Risks, The SKILL.md Open Standard (+33 more)
-
-### Community 60 - "Pi coding agent · Research: vcc extension for pi coding a… · Research Agent"
-Cohesion: 0.05
-Nodes (43): code:bash (git clone https://github.com/aryaniyaps/ultimate-pi.git), Local development setup, code:shell (git clone https://github.com/BeaconBay/ck), code:shell (git clone https://github.com/BeaconBay/ck), Development Setup, From Source, code:shell (cargo install smgrep), code:shell (smgrep serve              # Start daemon for current repo) (+35 more)
-
-### Community 61 - "Indie Dev Tools · Everything is a function · Prompt as fundamental unit"
-Cohesion: 0.05
-Nodes (44): ✨ Features, ✨ Features, ✨ Features, ✨ Features, ✨ Features, ✨ Features, ✨ Features, ✨ Features (+36 more)
-
-### Community 62 - "Bash streaming: Cursor vs Claude Code · code:bash (pi install . -l) · code:bash (/reload)"
-Cohesion: 0.05
-Nodes (44): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+36 more)
-
-### Community 63 - "browser-harness-agent.md · agent-harness-architecture.md · Agent Harness Architecture"
-Cohesion: 0.07
-Nodes (44): Address spaces, Address translation, Buffer overflows and stack corruption, Cache hits, misses, evictions, Cache organization (S, E, B), Context switching, Demand paging, Dynamic memory allocators (+36 more)
-
-### Community 64 - "Ralph Wiggum autonomous loop · Agent harness for long-running tasks · Model T vs Tesla …"
-Cohesion: 0.08
-Nodes (43): Video: skill creator / agent skills (YouTube), Agent skills directory format, AWS Bedrock caching PR, github.com/boundaryml/baml-skills-example, Calculator skill with tool call, execute_skill BAML function, Filesystem skill discovery, Harness vs BAML responsibility split (+35 more)
-
-### Community 65 - "The Steering Loop · Human-in-the-loop checkpoints · Core Framework"
-Cohesion: 0.05
-Nodes (36): Anders Hejlsberg, Engineering Practices, Relevance to AI Coding Harness, Bjarne Stroustrup, Engineering Practices, Relevance to AI Coding Harness, Dennis Ritchie, Engineering Practices (+28 more)
-
-### Community 66 - "mixedbread-ai/mgrep: A calm, CLI-native… · More Agents Coming Soon · Sync Options"
-Cohesion: 0.06
-Nodes (43): Crucial Conversations: Tools for Talking When Stakes Are High (2nd ed., 2012), Howard Markman: couples — silence, violence, or open dialogue, Case: Nurse silent when doctor ignores safety (patient harm), Case: Tom E. (engineering blow-ups; Learn to Look), Dual-processing: content and conditions, Crucial conversation: high stakes, opinions vary, strong emotions, Dialogue (free flow of meaning into the shared pool), Law of Crucial Conversations (chronic problems ↔ avoided/poor crucial conversations) (+35 more)
-
-### Community 67 - "Human nature · Social comparison, envy, salary relativity · Law of Narcissism"
-Cohesion: 0.08
-Nodes (26): registerVccRecallCommand(), formatRecallOutput(), getActiveLineageEntryIds(), LineageEntryLike, LineageSessionManagerLike, loadAllMessages(), LoadedMessages, normalizeRecallScope() (+18 more)
-
 ### Community 68 - "First Principles (Synthesized from All … · Progressive disclosure in skills · Three-tie…"
-Cohesion: 0.07
-Nodes (34): afterText, beforeChars, doneLines, filteredBlocks, goalLines, issues, loaded, problemLines (+26 more)
+Cohesion: 0.1
+Nodes (43): code:block1 (L2.5 Runtime Drift Monitor:), Confidence, Cost Analysis, Evidence, Harness Implementation, LLM-Based Detection = Small Model Feasible, Q1: Can Haiku/Flash serve as meta-agent detector?, Q2: Can Haiku subagents apply to code review / adversarial verification (L4)? (+35 more)
 
 ### Community 69 - "Apple MLX framework · Claude 1M context · Pi coding agent benchmarks"
-Cohesion: 0.1
-Nodes (5): recordLsp(), shouldReadCascadeFromSnapshot(), getServersForFileWithConfig(), logSessionStart(), LSPService
+Cohesion: 0.05
+Nodes (38): Approach, Key Differentiator, pi-context-prune, Relevance to pi-vcc, Summary, Configuration, How It Works, Key Differentiator (+30 more)
 
 ### Community 70 - "resolved-context-window-economics.md · 2. Context Window Pollution (Interactio… · 1M to…"
 Cohesion: 0.06
-Nodes (40): 2. Context Window Pollution (Interaction Drift), 1. Token Allocation Model, 2. Monorepo Handling, 3. Pre-Computation and Caching, 4. Context Expansion Decision (L0→L1→L2), 5. Remaining Gitingest Questions, Allocation for Common Context Windows, Caching Architecture (+32 more)
+Nodes (28): getPackageRoot(), packageRootCache, resolvePackagePath(), LANGUAGE_TO_GRAMMAR, _require, SearchPattern, StructuralMatch, TreeSitterLanguage (+20 more)
 
 ### Community 71 - "OpenAI · GPT-4o mini · Personal AI assistant"
-Cohesion: 0.07
-Nodes (40): Avoid over-engineering low-value surfaces, Project estimation skills, Measure what you want to improve, Lack of metrics causes blind fixes, Dropbox, HealthCare.gov launch (2013), Prioritize regularly, Balance quality with pragmatism (+32 more)
+Cohesion: 0.05
+Nodes (43): code:bash (git clone https://github.com/aryaniyaps/ultimate-pi.git), Local development setup, code:shell (git clone https://github.com/BeaconBay/ck), code:shell (git clone https://github.com/BeaconBay/ck), Development Setup, From Source, code:shell (cargo install smgrep), code:shell (smgrep serve              # Start daemon for current repo) (+35 more)
 
 ### Community 72 - "Triple C: Comment Copilot Coding · Bun runtime · Notion wrapper TypeScript class"
-Cohesion: 0.08
-Nodes (41): Bad management: blame subordinates, excessive rules, disguised threats under stress, Clear roles reduce duplicated work and toxic overlap, Under pressure, decision-maker identity must be unambiguous, Leadership is based on trust, Avoid micromanagement; trust plus checkpoints beats hovering, Entry-level PM: limited formal authority, Executing: negotiate team, direct work, develop team, Governance failure: confusion with corporate governance; micromanagement (+33 more)
+Cohesion: 0.06
+Nodes (43): Alpha geek (good/bad manager pattern), Brilliant jerk / toxic high performer, Challenging Situations (recurring section), Curse of the gifted (gifted engineer dynamics), Firing and performance management exits, Good Manager, Bad Manager (recurring section), Hiring and interview process, Individual contributor track vs management track (+35 more)
 
 ### Community 73 - "aider hist · bash bg · big3"
-Cohesion: 0.07
-Nodes (41): Fred Brooks: hardest part is deciding what to build (requirements), Closing the gap between intent and written spec, Milestone goals and exit criteria tie specs to delivery, How to figure out what to do (planning overview), Lincoln axe quote: preparation reduces wasted execution, Plans force issues early while options remain open, Prototypes validate ideas cheaply before heavy commitment, Exit criteria and quality bar before release (+33 more)
+Cohesion: 0.06
+Nodes (41): AddyOsmani.com - Agent Harness Engineering, Core Definition, Filesystem, Key Harness Primitives, LangChain: The Anatomy of an Agent Harness, Long-Horizon Execution, Model-Harness Co-Evolution (Critical Insight), Relevance to Ultimate-PI (+33 more)
 
 ### Community 74 - "Decoy effect (asymmetric dominance) · Anchoring (first price shapes willingne… · Contra…"
-Cohesion: 0.05
-Nodes (40): 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation (+32 more)
+Cohesion: 0.06
+Nodes (42): Pi's Damage Control Extension, Boris Cherny, Sequoia Capital, Claude subscription auth, claude setup-token, MiniMax M2.7, AI Engineer conference, AMP coding tool (+34 more)
 
 ### Community 75 - "Work Breakdown Structure (WBS) · Cost control via comparing actual to pl… · Project Cos…"
+Cohesion: 0.1
+Nodes (5): shouldReadCascadeFromSnapshot(), getServersForFileWithConfig(), logSessionStart(), LSPService, mergeLspDiagnostics()
+
+### Community 76 - "Part V — Code Improvements · Refactoring for safe evolution · Tip: Code That's Easy to …"
+Cohesion: 0.08
+Nodes (42): Credible schedules need credible design/requirements inputs, Hero complex: craving heroic rescue undermines sustainable pace, Late or vague specifications derail schedules and quality, People tend to be late; optimism and behavior shape dates, Dependencies outside your control threaten schedules, The truth about schedules, Work breakdown structure (WBS): how team divides execution, Work items and development pipeline in mid-project (+34 more)
+
+### Community 77 - "fault tolerance · build slash · cheap summaries"
+Cohesion: 0.07
+Nodes (34): afterText, beforeChars, doneLines, filteredBlocks, goalLines, issues, loaded, problemLines (+26 more)
+
+### Community 78 - "Method 1: System Prompt Injection · OpenAI Responses API · Deterministic post-parse val…"
 Cohesion: 0.09
 Nodes (15): captureLineHashes(), currentLinesMatchReadSnapshot(), DEFAULT_CONFIG, EditRecord, lineContentHash(), mapVerdictAction(), OWN_EDIT_STALE_GRACE_MS, READ_HASH_MAX_LINES (+7 more)
 
-### Community 76 - "Part V — Code Improvements · Refactoring for safe evolution · Tip: Code That's Easy to …"
-Cohesion: 0.09
-Nodes (40): Find and remove iteration bottlenecks, Instagram, Pinterest, Mike Krieger (Instagram), Simple architectures that scale by repetition, Chapter 2 — Metaphors for a Richer Understanding of Software Development, Chapter 5 — Design in Construction, David L. Parnas (+32 more)
-
-### Community 77 - "fault tolerance · build slash · cheap summaries"
-Cohesion: 0.08
-Nodes (39): code:markdown (## Think in Code (MANDATORY)), Definition, Efficiency Gains (claimed), Enforcing in Agentic Harness, Mechanism, Method 1: System Prompt Injection, Method 2: PreToolUse Hook, Method 3: PostToolUse Compression (+31 more)
-
-### Community 78 - "Method 1: System Prompt Injection · OpenAI Responses API · Deterministic post-parse val…"
-Cohesion: 0.06
-Nodes (40): Core Mental Model, BMAD framework reference, Sept 27 half-day workshop promo, Plan → implement → validate mental model, PRP framework reference, Ada assistant persona, Markdown prompts, XML coding prompts (+32 more)
-
 ### Community 79 - "Multi-agent orchestration · JSON KV sub-prompts · Meta Q4 2024 call"
-Cohesion: 0.07
-Nodes (35): code:bash (# 1. Create your env file), code:js (const client = new Firecrawl({ apiKey: "", baseUrl: "http://), Configuration, Enabling AI features, Firecrawl Self-Hosted, Quick Start, SDK Usage, Services (+27 more)
+Cohesion: 0.05
+Nodes (40): ⚙️ **Automatic Delta Indexing with Chunk-Level Caching**, CI Requirements, code:shell (# Install from crates.io), code:shell (# Threshold filtering), code:shell (# Check index status), code:shell (cargo install ck-search), code:shell (# Currently available:), code:shell (# Find authentication/authorization code) (+32 more)
 
 ### Community 80 - "Sub-agents / Context Isolation · Claude Haiku 4.5 · Claude Sonnet 4.5"
 Cohesion: 0.08
-Nodes (30): astGrepNapiRunner, executeStructuredRule(), findByKind(), findMatchingNodes(), getAllNodes(), getCandidatesForAll(), LINTER_OVERLAP, nodeMatchesCondition() (+22 more)
+Nodes (41): Bad management: blame subordinates, excessive rules, disguised threats under stress, Leadership is based on trust, Avoid micromanagement; trust plus checkpoints beats hovering, Action plan: Who? Does what? By when? Follow-up?, Document your work (commitments in writing), Move to Action, Entry-level PM: limited formal authority, Executing: negotiate team, direct work, develop team (+33 more)
 
 ### Community 81 - "OpenAI Assistants API · OpenAI DevDay announcements · Turbo4 Python wrapper class"
+Cohesion: 0.06
+Nodes (40): Layer 4: Tool-Level Validation, Architecture Relevance, Components, Key Differentiators, Pi Coding Agent (pi-mono), Postman git-native sponsor, Stripe, Coding agent abstraction (+32 more)
+
+### Community 82 - "Meta Agent · meta agent builder · langsight-loop-detection.md"
+Cohesion: 0.07
+Nodes (37): code:bash (# 1. Create your env file), code:js (const client = new Firecrawl({ apiKey: "", baseUrl: "http://), Configuration, Enabling AI features, Firecrawl Self-Hosted, Quick Start, SDK Usage, Services (+29 more)
+
+### Community 83 - "Brief history of project management (wh… · <% tp.file.title %> · codebase-to-context-in…"
+Cohesion: 0.05
+Nodes (40): 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation (+32 more)
+
+### Community 84 - "generator-evaluator-architecture.md · Core asset + metadata pattern · Source: AgentBus …"
+Cohesion: 0.08
+Nodes (40): Tell your story, Alfred Binet: IQ test to identify children needing support; believed education/practice can change intelligence, Mindset: The New Psychology of Success (updated ed., 2019), Brainology-style content: brain changes with learning; workshop parallels manager workshop, Enron collapse tied to arrogance/blame (Skilling: not my fault; world didn’t appreciate), Jack Welch contrast: constructive response to GE/Kidder, Peabody failures, Complacency/sloppiness after success — ‘infected with success,’ disease of me, In fixed mindset, effort implies low ability (“If you were smart you wouldn’t need effort”) (+32 more)
+
+### Community 85 - "Social proof principle · Influence: The Psychology of Persuasion… · Introduction: compl…"
+Cohesion: 0.08
+Nodes (30): astGrepNapiRunner, executeStructuredRule(), findByKind(), findMatchingNodes(), getAllNodes(), getCandidatesForAll(), LINTER_OVERLAP, nodeMatchesCondition() (+22 more)
+
+### Community 86 - "How not to annoy people: process, email… · Middle-game strategy: steady execution … · P…"
+Cohesion: 0.07
+Nodes (39): Agile methods assume future requirements stay uncertain, Agile task boards/story cards as lightweight WBS analogues, Practical tactics over single grand theory of project management, References to waterfall, spiral, RAD as scheduling contexts, Discussion guide supports study groups for continued learning, End-game strategy: shipping, stabilization, finish line, Second edition: exercises, footnotes in-text, discussion guide, First edition title: The Art of Project Management (+31 more)
+
+### Community 87 - "10 Key Innovations · Concurrent Programming · Client/server architecture"
 Cohesion: 0.11
 Nodes (37): Consensus, Pair With, Sub-flags Enabled, Confidence, Key Contributions, Summary, Changelog automation, ESLint config (+29 more)
 
-### Community 82 - "Meta Agent · meta agent builder · langsight-loop-detection.md"
-Cohesion: 0.06
-Nodes (37): Core Features, Ecosystem Position, Key Facts, When to Use, 1. What the Agent Can't See Doesn't Exist, 2. Ask What Capability Is Missing, Not Why the Agent Is Failing, 3. Mechanical Enforcement Over Documentation, 4. Give the Agent Eyes (+29 more)
-
-### Community 83 - "Brief history of project management (wh… · <% tp.file.title %> · codebase-to-context-in…"
-Cohesion: 0.08
-Nodes (38): Avoid peanut-buttering scarce resources, The Phoenix Project — Kim, Behr, Spafford, Consolidate org efforts; one team at a time, Treading water fix: consolidate; limit WIP, Migrations as scalable tech-debt fix, Why migrations matter, Technical debt payoff via migrations, Treading water: critical work only (+30 more)
-
-### Community 84 - "generator-evaluator-architecture.md · Core asset + metadata pattern · Source: AgentBus …"
-Cohesion: 0.07
-Nodes (38): Ask the CTO (recurring section), VP Eng / CTO: senior leadership (big leagues), Bootstrapping and evolving culture, Conway's Law (system structure ↔ org), CTO role (technology, culture, structure), Culture of fear (and building trust), Cultural values as team glue, Organizational structure and scaling (+30 more)
-
-### Community 85 - "Social proof principle · Influence: The Psychology of Persuasion… · Introduction: compl…"
-Cohesion: 0.1
-Nodes (38): 1. Separate Planning from Execution, 2. Structured Handoffs Between Agents, 3. Independent Evaluator with Hard Criteria, 4. Sprint Contracts (Agree on "Done" Before Work), 5. Tool Surface = Agent Capability Boundary, First-Principles Architecture, Opus Planning Codex Execution, agent ux (+30 more)
-
-### Community 86 - "How not to annoy people: process, email… · Middle-game strategy: steady execution … · P…"
-Cohesion: 0.14
-Nodes (37): Getting started with insertion sort, code:bash (pi install . -l), code:bash (# Install (macOS / Linux / Windows)), code:bash (cd firecrawl), code:bash (npm install -g ultimate-pi), code:bash (pi install ultimate-pi -l), code:bash (/reload), code:bash (npm install -g @aryaniyaps/ultimate-pi --registry=https://np) (+29 more)
-
-### Community 87 - "10 Key Innovations · Concurrent Programming · Client/server architecture"
-Cohesion: 0.06
-Nodes (37): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+29 more)
-
 ### Community 88 - "Monolithic versus distributed architect… · Scalability · Reinforcing (positive) feedback"
-Cohesion: 0.07
-Nodes (37): Customer and requirement volatility drives rework risk, Some decisions have no winning choice—pick least bad openly, How to make good decisions, Stakeholders shape tradeoffs when authority and values collide, Project Management: A Systems Approach to Planning, Scheduling, and Controlling (13th ed., 2022), Case: Disney non-negotiable constraints in trade-offs, Concurrent engineering / design-build as modern integration, Constraint prioritization can change over project life (+29 more)
+Cohesion: 0.06
+Nodes (39): Apologize when appropriate (restore respect/purpose), Case: Carole and Bob (Good Night Motel bill; STATE skills), Case: Lori A. (bipolar daughter; Contrasting and STATE), Case: Union and management flip-chart goals (restore respect), Case: Yvonne and Jotham (intimacy; Contrasting and CRIB), Contrasting (don't/do statements to fix misunderstanding), CRIB skills for creating Mutual Purpose, Brainstorm new strategies (+31 more)
 
 ### Community 89 - "tone engineering · gemini preference · readme autopr"
 Cohesion: 0.07
-Nodes (37): Brilliant jerk / toxic high performer, Challenging Situations (recurring section), Curse of the gifted (gifted engineer dynamics), Firing and performance management exits, Hiring and interview process, Managing people (first-line manager), Mishires and 90-day goals, Cold sourcing hires (+29 more)
+Nodes (38): Avoid over-engineering low-value surfaces, BloomReach, Balance quality with pragmatism, Shipping frequently to learn, Validate ideas early and often, Chapter 1 — Welcome to Software Construction, Barry Boehm et al., Tom DeMarco and Timothy Lister (+30 more)
 
 ### Community 90 - "medium_vector-search-comparison.md · Vector retrieval and embeddings · What Are Vector …"
-Cohesion: 0.08
-Nodes (37): SQL string capitalization mismatch class of bugs, Capitalized references for schema context, config_list_from_models helper, Data engineer SQL-generating agent, AutoGen function map for tool calling, AutoGen GroupChatManager, human_input_mode NEVER for autonomy, JOIN query multi-table examples (+29 more)
+Cohesion: 0.06
+Nodes (35): Evolvability, Fault tolerance, Human errors, Maintainability, Reliability, Reliable, scalable, maintainable systems, Simplicity, Software faults (bugs) (+27 more)
 
 ### Community 91 - "GitHub Actions · Archon · Archon MCP server"
-Cohesion: 0.07
-Nodes (36): Layer 4: Tool-Level Validation, Architecture Relevance, Components, Key Differentiators, Pi Coding Agent (pi-mono), Postman git-native sponsor, Stripe, Coding agent abstraction (+28 more)
+Cohesion: 0.08
+Nodes (38): ABC Production Analysis, Cell, Changeover, Continuous Flow, Cross-Dock, Every Product Every Interval (EPEx), Fill-Up System, First In (+30 more)
 
 ### Community 92 - "Talk to Your Database · Agentic Orchestration Pipeline · Three Orchestration Patterns"
-Cohesion: 0.08
-Nodes (36): Causality and happens-before, The trouble with distributed systems, Latency percentiles (p50, p95, p99), Load parameters (RPS, data size), Logical clocks, Multi-leader replication, Unreliable networks, Partial failure (+28 more)
+Cohesion: 0.09
+Nodes (37): Harness Evolution Loop, 7. Long-Running Agent Hooks, P11: Model-Harness Independence, Core Definition, Effective Harnesses for Long-Running Agents, Key Principles, Relevance, Long-Running Agent Hooks (+29 more)
 
 ### Community 93 - "github.com_can1357_smgrep.md · `smgrep doctor` · `smgrep [query]`"
-Cohesion: 0.06
-Nodes (35): Apache Avro, Backward compatibility, Binary encodings, Encoding and evolution, Forward compatibility, JSON encoding, Protocol Buffers, Schema evolution (+27 more)
+Cohesion: 0.1
+Nodes (38): Agentic Horizons course, Tactical Agentic Coding, Agentic Horizons, Agentic Horizon course, Agentic Horizon, Atomic claims verification, Bash restricted to one script, Single-model benchmark limitation (+30 more)
 
 ### Community 94 - "Information hiding · Chapter 5 — Design in Construction · Abstract data types and class…"
-Cohesion: 0.09
-Nodes (36): Automation to accelerate work, Charlie Cheever (Quora co-founder), Continuous deployment / frequent releases, Strong engineering and hiring culture, Facebook Beacon product failure, Invest in iteration speed, Mentoring new hires, Onboarding programs for new engineers (+28 more)
+Cohesion: 0.08
+Nodes (34): 2. Multi-Surface Agent Architecture, 10. Multi-Registry Architecture (v0.36+), Relevance to Our Harness, code:yaml (frontend: [planner, builder, reviewer]), Key Insight, Model-Agnostic Design, Multi-Agent Specialization, Team Composition (+26 more)
 
 ### Community 95 - "Claude Code harness · Harness Implementation Plan · Claude Code one-shot after design"
-Cohesion: 0.07
-Nodes (36): Activity-selection problem, All-pairs shortest paths, Augmenting data structures, B-trees for disk-oriented storage, Bellman–Ford algorithm, Breadth-first search (BFS), Binary search trees, BST search, insert, delete (+28 more)
+Cohesion: 0.06
+Nodes (37): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+29 more)
 
 ### Community 96 - "Agent skills · Agent Skills · Skills as universal agent pattern"
-Cohesion: 0.09
-Nodes (36): Late or vague specifications derail schedules and quality, People tend to be late; optimism and behavior shape dates, Dependencies outside your control threaten schedules, The truth about schedules, Work items and development pipeline in mid-project, Arrow Diagram Method (ADM), Construction projects as multi-year PM horizon example, Critical Path Method (CPM); ADM interchangeable per text (+28 more)
+Cohesion: 0.06
+Nodes (37): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+29 more)
 
 ### Community 97 - "Expectations shape perceived experience · Memory and coherence vs 'true' stable p… · WY…"
-Cohesion: 0.1
-Nodes (34): Build Phases, Config Schema, Harness Implementation Plan, Overview, Risk Surface, Shared Schemas, Verification Criteria, Claude Code harness (+26 more)
+Cohesion: 0.07
+Nodes (37): Learning adjacent disciplines (Sinofsky), Charlie Cheever (Quora co-founder), Compounding returns of learning, Strong engineering and hiring culture, Growth mindset (Dweck), High-leverage activities, Mentoring new hires, Onboarding programs for new engineers (+29 more)
 
 ### Community 98 - "Balancing (negative) feedback · Model, document, and share · Slackful teams as organiza…"
-Cohesion: 0.08
-Nodes (35): [Open Source] I reduced Claude Code input tokens by 97% using ..., Agentic scaling framework, Reddit critique thread, Tactical Agentic Coding reference, Indy Dev Dan (Andy), Base thread, B-thread (big/meta thread), Core four (context, model, prompt, tools) (+27 more)
+Cohesion: 0.1
+Nodes (29): normalize(), normalizeOne(), BlockCounts, briefLineCountOf(), buildCompactReport(), CompactReport, countBlocks(), countRoles() (+21 more)
 
 ### Community 99 - "GitHub - numtide/llm-agents.nix: Nix pa… · Binary Cache · Code Quality"
-Cohesion: 0.06
-Nodes (34): Can I host SeaGOAT server on a different computer?, Can I ignore files/directories?, code:shell (pipx install seagoat), code:shell (poetry run seagoat-server start ~/path/an/example/repository), code:shell (seagoat-server start /path/to/your/repo), code:shell (seagoat-server stop /path/to/your/repo), code:yaml (# .seagoat.yml), Configuring SeaGOAT (+26 more)
+Cohesion: 0.07
+Nodes (18): registerPiVccCommand(), registerVccRecallCommand(), buildOwnCut(), CompactionStats, EntryWithMessage, getLastCompactionStats(), OwnCutCancelReason, OwnCutResult (+10 more)
 
 ### Community 100 - "Claude Code source leak · Orchestrator agent · Worker agents"
-Cohesion: 0.09
-Nodes (34): Adaptive Context Compaction (ACC), Anthropic Context Compaction API, Context Folding, How It Works, Ideal Use Cases, Relevance to pi-vcc, Summary, Supported Models (+26 more)
+Cohesion: 0.12
+Nodes (32): Ambiguous Edges - Review These, Community Hubs (Navigation), Corpus Check, God Nodes (most connected - your core abstractions), Graph Report - data/books/  (2026-05-10), Hyperedges (group relationships), Knowledge Gaps, Suggested Questions (+24 more)
 
 ### Community 101 - "Claude Sonnet 4.6 · Per-Subagent Model Selection · Phase 1: Core Reasoning (Claude Sonn…"
-Cohesion: 0.06
-Nodes (32): Evolvability, Fault tolerance, Human errors, Maintainability, Reliability, Reliable, scalable, maintainable systems, Simplicity, Software faults (bugs) (+24 more)
+Cohesion: 0.11
+Nodes (36): Chapter 20 — The Software-Quality Landscape, Chapter 22 — Developer Testing, Chapter 23 — Debugging, Chapter 24 — Refactoring, Chapter 25 — Code-Tuning Strategies, Chapter 26 — Code-Tuning Techniques, Chapter 31 — Layout and Style, Performance tuning strategies and techniques (+28 more)
 
 ### Community 102 - "Five essential prompt elements · How It Works · GPT-4o (Omni)"
-Cohesion: 0.09
-Nodes (35): Concurrent Programming, Condition variables, Mutexes (Pthreads mutex), Parallelism and speedup (Amdahl), Race conditions, Semaphores, Signal handlers and async-signal-safety, Unix signals (+27 more)
+Cohesion: 0.08
+Nodes (36): Administrative closure of records and paperwork, Benchmarking drives PM intellectual property growth, Historical case: DOD early PM standards and gate reviews, Public sector: contractors sharing PM IP with agencies, Classical management: planning, organizing, staffing, controlling, directing, Contract types (fixed price, cost reimbursable, cost sharing) suitability, Contractual closure of contracts, DOD gate reviews and status reporting (historical roots) (+28 more)
 
 ### Community 103 - "Post-tool use hook · settings.json hooks · Hooks in skills/subagents/commands"
-Cohesion: 0.09
-Nodes (35): Consistency and consensus, Fencing tokens, Linearizability, Membership and coordination services, Brewer: Towards robust distributed systems (CAP intuition), Gilbert & Lynch: Brewer's conjecture and feasibility of CAP, Lamport: The Part-Time Parliament (Paxos), Ongaro & Ousterhout: Raft consensus (+27 more)
+Cohesion: 0.06
+Nodes (28): Anders Hejlsberg, Engineering Practices, Relevance to AI Coding Harness, Bjarne Stroustrup, Engineering Practices, Relevance to AI Coding Harness, Dennis Ritchie, Engineering Practices (+20 more)
 
 ### Community 104 - "Ryan Lopopo · Skills-from-first-principles docs · Git worktrees at scale"
-Cohesion: 0.06
-Nodes (35): Accept/reject diff workflow, Composer overlay / fullscreen, Cursor beta flags, Cursor changelog, Cursor Composer, Cursor system prompt for Nuxt auto-imports, Engineers that ship framing, Gemini 1.5 Ultra reference (+27 more)
+Cohesion: 0.09
+Nodes (36): Agentic Systems, Frontend Design, General Principles (All Models), Output Control, Thinking & Reasoning, Tool Use, Anthropic tool use API, Codex-style parallelism (+28 more)
 
 ### Community 105 - "Microsoft AutoGen framework · Unix Philosophy · Multi-agent Postgres analytics tool"
-Cohesion: 0.06
-Nodes (34): 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation (+26 more)
+Cohesion: 0.07
+Nodes (36): Ada assistant persona, Markdown prompts, XML coding prompts, Personal assistant commanding agent army, Assistant personalization YAML, Async Python prototype (~1k LOC), Async tool execution thread idea, Voice-driven CSV editing demo (+28 more)
 
 ### Community 106 - "Project Integration Management · Systems approach to project management … · Integrated …"
-Cohesion: 0.1
-Nodes (34): Anchoring (first price shapes willingness to pay), Arbitrary coherence, Middle option / compromise attraction (TV pricing), MIT dating photo decoy experiment, Decoy effect (asymmetric dominance), Economist three-option subscription experiment (MIT Sloan), Imprinting metaphor (goslings) for first prices, Menu decoy pricing (restaurant consultant): expensive anchor entrée (+26 more)
+Cohesion: 0.07
+Nodes (35): 1. What the Agent Can't See Doesn't Exist, 2. Ask What Capability Is Missing, Not Why the Agent Is Failing, 3. Mechanical Enforcement Over Documentation, 4. Give the Agent Eyes, 5. A Map, Not a Manual, The Five Principles, Key Features, Summary (+27 more)
 
 ### Community 107 - "Leverage (impact per time invested) · Strategic programming (invest in design) · Manage…"
-Cohesion: 0.08
-Nodes (34): Herding (follow others' behavior), Bibliography, Influence: The Psychology of Persuasion (2007 revised ed.), Police bunco-squad / consumer-agency interviews, Bystander intervention research lineage, Canned laughter as social-proof cue, Kitty Genovese / bystander nonintervention narrative, Jonestown / Peoples Temple mass compliance (+26 more)
+Cohesion: 0.06
+Nodes (33): First Principles (Synthesized from All Sources), P12: Ashby's Law of Requisite Variety, P1: Feedforward + Feedback, P2: Computational > Inferential (for Enforcement), P3: Mechanical Enforcement Over Documentation, P4: What the Agent Can't See Doesn't Exist, P5: Ask What Capability Is Missing, P6: Give the Agent Eyes (+25 more)
 
 ### Community 108 - "Machine-Level Representation of Programs · Pipelined processor · Arithmetic and logical…"
-Cohesion: 0.07
-Nodes (33): Expectations of a software architect, Interpersonal and leadership skills, Soft skills for architects, Complicated-subsystem team, Enabling team, Facilitating interaction mode, Four fundamental team types, A good platform is “just big enough” (+25 more)
+Cohesion: 0.06
+Nodes (35): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+27 more)
 
 ### Community 109 - "Claude Code · Claude Code as batteries-included harness · Claude Code bloat critique"
-Cohesion: 0.1
-Nodes (34): Batch processing, Change data capture (CDC), Complex event processing, Dataflow execution engines, End-to-end argument for correctness, Event logs (Kafka-style), Event sourcing, The future of data systems (+26 more)
+Cohesion: 0.11
+Nodes (35): Approach 2: Sliding Window Rate, code:python (from collections import deque), RAG, FastAPI, Partial JSON Streaming, React, Recipe Streaming Demo, Server-Sent Events (+27 more)
 
 ### Community 110 - "Model-Adaptive Agent Harness · Research: Model-Adaptive Agent Harness … · Agent harness…"
-Cohesion: 0.07
-Nodes (34): The Effective Engineer, Build systems that sustain growth, Effective engineer as value produced per unit time, Leverage (impact per time invested), Minimize operational burden, Quip, Output quantity vs leverage / value choice, Pareto principle / 80–20 rule (+26 more)
+Cohesion: 0.09
+Nodes (35): Anchoring (first price shapes willingness to pay), Arbitrary coherence, Middle option / compromise attraction (TV pricing), MIT dating photo decoy experiment, Decoy effect (asymmetric dominance), Economist three-option subscription experiment (MIT Sloan), Filene's Basement Running of the Brides, Imprinting metaphor (goslings) for first prices (+27 more)
 
 ### Community 111 - "Promptfoo · Gemini Pro · GPT-3.5 Turbo"
-Cohesion: 0.09
-Nodes (34): Interferon injections paired with movies (immediate reward), Procrastination and self-control, Accounting method, Aggregate analysis, Amortized analysis, Chaining for collision resolution, Dynamic tables (expansion/contraction), Hash tables (+26 more)
+Cohesion: 0.07
+Nodes (35): Activity-selection problem, All-pairs shortest paths, Augmenting data structures, B-trees for disk-oriented storage, Bellman–Ford algorithm, Binary search trees, BST search, insert, delete, Discrete Fourier transform (+27 more)
 
 ### Community 112 - "Multi-Agent Specialization · Multi-agent debate · Multi-agent observability"
 Cohesion: 0.08
-Nodes (34): Agile methods assume future requirements stay uncertain, Agile task boards/story cards as lightweight WBS analogues, Practical tactics over single grand theory of project management, References to waterfall, spiral, RAD as scheduling contexts, Discussion guide supports study groups for continued learning, End-game strategy: shipping, stabilization, finish line, Second edition: exercises, footnotes in-text, discussion guide, Shorter milestones redirect work toward accurate next chunk (+26 more)
+Nodes (34): Feedback loop, Agent Execution Cycle, code:block1 (1. Propose change (edit file)), Key Differences from Human Debugging, Requirements for Agent-Friendly Execution, Admin Feedback Loop Reset Steps, BAML docs RAG + codegen chatbot, Doc-search loop until context sufficient (+26 more)
 
 ### Community 113 - "Stakeholder navigation and influence wi… · Power and politics in organizations · Projec…"
 Cohesion: 0.09
-Nodes (34): chatgpt memory ui, drm decaying resolution, enshrine summaries, eval observability, memory vs state history, openai system trust, redis analogy models, structured outputs bridge (+26 more)
+Nodes (35): Fred Brooks: hardest part is deciding what to build (requirements), Closing the gap between intent and written spec, Decision-makers may delegate if ownership stays visible, Milestone goals and exit criteria tie specs to delivery, How to figure out what to do (planning overview), Lincoln axe quote: preparation reduces wasted execution, Shorter milestones redirect work toward accurate next chunk, Plans force issues early while options remain open (+27 more)
 
 ### Community 114 - "PERT network development and time integ… · Section III — Project Management Knowle… · P…"
-Cohesion: 0.09
-Nodes (34): BoundaryML, Human Layer, Dex / Human Layer, Vaibhav (BoundaryML co-founder), Observations object across pipeline, Email as agent surface (AI that works), Redis production store, Thread store / event log (+26 more)
+Cohesion: 0.08
+Nodes (35): Functional test for quality, In-process inspection, Inventory as time buffer, A-B Control, Andon, Automatic Line Stop, Batch-and-Queue, Brownfield (+27 more)
 
 ### Community 115 - "Monitoring and Controlling Process Group · Workflow & Project Management · Project Proc…"
-Cohesion: 0.07
-Nodes (31): Bootstrap, code:block5 (/harness-setup), Contributing, Goal, ADR-017: Harness Project Structure, code:block1 (src/harness/), Consequences, Context (+23 more)
+Cohesion: 0.06
+Nodes (33): Glue work (team glue / cross-cutting work), Cross-cutting architectural characteristics, Agentic Harness, Build Sequence, code:block1 (L1: Spec Hardening → L2: Structured Planning → L2.5: Drift M), Cross-Cutting Tool Enhancements (L3), Formal Models, Build Phases — Implementation Method (+25 more)
 
 ### Community 116 - "Least worst architecture (trade-offs) · Deterministic Session Compaction · Architectura…"
-Cohesion: 0.09
-Nodes (29): 2. Multi-Surface Agent Architecture, 10. Multi-Registry Architecture (v0.36+), Relevance to Our Harness, code:yaml (frontend: [planner, builder, reviewer]), Key Insight, Model-Agnostic Design, Multi-Agent Specialization, Team Composition (+21 more)
+Cohesion: 0.08
+Nodes (34): code:markdown (## Think in Code (MANDATORY)), Definition, Efficiency Gains (claimed), Enforcing in Agentic Harness, Mechanism, Method 1: System Prompt Injection, Method 2: PreToolUse Hook, Method 3: PostToolUse Compression (+26 more)
 
 ### Community 117 - "Heijunka · Build-to-Order · Higher-order build prompt"
-Cohesion: 0.1
-Nodes (33): Tool Use, Agent Skills (tool use), Anthropic tool use API, Codex-style parallelism, One-shot setup prompt, Anthropic tool-use XML pattern, Claude Code hooks system, Notification hook (+25 more)
+Cohesion: 0.06
+Nodes (35): Accept/reject diff workflow, Composer overlay / fullscreen, Cursor beta flags, Cursor changelog, Cursor Composer, Cursor system prompt for Nuxt auto-imports, Engineers that ship framing, Gemini 1.5 Ultra reference (+27 more)
 
 ### Community 118 - "Four-state vocabulary for team performance · Safety (when safe, people can hear almo… ·…"
 Cohesion: 0.08
-Nodes (33): BUCKET-SORT, BUILD-MAX-HEAP, Computational geometry, Convex hull algorithms, COUNTING-SORT, Divide-and-conquer design paradigm, Heap data structure, HEAPSORT (+25 more)
+Nodes (35): SQL string capitalization mismatch class of bugs, Capitalized references for schema context, config_list_from_models helper, AutoGen function map for tool calling, AutoGen GroupChatManager, human_input_mode NEVER for autonomy, JOIN query multi-table examples, Microsoft AutoGen framework (+27 more)
 
 ### Community 119 - "Jidoka · Toyota Production System (TPS) · Team Leader"
-Cohesion: 0.09
-Nodes (33): OpenAI Assistants API, Prior AutoGen + Guidance architecture, Composable LLM building blocks philosophy, Two-step chat completion alternative, Equip tools on specific thread run, Assistants Files API future work, Fluent chainable assistant setup API, get_or_create assistant by name (+25 more)
+Cohesion: 0.06
+Nodes (34): Can I host SeaGOAT server on a different computer?, Can I ignore files/directories?, code:shell (pipx install seagoat), code:shell (poetry run seagoat-server start ~/path/an/example/repository), code:shell (seagoat-server start /path/to/your/repo), code:shell (seagoat-server stop /path/to/your/repo), code:yaml (# .seagoat.yml), Configuring SeaGOAT (+26 more)
 
 ### Community 120 - "Claude Code Hooks · patterns.yaml · Five Safety Layers"
 Cohesion: 0.06
-Nodes (32): Authentication & Store, code:shell (# index once), code:shell (mgrep "What code parsers are available?"  # search in the cu), code:shell (mgrep watch  # index the current repository and keep the Mix), code:yaml (# Maximum file size in bytes to upload (default: 1MB)), code:shell (# Set default max results to 25), code:shell (pnpm test), code:shell (npm install -g @mixedbread/mgrep    # or pnpm / bun) (+24 more)
+Nodes (33): Agent Skills Ecosystem, Definition, Ecosystem Trajectory, Installation, Marketplaces, Relevance to Harness, Security Risks, The SKILL.md Open Standard (+25 more)
 
 ### Community 121 - "Make It Safe (step out → rebuild safety… · Mutual Purpose (entry condition of dial… · S…"
-Cohesion: 0.09
-Nodes (32): AddyOsmani.com - Agent Harness Engineering, Human-in-the-loop, proposed committed states, human queue long tail, Agent Personality (Vibes), SuperWhisper, Fireship, Agent harness (+24 more)
+Cohesion: 0.11
+Nodes (34): Chapter 2 — Metaphors for a Richer Understanding of Software Development, Chapter 5 — Design in Construction, Chapter 6 — Working Classes, David L. Parnas, Abstract data types and class interface quality, Design reasoning during construction, Part I — Laying the Foundation, Part II — Creating High-Quality Code (+26 more)
 
 ### Community 122 - "Agent Skills Ecosystem · Extensions · Pi Compaction Extensions Ecosystem"
-Cohesion: 0.14
-Nodes (26): PostHandler, ManagerEvent, ManagerEventMap, buildSystemPromptAppendix(), CreatedSession, createStructuredOutputFactory(), createSubagentSession(), SessionFactoryOptions (+18 more)
+Cohesion: 0.07
+Nodes (34): Anti vibe-coding stance, Caption burn-in step, CLI flag step architecture, Cut it Up application, FFmpeg clip/crop pipeline, GPT-3.5 turbo option, GPT-4 clip selection, Master disruption source video (+26 more)
 
 ### Community 123 - "Bash / shell tool · Append system prompt · Key Safety Patterns"
-Cohesion: 0.11
-Nodes (28): normalize(), BlockCounts, briefLineCountOf(), buildCompactReport(), CompactReport, countBlocks(), countRoles(), estimateTokensFromChars() (+20 more)
+Cohesion: 0.14
+Nodes (23): stringifyBrief(), buildSections(), BuildSectionsInput, extractOutstandingContext(), formatFileActivity(), clip(), clipSentence(), firstLine() (+15 more)
 
 ### Community 124 - "ITV benchmark (Is This Viable) · BAP (Big Ass Prompt) · Llama 3"
 Cohesion: 0.09
-Nodes (32): Chapter 6 — Working Classes, Chapter 7 — High-Quality Routines, Chapter 8 — Defensive Programming, Chapter 12 — Fundamental Data Types, Chapter 14 — Organizing Straight-Line Code, Chapter 15 — Using Conditionals, Chapter 16 — Controlling Loops, Chapter 17 — Unusual Control Structures (+24 more)
+Nodes (33): Accounting method, Aggregate analysis, Amortized analysis, Chaining for collision resolution, Dynamic tables (expansion/contraction), Hash tables, Online caching / paging, Open addressing (+25 more)
 
 ### Community 125 - "Domain-specific agent · DALL·E 3 · Function / tool calling"
-Cohesion: 0.16
-Nodes (31): Community 66 - "Performance Reviews & Feedback", Architecture, Core Insight, GSD (Get Shit Done), Key Patterns, Limitations (from community feedback), Pipeline: discuss → plan → execute → verify → ship, Relationship to Our Harness (+23 more)
+Cohesion: 0.07
+Nodes (33): Root cause of organizational dysfunction, Black box model of operations, High Output Management, The breakfast factory (production metaphor), Continuous operation and breakdown risk, Cross-help between workers (pairing), E-mail and information velocity (Vintage edition), Interruptions as plague of managerial work (+25 more)
 
 ### Community 126 - "Graph Report - data/books/  (2026-05-10) · Graph Report - data/books/ + graphify-b… · G…"
-Cohesion: 0.08
-Nodes (30): Build-to-Order, Demand Amplification, Heijunka, Level Selling, Muda, Mura, and Muri in Conjunction, Build Order, code:block1 (Source: prompts/*.yaml (base specs)), Deterministic Build Requirements (+22 more)
+Cohesion: 0.09
+Nodes (32): Agent = Model + Harness, [Open Source] I reduced Claude Code input tokens by 97% using ..., Agentic scaling framework, Reddit critique thread, Tactical Agentic Coding reference, Orchestrator agent, Active listener skill, Conversation JSONL log (+24 more)
 
 ### Community 127 - "Interruptible Agents · Supervisor Agent · Voice Agents"
-Cohesion: 0.08
-Nodes (32): GPT-4o mini, Fallback provider chain, OpenAI-compatible generic client, Reasoning models vs prompt-based reasoning, Retry policy (BAML), o3-mini reasoning model, Reasoning start/end special tokens, GPT-4o mini for diffs (+24 more)
+Cohesion: 0.06
+Nodes (31): Interpersonal and leadership skills, Benchmark Standing (Render, Aug 2025), Contradictions, Gap Analysis: Ultimate-PI vs Gemini CLI SOTA, Gemini CLI SOTA Innovations (by harness layer), Integration Opportunities (First Principles), Key Concepts, Key Findings (+23 more)
 
 ### Community 128 - "github.com_danielchen26_skylakegrep.md · 🔍 Why this matched · `skygrep -x` _(new… · 🧠 C…"
-Cohesion: 0.08
-Nodes (32): Production Pattern: Combined Types, Bun runtime, Flask CORS helper for local dev, Ctrl-Z undo Aider changes, Duplicate script block LLM pitfall, Flask /prompt API, GPT-4 Turbo on backend calls, HTTP POST JSON.parse integration (+24 more)
+Cohesion: 0.06
+Nodes (32): Authentication & Store, code:shell (# index once), code:shell (mgrep "What code parsers are available?"  # search in the cu), code:shell (mgrep watch  # index the current repository and keep the Mix), code:yaml (# Maximum file size in bytes to upload (default: 1MB)), code:shell (# Set default max results to 25), code:shell (pnpm test), code:shell (npm install -g @mixedbread/mgrep    # or pnpm / bun) (+24 more)
 
 ### Community 129 - "Commitment and consistency principle · Law of Conformity · Drive for consistency betwee…"
-Cohesion: 0.13
-Nodes (32): aider hist, bash bg, big3, emoji tags, genui, genui preset, hooks repo, hooks state (+24 more)
+Cohesion: 0.11
+Nodes (13): CacheEntry, CacheManager, CacheMeta, DEFAULT_TURN_STATE, getCacheDir(), getLensDir(), getTurnStatePath(), ModifiedRange (+5 more)
 
 ### Community 130 - "Defensive programming (inputs, assertio… · Exceptions add complexity · Tip: When to Use…"
-Cohesion: 0.12
-Nodes (31): Claude Context Editing Docs, Gemma 4, Google, Agent experts accumulating memory, Claude 1M context, Mental model skill, Trust and scale 2026, ~32K practical context for SLMs (+23 more)
+Cohesion: 0.07
+Nodes (30): Physicist-style truth vs LLM pattern-matching (combined clarity), Mind-shift question: If I rebuilt this from raw truth, what would it become?, Stacked meta-prompt: truths, strip assumptions, optimal solution, hidden constraints, rebuild from first principles, 1. "What are the physics of this problem?", 2. "If I couldn’t rely on existing assumptions, how would I solve this?", 3. "What are the problem’s fundamental components?", 4. "What would the optimal solution look if cost didn’t exist?", 5. "If I were forced to cut 90% of this, what would remain?" (+22 more)
 
 ### Community 131 - "Cursor IDE · Claude Code generating eval fixtures · Aider CLI"
-Cohesion: 0.06
-Nodes (30): Actionable Warnings, Agent End, Ast-Grep Rules, code:bash (pi install npm:pi-lens), code:bash (pi install git:github.com/apmantza/pi-lens), code:json ({ "warmFiles": ["src/main.cpp", "src/lib.cpp"] }), code:yaml (metadata:), code:bash (# Standard mode (LSP enabled by default)) (+22 more)
+Cohesion: 0.09
+Nodes (32): Herding (follow others' behavior), Bibliography, Influence: The Psychology of Persuasion (2007 revised ed.), Police bunco-squad / consumer-agency interviews, Bystander intervention research lineage, Canned laughter as social-proof cue, Kitty Genovese / bystander nonintervention narrative, Jonestown / Peoples Temple mass compliance (+24 more)
 
 ### Community 132 - "email declare ai · github folder matching · hello firstname bug"
-Cohesion: 0.06
-Nodes (27): Brief history of project management (why history matters), Lessons drawn from software plus general business and design, Making things happen: myths and realities of the PM role, Author background: Microsoft IE/Windows/MSN and engineering excellence training, Many leaders manage outcomes without the words project manager on their card, Why It Matters, Algorithm (cAST / code-chunk), Definition (+19 more)
+Cohesion: 0.08
+Nodes (32): BUCKET-SORT, BUILD-MAX-HEAP, Computational geometry, Convex hull algorithms, COUNTING-SORT, Divide-and-conquer design paradigm, Heap data structure, HEAPSORT (+24 more)
 
 ### Community 133 - "fuzzy-edit-matching.md · ast-truncation.md · repo-map-ranking.md"
-Cohesion: 0.15
-Nodes (31): Meta earnings extraction prompt, o3-mini reasoning effort, JSON KV sub-prompts, Enterprise deployment path, Safety policy deltas, OpenAI vs Meta narrative, DeepSeek disruption angle, Multi-agent orchestration (+23 more)
+Cohesion: 0.08
+Nodes (32): Skew and hotspots, Operability, Afferent coupling, Domain versus operational coupling, Efferent coupling, Team topologies and architecture, Yourdon and Constantine Structured Design, Systems thinking (+24 more)
 
 ### Community 134 - "model-routing-agents.md · LLM router / model routing · Fallback model routing"
-Cohesion: 0.11
-Nodes (28): Ambiguous Edges - Review These, Community Hubs (Navigation), Corpus Check, God Nodes (most connected - your core abstractions), Graph Report - data/books/  (2026-05-10), Hyperedges (group relationships), Knowledge Gaps, Suggested Questions (+20 more)
+Cohesion: 0.09
+Nodes (32): Customer and requirement volatility drives rework risk, Stakeholders shape tradeoffs when authority and values collide, Project Management: A Systems Approach to Planning, Scheduling, and Controlling (13th ed., 2022), Case: Disney non-negotiable constraints in trade-offs, Concurrent engineering / design-build as modern integration, Constraint prioritization can change over project life, Customer relations as fourth constraint for external customers, Disney case: safety, aesthetics, quality as locked-in constraints (+24 more)
 
 ### Community 135 - "merge_graphify_corpora.py · main() · auto_community_labels()"
-Cohesion: 0.14
-Nodes (31): ada orchestrator, big3 super, blink agent, browser validate, build slash, cc agents under, cheap summaries, closed loop (+23 more)
+Cohesion: 0.08
+Nodes (31): Alternate rapid hiring with gelling periods, Management often self-taught and unstructured, Personal philosophy of management, Re-gelling tax on moving people, Shift scope; use fixed-term rotations, Team first: sacred high-performing teams, Build-to-Order, Demand Amplification (+23 more)
 
 ### Community 136 - "Changelog entry for streaming fix · GitHub discussion on streaming bugs · Template type…"
 Cohesion: 0.1
-Nodes (31): Cyclomatic complexity metric, Fitness functions (architectural governance tests), Measuring architecture characteristics, Administrative closure of records and paperwork, Benchmarking drives PM intellectual property growth, Historical case: DOD early PM standards and gate reviews, Public sector: contractors sharing PM IP with agencies, Contract types (fixed price, cost reimbursable, cost sharing) suitability (+23 more)
+Nodes (32): chatgpt memory ui, drm decaying resolution, enshrine summaries, eval observability, memory vs state history, openai system trust, redis analogy models, structured outputs bridge (+24 more)
 
 ### Community 137 - "code:toml ([constraints]) · Rules Engine · sentrux Rules Engine"
-Cohesion: 0.11
-Nodes (31): Growth mindset as resource when facing negative stereotypes (chapter theme), Defiant power of the human spirit, Jerry Long (case testimony), Leo Tolstoy, Meaning in suffering, Shema Yisrael fragment episode, Super-meaning, Tragic optimism (+23 more)
+Cohesion: 0.09
+Nodes (32): Alfred Adler, Annemarie von Forstmeyer, Man's Search for Meaning, Concentration camp (inner experience focus), Death in Teheran (parable), Dr. J. / Steinhof transformation case, Edith Weisskopf-Joelson, Existential analysis (+24 more)
 
 ### Community 138 - "Liking principle · Jigsaw classroom (interdependence reduc… · Empathy"
-Cohesion: 0.1
-Nodes (31): Chapter 2: Reciprocation — The Old Give and Take … and Take, Hare Krishna unsolicited gift then donation solicitation, Reciprocity principle, Combined reciprocity + contrast in sequential requests, Rejection-then-retreat / door-in-the-face sequence, ABC: Agree, Build, Compare, Explore Others' Paths, Helpless story (+23 more)
+Cohesion: 0.09
+Nodes (31): ADR-025: GitHub Issues as Sole Spec Storage + harness-setup, code:markdown (## Spec), code:yaml (name: Harness Spec), Consequences, Context, Decision, Failure Mode, Issue Format (+23 more)
 
 ### Community 139 - "Project Scope Management · Writing the good vision · Writing good specifications"
-Cohesion: 0.1
-Nodes (29): Alternatives to MCP Routing, code:block1 (┌─────────────────┐     MCP Protocol      ┌─────────────────), code:block3 ("ck_search: Semantic code search using embeddings. Use for c), Limitations, MCP Architecture for Code Search, Registration, Routing Logic, Key Argument (+21 more)
+Cohesion: 0.08
+Nodes (32): Production Pattern: Combined Types, Bun runtime, Flask CORS helper for local dev, Ctrl-Z undo Aider changes, Duplicate script block LLM pitfall, Flask /prompt API, GPT-4 Turbo on backend calls, HTTP POST JSON.parse integration (+24 more)
 
 ### Community 140 - "Optimizing Program Performance · EVMS emphasizes time and cost metrics · Earned value m…"
-Cohesion: 0.13
-Nodes (31): RAG, FastAPI, Partial JSON Streaming, React, Recipe Streaming Demo, Server-Sent Events, Structured Streaming, CopilotKit (+23 more)
+Cohesion: 0.08
+Nodes (32): GPT-4o mini, Fallback provider chain, OpenAI-compatible generic client, Reasoning models vs prompt-based reasoning, Retry policy (BAML), o3-mini reasoning model, Reasoning start/end special tokens, GPT-4o mini for diffs (+24 more)
 
 ### Community 141 - "Invest in iteration speed · Part 3: The Basic Tools · Tip: Source Code Control"
+Cohesion: 0.13
+Nodes (32): aider hist, bash bg, big3, emoji tags, genui, genui preset, hooks repo, hooks state (+24 more)
+
+### Community 142 - "Code Complete, 2nd ed.: A Practical Han… · Reviews, pair programming, collaborativ… · P…"
+Cohesion: 0.14
+Nodes (32): Meta earnings extraction prompt, o3-mini reasoning effort, JSON KV sub-prompts, Enterprise deployment path, Safety policy deltas, OpenAI vs Meta narrative, DeepSeek disruption angle, Multi-agent orchestration (+24 more)
+
+### Community 143 - "Book Contents / Outline · Growth mindset (Dweck) · Continual small investments improvin…"
+Cohesion: 0.06
+Nodes (30): Actionable Warnings, Agent End, Ast-Grep Rules, code:bash (pi install npm:pi-lens), code:bash (pi install git:github.com/apmantza/pi-lens), code:json ({ "warmFiles": ["src/main.cpp", "src/lib.cpp"] }), code:yaml (metadata:), code:bash (# Standard mode (LSP enabled by default)) (+22 more)
+
+### Community 144 - "Community feedback loop on union UX · Backward compatibility for union rules · Union im…"
+Cohesion: 0.06
+Nodes (30): Appendix: Full Frontmatter Gap Table, Conceptual pages that don't exist, Dashboard, Dead Links (64), Entity pages that don't exist (used as wikilinks), Filename Uniqueness, Frontmatter Gaps (169), Lint Report: 2026-05-02 (+22 more)
+
+### Community 145 - "Task-relevant maturity (TRM) · Mentoring · Training is the boss's job"
+Cohesion: 0.08
+Nodes (31): The Effective Engineer, Build systems that sustain growth, Effective engineer as value produced per unit time, Leverage (impact per time invested), Minimize operational burden, Dropbox, Instagram, Pinterest (+23 more)
+
+### Community 146 - "Per-Layer Skill Mapping · Managerial output = org output + influe… · Glue work (team gl…"
+Cohesion: 0.1
+Nodes (31): Automation to accelerate work, Find and remove iteration bottlenecks, Continuous deployment / frequent releases, Facebook Beacon product failure, Invest in iteration speed, Etsy, Internal tools that boost team productivity, Master daily dev tools (editor, debugger, VCS) (+23 more)
+
+### Community 147 - "Infinite context window bet · Data > UX > benchmarks thesis · Exponential slop prediction"
+Cohesion: 0.1
+Nodes (31): Misunderstanding: blaming kids for fixed mindset instead of improving learning conditions, Misunderstanding: growth mindset reduced to praising effort alone; empty effort praise, False growth mindset: superficial or mistaken adoption of growth mindset language, Misunderstanding: calling oneself ‘open-minded’ instead of committed to developing abilities, Misunderstanding: telling kids they can do anything without skills/resources, Praising process (effort, strategies, focus, perseverance) vs praising fixed traits, Process praise tied to learning/progress/achievement—not praise divorced from outcomes, Susan Mackie (Australia colleague): observed ‘false growth mindset’ in practice (+23 more)
+
+### Community 148 - "typer assistant awaken · 100% local brain option · Post-speech silence tuning"
+Cohesion: 0.09
+Nodes (31): OpenAI Assistants API, Prior AutoGen + Guidance architecture, Two-step chat completion alternative, Equip tools on specific thread run, Assistants Files API future work, Fluent chainable assistant setup API, get_or_create assistant by name, Macro: OpenAI as LLM platform / App Store analogy (+23 more)
+
+### Community 149 - "summarize then tier · github actions cache keys · information funnel loss"
 Cohesion: 0.14
 Nodes (31): adw, afk tactics, agentic layer, always on agent, bets2026, chatgpt pulse, compute max, cost decline bet (+23 more)
 
-### Community 142 - "Code Complete, 2nd ed.: A Practical Han… · Reviews, pair programming, collaborativ… · P…"
-Cohesion: 0.07
-Nodes (29): Agent = Model + Harness, The Last Harness (meta-evolution), FP #1 (Harness > Model): VALIDATED, New First Principle: Agent as MCP Tool, New First Principle: Implicit Memory Matters, New First Principle: Sandbox > Permissions, What This Means From First Principles, P11: Model-Harness Independence (+21 more)
+### Community 150 - "Claude Code Sub-Agents · Claude Code / Cursor implementation · 12 Parallel Sub-Agents E…"
+Cohesion: 0.14
+Nodes (31): ada orchestrator, big3 super, blink agent, browser validate, build slash, cc agents under, cheap summaries, closed loop (+23 more)
 
-### Community 143 - "Book Contents / Outline · Growth mindset (Dweck) · Continual small investments improvin…"
+### Community 151 - "code:block5 (/harness-setup) · Claude Code leak 40% harness code · Claude Code setup hook"
+Cohesion: 0.1
+Nodes (23): cleanUserText(), filterNoise(), isNoiseUserBlock(), NOISE_STRINGS, NOISE_TOOLS, extractFiles(), FILE_CREATE_TOOLS, FILE_READ_TOOLS (+15 more)
+
+### Community 152 - "Cursor Harness Innovations · Claude Agent SDK wraps Claude Code binary · Claude Code Re…"
 Cohesion: 0.07
 Nodes (30): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+22 more)
 
-### Community 144 - "Community feedback loop on union UX · Backward compatibility for union rules · Union im…"
+### Community 153 - "ElevenLabs MCP Server · Auggie Context MCP Server.md · MCP Server (Recommended)"
 Cohesion: 0.1
-Nodes (20): getStateIndex(), isSyntaxNode(), SYNTAX_TYPES, TOKEN_TYPES, buildFunctionMatrixFromNode(), extractArrowFunctions(), findSimilarFunctions(), getArrowFunctionSignature() (+12 more)
+Nodes (29): Architecture, browser-harness — Self-Healing CDP Harness, code:block1 (LLM Agent → browser-harness → Chrome DevTools Protocol (CDP)), code:block2 (P25 Subagent Router → P30 Browser Subagent), Config, Integration with ultimate-pi Harness (P30), Key Properties, TypeScript Stack Preference (+21 more)
 
-### Community 145 - "Task-relevant maturity (TRM) · Mentoring · Training is the boss's job"
-Cohesion: 0.13
-Nodes (30): Anthropic Claude 4.x, Provider Profiles (Official Guidance), Anthropic Claude 4.x Profile, code:block2 (STRUCTURE: XML tags (<instructions>, <context>, <examples>)), Anthropic Claude models, OpenAI-compatible providers, Type safety at LLM boundary, IndyDevDan YouTube channel (+22 more)
-
-### Community 146 - "Per-Layer Skill Mapping · Managerial output = org output + influe… · Glue work (team gl…"
-Cohesion: 0.09
-Nodes (30): Advanced project management for engineering managers, Navigating ambiguity in delivery, Decision-making and delegation, Doubling rule for quick estimates, Process-czar anti-pattern (over-process for ambiguity), 20% time for sustaining engineering / cleanup, ~10 productive engineering weeks per engineer per quarter, Coordination via peer groups (+22 more)
-
-### Community 147 - "Infinite context window bet · Data > UX > benchmarks thesis · Exponential slop prediction"
-Cohesion: 0.09
-Nodes (30): Functional test for quality, In-process inspection, Management style scales with TRM, 5S, Andon, Automatic Line Stop, Error-Proofing, Fixed-Position Stop System (+22 more)
-
-### Community 148 - "typer assistant awaken · 100% local brain option · Post-speech silence tuning"
+### Community 154 - "Skill-First Harness Architecture · antigravity-agent-first-architecture.md · Why Skills…"
 Cohesion: 0.07
 Nodes (27): code:block1 (Generator ──produces──► Output), Core Pattern, Evaluator Tuning, Relevance to Our Harness, Sprint Contracts, When Is It Worth It?, Why Separate Generator and Evaluator, code:python (from jinja2 import Environment, FileSystemLoader) (+19 more)
 
-### Community 150 - "Claude Code Sub-Agents · Claude Code / Cursor implementation · 12 Parallel Sub-Agents E…"
-Cohesion: 0.07
-Nodes (29): Agent playback logs, Astral uv runner, Best-of-N parallel runs, CLI → MCP → optional skill layering, GitHub PRs from sandboxes, MCP wrapping sandbox CLI, Modal as alternative host, Nine parallel landing-page variants (+21 more)
-
-### Community 151 - "code:block5 (/harness-setup) · Claude Code leak 40% harness code · Claude Code setup hook"
-Cohesion: 0.11
-Nodes (28): Architecture, browser-harness — Self-Healing CDP Harness, code:block1 (LLM Agent → browser-harness → Chrome DevTools Protocol (CDP)), code:block2 (P25 Subagent Router → P30 Browser Subagent), Integration with ultimate-pi Harness (P30), Key Properties, TypeScript Stack Preference, TypeScript Version: browser-harness-js (+20 more)
-
-### Community 152 - "Cursor Harness Innovations · Claude Agent SDK wraps Claude Code binary · Claude Code Re…"
-Cohesion: 0.1
-Nodes (29): Chapter 9 — The Pseudocode Programming Process (PPP), Chapter 21 — Collaborative Construction, Reviews, pair programming, collaborative construction, Pseudocode Programming Process for routines/classes, Self-documenting code and comments policy, Comments as a design tool, Four excuses for avoiding comments, Comments describe what is not obvious from code (+21 more)
-
-### Community 153 - "ElevenLabs MCP Server · Auggie Context MCP Server.md · MCP Server (Recommended)"
-Cohesion: 0.07
-Nodes (28): Agentic Harness Engineering closed loop, Agentic Harness Engineering (AHE), Frozen harness transfer across models, Layered trajectory distillation, Limits of compressed feedback optimizers, Meta-Harness, Filesystem-backed full optimization history, Meta-Harness outer-loop search (+20 more)
-
-### Community 154 - "Skill-First Harness Architecture · antigravity-agent-first-architecture.md · Why Skills…"
-Cohesion: 0.13
-Nodes (26): appendBlockSection(), BriefLine, buildBriefSections(), capAssistantToolLines(), collapseAssistantToolLines(), collapseConsecutiveToolErrors(), compileBrief(), compressBash() (+18 more)
-
 ### Community 155 - "Claude Opus 4.7 · Claude Opus 4.6 · Claude Opus 4.5"
-Cohesion: 0.12
-Nodes (24): logReadGuardEvent(), MAX_LOG_BYTES, READ_GUARD_LOG_BACKUP_FILE, READ_GUARD_LOG_DIR, READ_GUARD_LOG_FILE, ReadGuardLogEntry, rotateIfNeeded(), shouldLogEvent() (+16 more)
+Cohesion: 0.07
+Nodes (26): Alternatives to RRF, code:block1 (RRF_score(d) = Σ (1 / (k + rank_i(d)))), Lexical Search (BM25), Reciprocal Rank Fusion (RRF), Semantic Search (Embeddings), Contradictions, Key Concepts, Key Entities (+18 more)
 
 ### Community 156 - "Research: how claude-mem fits into our … · Research: claude-mem over obsidian wiki… · N…"
-Cohesion: 0.07
-Nodes (27): ACP Ecosystem, AI Assistants, Binary Cache, Building Packages, Code Quality, code:nix ({), code:nix ({), code:nix ({) (+19 more)
+Cohesion: 0.11
+Nodes (29): Loop invariants and correctness proofs, Chapter 8 — Defensive Programming, Chapter 12 — Fundamental Data Types, Chapter 13 — Unusual Data Types, Chapter 19 — General Control Issues, Defensive programming (inputs, assertions, errors), Part III — Variables, Define errors out of existence (+21 more)
 
 ### Community 157 - "Consensus Debate · Protocol Design · First Principles"
-Cohesion: 0.09
-Nodes (28): CEO pay disclosure and ratcheting (social comparison), Social comparison, envy, salary relativity, Arthur Schopenhauer, Carl Jung, Elliot Aronson, Evolutionary roots of behavior, Fragile ego dynamics, Frans de Waal (+20 more)
+Cohesion: 0.11
+Nodes (30): Crucial Conversations: Tools for Talking When Stakes Are High (2nd ed., 2012), Crucial conversation: high stakes, opinions vary, strong emotions, Leo Tolstoy, Meaning in suffering, Shema Yisrael fragment episode, Super-meaning, Tragic optimism, Tragic triad (pain, guilt, death) (+22 more)
 
 ### Community 158 - "research-agent-first-codebase-explorati… · agent-codebase-interface.md · Postgres analy…"
-Cohesion: 0.08
-Nodes (27): Feedback loop, Systems thinking, Psychological safety (Edmondson), Sociotechnical / human–computer ecosystem framing, Team API (explicit interface), Team-first thinking, Agent Execution Cycle, code:block1 (1. Propose change (edit file)) (+19 more)
+Cohesion: 0.07
+Nodes (28): 1. Stale Environment Context (Infrastructure Drift), 2. Context Window Pollution (Interaction Drift), Drift Taxonomy, Mitigation Approaches, Quantified Impact, See Also, Stuck-Pattern Signatures, Three Causal Mechanisms (+20 more)
 
 ### Community 159 - "Contributing to ultimate-pi · Sentrux (architectural quality gate) · Skill sources"
-Cohesion: 0.09
-Nodes (28): Random-access machine (RAM) model, Arithmetic and logical operations, Array indexing and struct layout, Bits and bytes, Branch prediction, C integer promotions and conversions, Code motion and strength reduction, Compiler optimizations (+20 more)
+Cohesion: 0.07
+Nodes (30): Soft skills for architects, AI Layer (PRD, rules, commands), AquaVoice, Agent question flurries, BMAD framework, Dynamis community / course, .env.example workflow, Epicenter Whispering (+22 more)
 
 ### Community 160 - "Feedback loop · execution-feedback-loop.md · BAML docs RAG + codegen chatbot"
-Cohesion: 0.1
-Nodes (28): Code Complete, 2nd ed.: A Practical Handbook of Software Construction, Chapter 10 — General Issues in Using Variables, Chapter 11 — The Power of Variable Names, Chapter 13 — Unusual Data Types, Chapter 26 — Code-Tuning Techniques, Chapter 31 — Layout and Style, Chapter 32 — Self-Documenting Code, Chapter 33 — Personal Character (+20 more)
-
-### Community 161 - "PM: exploration, selection, validation · Lean Product and Process Development · Core fo…"
-Cohesion: 0.1
-Nodes (28): Natural vs artificial, positive vs negative pressure on teams, How not to annoy people: process, email, and meetings, Middle-game strategy: steady execution after planning, Managing open issues and splitting urgent vs deferrable lists, What to do when things go wrong, Brain Time versus Body Time, Bring Back the Door, Coding War Games competitions (+20 more)
-
-### Community 162 - "Human Layer · BoundaryML · email.works demo platform"
-Cohesion: 0.1
-Nodes (28): Brainstorming sessions require facilitation for useful output, Communication and relationships, Decision-makers may delegate if ownership stays visible, Facilitation speeds clarity before authority commits, Human-nature chapters (communication through politics) stand alone but connect, Cross-reference: author's The Myths of Innovation, Stakeholder navigation and influence without cynicism, Oral vs written communication tradeoffs in teams (+20 more)
+Cohesion: 0.07
+Nodes (29): 1. Direct Repetition, 2. Ping-Pong Between Tools, 3. Retry-Without-Progress, Always Combine With Budget Guardrails, Approach 1: Argument Hash (Recommended), Approach 3: LLM Similarity, code:python (import hashlib, json), Detection Approaches (+21 more)
 
 ### Community 163 - "Logotherapy · Existential vacuum · Man's Search for Meaning"
 Cohesion: 0.09
-Nodes (28): Apologize when appropriate (restore respect/purpose), Case: Carole and Bob (Good Night Motel bill; STATE skills), Case: Lori A. (bipolar daughter; Contrasting and STATE), Case: Union and management flip-chart goals (restore respect), Case: Yvonne and Jotham (intimacy; Contrasting and CRIB), Contrasting (don't/do statements to fix misunderstanding), CRIB skills for creating Mutual Purpose, Brainstorm new strategies (+20 more)
+Nodes (29): CEO pay disclosure and ratcheting (social comparison), Social comparison, envy, salary relativity, Accelerating pace of life increases shortcut reliance, Arthur Schopenhauer, Carl Jung, Elliot Aronson, Emotional permeability and contagion, Evolutionary roots of behavior (+21 more)
 
 ### Community 164 - "Python · LangGraph · n8n"
-Cohesion: 0.09
-Nodes (28): Cate Huston: team needs a manager not an engineer (quote), Engineering director role (multi-team, low daily coding), Managing managers, Managing multiple teams (director-level breadth), Plate spinning (juggling people and projects), High Output Management (Andrew S. Grove), Rule of thumb: six to eight subordinates, Appendix tools: line management (+20 more)
+Cohesion: 0.08
+Nodes (28): 1. Subagent Delegation (Fan-out), 2. Team Dispatch (Specialist Routing), 3. Sequential Chaining (Pipeline), Agentic Orchestration Pipeline, Design Principles, Harness Implementation Path, Three Orchestration Patterns, Read-only database connections (+20 more)
 
 ### Community 165 - "Verifier agent · Tactical Agentic Coding · GPT-5.5"
-Cohesion: 0.1
-Nodes (28): 360-degree performance reviews, First, Break All the Rules (Buckingham & Coffman), Casey Stengel (epigraph on managing), Engineering management, Ongoing feedback (not only annual review), Management 101: being managed, Performance reviews, The Tyranny of Structurelessness (Jo Freeman) (+20 more)
+Cohesion: 0.22
+Nodes (28): Implementation for Our Harness, code:python (def ensemble_solutions(problem: str, candidates: int = 5) ->), Implementation for Our Harness, Fresh session for implementation, Implement command, Plan command (custom), llm templates subcommands, Ollama model pull workflow (+20 more)
 
 ### Community 166 - "Cursor Composer · Liquid prompt editor · GPT-4o latest (Cursor)"
-Cohesion: 0.1
-Nodes (26): 5. Context as API/MCP, Module 4: MCP Context Server, AI Agent Integration, code:python (# Example usage in AI agents), code:shell (# JSONL format - one JSON object per line (recommended for a), JSONL Output (Custom Workflows), MCP Server (Recommended), code:shell (smgrep mcp) (+18 more)
+Cohesion: 0.08
+Nodes (27): Broader Pattern Validation, Clarification, Competitive Position in Pi Ecosystem, Core Mechanics, Definition, Practical Impact, VCC Conversation Compaction for Pi, Lessons for AI Coding Harness (+19 more)
 
 ### Community 167 - "Research: Meta-Agent Context Drift Dete… · First Principles Analysis · Integration with…"
-Cohesion: 0.08
-Nodes (28): AI as smarter Stack Overflow, Missing transcript, Vue/Electron/Copilot (title inference), Review Copilot output discipline, Express.js Copilot demo, GitHub Copilot, Is it hype series, Pinia state store (+20 more)
+Cohesion: 0.1
+Nodes (27): Bandage removal: low-intensity longer duration less pain, Coffee additives presentation affects taste ratings, Coke vs Pepsi fMRI brand effects (Montague et al.), Expectations shape perceived experience, MIT Brew: Budweiser + balsamic vinegar beer experiments, Placebo pricing and healthcare policy tension, Veladone-Rx placebo: price modulates analgesia, SoBe energy drink: discounted price hurts performance (+19 more)
 
 ### Community 168 - "Postgres data analytics AI agent · Aider pair programming · llm.py prompt helper module"
 Cohesion: 0.1
-Nodes (27): Architecture: Archon as Workflow Engine, GitHub - openai/symphony: Symphony turns project work into isolated, autonomous implementation runs, allowing teams to manage work instead of supervising coding agents. · GitHub, GitHub Actions, Agents Md, Archon, Archon MCP server, Codex, Docker (+19 more)
+Nodes (28): Asynchronous replication, Consistent prefix reads, Hinted handoff, Leaderless replication, Monotonic reads, DeCandia et al.: Dynamo, Quorum reads/writes, Read repair (+20 more)
 
 ### Community 169 - "Research: Superpowers Skill for Agentic… · Key Findings · Sub-agents for research"
-Cohesion: 0.09
-Nodes (25): code:toml ([constraints]), Rules Engine, Capabilities, code:toml ([constraints]), Example, Execution Modes, Integration, sentrux Rules Engine (+17 more)
+Cohesion: 0.08
+Nodes (28): Capital equipment vs labor tradeoffs, Limiting step (bottleneck), Avoid peanut-buttering scarce resources, The Phoenix Project — Kim, Behr, Spafford, Concentrate hiring; rotate interviewers, Consolidate org efforts; one team at a time, Treading water fix: consolidate; limit WIP, Durable excellence via compounding improvement (+20 more)
 
 ### Community 170 - "Persistent Structured Memory · Persistent sub-agent memory · patterns.yaml analogy layer"
-Cohesion: 0.07
-Nodes (27): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 📖 Documentation, 📖 Documentation, 📖 Documentation, 📖 Documentation (+19 more)
+Cohesion: 0.13
+Nodes (27): Claude Context Editing Docs, Gemma 4, Google, Claude 1M context, ~32K practical context for SLMs, SLM-specialized agent harness, Claude 1M true context, Claude API outage context (+19 more)
 
 ### Community 171 - "QUICKSORT · Probabilistic analysis · Heap data structure"
+Cohesion: 0.13
+Nodes (25): appendBlockSection(), BriefLine, buildBriefSections(), capAssistantToolLines(), collapseAssistantToolLines(), collapseConsecutiveToolErrors(), compileBrief(), compressBash() (+17 more)
+
+### Community 172 - "client.setPrimary documentation improve… · Multi-client registry (TS/Python/Ruby) · VS …"
 Cohesion: 0.07
 Nodes (26): Browse, code:bash (pi install npm:@sting8k/pi-vcc), code:bash (pi install https://github.com/sting8k/pi-vcc), code:bash (pi -e https://github.com/sting8k/pi-vcc), code:block4 ([Session Goal]), code:block5 (vcc_recall({ query: "auth token" })                         ), code:block6 (/pi-vcc-recall auth token scope:all), code:block7 (vcc_recall()) (+18 more)
 
-### Community 172 - "client.setPrimary documentation improve… · Multi-client registry (TS/Python/Ruby) · VS …"
-Cohesion: 0.09
-Nodes (25): Shortest paths in a DAG, Depth-first search (DFS), Strongly connected components algorithm, Topological sort, ADR-009: claude-obsidian Mode B, code:block1 (wiki/), Dependencies, Extension Event Hooks (+17 more)
-
 ### Community 173 - "Gemini 2.0 Flash demo · Fireworks AI hosting · Auth approach reasoning demo"
-Cohesion: 0.09
-Nodes (24): Benchmark Standing (Render, Aug 2025), Contradictions, Gap Analysis: Ultimate-PI vs Gemini CLI SOTA, Gemini CLI SOTA Innovations (by harness layer), Integration Opportunities (First Principles), Key Concepts, Key Findings, Open Questions (+16 more)
+Cohesion: 0.13
+Nodes (24): logReadGuardEvent(), MAX_LOG_BYTES, READ_GUARD_LOG_BACKUP_FILE, READ_GUARD_LOG_DIR, READ_GUARD_LOG_FILE, ReadGuardLogEntry, rotateIfNeeded(), shouldLogEvent() (+16 more)
 
 ### Community 174 - "Episode transcript anchor · chain.ts runner · Extractor second prompt"
-Cohesion: 0.12
-Nodes (27): Bandage removal: low-intensity longer duration less pain, Coffee additives presentation affects taste ratings, Coke vs Pepsi fMRI brand effects (Montague et al.), Cycle of distrust (markets / institutions), Expectations shape perceived experience, MIT Brew: Budweiser + balsamic vinegar beer experiments, Placebo pricing and healthcare policy tension, Veladone-Rx placebo: price modulates analgesia (+19 more)
+Cohesion: 0.09
+Nodes (25): code:toml ([constraints]), Rules Engine, Capabilities, code:toml ([constraints]), Example, Execution Modes, Integration, sentrux Rules Engine (+17 more)
 
 ### Community 175 - "Staleness Elimination Rules · Harness-Wiki Pipeline · Read-First Protocol"
-Cohesion: 0.1
-Nodes (27): Skew and hotspots, Operability, Afferent coupling, Domain versus operational coupling, Efferent coupling, Yourdon and Constantine Structured Design, System archetypes (recurring trap structures), Chapter 5: System Traps … and Opportunities (+19 more)
+Cohesion: 0.09
+Nodes (25): 5. Context as API/MCP, Module 4: MCP Context Server, AI Agent Integration, code:python (# Example usage in AI agents), code:shell (# JSONL format - one JSON object per line (recommended for a), JSONL Output (Custom Workflows), MCP Server (Recommended), code:shell (smgrep mcp) (+17 more)
 
 ### Community 176 - "Autocomplete benchmark UI · Cost and latency columns · Debounced requests"
-Cohesion: 0.08
-Nodes (25): Glue work (team glue / cross-cutting work), Cross-cutting architectural characteristics, Agentic Harness, Build Sequence, code:block1 (L1: Spec Hardening → L2: Structured Planning → L2.5: Drift M), Cross-Cutting Tool Enhancements (L3), Formal Models, Cross-Cutting — Mixed (+17 more)
+Cohesion: 0.12
+Nodes (27): Burning Man gift economy (no cash), Coke vs dollar bills dorm fridge honesty, Crowding out: money can reduce intrinsic motivation, Gifts vs cash in social relationships, Honor code signature despite no formal code, Market norms, Self-herding (repeat own past behavior), Social norms (+19 more)
 
 ### Community 177 - "Search for meaning · Three ways to find meaning in life · Attachment bonds and relatedness"
+Cohesion: 0.08
+Nodes (26): Fundamentals of Software Architecture (2nd ed.), Diagramming architecture (UML, C4, ArchiMate), Architecture characteristics (definitional dimension), Logical components (definitional dimension), Architecture decisions (definitional dimension), Architecture style (definitional dimension), Layered architecture style, Layers of isolation (+18 more)
+
+### Community 178 - "Community PR review: Zed Windows · Zed on Windows BAML CLI install fix · Boundary thank…"
+Cohesion: 0.11
+Nodes (27): Brainstorming sessions require facilitation for useful output, Clear roles reduce duplicated work and toxic overlap, Communication and relationships, Under pressure, decision-maker identity must be unambiguous, Some decisions have no winning choice—pick least bad openly, Facilitation speeds clarity before authority commits, How to make good decisions, Human-nature chapters (communication through politics) stand alone but connect (+19 more)
+
+### Community 179 - "Streaming-first layout (progressive dis… · Async UI: DB sync engine / event streams · F…"
+Cohesion: 0.11
+Nodes (27): 360-degree performance reviews, First, Break All the Rules (Buckingham & Coffman), Casey Stengel (epigraph on managing), Engineering management, Ongoing feedback (not only annual review), Management 101: being managed, One-on-one (1-1) meetings, Performance reviews (+19 more)
+
+### Community 180 - "Agent skills (progressive disclosure) · Obsidian knowledge base · Obsidian graph view"
+Cohesion: 0.08
+Nodes (25): FP #1 (Harness > Model): VALIDATED, New First Principle: Agent as MCP Tool, New First Principle: Implicit Memory Matters, New First Principle: Sandbox > Permissions, What This Means From First Principles, Application to Harness Pipeline, code:block1 (Semantic Spec → Prompt Renderer → Provider-Native Prompt), Design Principle (v2 — May 2026) (+17 more)
+
+### Community 181 - "RAG is not dead (nuanced thesis) · Traditional RAG (vector + embeddings) · Vector Searc…"
 Cohesion: 0.1
 Nodes (27): data leakage risk, brian guest, constraint sampling, family id implicit, instructional vs factual split, json parse naive, mcp list tools, neo4j owltime question (+19 more)
 
-### Community 178 - "Community PR review: Zed Windows · Zed on Windows BAML CLI install fix · Boundary thank…"
-Cohesion: 0.13
-Nodes (27): First Principles Takeaways, Rethought from First Principles, First-Principles Criteria, First-Principles Requirements, Codex background shells, Elixir / BEAM process supervision, Eval: hard+new still needs humans, GitHub CLI token efficiency (+19 more)
+### Community 182 - "Stripe Minions agents · P-thread (parallel threads) · Blueprint engine"
+Cohesion: 0.11
+Nodes (27): Human Layer, Dex / Human Layer, Observations object across pipeline, Email as agent surface (AI that works), Redis production store, Thread store / event log, Evolution IQ, Dexter (Human Layer founder) (+19 more)
 
-### Community 179 - "Streaming-first layout (progressive dis… · Async UI: DB sync engine / event streams · F…"
-Cohesion: 0.07
-Nodes (27): Static vs dynamic linking, Element: examples, Element: purpose, Element: variables, Five essential prompt elements, 80/20 prompt framing, Python examples block, Single-purpose prompts (+19 more)
-
-### Community 180 - "Agent skills (progressive disclosure) · Obsidian knowledge base · Obsidian graph view"
+### Community 183 - "Anthropic Post-Mortem · Three Detection Approaches · LLM Output Reformatter"
 Cohesion: 0.1
 Nodes (27): Anthropic provider integration, CI/CD prompt regression testing, Clue benchmark blog, Gemini Pro, Gemini Ultra, GPT-3.5 Turbo, Instruction following quality, LLM evaluation codebase (+19 more)
 
-### Community 181 - "RAG is not dead (nuanced thesis) · Traditional RAG (vector + embeddings) · Vector Searc…"
-Cohesion: 0.08
-Nodes (25): 🧠 Code by concept, code:shell ($ skygrep "where does the auth token get refreshed?"), code:python (from skylakegrep.src.reference_graph import register_extract), code:shell ($ skygrep "where does session refresh logic live?"), code:shell ($ skygrep "the design doc on rate limiter rewrite"), code:shell ($ skygrep "我昨天写的 cascade 调度代码"), code:shell ($ cd /path/to/brand-new-project), code:shell ($ cd /tmp/scratch) (+17 more)
-
-### Community 182 - "Stripe Minions agents · P-thread (parallel threads) · Blueprint engine"
-Cohesion: 0.08
-Nodes (21): raceToCompletion(), LSPClientInfo, DIAGNOSTICS_SEMANTIC_SETTLE_THRESHOLD_MS, DIAGNOSTICS_SEMANTIC_SETTLE_WAIT_MS, EARLY_UNBLOCK_GRACE_MS, LSPDiagnosticsHealth, LSPDiagnosticsMode, LSPState (+13 more)
-
-### Community 183 - "Anthropic Post-Mortem · Three Detection Approaches · LLM Output Reformatter"
-Cohesion: 0.15
-Nodes (23): _attachErrorHandler(), buildAugmentedPath(), bypassPs1OnWindows(), combinePathValuesForPlatform(), delimiterForPlatform(), _findBinaryInNpmGlobal(), findBinaryOnPath(), getLiveWindowsPath() (+15 more)
-
 ### Community 184 - "Research: Prompt Renderer for Multi-Mod… · Implementation Plan (integrated into ha… · c…"
 Cohesion: 0.08
-Nodes (25): Annoy, Approximate Nearest Neighbors Approach, Benchmarking with Real-world Workloads, Choosing the Right Vector Search Engine, Comparison Table: Key Features of Top Vector Search Engines, Conclusion and Next Steps, Emerging Options, Faiss (+17 more)
+Nodes (24): Background, Contribution to Agent Skills, Jesse Vincent, Philosophy, Agent Skills, Description, Key Skills, Video: skill creator / agent skills (YouTube) (+16 more)
 
 ### Community 185 - "IndyDevDan YouTube channel · Plan mode read-only planning · Agent ephemeral context"
 Cohesion: 0.15
-Nodes (26): Chapter 20 — The Software-Quality Landscape, Chapter 22 — Developer Testing, Chapter 23 — Debugging, Chapter 24 — Refactoring, Debugging mindset and tactics, Developer testing role and techniques, Refactoring for safe evolution, Part V — Code Improvements (+18 more)
+Nodes (23): _attachErrorHandler(), buildAugmentedPath(), bypassPs1OnWindows(), combinePathValuesForPlatform(), delimiterForPlatform(), _findBinaryInNpmGlobal(), findBinaryOnPath(), getLiveWindowsPath() (+15 more)
 
 ### Community 186 - "Compaction context loss · 1. Slash Commands (Skills) · Terminal desktop web spectrum"
-Cohesion: 0.14
-Nodes (26): Memory aliasing and optimization limits, Optimizing Program Performance, EVM time+cost may not forecast all future failures alone, EVMS emphasizes time and cost metrics, Finance fear: horizontal project accounting / EV, Measurement performance domain, Metrics vs. periodic health checks for true status, PMBOK 7th: eight performance domains (stakeholder through uncertainty) (+18 more)
+Cohesion: 0.08
+Nodes (25): Annoy, Approximate Nearest Neighbors Approach, Benchmarking with Real-world Workloads, Choosing the Right Vector Search Engine, Comparison Table: Key Features of Top Vector Search Engines, Conclusion and Next Steps, Emerging Options, Faiss (+17 more)
 
 ### Community 187 - "Todo list plan execution · Agentic coding superset · Anthropic Claude Code team"
-Cohesion: 0.1
-Nodes (26): AMPP: Ask, Mirror, Paraphrase, Prime, Ask to get things rolling, Mirror to confirm feelings, Paraphrase to acknowledge the story, Prime when you're getting nowhere, Misunderstanding: growth mindset reduced to praising effort alone; empty effort praise, Praising process (effort, strategies, focus, perseverance) vs praising fixed traits, Process praise tied to learning/progress/achievement—not praise divorced from outcomes (+18 more)
+Cohesion: 0.08
+Nodes (25): Principle of locality (temporal and spatial), Apache Avro, Backward compatibility, Binary encodings, Encoding and evolution, Forward compatibility, JSON encoding, Protocol Buffers (+17 more)
 
 ### Community 188 - "AST as projection of CST · Parser benchmarks · Compiler pipeline stages"
-Cohesion: 0.1
-Nodes (26): Abraham H. Maslow, Black box model of operations, Can't do vs won't do diagnostic, E-mail and information velocity (Vintage edition), Lagging indicators, Maslow hierarchy applied to workplace, Motivation and Personality (Maslow, 1954), Motivation as inner drive; manager shapes environment (+18 more)
+Cohesion: 0.12
+Nodes (26): Causality and happens-before, Consistency and consensus, Fencing tokens, Linearizability, Logical clocks, Membership and coordination services, Multi-leader replication, Brewer: Towards robust distributed systems (CAP intuition) (+18 more)
 
 ### Community 189 - "Obsidian mentions · Open in Obsidian · Accessibility / captions"
 Cohesion: 0.1
-Nodes (26): Cursor IDE, Cursor / Claude style planning loops, Cursor for eval iteration, Cursor in Enron workflow, Alignment agent as engineering practice, Background supervisor on token stream, BAML TUI (Rust), Buffer tokens until guardrail passes (+18 more)
+Nodes (26): dual user messages gemini, gemini preference, placeholder url pattern, readme autopr, rtfp meme, supersonic github, tone engineering, two step email structure (+18 more)
 
 ### Community 190 - "ADR-011: Multi-Agent Consensus Debate w… · Decision · Rationale"
-Cohesion: 0.08
-Nodes (25): 1. Direct Repetition, 2. Ping-Pong Between Tools, 3. Retry-Without-Progress, Always Combine With Budget Guardrails, Intervention Strategies, See Also, Three Loop Types, Threshold Tuning (+17 more)
+Cohesion: 0.15
+Nodes (26): Agentic Harness Engineering closed loop, Agentic Loop, Closed-loop verification, ADW agentic workflow, Beni reference codebase, Claude 4 Opus, Git worktrees parallel agents, Merge best parallel outcome (+18 more)
 
 ### Community 191 - "Portfolio of projects aligned to strate… · Organizational Learning · Benchmarking drive…"
-Cohesion: 0.09
-Nodes (23): Claude Code, Relevance to Harness, code:block2 (.pi/skills/), What Becomes Skills (6 directories), code:block1 (.pi/skills/superpowers/), Direct Integration Path, How Superpowers Fits Into / Helps Our Workflow, Mapping to Our Harness Layers (+15 more)
+Cohesion: 0.08
+Nodes (26): Adaptive LLM-powered software, Mixture-of-Experts, RAG obsolete prediction, YouTube data moat, ~80% accuracy gate, Apple OpenELM framing, 32k+ context preference, ELM / efficient on-device LM (+18 more)
 
 ### Community 192 - "BAML (Boundary ML DSL) · entity resolution · golden files regression"
+Cohesion: 0.14
+Nodes (26): High-Level Component Structure, High-level IDE prompting, Agentic engineering, Alignment vs oversight gap, Anthropic $30B ARR, Bash tool danger, Benchmark ghosting / emergent capability, Capability mountain metaphor (+18 more)
+
+### Community 193 - "Dexter Horthy · MCP tool instruction bloat · Research–Plan–Implement (RPI)"
 Cohesion: 0.08
 Nodes (19): beforeRaw, beforeState, bin, cfg, cron, dir, envTemplate, file (+11 more)
 
-### Community 193 - "Dexter Horthy · MCP tool instruction bloat · Research–Plan–Implement (RPI)"
+### Community 194 - "Claude Pro/Max subscription · Anthropic API key · Boris Cherny (Claude Code)"
 Cohesion: 0.12
 Nodes (24): add_cross_corpus_edges(), auto_community_labels(), build_token_index(), collect_hyperedges_books(), collect_hyperedges_main(), collect_hyperedges_yt(), load_node_link(), load_youtube_nx() (+16 more)
 
-### Community 194 - "Claude Pro/Max subscription · Anthropic API key · Boris Cherny (Claude Code)"
-Cohesion: 0.13
-Nodes (23): BM25Context, bm25Score(), buildBM25Context(), countMatches(), escapeRegex(), filterStopwords(), fullText(), lineSnippet() (+15 more)
-
 ### Community 195 - "vector-embeddings · GitHub Topics · [alash3al](https://github.com/alash3al) · [Automato…"
 Cohesion: 0.14
-Nodes (7): CacheManager, getCacheDir(), getLensDir(), getTurnStatePath(), evaluateGitGuard(), getShellCommand(), isGitCommitOrPushAttempt()
+Nodes (21): AgentConfig, AgentDiscoveryResult, AgentScope, AgentSource, ApplyAgentPolicyFn, applyAgentsPolicyIfAvailable(), BUILT_IN_AGENTS, BUILTIN_TOOL_NAMES (+13 more)
 
 ### Community 196 - "LLM agent network V2 · GPT-4 · OpenAI API"
-Cohesion: 0.12
-Nodes (4): AstGrepClient, createAstGrepReplaceTool(), createAstGrepSearchTool(), LANGUAGES
+Cohesion: 0.08
+Nodes (25): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+17 more)
 
 ### Community 198 - "meta-agent-context-pruning.md · Big Three: Context Model Prompt · Primary Agent"
-Cohesion: 0.14
-Nodes (25): Coke vs dollar bills dorm fridge honesty, Commitment devices and external deadlines, Honor code signature despite no formal code, Market norms, Memory and coherence vs 'true' stable preferences, Self-herding (repeat own past behavior), Chinese POW camps: start small written agreements (commitment ladder), Chapter 3: Commitment and Consistency — Hobgoblins of the Mind (+17 more)
+Cohesion: 0.08
+Nodes (24): Architecture, code:block1 (┌─────────────────────────────────────────────────┐), code:block2 (L1 (Spec Hardening) → L2 (Structured Planning) → L2.5 (Drift), Feasibility, Harness Integration, Open Questions, Overhead, Phase 1: Detection (+16 more)
 
 ### Community 199 - "E2B sandboxes · Nine parallel landing-page variants · 15 concurrent sandboxes experiment"
-Cohesion: 0.14
-Nodes (25): Loop invariants and correctness proofs, Exceptional Control Flow, Hardware exceptions, OS exceptions and traps, Nonlocal jumps (setjmp/longjmp), Defensive programming (inputs, assertions, errors), Define errors out of existence, Java substring exceptions (+17 more)
+Cohesion: 0.08
+Nodes (25): Anthropic Pattern: Planner → Generator → Evaluator, code:block1 (User prompt → Planner (structured Plan) → Architect (TaskPla), code:block2 (User prompt → Planner (product spec) → Generator (implements), code:block3 (Codex generates → Codex reviews locally → Additional agent r), Lovable/Clone Pattern: Planner → Architect → Coder, OpenAI Pattern: Agent-to-Agent Review Loops, Three Common Decompositions, Model Context Protocol (MCP) (+17 more)
 
 ### Community 200 - "Google Gemini CLI · Gemini CLI Architecture (Official Docs) · slash chat save resume"
-Cohesion: 0.1
-Nodes (25): Influencing without authority, Mentoring interns, Mentoring, Onboarding new hires, Project management for tech leads, Senior engineer path and growth, Stretch projects for growth, Tech lead role (responsibilities, not just a ladder rung) (+17 more)
+Cohesion: 0.12
+Nodes (25): Beer and free lunches (behavioral economics limits), Behavioral Economics (Judgment and Decision Making), Predictable Irrationality, Standard Rational Economic Model, Anchored demand: supply-side prices shape willingness to pay, Community 18 - "Behavioral Economics: Perception", Community 71 - "Limits of Behavioral Economics", Cognitive biases (+17 more)
 
 ### Community 201 - "Minimal chainable prompt runner · Defer LLM libraries early · LangChain / library critique"
-Cohesion: 0.1
-Nodes (25): dual user messages gemini, gemini preference, golden email targets, placeholder url pattern, readme autopr, rtfp meme, slackbot example, supersonic github (+17 more)
+Cohesion: 0.13
+Nodes (25): Chapter 9 — The Pseudocode Programming Process (PPP), Chapter 11 — The Power of Variable Names, Chapter 21 — Collaborative Construction, Chapter 32 — Self-Documenting Code, Reviews, pair programming, collaborative construction, Pseudocode Programming Process for routines/classes, Self-documenting code and comments policy, Comments as a design tool (+17 more)
 
 ### Community 202 - "Research: how GSD fits into our coding … · Key Findings · Integration Opportunities"
-Cohesion: 0.14
-Nodes (25): Fon (Sherlock co-founder), LangGraph, Loading States Streaming Copy, Quick Prompts Ux, Sherlock AI (trading copilot), LangChain porting mention, agentskills.io scripts specification, github.com/boundaryml/baml-skills-demo (+17 more)
+Cohesion: 0.24
+Nodes (25): Community 66 - "Performance Reviews & Feedback", Limitations (from community feedback), Community 66 - "Performance Reviews & Feedback", Backward compatibility for union rules, Benchmark suite for PDF parse paths, CLI validate subcommand for media inputs, Community feedback loop on union UX, Documentation examples for image vs PDF (+17 more)
 
 ### Community 203 - "github-fork-issues-discussion.md · github-sub-issues-docs.md · GitHub issues workflow"
-Cohesion: 0.09
-Nodes (24): 12. Model Routing (v0.12+), code:block1 (User Request → L1 (Spec) → L2 (Plan) → L3 (Execute) → L4 (Cr), code:typescript (interface ModelRouter {), Cost Model, L2: Structured Planning, L8: Wiki Query Interface, NEW: Model Router Component, Our Harness Integration Points (+16 more)
+Cohesion: 0.15
+Nodes (25): Batch processing, Change data capture (CDC), Complex event processing, Dataflow execution engines, End-to-end argument for correctness, Event logs (Kafka-style), Event sourcing, The future of data systems (+17 more)
 
 ### Community 204 - "Agentic engineering · Agentic Harness Engineering closed loop · Agentic Harness Enginee…"
-Cohesion: 0.09
-Nodes (25): Immediate vs Cued Messages, Inner/Outer Loop Pattern, Interruptible Agents, Message Queue, Python Threads, Shared State (DB/in-memory), Interrupt UX Design, End-of-Utterance Detection (+17 more)
+Cohesion: 0.11
+Nodes (25): Natural vs artificial, positive vs negative pressure on teams, How not to annoy people: process, email, and meetings, Middle-game strategy: steady execution after planning, Managing open issues and splitting urgent vs deferrable lists, What to do when things go wrong, Brain Time versus Body Time, Bring Back the Door, Coding War Games competitions (+17 more)
 
 ### Community 205 - "2026-04-30-pi-lean-ctx-native.md · Consequences · What pi-lean-ctx Provides"
 Cohesion: 0.08
-Nodes (24): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+16 more)
+Nodes (25): BAML Streaming Traits, Dynamic Renderer, Type Safety, TypeScript, BAML vs JSON Schema, Dynamic Schemas, Invoice Processor Demo, LLM Meta-Programming (+17 more)
 
 ### Community 206 - "Marimo prompt UI · Postgres dialect prompt · Spicy summarize template"
-Cohesion: 0.08
-Nodes (24): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+16 more)
+Cohesion: 0.13
+Nodes (25): Regan, D. T. Effects of a Favor and Liking on Compliance (JESP), Hare Krishna unsolicited gift then donation solicitation, Reciprocity principle, Reader's Reports as pedagogical device, Reader's Reports (end-of-chapter illustrations), Regan study: unsolicited Coke then raffle-ticket compliance, ABC: Agree, Build, Compare, Dialogue (free flow of meaning into the shared pool) (+17 more)
 
 ### Community 207 - "System 1 (fast, intuitive) · Automatic, mindless compliance under mo… · Dual-process fr…"
-Cohesion: 0.11
-Nodes (18): buildProjectIndex(), isIndexFresh(), loadIndex(), buildIndexForTesting(), CONFIG, extractArrowFunctions(), ExtractedFunction, GENERIC_NAME_TOKENS (+10 more)
+Cohesion: 0.08
+Nodes (24): 🧠 Code by concept, code:shell ($ skygrep "where does the auth token get refreshed?"), code:python (from skylakegrep.src.reference_graph import register_extract), code:shell ($ skygrep "where does session refresh logic live?"), code:shell ($ skygrep "the design doc on rate limiter rewrite"), code:shell ($ skygrep "我昨天写的 cascade 调度代码"), code:shell ($ cd /path/to/brand-new-project), code:shell ($ cd /tmp/scratch) (+16 more)
 
 ### Community 208 - "Performance reviews · Ongoing feedback (not only annual review) · Performance appraisal"
-Cohesion: 0.26
-Nodes (24): Backpressure handling in browser streams, CI matrix Node 18/20/22 for SDK, CFI codegen for dynamic classes, CFI union discriminator codegen, Changelog entry for streaming fix, Community contributor credit in release, Docs: playground onboarding flow, BAML HTTP client error hierarchy cleanup (+16 more)
+Cohesion: 0.09
+Nodes (24): 12. Model Routing (v0.12+), code:block1 (User Request → L1 (Spec) → L2 (Plan) → L3 (Execute) → L4 (Cr), code:typescript (interface ModelRouter {), Cost Model, L2: Structured Planning, L8: Wiki Query Interface, NEW: Model Router Component, Our Harness Integration Points (+16 more)
 
 ### Community 209 - "2k token meta prompt · R1 distill thought pattern · Leading text prompt technique"
 Cohesion: 0.08
-Nodes (23): 1. Agent Registry (`.pi/messenger/registry/`), 2. Per-Agent Inboxes (`.pi/messenger/inbox/<agent>/`), 3. Message Format, 4. Atomic Patterns, Activity Feed (`feed.ts`), Chat Overlay (`overlay.ts`, `overlay-*.ts`), code:json ({), code:block5 (┌─────────────────────────────────────────────────────────┐) (+15 more)
+Nodes (24): ACP Ecosystem, AI Assistants, Building Packages, Code Quality, code:nix ({), code:nix ({), code:shell (# Build a specific package), code:shell (# Format all code) (+16 more)
 
 ### Community 210 - "Drift Detection — Unified Framework (LL… · First-Principles Rethink (May 2026) · Token …"
-Cohesion: 0.28
-Nodes (24): VS Code, Paul Gauthier, Aider read-only context, SQLite, Aider /load, Principled AI Coding course, Gemini 2 Flash vs Sonnet, Parallel tool calls (+16 more)
+Cohesion: 0.12
+Nodes (23): Key Details, Relevance to Harness, Summary, Features, Key Facts, Model Support, Relevance to Harness, Software 3.0 (+15 more)
 
 ### Community 211 - "Breaking change policy · CLI versioning · Community PR merges"
-Cohesion: 0.29
-Nodes (24): Layer 1: Prompt-Level Guardrails, Four-level prompt framework, llm templates subcommands, Ollama model pull workflow, Token streaming UX, Prompt portability across hosts, System vs user message roles, Schema-on-read prompting (+16 more)
+Cohesion: 0.08
+Nodes (24): 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores, 🔧 Chores (+16 more)
 
 ### Community 212 - "weekly monthly rollups · drm decaying resolution · daily assignments tier"
-Cohesion: 0.23
-Nodes (24): Ada voice assistant, realtime-stt, uv package runner, typer assistant awaken, DeepSeek assistant daemon, Always-on Python agent, Background worker pattern, File watcher triggers (+16 more)
+Cohesion: 0.12
+Nodes (4): AstGrepClient, createAstGrepReplaceTool(), createAstGrepSearchTool(), LANGUAGES
 
 ### Community 213 - "mcp list tools · tool calling tokens · step summarization compression"
-Cohesion: 0.23
-Nodes (24): Devin agent, Agentic coding begins (prediction), Data > UX > benchmarks thesis, 2025 GenAI predictions, o3 Paic framing, Context window race, Pricing model shifts, Local-first resurgence (+16 more)
-
-### Community 214 - "Healing power located in patient's subc… · Prayers answered in a scientific/lawful… · V…"
-Cohesion: 0.11
-Nodes (24): Association with positive/negative contexts (liking), Chapter 5: Liking — The Friendly Thief, Aronson, E. Jigsaw route to learning and liking (Psychology Today), Regan, D. T. Effects of a Favor and Liking on Compliance (JESP), Sherif et al. Robbers Cave book (1961), Compliments and cooperation as liking builders, Contact and cooperation increase liking, Halo effect (attractiveness generalization) (+16 more)
-
-### Community 215 - "Architecture Diagram · Svg Architecture Diagram · Aaron Architecture Diagram Tool Router"
-Cohesion: 0.09
-Nodes (24): Root cause of organizational dysfunction, Capital equipment vs labor tradeoffs, Continuous operation and breakdown risk, Inventory as time buffer, Leading indicators, Limiting step (bottleneck), Planning: today's actions for tomorrow's output, Work in process (WIP) (+16 more)
-
-### Community 216 - "OpenAI structured outputs · 3. Structured Outputs Prevent Chaos · Speech + structured o…"
-Cohesion: 0.08
-Nodes (22): Next-generation digital operating model, Complement, Contradictions, Key Findings, Open Questions, Overview, Recommended Operating Model, Replace (+14 more)
-
-### Community 217 - "Omni Complete (LLM autocomplete) · Key Details · Superpowers: How I'm Using Coding Agent…"
 Cohesion: 0.08
 Nodes (23): code:block1 (DebateSession {), code:block2 (ConsensusBudget {), code:block3 (Round {), Consensus Debate, ConsensusBudget, Convergence Detection, DebateSession, Files (+15 more)
 
-### Community 218 - "Google Gemini 3 Profile · Google Gemini 3 · Gemini / Google GenAI"
+### Community 214 - "Healing power located in patient's subc… · Prayers answered in a scientific/lawful… · V…"
+Cohesion: 0.15
+Nodes (24): Architecture: Archon as Workflow Engine, Archon workflow security patterns, Codex background shells, Elixir / BEAM process supervision, Eval: hard+new still needs humans, GitHub CLI token efficiency, Ghost libraries / spec distribution, GPT-5.4 model (+16 more)
+
+### Community 215 - "Architecture Diagram · Svg Architecture Diagram · Aaron Architecture Diagram Tool Router"
 Cohesion: 0.13
-Nodes (23): 10. 90-Minute RL Loop, 1. Shadow Workspace (Pre-Verification Isolation), 2. Speculative Edits (Fast Apply), 3. Dynamic Context Evolution, 5. Per-Tool Per-Model Error Classification, 6. Model-Adaptive Tool Provisioning, 8. Subagent Specialization, Cursor Harness Innovations (+15 more)
+Nodes (24): Cycle of distrust (markets / institutions), Fudge factor: small dishonesty not maximal, Memory and coherence vs 'true' stable preferences, Cognitive dissonance (linked to consistency pressures), Drive for consistency between beliefs and actions, Law of Defensiveness, Rationalization and cover stories, Confirmation of self-opinion (+16 more)
+
+### Community 216 - "OpenAI structured outputs · 3. Structured Outputs Prevent Chaos · Speech + structured o…"
+Cohesion: 0.09
+Nodes (22): ADR-009: claude-obsidian Mode B, code:block1 (wiki/), Dependencies, Extension Event Hooks, Harness Entry Type Mapping, Lint, Origin Principle, Persistent Structured Memory (+14 more)
+
+### Community 217 - "Omni Complete (LLM autocomplete) · Key Details · Superpowers: How I'm Using Coding Agent…"
+Cohesion: 0.11
+Nodes (24): Asymptotic notation, O-notation (asymptotic upper bound), Ω-notation (asymptotic lower bound), Θ-notation (asymptotically tight), Introduction to Algorithms, Fourth Edition (2022), o-notation, ω-notation, The role of algorithms in computing (+16 more)
+
+### Community 218 - "Google Gemini 3 Profile · Google Gemini 3 · Gemini / Google GenAI"
+Cohesion: 0.15
+Nodes (24): EVM time+cost may not forecast all future failures alone, EVMS emphasizes time and cost metrics, Finance fear: horizontal project accounting / EV, Measurement performance domain, Metrics vs. periodic health checks for true status, PMBOK 7th: eight performance domains (stakeholder through uncertainty), Gilb's Law on measurement acceptance, 10:1 individual performance spread; 2.5x median (+16 more)
 
 ### Community 219 - "Gemini CLI · Research: Gemini CLI SOTA Harness Integ… · Google Official Blog: Gemini CL…"
-Cohesion: 0.09
-Nodes (24): OpenAI GPT-5.x, code:block1 (STRUCTURE: XML-like sections (<instruction_spec>)), OpenAI GPT-5.x Profile, Baururazalinov 2026 03 30 9F4B3Xzjjkq Openai, ctx.output_format (schema in prompt), extract_resume BAML function, Circuit / image structured extraction, Equation extraction from diagrams (+16 more)
+Cohesion: 0.1
+Nodes (24): AMPP: Ask, Mirror, Paraphrase, Prime, Ask to get things rolling, Mirror to confirm feelings, Paraphrase to acknowledge the story, Prime when you're getting nowhere, Howard Markman: couples — silence, violence, or open dialogue, Case: Nurse silent when doctor ignores safety (patient harm), Case: Tom E. (engineering blow-ups; Learn to Look) (+16 more)
 
 ### Community 220 - "Gemini CLI Changelogs (v0.4 — v0.40) · policy-engine-pattern.md · Gemini CLI Implementa…"
+Cohesion: 0.26
+Nodes (24): Backpressure handling in browser streams, CI matrix Node 18/20/22 for SDK, CFI codegen for dynamic classes, CFI union discriminator codegen, Changelog entry for streaming fix, Community contributor credit in release, Docs: playground onboarding flow, BAML HTTP client error hierarchy cleanup (+16 more)
+
+### Community 221 - "Precision/recall style metrics · Runtime invariant checks · Cost vs latency tradeoffs"
+Cohesion: 0.16
+Nodes (24): ck MCP Tools, list_tools / call_tool MCP flow, Smithery MCP registry, IndyDevDan YouTube channel, Composable LLM building blocks philosophy, Micro: reuse llm.py and small wrappers, Simon Willison, ADW MCP prompt chains (+16 more)
+
+### Community 222 - "1. File Structure (Code Layer) · Code Layer product · ts-execution-layer.md"
 Cohesion: 0.11
 Nodes (24): Module 3: Prompt Enhancer, code:block4 (Semantic Spec → Prompt Renderer → Provider-Native Prompt → A), New: Prompt Renderer Module, Poetry (Python packaging), Aider pair programming, argparse CLI, ChatGPT code generation, Generated db.py Postgres manager class (+16 more)
 
-### Community 221 - "Precision/recall style metrics · Runtime invariant checks · Cost vs latency tradeoffs"
-Cohesion: 0.08
-Nodes (23): Architecture, code:block1 (┌─────────────────────────────────────────────────┐), code:block2 (L1 (Spec Hardening) → L2 (Structured Planning) → L2.5 (Drift), Feasibility, Harness Integration, Open Questions, Overhead, Phase 1: Detection (+15 more)
-
-### Community 222 - "1. File Structure (Code Layer) · Code Layer product · ts-execution-layer.md"
-Cohesion: 0.15
-Nodes (18): longTranscript, previousSummary, r, assistantText(), assistantWithThinking(), assistantWithToolCall(), assistBase, toolResult() (+10 more)
-
 ### Community 223 - "Built for Speed: ~10ms Latency, Even Un… · Meetups and local community · **5\. Communit…"
-Cohesion: 0.09
-Nodes (18): allRuleFiles, args, __dirname, full, hitRules, hits, id, lang (+10 more)
+Cohesion: 0.23
+Nodes (24): Ada voice assistant, realtime-stt, uv package runner, typer assistant awaken, DeepSeek assistant daemon, Always-on Python agent, Background worker pattern, File watcher triggers (+16 more)
 
 ### Community 224 - "Sentrux (architectural quality gate) · sentrux Docs: Quality Signal · Quality Signal (s…"
-Cohesion: 0.15
-Nodes (22): capitalize(), detectCppProject(), detectCsharpProject(), detectDartProject(), detectElixirProject(), detectGleamProject(), detectGoProject(), detectJavaProject() (+14 more)
+Cohesion: 0.23
+Nodes (24): Devin agent, Agentic coding begins (prediction), Data > UX > benchmarks thesis, 2025 GenAI predictions, o3 Paic framing, Context window race, Pricing model shifts, Local-first resurgence (+16 more)
 
 ### Community 225 - "Research: executor.sh Harness Integrati… · Key Findings · How This Fits Into Our Harnes…"
 Cohesion: 0.09
-Nodes (13): logTreeSitter(), TREE_SITTER_LOG_DIR, TREE_SITTER_LOG_FILE, TreeSitterLogEntry, buildOrUpdateGraph(), recordEntitySnapshotDiff(), blastCooldownByFile, ENTITY_QUERIES (+5 more)
+Nodes (24): Anthropic ToS warning for subscription routing, GitHub Copilot subscription in Pi, OpenClaw under the hood, Cursor (policy keyword), Regex filters lived in removed fetch scripts, scripts/index_youtube_urls.py, IndyDevDan channel, MCP for dev agents (policy keyword) (+16 more)
 
 ### Community 226 - "Pattern Definitions · ADR-022: Drift Monitor Pattern Definiti… · Consequences"
-Cohesion: 0.11
-Nodes (21): P9: Progressive Disclosure, Progressive Skill Disclosure, References, 6. Skills with Progressive Disclosure, Industry Adoption Speed, Key Contributions, Non-Coding Applications, Summary (+13 more)
+Cohesion: 0.28
+Nodes (24): VS Code, Paul Gauthier, Aider read-only context, SQLite, Aider /load, Principled AI Coding course, Gemini 2 Flash vs Sonnet, Parallel tool calls (+16 more)
 
 ### Community 227 - "Prospect theory · Predictable Irrationality · Heuristics and Biases (theme)"
-Cohesion: 0.09
-Nodes (23): Proactive Guardian (Pre-Execution), Reactive Guardian (Post-Execution), Two Variants, Ad hoc prompt testing notebook, AI coding meta-review prompt, Build software + communicate value, Bullet knowledge compression prompt, {{variable}} prompt variables (+15 more)
+Cohesion: 0.15
+Nodes (18): longTranscript, previousSummary, r, assistantText(), assistantWithThinking(), assistantWithToolCall(), assistBase, toolResult() (+10 more)
 
 ### Community 228 - "Optimize for learning · High-leverage activities · Onboarding programs for new engineers"
 Cohesion: 0.09
-Nodes (22): Appendix: Full Frontmatter Gap Table, Conceptual pages that don't exist, Dashboard, Dead Links (64), Entity pages that don't exist (used as wikilinks), Filename Uniqueness, Lint Report: 2026-05-02, Missing Pages (entities mentioned without a page) (+14 more)
+Nodes (18): allRuleFiles, args, __dirname, full, hitRules, hits, id, lang (+10 more)
 
 ### Community 229 - "Evals for agentic black boxes · Compiler AST through VM path · False positive vs negati…"
-Cohesion: 0.11
-Nodes (22): Case: Kevin's team vs Chris the CEO (unsafe boss, poor relocation buy-in), Fool's choice (either candor or kindness / either/or), Search for the elusive 'and' (replace either/or), Start with Heart (right motives; focus on what you really want), Work on me first, us second, True growth mindset via journey, triggers, fixed-mindset ‘persona’ — not self-proclamation, Orientation toward validating fixed traits (intelligence, personality, character), Relationships vignette: seeking prince-like mate/career as validation — mindset shift over life (+14 more)
+Cohesion: 0.15
+Nodes (22): capitalize(), detectCppProject(), detectCsharpProject(), detectDartProject(), detectElixirProject(), detectGleamProject(), detectGoProject(), detectJavaProject() (+14 more)
 
 ### Community 230 - "MCP (Model Context Protocol) · Codex team tool search thinking · Bash tool required for…"
-Cohesion: 0.29
-Nodes (23): code:block1 (AI Agent (Claude, Cursor)), asyncio parallel fanout, backend writes only, baml codegen ts py, cloud code agent, cursor agent, email draft, feedback refine loop (+15 more)
+Cohesion: 0.09
+Nodes (21): Evidence, For Model Selection, For Our Harness, Practical Implications, The Analogy, Why This Matters, Broader Compaction Landscape (May 2026), Definition (+13 more)
 
 ### Community 231 - "cloud code agent · asyncio parallel fanout · feedback refine loop"
-Cohesion: 0.1
-Nodes (23): BAML (Boundary ML DSL), entity extraction, entity resolution, f1 scoring, skill tags resolution, topic clustering, type signatures as contracts, Vibb / Vaibhav (BAML co-creator) (+15 more)
+Cohesion: 0.13
+Nodes (23): Chapter 7 — High-Quality Routines, Chapter 10 — General Issues in Using Variables, Chapter 14 — Organizing Straight-Line Code, Chapter 15 — Using Conditionals, Chapter 16 — Controlling Loops, Chapter 17 — Unusual Control Structures, Chapter 18 — Table-Driven Methods, Cohesion, abstraction, and routine length guidelines (+15 more)
 
 ### Community 232 - "Apathy in camp · Loss of faith in the future · Provisional existence of unknown limit"
 Cohesion: 0.09
-Nodes (22): 10. Token Budget (MVP — Skill-First), 12. What's Deferred (Post-MVP), 13. Files to Create (MVP — Skill-First v2), 14. Key Architecture Decisions (ADRs Governing MVP), 15. Skill-First vs Code-First Comparison, 5. L2.5: Runtime Drift Monitor (CODE — `drift-monitor.ts`), 7. P20: Deterministic Gate — `harness-gate/SKILL.md`, 8. L5-L8: Trace, Observability, Memory (+14 more)
+Nodes (23): Agent Harness Architecture, Feedforward + Feedback Model, Harness Layers (OpenDev Reference), Harness (Runtime), Harness Templates, Relevance to Our Harness, Scaffolding (Pre-Runtime), Two-Phase Model (+15 more)
 
 ### Community 233 - "Silence (withholding meaning from the p… · Violence (forcing meaning into the pool) · L…"
-Cohesion: 0.26
-Nodes (23): Dexter (Human Layer founder), Vaibhav (BAML / Boundary), BAML (Boundary ML language), BAML CIS (syscalls: fetch, shell, file IO), BAML executor (static orchestration), BAML program (diff-applied), BAML project (incremental), BAML VM bytecode execution (+15 more)
+Cohesion: 0.09
+Nodes (23): Single-Model Multi-Pass, cheap model first, classification over catalog, gpt4 mini, runtime guards, automated eval gap, multi model matrix baml, markdown only editing culture (+15 more)
 
 ### Community 234 - "Reciprocity principle · Explore Others' Paths · Master My Stories (interrupt unhelpful …"
 Cohesion: 0.1
-Nodes (20): Contrast with Human Interfaces, Core Principle, Agent-Superior Capabilities, Agent-Weak Areas, Contradictions, Open Questions, Overview, Sources (+12 more)
+Nodes (23): BAML (Boundary ML DSL), entity extraction, entity resolution, f1 scoring, skill tags resolution, topic clustering, type signatures as contracts, Vibb / Vaibhav (BAML co-creator) (+15 more)
 
 ### Community 235 - "Code review as a continuum of rigor · Code Review · Community 45 - "Code Review & Pseud…"
 Cohesion: 0.11
-Nodes (22): The Meta-Agent Problem Space, Stacked meta-prompt (verbatim gist), Agent Stability Index (ASI), Key Findings, Relevance to Meta-Agent Concept, Summary, Three Causal Mechanisms, Three Drift Types (+14 more)
+Nodes (23): Model Selection, code:yaml (---), What Adapts Per Model, Per-Model Rendering Rules, Phase 2: Per-Model Renderers, code:shell (# Default: BGE-Small (fast, precise chunking)), Model Selection, Per-tenant model selection (SaaS tiers) (+15 more)
 
 ### Community 236 - "Marimo reactive Python notebooks · Prompt library notebook UI · Ad hoc prompt testing n…"
-Cohesion: 0.16
-Nodes (23): Agentic Horizons course, Tactical Agentic Coding, Agentic Horizons, Agentic Horizon course, Agentic Horizon, Atomic claims verification, Bash restricted to one script, Single-model benchmark limitation (+15 more)
+Cohesion: 0.12
+Nodes (22): Claude Opus 4.6, Claude Opus 4.7, Model-Specific Key Findings, Anthropic Prompt Optimizer Mention, Frequent Intentional Compaction, Claude Opus, Research-Plan-Implement Workflow, Export best prompt (+14 more)
 
 ### Community 237 - "Git worktrees parallel agents · Infinite agentic loop · Claude 4 Opus"
-Cohesion: 0.13
-Nodes (19): discoverAgents(), findNearestProjectAgentsDir(), isDirectory(), loadAgentsFromDir(), parseModelPreferences(), parseModelTier(), parseNumber(), parseOutputMode() (+11 more)
+Cohesion: 0.1
+Nodes (23): Immediate vs Cued Messages, Inner/Outer Loop Pattern, Interruptible Agents, Message Queue, Python Threads, Shared State (DB/in-memory), Interrupt UX Design, End-of-Utterance Detection (+15 more)
 
 ### Community 238 - "afk tactics · agentic layer · cost decline bet"
-Cohesion: 0.13
-Nodes (20): code:bash (npm run lint            # check lint + format errors), Contributing to ultimate-pi, Dotenv loader, Extensions, Firecrawl sub-skills, Linting & formatting, PostHog analytics, Skill sources (+12 more)
+Cohesion: 0.16
+Nodes (23): Vendor integration skill pattern (Chargebee), Obsidian knowledge base, Agent skills (progressive disclosure), Brand + voice generator skill, .claude/skills directory, Python cookbook in skill, Excalidraw diagrams skill, Five agent capabilities framing (+15 more)
 
 ### Community 239 - "OpenAI Codex / GPT-5.1 Codex · Meilir Page design principle (encapsula… · Provider Prof…"
+Cohesion: 0.09
+Nodes (22): 1. Superpowers is process-as-discipline, not model improvement (Source: [[superpowers-github-repo]]), 2. Hard gates beat suggestions every time (Source: [[superpowers-termdock-analysis]]), 3. Subagent-driven development is the architectural innovation (Source: [[superpowers-release-blog]]), 4. Cross-agent portability via plain Markdown (Source: [[agent-skills-ecosystem]]), 5. TDD enforcement with real results (Source: [[superpowers-termdock-analysis]]), 6. Skill creation is meta — TDD for skills (Source: [[superpowers-release-blog]]), 7. Persuasion principles work on LLMs (Source: [[superpowers-release-blog]]), Contradictions (+14 more)
+
+### Community 240 - "Research: Model-Specific Prompting Guid… · What Changes in the Harness · Key Finding: T…"
+Cohesion: 0.09
+Nodes (20): agent, approve, ask, bash, batch, block, create, evalWrite (+12 more)
+
+### Community 241 - "AutoGen · Round robin multi-agent conversation · JSON structured business insights output"
 Cohesion: 0.16
 Nodes (9): AstGrepJsonDiagnostic, AstGrepParser, AstGrepRuleManager, AstGrepDiagnostic, AstGrepJsonDiagnostic, AstGrepMatch, RuleDescription, SgMatch (+1 more)
 
-### Community 240 - "Research: Model-Specific Prompting Guid… · What Changes in the Harness · Key Finding: T…"
-Cohesion: 0.13
-Nodes (17): getPackageRoot(), packageRootCache, resolvePackagePath(), LANGUAGE_TO_GRAMMAR, _require, SearchPattern, StructuralMatch, TreeSitterLanguage (+9 more)
-
-### Community 241 - "AutoGen · Round robin multi-agent conversation · JSON structured business insights output"
+### Community 242 - "Integration Points · 1. L3 Execution Layer — Agent Tool Call… · 3. Phase 16 Lint+Format…"
 Cohesion: 0.14
 Nodes (20): AppliedWorkspaceEdit, applyTextEditsToString(), applyWorkspaceEdit(), comparePosition(), CreateFileOp, DeleteFileOp, flattenWorkspaceTextEdits(), formatRange() (+12 more)
 
-### Community 242 - "Integration Points · 1. L3 Execution Layer — Agent Tool Call… · 3. Phase 16 Lint+Format…"
+### Community 243 - "pi-messenger Analysis: What We Adopt, W… · What We Strip · code:block5 (┌──────────────…"
 Cohesion: 0.13
 Nodes (19): LSPDiagnostic, applySeverityFilter(), BatchOptions, collectDiagnosticsForFile(), collectFileDiagnosticResult(), collectFiles(), createLspDiagnosticsTool(), diagnosticsToFileDiags() (+11 more)
 
-### Community 243 - "pi-messenger Analysis: What We Adopt, W… · What We Strip · code:block5 (┌──────────────…"
-Cohesion: 0.14
-Nodes (22): Sub-agents / Context Isolation, Anthropic sub-agent research claim, Avoid sub-agents for implementation, Parallel sub-agent research, Scout sub-agent pattern, Archon worktrees context, Cheap fast models for sub-agents, OpenAI Codex (+14 more)
-
 ### Community 244 - "Eval harness for prompts · Subscription OK for local harness · Lessons for AI Coding Ha…"
-Cohesion: 0.1
-Nodes (21): code:yaml (---), What Adapts Per Model, Architecture, code:block1 (┌──────────────────────────────────────────────────────┐), code:typescript (interface PromptVariable {), code:block5 (@ultimate-pi/harness/), Contradictions, Implementation Plan (integrated into harness) (+13 more)
+Cohesion: 0.11
+Nodes (21): The Meta-Agent Problem Space, Stacked meta-prompt (verbatim gist), Meta & Cross-Agent (2 extensions), Safety & Control (2 extensions), UI & DX (7 extensions), What It Provides, Design Details, Five Detection Rules (+13 more)
 
 ### Community 245 - "Part 2: A Pragmatic Approach · Validate ideas early and often · Incremental design via …"
-Cohesion: 0.11
-Nodes (20): GitHub Projects v2 (Optional Visualization), Integration Points, L1 Spec Hardening → GitHub Issues, L2 Structured Planning → GitHub Sub-Issues, Relevance to Harness, Timeline, Key Capabilities, Relevance to Harness (+12 more)
+Cohesion: 0.09
+Nodes (21): [alash3al](https://github.com/alash3al), [AutomatosAI](https://github.com/AutomatosAI), [bennyschmidt](https://github.com/bennyschmidt), [christopherkarani](https://github.com/christopherkarani), [cwida](https://github.com/cwida), [dead8309](https://github.com/dead8309), [elbruno](https://github.com/elbruno), [fpgmaas](https://github.com/fpgmaas) (+13 more)
 
 ### Community 246 - "Pi VS Code Extension Landscape · Pi Coding Agent VS Code Extension (pi0.… · VS Code ext…"
 Cohesion: 0.1
-Nodes (22): Vector Search vs. Traditional Search, Pinecone vector DB for doc search, RAG context injection style guidance (readable blocks), RAG is not dead (nuanced thesis), Traditional RAG (vector + embeddings), SQLite + light RAG for memory search, Archon chunks confusing LLMs, Bridging traditional + agentic retrieval (+14 more)
+Nodes (21): First Law of Software Architecture, 1. Separate Planning from Execution, 2. Structured Handoffs Between Agents, 3. Independent Evaluator with Hard Criteria, 4. Sprint Contracts (Agree on "Done" Before Work), 5. Tool Surface = Agent Capability Boundary, First-Principles Architecture, 1. The Model Is Better at Evaluation Than Imperative Code (+13 more)
 
 ### Community 247 - "Ethan (MX / email infra guest) · Bounce handling via webhook callbacks · Delegation fro…"
-Cohesion: 0.29
-Nodes (22): AGUI: structured data then component generation, Async UI: DB sync engine / event streams, Client-side batching of tool calls, Serverless cold start mitigation patterns, Edge CDN for static UI shell assets, Firebase, Convex, Electric SQL sync engines, Skeleton / ghost UI for perceived speed, Find bottleneck before optimizing (+14 more)
+Cohesion: 0.09
+Nodes (21): code:block1 (Every N turns (configurable, default 8):), First-Principles Rethink (May 2026), New Detection Architecture, The Problem With Rule-Based Primary Detection, Token Budget (L2.5), Why LLM-Based Detection From First Principles, Why This Is Better, First Principles (+13 more)
 
 ### Community 248 - "classification over catalog · multi model matrix baml · resume pipeline"
-Cohesion: 0.17
-Nodes (22): Vendor integration skill pattern (Chargebee), Obsidian knowledge base, Agent skills (progressive disclosure), Brand + voice generator skill, .claude/skills directory, Python cookbook in skill, Excalidraw diagrams skill, Five agent capabilities framing (+14 more)
-
-### Community 249 - "Mastra framework · Claude Code usage at Range · TypeScript engineering stack"
-Cohesion: 0.25
-Nodes (22): Shipping real software vs hype, Two-way prompt / agent prompts user, Auth approach reasoning demo, Six LLM use-case categories, Phi-4 Microsoft model, JWT vs OAuth reasoning, Model pick decision tree, Latency-first routing (+14 more)
-
-### Community 250 - "Decision · ADR-025: GitHub Issues as Sole Spec Sto… · Llama 3.2 (1B/3B)"
-Cohesion: 0.35
-Nodes (22): chain.ts runner, QwQ extractor second pass, Qwen family local stack, DeepSeek V3 comparison aside, Chinese-English mixing issue, Chained temperature strategy, Stop-sequence discipline, Multi-model fan-out pattern (+14 more)
-
-### Community 251 - "Claude Agent Sdk · MCP_Docker aggregated server · Obsidian"
-Cohesion: 0.33
-Nodes (22): Autocomplete benchmark UI, Cost and latency columns, Debounced requests, Autocomplete debounce UX, Predicted outputs latency, Editor ghost text pattern, Provider API throughput, Benchmark reproducibility (+14 more)
-
-### Community 252 - "Sub-agents · Parallel Agents · Amazon Kiro / Q Developer coding agent …"
 Cohesion: 0.1
 Nodes (21): code:block1 (┌─────────────────────────────────────────────────┐), code:typescript (// Pre-action: read wiki), Core Contract, Extension Hook Implementation, Harness-Wiki Pipeline, Per-Layer Read, Per-Layer Write Matrix, Read-First Protocol (+13 more)
 
-### Community 253 - "Ada (personal AI assistant POC) · PAR framework (Prompt–Agent–Response) · Two-way promp…"
+### Community 249 - "Mastra framework · Claude Code usage at Range · TypeScript engineering stack"
 Cohesion: 0.13
-Nodes (22): Asynchronous replication, Consistent prefix reads, Hinted handoff, Leaderless replication, Monotonic reads, DeCandia et al.: Dynamo, Quorum reads/writes, Read repair (+14 more)
+Nodes (22): Association with positive/negative contexts (liking), Chapter 5: Liking — The Friendly Thief, Aronson, E. Jigsaw route to learning and liking (Psychology Today), Sherif et al. Robbers Cave book (1961), Compliments and cooperation as liking builders, Contact and cooperation increase liking, Halo effect (attractiveness generalization), Ingroup/outgroup dynamics (Sherif; liking) (+14 more)
 
-### Community 254 - "Continually Improving Our Agent Harness · LLM-as-judge · 4. Keep Rate + LLM-as-Judge Me…"
-Cohesion: 0.1
-Nodes (22): Manager as ally: advocating for the team, Debugging struggling / dysfunctional teams, Managing a team (execution, culture, projects), The Five Dysfunctions of a Team (Patrick Lencioni), Skip-level meetings, The Goal — Eliyahu M. Goldratt, Hero programmer anti-pattern, Utilization near 100% slows new work completion (+14 more)
-
-### Community 255 - "Planner agent · review agent · append sysprompt"
+### Community 250 - "Decision · ADR-025: GitHub Issues as Sole Spec Sto… · Llama 3.2 (1B/3B)"
 Cohesion: 0.09
-Nodes (22): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, 4. L2: Structured Planning — `harness-plan/SKILL.md`, 6. L4: Adversarial Verification — `harness-critic/SKILL.md` + `.pi/agents/critic.md`, code:yaml (---), code:yaml (---), code:yaml (---), code:yaml (---), Critic Agent Definition (`.pi/agents/critic.md`) (+14 more)
+Nodes (22): Bridge nodes (top 20 by betweenness centrality), c0 (249 nodes, channels: indydevdan, cole-medin, boundaryml), c10 (240 nodes, channels: boundaryml, cole-medin, indydevdan), c11 (205 nodes, channels: boundaryml), c12 (421 nodes, channels: boundaryml, indydevdan, cole-medin), c15 (193 nodes, channels: indydevdan, cole-medin), c20 (152 nodes, channels: indydevdan), c21 (145 nodes, channels: indydevdan) (+14 more)
 
-### Community 256 - "D. E. Shaw selective CI / test prediction · Microsoft then Google career path · Aaron (…"
+### Community 251 - "Claude Agent Sdk · MCP_Docker aggregated server · Obsidian"
+Cohesion: 0.12
+Nodes (21): Project estimation skills, Measure what you want to improve, Lack of metrics causes blind fixes, HealthCare.gov launch (2013), Chapter 3 — Measure Twice, Cut Once: Upstream Prerequisites, Capers Jones, Measurement, metrics, and effect of program size, Upstream prerequisites before construction (+13 more)
+
+### Community 252 - "Sub-agents · Parallel Agents · Amazon Kiro / Q Developer coding agent …"
+Cohesion: 0.11
+Nodes (19): Architecture, Core Idea, Key Properties, code:block1 (FEEDFORWARD (Guides)                   FEEDBACK (Sensors)), code:block2 (┌──────────────────────────────────────────────────────────┐), Feedforward-Feedback: Control Flow (Böckeler/Fowler 2026), Generator-Evaluator: Agent Topology (Anthropic 2026), H-Formalism: Component Taxonomy (Meng 2026) (+11 more)
+
+### Community 253 - "Ada (personal AI assistant POC) · PAR framework (Prompt–Agent–Response) · Two-way promp…"
 Cohesion: 0.29
 Nodes (22): Boundary thanks to external contributor, Chunk coalescing in HTTP stream reader, GitHub Actions Windows runner for Zed tests, Code signing for Windows CLI binary, Community PR review: Zed Windows, Discord thread: Windows Zed repro, Docs update for Windows setup, LSP server crash guard on Windows (+14 more)
 
+### Community 254 - "Continually Improving Our Agent Harness · LLM-as-judge · 4. Keep Rate + LLM-as-Judge Me…"
+Cohesion: 0.17
+Nodes (22): LangGraph, LangChain porting mention, agentskills.io scripts specification, github.com/boundaryml/baml-skills-demo, BAML typed contracts between LangGraph steps, Critic stage (LangGraph workflow), Deterministic post-LLM validation, Evidence extractor stage (+14 more)
+
+### Community 255 - "Planner agent · review agent · append sysprompt"
+Cohesion: 0.13
+Nodes (20): code:bash (npm run lint            # check lint + format errors), Contributing to ultimate-pi, Dotenv loader, Extensions, Firecrawl sub-skills, Linting & formatting, PostHog analytics, Skill sources (+12 more)
+
+### Community 256 - "D. E. Shaw selective CI / test prediction · Microsoft then Google career path · Aaron (…"
+Cohesion: 0.21
+Nodes (22): Agentic coding superset, AI docs directory, Anthropic Claude Code team, Programmable codebase CLAUDE.md, Compute advantage scaling, Context priming workflow, Cursor Windsurf Klein ecosystem, .claude slash commands (+14 more)
+
 ### Community 257 - "Lint Report: 2026-05-02 · Appendix: Full Frontmatter Gap Table · Orphan Pages (9)"
-Cohesion: 0.11
-Nodes (21): 1. Subagent Delegation (Fan-out), 2. Team Dispatch (Specialist Routing), 3. Sequential Chaining (Pipeline), Agentic Orchestration Pipeline, Design Principles, Harness Implementation Path, Three Orchestration Patterns, Read-only database connections (+13 more)
+Cohesion: 0.1
+Nodes (22): Transcribe video step, DALL·E 3, Faster Whisper, Thumbnail generation step, First-mover advantage, 100× SOTA LLM future, Sam Altman, Domain-specific agent (+14 more)
 
 ### Community 258 - "Think-in-Code Enforcement (L3 Tool Layer) · Enforcement Architecture · Example: Before …"
-Cohesion: 0.11
-Nodes (22): Best-of-N pattern, Codec agents, F-thread (fusion thread), Gemini, MROS tool, Agent sandboxes, Agent validates install output, Documentation scraping step (+14 more)
+Cohesion: 0.09
+Nodes (21): Anti-Piracy Posture, Build Pipeline, CLI Commands, code:json ({), code:bash (sentrux login              # GitHub OAuth → purchase), Design Principles, License Key Format, Pro Features (vs Free) (+13 more)
 
 ### Community 259 - "JSON escaping cost for code tools · Architecture Summary · code:block1 (Agent A        …"
-Cohesion: 0.1
-Nodes (20): agent, approve, ask, bash, batch, block, create, evalWrite (+12 more)
+Cohesion: 0.09
+Nodes (22): Accessibility / captions, AI Engineer Summit NYC, Brand consistency, Code Summit talk, Async collab review, Content calendar, Diagram-as-code, Editorial review (+14 more)
 
 ### Community 260 - "Planning Process Group · Project Risk Management · Risk register"
+Cohesion: 0.35
+Nodes (22): chain.ts runner, QwQ extractor second pass, Qwen family local stack, DeepSeek V3 comparison aside, Chinese-English mixing issue, Chained temperature strategy, Stop-sequence discipline, Multi-model fan-out pattern (+14 more)
+
+### Community 261 - "Tip: Algorithm Speed · Asymptotic notation · Performance tuning strategies and techn…"
+Cohesion: 0.25
+Nodes (22): Shipping real software vs hype, Two-way prompt / agent prompts user, Auth approach reasoning demo, Six LLM use-case categories, Phi-4 Microsoft model, JWT vs OAuth reasoning, Model pick decision tree, Latency-first routing (+14 more)
+
+### Community 262 - "LangGraph planner → evidence → critic →… · github.com/boundaryml/baml-skills-demo · BAM…"
+Cohesion: 0.33
+Nodes (22): Autocomplete benchmark UI, Cost and latency columns, Debounced requests, Autocomplete debounce UX, Predicted outputs latency, Editor ghost text pattern, Provider API throughput, Benchmark reproducibility (+14 more)
+
+### Community 263 - "codebase-intelligence-ecosystem-compari… · Elixir · TypeScript / JavaScript"
+Cohesion: 0.29
+Nodes (22): AGUI: structured data then component generation, Async UI: DB sync engine / event streams, Client-side batching of tool calls, Serverless cold start mitigation patterns, Edge CDN for static UI shell assets, Firebase, Convex, Electric SQL sync engines, Skeleton / ghost UI for perceived speed, Find bottleneck before optimizing (+14 more)
+
+### Community 264 - "Claude Code hooks comparison · code:shell (# Git hooks) · git hooks for agents"
 Cohesion: 0.14
 Nodes (3): Blackboard, truncateForDisplay(), Handler
 
-### Community 261 - "Tip: Algorithm Speed · Asymptotic notation · Performance tuning strategies and techn…"
-Cohesion: 0.11
-Nodes (10): registerPiVccCommand(), buildOwnCut(), CompactionStats, EntryWithMessage, getLastCompactionStats(), OwnCutCancelReason, OwnCutResult, REASON_MESSAGES (+2 more)
-
-### Community 262 - "LangGraph planner → evidence → critic →… · github.com/boundaryml/baml-skills-demo · BAM…"
+### Community 265 - "Research: Augment Code Context Engine.md · Key Findings · Resolved Questions"
 Cohesion: 0.1
 Nodes (20): 1. Simple (most common), 2. Pipeline — scout → planner → worker (use `/implement <task>` shortcut), 3. Parallel — multiple scouts at once, 4. Reactive — spawn async, wait for blackboard post, `agent` Tool Reference, Available Agents, Blackboard Reference, code:block1 (agent { action: "spawn", agent: "worker", maxTurns: 15, task) (+12 more)
 
-### Community 263 - "codebase-intelligence-ecosystem-compari… · Elixir · TypeScript / JavaScript"
-Cohesion: 0.16
-Nodes (18): getProjectDataDir(), captureSnapshot(), captureSnapshots(), computeTrend(), FileHistory, formatTrendCell(), getCurrentCommit(), getDelta() (+10 more)
-
-### Community 265 - "Research: Augment Code Context Engine.md · Key Findings · Resolved Questions"
-Cohesion: 0.16
-Nodes (19): ASYNC_HINTS, classifyDefect(), classifyDiagnostic(), hasAny(), INJECTION_HINTS, SECRET_HINTS, SILENT_ERROR_HINTS, DefectClass (+11 more)
-
-### Community 266 - "Key Findings · Research: Claude Code State-of-the-Art … · 5. CLAUDE.md Hierarchical System"
+### Community 267 - "GitHub - yoanbernabeu/grepai: Semantic … · JP Morgan code of conduct · Code of conduct"
 Cohesion: 0.11
 Nodes (18): igniteWarmFiles(), CONFIG_PATHS, configInFlight, CustomServerConfig, EMPTY_CONFIG, getAllServers(), getConfigForFile(), initLSPConfig() (+10 more)
 
-### Community 267 - "GitHub - yoanbernabeu/grepai: Semantic … · JP Morgan code of conduct · Code of conduct"
-Cohesion: 0.1
-Nodes (21): [alash3al](https://github.com/alash3al), [AutomatosAI](https://github.com/AutomatosAI), [bennyschmidt](https://github.com/bennyschmidt), [christopherkarani](https://github.com/christopherkarani), [cwida](https://github.com/cwida), [dead8309](https://github.com/dead8309), [elbruno](https://github.com/elbruno), [fpgmaas](https://github.com/fpgmaas) (+13 more)
-
 ### Community 268 - "Mac Mini dedicated agent device · Claude Code on device · listen HTTP job server"
-Cohesion: 0.17
-Nodes (21): 12-factor agents, 12-factor agents methodology, Research–Plan–Implement (RPI), Beads / OpenClaw scale reference, Context engineering (narrow vs RAG), CRISPY extended workflow, Design discussion markdown artifact, Dexter Horthy (+13 more)
-
-### Community 269 - "Schema-aligned parsing · Edge Cases · BAML parser string termination bug"
-Cohesion: 0.18
-Nodes (21): Agentic engineering, Alignment vs oversight gap, Anthropic $30B ARR, Bash tool danger, Benchmark ghosting / emergent capability, Capability mountain metaphor, Claude Code auto mode bypass, Claude Mythos preview (+13 more)
-
-### Community 270 - "Key Innovations · Codex CLI — OpenAI's Open-Source Coding… · Multi-Surface Architecture"
-Cohesion: 0.28
-Nodes (21): Prompt cache pricing, o1 architect limit testing, o3-mini preparation drills, Latency SLA probing, Multi-file refactor blast, Git safety during agent runs, Checkpoint/rollback strategy, Human-in-loop escalation (+13 more)
-
-### Community 271 - "Book community index nodes (metadata)"
 Cohesion: 0.1
 Nodes (20): ADR-011: Multi-Agent Consensus Debate with Selective Routing, Consensus Protocol:, Consequences, Context, Decision, iMAD Integration: Pre-Debate Gate, Implementation, Integration points (selective — triggered only when pre-debate gate signals uncertainty): (+12 more)
 
-### Community 272 - "Graph model · Relational model · Document model"
-Cohesion: 0.15
-Nodes (21): Jekyll & Hyde / dual selves metaphor, Automatic, mindless compliance under modern informational load, Mother turkey + stuffed polecat + cheep-cheep recorder (Fox), Chapter 1: Weapons of Influence, Fox, M. W. (ethology / turkey-polecat citation), Ethology — animal behavior in natural settings, Fixed-action patterns (stereotyped sequences triggered by key stimuli), Trigger features (single salient cues) (+13 more)
+### Community 269 - "Schema-aligned parsing · Edge Cases · BAML parser string termination bug"
+Cohesion: 0.13
+Nodes (21): The Steering Loop, P10: The Steering Loop, The Steering Loop, Computational vs Inferential, Core Framework, Harness Templates, Harnessability, Regulation Categories (+13 more)
 
-### Community 273 - "Claude Mythos preview · MCP server memory manipulation · Harness hooks"
-Cohesion: 0.11
-Nodes (20): Case: Reichart / Trophy Project schedule and cost overrun exposure, Classical management: planning, organizing, staffing, controlling, directing, Committee sponsorship/governance for complex projects, Corporate governance vs. project governance (alignment, dashboards), Project governance dashboards: time, cost, scope, risk, deliverables, Executive / project sponsor as ally for escalation, IBM, Microsoft, HP: PM as strategic competency (mentioned), Project management: knowledge, skills, tools to achieve requirements (+12 more)
-
-### Community 274 - "Filesystem + bash as agent integration … · Agent skills as markdown in filesystem · Met…"
+### Community 270 - "Key Innovations · Codex CLI — OpenAI's Open-Source Coding… · Multi-Surface Architecture"
 Cohesion: 0.1
 Nodes (21): AST as projection of CST, Parser benchmarks, Boundary compiler team, Compiler pipeline stages, Parser concurrency, DevTools experience, Error recovery in parser, Formatter using CST (+13 more)
 
+### Community 271 - "Book community index nodes (metadata)"
+Cohesion: 0.1
+Nodes (21): Prompt Fiddle, Breaking change policy, CLI versioning, Community PR merges, Docs examples sync, Go client fix, Idempotency keys, Internal dogfooding (+13 more)
+
+### Community 272 - "Graph model · Relational model · Document model"
+Cohesion: 0.12
+Nodes (21): AI as smarter Stack Overflow, Missing transcript, Vue/Electron/Copilot (title inference), Review Copilot output discipline, Express.js Copilot demo, GitHub Copilot, Is it hype series, Pinia state store (+13 more)
+
+### Community 273 - "Claude Mythos preview · MCP server memory manipulation · Harness hooks"
+Cohesion: 0.1
+Nodes (21): 3. L1: Spec Hardening — `harness-spec/SKILL.md`, 4. L2: Structured Planning — `harness-plan/SKILL.md`, 7. P20: Deterministic Gate — `harness-gate/SKILL.md`, code:yaml (---), code:yaml (---), code:yaml (---), Skill Frontmatter, Skill Frontmatter (+13 more)
+
+### Community 274 - "Filesystem + bash as agent integration … · Agent skills as markdown in filesystem · Met…"
+Cohesion: 0.28
+Nodes (21): Prompt cache pricing, o1 architect limit testing, o3-mini preparation drills, Latency SLA probing, Multi-file refactor blast, Git safety during agent runs, Checkpoint/rollback strategy, Human-in-loop escalation (+13 more)
+
 ### Community 275 - "How to enable semantic code search now · Implementation status (2026-05-04) · Solution:…"
-Cohesion: 0.1
-Nodes (20): code:block1 (System prompt (~500 tokens)), code:block2 (System prompt with coding instructions (~400 tokens)), Harness Integration, Implementations, The Problem: Tool Context Bloat, The Solution: Code as Execution Layer, Tradeoffs, Why TypeScript (Not Python, Not JSON, Not Bash) (+12 more)
-
-### Community 276 - "Integration Into Our Harness · inline-post-edit-validation.md · Postgres dialect SQL gen"
-Cohesion: 0.1
-Nodes (21): Accessibility / captions, AI Engineer Summit NYC, Brand consistency, Code Summit talk, Async collab review, Content calendar, Diagram-as-code, Editorial review (+13 more)
-
-### Community 277 - "Social norms · Power of FREE (zero is not just another… · Ten Commandments recall reduc…"
-Cohesion: 0.1
-Nodes (20): First Principles, Five Hook Types, Hook vs Prompt, Integration with Our Harness, Key Hook Events, Lifecycle Hook System, PermissionRequest, PostToolUse (+12 more)
-
-### Community 278 - "Project governance as decision-making f… · Monitor and Control Project Work · Executive…"
-Cohesion: 0.1
-Nodes (20): Evidence, For Model Selection, For Tool Builders, Practical Implications, The Analogy, Why This Matters, Aider /ask conversational planning, build_file_path output directory pattern (+12 more)
-
-### Community 279 - "Community 94 - "CLRS: Approximation & LP" · Community 87 - "CLRS: Computational Geo… · …"
-Cohesion: 0.1
-Nodes (21): BAML Streaming Traits, Type Safety, TypeScript, BAML vs JSON Schema, Dynamic Schemas, Invoice Processor Demo, PDF Screenshot Input, Runtime Type Registration (+13 more)
-
-### Community 280 - "research-agentic-coding-harness-latest-… · Key Findings · Agentic coding"
-Cohesion: 0.12
-Nodes (21): OpenAI API, Configurable agent URL + query parameter, ChatGPT API wrapper endpoint, Composer and tester agent roles, Cytoscape.js graph visualization, Git commit per Aider-style undo (concept), GPT-3, LLM agent network V2 (+13 more)
-
-### Community 281 - "claude code workflow · baml live coding · work backwards design"
-Cohesion: 0.1
-Nodes (21): Transcribe video step, DALL·E 3, Faster Whisper, Thumbnail generation step, Midjourney API, Modular Typer subcommands, Domain-specific agent, Personalized education with LLMs (+13 more)
-
-### Community 282 - "email draft · linkedin draft · twitter x draft"
-Cohesion: 0.1
-Nodes (20): Approach 1: Argument Hash Comparison (Recommended), Approach 2: Sliding Window Rate Detection, Approach 3: LLM Output Similarity, Budget Guardrails, code:python (def compute_call_hash(tool_name: str, args: dict) -> str:), Intervention Options, Relevance to Meta-Agent Concept, Summary (+12 more)
-
-### Community 283 - "Last human freedom (choose attitude) · Responsibleness as essence of existence · Start …"
-Cohesion: 0.12
-Nodes (21): Physicist-style truth vs LLM pattern-matching (combined clarity), Mind-shift question: If I rebuilt this from raw truth, what would it become?, Stacked meta-prompt: truths, strip assumptions, optimal solution, hidden constraints, rebuild from first principles, 1. "What are the physics of this problem?", 2. "If I couldn’t rely on existing assumptions, how would I solve this?", 3. "What are the problem’s fundamental components?", 4. "What would the optimal solution look if cost didn’t exist?", 5. "If I were forced to cut 90% of this, what would remain?" (+13 more)
-
-### Community 285 - "Best Practices for Coding with Agents · SWE-bench style RL on coding agents · Ideation …"
-Cohesion: 0.1
-Nodes (20): Build Phases — Implementation Method, code:block1 (/ harness "task"), Consensus Filing Contract, First Principles, Formal Model: H = (E, T, C, S, L, V), Foundation (Phase 0) — CODE, Future Phases — Method TBD, Harness Implementation Plan (Skill-First v2) (+12 more)
-
-### Community 286 - "Build Phases — Implementation Method · Agent sandbox skill · Plan-build-host-test ADW"
-Cohesion: 0.16
-Nodes (17): DETAIL_PATTERNS, ERROR_INDICATORS, extractDiagnosticLines(), extractErrorMessage(), formatJsonDiagnostics(), isDetailLine(), isErrorLine(), sanitizeBiomeOutput() (+9 more)
-
-### Community 287 - "Communities (top 15) · c0 (249 nodes, channels: indydevdan, co… · c10 (240 nodes, chann…"
-Cohesion: 0.11
-Nodes (10): LSPCallHierarchyItem, createLspNavigationTool(), flattenSymbols(), LspNavigationOperation, pickLocalSymbolLocation(), SYMBOL_KIND_LABELS, SymbolMatch, SymbolNode (+2 more)
-
-### Community 288 - "Lint Report: 2026-04-30 (Auto-fixes app… · Auto-Fixed (18 issues resolved) · Remaining …"
-Cohesion: 0.1
-Nodes (19): code:block1 (index.ts                  Extension entry point (async facto), code:block2 (npm test              # vitest run (all tests)), code:block3 (npm run build && npm test), code:block4 ([ (assignment_expression ...) @PROP @VALUE ... ]), Commands, Conventions, Current version / state, Debug logs (+11 more)
-
-### Community 289 - "Fork / Multi-Tenant Considerations · code:block1 (ultimate-pi harness init) · Init Flow…"
 Cohesion: 0.13
 Nodes (18): discoverFromRoots(), getDriftReport(), isSafeAgentId(), sha256Content(), walkAgentsDir(), abs, content, drift (+10 more)
 
-### Community 290 - "swe-bench.md · SWE-bench · Augment SWE-bench Pro Blog.md"
-Cohesion: 0.1
-Nodes (19): code:block1 (Every N turns (configurable, default 8):), code:yaml (task: string            # from L1 hardened spec (~100 tokens), code:block3 (L1 (Spec) → L2 (Plan) → [L2.5: LLM-First Drift Monitor] → L3), Drift Detection — Unified Framework (LLM-First v2), First-Principles Rethink (May 2026), Integration Into Pipeline, Key Entities, New Detection Architecture (+11 more)
+### Community 276 - "Integration Into Our Harness · inline-post-edit-validation.md · Postgres dialect SQL gen"
+Cohesion: 0.16
+Nodes (17): DETAIL_PATTERNS, ERROR_INDICATORS, extractDiagnosticLines(), extractErrorMessage(), formatJsonDiagnostics(), isDetailLine(), isErrorLine(), sanitizeBiomeOutput() (+9 more)
 
-### Community 291 - "Provider-Native Prompting · Renderer (Provider-Native) · Solution: Semantic Spec → Nati…"
+### Community 277 - "Social norms · Power of FREE (zero is not just another… · Ten Commandments recall reduc…"
+Cohesion: 0.1
+Nodes (19): code:block1 (index.ts                  Extension entry point (async facto), code:block2 (npm test              # vitest run (all tests)), code:block3 (npm run build && npm test), code:block4 ([ (assignment_expression ...) @PROP @VALUE ... ]), Commands, Conventions, Current version / state, Debug logs (+11 more)
+
+### Community 278 - "Project governance as decision-making f… · Monitor and Control Project Work · Executive…"
 Cohesion: 0.1
 Nodes (19): 1. GSD is downstream; our harness is upstream (Source: [[gsd-github-repo]], [[gsd-codecentric-deep-dive]]), 2. GSD uses Claude Code as its runtime; we use pi (Source: [[gsd-codecentric-deep-dive]]), 3. GSD lacks adversarial verification — our L4 fills that gap (Source: [[gsd-hn-discussion]], [[Source: How to Apply GAN Architecture to Multi-Agent Code Generation]]), 4. GSD's context engineering complements our L3 grounding checkpoints (Source: [[gsd-github-repo]]), 5. Both systems share skill-first architecture (Source: [[skill-first-architecture]], [[gsd-github-repo]]), 6. GSD's state files are a narrower version of our L6 persistent memory (Source: [[gsd-github-repo]], [[persistent-memory]]), 7. GSD's limitations validate our harness approach (Source: [[gsd-hn-discussion]]), Contradictions (+11 more)
 
-### Community 292 - "code:bash (git clone https://github.com… · Local development setup · Development Setup"
+### Community 279 - "Community 94 - "CLRS: Approximation & LP" · Community 87 - "CLRS: Computational Geo… · …"
+Cohesion: 0.11
+Nodes (20): RAG is not dead (nuanced thesis), Traditional RAG (vector + embeddings), SQLite + light RAG for memory search, Archon chunks confusing LLMs, Bridging traditional + agentic retrieval, Chunking cost vs full-doc agent search, File tree navigation for agents, Exact identifiers in code (+12 more)
+
+### Community 280 - "research-agentic-coding-harness-latest-… · Key Findings · Agentic coding"
+Cohesion: 0.11
+Nodes (20): Architecture Diagram, code:block1 (┌───────────────────────────────────────────────────────────), Architecture Diagram, code:block1 (┌─────────────────────────────────────────────────────┐), Aaron Architecture Diagram Tool Router, Pinecone Hybrid Discord Docs, Code Rabbit Ci, Criterion Performance (+12 more)
+
+### Community 281 - "claude code workflow · baml live coding · work backwards design"
+Cohesion: 0.1
+Nodes (19): Alternatives Considered, Changes Made, Consequences, Context, Decision, Dependencies, Diagnostic Command, MCP Bridge (+11 more)
+
+### Community 282 - "email draft · linkedin draft · twitter x draft"
+Cohesion: 0.13
+Nodes (20): Ask the CTO (recurring section), VP Eng / CTO: senior leadership (big leagues), Bootstrapping and evolving culture, Conway's Law (system structure ↔ org), CTO role (technology, culture, structure), Organizational structure and scaling, Systemantics (John Gall), VP of Engineering (org + product/tech strategy) (+12 more)
+
+### Community 283 - "Last human freedom (choose attitude) · Responsibleness as essence of existence · Start …"
+Cohesion: 0.32
+Nodes (20): AMP agent thread review for coaching, Behavior trees / classical AI control, Anti-pattern: control flow only via prompt, Human Layer create_plan prompt workflow, Deterministic DAG + micro-agent islands, Eval harness for multi-step agents, Two levers: fewer steps or better routing, Human gate on critical state transitions (+12 more)
+
+### Community 284 - "PIV loop methodology · GPT-4 clip selection · Cut it Up application"
+Cohesion: 0.11
+Nodes (20): Withdrawing from the conversation, Victim story, Jim Collins Good to Great: Scott Paper resigned comparison vs P&G — downward comparison, Study: fixed mindset students viewed worse peers’ tests after failure; growth viewed better peers’ tests, Study note: college students post-failure comparisons — with David Nussbaum, Apathy in camp, Baruch Spinoza, Capos (trustee prisoners) (+12 more)
+
+### Community 285 - "Best Practices for Coding with Agents · SWE-bench style RL on coding agents · Ideation …"
+Cohesion: 0.15
+Nodes (20): Sub-agents / Context Isolation, Anthropic sub-agent research claim, Avoid sub-agents for implementation, Parallel sub-agent research, Scout sub-agent pattern, Archon worktrees context, Cheap fast models for sub-agents, Cursor sub-agents (+12 more)
+
+### Community 286 - "Build Phases — Implementation Method · Agent sandbox skill · Plan-build-host-test ADW"
+Cohesion: 0.13
+Nodes (18): GitHub Projects v2 (Optional Visualization), Integration Points, L1 Spec Hardening → GitHub Issues, L2 Structured Planning → GitHub Sub-Issues, Relevance to Harness, Timeline, Key Capabilities, Relevance to Harness (+10 more)
+
+### Community 287 - "Communities (top 15) · c0 (249 nodes, channels: indydevdan, co… · c10 (240 nodes, chann…"
+Cohesion: 0.11
+Nodes (19): Bootstrap Mechanism, code:block1 (<session-start-hook><EXTREMELY_IMPORTANT>), Key Details, Persuasion Principles Applied to LLMs, Relevance to Harness, Self-Improving Skills, Skill Testing Methodology, Summary (+11 more)
+
+### Community 288 - "Lint Report: 2026-04-30 (Auto-fixes app… · Auto-Fixed (18 issues resolved) · Remaining …"
+Cohesion: 0.13
+Nodes (20): 3. Structured Outputs Prevent Chaos, Structured outputs as tools, Partial streaming structured outputs, Partial JSON streaming (BAML), Structured outputs debate, Guaranteed structured outputs, OpenAI as agentic framework, OpenAI blog examples (+12 more)
+
+### Community 289 - "Fork / Multi-Tenant Considerations · code:block1 (ultimate-pi harness init) · Init Flow…"
 Cohesion: 0.12
-Nodes (20): Google Gemini 3, code:block3 (STRUCTURE: Plain text sections), Google Gemini 3 Profile, Google Gemini (provider ecosystem), Gemini bias toward Google, JSON-mode assertions, Save money/time via prompt tests, Temperature / sampling (+12 more)
+Nodes (20): Ada (personal AI assistant POC), Prototype code in gist, Voice loop latency (~20–36s), PAR framework (Prompt–Agent–Response), Speech-to-text (STT), 10-second audio chunks, Text-to-speech (TTS), Domain-specific agent UX (+12 more)
+
+### Community 290 - "swe-bench.md · SWE-bench · Augment SWE-bench Pro Blog.md"
+Cohesion: 0.1
+Nodes (20): The 15 prompts, Defer LLM libraries early, LangChain deferral, Back-references to prior outputs, Beam / sample / fusion techniques, Blog title→hook→paragraph chain, LangChain / library critique, Minimal chainable prompt runner (+12 more)
+
+### Community 291 - "Provider-Native Prompting · Renderer (Provider-Native) · Solution: Semantic Spec → Nati…"
+Cohesion: 0.1
+Nodes (19): 1. The Harness Has a Formal Model (Source: [[meng2026-agent-harness-survey]]), 2. Self-Evaluation Is Fundamentally Broken (Source: [[anthropic2026-harness-design]]), 3. Harness Simplification Is Ongoing Practice (Source: [[anthropic2026-harness-design]]), 4. Feedforward + Feedback Control Framework (Source: [[bockeler2026-harness-engineering]]), 5. Harnesses Can Self-Evolve (Sources: [[lou2026-autoharness]], [[lee2026-meta-harness]]), 6. Debate Should Be Selective, Not Always-On (Source: [[fan2025-imad]]), 7. Context Anxiety Is Real (Source: [[anthropic2026-harness-design]]), Contradictions (+11 more)
+
+### Community 292 - "code:bash (git clone https://github.com… · Local development setup · Development Setup"
+Cohesion: 0.29
+Nodes (20): DeepSeek R1 reasoning trace, o1 thought trace comparison, Math vs coding split, Self-consistency checks, Judge model limitations, Public leaderboard bias, Replication package, 25x compute value claim (+12 more)
 
 ### Community 293 - "Research: Google Antigravity Harness In… · Integration Recommendations · Key Findings"
-Cohesion: 0.15
-Nodes (19): Gemini CLI Implementation (v0.18+), Feature Evolution Timeline, Gemini CLI Changelogs (v0.4 — v0.40), Key Patterns, Phase 1: Foundation (Jun–Sep 2025, v0.4–v0.9), Phase 2: Intelligence (Oct–Dec 2025, v0.10–v0.22), Phase 3: Agent Architecture (Jan–Apr 2026, v0.23–v0.40), Relevance to Ultimate-PI (+11 more)
+Cohesion: 0.13
+Nodes (20): IndyDevDan, just command runner, Skills prompts agents stack, Agentic engineering vs vibe coding, Claude Code on device, direct CLI client, just file workflows, Karpathy security concerns (+12 more)
 
 ### Community 294 - "YouTube: CI/CD Is Dead — Continuous Com… · Continuous compute (successor framing t… · I…"
 Cohesion: 0.11
 Nodes (19): Architecture, code:block2 (Model calls grep("error handling", pages/")), code:block3 (Files change (edit, save, git checkout)), File watcher, How to enable semantic code search now, Impact, Implementation status (2026-05-04), Layer 1 (Complete) (+11 more)
 
-### Community 295 - "Conway's Law · Conway’s law · Community 68 - "Conway's Law & Reverse …"
-Cohesion: 0.29
-Nodes (20): DeepSeek R1 reasoning trace, o1 thought trace comparison, Math vs coding split, Self-consistency checks, Judge model limitations, Public leaderboard bias, Replication package, 25x compute value claim (+12 more)
-
 ### Community 296 - "Community 107 - "Architecture Style Sel… · Community 10 - "Architecture & PM Gover… · C…"
-Cohesion: 0.1
-Nodes (19): 1. The Harness Has a Formal Model (Source: [[meng2026-agent-harness-survey]]), 2. Self-Evaluation Is Fundamentally Broken (Source: [[anthropic2026-harness-design]]), 3. Harness Simplification Is Ongoing Practice (Source: [[anthropic2026-harness-design]]), 4. Feedforward + Feedback Control Framework (Source: [[bockeler2026-harness-engineering]]), 5. Harnesses Can Self-Evolve (Sources: [[lou2026-autoharness]], [[lee2026-meta-harness]]), 6. Debate Should Be Selective, Not Always-On (Source: [[fan2025-imad]]), 7. Context Anxiety Is Real (Source: [[anthropic2026-harness-design]]), Contradictions (+11 more)
-
-### Community 297 - "Prompt Renderer.md · Community 92 - "Code Complete: Variable… · Community 31 - "Code Co…"
-Cohesion: 0.12
-Nodes (20): Beer and free lunches (behavioral economics limits), Behavioral Economics (Judgment and Decision Making), Predictable Irrationality, Standard Rational Economic Model, Anchored demand: supply-side prices shape willingness to pay, Cognitive biases, Daniel Kahneman, Master your emotional self (+12 more)
-
-### Community 298 - "Claude Agent SDK bash streaming gap · Claude Code streams turns not partial t… · Codex …"
-Cohesion: 0.18
-Nodes (20): Credible schedules need credible design/requirements inputs, Hero complex: craving heroic rescue undermines sustainable pace, Work breakdown structure (WBS): how team divides execution, Cost control via comparing actual to planned (monitoring), Planning performance domain, Work breakdown structure in early planning, Cost baseline, Project Cost Management (+12 more)
-
-### Community 299 - "BAML Type Builder · BAML Streaming Traits · TypeScript"
-Cohesion: 0.16
-Nodes (20): Alfred Adler, Man's Search for Meaning, Carolyn Wood Sherif, Charlotte Bühler, Concentration camp (inner experience focus), Existential analysis, Gordon W. Allport, Irvin D. Yalom (+12 more)
-
-### Community 300 - "IndyDevDan channel · scripts/index_youtube_urls.py · Title filter for agentic coding tr…"
-Cohesion: 0.1
-Nodes (20): Breaking change policy, CLI versioning, Community PR merges, Docs examples sync, Go client fix, Idempotency keys, Internal dogfooding, Load testing LLM calls (+12 more)
-
-### Community 301 - "resolved-mcp-tool-preference.md · Specific Questions Resolved · Evidence"
-Cohesion: 0.17
-Nodes (19): Academic Treatment, code:block1 (User Request → [Guardian Agent: validate plan] → [Agent exec), Complementary Approaches, See Also, Agent turn-level streaming, Claude Agent SDK bash streaming gap, Claude Code streams turns not partial tool JSON, Codex per-token streaming UX (+11 more)
-
-### Community 302 - "Key Findings · Research: Automating Software Engineeri… · 7. Generator-Evaluator Loop (…"
-Cohesion: 0.32
-Nodes (20): AMP agent thread review for coaching, Behavior trees / classical AI control, Anti-pattern: control flow only via prompt, Human Layer create_plan prompt workflow, Deterministic DAG + micro-agent islands, Eval harness for multi-step agents, Two levers: fewer steps or better routing, Human gate on critical state transitions (+12 more)
-
-### Community 303 - "Benchmark: grepai vs grep on Claude Cod… · Token Metrics · Aider token/cost metrics dis…"
-Cohesion: 0.14
-Nodes (20): Dockling, host.docker.internal, n8n, Python, Dynamis AI Agent Mastery course, Crawl4AI, Google Drive, Hybrid n8n + Python (+12 more)
-
-### Community 304 - "Braintrust eval platform · Claude Code as agentic search baseline · Claude Code disallo…"
-Cohesion: 0.11
-Nodes (20): Architecture Diagram, code:block1 (┌───────────────────────────────────────────────────────────), Architecture Diagram, code:block1 (┌─────────────────────────────────────────────────────┐), Aaron Architecture Diagram Tool Router, Pinecone Hybrid Discord Docs, Code Rabbit Ci, Criterion Performance (+12 more)
-
-### Community 305 - "Python's Design Philosophy — Guido van … · Philosophy / eval design difficulty · Eval a…"
-Cohesion: 0.11
-Nodes (19): Bootstrap Mechanism, code:block1 (<session-start-hook><EXTREMELY_IMPORTANT>), Key Details, Persuasion Principles Applied to LLMs, Relevance to Harness, Self-Improving Skills, Skill Testing Methodology, Summary (+11 more)
-
-### Community 306 - "Context Engineering · Key Techniques · Prompt Caching"
-Cohesion: 0.13
-Nodes (20): 3. Structured Outputs Prevent Chaos, Structured outputs as tools, Partial streaming structured outputs, Partial JSON streaming (BAML), Structured outputs debate, Guaranteed structured outputs, OpenAI as agentic framework, OpenAI blog examples (+12 more)
-
-### Community 307 - "Mermaid AI agent CLI · Task tool for sub-agents · For Tool Builders"
-Cohesion: 0.11
-Nodes (20): Agent Harness Architecture, Feedforward + Feedback Model, Harness Layers (OpenDev Reference), Harness Templates, Relevance to Our Harness, Microservices architecture for agents (vs monolithic agent), Thousands of short-lived branches at agent scale, Continuous compute (successor framing to CI/CD) (+12 more)
-
-### Community 308 - "Hacker News Claude Code thread · Principal AI Coding · Natural language latency limits"
-Cohesion: 0.11
-Nodes (18): Alignment with existing phases, Build vs Integrate Decision, Contradictions, executor.sh is NOT just a TS execution layer, Five pillars absent from our P43 plan, Gaps Executor reveals in our plan, How This Fits Into Our Harness Implementation Plan, Impact on Harness Implementation Plan (+10 more)
-
-### Community 309 - "Uv Run · alpha custom · eight apps"
-Cohesion: 0.16
-Nodes (8): clearAllSessions(), createFileTime(), createStamp(), FileStamp, FileTime, FileTimeError, FileTimeState, globalState
-
-### Community 310 - "RM64 support · CLI release notes · Contributor guide"
 Cohesion: 0.16
 Nodes (5): getTypeScriptService(), TypeScriptService, TypeSafetyClient, TypeSafetyIssue, TypeSafetyReport
 
-### Community 311 - "Adversarial Verification · AI Prompt Pattern · Capitalized reference prompt memory pat…"
-Cohesion: 0.19
-Nodes (3): sgExcludeArgsForProject(), SgRunner, getFiles()
-
-### Community 312 - "Structured agent_conversations.json log… · Explicit validate_results callable · Postgre…"
+### Community 297 - "Prompt Renderer.md · Community 92 - "Code Complete: Variable… · Community 31 - "Code Co…"
 Cohesion: 0.16
 Nodes (3): ASTNode, ScopeContext, TreeSitterNavigator
 
-### Community 313 - "build_nodes_edges() · _build_chunk_20.py · nid()"
+### Community 298 - "Claude Agent SDK bash streaming gap · Claude Code streams turns not partial t… · Codex …"
+Cohesion: 0.16
+Nodes (8): clearAllSessions(), createFileTime(), createStamp(), FileStamp, FileTime, FileTimeError, FileTimeState, globalState
+
+### Community 299 - "BAML Type Builder · BAML Streaming Traits · TypeScript"
 Cohesion: 0.15
 Nodes (4): CircularDep, DepCheckResult, DependencyChecker, FileImports
 
-### Community 314 - "Research: GitHub Issues as Harness Spec… · Creative Solution: Content-Addressed Sp… · c…"
+### Community 300 - "IndyDevDan channel · scripts/index_youtube_urls.py · Title filter for agentic coding tr…"
+Cohesion: 0.11
+Nodes (9): LSPCallHierarchyItem, createLspNavigationTool(), flattenSymbols(), LspNavigationOperation, pickLocalSymbolLocation(), SYMBOL_KIND_LABELS, SymbolMatch, SymbolNode (+1 more)
+
+### Community 301 - "resolved-mcp-tool-preference.md · Specific Questions Resolved · Evidence"
 Cohesion: 0.2
 Nodes (18): ADRS, checkSentruxGate(), checkSentruxRules(), fail(), fileExists(), main(), ok(), REQUIRED_ADRS (+10 more)
 
-### Community 315 - "Specific Questions Resolved · resolved-context-pruning-inplace-vs-res… · Evidence"
-Cohesion: 0.17
-Nodes (19): Claude Opus 4.6, Claude Opus 4.7, Model-Specific Key Findings, Claude Opus, Claude Opus 4.6, Claude Opus 1M context, NLQ→SQL benchmark suite, Postgres dialect in prompts (+11 more)
-
-### Community 316 - "🤖 **AI Agent Integration (MCP Server)** · MCP Integration · Cursor MCP integration"
-Cohesion: 0.12
-Nodes (19): Conference speaking (recruit or learn), Employer brand investment, Engineering/product blog for brand, Meetups and local community, Community and Ecosystem, **1\. Search Performance and Indexing Options**, **2\. Scalability and Deployment Flexibility**, **3\. Hybrid Search Capabilities** (+11 more)
-
-### Community 317 - "ADR-023: Hybrid Spec Format — Structure… · Decision · Consequences"
+### Community 302 - "Key Findings · Research: Automating Software Engineeri… · 7. Generator-Evaluator Loop (…"
 Cohesion: 0.11
 Nodes (18): 1. Repetition Loops, 2. Failure Spirals, 3. Tool Cycling, 4. Silence/Batching (Turn-Dependent), 5. Rework, 6. Excessive Search, 7. Obsolete Search (ck routing), ADR-022: Drift Monitor Pattern Definitions and Thresholds (+10 more)
 
-### Community 318 - "ADR-027: pi-vcc Overrides Built-in Auto… · Consequences · Decision"
-Cohesion: 0.13
-Nodes (19): Single-Model Multi-Pass, action items field, claude models, dspy discussion, email declare ai, github folder matching, hello firstname bug, instruction placement bottom (+11 more)
+### Community 303 - "Benchmark: grepai vs grep on Claude Cod… · Token Metrics · Aider token/cost metrics dis…"
+Cohesion: 0.12
+Nodes (19): Meilir Page design principle (encapsulation), Design Principle (v2), Anthropic Claude 4.x, OpenAI GPT-5.x, Provider Profiles (Official Guidance), Anthropic Claude 4.x Profile, code:block1 (STRUCTURE: XML-like sections (<instruction_spec>)), code:block2 (STRUCTURE: XML tags (<instructions>, <context>, <examples>)) (+11 more)
 
-### Community 319 - "Andrej Karpathy · Google Antigravity IDE · Opus 4.6"
+### Community 304 - "Braintrust eval platform · Claude Code as agentic search baseline · Claude Code disallo…"
 Cohesion: 0.11
-Nodes (18): Confidence, Impact on Codebase Exploration, Impact on WOZCODE AST Truncation, Layer 1: Tree-Sitter (Syntax) — Handles ~80%, Layer 2: Static Analysis Tools (Types) — Handles ~15%, Layer 3: Runtime Profiling (Dynamic) — Handles remaining ~5%, Resolution, Three-Layer Solution (+10 more)
+Nodes (19): Agent playback logs, Astral uv runner, Best-of-N parallel runs, GitHub PRs from sandboxes, Modal as alternative host, Nine parallel landing-page variants, Node.js 22 in templates, Outbox ox CLI workflow (+11 more)
 
-### Community 320 - "ADR-020: YAML Task DAG and Sprint Contr… · Decision · Consequences"
+### Community 305 - "Python's Design Philosophy — Guido van … · Philosophy / eval design difficulty · Eval a…"
 Cohesion: 0.11
-Nodes (18): Broader Pattern Validation, Clarification, Competitive Position in Pi Ecosystem, Core Mechanics, Definition, Practical Impact, VCC Conversation Compaction for Pi, Archon (open-source harness builder) (+10 more)
+Nodes (19): Culture of fear (and building trust), Cultural values as team glue, Debugging struggling / dysfunctional teams, The Five Dysfunctions of a Team (Patrick Lencioni), Toxic team members (negativity, lack of respect), Corporate culture and trust for ambiguity, Modes of control, Humane interview process (+11 more)
 
-### Community 321 - "Self-documenting code and comments policy · Tip: Power Editing · Comments describe what…"
+### Community 306 - "Context Engineering · Key Techniques · Prompt Caching"
+Cohesion: 0.11
+Nodes (18): 10 GitHub Repos for Claude Code Workflow - LinkedIn, ats example, cursor debugging, hierarchical entities, legal name resolution, multi company experience, resume pipeline, baml live coding (+10 more)
+
+### Community 307 - "Mermaid AI agent CLI · Task tool for sub-agents · For Tool Builders"
+Cohesion: 0.36
+Nodes (19): code:block1 (AI Agent (Claude, Cursor)), OpenAI Agents SDK (TypeScript), Zod schemas, asyncio parallel fanout, baml codegen ts py, cloud code agent, cursor agent, dag as code (+11 more)
+
+### Community 308 - "Hacker News Claude Code thread · Principal AI Coding · Natural language latency limits"
+Cohesion: 0.15
+Nodes (18): 10. 90-Minute RL Loop, 1. Shadow Workspace (Pre-Verification Isolation), 2. Speculative Edits (Fast Apply), 3. Dynamic Context Evolution, 5. Per-Tool Per-Model Error Classification, 6. Model-Adaptive Tool Provisioning, 8. Subagent Specialization, Cursor Harness Innovations (+10 more)
+
+### Community 309 - "Uv Run · alpha custom · eight apps"
 Cohesion: 0.23
 Nodes (19): Code review as a continuum of rigor, Community 45 - "Code Review & Pseudocode", Community 45 - "Code Review & Pseudocode", Transfer Analysis: QA → Code Review, What Does NOT Transfer, What Must Be Adapted, What Transfers Directly, Code Review (+11 more)
 
-### Community 322 - "Wiki Query Interface (claude-obsidian S… · Query Operations (wiki-query skill) · Archit…"
+### Community 310 - "RM64 support · CLI release notes · Contributor guide"
 Cohesion: 0.11
-Nodes (18): Priority 1: Pre-Execution Policy Gates (P-F1), Priority 2: Skills Activation Mechanism (P-F2), Priority 3: Research Subagents for Planning (P-F3), Priority 4: Event-Driven Hooks Middleware (P-F4), Priority 6: Chapters Narrative for Sessions (P-F6), Recommended Integration Priority (First Principles), 1. Slash Commands (Skills), 2. Workflow Files (+10 more)
+Nodes (19): Baururazalinov 2026 03 30 9F4B3Xzjjkq Openai, ctx.output_format (schema in prompt), extract_resume BAML function, Circuit / image structured extraction, Equation extraction from diagrams, Tabular layout reduces hallucination risk, Post-extract hyperlink augmentation, PDFs, PPTX, DOCX, screenshots (+11 more)
 
-### Community 323 - "Ship-it Friday · BAML Playground · Audio Input Handling"
+### Community 311 - "Adversarial Verification · AI Prompt Pattern · Capitalized reference prompt memory pat…"
+Cohesion: 0.11
+Nodes (18): Alignment with existing phases, Build vs Integrate Decision, Contradictions, executor.sh is NOT just a TS execution layer, Five pillars absent from our P43 plan, Gaps Executor reveals in our plan, How This Fits Into Our Harness Implementation Plan, Impact on Harness Implementation Plan (+10 more)
+
+### Community 312 - "Structured agent_conversations.json log… · Explicit validate_results callable · Postgre…"
+Cohesion: 0.11
+Nodes (18): Architecture, Caching Layer Design, code:block1 (┌──────────────────────────────────────────────────────┐), code:block3 (dist/prompts/manifest.json  # { spec → { model → { hash, pat), code:typescript (interface PromptVariable {), Contradictions, Implementation Plan (integrated into harness), Key Findings (+10 more)
+
+### Community 313 - "build_nodes_edges() · _build_chunk_20.py · nid()"
+Cohesion: 0.12
+Nodes (19): Conference speaking (recruit or learn), Employer brand investment, Engineering/product blog for brand, Meetups and local community, Community and Ecosystem, **1\. Search Performance and Indexing Options**, **2\. Scalability and Deployment Flexibility**, **3\. Hybrid Search Capabilities** (+11 more)
+
+### Community 314 - "Research: GitHub Issues as Harness Spec… · Creative Solution: Content-Addressed Sp… · c…"
+Cohesion: 0.12
+Nodes (18): Natural-Language Agent Harnesses (NLAH), Natural-Language Agent Harnesses, Anthropic Context Compaction API, Context Folding, How It Works, Ideal Use Cases, Relevance to pi-vcc, Summary (+10 more)
+
+### Community 315 - "Specific Questions Resolved · resolved-context-pruning-inplace-vs-res… · Evidence"
+Cohesion: 0.13
+Nodes (16): Contrast with Human Interfaces, Core Principle, Agent-Superior Capabilities, Contradictions, Open Questions, Overview, Sources, Agent-Codebase Interaction Model (+8 more)
+
+### Community 316 - "🤖 **AI Agent Integration (MCP Server)** · MCP Integration · Cursor MCP integration"
+Cohesion: 0.11
+Nodes (19): Ad hoc prompt testing notebook, AI coding meta-review prompt, Build software + communicate value, Bullet knowledge compression prompt, {{variable}} prompt variables, DuckDB (enthusiasm comparator), Hacker News sentiment prompt, Shared llm module for calls (+11 more)
+
+### Community 317 - "ADR-023: Hybrid Spec Format — Structure… · Decision · Consequences"
 Cohesion: 0.11
 Nodes (19): Cost vs latency tradeoffs, Agent error recovery, Regression eval suite, Streaming tool arguments, Ablation studies, BAML function for receipts, Batch inference, Cost per document (+11 more)
 
-### Community 324 - "Agent skills directory format · github.com/boundaryml/baml-skills-example · Calculator …"
-Cohesion: 0.21
-Nodes (10): textOf(), textParts(), normalizeOne(), extractFilesFromContent(), renderMessage(), toolCalls(), sanitize(), extractPath() (+2 more)
+### Community 318 - "ADR-027: pi-vcc Overrides Built-in Auto… · Consequences · Decision"
+Cohesion: 0.22
+Nodes (19): bg agent, bundle dir, claude md bloat, context prime, delete default mcp, doc scraper, expert dir, firecrawl only (+11 more)
 
-### Community 325 - "Musk-style first-principles prompts (Gl… · Stacked meta-prompt: truths, strip assu… · 1…"
-Cohesion: 0.12
-Nodes (16): Sentrux (architectural quality gate), code:block1 (quality_signal = (modularity × acyclicity × depth × equality), Normalization, Properties, Quality Signal (sentrux), Theoretical Basis, Why Not Letter Grades?, code:block1 (quality_signal = (modularity × acyclicity × depth × equality) (+8 more)
-
-### Community 326 - "Enforcement Strategies · 1. System Prompt Rules (Weak) · 2. MCP Tool Registration (Medium)"
-Cohesion: 0.11
-Nodes (17): ADR-025: GitHub Issues as Sole Spec Storage + harness-setup, code:markdown (## Spec), code:yaml (name: Harness Spec), Consequences, Context, Decision, Failure Mode, Issue Format (+9 more)
-
-### Community 327 - "Kyle thesis: Claude Code vs API strategy · General-purpose subagent · GitHub PR comment…"
+### Community 319 - "Andrej Karpathy · Google Antigravity IDE · Opus 4.6"
 Cohesion: 0.14
 Nodes (16): astGrepRoot, astRules, catalogPath, catalogRaw, collectAstGrepTrackedRules(), collectTreeSitterSecurityConcurrency(), { errors, warnings, byRuleId }, exists (+8 more)
 
-### Community 328 - "Anthropic Context Compaction API · anthropic-compaction-api.md · Anthropic elicitation API"
-Cohesion: 0.35
-Nodes (18): Aaron (BAML co-founder), BAML born from DSL dissatisfaction, Rust workspace / crate diagram enforcement, C++ focused coding bootcamp, D. E. Shaw selective CI / test prediction, Design doc collaboration export workflow, Face ID work at Google, Git-diff-based test subset selection (+10 more)
+### Community 320 - "ADR-020: YAML Task DAG and Sprint Contr… · Decision · Consequences"
+Cohesion: 0.18
+Nodes (16): captureSnapshot(), captureSnapshots(), computeTrend(), FileHistory, formatTrendCell(), getCurrentCommit(), getDelta(), getTrendEmoji() (+8 more)
 
-### Community 329 - "Harness Engineering for Coding Agent Users · Agent = Model + Harness · Core Mental Model"
-Cohesion: 0.14
-Nodes (14): Architecture, GSD (Get Shit Done) — GitHub Repository, Key Design Decisions, Summary, 5 Semantic Sections, Competitive Position, Key Details, Performance Benchmarks (+6 more)
+### Community 321 - "Self-documenting code and comments policy · Tip: Power Editing · Comments describe what…"
+Cohesion: 0.24
+Nodes (18): codex gap, complexity earned, decision tree, flow primary, flow sub, full app, gemini toml, gray box (+10 more)
 
-### Community 330 - "Token Budget · Token budget discipline (pe0rzn) · Token budget discipline (sbssz0)"
-Cohesion: 0.16
-Nodes (17): Three observability pillars (AHE), Terminal-Bench 2.0, Harbor task format and harness, Terminal-Bench benchmark, What Is SWE-bench Pro?, Benchmark Results (SWE-bench Lite Eval), Benchmark Design, Task Definition (+9 more)
+### Community 322 - "Wiki Query Interface (claude-obsidian S… · Query Operations (wiki-query skill) · Archit…"
+Cohesion: 0.11
+Nodes (16): First Principles, Five Hook Types, Hook vs Prompt, Integration with Our Harness, Key Hook Events, Lifecycle Hook System, PermissionRequest, PostToolUse (+8 more)
 
-### Community 331 - "Language Processing Unit · Plan-then-execute · RAM: agent state & context"
+### Community 323 - "Ship-it Friday · BAML Playground · Audio Input Handling"
+Cohesion: 0.22
+Nodes (18): Uv Run, alpha custom, bare metal agents, domain fit, echo tool, eight apps, fastapi stack, git push ship (+10 more)
+
+### Community 324 - "Agent skills directory format · github.com/boundaryml/baml-skills-example · Calculator …"
 Cohesion: 0.12
-Nodes (17): First Law of Software Architecture, 1. The Model Is Better at Evaluation Than Imperative Code, 2. Progressive Disclosure Prevents Context Bloat, 3. User-Editable Without Compilation, 4. Skills Compose Naturally with the Wiki, 5. Cross-Platform Compatibility, code:block2 (.pi/skills/), Definition (+9 more)
+Nodes (16): Sentrux (architectural quality gate), code:block1 (quality_signal = (modularity × acyclicity × depth × equality), Normalization, Properties, Quality Signal (sentrux), Theoretical Basis, Why Not Letter Grades?, code:block1 (quality_signal = (modularity × acyclicity × depth × equality) (+8 more)
 
-### Community 332 - "Claude Code no MCP resources · ck MCP Tools · MCP prompts over tools"
-Cohesion: 0.11
-Nodes (17): Built-in Rust compiler warnings, cargo-deny (EmbarkStudios/cargo-deny), cargo-machete (bnjbvr/cargo-machete), cargo-udeps (est31/cargo-udeps), CodeScene, Credo (rrrene/credo), deadcode (golang.org/x/tools/cmd/deadcode), Dialyzer (via dialyxir: jeremyjh/dialyxir) (+9 more)
-
-### Community 333 - "Key Arguments · Beyond Code Generation · Augment Code WorkOS ERC 2025.md"
-Cohesion: 0.11
-Nodes (15): Definition, Key Insight, Pattern Differences, Pi VS Code Extension Landscape, code:typescript (// Minimal extension pattern), Extension API, Key Details, Pi Coding Agent VS Code Extension (pi0.pi-vscode) (+7 more)
-
-### Community 334 - "Semantic Code Search for AI Agents | gr… · Codex CLI · OpenAI Codex CLI"
-Cohesion: 0.17
-Nodes (18): Duke basketball lottery ticket WTA/WTP gap, Endowment effect, Ikea effect (labor increases valuation), Lindt truffle vs Hershey's Kiss pricing experiment, Loss aversion in selling owned goods, Power of FREE (zero is not just another price), Adam Smith (commercial society; cited), Jack Knetsch, Dick Thaler, Daniel Kahneman endowment (cited) (+10 more)
-
-### Community 335 - "Fork terminal skill · cookbook/ directory · Meta-prompt: base→fork handoff"
+### Community 325 - "Musk-style first-principles prompts (Gl… · Stacked meta-prompt: truths, strip assu… · 1…"
 Cohesion: 0.18
 Nodes (18): Conway's Law, Inverse Conway Maneuver (Jonny Leroy), Jonny Leroy (Inverse Conway coinage), Melvin Conway, Community 68 - "Conway's Law & Reverse Conway", Actual lateral communication vs reporting lines, How Do Committees Invent? (1968), Conway’s law (+10 more)
 
-### Community 336 - "Custom Orchestrator conversation contro… · Broadcast fan-out conversation flow · Compos…"
+### Community 326 - "Enforcement Strategies · 1. System Prompt Rules (Weak) · 2. MCP Tool Registration (Medium)"
+Cohesion: 0.14
+Nodes (18): action items field, claude models, dspy discussion, email declare ai, github folder matching, hello firstname bug, instruction placement bottom, kit git toolkit (+10 more)
+
+### Community 327 - "Kyle thesis: Claude Code vs API strategy · General-purpose subagent · GitHub PR comment…"
+Cohesion: 0.2
+Nodes (18): Tool Result Optimization, Lights-off software factory risk, Monorepo for shared agent config, OpenClaw / OpenCode harness caveats, Skepticism of parallel agent teams, Parent prompt quality for subagents, Playwright-heavy browser subagent, Progressive disclosure (skills) (+10 more)
+
+### Community 328 - "Anthropic Context Compaction API · anthropic-compaction-api.md · Anthropic elicitation API"
+Cohesion: 0.11
+Nodes (17): Confidence, Impact on Codebase Exploration, Impact on WOZCODE AST Truncation, Layer 1: Tree-Sitter (Syntax) — Handles ~80%, Layer 2: Static Analysis Tools (Types) — Handles ~15%, Layer 3: Runtime Profiling (Dynamic) — Handles remaining ~5%, Resolution, Three-Layer Solution (+9 more)
+
+### Community 329 - "Harness Engineering for Coding Agent Users · Agent = Model + Harness · Core Mental Model"
 Cohesion: 0.11
 Nodes (17): 1. L3 Execution Layer — Agent Tool Calling (P44a), 2. P15b Pre-Verification Isolation Sandbox — Fallow Audit (P44b), 3. Phase 16 Lint+Format Gate — Fallow as Gate (P44c), 4. L5 Observability — Health Trends + Keep Rate (P44d), 5. P29 Per-Tool Per-Model Error Classification (P44e), 6. L6 Persistent Memory — Baseline Storage (P44f), 7. P42 Scheduled Agent Automations — Periodic Health Sweeps (P44g), code:block1 (Agent: "I've finished editing files. Let me check quality.") (+9 more)
 
-### Community 337 - "Aider AI pair programmer · pytest · Aider /run pytest feedback loop"
+### Community 330 - "Token Budget · Token budget discipline (pe0rzn) · Token budget discipline (sbssz0)"
 Cohesion: 0.11
-Nodes (16): Problem, Recommendation for ultimate-pi Harness, For Our Harness, Building AI Coding Agents for the Terminal: Scaffolding, Harness, Context Engineering, and Lessons Learned, Compound AI System, Core Architecture, Extended ReAct Loop, Lessons for Our Harness (+8 more)
+Nodes (15): Definition, Key Insight, Pattern Differences, Pi VS Code Extension Landscape, code:typescript (// Minimal extension pattern), Extension API, Key Details, Pi Coding Agent VS Code Extension (pi0.pi-vscode) (+7 more)
 
-### Community 338 - "research-gitingest-gitreverse-integrati… · Critical Evaluation: Gitingest · Critical Ev…"
-Cohesion: 0.35
-Nodes (18): Bounce handling via webhook callbacks, Delegation from inbox (forward-to-agent), Ethan (MX / email infra guest), Idempotency keys for webhook delivery, Inbound MIME parsing pipeline, AWS Lambda deployment for email agent, Outbound SMTP relay configuration, PII redaction in agent logs (+10 more)
-
-### Community 339 - "Recommended Implementation · Build-Time Prompt Compilation — Real To… · What Exists"
+### Community 331 - "Language Processing Unit · Plan-then-execute · RAM: agent state & context"
 Cohesion: 0.11
-Nodes (17): Does SeaGOAT create AI-derived work? Is SeaGOAT ethical?, Hardware, How does SeaGOAT work? Does it send my data to ChatGPT?, Install dependencies, Install SeaGOAT, Manual testing, Oporating system, Running tests (+9 more)
+Nodes (17): 10. Token Budget (MVP — Skill-First), 12. What's Deferred (Post-MVP), 13. Files to Create (MVP — Skill-First v2), 14. Key Architecture Decisions (ADRs Governing MVP), 15. Skill-First vs Code-First Comparison, 5. L2.5: Runtime Drift Monitor (CODE — `drift-monitor.ts`), 8. L5-L8: Trace, Observability, Memory, 9. Dependencies (+9 more)
 
-### Community 340 - "ADR-021: Explicit Command for Harness A… · Consequences · Decision"
-Cohesion: 0.16
-Nodes (18): fetch_transcript_firecrawl(), _firecrawl_transcript_sane(), parse_firecrawl_youtube_transcript(), Reject full-page scrapes where ## Transcript captured sidebar/recommendations., Firecrawl / re-index script, YouTube transcript indexing gap, Transcript pending / Firecrawl empty, Firecrawl transcript scrape gap (+10 more)
-
-### Community 341 - "Loss aversion · Endowment effect · Affect heuristic"
-Cohesion: 0.11
-Nodes (18): 4. Real-time Sync, Agent session fork, Public beta API, Billing roadmap, Crash reporting, macOS/Windows parity, Keyboard shortcuts, Onboarding wizard (+10 more)
-
-### Community 342 - "Part 5: Bend, or Break · Tip: Metaprogramming · Temporal decomposition (structure by ti…"
-Cohesion: 0.24
-Nodes (18): adw solution, afk mcp prompt, agent device, auto compact, build hop, chained slash, context half use, fn tool (+10 more)
-
-### Community 343 - "Limiting step (bottleneck) · Right-Sized Tools · Inventory as time buffer"
-Cohesion: 0.14
-Nodes (18): IndyDevDan, Agentic engineering vs vibe coding, Claude Code on device, direct CLI client, just file workflows, Karpathy security concerns, listen HTTP job server, Mac Mini dedicated agent device (+10 more)
-
-### Community 344 - "Dynamic programming technique · Red-black trees · Augmenting data structures"
+### Community 332 - "Claude Code no MCP resources · ck MCP Tools · MCP prompts over tools"
 Cohesion: 0.24
 Nodes (18): background sec, codebase map, consistency, control flow, coworker test, delegate sec, dynamic var, instructions sec (+10 more)
 
-### Community 345 - "Specific Questions Resolved · resolved-imad-debate-gating-transfer.md · Harness Impleme…"
-Cohesion: 0.25
-Nodes (15): DisplayItem, formatTokens(), formatToolCall(), formatUsageStats(), getDisplayItems(), getFinalOutput(), renderAgentResult(), renderDisplayItems() (+7 more)
+### Community 333 - "Key Arguments · Beyond Code Generation · Augment Code WorkOS ERC 2025.md"
+Cohesion: 0.2
+Nodes (18): Harness design-pattern layer, Pre Commit Hooks, Agent scope control, Anti-mocking testing philosophy, Anti-slop engineering, Hard blocks (e.g. block git push), Hooks as harness layer, Jaymin West (+10 more)
 
-### Community 346 - "Implementation Plan: Integration into O… · Agentic RAG multi-tool retrieval · RAG (retr…"
-Cohesion: 0.18
-Nodes (13): CategoryResult, detectTestFramework(), findSourceFiles(), findTestFiles(), ProductionReadinessResult, scoreToGrade(), validateCode(), validateConfig() (+5 more)
+### Community 334 - "Semantic Code Search for AI Agents | gr… · Codex CLI · OpenAI Codex CLI"
+Cohesion: 0.15
+Nodes (14): extractFilesFromContent(), renderMessage(), toolCalls(), extractPath(), summarizeToolArgs(), e, entries, extraEntries (+6 more)
 
-### Community 347 - "Vector search / embeddings · Agentic codebase search (ripgrep/glob) · Agentic search (C…"
-Cohesion: 0.19
-Nodes (13): canUseInteractivePrompt(), COMMON_LANGUAGES, getCachePath(), InstallChoice, InstallStrategy, installTool(), isAutoInstallEnabled(), isToolOnPath() (+5 more)
-
-### Community 348 - "Agent sandboxes · F-thread (fusion thread) · Gemini"
-Cohesion: 0.18
-Nodes (16): clearWidgetState(), countTotalIn(), dedupeByBasename(), FileRecord, files, fitLine(), getOrCreate(), LspRecord (+8 more)
-
-### Community 349 - "Docs hyperlink suggestion pipeline (Sam) · Baururazalinov 2026 03 30 9F4B3Xzjjkq A… · C…"
+### Community 335 - "Fork terminal skill · cookbook/ directory · Meta-prompt: base→fork handoff"
 Cohesion: 0.15
 Nodes (10): CacheEntry, checkToolsAvailable(), extractVersion(), getAvailableTools(), getToolVersion(), isToolAvailable(), TOOL_CACHE, TOOL_REGISTRY (+2 more)
 
-### Community 350 - "Engineering velocity · Tool observability · Prompt reuse library"
-Cohesion: 0.15
-Nodes (17): Model Selection, code:shell (# Default: BGE-Small (fast, precise chunking)), Model Selection, Per-tenant model selection (SaaS tiers), Per-subagent model selection (Haiku save), Opus/Sonnet/Haiku mix per role, /agents slash command, A/B/C Model Comparison Pattern (+9 more)
+### Community 336 - "Custom Orchestrator conversation contro… · Broadcast fan-out conversation flow · Compos…"
+Cohesion: 0.18
+Nodes (13): CategoryResult, detectTestFramework(), findSourceFiles(), findTestFiles(), ProductionReadinessResult, scoreToGrade(), validateCode(), validateConfig() (+5 more)
 
-### Community 351 - "Source: TianPan Prompt Caching Architec… · Cursor: How Forking VS Code Built a $29… · T…"
+### Community 338 - "research-gitingest-gitreverse-integrati… · Critical Evaluation: Gitingest · Critical Ev…"
+Cohesion: 0.19
+Nodes (13): canUseInteractivePrompt(), COMMON_LANGUAGES, getCachePath(), InstallChoice, InstallStrategy, installTool(), isAutoInstallEnabled(), isToolOnPath() (+5 more)
+
+### Community 339 - "Recommended Implementation · Build-Time Prompt Compilation — Real To… · What Exists"
 Cohesion: 0.12
-Nodes (16): 10. Session Storage & Checkpointing, 1. Five-Layer Compaction Pipeline, 2. Lifecycle Hook System (Deterministic Policy), 3. Permission System as Architectural Subsystem, 5. CLAUDE.md Hierarchical System, 7. Plugin Ecosystem, 9. Sandboxing (OS-Level Enforcement), Architecture Philosophy (+8 more)
+Nodes (17): Anthropic Client, BAML Parser, LLM Output Reformatter, Semantic-vs-Format Separation, Anthropic Post-Mortem, Compiler / FP Precision Bug, Context-Window Routing Bug, Distributed Inference (+9 more)
 
-### Community 352 - "Semantic Code Search Tools: Comprehensi… · Research Summary · Decision: smgrep is best …"
-Cohesion: 0.12
-Nodes (17): Model Context Protocol (MCP), Probing / debuggable control points, MCP servers with 1000+ tools, Probing metaphor (EE / chip introspection), Browser tools MCP via Cursor, Probes in eval harness, MCP supply-chain / injection risks, 10k tools scenario (+9 more)
-
-### Community 353 - "2. Foundation (F0) — Phase 0 (CODE) · config.json providers · 2.2 Config (`src/harness/…"
-Cohesion: 0.12
-Nodes (16): 1. Superpowers is process-as-discipline, not model improvement (Source: [[superpowers-github-repo]]), 2. Hard gates beat suggestions every time (Source: [[superpowers-termdock-analysis]]), 3. Subagent-driven development is the architectural innovation (Source: [[superpowers-release-blog]]), 4. Cross-agent portability via plain Markdown (Source: [[agent-skills-ecosystem]]), 5. TDD enforcement with real results (Source: [[superpowers-termdock-analysis]]), 6. Skill creation is meta — TDD for skills (Source: [[superpowers-release-blog]]), 7. Persuasion principles work on LLMs (Source: [[superpowers-release-blog]]), Contradictions (+8 more)
-
-### Community 354 - "Streamlit UI · Fusion chain (parallel chains + evaluator) · Recommendations workflow"
-Cohesion: 0.12
-Nodes (15): Implementation for Our Harness, code:json ({), code:python (def ensemble_solutions(problem: str, candidates: int = 5) ->), Cost Consideration, How Augment Implements It, Implementation for Our Harness, Input Format, Why It Works (+7 more)
-
-### Community 355 - "ADR-016: @tintinweb/pi-subagents for L4… · Consequences · Decision"
-Cohesion: 0.12
-Nodes (17): c0 (249 nodes, channels: indydevdan, cole-medin, boundaryml), c10 (240 nodes, channels: boundaryml, cole-medin, indydevdan), c11 (205 nodes, channels: boundaryml), c12 (421 nodes, channels: boundaryml, indydevdan, cole-medin), c15 (193 nodes, channels: indydevdan, cole-medin), c20 (152 nodes, channels: indydevdan), c21 (145 nodes, channels: indydevdan), c22 (162 nodes, channels: indydevdan, boundaryml, cole-medin) (+9 more)
-
-### Community 356 - "Core Capabilities · fallow-rs-codebase-intelligence.md · Agent Integration"
-Cohesion: 0.12
-Nodes (16): code:markdown (## Think in Code (MANDATORY)), code:block2 (Agent: Read(file1) → Read(file2) → ... → Read(file47)), code:block3 (Agent: ctx_execute(`), code:block4 (L3 Grounding Checkpoint:), Efficiency Gains, Enforcement Architecture, Example: Before vs After, Execution Sandbox: ctx_execute() (+8 more)
-
-### Community 357 - "Grounding Checkpoints (MVC Execution) · code:json ({) · Config"
+### Community 340 - "ADR-021: Explicit Command for Harness A… · Consequences · Decision"
 Cohesion: 0.12
 Nodes (17): Cross-Fork Specs (Multiple Forks, Same Spec), Duplicate Specs (Same Fingerprint, Different Issues), Edge Cases, Orphaned Specs (No Fingerprint Match), Edge Cases, Edge Cases, BAML parser string termination bug, User-reported parsing failure (+9 more)
 
-### Community 358 - "Enforcement Layers · Governance layer · Layer 1: System Prompt / Instructions (…"
-Cohesion: 0.21
-Nodes (16): channel_dir_from_handle(), collect_urls(), default_paths(), fetch_transcript_harness_web(), main(), merge_index(), needs_transcript(), Returns (video_id, upload_date, title, uploader_id). (+8 more)
+### Community 341 - "Loss aversion · Endowment effect · Affect heuristic"
+Cohesion: 0.12
+Nodes (16): code:markdown (## Think in Code (MANDATORY)), code:block2 (Agent: Read(file1) → Read(file2) → ... → Read(file47)), code:block3 (Agent: ctx_execute(`), code:block4 (L3 Grounding Checkpoint:), Efficiency Gains, Enforcement Architecture, Example: Before vs After, Execution Sandbox: ctx_execute() (+8 more)
 
-### Community 359 - "ADR-012: Extension-Based Harness Orches… · Consequences · Decision"
+### Community 342 - "Part 5: Bend, or Break · Tip: Metaprogramming · Temporal decomposition (structure by ti…"
 Cohesion: 0.12
 Nodes (16): 1. Context Engine Architecture, 2. Benchmark Performance, 3. Agent Architecture, 4. Prompt Enhancement, 6. Real-World Impact (claimed), Contradictions, Key Concepts, Key Entities (+8 more)
 
-### Community 360 - "ADR-024: Compact Plan Summary in System… · Decision · program.md agent instructions"
-Cohesion: 0.12
-Nodes (17): Adaptive LLM-powered software, Mixture-of-Experts, RAG obsolete prediction, YouTube data moat, BAP (Big Ass Prompt), Context window growth thesis, GPT-5 trajectory, Needle-in-haystack accuracy (+9 more)
+### Community 343 - "Limiting step (bottleneck) · Right-Sized Tools · Inventory as time buffer"
+Cohesion: 0.15
+Nodes (17): Mentoring interns, Mentoring, Onboarding new hires, Abraham H. Maslow, Can't do vs won't do diagnostic, Maslow hierarchy applied to workplace, Motivation and Personality (Maslow, 1954), Motivation as inner drive; manager shapes environment (+9 more)
 
-### Community 361 - "ADR-019: Tool-Based Q&A for L1 Spec Cla… · Consequences · Decision"
+### Community 344 - "Dynamic programming technique · Red-black trees · Augmenting data structures"
+Cohesion: 0.12
+Nodes (16): CodeScene, Credo (rrrene/credo), deadcode (golang.org/x/tools/cmd/deadcode), Dialyzer (via dialyxir: jeremyjh/dialyxir), Elixir, Fallow (fallow-rs/fallow) — PRIMARY RECOMMENDED, Gap Analysis: No Ecosystem Has a Fallow Equivalent, Go (+8 more)
+
+### Community 345 - "Specific Questions Resolved · resolved-imad-debate-gating-transfer.md · Harness Impleme…"
+Cohesion: 0.25
+Nodes (17): agent thesis, api weirdness, bench critique, gitignore pat, gpt5 eval, haiku grade, hop lop, instruction fmt (+9 more)
+
+### Community 346 - "Implementation Plan: Integration into O… · Agentic RAG multi-tool retrieval · RAG (retr…"
 Cohesion: 0.12
 Nodes (17): Agent sandboxes / isolation, Agents eating SaaS / UI, AGI hype skepticism, Karpathy decade-of-agents quote, Anthropic execution / harness thesis, Custom agents above all, Entry-level hiring shrink bet (2025 recap), Gemini 3 Flash (+9 more)
 
-### Community 362 - "Representativeness heuristic · Rationalization and cover stories · Hindsight bias"
-Cohesion: 0.23
-Nodes (15): MCP Integration, Available Tools (9 total), Key Design, sentrux MCP Integration, Setup, 🤖 **AI Agent Integration (MCP Server)**, code:shell (# Start MCP server for AI agent integration), code:shell (# Install via Claude Code CLI (recommended)) (+7 more)
+### Community 347 - "Vector search / embeddings · Agentic codebase search (ripgrep/glob) · Agentic search (C…"
+Cohesion: 0.18
+Nodes (13): CompletionItem, Diagnostic, DiagnosticSeverity, FoldingRange, HoverInfo, Location, Position, Range (+5 more)
 
-### Community 363 - "Community 8 - "Metrics & Estimation" · Community 57 - "Coupling Metrics & Oper… · Commu…"
-Cohesion: 0.12
-Nodes (14): How It Works, Implementation Path for Our Harness, Limitations, Relationship to Repo-Map Ranking, Token Savings, WOZCODE Implementation, Token Savings, Algorithm (from Aider) (+6 more)
-
-### Community 364 - "Accessibility in LSP · BAML LSP update · Docs i18n future"
-Cohesion: 0.16
-Nodes (16): Cypher (graph query language), Data models for applications, Declarative query languages (SQL), Document model, Graph model, Many-to-one and many-to-many relationships, Property graph model, Relational model (+8 more)
-
-### Community 365 - "Tree-shaking in code vs MCP · Augment Code MCP SiliconAngle.md · Claude pivot: skills +…"
-Cohesion: 0.12
-Nodes (15): Contradictions, Critical Contradictions, Entities, Key Concepts, Key Finding: The Harness Must Be Redesigned, L1: Spec Hardening, L2.5: Drift Monitor, L2: Structured Planning (+7 more)
-
-### Community 366 - "Bolt.new (StackBlitz).md · Architecture (DeepWiki) · Source: Bolt.new Architecture & Ca…"
-Cohesion: 0.22
-Nodes (16): Software 3.0, Andrej Karpathy, Opus 4.6, Project Glasswing, Google Antigravity IDE, Binary yes/no eval criteria, Claude Sonnet vision judging, Diagram generator skill (+8 more)
-
-### Community 367 - "Skill / MCP tool search · Progressive disclosure (skills) · Slash command history in Cl…"
-Cohesion: 0.4
-Nodes (16): CrewAI / LangGraph / Chroma distribution thesis, Dalton Caldwell (YC) feedback anecdote, Email-based MCP agent prototype, Filesystem + bash as agent integration substrate, Guided planning / autotune for plans, Human approval via Slack natural language, K8s orchestrator for agents experiment, Kyle (co-founder) story (+8 more)
-
-### Community 368 - "Library meta-skill · library.yaml reference catalog · Private GitHub references"
-Cohesion: 0.13
-Nodes (16): Architecture Summary, code:block1 (Agent A                          Filesystem                 ), code:json ({), code:json ({), Components, Core Mechanism: File-Based Agent Mesh, Message Delivery Flow, Message Format (+8 more)
-
-### Community 369 - "Anthropic Bash tool · Anthropic computer use tool · Anthropic text / file editor tool"
-Cohesion: 0.17
-Nodes (16): Communities (60 total, 46 thin omitted), Communities (6 total, 0 thin omitted), Community 0 - "Agent · Failure · Harbor · Merge-Readiness", Community 10 - "Community 10", Community 13 - "Community 13", Community 14 - "Community 14", Community 16 - "Community 16", Community 1 - "Agent · Filesystem-backed · Harness · Limits" (+8 more)
-
-### Community 370 - "echo zone · event created · gemini echo"
-Cohesion: 0.23
-Nodes (16): Community 101 - "CLRS: BFS & Search Trees", Community 104 - "CLRS: B-trees & DP", Community 108 - "CLRS: Greedy Algorithms", Community 110 - "CLRS: Heaps", Community 111 - "CLRS: Shortest Paths", Community 67 - "CLRS: Linear Sorts", Community 87 - "CLRS: Computational Geometry", Community 94 - "CLRS: Approximation & LP" (+8 more)
-
-### Community 371 - "sentrux Pro Architecture · CLI Commands · code:json ({)"
-Cohesion: 0.23
-Nodes (16): Dr. Kurt Kocourek, Logodrama / psychodrama vignette, Love as access to other's essence, Self-transcendence of human existence, Three ways to find meaning in life, Attachment bonds and relatedness, Buddha and Stoics: happiness via detachment from externals, Chapter 10: Happiness Comes from Between (+8 more)
-
-### Community 372 - "agent agnostic · cat batch · fs prim"
-Cohesion: 0.12
-Nodes (16): ats example, cheap model first, classification over catalog, cursor debugging, gpt4 mini, hierarchical entities, legal name resolution, multi company experience (+8 more)
-
-### Community 373 - "Key Contributions · Blake Crosley — Agent Architecture Guide · Multi-Agent Deliberation…"
-Cohesion: 0.12
-Nodes (15): 10 GitHub Repos for Claude Code Workflow - LinkedIn, baml live coding, work backwards design, architecture not only prompt, headless agentic claude, linkedin whitespace post, claude code workflow, claude md rules (+7 more)
-
-### Community 374 - "multi agent product ui · always on agent · chatgpt pulse"
-Cohesion: 0.12
-Nodes (15): 10. Enterprise Governance, 1. Rust-Native Implementation, 2. Platform-Native Sandboxing, 3. Bidirectional MCP, 4. Memories + Chronicle, 5. Hooks Framework, 6. Subagent Workflows, 8. Skills System (+7 more)
-
-### Community 375 - "system prompt explicit · db backed logs · firecrawl mcp json"
+### Community 348 - "Agent sandboxes · F-thread (fusion thread) · Gemini"
 Cohesion: 0.15
 Nodes (16): 10 Key Innovations, 1. Rust-Native Implementation (96.3% Rust), 3. Platform-Native Sandboxing (3-Tier), 5. Memories System with Chronicle, 6. Hooks Framework (6 Events), 7. Subagent Workflows (Parallel Dispatch), 8. Git Worktrees, 9. Skills System (agentskills.io Standard) (+8 more)
 
-### Community 376 - "agent thesis · gitignore pat · instruction fmt"
-Cohesion: 0.24
-Nodes (16): Lights-off software factory risk, Monorepo for shared agent config, OpenClaw / OpenCode harness caveats, Skepticism of parallel agent teams, Parent prompt quality for subagents, Playwright-heavy browser subagent, Progressive disclosure (skills), Riptide research product (+8 more)
-
-### Community 377 - "gemini-cli-architecture.md · Key Announcements · AssemblyAI free tier speed caveat"
-Cohesion: 0.4
-Nodes (16): Boundary Discord community, Community-driven bug reports & thanks, BAML client gen without embedding tests, BAML examples: extract anything, Generic OpenAI-compatible client config, Custom headers for LLM HTTP calls, npm stricter release after supply chain attacks, OpenRouter as default BAML client target (+8 more)
-
-### Community 378 - "Graph Report - ultimate-pi  (2026-05-13) · Graph Report - /home/aryaniyaps/ai-proj… · C…"
+### Community 349 - "Docs hyperlink suggestion pipeline (Sam) · Baururazalinov 2026 03 30 9F4B3Xzjjkq A… · C…"
 Cohesion: 0.12
-Nodes (16): code:shell (cd my-repo), code:shell (cd path/to/repo), ~80% accuracy gate, Apple OpenELM framing, 32k+ context preference, ELM / efficient on-device LM, Gemma, GPT-3.5 Turbo control model (+8 more)
+Nodes (15): 10. Enterprise Governance, 1. Rust-Native Implementation, 2. Platform-Native Sandboxing, 3. Bidirectional MCP, 4. Memories + Chronicle, 5. Hooks Framework, 6. Subagent Workflows, 8. Skills System (+7 more)
 
-### Community 379 - "Knowledge Graph Report — YouTube transc… · Markdown CRM · Knowledge Graph"
+### Community 350 - "Engineering velocity · Tool observability · Prompt reuse library"
+Cohesion: 0.12
+Nodes (15): Approval Persistence, Doom-Loop Detection, Five Safety Layers, Key Safety Patterns, Layer 1: Prompt-Level Guardrails, Layer 2: Schema-Level Tool Restrictions, Layer 3: Runtime Approval System, Layer 5: Lifecycle Hooks (+7 more)
+
+### Community 351 - "Source: TianPan Prompt Caching Architec… · Cursor: How Forking VS Code Built a $29… · T…"
+Cohesion: 0.17
+Nodes (16): Communities (60 total, 46 thin omitted), Communities (6 total, 0 thin omitted), Community 0 - "Agent · Failure · Harbor · Merge-Readiness", Community 10 - "Community 10", Community 13 - "Community 13", Community 14 - "Community 14", Community 16 - "Community 16", Community 1 - "Agent · Filesystem-backed · Harness · Limits" (+8 more)
+
+### Community 352 - "Semantic Code Search Tools: Comprehensi… · Research Summary · Decision: smgrep is best …"
+Cohesion: 0.23
+Nodes (16): Community 101 - "CLRS: BFS & Search Trees", Community 104 - "CLRS: B-trees & DP", Community 108 - "CLRS: Greedy Algorithms", Community 110 - "CLRS: Heaps", Community 111 - "CLRS: Shortest Paths", Community 67 - "CLRS: Linear Sorts", Community 87 - "CLRS: Computational Geometry", Community 94 - "CLRS: Approximation & LP" (+8 more)
+
+### Community 353 - "2. Foundation (F0) — Phase 0 (CODE) · config.json providers · 2.2 Config (`src/harness/…"
+Cohesion: 0.12
+Nodes (15): Contradictions, Critical Contradictions, Entities, Key Concepts, Key Finding: The Harness Must Be Redesigned, L1: Spec Hardening, L2.5: Drift Monitor, L2: Structured Planning (+7 more)
+
+### Community 354 - "Streamlit UI · Fusion chain (parallel chains + evaluator) · Recommendations workflow"
+Cohesion: 0.13
+Nodes (15): Architecture Decision Records (ADRs), Storing and managing ADRs, Architectural decisions (Chapter 21), Generative AI in architectural decisions, 1. Progressive Disclosure (Maps, Not Encyclopedias), 2. Mechanical Architecture Enforcement, 3. Agent Legibility as System of Record, 4. Environment Control (+7 more)
+
+### Community 355 - "ADR-016: @tintinweb/pi-subagents for L4… · Consequences · Decision"
+Cohesion: 0.16
+Nodes (15): Expectations of a software architect, Complicated-subsystem team, Enabling team, Facilitating interaction mode, Four fundamental team types, Stream-aligned as primary team form, Stream-aligned team, 1. Coding Harnesses (+7 more)
+
+### Community 356 - "Core Capabilities · fallow-rs-codebase-intelligence.md · Agent Integration"
+Cohesion: 0.16
+Nodes (16): Alfred P. Sloan Jr., Dual reporting, Functional (centralized) organization, General Motors (Sloan management experience), Grove's Law: large orgs tend to hybrid form, Hybrid organization, Matrix management / NASA coordination precedent, Mission-oriented organization (+8 more)
+
+### Community 357 - "Grounding Checkpoints (MVC Execution) · code:json ({) · Config"
+Cohesion: 0.36
+Nodes (16): backend writes only, email draft, linkedin draft, materialized views, pydantic models, realtime db reads, summary streaming, transcript download (+8 more)
+
+### Community 358 - "Enforcement Layers · Governance layer · Layer 1: System Prompt / Instructions (…"
+Cohesion: 0.22
+Nodes (16): Dereflection, Dr. Kurt Kocourek, Logodrama / psychodrama vignette, Love as access to other's essence, Self-transcendence of human existence, Three ways to find meaning in life, Attachment bonds and relatedness, Buddha and Stoics: happiness via detachment from externals (+8 more)
+
+### Community 359 - "ADR-012: Extension-Based Harness Orches… · Consequences · Decision"
+Cohesion: 0.12
+Nodes (14): How It Works, Implementation Path for Our Harness, Limitations, Relationship to Repo-Map Ranking, Token Savings, WOZCODE Implementation, Token Savings, Algorithm (from Aider) (+6 more)
+
+### Community 360 - "ADR-024: Compact Plan Summary in System… · Decision · program.md agent instructions"
+Cohesion: 0.16
+Nodes (16): Cypher (graph query language), Data models for applications, Declarative query languages (SQL), Document model, Graph model, Many-to-one and many-to-many relationships, Property graph model, Relational model (+8 more)
+
+### Community 361 - "ADR-019: Tool-Based Q&A for L1 Spec Cla… · Consequences · Decision"
+Cohesion: 0.12
+Nodes (16): 6. L4: Adversarial Verification — `harness-critic/SKILL.md` + `.pi/agents/critic.md`, code:yaml (---), code:yaml (---), Critic Agent Definition (`.pi/agents/critic.md`), Skill Frontmatter, SKILL.md Body, Supporting File: `reference.md`, Two-tier activation + routing (+8 more)
+
+### Community 362 - "Representativeness heuristic · Rationalization and cover stories · Hindsight bias"
+Cohesion: 0.23
+Nodes (16): Token Budget, Token Budget, Image Prompts, Token Budget Discipline, Token budget discipline (pe0rzn), Token budget discipline (48qlxc), Token budget discipline (sbssz0), Token budget discipline (7fzifm) (+8 more)
+
+### Community 363 - "Community 8 - "Metrics & Estimation" · Community 57 - "Coupling Metrics & Oper… · Commu…"
+Cohesion: 0.16
+Nodes (16): Agent sandboxes, Agent validates install output, Documentation scraping step, Interactive install flow, /install command, Setup logging artifacts, Mintlify LM executables blog, Time-to-first-run onboarding (+8 more)
+
+### Community 364 - "Accessibility in LSP · BAML LSP update · Docs i18n future"
+Cohesion: 0.4
+Nodes (16): CrewAI / LangGraph / Chroma distribution thesis, Dalton Caldwell (YC) feedback anecdote, Email-based MCP agent prototype, Filesystem + bash as agent integration substrate, Guided planning / autotune for plans, Human approval via Slack natural language, K8s orchestrator for agents experiment, Kyle (co-founder) story (+8 more)
+
+### Community 365 - "Tree-shaking in code vs MCP · Augment Code MCP SiliconAngle.md · Claude pivot: skills +…"
+Cohesion: 0.14
+Nodes (14): What Is SWE-bench Pro?, Benchmark Results (SWE-bench Lite Eval), code:block1 (# src/services/user.ts), Contextualized Text Format, Key Features Beyond cAST Paper, Relevance to Our Implementation, Summary, Benchmark Design (+6 more)
+
+### Community 366 - "Bolt.new (StackBlitz).md · Architecture (DeepWiki) · Source: Bolt.new Architecture & Ca…"
+Cohesion: 0.13
+Nodes (11): agents, allowed, body, disallowed, disallowedMatch, effective, policyOpts, result (+3 more)
+
+### Community 367 - "Skill / MCP tool search · Progressive disclosure (skills) · Slash command history in Cl…"
 Cohesion: 0.13
 Nodes (12): art, env, lanes, light, messages, plan, post, round (+4 more)
 
-### Community 380 - "Candidate prompt pool · BAML check() soft metrics · Diversity among elites"
+### Community 368 - "Library meta-skill · library.yaml reference catalog · Private GitHub references"
 Cohesion: 0.13
 Nodes (13): allQueries, client, DEDUP_PER_FILE, __dirname, full, hits, langId, langQueries (+5 more)
 
-### Community 382 - "Research: cursor.sh Harness Innovations.md · Key Findings · Contradictions"
-Cohesion: 0.22
-Nodes (14): createStarterSemgrepConfig(), findLocalSemgrepConfig(), findPiLensSemgrepConfigPath(), getPiLensSemgrepConfigPath(), isRegistryOrAutoConfig(), loadPiLensSemgrepConfig(), LOCAL_SEMGREP_CONFIG_NAMES, normalizeSemgrepConfigArg() (+6 more)
-
-### Community 383 - "Dive into Claude Code (VILA-Lab, 2026) · Architecture Components · claude-code-architec…"
-Cohesion: 0.13
-Nodes (14): As a user, Basic Config Shape, code:bash (pi install npm:@yeliu84/pi-model-router), code:bash (pi install .), code:bash (pi -e ./extensions/index.ts), code:json ({), Commands, Configuration (+6 more)
-
-### Community 384 - "Architecture (from DeepWiki + GitHub RE… · executor-rhyssullivan.md · How Agents Use It"
-Cohesion: 0.13
-Nodes (15): code:block1 (ultimate-pi harness init), Fork / Multi-Tenant Considerations, Init Flow for Forked Projects, Solution: Local-First, Gitignored Cache, Init Bootstrap, The Fork Problem, Why This Works, Docker dev environment, Formatter stability (+7 more)
-
-### Community 385 - "Augment SWE-bench Agent GitHub.md · Architecture · Execution Modes"
-Cohesion: 0.13
-Nodes (14): Benchmark: grepai vs grep on Claude Code - GitHub Pages, Cost Breakdown, Metric Collection, Non-Deterministic Behavior, Test Environment, The Five Test Questions, The Glob Elimination, The Subagent Problem (+6 more)
-
-### Community 386 - "Terminal-Bench benchmark · Terminal-Bench 2.0 · Agent optimization as coding task"
-Cohesion: 0.13
-Nodes (14): code:block1 (Layer 1 (immediate): AGENTS.md rules + ck installation + MCP), Confidence, Evidence, Harness Implementation, How Agents Choose Tools, MCP Architecture: No Priority System, Q1: How does Claude Code's native Grep tool interact with custom MCP tools?, Q2: Can MCP tools be marked as "preferred" or given higher priority? (+6 more)
-
-### Community 387 - "Adversarial Verification · code:json ({) · Config"
-Cohesion: 0.13
-Nodes (14): Meilir Page design principle (encapsulation), code:block1 (L4 COMPLETION MODEL — How "done" is determined and verified), Design Principle (v2), Harness Configuration Layers, L1: Signal Design, L2: Gate Design, L3: State Channel, L4: Completion Model (+6 more)
-
-### Community 388 - "Automated Observability · code:json ({) · Config"
-Cohesion: 0.13
-Nodes (14): Contradictions, Critical Gaps Revealed, Integration Recommendations, Key Concepts, Key Entities, Key Findings, Open Questions, Overview (+6 more)
-
-### Community 389 - "Schema-Based Orchestration via Archon · Architecture: Archon as Workflow Engine · Archo…"
-Cohesion: 0.13
-Nodes (14): code:block1 (┌─────────────────┐     ┌──────────────────┐     ┌──────────), code:yaml (spec:), code:block3 (<code_editing_rules>), code:xml (<instructions>), code:block5 (You are a senior software engineer. You are refactoring the ), Design Principles, Implementation Notes, Integration with Existing Harness Layers (+6 more)
-
-### Community 390 - "Spec Hardening · code:json ({) · Config"
-Cohesion: 0.31
-Nodes (15): ADW embedded tool calls, Anthropic web search tool, claude continue resume sessions, Claude Max subscription, Compute equals success, Conversation tracker, GPT-4.1 mini summarization, Hacker News Claude Code thread (+7 more)
-
-### Community 391 - "Expert intuition (skilled pattern recog… · Key Design Principles · Prompt Enhancement.md"
+### Community 370 - "echo zone · event created · gemini echo"
 Cohesion: 0.16
 Nodes (13): ADR-020: YAML Task DAG and Sprint Contract Format, Checkpoints, code:yaml (spec: sha256:abc123...), Consequences, Context, Decision, Done Criteria Types, Mitigations (+5 more)
 
-### Community 392 - "Linear programming · Maximum-flow problem · NP-completeness theory"
+### Community 371 - "sentrux Pro Architecture · CLI Commands · code:json ({)"
 Cohesion: 0.13
-Nodes (14): Artifacts Updated, Auto-Fixed (18 issues resolved), Dead Links Fixed (8), Empty Sections, False Positives (1), Frontmatter Gaps Fixed (8), Lint Report: 2026-04-30 (Auto-fixes applied), Naming Convention Deviation (+6 more)
+Nodes (14): As a user, Basic Config Shape, code:bash (pi install npm:@yeliu84/pi-model-router), code:bash (pi install .), code:bash (pi -e ./extensions/index.ts), code:json ({), Commands, Configuration (+6 more)
 
-### Community 393 - "Concrete Syntax Tree · Layer 1: Tree-Sitter (Syntax) — Handles… · Syntax tree view"
-Cohesion: 0.17
-Nodes (14): Community 31 - "Code Complete: Routines & Defense", Community 56 - "Code Complete: Tuning & Style", Community 92 - "Code Complete: Variables & Names", Architecture, Caching Strategy, code:block1 (Base Prompt Spec (JSON/YAML)), code:yaml (variables:), Key Properties (+6 more)
-
-### Community 394 - "Harness Multi-Language Strategy · Multi-language clients (Py/JS/Go/Ruby) · Retries and …"
-Cohesion: 0.19
-Nodes (15): High-leverage activities, Community 107 - "Architecture Style Selection", Community 10 - "Architecture & PM Governance", Community 11 - "Senior Engineering Leadership", Community 28 - "Engineering Leverage", Community 36 - "Architecture Strategy & Leverage Points", Community 79 - "High-Leverage Eng Culture", Community 9 - "Architecture: Concepts & Diagrams" (+7 more)
-
-### Community 395 - "Jagged frontier + context engineering · MCP all-or-nothing tool schemas · MCP as packag…"
-Cohesion: 0.14
-Nodes (14): Architectural decisions (Chapter 21), Architectural decision antipatterns, Generative AI in architectural decisions, 1. Progressive Disclosure (Maps, Not Encyclopedias), 2. Mechanical Architecture Enforcement, 3. Agent Legibility as System of Record, 4. Environment Control, 6. Minimal Blocking Merge Gates (+6 more)
-
-### Community 396 - "Critical Model-Specific Rules · Temperature Tuning · Distinguishing Deduction from Exte…"
-Cohesion: 0.13
-Nodes (15): Accessibility in LSP, BAML LSP update, Docs i18n future, Font ligatures, Keyboard nav playground, Linux AppImage, macOS codesign, Markdown render pipeline (+7 more)
-
-### Community 397 - "Agentic Harness · Key Design Decisions · Pipeline Flow"
-Cohesion: 0.14
-Nodes (14): Better Error Context, Final Gate Tooling (Phase 16 — Lint + Format), How It Differs From Our Current Approach, Integration Into Our Harness, Layer 4: Adversarial Verification, Phase 12: Inline Syntax Validation (L3), Phase 16: Final Lint + Format Gate (post-L4), SQL Dialect Auto-Fix (+6 more)
-
-### Community 398 - "browser-harness — Self-Healing CDP Harness · Integration with ultimate-pi Harness (P30)…"
-Cohesion: 0.13
-Nodes (14): Deliberate Departures from ABC, Design Principles, Guido's 2025 Perspective on Type Hints, Python's Design Philosophy — Guido van Rossum, The Zen of Python (Tim Peters), Timesaving Rules (from Python's origin as skunkworks project), Bitter lesson argument, EC2/S3 API stability example (+6 more)
-
-### Community 399 - "Key Hook Events · Lifecycle Hook System · Claude Code hook events stream"
-Cohesion: 0.12
-Nodes (14): SKILL.md Body (Core Instructions), Reference harnesses (patterns to mine), Claude Code Security Architecture (Penligent, 2026), Five Operational Layers, Key Quotes, Permission Modes, Sandboxing, Security CVE Case Studies (+6 more)
-
-### Community 400 - "Subagent Worktree Isolation · Subagent context isolation · Context Isolation"
+### Community 372 - "agent agnostic · cat batch · fs prim"
 Cohesion: 0.13
 Nodes (14): code:block2 (L2 (Plan) → L2.5 (Drift Monitor) → L3 (Execute + Grounding)), code:typescript (interface DriftMonitorConfig {), Configuration Schema, Contradictions, Integration Points, Integration with Existing Harness Pipeline, Key Concepts, Key Entities (+6 more)
 
-### Community 401 - "grep for the AI era · code:shell (brew install yoanbernabeu/t… · code:powershell (grepa…"
-Cohesion: 0.3
-Nodes (15): constants eval, file ops, instruction fmt, judge opus, latency cost, m4 hw, oss120b, oss20b (+7 more)
+### Community 373 - "Key Contributions · Blake Crosley — Agent Architecture Guide · Multi-Agent Deliberation…"
+Cohesion: 0.24
+Nodes (14): Braintrust eval platform, Claude Code as agentic search baseline, Claude Code disallow tools flag, Django legacy codebase rows, Eval dataset-task-score-experiment loop, Evals as cross-functional team sport, Jess (Braintrust), Braintrust Loop natural language (+6 more)
 
-### Community 402 - "Programmatic cross-field validation · Reviewer Principle (separate reviewer m… · Backgr…"
+### Community 374 - "multi agent product ui · always on agent · chatgpt pulse"
+Cohesion: 0.13
+Nodes (14): Benchmark: grepai vs grep on Claude Code - GitHub Pages, Cost Breakdown, Metric Collection, Non-Deterministic Behavior, Test Environment, The Five Test Questions, The Glob Elimination, The Subagent Problem (+6 more)
+
+### Community 375 - "system prompt explicit · db backed logs · firecrawl mcp json"
+Cohesion: 0.13
+Nodes (14): code:block1 (┌─────────────────┐     ┌──────────────────┐     ┌──────────), code:yaml (spec:), code:block3 (<code_editing_rules>), code:xml (<instructions>), code:block5 (You are a senior software engineer. You are refactoring the ), Design Principles, Implementation Notes, Integration with Existing Harness Layers (+6 more)
+
+### Community 376 - "agent thesis · gitignore pat · instruction fmt"
+Cohesion: 0.14
+Nodes (15): code:json ({), Config, code:json ({), Config, Architecture Summary, code:block1 (Agent A                          Filesystem                 ), code:json ({), code:json ({) (+7 more)
+
+### Community 377 - "gemini-cli-architecture.md · Key Announcements · AssemblyAI free tier speed caveat"
+Cohesion: 0.28
+Nodes (15): Planner agent, append sysprompt, builder agent, builtin tools bloat, context cmd, followup turn, kanban ui, micro sdlc (+7 more)
+
+### Community 378 - "Graph Report - ultimate-pi  (2026-05-13) · Graph Report - /home/aryaniyaps/ai-proj… · C…"
+Cohesion: 0.13
+Nodes (14): Enforcement Layers, Layer 1: System Prompt / Instructions (cheapest, least reliable), Layer 2: PreToolUse Interception (medium cost, high reliability), Layer 3: PostToolUse Compression (medium cost, medium reliability), Layer 4: Tool Replacement (highest cost, highest reliability), Layer 5: Governance & Monitoring (supplemental), Layer 6: TypeScript Execution Layer (emerging, high potential), Problem (+6 more)
+
+### Community 379 - "Knowledge Graph Report — YouTube transc… · Markdown CRM · Knowledge Graph"
 Cohesion: 0.26
-Nodes (15): Bash / shell tool, Blacklist / pre-tool hooks, Damage control extension, Git-reversible write tool, Inline Python / script workarounds, MCP / explicit tools vs bash, Murphy's law at agent scale, Mythos-class model behavior (+7 more)
+Nodes (14): MCP Integration, Available Tools (9 total), Key Design, sentrux MCP Integration, Setup, 🤖 **AI Agent Integration (MCP Server)**, code:shell (# Start MCP server for AI agent integration), code:shell (# Install via Claude Code CLI (recommended)) (+6 more)
 
-### Community 403 - "Agent harness research seeds (2026-05-11) · Context compression · Execution layer"
+### Community 380 - "Candidate prompt pool · BAML check() soft metrics · Diversity among elites"
+Cohesion: 0.17
+Nodes (14): Community 31 - "Code Complete: Routines & Defense", Community 56 - "Code Complete: Tuning & Style", Community 92 - "Code Complete: Variables & Names", Architecture, Caching Strategy, code:block1 (Base Prompt Spec (JSON/YAML)), code:yaml (variables:), Key Properties (+6 more)
+
+### Community 381 - "Key Findings · 10. "Hack it, then get it right" → "Ite… · 1. "Use the project" → "Map t…"
+Cohesion: 0.13
+Nodes (14): Artifacts Updated, Auto-Fixed (18 issues resolved), Dead Links Fixed (8), Empty Sections, False Positives (1), Frontmatter Gaps Fixed (8), Lint Report: 2026-04-30 (Auto-fixes applied), Naming Convention Deviation (+6 more)
+
+### Community 382 - "Research: cursor.sh Harness Innovations.md · Key Findings · Contradictions"
+Cohesion: 0.13
+Nodes (15): Consensus Filing Contract, Formal Model: H = (E, T, C, S, L, V), Harness Implementation Plan (Skill-First v2), New Tools Integrated, Research Validation Summary, Savings from Skill-First Architecture, The 8-Layer Runtime Pipeline (Skill-First), The Skill-First Principle (+7 more)
+
+### Community 383 - "Dive into Claude Code (VILA-Lab, 2026) · Architecture Components · claude-code-architec…"
+Cohesion: 0.13
+Nodes (14): code:block1 (Layer 1 (immediate): AGENTS.md rules + ck installation + MCP), Confidence, Evidence, Harness Implementation, How Agents Choose Tools, MCP Architecture: No Priority System, Q1: How does Claude Code's native Grep tool interact with custom MCP tools?, Q2: Can MCP tools be marked as "preferred" or given higher priority? (+6 more)
+
+### Community 384 - "Architecture (from DeepWiki + GitHub RE… · executor-rhyssullivan.md · How Agents Use It"
+Cohesion: 0.13
+Nodes (15): Accessibility in LSP, BAML LSP update, Docs i18n future, Font ligatures, Keyboard nav playground, Linux AppImage, macOS codesign, Markdown render pipeline (+7 more)
+
+### Community 385 - "Augment SWE-bench Agent GitHub.md · Architecture · Execution Modes"
+Cohesion: 0.13
+Nodes (14): code:block1 (===============================================), How It Works, Integration Surface, Output Format, Relevance to ultimate-pi, Stack, What It Is, ctx.output_format / prefix hints (+6 more)
+
+### Community 386 - "Terminal-Bench benchmark · Terminal-Bench 2.0 · Agent optimization as coding task"
+Cohesion: 0.15
+Nodes (14): Case: Kevin's team vs Chris the CEO (unsafe boss, poor relocation buy-in), Fool's choice (either candor or kindness / either/or), Search for the elusive 'and' (replace either/or), Start with Heart (right motives; focus on what you really want), Work on me first, us second, True growth mindset via journey, triggers, fixed-mindset ‘persona’ — not self-proclamation, Orientation toward validating fixed traits (intelligence, personality, character), Relationships vignette: seeking prince-like mate/career as validation — mindset shift over life (+6 more)
+
+### Community 387 - "Adversarial Verification · code:json ({) · Config"
+Cohesion: 0.14
+Nodes (14): Better Error Context, Final Gate Tooling (Phase 16 — Lint + Format), How It Differs From Our Current Approach, Integration Into Our Harness, Layer 4: Adversarial Verification, Phase 12: Inline Syntax Validation (L3), Phase 16: Final Lint + Format Gate (post-L4), SQL Dialect Auto-Fix (+6 more)
+
+### Community 388 - "Automated Observability · code:json ({) · Config"
+Cohesion: 0.13
+Nodes (14): Deliberate Departures from ABC, Design Principles, Guido's 2025 Perspective on Type Hints, Python's Design Philosophy — Guido van Rossum, The Zen of Python (Tim Peters), Timesaving Rules (from Python's origin as skunkworks project), Bitter lesson argument, EC2/S3 API stability example (+6 more)
+
+### Community 389 - "Schema-Based Orchestration via Archon · Architecture: Archon as Workflow Engine · Archo…"
+Cohesion: 0.13
+Nodes (15): code:block1 (ultimate-pi harness init), Fork / Multi-Tenant Considerations, Init Flow for Forked Projects, Solution: Local-First, Gitignored Cache, Init Bootstrap, The Fork Problem, Why This Works, Docker dev environment, Formatter stability (+7 more)
+
+### Community 390 - "Spec Hardening · code:json ({) · Config"
+Cohesion: 0.3
+Nodes (15): Terminal highest leverage, Aider Clyde Claude lineage, Boris and Cat leadership, Compaction context loss, Devin Replit ecosystem, GitHub Action Claude lint, Ideation via background compute, Do simple thing first KISS (+7 more)
+
+### Community 391 - "Expert intuition (skilled pattern recog… · Key Design Principles · Prompt Enhancement.md"
+Cohesion: 0.31
+Nodes (15): ADW embedded tool calls, Anthropic web search tool, claude continue resume sessions, Claude Max subscription, Compute equals success, Conversation tracker, GPT-4.1 mini summarization, Hacker News Claude Code thread (+7 more)
+
+### Community 392 - "Linear programming · Maximum-flow problem · NP-completeness theory"
+Cohesion: 0.13
+Nodes (15): For Tool Builders, Aider /ask conversational planning, build_file_path output directory pattern, Versioned diagram outputs per iteration, Mermaid AI agent CLI, Bulk diagram generation (-c count), Mermaid flowcharts, Mermaid pie chart diagrams (+7 more)
+
+### Community 393 - "Concrete Syntax Tree · Layer 1: Tree-Sitter (Syntax) — Handles… · Syntax tree view"
+Cohesion: 0.13
+Nodes (14): 1. Code Chunking, 2. Embedding Generation, 3. Vector Database Storage, 4. Real-time Sync, 5. Hybrid Search, How It Works, Implementation Stack (for our harness), Why Semantic > Grep (+6 more)
+
+### Community 394 - "Harness Multi-Language Strategy · Multi-language clients (Py/JS/Go/Ruby) · Retries and …"
+Cohesion: 0.13
+Nodes (14): Design-In, Lean Product and Process Development, Overall Equipment Effectiveness, Resident Engineer, Set-Based Concurrent Engineering, Total Productive Maintenance, Useable Knowledge, Coding Style — Direct from Linus (+6 more)
+
+### Community 395 - "Jagged frontier + context engineering · MCP all-or-nothing tool schemas · MCP as packag…"
+Cohesion: 0.13
+Nodes (14): 2. Environment Control Is the Moat, 5. Repository Knowledge as System of Record, 6. "Code Generation Is a Commodity" — The Pre-Build Layer Matters, 7. Generator-Evaluator Loop (GAN-Inspired), 8. Progressive Disclosure: Maps, Not Encyclopedias, 9. "No Manually-Written Code" Philosophy, Contradictions, Key Concepts (+6 more)
+
+### Community 396 - "Critical Model-Specific Rules · Temperature Tuning · Distinguishing Deduction from Exte…"
+Cohesion: 0.13
+Nodes (14): Contradictions, Critical Gaps Revealed, Integration Recommendations, Key Concepts, Key Entities, Key Findings, Open Questions, Overview (+6 more)
+
+### Community 397 - "Agentic Harness · Key Design Decisions · Pipeline Flow"
 Cohesion: 0.14
 Nodes (12): approval, bad, caps, check, ctx, entries, good, linkPath (+4 more)
 
-### Community 404 - "/e2e test self-healing skill · Soft skills for architects · modelInvocation: OFF for sk…"
+### Community 398 - "browser-harness — Self-Healing CDP Harness · Integration with ultimate-pi Harness (P30)…"
+Cohesion: 0.23
+Nodes (12): discoverAgents(), findNearestProjectAgentsDir(), isDirectory(), loadAgentsFromDir(), parseModelPreferences(), parseModelTier(), parseNumber(), parseOutputMode() (+4 more)
+
+### Community 399 - "Key Hook Events · Lifecycle Hook System · Claude Code hook events stream"
 Cohesion: 0.21
 Nodes (4): RunnerTracker, RunOptions, runSequence(), TrackedRunner
 
-### Community 406 - "Agent session fork · Public beta API · Billing roadmap"
+### Community 401 - "grep for the AI era · code:shell (brew install yoanbernabeu/t… · code:powershell (grepa…"
 Cohesion: 0.21
-Nodes (14): GPT-5.3 Codex, GPT-5 Codex, Claude Sonnet 4.5, Open Router, Claude Haiku 4.5, Cache read/write pricing dynamics, Gemini model tiers, Haiku as scouter / summarizer (+6 more)
+Nodes (13): createStarterSemgrepConfig(), findLocalSemgrepConfig(), findPiLensSemgrepConfigPath(), getPiLensSemgrepConfigPath(), isRegistryOrAutoConfig(), loadPiLensSemgrepConfig(), LOCAL_SEMGREP_CONFIG_NAMES, normalizeSemgrepConfigArg() (+5 more)
 
-### Community 407 - "Vision Grid app · Flux Pro · Flux Dev"
+### Community 402 - "Programmatic cross-field validation · Reviewer Principle (separate reviewer m… · Backgr…"
 Cohesion: 0.14
-Nodes (13): code:block2 (ultimate-pi harness migrate), Contradictions, Creative Solution: Content-Addressed Spec Identity, How It Works, Key Concepts, Key Entities, Key Findings, Migration Flow (+5 more)
+Nodes (13): 9. "What is the minimum viable breakthrough?", Ken Thompson's Productivity, Kernighan on Modern Programming, Kernighan's Thesis as Tool-Building Metaphor, Richard Hamming's Influence, The Birth of UNIX — Brian Kernighan Interview, The Pipes Breakthrough, The Unix Room Culture (+5 more)
 
-### Community 408 - "Cross-Book Bridges · CROSS_BOOK_BRIDGES.md · High-confidence equivalences (score ≥ 0…"
-Cohesion: 0.21
-Nodes (9): N(), nid(), add_node(), entry_for(), nid(), norm_stem(), build_nodes_edges(), main() (+1 more)
+### Community 403 - "Agent harness research seeds (2026-05-11) · Context compression · Execution layer"
+Cohesion: 0.2
+Nodes (13): Agentic Search Without Embeddings, References, 8. Agentic Search (No Embeddings), Elasticsearch with Vector Search, Other Notable Vector Search Options, Popular Vector Search Use Cases, Understanding Vector Search: Core Concepts, Vector Search vs. Traditional Search (+5 more)
 
-### Community 409 - "Wiki Dashboard · Entities Missing Sources · Open Questions"
+### Community 404 - "/e2e test self-healing skill · Soft skills for architects · modelInvocation: OFF for sk…"
 Cohesion: 0.14
 Nodes (13): Confidence, Evidence, Harness Implementation, In-Place Editing (Production Pattern), Q1: Can context be pruned in-place or must it always restart?, Q2: Minimum context that must survive pruning?, Q3: Does pruning break chain-of-thought coherence?, Q4: How does pruning interact with prompt caching? (+5 more)
 
-### Community 410 - "Research: claude-mem over Obsidian for … · Contradictions · Key Concepts"
-Cohesion: 0.2
-Nodes (12): Agentic Search Without Embeddings, References, 8. Agentic Search (No Embeddings), Elasticsearch with Vector Search, Other Notable Vector Search Options, Popular Vector Search Use Cases, Understanding Vector Search: Core Concepts, Agentic codebase search (ripgrep/glob) (+4 more)
-
-### Community 411 - "Research: Skill-First MVP & Harness Imp… · Architecture Comparison · Contradictions"
-Cohesion: 0.15
-Nodes (14): cookbook/ directory, curl google.com demo, ffmpeg --help demo command, Git commit as checkpoint, Meta-prompt: base→fork handoff, osascript macOS terminal launcher, prime.md onboarding prompt, prompts/ directory (+6 more)
-
-### Community 412 - "Benchmarks Don't Matter — Until They Do… · Four Fixes Applied · Core Finding"
-Cohesion: 0.3
-Nodes (14): ck MCP Tools, list_tools / call_tool MCP flow, Smithery MCP registry, ADW MCP prompt chains, Claude Code no MCP resources, Context model prompt triad, Correlation investigation prompt, DeepSeek R1.1 (+6 more)
-
-### Community 413 - "ADR-018: Single Harness Config File · Consequences · Decision"
+### Community 405 - "Text-to-SQL pipeline (two-step BAML) · Boundaryml 2024 09 16 Mitj2Ukpb-S Struc… · BAML …"
 Cohesion: 0.14
 Nodes (13): ADR-023: Hybrid Spec Format — Structured + Freeform Acceptance Criteria, code:yaml (request: "Fix the authentication timeout bug in auth.ts"), Consequences, Context, Decision, Enforcement, Field Definitions, Mitigations (+5 more)
 
-### Community 414 - "Dynamic Schemas · BAML vs JSON Schema · Invoice Processor Demo"
+### Community 406 - "Agent session fork · Public beta API · Billing roadmap"
 Cohesion: 0.14
 Nodes (13): 1. Project-level pi-vcc activation (not global), 2. Enable `overrideDefaultCompaction: true`, 3. Fix "model stops" with continuation directive, ADR-027: pi-vcc Overrides Built-in Auto-Compaction, Alternatives Considered, code:block1 ([Continue]), Consequences, Context (+5 more)
 
-### Community 415 - "ADR-014: isolated-vm for P43 TypeScript… · Consequences · Decision"
+### Community 407 - "Vision Grid app · Flux Pro · Flux Dev"
+Cohesion: 0.22
+Nodes (14): Jekyll & Hyde / dual selves metaphor, Automatic, mindless compliance under modern informational load, Mother turkey + stuffed polecat + cheep-cheep recorder (Fox), Chapter 1: Weapons of Influence, Fox, M. W. (ethology / turkey-polecat citation), Ethology — animal behavior in natural settings, Fixed-action patterns (stereotyped sequences triggered by key stimuli), Trigger features (single salient cues) (+6 more)
+
+### Community 408 - "Cross-Book Bridges · CROSS_BOOK_BRIDGES.md · High-confidence equivalences (score ≥ 0…"
+Cohesion: 0.18
+Nodes (14): Commitment devices and external deadlines, Hot–cold empathy gap (underpredict arousal), Interferon injections paired with movies (immediate reward), Procrastination and self-control, Berkeley sexual arousal decision-making study (Loewenstein), Skinner variable reinforcement / email as slot machine, Amway BUG (free product trial creating obligation), Public, active commitment as self-persuasion lever (+6 more)
+
+### Community 409 - "Wiki Dashboard · Entities Missing Sources · Open Questions"
+Cohesion: 0.21
+Nodes (14): Community 107 - "Architecture Style Selection", Community 10 - "Architecture & PM Governance", Community 11 - "Senior Engineering Leadership", Community 28 - "Engineering Leverage", Community 36 - "Architecture Strategy & Leverage Points", Community 79 - "High-Leverage Eng Culture", Community 9 - "Architecture: Concepts & Diagrams", Community 107 - "Architecture Style Selection" (+6 more)
+
+### Community 410 - "Research: claude-mem over Obsidian for … · Contradictions · Key Concepts"
+Cohesion: 0.22
+Nodes (14): Cyclomatic complexity metric, Fitness functions (architectural governance tests), Measuring architecture characteristics, Case: Reichart / Trophy Project schedule and cost overrun exposure, Cost control via comparing actual to planned (monitoring), Monitoring & controlling: track, compare, variance, corrective action, Recovery planning when milestones missed / budgets overrun, Goals vs measured indicators (distortion risks) (+6 more)
+
+### Community 411 - "Research: Skill-First MVP & Harness Imp… · Architecture Comparison · Contradictions"
+Cohesion: 0.29
+Nodes (14): PM obstacles: restructuring, technology change, forward pricing, Project complexity as obstacle to PM benefits, Risk evaluation embedded in planning process group, Technology-intensive projects: agile techniques, higher conflict, Uncertainty performance domain, Project Risk Management, Identify Risks, Monitor and Control Risks (+6 more)
+
+### Community 412 - "Benchmarks Don't Matter — Until They Do… · Four Fixes Applied · Core Finding"
+Cohesion: 0.14
+Nodes (14): Core Mental Model, Harness Engineering for Coding Agent Users, Harness Templates, Key Timing Principle: Keep Quality Left, Relevance to Our Harness, Three Regulation Categories, High-quality design enables one-shot code, BMAD framework reference (+6 more)
+
+### Community 413 - "ADR-018: Single Harness Config File · Consequences · Decision"
 Cohesion: 0.14
 Nodes (13): Architecture, code:block1 (Agent / Human), Deep Mode Workflow, Dependencies, Extension Event Hooks, Ingest Operations (wiki-ingest skill), Lint Operations (wiki-lint skill), Origin Principle (+5 more)
 
+### Community 414 - "Dynamic Schemas · BAML vs JSON Schema · Invoice Processor Demo"
+Cohesion: 0.27
+Nodes (14): Custom subagent static instructions, Dax tweet on shipping discipline, disable_model_invocation for skills, Docker workflow divergence analogy, Episode prep skill, Backend/FE subagent roleplay antipattern, General-purpose subagent, GitHub PR comment automation script (+6 more)
+
+### Community 415 - "ADR-014: isolated-vm for P43 TypeScript… · Consequences · Decision"
+Cohesion: 0.16
+Nodes (14): BAML Playground, Enum Value Rendering, License Settings, Multimodal Types, ESM/CJS Modules, Ship-it Friday, PDF Playground Testing, Playground Scroll Fix (+6 more)
+
 ### Community 416 - "Scarcity principle · Psychological reactance (lost freedoms … · Object of desire and ma…"
-Cohesion: 0.22
-Nodes (14): Analyzing algorithms and running time, Asymptotic notation, O-notation (asymptotic upper bound), Ω-notation (asymptotic lower bound), Θ-notation (asymptotically tight), Introduction to Algorithms, Fourth Edition (2022), o-notation, ω-notation (+6 more)
+Cohesion: 0.14
+Nodes (13): 1. System Prompt Rules (Weak), 2. MCP Tool Registration (Medium), 3. Shell Wrapper Interception (Medium-Strong), 4. Harness-Level Tool Routing (Strong), 5. Post-Hoc Validation (Weak), code:markdown (## Search Policy), code:bash (claude mcp add ck-search -s user -- ck --serve), code:python (def pre_exec_hook(command: str) -> str:) (+5 more)
 
 ### Community 417 - "Planning fallacy · Law of Shortsightedness · Overconfidence"
-Cohesion: 0.29
-Nodes (14): Action plan: Who? Does what? By when? Follow-up?, Document your work (commitments in writing), Move to Action, Risk evaluation embedded in planning process group, Uncertainty performance domain, Project Risk Management, Identify Risks, Monitor and Control Risks (+6 more)
+Cohesion: 0.21
+Nodes (9): N(), nid(), add_node(), entry_for(), nid(), norm_stem(), build_nodes_edges(), main() (+1 more)
 
 ### Community 418 - "Fundamentals of Software Architecture (… · Maintainability · Software architecture"
-Cohesion: 0.16
-Nodes (14): Open source software as social-norm motivation, Bias reduction: anonymized challenge review, CV screening heuristics, Kellan Elliott-McCrea pragmatic OSS advice, Open source as recruiting signal, Practical challenge (take-home or on-site), Initial screening call / video, Open Source (+6 more)
+Cohesion: 0.14
+Nodes (13): code:block2 (ultimate-pi harness migrate), Contradictions, Creative Solution: Content-Addressed Spec Identity, How It Works, Key Concepts, Key Entities, Key Findings, Migration Flow (+5 more)
 
 ### Community 419 - "Fault tolerance · Distill — Deterministic Context Compres… · Human errors"
 Cohesion: 0.15
 Nodes (13): Always in sync, Codex CLI, Cursor, Find code you couldn't grep, Instant results, Know impact before you change, Semantic Code Search for AI Agents | grepai, Your AI agent gets smarter (+5 more)
 
 ### Community 420 - "Writing cache-friendly code · Caching Layer Design · Community 69 - "Cache-Friendly Cod…"
-Cohesion: 0.14
-Nodes (13): 1. System Prompt Rules (Weak), 2. MCP Tool Registration (Medium), 3. Shell Wrapper Interception (Medium-Strong), 4. Harness-Level Tool Routing (Strong), 5. Post-Hoc Validation (Weak), code:markdown (## Search Policy), code:bash (claude mcp add ck-search -s user -- ck --serve), code:python (def pre_exec_hook(command: str) -> str:) (+5 more)
+Cohesion: 0.15
+Nodes (14): cookbook/ directory, curl google.com demo, ffmpeg --help demo command, Git commit as checkpoint, Meta-prompt: base→fork handoff, osascript macOS terminal launcher, prime.md onboarding prompt, prompts/ directory (+6 more)
 
 ### Community 421 - "Divide-and-conquer design paradigm · Recurrences for recursive algorithms · MERGE-SORT"
-Cohesion: 0.16
-Nodes (14): BAML Playground, Enum Value Rendering, License Settings, Multimodal Types, ESM/CJS Modules, Ship-it Friday, PDF Playground Testing, Playground Scroll Fix (+6 more)
-
-### Community 422 - "resolved-treesitter-dynamic-languages.md · Three-Layer Solution · Confidence"
-Cohesion: 0.2
-Nodes (13): AI Prompt Pattern, Adversarial Verification, AI Prompt Pattern, Critic Focus Areas, Extension Interface, Files, Retry Logic, Verdict Semantics (+5 more)
-
-### Community 423 - "Build-Time Prompt Compilation.md · Two-Phase Variable Model · Token Budget Awareness"
-Cohesion: 0.14
-Nodes (13): Augment's Answer: Context Engines, Beyond Code Generation, Key Arguments, Live Demo: Git Branch Status Bar, Relevance to Implementation, Summary, Why AI Coding Feels Junior, Boundary engineering team (+5 more)
-
-### Community 424 - "Harness Implementation Plan (Skill-Firs… · Unified Token Budget · First Principles"
 Cohesion: 0.2
 Nodes (14): PEV Loop (Plan-Execute-Verify), Decision-maker chain, Plan-then-execute, Agent OS, Deepgram / TTS, GPT Store, I/O tools / function calling, LLM OS (Karpathy) (+6 more)
 
-### Community 425 - "TITLE_POSITIVE harness keywords · GitHub Copilot subscription in Pi · Claude Code (poli…"
+### Community 422 - "resolved-treesitter-dynamic-languages.md · Three-Layer Solution · Confidence"
 Cohesion: 0.14
-Nodes (13): 9. "What is the minimum viable breakthrough?", Ken Thompson's Productivity, Kernighan on Modern Programming, Kernighan's Thesis as Tool-Building Metaphor, Richard Hamming's Influence, The Birth of UNIX — Brian Kernighan Interview, The Pipes Breakthrough, The Unix Room Culture (+5 more)
+Nodes (13): Augment's Answer: Context Engines, Beyond Code Generation, Key Arguments, Live Demo: Git Branch Status Bar, Relevance to Implementation, Summary, Why AI Coding Feels Junior, Boundary engineering team (+5 more)
 
-### Community 426 - "Claude Code Damage Control repo/skill · Claude Code (workshop) · Ask user question tool"
-Cohesion: 0.14
-Nodes (12): code:block2 (1. Check local cache: .pi/harness/specs/<id>.json — read spe), Embedding Points, Fingerprint Generation, Idempotency Guarantee, Implementation Complexity, Prior Art, Resolution Algorithm, The Solution: Content-Hash Identity (+4 more)
+### Community 423 - "Build-Time Prompt Compilation.md · Two-Phase Variable Model · Token Budget Awareness"
+Cohesion: 0.2
+Nodes (13): AI Prompt Pattern, Adversarial Verification, AI Prompt Pattern, Critic Focus Areas, Extension Interface, Files, Retry Logic, Verdict Semantics (+5 more)
 
-### Community 427 - "think-in-code.md · Enforcing in Agentic Harness · Method 4: MCP Execution Tool"
-Cohesion: 0.3
-Nodes (14): agent thesis, api weirdness, bench critique, gitignore pat, gpt5 eval, haiku grade, hop lop, mini wins (+6 more)
-
-### Community 428 - "Critical Findings · anthropic2026-harness-design.md · Three-Agent Architecture"
+### Community 424 - "Harness Implementation Plan (Skill-Firs… · Unified Token Budget · First Principles"
 Cohesion: 0.3
 Nodes (14): agentic prompt, create image, edit image, horizon pointer, important kw, input out frame, load docs loop, metadata sec (+6 more)
 
-### Community 429 - "Tree-sitter parsing mention · Aider tree-sitter index approach · aider-repomap-tree-sit…"
-Cohesion: 0.15
-Nodes (9): agents, allowed, body, disallowed, disallowedMatch, effective, result, scoutPath (+1 more)
-
-### Community 430 - "Lovable Clone Architecture (Neel S, Sep… · Source: Lovable Architecture & Clone An… · S…"
+### Community 425 - "TITLE_POSITIVE harness keywords · GitHub Copilot subscription in Pi · Claude Code (poli…"
 Cohesion: 0.15
 Nodes (11): allDiagnostics, byRule, ctx, diagnostics, __dirname, files, pi, rel (+3 more)
 
-### Community 431 - "gitingest.md · Output Format · Integration Surface"
-Cohesion: 0.18
-Nodes (9): C_HEADER_EXTENSIONS, C_SOURCE_EXTENSIONS, CompilerSpec, CPP_HEADER_EXTENSIONS, CPP_SOURCE_EXTENSIONS, cppCheckRunner, getGccLikeCandidates(), headerLooksLikeCpp() (+1 more)
-
-### Community 432 - "OpenAI fine-tuning · Prompt engineering before fine-tune · Expansion prompt (few tokens…"
+### Community 426 - "Claude Code Damage Control repo/skill · Claude Code (workshop) · Ask user question tool"
 Cohesion: 0.15
-Nodes (12): Contributing, Forks, GitHub - yoanbernabeu/grepai: Semantic Search &amp; Call Graphs for AI Agents (100% Local) · GitHub, GitHub - yoanbernabeu/grepai: Semantic Search & Call Graphs for ..., License, Resources, Security policy, Stars (+4 more)
+Nodes (12): Approach 1: Argument Hash Comparison (Recommended), Approach 2: Sliding Window Rate Detection, Approach 3: LLM Output Similarity, Budget Guardrails, code:python (def compute_call_hash(tool_name: str, args: dict) -> str:), Intervention Options, Relevance to Meta-Agent Concept, Summary (+4 more)
 
-### Community 433 - "Structured Planning · Flow · Review Gate"
+### Community 427 - "think-in-code.md · Enforcing in Agentic Harness · Method 4: MCP Execution Tool"
 Cohesion: 0.15
 Nodes (12): code:block1 (Skill: /gitingest), Contradictions, Critical Evaluation: Gitingest, Critical Evaluation: GitReverse, How to integrate, Key Findings, Open Questions, Overview (+4 more)
 
-### Community 434 - "Deterministic context curation · Tool Shed ~500 MCP tools · Core Capabilities"
-Cohesion: 0.17
-Nodes (13): Anti vibe-coding stance, Caption burn-in step, CLI flag step architecture, Cut it Up application, FFmpeg clip/crop pipeline, GPT-3.5 turbo option, GPT-4 clip selection, Master disruption source video (+5 more)
-
-### Community 435 - "Harness Configuration Layers · L2: Gate Design · Layer Architecture"
-Cohesion: 0.15
-Nodes (13): Architecture, Development Velocity, Key Features, sentrux GitHub Repository, Stats (as of May 2026), Architecture, Core Workflow, Key Insight (+5 more)
-
-### Community 436 - "Gemini 3 Pro · SQLite CRUD full-stack demo · Artificial Analysis benchmarks"
+### Community 428 - "Critical Findings · anthropic2026-harness-design.md · Three-Agent Architecture"
 Cohesion: 0.15
 Nodes (12): Build-Time Prompt Compilation — Real Tools & Architecture, code:block1 (prompts/*.yaml (base specs)), DIY Build Pipeline, Microsoft prompt-engine, PromptWeaver, Recommended Implementation, Relevance to ultimate-pi Prompt Renderer, Stack (+4 more)
 
-### Community 437 - "6. L4: Adversarial Verification — `harn… · Agent OS (composable agents) · Critic Agent …"
-Cohesion: 0.54
-Nodes (13): Human review gate, Background agent jobs, Branch safety practices, Cost tracking discipline, Docs-as-code for agents, Engineering velocity, Lint-to-agent migration, Model switching workflow (+5 more)
-
-### Community 438 - "Research: pi-vcc · Contradictions · Key Concepts"
+### Community 429 - "Tree-sitter parsing mention · Aider tree-sitter index approach · aider-repomap-tree-sit…"
 Cohesion: 0.15
-Nodes (12): Contradictions, Harness Integration Map, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: sentrux.dev (+4 more)
+Nodes (12): Complement, Contradictions, First-Principles Criteria, Key Findings, Open Questions, Overview, Recommended Operating Model, Replace (+4 more)
 
-### Community 439 - "Research: Engineering Workflows of Lege… · Contradictions · Key Concepts"
+### Community 430 - "Lovable Clone Architecture (Neel S, Sep… · Source: Lovable Architecture & Clone An… · S…"
 Cohesion: 0.15
-Nodes (12): ADR-021: Explicit Command for Harness Activation, code:block1 (/harness "fix the authentication bug in auth.ts"), Command Registration, Consequences, Context, Decision, Flags, Lifecycle (+4 more)
+Nodes (12): code:yaml (task: string            # from L1 hardened spec (~100 tokens), code:block3 (L1 (Spec) → L2 (Plan) → [L2.5: LLM-First Drift Monitor] → L3), Drift Detection — Unified Framework (LLM-First v2), Integration Into Pipeline, Key Entities, Open Questions, Paradigm 1: Tool-Call Drift (L2.5 — Runtime Drift Monitor) [LLM-FIRST v2], Paradigm 2: Spec Drift (L3 — Grounding Checkpoints) (+4 more)
 
-### Community 440 - "Research: TypeScript Execution Layer fo… · Contradictions · Key Concepts"
-Cohesion: 0.19
-Nodes (13): Burning Man gift economy (no cash), Crowding out: money can reduce intrinsic motivation, Filene's Basement Running of the Brides, Gifts vs cash in social relationships, Hot–cold empathy gap (underpredict arousal), Berkeley sexual arousal decision-making study (Loewenstein), Social norms, Ten Commandments recall reduces matrix cheating (+5 more)
+### Community 431 - "gitingest.md · Output Format · Integration Surface"
+Cohesion: 0.32
+Nodes (13): agent ux, cli wrap, compute ladder, course site, file presentation, five patterns, hitl, horizon tease (+5 more)
 
-### Community 441 - "7 Learnings from Anders Hejlsberg · 1. Fast feedback matters more than almo… · 2. Scali…"
-Cohesion: 0.15
-Nodes (12): Broader Compaction Landscape (May 2026), Definition, Deterministic Session Compaction, Implementations, Pattern for Harness Integration, Production, Proposed (Not Implemented), Why It Matters (+4 more)
-
-### Community 442 - "context-mode.com · Architecture · Compression Results (claimed)"
-Cohesion: 0.22
-Nodes (13): Configuration parameters (complexity pushed to callers), Red flag: Temporal Decomposition, Temporal decomposition (structure by time/order), Blackboard pattern for opportunistic collaboration, Metaprogramming: programs that write/configure programs, Temporal coupling (time/sequence dependencies), Part 5: Bend, or Break, Tip: Blackboards (+5 more)
-
-### Community 443 - "leanctx.com · Agent Governance · Architecture (3 layers)"
-Cohesion: 0.15
-Nodes (11): Tip: The Specification Trap, Cursor: How Forking VS Code Built a $29B Company, Relevance to Harness, The Extension Trap, The Fork = Root Access, Vertical Agent Thesis, Provider Differences, Relevance to ultimate-pi Prompt Renderer (+3 more)
-
-### Community 444 - "Superpowers Methodology · The Brainstorm → Plan → Implement → Rev… · code:block1 (User …"
-Cohesion: 0.15
-Nodes (12): code:block1 (Task → Single agent self-critique (L1/L2/L4 as appropriate)), Confidence, Harness Implementation, Q1: Do iMAD hesitation cues generalize from QA to code review?, Q2: Can a single classifier work across L1 (spec), L2 (plan), L4 (code)?, Q3: Should the classifier be model-specific?, Q4: Optimal convergenceRounds? (from consensus-debate), Q5: Same model for both sides, or different models? (from consensus-debate) (+4 more)
-
-### Community 445 - "Structured Compaction Pipeline · Compaction Instructions · code:markdown (# Summary ins…"
-Cohesion: 0.15
-Nodes (13): Dual-Memory Architecture, Event-Driven System Reminders, Key Techniques, Lazy Tool Discovery, Prompt Caching, Tool Result Optimization, Prompt caching (mentioned as future topic), Prompt caching / multi-request pricing (+5 more)
-
-### Community 446 - "Wiki Index · Concepts · Entities"
+### Community 432 - "OpenAI fine-tuning · Prompt engineering before fine-tune · Expansion prompt (few tokens…"
 Cohesion: 0.15
 Nodes (13): Implementation Plan: Integration into Our Agentic Coding Harness, Module 1: Semantic Codebase Indexer, Module 2: Context Retrieval Engine, Module 6: Multi-Source Context Aggregation, Retrieval Augmented Generation (RAG), Agentic RAG multi-tool retrieval, Full-document metadata tool, Excel/CSV tabular ingestion path (+5 more)
 
-### Community 447 - "ADR-026: Replace CLI Cursor Provider wi… · Consequences · Alternatives considered"
+### Community 433 - "Structured Planning · Flow · Review Gate"
+Cohesion: 0.15
+Nodes (12): ADR-021: Explicit Command for Harness Activation, code:block1 (/harness "fix the authentication bug in auth.ts"), Command Registration, Consequences, Context, Decision, Flags, Lifecycle (+4 more)
+
+### Community 434 - "Deterministic context curation · Tool Shed ~500 MCP tools · Core Capabilities"
 Cohesion: 0.19
-Nodes (13): Cole Medin (channel), LiveKit, Transcript unavailable (scraping), Voice AI agent, Docker Desktop, Docker MCP catalog, Docker MCP gateway, Gemini 2.5 Flash (inferred Gordon backend) (+5 more)
+Nodes (13): Google Gemini 3, code:block3 (STRUCTURE: Plain text sections), Google Gemini 3 Profile, Google Gemini (provider ecosystem), Gemini bias toward Google, JSON-mode assertions, Save money/time via prompt tests, Temperature / sampling (+5 more)
 
-### Community 448 - "ADR-013: Biome for Phase 16 Determinist… · Consequences · Context"
+### Community 435 - "Harness Configuration Layers · L2: Gate Design · Layer Architecture"
 Cohesion: 0.22
-Nodes (13): Structured agent_conversations.json logging, PostgresAgentInstruments centralized store, agent_results session directory layout, ConversationResult typed return (messages cost tokens), Per-run cost and token reporting, dataclasses.asdict for JSON export, dataclass Chat message model, Python 3.10+ match statement for results (+5 more)
+Nodes (13): Configuration parameters (complexity pushed to callers), Red flag: Temporal Decomposition, Temporal decomposition (structure by time/order), Blackboard pattern for opportunistic collaboration, Metaprogramming: programs that write/configure programs, Temporal coupling (time/sequence dependencies), Part 5: Bend, or Break, Tip: Blackboards (+5 more)
 
-### Community 449 - "Wiki Query Interface (claude-obsidian S… · Architecture · code:block1 (Agent / Human)"
+### Community 436 - "Gemini 3 Pro · SQLite CRUD full-stack demo · Artificial Analysis benchmarks"
+Cohesion: 0.19
+Nodes (12): Committee sponsorship/governance for complex projects, Corporate governance vs. project governance (alignment, dashboards), Project governance dashboards: time, cost, scope, risk, deliverables, Executive / project sponsor as ally for escalation, Project governance as decision-making framework, Sponsor and governance hold much real authority, Monitor and Control Project Work, Bun (+4 more)
+
+### Community 437 - "6. L4: Adversarial Verification — `harn… · Agent OS (composable agents) · Critic Agent …"
+Cohesion: 0.18
+Nodes (13): Exit criteria and quality bar before release, Dancing with Risk, Making Change Possible, The Making of Community, Organizational Learning, Quality—If Time Permits, The Self-Healing System, Steady-state cheeseburger production mentality (+5 more)
+
+### Community 438 - "Research: pi-vcc · Contradictions · Key Concepts"
+Cohesion: 0.15
+Nodes (12): Comparison With Other Agents, Best Practices for Coding with Agents, Context Management, Harness Components, Relevance to Harness, Ideation with coding agents, Cookbook markdown workflows, Nine-step install workflow (+4 more)
+
+### Community 439 - "Research: Engineering Workflows of Lege… · Contradictions · Key Concepts"
+Cohesion: 0.15
+Nodes (12): code:block1 (Task → Single agent self-critique (L1/L2/L4 as appropriate)), Confidence, Harness Implementation, Q1: Do iMAD hesitation cues generalize from QA to code review?, Q2: Can a single classifier work across L1 (spec), L2 (plan), L4 (code)?, Q3: Should the classifier be model-specific?, Q4: Optimal convergenceRounds? (from consensus-debate), Q5: Same model for both sides, or different models? (from consensus-debate) (+4 more)
+
+### Community 440 - "Research: TypeScript Execution Layer fo… · Contradictions · Key Concepts"
+Cohesion: 0.19
+Nodes (13): Phase 1: Core Reasoning (Claude Sonnet 3.7), Claude Sonnet 4.6, Claude Sonnet, 1M token context window, Claude Sonnet 4.6, Claude 3 Sonnet, Claude 3.5 Sonnet + Artifacts, Anthropic server error transient (+5 more)
+
+### Community 441 - "7 Learnings from Anders Hejlsberg · 1. Fast feedback matters more than almo… · 2. Scali…"
+Cohesion: 0.23
+Nodes (13): Claude Sonnet 4.5, Open Router, Claude Haiku 4.5, Cache read/write pricing dynamics, Claude Opus 4.1, Gemini model tiers, Haiku as scouter / summarizer, Second-sentence instruction drift (+5 more)
+
+### Community 442 - "context-mode.com · Architecture · Compression Results (claimed)"
 Cohesion: 0.15
 Nodes (12): ADR-016: @tintinweb/pi-subagents for L4 Critic and Sub-Agent Infrastructure, code:yaml (---), Consequences, Context, Critic Agent Definition, Decision, Harness Integration, Mitigations (+4 more)
 
-### Community 450 - "Horizontal scaling (scale out) · Community 17 - "Replication & Scaling Out" · Community…"
-Cohesion: 0.24
-Nodes (13): Aider AI pair programmer, unittest.mock patch patterns, Notion API integration, notion.py module, OPENAI_API_KEY environment variable, pytest, Self-correcting tests via test output, Aider /clear history (+5 more)
+### Community 443 - "leanctx.com · Agent Governance · Architecture (3 layers)"
+Cohesion: 0.22
+Nodes (13): Structured agent_conversations.json logging, PostgresAgentInstruments centralized store, agent_results session directory layout, ConversationResult typed return (messages cost tokens), Per-run cost and token reporting, dataclasses.asdict for JSON export, dataclass Chat message model, Python 3.10+ match statement for results (+5 more)
 
-### Community 451 - "ELF relocatable object files · Community 114 - "ELF Object Files" · ELF executable obje…"
+### Community 444 - "Superpowers Methodology · The Brainstorm → Plan → Implement → Rev… · code:block1 (User …"
 Cohesion: 0.19
 Nodes (13): Composing multiple agent teams, Broadcast fan-out conversation flow, Composing sequential then broadcast pipelines, Custom Orchestrator conversation controller, Text JSON YAML report analyst agents, OpenAI-style function call sequencing, GPT-4 as orchestration backbone, AutoGen group chat inconsistency (narrative) (+5 more)
 
-### Community 452 - "Community Consensus · Community 32 - "Linearizability & Conse… · GSD Hacker News Discus…"
+### Community 445 - "Structured Compaction Pipeline · Compaction Instructions · code:markdown (# Summary ins…"
+Cohesion: 0.15
+Nodes (13): Static vs dynamic linking, Element: examples, Element: purpose, Element: variables, Five essential prompt elements, 80/20 prompt framing, Python examples block, Single-purpose prompts (+5 more)
+
+### Community 446 - "Wiki Index · Concepts · Entities"
+Cohesion: 0.21
+Nodes (13): 4. Keep Rate + LLM-as-Judge Metrics, Measurement: Keep Rate + LLM-as-Judge, Actor-critic multi-request cost growth, LLM-as-judge, ollama local, llm judge tradeoffs, Human audit sampling, Human ranking judge (+5 more)
+
+### Community 447 - "ADR-026: Replace CLI Cursor Provider wi… · Consequences · Alternatives considered"
+Cohesion: 0.15
+Nodes (12): Contradictions, Harness Integration Map, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: sentrux.dev (+4 more)
+
+### Community 448 - "ADR-013: Biome for Phase 16 Determinist… · Consequences · Context"
+Cohesion: 0.15
+Nodes (12): Contributing, Forks, GitHub - yoanbernabeu/grepai: Semantic Search &amp; Call Graphs for AI Agents (100% Local) · GitHub, GitHub - yoanbernabeu/grepai: Semantic Search & Call Graphs for ..., License, Resources, Security policy, Stars (+4 more)
+
+### Community 449 - "Wiki Query Interface (claude-obsidian S… · Architecture · code:block1 (Agent / Human)"
 Cohesion: 0.32
 Nodes (13): cli spawn, ctx eng, focus agent, mcp bloat, mcp spawn, multi primary, outloop, reduce delegate (+5 more)
 
-### Community 453 - "String matching · Fast Fourier transform · Knuth–Morris–Pratt algorithm"
-Cohesion: 0.15
-Nodes (12): code:block1 (===============================================), How It Works, Integration Surface, Output Format, Relevance to ultimate-pi, Stack, What It Is, ctx.output_format / prefix hints (+4 more)
+### Community 450 - "Horizontal scaling (scale out) · Community 17 - "Replication & Scaling Out" · Community…"
+Cohesion: 0.33
+Nodes (13): CLAUDE.md global rules, Devlog documentation, Dynamis community, AI coding hackathon, Amazon Kiro / Q Developer coding agent (video theme), Kiro CLI, Markdown workflow commands, MCP servers in Kiro (+5 more)
 
-### Community 454 - "Team first: sacred high-performing teams · Alternate rapid hiring with gelling per… · R…"
-Cohesion: 0.17
-Nodes (6): entries, { pi, invoke }, { pi, invoke, notifyCalls }, result, serialized, snapshot
-
-### Community 455 - "Python · Ruff (astral-sh/ruff) · Ruff / Astral uv"
+### Community 451 - "ELF relocatable object files · Community 114 - "ELF Object Files" · ELF executable obje…"
 Cohesion: 0.21
 Nodes (11): CocoIndex Code (CLI + skill), Design references (not vendored), Harness lens (derived from pi-lens), Harness lens (harness-native), pi-lens (vendored), pi-model-router (vendored), pi-subagents (vendored), pi-vcc (vendored) (+3 more)
 
-### Community 456 - "Agentic Harness · Token Budget · Key Design Decisions"
+### Community 452 - "Community Consensus · Community 32 - "Linearizability & Conse… · GSD Hacker News Discus…"
 Cohesion: 0.21
 Nodes (10): CallEdge, CallGraph, SerializableCallGraph, SerializableSymbolIndex, Symbol, SymbolIndex, SymbolKind, SymbolRef (+2 more)
 
-### Community 457 - "Research: sentrux.dev · Contradictions · Key Concepts"
+### Community 453 - "String matching · Fast Fourier transform · Knuth–Morris–Pratt algorithm"
 Cohesion: 0.26
 Nodes (11): fail(), fileExists(), hashContent(), main(), MANIFEST, mergeRules(), META_PATH, renderManagedBlock() (+3 more)
 
-### Community 458 - "fork-safe-spec-storage.md · The Solution: Three-Layer Isolation · Layer 2: `harness ini…"
+### Community 454 - "Team first: sacred high-performing teams · Alternate rapid hiring with gelling per… · R…"
 Cohesion: 0.17
 Nodes (11): code:block1 (graphify  ←  architecture understanding, call graph tracing,), Decision: smgrep is best ck replacement, Graphify Already Handles What These Tools Promise, Key Architectural Divergence, Open Questions, Research Summary, Semantic Code Search Tools: Comprehensive Comparison (2026), Sources (+3 more)
 
-### Community 459 - "vgrep-semantic-search.md · Setup · code:bash (vgrep init              # ~1…"
-Cohesion: 0.21
-Nodes (12): Phase 1: Core Reasoning (Claude Sonnet 3.7), Claude Sonnet 4.6, Frequent Intentional Compaction, Research-Plan-Implement Workflow, Claude Sonnet, Claude Sonnet 4.6, Claude 3 Sonnet, Claude 3.5 Sonnet + Artifacts (+4 more)
-
-### Community 460 - "Layers · progressive-disclosure-agents.md · L2: File Context (on request)"
-Cohesion: 0.17
-Nodes (11): Alternatives Considered, Changes Made, Consequences, Context, Decision, Dependencies, Negative, Neutral (+3 more)
-
-### Community 461 - "Source: Rocket.new — Vibe Solutioning P… · Three Capabilities · Relevance to AI Coding …"
-Cohesion: 0.17
-Nodes (11): code:block1 (User Input → packages/cli (frontend) → packages/core (backen), Core Architecture, Free Tier Economics, Overview, Relevance to Ultimate-PI, Technology Stack, Core Capabilities, Free Tier (Unprecedented) (+3 more)
-
-### Community 462 - "General Principles (All Models) · anthropic-prompt-best-practices.md · Export best prompt"
-Cohesion: 0.23
-Nodes (11): Google Cloud, Relevance to Harness, Google Cloud setup friction, OpenAI API developer experience, Privacy as evaluation dimension, Provider latency variance, Regex-based Promptfoo assertions, Safety / alignment restrictiveness (+3 more)
-
-### Community 463 - "context-drift-in-agents.md · Two Definitions · 1. Stale Environment Context (Infrastru…"
-Cohesion: 0.17
-Nodes (11): Agent Integration, Architecture Boundaries, Benchmarks (Apple M5, median of 5 runs with 2 warmups), code:block1 (npx fallow --format json), Complexity Analysis, Core Capabilities, Dead Code Detection, Duplication Detection (+3 more)
-
-### Community 464 - "/install command · Agent validates install output · Interactive install flow"
-Cohesion: 0.17
-Nodes (11): code:block1 (For each ready node in plan:), code:json ({), Config, Drift Detection, Error States, Extension Interface, Files, Flow (+3 more)
-
-### Community 465 - "ctx.output_format (schema in prompt) · Baururazalinov 2026 03 30 9F4B3Xzjjkq O… · Facts…"
-Cohesion: 0.17
-Nodes (11): Anti-Piracy Posture, Build Pipeline, CLI Commands, code:json ({), code:bash (sentrux login              # GitHub OAuth → purchase), Design Principles, License Key Format, Pro Features (vs Free) (+3 more)
-
-### Community 466 - "Keyword / LLM agent router · Bash and browser agent flows · Speech-to-text (STT)"
-Cohesion: 0.18
-Nodes (12): Black Forest Labs, Cloud storage for generated images, Flux Dev, Flux Pro, Flux Pro ~5 cents per image, Flux Schnell, Flux Schnell low cost per image, Four-chapter narrative structure (+4 more)
-
-### Community 467 - "Replicate API · csv extend · finance viz"
-Cohesion: 0.45
-Nodes (12): Boundary GitHub org triage, Ship-it changelog communication to users, client.setPrimary documentation improvement, Discord support thread routing, GitHub issue on client registry clarity, Hotfix cherry-pick workflow, JetBrains plugin parity with VS Code, PDF fixture tests in CI (+4 more)
-
-### Community 468 - "guardian-agent-pattern.md · Two Variants · Complementary Approaches"
-Cohesion: 0.38
-Nodes (12): ADW agentic workflow, Beni reference codebase, Claude 4 Opus, Git worktrees parallel agents, Merge best parallel outcome, Nondeterminism hedging, Opus token expense, Parallel sub-agents pattern (+4 more)
-
-### Community 469 - "vectara-guardian-agents.md · Relevance to Meta-Agent Concept · Benchmark Design"
-Cohesion: 0.17
-Nodes (11): ADR-012: Extension-Based Harness Orchestrator — Leveraging Pi's Native Event System, Consequences, Context, Correction from Original (2026-05-04), Decision, Enforcement Model — Updated, Event-to-Pipeline Mapping, Mitigations (+3 more)
-
-### Community 470 - "Key Analysis Points · Superpowers: Skills Framework Reshaping… · superpowers-termdock-a…"
-Cohesion: 0.17
-Nodes (11): ADR-019: Tool-Based Q&A for L1 Spec Clarification, Consequences, Constraints, Context, Decision, Fallback, Flow, Mitigations (+3 more)
-
-### Community 471 - "web search tool · afk mcp prompt · agent device"
-Cohesion: 0.29
-Nodes (11): Community Hubs (Navigation), Corpus Check, God Nodes (most connected - your core abstractions), Graph Freshness, Graph Report - /home/aryaniyaps/ai-projects/ultimate-pi/data/research-papers  (2026-05-13), Graph Report - ultimate-pi  (2026-05-13), Hyperedges (group relationships), Knowledge Gaps (+3 more)
-
-### Community 472 - "auto compact · context half use · toggle autocompact"
-Cohesion: 0.26
-Nodes (12): Community 15 - "Scheduling Truth & Estimation", Community 41 - "EVM & Project Health Metrics", Community 42 - "Operational Reviews & Metrics", Community 57 - "Coupling Metrics & Operability", Community 85 - "Coupling Distance & Decoupling", Community 8 - "Metrics & Estimation", Community 15 - "Scheduling Truth & Estimation", Community 41 - "EVM & Project Health Metrics" (+4 more)
-
-### Community 473 - "constants eval · judge opus · provider sw"
-Cohesion: 0.27
-Nodes (12): Keeping options open / Buridan-style overchoice costs, Accelerating pace of life increases shortcut reliance, Farsighted perspective, Law of Grandiosity, Law of Shortsightedness, Social media amplification of primitive drives, Success delusion, Inside view (+4 more)
-
-### Community 474 - "Open Source · Shopify Roast (open source) · Open source as recruiting signal"
-Cohesion: 0.24
-Nodes (12): Fudge factor: small dishonesty not maximal, Cognitive dissonance (linked to consistency pressures), Rationalization and cover stories, Base-rate neglect, Causal stories about chance, Hindsight bias, Narrative fallacy / coherent stories, Natural frequency facilitation (+4 more)
-
-### Community 475 - "Codex Harness Innovations · Cole's Claude/Codex harness repo · Codex CLI harness"
-Cohesion: 0.18
-Nodes (12): Withdrawing from the conversation, Victim story, Jim Collins Good to Great: Scott Paper resigned comparison vs P&G — downward comparison, Study: fixed mindset students viewed worse peers’ tests after failure; growth viewed better peers’ tests, Study note: college students post-failure comparisons — with David Nussbaum, Apathy in camp, Capos (trustee prisoners), Delusion of reprieve (+4 more)
-
-### Community 476 - "7. Git Worktrees · 14. Git Worktrees (v0.36+) · Git worktrees"
-Cohesion: 0.48
-Nodes (12): OpenAI Agents SDK (TypeScript), Zod schemas, dag as code, dynamic few shot, few shot risks, golden real inputs, observability traces, piecewise tests (+4 more)
-
-### Community 477 - "Model-Specific Key Findings · Cross-Model Patterns · openai-prompt-guidance.md"
-Cohesion: 0.17
-Nodes (12): 2.1 Harness Types (`src/harness/types.ts`), 2.2 Config (`src/harness/config.ts` + `.pi/harness/config.json`), 2.3 Event Routing (Pi's Built-in Event Bus), 2. Foundation (F0) — Phase 0 (CODE), code:typescript (// Spec after hardening (generated by L1 skill)), code:block5 (Pi Native Event          → Skill Action), HTML selector scraping config, JSON provider configuration (+4 more)
-
-### Community 478 - "Context Folding · Mechanism · Why It Matters"
-Cohesion: 0.18
-Nodes (12): CORD HuggingFace dataset, Receipt extraction, Elite information diet, Junk in junk out curation, Simon Willison blog stream, Streamlit UI, Zero noise information tool, Evaluator merge function (+4 more)
-
-### Community 479 - "_gen_chunk09.py · edge() · node()"
-Cohesion: 0.18
-Nodes (11): code:block1 (FEEDFORWARD (Guides)                   FEEDBACK (Sensors)), code:block2 (┌──────────────────────────────────────────────────────────┐), Feedforward-Feedback: Control Flow (Böckeler/Fowler 2026), Generator-Evaluator: Agent Topology (Anthropic 2026), H-Formalism: Component Taxonomy (Meng 2026), Harness Control Frameworks — Unified, How They Fit Together, The Three Frameworks (+3 more)
-
-### Community 480 - "gen_chunk12.py · nid() · ref()"
-Cohesion: 0.17
-Nodes (12): Enforcement Layers, Layer 1: System Prompt / Instructions (cheapest, least reliable), Layer 2: PreToolUse Interception (medium cost, high reliability), Layer 3: PostToolUse Compression (medium cost, medium reliability), Layer 4: Tool Replacement (highest cost, highest reliability), Layer 5: Governance & Monitoring (supplemental), Layer 6: TypeScript Execution Layer (emerging, high potential), claw.md global agent rules (+4 more)
-
-### Community 481 - "main() · _gen_chunk18.py · nid()"
-Cohesion: 0.21
-Nodes (12): Cookbook per subcommand, IDD library repos, just file (mentioned stack), Library meta-skill, library.yaml reference catalog, Private GitHub references, Pure agentic application pattern, library push (+4 more)
-
-### Community 482 - "Frontmatter Gaps (169) · Missing `created` field (58 pages) · Missing `status` field (5…"
-Cohesion: 0.17
-Nodes (12): Skepticism of vendor benchmarks, Code explanation <100 words prompt, Hello name readiness prompt, Local model freezing host during huge context, Manual vote/score UI for outputs, Model ranking notebook, Needle-in-haystack retrieval test, NL-to-SQL prompt suite (+4 more)
-
-### Community 483 - "Recommended Integration Priority (First… · Priority 3: Research Subagents for Plan… · S…"
+### Community 455 - "Python · Ruff (astral-sh/ruff) · Ruff / Astral uv"
 Cohesion: 0.17
 Nodes (10): Founding, Key Innovation, Key Numbers, Technology Stack, Architecture (DeepWiki), code:block1 (User → Submit prompt → AI Agent → Generate code → Create fil), Core Components, Interaction Flow (+2 more)
 
-### Community 484 - "Research: Fallow Codebase Intelligence … · Contradictions · Key Concepts"
-Cohesion: 0.23
-Nodes (12): 4. Keep Rate + LLM-as-Judge Metrics, Measurement: Keep Rate + LLM-as-Judge, Actor-critic multi-request cost growth, LLM-as-judge, ollama local, llm judge tradeoffs, Human audit sampling, Human ranking judge (+4 more)
-
-### Community 485 - "Multi-Stage Classification Pipeline · Large-scale classification · Large-Scale Scrum (L…"
+### Community 456 - "Agentic Harness · Token Budget · Key Design Decisions"
 Cohesion: 0.17
-Nodes (11): ADR-024: Compact Plan Summary in System Prompt, Agent Instructions, code:block1 (TASK PLAN → .pi/harness/plans/<hash>.yaml), Consequences, Context, Decision, L2.5 Drift Integration, Negative (+3 more)
+Nodes (11): Cross-Agent Compatibility, Key Analysis Points, Philosophy: Rigid Where It Matters, Flexible Where It Doesn't, Real Results, Relevance to Harness, Summary, Superpowers: Skills Framework Reshaping AI Dev (Termdock), The Core Insight (+3 more)
 
-### Community 486 - "Research: TypeScript Best Practices and… · Contradictions · Key Concepts"
-Cohesion: 0.35
-Nodes (12): 500 students, cc20 devlog, claude2, db backed logs, eight custom apps, firecrawl mcp json, horizon bundle, sdk rename (+4 more)
+### Community 457 - "Research: sentrux.dev · Contradictions · Key Concepts"
+Cohesion: 0.21
+Nodes (12): Cookbook per subcommand, IDD library repos, just file (mentioned stack), Library meta-skill, library.yaml reference catalog, Private GitHub references, Pure agentic application pattern, library push (+4 more)
 
-### Community 487 - "Research: context-mode vs lean-ctx.md · Contradictions · Key Concepts"
+### Community 458 - "fork-safe-spec-storage.md · The Solution: Three-Layer Isolation · Layer 2: `harness ini…"
+Cohesion: 0.17
+Nodes (11): ADR-012: Extension-Based Harness Orchestrator — Leveraging Pi's Native Event System, Consequences, Context, Correction from Original (2026-05-04), Decision, Enforcement Model — Updated, Event-to-Pipeline Mapping, Mitigations (+3 more)
+
+### Community 459 - "vgrep-semantic-search.md · Setup · code:bash (vgrep init              # ~1…"
+Cohesion: 0.17
+Nodes (11): ADR-019: Tool-Based Q&A for L1 Spec Clarification, Consequences, Constraints, Context, Decision, Fallback, Flow, Mitigations (+3 more)
+
+### Community 460 - "Layers · progressive-disclosure-agents.md · L2: File Context (on request)"
+Cohesion: 0.29
+Nodes (12): Duke basketball lottery ticket WTA/WTP gap, Endowment effect, Ikea effect (labor increases valuation), Loss aversion in selling owned goods, Adam Smith (commercial society; cited), Jack Knetsch, Dick Thaler, Daniel Kahneman endowment (cited), Virtual ownership (bidding, ads), Affect heuristic (+4 more)
+
+### Community 461 - "Source: Rocket.new — Vibe Solutioning P… · Three Capabilities · Relevance to AI Coding …"
+Cohesion: 0.26
+Nodes (12): Community 15 - "Scheduling Truth & Estimation", Community 41 - "EVM & Project Health Metrics", Community 42 - "Operational Reviews & Metrics", Community 57 - "Coupling Metrics & Operability", Community 85 - "Coupling Distance & Decoupling", Community 8 - "Metrics & Estimation", Community 15 - "Scheduling Truth & Estimation", Community 41 - "EVM & Project Health Metrics" (+4 more)
+
+### Community 462 - "General Principles (All Models) · anthropic-prompt-best-practices.md · Export best prompt"
+Cohesion: 0.18
+Nodes (12): Blocking/tiling for cache locality, Writing cache-friendly code, Matrix multiply and locality, Program profiling (e.g., gprof), Column-oriented storage, Secondary indexes, Community 113 - "Cache Locality & Tiling", Community 69 - "Cache-Friendly Code & Encoding" (+4 more)
+
+### Community 463 - "context-drift-in-agents.md · Two Definitions · 1. Stale Environment Context (Infrastru…"
+Cohesion: 0.17
+Nodes (10): Agentic Harness, code:block1 (User request), Key Design Decisions, Key pages, Pipeline Flow, Shared Foundation, The 8 Layers, Token Budget (+2 more)
+
+### Community 464 - "/install command · Agent validates install output · Interactive install flow"
+Cohesion: 0.17
+Nodes (11): Agent harness research seeds (2026-05-11), Context compression, Execution layer, Goal-oriented processes, Reverse-engineering codebases, Sandboxing, Semantic code indexing, Session compaction (+3 more)
+
+### Community 465 - "ctx.output_format (schema in prompt) · Baururazalinov 2026 03 30 9F4B3Xzjjkq O… · Facts…"
+Cohesion: 0.18
+Nodes (12): CORD HuggingFace dataset, Receipt extraction, Elite information diet, Junk in junk out curation, Simon Willison blog stream, Streamlit UI, Zero noise information tool, Evaluator merge function (+4 more)
+
+### Community 466 - "Keyword / LLM agent router · Bash and browser agent flows · Speech-to-text (STT)"
+Cohesion: 0.17
+Nodes (11): code:block2 (System prompt with coding instructions (~400 tokens)), Harness Integration, Implementations, The Solution: Code as Execution Layer, Tradeoffs, Why TypeScript (Not Python, Not JSON, Not Bash), Rust, Code Layer product (+3 more)
+
+### Community 467 - "Replicate API · csv extend · finance viz"
+Cohesion: 0.2
+Nodes (11): Failure Modes, Implementation Path for Our Harness, Problem, Relationship to WOZCODE Quality Loop, Solution, Claude 3 Opus coding, Function keyword, GPT-4 (1.2.5 label) (+3 more)
+
+### Community 468 - "guardian-agent-pattern.md · Two Variants · Complementary Approaches"
+Cohesion: 0.58
+Nodes (12): Human review gate, Background agent jobs, Branch safety practices, Cost tracking discipline, Docs-as-code for agents, Engineering velocity, Lint-to-agent migration, Model switching workflow (+4 more)
+
+### Community 469 - "vectara-guardian-agents.md · Relevance to Meta-Agent Concept · Benchmark Design"
+Cohesion: 0.17
+Nodes (12): 2.1 Harness Types (`src/harness/types.ts`), 2.2 Config (`src/harness/config.ts` + `.pi/harness/config.json`), 2.3 Event Routing (Pi's Built-in Event Bus), 2. Foundation (F0) — Phase 0 (CODE), code:typescript (// Spec after hardening (generated by L1 skill)), code:block5 (Pi Native Event          → Skill Action), HTML selector scraping config, JSON provider configuration (+4 more)
+
+### Community 470 - "Key Analysis Points · Superpowers: Skills Framework Reshaping… · superpowers-termdock-a…"
+Cohesion: 0.23
+Nodes (11): Google Cloud, Relevance to Harness, Google Cloud setup friction, OpenAI API developer experience, Privacy as evaluation dimension, Provider latency variance, Regex-based Promptfoo assertions, Safety / alignment restrictiveness (+3 more)
+
+### Community 471 - "web search tool · afk mcp prompt · agent device"
+Cohesion: 0.18
+Nodes (12): Black Forest Labs, Cloud storage for generated images, Flux Dev, Flux Pro, Flux Pro ~5 cents per image, Flux Schnell, Flux Schnell low cost per image, Four-chapter narrative structure (+4 more)
+
+### Community 472 - "auto compact · context half use · toggle autocompact"
+Cohesion: 0.36
+Nodes (12): constants eval, file ops, judge opus, latency cost, m4 hw, oss120b, oss20b, provider sw (+4 more)
+
+### Community 473 - "constants eval · judge opus · provider sw"
 Cohesion: 0.33
-Nodes (12): bundle dir, claude md bloat, context prime, delete default mcp, doc scraper, firecrawl only, load ai docs, load bundle (+4 more)
+Nodes (12): adw solution, agent device, auto compact, build hop, chained slash, context half use, nested scout, observable tools diff tts (+4 more)
 
-### Community 488 - "sentrux Docs: Root Cause Metrics · 1. Modularity · 2. Acyclicity"
+### Community 474 - "Open Source · Shopify Roast (open source) · Open source as recruiting signal"
+Cohesion: 0.17
+Nodes (11): Agent Integration, Architecture Boundaries, Benchmarks (Apple M5, median of 5 runs with 2 warmups), code:block1 (npx fallow --format json), Complexity Analysis, Core Capabilities, Dead Code Detection, Duplication Detection (+3 more)
+
+### Community 475 - "Codex Harness Innovations · Cole's Claude/Codex harness repo · Codex CLI harness"
 Cohesion: 0.29
 Nodes (8): TranscriptEntry, capBrief(), formatSummary(), section(), SectionData, data, empty, r
 
-### Community 489 - "Context Folding · Core Mechanism · Critical Finding"
-Cohesion: 0.36
-Nodes (10): cleanupOldLogs(), getConfig(), getFileAgeDays(), getFileSizeMB(), getLogStorageSummary(), LOG_DIR, LogCleanupConfig, LOGS_SUBDIR (+2 more)
+### Community 476 - "7. Git Worktrees · 14. Git Worktrees (v0.36+) · Git worktrees"
+Cohesion: 0.18
+Nodes (11): 🐛 Fixes, 🐛 Fixes, 🐛 Fixes, 🐛 Fixes, 🐛 Fixes, 🐛 Fixes, 🐛 Fixes, 🐛 Fixes (+3 more)
 
-### Community 490 - "Meta-Harness outer-loop search · Meta-Harness · Layered trajectory distillation"
+### Community 477 - "Model-Specific Key Findings · Cross-Model Patterns · openai-prompt-guidance.md"
 Cohesion: 0.24
 Nodes (3): FixEdit, FixTemplate, TreeSitterFixer
 
-### Community 491 - "sentrux (tool) · Core Identity · Creators"
+### Community 478 - "Context Folding · Mechanism · Why It Matters"
+Cohesion: 0.36
+Nodes (10): cleanupOldLogs(), getConfig(), getFileAgeDays(), getFileSizeMB(), getLogStorageSummary(), LOG_DIR, LogCleanupConfig, LOGS_SUBDIR (+2 more)
+
+### Community 479 - "_gen_chunk09.py · edge() · node()"
 Cohesion: 0.18
 Nodes (10): AST-Grep Code Search, code:yaml (# console.log inside class methods), code:block2 (❌ $VAR inside quotes — not a metavariable, matches literal t), Common Gotchas, Composite (inside/has), Golden Rules, Metavariables, Patterns (+2 more)
 
-### Community 492 - "Contextualized Text Embedding.md · Format · Embedding text vs LLM display text split"
-Cohesion: 0.2
-Nodes (10): Failure modes: domineering, bottlenecked, status, inert, Failure Modes, Implementation Path for Our Harness, Problem, Relationship to WOZCODE Quality Loop, Solution, Function keyword, Levenshtein fuzzy matching (+2 more)
-
-### Community 493 - "context-anxiety.md · Mitigations · Behavior"
-Cohesion: 0.18
-Nodes (11): code:shell (brew install yoanbernabeu/tap/grepai), code:powershell (grepai completion powershell | Out-String | Invoke-Expressio), code:shell (curl -sSL https://raw.githubusercontent.com/yoanbernabeu/gre), code:powershell (irm https://raw.githubusercontent.com/yoanbernabeu/grepai/ma), code:shell (ollama pull nomic-embed-text), code:shell (grepai init                        # Initialize in your proj), code:shell (eval "$(grepai completion zsh)"), code:shell (mkdir -p ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/grepai) (+3 more)
-
-### Community 494 - "agent-artifacts-verifiable-deliverables.md · How Artifacts Build Trust · code:block1 (R…"
-Cohesion: 0.18
-Nodes (10): Contradictions, Critical Gaps (Things we're missing), Key Concepts, Key Entities, Key Findings, New Patterns to Adopt, Open Questions, Overview (+2 more)
-
-### Community 495 - "selective-debate-routing.md · Implementation Sketch · code:block1 (Task → Single agent …"
-Cohesion: 0.33
-Nodes (11): Braintrust eval platform, Django legacy codebase rows, Eval dataset-task-score-experiment loop, Evals as cross-functional team sport, Jess (Braintrust), Braintrust Loop natural language, Parent span ID for subprocess traces, Prod logs to eval dataset (+3 more)
-
-### Community 496 - "Building AI Coding Agents for the Termi… · Core Architecture · Lessons for Our Harness"
+### Community 480 - "gen_chunk12.py · nid() · ref()"
 Cohesion: 0.22
 Nodes (10): Context Isolation, Filesystem Isolation (Worktree), Integration with P25 Subagent Router, Security Model, Subagent Worktree Isolation, Two Dimensions of Isolation, What Subagents CANNOT Do, Why This Matters (+2 more)
 
-### Community 497 - "Automated Observability · Config · code:json ({ "observability": { "requir…"
+### Community 481 - "main() · _gen_chunk18.py · nid()"
+Cohesion: 0.18
+Nodes (10): Contradictions, Critical Gaps (Things we're missing), Key Concepts, Key Entities, Key Findings, New Patterns to Adopt, Open Questions, Overview (+2 more)
+
+### Community 482 - "Frontmatter Gaps (169) · Missing `created` field (58 pages) · Missing `status` field (5…"
 Cohesion: 0.18
 Nodes (10): Architecture Components, Comparison with OpenClaw, Core Loop, Dive into Claude Code (VILA-Lab, 2026), Five Human Values → 13 Design Principles, Four Extensibility Mechanisms, Key Quotes, Relevance to Our Harness (+2 more)
 
-### Community 498 - "Spec Hardening · Config · code:json ({ "spec_hardening": { "max_a…"
-Cohesion: 0.18
-Nodes (10): Critical Model-Specific Rules, Distinguishing Deduction from External Info, Grounding, Latency, Output Verbosity, Persona Handling, Preventing Hallucination, Synthesizing Multiple Sources (+2 more)
-
-### Community 499 - "Replace pi-lean-ctx with context-mode · Alternatives Considered · Changes Made"
+### Community 483 - "Recommended Integration Priority (First… · Priority 3: Research Subagents for Plan… · S…"
 Cohesion: 0.18
 Nodes (10): Architecture (from DeepWiki + GitHub README), code:typescript (// Discover tools by intent), Execution Lifecycle, How Agents Use It, Key Components, Monorepo Structure (Bun-powered), Product Positioning (from executor.sh), Relevance to ultimate-pi Harness (+2 more)
 
-### Community 500 - "GSD (Get Shit Done) · Architecture · Core Insight"
+### Community 484 - "Research: Fallow Codebase Intelligence … · Contradictions · Key Concepts"
 Cohesion: 0.18
-Nodes (10): Architecture, Execution Modes, High-Level Component Structure, Interactive Mode (cli.py), Key Tools, Majority Vote Ensembler, Summary, SWE-bench Mode (run_agent_on_swebench_problem.py) (+2 more)
+Nodes (10): AI Prompt Strategy, code:block1 (User request), code:json ({), Config, Extension Interface, Files, Flow, HardenedSpec Data Contract (+2 more)
 
-### Community 501 - "mcp-tool-routing.md · code:block1 (┌─────────────────┐     MC… · MCP Architecture for C…"
-Cohesion: 0.18
-Nodes (10): Additional Workflows, code:json ({), Config, Extension Interface, Failure & Resume Policy, Files, Origin Principle, Primary Workflow: harness-pipeline.yaml (+2 more)
-
-### Community 502 - "monorepo-architecture.md · Internal Package Strategies · IDE Integration"
-Cohesion: 0.18
-Nodes (10): Automated Observability, code:block1 (subtask_verified (critics passed)), code:json ({), Config, Extension Interface, Files, Flow, Instrumentation Verification (Heuristic) (+2 more)
-
-### Community 503 - "Ultimate-PI Harness Architecture Overview · What This Is · 13. "If I had to achieve thi…"
+### Community 485 - "Multi-Stage Classification Pipeline · Large-scale classification · Large-Scale Scrum (L…"
 Cohesion: 0.18
 Nodes (10): Adversarial Verification, code:json ({), Config, Critic Focus Areas, Extension Interface, Failure Severity, Files, Origin Principle (+2 more)
 
-### Community 504 - "ADR-017: Harness Project Structure · Consequences · Context"
+### Community 486 - "Research: TypeScript Best Practices and… · Contradictions · Key Concepts"
 Cohesion: 0.18
-Nodes (11): Character signs and patterns, Law of Compulsive Behavior (Character), Toxic types, Harness Multi-Language Strategy, Multi-language generated clients, 5% LM failure vs prod reliability, Multi-language clients (Py/JS/Go/Ruby), Observability / tracing hooks (+3 more)
+Nodes (10): Additional Workflows, code:json ({), Config, Extension Interface, Failure & Resume Policy, Files, Origin Principle, Primary Workflow: harness-pipeline.yaml (+2 more)
 
-### Community 505 - "OpenAI Codex · Claude Code Web · Cole Medin"
+### Community 487 - "Research: context-mode vs lean-ctx.md · Contradictions · Key Concepts"
+Cohesion: 0.18
+Nodes (10): Cross-Model Patterns, GPT-4.1, GPT-5, GPT-5.1, GPT-5.2, GPT-5.3 Codex, GPT-5.4, GPT-5.5 (+2 more)
+
+### Community 488 - "sentrux Docs: Root Cause Metrics · 1. Modularity · 2. Acyclicity"
 Cohesion: 0.18
 Nodes (11): Approximation algorithms, Ford–Fulkerson method, Linear programming, Linear programming duality, Maximum bipartite matching, Maximum-flow problem, Max-flow min-cut theorem, Canonical NP-complete problems (+3 more)
 
-### Community 506 - "Key Engineering Insights · Augment Code Codacy AI Giants.md · Onboarding Revolution"
-Cohesion: 0.18
-Nodes (9): Agentic Harness, code:block1 (User request), Key Design Decisions, Key pages, Pipeline Flow, Shared Foundation, The 8 Layers, What it does (+1 more)
+### Community 489 - "Context Folding · Core Mechanism · Critical Finding"
+Cohesion: 0.2
+Nodes (10): Engineering and product management partnership, Problem discovery, PM: exploration, selection, validation, Problem selection, Solution validation, Trade-off Curves, Benchmark Results, Relevance to Our Implementation (+2 more)
 
-### Community 507 - "Research: semantic code search tools.md · Contradictions · Key Concepts"
+### Community 490 - "Meta-Harness outer-loop search · Meta-Harness · Layered trajectory distillation"
 Cohesion: 0.18
-Nodes (11): Agent orchestrator, Branch-per-task workflow, Cargo.lock contention, CI per worktree, Docker isolation, .env file sync, Handoff protocol, Merge conflict strategies (+3 more)
+Nodes (11): MCP in Pi (optional extension), Confluence, COXOS agent ops analogy, Git history as long-term memory, Jira, Jira MCP / Atlassian MCP, Linear, MCP.json configuration (+3 more)
 
-### Community 508 - "Research: pi-vs-claude-code Agentic Orc… · Contradictions · Key Concepts"
-Cohesion: 0.18
-Nodes (11): CLI release notes, Contributor guide, go mod tidying, License headers, Older GCC toolchain, manylinux wheels, React + BAML docs, Rubygems publish (+3 more)
-
-### Community 509 - "Running tests · Watch mode (recommended) · poetry run CLI"
+### Community 491 - "sentrux (tool) · Core Identity · Creators"
 Cohesion: 0.18
 Nodes (11): Candidate prompt pool, BAML check() soft metrics, Diversity among elites, JSONL eval dataset, Generate operator, Greg (compiler), Holdout validation, jepta.baml meta-prompts (+3 more)
 
-### Community 510 - "BAML threading / spawn BEP · Implicit cancellation like Python asyncio · asyncio colore…"
+### Community 492 - "Contextualized Text Embedding.md · Format · Embedding text vs LLM display text split"
+Cohesion: 0.18
+Nodes (11): CLI release notes, Contributor guide, go mod tidying, License headers, Older GCC toolchain, manylinux wheels, React + BAML docs, Rubygems publish (+3 more)
+
+### Community 493 - "context-anxiety.md · Mitigations · Behavior"
 Cohesion: 0.18
 Nodes (11): Boundaryml 2024 09 16 Mitj2Ukpb-S Structured Prompting Rigor, BAML union types for agent actions, Mixed structured outputs in one prompt, DSPy / verbose prompt optimizers critique, generate_sql_query BAML function, Irrelevant question guard (Obama age), Schema change enables region query, Schema grounding / irrelevant query detection (+3 more)
 
-### Community 511 - "Claude Code Security Architecture (Penl… · claude-code-security-architecture-penli… · F…"
-Cohesion: 0.18
-Nodes (11): Inner vs outer harness layering, Nested while loops as abstraction ladder, Orchestrator: permissions, secrets, policy, Codex goal mode Ralph-like loop, Archon beta launch livestream (title), Agent factory GitHub template, Archon (knowledge MCP), CLAUDE.md global workflow rules (+3 more)
+### Community 494 - "agent-artifacts-verifiable-deliverables.md · How Artifacts Build Trust · code:block1 (R…"
+Cohesion: 0.49
+Nodes (11): baml-cli watch mode for dev loop, Boundary GitHub org triage, Ship-it changelog communication to users, CI nightly parser fuzzing, Community PR review for client registry, LSP diagnostics for BAML schema errors, Multi-client registry (TS/Python/Ruby), OpenAPI-style client generation from BAML (+3 more)
 
-### Community 512 - "Source: OpenDev — Building AI Coding Ag… · Core Architecture · Compound AI System"
+### Community 495 - "selective-debate-routing.md · Implementation Sketch · code:block1 (Task → Single agent …"
+Cohesion: 0.18
+Nodes (11): Character signs and patterns, Law of Compulsive Behavior (Character), Toxic types, Harness Multi-Language Strategy, Multi-language generated clients, 5% LM failure vs prod reliability, Multi-language clients (Py/JS/Go/Ruby), Observability / tracing hooks (+3 more)
+
+### Community 496 - "Building AI Coding Agents for the Termi… · Core Architecture · Lessons for Our Harness"
+Cohesion: 0.49
+Nodes (11): client.setPrimary documentation improvement, Discord report: CSS preload with PDF tests, Discord support thread routing, GitHub issue on client registry clarity, Hotfix cherry-pick workflow, JetBrains plugin parity with VS Code, PDF fixture tests in CI, Release branch cut checklist (+3 more)
+
+### Community 497 - "Automated Observability · Config · code:json ({ "observability": { "requir…"
+Cohesion: 0.18
+Nodes (10): Blake Crosley — Agent Architecture Guide, Context Degradation Research, Hooks vs Skills vs Subagents Decision Framework, Key Contributions, Production Results, Summary, The Distinction That Matters, The Harness Pattern (+2 more)
+
+### Community 498 - "Spec Hardening · Config · code:json ({ "spec_hardening": { "max_a…"
 Cohesion: 0.18
 Nodes (11): 10. "Hack it, then get it right" → "Iterative refinement with verification gates" (Source: [[oss-guide-codebase-exploration]]), 1. "Use the project" → "Map the project" (Source: [[oss-guide-codebase-exploration]], [[aider-repomap-tree-sitter]]), 2. "Check earliest commits" → "Check architectural spec" (Source: [[oss-guide-codebase-exploration]]), 3. "Test cases as documentation" → "Test cases as ground truth" (Source: [[oss-guide-codebase-exploration]], [[execution-feedback-loop]]), 4. "Git log trick (80/20 rule)" → "Graph centrality ranking" (Source: [[oss-guide-codebase-exploration]], [[repo-map-ranking]]), 5. "Don't try to understand everything" → "Progressive disclosure" (Source: [[oss-guide-codebase-exploration]], [[progressive-disclosure-agents]]), 6. "Paper Cut Principle" → "Coverage-driven exploration" (Source: [[oss-guide-codebase-exploration]]), 7. "Reproduce the issue" → "Automated reproduction + test capture" (Source: [[oss-guide-codebase-exploration]], [[execution-feedback-loop]]) (+3 more)
 
-### Community 513 - "Circuit / image structured extraction · Tabular schema output · Tabular layout reduces …"
+### Community 499 - "Replace pi-lean-ctx with context-mode · Alternatives Considered · Changes Made"
 Cohesion: 0.18
-Nodes (11): AI Layer (PRD, rules, commands), BMAD framework, Dynamis community / course, PIV Loop (Plan Implement Validate), System evolution mindset, Deterministic bash nodes, Planotator extension, GSD (workshop mention) (+3 more)
+Nodes (11): Agent session fork, Public beta API, Billing roadmap, Crash reporting, macOS/Windows parity, Keyboard shortcuts, Onboarding wizard, Permissions model (+3 more)
 
-### Community 514 - "Notion API · read_text ingestion flow · Python Notion client"
+### Community 500 - "GSD (Get Shit Done) · Architecture · Core Insight"
 Cohesion: 0.18
-Nodes (10): Approval Persistence, Doom-Loop Detection, Key Safety Patterns, Pi's Damage Control Extension, Relevance to Our Harness, Resource Bounding, Safety Defense-in-Depth, Schema Gating > Permission Checks (+2 more)
+Nodes (10): Critical Model-Specific Rules, Distinguishing Deduction from External Info, Grounding, Latency, Output Verbosity, Persona Handling, Preventing Hallucination, Synthesizing Multiple Sources (+2 more)
 
-### Community 515 - "agent-ops TypeScript runner · duckdb CLI · Electron preload bridge"
+### Community 501 - "mcp-tool-routing.md · code:block1 (┌─────────────────┐     MC… · MCP Architecture for C…"
 Cohesion: 0.18
-Nodes (10): Epilogue note, Framing, Mind-shift question (verbatim gist), Musk-style first-principles prompts (Gleeson thread, Nov 2025), The 15 prompts, Defer LLM libraries early, LangChain deferral, LangChain / library critique (+2 more)
+Nodes (11): code:shell (brew install yoanbernabeu/tap/grepai), code:powershell (grepai completion powershell | Out-String | Invoke-Expressio), code:shell (curl -sSL https://raw.githubusercontent.com/yoanbernabeu/gre), code:powershell (irm https://raw.githubusercontent.com/yoanbernabeu/grepai/ma), code:shell (ollama pull nomic-embed-text), code:shell (grepai init                        # Initialize in your proj), code:shell (eval "$(grepai completion zsh)"), code:shell (mkdir -p ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/grepai) (+3 more)
 
-### Community 516 - "agent-drift-academic-paper.md · Agent Stability Index (ASI) · Key Findings"
-Cohesion: 0.18
-Nodes (11): Agent harness research seeds (2026-05-11), Context compression, Execution layer, Goal-oriented processes, Reverse-engineering codebases, Sandboxing, Semantic code indexing, Session compaction (+3 more)
-
-### Community 517 - "web search enrichment · Web search · enrichment"
-Cohesion: 0.18
-Nodes (11): Background Agents, Reviewer Principle (separate reviewer model), Delta column for validation results, Labeled fund categories, Human-in-the-loop UX for validation failures, quantity * price vs market value validation, Programmatic cross-field validation, Optional second LLM validation pass (+3 more)
-
-### Community 518 - "haiku grade · nano wins · hop lop"
+### Community 502 - "monorepo-architecture.md · Internal Package Strategies · IDE Integration"
 Cohesion: 0.2
 Nodes (8): BOOTSTRAP_SCRIPT, manifest, manifestPath, ROOT, rulesPath, SENTRUX_CLI_SCRIPT, SYNC_SCRIPT, TEMPLATE_MANIFEST
 
-### Community 519 - "Architectural Layers · 3. Agent Orchestration · GSD Architecture Deep Dive (codecentric…"
+### Community 503 - "Ultimate-PI Harness Architecture Overview · What This Is · 13. "If I had to achieve thi…"
 Cohesion: 0.2
 Nodes (9): code:sql (SELECT), code:sql (SELECT), code:sql (SELECT), Event properties (after telemetry-first), HogQL — debate round count per run, HogQL — plan phase wall clock (session), HogQL — subagent time by agent id, PostHog — harness plan latency dashboard (+1 more)
 
-### Community 520 - "Cross-channel link analysis · Channel-pair overlap (top 30 channel pa… · Channels (by n…"
+### Community 504 - "ADR-017: Harness Project Structure · Consequences · Context"
 Cohesion: 0.2
 Nodes (9): @BaurUrazalinov:, @boundaryml:, @ColeMedin:, @indydevdan:, @jaymin-west:, @LatentSpacePod:, @mastra-ai:, @MLOps: (+1 more)
 
-### Community 521 - "{{title}} · Consequences · Context"
-Cohesion: 0.27
-Nodes (8): getGlobalAutoformatEnabled(), getGlobalImmediateFormatDefault(), getGlobalWidgetDefaultVisible(), loadPiLensGlobalConfig(), PiLensFormatMode, PiLensGlobalConfig, resolvePiLensFlag(), getLensFlag()
-
-### Community 522 - "<% tp.file.title %> · Concepts Introduced · Entities Mentioned"
+### Community 505 - "OpenAI Codex · Claude Code Web · Cole Medin"
 Cohesion: 0.2
 Nodes (8): defectClass, defectClassCounts, files, inlineTier, inlineTierCounts, report, root, text
 
-### Community 523 - "codeact-apple-2024.md · Adoption · Core Insight"
-Cohesion: 0.33
-Nodes (8): Cross-Book Bridges, High-confidence equivalences (score ≥ 0.90, total 65), Surprising cross-domain analogies (score 0.65-0.85), Top book-pair densities, Cross-Book Bridges, High-confidence equivalences (score ≥ 0.90, total 65), Surprising cross-domain analogies (score 0.65-0.85), Top book-pair densities
+### Community 506 - "Key Engineering Insights · Augment Code Codacy AI Giants.md · Onboarding Revolution"
+Cohesion: 0.27
+Nodes (8): getGlobalAutoformatEnabled(), getGlobalImmediateFormatDefault(), getGlobalWidgetDefaultVisible(), loadPiLensGlobalConfig(), PiLensFormatMode, PiLensGlobalConfig, resolvePiLensFlag(), getLensFlag()
 
-### Community 524 - "Agentic programming taxonomy · Harness design-pattern layer · AI Agentic Programming Su…"
+### Community 507 - "Research: semantic code search tools.md · Contradictions · Key Concepts"
+Cohesion: 0.2
+Nodes (7): files, getFiles(), installDir, relFile, seen, src, stripped
+
+### Community 508 - "Research: pi-vs-claude-code Agentic Orc… · Contradictions · Key Concepts"
 Cohesion: 0.2
 Nodes (9): code:dataview (TABLE type, status, updated FROM "wiki" SORT updated DESC LI), code:dataview (LIST FROM "wiki" WHERE status = "seed" SORT updated ASC), code:dataview (LIST FROM "wiki/entities" WHERE !sources OR length(sources) ), code:dataview (LIST FROM "wiki/questions" WHERE answer_quality = "draft" SO), Entities Missing Sources, Open Questions, Recent Activity, Seed Pages (Need Development) (+1 more)
 
-### Community 525 - "gitreverse.md · Features · How It Works"
+### Community 509 - "Running tests · Watch mode (recommended) · poetry run CLI"
 Cohesion: 0.2
 Nodes (9): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Recommendation, Research: claude-mem over Obsidian for Harness Layer (+1 more)
 
-### Community 526 - "vgrep-tool.md · Architecture · Key Commands"
-Cohesion: 0.2
-Nodes (9): Architecture Comparison, Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: Skill-First MVP & Harness Implementation Architecture (+1 more)
-
-### Community 527 - "feedforward-feedback-harness.md · The Framework · code:block1 (FEEDFORWARD (Guides)      …"
+### Community 510 - "BAML threading / spawn BEP · Implicit cancellation like Python asyncio · asyncio colore…"
 Cohesion: 0.33
 Nodes (7): Core Technique, Py Tree-Sitter, Tree-Sitter Docs, Agent memory via files, Repo indexing strategy, Tree-sitter parsing mention, Aider tree-sitter index approach
 
-### Community 528 - "Memory System-of-Record vs Ephemeral Cache · Definition · Guardrails"
+### Community 511 - "Claude Code Security Architecture (Penl… · claude-code-security-architecture-penli… · F…"
+Cohesion: 0.2
+Nodes (10): 10. Session Storage & Checkpointing, 1. Five-Layer Compaction Pipeline, 2. Lifecycle Hook System (Deterministic Policy), 3. Permission System as Architectural Subsystem, 5. CLAUDE.md Hierarchical System, 7. Plugin Ecosystem, 9. Sandboxing (OS-Level Enforcement), Architecture Philosophy (+2 more)
+
+### Community 512 - "Source: OpenDev — Building AI Coding Ag… · Core Architecture · Compound AI System"
+Cohesion: 0.2
+Nodes (9): Architecture Comparison, Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: Skill-First MVP & Harness Implementation Architecture (+1 more)
+
+### Community 513 - "Circuit / image structured extraction · Tabular schema output · Tabular layout reduces …"
 Cohesion: 0.2
 Nodes (9): Benchmarks Don't Matter — Until They Do (Part 2), Core Finding, Fix 1: Field Ordering in Tool Schemas, Fix 2: Flatten Nested Schemas, Fix 3: Make Truncation Impossible to Miss, Fix 4: Enforced Verification, Four Fixes Applied, Model Behavioral Differences (+1 more)
 
-### Community 529 - "gh-sub-issue-extension.md · code:bash (# Create spec issue) · Sub-agents in Pi (extension)"
+### Community 514 - "Notion API · read_text ingestion flow · Python Notion client"
 Cohesion: 0.2
-Nodes (9): Context Anxiety, Critical Findings, Evaluator Tuning, Harness Simplification Principle, Key Takeaway, Results, Self-Evaluation Is Broken, Sprint Contracts (+1 more)
+Nodes (9): code:block1 (For each ready node in plan:), Drift Detection, Error States, Extension Interface, Files, Flow, Grounding Checkpoints (MVC Execution), GroundingCheckpoint Data Contract (+1 more)
 
-### Community 530 - "Deterministic install scripts · just command runner · Maintenance mode hook"
-Cohesion: 0.2
-Nodes (9): code:block1 ({), Key Architecture Insight, Key Patterns, Lovable Clone Architecture (Neel S, Sept 2025), Lovable Production Architecture, Relevance to AI Coding Harness, State Management, Three-Agent Pipeline (+1 more)
-
-### Community 531 - "For Model Selection · For Our Harness · Practical Implications"
-Cohesion: 0.2
-Nodes (10): First Principles (Synthesized from All Sources), P12: Ashby's Law of Requisite Variety, P1: Feedforward + Feedback, P2: Computational > Inferential (for Enforcement), P3: Mechanical Enforcement Over Documentation, P4: What the Agent Can't See Doesn't Exist, P5: Ask What Capability Is Missing, P6: Give the Agent Eyes (+2 more)
-
-### Community 532 - "Structured Planning · ExecutionPlan Data Contract · Extension Interface"
-Cohesion: 0.2
-Nodes (10): Domain-specific style via fine-tune, Expansion prompt (few tokens to rich prompt), OpenAI / Anthropic / Gemini fine-tune notes, Fine-tune user/assistant training pairs, 14k-token hand-written prompt baseline, Chained LLM prompt + image model, OpenAI fine-tuning, Prompt engineering before fine-tune (+2 more)
-
-### Community 533 - "Schema-Based Orchestration via Archon · Architecture · Extension Interface"
+### Community 515 - "agent-ops TypeScript runner · duckdb CLI · Electron preload bridge"
 Cohesion: 0.2
 Nodes (9): ADR-018: Single Harness Config File, code:json ({), Consequences, Context, Decision, Negative, Positive, Rationale (+1 more)
 
-### Community 534 - "Grounding Checkpoints (MVC Execution) · Error States · Extension Interface"
-Cohesion: 0.53
-Nodes (10): baml-cli watch mode for dev loop, CI nightly parser fuzzing, Community PR review for client registry, Discord report: CSS preload with PDF tests, LSP diagnostics for BAML schema errors, Multi-client registry (TS/Python/Ruby), OpenAPI-style client generation from BAML, Playground regression triage workflow (+2 more)
-
-### Community 535 - "Co-locating Wiki with Codebase · Consequences · Context"
-Cohesion: 0.2
-Nodes (9): code:block1 (spec_hardened event →), ExecutionPlan Data Contract, Extension Interface, Files, Flow, Origin Principle, Review Gate, Structured Planning (+1 more)
-
-### Community 536 - "pi-omni-compact · pi-omni-compact-github-repo.md · Configuration"
-Cohesion: 0.42
-Nodes (10): 2. Plan Mode (v0.29+), Plan Mode, Agent ephemeral context, Exit plan mode tool, Metaprompting to spec file, Multi-file UI spec v4, Plan mode read-only planning, Shift-tab plan toggle (+2 more)
-
-### Community 537 - "Karpathy autoresearch GitHub repo · GitHub demo repo with commands · sentrux-github-rep…"
-Cohesion: 0.2
-Nodes (9): Blake Crosley — Agent Architecture Guide, Hooks vs Skills vs Subagents Decision Framework, Key Contributions, Production Results, Summary, The Distinction That Matters, The Harness Pattern, What We Adopt (+1 more)
-
-### Community 538 - "Superpowers — GitHub Repository · Architecture · Core Workflow"
+### Community 516 - "agent-drift-academic-paper.md · Agent Stability Index (ASI) · Key Findings"
 Cohesion: 0.2
 Nodes (9): ADR-014: isolated-vm for P43 TypeScript Execution Sandbox, Consequences, Context, Decision, Fallback, Mitigations, Negative, Positive (+1 more)
 
-### Community 539 - "pi-vcc Repository · 5 Semantic Sections · Competitive Position"
-Cohesion: 0.22
-Nodes (10): Writing cache-friendly code, Program profiling (e.g., gprof), Community 69 - "Cache-Friendly Code & Encoding", Community 69 - "Cache-Friendly Code & Encoding", Build Cache (incremental compilation), Caching Layer Design, code:block2 (cache/), code:block3 (dist/prompts/manifest.json  # { spec → { model → { hash, pat) (+2 more)
+### Community 517 - "web search enrichment · Web search · enrichment"
+Cohesion: 0.33
+Nodes (8): Cross-Book Bridges, High-confidence equivalences (score ≥ 0.90, total 65), Surprising cross-domain analogies (score 0.65-0.85), Top book-pair densities, Cross-Book Bridges, High-confidence equivalences (score ≥ 0.90, total 65), Surprising cross-domain analogies (score 0.65-0.85), Top book-pair densities
 
-### Community 540 - "_gen_chunk_06.py · add_node() · reg()"
+### Community 518 - "haiku grade · nano wins · hop lop"
 Cohesion: 0.29
 Nodes (10): Chapter 7: Scarcity — The Rule of the Few, Cookie-jar scarcity experiment (fewer cookies preferred), Optimized scarcity messages (new vs old availability), Scarcity principle, Psychological reactance (lost freedoms motivate), Competition for scarce resources amplifies desire, Scarcity of information / exclusivity appeals, Scarcity — limited availability increases value (+2 more)
 
-### Community 541 - "sentrux.dev Landing Page · The Black Team narrative · Live Demo"
+### Community 519 - "Architectural Layers · 3. Agent Orchestration · GSD Architecture Deep Dive (codecentric…"
+Cohesion: 0.36
+Nodes (10): Keeping options open / Buridan-style overchoice costs, Farsighted perspective, Law of Grandiosity, Law of Shortsightedness, Success delusion, Inside view, Optimism and overplacement, Outside view (reference class forecasting) (+2 more)
+
+### Community 520 - "Cross-channel link analysis · Channel-pair overlap (top 30 channel pa… · Channels (by n…"
+Cohesion: 0.2
+Nodes (9): code:block1 (L4 COMPLETION MODEL — How "done" is determined and verified), Harness Configuration Layers, L1: Signal Design, L2: Gate Design, L3: State Channel, L4: Completion Model, Layer Architecture, Sources (+1 more)
+
+### Community 521 - "{{title}} · Consequences · Context"
 Cohesion: 0.2
 Nodes (10): database id mapping, deduplication, Tokens in / tokens out, llm merge dupes, page break continuation, pdf transactions, multimodal tokens, pdf under the hood (+2 more)
 
-### Community 542 - "Thoughtworks Technology Radar · Community 112 - "Personal Tech Radar" · Personal techno…"
+### Community 522 - "<% tp.file.title %> · Concepts Introduced · Entities Mentioned"
+Cohesion: 0.2
+Nodes (9): ADR-017: Harness Project Structure, Consequences, Context, Decision, Mitigations, Negative, Positive, Rationale (+1 more)
+
+### Community 523 - "codeact-apple-2024.md · Adoption · Core Insight"
+Cohesion: 0.2
+Nodes (9): code:block1 (spec_hardened event →), ExecutionPlan Data Contract, Extension Interface, Files, Flow, Origin Principle, Review Gate, Structured Planning (+1 more)
+
+### Community 524 - "Agentic programming taxonomy · Harness design-pattern layer · AI Agentic Programming Su…"
+Cohesion: 0.42
+Nodes (10): 2. Plan Mode (v0.29+), Plan Mode, Agent ephemeral context, Exit plan mode tool, Metaprompting to spec file, Multi-file UI spec v4, Plan mode read-only planning, Shift-tab plan toggle (+2 more)
+
+### Community 525 - "gitreverse.md · Features · How It Works"
+Cohesion: 0.24
+Nodes (9): Core Tenets (Doug McIlroy, 1978), Eric Raymond's 17 Unix Rules (The Art of Unix Programming, 2003), The 1994 Summary (Peter Salus, crediting McIlroy), Unix Philosophy, Worse is Better (Richard P. Gabriel), Tailwind vs shadcn harness analogy, Unix pipes composability philosophy, Data engineer SQL-generating agent (+1 more)
+
+### Community 526 - "vgrep-tool.md · Architecture · Key Commands"
 Cohesion: 0.22
 Nodes (9): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: vcc extension for pi coding agent, Sources (+1 more)
 
-### Community 543 - "Getting started with insertion sort · Getting Started · Key Sections"
+### Community 527 - "feedforward-feedback-harness.md · The Framework · code:block1 (FEEDFORWARD (Guides)      …"
+Cohesion: 0.2
+Nodes (9): code:block1 ({), Key Architecture Insight, Key Patterns, Lovable Clone Architecture (Neel S, Sept 2025), Lovable Production Architecture, Relevance to AI Coding Harness, State Management, Three-Agent Pipeline (+1 more)
+
+### Community 528 - "Memory System-of-Record vs Ephemeral Cache · Definition · Guardrails"
+Cohesion: 0.2
+Nodes (9): Context Anxiety, Critical Findings, Evaluator Tuning, Harness Simplification Principle, Key Takeaway, Results, Self-Evaluation Is Broken, Sprint Contracts (+1 more)
+
+### Community 529 - "gh-sub-issue-extension.md · code:bash (# Create spec issue) · Sub-agents in Pi (extension)"
+Cohesion: 0.2
+Nodes (9): ADR-024: Compact Plan Summary in System Prompt, Agent Instructions, Consequences, Context, Decision, L2.5 Drift Integration, Negative, Positive (+1 more)
+
+### Community 530 - "Deterministic install scripts · just command runner · Maintenance mode hook"
 Cohesion: 0.47
 Nodes (8): downgradeModel(), escalateModel(), findModelByName(), getModelsSortedByCost(), getProviderFamily(), pickByTier(), preferCrossRegion(), resolveModel()
 
-### Community 544 - "Depth-first search (DFS) · Graph representations (adjacency list/m… · Topological sort"
+### Community 531 - "For Model Selection · For Our Harness · Practical Implications"
 Cohesion: 0.22
 Nodes (5): commandCtx, ctx, factory, pi, tmp
 
-### Community 545 - "Greedy-algorithm strategy · Minimum spanning tree problem · Prim’s MST algorithm"
-Cohesion: 0.31
-Nodes (7): cleanUserText(), filterNoise(), isNoiseUserBlock(), NOISE_STRINGS, NOISE_TOOLS, blocks, result
-
-### Community 546 - "Context-Aware System Reminders.md · Why role: user beats role: system · Event Detectors"
+### Community 532 - "Structured Planning · ExecutionPlan Data Contract · Extension Interface"
 Cohesion: 0.22
 Nodes (7): ExecutionPlan Data Contract, Extension Interface, Files, Flow, Review Gate, Structured Planning, Validation Checks
 
-### Community 547 - "Evil Martians Case Study · 9. "What is the minimum viable breakthr… · The Pipes Breakth…"
-Cohesion: 0.33
-Nodes (8): ENCLOSING_TYPES, ExpandedRead, EXT_TO_LANG, findEnclosingNodeForRange(), getSymbolName(), tryExpandMarkdownSection(), tryExpandRead(), withBudget()
-
-### Community 548 - "The Solution: Content-Hash Identity · Fingerprint Generation · Resolution Algorithm"
+### Community 534 - "Grounding Checkpoints (MVC Execution) · Error States · Extension Interface"
 Cohesion: 0.42
 Nodes (8): bucketPrefix(), chunkFiles(), commonLabel(), currentLabel(), normalizeFiles(), partitionAt(), partitionSourceFiles(), SourceGroup
 
-### Community 549 - "content-addressed-spec-identity.md · The Transfer-on-Merge Pattern · Prior Art"
-Cohesion: 0.22
-Nodes (9): [3.8.42] - 2026-05-08, Added, Added, Added, Changed, Changed, Changed, Fixed (+1 more)
+### Community 535 - "Co-locating Wiki with Codebase · Consequences · Context"
+Cohesion: 0.33
+Nodes (8): ENCLOSING_TYPES, ExpandedRead, EXT_TO_LANG, findEnclosingNodeForRange(), getSymbolName(), tryExpandMarkdownSection(), tryExpandRead(), withBudget()
 
-### Community 550 - "The Birth of UNIX — Brian Kernighan Int… · Ken Thompson's Productivity · Kernighan on M…"
-Cohesion: 0.22
-Nodes (9): [3.0.0] - 2026-03-31, Added - Auto-Install for Core Tools, Added - NAPI Security Rules, Added - Tree-Sitter Runner, Breaking Changes, Changed, Changed - Blockers vs Warnings Architecture, Fixed (+1 more)
-
-### Community 551 - "Think in Code (blog post) · Injected Instruction · Case Study: Cloudflare Code Mode"
+### Community 537 - "Karpathy autoresearch GitHub repo · GitHub demo repo with commands · sentrux-github-rep…"
 Cohesion: 0.22
 Nodes (9): [2.6.0] - 2026-03-30, Added - Phase 1: Event Bus Architecture, Added - Phase 2: Effect-TS Service Layer, Added - Phase 3: Multi-LSP Client (31 Language Servers), Added - Phase 4: Auto-Installation System, Changed - Architecture, Changed - Commands, Documentation (+1 more)
 
-### Community 552 - "self-evolving-harness.md · Two Approaches · Meta-Harness (Lee et al., 2026)"
+### Community 538 - "Superpowers — GitHub Repository · Architecture · Core Workflow"
+Cohesion: 0.22
+Nodes (9): [3.0.0] - 2026-03-31, Added - Auto-Install for Core Tools, Added - NAPI Security Rules, Added - Tree-Sitter Runner, Breaking Changes, Changed, Changed - Blockers vs Warnings Architecture, Fixed (+1 more)
+
+### Community 539 - "pi-vcc Repository · 5 Semantic Sections · Competitive Position"
+Cohesion: 0.22
+Nodes (9): [3.8.42] - 2026-05-08, Added, Added, Added, Changed, Changed, Changed, Fixed (+1 more)
+
+### Community 540 - "_gen_chunk_06.py · add_node() · reg()"
 Cohesion: 0.22
 Nodes (8): Call Hierarchy Pattern, code:typescript (// Step 1: Prepare (get the callable item)), Golden Rule, LSP Navigation and Diagnostics, Operational Guidance (From Field Tests), When NOT to Use LSP, When to Use Diagnostics, When to Use Navigation (Code Intelligence)
 
-### Community 553 - "code:shell (cd my-repo) · code:shell (cd path/to/repo) · VS Code ITV repo walkthrough"
+### Community 541 - "sentrux.dev Landing Page · The Black Team narrative · Live Demo"
 Cohesion: 0.22
 Nodes (8): 1. Profiles & Tiers, 2. Custom Provider Implementation, Architecture: Pi Model Router Extension, Core Concepts, Module Architecture, Reliability: Fallback Chains, Routing Decision Flow, State & Persistence
 
-### Community 554 - "Mario Snaphappy author · WebSocket telemetry idea · Simon Willison"
-Cohesion: 0.22
-Nodes (8): Agentic Systems, Frontend Design, General Principles (All Models), Output Control, Thinking & Reasoning, Anthropic Prompt Optimizer Mention, Export best prompt, Prompt diff view
-
-### Community 555 - "agent-skills-pattern.md · Gemini CLI Implementation (v0.23+) · Key Design Decisions"
-Cohesion: 0.22
-Nodes (9): AI Coding Agents, Codex apply_patch vs Claude old/new string, RL training co-evolved with harness tools, Coding benchmark skepticism, GPT-5 in Claude harness mismatch, Lab-owned harness post-training alpha, Opus 4.7 50k token harness bloat hypothesis, SWE-bench style RL on coding agents (+1 more)
-
-### Community 556 - "<% tp.file.title %> · Connections · Key Facts"
+### Community 542 - "Thoughtworks Technology Radar · Community 112 - "Personal Tech Radar" · Personal techno…"
 Cohesion: 0.22
 Nodes (8): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: pi-vcc, Sources
 
-### Community 557 - "<% tp.file.title %> · Comparison · comparison.md"
+### Community 543 - "Getting started with insertion sort · Getting Started · Key Sections"
+Cohesion: 0.22
+Nodes (8): Agent Stability Index (ASI), Key Findings, Relevance to Meta-Agent Concept, Summary, Three Causal Mechanisms, Three Drift Types, Three Mitigation Strategies, What It Contributes
+
+### Community 544 - "Depth-first search (DFS) · Graph representations (adjacency list/m… · Topological sort"
+Cohesion: 0.22
+Nodes (8): code:block1 (ultimate-pi harness init), Enforcement, Layer 1: Gitignored Runtime Cache, Layer 2: `harness init` Bootstrap, Layer 3: GitHub's Native Repo Scoping, The Merge Problem — SOLVED, The Solution: Three-Layer Isolation, Why Labels Instead of Issue Numbers
+
+### Community 545 - "Greedy-algorithm strategy · Minimum spanning tree problem · Prim’s MST algorithm"
 Cohesion: 0.22
 Nodes (8): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: Engineering Workflows of Legendary Programmers and AI Harness Mapping, Sources
 
-### Community 558 - "Dead Links (64) · Conceptual pages that don't exist · Entity pages that don't exist (us…"
+### Community 546 - "Context-Aware System Reminders.md · Why role: user beats role: system · Event Detectors"
 Cohesion: 0.22
 Nodes (8): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Sources, What the Harness Does NOT Need from These Systems
+
+### Community 547 - "Evil Martians Case Study · 9. "What is the minimum viable breakthr… · The Pipes Breakth…"
+Cohesion: 0.22
+Nodes (8): 1. Fast feedback matters more than almost anything else, 2. Scaling software means letting go of personal preferences, 3. TypeScript extended JavaScript instead of replacing it, 4. Visibility is part of what makes open source work, 5. Leaving JavaScript as implementation language was a necessary break, 6. AI workflow: grounding matters more than generation, 7 Learnings from Anders Hejlsberg, 7. Open collaboration builds institutional memory
+
+### Community 548 - "The Solution: Content-Hash Identity · Fingerprint Generation · Resolution Algorithm"
+Cohesion: 0.22
+Nodes (8): Architecture, Compression Results (claimed), context-mode.com, GitHub, License, npm, Platforms, Think in Code Paradigm
+
+### Community 549 - "content-addressed-spec-identity.md · The Transfer-on-Merge Pattern · Prior Art"
+Cohesion: 0.22
+Nodes (8): Agent Governance, Architecture (3 layers), Compression Results (claimed), crates.io, GitHub, leanctx.com, Platforms, Read Modes
+
+### Community 550 - "The Birth of UNIX — Brian Kernighan Int… · Ken Thompson's Productivity · Kernighan on M…"
+Cohesion: 0.22
+Nodes (8): code:block1 (Traditional: Human → IDE → Agent (agent as assistant in side), Core Innovation: The Inversion, Editor View, Four Design Tenets, Manager View ("Mission Control"), Our Gap, The Two-View Architecture, What This Means for Harness Design
+
+### Community 551 - "Think in Code (blog post) · Injected Instruction · Case Study: Cloudflare Code Mode"
+Cohesion: 0.28
+Nodes (9): Sandboxes mitigate destructive risk, bash tool blocker script, edit tool guard, no-delete paths, patterns.yaml, Production asset safety, read-only paths, write tool guard (+1 more)
+
+### Community 552 - "self-evolving-harness.md · Two Approaches · Meta-Harness (Lee et al., 2026)"
+Cohesion: 0.22
+Nodes (9): Activity Feed (`feed.ts`), Chat Overlay (`overlay.ts`, `overlay-*.ts`), Crew Orchestration (`crew/`), Crew Skills (`crew/skills/`), Human as Participant, Message Budgets (per-coordination-level), Status Bar Indicators, Swarm (`swarm` actions, `store.ts` claim/complete) (+1 more)
+
+### Community 553 - "code:shell (cd my-repo) · code:shell (cd path/to/repo) · VS Code ITV repo walkthrough"
+Cohesion: 0.22
+Nodes (8): Automated Observability, code:block1 (subtask_verified (critics passed)), Extension Interface, Files, Flow, Instrumentation Verification (Heuristic), ObservabilitySpec Data Contract, Origin Principle
+
+### Community 554 - "Mario Snaphappy author · WebSocket telemetry idea · Simon Willison"
+Cohesion: 0.22
+Nodes (8): code:block5 (┌─────────────────────────────────────────────────────────┐), code:json (// package.json), Dependency, Files We Will Adapt, Integration Architecture, Key Differences from pi-messenger's Crew, pi-messenger Analysis: What We Adopt, What We Strip, Risk Assessment
+
+### Community 555 - "agent-skills-pattern.md · Gemini CLI Implementation (v0.23+) · Key Design Decisions"
+Cohesion: 0.33
+Nodes (8): Codex Harness Innovations, Sources, code:block3 (ultimate-pi harness migrate [--dry-run]), `ultimate-pi harness migrate` Command, bun run harness command, Cole's Claude/Codex harness repo, Codex harness variant, Codex CLI harness
+
+### Community 556 - "<% tp.file.title %> · Connections · Key Facts"
+Cohesion: 0.28
+Nodes (9): Open source software as social-norm motivation, Open source as recruiting signal, Open Source, BAML monorepo open source beeps, Open source voice stack, Airbnb internal harness, AWS harness blog, Shopify Roast (open source) (+1 more)
+
+### Community 557 - "<% tp.file.title %> · Comparison · comparison.md"
+Cohesion: 0.22
+Nodes (8): code:block1 (User describes goal), Core Principles, Definition, Relationship to Our Harness, Superpowers Methodology, The Brainstorm → Plan → Implement → Review Pipeline, Two Types of Enforcement, Why Hard Gates Work
+
+### Community 558 - "Dead Links (64) · Conceptual pages that don't exist · Entity pages that don't exist (us…"
+Cohesion: 0.22
+Nodes (8): code:markdown (# Summary instructions), Compaction Instructions, How It Works, Integration Opportunities, Relationship to Current Drift Monitor, Structured Compaction Pipeline, What Does Not Survive, What Survives Compaction
 
 ### Community 559 - "Pipeline · Phase 4: Correction Injection · Correction Injection"
 Cohesion: 0.22
@@ -3609,987 +3581,995 @@ Nodes (9): Daily Review Automation, GH CLI, Release Notes Workflow, Standard Ope
 
 ### Community 560 - "Implementation Recommendations for Our … · JSON mode must-have · Must-Have (L1-L3 integ…"
 Cohesion: 0.22
-Nodes (8): code:block1 (main trajectory: [step1] → [step2] → BRANCH → ... → RETURN(s), Context Folding, Definition, Harness Integration, Mechanism, Open Questions, vs Other Compaction Approaches, Why It Matters
+Nodes (8): code:bash (vgrep init              # ~1GB model download), Confidence Assessment, Key Capabilities, Limitations (Observed), Setup, Summary, System Requirements, What It Contributes
 
 ### Community 561 - "cursor-vs-antigravity-2026.md · Benchmark Notes · Core Distinction"
 Cohesion: 0.22
-Nodes (8): 1. Fast feedback matters more than almost anything else, 2. Scaling software means letting go of personal preferences, 3. TypeScript extended JavaScript instead of replacing it, 4. Visibility is part of what makes open source work, 5. Leaving JavaScript as implementation language was a necessary break, 6. AI workflow: grounding matters more than generation, 7 Learnings from Anders Hejlsberg, 7. Open collaboration builds institutional memory
+Nodes (8): Concepts, Entities, Journal, Projects, References, Skills, Synthesis, Wiki Index
 
 ### Community 562 - "lou2026-autoharness.md · Core Idea · Key Insight"
 Cohesion: 0.22
-Nodes (8): Architecture, Compression Results (claimed), context-mode.com, GitHub, License, npm, Platforms, Think in Code Paradigm
+Nodes (8): ADR-026: Replace CLI Cursor Provider with Native Cursor SDK Provider, Alternatives considered, Consequences, Context, Decision, Negative, Positive, Rationale
 
 ### Community 563 - "fan2025-imad.md · Core Idea · Key Insight"
 Cohesion: 0.22
-Nodes (8): Agent Governance, Architecture (3 layers), Compression Results (claimed), crates.io, GitHub, leanctx.com, Platforms, Read Modes
-
-### Community 564 - "code-chunk-library-supermemory.md · Contextualized Text Format · code:block1 (# src/ser…"
-Cohesion: 0.22
-Nodes (8): Implementation, L0: Project Map (always available, minimal tokens), L1: Symbol Map (on-demand, medium tokens), L2: File Context (on request), L3: Deep Context (on explicit request), Layers, Why It Matters, Cursor @ file references for context
-
-### Community 565 - "Iterating with Shadow Workspaces · Current Implementation · Design Criteria"
-Cohesion: 0.22
-Nodes (8): 1. Smarter Search (Input Token Reduction), 2. Batched & Fuzzy Edits (Output Token Reduction), 3. Quality Loop (Rework Reduction), Agent Architecture, Claims to Verify, Competitor Comparison (from WOZCODE), Privacy Architecture, Three Core Levers
-
-### Community 566 - "lee2026-meta-harness.md · Architecture · Core Idea"
-Cohesion: 0.22
-Nodes (8): code:block1 (Traditional: Human → IDE → Agent (agent as assistant in side), Core Innovation: The Inversion, Editor View, Four Design Tenets, Manager View ("Mission Control"), Our Gap, The Two-View Architecture, What This Means for Harness Design
-
-### Community 567 - "ts-folder-structure-mingyang.md · Recommended Structure · code:block1 (src/)"
-Cohesion: 0.22
-Nodes (8): AI Prompt Strategy, code:block1 (User request), Extension Interface, Files, Flow, HardenedSpec Data Contract, Origin Principle, Spec Hardening
-
-### Community 568 - "Augment Code.md · Key Metrics · Key People"
-Cohesion: 0.22
-Nodes (9): Coverage.py + pytest-cov, Py-spy (benfred/py-spy), pydeps (thebjorn/pydeps), Python, Ruff (astral-sh/ruff), Skylos (duriantaco/skylos), Vulture (jendrikseipp/vulture), build.md command (+1 more)
-
-### Community 569 - "What We Adopt · 2. Per-Agent Inboxes (`.pi/messenger/in… · 3. Message Format"
-Cohesion: 0.22
-Nodes (8): code:block1 (User describes goal), Core Principles, Definition, Relationship to Our Harness, Superpowers Methodology, The Brainstorm → Plan → Implement → Review Pipeline, Two Types of Enforcement, Why Hard Gates Work
-
-### Community 570 - "ck-tool.md · AI Agent Integration · Recommended Agent Queries"
-Cohesion: 0.22
-Nodes (8): code:markdown (# Summary instructions), Compaction Instructions, How It Works, Integration Opportunities, Relationship to Current Drift Monitor, Structured Compaction Pipeline, What Does Not Survive, What Survives Compaction
-
-### Community 571 - "Majority Vote Ensembling.md · code:json ({) · Input Format"
-Cohesion: 0.5
-Nodes (9): Benchmark ghosting emergent perf, Close the loop automation, Dedicated agent Mac Mini, Engineering primitive framing, Multi-agent swarms future, Programmable -p CLI mode, Sam Altman intelligence age, Simplicity vs complexity risk (+1 more)
-
-### Community 572 - "ck-semantic-search.md · Confidence Assessment · Key Capabilities"
-Cohesion: 0.22
-Nodes (8): 1. Stale Environment Context (Infrastructure Drift), Drift Taxonomy, Mitigation Approaches, Quantified Impact, See Also, Stuck-Pattern Signatures, Three Causal Mechanisms, Two Definitions
-
-### Community 573 - "Consensus Records · Consensus Page Template · code:markdown (---)"
-Cohesion: 0.22
-Nodes (8): Concepts, Entities, Journal, Projects, References, Skills, Synthesis, Wiki Index
-
-### Community 574 - "ADR-009: claude-obsidian Mode B for Per… · Comparison · Consequences"
-Cohesion: 0.22
-Nodes (8): ADR-026: Replace CLI Cursor Provider with Native Cursor SDK Provider, Alternatives considered, Consequences, Context, Decision, Negative, Positive, Rationale
-
-### Community 575 - "ADR-008: Spec-Only Black-Box QA · Consequences · Context"
-Cohesion: 0.22
 Nodes (8): ADR-013: Biome for Phase 16 Deterministic Quality Gate, Consequences, Context, Decision, Mitigations, Negative, Positive, Rationale
 
-### Community 576 - "ADR-010: Agentic Harness ↔ Wiki Tight-C… · Consequences · Context"
-Cohesion: 0.22
-Nodes (8): Community 32 - "Linearizability & Consensus", Community 32 - "Linearizability & Consensus", Community Consensus, GSD Hacker News Discussion (473 points, March 2026), Key Comparisons, Negative, Notable Quotes, Positive
-
-### Community 577 - "pi-context-prune · pi-context-prune-github-repo.md · Approach"
-Cohesion: 0.28
-Nodes (9): Elastic systems, Horizontal scaling (scale out), Community 14 - "Reliability, Scaling, Maintainability", Community 17 - "Replication & Scaling Out", Community 40 - "Transactions & Replication", Dynamic equilibrium, Community 14 - "Reliability, Scaling, Maintainability", Community 17 - "Replication & Scaling Out" (+1 more)
-
-### Community 578 - "pi-rtk-optimizer · pi-rtk-optimizer-github-repo.md · Architecture"
+### Community 564 - "code-chunk-library-supermemory.md · Contextualized Text Format · code:block1 (# src/ser…"
 Cohesion: 0.42
 Nodes (9): ELF executable object files, ELF relocatable object files, ELF shared object (.so), Relocation and relocation entries, Symbol resolution and linkage, Community 114 - "ELF Object Files", Community 86 - "Linking & Object Files", Community 114 - "ELF Object Files" (+1 more)
 
-### Community 579 - "_gen_chunk14.py · edge() · intra()"
-Cohesion: 0.22
-Nodes (8): Architecture, code:block1 (Agent / Human), Dependencies, Ingest Operations, Lint Operations (after every 10-15 writes), Query Operations, Three Depth Modes, Wiki Query Interface (claude-obsidian Skills)
-
-### Community 580 - "Always-on RAG toggle · bash tool + cwd state · read_file truncation"
+### Community 565 - "Iterating with Shadow Workspaces · Current Implementation · Design Criteria"
 Cohesion: 0.28
-Nodes (9): Client-server programming model, Sockets API, Web clients and servers, Client/server architecture, Unitary architecture, 4. Bidirectional MCP (Client AND Server), code:block2 ([System prompt — stable across all requests]         ← CACHE), Prompt Structure IS Cache Architecture (+1 more)
+Nodes (9): Elastic systems, Horizontal scaling (scale out), Community 14 - "Reliability, Scaling, Maintainability", Community 17 - "Replication & Scaling Out", Community 40 - "Transactions & Replication", Dynamic equilibrium, Community 14 - "Reliability, Scaling, Maintainability", Community 17 - "Replication & Scaling Out" (+1 more)
 
-### Community 581 - "Community 48 - "Lean: 5S, Andon, Quality" · Community 39 - "Software Quality & Refa… · …"
-Cohesion: 0.33
-Nodes (8): Codex Harness Innovations, Sources, code:block3 (ultimate-pi harness migrate [--dry-run]), `ultimate-pi harness migrate` Command, bun run harness command, Cole's Claude/Codex harness repo, Codex harness variant, Codex CLI harness
-
-### Community 582 - "Community 99 - "Grove: Maslow & Motivat… · Community 52 - "Grove: Production Metap… · C…"
+### Community 566 - "lee2026-meta-harness.md · Architecture · Core Idea"
 Cohesion: 0.22
-Nodes (9): Anthropic Client, Anthropic Post-Mortem, Context-Window Routing Bug, Model Degradation, Output Corruption Bug, Anthropic Post-Mortem Reference, AI Observability, Rollback Strategy (+1 more)
+Nodes (8): Community 32 - "Linearizability & Consensus", Community 32 - "Linearizability & Consensus", Community Consensus, GSD Hacker News Discussion (473 points, March 2026), Key Comparisons, Negative, Notable Quotes, Positive
 
-### Community 583 - "Community 22 - "Social Comparison & Envy" · Community 27 - "Social Proof & Conformity" …"
+### Community 567 - "ts-folder-structure-mingyang.md · Recommended Structure · code:block1 (src/)"
 Cohesion: 0.22
-Nodes (9): Advanced agentic coding video (missing text), YouTube transcript pipeline gap, MCP servers critique (missing), Three proven solutions (missing), Agent experts topic unavailable, Learning agents placeholder, Agents run codebase hypothesis, Codebase singularity theme (+1 more)
+Nodes (9): Layered trajectory distillation, Limits of compressed feedback optimizers, Meta-Harness, Filesystem-backed full optimization history, Meta-Harness outer-loop search, The Last Harness (meta-evolution), Meta-Evolution Loop, Context collapse phenomenon (+1 more)
 
-### Community 584 - "Community 49 - "Defensive Programming &… · Community 62 - "Network Programming & I/O" ·…"
-Cohesion: 0.25
-Nodes (9): Regex filters lived in removed fetch scripts, scripts/index_youtube_urls.py, IndyDevDan channel, Title filter for agentic coding transcripts, API latency vs product speed, Missing transcript / scrape gap, Llamafile (inferred from title), Local LLM one-liner workflow (+1 more)
-
-### Community 585 - "Reliable, scalable, maintainable systems · Community 3 - "Scalable Systems & Itera… · C…"
-Cohesion: 0.22
-Nodes (9): Anthropic ToS warning for subscription routing, GitHub Copilot subscription in Pi, OpenClaw under the hood, Cursor (policy keyword), MCP for dev agents (policy keyword), OpenClaw keyword, Ralph Wiggum keyword, TITLE_NEGATIVE spam filter (+1 more)
-
-### Community 586 - "Community 24 - "PM Tradeoffs & Decision… · Decide how to decide (separate dialogue… · C…"
-Cohesion: 0.22
-Nodes (8): code:bash (vgrep init              # ~1GB model download), Confidence Assessment, Key Capabilities, Limitations (Observed), Setup, Summary, System Requirements, What It Contributes
-
-### Community 587 - "Dijkstra’s algorithm · Johnson’s all-pairs algorithm · Bellman–Ford algorithm"
-Cohesion: 0.22
-Nodes (8): code:block1 (ultimate-pi harness init), Enforcement, Layer 1: Gitignored Runtime Cache, Layer 2: `harness init` Bootstrap, Layer 3: GitHub's Native Repo Scoping, The Merge Problem — SOLVED, The Solution: Three-Layer Isolation, Why Labels Instead of Issue Numbers
-
-### Community 588 - "Jay Gazior · Test block argument warnings · List streaming atomicity fix"
-Cohesion: 0.22
-Nodes (8): Key Analysis Points, Philosophy: Rigid Where It Matters, Flexible Where It Doesn't, Real Results, Relevance to Harness, Summary, Superpowers: Skills Framework Reshaping AI Dev (Termdock), The Core Insight, What Makes This Different from Good Prompts
-
-### Community 589 - "Rust · Built-in Rust compiler warnings · cargo-deny (EmbarkStudios/cargo-deny)"
-Cohesion: 0.36
-Nodes (9): bg agent, expert dir, hook trail, report file, websocket tac, Claude Agent SDK custom agent, core four, just command runner (+1 more)
-
-### Community 590 - "Musk-style first-principles prompts (Gl… · Stacked meta-prompt (verbatim gist) · aiglee…"
-Cohesion: 0.22
-Nodes (8): Computational vs Inferential, Core Framework, Harness Templates, Harnessability, Martin Fowler: Harness Engineering for Coding Agent Users, Regulation Categories, Relevance to Ultimate-PI, What It Is
-
-### Community 591 - "LiveKit · Docker MCP gateway · Cole Medin (channel)"
+### Community 568 - "Augment Code.md · Key Metrics · Key People"
 Cohesion: 0.22
 Nodes (8): 1. Solve (The Thinking Before the Build), 2. Build (Production-Grade from First Prompt), 3. Intelligence (Know What Your Competition Just Did), Business Model, Funding & Traction, Key Thesis, Relevance to AI Coding Harness, Three Capabilities
 
-### Community 592 - "hybrid-code-search.md · Semantic Search (Embeddings) · Reciprocal Rank Fusion (RRF)"
-Cohesion: 0.25
-Nodes (6): files, installDir, relFile, seen, src, stripped
+### Community 569 - "What We Adopt · 2. Per-Agent Inboxes (`.pi/messenger/in… · 3. Message Format"
+Cohesion: 0.22
+Nodes (9): Background Agents, Reviewer Principle (separate reviewer model), Delta column for validation results, Labeled fund categories, Human-in-the-loop UX for validation failures, quantity * price vs market value validation, Programmatic cross-field validation, Optional second LLM validation pass (+1 more)
 
-### Community 594 - "Effective Harnesses for Long-Running Ag… · anthropic-effective-harnesses.md · Anthropic…"
+### Community 570 - "ck-tool.md · AI Agent Integration · Recommended Agent Queries"
+Cohesion: 0.22
+Nodes (8): Architecture, code:block1 (Agent / Human), Dependencies, Ingest Operations, Lint Operations (after every 10-15 writes), Query Operations, Three Depth Modes, Wiki Query Interface (claude-obsidian Skills)
+
+### Community 571 - "Majority Vote Ensembling.md · code:json ({) · Input Format"
+Cohesion: 0.22
+Nodes (9): Coverage.py + pytest-cov, Py-spy (benfred/py-spy), pydeps (thebjorn/pydeps), Python, Ruff (astral-sh/ruff), Skylos (duriantaco/skylos), Vulture (jendrikseipp/vulture), build.md command (+1 more)
+
+### Community 572 - "ck-semantic-search.md · Confidence Assessment · Key Capabilities"
+Cohesion: 0.5
+Nodes (9): Benchmark ghosting emergent perf, Close the loop automation, Dedicated agent Mac Mini, Engineering primitive framing, Multi-agent swarms future, Programmable -p CLI mode, Sam Altman intelligence age, Simplicity vs complexity risk (+1 more)
+
+### Community 573 - "Consensus Records · Consensus Page Template · code:markdown (---)"
+Cohesion: 0.47
+Nodes (9): agent agnostic, archive moves, cat batch, gemini err429, lockin warn, open dir step, parallel drop, rich logs (+1 more)
+
+### Community 574 - "ADR-009: claude-obsidian Mode B for Per… · Comparison · Consequences"
+Cohesion: 0.22
+Nodes (8): Academic Treatment, code:block1 (User Request → [Guardian Agent: validate plan] → [Agent exec), Complementary Approaches, Proactive Guardian (Pre-Execution), Reactive Guardian (Post-Execution), See Also, Two Variants, Reactive cell execution
+
+### Community 575 - "ADR-008: Spec-Only Black-Box QA · Consequences · Context"
+Cohesion: 0.44
+Nodes (9): drop zones, drops yaml, event created, gemini echo, pattern globs, readme arch, replace vars, stream cc (+1 more)
+
+### Community 576 - "ADR-010: Agentic Harness ↔ Wiki Tight-C… · Consequences · Context"
+Cohesion: 0.47
+Nodes (9): afk mcp prompt, db backed logs, eight custom apps, fn tool, git rail mount, openai sdk poc, realtime audio poc, sdk rename (+1 more)
+
+### Community 577 - "pi-context-prune · pi-context-prune-github-repo.md · Approach"
+Cohesion: 0.44
+Nodes (9): 500 students, cc20 devlog, claude2, firecrawl mcp json, horizon bundle, sonnet 45, system prompt explicit, tac pitch (+1 more)
+
+### Community 578 - "pi-rtk-optimizer · pi-rtk-optimizer-github-repo.md · Architecture"
+Cohesion: 0.22
+Nodes (9): AI Coding Agents, Codex apply_patch vs Claude old/new string, RL training co-evolved with harness tools, Coding benchmark skepticism, GPT-5 in Claude harness mismatch, Lab-owned harness post-training alpha, Opus 4.7 50k token harness bloat hypothesis, SWE-bench style RL on coding agents (+1 more)
+
+### Community 579 - "_gen_chunk14.py · edge() · intra()"
+Cohesion: 0.22
+Nodes (8): 1. Smarter Search (Input Token Reduction), 2. Batched & Fuzzy Edits (Output Token Reduction), 3. Quality Loop (Rework Reduction), Agent Architecture, Claims to Verify, Competitor Comparison (from WOZCODE), Privacy Architecture, Three Core Levers
+
+### Community 580 - "Always-on RAG toggle · bash tool + cwd state · read_file truncation"
+Cohesion: 0.22
+Nodes (8): Architecture, Execution Modes, Interactive Mode (cli.py), Key Tools, Majority Vote Ensembler, Summary, SWE-bench Mode (run_agent_on_swebench_problem.py), Technology Stack
+
+### Community 581 - "Community 48 - "Lean: 5S, Andon, Quality" · Community 39 - "Software Quality & Refa… · …"
+Cohesion: 0.39
+Nodes (7): getProjectDataDir(), appendToWorklog(), getWorklogPath(), readWorklog(), summarizeWorklog(), WorklogEntry, WorklogStats
+
+### Community 582 - "Community 99 - "Grove: Maslow & Motivat… · Community 52 - "Grove: Production Metap… · C…"
 Cohesion: 0.25
 Nodes (8): [3.8.32] - 2026-04-26, Added, Changed, Fixed, Fixed, Performance, Removed, Tests
 
-### Community 595 - "Key Insight: Context > Model Intelligence · Long-Context Model · 9. Context Anxiety (Cr…"
+### Community 583 - "Community 22 - "Social Comparison & Envy" · Community 27 - "Social Proof & Conformity" …"
 Cohesion: 0.25
 Nodes (8): [3.8.33] - 2026-04-27, Added, Added, Changed, Changed, Fixed, Fixed, Fixed
 
-### Community 596 - "OpenAI API developer experience · Privacy as evaluation dimension · Regex-based Promptf…"
+### Community 584 - "Community 49 - "Defensive Programming &… · Community 62 - "Network Programming & I/O" ·…"
 Cohesion: 0.39
 Nodes (6): E(), edge(), I(), N(), node(), a,b are suffix keys within file k, or ta is full target id if cross.
 
-### Community 597 - "Google Cloud · Google Cloud.md · Google Cloud setup friction"
+### Community 585 - "Reliable, scalable, maintainable systems · Community 3 - "Scalable Systems & Itera… · C…"
 Cohesion: 0.46
 Nodes (6): add_bulk(), canon(), edge(), nid(), node(), ref()
 
-### Community 598 - "Sequential agentic workflow · Trigger step · File logging of runs"
+### Community 586 - "Community 24 - "PM Tradeoffs & Decision… · Decide how to decide (separate dialogue… · C…"
 Cohesion: 0.32
 Nodes (4): main(), nid(), add_edge(), add_node()
 
-### Community 599 - "Multi-agent observability UI · Bun WebSocket server · Session color hashing UI"
-Cohesion: 0.29
-Nodes (8): code:shell (poetry run pytest .), code:shell (poetry run ptw), code:shell (poetry run pytest .  --testmon), Running tests, Test all files, Test changed files, Watch mode (recommended), poetry run CLI
-
-### Community 600 - "Retail compliance · Dashboard charts · CSV export"
+### Community 587 - "Dijkstra’s algorithm · Johnson’s all-pairs algorithm · Bellman–Ford algorithm"
 Cohesion: 0.25
 Nodes (7): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Sources
 
-### Community 601 - "[v0.1.7] — 2026-05-07 · Changelog · CHANGELOG.md"
-Cohesion: 0.25
-Nodes (7): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Sources
-
-### Community 602 - "_gen_chunk_10.py · edge() · hyper()"
-Cohesion: 0.25
-Nodes (7): 1. Code Chunking, 2. Embedding Generation, 3. Vector Database Storage, 5. Hybrid Search, How It Works, Implementation Stack (for our harness), Why Semantic > Grep
-
-### Community 603 - "{{title}} · Components Involved · Description"
-Cohesion: 0.25
-Nodes (7): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Sources
-
-### Community 604 - "<% tp.file.title %> · Answer · Confidence"
-Cohesion: 0.25
-Nodes (7): 1. Modularity, 2. Acyclicity, 3. Depth, 4. Equality (Gini Coefficient), 5. Redundancy, sentrux Docs: Root Cause Metrics, Why Exactly 5?
-
-### Community 605 - "colinmcnamara-context-optimization-code… · Context Efficiency Comparison · Key Insight:…"
-Cohesion: 0.25
-Nodes (7): Context Folding, Core Mechanism, Critical Finding, FoldGRPO, Relevance to pi-vcc, Results, Summary
-
-### Community 606 - "Codex DSC RFC 8573 — Deterministic Sess… · Key Details · codex-dsc-rfc-8573.md"
-Cohesion: 0.25
-Nodes (8): Diagnostic Command, MCP Bridge, Tool Overrides, What pi-lean-ctx Provides, Agentic product experiences, AGUI protocol (CopilotKit), Copilot Kit React UI, MCP for tools vs AGUI for UI bridge
-
-### Community 607 - "pi-mono Compaction Documentation · Key Details · pi-mono-compaction-docs.md"
-Cohesion: 0.25
-Nodes (8): Anthropic Pattern: Planner → Generator → Evaluator, code:block1 (User prompt → Planner (structured Plan) → Architect (TaskPla), code:block2 (User prompt → Planner (product spec) → Generator (implements), code:block3 (Codex generates → Codex reviews locally → Additional agent r), Lovable/Clone Pattern: Planner → Architect → Coder, OpenAI Pattern: Agent-to-Agent Review Loops, Three Common Decompositions, OpenAI Agent Kit
-
-### Community 608 - "coir-code-retrieval-benchmark.md · Framework · Relevance to Our Implementation"
-Cohesion: 0.25
-Nodes (8): Artificial Analysis benchmarks, Gemini 3 Pro, Model benchmark saturation takeaway, Nano Banana Pro, Nano Banana operator UI demo, Note-taking full-stack demo, OpenRouter usage commentary, Terminal bench / long-horizon agentic signal
-
-### Community 609 - "Pi Language Model Provider Extension (t… · Key Details · pi-vscode-model-provider-marke…"
-Cohesion: 0.25
-Nodes (7): Core Identity, Creators, Critical Reception, Key Stats, Philosophy, sentrux (tool), Technology
-
-### Community 610 - "Beta launch gating · Demo read-only Postgres dataset · Feedback moderation agents"
-Cohesion: 0.25
-Nodes (7): code:block1 (# src/services/user.ts), Definition, Format, Impact on MiniLM-L6-v2, Why It Works, Embedding text vs LLM display text split, LLM text serialization for categories
-
-### Community 611 - "vectara-chunking-vs-embedding-naacl2025.md · Key Finding · Practical Defaults"
-Cohesion: 0.25
-Nodes (7): Behavior, Compaction (for non-anxious models), Context Reset (for anxious models), Detection, Mitigations, Relevance to Our Harness, Which Models Exhibit It
-
-### Community 612 - "Emergent Labs.md · Hiring Focus · Key Claim"
-Cohesion: 0.25
-Nodes (7): code:block1 (Raw tool logs: "execute_command: npm install" → "exit 0" → "), Comparison with Our Harness, Feedback on Artifacts, Gap Analysis, How Artifacts Build Trust, Proposed Integration: Phase P31, What Are Artifacts?
-
-### Community 613 - "Rocket.new.md · Founder · Key Numbers"
-Cohesion: 0.25
-Nodes (7): code:block1 (Task → Single agent self-critique → Extract hesitation featu), Core Insight, iMAD Mechanism, Impact on Our Consensus Debate (ADR-011), Implementation Sketch, Open Questions, Results
-
-### Community 614 - "disler (IndyDevDan) · Contributions · disler-indydevdan.md"
-Cohesion: 0.25
-Nodes (7): Built-Package (Recommended by Koerselman), Deployment Isolation, ESM in Monorepos, IDE Integration, Internal Package Strategies, Internal-Packages (Source-only), Key Tools
-
-### Community 615 - "OpenDev · Architecture · Key Features"
-Cohesion: 0.25
-Nodes (7): Automated Observability, code:json ({ "observability": { "require_metrics": true } }), Config, Extension Interface, Files, Flow, ObservabilitySpec Data Contract
-
-### Community 616 - "harness-h-formalism.md · Components · Gaps"
-Cohesion: 0.25
-Nodes (7): code:json ({ "spec_hardening": { "max_ambiguity_retries": 3, "auto_reso), Config, Extension Interface, Files, Flow, HardenedSpec Data Contract, Spec Hardening
-
-### Community 617 - "context-mode · Architecture · Key features"
-Cohesion: 0.25
-Nodes (7): Alternatives Considered, Changes Made, Chosen, Consequences, Context, Replace pi-lean-ctx with context-mode, Tradeoffs
-
-### Community 618 - "sentrux GitHub Repository · Architecture · Development Velocity"
-Cohesion: 0.25
-Nodes (8): Frontmatter Gaps (169), Missing `created` field (58 pages), Missing `status` field (57 pages), Missing `tags` field (169 pages), Missing `type` field, Missing `updated` field (82 pages), No frontmatter at all (2 pages — critical), Specific notable gaps
-
-### Community 619 - "google-antigravity-wikipedia.md · Features · Key Facts"
-Cohesion: 0.25
-Nodes (8): Tell your story, Mental healings in ancient cultures, Priests and holy men as healing intermediaries, Professor case: major premise of infinite intelligence guiding life, Your right to be rich (prosperity framing), Tuberculosis case healed via belief in ring / 'true cross' splinter, Visualization / mental pictures and blind belief effects, Using subconscious for wealth
-
-### Community 620 - "[v0.1.7] — 2026-05-07 · Changelog · CHANGELOG.md"
-Cohesion: 0.25
-Nodes (7): 1. The Diff Problem, 2. Latency Compounds, 3. Sandboxing at Scale, How Cursor Shipped its Coding Agent to Production, Relevance to Harness, System Architecture, Three Production Challenges
-
-### Community 621 - "Recruiter–hiring manager calibration · Community 122 - "Recruiter Calibration" · Calibr…"
-Cohesion: 0.46
-Nodes (8): General-purpose subagent, GitHub PR comment automation script, Human Layer open-source slash commands, Instruction budget / tools block bloat, Instruction modules vs personas, Jeff moo context-window attention test, Kyle thesis: Claude Code vs API strategy, Lazy vs hard-loaded skills
-
-### Community 622 - "Acqui-hire (team acquisition for talent) · Acqui-hire anti-patterns list · Acqui-hire c…"
-Cohesion: 0.25
-Nodes (7): Key Engineering Insights, Onboarding Revolution, Planning Philosophy, Pricing Evolution, Summary, The "Contractor vs Employee" Model, Three-Pronged Context Strategy
-
-### Community 623 - "Baml Playground Wasm · Beex Engine · Wasi Runtime"
-Cohesion: 0.25
-Nodes (7): Compound AI System, Core Architecture, Discussion: Transferable Lessons, Dual-Agent Separation, Extended ReAct Loop, Safety — Defense in Depth, Tool System
-
-### Community 624 - "Friday Discord triage bot (Antonio) · Antonio Friday Bot Author · GitHub issue linking …"
-Cohesion: 0.25
-Nodes (7): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Sources
-
-### Community 625 - "Identify Source Function · Gpt4O Mini Source Classifier · Test-first prompt iteration"
-Cohesion: 0.25
-Nodes (8): asyncio colored functions pain, Call-site determines concurrency, Implicit cancellation like Python asyncio, Meeting transcript → model outline, Middleware wraps spawn (retry etc), BAML threading / spawn BEP, AbortController rarely used in TS APIs, V2 rewrite vs destructive in-place edits
-
-### Community 626 - "1. "What are the physics of this problem?" · 3. "What are the problem’s fundamental … ·…"
-Cohesion: 0.29
-Nodes (7): Core Tenets (Doug McIlroy, 1978), Eric Raymond's 17 Unix Rules (The Art of Unix Programming, 2003), The 1994 Summary (Peter Salus, crediting McIlroy), Unix Philosophy, Worse is Better (Richard P. Gabriel), Tailwind vs shadcn harness analogy, Unix pipes composability philosophy
-
-### Community 627 - "Dynamic BAML types · Form builder UX for doctors · generate_schema ML function"
-Cohesion: 0.25
-Nodes (8): agent-ops TypeScript runner, duckdb CLI, Electron preload bridge, measurements.txt generated file, Simon Willison terminal tip, Vue watcher pagination pattern, Weather stations CSV seed, Assistants write_file tool
-
-### Community 628 - "ck ("seek")Hybrid Code Search · From crates.io [​](https://beaconbay.gi… · From NPM (re…"
-Cohesion: 0.43
-Nodes (8): Replicate API, cc py sdk, cc ts sdk, csv extend, finance viz, gemini flash img, morning debrief, uv sfs
-
-### Community 629 - "Gordon (Docker Desktop agent) · Docker Desktop · Docker MCP toolkit (beta)"
-Cohesion: 0.25
-Nodes (7): Benchmark Design, Failure Distribution, Guardian Agents, Key Results, Six Domains, Summary, What It Contributes
-
-### Community 630 - "GPT-5 swap-in future-proofing · Future-Proofing · Agentic workflows composition"
+### Community 588 - "Jay Gazior · Test block argument warnings · List streaming atomicity fix"
 Cohesion: 0.25
 Nodes (8): code:block1 (Pattern              | Threshold   | Detection), Detection Mechanism, Escalation Model, Feasibility, First Principles Analysis, Overhead Analysis, Pruning Heuristic, The Meta-Agent Solution
 
-### Community 631 - "Agentic chunking via LLM splits · Google Drive document ingest · LangChain code node in…"
+### Community 589 - "Rust · Built-in Rust compiler warnings · cargo-deny (EmbarkStudios/cargo-deny)"
 Cohesion: 0.25
-Nodes (7): Design Details, Five Detection Rules, Future Extensions (Not in Scope), Integration Points, Relevance to Meta-Agent Concept, Summary, What It Contributes
+Nodes (7): Benchmark Design, Failure Distribution, Guardian Agents, Key Results, Six Domains, Summary, What It Contributes
 
-### Community 632 - "Scrape URL → codegen prompt chain · Element: output format · JSON for chainability"
+### Community 590 - "Musk-style first-principles prompts (Gl… · Stacked meta-prompt (verbatim gist) · aiglee…"
 Cohesion: 0.25
-Nodes (8): Web search, aws sqs jobs, enrichment, exa search, tavily search, web search enrichment, sec policy prompts, OpenAI Web Search
+Nodes (7): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Sources
 
-### Community 633 - "Lovable (company).md · Architecture Pattern · Competitors"
+### Community 591 - "LiveKit · Docker MCP gateway · Cole Medin (channel)"
+Cohesion: 0.25
+Nodes (8): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Research: pi-vs-claude-code Agentic Orchestration Pipeline, Sources
+
+### Community 592 - "hybrid-code-search.md · Semantic Search (Embeddings) · Reciprocal Rank Fusion (RRF)"
+Cohesion: 0.25
+Nodes (7): Contradictions, Key Concepts, Key Entities, Key Findings, Open Questions, Overview, Sources
+
+### Community 593 - "System prompt principles · Sub-Agent System Prompt Layer · Summary Format (in system pr…"
+Cohesion: 0.25
+Nodes (7): 1. Modularity, 2. Acyclicity, 3. Depth, 4. Equality (Gini Coefficient), 5. Redundancy, sentrux Docs: Root Cause Metrics, Why Exactly 5?
+
+### Community 594 - "Effective Harnesses for Long-Running Ag… · anthropic-effective-harnesses.md · Anthropic…"
+Cohesion: 0.25
+Nodes (7): Context Folding, Core Mechanism, Critical Finding, FoldGRPO, Relevance to pi-vcc, Results, Summary
+
+### Community 595 - "Key Insight: Context > Model Intelligence · Long-Context Model · 9. Context Anxiety (Cr…"
+Cohesion: 0.25
+Nodes (7): Core Identity, Creators, Critical Reception, Key Stats, Philosophy, sentrux (tool), Technology
+
+### Community 596 - "OpenAI API developer experience · Privacy as evaluation dimension · Regex-based Promptf…"
+Cohesion: 0.25
+Nodes (7): code:block1 (# src/services/user.ts), Definition, Format, Impact on MiniLM-L6-v2, Why It Works, Embedding text vs LLM display text split, LLM text serialization for categories
+
+### Community 597 - "Google Cloud · Google Cloud.md · Google Cloud setup friction"
+Cohesion: 0.25
+Nodes (7): Building AI Coding Agents for the Terminal: Scaffolding, Harness, Context Engineering, and Lessons Learned, Compound AI System, Core Architecture, Extended ReAct Loop, Lessons for Our Harness, Safety Architecture (Defense-in-Depth), Scaffolding vs Harness
+
+### Community 598 - "Sequential agentic workflow · Trigger step · File logging of runs"
+Cohesion: 0.25
+Nodes (7): Behavior, Compaction (for non-anxious models), Context Reset (for anxious models), Detection, Mitigations, Relevance to Our Harness, Which Models Exhibit It
+
+### Community 599 - "Multi-agent observability UI · Bun WebSocket server · Session color hashing UI"
+Cohesion: 0.25
+Nodes (7): code:block1 (Raw tool logs: "execute_command: npm install" → "exit 0" → "), Comparison with Our Harness, Feedback on Artifacts, Gap Analysis, How Artifacts Build Trust, Proposed Integration: Phase P31, What Are Artifacts?
+
+### Community 600 - "Retail compliance · Dashboard charts · CSV export"
+Cohesion: 0.25
+Nodes (7): code:block1 (Task → Single agent self-critique → Extract hesitation featu), Core Insight, iMAD Mechanism, Impact on Our Consensus Debate (ADR-011), Implementation Sketch, Open Questions, Results
+
+### Community 601 - "[v0.1.7] — 2026-05-07 · Changelog · CHANGELOG.md"
+Cohesion: 0.25
+Nodes (7): Automated Observability, code:json ({ "observability": { "require_metrics": true } }), Config, Extension Interface, Files, Flow, ObservabilitySpec Data Contract
+
+### Community 602 - "_gen_chunk_10.py · edge() · hyper()"
+Cohesion: 0.25
+Nodes (7): code:json ({ "spec_hardening": { "max_ambiguity_retries": 3, "auto_reso), Config, Extension Interface, Files, Flow, HardenedSpec Data Contract, Spec Hardening
+
+### Community 603 - "{{title}} · Components Involved · Description"
+Cohesion: 0.25
+Nodes (7): Alternatives Considered, Changes Made, Chosen, Consequences, Context, Replace pi-lean-ctx with context-mode, Tradeoffs
+
+### Community 604 - "<% tp.file.title %> · Answer · Confidence"
+Cohesion: 0.25
+Nodes (8): Agent sandbox skill, Claude memory file reprogramming, Skills portability across CLIs (theme), ElevenLabs Scribe 2.5, Graphing tool demo, Plan-build-host-test ADW, Planning velocity constraint, Voice notes full-stack demo
+
+### Community 605 - "colinmcnamara-context-optimization-code… · Context Efficiency Comparison · Key Insight:…"
+Cohesion: 0.25
+Nodes (7): Architecture, Core Insight, GSD (Get Shit Done), Key Patterns, Pipeline: discuss → plan → execute → verify → ship, Relationship to Our Harness, What It Is
+
+### Community 606 - "Codex DSC RFC 8573 — Deterministic Sess… · Key Details · codex-dsc-rfc-8573.md"
+Cohesion: 0.32
+Nodes (8): Client-server programming model, Sockets API, Standard I/O vs Unix I/O, Web clients and servers, Client/server architecture, Unitary architecture, 4. Bidirectional MCP (Client AND Server), Client/server prompt architecture
+
+### Community 607 - "pi-mono Compaction Documentation · Key Details · pi-mono-compaction-docs.md"
+Cohesion: 0.25
+Nodes (7): 1. The Diff Problem, 2. Latency Compounds, 3. Sandboxing at Scale, How Cursor Shipped its Coding Agent to Production, Relevance to Harness, System Architecture, Three Production Challenges
+
+### Community 608 - "coir-code-retrieval-benchmark.md · Framework · Relevance to Our Implementation"
 Cohesion: 0.25
 Nodes (7): Browser Subagent for Visual Verification, Gap in Our Harness, How It Works, Proposed Integration: Phase P30, Use Cases, Why agent-browser over browser-harness, Why This Is Revolutionary
 
-### Community 634 - "github-issue-dependencies-docs.md · GitHub issue templates · Distinction from Sub-Issues"
+### Community 609 - "Pi Language Model Provider Extension (t… · Key Details · pi-vscode-model-provider-marke…"
+Cohesion: 0.25
+Nodes (7): Key Engineering Insights, Onboarding Revolution, Planning Philosophy, Pricing Evolution, Summary, The "Contractor vs Employee" Model, Three-Pronged Context Strategy
+
+### Community 610 - "Beta launch gating · Demo read-only Postgres dataset · Feedback moderation agents"
+Cohesion: 0.29
+Nodes (8): BoundaryML, Vaibhav (BoundaryML co-founder), AI That Works (Series), Dex (Dexter), Vaibhav (Vibov), AI That Works (shared series), Dex (shared host), Vaibhav (shared host)
+
+### Community 611 - "vectara-chunking-vs-embedding-naacl2025.md · Key Finding · Practical Defaults"
+Cohesion: 0.25
+Nodes (7): Compound AI System, Core Architecture, Discussion: Transferable Lessons, Dual-Agent Separation, Extended ReAct Loop, Safety — Defense in Depth, Tool System
+
+### Community 612 - "Emergent Labs.md · Hiring Focus · Key Claim"
+Cohesion: 0.25
+Nodes (8): asyncio colored functions pain, Call-site determines concurrency, Implicit cancellation like Python asyncio, Meeting transcript → model outline, Middleware wraps spawn (retry etc), BAML threading / spawn BEP, AbortController rarely used in TS APIs, V2 rewrite vs destructive in-place edits
+
+### Community 613 - "Rocket.new.md · Founder · Key Numbers"
+Cohesion: 0.25
+Nodes (8): JSON debug file dump, Notion API, blocks.children.list endpoint, Notion developer documentation, Python Notion client, read_text ingestion flow, Recursive nested blocks, Rich text parsing
+
+### Community 614 - "disler (IndyDevDan) · Contributions · disler-indydevdan.md"
+Cohesion: 0.25
+Nodes (8): agent-ops TypeScript runner, duckdb CLI, Electron preload bridge, measurements.txt generated file, Simon Willison terminal tip, Vue watcher pagination pattern, Weather stations CSV seed, Assistants write_file tool
+
+### Community 615 - "OpenDev · Architecture · Key Features"
+Cohesion: 0.25
+Nodes (8): Large-Scale Scrum (LeSS) reference, Large-scale classification, Accuracy over Cost, Embeddings, Hyperparameter Tuning, Medical Billing Codes, Multi-Stage Classification Pipeline, Pipeline Probes
+
+### Community 616 - "harness-h-formalism.md · Components · Gaps"
+Cohesion: 0.43
+Nodes (8): Replicate API, cc py sdk, cc ts sdk, csv extend, finance viz, gemini flash img, morning debrief, uv sfs
+
+### Community 617 - "context-mode · Architecture · Key features"
+Cohesion: 0.25
+Nodes (8): Web search, aws sqs jobs, enrichment, exa search, tavily search, web search enrichment, sec policy prompts, OpenAI Web Search
+
+### Community 618 - "sentrux GitHub Repository · Architecture · Development Velocity"
+Cohesion: 0.25
+Nodes (7): Built-Package (Recommended by Koerselman), Deployment Isolation, ESM in Monorepos, IDE Integration, Internal Package Strategies, Internal-Packages (Source-only), Key Tools
+
+### Community 619 - "google-antigravity-wikipedia.md · Features · Key Facts"
+Cohesion: 0.29
+Nodes (8): code:shell (poetry run pytest .), code:shell (poetry run ptw), code:shell (poetry run pytest .  --testmon), Running tests, Test all files, Test changed files, Watch mode (recommended), poetry run CLI
+
+### Community 620 - "[v0.1.7] — 2026-05-07 · Changelog · CHANGELOG.md"
 Cohesion: 0.29
 Nodes (6): ctx, entries, found, md, samplePacket, sampleResearchBrief
 
-### Community 635 - "run_extract_v3.py · _on_chunk_done() · V3 driver: switch to glm-5.1 via the pr…"
+### Community 621 - "Recruiter–hiring manager calibration · Community 122 - "Recruiter Calibration" · Calibr…"
 Cohesion: 0.29
 Nodes (6): art, early, lanes, r, required, runDir
 
-### Community 636 - "analyze_crosslinks.py · channel_of() · main()"
+### Community 622 - "Acqui-hire (team acquisition for talent) · Acqui-hire anti-patterns list · Acqui-hire c…"
+Cohesion: 0.33
+Nodes (4): { dir, file }, register(), tool, registerRecallTool()
+
+### Community 623 - "Baml Playground Wasm · Beex Engine · Wasi Runtime"
 Cohesion: 0.29
 Nodes (6): Conventions, graphify, Graphify-First Workflow, Instruction Boundaries, Structure, ultimate-pi: Agentic Harness
 
-### Community 637 - "run_extract_v2.py · _on_chunk_done() · V2 driver: normal-mode (no deep addendu…"
+### Community 624 - "Friday Discord triage bot (Antonio) · Antonio Friday Bot Author · GitHub issue linking …"
 Cohesion: 0.29
 Nodes (5): initI18n(), Locale, Params, t(), translations
 
-### Community 638 - "ts-best-practices-2025-devto.md · Confidence · Key Recommendations"
-Cohesion: 0.43
-Nodes (6): appendToWorklog(), getWorklogPath(), readWorklog(), summarizeWorklog(), WorklogEntry, WorklogStats
-
-### Community 639 - "swe-agent-aci.md · ACI Design Principles · Key Insight"
+### Community 625 - "Identify Source Function · Gpt4O Mini Source Classifier · Test-first prompt iteration"
 Cohesion: 0.29
 Nodes (7): [3.8.27] - 2026-04-19, Added, Changed, Fixed, Performance, Refactored, Tests
 
-### Community 640 - "lean-ctx · Key pages · lean-ctx.md"
+### Community 626 - "1. "What are the physics of this problem?" · 3. "What are the problem’s fundamental … ·…"
 Cohesion: 0.29
 Nodes (7): [3.8.30] - 2026-04-22, Changed, CI, Fixed, Refactored, Removed, Tests
 
-### Community 641 - "barrel-files.md · Current Best Practice (2024+) · Known Problems"
+### Community 627 - "Dynamic BAML types · Form builder UX for doctors · generate_schema ML function"
 Cohesion: 0.29
 Nodes (6): Architectural Principles, Coding Standards, Documentation Reference, Pi Model Router: Core Mandates, Project Overview, Routing Decision Logic
 
-### Community 642 - "Five Root Cause Metrics (sentrux) · Dimensional Completeness · five-root-cause-metrics-…"
+### Community 628 - "ck ("seek")Hybrid Code Search · From crates.io [​](https://beaconbay.gi… · From NPM (re…"
 Cohesion: 0.29
 Nodes (6): Channel-pair overlap (top 30 channel pairs by shared concepts), Channels (by node attribution count), Cross-channel link analysis, High-betweenness multi-channel bridges (top 25), Shared concepts that bridge channels, Top cross-channel edges (by weight)
 
-### Community 643 - "Extensions · Components · Description"
+### Community 629 - "Gordon (Docker Desktop agent) · Docker Desktop · Docker MCP toolkit (beta)"
 Cohesion: 0.29
 Nodes (6): Consequences, Context, Decision, Options Considered, Rationale, {{title}}
 
-### Community 644 - "google-antigravity-official-blog.md · Key Details · Relevance to Harness"
+### Community 630 - "GPT-5 swap-in future-proofing · Future-Proofing · Agentic workflows composition"
 Cohesion: 0.29
 Nodes (6): Concepts Introduced, Entities Mentioned, Key Claims, Notes, Summary, <% tp.file.title %>
 
-### Community 645 - "Community 0 - "Difficult Conversations … · Community 23 - "Crucial Conversations C…"
+### Community 631 - "Agentic chunking via LLM splits · Google Drive document ingest · LangChain code node in…"
+Cohesion: 0.29
+Nodes (6): code:block2 (1. Check local cache: .pi/harness/specs/<id>.json — read spe), Embedding Points, Fingerprint Generation, Resolution Algorithm, The Solution: Content-Hash Identity, Why This Works
+
+### Community 632 - "Scrape URL → codegen prompt chain · Element: output format · JSON for chainability"
 Cohesion: 0.29
 Nodes (6): Adoption, Core Insight, Key Results, Limitations, Mechanism, Relevance to ultimate-pi
 
-### Community 646 - "Community 2 - "Anchoring & Decoy Effects" · Community 84 - "Endowment & IKEA Effects""
-Cohesion: 0.29
-Nodes (6): Final Scores, Gemini CLI Specific Findings, Key Takeaways, Relevance to Ultimate-PI, Render AI Coding Agents Benchmark (August 2025), What It Is
-
-### Community 647 - "Community 74 - "Compounding & Repaying … · Repaying debt: debt snowball · Repaying debt…"
-Cohesion: 0.29
-Nodes (6): Gemini CLI Implementation (v0.23+), Integration Path (P-F2), Key Design Decisions, Relationship to Other Harness Primitives, Ultimate-PI Current State, What It Is
-
-### Community 648 - "Community 71 - "Limits of Behavioral Ec… · Community 18 - "Behavioral Economics: P…"
-Cohesion: 0.29
-Nodes (6): Integration Path (P-F1), Policy Dimensions, Pre-Execution Gate Types (Augment PEV), Relationship to Other Harness Primitives, Ultimate-PI Current State, What It Is
-
-### Community 649 - "Community 20 - "Self-Control & Amortiza… · Community 81 - "Memory & Exceptional Co…"
-Cohesion: 0.29
-Nodes (6): Configuration, How It Works, Key Differentiator, pi-omni-compact, Relevance, Summary
-
-### Community 650 - "Pydantic-typed generated client sync · Generated baml_client (Python) · BAML streaming …"
+### Community 633 - "Lovable (company).md · Architecture Pattern · Competitors"
 Cohesion: 0.29
 Nodes (6): Features, How It Works, Output Example (for gitreverse repo itself), Relevance to ultimate-pi, Stack, What It Is
 
-### Community 651 - "Semantic streaming (complete numbers/ch… · Structured Streaming State Machine · Streami…"
+### Community 634 - "github-issue-dependencies-docs.md · GitHub issue templates · Distinction from Sub-Issues"
 Cohesion: 0.29
 Nodes (6): Architecture, code:block1 (User Query → vgrep CLI → vgrep daemon (in-memory index) → Re), code:bash (vgrep init               # Download models (~1GB)), Gap Analysis (vs ck), Key Commands, Recommendation
 
-### Community 652 - "BAML VS Code Playground · Prompt visibility as essential primitive · Raw web request in…"
+### Community 635 - "run_extract_v3.py · _on_chunk_done() · V3 driver: switch to glm-5.1 via the pr…"
 Cohesion: 0.29
 Nodes (6): Event Detectors, Guardrail Counters, How It Works, Relevance to Our Harness, Why role: user beats role: system, role system / role user split
 
-### Community 653 - "Structured outputs / schema-guided gene… · Dynamic enum (TypeBuilder) · Triple-backtick…"
-Cohesion: 0.29
-Nodes (6): Alternative Patterns, Augment Code's Implementation, Committee of Models, Model Cascade, Phase 2: Solution Ensembling (OpenAI o1), Why Two Models?
-
-### Community 654 - "Evals and test-driven LLM pipelines · Table tests for structured outputs · Answer key /…"
+### Community 636 - "analyze_crosslinks.py · channel_of() · main()"
 Cohesion: 0.29
 Nodes (6): code:block1 (FEEDFORWARD (Guides)                   FEEDBACK (Sensors)), Key Insight, Mapping to Our Pipeline, Steering Loop, The Framework, Unsolved: Behaviour Harness
 
-### Community 655 - "ocr medical pipeline · vlm state of art ocr · end to end training vs math"
+### Community 637 - "run_extract_v2.py · _on_chunk_done() · V2 driver: normal-mode (no deep addendu…"
 Cohesion: 0.29
 Nodes (6): Definition, Guardrails, Harness Mapping, Memory System-of-Record vs Ephemeral Cache, Tradeoff, Why This Pattern
 
-### Community 656 - "Dexter (host, Human Layer) · Viv (LangChain, harness writing) · Jeff (Ralph Wiggum)"
-Cohesion: 0.62
-Nodes (7): Simon Willison, ccusage npx usage reports, Claude Trace HTML, Mario Snaphappy author, Snaphappy screenshot MCP, Sub-agent tool definitions, WebSocket telemetry idea
-
-### Community 657 - "Browser UI testing at scale · PDF-to-text extraction step · Review velocity constraint"
+### Community 638 - "ts-best-practices-2025-devto.md · Confidence · Key Recommendations"
 Cohesion: 0.29
 Nodes (6): Architecture, Extension Interface, Files, Primary Workflow: harness-pipeline.yaml, Schema-Based Orchestration via Archon, Terminal States
 
-### Community 658 - "Act step · Auto-updating blog/table · Change detection vs prior JSON"
+### Community 639 - "swe-agent-aci.md · ACI Design Principles · Key Insight"
 Cohesion: 0.29
 Nodes (6): Error States, Extension Interface, Files, Flow, Grounding Checkpoints (MVC Execution), GroundingCheckpoint Data
 
-### Community 659 - "notion utils parse blocks · Recursive Notion block parsing · Notion embed/math/code blo…"
+### Community 640 - "lean-ctx · Key pages · lean-ctx.md"
 Cohesion: 0.29
 Nodes (6): Co-locating Wiki with Codebase, Consequences, Context, Decision, Options Considered, Rationale
 
-### Community 661 - "barrel-files-tkdodo.md · Key Arguments · Summary"
+### Community 642 - "Five Root Cause Metrics (sentrux) · Dimensional Completeness · five-root-cause-metrics-…"
 Cohesion: 0.29
 Nodes (7): Personal technology radar, Technical breadth for architects, Thoughtworks (organization), Thoughtworks Technology Radar, 20-minute learning rule, Community 112 - "Personal Tech Radar", Community 112 - "Personal Tech Radar"
 
-### Community 662 - "ts-runtimes-comparison-betterstack.md · Key Findings · Summary"
+### Community 643 - "Extensions · Components · Description"
+Cohesion: 0.29
+Nodes (7): Attention Is All You Need (Google), Generative consistency problem, DALL·E 3 pricing anchor for Sora cost, Infinite content generation, Model capability convergence thesis, Reddit/X proprietary data, Sora timing vs Gemini narrative
+
+### Community 644 - "google-antigravity-official-blog.md · Key Details · Relevance to Harness"
+Cohesion: 0.33
+Nodes (7): Breadth-first search (BFS), Shortest paths in a DAG, Depth-first search (DFS), Graph representations (adjacency list/matrix), Strongly connected components algorithm, Topological sort, Search: Three Depth Modes
+
+### Community 645 - "Community 0 - "Difficult Conversations … · Community 23 - "Crucial Conversations C…"
 Cohesion: 0.29
 Nodes (6): The Black Team narrative, Key Sections, Live Demo, Positioning, sentrux.dev Landing Page, The Problem Narrative
 
-### Community 663 - "ts-monorepo-koerselman.md · Key Insights · Summary"
-Cohesion: 0.29
-Nodes (6): Beyond Code, Core Capabilities, Intelligent Context Curation, Semantic Indexing, Summary, Team Impact Claims
-
-### Community 664 - "Meng et al. · Meng et al.md · Relevance to Harness"
-Cohesion: 0.29
-Nodes (7): AIN conference talk on design tooling, BEP / beeps platform, Fib (BAML, host), GitHub ill-suited for mass markdown design, Kai engineer daytime BEP example, Slack integration for design notifications, Linear versioning for beeps vs git
-
-### Community 665 - "Anthropic · Anthropic.md · Relevance to Harness"
-Cohesion: 0.29
-Nodes (7): Approach 1: Argument Hash (Recommended), Approach 2: Sliding Window Rate, Approach 3: LLM Similarity, code:python (import hashlib, json), code:python (from collections import deque), Detection Approaches, Sliding window conversation memory
-
-### Community 666 - "VILA-Lab · VILA-Lab.md · Relevance to Harness"
+### Community 646 - "Community 2 - "Anchoring & Decoy Effects" · Community 84 - "Endowment & IKEA Effects""
 Cohesion: 0.29
 Nodes (7): Baururazalinov 2026 03 30 9F4B3Xzjjkq Anthropic, Citation Substring Verify, Extract Facts Function, Fact Class Citation Summary, Docs hyperlink suggestion pipeline (Sam), Claude Haiku vs Sonnet for doc link task, HTTP + sitemap verification of suggested links
 
-### Community 667 - "Lee et al. · Lee et al.md · Relevance to Harness"
+### Community 647 - "Community 74 - "Compounding & Repaying … · Repaying debt: debt snowball · Repaying debt…"
+Cohesion: 0.29
+Nodes (6): AutoHarness (Lou et al., 2026), Meta-Harness (Lee et al., 2026), Relevance to Our Harness, Risks, Two Approaches, What Can Evolve
+
+### Community 648 - "Community 71 - "Limits of Behavioral Ec… · Community 18 - "Behavioral Economics: P…"
 Cohesion: 0.29
 Nodes (6): Case Study: Cloudflare Code Mode, code:block1 (THINK IN CODE: When you need to analyze, count, filter, comp), Core Idea, Efficiency, Injected Instruction, Think in Code (blog post)
 
-### Community 668 - "OpenAI · OpenAI.md · Relevance to Harness"
+### Community 649 - "Community 20 - "Self-Control & Amortiza… · Community 81 - "Memory & Exceptional Co…"
 Cohesion: 0.29
-Nodes (7): MCP in Pi (optional extension), Confluence, COXOS agent ops analogy, Git history as long-term memory, Jira MCP / Atlassian MCP, MCP.json configuration, Prime codebase command
+Nodes (6): Alternative Patterns, Augment Code's Implementation, Committee of Models, Model Cascade, Phase 2: Solution Ensembling (OpenAI o1), Why Two Models?
 
-### Community 669 - "Subagent Orchestration · subagent-orchestration.md · References"
+### Community 650 - "Pydantic-typed generated client sync · Generated baml_client (Python) · BAML streaming …"
+Cohesion: 0.29
+Nodes (7): code:shell (cd my-repo), code:shell (cd path/to/repo), VS Code ITV repo walkthrough, SL_REPO path placeholder pattern, AirDrop handoff pattern, Cloud Code hooks mastery repo, Screenshot proof-of-work
+
+### Community 651 - "Semantic streaming (complete numbers/ch… · Structured Streaming State Machine · Streami…"
 Cohesion: 0.33
 Nodes (5): approval, lines, samplePacket, text, yaml
 
-### Community 670 - "shell-pattern-compression · Key pages · shell-pattern-compression.md"
+### Community 652 - "BAML VS Code Playground · Prompt visibility as essential primitive · Raw web request in…"
 Cohesion: 0.33
 Nodes (5): appended, approval, entries, first, second
 
-### Community 671 - "Context Compression Techniques · context-compression-techniques.md · References"
+### Community 653 - "Structured outputs / schema-guided gene… · Dynamic enum (TypeBuilder) · Triple-backtick…"
 Cohesion: 0.33
 Nodes (5): parentEntries, parsed, planAbs, runCtx, samplePacket
 
-### Community 672 - "Consensus Debate Flow · consensus-debate-flow.md · References"
-Cohesion: 0.33
-Nodes (5): code:bash (# Create spec issue), Commands, Harness Integration, Key Features, Sub-agents in Pi (extension)
-
-### Community 673 - "Sandbox OS Enforcement · sandbox-os-enforcement.md · References"
+### Community 654 - "Evals and test-driven LLM pipelines · Table tests for structured outputs · Answer key /…"
 Cohesion: 0.33
 Nodes (5): Architecture, code:typescript (// actual code snippets), Files Retrieved, Key Code, Start Here
 
-### Community 674 - "Meta-Harness · Meta-Harness.md · References"
+### Community 655 - "ocr medical pipeline · vlm state of art ocr · end to end training vs math"
 Cohesion: 0.33
 Nodes (5): Files to Modify, Goal, New Files (if any), Plan, Risks
 
-### Community 675 - "Permission Subsystem · permission-subsystem.md · References"
+### Community 656 - "Dexter (host, Human Layer) · Viv (LangChain, harness writing) · Jeff (Ralph Wiggum)"
 Cohesion: 0.33
 Nodes (5): Critical (must fix), Files Reviewed, Suggestions (consider), Summary, Warnings (should fix)
 
-### Community 676 - "Additive Config Hierarchy · additive-config-hierarchy.md · References"
+### Community 657 - "Browser UI testing at scale · PDF-to-text extraction step · Review velocity constraint"
 Cohesion: 0.6
 Nodes (4): downloadGrammar(), findGrammarsDir(), GRAMMARS, main()
 
-### Community 677 - "Benchmarks · Description · bench.md"
-Cohesion: 0.33
-Nodes (6): [2.3.0] - 2026-03-30, Added, Changed, Deprecated, Removed, Repository Cleanup
-
-### Community 678 - "Law of Gender Rigidity · Community 124 - "Greene: Law of Gender … · Gender projection t…"
-Cohesion: 0.33
-Nodes (6): [3.8.0] - 2026-04-05, Added — New Rules (50+), Added — Tree-sitter Expansion, Changed — Severity Upgrades, Fixed, Fixed (from PR #1 — alexx-ftw)
-
-### Community 679 - "Risk vs speed in hyper-growth hiring · Henry Ward 'How to Hire' (false positiv… · Don't…"
+### Community 658 - "Act step · Auto-updating blog/table · Change detection vs prior JSON"
 Cohesion: 0.33
 Nodes (6): [3.6.7] - 2026-04-04, Added, Changed, Fixed, Fixed (Rust), Repository
 
-### Community 680 - "Generative Rules · Static Rules · Dynamic Rules"
+### Community 659 - "notion utils parse blocks · Recursive Notion block parsing · Notion embed/math/code blo…"
+Cohesion: 0.33
+Nodes (6): [2.3.0] - 2026-03-30, Added, Changed, Deprecated, Removed, Repository Cleanup
+
+### Community 660 - "ms-chat-history-management.md · MS Chat History Management · Compaction Chat History"
+Cohesion: 0.33
+Nodes (6): [3.8.0] - 2026-04-05, Added — New Rules (50+), Added — Tree-sitter Expansion, Changed — Severity Upgrades, Fixed, Fixed (from PR #1 — alexx-ftw)
+
+### Community 661 - "barrel-files-tkdodo.md · Key Arguments · Summary"
 Cohesion: 0.33
 Nodes (5): Connections, Key Facts, Overview, Sources, <% tp.file.title %>
 
-### Community 681 - "Todd Berman modular API Go/Rust · Bedrock Private Deployment · Proxy Anthropic"
+### Community 662 - "ts-runtimes-comparison-betterstack.md · Key Findings · Summary"
 Cohesion: 0.33
 Nodes (5): Comparison, Overview, Sources, <% tp.file.title %>, Verdict
 
-### Community 682 - "Label indirection / sentinel IDs · Alias pattern for enum labels · RAG citations withou…"
-Cohesion: 0.4
-Nodes (6): Hash indexes, Storage and retrieval, AI Agents and Knowledge Retrieval, What Are Vector Embeddings?, Vector retrieval and embeddings, Embeddings for policy relevance
-
-### Community 683 - "Hideki · Python glass field ordering · Medical scribe workflow"
-Cohesion: 0.33
-Nodes (5): Benchmark Notes, Core Distinction, Key Antigravity Features, Pricing Gap, Relevance to Harness
-
-### Community 684 - "System requirements · Hardware · Operating system"
-Cohesion: 0.33
-Nodes (5): Core Idea, Key Insight, Key Numbers, Mechanism, Relevance to Our Harness
-
-### Community 685 - "Try Without Installing · code:shell (nix run github:numtide/llm-…"
-Cohesion: 0.33
-Nodes (5): code:block1 (# src/services/user.ts), Contextualized Text Format, Key Features Beyond cAST Paper, Relevance to Our Implementation, Summary
-
-### Community 686 - "pgvector style storage · Postgres on Neon · Quadrant or Pinecone vector DB swap"
-Cohesion: 0.33
-Nodes (5): Architecture, Key Stats, pi-rtk-optimizer, Relevance to pi-vcc, Summary
-
-### Community 687 - "Anthropic editor & bash tools · Doc scrape + clean workflow · Forced tool-call pattern"
-Cohesion: 0.33
-Nodes (5): Approach, Key Differentiator, pi-context-prune, Relevance to pi-vcc, Summary
-
-### Community 688 - "just commands for eval · Prompt complexity classifier · scikit-learn classifiers"
-Cohesion: 0.33
-Nodes (5): Core Idea, Key Insight, Mechanism, Relevance to Our Consensus Debate (Phases 14-15), Results
-
-### Community 689 - "main() · regen_graphify_html.py"
-Cohesion: 0.33
-Nodes (5): Current Implementation, Design Criteria, Iterating with Shadow Workspaces, Open Questions, Relevance to Harness
-
-### Community 690 - "Follow a goal | Codex use cases · developers_openai_com_codex_use-cases_f…"
-Cohesion: 0.33
-Nodes (5): Architecture, Core Idea, Key Insight, Relevance to Our Harness, Results
-
-### Community 691 - "Future AGI | AI Agents hallucinate, fix… · futureagi_com.md"
-Cohesion: 0.33
-Nodes (5): code:block1 (src/), Confidence, Key Rules, Recommended Structure, Summary
-
-### Community 692 - "GitHub - tintinweb/pi-subagents: Sub-ag… · github_com_tintinweb_pi-subagents.md"
-Cohesion: 0.33
-Nodes (5): Key Metrics, Key People, Philosophy, Products, Relevance to Our Harness
-
-### Community 693 - "GitHub - sting8k/pi-vcc: Smart, Fast &a… · github_com_sting8k_pi-vcc.md"
-Cohesion: 0.33
-Nodes (5): AI Agent Integration, code:bash (ck --sem --limit 20 "error handling patterns" src/), Key Flags (grep-compatible), Recommended Agent Queries, Search Modes
-
-### Community 694 - "GitHub - tirth8205/code-review-graph: L… · github_com_tirth8205_code-review-graph.md"
-Cohesion: 0.33
-Nodes (5): code:markdown (---), Consensus Page Template, Consensus Records, Directory Convention, No records yet
-
-### Community 695 - "GitHub - yeliu84/pi-model-router: Exten… · github_com_yeliu84_pi-model-router.md"
-Cohesion: 0.33
-Nodes (5): ADR-009: claude-obsidian Mode B for Persistent Memory, Comparison, Consequences, Context, Decision
-
-### Community 696 - "docs_factory_ai_cli_features_missions.md · Missions - Factory Documentation"
-Cohesion: 0.33
-Nodes (5): ADR-008: Spec-Only Black-Box QA, Consequences, Context, Decision, Rationale
-
-### Community 697 - "GitHub - safishamsi/graphify: AI coding… · github_com_safishamsi_graphify.md"
-Cohesion: 0.33
-Nodes (5): ADR-010: Agentic Harness ↔ Wiki Tight-Coupling Contract, Consequences, Context, Decision, Rationale
-
-### Community 699 - "GitHub - mksglu/context-mode: Context w… · github_com_mksglu_context-mode.md"
-Cohesion: 0.53
-Nodes (6): Decide how to decide (separate dialogue from decision), Command decision making, Consensus decision making, Consult decision making, Vote decision making, Community 24 - "PM Tradeoffs & Decision-Making"
-
-### Community 700 - "GitHub - obra/superpowers: An agentic s… · github_com_obra_superpowers.md"
-Cohesion: 0.47
-Nodes (6): Community 39 - "Software Quality & Refactoring", Community 48 - "Lean: 5S, Andon, Quality", Community 78 - "Lean: FIFO & Heijunka", Community 39 - "Software Quality & Refactoring", Community 48 - "Lean: 5S, Andon, Quality", Community 78 - "Lean: FIFO & Heijunka"
-
-### Community 701 - "www_reddit_com_r_vibecoding_comments_1s… · Reddit - Please wait for verification"
-Cohesion: 0.6
-Nodes (6): Community 49 - "Defensive Programming & Invariants", Community 62 - "Network Programming & I/O", Community 80 - "Concurrent Programming & Processes", Community 49 - "Defensive Programming & Invariants", Community 62 - "Network Programming & I/O", Community 80 - "Concurrent Programming & Processes"
-
-### Community 702 - "GitHub - filiksyos/gitreverse: Reverse … · github_com_filiksyos_gitreverse.md"
-Cohesion: 0.53
-Nodes (6): Community 105 - "Lean: Capital & Labor Linearity", Capital Linearity, Labor Linearity, Monument, Right-Sized Tools, Community 105 - "Lean: Capital & Labor Linearity"
-
-### Community 703 - "GitHub - code-yeongyu/oh-my-openagent: … · github_com_code-yeongyu_oh-my-openagent.md"
-Cohesion: 0.47
-Nodes (6): Community 22 - "Social Comparison & Envy", Community 27 - "Social Proof & Conformity", Community 44 - "Downward Comparison & Ego", Community 22 - "Social Comparison & Envy", Community 27 - "Social Proof & Conformity", Community 44 - "Downward Comparison & Ego"
-
-### Community 704 - "ast-grep | structural search/rewrite to… · ast-grep_github_io.md"
-Cohesion: 0.47
-Nodes (6): Community 52 - "Grove: Production Metaphors", Community 6 - "Money, Norms & Motivation", Community 99 - "Grove: Maslow & Motivation", Community 52 - "Grove: Production Metaphors", Community 6 - "Money, Norms & Motivation", Community 99 - "Grove: Maslow & Motivation"
-
-### Community 705 - "Executor — The gateway to connect your … · executor_sh.md"
-Cohesion: 0.33
-Nodes (6): AI coding with local models, DEVLOG video format, Quantized weights (inferred), Retry transcript later note, Terminal GPT helpers, Local inference on dev machine
-
-### Community 706 - "An open-source spec for Codex orchestra… · openai_com_index_open-source-codex-orch…"
-Cohesion: 0.33
-Nodes (5): Alternatives to RRF, code:block1 (RRF_score(d) = Σ (1 / (k + rank_i(d)))), Lexical Search (BM25), Reciprocal Rank Fusion (RRF), Semantic Search (Embeddings)
-
-### Community 707 - "GitHub - lllyasviel/VCC: Compile agent … · github_com_lllyasviel_VCC.md"
-Cohesion: 0.33
-Nodes (5): Confidence Assessment, Key Capabilities, Limitations (Documented), Summary, What It Contributes
-
-### Community 708 - "www_yixtian_com_blog_10-multi-agent-deb… · Multi-agent debate with state pattern f…"
-Cohesion: 0.33
-Nodes (6): Implementation Recommendations for Our Harness, Must-Have (L1-L3 integration), Nice-to-Have, Should-Have (medium priority), JSON mode must-have, JSON completion contract
-
-### Community 709 - "GitHub - sentrux/sentrux: Real-time arc… · github_com_sentrux_sentrux.md"
-Cohesion: 0.33
-Nodes (6): Cmd/Ctrl-K inline prompts, Cmd/Ctrl-L chat panel, Edge labels as LLM coder graph, fitView graph camera helper, Parallel inline completions, Move up the abstraction stack
-
-### Community 710 - "Improving skill-creator: Test, measure,… · claude_com_blog_improving-skill-creator…"
+### Community 663 - "ts-monorepo-koerselman.md · Key Insights · Summary"
 Cohesion: 0.33
 Nodes (5): Architecture At a Glance, Authoritative Pages, code:block1 (L1: Spec Hardening    → L2: Structured Planning  → L2.5: Run), Key Numbers, Ultimate-PI Harness Architecture Overview
 
-### Community 711 - "GitHub - coderamp-labs/gitingest: Repla… · github_com_coderamp-labs_gitingest.md"
-Cohesion: 0.33
-Nodes (6): Context Anxiety, Continually Improving Our Agent Harness, Dynamic Context Evolution, Error Classification System, Model-Adaptive Customization, Relevance to Harness
+### Community 664 - "Meng et al. · Meng et al.md · Relevance to Harness"
+Cohesion: 0.4
+Nodes (6): Hash indexes, Storage and retrieval, AI Agents and Knowledge Retrieval, What Are Vector Embeddings?, Vector retrieval and embeddings, Embeddings for policy relevance
 
-### Community 712 - "GitHub - garrytan/gstack: Use Garry Tan… · github_com_garrytan_gstack.md"
+### Community 665 - "Anthropic · Anthropic.md · Relevance to Harness"
+Cohesion: 0.33
+Nodes (5): Benchmark Notes, Core Distinction, Key Antigravity Features, Pricing Gap, Relevance to Harness
+
+### Community 666 - "VILA-Lab · VILA-Lab.md · Relevance to Harness"
+Cohesion: 0.33
+Nodes (5): Core Idea, Key Insight, Key Numbers, Mechanism, Relevance to Our Harness
+
+### Community 667 - "Lee et al. · Lee et al.md · Relevance to Harness"
+Cohesion: 0.33
+Nodes (5): Core Idea, Key Insight, Mechanism, Relevance to Our Consensus Debate (Phases 14-15), Results
+
+### Community 668 - "OpenAI · OpenAI.md · Relevance to Harness"
+Cohesion: 0.33
+Nodes (5): Current Implementation, Design Criteria, Iterating with Shadow Workspaces, Open Questions, Relevance to Harness
+
+### Community 669 - "Subagent Orchestration · subagent-orchestration.md · References"
+Cohesion: 0.33
+Nodes (5): Architecture, Core Idea, Key Insight, Relevance to Our Harness, Results
+
+### Community 670 - "shell-pattern-compression · Key pages · shell-pattern-compression.md"
+Cohesion: 0.33
+Nodes (5): code:block1 (src/), Confidence, Key Rules, Recommended Structure, Summary
+
+### Community 671 - "Context Compression Techniques · context-compression-techniques.md · References"
+Cohesion: 0.33
+Nodes (5): Key Metrics, Key People, Philosophy, Products, Relevance to Our Harness
+
+### Community 672 - "Consensus Debate Flow · consensus-debate-flow.md · References"
+Cohesion: 0.33
+Nodes (6): 1. Agent Registry (`.pi/messenger/registry/`), 2. Per-Agent Inboxes (`.pi/messenger/inbox/<agent>/`), 3. Message Format, 4. Atomic Patterns, code:json ({), What We Adopt
+
+### Community 673 - "Sandbox OS Enforcement · sandbox-os-enforcement.md · References"
+Cohesion: 0.33
+Nodes (5): code:json ({), Cost Consideration, How Augment Implements It, Input Format, Why It Works
+
+### Community 674 - "Meta-Harness · Meta-Harness.md · References"
+Cohesion: 0.33
+Nodes (5): code:markdown (---), Consensus Page Template, Consensus Records, Directory Convention, No records yet
+
+### Community 675 - "Permission Subsystem · permission-subsystem.md · References"
+Cohesion: 0.33
+Nodes (5): ADR-009: claude-obsidian Mode B for Persistent Memory, Comparison, Consequences, Context, Decision
+
+### Community 676 - "Additive Config Hierarchy · additive-config-hierarchy.md · References"
+Cohesion: 0.33
+Nodes (5): ADR-008: Spec-Only Black-Box QA, Consequences, Context, Decision, Rationale
+
+### Community 677 - "Benchmarks · Description · bench.md"
+Cohesion: 0.33
+Nodes (5): ADR-010: Agentic Harness ↔ Wiki Tight-Coupling Contract, Consequences, Context, Decision, Rationale
+
+### Community 679 - "Risk vs speed in hyper-growth hiring · Henry Ward 'How to Hire' (false positiv… · Don't…"
+Cohesion: 0.47
+Nodes (6): Community 39 - "Software Quality & Refactoring", Community 48 - "Lean: 5S, Andon, Quality", Community 78 - "Lean: FIFO & Heijunka", Community 39 - "Software Quality & Refactoring", Community 48 - "Lean: 5S, Andon, Quality", Community 78 - "Lean: FIFO & Heijunka"
+
+### Community 680 - "Generative Rules · Static Rules · Dynamic Rules"
+Cohesion: 0.6
+Nodes (6): Community 49 - "Defensive Programming & Invariants", Community 62 - "Network Programming & I/O", Community 80 - "Concurrent Programming & Processes", Community 49 - "Defensive Programming & Invariants", Community 62 - "Network Programming & I/O", Community 80 - "Concurrent Programming & Processes"
+
+### Community 681 - "Todd Berman modular API Go/Rust · Bedrock Private Deployment · Proxy Anthropic"
+Cohesion: 0.53
+Nodes (6): Decide how to decide (separate dialogue from decision), Command decision making, Consensus decision making, Consult decision making, Vote decision making, Community 24 - "PM Tradeoffs & Decision-Making"
+
+### Community 682 - "Label indirection / sentinel IDs · Alias pattern for enum labels · RAG citations withou…"
+Cohesion: 0.47
+Nodes (6): Community 52 - "Grove: Production Metaphors", Community 6 - "Money, Norms & Motivation", Community 99 - "Grove: Maslow & Motivation", Community 52 - "Grove: Production Metaphors", Community 6 - "Money, Norms & Motivation", Community 99 - "Grove: Maslow & Motivation"
+
+### Community 683 - "Hideki · Python glass field ordering · Medical scribe workflow"
+Cohesion: 0.53
+Nodes (6): Community 105 - "Lean: Capital & Labor Linearity", Capital Linearity, Labor Linearity, Monument, Right-Sized Tools, Community 105 - "Lean: Capital & Labor Linearity"
+
+### Community 684 - "System requirements · Hardware · Operating system"
+Cohesion: 0.47
+Nodes (6): Community 22 - "Social Comparison & Envy", Community 27 - "Social Proof & Conformity", Community 44 - "Downward Comparison & Ego", Community 22 - "Social Comparison & Envy", Community 27 - "Social Proof & Conformity", Community 44 - "Downward Comparison & Ego"
+
+### Community 685 - "Try Without Installing · code:shell (nix run github:numtide/llm-…"
+Cohesion: 0.4
+Nodes (6): Decision model: consensus interview panel, Decision model: fully accountable hiring manager, Decision model: Google hiring committee, Anti-pattern: one exec hires all then assigns, pareto 80 20, model swap decision
+
+### Community 686 - "pgvector style storage · Postgres on Neon · Quadrant or Pinecone vector DB swap"
+Cohesion: 0.33
+Nodes (6): Jay Gazior, Test block argument warnings, List streaming atomicity fix, Bun Test Harness, Git Hub Repo Podcast Site, Rust client doc topic 8
+
+### Community 687 - "Anthropic editor & bash tools · Doc scrape + clean workflow · Forced tool-call pattern"
+Cohesion: 0.33
+Nodes (6): Built-in Rust compiler warnings, cargo-deny (EmbarkStudios/cargo-deny), cargo-machete (bnjbvr/cargo-machete), cargo-udeps (est31/cargo-udeps), Rust, rust-code-analysis (mozilla/rust-code-analysis)
+
+### Community 688 - "just commands for eval · Prompt complexity classifier · scikit-learn classifiers"
+Cohesion: 0.33
+Nodes (6): Always-on RAG toggle, bash tool + cwd state, read_file truncation, Spill large results to disk, Vector DB RAG, web_fetch truncation
+
+### Community 689 - "main() · regen_graphify_html.py"
+Cohesion: 0.33
+Nodes (6): 3. Pre-Computation and Caching, Caching Architecture, code:block2 (Session Start:), Embedding-Based Retrieval, What to Pre-Compute, Session start/end hooks
+
+### Community 690 - "Follow a goal | Codex use cases · developers_openai_com_codex_use-cases_f…"
+Cohesion: 0.33
+Nodes (6): Implementation Recommendations for Our Harness, Must-Have (L1-L3 integration), Nice-to-Have, Should-Have (medium priority), JSON mode must-have, JSON completion contract
+
+### Community 691 - "Future AGI | AI Agents hallucinate, fix… · futureagi_com.md"
+Cohesion: 0.33
+Nodes (6): Agent-Weak Areas, Claude Max $200 Plan, Model Overkill Problem, Model Underperformance Problem, Token Time Cost Tradeoffs, Weak-Base-Strong Agent Stack
+
+### Community 692 - "GitHub - tintinweb/pi-subagents: Sub-ag… · github_com_tintinweb_pi-subagents.md"
+Cohesion: 0.33
+Nodes (6): File logging of runs, Incremental workflow tips, Python schedule library, Sequential agentic workflow, Trigger step, ACT updates last_seen
+
+### Community 693 - "GitHub - sting8k/pi-vcc: Smart, Fast &a… · github_com_sting8k_pi-vcc.md"
+Cohesion: 0.67
+Nodes (6): echo zone, fs prim, out of chat, phase2 theme, programmable agents, subprocess alt
+
+### Community 694 - "GitHub - tirth8205/code-review-graph: L… · github_com_tirth8205_code-review-graph.md"
+Cohesion: 0.33
+Nodes (6): 9. Context Anxiety (Cross-Model Phenomenon), Example: BCrypt Handling in Ansible, Key Insight: Context > Model Intelligence, Context Window, Long-Context Model, RoPE Scaling
+
+### Community 695 - "GitHub - yeliu84/pi-model-router: Exten… · github_com_yeliu84_pi-model-router.md"
 Cohesion: 0.33
 Nodes (6): Boundary evals product tie-in, Retail compliance, Dashboard charts, CSV export, Future video eval, PII redaction
 
-### Community 713 - "How to Build Agent Chat Rooms: Multi-Ag… · www_mindstudio_ai_blog_agent-chat-rooms…"
+### Community 696 - "docs_factory_ai_cli_features_missions.md · Missions - Factory Documentation"
+Cohesion: 0.33
+Nodes (6): Context Anxiety, Continually Improving Our Agent Harness, Dynamic Context Evolution, Error Classification System, Model-Adaptive Customization, Relevance to Harness
+
+### Community 697 - "GitHub - safishamsi/graphify: AI coding… · github_com_safishamsi_graphify.md"
+Cohesion: 0.33
+Nodes (5): AI Agent Integration, code:bash (ck --sem --limit 20 "error handling patterns" src/), Key Flags (grep-compatible), Recommended Agent Queries, Search Modes
+
+### Community 698 - "Exa | Web Search API, AI Search Engine,… · exa_ai.md"
 Cohesion: 0.4
 Nodes (4): artifactsDir, debatesDir, manifest, runDir
 
-### Community 714 - "GitHub - alibaba/OpenSandbox: Secure, F… · github_com_alibaba_OpenSandbox.md"
+### Community 699 - "GitHub - mksglu/context-mode: Context w… · github_com_mksglu_context-mode.md"
 Cohesion: 0.4
 Nodes (4): boot, ctx, parsed, runDir
 
-### Community 715 - "GitHub - mattpocock/sandcastle: Orchest… · github_com_mattpocock_sandcastle.md"
+### Community 700 - "GitHub - obra/superpowers: An agentic s… · github_com_obra_superpowers.md"
 Cohesion: 0.4
 Nodes (4): maxH, md, samplePacket, viewport
 
-### Community 716 - "Goal Buddy - Open source Codex /goal co… · goalbuddy_dev.md"
+### Community 701 - "www_reddit_com_r_vibecoding_comments_1s… · Reddit - Please wait for verification"
 Cohesion: 0.4
 Nodes (4): bad, ids, ok, r
 
-### Community 717 - "Data corpus · README.md"
+### Community 702 - "GitHub - filiksyos/gitreverse: Reverse … · github_com_filiksyos_gitreverse.md"
 Cohesion: 0.4
 Nodes (4): doc, engine, names, root
 
-### Community 718 - "run_deep_extract.py · Deep-mode driver for graphify's headles…"
+### Community 703 - "GitHub - code-yeongyu/oh-my-openagent: … · github_com_code-yeongyu_oh-my-openagent.md"
 Cohesion: 0.4
 Nodes (4): boot, ctx, planPath, runDir
 
-### Community 719 - "Cross-paper links (research corpus) · CROSS_PAPER_LINKS.md"
+### Community 704 - "ast-grep | structural search/rewrite to… · ast-grep_github_io.md"
+Cohesion: 0.4
+Nodes (4): merged, packageRoot, projectRoot, spec
+
+### Community 705 - "Executor — The gateway to connect your … · executor_sh.md"
+Cohesion: 0.4
+Nodes (3): d, found, root
+
+### Community 706 - "An open-source spec for Codex orchestra… · openai_com_index_open-source-codex-orch…"
 Cohesion: 0.4
 Nodes (3): hint, state, text
 
-### Community 720 - "news.ycombinator.com_item_id=45157223.md · Show HN: Semantic grep with local embed…"
-Cohesion: 0.4
-Nodes (5): [3.8.41] - 2026-05-05, Added, Changed, Fixed, Fixed
-
-### Community 721 - "Discover ck: A Semantic Grep Tool for C… · www.linkedin.com_posts_bigaddict_ai-rus…"
-Cohesion: 0.4
-Nodes (5): [2.4.0] - 2026-03-30, Added, Changed, Code Quality, Fixed
-
-### Community 722 - "medium.com_coding-nexus_me-and-claude-a… · Me And Claude Are in Love With MGREP fo…"
+### Community 707 - "GitHub - lllyasviel/VCC: Compile agent … · github_com_lllyasviel_VCC.md"
 Cohesion: 0.4
 Nodes (5): [3.8.29] - 2026-04-21, Added, Changed, Changed, Fixed
 
-### Community 723 - "Comparing AI coding tools: grep-based v… · www.linkedin.com_posts_antaripa-saha_be…"
-Cohesion: 0.4
-Nodes (5): [3.6.0] - 2026-04-02, Added, Changed, code:block1 (Debt breakdown:), Removed
-
-### Community 724 - "news.ycombinator.com_item_id=37583219.md · Show HN: SeaGOAT - local, "AI-based" gr…"
+### Community 708 - "www_yixtian_com_blog_10-multi-agent-deb… · Multi-agent debate with state pattern f…"
 Cohesion: 0.4
 Nodes (5): [3.8.36] - 2026-05-02, Added, Changed, Fixed, Improved
 
-### Community 725 - "module.md · {{title}}"
+### Community 709 - "GitHub - sentrux/sentrux: Real-time arc… · github_com_sentrux_sentrux.md"
 Cohesion: 0.4
-Nodes (5): [3.7.0] - 2026-04-05, Added, Changed, Fixed, Tests
+Nodes (5): [3.8.41] - 2026-05-05, Added, Changed, Fixed, Fixed
 
-### Community 726 - "swe-pruner-context-pruning.md · SWE-Pruner Context Pruning"
+### Community 710 - "Improving skill-creator: Test, measure,… · claude_com_blog_improving-skill-creator…"
 Cohesion: 0.4
 Nodes (5): [3.8.45] - 2026-05-21, Added, Changed, Changed, Fixed
 
-### Community 727 - "opencode-dcp.md · OpenCode DCP"
+### Community 711 - "GitHub - coderamp-labs/gitingest: Repla… · github_com_coderamp-labs_gitingest.md"
+Cohesion: 0.4
+Nodes (5): [2.4.0] - 2026-03-30, Added, Changed, Code Quality, Fixed
+
+### Community 712 - "GitHub - garrytan/gstack: Use Garry Tan… · github_com_garrytan_gstack.md"
+Cohesion: 0.4
+Nodes (5): [3.6.0] - 2026-04-02, Added, Changed, code:block1 (Debt breakdown:), Removed
+
+### Community 713 - "How to Build Agent Chat Rooms: Multi-Ag… · www_mindstudio_ai_blog_agent-chat-rooms…"
 Cohesion: 0.4
 Nodes (5): [3.8.44] - 2026-05-13, Added, Changed, Fixed, Fixed
 
-### Community 728 - "MCP Architecture Docs · mcp-architecture-docs.md"
+### Community 714 - "GitHub - alibaba/OpenSandbox: Secure, F… · github_com_alibaba_OpenSandbox.md"
+Cohesion: 0.4
+Nodes (5): [3.7.0] - 2026-04-05, Added, Changed, Fixed, Tests
+
+### Community 715 - "GitHub - mattpocock/sandcastle: Orchest… · github_com_mattpocock_sandcastle.md"
 Cohesion: 0.4
 Nodes (4): resolved, root, runCtxLib, vendoredIndex
 
-### Community 730 - "ops-codegraph-tool.md · ops-codegraph-tool"
-Cohesion: 0.4
-Nodes (5): First-mover advantage, Gemini Pro (SOTA), GPT-4 (SOTA family), 100× SOTA LLM future, Sam Altman
-
-### Community 731 - "codesearch · codesearch.md"
+### Community 717 - "Data corpus · README.md"
 Cohesion: 0.4
 Nodes (4): Components Involved, Description, Sequence, {{title}}
 
-### Community 732 - "autodev-codebase · autodev-codebase.md"
+### Community 718 - "run_deep_extract.py · Deep-mode driver for graphify's headles…"
 Cohesion: 0.4
 Nodes (4): Answer, Confidence, Related Questions, <% tp.file.title %>
 
-### Community 733 - "AST Compression · ast-compression.md"
+### Community 719 - "Cross-paper links (research corpus) · CROSS_PAPER_LINKS.md"
 Cohesion: 0.4
 Nodes (5): Future-Proofing, Agentic workflows composition, GPT-5 swap-in future-proofing, Personal AI assistant build tease, Reward function for self-improve
 
-### Community 734 - "FTS5 Sandbox · fts5-sandbox.md"
+### Community 720 - "news.ycombinator.com_item_id=45157223.md · Show HN: Semantic grep with local embed…"
 Cohesion: 0.4
 Nodes (4): Context Efficiency Comparison, Key Insight: Deterministic Bridge, Relevance to ultimate-pi, TypeScript Advantages
 
-### Community 735 - "verification-drift-detection.md · Verification Drift Detection"
+### Community 721 - "Discover ck: A Semantic Grep Tool for C… · www.linkedin.com_posts_bigaddict_ai-rus…"
 Cohesion: 0.4
 Nodes (4): Codex DSC RFC 8573 — Deterministic Session Checkpoint, Key Details, Summary, Why This Matters
 
-### Community 736 - "Four-level prompt framework · Layer 1: Prompt-Level Guardrails"
+### Community 722 - "medium.com_coding-nexus_me-and-claude-a… · Me And Claude Are in Love With MGREP fo…"
 Cohesion: 0.4
 Nodes (4): Key Details, pi-mono Compaction Documentation, Summary, Why This Matters for Topic
 
-### Community 737 - "Context Continuity · context-continuity.md"
-Cohesion: 0.4
-Nodes (5): Beta launch gating, Demo read-only Postgres dataset, Feedback moderation agents, Result retention / expiry, Validate generated SQL against DB
-
-### Community 738 - "Inner authority · Law of Fickleness"
-Cohesion: 0.4
-Nodes (4): Features, Key Facts, Model Support, Relevance to Harness
-
-### Community 739 - "Law of Generational Myopia · Spirit of the times"
+### Community 723 - "Comparing AI coding tools: grep-based v… · www.linkedin.com_posts_antaripa-saha_be…"
 Cohesion: 0.4
 Nodes (4): Framework, Relevance to Our Implementation, Summary, Top Models on CoIR Leaderboard
 
-### Community 740 - "Law of Death Denial · Philosophy of life through death"
+### Community 724 - "news.ycombinator.com_item_id=37583219.md · Show HN: SeaGOAT - local, "AI-based" gr…"
 Cohesion: 0.4
 Nodes (4): Key Details, Pi Language Model Provider Extension (tintinweb), Summary, Why This Matters for Topic
 
-### Community 741 - "Barbed wire syndrome (prior WWI literat… · Gustave Le Bon"
+### Community 725 - "module.md · {{title}}"
 Cohesion: 0.4
 Nodes (4): Key Finding, Practical Defaults, Relevance to Our Implementation, Summary
 
-### Community 742 - "Gilbert Gottlieb: genes require environ… · Reference: Gottlieb (1995), Psychologic…"
+### Community 726 - "swe-pruner-context-pruning.md · SWE-Pruner Context Pruning"
 Cohesion: 0.4
 Nodes (4): Hiring Focus, Key Claim, Note, Product
 
-### Community 743 - "Reference: Sternberg chapter in Elliot … · Robert Sternberg: expertise hinges on p…"
+### Community 727 - "opencode-dcp.md · OpenCode DCP"
 Cohesion: 0.4
 Nodes (4): Founder, Key Numbers, Key Thesis, Three Capabilities
 
-### Community 744 - "RB-INSERT and RB-DELETE · Rotations in RB-trees"
+### Community 728 - "MCP Architecture Docs · mcp-architecture-docs.md"
 Cohesion: 0.4
 Nodes (4): Contributions, disler (IndyDevDan), Philosophy, Relevance
 
-### Community 745 - "Dispersed team structure (local attachm… · Dispersed geographically / virtual teams"
+### Community 729 - "openclaw-session-pruning.md · OpenClaw Session Pruning"
 Cohesion: 0.4
 Nodes (4): Architecture, Key Features, OpenDev, Relevance
 
-### Community 746 - "Harlan Mills clustering of best program… · Pair mates from same org perform alike"
+### Community 730 - "ops-codegraph-tool.md · ops-codegraph-tool"
 Cohesion: 0.4
 Nodes (4): Components, Gaps, Key Finding, Mapping to Our Harness
 
-### Community 747 - "Christopher Alexander pattern books · Taking Umbrella Steps (Alexander patterns)"
+### Community 731 - "codesearch · codesearch.md"
 Cohesion: 0.4
 Nodes (4): Architecture, context-mode, Key features, Key pages
 
-### Community 748 - "First recruiter qualities (Erik Engstro… · When to hire internal recruiter"
-Cohesion: 0.4
-Nodes (5): Fallow (fallow-rs/fallow) — PRIMARY RECOMMENDED, jscpd, knip (webpro-nl/knip), ts-prune, TypeScript / JavaScript
-
-### Community 749 - "Overall Equipment Effectiveness (OEE) · Total Productive Maintenance (TPM)"
-Cohesion: 0.4
-Nodes (4): Changelog, 🔧 Chores, ✨ Features, [v0.1.7] — 2026-05-07
-
-### Community 750 - "Kaizen Promotion Office · Lean Promotion Office"
-Cohesion: 0.4
-Nodes (5): Community 122 - "Recruiter Calibration", Calibration exercise with hypothetical CVs, Recruiter–hiring manager calibration, External recruiter fee models, Community 122 - "Recruiter Calibration"
-
-### Community 751 - "Autonomous Agent Teams · Voice-to-Voice Engineering Interface (s…"
-Cohesion: 0.4
-Nodes (5): Acqui-hire (team acquisition for talent), Acqui-hire anti-patterns list, Acqui-hire culture/talent fit checks, Case: Amazon dispersed Blue Mug / Geoworks Mafia, Case: Nokia acquired bit-side (services overlap)
-
-### Community 752 - "Predefined holding categories (cash, ET… · Unknown category for junk rows"
-Cohesion: 0.4
-Nodes (5): Test-first prompt iteration, Cnn Bbc Reddit Twitter Sources, Enum Source Type, Gpt4O Mini Source Classifier, Identify Source Function
-
-### Community 753 - "WebAssembly local parsing (<1ms) · BAML Rust runtime / local parsing"
+### Community 732 - "autodev-codebase · autodev-codebase.md"
 Cohesion: 0.4
 Nodes (4): Distinction from Sub-Issues, Key Capabilities, Relevance to Harness, GitHub issue templates
 
-### Community 754 - "Clarifying Questions Pattern · Massive Single Prompt Antipattern"
+### Community 733 - "AST Compression · ast-compression.md"
 Cohesion: 0.4
-Nodes (5): Dynamic BAML types, Form builder UX for doctors, generate_schema ML function, JSON schema limits for end users, Meta schema from prior notes
+Nodes (4): Changelog, 🔧 Chores, ✨ Features, [v0.1.7] — 2026-05-07
 
-### Community 755 - "Switch Statement Metaphor · User Action Vs Tool Action"
+### Community 734 - "FTS5 Sandbox · fts5-sandbox.md"
+Cohesion: 0.4
+Nodes (5): Community 122 - "Recruiter Calibration", Calibration exercise with hypothetical CVs, Recruiter–hiring manager calibration, External recruiter fee models, Community 122 - "Recruiter Calibration"
+
+### Community 735 - "verification-drift-detection.md · Verification Drift Detection"
+Cohesion: 0.4
+Nodes (5): Acqui-hire (team acquisition for talent), Acqui-hire anti-patterns list, Acqui-hire culture/talent fit checks, Case: Amazon dispersed Blue Mug / Geoworks Mafia, Case: Nokia acquired bit-side (services overlap)
+
+### Community 736 - "Four-level prompt framework · Layer 1: Prompt-Level Guardrails"
+Cohesion: 0.4
+Nodes (5): Test-first prompt iteration, Cnn Bbc Reddit Twitter Sources, Enum Source Type, Gpt4O Mini Source Classifier, Identify Source Function
+
+### Community 737 - "Context Continuity · context-continuity.md"
 Cohesion: 0.4
 Nodes (5): Antonio Friday Bot Author, Friday Discord triage bot (Antonio), GitHub issue linking via LLM similarity, Notion table output for classified issues, Thread Summary Field
 
-### Community 756 - "Batch Classification Discord · Concurrent Pipeline Summarize"
+### Community 738 - "Inner authority · Law of Fickleness"
 Cohesion: 0.5
 Nodes (5): Baml Playground Wasm, Beex Engine, Wasi Runtime, Wasm Cis Bridge, Studio UX fix 13
 
-### Community 757 - "Hallucinated Github Id Skip · Semantic Issue Matching Llm"
+### Community 739 - "Law of Generational Myopia · Spirit of the times"
 Cohesion: 0.4
-Nodes (4): ck ("seek")Hybrid Code Search, From crates.io [​](https://beaconbay.github.io/ck/#from-crates-io), From NPM (recommended) [​](https://beaconbay.github.io/ck/#from-npm-recommended), From source [​](https://beaconbay.github.io/ck/#from-source)
+Nodes (5): Dynamic BAML types, Form builder UX for doctors, generate_schema ML function, JSON schema limits for end users, Meta schema from prior notes
 
-### Community 758 - "Eval Ui Vs Terminal · Haiku Sitemap Internal Links"
+### Community 740 - "Law of Death Denial · Philosophy of life through death"
 Cohesion: 0.4
-Nodes (5): 9. Context Anxiety (Cross-Model Phenomenon), Example: BCrypt Handling in Ansible, Key Insight: Context > Model Intelligence, Long-Context Model, RoPE Scaling
+Nodes (5): 2. Monorepo Handling, code:block1 (L0: Project-Level Map (always injected, ~2-5k tokens)), Gitingest for Monorepos, Problem, Solution: Hierarchical Repo Maps
 
-### Community 759 - "Native Rag Not In Baml · Rag Json Dump Bad Prompt"
+### Community 741 - "Barbed wire syndrome (prior WWI literat… · Gustave Le Bon"
 Cohesion: 0.4
 Nodes (5): Agentic chunking via LLM splits, Google Drive document ingest, LangChain code node in n8n, n8n workflow automation, Recursive character splitting baseline
 
-### Community 761 - "Fact Opinion Enum Future · Sentence Level Classification Design"
+### Community 742 - "Gilbert Gottlieb: genes require environ… · Reference: Gottlieb (1995), Psychologic…"
+Cohesion: 0.4
+Nodes (5): Beta launch gating, Demo read-only Postgres dataset, Feedback moderation agents, Result retention / expiry, Validate generated SQL against DB
+
+### Community 744 - "RB-INSERT and RB-DELETE · Rotations in RB-trees"
 Cohesion: 0.5
 Nodes (3): ids, parsed, snippet
 
-### Community 762 - "Api Key Rotation Joke · Streaming Print Loop Bug"
+### Community 746 - "Harlan Mills clustering of best program… · Pair mates from same org perform alike"
 Cohesion: 0.5
 Nodes (3): err, ROOT, v
 
-### Community 763 - "Sam Shiny Not Gradio · Weekly Doc Link Refresh Job"
+### Community 747 - "Christopher Alexander pattern books · Taking Umbrella Steps (Alexander patterns)"
 Cohesion: 0.5
 Nodes (3): budgetGuardSrc, budgetSchema, root
 
-### Community 764 - "Prompt Injection Structured Empty Fields · Recipe Stream Spinner Per Field"
+### Community 748 - "First recruiter qualities (Erik Engstro… · When to hire internal recruiter"
 Cohesion: 0.5
 Nodes (3): cases, input, root
 
-### Community 765 - "Chain-of-thought vs reasoning elasticity · Debate / staged reasoning prompts"
+### Community 749 - "Overall Equipment Effectiveness (OEE) · Total Productive Maintenance (TPM)"
 Cohesion: 0.5
 Nodes (3): entries, p, turn
 
-### Community 766 - "Apply diff per file · LLM diff generation"
+### Community 750 - "Kaizen Promotion Office · Lean Promotion Office"
 Cohesion: 0.5
 Nodes (3): engine, pkg, root
 
-### Community 767 - "Latency vs multi-stage pruning tradeoffs · Cost/latency distribution shaping"
+### Community 751 - "Autonomous Agent Teams · Voice-to-Voice Engineering Interface (s…"
 Cohesion: 0.5
 Nodes (3): root, specsDir, withoutDecomp
 
-### Community 768 - "Enron email corpus · Policy-to-prompt pipeline"
-Cohesion: 0.5
-Nodes (3): Coding, Key Sections, Planning
-
-### Community 769 - "Streaming limits for structured JSON · Agent trace dashboard debugging"
+### Community 752 - "Predefined holding categories (cash, ET… · Unknown category for junk rows"
 Cohesion: 0.5
 Nodes (3): Completed, Files Changed, Notes (if any)
 
-### Community 770 - "Dexter (co-host) · Human Layer (company)"
+### Community 753 - "WebAssembly local parsing (<1ms) · BAML Rust runtime / local parsing"
 Cohesion: 0.5
 Nodes (4): classifyFailure(), fileChanged(), normalizeText(), readTextIfExists()
 
-### Community 771 - "company aliases · heuristic alias match"
-Cohesion: 0.5
-Nodes (4): [3.8.23] - 2026-04-12, Added, Changed, Fixed
-
-### Community 772 - "face id geometry history · wrong tool uuid encoder"
-Cohesion: 0.5
-Nodes (4): [2.0.0] - 2026-03-25, Added, Changed, Fixed
-
-### Community 773 - "engineering visibility not abstraction · gpt oss rust python"
-Cohesion: 0.5
-Nodes (4): [3.8.11] - 2026-04-07, Added, Changed, Tests
-
-### Community 774 - "b.request function web access · Modular API in Go and Rust"
-Cohesion: 0.5
-Nodes (4): [3.7.2] - 2026-04-05, Added, Fixed, Security
-
-### Community 775 - "Discord vs npm download visibility · Uncle Bob Professionalism"
-Cohesion: 0.5
-Nodes (4): [3.8.14] - 2026-04-07, Added, Changed, Tests
-
-### Community 776 - "Salesforce custom objects · User-defined prompting surface"
-Cohesion: 0.5
-Nodes (4): [3.8.43] - 2026-05-10, Added, Changed, Fixed
-
-### Community 777 - "Interrupt Vs Queue · Message Queue Default"
-Cohesion: 0.5
-Nodes (4): [3.4.0] - 2026-04-02, Added, Changed, Fixed
-
-### Community 778 - "Airgapped Intranet · Class One Pii"
+### Community 754 - "Clarifying Questions Pattern · Massive Single Prompt Antipattern"
 Cohesion: 0.5
 Nodes (4): [2.0.29] - 2026-03-26, Added, Changed, Removed
 
-### Community 779 - "baml init tooling · GPT-4 mini model"
+### Community 755 - "Switch Statement Metaphor · User Action Vs Tool Action"
 Cohesion: 0.5
-Nodes (4): [2.5.0] - 2026-03-30, Added, Changed, Technical Details
+Nodes (4): [3.8.43] - 2026-05-10, Added, Changed, Fixed
 
-### Community 780 - "Bitter lessened away (harness skepticism) · Ryan Leapo OpenAI harness tweet"
+### Community 756 - "Batch Classification Discord · Concurrent Pipeline Summarize"
 Cohesion: 0.5
-Nodes (4): [3.5.0] - 2026-04-02, Added, Fixed, Removed
+Nodes (4): [2.0.0] - 2026-03-25, Added, Changed, Fixed
 
-### Community 781 - "Dynamis Obsidian agent · Obsidian + local Docker agent example"
-Cohesion: 0.5
-Nodes (4): [3.8.34] - 2026-05-01, Added, Fixed, Fixed
-
-### Community 782 - "RPI workflow boost anecdote · Engineering velocity over static position"
+### Community 757 - "Hallucinated Github Id Skip · Semantic Issue Matching Llm"
 Cohesion: 0.5
 Nodes (4): [1.3.0] - 2026-03-23, Added, Changed, Changed
 
-### Community 784 - "M2 MacBook Pro 64GB · ~32GB RAM budget"
+### Community 758 - "Eval Ui Vs Terminal · Haiku Sitemap Internal Links"
+Cohesion: 0.5
+Nodes (4): [3.8.34] - 2026-05-01, Added, Fixed, Fixed
+
+### Community 759 - "Native Rag Not In Baml · Rag Json Dump Bad Prompt"
+Cohesion: 0.5
+Nodes (4): [2.5.0] - 2026-03-30, Added, Changed, Technical Details
+
+### Community 760 - "Bbc Png Test Asset · Image Input Identify Source"
+Cohesion: 0.5
+Nodes (4): [3.5.0] - 2026-04-02, Added, Fixed, Removed
+
+### Community 761 - "Fact Opinion Enum Future · Sentence Level Classification Design"
+Cohesion: 0.5
+Nodes (4): [3.7.2] - 2026-04-05, Added, Fixed, Security
+
+### Community 762 - "Api Key Rotation Joke · Streaming Print Loop Bug"
+Cohesion: 0.5
+Nodes (4): [3.8.23] - 2026-04-12, Added, Changed, Fixed
+
+### Community 763 - "Sam Shiny Not Gradio · Weekly Doc Link Refresh Job"
+Cohesion: 0.5
+Nodes (4): [3.8.14] - 2026-04-07, Added, Changed, Tests
+
+### Community 764 - "Prompt Injection Structured Empty Fields · Recipe Stream Spinner Per Field"
+Cohesion: 0.5
+Nodes (4): [3.4.0] - 2026-04-02, Added, Changed, Fixed
+
+### Community 765 - "Chain-of-thought vs reasoning elasticity · Debate / staged reasoning prompts"
+Cohesion: 0.5
+Nodes (4): [3.8.11] - 2026-04-07, Added, Changed, Tests
+
+### Community 767 - "Latency vs multi-stage pruning tradeoffs · Cost/latency distribution shaping"
 Cohesion: 0.67
 Nodes (3): channel_of(), main(), Cross-channel link analysis for the youtube-transcripts graph.  Reads `graphify-
 
-### Community 786 - "Tailwind comparison domain · UnoCSS"
-Cohesion: 0.5
-Nodes (4): Code of conduct, Code of conduct, Code of conduct, JP Morgan code of conduct
-
-### Community 787 - "Incremental benchmark skepticism · Iterative rollout narrative"
+### Community 769 - "Streaming limits for structured JSON · Agent trace dashboard debugging"
 Cohesion: 0.5
 Nodes (3): Confidence, Key Recommendations, Summary
 
-### Community 788 - "Parasocial risk · Work-oriented AI relationship"
-Cohesion: 0.5
-Nodes (3): Key Details, Relevance to Harness, Summary
-
-### Community 789 - "99% AI code north star · Aider self-authored %"
+### Community 770 - "Dexter (co-host) · Human Layer (company)"
 Cohesion: 0.5
 Nodes (3): ACI Design Principles, Key Insight, Relevance to Codebase Exploration
 
-### Community 790 - "Notify step · ntfy notifications"
+### Community 771 - "company aliases · heuristic alias match"
 Cohesion: 0.5
 Nodes (3): Key pages, lean-ctx, What it provides
 
-### Community 791 - "Apple M2 Max · Apple M4 Max"
-Cohesion: 0.5
-Nodes (4): Dynamic Renderer, LLM Meta-Programming, Other Code Dumping Ground, Schema-Generation Prompt
-
-### Community 792 - "Hidden File @ Mentions · MCP.json Mentioned in Hidden File Flow"
+### Community 772 - "face id geometry history · wrong tool uuid encoder"
 Cohesion: 0.5
 Nodes (3): Current Best Practice (2024+), Known Problems, The Debate
 
-### Community 793 - "Agent as compositional unit · Prompt as primitive"
+### Community 773 - "engineering visibility not abstraction · gpt oss rust python"
 Cohesion: 0.5
 Nodes (3): Dimensional Completeness, Five Root Cause Metrics (sentrux), Why These Five?
 
-### Community 794 - "Anti-hype agentic coding · Trust engineering theme"
+### Community 774 - "b.request function web access · Modular API in Go and Rust"
 Cohesion: 0.5
 Nodes (3): Components, Description, Extensions
 
-### Community 795 - "Core four (inferred) · Hooks context (inferred related episode)"
-Cohesion: 0.5
-Nodes (4): Knowledge graph tooling, Markdown CRM, Markdown Front Matter, Knowledge Graph
-
-### Community 796 - "reddit_grepai_claude_tokens.md"
-Cohesion: 0.67
-Nodes (4): Community 91 - "Scarcity & Pricing Experiments", Community 96 - "Scarcity Principle", Community 91 - "Scarcity & Pricing Experiments", Community 96 - "Scarcity Principle"
-
-### Community 797 - "reddit_demongrep.md"
-Cohesion: 0.67
-Nodes (4): Community 74 - "Compounding & Repaying Debt", Repaying debt fix: add time for compounding, Repaying debt: debt snowball, Community 74 - "Compounding & Repaying Debt"
-
-### Community 798 - "Imperative APIs"
-Cohesion: 0.67
-Nodes (4): Community 2 - "Anchoring & Decoy Effects", Community 84 - "Endowment & IKEA Effects", Community 2 - "Anchoring & Decoy Effects", Community 84 - "Endowment & IKEA Effects"
-
-### Community 799 - "Lamport (1978) Time, Clocks, and Orderi…"
-Cohesion: 0.67
-Nodes (4): Community 0 - "Difficult Conversations & Decisions", Community 23 - "Crucial Conversations Cases", Community 0 - "Difficult Conversations & Decisions", Community 23 - "Crucial Conversations Cases"
-
-### Community 800 - "Gray & Reuter: Transaction Processing: …"
+### Community 775 - "Discord vs npm download visibility · Uncle Bob Professionalism"
 Cohesion: 0.67
 Nodes (4): Community 20 - "Self-Control & Amortization", Community 81 - "Memory & Exceptional Control", Community 20 - "Self-Control & Amortization", Community 81 - "Memory & Exceptional Control"
 
-### Community 801 - "Fischer, Lynch, Paterson: Impossibility…"
+### Community 776 - "Salesforce custom objects · User-defined prompting surface"
 Cohesion: 0.67
-Nodes (4): Community 3 - "Scalable Systems & Iteration", Community 54 - "Distributed Systems Trouble", Community 3 - "Scalable Systems & Iteration", Community 54 - "Distributed Systems Trouble"
+Nodes (4): Community 2 - "Anchoring & Decoy Effects", Community 84 - "Endowment & IKEA Effects", Community 2 - "Anchoring & Decoy Effects", Community 84 - "Endowment & IKEA Effects"
 
-### Community 802 - "Chandy & Lamport: Distributed snapshots"
+### Community 777 - "Interrupt Vs Queue · Message Queue Default"
+Cohesion: 0.67
+Nodes (4): Community 74 - "Compounding & Repaying Debt", Repaying debt fix: add time for compounding, Repaying debt: debt snowball, Community 74 - "Compounding & Repaying Debt"
+
+### Community 778 - "Airgapped Intranet · Class One Pii"
+Cohesion: 0.67
+Nodes (4): Community 91 - "Scarcity & Pricing Experiments", Community 96 - "Scarcity Principle", Community 91 - "Scarcity & Pricing Experiments", Community 96 - "Scarcity Principle"
+
+### Community 779 - "baml init tooling · GPT-4 mini model"
+Cohesion: 0.67
+Nodes (4): Community 0 - "Difficult Conversations & Decisions", Community 23 - "Crucial Conversations Cases", Community 0 - "Difficult Conversations & Decisions", Community 23 - "Crucial Conversations Cases"
+
+### Community 780 - "Bitter lessened away (harness skepticism) · Ryan Leapo OpenAI harness tweet"
 Cohesion: 0.5
 Nodes (4): Generated baml_client (Python), Pydantic-typed generated client sync, BAML streaming (.stream), Nested classes for resume fields
 
-### Community 803 - "Thomson et al.: Calvin (deterministic DB)"
-Cohesion: 0.5
-Nodes (4): Streaming structured facts to UI, Recipe Ingredients First Order, Semantic streaming (complete numbers/chunks), Structured Streaming State Machine
-
-### Community 804 - "Snowflake paper (elastic warehouse)"
+### Community 781 - "Dynamis Obsidian agent · Obsidian + local Docker agent example"
 Cohesion: 0.5
 Nodes (4): BAML VS Code Playground, Raw web request inspection, Prompt visibility as essential primitive, Hamel Husain 'Show me the prompt' critique
 
-### Community 805 - "Dean & Ghemawat: MapReduce"
+### Community 782 - "RPI workflow boost anecdote · Engineering velocity over static position"
+Cohesion: 0.5
+Nodes (4): Streaming structured facts to UI, Recipe Ingredients First Order, Semantic streaming (complete numbers/chunks), Structured Streaming State Machine
+
+### Community 783 - "AI transformation workshop · Leor Weinstein"
 Cohesion: 0.5
 Nodes (4): Structured outputs / schema-guided generation, Dynamic enum (TypeBuilder), Triple-backtick multiline strings in prompts, Speaker diarization prompting
 
-### Community 806 - "Kreps et al.: Kafka / log-centric archi…"
+### Community 784 - "M2 MacBook Pro 64GB · ~32GB RAM budget"
 Cohesion: 0.5
 Nodes (4): Evals and test-driven LLM pipelines, Answer key / rubric, Golden dataset from production, Table tests for structured outputs
 
-### Community 807 - "Direct applications channel"
+### Community 785 - "GET/USE autocomplete endpoints · Flask server"
 Cohesion: 0.5
 Nodes (4): ocr medical pipeline, end to end training vs math, ocr concat, vlm state of art ocr
 
-### Community 808 - "Supermarket Pull System"
+### Community 786 - "Tailwind comparison domain · UnoCSS"
 Cohesion: 0.5
-Nodes (4): pnpm dev chatbot example, Python uv workflow, React streaming integration, Tool-call debugger UI
+Nodes (4): Fon (Sherlock co-founder), Loading States Streaming Copy, Quick Prompts Ux, Sherlock AI (trading copilot)
 
-### Community 809 - "Lean Thinking"
+### Community 787 - "Incremental benchmark skepticism · Iterative rollout narrative"
 Cohesion: 0.5
 Nodes (4): Dexter (host, Human Layer), Jeff (Ralph Wiggum), LangChain framework, Viv (LangChain, harness writing)
 
-### Community 810 - "Lean Lexicon"
+### Community 788 - "Parasocial risk · Work-oriented AI relationship"
 Cohesion: 0.5
 Nodes (4): Act step, Auto-updating blog/table, Change detection vs prior JSON, Commit/push step (planned)
 
-### Community 811 - "Mizusumashi"
+### Community 789 - "99% AI code north star · Aider self-authored %"
 Cohesion: 0.5
 Nodes (4): Recursive Notion block parsing, Notion embed/math/code block parsing, notion utils parse blocks, Read-only parse content markdown
 
-### Community 812 - "Kanban Post"
+### Community 790 - "Notify step · ntfy notifications"
 Cohesion: 0.5
 Nodes (4): Browser UI testing at scale, PDF-to-text extraction step, Review velocity constraint, User story closed-loop browser tests
+
+### Community 791 - "Apple M2 Max · Apple M4 Max"
+Cohesion: 0.5
+Nodes (4): Code of conduct, Code of conduct, Code of conduct, JP Morgan code of conduct
+
+### Community 800 - "Gray & Reuter: Transaction Processing: …"
+Cohesion: 0.67
+Nodes (3): [3.8.24] - 2026-04-12, Changed, Fixed
+
+### Community 801 - "Fischer, Lynch, Paterson: Impossibility…"
+Cohesion: 0.67
+Nodes (3): [2.0.11] - 2026-03-26, Added, Removed
+
+### Community 802 - "Chandy & Lamport: Distributed snapshots"
+Cohesion: 0.67
+Nodes (3): Added, Fixed, [Unreleased]
+
+### Community 803 - "Thomson et al.: Calvin (deterministic DB)"
+Cohesion: 0.67
+Nodes (3): [2.0.16] - 2026-03-26, Added, Changed
+
+### Community 804 - "Snowflake paper (elastic warehouse)"
+Cohesion: 0.67
+Nodes (3): [3.1.3] - 2026-04-02, Fixed, Performance
+
+### Community 805 - "Dean & Ghemawat: MapReduce"
+Cohesion: 0.67
+Nodes (3): [2.2.0] - 2026-03-29, Added, Fixed
+
+### Community 806 - "Kreps et al.: Kafka / log-centric archi…"
+Cohesion: 0.67
+Nodes (3): [2.7.0] - 2026-03-31, Added - New Lint Runners, Changed
+
+### Community 807 - "Direct applications channel"
+Cohesion: 0.67
+Nodes (3): [3.8.10] - 2026-04-07, Changed, Fixed
+
+### Community 808 - "Supermarket Pull System"
+Cohesion: 0.67
+Nodes (3): [1.5.0] - 2026-03-23, Added, Changed
+
+### Community 809 - "Lean Thinking"
+Cohesion: 0.67
+Nodes (3): [3.8.25] - 2026-04-13, Changed, Fixed
+
+### Community 810 - "Lean Lexicon"
+Cohesion: 0.67
+Nodes (3): [3.2.0] - 2026-04-02, Changed, Fixed
+
+### Community 811 - "Mizusumashi"
+Cohesion: 0.67
+Nodes (3): [2.0.12] - 2026-03-26, Changed, Fixed
+
+### Community 812 - "Kanban Post"
+Cohesion: 0.67
+Nodes (3): [3.8.9] - 2026-04-07, Changed, Fixed
+
+### Community 813 - "Greenfield"
+Cohesion: 0.67
+Nodes (3): [3.8.12] - 2026-04-07, Changed, Tests
+
+### Community 814 - "TPM"
+Cohesion: 0.67
+Nodes (3): [3.1.0] - 2026-04-01, Changed, Fixed
+
+### Community 815 - "Community 815"
+Cohesion: 0.67
+Nodes (3): [3.8.31] - 2026-04-23, Changed, Fixed
+
+### Community 816 - "Production Preparation Process"
+Cohesion: 0.67
+Nodes (3): [2.0.27] - 2026-03-26, Added, Changed
+
+### Community 817 - "Material"
+Cohesion: 0.67
+Nodes (3): [3.8.13] - 2026-04-07, Changed, Tests
+
+### Community 818 - "clients.baml / generators.baml"
+Cohesion: 0.67
+Nodes (3): [3.8.18] - 2026-04-07, Changed, Tests
+
+### Community 819 - "BAML async client"
+Cohesion: 0.67
+Nodes (3): [3.6.1] - 2026-04-02, Changed, Repository
+
+### Community 820 - "BoundaryML Discord community"
+Cohesion: 0.67
+Nodes (3): [3.6.2] - 2026-04-02, Added, Changed
+
+### Community 821 - "Datasheet extraction to tables"
+Cohesion: 0.67
+Nodes (3): [2.1.1] - 2026-03-29, Added, Changed
+
+### Community 822 - "Low-quality phone photo extraction"
+Cohesion: 0.67
+Nodes (3): [3.8.38] - 2026-05-02, Added, Fixed
 
 ### Community 823 - "Aron (BoundaryML founder)"
 Cohesion: 0.67
@@ -4597,165 +4577,89 @@ Nodes (3): [2.0.26] - 2026-03-26, Added, Changed
 
 ### Community 824 - "Vaibhav (Boundary co-founder)"
 Cohesion: 0.67
-Nodes (3): [3.1.0] - 2026-04-01, Changed, Fixed
+Nodes (3): [2.0.1] - 2026-03-25, Changed, Fixed
 
 ### Community 825 - "Aaron (Boundary co-founder)"
 Cohesion: 0.67
-Nodes (3): [3.8.17] - 2026-04-07, Changed, Tests
+Nodes (3): [3.8.22] - 2026-04-09, Changed, Fixed
 
 ### Community 826 - "BAML retry_policy on clients"
 Cohesion: 0.67
-Nodes (3): [3.8.25] - 2026-04-13, Changed, Fixed
+Nodes (3): [3.8.21] - 2026-04-08, Changed, Fixed
 
 ### Community 827 - "Chain-of-thought fields in schema"
 Cohesion: 0.67
-Nodes (3): [3.8.13] - 2026-04-07, Changed, Tests
+Nodes (3): [3.8.20] - 2026-04-08, Changed, Fixed
 
 ### Community 828 - "Next.js + Tailwind + BAML UI example"
 Cohesion: 0.67
-Nodes (3): [2.1.1] - 2026-03-29, Added, Changed
+Nodes (3): [3.7.2] - 2026-04-05 (previous), Added, Fixed
 
 ### Community 829 - "Semantic similarity tests in Python"
 Cohesion: 0.67
-Nodes (3): [2.0.15] - 2026-03-26, Changed, Removed
+Nodes (3): [3.8.16] - 2026-04-07, Changed, Tests
 
 ### Community 830 - "boundaryml/prompt-shepherds repo"
 Cohesion: 0.67
-Nodes (3): [3.2.0] - 2026-04-02, Changed, Fixed
-
-### Community 831 - "resume.baml extract function"
-Cohesion: 0.67
-Nodes (3): Added, Fixed, [Unreleased]
-
-### Community 832 - "GPT-4o client in BAML"
-Cohesion: 0.67
-Nodes (3): [2.0.11] - 2026-03-26, Added, Removed
-
-### Community 833 - "Retry policy visualization in playground"
-Cohesion: 0.67
-Nodes (3): [2.7.0] - 2026-03-31, Added - New Lint Runners, Changed
-
-### Community 834 - "discord.py client"
-Cohesion: 0.67
-Nodes (3): [3.3.0] - 2026-04-02, Changed, Removed
-
-### Community 835 - "MS Paint drawing eval for LLM agents"
-Cohesion: 0.67
-Nodes (3): [3.8.20] - 2026-04-08, Changed, Fixed
-
-### Community 836 - "Shiny for Python UI (Hamilton Ulster / …"
-Cohesion: 0.67
-Nodes (3): [3.8.24] - 2026-04-12, Changed, Fixed
-
-### Community 837 - "boundaryml/baml-examples repository"
-Cohesion: 0.67
-Nodes (3): [1.5.0] - 2026-03-23, Added, Changed
-
-### Community 838 - "Lucide + shadcn/ui stack specialization"
-Cohesion: 0.67
-Nodes (3): [3.7.2] - 2026-04-05 (previous), Added, Fixed
-
-### Community 839 - "Recipe generator structured streaming UI"
-Cohesion: 0.67
-Nodes (3): [2.2.0] - 2026-03-29, Added, Fixed
-
-### Community 840 - "Instructor library mention"
-Cohesion: 0.67
-Nodes (3): [3.8.12] - 2026-04-07, Changed, Tests
-
-### Community 841 - "Gradio / Streamlit mention"
-Cohesion: 0.67
-Nodes (3): [3.8.31] - 2026-04-23, Changed, Fixed
-
-### Community 842 - "Vaibhav (speaker)"
-Cohesion: 0.67
-Nodes (3): [3.8.38] - 2026-05-02, Added, Fixed
-
-### Community 843 - "Playground + evals in product"
-Cohesion: 0.67
-Nodes (3): [3.8.10] - 2026-04-07, Changed, Fixed
-
-### Community 844 - "Chain-of-thought in structured function"
-Cohesion: 0.67
-Nodes (3): [3.0.1] - 2026-03-31, Changed, Fixed
-
-### Community 845 - "Multi-language clients from BAML"
-Cohesion: 0.67
-Nodes (3): [3.6.3] - 2026-04-03, Removed (Dead Code Cleanup), Test Suite Overhaul
-
-### Community 846 - "Multi-provider client configuration pat…"
-Cohesion: 0.67
-Nodes (3): [1.4.0] - 2026-03-23, Added, Changed
-
-### Community 847 - "Local fast parse (Rust/WASM theme)"
-Cohesion: 0.67
-Nodes (3): [2.0.1] - 2026-03-25, Changed, Fixed
-
-### Community 848 - "Pisan Agent Tech Mention"
-Cohesion: 0.67
-Nodes (3): [3.6.1] - 2026-04-02, Changed, Repository
+Nodes (3): [2.0.15] - 2026-03-26, Changed, Removed
 
 ### Community 849 - "Multimodal Image Article"
 Cohesion: 0.67
-Nodes (3): [2.0.27] - 2026-03-26, Added, Changed
+Nodes (3): Henry Ward 'How to Hire' (false positives argument), Don't cut corners (rigor like code review), Risk vs speed in hyper-growth hiring
 
 ### Community 850 - "Reddit Opinion Piece"
 Cohesion: 0.67
-Nodes (3): [3.6.2] - 2026-04-02, Added, Changed
+Nodes (3): Alias pattern for enum labels, RAG citations without raw URLs in context, Label indirection / sentinel IDs
 
 ### Community 851 - "Bbc Screenshot Test"
 Cohesion: 0.67
-Nodes (3): [3.8.22] - 2026-04-09, Changed, Fixed
+Nodes (3): Todd Berman modular API Go/Rust, Bedrock Private Deployment, Proxy Anthropic
 
 ### Community 852 - "Elmo News Meme"
 Cohesion: 0.67
-Nodes (3): [2.0.16] - 2026-03-26, Added, Changed
+Nodes (3): Rust client doc topic 10, Rust client doc topic 5, Studio UX fix 9
 
 ### Community 853 - "Red Lobster Meme"
 Cohesion: 0.67
-Nodes (3): [3.8.16] - 2026-04-07, Changed, Tests
+Nodes (3): Dynamic Rules, Generative Rules, Static Rules
 
 ### Community 854 - "Embedding Similarity Optional"
 Cohesion: 0.67
-Nodes (3): [3.8.9] - 2026-04-07, Changed, Fixed
+Nodes (3): Ship item 14, Telemetry / docs item 7, Studio UX fix 17
 
 ### Community 855 - "Resume Injection Guard"
 Cohesion: 0.67
-Nodes (3): Hardware, Operating system, System requirements
+Nodes (3): Rendering-only vs LLM fields, Release note 8, Studio UX fix 10
 
 ### Community 856 - "Markdown Vs Structured Rendering"
 Cohesion: 0.67
-Nodes (3): code:shell (nix run github:numtide/llm-agents.nix), code:shell (nix run github:numtide/llm-agents.nix#claude-code), Try Without Installing
+Nodes (3): Hideki, Python glass field ordering, Medical scribe workflow
 
 ### Community 857 - "Chess Move Refusal Parse"
 Cohesion: 0.67
-Nodes (3): code:shell (gt "Where are the numbers rounded"), code:shell (gt "function calc_.* that deals with taxes"), Search your repository
-
-### Community 876 - "Groq / OpenAI-compatible base URL example"
-Cohesion: 0.67
-Nodes (3): Henry Ward 'How to Hire' (false positives argument), Don't cut corners (rigor like code review), Risk vs speed in hyper-growth hiring
-
-### Community 877 - "env. prefix for secrets in BAML"
-Cohesion: 0.67
-Nodes (3): Alias pattern for enum labels, RAG citations without raw URLs in context, Label indirection / sentinel IDs
-
-### Community 878 - "Dynamic types for structured responses …"
-Cohesion: 0.67
-Nodes (3): Hideki, Python glass field ordering, Medical scribe workflow
-
-### Community 879 - "Demo land vs production AI"
-Cohesion: 0.67
-Nodes (3): Slack, email.works demo platform, myMX / MX email infrastructure
-
-### Community 881 - "NumPy cosine similarity"
-Cohesion: 0.67
 Nodes (3): Postgres on Neon, Quadrant or Pinecone vector DB swap, pgvector style storage
 
-### Community 882 - "pick_category as composable function"
+### Community 858 - "Union Type Receipt Or String"
 Cohesion: 0.67
 Nodes (3): Anthropic editor & bash tools, Doc scrape + clean workflow, Forced tool-call pattern
 
-### Community 883 - "Unit-testable prune layer"
+### Community 859 - "Luma Event Scheduling"
+Cohesion: 0.67
+Nodes (3): Hardware, Operating system, System requirements
+
+### Community 860 - "Community Poll Demo Picker"
+Cohesion: 0.67
+Nodes (3): code:shell (nix run github:numtide/llm-agents.nix), code:shell (nix run github:numtide/llm-agents.nix#claude-code), Try Without Installing
+
+### Community 861 - "Greg Spatial Eval Pentagon"
+Cohesion: 0.67
+Nodes (3): code:shell (gt "Where are the numbers rounded"), code:shell (gt "function calc_.* that deals with taxes"), Search your repository
+
+### Community 862 - "Token History Screenshots Cost"
+Cohesion: 0.67
+Nodes (3): Binary Cache, code:nix ({), code:nix (nix.settings = {)
+
+### Community 863 - "Sonnet External Links Weak"
 Cohesion: 1.0
 Nodes (3): just commands for eval, Prompt complexity classifier, scikit-learn classifiers
 
@@ -4810,9 +4714,9 @@ Nodes (3): just commands for eval, Prompt complexity classifier, scikit-learn cl
   data/books/team-management/Alexander Grosse_ David Loftesness - Scaling Teams_ Strategies for Building Successful Teams and Organizations (2016, O'Reilly Media, Inc.) - libgen.li (1).pdf · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **4985 isolated node(s):** `Return new graph with prefixed node ids; mapping old_id -> new_id.`, `node_id -> tokens, node_id -> display string for matching.`, `parts: (name, subgraph, tokens_map, labels_map) for each corpus.     Adds INFERR`, `Short names from highest-degree node labels in each community.`, `Short-circuit noisy labels from ingested graph-report summary nodes.` (+4980 more)
+- **4995 isolated node(s):** `Return new graph with prefixed node ids; mapping old_id -> new_id.`, `node_id -> tokens, node_id -> display string for matching.`, `parts: (name, subgraph, tokens_map, labels_map) for each corpus.     Adds INFERR`, `Short names from highest-degree node labels in each community.`, `Short-circuit noisy labels from ingested graph-report summary nodes.` (+4990 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **505 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **514 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

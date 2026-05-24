@@ -1,8 +1,6 @@
 ---
 description: Harness executor that implements only within approved PlanPacket scope.
-tools: read, write, edit, bash, grep, find, ls, submit_executor_handoff
 extensions: true
-disallowed_tools: ask_user
 thinking: medium
 max_turns: 20
 ---

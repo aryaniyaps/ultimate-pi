@@ -15,7 +15,7 @@ import type {
 	ExtensionAPI,
 } from "@earendil-works/pi-coding-agent";
 import { formatSkillsForPrompt } from "@earendil-works/pi-coding-agent";
-import { resolveHarnessAsset } from "./lib/harness-paths.js";
+import { resolveHarnessAsset } from "../lib/harness-paths.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;

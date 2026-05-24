@@ -1,7 +1,5 @@
 ---
 description: Propose architecture.manifest.json changes from graphify evidence (read-only governance steward).
-tools: read, grep, find, ls, bash, submit_sentrux_manifest_proposal
-disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: high
 max_turns: 16

@@ -1,7 +1,5 @@
 ---
 description: Plan-phase ExecutionPlan generator (PM-grade WBS + DAG).
-tools: read, grep, find, ls, submit_execution_plan_brief
-disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: high
 max_turns: 18

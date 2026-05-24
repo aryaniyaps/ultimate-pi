@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
 	formatPlanPacketLines,
 	formatPlanPacketYaml,
-} from "../.pi/extensions/lib/plan-approval/format-plan.ts";
+} from "../.pi/lib/plan-approval/format-plan.ts";
 import { parsePlanApprovalFromMessage } from "../.pi/lib/harness-run-context.ts";
 
 const samplePacket = {

@@ -12,41 +12,41 @@ import {
 	parsePlanApprovalFromMessage,
 	planPacketSummary,
 } from "../lib/harness-run-context.js";
-import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
+import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import {
 	CREATE_PLAN_GUIDELINES,
 	CREATE_PLAN_SNIPPET,
 	executeCreatePlan,
 	formatCreatePlanResultText,
-} from "./lib/plan-approval/create-plan.js";
+} from "../lib/plan-approval/create-plan.js";
 import {
 	buildPlanApprovalMarkdown,
 	runPlanApprovalDialog,
-} from "./lib/plan-approval/dialog.js";
-import { writePlanReviewMarkdown } from "./lib/plan-approval/plan-review.js";
+} from "../lib/plan-approval/dialog.js";
+import { writePlanReviewMarkdown } from "../lib/plan-approval/plan-review.js";
 import {
 	renderApprovePlanCall,
 	renderApprovePlanResult,
 	renderHarnessPlanDraft,
-} from "./lib/plan-approval/render.js";
-import { resolveApprovePlanParamsFromDisk } from "./lib/plan-approval/resolve-disk.js";
+} from "../lib/plan-approval/render.js";
+import { resolveApprovePlanParamsFromDisk } from "../lib/plan-approval/resolve-disk.js";
 import {
 	ApprovePlanParamsSchema,
 	CreatePlanParamsSchema,
 	PROMPT_GUIDELINES,
 	PROMPT_SNIPPET,
-} from "./lib/plan-approval/schema.js";
+} from "../lib/plan-approval/schema.js";
 import type {
 	ApprovePlanParams,
 	PlanApprovalDialogResult,
-} from "./lib/plan-approval/types.js";
+} from "../lib/plan-approval/types.js";
 import {
 	formatApprovePlanResultText,
 	toApprovePlanToolDetails,
 	validateApprovePlanParams,
-} from "./lib/plan-approval/validate.js";
-import { validatePlanApprovalReadiness } from "./lib/plan-approval-readiness.js";
-import { validatePlanDebateGate } from "./lib/plan-debate-gate.js";
+} from "../lib/plan-approval/validate.js";
+import { validatePlanApprovalReadiness } from "../lib/plan-approval-readiness.js";
+import { validatePlanDebateGate } from "../lib/plan-debate-gate.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;

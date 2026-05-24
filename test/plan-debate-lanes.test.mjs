@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
 	laneArtifactPathsForConsolidatedRound,
 	lanesForConsolidatedRound,
-} from "../.pi/extensions/lib/plan-debate-lanes.ts";
+} from "../.pi/lib/plan-debate-lanes.ts";
 
 test("consolidated round includes blind hypothesis-validation lane", () => {
 	const lanes = lanesForConsolidatedRound();

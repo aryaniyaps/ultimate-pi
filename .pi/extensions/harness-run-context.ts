@@ -72,15 +72,14 @@ import {
 	parseStructuredDocument,
 	writeYamlFile,
 } from "../lib/harness-yaml.js";
-import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
-import { blockRunContextMessage } from "./lib/harness-run-context-responses.js";
-import {
-	evaluateHarnessSubagentToolCall,
-	isSubmitToolName,
-} from "./lib/harness-subagent-policy.js";
-import { bootstrapHarnessSubprocessFromEnv } from "./lib/harness-subprocess-bootstrap.js";
-import { isReviewRoundArtifactPath } from "./lib/plan-debate-gate.js";
-import { isReviewRoundYamlWriteAllowed } from "./lib/plan-debate-write-guard.js";
+import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
+import { getHarnessPackageRoot } from "../lib/harness-paths.js";
+import { blockRunContextMessage } from "../lib/harness-run-context-responses.js";
+import { allowsAgentTool } from "../lib/agents-policy.mjs";
+import { isSubmitToolName } from "../lib/harness-subagent-submit-registry.js";
+import { bootstrapHarnessSubprocessFromEnv } from "../lib/harness-subprocess-bootstrap.js";
+import { isReviewRoundArtifactPath } from "../lib/plan-debate-gate.js";
+import { isReviewRoundYamlWriteAllowed } from "../lib/plan-debate-write-guard.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
@@ -1044,13 +1043,22 @@ async function guardToolCall(input: {
 	const { isHarnessAgtPolicyEnabled } = await import("../lib/agt/config.js");
 	if (!isHarnessAgtPolicyEnabled()) {
 		if (isSubmitToolName(input.event.toolName)) {
-			const decision = evaluateHarnessSubagentToolCall(
-				input.event.toolName,
-				input.event.input as Record<string, unknown>,
-				"parent-orchestrator",
-			);
-			if (decision.action === "block")
-				return { block: true, reason: decision.reason };
+			const packageRoot = getHarnessPackageRoot(MODULE_URL);
+			const allowed = allowsAgentTool({
+				packageRoot,
+				projectRoot: process.cwd(),
+				agentId: "parent-orchestrator",
+				toolName: input.event.toolName,
+				toolInput: input.event.input as Record<string, unknown>,
+				isSubprocess: false,
+				isParentOrchestrator: true,
+			});
+			if (!allowed) {
+				return {
+					block: true,
+					reason: `agents-policy: ${input.event.toolName} blocked for parent-orchestrator`,
+				};
+			}
 		}
 	}
 	if (input.event.toolName === "write") {
@@ -1946,7 +1954,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			);
 			const specsDir = join(projectRoot, ".pi", "harness", "specs");
 			const { validateHarnessArtifactPaths } = await import(
-				"./lib/harness-artifact-gate.js"
+				"../lib/harness-artifact-gate.js"
 			);
 			const gate = await validateHarnessArtifactPaths(runRoot, paths, specsDir);
 			const text = gate.ok

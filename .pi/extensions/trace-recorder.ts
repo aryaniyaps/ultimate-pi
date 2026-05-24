@@ -20,7 +20,7 @@ import {
 	phaseTraceFileName,
 	saveRunContextToDisk,
 } from "../lib/harness-run-context.js";
-import { captureHarnessEvent } from "./lib/harness-posthog.js";
+import { captureHarnessEvent } from "../lib/harness-posthog.js";
 
 interface ToolSpan {
 	tool_call_id: string;

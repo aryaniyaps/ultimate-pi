@@ -10,7 +10,7 @@ const {
 	validateAskParams,
 	formatResultText,
 } = await import(
-	new URL("../.pi/extensions/lib/ask-user/validate-core.mjs", import.meta.url).href
+	new URL("../.pi/lib/ask-user/validate-core.mjs", import.meta.url).href
 );
 
 test("normalizeOption accepts string and object", () => {

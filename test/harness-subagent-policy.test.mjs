@@ -4,17 +4,38 @@ import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-	classifyHarnessAgent,
-	evaluateHarnessSubagentToolCall,
+	allowsAgentTool,
+	getAgentKind,
 	isHarnessPlanningAgent,
-	isSubmitToolName,
-} from "../.pi/extensions/lib/harness-subagent-policy.ts";
-import { evaluateSubagentToolCall } from "../.pi/extensions/lib/spawn-policy.ts";
+} from "../.pi/lib/agents-policy.mjs";
+import { isSubmitToolName } from "../.pi/lib/harness-subagent-submit-registry.ts";
+import { evaluateSubagentToolCall } from "../.pi/lib/harness-spawn-policy.ts";
 import { parseHarnessAgentJson } from "../.pi/lib/harness-agent-output.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const packageRoot = root;
+const projectRoot = root;
 
-test("isSubmitToolName is exported from harness-subagent-policy", () => {
+function evaluateHarnessSubagentToolCall(toolName, toolInput, agentId) {
+	const isParent = agentId === "parent-orchestrator";
+	const allowed = allowsAgentTool({
+		packageRoot,
+		projectRoot,
+		agentId,
+		toolName,
+		toolInput,
+		isSubprocess: !isParent && Boolean(process.env.PI_HARNESS_SUBPROCESS),
+		isParentOrchestrator: isParent,
+	});
+	return allowed
+		? { action: "allow" }
+		: {
+				action: "block",
+				reason: `agents-policy: ${toolName} blocked for ${agentId}`,
+			};
+}
+
+test("isSubmitToolName is exported from submit registry", () => {
 	assert.equal(typeof isSubmitToolName, "function");
 	assert.equal(isSubmitToolName("submit_decomposition_brief"), true);
 	assert.equal(isSubmitToolName("read"), false);
@@ -72,13 +93,16 @@ test("executor allows write", () => {
 });
 
 test("planning decompose and hypothesis-validator classified as planner read-only", () => {
-	assert.equal(classifyHarnessAgent("harness/planning/decompose"), "planner");
 	assert.equal(
-		classifyHarnessAgent("harness/planning/hypothesis"),
+		getAgentKind(packageRoot, projectRoot, "harness/planning/decompose"),
 		"planner",
 	);
 	assert.equal(
-		classifyHarnessAgent("harness/planning/hypothesis-validator"),
+		getAgentKind(packageRoot, projectRoot, "harness/planning/hypothesis"),
+		"planner",
+	);
+	assert.equal(
+		getAgentKind(packageRoot, projectRoot, "harness/planning/hypothesis-validator"),
 		"planner",
 	);
 	const evalWrite = evaluateHarnessSubagentToolCall(
@@ -91,10 +115,13 @@ test("planning decompose and hypothesis-validator classified as planner read-onl
 
 test("planning-context classified as planner read-only", () => {
 	assert.equal(
-		classifyHarnessAgent("harness/planning/planning-context"),
+		getAgentKind(packageRoot, projectRoot, "harness/planning/planning-context"),
 		"planner",
 	);
-	assert.equal(isHarnessPlanningAgent("harness/planning/planning-context"), true);
+	assert.equal(
+		isHarnessPlanningAgent("harness/planning/planning-context"),
+		true,
+	);
 	const write = evaluateHarnessSubagentToolCall(
 		"write",
 		{ path: "src/a.ts", content: "x" },
@@ -179,11 +206,12 @@ test("submit tools blocked outside subprocess", () => {
 	if (prev !== undefined) process.env.PI_HARNESS_SUBPROCESS = prev;
 });
 
-test("planning-context agent disallows approve_plan in frontmatter", () => {
+test("planning-context agent frontmatter has no tool lists (agents.policy.yaml SSOT)", () => {
 	const agent = readFileSync(
 		join(root, ".pi/agents/harness/planning/planning-context.md"),
 		"utf-8",
 	);
-	assert.match(agent, /disallowed_tools:.*approve_plan/);
+	assert.doesNotMatch(agent, /^tools:/m);
+	assert.doesNotMatch(agent, /^disallowed_tools:/m);
 	assert.match(agent, /submit_planning_context/);
 });

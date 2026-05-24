@@ -1,7 +1,5 @@
 ---
 description: Plan-phase Review Gate integrator (round → debate bus).
-tools: read, grep, find, ls, submit_review_round_draft
-disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
 max_turns: 12

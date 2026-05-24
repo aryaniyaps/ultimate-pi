@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildPlanApprovalMarkdown } from "../.pi/extensions/lib/plan-approval/dialog.ts";
+import { buildPlanApprovalMarkdown } from "../.pi/lib/plan-approval/dialog.ts";
 
 const samplePacket = {
 	schema_version: "1.0.0",

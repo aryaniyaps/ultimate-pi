@@ -4,13 +4,13 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
-import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
+import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import {
 	harnessWebContextLine,
 	readTextExcerpt,
 	runHarnessWeb,
 	summarizeSearchJson,
-} from "./lib/harness-web/run-cli.js";
+} from "../lib/harness-web/run-cli.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;

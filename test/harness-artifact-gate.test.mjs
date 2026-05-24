@@ -7,7 +7,7 @@ import { randomUUID } from "node:crypto";
 import {
 	validateHarnessArtifactFile,
 	validateHarnessArtifactPaths,
-} from "../.pi/extensions/lib/harness-artifact-gate.ts";
+} from "../.pi/lib/harness-artifact-gate.ts";
 
 const specsDir = join(process.cwd(), ".pi/harness/specs");
 

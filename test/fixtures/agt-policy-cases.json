@@ -47,6 +47,7 @@
 		"agentId": "parent-orchestrator",
 		"phase": "plan",
 		"isSubprocess": false,
+		"harnessSession": true,
 		"aborted": true,
 		"input": { "command": "git commit -m x" },
 		"expect": "deny"
@@ -57,6 +58,7 @@
 		"agentId": "parent-orchestrator",
 		"phase": "plan",
 		"isSubprocess": false,
+		"harnessSession": true,
 		"input": { "command": "git commit -m x" },
 		"expect": "deny"
 	},
@@ -75,6 +77,7 @@
 		"agentId": "harness/running/executor",
 		"phase": "execute",
 		"isSubprocess": true,
+		"harnessSession": true,
 		"input": { "command": "curl https://example.com" },
 		"expect": "deny"
 	},

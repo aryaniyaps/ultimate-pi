@@ -13,13 +13,13 @@ import {
 	finalizeDebateConsensus,
 	openDebateBus,
 	parseRoundEnvelope,
-} from "./lib/debate-bus-core.js";
+} from "../lib/debate-bus-core.js";
 import {
 	getDebateState,
 	restoreDebateStateFromEntry,
-} from "./lib/debate-bus-state.js";
-import { normalizePlanDebateId } from "./lib/plan-debate-id.js";
-import { initPlanMessenger } from "./lib/plan-messenger.js";
+} from "../lib/debate-bus-state.js";
+import { normalizePlanDebateId } from "../lib/plan-debate-id.js";
+import { initPlanMessenger } from "../lib/plan-messenger.js";
 
 function getRunId(ctx: {
 	sessionManager: { getEntries(): unknown[]; getSessionId(): string };

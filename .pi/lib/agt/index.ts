@@ -28,8 +28,10 @@ export {
 } from "./identity-registry.js";
 export { evaluateLegacyHarnessToolPolicy } from "./legacy-evaluate.js";
 export {
+	createAgtPolicyEngine,
 	createHarnessPolicyEngine,
 	doctorHarnessPolicies,
+	getAgtPolicyEngine,
 	getHarnessPolicyEngine,
 	HarnessPolicyLoadError,
 	resetHarnessPolicyEngineCache,

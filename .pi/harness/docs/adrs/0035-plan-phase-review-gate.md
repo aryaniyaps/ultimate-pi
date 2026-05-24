@@ -32,4 +32,4 @@ Early implementation treated debate as a fixed four-round checklist with single 
 
 - [ADR-0033](0033-parent-orchestrated-planning.md), [ADR-0034](0034-darwin-plan-research-pipeline.md)
 - `raw/decisions/adr-020.md`, `raw/modules/structured-planning.md`
-- `.pi/prompts/planning-rubrics.md`, `.pi/prompts/harness-plan.md` Phase 5
+- `.pi/harness/docs/planning-rubrics.md`, `.pi/prompts/harness-plan.md` Phase 5

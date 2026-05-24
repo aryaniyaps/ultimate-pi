@@ -211,7 +211,7 @@ Med/low non-fork plans with clear stack and no implementation `open_questions` d
 
 ## Phase 5 — Structured inspection / Review Gate (Fagan-style)
 
-**Practice:** Code Complete collaborative construction; Fagan inspection with rubrics in `planning-rubrics.md`. Parent is **chair**; one debate agent per `subagent` batch.
+**Practice:** Code Complete collaborative construction; Fagan inspection with rubrics in `.pi/harness/docs/planning-rubrics.md`. Parent is **chair**; one debate agent per `subagent` batch.
 
 **Forbidden:** parallel `subagent` calls for any debate lane agent in one batch.
 

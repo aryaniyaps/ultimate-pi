@@ -9,7 +9,7 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { truncateToWidth } from "@earendil-works/pi-tui";
 import * as JimpModule from "jimp";
-import { resolveHarnessAsset } from "./lib/harness-paths.js";
+import { resolveHarnessAsset } from "../lib/harness-paths.js";
 
 /** Shipped next to this extension in the npm package — not the host project's .pi dir. */
 const imagePath = resolveHarnessAsset(

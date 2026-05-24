@@ -1,8 +1,6 @@
 ---
 description: Final arbiter for unresolved evaluator vs adversary debates within budget limits.
-tools: read, grep, find, ls, submit_human_required
 extensions: false
-disallowed_tools: ask_user
 thinking: high
 max_turns: 15
 ---

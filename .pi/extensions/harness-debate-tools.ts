@@ -5,7 +5,7 @@
 import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
+import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import {
 	captureHarnessEvent,
 	DEBATE_AGENT_SUBMIT_TOOL,
@@ -17,7 +17,7 @@ import {
 	parseYaml,
 	Type,
 	writeYamlFile,
-} from "./lib/harness-debate-core-deps.js";
+} from "../lib/harness-debate-core-deps.js";
 import {
 	acceptDebateRound,
 	applyDebateLane,
@@ -49,7 +49,7 @@ import {
 	readRoundTranscript,
 	validateIntegratorDraft,
 	withReviewRoundYamlWrite,
-} from "./lib/harness-debate-workflow-deps.js";
+} from "../lib/harness-debate-workflow-deps.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;

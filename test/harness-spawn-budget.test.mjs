@@ -6,7 +6,7 @@ import {
 	isHarnessAgentType,
 	recordSpawnEnd,
 	recordSpawnStart,
-} from "../.pi/extensions/lib/harness-spawn-budget.ts";
+} from "../.pi/lib/harness-spawn-budget.ts";
 
 test("isHarnessAgentType matches harness paths", () => {
 	assert.equal(isHarnessAgentType("harness/running/executor"), true);

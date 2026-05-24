@@ -4,7 +4,7 @@ import {
 	isUsableApiKey,
 	parseModelRef,
 	resolveConcreteSubagentModel,
-} from "../.pi/extensions/lib/harness-subagent-auth.ts";
+} from "../.pi/lib/harness-subagent-auth.ts";
 
 describe("harness-subagent-auth", () => {
 	it("rejects sentinel api keys", () => {

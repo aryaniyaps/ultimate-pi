@@ -7,23 +7,18 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 test("subprocess governance bundle path exists", () => {
-	const path = join(
-		root,
-		".pi",
-		"extensions",
-		"harness-subagent-governance.ts",
-	);
+	const path = join(root, ".pi", "extensions", "subagent-governance.ts");
 	const src = readFileSync(path, "utf-8");
-	assert.ok(src.includes("evaluateAgtHarnessToolCall"));
+	assert.ok(src.includes("evaluateAgtToolCall"));
 	assert.ok(src.includes("registerHarnessSubagentSubmitTools"));
 });
 
 test("bridge uses governance extension not submit-only", () => {
 	const src = readFileSync(
-		join(root, ".pi", "extensions", "lib", "harness-subagents-bridge.ts"),
+		join(root, ".pi", "lib", "harness-subagents-bridge.ts"),
 		"utf-8",
 	);
-	assert.ok(src.includes("harnessSubagentGovernanceExtensionPath"));
+	assert.ok(src.includes("subprocessGovernanceExtensionPath"));
 	assert.ok(src.includes("mintSubagentDelegation"));
 });
 
