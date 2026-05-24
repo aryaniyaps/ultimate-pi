@@ -88,49 +88,31 @@ function computeCriticalPath(workItems) {
 	return path;
 }
 
-export function validateExecutionPlan(packet, projectRoot = ROOT) {
+function validateMinimumShape(packet, ep, phases, workItems) {
 	const errors = [];
-	const ep = packet.execution_plan;
-	if (!ep) {
-		errors.push("execution_plan required");
-		return { status: "fail", errors, report: null };
-	}
-
 	const risk = packet.risk_level ?? "med";
 	const min = MINIMUMS[risk] ?? MINIMUMS.med;
-	const phases = ep.phases ?? [];
-	const workItems = ep.work_items ?? [];
-	const conflicts = [];
-
-	if (phases.length < min.phases) {
-		errors.push(`need >= ${min.phases} phases for risk ${risk}`);
-	}
-	if (workItems.length < min.work_items) {
-		errors.push(`need >= ${min.work_items} work_items for risk ${risk}`);
-	}
 	const ac = packet.acceptance_checks ?? [];
-	if (ac.length < min.acceptance_checks) {
-		errors.push(`need >= ${min.acceptance_checks} acceptance_checks`);
-	}
-	if ((ep.risk_register ?? []).length < min.risks) {
-		errors.push(`need >= ${min.risks} risks for risk ${risk}`);
-	}
+	if (phases.length < min.phases) errors.push(`need >= ${min.phases} phases for risk ${risk}`);
+	if (workItems.length < min.work_items) errors.push(`need >= ${min.work_items} work_items for risk ${risk}`);
+	if (ac.length < min.acceptance_checks) errors.push(`need >= ${min.acceptance_checks} acceptance_checks`);
+	if ((ep.risk_register ?? []).length < min.risks) errors.push(`need >= ${min.risks} risks for risk ${risk}`);
+	return errors;
+}
 
+function validatePhaseAndWorkItemLinks(phases, workItems) {
+	const errors = [];
 	const phaseIds = new Set(phases.map((p) => p.phase_id));
-	const phaseIndex = new Map(phases.map((p, i) => [p.phase_id, i]));
 	const wiIds = new Set(workItems.map((w) => w.work_item_id));
-
 	for (const p of phases) {
 		if (!p.exit_criteria?.length) errors.push(`phase ${p.phase_id} missing exit_criteria`);
 		if (!p.work_item_ids?.length) errors.push(`phase ${p.phase_id} has no work items`);
-	}
-
-	const wiInPhase = new Set();
-	for (const w of workItems) {
-		if (!phaseIds.has(w.phase_id)) {
-			errors.push(`work_item ${w.work_item_id} unknown phase_id`);
+		for (const wid of p.work_item_ids ?? []) {
+			if (!wiIds.has(wid)) errors.push(`phase ${p.phase_id} references missing ${wid}`);
 		}
-		wiInPhase.add(w.work_item_id);
+	}
+	for (const w of workItems) {
+		if (!phaseIds.has(w.phase_id)) errors.push(`work_item ${w.work_item_id} unknown phase_id`);
 		for (const d of w.depends_on ?? []) {
 			if (!wiIds.has(d)) errors.push(`work_item ${w.work_item_id} depends_on missing ${d}`);
 		}
@@ -138,17 +120,23 @@ export function validateExecutionPlan(packet, projectRoot = ROOT) {
 			errors.push(`work_item ${w.work_item_id} needs files[] or non_code: true`);
 		}
 	}
+	return errors;
+}
 
-	for (const p of phases) {
-		for (const wid of p.work_item_ids ?? []) {
-			if (!wiIds.has(wid)) errors.push(`phase ${p.phase_id} references missing ${wid}`);
-		}
+function isReachable(workItems, from, to, seen = new Set()) {
+	if (from === to) return true;
+	if (seen.has(from)) return false;
+	seen.add(from);
+	const w = workItems.find((x) => x.work_item_id === from);
+	for (const d of w?.depends_on ?? []) {
+		if (isReachable(workItems, d, to, seen)) return true;
 	}
+	return false;
+}
 
-	const { order, cycles } = topoSort(workItems);
-	if (cycles.length) errors.push(`cycle detected: ${JSON.stringify(cycles[0])}`);
-
-	// File conflicts
+function findFileConflicts(phases, workItems) {
+	const conflicts = [];
+	const phaseIndex = new Map(phases.map((p, i) => [p.phase_id, i]));
 	for (let i = 0; i < workItems.length; i++) {
 		for (let j = i + 1; j < workItems.length; j++) {
 			const a = workItems[i];
@@ -156,42 +144,34 @@ export function validateExecutionPlan(packet, projectRoot = ROOT) {
 			const filesA = new Set(a.files ?? []);
 			const overlap = (b.files ?? []).filter((f) => filesA.has(f));
 			if (overlap.length === 0) continue;
-			const reachable = (from, to, seen = new Set()) => {
-				if (from === to) return true;
-				if (seen.has(from)) return false;
-				seen.add(from);
-				const w = workItems.find((x) => x.work_item_id === from);
-				for (const d of w?.depends_on ?? []) {
-					if (reachable(d, to, seen)) return true;
-				}
-				return false;
-			};
-			if (!reachable(a.work_item_id, b.work_item_id) && !reachable(b.work_item_id, a.work_item_id)) {
-				if ((phaseIndex.get(a.phase_id) ?? 0) === (phaseIndex.get(b.phase_id) ?? 0)) {
-					conflicts.push(
-						`file overlap ${overlap.join(",")} between ${a.work_item_id} and ${b.work_item_id} without dependency`,
-					);
-				}
+			const ordered =
+				isReachable(workItems, a.work_item_id, b.work_item_id) ||
+				isReachable(workItems, b.work_item_id, a.work_item_id);
+			const samePhase = (phaseIndex.get(a.phase_id) ?? 0) === (phaseIndex.get(b.phase_id) ?? 0);
+			if (!ordered && samePhase) {
+				conflicts.push(
+					`file overlap ${overlap.join(",")} between ${a.work_item_id} and ${b.work_item_id} without dependency`,
+				);
 			}
 		}
 	}
+	return conflicts;
+}
 
+function validateCriticalPath(ep, workItems) {
 	const computedCp = computeCriticalPath(workItems);
 	const authorCp = ep.schedule_metadata?.critical_path_work_item_ids ?? [];
-	if (computedCp.length >= 3 && authorCp.length) {
-		const same =
-			authorCp.length === computedCp.length &&
-			authorCp.every((id, i) => id === computedCp[i]);
-		if (!same) {
-			errors.push(
-				`critical_path mismatch author=${authorCp.join("→")} computed=${computedCp.join("→")}`,
-			);
-		}
-	}
+	const same =
+		authorCp.length === computedCp.length &&
+		authorCp.every((id, i) => id === computedCp[i]);
+	if (computedCp.length < 3 || !authorCp.length || same) return [];
+	return [`critical_path mismatch author=${authorCp.join("→")} computed=${computedCp.join("→")}`];
+}
 
-	const acIds = new Set(
-		ac.map((c) => (typeof c === "string" ? c : c.id)).filter(Boolean),
-	);
+function validateAcceptanceCheckLinks(packet, workItems) {
+	const errors = [];
+	const ac = packet.acceptance_checks ?? [];
+	const acIds = new Set(ac.map((c) => (typeof c === "string" ? c : c.id)).filter(Boolean));
 	for (const w of workItems) {
 		for (const acid of w.acceptance_check_ids ?? []) {
 			if (!acIds.has(acid)) errors.push(`${w.work_item_id} references orphan ${acid}`);
@@ -201,14 +181,25 @@ export function validateExecutionPlan(packet, projectRoot = ROOT) {
 		const used = workItems.some((w) => (w.acceptance_check_ids ?? []).includes(acid));
 		if (!used) errors.push(`orphan acceptance check ${acid}`);
 	}
+	return errors;
+}
 
+export function validateExecutionPlan(packet, projectRoot = ROOT) {
+	const ep = packet.execution_plan;
+	if (!ep) return { status: "fail", errors: ["execution_plan required"], report: null };
+	const phases = ep.phases ?? [];
+	const workItems = ep.work_items ?? [];
+	const { order, cycles } = topoSort(workItems);
+	const errors = [
+		...validateMinimumShape(packet, ep, phases, workItems),
+		...validatePhaseAndWorkItemLinks(phases, workItems),
+		...(cycles.length ? [`cycle detected: ${JSON.stringify(cycles[0])}`] : []),
+		...validateCriticalPath(ep, workItems),
+		...validateAcceptanceCheckLinks(packet, workItems),
+	];
+	const conflicts = findFileConflicts(phases, workItems);
 	const status = errors.length === 0 && conflicts.length === 0 ? "pass" : "fail";
-	const report = {
-		status,
-		topological_order: order,
-		cycles,
-		conflicts: [...conflicts, ...errors],
-	};
+	const report = { status, topological_order: order, cycles, conflicts: [...conflicts, ...errors] };
 	return { status, errors: [...errors, ...conflicts], report };
 }
 

@@ -4,6 +4,11 @@ Purpose: Agentic coding harness — architecture, research, decisions, implement
 Owner: pi-mono + user
 Created: 2026-05-14
 
+## Instruction Boundaries
+
+- `.pi/SYSTEM.md` is the reusable harness-level agent prompt and should remain project-agnostic for external projects.
+- Keep ultimate-pi-specific paths, ownership, local conventions, and repository facts in this `AGENTS.md` file (or nearby project docs), not in `.pi/SYSTEM.md`.
+
 ## Structure
 
 - graphify-out/ → Knowledge graph (run `graphify update .` to build)

@@ -128,75 +128,47 @@ export interface TranscriptEntry {
   count?: number;
 }
 
-/**
- * Build BriefLine sections from NormalizedBlocks.
- */
-export const buildBriefSections = (blocks: NormalizedBlock[]): BriefLine[] => {
-  const sections: BriefLine[] = [];
-  let lastHeader = "";
-
-  const push = (header: string, line: string) => {
-    if (header === lastHeader && sections.length > 0) {
-      sections[sections.length - 1].lines.push(line);
-      return;
-    }
-    sections.push({ header, lines: [line] });
-    lastHeader = header;
-  };
-
-  for (const b of blocks) {
-    switch (b.kind) {
-      case "user": {
-        if (isNoiseUser(b.text)) break;
-        const text = truncateTokens(collapseSkillText(b.text), TRUNCATE_USER);
-        if (text) {
-          const ref = b.sourceIndex != null ? ` (#${b.sourceIndex})` : "";
-          push("[user]", text + ref);
-        }
-        lastHeader = "[user]";
-        break;
-      }
-      case "assistant": {
-        let raw = b.text;
-        // Strip leading self-talk prefix (up to 2x; assistants sometimes chain "Hmm, actually, ...")
-        for (let i = 0; i < 2; i++) {
-          const stripped = raw.replace(SELF_TALK_PREFIX_RE, "");
-          if (stripped === raw) break;
-          raw = stripped;
-        }
-        const text = truncateTokens(raw, TRUNCATE_ASSISTANT);
-        if (text) {
-          const ref = b.sourceIndex != null ? ` (#${b.sourceIndex})` : "";
-          push("[assistant]", text + ref);
-        }
-        break;
-      }
-      case "tool_call": {
-        // Skip malformed tool calls from streaming providers (empty name / fragmented args).
-        if (!b.name || b.name.trim() === "") break;
-        const ref = b.sourceIndex != null ? ` (#${b.sourceIndex})` : "";
-        const summary = toolOneLiner(b.name, b.args) + ref;
-        push("[assistant]", summary);
-        break;
-      }
-      case "tool_result": {
-        if (b.isError) {
-          const body = firstLine(b.text, 150);
-          // Drop empty/placeholder error bodies — keep the line only if it carries info.
-          if (!body || body === "(no output)") break;
-          const ref = b.sourceIndex != null ? ` (#${b.sourceIndex})` : "";
-          const header = `[tool_error] ${b.name}${ref}`;
-          push(header, body);
-          lastHeader = header;
-        }
-        break;
-      }
-      case "thinking":
-        break;
-    }
+const stripAssistantSelfTalk = (text: string): string => {
+  let raw = text;
+  for (let i = 0; i < 2; i++) {
+    const stripped = raw.replace(SELF_TALK_PREFIX_RE, "");
+    if (stripped === raw) break;
+    raw = stripped;
   }
+  return raw;
+};
 
-  // Collapse consecutive identical tool lines (same text, different #ref)
+const appendBlockSection = (
+  b: NormalizedBlock,
+  push: (header: string, line: string) => void,
+): string | null => {
+  if (b.kind === "user") {
+    if (isNoiseUser(b.text)) return null;
+    const text = truncateTokens(collapseSkillText(b.text), TRUNCATE_USER);
+    if (text) push("[user]", text + (b.sourceIndex != null ? ` (#${b.sourceIndex})` : ""));
+    return "[user]";
+  }
+  if (b.kind === "assistant") {
+    const text = truncateTokens(stripAssistantSelfTalk(b.text), TRUNCATE_ASSISTANT);
+    if (text) push("[assistant]", text + (b.sourceIndex != null ? ` (#${b.sourceIndex})` : ""));
+    return null;
+  }
+  if (b.kind === "tool_call") {
+    if (!b.name || b.name.trim() === "") return null;
+    push("[assistant]", toolOneLiner(b.name, b.args) + (b.sourceIndex != null ? ` (#${b.sourceIndex})` : ""));
+    return null;
+  }
+  if (b.kind === "tool_result" && b.isError) {
+    const body = firstLine(b.text, 150);
+    if (!body || body === "(no output)") return null;
+    const header = `[tool_error] ${b.name}${b.sourceIndex != null ? ` (#${b.sourceIndex})` : ""}`;
+    push(header, body);
+    return header;
+  }
+  return null;
+};
+
+const collapseAssistantToolLines = (sections: BriefLine[]): void => {
   for (const sec of sections) {
     if (sec.header !== "[assistant]") continue;
     const out: string[] = [];
@@ -206,26 +178,19 @@ export const buildBriefSections = (blocks: NormalizedBlock[]): BriefLine[] => {
       const base = ref ? line.slice(0, -(ref.length + 3)).trimEnd() : line;
       const last = out.length > 0 ? out[out.length - 1] : "";
       const m = last.match(/^(.*) \((#[\d, #]+)\) x(\d+)$/);
-      if (m && m[1] === base) {
-        out[out.length - 1] = `${base} (${m[2]}, #${ref}) x${parseInt(m[3]) + 1}`;
-      } else if (last.match(/\(#\d+\)$/) && last.replace(/\s*\(#\d+\)$/, "") === base) {
-        const prevRef = last.match(/\(#(\d+)\)$/)?.[1];
-        out[out.length - 1] = `${base} (#${prevRef}, #${ref}) x2`;
-      } else {
-        out.push(line);
-      }
+      if (m && m[1] === base) out[out.length - 1] = `${base} (${m[2]}, #${ref}) x${parseInt(m[3]) + 1}`;
+      else if (last.match(/\(#\d+\)$/) && last.replace(/\s*\(#\d+\)$/, "") === base) out[out.length - 1] = `${base} (#${last.match(/\(#(\d+)\)$/)?.[1]}, #${ref}) x2`;
+      else out.push(line);
     }
     sec.lines = out;
   }
+};
 
-  // Cap tool calls per [assistant] turn — keep tail (latest actions tend to
-  // be the deciding edits/writes; head is usually exploration noise).
+const capAssistantToolLines = (sections: BriefLine[]): void => {
   const TOOL_CALLS_PER_TURN = 8;
   for (const sec of sections) {
     if (sec.header !== "[assistant]") continue;
-    const toolIdxs = sec.lines
-      .map((l, i) => (l.startsWith("* ") ? i : -1))
-      .filter((i) => i >= 0);
+    const toolIdxs = sec.lines.map((l, i) => (l.startsWith("* ") ? i : -1)).filter((i) => i >= 0);
     if (toolIdxs.length <= TOOL_CALLS_PER_TURN) continue;
     const dropCount = toolIdxs.length - TOOL_CALLS_PER_TURN;
     const dropSet = new Set(toolIdxs.slice(0, dropCount));
@@ -242,36 +207,40 @@ export const buildBriefSections = (blocks: NormalizedBlock[]): BriefLine[] => {
     }
     sec.lines = next;
   }
+};
 
-  // Collapse consecutive identical [tool_error] sections (same tool, same body).
-  // E.g. 20 back-to-back `[tool_error] bash (#N) ... Command aborted` become one
-  // `[tool_error] bash (#refs...) x20` entry.
+const collapseConsecutiveToolErrors = (sections: BriefLine[]): BriefLine[] => {
   const collapsedErrors: BriefLine[] = [];
   for (const sec of sections) {
     const m = sec.header.match(/^\[tool_error\]\s+(\S+?)(?:\s*\(#(\d+)\))?$/);
-    if (!m || sec.lines.length !== 1) {
-      collapsedErrors.push(sec);
-      continue;
-    }
-    const tool = m[1];
-    const ref = m[2];
-    const body = sec.lines[0];
-    const prev = collapsedErrors[collapsedErrors.length - 1];
-    const prevMatch = prev?.header.match(
-      /^\[tool_error\]\s+(\S+?)\s*\(((?:#\d+(?:,\s*)?)+)\)(?:\s*x(\d+))?$/,
-    );
+    if (!m || sec.lines.length !== 1) { collapsedErrors.push(sec); continue; }
+    const [tool, ref, body, prev] = [m[1], m[2], sec.lines[0], collapsedErrors[collapsedErrors.length - 1]];
+    const prevMatch = prev?.header.match(/^\[tool_error\]\s+(\S+?)\s*\(((?:#\d+(?:,\s*)?)+)\)(?:\s*x(\d+))?$/);
     if (prev && prevMatch && prevMatch[1] === tool && prev.lines.length === 1 && prev.lines[0] === body) {
       const refs = prevMatch[2] + (ref ? `, #${ref}` : "");
       const count = prevMatch[3] ? parseInt(prevMatch[3]) + 1 : 2;
       prev.header = `[tool_error] ${tool} (${refs}) x${count}`;
-    } else {
-      collapsedErrors.push(sec);
-    }
+    } else collapsedErrors.push(sec);
   }
-  sections.length = 0;
-  sections.push(...collapsedErrors);
+  return collapsedErrors;
+};
 
-  return sections;
+/**
+ * Build BriefLine sections from NormalizedBlocks.
+ */
+export const buildBriefSections = (blocks: NormalizedBlock[]): BriefLine[] => {
+  let lastHeader = "";
+  const sections: BriefLine[] = [];
+  const push = (header: string, line: string) => {
+    if (header === lastHeader && sections.length > 0) sections[sections.length - 1].lines.push(line);
+    else sections.push({ header, lines: [line] });
+    lastHeader = header;
+  };
+
+  for (const b of blocks) lastHeader = appendBlockSection(b, push) ?? lastHeader;
+  collapseAssistantToolLines(sections);
+  capAssistantToolLines(sections);
+  return collapseConsecutiveToolErrors(sections);
 };
 
 /**

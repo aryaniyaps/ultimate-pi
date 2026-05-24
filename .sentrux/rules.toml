@@ -41,9 +41,9 @@ order = 3
 
 [[layers]]
 name = "tooling"
-paths = [".pi/scripts/*", "test/*"]
+paths = [".pi/scripts/*"]
 order = 4
-# Harness CLI scripts and tests
+# Harness CLI scripts
 
 [[boundaries]]
 from = ".agents/skills/*"

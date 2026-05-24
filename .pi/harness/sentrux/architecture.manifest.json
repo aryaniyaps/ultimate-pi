@@ -39,9 +39,9 @@
 		},
 		{
 			"name": "tooling",
-			"paths": [".pi/scripts/*", "test/*"],
+			"paths": [".pi/scripts/*"],
 			"order": 4,
-			"description": "Harness CLI scripts and tests"
+			"description": "Harness CLI scripts"
 		}
 	],
 	"boundaries": [
