@@ -1,0 +1,58 @@
+# Return in Generator
+# Detects 'return' with a value in generator functions (with 'yield')
+id: return-in-generator
+name: Return with Value in Generator
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "'return' with a value should not be used in a generator function"
+
+description: |
+  In Python 3.3+, using 'return <value>' in a generator sets the
+  StopIteration.value, which is rarely intended. Use 'return' without
+  a value, or yield the value instead.
+
+  ✅ FIX: Remove the return value or yield it
+
+  ```python
+  def my_generator():
+      yield 1
+      yield 2
+      return  # OK - no value
+  ```
+
+query: |
+  (function_definition
+    body: (block
+      (return_statement
+        (_) @RETURN_VAL) @RETURN)) @FUNCTION
+
+metavars:
+  - FUNCTION
+  - RETURN
+  - RETURN_VAL
+
+post_filter: is_generator_with_valued_return
+
+tags:
+  - reliability
+  - python-specific
+  - generator
+
+examples:
+  bad: |
+    def my_gen():
+        yield 1
+        return 42  # BAD - StopIteration.value is rarely intended
+
+  good: |
+    def my_gen():
+        yield 1
+        yield 42  # GOOD - yield instead
+        return  # GOOD - return without value
+
+has_fix: true
+fix_action: remove_return_value

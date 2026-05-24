@@ -1,0 +1,54 @@
+# NCHAR NVARCHAR2 Byte Size
+# Detects NCHAR/NVARCHAR2 with size in bytes
+id: nchar-nvarchar2-bytes
+name: NCHAR and NVARCHAR2 Size Should Not Be Specified in Bytes
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "NCHAR/NVARCHAR2 size should be in characters, not bytes"
+
+description: |
+  NCHAR and NVARCHAR2 store Unicode characters. Specifying size
+  in bytes is confusing and may cause data truncation. Use character
+  semantics with CHAR keyword.
+
+  ✅ FIX: Use CHAR keyword for character semantics
+
+  ```sql
+  name NCHAR(10 CHAR)  -- GOOD - characters
+  ```
+
+query: |
+  (variable_declaration
+    (nchar_type) @TYPE
+    (size_specification) @SIZE)
+  (variable_declaration
+    (nvarchar2_type) @TYPE
+    (size_specification) @SIZE)
+
+metavars:
+  - TYPE
+  - SIZE
+
+post_filter: size_in_bytes_not_char
+
+tags:
+  - reliability
+  - plsql
+  - unicode
+  - data-integrity
+
+examples:
+  bad: |
+    name NCHAR(10 BYTE);     -- BAD - bytes
+    text NVARCHAR2(100);     -- BAD - defaults to bytes
+
+  good: |
+    name NCHAR(10 CHAR);     -- GOOD - characters
+    text NVARCHAR2(100 CHAR); -- GOOD - explicit
+
+has_fix: true
+fix_action: add_char_keyword

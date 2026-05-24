@@ -1,0 +1,15 @@
+id: no-return-await
+language: TypeScript
+message: "Unnecessary 'await' in return statement — use direct return instead"
+severity: warning
+note: |
+  Returning await adds unnecessary overhead. In most cases, return the
+  promise directly. The exception is try/catch blocks where you want
+  to catch rejections.
+rule:
+  all:
+    - pattern: return await $X
+    - not:
+        inside:
+          kind: try_statement
+          stopBy: end

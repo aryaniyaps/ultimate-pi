@@ -1,0 +1,12 @@
+id: no-single-promise-in-promise-methods-js
+language: JavaScript
+severity: warning
+message: "Promise.all/race with a single promise is unnecessary — await it directly"
+note: |
+  Promise.all([p]) adds ceremony for no benefit. Just await p.
+rule:
+  any:
+    - pattern: "Promise.all([$PROMISE])"
+    - pattern: "Promise.allSettled([$PROMISE])"
+    - pattern: "Promise.race([$PROMISE])"
+    - pattern: "Promise.any([$PROMISE])"

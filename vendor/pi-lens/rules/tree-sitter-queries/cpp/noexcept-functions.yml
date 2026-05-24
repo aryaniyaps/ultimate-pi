@@ -1,0 +1,58 @@
+# Noexcept Functions
+# Detects functions that should be noexcept
+id: noexcept-functions
+name: Exception-Unfriendly Functions Should Be noexcept
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: cpp
+
+message: "Function should be declared noexcept"
+
+description: |
+  Functions that don't throw exceptions should be marked noexcept.
+  This enables compiler optimizations and better error handling.
+  This is a MISRA C++ 2023 rule.
+
+  ✅ FIX: Add noexcept specifier
+
+  ```cpp
+  int add(int a, int b) noexcept {  // GOOD - noexcept
+      return a + b;
+  }
+  ```
+
+query: |
+  (function_definition
+    type: (primitive_type) @RET
+    (function_declarator
+      name: (identifier) @NAME)
+    body: (compound_statement) @BODY)
+
+metavars:
+  - RET
+  - NAME
+  - BODY
+
+post_filter: should_be_noexcept
+
+tags:
+  - reliability
+  - cpp
+  - misra-cpp2023
+  - performance
+
+examples:
+  bad: |
+    int add(int a, int b) {  // BAD - missing noexcept
+        return a + b;
+    }
+
+  good: |
+    int add(int a, int b) noexcept {  // GOOD
+        return a + b;
+    }
+
+has_fix: true
+fix_action: add_noexcept

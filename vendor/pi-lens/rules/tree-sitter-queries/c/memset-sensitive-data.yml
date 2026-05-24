@@ -1,0 +1,50 @@
+# S5798: memset should not be used to delete sensitive data
+# memset can be optimized away by compilers; use explicit_bzero or SecureZeroMemory
+id: memset-sensitive-data
+name: memset Should Not Be Used to Delete Sensitive Data
+severity: error
+category: security
+defect_class: secrets
+inline_tier: blocking
+language: c
+
+message: "memset should not be used to erase sensitive data — use explicit_bzero, SecureZeroMemory, or memset_s"
+
+description: |
+  Compilers may optimize away memset() calls on variables that are never
+  read afterward. Use platform-specific secure zeroing functions instead.
+
+  ✅ FIX: Use explicit_bzero (BSD), SecureZeroMemory (Windows), or memset_s (C11)
+
+  ```c
+  explicit_bzero(password, sizeof(password));  // GOOD
+  SecureZeroMemory(password, sizeof(password)); // GOOD (Windows)
+  ```
+
+query: |
+  (call_expression
+    function: (identifier) @FN (#eq? @FN "memset")) @CALL
+
+metavars:
+  - FN
+  - CALL
+
+post_filter: c_memset_sensitive_arg
+
+tags:
+  - security
+  - c
+  - cert
+  - secrets
+  - compiler-optimization
+
+examples:
+  bad: |
+    char password[32];
+    memset(password, 0, sizeof(password));  // BAD - may be optimized away
+
+  good: |
+    explicit_bzero(password, sizeof(password));  // GOOD
+
+has_fix: true
+fix_action: replace_with_explicit_bzero

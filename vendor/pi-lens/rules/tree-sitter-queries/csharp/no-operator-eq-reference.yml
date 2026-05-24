@@ -1,0 +1,60 @@
+# No Operator == on Reference Types
+# Detects operator== overloading on reference types in C#
+id: no-operator-eq-reference
+name: operator== Should Not Be Overloaded on Reference Types
+severity: warning
+category: maintainability
+defect_class: correctness
+inline_tier: warning
+language: csharp
+
+message: "operator== should not be overloaded on reference types"
+
+description: |
+  Overloading == on reference types can cause confusion between
+  reference equality and value equality. Let reference types use
+  the default reference equality, or implement IEquatable<T>.
+
+  ✅ FIX: Don't overload == for classes, use Equals() or make it a struct
+
+  ```csharp
+  public class Person : IEquatable<Person> {
+      public bool Equals(Person other) {  // Explicit interface
+          // Value equality logic
+      }
+  }
+  ```
+
+query: |
+  (class_declaration
+    body: (declaration_list
+      (operator_declaration
+        ("operator")
+        ("==") @OP) @OPERATOR))
+
+metavars:
+  - OP
+  - OPERATOR
+
+tags:
+  - maintainability
+  - csharp
+  - api-design
+  - pitfall
+
+examples:
+  bad: |
+    public class Person {
+        public static bool operator ==(Person a, Person b) {  // BAD
+            return a.Name == b.Name;
+        }
+    }
+
+  good: |
+    public struct Point {  // GOOD - value type
+        public static bool operator ==(Point a, Point b) {
+            return a.X == b.X && a.Y == b.Y;
+        }
+    }
+
+has_fix: false

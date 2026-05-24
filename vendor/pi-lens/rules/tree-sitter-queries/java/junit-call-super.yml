@@ -1,0 +1,63 @@
+# JUnit Call Super
+# Detects JUnit test cases that should call super methods
+id: junit-call-super
+name: JUnit Test Cases Should Call Super Methods
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "JUnit test case should call super method"
+
+description: |
+  When overriding setUp(), tearDown(), or other JUnit lifecycle
+  methods, always call super.method() to ensure proper initialization
+  and cleanup from parent classes.
+
+  ✅ FIX: Call super method at start or end
+
+  ```java
+  @Override
+  protected void setUp() throws Exception {
+      super.setUp();  // GOOD - call super first
+      // custom setup
+  }
+  ```
+
+query: |
+  (method_declaration
+    (modifiers
+      (annotation
+        name: (identifier) @OVERRIDE (#eq? @OVERRIDE "Override")))
+    name: (identifier) @METHOD (#match? @METHOD "^(setUp|tearDown|setUpBeforeClass|tearDownAfterClass)$")
+    body: (block) @BODY)
+
+metavars:
+  - OVERRIDE
+  - METHOD
+  - BODY
+
+post_filter: missing_super_call
+
+tags:
+  - maintainability
+  - java
+  - junit
+  - testing
+
+examples:
+  bad: |
+    @Override
+    protected void setUp() throws Exception {
+        // custom setup  // BAD - missing super.setUp()
+    }
+
+  good: |
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();  // GOOD - call super first
+        // custom setup
+    }
+
+has_fix: false

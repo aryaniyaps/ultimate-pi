@@ -1,0 +1,11 @@
+id: no-mutable-default
+language: Python
+message: "Mutable default argument detected — use None and initialize inside function"
+severity: error
+note: |
+  Mutable defaults (lists, dicts) are shared across all calls to the function.
+  Use None as default and create a new instance inside the function body.
+rule:
+  kind: default_parameter
+  has:
+    kind: list

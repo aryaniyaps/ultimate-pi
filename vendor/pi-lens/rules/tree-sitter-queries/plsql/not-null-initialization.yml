@@ -1,0 +1,59 @@
+# NOT NULL Initialization
+# Detects NOT NULL variables without initialization
+id: not-null-initialization
+name: NOT NULL Variables Should Be Initialized
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "NOT NULL variable should be initialized"
+
+description: |
+  Declaring a NOT NULL variable without initialization causes
+  a runtime error when trying to use it. Initialize at declaration
+  or in the BEGIN block.
+
+  ✅ FIX: Initialize the variable
+
+  ```sql
+  DECLARE
+      v_count NUMBER NOT NULL := 0;  -- GOOD - initialized
+  BEGIN
+      -- use v_count
+  END;
+  ```
+
+query: |
+  (variable_declaration
+    (not_null) @NOTNULL
+    (assignment)? @INIT)
+
+metavars:
+  - NOTNULL
+  - INIT
+
+post_filter: not_null_without_init
+
+tags:
+  - reliability
+  - plsql
+  - runtime-error
+
+examples:
+  bad: |
+    DECLARE
+        v_count NUMBER NOT NULL;  -- BAD - not initialized
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE(v_count);
+    END;
+
+  good: |
+    DECLARE
+        v_count NUMBER NOT NULL := 0;  -- GOOD
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE(v_count);
+    END;
+
+has_fix: false

@@ -1,0 +1,74 @@
+# Unsafe Regex Construction
+# Detects dynamic regex construction that can lead to ReDoS
+id: unsafe-regex
+name: Dynamic Regex Construction
+severity: error
+category: security
+defect_class: injection
+inline_tier: blocking
+language: typescript
+
+message: "Dynamic regex from user input — can cause ReDoS (Regular Expression Denial of Service)"
+
+description: |
+  Building regular expressions from user input or dynamic strings can
+  lead to ReDoS attacks. An attacker can craft input that causes
+  catastrophic backtracking.
+  
+  ❌ NEVER:
+  const regex = new RegExp(userInput, 'i');  // ReDoS risk!
+  const pattern = new RegExp(`\\b${term}\\b`);  // Also risky!
+  
+  ✅ SAFE ALTERNATIVES:
+  1. Escape special regex characters before interpolation
+  2. Use string methods instead of regex when possible
+  3. Validate input against a whitelist
+  
+  Example escaping:
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+  const regex = new RegExp(escapeRegExp(userInput), 'i');
+
+query: |
+  (new_expression
+    constructor: (identifier) @CTOR
+    (#eq? @CTOR "RegExp")
+    arguments: (arguments
+      (template_string
+        (template_substitution) @INTERPOLATION) @PATTERN)
+    (#not-match? @INTERPOLATION "escape|Escape|replace"))
+
+metavars:
+  - CTOR
+  - INTERPOLATION
+  - PATTERN
+
+has_fix: false
+
+tags:
+  - security
+  - regex
+  - redos
+  - injection
+
+examples:
+  bad: |
+    // ReDoS vulnerability!
+    const searchRegex = new RegExp(`\\b${userSearch}\\b`, 'gi');
+    
+    // Also vulnerable
+    const validator = new RegExp(req.body.pattern);
+  
+  good: |
+    // Safe: Escape special characters
+    function escapeRegExp(string: string): string {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    const safeRegex = new RegExp(escapeRegExp(userSearch), 'i');
+    
+    // Safe: Use string methods
+    const found = text.toLowerCase().includes(userSearch.toLowerCase());
+    
+    // Safe: Static regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

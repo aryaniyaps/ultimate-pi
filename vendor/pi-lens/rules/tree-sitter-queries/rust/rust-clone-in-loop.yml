@@ -1,0 +1,51 @@
+# Rust Clone in Loop
+# Detects unnecessary clone() calls in hot loops
+id: rust-clone-in-loop
+name: Clone in Hot Loop
+severity: info
+category: performance
+defect_class: safety
+inline_tier: warning
+language: rust
+
+message: "clone() in loop may hurt performance — consider borrowing or moving"
+
+description: |
+  Cloning values in a loop can be expensive, especially for large types.
+  Consider using references (&T) instead of owned values.
+  
+  ✅ FIX: Use &T instead of cloning, or restructure to move values.
+
+query: |
+  (for_expression
+    body: (block
+      (call_expression
+        function: (field_expression
+          field: (field_identifier) @METHOD)
+        (#eq? @METHOD "clone")) @CALL))
+
+metavars:
+  - METHOD
+  - CALL
+
+has_fix: false
+
+tags:
+  - rust
+  - performance
+  - memory
+
+examples:
+  bad: |
+    for item in &items {
+        process(item.clone());  // Unnecessary clone
+    }
+  
+  good: |
+    for item in &items {
+        process(item);  // Borrow instead
+    }
+    // Or if process needs ownership:
+    for item in items {  // Move items
+        process(item);
+    }

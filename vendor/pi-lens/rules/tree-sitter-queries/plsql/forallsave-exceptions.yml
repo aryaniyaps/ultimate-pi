@@ -1,0 +1,51 @@
+# FORALL Save Exceptions
+# Detects FORALL statements without SAVE EXCEPTIONS
+id: forallsave-exceptions
+name: FORALL Should Use SAVE EXCEPTIONS Clause
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "FORALL statement should use the SAVE EXCEPTIONS clause"
+
+description: |
+  FORALL without SAVE EXCEPTIONS stops on first error, 
+  losing information about which rows failed. Use SAVE EXCEPTIONS
+  to continue and get error details for all failed rows.
+
+  ✅ FIX: Add SAVE EXCEPTIONS clause
+
+  ```sql
+  FORALL i IN 1..collection.COUNT SAVE EXCEPTIONS
+      INSERT INTO table VALUES collection(i);  -- GOOD
+  ```
+
+query: |
+  (forall_statement
+    (forall) @FORALL
+    (bulk_operation) @OP)
+
+metavars:
+  - FORALL
+  - OP
+
+post_filter: missing_save_exceptions
+
+tags:
+  - reliability
+  - plsql
+  - error-handling
+
+examples:
+  bad: |
+    FORALL i IN 1..employees.COUNT
+        INSERT INTO emp VALUES employees(i);  -- BAD - no SAVE EXCEPTIONS
+
+  good: |
+    FORALL i IN 1..employees.COUNT SAVE EXCEPTIONS
+        INSERT INTO emp VALUES employees(i);  -- GOOD
+
+has_fix: true
+fix_action: add_save_exceptions

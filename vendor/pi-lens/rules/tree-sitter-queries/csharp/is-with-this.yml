@@ -1,0 +1,52 @@
+# Is With This
+# Detects 'is' operator used with 'this' in C#
+id: is-with-this
+name: is Should Not Be Used With This
+severity: warning
+category: maintainability
+defect_class: correctness
+inline_tier: warning
+language: csharp
+
+message: "'is' should not be used with 'this' — use GetType() comparison instead"
+
+description: |
+  Using 'is' with 'this' checks the declared type, not the runtime type.
+  Use GetType() == typeof(ExpectedType) for exact type comparison,
+  or virtual methods for polymorphic behavior.
+
+  ✅ FIX: Use GetType() or virtual dispatch
+
+  ```csharp
+  if (this.GetType() == typeof(DerivedClass)) {  // Runtime type check
+      // ...
+  }
+  ```
+
+query: |
+  (binary_expression
+    left: (this_expression) @THIS
+    right: (_) @TYPE)
+
+metavars:
+  - THIS
+  - TYPE
+
+tags:
+  - maintainability
+  - csharp
+  - api-design
+  - pitfall
+
+examples:
+  bad: |
+    if (this is MyClass) {  // BAD - checks declared type
+        // ...
+    }
+
+  good: |
+    if (this.GetType() == typeof(MyClass)) {  // GOOD - runtime check
+        // ...
+    }
+
+has_fix: false

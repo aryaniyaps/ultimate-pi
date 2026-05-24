@@ -1,0 +1,8 @@
+id: prefer-prototype-methods
+language: TypeScript
+severity: warning
+message: "Use Object.hasOwn() instead of .hasOwnProperty()"
+note: |
+  .hasOwnProperty can be shadowed. Object.hasOwn(obj, key) is safe.
+rule:
+  pattern: "$OBJ.hasOwnProperty($$$ARGS)"

@@ -1,0 +1,48 @@
+# No Octal Values
+# Detects octal integer literals (leading zero)
+id: no-octal-values
+name: Octal Values Should Not Be Used
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Octal value '{{VALUE}}' should not be used - use explicit 0o prefix if intended"
+
+description: |
+  Leading zeros make integers octal (base 8), which is confusing.
+  Use explicit 0o prefix for octal, or remove leading zeros for decimal.
+
+  ✅ FIX: Remove leading zeros or use 0o prefix
+
+  ```java
+  int x = 10;     // GOOD - decimal 10
+  int y = 0o10;   // GOOD - explicit octal 8
+  ```
+
+query: |
+  ((decimal_integer_literal) @VALUE
+    (#match? @VALUE "^[0][0-9]+$")
+    (#not-match? @VALUE "^0[xXoObB]"))
+
+metavars:
+  - VALUE
+
+tags:
+  - maintainability
+  - java
+  - cert
+  - confusing
+
+examples:
+  bad: |
+    int x = 010;  // BAD - octal 8, not decimal 10!
+    int y = 0644;  // BAD - looks like permission but is octal
+
+  good: |
+    int x = 10;     // GOOD - decimal
+    int y = 0o644;  // GOOD - explicit octal
+
+has_fix: true
+fix_action: remove_leading_zeros

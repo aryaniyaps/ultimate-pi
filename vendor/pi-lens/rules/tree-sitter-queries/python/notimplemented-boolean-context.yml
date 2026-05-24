@@ -1,0 +1,67 @@
+# NotImplemented in Boolean Context
+# Detects NotImplemented used in boolean contexts (if, while, and, or)
+id: notimplemented-boolean-context
+name: NotImplemented in Boolean Context
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "NotImplemented should not be used in boolean contexts"
+
+description: |
+  NotImplemented is not a boolean value and should not be used in boolean contexts.
+  In Python 3.14+, this will raise a DeprecationWarning and eventually an error.
+  Use NotImplementedError exception instead, or return NotImplemented from operators.
+
+  ✅ FIX: Raise NotImplementedError instead
+
+  ```python
+  def method(self):
+      if not self.supported:
+          raise NotImplementedError("Not supported")  # Correct
+  ```
+
+query: |
+  (if_statement
+    condition: (identifier) @COND (#eq? @COND "NotImplemented"))
+  (while_statement
+    condition: (identifier) @COND (#eq? @COND "NotImplemented"))
+  (binary_operator
+    (identifier) @COND (#eq? @COND "NotImplemented")
+    ("and" | "or"))
+  (boolean_operator
+    (identifier) @COND (#eq? @COND "NotImplemented"))
+  (unary_operator
+    operator: ("not")
+    argument: (identifier) @COND (#eq? @COND "NotImplemented"))
+
+metavars:
+  - COND
+
+tags:
+  - reliability
+  - python-specific
+  - deprecation
+  - python3.14
+
+examples:
+  bad: |
+    if NotImplemented:  # BAD - boolean context
+        pass
+
+    while NotImplemented:  # BAD
+        pass
+
+    result = NotImplemented and True  # BAD
+
+  good: |
+    def __eq__(self, other):
+        if not isinstance(other, MyClass):
+            return NotImplemented  # GOOD - from operator
+
+    raise NotImplementedError("Not supported")  # GOOD - exception
+
+has_fix: true
+fix_action: replace_with_notimplemented_error

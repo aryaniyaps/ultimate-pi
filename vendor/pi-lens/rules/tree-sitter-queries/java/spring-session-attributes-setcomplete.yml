@@ -1,0 +1,75 @@
+# Spring SessionAttributes setComplete
+# Detects @Controller classes with @SessionAttributes that don't call setComplete
+id: spring-session-attributes-setcomplete
+name: SessionAttributes Controllers Must Call setComplete
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "@Controller with @SessionAttributes must call setComplete on SessionStatus"
+
+description: |
+  Controllers using @SessionAttributes must call setComplete() on the SessionStatus
+  parameter to clean up session attributes. Otherwise, session data leaks
+  and causes memory issues.
+
+  ✅ FIX: Call setComplete() when done with session attributes
+
+  ```java
+  @Controller
+  @SessionAttributes("user")
+  public class UserController {
+      @RequestMapping("/complete")
+      public String complete(SessionStatus status) {
+          status.setComplete();  // Clear session attributes
+          return "done";
+      }
+  }
+  ```
+
+query: |
+  (class_declaration
+    (modifiers
+      (annotation
+        name: (identifier) @ANNOT1 (#eq? @ANNOT1 "Controller"))
+      (annotation
+        name: (identifier) @ANNOT2 (#eq? @ANNOT2 "SessionAttributes"))))
+
+metavars:
+  - ANNOT1
+  - ANNOT2
+
+post_filter: missing_setcomplete_call
+
+tags:
+  - reliability
+  - java
+  - spring
+  - session
+  - memory-leak
+
+examples:
+  bad: |
+    @Controller
+    @SessionAttributes("data")
+    public class MyController {
+        @PostMapping("/submit")
+        public String submit(SessionStatus status) {  // Missing setComplete()
+            return "done";
+        }
+    }
+
+  good: |
+    @Controller
+    @SessionAttributes("data")
+    public class MyController {
+        @PostMapping("/submit")
+        public String submit(SessionStatus status) {
+            status.setComplete();  // GOOD - clean up
+            return "done";
+        }
+    }
+
+has_fix: false

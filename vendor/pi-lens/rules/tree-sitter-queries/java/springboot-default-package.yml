@@ -1,0 +1,69 @@
+# SpringBootApplication Default Package
+# Detects @SpringBootApplication in default package
+id: springboot-default-package
+name: SpringBootApplication Should Not Be in Default Package
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "@SpringBootApplication and @ComponentScan should not be used in default package"
+
+description: |
+  Using @SpringBootApplication or @ComponentScan in the default package causes
+  component scanning issues and unexpected behavior. Always use a named package.
+
+  ✅ FIX: Move to a named package
+
+  ```java
+  package com.example.myapp;  // GOOD - named package
+
+  @SpringBootApplication
+  public class Application {
+      public static void main(String[] args) {
+          SpringApplication.run(Application.class, args);
+      }
+  }
+  ```
+
+query: |
+  (class_declaration
+    (modifiers
+      (annotation
+        name: (identifier) @ANNOT (#match? @ANNOT "^(SpringBootApplication|ComponentScan)$")))
+    name: (_) @CLASS)
+
+metavars:
+  - ANNOT
+  - CLASS
+
+post_filter: in_default_package
+
+tags:
+  - reliability
+  - java
+  - spring
+  - best-practice
+
+examples:
+  bad: |
+    // No package declaration - default package
+    @SpringBootApplication  // BAD - in default package
+    public class Application {
+        public static void main(String[] args) {
+            SpringApplication.run(Application.class, args);
+        }
+    }
+
+  good: |
+    package com.example;
+
+    @SpringBootApplication  // GOOD - named package
+    public class Application {
+        public static void main(String[] args) {
+            SpringApplication.run(Application.class, args);
+        }
+    }
+
+has_fix: false

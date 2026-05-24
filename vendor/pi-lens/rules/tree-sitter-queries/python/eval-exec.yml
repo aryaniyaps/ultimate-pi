@@ -1,0 +1,52 @@
+# Eval/Exec Usage
+# Detects eval() and exec() which are security risks
+id: eval-exec
+name: Eval/Exec Usage
+severity: warning
+category: security
+defect_class: injection
+inline_tier: blocking
+language: python
+
+message: "{{FUNC}}() detected — security risk, code injection vulnerability"
+
+description: |
+  eval() and exec() execute arbitrary Python code and are major
+  security vulnerabilities when used with untrusted input.
+  
+  ✅ ALTERNATIVES:
+  - ast.literal_eval() for parsing literals
+  - json.loads() for JSON
+  - Proper parsing libraries for complex needs
+
+query: |
+  (call
+    function: (identifier) @FUNC
+    (#match? @FUNC "^(eval|exec)$")
+    arguments: (argument_list) @ARGS)
+
+metavars:
+  - FUNC
+  - ARGS
+
+tags:
+  - security
+  - xss
+  - injection
+
+examples:
+  bad: |
+    user_input = "os.system('rm -rf /')"
+    eval(user_input)  # DANGEROUS!
+  
+  good: |
+    import ast
+    import json
+    
+    # For literals: use ast.literal_eval
+    data = ast.literal_eval("[1, 2, 3]")
+    
+    # For JSON: use json.loads
+    data = json.loads(json_string)
+
+has_fix: false

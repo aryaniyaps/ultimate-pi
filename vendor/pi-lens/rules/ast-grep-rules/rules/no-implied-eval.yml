@@ -1,0 +1,13 @@
+id: no-implied-eval
+language: TypeScript
+message: "Avoid implied eval via setTimeout/setInterval with string arguments"
+severity: error
+note: |
+  Passing strings to setTimeout() or setInterval() is equivalent to eval()
+  and can execute arbitrary code. Pass a function reference instead.
+rule:
+  any:
+    - pattern: setTimeout("$STRING")
+    - pattern: setTimeout('$STRING')
+    - pattern: setInterval("$STRING")
+    - pattern: setInterval('$STRING')

@@ -1,0 +1,11 @@
+id: no-javascript-url-js
+language: JavaScript
+message: "Avoid javascript: URLs — they can execute arbitrary code"
+severity: error
+note: |
+  javascript: URLs in href or src attributes can execute arbitrary JavaScript.
+  This is a security risk, especially with user-controlled content.
+rule:
+  all:
+    - kind: string
+    - regex: "^javascript:"

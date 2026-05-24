@@ -1,0 +1,23 @@
+id: no-discarded-error-js
+language: JavaScript
+severity: error
+message: "new Error() result discarded — add 'throw' or assign to a variable"
+note: |
+  Creating an Error object without throwing it silently discards the error.
+  The function continues execution as if nothing happened.
+
+  ✅ FIX:
+    throw new Error("message");
+    throw new TypeError("expected string");
+
+rule:
+  kind: expression_statement
+  has:
+    kind: new_expression
+    has:
+      pattern: $CLASS
+      regex: "Error$"
+  not:
+    inside:
+      stopBy: end
+      kind: throw_statement

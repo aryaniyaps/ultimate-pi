@@ -101,7 +101,6 @@ const HARNESS_COMMANDS = new Set([
 	"harness-drift-proceed",
 	"harness-policy-status",
 	"harness-trace-last",
-	"harness-router-tune",
 	"harness-budget-status",
 ]);
 
@@ -213,7 +212,6 @@ export const HARNESS_COMMAND_PHASE: Record<string, HarnessPhase> = {
 	"harness-run-status": "plan",
 	"harness-use-run": "plan",
 	"harness-policy-status": "merge",
-	"harness-router-tune": "plan",
 	"harness-budget-status": "plan",
 	"harness-setup": "execute",
 };

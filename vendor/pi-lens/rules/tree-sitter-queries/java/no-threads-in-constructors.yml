@@ -1,0 +1,73 @@
+# No Threads in Constructors
+# Detects thread start() calls in constructors
+id: no-threads-in-constructors
+name: Threads Should Not Be Started in Constructors
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Threads should not be started in constructors"
+
+description: |
+  Starting threads in constructors can lead to race conditions,
+  as the object may not be fully constructed when the thread runs.
+  Use a separate start() method or factory pattern instead.
+
+  ✅ FIX: Move thread start to a dedicated method
+
+  ```java
+  class Worker {
+      private Thread thread;
+      
+      public Worker() {
+          thread = new Thread(this::run);
+      }
+      
+      public void start() {
+          thread.start();  // GOOD - explicit start
+      }
+  }
+  ```
+
+query: |
+  (constructor_declaration
+    body: (constructor_body
+      (expression_statement
+        (method_invocation
+          name: (identifier) @METHOD (#eq? @METHOD "start")) @CALL)))
+
+metavars:
+  - METHOD
+  - CALL
+
+tags:
+  - maintainability
+  - java
+  - concurrency
+  - race-condition
+  - cert
+
+examples:
+  bad: |
+    class Worker {
+        public Worker() {
+            new Thread(this::run).start();  // BAD - in constructor
+        }
+    }
+
+  good: |
+    class Worker {
+        private Thread thread;
+        
+        public Worker() {
+            thread = new Thread(this::run);
+        }
+        
+        public void start() {
+            thread.start();  // GOOD - separate method
+        }
+    }
+
+has_fix: false

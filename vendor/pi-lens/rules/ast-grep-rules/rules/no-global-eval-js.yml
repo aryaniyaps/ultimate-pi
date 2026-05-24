@@ -1,0 +1,14 @@
+id: no-global-eval-js
+language: JavaScript
+message: "Avoid dynamic code execution (eval/Function/string timers)"
+severity: error
+metadata:
+  category: security
+rule:
+  any:
+    - pattern: eval($CODE)
+    - pattern: Function($$$ARGS)
+    - pattern: setTimeout('$CODE', $$$REST)
+    - pattern: setTimeout("$CODE", $$$REST)
+    - pattern: setInterval('$CODE', $$$REST)
+    - pattern: setInterval("$CODE", $$$REST)

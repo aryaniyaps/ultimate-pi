@@ -1,0 +1,10 @@
+id: no-useless-promise-resolve-reject-js
+language: JavaScript
+severity: warning
+message: "Unnecessary Promise.resolve/reject wrapping — return the value directly"
+note: |
+  Promise.resolve(await expr) double-wraps the result. Return the awaited value directly.
+rule:
+  any:
+    - pattern: "Promise.resolve(await $EXPR)"
+    - pattern: "Promise.reject(await $EXPR)"

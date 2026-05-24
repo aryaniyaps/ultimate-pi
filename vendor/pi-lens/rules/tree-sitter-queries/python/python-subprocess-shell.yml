@@ -1,0 +1,60 @@
+id: python-subprocess-shell
+name: subprocess with shell=True
+severity: warning
+category: security
+defect_class: injection
+inline_tier: warning
+language: python
+
+message: "subprocess called with shell=True — command injection risk if any argument is user-controlled"
+
+description: |
+  shell=True passes the command to the OS shell (/bin/sh -c), enabling
+  shell metacharacters (;, |, &&, $()) to be interpreted. If any part
+  of the command comes from user input, this is a command injection vulnerability.
+
+  ✅ FIX: use a list of arguments without shell=True.
+
+  ❌ NEVER:
+    subprocess.run(f"git log {branch}", shell=True)
+
+  ✅ SAFE:
+    subprocess.run(["git", "log", branch], check=True)
+
+query: |
+  (call
+    function: (attribute
+      object: (identifier) @MOD
+      attribute: (identifier) @FN)
+    arguments: (argument_list
+      (keyword_argument
+        name: (identifier) @KW
+        value: (true) @VAL))
+    (#eq? @MOD "subprocess")
+    (#match? @FN "^(run|Popen|call|check_output|check_call)$")
+    (#eq? @KW "shell"))
+
+metavars:
+  - MOD
+  - FN
+  - KW
+
+has_fix: false
+
+tags:
+  - python
+  - security
+  - command-injection
+  - subprocess
+  - cwe-78
+
+examples:
+  bad: |
+    import subprocess
+    subprocess.run(f"ls {user_path}", shell=True)   # injection!
+    subprocess.check_output("pip list", shell=True)
+
+  good: |
+    import subprocess
+    subprocess.run(["ls", user_path], check=True)
+    subprocess.check_output(["pip", "list"])

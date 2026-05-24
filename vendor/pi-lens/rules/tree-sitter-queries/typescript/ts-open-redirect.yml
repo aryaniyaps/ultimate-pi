@@ -1,0 +1,111 @@
+# Open Redirect Detection
+# Detects redirect sinks with dynamic URL values (S6105).
+id: ts-open-redirect
+name: Open Redirect
+severity: error
+category: security
+defect_class: injection
+inline_tier: blocking
+language: typescript
+
+message: "Open redirect — unvalidated URL in redirect/location lets attackers send users to malicious sites"
+
+description: |
+  Redirecting users to a URL derived from request parameters without
+  validation allows attackers to craft links that redirect victims to
+  phishing or malware sites.
+
+  ❌ NEVER:
+  res.redirect(req.query.returnUrl);          // Open redirect!
+  window.location.href = params.get("next");  // Open redirect!
+
+  ✅ SAFE:
+  const ALLOWED = new Set(["/home", "/dashboard"]);
+  if (ALLOWED.has(url)) res.redirect(url);
+  else res.redirect("/home");
+
+query: |
+  [
+    (call_expression
+      function: (member_expression
+        object: (identifier) @OBJ
+        property: (property_identifier) @FN)
+      arguments: (arguments (identifier) @URL)
+      (#match? @OBJ "^(res|response|ctx|context)$")
+      (#eq? @FN "redirect"))
+    (call_expression
+      function: (member_expression
+        object: (identifier) @OBJ
+        property: (property_identifier) @FN)
+      arguments: (arguments (member_expression) @URL)
+      (#match? @OBJ "^(res|response|ctx|context)$")
+      (#eq? @FN "redirect"))
+    (call_expression
+      function: (member_expression
+        object: (identifier) @OBJ
+        property: (property_identifier) @FN)
+      arguments: (arguments (call_expression) @URL)
+      (#match? @OBJ "^(res|response|ctx|context)$")
+      (#eq? @FN "redirect"))
+  ]
+  [
+    (assignment_expression
+      left: (member_expression
+        object: (member_expression
+          object: (identifier) @WIN
+          property: (property_identifier) @LOC)
+        property: (property_identifier) @PROP)
+      right: (identifier) @VALUE
+      (#eq? @WIN "window")
+      (#eq? @LOC "location")
+      (#eq? @PROP "href"))
+    (assignment_expression
+      left: (member_expression
+        object: (member_expression
+          object: (identifier) @WIN
+          property: (property_identifier) @LOC)
+        property: (property_identifier) @PROP)
+      right: (member_expression) @VALUE
+      (#eq? @WIN "window")
+      (#eq? @LOC "location")
+      (#eq? @PROP "href"))
+    (assignment_expression
+      left: (member_expression
+        object: (member_expression
+          object: (identifier) @WIN
+          property: (property_identifier) @LOC)
+        property: (property_identifier) @PROP)
+      right: (call_expression) @VALUE
+      (#eq? @WIN "window")
+      (#eq? @LOC "location")
+      (#eq? @PROP "href"))
+  ]
+
+metavars:
+  - OBJ
+  - FN
+  - URL
+  - WIN
+  - LOC
+  - PROP
+  - VALUE
+
+has_fix: false
+
+tags:
+  - typescript
+  - javascript
+  - security
+  - open-redirect
+  - cwe-601
+  - owasp-a01
+
+examples:
+  bad: |
+    res.redirect(req.query.returnUrl);
+    window.location.href = userInput;
+
+  good: |
+    res.redirect("/home");
+    if (ALLOWED_PATHS.has(path)) res.redirect(path);
+    else res.redirect("/home");

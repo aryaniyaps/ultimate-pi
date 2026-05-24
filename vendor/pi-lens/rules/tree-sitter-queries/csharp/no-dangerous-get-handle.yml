@@ -1,0 +1,59 @@
+# No SafeHandle.DangerousGetHandle
+# Detects calls to SafeHandle.DangerousGetHandle()
+id: no-dangerous-get-handle
+name: SafeHandle.DangerousGetHandle Should Not Be Called
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: csharp
+
+message: "SafeHandle.DangerousGetHandle should not be called — use DangerousAddRef/DangerousRelease"
+
+description: |
+  DangerousGetHandle() doesn't increment the reference count, so the
+  handle could be closed while being used. Use DangerousAddRef() and
+  DangerousRelease() for safe handle access.
+
+  ✅ FIX: Use proper reference counting
+
+  ```csharp
+  bool refAdded = false;
+  try {
+      handle.DangerousAddRef(ref refAdded);
+      IntPtr ptr = handle.DangerousGetHandle();
+      // Use ptr...
+  } finally {
+      if (refAdded) handle.DangerousRelease();
+  }
+  ```
+
+query: |
+  (invocation_expression
+    function: (member_access_expression
+      name: (identifier) @METHOD (#eq? @METHOD "DangerousGetHandle")) @CALL)
+
+metavars:
+  - METHOD
+  - CALL
+
+tags:
+  - reliability
+  - csharp
+  - leak
+  - security
+
+examples:
+  bad: |
+    IntPtr ptr = handle.DangerousGetHandle();  // BAD - no ref counting
+
+  good: |
+    bool refAdded = false;
+    try {
+        handle.DangerousAddRef(ref refAdded);
+        IntPtr ptr = handle.DangerousGetHandle();  // GOOD - within addref
+    } finally {
+        if (refAdded) handle.DangerousRelease();
+    }
+
+has_fix: false

@@ -14,7 +14,6 @@ Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, C
 | Pitfall | Correct approach |
 |---------|------------------|
 | `UP_PKG="$(pwd)"` in an **external** repo | Wrong — scripts live in the npm package. Resolve via `harness-resolve-up-pkg.mjs` (see Step 0). |
-| Provider detection from `OPENAI_*` / `ANTHROPIC_*` env only | Wrong for pi users — keys live in `~/.pi/agent/auth.json`. Use `harness-generate-model-router.mjs` (Pi `ModelRegistry.getAvailable()`). |
 | Re-running 2.1–2.8 manually after CLI verify | Wasteful — trust `harness-cli-verify.sh` output; only fix reported ✗ lines. |
 | Overwriting `AGENTS.md` after graphify | Graphify appends a section — **merge**, do not replace (Step 4.3). |
 | `sentrux-rules-sync` without project manifest | Use **`harness-sentrux-bootstrap.mjs`** (Step 4.2) — seeds manifest + idempotent rules sync. |
@@ -327,7 +326,14 @@ sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or fa
 
 ## Step 3 — Pi Extension Packages
 
-Bundled extensions load from the installed `ultimate-pi` package. **Session-locked model routing** comes from a **vendored** fork of [`yeliu84/pi-model-router`](https://github.com/yeliu84/pi-model-router) in `vendor/pi-model-router/`, wired through [`.pi/extensions/pi-model-router-harness.ts`](.pi/extensions/pi-model-router-harness.ts). The router picks **one concrete model** when the session starts (from the first user prompt + system prompt complexity), then changes **thinking level only** each turn. The harness **gates** activation on `.pi/model-router.json` (Step **3.5** below) so `router/auto` cannot load prematurely. Attribution: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `vendor/pi-model-router/UPSTREAM_PIN.md`. Maintainer refresh: `npm run vendor:sync-router`.
+Bundled extensions load from the installed `ultimate-pi` package. `ultimate-pi` also vendors [`apmantza/pi-lens`](https://github.com/apmantza/pi-lens) at `vendor/pi-lens/` and loads it directly from `vendor/pi-lens/index.ts` for edit-time diagnostics, LSP/navigation helpers, formatting/lint feedback, and read-before-edit guardrails. Attribution and the pinned revision are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `vendor/pi-lens/UPSTREAM_PIN.md`.
+
+pi-lens diagnostics are **complementary** to Sentrux:
+
+- **pi-lens:** fast edit-time and turn-time code diagnostics (LSP, formatter/linter, ast-grep/tree-sitter, optional Semgrep when configured).
+- **Sentrux:** architecture-quality signal and gate (`.sentrux/rules.toml`, `sentrux-signal.yaml`, harness review/evaluate inputs).
+
+Do not treat pi-lens as a replacement for Sentrux. If a future pi-lens release adds architecture-boundary gating that duplicates Sentrux, keep Sentrux authoritative and disable/remove the overlapping pi-lens path.
 
 Optionally install the companion lockfile used in development:
 
@@ -341,51 +347,19 @@ else
 fi
 ```
 
-Merge extension entries from `$UP_PKG/.pi/settings.example.json` into this project's `.pi/settings.json` `packages` array (add any missing `npm:…` entries; keep existing user packages). **Do not add** `npm:@yeliu84/pi-model-router` (superseded by the vendored router).
+Merge extension entries from `$UP_PKG/.pi/settings.example.json` into this project's `.pi/settings.json` `packages` array (add any missing `npm:…` entries; keep existing user packages).
 
 Verify each package:
 
 | Package | Purpose | Phase |
 |---------|---------|-------|
 | `@posthog/pi` | Analytics event capture | F0 |
-| `pi-lean-ctx` | Context runtime (read/bash/find/grep/MCP bridge) | F0 |
+| `context-mode` | Context runtime and MCP context-saving tools | F0 |
 | `harness-subagents` (bundled extension) | L4 `subagent` tool, subprocess spawns, package agents | P16 |
 | Vendored `pi-vcc` (`vendor/pi-vcc`, `.pi/extensions/ultimate-pi-vcc.ts`) | VCC compaction / `vcc_recall` — env-only: `HARNESS_VCC_COMPACTION` (default on), `HARNESS_VCC_DEBUG` | Shipped |
-| `pi-model-router` | Vendored (`vendor/`); activates after `.pi/model-router.json` exists | F0 |
+| Vendored `pi-lens` (`vendor/pi-lens/index.ts`) | Edit-time diagnostics + LSP/navigation/read guardrails; Sentrux remains architecture gate | F0 |
 
-## Step 3.5 — Model Router Configuration (Dynamic)
-
-`.pi/model-router.json` is **user-specific** (gitignored). Generate from **Pi authenticated providers** (`~/.pi/agent/auth.json`, OAuth, env) — **not** env-var guessing alone.
-
-Pi API (see `packages/coding-agent` docs / SDK example `02-custom-model.ts`):
-
-- `AuthStorage.create()` → credentials store
-- `ModelRegistry.create(authStorage)` → registry
-- `await modelRegistry.getAvailable()` → models with working auth (same as interactive pi)
-
-```bash
-# Verify vendored extension source ships with ultimate-pi
-ls "$UP_PKG/vendor/pi-model-router/extensions/index.ts" 2>/dev/null \
-  && echo "✓ vendored pi-model-router" \
-  || echo "✗ missing vendor/pi-model-router"
-
-# Generate from Pi registry (skips if .pi/model-router.json exists; --force to regenerate)
-node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs"
-# Preview only: node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs" --dry-run
-
-# Merge router defaults after config exists (never adds npm packages — router is vendored)
-node "$UP_PKG/.pi/scripts/harness-sync-model-router.mjs"
-```
-
-If generation prints "No authenticated Pi providers": warn in report — user should run **`/login`** in pi (or `pi login`) then re-run Step 3.5. Do **not** infer providers from `OPENAI_API_KEY` alone; pi sessions often use `opencode-go` via auth.json without those env vars.
-
-Do NOT block setup. If no config is written, `harness-sync-model-router.mjs` clears a premature `defaultProvider: "router"` in `.pi/settings.json`.
-
-**Router onboarding** — The vendored extension starts only after `.pi/model-router.json` appears. Running the script above prepares that file plus optional Pi defaults (**`router` / `auto`**, or whatever `defaultProfile` is) via `harness-sync-model-router.mjs` when `defaultProvider` was unset—then **`/reload`**. Generated profiles use **one model SKU per profile**; high/medium/low tiers differ in **thinking** only. Subagents resolve their subprocess model from the **agent system prompt** complexity (same lock rules).
-
-Manual override: **`/router profile auto`** or **`/router profile opencode-go`** anytime after reload if they changed defaults.
-
-## Step 3.6 — Harness agents (package-resolved)
+## Step 3.5 — Harness agents (package-resolved)
 
 `harness-subagents` loads agents from the installed **`ultimate-pi`** package (`$UP_PKG/.pi/agents/**`) with namespaced ids (`harness/running/executor`, `harness/reviewing/evaluator`, `pi-pi/agent-expert`). **Do not copy** agents into the project unless you want a deliberate override.
 
@@ -500,10 +474,9 @@ Ensure `.gitignore` contains harness runtime entries (see repo root `.gitignore`
 !.pi/harness/incidents/README.md
 .pi/harness/debates/*
 !.pi/harness/debates/README.md
-.pi/harness/router/proposals/*
 
-# Model router config (user-specific — generated from env)
-.pi/model-router.json
+# pi-lens runtime cache and local diagnostics state
+.pi-lens/
 
 # sentrux baselines and local meta (rules.toml is committed)
 .sentrux/*
@@ -564,7 +537,7 @@ Created: $(date +%Y-%m-%d)
 - .pi/harness/specs/ → Harness contracts and schema docs
 - .pi/harness/incidents/ → Incident and override records
 - `.agents/skills/` (npm package) → Harness skills (no copy into `.pi/skills/` needed)
-- `.pi/agents/` → Optional per-repo agent overrides (package agents load automatically — see Step 3.6)
+- `.pi/agents/` → Optional per-repo agent overrides (package agents load automatically — see Step 3.5)
 
 ## Graphify-First Workflow
 
@@ -627,10 +600,11 @@ print(f'✓ knowledge graph built ({n} nodes)' if n else '✗ graph.json has 0 n
 " 2>/dev/null || echo "✗ no graph built yet"
 graphify hook status 2>/dev/null && echo "✓ graphify git hooks installed" || echo "✗ graphify git hooks not installed"
 
-# vendored model router
-ls "$UP_PKG/vendor/pi-model-router/extensions/index.ts" 2>/dev/null \
-  && echo "✓ vendored pi-model-router" || echo "✗ vendor/pi-model-router missing"
-ls .pi/model-router.json 2>/dev/null && echo "✓ model-router config" || echo "✗ model-router config"
+# vendored pi-lens diagnostics extension
+ls "$UP_PKG/vendor/pi-lens/index.ts" 2>/dev/null \
+  && echo "✓ vendored pi-lens" || echo "✗ vendor/pi-lens missing"
+ls "$UP_PKG/vendor/pi-lens/UPSTREAM_PIN.md" 2>/dev/null \
+  && echo "✓ pi-lens upstream pin" || echo "✗ pi-lens upstream pin missing"
 
 # raw folder for graphify sources
 ls -d ./raw 2>/dev/null && echo "✓ ./raw directory exists" || echo "! ./raw directory missing"
@@ -677,8 +651,8 @@ Output summary table:
 | gh CLI | ✓/✗ | Auth: yes/no |
 | sentrux | ✓/✗ | CLI + plugins; rules via Step 4.2 bootstrap |
 | Sentrux rules.toml | ✓/✗ | `.sentrux/rules.toml` synced from manifest |
-| pi extensions | ✓/✗ | 4 packages |
-| model router | ✓/✗ | Package + config verified, activation via `/router profile auto` (or `opencode-go`) |
+| pi extensions | ✓/✗ | bundled extensions + vendored pi-lens |
+| pi-lens diagnostics | ✓/✗ | `vendor/pi-lens/index.ts`; complements Sentrux architecture signal |
 | `.env` | ✓/✗/ask | Created / keys appended / user declined |
 
 | .gitignore | ✓/✗ | entries added (incl. `.env`) |
@@ -732,7 +706,6 @@ Next steps:
 | settings.json not writable | Warn. Settings won't persist across sessions. |
 | No internet | Block for tool installs. Continue for graphify-only steps if `--skip-tools`. |
 | sentrux install fails | Show install script output. Fallback: download from https://github.com/sentrux/sentrux/releases/latest |
-| No model-router.json / "No authenticated Pi providers" | Run `/login` in pi, then `node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs" --force` |
 | UP_PKG not found | `pi install npm:ultimate-pi` or `npm i -g ultimate-pi`; verify with `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
 | No `.env` at project root | `ask_user` create vs skip; on create: `harness-sync-env.mjs --create-missing` |
 

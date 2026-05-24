@@ -1,0 +1,52 @@
+# No super() in TorchScript
+# Detects super() calls in TorchScript methods
+id: no-super-torchscript
+name: super Should Not Be Used in TorchScript Methods
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "super() calls should not be used in TorchScript methods"
+
+description: |
+  TorchScript does not support super() calls. Refactor to avoid
+  inheritance or use composition instead for PyTorch JIT compatibility.
+
+  ✅ FIX: Use composition or avoid TorchScript for this class
+
+query: |
+  (function_definition
+    (decorator
+      (call
+        function: (identifier) @DEC (#match? @DEC "^(torch\.jit\.script|jit\.script)$")))
+    body: (block
+      (call
+        function: (identifier) @FUNC (#eq? @FUNC "super")) @CALL))
+
+metavars:
+  - DEC
+  - FUNC
+  - CALL
+
+tags:
+  - reliability
+  - python
+  - pytorch
+  - torchscript
+  - deployment
+
+examples:
+  bad: |
+    @torch.jit.script
+    class MyModel(nn.Module):
+        def forward(self, x):
+            return super().forward(x)  # BAD - super in TorchScript
+
+  good: |
+    class MyModel(nn.Module):
+        def forward(self, x):  # GOOD - no TorchScript decorator
+            return super().forward(x)
+
+has_fix: false

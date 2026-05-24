@@ -1,0 +1,20 @@
+id: no-shadow
+language: TypeScript
+message: "Variable '$NAME' shadows a variable from an outer scope"
+severity: warning
+note: |
+  Shadowing variables from outer scopes can cause confusion and bugs.
+  Rename the inner variable to avoid ambiguity.
+rule:
+  all:
+    - any:
+        - pattern: let $NAME = $$$
+        - pattern: const $NAME = $$$
+        - pattern: var $NAME = $$$
+        - pattern: function $NAME($$$) { $$$ }
+    - inside:
+        any:
+          - kind: function_declaration
+          - kind: function_expression
+          - kind: arrow_function
+          - kind: method_definition

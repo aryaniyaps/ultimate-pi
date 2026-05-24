@@ -1,0 +1,52 @@
+# No ThreadGroup Usage
+# Detects usage of ThreadGroup which is deprecated/unsafe
+id: no-threadgroup
+name: ThreadGroup Should Not Be Used
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "ThreadGroup should not be used — it's obsolete and unsafe"
+
+description: |
+  ThreadGroup is obsolete and has security vulnerabilities.
+  Use ExecutorService and ThreadPoolExecutor instead for better
+  thread management and security.
+
+  ✅ FIX: Use ExecutorService instead
+
+  ```java
+  ExecutorService executor = Executors.newFixedThreadPool(10);
+  executor.submit(task);
+  ```
+
+query: |
+  (object_creation_expression
+    type: (type_identifier) @TYPE (#eq? @TYPE "ThreadGroup"))
+  (local_variable_declaration
+    type: (type_identifier) @TYPE (#eq? @TYPE "ThreadGroup"))
+  (formal_parameter
+    type: (type_identifier) @TYPE (#eq? @TYPE "ThreadGroup"))
+
+metavars:
+  - TYPE
+
+tags:
+  - reliability
+  - java
+  - concurrency
+  - deprecated
+  - cert
+
+examples:
+  bad: |
+    ThreadGroup group = new ThreadGroup("workers");  // BAD
+    Thread t = new Thread(group, runnable);
+
+  good: |
+    ExecutorService executor = Executors.newFixedThreadPool(4);  // GOOD
+    executor.submit(runnable);
+
+has_fix: false

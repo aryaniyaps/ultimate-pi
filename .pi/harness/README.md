@@ -8,7 +8,7 @@ Phase 1–2 scaffold for the Pi harness runtime surfaces.
 - `debates/` - debate round artifacts and consensus packets.
 - `docs/adrs/` - team-shared Architectural Decision Records ([index](docs/adrs/README.md)).
 - `evals/smoke/` - deterministic fixtures (no CI LLM).
-- `evolution/` - self-healing rules + meta-optimizer (JSONL-first).
+- `evolution/` - self-healing rules and chaos drills (JSONL-first).
 - `corpus/` - ingest notes for graphify/raw sources.
 - `sentrux/` - `architecture.manifest.json` source for `.sentrux/rules.toml` ([ADR 0009](docs/adrs/0009-sentrux-rules-lifecycle.md)).
 

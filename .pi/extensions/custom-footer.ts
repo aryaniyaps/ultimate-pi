@@ -8,7 +8,6 @@
 import type {
 	ExtensionAPI,
 	ExtensionContext,
-	ThemeColor,
 } from "@earendil-works/pi-coding-agent";
 import type { TUI } from "@earendil-works/pi-tui";
 import {
@@ -17,56 +16,6 @@ import {
 	truncateToWidth,
 	visibleWidth,
 } from "@earendil-works/pi-tui";
-
-// ── router decision reader ──────────────────────────────────────────
-
-/** Extract last routing decision from model-router session entries. */
-function readRouterDecision(ctx: ExtensionContext): {
-	targetProvider: string;
-	targetModelId: string;
-	thinking: string;
-	profile: string;
-	enabled: boolean;
-} | null {
-	try {
-		const entries = ctx.sessionManager.getEntries();
-		for (let i = entries.length - 1; i >= 0; i--) {
-			const e = entries[i];
-			if (
-				e.type === "custom" &&
-				(e as any).customType === "router-state" &&
-				(e as any).data
-			) {
-				const data = (e as any).data;
-				const d = data.lastDecision;
-				if (d?.targetProvider && d?.targetModelId) {
-					return {
-						targetProvider: d.targetProvider,
-						targetModelId: d.targetModelId,
-						thinking: d.thinking,
-						profile: data.selectedProfile ?? d.profile,
-						enabled: data.enabled ?? true,
-					};
-				}
-			}
-		}
-	} catch {
-		// session not ready
-	}
-	return null;
-}
-
-// ── profile colors ────────────────────────────────────────────────
-
-const PROFILE_COLORS: Record<string, ThemeColor> = {
-	auto: "accent",
-	cheap: "success",
-	deep: "toolTitle",
-};
-
-function profileColor(profile: string): ThemeColor {
-	return PROFILE_COLORS[profile] ?? "muted";
-}
 
 // ── token formatting ──────────────────────────────────────────────
 
@@ -145,20 +94,6 @@ function modelInfo(ctx: ExtensionContext): ModelInfo {
 	const m = ctx.model;
 	if (!m) return { id: "no-model", provider: "unknown", reasoning: false };
 
-	// Router provider — extract actual model from routing decision
-	if (m.provider === "router") {
-		const decision = readRouterDecision(ctx);
-		if (decision) {
-			return {
-				id: decision.targetModelId,
-				provider: decision.targetProvider,
-				reasoning: true,
-			};
-		}
-		// No decision yet — show profile name so user knows router is active
-		return { id: m.id, provider: "router", reasoning: m.reasoning };
-	}
-
 	return { id: m.id, provider: m.provider, reasoning: m.reasoning };
 }
 
@@ -204,8 +139,6 @@ export default function customFooter(pi: ExtensionAPI) {
 		modelProvider: string;
 		modelReasoning: boolean;
 		thinkingLevel: string | null;
-		routerProfile: string | null;
-		routerActive: boolean;
 		branch: string | null;
 	} = {
 		tui: null,
@@ -218,8 +151,6 @@ export default function customFooter(pi: ExtensionAPI) {
 		modelProvider: "…",
 		modelReasoning: false,
 		thinkingLevel: null,
-		routerProfile: null,
-		routerActive: false,
 		branch: null,
 	};
 
@@ -235,17 +166,7 @@ export default function customFooter(pi: ExtensionAPI) {
 		state.modelProvider = mi.provider;
 		state.modelReasoning = mi.reasoning;
 
-		// When router active, use thinking from the routing decision
-		if (ctx.model?.provider === "router") {
-			const routerDecision = readRouterDecision(ctx);
-			state.thinkingLevel = routerDecision?.thinking ?? pi.getThinkingLevel();
-			state.routerProfile = routerDecision?.profile ?? ctx.model?.id;
-			state.routerActive = routerDecision?.enabled ?? true;
-		} else {
-			state.thinkingLevel = pi.getThinkingLevel();
-			state.routerProfile = null;
-			state.routerActive = false;
-		}
+		state.thinkingLevel = pi.getThinkingLevel();
 	}
 
 	pi.on("session_start", (_event, ctx) => {
@@ -328,25 +249,11 @@ export default function customFooter(pi: ExtensionAPI) {
 					const tl = thinkingLabel(state.thinkingLevel, state.modelReasoning);
 					const modelDisplay = tl ? `${state.modelId} ${tl}` : state.modelId;
 
-					// Colorize: router profile gets mode color, model gets thinking color
-					const rightStr = state.routerActive
-						? (() => {
-								const pColor = profileColor(state.routerProfile ?? "router");
-								const profileStr = theme.fg(
-									pColor,
-									state.routerProfile ?? "router",
-								);
-								const thinkingColorFn = theme.getThinkingBorderColor(
-									(state.thinkingLevel as any) ?? "medium",
-								);
-								const modelStr = thinkingColorFn(modelDisplay);
-								return `${profileStr} • ${modelStr}`;
-							})()
-						: `${state.modelProvider} • ${modelDisplay}`;
+					const rightStr = `${state.modelProvider} • ${modelDisplay}`;
 
 					// ── compose single line ──
 					const colLeft = leftStr;
-					const finalRight = state.routerActive ? rightStr : dim(rightStr);
+					const finalRight = dim(rightStr);
 					const lw = visibleWidth(colLeft);
 					const rw = visibleWidth(finalRight);
 					const bw = visibleWidth(barFull);
@@ -367,20 +274,8 @@ export default function customFooter(pi: ExtensionAPI) {
 							state.thinkingLevel,
 							state.modelReasoning,
 						);
-						const thinkingColorFn = theme.getThinkingBorderColor(
-							(state.thinkingLevel as any) ?? "medium",
-						);
 						const buildRight = (mid: string) => {
 							const modelPart = tlNow ? `${mid} ${tlNow}` : mid;
-							if (state.routerActive) {
-								const pColor = profileColor(state.routerProfile ?? "router");
-								const profileStr = theme.fg(
-									pColor,
-									state.routerProfile ?? "router",
-								);
-								const modelStr = thinkingColorFn(modelPart);
-								return `${profileStr} • ${modelStr}`;
-							}
 							const parts: string[] = [state.modelProvider];
 							if (modelPart) parts.push(modelPart);
 							return dim(parts.join(" • "));
@@ -442,32 +337,11 @@ export default function customFooter(pi: ExtensionAPI) {
 	});
 
 	// Track model changes
-	pi.on("model_select", (event, ctx) => {
-		if (event.model?.provider === "router") {
-			const routerDecision = readRouterDecision(ctx);
-			if (routerDecision) {
-				state.modelId = routerDecision.targetModelId;
-				state.modelProvider = routerDecision.targetProvider;
-				state.modelReasoning = true;
-				state.thinkingLevel = routerDecision.thinking;
-				state.routerProfile = routerDecision.profile;
-				state.routerActive = routerDecision.enabled;
-			} else {
-				state.modelId = event.model.id ?? "…";
-				state.modelProvider = "router";
-				state.modelReasoning = event.model?.reasoning ?? false;
-				state.thinkingLevel = pi.getThinkingLevel();
-				state.routerProfile = event.model.id;
-				state.routerActive = true;
-			}
-		} else {
-			state.modelId = event.model?.id ?? "…";
-			state.modelProvider = event.model?.provider ?? "…";
-			state.modelReasoning = event.model?.reasoning ?? false;
-			state.thinkingLevel = pi.getThinkingLevel();
-			state.routerProfile = null;
-			state.routerActive = false;
-		}
+	pi.on("model_select", (event) => {
+		state.modelId = event.model?.id ?? "…";
+		state.modelProvider = event.model?.provider ?? "…";
+		state.modelReasoning = event.model?.reasoning ?? false;
+		state.thinkingLevel = pi.getThinkingLevel();
 		invalidate();
 	});
 

@@ -1,0 +1,47 @@
+# Nested Anchor Tags Detection
+# Detects nested <a> tags which are invalid HTML
+id: no-nested-links
+name: Nested anchor tags
+severity: error
+category: correctness
+defect_class: correctness
+inline_tier: blocking
+language: tsx
+
+message: "Nested <a> tags are invalid HTML and cause unexpected behavior"
+
+description: |
+  HTML does not allow anchor tags nested inside other anchor tags.
+  This causes rendering issues and unpredictable click behavior.
+
+query: |
+  (jsx_element
+    open_tag: (jsx_opening_element
+      (identifier) @OUTER
+      (#eq? @OUTER "a"))
+    (jsx_element
+      open_tag: (jsx_opening_element
+        (identifier) @INNER
+        (#eq? @INNER "a"))))
+
+metavars:
+  - OUTER
+  - INNER
+
+tags:
+  - correctness
+  - react
+  - jsx
+  - html
+
+examples:
+  bad: |
+    <a href="/outer">
+      <a href="/inner">Click</a>
+    </a>
+
+  good: |
+    <a href="/outer">Outer link</a>
+    <a href="/inner">Inner link</a>
+
+has_fix: false

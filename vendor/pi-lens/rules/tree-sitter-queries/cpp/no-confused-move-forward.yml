@@ -1,0 +1,59 @@
+# No Confused std::move/std::forward
+# Detects potential confusion between std::move and std::forward
+id: no-confused-move-forward
+name: std::move and std::forward Should Not Be Confused
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: cpp
+
+message: "std::move and std::forward should not be confused"
+
+description: |
+  std::move unconditionally casts to rvalue, while std::forward
+  conditionally casts based on template parameter. Using the wrong
+  one can lead to subtle bugs and unexpected copies/moves.
+
+  ✅ FIX: Use std::move for known objects, std::forward for templates
+
+  ```cpp
+  template<typename T>
+  void process(T&& t) {
+      other(std::forward<T>(t));  // Correct - preserve value category
+  }
+  ```
+
+query: |
+  (call_expression
+    function: (qualified_identifier
+      name: (identifier) @FUNC
+      (#match? @FUNC "^(move|forward)$"))
+    arguments: (argument_list) @ARGS)
+
+post_filter: confused_move_forward
+
+metavars:
+  - FUNC
+  - ARGS
+
+tags:
+  - reliability
+  - cpp
+  - move-semantics
+  - cppcoreguidelines
+
+examples:
+  bad: |
+    template<typename T>
+    void wrapper(T&& t) {
+        return foo(std::move(t));  // BAD - breaks perfect forwarding
+    }
+
+  good: |
+    template<typename T>
+    void wrapper(T&& t) {
+        return foo(std::forward<T>(t));  // GOOD - preserves category
+    }
+
+has_fix: false

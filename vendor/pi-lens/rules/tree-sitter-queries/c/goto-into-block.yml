@@ -1,0 +1,72 @@
+# Goto Into Block
+# Detects goto statements that jump into blocks
+id: goto-into-block
+name: Goto Should Not Jump Into Blocks
+severity: warning
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: c
+
+message: "goto statements should not be used to jump into blocks"
+
+description: |
+  Jumping into a block bypasses variable initialization and
+  is undefined behavior. This is a MISRA C requirement.
+
+  ✅ FIX: Jump to the block's beginning or restructure code
+
+  ```c
+  void process() {
+      if (error) {
+          goto cleanup;
+      }
+      // ... code ...
+  cleanup:
+      {  // Jump to block start
+          free_resources();
+      }
+  }
+  ```
+
+query: |
+  (function_definition
+    body: (compound_statement
+      (goto_statement
+        (statement_identifier) @TARGET) @GOTO))
+
+metavars:
+  - TARGET
+  - GOTO
+
+post_filter: goto_targets_inner_block
+
+tags:
+  - maintainability
+  - c
+  - misra
+  - undefined-behavior
+
+examples:
+  bad: |
+    void func() {
+        if (cond) {
+            goto inside;  // BAD - jumps into block
+        }
+        {
+        inside:
+            x = 1;  // Variable might not be initialized!
+        }
+    }
+
+  good: |
+    void func() {
+        if (cond) {
+            needsProcessing = true;
+        }
+        if (needsProcessing) {  // GOOD - restructure
+            x = 1;
+        }
+    }
+
+has_fix: false

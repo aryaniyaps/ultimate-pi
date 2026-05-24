@@ -1,0 +1,60 @@
+id: python-unsafe-regex
+name: Unsafe Dynamic Regex
+severity: warning
+category: security
+defect_class: injection
+inline_tier: blocking
+language: python
+
+message: "re.{{FUNC}}() with variable pattern — ReDoS risk if pattern is user-controlled"
+
+description: |
+  Building regex patterns from variables can cause ReDoS (Regular Expression
+  Denial of Service) if the pattern contains user input. A crafted input can
+  cause catastrophic backtracking.
+  
+  ✅ FIX:
+    # If pattern must be dynamic, validate/escape it first
+    import re
+    safe_pattern = re.escape(user_input)
+    re.search(safe_pattern, text)
+    
+    # Or use string methods instead
+    text.find(user_input)
+
+query: |
+  (call
+    function: (attribute
+      object: (identifier) @MOD
+      attribute: (identifier) @FUNC)
+    arguments: (argument_list
+      (identifier) @PATTERN)
+    (#eq? @MOD "re")
+    (#match? @FUNC "^(compile|match|search|fullmatch|findall|finditer|sub|subn|split)$"))
+
+metavars:
+  - MOD
+  - FUNC
+  - PATTERN
+
+has_fix: false
+
+tags:
+  - security
+  - regex
+  - redos
+
+examples:
+  bad: |
+    pattern = request.args.get('filter')
+    re.search(pattern, content)    # ReDoS if malicious pattern
+    re.compile(user_pattern)       # can hang the server
+  
+  good: |
+    import re
+    safe = re.escape(user_input)   # escape special chars
+    re.search(safe, content)
+    
+    # Or use string methods for simple cases
+    if user_input in content:
+        ...

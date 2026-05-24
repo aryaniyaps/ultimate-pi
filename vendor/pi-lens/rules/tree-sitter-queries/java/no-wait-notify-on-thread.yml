@@ -1,0 +1,58 @@
+# No Wait/Notify on Thread
+# Detects wait(), notify(), notifyAll() called on Thread instances
+id: no-wait-notify-on-thread
+name: Wait/Notify Should Not Be Called on Thread Instances
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "{{METHOD}}() should not be called on Thread instances"
+
+description: |
+  Calling wait(), notify(), or notifyAll() on Thread objects can
+  conflict with the Thread's internal join mechanism, causing 
+  unexpected behavior. Use them on a separate lock object.
+
+  ✅ FIX: Use a dedicated lock object
+
+  ```java
+  private final Object lock = new Object();
+
+  synchronized (lock) {
+      lock.wait();  // GOOD - separate lock
+  }
+  ```
+
+query: |
+  (method_invocation
+    object: (identifier) @OBJ
+    name: (identifier) @METHOD
+    (#match? @METHOD "^(wait|notify|notifyAll)$"))
+
+metavars:
+  - METHOD
+  - OBJ
+
+post_filter: called_on_thread_instance
+
+tags:
+  - reliability
+  - java
+  - multi-threading
+  - bugs
+
+examples:
+  bad: |
+    Thread thread = new Thread(runnable);
+    thread.wait();  // BAD - on Thread instance
+    thread.notify();  // BAD
+
+  good: |
+    Object lock = new Object();
+    synchronized (lock) {
+        lock.wait();  // GOOD - on separate lock
+    }
+
+has_fix: false

@@ -1,0 +1,49 @@
+# Go Defer in Loop
+# Detects defer statements inside loops (resource leak risk)
+id: go-defer-in-loop
+name: Defer Inside Loop
+severity: warning
+category: resource-management
+defect_class: async-misuse
+inline_tier: blocking
+language: go
+
+message: "defer in loop can cause resource exhaustion — move outside loop or use function"
+
+description: |
+  Using defer inside a loop defers cleanup until the function returns,
+  not until the loop iteration ends. This can cause resource exhaustion.
+  
+  ✅ FIX: Move defer outside loop, or wrap loop body in a function.
+
+query: |
+  (for_statement
+    body: (block
+      (defer_statement) @DEFER))
+
+metavars:
+  - DEFER
+
+has_fix: false
+
+tags:
+  - go
+  - resource-leaks
+  - performance
+
+examples:
+  bad: |
+    for _, file := range files {
+        f, _ := os.Open(file)
+        defer f.Close()  // All closes deferred until function exit!
+        process(f)
+    }
+  
+  good: |
+    for _, file := range files {
+        func() {
+            f, _ := os.Open(file)
+            defer f.Close()  // Closes at end of anonymous function
+            process(f)
+        }()
+    }

@@ -1,0 +1,10 @@
+id: prefer-string-trim-start-end
+language: TypeScript
+severity: hint
+message: "Use .trimStart()/.trimEnd() instead of .trimLeft()/.trimRight()"
+note: |
+  trimLeft/trimRight are non-standard aliases. Use the ECMA standard trimStart/trimEnd.
+rule:
+  any:
+    - pattern: "$STR.trimLeft()"
+    - pattern: "$STR.trimRight()"

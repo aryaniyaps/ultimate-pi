@@ -1,0 +1,60 @@
+# No Clone Override
+# Detects classes that override the clone() method
+id: no-clone-override
+name: Clone Should Not Be Overridden
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "clone() should not be overridden — use copy constructor instead"
+
+description: |
+  Overriding clone() is error-prone due to shallow copy issues and 
+  complex inheritance. Use copy constructors or factory methods instead.
+
+  ✅ FIX: Implement a copy constructor
+
+  ```java
+  public class Person {
+      private String name;
+      
+      public Person(Person other) {
+          this.name = other.name;
+      }
+  }
+  ```
+
+query: |
+  (method_declaration
+    name: (identifier) @NAME (#eq? @NAME "clone")
+    parameters: (formal_parameters) @PARAMS)
+
+metavars:
+  - NAME
+  - PARAMS
+
+tags:
+  - reliability
+  - java
+  - cloning
+  - best-practice
+
+examples:
+  bad: |
+    class MyClass implements Cloneable {
+        @Override
+        public Object clone() {  // BAD - override
+            // ...
+        }
+    }
+
+  good: |
+    class MyClass {
+        public MyClass(MyClass other) {  // GOOD - copy constructor
+            this.field = other.field;
+        }
+    }
+
+has_fix: false

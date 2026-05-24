@@ -1,0 +1,10 @@
+id: prefer-string-slice
+language: TypeScript
+severity: hint
+message: "Use .slice() instead of .substring()/.substr()"
+note: |
+  .substring() has confusing behavior with negative arguments. .slice() is consistent.
+rule:
+  any:
+    - pattern: "$STR.substring($$$ARGS)"
+    - pattern: "$STR.substr($$$ARGS)"

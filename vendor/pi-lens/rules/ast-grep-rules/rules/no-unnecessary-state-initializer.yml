@@ -1,0 +1,17 @@
+id: no-unnecessary-state-initializer
+language: TSX
+message: "Unnecessary useState initializer — useState with undefined uses the initial value automatically"
+severity: hint
+note: |
+  useState(undefined) is equivalent to useState(). The explicit undefined
+  is unnecessary and can be removed for cleaner code.
+rule:
+  all:
+    - kind: call_expression
+    - has:
+        field: function
+        regex: "^useState$"
+    - has:
+        kind: arguments
+        has:
+          kind: undefined

@@ -1,0 +1,14 @@
+id: prefer-optional-chain
+language: TypeScript
+message: "Use optional chaining '?.' instead of logical AND for null checks"
+severity: hint
+note: |
+  Optional chaining provides more concise and safer access to deeply
+  nested properties. Instead of foo && foo.bar, use foo?.bar.
+rule:
+  any:
+    - pattern: $X && $X.$Y
+    - pattern: $X !== null && $X !== undefined && $X.$Y
+    - pattern: $X != null && $X.$Y
+  not:
+    pattern: $X && $X.$Y && $$$

@@ -29,11 +29,8 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | Sentrux rules drift check (CI) | `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --check` |
 | Sentrux run/review check or gate (root-resolving) | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` / `gate [--save]` |
 | Resolve package root (`UP_PKG`) | `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
-| Model-router config (Pi auth) | `node "$UP_PKG/.pi/scripts/harness-generate-model-router.mjs"` |
 | Project `.env` (append-only) | `node "$UP_PKG/.pi/scripts/harness-sync-env.mjs"` (`--create-missing` after user confirms) |
-| Model-router / Pi defaults | `harness-sync-model-router.mjs` (Step 3.5 of `/harness-setup`) |
-| Vendor router sync (this repo only) | `bash .pi/scripts/vendor-sync-pi-model-router.sh` or `npm run vendor:sync-router` |
-| Meta-optimizer (JSONL proposals) | `node "$UP_PKG/.pi/harness/evolution/meta-optimizer.mjs"` |
+| Vendored pi-lens diagnostics | `vendor/pi-lens/index.ts` (loaded by `package.json` → `pi.extensions`; Sentrux remains architecture signal) |
 
 Pass `--force` to shell scripts that support it (e.g. `harness-graphify-bootstrap.sh --force`, `harness-cli-verify.sh --force`).
 

@@ -1,0 +1,109 @@
+{
+	"name": "pi-lens",
+	"version": "3.8.45",
+	"type": "module",
+	"description": "Real-time code feedback for pi — LSP, linters, formatters, type-checking, structural analysis & booboo",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/apmantza/pi-lens.git"
+	},
+	"main": "index.ts",
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"lint": "tsc --project tsconfig.json",
+		"watch": "tsc --watch",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"check": "node scripts/check-extensions.mjs",
+		"audit:tree-sitter": "node scripts/audit-tree-sitter-rules.mjs",
+		"audit:rule-catalog": "node scripts/validate-rule-catalog.mjs",
+		"logs:smells": "node scripts/analyze-pi-lens-logs.mjs",
+		"download-grammars": "node scripts/download-grammars.js",
+		"harness:poc": "node scripts/run-harness.mjs cases/ts/pipeline-dispatch-poc --pi-bin \"C:\\Users\\R3LiC\\AppData\\Roaming\\npm\\pi.cmd\"",
+		"harness:python-poc": "node scripts/run-harness.mjs cases/python/pipeline-dispatch-poc --pi-bin \"C:\\Users\\R3LiC\\AppData\\Roaming\\npm\\pi.cmd\"",
+		"harness:ts-format-poc": "node scripts/run-harness.mjs cases/ts/format-default-poc --pi-bin \"C:\\Users\\R3LiC\\AppData\\Roaming\\npm\\pi.cmd\"",
+		"harness:python-autofix-poc": "node scripts/run-harness.mjs cases/python/autofix-default-poc --pi-bin \"C:\\Users\\R3LiC\\AppData\\Roaming\\npm\\pi.cmd\"",
+		"harness:go-poc": "node scripts/run-harness.mjs cases/go/pipeline-dispatch-poc --pi-bin \"C:\\Users\\R3LiC\\AppData\\Roaming\\npm\\pi.cmd\"",
+		"postinstall": "node scripts/download-grammars.js"
+	},
+	"keywords": [
+		"pi",
+		"pi-extension",
+		"pi-package",
+		"linter",
+		"biome",
+		"ast-grep",
+		"ruff",
+		"typescript",
+		"code-quality",
+		"feedback",
+		"type-coverage",
+		"jscpd",
+		"knip"
+	],
+	"author": "Apostolos Mantzaris",
+	"license": "MIT",
+	"files": [
+		"index.ts",
+		"i18n.ts",
+		"config/",
+		"tools/",
+		"clients/**/*.ts",
+		"commands/**/*.ts",
+		"rules/",
+		"skills/",
+		"scripts/download-grammars.js",
+		"scripts/analyze-pi-lens-logs.mjs",
+		"tsconfig.json",
+		"README.md",
+		"CHANGELOG.md",
+		"UPSTREAM_PIN.md",
+		"banner.svg",
+		"banner.png"
+	],
+	"peerDependencies": {
+		"@earendil-works/pi-coding-agent": "*"
+	},
+	"dependencies": {
+		"@ast-grep/napi": "^0.42.1",
+		"@earendil-works/pi-tui": "^0.75.3",
+		"minimatch": "^10.2.5",
+		"typebox": "^1.0.0",
+		"typescript": "^6.0.3",
+		"vscode-jsonrpc": "^8.2.1"
+	},
+	"optionalDependencies": {
+		"tree-sitter-wasms": "npm:null@^0.11.0",
+		"web-tree-sitter": "^0.25.10"
+	},
+	"devDependencies": {
+		"@ast-grep/cli": "^0.42.1",
+		"@biomejs/biome": "^2.4.10",
+		"@types/js-yaml": "^4.0.9",
+		"@types/node": "^25.6.0",
+		"@vitest/coverage-v8": "^4.1.5",
+		"js-yaml": "^4.1.1",
+		"typescript-language-server": "^5.1.3",
+		"vitest": "^4.1.1"
+	},
+	"pi": {
+		"extensions": [
+			"./index.ts"
+		],
+		"skills": [
+			"./skills"
+		]
+	},
+	"knip": {
+		"entry": [
+			"index.ts"
+		],
+		"project": [
+			"**/*.ts",
+			"!**/*.test.ts"
+		],
+		"ignore": [
+			"**/*.test.ts"
+		]
+	}
+}

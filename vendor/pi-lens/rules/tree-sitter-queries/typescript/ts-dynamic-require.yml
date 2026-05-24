@@ -1,0 +1,55 @@
+# Dynamic require() Injection
+# Detects require() called with a non-literal argument (S5335).
+id: ts-dynamic-require
+name: Dynamic Require Injection
+severity: error
+category: security
+defect_class: injection
+inline_tier: blocking
+language: typescript
+
+message: "Dynamic require() — non-literal argument allows loading arbitrary modules"
+
+description: |
+  Calling require() with a runtime expression instead of a string literal
+  can allow an attacker to load arbitrary modules from the filesystem,
+  enabling remote code execution or sensitive file disclosure.
+
+  ❌ NEVER:
+  const handler = require(userInput);     // Loads arbitrary file!
+  const plugin  = require(config.path);   // Config could be tainted
+
+  ✅ SAFE:
+  const handler = require("./handler");   // String literal only
+  // If dynamic loading is required, use an explicit allowlist:
+  const safe = { a: "./mod-a", b: "./mod-b" };
+  const mod = require(safe[name] ?? "./default");
+
+query: |
+  (call_expression
+    function: (identifier) @FN
+    arguments: (arguments [(identifier) (member_expression) (call_expression) (await_expression)] @ARG)
+    (#eq? @FN "require"))
+
+metavars:
+  - FN
+  - ARG
+
+has_fix: false
+
+tags:
+  - typescript
+  - javascript
+  - security
+  - injection
+  - cwe-706
+  - owasp-a03
+
+examples:
+  bad: |
+    const handler = require(pluginName);
+    const lib = require(config.libPath);
+
+  good: |
+    const handler = require("./handler");
+    const lib = require("./lib");

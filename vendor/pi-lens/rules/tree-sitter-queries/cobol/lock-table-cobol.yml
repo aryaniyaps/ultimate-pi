@@ -1,0 +1,35 @@
+# COBOL LOCK TABLE
+# Detects LOCK TABLE in COBOL
+id: lock-table-cobol
+name: LOCK TABLE Should Not Be Used
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: cobol
+
+message: "LOCK TABLE should not be used"
+
+description: |
+  LOCK TABLE causes concurrency issues. Use row-level locking.
+
+query: |
+  (lock_table_statement
+    (LOCK) @LOCK)
+
+metavars:
+  - LOCK
+
+tags:
+  - maintainability
+  - cobol
+  - bad-practice
+
+examples:
+  bad: |
+    EXEC SQL LOCK TABLE employees IN EXCLUSIVE MODE END-EXEC  -- BAD
+
+  good: |
+    EXEC SQL SELECT * FROM employees FOR UPDATE END-EXEC  -- GOOD
+
+has_fix: false

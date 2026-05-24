@@ -1,0 +1,25 @@
+# pi-lens bundled ruff config
+# Applied when no project-level ruff config is found.
+# Projects can override everything by adding [tool.ruff] to pyproject.toml
+# or creating ruff.toml / .ruff.toml at the project root.
+
+line-length = 88  # black-compatible default
+
+[lint]
+select = [
+  "E",    # pycodestyle errors
+  "W",    # pycodestyle warnings
+  "F",    # pyflakes (undefined names, unused imports)
+  "I",    # isort (import ordering)
+  "B",    # flake8-bugbear (likely bugs and design issues)
+  "UP",   # pyupgrade (modernize syntax for target Python version)
+  "SIM",  # flake8-simplify (simplifiable constructs)
+  "C4",   # flake8-comprehensions (unnecessary comprehension patterns)
+  "PIE",  # flake8-pie (misc lints)
+]
+
+ignore = [
+  "E501",   # line too long — formatter handles this
+  "B008",   # function call in default argument — common FastAPI/typer pattern
+  "SIM108", # ternary operator — readability is subjective
+]

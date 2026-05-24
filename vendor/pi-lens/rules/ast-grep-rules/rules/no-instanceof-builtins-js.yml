@@ -1,0 +1,14 @@
+id: no-instanceof-builtins-js
+language: JavaScript
+severity: error
+message: "Do not use instanceof with primitive wrapper types — use typeof instead"
+note: |
+  instanceof String/Number/Boolean checks boxed wrappers, not primitives.
+  Use typeof x === "string" etc.
+rule:
+  any:
+    - pattern: "$X instanceof String"
+    - pattern: "$X instanceof Number"
+    - pattern: "$X instanceof Boolean"
+    - pattern: "$X instanceof Symbol"
+    - pattern: "$X instanceof BigInt"

@@ -1,0 +1,59 @@
+# Mutable Default Argument
+# Detects mutable defaults in function arguments (common Python pitfall)
+id: mutable-default-arg
+name: Mutable Default Argument
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "Mutable default argument — list/dict/set as default value"
+
+description: |
+  Mutable default arguments are evaluated once at function definition time,
+  not each call. This causes unexpected shared state between calls.
+  
+  ✅ FIX: Use None as default, create mutable inside function
+  
+  ```python
+  def process(items=None):  # GOOD
+      if items is None:
+          items = []
+      items.append(item)
+  ```
+
+query: |
+  (function_definition
+    (parameters
+      (default_parameter
+        (identifier) @PARAM
+        [(list) (dictionary) (set)] @MUTABLE)))
+
+metavars:
+  - PARAM
+  - MUTABLE
+
+tags:
+  - reliability
+  - common-mistake
+  - python-specific
+
+examples:
+  bad: |
+    def add_item(item, items=[]):  # BAD - shared list!
+        items.append(item)
+        return items
+    
+    print(add_item(1))  # [1]
+    print(add_item(2))  # [1, 2] - unexpected!
+  
+  good: |
+    def add_item(item, items=None):  # GOOD
+        if items is None:
+            items = []
+        items.append(item)
+        return items
+
+has_fix: true
+fix_action: convert_to_none_default

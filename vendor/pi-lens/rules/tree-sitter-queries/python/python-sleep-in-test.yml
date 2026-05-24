@@ -1,0 +1,50 @@
+id: python-sleep-in-test
+name: time.sleep in Test
+severity: warning
+category: correctness
+defect_class: async-misuse
+inline_tier: warning
+language: python
+
+message: "time.sleep() in test — use synchronisation primitives or polling helpers instead of fixed sleeps"
+
+description: |
+  Fixed sleeps in tests cause flakiness: they slow down the suite and still
+  fail on resource-constrained CI runners.
+
+  ✅ FIX: use threading.Event, asyncio.wait_for, or a polling helper like
+  tenacity or pytest-eventually.
+
+query: |
+  (call
+    function: (attribute
+      object: (identifier) @MOD
+      attribute: (identifier) @FN)
+    (#eq? @MOD "time")
+    (#eq? @FN "sleep")) @CALL
+
+metavars:
+  - MOD
+  - FN
+  - CALL
+
+has_fix: false
+
+tags:
+  - python
+  - testing
+  - flakiness
+  - sleep
+
+examples:
+  bad: |
+    def test_worker_starts():
+        worker.start()
+        time.sleep(0.5)   # fragile
+        assert worker.is_ready()
+
+  good: |
+    def test_worker_starts():
+        worker.start()
+        worker.ready_event.wait(timeout=5)
+        assert worker.is_ready()

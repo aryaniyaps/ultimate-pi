@@ -1,0 +1,6 @@
+id: no-alert
+language: TypeScript
+message: "Avoid alert() — use a proper notification system"
+severity: warning
+rule:
+  pattern: alert($$$ARGS)

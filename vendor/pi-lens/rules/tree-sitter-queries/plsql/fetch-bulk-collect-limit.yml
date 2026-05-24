@@ -1,0 +1,47 @@
+# FETCH BULK COLLECT With LIMIT
+# Detects FETCH ... BULK COLLECT without LIMIT clause
+id: fetch-bulk-collect-limit
+name: FETCH BULK COLLECT INTO Should Use LIMIT Clause
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "FETCH ... BULK COLLECT INTO should not be used without a LIMIT clause"
+
+description: |
+  FETCH ... BULK COLLECT without LIMIT fetches ALL rows into memory.
+  This can cause out-of-memory errors for large result sets.
+
+  ✅ FIX: Add LIMIT clause to control batch size
+
+  ```sql
+  FETCH cursor BULK COLLECT INTO collection LIMIT 1000;  -- GOOD
+  ```
+
+query: |
+  (fetch_statement
+    (fetch) @FETCH
+    (bulk_collect_into_clause) @BULK)
+
+metavars:
+  - FETCH
+  - BULK
+
+post_filter: missing_limit_clause
+
+tags:
+  - reliability
+  - plsql
+  - performance
+  - memory
+
+examples:
+  bad: |
+    FETCH cursor BULK COLLECT INTO employees;  -- BAD - no LIMIT
+
+  good: |
+    FETCH cursor BULK COLLECT INTO employees LIMIT 1000;  -- GOOD
+
+has_fix: false

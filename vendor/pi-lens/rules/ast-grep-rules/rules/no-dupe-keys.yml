@@ -1,0 +1,73 @@
+id: no-dupe-keys
+message: Disallow duplicate keys in object literals
+severity: error # error, warning, hint, info
+language: TypeScript
+rule:
+  any:
+    - any:
+        - matches: method-key
+          has:
+            field: name
+            matches: key-name
+            not:
+              follows:
+                pattern: $$ACCESS
+        - matches: pair-key
+      precedes:
+        stopBy: end
+        any:
+          - matches: method-key
+          - matches: pair-key
+    - matches: accessor
+      any:
+        - follows:
+            stopBy: end
+            any:
+              - matches: pair-key
+              - matches: accessor
+        - precedes:
+            stopBy: end
+            any:
+              - matches: pair-key
+              - matches: accessor
+utils:
+  accessor:
+    matches: method-key
+    has:
+      field: name
+      matches: key-name
+      follows:
+        pattern: $$ACCESS
+  pair-key:
+    kind: pair
+    inside:
+      kind: object
+    has:
+      field: key
+      matches: key-name
+  method-key:
+    kind: method_definition
+    inside:
+      kind: object
+    has:
+      field: name
+      matches: key-name
+  key-name:
+    any:
+      - kind: property_identifier
+        pattern: $NAME
+      - kind: string
+        has:
+          pattern: $NAME
+          kind: string_fragment
+      - kind: number
+        pattern: $NAME
+      - kind: string
+        has:
+          pattern: $NAME
+          kind: string_fragment
+      - kind: computed_property_name
+        has:
+          matches: key-name
+note: |
+  Multiple properties with the same key in object literals can cause unexpected behavior in your application.

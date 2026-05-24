@@ -1,0 +1,16 @@
+id: redundant-state
+language: TypeScript
+message: "Redundant state — '$NAME' is only used to return it, inline the value"
+severity: warning
+note: |
+  const $NAME = $VALUE; return $NAME; is redundant.
+  Inline: return $VALUE; directly.
+  Grade 2.1 — low complexity, easy fix.
+rule:
+  all:
+    - pattern: return $NAME
+    - follows:
+        pattern: const $NAME = $VALUE
+        strict: true
+fix: |
+  return $VALUE;

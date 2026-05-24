@@ -1,0 +1,75 @@
+# $this in Static Context
+# Detects $this used inside static methods in PHP
+id: this-in-static-context
+name: $this Should Not Be Used in Static Context
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: php
+
+message: "$this should not be used in a static method context"
+
+description: |
+  Using $this inside a static method causes a fatal error in PHP.
+  Static methods don't have access to instance properties.
+  Use self:: for static properties or remove the static modifier.
+
+  ✅ FIX: Use self:: for static access or remove static modifier
+
+  ```php
+  class MyClass {
+      private static $staticVar;
+      
+      public static function getStatic() {
+          return self::$staticVar;  // Correct - use self::
+      }
+      
+      public function getInstance() {
+          return $this->instanceVar;  // Correct - instance method
+      }
+  }
+  ```
+
+query: |
+  (method_declaration
+    (modifiers
+      "static")
+    body: (compound_statement
+      ((variable_name) @THIS
+        (#eq? @THIS "$this"))))
+
+metavars:
+  - THIS
+  - VAR
+
+tags:
+  - reliability
+  - php
+  - fatal-error
+  - oop
+
+examples:
+  bad: |
+    class MyClass {
+        private $name;
+        
+        public static function getName() {
+            return $this->name;  // FATAL ERROR - $this in static context
+        }
+    }
+
+  good: |
+    class MyClass {
+        private static $name;
+        
+        public static function getName() {
+            return self::$name;  // GOOD - use self::
+        }
+        
+        public function getName() {
+            return $this->name;  // GOOD - instance method
+        }
+    }
+
+has_fix: false

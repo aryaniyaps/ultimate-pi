@@ -1,0 +1,59 @@
+# __iter__ Should Return Iterator
+# Detects __iter__ methods that don't return an iterator
+id: iter-return-iterator
+name: __iter__ Should Return Iterator
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "__iter__ should return an iterator (object with __next__ method)"
+
+description: |
+  The __iter__ method must return an iterator object (something with a __next__ method).
+  Returning a non-iterator will cause TypeError when iterating.
+
+  ✅ FIX: Return self (if class has __next__) or use iter() on a collection
+
+  ```python
+  class MyIterator:
+      def __iter__(self):
+          return self  # OK - self has __next__
+      
+      def __next__(self):
+          return 1
+
+  class MyCollection:
+      def __iter__(self):
+          return iter(self.items)  # OK - returns iterator
+  ```
+
+query: |
+  (function_definition
+    name: (identifier) @NAME (#eq? @NAME "__iter__")
+    body: (block
+      (return_statement) @RETURN))
+
+metavars:
+  - NAME
+  - RETURN
+
+tags:
+  - reliability
+  - python-specific
+  - iterator
+  - protocol
+
+examples:
+  bad: |
+    class MyClass:
+        def __iter__(self):
+            return [1, 2, 3]  # BAD - returns list, not iterator
+
+  good: |
+    class MyClass:
+        def __iter__(self):
+            return iter([1, 2, 3])  # GOOD - returns iterator
+
+has_fix: false

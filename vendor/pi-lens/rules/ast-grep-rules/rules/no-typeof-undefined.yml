@@ -1,0 +1,19 @@
+id: no-typeof-undefined
+language: TypeScript
+severity: hint
+message: "Use === undefined instead of typeof x === 'undefined'"
+note: |
+  In modern JS, undefined cannot be reassigned. typeof check is unnecessary.
+  Exception: typeof __dirname checks for ESM/CJS detection are intentional.
+rule:
+  any:
+    - pattern: "typeof $X === \"undefined\""
+    - pattern: "typeof $X !== \"undefined\""
+    - pattern: "typeof $X == \"undefined\""
+    - pattern: "typeof $X != \"undefined\""
+  not:
+    any:
+      - pattern: "typeof __dirname !== \"undefined\""
+      - pattern: "typeof __dirname === \"undefined\""
+      - pattern: "typeof __filename !== \"undefined\""
+      - pattern: "typeof __filename === \"undefined\""

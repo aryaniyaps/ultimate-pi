@@ -1,0 +1,53 @@
+# Send File Mimetype
+# Detects send_file without mimetype or download_name
+id: send-file-mimetype
+name: send_file Should Specify Mimetype or Download Name
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "send_file should specify 'mimetype' or 'download_name' when used with file-like objects"
+
+description: |
+  Flask's send_file without mimetype or download_name can cause
+  security issues and incorrect browser handling. Always specify
+  at least one when sending files.
+
+  ✅ FIX: Add mimetype or download_name parameter
+
+  ```python
+  send_file(file_obj, mimetype='text/plain')  # GOOD
+  send_file(file_obj, download_name='report.pdf')  # GOOD
+  ```
+
+query: |
+  (call
+    function: (identifier) @FUNC (#eq? @FUNC "send_file")
+    arguments: (argument_list
+      (_) @FIRST_ARG
+      (keyword_argument)? @KW))
+
+metavars:
+  - FUNC
+  - FIRST_ARG
+  - KW
+
+post_filter: missing_mimetype_and_download_name
+
+tags:
+  - reliability
+  - python
+  - flask
+  - security
+
+examples:
+  bad: |
+    send_file(file_obj)  # BAD - missing mimetype and download_name
+
+  good: |
+    send_file(file_obj, mimetype='application/pdf')  # GOOD
+    send_file(file_obj, download_name='report.pdf')  # GOOD
+
+has_fix: false

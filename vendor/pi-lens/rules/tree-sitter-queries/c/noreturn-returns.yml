@@ -1,0 +1,60 @@
+# S5267: Functions with noreturn attribute should not return
+id: noreturn-returns
+name: noreturn Functions Should Not Return
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: c
+
+message: "function declared with noreturn attribute contains a return statement"
+
+description: |
+  A function marked with __attribute__((noreturn)) or _Noreturn promises
+  to never return to its caller. A return statement inside it violates
+  that contract and is undefined behavior.
+
+  ✅ FIX: Use exit(), abort(), or longjmp() to terminate
+
+  ```c
+  __attribute__((noreturn)) void fatal(const char* msg) {
+      fprintf(stderr, "%s\n", msg);
+      abort();  // GOOD - never returns
+  }
+  ```
+
+query: |
+  (function_definition
+    (attribute_specifier
+      (argument_list
+        (identifier) @ATTR))
+    (compound_statement
+      (return_statement) @RET)) @FUNC
+
+metavars:
+  - ATTR
+  - RET
+  - FUNC
+
+post_filter: c_noreturn_attr
+
+tags:
+  - reliability
+  - c
+  - undefined-behavior
+  - confusing
+
+examples:
+  bad: |
+    __attribute__((noreturn)) void die() {
+        printf("error\n");
+        return;  // BAD - contradicts noreturn
+    }
+
+  good: |
+    __attribute__((noreturn)) void die() {
+        printf("error\n");
+        abort();  // GOOD - never returns
+    }
+
+has_fix: false

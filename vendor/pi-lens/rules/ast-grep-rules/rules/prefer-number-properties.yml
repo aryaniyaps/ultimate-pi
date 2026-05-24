@@ -1,0 +1,10 @@
+id: prefer-number-properties
+language: TypeScript
+severity: warning
+message: "Use Number.isNaN()/Number.isFinite() instead of global isNaN()/isFinite()"
+note: |
+  Global isNaN() coerces its argument first. Number.isNaN(x) returns true only for NaN.
+rule:
+  any:
+    - pattern: "isNaN($$$ARGS)"
+    - pattern: "isFinite($$$ARGS)"

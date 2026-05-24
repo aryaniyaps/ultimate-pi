@@ -1,0 +1,70 @@
+# Switch Fall-Through
+# Detects switch cases that fall through without break
+id: switch-fall-through
+name: Switch Cases Should End With Break
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Switch case should end with an unconditional break statement"
+
+description: |
+  Unintentional fall-through in switch cases causes bugs.
+  Every case should end with break, return, throw, or continue.
+  If fall-through is intentional, add a // fallthrough comment.
+
+  ✅ FIX: Add break or indicate intentional fall-through
+
+  ```java
+  switch (value) {
+      case 1:
+          doSomething();
+          break;  // GOOD - explicit break
+      case 2:
+          doOther();
+          break;
+  }
+  ```
+
+query: |
+  (switch_statement
+    body: (switch_block
+      (switch_label) @LABEL
+      (expression_statement)*
+      (switch_label) @NEXT_LABEL))
+
+metavars:
+  - LABEL
+  - NEXT_LABEL
+
+post_filter: missing_break_between_cases
+
+tags:
+  - maintainability
+  - java
+  - cert
+  - bugs
+
+examples:
+  bad: |
+    switch (val) {
+        case 1:
+            doSomething();  // BAD - falls through!
+        case 2:
+            doOther();
+            break;
+    }
+
+  good: |
+    switch (val) {
+        case 1:
+            doSomething();
+            break;  // GOOD
+        case 2:
+            doOther();
+            break;
+    }
+
+has_fix: false

@@ -1,0 +1,59 @@
+# Return in __init__
+# Detects __init__ methods that explicitly return a value (should return None)
+id: return-in-init
+name: Return Value in __init__
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "__init__ should not return a value — it must always return None"
+
+description: |
+  The __init__ method in Python must not return any value other than None.
+  Returning a value from __init__ will raise a TypeError at runtime.
+
+  ✅ FIX: Remove the return statement or return None implicitly
+
+  ```python
+  class MyClass:
+      def __init__(self, value):
+          self.value = value
+          # No return statement needed
+  ```
+
+query: |
+  (function_definition
+    name: (identifier) @NAME (#eq? @NAME "__init__")
+    body: (block
+      (return_statement
+        (_) @RETURN_VAL) @RETURN))
+
+metavars:
+  - NAME
+  - RETURN
+  - RETURN_VAL
+
+post_filter: has_return_value
+
+tags:
+  - reliability
+  - python-specific
+  - runtime-error
+
+examples:
+  bad: |
+    class MyClass:
+        def __init__(self, value):
+            self.value = value
+            return self  # BAD - TypeError at runtime!
+
+  good: |
+    class MyClass:
+        def __init__(self, value):
+            self.value = value
+            # Implicit return None is correct
+
+has_fix: true
+fix_action: remove_return_value

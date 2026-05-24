@@ -1,0 +1,65 @@
+# Goto Label Order
+# Detects goto statements that jump to labels declared earlier
+id: goto-label-order
+name: Goto Should Jump to Later Labels
+severity: warning
+category: maintainability
+defect_class: correctness
+inline_tier: warning
+language: c
+
+message: "goto should jump to labels declared later in the same function"
+
+description: |
+  Goto statements should only jump forward to labels declared later.
+  Backward jumps create spaghetti code and are harder to understand.
+  This is a MISRA C requirement.
+
+  ✅ FIX: Restructure to use forward jumps only
+
+  ```c
+  void process() {
+      if (error) {
+          goto cleanup;  // Forward jump - OK
+      }
+      // ... code ...
+  cleanup:
+      free_resources();
+  }
+  ```
+
+query: |
+  (function_definition
+    body: (compound_statement
+      (goto_statement
+        (statement_identifier) @LABEL) @GOTO))
+
+metavars:
+  - LABEL
+  - GOTO
+
+post_filter: goto_jumps_backward
+
+tags:
+  - maintainability
+  - c
+  - misra
+  - control-flow
+
+examples:
+  bad: |
+    void func() {
+    loop:
+        if (done) return;
+        process();
+        goto loop;  // BAD - backward jump
+    }
+
+  good: |
+    void func() {
+        while (!done) {  // GOOD - use loop instead
+            process();
+        }
+    }
+
+has_fix: false

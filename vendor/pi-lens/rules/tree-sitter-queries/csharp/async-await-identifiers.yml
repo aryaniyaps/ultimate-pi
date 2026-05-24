@@ -1,0 +1,50 @@
+# Async/Await as Identifiers
+# Detects async and await used as identifiers in C#
+id: async-await-identifiers
+name: async and await Should Not Be Used as Identifiers
+severity: warning
+category: maintainability
+defect_class: correctness
+inline_tier: warning
+language: csharp
+
+message: "'async' and 'await' should not be used as identifiers"
+
+description: |
+  Using async and await as identifiers is confusing and may cause
+  conflicts with the async/await keywords. Use different names.
+
+  ✅ FIX: Use descriptive names that don't conflict with keywords
+
+  ```csharp
+  bool isAsyncOperation = true;  // GOOD - descriptive
+  ```
+
+query: |
+  (variable_declarator
+    (identifier) @NAME (#match? @NAME "^(async|await)$"))
+  (parameter
+    (identifier) @NAME (#match? @NAME "^(async|await)$"))
+  (property_declaration
+    name: (identifier) @NAME (#match? @NAME "^(async|await)$"))
+
+metavars:
+  - NAME
+
+tags:
+  - maintainability
+  - csharp
+  - pitfall
+  - readability
+
+examples:
+  bad: |
+    int async = 5;  // BAD - keyword as identifier
+    void Method(int await) { }  // BAD
+
+  good: |
+    int asyncOperation = 5;  // GOOD - descriptive
+    void Method(int waitTime) { }  // GOOD
+
+has_fix: true
+fix_action: rename_identifier

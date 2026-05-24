@@ -1,0 +1,46 @@
+# Self Assignment
+# Detects variables assigned to themselves
+id: self-assignment
+name: Variables Should Not Be Self-Assigned
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "'{{VAR}}' is assigned to itself"
+
+description: |
+  Self-assignment (x = x) has no effect and indicates a bug,
+  usually from typo or incomplete refactoring.
+
+  ✅ FIX: Fix the assignment or remove it
+
+  ```typescript
+  x = y;  // GOOD - actual intent
+  ```
+
+query: |
+  (assignment_expression
+    left: (identifier) @VAR
+    right: (identifier) @SAME
+    (#eq? @VAR @SAME))
+
+metavars:
+  - VAR
+  - SAME
+
+tags:
+  - reliability
+  - typescript
+  - bugs
+  - suspicious
+
+examples:
+  bad: |
+    x = x;  // BAD - no effect
+
+  good: |
+    x = y;  // GOOD - actual assignment
+
+has_fix: false

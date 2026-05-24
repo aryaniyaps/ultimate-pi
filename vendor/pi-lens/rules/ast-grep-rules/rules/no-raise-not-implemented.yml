@@ -1,0 +1,16 @@
+id: no-raise-not-implemented
+language: Python
+severity: warning
+message: "NotImplementedError stub — function was scaffolded but never completed"
+note: |
+  Replace the stub with the actual implementation.
+rule:
+  kind: raise_statement
+  has:
+    any:
+      - kind: identifier
+        regex: '^NotImplementedError$'
+      - kind: call
+        has:
+          field: function
+          regex: '^NotImplementedError$'

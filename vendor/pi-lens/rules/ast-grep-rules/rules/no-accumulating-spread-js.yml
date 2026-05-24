@@ -1,0 +1,11 @@
+id: no-accumulating-spread-js
+language: JavaScript
+message: "Avoid accumulating array spread in loops/reduce (O(n^2)); use push/flatMap"
+severity: warning
+metadata:
+  category: performance
+rule:
+  any:
+    - pattern: $ARR.reduce(($ACC, $ITEM) => [...$ACC, $ITEM], $$$INIT)
+    - pattern: $ARR.reduce(($ACC, $ITEM) => [...$ACC, ...$ITEM], $$$INIT)
+    - pattern: $ARR.reduce(function($ACC, $ITEM) { return [...$ACC, $ITEM] }, $$$INIT)

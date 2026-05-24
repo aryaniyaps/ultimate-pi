@@ -1,0 +1,55 @@
+# TypeScript/React Slop Detection
+# Detects common React anti-patterns that cause bugs or unnecessary re-renders.
+id: ts-react-antipatterns
+name: React Anti-Pattern
+severity: warning
+category: correctness
+defect_class: logic-error
+inline_tier: warning
+language: typescript
+
+message: "React anti-pattern: setState inside a loop causes multiple re-renders — batch with a single state update"
+
+description: |
+  Calling a state setter inside a loop triggers a re-render on every iteration.
+  Batch the updates into a single setState call outside the loop.
+
+  ✅ FIX: compute the new state value in the loop, then call setState once after.
+
+query: |
+  [
+    (for_statement
+      (statement_block) @BODY
+      (#match? @BODY "set[A-Z]")
+      (#not-match? @BODY "set(Timeout|Interval|Immediate)"))
+    (for_in_statement
+      (statement_block) @BODY
+      (#match? @BODY "set[A-Z]")
+      (#not-match? @BODY "set(Timeout|Interval|Immediate)"))
+    (while_statement
+      (statement_block) @BODY
+      (#match? @BODY "set[A-Z]")
+      (#not-match? @BODY "set(Timeout|Interval|Immediate)"))
+  ]
+
+metavars:
+  - BODY
+
+has_fix: false
+
+tags:
+  - typescript
+  - react
+  - correctness
+  - performance
+  - slop
+  - ai-generated
+
+examples:
+  bad: |
+    for (const item of items) {
+      setCount(count + 1)
+    }
+
+  good: |
+    setCount(count + items.length)

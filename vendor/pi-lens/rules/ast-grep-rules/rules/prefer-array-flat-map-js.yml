@@ -1,0 +1,8 @@
+id: prefer-array-flat-map-js
+language: JavaScript
+severity: warning
+message: "Use .flatMap() instead of .map().flat() — single pass, more efficient"
+note: |
+  arr.map(fn).flat() is two array traversals. arr.flatMap(fn) does the same in one.
+rule:
+  pattern: "$ARR.map($FN).flat()"

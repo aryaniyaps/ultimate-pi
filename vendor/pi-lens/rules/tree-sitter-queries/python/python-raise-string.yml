@@ -1,0 +1,40 @@
+id: python-raise-string
+name: Raise String Instead of Exception
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "raise with string literal — Python 3 requires exception instances"
+
+description: |
+  In Python 3, 'raise "message"' is a TypeError at runtime.
+  You must raise exception instances or classes, not strings.
+  
+  ✅ FIX:
+    raise ValueError("message")
+    raise RuntimeError(f"failed: {reason}")
+
+query: |
+  (raise_statement
+    (string) @VALUE)
+
+metavars:
+  - VALUE
+
+has_fix: false
+
+tags:
+  - reliability
+  - error-handling
+  - python3
+
+examples:
+  bad: |
+    if not valid:
+        raise "Validation failed"   # TypeError in Python 3!
+  
+  good: |
+    if not valid:
+        raise ValueError("Validation failed")

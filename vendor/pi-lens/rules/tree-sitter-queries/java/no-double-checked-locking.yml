@@ -1,0 +1,74 @@
+# No Double-Checked Locking
+# Detects double-checked locking patterns
+id: no-double-checked-locking
+name: Double-Checked Locking Should Not Be Used
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Double-checked locking should not be used"
+
+description: |
+  Double-checked locking is not thread-safe in Java due to memory
+  model issues (instruction reordering). Use static initialization
+  or make the whole method synchronized.
+
+  ✅ FIX: Use static holder pattern
+
+  ```java
+  private static class Holder {
+      static final Resource INSTANCE = new Resource();
+  }
+  public static Resource getInstance() {
+      return Holder.INSTANCE;  // GOOD - static init
+  }
+  ```
+
+query: |
+  (if_statement
+    condition: (binary_expression
+      left: (identifier) @FIELD
+      operator: ("==")
+      right: ("null"))
+    consequence: (block
+      (synchronized_statement
+        body: (block
+          (if_statement
+            condition: (binary_expression
+              left: (identifier) @FIELD2
+              operator: ("==")
+              right: ("null")))))))
+
+metavars:
+  - FIELD
+  - FIELD2
+
+post_filter: is_double_checked_locking
+
+tags:
+  - reliability
+  - java
+  - concurrency
+  - cert
+
+examples:
+  bad: |
+    if (instance == null) {  // BAD - double-checked locking
+        synchronized (lock) {
+            if (instance == null) {
+                instance = new Instance();
+            }
+        }
+    }
+
+  good: |
+    private static class InstanceHolder {
+        static final Instance INSTANCE = new Instance();
+    }
+    public Instance getInstance() {
+        return InstanceHolder.INSTANCE;  // GOOD
+    }
+
+has_fix: false

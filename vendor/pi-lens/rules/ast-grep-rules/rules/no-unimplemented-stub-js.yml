@@ -1,0 +1,11 @@
+id: no-unimplemented-stub-js
+language: JavaScript
+severity: warning
+message: "Unimplemented stub — function was scaffolded but never completed"
+note: |
+  Replace the stub with the actual implementation.
+rule:
+  kind: throw_statement
+  has:
+    kind: new_expression
+    regex: '(?i)(not\s+implemented|todo|unimplemented)'

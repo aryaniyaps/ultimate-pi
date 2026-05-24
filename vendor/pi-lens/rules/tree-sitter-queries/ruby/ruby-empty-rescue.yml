@@ -1,0 +1,49 @@
+id: ruby-empty-rescue
+name: Empty Rescue Block
+severity: warning
+category: reliability
+defect_class: silent-error
+inline_tier: blocking
+language: ruby
+
+message: "Empty rescue block — handle or re-raise the exception"
+
+description: |
+  A rescue block with no body silently swallows the exception.
+  This makes debugging impossible and can hide serious errors.
+  
+  ✅ FIX (choose one):
+    rescue => e
+      logger.error("Failed: #{e.message}")
+      raise   # re-raise
+
+query: |
+  (rescue
+    body: (then) @BODY)
+
+metavars:
+  - BODY
+
+post_filter: ruby_empty_rescue
+
+has_fix: false
+
+tags:
+  - reliability
+  - error-handling
+
+examples:
+  bad: |
+    begin
+      risky_operation
+    rescue => e
+      # nothing here - error silently swallowed
+    end
+  
+  good: |
+    begin
+      risky_operation
+    rescue => e
+      Rails.logger.error("Operation failed: #{e.message}")
+      raise
+    end

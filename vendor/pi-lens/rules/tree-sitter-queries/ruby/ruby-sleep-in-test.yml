@@ -1,0 +1,48 @@
+id: ruby-sleep-in-test
+name: sleep in Test
+severity: warning
+category: correctness
+defect_class: async-misuse
+inline_tier: warning
+language: ruby
+
+message: "sleep() in test — use synchronisation or polling helpers instead of fixed sleeps"
+
+description: |
+  Fixed sleeps in tests cause flakiness and slow CI. Use explicit
+  synchronisation (Mutex, ConditionVariable) or polling helpers instead.
+
+  ✅ FIX: use wait_for, have_received, or explicit synchronisation primitives.
+
+query: |
+  (call
+    method: (identifier) @METHOD
+    arguments: (argument_list) @ARGS
+    (#eq? @METHOD "sleep")) @CALL
+
+metavars:
+  - METHOD
+  - ARGS
+  - CALL
+
+has_fix: false
+
+tags:
+  - ruby
+  - testing
+  - flakiness
+  - sleep
+
+examples:
+  bad: |
+    it "processes the job" do
+      worker.enqueue(job)
+      sleep 0.5   # fragile!
+      expect(worker.results).to include(job.id)
+    end
+
+  good: |
+    it "processes the job" do
+      worker.enqueue(job)
+      expect { worker.results }.to eventually_include(job.id)
+    end

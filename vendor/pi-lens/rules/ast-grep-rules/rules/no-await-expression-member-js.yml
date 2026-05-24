@@ -1,0 +1,11 @@
+id: no-await-expression-member-js
+language: JavaScript
+severity: hint
+message: "Unnecessary parentheses around await — write await expr.prop directly"
+note: |
+  (await expr).prop can be written as await expr.prop — the parens are redundant.
+  Exception: (await import(...)).prop is the standard dynamic import pattern.
+rule:
+  pattern: "(await $EXPR).$PROP"
+  not:
+    pattern: "(await import($$$ARGS)).$PROP"

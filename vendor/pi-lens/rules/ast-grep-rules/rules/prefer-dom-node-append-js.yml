@@ -1,0 +1,8 @@
+id: prefer-dom-node-append-js
+language: JavaScript
+severity: hint
+message: "Use .append() instead of .appendChild() — accepts multiple nodes and strings"
+note: |
+  .append() is the modern API that accepts DOMStrings and multiple args at once.
+rule:
+  pattern: "$EL.appendChild($CHILD)"

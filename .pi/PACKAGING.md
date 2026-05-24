@@ -6,8 +6,8 @@ Aligned with [pi packages](https://github.com/badlogic/pi-mono/blob/main/package
 
 | Key | Paths | Notes |
 |-----|-------|--------|
-| `extensions` | `.pi/extensions` | TypeScript extensions (loaded by pi) |
-| `skills` | `.agents/skills`, `.pi/skills` | Agent Skills + pi-local skills |
+| `extensions` | `.pi/extensions`, `vendor/pi-lens/index.ts` | TypeScript extensions (loaded by pi) |
+| `skills` | `.agents/skills`, `.pi/skills`, `vendor/pi-lens/skills` | Agent Skills + pi-local skills |
 | `prompts` | `.pi/prompts` | Slash-command prompt templates |
 
 Pi does **not** define `scripts`, `agents`, or `providers` in the manifest.
@@ -20,9 +20,9 @@ Pi does **not** define `scripts`, `agents`, or `providers` in the manifest.
 
 We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts never ship:
 
-- No `.pi/harness/runs/`, local `model-router.json`, or `firecrawl/.env`
+- No `.pi/harness/runs/`, `.pi-lens/` runtime cache, or `firecrawl/.env`
 - Ship `.pi/settings.example.json`, not `.pi/settings.json` (dev checkout uses `".."` local package)
-- Include **`vendor/pi-model-router/`** ([`pi-model-router`](https://github.com/yeliu84/pi-model-router), MIT) — see repo [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md); refresh with `npm run vendor:sync-router`
+- Include **`vendor/pi-lens/`** ([`pi-lens`](https://github.com/apmantza/pi-lens), MIT) — loaded directly from `vendor/pi-lens/index.ts`; Sentrux remains the architecture-quality signal
 - Include **`vendor/pi-vcc/`** ([`pi-vcc`](https://github.com/sting8k/pi-vcc), MIT; inspired by [lllyasviel/VCC](https://github.com/lllyasviel/VCC)) — loaded via `.pi/extensions/ultimate-pi-vcc.ts`; refresh with `npm run vendor:sync-vcc`
 - Include **`vendor/pi-subagents/`** (vendored from [narumiruna/pi-extensions](https://github.com/narumiruna/pi-extensions) `pi-subagents`) — loaded via `.pi/extensions/harness-subagents.ts`; refresh with `npm run vendor:sync-subagents`
 
@@ -37,4 +37,4 @@ We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts n
 
 Runtime pi extensions are regular `dependencies` (installed by `npm install` when pi installs the package). We do **not** use `bundledDependencies`: bundling pre-installs `node_modules` and breaks `npm install -g` / `pi update` for native modules such as `koffi` (empty stub dir, postinstall fails).
 
-`@earendil-works/pi-coding-agent` (and sibling `@earendil-works/pi-ai`, `pi-tui`, `pi-agent-core` used by the vendored router) are provided by the Pi install / hoisted from the peer; ultimate-pi lists the latter three as `devDependencies` for `npm run check:ts`.
+`@earendil-works/pi-coding-agent` (and sibling `@earendil-works/pi-ai`, `pi-tui`, `pi-agent-core` used by bundled extensions and vendored integrations) are provided by the Pi install / hoisted from the peer; ultimate-pi lists the latter three as `devDependencies` for `npm run check:ts`.

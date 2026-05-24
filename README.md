@@ -64,7 +64,7 @@ If `/harness-review` returns `implementation_gap`, run:
 
 | Command | Purpose |
 |---|---|
-| `/harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]` | Idempotent project bootstrap: Graphify, harness-web/Scrapling, CLI tools, settings, contracts, Sentrux, model router, and verification. |
+| `/harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]` | Idempotent project bootstrap: Graphify, harness-web/Scrapling, CLI tools, settings, contracts, Sentrux, pi-lens diagnostics, and verification. |
 | `/harness-auto "<task>" [--quick] [--risk low\|med\|high]` | Strict full pipeline: plan, execute, review, steer when appropriate. |
 | `/harness-plan "<task>" [--risk low\|med\|high] [--quick]` | PM-grade planning: reconnaissance, decomposition, hypothesis, external research, ExecutionPlan, DAG validation, Review Gate debate, `approve_plan`, `create_plan`. |
 | `/harness-run` | Executes the approved active PlanPacket by spawning `harness/running/executor`; no inline implementation. |
@@ -74,7 +74,6 @@ If `/harness-review` returns `implementation_gap`, run:
 | `/harness-trace [--run <id>] [--phase plan\|execute\|evaluate\|adversary\|merge]` | Summarizes run traces and artifact handoffs for replay/forensics. |
 | `/harness-incident --trigger <reason> [--run <id>] [--severity low\|med\|high\|critical]` | Records incident, rollback, and override trail for harness failures. |
 | `/harness-sentrux-steward [--run <id>]` | Ad-hoc architectural intent review for Sentrux manifest/rule alignment. |
-| `/harness-router-tune --evidence <evidence.json> --candidate <candidate-router.json> [--proposal <out.json>]` | Proposes model-router updates from evidence; applies only after explicit approval. |
 | `/graphify [directory]` | Bootstraps or updates the Graphify knowledge graph. |
 | `/wiki-autoresearch [topic]` | Runs autonomous web research and builds a Graphify-backed research wiki. |
 | `/wiki-save` | Saves the current conversation or insight as a structured wiki note. |
@@ -116,8 +115,8 @@ Subagents run isolated from the parent session. They persist canonical YAML thro
 - **No inline execution:** `/harness-run` delegates to `harness/running/executor` only.
 - **No inline review:** `/harness-review` delegates verdicts to isolated reviewing agents.
 - **No auto-merge:** final merge remains a human/operator decision.
-- **Sentrux is observational:** structural baselines and gates inform review; executor does not optimize metrics as a goal.
-- **Router is gated:** `pi-model-router` activates after `/harness-setup` creates `.pi/model-router.json`; run `/reload` after setup or router changes.
+- **Sentrux is the architecture signal:** structural baselines and gates inform review; executor does not optimize metrics as a goal.
+- **pi-lens is edit-time diagnostics:** LSP/lint/format/ast feedback complements Sentrux and does not replace architecture gating.
 
 ## Troubleshooting
 
@@ -129,7 +128,6 @@ Subagents run isolated from the parent session. They persist canonical YAML thro
 | Need to restart safely | Run `/harness-abort [reason]`, then create a fresh plan. |
 | Review says `implementation_gap` | Run `/harness-steer`, then `/harness-review`. |
 | Review says `plan_gap` | Revise with `/harness-plan "<updated task>"`. |
-| Router profile missing | Complete `/harness-setup`, run `/reload`, then check `.pi/model-router.json`. |
 | Sentrux missing | Install/configure Sentrux or keep it skipped; harness verification still reports the status. |
 
 Optional integrations can be configured by copying `.env.example` to `.env`; `/harness-setup` appends missing keys without overwriting existing values.

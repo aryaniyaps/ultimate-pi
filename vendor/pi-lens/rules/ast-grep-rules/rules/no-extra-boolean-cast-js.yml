@@ -1,0 +1,25 @@
+id: no-extra-boolean-cast-js
+language: JavaScript
+message: "Unnecessary double negation '!!' — the value is already coerced in this context"
+severity: warning
+note: |
+  Double negation (!!) is unnecessary in boolean contexts like if statements,
+  ternary conditions, and logical operators where coercion already occurs.
+rule:
+  all:
+    - kind: unary_expression
+      has:
+        field: operator
+        regex: "^!$"
+        has:
+          kind: unary_expression
+          has:
+            field: operator
+            regex: "^!$"
+    - any:
+        - inside:
+            kind: if_statement
+        - inside:
+            kind: while_statement
+        - inside:
+            kind: ternary_expression

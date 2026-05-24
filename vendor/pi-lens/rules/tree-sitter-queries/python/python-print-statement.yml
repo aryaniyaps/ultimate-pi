@@ -1,0 +1,55 @@
+id: python-print-statement
+name: Print Statement in Production
+severity: warning
+category: debugging
+defect_class: safety
+inline_tier: warning
+language: python
+
+message: "print() — remove debug output before committing"
+
+description: |
+  print() calls are for debugging and should not appear in production code.
+  Use a proper logger instead.
+  
+  ✅ FIX: Remove or replace with logging.
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.debug("value: %s", value)
+
+query: |
+  (call
+    function: (identifier) @FUNC
+    (#eq? @FUNC "print")
+    arguments: (argument_list) @ARGS)
+
+metavars:
+  - FUNC
+  - ARGS
+
+post_filter: not_in_test_block
+
+has_fix: true
+fix_action: remove
+
+tags:
+  - debugging
+  - code-quality
+
+examples:
+  bad: |
+    def process(data):
+        print("Processing:", data)
+        result = transform(data)
+        print("Result:", result)
+        return result
+  
+  good: |
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    def process(data):
+        logger.debug("Processing: %s", data)
+        result = transform(data)
+        logger.debug("Result: %s", result)
+        return result

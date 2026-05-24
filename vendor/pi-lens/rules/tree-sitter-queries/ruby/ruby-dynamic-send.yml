@@ -1,0 +1,54 @@
+id: ruby-dynamic-send
+name: Dynamic Method Dispatch via send
+severity: warning
+category: security
+defect_class: injection
+inline_tier: warning
+language: ruby
+
+message: "send() with dynamic method name — can invoke arbitrary methods including private ones"
+
+description: |
+  Ruby's send() and public_send() dispatch to a method named by a string or
+  symbol at runtime. If the method name comes from user input, an attacker can
+  call any method on the object — including private and dangerous ones.
+
+  ✅ FIX: use an explicit allowlist of permitted method names before dispatching.
+
+  ❌ NEVER:
+    obj.send(params[:action])
+
+  ✅ SAFE:
+    ALLOWED = %w[start stop status].freeze
+    raise unless ALLOWED.include?(params[:action])
+    obj.public_send(params[:action])
+
+query: |
+  (call
+    method: (identifier) @METHOD
+    arguments: (argument_list) @ARGS
+    (#match? @METHOD "^(send|public_send)$")) @CALL
+
+metavars:
+  - METHOD
+  - ARGS
+  - CALL
+
+has_fix: false
+
+tags:
+  - ruby
+  - security
+  - injection
+  - metaprogramming
+
+examples:
+  bad: |
+    model.send(params[:action])          # can call anything!
+    user.public_send(request.body[:fn])  # still dangerous
+
+  good: |
+    ALLOWED_ACTIONS = %w[activate deactivate].freeze
+    action = params[:action]
+    raise ArgumentError unless ALLOWED_ACTIONS.include?(action)
+    model.public_send(action)

@@ -1,0 +1,119 @@
+# Deep Nesting
+# Detects functions with 3+ levels of control structure nesting (if/for/while/try)
+id: deep-nesting
+name: Deep Nesting
+severity: warning
+category: complexity
+defect_class: safety
+inline_tier: review
+language: typescript
+
+message: "Deep nesting (3+ levels) — consider early returns or extract functions"
+
+description: |
+  Deeply nested code (if/for/while/try blocks 3+ levels deep) is hard to read and test.
+  Flatten by using early returns (guard clauses) or extracting nested logic.
+
+query: |
+  [
+    ;; Pattern 1: if inside if inside if
+    (statement_block
+      (if_statement
+        consequence: (statement_block
+          (if_statement
+            consequence: (statement_block
+              (if_statement) @IF_NESTED)))))
+    
+    ;; Pattern 2: for inside if inside if
+    (statement_block
+      (if_statement
+        consequence: (statement_block
+          (if_statement
+            consequence: (statement_block
+              (for_statement) @FOR_NESTED)))))
+    
+    ;; Pattern 3: while inside if inside if
+    (statement_block
+      (if_statement
+        consequence: (statement_block
+          (if_statement
+            consequence: (statement_block
+              (while_statement) @WHILE_NESTED)))))
+    
+    ;; Pattern 4: try inside if inside if
+    (statement_block
+      (if_statement
+        consequence: (statement_block
+          (if_statement
+            consequence: (statement_block
+              (try_statement) @TRY_NESTED)))))
+    
+    ;; Pattern 5: if inside for inside if
+    (statement_block
+      (if_statement
+        consequence: (statement_block
+          (for_statement
+            body: (statement_block
+              (if_statement) @IF_IN_FOR)))))
+    
+    ;; Pattern 6: if inside while inside if
+    (statement_block
+      (if_statement
+        consequence: (statement_block
+          (while_statement
+            body: (statement_block
+              (if_statement) @IF_IN_WHILE)))))
+    
+    ;; Pattern 7: for inside for inside for
+    (statement_block
+      (for_statement
+        body: (statement_block
+          (for_statement
+            body: (statement_block
+              (for_statement) @FOR_NESTED)))))
+  ]
+
+metavars:
+  - IF_NESTED
+  - FOR_NESTED
+  - WHILE_NESTED
+  - TRY_NESTED
+  - IF_IN_FOR
+  - IF_IN_WHILE
+
+tags:
+  - complexity
+  - readability
+  - best-practice
+
+examples:
+  bad: |
+    function process(user) {
+      if (user) {
+        if (user.active) {
+          if (user.permissions) {  // 3 levels deep!
+            return doSomething();
+          }
+        }
+      }
+    }
+    
+    function loop(items) {
+      for (const item of items) {
+        if (item.active) {
+          for (const sub of item.subs) {  // 3 levels
+            process(sub);
+          }
+        }
+      }
+    }
+  
+  good: |
+    function process(user) {
+      if (!user) return null;
+      if (!user.active) return null;
+      if (!user.permissions) return null;
+      return doSomething();
+    }
+
+has_fix: false

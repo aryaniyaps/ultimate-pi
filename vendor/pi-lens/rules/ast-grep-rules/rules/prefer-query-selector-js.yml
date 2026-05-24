@@ -1,0 +1,11 @@
+id: prefer-query-selector-js
+language: JavaScript
+severity: hint
+message: "Use document.querySelector() instead of getElementById/getElementsByClassName"
+note: |
+  querySelector/querySelectorAll is the modern unified DOM selection API.
+rule:
+  any:
+    - pattern: "document.getElementById($$$ARGS)"
+    - pattern: "document.getElementsByClassName($$$ARGS)"
+    - pattern: "document.getElementsByTagName($$$ARGS)"

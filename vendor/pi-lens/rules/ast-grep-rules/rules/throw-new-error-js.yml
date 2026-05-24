@@ -1,0 +1,14 @@
+id: throw-new-error-js
+language: JavaScript
+severity: error
+message: "Use new Error() not Error() — explicit construction is clearer"
+note: |
+  throw Error() works by accident. throw new Error() is the correct pattern.
+rule:
+  any:
+    - pattern: "throw Error($$$ARGS)"
+    - pattern: "throw TypeError($$$ARGS)"
+    - pattern: "throw RangeError($$$ARGS)"
+    - pattern: "throw SyntaxError($$$ARGS)"
+    - pattern: "throw URIError($$$ARGS)"
+    - pattern: "throw EvalError($$$ARGS)"

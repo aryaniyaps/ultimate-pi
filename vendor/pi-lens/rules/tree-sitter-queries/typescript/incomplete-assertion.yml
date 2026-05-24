@@ -1,0 +1,50 @@
+# TypeScript Incomplete Assertion
+# Detects expect() chains that are never called (Jest/Vitest style).
+# Chai property assertions (e.g. expect(foo).to.be.true) are excluded.
+id: ts-incomplete-assertion
+name: Incomplete Test Assertion
+severity: error
+category: testing
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "Incomplete assertion — expect() chain is not called"
+
+description: |
+  Jest and Vitest matchers are methods that must be called.
+  `expect(foo).toBe` (without parentheses) or `expect(foo)` (without a
+  matcher) does not actually assert anything. The test will pass silently.
+
+  ✅ FIX: call the matcher: `expect(foo).toBe(true)`
+
+query: |
+  (call_expression
+    function: (identifier) @EXPECT
+    (#eq? @EXPECT "expect")
+    arguments: (arguments)) @EXPR
+
+metavars:
+  - EXPECT
+  - EXPR
+
+post_filter: incomplete_assertion
+
+has_fix: false
+
+tags:
+  - typescript
+  - testing
+  - jest
+  - vitest
+  - assertions
+
+examples:
+  bad: |
+    expect(foo).toBe;        // BAD — matcher not called
+    expect(foo).not.toBe;    // BAD — matcher not called
+    expect(foo);             // BAD — no matcher at all
+
+  good: |
+    expect(foo).toBe(true);  // OK
+    expect(foo).not.toBe(1); // OK

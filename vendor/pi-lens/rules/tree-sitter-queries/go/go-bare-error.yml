@@ -1,0 +1,61 @@
+# Go Error Handling
+# Detects bare error returns without handling
+id: go-bare-error
+name: Bare Error Return
+severity: warning
+category: error-handling
+defect_class: silent-error
+inline_tier: blocking
+language: go
+
+message: "Error returned without handling — check err value"
+
+description: |
+  Returning errors without checking or handling can lead to silent failures.
+  
+  ✅ FIX: Handle the error before returning, or document why it's safe.
+
+query: |
+  [
+    (function_declaration
+      result: (type_identifier) @RET
+      body: (block
+        (return_statement
+          (expression_list
+            (call_expression) @CALL)))
+      (#eq? @RET "error"))
+    (function_declaration
+      result: (parameter_list
+        (parameter_declaration
+          type: (type_identifier) @RET))
+      body: (block
+        (return_statement
+          (expression_list
+            (call_expression) @CALL)))
+      (#eq? @RET "error"))
+  ]
+
+metavars:
+  - RET
+  - CALL
+
+has_fix: false
+
+tags:
+  - go
+  - error-handling
+  - reliability
+
+examples:
+  bad: |
+    func doWork() error {
+        return someOperation()  // Error returned without checking
+    }
+  
+  good: |
+    func doWork() error {
+        if err := someOperation(); err != nil {
+            return fmt.Errorf("work failed: %w", err)
+        }
+        return nil
+    }

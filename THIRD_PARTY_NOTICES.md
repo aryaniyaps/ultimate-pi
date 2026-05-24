@@ -1,11 +1,11 @@
 # Third-party notices
 
-## pi-model-router (vendored)
+## pi-lens (vendored)
 
-- **Project:** https://github.com/yeliu84/pi-model-router  
-- **License:** MIT ([vendor/pi-model-router/LICENSE](vendor/pi-model-router/LICENSE))  
-- **Pinned revision:** See [vendor/pi-model-router/UPSTREAM_PIN.md](vendor/pi-model-router/UPSTREAM_PIN.md)  
-- ultimate-pi loads it from [`vendor/pi-model-router`](vendor/pi-model-router); import specifiers were adapted for `@earendil-works/pi-coding-agent` and related Pi packages.
+- **Project:** https://github.com/apmantza/pi-lens  
+- **License:** MIT (declared in [vendor/pi-lens/package.json](vendor/pi-lens/package.json))  
+- **Pinned revision:** See [vendor/pi-lens/UPSTREAM_PIN.md](vendor/pi-lens/UPSTREAM_PIN.md)  
+- ultimate-pi loads it from [`vendor/pi-lens/index.ts`](vendor/pi-lens/index.ts) as a bundled pi extension. pi-lens provides edit-time diagnostics and LSP/navigation feedback; Sentrux remains the harness architecture-quality signal and gate.
 
 ## pi-vcc (vendored)
 

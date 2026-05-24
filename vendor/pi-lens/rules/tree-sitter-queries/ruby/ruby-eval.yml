@@ -1,0 +1,45 @@
+# Ruby Eval
+# Detects dangerous eval usage
+id: ruby-eval
+name: Dangerous eval() Usage
+severity: warning
+category: security
+defect_class: injection
+inline_tier: blocking
+language: ruby
+
+message: "eval() executes arbitrary code — security risk, avoid if possible"
+
+description: |
+  eval() executes arbitrary code and is a major security vulnerability.
+  Never use eval with user input.
+  
+  ✅ FIX: Use send(), const_get(), or other metaprogramming instead.
+
+query: |
+  (method_call
+    method: (identifier) @METHOD
+    (#eq? @METHOD "eval")
+    arguments: (argument_list) @ARGS)
+
+metavars:
+  - METHOD
+  - ARGS
+
+has_fix: false
+
+tags:
+  - ruby
+  - security
+  - injection
+  - eval
+
+examples:
+  bad: |
+    eval(user_input)  # Code injection!
+    eval("system('rm -rf /')")
+  
+  good: |
+    # Use safer alternatives
+    Object.const_get(class_name)
+    object.send(method_name, args)

@@ -1,0 +1,63 @@
+# Main Should Not Throw
+# Detects main methods that declare throws clause
+id: main-should-not-throw
+name: Main Method Should Not Throw
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "main() should not declare throws — handle exceptions internally"
+
+description: |
+  The main() method should not throw exceptions. Instead, handle
+  exceptions within main and exit with an appropriate status code.
+  Throwing from main leaves error handling to the JVM.
+
+  ✅ FIX: Wrap in try-catch and exit gracefully
+
+  ```java
+  public static void main(String[] args) {
+      try {
+          runApplication(args);
+      } catch (Exception e) {
+          System.err.println("Error: " + e.getMessage());
+          System.exit(1);
+      }
+  }
+  ```
+
+query: |
+  (method_declaration
+    (modifiers
+      "static")
+    name: (identifier) @NAME (#eq? @NAME "main")
+    (throws) @THROWS)
+
+metavars:
+  - NAME
+  - THROWS
+
+tags:
+  - reliability
+  - java
+  - error-handling
+  - entry-point
+
+examples:
+  bad: |
+    public static void main(String[] args) throws Exception {  // BAD
+        runApp(args);
+    }
+
+  good: |
+    public static void main(String[] args) {
+        try {
+            runApp(args);
+        } catch (Exception e) {
+            System.exit(1);  // GOOD - handle in main
+        }
+    }
+
+has_fix: false

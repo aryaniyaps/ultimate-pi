@@ -1,0 +1,54 @@
+# No Console in Tests
+# Allows console.log in production but not in test files/blocks
+id: no-console-in-tests
+name: Console Statement in Test
+severity: warning
+category: testing
+defect_class: safety
+inline_tier: warning
+language: typescript
+
+message: "console.{{METHOD}} in test block — use proper assertions or logging"
+
+description: |
+  Console statements in tests are code smell. Tests should use assertions
+  to verify behavior, not console output. Use proper test utilities instead.
+  
+  ✅ FIX: Convert to assertions or remove.
+
+query: |
+  (call_expression
+    function: (member_expression
+      object: (identifier) @OBJ (#eq? @OBJ "console")
+      property: (property_identifier) @METHOD)
+    arguments: (arguments) @ARGS)
+
+metavars:
+  - OBJ
+  - METHOD
+  - ARGS
+
+post_filter: in_test_block
+
+has_fix: true
+fix_action: remove
+
+tags:
+  - testing
+  - code-quality
+  - no-console
+
+examples:
+  bad: |
+    it('should work', () => {
+      const result = doSomething();
+      console.log(result);  // ← Remove this!
+      expect(result).toBe(true);
+    });
+  
+  good: |
+    it('should work', () => {
+      const result = doSomething();
+      // Use assertion instead
+      expect(result).toBe(true);
+    });

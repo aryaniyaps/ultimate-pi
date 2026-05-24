@@ -1,0 +1,9 @@
+id: no-instanceof-array
+language: TypeScript
+severity: warning
+message: "Use Array.isArray() instead of instanceof Array — fails across realm boundaries"
+note: |
+  instanceof Array returns false for arrays from iframes or vm contexts.
+  Array.isArray() works everywhere.
+rule:
+  pattern: "$OBJ instanceof Array"

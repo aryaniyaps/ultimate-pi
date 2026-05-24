@@ -1,0 +1,71 @@
+# TypeScript Path Traversal
+# Detects fs and path API calls with potentially user-controlled paths.
+id: ts-path-traversal
+name: Path Traversal Risk
+severity: error
+category: security
+defect_class: injection
+inline_tier: blocking
+language: typescript
+
+message: "Potential path traversal sink — avoid filesystem I/O with untrusted input"
+
+description: |
+  File-system APIs (`fs.readFile`, `fs.writeFile`, `path.join`, etc.) are
+  vulnerable when path arguments include untrusted input. An attacker can
+  inject `../` sequences to access files outside the intended directory.
+
+  ✅ FIX: validate and sanitize paths; use allowlists or chroot jails.
+
+query: |
+  (call_expression
+    function: (member_expression
+      object: (identifier) @MOD
+      property: (property_identifier) @FN)
+    arguments: (arguments
+      [(identifier) (member_expression) (template_string) (call_expression) (binary_expression)] @PATH)
+    (#eq? @MOD "fs"))
+  (call_expression
+    function: (member_expression
+      object: (identifier) @MOD
+      property: (property_identifier) @FN)
+    arguments: (arguments
+      [(identifier) (member_expression) (template_string) (call_expression) (binary_expression)] @PATH)
+    (#eq? @MOD "path")
+    (#match? @FN "^(join|resolve)$"))
+  (call_expression
+    function: (member_expression
+      object: (member_expression
+        object: (identifier) @MOD
+        property: (property_identifier) @PROMISES)
+      property: (property_identifier) @FN)
+    arguments: (arguments
+      [(identifier) (member_expression) (template_string) (call_expression) (binary_expression)] @PATH)
+    (#eq? @MOD "fs")
+    (#eq? @PROMISES "promises"))
+
+metavars:
+  - MOD
+  - PROMISES
+  - FN
+  - PATH
+
+post_filter: ts_path_traversal_sink
+
+has_fix: false
+
+tags:
+  - typescript
+  - security
+  - path-traversal
+  - cwe-22
+  - owasp-a01
+
+examples:
+  bad: |
+    fs.readFile(req.query.path);   // BAD — user controls path
+    path.join(baseDir, userFile);  // BAD — user controls segment
+
+  good: |
+    fs.readFile("./safe.txt");     // OK — literal path
+    path.join(baseDir, "static");  // OK — literal segment

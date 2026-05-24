@@ -1,0 +1,57 @@
+id: go-mutex-copy
+name: Mutex Copied by Value
+severity: warning
+category: concurrency
+defect_class: correctness
+inline_tier: blocking
+language: go
+
+message: "sync.Mutex copied by value — copy breaks the lock; use a pointer receiver or embed via pointer"
+
+description: |
+  A sync.Mutex must never be copied after first use. Copying a mutex copies
+  its internal state, so both copies appear unlocked even if the original
+  was locked — leading to data races and deadlocks.
+
+  This fires when a struct containing a Mutex is assigned by value or passed
+  by value to a function.
+
+  ✅ FIX: pass structs containing mutexes by pointer, or use *sync.Mutex.
+
+  ❌ NEVER:
+    type S struct { mu sync.Mutex }
+    func work(s S) { s.mu.Lock() }  // copies the mutex!
+
+  ✅ SAFE:
+    func work(s *S) { s.mu.Lock() }
+
+query: |
+  (short_var_declaration
+    right: (call_expression
+      function: (selector_expression
+        operand: (identifier) @PKG
+        field: (field_identifier) @FN)
+      (#eq? @PKG "sync")
+      (#match? @FN "^(Mutex|RWMutex)$"))) @DECL
+
+metavars:
+  - PKG
+  - FN
+  - DECL
+
+has_fix: false
+
+tags:
+  - go
+  - concurrency
+  - mutex
+  - correctness
+
+examples:
+  bad: |
+    mu := sync.Mutex{}   // value copy if passed to function
+    doWork(mu)           // race condition
+
+  good: |
+    mu := &sync.Mutex{}
+    doWork(mu)

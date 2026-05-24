@@ -1,0 +1,11 @@
+id: prefer-array-some
+language: TypeScript
+severity: warning
+message: "Use .some() instead of .filter().length check — short-circuits at first match"
+note: |
+  arr.filter(fn).length > 0 traverses the entire array. .some(fn) stops early.
+rule:
+  any:
+    - pattern: "$ARR.filter($$$ARGS).length > 0"
+    - pattern: "$ARR.filter($$$ARGS).length !== 0"
+    - pattern: "$ARR.filter($$$ARGS).length >= 1"

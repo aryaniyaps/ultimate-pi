@@ -1,0 +1,58 @@
+# Unnecessary Bit Operations
+# Detects bit operations that have no effect
+id: unnecessary-bit-ops
+name: Unnecessary Bit Operations Should Not Be Performed
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: cpp
+
+message: "Unnecessary bit operation - has no effect"
+
+description: |
+  Operations like (x | 0), (x & -1), (x ^ 0) have no effect.
+  They indicate confusion or incomplete refactoring. Remove them.
+
+  ✅ FIX: Remove unnecessary operation
+
+  ```cpp
+  int y = x;  // GOOD - simplified
+  ```
+
+query: |
+  (binary_expression
+    (identifier) @VAR
+    "|" @OP
+    (number_literal) @ZERO (#eq? @ZERO "0"))
+  (binary_expression
+    (identifier) @VAR
+    "&" @OP
+    (number_literal) @VAL (#match? @VAL "^-?1+$"))
+  (binary_expression
+    (identifier) @VAR
+    "^" @OP
+    (number_literal) @ZERO (#eq? @ZERO "0"))
+
+metavars:
+  - VAR
+  - OP
+  - ZERO
+  - VAL
+
+tags:
+  - maintainability
+  - cpp
+  - suspicious
+
+examples:
+  bad: |
+    int y = x | 0;   // BAD - no effect
+    int z = x & -1;  // BAD - no effect
+    int w = x ^ 0;   // BAD - no effect
+
+  good: |
+    int y = x;       // GOOD - simplified
+
+has_fix: true
+fix_action: remove_bit_operation

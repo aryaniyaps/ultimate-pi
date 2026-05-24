@@ -1,0 +1,21 @@
+id: no-case-declarations-js
+language: JavaScript
+message: "Unexpected lexical declaration in case block — wrap in braces to restrict scope"
+severity: error
+note: |
+  Variables declared with let/const in a case clause are accessible to the
+  entire switch block, which can cause unexpected behavior. Wrap the case
+  body in curly braces {} to create a block scope.
+rule:
+  all:
+    - any:
+        - pattern: let $X = $$$
+        - pattern: const $X = $$$
+    - inside:
+        kind: switch_case
+        stopBy: end
+    - not:
+        inside:
+          kind: statement_block
+          inside:
+            kind: switch_case

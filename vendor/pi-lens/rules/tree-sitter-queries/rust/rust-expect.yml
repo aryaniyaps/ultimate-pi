@@ -1,0 +1,47 @@
+id: rust-expect
+name: Expect Instead of Proper Error Handling
+severity: warning
+category: error-handling
+defect_class: correctness
+inline_tier: warning
+language: rust
+
+message: "expect() panics with a message — use ? or match for recoverable error handling"
+
+description: |
+  expect() is slightly better than unwrap() (gives a message) but still panics
+  on None/Err. In library or server code this crashes the process.
+
+  ✅ FIX: use ? to propagate, or match/if let to handle the case.
+
+  ❌ NEVER:
+    let cfg = std::env::var("PORT").expect("PORT must be set");
+
+  ✅ SAFE:
+    let cfg = std::env::var("PORT").map_err(|_| AppError::MissingEnvVar("PORT"))?;
+
+query: |
+  (call_expression
+    function: (field_expression
+      field: (field_identifier) @METHOD)
+    (#eq? @METHOD "expect"))
+
+metavars:
+  - METHOD
+
+has_fix: false
+
+tags:
+  - rust
+  - panic
+  - error-handling
+  - reliability
+
+examples:
+  bad: |
+    let port = std::env::var("PORT").expect("PORT must be set");
+    let conn = pool.get().expect("failed to get connection");
+
+  good: |
+    let port = std::env::var("PORT")?;
+    let conn = pool.get().map_err(|e| AppError::Pool(e))?;

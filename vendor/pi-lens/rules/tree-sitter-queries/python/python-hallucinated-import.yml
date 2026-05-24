@@ -1,0 +1,58 @@
+# Python Slop Detection
+# Detects cross-framework import confusion — importing names from the wrong package.
+# These are syntactically valid but fail at runtime. Common AI hallucination pattern.
+id: python-hallucinated-import
+name: Hallucinated Import
+severity: warning
+category: correctness
+defect_class: hallucination
+inline_tier: blocking
+language: python
+
+message: "Hallucinated import — '{NAME}' does not exist in '{MODULE}'"
+
+description: |
+  This import is from the wrong package. A name from one framework is being
+  imported from another — a common AI confusion pattern that fails at runtime.
+
+  Common cases:
+  - FastAPI/Starlette confusion (JSONResponse, Depends, Query in wrong package)
+  - dataclasses/typing/pydantic confusion (BaseModel, dataclass)
+  - pytest/unittest confusion (fixture, TestCase)
+  - JavaScript method names on json module (json.parse, json.stringify)
+
+query: |
+  (import_from_statement
+    module_name: (dotted_name) @MODULE
+    name: (dotted_name) @NAME)
+
+metavars:
+  - MODULE
+  - NAME
+
+post_filter: match_captures
+post_filter_params:
+  MODULE: "^(requests|flask|django|typing|collections|asyncio|json|unittest|pytest|urllib|sqlalchemy)$"
+  NAME: "^(JSONResponse|HTMLResponse|RedirectResponse|StreamingResponse|Depends|Query|Path|Body|Header|Cookie|Form|File|UploadFile|FastAPI|APIRouter|HTTPException|BackgroundTasks|dataclass|fields|BaseModel|Field|validator|aiohttp|parse|stringify|fixture|TestCase|get|post|put|delete|Model|Session|Column|Integer|String)$"
+
+has_fix: false
+
+tags:
+  - python
+  - correctness
+  - hallucination
+  - slop
+  - ai-generated
+
+examples:
+  bad: |
+    from requests import JSONResponse
+    from flask import Depends
+    from json import parse
+    from typing import dataclass
+
+  good: |
+    from fastapi.responses import JSONResponse
+    from fastapi import Depends
+    import json; json.loads(data)
+    from dataclasses import dataclass

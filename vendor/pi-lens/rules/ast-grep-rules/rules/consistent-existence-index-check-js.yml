@@ -1,0 +1,15 @@
+id: consistent-existence-index-check-js
+language: JavaScript
+severity: warning
+message: "Use .includes() instead of .indexOf() for existence checks"
+note: |
+  arr.indexOf(x) !== -1 should be arr.includes(x). Clearer intent, same semantics.
+rule:
+  any:
+    - pattern: "$ARR.indexOf($$$ARGS) !== -1"
+    - pattern: "$ARR.indexOf($$$ARGS) != -1"
+    - pattern: "$ARR.indexOf($$$ARGS) >= 0"
+    - pattern: "$ARR.indexOf($$$ARGS) > -1"
+    - pattern: "$ARR.indexOf($$$ARGS) === -1"
+    - pattern: "$ARR.indexOf($$$ARGS) == -1"
+    - pattern: "$ARR.indexOf($$$ARGS) < 0"

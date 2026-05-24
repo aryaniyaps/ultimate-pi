@@ -1,0 +1,54 @@
+# Name Capitalization Conflict
+# Detects methods and fields with same name differing only by case
+id: name-capitalization-conflict
+name: Methods and Field Names Should Not Differ Only By Capitalization
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "'{{NAME}}' differs only by capitalization from existing field/method"
+
+description: |
+  Names differing only by case (value vs Value) are confusing
+  and violate Java naming conventions. Use distinct names.
+
+  ✅ FIX: Use more descriptive distinct names
+
+  ```java
+  private int count;           // field
+  public int getCount() { }    // method - distinct
+  ```
+
+query: |
+  (class_body
+    (field_declaration
+      (variable_declarator
+        name: (identifier) @FIELD) @FDECL)
+    (method_declaration
+      name: (identifier) @METHOD) @MDECL)
+
+metavars:
+  - FIELD
+  - FDECL
+  - METHOD
+  - MDECL
+
+post_filter: differs_only_by_case
+
+tags:
+  - maintainability
+  - java
+  - confusing
+
+examples:
+  bad: |
+    private int value;
+    public int Value() { }  // BAD - differs by case
+
+  good: |
+    private int value;
+    public int getValue() { }  // GOOD - distinct names
+
+has_fix: false

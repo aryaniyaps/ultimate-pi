@@ -1,0 +1,10 @@
+id: prefer-at-js
+language: JavaScript
+severity: hint
+message: "Use .at(-1) instead of [length-1] for last element access"
+note: |
+  arr[arr.length - 1] is verbose. arr.at(-1) is concise and semantically clear.
+rule:
+  any:
+    - pattern: "$ARR[$ARR.length - 1]"
+    - pattern: "$STR[$STR.length - 1]"

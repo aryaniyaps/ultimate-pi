@@ -10,7 +10,7 @@ ultimate-pi depended on the npm package `@sting8k/pi-vcc` for deterministic, vie
 
 ## Decision
 
-1. Vendor [sting8k/pi-vcc](https://github.com/sting8k/pi-vcc) under `vendor/pi-vcc/` (refresh via `npm run vendor:sync-vcc`), following the same pattern as `vendor/pi-model-router`.
+1. Vendor [sting8k/pi-vcc](https://github.com/sting8k/pi-vcc) under `vendor/pi-vcc/` (refresh via `npm run vendor:sync-vcc`), following the pinned-vendor pattern documented in `THIRD_PARTY_NOTICES.md`.
 2. Load compaction through [`.pi/extensions/ultimate-pi-vcc.ts`](../../../extensions/ultimate-pi-vcc.ts).
 3. Remove `@sting8k/pi-vcc` from `package.json` dependencies and from `.pi/settings*.json` `packages` arrays.
 4. **Configuration is env-only** — no JSON config files (`PI_VCC_CONFIG_PATH` and `.pi/pi-vcc-config.json` are not used).

@@ -1,0 +1,14 @@
+id: require-await
+language: TypeScript
+message: "Async function has no 'await' expression — consider removing 'async' keyword"
+severity: warning
+note: |
+  An async function without await does not benefit from being async.
+  Remove the async keyword or add await expressions inside the function.
+rule:
+  all:
+    - pattern: async function $NAME($$$PARAMS) { $$$BODY }
+    - not:
+        has:
+          pattern: await $$$
+          stopBy: end

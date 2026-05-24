@@ -1,0 +1,53 @@
+# Variable Shadowing
+# Detects when a local variable name shadows a function parameter
+id: variable-shadowing
+name: Variable Shadowing
+severity: warning
+category: maintainability
+defect_class: safety
+inline_tier: review
+language: typescript
+
+message: "Variable '{{NAME}}' shadows a parameter — use a distinct name"
+
+description: |
+  Declaring a variable with the same name as a parameter makes it impossible
+  to tell which binding is being used.
+  
+  ✅ FIX: Rename the inner variable to something descriptive.
+
+query: |
+  (function_declaration
+    parameters: (formal_parameters
+      (required_parameter
+        pattern: (identifier) @PARAM))
+    body: (statement_block
+      (lexical_declaration
+        (variable_declarator
+          name: (identifier) @NAME))))
+
+metavars:
+  - PARAM
+  - NAME
+
+post_filter: name_matches_param
+
+has_fix: false
+
+tags:
+  - maintainability
+  - readability
+  - variable-shadowing
+
+examples:
+  bad: |
+    function process(data) {
+      const data = transform(data);  // ← shadows parameter
+      return data;
+    }
+  
+  good: |
+    function process(data) {
+      const transformed = transform(data);
+      return transformed;
+    }

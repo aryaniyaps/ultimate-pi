@@ -9,8 +9,7 @@ description: Structured user decisions via ask_user for harness setup, planning,
 
 - `/harness-setup` — missing project `.env`, other bootstrap forks
 - `/harness-plan` or harness-auto **plan** phase — scope, risk, acceptance ambiguity
-- Orchestrator receives `human_required` from evaluator, adversary, tie-breaker, or meta-optimizer
-- `/harness-router-tune` — approve / reject / edit a router proposal before apply
+- Orchestrator receives `human_required` from evaluator, adversary, or tie-breaker
 
 ## Decision handshake
 

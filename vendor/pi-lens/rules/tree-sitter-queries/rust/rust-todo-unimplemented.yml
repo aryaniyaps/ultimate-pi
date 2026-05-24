@@ -1,0 +1,47 @@
+id: rust-todo-unimplemented
+name: Unfinished Stub Macro
+severity: warning
+category: correctness
+defect_class: correctness
+inline_tier: blocking
+language: rust
+
+message: "todo!() / unimplemented!() stub — function was scaffolded but never completed"
+
+description: |
+  todo!() and unimplemented!() always panic at runtime. They are scaffolding
+  markers that must be replaced before shipping.
+
+  ✅ FIX: implement the function body or return an appropriate error.
+
+query: |
+  (macro_invocation
+    macro: (identifier) @MACRO
+    (#match? @MACRO "^(todo|unimplemented)$")) @CALL
+
+metavars:
+  - MACRO
+  - CALL
+
+has_fix: false
+
+tags:
+  - rust
+  - correctness
+  - stub
+  - panic
+
+examples:
+  bad: |
+    fn process_payment(amount: f64) -> Result<Receipt> {
+        todo!()
+    }
+
+    fn legacy_path() -> bool {
+        unimplemented!()
+    }
+
+  good: |
+    fn process_payment(amount: f64) -> Result<Receipt> {
+        stripe_client.charge(amount).map(Receipt::from)
+    }

@@ -1,0 +1,15 @@
+id: no-open-redirect
+language: TypeScript
+message: "Potential open redirect vulnerability — validate redirect URLs"
+severity: error
+note: |
+  Redirecting to user-supplied URLs without validation can enable phishing
+  attacks. Validate that redirect targets are internal paths or trusted domains.
+rule:
+  any:
+    - pattern: window.location = $URL
+    - pattern: window.location.href = $URL
+    - pattern: window.open($URL, $$$)
+    - pattern: location.href = $URL
+    - pattern: res.redirect($URL)
+    - pattern: response.redirect($URL)

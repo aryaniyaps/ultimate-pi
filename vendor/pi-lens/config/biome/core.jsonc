@@ -1,0 +1,83 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"vcs": {
+		"enabled": false
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error",
+				"noUndeclaredVariables": "warn"
+			},
+			"style": {
+				"useConst": "error",
+				"useTemplate": "error",
+				"noNegationElse": "error",
+				"noNestedTernary": "error",
+				"noParameterAssign": "error",
+				"noNonNullAssertion": "warn",
+				"useBlockStatements": "warn",
+				"useCollapsedElseIf": "warn"
+			},
+			"complexity": {
+				"noForEach": "error",
+				"noExcessiveCognitiveComplexity": {
+					"level": "warn",
+					"options": {
+						"maxAllowedComplexity": 20
+					}
+				},
+				"useOptionalChain": "warn",
+				"noAdjacentSpacesInRegex": "warn"
+			},
+			"performance": {
+				"noAccumulatingSpread": "warn",
+				"noBarrelFile": "warn"
+			},
+			"security": {
+				"noBlankTarget": "error",
+				"noDangerouslySetInnerHtml": "error",
+				"noGlobalEval": "error"
+			},
+			"a11y": {
+				"recommended": true
+			},
+			"suspicious": {
+				"recommended": true,
+				"noDebugger": "error",
+				"noDoubleEquals": "error",
+				"noEmptyInterface": "warn",
+				"noExplicitAny": "warn"
+			},
+			"nursery": {
+				"useSortedClasses": "off"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double",
+			"trailingCommas": "es5",
+			"semicolons": "always"
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.{test,spec}.{ts,tsx,js,jsx}"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noConsole": "off",
+						"noExplicitAny": "off"
+					},
+					"complexity": {
+						"noExcessiveCognitiveComplexity": "off"
+					}
+				}
+			}
+		}
+	]
+}

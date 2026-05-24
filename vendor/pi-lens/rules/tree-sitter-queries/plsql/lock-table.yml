@@ -1,0 +1,42 @@
+# LOCK TABLE
+# Detects LOCK TABLE statements
+id: lock-table
+name: LOCK TABLE Should Not Be Used
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "LOCK TABLE should not be used"
+
+description: |
+  LOCK TABLE can cause deadlocks and concurrency issues. Use
+  SELECT FOR UPDATE for row-level locking instead.
+
+  ✅ FIX: Use SELECT FOR UPDATE
+
+  ```sql
+  SELECT * FROM employees WHERE id = 123 FOR UPDATE;  -- GOOD
+  ```
+
+query: |
+  (lock_statement
+    (lock) @LOCK)
+
+metavars:
+  - LOCK
+
+tags:
+  - maintainability
+  - plsql
+  - bad-practice
+
+examples:
+  bad: |
+    LOCK TABLE employees IN EXCLUSIVE MODE;  -- BAD
+
+  good: |
+    SELECT * FROM employees WHERE id = 123 FOR UPDATE;  -- GOOD
+
+has_fix: false

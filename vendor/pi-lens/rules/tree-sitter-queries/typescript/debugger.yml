@@ -1,0 +1,49 @@
+# Debugger Statement
+# Detects debugger statements left in code
+id: debugger-statement
+name: Debugger Statement
+severity: error
+category: debugging
+defect_class: safety
+inline_tier: blocking
+language: typescript
+
+message: "Debugger statement — remove before committing"
+
+description: |
+  Debugger statements pause execution and should never be committed to production.
+  
+  ✅ FIX: Remove the debugger statement before committing.
+  
+  If you need to debug, use:
+  - console.log() for quick checks
+  - IDE debugger for stepping through
+  - Add breakpoints in dev tools
+
+query: |
+  (debugger_statement) @DEBUGGER
+
+metavars:
+  - DEBUGGER
+
+tags:
+  - debugging
+  - code-quality
+
+examples:
+  bad: |
+    function process() {
+      const x = calculate();
+      debugger;  // ← Remove this!
+      return x;
+    }
+  
+  good: |
+    function process() {
+      const x = calculate();
+      console.log('Debug:', x);  // Or just remove
+      return x;
+    }
+
+has_fix: true
+fix_action: remove

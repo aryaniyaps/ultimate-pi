@@ -1,0 +1,14 @@
+id: no-blank-target-js
+language: JavaScript
+message: "Links with target=\"_blank\" must include rel to prevent opener leaks"
+severity: warning
+metadata:
+  category: security
+rule:
+  all:
+    - pattern: <a $$$PROPS>$$$CHILD</a>
+    - has:
+        pattern: target="_blank"
+    - not:
+        has:
+          pattern: rel=$REL

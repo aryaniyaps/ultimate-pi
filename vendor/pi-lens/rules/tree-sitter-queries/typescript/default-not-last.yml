@@ -1,0 +1,54 @@
+# Default Not Last
+# Detects default clauses that are not last
+id: default-not-last
+name: Default Clauses Should Be Last
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "default clause should be the last case"
+
+description: |
+  The default clause should always be the last case in a switch.
+  Having it before other cases is confusing and may cause bugs.
+
+  ✅ FIX: Move default to the end
+
+  ```typescript
+  switch (x) {
+      case 1: ...
+      default: ...  // GOOD - last
+  }
+  ```
+
+query: |
+  (switch_statement
+    body: (switch_body
+      (switch_default) @DEFAULT
+      (switch_case) @AFTER_CASE))
+
+metavars:
+  - DEFAULT
+  - AFTER_CASE
+
+tags:
+  - maintainability
+  - typescript
+  - confusing
+
+examples:
+  bad: |
+    switch (x) {
+        default: ...  // BAD - not last
+        case 1: ...
+    }
+
+  good: |
+    switch (x) {
+        case 1: ...
+        default: ...  // GOOD - last
+    }
+
+has_fix: false

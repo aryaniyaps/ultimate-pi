@@ -1,0 +1,8 @@
+id: no-unnecessary-array-flat-depth-js
+language: JavaScript
+severity: hint
+message: ".flat(1) is the default depth — just use .flat()"
+note: |
+  Array.flat() defaults to depth 1. Passing 1 explicitly is redundant.
+rule:
+  pattern: "$ARR.flat(1)"

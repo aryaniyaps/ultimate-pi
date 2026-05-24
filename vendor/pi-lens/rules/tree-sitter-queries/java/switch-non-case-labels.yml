@@ -1,0 +1,62 @@
+# Switch Non-Case Labels
+# Detects non-case labels inside switch statements
+id: switch-non-case-labels
+name: Switch Statements Should Not Contain Non-Case Labels
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Non-case labels should not be used inside switch statements"
+
+description: |
+  Using labels (other than case/default) inside switch statements is confusing
+  and can lead to unexpected control flow. This is also a MISRA C rule.
+
+  ✅ FIX: Remove the label or restructure the code
+
+  ```java
+  switch (value) {
+      case 1:
+          process();
+          break;
+      default:
+          handleDefault();
+  }
+  ```
+
+query: |
+  (switch_statement
+    body: (switch_block
+      (labeled_statement
+        (identifier) @LABEL) @LABELED_STMT))
+
+metavars:
+  - LABEL
+  - LABELED_STMT
+
+tags:
+  - reliability
+  - misra
+  - java
+  - control-flow
+
+examples:
+  bad: |
+    switch (x) {
+        case 1:
+            break;
+        myLabel:  // BAD - non-case label in switch
+            doSomething();
+    }
+
+  good: |
+    switch (x) {
+        case 1:
+            break;
+        default:
+            break;  // GOOD - only case/default labels
+    }
+
+has_fix: false

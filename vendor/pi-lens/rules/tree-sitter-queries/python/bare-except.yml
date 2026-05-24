@@ -1,0 +1,56 @@
+# Bare Except Clause
+# Detects bare 'except:' that catches all exceptions including SystemExit
+id: bare-except
+name: Bare Except Clause
+severity: warning
+category: reliability
+defect_class: silent-error
+inline_tier: blocking
+language: python
+
+message: "Bare 'except:' clause — catches SystemExit, KeyboardInterrupt"
+
+description: |
+  Using bare 'except:' catches all exceptions including SystemExit
+  and KeyboardInterrupt, making the code hard to interrupt.
+  
+  ✅ FIX: Use 'except Exception:' or catch specific exceptions
+  
+  ```python
+  try:
+      process()
+  except ValueError as e:  # Specific exception
+      handle_error(e)
+  ```
+
+query: |
+  (except_clause
+    "except") @CLAUSE
+
+metavars:
+  - CLAUSE
+
+# Post-filter: Only match if no identifier follows except (bare except)
+post_filter: bare_except_only
+
+tags:
+  - reliability
+  - best-practice
+  - exceptions
+
+examples:
+  bad: |
+    try:
+        process()
+    except:  # BAD - catches everything
+        pass
+  
+  good: |
+    try:
+        process()
+    except ValueError as e:  # GOOD - specific
+        handle_value_error(e)
+    except Exception as e:  # GOOD - at least Exception
+        logger.error(f"Unexpected: {e}")
+
+has_fix: false
