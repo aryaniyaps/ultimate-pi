@@ -1,0 +1,10 @@
+id: strict-inequality
+language: TypeScript
+message: "Use !== instead of !="
+severity: warning
+note: |
+  != performs type coercion which leads to unexpected comparisons.
+  Use !== for strict inequality checks.
+rule:
+  pattern: $X != $Y
+fix: $X !== $Y

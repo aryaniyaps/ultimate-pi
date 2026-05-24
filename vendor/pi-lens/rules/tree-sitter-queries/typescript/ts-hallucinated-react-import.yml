@@ -1,0 +1,61 @@
+# TypeScript/React Slop Detection
+# Detects Next.js APIs imported from 'react' — a common AI hallucination.
+# These compile fine but fail at runtime with "X is not exported from react".
+id: ts-hallucinated-react-import
+name: Hallucinated React Import
+severity: error
+category: correctness
+defect_class: hallucination
+inline_tier: blocking
+language: typescript
+
+message: "'{NAME}' is a Next.js API, not from 'react' — import from 'next/{CORRECT}' instead"
+
+description: |
+  A Next.js-specific API is being imported from 'react'. This compiles but
+  throws at runtime because react does not export these names.
+
+  Common cases:
+  - useRouter, usePathname, useSearchParams → 'next/navigation'
+  - Link, Image, Script, Head → 'next/link', 'next/image', etc.
+  - getServerSideProps, getStaticProps → page-level exports, not imports
+
+query: |
+  (import_statement
+    (import_clause
+      (named_imports
+        (import_specifier
+          name: (identifier) @NAME)))
+    source: (string) @SRC)
+  (#match? @SRC "^['\"]react['\"]$")
+  (#match? @NAME "^(useRouter|usePathname|useSearchParams|useParams|Link|Image|Script|Head|getServerSideProps|getStaticProps|getStaticPaths|NextPage|NextApiRequest|NextApiResponse|GetServerSideProps|GetStaticProps|GetStaticPaths|notFound|redirect|permanentRedirect)$")
+
+metavars:
+  - NAME
+  - SRC
+
+post_filter: match_captures
+post_filter_params:
+  SRC: "^['\"]react['\"]$"
+  NAME: "^(useRouter|usePathname|useSearchParams|useParams|Link|Image|Script|Head|getServerSideProps|getStaticProps|getStaticPaths|NextPage|NextApiRequest|NextApiResponse|GetServerSideProps|GetStaticProps|GetStaticPaths|notFound|redirect|permanentRedirect)$"
+
+has_fix: false
+
+tags:
+  - typescript
+  - react
+  - nextjs
+  - correctness
+  - hallucination
+  - slop
+  - ai-generated
+
+examples:
+  bad: |
+    import { useRouter, Link, Image } from 'react'
+    import { getServerSideProps } from 'react'
+
+  good: |
+    import { useRouter } from 'next/navigation'
+    import Link from 'next/link'
+    import Image from 'next/image'

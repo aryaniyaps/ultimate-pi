@@ -1,0 +1,9 @@
+id: prefer-structured-clone
+language: TypeScript
+severity: warning
+message: "Use structuredClone() instead of JSON.parse(JSON.stringify()) for deep cloning"
+note: |
+  JSON round-tripping loses undefined, Date objects, and circular refs.
+  structuredClone() handles all of these correctly.
+rule:
+  pattern: "JSON.parse(JSON.stringify($$$ARGS))"

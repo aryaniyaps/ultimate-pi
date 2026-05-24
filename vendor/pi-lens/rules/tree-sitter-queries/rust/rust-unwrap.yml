@@ -1,0 +1,47 @@
+# Rust Unwrap
+# Detects unwrap() calls that can panic
+id: rust-unwrap
+name: Unwrap Instead of Proper Error Handling
+severity: warning
+category: error-handling
+defect_class: correctness
+inline_tier: blocking
+language: rust
+
+message: "unwrap() can panic — use ? or match for proper error handling"
+
+description: |
+  unwrap() causes a panic on None/Err, crashing the program.
+  Use proper error handling instead.
+  
+  ✅ FIX: Use ? operator in functions returning Result/Option,
+  or match to handle the error case.
+
+query: |
+  (call_expression
+    function: (field_expression
+      field: (field_identifier) @METHOD)
+    (#eq? @METHOD "unwrap"))
+
+metavars:
+  - METHOD
+
+has_fix: false
+
+tags:
+  - rust
+  - panic
+  - error-handling
+  - reliability
+
+examples:
+  bad: |
+    let value = some_result.unwrap();  // Can panic!
+    let item = vec.get(0).unwrap();   // Can panic if empty!
+  
+  good: |
+    let value = some_result?;  // Propagate error
+    match vec.get(0) {
+        Some(item) => item,
+        None => return Err("empty".into()),
+    }

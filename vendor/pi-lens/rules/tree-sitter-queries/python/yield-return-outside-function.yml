@@ -1,0 +1,57 @@
+# Yield/Return Outside Function
+# Detects yield and return statements used outside function definitions
+id: yield-return-outside-function
+name: Yield/Return Outside Function
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "{{STATEMENT}} used outside function — syntax error"
+
+description: |
+  'yield' and 'return' statements can only be used inside function definitions.
+  Using them at module level or in class bodies causes a SyntaxError.
+
+  ✅ FIX: Move the statement inside a function or use a different approach
+
+  ```python
+  def generator():
+      yield 1  # Correct - inside function
+
+  def func():
+      return 42  # Correct - inside function
+  ```
+
+query: |
+  (module
+    (expression_statement
+      (yield) @STATEMENT))
+  (module
+    (expression_statement
+      (yield_expression) @STATEMENT))
+  (module
+    (return_statement) @STATEMENT)
+
+metavars:
+  - STATEMENT
+
+tags:
+  - reliability
+  - syntax-error
+  - python-specific
+
+examples:
+  bad: |
+    yield 1  # BAD - outside function
+    return 42  # BAD - outside function
+
+  good: |
+    def gen():
+        yield 1  # GOOD - inside function
+
+    def func():
+        return 42  # GOOD - inside function
+
+has_fix: false

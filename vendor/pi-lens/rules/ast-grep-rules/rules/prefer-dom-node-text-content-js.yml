@@ -1,0 +1,8 @@
+id: prefer-dom-node-text-content-js
+language: JavaScript
+severity: warning
+message: "Use .textContent instead of .innerText — innerText triggers a layout reflow"
+note: |
+  .innerText forces a layout calculation. .textContent is faster for plain text reads.
+rule:
+  pattern: "$EL.innerText"

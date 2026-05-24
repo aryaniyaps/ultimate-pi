@@ -1,0 +1,62 @@
+# Unreachable Except Clause
+# Detects except clauses that can never be reached
+id: unreachable-except
+name: Unreachable Except Clause
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "Unreachable except clause — earlier except catches all"
+
+description: |
+  When a bare 'except' or 'except Exception' comes before specific
+  exception handlers, those specific handlers are never reached.
+  
+  ✅ FIX: Order from specific to general
+  
+  ```python
+  try:
+      process()
+  except ValueError:  # Specific first
+      handle_value_error()
+  except Exception:  # General last
+      handle_general()
+  ```
+
+query: |
+  (try_statement
+    (except_clause
+      "except") @GENERAL
+    (except_clause
+      "except"
+      (identifier) @SPECIFIC))
+
+metavars:
+  - GENERAL
+  - SPECIFIC
+
+tags:
+  - reliability
+  - dead-code
+  - exceptions
+
+examples:
+  bad: |
+    try:
+        process()
+    except:  # BAD - catches everything
+        handle_all()
+    except ValueError:  # UNREACHABLE!
+        handle_value()
+  
+  good: |
+    try:
+        process()
+    except ValueError:  # GOOD - specific first
+        handle_value()
+    except Exception:  # GOOD - general last
+        handle_general()
+
+has_fix: false

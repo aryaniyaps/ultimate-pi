@@ -1,0 +1,56 @@
+# JS/TS Concurrency
+# Detects detached async/suspicious promise calls used as bare statements.
+id: ts-detached-async-call
+name: Detached Async Call
+severity: warning
+category: concurrency
+defect_class: async-misuse
+inline_tier: warning
+language: typescript
+
+message: "Detached async call — ensure this Promise is awaited or explicitly handled"
+
+description: |
+  Bare async calls can drop errors and cause race conditions when results are ignored.
+
+  ✅ FIX: await the call, return the promise, or explicitly handle it with .catch/.then.
+
+query: |
+  (expression_statement
+    (call_expression
+      function: [
+        (identifier) @FN
+        (member_expression
+          property: (property_identifier) @FN)
+      ]
+      arguments: (arguments) @ARGS)
+    (#match? @FN "(Async$|fetch$|request$)"))
+
+metavars:
+  - FN
+  - ARGS
+
+post_filter: ts_detached_async_call
+
+cwe:
+  - CWE-703
+owasp:
+  - A09
+confidence: medium
+
+has_fix: false
+
+tags:
+  - javascript
+  - typescript
+  - concurrency
+  - async
+
+examples:
+  bad: |
+    fetch(url)
+    saveAsync(record)
+
+  good: |
+    await fetch(url)
+    await saveAsync(record)

@@ -71,10 +71,9 @@ graphify-books-out/.graphify_root
 !.pi/harness/incidents/README.md
 .pi/harness/debates/*
 !.pi/harness/debates/README.md
-.pi/harness/router/proposals/*
 
-# Model router config (user-specific — generated from env)
-.pi/model-router.json
+# pi-lens runtime cache and local diagnostics state
+.pi-lens/
 
 # mtime-based, breaks after git clone
 graphify-out/manifest.json

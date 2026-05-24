@@ -1,0 +1,10 @@
+id: no-array-constructor
+language: TypeScript
+message: "Use array literal [] instead of new Array()"
+severity: warning
+note: |
+  Array literal notation [] is more concise and avoids ambiguity with
+  new Array(n) which creates a sparse array of length n.
+rule:
+  pattern: new Array($$$ARGS)
+fix: "[$$$ARGS]"

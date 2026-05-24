@@ -1,0 +1,57 @@
+# No Memset For Sensitive Data
+# Detects memset used to clear sensitive data
+id: no-memset-sensitive-data
+name: memset Should Not Be Used to Delete Sensitive Data
+severity: error
+category: security
+defect_class: security
+inline_tier: blocking
+language: cpp
+
+message: "memset should not be used to delete sensitive data — use SecureZeroMemory or explicit_bzero"
+
+description: |
+  memset can be optimized away by compilers, leaving sensitive data
+  in memory. Use SecureZeroMemory (Windows), explicit_bzero (Linux),
+  or std::fill with volatile for clearing passwords/keys.
+
+  ✅ FIX: Use secure memory clearing functions
+
+  ```cpp
+  #ifdef _WIN32
+  SecureZeroMemory(password, sizeof(password));
+  #else
+  explicit_bzero(password, sizeof(password));
+  #endif
+  ```
+
+query: |
+  (call_expression
+    function: (identifier) @FUNC (#eq? @FUNC "memset")
+    arguments: (argument_list) @ARGS)
+
+metavars:
+  - FUNC
+  - ARGS
+
+post_filter: memset_for_sensitive_data
+
+tags:
+  - security
+  - cpp
+  - cwe
+  - cryptography
+  - memory
+
+examples:
+  bad: |
+    char password[32];
+    // ... use password ...
+    memset(password, 0, sizeof(password));  // BAD - may be optimized away!
+
+  good: |
+    char password[32];
+    // ... use password ...
+    explicit_bzero(password, sizeof(password));  // GOOD - guaranteed clear
+
+has_fix: false

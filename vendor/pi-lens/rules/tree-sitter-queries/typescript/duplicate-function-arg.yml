@@ -1,0 +1,51 @@
+# Duplicate Function Argument
+# Detects duplicate parameter names
+id: duplicate-function-arg
+name: Function Argument Names Should Be Unique
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "Duplicate parameter name '{{NAME}}'"
+
+description: |
+  Duplicate parameter names cause the last one to shadow earlier
+  ones, leading to confusing behavior. Use unique names.
+
+  ✅ FIX: Use unique parameter names
+
+  ```typescript
+  function add(a: number, b: number) { }  // GOOD
+  ```
+
+query: |
+  (function_declaration
+    parameters: (formal_parameters
+      (identifier) @PARAM1
+      (identifier) @PARAM2))
+  (arrow_function
+    parameters: (formal_parameters
+      (identifier) @PARAM1
+      (identifier) @PARAM2))
+
+metavars:
+  - PARAM1
+  - PARAM2
+
+post_filter: same_param_name
+
+tags:
+  - reliability
+  - typescript
+  - bugs
+
+examples:
+  bad: |
+    function add(a, a) { }  // BAD - duplicate
+
+  good: |
+    function add(a, b) { }  // GOOD - unique
+
+has_fix: false

@@ -1,0 +1,49 @@
+# No std::auto_ptr
+# Detects usage of deprecated std::auto_ptr
+id: no-auto-ptr
+name: std::auto_ptr Should Not Be Used
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: cpp
+
+message: "std::auto_ptr should not be used — use std::unique_ptr instead"
+
+description: |
+  std::auto_ptr is deprecated (since C++11) and removed in C++17.
+  It has dangerous copy semantics. Use std::unique_ptr instead.
+
+  ✅ FIX: Replace with std::unique_ptr
+
+  ```cpp
+  std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>();  // GOOD
+  ```
+
+query: |
+  (template_type
+    name: (type_identifier) @NAME (#eq? @NAME "auto_ptr")
+    arguments: (template_argument_list) @ARGS)
+  ((type_identifier) @NAME
+    (#eq? @NAME "auto_ptr"))
+
+metavars:
+  - NAME
+  - ARGS
+
+tags:
+  - reliability
+  - cpp
+  - deprecated
+  - since-cpp11
+  - removed-cpp17
+
+examples:
+  bad: |
+    std::auto_ptr<MyClass> ptr(new MyClass());  // BAD - deprecated
+
+  good: |
+    std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>();  // GOOD
+
+has_fix: true
+fix_action: replace_auto_with_unique_ptr

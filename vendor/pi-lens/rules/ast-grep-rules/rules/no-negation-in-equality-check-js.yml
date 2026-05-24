@@ -1,0 +1,12 @@
+id: no-negation-in-equality-check-js
+language: JavaScript
+severity: error
+message: "Negation before equality check — !a === b evaluates as (!a) === b, not !(a === b)"
+note: |
+  Use !== instead of !a === b. Or write !(a === b) if you meant negated equality.
+rule:
+  any:
+    - pattern: "!$A === $B"
+    - pattern: "!$A !== $B"
+    - pattern: "!$A == $B"
+    - pattern: "!$A != $B"

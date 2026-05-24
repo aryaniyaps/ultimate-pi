@@ -1,0 +1,100 @@
+# XSS DOM Sink Detection
+# Detects dynamic content assigned to dangerous DOM properties/methods.
+id: ts-xss-dom-sink
+name: XSS DOM Sink
+severity: error
+category: security
+defect_class: injection
+inline_tier: blocking
+language: typescript
+
+message: "XSS risk — dynamic value written to innerHTML/outerHTML or document.write()"
+
+description: |
+  Assigning untrusted content to innerHTML or outerHTML, or calling
+  document.write() / document.writeln() with a dynamic value, allows an
+  attacker to inject and execute arbitrary HTML and JavaScript.
+
+  ❌ NEVER:
+  element.innerHTML = userInput;          // XSS — executes injected scripts!
+  element.outerHTML = response.data;      // XSS
+  document.write(req.query.msg);          // XSS
+
+  ✅ SAFE:
+  element.textContent = userInput;        // Escapes all HTML automatically
+  element.innerHTML = DOMPurify.sanitize(userInput);  // Explicit sanitisation
+
+query: |
+  [
+    (assignment_expression
+      left: (member_expression
+        property: (property_identifier) @PROP)
+      right: (identifier) @VALUE
+      (#match? @PROP "^(innerHTML|outerHTML)$"))
+    (assignment_expression
+      left: (member_expression
+        property: (property_identifier) @PROP)
+      right: (member_expression) @VALUE
+      (#match? @PROP "^(innerHTML|outerHTML)$"))
+    (assignment_expression
+      left: (member_expression
+        property: (property_identifier) @PROP)
+      right: (call_expression) @VALUE
+      (#match? @PROP "^(innerHTML|outerHTML)$"))
+    (assignment_expression
+      left: (member_expression
+        property: (property_identifier) @PROP)
+      right: (await_expression) @VALUE
+      (#match? @PROP "^(innerHTML|outerHTML)$"))
+  ]
+  [
+    (call_expression
+      function: (member_expression
+        object: (identifier) @OBJ
+        property: (property_identifier) @FN)
+      arguments: (arguments (identifier) @ARG)
+      (#eq? @OBJ "document")
+      (#match? @FN "^(write|writeln)$"))
+    (call_expression
+      function: (member_expression
+        object: (identifier) @OBJ
+        property: (property_identifier) @FN)
+      arguments: (arguments (member_expression) @ARG)
+      (#eq? @OBJ "document")
+      (#match? @FN "^(write|writeln)$"))
+    (call_expression
+      function: (member_expression
+        object: (identifier) @OBJ
+        property: (property_identifier) @FN)
+      arguments: (arguments (call_expression) @ARG)
+      (#eq? @OBJ "document")
+      (#match? @FN "^(write|writeln)$"))
+  ]
+
+metavars:
+  - PROP
+  - VALUE
+  - OBJ
+  - FN
+  - ARG
+
+has_fix: false
+
+tags:
+  - typescript
+  - javascript
+  - security
+  - xss
+  - cwe-79
+  - owasp-a03
+
+examples:
+  bad: |
+    element.innerHTML = userInput;
+    element.outerHTML = getContent();
+    document.write(req.query.message);
+
+  good: |
+    element.textContent = userInput;
+    element.innerHTML = DOMPurify.sanitize(userInput);
+    document.write("<h1>Static content</h1>");

@@ -1,0 +1,55 @@
+# Infinite Loop TypeScript
+# Detects potentially infinite loops
+id: infinite-loop
+name: Loops Should Not Be Infinite
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "Loop appears to be infinite with no termination condition"
+
+description: |
+  while(true) or for(;;) without break/return creates infinite loops.
+  Ensure there's an exit condition.
+
+  ✅ FIX: Add break condition
+
+  ```typescript
+  while (running) {  // control flag
+      if (shouldStop()) break;
+  }
+  ```
+
+query: |
+  (while_statement
+    condition: (true)
+    body: (statement_block) @BODY)
+  (for_statement
+    condition: (null)
+    body: (statement_block) @BODY)
+
+metavars:
+  - BODY
+
+post_filter: no_break_or_return_in_body
+
+tags:
+  - reliability
+  - typescript
+  - bugs
+
+examples:
+  bad: |
+    while (true) {  // BAD
+        doWork();
+    }
+
+  good: |
+    while (true) {  // GOOD - has exit
+        if (done) break;
+        doWork();
+    }
+
+has_fix: false

@@ -1,0 +1,14 @@
+id: no-this-in-static
+language: TypeScript
+severity: error
+message: "Unexpected this in a static method — static methods have no instance context"
+note: |
+  this in a static method refers to the class constructor, not an instance.
+  Almost always a bug. Use ClassName.prop instead.
+rule:
+  pattern: "this"
+  inside:
+    kind: method_definition
+    stopBy: end
+    has:
+      field: static

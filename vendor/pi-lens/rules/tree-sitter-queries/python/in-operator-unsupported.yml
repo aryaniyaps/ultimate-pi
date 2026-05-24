@@ -1,0 +1,57 @@
+# In Operator on Unsupported Objects
+# Detects 'in' and 'not in' used on objects that don't support containment
+id: in-operator-unsupported
+name: In and Not In Operators Should Be Used on Valid Objects
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: warning
+language: python
+
+message: "'in' operator used on object that may not support containment"
+
+description: |
+  The 'in' and 'not in' operators require objects implementing __contains__,
+  __iter__, or __getitem__. Using them on incompatible types causes TypeError.
+
+  ✅ FIX: Check object type or use appropriate method
+
+  ```python
+  if isinstance(obj, (list, dict, set, str)) and x in obj:
+      pass
+  ```
+
+query: |
+  (comparison_operator
+    (identifier) @OBJ
+    "in"
+    (identifier) @TARGET)
+  (comparison_operator
+    (identifier) @OBJ
+    "not"
+    "in"
+    (identifier) @TARGET)
+
+metavars:
+  - OBJ
+  - TARGET
+
+post_filter: check_in_operator_types
+
+tags:
+  - reliability
+  - python
+  - type-error
+
+examples:
+  bad: |
+    x = 5
+    if x in None:  # BAD - None doesn't support 'in'
+        pass
+
+  good: |
+    items = [1, 2, 3]
+    if x in items:  # GOOD - list supports 'in'
+        pass
+
+has_fix: false

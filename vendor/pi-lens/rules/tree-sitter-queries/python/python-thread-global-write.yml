@@ -1,0 +1,58 @@
+# Python Concurrency
+# Detects thread creation sites where shared state safety should be reviewed.
+id: python-thread-global-write
+name: Threaded Shared State Risk
+severity: warning
+category: concurrency
+defect_class: async-misuse
+inline_tier: warning
+language: python
+
+message: "Thread creation detected — ensure shared state mutations are synchronized"
+
+description: |
+  Creating threads in code paths that touch shared mutable state can introduce races.
+
+  ✅ FIX: guard shared state with Lock/RLock or redesign ownership boundaries.
+
+query: |
+  (call
+    function: (attribute
+      object: (identifier) @MOD
+      attribute: (identifier) @FN)
+    arguments: (argument_list) @ARGS)
+  (#eq? @MOD "threading")
+  (#eq? @FN "Thread")
+
+metavars:
+  - MOD
+  - FN
+  - ARGS
+
+cwe:
+  - CWE-362
+owasp:
+  - A09
+confidence: medium
+
+has_fix: false
+
+tags:
+  - python
+  - concurrency
+  - shared-state
+  - threading
+
+examples:
+  bad: |
+    counter = 0
+    def worker():
+        global counter
+        counter += 1
+    threading.Thread(target=worker).start()
+
+  good: |
+    lock = threading.Lock()
+    def worker():
+        with lock:
+            update_state()

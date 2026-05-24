@@ -1,0 +1,50 @@
+id: go-time-sleep-test
+name: time.Sleep in Test
+severity: warning
+category: correctness
+defect_class: async-misuse
+inline_tier: warning
+language: go
+
+message: "time.Sleep in test — use synchronisation (channel, WaitGroup, Eventually) instead of arbitrary sleeps"
+
+description: |
+  Sleeping in tests introduces timing-dependent flakiness. Fast machines pass,
+  slow CI fails. Use explicit synchronisation instead.
+
+  ✅ FIX: use sync primitives, testify's Eventually, or channel signalling.
+
+query: |
+  (call_expression
+    function: (selector_expression
+      operand: (identifier) @PKG
+      field: (field_identifier) @FN)
+    (#eq? @PKG "time")
+    (#eq? @FN "Sleep")) @CALL
+
+metavars:
+  - PKG
+  - FN
+  - CALL
+
+has_fix: false
+
+tags:
+  - go
+  - testing
+  - flakiness
+  - sleep
+
+examples:
+  bad: |
+    func TestWorker(t *testing.T) {
+        go worker.Start()
+        time.Sleep(100 * time.Millisecond) // fragile
+        assert.True(t, worker.IsReady())
+    }
+
+  good: |
+    func TestWorker(t *testing.T) {
+        go worker.Start()
+        require.Eventually(t, worker.IsReady, time.Second, 10*time.Millisecond)
+    }

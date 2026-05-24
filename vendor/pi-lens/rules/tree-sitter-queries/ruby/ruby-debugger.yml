@@ -1,0 +1,46 @@
+id: ruby-debugger
+name: Debugger Call
+severity: warning
+category: debugging
+defect_class: safety
+inline_tier: blocking
+language: ruby
+
+message: "Debugger call '{{METHOD}}' — remove before committing"
+
+description: |
+  Debugger calls pause execution and must never reach production.
+  
+  ✅ FIX: Remove the debugger call.
+
+query: |
+  (call
+    receiver: (call
+      method: (identifier) @BINDING
+      (#eq? @BINDING "binding"))
+    method: (identifier) @METHOD
+    (#match? @METHOD "^(pry|irb|break)$"))
+
+metavars:
+  - BINDING
+  - METHOD
+
+has_fix: true
+fix_action: remove
+
+tags:
+  - debugging
+  - code-quality
+
+examples:
+  bad: |
+    def process(data)
+      binding.pry     # remove!
+      binding.irb     # remove!
+      transform(data)
+    end
+  
+  good: |
+    def process(data)
+      transform(data)
+    end

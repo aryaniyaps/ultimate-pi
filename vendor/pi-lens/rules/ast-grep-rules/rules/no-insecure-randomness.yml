@@ -1,0 +1,20 @@
+id: no-insecure-randomness
+language: TypeScript
+message: "Math.random() used for security-sensitive operations — use crypto.getRandomValues() instead"
+severity: error
+note: |
+  Math.random() is not cryptographically secure. For tokens, IDs, or
+  any security-sensitive random values, use crypto.getRandomValues()
+  or the Web Crypto API.
+rule:
+  all:
+    - pattern: Math.random()
+    - any:
+        - inside:
+            kind: call_expression
+            has:
+              regex: "(?i)(token|secret|key|nonce|salt|hash|encrypt|uuid|guid|id)"
+        - inside:
+            kind: variable_declarator
+            has:
+              regex: "(?i)(token|secret|key|nonce|salt|hash)"

@@ -1,0 +1,51 @@
+# END LOOP Semicolon
+# Detects END LOOP without following semicolon
+id: end-loop-semicolon
+name: END LOOP Should Be Followed By Semicolon
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "END LOOP should be followed by a semicolon"
+
+description: |
+  The END LOOP keyword must be followed by a semicolon.
+  Missing semicolon causes a syntax error.
+
+  ✅ FIX: Add semicolon after END LOOP
+
+  ```sql
+  LOOP
+      EXIT WHEN condition;
+  END LOOP;  -- GOOD - has semicolon
+  ```
+
+query: |
+  (loop_statement
+    (end_loop) @ENDLOOP)
+
+metavars:
+  - ENDLOOP
+
+post_filter: missing_following_semicolon
+
+tags:
+  - reliability
+  - plsql
+  - syntax
+
+examples:
+  bad: |
+    LOOP
+        EXIT WHEN x > 10;
+    END LOOP  -- BAD - missing semicolon
+
+  good: |
+    LOOP
+        EXIT WHEN x > 10;
+    END LOOP;  -- GOOD
+
+has_fix: true
+fix_action: add_semicolon

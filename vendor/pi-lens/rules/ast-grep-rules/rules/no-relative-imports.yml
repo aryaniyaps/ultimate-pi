@@ -1,0 +1,21 @@
+id: no-relative-cross-package-import
+message: >-
+  Avoid relative imports across package boundaries (../../).
+  Use absolute imports (@app/..., @components/...) for better agent reasoning
+  about code provenance and safer refactors.
+severity: info
+language: typescript
+rule:
+  any:
+    - pattern: import { $$$ } from '../../../$$$'
+    - pattern: import '$$$/../../../$$$'
+    - pattern: import * as $N from '../../../$$$'
+    - pattern: import $N from '../../../$$$'
+note: |
+  Relative imports with 3+ levels (../../../) indicate cross-package imports.
+
+  Before:
+    import { helper } from '../../../utils/helper';
+
+  After:
+    import { helper } from '@/utils/helper';

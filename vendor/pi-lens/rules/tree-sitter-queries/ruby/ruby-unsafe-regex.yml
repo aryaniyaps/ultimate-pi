@@ -1,0 +1,51 @@
+id: ruby-unsafe-regex
+name: Unsafe Dynamic Regex
+severity: warning
+category: security
+defect_class: injection
+inline_tier: blocking
+language: ruby
+
+message: "Regexp.new with variable — ReDoS risk if pattern is user-controlled"
+
+description: |
+  Building regexes from variables can cause ReDoS if user-controlled.
+  A crafted pattern causes catastrophic backtracking.
+  
+  ✅ FIX:
+    safe = Regexp.escape(user_input)
+    Regexp.new(safe)
+    
+    # Or use string methods:
+    content.include?(user_input)
+
+query: |
+  (call
+    receiver: (constant) @RECV
+    method: (identifier) @METH
+    arguments: (argument_list
+      (identifier) @PATTERN)
+    (#eq? @RECV "Regexp")
+    (#eq? @METH "new"))
+
+metavars:
+  - RECV
+  - METH
+  - PATTERN
+
+has_fix: false
+
+tags:
+  - security
+  - regex
+  - redos
+
+examples:
+  bad: |
+    pattern = params[:filter]
+    Regexp.new(pattern)          # ReDoS risk!
+    Regexp.new(user_input, 'i')  # ReDoS risk!
+  
+  good: |
+    safe = Regexp.escape(params[:filter])
+    Regexp.new(safe)

@@ -1,0 +1,49 @@
+id: python-assert-production
+name: Assert in Production Code
+severity: warning
+category: correctness
+defect_class: correctness
+inline_tier: warning
+language: python
+
+message: "assert statement stripped by Python -O flag — use explicit checks with exceptions in production code"
+
+description: |
+  Python removes assert statements when run with the -O (optimize) flag.
+  Any validation relying on assert will silently disappear in optimized builds,
+  allowing invalid state to propagate unchecked.
+
+  ✅ FIX: replace with explicit if/raise for invariants that must hold in production.
+
+  ❌ NEVER:
+    assert user_id is not None, "user_id required"
+
+  ✅ SAFE:
+    if user_id is None:
+        raise ValueError("user_id required")
+
+query: |
+  (assert_statement) @ASSERT
+
+metavars:
+  - ASSERT
+
+has_fix: false
+
+tags:
+  - python
+  - correctness
+  - assert
+  - production
+
+examples:
+  bad: |
+    def process(user_id: int) -> None:
+        assert user_id > 0, "user_id must be positive"  # stripped by -O!
+        db.update(user_id)
+
+  good: |
+    def process(user_id: int) -> None:
+        if user_id <= 0:
+            raise ValueError(f"user_id must be positive, got {user_id}")
+        db.update(user_id)

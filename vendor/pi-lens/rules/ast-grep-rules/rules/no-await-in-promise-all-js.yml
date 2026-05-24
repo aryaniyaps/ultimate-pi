@@ -1,0 +1,20 @@
+id: no-await-in-promise-all-js
+language: JavaScript
+message: "Avoid await inside Promise.all — use Promise.all with an array of promises instead"
+severity: error
+note: |
+  Using await inside Promise.all forces sequential execution instead of
+  parallel. Map to an array of promises and pass to Promise.all.
+  Grade 3.2 — moderate complexity, significant performance gain.
+rule:
+  all:
+    - kind: call_expression
+    - has:
+        field: function
+        regex: "^Promise\\.all$"
+    - has:
+        kind: arguments
+        has:
+          kind: array
+          has:
+            kind: await_expression

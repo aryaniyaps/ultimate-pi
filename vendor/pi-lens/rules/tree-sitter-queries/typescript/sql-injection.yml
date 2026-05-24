@@ -1,0 +1,57 @@
+# SQL Injection Detection
+# Detects unsafe interpolation in SQL-like template literals
+id: sql-injection
+name: SQL Injection Risk
+severity: error
+category: security
+defect_class: injection
+inline_tier: blocking
+language: typescript
+
+message: "SQL injection risk — use parameterized queries, never interpolate into SQL"
+
+description: |
+  Building SQL queries with template literal interpolation is vulnerable to SQL
+  injection. An attacker can craft input that escapes the query and runs arbitrary SQL.
+  
+  ❌ NEVER:
+  db.query(`SELECT * FROM users WHERE id = ${userId}`);
+  db.execute(`UPDATE users SET name = '${req.body.name}'`);
+  
+  ✅ ALWAYS USE PARAMETERIZED QUERIES:
+  db.query('SELECT * FROM users WHERE id = $1', [userId]);
+  
+  Or use an ORM:
+  await User.findOne({ where: { id: userId } });
+
+query: |
+  (call_expression
+    function: [
+      (identifier) @SQL_FUNC
+      (member_expression property: (property_identifier) @SQL_FUNC)
+    ]
+    arguments: (arguments
+      (template_string (template_substitution) @INTERPOLATION))
+    (#match? @SQL_FUNC "^(query|execute|exec|run)$"))
+
+metavars:
+  - SQL_FUNC
+  - INTERPOLATION
+
+has_fix: false
+
+tags:
+  - security
+  - sql-injection
+  - owasp-top-10
+
+examples:
+  bad: |
+    db.query(`SELECT * FROM users WHERE id = ${userId}`);
+    pool.execute(`UPDATE users SET name = '${req.body.name}'`);
+    await connection.run(`DELETE FROM sessions WHERE token = '${token}'`);
+  
+  good: |
+    db.query('SELECT * FROM users WHERE id = $1', [userId]);
+    pool.execute('UPDATE users SET name = ?', [req.body.name]);
+    await User.findOne({ where: { id: userId } });

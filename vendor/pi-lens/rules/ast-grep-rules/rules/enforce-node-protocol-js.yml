@@ -1,0 +1,11 @@
+id: enforce-node-protocol-js
+language: JavaScript
+severity: warning
+message: "Use node: prefix for Node.js built-in module imports"
+note: |
+  import "node:fs" explicitly marks the built-in. Prevents name conflicts with npm packages.
+rule:
+  kind: import_statement
+  has:
+    field: source
+    regex: "^\"(fs|path|os|crypto|buffer|http|https|url|stream|util|zlib|assert|events|child_process|cluster|dgram|dns|readline|tls|tty|v8|vm|worker_threads)\"$"

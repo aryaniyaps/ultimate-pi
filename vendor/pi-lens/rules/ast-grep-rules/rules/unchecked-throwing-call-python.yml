@@ -1,0 +1,48 @@
+id: unchecked-throwing-call-python
+language: Python
+severity: error
+message: "Call without try/except — throws on invalid input or missing file"
+note: |
+  These Python calls raise exceptions that must be handled.
+
+  open():       raises FileNotFoundError, PermissionError, IsADirectoryError
+  json.loads(): raises json.JSONDecodeError on malformed JSON
+  os.stat():    raises FileNotFoundError, PermissionError
+  os.remove():  raises FileNotFoundError, PermissionError
+  int()/float():raises ValueError on non-numeric strings
+
+  ✅ WRAP IN TRY/EXCEPT:
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as e:
+        logger.error("Invalid JSON: %s", e)
+        return None
+
+  ✅ OR USE PATHLIB (cleaner for file checks):
+    from pathlib import Path
+    text = Path(path).read_text()  # still raises — wrap it too
+
+rule:
+  any:
+    - pattern: open($$$)
+    - pattern: json.loads($$$)
+    - pattern: json.load($$$)
+    - pattern: os.stat($$$)
+    - pattern: os.lstat($$$)
+    - pattern: os.remove($$$)
+    - pattern: os.unlink($$$)
+    - pattern: os.rename($$$)
+    - pattern: os.mkdir($$$)
+    - pattern: os.makedirs($$$)
+    - pattern: os.rmdir($$$)
+    - pattern: os.listdir($$$)
+    - pattern: os.access($$$)
+    - pattern: shutil.copy($$$)
+    - pattern: shutil.move($$$)
+    - pattern: shutil.rmtree($$$)
+    - pattern: int($EXPR)
+    - pattern: float($EXPR)
+  not:
+    inside:
+      stopBy: end
+      kind: try_statement

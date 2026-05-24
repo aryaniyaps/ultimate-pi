@@ -1,0 +1,65 @@
+# Case Ranges Should Cover Multiple Values
+# Detects case statements with ranges that only cover single values
+id: case-range-multiple-values
+name: Case Ranges Should Cover Multiple Values
+severity: warning
+category: maintainability
+defect_class: correctness
+inline_tier: warning
+language: c
+
+message: "Case range should cover multiple values"
+
+description: |
+  GCC case ranges (case 1..5:) should cover multiple values.
+  Using ranges for single values is confusing and unnecessary.
+
+  ✅ FIX: Use regular case for single values, ranges for multiple
+
+  ```c
+  switch (value) {
+      case 1:           // Single value - use regular case
+          break;
+      case 10..20:      // Range - multiple values
+          break;
+  }
+  ```
+
+query: |
+  (switch_statement
+    body: (compound_statement
+      (case_statement
+        value: (range_expression
+          (number_literal) @START
+          (number_literal) @END) @RANGE)))
+
+metavars:
+  - START
+  - END
+  - RANGE
+
+post_filter: case_range_single_value
+
+tags:
+  - maintainability
+  - c
+  - gnu
+  - switch
+
+examples:
+  bad: |
+    switch (val) {
+        case 5..5:  // BAD - range with single value
+            break;
+    }
+
+  good: |
+    switch (val) {
+        case 5:  // GOOD - single value
+            break;
+        case 10..20:  // GOOD - actual range
+            break;
+    }
+
+has_fix: true
+fix_action: simplify_single_case_range

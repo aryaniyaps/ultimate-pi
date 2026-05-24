@@ -1,0 +1,12 @@
+id: no-await-in-promise-methods-js
+language: JavaScript
+severity: warning
+message: "Do not await inside Promise.all/allSettled — pass the promises directly"
+note: |
+  Promise.all([await x]) defeats parallelism. Pass the promise: Promise.all([x]).
+rule:
+  any:
+    - pattern: "Promise.all([await $X, $$$REST])"
+    - pattern: "Promise.allSettled([await $X, $$$REST])"
+    - pattern: "Promise.all([await $X])"
+    - pattern: "Promise.allSettled([await $X])"

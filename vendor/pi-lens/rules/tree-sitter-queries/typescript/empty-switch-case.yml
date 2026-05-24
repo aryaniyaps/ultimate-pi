@@ -1,0 +1,54 @@
+# Empty Switch Case
+# Detects empty switch cases
+id: empty-switch-case
+name: Switch Cases Should Not Be Empty
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "Switch case should not be empty"
+
+description: |
+  Empty switch cases are confusing and likely indicate incomplete
+  code. Add handling or remove the case.
+
+  ✅ FIX: Add case body or remove
+
+  ```typescript
+  switch (x) {
+      case 1:
+          handleOne();  // GOOD
+          break;
+  }
+  ```
+
+query: |
+  (switch_statement
+    body: (switch_body
+      (switch_case
+        consequence: (statement_block) @BLOCK)))
+
+metavars:
+  - BLOCK
+
+post_filter: is_empty_block
+
+tags:
+  - reliability
+  - typescript
+  - bugs
+
+examples:
+  bad: |
+    case 1:  // BAD - empty
+    case 2:
+        doWork();
+
+  good: |
+    case 1:
+        handleOne();  // GOOD
+        break;
+
+has_fix: false

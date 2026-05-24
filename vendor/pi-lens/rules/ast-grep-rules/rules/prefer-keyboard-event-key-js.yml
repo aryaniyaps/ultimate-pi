@@ -1,0 +1,10 @@
+id: prefer-keyboard-event-key-js
+language: JavaScript
+severity: warning
+message: "Use event.key instead of event.keyCode/.which — keyCode is deprecated"
+note: |
+  keyCode and which are deprecated. Use the string-based .key property.
+rule:
+  any:
+    - pattern: "$EVT.keyCode"
+    - pattern: "$EVT.which"

@@ -1,0 +1,64 @@
+# Switch Case Termination JavaScript
+# Detects switch cases that don't properly terminate
+id: switch-case-termination-js
+name: Switch Cases Should End With Terminating Statement
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: javascript
+
+message: "Switch case should end with break, return, throw, or continue"
+
+description: |
+  Switch cases that fall through to the next case cause bugs.
+  Each case should end with break, return, throw, or continue.
+  If fall-through is intentional, add a // fallthrough comment.
+
+  ✅ FIX: Add terminating statement
+
+  ```javascript
+  switch (x) {
+      case 1:
+          doSomething();
+          break;  // GOOD
+  }
+  ```
+
+query: |
+  (switch_statement
+    body: (switch_body
+      (switch_case
+        consequence: (statement_block
+          (expression_statement) @LAST))
+      (switch_case) @NEXT))
+
+metavars:
+  - LAST
+  - NEXT
+
+post_filter: no_terminating_statement
+
+tags:
+  - reliability
+  - javascript
+  - bugs
+
+examples:
+  bad: |
+    switch (x) {
+        case 1:
+            doSomething();  // BAD - falls through
+        case 2:
+            break;
+    }
+
+  good: |
+    switch (x) {
+        case 1:
+            return "one";  // GOOD - return terminates
+        case 2:
+            break;
+    }
+
+has_fix: false

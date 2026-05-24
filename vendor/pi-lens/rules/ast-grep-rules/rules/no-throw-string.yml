@@ -1,0 +1,12 @@
+id: no-throw-string
+language: TypeScript
+message: "Throw Error objects, not strings"
+severity: error
+note: |
+  Throwing strings loses stack traces and type information.
+  Use: throw new Error('message')
+rule:
+  all:
+    - kind: throw_statement
+    - has:
+        kind: string

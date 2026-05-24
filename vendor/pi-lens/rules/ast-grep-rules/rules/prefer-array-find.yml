@@ -1,0 +1,10 @@
+id: prefer-array-find
+language: TypeScript
+severity: warning
+message: "Use .find() instead of .filter()[0] — stops at first match"
+note: |
+  .filter() traverses the full array. .find() stops at the first match.
+rule:
+  any:
+    - pattern: "$ARR.filter($$$ARGS)[0]"
+    - pattern: "$ARR.filter($$$ARGS).shift()"

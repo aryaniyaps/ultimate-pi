@@ -1,0 +1,10 @@
+id: prefer-string-starts-ends-with-js
+language: JavaScript
+severity: warning
+message: "Use .startsWith()/.endsWith() instead of indexOf for prefix/suffix checks"
+note: |
+  str.indexOf(sub) === 0 should be str.startsWith(sub). Clearer intent.
+rule:
+  any:
+    - pattern: "$STR.indexOf($SUB) === 0"
+    - pattern: "$STR.indexOf($SUB) == 0"

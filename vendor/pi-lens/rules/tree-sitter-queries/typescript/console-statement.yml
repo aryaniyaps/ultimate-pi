@@ -1,0 +1,48 @@
+# Console Statement
+# Detects console.log and friends (debug leftovers)
+id: console-statement
+name: Console Statement
+severity: warning
+category: debugging
+defect_class: safety
+inline_tier: warning
+language: typescript
+
+message: "{{METHOD}} — remove debug statements before committing"
+
+description: |
+  Console statements are for debugging and should not be in production code.
+  
+  ✅ FIX: Remove or use a proper logging library.
+
+query: |
+  (call_expression
+    function: (member_expression
+      object: (identifier) @OBJ (#eq? @OBJ "console")
+      property: (property_identifier) @METHOD (#not-eq? @METHOD "dbg"))
+    arguments: (arguments) @ARGS)
+
+post_filter: not_in_test_block  # skip test blocks — no-console-in-tests handles that case
+
+metavars:
+  - OBJ
+  - METHOD
+  - ARGS
+
+tags:
+  - debugging
+  - code-quality
+
+examples:
+  bad: |
+    console.log("debug info");
+    console.error("error");
+  
+  good: |
+    // Use a logging library
+    import { logger } from './logger';
+    logger.info("info");
+    logger.error("error");
+
+has_fix: true
+fix_action: remove

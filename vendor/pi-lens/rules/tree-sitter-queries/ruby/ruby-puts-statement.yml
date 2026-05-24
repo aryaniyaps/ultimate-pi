@@ -1,0 +1,54 @@
+id: ruby-puts-statement
+name: Debug Output in Production
+severity: warning
+category: debugging
+defect_class: safety
+inline_tier: warning
+language: ruby
+
+message: "{{METHOD}} — remove debug output before committing"
+
+description: |
+  puts/p/pp are for debugging and should not appear in production code.
+  Use a proper logger instead.
+  
+  ✅ FIX:
+    Rails.logger.debug("value: #{value}")
+    logger.info("Processing complete")
+
+query: |
+  (call
+    method: (identifier) @METHOD
+    (#match? @METHOD "^(puts|p|pp)$")
+    arguments: (argument_list) @ARGS)
+
+metavars:
+  - METHOD
+  - ARGS
+
+post_filter: not_in_test_block
+
+has_fix: true
+fix_action: remove
+
+tags:
+  - debugging
+  - code-quality
+
+examples:
+  bad: |
+    def process(data)
+      puts "Processing: #{data}"
+      p data
+      result = transform(data)
+      pp result
+      result
+    end
+  
+  good: |
+    def process(data)
+      Rails.logger.debug("Processing: #{data}")
+      result = transform(data)
+      Rails.logger.debug("Result: #{result.inspect}")
+      result
+    end

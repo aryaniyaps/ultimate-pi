@@ -1,0 +1,49 @@
+# Go Concurrency
+# Detects goroutines started inside loops with parameterless func literals.
+id: go-goroutine-loop-capture
+name: Goroutine Loop Capture Risk
+severity: warning
+category: concurrency
+defect_class: async-misuse
+inline_tier: warning
+language: go
+
+message: "Goroutine launched in loop with captured variables — pass loop values as parameters"
+
+description: |
+  Launching `go func(){...}()` inside loops can capture changing loop variables.
+
+  ✅ FIX: pass loop variables as explicit function parameters.
+
+query: |
+  (for_statement
+    body: (block
+      (go_statement) @GO))
+
+metavars:
+  - GO
+
+cwe:
+  - CWE-362
+owasp:
+  - A09
+confidence: medium
+
+has_fix: false
+
+tags:
+  - go
+  - concurrency
+  - goroutine
+  - loop-capture
+
+examples:
+  bad: |
+    for _, item := range items {
+        go func() { use(item) }()
+    }
+
+  good: |
+    for _, item := range items {
+        go func(v string) { use(v) }(item)
+    }

@@ -1,0 +1,39 @@
+# COBOL ALTER Statement
+# Detects ALTER statement usage in COBOL
+id: alter-statement
+name: ALTER Should Not Be Used
+severity: warning
+category: maintainability
+defect_class: correctness
+inline_tier: warning
+language: cobol
+
+message: "ALTER should not be used - causes spaghetti code"
+
+description: |
+  ALTER changes paragraph/section execution flow at runtime.
+  This is deprecated and causes unmaintainable spaghetti code.
+
+  ✅ FIX: Restructure to use PERFORM or other control flow
+
+query: |
+  (alter_statement
+    (ALTER) @ALTER)
+
+metavars:
+  - ALTER
+
+tags:
+  - maintainability
+  - cobol
+  - brain-overload
+  - deprecated
+
+examples:
+  bad: |
+    ALTER PARA-1 TO PROCEED TO PARA-2.  -- BAD
+
+  good: |
+    PERFORM PARA-2.  -- GOOD - explicit control flow
+
+has_fix: false

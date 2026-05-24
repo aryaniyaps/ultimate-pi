@@ -1,0 +1,48 @@
+id: python-debugger
+name: Debugger Statement
+severity: warning
+category: debugging
+defect_class: safety
+inline_tier: blocking
+language: python
+
+message: "Debugger call '{{FUNC}}' — remove before committing"
+
+description: |
+  Debugger calls pause execution and must never reach production.
+  
+  ✅ FIX: Remove the debugger call.
+
+query: |
+  (call
+    function: (identifier) @FUNC
+    (#eq? @FUNC "breakpoint"))
+
+  (call
+    function: (attribute
+      object: (identifier) @MOD
+      attribute: (identifier) @FUNC)
+    (#eq? @MOD "pdb")
+    (#match? @FUNC "^(set_trace|post_mortem|pm|run|runcall)$"))
+
+metavars:
+  - FUNC
+  - MOD
+
+has_fix: true
+fix_action: remove
+
+tags:
+  - debugging
+  - code-quality
+
+examples:
+  bad: |
+    def process(data):
+        breakpoint()        # remove!
+        pdb.set_trace()     # remove!
+        return transform(data)
+  
+  good: |
+    def process(data):
+        return transform(data)

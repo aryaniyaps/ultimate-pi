@@ -1,0 +1,57 @@
+# Constructor Super Call Detection
+# Detects derived class constructors that don't call super()
+id: constructor-super
+name: Missing super() call in derived class constructor
+severity: error
+category: correctness
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "Constructor of derived class must call super() before accessing 'this'"
+
+description: |
+  Constructors of derived classes must call super() before accessing 'this'.
+  This is a JavaScript runtime requirement that throws if violated.
+
+query: |
+  (class_declaration
+    (class_heritage
+      (extends_clause) @EXTENDS)
+    body: (class_body
+      (method_definition
+        name: (property_identifier) @CONSTRUCTOR
+        (#eq? @CONSTRUCTOR "constructor")
+        body: (statement_block) @BODY)))
+
+metavars:
+  - EXTENDS
+  - CONSTRUCTOR
+  - BODY
+
+post_filter: "no_super_call"
+post_filter_params: {}
+
+tags:
+  - correctness
+  - javascript
+  - typescript
+  - constructor
+
+examples:
+  bad: |
+    class Derived extends Base {
+      constructor() {
+        this.value = 1; // ERROR: must call super() first
+      }
+    }
+
+  good: |
+    class Derived extends Base {
+      constructor() {
+        super();
+        this.value = 1;
+      }
+    }
+
+has_fix: false

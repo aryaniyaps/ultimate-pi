@@ -1,0 +1,11 @@
+id: no-absolute-path-import-js
+language: JavaScript
+severity: warning
+message: "Absolute import path is not portable — use a relative or aliased path"
+note: |
+  Import paths starting with "/" are environment-specific and break portability.
+rule:
+  kind: import_statement
+  has:
+    field: source
+    regex: "^\"/[^/]"

@@ -1,0 +1,10 @@
+id: no-useless-rest-spread-js
+language: JavaScript
+severity: warning
+message: "Redundant spread into same container type — remove the extra spread"
+note: |
+  [...[a, b]] is just [a, b]. {...{x: 1}} is just {x: 1}. The spread adds noise.
+rule:
+  any:
+    - pattern: "[...[$$$ITEMS]]"
+    - pattern: "{...{$$$PROPS}}"

@@ -1,0 +1,17 @@
+id: long-parameter-list
+language: TypeScript
+message: "Function has many parameters — consider using an options object"
+severity: hint
+note: |
+  Functions with more than 4 parameters are hard to call and remember.
+  Consider grouping related params into an options object or configuration.
+  Grade 2.4 — low complexity, improved API design.
+rule:
+  kind: formal_parameters
+  all:
+    - has:
+        kind: required_parameter
+    - has:
+        nthChild:
+          position: 5
+          ofKind: required_parameter

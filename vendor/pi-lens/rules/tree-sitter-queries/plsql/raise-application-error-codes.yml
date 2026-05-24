@@ -1,0 +1,50 @@
+# RAISE_APPLICATION_ERROR Codes
+# Detects RAISE_APPLICATION_ERROR with invalid error codes
+id: raise-application-error-codes
+name: RAISE_APPLICATION_ERROR Should Use Valid Error Codes
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "RAISE_APPLICATION_ERROR should only be used with error codes from -20000 to -20999"
+
+description: |
+  RAISE_APPLICATION_ERROR should use codes in the -20000 to -20999
+  range (user-defined errors). Other codes may conflict with Oracle
+  reserved error codes.
+
+  ✅ FIX: Use a code in the -20000..-20999 range
+
+  ```sql
+  RAISE_APPLICATION_ERROR(-20001, 'Custom error');  -- GOOD
+  ```
+
+query: |
+  (raise_statement
+    (raise_application_error) @RAISE
+    (argument_list
+      (numeric_literal) @CODE))
+
+metavars:
+  - RAISE
+  - CODE
+
+post_filter: invalid_error_code_range
+
+tags:
+  - reliability
+  - plsql
+  - error-handling
+
+examples:
+  bad: |
+    RAISE_APPLICATION_ERROR(-1, 'Error');  -- BAD - invalid code
+    RAISE_APPLICATION_ERROR(-30000, 'Error');  -- BAD - out of range
+
+  good: |
+    RAISE_APPLICATION_ERROR(-20001, 'Custom error');  -- GOOD
+    RAISE_APPLICATION_ERROR(-20999, 'Another error');  -- GOOD
+
+has_fix: false

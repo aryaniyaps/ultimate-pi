@@ -1,0 +1,46 @@
+# ABAP DELETE Without WHERE
+# Detects DELETE statements without WHERE in ABAP
+id: delete-where
+name: DELETE FROM Should Have WHERE Clause
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: abap
+
+message: "DELETE FROM statement should have a WHERE clause"
+
+description: |
+  DELETE FROM without WHERE deletes ALL rows. Almost always a bug.
+
+  ✅ FIX: Add WHERE clause
+
+  ```abap
+  DELETE FROM employees WHERE id = lv_id.  " GOOD
+  ```
+
+query: |
+  (delete_statement
+    (delete) @DELETE
+    (from_clause)
+    (where_clause)? @WHERE)
+
+metavars:
+  - DELETE
+  - WHERE
+
+post_filter: missing_where
+
+tags:
+  - reliability
+  - abap
+  - data-loss
+
+examples:
+  bad: |
+    DELETE FROM employees.  " BAD
+
+  good: |
+    DELETE FROM employees WHERE id = 123.  " GOOD
+
+has_fix: false

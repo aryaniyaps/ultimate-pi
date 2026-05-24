@@ -1,0 +1,12 @@
+id: prefer-math-min-max
+language: TypeScript
+severity: hint
+message: "Use Math.min()/Math.max() instead of ternary for min/max"
+note: |
+  a > b ? a : b is Math.max(a, b). More readable and intent is clearer.
+rule:
+  any:
+    - pattern: "$A > $B ? $A : $B"
+    - pattern: "$A >= $B ? $A : $B"
+    - pattern: "$A < $B ? $A : $B"
+    - pattern: "$A <= $B ? $A : $B"

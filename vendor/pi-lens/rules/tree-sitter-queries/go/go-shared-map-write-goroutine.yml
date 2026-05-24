@@ -1,0 +1,54 @@
+# Go Concurrency
+# Detects map writes inside goroutines, often indicating unsafe shared mutation.
+id: go-shared-map-write-goroutine
+name: Shared Map Write in Goroutine
+severity: error
+category: concurrency
+defect_class: async-misuse
+inline_tier: blocking
+language: go
+
+message: "Map write inside goroutine may race — guard with synchronization or ownership boundaries"
+
+description: |
+  Native Go maps are not safe for concurrent writes without synchronization.
+
+  ✅ FIX: use sync.Mutex/RWMutex, channels, or sync.Map based on access patterns.
+
+query: |
+  (go_statement
+    expression: (call_expression
+      function: (func_literal
+        body: (block
+          (assignment_statement
+            left: (index_expression) @MAPWRITE
+            right: (_) @VALUE)))
+      arguments: (argument_list) @ARGS))
+
+metavars:
+  - MAPWRITE
+  - VALUE
+  - ARGS
+
+cwe:
+  - CWE-362
+owasp:
+  - A09
+confidence: medium
+
+has_fix: false
+
+tags:
+  - go
+  - concurrency
+  - map
+  - race
+
+examples:
+  bad: |
+    go func() { m[key] = value }()
+
+  good: |
+    mu.Lock()
+    m[key] = value
+    mu.Unlock()

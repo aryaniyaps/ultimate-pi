@@ -1,0 +1,9 @@
+id: prefer-string-raw-js
+language: JavaScript
+severity: hint
+message: "Use String.raw for string literals with many backslashes"
+note: |
+  String.raw`C:\Users\foo` avoids double-escaping backslashes.
+rule:
+  kind: string
+  regex: "\\\\\\\\"

@@ -1,0 +1,60 @@
+# No Thread.Resume or Thread.Suspend
+# Detects usage of deprecated Thread.Resume() and Thread.Suspend()
+id: no-thread-resume-suspend
+name: Thread.Resume and Thread.Suspend Should Not Be Used
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: csharp
+
+message: "{{METHOD}} should not be used — deprecated and causes deadlocks"
+
+description: |
+  Thread.Resume() and Thread.Suspend() are deprecated and dangerous.
+  They can cause deadlocks if the thread holds locks while suspended.
+  Use synchronization primitives like Monitor, Mutex, or Semaphore.
+
+  ✅ FIX: Use proper synchronization primitives
+
+  ```csharp
+  await semaphore.WaitAsync();
+  try {
+      // Work...
+  } finally {
+      semaphore.Release();
+  }
+  ```
+
+query: |
+  (invocation_expression
+    function: (member_access_expression
+      expression: (identifier) @OBJ (#eq? @OBJ "Thread")
+      name: (identifier) @METHOD (#match? @METHOD "^(Resume|Suspend)$")) @CALL)
+
+metavars:
+  - OBJ
+  - METHOD
+  - CALL
+
+tags:
+  - reliability
+  - csharp
+  - multi-threading
+  - deadlock
+  - deprecated
+
+examples:
+  bad: |
+    thread.Suspend();  // BAD - deprecated, deadlock risk
+    // ... work ...
+    thread.Resume();   // BAD
+
+  good: |
+    using (var semaphore = new SemaphoreSlim(1)) {
+        await semaphore.WaitAsync();  // GOOD - proper sync
+        // ... work ...
+        semaphore.Release();
+    }
+
+has_fix: false

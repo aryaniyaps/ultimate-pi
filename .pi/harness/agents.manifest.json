@@ -1,8 +1,8 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.18.0",
-	"generated_at": "2026-05-23T19:00:12.987Z",
+	"package_version": "0.18.1",
+	"generated_at": "2026-05-24T00:00:00.000Z",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -47,10 +47,6 @@
 		"harness/incident-recorder": {
 			"path": ".pi/agents/harness/incident-recorder.md",
 			"sha256": "d42fa45de1a2fe3842d075c6f319315266588942e314f1b650caabac39bdc29a"
-		},
-		"harness/meta-optimizer": {
-			"path": ".pi/agents/harness/meta-optimizer.md",
-			"sha256": "cbaab35367126796b7136389a02ab41b4fd1fe7098cf83be562d7b7493ccc297"
 		},
 		"harness/sentrux-bootstrap": {
 			"path": ".pi/agents/harness/sentrux-bootstrap.md",

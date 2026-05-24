@@ -1,0 +1,15 @@
+id: no-string-ref
+language: TSX
+message: "String refs are deprecated — use useRef callback or forwardRef instead"
+severity: warning
+note: |
+  String refs (ref="myRef") are deprecated in React and may be removed
+  in future versions. Use useRef with a callback or forwardRef.
+rule:
+  kind: jsx_attribute
+  has:
+    field: attribute
+    regex: "^ref$"
+    has:
+      field: value
+      kind: string

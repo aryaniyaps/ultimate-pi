@@ -1,0 +1,49 @@
+# PreparedStatement Valid Indices Kotlin
+# Detects PreparedStatement/ResultSet with invalid indices in Kotlin
+id: prepared-statement-indices
+name: PreparedStatement Methods Should Use Valid Indices
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: kotlin
+
+message: "PreparedStatement/ResultSet methods should use valid indices (1-based)"
+
+description: |
+  JDBC uses 1-based indices, not 0-based. Using 0 causes SQLException.
+
+  ✅ FIX: Use 1-based indices
+
+  ```kotlin
+  stmt.setString(1, value)  // GOOD - index 1
+  ```
+
+query: |
+  (call_expression
+    (simple_identifier) @METHOD (#match? @METHOD "^(setString|setInt|setLong|getString|getInt|getLong)$")
+    (value_arguments
+      (integer_literal) @INDEX) @ARGS)
+
+metavars:
+  - METHOD
+  - INDEX
+  - ARGS
+
+post_filter: invalid_jdbc_index
+
+tags:
+  - reliability
+  - kotlin
+  - sql
+  - jdbc
+
+examples:
+  bad: |
+    stmt.setString(0, value)  // BAD - 0-based
+
+  good: |
+    stmt.setString(1, value)  // GOOD - 1-based
+
+has_fix: true
+fix_action: increment_index

@@ -1,0 +1,58 @@
+# Infinite Recursion
+# Detects recursive methods without base case
+id: infinite-recursion
+name: Recursion Should Not Be Infinite
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Method '{{NAME}}' appears to recurse without termination condition"
+
+description: |
+  Recursive methods must have a termination condition (base case).
+  Without one, they cause StackOverflowError.
+
+  ✅ FIX: Add base case condition
+
+  ```java
+  int factorial(int n) {
+      if (n <= 1) return 1;  // GOOD - base case
+      return n * factorial(n - 1);
+  }
+  ```
+
+query: |
+  (method_declaration
+    name: (identifier) @NAME
+    body: (block
+      (return_statement
+        (method_invocation
+          name: (identifier) @RECURSE) @CALL)))
+
+metavars:
+  - NAME
+  - RECURSE
+  - CALL
+
+post_filter: same_method_no_base_case
+
+tags:
+  - reliability
+  - java
+  - bugs
+
+examples:
+  bad: |
+    void process() {
+        process();  // BAD - infinite recursion
+    }
+
+  good: |
+    void process(int n) {
+        if (n <= 0) return;  // GOOD - base case
+        process(n - 1);
+    }
+
+has_fix: false

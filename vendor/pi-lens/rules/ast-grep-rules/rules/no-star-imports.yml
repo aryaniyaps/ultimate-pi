@@ -1,0 +1,11 @@
+id: no-star-imports
+language: Python
+message: "Avoid wildcard imports — import specific names instead"
+severity: warning
+note: |
+  Wildcard imports (from module import *) pollute the namespace and make
+  it unclear where names come from. Import only what you need explicitly.
+rule:
+  kind: import_from_statement
+  has:
+    kind: wildcard_import

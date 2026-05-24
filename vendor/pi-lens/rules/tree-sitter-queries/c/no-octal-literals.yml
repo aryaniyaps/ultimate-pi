@@ -1,0 +1,46 @@
+# S1314 / M23_035: Octal values should not be used
+id: no-octal-literals
+name: Octal Values Should Not Be Used
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: c
+
+message: "octal literal detected — use decimal or hexadecimal instead"
+
+description: |
+  Octal literals (leading zero) are easily confused with decimal literals.
+  A typo like `012` instead of `12` can cause subtle bugs.
+
+  ✅ FIX: Remove the leading zero or use 0x prefix for hex
+
+  ```c
+  int mode = 12;    // GOOD - decimal
+  int flags = 0xA;  // GOOD - hex
+  ```
+
+query: |
+  (number_literal) @NUM
+
+metavars:
+  - NUM
+
+post_filter: c_octal_literal
+
+tags:
+  - maintainability
+  - c
+  - misra
+  - pitfall
+
+examples:
+  bad: |
+    int x = 010;   // BAD - octal (value 8)
+    int y = 007;   // BAD - octal (value 7)
+
+  good: |
+    int x = 10;    // GOOD - decimal
+    int y = 0x10;  // GOOD - hex
+
+has_fix: false

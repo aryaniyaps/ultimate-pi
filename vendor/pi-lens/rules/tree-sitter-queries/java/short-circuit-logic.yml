@@ -1,0 +1,57 @@
+# Short Circuit Logic
+# Detects non-short-circuit operators in boolean contexts
+id: short-circuit-logic
+name: Short-Circuit Logic Should Be Used in Boolean Contexts
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Use '{{OP}}' instead of '{{BAD_OP}}' for short-circuit evaluation"
+
+description: |
+  Use && and || for boolean logic (short-circuit). & and | are
+  bitwise operators that evaluate both sides, causing unnecessary
+  computation and potential errors.
+
+  ✅ FIX: Use && or ||
+
+  ```java
+  if (obj != null && obj.isValid()) {  // GOOD - short-circuit
+  ```
+
+query: |
+  (binary_expression
+    (identifier) @LEFT
+    "&" @BAD_OP
+    (identifier) @RIGHT)
+  (binary_expression
+    (identifier) @LEFT
+    "|" @BAD_OP
+    (identifier) @RIGHT)
+
+metavars:
+  - LEFT
+  - BAD_OP
+  - RIGHT
+
+post_filter: boolean_operands
+
+tags:
+  - maintainability
+  - java
+  - cert
+  - performance
+
+examples:
+  bad: |
+    if (a & b) { }  // BAD - bitwise AND
+    if (x | y) { }  // BAD - bitwise OR
+
+  good: |
+    if (a && b) { }  // GOOD - short-circuit
+    if (x || y) { }  // GOOD - short-circuit
+
+has_fix: true
+fix_action: replace_with_short_circuit

@@ -1,0 +1,54 @@
+# NoSQL Injection Detection
+# Detects MongoDB $where operator usage, which executes arbitrary JS server-side (S5147).
+id: ts-nosql-injection
+name: NoSQL Injection
+severity: error
+category: security
+defect_class: injection
+inline_tier: blocking
+language: typescript
+
+message: "NoSQL injection — $where executes JavaScript server-side and must never be used with user input"
+
+description: |
+  The MongoDB $where operator runs a JavaScript expression on the server.
+  Any use of $where is dangerous: with dynamic values it is directly
+  injectable; even with static strings it exposes a JS execution surface.
+
+  Use field equality operators instead — they are safe and faster.
+
+  ❌ NEVER:
+  db.users.find({ $where: `this.name === '${name}'` })
+  collection.find({ "$where": "this.credits > 0 && code == '" + input + "'" })
+
+  ✅ SAFE:
+  db.users.find({ name: name })
+  collection.find({ credits: { $gt: 0 }, code: input })
+
+query: |
+  (pair
+    key: [(property_identifier) (string)] @KEY
+    (#match? @KEY "\\$where"))
+
+metavars:
+  - KEY
+
+has_fix: false
+
+tags:
+  - typescript
+  - javascript
+  - security
+  - nosql
+  - injection
+  - cwe-943
+  - owasp-a03
+
+examples:
+  bad: |
+    db.users.find({ $where: `this.password === '${userPassword}'` })
+    collection.find({ "$where": "this.credits > 0 && this.code == '" + input + "'" })
+
+  good: |
+    db.users.find({ password: userPassword })
+    collection.find({ credits: { $gt: 0 }, code: input })

@@ -1,0 +1,52 @@
+# No Exit or Die
+# Detects exit() and die() statements in PHP
+id: no-exit-die
+name: Exit and Die Should Not Be Used
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: php
+
+message: "{{FUNC}}() should not be used — use exceptions for error handling"
+
+description: |
+  exit() and die() abruptly terminate script execution and make
+  code hard to test and reuse. Use exceptions for proper error handling.
+
+  ✅ FIX: Throw an exception instead
+
+  ```php
+  if ($invalid) {
+      throw new InvalidArgumentException("Invalid input");
+  }
+  ```
+
+query: |
+  (function_call_expression
+    function: (name) @FUNC
+    (#match? @FUNC "^(exit|die)$"))
+
+metavars:
+  - FUNC
+
+tags:
+  - reliability
+  - php
+  - error-handling
+  - testing
+
+examples:
+  bad: |
+    if ($error) {
+        exit(1);  // BAD - abrupt termination
+    }
+
+    die("Error occurred");  // BAD
+
+  good: |
+    if ($error) {
+        throw new RuntimeException("Error occurred");  // GOOD
+    }
+
+has_fix: false

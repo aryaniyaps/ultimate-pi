@@ -13,13 +13,12 @@ data/
 
 # Dev-only under .pi (explicit files allowlist is primary; these are backups)
 .pi/settings.json
-.pi/model-router.json
 .pi/prompts/release.md
 .pi/harness/runs/
 .pi/harness/debates/
 .pi/harness/incidents/
-.pi/harness/router/
 .pi/harness/release-readiness-report.md
+.pi-lens/
 .pi/harness/browser.json
 .pi/npm/node_modules/
 

@@ -1,0 +1,57 @@
+# Resources Closed
+# Detects resources that should be closed (pre-Java 7 style)
+id: resources-closed
+name: Resources Should Be Closed
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Resource '{{RESOURCE}}' should be closed in finally block"
+
+description: |
+  Resources like streams, connections, and files must be closed
+  to prevent leaks. Use try-with-resources (Java 7+) or close()
+  in finally block.
+
+  ✅ FIX: Use try-with-resources
+
+  ```java
+  try (InputStream in = new FileInputStream(file)) {  // GOOD
+      // use stream
+  }  // auto-closed
+  ```
+
+query: |
+  (local_variable_declaration
+    type: (type_identifier) @TYPE (#match? @TYPE "^(InputStream|OutputStream|Connection|Statement|ResultSet|Socket|Reader|Writer)$")
+    (variable_declarator
+      name: (identifier) @RESOURCE) @DECL)
+
+metavars:
+  - TYPE
+  - RESOURCE
+  - DECL
+
+post_filter: not_closed_or_try_with_resources
+
+tags:
+  - reliability
+  - java
+  - leak
+  - cert
+
+examples:
+  bad: |
+    InputStream in = new FileInputStream(file);  // BAD - not closed
+    // use stream
+    // missing in.close() or try-with-resources
+
+  good: |
+    try (InputStream in = new FileInputStream(file)) {  // GOOD
+        // use stream
+    }
+
+has_fix: true
+fix_action: wrap_try_with_resources

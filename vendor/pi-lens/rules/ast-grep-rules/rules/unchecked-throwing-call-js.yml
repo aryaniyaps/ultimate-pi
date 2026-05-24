@@ -1,0 +1,29 @@
+id: unchecked-throwing-call-js
+language: JavaScript
+severity: error
+message: "$CALL without try/catch — throws on invalid input"
+note: |
+  These calls throw on malformed input and should always be wrapped.
+
+  JSON.parse: throws SyntaxError on invalid JSON
+  new URL():  throws TypeError on invalid URL string
+  execSync(): throws on non-zero exit code
+
+  ✅ WRAP IN TRY/CATCH:
+    try {
+      const data = JSON.parse(raw);
+    } catch (err) {
+      console.error('Invalid JSON:', err);
+      return null;
+    }
+
+rule:
+  any:
+    - pattern: JSON.parse($INPUT)
+    - pattern: new URL($URL)
+    - pattern: execSync($CMD)
+    - pattern: execSync($CMD, $OPTS)
+  not:
+    inside:
+      stopBy: end
+      kind: try_statement

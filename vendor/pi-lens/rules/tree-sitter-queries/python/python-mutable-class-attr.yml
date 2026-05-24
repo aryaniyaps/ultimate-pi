@@ -1,0 +1,59 @@
+id: python-mutable-class-attr
+name: Mutable Class Attribute
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "Class attribute '{{VARNAME}}' is mutable — shared across all instances"
+
+description: |
+  Mutable class-level attributes (list, dict, set) are shared across every instance.
+  Modifying them on one instance modifies ALL instances.
+  
+  ❌ BUG:
+    class Node:
+        children = []  # shared! Node().children is Node().children
+  
+  ✅ FIX: Initialise in __init__:
+    class Node:
+        def __init__(self):
+            self.children = []
+
+query: |
+  (class_definition
+    body: (block
+      (expression_statement
+        (assignment
+          left: (identifier) @VARNAME
+          right: [
+            (list) @VALUE
+            (dictionary) @VALUE
+            (set) @VALUE
+          ]))))
+
+metavars:
+  - VARNAME
+  - VALUE
+
+post_filter: not_in_function
+
+has_fix: false
+
+tags:
+  - reliability
+  - oop
+  - shared-state
+
+examples:
+  bad: |
+    class Node:
+        children = []   # all Node instances share one list
+        metadata = {}   # all Node instances share one dict
+  
+  good: |
+    class Node:
+        def __init__(self):
+            self.children = []
+            self.metadata = {}

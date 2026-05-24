@@ -1,0 +1,41 @@
+id: rust-unsafe-block
+name: Unsafe Block
+severity: warning
+category: security
+defect_class: memory-safety
+inline_tier: warning
+language: rust
+
+message: "unsafe block — requires manual verification of memory safety invariants"
+
+description: |
+  unsafe blocks opt out of Rust's memory safety guarantees. Every unsafe block
+  must be manually audited to ensure:
+  - No undefined behaviour
+  - Invariants are upheld across the FFI boundary
+  - Lifetimes and aliasing rules are respected
+
+  ✅ FIX: prefer safe abstractions; document every unsafe block with a
+  // SAFETY: comment explaining why the invariants hold.
+
+query: |
+  (unsafe_block) @BLOCK
+
+metavars:
+  - BLOCK
+
+has_fix: false
+
+tags:
+  - rust
+  - security
+  - memory-safety
+  - unsafe
+
+examples:
+  bad: |
+    let val = unsafe { *raw_ptr };
+
+  good: |
+    // SAFETY: raw_ptr is guaranteed non-null and aligned by the C caller contract.
+    let val = unsafe { *raw_ptr };

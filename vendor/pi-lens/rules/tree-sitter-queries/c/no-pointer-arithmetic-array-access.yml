@@ -1,0 +1,50 @@
+# S3729: Array indices should be placed between brackets
+id: no-pointer-arithmetic-array-access
+name: Array Indices Should Use Bracket Notation
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: c
+
+message: "use array bracket notation instead of pointer arithmetic for indexing"
+
+description: |
+  `*(arr + i)` is equivalent to `arr[i]` but less clear. Bracket notation
+  makes the intent obvious and is the idiomatic form in C.
+
+  ✅ FIX: Replace with bracket notation
+
+  ```c
+  int val = arr[3];  // GOOD - clear intent
+  ```
+
+query: |
+  (pointer_expression
+    "*"
+    (parenthesized_expression
+      (binary_expression
+        (_) @ARRAY
+        "+"
+        (_) @INDEX))) @EXPR
+
+metavars:
+  - ARRAY
+  - INDEX
+  - EXPR
+
+tags:
+  - maintainability
+  - c
+  - pitfall
+  - readability
+
+examples:
+  bad: |
+    int val = *(arr + 3);  // BAD - unclear
+
+  good: |
+    int val = arr[3];      // GOOD - idiomatic
+
+has_fix: true
+fix_action: convert_to_bracket_notation

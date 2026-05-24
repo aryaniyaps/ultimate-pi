@@ -1,0 +1,47 @@
+# No SYNCHRONIZE
+# Detects SYNCHRONIZE statement usage
+id: no-synchronize
+name: SYNCHRONIZE Should Not Be Used
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "SYNCHRONIZE should not be used"
+
+description: |
+  The SYNCHRONIZE statement forces buffer writes and is rarely needed.
+  It impacts performance and should be avoided. Oracle handles
+  buffer management automatically.
+
+  ✅ FIX: Remove SYNCHRONIZE, let Oracle manage buffers
+
+  ```sql
+  -- Let Oracle handle synchronization automatically
+  COMMIT;  -- GOOD - proper transaction control
+  ```
+
+query: |
+  (synchronize_statement
+    (synchronize) @SYNC)
+
+metavars:
+  - SYNC
+
+tags:
+  - reliability
+  - plsql
+  - performance
+
+examples:
+  bad: |
+    INSERT INTO log VALUES (msg);
+    SYNCHRONIZE;  -- BAD - unnecessary
+
+  good: |
+    INSERT INTO log VALUES (msg);
+    COMMIT;  -- GOOD - proper transaction control
+
+has_fix: true
+fix_action: remove_synchronize

@@ -1,0 +1,14 @@
+id: jwt-no-verify
+language: TypeScript
+message: "Unsafe JWT operation — verification is bypassed"
+severity: error
+note: |
+  Bypassing JWT verification allows attackers to forge tokens.
+  - For 'jwt-simple': avoid { noVerify: true }.
+  - For 'jsonwebtoken': avoid { ignoreExpiration: true } or using .decode() for untrusted tokens.
+  Grade 3.8 — high risk, critical security issue.
+rule:
+  any:
+    - pattern: "jwt.decode($$$, { noVerify: true })"
+    - pattern: "jwt.verify($$$, { ignoreExpiration: true, $$$ })"
+    - pattern: "jwt.verify($$$, { ignoreNotBefore: true, $$$ })"

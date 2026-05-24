@@ -1,0 +1,57 @@
+id: ruby-string-eval
+name: eval/class_eval/instance_eval with String
+severity: warning
+category: security
+defect_class: injection
+inline_tier: blocking
+language: ruby
+
+message: "eval/class_eval/instance_eval with string argument — arbitrary code execution risk"
+
+description: |
+  Passing a string to eval, class_eval, or instance_eval executes it as Ruby
+  code at runtime. If the string contains any user-controlled input, this is
+  a remote code execution vulnerability.
+
+  ✅ FIX: use block form of class_eval/instance_eval, or restructure to avoid
+  dynamic code generation entirely.
+
+  ❌ NEVER:
+    eval(params[:code])
+    klass.class_eval("def #{method_name}; #{body}; end")
+
+  ✅ SAFE:
+    klass.class_eval do
+      define_method(method_name) { body_proc.call }
+    end
+
+query: |
+  (call
+    method: (identifier) @METHOD
+    arguments: (argument_list
+      [(string) (interpolated_string)] @ARG)
+    (#match? @METHOD "^(eval|class_eval|module_eval|instance_eval)$")) @CALL
+
+metavars:
+  - METHOD
+  - ARG
+  - CALL
+
+has_fix: false
+
+tags:
+  - ruby
+  - security
+  - eval
+  - code-injection
+  - cwe-95
+
+examples:
+  bad: |
+    eval(user_input)
+    User.class_eval("def #{attr}; @#{attr}; end")
+
+  good: |
+    User.class_eval do
+      define_method(attr) { instance_variable_get(:"@#{attr}") }
+    end

@@ -1,0 +1,49 @@
+# S978: Reserved identifiers should not be defined or declared
+id: no-reserved-identifiers
+name: Reserved Identifiers Should Not Be Defined
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: c
+
+message: "identifier {{NAME}} uses a reserved namespace — identifiers beginning with '_' + uppercase or '__' are reserved by the implementation"
+
+description: |
+  The C standard reserves all identifiers that begin with an underscore
+  followed by an uppercase letter or another underscore. Using them can
+  cause conflicts with compiler/runtime internals.
+
+  ✅ FIX: Rename without leading underscore(s)
+
+  ```c
+  int my_buffer_size = 1024;  // GOOD
+  ```
+
+query: |
+  [
+    (identifier) @NAME (#match? @NAME "^_[A-Z_]")
+    (field_identifier) @NAME (#match? @NAME "^_[A-Z_]")
+    (type_identifier) @NAME (#match? @NAME "^_[A-Z_]")
+  ]
+
+metavars:
+  - NAME
+
+tags:
+  - maintainability
+  - c
+  - bad-practice
+  - portability
+
+examples:
+  bad: |
+    int _MyVar = 1;       // BAD - _ + uppercase
+    int __internal = 2;   // BAD - double underscore
+
+  good: |
+    int myVar = 1;        // GOOD
+    int internal = 2;     // GOOD
+
+has_fix: true
+fix_action: rename_identifier

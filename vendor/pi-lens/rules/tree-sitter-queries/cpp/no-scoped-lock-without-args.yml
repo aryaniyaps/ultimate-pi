@@ -1,0 +1,52 @@
+# std::scoped_lock With Constructor Args
+# Detects std::scoped_lock created without constructor arguments
+id: no-scoped-lock-without-args
+name: std::scoped_lock Should Be Created With Constructor Arguments
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: cpp
+
+message: "std::scoped_lock should be created with constructor arguments"
+
+description: |
+  std::scoped_lock is designed to lock multiple mutexes atomically.
+  Creating one without arguments serves no purpose and is likely a bug.
+
+  ✅ FIX: Pass mutexes to the constructor
+
+  ```cpp
+  std::mutex m1, m2;
+  std::scoped_lock lock(m1, m2);  // GOOD - locks both
+  ```
+
+query: |
+  (declaration
+    type: (template_type
+      name: (type_identifier) @TYPE (#eq? @TYPE "scoped_lock"))
+    declarator: (init_declarator
+      initializer: (argument_list) @ARGS))
+
+metavars:
+  - TYPE
+  - ARGS
+
+post_filter: scoped_lock_empty_args
+
+tags:
+  - reliability
+  - cpp
+  - since-cpp17
+  - mutex
+  - concurrency
+
+examples:
+  bad: |
+    std::scoped_lock lock;  // BAD - no mutexes to lock!
+
+  good: |
+    std::mutex mtx;
+    std::scoped_lock lock(mtx);  // GOOD - locks mutex
+
+has_fix: false

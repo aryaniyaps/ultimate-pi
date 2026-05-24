@@ -1,0 +1,50 @@
+# Ruby Open Struct
+# Detects OpenStruct usage (performance and debugging issues)
+id: ruby-open-struct
+name: OpenStruct Usage
+severity: warning
+category: best-practices
+defect_class: safety
+inline_tier: warning
+language: ruby
+
+message: "OpenStruct is slow and makes debugging hard — use a plain class or Struct"
+
+description: |
+  OpenStruct is convenient but has poor performance and hides method
+  definitions from static analysis. Prefer Struct or plain classes.
+  
+  ✅ FIX: Use Struct.new or a plain class with attr_accessor.
+
+query: |
+  (call_expression
+    receiver: (constant) @RECV
+    (#eq? @RECV "OpenStruct")
+    method: (identifier) @METHOD
+    (#eq? @METHOD "new"))
+
+metavars:
+  - RECV
+  - METHOD
+
+has_fix: false
+
+tags:
+  - ruby
+  - performance
+  - maintainability
+
+examples:
+  bad: |
+    person = OpenStruct.new(name: "Ada", age: 30)
+    person.name  # Slow, hidden method definition
+  
+  good: |
+    Person = Struct.new(:name, :age)
+    person = Person.new("Ada", 30)
+    person.name  # Fast, explicit method
+    
+    # Or plain class
+    class Person
+      attr_accessor :name, :age
+    end

@@ -1,0 +1,57 @@
+# S3491: Redundant pointer operator sequences should be removed
+id: no-redundant-pointer-ops
+name: Redundant Pointer Operator Sequences
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: c
+
+message: "redundant pointer operator sequence — simplify by removing canceling operators"
+
+description: |
+  Sequences like `*&x` or `&*p` are no-ops and reduce readability.
+  They should be simplified to just the underlying expression.
+
+  ✅ FIX: Remove the canceling operators
+
+  ```c
+  int y = x;   // instead of *&x
+  int *q = p;  // instead of &*p
+  ```
+
+query: |
+  [
+    (pointer_expression
+      "*"
+      (pointer_expression
+        "&"
+        (_) @VAR)) @EXPR
+    (pointer_expression
+      "&"
+      (pointer_expression
+        "*"
+        (_) @VAR)) @EXPR
+  ]
+
+metavars:
+  - VAR
+  - EXPR
+
+tags:
+  - maintainability
+  - c
+  - suspicious
+  - readability
+
+examples:
+  bad: |
+    int y = *&x;   // BAD - cancels out
+    int *q = &*p;  // BAD - cancels out
+
+  good: |
+    int y = x;     // GOOD
+    int *q = p;    // GOOD
+
+has_fix: true
+fix_action: simplify_pointer_ops

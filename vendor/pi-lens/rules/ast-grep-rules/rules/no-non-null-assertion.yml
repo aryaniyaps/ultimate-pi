@@ -1,0 +1,14 @@
+id: no-non-null-assertion
+language: TypeScript
+message: "Non-null assertion '!' used — prefer explicit null checks or optional chaining"
+severity: warning
+note: |
+  The ! operator bypasses TypeScript's null checking which can lead to
+  runtime errors. Use optional chaining (?.), nullish coalescing (??),
+  or explicit null checks instead.
+rule:
+  pattern: $X!
+  not:
+    any:
+      - kind: function_type
+      - kind: method_signature

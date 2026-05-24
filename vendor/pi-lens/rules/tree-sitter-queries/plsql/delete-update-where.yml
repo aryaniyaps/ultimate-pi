@@ -1,0 +1,56 @@
+# DELETE and UPDATE Without WHERE
+# Detects DELETE and UPDATE statements without WHERE clauses in PL/SQL
+id: delete-update-where
+name: DELETE and UPDATE Should Contain WHERE Clauses
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: plsql
+
+message: "{{STATEMENT}} statement should contain a WHERE clause"
+
+description: |
+  DELETE and UPDATE without WHERE clauses affect ALL rows in the table.
+  This is almost always a bug and can cause data loss.
+
+  ✅ FIX: Add a WHERE clause to limit affected rows
+
+  ```sql
+  DELETE FROM employees WHERE id = emp_id;  -- GOOD
+  UPDATE employees SET status = 'inactive' WHERE id = emp_id;  -- GOOD
+  ```
+
+query: |
+  (delete_statement
+    (delete) @DELETE
+    (from_clause)
+    (where_clause)? @WHERE)
+  (update_statement
+    (update) @UPDATE
+    (table_reference)
+    (where_clause)? @WHERE)
+
+metavars:
+  - DELETE
+  - UPDATE
+  - WHERE
+
+post_filter: missing_where_clause
+
+tags:
+  - reliability
+  - plsql
+  - sql
+  - data-loss
+
+examples:
+  bad: |
+    DELETE FROM employees;  -- BAD - deletes all rows!
+    UPDATE employees SET salary = 0;  -- BAD - updates all rows!
+
+  good: |
+    DELETE FROM employees WHERE id = 123;  -- GOOD
+    UPDATE employees SET salary = 0 WHERE department = 'TEMP';  -- GOOD
+
+has_fix: false

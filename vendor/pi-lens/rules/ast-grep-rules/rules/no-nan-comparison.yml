@@ -1,0 +1,22 @@
+id: no-nan-comparison
+language: TypeScript
+severity: error
+message: "x === NaN is always false — use Number.isNaN(x)"
+note: |
+  NaN is the only value not equal to itself: NaN !== NaN by spec.
+  Comparing with === or == always returns false, silently.
+
+  ✅ FIX:
+    Number.isNaN(x)       // strict: only true for NaN
+    isNaN(x)              // loose: also true for NaN-coercible values
+
+rule:
+  any:
+    - pattern: $X === NaN
+    - pattern: NaN === $X
+    - pattern: $X !== NaN
+    - pattern: NaN !== $X
+    - pattern: $X == NaN
+    - pattern: NaN == $X
+    - pattern: $X != NaN
+    - pattern: NaN != $X

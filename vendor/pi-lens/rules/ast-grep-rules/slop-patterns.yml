@@ -1,0 +1,478 @@
+---
+# DISABLED: This rule produces false positives for legitimate index-based operations
+# (e.g., matrix calculations, line number tracking)
+# id: ts-for-index-length
+# language: typescript
+# severity: warning
+# message: for (let i = 0; i < arr.length; i++) suggests index juggling; prefer for-of or forEach
+# metadata:
+#   weight: 3
+#   category: slop
+# rule:
+#   kind: for_statement
+#   pattern: "for (let $I = 0; $I < $ARR.length; $I++) { $$$ }"
+---
+id: ts-while-index-length
+language: typescript
+severity: warning
+message: while loop with index < length - consider for-of or array methods
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: while_statement
+  pattern: "while ($I < $ARR.length) { $$$ }"
+---
+# DISABLED: Complex block patterns don't match with current ast-grep-napi runner
+# Requires implementation support for multi-statement patterns with blocks
+# Consider migrating to tree-sitter for better structural matching
+# id: ts-manual-min-max
+# language: typescript
+# severity: warning
+# message: Manual min/max logic - use Math.min() or Math.max()
+# metadata:
+#   weight: 3
+#   category: slop
+# rule:
+#   any:
+#   # Pattern for MAX: if (a > b) result = a else result = b
+#   - pattern: "if ($A > $B) { $M = $A; } else { $M = $B; }"
+#   # Pattern for MIN: if (a < b) result = a else result = b  
+#   - pattern: "if ($A < $B) { $M = $A; } else { $M = $B; }"
+#   # Pattern for MAX (reversed): if (a < b) result = b else result = a
+#   - pattern: "if ($A < $B) { $M = $B; } else { $M = $A; }"
+#   # Pattern for MIN (reversed): if (a > b) result = b else result = a
+#   - pattern: "if ($A > $B) { $M = $B; } else { $M = $A; }"
+# ---
+id: ts-array-map-ceremony
+language: typescript
+severity: warning
+message: Array.from(arr) or arr.map(x => x) is unnecessary ceremony - use arr directly
+metadata:
+  weight: 2
+  category: slop
+rule:
+  any:
+  - kind: call_expression
+    pattern: "Array.from($ARR)"
+    not:
+      has:
+        kind: arguments
+  - kind: arrow_function
+    pattern: "$ARR.map(x => x)"
+---
+id: ts-boolean-return-if-else
+language: typescript
+severity: warning
+message: if/else returning true/false - simplify to return the condition directly
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: if_statement
+  any:
+  - pattern: "if ($COND) { return true; } else { return false; }"
+  - pattern: "if ($COND) { return false; } else { return true; }"
+---
+id: ts-json-stringify-parse
+language: typescript
+severity: warning
+message: JSON.parse(JSON.stringify(x)) is noisy; use structuredClone or copy properly
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: call_expression
+  pattern: "JSON.parse(JSON.stringify($X))"
+---
+id: ts-pointless-bool-cast
+language: typescript
+severity: warning
+message: Wrapping a condition in Boolean() is redundant ceremony
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: if_statement
+  pattern: "if (Boolean($COND)) { $$$ }"
+---
+id: ts-double-negation
+language: typescript
+severity: warning
+message: !!value to coerce boolean - use Boolean(value) or truthiness directly
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: unary_expression
+  pattern: "!!$X"
+---
+id: ts-unnecessary-array-concat
+language: typescript
+severity: warning
+message: arr.concat([item]) in loop - use arr.push(item) or spread [...arr, item]
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: for_statement
+  has:
+    kind: block
+    has:
+      kind: expression_statement
+      has:
+        kind: call_expression
+        pattern: "$ARR.concat([$ITEM])"
+---
+id: ts-defensive-null-guard
+language: typescript
+severity: warning
+message: if (x === null || x === undefined) return null - overly defensive early guard
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: if_statement
+  any:
+  - pattern: "if ($X === null || $X === undefined) { return null; }"
+  - pattern: "if ($X == null) { return null; }"
+---
+# DISABLED: Duplicate of prefer-optional-chain.yml which has more comprehensive patterns
+# id: ts-optional-chain-opportunity
+# language: typescript
+# severity: warning
+# message: obj && obj.prop && obj.prop.nested - use optional chaining obj?.prop?.nested
+# metadata:
+#   weight: 3
+#   category: slop
+# rule:
+#   kind: binary_expression
+#   pattern: "$A && $A.$B && $A.$B.$C"
+# ---
+id: ts-explicit-undefined-check
+language: typescript
+severity: warning
+message: typeof x === 'undefined' - use x === undefined or check truthiness
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: binary_expression
+  pattern: "typeof $X === 'undefined'"
+---
+id: ts-array-length-check
+language: typescript
+severity: warning
+message: arr.length > 0 - use truthiness if (arr) or arr.length
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: binary_expression
+  any:
+  - pattern: "$ARR.length > 0"
+  - pattern: "$ARR.length !== 0"
+  - pattern: "$ARR.length >= 1"
+---
+id: ts-unnecessary-array-from
+language: typescript
+severity: warning
+message: Array.from(iterable) in for-of - iterate directly
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: for_of_statement
+  has:
+    kind: call_expression
+    pattern: "Array.from($ITER)"
+---
+id: ts-redundant-filter-map
+language: typescript
+severity: warning
+message: arr.filter(x => x).map(...) - use flatMap or a single pass
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: call_expression
+  pattern: "$ARR.filter($F).map($G)"
+---
+# DISABLED: Pattern doesn't match with current ast-grep-napi runner
+# The AST representation of boolean literals differs from string patterns
+# id: ts-unnecessary-ternary-boolean
+# language: typescript
+# severity: warning
+# message: cond ? true : false - use Boolean(cond) or cond directly
+# metadata:
+#   weight: 2
+#   category: slop
+# rule:
+#   any:
+#     - pattern: "$COND ? true : false"
+#     - pattern: "$COND ? false : true"
+# ---
+id: ts-typeof-equality
+language: typescript
+severity: warning
+message: typeof x === 'string' checks - consider instanceof or proper type guards
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: binary_expression
+  pattern: "typeof $X === '$TYPE'"
+---
+id: ts-manual-array-contains
+language: typescript
+severity: warning
+message: arr.indexOf(x) !== -1 - use arr.includes(x)
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: binary_expression
+  pattern: "$ARR.indexOf($X) !== -1"
+---
+id: ts-slice-copy
+language: typescript
+severity: warning
+message: arr.slice() to copy - use [...arr] spread
+metadata:
+  weight: 2
+  category: slop
+rule:
+  pattern: "$ARR.slice()"
+  not:
+    pattern: "$ARR.slice($START)"
+---
+# DISABLED: nthChild is unsupported - need to rewrite without it
+# id: ts-parseint-no-radix
+# language: typescript
+# severity: warning
+# message: parseInt(x) without radix - use parseInt(x, 10)
+# metadata:
+#   weight: 2
+#   category: slop
+# rule:
+#   kind: call_expression
+#   all:
+#   - has:
+#       kind: identifier
+#       regex: ^parseInt$
+#   - has:
+#       kind: arguments
+#       not:
+#         has:
+#           nthChild:
+#             position: 2
+# ---
+# Rewritten rule using pattern matching instead of nthChild:
+id: ts-parseint-no-radix
+language: typescript
+severity: warning
+message: parseInt(x) without radix - use parseInt(x, 10)
+metadata:
+  weight: 2
+  category: slop
+rule:
+  pattern: "parseInt($X)"
+  not:
+    pattern: "parseInt($X, $RADIX)"
+---
+id: ts-isnan-check
+language: typescript
+severity: warning
+message: x !== x to check NaN - use Number.isNaN(x)
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: binary_expression
+  pattern: "$X !== $X"
+---
+id: ts-void-zero
+language: typescript
+severity: warning
+message: void 0 for undefined - use undefined directly
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: unary_expression
+  pattern: "void 0"
+---
+id: ts-function-constructor
+language: typescript
+severity: warning
+message: new Function() - avoid dynamic code evaluation
+metadata:
+  weight: 4
+  category: slop
+rule:
+  kind: new_expression
+  has:
+    kind: identifier
+    regex: ^Function$
+---
+id: ts-unnecessary-bind
+language: typescript
+severity: warning
+message: fn.bind(this) in arrow function context - arrow functions capture this lexically
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: call_expression
+  pattern: "$FN.bind(this)"
+---
+# DISABLED: Debatable value - arr.length === 0 is often clearer than !arr.length
+# id: ts-empty-array-check
+# language: typescript
+# severity: warning
+# message: arr.length === 0 - use !arr.length or arr.length (truthiness)
+# metadata:
+#   weight: 2
+#   category: slop
+# rule:
+#   kind: binary_expression
+#   pattern: "$ARR.length === 0"
+# ---
+id: ts-array-every-some
+language: typescript
+severity: warning
+message: arr.map(x => x.prop).every(Boolean) - use arr.every(x => !!x.prop)
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: call_expression
+  pattern: "$ARR.map($FN).every(Boolean)"
+---
+id: ts-string-split-index
+language: typescript
+severity: warning
+message: str.split('.')[1] with magic index - use destructuring or named variables
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: element_access_expression
+  all:
+  - has:
+      kind: call_expression
+      has:
+        kind: property_access_expression
+        regex: \.split$
+  - has:
+      kind: number
+      regex: ^[1-9][0-9]*$
+---
+id: ts-unnecessary-else-return
+language: typescript
+severity: warning
+message: else after return - the else block is redundant
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: if_statement
+  all:
+  - has:
+      kind: block
+      has:
+        kind: return_statement
+  - has:
+      kind: else_clause
+---
+id: ts-object-hasown-check
+language: typescript
+severity: warning
+message: obj.hasOwnProperty(key) - use Object.hasOwn(obj, key) or Object.prototype.hasOwnProperty.call
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: call_expression
+  has:
+    kind: property_access_expression
+    regex: \.hasOwnProperty$
+---
+id: ts-delete-property
+language: typescript
+severity: warning
+message: delete obj.prop - consider setting to undefined or restructuring instead
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: unary_expression
+  pattern: "delete $OBJ.$PROP"
+---
+id: ts-in-operator-loop
+language: typescript
+severity: warning
+message: for (const key in obj) - use Object.keys/entries/values for safer iteration
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: for_in_statement
+  not:
+    has:
+      kind: if_statement
+      has:
+        kind: call_expression
+        pattern: "obj.hasOwnProperty(key)"
+---
+id: ts-array-concat-spread
+language: typescript
+severity: warning
+message: arr.concat([...items]) - use arr.push(...items) or [...arr, ...items]
+metadata:
+  weight: 2
+  category: slop
+rule:
+  kind: call_expression
+  pattern: "$ARR.concat([...$ITEMS])"
+---
+# DISABLED: This rule has false positives - matches files without Array.isArray()
+# id: ts-unnecessary-array-isarray
+# language: typescript
+# severity: warning
+# message: Array.isArray(arr) check when already known to be array - redundant type check
+# metadata:
+#   weight: 2
+#   category: slop
+# rule:
+#   kind: call_expression
+#   pattern: "Array.isArray($X)"
+#   inside:
+#     kind: if_statement
+#     follows:
+#       kind: expression_statement
+#       has:
+#         kind: call_expression
+#         pattern: "$X.push"
+---
+id: ts-nullish-coalescing-opportunity
+language: typescript
+severity: warning
+message: x !== null && x !== undefined ? x : default - use x ?? default
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: conditional_expression
+  pattern: "$X !== null && $X !== undefined ? $X : $DEFAULT"
+---
+id: ts-optional-chaining-default
+language: typescript
+severity: warning
+message: obj && obj.prop ? obj.prop : default - use obj?.prop ?? default
+metadata:
+  weight: 3
+  category: slop
+rule:
+  kind: conditional_expression
+  pattern: "$OBJ && $OBJ.$PROP ? $OBJ.$PROP : $DEFAULT"

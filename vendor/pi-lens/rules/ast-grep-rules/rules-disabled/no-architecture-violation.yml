@@ -1,0 +1,21 @@
+# TEMPLATE RULE — disabled by default.
+#
+# This rule enforces layer boundary imports for projects that use the
+# models/database/prisma directory structure. It will produce false positives
+# on projects that don't use this exact layout.
+#
+# To enable: copy to your project's .pi-lens/ast-grep-rules/rules/ directory
+# and adjust the import paths to match your architecture.
+#
+# id: no-architecture-violation
+# language: TypeScript
+# message: "Forbidden import — layer boundary violation"
+# severity: warning
+# rule:
+#   any:
+#     - pattern: import { $$$ } from "../models/$_"
+#     - pattern: import { $$$ } from "../../models/$_"
+#     - pattern: import { $$$ } from "../database/$_"
+#     - pattern: import { $$$ } from "../../database/$_"
+#     - pattern: import { $$$ } from "../prisma/$_"
+#     - pattern: import { $$$ } from "../../prisma/$_"

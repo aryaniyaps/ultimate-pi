@@ -1,0 +1,26 @@
+id: no-ellipsis-body
+language: Python
+severity: warning
+message: "Bare ellipsis body — function was scaffolded but never completed"
+note: |
+  Replace the ellipsis with the actual implementation.
+rule:
+  any:
+    - kind: function_definition
+      has:
+        field: body
+        kind: block
+        has:
+          kind: expression_statement
+          has:
+            kind: ellipsis
+    - kind: decorated_definition
+      has:
+        kind: function_definition
+        has:
+          field: body
+          kind: block
+          has:
+            kind: expression_statement
+            has:
+              kind: ellipsis

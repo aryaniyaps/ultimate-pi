@@ -1,0 +1,66 @@
+# Mockito Initialized
+# Detects annotated Mockito objects that may not be initialized
+id: mockito-initialized
+name: Annotated Mockito Objects Should Be Initialized
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "@Mock/@InjectMocks object should be initialized with MockitoAnnotations.openMocks()"
+
+description: |
+  @Mock, @Spy, @Captor, @InjectMocks fields must be initialized
+  before use. Call MockitoAnnotations.openMocks(this) in @Before
+  or use MockitoJUnitRunner.
+
+  ✅ FIX: Add initialization in @Before method
+
+  ```java
+  @Before
+  public void setUp() {
+      MockitoAnnotations.openMocks(this);  // GOOD
+  }
+  ```
+
+query: |
+  (field_declaration
+    (modifiers
+      (annotation
+        name: (identifier) @ANNOT (#match? @ANNOT "^(Mock|Spy|Captor|InjectMocks)$")))
+    (variable_declarator
+      name: (identifier) @FIELD))
+
+metavars:
+  - ANNOT
+  - FIELD
+
+post_filter: missing_mockito_init
+
+tags:
+  - reliability
+  - java
+  - mockito
+  - testing
+
+examples:
+  bad: |
+    @Mock
+    private Service service;  // BAD - not initialized
+
+    @Test
+    public void test() {
+        service.doSomething();  // NullPointerException!
+    }
+
+  good: |
+    @Mock
+    private Service service;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);  // GOOD
+    }
+
+has_fix: false

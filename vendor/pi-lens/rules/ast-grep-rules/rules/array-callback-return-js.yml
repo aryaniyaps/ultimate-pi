@@ -1,0 +1,33 @@
+id: array-callback-return-js
+message: return statements must be enforced in callbacks of array methods
+severity: error
+language: JavaScript
+rule:
+  all:
+    - any:
+      - kind: function_declaration
+      - kind: arrow_function
+      - kind: function_expression
+    - pattern: $FUNC
+    - not:
+        has:
+          stopBy: end
+          pattern: return $C
+    - not:
+        all:
+          - pattern: $$$ => $R
+          - not:
+              pattern: $$$ => { $$$ }
+    - inside:
+        stopBy: end
+        any:
+          - pattern: Array.from($, $FUNC)
+          - pattern: $A.$METHOD($FUNC)
+constraints:
+  METHOD:
+    regex: ^(every|filter|find|findIndex|findLast|findLastIndex|flatMap|map|reduce|reduceRight|some|sort)$
+
+note: |
+  Array has several methods for filtering, mapping, and folding.
+  If we forget to write return statement in a callback of those, it’s probably a mistake.
+  If you don’t want to use a return or don’t need the returned results, consider using .forEach instead.

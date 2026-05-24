@@ -1,0 +1,10 @@
+id: prefer-date-now
+language: TypeScript
+severity: hint
+message: "Use Date.now() instead of new Date().getTime()"
+note: |
+  Date.now() is simpler and avoids allocating a Date object.
+rule:
+  any:
+    - pattern: "new Date().getTime()"
+    - pattern: "new Date().valueOf()"

@@ -1,0 +1,13 @@
+id: no-new-wrappers
+language: TypeScript
+message: "Do not use 'new' with wrapper objects — use literal primitives instead"
+severity: error
+note: |
+  Using 'new' with Boolean, Number, or String creates objects, not primitives.
+  This causes unexpected behavior (e.g., new Boolean(false) is truthy).
+  Use literal syntax: true, 0, "string".
+rule:
+  any:
+    - pattern: new Boolean($$$ARGS)
+    - pattern: new Number($$$ARGS)
+    - pattern: new String($$$ARGS)

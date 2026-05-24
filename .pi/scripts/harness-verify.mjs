@@ -148,32 +148,25 @@ async function checkSentruxRules() {
 	ok(".sentrux/rules.toml present");
 }
 
-async function checkModelRouterThinkingOnly() {
-	const path = join(ROOT, ".pi", "model-router.json");
-	if (!(await fileExists(path))) {
-		ok("model-router.json absent (skip thinking-only tier check)");
-		return;
+async function checkPiLensVendor(pkgJson) {
+	if (!pkgJson.files?.includes("vendor/pi-lens")) {
+		fail('package.json "files" must include vendor/pi-lens (npm publish ships pi-lens vendor)');
 	}
-	let raw;
-	try {
-		raw = JSON.parse(await readFile(path, "utf-8"));
-	} catch {
-		fail("invalid .pi/model-router.json");
+	ok('package.json files includes vendor/pi-lens');
+
+	const piExtensions = pkgJson.pi?.extensions ?? [];
+	if (!piExtensions.includes("./vendor/pi-lens/index.ts")) {
+		fail('package.json pi.extensions must include ./vendor/pi-lens/index.ts');
 	}
-	const profiles = raw.profiles ?? {};
-	for (const [name, profile] of Object.entries(profiles)) {
-		const high = profile?.high?.model;
-		const medium = profile?.medium?.model;
-		const low = profile?.low?.model;
-		if (
-			!(high && medium && low && high === medium && medium === low)
-		) {
-			fail(
-				`model-router profile "${name}" must use the same model on high/medium/low (thinking-only tiers)`,
-			);
-		}
-	}
-	ok("model-router.json thinking-only (same model per profile)");
+	ok("package.json loads vendored pi-lens extension");
+
+	const lensIndex = join(ROOT, "vendor", "pi-lens", "index.ts");
+	if (!(await fileExists(lensIndex))) fail("missing vendor/pi-lens/index.ts");
+	ok("vendor/pi-lens/index.ts");
+
+	const lensPin = join(ROOT, "vendor", "pi-lens", "UPSTREAM_PIN.md");
+	if (!(await fileExists(lensPin))) fail("missing vendor/pi-lens/UPSTREAM_PIN.md");
+	ok("vendor/pi-lens upstream pin");
 }
 
 async function checkSentruxGate() {
@@ -246,6 +239,8 @@ async function main() {
 	const pkgJson = JSON.parse(
 		await readFile(join(ROOT, "package.json"), "utf-8"),
 	);
+	await checkPiLensVendor(pkgJson);
+
 	if (!pkgJson.files?.includes("vendor/pi-subagents")) {
 		fail(
 			'package.json "files" must include vendor/pi-subagents (npm publish ships subagents vendor)',
@@ -332,7 +327,6 @@ async function main() {
 	ok("test-diff-golden.json");
 
 	await checkSentruxGate();
-	await checkModelRouterThinkingOnly();
 
 	if (!(await fileExists(AGENTS_MANIFEST))) {
 		fail(

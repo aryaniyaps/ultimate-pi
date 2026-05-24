@@ -1,0 +1,53 @@
+# S6936: Names of well-known C standard library macros and functions should not be used as identifiers
+id: no-stdlib-name-as-id
+name: Standard Library Names Should Not Be Shadowed
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: c
+
+message: "{{NAME}} is a well-known C standard library name and should not be used as an identifier"
+
+description: |
+  Shadowing standard library names (malloc, free, printf, etc.) causes
+  confusion and can lead to subtle bugs when macros or headers are included.
+
+  ✅ FIX: Rename to something descriptive
+
+  ```c
+  int my_allocator = 10;  // GOOD
+  ```
+
+query: |
+  [
+    (declaration
+      (init_declarator
+        (identifier) @NAME))
+    (parameter_declaration
+      (identifier) @NAME)
+    (function_declarator
+      (identifier) @NAME)
+  ]
+
+metavars:
+  - NAME
+
+post_filter: c_stdlib_name
+
+tags:
+  - maintainability
+  - c
+  - bad-practice
+  - readability
+
+examples:
+  bad: |
+    int malloc = 10;    // BAD - shadows stdlib function
+    int printf = 20;    // BAD
+
+  good: |
+    int my_size = 10;   // GOOD
+
+has_fix: true
+fix_action: rename_identifier

@@ -1,0 +1,8 @@
+id: no-array-reverse-mutation-js
+language: JavaScript
+severity: warning
+message: ".reverse() mutates the array in place — use toReversed() or slice first"
+note: |
+  arr.reverse() modifies arr. Use arr.toReversed() (ES2023) or [...arr].reverse().
+rule:
+  pattern: "$ARR.reverse()"

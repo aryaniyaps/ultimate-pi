@@ -1,0 +1,62 @@
+# Is vs Equals for Literals
+# Detects 'is' used with string/int literals (should use '==')
+id: is-vs-equals
+name: Is vs Equals for Literals
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "Using 'is' with literal — use '==' for value comparison"
+
+description: |
+  'is' checks identity (same object in memory), not equality.
+  For strings and small ints, Python may intern them, making
+  'is' appear to work, but it's unreliable and wrong.
+  
+  ✅ FIX: Use '==' for value comparison
+  
+  ```python
+  if name == "admin":  # GOOD - value comparison
+  if count == 0:  # GOOD - value comparison
+  ```
+
+query: |
+  (comparison_operator
+    (identifier)
+    ("is")
+    (string) @LITERAL)
+  (comparison_operator
+    (identifier)
+    ("is not")
+    (string) @LITERAL)
+  (comparison_operator
+    (identifier)
+    ("is")
+    (integer) @LITERAL)
+  (comparison_operator
+    (identifier)
+    ("is not")
+    (integer) @LITERAL)
+
+metavars:
+  - LITERAL
+
+tags:
+  - reliability
+  - common-mistake
+  - python-specific
+
+examples:
+  bad: |
+    if name is "admin":  # BAD - identity check
+    if count is 0:  # BAD - may work by accident
+  
+  good: |
+    if name == "admin":  # GOOD
+    if count == 0:  # GOOD
+    if obj is None:  # OK - None is a singleton
+
+has_fix: true
+fix_action: replace_is_with_equals

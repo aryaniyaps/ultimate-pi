@@ -1,0 +1,66 @@
+# No Field Shadowing
+# Detects child class fields that shadow parent class fields
+id: no-field-shadowing
+name: Child Class Fields Should Not Shadow Parent Fields
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Field '{{NAME}}' should not shadow parent class field"
+
+description: |
+  Field shadowing in subclasses causes confusion and bugs when
+  accessing fields through polymorphism. Use different names.
+
+  ✅ FIX: Use a different field name
+
+  ```java
+  class Parent {
+      protected int value;
+  }
+  class Child extends Parent {
+      private int childValue;  // GOOD - different name
+  }
+  ```
+
+query: |
+  (class_declaration
+    (extends_clause
+      (type_identifier) @PARENT)
+    body: (class_body
+      (field_declaration
+        (variable_declarator
+          name: (identifier) @NAME) @FIELD)))
+
+metavars:
+  - PARENT
+  - NAME
+  - FIELD
+
+post_filter: shadows_parent_field
+
+tags:
+  - maintainability
+  - java
+  - confusing
+
+examples:
+  bad: |
+    class Parent {
+        protected int value;
+    }
+    class Child extends Parent {
+        private int value;  // BAD - shadows parent field
+    }
+
+  good: |
+    class Parent {
+        protected int value;
+    }
+    class Child extends Parent {
+        private int childValue;  // GOOD - different name
+    }
+
+has_fix: false

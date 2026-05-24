@@ -1,0 +1,49 @@
+# No Future Keywords
+# Detects use of future keywords as identifiers
+id: no-future-keywords
+name: Future Keywords Should Not Be Used as Names
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "'{{NAME}}' is a future keyword and should not be used as an identifier"
+
+description: |
+  Using future reserved keywords (assert, enum, etc.) as identifiers
+  can cause breaking changes in future Java versions. Use different names.
+
+  ✅ FIX: Use a different identifier name
+
+  ```java
+  boolean useAssertions = true;  // GOOD - not 'assert'
+  ```
+
+query: |
+  (variable_declarator
+    name: (identifier) @NAME (#match? @NAME "^(assert|enum|const|goto)$"))
+  (method_declaration
+    name: (identifier) @NAME (#match? @NAME "^(assert|enum|const|goto)$"))
+  (class_declaration
+    name: (identifier) @NAME (#match? @NAME "^(assert|enum|const|goto)$"))
+
+metavars:
+  - NAME
+
+tags:
+  - maintainability
+  - java
+  - obsolete
+
+examples:
+  bad: |
+    boolean assert = true;  // BAD - future keyword
+    String enum = "value";  // BAD
+
+  good: |
+    boolean useAssert = true;  // GOOD
+    String enumValue = "value";  // GOOD
+
+has_fix: true
+fix_action: rename_identifier

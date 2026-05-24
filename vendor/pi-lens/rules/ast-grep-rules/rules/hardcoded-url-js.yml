@@ -1,0 +1,12 @@
+id: hardcoded-url-js
+language: JavaScript
+message: "Hardcoded URL — use config or environment variable"
+severity: warning
+note: |
+  URLs should come from configuration, not hardcoded in source.
+  Use environment variables or a config file.
+rule:
+  all:
+    - pattern: $X = $URL
+    - has:
+        regex: "^https?://"

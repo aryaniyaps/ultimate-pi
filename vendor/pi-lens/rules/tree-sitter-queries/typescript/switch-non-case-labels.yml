@@ -1,0 +1,53 @@
+# TypeScript Switch Non-Case Labels
+# Detects non-case labels inside switch statements in TypeScript
+id: switch-non-case-labels-ts
+name: Switch Should Not Contain Non-Case Labels
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: typescript
+
+message: "switch statements should not contain non-case labels"
+
+description: |
+  Non-case labels in switch statements create confusing control flow.
+  This is a MISRA rule violation.
+
+  ✅ FIX: Remove labels or restructure code
+
+query: |
+  (switch_statement
+    body: (switch_body
+      (switch_case
+        (labeled_statement
+          (statement_identifier) @LABEL) @LABELED)))
+
+metavars:
+  - LABEL
+  - LABELED
+
+tags:
+  - reliability
+  - typescript
+  - misra
+  - control-flow
+
+examples:
+  bad: |
+    switch (x) {
+        case 1:
+            break;
+        myLabel:  // BAD
+            doSomething();
+    }
+
+  good: |
+    switch (x) {
+        case 1:
+            break;
+        default:
+            break;
+    }
+
+has_fix: false

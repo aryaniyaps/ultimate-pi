@@ -1,0 +1,53 @@
+id: ruby-rescue-exception
+name: Rescue Exception Base Class
+severity: warning
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: ruby
+
+message: "rescue Exception catches SystemExit and Interrupt — use StandardError"
+
+description: |
+  'rescue Exception' catches EVERYTHING including system signals:
+  - Interrupt (Ctrl+C)
+  - SystemExit (exit/abort)
+  - SignalException (kill signals)
+  
+  This makes the process impossible to kill gracefully.
+  
+  ✅ FIX: Use StandardError or a specific exception class:
+    rescue StandardError => e   # safe: catches user errors
+    rescue ArgumentError, TypeError => e  # specific
+
+query: |
+  (rescue
+    exceptions: (exceptions
+      (constant) @EXCEP)
+    (#eq? @EXCEP "Exception"))
+
+metavars:
+  - EXCEP
+
+has_fix: false
+
+tags:
+  - reliability
+  - error-handling
+  - signals
+
+examples:
+  bad: |
+    begin
+      risky_operation
+    rescue Exception => e   # catches SystemExit, Interrupt!
+      puts e.message
+    end
+  
+  good: |
+    begin
+      risky_operation
+    rescue StandardError => e
+      logger.error(e.message)
+      raise
+    end

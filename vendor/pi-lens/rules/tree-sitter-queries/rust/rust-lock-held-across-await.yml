@@ -1,0 +1,59 @@
+# Rust Concurrency
+# Detects lock guards obtained via lock().await and additional await in same block.
+id: rust-lock-held-across-await
+name: Lock Held Across Await
+severity: error
+category: concurrency
+defect_class: async-misuse
+inline_tier: blocking
+language: rust
+
+message: "Lock guard may be held across await — release lock before awaiting other work"
+
+description: |
+  Awaiting while holding a mutex guard can cause contention and deadlocks.
+
+  ✅ FIX: limit lock scope, clone needed data, then await outside lock lifetime.
+
+query: |
+  (block
+    (let_declaration
+      pattern: (identifier) @GUARD
+      value: (await_expression
+        expression: (call_expression
+          function: (field_expression
+            field: (field_identifier) @LOCKFN))))
+    (_)*
+    (await_expression) @LATER_AWAIT)
+  (#eq? @LOCKFN "lock")
+
+metavars:
+  - GUARD
+  - LOCKFN
+  - LATER_AWAIT
+
+cwe:
+  - CWE-833
+owasp:
+  - A09
+confidence: low
+
+has_fix: false
+
+tags:
+  - rust
+  - concurrency
+  - mutex
+  - async
+
+examples:
+  bad: |
+    let guard = state.lock().await;
+    do_network().await;
+
+  good: |
+    {
+        let guard = state.lock().await;
+        update(&guard);
+    }
+    do_network().await;

@@ -1,0 +1,66 @@
+# __exit__ Signature Check
+# Detects __exit__ methods without proper parameters (type, value, traceback)
+id: exit-signature-check
+name: __exit__ Missing Parameters
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: python
+
+message: "__exit__ should accept type, value, and traceback arguments"
+
+description: |
+  The __exit__ method in context managers must accept exactly 4 parameters:
+  self, exc_type, exc_value, and traceback.
+  Missing parameters will cause a TypeError when an exception occurs.
+
+  ✅ FIX: Include all required parameters
+
+  ```python
+  class MyContext:
+      def __exit__(self, exc_type, exc_value, traceback):
+          if exc_type:
+              print(f"Error: {exc_value}")
+          return False  # Don't suppress
+  ```
+
+query: |
+  (function_definition
+    name: (identifier) @NAME (#eq? @NAME "__exit__")
+    parameters: (parameters
+      (_) @SELF
+      . (_) @PARAM1?
+      . (_) @PARAM2?
+      . (_) @PARAM3?))
+
+metavars:
+  - NAME
+  - SELF
+  - PARAM1
+  - PARAM2
+  - PARAM3
+
+post_filter: exit_params_insufficient
+
+tags:
+  - reliability
+  - python-specific
+  - context-manager
+
+examples:
+  bad: |
+    class MyContext:
+        def __exit__(self):  # BAD - missing parameters
+            pass
+        
+        def __exit__(self, exc_type):  # BAD - only one param
+            pass
+
+  good: |
+    class MyContext:
+        def __exit__(self, exc_type, exc_value, traceback):  # GOOD
+            if exc_type:
+                return False
+
+has_fix: false

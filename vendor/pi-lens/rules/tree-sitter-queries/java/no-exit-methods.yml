@@ -1,0 +1,50 @@
+# No Exit Methods
+# Detects System.exit() and Runtime.exit() calls
+id: no-exit-methods
+name: Exit Methods Should Not Be Called
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "{{METHOD}} should not be called — use exceptions for normal termination"
+
+description: |
+  System.exit() and Runtime.exit() abruptly terminate the JVM, 
+  making code hard to test and bypassing normal cleanup. Use 
+  exceptions or return codes instead for proper error handling.
+
+  ✅ FIX: Throw an exception or return status
+
+  ```java
+  if (error) {
+      throw new RuntimeException("Fatal error");  // Better
+  }
+  ```
+
+query: |
+  (method_invocation
+    name: (identifier) @METHOD (#eq? @METHOD "exit")
+    arguments: (argument_list) @ARGS)
+
+metavars:
+  - METHOD
+  - ARGS
+
+tags:
+  - maintainability
+  - java
+  - cert
+  - testing
+
+examples:
+  bad: |
+    System.exit(1);  // BAD - abrupt termination
+    Runtime.exit(0);  // BAD
+
+  good: |
+    throw new RuntimeException("Error");  // GOOD - exception
+    return errorCode;  // GOOD - normal return
+
+has_fix: false

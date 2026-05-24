@@ -1,0 +1,50 @@
+id: python-empty-except
+name: Empty Except Block
+severity: warning
+category: reliability
+defect_class: silent-error
+inline_tier: blocking
+language: python
+
+message: "Except block only contains 'pass' — handle or re-raise the exception"
+
+description: |
+  An except block that only does 'pass' silently swallows the exception.
+  This makes debugging impossible and can hide serious errors.
+  
+  ✅ FIX (choose one):
+    except Exception as e:
+        logger.error("Failed: %s", e)   # log it
+        raise                            # re-raise
+        return default_value             # return safe default
+
+query: |
+  (try_statement
+    (except_clause
+      body: (block) @BODY))
+
+metavars:
+  - BODY
+
+post_filter: python_empty_except
+
+has_fix: false
+
+tags:
+  - reliability
+  - error-handling
+  - debugging
+
+examples:
+  bad: |
+    try:
+        result = risky_operation()
+    except Exception:
+        pass    # error silently swallowed
+  
+  good: |
+    try:
+        result = risky_operation()
+    except Exception as e:
+        logger.error("Operation failed: %s", e)
+        raise

@@ -1,0 +1,57 @@
+id: go-context-background-handler
+name: context.Background() in HTTP Handler
+severity: warning
+category: correctness
+defect_class: async-misuse
+inline_tier: warning
+language: go
+
+message: "context.Background() in handler — use the request context (r.Context()) to propagate cancellation"
+
+description: |
+  HTTP handlers receive a request-scoped context via r.Context() that carries
+  deadlines, cancellation signals, and request-scoped values. Creating a fresh
+  context.Background() discards these signals — downstream calls won't be
+  cancelled when the client disconnects or the request times out.
+
+  ✅ FIX: pass r.Context() to downstream calls instead of context.Background().
+
+  ❌ NEVER:
+    ctx := context.Background()
+    result, err := db.QueryContext(ctx, query)
+
+  ✅ SAFE:
+    result, err := db.QueryContext(r.Context(), query)
+
+query: |
+  (call_expression
+    function: (selector_expression
+      operand: (identifier) @PKG
+      field: (field_identifier) @FN)
+    (#eq? @PKG "context")
+    (#eq? @FN "Background")) @CALL
+
+metavars:
+  - PKG
+  - FN
+  - CALL
+
+has_fix: false
+
+tags:
+  - go
+  - context
+  - cancellation
+  - http
+
+examples:
+  bad: |
+    func handleRequest(w http.ResponseWriter, r *http.Request) {
+        ctx := context.Background()
+        result, err := db.QueryContext(ctx, "SELECT ...")
+    }
+
+  good: |
+    func handleRequest(w http.ResponseWriter, r *http.Request) {
+        result, err := db.QueryContext(r.Context(), "SELECT ...")
+    }

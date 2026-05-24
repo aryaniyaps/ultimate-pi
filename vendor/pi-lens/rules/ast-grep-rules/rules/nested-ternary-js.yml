@@ -1,0 +1,10 @@
+id: nested-ternary-js
+language: JavaScript
+message: "Nested ternary expressions are hard to read — use if/else or switch"
+severity: warning
+note: |
+  Nested ternaries reduce readability. Extract to a function or use if/else.
+rule:
+  kind: ternary_expression
+  has:
+    kind: ternary_expression

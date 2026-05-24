@@ -1,0 +1,18 @@
+id: inline-styles
+language: TSX
+message: "Inline styles — use CSS modules or styled components"
+severity: hint
+note: |
+  Inline styles make components harder to maintain and override.
+  Use CSS modules, styled-components, or Tailwind CSS.
+rule:
+  all:
+    - kind: jsx_attribute
+    - has:
+        field: attribute
+        regex: "^style$"
+    - has:
+        field: value
+        kind: jsx_expression
+        has:
+          kind: object

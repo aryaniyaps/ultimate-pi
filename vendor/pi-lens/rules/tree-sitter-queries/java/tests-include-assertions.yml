@@ -1,0 +1,60 @@
+# Tests Include Assertions
+# Detects JUnit tests without assertions
+id: tests-include-assertions
+name: Tests Should Include Assertions
+severity: error
+category: maintainability
+defect_class: correctness
+inline_tier: blocking
+language: java
+
+message: "Test method should include at least one assertion"
+
+description: |
+  Tests without assertions don't verify anything. They pass even
+  if the code is broken. Use assertEquals, assertTrue, etc.
+
+  ✅ FIX: Add meaningful assertions
+
+  ```java
+  @Test
+  public void testAdd() {
+      assertEquals(4, calculator.add(2, 2));  // GOOD
+  }
+  ```
+
+query: |
+  (method_declaration
+    (modifiers
+      (annotation
+        name: (identifier) @TEST (#match? @TEST "^(Test|ParameterizedTest|RepeatedTest)$")))
+    name: (identifier) @NAME
+    body: (block) @BODY)
+
+metavars:
+  - TEST
+  - NAME
+  - BODY
+
+post_filter: no_assertion_call
+
+tags:
+  - maintainability
+  - java
+  - junit
+  - testing
+
+examples:
+  bad: |
+    @Test
+    public void testSomething() {
+        calculator.add(2, 2);  // BAD - no assertion
+    }
+
+  good: |
+    @Test
+    public void testSomething() {
+        assertEquals(4, calculator.add(2, 2));  // GOOD
+    }
+
+has_fix: false

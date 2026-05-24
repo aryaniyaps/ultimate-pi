@@ -1,0 +1,50 @@
+# CSS Calc Spacing
+# Detects calc() operands without correct spacing
+id: calc-spacing
+name: calc Operands Should Be Correctly Spaced
+severity: error
+category: reliability
+defect_class: correctness
+inline_tier: blocking
+language: css
+
+message: "calc() operands should be correctly spaced"
+
+description: |
+  calc() expressions require spaces around + and - operators.
+  Without spaces, they may be parsed as signs instead of operators.
+
+  ✅ FIX: Add spaces around + and -
+
+  ```css
+  width: calc(100% - 20px);  /* GOOD - spaces */
+  ```
+
+query: |
+  (call_expression
+    function: (function_name) @FUNC (#eq? @FUNC "calc")
+    arguments: (arguments
+      (binary_expression
+        operator: ("+" | "-") @OP) @EXPR))
+
+metavars:
+  - FUNC
+  - OP
+  - EXPR
+
+post_filter: calc_missing_spaces
+
+tags:
+  - reliability
+  - css
+  - syntax
+
+examples:
+  bad: |
+    width: calc(100%-20px);  /* BAD - no spaces */
+
+  good: |
+    width: calc(100% - 20px);  /* GOOD - spaces */
+
+has_fix: true
+fix_action: add_calc_spaces
